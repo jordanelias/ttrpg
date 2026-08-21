@@ -6,8 +6,8 @@ docs:
 - systems/articulation/articulation_flow_skeleton_v1.md
 - systems/articulation/articulation_layer_v30.md
 counts:
-  UNRESOLVED: 38
-  BUILT: 44
+  UNRESOLVED: 39
+  BUILT: 43
 identifiers:
   accord_echo:
     identifier: accord_echo
@@ -247,7 +247,6 @@ identifiers:
     - systems/articulation/articulation_layer_v30.md
     purpose: '`key_type_registry_v30.md:969-1006`''s (re-derived round 2, fix-round-2 — was :943-977) `scene.accord_echo` entry declares `articulation` a `consuming_systems`'
     built_in:
-    - py:tools/observability/build_graph.py
     - typed:engine/engine_params/key_types.json
     disposition: BUILT
     doc_status: null
@@ -344,7 +343,6 @@ identifiers:
     - systems/articulation/articulation_layer_v30.md
     purpose: 'Confirmed in registry (`emitting_systems: [personal_combat]`, `consuming_systems: [npc_behavior, faction_layer, articulation]`); no new type declaration needed.'
     built_in:
-    - py:tools/observability/build_graph.py
     - typed:engine/engine_params/key_types.json
     disposition: BUILT
     doc_status: null
@@ -386,7 +384,6 @@ identifiers:
     purpose: '`scene.combat_resolved` and `scene.combat_felled` (alongside `npc_behavior`/`faction_layer`, which have'
     built_in:
     - py:tools/build_key_graph.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: false
@@ -556,10 +553,8 @@ identifiers:
     docs:
     - systems/articulation/articulation_layer_v30.md
     purpose: 'Confirmed in registry (`emitting_systems: [personal_combat]`, `consuming_systems: [npc_behavior, faction_layer, articulation]`); no new type declaration needed.'
-    built_in:
-    - py:tools/dashboard_data.py
-    - py:tools/observability/build_proposals.py
-    disposition: BUILT
+    built_in: []
+    disposition: UNRESOLVED
     doc_status: null
     in_table: false
   protagonist_alignment:
@@ -597,7 +592,6 @@ identifiers:
     purpose: '[1. Entry points] Callable | Anchor | Called by :: `subscribe_all(scheduler)` | `engine/cross_scale/articulation.py:152 subscribe_all` | `engine/mc_v18.py:266 subscribe_all` (production); `engine/tests/test_pipeline_reach.py:649 subscribe_all` and `:681 run_campaign` (test reach probes); `tests/valoria/test_articulation_subscriber.py:233 subscribe_all` (unit tests)'
     built_in:
     - py:engine/mc_v18.py
-    - py:tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py
     disposition: BUILT
     doc_status: null
     in_table: true
@@ -608,7 +602,6 @@ identifiers:
     purpose: 'stakes_weight(key) # 1-5 from Key.scale_signature + targets'
     built_in:
     - py:engine/substrate/keys.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: false
@@ -693,7 +686,6 @@ identifiers:
     purpose: (`references/module_contracts.yaml:988` `sim_module`), per standing rule 1.
     built_in:
     - py:tools/build_key_graph.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: false

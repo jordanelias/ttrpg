@@ -23,116 +23,116 @@
  "nomenclature": {
   "contracts": {
    "articulation_layer": {
-    "occurrences": 319,
+    "occurrences": 311,
     "qualified": 0
    },
    "audit": {
-    "occurrences": 2335,
+    "occurrences": 1814,
     "qualified": 0
    },
    "campaign_architecture": {
-    "occurrences": 35,
+    "occurrences": 26,
     "qualified": 0
    },
    "ci_political": {
-    "occurrences": 72,
+    "occurrences": 60,
     "qualified": 0
    },
    "clock_registry": {
-    "occurrences": 62,
+    "occurrences": 53,
     "qualified": 0
    },
    "domain_actions": {
-    "occurrences": 117,
+    "occurrences": 108,
     "qualified": 0
    },
    "engine_clock": {
-    "occurrences": 131,
+    "occurrences": 112,
     "qualified": 0
    },
    "faction_politics": {
-    "occurrences": 148,
+    "occurrences": 113,
     "qualified": 0
    },
    "faction_state": {
-    "occurrences": 343,
+    "occurrences": 319,
     "qualified": 0
    },
    "fieldwork_knots": {
-    "occurrences": 71,
+    "occurrences": 64,
     "qualified": 0
    },
    "game_director": {
-    "occurrences": 60,
+    "occurrences": 51,
     "qualified": 0
    },
    "mass_battle": {
-    "occurrences": 2525,
+    "occurrences": 965,
     "qualified": 0
    },
    "miraculous_event": {
-    "occurrences": 91,
+    "occurrences": 80,
     "qualified": 0
    },
    "npc_behavior": {
-    "occurrences": 649,
+    "occurrences": 632,
     "qualified": 0
    },
    "npc_memory": {
-    "occurrences": 68,
+    "occurrences": 62,
     "qualified": 0
    },
    "peninsular_strain": {
-    "occurrences": 175,
+    "occurrences": 164,
     "qualified": 0
    },
    "personal_combat": {
-    "occurrences": 106,
+    "occurrences": 92,
     "qualified": 0
    },
    "piety_track": {
-    "occurrences": 152,
+    "occurrences": 137,
     "qualified": 0
    },
    "scenario_authoring": {
-    "occurrences": 68,
-    "qualified": 0
-   },
-   "scene_slate": {
-    "occurrences": 197,
-    "qualified": 0
-   },
-   "scene_timer": {
-    "occurrences": 45,
-    "qualified": 0
-   },
-   "settlement_economy": {
-    "occurrences": 60,
-    "qualified": 0
-   },
-   "settlement_layer": {
-    "occurrences": 346,
-    "qualified": 0
-   },
-   "social_contest": {
-    "occurrences": 2220,
-    "qualified": 0
-   },
-   "territorial_piety": {
     "occurrences": 55,
     "qualified": 0
    },
+   "scene_slate": {
+    "occurrences": 192,
+    "qualified": 0
+   },
+   "scene_timer": {
+    "occurrences": 40,
+    "qualified": 0
+   },
+   "settlement_economy": {
+    "occurrences": 51,
+    "qualified": 0
+   },
+   "settlement_layer": {
+    "occurrences": 315,
+    "qualified": 0
+   },
+   "social_contest": {
+    "occurrences": 716,
+    "qualified": 0
+   },
+   "territorial_piety": {
+    "occurrences": 45,
+    "qualified": 0
+   },
    "threadwork": {
-    "occurrences": 2288,
+    "occurrences": 901,
     "qualified": 0
    },
    "victory": {
-    "occurrences": 2127,
+    "occurrences": 811,
     "qualified": 0
    }
   },
-  "contracts_median_occurrences": 131,
-  "keys_median_occurrences": 27
+  "contracts_median_occurrences": 112,
+  "keys_median_occurrences": 26
  },
  "schema_version": 1,
  "subsystems": [

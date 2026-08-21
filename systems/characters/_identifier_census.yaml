@@ -161,7 +161,6 @@ identifiers:
     purpose: '<!-- Infill: conviction_track_v30_infill.md -->'
     built_in:
     - py:tools/build_key_graph.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: false
@@ -714,7 +713,6 @@ identifiers:
     purpose: '[7. Traced gaps] Gap | Evidence :: 3. Code↔contract divergence: `references/module_contracts.yaml`''s `piety_track` entry declares `conviction.py` as a Key-substrate consumer of 9 Key types and an emitter of `state.scar_acquired`, but `conviction.py`/`beliefs.py`/`companion.py` contain no Key subscription, `echo_scheduler`/`TickScheduler` reference, or `.emit(` call anywhere — the module is a plain'
     built_in:
     - py:tools/build_key_graph.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: true

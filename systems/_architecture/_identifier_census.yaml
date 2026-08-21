@@ -47,8 +47,8 @@ docs:
 - systems/_architecture/videogame_mode_spec.md
 - systems/_architecture/videogame_mode_spec_index.md
 counts:
-  UNRESOLVED: 401
-  BUILT: 232
+  UNRESOLVED: 424
+  BUILT: 223
 identifiers:
   abstract_resolve:
     identifier: abstract_resolve
@@ -113,7 +113,6 @@ identifiers:
     purpose: 'accounting_phase: [season_tick, accounting_boundary]'
     built_in:
     - py:tools/build_execution_map.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: false
@@ -131,9 +130,8 @@ identifiers:
     docs:
     - systems/_architecture/key_echo_armature_v1.md
     purpose: '[§1 · The seam-contract row (the format every crossing must satisfy)] Field | Obligation | Checker (§4) :: `timing` | The accounting phase binding (accounting_sequence spine) + deferred-apply discipline (AU-3.2/OF-7 — **assumes OF-7; provisional/reversible, docket §5.3**): echo Keys log LIVE at scene end, settlement effects land at ACCOUNTING_BOUNDARY. | A12 + substrate'
-    built_in:
-    - py:tools/observability/build_graph.py
-    disposition: BUILT
+    built_in: []
+    disposition: UNRESOLVED
     doc_status: null
     in_table: true
   action_type:
@@ -637,14 +635,49 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: true
+  build_graph:
+    identifier: build_graph
+    docs:
+    - systems/_architecture/repository_keep_set_v1.md
+    purpose: for `key_type_registry_v30.md` at `echo_transport.py:62` and `build_graph.py:50`; two earlier
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  build_incompleteness:
+    identifier: build_incompleteness
+    docs:
+    - systems/_architecture/repository_keep_set_v1.md
+    purpose: (`build_incompleteness`).
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  build_lexicon:
+    identifier: build_lexicon
+    docs:
+    - systems/_architecture/repo_state_armature_v1.md
+    purpose: '`build_lexicon.py`, whose output was verified BYTE-IDENTICAL before/after each slice.'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  build_proposals:
+    identifier: build_proposals
+    docs:
+    - systems/_architecture/repository_keep_set_v1.md
+    purpose: the observability suite that read `proposals/` (`build_proposals`) or the audit corpus
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
   build_review_state:
     identifier: build_review_state
     docs:
     - systems/_architecture/repo_state_armature_v1.md
     purpose: '`build_review_state()` → `review_core.collect()` — **BUILT**), and a GitHub `review-state` CI job'
-    built_in:
-    - py:tools/dashboard_data.py
-    disposition: BUILT
+    built_in: []
+    disposition: UNRESOLVED
     doc_status: null
     in_table: false
   by_actor:
@@ -1292,7 +1325,6 @@ identifiers:
     - systems/_architecture/propagation_spec_v1.md
     purpose: 'emitting_systems / consuming_systems: [...] # same discipline as key_type_registry_v30.md'
     built_in:
-    - py:tools/observability/build_graph.py
     - typed:engine/engine_params/key_types.json
     disposition: BUILT
     doc_status: null
@@ -1304,7 +1336,6 @@ identifiers:
     purpose: '[1. Entry points] Callable | Anchor | Called-by :: `KeyLog.serialize` | `engine/substrate/keys.py:453 serialize` | `engine/substrate/keys.py:460 content_hash` (internal)'
     built_in:
     - py:engine/substrate/keys.py
-    - py:tools/sim_harness/trace_logger.py
     disposition: BUILT
     doc_status: null
     in_table: true
@@ -1375,7 +1406,6 @@ identifiers:
     purpose: Co-files updated:** doc 08, doc 12 (procedures rewritten to consume Keys), `designs/personal/conviction_track_v1.md`, scene/social_contest/mass_battle docs (per Phase B migration), `references/glossary.md`, `references/alias_registry.yaml`, `canon/supersession_register.yaml`, `references/canonical_s…
     built_in:
     - py:tools/build_key_graph.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: false
@@ -1384,9 +1414,8 @@ identifiers:
     docs:
     - systems/_architecture/repo_state_armature_v1.md
     purpose: Each tool's `count_re` (in
-    built_in:
-    - py:tools/review_core.py
-    disposition: BUILT
+    built_in: []
+    disposition: UNRESOLVED
     doc_status: null
     in_table: false
   counterparty_faction:
@@ -1489,7 +1518,6 @@ identifiers:
     purpose: 'emitting_systems: [da_framework]'
     built_in:
     - py:tools/build_key_graph.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: false
@@ -1500,6 +1528,15 @@ identifiers:
     - systems/_architecture/key_substrate_v30.md
     - systems/_architecture/key_type_registry_v30.md
     purpose: '[§14.1 · The loop, mapped to module contracts (owner · resolver · Keys)] Loop arc | Owning module (`module_contracts.yaml`) | Resolver (fixed enum) | Keys IN → OUT (registry vocabulary) | Compliance :: Response resolution (§3) | `domain_actions` (governance verbs / Directive) | **`d_sigma`** (ED-874: legible odds, flat +10%/pt uniform-P-ii, FLOOR .05/CAP .90, FAIL_FLOOR .97 graded-P-iv) | IN: play'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  death_spiral_log:
+    identifier: death_spiral_log
+    docs:
+    - systems/_architecture/ners_vsg_reconciliation_v1.md
+    purpose: '[§1 · Where execution confirmed the design (convergent findings)] Claim | Design-branch source | Empirical-branch evidence | Verdict :: **Goldenfurt''s Π restoring term + recall escape are "already designed, just needs porting"** (E1) | `governance_consolidation_v1 §3 E1`, framed "No new design — a port" | Four independent measurements (500-seed isolated homeostat test, 1500-trial integrated campai'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -2064,9 +2101,8 @@ identifiers:
     docs:
     - systems/_architecture/key_type_registry_v30.md
     purpose: Wall-clock excluded from payload (see scene_entered notes); SceneTimer sidecar computes elapsed_ms by joining records.
-    built_in:
-    - py:tools/review_core.py
-    disposition: BUILT
+    built_in: []
+    disposition: UNRESOLVED
     doc_status: null
     in_table: false
   elective_high:
@@ -2127,7 +2163,6 @@ identifiers:
     - systems/_architecture/key_type_registry_v30.md
     purpose: 'emitting_systems / consuming_systems: [...] # same discipline as key_type_registry_v30.md'
     built_in:
-    - py:tools/observability/build_graph.py
     - typed:engine/engine_params/key_types.json
     disposition: BUILT
     doc_status: null
@@ -2379,7 +2414,6 @@ identifiers:
     purpose: The V30 documents (faction_layer, fieldwork, social_contest) describe *world physics* — how the world moves, resists, and responds.
     built_in:
     - py:tools/build_key_graph.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: true
@@ -2681,7 +2715,6 @@ identifiers:
     purpose: gap_notes for the pointer (W3 item 3, ED-IN-0096)."
     built_in:
     - py:tools/build_execution_map.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: false
@@ -2802,9 +2835,8 @@ identifiers:
     docs:
     - systems/_architecture/ners_vsg_reconciliation_v1.md
     purpose: '[Generation/build-substrate blockers (from `generation_sourcebook_v1`, updated)] ID | Blocker | Update after PR#127 :: **B8** | "Event-deck engine S3–S6 unbuilt... zero-code" | **STALE.** `pr119_event_deck_engine.py` is real, committed, working code: a 13-of-28-card subset with trigger/cooldown/response dispatch, the Π homeostat, and per-NPC ambition ticks (`hedda_progress`/`konrad_progress`/`orsk'
-    built_in:
-    - py:tools/sim_harness/adapters/pr119_governance/pr119_event_deck_engine.py
-    disposition: BUILT
+    built_in: []
+    disposition: UNRESOLVED
     doc_status: null
     in_table: true
   horizon_factor:
@@ -3206,10 +3238,8 @@ identifiers:
     docs:
     - systems/_architecture/ners_vsg_reconciliation_v1.md
     purpose: '[Generation/build-substrate blockers (from `generation_sourcebook_v1`, updated)] ID | Blocker | Update after PR#127 :: **B8** | "Event-deck engine S3–S6 unbuilt... zero-code" | **STALE.** `pr119_event_deck_engine.py` is real, committed, working code: a 13-of-28-card subset with trigger/cooldown/response dispatch, the Π homeostat, and per-NPC ambition ticks (`hedda_progress`/`konrad_progress`/`orsk'
-    built_in:
-    - py:tools/sim_harness/adapters/pr119_governance/pr119_event_deck_engine.py
-    - py:tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py
-    disposition: BUILT
+    built_in: []
+    disposition: UNRESOLVED
     doc_status: null
     in_table: true
   leader_id_at_resolution:
@@ -3785,9 +3815,8 @@ identifiers:
     docs:
     - systems/_architecture/ners_vsg_reconciliation_v1.md
     purpose: '[Generation/build-substrate blockers (from `generation_sourcebook_v1`, updated)] ID | Blocker | Update after PR#127 :: **B8** | "Event-deck engine S3–S6 unbuilt... zero-code" | **STALE.** `pr119_event_deck_engine.py` is real, committed, working code: a 13-of-28-card subset with trigger/cooldown/response dispatch, the Π homeostat, and per-NPC ambition ticks (`hedda_progress`/`konrad_progress`/`orsk'
-    built_in:
-    - py:tools/sim_harness/adapters/pr119_governance/pr119_event_deck_engine.py
-    disposition: BUILT
+    built_in: []
+    disposition: UNRESOLVED
     doc_status: null
     in_table: true
   other_echoes:
@@ -3900,10 +3929,8 @@ identifiers:
     docs:
     - systems/_architecture/key_type_registry_v30.md
     purpose: 'emitting_systems: [personal_combat]'
-    built_in:
-    - py:tools/dashboard_data.py
-    - py:tools/observability/build_proposals.py
-    disposition: BUILT
+    built_in: []
+    disposition: UNRESOLVED
     doc_status: null
     in_table: false
   personal_convictions:
@@ -4099,6 +4126,87 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: false
+  pr119_bind_the_cells:
+    identifier: pr119_bind_the_cells
+    docs:
+    - systems/_architecture/ners_vsg_reconciliation_v1.md
+    purpose: '[Extensions / execution items (design-level, once their gating D is ruled)] ID | Item | Source | PR#127 update :: E4 | Resolve Compact (rides D3) + the §1.3b population-granularity layer | `governance_consolidation_v1 §3` | `pr119_bind_the_cells.py`: 9 real Goldenfurt actors mod 5-household cells = remainder 4, **100/100**; cascade to "Cell Revolt" in **32/100** trials over 6 seasons. This is non-'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  pr119_clerk_capacity:
+    identifier: pr119_clerk_capacity
+    docs:
+    - systems/_architecture/ners_vsg_reconciliation_v1.md
+    purpose: 1.1a (+ the measured CC0–CC1 AP-curve target from pr119_clerk_capacity.py)
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  pr119_event_deck_engine:
+    identifier: pr119_event_deck_engine
+    docs:
+    - systems/_architecture/ners_vsg_reconciliation_v1.md
+    purpose: '[§1 · Where execution confirmed the design (convergent findings)] Claim | Design-branch source | Empirical-branch evidence | Verdict :: **The card-deck is the player-facing engine of record; predicate-sweep is the batch oracle** (D1) | `governance_consolidation_v1 §1 D1` | `event_architecture_fork` check: both `_PREDICATE_SWEEP_DIR` and `_CARD_DECK_DOC` present, **100/100**, and no file anywhere s'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  pr119_integrated_campaign:
+    identifier: pr119_integrated_campaign
+    docs:
+    - systems/_architecture/ners_vsg_reconciliation_v1.md
+    purpose: '[§1 · Where execution confirmed the design (convergent findings)] Claim | Design-branch source | Empirical-branch evidence | Verdict :: **§1.0d Performance Audit should merge into the suspicion/recall spine, not run parallel** (D5) | `governance_consolidation_v1 §1 D5` | `pr119_integrated_campaign.py`, 3 regimes × 500 trials: G606 (cumulative suspicion) drives **100% of terminal recalls in the mos'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  pr119_ledger_family_collision:
+    identifier: pr119_ledger_family_collision
+    docs:
+    - systems/_architecture/ners_vsg_reconciliation_v1.md
+    purpose: '[§1 · Where execution confirmed the design (convergent findings)] Claim | Design-branch source | Empirical-branch evidence | Verdict :: **Compact should be a recurring `Debt` subtype, not a 6th ledger family** (D3) | `governance_consolidation_v1 §1 D3` | `pr119_ledger_family_collision.py`: writing `Compact` through the real `ledger_add()` against the built `TAG_KINDS = {Precedent, Grudge, Debt, Re'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  pr119_proactive_governance_menus:
+    identifier: pr119_proactive_governance_menus
+    docs:
+    - systems/_architecture/ners_vsg_reconciliation_v1.md
+    purpose: '[Generation/build-substrate blockers (from `generation_sourcebook_v1`, updated)] ID | Blocker | Update after PR#127 :: **B11** | `engine_clock` unauthored (`doc: null` in `module_contracts.yaml`, per CLAUDE.md §6) blocks more than previously scoped: it''s the sole blocker on Part 41''s Relay Tier/Beacon Network — "the single strongest new-state case in the corpus" per the NERS review — and by extens'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  pr119_promote_ready_fiscal:
+    identifier: pr119_promote_ready_fiscal
+    docs:
+    - systems/_architecture/ners_vsg_reconciliation_v1.md
+    purpose: '[Extensions / execution items (design-level, once their gating D is ruled)] ID | Item | Source | PR#127 update :: **E8 (NEW)** | **Reconcile IT-2 Condotta''s Aspetto ×0.5 Mil clause against all four real `faction.Mil` read sites** — `_mil_advantage_signal` (`faction_action.py` ~line 142), the `CONQUEST_MIN_MIL` gate (~lines 192/341), the muster-pool formula (~line 416), and `massbattle.py::_faction'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  pr119_promote_ready_political:
+    identifier: pr119_promote_ready_political
+    docs:
+    - systems/_architecture/ners_vsg_reconciliation_v1.md
+    purpose: '[Extensions / execution items (design-level, once their gating D is ruled)] ID | Item | Source | PR#127 update :: **E9 (NEW)** | **Author a Ministry priority-action economy** (what a Ministry''s action capability is, where its AP/Competence comes from) before HAB-4 Overlapping Consulta Arbitration can be trusted to generalize beyond the tested domain | `pr119_promote_ready_political.py`, NERS revie'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  pr119_subnational_factions:
+    identifier: pr119_subnational_factions
+    docs:
+    - systems/_architecture/ners_vsg_reconciliation_v1.md
+    purpose: '[Extensions / execution items (design-level, once their gating D is ruled)] ID | Item | Source | PR#127 update :: E2 | Author the Mandate-Challenge (political, non-violent Seggio removal) | `governance_consolidation_v1 §3` | `pr119_subnational_factions.py`''s `za_patron_lapse` (66/16/18) independently validates the *sibling* §3.3b mechanic is sound, strengthening the case that §3.3c''s missing polit'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
   prior_aggregate:
     identifier: prior_aggregate
     docs:
@@ -4481,9 +4589,8 @@ identifiers:
     docs:
     - systems/_architecture/repo_state_armature_v1.md
     purpose: 2.2 `tools/review_core.py` → `review_state.json` — the one review engine (Phase 1, BUILT)
-    built_in:
-    - py:tools/dashboard_data.py
-    disposition: BUILT
+    built_in: []
+    disposition: UNRESOLVED
     doc_status: null
     in_table: false
   rhetorical_style_used:
@@ -4566,7 +4673,6 @@ identifiers:
     purpose: S1 `[gate]` `run_campaign` decides `DISPATCH_COMBAT_BRIDGE` once, stashes on `world` — `engine/mc_v18.py:237`
     built_in:
     - py:engine/mc_v18.py
-    - py:tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py
     disposition: BUILT
     doc_status: null
     in_table: true
@@ -4713,7 +4819,6 @@ identifiers:
     purpose: S0.3 `[write]` `TypeRegistry.apply_defaults` fills unset `scale_signature`/`permanence`/`time_horizon` from the type's registry entry — `engine/substrate/keys.py:566`
     built_in:
     - py:engine/substrate/keys.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: true
@@ -5254,7 +5359,6 @@ identifiers:
     purpose: '[7. Traced gaps] Gap | Evidence anchor :: `engine_clock` — the `module_contracts.yaml`-declared contract this scheduler notionally realizes — carries `sim_module: none`; no code was ever joined to `TickScheduler`/`KeyLog` under that contract name | `references/module_contracts.yaml:885-888`'
     built_in:
     - py:tools/build_key_graph.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: true
@@ -5984,7 +6088,6 @@ identifiers:
     built_in:
     - py:engine/substrate/keys.py
     - py:tools/build_key_graph.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: false
@@ -6350,10 +6453,6 @@ dropped_as_not_a_mechanic:
   build_contract_index: matches a tracked/aliased document stem
   build_engine_atlas: matches a tracked/aliased document stem
   build_fork: matches a tracked/aliased document stem
-  build_graph: matches a tracked/aliased document stem
-  build_incompleteness: matches a tracked/aliased document stem
-  build_lexicon: matches a tracked/aliased document stem
-  build_proposals: matches a tracked/aliased document stem
   calamity_radiation_v30: matches a tracked/aliased document stem
   campaign_architecture_v1: matches a tracked/aliased document stem
   campaign_architecture_v30: the doc spells it as <name>.md — a citation
@@ -6402,7 +6501,6 @@ dropped_as_not_a_mechanic:
   d10_success_probabilities: matches a tracked/aliased document stem
   dashboard_data: matches a tracked/aliased document stem
   dead_primitive_census: matches a tracked/aliased document stem
-  death_spiral_log: matches a tracked/aliased document stem
   decision_queue: the doc spells it as <name>.md — a citation
   definitions_store: matches a tracked/aliased document stem
   deprecated_terms_registry: matches a tracked/aliased document stem
@@ -6517,15 +6615,6 @@ dropped_as_not_a_mechanic:
   pessimist_ners_audit_v1: the doc spells it as <name>.md — a citation
   player_agency_v30: matches a tracked/aliased document stem
   political_dynamics_keys_migration_v30: matches a tracked/aliased document stem
-  pr119_bind_the_cells: matches a tracked/aliased document stem
-  pr119_clerk_capacity: matches a tracked/aliased document stem
-  pr119_event_deck_engine: matches a tracked/aliased document stem
-  pr119_integrated_campaign: matches a tracked/aliased document stem
-  pr119_ledger_family_collision: matches a tracked/aliased document stem
-  pr119_proactive_governance_menus: matches a tracked/aliased document stem
-  pr119_promote_ready_fiscal: matches a tracked/aliased document stem
-  pr119_promote_ready_political: matches a tracked/aliased document stem
-  pr119_subnational_factions: matches a tracked/aliased document stem
   precedents_analysis: the doc spells it as <name>.md — a citation
   precedents_warfare: the doc spells it as <name>.md — a citation
   propagation_log: the doc spells it as <name>.md — a citation
@@ -6552,7 +6641,7 @@ dropped_as_not_a_mechanic:
   settlement_layer_v30: the doc spells it as <name>.md — a citation
   settlements_flow_skeleton_v1: the doc spells it as <name>.md — a citation
   sigma_leverage: matches a tracked/aliased document stem
-  sim_harness: matches a module or path component
+  sim_harness: matches a tracked/aliased document stem
   sim_params: matches a tracked/aliased document stem
   social_contest: matches a module or path component
   social_contest_flow_skeleton_v1: the doc spells it as <name>.md — a citation

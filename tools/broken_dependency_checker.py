@@ -30,19 +30,24 @@ _IGNORE_DIRS = {'.git'}
 
 
 def _gate_jobs():
-    """Parsed CI jobs, from the SINGLE OWNER of workflow parsing (tools/ci_gate_coverage.py).
+    """No longer parsed. Returns [] — deliberately, and permanently.
 
-    Re-parsing the YAML here would be a second owner of "what CI runs" and would drift the
-    moment a job changed shape — the §8 violation this file exists to detect. Degrades to []
-    rather than raising: this checker is a BLOCKING gate, and a gate that crashes on an
-    unrelated import failure is worse than one that reports a little less.
+    This used to import `tools/ci_gate_coverage.py`, the single owner of workflow parsing, so
+    that path references inside CI job bodies were checked too. `ci_gate_coverage.py` was
+    RETIRED 2026-08-21 (culling wave 3, ED-IN-0194): its subject was this repository's own gate
+    wiring, not the game, which is what `CLAUDE.md` §0.1 pt 5's load-bearing predicate excludes.
+
+    WHAT IS LOST, said plainly rather than left for the next reader to discover: path references
+    that appear ONLY inside a `.github/workflows/*.yml` job body are no longer resolved by this
+    checker. Everything else it checks — ledger entries, registry rows, doc cross-references —
+    is unaffected, and a dead tool path in a workflow now fails the obvious way instead, by the
+    workflow step erroring on a missing file.
+
+    The function is kept rather than inlined because its two callers already handle an empty
+    result, and a stub that documents a deliberate gap is more honest than a silently deleted
+    branch.
     """
-    try:
-        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-        import ci_gate_coverage
-        return ci_gate_coverage.jobs()
-    except Exception:
-        return []
+    return []
 
 
 def get_all_repo_files():
@@ -321,11 +326,16 @@ def check_ci_registry_coverage(all_files):
                 # NEVER SILENT. If workflow parsing is unavailable this sub-check cannot run, and a
                 # blocking gate whose sub-check evaporates without a word is the "clean over
                 # nothing" class this file exists to detect. Recorded once, as check (d) does.
-                if "ci_job invocation join SKIPPED" not in " ".join(errors):
+                if "ci_job invocation join RETIRED" not in " ".join(errors):
                     errors.append(
-                        "ci_job invocation join SKIPPED: tools/ci_gate_coverage.py could not be "
-                        "imported, so registry rows claiming CI coverage were NOT verified against "
-                        "the workflow. Fix the import rather than trusting this run's green."
+                        "ci_job invocation join RETIRED 2026-08-21 (culling wave 3, ED-IN-0194): "
+                        "tools/ci_gate_coverage.py owned workflow parsing and is gone, so a "
+                        "registry row's `ci_job:` claim is no longer cross-checked against the "
+                        "workflow that would run it. This is a DELIBERATE GAP, not a fixable "
+                        "import failure — do not restore the parser to close it. The rows are "
+                        "documentation now; the workflow itself is the authority on what runs, "
+                        "and a row naming a dead job costs a stale comment rather than a missed "
+                        "gate."
                     )
             else:
                 job = next((j for j in parsed if j['id'] == ci_job), None)

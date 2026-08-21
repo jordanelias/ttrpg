@@ -322,7 +322,6 @@ identifiers:
     purpose: '[PROPAGATION MAP] ED | Target Document | Section | Action :: ED-676 | designs/conviction_track/conviction_track_v30.md | After §1.3 | Insert §1.4'
     built_in:
     - py:tools/build_key_graph.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: true
@@ -669,7 +668,6 @@ identifiers:
     purpose: '[7. Traced gaps] Gap | Evidence anchor :: **The campaign season loop never reaches Thread scale.** `engine/mc_v18.py` (`run_campaign`) imports no `systems.threadwork` module. The vertical dispatcher `engine/cross_scale/scene_dispatch.py` has no `"thread"` `scene_type` branch — only `combat`/`contest`/`fieldwork`/`investigation` are live, everything else falls through to a generic `stubwire.stub_re'
     built_in:
     - py:engine/mc_v18.py
-    - py:tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py
     disposition: BUILT
     doc_status: null
     in_table: true

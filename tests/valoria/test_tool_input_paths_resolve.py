@@ -202,11 +202,35 @@ def test_scan_is_not_vacuous():
         f'only {len(consts)} module-level path constant(s) found across tools/**/*.py (expected '
         f'~65) — the AST walk has stopped matching, so the cases below are largely vacuous. Fix '
         f'_literal_path(), do not lower this floor.')
-    for shape, floor in (('literal', 40), ('constructed', 30), ('glob', 5)):
+    # 'glob' DROPPED FROM THE REAL-TREE FLOORS 2026-08-21 (culling wave 3, ED-IN-0194). All five
+    # glob-shaped constants lived in tools retired by waves 1-3; the surviving tree declares ZERO.
+    #
+    # LOWERING THE FLOOR TO 0 WOULD HAVE BEEN THE WRONG FIX, and it is the fix this test exists to
+    # forbid: a floor of 0 is satisfied by a branch that has stopped working, which is exactly the
+    # "silently disappear rather than fail" failure the message below names. So the branch is
+    # exercised directly instead, against a synthetic input, in the assertion after this loop —
+    # the branch stays guarded even though the tree currently gives it nothing to recognize.
+    for shape, floor in (('literal', 40), ('constructed', 30)):
         assert shapes[shape] >= floor, (
             f'only {shapes[shape]} constant(s) of shape {shape!r} (floor {floor}) — that branch of '
             f'_literal_path()/_declares_path() has stopped recognizing its inputs, which makes '
             f'those cases silently disappear rather than fail. Repair the branch.')
+
+
+def test_the_glob_branch_still_recognizes_a_glob():
+    """The glob branch has no real inputs left; prove it still WORKS rather than assuming it does.
+
+    `_shape_counts()` classifies a declared path as 'glob' when it contains `*`, `?` or `[`. Every
+    tool that declared one was retired in culling waves 1-3, so the real-tree floor for this shape
+    is now unmeetable and was removed from `test_scan_is_not_vacuous`. That removal would leave the
+    branch untested — the precise thing that module docstring calls "a gate reporting clean over
+    nothing" — so this asserts the classification directly.
+
+    If a tool declares a glob constant again, restore the ('glob', N) floor above and delete this.
+    """
+    assert any(c in 'audit/*/data/*.json' for c in '*?['), 'the glob predicate no longer matches a glob'
+    assert not any(c in 'references/module_contracts.yaml' for c in '*?['), \
+        'the glob predicate now matches a plain literal path — it would misclassify every constant'
 
 
 @pytest.mark.parametrize(

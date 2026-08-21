@@ -113,6 +113,24 @@ CLAIM_PATTERNS = [
 _ED_ID = re.compile(r"^(ED-[A-Z]+)-(\d+)$")
 
 
+
+def _resolves_through_restructure_ledger(target):
+    """True if `references/restructure_ledger.md` retires `target` to a ref or a live successor.
+
+    Delegates to `tools/pathres.py`, which CLAUDE.md §8 names the sole parser of that ledger.
+    Re-implementing the parse here would make this the fifth reader of one file, which is the
+    §8 violation the ledger's own header complains about. Degrades to False (i.e. still a
+    violation) if pathres is unavailable, so an import problem can never silently green the gate.
+    """
+    try:
+        import sys as _sys
+        _sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import pathres
+        r = pathres.resolve(target)
+        return r.status != 'DEAD'
+    except Exception:
+        return False
+
 def _is_pre_cutover(entry_id, cutover_id):
     """True when `entry_id` predates `cutover_id` and is therefore grandfathered.
 
@@ -199,11 +217,29 @@ def check(staged_only=False):
                 continue
             for ref in found:
                 target = ref.rstrip(_TRAILING_PROSE).split("::")[0]
-                if not os.path.exists(os.path.join(ROOT, target)):
-                    violations.append(
-                        (ledger, lineno, entry.get("id", "?"),
-                         f"cites `MEASURED-BY: {ref}` but {target} does not exist in the tree — the claim cannot "
-                         f"be re-run, which is the whole point of the marker."))
+                if os.path.exists(os.path.join(ROOT, target)):
+                    continue
+                # RETIRED INSTRUMENTS RESOLVE, THEY DO NOT VIOLATE (2026-08-21, ED-IN-0194).
+                #
+                # Culling waves 1-3 retired 42 apparatus files, and 24 historical MEASURED-BY
+                # markers cite one of them. Those claims were TRUE and their instrument still
+                # exists — at the ref `references/restructure_ledger.md` records — so "the claim
+                # cannot be re-run" is false for them: it can, from that ref. Failing here would
+                # have forced a choice between rewriting 24 settled ledger rows and narrowing this
+                # gate, and both destroy evidence to satisfy a checker.
+                #
+                # The resolver is the SANCTIONED one and is not re-implemented here:
+                # `tools/pathres.py` is the declared sole parser of the restructure ledger, and
+                # `broken_dependency_checker.py` already treats a `FORK:<ref>` target as resolved.
+                # A marker naming a path with NO ledger row still violates, exactly as before —
+                # this widens the gate to the retirement mechanism, not to absence.
+                if _resolves_through_restructure_ledger(target):
+                    continue
+                violations.append(
+                    (ledger, lineno, entry.get("id", "?"),
+                     f"cites `MEASURED-BY: {ref}` but {target} does not exist in the tree and no "
+                     f"references/restructure_ledger.md row retires it — the claim cannot be "
+                     f"re-run, which is the whole point of the marker."))
 
     print(f"[claim-provenance] {checked} quantitative entr(y/ies) in scope across {len(LEDGERS)} ledger(s) "
           f"(cutovers: {', '.join(sorted(LEDGERS.values()))})")

@@ -32,8 +32,8 @@ docs:
 - systems/factions/varfell_path_b_v30.md
 - systems/factions/varfell_path_b_v30_infill.md
 counts:
-  UNRESOLVED: 288
-  BUILT: 107
+  UNRESOLVED: 289
+  BUILT: 106
 identifiers:
   accounting_boundary:
     identifier: accounting_boundary
@@ -928,7 +928,6 @@ identifiers:
     - systems/factions/political_dynamics_keys_migration_v30.md
     purpose: Bottom-up = registry consuming_systems (npc_behavior on contest/battle/combat_resolved) + the §5.1 input filter.
     built_in:
-    - py:tools/observability/build_graph.py
     - typed:engine/engine_params/key_types.json
     disposition: BUILT
     doc_status: null
@@ -999,7 +998,6 @@ identifiers:
     purpose: 'Cross-references: player_agency_v30 (Standing §5, Renown §5.4, Duties §3), factions_ttrpg_v30 (8-faction roster §8.2–§8.9), worldbuilding_v30 (Four-Cardinal Church §3, Löwenritter arms §4, Guild structure §5, Parliament §6), npc_roster_v30 §14 (caste annotations), conviction_track_v30 (CV/WA), tc_po…'
     built_in:
     - py:tools/build_key_graph.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: true
@@ -1609,7 +1607,6 @@ identifiers:
     purpose: '[§3.2 CI Institutional Weight (Church in Political Forums)] Context | Resolution method | CI applied as :: Parliamentary motion (proposing or defending) | Deterministic Mandate **tally** (faction_layer §5.3) | **+⌊CI/20⌋ votes** to Church''s contribution'
     built_in:
     - py:tools/build_key_graph.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: true
@@ -3199,7 +3196,6 @@ identifiers:
     purpose: scale_signature='personal',
     built_in:
     - py:engine/substrate/keys.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: false
@@ -3599,9 +3595,8 @@ identifiers:
     - systems/factions/parliamentary_transfer_v30.md
     - systems/factions/treaty_expiration_v30.md
     purpose: 'Per `canon/mechanics_index.yaml` entry `parliamentary_transfer`, `test_status: validated_n1000_v12c`.'
-    built_in:
-    - py:tools/observability/build_graph.py
-    disposition: BUILT
+    built_in: []
+    disposition: UNRESOLVED
     doc_status: null
     in_table: false
   theodor_kreutz:

@@ -399,7 +399,6 @@ identifiers:
     purpose: '[§6.1 Obligations (NEW — post-contest binding commitments)] Edge Case | Trigger | Resolution :: **Counterparty institutional collapse** | The counterparty''s faction collapses (Stability 0, formal dissolution per faction_layer §1) before the Wager condition resolves AND the counterparty was institutionally bound (e.g., wagered as Cardinal, as Jarl, as Crown Inner Circle member) | Wager is **suspend'
     built_in:
     - py:tools/build_key_graph.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: true
@@ -805,7 +804,6 @@ identifiers:
     purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.echo_scheduler` | R | set once per campaign by `mc_v18`; read by both seams as a gate | `engine/mc_v18.py:251 run_campaign`, `engine/cross_scale/scene_dispatch.py:390 _resolve_slot`, `engine/cross_scale/parliamentary_bridge.py:190 run_parliamentary_scene`'
     built_in:
     - py:engine/mc_v18.py
-    - py:tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py
     disposition: BUILT
     doc_status: null
     in_table: true

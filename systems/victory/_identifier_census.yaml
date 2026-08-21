@@ -131,7 +131,6 @@ identifiers:
     purpose: '[§3.6a Post-Coup Succession Rule (ED-674)] Candidate | Path | Confirmation condition :: Torben Almqvist | Dynastic heir | Torben Loyalty ≥ 6 + Parliamentary Succession Endorsement (faction_layer §5.4)'
     built_in:
     - py:tools/build_key_graph.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: true
@@ -188,7 +187,6 @@ identifiers:
     purpose: '[7. Traced gaps] Gap | Evidence anchor :: `references/module_contracts.yaml` declares four world-state-era gates on the `victory` module (`g_ms0` MS=0→Post-Calamity Era, `g_ms5` sustained MS≤5→Second Calamity, `g_msrec` MS-recovery, `g_diss` all-factions-dissolved→Anarchy Era) — none appear in `engine/autoload/victory.py`, whose only exported checks implement GD-1 (peninsular sovereignty) alone. R'
     built_in:
     - py:tools/build_execution_map.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: true
@@ -224,7 +222,7 @@ identifiers:
     identifier: peninsular_sovereignty
     docs:
     - systems/victory/victory_flow_skeleton_v1.md
-    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `systems/victory/` has no head row of its own in `CURRENT.md`''s subsystem table, and `references/canonical_sources.yaml`''s `victory` entry names only the design doc, no code pointer — both of this module''s mechanics (`victory_check_service`, `peninsular_sovereignty`) sim into `engine/autoload/victory.py`, never into this folder. | `CURRENT.md:33-56` (head '
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `systems/victory/` has no head row of its own in `CURRENT.md`''s subsystem table, and `references/canonical_sources.yaml`''s `victory` entry names only the design doc, no code pointer — both of this module''s mechanics (`victory_check_service`, `peninsular_sovereignty`) sim into `engine/autoload/victory.py`, never into this folder. | `CURRENT.md:21-42` (head '
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -294,7 +292,6 @@ identifiers:
     purpose: '[1. Entry points] Callable | Anchor | Called-by :: `check_all_factions` | `engine/autoload/victory.py:103 check_all_factions` | `engine/mc_v18.py:278 run_campaign`'
     built_in:
     - py:engine/mc_v18.py
-    - py:tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py
     disposition: BUILT
     doc_status: null
     in_table: true
@@ -381,7 +378,7 @@ identifiers:
     identifier: victory_check_service
     docs:
     - systems/victory/victory_flow_skeleton_v1.md
-    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `systems/victory/` has no head row of its own in `CURRENT.md`''s subsystem table, and `references/canonical_sources.yaml`''s `victory` entry names only the design doc, no code pointer — both of this module''s mechanics (`victory_check_service`, `peninsular_sovereignty`) sim into `engine/autoload/victory.py`, never into this folder. | `CURRENT.md:33-56` (head '
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `systems/victory/` has no head row of its own in `CURRENT.md`''s subsystem table, and `references/canonical_sources.yaml`''s `victory` entry names only the design doc, no code pointer — both of this module''s mechanics (`victory_check_service`, `peninsular_sovereignty`) sim into `engine/autoload/victory.py`, never into this folder. | `CURRENT.md:21-42` (head '
     built_in: []
     disposition: UNRESOLVED
     doc_status: null

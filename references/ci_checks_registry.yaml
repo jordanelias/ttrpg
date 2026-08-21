@@ -62,11 +62,7 @@ ci_checks:
     ci_job: validators
     notes: "External enforcement gate; runs outside Claude."
 
-  - path: tools/ci_hooks_verifier.py
-    level: 5
-    role: "Enforcement architecture intact: hooks wired, orchestrator imports them, skills don't bypass safe_commit, skeleton limits."
-    ci_job: validators
-    notes: "Meta-check. Drift here means the whole hook system has been bypassed."
+  # RETIRED culling wave 3 (ED-IN-0194, 2026-08-21): tools/ci_hooks_verifier.py
 
   - path: tools/ci_co_file_checker.py
     level: 5
@@ -181,19 +177,7 @@ ci_checks:
       taking this entry's own "widen lane by lane" instruction at its word once the IN lane had an instrument
       (tools/ci_claude_workflow_paths.py) to point at.
 
-  - path: tools/ci_claude_workflow_paths.py
-    level: 5
-    role: "Blocking .claude/ path-resolution gate: every repo path referenced by a .claude/ file (wf_*.js orchestration scripts, launch.json) resolves — LIVE on disk, or ALIASED through references/restructure_ledger.md — with no DEAD references."
-    ci_job: validators
-    notes: >-
-      ED-IN-0085 (shipped) / ED-IN-0087 (wired into CI). The .claude/ tree was the one part of this repo's machinery
-      nothing in CI ever read, and it had rotted: 51 referenced dependencies were 12 live, 35 resolvable only through
-      the restructure ledger (an indirection the scripts never declared), and 4 dead outright — so a workflow was
-      dispatching agents to read files that no longer exist, silently. Built BECAUSE the finding that motivated it was
-      first hand-counted and wrong by an order of magnitude ("44 of 64 broken"): the instrument is the correction, and
-      it is what ED-IN-0087 cites as its MEASURED-BY. Two filters keep it honest — a path a script deliberately names
-      as nonexistent (as its own finding) is not counted as a dependency, and the sanctioned alias map is followed
-      rather than ignored. Also runs locally via valoria_local.py --staged (blocking).
+  # RETIRED culling wave 3 (ED-IN-0194, 2026-08-21): tools/ci_claude_workflow_paths.py
 
   # RETIRED culling wave 2 (ED-IN-0194, 2026-08-21): ci_workplan_pointer_check.py together with
   # the 11 workplans/POINTER_*.md files it guarded. The guard was sound; its subject was a pointer
@@ -205,23 +189,7 @@ ci_checks:
   # carry one, 7 of those 10 are dead, 3 of the live plans carry one). That half remains a Jordan
   # docket question and does not become answered by deleting the guard.
   #
-  - path: tools/ci_wf_harness_check.py
-    level: 5
-    role: "Blocking workflow run-discipline gate: the .claude/wf_*.js run-discipline prelude is byte-identical to its owner tools/wf_harness.js, is actually CALLED, routes every critic stage through a structurally read-only agentType, and keeps model:'fable' off artifact-writing stages."
-    ci_job: validators
-    notes: >-
-      ED-IN-0087 (finding: ED-IN-0085). All three orchestration scripts shared four holes — no loop-termination
-      discipline, critic independence asserted only as a sentence inside a prompt, no alarm on a critic that found
-      nothing, no record of an unresolved disagreement. The fix is a shared prelude, but workflow scripts run in a
-      sandbox with NO filesystem and NO Node API, so they cannot import one: tools/wf_harness.js is the single owner
-      and is COPIED verbatim between sentinels, which is how CLAUDE.md §8's every-rule-lives-once survives a
-      constraint that forbids imports. This is the guard that fails when a copy drifts; `--fix` re-syncs. Also
-      enforces the 2026-07-28 fable ruling (read-only audit / planner / orchestrator / guardrail, NOT synthesis or
-      artifact authorship). LIMITS, stated plainly: the critic-stage scan reads SINGLE-LINE agent() options objects,
-      so a multi-line options literal is missed; CRITIC_MARKERS is a word list, so a critic phase under a new name
-      must be added deliberately. Both are why the BEHAVIOURAL half exists separately —
-      tests/valoria/test_wf_harness.py executes the harness under node (mutation-verified, 13/13 mutants killed).
-      Also runs locally via valoria_local.py --staged (blocking).
+  # RETIRED culling wave 3 (ED-IN-0194, 2026-08-21): tools/ci_wf_harness_check.py
 
   # RETIRED culling wave 2 (ED-IN-0194, 2026-08-21): ci_supersession_check.py — every return in
   # its main() was 0 and :66 said so explicitly, so it could never gate.

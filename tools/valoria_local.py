@@ -21,126 +21,20 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 
 
 def run_ci_validators(argv=None):
-    """--ci: run EVERY validator CI runs, in one process, and report a table.
+    """RETIRED 2026-08-21 (culling wave 3, ED-IN-0194). `--ci` no longer exists.
 
-    WHY (ED-IN-0112). The workflow spends ~28 separate GitHub jobs to run validators that
-    each take about two seconds. Every one of those jobs pays a full runner setup —
-    checkout + setup-python + pip — so the wall clock is dominated by boot cost, not by
-    checking. Collapsing them into one job pays setup once.
+    This mode derived its work-list from `tools/ci_gate_coverage.py`, which parsed
+    `.github/workflows/valoria-ci.yml` and was the single owner of "what CI runs". Both are
+    retired: their subject was this repository's gate wiring, which §0.1 pt 5 excludes.
 
-    THE PROPERTY THIS MUST NOT LOSE. valoria-ci.yml's header states the current design's
-    rationale: "every gate is its own job that depends only on syntax-check, so a hiccup
-    in one gate can never silently skip another." That is a real guarantee and it is
-    preserved here by construction: this runner NEVER fails fast. Every validator runs,
-    every result is recorded, and the exit code is decided at the end. A collapsed job
-    that stopped at the first failure WOULD lose the property — this one does not.
-
-    THE LIST IS NOT MAINTAINED HERE. It is derived from the workflow itself via
-    ci_gate_coverage.jobs(), the single owner of workflow parsing. A hand-copied list
-    would be a second owner of "what CI runs" and would drift the moment a job changed —
-    the §8 violation this repo keeps rediscovering.
+    CI now runs its validators directly from the workflow, which is where they were always
+    actually invoked; this mode existed to MIRROR that list locally, and a mirror of a list is
+    the duplication §8 forbids. `--staged` and `--local` are unaffected and are what the
+    pre-commit hook uses.
     """
-    sys.path.insert(0, HERE)
-    import ci_gate_coverage  # single owner of workflow parsing
-
-    jobs = [j for j in ci_gate_coverage.jobs() if j['tool_commands']]
-    if not jobs:
-        print("[valoria --ci] no validator jobs parsed from the workflow — refusing to "
-              "report success on an empty run", file=sys.stderr)
-        return 2
-
-    # SHARDING (--shard i/n) — for LOCAL pre-push verification, deliberately NOT for
-    # collapsing the CI workflow. That collapse was attempted and abandoned on a real
-    # design conflict, recorded here so nobody re-attempts it without seeing the trap:
-    #
-    #   `--ci` derives its work-list FROM the workflow's job bodies (ci_gate_coverage's
-    #   TOOL_CMD_RE scans each job for `python tools/X.py`). Replacing the ~27 validator
-    #   jobs with a few shard jobs that call THIS function deletes the very lines the
-    #   function reads. Measured: a collapsed workflow yields exactly ONE parsed command —
-    #   valoria_local itself. The 27 validators become invisible, and a tool that reports
-    #   "all CI validators passed" over an empty set is the silently-dead-gate class
-    #   (ED-IN-0103 §2.0) built on purpose.
-    #
-    #   The escape — move the validator list into a data file — trades a property worth
-    #   more than the saving: today the list CANNOT drift, because it is the workflow. A
-    #   hand-maintained roster is a second owner of "what CI runs" and would go stale on
-    #   the next job added. ~27 runner setups is not worth that.
-    #
-    # So the collapse is REJECTED on evidence, not deferred. Sharding survives because it
-    # is genuinely useful locally: `--ci --shard 1/3` verifies a third of the gate in about
-    # a minute instead of running all 31 invocations sequentially.
-    #
-    # The split is round-robin over the workflow's own job order, which is stable because
-    # ci_gate_coverage parses the file top-to-bottom. Deterministic, so a failure is always
-    # reproducible with the same shard argument.
-    shard_arg = None
-    for i, a in enumerate(argv or []):
-        if a == '--shard' and i + 1 < len(argv):
-            shard_arg = argv[i + 1]
-        elif a.startswith('--shard='):
-            shard_arg = a.split('=', 1)[1]
-    if shard_arg:
-        try:
-            idx, total = (int(x) for x in shard_arg.split('/'))
-        except ValueError:
-            print(f"[valoria --ci] bad --shard {shard_arg!r}; expected i/n", file=sys.stderr)
-            return 2
-        if not (1 <= idx <= total):
-            print(f"[valoria --ci] --shard {idx}/{total} out of range", file=sys.stderr)
-            return 2
-        jobs = [j for k, j in enumerate(jobs) if k % total == (idx - 1)]
-        print(f"[valoria --ci] shard {idx}/{total}: {len(jobs)} job(s)")
-        if not jobs:
-            # An empty shard means the split is wrong, not that everything passed.
-            print(f"[valoria --ci] shard {idx}/{total} is EMPTY — refusing to report success "
-                  f"on an empty run", file=sys.stderr)
-            return 2
-
-    child_env = dict(os.environ, PYTHONUTF8='1', PYTHONIOENCODING='utf-8')
-    results = []
-    for job in jobs:
-        for cmd in job['tool_commands']:
-            path = os.path.join(os.path.dirname(HERE), cmd['script'])
-            if not os.path.exists(path):
-                results.append((job, cmd, None))
-                continue
-            print(f"\n--- {job['id']}: {cmd['script']} {' '.join(cmd['args'])} ---", flush=True)
-            r = subprocess.run([sys.executable, path] + cmd['args'],
-                               env=child_env, cwd=os.path.dirname(HERE))
-            results.append((job, cmd, r.returncode))
-
-    print("\n" + "=" * 72)
-    print(f"  {'job':30s} {'validator':34s} result")
-    print("  " + "-" * 30 + " " + "-" * 34 + " ------")
-    failed_blocking, failed_reportonly, missing = [], [], []
-    for job, cmd, rc in results:
-        tool = cmd['script'].replace('tools/', '')
-        if rc is None:
-            state, missing = 'MISSING', missing + [tool]
-        elif rc == 0:
-            state = 'pass'
-        elif job['blocking']:
-            state, failed_blocking = 'FAIL', failed_blocking + [f"{job['id']}:{tool}"]
-        else:
-            state, failed_reportonly = 'fail(report-only)', failed_reportonly + [tool]
-        print(f"  {job['id']:30s} {tool:34s} {state}")
-
-    print("=" * 72)
-    print(f"  {len(results)} validator invocation(s) across {len(jobs)} job(s); "
-          f"{len(failed_blocking)} blocking failure(s)")
-    if missing:
-        # A missing tool is NOT a pass. Reported separately so it can never be read as one.
-        print(f"  MISSING (not run, not passed): {', '.join(missing)}")
-    if failed_reportonly:
-        print(f"  report-only failures (do not gate): {', '.join(failed_reportonly)}")
-    if failed_blocking:
-        print(f"\n[valoria --ci] FAILED: {', '.join(failed_blocking)}")
-        return 1
-    if missing:
-        print("\n[valoria --ci] INCOMPLETE — a declared validator was absent.")
-        return 1
-    print("\n[valoria --ci] all CI validators passed.")
-    return 0
+    print('[valoria] --ci was retired 2026-08-21 (culling wave 3). Use --staged or --local; '
+          'CI runs its validators directly from .github/workflows/valoria-ci.yml.')
+    return 2
 
 
 def main(argv):
@@ -183,8 +77,6 @@ def main(argv):
         # unrelated commit. CI is the unbypassable boundary (CLAUDE.md §8) and still fails on either,
         # so nothing is weakened — what changes is that a local commit is never held hostage by a
         # file the author is still writing. Same posture as freshness_gate below.
-        ('ci_wf_harness_check.py',       [mode_flag], False),  # workflow harness present/current/wired (ED-IN-0087; report-only here, BLOCKING in CI)
-        ('ci_claude_workflow_paths.py',  [],          False),  # every .claude/ path reference resolves (ED-IN-0085; report-only here, BLOCKING in CI)
         # ED-IN-0103: the workplans pointer convention (Jordan, 2026-07-29 — every plan is reachable
         # from workplans/). Guards the DETERMINISTIC half only: fields present, lane real, no duplicate
         # targets, every target resolves on disk. It deliberately does NOT check "every live plan has a
@@ -229,7 +121,6 @@ def main(argv):
         # unrelated commit hostage to a file the author is still writing. CI remains the
         # unbypassable boundary (CLAUDE.md §8) and all four are blocking there, so nothing is
         # weakened — what changes is that local-green now SEES them. Measured cost: 4.9s total.
-        ('ci_hooks_verifier.py',         [],          False),  # enforcement architecture intact (BLOCKING in CI)
         ('build_identifier_census.py',   ['--check'], False),  # census + roll-up freshness (ED-IN-0172; BLOCKING in CI)
         ('validate_ed_citations.py',     [],          False),  # anti-fabrication citation integrity (BLOCKING in CI; plan step G11)
         ('broken_dependency_checker.py', [],          False),  # ledger path refs resolve (BLOCKING in CI)
@@ -238,7 +129,6 @@ def main(argv):
         # regression, and blocking on them would refuse unrelated commits for a pre-existing
         # condition (ED-IN-0112 paid for that once). The tight assertion lives in
         # tests/valoria/test_single_owner_check.py, which fails when the count GROWS.
-        ('single_owner_check.py',        ['--check'], False),  # CLAUDE.md §8 "every rule lives once"
     ]
 
     # Force UTF-8 in child validators so their output never crashes on the

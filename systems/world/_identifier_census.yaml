@@ -146,7 +146,6 @@ identifiers:
     purpose: '[§1. Pipeline Overview — 4 Stages] Stage | Name | Mechanical character | Canon source :: **2** | Latent RM (ambient influence) | Active NPC influence in low-PT territories; does NOT control territory | conviction_track §5 PP-416'
     built_in:
     - py:tools/build_key_graph.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: true
@@ -197,7 +196,6 @@ identifiers:
     purpose: '**Military defeat** — territorial count = 0, OR Legitimacy < 1.0 AND territorial count < 2 (same as a fully-collapsed faction; a Promoted Faction at Stability 0 also follows the standard **Collapse Exit Procedure**, faction_layer §1.5 / ED-675 — collapse-as-simplification, reconstitution possible).'
     built_in:
     - py:tools/build_key_graph.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: false
@@ -459,7 +457,6 @@ identifiers:
     purpose: '[1. Entry points] Callable | Anchor | Called by :: `create_world(seed)` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:232 run_campaign`'
     built_in:
     - py:engine/mc_v18.py
-    - py:tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py
     disposition: BUILT
     doc_status: null
     in_table: true

@@ -98,7 +98,7 @@ jobs:
           fail=0
           v() { echo "::group::$*"; if ! "$@"; then echo "::error::FAILED: $*"; fail=1; fi; echo "::endgroup::"; }
           v python3 tools/ci_register_size_check.py
-          v python3 tools/ci_hooks_verifier.py
+          # RETIRED culling wave 3 (ED-IN-0194, 2026-08-21): ci_hooks_verifier.py. Its Check 6 (the deny-list) is independently asserted by tests/valoria/test_no_polling_triggers.py, which opens .claude/settings.json directly and never imported the verifier — the culling plan §5.3 hard gate, verified before deleting. CLAUDE.md §11 corrected to match.
           v python3 tools/ci_co_file_checker.py
           v python3 tools/ci_editorial_checker.py
           v python3 tools/ci_pp_frozen_check.py
@@ -149,8 +149,6 @@ jobs:
           v python3 tools/build_identifier_census.py --check
           v python3 tools/ci_sim_fabrication_check.py
           v python3 tools/ci_claim_provenance_check.py
-          v python3 tools/ci_claude_workflow_paths.py
-          v python3 tools/ci_wf_harness_check.py
           v python3 tools/ci_vetting_check.py
           v python3 tools/validate_ed_citations.py
           v python3 tools/broken_dependency_checker.py

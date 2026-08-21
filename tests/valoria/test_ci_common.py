@@ -93,49 +93,8 @@ def _load_apparatus_registry():
     return mod
 
 
-def test_build_apparatus_registry_analyze_py_uses_the_shared_predicate(tmp_path):
-    bar = _load_apparatus_registry()
+# RETIRED 2026-08-21 (culling wave 1/3, ED-IN-0194): test_build_apparatus_registry_analyze_py_uses_the_shared_predicate — its subject tools/build_apparatus_registry.py was retired.
 
-    real_guard = tmp_path / "real_cli.py"
-    real_guard.write_text("if __name__ == '__main__':\n    pass\n", encoding="utf-8")
-    assert bar.analyze_py(real_guard)["has_main"] is True
+# RETIRED 2026-08-21 (culling wave 1/3, ED-IN-0194): test_build_apparatus_registry_no_longer_false_positives_on_a_comment — its subject tools/build_apparatus_registry.py was retired.
 
-    reversed_guard = tmp_path / "reversed_cli.py"
-    reversed_guard.write_text("if '__main__' == __name__:\n    pass\n", encoding="utf-8")
-    assert bar.analyze_py(reversed_guard)["has_main"] is True
-
-
-def test_build_apparatus_registry_no_longer_false_positives_on_a_comment(tmp_path):
-    # The exact regression the OLD regex-over-raw-text implementation was exposed to: a module
-    # with no real CLI entry point, whose only trace of the guard text is a comment.
-    bar = _load_apparatus_registry()
-    fake = tmp_path / "not_a_cli.py"
-    fake.write_text(
-        "# Example: if __name__ == '__main__':\n"
-        "#     run()\n"
-        "def helper():\n"
-        "    return 1\n",
-        encoding="utf-8",
-    )
-    assert bar.analyze_py(fake)["has_main"] is False
-
-
-def test_build_apparatus_registry_imports_ci_common_not_a_local_regex():
-    # Single-owner check: the module must consume the SAME function object (not a re-implemented
-    # copy), and must not carry its own re.search-based guard predicate any more.
-    bar = _load_apparatus_registry()
-    assert bar.ci_common.has_main_guard is ci_common.has_main_guard
-    src_path = os.path.join(os.path.dirname(__file__), '..', '..', 'tools',
-                             'build_apparatus_registry.py')
-    src = open(src_path, encoding='utf-8').read()
-    # Check the live executable line, not the module's own doc comment describing the old
-    # implementation (which quotes the pattern verbatim as a citation, per §0.1's own provenance
-    # discipline — matching on that text would be exactly the comment/string false-positive class
-    # this consolidation exists to fix).
-    assert 'has_main = bool(re.search(' not in src, (
-        "build_apparatus_registry.py still carries the old regex-based __main__-guard assignment — "
-        "the single-owner consolidation was supposed to delete it"
-    )
-    assert 'has_main = ci_common.has_main_guard(tree)' in src, (
-        "build_apparatus_registry.py's analyze_py() no longer calls the single-owner predicate"
-    )
+# RETIRED 2026-08-21 (culling wave 1/3, ED-IN-0194): test_build_apparatus_registry_imports_ci_common_not_a_local_regex — its subject tools/build_apparatus_registry.py was retired.

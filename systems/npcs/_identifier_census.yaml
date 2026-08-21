@@ -23,9 +23,9 @@ docs:
 - systems/npcs/npc_roster_v30_infill.md
 - systems/npcs/npcs_flow_skeleton_v1.md
 counts:
-  UNRESOLVED: 76
+  UNRESOLVED: 77
   SUPERSEDED-DOC: 2
-  BUILT: 34
+  BUILT: 33
 identifiers:
   action_type:
     identifier: action_type
@@ -171,7 +171,6 @@ identifiers:
     purpose: '[7. Traced gaps] Gap | Evidence anchor :: Zero `mechanics_index.yaml` entries resolve into `systems/npcs/` — no mechanic cites any `systems/npcs/` path in `canon_sources` or `sim_module`; the conceptually-matching `npc_ai_service` entry is canon''d and sim''d elsewhere. | `registers/mechanics_index.yaml:192 npc_ai_service`'
     built_in:
     - py:tools/ci_generation_consistency.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: true
@@ -247,7 +246,6 @@ identifiers:
     purpose: Conviction Crisis on Honor (3+ Honor Scars per `conviction_track_v1 §2`) | All sworn-bonds and liege-vassal edges held by crisis NPC | All take +2 strain immediate; if any reach capacity, break per §3.8 |
     built_in:
     - py:tools/build_key_graph.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: false
@@ -884,7 +882,6 @@ identifiers:
     purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: declared, unimplemented | `systems/factions` (npc_behavior contract''s `consumes`/`emits` Key edges: `scene.gossip`, `scene.witness`, `state.opinion_revised`, etc.) | contract declares edges against a `sim_module: none` — see §7 gap 3 | `references/module_contracts.yaml:148 npc_behavior` / `references/module_contracts.yaml:184 npc_behavior`'
     built_in:
     - py:tools/build_key_graph.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: true
@@ -1040,9 +1037,8 @@ identifiers:
     docs:
     - systems/npcs/npcs_flow_skeleton_v1.md
     purpose: '[7. Traced gaps] Gap | Evidence anchor :: `mechanics_index.yaml`''s `npc_ai_service` entry cites `systems/_architecture/complete_systems_reference.md#part-1` as its canon source and marks `test_status: contested`, flagging the priority-stack contents as possibly contaminated pending an audit — a doc↔code divergence the contract layer records but the code carries no trace of (the function bodies are'
-    built_in:
-    - py:tools/observability/build_graph.py
-    disposition: BUILT
+    built_in: []
+    disposition: UNRESOLVED
     doc_status: null
     in_table: true
   thread_witnessed:

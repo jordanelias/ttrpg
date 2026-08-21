@@ -1400,3 +1400,100 @@ in `combat_design_v1.md` alone** and was carried forward — §13.1's Domain Ech
 | `designs/combat/combat_v30_infill.md` | `systems/combat/combat_reference_v1.md` | CONSOLIDATED |
 | `designs/combat/combat_design_v1.md` | `systems/combat/combat_reference_v1.md` | CONSOLIDATED |
 | `designs/combat/combat_design_v1_index.md` | `systems/combat/combat_reference_v1.md` | CONSOLIDATED |
+
+---
+
+## Culling waves 1–3 — apparatus retired 2026-08-21 (ED-IN-0194)
+
+`proposals/2026-08-18-culling-plan-v1.md`, ratified 2026-08-18, executed in its entirety on Jordan's
+ruling of 2026-08-21. These paths left `main` deliberately; their content is at the commits named
+below, on `claude/fable5-infrastructure-review-l0lw8r`. A citation to any of them resolves through
+this table rather than reading as a broken dependency — which is the whole reason the rows exist,
+since several are cited by live ledger entries that were correct when written.
+
+**Waves 1+2** — `FORK:3be53ef`. Observability generators and their committed feeds, the status
+dashboard, the apparatus registry, the repository-state ratchet and the scope ratchet, the test
+register, the audit-staleness/registry pair, three warn-only gates that could not fail, the workplan
+pointer set, and three skills whose subjects were already retired.
+
+**Wave 3** — the wiring-checkers and session machinery, retired in the commit that adds this table.
+`.claude/agents/valoria-critic.md` was KEPT by Jordan's ruling, so structurally-independent
+adversarial review survives the wave written to end it.
+
+| Old Path | New Path | Status |
+|----------|----------|--------|
+| `tools/observability/` | `FORK:3be53ef` | FORKED |
+| `tools/dashboard_data.py` | `FORK:3be53ef` | FORKED |
+| `dashboard/` | `FORK:3be53ef` | FORKED |
+| `tools/sim_harness/` | `FORK:3be53ef` | FORKED |
+| `tools/build_apparatus_registry.py` | `FORK:3be53ef` | FORKED |
+| `references/apparatus_registry.yaml` | `FORK:3be53ef` | FORKED |
+| `references/apparatus_registry.md` | `FORK:3be53ef` | FORKED |
+| `tools/audit_staleness.py` | `FORK:3be53ef` | FORKED |
+| `tools/audit_registry.py` | `FORK:3be53ef` | FORKED |
+| `tools/ci_audit_registry_check.py` | `FORK:3be53ef` | FORKED |
+| `tools/review_core.py` | `FORK:3be53ef` | FORKED |
+| `registers/review_baseline.yaml` | `FORK:3be53ef` | FORKED |
+| `tools/scope_ratchet.py` | `FORK:3be53ef` | FORKED |
+| `registers/scope_baseline.yaml` | `FORK:3be53ef` | FORKED |
+| `tools/build_test_register.py` | `FORK:3be53ef` | FORKED |
+| `references/test_register.json` | `FORK:3be53ef` | FORKED |
+| `references/glossary/` | `FORK:3be53ef` | FORKED |
+| `tools/ci_supersession_check.py` | `FORK:3be53ef` | FORKED |
+| `tools/ci_program_claim_check.py` | `FORK:3be53ef` | FORKED |
+| `tools/ci_workplan_pointer_check.py` | `FORK:3be53ef` | FORKED |
+| `workplans/POINTER_*.md` | `FORK:3be53ef` | FORKED |
+| `tools/editorial_review/` | `FORK:3be53ef` | FORKED |
+| `tools/model_router.html` | `FORK:3be53ef` | FORKED |
+| `tools/valoria_rename.py` | `FORK:3be53ef` | FORKED |
+| `tools/dead_primitive_census.py` | `FORK:3be53ef` | FORKED |
+| `skills/valoria-arc-generator/` | `FORK:3be53ef` | FORKED |
+| `skills/valoria-simulator/` | `FORK:3be53ef` | FORKED |
+| `skills/valoria-workplan-navigator/` | `FORK:3be53ef` | FORKED |
+| `.github/workflows/dashboard.yml` | `FORK:3be53ef` | FORKED |
+| `.github/workflows/audit-refresh.yml` | `FORK:3be53ef` | FORKED |
+| `tools/ci_gate_coverage.py` | `FORK:3be53ef` | FORKED |
+| `tools/ci_hooks_verifier.py` | `FORK:3be53ef` | FORKED |
+| `tools/ci_wf_harness_check.py` | `FORK:3be53ef` | FORKED |
+| `tools/wf_harness.js` | `FORK:3be53ef` | FORKED |
+| `tools/ci_claude_workflow_paths.py` | `FORK:3be53ef` | FORKED |
+| `tools/single_owner_check.py` | `FORK:3be53ef` | FORKED |
+| `tools/session_status.py` | `FORK:3be53ef` | FORKED |
+| `tools/session_handoff_reminder.py` | `FORK:3be53ef` | FORKED |
+| `tools/session_open_work.py` | `FORK:3be53ef` | FORKED |
+| `tools/handoff_atomize.py` | `FORK:3be53ef` | FORKED |
+| `tools/workplan_status.py` | `FORK:3be53ef` | FORKED |
+| `.claude/wf_world_schema_gaps.js` | `FORK:3be53ef` | FORKED |
+
+**Paired tests retired with their subjects** — a test whose subject is gone is not a test. Listed
+separately because several are cited by `MEASURED-BY:` markers in settled ledger entries: those
+claims were true and their instrument is at the ref, so the markers resolve here rather than
+reading as unre-runnable.
+
+| Old Path | New Path | Status |
+|----------|----------|--------|
+| `tests/valoria/test_gate_coverage.py` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/test_blocking_tier_is_honest.py` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/test_registry_job_join.py` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/test_status_reader_one_owner.py` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/test_wf_harness.py` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/test_wf_harness_check.py` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/test_single_owner_check.py` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/test_handoff_structure.py` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/test_handoff_dispatch_validity.py` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/test_retired_tree_apparatus.py` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/test_retired_tree_scanner.py` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/test_session_open_work.py` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/test_build_glossary.py` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/test_build_proposals.py` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/test_observability_core.py` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/test_model_router_ids.py` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/test_compile_is_not_invocation.py` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/test_oi12_orphan_census.py` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/test_test_register.py` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/test_ci_supersession_check.py` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/test_scope_ratchet.py` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/test_program_claim_check.py` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/test_gen_audit.py` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/test_audit_refresh_coverage.py` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/test_fork_divergence.py` | `FORK:3be53ef` | FORKED |

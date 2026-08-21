@@ -407,7 +407,6 @@ identifiers:
     purpose: '[§2.3 Accord Changes — Gaining] Method | Accord Change | Notes :: Peace or Truce treaty with territory cession (faction_layer §3) | Accord set to 2 | Diplomatic legitimacy from negotiated transfer.'
     built_in:
     - py:tools/build_key_graph.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: true
@@ -780,7 +779,6 @@ identifiers:
     purpose: '[1. Entry points] Callable | Anchor | Called by :: `run_campaign(seed, max_seasons, params) -> CampaignResult` | `engine/mc_v18.py:220 run_campaign` | `engine/mc_v18.py:317` (direct caller — `run_batch`''s loop; `run_batch` itself is reached only from `__main__` at `engine/mc_v18.py:334`); no in-tree production subsystem calls it — invoked externally by `tools/trace_execution_phases.py:147`, and in'
     built_in:
     - py:engine/mc_v18.py
-    - py:tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py
     disposition: BUILT
     doc_status: null
     in_table: true

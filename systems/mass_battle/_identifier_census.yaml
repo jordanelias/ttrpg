@@ -12,7 +12,7 @@ docs:
 - systems/mass_battle/military_layer_v30_index.md
 counts:
   BUILT: 122
-  UNRESOLVED: 93
+  UNRESOLVED: 94
 identifiers:
   a_casualties:
     identifier: a_casualties
@@ -846,7 +846,6 @@ identifiers:
     purpose: See faction_layer §1.5 for full doctrine note.
     built_in:
     - py:tools/build_key_graph.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: false
@@ -898,7 +897,6 @@ identifiers:
     purpose: '`obs_core.first_status()` (the single owner of status parsing) returns the'
     built_in:
     - py:tools/ci_common.py
-    - py:tools/observability/obs_core.py
     disposition: BUILT
     doc_status: null
     in_table: false
@@ -1140,6 +1138,16 @@ identifiers:
     docs:
     - systems/mass_battle/military_layer_v30.md
     purpose: So the doc read as no_status to every instrument while carrying an approval.
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  obs_core:
+    identifier: obs_core
+    docs:
+    - systems/mass_battle/mass_battle_v30.md
+    - systems/mass_battle/military_layer_v30.md
+    purpose: '`obs_core.first_status()` (the single owner of status parsing) returns the'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -1483,7 +1491,6 @@ identifiers:
     purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: up | `engine/mc_v18.py` (campaign driver) | `run_campaign` → `run_season(action_callback=_faction_actions_callback)` | `engine/mc_v18.py:220 run_campaign`, `:267 run_season`'
     built_in:
     - py:engine/mc_v18.py
-    - py:tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py
     disposition: BUILT
     doc_status: null
     in_table: true
@@ -1678,7 +1685,6 @@ identifiers:
     purpose: '[7. Traced gaps] Gap | Evidence :: **Registries have not caught up to the J2 ruling.** `registers/mechanics_index.yaml`''s `mass_battle` entry still points `sim_module: systems/mass_battle/sim/massbattle.py` (TREE A) with no acknowledgement of TREE B. `references/module_contracts.yaml`''s `mass_battle` module entry deliberately omits `sim_module` at all (marked "undeclared", awaiting an MB-lane add)'
     built_in:
     - py:tools/build_key_graph.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: true
@@ -1770,7 +1776,6 @@ identifiers:
     purpose: '(`<!-- Status: CANONICAL — approved 2026-04-17 -->`), which `obs_core.STATUS_RE` cannot'
     built_in:
     - py:tools/ci_common.py
-    - py:tools/observability/obs_core.py
     disposition: BUILT
     doc_status: null
     in_table: false
@@ -2158,7 +2163,6 @@ dropped_as_not_a_mechanic:
   module_contracts: boilerplate-or-too-short
   ms_budget: the doc spells it as <name>.md — a citation
   npc_behavior_v30: matches a tracked/aliased document stem
-  obs_core: matches a tracked/aliased document stem
   params_board_game: the doc spells it as <name>.md — a citation
   params_combat: the doc spells it as <name>.md — a citation
   peninsular_strain_v1: the doc spells it as <name>.md — a citation

@@ -99,22 +99,39 @@ THRESHOLDS = {
     # out of registers/editorial_ledger.jsonl by lane, mirroring registers/handoffs/HANDOFF_<LANE>.md.
     # Generous headroom — each lane starts small (largest today, IN, is ~34 entries) but
     # this is a live append-only store like its parent, not a fixed-size snapshot.
-    "registers/editorial_ledger_mb.jsonl": 50_000,
-    "registers/editorial_ledger_pc.jsonl": 50_000,
-    "registers/editorial_ledger_fi.jsonl": 50_000,
-    "registers/editorial_ledger_sc.jsonl": 50_000,
-    "registers/editorial_ledger_fa.jsonl": 50_000,
-    "registers/editorial_ledger_wr.jsonl": 50_000,
-    "registers/editorial_ledger_in.jsonl": 50_000,
-    "registers/editorial_ledger_go.jsonl": 50_000,
-    "registers/editorial_ledger_se.jsonl": 50_000,
+    # RAISED 50_000 -> 120_000, RULED 2026-08-21 by Jordan: "merely fiat made trying to get work
+    # done, not anything essential." The cap had become the thing it was supposed to prevent — a
+    # blocking gate whose only observable effect was stopping lanes from recording work.
+    #
+    # WHAT THE MEASUREMENT ACTUALLY SHOWED, because the reported blocker was stale. ED-IN-0185 Q5
+    # recorded "~108 tokens of headroom" and it was carried forward for six days as "no lane can
+    # file". Measured 2026-08-21 the file was at 45,998 / 50,000 — 4,002 tokens, roughly four rows.
+    # Real, tight, and not the emergency the citation described: the 2026-08-19 archive split had
+    # already relieved it and nothing re-measured. A number that is re-cited rather than re-taken
+    # rots, which is the same defect class as the duplicated date CLAUDE.md §1 records.
+    #
+    # WHY A RAISE AND NOT MORE ARCHIVING. Archiving was the designed relief valve and it has run
+    # out of room: editorial_ledger_in_archive.jsonl is itself at 135,224 / 150,000 (90%), so
+    # archiving moves the wall rather than removing it. These files are APPEND-ONLY STORES READ BY
+    # TOOLS — validate_ed_citations globs them, obs_core parsed them — not documents a session
+    # reads cover to cover, so the token cap is protecting nobody from a context cost that is not
+    # paid. 120_000 sits below the flat ledger's own 150_000 and gives every lane ~80 rows.
+    "registers/editorial_ledger_mb.jsonl": 120_000,
+    "registers/editorial_ledger_pc.jsonl": 120_000,
+    "registers/editorial_ledger_fi.jsonl": 120_000,
+    "registers/editorial_ledger_sc.jsonl": 120_000,
+    "registers/editorial_ledger_fa.jsonl": 120_000,
+    "registers/editorial_ledger_wr.jsonl": 120_000,
+    "registers/editorial_ledger_in.jsonl": 120_000,
+    "registers/editorial_ledger_go.jsonl": 120_000,
+    "registers/editorial_ledger_se.jsonl": 120_000,
     # Per-lane ARCHIVE overflow (ED-IN-0075, IN was the first lane to reach its 50k cap):
     # resolved/superseded entries move here from the live lane ledger; still loaded into the
     # ED universe by tools/validate_ed_citations.py (globs editorial_ledger_*_archive.jsonl),
     # so archived-ED citations keep resolving. Large cap like the flat editorial archive.
-    "registers/editorial_ledger_in_archive.jsonl": 150_000,
+    "registers/editorial_ledger_in_archive.jsonl": 250_000,  # RAISED 150_000 -> 250_000 with its live twin (Jordan, 2026-08-21). At 135,224 / 150,000 the ARCHIVE was itself at 90%, so archiving relieved nothing — the relief valve had no room. See the live-ledger note above.
     # [ED-MB-0051, 2026-07-29] MB lane archive — same 150k overflow ceiling as the IN sibling.
-    "registers/editorial_ledger_mb_archive.jsonl": 150_000,
+    "registers/editorial_ledger_mb_archive.jsonl": 250_000,
     # PC was the THIRD lane to reach its 50k cap (ED-PC-0050, 2026-07-29), during the E0-E3
     # combat-correctness arc. Same convention as the IN archive above: settled entries
     # (status resolved/ratified, needs_jordan not True) move here; anything open, deferred,
@@ -122,7 +139,7 @@ THRESHOLDS = {
     # NOTE the MB sibling above landed independently on main the same day — three lanes crossed
     # the 50k cap within a week, so this is now a recurring pattern rather than a one-off. Adding
     # the cap by hand each time is the manual step; a per-lane default would retire it.
-    "registers/editorial_ledger_pc_archive.jsonl": 150_000,
+    "registers/editorial_ledger_pc_archive.jsonl": 250_000,
     # Audit/simulation-run verdict registry (added with the GitHub Pages dashboard,
     # 2026-07-11): one JSONL line per completed audit/simulation-balance run, appended
     # by 8 skills (valoria-canon-guard, -mechanic-audit, -resolution-diagnostic,

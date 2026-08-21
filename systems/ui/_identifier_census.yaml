@@ -14,8 +14,8 @@ docs:
 - systems/ui/valoria_ui_ux_v4_2_workplan_index.md
 - systems/ui/valoria_ui_ux_v4_index.md
 counts:
-  UNRESOLVED: 156
-  BUILT: 28
+  UNRESOLVED: 157
+  BUILT: 27
 identifiers:
   active_slate:
     identifier: active_slate
@@ -99,7 +99,6 @@ identifiers:
     purpose: '[7. Traced gaps] Gap | Evidence anchor :: `systems/ui/_identifier_census.yaml` (generated, `tools/build_identifier_census.py`) reports 28 identifiers as `disposition: BUILT` against the UI docs'' vocabulary, but every `built_in:` pointer for those rows resolves into **other** subsystems'' code (e.g. `systems/combat/combat_engine_v1/combatant.py`, `systems/settlements/sim/settlement.py`, `systems/fac'
     built_in:
     - py:tools/build_identifier_census.py
-    - py:tools/observability/build_glossary.py
     disposition: BUILT
     doc_status: null
     in_table: true
@@ -679,7 +678,6 @@ identifiers:
     purpose: 'Three phases per faction_layer §3.3:'
     built_in:
     - py:tools/build_key_graph.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: false
@@ -739,9 +737,8 @@ identifiers:
     docs:
     - systems/ui/valoria_ui_ux_v4.md
     purpose: 'generated_at: Season'
-    built_in:
-    - py:tools/dashboard_data.py
-    disposition: BUILT
+    built_in: []
+    disposition: UNRESOLVED
     doc_status: null
     in_table: false
   hybrid_gaps:
@@ -1465,7 +1462,6 @@ identifiers:
     purpose: '[7. Traced gaps] Gap | Evidence anchor :: `references/module_contracts.yaml` declares no `ui` / `ui_ux` module. The file''s full `module:` roster (27 entries, grepped ` - module:` across the file) contains no UI-named entry — the subsystem has no `consumes`/`emits`/`resolver`/`sim_module` contract at all, not merely an unbuilt one. | `references/module_contracts.yaml:81` (`faction_state`, first of '
     built_in:
     - py:tools/build_key_graph.py
-    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: true
