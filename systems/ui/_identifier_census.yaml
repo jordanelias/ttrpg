@@ -687,7 +687,7 @@ identifiers:
     identifier: faction_state
     docs:
     - systems/ui/ui_flow_skeleton_v1.md
-    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `references/module_contracts.yaml` declares no `ui` / `ui_ux` module. The file''s full `module:` roster (27 entries, grepped ` - module:` across the file) contains no UI-named entry — the subsystem has no `consumes`/`emits`/`resolver`/`sim_module` contract at all, not merely an unbuilt one. | `references/module_contracts.yaml:59` (`faction_state`, first of '
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `references/module_contracts.yaml` declares no `ui` / `ui_ux` module. The file''s full `module:` roster (27 entries, grepped ` - module:` across the file) contains no UI-named entry — the subsystem has no `consumes`/`emits`/`resolver`/`sim_module` contract at all, not merely an unbuilt one. | `references/module_contracts.yaml:81` (`faction_state`, first of '
     built_in:
     - py:systems/factions/sim/hafenmark_equipment.py
     disposition: BUILT
@@ -1462,7 +1462,7 @@ identifiers:
     identifier: sim_module
     docs:
     - systems/ui/ui_flow_skeleton_v1.md
-    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `references/module_contracts.yaml` declares no `ui` / `ui_ux` module. The file''s full `module:` roster (27 entries, grepped ` - module:` across the file) contains no UI-named entry — the subsystem has no `consumes`/`emits`/`resolver`/`sim_module` contract at all, not merely an unbuilt one. | `references/module_contracts.yaml:59` (`faction_state`, first of '
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `references/module_contracts.yaml` declares no `ui` / `ui_ux` module. The file''s full `module:` roster (27 entries, grepped ` - module:` across the file) contains no UI-named entry — the subsystem has no `consumes`/`emits`/`resolver`/`sim_module` contract at all, not merely an unbuilt one. | `references/module_contracts.yaml:81` (`faction_state`, first of '
     built_in:
     - py:tools/build_key_graph.py
     - py:tools/observability/build_graph.py
@@ -1696,7 +1696,7 @@ identifiers:
     docs:
     - systems/ui/ui_flow_skeleton_v1.md
     - systems/ui/valoria_ui_ux_v4_2_workplan.md
-    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `references/module_contracts.yaml` declares no `ui` / `ui_ux` module. The file''s full `module:` roster (27 entries, grepped ` - module:` across the file) contains no UI-named entry — the subsystem has no `consumes`/`emits`/`resolver`/`sim_module` contract at all, not merely an unbuilt one. | `references/module_contracts.yaml:59` (`faction_state`, first of '
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `references/module_contracts.yaml` declares no `ui` / `ui_ux` module. The file''s full `module:` roster (27 entries, grepped ` - module:` across the file) contains no UI-named entry — the subsystem has no `consumes`/`emits`/`resolver`/`sim_module` contract at all, not merely an unbuilt one. | `references/module_contracts.yaml:81` (`faction_state`, first of '
     built_in: []
     disposition: UNRESOLVED
     doc_status: null

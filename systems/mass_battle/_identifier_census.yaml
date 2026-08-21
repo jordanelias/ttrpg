@@ -106,7 +106,7 @@ identifiers:
     identifier: action_callback
     docs:
     - systems/mass_battle/mass_battle_flow_skeleton_v1.md
-    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: up | `engine/mc_v18.py` (campaign driver) | `run_campaign` → `run_season(action_callback=_faction_actions_callback)` | `engine/mc_v18.py:212 run_campaign`, `:267 run_season`'
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: up | `engine/mc_v18.py` (campaign driver) | `run_campaign` → `run_season(action_callback=_faction_actions_callback)` | `engine/mc_v18.py:220 run_campaign`, `:267 run_season`'
     built_in:
     - py:systems/overview/sim/season.py
     disposition: BUILT
@@ -1480,7 +1480,7 @@ identifiers:
     identifier: run_campaign
     docs:
     - systems/mass_battle/mass_battle_flow_skeleton_v1.md
-    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: up | `engine/mc_v18.py` (campaign driver) | `run_campaign` → `run_season(action_callback=_faction_actions_callback)` | `engine/mc_v18.py:212 run_campaign`, `:267 run_season`'
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: up | `engine/mc_v18.py` (campaign driver) | `run_campaign` → `run_season(action_callback=_faction_actions_callback)` | `engine/mc_v18.py:220 run_campaign`, `:267 run_season`'
     built_in:
     - py:engine/mc_v18.py
     - py:tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py
@@ -1513,7 +1513,7 @@ identifiers:
     identifier: run_season
     docs:
     - systems/mass_battle/mass_battle_flow_skeleton_v1.md
-    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: up | `engine/mc_v18.py` (campaign driver) | `run_campaign` → `run_season(action_callback=_faction_actions_callback)` | `engine/mc_v18.py:212 run_campaign`, `:267 run_season`'
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: up | `engine/mc_v18.py` (campaign driver) | `run_campaign` → `run_season(action_callback=_faction_actions_callback)` | `engine/mc_v18.py:220 run_campaign`, `:267 run_season`'
     built_in:
     - py:systems/overview/sim/season.py
     disposition: BUILT

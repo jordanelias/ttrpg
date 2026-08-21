@@ -31,7 +31,7 @@
 | `apply_strain_shock(strain_delta, affected_territories, world=None)` | `systems/settlements/sim/temperaments.py:142 apply_strain_shock` | `—` (no importer) |
 | `get_faction_aggregate(faction_name)` | `systems/settlements/sim/temperaments.py:163 get_faction_aggregate` | `—` (no importer) |
 | `ledger_add` / `ledger_has` / `ledger_get` / `ledger_sweep` | `systems/settlements/sim/ledger.py:47`, `systems/settlements/sim/ledger.py:61`, `systems/settlements/sim/ledger.py:65`, `systems/settlements/sim/ledger.py:69` | Only via `Settlement.add_tag`/`has_tag`/`tags` (`systems/settlements/sim/registry.py:99-107`) and `succeed_governor`'s `ledger_sweep` call (`systems/settlements/sim/registry.py:206`) — itself uncalled in production; live tag-writers are only `tools/sim_harness/adapters/pr119_governance/*.py` |
-| `serialize_world(world)` settlements branch | `engine/autoload/game_state.py:349 settlements` | `engine/mc_v18.py:307 serialize_world` (end of `run_campaign`) |
+| `serialize_world(world)` settlements branch | `engine/autoload/game_state.py:349 settlements` | `engine/mc_v18.py:315 serialize_world` (end of `run_campaign`) |
 | `restore_world(snapshot)` settlements branch | `engine/autoload/game_state.py:438-440 settlements` | no production caller found (save/restore round-trip exercised only by `engine/tests/test_world_population.py`) |
 
 ## 2. IN
@@ -43,7 +43,7 @@
 | `world` (`GameState`/`World`) | `world-state` | Caller-supplied on every registry/ledger/infrastructure/adjacency entry point | `systems/settlements/sim/registry.py:165 settlement_store` |
 | `settlement_id` / `province_id` / `territory_id` / `sid` | `arg` | Caller-supplied key | e.g. `systems/settlements/sim/registry.py:176 get_settlement` |
 | `echo_ctx['target_settlement']`, `echo['scene_outcome']` | `arg` | Optional fields on a scene's `echo` context block, read at the accord-echo seam | `engine/cross_scale/echo_transport.py:301 echo_ctx`, `:167 declared` |
-| `world.echo_scheduler` (presence) | `flag` | Set on `world` in `run_campaign` when `ECHO_TRANSPORT` is on | `engine/mc_v18.py:243 world.echo_scheduler` |
+| `world.echo_scheduler` (presence) | `flag` | Set on `world` in `run_campaign` when `ECHO_TRANSPORT` is on | `engine/mc_v18.py:251 world.echo_scheduler` |
 | `ACCORD_MAP` / `STARTING_ACCORD` / `STARTING_OWNER` | `param` | `engine/autoload/game_state.py` module constants, used to build `Territory` objects (a separate, uncoordinated source from the geography YAML — see §7) | `engine/autoload/game_state.py:246-254 Territory` |
 | `world.territories[tid].templar` | `world-state` | `Territory` dataclass field, read as a seed for infrastructure Axis-2 backward compat | `systems/settlements/sim/infrastructure.py:130-131 templar_seed` |
 
@@ -96,11 +96,11 @@ Two production sites write `Territory.accord` directly, never going through `Set
 |---|---|---|---|
 | `world.settlements: dict[sid, Settlement]` | `registry` | `serialize_world`, `province_members`/`province_accord` readers, `echo_transport._apply_accord_echo` | `engine/autoload/game_state.py:231 settlements` |
 | `province_accord(...)` return (`int`) | `arg` | `_probe_province_accord_drift` only, in production | `systems/settlements/sim/registry.py:190 province_accord` |
-| `world.accord_drift_probe_hits` (`int`) | `world-state` | `CampaignResult.accord_drift_probe_hits` | `engine/mc_v18.py:304 accord_drift_probe_hits` |
+| `world.accord_drift_probe_hits` (`int`) | `world-state` | `CampaignResult.accord_drift_probe_hits` | `engine/mc_v18.py:312 accord_drift_probe_hits` |
 | `world.territory_infrastructure[tid]: InfrastructureState` | `registry` | `count_infrastructure`/`seizure_ob_modifier` readers (`mass_seizure.py`), `serialize_world`/`restore_world` | `engine/autoload/game_state.py:421-423 InfrastructureState` |
 | `ADJACENCY[tid]: set[str]` | `key` | `faction_action._conquest_targets`/`_threat_signal`, `insurgency_pipeline._contiguous_uncontrolled_groups` | `systems/settlements/sim/adjacency.py:9 ADJACENCY` |
 | Queued `scene.accord_echo` Key (`settlement.order` delta) | `key` | `TickScheduler` log, applied at `accounting_boundary()` — dormant in a seeded campaign (see §7) | `engine/cross_scale/echo_transport.py:319-333 key` |
-| `CampaignResult.final_state['settlements']` | `arg` | `run_campaign` caller / any downstream telemetry reader | `engine/mc_v18.py:307 final_state` |
+| `CampaignResult.final_state['settlements']` | `arg` | `run_campaign` caller / any downstream telemetry reader | `engine/mc_v18.py:315 final_state` |
 
 ## 5. State touched
 
@@ -147,4 +147,4 @@ Two production sites write `Territory.accord` directly, never going through `Set
 | `Settlement.legitimacy`/`Settlement.popular_support` are declared 0-7 fields with zero readers or writers anywhere in `sim/`, an inert schema stub per the module's own inline note (PRE-LPS-1, ED-FA-0004) | `systems/settlements/sim/registry.py:69-74` |
 | `restore_world`'s `settlements` branch has no production caller — only exercised by `engine/tests/test_world_population.py`'s explicit serialize/restore round-trip | `engine/autoload/game_state.py:418-420`; `engine/tests/test_world_population.py:1-18` |
 | **Two same-named, differently-keyed fields, both called `religious_building`.** `Settlement.religious_building` (`registry.py`) is touched only by the dataclass's own `to_dict`/`from_dict` — never set by `populate_from_geography`, never read by any logic — so it round-trips through serialization while being logically dead. The live field is a different store entirely: `InfrastructureState.religious_building`, written by `build_infrastructure` and read by `count_infrastructure`/`seizure_ob_modifier`. | `systems/settlements/sim/registry.py:81 religious_building`; `systems/settlements/sim/registry.py:123 religious_building`; `systems/settlements/sim/registry.py:148 religious_building`; `systems/settlements/sim/infrastructure.py:81 religious_building`; `systems/settlements/sim/infrastructure.py:160 religious_building`; `systems/settlements/sim/infrastructure.py:208 religious_building`; `systems/settlements/sim/infrastructure.py:246 religious_building` |
-| **The `settlement_layer` contract's `executes:false` flag is correct for the file it names, but that file is the wrong one.** Its declared `sim_module` is `settlement.py`, the orphan this skeleton independently proves has zero importers; the live registry code (`registry.py`) that actually runs at boot and every `loop.s3` has no contract entry of its own. The contract pointing at the dead file while the live file goes uncontracted is the real defect. | `references/module_contracts.yaml:690-693 settlement_layer`; `systems/settlements/sim/settlement.py:95 compute_settlement_state`; `systems/settlements/sim/registry.py:215 populate_from_geography` |
+| **The `settlement_layer` contract's `executes:false` flag is correct for the file it names, but that file is the wrong one.** Its declared `sim_module` is `settlement.py`, the orphan this skeleton independently proves has zero importers; the live registry code (`registry.py`) that actually runs at boot and every `loop.s3` has no contract entry of its own. The contract pointing at the dead file while the live file goes uncontracted is the real defect. | `references/module_contracts.yaml:712-715 settlement_layer`; `systems/settlements/sim/settlement.py:95 compute_settlement_state`; `systems/settlements/sim/registry.py:215 populate_from_geography` |

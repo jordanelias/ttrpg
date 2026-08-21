@@ -25,7 +25,7 @@ identifiers:
     identifier: accord_drift_probe_hits
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.accord_drift_probe_hits` (`int`) | `world-state` | `CampaignResult.accord_drift_probe_hits` | `engine/mc_v18.py:304 accord_drift_probe_hits`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.accord_drift_probe_hits` (`int`) | `world-state` | `CampaignResult.accord_drift_probe_hits` | `engine/mc_v18.py:312 accord_drift_probe_hits`'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT
@@ -414,7 +414,7 @@ identifiers:
     identifier: echo_scheduler
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.echo_scheduler` (presence) | `flag` | Set on `world` in `run_campaign` when `ECHO_TRANSPORT` is on | `engine/mc_v18.py:243 world.echo_scheduler`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.echo_scheduler` (presence) | `flag` | Set on `world` in `run_campaign` when `ECHO_TRANSPORT` is on | `engine/mc_v18.py:251 world.echo_scheduler`'
     built_in:
     - py:engine/tests/test_accord_echo.py
     - py:engine/tests/test_echo_transport.py
@@ -582,7 +582,7 @@ identifiers:
     identifier: final_state
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `CampaignResult.final_state[''settlements'']` | `arg` | `run_campaign` caller / any downstream telemetry reader | `engine/mc_v18.py:307 final_state`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `CampaignResult.final_state[''settlements'']` | `arg` | `run_campaign` caller / any downstream telemetry reader | `engine/mc_v18.py:315 final_state`'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT
@@ -1332,7 +1332,7 @@ identifiers:
     identifier: run_campaign
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `serialize_world(world)` settlements branch | `engine/autoload/game_state.py:349 settlements` | `engine/mc_v18.py:307 serialize_world` (end of `run_campaign`)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `serialize_world(world)` settlements branch | `engine/autoload/game_state.py:349 settlements` | `engine/mc_v18.py:315 serialize_world` (end of `run_campaign`)'
     built_in:
     - py:engine/mc_v18.py
     - py:tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py
@@ -1422,7 +1422,7 @@ identifiers:
     identifier: serialize_world
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `serialize_world(world)` settlements branch | `engine/autoload/game_state.py:349 settlements` | `engine/mc_v18.py:307 serialize_world` (end of `run_campaign`)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `serialize_world(world)` settlements branch | `engine/autoload/game_state.py:349 settlements` | `engine/mc_v18.py:315 serialize_world` (end of `run_campaign`)'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT

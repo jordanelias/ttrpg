@@ -5261,19 +5261,27 @@
      "name": "_offenders"
     }
    ],
-   "lane_derived": false,
-   "lanes": [],
-   "loc": 120,
+   "lane_derived": true,
+   "lanes": [
+    "IN"
+   ],
+   "loc": 147,
    "modules_under_test": [
     "engine",
     "engine.autoload.game_state",
+    "engine.substrate",
     "systems",
     "systems.factions.sim.treaty"
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 5,
+   "test_count": 7,
    "tests": {
+    "test_every_declared_composition_role_resolves": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Import-by-string is only safe because every target is proven to resolve. Prove it here too,"
+    },
     "test_no_new_engine_to_systems_inversion": {
      "assertionless": false,
      "assertions": 1,
@@ -5283,6 +5291,11 @@
      "assertionless": false,
      "assertions": 1,
      "summary": null
+    },
+    "test_the_composition_resolver_refuses_an_undeclared_role": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The indirection must not degrade into a silent default."
     },
     "test_the_documented_cycle_is_still_real": {
      "assertionless": false,
@@ -6309,7 +6322,7 @@
     },
     {
      "name": "EXPECTED_COMMANDS",
-     "size": 38
+     "size": 39
     }
    ],
    "cites_measurement": false,
@@ -6339,7 +6352,7 @@
    "lanes": [
     "IN"
    ],
-   "loc": 388,
+   "loc": 389,
    "modules_under_test": [
     "engine/tests",
     "tools",
@@ -6371,6 +6384,7 @@
     "tools/ci_workplan_pointer_check.py",
     "tools/compliance_check.py",
     "tools/currency_consistency_check.py",
+    "tools/export_composition.py",
     "tools/export_descriptors.py",
     "tools/export_engine_params.py",
     "tools/export_game_constants.py",
@@ -12471,7 +12485,7 @@
    "FA": 7,
    "FI": 1,
    "GO": 2,
-   "IN": 45,
+   "IN": 46,
    "MB": 5,
    "PC": 8,
    "SC": 2,
@@ -12602,11 +12616,11 @@
   "files_claiming_mutation": 10,
   "files_naming_a_module": 124,
   "files_with_a_kill_count": 1,
-  "files_with_a_lane": 48,
+  "files_with_a_lane": 49,
   "helper_defs": 312,
   "helper_loc": 2886,
   "ratchet_baselines": 11,
-  "tests": 1435,
+  "tests": 1437,
   "undocumented_files": 0
  }
 }

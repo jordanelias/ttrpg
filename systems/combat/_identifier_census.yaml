@@ -330,7 +330,7 @@ identifiers:
     docs:
     - systems/combat/combat_flow_skeleton_v1.md
     - systems/combat/scene_combat_design_v1.md
-    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `references/module_contracts.yaml` `personal_combat` module | declares `emits: scene.combat_hit / scene.combat_felled / scene.combat_resolved` as though the engine itself emits Keys — see §7 divergence | `references/module_contracts.yaml:1018-1021`'
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `references/module_contracts.yaml` `personal_combat` module | declares `emits: scene.combat_hit / scene.combat_felled / scene.combat_resolved` as though the engine itself emits Keys — see §7 divergence | `references/module_contracts.yaml:1040-1043`'
     built_in:
     - key:key_type_registry_v30.md
     disposition: BUILT
@@ -341,7 +341,7 @@ identifiers:
     docs:
     - systems/combat/combat_flow_skeleton_v1.md
     - systems/combat/scene_combat_design_v1.md
-    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `references/module_contracts.yaml` `personal_combat` module | declares `emits: scene.combat_hit / scene.combat_felled / scene.combat_resolved` as though the engine itself emits Keys — see §7 divergence | `references/module_contracts.yaml:1018-1021`'
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `references/module_contracts.yaml` `personal_combat` module | declares `emits: scene.combat_hit / scene.combat_felled / scene.combat_resolved` as though the engine itself emits Keys — see §7 divergence | `references/module_contracts.yaml:1040-1043`'
     built_in:
     - key:key_type_registry_v30.md
     disposition: BUILT
@@ -483,7 +483,7 @@ identifiers:
     identifier: dispatch_combat_bridge
     docs:
     - systems/combat/combat_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.dispatch_combat_bridge` | flag | decided once per campaign by `mc_v18.run_campaign`, default OFF | `engine/mc_v18.py:70 _dispatch_combat_bridge_on`, `engine/mc_v18.py:237`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.dispatch_combat_bridge` | flag | decided once per campaign by `mc_v18.run_campaign`, default OFF | `engine/mc_v18.py:78 _dispatch_combat_bridge_on`, `engine/mc_v18.py:237`'
     built_in:
     - py:engine/mc_v18.py
     - py:engine/tests/test_combat_bridge_seam.py
@@ -935,7 +935,7 @@ identifiers:
     docs:
     - systems/combat/combat_flow_skeleton_v1.md
     - systems/combat/scene_combat_design_v1.md
-    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `references/module_contracts.yaml` `personal_combat` module | declares `emits: scene.combat_hit / scene.combat_felled / scene.combat_resolved` as though the engine itself emits Keys — see §7 divergence | `references/module_contracts.yaml:1018-1021`'
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `references/module_contracts.yaml` `personal_combat` module | declares `emits: scene.combat_hit / scene.combat_felled / scene.combat_resolved` as though the engine itself emits Keys — see §7 divergence | `references/module_contracts.yaml:1040-1043`'
     built_in:
     - py:tools/dashboard_data.py
     - py:tools/observability/build_proposals.py
@@ -1152,7 +1152,7 @@ identifiers:
     identifier: run_campaign
     docs:
     - systems/combat/combat_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.dispatch_combat_bridge` | flag | decided once per campaign by `mc_v18.run_campaign`, default OFF | `engine/mc_v18.py:70 _dispatch_combat_bridge_on`, `engine/mc_v18.py:237`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.dispatch_combat_bridge` | flag | decided once per campaign by `mc_v18.run_campaign`, default OFF | `engine/mc_v18.py:78 _dispatch_combat_bridge_on`, `engine/mc_v18.py:237`'
     built_in:
     - py:engine/mc_v18.py
     - py:tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py

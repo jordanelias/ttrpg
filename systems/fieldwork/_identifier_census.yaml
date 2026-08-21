@@ -274,7 +274,7 @@ identifiers:
     docs:
     - systems/fieldwork/fieldwork_flow_skeleton_v1.md
     - systems/fieldwork/knots_v30.md
-    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `module_contracts.yaml` declares a contract only for `fieldwork_knots`; `fieldwork.py`''s own module docstring states this explicitly and cites its "Entry points" docstring block as the substitute io_contract source (no registry entry backs it). `investigation.py` has no contract entry either. | `references/module_contracts.yaml:373` (only `fieldwork_knots`'
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `module_contracts.yaml` declares a contract only for `fieldwork_knots`; `fieldwork.py`''s own module docstring states this explicitly and cites its "Entry points" docstring block as the substitute io_contract source (no registry entry backs it). `investigation.py` has no contract entry either. | `references/module_contracts.yaml:395` (only `fieldwork_knots`'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null

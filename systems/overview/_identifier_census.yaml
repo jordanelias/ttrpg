@@ -67,7 +67,7 @@ identifiers:
     identifier: action_callback
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called by :: `_faction_actions_callback(world)` | `engine/mc_v18.py:116 _faction_actions_callback` | `engine/mc_v18.py:267` (passed as `action_callback=` to `run_season`)'
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `_faction_actions_callback(world)` | `engine/mc_v18.py:124 _faction_actions_callback` | `engine/mc_v18.py:267` (passed as `action_callback=` to `run_season`)'
     built_in:
     - py:systems/overview/sim/season.py
     disposition: BUILT
@@ -206,7 +206,7 @@ identifiers:
     identifier: base_seed
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called by :: `run_batch(n, base_seed, params) -> BatchResult` | `engine/mc_v18.py:311 run_batch` | `engine/mc_v18.py:334 __main__`; no external-tooling call site — `tools/dashboard_data.py` and `systems/mass_battle/sim/massbattle.py` mention `run_batch` only in comments, not calls; live callers are tests and its own `__main__` block'
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `run_batch(n, base_seed, params) -> BatchResult` | `engine/mc_v18.py:319 run_batch` | `engine/mc_v18.py:342 __main__`; no external-tooling call site — `tools/dashboard_data.py` and `systems/mass_battle/sim/massbattle.py` mention `run_batch` only in comments, not calls; live callers are tests and its own `__main__` block'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT
@@ -236,7 +236,7 @@ identifiers:
     identifier: CAMPAIGN_SEASONS
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `DEFAULT_PARAMS` (`CAMPAIGN_SEASONS`, `VICTORY_THRESHOLD`) | param | module constant | `engine/mc_v18.py:42-54 DEFAULT_PARAMS`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `DEFAULT_PARAMS` (`CAMPAIGN_SEASONS`, `VICTORY_THRESHOLD`) | param | module constant | `engine/mc_v18.py:50-62 DEFAULT_PARAMS`'
     built_in:
     - py:engine/mc_v18.py
     - py:tools/m1_acceptance.py
@@ -258,7 +258,7 @@ identifiers:
     identifier: check_all_factions
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called by :: `check_all_factions(world) -> list[VictoryResult]` | `engine/autoload/victory.py:103 check_all_factions` | `engine/mc_v18.py:270 run_campaign`'
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `check_all_factions(world) -> list[VictoryResult]` | `engine/autoload/victory.py:103 check_all_factions` | `engine/mc_v18.py:278 run_campaign`'
     built_in:
     - py:engine/autoload/victory.py
     disposition: BUILT
@@ -339,7 +339,7 @@ identifiers:
     identifier: create_world
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called by :: `create_world(seed=None) -> World` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:224 run_campaign`'
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `create_world(seed=None) -> World` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:232 run_campaign`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -349,7 +349,7 @@ identifiers:
     identifier: DEFAULT_PARAMS
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `DEFAULT_PARAMS` (`CAMPAIGN_SEASONS`, `VICTORY_THRESHOLD`) | param | module constant | `engine/mc_v18.py:42-54 DEFAULT_PARAMS`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `DEFAULT_PARAMS` (`CAMPAIGN_SEASONS`, `VICTORY_THRESHOLD`) | param | module constant | `engine/mc_v18.py:50-62 DEFAULT_PARAMS`'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT
@@ -368,7 +368,7 @@ identifiers:
     identifier: DISPATCH_COMBAT_BRIDGE
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `DISPATCH_COMBAT_BRIDGE` | flag (params override, else env var, default `''0''`) | caller / environment | `engine/mc_v18.py:70-81 _dispatch_combat_bridge_on`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `DISPATCH_COMBAT_BRIDGE` | flag (params override, else env var, default `''0''`) | caller / environment | `engine/mc_v18.py:78-89 _dispatch_combat_bridge_on`'
     built_in:
     - py:engine/mc_v18.py
     - py:engine/tests/test_combat_bridge_seam.py
@@ -394,7 +394,7 @@ identifiers:
     identifier: effective_params
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `DEFAULT_PARAMS[''VICTORY_THRESHOLD''] = 11` is a documented DEAD param — the live victory gate is `engine/autoload/victory.py`''s own module-level `VICTORY_THRESHOLD = 15`; nothing in `season.py`/`accounting.py`/`victory.py` reads `effective_params[''VICTORY_THRESHOLD'']`. | `engine/mc_v18.py:42-54 DEFAULT_PARAMS`; `engine/autoload/victory.py:27 VICTORY_THRESH'
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `DEFAULT_PARAMS[''VICTORY_THRESHOLD''] = 11` is a documented DEAD param — the live victory gate is `engine/autoload/victory.py`''s own module-level `VICTORY_THRESHOLD = 15`; nothing in `season.py`/`accounting.py`/`victory.py` reads `effective_params[''VICTORY_THRESHOLD'']`. | `engine/mc_v18.py:50-62 DEFAULT_PARAMS`; `engine/autoload/victory.py:27 VICTORY_THRESH'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT
@@ -546,7 +546,7 @@ identifiers:
     identifier: max_s
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '`run_campaign(seed, max_seasons, params) -> CampaignResult` | `engine/mc_v18.py:212 run_campaign` | `engine/mc_v18.py:317` (direct caller — `run_batch`''s loop; `run_batch` itself is reached only from `__main__` at `engine/mc_v18.py:334`); no in-tree production subsystem calls it — invoked externally…'
+    purpose: '`run_campaign(seed, max_seasons, params) -> CampaignResult` | `engine/mc_v18.py:220 run_campaign` | `engine/mc_v18.py:317` (direct caller — `run_batch`''s loop; `run_batch` itself is reached only from `__main__` at `engine/mc_v18.py:334`); no in-tree production subsystem calls it — invoked externally…'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT
@@ -556,7 +556,7 @@ identifiers:
     identifier: max_seasons
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called by :: `run_campaign(seed, max_seasons, params) -> CampaignResult` | `engine/mc_v18.py:212 run_campaign` | `engine/mc_v18.py:317` (direct caller — `run_batch`''s loop; `run_batch` itself is reached only from `__main__` at `engine/mc_v18.py:334`); no in-tree production subsystem calls it — invoked externally by `tools/trace_execution_phases.py:147`, and in'
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `run_campaign(seed, max_seasons, params) -> CampaignResult` | `engine/mc_v18.py:220 run_campaign` | `engine/mc_v18.py:317` (direct caller — `run_batch`''s loop; `run_batch` itself is reached only from `__main__` at `engine/mc_v18.py:334`); no in-tree production subsystem calls it — invoked externally by `tools/trace_execution_phases.py:147`, and in'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT
@@ -767,7 +767,7 @@ identifiers:
     identifier: run_batch
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called by :: `run_campaign(seed, max_seasons, params) -> CampaignResult` | `engine/mc_v18.py:212 run_campaign` | `engine/mc_v18.py:317` (direct caller — `run_batch`''s loop; `run_batch` itself is reached only from `__main__` at `engine/mc_v18.py:334`); no in-tree production subsystem calls it — invoked externally by `tools/trace_execution_phases.py:147`, and in'
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `run_campaign(seed, max_seasons, params) -> CampaignResult` | `engine/mc_v18.py:220 run_campaign` | `engine/mc_v18.py:317` (direct caller — `run_batch`''s loop; `run_batch` itself is reached only from `__main__` at `engine/mc_v18.py:334`); no in-tree production subsystem calls it — invoked externally by `tools/trace_execution_phases.py:147`, and in'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT
@@ -777,7 +777,7 @@ identifiers:
     identifier: run_campaign
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called by :: `run_campaign(seed, max_seasons, params) -> CampaignResult` | `engine/mc_v18.py:212 run_campaign` | `engine/mc_v18.py:317` (direct caller — `run_batch`''s loop; `run_batch` itself is reached only from `__main__` at `engine/mc_v18.py:334`); no in-tree production subsystem calls it — invoked externally by `tools/trace_execution_phases.py:147`, and in'
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `run_campaign(seed, max_seasons, params) -> CampaignResult` | `engine/mc_v18.py:220 run_campaign` | `engine/mc_v18.py:317` (direct caller — `run_batch`''s loop; `run_batch` itself is reached only from `__main__` at `engine/mc_v18.py:334`); no in-tree production subsystem calls it — invoked externally by `tools/trace_execution_phases.py:147`, and in'
     built_in:
     - py:engine/mc_v18.py
     - py:tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py
@@ -808,7 +808,7 @@ identifiers:
     identifier: run_season
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called by :: `_faction_actions_callback(world)` | `engine/mc_v18.py:116 _faction_actions_callback` | `engine/mc_v18.py:267` (passed as `action_callback=` to `run_season`)'
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `_faction_actions_callback(world)` | `engine/mc_v18.py:124 _faction_actions_callback` | `engine/mc_v18.py:267` (passed as `action_callback=` to `run_season`)'
     built_in:
     - py:systems/overview/sim/season.py
     disposition: BUILT
@@ -1020,7 +1020,7 @@ identifiers:
     identifier: VICTORY_THRESHOLD
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `DEFAULT_PARAMS` (`CAMPAIGN_SEASONS`, `VICTORY_THRESHOLD`) | param | module constant | `engine/mc_v18.py:42-54 DEFAULT_PARAMS`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `DEFAULT_PARAMS` (`CAMPAIGN_SEASONS`, `VICTORY_THRESHOLD`) | param | module constant | `engine/mc_v18.py:50-62 DEFAULT_PARAMS`'
     built_in:
     - py:engine/autoload/victory.py
     - py:engine/mc_v18.py

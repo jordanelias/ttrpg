@@ -47,11 +47,14 @@ ALLOWED = {
     # references/descriptor_registry.yaml already declares as `set.order`, so it now reads the root
     # via engine.substrate.descriptors. Value-identical by construction; the seeded goldens were the
     # control and did not move.
-    'mc_v18.py': 2,                          # 2. campaign-driver callbacks: faction_action, season
+    # Seam 2 (mc_v18.py) LANDED 2026-08-20: the campaign driver's two subsystem callbacks now
+    # resolve through engine.substrate.composition, with references/module_contracts.yaml's
+    # composition_roles: block naming the providers. engine/ states WHAT it needs; references/
+    # states WHICH module gives it.
     'cross_scale/parliamentary_bridge.py': 3,  # 3. and delete the lateral duplicate of this same
                                              #    seam at systems/factions/sim/parliamentary_transfer.py:54
 }
-BASELINE_TOTAL = 5
+BASELINE_TOTAL = 3
 
 
 def _offenders():
@@ -117,3 +120,27 @@ def test_the_documented_cycle_is_still_real():
     gs = (REPO / 'engine' / 'autoload' / 'game_state.py').read_text(encoding='utf-8')
     assert 'engine.autoload.game_state' in fa, 'the systems -> engine half of the cycle moved'
     assert 'systems.factions.sim.treaty' in gs, 'the engine -> systems half of the cycle moved'
+
+
+def test_the_composition_resolver_refuses_an_undeclared_role():
+    """The indirection must not degrade into a silent default.
+
+    §0.1 pt 2: an assertion that cannot observe its failure is absent. The failure this design could
+    introduce is a campaign running with a subsystem quietly missing, so `require()` raises on an
+    undeclared role rather than returning None — and that behaviour is pinned here.
+    """
+    import pytest
+
+    from engine.substrate import composition
+    with pytest.raises(KeyError) as exc:
+        composition.require('no_such_role')
+    assert 'do not' in str(exc.value).lower(), 'the error must tell the reader not to work around it'
+
+
+def test_every_declared_composition_role_resolves():
+    """Import-by-string is only safe because every target is proven to resolve. Prove it here too,
+    so the guarantee does not live solely in a tool a session might not run."""
+    from engine.substrate import composition
+    assert composition.ROLES, 'no composition roles declared — mc_v18 has nothing to resolve'
+    for role in composition.ROLES:
+        assert callable(composition.require(role)), f'role {role} did not resolve to a callable'

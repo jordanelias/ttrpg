@@ -154,7 +154,7 @@ identifiers:
     identifier: create_world
     docs:
     - systems/world/world_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called by :: `create_world(seed)` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:224 run_campaign`'
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `create_world(seed)` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:232 run_campaign`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -456,7 +456,7 @@ identifiers:
     identifier: run_campaign
     docs:
     - systems/world/world_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called by :: `create_world(seed)` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:224 run_campaign`'
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `create_world(seed)` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:232 run_campaign`'
     built_in:
     - py:engine/mc_v18.py
     - py:tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py
@@ -490,7 +490,7 @@ identifiers:
     identifier: serialize_world
     docs:
     - systems/world/world_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called by :: `serialize_world(world)` | `engine/autoload/game_state.py:284 serialize_world` | `engine/mc_v18.py:307 run_campaign`'
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `serialize_world(world)` | `engine/autoload/game_state.py:284 serialize_world` | `engine/mc_v18.py:315 run_campaign`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT

@@ -34,8 +34,16 @@ from dataclasses import dataclass, field
 
 from engine.autoload import game_state, victory, scene_slate
 from engine.substrate import stubwire
-from systems.factions.sim.faction_action import faction_take_action
-from systems.overview.sim.season import run_season
+# SEAM 2 OF 3 REMOVED 2026-08-20 (plan Act C3). These two lines were
+#   from systems.factions.sim.faction_action import faction_take_action
+#   from systems.overview.sim.season import run_season
+# — the campaign driver naming its own subsystems, which inverts the direction the premise sets
+# (systems/ stems from engine/ and references/) and is one half of the live package cycle
+# faction_action -> engine.autoload.game_state -> systems.factions.sim.treaty.
+# engine/ now states WHAT it needs; references/module_contracts.yaml's composition_roles: block
+# states WHICH module provides it. Every target is imported and resolved at EXPORT time behind a
+# blocking gate (tools/export_composition.py --check), so this indirection cannot fail late.
+from engine.substrate import composition
 from engine.cross_scale import scene_dispatch
 
 
@@ -127,7 +135,7 @@ def _faction_actions_callback(world):
         if not faction.territories:
             continue
         try:
-            faction_take_action(faction, world, world.rng)
+            composition.require('faction_action')(faction, world, world.rng)
         except Exception as e:
             # Resilience: one faction's action error must not abort the whole season — but
             # it must NOT be swallowed SILENTLY either (audit ED-IN-0074 D7). Surface it to
@@ -264,7 +272,7 @@ def run_campaign(seed: int | None = None, max_seasons: int = 50,
         # season.run_season composes: advance_season → action_callback → run_accounting
         # [canonical: designs/architecture/campaign_architecture_v30.md;
         #  Deferred Migration Batch 2026-05-20 — replaces inline composition]
-        run_season(world, action_callback=_faction_actions_callback)
+        composition.require('season_driver')(world, action_callback=_faction_actions_callback)
 
         # === VICTORY CHECK (GD-1) ===
         results = victory.check_all_factions(world)

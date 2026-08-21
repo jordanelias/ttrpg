@@ -4,7 +4,7 @@
 
 # Glossary — `victory`
 
-**119 terms** appear in this subsystem; **40** carry a curated definition. A term used by several subsystems is listed in each, with cross-references — the repetition is the point.
+**120 terms** appear in this subsystem; **40** carry a curated definition. A term used by several subsystems is listed in each, with cross-references — the repetition is the point.
 
 Files column shows this subsystem's docs only (basenames). Full paths for every term are in [`glossary.json`](glossary.json). Master index: [MASTER_GLOSSARY.md](MASTER_GLOSSARY.md).
 
@@ -98,6 +98,7 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **run_campaign** | _no curated definition_ | `victory_flow_skeleton_v1.md` | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [mass_battle](GLOSSARY_mass_battle.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [world](GLOSSARY_world.md) · BUILT |
 | **run_season** | _no curated definition_ | `victory_flow_skeleton_v1.md` | [_architecture](GLOSSARY__architecture.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [mass_battle](GLOSSARY_mass_battle.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [world](GLOSSARY_world.md) · BUILT |
 | **Schoenland** | _no curated definition_ | `victory_v30.md` | [_architecture](GLOSSARY__architecture.md), [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [world](GLOSSARY_world.md) · alias: Schoenland Factor |
+| **season_driver** | _no curated definition_ | `victory_flow_skeleton_v1.md` | _local only_ · BUILT |
 | **serialize_world** | _no curated definition_ | `victory_flow_skeleton_v1.md` | [_architecture](GLOSSARY__architecture.md), [characters](GLOSSARY_characters.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [threadwork](GLOSSARY_threadwork.md), [world](GLOSSARY_world.md) · BUILT |
 | **Sigurdshelm** | _no curated definition_ | `victory_v30.md` | [_architecture](GLOSSARY__architecture.md), [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [world](GLOSSARY_world.md) |
 | **Social** | _no curated definition_ | `victory_v30.md` | [_architecture](GLOSSARY__architecture.md), [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [world](GLOSSARY_world.md) · ⚠️ broad (68 files) |

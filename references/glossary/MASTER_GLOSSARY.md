@@ -4,7 +4,7 @@
 
 # Master Glossary — every term, every location
 
-**2083 terms** from 5 registries. **1809** are located in the live corpus (`systems`, `canon`, `engine`, `godot`, `proposals`); **274** are registered but appear in no scanned design doc.
+**2084 terms** from 5 registries. **1810** are located in the live corpus (`systems`, `canon`, `engine`, `godot`, `proposals`); **274** are registered but appear in no scanned design doc.
 
 Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md)
 
@@ -1436,6 +1436,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **season counter** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [engine](GLOSSARY_engine.md), [godot](GLOSSARY_godot.md), [proposals](GLOSSARY_proposals.md), [ui](GLOSSARY_ui.md) | 5 | descriptor_registry |
 | **season_boundary** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 2 | identifier_census |
 | **season_change** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [godot](GLOSSARY_godot.md) | 6 | identifier_census |
+| **season_driver** | _no curated definition_ | [victory](GLOSSARY_victory.md) | 1 | identifier_census |
 | **season_factor** | _no curated definition_ | [settlements](GLOSSARY_settlements.md) | 1 | identifier_census |
 | **season_index** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [godot](GLOSSARY_godot.md) | 5 | identifier_census |
 | **season_n** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |

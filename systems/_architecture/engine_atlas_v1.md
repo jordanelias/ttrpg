@@ -61,31 +61,31 @@ follow `CLAUDE.md` §4's taxonomy; for the four folders not yet formalized as 1:
 
 ## 1. The campaign spine
 
-One ordered loop; `run_campaign` is the engine's single driver — `engine/mc_v18.py:212 run_campaign`.
+One ordered loop; `run_campaign` is the engine's single driver — `engine/mc_v18.py:220 run_campaign`.
 
 **Boot, once per campaign.** **S1** `create_world(seed)` builds the `Faction`/`Territory` maps from the
 starting tables, seeds `World.clocks`, and calls down into settlements to populate `world.settlements`
 from the geography YAML — `engine/autoload/game_state.py:234 create_world`, called at
-`engine/mc_v18.py:224 run_campaign`; settlements down-seam `engine/autoload/game_state.py:279-280 create_world`.
+`engine/mc_v18.py:232 run_campaign`; settlements down-seam `engine/autoload/game_state.py:279-280 create_world`.
 **S2** The victory streak tracker and the scene slate are module-level, not `world` state, so they are
-explicitly cleared — `engine/mc_v18.py:225-226 run_campaign`. **S3** Two flags resolve once:
-`DISPATCH_COMBAT_BRIDGE` (default OFF) is stashed on `world` — `engine/mc_v18.py:237 run_campaign` — and
+explicitly cleared — `engine/mc_v18.py:233-234 run_campaign`. **S3** Two flags resolve once:
+`DISPATCH_COMBAT_BRIDGE` (default OFF) is stashed on `world` — `engine/mc_v18.py:245 run_campaign` — and
 `ECHO_TRANSPORT` (default ON) decides whether the Key substrate attaches at all —
-`engine/mc_v18.py:241 run_campaign`. **S4** When it is on, `make_scheduler` builds the type registry →
-`KeyLog` → `TickScheduler` onto `world.echo_scheduler` — `engine/mc_v18.py:243 run_campaign`. **S5** 13
+`engine/mc_v18.py:249 run_campaign`. **S4** When it is on, `make_scheduler` builds the type registry →
+`KeyLog` → `TickScheduler` onto `world.echo_scheduler` — `engine/mc_v18.py:251 run_campaign`. **S5** 13
 trigger callbacks subscribe to that scheduler — `engine/cross_scale/articulation.py:152 subscribe_all`,
-called at `engine/mc_v18.py:258 run_campaign`; none of the 13 can fire in a default campaign (§3c).
+called at `engine/mc_v18.py:266 run_campaign`; none of the 13 can fire in a default campaign (§3c).
 
 **The season loop.** `for _ in range(max_s)`, breaking as soon as a winner exists —
-`engine/mc_v18.py:260-261 run_campaign`. Each iteration calls `run_season`, whose composition is exactly
-three steps — `systems/overview/sim/season.py:48 run_season`, invoked at `engine/mc_v18.py:267 run_campaign`.
+`engine/mc_v18.py:268-269 run_campaign`. Each iteration calls `run_season`, whose composition is exactly
+three steps — `systems/overview/sim/season.py:48 run_season`, invoked at `engine/mc_v18.py:275 run_campaign`.
 
 - **S6 — Step 1, advance the clock.** Season and arc counters advance; per-season and per-arc faction
   flags reset — `engine/autoload/season_manager.py:31 advance_season`, called at
   `systems/overview/sim/season.py:69 run_season`.
-- **S7 — Step 2, the action callback** supplied by the driver — `engine/mc_v18.py:116 _faction_actions_callback`.
+- **S7 — Step 2, the action callback** supplied by the driver — `engine/mc_v18.py:124 _faction_actions_callback`.
   - **S7.1 Faction actions.** For each faction parliamentary *and* holding territory: `faction_take_action`,
-    wrapped so one faction's exception cannot abort the season — `engine/mc_v18.py:124-136 _faction_actions_callback`;
+    wrapped so one faction's exception cannot abort the season — `engine/mc_v18.py:132-144 _faction_actions_callback`;
     resolver `systems/factions/sim/faction_action.py:197 faction_take_action`. Four state signals re-weight
     one probability vector, then a **single** `rng.random()` draw selects among faction-unique / conquest /
     muster / govern — `systems/factions/sim/faction_action.py:220 faction_take_action`. Conquest resolves
@@ -93,7 +93,7 @@ three steps — `systems/overview/sim/season.py:48 run_season`, invoked at `engi
     win, territory ownership transfers — `systems/factions/sim/faction_action.py:461-497 _try_conquest`.
   - **S7.2 The scene phase.** `run_scene_phase` evaluates triggers, queues scenes, then drains the slate
     one slot at a time — `engine/cross_scale/scene_dispatch.py:416 run_scene_phase`, called at
-    `engine/mc_v18.py:141 _faction_actions_callback`. Exactly **one** trigger is field-evaluable today
+    `engine/mc_v18.py:149 _faction_actions_callback`. Exactly **one** trigger is field-evaluable today
     (Stability Crisis) and it queues a `contest` scene — `engine/cross_scale/scene_dispatch.py:75 evaluate_triggers`.
     Each slot zooms in, dispatches by `scene_type`, checks handoff validity, emits its Domain Echo, zooms
     out — `engine/cross_scale/scene_dispatch.py:401 dispatch_scenes`; the contest branch derives two parties
@@ -101,14 +101,14 @@ three steps — `systems/overview/sim/season.py:48 run_season`, invoked at `engi
   - **S7.3 The parliamentary scene**, gated on the scheduler's presence: a two-pole motion is derived from
     aggregate state, resolved by a faction-scale vote, and — independently of that vote's outcome — a
     territory-transfer motion is attempted — `engine/cross_scale/parliamentary_bridge.py:180 run_parliamentary_scene`,
-    called at `engine/mc_v18.py:150 _faction_actions_callback`.
+    called at `engine/mc_v18.py:158 _faction_actions_callback`.
   - **S7.4 The ACTION→ACCOUNTING boundary.** Every Key emitted during the scene phase was logged *live*
     but its `apply` closure **deferred**; those deferred faction/settlement writes land here, in emission
     order, and the per-tick counter resets — `engine/substrate/keys.py:581 accounting_boundary` and
-    `engine/substrate/keys.py:593 next_tick`, called at `engine/mc_v18.py:158-161 _faction_actions_callback`.
+    `engine/substrate/keys.py:593 next_tick`, called at `engine/mc_v18.py:166-169 _faction_actions_callback`.
   - **S7.5 Two honest-deferral markers.** NPC generation and Knot formation have no canonical trigger to
     cite, so the season records a named `stubwire` no-op where each call would go rather than fabricating
-    one — `engine/mc_v18.py:186 _faction_actions_callback`, `engine/mc_v18.py:204 _faction_actions_callback`.
+    one — `engine/mc_v18.py:194 _faction_actions_callback`, `engine/mc_v18.py:212 _faction_actions_callback`.
 - **S8 — Step 3, accounting.** Exactly six steps, fixed order, the last report-only —
   `systems/overview/sim/accounting.py:95 run_accounting`, called at `systems/overview/sim/season.py:72 run_season`:
   CI seasonal calc (`systems/overview/sim/accounting.py:112 run_accounting`) → MS baseline decay, year-end
@@ -118,14 +118,14 @@ three steps — `systems/overview/sim/season.py:48 run_season`, invoked at `engi
   (`systems/overview/sim/accounting.py:138 run_accounting`) → province-Accord drift **probe**
   (`systems/overview/sim/accounting.py:142 run_accounting`).
 - **S9 — Victory check.** Every faction is scored; the first qualifying result sets `world.winner` —
-  `engine/autoload/victory.py:103 check_all_factions`, called at `engine/mc_v18.py:270 run_campaign`. The
-  loop exits at the *next* iteration's guard, not here — `engine/mc_v18.py:271-274 run_campaign`.
+  `engine/autoload/victory.py:103 check_all_factions`, called at `engine/mc_v18.py:278 run_campaign`. The
+  loop exits at the *next* iteration's guard, not here — `engine/mc_v18.py:279-282 run_campaign`.
 
 **Close.** **S10** For every campaign whose winner is not set by the sustained check, an inline block in
 the driver — not in the victory module — scores every parliamentary faction and picks the maximum —
-`engine/mc_v18.py:276-286 run_campaign`. **S11** The world is dict-serialized into
+`engine/mc_v18.py:284-294 run_campaign`. **S11** The world is dict-serialized into
 `CampaignResult.final_state` alongside the telemetry counters — `engine/autoload/game_state.py:284 serialize_world`,
-called at `engine/mc_v18.py:307 run_campaign`.
+called at `engine/mc_v18.py:315 run_campaign`.
 
 **What the spine does *not* do** — the absences are structural, each evidenced in §3. **No combat scene
 is ever queued**, so the whole combat dispatch branch is unreachable regardless of `DISPATCH_COMBAT_BRIDGE`
@@ -211,7 +211,7 @@ typed no-ops. Loss consequences are only **partly** implemented: two of four dec
 their owning modules, the other two are computed into the returned dict and applied to nothing —
 `systems/fieldwork/sim/knots.py:340 apply_knot_loss`. `form_knot` has no auto-call anywhere and the driver records
 that absence with a named stub marker rather than inventing a trigger, so `world.knots` is provably empty for the
-life of every campaign — `engine/mc_v18.py:204 _faction_actions_callback` (§3a).
+life of every campaign — `engine/mc_v18.py:212 _faction_actions_callback` (§3a).
 
 **`mass_battle` — faction-scale battle.** Two disjoint trees, both alive for different reasons. TREE A is retired
 by ruling yet carries the campaign's only battle seam — `systems/mass_battle/sim/massbattle.py:1791 resolve_mass_battle`.
@@ -261,7 +261,7 @@ sorted result list — `engine/autoload/victory.py:52 check_peninsular_sovereign
 aggregate-state reads the code performs **two**: Accord, `engine/autoload/victory.py:71 check_peninsular_sovereignty`,
 and Turmoil, `engine/autoload/victory.py:73 check_peninsular_sovereignty`. The path deciding every campaign whose
 winner is not set by that check is not in this module at all — it is an inline scoring block in the driver,
-undocumented by the contract — `engine/mc_v18.py:276-286 run_campaign` (§3b, §3e).
+undocumented by the contract — `engine/mc_v18.py:284-294 run_campaign` (§3b, §3e).
 
 **`world` — world-gen, insurgency, NPC ecology, miracles, restoration.** Owns the `World` lifecycle and two genuinely
 live per-season pipelines — `systems/world/sim/insurgency_pipeline.py:139 check_insurgency_triggers`. Its contract
@@ -302,7 +302,7 @@ the social-contest scene branch's `except Exception` swallow and its unreachable
 | e | The combat contract declares the engine as its own Key emitter and consumer; every production construction site lives outside the subsystem | combat, `_architecture` | `engine/cross_scale/echo_transport.py:426 Key` |
 | e | A track's design doc is homed in one subsystem while its code lives in another — and it executes despite its map flag saying otherwise | characters, overview | `systems/overview/sim/ci_track.py:170 apply_ci_delta` |
 | e | The static execution map declares the faction contract non-executing; the seeded trace records calls into it in **five of the seven** traced phases — all but `loop.s2.scenes` and `loop.victory` | factions | `references/execution_trace.json:33 faction_state` |
-| f | The driver's victory-threshold param is dead: the live gate is the victory module's own constant, a different owner with no wiring between them — pinned by a falsifier test that sweeps the dead param and moves no outcome | overview, victory | `engine/mc_v18.py:42-54 DEFAULT_PARAMS` |
+| f | The driver's victory-threshold param is dead: the live gate is the victory module's own constant, a different owner with no wiring between them — pinned by a falsifier test that sweeps the dead param and moves no outcome | overview, victory | `engine/mc_v18.py:50-62 DEFAULT_PARAMS` |
 | f | One world clock is read as the political-stability victory gate and has **zero writers anywhere**, so that gate is permanently satisfied in every campaign | victory, overview | `engine/autoload/victory.py:73-74 check_peninsular_sovereignty` |
 | f | Permanently-placeholdered inputs: battle terrain is always passed as a placeholder, and the CI Assert/Suppress parameters are never supplied by the only caller | factions, overview | `systems/factions/sim/faction_action.py:436 _try_conquest` |
 | g | A contract-layer wiring cycle spans four subsystems | factions, npcs, characters, social_contest | `audit/2026-08-06-vector-audit/structure_audit/data/structure_metrics.json:337 cycles` |

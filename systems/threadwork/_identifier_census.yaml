@@ -779,7 +779,7 @@ identifiers:
     identifier: thread_operation
     docs:
     - systems/threadwork/threadwork_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `scene.thread_operation`, `meta.thread_woven` (declared Key types) | `key` | **none — declared in contract, never constructed anywhere in the tree** | `references/module_contracts.yaml:354-355`; see §7'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `scene.thread_operation`, `meta.thread_woven` (declared Key types) | `key` | **none — declared in contract, never constructed anywhere in the tree** | `references/module_contracts.yaml:376-377`; see §7'
     built_in:
     - key:key_type_registry_v30.md
     disposition: BUILT
@@ -789,7 +789,7 @@ identifiers:
     identifier: thread_woven
     docs:
     - systems/threadwork/threadwork_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `scene.thread_operation`, `meta.thread_woven` (declared Key types) | `key` | **none — declared in contract, never constructed anywhere in the tree** | `references/module_contracts.yaml:354-355`; see §7'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `scene.thread_operation`, `meta.thread_woven` (declared Key types) | `key` | **none — declared in contract, never constructed anywhere in the tree** | `references/module_contracts.yaml:376-377`; see §7'
     built_in:
     - key:key_type_registry_v30.md
     disposition: BUILT

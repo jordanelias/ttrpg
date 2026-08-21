@@ -2,9 +2,9 @@
  "ambiguity_floor": 60,
  "counts": {
   "ambiguous": 32,
-  "located": 1809,
+  "located": 1810,
   "refused": 0,
-  "terms": 2083
+  "terms": 2084
  },
  "generated_by": "tools/observability/build_glossary.py",
  "refused": [],
@@ -11598,7 +11598,7 @@
      "docs": [
       "systems/settlements/settlements_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.accord_drift_probe_hits` (`int`) | `world-state` | `CampaignResult.accord_drift_probe_hits` | `engine/mc_v18.py:304 accord_drift_probe_hits`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.accord_drift_probe_hits` (`int`) | `world-state` | `CampaignResult.accord_drift_probe_hits` | `engine/mc_v18.py:312 accord_drift_probe_hits`"
     }
    },
    "file_count": 2,
@@ -11821,7 +11821,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "S5** `[write]` Accounting boundary: apply deferred Key effects, advance the tick counter \u2014 `engine/mc_v18.py:158-161 accounting_boundary`."
+     "purpose": "S5** `[write]` Accounting boundary: apply deferred Key effects, advance the tick counter \u2014 `engine/mc_v18.py:166-169 accounting_boundary`."
     },
     "overview": {
      "built_in": [
@@ -12132,7 +12132,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world` | arg | passed through `season.run_season` \u2192 `action_callback` | `engine/mc_v18.py:130 world`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world` | arg | passed through `season.run_season` \u2192 `action_callback` | `engine/mc_v18.py:138 world`"
     },
     "mass_battle": {
      "built_in": [
@@ -12142,7 +12142,7 @@
      "docs": [
       "systems/mass_battle/mass_battle_flow_skeleton_v1.md"
      ],
-     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: up | `engine/mc_v18.py` (campaign driver) | `run_campaign` \u2192 `run_season(action_callback=_faction_actions_callback)` | `engine/mc_v18.py:212 run_campaign`, `:267 run_season`"
+     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: up | `engine/mc_v18.py` (campaign driver) | `run_campaign` \u2192 `run_season(action_callback=_faction_actions_callback)` | `engine/mc_v18.py:220 run_campaign`, `:267 run_season`"
     },
     "overview": {
      "built_in": [
@@ -12152,7 +12152,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `_faction_actions_callback(world)` | `engine/mc_v18.py:116 _faction_actions_callback` | `engine/mc_v18.py:267` (passed as `action_callback=` to `run_season`)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `_faction_actions_callback(world)` | `engine/mc_v18.py:124 _faction_actions_callback` | `engine/mc_v18.py:267` (passed as `action_callback=` to `run_season`)"
     },
     "world": {
      "built_in": [
@@ -16982,7 +16982,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `run_batch(n, base_seed, params) -> BatchResult` | `engine/mc_v18.py:311 run_batch` | `engine/mc_v18.py:334 __main__`; no external-tooling call site \u2014 `tools/dashboard_data.py` and `systems/mass_battle/sim/massbattle.py` mention `run_batch` only in comments, not calls; live callers are tests and its own `__main__` block"
+     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `run_batch(n, base_seed, params) -> BatchResult` | `engine/mc_v18.py:319 run_batch` | `engine/mc_v18.py:342 __main__`; no external-tooling call site \u2014 `tools/dashboard_data.py` and `systems/mass_battle/sim/massbattle.py` mention `run_batch` only in comments, not calls; live callers are tests and its own `__main__` block"
     }
    },
    "file_count": 3,
@@ -18758,7 +18758,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `DEFAULT_PARAMS` (`CAMPAIGN_SEASONS`, `VICTORY_THRESHOLD`) | param | module constant | `engine/mc_v18.py:42-54 DEFAULT_PARAMS`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `DEFAULT_PARAMS` (`CAMPAIGN_SEASONS`, `VICTORY_THRESHOLD`) | param | module constant | `engine/mc_v18.py:50-62 DEFAULT_PARAMS`"
     }
    },
    "file_count": 0,
@@ -20449,7 +20449,7 @@
      "docs": [
       "systems/_architecture/engine_atlas_v1.md"
      ],
-     "purpose": "`engine/autoload/victory.py:103 check_all_factions`, called at `engine/mc_v18.py:270 run_campaign`."
+     "purpose": "`engine/autoload/victory.py:103 check_all_factions`, called at `engine/mc_v18.py:278 run_campaign`."
     },
     "factions": {
      "built_in": [
@@ -20469,7 +20469,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `check_all_factions(world) -> list[VictoryResult]` | `engine/autoload/victory.py:103 check_all_factions` | `engine/mc_v18.py:270 run_campaign`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `check_all_factions(world) -> list[VictoryResult]` | `engine/autoload/victory.py:103 check_all_factions` | `engine/mc_v18.py:278 run_campaign`"
     },
     "victory": {
      "built_in": [
@@ -22266,7 +22266,7 @@
       "systems/combat/combat_flow_skeleton_v1.md",
       "systems/combat/scene_combat_design_v1.md"
      ],
-     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `references/module_contracts.yaml` `personal_combat` module | declares `emits: scene.combat_hit / scene.combat_felled / scene.combat_resolved` as though the engine itself emits Keys \u2014 see \u00a77 divergence | `references/module_contracts.yaml:1018-1021`"
+     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `references/module_contracts.yaml` `personal_combat` module | declares `emits: scene.combat_hit / scene.combat_felled / scene.combat_resolved` as though the engine itself emits Keys \u2014 see \u00a77 divergence | `references/module_contracts.yaml:1040-1043`"
     }
    },
    "file_count": 8,
@@ -22314,7 +22314,7 @@
       "systems/combat/combat_flow_skeleton_v1.md",
       "systems/combat/scene_combat_design_v1.md"
      ],
-     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `references/module_contracts.yaml` `personal_combat` module | declares `emits: scene.combat_hit / scene.combat_felled / scene.combat_resolved` as though the engine itself emits Keys \u2014 see \u00a77 divergence | `references/module_contracts.yaml:1018-1021`"
+     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `references/module_contracts.yaml` `personal_combat` module | declares `emits: scene.combat_hit / scene.combat_felled / scene.combat_resolved` as though the engine itself emits Keys \u2014 see \u00a77 divergence | `references/module_contracts.yaml:1040-1043`"
     }
    },
    "file_count": 7,
@@ -25183,7 +25183,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `create_world(seed=None) -> World` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:224 run_campaign`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `create_world(seed=None) -> World` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:232 run_campaign`"
     },
     "settlements": {
      "built_in": [
@@ -25213,7 +25213,7 @@
      "docs": [
       "systems/victory/victory_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world` (`World`) | arg | `game_state.create_world` | `engine/mc_v18.py:224 create_world`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world` (`World`) | arg | `game_state.create_world` | `engine/mc_v18.py:232 create_world`"
     },
     "world": {
      "built_in": [
@@ -25223,7 +25223,7 @@
      "docs": [
       "systems/world/world_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `create_world(seed)` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:224 run_campaign`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `create_world(seed)` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:232 run_campaign`"
     }
    },
    "file_count": 10,
@@ -26419,7 +26419,7 @@
      "docs": [
       "systems/_architecture/engine_atlas_v1.md"
      ],
-     "purpose": "[3. Gap kinds, and the cross-lane rows] Kind | Cross-lane row | Subsystems | Anchor / link :: f | The driver's victory-threshold param is dead: the live gate is the victory module's own constant, a different owner with no wiring between them \u2014 pinned by a falsifier test that sweeps the dead param and moves no outcome | overview, victory | `engine/mc_v18.py:42-54 DEFAULT_PARAMS`"
+     "purpose": "[3. Gap kinds, and the cross-lane rows] Kind | Cross-lane row | Subsystems | Anchor / link :: f | The driver's victory-threshold param is dead: the live gate is the victory module's own constant, a different owner with no wiring between them \u2014 pinned by a falsifier test that sweeps the dead param and moves no outcome | overview, victory | `engine/mc_v18.py:50-62 DEFAULT_PARAMS`"
     },
     "overview": {
      "built_in": [
@@ -26429,7 +26429,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `DEFAULT_PARAMS` (`CAMPAIGN_SEASONS`, `VICTORY_THRESHOLD`) | param | module constant | `engine/mc_v18.py:42-54 DEFAULT_PARAMS`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `DEFAULT_PARAMS` (`CAMPAIGN_SEASONS`, `VICTORY_THRESHOLD`) | param | module constant | `engine/mc_v18.py:50-62 DEFAULT_PARAMS`"
     },
     "victory": {
      "built_in": [
@@ -26439,7 +26439,7 @@
      "docs": [
       "systems/victory/victory_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `DEFAULT_PARAMS['VICTORY_THRESHOLD']` | param | `engine/mc_v18.py:42 DEFAULT_PARAMS` | `engine/mc_v18.py:53 VICTORY_THRESHOLD` (declared, unread \u2014 see \u00a77)"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `DEFAULT_PARAMS['VICTORY_THRESHOLD']` | param | `engine/mc_v18.py:50 DEFAULT_PARAMS` | `engine/mc_v18.py:61 VICTORY_THRESHOLD` (declared, unread \u2014 see \u00a77)"
     }
    },
    "file_count": 0,
@@ -27693,7 +27693,7 @@
      "docs": [
       "systems/articulation/articulation_flow_skeleton_v1.md"
      ],
-     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: **`scene.combat_resolved`'s one live emission path is behind a default-off flag.** Reaching it requires `DISPATCH_COMBAT_BRIDGE=1` (default `'0'`); the reach test for this path is an `xfail` under the default. | `engine/mc_v18.py:71-81 _dispatch_combat_bridge_on`, `engine/cross_scale/scene_dispatch.py:55`, `engine/tests/test_pipeline_reach.py:693-695 test_"
+     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: **`scene.combat_resolved`'s one live emission path is behind a default-off flag.** Reaching it requires `DISPATCH_COMBAT_BRIDGE=1` (default `'0'`); the reach test for this path is an `xfail` under the default. | `engine/mc_v18.py:79-89 _dispatch_combat_bridge_on`, `engine/cross_scale/scene_dispatch.py:55`, `engine/tests/test_pipeline_reach.py:693-695 test_"
     },
     "combat": {
      "built_in": [
@@ -27705,7 +27705,7 @@
      "docs": [
       "systems/combat/combat_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world.dispatch_combat_bridge` | flag | decided once per campaign by `mc_v18.run_campaign`, default OFF | `engine/mc_v18.py:70 _dispatch_combat_bridge_on`, `engine/mc_v18.py:237`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world.dispatch_combat_bridge` | flag | decided once per campaign by `mc_v18.run_campaign`, default OFF | `engine/mc_v18.py:78 _dispatch_combat_bridge_on`, `engine/mc_v18.py:237`"
     },
     "overview": {
      "built_in": [
@@ -27717,7 +27717,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `DISPATCH_COMBAT_BRIDGE` | flag (params override, else env var, default `'0'`) | caller / environment | `engine/mc_v18.py:70-81 _dispatch_combat_bridge_on`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `DISPATCH_COMBAT_BRIDGE` | flag (params override, else env var, default `'0'`) | caller / environment | `engine/mc_v18.py:78-89 _dispatch_combat_bridge_on`"
     },
     "social_contest": {
      "built_in": [
@@ -27729,7 +27729,7 @@
      "docs": [
       "systems/social_contest/social_contest_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world.dispatch_combat_bridge` (unrelated combat flag, gates a sibling branch in the same dispatcher) | flag | `engine/mc_v18.py:237 dispatch_combat_bridge` | `engine/cross_scale/scene_dispatch.py:232 dispatch_combat_bridge`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world.dispatch_combat_bridge` (unrelated combat flag, gates a sibling branch in the same dispatcher) | flag | `engine/mc_v18.py:245 dispatch_combat_bridge` | `engine/cross_scale/scene_dispatch.py:232 dispatch_combat_bridge`"
     }
    },
    "file_count": 4,
@@ -29023,7 +29023,7 @@
      "docs": [
       "systems/articulation/articulation_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | kind | origin | anchor :: `scheduler` (`TickScheduler`) | arg | `world.echo_scheduler`, built by `echo_transport.make_scheduler` | `engine/mc_v18.py:258 subscribe_all`"
+     "purpose": "[2. IN] Input | kind | origin | anchor :: `scheduler` (`TickScheduler`) | arg | `world.echo_scheduler`, built by `echo_transport.make_scheduler` | `engine/mc_v18.py:266 subscribe_all`"
     },
     "characters": {
      "built_in": [
@@ -29065,7 +29065,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `run_parliamentary_scene(world, rng)` | `engine/cross_scale/parliamentary_bridge.py:180 run_parliamentary_scene` | `engine/mc_v18.py:150 run_parliamentary_scene` (gated on `world.echo_scheduler`)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `run_parliamentary_scene(world, rng)` | `engine/cross_scale/parliamentary_bridge.py:180 run_parliamentary_scene` | `engine/mc_v18.py:158 run_parliamentary_scene` (gated on `world.echo_scheduler`)"
     },
     "mass_battle": {
      "built_in": [
@@ -29107,7 +29107,7 @@
      "docs": [
       "systems/settlements/settlements_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world.echo_scheduler` (presence) | `flag` | Set on `world` in `run_campaign` when `ECHO_TRANSPORT` is on | `engine/mc_v18.py:243 world.echo_scheduler`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world.echo_scheduler` (presence) | `flag` | Set on `world` in `run_campaign` when `ECHO_TRANSPORT` is on | `engine/mc_v18.py:251 world.echo_scheduler`"
     },
     "social_contest": {
      "built_in": [
@@ -29121,7 +29121,7 @@
      "docs": [
       "systems/social_contest/social_contest_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world.echo_scheduler` presence (ECHO_TRANSPORT flag) | flag | `engine/mc_v18.py` per-campaign setup | `engine/mc_v18.py:148 echo_scheduler`, `engine/mc_v18.py:243 echo_scheduler`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world.echo_scheduler` presence (ECHO_TRANSPORT flag) | flag | `engine/mc_v18.py` per-campaign setup | `engine/mc_v18.py:156 echo_scheduler`, `engine/mc_v18.py:251 echo_scheduler`"
     }
    },
    "file_count": 10,
@@ -29445,7 +29445,7 @@
      "docs": [
       "systems/_architecture/_architecture_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `ECHO_TRANSPORT` flag | flag | `effective_params` dict or `os.environ`, default ON | `engine/mc_v18.py:57-67 _echo_transport_on`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `ECHO_TRANSPORT` flag | flag | `effective_params` dict or `os.environ`, default ON | `engine/mc_v18.py:65-75 _echo_transport_on`"
     },
     "articulation": {
      "built_in": [
@@ -29455,7 +29455,7 @@
      "docs": [
       "systems/articulation/articulation_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | kind | origin | anchor :: `ECHO_TRANSPORT` (params/env flag; default ON) | flag | `effective_params` / `os.environ` | `engine/mc_v18.py:57-67 _echo_transport_on` (definition; call site `engine/mc_v18.py:241 _echo_transport_on`)"
+     "purpose": "[2. IN] Input | kind | origin | anchor :: `ECHO_TRANSPORT` (params/env flag; default ON) | flag | `effective_params` / `os.environ` | `engine/mc_v18.py:65-75 _echo_transport_on` (definition; call site `engine/mc_v18.py:249 _echo_transport_on`)"
     },
     "overview": {
      "built_in": [
@@ -29465,7 +29465,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `DEFAULT_PARAMS['VICTORY_THRESHOLD'] = 11` is a documented DEAD param \u2014 the live victory gate is `engine/autoload/victory.py`'s own module-level `VICTORY_THRESHOLD = 15`; nothing in `season.py`/`accounting.py`/`victory.py` reads `effective_params['VICTORY_THRESHOLD']`. | `engine/mc_v18.py:42-54 DEFAULT_PARAMS`; `engine/autoload/victory.py:27 VICTORY_THRESH"
+     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `DEFAULT_PARAMS['VICTORY_THRESHOLD'] = 11` is a documented DEAD param \u2014 the live victory gate is `engine/autoload/victory.py`'s own module-level `VICTORY_THRESHOLD = 15`; nothing in `season.py`/`accounting.py`/`victory.py` reads `effective_params['VICTORY_THRESHOLD']`. | `engine/mc_v18.py:50-62 DEFAULT_PARAMS`; `engine/autoload/victory.py:27 VICTORY_THRESH"
     },
     "victory": {
      "built_in": [
@@ -30300,7 +30300,7 @@
       "systems/_architecture/ners_vsg_reconciliation_v1.md",
       "systems/_architecture/propagation_spec_v1.md"
      ],
-     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `engine_clock` \u2014 the `module_contracts.yaml`-declared contract this scheduler notionally realizes \u2014 carries `sim_module: none`; no code was ever joined to `TickScheduler`/`KeyLog` under that contract name | `references/module_contracts.yaml:863-866`"
+     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `engine_clock` \u2014 the `module_contracts.yaml`-declared contract this scheduler notionally realizes \u2014 carries `sim_module: none`; no code was ever joined to `TickScheduler`/`KeyLog` under that contract name | `references/module_contracts.yaml:885-888`"
     },
     "settlements": {
      "built_in": [],
@@ -32666,7 +32666,7 @@
      "docs": [
       "systems/ui/ui_flow_skeleton_v1.md"
      ],
-     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `references/module_contracts.yaml` declares no `ui` / `ui_ux` module. The file's full `module:` roster (27 entries, grepped ` - module:` across the file) contains no UI-named entry \u2014 the subsystem has no `consumes`/`emits`/`resolver`/`sim_module` contract at all, not merely an unbuilt one. | `references/module_contracts.yaml:59` (`faction_state`, first of "
+     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `references/module_contracts.yaml` declares no `ui` / `ui_ux` module. The file's full `module:` roster (27 entries, grepped ` - module:` across the file) contains no UI-named entry \u2014 the subsystem has no `consumes`/`emits`/`resolver`/`sim_module` contract at all, not merely an unbuilt one. | `references/module_contracts.yaml:81` (`faction_state`, first of "
     }
    },
    "file_count": 10,
@@ -32816,7 +32816,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `faction_take_action(faction, world, rng)` | `systems/factions/sim/faction_action.py:197 faction_take_action` | `engine/mc_v18.py:130 faction_take_action` (inside `_faction_actions_callback`)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `faction_take_action(faction, world, rng)` | `systems/factions/sim/faction_action.py:197 faction_take_action` | `engine/mc_v18.py:138 composition.require` (inside `_faction_actions_callback`; resolved by ROLE `faction_action` since 2026-08-20, plan Act C3 seam 2 \u2014 the driver no longer imports the subsystem)"
     },
     "mass_battle": {
      "built_in": [
@@ -32865,7 +32865,7 @@
     "engine/mc_v18_walkthrough.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 2,
     "systems/_architecture/engine_atlas_v1.md": 4,
-    "systems/factions/factions_flow_skeleton_v1.md": 12,
+    "systems/factions/factions_flow_skeleton_v1.md": 7,
     "systems/mass_battle/mass_battle_flow_skeleton_v1.md": 2,
     "systems/overview/overview_flow_skeleton_v1.md": 2,
     "systems/settlements/settlements_flow_skeleton_v1.md": 1,
@@ -33333,7 +33333,7 @@
       "systems/fieldwork/fieldwork_flow_skeleton_v1.md",
       "systems/fieldwork/knots_v30.md"
      ],
-     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `module_contracts.yaml` declares a contract only for `fieldwork_knots`; `fieldwork.py`'s own module docstring states this explicitly and cites its \"Entry points\" docstring block as the substitute io_contract source (no registry entry backs it). `investigation.py` has no contract entry either. | `references/module_contracts.yaml:373` (only `fieldwork_knots`"
+     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `module_contracts.yaml` declares a contract only for `fieldwork_knots`; `fieldwork.py`'s own module docstring states this explicitly and cites its \"Entry points\" docstring block as the substitute io_contract source (no registry entry backs it). `investigation.py` has no contract entry either. | `references/module_contracts.yaml:395` (only `fieldwork_knots`"
     }
    },
    "file_count": 5,
@@ -33539,7 +33539,7 @@
      "docs": [
       "systems/characters/characters_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `CampaignResult.final_state['convictions'/'beliefs']` | return value | nothing reads these two keys downstream \u2014 see \u00a77 gap 2 | `engine/mc_v18.py:307 final_state`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `CampaignResult.final_state['convictions'/'beliefs']` | return value | nothing reads these two keys downstream \u2014 see \u00a77 gap 2 | `engine/mc_v18.py:315 final_state`"
     },
     "fieldwork": {
      "built_in": [
@@ -33569,7 +33569,7 @@
      "docs": [
       "systems/settlements/settlements_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `CampaignResult.final_state['settlements']` | `arg` | `run_campaign` caller / any downstream telemetry reader | `engine/mc_v18.py:307 final_state`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `CampaignResult.final_state['settlements']` | `arg` | `run_campaign` caller / any downstream telemetry reader | `engine/mc_v18.py:315 final_state`"
     },
     "victory": {
      "built_in": [
@@ -38693,7 +38693,7 @@
      "docs": [
       "systems/_architecture/_architecture_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `KeyLog.content_hash` | `engine/substrate/keys.py:459 content_hash` | `engine/mc_v18.py:305 key_log_hash`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `KeyLog.content_hash` | `engine/substrate/keys.py:459 content_hash` | `engine/mc_v18.py:313 key_log_hash`"
     },
     "overview": {
      "built_in": [
@@ -38992,7 +38992,7 @@
      "docs": [
       "systems/_architecture/_architecture_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `KeyLog.__len__` | `engine/substrate/keys.py:358 __len__` | `engine/mc_v18.py:306 keys_emitted`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `KeyLog.__len__` | `engine/substrate/keys.py:358 __len__` | `engine/mc_v18.py:314 keys_emitted`"
     },
     "overview": {
      "built_in": [
@@ -40806,7 +40806,7 @@
      "docs": [
       "systems/articulation/articulation_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | kind | origin | anchor :: `scheduler` (`TickScheduler`) | arg | `world.echo_scheduler`, built by `echo_transport.make_scheduler` | `engine/mc_v18.py:258 subscribe_all`"
+     "purpose": "[2. IN] Input | kind | origin | anchor :: `scheduler` (`TickScheduler`) | arg | `world.echo_scheduler`, built by `echo_transport.make_scheduler` | `engine/mc_v18.py:266 subscribe_all`"
     },
     "overview": {
      "built_in": [
@@ -41359,7 +41359,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "`run_campaign(seed, max_seasons, params) -> CampaignResult` | `engine/mc_v18.py:212 run_campaign` | `engine/mc_v18.py:317` (direct caller \u2014 `run_batch`'s loop; `run_batch` itself is reached only from `__main__` at `engine/mc_v18.py:334`); no in-tree production subsystem calls it \u2014 invoked externally\u2026"
+     "purpose": "`run_campaign(seed, max_seasons, params) -> CampaignResult` | `engine/mc_v18.py:220 run_campaign` | `engine/mc_v18.py:317` (direct caller \u2014 `run_batch`'s loop; `run_batch` itself is reached only from `__main__` at `engine/mc_v18.py:334`); no in-tree production subsystem calls it \u2014 invoked externally\u2026"
     },
     "victory": {
      "built_in": [
@@ -41412,7 +41412,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `run_campaign(seed, max_seasons, params) -> CampaignResult` | `engine/mc_v18.py:212 run_campaign` | `engine/mc_v18.py:317` (direct caller \u2014 `run_batch`'s loop; `run_batch` itself is reached only from `__main__` at `engine/mc_v18.py:334`); no in-tree production subsystem calls it \u2014 invoked externally by `tools/trace_execution_phases.py:147`, and in"
+     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `run_campaign(seed, max_seasons, params) -> CampaignResult` | `engine/mc_v18.py:220 run_campaign` | `engine/mc_v18.py:317` (direct caller \u2014 `run_batch`'s loop; `run_batch` itself is reached only from `__main__` at `engine/mc_v18.py:334`); no in-tree production subsystem calls it \u2014 invoked externally by `tools/trace_execution_phases.py:147`, and in"
     }
    },
    "file_count": 3,
@@ -43894,7 +43894,7 @@
      "docs": [
       "systems/npcs/npcs_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.npc_counter` increment | write | `world` state; read back as `CampaignResult.npcs_generated` telemetry | `systems/world/sim/npe.py:107-109 _next_npc_id` / `engine/mc_v18.py:299 npcs_generated`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.npc_counter` increment | write | `world` state; read back as `CampaignResult.npcs_generated` telemetry | `systems/world/sim/npe.py:107-109 _next_npc_id` / `engine/mc_v18.py:307 npcs_generated`"
     },
     "overview": {
      "built_in": [
@@ -44348,7 +44348,7 @@
      "docs": [
       "systems/npcs/npcs_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.npc_counter` increment | write | `world` state; read back as `CampaignResult.npcs_generated` telemetry | `systems/world/sim/npe.py:107-109 _next_npc_id` / `engine/mc_v18.py:299 npcs_generated`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.npc_counter` increment | write | `world` state; read back as `CampaignResult.npcs_generated` telemetry | `systems/world/sim/npe.py:107-109 _next_npc_id` / `engine/mc_v18.py:307 npcs_generated`"
     },
     "overview": {
      "built_in": [
@@ -45104,7 +45104,7 @@
      "docs": [
       "systems/npcs/npcs_flow_skeleton_v1.md"
      ],
-     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: declared, unimplemented | `systems/factions` (npc_behavior contract's `consumes`/`emits` Key edges: `scene.gossip`, `scene.witness`, `state.opinion_revised`, etc.) | contract declares edges against a `sim_module: none` \u2014 see \u00a77 gap 3 | `references/module_contracts.yaml:126 npc_behavior` / `references/module_contracts.yaml:162 npc_behavior`"
+     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: declared, unimplemented | `systems/factions` (npc_behavior contract's `consumes`/`emits` Key edges: `scene.gossip`, `scene.witness`, `state.opinion_revised`, etc.) | contract declares edges against a `sim_module: none` \u2014 see \u00a77 gap 3 | `references/module_contracts.yaml:148 npc_behavior` / `references/module_contracts.yaml:184 npc_behavior`"
     }
    },
    "file_count": 8,
@@ -46805,7 +46805,7 @@
       "systems/combat/combat_flow_skeleton_v1.md",
       "systems/combat/scene_combat_design_v1.md"
      ],
-     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `references/module_contracts.yaml` `personal_combat` module | declares `emits: scene.combat_hit / scene.combat_felled / scene.combat_resolved` as though the engine itself emits Keys \u2014 see \u00a77 divergence | `references/module_contracts.yaml:1018-1021`"
+     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `references/module_contracts.yaml` `personal_combat` module | declares `emits: scene.combat_hit / scene.combat_felled / scene.combat_resolved` as though the engine itself emits Keys \u2014 see \u00a77 divergence | `references/module_contracts.yaml:1040-1043`"
     }
    },
    "file_count": 9,
@@ -53929,7 +53929,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `run_campaign(seed, max_seasons, params) -> CampaignResult` | `engine/mc_v18.py:212 run_campaign` | `engine/mc_v18.py:317` (direct caller \u2014 `run_batch`'s loop; `run_batch` itself is reached only from `__main__` at `engine/mc_v18.py:334`); no in-tree production subsystem calls it \u2014 invoked externally by `tools/trace_execution_phases.py:147`, and in"
+     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `run_campaign(seed, max_seasons, params) -> CampaignResult` | `engine/mc_v18.py:220 run_campaign` | `engine/mc_v18.py:317` (direct caller \u2014 `run_batch`'s loop; `run_batch` itself is reached only from `__main__` at `engine/mc_v18.py:334`); no in-tree production subsystem calls it \u2014 invoked externally by `tools/trace_execution_phases.py:147`, and in"
     },
     "victory": {
      "built_in": [
@@ -53939,7 +53939,7 @@
      "docs": [
       "systems/victory/victory_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `run_batch` | `engine/mc_v18.py:311 run_batch` | `engine/mc_v18.py:334` (`__main__`)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `run_batch` | `engine/mc_v18.py:319 run_batch` | `engine/mc_v18.py:334` (`__main__`)"
     }
    },
    "file_count": 4,
@@ -54021,7 +54021,7 @@
      "docs": [
       "systems/articulation/articulation_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `subscribe_all(scheduler)` | `engine/cross_scale/articulation.py:152 subscribe_all` | `engine/mc_v18.py:258 subscribe_all` (production); `engine/tests/test_pipeline_reach.py:649 subscribe_all` and `:681 run_campaign` (test reach probes); `tests/valoria/test_articulation_subscriber.py:233 subscribe_all` (unit tests)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `subscribe_all(scheduler)` | `engine/cross_scale/articulation.py:152 subscribe_all` | `engine/mc_v18.py:266 subscribe_all` (production); `engine/tests/test_pipeline_reach.py:649 subscribe_all` and `:681 run_campaign` (test reach probes); `tests/valoria/test_articulation_subscriber.py:233 subscribe_all` (unit tests)"
     },
     "combat": {
      "built_in": [
@@ -54032,7 +54032,7 @@
      "docs": [
       "systems/combat/combat_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world.dispatch_combat_bridge` | flag | decided once per campaign by `mc_v18.run_campaign`, default OFF | `engine/mc_v18.py:70 _dispatch_combat_bridge_on`, `engine/mc_v18.py:237`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world.dispatch_combat_bridge` | flag | decided once per campaign by `mc_v18.run_campaign`, default OFF | `engine/mc_v18.py:78 _dispatch_combat_bridge_on`, `engine/mc_v18.py:237`"
     },
     "mass_battle": {
      "built_in": [
@@ -54043,7 +54043,7 @@
      "docs": [
       "systems/mass_battle/mass_battle_flow_skeleton_v1.md"
      ],
-     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: up | `engine/mc_v18.py` (campaign driver) | `run_campaign` \u2192 `run_season(action_callback=_faction_actions_callback)` | `engine/mc_v18.py:212 run_campaign`, `:267 run_season`"
+     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: up | `engine/mc_v18.py` (campaign driver) | `run_campaign` \u2192 `run_season(action_callback=_faction_actions_callback)` | `engine/mc_v18.py:220 run_campaign`, `:267 run_season`"
     },
     "overview": {
      "built_in": [
@@ -54054,7 +54054,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `run_campaign(seed, max_seasons, params) -> CampaignResult` | `engine/mc_v18.py:212 run_campaign` | `engine/mc_v18.py:317` (direct caller \u2014 `run_batch`'s loop; `run_batch` itself is reached only from `__main__` at `engine/mc_v18.py:334`); no in-tree production subsystem calls it \u2014 invoked externally by `tools/trace_execution_phases.py:147`, and in"
+     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `run_campaign(seed, max_seasons, params) -> CampaignResult` | `engine/mc_v18.py:220 run_campaign` | `engine/mc_v18.py:317` (direct caller \u2014 `run_batch`'s loop; `run_batch` itself is reached only from `__main__` at `engine/mc_v18.py:334`); no in-tree production subsystem calls it \u2014 invoked externally by `tools/trace_execution_phases.py:147`, and in"
     },
     "settlements": {
      "built_in": [
@@ -54065,7 +54065,7 @@
      "docs": [
       "systems/settlements/settlements_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `serialize_world(world)` settlements branch | `engine/autoload/game_state.py:349 settlements` | `engine/mc_v18.py:307 serialize_world` (end of `run_campaign`)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `serialize_world(world)` settlements branch | `engine/autoload/game_state.py:349 settlements` | `engine/mc_v18.py:315 serialize_world` (end of `run_campaign`)"
     },
     "social_contest": {
      "built_in": [
@@ -54076,7 +54076,7 @@
      "docs": [
       "systems/social_contest/social_contest_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `world.echo_scheduler` | R | set once per campaign by `mc_v18`; read by both seams as a gate | `engine/mc_v18.py:243 run_campaign`, `engine/cross_scale/scene_dispatch.py:390 _resolve_slot`, `engine/cross_scale/parliamentary_bridge.py:190 run_parliamentary_scene`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `world.echo_scheduler` | R | set once per campaign by `mc_v18`; read by both seams as a gate | `engine/mc_v18.py:251 run_campaign`, `engine/cross_scale/scene_dispatch.py:390 _resolve_slot`, `engine/cross_scale/parliamentary_bridge.py:190 run_parliamentary_scene`"
     },
     "threadwork": {
      "built_in": [
@@ -54098,7 +54098,7 @@
      "docs": [
       "systems/victory/victory_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `check_all_factions` | `engine/autoload/victory.py:103 check_all_factions` | `engine/mc_v18.py:270 run_campaign`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `check_all_factions` | `engine/autoload/victory.py:103 check_all_factions` | `engine/mc_v18.py:278 run_campaign`"
     },
     "world": {
      "built_in": [
@@ -54109,7 +54109,7 @@
      "docs": [
       "systems/world/world_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `create_world(seed)` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:224 run_campaign`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `create_world(seed)` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:232 run_campaign`"
     }
    },
    "file_count": 15,
@@ -54128,7 +54128,7 @@
     "systems/settlements/settlements_flow_skeleton_v1.md": 5,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 1,
     "systems/threadwork/threadwork_flow_skeleton_v1.md": 2,
-    "systems/victory/victory_flow_skeleton_v1.md": 32,
+    "systems/victory/victory_flow_skeleton_v1.md": 33,
     "systems/world/world_flow_skeleton_v1.md": 10
    },
    "sources": [
@@ -54366,7 +54366,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `run_parliamentary_scene(world, rng)` | `engine/cross_scale/parliamentary_bridge.py:180 run_parliamentary_scene` | `engine/mc_v18.py:150 run_parliamentary_scene` (gated on `world.echo_scheduler`)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `run_parliamentary_scene(world, rng)` | `engine/cross_scale/parliamentary_bridge.py:180 run_parliamentary_scene` | `engine/mc_v18.py:158 run_parliamentary_scene` (gated on `world.echo_scheduler`)"
     },
     "overview": {
      "built_in": [
@@ -54386,7 +54386,7 @@
      "docs": [
       "systems/social_contest/social_contest_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `run_parliamentary_scene` | `engine/cross_scale/parliamentary_bridge.py:180 run_parliamentary_scene` | `engine/mc_v18.py:150 run_parliamentary_scene`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `run_parliamentary_scene` | `engine/cross_scale/parliamentary_bridge.py:180 run_parliamentary_scene` | `engine/mc_v18.py:158 run_parliamentary_scene`"
     }
    },
    "file_count": 6,
@@ -54497,7 +54497,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "S3** `[emit]` Scene phase dispatch (peer subsystem, not traced further here) \u2014 `engine/mc_v18.py:141-142 run_scene_phase`."
+     "purpose": "S3** `[emit]` Scene phase dispatch (peer subsystem, not traced further here) \u2014 `engine/mc_v18.py:149-150 run_scene_phase`."
     },
     "overview": {
      "built_in": [
@@ -54527,7 +54527,7 @@
      "docs": [
       "systems/social_contest/social_contest_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `run_scene_phase` | `engine/cross_scale/scene_dispatch.py:416 run_scene_phase` | `engine/mc_v18.py:141 run_scene_phase`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `run_scene_phase` | `engine/cross_scale/scene_dispatch.py:416 run_scene_phase` | `engine/mc_v18.py:149 run_scene_phase`"
     }
    },
    "file_count": 9,
@@ -54580,7 +54580,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world` | arg | passed through `season.run_season` \u2192 `action_callback` | `engine/mc_v18.py:130 world`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world` | arg | passed through `season.run_season` \u2192 `action_callback` | `engine/mc_v18.py:138 world`"
     },
     "mass_battle": {
      "built_in": [
@@ -54590,7 +54590,7 @@
      "docs": [
       "systems/mass_battle/mass_battle_flow_skeleton_v1.md"
      ],
-     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: up | `engine/mc_v18.py` (campaign driver) | `run_campaign` \u2192 `run_season(action_callback=_faction_actions_callback)` | `engine/mc_v18.py:212 run_campaign`, `:267 run_season`"
+     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: up | `engine/mc_v18.py` (campaign driver) | `run_campaign` \u2192 `run_season(action_callback=_faction_actions_callback)` | `engine/mc_v18.py:220 run_campaign`, `:267 run_season`"
     },
     "overview": {
      "built_in": [
@@ -54600,7 +54600,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `_faction_actions_callback(world)` | `engine/mc_v18.py:116 _faction_actions_callback` | `engine/mc_v18.py:267` (passed as `action_callback=` to `run_season`)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `_faction_actions_callback(world)` | `engine/mc_v18.py:124 _faction_actions_callback` | `engine/mc_v18.py:267` (passed as `action_callback=` to `run_season`)"
     },
     "settlements": {
      "built_in": [
@@ -56302,7 +56302,7 @@
      "docs": [
       "systems/social_contest/social_contest_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.scenes_resolved` counter increment | write | `mc_v18._faction_actions_callback` telemetry | `engine/mc_v18.py:142 _faction_actions_callback`, `engine/mc_v18.py:151-152 _faction_actions_callback`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.scenes_resolved` counter increment | write | `mc_v18._faction_actions_callback` telemetry | `engine/mc_v18.py:150 _faction_actions_callback`, `engine/mc_v18.py:159-160 _faction_actions_callback`"
     }
    },
    "file_count": 4,
@@ -56531,7 +56531,7 @@
       "systems/_architecture/key_type_registry_v30.md",
       "systems/_architecture/propagation_spec_v1.md"
      ],
-     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `engine_clock`'s declared emit `mechanical.season_change` is itself a dangling emit \u2014 the only `from: [engine_clock]` consumer row in the file is for its sibling `mechanical.accounting`. | `references/module_contracts.yaml:876 mechanical.season_change`; `references/module_contracts.yaml:82`"
+     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `engine_clock`'s declared emit `mechanical.season_change` is itself a dangling emit \u2014 the only `from: [engine_clock]` consumer row in the file is for its sibling `mechanical.accounting`. | `references/module_contracts.yaml:898 mechanical.season_change`; `references/module_contracts.yaml:104`"
     }
    },
    "file_count": 6,
@@ -56552,6 +56552,33 @@
     "godot"
    ],
    "term": "season_change"
+  },
+  "season_driver": {
+   "ambiguous": false,
+   "census": {
+    "victory": {
+     "built_in": [
+      "typed:engine/engine_params/composition.json"
+     ],
+     "disposition": "BUILT",
+     "docs": [
+      "systems/victory/victory_flow_skeleton_v1.md"
+     ],
+     "purpose": "`engine/mc_v18.py:275 composition.require` (the `season_driver` role; the driver stopped importing `run_season` by name 2026-08-20)"
+    }
+   },
+   "file_count": 1,
+   "legacy_count": 0,
+   "locations": {
+    "systems/victory/victory_flow_skeleton_v1.md": 1
+   },
+   "sources": [
+    "identifier_census"
+   ],
+   "subsystems": [
+    "victory"
+   ],
+   "term": "season_driver"
   },
   "season_factor": {
    "ambiguous": false,
@@ -57492,7 +57519,7 @@
      "docs": [
       "systems/settlements/settlements_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `serialize_world(world)` settlements branch | `engine/autoload/game_state.py:349 settlements` | `engine/mc_v18.py:307 serialize_world` (end of `run_campaign`)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `serialize_world(world)` settlements branch | `engine/autoload/game_state.py:349 settlements` | `engine/mc_v18.py:315 serialize_world` (end of `run_campaign`)"
     },
     "threadwork": {
      "built_in": [
@@ -57522,7 +57549,7 @@
      "docs": [
       "systems/world/world_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `serialize_world(world)` | `engine/autoload/game_state.py:284 serialize_world` | `engine/mc_v18.py:307 run_campaign`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `serialize_world(world)` | `engine/autoload/game_state.py:284 serialize_world` | `engine/mc_v18.py:315 run_campaign`"
     }
    },
    "file_count": 8,
@@ -58931,7 +58958,7 @@
       "systems/_architecture/engine_atlas_v1.md",
       "systems/_architecture/subsystem_flow_skeletons_v1.md"
      ],
-     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `engine_clock` \u2014 the `module_contracts.yaml`-declared contract this scheduler notionally realizes \u2014 carries `sim_module: none`; no code was ever joined to `TickScheduler`/`KeyLog` under that contract name | `references/module_contracts.yaml:863-866`"
+     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `engine_clock` \u2014 the `module_contracts.yaml`-declared contract this scheduler notionally realizes \u2014 carries `sim_module: none`; no code was ever joined to `TickScheduler`/`KeyLog` under that contract name | `references/module_contracts.yaml:885-888`"
     },
     "articulation": {
      "built_in": [
@@ -58942,7 +58969,7 @@
      "docs": [
       "systems/articulation/articulation_flow_skeleton_v1.md"
      ],
-     "purpose": "(`references/module_contracts.yaml:966` `sim_module`), per standing rule 1."
+     "purpose": "(`references/module_contracts.yaml:988` `sim_module`), per standing rule 1."
     },
     "characters": {
      "built_in": [
@@ -58975,7 +59002,7 @@
      "docs": [
       "systems/npcs/npcs_flow_skeleton_v1.md"
      ],
-     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: declared, unimplemented | `systems/factions` (npc_behavior contract's `consumes`/`emits` Key edges: `scene.gossip`, `scene.witness`, `state.opinion_revised`, etc.) | contract declares edges against a `sim_module: none` \u2014 see \u00a77 gap 3 | `references/module_contracts.yaml:126 npc_behavior` / `references/module_contracts.yaml:162 npc_behavior`"
+     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: declared, unimplemented | `systems/factions` (npc_behavior contract's `consumes`/`emits` Key edges: `scene.gossip`, `scene.witness`, `state.opinion_revised`, etc.) | contract declares edges against a `sim_module: none` \u2014 see \u00a77 gap 3 | `references/module_contracts.yaml:148 npc_behavior` / `references/module_contracts.yaml:184 npc_behavior`"
     },
     "settlements": {
      "built_in": [
@@ -58997,7 +59024,7 @@
      "docs": [
       "systems/ui/ui_flow_skeleton_v1.md"
      ],
-     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `references/module_contracts.yaml` declares no `ui` / `ui_ux` module. The file's full `module:` roster (27 entries, grepped ` - module:` across the file) contains no UI-named entry \u2014 the subsystem has no `consumes`/`emits`/`resolver`/`sim_module` contract at all, not merely an unbuilt one. | `references/module_contracts.yaml:59` (`faction_state`, first of "
+     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `references/module_contracts.yaml` declares no `ui` / `ui_ux` module. The file's full `module:` roster (27 entries, grepped ` - module:` across the file) contains no UI-named entry \u2014 the subsystem has no `consumes`/`emits`/`resolver`/`sim_module` contract at all, not merely an unbuilt one. | `references/module_contracts.yaml:81` (`faction_state`, first of "
     }
    },
    "file_count": 11,
@@ -61242,7 +61269,7 @@
      "docs": [
       "systems/articulation/articulation_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | kind | consumer | anchor :: `stubwire.invocations` delta | telemetry counter | `CampaignResult.stub_hits` | `engine/mc_v18.py:300 stub_hits`"
+     "purpose": "[4. OUT] Output | kind | consumer | anchor :: `stubwire.invocations` delta | telemetry counter | `CampaignResult.stub_hits` | `engine/mc_v18.py:308 stub_hits`"
     },
     "npcs": {
      "built_in": [
@@ -61351,7 +61378,7 @@
      "docs": [
       "systems/npcs/npcs_flow_skeleton_v1.md"
      ],
-     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `engine/mc_v18` | honest-deferral `stubwire.stub_resolve('generate_npc(world-gen | season-tick)', ...)` fired once per season instead of calling `generate_npc` | `engine/mc_v18.py:186-194 stub_resolve`"
+     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `engine/mc_v18` | honest-deferral `stubwire.stub_resolve('generate_npc(world-gen | season-tick)', ...)` fired once per season instead of calling `generate_npc` | `engine/mc_v18.py:194-202 stub_resolve`"
     },
     "overview": {
      "built_in": [
@@ -61646,7 +61673,7 @@
       "systems/articulation/articulation_flow_skeleton_v1.md",
       "systems/articulation/articulation_layer_v30.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `subscribe_all(scheduler)` | `engine/cross_scale/articulation.py:152 subscribe_all` | `engine/mc_v18.py:258 subscribe_all` (production); `engine/tests/test_pipeline_reach.py:649 subscribe_all` and `:681 run_campaign` (test reach probes); `tests/valoria/test_articulation_subscriber.py:233 subscribe_all` (unit tests)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `subscribe_all(scheduler)` | `engine/cross_scale/articulation.py:152 subscribe_all` | `engine/mc_v18.py:266 subscribe_all` (production); `engine/tests/test_pipeline_reach.py:649 subscribe_all` and `:681 run_campaign` (test reach probes); `tests/valoria/test_articulation_subscriber.py:233 subscribe_all` (unit tests)"
     },
     "overview": {
      "built_in": [
@@ -63907,7 +63934,7 @@
      "docs": [
       "systems/articulation/articulation_flow_skeleton_v1.md"
      ],
-     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: **`scene.combat_resolved`'s one live emission path is behind a default-off flag.** Reaching it requires `DISPATCH_COMBAT_BRIDGE=1` (default `'0'`); the reach test for this path is an `xfail` under the default. | `engine/mc_v18.py:71-81 _dispatch_combat_bridge_on`, `engine/cross_scale/scene_dispatch.py:55`, `engine/tests/test_pipeline_reach.py:693-695 test_"
+     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: **`scene.combat_resolved`'s one live emission path is behind a default-off flag.** Reaching it requires `DISPATCH_COMBAT_BRIDGE=1` (default `'0'`); the reach test for this path is an `xfail` under the default. | `engine/mc_v18.py:79-89 _dispatch_combat_bridge_on`, `engine/cross_scale/scene_dispatch.py:55`, `engine/tests/test_pipeline_reach.py:693-695 test_"
     }
    },
    "file_count": 1,
@@ -64088,7 +64115,7 @@
      "docs": [
       "systems/npcs/npcs_flow_skeleton_v1.md"
      ],
-     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `generate_npc` has no world-gen or season-tick call site \u2014 `engine/mc_v18.py` fires a `stubwire.stub_resolve('generate_npc(world-gen | season-tick)', ...)` in its place every season, and a dedicated test pins `npcs_generated == 0` on a seeded campaign. Only `simulate_npc_actions` (the drift half) is wired. | `engine/mc_v18.py:186-194 stub_resolve` \u00b7 `engin"
+     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `generate_npc` has no world-gen or season-tick call site \u2014 `engine/mc_v18.py` fires a `stubwire.stub_resolve('generate_npc(world-gen | season-tick)', ...)` in its place every season, and a dedicated test pins `npcs_generated == 0` on a seeded campaign. Only `simulate_npc_actions` (the drift half) is wired. | `engine/mc_v18.py:194-202 stub_resolve` \u00b7 `engin"
     }
    },
    "file_count": 1,
@@ -64810,7 +64837,7 @@
      "docs": [
       "systems/threadwork/threadwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `scene.thread_operation`, `meta.thread_woven` (declared Key types) | `key` | **none \u2014 declared in contract, never constructed anywhere in the tree** | `references/module_contracts.yaml:354-355`; see \u00a77"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `scene.thread_operation`, `meta.thread_woven` (declared Key types) | `key` | **none \u2014 declared in contract, never constructed anywhere in the tree** | `references/module_contracts.yaml:376-377`; see \u00a77"
     }
    },
    "file_count": 8,
@@ -64967,7 +64994,7 @@
      "docs": [
       "systems/threadwork/threadwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `scene.thread_operation`, `meta.thread_woven` (declared Key types) | `key` | **none \u2014 declared in contract, never constructed anywhere in the tree** | `references/module_contracts.yaml:354-355`; see \u00a77"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `scene.thread_operation`, `meta.thread_woven` (declared Key types) | `key` | **none \u2014 declared in contract, never constructed anywhere in the tree** | `references/module_contracts.yaml:376-377`; see \u00a77"
     }
    },
    "file_count": 5,
@@ -66593,7 +66620,7 @@
       "systems/ui/ui_flow_skeleton_v1.md",
       "systems/ui/valoria_ui_ux_v4_2_workplan.md"
      ],
-     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `references/module_contracts.yaml` declares no `ui` / `ui_ux` module. The file's full `module:` roster (27 entries, grepped ` - module:` across the file) contains no UI-named entry \u2014 the subsystem has no `consumes`/`emits`/`resolver`/`sim_module` contract at all, not merely an unbuilt one. | `references/module_contracts.yaml:59` (`faction_state`, first of "
+     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `references/module_contracts.yaml` declares no `ui` / `ui_ux` module. The file's full `module:` roster (27 entries, grepped ` - module:` across the file) contains no UI-named entry \u2014 the subsystem has no `consumes`/`emits`/`resolver`/`sim_module` contract at all, not merely an unbuilt one. | `references/module_contracts.yaml:81` (`faction_state`, first of "
     }
    },
    "file_count": 2,
@@ -67965,7 +67992,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `DEFAULT_PARAMS` (`CAMPAIGN_SEASONS`, `VICTORY_THRESHOLD`) | param | module constant | `engine/mc_v18.py:42-54 DEFAULT_PARAMS`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `DEFAULT_PARAMS` (`CAMPAIGN_SEASONS`, `VICTORY_THRESHOLD`) | param | module constant | `engine/mc_v18.py:50-62 DEFAULT_PARAMS`"
     },
     "victory": {
      "built_in": [

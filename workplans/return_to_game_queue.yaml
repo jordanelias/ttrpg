@@ -29,10 +29,14 @@
 #   loop-shaped procedure. Rewritten in the past tense 2026-08-19; the steps are recorded so the
 #   S0/S1/S2 evidence below is interpretable, not so anyone repeats them.
 #   Each step was: pick the first `state: pending` whose precondition held on disk; run the driver
-#   (.claude/wf_return_to_game.js) against it; it produced, put three structurally read-only critics
+#   (then .claude/wf_return_to_game.js, RETIRED 2026-08-20 to deprecated/claude/) against it; it
+#   produced, put three structurally read-only critics
 #   on the result, and reconciled; the session then committed and wrote `evidence` +
 #   `critic_verdict` back here; and repeated until context degraded.
-#   ⛔ That loop is OVER. Do not pick a pending step. Do not run the driver.
+#   ⛔ That loop is OVER. Do not pick a pending step. There is no driver to run: it was RETIRED
+#   2026-08-20 to deprecated/claude/wf_return_to_game.js. Two read-only audits had noted that this
+#   file said DO NOT RUN THE DRIVER while the driver stayed invocable — prose guarding a live
+#   mechanism, the exact pattern CLAUDE.md §0's correction retracts. The mechanism is gone now.
 #
 # WHY THERE IS NO AUTO-CHAIN. CLAUDE.md §11 forbids a session arming its own wake-up, and the
 # deny-list in .claude/settings.json is CI-enforced (tests/valoria/test_no_polling_triggers.py).
@@ -56,7 +60,7 @@ schema_version: 1
 program: return-to-game
 lane: IN
 created: "2026-08-19"
-driver: ".claude/wf_return_to_game.js"
+driver_retired: "deprecated/claude/wf_return_to_game.js"   # was .claude/wf_return_to_game.js; RETIRED 2026-08-20 (plan Act A2). Kept at a named path for history, NOT for invocation.
 authored_by: "adversarial-critique session 2026-08-19; 4 Fable-5 read-only nodes + measured execution"
 
 # The ordering thesis, so a later session does not 'improve' it into the loop it escapes:
