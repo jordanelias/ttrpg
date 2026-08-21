@@ -1,25 +1,27 @@
 """Falsifier tests for engine/substrate/stubwire.py — the P1 stub-wire primitive (ED-IN-0091,
 `audit/2026-07-29-code-shape-open-items/01_orchestration_plan_v1.md` §2.1).
 
-Three claims, one fixture, one mutation (§0.1 point 3 "name the falsifier"):
+TWO claims as of 2026-08-21. A third — `tools/review_core.py`'s `stubs.count` report-only signal —
+was dropped when culling wave 2 retired `review_core.py` (ED-IN-0194). The two that remain are the
+two whose subject is the executable model; the retired one's subject was the repository-state
+ratchet.
+
+Two claims, one fixture, one mutation (§0.1 point 3 "name the falsifier"):
   1. `stub_resolve` bumps the module-level `invocations` counter — the telemetry
      `engine/mc_v18.py`'s `CampaignResult.stub_hits` folds the same way as the existing F7
      `npcs_generated` counter.
   2. `structure_audit.py`'s `stub_wired` node attribute (derived from the SAME AST import pass
      `build_g_code` already runs — no second parser) sees a module that imports
      `engine.substrate.stubwire`.
-  3. `tools/review_core.py`'s `stubs.count` report-only signal — via the REAL registered CHECKS
-     row and the REAL `_run_check` codepath (subprocess + its own `count_re`), not a hand-rolled
-     regex re-implementation — counts it too.
 
 MUTATION CHECK (the falsifier, not just a claim, per §0.1 point 5 "if you cannot write the guard
 you have not understood the pattern"): ONE fixture module (`engine/fixture_consumer.py` under a
 synthetic repo root) is built in two variants — WITH the `from engine.substrate import stubwire`
 import plus a `stubwire.stub_resolve(...)` call, and WITHOUT it (the import AND the call deleted,
-standing in for a stub site that was never actually converted). `test_stub_wired_fixture_seen_by_all_three_surfaces`
-asserts all three claims TRUE for the WITH variant; `test_mutation_deleting_the_import_fails_all_three`
-asserts all three flip to FALSE/zero for the WITHOUT variant — so a broken/no-op detector on any of
-the three surfaces fails a test here, not silently reports nothing.
+standing in for a stub site that was never actually converted). `test_stub_wired_fixture_seen_by_both_surfaces`
+asserts both claims TRUE for the WITH variant; `test_mutation_deleting_the_import_fails_both`
+asserts both flip to FALSE/zero for the WITHOUT variant — so a broken/no-op detector on either of
+the two surfaces fails a test here, not silently reports nothing.
 """
 import importlib.util
 import os
@@ -31,7 +33,7 @@ from engine.substrate import stubwire
 
 _ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 _SA_SCRIPT = os.path.join(_ROOT, 'skills', 'valoria-vector-audit', 'scripts', 'structure_audit.py')
-_RC_SCRIPT = os.path.join(_ROOT, 'tools', 'review_core.py')
+# review_core.py retired 2026-08-21 (culling wave 2, ED-IN-0194) — its stubs.count surface is gone.
 _CI_COMMON_SCRIPT = os.path.join(_ROOT, 'tools', 'ci_common.py')
 
 
@@ -43,7 +45,6 @@ def _load(name, path):
 
 
 sa = _load('structure_audit_for_stubwire_test', _SA_SCRIPT)
-rc = _load('review_core_for_stubwire_test', _RC_SCRIPT)
 
 
 # ── StubResult / stub_resolve contract (frozen shape, §2.1 pin) ─────────────────────────────────
@@ -157,31 +158,21 @@ def _run_fixture(tmp_path: Path, with_stubwire: bool, monkeypatch):
     assert errs == []
     audit_hit = 'engine.fixture_consumer' in sa.stub_wired_modules(g_code)
 
-    # 3. review_core signal — the REAL registered CHECKS row + its REGISTERED count_re, via the
-    #    REAL _run_check codepath (subprocess), against the synthetic root.
-    monkeypatch.setattr(rc, 'ROOT', root)
-    chk = next(c for c in rc.CHECKS if c['id'] == 'stubs.count')
-    sig = rc._run_check(chk)
-
-    return invocations_delta, audit_hit, sig
+    return invocations_delta, audit_hit
 
 
-def test_stub_wired_fixture_seen_by_all_three_surfaces(tmp_path, monkeypatch):
-    invocations_delta, audit_hit, sig = _run_fixture(tmp_path, with_stubwire=True,
-                                                       monkeypatch=monkeypatch)
+def test_stub_wired_fixture_seen_by_both_surfaces(tmp_path, monkeypatch):
+    invocations_delta, audit_hit = _run_fixture(tmp_path, with_stubwire=True,
+                                                monkeypatch=monkeypatch)
     assert invocations_delta == 1, "the fixture's stub_resolve call did not bump invocations"
     assert audit_hit, "structure_audit's stub_wired attribute did not see the fixture's import"
-    assert sig['verdict'] == 'fail' and sig['count'] == 1, (
-        f"review_core's stubs.count signal did not count the fixture: {sig}")
 
 
-def test_mutation_deleting_the_import_fails_all_three(tmp_path, monkeypatch):
+def test_mutation_deleting_the_import_fails_both(tmp_path, monkeypatch):
     """The falsifier: with the fixture's `from engine.substrate import stubwire` import (and its
-    call) DELETED, all three assertions above must flip to false/zero in the SAME test — proving
-    none of the three checks can pass on a fixture that never actually converted."""
-    invocations_delta, audit_hit, sig = _run_fixture(tmp_path, with_stubwire=False,
-                                                       monkeypatch=monkeypatch)
+    call) DELETED, both assertions above must flip to false/zero in the SAME test — proving
+    neither check can pass on a fixture that never actually converted."""
+    invocations_delta, audit_hit = _run_fixture(tmp_path, with_stubwire=False,
+                                                monkeypatch=monkeypatch)
     assert invocations_delta == 0, "invocations counted a call the mutated fixture never made"
     assert not audit_hit, "structure_audit's stub_wired attribute still saw the mutated fixture"
-    assert sig['verdict'] == 'pass' and sig['count'] == 0, (
-        f"review_core's stubs.count signal still counted the mutated fixture: {sig}")

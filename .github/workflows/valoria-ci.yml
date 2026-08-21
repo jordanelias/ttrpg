@@ -122,7 +122,20 @@ jobs:
           v python3 tools/export_composition.py --check
           # ED-IN-0142: the test register drifted 3x in one session and only the pytest suite
           # noticed, because --check could not fail. Both fixed; this is the CI half.
-          v python3 tools/build_test_register.py --check
+          # RETIRED culling wave 2 (ED-IN-0194, 2026-08-21): build_test_register.py + its
+          # references/test_register.json output. The register indexed test files for an
+          # apparatus census; nothing in engine/ or systems/ read it.
+          #
+          # THE GAME SIGNAL MOVES — see the validators-report job, NOT here. `review_core.py`
+          # retired in the same wave and it was what carried `m1.acceptance` into a required job,
+          # the single game-subject signal wired into CI (CLAUDE.md §0.2's instrument). Losing it
+          # silently would be the commensurability failure this cull was told to avoid.
+          #
+          # It is rewired REPORT-ONLY, deliberately. `m1_acceptance --check` exits 1 today —
+          # stub_invocations and m1_junctures both fail, which is the true state of the milestone.
+          # review_core graded it against a ratchet baseline (now retired with it), so it red only
+          # on REGRESSION; a bare --check has no baseline and would red on arrival, refusing every
+          # unrelated author's commit for a pre-existing condition. ED-IN-0112 paid for that once.
           # ED-IN-0172: moved OUT of the pytest suite, where it was racy by construction.
           # It shells out and reads the WHOLE tree, while `test_engine_atlas` deliberately
           # plants a throwaway probe module under a reserved subsystem name in the real
@@ -184,8 +197,13 @@ jobs:
           # that job's membership a false claim about what blocks a merge. Nothing about
           # their behaviour changes here; `valoria_local.py:162,172` ALREADY ran both
           # report-only, so this is CI catching up to the local tier, not a relaxation.
-          w python3 tools/ci_supersession_check.py
-          w python3 tools/ci_audit_registry_check.py
+          # RETIRED culling wave 2 (ED-IN-0194, 2026-08-21): ci_supersession_check.py and
+          # ci_audit_registry_check.py. Both were structurally incapable of failing, as the
+          # paragraph above records — a tool that cannot fail cannot gate.
+          #
+          # THE GAME SIGNAL, REWIRED HERE (see the note in the blocking job). review_core.py
+          # retired in this wave and it was the only carrier of `m1.acceptance` into CI.
+          w python3 tools/m1_acceptance.py --summary
           w python3 tools/ci_names_check.py
           w python3 tools/currency_consistency_check.py
           w python3 tools/ci_quantity_vocabulary_check.py
@@ -193,18 +211,14 @@ jobs:
           w python3 tools/ci_generation_consistency.py
           w python3 tools/canon_coverage_check.py --strict --json
           w python3 tools/ci_module_shape_check.py
-          w python3 tools/ci_workplan_pointer_check.py
+          # RETIRED culling wave 2 (ED-IN-0194, 2026-08-21): ci_workplan_pointer_check.py, with
+          # the 11 workplans/POINTER_*.md files it guarded.
           w python3 tools/wiring_map_check.py --check
-          # Added 2026-08-01 (ED-IN-0118). All three existed and NOTHING RAN THEM.
-          # scope_ratchet's registry row claimed `ci_job: validators-report` and its notes said
-          # it "rides valoria_local" -- but no workflow invokes valoria_local at all (only
-          # py_compile on it), so ED-IN-0112's design silently lost its CI half in the 2026-08-01
-          # job collapse. It reports REGRESSED today, which is exactly why it belongs HERE and not
-          # in the blocking job. The other two ship with their own pytest suites and had zero
-          # invokers and zero registry rows -- a detector nobody runs is the defect it detects.
-          w python3 tools/scope_ratchet.py --check
+          # RETIRED culling wave 2 (ED-IN-0194, 2026-08-21): scope_ratchet.py + scope_baseline.yaml
+          # and ci_program_claim_check.py. `ci_vacuous_assertion_check` below is KEPT by Jordan's
+          # ruling of 2026-08-21 (culling plan §5.6): it is a literal encoding of CLAUDE.md §0.1
+          # point 2, and deleting it would have required striking §0.1 in the same commit.
           w python3 tools/ci_vacuous_assertion_check.py
-          w python3 tools/ci_program_claim_check.py
           exit 0
 
   contract-conformance:
@@ -415,14 +429,16 @@ jobs:
       - name: Run compliance check
         run: python3 tools/compliance_check.py --check-only --repo-state .
 
-      - name: Repository-state regression ratchet (review_core --check)
-        # Stage C (earned-gate): the ED-IN-0077 ratchet grades every report-only signal against
-        # registers/review_baseline.yaml and fails only on a REGRESSION (a signal's debt count
-        # GROWS past its accepted baseline). Wiring it into this already-required job makes every
-        # report-only check blocking-on-regression — outputs now ENFORCE "no new debt" — with no
-        # branch-protection edit and no backlog burn (debt can only shrink; lowering a baseline is
-        # the one-line edit in the PR that earns it, CODEOWNERS-gated to Jordan).
-        run: python3 tools/review_core.py --check
+      # RETIRED culling wave 2 (ED-IN-0194, 2026-08-21): the ED-IN-0077 repository-state ratchet
+      # (review_core.py + registers/review_baseline.yaml). It graded twelve report-only signals
+      # against a baseline and failed on regression — an apparatus-subject gate whose twelve
+      # signals were, with one exception, apparatus signals.
+      #
+      # THE EXCEPTION IS WHY THIS BLOCK IS A COMMENT AND NOT A DELETION. `m1.acceptance` was the
+      # one game-subject signal in it, and this job is the required one, so retiring review_core
+      # silently would have removed the only path by which CLAUDE.md §0.2's instrument reached CI.
+      # It is rewired as `m1_acceptance.py --summary` in `validators-report`; report-only, because
+      # a bare --check has no baseline and reds on arrival. See the note at the blocking job.
 
   # ── AGGREGATOR: the single required check for branch protection ──────────────
   # Proves every authoritative gate actually RAN and PASSED (not skipped). Make
