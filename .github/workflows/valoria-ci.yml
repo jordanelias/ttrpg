@@ -44,7 +44,7 @@ jobs:
       # (ED-IN-0194); the mechanism stays because it is the right one, not because a parser needs it.
       #
       # SHIPPED WITH THE `invoked_by` FIX, NOT BEFORE IT — see G9's note in
-      # tools/build_apparatus_registry.py. Being compiled is not being invoked, and the
+      # tools/build_apparatus_registry.py (retired 2026-08-21). Being compiled is not being invoked, and the
       # orphan census used to conflate the two. Expanding this list to name all 108 tools
       # would have been the obvious fix and would have driven the orphan count to zero.
       - name: Compile all validators and tools

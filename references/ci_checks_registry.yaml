@@ -308,6 +308,16 @@ ci_checks:
       wave 1 by Jordan's ruling 2026-08-21 — wave 1 as ratified deleted it, one day before §0.2
       made it the definition of `done`.
 
+      ⚠ NAMED AS A LOSS, because the rewire was not neutral and the first version of this row did
+      not say so. `review_core.py` carried `m1.acceptance` inside the REQUIRED compliance job and
+      graded it against a baseline, so a REGRESSION genuinely red CI — that is exactly why the
+      2026-08-20 plan of record (§1.A4) valued it. Report-only here cannot red on anything. So the
+      net effect of culling wave 2 is that NO GAME-FACING SIGNAL CAN NOW FAIL CI ON REGRESSION,
+      and the only reason that is tolerable is that the milestone's true state is already NOT MET,
+      so there is nothing green to protect. It stops being tolerable the moment a juncture passes:
+      whoever greens the first row must restore a blocking form in the same commit, with a
+      baseline, or the gate that defines `done` will be advisory at exactly the point it matters.
+
 
 # ── Level 1-2 (text/skill, supervisory only) ─────────────────────────────────
 # Listed for completeness; promotion to Level 5 is the long-term direction. (Was
@@ -321,7 +331,7 @@ advisory_only:
     role: "GitHub > memory; investigate don't guess; bootstrap before game-state work."
     notes: "Backed by CLAUDE.md §2/§8 and the .githooks/ local tier. (Previously read 'largely backed by Level 4 hooks' — those hooks were evacuated 2026-08-05 and the claim outlived them.)"
 
-  - locus: skill descriptions (valoria-mechanic-audit, valoria-simulator)
+  - locus: skill descriptions (valoria-mechanic-audit, valoria-simulator [RETIRED 2026-08-21, ED-IN-0194])
     level: 2
     role: "Mode/workflow guidance."
 

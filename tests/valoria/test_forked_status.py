@@ -72,20 +72,56 @@ def test_the_fork_rows_name_a_real_ref():
 
 
 def test_the_evacuated_content_is_actually_at_the_ref():
-    """The promise a FORK row makes is 'the content is at this ref'. Verify it, rather than
-    trusting the row — an unverifiable provenance pointer is the stale-artifact hazard this
-    programme keeps closing."""
+    """The promise a FORK row makes is "the content is at this ref". Verify EVERY row, and pin the
+    number that cannot be verified so it can only shrink.
+
+    REWRITTEN 2026-08-21 (ED-IN-0194) after this test failed to catch the exact defect it exists
+    for. It counted rows it COULD confirm and asserted `checked >= 3` against ~200 rows — so 229
+    rows could point at nothing and it still passed. A culling pass then added 77 rows naming
+    `3be53ef`, the commit that PERFORMS the deletion: a file deleted BY a commit is not present AT
+    it, so all 77 were unfollowable from the moment they were written, and this test was green.
+
+    That is CLAUDE.md §0.1 pt 2 verbatim — an assertion that cannot observe the failure it excludes
+    — committed inside a provenance guard, which is the worst possible host for it. The floor was
+    measuring the test's own reach, not the ledger's health.
+
+    Now it counts the rows that CANNOT be followed and ratchets that number down. A hard zero would
+    be red on arrival: 79 pre-existing rows name `designs/`-era paths at refs where those paths had
+    already moved, which is inherited debt and not this test's to fix in one commit. A ceiling that
+    only falls is the honest shape — the same one `test_engine_does_not_import_systems.py` uses.
+    """
     import subprocess
     remap = bdc._load_restructure_map()
     forked = [(old, v[len(bdc.FORK_PREFIX):]) for old, v in remap.items() if bdc._is_forked(v)]
-    assert forked, 'no FORK rows found'
-    checked = 0
+    assert forked, 'no FORK rows found — this test would pass vacuously'
+
+    unresolvable = []
     for old, ref in forked:
         probe = old.rstrip('/')
         r = subprocess.run(['git', 'cat-file', '-e', f'{ref}:{probe}'],
                            cwd=ROOT, capture_output=True)
-        if r.returncode == 0:
-            checked += 1
-    assert checked >= 3, (
-        f'only {checked} of {len(forked)} FORK rows could be confirmed present at their ref — '
-        'a provenance pointer nobody can follow is not provenance')
+        if r.returncode != 0:
+            unresolvable.append(f'{old} -> {ref}')
+
+    # THE CEILING. Measured 2026-08-21: 79 of 232 rows unfollowable, all of them pre-existing
+    # `designs/`-era rows. Every row added since is verified reachable before it is written.
+    UNRESOLVABLE_CEILING = 79
+
+    assert len(unresolvable) <= UNRESOLVABLE_CEILING, (
+        f'FORK rows that cannot be followed ROSE {UNRESOLVABLE_CEILING} -> {len(unresolvable)}. '
+        f'A provenance pointer nobody can follow is not provenance — it is worse than a DEAD row, '
+        f'because it reads as resolved. New offenders:\n  ' + '\n  '.join(
+            r for r in unresolvable if r not in ()) [:1200] + '\n'
+        f'Verify a row with `git cat-file -e <ref>:<path>` BEFORE writing it. If you are recording '
+        f'a deletion, the content is at the PARENT of the deleting commit, not at it.')
+
+    assert len(unresolvable) == UNRESOLVABLE_CEILING, (
+        f'FORK rows that cannot be followed FELL {UNRESOLVABLE_CEILING} -> {len(unresolvable)}. '
+        f'Lower UNRESOLVABLE_CEILING to {len(unresolvable)} in this commit so the progress is banked.')
+
+    # And the assertion that the loop ran at all (§0.1 pt 2) — the property whose absence is the
+    # reason this test was rewritten. Counting failures, not successes, means a scan that stops
+    # working reports ZERO problems; this makes that indistinguishable-from-healthy state fail.
+    assert len(forked) >= 200, (
+        f'only {len(forked)} FORK rows parsed (expected 200+) — the ledger reader has stopped '
+        f'matching rows, so the count above is measuring nothing. Fix the parser, not this floor.')

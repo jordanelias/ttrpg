@@ -443,11 +443,23 @@ def check_dead_maintainers(drift):
 
 
 def check_handoff_heading(drift):
+    """HANDOFF.md must carry a '## Next…' heading.
+
+    The REASON changed on 2026-08-21 and the message with it. This used to warn that "the
+    SessionStart banner will be silently blank" — `tools/session_status.py` was retired in culling
+    wave 3 (ED-IN-0194) and there is no banner to blank. The heading still matters, and now matters
+    MORE: with no banner relaying it, this section is read by a human or not at all, so losing the
+    heading loses the continuity surface outright rather than degrading a generated view of it.
+    """
     text = _read('HANDOFF.md')
     if text is None:
-        return  # session_status handles the missing-file case itself
+        drift.append("HANDOFF.md is missing — it is the only continuity surface left since the "
+                     "SessionStart banner was retired (2026-08-21, ED-IN-0194)")
+        return
     if not any(ln.strip().lower().startswith('## next') for ln in text.splitlines()):
-        drift.append("HANDOFF.md has no '## Next…' heading — the SessionStart banner will be silently blank")
+        drift.append("HANDOFF.md has no '## Next…' heading — nothing relays this file automatically "
+                     "any more, so a missing heading loses the continuity surface rather than "
+                     "blanking a banner")
 
 
 def run_checks():

@@ -206,7 +206,7 @@ either §0.1 guard. Do not write a replacement banner.
 
 ---
 
-### S4 — Wave 5: untrack the generated data · `state: next`
+### S4 — Wave 5: untrack the generated data · `state: after S8`
 
 **Goal:** no read/write failures from generated artifacts; end the document tax.
 
@@ -346,11 +346,36 @@ names is already clear: `test_fork_divergence.py` was deleted in `4ab18df`.
 
 ---
 
-### S8 — M1 juncture 1 · `state: unblocked throughout; slot it anywhere after S3`
+### S8 — M1 juncture 1 · `state: next` (promoted 2026-08-21 — see below)
+
+> **PROMOTED TO `next`, and the promotion is the point.** This document's §1(c) says *something must
+> move `0/7` before more architecture lands*. S1, S2 and S3 landed; none of them changed how the game
+> plays; `0/7` is unmoved. A read-only audit put it plainly: the plan's mechanical rail said "take the
+> first step whose `state:` is `next`" while `next` pointed at **more culling**, so the rail and the
+> stated priority pointed in opposite directions and the rail would have won by default.
+>
+> That is not a scheduling detail. It is the T2 mechanism `CLAUDE.md` §0.3 describes — the next step
+> being whatever the board says, rather than whatever the milestone needs — reproduced inside the
+> document written to escape it. Resolved by one word of bookkeeping, which is what it always cost.
 
 **Half A, fractional pools — and it is NOT a dormant bug.** Measured 2026-08-21: a 4-season seeded
 campaign makes 40 calls to `roll_net_continuous` and **20 already pass a fractional pool** (4.3, 4.6,
-4.9, 5.3, 5.5, …), every one silently rounded. `sigma_leverage.py:284` does
+4.9, 5.3, 5.5, …), every one silently rounded.
+
+The instrument, because a number without one is not a measurement (§0.1 pts 3-4) and the first
+version of this paragraph shipped without it — re-run it before trusting the 20/40:
+
+```python
+import sys, collections; sys.path.insert(0, '.')
+from engine.autoload import sigma_leverage as SL
+seen, real = collections.Counter(), SL.roll_net_continuous
+def spy(pool, tn=SL.TN_STANDARD, rng=None):
+    seen['frac' if float(pool) != round(float(pool)) else 'int'] += 1
+    return real(pool, tn, rng=rng)
+SL.roll_net_continuous = spy
+from engine import mc_v18; mc_v18.run_campaign(seed=20260819, max_seasons=4)
+print(seen)          # -> Counter({'frac': 20, 'int': 20}) on 2026-08-21
+``` `sigma_leverage.py:284` does
 `max(1, int(round(pool)))` while `dice_engine.continuous_engine_sample` already accepts fractional
 input and says so at `dice_engine.py:92`. Replace with `max(1.0, float(pool))` — the canonical pool
 floor survives, the quantisation goes. **Do not touch `roll_net` at :273**, the discrete path.
@@ -422,13 +447,13 @@ script over the pure-logic classes.
 | ~~Q6~~ | **RULED 2026-08-21 — KEEP both guards.** `ci_claim_provenance_check.py` and `ci_vacuous_assertion_check.py` stay, and `CLAUDE.md` §0.1 stays intact with them. They are the one place doctrine is mechanised rather than merely asserted; the load-bearing predicate is overridden here deliberately, and the exemption is recorded rather than silent. | — | culling plan §5.6, held 2026-08-18 → ruled |
 | ~~Q7~~ | **RULED 2026-08-21 — Wave 3 RUNS, `valoria-critic` is KEPT.** `.claude/wf_*.js`, `wf_harness.js`, the wiring-checkers and the session machinery go; `.claude/agents/valoria-critic.md` survives as a standalone agent definition, invoked through the Agent tool now that the workflow scripts are gone. Structurally-independent adversarial review therefore survives the wave that was written to end it. ⚠ **The cost this ruling carries: Wave 3 deletes `session_status.py`, so the §0.3 banner experiment ENDS.** S3 amends §0.3 in the same commit. | — | culling plan §5.7, held 2026-08-18 → ruled |
 | ~~m1_acceptance~~ | **RULED 2026-08-21 — CARVED OUT of Wave 1, kept.** Wave 1 as ratified deleted it; §0.2 made it the definition of `done` one day after that ratification. | — | §3 S2 |
-| **Q8 — the ledger cap.** `registers/editorial_ledger_in.jsonl` has ~108 tokens of headroom under a **blocking** cap, so **no lane can file a row at all** (ED-IN-0185 Q5, overdue). Raise the cap, split the file, or accept that IN cannot file? Separately, lines 50-51 carry **two rows sharing id `ED-IN-0194`** with conflicting `needs_jordan`, reported 2026-08-19 and unruled. | S6; any future ledger row in any lane | `registers/editorial_ledger_in.jsonl` |
+| ~~Q8~~ | **RULED AND EXECUTED 2026-08-21 — "merely fiat made trying to get work done."** Caps raised 50k→120k (live lane ledgers) and 150k→250k (their archives). The reported "~108 tokens of headroom" was itself STALE — measured 45,998/50,000, about four rows — and had been re-cited for six days without re-measurement. The duplicate `ED-IN-0194` was split (second row → `ED-IN-0195`, `next_free` 195→196), and a scan found **nine more duplicate-id groups nobody had reported**, five conflicting on `status`; all reconciled into declared parts without renumbering, because those ids are cited across the corpus. | — | `tools/ci_register_size_check.py:102-124` |
 
 **The two that gated how deep the cull goes are now answered.** Q6 and Q7 had been held since
 2026-08-18; Jordan ruled both on 2026-08-21 and the answers are recorded above rather than left as
-open rows, so no later session re-opens a settled question. **Q8 is now the only ruling that blocks
-a step in this document** — S6 cannot close the ledger work without it, and no lane can file a row
-in the meantime.
+open rows, so no later session re-opens a settled question. **No ruling now blocks a step in this document.** Q8 was the last one and it was ruled and executed
+on 2026-08-21. Q1/Q1b/Q2/Q3 remain open but gate only the FINAL form of work that proceeds
+provisionally; S4 through S9 need no answer from Jordan to begin.
 
 Q1, Q1b, Q2 and Q3 are the 2026-08-20 plan's §7 queue, unchanged and still open. That plan's own
 Q4 (ED-SC-0003/0004/0005 — 0004 has two contradictory live implementations; read ED-SC-0017 first,

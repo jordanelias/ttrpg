@@ -54,20 +54,31 @@ and this root file remains the one stable SessionStart entry point.
 document is still the authority on what each act is and why. If you are about to write a new plan
 instead of taking a step, that is the loop; take the step.
 
-`state: next` is currently **S4 — culling wave 5: untrack the generated data.** S1, S2 and S3 have
-landed: the load-bearing claim is true, waves 1-3 retired ~84,000 lines, the suite is **1,622 passed
-/ 0 failed**, and the four connectivity gates (broken-deps, claim-provenance, currency, register
-size) are all green with zero dead tool references anywhere.
+`state: next` is **S8 — move M1 juncture 1. The game, not more apparatus.**
 
-**⚠ THE GAME IS STILL AT 0/7, AND THAT IS NOW THE OLDEST UNPAID ITEM.** S8 — fractional pools at
-`sigma_leverage.py:284` plus the `score/2` classification — is `unblocked throughout` and has been
-available since S3. It is a two-line change with a measured golden delta. Nothing in S4-S7 depends
-on it, and nothing it depends on is missing. If you take S4 first, that is a choice, not a
-dependency, and §1(c) of the execution order says so.
+S1, S2 and S3 landed: the load-bearing claim is true, waves 1-3 retired ~84,000 lines, the suite is
+**1,624 passed / 0 failed**, and broken-deps, claim-provenance, currency, register-size and
+ed-citations are all green with zero dead tool invocations anywhere.
 
-**There is no SessionStart banner any more.** Wave 3 retired `tools/session_status.py`; the §0.3
-experiment is closed and its result is recorded in `CLAUDE.md` §0.3. Orient from `CURRENT.md`, this
-file, and the execution order. Do not build a replacement.
+**And `0/7` is exactly where it was.** The execution order's own §1(c) says something must move it
+before more architecture lands; three steps landed and none did. `next` pointed at more culling
+until 2026-08-21, which is the T2 mechanism `CLAUDE.md` §0.3 describes — the board deciding the work
+instead of the milestone — reproduced inside the document written to escape it. S8 is now `next`.
+
+**What S8 is:** `engine/autoload/sigma_leverage.py:284` does `max(1, int(round(pool)))` while
+`dice_engine.continuous_engine_sample` already accepts a fractional pool and says so at
+`dice_engine.py:92`. Measured: a 4-season seeded campaign makes 40 calls and **20 already pass a
+fractional pool**, every one silently rounded — the instrument is in the plan's S8 section, re-run
+it. Two lines, plus a measured golden delta. Then the `score/2` classification, which begins as a
+classification and may end as a question rather than an edit.
+
+⚠ **BEFORE THIS BRANCH MERGES:** `git push origin refs/tags/cull-2026-08-21-pre-waves-1-3`. The tag
+exists locally and covers all three culling waves; pushing it returned **HTTP 403** from this
+session's credential. Until it is on `origin`, the 76 `FORK:421cff2` provenance rows in
+`references/restructure_ledger.md` are correct only while this branch exists.
+
+**There is no SessionStart banner.** Wave 3 retired it; `CLAUDE.md` §0.3 records the experiment's
+result. Orient from `CURRENT.md`, this file, and the execution order. Do not build a replacement.
 
 _Cross-cutting items only — lane-owned work lives in `registers/handoffs/HANDOFF_<LANE>.md`.
 Rewritten 2026-08-14 (ED-IN-0189): this section had opened with a blocker resolved 2026-07-30 and
