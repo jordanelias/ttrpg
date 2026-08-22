@@ -551,6 +551,206 @@ script over the pure-logic classes.
 
 ---
 
+---
+
+## 3a. How deep the tooling goes — THREE layers, and L3 is zero code (Jordan asked 2026-08-22)
+
+Jordan proposed a model — L0 game code · L1 compliance · L2 verification · L3 holistic wrapper — and
+asked how many layers this repository actually needs. **The answer is three, and the fourth slot is
+filled by a stage rather than by code.** This section governs every step above and below it: a step
+that would add a rung is refused here, not debated later.
+
+**One correction to the model before it can be used: it classifies CHECKS, not FILES.** Applied
+per-file it misclassifies, and the misclassification is not hypothetical — `tools/export_descriptors.py`
+is simultaneously a **build step of L0** (its output `engine/engine_params/descriptors.json` is a
+runtime input; delete it and `engine.autoload.game_state` will not import) and an **L1 gate** in
+`--check` mode. `broken_dependency_checker` is L1 for path resolution and L2 for its registry↔CI
+join. `m1_acceptance` is L1 in rows 1-2 and process bookkeeping in row 4.
+
+| layer | what lives there | posture |
+|---|---|---|
+| **L0** | `engine/`, `systems/*/sim/`, `engine/substrate/`, the `engine_params/*.json` runtime inputs — **and runtime instrumentation the engine or the port consumes** | grow |
+| **L1** | compliance over L0 and canon: the blocking validators with game subjects, the five export `--check` round-trips, both pytest suites, the goldens, `m1_acceptance`, `balance_oracle` | **harden, do not grow** |
+| **L2** | small and enumerable; admitted only where an L1 gate's failure would be **silent and game-costly**, and each **mutation-verified at introduction** | cap |
+| **L3** | **zero code** | never build |
+
+**Why L2 terminates, and it is not because of a rule.** An L2 guard closes its own loop when it is
+*mutation-shaped*: plant the defect, assert red. `tests/valoria/test_field_golden_pins.py:16-18`
+records exactly that. You do not need an L3 test to know such a guard works — running it against the
+planted mutation **is** the evidence, and evidence is an artifact (§0.1 pt 3), not another file that
+itself needs guarding. Where an L2 guard is mutation-verified at birth, the regress bottoms out in
+execution rather than in code.
+
+**Why L3 is never mintable on the merits.** L3's subject is always an L2 guard — apparatus — and
+§0.1 pt 5 rules that load-bearing is **not transitive** through apparatus.
+
+**But the predicate leaks, so the cap does independent work.** Both live depth-3 artifacts exist
+*despite* the predicate: one rides an explicit Q6 exemption, and the other is
+`test_generated_layer.py::test_the_layer_is_not_vacuous`, whose predicate defence this very document
+withdraws two sections up — and which shipped anyway on a "ratified instruction mandated it"
+carve-out. §0.3's depth-five stack was built by **flawless** application of a judgment rule. Judgment
+rules admit exemptions; exemptions compound. So: **the predicate governs admission, and the depth cap
+is the backstop the predicate cannot provide about itself** — because "does this test's subject import
+or scan another test or tool?" is mechanically checkable in review, and therefore exemption-resistant.
+**As a review criterion, NOT as `ci_depth_check.py`** — a gate enforcing the gate-depth cap would be
+the joke writing itself.
+
+**L3 has already been built four times here and retired four times**, each time measured:
+`review_core.py` + `review_baseline.yaml` (twelve signals, eleven of them apparatus),
+`scope_ratchet.py`, the observability generators, the SessionStart banner. Each was a holistic surface
+over everything below it; each, per §0.3, **defined the next session's work** — the T3 loop closing.
+A new L3 wrapper recreates them under a new name, and §0.3 already answers it: *"Do not build a
+replacement… test T2 instead."* The only L3 that legitimately survives is not code — it is the
+fresh-context adversarial stage and Jordan's rulings, which by the §0 amendment **cannot accrete
+artifacts**.
+
+**Where runtime observability sits: L0** — which is what licenses S10 above and exempts it from the
+cap. The precedent is already in the tree: `KeyLog` (`engine/substrate/keys.py:336`) is append-only,
+deterministically serialized, consumed at runtime by `mc_v18.py:313`, and is the surface the Godot
+port's key-log parity validates against. Telemetry the engine emits and the port must reproduce is
+**oracle surface**, no more subject to a tooling depth cap than `dice_engine.py` is. The boundary test
+comes from the corpse of the counterexample — the retired `tools/observability/` tier died because its
+feeds *"had no runtime consumer in `engine/` or `systems/`"* (§8). So one line decides every future
+component: **does the engine, the port, or a Jordan decision consume it at runtime?** Yes → L0. No →
+that is the retired tier again.
+
+### Three findings this analysis surfaced that need Jordan, not a session
+
+1. **There is a depth INVERSION on `main` right now.** `tools/ci_vacuous_assertion_check.py` (L2) runs
+   in `validators-report`, which is `continue-on-error: true` — it **cannot fail the build**. Its test
+   `tests/valoria/test_vacuous_assertion_check.py` (L3) runs inside the **blocking** unit-tests job.
+   The depth-3 guard is enforced while the depth-2 tool it guards is advisory. Verified against
+   `.github/workflows/valoria-ci.yml:236` and `:351`.
+2. **`level:` in `references/ci_checks_registry.yaml` is close to information-free, and the worst case
+   is a game signal.** Measured: **12 of 32 `level: 5` rows cannot fail CI** — ten wired to
+   `validators-report`, two (`balance_oracle.py`, `build_identifier_census.py`) with an empty
+   `ci_job`. **`m1_acceptance.py` is among them.** That is §0.2's instrument, the one game-subject
+   signal, and it means **no game regression can currently red CI.** The registry admits this at
+   `:329-337`. This is an L1 hardening debt and it is the most consequential item on this page.
+3. **The `level:` ladder's own source document does not exist.** `ci_checks_registry.yaml:10` cites
+   `project-architecture-valoria-v2_2.md`; it resolves nowhere on `main` and has no
+   `references/restructure_ledger.md` row. The taxonomy is a dangling reference by this repo's own
+   standard.
+
+---
+
+### S10 — Errors become numbers: the caught-exception channel · `state: unblocked`
+
+Independent of S5–S9. **Do not take it ahead of S5 or S8 by rail-default** — it does not move `0/7`,
+and §1(c) still binds. Requested by Jordan 2026-08-22: *"record and identify how, why, where and when
+errors occur."*
+
+**Goal:** a caught exception on the campaign path becomes a counted, asserted-zero fact — never only
+stderr text, never a dropped string.
+
+**Measured 2026-08-22, by READING each construct in context rather than counting token hits.** That
+method distinction is load-bearing here: the first census of this surface was produced by grep and
+**two of its three headline numbers were wrong**, in the direction that would have justified more
+apparatus.
+
+  * *"12 silent-failure sites"* is **4**. Seven of the twelve are the identical benign
+    `sys.stdout.reconfigure(encoding='utf-8')` console shim inside `if __name__ == '__main__':`
+    blocks; one is an unreadable-file skip in a dead-code scanner that raises loudly if nothing was
+    read. The four real ones are cross-subsystem seams —
+    `systems/social_contest/sim/contest_legacy_stub.py:247`, `systems/threadwork/sim/opposing.py:255`,
+    `systems/fieldwork/sim/knots.py:354` and `:367` — where one `except (ImportError, AttributeError): pass`
+    wraps **both the late import and the effect call**, so a genuine `AttributeError` inside
+    `apply_conviction_scar` / `apply_coherence_delta` / `social_success` / `sustain_knot` is swallowed
+    identically to a missing module. All four write game state: Conviction scars, coherence, knot
+    strain, momentum grants. This is §0.1 pt 1's exact shape — correct when written, silently a no-op
+    once a callee changes.
+  * *"31 `NotImplementedError` stubs"* is **2 live `raise`s**, one of them an abstract base with three
+    concrete subclasses defined below it, the other a stub with zero production callers. The rest are
+    comments recording the OI-17 conversion into `engine/substrate/stubwire.py` — **45 live
+    `stub_resolve(` call sites**, already counted per-campaign into `CampaignResult.stub_hits` and
+    already consumed by `m1_acceptance` row 1 (which honestly FAILs at 2). **The stub-telemetry half
+    of this ask is built and consumed; do not rebuild it.**
+  * *"28 raises, 0 asserts"* is not a gap. 26 of the 28 are `engine/substrate/keys.py`'s typed
+    `KeyValidationError` (invariants 1-8) and `TerminationBreach`; the other two are leaf readers
+    failing fast on a missing cooked artifact. **Typed raises are strictly better than `assert`,
+    which `-O` strips. The substrate raises loudly — the gap is one layer up, in what the driver does
+    with what it catches.**
+
+**The actual error surface is two swallow points in the driver layer, and one of them already knows
+it.** `engine/mc_v18.py:137-144` catches faction-action exceptions and prints to stderr — its own
+comment says *"it must NOT be swallowed SILENTLY either (audit ED-IN-0074 D7)"* and then counts it
+nowhere. A resolver that raises **before consuming RNG** (an `AttributeError` on a renamed field —
+precisely the fractional-pools class) leaves the RNG stream unchanged, every seeded golden green, the
+faction silently inactive, and the only trace is stderr nothing reads.
+`engine/cross_scale/scene_dispatch.py:372-374` turns a resolver crash into
+`out["reason"] = f"resolver raised: {e!r}"`, which flows into `report["deferred"]` and is **dropped**
+at `mc_v18.py:149-150`, which reads only `["dispatch"]["resolved"]`. A resolver crash is currently
+indistinguishable from a designed deferral in every consumed output.
+
+**The change.**
+
+(a) `CampaignResult` gains `faction_action_errors`, `scene_resolver_errors`, `scene_deferrals` (int
+defaults). `mc_v18.py:139` increments a world attribute beside the kept stderr print;
+`scene_dispatch.py:372` sets `out["error"] = True` beside the existing reason; `dispatch_scenes`
+counts it; `mc_v18.py:149` folds the count instead of dropping the report. **Mirror the
+`accord_drift_probe_hits` idiom** (`mc_v18.py:312`, `getattr(world, ..., 0)`) — that is this repo's
+ratified shape for "record a defect without fixing it", and it already has a dedicated consumer test.
+
+(b) At the four seams: the `try` covers **the import only**; `ImportError` routes to
+`stubwire.stub_resolve` naming the seam (reusing the single owner, counted into `stub_hits` which m1
+row 1 already reads); the effect call moves **outside** the `try`, so a real bug in the callee raises
+again.
+
+(c) `m1_acceptance.row_invariant_violations` moves `blocked` → `partial`: over the probe season it
+already runs, assert both new counters are 0 and report `len(KeyLog.stat_vocabulary_warnings)`. Keep
+`unblocked_by` naming the full N-seed sweep that remains.
+
+(d) `mc_v18.__main__` gains `--seed / --seasons / --dump PATH`: one campaign, then the `KeyLog`
+serialization, every `CampaignResult` field, and the per-scene reports **including the deferral and
+error reasons currently dropped**. Written **only when asked**. Never by default, never committed —
+S4 just untracked the generated layer and a default-written run record regrows it.
+
+**Consumers, named, because §0.3 demands it.** Zero-assertions in
+`engine/tests/test_mc_v18_regression.py` + `test_f7_smoke_oracle.py` (blocking CI) · `m1_acceptance
+--summary` (Jordan's instrument) · `stub_hits` → m1 row 1 · the `--dump` file's consumer is the human
+who invoked it, and later the port's V.2 recorded-draw replay harness.
+
+**Determinism argument — the thing most likely to be got wrong.** No site constructs, seeds or draws
+from any `Random`; the additions are integer increments and dict keys. No new Key is emitted, so
+`content_hash()` — m1 row 2's instrument and the port's master parity check — cannot move. No
+golden-compared value derives from touched state (`run_batch` reads `r.winner` and `r.battle_count`
+only). The four seams are unreachable at the golden seeds, so (b) removes no RNG consumption either.
+`out["error"] = True` is set only on the exception path, which `return`s at `:374` before the
+echo-transport block, so it can never reach `emit_scene_echo`.
+
+**Gate — and the falsifier IS the gate.**
+
+```
+python -m pytest engine/tests -q            # green, ZERO golden re-records
+python3 tools/m1_acceptance.py --summary    # row 2 hash unchanged; row 5 now `partial`, measured 0
+```
+
+then inject a pre-RNG crash into `faction_action` and observe **the goldens stay green while the new
+counter and its assertion go red**. That asymmetry is the whole point of the step: it exhibits, as
+its birth certificate, the defect class the entire existing gate surface is structurally blind to.
+Then `--dump` the same seed twice and `cmp` the files.
+
+**Commit:** `[simulation] S10: caught exceptions on the campaign path become counted, asserted-zero
+telemetry; un-swallow the four cross-subsystem seams (Jordan 2026-08-22)`
+
+**Do not:** `import logging` anywhere in `engine/` or `systems/` — it is a second event channel beside
+`KeyLog` and a second counter channel beside `CampaignResult`, so §8 forbids it, and GDScript has no
+analog the strategy doc specifies · add a default-written or tracked run artifact (S4's boundary) ·
+build per-module instrumentation for the 27 dark modules — **you cannot log what does not execute**,
+their burn-down instrument is `test_pipeline_reach`'s XFAIL manifest and their census is
+`trace_execution_phases`, both of which exist · emit any Key from the error path (an error-Key moves
+`content_hash` and every determinism row; if error events ever belong in the KeyLog that is a design
+decision for the contract-registered `audit` module, `references/module_contracts.yaml:535`, and it
+is Jordan's, not this step's) · fold any of this into an S5 sub-step's commit.
+
+**Falsifier for the whole programme, recorded in advance.** If after two months the counters have only
+ever been read by the tests asserting they are zero — no red assertion ever fired on a real defect, no
+`--dump` ever invoked to diagnose a run, row 5's slice never influenced a commit or a ruling — **then
+this layer was apparatus, and the response is to delete the `--dump` flag and the row-5 slice.** It is
+confirmed the first time a golden-green commit turns a counter non-zero. The near-term test is
+concrete: S5d (`per_stat_floors`) and any S8 Half B ruling both edit resolvers on the live campaign
+path, and those are exactly the commits where a pre-RNG `AttributeError` would today ship green.
+
 ## 4. What this order deliberately does not do
 
 - **It does not add a step for the review that produced it.** No `test_plan_compliance`, no progress
