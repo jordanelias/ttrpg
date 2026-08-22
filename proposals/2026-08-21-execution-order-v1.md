@@ -206,7 +206,7 @@ either §0.1 guard. Do not write a replacement banner.
 
 ---
 
-### S4 — Wave 5: untrack the generated data · `state: next`
+### S4 — Wave 5: untrack the generated data · `state: done` (2026-08-22, `f84692c`)
 
 **Goal:** no read/write failures from generated artifacts; end the document tax.
 
@@ -243,11 +243,66 @@ as fabricated.
 committed; and the falsifier — **add a throwaway `proposals/*.md`, run the suite, observe zero
 generated-file churn and no red gate**, then delete it.
 
-**Commit:** `[cleanup] Culling wave 5: untrack generated data and flip the freshness gates to build-in-CI (ED-IN-0194)`
+**Commit:** `f84692c [cleanup] Culling wave 5 (S4): untrack the generated layer, and replace five
+staleness gates with one build gate` — 25 files untracked, **38,156 tracked lines** removed.
+
+**RESULT, including where this step DEVIATED from the instruction above.**
+
+*The gate flip was not a flip.* The instruction said each `--check` that diffs a committed copy
+"flips to **build in CI, do not diff a committed copy**". Executed literally that keeps five
+near-identical tests alive as a rule about a file nobody wrote — the duplication §8 forbids. What
+landed instead: **one** owner of "every builder runs and leaves its artifacts"
+(`tests/valoria/test_generated_layer.py`), with per-artifact **determinism** staying in each
+artifact's own file because nothing in the first claim can observe it. The staleness failure class
+was DELETED, not reworded — saying otherwise would have been the dishonest half of the change.
+
+*`build_identifier_census --check` was REMOVED from CI, not flipped.* It compares a fresh
+re-derivation against files git no longer carries; left in the blocking `validators` job it would
+have red `main` on the first push. Removed from `tools/valoria_local.py` in the same commit.
+
+*THE FOUR VOCAB VIEWS ARE KEPT TRACKED — the instruction above is wrong on this and is not
+followed.* Two independent reasons, both measured:
+
+  1. **Two BLOCKING CI validators read them** — `validate_ed_citations.py` and `ci_naming_check.py`.
+     Untracking them puts a blocking gate's input outside a clean checkout, which is precisely the
+     §5.5 hazard this step was told to clear, not create.
+  2. **They do not carry the document tax.** They are generated from
+     `references/definitions/vocab_source.yaml`, an AUTHORED file — so they churn when vocabulary
+     changes and never on an unrelated prose edit. The wave-5 criterion is *generated · never
+     authored · churns on unrelated edits*; the views fail the third clause. Untracking them buys
+     nothing and costs a builder in the fixture.
+
+  Their only former runtime consumer, `tools/observability/build_lexicon.py`, went in wave 1, which
+  is presumably why the instruction assumed they were free to drop.
+
+*`trace_execution_phases.py` was ADDED to the layer*, first and despite costing ~9.5s. Omitting it
+does not fail — both consumers report an absent input — it makes every subsystem read as "not
+observed at this seed", which is the false-absence error the tracer's own docstring warns about,
+reached by a fixture instead of by a reader.
+
+**Hard gate (§5.5) — CLEARED, by measurement.** `validate_ed_citations.py` EXCLUDES the generated
+sidecars rather than reading them, so it degrades safely. Verified by running it, and every other
+blocking validator, with all 25 files moved off disk: `broken_dependency_checker`,
+`ci_claim_provenance_check`, `compliance_check`, `ci_co_file_checker`, `freshness_gate`,
+`ci_vetting_check`, `ci_register_size_check`, `ci_names_consistency`, and all five export `--check`
+round-trips — all green. `engine.autoload.game_state` and `engine.mc_v18` also import cleanly with
+the layer absent, which is the no-runtime-reader claim proven rather than asserted.
+
+**Gate — MET.** Full suite from a simulated clean checkout (every artifact deleted first):
+**1628 passed, 23 skipped, 15 xfailed, 0 failed**. And the stated falsifier ran: a throwaway
+`proposals/*.md` was added, the suite run, and the tracked churn was **zero** — against 16 dirtied
+census files before this commit.
+
+**Two pre-existing defects fixed in passing.** `tools/valoria_local.py:113` cited "the note in
+valoria-ci.yml" as the mitigation for a three-instance pattern; ED-IN-0176 named that note and never
+wrote it, so the recorded remedy for a recurring defect was a dangling reference. It is written now.
+This shrinks the CI-only-validator residual from four to three; it does not resolve it, and nothing
+guards it — `test_gate_coverage.py` was the test that failed on a fifth instance and it went in
+wave 3.
 
 ---
 
-### S5 — Finish the centralization: one pattern, everywhere · `state: blocked-by S4`
+### S5 — Finish the centralization: one pattern, everywhere · `state: next`
 
 **Goal:** centralized definitions and injectable code, consumed by wrappers and systems. This is the
 step the whole programme exists to reach.
