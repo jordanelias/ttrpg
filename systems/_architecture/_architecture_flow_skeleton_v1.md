@@ -152,7 +152,7 @@ ids — `engine/substrate/keys.py:390-392` (comment) / `:384-389` (enforcement).
 | `world._echo_key_seq` | RW | `engine.cross_scale.echo_transport` | `engine/cross_scale/echo_transport.py:308-309`, `engine/cross_scale/echo_transport.py:413-414` |
 | `world.season` | R | `engine.autoload.game_state` (owned elsewhere; this subsystem only reads) | `engine/cross_scale/echo_transport.py:310`, `engine/cross_scale/echo_transport.py:415`; monotonicity invariant enforced at `engine/substrate/keys.py:395-398` |
 | `world.dispatch_combat_bridge` | RW | `engine.mc_v18` writes; `scene_dispatch` reads | W: `engine/mc_v18.py:237`; R: `engine/cross_scale/scene_dispatch.py:234` |
-| `world.scenes_resolved` | RW | `engine.mc_v18` (dataclass field owned by `engine.autoload.game_state`) | field: `engine/autoload/game_state.py:176`; RW: `engine/mc_v18.py:142`, `engine/mc_v18.py:152` |
+| `world.scenes_resolved` | RW | `engine.mc_v18` (dataclass field owned by `engine.autoload.game_state`) | field: `engine/autoload/game_state.py:177`; RW: `engine/mc_v18.py:142`, `engine/mc_v18.py:152` |
 | `world._battle_key_seq` | RW | `systems.factions.sim.faction_action` | `systems/factions/sim/faction_action.py:374-375` |
 | `world._parl_key_seq` | RW | `systems.factions.sim.parliamentary_transfer` | `systems/factions/sim/parliamentary_transfer.py:223-224` |
 | Faction stat (`L`/`Sta`/`W`/`I`/`Mil`, via `.adjust`) | W | `engine.autoload.game_state.Faction` | `engine/cross_scale/echo_transport.py:437-438` |

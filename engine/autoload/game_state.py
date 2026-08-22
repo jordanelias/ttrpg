@@ -35,30 +35,34 @@ from dataclasses import dataclass, field, fields as dc_fields
 # does not reintroduce the cycle it was moved to break.
 from engine.substrate.canon_buckets import canonical_accord  # noqa: F401 (re-export)
 from engine.substrate import composition
-from engine.substrate import descriptors  # sole runtime reader of references/descriptor_registry.yaml
+from engine.substrate import descriptors
+from engine.substrate import world_initial_state  # sole runtime reader of references/world_initial_state.yaml  # sole runtime reader of references/descriptor_registry.yaml
 
 
-# Canonical starting state (mc_v17.py L62-82, sourced from mc_v15.py)
-ALL_PLAYABLE_15 = frozenset({
-    'T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10',
-    'T11', 'T12', 'T13', 'T14', 'T17',
-})
+# ── The world's opening position (moved to references/ at plan S5b, 2026-08-22) ────────────────
+# These were six Python literals here, inherited from mc_v17.py L62-82 (itself from mc_v15.py) with
+# no authored source anywhere. They are WORLD DATA: which territories exist, who holds them at
+# season 0, how settled and prosperous each is, where the garrisons start, and what each faction
+# opens with. The authored source is references/world_initial_state.yaml, cooked by
+# tools/export_world_initial_state.py behind a blocking --check and read by the leaf below.
+#
+# The NAMES are unchanged on purpose — they are cited across flow skeletons, design docs and tests,
+# and renaming them while moving them would have made one change into two. `ALL_PLAYABLE_15` keeps
+# its count-bearing name here while the leaf exposes it as `ALL_PLAYABLE`; the count is a fact about
+# today's table, not a constraint on it.
+ALL_PLAYABLE_15 = world_initial_state.ALL_PLAYABLE
+STARTING_OWNER = world_initial_state.STARTING_OWNER
+STARTING_STATS = world_initial_state.STARTING_STATS
 
+# ⚠ MULTS STAYS A LITERAL, AND THAT IS A RECORDED DEPENDENCY, NOT AN OVERSIGHT.
+# Its correct home is references/descriptor_registry.yaml — which already states two of these
+# values in prose ("Legitimacy (faction, derived) is Mandate x 20", "Discipline (faction) is
+# Stability x 10"). Authoring `L` as a faction-stat row there would ANSWER Q1, the open Jordan
+# ruling on whether Legitimacy is a base descriptor or derived like Mandate, and the execution
+# order records Q1 as gating exactly this deletion. It waits on the ruling.
+# Do NOT resolve this by moving MULTS into world_initial_state.yaml: it is not initial state, and
+# a file whose name lies is worse than a literal that is honest.
 MULTS = {'L': 20, 'Sta': 10, 'W': 100, 'I': 15, 'Mil': 10, 'accord': 10, 'pt': 10}
-
-STARTING_OWNER = {
-    'T1': 'Crown', 'T2': 'Crown', 'T3': 'Crown', 'T4': 'Varfell',
-    'T5': 'Crown', 'T6': 'Crown', 'T7': 'Hafenmark', 'T8': 'Hafenmark',
-    'T9': 'Church', 'T10': 'Hafenmark', 'T11': 'Varfell', 'T12': 'Varfell',
-    'T13': 'Varfell', 'T14': 'Crown', 'T15': None, 'T17': 'Hafenmark',
-}
-
-STARTING_STATS = {
-    'Crown':     {'L': 5.0, 'Sta': 4.0, 'W': 4.0, 'I': 5.0, 'Mil': 4.0},
-    'Church':    {'L': 5.0, 'Sta': 5.0, 'W': 5.0, 'I': 6.0, 'Mil': 4.0},
-    'Hafenmark': {'L': 4.0, 'Sta': 4.0, 'W': 5.0, 'I': 4.0, 'Mil': 3.0},
-    'Varfell':   {'L': 4.0, 'Sta': 4.0, 'W': 4.0, 'I': 4.0, 'Mil': 4.0},
-}
 
 ACCORD_MAP = {0: 1.0, 1: 2.5, 2: 4.0, 3: 5.5, 4: 7.0}
 PT_MAP = {0: 1.0, 1: 2.5, 2: 4.0, 3: 5.5, 4: 6.5, 5: 7.0}
@@ -87,13 +91,10 @@ def canonical_pt(continuous_pt: float) -> int:
     return 5
 
 
-STARTING_ACCORD = {'T1': 3, 'T2': 3, 'T3': 3, 'T4': 2, 'T5': 2, 'T6': 2,
-                   'T7': 2, 'T8': 3, 'T9': 4, 'T10': 2, 'T11': 2, 'T12': 2,
-                   'T13': 1, 'T14': 3, 'T15': 0, 'T17': 2}
-STARTING_PT = {'T1': 3, 'T2': 3, 'T3': 3, 'T4': 2, 'T5': 3, 'T6': 1,
-               'T7': 3, 'T8': 3, 'T9': 5, 'T10': 3, 'T11': 2, 'T12': 2,
-               'T13': 1, 'T14': 3, 'T15': 3, 'T17': 3}
-STARTING_GARRISON = {'T1': True, 'T8': True, 'T9': True, 'T12': True}
+# The other three columns of the same table — see the block above.
+STARTING_ACCORD = world_initial_state.STARTING_ACCORD
+STARTING_PT = world_initial_state.STARTING_PT
+STARTING_GARRISON = world_initial_state.STARTING_GARRISON
 
 
 @dataclass

@@ -33,7 +33,7 @@ contract-declared module in this subsystem; `fieldwork`/`investigation` have no
 | `get_knot(knot_id, world)` | `systems/fieldwork/sim/knots.py:372 get_knot` | `—` (no caller found) |
 | `get_active_knots(world)` | `systems/fieldwork/sim/knots.py:376 get_active_knots` | `—` (no caller found) |
 | `reset_knots(world)` | `systems/fieldwork/sim/knots.py:380 reset_knots` | test helper only: `engine/tests/test_knots_ed912.py:43`, `engine/tests/test_knots_ed912.py:54` |
-| `Knot.from_dict(d)` | `systems/fieldwork/sim/knots.py:131 from_dict` | `engine/autoload/game_state.py:398` (world-snapshot deserialization) |
+| `Knot.from_dict(d)` | `systems/fieldwork/sim/knots.py:131 from_dict` | `engine/autoload/game_state.py:399` (world-snapshot deserialization) |
 
 ## 2. IN
 
@@ -47,7 +47,7 @@ contract-declared module in this subsystem; `fieldwork`/`investigation` have no
 | dice pool roll | `key` | `engine.autoload.dice_engine.roll_pool` | `systems/fieldwork/sim/knots.py:45 import`, `:222 roll_pool` call |
 | `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:52-59` |
 | `knot_id`, `strain_delta`, `source`, `world` | `arg` | `resolve_opposing_operations`'s locals (`a_knot_id`/`b_knot_id`, `knot_strain_delta`) | `systems/threadwork/sim/opposing.py:243-253` |
-| `world.knots` snapshot dict (on load) | `file` | save/load snapshot restore | `engine/autoload/game_state.py:396-398` |
+| `world.knots` snapshot dict (on load) | `file` | save/load snapshot restore | `engine/autoload/game_state.py:397-399` |
 
 ## 3. Flow
 
@@ -109,14 +109,14 @@ contract-declared module in this subsystem; `fieldwork`/`investigation` have no
 | consequences `dict` (`composure_damage`, `coherence_delta`, `disposition_set_to`, `wound`, `conviction_scar`) | `arg` return value | caller of `apply_knot_loss` (no live caller found — §7) | `systems/fieldwork/sim/knots.py:328-337` |
 | `apply_conviction_scar(...)` call | `lateral` | `systems.characters.sim.conviction` | `systems/fieldwork/sim/knots.py:349-353` |
 | `apply_coherence_delta(...)` call | `lateral` | `systems.threadwork.sim.coherence` | `systems/fieldwork/sim/knots.py:364-365` |
-| `world.knots[k].to_dict()` | `world-state` (serialized) | save-snapshot writer | `engine/autoload/game_state.py:315-316` |
+| `world.knots[k].to_dict()` | `world-state` (serialized) | save-snapshot writer | `engine/autoload/game_state.py:316-317` |
 
 ## 5. State touched
 
 | Field | R/W | Owning module | Anchor |
 |---|---|---|---|
-| `world.knots` (dict `knot_id -> Knot`) | RW | `engine.autoload.game_state` (`World` dataclass field); read/written by `systems.fieldwork.sim.knots` via `_store(world)` | field decl `engine/autoload/game_state.py:200`; router `systems/fieldwork/sim/knots.py:159-164` |
-| `world.knot_id_counter` | RW | `engine.autoload.game_state` field; incremented in `form_knot` | field decl `engine/autoload/game_state.py:201`; increment `systems/fieldwork/sim/knots.py:237-239` |
+| `world.knots` (dict `knot_id -> Knot`) | RW | `engine.autoload.game_state` (`World` dataclass field); read/written by `systems.fieldwork.sim.knots` via `_store(world)` | field decl `engine/autoload/game_state.py:201`; router `systems/fieldwork/sim/knots.py:159-164` |
+| `world.knot_id_counter` | RW | `engine.autoload.game_state` field; incremented in `form_knot` | field decl `engine/autoload/game_state.py:202`; increment `systems/fieldwork/sim/knots.py:237-239` |
 | module-level `_knots` dict (fallback store, no `world` supplied) | RW | `systems.fieldwork.sim.knots` | `systems/fieldwork/sim/knots.py:156` |
 | module-level `_knot_id_counter` (fallback counter) | RW | `systems.fieldwork.sim.knots` | `systems/fieldwork/sim/knots.py:156` |
 | `Knot.strain`, `.active`, `.log` | W | `systems.fieldwork.sim.knots` (`sustain_knot`, `check_knot_rupture`) | `systems/fieldwork/sim/knots.py:266-272`, `:302-309` |
@@ -130,7 +130,7 @@ contract-declared module in this subsystem; `fieldwork`/`investigation` have no
 | `up` | `engine.cross_scale.scene_dispatch` | scene-type dispatch calls `run_fieldwork_scene`/`resolve_npe_response` (stub-wired) | `engine/cross_scale/scene_dispatch.py:348-361` |
 | `up` | `engine.autoload.scene_slate` | declares `"fieldwork"` as an example `scene_type` string on `SceneSlot`; no production `queue_scene("fieldwork", ...)` call site exists (§7) | `engine/autoload/scene_slate.py:26`, `engine/autoload/scene_slate.py:34` |
 | `up` | `engine.mc_v18` | season loop records a `stub_resolve` marker literally named `form_knot(world-gen|season-tick)` in place of calling `form_knot` | `engine/mc_v18.py:204-209` |
-| `up` | `engine.autoload.game_state` | `World.knots`/`World.knot_id_counter` fields own the state `_store(world)` reads/writes; `Knot.from_dict` used on snapshot restore | `engine/autoload/game_state.py:200-201`, `engine/autoload/game_state.py:315-316`, `engine/autoload/game_state.py:396-399` |
+| `up` | `engine.autoload.game_state` | `World.knots`/`World.knot_id_counter` fields own the state `_store(world)` reads/writes; `Knot.from_dict` used on snapshot restore | `engine/autoload/game_state.py:201-202`, `engine/autoload/game_state.py:316-317`, `engine/autoload/game_state.py:397-400` |
 | `lateral` | `engine.autoload.dice_engine` | `roll_pool` drives the §3.2 formation roll | `systems/fieldwork/sim/knots.py:46`, `systems/fieldwork/sim/knots.py:223` |
 | `lateral` | `systems.threadwork.sim.opposing` | `resolve_opposing_operations` calls `sustain_knot` when knot ids are supplied (module itself orphaned — §7) | `systems/threadwork/sim/opposing.py:243-256` |
 | `lateral` | `systems.threadwork.sim.coherence` | `apply_knot_loss` late-imports `apply_coherence_delta` on rupture | `systems/fieldwork/sim/knots.py:364-366` |

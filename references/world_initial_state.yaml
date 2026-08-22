@@ -1,0 +1,60 @@
+# references/world_initial_state.yaml — the canonical starting configuration of the world.
+#
+# AUTHORED. This is the source; nothing derives it. `tools/export_world_initial_state.py` cooks
+# it into `engine/engine_params/world_initial_state.json` behind a blocking `--check`, and
+# `engine/substrate/world_initial_state.py` is its single runtime reader — the same pattern as
+# descriptor_registry -> descriptors.json -> substrate/descriptors.py.
+#
+# WHY IT EXISTS (plan S5b, 2026-08-22). These tables were Python literals at the top of
+# `engine/autoload/game_state.py`, carried forward from mc_v17.py L62-82 (itself from mc_v15.py)
+# with no authored source anywhere. They are WORLD DATA, not code: which territories exist, who
+# holds them at season 0, how settled and how prosperous each is, and where the garrisons start.
+# Editing the opening position of the campaign should be editing a table, not editing the engine.
+#
+# ⚠ THE VALUES BELOW WERE GENERATED FROM THE LIVE LITERALS, NOT RETYPED. The seeded campaign
+# goldens are the control: this file is a relocation, and any transcription error in it moves
+# them. Change a number here only when you mean to change the game.
+#
+# ⚠ WHAT IS DELIBERATELY NOT HERE: `MULTS`, the internal-units multipliers for faction and
+# territory stats. Its correct home is `references/descriptor_registry.yaml` — that registry
+# already states two of its values in prose ("Legitimacy (faction, derived) is Mandate x 20",
+# "Discipline (faction) is Stability x 10") — but binding `L` as a faction-stat row there would
+# answer Q1, the OPEN Jordan ruling on whether Legitimacy is a base descriptor or derived like
+# Mandate. The execution order records Q1 as gating exactly this deletion. So `MULTS` stays a
+# literal in game_state.py until Q1 is ruled, and that is a stated dependency rather than an
+# oversight. Do not resolve it by dropping MULTS into this file: it is not initial state, and
+# a file whose name lies is worse than a literal that is honest.
+
+schema_version: 1
+
+# The 16 territory ids the campaign opens with. There is no T16 — the gap is in the source data
+# and is preserved rather than tidied. `playable` is authored per-territory rather than derived
+# from `owner`, because "unowned means unplayable" is a rule nobody has stated: today T15 is the
+# only territory with neither an owner nor playable status, and one row is not a rule.
+territories:
+  T1: {owner: "Crown", accord: 3, pt: 3, garrison: true, playable: true}
+  T2: {owner: "Crown", accord: 3, pt: 3, garrison: false, playable: true}
+  T3: {owner: "Crown", accord: 3, pt: 3, garrison: false, playable: true}
+  T4: {owner: "Varfell", accord: 2, pt: 2, garrison: false, playable: true}
+  T5: {owner: "Crown", accord: 2, pt: 3, garrison: false, playable: true}
+  T6: {owner: "Crown", accord: 2, pt: 1, garrison: false, playable: true}
+  T7: {owner: "Hafenmark", accord: 2, pt: 3, garrison: false, playable: true}
+  T8: {owner: "Hafenmark", accord: 3, pt: 3, garrison: true, playable: true}
+  T9: {owner: "Church", accord: 4, pt: 5, garrison: true, playable: true}
+  T10: {owner: "Hafenmark", accord: 2, pt: 3, garrison: false, playable: true}
+  T11: {owner: "Varfell", accord: 2, pt: 2, garrison: false, playable: true}
+  T12: {owner: "Varfell", accord: 2, pt: 2, garrison: true, playable: true}
+  T13: {owner: "Varfell", accord: 1, pt: 1, garrison: false, playable: true}
+  T14: {owner: "Crown", accord: 3, pt: 3, garrison: false, playable: true}
+  T15: {owner: null, accord: 0, pt: 3, garrison: false, playable: false}
+  T17: {owner: "Hafenmark", accord: 2, pt: 3, garrison: false, playable: true}
+
+# Opening faction stats. Field names are the `Faction` dataclass's own (L/Sta/W/I/Mil), not
+# registry keys, because that is what this table sets — see the MULTS note above for why this
+# file takes no position on whether `L` is a base descriptor.
+faction_starting_stats:
+  Crown: {L: 5.0, Sta: 4.0, W: 4.0, I: 5.0, Mil: 4.0}
+  Church: {L: 5.0, Sta: 5.0, W: 5.0, I: 6.0, Mil: 4.0}
+  Hafenmark: {L: 4.0, Sta: 4.0, W: 5.0, I: 4.0, Mil: 3.0}
+  Varfell: {L: 4.0, Sta: 4.0, W: 4.0, I: 4.0, Mil: 4.0}
+

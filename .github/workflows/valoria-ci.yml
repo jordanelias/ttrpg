@@ -139,6 +139,10 @@ jobs:
           # resolves through. Blocking, and it IMPORTS every target at export time, so a broken row
           # reds CI instead of failing a campaign run hours later.
           v python3 tools/export_composition.py --check
+          # references/world_initial_state.yaml -> the campaign's opening position, read at import
+          # by engine/substrate/world_initial_state.py. Blocking: game_state.py no longer carries
+          # these tables, so a stale artifact is a world with the wrong owners.
+          v python3 tools/export_world_initial_state.py --check
           # ED-IN-0142: the test register drifted 3x in one session and only the pytest suite
           # noticed, because --check could not fail. Both fixed; this is the CI half.
           # RETIRED culling wave 2 (ED-IN-0194, 2026-08-21): build_test_register.py + its

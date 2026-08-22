@@ -349,6 +349,14 @@ ci_checks:
     ci_job: validators
     notes: "Added 2026-08-20 (plan Act C3 seam 2). BLOCKING. It IMPORTS AND RESOLVES every declared target at export time, which is the whole reason import-by-string is safe here: a typo or a moved module reds this gate rather than failing a campaign run. Before this, engine/mc_v18.py:37-38 imported systems.factions.sim.faction_action and systems.overview.sim.season at module level — the root naming its own dependents, and one half of the live package cycle faction_action -> engine.autoload.game_state -> systems.factions.sim.treaty. Falsifier: tests/valoria/test_engine_does_not_import_systems.py asserts require() RAISES on an undeclared role (no silent default) and that every declared role resolves."
 
+  - path: tools/export_world_initial_state.py
+    level: 5
+    layer: L1
+    posture: harden
+    role: "Registry -> typed-JSON: engine/engine_params/world_initial_state.json must match references/world_initial_state.yaml (--check mode). It is the writer for engine/substrate/world_initial_state.py, from which engine/autoload/game_state.py reads the campaign's opening position instead of carrying it as literals."
+    ci_job: validators
+    notes: "Added 2026-08-22 (plan S5b). BLOCKING, and it is a RUNTIME INPUT gate rather than a documentation one: game_state.py imports the leaf at module load, so a stale or missing artifact is not a drifted document, it is a campaign that opens with the wrong owners — or does not import at all. The exporter validates at export time (all four per-territory columns present, owners are declared factions, Accord within the 0-4 ACCORD_MAP buckets and PT within 0-5, no landless faction), so a bad table reds this gate rather than producing a silently wrong world. Falsifier: tests/valoria/test_world_initial_state.py plants each of those defects in a tmp_path copy and asserts the exporter rejects it, and pins the artifact against the values the seeded goldens were recorded under. NOT in scope: MULTS, which stays a literal in game_state.py because authoring it would answer Q1 (is Legitimacy a base descriptor) — a stated dependency on an open Jordan ruling, not an oversight."
+
   - path: tools/build_identifier_census.py
     level: 5
     layer: L1

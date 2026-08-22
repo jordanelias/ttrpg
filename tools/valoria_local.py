@@ -61,6 +61,7 @@ def main(argv):
         ('export_game_constants.py',    ['--check'], True),   # oracle -> Godot-facing constants round-trip (blocking)
         ('export_descriptors.py',       ['--check'], True),   # descriptor registry -> the artifact the engine reads at runtime (blocking)
         ('export_composition.py',       ['--check'], True),   # composition roles -> the map mc_v18 resolves through (blocking)
+        ('export_world_initial_state.py', ['--check'], True),  # authored opening position -> the artifact game_state reads (blocking)
         # MIGRATION-WINDOW gate: retire with engine/params/ (ED-IN-0139). See evacuation_plan R-PARAMS-DUMPED.
         # ED-IN-0142: the register went stale 3x in one session and CI caught it every time,
         # because --check could not fail and this list did not run it. Both fixed.

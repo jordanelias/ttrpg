@@ -17,7 +17,7 @@ IT IS A LEAF, DELIBERATELY. stdlib only, no `engine.*` or `systems.*` imports, s
 depend on it without creating a cycle. It reads the file once, at import.
 
 WHAT IT DOES NOT DO. It does not clamp anything yet. `Faction.adjust`
-(`engine/autoload/game_state.py:129-133`) still applies a blanket floor 0.5 / ceiling 7.0 to every
+(`engine/autoload/game_state.py:130-134`) still applies a blanket floor 0.5 / ceiling 7.0 to every
 stat, while the registry's PER-STAT floors were ratified 2026-07-08 (ED-IN-0029) — Influence at 1,
 the rest at 0. Wiring `adjust` to `faction_bounds()` moves the seeded campaign goldens, so it is a
 separate, MEASURED commit rather than a side effect of introducing this reader. The gap is recorded

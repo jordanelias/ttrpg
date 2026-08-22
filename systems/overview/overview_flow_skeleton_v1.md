@@ -28,7 +28,7 @@
 | `apply_rs_delta(delta, source, world)` | `systems/overview/sim/rs_track.py:28 apply_rs_delta` | `engine/cross_scale/echo_transport.py:357` |
 | `advance_season(world) -> SeasonResult` | `engine/autoload/season_manager.py:31 advance_season` | `systems/overview/sim/season.py:69` |
 | `check_arc_boundary(season) -> bool` | `engine/autoload/season_manager.py:46 check_arc_boundary` | — declared entry point, zero callers (see §7); only a prose mention at `systems/factions/sim/treaty.py:127` |
-| `create_world(seed=None) -> World` | `engine/autoload/game_state.py:236 create_world` | `engine/mc_v18.py:232 run_campaign` |
+| `create_world(seed=None) -> World` | `engine/autoload/game_state.py:237 create_world` | `engine/mc_v18.py:232 run_campaign` |
 | `check_all_factions(world) -> list[VictoryResult]` | `engine/autoload/victory.py:103 check_all_factions` | `engine/mc_v18.py:278 run_campaign` |
 | `reset()` (victory streak) | `engine/autoload/victory.py:47 reset` | `engine/mc_v18.py:233 run_campaign` |
 
@@ -43,13 +43,13 @@
 | `ECHO_TRANSPORT` | flag (params override, else env var, default `'1'`) | caller / environment | `engine/mc_v18.py:65-75 _echo_transport_on` |
 | `DISPATCH_COMBAT_BRIDGE` | flag (params override, else env var, default `'0'`) | caller / environment | `engine/mc_v18.py:78-89 _dispatch_combat_bridge_on` |
 | `action_callback` | arg (Callable) | caller (`mc_v18` supplies `_faction_actions_callback`) | `systems/overview/sim/season.py:48 run_season` |
-| `STARTING_STATS`, `STARTING_OWNER`, `ACCORD_MAP`, `PT_MAP` | param | module constant | `engine/autoload/game_state.py:48-63` |
-| `world.clocks` seed values (`CI`, `MS`, `IP`, `PI`, `Strain`, `Turmoil`) | world-state | `create_world` | `engine/autoload/game_state.py:268 create_world` |
+| `STARTING_STATS`, `STARTING_OWNER`, `ACCORD_MAP`, `PT_MAP` | param | module constant | `engine/autoload/game_state.py:66-67` |
+| `world.clocks` seed values (`CI`, `MS`, `IP`, `PI`, `Strain`, `Turmoil`) | world-state | `create_world` | `engine/autoload/game_state.py:269 create_world` |
 | `SEASONS_PER_ARC` | param | module constant | `engine/autoload/season_manager.py:23` |
 | `SEASONS_PER_YEAR` | param | module constant | `systems/overview/sim/ms_track.py:48` |
 | `assert_attempted`/`assert_success`/`suppress_attempted`/`suppress_success` | arg (caller-driven CI Assert/Suppress outcome) | caller — not supplied by `accounting.run_accounting` | `systems/overview/sim/ci_track.py:100-104 compute_seasonal_ci_delta` |
 | `world.factions[*].parliamentary`/`.territories` | world-state | `engine/autoload/game_state.py` | `engine/mc_v18.py:132-136 _faction_actions_callback` |
-| `world.rng` | world-state | `create_world` | `engine/autoload/game_state.py:197 World` |
+| `world.rng` | world-state | `create_world` | `engine/autoload/game_state.py:198 World` |
 | `world.echo_scheduler` presence | registry | set by `run_campaign` | `engine/mc_v18.py:241-250` |
 | `game_state.ALL_PLAYABLE_15` | param | module constant | `engine/mc_v18.py:282` |
 | `world.factions[*].L` | world-state | `engine/autoload/game_state.py` | `engine/mc_v18.py:284` |
@@ -111,20 +111,20 @@
 | `world.winner` | RW | `engine/mc_v18.py` (write), `engine/autoload/victory.py` (feeds decision) | `engine/mc_v18.py:261`, `engine/mc_v18.py:273`, `engine/mc_v18.py:277-286` |
 | `world.clocks['CI']` | RW | `systems/overview/sim/ci_track.py` | `systems/overview/sim/ci_track.py:170-178` |
 | `world.clocks['MS']` | RW | `systems/overview/sim/ms_track.py` | `systems/overview/sim/ms_track.py:59-91` |
-| `world.clocks['IP']` | W (seed only) | `engine/autoload/game_state.py`; declared writer `ip_track.apply_ip_delta` is uncalled | `engine/autoload/game_state.py:248`; `systems/overview/sim/ip_track.py:29-34` |
-| `world.clocks['PI']`, `world.clocks['Strain']` | W (seed only) | `engine/autoload/game_state.py`; no reader or writer anywhere else in the tree | `engine/autoload/game_state.py:248` |
-| `world.clocks['Turmoil']` | W (seed only) / R | `engine/autoload/game_state.py` (seed); `engine/autoload/victory.py` (read as the PS victory gate); no writer anywhere — see §7 | `engine/autoload/game_state.py:248`; `engine/autoload/victory.py:73` |
+| `world.clocks['IP']` | W (seed only) | `engine/autoload/game_state.py`; declared writer `ip_track.apply_ip_delta` is uncalled | `engine/autoload/game_state.py:249`; `systems/overview/sim/ip_track.py:29-34` |
+| `world.clocks['PI']`, `world.clocks['Strain']` | W (seed only) | `engine/autoload/game_state.py`; no reader or writer anywhere else in the tree | `engine/autoload/game_state.py:249` |
+| `world.clocks['Turmoil']` | W (seed only) / R | `engine/autoload/game_state.py` (seed); `engine/autoload/victory.py` (read as the PS victory gate); no writer anywhere — see §7 | `engine/autoload/game_state.py:249`; `engine/autoload/victory.py:73` |
 | `world.insurgencies`, `world.uncontrolled_streaks` | RW | `systems/world/sim/insurgency_pipeline.py` | `systems/overview/sim/accounting.py:124`, `systems/overview/sim/accounting.py:131-132` |
 | `world.npcs`, `world.npc_counter` | RW | `systems/world/sim/npe.py` | `systems/overview/sim/accounting.py:138` |
-| `world.settlements` | R (drift probe) | `systems/settlements/sim/registry.py` (write-owner); written at world-gen | `systems/overview/sim/accounting.py:79-89`; `engine/autoload/game_state.py:261-262` |
+| `world.settlements` | R (drift probe) | `systems/settlements/sim/registry.py` (write-owner); written at world-gen | `systems/overview/sim/accounting.py:79-89`; `engine/autoload/game_state.py:262-263` |
 | `world.territories[*].accord` | R (drift probe) | `engine/autoload/game_state.py` (write-owner is SE/FA-lane. The dominant in-loop path is `Territory.adjust_accord(...)`, NOT a bare `.accord =` assignment — a grep for the literal misses it: `systems/factions/sim/faction_action.py:502`, `systems/factions/sim/faction_action.py:513` (both `_try_conquest`), `systems/factions/sim/faction_action.py:566` (`_try_govern`), `systems/factions/sim/crown_initiative.py:102`, `systems/factions/sim/crown_initiative.py:110` (both `attempt_royal_progress`). The two direct `.accord =` sites are `systems/factions/sim/parliamentary_transfer.py:344` and `systems/factions/sim/mass_seizure.py:293` — accounting.py's own comment cites a stale line number for the former, see §7) | `systems/overview/sim/accounting.py:87-88` |
 | `world.battle_count` | R | write-owner `systems/factions/sim/faction_action.py:515` | `engine/mc_v18.py:296` |
 | `world.echo_scheduler`, `world.key_log`, `world._echo_key_seq` | W (init) | `engine/mc_v18.py`; read by `engine/cross_scale/*` | `engine/mc_v18.py:243-250` |
 | `world.dispatch_combat_bridge` | W | `engine/mc_v18.py`; read by `engine/cross_scale/scene_dispatch.py` | `engine/mc_v18.py:237` |
 | `world.scenes_resolved` | RW | `engine/mc_v18.py`, `engine/cross_scale/parliamentary_bridge.py` | `engine/mc_v18.py:142`, `engine/mc_v18.py:152`, `engine/mc_v18.py:297` |
 | `world.accord_drift_probe_hits` | RW | `systems/overview/sim/accounting.py` (write), `engine/mc_v18.py` (read) | `systems/overview/sim/accounting.py:83-92`; `engine/mc_v18.py:304` |
-| `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:134 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:135-137` |
-| `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:138 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:139-142` |
+| `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:135 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:136-138` |
+| `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:139 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:140-143` |
 | `scene_slate._queue` (module-level global, not `world`-scoped) | RW | `engine/autoload/scene_slate.py` | `engine/autoload/scene_slate.py:31`, `engine/autoload/scene_slate.py:34-59` |
 | `stubwire.invocations` (module-level global counter) | RW | `engine/substrate/stubwire.py`; snapshotted per-campaign by `run_campaign` | `engine/mc_v18.py:222`, `engine/mc_v18.py:300` |
 | `victory._qualifying_streak` (module-level global, not `world`-scoped) | RW | `engine/autoload/victory.py` — reset per campaign by `victory.reset()`, not by `create_world` | `engine/autoload/victory.py:44-49`, `engine/autoload/victory.py:79-84` |
@@ -151,7 +151,7 @@
 | out (declared, unreached) | `systems.social_contest.sim.parliamentary_stay` | reads `world.clocks['CI']` as the Stay availability gate; zero callers anywhere in the tree per `social_contest_flow_skeleton_v1.md` | `systems/social_contest/sim/parliamentary_stay.py:59` |
 | out (declared, unreached) | `systems.threadwork.sim.co_movement` | reads `world.clocks['MS']` as its delta base; no production caller found per `threadwork_flow_skeleton_v1.md` | `systems/threadwork/sim/co_movement.py:139` |
 | out (declared, unreached) | `systems.threadwork.sim.opposing` | reads `world.clocks['MS']` as its delta gate; no production caller found per `threadwork_flow_skeleton_v1.md` | `systems/threadwork/sim/opposing.py:235` |
-| out | `systems.settlements.sim.registry` | `province_members`, `province_accord` (drift probe); `populate_from_geography` (world-gen) | `systems/overview/sim/accounting.py:85`, `systems/overview/sim/accounting.py:87`; `engine/autoload/game_state.py:261-262` |
+| out | `systems.settlements.sim.registry` | `province_members`, `province_accord` (drift probe); `populate_from_geography` (world-gen) | `systems/overview/sim/accounting.py:85`, `systems/overview/sim/accounting.py:87`; `engine/autoload/game_state.py:262-263` |
 | in | `systems.threadwork.sim.opposing` | calls `ms_track.apply_ms_delta` | `systems/threadwork/sim/opposing.py:236-239` |
 | in | `systems.threadwork.sim.co_movement` | calls `ms_track.apply_ms_delta` | `systems/threadwork/sim/co_movement.py:140-143` |
 | in | `systems.factions.sim.excommunication` | calls `ci_track.apply_ci_delta` | `systems/factions/sim/excommunication.py:164-167` |
@@ -166,8 +166,8 @@
 | `CampaignResult.stub_hits`'s own field comment asserts "0 while no live call site is stub-wired yet" — stale: this skeleton's S2.2.2.5/S2.2.2.6 record two `stubwire.stub_resolve` call sites (`generate_npc`, `form_knot`) that run every season, so hits ARE live, not zero-by-construction. | `engine/mc_v18.py:93-96` (comment); `engine/mc_v18.py:186-194`, `engine/mc_v18.py:204-209` (the live stub-wired call sites) |
 | `stubwire.stub_resolve` call for `generate_npc(world-gen|season-tick)` — no automatic NPC generation is wired anywhere in the season loop; the comment states no canonical trigger exists to cite (only `simulate_npc_actions`, the drift half, runs live). | `engine/mc_v18.py:186-194` |
 | `stubwire.stub_resolve` call for `form_knot(world-gen|season-tick)` — no automatic Knot formation is wired anywhere in the season loop; the comment states the personal-scale prerequisite fields (Disposition, Bonds) do not exist on the aggregate `World`. | `engine/mc_v18.py:204-209` |
-| `world.clocks['Turmoil']` is read as the Political-Stability victory gate (`ps = world.clocks.get('Turmoil', 0.0)`) but has **zero write sites** anywhere in the tree outside its `create_world` seed of `0.0` — the gate is therefore permanently satisfied (`ps_ok` always `True`) in every traced campaign. `references/module_contracts.yaml`'s own `peninsular_strain` module entry independently records the same finding ("Turmoil has NO tracker file anywhere ... verified: grep for a Turmoil writer finds none"). | `engine/autoload/game_state.py:248` (seed); `engine/autoload/victory.py:73` (read); `references/module_contracts.yaml:769-771` |
-| `world.clocks['PI']` and `world.clocks['Strain']` are seeded at world creation and have no reader or writer anywhere else in the codebase (production or test). | `engine/autoload/game_state.py:248` |
+| `world.clocks['Turmoil']` is read as the Political-Stability victory gate (`ps = world.clocks.get('Turmoil', 0.0)`) but has **zero write sites** anywhere in the tree outside its `create_world` seed of `0.0` — the gate is therefore permanently satisfied (`ps_ok` always `True`) in every traced campaign. `references/module_contracts.yaml`'s own `peninsular_strain` module entry independently records the same finding ("Turmoil has NO tracker file anywhere ... verified: grep for a Turmoil writer finds none"). | `engine/autoload/game_state.py:249` (seed); `engine/autoload/victory.py:73` (read); `references/module_contracts.yaml:769-771` |
+| `world.clocks['PI']` and `world.clocks['Strain']` are seeded at world creation and have no reader or writer anywhere else in the codebase (production or test). | `engine/autoload/game_state.py:249` |
 | `systems/overview/sim/ip_track.py`'s two declared entry points (`apply_ip_delta`, `check_phased_occupation_threshold`) are both `stubwire.stub_resolve` typed no-ops (Pass 2l armature stub) with **zero production call sites**; `apply_ip_delta` is exercised only by a generic pipeline-reach test, `check_phased_occupation_threshold` by nothing at all. `systems/mass_battle/sim/altonian_reinforcements.py` names `ip_track` as a dependency in its module docstring but contains no actual call. | `systems/overview/sim/ip_track.py:29-42`; `engine/tests/test_pipeline_reach.py:784-785`; `systems/mass_battle/sim/altonian_reinforcements.py:9` (docstring-only reference) |
 | `systems/overview/sim/rs_track.py`'s `apply_rs_delta` is itself a `stubwire.stub_resolve` typed no-op (RS has no live write path per its own module docstring), reachable only through `engine/cross_scale/echo_transport.py`'s violence-row Accord Echo leg, which requires `world.echo_scheduler` attached AND a caller-declared `ctx['echo']['scene_outcome']` — no live trigger in the campaign loop declares that field (per `echo_transport.py`'s own module docstring), so the call site is WIRED but DORMANT in any seeded campaign today. | `systems/overview/sim/rs_track.py:15-33`; `engine/cross_scale/echo_transport.py:350-357` |
 | `engine/autoload/season_manager.py`'s declared entry point `check_arc_boundary(season)` has zero callers anywhere in the tree (production or test) — the only reference is a prose mention inside a comment in a peer module. | `engine/autoload/season_manager.py:48-50`; `systems/factions/sim/treaty.py:127` (comment, not a call) |
