@@ -26,3 +26,31 @@ tools/observability/review_state_data.js
 # gate yet, and committing an unguarded generated snapshot is the stale-artifact hazard
 # ED-IN-0126 exists to avoid).
 references/evacuation_manifest.json
+
+# ── GENERATED LAYER — untracked 2026-08-22 (culling wave 5, ED-IN-0194) ────────────────────────
+# These are BUILT from tracked sources, never authored. Committing them made every prose edit a
+# diff in files no human wrote: adding ONE document to proposals/ churned three of these indexes
+# and turned a blocking gate red. Two sibling branches once collided on 18 files "over nothing" —
+# every conflict a generated file, zero in source.
+#
+# THE GATE FLIP THAT MAKES THIS SAFE: their `--check` modes existed to detect a STALE COMMITTED
+# COPY. With nothing committed there is no staleness to detect, so the tests now BUILD the artifact
+# from source and assert on the result. `tests/valoria/conftest.py`'s `generated_layer` fixture is
+# the single owner of the build ORDER (key_graph -> engine_atlas/contract_index), because two of
+# these builders read another's output.
+#
+# ⚠ NOT UNTRACKED, AND DO NOT ADD THEM: `engine/engine_params/*.json` and `params_tables.yaml`.
+# Those are RUNTIME INPUTS — `engine/substrate/descriptors.py` and `keys.py` read them at import,
+# so an untracked clone would not start. `params_tables.yaml` is additionally NOT REGENERABLE (its
+# source docs were evacuated), making it a source rather than an artifact.
+systems/*/_identifier_census.yaml
+references/identifier_census.json
+references/key_graph.json
+references/execution_map.json
+references/EXECUTION_MAP.md
+references/execution_trace.json
+references/engine_atlas.json
+references/ENGINE_ATLAS.md
+references/CONTRACT_INDEX.md
+references/KEY_INDEX.md
+references/definitions/definitions.yaml

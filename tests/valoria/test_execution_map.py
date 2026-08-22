@@ -27,7 +27,7 @@ pytest.importorskip('yaml')
 
 
 @pytest.fixture(scope='module')
-def emap():
+def emap(generated_layer):
     with open(MAP_JSON, encoding='utf-8') as fh:
         return json.load(fh)
 
@@ -89,11 +89,24 @@ def test_execution_claims_match_the_manifest(emap):
     assert live, "no unit reads as executing — the join is broken, not the game"
 
 
-def test_map_is_current():
-    """Regenerating must be a no-op. Catches a hand-edit of the generated files."""
+def test_the_render_is_deterministic(emap):
+    """Regenerating must be a no-op.
+
+    This WAS `test_map_is_current`, and its stated purpose — "catches a hand-edit of the generated
+    files" — died with the commit: `execution_map.json` is untracked as of culling wave 5
+    (ED-IN-0194, 2026-08-22), so there is no committed copy for anyone to hand-edit. What is left
+    is the property that still has teeth for a JOINED artifact: rebuilding from the same sources
+    must land on the same bytes. The spine is hand-transcribed but the rest is joined from
+    registries, and a join over an unordered set renders differently run to run — which would make
+    every anchor assertion above unfalsifiable.
+    """
     proc = subprocess.run(
-        [sys.executable, os.path.join(ROOT, 'tools', 'build_execution_map.py'), '--check'],
+        [sys.executable, os.path.join(ROOT, 'tools', 'build_execution_map.py')],
         capture_output=True, text=True, cwd=ROOT)
     assert proc.returncode == 0, (
-        f"execution map is stale — run `python3 tools/build_execution_map.py`.\n"
-        f"{proc.stdout}\n{proc.stderr}")
+        f"rebuilding the execution map failed:\n{proc.stdout}\n{proc.stderr}")
+    with open(MAP_JSON, encoding='utf-8') as fh:
+        rebuilt = json.load(fh)
+    assert rebuilt == emap, (
+        'references/execution_map.json differs between two builds of the same sources — the '
+        'render is not deterministic, which makes every check in this file a coin flip.')

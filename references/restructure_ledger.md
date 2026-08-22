@@ -1424,34 +1424,30 @@ below, on `claude/fable5-infrastructure-review-l0lw8r`. A citation to any of the
 this table rather than reading as a broken dependency — which is the whole reason the rows exist,
 since several are cited by live ledger entries that were correct when written.
 
-⚠ **`421cff2` IS A BRANCH COMMIT, AND THAT IS A KNOWN, UNCLOSED HAZARD — READ THIS BEFORE MERGING.**
+**THE REF IS `1e4c6f4`, WHICH IS `origin/main`'S OWN TIP — chosen so no merge strategy can break it.**
 
-Two things were wrong with the first version of these rows, both found by a read-only audit:
+Two earlier versions of these rows were wrong, and the sequence is worth keeping because each error
+was a different way to get provenance wrong:
 
 1. **They named `3be53ef`, the commit that PERFORMS the wave-1+2 deletion.** A file deleted *by* a
-   commit is not present *at* it — `git cat-file -e 3be53ef:tools/review_core.py` fails. The content
-   is at its parent. Re-pointed to `421cff2`, and every row in this block was then verified
-   reachable: 76 of 76.
-2. **A branch SHA does not survive a squash-merge.** This file's own note above records that PR
-   #288's squash annihilated exactly such a ref and calls the result *fabricated provenance*. The
-   session re-created that documented failure two hundred lines below the paragraph documenting it.
+   commit is not present *at* it — `git cat-file -e 3be53ef:tools/review_core.py` fails. Caught by a
+   read-only audit.
+2. **They then named `421cff2`, the pre-deletion commit — correct content, wrong lifetime.** It is a
+   BRANCH commit, and this file's own note above records that PR #288's squash-merge annihilated
+   exactly such a ref and calls the result *fabricated provenance*. The fix at the time was a tag
+   (`cull-2026-08-21-pre-waves-1-3`), which could not be pushed: **HTTP 403**, this session's
+   credential being scoped to branch refs.
+3. **Measured 2026-08-22: every one of these 83 paths is present at `1e4c6f4`**, the tip of
+   `origin/main` — because waves 1-3 deleted files that were *already on main*. So the durable ref
+   was available the whole time and needed no tag, no credential, and no constraint on how this
+   branch merges. Squash, rebase or merge-commit: `1e4c6f4` is an ancestor of `main` either way.
 
-**The prescribed fix is a tag, and it is HALF DONE.** `proposals/2026-08-18-culling-plan-v1.md`
-wave 4 says the method is *"tag, push the tag, delete from `main`"*. The tag exists locally —
-`cull-2026-08-21-pre-waves-1-3` at `421cff2`, covering all three waves because nothing had been
-deleted yet — but **pushing it returned HTTP 403**: this session's GitHub credential is scoped to
-branch refs, not tag refs. It could not be completed from here and is not being papered over.
+The lesson worth carrying: when recording a retirement, prefer **the newest ref already on `main`
+that still contains the content** over any commit on the working branch. Verify with
+`git cat-file -e <ref>:<path>` before writing the row — `tests/valoria/test_forked_status.py` checks
+every row, so an unverifiable one fails there rather than at merge time.
 
-**REQUIRED AT MERGE, by whoever merges this branch:**
-```
-git push origin refs/tags/cull-2026-08-21-pre-waves-1-3     # from a credential that can push tags
-```
-then, if the PR squash-merged, re-point this block from `421cff2` to the tag name. Until the tag is
-on `origin`, these 76 rows are correct **only while the branch exists**. `tests/valoria/test_forked_status.py`
-now checks every row rather than a sample, so a ref that stops resolving fails loudly instead of
-passing on a three-row spot-check.
-
-**Waves 1+2** — `FORK:421cff2`. Observability generators and their committed feeds, the status
+**Waves 1+2** — `FORK:1e4c6f4`. Observability generators and their committed feeds, the status
 dashboard, the apparatus registry, the repository-state ratchet and the scope ratchet, the test
 register, the audit-staleness/registry pair, three warn-only gates that could not fail, the workplan
 pointer set, and three skills whose subjects were already retired.
@@ -1462,63 +1458,63 @@ adversarial review survives the wave written to end it.
 
 | Old Path | New Path | Status |
 |----------|----------|--------|
-| `tools/observability/` | `FORK:421cff2` | FORKED |
-| `tools/dashboard_data.py` | `FORK:421cff2` | FORKED |
-| `dashboard/` | `FORK:421cff2` | FORKED |
-| `tools/sim_harness/` | `FORK:421cff2` | FORKED |
-| `tools/build_apparatus_registry.py` | `FORK:421cff2` | FORKED |
-| `references/apparatus_registry.yaml` | `FORK:421cff2` | FORKED |
-| `references/apparatus_registry.md` | `FORK:421cff2` | FORKED |
-| `tools/audit_staleness.py` | `FORK:421cff2` | FORKED |
-| `tools/audit_registry.py` | `FORK:421cff2` | FORKED |
-| `tools/ci_audit_registry_check.py` | `FORK:421cff2` | FORKED |
-| `tools/review_core.py` | `FORK:421cff2` | FORKED |
-| `registers/review_baseline.yaml` | `FORK:421cff2` | FORKED |
-| `tools/scope_ratchet.py` | `FORK:421cff2` | FORKED |
-| `registers/scope_baseline.yaml` | `FORK:421cff2` | FORKED |
-| `tools/build_test_register.py` | `FORK:421cff2` | FORKED |
-| `references/test_register.json` | `FORK:421cff2` | FORKED |
-| `references/glossary/` | `FORK:421cff2` | FORKED |
-| `tools/ci_supersession_check.py` | `FORK:421cff2` | FORKED |
-| `tools/ci_program_claim_check.py` | `FORK:421cff2` | FORKED |
-| `tools/ci_workplan_pointer_check.py` | `FORK:421cff2` | FORKED |
+| `tools/observability/` | `FORK:1e4c6f4` | FORKED |
+| `tools/dashboard_data.py` | `FORK:1e4c6f4` | FORKED |
+| `dashboard/` | `FORK:1e4c6f4` | FORKED |
+| `tools/sim_harness/` | `FORK:1e4c6f4` | FORKED |
+| `tools/build_apparatus_registry.py` | `FORK:1e4c6f4` | FORKED |
+| `references/apparatus_registry.yaml` | `FORK:1e4c6f4` | FORKED |
+| `references/apparatus_registry.md` | `FORK:1e4c6f4` | FORKED |
+| `tools/audit_staleness.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/audit_registry.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/ci_audit_registry_check.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/review_core.py` | `FORK:1e4c6f4` | FORKED |
+| `registers/review_baseline.yaml` | `FORK:1e4c6f4` | FORKED |
+| `tools/scope_ratchet.py` | `FORK:1e4c6f4` | FORKED |
+| `registers/scope_baseline.yaml` | `FORK:1e4c6f4` | FORKED |
+| `tools/build_test_register.py` | `FORK:1e4c6f4` | FORKED |
+| `references/test_register.json` | `FORK:1e4c6f4` | FORKED |
+| `references/glossary/` | `FORK:1e4c6f4` | FORKED |
+| `tools/ci_supersession_check.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/ci_program_claim_check.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/ci_workplan_pointer_check.py` | `FORK:1e4c6f4` | FORKED |
 <!-- The 11 pointer files are listed INDIVIDUALLY, not as `workplans/POINTER_*.md`. A glob row
      cannot be verified: `git cat-file -e <ref>:workplans/POINTER_*.md` does no shell expansion
      and there is no literal file of that name, so the row was unfollowable BY CONSTRUCTION and
      sat inside a block this session claimed it had verified row-by-row. Caught by an
      adversarial pass 2026-08-21. Every row below was checked with that exact command. -->
-| `workplans/POINTER_2026-07-17_character_decision_L1_L2.md` | `FORK:421cff2` | FORKED |
-| `workplans/POINTER_2026-07-17_character_decision_program.md` | `FORK:421cff2` | FORKED |
-| `workplans/POINTER_2026-07-22_mass_battle_full_implementation.md` | `FORK:421cff2` | FORKED |
-| `workplans/POINTER_2026-07-26_combat_execution.md` | `FORK:421cff2` | FORKED |
-| `workplans/POINTER_2026-07-26_combat_remediation.md` | `FORK:421cff2` | FORKED |
-| `workplans/POINTER_2026-07-26_mass_battle_execution.md` | `FORK:421cff2` | FORKED |
-| `workplans/POINTER_2026-07-29_centralization_single_owner.md` | `FORK:421cff2` | FORKED |
-| `workplans/POINTER_2026-07-29_code_shape_execution_ledger.md` | `FORK:421cff2` | FORKED |
-| `workplans/POINTER_2026-07-29_code_shape_open_items.md` | `FORK:421cff2` | FORKED |
-| `workplans/POINTER_2026-07-31_m1_program_scaffolding.md` | `FORK:421cff2` | FORKED |
-| `workplans/POINTER_2026-08-19_return_to_game.md` | `FORK:421cff2` | FORKED |
-| `tools/editorial_review/` | `FORK:421cff2` | FORKED |
-| `tools/model_router.html` | `FORK:421cff2` | FORKED |
-| `tools/valoria_rename.py` | `FORK:421cff2` | FORKED |
-| `tools/dead_primitive_census.py` | `FORK:421cff2` | FORKED |
-| `skills/valoria-arc-generator/` | `FORK:421cff2` | FORKED |
-| `skills/valoria-simulator/` | `FORK:421cff2` | FORKED |
-| `skills/valoria-workplan-navigator/` | `FORK:421cff2` | FORKED |
-| `.github/workflows/dashboard.yml` | `FORK:421cff2` | FORKED |
-| `.github/workflows/audit-refresh.yml` | `FORK:421cff2` | FORKED |
-| `tools/ci_gate_coverage.py` | `FORK:421cff2` | FORKED |
-| `tools/ci_hooks_verifier.py` | `FORK:421cff2` | FORKED |
-| `tools/ci_wf_harness_check.py` | `FORK:421cff2` | FORKED |
-| `tools/wf_harness.js` | `FORK:421cff2` | FORKED |
-| `tools/ci_claude_workflow_paths.py` | `FORK:421cff2` | FORKED |
-| `tools/single_owner_check.py` | `FORK:421cff2` | FORKED |
-| `tools/session_status.py` | `FORK:421cff2` | FORKED |
-| `tools/session_handoff_reminder.py` | `FORK:421cff2` | FORKED |
-| `tools/session_open_work.py` | `FORK:421cff2` | FORKED |
-| `tools/handoff_atomize.py` | `FORK:421cff2` | FORKED |
-| `tools/workplan_status.py` | `FORK:421cff2` | FORKED |
-| `.claude/wf_world_schema_gaps.js` | `FORK:421cff2` | FORKED |
+| `workplans/POINTER_2026-07-17_character_decision_L1_L2.md` | `FORK:1e4c6f4` | FORKED |
+| `workplans/POINTER_2026-07-17_character_decision_program.md` | `FORK:1e4c6f4` | FORKED |
+| `workplans/POINTER_2026-07-22_mass_battle_full_implementation.md` | `FORK:1e4c6f4` | FORKED |
+| `workplans/POINTER_2026-07-26_combat_execution.md` | `FORK:1e4c6f4` | FORKED |
+| `workplans/POINTER_2026-07-26_combat_remediation.md` | `FORK:1e4c6f4` | FORKED |
+| `workplans/POINTER_2026-07-26_mass_battle_execution.md` | `FORK:1e4c6f4` | FORKED |
+| `workplans/POINTER_2026-07-29_centralization_single_owner.md` | `FORK:1e4c6f4` | FORKED |
+| `workplans/POINTER_2026-07-29_code_shape_execution_ledger.md` | `FORK:1e4c6f4` | FORKED |
+| `workplans/POINTER_2026-07-29_code_shape_open_items.md` | `FORK:1e4c6f4` | FORKED |
+| `workplans/POINTER_2026-07-31_m1_program_scaffolding.md` | `FORK:1e4c6f4` | FORKED |
+| `workplans/POINTER_2026-08-19_return_to_game.md` | `FORK:1e4c6f4` | FORKED |
+| `tools/editorial_review/` | `FORK:1e4c6f4` | FORKED |
+| `tools/model_router.html` | `FORK:1e4c6f4` | FORKED |
+| `tools/valoria_rename.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/dead_primitive_census.py` | `FORK:1e4c6f4` | FORKED |
+| `skills/valoria-arc-generator/` | `FORK:1e4c6f4` | FORKED |
+| `skills/valoria-simulator/` | `FORK:1e4c6f4` | FORKED |
+| `skills/valoria-workplan-navigator/` | `FORK:1e4c6f4` | FORKED |
+| `.github/workflows/dashboard.yml` | `FORK:1e4c6f4` | FORKED |
+| `.github/workflows/audit-refresh.yml` | `FORK:1e4c6f4` | FORKED |
+| `tools/ci_gate_coverage.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/ci_hooks_verifier.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/ci_wf_harness_check.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/wf_harness.js` | `FORK:1e4c6f4` | FORKED |
+| `tools/ci_claude_workflow_paths.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/single_owner_check.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/session_status.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/session_handoff_reminder.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/session_open_work.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/handoff_atomize.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/workplan_status.py` | `FORK:1e4c6f4` | FORKED |
+| `.claude/wf_world_schema_gaps.js` | `FORK:1e4c6f4` | FORKED |
 
 **Named files inside forked directories.** The directory rows above are for path resolution; these
 are the individual files that a `MEASURED-BY:` marker or a doc citation names BY NAME. They exist
@@ -1529,15 +1525,15 @@ one line here — that is the correct price.
 
 | Old Path | New Path | Status |
 |----------|----------|--------|
-| `tools/observability/obs_core.py` | `FORK:421cff2` | FORKED |
-| `tools/observability/build_glossary.py` | `FORK:421cff2` | FORKED |
-| `tools/observability/build_decisions.py` | `FORK:421cff2` | FORKED |
-| `tools/observability/build_proposals.py` | `FORK:421cff2` | FORKED |
-| `tools/observability/build_incompleteness.py` | `FORK:421cff2` | FORKED |
-| `tools/observability/build_lexicon.py` | `FORK:421cff2` | FORKED |
-| `tools/observability/build_graph.py` | `FORK:421cff2` | FORKED |
+| `tools/observability/obs_core.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/observability/build_glossary.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/observability/build_decisions.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/observability/build_proposals.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/observability/build_incompleteness.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/observability/build_lexicon.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/observability/build_graph.py` | `FORK:1e4c6f4` | FORKED |
 | `.claude/wf_wave4_central.js` | `FORK:c451bcb` | FORKED |
-| `tests/valoria/fixtures/wf_donor.js` | `FORK:421cff2` | FORKED |
+| `tests/valoria/fixtures/wf_donor.js` | `FORK:1e4c6f4` | FORKED |
 
 **Paired tests retired with their subjects** — a test whose subject is gone is not a test. Listed
 separately because several are cited by `MEASURED-BY:` markers in settled ledger entries: those
@@ -1546,28 +1542,28 @@ reading as unre-runnable.
 
 | Old Path | New Path | Status |
 |----------|----------|--------|
-| `tests/valoria/test_gate_coverage.py` | `FORK:421cff2` | FORKED |
-| `tests/valoria/test_blocking_tier_is_honest.py` | `FORK:421cff2` | FORKED |
-| `tests/valoria/test_registry_job_join.py` | `FORK:421cff2` | FORKED |
-| `tests/valoria/test_status_reader_one_owner.py` | `FORK:421cff2` | FORKED |
-| `tests/valoria/test_wf_harness.py` | `FORK:421cff2` | FORKED |
-| `tests/valoria/test_wf_harness_check.py` | `FORK:421cff2` | FORKED |
-| `tests/valoria/test_single_owner_check.py` | `FORK:421cff2` | FORKED |
-| `tests/valoria/test_handoff_structure.py` | `FORK:421cff2` | FORKED |
-| `tests/valoria/test_handoff_dispatch_validity.py` | `FORK:421cff2` | FORKED |
-| `tests/valoria/test_retired_tree_apparatus.py` | `FORK:421cff2` | FORKED |
-| `tests/valoria/test_retired_tree_scanner.py` | `FORK:421cff2` | FORKED |
-| `tests/valoria/test_session_open_work.py` | `FORK:421cff2` | FORKED |
-| `tests/valoria/test_build_glossary.py` | `FORK:421cff2` | FORKED |
-| `tests/valoria/test_build_proposals.py` | `FORK:421cff2` | FORKED |
-| `tests/valoria/test_observability_core.py` | `FORK:421cff2` | FORKED |
-| `tests/valoria/test_model_router_ids.py` | `FORK:421cff2` | FORKED |
-| `tests/valoria/test_compile_is_not_invocation.py` | `FORK:421cff2` | FORKED |
-| `tests/valoria/test_oi12_orphan_census.py` | `FORK:421cff2` | FORKED |
-| `tests/valoria/test_test_register.py` | `FORK:421cff2` | FORKED |
-| `tests/valoria/test_ci_supersession_check.py` | `FORK:421cff2` | FORKED |
-| `tests/valoria/test_scope_ratchet.py` | `FORK:421cff2` | FORKED |
-| `tests/valoria/test_program_claim_check.py` | `FORK:421cff2` | FORKED |
-| `tests/valoria/test_gen_audit.py` | `FORK:421cff2` | FORKED |
+| `tests/valoria/test_gate_coverage.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_blocking_tier_is_honest.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_registry_job_join.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_status_reader_one_owner.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_wf_harness.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_wf_harness_check.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_single_owner_check.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_handoff_structure.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_handoff_dispatch_validity.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_retired_tree_apparatus.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_retired_tree_scanner.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_session_open_work.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_build_glossary.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_build_proposals.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_observability_core.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_model_router_ids.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_compile_is_not_invocation.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_oi12_orphan_census.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_test_register.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_ci_supersession_check.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_scope_ratchet.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_program_claim_check.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_gen_audit.py` | `FORK:1e4c6f4` | FORKED |
 | `tests/valoria/test_audit_refresh_coverage.py` | `FORK:c9b0a86` | FORKED |
 | `tests/valoria/test_fork_divergence.py` | `FORK:c9b0a86` | FORKED |

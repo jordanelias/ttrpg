@@ -111,6 +111,9 @@ def main(argv):
         # 2026-08-21 (ED-IN-0194). A pattern with THREE recorded instances now has no guard, and
         # nothing detects a fifth CI-only validator. Recorded rather than dropped silently; the
         # mitigation is the note in valoria-ci.yml — add a validator to BOTH lists in one commit.
+        # That note is REAL as of 2026-08-22 (culling wave 5, ED-IN-0194). Until then this line
+        # pointed at nothing: ED-IN-0176 named the note as the mitigation and never wrote it, so
+        # the recorded remedy for a three-instance pattern was a dangling reference.
         #
         # `compliance_check.py` stays deliberately absent and is NOT part of this residual —
         # ci_checks_registry.yaml:262 records that call ("local-green != compliance-green").
@@ -120,7 +123,16 @@ def main(argv):
         # unrelated commit hostage to a file the author is still writing. CI remains the
         # unbypassable boundary (CLAUDE.md §8) and all four are blocking there, so nothing is
         # weakened — what changes is that local-green now SEES them. Measured cost: 4.9s total.
-        ('build_identifier_census.py',   ['--check'], False),  # census + roll-up freshness (ED-IN-0172; BLOCKING in CI)
+        # `build_identifier_census.py --check` stood here and is GONE (culling wave 5, ED-IN-0194,
+        # 2026-08-22). The census roll-up and its 15 `systems/*/_identifier_census.yaml` sidecars are
+        # UNTRACKED now, so "the committed copy drifted from a fresh re-derivation" is not a state
+        # the tree can be in. It was removed from CI's blocking `validators` job in the same commit
+        # — leaving it there would have red `main` on the first push, since --check compares against
+        # files git no longer carries.
+        #
+        # This SHRINKS the ED-IN-0176 residual documented above from four CI-only validators to
+        # three; it does not resolve it. The pattern (a validator blocking in CI and absent locally)
+        # still has no guard, since `test_gate_coverage.py` went in wave 3.
         ('validate_ed_citations.py',     [],          False),  # anti-fabrication citation integrity (BLOCKING in CI; plan step G11)
         ('broken_dependency_checker.py', [],          False),  # ledger path refs resolve (BLOCKING in CI)
         # ED-IN-0180. Reports modules that read a registry directly when a single owner exists.

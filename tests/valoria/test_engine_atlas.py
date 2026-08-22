@@ -42,12 +42,11 @@ def _builder():
     return mod
 
 
-def test_atlas_is_current():
-    r = subprocess.run([sys.executable, BUILDER, '--check'],
-                       capture_output=True, text=True, cwd=ROOT)
-    assert r.returncode == 0, (
-        f'engine atlas is stale:\n{r.stdout}\n{r.stderr}\n'
-        'Regenerate with `python tools/build_engine_atlas.py` and commit.')
+# `test_atlas_is_current` stood here and is GONE (culling wave 5, ED-IN-0194, 2026-08-22). The
+# atlas is no longer committed, so "the committed copy is stale" is not a state the tree can be
+# in. That the builder runs and writes its two artifacts is asserted once, for all six builders,
+# in `test_generated_layer.py`; failure mode (1) in the docstring above is therefore retired and
+# (2) and (3) — which are the ones a generator can still commit — are what this file now owns.
 
 
 def test_render_is_deterministic():
@@ -103,8 +102,8 @@ def test_an_added_subsystem_surfaces_as_drift(tmp_path):
     mod = _builder()
     new = os.path.join(ROOT, 'systems', 'zz_atlas_probe')
     # Self-heal our OWN reserved name. A previous run killed mid-test leaves the folder behind,
-    # which then pollutes the generated atlas and fails test_atlas_is_current with a confusing
-    # message about staleness. Only ever removed when it looks like our probe and nothing else —
+    # which then pollutes the generated atlas and fails `test_every_subsystem_folder_on_disk_appears`
+    # with a confusing message. Only ever removed when it looks like our probe and nothing else —
     # clobbering a real subsystem folder would be far worse than a confusing failure.
     if os.path.isdir(new):
         leftover = sorted(os.listdir(new))
@@ -142,7 +141,7 @@ def test_missing_input_is_reported_not_silently_absorbed(monkeypatch):
         'a missing input file was absorbed silently instead of being reported'
 
 
-def test_json_and_markdown_agree_on_the_roster():
+def test_json_and_markdown_agree_on_the_roster(generated_layer):
     """The two outputs are rendered from one pass; if they disagree, one is stale."""
     assert os.path.isfile(OUT_JSON), 'engine_atlas.json not generated'
     payload = json.load(open(OUT_JSON, encoding='utf-8'))

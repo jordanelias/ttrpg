@@ -100,6 +100,22 @@ jobs:
         run: |
           fail=0
           v() { echo "::group::$*"; if ! "$@"; then echo "::error::FAILED: $*"; fail=1; fi; echo "::endgroup::"; }
+          # ─────────────────────────────────────────────────────────────────────────────────
+          # A VALIDATOR BELONGS IN BOTH LISTS OR NEITHER (ED-IN-0176).
+          #
+          # This list and `tools/valoria_local.py`'s `checks` tuple must name the same tools. A
+          # validator that runs only here makes `valoria_local` print "all local gates passed" on
+          # a tree CI is about to red — measured three times (build_test_register ED-IN-0142,
+          # freshness_gate ED-PC-0040, build_identifier_census on PR #307). Blocking here and
+          # report-only there is FINE and is the normal shape; PRESENT here and ABSENT there is
+          # the defect.
+          #
+          # `tools/valoria_local.py` cites this note as the mitigation. It had been citing
+          # nothing — the note was named but never written — until culling wave 5 (ED-IN-0194,
+          # 2026-08-22) wrote it. There is no automated guard: `tests/valoria/test_gate_coverage.py`
+          # was the one that failed on a fifth instance and it was retired in wave 3. Adding a
+          # validator to one list without the other is caught by a reader or not at all.
+          # ─────────────────────────────────────────────────────────────────────────────────
           v python3 tools/ci_register_size_check.py
           # RETIRED culling wave 3 (ED-IN-0194, 2026-08-21): ci_hooks_verifier.py. Its Check 6 (the deny-list) is independently asserted by tests/valoria/test_no_polling_triggers.py, which opens .claude/settings.json directly and never imported the verifier — the culling plan §5.3 hard gate, verified before deleting. CLAUDE.md §11 corrected to match.
           v python3 tools/ci_co_file_checker.py
@@ -139,17 +155,15 @@ jobs:
           # review_core graded it against a ratchet baseline (now retired with it), so it red only
           # on REGRESSION; a bare --check has no baseline and would red on arrival, refusing every
           # unrelated author's commit for a pre-existing condition. ED-IN-0112 paid for that once.
-          # ED-IN-0172: moved OUT of the pytest suite, where it was racy by construction.
-          # It shells out and reads the WHOLE tree, while `test_engine_atlas` deliberately
-          # plants a throwaway probe module under a reserved subsystem name in the real
-          # tree (see that test for the name — it is deliberately NOT written here, because
-          # ci_claude_workflow_paths requires every path a workflow names to resolve, and a
-          # path that exists for milliseconds inside a test resolves to DEAD). Under `-n auto` the
-          # census saw that file, counted `probe_entry`, and the roll-up drifted by exactly
-          # one name — per-subsystem files unaffected, because the probe dir has no `.md`
-          # so it is not a subsystem. Green locally, red in CI, and the signature said so.
-          # Whole-tree freshness belongs in a validator step, next to its three siblings.
-          v python3 tools/build_identifier_census.py --check
+          #
+          # `build_identifier_census.py --check` ran HERE and is GONE (culling wave 5,
+          # ED-IN-0194, 2026-08-22), along with the ED-IN-0172 note explaining why it had been
+          # moved out of the pytest suite. Its outputs - references/identifier_census.json and the
+          # 15 systems/*/_identifier_census.yaml sidecars - are UNTRACKED now, so --check compares
+          # a fresh re-derivation against files git no longer carries and would red main on the
+          # first push. The builder is kept and runs on demand from the generated_layer fixture in
+          # tests/valoria/conftest.py. Removed from tools/valoria_local.py in the same commit, per
+          # the note below: a validator belongs in BOTH lists or NEITHER.
           v python3 tools/ci_sim_fabrication_check.py
           v python3 tools/ci_claim_provenance_check.py
           v python3 tools/ci_vetting_check.py
