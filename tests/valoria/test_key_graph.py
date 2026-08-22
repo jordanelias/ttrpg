@@ -74,7 +74,7 @@ KNOWN_NO_AUTHORITY = {
 
 
 @pytest.fixture(scope='module')
-def graph():
+def graph(generated_layer):
     if not os.path.exists(GRAPH):
         pytest.fail('references/key_graph.json missing — run tools/build_key_graph.py')
     with open(GRAPH, encoding='utf-8') as f:
@@ -152,24 +152,27 @@ def test_key_names_are_well_formed(graph):
     assert not bad, f'malformed key type name(s): {sorted(bad)} (expected `namespace.name`)'
 
 
-def test_graph_is_current(graph):
-    """The committed graph must equal a fresh rebuild — it is generated, so drift means a hand-edit
-    or a stale commit, and either makes every assertion above describe the wrong tree."""
-    import subprocess
-    import sys
-    r = subprocess.run([sys.executable, os.path.join(ROOT, 'tools', 'build_key_graph.py'), '--check'],
-                       capture_output=True, text=True, cwd=ROOT)
-    assert r.returncode == 0, f'build_key_graph.py --check failed:\n{r.stdout}\n{r.stderr}'
-    with open(GRAPH, encoding='utf-8') as f:
-        committed = json.load(f)
+def test_the_render_is_deterministic(graph):
+    """Two builds of the same sources must agree.
+
+    This WAS `test_graph_is_current`, which shelled out to `--check` to prove the COMMITTED graph
+    equalled a fresh build. `key_graph.json` is untracked as of culling wave 5 (ED-IN-0194,
+    2026-08-22), so staleness is not a state the tree can be in and that half of the claim is
+    retired rather than restated. The half that survives is the one that can still fail: the copy
+    the `generated_layer` fixture built in a SUBPROCESS must equal a fresh IN-PROCESS build, so a
+    renderer that iterates an unordered set — the exact defect the sibling `build_contract_index`
+    shipped — is still caught here.
+
+    That the builder ran at all is `test_generated_layer.py`'s claim, not this one.
+    """
     import importlib.util
     spec = importlib.util.spec_from_file_location(
         'bkg', os.path.join(ROOT, 'tools', 'build_key_graph.py'))
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
-    assert committed == mod.build(), (
-        'references/key_graph.json differs from a fresh build — regenerate with '
-        '`python3 tools/build_key_graph.py` and commit.')
+    assert graph == mod.build(), (
+        'references/key_graph.json, as written by the builder in a subprocess, differs from a '
+        'fresh in-process build of the same sources — the render is not deterministic.')
 
 
 def test_every_module_has_a_valid_authority(graph):

@@ -280,9 +280,35 @@ def roll_net_continuous(pool: float, tn: int = TN_STANDARD, rng: random.Random |
 
     Canonical for Godot; statistically equivalent to the discrete engine.
     [canonical: params/core.md §Continuous Engine, Decision E]
+
+    THE POOL IS FRACTIONAL HERE (M1 juncture 1, 2026-08-21). Jordan ruled "fractional dice" on
+    2026-08-14 and only the fractional RESULT had been implemented: this line read
+    `max(1, int(round(pool)))`, so a 3.5-die pool was sampled as a 4-die pool. The rounding was
+    imposed by THIS CALLER ALONE — `dice_engine.continuous_engine_sample` has always accepted a
+    fractional pool and says so at `dice_engine.py:92`, computing `mu*pool` and `sigma*sqrt(pool)`
+    with no quantisation. ED-IN-0187 recorded the gap and it was written into the ledger without
+    being applied here, which `systems/factions/sim/faction_action.py` called out as worse than an
+    unimplemented feature because the call site asserted the opposite.
+
+    THE FLOOR STAYS AT 1D and is canon, not caution — `params/core.md §Pool Floor (all systems)`.
+    What goes is the rounding, not the floor.
+
+    `roll_net` above is the DISCRETE d10 path and keeps `int(round(pool))`: whole dice are correct
+    there, because it deals actual dice rather than sampling their limit distribution.
+
+    MEASURED BLAST RADIUS, because two subsystems share this entry point (§0.1 pt 4 — a number
+    without a control is not a measurement):
+      * faction strategic actions — 4-season seeded campaign, 40 calls, **20 already fractional**
+        (4.3, 4.6, 4.9, 5.3, 5.5, …), every one silently rounded before this change. These MOVE.
+      * personal combat, via `systems/combat/combat_engine_v1/core.py:56` — 749 calls driven
+        through `workbench.balance.winrate` at n=120, **749 integral, 0 fractional**, because
+        `core.resolution_pool()` returns `max(POOL_FLOOR, int(round(history)) + BASE_POOL)` and no
+        call site modifies it. `int(round(n)) == n` for integral n, so combat is value-identical
+        and its byte-exact goldens are the CONTROL: if they move, this change did something it
+        was not meant to.
     """
-    effective_pool = max(1, int(round(pool)))       # [canonical: params/core.md §Pool Floor (all systems)]
-    return dice_engine.continuous_engine_sample(pool=float(effective_pool), tn=tn, rng=rng)
+    effective_pool = max(1.0, float(pool))          # [canonical: params/core.md §Pool Floor (all systems)]
+    return dice_engine.continuous_engine_sample(pool=effective_pool, tn=tn, rng=rng)
 
 
 # ---------------------------------------------------------------------------

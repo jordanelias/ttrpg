@@ -1180,10 +1180,17 @@ a TERMINAL status, distinct from a broken reference: a path with no row here sti
 dependency gate.
 
 ⚠️ THE REF MUST BE REACHABLE FROM `main`, and the first version of these rows was not. They named
-`c451bcb`, the pre-deletion commit on the working BRANCH — but PR #288 was SQUASH-merged, so that
-object exists only in a local clone and `git cat-file` fails for everyone else. The corrected ref
-is `c451bcb`: main's own commit immediately before the evacuation landed, which is an ancestor of
-`main` and contains every evacuated file. Caught by
+the pre-deletion commit on the working BRANCH — but PR #288 was SQUASH-merged, so that object
+exists only in a local clone and `git cat-file` fails for everyone else. The corrected ref is
+`c451bcb`: main's own commit immediately before the evacuation landed, which is an ancestor of
+`main` and contains every evacuated file.
+
+*(The original branch SHA is not recoverable from this paragraph: a later edit replaced BOTH
+occurrences, so it read "They named `c451bcb` … The corrected ref is `c451bcb`" — the wrong ref
+and the corrected ref as the same string, which makes the lesson unreadable. Repaired 2026-08-21
+after an adversarial pass flagged it; the specific SHA is gone but the principle is the point, and
+this paragraph is cited as precedent by `tests/valoria/test_forked_status.py` and by the culling
+block below.)* Caught by
 `tests/valoria/test_forked_status.py::test_the_fork_rows_name_a_real_ref` on the first CI run — a
 provenance pointer nobody can follow is not provenance, which is exactly what that control says. That distinction is the anti-fabrication property, and
 `tests/valoria/test_forked_status.py` plants both cases to keep it.
@@ -1242,6 +1249,12 @@ resolution means the bare `audit/<unit>/` row alone cannot catch those. -->
 | `audit/2026-08-05-repo-analysis-sweep/` | `FORK:c9b0a86` | FORKED |
 | `designs/audit/2026-08-06-vector-audit/` | `FORK:c9b0a86` | FORKED |
 | `audit/2026-08-06-vector-audit/` | `FORK:c9b0a86` | FORKED |
+<!-- ⚠ PARTIAL, corrected 2026-08-21: one file under this directory is STILL ON DISK and is cited
+     by live design docs — audit/2026-08-06-vector-audit/structure_audit/data/structure_metrics.json,
+     referenced from systems/factions/factions_flow_skeleton_v1.md and
+     systems/_architecture/engine_atlas_v1.md. The row above is correct for everything ELSE under
+     that directory. Do not "complete" the fork by deleting that file without re-pointing its two
+     citers first; a prefix row that contradicts the tree is how a resolver starts lying. -->
 | `designs/audit/2026-07-26-mass-battle-vector-audit/` | `FORK:c9b0a86` | FORKED |
 | `audit/2026-07-26-mass-battle-vector-audit/` | `FORK:c9b0a86` | FORKED |
 | `designs/audit/2026-08-10-subsystem-atlas-verification/` | `FORK:c9b0a86` | FORKED |
@@ -1400,3 +1413,157 @@ in `combat_design_v1.md` alone** and was carried forward — §13.1's Domain Ech
 | `designs/combat/combat_v30_infill.md` | `systems/combat/combat_reference_v1.md` | CONSOLIDATED |
 | `designs/combat/combat_design_v1.md` | `systems/combat/combat_reference_v1.md` | CONSOLIDATED |
 | `designs/combat/combat_design_v1_index.md` | `systems/combat/combat_reference_v1.md` | CONSOLIDATED |
+
+---
+
+## Culling waves 1–3 — apparatus retired 2026-08-21 (ED-IN-0194)
+
+`proposals/2026-08-18-culling-plan-v1.md`, ratified 2026-08-18, executed in its entirety on Jordan's
+ruling of 2026-08-21. These paths left `main` deliberately; their content is at the commits named
+below, on `claude/fable5-infrastructure-review-l0lw8r`. A citation to any of them resolves through
+this table rather than reading as a broken dependency — which is the whole reason the rows exist,
+since several are cited by live ledger entries that were correct when written.
+
+**THE REF IS `1e4c6f4`, WHICH IS `origin/main`'S OWN TIP — chosen so no merge strategy can break it.**
+
+Two earlier versions of these rows were wrong, and the sequence is worth keeping because each error
+was a different way to get provenance wrong:
+
+1. **They named `3be53ef`, the commit that PERFORMS the wave-1+2 deletion.** A file deleted *by* a
+   commit is not present *at* it — `git cat-file -e 3be53ef:tools/review_core.py` fails. Caught by a
+   read-only audit.
+2. **They then named `421cff2`, the pre-deletion commit — correct content, wrong lifetime.** It is a
+   BRANCH commit, and this file's own note above records that PR #288's squash-merge annihilated
+   exactly such a ref and calls the result *fabricated provenance*. The fix at the time was a tag
+   (`cull-2026-08-21-pre-waves-1-3`), which could not be pushed: **HTTP 403**, this session's
+   credential being scoped to branch refs.
+3. **Measured 2026-08-22: every one of these 83 paths is present at `1e4c6f4`**, the tip of
+   `origin/main` — because waves 1-3 deleted files that were *already on main*. So the durable ref
+   was available the whole time and needed no tag, no credential, and no constraint on how this
+   branch merges. Squash, rebase or merge-commit: `1e4c6f4` is an ancestor of `main` either way.
+
+The lesson worth carrying: when recording a retirement, prefer **the newest ref already on `main`
+that still contains the content** over any commit on the working branch. Verify with
+`git cat-file -e <ref>:<path>` before writing the row — `tests/valoria/test_forked_status.py` checks
+every row, so an unverifiable one fails there rather than at merge time.
+
+**Waves 1+2** — `FORK:1e4c6f4`. Observability generators and their committed feeds, the status
+dashboard, the apparatus registry, the repository-state ratchet and the scope ratchet, the test
+register, the audit-staleness/registry pair, three warn-only gates that could not fail, the workplan
+pointer set, and three skills whose subjects were already retired.
+
+**Wave 3** — the wiring-checkers and session machinery, retired in the commit that adds this table.
+`.claude/agents/valoria-critic.md` was KEPT by Jordan's ruling, so structurally-independent
+adversarial review survives the wave written to end it.
+
+| Old Path | New Path | Status |
+|----------|----------|--------|
+| `tools/observability/` | `FORK:1e4c6f4` | FORKED |
+| `tools/dashboard_data.py` | `FORK:1e4c6f4` | FORKED |
+| `dashboard/` | `FORK:1e4c6f4` | FORKED |
+| `tools/sim_harness/` | `FORK:1e4c6f4` | FORKED |
+| `tools/build_apparatus_registry.py` | `FORK:1e4c6f4` | FORKED |
+| `references/apparatus_registry.yaml` | `FORK:1e4c6f4` | FORKED |
+| `references/apparatus_registry.md` | `FORK:1e4c6f4` | FORKED |
+| `tools/audit_staleness.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/audit_registry.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/ci_audit_registry_check.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/review_core.py` | `FORK:1e4c6f4` | FORKED |
+| `registers/review_baseline.yaml` | `FORK:1e4c6f4` | FORKED |
+| `tools/scope_ratchet.py` | `FORK:1e4c6f4` | FORKED |
+| `registers/scope_baseline.yaml` | `FORK:1e4c6f4` | FORKED |
+| `tools/build_test_register.py` | `FORK:1e4c6f4` | FORKED |
+| `references/test_register.json` | `FORK:1e4c6f4` | FORKED |
+| `references/glossary/` | `FORK:1e4c6f4` | FORKED |
+| `tools/ci_supersession_check.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/ci_program_claim_check.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/ci_workplan_pointer_check.py` | `FORK:1e4c6f4` | FORKED |
+<!-- The 11 pointer files are listed INDIVIDUALLY, not as `workplans/POINTER_*.md`. A glob row
+     cannot be verified: `git cat-file -e <ref>:workplans/POINTER_*.md` does no shell expansion
+     and there is no literal file of that name, so the row was unfollowable BY CONSTRUCTION and
+     sat inside a block this session claimed it had verified row-by-row. Caught by an
+     adversarial pass 2026-08-21. Every row below was checked with that exact command. -->
+| `workplans/POINTER_2026-07-17_character_decision_L1_L2.md` | `FORK:1e4c6f4` | FORKED |
+| `workplans/POINTER_2026-07-17_character_decision_program.md` | `FORK:1e4c6f4` | FORKED |
+| `workplans/POINTER_2026-07-22_mass_battle_full_implementation.md` | `FORK:1e4c6f4` | FORKED |
+| `workplans/POINTER_2026-07-26_combat_execution.md` | `FORK:1e4c6f4` | FORKED |
+| `workplans/POINTER_2026-07-26_combat_remediation.md` | `FORK:1e4c6f4` | FORKED |
+| `workplans/POINTER_2026-07-26_mass_battle_execution.md` | `FORK:1e4c6f4` | FORKED |
+| `workplans/POINTER_2026-07-29_centralization_single_owner.md` | `FORK:1e4c6f4` | FORKED |
+| `workplans/POINTER_2026-07-29_code_shape_execution_ledger.md` | `FORK:1e4c6f4` | FORKED |
+| `workplans/POINTER_2026-07-29_code_shape_open_items.md` | `FORK:1e4c6f4` | FORKED |
+| `workplans/POINTER_2026-07-31_m1_program_scaffolding.md` | `FORK:1e4c6f4` | FORKED |
+| `workplans/POINTER_2026-08-19_return_to_game.md` | `FORK:1e4c6f4` | FORKED |
+| `tools/editorial_review/` | `FORK:1e4c6f4` | FORKED |
+| `tools/model_router.html` | `FORK:1e4c6f4` | FORKED |
+| `tools/valoria_rename.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/dead_primitive_census.py` | `FORK:1e4c6f4` | FORKED |
+| `skills/valoria-arc-generator/` | `FORK:1e4c6f4` | FORKED |
+| `skills/valoria-simulator/` | `FORK:1e4c6f4` | FORKED |
+| `skills/valoria-workplan-navigator/` | `FORK:1e4c6f4` | FORKED |
+| `.github/workflows/dashboard.yml` | `FORK:1e4c6f4` | FORKED |
+| `.github/workflows/audit-refresh.yml` | `FORK:1e4c6f4` | FORKED |
+| `tools/ci_gate_coverage.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/ci_hooks_verifier.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/ci_wf_harness_check.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/wf_harness.js` | `FORK:1e4c6f4` | FORKED |
+| `tools/ci_claude_workflow_paths.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/single_owner_check.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/session_status.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/session_handoff_reminder.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/session_open_work.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/handoff_atomize.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/workplan_status.py` | `FORK:1e4c6f4` | FORKED |
+| `.claude/wf_world_schema_gaps.js` | `FORK:1e4c6f4` | FORKED |
+
+**Named files inside forked directories.** The directory rows above are for path resolution; these
+are the individual files that a `MEASURED-BY:` marker or a doc citation names BY NAME. They exist
+separately and deliberately: `tools/ci_claim_provenance_check.py` requires an EXACT row, never a
+directory-prefix match, because a prefix match would let a fabricated filename under a retired
+directory pass the anti-fabrication gate. Retiring an instrument that a settled claim cites costs
+one line here — that is the correct price.
+
+| Old Path | New Path | Status |
+|----------|----------|--------|
+| `tools/observability/obs_core.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/observability/build_glossary.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/observability/build_decisions.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/observability/build_proposals.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/observability/build_incompleteness.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/observability/build_lexicon.py` | `FORK:1e4c6f4` | FORKED |
+| `tools/observability/build_graph.py` | `FORK:1e4c6f4` | FORKED |
+| `.claude/wf_wave4_central.js` | `FORK:c451bcb` | FORKED |
+| `tests/valoria/fixtures/wf_donor.js` | `FORK:1e4c6f4` | FORKED |
+
+**Paired tests retired with their subjects** — a test whose subject is gone is not a test. Listed
+separately because several are cited by `MEASURED-BY:` markers in settled ledger entries: those
+claims were true and their instrument is at the ref, so the markers resolve here rather than
+reading as unre-runnable.
+
+| Old Path | New Path | Status |
+|----------|----------|--------|
+| `tests/valoria/test_gate_coverage.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_blocking_tier_is_honest.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_registry_job_join.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_status_reader_one_owner.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_wf_harness.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_wf_harness_check.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_single_owner_check.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_handoff_structure.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_handoff_dispatch_validity.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_retired_tree_apparatus.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_retired_tree_scanner.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_session_open_work.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_build_glossary.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_build_proposals.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_observability_core.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_model_router_ids.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_compile_is_not_invocation.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_oi12_orphan_census.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_test_register.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_ci_supersession_check.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_scope_ratchet.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_program_claim_check.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_gen_audit.py` | `FORK:1e4c6f4` | FORKED |
+| `tests/valoria/test_audit_refresh_coverage.py` | `FORK:c9b0a86` | FORKED |
+| `tests/valoria/test_fork_divergence.py` | `FORK:c9b0a86` | FORKED |

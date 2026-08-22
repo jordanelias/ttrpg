@@ -100,3 +100,46 @@ def test_the_live_ledgers_still_pass():
     # `None` — values the function never returns — making the assertion unable to observe the
     # failure it excludes. §0.1 point 2, caught in review of this very file.
     assert cpc.check() == 0, 'live ledgers now violate the widened gate — triage the debt, do not narrow the blob'
+
+
+def test_a_fabricated_path_under_a_forked_directory_still_violates():
+    """THE FALSIFIER FOR THE 2026-08-21 PREFIX-SWALLOW (ED-IN-0194).
+
+    `ci_claim_provenance_check` was widened that day so a `MEASURED-BY:` marker naming a RETIRED
+    instrument still resolves — the claim can genuinely be re-run from the ref the restructure
+    ledger records. The first implementation called `pathres.resolve()` and accepted anything not
+    DEAD. `pathres` matches DIRECTORY PREFIXES and the ledger carries 162 directory-prefix `FORK:`
+    rows, so `tools/observability/never_existed.py` resolved FORKED and PASSED.
+
+    That is fabrication passing the anti-fabrication gate across 162 namespaces, and it looked
+    exactly like a fix. This test is the thing that would have caught it, so it is the thing that
+    must never be deleted: it asserts the gate rejects a made-up filename under a forked directory
+    while still accepting the real retired instrument beside it.
+    """
+    import importlib.util
+    import pathlib
+
+    repo = pathlib.Path(__file__).resolve().parents[2]
+    spec = importlib.util.spec_from_file_location(
+        'cpc_prefix_probe', repo / 'tools' / 'ci_claim_provenance_check.py')
+    cpc = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(cpc)
+
+    # Fabricated names under directories the ledger forks WHOLESALE. Each must be rejected.
+    for fake in ('tools/observability/never_existed.py',
+                 'tools/sim_harness/totally_made_up.py',
+                 'audit/2026-08-06-vector-audit/fabricated.py',
+                 'dashboard/invented.js'):
+        assert not cpc._resolves_through_restructure_ledger(fake), (
+            f'{fake} resolved through the restructure ledger — the gate is matching directory '
+            f'prefixes again, so any invented filename under a forked tree passes. Require an '
+            f'EXACT row; see that function\'s docstring.')
+
+    # Real retired instruments, recorded BY NAME, must still resolve — otherwise the widening is
+    # useless and 24 settled ledger rows go red for citing instruments that legitimately existed.
+    for real in ('tools/review_core.py',
+                 'tools/observability/obs_core.py',
+                 'tests/valoria/test_gate_coverage.py'):
+        assert cpc._resolves_through_restructure_ledger(real), (
+            f'{real} no longer resolves — add its exact row to references/restructure_ledger.md '
+            f'rather than reverting to prefix matching.')

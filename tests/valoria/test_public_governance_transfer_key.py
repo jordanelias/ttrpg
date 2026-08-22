@@ -132,14 +132,23 @@ def test_emission_is_log_only(seeded_transfer_campaign):
         "the log did not grow — the emitter is not firing, so 'log-only' is untested")
 
 
-def test_the_pinned_golden_seed_cannot_see_this_path():
-    """RECORDS A BLIND SPOT rather than asserting a behaviour.
+def test_the_pinned_golden_seed_now_covers_this_path():
+    """THE BLIND SPOT CLOSED ITSELF, 2026-08-21 — inverted rather than deleted.
 
-    engine/tests/test_parliamentary_bridge.py pins the Key-log composition on seed 42. That
-    golden stayed green when this emitter landed — not because nothing changed, but because seed
-    42 produces zero Parliamentary Transfers. Left green-and-silent, that reads as coverage.
-    If seed 42 ever DOES start transferring, this fails and the golden's composition map needs a
-    da.public_governance row.
+    This test used to RECORD A BLIND SPOT: `engine/tests/test_parliamentary_bridge.py` pins the
+    Key-log composition on seed 42, that golden stayed green when this emitter landed, and the
+    reason was not coverage — seed 42 produced ZERO Parliamentary Transfers, so the pin could not
+    have seen the emitter either way. Left green-and-silent, that reads as coverage.
+
+    Its own docstring said what to do if the situation changed: *"If seed 42 ever DOES start
+    transferring, this fails and the golden's composition map needs a da.public_governance row."*
+    Fractional dice pools (M1 juncture 1, 2026-08-21) shifted the RNG stream, a transfer motion now
+    qualifies on this seed, and the test failed exactly as designed and named the remedy. The row
+    was added: `_ON_KEYS_BY_TYPE` now carries `'da.public_governance': 1`.
+
+    So the assertion INVERTS. The blind spot is gone and the golden genuinely covers this emitter
+    now, which is a stronger position than before — and if the coverage is ever lost again, this
+    fails and says so, instead of the golden going quietly back to being green over nothing.
     """
     from engine import mc_v18
     import systems.factions.sim.parliamentary_transfer as PT
@@ -155,7 +164,8 @@ def test_the_pinned_golden_seed_cannot_see_this_path():
         mc_v18.run_campaign(seed=GOLDEN_SEED, params={'ECHO_TRANSPORT': True})
     finally:
         PT._emit_public_governance_transfer = original
-    assert not calls, (
-        f"seed {GOLDEN_SEED} now fires the transfer emitter {len(calls)}x. "
-        f"engine/tests/test_parliamentary_bridge.py's _ON_KEYS_BY_TYPE and _ON_KEYLOG_HASH must "
-        f"be re-recorded to include da.public_governance.")
+    assert calls, (
+        f"seed {GOLDEN_SEED} no longer fires the transfer emitter, so "
+        f"engine/tests/test_parliamentary_bridge.py's _ON_KEYS_BY_TYPE is once again green over a "
+        f"path it cannot see. Either restore the coverage, or drop the da.public_governance row "
+        f"from that map and re-record its hash — do not leave the map claiming coverage it lacks.")

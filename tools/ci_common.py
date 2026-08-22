@@ -66,9 +66,13 @@ EMPTY_TREE = '4b825dc642cb6eb9a060e54bf8d69288fbee4904'
 # call site should never have to convert. They are one definition — REPO_PATH is
 # derived from REPO — so they cannot drift.
 #   REPO      (str)  — the `os.path.join(REPO, ...)` / `subprocess(cwd=REPO)` idiom
-#   REPO_PATH (Path) — the `REPO_PATH / 'references' / 'x.yaml'` idiom
+#
+# REPO_PATH (the `Path` shape) was DELETED 2026-08-21 (ED-IN-0194). Its last callers were
+# retired in culling waves 1-3 and `test_every_ci_common_primitive_has_a_caller` caught it
+# immediately — an abstraction with no caller is the ED-IN-0149 defect, and keeping a convenience
+# alias "in case someone wants it" is exactly how this tier grew. Re-add it in the commit that
+# needs it, not before; `Path(REPO)` at a call site costs nothing.
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-REPO_PATH = Path(REPO)
 
 # Pre-G7 private name, kept so nothing that already imported it breaks. New code
 # uses REPO.
@@ -295,8 +299,11 @@ def has_main_guard(tree):
 # 'GO', undercounting a whole lane. Adding a tenth lane used to be 8 edits.
 LANE_CODES: tuple = ("MB", "PC", "FI", "SC", "FA", "WR", "IN", "GO", "SE")
 
-# Ledger filenames use the lowercase code: registers/editorial_ledger_<xx>.jsonl
-LEDGER_LANE_CODES: tuple = tuple(c.lower() for c in LANE_CODES)
+# LEDGER_LANE_CODES (the lowercase spelling used by registers/editorial_ledger_<xx>.jsonl) was
+# DELETED 2026-08-21 (ED-IN-0194) for the same reason as REPO_PATH above: its last callers were
+# the retired observability generators, and the no-caller guard caught it. `LANE_CODES` remains
+# the single owner of WHICH LANES EXIST; a caller that needs the lowercase form writes
+# `c.lower()` at the point of use, which is one expression and cannot drift from the roster.
 
 
 # ── id regexes (§1.2: 6 sites) ───────────────────────────────────────────────
@@ -454,11 +461,16 @@ def load_yaml(path, default=_RAISE):
     honestly. An adversarial pass re-earned it here within one commit.
 
     Migrated: 12 call sites, both idioms — `yaml.safe_load(open(x))` and
-    `with open(x) as f: y = yaml.safe_load(f)`. **44 bare `yaml.safe_load` calls
+    `with open(x) as f: y = yaml.safe_load(f)`. **26 bare `yaml.safe_load` calls
     remain in `tools/`**, each of which does something this helper does not (loads
     a stream, a string, a StringIO, or wants the exception on a missing file).
     `tests/valoria/test_ci_common_primitives.py` pins that count, so it can only
-    go down. **52 -> 44 on 2026-08-13 by RETIREMENT, not migration** (ED-IN-0175):
+    go down. **44 -> 26 on 2026-08-21 by RETIREMENT, not migration** (ED-IN-0194,
+    culling waves 1-3): the observability generators, the apparatus registry
+    builder, `review_core`, `scope_ratchet`, `audit_staleness` and the wiring
+    checkers all left `tools/`. Same shape as the 2026-08-13 move below — the
+    ratchet fell because the callers went, not because anything was migrated, and
+    banking it is what keeps the ceiling honest. **52 -> 44 on 2026-08-13** (ED-IN-0175):
     `atomizer`/`doc_index_gen`/`index_gen` left `tools/` for `deprecated/tools/`
     carrying 8 bare calls with them. Worth distinguishing — a ratchet that falls
     because its corpus shrank has not adopted anything, and reading it as progress
@@ -524,29 +536,23 @@ def load_yaml(path, default=_RAISE):
 # Recorded rather than silently skipped: §0.1 point 3.
 
 
-# ── lazy re-exports of obs_core's heavier primitives ──────────────────────────
-# PEP 562 module __getattr__. `ci_common.read_ledger_entries(...)` works and is
-# the single import surface §8.3 asks for, but `import ci_common` still costs
-# nothing: obs_core (and through it build_decisions, and through that PyYAML) is
-# imported only if one of these names is actually touched.
-_LAZY_FROM_OBS_CORE = (
-    'read_ledger_entries',      # registers/editorial_ledger*.jsonl, normalized
-    'open_ledger_entries',
-    'is_unratified_status',
-    'text_needs_jordan',
-    'write_js_bundle',
-    'infer_lane',
-    'LANE_NAMES',
-    'DECISION_MARKERS',
-)
+# ── the obs_core lazy re-exports are GONE (culling wave 1, ED-IN-0194, 2026-08-21) ────────────
+# This block was a PEP 562 module `__getattr__` forwarding eight names to
+# `tools/observability/obs_core.py` — the ED-IN-0068 single owner of the ledger reader, the lane
+# roster and the JS-bundle writer. `tools/observability/` was retired in culling wave 1, so every
+# forwarded name would now raise ModuleNotFoundError *at call time*, not at import: the module
+# imported cleanly and failed only when a caller touched one of the eight. That is the worst shape
+# a dead re-export can have, which is why it is deleted rather than left to rot.
+#
+# NOTHING IN THE SURVIVING TREE CALLS THEM — verified before deleting. Their callers were the
+# observability generators, `scope_ratchet` and `dashboard_data`, all retired in the same waves.
+#
+# If a future tool needs to read the editorial ledgers, write the reader here, in stdlib, as a
+# first-class function. Do NOT reintroduce a forwarding layer to a module in another directory:
+# that indirection is what made the breakage invisible to `import ci_common`.
+#
+# The lane roster itself (`LANE_CODES`) is a first-class definition ABOVE and is unaffected.
 
 
 def __getattr__(name):
-    if name in _LAZY_FROM_OBS_CORE:
-        import sys
-        obs_dir = os.path.join(REPO, 'tools', 'observability')
-        if obs_dir not in sys.path:
-            sys.path.insert(0, obs_dir)
-        import obs_core
-        return getattr(obs_core, name)
     raise AttributeError(f'module {__name__!r} has no attribute {name!r}')

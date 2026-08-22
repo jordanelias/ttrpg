@@ -27,7 +27,7 @@ pytest.importorskip('yaml')
 
 
 @pytest.fixture(scope='module')
-def emap():
+def emap(generated_layer):
     with open(MAP_JSON, encoding='utf-8') as fh:
         return json.load(fh)
 
@@ -89,11 +89,28 @@ def test_execution_claims_match_the_manifest(emap):
     assert live, "no unit reads as executing — the join is broken, not the game"
 
 
-def test_map_is_current():
-    """Regenerating must be a no-op. Catches a hand-edit of the generated files."""
-    proc = subprocess.run(
-        [sys.executable, os.path.join(ROOT, 'tools', 'build_execution_map.py'), '--check'],
-        capture_output=True, text=True, cwd=ROOT)
-    assert proc.returncode == 0, (
-        f"execution map is stale — run `python3 tools/build_execution_map.py`.\n"
-        f"{proc.stdout}\n{proc.stderr}")
+def test_the_render_is_deterministic(emap):
+    """Regenerating must be a no-op.
+
+    This WAS `test_map_is_current`, and its stated purpose — "catches a hand-edit of the generated
+    files" — died with the commit: `execution_map.json` is untracked as of culling wave 5
+    (ED-IN-0194, 2026-08-22), so there is no committed copy for anyone to hand-edit. What is left
+    is the property that still has teeth for a JOINED artifact: rebuilding from the same sources
+    must land on the same bytes. The spine is hand-transcribed but the rest is joined from
+    registries, and a join over an unordered set renders differently run to run — which would make
+    every anchor assertion above unfalsifiable.
+    """
+    # IN-PROCESS, and deliberately not a subprocess run of the builder. Invoking `main()` WRITES
+    # references/execution_map.json, and under CI's `-n auto` another worker may be reading that
+    # file at the same moment — the shared-tree-mutation race that took down test_engine_atlas on
+    # 2026-08-22. `build()` is pure (only `main()` writes), so the same claim is available without
+    # touching the tree at all.
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        'bem', os.path.join(ROOT, 'tools', 'build_execution_map.py'))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    rebuilt = mod.build()
+    assert rebuilt == emap, (
+        'references/execution_map.json differs between two builds of the same sources — the '
+        'render is not deterministic, which makes every check in this file a coin flip.')

@@ -50,21 +50,18 @@ def _slug(text: str) -> str:
 
 
 @pytest.fixture(scope='module')
-def docs():
+def docs(generated_layer):
     missing = [n for n, p in DOCS.items() if not os.path.exists(p)]
     if missing:
         pytest.fail(f'{missing} missing — run `python3 tools/build_contract_index.py`')
     return {n: open(p, encoding='utf-8').read() for n, p in DOCS.items()}
 
 
-def test_indexes_are_current():
-    """The committed files must equal a fresh build — they are generated, so any drift means a
-    hand-edit or a stale commit, and either makes every number in them describe the wrong tree."""
-    r = subprocess.run([sys.executable, BUILDER, '--check'],
-                       capture_output=True, text=True, cwd=ROOT)
-    assert r.returncode == 0, (
-        f'contract index is stale:\n{r.stdout}\n{r.stderr}\n'
-        'Regenerate with `python3 tools/build_contract_index.py` and commit.')
+# `test_indexes_are_current` stood here and is GONE (culling wave 5, ED-IN-0194, 2026-08-22).
+# CONTRACT_INDEX.md and KEY_INDEX.md are no longer committed, so there is no committed copy to
+# drift from a fresh build. That the builder runs and writes both files is asserted once, for all
+# six builders, in `test_generated_layer.py`; `test_render_is_deterministic` below keeps the half
+# of the old claim that survives, and it is the half that actually caught a bug.
 
 
 def test_every_anchor_link_resolves(docs):

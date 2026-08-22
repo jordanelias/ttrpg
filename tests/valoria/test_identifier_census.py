@@ -102,11 +102,14 @@ def _fake_repo(tmp_path, mod, monkeypatch):
 # ------------------------------------------------------------------------------------------
 
 
-def test_the_rollup_is_committed_and_covers_every_subsystem():
+def test_the_rollup_covers_every_subsystem(generated_layer):
     """The roll-up's subsystem set must equal the per-subsystem files' — the two are one build.
 
     A roll-up naming a subsystem with no census file (or vice versa) means the two halves were
-    written by different runs, which is precisely the state `--check` now refuses.
+    written by different runs. Was `test_the_rollup_is_committed_and_covers_every_subsystem`;
+    the roll-up and the 15 sidecars are UNTRACKED as of culling wave 5 (ED-IN-0194, 2026-08-22)
+    and are written by the `generated_layer` fixture, so "committed" is no longer part of the
+    claim. The two-halves-of-one-build property is, and it is the half that had teeth.
     """
     payload = json.load(open(ROLLUP, encoding='utf-8'))
     from_rollup = set(payload['by_subsystem'])

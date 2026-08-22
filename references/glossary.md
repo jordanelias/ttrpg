@@ -20,7 +20,7 @@
 >   A term used by several subsystems appears in each; the repetition is deliberate.
 > - **`glossary/glossary.json`** — machine-readable, with the exhaustive per-term file list.
 >
-> Regenerate with `python3 tools/observability/build_glossary.py` after any doc move. Those files
+> Regenerate with `RETIRED 2026-08-21 (ED-IN-0194) — the generator and references/glossary/ both went; nothing regenerates this` after any doc move. Those files
 > are GENERATED — never hand-edit them; edit *this* file (for definitions) or the source registry,
 > then re-run.
 >

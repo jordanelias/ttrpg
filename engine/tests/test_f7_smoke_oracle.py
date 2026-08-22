@@ -91,15 +91,44 @@ _FACTIONS = ['Crown', 'Church', 'Hafenmark', 'Varfell']
 # has a mechanism: more faction actions now resolve to a band that opens a scene, and the deleted
 # Mil gate lets more conquests start. Recorded explicitly because 'the spine output moved,
 # investigate before regenerating' is what this assertion says, and this IS the investigation.
-GOLDEN_WIN_SHARE = {'Crown': 25.0, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 50.0}
+# ── RE-PINNED 2026-08-21 — M1 juncture 1, fractional dice pools (ED-IN-0187) ────────────────────
+# `sigma_leverage.roll_net_continuous` stopped rounding its pool: it did `max(1, int(round(pool)))`
+# so a 3.5-die pool sampled as 4 dice, and Jordan's 2026-08-14 "fractional dice" ruling was only
+# half-implemented. MEASURED before the change: a 4-season seeded campaign made 40 calls and 20
+# already passed a fractional pool, every one silently rounded.
+#
+# WHY THESE NUMBERS MOVED, AND WHY THAT IS NOT A BALANCE SIGNAL. Every sampled value changes, so
+# the RNG stream diverges and campaign outcomes reshuffle. At n=8 ONE campaign flipping is 12.5pp,
+# so the deltas below carry no balance information whatsoever — which is exactly the gap line 8 of
+# this file has been demanding an n>=100 oracle to close.
+#
+# THAT ORACLE WAS RUN BEFORE RE-RECORDING, and it is the control this re-pin rests on
+# (`tools/balance_oracle.py`, 120 campaigns per arm, both arms in one process so the ONLY
+# difference is the mechanic):
+#
+#     faction      rounded   fractional   delta pp        z
+#     Church        10.8%       10.0%       -0.8       -0.21
+#     Crown         36.7%       39.2%       +2.5       +0.40
+#     Hafenmark      8.3%       10.0%       +1.7       +0.45
+#     Varfell       44.2%       40.8%       -3.3       -0.52
+#
+# No faction shifts significantly (all |z| < 0.53 against a 1.96 threshold). So: the mechanic did
+# what it was meant to and did NOT move balance measurably. Re-run `python3 tools/balance_oracle.py`
+# before any future re-record — an uncontrolled re-pin is the second open gap CLAUDE.md §7 names.
+#
+# THE CONTROL IN THE OTHER DIRECTION: personal combat shares this entry point via
+# `systems/combat/combat_engine_v1/core.py:56`. Measured 749 combat calls through
+# `workbench.balance.winrate`, ALL INTEGRAL — so combat is value-identical and its byte-exact
+# goldens did not move. They are what says this change touched only what it was aimed at.
+GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 12.5, 'Hafenmark': 0.0, 'Varfell': 37.5}
 # GOLDEN_WINNERS mirrors _win_share's raw `wins` dict shape: only factions with >=1 win get a key.
 # ⚠ The sentence here used to say "Church/Hafenmark win 0/8 now". That was true of the PREVIOUS
 # pin and false of this one — under the 2026-08-14 reband Church wins 2 of 8 and Hafenmark 0, so
 # Hafenmark alone is absent. Corrected rather than left: a comment explaining the shape of numbers
 # it no longer describes is how the next re-record gets reasoned about wrongly.
-GOLDEN_WINNERS = {'Church': 2, 'Varfell': 4, 'Crown': 2}
-GOLDEN_BATTLES_MEAN = 31.6
-GOLDEN_SCENES_RESOLVED = 862  # 463 -> 862 under the 2026-08-14 ruling; see the REPINNED note above
+GOLDEN_WINNERS = {'Varfell': 3, 'Crown': 4, 'Church': 1}
+GOLDEN_BATTLES_MEAN = 32.9
+GOLDEN_SCENES_RESOLVED = 858  # 862 -> 858 under fractional pools, 2026-08-21; see the RE-PINNED note above
 WALL_TIME_CEILING_S = 90.0  # n=8 runs ~16s; generous headroom for CI variance
 
 _CACHE = {}

@@ -24,7 +24,9 @@ multi-agent mechanics live in §10; the disposition below applies whether you're
   A wrong assumption caught in a plan is free; caught in a merged commit it becomes editorial debt.
 - **Build bottom-up from primitives.** Find the single-owner primitive first and compose on top of it
   — never re-implement a rule that already lives once (§8's core invariant). New tooling reuses
-  `obs_core` / `audit_staleness` / `review_core` / the registries; new mechanics resolve from the
+  the registries and `engine/substrate/`'s leaf readers (`descriptors`, `composition`, `keys`) —
+  `obs_core`, `audit_staleness` and `review_core` were RETIRED 2026-08-21 (ED-IN-0194) and are
+  named here only so a reader of an older commit knows why they are gone; new mechanics resolve from the
   Key substrate up. Emergence is the goal: small correct primitives, composed, not a bespoke
   top-level special case. If you find yourself special-casing an entity or outcome, stop — that's
   scripting drift (§10 guardrails).
@@ -82,9 +84,10 @@ multi-agent mechanics live in §10; the disposition below applies whether you're
 - **Close the loop, honestly.** Run `pytest tests/valoria` + the lane's validator, commit with the
   `[scope]` format citing the `PP/ED`, and capture next actions in your lane's `HANDOFF_<LANE>.md`.
   If a check failed or a step was skipped, say so plainly — a green claim you didn't verify is worse
-  than a red one you did. The SessionStart banner (§1, `tools/session_status.py`) surfaces your
-  lane's pending work, open editorial debt, schema-in-flux flags, and stale audits at start — read
-  it; it exists so these stop getting missed (ED-IN-0081).
+  than a red one you did. **There is no SessionStart banner any more** — `tools/session_status.py`
+  was retired 2026-08-21 with the rest of the session machinery (culling wave 3, ED-IN-0194), and
+  §0.3 records the result of the experiment it was the instrument for. Orient from `§1` and
+  `HANDOFF.md` instead, and do not build a replacement.
 
 ### 0.1 Measurement discipline — five checks, each with an artifact (ED-MB-0042, 2026-07-25)
 
@@ -137,6 +140,9 @@ artifact proving it happened, is the whole of the fix.**
    `ci_golden_modes_check`, `ci_sim_fabrication_check`, `export_engine_params.py`'s round-trip `--check`
    (apparatus by subject, but it produces the bridge the Godot port ingests), and a compile gate. It
    FORBIDS `test_wf_harness_check.py`, `test_gate_coverage.py`, `test_blocking_tier_is_honest.py`.
+   **All three were deleted 2026-08-21** (culling wave 3, ED-IN-0194), so this sentence now records
+   a settled disposition rather than naming live files. The predicate itself still binds every new
+   guard; keep the three names as worked examples of what it excludes.
 
    ⚠ **This edit is inert without the `§0` adversarial-pass amendment above.** A session forbidden to
    write a guard will write **a finding about the defect** instead. The loop's carrier is prose, so
@@ -227,12 +233,31 @@ adversarial-pass bound closes the prose reroute (forbid the guard and a session 
 instead — the loop's carrier is prose). `§0.2` + `§0`'s max-effort selection term redirect the freed
 capacity at **T2** and the game. The banner change is **T1**.
 
-**⚠ THE BANNER IS A RUNNING EXPERIMENT.** It prints one thing — the current juncture and whether it
-runs — precisely so the diagnosis is falsifiable: change nothing else and watch one session. If it
-still writes apparatus, the ordering above is wrong and
-`proposals/2026-08-18-breaking-the-recursion.md` should be attacked accordingly. **Adding lines back
-does not measure anything.** Nothing was deleted — `session_open_work.py`, `review_core.py` and the
-rest still run, and the banner names the command. They are available, not advertised.
+**⚠ THE BANNER EXPERIMENT IS OVER. It ran for one session, and the result is recorded here rather
+than quietly dropped (2026-08-21, ED-IN-0194).**
+
+The experiment was: reduce the SessionStart banner to the current juncture and whether it runs,
+change nothing else, and watch one session. If the session still wrote apparatus, the T1→T2→T3
+ordering above was wrong.
+
+**One session ran. It wrote 1,022 lines of apparatus and zero lines of game** (`1e4c6f4`, Act
+C2/C3 — measured: 142 of those lines touched executable engine code, 103 of them a new leaf module,
+and the commit's own control was that the seeded goldens did *not* move). That is the result. It
+does **not** falsify the diagnosis, and the honest reading is narrower than either "it worked" or
+"it failed": **T1 was reduced and the freed capacity still went to apparatus, which says T2 — what a
+session is graded on at Stop — had not moved.** A clean tree, a passing suite and a banked ratchet
+still read as a finished session.
+
+**The instrument no longer exists.** Culling wave 3 retired `tools/session_status.py`, which *was*
+the banner, along with the rest of the session machinery — Jordan ruled the cull runs in its
+entirety (2026-08-21), and that ruling is newer than the standing "wave 3 does not run while the
+experiment is live". So the experiment ends rather than pauses, and there is nothing left to
+contaminate by editing.
+
+**Do not build a replacement banner.** A new session orients from `§1` and `HANDOFF.md`, which is
+what those files are for. Re-introducing a generated start-of-session surface is how T1 grew the
+first time; if the diagnosis needs re-testing, test T2 instead — that is the term this result
+points at.
 
 ---
 
@@ -250,8 +275,10 @@ are more "current state" files than there should be; trust them in this strict p
    `registers/handoffs/HANDOFF_<LANE>.md` files (§3's `ED-<LANE>-NNNN` taxonomy: `MB, PC, FI, SC, FA, WR, IN,
    GO, SE`) plus genuinely cross-cutting pending work/decisions/next actions. Split 2026-07-02 to
    reduce concurrent-session merge-collision surface on one shared file, the same motivation
-   behind the ID namespace itself. The SessionStart banner (`tools/session_status.py`) reads root
-   `HANDOFF.md`'s "Next actions" section only — check your lane's file too.
+   behind the ID namespace itself. Nothing reads this file automatically any more — the
+   SessionStart banner that used to relay its "Next actions" was retired 2026-08-21 (§0.3), which
+   also closes the `HANDOFF.md` → banner → next-session channel that made that experiment
+   two-variable. **Read root `HANDOFF.md` AND your lane's file yourself.**
 3. **`references/canonical_sources.yaml`** + **`registers/mechanics_index.yaml`** — machine-readable
    indices. ⚠️ The `canonical_sha__*` pins in `canonical_sources.yaml` are **not verified against the
    working tree** (the only tooling re-syncs them *from* GitHub, which contradicts the working-tree
@@ -274,10 +301,10 @@ are more "current state" files than there should be; trust them in this strict p
 
 - **The working tree is the source of truth.** Read and edit local files directly (Read/Write/Edit,
   Grep/Glob). **Do not re-fetch from the GitHub API** and do not trust memory over disk — the checkout
-  is fresher than any cache. *(Caveat, CORRECTED 2026-08-05 — this rule is now essentially clean: the
-  integrity gates were ported off the GitHub API by ED-1053, and the only remaining API caller is
-  `tools/dashboard_data.py`, which fetches Actions/PR status — state that exists only on GitHub, not
-  repo content. It is not an exception to this rule.)*
+  is fresher than any cache. *(CLEAN AS OF 2026-08-21 — the caveat is gone, not weakened. ED-1053
+  ported the integrity gates off the GitHub API in 2026-06, leaving one caller, `tools/dashboard_data.py`,
+  which fetched Actions/PR status. That tool was retired in culling wave 1 (ED-IN-0194), so **no tool
+  in this repository reads the GitHub API at all.** The rule now holds without exception.)*
 - **Commit with git.** Stage your own files explicitly and `git commit`; no bespoke wrapper. If you are
   on `main`, branch first. Commit message format:
   `[scope] description` where scope ∈
@@ -547,7 +574,7 @@ Do not represent the skeleton as a runnable head-start.
 > time and are corrected inline, marked `[CORRECTED 2026-08-05]`. Everything else is verbatim.
 
 - **Authoritative tier — CI** (`.github/workflows/valoria-ci.yml`, branch-protected `main`): syntax,
-  register sizes, hooks verifier, co-file rules, editorial markers, naming + names-consistency/drift,
+  register sizes, co-file rules, editorial markers, naming + names-consistency/drift,
   sim anti-fabrication, supersession, PP-674 vetting, ED-citation integrity, the `tests/valoria/` pytest
   suite, integrity, and compliance. **CI is the unbypassable boundary.** *[CORRECTED 2026-08-05: the 25
   per-gate jobs were collapsed into `validators` (blocking) + `validators-report` (never fails) by
@@ -555,11 +582,10 @@ Do not represent the skeleton as a runnable head-start.
 - **Local tier — advisory accelerators** (one-time per clone: `git config core.hooksPath .githooks`):
   `.githooks/pre-commit` runs the SAME validators on staged files via `python tools/valoria_local.py
   --staged`; `.claude/settings.json` wires the edit-time naming nudge (`hook_naming_guard.py`), the
-  SessionStart banner (`session_status.py`), and — on Stop — the handoff reminder
-  (`session_handoff_reminder.py`) plus **`review_core.py --check`** (added 2026-07-28, ED-IN-0087:
-  the session close now reports the repo-state verdict against `registers/review_baseline.yaml`,
-  so a ratchet regression surfaces at the end of the session that caused it rather than in CI on
-  someone else's PR). Bypass a local block with `git commit --no-verify` — CI still enforces.
+  edit-time naming nudge and **nothing else**. The SessionStart and Stop hooks are now empty
+  arrays: `session_status.py`, `session_handoff_reminder.py` and `review_core.py` were all retired
+  in culling waves 2-3 (ED-IN-0194, 2026-08-21). A session now opens and closes with no generated
+  surface, deliberately — see §0.3. Bypass a local block with `git commit --no-verify` — CI still enforces.
 
 **Intended invariant:** every rule lives once, in `tools/`, called by both CI and local hooks. **Never
 re-implement a rule.** Known violations of this invariant (treat as bugs, don't propagate):
@@ -580,26 +606,30 @@ re-implement a rule.** Known violations of this invariant (treat as bugs, don't 
   half-alive: its CI mode `--check-only --repo-state .` runs working-tree size caps and is a
   BLOCKING CI gate — note it is NOT in the local `valoria_local.py` list, so local-green ≠
   compliance-green; its orchestrator-era harness paths remain dead. ED-1082 correction.)
-- **Observability apparatus consolidated (2026-07-15, ED-IN-0068).** `tools/observability/obs_core.py`
-  is now the single owner of the primitives that were re-implemented ≥4 ways (editorial-ledger read,
-  the 9-code lane roster **including GO**, the reconciled `## Status:` regex, the narrow needs-Jordan
-  vs corpus-wide marker vocabularies, the `window.VALORIA_X` JS-bundle writer); the generators import
-  it. `tools/observability/build_proposals.py` generates the **unified proposals/open-work register**
-  (`PROPOSALS.md` triad — one lane-partitioned view of every unratified item, covering
-  `proposals/` by location), refreshed by `audit-refresh.yml` alongside the decisions digest;
-  it complements `DECISIONS.md` (marker-level debt) rather than duplicating it.
-  `tools/build_apparatus_registry.py` generates `references/apparatus_registry.{yaml,md}` — the
-  inventory of every tool/skill/hook/workflow with its output destination + format + orphan status
-  (orphan flag derived from `structure_audit`'s import graph). That prune pass retired 4 zero-importer
-  dead pure-function tools (`propagator`, `verify_cuts`, `coverage_matrix`, `find_references`) to
-  `deprecated/tools/`. Still deliberately deferred (blocking-gate risk): migrating
-  `currency_consistency_check`'s flat-file-only ledger reader and the `ci_audit_registry_check`
-  all-entries reader onto `core` — each needs its own expected-delta test, not a drop-in.
-- **`tools/pathres.py` declares itself the SOLE PARSER of `references/restructure_ledger.md` and is
-  not** *[added 2026-08-05, ED-IN-0147]* — `broken_dependency_checker.py`, `ci_claude_workflow_paths.py`
-  and two `skills/valoria-vector-audit/scripts/` modules still parse it independently. The
-  consolidation `pathres` was written to perform never landed. A single-owner comment asserting a
-  property the tree lacks is worse than no comment: it stops the next reader from looking.
+- **Observability apparatus — RETIRED 2026-08-21 (culling waves 1-2, ED-IN-0194).** This bullet used
+  to describe `tools/observability/obs_core.py` as "the single owner" of five primitives, with
+  `build_proposals.py`, `build_apparatus_registry.py` and the rest as live generators. The whole tier
+  is gone, at `FORK:421cff2`. Two things survive it and are the live statement now: the dependency-free
+  primitives (repo root, the 9-code lane roster **including GO**, token estimate, id regexes) are owned
+  by **`tools/ci_common.py`**, and `ci_common` no longer forwards anything to another module — the lazy
+  `obs_core` re-exports were deleted with it, because they imported cleanly and would have raised at
+  CALL time. The generated feeds (`PROPOSALS.md`, `DECISIONS.md`, `apparatus_registry.{yaml,md}`) had
+  no runtime consumer in `engine/` or `systems/`.
+- **`tools/pathres.py` is closer to the SOLE PARSER of `references/restructure_ledger.md` than it was,
+  and the gap is now named precisely** *[added 2026-08-05 ED-IN-0147; narrowed 2026-08-21 ED-IN-0194]*.
+  `ci_claude_workflow_paths.py` was retired, and `ci_claim_provenance_check.py` — added as a reader the
+  same day — routes through `pathres.load_alias_map()` rather than parsing the file itself. Remaining
+  independent parsers: `broken_dependency_checker.py` and two `skills/valoria-vector-audit/scripts/`
+  modules.
+
+  ⚠ **`pathres.resolve()` MATCHES DIRECTORY PREFIXES, and a caller asking "is this exact file
+  retired" must NOT use it.** The ledger carries ~162 directory-prefix `FORK:` rows, and a `FORK:`
+  target has no existence check because the content is at a ref — so `resolve()` returns FORKED for
+  *any* invented filename under a forked directory. That is fine for "does this reference point
+  anywhere" and catastrophic for an anti-fabrication gate: shipped for a few hours on 2026-08-21 in
+  `ci_claim_provenance_check`, where it made a fabricated `MEASURED-BY:` path pass across 162
+  namespaces. Ask `load_alias_map()` for an exact row instead. Falsifier:
+  `tests/valoria/test_claim_provenance_fields.py::test_a_fabricated_path_under_a_forked_directory_still_violates`.
 
 *Resolved (ED-1053, 2026-06-30):* the three "integrity" gates — `broken_dependency_checker.py`,
 `patch_propagation_checker.py`, `freshness_gate.py` — now read the **working tree** (no `GITHUB_PAT`,
@@ -632,17 +662,17 @@ Run the unit tests locally: `pip install pyyaml pytest numpy && python -m pytest
 | Philosophy (**P-01..P-15**) compliance | `valoria-canon-guard` |
 | Key IN → resolver → OUT contract closure | `valoria-module-adjudicator` |
 | NERS resolver stress methodology | `valoria-resolution-diagnostic` |
-| Emergent-arc generation | `valoria-arc-generator` |
+| Emergent-arc generation | **RETIRED 2026-08-21** (ED-IN-0194) — its subject `arcs/` was evacuated 2026-08-05. |
 | Editorial-debt workflow over the JSONL ledger | `valoria-editorial-register` |
-| "Where are we in the workplan?" / resume-with-options / progress board | `valoria-workplan-navigator` |
+| "Where are we in the workplan?" / progress board | **RETIRED 2026-08-21** (ED-IN-0194). Read `workplans/workplan_v6_progress.yaml` directly, and `python tools/m1_acceptance.py --summary` for whether the milestone RUNS — which is the only reading of "where are we" that §0.2 accepts. |
 | Index/infill doc hygiene | auto-enforced by `ci_co_file_checker` + the compliance size gate; split a new oversized doc with `valoria-chunker` (the `valoria-atomizer` skill + its `references/design_registry.yaml` work-list were **retired 2026-07-21** — atomization complete for every subsystem) |
 | Structural-debt corpus scan | `valoria-vector-audit` |
 | Splitting an oversized doc into index + chunks | `valoria-chunker` |
 | Assembling a canonical artifact (with canon-guard) | `valoria-compiler` |
-| Incremental module-by-module sim build | `valoria-simulator` |
-| "What's the state of the repo?" / exhaustive repo-state review | `python tools/review_core.py --summary` (Repository State Armature, ED-IN-0077; the single verdict-aggregator — one core behind the SessionStart banner + a GitHub job + the artifact) |
-| Reviewing a diff / a PR / your own just-finished work | the native `/code-review` (a fresh-context reviewer that never saw your reasoning — the agonist→antagonist relay of §10 applied to code). Complements, does not replace, `review_core.py --check`: that one grades repo-wide signals against `registers/review_baseline.yaml`; `/code-review` reads the change itself. |
-| Editing a `.claude/wf_*.js` orchestration script | edit the **owner** `tools/wf_harness.js` for anything in the harness block, then `python tools/ci_wf_harness_check.py --fix`; run `python tools/ci_claude_workflow_paths.py` before committing (every path a `.claude/` file names must resolve — 39 of 51 had rotted by 2026-07-28). |
+| Incremental module-by-module sim build | **RETIRED 2026-08-21** (ED-IN-0194) — its subject `sim/` was retired 2026-07-21. |
+| "What's the state of the repo?" | **No tool. RETIRED 2026-08-21** (ED-IN-0194) — `review_core.py`, `scope_ratchet.py` and the observability generators all went. Read `CURRENT.md`, `HANDOFF.md` and `git log`. If you want the milestone's state, that is `python tools/m1_acceptance.py --summary`, which measures execution rather than aggregating apparatus verdicts. |
+| Reviewing a diff / a PR / your own just-finished work | the native `/code-review` (a fresh-context reviewer that never saw your reasoning — the agonist→antagonist relay of §10 applied to code). It is now the ONLY review surface: `review_core.py --check` and its `registers/review_baseline.yaml` ratchet were retired 2026-08-21 (ED-IN-0194), so nothing grades repo-wide signals any more and nothing is supposed to. `/code-review` reads the change itself, which is the reading that was always worth having. |
+| Orchestrating a multi-agent audit | Use the **Agent tool** directly with `.claude/agents/valoria-critic.md` for read-only critic stages. The `.claude/wf_*.js` scripts, their `tools/wf_harness.js` owner and both harness gates were retired 2026-08-21 (ED-IN-0194); `valoria-critic` was KEPT by ruling, so structurally-independent review survives without the script layer. §10's relay still applies. |
 
 `valoria-orchestrator` is **retired** to `deprecated/skills/` (the old `/home/claude` GraphQL session
 driver; superseded by the Claude Code-native model). `valoria-combat-simulator` is also **retired**
@@ -671,7 +701,7 @@ orchestrator's routing table — `deprecated/skills/…/model_routing_table.md`,
 canonical** per §1/§3; this section is the live owner and does not defer to it.)
 
 **Live roster + the tier→ID binding (refreshed 2026-07-28, ED-IN-0087).** Nothing else in the tree binds
-tier aliases to model IDs — this table is the single owner; `tools/model_router.html` mirrors it.
+tier aliases to model IDs — this table is the single owner; `tools/model_router.html` mirrored it until 2026-08-21, when it was retired (ED-IN-0194); this table is now the only home.
 
 | Tier | Model ID | Context | In / Out $/MTok | Relative cost | Prompt-cache minimum |
 |---|---|---|---|---|---|
@@ -725,12 +755,15 @@ obvious, all of them load-bearing on how `parallel()` stages are written):
 - **Agonist→antagonist is a relay, not a dialogue**: subagents are stateless and isolated —
   dispatch the producer, capture its output, dispatch the critic WITH that output, reconcile in the
   orchestrator. For audits this is *preferable*: a critic that never saw the producer's reasoning is
-  more independent. Make independence structural: critic gets read-only tools. **This is now wired,
-  not merely stated (ED-IN-0087):** pass `hCritic({...})` in a `.claude/wf_*.js` stage and the
-  agent runs as `valoria-critic` (`.claude/agents/valoria-critic.md`, `tools: Read, Grep, Glob` —
-  no Write, no Edit, no Bash). Until 2026-07-28 every "critic" in this repo was declared read-only
-  by a sentence *inside its prompt*, which restricts nothing; `tools/ci_wf_harness_check.py` now
-  fails any critic/verify stage that does not route through `hCritic`.
+  more independent. Make independence structural: critic gets read-only tools. **Independence is still structural, and the mechanism
+  survived the cull (2026-08-21, ED-IN-0194):** `.claude/agents/valoria-critic.md` declares
+  `tools: Read, Grep, Glob` — no Write, no Edit, no Bash — so a critic dispatched with
+  `subagent_type: "valoria-critic"` *cannot* write, whatever its prompt says. That property lives
+  in the agent definition, not in a wrapper. The `hCritic({...})` helper, the `.claude/wf_*.js`
+  scripts, `tools/wf_harness.js` and `ci_wf_harness_check.py` were all retired; dispatch the
+  critic through the **Agent tool** instead. Until 2026-07-28 every "critic" here was declared
+  read-only by a sentence *inside its prompt*, which restricts nothing — that is the failure the
+  agent definition fixes, and it is unaffected by the retirement.
 - **Strong producer when producing; strong critic when auditing** — put the stronger tier where the
   binding constraint is.
 - **Parallel write lanes need `isolation: worktree`** (one repo, colliding working trees otherwise);
@@ -746,20 +779,21 @@ obvious, all of them load-bearing on how `parallel()` stages are written):
   the recurrence trigger this rule waits for. Still-watched candidates: a standing
   conformance-scanner and (once seeded headless sims + ablation are runnable) an emergence-auditor
   — see the 2026-07-01 decision queue.
-- **Run discipline lives in one owner and is copied, not imported (ED-IN-0087).** Workflow scripts
-  run in a sandbox with **no filesystem and no Node API**, so they cannot `import` a shared module.
-  `tools/wf_harness.js` is the single owner of the prelude (termination signals + null-result alarm
-  + rediscovery ranking + disagreement records) and it is copied verbatim between sentinels into
-  each `.claude/wf_*.js`. **Edit the owner, never a copy**, then
-  `python tools/ci_wf_harness_check.py --fix`. Four things the harness gives every workflow:
+- **Run discipline — RETIRED 2026-08-21 (ED-IN-0194), and the four properties are recorded here
+  because they were earned, not because the code survives.** `tools/wf_harness.js` was the single
+  owner of a prelude copied verbatim into each `.claude/wf_*.js`; owner, copies and both gates are
+  gone. If you build an orchestrated run again, these are the four behaviours worth re-deriving —
+  do not restore the script layer to get them:
   a **closed `stop_reason` set that is report-only** (Jordan ruled 2026-07-28 — a breaker that
   halts a 40-agent audit on a heuristic costs more than the defect it caught, so every signal
   records and the run continues); a **null-result alarm** on any lens that returned nothing, which
   ships *paired with* **rank-by-independent-rediscovery** so the alarm never becomes pressure to
   manufacture findings; and **disagreement records with required adjudication**, where an
   out-of-lane record is a terminal `observation` no later ruling can overwrite (observe, don't
-  judge). Behaviour is pinned by `tests/valoria/test_wf_harness.py`, which executes the harness
-  under node — mutation-verified, 13/13 mutants killed.
+  judge). Behaviour WAS pinned by `tests/valoria/test_wf_harness.py`, mutation-verified 13/13 — that
+  test went with the harness on 2026-08-21 (ED-IN-0194). The four properties are recorded above
+  because they were earned and are worth re-deriving; nothing enforces them today, and that is the
+  honest state rather than a gap to paper over with a replacement script.
 
 ---
 
@@ -772,9 +806,19 @@ blocks `send_later`, `create_trigger`, `ScheduleWakeup`, `CronCreate`, `update_t
 still reachable in-session by ED-IN-0085: `update_trigger` re-arms an *existing* Routine without
 needing `create_trigger`, `fire_trigger` invokes one whose prompt can re-arm, and `Skill(loop)` is
 /loop's entry point rather than its already-denied pacing primitives), and
-`tools/ci_hooks_verifier.py` Check 6 (the BLOCKING "Enforcement Architecture Intact" job) fails if
-any entry is dropped or if this section goes missing. The deny-list is the single owner of the rule;
-the check is the guard that fails on recurrence (§0.1 point 5).
+**`tests/valoria/test_no_polling_triggers.py`** fails if any entry is dropped or if this section
+goes missing. The deny-list is the single owner of the rule; that test is the guard that fails on
+recurrence (§0.1 point 5).
+
+⚠ **CORRECTED 2026-08-21.** This paragraph named `tools/ci_hooks_verifier.py` Check 6, "the BLOCKING
+Enforcement Architecture Intact job", as the guard. **That tool was retired in culling wave 3
+(ED-IN-0194) and the claim would otherwise be false** — doctrine asserting an enforcement that does
+not exist is worse than no doctrine, because it stops the next reader from checking. The retirement
+was allowed only because the culling plan's own §5.3 hard gate required proving the test is
+INDEPENDENT first: verified 2026-08-21, `test_no_polling_triggers.py` opens `.claude/settings.json`
+and `CLAUDE.md` directly, asserts all seven primitives from its own `REQUIRED_DENY` tuple, and names
+`ci_hooks_verifier` only in a docstring. It never imported it. So the guard did not weaken; the
+duplicate copy of it went, and this sentence now names the survivor.
 
 **The measurement that motivated it** (window 2026-07-19..26, from the account's Routine list):
 

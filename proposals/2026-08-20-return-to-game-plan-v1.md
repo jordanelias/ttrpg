@@ -286,6 +286,18 @@ output, which is exactly the distinction `CLAUDE.md` §0.1 pt 5 draws — so it 
 > that needs a cross-repo hop neither CI has.
 
 #### C2. Make `references/` load-bearing at runtime
+> **STATUS 2026-08-21: PARTIAL, one third landed — and its headline claim was FALSE until today.**
+> `1e4c6f4` shipped the reader (`engine/substrate/descriptors.py`), the exporter and the import-time
+> check, and its message says *"add a faction stat to the registry without adding its field and the
+> engine stops importing"*. It did not: the check iterated `FACTION_FIELD_MAP`, the hand-maintained
+> dict in `tools/export_descriptors.py`, never the registry-derived `faction_stats`. Adding
+> `fac.zeal` to the registry, re-cooking and calling the check returned `covered=5`. Fixed
+> 2026-08-21 (two-stage check + an end-to-end falsifier that runs the real exporter over a doctored
+> registry copy). **Still outstanding, and the reason this row is not done:** the three hardcoded
+> twins below — `MULTS`, `ALL_PLAYABLE_15`, `STARTING_STATS` (plus `STARTING_OWNER`,
+> `STARTING_GARRISON`) — are untouched, so the runtime footprint of `references/` remains
+> `set.order`'s two bounds in `echo_transport.py`. Do not read this row as crossed off.
+
 Today `descriptor_registry.yaml` and `module_contracts.yaml` are read by apparatus only (C1 in §1.C),
 while the rosters code runs on are hardcoded twins in `engine/autoload/game_state.py`.
 - Add `tools/export_rosters.py` + blocking `--check` (fifth instance of the same pattern) generating
@@ -427,7 +439,7 @@ re-derived. **Starts only after Act B is green.**
 | 3 | **B1** | `godot-ci.yml` green on `valoria-game` `main` for the first time since 2026-05-04, with the Solmund step *executed* |
 | 4 | B2, B3 | ratchet compares error **sets**; ≥1 GDScript test executes in CI |
 | 5 | **C1** | a parity job exists, is red on a `KNOWN_DIVERGENT` list that can only shrink, and the game reads its first `.json` |
-| 6 | C2, C4 | `game_state.py` has no hardcoded roster twin; `params_tables.yaml` is pinned |
+| 6 | C2, C4 | `game_state.py` has no hardcoded roster twin; `params_tables.yaml` is pinned — ⚠ **C2 is PARTIAL as of 2026-08-21**, see the status block on C2; the three twins are still there |
 | 7 | C3 | `engine/**` contains no top-level `import systems.`; allow-list can only shrink |
 | 8 | D1–D6 | one FORK semantics; one register-size owner; three CLAUDE.md corrections landed |
 | 9 | E | waves in the order above; wave 3 held |

@@ -90,9 +90,10 @@ from engine.mc_v18 import run_batch, run_campaign  # noqa: E402
 #   GOLDEN_BATTLES_MEAN  = 33.5
 _SEED = 0
 _N = 2
-GOLDEN_WIN_SHARE = {'Crown': 0.0, 'Church': 0.0, 'Hafenmark': 50.0, 'Varfell': 50.0}
-GOLDEN_WINNERS = {'Hafenmark': 1, 'Varfell': 1}
-GOLDEN_BATTLES_MEAN = 36.0
+GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 0.0, 'Hafenmark': 50.0, 'Varfell': 0.0}
+GOLDEN_WINNERS = {'Hafenmark': 1, 'Crown': 1}
+# RE-PINNED 2026-08-21, M1 juncture 1: fractional dice pools (ED-IN-0187). `sigma_leverage.roll_net_continuous` no longer rounds its pool, so every sampled value changes and the RNG stream diverges. NOT a balance signal at this n — the control is `tools/balance_oracle.py` at 120 campaigns per arm, where no faction shifts significantly (all |z| < 0.53); see the RE-PINNED block in test_f7_smoke_oracle.py for the table.
+GOLDEN_BATTLES_MEAN = 39.5
 
 
 def test_mc_v18_batch_is_deterministic():

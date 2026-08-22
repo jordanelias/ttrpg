@@ -205,7 +205,13 @@ def test_the_io_tracer_is_not_vacuous():
     there is nothing constant to trace. The floor is deliberately low (>= 1) because the honest
     coverage of this tracer IS low; a high floor here would be a claim the tracer cannot support.
     """
-    with open(os.path.join(ROOT, 'tools', 'ci_claude_workflow_paths.py'), encoding='utf-8') as fh:
+    # EXEMPLAR MOVED 2026-08-21 (culling wave 3, ED-IN-0194): the original was
+    # `tools/ci_claude_workflow_paths.py`, retired with the rest of the wiring-checkers.
+    # `export_descriptors.py` replaces it and is a BETTER choice for the reason the docstring
+    # above already gives — it opens constants (`SRC`, `OUT`) bound at module level, and it is
+    # game-subject rather than apparatus, so it will not be retired out from under this test the
+    # next time the apparatus shrinks.
+    with open(os.path.join(ROOT, 'tools', 'export_descriptors.py'), encoding='utf-8') as fh:
         traced = pathres.py_path_io(fh.read())
     assert traced, 'the I/O tracer found nothing in a tool that opens a constant-bound path'
 
