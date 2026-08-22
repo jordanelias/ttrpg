@@ -14,14 +14,19 @@ sys.path.insert(0, TOOLS)
 import definitions_store as ds  # noqa: E402
 
 
-def test_store_is_current_and_parity_holds():
-    """The committed store must equal a fresh rebuild AND name fields must agree across registers.
-    If this fails: run `python tools/definitions_store.py --build` and commit."""
+def test_store_is_current_and_parity_holds(generated_layer):
+    """The store on disk must equal a fresh rebuild AND name fields must agree across registers.
+
+    The store is UNTRACKED as of culling wave 5 (ED-IN-0194, 2026-08-22) and is written by the
+    `generated_layer` fixture, so the first half now reads as determinism rather than staleness.
+    The second half — name-field parity across `names_index` and `descriptor_registry` — is
+    unaffected by the untracking and is the reason this test was called permanent.
+    """
     ok, msgs = ds.check()
     assert ok, "definitions store drift or name mismatch:\n" + "\n".join(msgs)
 
 
-def test_store_keys_are_set_identical_to_source_union():
+def test_store_keys_are_set_identical_to_source_union(generated_layer):
     """No key invented, none dropped — the store is exactly union(names_index, descriptor_registry)."""
     names, desc = ds._load_names(), ds._load_descriptors()
     expected = set(names) | set(desc)
@@ -38,6 +43,6 @@ def test_name_fields_never_disagree_on_overlap():
             f"name disagreement at {key}"
 
 
-def test_every_definition_has_a_canonical():
+def test_every_definition_has_a_canonical(generated_layer):
     for key, rec in (ds.load_store().get('definitions') or {}).items():
         assert rec.get('canonical'), f"{key} has no canonical name"

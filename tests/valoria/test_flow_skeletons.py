@@ -239,14 +239,33 @@ def _anchor_failures(relpath):
 
 
 @pytest.mark.parametrize('subsystem,lane,relpath', ANCHORED_DOCS, ids=ANCHORED_IDS)
-def test_anchors_resolve(subsystem, lane, relpath):
+def test_anchors_resolve(subsystem, lane, relpath, generated_layer):
+    """Every anchor must name a file that exists, a line in range, and a symbol that covers it.
+
+    REQUESTS `generated_layer` BECAUSE TWELVE ANCHORS POINT INTO UNTRACKED GENERATED FILES.
+    Measured 2026-08-22 after CI flaked on `[ui]`: `systems/ui/` cites
+    `systems/ui/_identifier_census.yaml` three times, `systems/world/` and `systems/factions/`
+    cite `references/execution_{map,trace}.json` nine times between them. Culling wave 5 untracked
+    all of those, so on a clean checkout the target is absent until some builder runs — and under
+    `-n auto` whether it has run yet is a scheduling accident. The gate then reports "file does not
+    exist" for an anchor that is perfectly correct.
+
+    ⚠ THIS MAKES THE TEST DETERMINISTIC; IT DOES NOT MAKE THE ANCHORS SOUND, and the difference is
+    worth stating rather than papering over. A line-numbered citation into a REGENERATED file is a
+    claim that rots whenever the generator's input changes: touch campaign-reachable engine code and
+    `execution_trace.json` renumbers, breaking an authored design doc that says nothing wrong. That
+    is the document tax culling wave 5 removed, re-entering through a different door. The durable
+    fix is to cite those files by symbol without a line, which needs a checker change plus edits to
+    twelve citations in four design docs — a design-surface call, flagged for Jordan rather than
+    taken here while fixing a red gate.
+    """
     if not os.path.isfile(os.path.join(ROOT, relpath)):
         pytest.skip('missing skeleton — reported by test_every_roster_subsystem_has_a_skeleton')
     failures, _ = _anchor_failures(relpath)
     assert not failures, f"{len(failures)} unresolvable anchor(s):\n  " + "\n  ".join(failures)
 
 
-def test_the_suite_actually_checked_symbols():
+def test_the_suite_actually_checked_symbols(generated_layer):
     """An assertion that never ran is not a passing assertion (CLAUDE.md §0.1 point 2).
 
     If the anchor regex stops matching — a format drift, an escaping change — every per-file

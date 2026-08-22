@@ -16,4 +16,4 @@
 
 ## Repository-state impact (optional)
 <!-- If this PR moves a review_baseline.yaml ceiling or adds/retires an apparatus, note it:
-     python tools/review_core.py --summary -->
+     python tools/m1_acceptance.py --summary   (review_core.py retired 2026-08-21, ED-IN-0194) -->

@@ -38,12 +38,13 @@ jobs:
       #
       # `find | xargs`, not `tools/*.py`: the shell glob does not descend into
       # `tools/observability/` or `tools/sim_harness/`, which is half the uncovered set.
-      # `py_compile` is kept as the mechanism (rather than `compileall`) because
-      # `ci_gate_coverage.jobs()` keys "this job is compile-only, it invokes nothing" on
-      # that literal token, and `test_gate_coverage` pins that classification.
+      # `py_compile` is kept as the mechanism (rather than `compileall`). It USED to be required:
+      # `ci_gate_coverage.jobs()` keyed "this job is compile-only, it invokes nothing" on that
+      # literal token and `test_gate_coverage` pinned the classification. Both retired 2026-08-21
+      # (ED-IN-0194); the mechanism stays because it is the right one, not because a parser needs it.
       #
       # SHIPPED WITH THE `invoked_by` FIX, NOT BEFORE IT — see G9's note in
-      # tools/build_apparatus_registry.py. Being compiled is not being invoked, and the
+      # tools/build_apparatus_registry.py (retired 2026-08-21). Being compiled is not being invoked, and the
       # orphan census used to conflate the two. Expanding this list to name all 108 tools
       # would have been the obvious fix and would have driven the orphan count to zero.
       - name: Compile all validators and tools
@@ -60,15 +61,17 @@ jobs:
   # (checkout + setup-python + pip, ~10-30s). The wall clock was runner setup, not
   # work. Collapsed to two jobs -> 23 fewer boots.
   #
-  # EVERY validator invocation line IS PRESERVED VERBATIM, and that is the whole
-  # safety argument. `tools/valoria_local.py --ci` derives what it runs from
-  # `ci_gate_coverage.jobs()`, which regex-scans each job BODY (not each step) for
-  # tool invocations. Verified empirically before this change: a single job with N
-  # validator lines in one `run:` block parses to exactly N commands. So the work-list
-  # still IS the workflow and cannot drift -- the property that made `--ci`
-  # trustworthy survives the collapse. A roster in a data file would NOT have.
-  # tests/valoria/test_gate_coverage.py pins the full command set (EXPECTED_COMMANDS)
-  # and that the two jobs keep their blocking tiers apart.
+  # ⚠ THE ANTI-DRIFT GUARD IS GONE, 2026-08-21 (ED-IN-0194) — recorded here rather than left for
+  # someone to infer from a missing file. `tools/valoria_local.py --ci` derived its work-list from
+  # `ci_gate_coverage.jobs()`, which regex-scanned each job BODY, so the local list could not drift
+  # from this workflow; `test_gate_coverage.py` pinned the full command set and the tier split.
+  # All three were retired: their subject was this repository's own gate wiring, which CLAUDE.md
+  # §0.1 pt 5 excludes.
+  #
+  # CONSEQUENCE: `valoria_local.py --staged` and this file are now two independently maintained
+  # lists, and LOCAL-GREEN NO LONGER IMPLIES CI-GREEN. That asymmetry is acceptable only because CI
+  # is the unbypassable boundary (CLAUDE.md §8) — do not describe local-green as authoritative, and
+  # when you add a validator here, add it there in the same commit.
   #
   # NO FAIL-FAST. Each validator runs even if an earlier one failed, and the job
   # exits non-zero at the end if any did. Fail-fast would report one failure per
@@ -97,8 +100,24 @@ jobs:
         run: |
           fail=0
           v() { echo "::group::$*"; if ! "$@"; then echo "::error::FAILED: $*"; fail=1; fi; echo "::endgroup::"; }
+          # ─────────────────────────────────────────────────────────────────────────────────
+          # A VALIDATOR BELONGS IN BOTH LISTS OR NEITHER (ED-IN-0176).
+          #
+          # This list and `tools/valoria_local.py`'s `checks` tuple must name the same tools. A
+          # validator that runs only here makes `valoria_local` print "all local gates passed" on
+          # a tree CI is about to red — measured three times (build_test_register ED-IN-0142,
+          # freshness_gate ED-PC-0040, build_identifier_census on PR #307). Blocking here and
+          # report-only there is FINE and is the normal shape; PRESENT here and ABSENT there is
+          # the defect.
+          #
+          # `tools/valoria_local.py` cites this note as the mitigation. It had been citing
+          # nothing — the note was named but never written — until culling wave 5 (ED-IN-0194,
+          # 2026-08-22) wrote it. There is no automated guard: `tests/valoria/test_gate_coverage.py`
+          # was the one that failed on a fifth instance and it was retired in wave 3. Adding a
+          # validator to one list without the other is caught by a reader or not at all.
+          # ─────────────────────────────────────────────────────────────────────────────────
           v python3 tools/ci_register_size_check.py
-          v python3 tools/ci_hooks_verifier.py
+          # RETIRED culling wave 3 (ED-IN-0194, 2026-08-21): ci_hooks_verifier.py. Its Check 6 (the deny-list) is independently asserted by tests/valoria/test_no_polling_triggers.py, which opens .claude/settings.json directly and never imported the verifier — the culling plan §5.3 hard gate, verified before deleting. CLAUDE.md §11 corrected to match.
           v python3 tools/ci_co_file_checker.py
           v python3 tools/ci_editorial_checker.py
           v python3 tools/ci_pp_frozen_check.py
@@ -122,22 +141,31 @@ jobs:
           v python3 tools/export_composition.py --check
           # ED-IN-0142: the test register drifted 3x in one session and only the pytest suite
           # noticed, because --check could not fail. Both fixed; this is the CI half.
-          v python3 tools/build_test_register.py --check
-          # ED-IN-0172: moved OUT of the pytest suite, where it was racy by construction.
-          # It shells out and reads the WHOLE tree, while `test_engine_atlas` deliberately
-          # plants a throwaway probe module under a reserved subsystem name in the real
-          # tree (see that test for the name — it is deliberately NOT written here, because
-          # ci_claude_workflow_paths requires every path a workflow names to resolve, and a
-          # path that exists for milliseconds inside a test resolves to DEAD). Under `-n auto` the
-          # census saw that file, counted `probe_entry`, and the roll-up drifted by exactly
-          # one name — per-subsystem files unaffected, because the probe dir has no `.md`
-          # so it is not a subsystem. Green locally, red in CI, and the signature said so.
-          # Whole-tree freshness belongs in a validator step, next to its three siblings.
-          v python3 tools/build_identifier_census.py --check
+          # RETIRED culling wave 2 (ED-IN-0194, 2026-08-21): build_test_register.py + its
+          # references/test_register.json output. The register indexed test files for an
+          # apparatus census; nothing in engine/ or systems/ read it.
+          #
+          # THE GAME SIGNAL MOVES — see the validators-report job, NOT here. `review_core.py`
+          # retired in the same wave and it was what carried `m1.acceptance` into a required job,
+          # the single game-subject signal wired into CI (CLAUDE.md §0.2's instrument). Losing it
+          # silently would be the commensurability failure this cull was told to avoid.
+          #
+          # It is rewired REPORT-ONLY, deliberately. `m1_acceptance --check` exits 1 today —
+          # stub_invocations and m1_junctures both fail, which is the true state of the milestone.
+          # review_core graded it against a ratchet baseline (now retired with it), so it red only
+          # on REGRESSION; a bare --check has no baseline and would red on arrival, refusing every
+          # unrelated author's commit for a pre-existing condition. ED-IN-0112 paid for that once.
+          #
+          # `build_identifier_census.py --check` ran HERE and is GONE (culling wave 5,
+          # ED-IN-0194, 2026-08-22), along with the ED-IN-0172 note explaining why it had been
+          # moved out of the pytest suite. Its outputs - references/identifier_census.json and the
+          # 15 systems/*/_identifier_census.yaml sidecars - are UNTRACKED now, so --check compares
+          # a fresh re-derivation against files git no longer carries and would red main on the
+          # first push. The builder is kept and runs on demand from the generated_layer fixture in
+          # tests/valoria/conftest.py. Removed from tools/valoria_local.py in the same commit, per
+          # the note below: a validator belongs in BOTH lists or NEITHER.
           v python3 tools/ci_sim_fabrication_check.py
           v python3 tools/ci_claim_provenance_check.py
-          v python3 tools/ci_claude_workflow_paths.py
-          v python3 tools/ci_wf_harness_check.py
           v python3 tools/ci_vetting_check.py
           v python3 tools/validate_ed_citations.py
           v python3 tools/broken_dependency_checker.py
@@ -184,8 +212,13 @@ jobs:
           # that job's membership a false claim about what blocks a merge. Nothing about
           # their behaviour changes here; `valoria_local.py:162,172` ALREADY ran both
           # report-only, so this is CI catching up to the local tier, not a relaxation.
-          w python3 tools/ci_supersession_check.py
-          w python3 tools/ci_audit_registry_check.py
+          # RETIRED culling wave 2 (ED-IN-0194, 2026-08-21): ci_supersession_check.py and
+          # ci_audit_registry_check.py. Both were structurally incapable of failing, as the
+          # paragraph above records — a tool that cannot fail cannot gate.
+          #
+          # THE GAME SIGNAL, REWIRED HERE (see the note in the blocking job). review_core.py
+          # retired in this wave and it was the only carrier of `m1.acceptance` into CI.
+          w python3 tools/m1_acceptance.py --summary
           w python3 tools/ci_names_check.py
           w python3 tools/currency_consistency_check.py
           w python3 tools/ci_quantity_vocabulary_check.py
@@ -193,18 +226,14 @@ jobs:
           w python3 tools/ci_generation_consistency.py
           w python3 tools/canon_coverage_check.py --strict --json
           w python3 tools/ci_module_shape_check.py
-          w python3 tools/ci_workplan_pointer_check.py
+          # RETIRED culling wave 2 (ED-IN-0194, 2026-08-21): ci_workplan_pointer_check.py, with
+          # the 11 workplans/POINTER_*.md files it guarded.
           w python3 tools/wiring_map_check.py --check
-          # Added 2026-08-01 (ED-IN-0118). All three existed and NOTHING RAN THEM.
-          # scope_ratchet's registry row claimed `ci_job: validators-report` and its notes said
-          # it "rides valoria_local" -- but no workflow invokes valoria_local at all (only
-          # py_compile on it), so ED-IN-0112's design silently lost its CI half in the 2026-08-01
-          # job collapse. It reports REGRESSED today, which is exactly why it belongs HERE and not
-          # in the blocking job. The other two ship with their own pytest suites and had zero
-          # invokers and zero registry rows -- a detector nobody runs is the defect it detects.
-          w python3 tools/scope_ratchet.py --check
+          # RETIRED culling wave 2 (ED-IN-0194, 2026-08-21): scope_ratchet.py + scope_baseline.yaml
+          # and ci_program_claim_check.py. `ci_vacuous_assertion_check` below is KEPT by Jordan's
+          # ruling of 2026-08-21 (culling plan §5.6): it is a literal encoding of CLAUDE.md §0.1
+          # point 2, and deleting it would have required striking §0.1 in the same commit.
           w python3 tools/ci_vacuous_assertion_check.py
-          w python3 tools/ci_program_claim_check.py
           exit 0
 
   contract-conformance:
@@ -273,8 +302,17 @@ jobs:
       - uses: actions/checkout@v4
         with:
           # FULL HISTORY REQUIRED (ED-IN-0123, 2026-08-03). Not a convenience.
-          # tests/valoria/test_retired_tree_apparatus.py exercises
-          # currency_consistency_check.check_current_stamp in BOTH directions: an
+          #
+          # ⚠ THE STATED REASON MOVED 2026-08-21 (ED-IN-0194). It named
+          # tests/valoria/test_retired_tree_apparatus.py, which culling wave 3 retired — so the
+          # justification pointed at a file that does not exist, and someone tidying that comment
+          # could have dropped the setting with it. The LIVE reason is stronger:
+          # tests/valoria/test_forked_status.py runs `git cat-file -e <ref>:<path>` against 242
+          # restructure-ledger FORK rows. At the default depth-1 those refs are unreachable and all
+          # 242 read as unfollowable at once. DO NOT LOWER THIS.
+          #
+          # The original reason also still holds, via the surviving half of that test's subject:
+          # currency_consistency_check.check_current_stamp in BOTH directions — an
           # apparatus-only change must not trip the stamp, and a canonical head moving
           # must. It stubs the date source, so it needs no real dates -- but the check's
           # depth guard reads the actual commit count, and under the default depth-1
@@ -398,9 +436,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          # fetch-depth: 0 is REQUIRED, not an optimisation (ED-IN-0123, 2026-08-03). This job runs
-          # `review_core.py --check`, whose `currency.stamps` signal shells out to
-          # currency_consistency_check, which compares CURRENT.md's reconcile stamp against
+          # fetch-depth: 0 is REQUIRED, not an optimisation (ED-IN-0123, 2026-08-03). The reason is
+          # unchanged but its carrier moved: this job used to run `review_core.py --check` (retired
+          # 2026-08-21, ED-IN-0194) whose `currency.stamps` signal shelled out to
+          # currency_consistency_check. That checker still runs in `validators-report` and still
+          # compares CURRENT.md's reconcile stamp against
           # `git log -1 --format=%cs -- <each canonical head>`. At the default depth-1 there is
           # exactly ONE commit, so every path returns HEAD's date and EVERY canonical head falsely
           # reads as touched today. MEASURED: the signal went RED here while passing on full history,
@@ -415,14 +455,16 @@ jobs:
       - name: Run compliance check
         run: python3 tools/compliance_check.py --check-only --repo-state .
 
-      - name: Repository-state regression ratchet (review_core --check)
-        # Stage C (earned-gate): the ED-IN-0077 ratchet grades every report-only signal against
-        # registers/review_baseline.yaml and fails only on a REGRESSION (a signal's debt count
-        # GROWS past its accepted baseline). Wiring it into this already-required job makes every
-        # report-only check blocking-on-regression — outputs now ENFORCE "no new debt" — with no
-        # branch-protection edit and no backlog burn (debt can only shrink; lowering a baseline is
-        # the one-line edit in the PR that earns it, CODEOWNERS-gated to Jordan).
-        run: python3 tools/review_core.py --check
+      # RETIRED culling wave 2 (ED-IN-0194, 2026-08-21): the ED-IN-0077 repository-state ratchet
+      # (review_core.py + registers/review_baseline.yaml). It graded twelve report-only signals
+      # against a baseline and failed on regression — an apparatus-subject gate whose twelve
+      # signals were, with one exception, apparatus signals.
+      #
+      # THE EXCEPTION IS WHY THIS BLOCK IS A COMMENT AND NOT A DELETION. `m1.acceptance` was the
+      # one game-subject signal in it, and this job is the required one, so retiring review_core
+      # silently would have removed the only path by which CLAUDE.md §0.2's instrument reached CI.
+      # It is rewired as `m1_acceptance.py --summary` in `validators-report`; report-only, because
+      # a bare --check has no baseline and reds on arrival. See the note at the blocking job.
 
   # ── AGGREGATOR: the single required check for branch protection ──────────────
   # Proves every authoritative gate actually RAN and PASSED (not skipped). Make

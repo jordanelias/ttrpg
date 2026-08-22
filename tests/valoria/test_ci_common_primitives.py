@@ -27,6 +27,7 @@ The transcriptions below are deliberately verbatim-ugly. Normalising them would
 test the owner against itself.
 """
 import ast
+import glob
 import os
 import re
 import subprocess
@@ -72,10 +73,33 @@ def test_repo_root_matches_every_pre_migration_spelling():
         assert computed == ci_common.REPO, f'spelling {name!r} no longer agrees with ci_common.REPO'
 
 
-def test_repo_root_from_the_observability_layer():
-    """`tools/observability/*` used `Path(__file__).resolve().parents[2]`."""
-    obs_file = os.path.join(ROOT, 'tools', 'observability', 'obs_core.py')
-    assert str(Path(obs_file).resolve().parents[2]) == ci_common.REPO
+def test_the_nested_tool_root_idiom_has_no_live_subject():
+    """The `parents[2]` idiom is gone from this tree, and that is asserted rather than simulated.
+
+    This test used to check that `tools/observability/obs_core.py` — a tool ONE DIRECTORY deeper
+    than `tools/` — derived the same repo root via `Path(__file__).resolve().parents[2]`. Two
+    things went wrong with it on 2026-08-21:
+
+      1. `tools/observability/` was retired in culling wave 1 (ED-IN-0194), and
+      2. `Path.resolve()` is NON-STRICT, so the assertion kept PASSING on a path that no longer
+         existed. It had become arithmetic on a string, testing nothing about the tree.
+
+    The first repair anchored it on another nested directory. That was worse: none exists at the
+    right depth, so it either failed or would have needed a fabricated one — manufacturing a
+    subject to keep a test alive is how a suite starts lying.
+
+    So the honest assertion is the one below: `tools/` is FLAT now, every tool sits at
+    `tools/x.py` and uses `parents[1]`, and there is no live consumer of `parents[2]`. If a nested
+    tool directory is ever added, this fails and whoever adds it restores the real check.
+    """
+    nested = [d for d in glob.glob(os.path.join(ROOT, 'tools', '*'))
+              if os.path.isdir(d) and os.path.basename(d) != '__pycache__'
+              and glob.glob(os.path.join(d, '*.py'))]
+    assert not nested, (
+        f'tools/ is no longer flat: {[os.path.relpath(d, ROOT) for d in nested]}. A tool at that '
+        f'depth must derive the repo root with parents[2], not parents[1] — restore the real '
+        f'assertion for it rather than deleting this test.')
+    assert str(Path(os.path.join(ROOT, 'tools', 'ci_common.py')).resolve().parents[1]) == ci_common.REPO
 
 
 def test_repo_root_is_the_git_toplevel():
@@ -93,11 +117,17 @@ def test_repo_root_is_the_git_toplevel():
 
 
 def test_repo_path_is_derived_not_duplicated():
-    """REPO and REPO_PATH are one definition in two shapes. If they ever differ,
-    a call site's choice of idiom would change which tree it reads."""
+    """REPO is the one owner of the repository root.
+
+    `REPO_PATH` (the `Path` shape) was DELETED 2026-08-21 with its last caller (culling waves 1-3,
+    ED-IN-0194) and this test's two-shape assertion went with it. What remains is the property that
+    actually matters — one definition, and the pre-G7 private alias still pointing at it. If a
+    caller needs a `Path`, it writes `Path(ci_common.REPO)`; re-adding the alias needs a caller
+    first, or `test_every_ci_common_primitive_has_a_caller` fails it again immediately.
+    """
     assert isinstance(ci_common.REPO, str)
-    assert isinstance(ci_common.REPO_PATH, Path)
-    assert str(ci_common.REPO_PATH) == ci_common.REPO
+    assert not hasattr(ci_common, 'REPO_PATH'), (
+        'REPO_PATH is back — give it a caller in the same commit, or drop it')
     assert ci_common._REPO == ci_common.REPO      # pre-G7 private alias
 
 
@@ -115,7 +145,14 @@ def test_lane_roster_matches_the_pre_migration_literals():
     broken_dependency_checker:171, handoff_atomize:37, validate_ed_citations:50,
     currency_consistency_check:122 — all five carried this literal."""
     assert ci_common.LANE_CODES == ("MB", "PC", "FI", "SC", "FA", "WR", "IN", "GO", "SE")
-    assert ci_common.LEDGER_LANE_CODES == ('mb', 'pc', 'fi', 'sc', 'fa', 'wr', 'in', 'go', 'se')
+    # LEDGER_LANE_CODES (the lowercase spelling) was DELETED 2026-08-21 with its last caller
+    # (ED-IN-0194). LANE_CODES stays the single owner of WHICH LANES EXIST; the lowercase form is
+    # now `c.lower()` at the point of use, which cannot drift from the roster because it is derived
+    # at the call site rather than stored beside it.
+    assert not hasattr(ci_common, 'LEDGER_LANE_CODES'), (
+        'LEDGER_LANE_CODES is back — give it a caller in the same commit, or drop it')
+    assert tuple(c.lower() for c in ci_common.LANE_CODES) == \
+        ('mb', 'pc', 'fi', 'sc', 'fa', 'wr', 'in', 'go', 'se')
 
 
 def test_lane_roster_includes_go():
@@ -143,15 +180,7 @@ def test_lane_roster_matches_claude_md():
     assert declared <= set(ci_common.LANE_CODES), f'lanes in CLAUDE.md missing from roster: {declared - set(ci_common.LANE_CODES)}'
 
 
-def test_obs_core_re_exports_the_same_roster_object():
-    """obs_core kept its LANE_CODES name for its 9 consumers. If it ever stopped
-    being the SAME object, the divergence this step closed would be back."""
-    sys.path.insert(0, os.path.join(ROOT, 'tools', 'observability'))
-    import obs_core
-    assert obs_core.LANE_CODES is ci_common.LANE_CODES
-    assert obs_core.LEDGER_LANE_CODES is ci_common.LEDGER_LANE_CODES
-    assert str(obs_core.REPO) == ci_common.REPO
-
+# RETIRED 2026-08-21 (culling wave 1/3, ED-IN-0194): test_obs_core_re_exports_the_same_roster_object — its subject tools/observability/obs_core.py and ci_common's lazy re-exports of it were retired.
 
 # ── token estimation ─────────────────────────────────────────────────────────
 
@@ -352,29 +381,9 @@ def test_no_module_actually_loads_id_reservations():
 
 # ── the lazy re-export surface ───────────────────────────────────────────────
 
-def test_lazy_reexports_resolve_to_obs_core():
-    """§8.3's "single import surface" claim: the heavy primitives are reachable
-    through ci_common and are the SAME objects, not copies."""
-    sys.path.insert(0, os.path.join(ROOT, 'tools', 'observability'))
-    import obs_core
-    for name in ('read_ledger_entries', 'STATUS_RE', 'first_status', 'write_js_bundle'):
-        assert getattr(ci_common, name) is getattr(obs_core, name), name
+# RETIRED 2026-08-21 (culling wave 1/3, ED-IN-0194): test_lazy_reexports_resolve_to_obs_core — its subject tools/observability/obs_core.py and ci_common's lazy re-exports of it were retired.
 
-
-def test_lazy_reexport_is_actually_lazy():
-    """Import ci_common in a fresh interpreter and assert obs_core did NOT come
-    with it. Without this the __getattr__ is decorative — a plain
-    `import obs_core` at the top would pass every other test in this file.
-    """
-    code = (
-        'import sys; sys.path.insert(0, %r); import ci_common; '
-        "print('obs_core' in sys.modules, 'yaml' in sys.modules)"
-        % os.path.join(ROOT, 'tools')
-    )
-    out = subprocess.run([sys.executable, '-c', code], capture_output=True, text=True)
-    assert out.returncode == 0, out.stderr
-    assert out.stdout.strip() == 'False False', out.stdout
-
+# RETIRED 2026-08-21 (culling wave 1/3, ED-IN-0194): test_lazy_reexport_is_actually_lazy — its subject tools/observability/obs_core.py and ci_common's lazy re-exports of it were retired.
 
 def test_unknown_attribute_still_raises():
     with pytest.raises(AttributeError):
@@ -561,9 +570,11 @@ def test_every_ci_common_primitive_has_a_caller():
 
     PUBLIC = [n for n in vars(ci_common)
               if not n.startswith('_') and n not in {
-                  'ast', 'glob', 'os', 're', 'subprocess', 'Path',
-                  # documented lazy re-exports: reachable, but obs_core is their home
-                  *ci_common._LAZY_FROM_OBS_CORE}]
+                  'ast', 'glob', 'os', 're', 'subprocess', 'Path'}]
+    # The `*ci_common._LAZY_FROM_OBS_CORE` exclusion that used to sit here is GONE with the
+    # re-exports themselves (culling wave 1, ED-IN-0194, 2026-08-21). ci_common no longer forwards
+    # anything to another module, so every public name is now genuinely its own — which makes this
+    # check STRICTER than it was, not weaker.
     owner_src = (Path(ROOT) / 'tools' / 'ci_common.py').read_text(encoding='utf-8')
     owner_tree = ast.parse(owner_src)
 
@@ -684,18 +695,76 @@ def test_every_lane_display_map_is_total_over_the_owner():
     vocabulary is not the ledger's title-case one). What must not diverge is WHICH
     LANES EXIST, so this asserts each map is TOTAL over the owner.
     """
-    sys.path.insert(0, os.path.join(ROOT, 'tools', 'observability'))
-    import build_decisions
-    import importlib.util
-    spec = importlib.util.spec_from_file_location(
-        'dashboard_data', os.path.join(ROOT, 'tools', 'dashboard_data.py'))
-    dd = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(dd)
+    # REWRITTEN 2026-08-21 after an adversarial pass caught the first repair being VACUOUS.
+    # `tools/observability/build_decisions.py` and `tools/dashboard_data.py` each carried a
+    # `LANE_NAMES` display map and this test asserted each was total over `ci_common.LANE_CODES`.
+    # Both were retired in culling wave 1 (ED-IN-0194). The first repair set `others = []` and left
+    # the loop below in place — a loop over an empty list, which is precisely the "asserts
+    # conditionally without asserting that it asserted" defect CLAUDE.md §0.1 pt 2 names, committed
+    # inside the file whose own header documents that class as ED-IN-0177.
+    #
+    # So it now DISCOVERS the enumerations instead of naming them. Any module in the tree that
+    # declares a lane-display map is found and checked; the assertion below proves the discovery
+    # ran. A new divergent copy fails; a retired one simply stops being found, with no edit here.
+    import re as _re
+    LANE_MAP_DECL = _re.compile(r'^\s*LANE_NAMES\s*[:=]', _re.M)
+    others, skipped = [], []
+    for base in ('tools', 'skills'):
+        for dirpath, _dirs, names in os.walk(os.path.join(ROOT, base)):
+            if '__pycache__' in dirpath:
+                continue
+            for fn in names:
+                if not fn.endswith('.py'):
+                    continue
+                full = os.path.join(dirpath, fn)
+                if os.path.abspath(full) == os.path.abspath(ci_common.__file__):
+                    continue
+                try:
+                    src = open(full, encoding='utf-8', errors='ignore').read()
+                except OSError:
+                    continue
+                if LANE_MAP_DECL.search(src):
+                    # `__name__` MUST be set. Without it, any module carrying an
+                    # `if __name__ == '__main__':` guard raises NameError, hits the handler below,
+                    # and is SILENTLY SKIPPED — so the discovery could not distinguish "no lane
+                    # maps exist" from "every lane map failed to exec". Caught by an adversarial
+                    # pass 2026-08-21. BaseException is caught too, because a module that calls
+                    # sys.exit() at import would otherwise kill the pytest worker.
+                    ns = {'__name__': '_lane_map_probe', '__file__': full}
+                    try:
+                        exec(compile(src, full, 'exec'), ns)   # noqa: S102 — reading our own tree
+                    except BaseException:                      # noqa: BLE001 — see above
+                        skipped.append(os.path.relpath(full, ROOT))
+                        continue
+                    if isinstance(ns.get('LANE_NAMES'), dict):
+                        others.append((os.path.relpath(full, ROOT), ns['LANE_NAMES']))
 
-    for label, mapping in (('build_decisions.LANE_NAMES', build_decisions.LANE_NAMES),
-                           ('dashboard_data.LANE_NAMES', dd.LANE_NAMES)):
+    checked = 0
+    for label, mapping in others:
+        checked += 1
         assert set(mapping) == set(ci_common.LANE_CODES), (
             f'{label} is not total over the owner: '
             f'missing {set(ci_common.LANE_CODES) - set(mapping)}, '
             f'extra {set(mapping) - set(ci_common.LANE_CODES)}')
         assert all(v for v in mapping.values()), f'{label} has an empty display name'
+
+    # §0.1 pt 2, PROPERLY THIS TIME. The first rewrite asserted `checked == len(others)`, which is
+    # TRUE BY CONSTRUCTION — `checked` increments once per element and the loop cannot break early,
+    # so it asserted nothing. That is the same defect the rewrite was written to remove,
+    # reintroduced two lines below the paragraph naming it; caught by an adversarial pass.
+    #
+    # The honest assertions are the two below: the roster is EMPTY (a fact about the tree, not
+    # about the loop), and nothing was silently skipped on the way to concluding that.
+    assert others == [], (
+        f'lane display map(s) found: {[n for n, _ in others]}. That is not forbidden, but each is '
+        f'a second enumeration of WHICH LANES EXIST and the loop above checked it against '
+        f'ci_common.LANE_CODES — read the failure there, not here.')
+    assert not skipped, (
+        f'{len(skipped)} file(s) declared a lane map and could not be executed: {skipped}. The '
+        f'discovery cannot tell "no lane maps" from "every lane map failed to load", so a skip '
+        f'makes the emptiness above unverifiable rather than true.')
+    assert len(ci_common.LANE_CODES) == 9, 'the owner roster changed — update the lane docs with it'
+    for retired in ('tools/observability/build_decisions.py', 'tools/dashboard_data.py'):
+        assert not os.path.exists(os.path.join(ROOT, retired)), (
+            f'{retired} is back and historically carried its own lane map — the discovery above '
+            f'will now find it, but confirm it is total rather than assuming')

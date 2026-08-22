@@ -34,9 +34,16 @@ REPO = pathlib.Path(__file__).resolve().parents[2]
 ENGINE = REPO / 'engine'
 
 # Top-level `from systems...` / `import systems...` — column 0 only. An import nested inside a
-# function is a DIFFERENT (and also real) problem, tracked separately; conflating them would make
-# this list churn on refactors that change nothing about the package graph.
+# function is a DIFFERENT (and also real) problem, counted separately BELOW — not merely promised to
+# be. Conflating the two counts would make the top-level list churn on refactors that change nothing
+# about the package graph; leaving the nested one UNCOUNTED, which is what this file did until
+# 2026-08-21, is worse than conflating them (see NESTED_BASELINE).
 TOP_LEVEL_SYSTEMS_IMPORT = re.compile(r'^(?:from|import)\s+systems[.\s]', re.M)
+
+# The same import, indented — i.e. inside a function or a class body. A deferred import hides the
+# cycle from the interpreter; it does not remove it, and `engine/autoload/game_state.py` carries
+# ELEVEN of them, which is why "autoload is a leaf" is false.
+NESTED_SYSTEMS_IMPORT = re.compile(r'^[ \t]+(?:from|import)\s+systems[.\s]', re.M)
 
 # THE CEILING. Every entry is a seam to be moved to registration-driven composition
 # (proposals/2026-08-20-return-to-game-plan-v1.md Act C3). Remove the line when the seam lands.
@@ -56,6 +63,17 @@ ALLOWED = {
 }
 BASELINE_TOTAL = 3
 
+# THE SECOND CEILING, AND THE REASON IT EXISTS. With only the count above, the CHEAPEST way to lower
+# `BASELINE_TOTAL` is to indent a top-level import into the function that uses it. That satisfies the
+# ratchet, reads as progress in a commit message, and makes the cycle HARDER to see — the metric's
+# cheapest satisfier makes the underlying condition worse. Counting both means the move is net-zero:
+# the top-level number falls, this one rises, and only genuine removal lowers the pair.
+#
+# Measured 2026-08-21: game_state.py 11, scene_dispatch.py 4, echo_transport.py 1. The eleven in
+# `autoload` are the ones that matter — they are the `engine -> systems` half of the live package
+# cycle with `systems/factions/sim/faction_action.py:42`.
+NESTED_BASELINE = 16
+
 
 def _offenders():
     found = {}
@@ -64,6 +82,18 @@ def _offenders():
         if rel.startswith('tests/') or '__pycache__' in rel:
             continue
         hits = TOP_LEVEL_SYSTEMS_IMPORT.findall(path.read_text(encoding='utf-8'))
+        if hits:
+            found[rel] = len(hits)
+    return found
+
+
+def _nested_offenders():
+    found = {}
+    for path in sorted(ENGINE.rglob('*.py')):
+        rel = path.relative_to(ENGINE).as_posix()
+        if rel.startswith('tests/') or '__pycache__' in rel:
+            continue
+        hits = NESTED_SYSTEMS_IMPORT.findall(path.read_text(encoding='utf-8'))
         if hits:
             found[rel] = len(hits)
     return found
@@ -99,6 +129,34 @@ def test_the_total_did_not_rise():
         f'engine/ -> systems/ imports FELL {BASELINE_TOTAL} -> {total}. Lower BASELINE_TOTAL to '
         f'{total} in this commit so the progress is banked.'
     )
+
+
+def test_nested_systems_imports_did_not_rise():
+    """The deferred-import count is a ceiling too, so hiding a seam is not progress."""
+    total = sum(_nested_offenders().values())
+    assert total <= NESTED_BASELINE, (
+        f'function-local engine/ -> systems/ imports ROSE {NESTED_BASELINE} -> {total}. Moving a '
+        f'top-level import inside a function does not remove the cycle; it hides it. If a seam '
+        f'genuinely has to defer, remove one elsewhere or say why here.'
+    )
+    assert total == NESTED_BASELINE, (
+        f'function-local engine/ -> systems/ imports FELL {NESTED_BASELINE} -> {total}. Lower '
+        f'NESTED_BASELINE to {total} in this commit so the progress is banked.'
+    )
+
+
+def test_the_two_counts_cannot_be_gamed_against_each_other():
+    """The falsifier for the ratchet itself (§0.1 pt 3): indenting an import must be observable.
+
+    Without this, the pair of ceilings is just two numbers. This asserts the specific property that
+    makes them a ratchet rather than a scoreboard — that the SAME line, at column 0 and indented,
+    is seen by exactly one pattern each, so a move between them is visible as a change in both.
+    """
+    line = 'from systems.factions.sim import treaty\n'
+    assert TOP_LEVEL_SYSTEMS_IMPORT.search(line)
+    assert not NESTED_SYSTEMS_IMPORT.search(line)
+    assert not TOP_LEVEL_SYSTEMS_IMPORT.search('    ' + line)
+    assert NESTED_SYSTEMS_IMPORT.search('    ' + line)
 
 
 def test_this_check_can_observe_its_own_failure(tmp_path):

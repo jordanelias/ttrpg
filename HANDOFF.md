@@ -1,8 +1,10 @@
 # Handoff
 
 Plain, hand-maintained continuity for Valoria. Update this when you pause mid-task; a
-git commit *is* the session close. The SessionStart banner (`tools/session_status.py`)
-surfaces the "Next actions" section below, alongside `git status` / last commit.
+git commit *is* the session close. **Nothing surfaces this file automatically** — the
+SessionStart banner that used to relay "Next actions" was retired 2026-08-21 with the rest
+of the session machinery (ED-IN-0194), and `CLAUDE.md` §0.3 records the result of the
+experiment it was the instrument for. Read this file, and your lane's, yourself.
 
 This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint machinery
 (which depended on the retired GitHub-API harness and token budgets).
@@ -45,6 +47,57 @@ and this root file remains the one stable SessionStart entry point.
 `registers/handoffs/HANDOFF_IN.md`'s Decisions log** — this root file does not duplicate that history.
 
 ## Next actions
+
+**▶ THE STEP TO TAKE: `proposals/2026-08-21-execution-order-v1.md` §3, first step whose `state:` is
+`next`.** Written 2026-08-21 at Jordan's request. It is **not** a tenth planning surface: it replaces
+§5 (Sequencing summary) of `proposals/2026-08-20-return-to-game-plan-v1.md` and nothing else — that
+document is still the authority on what each act is and why. If you are about to write a new plan
+instead of taking a step, that is the loop; take the step.
+
+`state: next` is **S4 — culling wave 5: untrack the generated data** (~38,000 lines).
+
+**S8 Half A LANDED — the game moved.** `sigma_leverage.roll_net_continuous` no longer rounds its
+pool, so Jordan's 2026-08-14 fractional-dice ruling is implemented rather than half-implemented. Six
+goldens re-recorded against `tools/balance_oracle.py` (NEW — the n>=100 control
+`engine/tests/test_f7_smoke_oracle.py:8` has demanded since it was written): 120 campaigns per arm,
+no faction shifts significantly, so the goldens moved from RNG divergence and not from balance.
+Combat's byte-exact goldens are the control and did not move.
+
+**S8 Half B SUSPENDED 2026-08-21 by Jordan — flagged for later systems work. Do not wire it.**
+The classification found the board's claim that `score/2` is "wired NOWHERE" to be FALSE: of three
+OPPOSED sites, `coronation_renewal_ob` already implements `floor(L/2)+1`, `tribunal` implements it
+under formal grounds, and only `parliamentary_transfer` contradicts it — with `L+2` stated as canon
+in its own design doc. Reconciling them would overwrite ratified canon and collapse tribunal's
+two-tier resistance mechanic. Classification: `registers/handoffs/HANDOFF_FA.md`. Pinned against
+drift by `tests/valoria/test_faction_obstacle_conventions.py`.
+
+✅ **RESOLVED 2026-08-22 — the tag is no longer load-bearing, so the blocker is gone rather than
+outstanding.** This warning used to read: push `refs/tags/cull-2026-08-21-pre-waves-1-3` before this
+branch merges, because the ledger's FORK rows pointed at `421cff2` and would dangle otherwise. The
+tag push had returned HTTP 403 from this session's credential, so the blocker was real.
+
+It is closed by re-pointing rather than by pushing. All **83** `FORK:` rows in
+`references/restructure_ledger.md` now name **`1e4c6f4`**, which is `origin/main`'s own tip —
+`git merge-base --is-ancestor 1e4c6f4 origin/main` succeeds, so squash, rebase and merge-commit all
+leave every row resolvable. The tag remains a nice-to-have, not a precondition.
+
+⚠ **AND THE HALF THIS WARNING PREVIOUSLY MISSED, now also closed.** Re-pointing the ledger fixed the
+ledger and nothing else: **twenty-eight further citations of `421cff2` were still live on eight
+tracked surfaces** — `CLAUDE.md` §8, `CURRENT.md` ×2, this file, fourteen rows of `tools/README.md`,
+and three *game-design* flow skeletons (`systems/settlements/` ×10, `systems/fieldwork/`,
+`systems/ui/`). `421cff2` is a **branch-local rebase commit** — `git branch --contains` names only
+this branch — so a squash-merge annihilates it and dangles every one of those, which is exactly the
+fabricated-provenance failure PR #288 caused once already.
+
+All twenty-eight are re-pointed to `1e4c6f4`, verified byte-identical at both refs
+(`git rev-parse 421cff2:<path>` == `git rev-parse 1e4c6f4:<path>` for a sample of six) and present
+there. **Zero live citations of `421cff2` remain.** Found by an adversarial read-only pass, not by a
+tool: nothing in the tree distinguishes a squash-mortal ref from a durable one, and that gap is still
+open — the lesson is that re-pointing a ledger is not the same as re-pointing the corpus that cites
+the same ref.
+
+**There is no SessionStart banner.** Wave 3 retired it; `CLAUDE.md` §0.3 records the experiment's
+result. Orient from `CURRENT.md`, this file, and the execution order. Do not build a replacement.
 
 _Cross-cutting items only — lane-owned work lives in `registers/handoffs/HANDOFF_<LANE>.md`.
 Rewritten 2026-08-14 (ED-IN-0189): this section had opened with a blocker resolved 2026-07-30 and

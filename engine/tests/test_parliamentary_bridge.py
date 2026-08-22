@@ -50,7 +50,10 @@ from systems.social_contest.sim.parliamentary_vote import VoteResult
 # The ON/OFF arms still DIVERGE from each other, which is the property this file exists to pin —
 # the spine changes outcomes. Both arms simply moved to new positions under the ruled dice.
 _OFF_WIN_SHARE = {'Crown': 25.0, 'Church': 0.0, 'Hafenmark': 12.5, 'Varfell': 62.5}
-_ON_WIN_SHARE = {'Crown': 25.0, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 50.0}
+# RE-PINNED 2026-08-21, M1 juncture 1: fractional dice pools (ED-IN-0187). `sigma_leverage.roll_net_continuous` no longer rounds its pool, so every sampled value changes and the RNG stream diverges. NOT a balance signal at this n — the control is `tools/balance_oracle.py` at 120 campaigns per arm, where no faction shifts significantly (all |z| < 0.53); see the RE-PINNED block in test_f7_smoke_oracle.py for the table.
+# NOTE _OFF_WIN_SHARE did NOT move: the flag-OFF path does not reach a fractional pool on
+# this batch, which is itself a useful signal about where fractional pools are produced.
+_ON_WIN_SHARE = {'Crown': 50.0, 'Church': 12.5, 'Hafenmark': 0.0, 'Varfell': 37.5}
 # ── GOLDEN RE-RECORD 2026-08-02 (ED-IN-0122) — deliberate, and here is the whole reason ────────
 # `systems/factions/sim/faction_action` gained a SECOND live Key emitter, `scene.battle_concluded`.
 # The KeyLog is append-only, so a new emitter necessarily changes both the count and the content
@@ -76,11 +79,22 @@ _ON_WIN_SHARE = {'Crown': 25.0, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 50.
 #   _ON_KEYLOG_HASH     = '2fd2c2dc1eb7996f738f7dedec185633999d72ebf4304b5289000b9b630174c1'
 #   _ON_SCENES_RESOLVED = 50
 #   _ON_KEYS_EMITTED    = 75
-_ON_KEYLOG_HASH = '9d9b7e80cec85c2effb0ce60a643e6b2a3b0b15a17f1bea1384286138dd4110c'
-_ON_SCENES_RESOLVED = 104
-_ON_KEYS_EMITTED = 155
+# ── RE-PINNED 2026-08-21 — fractional dice pools, AND A NEW KEY TYPE APPEARS ────────────────────
+# `da.public_governance: 1` is now in the composition map, and that is the interesting part of this
+# re-record rather than the shifted counts. `tests/valoria/test_public_governance_transfer_key.py`
+# was written to pin that seed 42 fired the Parliamentary Transfer emitter ZERO times, and said in
+# its own docstring: "If seed 42 ever DOES start transferring, this fails and the golden's
+# composition map needs a da.public_governance row." It fired, it failed, and it named the remedy.
+# That is a guard doing precisely its job, so the row is added rather than the guard relaxed.
+#
+# MECHANISM: fractional pools change every sampled value, so the RNG stream diverges and a transfer
+# motion that previously missed its window now qualifies on this seed. Not a balance change — see
+# the control table in test_f7_smoke_oracle.py (120 campaigns per arm, all |z| < 0.53).
+_ON_KEYLOG_HASH = '3ae923ad90230769809e86f0f089b0d9ca459f05e998e2bc88e43630949c6adb'
+_ON_SCENES_RESOLVED = 110
+_ON_KEYS_EMITTED = 173
 # The composition behind that total — the diagnostic half of the pin.
-_ON_KEYS_BY_TYPE = {'scene.contest_resolved': 79, 'scene.battle_concluded': 76}
+_ON_KEYS_BY_TYPE = {'scene.battle_concluded': 83, 'scene.contest_resolved': 89, 'da.public_governance': 1}
 # 2026-08-14 (ED-IN-0187): contest_resolved 13 -> 79 and battle_concluded 62 -> 76. The
 # contest jump is the larger and has a mechanism worth naming — more faction actions now land
 # in bands that open a scene, and the deleted Mil gate opens more conquests, so both emitters

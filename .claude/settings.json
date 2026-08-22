@@ -37,29 +37,7 @@
         ]
       }
     ],
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python tools/session_status.py"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python tools/session_handoff_reminder.py"
-          },
-          {
-            "type": "command",
-            "command": "python tools/review_core.py --check || true"
-          }
-        ]
-      }
-    ]
+    "SessionStart": [],
+    "Stop": []
   }
 }

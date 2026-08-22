@@ -8,6 +8,53 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
 `designs/provincial/faction_canon_v30.md`, `faction_layer_v30.md`, `faction_behavior_v30.md`,
 `faction_state_authoring_v30.md` (overview: `designs/factions/faction_systems_overview_v30.md`).
 
+## SUSPENDED — the `score/2` obstacle derivation (M1 juncture 1, Half B). Flagged 2026-08-21 by Jordan for later systems work.
+
+**Do not wire `score/2` piecemeal. The classification below is why.**
+
+Jordan ruled 2026-08-14 that *"an obstacle rolled against a character or faction is their
+corresponding score/2 plus whatever specific modifiers exist for them in that instance."* The board
+row for this juncture says that derivation is **"wired NOWHERE"**. That is **FALSE**, measured
+2026-08-21 — and the true state is what makes this a systems question rather than an edit.
+
+### Every obstacle-bearing roll in the FA lane, classified
+
+**OPPOSED — Ob derives from a target faction's score. Three sites, and they DISAGREE:**
+
+| site | derivation | vs the ruling | its own canon |
+|---|---|---|---|
+| `crown_initiative.py:189` `coronation_renewal_ob` | `floor(church.L / 2) + 1` | **already matches** | part10 §3.4 |
+| `tribunal.py:116-122` | `round(accused.L * 0.5)` with formal grounds; `round(accused.L)` without | **half the time** | social_contest_v30 §9 (`L vs target L`) + §7.1 (Resistance halved) |
+| `parliamentary_transfer.py:257` | `holder.L + 2` — FULL score | **contradicts it** | `parliamentary_transfer_v30.md:30` states it as canon |
+
+**UNOPPOSED — no target faction, so the ruling's antecedent does not apply. Leave alone:**
+`faction_action.py:540` Muster (`ob = 1`) · `:562` Govern (`ob = 2`) ·
+`crown_initiative.py:46` `royal_progress_ob` (territory Accord gap) ·
+`council_solmund.py:30` `council_ob` (the CI world clock) ·
+`mass_seizure.py:261` (`10 − PT − infra_mod`, a territory stat).
+
+**NO OBSTACLE AT ALL:** `_try_conquest` — the one unambiguously opposed *action* — does not roll
+against an Ob. It delegates to `resolve_mass_battle`, so the defender's strength enters through the
+battle model. There is nothing here to convert.
+
+### Why this is suspended rather than wired
+
+1. **Wiring it would overwrite ratified canon.** `parliamentary_transfer_v30.md:30` states
+   `Ob = Holder Legitimacy + 2` as a design decision with its own table. Changing it to `L/2 + 2` on
+   a session's own authority overrides a live doc, which is a ruling, not an implementation.
+2. **It would silently destroy a working mechanic.** Tribunal's §7.1 gives formal grounds a
+   *halved* resistance — that halving IS the mechanic. If the base becomes `L/2`, then "halved"
+   either compounds to `L/4` or stops meaning anything. Either way a deliberate two-tier
+   distinction is collapsed by a change that looks like a one-line fix.
+3. **The roster it would read is itself unruled.** The faction stat roster disagrees across five
+   surfaces (ED-FA-0004 open, Q1).
+
+### What the next session should NOT do
+
+Do not "finish Half B" by editing the three sites into agreement. The disagreement is the finding.
+`tests/valoria/test_faction_obstacle_conventions.py` pins all three so none can be quietly changed
+while this is suspended; if a ruling lands, that test is where the new convention gets recorded.
+
 ## Pending
 
 - **Comparative-governance-research docket round 2 (filed + partly executed 2026-07-09; a

@@ -21,7 +21,6 @@ than vanish, and a deleted one must be reported rather than crash the render.
 import importlib.util
 import json
 import os
-import shutil
 import subprocess
 import sys
 
@@ -42,16 +41,22 @@ def _builder():
     return mod
 
 
-def test_atlas_is_current():
-    r = subprocess.run([sys.executable, BUILDER, '--check'],
-                       capture_output=True, text=True, cwd=ROOT)
-    assert r.returncode == 0, (
-        f'engine atlas is stale:\n{r.stdout}\n{r.stderr}\n'
-        'Regenerate with `python tools/build_engine_atlas.py` and commit.')
+# `test_atlas_is_current` stood here and is GONE (culling wave 5, ED-IN-0194, 2026-08-22). The
+# atlas is no longer committed, so "the committed copy is stale" is not a state the tree can be
+# in. That the builder runs and writes its two artifacts is asserted once, for all six builders,
+# in `test_generated_layer.py`; failure mode (1) in the docstring above is therefore retired and
+# (2) and (3) — which are the ones a generator can still commit — are what this file now owns.
 
 
-def test_render_is_deterministic():
-    """Same inputs, same bytes — otherwise `--check` above is a coin flip.
+def test_render_is_deterministic(generated_layer):
+    """Same inputs, same bytes.
+
+    Requests `generated_layer` because "same inputs" is a PRECONDITION here, not a given: `build()`
+    reads `references/{key_graph,execution_trace,execution_map}.json` through an `opt()` helper that
+    substitutes an empty default when a file is absent. Those files are untracked as of culling
+    wave 5, so on a clean checkout an early render can see them missing and a later one see them
+    present — two honest renders of two different input sets, reported here as non-determinism.
+    Depending on the fixture makes them present before the first render.
 
     Digested with sha256, never `hash()`: Python's builtin string hash is itself seed-randomised,
     so a `hash()`-based comparison across seeds can never agree and would fail on a perfectly
@@ -96,37 +101,65 @@ def test_every_subsystem_folder_on_disk_appears():
 def test_an_added_subsystem_surfaces_as_drift(tmp_path):
     """A new folder must APPEAR, flagged as not-yet-declared — not vanish.
 
-    Mutation-verified by construction: this test creates the mutation. It writes a real folder
-    under `systems/`, rebuilds, and asserts the generator both rows it and names it as drift.
-    The folder is removed in a `finally`, so a failure cannot leave the tree dirty.
+    Mutation-verified by construction: this test creates the mutation, then asserts the generator
+    both rows it and names it as drift.
+
+    THE MUTATION IS MADE IN A PRIVATE TREE, NOT IN `systems/` (fixed 2026-08-22 after CI caught it).
+    This test used to `os.makedirs(ROOT/systems/zz_atlas_probe)` — a write to the SHARED working
+    tree — while `test_render_is_deterministic` renders that same tree three times in three
+    subprocesses. Under CI's `-n auto` the two land on different workers, the probe blinks into
+    existence between two renders, and the digests differ. Locally the failure reads
+    `15 subsystems` vs `16 subsystems`; on CI it surfaced one assertion later, where the message
+    blames `PYTHONHASHSEED` — a misdiagnosis by construction, since the renderer was never at fault.
+
+    The retired ED-IN-0172 note in `test_identifier_census.py` records this exact class from the
+    other side: *"this file was careful never to WRITE to the working tree, and then shipped a test
+    that READ the entire working tree while another test wrote to it."* Coordinating the readers is
+    the other available fix; removing the write removes the hazard instead, which is why it is the
+    one taken. `tmp_path` mirrors `systems/` by SYMLINK, so every real subsystem is still measured
+    — no copy, no second tree to drift — and only the probe is genuinely new.
     """
     mod = _builder()
-    new = os.path.join(ROOT, 'systems', 'zz_atlas_probe')
-    # Self-heal our OWN reserved name. A previous run killed mid-test leaves the folder behind,
-    # which then pollutes the generated atlas and fails test_atlas_is_current with a confusing
-    # message about staleness. Only ever removed when it looks like our probe and nothing else —
-    # clobbering a real subsystem folder would be far worse than a confusing failure.
-    if os.path.isdir(new):
-        leftover = sorted(os.listdir(new))
-        assert leftover in ([], ['thing.py'], ['__pycache__', 'thing.py']), (
-            f'{new} exists and is not this test\'s probe ({leftover}) — refusing to remove it')
-        shutil.rmtree(new)
-    os.makedirs(new)
-    try:
-        with open(os.path.join(new, 'thing.py'), 'w', encoding='utf-8') as fh:
-            fh.write('def probe_entry():\n    return 1\n')
-        rows, drift, _ = mod.build_rows()
-        names = {r['subsystem'] for r in rows}
-        assert 'zz_atlas_probe' in names, \
-            'a newly added subsystem folder did not appear in the atlas at all'
-        assert 'zz_atlas_probe' in drift['folders_without_roster_row'], \
-            'a newly added folder was not reported as missing a roster row'
-        row = next(r for r in rows if r['subsystem'] == 'zz_atlas_probe')
-        assert row['declared_in_roster'] is False
-        assert row['coverage']['public'] >= 1, \
-            'the coverage check did not see the new file\'s public callable'
-    finally:
-        shutil.rmtree(new, ignore_errors=True)
+
+    # CHECKED FIRST, so the message is the true one. Mutation-verified 2026-08-22: with a probe
+    # present in the real tree this assertion fires; without it here, `probe.mkdir()` below raises
+    # a bare `FileExistsError` from pathlib (the real dir is already symlinked into the fake tree)
+    # — a real detection wearing a message that points nowhere. Two causes reach this line: a
+    # leftover from the pre-2026-08-22 version of this test, which really did write here and could
+    # be killed mid-run, or someone reintroducing that write.
+    real_probe = os.path.join(ROOT, 'systems', 'zz_atlas_probe')
+    assert not os.path.isdir(real_probe), (
+        f'{os.path.relpath(real_probe, ROOT)} exists in the REAL tree. This test builds its probe '
+        f'in tmp_path precisely so it never does — a probe here is what races '
+        f'test_render_is_deterministic under -n auto. Remove it, and if a test wrote it, stop '
+        f'that write rather than deleting the folder on each run.')
+
+    fake_systems = tmp_path / 'systems'
+    fake_systems.mkdir()
+    for entry in sorted(os.listdir(mod.SYSTEMS)):
+        os.symlink(os.path.join(mod.SYSTEMS, entry), fake_systems / entry)
+    probe = fake_systems / 'zz_atlas_probe'
+    probe.mkdir()
+    (probe / 'thing.py').write_text('def probe_entry():\n    return 1\n', encoding='utf-8')
+
+    # Every `systems/` access in the builder routes through this one module constant, so repointing
+    # it is sufficient — verified by grep at fix time (lines 52, 60, 92, 95, 96, 146, 197-198).
+    # `SCAN_ROOTS` still scans the REAL tree for nomenclature, which is correct: a throwaway probe
+    # must not contribute contract-name occurrences.
+    mod.SYSTEMS = str(fake_systems)
+
+    rows, drift, _ = mod.build_rows()
+    names = {r['subsystem'] for r in rows}
+    assert 'zz_atlas_probe' in names, \
+        'a newly added subsystem folder did not appear in the atlas at all'
+    assert 'zz_atlas_probe' in drift['folders_without_roster_row'], \
+        'a newly added folder was not reported as missing a roster row'
+    row = next(r for r in rows if r['subsystem'] == 'zz_atlas_probe')
+    assert row['declared_in_roster'] is False
+    assert row['coverage']['public'] >= 1, \
+        'the coverage check did not see the new file\'s public callable'
+    assert not os.path.isdir(real_probe), \
+        'this test put its probe in the REAL tree — that is the -n auto race it exists to avoid'
 
 
 def test_missing_input_is_reported_not_silently_absorbed(monkeypatch):
@@ -142,7 +175,7 @@ def test_missing_input_is_reported_not_silently_absorbed(monkeypatch):
         'a missing input file was absorbed silently instead of being reported'
 
 
-def test_json_and_markdown_agree_on_the_roster():
+def test_json_and_markdown_agree_on_the_roster(generated_layer):
     """The two outputs are rendered from one pass; if they disagree, one is stale."""
     assert os.path.isfile(OUT_JSON), 'engine_atlas.json not generated'
     payload = json.load(open(OUT_JSON, encoding='utf-8'))

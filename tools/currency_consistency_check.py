@@ -24,21 +24,29 @@ CHECKS
      under deprecated/skills/ (unless the line itself says it is retired/former).
   5. CURRENT.md head-row existence — every path CURRENT.md names must exist in the tree
      (file or directory).
-  6. HANDOFF.md must carry a "## Next…" heading — session_status.py's banner goes silently
-     blank without one.
+  6. HANDOFF.md must carry a "## Next…" heading. NOTHING RELAYS THAT SECTION AUTOMATICALLY since
+     the SessionStart banner was retired (2026-08-21, ED-IN-0194), which makes this check MORE
+     load-bearing, not less: a missing heading now loses the continuity surface outright rather
+     than blanking a generated view of it.
 
 NOT re-implemented here (one rule, one home): SHA freshness -> tools/freshness_gate.py;
 broken refs in registries/ledger -> tools/broken_dependency_checker.py; naming ->
 tools/ci_naming_check.py. This tool imports broken_dependency_checker's tree walk rather
 than re-deriving it.
 
-WIRING: CI job "currency-consistency" (report-only first — names-drift graduation lane);
-SessionStart banner (tools/session_status.py imports summary_line()); valoria_local.
-Exit 1 on any drift so the blocking flip is a one-line CI change.
+WIRING: CI job `validators-report` (report-only — names-drift graduation lane), and
+tools/valoria_local.py. The docstring said `currency-consistency` and that job name has not existed
+since the 2026-08-01 job collapse; corrected 2026-08-21 against references/ci_checks_registry.yaml,
+which is the single owner of the ci_job field. The other former consumer, tools/session_status.py,
+imported summary_line() and was retired 2026-08-21 (ED-IN-0194).
+
+⚠ THIS CHECKER SIGNALS THROUGH OUTPUT, NOT EXIT CODE. It prints `[CURRENCY DRIFT: n]` and STILL
+EXITS 0. Testing `$?` reads a red gate as green — a trap that has cost this repo real time. Read
+the output.
 
 CLI:
     python tools/currency_consistency_check.py            # full report
-    python tools/currency_consistency_check.py --summary  # one line (banner use)
+    python tools/currency_consistency_check.py --summary  # one line (formerly banner use — retired 2026-08-21)
 """
 import json
 import os
@@ -443,11 +451,23 @@ def check_dead_maintainers(drift):
 
 
 def check_handoff_heading(drift):
+    """HANDOFF.md must carry a '## Next…' heading.
+
+    The REASON changed on 2026-08-21 and the message with it. This used to warn that "the
+    SessionStart banner will be silently blank" — `tools/session_status.py` was retired in culling
+    wave 3 (ED-IN-0194) and there is no banner to blank. The heading still matters, and now matters
+    MORE: with no banner relaying it, this section is read by a human or not at all, so losing the
+    heading loses the continuity surface outright rather than degrading a generated view of it.
+    """
     text = _read('HANDOFF.md')
     if text is None:
-        return  # session_status handles the missing-file case itself
+        drift.append("HANDOFF.md is missing — it is the only continuity surface left since the "
+                     "SessionStart banner was retired (2026-08-21, ED-IN-0194)")
+        return
     if not any(ln.strip().lower().startswith('## next') for ln in text.splitlines()):
-        drift.append("HANDOFF.md has no '## Next…' heading — the SessionStart banner will be silently blank")
+        drift.append("HANDOFF.md has no '## Next…' heading — nothing relays this file automatically "
+                     "any more, so a missing heading loses the continuity surface rather than "
+                     "blanking a banner")
 
 
 def run_checks():
