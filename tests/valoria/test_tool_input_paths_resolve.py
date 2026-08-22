@@ -264,6 +264,19 @@ def test_the_exemption_list_is_still_empty():
     one is a deliberate act that must still point at something real.
     """
     import os as _os
+
+    # THE ASSERTION THE TEST IS NAMED FOR. Its first version contained ONLY the loop below, which
+    # over an empty dict is a no-op — the test passed vacuously and would have passed identically
+    # with the dict repopulated. The docstring above and the comment at the declaration both
+    # claimed the emptiness was checked; neither was true. Caught by an adversarial pass
+    # 2026-08-21, in the commit whose subject was removing exactly this defect class.
+    assert OUTPUT_PATHS == {}, (
+        f'OUTPUT_PATHS is no longer empty: {sorted(OUTPUT_PATHS)}. That is allowed, but it is a '
+        f'deliberate act — an exemption keyed on a module path goes QUIET when its subject is '
+        f'deleted rather than red, which is how the last one survived a cull unnoticed. Update '
+        f'this assertion in the same commit that adds the entry.')
+
+    # And if it is ever repopulated, every entry must still name a module that exists.
     for (module, const), reason in OUTPUT_PATHS.items():
         assert _os.path.exists(_os.path.join(ROOT, 'tools', module)), (
             f'OUTPUT_PATHS exempts {module}:{const} but tools/{module} does not exist — a dead '

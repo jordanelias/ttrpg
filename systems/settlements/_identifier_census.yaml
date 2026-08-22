@@ -195,7 +195,7 @@ identifiers:
     identifier: build_infrastructure
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `build_infrastructure(territory_id, infra_type, world=None)` | `systems/settlements/sim/infrastructure.py:139 build_infrastructure` | `—` (no importer found in `engine/`, `systems/`, `tests/`; `build_infrastructure` (RETIRED 2026-08-21 → `FORK:3be53ef`, culling plan v1 wave 1/3; was tools/sim_harness/adapters/pr119_governance/pr119_integrated_camp'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `build_infrastructure(territory_id, infra_type, world=None)` | `systems/settlements/sim/infrastructure.py:139 build_infrastructure` | `—` (no importer found in `engine/`, `systems/`, `tests/`; `build_infrastructure` (RETIRED 2026-08-21 → `FORK:421cff2`, culling plan v1 wave 1/3; was tools/sim_harness/adapters/pr119_governance/pr119_integrated_camp'
     built_in:
     - py:systems/settlements/sim/infrastructure.py
     disposition: BUILT
@@ -728,7 +728,7 @@ identifiers:
     identifier: infra_type
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `build_infrastructure(territory_id, infra_type, world=None)` | `systems/settlements/sim/infrastructure.py:139 build_infrastructure` | `—` (no importer found in `engine/`, `systems/`, `tests/`; `build_infrastructure` (RETIRED 2026-08-21 → `FORK:3be53ef`, culling plan v1 wave 1/3; was tools/sim_harness/adapters/pr119_governance/pr119_integrated_camp'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `build_infrastructure(territory_id, infra_type, world=None)` | `systems/settlements/sim/infrastructure.py:139 build_infrastructure` | `—` (no importer found in `engine/`, `systems/`, `tests/`; `build_infrastructure` (RETIRED 2026-08-21 → `FORK:421cff2`, culling plan v1 wave 1/3; was tools/sim_harness/adapters/pr119_governance/pr119_integrated_camp'
     built_in:
     - py:systems/settlements/sim/infrastructure.py
     disposition: BUILT
@@ -941,7 +941,7 @@ identifiers:
     identifier: new_governor
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `succeed_governor(sid, new_governor, world=None, season=0)` | `systems/settlements/sim/registry.py:198 succeed_governor` | `—` (no production caller; `succeed_governor` (RETIRED 2026-08-21 → `FORK:3be53ef`, culling plan v1 wave 1/3; was tools/sim_harness/adapters/pr119_governance/pr119_promote_ready_oversight.py:84) only)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `succeed_governor(sid, new_governor, world=None, season=0)` | `systems/settlements/sim/registry.py:198 succeed_governor` | `—` (no production caller; `succeed_governor` (RETIRED 2026-08-21 → `FORK:421cff2`, culling plan v1 wave 1/3; was tools/sim_harness/adapters/pr119_governance/pr119_promote_ready_oversight.py:84) only)'
     built_in:
     - py:systems/settlements/sim/registry.py
     disposition: BUILT
@@ -1114,7 +1114,7 @@ identifiers:
     identifier: pr119_governance
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `register_settlement(s, world=None)` | `systems/settlements/sim/registry.py:171 register_settlement` | `systems/settlements/sim/registry.py:264 register_settlement` (only production call, from inside `populate_from_geography` itself); `register_settlement` (RETIRED 2026-08-21 → `FORK:3be53ef`, culling plan v1 wave 1/3; was tools/sim_harness/adapte'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `register_settlement(s, world=None)` | `systems/settlements/sim/registry.py:171 register_settlement` | `systems/settlements/sim/registry.py:264 register_settlement` (only production call, from inside `populate_from_geography` itself); `register_settlement` (RETIRED 2026-08-21 → `FORK:421cff2`, culling plan v1 wave 1/3; was tools/sim_harness/adapte'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -1123,7 +1123,7 @@ identifiers:
     identifier: pr119_integrated_campaign
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `register_settlement(s, world=None)` | `systems/settlements/sim/registry.py:171 register_settlement` | `systems/settlements/sim/registry.py:264 register_settlement` (only production call, from inside `populate_from_geography` itself); `register_settlement` (RETIRED 2026-08-21 → `FORK:3be53ef`, culling plan v1 wave 1/3; was tools/sim_harness/adapte'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `register_settlement(s, world=None)` | `systems/settlements/sim/registry.py:171 register_settlement` | `systems/settlements/sim/registry.py:264 register_settlement` (only production call, from inside `populate_from_geography` itself); `register_settlement` (RETIRED 2026-08-21 → `FORK:421cff2`, culling plan v1 wave 1/3; was tools/sim_harness/adapte'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -1132,7 +1132,7 @@ identifiers:
     identifier: pr119_promote_ready_oversight
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `succeed_governor(sid, new_governor, world=None, season=0)` | `systems/settlements/sim/registry.py:198 succeed_governor` | `—` (no production caller; `succeed_governor` (RETIRED 2026-08-21 → `FORK:3be53ef`, culling plan v1 wave 1/3; was tools/sim_harness/adapters/pr119_governance/pr119_promote_ready_oversight.py:84) only)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `succeed_governor(sid, new_governor, world=None, season=0)` | `systems/settlements/sim/registry.py:198 succeed_governor` | `—` (no production caller; `succeed_governor` (RETIRED 2026-08-21 → `FORK:421cff2`, culling plan v1 wave 1/3; was tools/sim_harness/adapters/pr119_governance/pr119_promote_ready_oversight.py:84) only)'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -1141,7 +1141,7 @@ identifiers:
     identifier: pr119_subnational_factions
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `build_infrastructure(territory_id, infra_type, world=None)` | `systems/settlements/sim/infrastructure.py:139 build_infrastructure` | `—` (no importer found in `engine/`, `systems/`, `tests/`; `build_infrastructure` (RETIRED 2026-08-21 → `FORK:3be53ef`, culling plan v1 wave 1/3; was tools/sim_harness/adapters/pr119_governance/pr119_integrated_camp'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `build_infrastructure(territory_id, infra_type, world=None)` | `systems/settlements/sim/infrastructure.py:139 build_infrastructure` | `—` (no importer found in `engine/`, `systems/`, `tests/`; `build_infrastructure` (RETIRED 2026-08-21 → `FORK:421cff2`, culling plan v1 wave 1/3; was tools/sim_harness/adapters/pr119_governance/pr119_integrated_camp'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -1334,7 +1334,7 @@ identifiers:
     identifier: register_settlement
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `register_settlement(s, world=None)` | `systems/settlements/sim/registry.py:171 register_settlement` | `systems/settlements/sim/registry.py:264 register_settlement` (only production call, from inside `populate_from_geography` itself); `register_settlement` (RETIRED 2026-08-21 → `FORK:3be53ef`, culling plan v1 wave 1/3; was tools/sim_harness/adapte'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `register_settlement(s, world=None)` | `systems/settlements/sim/registry.py:171 register_settlement` | `systems/settlements/sim/registry.py:264 register_settlement` (only production call, from inside `populate_from_geography` itself); `register_settlement` (RETIRED 2026-08-21 → `FORK:421cff2`, culling plan v1 wave 1/3; was tools/sim_harness/adapte'
     built_in:
     - py:systems/settlements/sim/registry.py
     disposition: BUILT
@@ -1706,7 +1706,7 @@ identifiers:
     identifier: succeed_governor
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `succeed_governor(sid, new_governor, world=None, season=0)` | `systems/settlements/sim/registry.py:198 succeed_governor` | `—` (no production caller; `succeed_governor` (RETIRED 2026-08-21 → `FORK:3be53ef`, culling plan v1 wave 1/3; was tools/sim_harness/adapters/pr119_governance/pr119_promote_ready_oversight.py:84) only)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `succeed_governor(sid, new_governor, world=None, season=0)` | `systems/settlements/sim/registry.py:198 succeed_governor` | `—` (no production caller; `succeed_governor` (RETIRED 2026-08-21 → `FORK:421cff2`, culling plan v1 wave 1/3; was tools/sim_harness/adapters/pr119_governance/pr119_promote_ready_oversight.py:84) only)'
     built_in:
     - py:systems/settlements/sim/registry.py
     disposition: BUILT
@@ -1820,7 +1820,7 @@ identifiers:
     identifier: territory_id
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `build_infrastructure(territory_id, infra_type, world=None)` | `systems/settlements/sim/infrastructure.py:139 build_infrastructure` | `—` (no importer found in `engine/`, `systems/`, `tests/`; `build_infrastructure` (RETIRED 2026-08-21 → `FORK:3be53ef`, culling plan v1 wave 1/3; was tools/sim_harness/adapters/pr119_governance/pr119_integrated_camp'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `build_infrastructure(territory_id, infra_type, world=None)` | `systems/settlements/sim/infrastructure.py:139 build_infrastructure` | `—` (no importer found in `engine/`, `systems/`, `tests/`; `build_infrastructure` (RETIRED 2026-08-21 → `FORK:421cff2`, culling plan v1 wave 1/3; was tools/sim_harness/adapters/pr119_governance/pr119_integrated_camp'
     built_in:
     - py:systems/factions/sim/faction_action.py
     - py:systems/factions/sim/mass_seizure.py

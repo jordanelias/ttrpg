@@ -67,21 +67,17 @@ def main(argv):
         ('currency_consistency_check.py', [],        False),  # report-only recency gate (ED-1087)
         ('wiring_map_check.py',          ['--check'], False),  # report-only wiring-manifest tag/coverage gate (ED-IN-0074)
         ('ci_claim_provenance_check.py', [mode_flag], True),   # a MEASURED ledger claim must name a re-runnable instrument (ED-PC-0040; blocking)
-        # ED-IN-0087: the .claude/wf_*.js run-discipline prelude has one owner (tools/wf_harness.js)
-        # and is COPIED into each script, because workflow scripts run in a sandbox with no imports.
-        # A copied rule rots, so this is the guard. Blocking: an out-of-date copy is not a style
-        # nit — it silently changes what a 40-agent audit does, and `--fix` makes it a one-liner.
-        # REPORT-ONLY LOCALLY, BLOCKING IN CI (ED-IN-0088). Both were blocking here for about an hour
-        # and that was the wrong call: neither guards a canon invariant, both scan the WHOLE .claude/
-        # tree rather than the changeset, and a half-edited workflow script would therefore block an
-        # unrelated commit. CI is the unbypassable boundary (CLAUDE.md §8) and still fails on either,
-        # so nothing is weakened — what changes is that a local commit is never held hostage by a
-        # file the author is still writing. Same posture as freshness_gate below.
-        # ED-IN-0103: the workplans pointer convention (Jordan, 2026-07-29 — every plan is reachable
-        # from workplans/). Guards the DETERMINISTIC half only: fields present, lane real, no duplicate
-        # targets, every target resolves on disk. It deliberately does NOT check "every live plan has a
-        # pointer" — liveness was measured un-inferable, so a guessing guard would be wrong in both
-        # directions. Report-only on the names-drift graduation lane while the convention beds in.
+        # RETIRED culling wave 2/3 (ED-IN-0194, 2026-08-21). Two rationale blocks stood here and
+        # both argued the posture of gates that no longer exist: `ci_wf_harness_check` /
+        # `ci_claude_workflow_paths` (report-only here, blocking in CI, guarding the `.claude/wf_*.js`
+        # prelude copied from `tools/wf_harness.js`), and `ci_workplan_pointer_check` (ED-IN-0103,
+        # the workplans pointer convention). Subject and guard went together.
+        #
+        # ONE THING IN THEM IS STILL TRUE AND IS KEPT: ED-IN-0103 measured plan LIVENESS to be
+        # un-inferable — a `## Status:` heading is a signal in neither direction — so nothing here
+        # ever checked "every live plan has a pointer", and deleting the guard does not answer that
+        # question. It remains open, and it is the reason the pointer files were retired rather
+        # than repaired.
         # ED-PC-0040: freshness was CI-only, so five consecutive local-green commits shipped a stale
         # canonical_sha__ pin (ED-PC-0035 edited references/module_contracts.yaml without refreshing it) and it
         # only surfaced when a PR finally ran the integrity job. Report-only here — CI stays the blocking
@@ -110,8 +106,11 @@ def main(argv):
         # list did not run it"); ED-PC-0040 fixed it for `freshness_gate` ("five consecutive
         # local-green commits shipped a stale canonical_sha__ pin"). Each was fixed as an
         # incident. MEASURED here instead: 18 CI validator invocations against this list left
-        # exactly these four unrun, and `tests/valoria/test_gate_coverage.py` now fails on a
-        # fifth (§0.1 point 5 — the guard is the deliverable, not the wiring).
+        # exactly these four unrun. ⚠ THE RECURRENCE GUARD IS GONE: this read "and
+        # `tests/valoria/test_gate_coverage.py` now fails on a fifth", and that test was retired
+        # 2026-08-21 (ED-IN-0194). A pattern with THREE recorded instances now has no guard, and
+        # nothing detects a fifth CI-only validator. Recorded rather than dropped silently; the
+        # mitigation is the note in valoria-ci.yml — add a validator to BOTH lists in one commit.
         #
         # `compliance_check.py` stays deliberately absent and is NOT part of this residual —
         # ci_checks_registry.yaml:262 records that call ("local-green != compliance-green").
@@ -128,7 +127,8 @@ def main(argv):
         # Report-only and it REDS ON DAY ONE by design — 14 known bypasses are the finding, not a
         # regression, and blocking on them would refuse unrelated commits for a pre-existing
         # condition (ED-IN-0112 paid for that once). The tight assertion lives in
-        # tests/valoria/test_single_owner_check.py, which fails when the count GROWS.
+        # tests/valoria/test_single_owner_check.py — RETIRED 2026-08-21 with single_owner_check.py
+        # itself (ED-IN-0194), so the count-GROWS check is gone too.
     ]
 
     # Force UTF-8 in child validators so their output never crashes on the

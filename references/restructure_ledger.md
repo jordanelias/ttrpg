@@ -1180,10 +1180,17 @@ a TERMINAL status, distinct from a broken reference: a path with no row here sti
 dependency gate.
 
 ⚠️ THE REF MUST BE REACHABLE FROM `main`, and the first version of these rows was not. They named
-`c451bcb`, the pre-deletion commit on the working BRANCH — but PR #288 was SQUASH-merged, so that
-object exists only in a local clone and `git cat-file` fails for everyone else. The corrected ref
-is `c451bcb`: main's own commit immediately before the evacuation landed, which is an ancestor of
-`main` and contains every evacuated file. Caught by
+the pre-deletion commit on the working BRANCH — but PR #288 was SQUASH-merged, so that object
+exists only in a local clone and `git cat-file` fails for everyone else. The corrected ref is
+`c451bcb`: main's own commit immediately before the evacuation landed, which is an ancestor of
+`main` and contains every evacuated file.
+
+*(The original branch SHA is not recoverable from this paragraph: a later edit replaced BOTH
+occurrences, so it read "They named `c451bcb` … The corrected ref is `c451bcb`" — the wrong ref
+and the corrected ref as the same string, which makes the lesson unreadable. Repaired 2026-08-21
+after an adversarial pass flagged it; the specific SHA is gone but the principle is the point, and
+this paragraph is cited as precedent by `tests/valoria/test_forked_status.py` and by the culling
+block below.)* Caught by
 `tests/valoria/test_forked_status.py::test_the_fork_rows_name_a_real_ref` on the first CI run — a
 provenance pointer nobody can follow is not provenance, which is exactly what that control says. That distinction is the anti-fabrication property, and
 `tests/valoria/test_forked_status.py` plants both cases to keep it.
@@ -1475,7 +1482,22 @@ adversarial review survives the wave written to end it.
 | `tools/ci_supersession_check.py` | `FORK:421cff2` | FORKED |
 | `tools/ci_program_claim_check.py` | `FORK:421cff2` | FORKED |
 | `tools/ci_workplan_pointer_check.py` | `FORK:421cff2` | FORKED |
-| `workplans/POINTER_*.md` | `FORK:421cff2` | FORKED |
+<!-- The 11 pointer files are listed INDIVIDUALLY, not as `workplans/POINTER_*.md`. A glob row
+     cannot be verified: `git cat-file -e <ref>:workplans/POINTER_*.md` does no shell expansion
+     and there is no literal file of that name, so the row was unfollowable BY CONSTRUCTION and
+     sat inside a block this session claimed it had verified row-by-row. Caught by an
+     adversarial pass 2026-08-21. Every row below was checked with that exact command. -->
+| `workplans/POINTER_2026-07-17_character_decision_L1_L2.md` | `FORK:421cff2` | FORKED |
+| `workplans/POINTER_2026-07-17_character_decision_program.md` | `FORK:421cff2` | FORKED |
+| `workplans/POINTER_2026-07-22_mass_battle_full_implementation.md` | `FORK:421cff2` | FORKED |
+| `workplans/POINTER_2026-07-26_combat_execution.md` | `FORK:421cff2` | FORKED |
+| `workplans/POINTER_2026-07-26_combat_remediation.md` | `FORK:421cff2` | FORKED |
+| `workplans/POINTER_2026-07-26_mass_battle_execution.md` | `FORK:421cff2` | FORKED |
+| `workplans/POINTER_2026-07-29_centralization_single_owner.md` | `FORK:421cff2` | FORKED |
+| `workplans/POINTER_2026-07-29_code_shape_execution_ledger.md` | `FORK:421cff2` | FORKED |
+| `workplans/POINTER_2026-07-29_code_shape_open_items.md` | `FORK:421cff2` | FORKED |
+| `workplans/POINTER_2026-07-31_m1_program_scaffolding.md` | `FORK:421cff2` | FORKED |
+| `workplans/POINTER_2026-08-19_return_to_game.md` | `FORK:421cff2` | FORKED |
 | `tools/editorial_review/` | `FORK:421cff2` | FORKED |
 | `tools/model_router.html` | `FORK:421cff2` | FORKED |
 | `tools/valoria_rename.py` | `FORK:421cff2` | FORKED |

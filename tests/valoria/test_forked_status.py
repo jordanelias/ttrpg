@@ -103,15 +103,26 @@ def test_the_evacuated_content_is_actually_at_the_ref():
         if r.returncode != 0:
             unresolvable.append(f'{old} -> {ref}')
 
-    # THE CEILING. Measured 2026-08-21: 79 of 232 rows unfollowable, all of them pre-existing
-    # `designs/`-era rows. Every row added since is verified reachable before it is written.
-    UNRESOLVABLE_CEILING = 79
+    # THE CEILING. Re-measured 2026-08-21 after an adversarial pass falsified the first figure's
+    # PROVENANCE (not its arithmetic): it said "79 of 232, all of them pre-existing `designs/`-era
+    # rows", and the ledger holds only 77 `designs/` rows — so at least two were something else,
+    # and the sentence "every row added since is verified reachable" was false because one of them
+    # was `workplans/POINTER_*.md`, a GLOB row this session had added. A glob cannot be verified by
+    # `git cat-file -e <ref>:<path>` — no shell expansion — so it was unfollowable by construction
+    # inside a block claimed as row-by-row verified. Replaced with its 11 real filenames.
+    #
+    # TRUE COMPOSITION, measured with the same command this test uses: 78 of 242 unfollowable —
+    # 77 pre-existing `designs/`-era rows, plus `references/values_master.yaml -> c451bcb`, which
+    # is also inherited (that file moved to `deprecated/references/` on 2026-08-02, three days
+    # before `c451bcb` was cut). ZERO come from this session: all 86 of its rows resolve.
+    UNRESOLVABLE_CEILING = 78
 
     assert len(unresolvable) <= UNRESOLVABLE_CEILING, (
         f'FORK rows that cannot be followed ROSE {UNRESOLVABLE_CEILING} -> {len(unresolvable)}. '
         f'A provenance pointer nobody can follow is not provenance — it is worse than a DEAD row, '
-        f'because it reads as resolved. New offenders:\n  ' + '\n  '.join(
-            r for r in unresolvable if r not in ()) [:1200] + '\n'
+        f'because it reads as resolved. All offenders (the {UNRESOLVABLE_CEILING} inherited ones '
+        f'plus whatever this change added — the new one is the row you just touched):\n  '
+        + '\n  '.join(unresolvable)[:1200] + '\n'
         f'Verify a row with `git cat-file -e <ref>:<path>` BEFORE writing it. If you are recording '
         f'a deletion, the content is at the PARENT of the deleting commit, not at it.')
 

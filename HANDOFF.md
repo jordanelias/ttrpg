@@ -74,8 +74,8 @@ classification and may end as a question rather than an edit.
 
 ⚠ **BEFORE THIS BRANCH MERGES:** `git push origin refs/tags/cull-2026-08-21-pre-waves-1-3`. The tag
 exists locally and covers all three culling waves; pushing it returned **HTTP 403** from this
-session's credential. Until it is on `origin`, the 76 `FORK:421cff2` provenance rows in
-`references/restructure_ledger.md` are correct only while this branch exists.
+session's credential. Until it is on `origin`, the 83 `FORK:421cff2` provenance rows in
+`references/restructure_ledger.md` are correct only while this branch exists. (The block holds 86 rows in all; the other 3 name refs already on `main`.)
 
 **There is no SessionStart banner.** Wave 3 retired it; `CLAUDE.md` §0.3 records the experiment's
 result. Orient from `CURRENT.md`, this file, and the execution order. Do not build a replacement.

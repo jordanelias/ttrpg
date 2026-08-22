@@ -609,7 +609,7 @@ re-implement a rule.** Known violations of this invariant (treat as bugs, don't 
 - **Observability apparatus — RETIRED 2026-08-21 (culling waves 1-2, ED-IN-0194).** This bullet used
   to describe `tools/observability/obs_core.py` as "the single owner" of five primitives, with
   `build_proposals.py`, `build_apparatus_registry.py` and the rest as live generators. The whole tier
-  is gone, at `FORK:3be53ef`. Two things survive it and are the live statement now: the dependency-free
+  is gone, at `FORK:421cff2`. Two things survive it and are the live statement now: the dependency-free
   primitives (repo root, the 9-code lane roster **including GO**, token estimate, id regexes) are owned
   by **`tools/ci_common.py`**, and `ci_common` no longer forwards anything to another module — the lazy
   `obs_core` re-exports were deleted with it, because they imported cleanly and would have raised at

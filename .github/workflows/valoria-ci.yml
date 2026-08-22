@@ -288,8 +288,17 @@ jobs:
       - uses: actions/checkout@v4
         with:
           # FULL HISTORY REQUIRED (ED-IN-0123, 2026-08-03). Not a convenience.
-          # tests/valoria/test_retired_tree_apparatus.py exercises
-          # currency_consistency_check.check_current_stamp in BOTH directions: an
+          #
+          # ⚠ THE STATED REASON MOVED 2026-08-21 (ED-IN-0194). It named
+          # tests/valoria/test_retired_tree_apparatus.py, which culling wave 3 retired — so the
+          # justification pointed at a file that does not exist, and someone tidying that comment
+          # could have dropped the setting with it. The LIVE reason is stronger:
+          # tests/valoria/test_forked_status.py runs `git cat-file -e <ref>:<path>` against 242
+          # restructure-ledger FORK rows. At the default depth-1 those refs are unreachable and all
+          # 242 read as unfollowable at once. DO NOT LOWER THIS.
+          #
+          # The original reason also still holds, via the surviving half of that test's subject:
+          # currency_consistency_check.check_current_stamp in BOTH directions — an
           # apparatus-only change must not trip the stamp, and a canonical head moving
           # must. It stubs the date source, so it needs no real dates -- but the check's
           # depth guard reads the actual commit count, and under the default depth-1

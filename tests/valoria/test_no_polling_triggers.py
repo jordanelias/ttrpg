@@ -18,7 +18,10 @@ NOTE on scope: no test can observe a *hosted* session actually calling the tool.
 testable is that the deny-list and the doctrine are present and cover every primitive we
 know of. If a session ever schedules a wake-up while these pass, the guard is not wrong
 about its artifacts — it is incomplete about the roster, and the new primitive belongs in
-REQUIRED_DENY here and in tools/ci_hooks_verifier.py (which owns the CI-side copy).
+REQUIRED_DENY here. (This used to add "and in tools/ci_hooks_verifier.py, which owns the CI-side
+copy" — that tool was retired 2026-08-21 (ED-IN-0194) after this file was verified INDEPENDENT of
+it, so THIS FILE IS NOW THE SOLE OWNER of the roster. An instruction to also edit a deleted file is
+how a next session concludes the guard is broken.)
 """
 import json
 import os

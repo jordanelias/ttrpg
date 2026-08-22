@@ -206,7 +206,7 @@ either §0.1 guard. Do not write a replacement banner.
 
 ---
 
-### S4 — Wave 5: untrack the generated data · `state: after S8`
+### S4 — Wave 5: untrack the generated data · `state: blocked-by S8`
 
 **Goal:** no read/write failures from generated artifacts; end the document tax.
 
@@ -422,7 +422,7 @@ script over the pure-logic classes.
 
 - **It does not add a step for the review that produced it.** No `test_plan_compliance`, no progress
   register for the steps, no findings document. §0.1 pt 5 forbids the first two and §0 forbids the
-  third. The `state:` fields in §2 are the whole bookkeeping surface and they are edited in place.
+  third. The `state:` fields in §3 are the whole bookkeeping surface and they are edited in place.
 - **It does not re-litigate the diagnosis.** `proposals/2026-08-18-breaking-the-recursion.md` is
   still the causal account and the amendments in `CLAUDE.md` §0/§0.1/§0.2/§0.3 are live doctrine.
   The review behind this document confirmed the mechanism and disputed only whether the fix had

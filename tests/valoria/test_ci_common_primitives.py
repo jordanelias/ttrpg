@@ -708,7 +708,7 @@ def test_every_lane_display_map_is_total_over_the_owner():
     # ran. A new divergent copy fails; a retired one simply stops being found, with no edit here.
     import re as _re
     LANE_MAP_DECL = _re.compile(r'^\s*LANE_NAMES\s*[:=]', _re.M)
-    others = []
+    others, skipped = [], []
     for base in ('tools', 'skills'):
         for dirpath, _dirs, names in os.walk(os.path.join(ROOT, base)):
             if '__pycache__' in dirpath:
@@ -724,10 +724,17 @@ def test_every_lane_display_map_is_total_over_the_owner():
                 except OSError:
                     continue
                 if LANE_MAP_DECL.search(src):
-                    ns = {}
+                    # `__name__` MUST be set. Without it, any module carrying an
+                    # `if __name__ == '__main__':` guard raises NameError, hits the handler below,
+                    # and is SILENTLY SKIPPED — so the discovery could not distinguish "no lane
+                    # maps exist" from "every lane map failed to exec". Caught by an adversarial
+                    # pass 2026-08-21. BaseException is caught too, because a module that calls
+                    # sys.exit() at import would otherwise kill the pytest worker.
+                    ns = {'__name__': '_lane_map_probe', '__file__': full}
                     try:
                         exec(compile(src, full, 'exec'), ns)   # noqa: S102 — reading our own tree
-                    except Exception:
+                    except BaseException:                      # noqa: BLE001 — see above
+                        skipped.append(os.path.relpath(full, ROOT))
                         continue
                     if isinstance(ns.get('LANE_NAMES'), dict):
                         others.append((os.path.relpath(full, ROOT), ns['LANE_NAMES']))
@@ -741,11 +748,21 @@ def test_every_lane_display_map_is_total_over_the_owner():
             f'extra {set(mapping) - set(ci_common.LANE_CODES)}')
         assert all(v for v in mapping.values()), f'{label} has an empty display name'
 
-    # THE ASSERTION THAT THE LOOP RAN (§0.1 pt 2). Today `checked` is legitimately 0 — every
-    # downstream copy was retired and `ci_common.LANE_CODES` is the only enumeration left, which is
-    # the end state this test was pushing toward. That is asserted DIRECTLY, so "0 copies" is a
-    # verified fact rather than an empty loop silently passing.
-    assert checked == len(others), 'the discovery loop did not visit every map it found'
+    # §0.1 pt 2, PROPERLY THIS TIME. The first rewrite asserted `checked == len(others)`, which is
+    # TRUE BY CONSTRUCTION — `checked` increments once per element and the loop cannot break early,
+    # so it asserted nothing. That is the same defect the rewrite was written to remove,
+    # reintroduced two lines below the paragraph naming it; caught by an adversarial pass.
+    #
+    # The honest assertions are the two below: the roster is EMPTY (a fact about the tree, not
+    # about the loop), and nothing was silently skipped on the way to concluding that.
+    assert others == [], (
+        f'lane display map(s) found: {[n for n, _ in others]}. That is not forbidden, but each is '
+        f'a second enumeration of WHICH LANES EXIST and the loop above checked it against '
+        f'ci_common.LANE_CODES — read the failure there, not here.')
+    assert not skipped, (
+        f'{len(skipped)} file(s) declared a lane map and could not be executed: {skipped}. The '
+        f'discovery cannot tell "no lane maps" from "every lane map failed to load", so a skip '
+        f'makes the emptiness above unverifiable rather than true.')
     assert len(ci_common.LANE_CODES) == 9, 'the owner roster changed — update the lane docs with it'
     for retired in ('tools/observability/build_decisions.py', 'tools/dashboard_data.py'):
         assert not os.path.exists(os.path.join(ROOT, retired)), (

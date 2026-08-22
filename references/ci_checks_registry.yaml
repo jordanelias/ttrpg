@@ -291,6 +291,24 @@ ci_checks:
   # debt on the ledgers, not apparatus debt, so if they are to be watched again the instrument
   # should be a ledger-subject one, not a five-ceiling repository ratchet.
 
+  - path: tools/balance_oracle.py
+    level: 5
+    role: >-
+      The n>=100 CONTROLLED balance comparison. Runs the same seeds twice in one process with a
+      mechanic patched to its old and new behaviour, and reports a per-faction win-share delta with
+      a two-proportion z. It is the control CLAUDE.md 0.1 pt 4 requires before re-recording a
+      seeded golden.
+    ci_job: ""
+    notes: >-
+      DELIBERATELY NOT WIRED INTO CI, and that is not an oversight. 240 campaigns take ~13 minutes;
+      a gate that slow gets skipped, which is worse than a tool that gets run. Added 2026-08-21
+      (ED-IN-0194 / M1 juncture 1) to close the gap engine/tests/test_f7_smoke_oracle.py:8 has
+      asked for since it was written and CLAUDE.md 7 records twice: the seeded goldens run at n=2
+      and n=8, where one campaign flip is 50pp and 12.5pp, so they cannot tell a balance regression
+      from noise -- and nothing verified that a golden regeneration was intended. First use
+      measured fractional dice pools as NOT moving balance (all |z| < 0.53 at n=120 per arm), which
+      is what the six golden re-records of 2026-08-21 rest on.
+
   - path: tools/m1_acceptance.py
     level: 5
     role: >-
