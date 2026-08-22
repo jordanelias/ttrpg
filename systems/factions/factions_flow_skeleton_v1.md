@@ -14,12 +14,12 @@
 | Callable | Anchor | Called-by |
 |---|---|---|
 | `faction_take_action(faction, world, rng)` | `systems/factions/sim/faction_action.py:197 faction_take_action` | `engine/mc_v18.py:138 composition.require` (inside `_faction_actions_callback`; resolved by ROLE `faction_action` since 2026-08-20, plan Act C3 seam 2 — the driver no longer imports the subsystem) |
-| `Faction.reset_arc()` | `engine/autoload/game_state.py:180 reset_arc` | `engine/autoload/season_manager.py:39 reset_arc` |
-| `Faction.reset_seasonal()` | `engine/autoload/game_state.py:176 reset_seasonal` | `engine/autoload/season_manager.py:42 reset_seasonal` |
+| `Faction.reset_arc()` | `engine/autoload/game_state.py:184 reset_arc` | `engine/autoload/season_manager.py:39 reset_arc` |
+| `Faction.reset_seasonal()` | `engine/autoload/game_state.py:180 reset_seasonal` | `engine/autoload/season_manager.py:42 reset_seasonal` |
 | `run_parliamentary_scene(world, rng)` | `engine/cross_scale/parliamentary_bridge.py:150 run_parliamentary_scene` | `engine/mc_v18.py:158 run_parliamentary_scene` (gated on `world.echo_scheduler`) |
 | `propose_transfer(initiator, target_territory, mode, world, ...)` | `systems/factions/sim/parliamentary_transfer.py:246 propose_transfer` | `engine/cross_scale/parliamentary_bridge.py:142-143 _run_transfer_motion` (by role `territory_transfer_proposal`) |
 | `propose_censure(proposer, world, rng)` | `systems/factions/sim/parliamentary_action.py:96 propose_censure` | `systems/factions/sim/faction_action.py:276 propose_censure` |
-| `TreatyRecord.from_dict(...)` | `systems/factions/sim/treaty.py:76-82 from_dict` (dataclass, module-level) | `engine/autoload/game_state.py:451 TreatyRecord` (`restore_world`, deserialization only) |
+| `TreatyRecord.from_dict(...)` | `systems/factions/sim/treaty.py:76-82 from_dict` (dataclass, module-level) | `engine/autoload/game_state.py:261 TreatyRecord` (`restore_world`, deserialization only) |
 | `attempt_charter(world)` | `systems/factions/sim/charter_liberties.py:27 attempt_charter` | — (stub; only `engine/tests/test_pipeline_reach.py:778`) |
 | `apply_hafenmark_equipment(faction_state)` | `systems/factions/sim/hafenmark_equipment.py:30 apply_hafenmark_equipment` | — (stub; only `engine/tests/test_pipeline_reach.py:783`) |
 | `t9_invasion_modifier(world)` | `systems/factions/sim/home_sanctuary.py:29 t9_invasion_modifier` | — (stub; only `engine/tests/test_pipeline_reach.py:780`) |
@@ -148,10 +148,10 @@
 | `world.clocks['CI']` | RW | `engine/autoload/game_state.py` (field), `systems/overview/sim/ci_track.py` (writer) | `systems/factions/sim/excommunication.py:166-167 apply_ci_delta` |
 | `world.battle_count` | W | `engine/autoload/game_state.py` | `systems/factions/sim/faction_action.py:515 battle_count` |
 | `world.arc` | R | `engine/autoload/game_state.py` | `systems/factions/sim/parliamentary_transfer.py:289 world.arc` |
-| `world.treaties` | RW (declared; live writers are all unreached production paths) | `engine/autoload/game_state.py` | `engine/autoload/game_state.py:257 treaties` |
+| `world.treaties` | RW (declared; live writers are all unreached production paths) | `engine/autoload/game_state.py` | `engine/autoload/game_state.py:261 treaties` |
 | `world._battle_key_seq`, `world._parl_key_seq` | RW (dynamic attrs) | none (ad hoc counters) | `systems/factions/sim/faction_action.py:374-375 _battle_key_seq` |
 | `world.casus_belli` | RW (optional, duck-typed; not a dataclass field) | none — see §7 | `systems/factions/sim/parliamentary_transfer.py:117 casus_belli` |
-| `Faction.consul_used` | W | `engine/autoload/game_state.py` | `engine/autoload/game_state.py:178 consul_used` |
+| `Faction.consul_used` | W | `engine/autoload/game_state.py` | `engine/autoload/game_state.py:118 consul_used` |
 
 ## 6. Seams
 

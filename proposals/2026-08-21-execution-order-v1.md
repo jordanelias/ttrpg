@@ -26,15 +26,18 @@ requires a human decision; this document's decision requests are §4, addressed 
 | S2 culling waves 1+2 | **done** 2026-08-21 | apparatus removal | — |
 | S3 wave 3 + green the suite | **done** 2026-08-21 | apparatus removal | — |
 | S4 wave 5, untrack the generated layer | **done** 2026-08-22 `f84692c` | apparatus removal | — |
-| **S5 contracts-as-registration** | **NEXT** | **the engine** | **L0** |
-| S6 wave 6 + FORK semantics + ledger cap | blocked-by S5 | apparatus + provenance | — |
+| S5 contracts-as-registration | **5a/5b/5d/5e done** 2026-08-22; **5c open** | **the engine** | **L0** |
+| **S6 wave 6 + FORK semantics + ledger cap** | **NEXT** (5c may be taken first — see S5) | apparatus + provenance | — |
 | S7 wave 4's residue: extraction | blocked-by S6 | audit corpus | — |
 | S8 M1 juncture 1 | half-done; **Half B SUSPENDED** by Jordan | **the engine** | **L0** |
 | S9 cross-repo residue | blocked-by attaching `jordanelias/valoria-game` | port | — |
 | S10 errors become numbers | **unblocked**, not gating | **the engine** | **L0** |
 
-**Take S5.** It is the first step in the rail whose subject is the game rather than the apparatus,
-and the whole cull existed to get here. S10 is unblocked and may be taken if Jordan directs it, but
+**S5 is four-fifths done (2026-08-22).** `engine/` no longer names `systems/` by import at all,
+the world's opening position is an authored table, ED-IN-0029's per-stat floors finally run, and the
+bridge invariant is enforceable. **What remains is 5c** — folding `wiring_manifest.yaml` into
+`module_contracts.yaml` — which is apparatus consolidation touching four generators, so a session
+may reasonably take S6 first. Read S5's RESULT section before either. S10 is unblocked and may be taken if Jordan directs it, but
 **do not take it ahead of S5 or S8 by rail-default** — it does not move `0/7`.
 
 **The depth rule binds every step, including any you invent.** §3a rules the tooling at **three
@@ -384,7 +387,7 @@ wave 3.
 
 ---
 
-### S5 — Finish the centralization: one pattern, everywhere · `state: next`
+### S5 — Finish the centralization: one pattern, everywhere · `state: 5a/5b/5d/5e done (2026-08-22); 5c open`
 
 **Goal:** centralized definitions and injectable code, consumed by wrappers and systems. This is the
 step the whole programme exists to reach.
@@ -434,6 +437,94 @@ for e in engine/engine_params/*; do echo "$e"; done  # each has one exporter + o
 
 **Do not:** invent a second registry; special-case a subsystem in `scene_dispatch.py`; or fold 5d
 into any other commit.
+
+---
+
+**RESULT (2026-08-22) — four of five sub-steps landed, and where each DEVIATED from the instruction
+above.** Commits `75ced64`, `96e56b5`, `de7eaab`, `556449a`, plus 5e.
+
+**5a — DONE, in two commits rather than one, and the plan's own next instruction was refused.**
+`BASELINE_TOTAL` 3 → 0 and `NESTED_BASELINE` 16 → 0. The three top-level imports needed three
+different answers, and treating them as one problem would have produced three bad fixes: the §10
+vote and its record types are genuine composition (roles); `parliamentary_transfer` was imported as
+a MODULE so the bridge could read four of its PRIVATE members, so the derivation MOVED to its owner
+as `derive_transfer_candidate` rather than declaring privates as roles; and
+`PERSUASION_TOTAL_VICTORY`/`_DEFEAT` were not composition at all — the engine re-deriving a band the
+vote had already recorded on its result, now read as `vr.status` + `vr.total_victory`.
+
+  ⚠ *The instruction to delete `test_the_documented_cycle_is_still_real` "when `BASELINE_TOTAL` hits
+  0" was NOT followed, and that was right.* The cycle's engine-side half was `game_state.py`'s
+  NESTED import of `treaty`, which that ratchet never counted; deleting the guard there would have
+  cleared it on a claim still false. It was deleted only once BOTH counts reached 0, and replaced
+  by a subprocess import probe — execution, not text.
+
+  ⚠ *"One seam, one declaration" was FALSE as first written and is now true.* The §10 vote was
+  imported by name in `parliamentary_action.py` as well; an adversarial pass found it and it was
+  converted. `parliamentary_stay.py` still imports it and is left alone deliberately —
+  social_contest importing its own sibling is not a cross-subsystem seam.
+
+  ⚠ **A 23rd SEAM EXISTS AND IS NOT AN IMPORT.** `engine/cross_scale/combat_bridge.py` puts
+  `systems/combat/combat_engine_v1/` on `sys.path` and loads `combatant`/`wrapper` by BARE NAME. It
+  was invisible to both ratchet regexes AND to the first import probe, which filtered `sys.modules`
+  by the `systems.` prefix. The probe now matches on each loaded module's FILE PATH and walks every
+  module under `engine/`; the seam is declared in `PATH_SEAM_ALLOWED` (one entry, shrink-only) with
+  a third detector scanning for the mechanism. Unconverted because `combat_engine_v1/` is a flat
+  module set whose own convention is bare imports and whose balance workbench loads it that way, so
+  dotted-path loading would give those modules a second identity — a PC-lane call.
+
+**5b — DONE, and the trap it fell into is worth more than the step.** `references/world_initial_state.yaml`
++ exporter + artifact + leaf; six literal tables gone from `game_state.py`. The first draft of the
+exporter sorted factions ALPHABETICALLY — an unremarkable "for determinism" habit — and moved the
+campaign goldens (Church 0.0 → 50.0) with every value identical, because `create_world` iterates
+that table to build `world.factions` and its order is the RNG draw sequence. **Determinism and
+canonical ORDER are different properties, and a sort applied for the first silently redefines the
+second.** Guarded three ways now.
+
+  ⚠ *`MULTS` was NOT moved, and that is a recorded dependency on Q1.* Its home is
+  `descriptor_registry.yaml`, but authoring `L` there would answer the open ruling on whether
+  Legitimacy is a base descriptor. §5 already records Q1 as gating this deletion.
+
+**5c — NOT DONE. Deliberately deferred, and the reason is a scope correction to the instruction.**
+The instruction says fold `wiring_manifest.yaml` into `module_contracts.yaml` and retire
+`wiring_map_check.py` "into `export_composition --check`". Measured before starting: the manifest
+has FOUR programmatic readers (`build_execution_map`, `build_contract_index`, `build_fork`,
+`wiring_map_check`) plus three tests, and `export_composition` reads only the `composition_roles:`
+block — folding the wiring VALIDATION into it would make one tool own two unrelated rules, which is
+the §8 violation this programme is removing, not an instance of it. The natural home is
+`build_contract_index`, the existing builder over `modules:`. **This is apparatus consolidation with
+no game-facing half**, so it was ordered last within S5 and left for a session that can give it a
+full verification pass rather than appended to one already carrying four sub-steps.
+
+**5d — DONE, and it is the one sub-step that changed how the game plays.** ED-IN-0029's per-stat
+floors (ratified 2026-07-08) reached `Faction.adjust` for the first time. Five goldens re-recorded
+against an n=240-per-arm control run TWICE; the first batch flagged Hafenmark significant and the
+replication showed exactly zero effect, so the pooled table and both batches are recorded inline at
+the golden rather than the convenient half. Four of the five floors reach code — `intel` has no
+`MULTS` multiplier, so its floor is unreachable, and that is pinned rather than fixed by inventing
+a canon value.
+
+**5e — DONE, and the invariant it enforces is NOT the one §2 states, because that one is not true.**
+Written as §2's paragraph — one exporter, one leaf, nothing else parses the authored surface — the
+test would be RED ON ARRIVAL, and a gate red on arrival gets deleted. So it splits the claim by what
+holds: **one writer per artifact is HARD** (true today, and two writers is how the bridge acquires a
+silent second owner); readers and authored-surface parsers are **shrink-only ratchets**. Distance to
+the target is recorded as a number rather than asserted away: 3 of the 4 runtime bindings are already
+one-artifact-one-leaf, `key_types.json` has one reader that is not a leaf, `descriptor_registry.yaml`
+has five parsers and `module_contracts.yaml` nine — which is what 5c is for. Both ratchets
+mutation-verified in both directions.
+
+  ⚠ *An earlier draft of 5e listed `key_types.json` with three engine readers and
+  `params_tables.yaml` with two.* That came from a grep that could not tell a path construction from
+  a docstring mentioning the filename. Re-measured by binding: four bindings exist in all of
+  `engine/`. The corrected detector requires the name as a string literal inside a path expression.
+
+**THE ADVERSARIAL PASS (CLAUDE.md §10) BROKE 20 CLAIMS ACROSS 5a/5b/5d** — the 23rd seam above, a
+fabricated `world_from_snapshot` citation in all ten new registry rows (the function is
+`restore_world`), a call-site count wrong on five surfaces, S5d shipping with no falsifier at all,
+and a guard on the ratified-but-unimplemented register that could not observe the deletion S5d made
+in it. All reconciled in `556449a`. What the critic could not check — the oracle runs, a moved-body
+diff — came back UNVERIFIABLE rather than inferred, which is the posture that makes the relay worth
+its cost.
 
 ---
 
