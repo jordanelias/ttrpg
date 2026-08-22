@@ -18,6 +18,32 @@ requires a human decision; this document's decision requests are §4, addressed 
 
 ## 0. If you are a session with no memory, read this section and then §3's first `state: next` step
 
+### THE BOARD — current as of 2026-08-22. If this table and a step's own `state:` disagree, the step wins.
+
+| step | state | subject | layer |
+|---|---|---|---|
+| S1 make the load-bearing claim true | **done** 2026-08-21 | descriptor roster → engine | L1 |
+| S2 culling waves 1+2 | **done** 2026-08-21 | apparatus removal | — |
+| S3 wave 3 + green the suite | **done** 2026-08-21 | apparatus removal | — |
+| S4 wave 5, untrack the generated layer | **done** 2026-08-22 `f84692c` | apparatus removal | — |
+| **S5 contracts-as-registration** | **NEXT** | **the engine** | **L0** |
+| S6 wave 6 + FORK semantics + ledger cap | blocked-by S5 | apparatus + provenance | — |
+| S7 wave 4's residue: extraction | blocked-by S6 | audit corpus | — |
+| S8 M1 juncture 1 | half-done; **Half B SUSPENDED** by Jordan | **the engine** | **L0** |
+| S9 cross-repo residue | blocked-by attaching `jordanelias/valoria-game` | port | — |
+| S10 errors become numbers | **unblocked**, not gating | **the engine** | **L0** |
+
+**Take S5.** It is the first step in the rail whose subject is the game rather than the apparatus,
+and the whole cull existed to get here. S10 is unblocked and may be taken if Jordan directs it, but
+**do not take it ahead of S5 or S8 by rail-default** — it does not move `0/7`.
+
+**The depth rule binds every step, including any you invent.** §3a rules the tooling at **three
+layers** — L0 grow · L1 harden · L2 cap · **L3 never** — and
+`references/ci_checks_registry.yaml` carries `layer:` and `posture:` on every row so you meet the
+model where the tools are declared. Before you add any gate, tool, or test, name its layer. If the
+answer is L3 — if its subject is another guard — you have found the loop `CLAUDE.md` §0.3 diagnoses,
+and the answer is no.
+
 **Your work is one step.** Take the first step in §3 whose `state:` is `next`. Do that step, run its
 gate, commit, update its `state:` to `done` with the evidence line, and stop. Do not read ahead and
 do not "also fix" what you notice on the way — §1 explains why that instruction is load-bearing
@@ -613,6 +639,42 @@ comes from the corpse of the counterexample — the retired `tools/observability
 feeds *"had no runtime consumer in `engine/` or `systems/`"* (§8). So one line decides every future
 component: **does the engine, the port, or a Jordan decision consume it at runtime?** Yes → L0. No →
 that is the retired tier again.
+
+
+### The orchestrator question, ruled (Jordan, 2026-08-22: "L2 requires an orchestrator")
+
+**It does, and it already exists — and naming it correctly is what stops it becoming L3.**
+
+`tools/valoria_local.py` is the orchestrator. Its docstring states the property that keeps it safe:
+*"ONE VALIDATOR, MANY CALLERS: this orchestrator shells the authoritative validators; it never
+re-implements a rule."* **A dispatcher that holds no rule has no subject, so it occupies no rung and
+cannot deepen the stack.** `tools/ci_common.py` is the same shape: shared primitives, no subject.
+Neither is L1, L2 or L3 — they are plumbing, and plumbing is not a layer.
+
+⚠ **THE LINE AN ORCHESTRATOR MUST NOT CROSS.** Dispatching is plumbing; **aggregating verdicts is
+L3.** The moment an orchestrator scores, ratchets, or rolls its children's results into a single
+repo-wide judgement, it has become `review_core.py` — which did exactly that across twelve signals,
+eleven of them apparatus, and was retired for it. The operational rule: **add a validator to the
+list; never add a summary of the list.**
+
+This is also why `valoria_local`'s report-only tier is correct as built. It *prints* which
+report-only checks failed and returns 0 — surfacing without judging. A version that folded those into
+a pass/fail score would be the crossing.
+
+### The keying is now IN THE TREE, not just in this document
+
+`references/ci_checks_registry.yaml` carries `layer:` and `posture:` on all 32 rows as of
+2026-08-22, with the vocabulary defined in its own header block — so the next session meets the model
+where the tools are declared, not only here (§4's "define it in both places" rule: prose AND the code
+that invokes it).
+
+Measured at keying: **31 rows are L1/harden, exactly 1 is L2/cap** (`ci_vacuous_assertion_check.py`,
+whose subject is the assertions inside `tests/valoria` + `engine/tests`). **No row is L0** — a gate is
+never the game. The remainder of L2 is not in that file because it is **tests, not tools**:
+`tests/valoria/test_field_golden_pins.py`, `test_pytest_marker_discipline.py`, the known-red register
+in `conftest.py`, `broken_dependency_checker`'s registry-coverage function, and the export
+falsifiers. **Any new L2 member, wherever it lives, needs a mutation check in the same commit** — that
+is what makes it terminate in execution instead of in a further guard.
 
 ### Three findings this analysis surfaced that need Jordan, not a session
 

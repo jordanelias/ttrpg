@@ -7,6 +7,56 @@
 # Architecture spec V2.2 explicitly names "code and text drifting apart is its
 # own defect." This file mechanizes that discipline for the CI/compliance class.
 #
+# ─────────────────────────────────────────────────────────────────────────────────────────────
+# LAYER AND POSTURE — the depth axis (Jordan, 2026-08-22). READ THIS BEFORE ADDING A ROW.
+#
+# `level:` (below) is ENFORCEMENT LOCUS: where a rule is applied — prose, skill, pre-commit, CI.
+# `layer:` is DEPTH OF SUBJECT: what the check is ABOUT. They are independent axes and must never
+# be conflated. A tool can be `level: 5, layer: L1` (export_descriptors) or `level: 5, layer: L2`
+# (ci_vacuous_assertion_check). Knowing one tells you nothing about the other.
+#
+#   layer: L0   the game — engine/, systems/*/sim/, engine/substrate/, the engine_params/*.json
+#               runtime inputs, and runtime instrumentation the engine or the Godot port consumes.
+#               posture: grow.  NOTHING IN THIS FILE IS L0; a gate is never the game.
+#   layer: L1   compliance over L0 and canon. posture: HARDEN, do not grow. Every row here is L1
+#               except the one noted below.
+#   layer: L2   verification of L1 — the subject is an L1 artifact. posture: CAP. Admitted only
+#               where an L1 gate's failure would be SILENT AND GAME-COSTLY, and each member must be
+#               MUTATION-VERIFIED at introduction so it terminates in execution rather than in a
+#               further guard.
+#   layer: L3   DOES NOT EXIST AS CODE, ever. Its subject is always an L2 guard — apparatus — and
+#               CLAUDE.md §0.1 pt 5 rules load-bearing is not transitive through apparatus. This
+#               repo built an L3 wrapper four times (review_core + review_baseline, scope_ratchet,
+#               the observability generators, the SessionStart banner) and retired all four with
+#               measurements attached; §0.3 records why. The slot is filled by the fresh-context
+#               adversarial stage and Jordan's rulings, which cannot accrete artifacts.
+#
+# ONLY ONE ROW HERE IS L2: `tools/ci_vacuous_assertion_check.py`, whose subject is the assertions
+# inside tests/valoria + engine/tests. The rest of L2 is not in this file because it is TESTS, not
+# tools — tests/valoria/{test_field_golden_pins, test_pytest_marker_discipline}.py, the known-red
+# register in conftest.py, broken_dependency_checker's registry-coverage function, and the export
+# falsifiers. If you add an L2 member anywhere, it needs a mutation check in the same commit.
+#
+# THE ORCHESTRATOR HAS NO LAYER, AND THAT IS WHAT KEEPS IT SAFE (Jordan asked 2026-08-22:
+# "L2 requires an orchestrator"). It does, and it already exists: `tools/valoria_local.py`, whose
+# docstring states the property — "ONE VALIDATOR, MANY CALLERS: this orchestrator shells the
+# authoritative validators; it never re-implements a rule." A dispatcher that holds no rule has no
+# subject, so it occupies no rung and cannot deepen the stack. `tools/ci_common.py` is the same:
+# shared primitives, no subject.
+#
+#   ⚠ THE LINE AN ORCHESTRATOR MUST NOT CROSS: dispatching is plumbing; AGGREGATING VERDICTS is
+#   L3. The moment an orchestrator scores, ratchets, or rolls its children's results into a single
+#   repo-wide judgement, it has become `review_core.py` — which did exactly that over twelve
+#   signals, eleven of them apparatus, and was retired for it. Add a validator to the list; never
+#   add a summary of the list.
+#
+# ─────────────────────────────────────────────────────────────────────────────────────────────
+
+# WARNING: `project-architecture-valoria-v2_2.md` RESOLVES NOWHERE on main and has no
+# references/restructure_ledger.md row (measured 2026-08-22). The ladder below is cited to a
+# document that does not exist — recorded rather than quietly re-sourced, because inventing a
+# citation is worse than naming a dangling one. The `layer:` axis above is defined in place
+# and depends on nothing absent.
 # Levels (from project-architecture-valoria-v2_2.md):
 #   1 — text rule in PI (low reliability)
 #   2 — skill description (medium)
@@ -27,7 +77,9 @@
 #
 # Field definitions:
 #   path             — script path
-#   level            — enforcement level (3 or 5)
+#   level            — enforcement locus (3 or 5). WHERE the rule is applied.
+#   layer            — L0/L1/L2 depth of subject. WHAT the check is about. See the block above.
+#   posture          — grow (L0) / harden (L1) / cap (L2). What may happen to this layer's size.
 #   role             — what defect class it catches
 #   ci_job           — name of the GitHub Actions job that invokes it (empty
 #                      if not wired in CI yet)
@@ -58,6 +110,8 @@ ci_checks:
 
   - path: tools/ci_register_size_check.py
     level: 5
+    layer: L1
+    posture: harden
     role: "Token-threshold enforcement on governed files (session log, ledgers, registers, canonical_sources)."
     ci_job: validators
     notes: "External enforcement gate; runs outside Claude."
@@ -66,42 +120,56 @@ ci_checks:
 
   - path: tools/ci_co_file_checker.py
     level: 5
+    layer: L1
+    posture: harden
     role: "Co-file requirements (design→canonical_sources, patch→propagation_map, sim→coverage_matrix, SKILL.md→skill_registry)."
     ci_job: validators
     notes: "Mirrors in-session co-file rules. Both must pass."
 
   - path: tools/ci_editorial_checker.py
     level: 5
+    layer: L1
+    posture: harden
     role: "Editorial paths (systems/npcs/, systems/world/, canon/03_*) carry [EDITORIAL] or [PROVISIONAL] markers."
     ci_job: validators
     notes: ""
 
   - path: tools/ci_golden_modes_check.py
     level: 5
+    layer: L1
+    posture: harden
     role: "Golden-mode byte-exact gate (unit_field/cell_field + the §4a cell_cm mode) with the FULL digest-relevant toggle vector pinned — the shipped configuration's regression oracle (ED-MB-0045 A1b)."
     ci_job: field-goldens
     notes: "Pin list single-owned in the tool's FIELD_PINS; drift-guarded by tests/valoria/test_field_golden_pins.py. Grid modes stay covered by test_mass_battle_byte_exact.py in unit-tests. DELIBERATELY CI-ONLY (ED-IN-0176): every other blocking CI validator now also runs in tools/valoria_local.py's list, report-only, so local-green sees them. This one does not, on cost — measured 2026-08-13 at rc=0 in 275s (~4.6 min), against a local list whose every other entry is under 5s. A 4.6-minute pre-commit step holds unrelated commits hostage, which is the exact reason freshness_gate and ci_wf_harness_check are report-only locally. Recorded HERE because tests/valoria/test_gate_coverage.py's CI_ONLY_BY_DESIGN set requires the reason to live in this registry, not in the test."
 
   - path: tests/sim/mass_battle/lanchester_signature.py
     level: 5
+    layer: L1
+    posture: harden
     role: "Attrition-law signature instrument (linear melee / square volley, conserved-quantity exponent fit) — REPORT-ONLY (ED-MB-0050 A6a/A6b)."
     ci_job: lanchester-signature
     notes: "REPORT-ONLY on purpose: the repaired instrument legitimately FAILS (melee fits p~3.20 against a <=1.4 linear bar), which is an engine finding held for plan-v2 fork #2 (two incompatible 2:1 targets), not a regression to gate on. Flips to blocking when that fork is ruled. Before A6a it was neither wired nor correct: its no-rout pin did not disable rout (PC_STOCHASTIC_ROUT keys on casualty fraction), its volley scenario never fired, and its exponent was the scan-grid ceiling."
 
   - path: tools/broken_dependency_checker.py
     level: 5
+    layer: L1
+    posture: harden
     role: "References to nonexistent files in propagation_map / canonical_sources."
     ci_job: validators    # collapsed 2026-08-01: was its own `integrity` job
     notes: ""
 
   - path: tools/freshness_gate.py
     level: 5
+    layer: L1
+    posture: harden
     role: "engine/params/canonical SHA drift detection — compares live HEAD SHA of canonical doc against recorded SHA in canonical_sources.yaml."
     ci_job: validators
     notes: "Bootstrap currently calls but the function get_live_sha is absent in active session; warning emitted, non-blocking."
 
   - path: tools/canon_coverage_check.py
     level: 5
+    layer: L1
+    posture: harden
     role: "Bidirectional Status:CANONICAL ↔ canonical_sources.yaml verification."
     ci_job: validators-report
     notes: "Added 2026-05-10. Ported off the GitHub code-search API onto a working-tree os.walk (ED-IN-0032, doctrine fix). Wired into CI report-only 2026-07-11 (Jordan's ruling, Phase 2 item 9). RE-MEASURED 2026-08-01: 4 unregistered-with-header, 27 registered-no-header. The prior figures (1/28, 2026-07-11) were the LAST READING BEFORE THE INSTRUMENT BROKE -- its scan root was designs/, retired 2026-07-19, so it reported 0/0/0 for 13 days while this note looked like current state. Repointed at systems/."
@@ -112,54 +180,72 @@ ci_checks:
 
   - path: tools/ci_pp_frozen_check.py
     level: 5
+    layer: L1
+    posture: harden
     role: "Blocking gate making PP frozen historical vocabulary REAL rather than declared (Jordan ruling 2026-08-14, ED-IN-0190): fails if any live PP id exceeds the frozen ceiling PP-726, and if any archive pointer in patch_register_active.yaml names a register absent from main without naming the fork ref it resolves at."
     ci_job: validators
     notes: "Executes Q4 of ED-IN-0185's ruling agenda. The ruling said 'verify only the format'; a literal format check over PP-\\d+ can never fail, so the intent (frozen vocabulary + provenance resolves at a named ref) is discharged as two rules that CAN fail. Carries its own left-boundary pattern rather than ci_common.PP_ID_PAT, which is bare PP-\\d+ and matches inside OPP-03 -- measured: the owner's pattern produces 34 fabricated findings on one proposals doc. Excludes itself from its own scan after reporting a violation against its own docstring on first run (ED-IN-0159 2.4, the instrument counting itself). Raising PP_FROZEN_CEILING un-freezes a frozen vocabulary and needs its own ED plus a ruling."
 
   - path: tools/ci_naming_check.py
     level: 5
+    layer: L1
+    posture: harden
     role: "Blocking naming-invariant gate: no new use of a deprecated name (Solmund never Galbados), diff-aware over enforce:block entries in names_index.yaml."
     ci_job: validators
     notes: "Also runs locally via valoria_local.py --staged (blocking)."
 
   - path: tools/ci_names_check.py
     level: 5
+    layer: L1
+    posture: harden
     role: "Report-only naming-drift lint over every enforce:warn entry in names_index.yaml; flags newly-added legacy terms and names the canonical replacement."
     ci_job: validators-report
     notes: "continue-on-error in CI; report-only (blocking=False) in valoria_local.py. Flip an index entry warn->block to promote it under ci_naming_check."
 
   - path: tools/ci_names_consistency.py
     level: 5
+    layer: L1
+    posture: harden
     role: "Asserts descriptor_registry.yaml / proper_noun_registry.yaml mirror fields equal names_index.yaml's canonical value (index is authoritative)."
     ci_job: validators
     notes: "Whole-tree gate, no diff needed. Also runs locally via valoria_local.py --staged (blocking)."
 
   - path: tools/ci_generation_consistency.py
     level: 5
+    layer: L1
+    posture: harden
     role: "v40 generation currency invariant: every canonical design doc exists, carries a recognized Status: line, and isn't recorded as superseded."
     ci_job: validators-report
     notes: "Warn-only by design (always exits 0 per its own docstring). Already ran locally via valoria_local.py --staged; CI wire added 2026-07-11 (Phase 2 item 8) to close the local/CI parity gap."
 
   - path: tools/ci_module_shape_check.py
     level: 5
+    layer: L1
+    posture: harden
     role: "Holonic container/shape hygiene on engine/sim runtime code (ED-1085): no sys.path reach-ins into tests/ trees, no tests/ imports; INFO-tier untagged module-scope constant surfacing."
     ci_job: validators-report
     notes: "Report-only (continue-on-error), names-drift graduation lane. Also runs locally via valoria_local.py --staged (report-only)."
 
   - path: tools/ci_quantity_vocabulary_check.py
     level: 5
+    layer: L1
+    posture: harden
     role: "A17 stat-vocabulary closure: every stat identifier in module_contracts.yaml / sim stat_deltas / impact_vector dicts resolves to descriptor_registry.yaml or names_index.yaml (via tools/quantity_registry.py)."
     ci_job: validators-report
     notes: "Report-only (continue-on-error), ED-IN-0029. Not listed in ci-summary's needs."
 
   - path: tools/ci_sim_fabrication_check.py
     level: 5
+    layer: L1
+    posture: harden
     role: "Blocking anti-fabrication guard: every numeric literal in sim/*.py must be ledger-cited or carry a provenance comment. The accepted markers, each meaning something different: `canonical:` the value IS canon on `main`; `GROUNDED:` traceable to evidence outside the engine; `JUSTIFIED:` mechanism sourced, magnitude fitted; `DECLARED-DIVERGENCE:` deliberately unlike canon, with the reason; `CALIBRATED-DEBT:` a known-provisional fitted value; `FORK:` the source is real but lives at a NAMED GIT REF rather than on `main` — the gate checks such a tag names a ref, accepting EITHER a 7-40 char hex sha CONTAINING AT LEAST ONE DIGIT (the digit requirement is what stops hex-spelled English words like `defaced` passing) OR a `refs/...` path; it never checks that the blob is fetchable."
     ci_job: validators
     notes: "Ports valoria_hooks.sim_fabrication_check (deprecated/skills/valoria-orchestrator/) into a standalone validator. Also runs locally via valoria_local.py --staged (blocking). FORK added 2026-08-14 (ED-IN-0188) for citations orphaned by the 2026-08-05 evacuation — mc_v17.py, tests/sim/v17-integration/, engine/params/ — which named live paths that no longer exist and were indistinguishable from invented ones."
 
   - path: tools/ci_claim_provenance_check.py
     level: 5
+    layer: L1
+    posture: harden
     role: "Blocking claim-provenance guard: a ledger entry stating MEASURED numbers must carry `MEASURED-BY: <path>` naming a re-runnable instrument that exists in the tree."
     ci_job: validators
     notes: >-
@@ -196,12 +282,16 @@ ci_checks:
 
   - path: tools/ci_vetting_check.py
     level: 5
+    layer: L1
+    posture: harden
     role: "PP-674 framework vetting gate: PP entries id>=674 without a class:C|D|E/pre-framework exemption must carry a valid vetting: block."
     ci_job: validators
     notes: "Ports valoria_hooks.vetting_gate. Also runs locally via valoria_local.py --staged (blocking)."
 
   - path: tools/compliance_check.py
     level: 5
+    layer: L1
+    posture: harden
     role: "Working-tree size-cap compliance scan (atomization_rules.yaml thresholds)."
     ci_job: compliance-check
     notes: "CI mode (--check-only --repo-state .) is the live BLOCKING half; NOT in valoria_local.py's local check list, so local-green != compliance-green (ED-1082 correction, CLAUDE.md §8). Its orchestrator-era check_all()/validate_commit() harness paths (github_ops import, /home/claude sys.path insert) remain dead outside CI mode."
@@ -213,42 +303,56 @@ ci_checks:
 
   - path: tools/currency_consistency_check.py
     level: 5
+    layer: L1
+    posture: harden
     role: "Self-updating recency gate (ED-1087): CURRENT.md reconcile-stamp vs head freshness, ED-ceiling consistency, register header/body currency, dead maintainer pointers."
     ci_job: validators-report
     notes: "Report-only (continue-on-error), names-drift graduation lane. Also runs locally via valoria_local.py --staged (report-only)."
 
   - path: tools/export_engine_params.py
     level: 5
+    layer: L1
+    posture: harden
     role: "Oracle -> typed-JSON round-trip: engine/engine_params/combat_engine_v1.json must match systems/combat/combat_engine_v1/config.py (--check mode)."
     ci_job: validators
     notes: "BLOCKING from day one (deterministic, self-consistent, no external pins). ED-1050/ED-1052. Also runs locally via valoria_local.py --staged --check (blocking)."
 
   - path: tools/export_key_types.py
     level: 5
+    layer: L1
+    posture: harden
     role: "Registry -> typed-JSON round-trip: engine/engine_params/key_types.json must match the authored systems/_architecture/key_type_registry_v30.md (--check mode)."
     ci_job: validators
     notes: "BLOCKING (deterministic, no external pins). ED-IN-0136 — the markdown stays the AUTHORED surface; code and the Godot port read the cooked JSON. Order is ORD-1 registry order and is NOT sorted. Falsifier: tests/valoria/test_key_substrate.py::test_the_round_trip_check_can_fail plants a mutation and asserts exit 1. Also runs locally via valoria_local.py --staged (blocking)."
 
   - path: tools/export_game_constants.py
     level: 5
+    layer: L1
+    posture: harden
     role: "Oracle -> Godot-facing constants round-trip: engine/engine_params/game_constants.json must match the values sim_params.json and combat_engine_v1.json already export from their Python owners (--check mode). It is the WRITER half of the ttrpg -> jordanelias/valoria-game constants bridge; the reader half is that repo's tools/check_constants_parity.py."
     ci_job: validators
     notes: "Added 2026-08-20. BLOCKING (deterministic, composes on two already-gated exports, no external pins). WHY IT EXISTS: measured the same day, valoria-game read ZERO bytes of any engine_params file and all ~200 constants in its systems/util/Constants.gd were hand-transcribed with no comparer. PAIRS ARE HAND-CONFIRMED, NEVER NAME-MATCHED — a first pass that matched by name produced six divergences and adversarial re-checking found none of them real (four from near-name guessing, two from exact-name collisions where the same word names different quantities), while the two REAL divergences it found later share no name with anything. The tool's COLLISIONS block records the look-alikes so they are not re-derived; DIVERGENCES records real model disagreements that need a ruling, not a value copy, and that list can only shrink."
 
   - path: tools/export_descriptors.py
     level: 5
+    layer: L1
+    posture: harden
     role: "Registry -> typed-JSON: engine/engine_params/descriptors.json must match references/descriptor_registry.yaml (--check mode). It is the writer for engine/substrate/descriptors.py, which is the SOLE runtime reader of the descriptor registry."
     ci_job: validators
     notes: "Added 2026-08-20. BLOCKING (deterministic, no external pins). WHY IT EXISTS: measured the same day, references/ was load-bearing on TOOLS AND PROSE ONLY — no module under engine/ or systems/ loaded descriptor_registry.yaml or module_contracts.yaml, every runtime hit was a comment or docstring, and the rosters code ran on were hardcoded twins in engine/autoload/game_state.py. game_state.py now calls descriptors.assert_faction_roster_is_covered() at IMPORT, so a registry stat with no code field stops the engine from importing. The check runs ONE WAY: a code field with no registry entry is not an error, because exactly one exists (L / Legitimacy, written by 32 .adjust() sites, declared nowhere) and its disposition is Jordan's ruling. The export also records two RATIFIED-BUT-UNIMPLEMENTED items in its `unimplemented` block rather than silently closing them: the L gap, and ED-IN-0029's per-stat floors (Influence 1, rest 0) which Faction.adjust still overrides with a blanket 0.5. Falsifier: tests/valoria/test_descriptors_runtime.py plants a registry stat with no field and asserts the import-time check raises."
 
   - path: tools/export_composition.py
     level: 5
+    layer: L1
+    posture: harden
     role: "Registry -> typed-JSON: engine/engine_params/composition.json must match references/module_contracts.yaml composition_roles (--check mode). It is the writer for engine/substrate/composition.py, through which engine/mc_v18.py resolves its subsystem callables by ROLE instead of importing them by name."
     ci_job: validators
     notes: "Added 2026-08-20 (plan Act C3 seam 2). BLOCKING. It IMPORTS AND RESOLVES every declared target at export time, which is the whole reason import-by-string is safe here: a typo or a moved module reds this gate rather than failing a campaign run. Before this, engine/mc_v18.py:37-38 imported systems.factions.sim.faction_action and systems.overview.sim.season at module level — the root naming its own dependents, and one half of the live package cycle faction_action -> engine.autoload.game_state -> systems.factions.sim.treaty. Falsifier: tests/valoria/test_engine_does_not_import_systems.py asserts require() RAISES on an undeclared role (no silent default) and that every declared role resolves."
 
   - path: tools/build_identifier_census.py
     level: 5
+    layer: L1
+    posture: harden
     role: "Builds the per-subsystem identifier census (systems/*/_identifier_census.yaml) and its roll-up references/identifier_census.json: what each design doc NAMES, and whether anything in code BUILT it."
     ci_job: ""
     notes: "NO LONGER A FRESHNESS GATE (culling wave 5, ED-IN-0194, 2026-08-22). Its outputs are UNTRACKED, so there is no committed copy for --check to find drift against; the `--check` invocation was removed from the blocking `validators` job and from tools/valoria_local.py in the same commit, because it compares against files git no longer carries and would have red main on the first push. The builder itself is KEPT and is run on demand by the `generated_layer` fixture in tests/valoria/conftest.py, which owns the build order for the whole generated layer. Its hermetic tmp_path falsifiers stay in tests/valoria/test_identifier_census.py and are unaffected — they monkeypatch REPO and never read the real tree. Two claims in the previous note are now stale and are recorded as such rather than carried forward: references/glossary/ is NOT built from this census (no glossary builder exists in tools/; references/glossary.md is authored and tracked), and the -n auto race with test_engine_atlas is moot now that whole-tree freshness is not asserted anywhere."
@@ -259,24 +363,32 @@ ci_checks:
 
   - path: tools/mechanics_index_gen.py
     level: 5
+    layer: L1
+    posture: harden
     role: "registers/mechanics_index.yaml schema + cross-reference validator: required fields, valid scale/test_status enums, gd_applicable resolves, sim_module/canon_sources paths exist, GD-1 victory_paths singularity."
     ci_job: validators-report
     notes: "Fully CI-shaped (--strict exit-code contract) but never wired before 2026-07-11 (Phase 2 item 7). Report-only (continue-on-error). Not listed in ci-summary's needs."
 
   - path: tools/wiring_map_check.py
     level: 5
+    layer: L1
+    posture: harden
     role: "Report-only wiring-manifest gate (ED-IN-0074): every module:/adapter: tag in references/wiring_manifest.yaml resolves in its live registry (module_contracts.yaml, engine/cross_scale/), full 27/27 + 7/7 coverage, valid build/godot vocab. Backs the MC-wiring map (designs/audit/2026-07-17-mc-wiring-coverage-audit/wiring_map.html) — catches a module rename / moved adapter as a caught error, not silent drift."
     ci_job: validators-report
     notes: "Added 2026-07-18 (ED-IN-0074 follow-up). Report-only (continue-on-error): the manifest is analysis-derived, not ratified canon, so a legitimate rename shouldn't block an unrelated PR. Also runs locally via valoria_local.py --staged (report-only). The same tool also emits --work-list (ranked Godot port queue), --summary, and --emit-map-json (regenerates the map's embedded PORT block). Flip to blocking (drop continue-on-error, add to ci-summary needs) once the manifest ratifies."
 
   - path: tools/validate_ed_citations.py
     level: 5
+    layer: L1
+    posture: harden
     role: "Every ED-NNN / ED-<LANE>-NNNN cited in canon/design docs resolves to a real, non-open ledger entry (active + archives)."
     ci_job: validators
     notes: "Blocking as of 2026-06-29 (backlog reconciled 292 -> 0, designs/audit/2026-06-28-ed-citation-triage/02_reconciliation.md)."
 
   - path: tools/ci_vacuous_assertion_check.py
     level: 5
+    layer: L2
+    posture: cap
     role: "VACUOUS-ASSERTION detector — scans tests/valoria + engine/tests for assertions that cannot observe the failure they exclude: loops that may assert zero times with no `assert checked >= N`, pytest.approx on an exactness claim, try/except: pass. CLAUDE.md §0.1 point 2 names this the repo's known past failure mode."
     ci_job: validators-report
     notes: "Wired 2026-08-01 (ED-IN-0118). It shipped with its own pytest suite and NO invoker and NO registry row — a detector nobody runs is the defect it detects, and its own test file says so: 'a switched-off guard is worse than none because the repo still believes it is covered.' Report-only: 18 suspicious findings today, 0 provably vacuous."
@@ -293,6 +405,8 @@ ci_checks:
 
   - path: tools/balance_oracle.py
     level: 5
+    layer: L1
+    posture: harden
     role: >-
       The n>=100 CONTROLLED balance comparison. Runs the same seeds twice in one process with a
       mechanic patched to its old and new behaviour, and reports a per-faction win-share delta with
@@ -311,6 +425,8 @@ ci_checks:
 
   - path: tools/m1_acceptance.py
     level: 5
+    layer: L1
+    posture: harden
     role: >-
       M1 acceptance gate (CLAUDE.md §0.2's instrument) — the five falsifiable rows that say whether
       a milestone juncture EXECUTES. Rows 1-2 run a seeded mc_v18 probe season and compare
