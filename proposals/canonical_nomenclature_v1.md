@@ -209,7 +209,7 @@ of distinction and will be mistyped forever. **Recommend accepting the overlap.*
 ### 3.3 Four cases this roster does NOT settle — Jordan's call
 
 1. **`piety_track`'s owner.** Jordan's example says `settlement.`. The corpus says otherwise:
-   `references/module_contracts.yaml:276` files it under `systems/characters/`, and
+   `references/module_contracts.yaml:360` files it under `systems/characters/`, and
    `systems/characters/conviction_track_v30.md:31` calls it a **per-territory** stat. So the
    candidates are `settlement.`, `territory.`, or `character.`, and the three docs disagree with
    each other independently of this proposal. **This is a design ruling, not a naming one.**

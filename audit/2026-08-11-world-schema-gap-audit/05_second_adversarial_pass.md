@@ -102,7 +102,7 @@ precedent (`module_contracts.yaml:566-572` reserving MB's rows to the MB lane) s
 call.
 
 - **N-1 · combat.** `scene.combat_resolved`/`_felled`/`_hit` declare `emitting_systems:
-  [personal_combat]`, but the sole constructor is `engine/cross_scale/echo_transport.py:416`, and
+  [personal_combat]`, but the sole constructor is `engine/cross_scale/echo_transport.py:418`, and
   **`echo_transport` has no row among the 27 contracts** while the key registry names it an emitting
   system elsewhere. The declaration names the **wrong owner** — admissible under `00` §1, and the same
   shape as G-45.

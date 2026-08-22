@@ -739,7 +739,7 @@ comment says *"it must NOT be swallowed SILENTLY either (audit ED-IN-0074 D7)"* 
 nowhere. A resolver that raises **before consuming RNG** (an `AttributeError` on a renamed field —
 precisely the fractional-pools class) leaves the RNG stream unchanged, every seeded golden green, the
 faction silently inactive, and the only trace is stderr nothing reads.
-`engine/cross_scale/scene_dispatch.py:372-374` turns a resolver crash into
+`engine/cross_scale/scene_dispatch.py:374-376` turns a resolver crash into
 `out["reason"] = f"resolver raised: {e!r}"`, which flows into `report["deferred"]` and is **dropped**
 at `mc_v18.py:149-150`, which reads only `["dispatch"]["resolved"]`. A resolver crash is currently
 indistinguishable from a designed deferral in every consumed output.
@@ -802,7 +802,7 @@ build per-module instrumentation for the 27 dark modules — **you cannot log wh
 their burn-down instrument is `test_pipeline_reach`'s XFAIL manifest and their census is
 `trace_execution_phases`, both of which exist · emit any Key from the error path (an error-Key moves
 `content_hash` and every determinism row; if error events ever belong in the KeyLog that is a design
-decision for the contract-registered `audit` module, `references/module_contracts.yaml:558`, and it
+decision for the contract-registered `audit` module, `references/module_contracts.yaml:642`, and it
 is Jordan's, not this step's) · fold any of this into an S5 sub-step's commit.
 
 **Falsifier for the whole programme, recorded in advance.** If after two months the counters have only

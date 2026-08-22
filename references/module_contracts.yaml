@@ -99,6 +99,90 @@ composition_roles:
     target: "systems.factions.sim.parliamentary_transfer:propose_transfer"
     needed_by: "engine/cross_scale/parliamentary_bridge.py — the §§1-4 CB-gated transfer motion itself"
 
+  # ── World composition: the eleven seams inside engine/autoload/game_state.py (S5a, 2026-08-22) ─
+  # These were FUNCTION-LOCAL imports, which is why they were invisible to the first ratchet and
+  # why `CLAUDE.md` §3 could claim "autoload is a leaf" while `game_state.py` named seven
+  # subsystems. A deferred import hides a cycle from the interpreter; it does not remove one. The
+  # concrete cycle they carried: systems/factions/sim/faction_action.py -> engine.autoload.
+  # game_state -> systems.factions.sim.treaty.
+  #
+  # `world_gen` runs at world creation. The `snapshot_state.*` rows are the save/restore
+  # deserializers: `serialize_world` writes a registry's rows as plain dicts, and
+  # `world_from_snapshot` needs the owning subsystem's dataclass to rehydrate them. The KEY is the
+  # snapshot field, so a reader can go from a save file straight to the class that owns it.
+  world_gen_settlements:
+    target: "systems.settlements.sim.registry:populate_from_geography"
+    needed_by: "engine/autoload/game_state.py create_world — OI-07, populates world.settlements from the canonical geography YAML"
+    note: "Deterministic, no RNG draw, so it cannot move an RNG-derived campaign golden."
+  snapshot_state.practitioners:
+    target: "systems.threadwork.sim.coherence:CoherenceState"
+    needed_by: "engine/autoload/game_state.py world_from_snapshot — schema migration #1"
+  snapshot_state.insurgencies:
+    target: "systems.world.sim.insurgency_pipeline:InsurgencyRecord"
+    needed_by: "engine/autoload/game_state.py world_from_snapshot — schema migration #1"
+  snapshot_state.npcs:
+    target: "systems.world.sim.npe:NPC"
+    needed_by: "engine/autoload/game_state.py world_from_snapshot — schema migration #1; a LIST per territory, not a single record"
+  snapshot_state.treaties:
+    target: "systems.factions.sim.treaty:TreatyRecord"
+    needed_by: "engine/autoload/game_state.py world_from_snapshot — schema migration #1"
+    note: "This row is the engine -> systems half of the package cycle CLAUDE.md §3 denied existed."
+  snapshot_state.convictions:
+    target: "systems.characters.sim.conviction:ConvictionState"
+    needed_by: "engine/autoload/game_state.py world_from_snapshot — schema migration #2"
+  snapshot_state.beliefs:
+    target: "systems.characters.sim.beliefs:Belief"
+    needed_by: "engine/autoload/game_state.py world_from_snapshot — schema migration #2; a LIST per holder"
+  snapshot_state.knots:
+    target: "systems.fieldwork.sim.knots:Knot"
+    needed_by: "engine/autoload/game_state.py world_from_snapshot — schema migration #2"
+  snapshot_state.territory_infrastructure:
+    target: "systems.settlements.sim.infrastructure:InfrastructureState"
+    needed_by: "engine/autoload/game_state.py world_from_snapshot — schema migration #2"
+  snapshot_state.threadcut_beings:
+    target: "systems.threadwork.sim.threadcut:ThreadcutState"
+    needed_by: "engine/autoload/game_state.py world_from_snapshot — schema migration #2"
+  snapshot_state.settlements:
+    target: "systems.settlements.sim.registry:Settlement"
+    needed_by: "engine/autoload/game_state.py world_from_snapshot — schema migration #3 (OI-07)"
+
+  # ── The last five function-local seams (S5a, 2026-08-22) ─────────────────────────────────────
+  # engine/cross_scale/scene_dispatch.py's four and echo_transport.py's one. With these,
+  # NESTED_BASELINE reaches 0 alongside BASELINE_TOTAL, and `engine/` names no subsystem at all —
+  # which is the condition CLAUDE.md §3's "acyclic" claim needed before it could be restated.
+  scene_resolver.combat:
+    target: "systems.combat.sim.combat:resolve_combat_round"
+    needed_by: "engine/cross_scale/scene_dispatch.py — the personal-combat scene branch"
+  scene_resolver.contest:
+    target: "systems.social_contest.sim.contest:resolve_contest"
+    needed_by: "engine/cross_scale/scene_dispatch.py — the promoted §Agon kernel (ED-SC-0006), paired with scene_builder.contest"
+  scene_builder.contest:
+    target: "systems.social_contest.sim.contest:build_contest"
+    needed_by: "engine/cross_scale/scene_dispatch.py — builds the contest the resolver then runs"
+  # The two side LABELS the verdict is compared against. `kind: value` because they are module
+  # constants ("a"/"b", contest/contract.py:7), not callables — the only two `value` rows in this
+  # block, and the reason that kind exists at all. The engine must not hardcode a subsystem's
+  # vocabulary: rename them in `contest` and the exporter's blocking gate catches it, where a
+  # literal "a" in scene_dispatch.py would silently start comparing false.
+  contest_side.a:
+    target: "systems.social_contest.sim.contest:A"
+    kind: value
+    needed_by: "engine/cross_scale/scene_dispatch.py — ED-SC-0002 emergency-council verdict -> echo degree"
+  contest_side.b:
+    target: "systems.social_contest.sim.contest:B"
+    kind: value
+    needed_by: "engine/cross_scale/scene_dispatch.py — ED-SC-0002 emergency-council verdict -> echo degree"
+  scene_resolver.fieldwork:
+    target: "systems.fieldwork.sim.fieldwork:run_fieldwork_scene"
+    needed_by: "engine/cross_scale/scene_dispatch.py — OI-02, stub-wired pending ED-916"
+  scene_resolver.investigation:
+    target: "systems.fieldwork.sim.investigation:resolve_npe_response"
+    needed_by: "engine/cross_scale/scene_dispatch.py — OI-02, stub-wired pending ED-916"
+  rs_track_delta:
+    target: "systems.overview.sim.rs_track:apply_rs_delta"
+    needed_by: "engine/cross_scale/echo_transport.py — the §5.5 Accord Domain Echo's RS leg"
+    note: "A Pass 2l armature stub (OI-17): self-flags as a typed no-op via stubwire until RS is built. Routing it as a role does not make it live."
+
 modules:
 
   - module: faction_state

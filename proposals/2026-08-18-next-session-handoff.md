@@ -239,7 +239,7 @@ cannot work.
 `engine/substrate/stubwire.py:9-11,46-50` documents its own design as shaped for
 `structure_audit`'s `stub_wired` attribute and `review_core`'s `stubs.count` ratchet. Same at
 `engine/cross_scale/articulation.py:26-27`, `engine/autoload/npc_ai.py:25-26`,
-`engine/cross_scale/scene_dispatch.py:364-365`, `engine/substrate/canon_buckets.py:6,11`.
+`engine/cross_scale/scene_dispatch.py:366-367`, `engine/substrate/canon_buckets.py:6,11`.
 ⚠ Precise scope: the colonisation of **rationale** is real; **behaviour** is not — `stubwire` does
 feed `mc_v18`'s `CampaignResult.stub_hits` and `engine/tests/test_pipeline_reach.py` consumes it.
 

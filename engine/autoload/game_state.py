@@ -34,6 +34,7 @@ from dataclasses import dataclass, field, fields as dc_fields
 # call site keeps working unchanged — engine/substrate/ has no internal dependents, so this import
 # does not reintroduce the cycle it was moved to break.
 from engine.substrate.canon_buckets import canonical_accord  # noqa: F401 (re-export)
+from engine.substrate import composition
 from engine.substrate import descriptors  # sole runtime reader of references/descriptor_registry.yaml
 
 
@@ -279,8 +280,7 @@ def create_world(seed: int | None = None) -> World:
     # is now gone (OI-52a, ED-IN-0097, 2026-07-29: canonical_accord moved to
     # engine.substrate.canon_buckets, which both modules import at top level without a cycle).
     # Deterministic — no RNG draw, so this cannot move any RNG-derived campaign golden.
-    from systems.settlements.sim.registry import populate_from_geography
-    populate_from_geography(world)
+    composition.require('world_gen_settlements')(world)
     return world
 
 
@@ -387,47 +387,47 @@ def restore_world(snapshot: dict) -> World:
     # ─── Schema migration #1 registries ──────────────────────────────────
     # Late-import each owning module's dataclass for .from_dict
     if 'practitioners' in snapshot:
-        from systems.threadwork.sim.coherence import CoherenceState
+        CoherenceState = composition.require('snapshot_state.practitioners')
         w.practitioners = {k: CoherenceState.from_dict(v)
                             for k, v in snapshot['practitioners'].items()}
     if 'insurgencies' in snapshot:
-        from systems.world.sim.insurgency_pipeline import InsurgencyRecord
+        InsurgencyRecord = composition.require('snapshot_state.insurgencies')
         w.insurgencies = {k: InsurgencyRecord.from_dict(v)
                            for k, v in snapshot['insurgencies'].items()}
     if 'uncontrolled_streaks' in snapshot:
         w.uncontrolled_streaks = {frozenset(entry['tids']): entry['streak']
                                    for entry in snapshot['uncontrolled_streaks']}
     if 'npcs' in snapshot:
-        from systems.world.sim.npe import NPC
+        NPC = composition.require('snapshot_state.npcs')
         w.npcs = {tid: [NPC.from_dict(n) for n in npc_list]
                    for tid, npc_list in snapshot['npcs'].items()}
     w.npc_counter = snapshot.get('npc_counter', 0)
     if 'treaties' in snapshot:
-        from systems.factions.sim.treaty import TreatyRecord
+        TreatyRecord = composition.require('snapshot_state.treaties')
         w.treaties = {frozenset(entry['parties_key']): TreatyRecord.from_dict(entry['record'])
                        for entry in snapshot['treaties']}
 
     # ─── Schema migration #2 registries ──────────────────────────────────
     if 'convictions' in snapshot:
-        from systems.characters.sim.conviction import ConvictionState
+        ConvictionState = composition.require('snapshot_state.convictions')
         w.convictions = {k: ConvictionState.from_dict(v)
                           for k, v in snapshot['convictions'].items()}
     if 'beliefs' in snapshot:
-        from systems.characters.sim.beliefs import Belief
+        Belief = composition.require('snapshot_state.beliefs')
         w.beliefs = {k: [Belief.from_dict(b) for b in v]
                       for k, v in snapshot['beliefs'].items()}
     if 'knots' in snapshot:
-        from systems.fieldwork.sim.knots import Knot
+        Knot = composition.require('snapshot_state.knots')
         w.knots = {k: Knot.from_dict(v) for k, v in snapshot['knots'].items()}
     w.knot_id_counter = snapshot.get('knot_id_counter', 0)
     if 'territory_infrastructure' in snapshot:
-        from systems.settlements.sim.infrastructure import InfrastructureState
+        InfrastructureState = composition.require('snapshot_state.territory_infrastructure')
         w.territory_infrastructure = {k: InfrastructureState.from_dict(v)
                                        for k, v in snapshot['territory_infrastructure'].items()}
     if 'npc_drift_state' in snapshot:
         w.npc_drift_state = dict(snapshot['npc_drift_state'])
     if 'threadcut_beings' in snapshot:
-        from systems.threadwork.sim.threadcut import ThreadcutState
+        ThreadcutState = composition.require('snapshot_state.threadcut_beings')
         w.threadcut_beings = {k: ThreadcutState.from_dict(v)
                                for k, v in snapshot['threadcut_beings'].items()}
     if 'comovement_deck' in snapshot:
@@ -439,7 +439,7 @@ def restore_world(snapshot: dict) -> World:
 
     # ─── Schema migration #3 registry (OI-07) ─────────────────────────────
     if 'settlements' in snapshot:
-        from systems.settlements.sim.registry import Settlement
+        Settlement = composition.require('snapshot_state.settlements')
         w.settlements = {k: Settlement.from_dict(v) for k, v in snapshot['settlements'].items()}
 
     return w

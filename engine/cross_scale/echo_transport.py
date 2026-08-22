@@ -62,6 +62,7 @@ from engine.substrate import EmittedAt, Key, KeyLog, Target, TickScheduler, Type
 # It now reads the root. Value-identical by construction: registry.py:50 is `STAT_MIN, STAT_MAX =
 # 0, 5` and the registry declares (0, 5), so the seeded campaign goldens are the control — if they
 # move, this swap was wrong. They did not.
+from engine.substrate import composition
 from engine.substrate import descriptors
 
 _ORDER_FLOOR, _ORDER_CEILING = (descriptors.SETTLEMENT_STATS['set.order']['floor'],
@@ -361,8 +362,8 @@ def _apply_accord_echo(scene_type: str, scene_outcome: str, ar, echo_ctx: dict, 
         # self-flags as a typed no-op via stubwire until RS is built. Stays IMMEDIATE per canon
         # (:219) -- see the docstring's "W3 QUEUE-PARITY" section for why this is unaffected by
         # the settlement-Order queueing above.
-        from systems.overview.sim import rs_track
-        rs_track.apply_rs_delta(ar.rs_delta, source=f"accord_echo:{scene_type}", world=world)
+        composition.require('rs_track_delta')(
+            ar.rs_delta, source=f"accord_echo:{scene_type}", world=world)
 
     return {"accord_applied": [detail]}
 

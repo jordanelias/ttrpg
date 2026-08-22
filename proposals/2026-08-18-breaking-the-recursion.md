@@ -641,7 +641,7 @@ and `review_core.py` (the `stubs.count` ratchet signal),"* and `:46-50` justifie
 because *"resetting on every call would make the counter useless for the ratchet signal in
 `tools/review_core.py`."* It returns a typed no-op. Three further kept
 engine files carry the same reasoning verbatim — `engine/cross_scale/articulation.py:26-28`,
-`engine/autoload/npc_ai.py:25-27`, `engine/cross_scale/scene_dispatch.py:363-365`.
+`engine/autoload/npc_ai.py:25-27`, `engine/cross_scale/scene_dispatch.py:365-367`.
 
 > **Game-engine code is now being written in a shape chosen to be legible to the audit apparatus.**
 > That is the recursion reaching its final surface, and no cull that classifies by directory can see it.
