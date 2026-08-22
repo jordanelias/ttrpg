@@ -54,28 +54,27 @@ and this root file remains the one stable SessionStart entry point.
 document is still the authority on what each act is and why. If you are about to write a new plan
 instead of taking a step, that is the loop; take the step.
 
-`state: next` is **S8 — move M1 juncture 1. The game, not more apparatus.**
+`state: next` is **S4 — culling wave 5: untrack the generated data** (~38,000 lines).
 
-S1, S2 and S3 landed: the load-bearing claim is true, waves 1-3 retired ~84,000 lines, the suite is
-**1,624 passed / 0 failed**, and broken-deps, claim-provenance, currency, register-size and
-ed-citations are all green with zero dead tool invocations anywhere.
+**S8 Half A LANDED — the game moved.** `sigma_leverage.roll_net_continuous` no longer rounds its
+pool, so Jordan's 2026-08-14 fractional-dice ruling is implemented rather than half-implemented. Six
+goldens re-recorded against `tools/balance_oracle.py` (NEW — the n>=100 control
+`engine/tests/test_f7_smoke_oracle.py:8` has demanded since it was written): 120 campaigns per arm,
+no faction shifts significantly, so the goldens moved from RNG divergence and not from balance.
+Combat's byte-exact goldens are the control and did not move.
 
-**And `0/7` is exactly where it was.** The execution order's own §1(c) says something must move it
-before more architecture lands; three steps landed and none did. `next` pointed at more culling
-until 2026-08-21, which is the T2 mechanism `CLAUDE.md` §0.3 describes — the board deciding the work
-instead of the milestone — reproduced inside the document written to escape it. S8 is now `next`.
+**S8 Half B SUSPENDED 2026-08-21 by Jordan — flagged for later systems work. Do not wire it.**
+The classification found the board's claim that `score/2` is "wired NOWHERE" to be FALSE: of three
+OPPOSED sites, `coronation_renewal_ob` already implements `floor(L/2)+1`, `tribunal` implements it
+under formal grounds, and only `parliamentary_transfer` contradicts it — with `L+2` stated as canon
+in its own design doc. Reconciling them would overwrite ratified canon and collapse tribunal's
+two-tier resistance mechanic. Classification: `registers/handoffs/HANDOFF_FA.md`. Pinned against
+drift by `tests/valoria/test_faction_obstacle_conventions.py`.
 
-**What S8 is:** `engine/autoload/sigma_leverage.py:284` does `max(1, int(round(pool)))` while
-`dice_engine.continuous_engine_sample` already accepts a fractional pool and says so at
-`dice_engine.py:92`. Measured: a 4-season seeded campaign makes 40 calls and **20 already pass a
-fractional pool**, every one silently rounded — the instrument is in the plan's S8 section, re-run
-it. Two lines, plus a measured golden delta. Then the `score/2` classification, which begins as a
-classification and may end as a question rather than an edit.
-
-⚠ **BEFORE THIS BRANCH MERGES:** `git push origin refs/tags/cull-2026-08-21-pre-waves-1-3`. The tag
-exists locally and covers all three culling waves; pushing it returned **HTTP 403** from this
-session's credential. Until it is on `origin`, the 83 `FORK:421cff2` provenance rows in
-`references/restructure_ledger.md` are correct only while this branch exists. (The block holds 86 rows in all; the other 3 name refs already on `main`.)
+⚠ **BEFORE THIS BRANCH MERGES:** `git push origin refs/tags/cull-2026-08-21-pre-waves-1-3` — the tag
+exists locally and covers all three culling waves; pushing it returned HTTP 403 from this session's
+credential. Until it is on `origin`, the 83 `FORK:421cff2` rows in `references/restructure_ledger.md`
+are correct only while this branch exists.
 
 **There is no SessionStart banner.** Wave 3 retired it; `CLAUDE.md` §0.3 records the experiment's
 result. Orient from `CURRENT.md`, this file, and the execution order. Do not build a replacement.

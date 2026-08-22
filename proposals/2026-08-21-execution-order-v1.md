@@ -206,7 +206,7 @@ either §0.1 guard. Do not write a replacement banner.
 
 ---
 
-### S4 — Wave 5: untrack the generated data · `state: blocked-by S8`
+### S4 — Wave 5: untrack the generated data · `state: next`
 
 **Goal:** no read/write failures from generated artifacts; end the document tax.
 
@@ -346,7 +346,29 @@ names is already clear: `test_fork_divergence.py` was deleted in `4ab18df`.
 
 ---
 
-### S8 — M1 juncture 1 · `state: next` (promoted 2026-08-21 — see below)
+### S8 — M1 juncture 1 · `state: half-done; Half B SUSPENDED` (2026-08-21)
+
+> **HALF A LANDED.** `sigma_leverage.roll_net_continuous` no longer rounds its pool. Six goldens
+> re-recorded against `tools/balance_oracle.py` at n=120 per arm — no faction shifts significantly,
+> so the goldens moved from RNG divergence, not balance. Combat's byte-exact goldens were the
+> control and did not move (749 of 749 combat calls are integral).
+>
+> **HALF B SUSPENDED by Jordan, 2026-08-21, flagged for later systems work** — and the
+> classification is why. It was expected to find fixed literals to convert. It found three OPPOSED
+> sites that already derive Ob from a target faction's score and DISAGREE with each other:
+> `coronation_renewal_ob` is `floor(L/2)+1` (already the ruling), `tribunal` is `L*0.5` under formal
+> grounds and full `L` otherwise, `parliamentary_transfer` is `L+2` — stated as canon in its own
+> design doc. So the board's claim that `score/2` is "wired NOWHERE" is false, and reconciling the
+> three would overwrite ratified canon and collapse tribunal's two-tier mechanic.
+>
+> Full classification and the two damage arguments: `registers/handoffs/HANDOFF_FA.md`. The three
+> conventions are pinned by `tests/valoria/test_faction_obstacle_conventions.py` so none drifts
+> while the question is suspended; when a ruling lands, that file is where it gets recorded.
+>
+> ⚠ NOT STUBBED, deliberately. These resolvers run in live campaigns: `stub_resolve`-ing them would
+> move the seeded goldens AND push `m1_acceptance` row 1 — which requires ZERO stub invocations on
+> the M1 path and currently fails at 2 — further from passing. Suspension is a flag on the
+> QUESTION, not a hole in the engine.
 
 > **PROMOTED TO `next`, and the promotion is the point.** This document's §1(c) says *something must
 > move `0/7` before more architecture lands*. S1, S2 and S3 landed; none of them changed how the game
