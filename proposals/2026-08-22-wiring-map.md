@@ -233,7 +233,11 @@ The discard at `keys.py:576-577` is **CODED by contract** (§4.1 step 5, synchro
 
 This is the map's cleanest actionable finding, and it is settled on the corpus's own evidence:
 
-- `scene.contest_resolved` is the only Key type a default campaign emits — `echo_transport.py:97-100` maps `"contest"` → it, and `parliamentary_bridge.py:212` emits one **every season**.
+> ⚠ **CORRECTED 2026-08-22, same day, by the reconciliation pass — and the correction strengthens the finding.** This section first read *"`scene.contest_resolved` is the only Key type a default campaign emits."* **False.** `faction_action.py::_emit_battle_concluded` (`:342`) builds a real `scene.battle_concluded` Key and is called **unconditionally** at `:480` after every resolved war action. Its own docstring names it *"THE FIRST KEY EMISSION OUTSIDE `echo_transport` (ED-IN-0122)"*, landed precisely because *"a substrate with one call site is a prototype, not an architecture."* I inherited the single-emitter claim from a measurement that predates that commit.
+>
+> **Why this makes C5 bigger, not smaller:** `scene.battle_concluded` is **also absent** from `_TRIGGER_TYPE_IDS` (verified — the tuple has 13 entries and does not contain it), while `references/key_graph.json` declares **four** consumers for it, `articulation_layer` among them (`faction_action.py:474-476`). So the registry-vs-trigger-roster inconsistency is **two omitted rows, not one**, and the second one's emitter fires on every battle. The delta's §2.2 conclusion — that **zero** articulation callbacks fire in a default campaign — is unaffected and still holds.
+
+- `scene.contest_resolved` is emitted every season — `echo_transport.py:97-100` maps `"contest"` → it, and `parliamentary_bridge.py:212` emits one **every season**.
 - It is absent from `_TRIGGER_TYPE_IDS` (`articulation.py:116-130`) **and** from the canon trigger table (`articulation_layer_v30.md` §3.1, rows 1–13).
 - **But the key-type registry already declares articulation a `consuming_systems` member of it** (`key_type_registry_v30.md:854`).
 - And the trigger table's own history note describes *exactly this class of gap* — *"declares articulation a consuming_systems member … but this ruleset never listed either type"* — as **the defect that rows #11/#12 (ED-IN-0004) and row #13 (OI-03) were added to close.**
@@ -241,6 +245,23 @@ This is the map's cleanest actionable finding, and it is settled on the corpus's
 `scene.contest_resolved` is the remaining instance of that same class, with the strongest emitter of all. Insertion point: a §3.1 row #14 plus one tuple entry at `articulation.py:130`, following the two-surface-in-one-change discipline rows 11–13 used.
 
 **Payoff is bounded:** the callback it would reach is still the C1–C4 stub. This closes a *registry inconsistency*, not the render gap.
+
+**A second correction to §0.1, from the same pass.** I wrote that the registry holds *"46 fully-structured characters"* and enumerated the fields *"every entry carries."* **That is false as a population claim** — those are the schema's **optional** fields, and I never counted them. Measured across all 46:
+
+| Field | Populated | | Field | Populated |
+|---|---|---|---|---|
+| `id` / `first_name` / `faction` / `role` / `status` / `source` / `convictions` | **46** | | `notes` | 15 |
+| `last_name` | 44 | | `ts` | 10 |
+| `cultural_label` | 43 | | `territory` | **7** |
+| `arc_trajectory` | 36 | | `title` | 7 |
+| `self_other_initial` | 28 | | `birthplace` | 5 |
+| `resonant_style` | 18 | | `stats` | **1** |
+| `goals` | 17 (39 sentences) | | `coherence` | **1** |
+| `certainty` | 8 | | `age` | **0** |
+
+**One entry has a stats block. One has a coherence value.** The honest characterization is **46 *identified* characters, all carrying a conviction profile, of which roughly a third are deeply authored** — not 46 fully-structured ones.
+
+**And a schema defect a loader will hit immediately:** `cultural_label`, `self_other_initial` and `migration_notes` appear at **two different nesting levels** across entries — top-level for some, nested under `convictions` for others (`cultural_label`: 17 top-level, 26 nested; `self_other_initial`: 2 top-level, 26 nested). A loader reading either level alone silently misses most of the data. This is not in the sixteen gaps; it is a data-hygiene fix.
 
 ---
 
