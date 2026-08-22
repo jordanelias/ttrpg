@@ -100,13 +100,17 @@ def test_the_render_is_deterministic(emap):
     registries, and a join over an unordered set renders differently run to run — which would make
     every anchor assertion above unfalsifiable.
     """
-    proc = subprocess.run(
-        [sys.executable, os.path.join(ROOT, 'tools', 'build_execution_map.py')],
-        capture_output=True, text=True, cwd=ROOT)
-    assert proc.returncode == 0, (
-        f"rebuilding the execution map failed:\n{proc.stdout}\n{proc.stderr}")
-    with open(MAP_JSON, encoding='utf-8') as fh:
-        rebuilt = json.load(fh)
+    # IN-PROCESS, and deliberately not a subprocess run of the builder. Invoking `main()` WRITES
+    # references/execution_map.json, and under CI's `-n auto` another worker may be reading that
+    # file at the same moment — the shared-tree-mutation race that took down test_engine_atlas on
+    # 2026-08-22. `build()` is pure (only `main()` writes), so the same claim is available without
+    # touching the tree at all.
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        'bem', os.path.join(ROOT, 'tools', 'build_execution_map.py'))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    rebuilt = mod.build()
     assert rebuilt == emap, (
         'references/execution_map.json differs between two builds of the same sources — the '
         'render is not deterministic, which makes every check in this file a coin flip.')

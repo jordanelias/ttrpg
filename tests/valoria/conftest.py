@@ -83,9 +83,11 @@ def pytest_collection_modifyitems(config, items):
 # that failure class does not exist any more — it was deleted, not weakened. What the tests assert
 # now is the invariant that survives: *the builder runs against the real sources and produces a
 # well-formed artifact*. A builder that crashes, or emits something malformed, still fails.
+import json as _json
 import os as _os
 import subprocess as _subprocess
 import sys as _sys
+import time as _time
 
 import pytest as _pytest
 
@@ -113,14 +115,8 @@ _GENERATED_LAYER = (
 )
 
 
-@_pytest.fixture(scope='session')
-def generated_layer():
-    """Build every untracked generated artifact, in dependency order. Returns {builder: artifacts}.
-
-    Request this from any test that reads one of them. It is idempotent and session-scoped, so
-    ordering between tests cannot matter — which is the property that made the committed copies
-    look necessary in the first place.
-    """
+def _build_the_layer():
+    """Run every builder, in dependency order. Returns {builder: artifacts}."""
     built = {}
     for builder, artifacts in _GENERATED_LAYER:
         path = _os.path.join(_REPO, 'tools', builder)
@@ -137,6 +133,57 @@ def generated_layer():
             f'stale", and it is a harder failure, not a softer one.')
         built[builder] = artifacts
     return built
+
+
+@_pytest.fixture(scope='session')
+def generated_layer(request, tmp_path_factory):
+    """Build every untracked generated artifact, in dependency order. Returns {builder: artifacts}.
+
+    Request this from any test that reads one of them. It is idempotent and session-scoped, so
+    ordering between tests cannot matter — which is the property that made the committed copies
+    look necessary in the first place.
+
+    EXACTLY ONE PROCESS BUILDS, EVEN UNDER `-n auto`, and that is not an optimisation.
+    `scope='session'` is per-WORKER, not per-run: with N xdist workers, N processes would run these
+    seven builders concurrently against one shared `references/` directory. A reader on worker 3
+    then sees `key_graph.json` mid-write — the same shared-tree race that took `test_engine_atlas`
+    down on 2026-08-22, arriving from the fixture instead of from a test.
+
+    The gate is an `O_CREAT | O_EXCL` create in xdist's shared base temp dir, which is atomic on
+    every filesystem this runs on. The winner builds and writes a `.done` marker; the others block
+    on that marker. No `filelock` dependency — CI installs `pyyaml pytest numpy pytest-xdist` and
+    nothing else, so a fixture that imported one would fail on the runner and pass locally, which
+    is the same class of defect as the race it is fixing.
+    """
+    if not hasattr(request.config, 'workerinput'):
+        return _build_the_layer()         # not under xdist: this process is the only one
+
+    shared = tmp_path_factory.getbasetemp().parent
+    done = shared / 'generated_layer.done'
+    lock = shared / 'generated_layer.lock'
+    try:
+        fd = _os.open(str(lock), _os.O_CREAT | _os.O_EXCL | _os.O_WRONLY)
+    except FileExistsError:
+        fd = None
+
+    if fd is not None:                    # we won the race; we build
+        try:
+            built = _build_the_layer()
+            done.write_text(_json.dumps(built), encoding='utf-8')
+        finally:
+            _os.close(fd)
+        return built
+
+    # Someone else is building. Wait for the marker rather than racing them.
+    deadline = _time.monotonic() + 900
+    while _time.monotonic() < deadline:
+        if done.exists():
+            return _json.loads(done.read_text(encoding='utf-8'))
+        _time.sleep(0.25)
+    raise RuntimeError(
+        f'timed out after 900s waiting for another xdist worker to build the generated layer '
+        f'({done} never appeared). The builder process most likely died; its own assertion text '
+        f'would be in that worker\'s output.')
 
 
 @_pytest.fixture(scope='session')
