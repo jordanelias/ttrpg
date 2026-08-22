@@ -93,9 +93,15 @@ import pytest as _pytest
 
 _REPO = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), '..', '..'))
 
-# (builder, [artifacts it produces]) in DEPENDENCY ORDER. Two edges make the order load-bearing:
-# `build_engine_atlas` and `build_contract_index` both read `references/key_graph.json`, and both
-# `build_engine_atlas` and `build_execution_map` read `references/execution_trace.json`.
+# (builder, [artifacts it produces]) in DEPENDENCY ORDER. FOUR edges make the order load-bearing —
+# this comment said "two" until an adversarial pass recounted them (2026-08-22):
+#   * `references/key_graph.json` is read by THREE builders — build_contract_index.py:68,
+#     build_engine_atlas.py:57, build_execution_map.py:212
+#   * `references/execution_trace.json` is read by build_engine_atlas.py:59 and build_execution_map
+#   * `references/execution_map.json` is read by build_engine_atlas.py:58
+# The order below satisfies all of them; the undercount was in the description, not the tuple. It is
+# corrected rather than left, because the next person to add a builder will size the risk from this
+# comment.
 #
 # `trace_execution_phases.py` is the expensive one (~9.5s — it profiles a full seeded campaign) and
 # it is FIRST rather than omitted on cost grounds. Omitting it does not fail: both consumers report
@@ -183,7 +189,12 @@ def generated_layer(request, tmp_path_factory):
     raise RuntimeError(
         f'timed out after 900s waiting for another xdist worker to build the generated layer '
         f'({done} never appeared). The builder process most likely died; its own assertion text '
-        f'would be in that worker\'s output.')
+        f'would be in that worker\'s output.\n'
+        f'KNOWN COST, stated rather than hidden: when a builder DOES die, every other worker waits '
+        f'the full 900s before reaching this line, so the common failure presents as a ~15-minute '
+        f'silent CI hang and then an error that points at a different process. The alternative — a '
+        f'short timeout — turns a slow machine into a spurious failure, which is worse. If this '
+        f'fires in CI, read the FIRST worker\'s output, not this one\'s.')
 
 
 @_pytest.fixture(scope='session')

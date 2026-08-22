@@ -71,10 +71,30 @@ in its own design doc. Reconciling them would overwrite ratified canon and colla
 two-tier resistance mechanic. Classification: `registers/handoffs/HANDOFF_FA.md`. Pinned against
 drift by `tests/valoria/test_faction_obstacle_conventions.py`.
 
-⚠ **BEFORE THIS BRANCH MERGES:** `git push origin refs/tags/cull-2026-08-21-pre-waves-1-3` — the tag
-exists locally and covers all three culling waves; pushing it returned HTTP 403 from this session's
-credential. Until it is on `origin`, the 83 `FORK:421cff2` rows in `references/restructure_ledger.md`
-are correct only while this branch exists.
+✅ **RESOLVED 2026-08-22 — the tag is no longer load-bearing, so the blocker is gone rather than
+outstanding.** This warning used to read: push `refs/tags/cull-2026-08-21-pre-waves-1-3` before this
+branch merges, because the ledger's FORK rows pointed at `421cff2` and would dangle otherwise. The
+tag push had returned HTTP 403 from this session's credential, so the blocker was real.
+
+It is closed by re-pointing rather than by pushing. All **83** `FORK:` rows in
+`references/restructure_ledger.md` now name **`1e4c6f4`**, which is `origin/main`'s own tip —
+`git merge-base --is-ancestor 1e4c6f4 origin/main` succeeds, so squash, rebase and merge-commit all
+leave every row resolvable. The tag remains a nice-to-have, not a precondition.
+
+⚠ **AND THE HALF THIS WARNING PREVIOUSLY MISSED, now also closed.** Re-pointing the ledger fixed the
+ledger and nothing else: **twenty-eight further citations of `421cff2` were still live on eight
+tracked surfaces** — `CLAUDE.md` §8, `CURRENT.md` ×2, this file, fourteen rows of `tools/README.md`,
+and three *game-design* flow skeletons (`systems/settlements/` ×10, `systems/fieldwork/`,
+`systems/ui/`). `421cff2` is a **branch-local rebase commit** — `git branch --contains` names only
+this branch — so a squash-merge annihilates it and dangles every one of those, which is exactly the
+fabricated-provenance failure PR #288 caused once already.
+
+All twenty-eight are re-pointed to `1e4c6f4`, verified byte-identical at both refs
+(`git rev-parse 421cff2:<path>` == `git rev-parse 1e4c6f4:<path>` for a sample of six) and present
+there. **Zero live citations of `421cff2` remain.** Found by an adversarial read-only pass, not by a
+tool: nothing in the tree distinguishes a squash-mortal ref from a durable one, and that gap is still
+open — the lesson is that re-pointing a ledger is not the same as re-pointing the corpus that cites
+the same ref.
 
 **There is no SessionStart banner.** Wave 3 retired it; `CLAUDE.md` §0.3 records the experiment's
 result. Orient from `CURRENT.md`, this file, and the execution order. Do not build a replacement.

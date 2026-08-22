@@ -246,6 +246,12 @@ generated-file churn and no red gate**, then delete it.
 **Commit:** `f84692c [cleanup] Culling wave 5 (S4): untrack the generated layer, and replace five
 staleness gates with one build gate` — 25 files untracked, **38,156 tracked lines** removed.
 
+⚠ **Do not quote a 566,731 → 370,340 figure as this STEP's result.** That −196,391 span is the whole
+BRANCH's cull (waves 1, 2, 3 and 5 together); S4 alone is the 38,156 above, which is what this step's
+gate at `:242` predicted ("~35,000"). The two were reported together to Jordan on 2026-08-22 in a way
+that read as one number for one step; corrected here so the next reader does not inherit the
+conflation.
+
 **RESULT, including where this step DEVIATED from the instruction above.**
 
 *The gate flip was not a flip.* The instruction said each `--check` that diffs a committed copy
@@ -254,23 +260,44 @@ near-identical tests alive as a rule about a file nobody wrote — the duplicati
 landed instead: **one** owner of "every builder runs and leaves its artifacts"
 (`tests/valoria/test_generated_layer.py`), with per-artifact **determinism** staying in each
 artifact's own file because nothing in the first claim can observe it. The staleness failure class
-was DELETED, not reworded — saying otherwise would have been the dishonest half of the change.
+was DELETED — saying otherwise would have been the dishonest half of the change.
+
+  ⚠ **"deleted, not reworded" was overdrawn as a description of the FILES, and is narrowed here.**
+  The *failure class* was genuinely deleted. But only three of the five tests disappeared: two were
+  rewritten in place into determinism tests that say so in their own docstrings
+  (`test_execution_map.py` "This WAS `test_map_is_current`", `test_key_graph.py` "This WAS
+  `test_graph_is_current`"), and `test_definitions_store.py` still carries its original name
+  `test_store_is_current_and_parity_holds`. Those rewrites make a different, still-falsifiable claim
+  — which is the point — but three-of-five is not five-of-five.
 
 *`build_identifier_census --check` was REMOVED from CI, not flipped.* It compares a fresh
 re-derivation against files git no longer carries; left in the blocking `validators` job it would
 have red `main` on the first push. Removed from `tools/valoria_local.py` in the same commit.
 
-*THE FOUR VOCAB VIEWS ARE KEPT TRACKED — the instruction above is wrong on this and is not
-followed.* Two independent reasons, both measured:
+*THE FOUR VOCAB VIEWS ARE KEPT TRACKED — the instruction above is not followed. ⚠ THE FIRST REASON
+THIS SECTION ORIGINALLY GAVE WAS FALSE AND IS RETRACTED (2026-08-22, adversarial pass).* It claimed
+two blocking CI validators "read them". They do not:
 
-  1. **Two BLOCKING CI validators read them** — `validate_ed_citations.py` and `ci_naming_check.py`.
-     Untracking them puts a blocking gate's input outside a clean checkout, which is precisely the
-     §5.5 hazard this step was told to clear, not create.
-  2. **They do not carry the document tax.** They are generated from
-     `references/definitions/vocab_source.yaml`, an AUTHORED file — so they churn when vocabulary
-     changes and never on an unrelated prose edit. The wave-5 criterion is *generated · never
-     authored · churns on unrelated edits*; the views fail the third clause. Untracking them buys
-     nothing and costs a builder in the fixture.
+  * `tools/ci_naming_check.py:60-75` lists all four in its **EXCLUDE** tuple — it deliberately skips
+    them, so their absence changes nothing.
+  * `tools/validate_ed_citations.py` lists them in `PROVENANCE_PATHS`, which only classifies a file
+    the tree walk already found; an absent one is skipped.
+
+  Measured, not reasoned: with all four moved off disk, `validate_ed_citations.py` and
+  `ci_naming_check.py` both exit **0**. The claim was a pattern-match on the filenames appearing in
+  both validators' source, and it was used to justify deviating from a ratified instruction — the
+  worst place to put an unverified reason.
+
+  **The decision stands, on the two reasons that survive:**
+
+  1. **`tests/valoria/test_vocab_store.py` is the real guard, and it is in the BLOCKING pytest
+     suite.** Same measurement: with the views absent it fails 2 of 4 (`test_views_are_generated_stamped`
+     among them). So untracking really would put a blocking gate's input outside a clean checkout —
+     the §5.5 hazard — just not via the validators originally named.
+  2. **They do not carry the document tax.** They generate from `references/definitions/vocab_source.yaml`,
+     an AUTHORED file, so they churn when vocabulary changes and never on an unrelated prose edit.
+     The wave-5 criterion is *generated · never authored · churns on unrelated edits*; the views fail
+     the third clause.
 
   Their only former runtime consumer, `tools/observability/build_lexicon.py`, went in wave 1, which
   is presumably why the instruction assumed they were free to drop.
@@ -279,6 +306,35 @@ followed.* Two independent reasons, both measured:
 does not fail — both consumers report an absent input — it makes every subsystem read as "not
 observed at this seed", which is the false-absence error the tracer's own docstring warns about,
 reached by a fixture instead of by a reader.
+
+*A FIFTH DEVIATION, UNDECLARED UNTIL THE ADVERSARIAL PASS FOUND IT (2026-08-22).* The instruction at
+`:234-236` gives a regeneration order: `build_execution_map` → `build_engine_atlas` →
+`build_identifier_census` → the exporters. The fixture implements a different one: `trace` →
+`key_graph` → `execution_map` → `atlas` → `contract_index` → `census` → `definitions`. The fixture's
+order is the CORRECT one — the instruction's omits `key_graph`, which **three** builders read
+(`build_contract_index.py:68`, `build_engine_atlas.py:57`, `build_execution_map.py:212`), and omits
+that `build_engine_atlas` additionally reads `execution_map.json` (`:58`). Running the instruction's
+order literally would hand two builders an absent input.
+
+So the deviation is an improvement, and it is recorded here for the reason the other four are: a
+plan whose executor silently re-orders its steps is a plan the next reader cannot trust. Note also
+that `conftest.py`'s own comment undercounted these edges as "two builders read `key_graph.json`" —
+corrected in the same commit.
+
+*THE BUILD GATE'S JUSTIFICATION, STATED NARROWLY.* `tests/valoria/test_generated_layer.py` was
+defended to Jordan as clearing §0.1 pt 5's load-bearing predicate. **It does not, and that defence is
+withdrawn.** The generated layer is load-bearing on process only: it has zero readers in `engine/`
+(proven by import), it crosses into no export, no port and no `needs_jordan` queue. Under the letter
+of the predicate — the one that forbade `test_gate_coverage.py` — this test would not be minted today
+on its own merits.
+
+What actually licenses it is narrower and sufficient: **S4's ratified instruction mandated a build
+gate** ("The gate flip IS the work", `:236-241`), and the change is a net **5 → 1** reduction of an
+existing guard surface, not a fresh mint. Recorded rather than quietly dropped, because CLAUDE.md
+§0.3 names apparatus-guard minting as the loop's generator (T3) and a session executing the
+anti-loop plan is the last place that should go unexamined. `test_the_layer_is_not_vacuous` is
+additionally a guard-on-a-guard by shape — four lines, defensible floor, but the shape §0.3 indicts
+at depth five, and nobody said so until now.
 
 **Hard gate (§5.5) — CLEARED, by measurement.** `validate_ed_citations.py` EXCLUDES the generated
 sidecars rather than reading them, so it degrades safely. Verified by running it, and every other

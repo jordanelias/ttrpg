@@ -1432,7 +1432,7 @@ was a different way to get provenance wrong:
 1. **They named `3be53ef`, the commit that PERFORMS the wave-1+2 deletion.** A file deleted *by* a
    commit is not present *at* it — `git cat-file -e 3be53ef:tools/review_core.py` fails. Caught by a
    read-only audit.
-2. **They then named `421cff2`, the pre-deletion commit — correct content, wrong lifetime.** It is a
+2. **They then named `1e4c6f4`, the pre-deletion commit — correct content, wrong lifetime.** It is a
    BRANCH commit, and this file's own note above records that PR #288's squash-merge annihilated
    exactly such a ref and calls the result *fabricated provenance*. The fix at the time was a tag
    (`cull-2026-08-21-pre-waves-1-3`), which could not be pushed: **HTTP 403**, this session's
