@@ -36,14 +36,14 @@ from dataclasses import dataclass, field, fields as dc_fields
 from engine.substrate.canon_buckets import canonical_accord  # noqa: F401 (re-export)
 from engine.substrate import composition
 from engine.substrate import descriptors
-from engine.substrate import world_initial_state  # sole runtime reader of references/world_initial_state.yaml  # sole runtime reader of references/descriptor_registry.yaml
+from engine.substrate import world_initial_state  # sole runtime reader of references/world_initial_state.yaml
 
 
 # ── The world's opening position (moved to references/ at plan S5b, 2026-08-22) ────────────────
 # These were six Python literals here, inherited from mc_v17.py L62-82 (itself from mc_v15.py) with
 # no authored source anywhere. They are WORLD DATA: which territories exist, who holds them at
-# season 0, how settled and prosperous each is, where the garrisons start, and what each faction
-# opens with. The authored source is references/world_initial_state.yaml, cooked by
+# season 0, how settled and prosperous each is, where the garrisons start, which is Templar-held,
+# and what each faction opens with. The authored source is references/world_initial_state.yaml, cooked by
 # tools/export_world_initial_state.py behind a blocking --check and read by the leaf below.
 #
 # The NAMES are unchanged on purpose — they are cited across flow skeletons, design docs and tests,
@@ -127,8 +127,51 @@ class Faction:
     # regardless of outcome.
     parl_transfer_used_this_arc: bool = False
 
+    #: The bounds `adjust` falls back to when `references/descriptor_registry.yaml` declares none.
+    #: Today that is `L` alone — Legitimacy/Mandate, whose registry status is Q1, Jordan's open
+    #: ruling. These were the BLANKET bounds every stat used before ED-IN-0029 was wired at plan
+    #: S5d; they survive here as the undeclared-stat fallback rather than as the rule.
+    UNDECLARED_FLOOR = 0.5
+    # Same ceiling the registry declares for every stat it DOES declare, so the undeclared case is
+    # not quietly more permissive than the declared ones.
+    UNDECLARED_CEILING = 7.0  # [canonical: references/descriptor_registry.yaml faction_stats — scale "0-7"/"1-7"]
+
     def adjust(self, stat: str, granular_delta: float,
-               floor: float = 0.5, ceiling: float = 7.0):
+               floor: float | None = None, ceiling: float | None = None):
+        """Apply a granular delta to a faction stat, clamped to the bounds the REGISTRY declares.
+
+        ED-IN-0029 (ratified 2026-07-08, OPT-AV-14/D14 + OPT-AV-18) set per-stat floors: Influence
+        floors at 1 — an institution's influence never fully vanishes — and Wealth, Military,
+        Stability and Intel float at 0. This method applied a blanket 0.5/7.0 to every stat for the
+        six weeks after that ratification, and none of its 31 call sites overrode it, so a ratified
+        canon decision had never reached the executable model. `descriptors.faction_bounds()` is
+        the single owner of those numbers; this is its first runtime caller.
+
+        ⚠ FOUR OF THE FIVE FLOORS REACH THE CODE. `intel` does not, and saying "ED-IN-0029 is now
+        wired" without this qualification would be the false-claim class §1(a) of the plan exists to
+        stop. `MULTS` has no `intel` key, so `adjust('intel', …)` raises `KeyError` on the line
+        below before any bound is consulted — `faction_bounds('intel')` returns (0, 7) that no code
+        path can reach. That is consistent with the field's own history: `fac.intel` was added to
+        the dataclass at its ratified floor and is documented as unread and unwritten by live code.
+        Wiring it needs a multiplier, which is a canon value nobody has stated, so it is recorded
+        here rather than invented.
+
+        `L` KEEPS THE OLD BOUNDS, and that is a decision rather than an omission. The registry
+        declares no entry for Legitimacy — whether it is a base faction descriptor or derived like
+        Mandate is Q1, open to Jordan — so `faction_bounds` returns None for it and this falls back
+        to 0.5/7.0. Twenty of the 31 call sites adjust `L`, so this is the majority of traffic and
+        it is deliberately unchanged: wiring a floor for a stat the registry does not declare would
+        be inventing canon, which is the one thing a wiring commit must not do.
+
+        The explicit `floor`/`ceiling` parameters survive with no live caller. They are how a call
+        site would state a locally-canonical bound, and removing an unused parameter is its own
+        change; what they no longer do is silently supply the DEFAULT for every stat.
+        """
+        bounds = descriptors.faction_bounds(stat)
+        if floor is None:
+            floor = bounds[0] if bounds else self.UNDECLARED_FLOOR
+        if ceiling is None:
+            ceiling = bounds[1] if bounds else self.UNDECLARED_CEILING
         mult = MULTS[stat]
         val = getattr(self, stat)
         val = max(floor, min(ceiling, val + granular_delta / mult))
@@ -153,15 +196,19 @@ class Faction:
 #
 # The check runs at import and ONE WAY: a faction stat declared in the registry with no field here
 # stops the engine from importing. It deliberately does NOT fail on the reverse, because exactly one
-# such field exists — `L` (Legitimacy/Mandate), written by 32 .adjust() call sites and declared
+# such field exists — `L` (Legitimacy/Mandate), written by 20 of .adjust()'s 31 non-test call
+# sites (AST-counted 2026-08-22; the 32 this line used to claim was a grep that counted comments)
+# and declared
 # nowhere in the registry — and whether it is a base descriptor or derived like Mandate is Jordan's
 # ruling to make, not a check's.
 #
-# NOT YET WIRED, and the gap is recorded rather than quietly closed: the registry's PER-STAT floors
-# were ratified 2026-07-08 (ED-IN-0029) — Influence floors at 1, the rest at 0 — while `adjust`
-# above applies a blanket floor of 0.5 to every stat and no caller overrides it. Wiring
-# `descriptors.faction_bounds()` into `adjust` moves the seeded campaign goldens, so it belongs in
-# its own commit with the delta measured (CLAUDE.md §0.1 pt 4), not here.
+# WIRED 2026-08-22 (plan S5d). The registry's PER-STAT floors, ratified 2026-07-08 (ED-IN-0029) —
+# Influence floors at 1, the rest at 0 — reach the executable model: `Faction.adjust` above reads
+# `descriptors.faction_bounds()` instead of applying a blanket 0.5 to every stat. It had been
+# ratified canon that never reached code for six weeks. `L` keeps the old bounds because the
+# registry declares no entry for it and Q1 (is Legitimacy a base descriptor?) is Jordan's open
+# ruling; inventing a floor for it here would be authoring canon inside a wiring commit.
+# The goldens moved and were re-recorded against a measured n=120 control — see that commit.
 descriptors.assert_faction_roster_is_covered({f.name for f in dc_fields(Faction)})
 
 
@@ -253,9 +300,11 @@ def create_world(seed: int | None = None) -> World:
             accord=ACCORD_MAP[STARTING_ACCORD[tid]],
             pt=PT_MAP[STARTING_PT[tid]],
             garrison=STARTING_GARRISON.get(tid, False),
-            prosperity=2 if tid in {'T1', 'T2', 'T3', 'T8', 'T9', 'T14'} else 1,
+            prosperity=world_initial_state.STARTING_PROSPERITY[tid],
+            # fort_level stays DERIVED from garrison rather than authored: it is a rule, not data,
+            # and authoring it would give one number two owners.
             fort_level=1 if STARTING_GARRISON.get(tid, False) else 0,
-            templar=(tid == 'T9'),
+            templar=world_initial_state.STARTING_TEMPLAR[tid],
         )
         territories[tid] = t
 

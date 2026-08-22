@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Cook the world's opening position so `engine/` stops carrying it as literals.
 
-WHY THIS EXISTS (plan S5b, 2026-08-22). `engine/autoload/game_state.py` opened with five hardcoded
+WHY THIS EXISTS (plan S5b, 2026-08-22). `engine/autoload/game_state.py` opened with six hardcoded
 tables — `ALL_PLAYABLE_15`, `STARTING_OWNER`, `STARTING_ACCORD`, `STARTING_PT`, `STARTING_GARRISON`
 and `STARTING_STATS` — carried forward from `mc_v17.py` L62-82 with no authored source anywhere in
 the corpus. That is world data living in the engine: changing who holds T4 at season 0 meant editing
@@ -10,8 +10,7 @@ and `engine/substrate/world_initial_state.py` is its single runtime reader — t
 the pattern the plan's §2 states as the target: one authored surface, one exporter, one artifact,
 one leaf.
 
-IT VALIDATES AT EXPORT TIME. The four per-territory columns must cover exactly the same territory
-set, owners must be factions the stats table declares, and the numeric ranges are checked against
+IT VALIDATES AT EXPORT TIME. Every territory declares all seven columns, owners must be factions the stats table declares, and the numeric ranges are checked against
 the canon buckets they index. A typo reds a blocking CI gate rather than silently producing a world
 with a territory nobody owns.
 
@@ -59,9 +58,9 @@ def build():
     factions = sorted(stats)
     owners_seen = set()
     for tid, row in sorted(territories.items()):
-        for field in ('owner', 'accord', 'pt', 'garrison', 'playable'):
+        for field in ('owner', 'accord', 'pt', 'garrison', 'playable', 'prosperity', 'templar'):
             if field not in row:
-                _fail(f'{tid} is missing {field!r}. Every territory declares all five columns; a '
+                _fail(f'{tid} is missing {field!r}. Every territory declares all seven columns; a '
                       f'missing one would silently default and move the opening position.')
         owner = row['owner']
         if owner is not None:
@@ -73,8 +72,12 @@ def build():
             _fail(f'{tid} accord={row["accord"]} is outside the canonical 0-4 ACCORD_MAP buckets.')
         if not PT_RANGE[0] <= row['pt'] <= PT_RANGE[1]:
             _fail(f'{tid} pt={row["pt"]} is outside the canonical 0-5 PT_MAP buckets.')
-        if not isinstance(row['garrison'], bool) or not isinstance(row['playable'], bool):
-            _fail(f'{tid}: garrison and playable must be booleans.')
+        if not all(isinstance(row[f], bool) for f in ('garrison', 'playable', 'templar')):
+            _fail(f'{tid}: garrison, playable and templar must be booleans.')
+        if row['prosperity'] not in (1, 2):
+            _fail(f'{tid} prosperity={row["prosperity"]}; the opening table only ever declares 1 or '
+                  f'2. A third value may be legitimate one day — say so in the plan and relax this '
+                  f'deliberately, because Territory.prosperity has no declared scale anywhere.')
 
     if list(stats) != ['Crown', 'Church', 'Hafenmark', 'Varfell']:
         _fail(f'faction order is {list(stats)}, expected [Crown, Church, Hafenmark, Varfell]. '

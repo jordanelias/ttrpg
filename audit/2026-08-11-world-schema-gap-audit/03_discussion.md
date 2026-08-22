@@ -253,7 +253,7 @@ and if it did, half the roster would be indistinguishable on it.
 This is **scripting drift**, the failure mode CLAUDE.md §10 names, and the register ranks it high
 regardless of rediscovery count because the defect is structural rather than statistical.
 
-- `engine/autoload/game_state.py:234` — `templar=(tid == 'T9')`. A real, writable, persisted,
+- `engine/autoload/game_state.py:279` — `templar=(tid == 'T9')`. A real, writable, persisted,
   consequential field, set for exactly one territory by a hardcoded name comparison (G-15).
 - ⚠ Faction-unique behaviour dispatches on string equality — **2 production sites, not the 8 an
   earlier version of this line reported.** The regex `.name == 'Crown'|'Church'|'Hafenmark'|'Varfell'`

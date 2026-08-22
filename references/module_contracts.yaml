@@ -78,19 +78,23 @@ composition_roles:
 
   # ── The parliamentary seam (added 2026-08-22, plan S5a) ───────────────────────────────────────
   # `engine/cross_scale/parliamentary_bridge.py` held the last three top-level `systems` imports in
-  # `engine/`, and the SAME seam was owned a second time laterally at
-  # `systems/factions/sim/parliamentary_transfer.py` (its own top-level import of the vote) — two
-  # modules each naming the §10 vote's provider. One seam, one declaration: both resolve these roles.
+  # `engine/`, and the SAME seam was owned laterally as well. CORRECTED 2026-08-22 after an
+  # adversarial pass: the first version of this note said "owned twice" and converted two callers.
+  # It was owned THREE times across subsystem boundaries — `parliamentary_transfer.py` §4 and
+  # `parliamentary_action.py` §5.4 both imported the provider by name — and all three now resolve
+  # these roles. `systems/social_contest/sim/parliamentary_stay.py` also imports it and is left
+  # alone deliberately: that is social_contest importing its own sibling, which is not a
+  # cross-subsystem seam and needs no registry indirection.
   parliamentary_vote:
     target: "systems.social_contest.sim.parliamentary_vote:run_parliamentary_vote"
-    needed_by: "engine/cross_scale/parliamentary_bridge.py (the two-pole season vote) AND systems/factions/sim/parliamentary_transfer.py §4 (the vote-wrapped transfer resolution)"
+    needed_by: "engine/cross_scale/parliamentary_bridge.py (the two-pole season vote), systems/factions/sim/parliamentary_transfer.py §4 (the vote-wrapped transfer resolution), and systems/factions/sim/parliamentary_action.py §5.4 (the Censure motion)"
     note: "social_contest_v30 §10. Applies the Total-Victory Mandate penalty itself; callers read the VoteResult, they do not re-derive its bands."
   parliamentary_motion:
     target: "systems.social_contest.sim.parliamentary_vote:Motion"
-    needed_by: "the same two callers — the §10 motion record they construct before voting"
+    needed_by: "the same three callers — the §10 motion record they construct before voting"
   parliamentary_vote_declaration:
     target: "systems.social_contest.sim.parliamentary_vote:VoteDeclaration"
-    needed_by: "the same two callers — one per faction taking a side under §10 step 2"
+    needed_by: "the same three callers — one per faction taking a side under §10 step 2"
   territory_transfer_candidate:
     target: "systems.factions.sim.parliamentary_transfer:derive_transfer_candidate"
     needed_by: "engine/cross_scale/parliamentary_bridge.py — OI-04 derivation of (initiator, territory, mode)"
@@ -108,7 +112,7 @@ composition_roles:
   #
   # `world_gen` runs at world creation. The `snapshot_state.*` rows are the save/restore
   # deserializers: `serialize_world` writes a registry's rows as plain dicts, and
-  # `world_from_snapshot` needs the owning subsystem's dataclass to rehydrate them. The KEY is the
+  # `restore_world` needs the owning subsystem's dataclass to rehydrate them. The KEY is the
   # snapshot field, so a reader can go from a save file straight to the class that owns it.
   world_gen_settlements:
     target: "systems.settlements.sim.registry:populate_from_geography"
@@ -116,35 +120,35 @@ composition_roles:
     note: "Deterministic, no RNG draw, so it cannot move an RNG-derived campaign golden."
   snapshot_state.practitioners:
     target: "systems.threadwork.sim.coherence:CoherenceState"
-    needed_by: "engine/autoload/game_state.py world_from_snapshot — schema migration #1"
+    needed_by: "engine/autoload/game_state.py restore_world — schema migration #1"
   snapshot_state.insurgencies:
     target: "systems.world.sim.insurgency_pipeline:InsurgencyRecord"
-    needed_by: "engine/autoload/game_state.py world_from_snapshot — schema migration #1"
+    needed_by: "engine/autoload/game_state.py restore_world — schema migration #1"
   snapshot_state.npcs:
     target: "systems.world.sim.npe:NPC"
-    needed_by: "engine/autoload/game_state.py world_from_snapshot — schema migration #1; a LIST per territory, not a single record"
+    needed_by: "engine/autoload/game_state.py restore_world — schema migration #1; a LIST per territory, not a single record"
   snapshot_state.treaties:
     target: "systems.factions.sim.treaty:TreatyRecord"
-    needed_by: "engine/autoload/game_state.py world_from_snapshot — schema migration #1"
+    needed_by: "engine/autoload/game_state.py restore_world — schema migration #1"
     note: "This row is the engine -> systems half of the package cycle CLAUDE.md §3 denied existed."
   snapshot_state.convictions:
     target: "systems.characters.sim.conviction:ConvictionState"
-    needed_by: "engine/autoload/game_state.py world_from_snapshot — schema migration #2"
+    needed_by: "engine/autoload/game_state.py restore_world — schema migration #2"
   snapshot_state.beliefs:
     target: "systems.characters.sim.beliefs:Belief"
-    needed_by: "engine/autoload/game_state.py world_from_snapshot — schema migration #2; a LIST per holder"
+    needed_by: "engine/autoload/game_state.py restore_world — schema migration #2; a LIST per holder"
   snapshot_state.knots:
     target: "systems.fieldwork.sim.knots:Knot"
-    needed_by: "engine/autoload/game_state.py world_from_snapshot — schema migration #2"
+    needed_by: "engine/autoload/game_state.py restore_world — schema migration #2"
   snapshot_state.territory_infrastructure:
     target: "systems.settlements.sim.infrastructure:InfrastructureState"
-    needed_by: "engine/autoload/game_state.py world_from_snapshot — schema migration #2"
+    needed_by: "engine/autoload/game_state.py restore_world — schema migration #2"
   snapshot_state.threadcut_beings:
     target: "systems.threadwork.sim.threadcut:ThreadcutState"
-    needed_by: "engine/autoload/game_state.py world_from_snapshot — schema migration #2"
+    needed_by: "engine/autoload/game_state.py restore_world — schema migration #2"
   snapshot_state.settlements:
     target: "systems.settlements.sim.registry:Settlement"
-    needed_by: "engine/autoload/game_state.py world_from_snapshot — schema migration #3 (OI-07)"
+    needed_by: "engine/autoload/game_state.py restore_world — schema migration #3 (OI-07)"
 
   # ── The last five function-local seams (S5a, 2026-08-22) ─────────────────────────────────────
   # engine/cross_scale/scene_dispatch.py's four and echo_transport.py's one. With these,

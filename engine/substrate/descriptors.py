@@ -16,12 +16,16 @@ surface stays reviewable, code reads the cooked one, and one exporter owns the p
 IT IS A LEAF, DELIBERATELY. stdlib only, no `engine.*` or `systems.*` imports, so anything may
 depend on it without creating a cycle. It reads the file once, at import.
 
-WHAT IT DOES NOT DO. It does not clamp anything yet. `Faction.adjust`
-(`engine/autoload/game_state.py:130-134`) still applies a blanket floor 0.5 / ceiling 7.0 to every
-stat, while the registry's PER-STAT floors were ratified 2026-07-08 (ED-IN-0029) — Influence at 1,
-the rest at 0. Wiring `adjust` to `faction_bounds()` moves the seeded campaign goldens, so it is a
-separate, MEASURED commit rather than a side effect of introducing this reader. The gap is recorded
-in the export's `unimplemented` block and surfaced by `assert_faction_roster_is_covered()` below.
+WHAT IT NOW DOES, corrected 2026-08-22 (plan S5d — this paragraph described the opposite until
+then). `faction_bounds()` IS the clamp: `Faction.adjust` reads it instead of applying a blanket
+floor 0.5 / ceiling 7.0 to every stat, so ED-IN-0029's per-stat floors (ratified 2026-07-08 —
+Influence at 1, the rest at 0) reach the executable model for the first time. That commit measured
+the golden delta against an n=240-per-arm control before re-recording.
+
+FOUR OF THE FIVE FLOORS ARE REACHABLE. `fac.intel` is not: `MULTS` carries no `intel` key, so
+`adjust('intel', …)` raises `KeyError` before any bound is consulted, and the (0, 7) this returns
+for it is unreachable. Recorded rather than papered over — wiring it needs a multiplier nobody has
+stated.
 """
 from __future__ import annotations
 
@@ -68,7 +72,7 @@ UNIMPLEMENTED = _DATA['unimplemented']
 
 def faction_bounds(field):
     """(floor, ceiling) the REGISTRY declares for a Faction dataclass field, or None if it declares
-    none. Returns None for `L` — Legitimacy/Mandate is written by 32 call sites and is declared
+    none. Returns None for `L` — Legitimacy/Mandate is written by 20 of the 31 call sites and is declared
     nowhere in the registry, which is the 5-vs-6 half of the faction-stats packet awaiting a ruling.
     Callers must handle None rather than substituting a default, so the gap stays visible."""
     key = _FIELD_TO_KEY.get(field)

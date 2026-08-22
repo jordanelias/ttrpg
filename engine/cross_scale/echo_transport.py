@@ -442,6 +442,14 @@ def emit_scene_echo(scene_type: str, result, ctx: dict, world) -> dict:
             # domain_echo.delta is in STAT POINTS (§5.2 ±2 Mandate); Faction.adjust expects a
             # GRANULAR delta (points × MULTS) — mirror the §10 Mandate-penalty convention
             # (parliamentary_vote: adjust("L", -1 * MULTS["L"])), so ±N points lands as ±N.
+            # ⚠ `_stat in MULTS` IS NOT "is a faction stat", and since plan S5d wired ED-IN-0029's
+            # per-stat floors those are two different sets. MULTS carries 'accord' and 'pt', which
+            # are TERRITORY fields, and `most_relevant_stat` is caller-supplied and unvalidated —
+            # so a scene declaring `most_relevant_stat: 'accord'` passes this guard and then raises
+            # AttributeError inside a deferred apply. Pre-existing (the guard was always a
+            # multiplier-availability check wearing a stat-membership name), recorded here rather
+            # than widened, because narrowing it is a behaviour change on the live echo path and
+            # belongs in a commit that measures it. `hasattr(f, _stat)` is the check it should be.
             f = getattr(world, "factions", {}).get(faction)
             if f is not None and hasattr(f, "adjust") and _stat in MULTS:
                 f.adjust(_stat, _delta * MULTS[_stat])

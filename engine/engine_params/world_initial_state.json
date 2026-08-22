@@ -8,112 +8,144 @@
       "garrison": true,
       "owner": "Crown",
       "playable": true,
-      "pt": 3
+      "prosperity": 2,
+      "pt": 3,
+      "templar": false
     },
     "T2": {
       "accord": 3,
       "garrison": false,
       "owner": "Crown",
       "playable": true,
-      "pt": 3
+      "prosperity": 2,
+      "pt": 3,
+      "templar": false
     },
     "T3": {
       "accord": 3,
       "garrison": false,
       "owner": "Crown",
       "playable": true,
-      "pt": 3
+      "prosperity": 2,
+      "pt": 3,
+      "templar": false
     },
     "T4": {
       "accord": 2,
       "garrison": false,
       "owner": "Varfell",
       "playable": true,
-      "pt": 2
+      "prosperity": 1,
+      "pt": 2,
+      "templar": false
     },
     "T5": {
       "accord": 2,
       "garrison": false,
       "owner": "Crown",
       "playable": true,
-      "pt": 3
+      "prosperity": 1,
+      "pt": 3,
+      "templar": false
     },
     "T6": {
       "accord": 2,
       "garrison": false,
       "owner": "Crown",
       "playable": true,
-      "pt": 1
+      "prosperity": 1,
+      "pt": 1,
+      "templar": false
     },
     "T7": {
       "accord": 2,
       "garrison": false,
       "owner": "Hafenmark",
       "playable": true,
-      "pt": 3
+      "prosperity": 1,
+      "pt": 3,
+      "templar": false
     },
     "T8": {
       "accord": 3,
       "garrison": true,
       "owner": "Hafenmark",
       "playable": true,
-      "pt": 3
+      "prosperity": 2,
+      "pt": 3,
+      "templar": false
     },
     "T9": {
       "accord": 4,
       "garrison": true,
       "owner": "Church",
       "playable": true,
-      "pt": 5
+      "prosperity": 2,
+      "pt": 5,
+      "templar": true
     },
     "T10": {
       "accord": 2,
       "garrison": false,
       "owner": "Hafenmark",
       "playable": true,
-      "pt": 3
+      "prosperity": 1,
+      "pt": 3,
+      "templar": false
     },
     "T11": {
       "accord": 2,
       "garrison": false,
       "owner": "Varfell",
       "playable": true,
-      "pt": 2
+      "prosperity": 1,
+      "pt": 2,
+      "templar": false
     },
     "T12": {
       "accord": 2,
       "garrison": true,
       "owner": "Varfell",
       "playable": true,
-      "pt": 2
+      "prosperity": 1,
+      "pt": 2,
+      "templar": false
     },
     "T13": {
       "accord": 1,
       "garrison": false,
       "owner": "Varfell",
       "playable": true,
-      "pt": 1
+      "prosperity": 1,
+      "pt": 1,
+      "templar": false
     },
     "T14": {
       "accord": 3,
       "garrison": false,
       "owner": "Crown",
       "playable": true,
-      "pt": 3
+      "prosperity": 2,
+      "pt": 3,
+      "templar": false
     },
     "T15": {
       "accord": 0,
       "garrison": false,
       "owner": null,
       "playable": false,
-      "pt": 3
+      "prosperity": 1,
+      "pt": 3,
+      "templar": false
     },
     "T17": {
       "accord": 2,
       "garrison": false,
       "owner": "Hafenmark",
       "playable": true,
-      "pt": 3
+      "prosperity": 1,
+      "pt": 3,
+      "templar": false
     }
   },
   "faction_starting_stats": {

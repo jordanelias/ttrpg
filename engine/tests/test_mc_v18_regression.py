@@ -90,10 +90,12 @@ from engine.mc_v18 import run_batch, run_campaign  # noqa: E402
 #   GOLDEN_BATTLES_MEAN  = 33.5
 _SEED = 0
 _N = 2
-GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 0.0, 'Hafenmark': 50.0, 'Varfell': 0.0}
-GOLDEN_WINNERS = {'Hafenmark': 1, 'Crown': 1}
+# PREVIOUS (pre-S5d, blanket 0.5 floor): GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 0.0, 'Hafenmark': 50.0, 'Varfell': 0.0}; GOLDEN_WINNERS = {'Hafenmark': 1, 'Crown': 1}; GOLDEN_BATTLES_MEAN = 41.5
+# RE-PINNED 2026-08-22, plan S5d: ED-IN-0029's PER-STAT FLOORS reached the executable model. `Faction.adjust` read a blanket floor 0.5 / ceiling 7.0 for every stat; it now reads `descriptors.faction_bounds()`, so Influence floors at 1 and Wealth/Military/Stability float at 0 — a canon decision ratified 2026-07-08 that had never reached code. `L` is unchanged (the registry declares no bounds for it; Q1 is open), and 20 of the 31 non-test `.adjust()` call sites adjust `L`, so most traffic is untouched. Measured blast radius: over 8 seeded 50-season campaigns, 1,969 `.adjust()` calls, of which 160 clamp DIFFERENTLY than before (107 on W, 53 on Sta) and none on I or L. ⚠ THIS IS NOT PURE RNG DIVERGENCE — see the control table in test_f7_smoke_oracle.py's RE-PINNED block before re-recording again.
+GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 50.0, 'Hafenmark': 0.0, 'Varfell': 0.0}
+GOLDEN_WINNERS = {'Church': 1, 'Crown': 1}
 # RE-PINNED 2026-08-21, M1 juncture 1: fractional dice pools (ED-IN-0187). `sigma_leverage.roll_net_continuous` no longer rounds its pool, so every sampled value changes and the RNG stream diverges. NOT a balance signal at this n — the control is `tools/balance_oracle.py` at 120 campaigns per arm, where no faction shifts significantly (all |z| < 0.53); see the RE-PINNED block in test_f7_smoke_oracle.py for the table.
-GOLDEN_BATTLES_MEAN = 39.5
+GOLDEN_BATTLES_MEAN = 41.5
 
 
 def test_mc_v18_batch_is_deterministic():

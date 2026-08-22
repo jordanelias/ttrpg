@@ -143,7 +143,7 @@
 | `Faction.Sta` (Stability) | R (contest seams) | live campaign `World` | `engine/cross_scale/scene_dispatch.py:85 evaluate_triggers`, `engine/cross_scale/parliamentary_bridge.py:97 _derive_vote` |
 | `world.echo_scheduler` | R | set once per campaign by `mc_v18`; read by both seams as a gate | `engine/mc_v18.py:251 run_campaign`, `engine/cross_scale/scene_dispatch.py:392 _resolve_slot`, `engine/cross_scale/parliamentary_bridge.py:160 run_parliamentary_scene` |
 | `world.scenes_resolved` | W | `mc_v18` telemetry counter | `engine/mc_v18.py:150 _faction_actions_callback`, `engine/mc_v18.py:159-160 _faction_actions_callback` |
-| `world.key_log` / `KeyLog` entries | W (queued, deferred-apply) | `engine.cross_scale.echo_transport` substrate, not this subsystem's own module or `zoom_in_out` (which never touches `world`) — `world.key_log` is aliased onto the same log object by `engine/mc_v18.py:249` | `engine/cross_scale/echo_transport.py:450 emit_scene_echo` |
+| `world.key_log` / `KeyLog` entries | W (queued, deferred-apply) | `engine.cross_scale.echo_transport` substrate, not this subsystem's own module or `zoom_in_out` (which never touches `world`) — `world.key_log` is aliased onto the same log object by `engine/mc_v18.py:249` | `engine/cross_scale/echo_transport.py:458 emit_scene_echo` |
 | `Faction.parl_transfer_used_this_arc` | R | `parliamentary_transfer.derive_transfer_candidate` (moved out of the bridge at plan S5a) | `systems/factions/sim/parliamentary_transfer.py:158 derive_transfer_candidate` |
 
 ## 6. Seams

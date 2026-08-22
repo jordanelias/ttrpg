@@ -69,6 +69,12 @@ def test_the_opening_position_is_exactly_what_the_goldens_were_recorded_under():
     assert w.ALL_PLAYABLE == frozenset({
         'T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10',
         'T11', 'T12', 'T13', 'T14', 'T17'})
+    # The two columns added at S5b's adversarial pass, transcribed from the inline expressions they
+    # replaced: `prosperity=2 if tid in {T1,T2,T3,T8,T9,T14} else 1` and `templar=(tid == 'T9')`.
+    assert {t for t, v in w.STARTING_PROSPERITY.items() if v == 2} == {
+        'T1', 'T2', 'T3', 'T8', 'T9', 'T14'}
+    assert set(w.STARTING_PROSPERITY.values()) == {1, 2}
+    assert {t for t, v in w.STARTING_TEMPLAR.items() if v} == {'T9'}
 
 
 def test_game_state_still_exposes_the_names_the_corpus_cites():
@@ -89,16 +95,42 @@ def test_game_state_still_exposes_the_names_the_corpus_cites():
 def test_the_engine_no_longer_carries_the_opening_position_as_literals():
     """The point of the step, asserted rather than assumed. A future session restoring one of these
     tables into `game_state.py` — as a 'quick fix', or by resolving a merge the lazy way — puts the
-    world back in the engine and gives the authored file a silent second owner."""
+    world back in the engine and gives the authored file a silent second owner.
+
+    ⚠ REWRITTEN 2026-08-22 after an adversarial pass. The first version searched for
+    whitespace-exact needles like `"'Crown':     {"` (five spaces), so a restoration with different
+    alignment, double quotes, or a line wrap passed it — it could observe the defect in exactly one
+    spelling. It now PARSES the module and asks whether any of the six names is bound to a literal
+    container, which no reformatting evades.
+    """
+    import ast
+
     src = (REPO / 'engine' / 'autoload' / 'game_state.py').read_text(encoding='utf-8')
-    for needle, name in (("'T1': 'Crown'", 'STARTING_OWNER'),
-                         ("'Crown':     {", 'STARTING_STATS'),
-                         ("'T1': True", 'STARTING_GARRISON')):
-        assert needle not in src, (
-            f'{name} looks like it is a literal in game_state.py again. It is authored in '
-            f'references/world_initial_state.yaml — edit that, and re-run '
-            f'tools/export_world_initial_state.py.'
-        )
+    tree = ast.parse(src)
+    authored = {'STARTING_OWNER', 'STARTING_ACCORD', 'STARTING_PT', 'STARTING_GARRISON',
+                'STARTING_STATS', 'ALL_PLAYABLE_15'}
+    offenders, checked = [], 0
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Assign):
+            continue
+        for tgt in node.targets:
+            if not isinstance(tgt, ast.Name) or tgt.id not in authored:
+                continue
+            checked += 1
+            if isinstance(node.value, (ast.Dict, ast.Set, ast.List, ast.Tuple)) or (
+                    isinstance(node.value, ast.Call)
+                    and isinstance(node.value.func, ast.Name)
+                    and node.value.func.id in ('frozenset', 'set', 'dict')):
+                offenders.append(f'{tgt.id} (line {node.lineno})')
+    assert checked == len(authored), (
+        f'only {checked} of the {len(authored)} authored names are bound in game_state.py — a '
+        f'rename would make this test silently stop checking'
+    )
+    assert not offenders, (
+        'the opening position is a literal in game_state.py again: ' + ', '.join(offenders) + '. '
+        'It is authored in references/world_initial_state.yaml — edit that, and re-run '
+        'tools/export_world_initial_state.py.'
+    )
 
 
 def test_mults_is_still_a_literal_and_still_says_why():
@@ -142,20 +174,22 @@ def test_the_unmutated_copy_exports_cleanly(tmp_path):
 
 @pytest.mark.parametrize('old,new,expected', [
     # An owner nobody declares — the shape of a faction rename applied to one table and not the other.
-    ("owner: \"Varfell\", accord: 2, pt: 2, garrison: false, playable: true}",
-     "owner: \"Varfelll\", accord: 2, pt: 2, garrison: false, playable: true}",
+    ('owner: "Varfell", accord: 2, pt: 2', 'owner: "Varfelll", accord: 2, pt: 2',
      'faction_starting_stats does not declare'),
     # An Accord outside the 0-4 canon buckets — ACCORD_MAP has no key for it.
     ("accord: 4, pt: 5", "accord: 9, pt: 5", 'outside the canonical 0-4'),
     # A PT outside the 0-5 canon buckets.
     ("accord: 4, pt: 5", "accord: 4, pt: 8", 'outside the canonical 0-5'),
     # A dropped column: the value would silently default and move the opening position.
-    ("{owner: \"Church\", accord: 4, pt: 5, garrison: true, playable: true}",
-     "{owner: \"Church\", accord: 4, pt: 5, playable: true}",
+    ('{owner: "Church", accord: 4, pt: 5, garrison: true,', '{owner: "Church", accord: 4, pt: 5,',
      "missing 'garrison'"),
     # A non-boolean flag — YAML makes this easy to do by accident.
-    ("garrison: true, playable: true}", "garrison: yes-please, playable: true}",
+    ('garrison: true, playable: true, prosperity: 2, templar: true}',
+     'garrison: yes-please, playable: true, prosperity: 2, templar: true}',
      'must be booleans'),
+    # A prosperity value the opening table never declares — added with the column at S5b's
+    # adversarial pass, since Territory.prosperity has no declared scale anywhere in the corpus.
+    ('prosperity: 2, templar: true}', 'prosperity: 9, templar: true}', 'only ever declares 1 or 2'),
 ])
 def test_a_broken_table_is_rejected_at_export_time(tmp_path, old, new, expected):
     """Each of these produces a WORKING but WRONG world if it reaches runtime. The exporter is
@@ -216,10 +250,45 @@ def test_a_reordered_faction_table_is_rejected_at_export_time(tmp_path):
     assert 'MOVES THE GOLDENS' in str(exc.value)
 
 
+@pytest.mark.parametrize('old,new,expected', [
+    # An emptied block — the shape of a bad merge resolution, not a typo.
+    ('faction_starting_stats:', 'faction_starting_stats_DISABLED:', 'no faction_starting_stats'),
+    # A dropped stat on one faction. Faction(**stats) would raise, but only when a world is built.
+    ('Crown: {L: 5.0, Sta: 4.0, W: 4.0, I: 5.0, Mil: 4.0}',
+     'Crown: {L: 5.0, Sta: 4.0, W: 4.0, I: 5.0}', "missing starting stat 'Mil'"),
+    # A stat that is not numeric — trivially easy in YAML, and it survives to a TypeError deep in
+    # the first roll rather than at world-gen.
+    ('Church: {L: 5.0', 'Church: {L: five', 'is not numeric'),
+])
+def test_a_broken_faction_stats_block_is_rejected_at_export_time(tmp_path, old, new, expected):
+    """Added 2026-08-22 after an adversarial pass observed that the territory columns had
+    falsifiers and the faction-stats block had none — so "each check can observe the defect it
+    excludes" was true of half the exporter."""
+    mod, src = _authored(tmp_path)
+    _mutate(src, old, new)
+    with pytest.raises(SystemExit) as exc:
+        mod.build()
+    assert expected in str(exc.value), f'rejected, but not for the stated reason: {exc.value}'
+
+
+def test_an_empty_territory_block_is_rejected(tmp_path):
+    """The remaining unfalsified `_fail` path: a campaign with no map."""
+    mod, src = _authored(tmp_path)
+    _mutate(src, 'territories:', 'territories_DISABLED:')
+    with pytest.raises(SystemExit) as exc:
+        mod.build()
+    assert 'no territories declared' in str(exc.value)
+
+
 def test_the_committed_artifact_matches_the_authored_source():
     """`--check` in CI proves this too, but only in CI. Running it here means a session that edits
     the YAML and forgets to re-export finds out from the suite it already runs."""
     mod = _exporter()
-    assert json.loads(json.dumps(mod.build())) == json.loads(
-        (REPO / 'engine' / 'engine_params' / 'world_initial_state.json').read_text(encoding='utf-8')
-    ), 'artifact is stale — run: python3 tools/export_world_initial_state.py'
+    # TEXT, not parsed dicts. Dict equality ignores key ORDER, and this file's whole argument is
+    # that faction order sets the RNG draw sequence — so the parsed comparison this test used until
+    # 2026-08-22 would have passed on an alphabetized artifact, the exact defect two tests above
+    # exist to catch. `--check` compares text; so does this.
+    fresh = json.dumps(mod.build(), indent=2, sort_keys=False) + '\n'
+    committed = (REPO / 'engine' / 'engine_params' / 'world_initial_state.json').read_text(
+        encoding='utf-8')
+    assert fresh == committed, 'artifact is stale — run: python3 tools/export_world_initial_state.py'

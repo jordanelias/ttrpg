@@ -13,6 +13,12 @@ its single runtime reader. Same shape as `descriptors.py`, `composition.py` and 
 IT IS A LEAF. stdlib only — no `engine.*`, no `systems.*`. `game_state.py` imports it at module
 load, so anything it imported would become a dependency of the entire engine.
 
+⚠ NOT EVERYTHING IN `create_world` IS HERE, and the first version of this docstring implied it was.
+`Territory.fort_level` is DERIVED from `garrison` (1 if garrisoned, else 0) and stays in the engine
+on purpose: it is a rule, not data, and authoring it would give one number two owners. Everything
+that IS data — owner, accord, pt, garrison, playable, prosperity, templar, and the faction opening
+stats — is authored.
+
 THE NAMES BELOW ARE THE ONES `game_state.py` USED, deliberately. `STARTING_OWNER` and friends are
 cited across the corpus by name — flow skeletons, design docs, tests — and renaming them while
 moving them would have made one change into two. The literals are gone; the vocabulary is not.
@@ -42,6 +48,9 @@ STARTING_PT = {t: r['pt'] for t, r in TERRITORIES.items()}
 #: Only the garrisoned territories, matching the original literal's shape: `game_state` reads it
 #: with `.get(tid)`, so absence means "no garrison" and a False value never appears.
 STARTING_GARRISON = {t: True for t, r in TERRITORIES.items() if r['garrison']}
+
+STARTING_PROSPERITY = {t: r['prosperity'] for t, r in TERRITORIES.items()}
+STARTING_TEMPLAR = {t: r['templar'] for t, r in TERRITORIES.items()}
 
 #: {faction -> {L, Sta, W, I, Mil}}
 STARTING_STATS = {f: dict(r) for f, r in _DATA['faction_starting_stats'].items()}

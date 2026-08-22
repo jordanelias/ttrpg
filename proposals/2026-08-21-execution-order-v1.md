@@ -802,7 +802,7 @@ build per-module instrumentation for the 27 dark modules — **you cannot log wh
 their burn-down instrument is `test_pipeline_reach`'s XFAIL manifest and their census is
 `trace_execution_phases`, both of which exist · emit any Key from the error path (an error-Key moves
 `content_hash` and every determinism row; if error events ever belong in the KeyLog that is a design
-decision for the contract-registered `audit` module, `references/module_contracts.yaml:642`, and it
+decision for the contract-registered `audit` module, `references/module_contracts.yaml:650`, and it
 is Jordan's, not this step's) · fold any of this into an S5 sub-step's commit.
 
 **Falsifier for the whole programme, recorded in advance.** If after two months the counters have only

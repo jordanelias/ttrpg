@@ -53,7 +53,23 @@ _OFF_WIN_SHARE = {'Crown': 25.0, 'Church': 0.0, 'Hafenmark': 12.5, 'Varfell': 62
 # RE-PINNED 2026-08-21, M1 juncture 1: fractional dice pools (ED-IN-0187). `sigma_leverage.roll_net_continuous` no longer rounds its pool, so every sampled value changes and the RNG stream diverges. NOT a balance signal at this n — the control is `tools/balance_oracle.py` at 120 campaigns per arm, where no faction shifts significantly (all |z| < 0.53); see the RE-PINNED block in test_f7_smoke_oracle.py for the table.
 # NOTE _OFF_WIN_SHARE did NOT move: the flag-OFF path does not reach a fractional pool on
 # this batch, which is itself a useful signal about where fractional pools are produced.
-_ON_WIN_SHARE = {'Crown': 50.0, 'Church': 12.5, 'Hafenmark': 0.0, 'Varfell': 37.5}
+
+# RE-PINNED 2026-08-22, plan S5d — ED-IN-0029's PER-STAT FLOORS. `Faction.adjust` now reads
+# `descriptors.faction_bounds()` instead of a blanket 0.5/7.0, so Influence floors at 1 and
+# Wealth/Military/Stability at 0. Unlike the 2026-07-29 re-record, this one moves BOTH the
+# 8-campaign batch AND the single-campaign seed-42 pins, because the clamp is on the faction stats
+# every path reads — 160 of 1,969 `.adjust()` calls now land differently over the 8-campaign batch.
+# The full n=240-per-arm control table (two seed batches plus the pooled figures) is in
+# test_f7_smoke_oracle.py's RE-PINNED block; read it before re-recording these again.
+# PREVIOUS: _ON_WIN_SHARE = {'Crown': 50.0, 'Church': 12.5, 'Hafenmark': 0.0, 'Varfell': 37.5};
+#   _ON_SCENES_RESOLVED = 125; _ON_KEYS_EMITTED = 186;
+#   _ON_KEYS_BY_TYPE = {'scene.battle_concluded': 83, 'scene.contest_resolved': 89,
+#                       'da.public_governance': 1};
+#   _ON_KEYLOG_HASH = '1378f082210393c0a1a536f4d63d0fcdef5d6b9114753778131356cac8a52b73'
+# ⚠ `da.public_governance` went 1 -> 2: the Parliamentary Transfer emitter fires TWICE on seed 42
+# now. That is the emitter test_public_governance_transfer_key.py covers, and its count moving is
+# expected here rather than a new emitter appearing — the composition map gains no new key type.
+_ON_WIN_SHARE = {'Crown': 25.0, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 50.0}
 # ── GOLDEN RE-RECORD 2026-08-02 (ED-IN-0122) — deliberate, and here is the whole reason ────────
 # `systems/factions/sim/faction_action` gained a SECOND live Key emitter, `scene.battle_concluded`.
 # The KeyLog is append-only, so a new emitter necessarily changes both the count and the content
@@ -90,11 +106,11 @@ _ON_WIN_SHARE = {'Crown': 50.0, 'Church': 12.5, 'Hafenmark': 0.0, 'Varfell': 37.
 # MECHANISM: fractional pools change every sampled value, so the RNG stream diverges and a transfer
 # motion that previously missed its window now qualifies on this seed. Not a balance change — see
 # the control table in test_f7_smoke_oracle.py (120 campaigns per arm, all |z| < 0.53).
-_ON_KEYLOG_HASH = '3ae923ad90230769809e86f0f089b0d9ca459f05e998e2bc88e43630949c6adb'
-_ON_SCENES_RESOLVED = 110
-_ON_KEYS_EMITTED = 173
+_ON_KEYLOG_HASH = '1378f082210393c0a1a536f4d63d0fcdef5d6b9114753778131356cac8a52b73'
+_ON_SCENES_RESOLVED = 125
+_ON_KEYS_EMITTED = 186
 # The composition behind that total — the diagnostic half of the pin.
-_ON_KEYS_BY_TYPE = {'scene.battle_concluded': 83, 'scene.contest_resolved': 89, 'da.public_governance': 1}
+_ON_KEYS_BY_TYPE = {'scene.battle_concluded': 80, 'scene.contest_resolved': 104, 'da.public_governance': 2}
 # 2026-08-14 (ED-IN-0187): contest_resolved 13 -> 79 and battle_concluded 62 -> 76. The
 # contest jump is the larger and has a mechanism worth naming — more faction actions now land
 # in bands that open a scene, and the deleted Mil gate opens more conquests, so both emitters

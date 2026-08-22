@@ -112,14 +112,9 @@
   },
   "unimplemented": {
     "faction_L": {
-      "what": "engine/autoload/game_state.py's Faction dataclass carries `L` (Legitimacy/Mandate), written by 32 .adjust() call sites across engine/ and systems/. references/descriptor_registry.yaml declares no entry for it.",
+      "what": "engine/autoload/game_state.py's Faction dataclass carries `L` (Legitimacy/Mandate), written by 20 of .adjust()'s 31 non-test call sites across engine/ and systems/. references/descriptor_registry.yaml declares no entry for it.",
       "why_it_matters": "The registry declares five faction stats; the code implements six. This is the 5-vs-6 half of the faction-stats packet.",
       "needs": "ruling \u2014 is Legitimacy a base faction descriptor, or derived like Mandate?"
-    },
-    "per_stat_floors": {
-      "what": "The per-stat floors above were RATIFIED 2026-07-08 (ED-IN-0029, OPT-AV-14/D14 + OPT-AV-18): Influence floors at 1, the rest at 0. Faction.adjust (game_state.py:127-131) applies a blanket floor of 0.5 and ceiling of 7.0 to every stat, and none of its 32 callers overrides either.",
-      "why_it_matters": "A ratified canon decision that has never reached the executable model. Wiring it moves the seeded campaign goldens, so it is a separate measured commit, not a side effect of this export.",
-      "needs": "implementation with a measured golden delta"
     }
   }
 }

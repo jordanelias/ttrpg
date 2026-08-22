@@ -23,7 +23,8 @@ the same shape `export_game_constants.py` uses, because each needs a ruling and 
 
   * `faction_stats` declares FIVE keys (influence, wealth, military, intel, stability). The Faction
     dataclass implements SIX fields (L, Sta, W, I, Mil, intel) — `L` (Legitimacy/Mandate) is written
-    by 32 call sites and is declared NOWHERE in the registry. That is the 5-vs-6 half of the
+    by 20 of .adjust()'s 31 non-test call sites and is declared NOWHERE in the registry. That is
+    the 5-vs-6 half of the
     faction-stats packet awaiting Jordan (HANDOFF.md; plan Q1).
   * the registry's PER-STAT floors were ratified 2026-07-08 (ED-IN-0029, OPT-AV-14/D14 + OPT-AV-18):
     Influence floors at 1, the rest at 0. `Faction.adjust` (game_state.py:127-131) applies a BLANKET
@@ -144,22 +145,18 @@ def build():
         'unimplemented': {
             'faction_L': {
                 'what': "engine/autoload/game_state.py's Faction dataclass carries `L` "
-                        "(Legitimacy/Mandate), written by 32 .adjust() call sites across engine/ and "
+                        "(Legitimacy/Mandate), written by 20 of .adjust()'s 31 non-test call sites across engine/ and "
                         "systems/. references/descriptor_registry.yaml declares no entry for it.",
                 'why_it_matters': 'The registry declares five faction stats; the code implements six. '
                                   'This is the 5-vs-6 half of the faction-stats packet.',
                 'needs': 'ruling — is Legitimacy a base faction descriptor, or derived like Mandate?',
             },
-            'per_stat_floors': {
-                'what': 'The per-stat floors above were RATIFIED 2026-07-08 (ED-IN-0029, OPT-AV-14/D14 '
-                        '+ OPT-AV-18): Influence floors at 1, the rest at 0. Faction.adjust '
-                        '(game_state.py:127-131) applies a blanket floor of 0.5 and ceiling of 7.0 to '
-                        'every stat, and none of its 32 callers overrides either.',
-                'why_it_matters': 'A ratified canon decision that has never reached the executable '
-                                  'model. Wiring it moves the seeded campaign goldens, so it is a '
-                                  'separate measured commit, not a side effect of this export.',
-                'needs': 'implementation with a measured golden delta',
-            },
+            # per_stat_floors WAS HERE AND IS NOW IMPLEMENTED (plan S5d, 2026-08-22).
+            # ED-IN-0029's floors — Influence 1, the rest 0 — reach the executable model:
+            # Faction.adjust reads descriptors.faction_bounds() instead of applying a blanket 0.5.
+            # The row is DELETED rather than annotated `done`, because an "unimplemented" register
+            # that accumulates implemented rows stops being a list of gaps and starts being a
+            # history nobody reads. The history is the commit; this dict is the live gap list.
         },
     }
 

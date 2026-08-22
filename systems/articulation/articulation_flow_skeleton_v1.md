@@ -16,7 +16,7 @@
 
 `systems/articulation/` itself holds no `.py` — only `articulation_layer_v30.md` and
 `_identifier_census.yaml`. Its code lives at `engine/cross_scale/articulation.py`
-(`references/module_contracts.yaml:1095` `sim_module`), per standing rule 1.
+(`references/module_contracts.yaml:1099` `sim_module`), per standing rule 1.
 
 ## 1. Entry points
 
@@ -127,5 +127,5 @@ list and the shared stub counter. `render_protagonist_lens`/`generate_chronicle_
 | **`scene.combat_resolved`'s one live emission path is behind a default-off flag.** Reaching it requires `DISPATCH_COMBAT_BRIDGE=1` (default `'0'`); the reach test for this path is an `xfail` under the default. | `engine/mc_v18.py:79-89 _dispatch_combat_bridge_on`, `engine/cross_scale/scene_dispatch.py:55`, `engine/tests/test_pipeline_reach.py:721-723 test_combat_pair_key_reaches_articulation_subscriber_under_flag_on` |
 | **`scene.accord_echo`'s one live emission path is organically dormant.** It requires a caller-declared `echo['scene_outcome']`, which no live `scene_dispatch.py`/`parliamentary_bridge.py` caller sets today. | `engine/cross_scale/echo_transport.py:34-37` |
 | **Net: `subscribe_all` wires all 13 callbacks at every default campaign boot, but under default flags none of the 13 can ever fire in a live campaign** — the whole Tier-2 trigger flow is structurally present and dormant, not partially reachable. | Composite of the four rows above; `engine/mc_v18.py:241-258` (default-flag boot path) |
-| **Declared vs. actual `consumes` contract diverges.** `module_contracts.yaml` declares articulation as a universal wildcard reader of the Key stream (`{type: "*", from: engine}`); the actual code subscribes to exactly the 13 explicit ids in `_TRIGGER_TYPE_IDS` and nothing else — no wildcard subscription exists in this module. | `references/module_contracts.yaml:1101-1103`; `engine/cross_scale/articulation.py:116-130 _TRIGGER_TYPE_IDS` |
+| **Declared vs. actual `consumes` contract diverges.** `module_contracts.yaml` declares articulation as a universal wildcard reader of the Key stream (`{type: "*", from: engine}`); the actual code subscribes to exactly the 13 explicit ids in `_TRIGGER_TYPE_IDS` and nothing else — no wildcard subscription exists in this module. | `references/module_contracts.yaml:1105-1107`; `engine/cross_scale/articulation.py:116-130 _TRIGGER_TYPE_IDS` |
 | **`subscribe_all` is non-idempotent by construction and unguarded.** A second call on the same scheduler double-registers every callback (`TickScheduler.subscribe` is purely additive); nothing in code enforces the "call exactly once per scheduler lifetime" contract — it is stated only in the docstring. | `engine/cross_scale/articulation.py:163-166 subscribe_all` docstring, `engine/substrate/keys.py:506-507 subscribe` |

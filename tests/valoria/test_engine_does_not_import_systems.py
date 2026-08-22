@@ -77,9 +77,11 @@ NESTED_SYSTEMS_IMPORT = re.compile(r'^[ \t]+(?:from|import)\s+systems[.\s]', re.
 #     read four members private to that module. The lateral duplicate of the same seam, at
 #     parliamentary_transfer.py:54, went in the same commit — one seam, one declaration.
 #
-# AN EMPTY ALLOW-LIST IS NOT THE END OF THE JOB. NESTED_BASELINE below is still 16, and a deferred
-# import is still a cycle (see test_the_documented_cycle_is_still_real). Do not read `BASELINE_TOTAL
-# == 0` as "engine/ no longer depends on systems/".
+# AN EMPTY ALLOW-LIST IS NOT THE END OF THE JOB, AND THIS PARAGRAPH ONCE SAID SO ABOUT A DIFFERENT
+# NUMBER. `NESTED_BASELINE` reached 0 in the commit after the one that emptied this list, and a
+# THIRD instrument exists below it — `PATH_SEAM_ALLOWED`, for the seam that is not an import at all.
+# Do not read `BASELINE_TOTAL == 0` as "engine/ no longer depends on systems/": it depends on them
+# as much as ever, through roles declared in `references/`.
 ALLOWED = {}
 BASELINE_TOTAL = 0
 
@@ -192,70 +194,126 @@ def test_this_check_can_observe_its_own_failure(tmp_path):
         'the pattern must not fire on a function-local import — that is a different problem'
 
 
-def test_importing_engine_pulls_in_no_subsystem():
-    """THE CLAIM ITSELF, MEASURED BY EXECUTION RATHER THAN BY TEXT (§0.2).
+#: The ONE surviving seam, declared rather than invisible. `engine/cross_scale/combat_bridge.py`
+#: inserts `systems/combat/combat_engine_v1/` onto `sys.path` and imports `combatant` and `wrapper`
+#: by BARE NAME. It was invisible to every instrument in this file until 2026-08-22: both regexes
+#: look for the literal token `systems`, and the import probe below used to filter `sys.modules` by
+#: the `systems.` prefix — under which those two modules appear as `combatant` and `wrapper`.
+#:
+#: WHY IT IS NOT CONVERTED HERE. `combat_engine_v1/` is a FLAT, self-contained module set with its
+#: own convention: `wrapper.py:4` inserts its own directory on `sys.path` and bare-imports its
+#: siblings, and the workbench and audit harnesses all load it that way. Importing it by dotted path
+#: works, but would give those modules a SECOND identity in any process that also loads them the
+#: flat way — `workbench/balance.py` is the canonical balance harness and does exactly that. That is
+#: a PC-lane convention change with a module-identity hazard, not an IN-lane wiring fix, and it is
+#: out of scope for a step whose subject is the composition registry.
+#:
+#: It can only shrink. Converting it deletes this entry.
+PATH_SEAM_ALLOWED = {'cross_scale/combat_bridge.py'}
 
-    This REPLACES `test_the_documented_cycle_is_still_real`, which recorded the concrete cycle
-    `systems/factions/sim/faction_action.py -> engine.autoload.game_state ->
-    systems.factions.sim.treaty` by grepping both files for a string. That test existed to stop
-    `CLAUDE.md` §3's "acyclic, autoload is a leaf" being restored while the code contradicted it.
-    The code no longer contradicts it, so the guard inverts rather than disappearing: §3 now
-    asserts something, and this is what can falsify it.
 
-    It is strictly stronger than the two regex ceilings above, and that is why it is worth having
-    alongside them. They read source text; this imports the engine in a SUBPROCESS and asks the
-    interpreter which modules that actually loaded. A seam invisible to both patterns — an
-    `importlib` call in engine code, a `__init__` re-export, a conditional import written in a
-    shape the regex misses — fails here and only here.
+def _modules_loaded_from_systems(probe_body):
+    """Run `probe_body` in a subprocess and return the modules it loaded whose FILE lives under
+    `systems/` — regardless of what they are called in `sys.modules`."""
+    import subprocess
+    import sys
 
-    ⚠ It does NOT claim the engine has no subsystem dependency. It has plenty; they are declared in
-    `references/module_contracts.yaml` and resolved by string at first call. The claim is about the
-    IMPORT GRAPH: `engine/` no longer names its own dependents, so the package graph is acyclic and
-    a subsystem can be swapped by editing a registry row. Runtime resolution is proven separately
-    by `test_every_declared_composition_role_resolves` and, at export time, by a blocking gate.
+    probe = (
+        'import sys, os\n'
+        + probe_body +
+        "\nroot = os.path.join(os.path.abspath('.'), 'systems') + os.sep\n"
+        "bad = sorted(f'{n}<-{getattr(m, \"__file__\", \"\")}' for n, m in list(sys.modules.items())\n"
+        "            if getattr(m, '__file__', None) and str(m.__file__).startswith(root))\n"
+        "print('|'.join(bad))\n"
+    )
+    proc = subprocess.run([sys.executable, '-c', probe], cwd=str(REPO),
+                          capture_output=True, text=True)
+    assert proc.returncode == 0, f'the probe did not run:\n{proc.stderr}'
+    return [m for m in proc.stdout.strip().split('|') if m]
+
+
+def test_importing_every_engine_module_pulls_in_no_subsystem():
+    """THE CLAIM, MEASURED OVER THE WHOLE PACKAGE AND BY FILE PATH (§0.2).
+
+    Two corrections to the first version of this test, both found by a read-only adversarial pass
+    on 2026-08-22 and both of which made it weaker than the docstring claimed:
+
+    1. IT IMPORTED FIVE HAND-PICKED MODULES. A subsystem import in any other module under `engine/`
+       was seen only if it was literally spelled `import systems`. It now walks EVERY module under
+       `engine/` (excluding `engine/tests/`) and imports them all in one subprocess.
+
+    2. IT FILTERED `sys.modules` BY THE NAME `systems.`, so it could not see the one seam that
+       matters — `combat_bridge.py` puts `systems/combat/combat_engine_v1/` on `sys.path` and
+       imports `combatant`/`wrapper` by bare name, which land in `sys.modules` under those names
+       and were counted as clean. It now asks each loaded module where its FILE is. A module's
+       path cannot be spelled around; its import name can.
+
+    `PATH_SEAM_ALLOWED` above is the ceiling for what remains, and it is one entry.
     """
-    import subprocess
-    import sys
+    mods = []
+    for path in sorted((REPO / 'engine').rglob('*.py')):
+        rel = path.relative_to(REPO / 'engine').as_posix()
+        if rel.startswith('tests/') or '__pycache__' in rel or rel.endswith('__init__.py'):
+            continue
+        mods.append('engine.' + rel[:-3].replace('/', '.'))
+    assert len(mods) >= 20, f'only {len(mods)} engine modules discovered — the walk is broken'
 
-    probe = (
-        'import sys\n'
-        'import engine.mc_v18, engine.autoload.game_state, engine.cross_scale.scene_dispatch, '
-        'engine.cross_scale.echo_transport, engine.cross_scale.parliamentary_bridge\n'
-        "print(','.join(sorted(m for m in sys.modules "
-        "if m == 'systems' or m.startswith('systems.'))))\n"
-    )
-    proc = subprocess.run([sys.executable, '-c', probe], cwd=str(REPO),
-                          capture_output=True, text=True)
-    assert proc.returncode == 0, f'the engine did not import at all:\n{proc.stderr}'
-    leaked = [m for m in proc.stdout.strip().split(',') if m]
+    body = 'import importlib\n' + ''.join(
+        f'importlib.import_module({m!r})\n' for m in mods)
+    leaked = _modules_loaded_from_systems(body)
     assert not leaked, (
-        'importing engine/ pulled in ' + str(len(leaked)) + ' subsystem module(s): '
+        'importing engine/ loaded ' + str(len(leaked)) + ' module(s) whose file is under systems/: '
         + ', '.join(leaked) + '\n'
-        'engine/ is the root; systems/ stems from it. Resolve the dependency through a '
-        'composition role (references/module_contracts.yaml) instead of importing it, or if this '
-        'genuinely cannot move, say so in the plan and correct CLAUDE.md §3 — which currently '
-        'claims the graph is acyclic on the strength of THIS test.'
+        'engine/ is the root; systems/ stems from it. Resolve the dependency through a composition '
+        'role (references/module_contracts.yaml) instead of importing it.'
     )
 
 
-def test_the_import_probe_can_observe_a_leak():
-    """§0.1 pt 2 — the probe above must be able to FAIL. Its whole result is "the list was empty",
-    which is also what a broken probe returns. This runs the same detection over a module that
-    genuinely does import a subsystem, and asserts it is seen."""
-    import subprocess
-    import sys
+def test_the_one_declared_path_seam_is_still_the_only_one():
+    """`combat_bridge` reaches into `systems/` by `sys.path` + bare name. That is a real seam and it
+    is DECLARED here rather than left invisible — the ratchet's own rule is that a seam which cannot
+    move yet is added deliberately, with its reason, never as a drive-by.
 
-    probe = (
-        'import sys\n'
-        'import systems.factions.sim.faction_action\n'
-        "print(','.join(sorted(m for m in sys.modules "
-        "if m == 'systems' or m.startswith('systems.'))))\n"
+    Scans for the mechanism rather than the module: any `sys.path` mutation in `engine/` that names
+    `systems`. A second one is a new seam of the class that hid for two days.
+    """
+    offenders = {}
+    for path in sorted((REPO / 'engine').rglob('*.py')):
+        rel = path.relative_to(REPO / 'engine').as_posix()
+        if rel.startswith('tests/') or '__pycache__' in rel:
+            continue
+        text = path.read_text(encoding='utf-8')
+        if re.search(r"sys\.path\.(insert|append)", text) and "'systems'" in text:
+            offenders[rel] = True
+    assert set(offenders) == PATH_SEAM_ALLOWED, (
+        f'sys.path seams into systems/ are now {sorted(offenders)}, declared {sorted(PATH_SEAM_ALLOWED)}. '
+        f'A NEW one is the invisible-seam class: it defeats both regexes above AND the import probe, '
+        f'because the modules it loads are not named `systems.*`. Removing one? Delete it from '
+        f'PATH_SEAM_ALLOWED in the same commit.'
     )
-    proc = subprocess.run([sys.executable, '-c', probe], cwd=str(REPO),
-                          capture_output=True, text=True)
-    assert proc.returncode == 0, proc.stderr
-    seen = [m for m in proc.stdout.strip().split(',') if m]
-    assert seen, 'the probe reports NOTHING even for a module that imports systems — it is broken'
+
+
+def test_the_import_probe_can_observe_both_kinds_of_leak():
+    """§0.1 pt 2 — the probe must be able to FAIL, and in BOTH the ways it is supposed to catch.
+    Its whole result is "the list was empty", which is also what a broken probe returns.
+
+    Two planted leaks, because the probe was rewritten precisely because it caught only the first:
+      1. a normal dotted `import systems.…`;
+      2. the `sys.path` + BARE NAME shape `combat_bridge` uses, where the loaded module is called
+         `wrapper`, not `systems.combat.…`. The old name-prefix probe reported this one as clean.
+    """
+    dotted = _modules_loaded_from_systems('import systems.factions.sim.faction_action\n')
+    assert dotted, 'the probe reports NOTHING for a plain dotted import — it is broken'
+
+    bare = _modules_loaded_from_systems(
+        "sys.path.insert(0, os.path.join(os.path.abspath('.'), 'systems', 'combat', "
+        "'combat_engine_v1'))\nimport combatant\n")
+    assert bare, (
+        'the probe reports NOTHING for a module loaded by sys.path + bare name. That is the exact '
+        'seam it was rewritten to see; a name-prefix filter cannot, because the module is called '
+        '"combatant".'
+    )
+    assert any('combatant' in b for b in bare), bare
 
 
 def test_the_composition_resolver_refuses_an_undeclared_role():

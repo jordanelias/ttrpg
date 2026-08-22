@@ -139,14 +139,50 @@ def test_the_attribute_roster_declares_itself_open_until_the_tenth_is_named():
         assert not descriptors.ATTRIBUTES_PENDING_TENTH
 
 
+#: The ratified-but-unimplemented rows expected on disk. A row leaves this set ONLY by being
+#: implemented, and the commit that implements it edits this line — which is the whole point:
+#: deleting a row and deleting its name here are the same act, done deliberately, in one place.
+#: `per_stat_floors` left at plan S5d (2026-08-22), wired into `Faction.adjust`; `faction_L` remains
+#: and is Q1, Jordan's open ruling.
+EXPECTED_UNIMPLEMENTED = {'faction_L'}
+
+
 def test_ratified_but_unimplemented_items_stay_visible():
-    """These are RATIFIED canon decisions the executable model has not implemented. The list may
-    shrink as they land; it must never be emptied by deleting entries instead of implementing them."""
+    """These are RATIFIED canon decisions the executable model has not implemented.
+
+    ⚠ REWRITTEN 2026-08-22 after an adversarial pass, because the previous version could not
+    observe the failure its own docstring named. It said the list "must never be emptied by deleting
+    entries instead of implementing them" and then only iterated whatever rows happened to be
+    present, asserting each had a `needs` field. An emptied dict passes a loop over an empty dict —
+    §0.1 pt 2, in the file whose subject is the register that records exactly this class of debt.
+    It went green through S5d deleting a row from it.
+
+    Now the SET is pinned. Implementing an item and deleting its row is correct and requires editing
+    `EXPECTED_UNIMPLEMENTED` above; deleting a row because it was inconvenient fails here. Adding a
+    newly-discovered gap also fails here, which is right — a new ratified-but-unimplemented item is
+    a thing a human should see named.
+    """
     data = json.loads((REPO / 'engine' / 'engine_params' / 'descriptors.json').read_text())
     unimpl = data['unimplemented']
+    assert set(unimpl) == EXPECTED_UNIMPLEMENTED, (
+        f'the ratified-but-unimplemented register is now {sorted(unimpl)}, expected '
+        f'{sorted(EXPECTED_UNIMPLEMENTED)}. If an item was IMPLEMENTED, update the set above in the '
+        f'same commit and say where. If one was merely deleted, restore it.'
+    )
     for key, row in unimpl.items():
         assert row.get('needs'), f'{key} records no required action'
         assert row.get('why_it_matters'), f'{key} records no consequence'
+
+
+def test_the_unimplemented_register_guard_can_observe_an_unauthorised_deletion():
+    """§0.1 pt 2 for the test above — the property is "the set matches", and a set comparison that
+    is never exercised against a mismatch proves nothing about the guard."""
+    live = {'faction_L'}
+    assert live == EXPECTED_UNIMPLEMENTED
+    assert set() != EXPECTED_UNIMPLEMENTED, 'an emptied register must not compare equal'
+    assert {'faction_L', 'per_stat_floors'} != EXPECTED_UNIMPLEMENTED, (
+        'a restored per_stat_floors row must not compare equal — it is implemented'
+    )
 
 
 def test_the_export_is_current():

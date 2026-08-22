@@ -21,17 +21,17 @@
     "parliamentary_motion": {
       "target": "systems.social_contest.sim.parliamentary_vote:Motion",
       "kind": "callable",
-      "needed_by": "the same two callers \u2014 the \u00a710 motion record they construct before voting"
+      "needed_by": "the same three callers \u2014 the \u00a710 motion record they construct before voting"
     },
     "parliamentary_vote": {
       "target": "systems.social_contest.sim.parliamentary_vote:run_parliamentary_vote",
       "kind": "callable",
-      "needed_by": "engine/cross_scale/parliamentary_bridge.py (the two-pole season vote) AND systems/factions/sim/parliamentary_transfer.py \u00a74 (the vote-wrapped transfer resolution)"
+      "needed_by": "engine/cross_scale/parliamentary_bridge.py (the two-pole season vote), systems/factions/sim/parliamentary_transfer.py \u00a74 (the vote-wrapped transfer resolution), and systems/factions/sim/parliamentary_action.py \u00a75.4 (the Censure motion)"
     },
     "parliamentary_vote_declaration": {
       "target": "systems.social_contest.sim.parliamentary_vote:VoteDeclaration",
       "kind": "callable",
-      "needed_by": "the same two callers \u2014 one per faction taking a side under \u00a710 step 2"
+      "needed_by": "the same three callers \u2014 one per faction taking a side under \u00a710 step 2"
     },
     "rs_track_delta": {
       "target": "systems.overview.sim.rs_track:apply_rs_delta",
@@ -71,52 +71,52 @@
     "snapshot_state.beliefs": {
       "target": "systems.characters.sim.beliefs:Belief",
       "kind": "callable",
-      "needed_by": "engine/autoload/game_state.py world_from_snapshot \u2014 schema migration #2; a LIST per holder"
+      "needed_by": "engine/autoload/game_state.py restore_world \u2014 schema migration #2; a LIST per holder"
     },
     "snapshot_state.convictions": {
       "target": "systems.characters.sim.conviction:ConvictionState",
       "kind": "callable",
-      "needed_by": "engine/autoload/game_state.py world_from_snapshot \u2014 schema migration #2"
+      "needed_by": "engine/autoload/game_state.py restore_world \u2014 schema migration #2"
     },
     "snapshot_state.insurgencies": {
       "target": "systems.world.sim.insurgency_pipeline:InsurgencyRecord",
       "kind": "callable",
-      "needed_by": "engine/autoload/game_state.py world_from_snapshot \u2014 schema migration #1"
+      "needed_by": "engine/autoload/game_state.py restore_world \u2014 schema migration #1"
     },
     "snapshot_state.knots": {
       "target": "systems.fieldwork.sim.knots:Knot",
       "kind": "callable",
-      "needed_by": "engine/autoload/game_state.py world_from_snapshot \u2014 schema migration #2"
+      "needed_by": "engine/autoload/game_state.py restore_world \u2014 schema migration #2"
     },
     "snapshot_state.npcs": {
       "target": "systems.world.sim.npe:NPC",
       "kind": "callable",
-      "needed_by": "engine/autoload/game_state.py world_from_snapshot \u2014 schema migration #1; a LIST per territory, not a single record"
+      "needed_by": "engine/autoload/game_state.py restore_world \u2014 schema migration #1; a LIST per territory, not a single record"
     },
     "snapshot_state.practitioners": {
       "target": "systems.threadwork.sim.coherence:CoherenceState",
       "kind": "callable",
-      "needed_by": "engine/autoload/game_state.py world_from_snapshot \u2014 schema migration #1"
+      "needed_by": "engine/autoload/game_state.py restore_world \u2014 schema migration #1"
     },
     "snapshot_state.settlements": {
       "target": "systems.settlements.sim.registry:Settlement",
       "kind": "callable",
-      "needed_by": "engine/autoload/game_state.py world_from_snapshot \u2014 schema migration #3 (OI-07)"
+      "needed_by": "engine/autoload/game_state.py restore_world \u2014 schema migration #3 (OI-07)"
     },
     "snapshot_state.territory_infrastructure": {
       "target": "systems.settlements.sim.infrastructure:InfrastructureState",
       "kind": "callable",
-      "needed_by": "engine/autoload/game_state.py world_from_snapshot \u2014 schema migration #2"
+      "needed_by": "engine/autoload/game_state.py restore_world \u2014 schema migration #2"
     },
     "snapshot_state.threadcut_beings": {
       "target": "systems.threadwork.sim.threadcut:ThreadcutState",
       "kind": "callable",
-      "needed_by": "engine/autoload/game_state.py world_from_snapshot \u2014 schema migration #2"
+      "needed_by": "engine/autoload/game_state.py restore_world \u2014 schema migration #2"
     },
     "snapshot_state.treaties": {
       "target": "systems.factions.sim.treaty:TreatyRecord",
       "kind": "callable",
-      "needed_by": "engine/autoload/game_state.py world_from_snapshot \u2014 schema migration #1"
+      "needed_by": "engine/autoload/game_state.py restore_world \u2014 schema migration #1"
     },
     "territory_transfer_candidate": {
       "target": "systems.factions.sim.parliamentary_transfer:derive_transfer_candidate",
