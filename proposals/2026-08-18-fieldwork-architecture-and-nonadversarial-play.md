@@ -226,7 +226,7 @@ consciousness-performed) are today enforced by prose and by nothing else.
 tree there are **three** non-test sites that set it, and **two of those pass `causes=[]`**:
 
 - `engine/cross_scale/echo_transport.py:317` — `causes=[caused_by_key_id] if caused_by_key_id else []` (the only real one)
-- `systems/factions/sim/parliamentary_transfer.py:166` — `causes=[]`
+- `systems/factions/sim/parliamentary_transfer.py:230` — `causes=[]`
 - `systems/factions/sim/faction_action.py:389` — `causes=[]`
 
 So the ancestry graph exists in the schema and not in the data. Corroboration (§5.3), the Case

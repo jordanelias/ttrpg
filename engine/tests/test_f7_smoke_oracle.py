@@ -205,7 +205,8 @@ def test_f7_hafenmark_elimination_lockout():
     itself (0-territory factions never act again) is untouched by this wave. Verified directly
     (2026-07-29, monkey-patched `propose_transfer` across the seed-42..49 batch): Crown's
     restoration motion fires 0-10 times per campaign depending on seed, and its [SEED]
-    largest-non-Crown-holder targeting (parliamentary_bridge._derive_transfer) sometimes selects
+    largest-non-Crown-holder targeting (parliamentary_transfer.derive_transfer_candidate, moved
+    out of parliamentary_bridge at plan S5a) sometimes selects
     Hafenmark as the target holder (e.g. seed 49: `('Crown', 'T10', 'Hafenmark', 'transferred')`)
     — Crown reclaiming territory FROM Hafenmark, working against Hafenmark's trajectory rather
     than for it, on top of the general RNG-stream shift from every attempt (success or failure)

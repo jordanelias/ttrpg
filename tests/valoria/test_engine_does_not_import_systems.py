@@ -1,4 +1,5 @@
-"""`engine/` must not name `systems/`. Six sites still do; this pins them so they can only go away.
+"""`engine/` must not name `systems/`. No top-level site does any more; SIXTEEN function-local ones
+still do, and this pins both counts so neither can grow back.
 
 THE PREMISE (Jordan, 2026-08-20): **`systems/` stems from `engine/` and `references/`.** `engine/`
 is the root — the executable model and the single owner of each rule — and `systems/<sub>/sim/`
@@ -6,11 +7,20 @@ composes on top of it. A top-level `from systems...` inside `engine/` inverts th
 its own dependents, and the package graph acquires a cycle.
 
 WHAT WAS MEASURED, 2026-08-20. `CLAUDE.md` §3 claimed the dependency graph is "acyclic, autoload is
-a leaf". It is neither. Six non-test modules under `engine/` import `systems.*` at module level, and
-`engine/autoload/game_state.py` imports seven subsystems' state classes inside functions — deferred
-imports hide a cycle from the interpreter, they do not remove it. `systems/factions/sim/
-faction_action.py:42` imports `engine.autoload.game_state` while `game_state.py:384` imports
-`systems.factions.sim.treaty`; that is a package-level cycle, live today.
+a leaf". It is neither. Six non-test modules under `engine/` imported `systems.*` at module level,
+and `engine/autoload/game_state.py` imports seven subsystems' state classes inside functions —
+deferred imports hide a cycle from the interpreter, they do not remove it.
+
+The concrete cycle: `systems/factions/sim/faction_action.py:42` imports
+`engine.autoload.game_state` while `game_state.py` imports `systems.factions.sim.treaty`; that is a
+package-level cycle, live today.
+
+UPDATED 2026-08-22 (plan S5a): the module-level count reached ZERO. The nested count did not, so
+the cycle above is still real, `CLAUDE.md` §3's claim is still false, and this file still says so.
+`BASELINE_TOTAL == 0` is half the job — which is also why the plan's instruction to delete
+`test_the_documented_cycle_is_still_real` "when BASELINE_TOTAL hits 0" is NOT followed here: that
+test reads `game_state.py`'s NESTED import, and deleting it now would clear the guard on a claim
+that is still wrong.
 
 WHY THIS IS A RATCHET AND NOT A CLIFF. A hard "zero imports" assertion would be red on arrival and
 would be deleted within a session. `ALLOWED` is a ceiling that can only go DOWN: each seam that
@@ -48,20 +58,24 @@ NESTED_SYSTEMS_IMPORT = re.compile(r'^[ \t]+(?:from|import)\s+systems[.\s]', re.
 # THE CEILING. Every entry is a seam to be moved to registration-driven composition
 # (proposals/2026-08-20-return-to-game-plan-v1.md Act C3). Remove the line when the seam lands.
 # NEVER add one.
-ALLOWED = {
-    # Removal order, cheapest first. Seam 1 (cross_scale/echo_transport.py) LANDED 2026-08-20: it
-    # imported systems.settlements.sim.registry for STAT_MIN/STAT_MAX alone, a 0-5 bound that
-    # references/descriptor_registry.yaml already declares as `set.order`, so it now reads the root
-    # via engine.substrate.descriptors. Value-identical by construction; the seeded goldens were the
-    # control and did not move.
-    # Seam 2 (mc_v18.py) LANDED 2026-08-20: the campaign driver's two subsystem callbacks now
-    # resolve through engine.substrate.composition, with references/module_contracts.yaml's
-    # composition_roles: block naming the providers. engine/ states WHAT it needs; references/
-    # states WHICH module gives it.
-    'cross_scale/parliamentary_bridge.py': 3,  # 3. and delete the lateral duplicate of this same
-                                             #    seam at systems/factions/sim/parliamentary_transfer.py:54
-}
-BASELINE_TOTAL = 3
+# EMPTY, as of 2026-08-22 (plan S5a). All three seams landed:
+#   Seam 1 (cross_scale/echo_transport.py, 2026-08-20) — imported systems.settlements.sim.registry
+#     for STAT_MIN/STAT_MAX alone, a 0-5 bound that references/descriptor_registry.yaml already
+#     declares as `set.order`, so it reads the root via engine.substrate.descriptors instead.
+#   Seam 2 (mc_v18.py, 2026-08-20) — the campaign driver's two subsystem callbacks resolve through
+#     engine.substrate.composition, with references/module_contracts.yaml's composition_roles:
+#     block naming the providers.
+#   Seam 3 (cross_scale/parliamentary_bridge.py, 2026-08-22) — the §10 vote, its two record types
+#     and the territory-transfer entry points resolve as roles; the transfer DERIVATION moved to
+#     its owner (systems/factions/sim/parliamentary_transfer.derive_transfer_candidate), because it
+#     read four members private to that module. The lateral duplicate of the same seam, at
+#     parliamentary_transfer.py:54, went in the same commit — one seam, one declaration.
+#
+# AN EMPTY ALLOW-LIST IS NOT THE END OF THE JOB. NESTED_BASELINE below is still 16, and a deferred
+# import is still a cycle (see test_the_documented_cycle_is_still_real). Do not read `BASELINE_TOTAL
+# == 0` as "engine/ no longer depends on systems/".
+ALLOWED = {}
+BASELINE_TOTAL = 0
 
 # THE SECOND CEILING, AND THE REASON IT EXISTS. With only the count above, the CHEAPEST way to lower
 # `BASELINE_TOTAL` is to indent a top-level import into the function that uses it. That satisfies the

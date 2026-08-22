@@ -100,7 +100,7 @@ three steps — `systems/overview/sim/season.py:48 run_season`, invoked at `engi
     from one faction's own aggregates and runs the Agôn kernel — `engine/cross_scale/scene_dispatch.py:288-301 _resolve_slot`.
   - **S7.3 The parliamentary scene**, gated on the scheduler's presence: a two-pole motion is derived from
     aggregate state, resolved by a faction-scale vote, and — independently of that vote's outcome — a
-    territory-transfer motion is attempted — `engine/cross_scale/parliamentary_bridge.py:180 run_parliamentary_scene`,
+    territory-transfer motion is attempted — `engine/cross_scale/parliamentary_bridge.py:150 run_parliamentary_scene`,
     called at `engine/mc_v18.py:158 _faction_actions_callback`.
   - **S7.4 The ACTION→ACCOUNTING boundary.** Every Key emitted during the scene phase was logged *live*
     but its `apply` closure **deferred**; those deferred faction/settlement writes land here, in emission
@@ -175,7 +175,7 @@ notify, `engine/substrate/keys.py:510 emit` — and is the only place deferred w
 `engine/substrate/keys.py:581 accounting_boundary`. It is the **substrate owner, not the sole emitter**: of the
 four production sites constructing a `Key`, two are here — `engine/cross_scale/echo_transport.py:319 Key`,
 `engine/cross_scale/echo_transport.py:426 Key` — and two are FA-lane, `systems/factions/sim/faction_action.py:375 Key`
-and `systems/factions/sim/parliamentary_transfer.py:162 Key`. Two of its three termination guards are
+and `systems/factions/sim/parliamentary_transfer.py:226 Key`. Two of its three termination guards are
 structurally unreachable, the queue path they defend having no production caller —
 `engine/substrate/keys.py:525 schedule_emission` (§3a).
 

@@ -445,13 +445,42 @@ def test_direction4b_territory_transfer_resolver_is_called():
     must have >=1 caller.
 
     RESOLVED (Wave 2 item 2, OI-04, XFAIL_MANIFEST row 'territory-transfer-resolver' retired
-    2026-07-29): the L-transfer lane added `_derive_transfer`/`_run_transfer_motion` to
-    engine/cross_scale/parliamentary_bridge.py, wired into `run_parliamentary_scene`;
-    `_run_transfer_motion` calls `parliamentary_transfer.propose_transfer` at
-    parliamentary_bridge.py:160 — closing the one-way territory ratchet OI-04 describes. STRICT
-    now (no xfail): the row is removed from XFAIL_MANIFEST."""
-    _checked, matches = _source_scan(r"propose_transfer\(", _KEY_DELIVERY_EMITTER_MODULES)
-    assert matches, "parliamentary_transfer.propose_transfer still has zero callers"
+    2026-07-29): the L-transfer lane added a derivation and `_run_transfer_motion` to
+    engine/cross_scale/parliamentary_bridge.py, wired into `run_parliamentary_scene` (the
+    derivation has since moved to `parliamentary_transfer.derive_transfer_candidate`, plan S5a);
+    `_run_transfer_motion` calls the transfer resolver — closing the one-way territory ratchet
+    OI-04 describes. STRICT now (no xfail): the row is removed from XFAIL_MANIFEST.
+
+    ⚠ REWRITTEN 2026-08-22 (plan S5a), AND THE REASON IS THE FINDING. This asserted its claim by
+    grepping live producer sources for the literal text `propose_transfer(`. S5a routed that call
+    through `engine.substrate.composition`, so the bridge now reads
+    `composition.require("territory_transfer_proposal")(...)` and the literal vanished — this test
+    went RED on a change that removed no caller at all. A text scan for a callee's NAME cannot see
+    a call made by role, which is precisely the shape the whole centralization step introduces; the
+    same scan would equally go quietly GREEN if the call were deleted while a comment mentioning it
+    survived.
+
+    So the claim is re-expressed over BOTH wiring styles, and it is now stronger than the grep it
+    replaces: a role-resolved call counts only when `references/module_contracts.yaml` binds the
+    role to this exact resolver AND a live producer module requires that role. The binding half is
+    additionally proven executable by `tools/export_composition.py`, which imports and resolves
+    every declared target behind a blocking gate."""
+    _checked, direct = _source_scan(r"propose_transfer\(", _KEY_DELIVERY_EMITTER_MODULES)
+
+    from engine.substrate import composition
+    role_rows = [r for r in composition.ROLES.items()
+                 if r[1]['target'].endswith(':propose_transfer')]
+    by_role = []
+    for role, _row in role_rows:
+        _c, requiring = _source_scan(rf"require\(\s*[\"']{re.escape(role)}[\"']\s*\)",
+                                     _KEY_DELIVERY_EMITTER_MODULES)
+        by_role.extend(requiring)
+
+    assert direct or by_role, (
+        "parliamentary_transfer.propose_transfer has zero callers: no live producer module calls "
+        "it by name, and no composition role bound to it is required by one either. The one-way "
+        "territory ratchet OI-04 describes is back."
+    )
 
 
 def test_direction5_down_diagonal_shares_direction4s_mechanism():

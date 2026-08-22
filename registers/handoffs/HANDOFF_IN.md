@@ -2785,7 +2785,7 @@ A `valoria-critic` (Read/Grep/Glob only) was given both audits as prior art to a
 load-bearing claim was re-run with Bash here.
 
 - **The four "possibly-uncalled" factions modules are REACHED** —
-  `engine/tests/test_pipeline_reach.py:749-755`, oi17 test passes. All four are `stub_resolve` no-ops
+  `engine/tests/test_pipeline_reach.py:777-783`, oi17 test passes. All four are `stub_resolve` no-ops
   carrying Jordan directives found nowhere else. **Phase 3.1 is CLOSED, not started.** The reasoning
   error is the lesson: both my methods were blind to the *same* thing (string-path dispatch), so
   "two independent methods agreed" carried no information.

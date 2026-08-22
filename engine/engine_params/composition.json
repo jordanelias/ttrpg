@@ -7,9 +7,29 @@
       "target": "systems.factions.sim.faction_action:faction_take_action",
       "needed_by": "engine/mc_v18.py \u2014 per-season faction action dispatch, passed to the season driver"
     },
+    "parliamentary_motion": {
+      "target": "systems.social_contest.sim.parliamentary_vote:Motion",
+      "needed_by": "the same two callers \u2014 the \u00a710 motion record they construct before voting"
+    },
+    "parliamentary_vote": {
+      "target": "systems.social_contest.sim.parliamentary_vote:run_parliamentary_vote",
+      "needed_by": "engine/cross_scale/parliamentary_bridge.py (the two-pole season vote) AND systems/factions/sim/parliamentary_transfer.py \u00a74 (the vote-wrapped transfer resolution)"
+    },
+    "parliamentary_vote_declaration": {
+      "target": "systems.social_contest.sim.parliamentary_vote:VoteDeclaration",
+      "needed_by": "the same two callers \u2014 one per faction taking a side under \u00a710 step 2"
+    },
     "season_driver": {
       "target": "systems.overview.sim.season:run_season",
       "needed_by": "engine/mc_v18.py \u2014 composes advance_season -> action_callback -> run_accounting"
+    },
+    "territory_transfer_candidate": {
+      "target": "systems.factions.sim.parliamentary_transfer:derive_transfer_candidate",
+      "needed_by": "engine/cross_scale/parliamentary_bridge.py \u2014 OI-04 derivation of (initiator, territory, mode)"
+    },
+    "territory_transfer_proposal": {
+      "target": "systems.factions.sim.parliamentary_transfer:propose_transfer",
+      "needed_by": "engine/cross_scale/parliamentary_bridge.py \u2014 the \u00a7\u00a71-4 CB-gated transfer motion itself"
     }
   }
 }

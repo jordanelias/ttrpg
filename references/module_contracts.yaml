@@ -76,6 +76,29 @@ composition_roles:
     target: "systems.overview.sim.season:run_season"
     needed_by: "engine/mc_v18.py — composes advance_season -> action_callback -> run_accounting"
 
+  # ── The parliamentary seam (added 2026-08-22, plan S5a) ───────────────────────────────────────
+  # `engine/cross_scale/parliamentary_bridge.py` held the last three top-level `systems` imports in
+  # `engine/`, and the SAME seam was owned a second time laterally at
+  # `systems/factions/sim/parliamentary_transfer.py` (its own top-level import of the vote) — two
+  # modules each naming the §10 vote's provider. One seam, one declaration: both resolve these roles.
+  parliamentary_vote:
+    target: "systems.social_contest.sim.parliamentary_vote:run_parliamentary_vote"
+    needed_by: "engine/cross_scale/parliamentary_bridge.py (the two-pole season vote) AND systems/factions/sim/parliamentary_transfer.py §4 (the vote-wrapped transfer resolution)"
+    note: "social_contest_v30 §10. Applies the Total-Victory Mandate penalty itself; callers read the VoteResult, they do not re-derive its bands."
+  parliamentary_motion:
+    target: "systems.social_contest.sim.parliamentary_vote:Motion"
+    needed_by: "the same two callers — the §10 motion record they construct before voting"
+  parliamentary_vote_declaration:
+    target: "systems.social_contest.sim.parliamentary_vote:VoteDeclaration"
+    needed_by: "the same two callers — one per faction taking a side under §10 step 2"
+  territory_transfer_candidate:
+    target: "systems.factions.sim.parliamentary_transfer:derive_transfer_candidate"
+    needed_by: "engine/cross_scale/parliamentary_bridge.py — OI-04 derivation of (initiator, territory, mode)"
+    note: "MOVED here from the bridge at S5a. It reads only parliamentary_transfer's own CB machinery (_available_cb / _MODE_CB / PARL_LAST_TERRITORY_FLOOR / MODES), so the engine was reaching into a subsystem's privates to re-derive a rule that lives in that subsystem."
+  territory_transfer_proposal:
+    target: "systems.factions.sim.parliamentary_transfer:propose_transfer"
+    needed_by: "engine/cross_scale/parliamentary_bridge.py — the §§1-4 CB-gated transfer motion itself"
+
 modules:
 
   - module: faction_state

@@ -189,6 +189,79 @@ def test_winner_and_degree_band_mapping():
     assert pb._winner_and_degree(_vr('committee', 5)) == (None, 'Partial')  # compromise fires nothing
 
 
+def test_winner_and_degree_is_identical_to_the_threshold_derivation_it_replaced():
+    """The falsifier for S5a's one behavioural-looking edit (§0.1 pts 2-3).
+
+    `_winner_and_degree` used to import `PERSUASION_TOTAL_VICTORY` / `PERSUASION_TOTAL_DEFEAT` from
+    `systems.social_contest` and re-derive, from the raw persuasion track, which side had won and
+    whether totally — a classification `run_parliamentary_vote` had ALREADY made and recorded on
+    the result it returned. S5a made it read `vr.status` + `vr.total_victory` instead, which is what
+    removed the last of `engine/`'s three top-level `systems` imports.
+
+    "Value-identical" is an argument, and an argument is not a measurement. This runs BOTH
+    implementations over every reachable (status, total_victory, track) triple and asserts they
+    never disagree. It reads the real canon constants rather than hardcoding 9/1/7/3, so if a
+    retune ever inverts the ordering the new form depends on — TOTAL_VICTORY >= WIN_THRESHOLD and
+    TOTAL_DEFEAT <= LOSS_THRESHOLD, i.e. "a total victory always also passes or fails" — this fails
+    here rather than silently changing which faction gets a Domain Echo.
+    """
+    from systems.social_contest.sim.contest import (
+        PERSUASION_TOTAL_VICTORY, PERSUASION_TOTAL_DEFEAT,
+        PERSUASION_WIN_THRESHOLD, PERSUASION_LOSS_THRESHOLD,
+    )
+
+    def old(vr):
+        """Verbatim the pre-S5a body."""
+        if vr.total_victory and vr.final_track >= PERSUASION_TOTAL_VICTORY:
+            return "A", "Overwhelming"
+        if vr.total_victory and vr.final_track <= PERSUASION_TOTAL_DEFEAT:
+            return "B", "Overwhelming"
+        if vr.status == "passed":
+            return "A", "Success"
+        if vr.status == "failed":
+            return "B", "Success"
+        return None, "Partial"
+
+    checked = 0
+    # The track is clamped to [_TRACK_FLOOR, _TRACK_CEIL] = [0, 10] in parliamentary_vote.py; the
+    # status and total_victory flags are derived from it there, so only these triples are reachable
+    # by a real vote. The zero-zero early return is the extra case: committee + not-total at ANY
+    # track, since it keeps the STARTING track rather than a computed one.
+    for track in range(0, 11):
+        if track >= PERSUASION_WIN_THRESHOLD:
+            status = 'passed'
+        elif track <= PERSUASION_LOSS_THRESHOLD:
+            status = 'failed'
+        else:
+            status = 'committee'
+        total = track >= PERSUASION_TOTAL_VICTORY or track <= PERSUASION_TOTAL_DEFEAT
+        for reachable in ((status, total), ('committee', False)):   # normal, then zero-zero
+            vr = _vr(reachable[0], track, total=reachable[1])
+            assert pb._winner_and_degree(vr) == old(vr), (
+                f'S5a changed behaviour at status={reachable[0]!r} track={track} '
+                f'total_victory={reachable[1]}: now {pb._winner_and_degree(vr)}, was {old(vr)}'
+            )
+            checked += 1
+    assert checked == 22, f'the sweep did not run over every reachable triple (checked {checked})'
+
+
+def test_the_equivalence_sweep_can_observe_a_divergence():
+    """§0.1 pt 2 — the sweep above must be able to FAIL. A comparison of a function against a copy
+    of itself is not evidence; this plants the divergence the sweep is meant to catch and asserts
+    the two forms really do differ there, so the sweep is comparing two distinct implementations.
+    """
+    from systems.social_contest.sim.contest import PERSUASION_TOTAL_VICTORY
+
+    # A total victory that did NOT pass — unreachable under canon's ordering (9 >= 7), which is
+    # precisely the assumption the new form rests on. The old threshold form calls it a Side-A
+    # overwhelming win; the new status-reading form calls it a compromise.
+    impossible = _vr('committee', PERSUASION_TOTAL_VICTORY, total=True)
+    assert pb._winner_and_degree(impossible) == (None, 'Partial')
+    assert impossible.total_victory and impossible.final_track >= PERSUASION_TOTAL_VICTORY, (
+        'the planted triple no longer trips the OLD form, so the sweep proves nothing'
+    )
+
+
 def test_bridge_is_inert_without_scheduler():
     """No ECHO_TRANSPORT scheduler → the bridge is a no-op (byte-exact default)."""
     w = game_state.create_world(seed=42)

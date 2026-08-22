@@ -261,7 +261,7 @@ regardless of rediscovery count because the defect is structural rather than sta
   production dispatch sites matching it are `systems/factions/sim/faction_action.py:277` and `:293`.
   **The register's G-16 census is the correct one and is larger: 5 sites**, because three do not match
   that regex at all — `systems/overview/sim/ci_track.py:91` and `systems/factions/sim/mass_seizure.py:131`
-  compare `t.owner ==`, and `systems/factions/sim/parliamentary_transfer.py:107` compares `initiator ==`.
+  compare `t.owner ==`, and `systems/factions/sim/parliamentary_transfer.py:114` compares `initiator ==`.
   I substituted a literal string count for G-16's concept-level census and the two coincidentally
   collided on 8. **That is pattern-matching on the term instead of the concept — the error CLAUDE.md §0
   names as the costliest in this corpus — committed inside the paragraph arguing against scripting
