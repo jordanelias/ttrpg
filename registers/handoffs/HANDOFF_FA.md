@@ -46,8 +46,15 @@ battle model. There is nothing here to convert.
    *halved* resistance — that halving IS the mechanic. If the base becomes `L/2`, then "halved"
    either compounds to `L/4` or stops meaning anything. Either way a deliberate two-tier
    distinction is collapsed by a change that looks like a one-line fix.
-3. **The roster it would read is itself unruled.** The faction stat roster disagrees across five
-   surfaces (ED-FA-0004 open, Q1).
+3. ~~**The roster it would read is itself unruled.**~~ **DISCHARGED 2026-08-23.** Q1 is RULED:
+   Jordan ruled "Legitimacy is a base", `fac.legitimacy` is declared in
+   `references/descriptor_registry.yaml`, and the faction roster is six stats with every one
+   clamping from the registry. The roster this derivation would read is now settled.
+
+   ⚠ **HALF B STAYS SUSPENDED ON REASONS 1 AND 2, WHICH ARE UNTOUCHED BY THAT RULING.** Wiring
+   `parliamentary_transfer` to `L/2` still overwrites a number a live design doc states as canon,
+   and wiring tribunal's BASE to `L/2` still collapses the two-tier formal-grounds mechanic. Do not
+   read "Q1 is ruled" as "Half B is unblocked" — it removes the third reason, not the first two.
 
 ### What the next session should NOT do
 

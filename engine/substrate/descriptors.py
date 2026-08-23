@@ -75,8 +75,8 @@ def faction_bounds(field):
     none.
 
     ⚠ IT NO LONGER RETURNS None FOR ANY DECLARED FACTION STAT. Until 2026-08-23 it returned None for
-    `L`, the one Faction field the registry did not declare — the "5-vs-6" half of the faction-stats
-    packet. Jordan ruled that day that Legitimacy IS a base descriptor, so `fac.legitimacy` is
+    `L`, the one Faction field the registry did not declare — the "5-vs-6" gap in the faction-stats
+    packet, now closed. Jordan ruled that day that Legitimacy IS a base descriptor, so `fac.legitimacy` is
     declared and bound to `L`, and the roster is six. Callers must STILL handle None, because a
     caller may pass a stat that is not a faction descriptor at all (`MULTS` carries `accord` and
     `pt`, which are Territory fields) — the contract is unchanged even though the L case is gone."""

@@ -18,22 +18,22 @@ same shape as its four sibling exports: the markdown/YAML stays the AUTHORED, re
 code reads the cooked artifact. Emitting a generated `.py` would put executable code in a directory
 whose whole contract is "typed data the Godot port ingests", and would give the port nothing.
 
-WHAT IT DOES NOT DO. It does not resolve the roster disagreements it exposes; it RECORDS them, in
-the same shape `export_game_constants.py` uses, because each needs a ruling and not a value edit:
+WHAT IT USED TO RECORD, AND WHY THAT SECTION IS NOW EMPTY. This tool does not resolve roster
+disagreements; it RECORDS them in its `unimplemented` block, because each needs a ruling and not a
+value edit. It carried two, and BOTH ARE NOW CLOSED:
 
-  * `faction_stats` declares FIVE keys (influence, wealth, military, intel, stability). The Faction
-    dataclass implements SIX fields (L, Sta, W, I, Mil, intel) — `L` (Legitimacy/Mandate) is written
-    by 20 of .adjust()'s 31 non-test call sites and is declared NOWHERE in the registry. That is
-    the 5-vs-6 half of the
-    faction-stats packet awaiting Jordan (HANDOFF.md; plan Q1).
-  * the registry's PER-STAT floors were ratified 2026-07-08 (ED-IN-0029, OPT-AV-14/D14 + OPT-AV-18):
-    Influence floors at 1, the rest at 0. `Faction.adjust` (game_state.py:127-131) applies a BLANKET
-    floor of 0.5 and ceiling of 7.0 to every stat, and no caller overrides it. **The ratified floors
-    have never been implemented.** Wiring them moves the seeded goldens, so it is a separate,
-    measured commit — not a side effect of adding this exporter.
-  * `attributes` ships NINE and Jordan ruled 2026-08-14 that it will be TEN. The tenth is unnamed, so
-    the export carries an explicit `pending_tenth` sentinel rather than silently shipping nine as if
-    the roster were closed (plan Q2).
+  * THE 5-vs-6 GAP — `faction_stats` declared FIVE keys while the Faction dataclass implemented SIX
+    fields, with `L` written by 20 of `.adjust()`'s 31 non-test call sites and declared NOWHERE.
+    RULED 2026-08-23: Jordan ruled "Legitimacy is a base", so `fac.legitimacy` is declared, bound to
+    `L` by `FACTION_KEY_TO_FIELD`, and the roster is SIX on both sides.
+  * THE UNIMPLEMENTED FLOORS — ED-IN-0029 (2026-07-08) ratified per-stat floors that
+    `Faction.adjust` ignored in favour of a blanket 0.5/7.0 for six weeks. WIRED 2026-08-22 (plan
+    S5d), then partly superseded 2026-08-23 by "Influence can be 0", which replaced that docket's
+    Influence floor of 1. All six stats floor at 0.
+
+An EMPTY `unimplemented` block is the correct state when nothing is outstanding, and it is not a
+licence to keep it empty: `tests/valoria/test_descriptors_runtime.py` pins the exact expected set,
+so a silent addition fails as loudly as an unauthorised deletion.
 
 Usage:
     python3 tools/export_descriptors.py           # write engine/engine_params/descriptors.json
