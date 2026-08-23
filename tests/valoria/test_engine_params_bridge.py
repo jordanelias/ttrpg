@@ -7,7 +7,7 @@ authored surface; nothing else reads the artifact.
 
 ⚠ THAT SENTENCE IS NOT TRUE OF THE TREE TODAY, AND THIS FILE SAYS SO RATHER THAN ASSERTING IT.
 Written as a hard invariant it would be RED ON ARRIVAL — `key_types.json`'s one reader is not a leaf,
-`descriptor_registry.yaml` has five parsers, `module_contracts.yaml` has ten — and a gate that is
+`descriptor_registry.yaml` has six parsers in tools/, `module_contracts.yaml` ten — and a gate that is
 red on arrival gets deleted by the next session, which loses the check entirely (`CLAUDE.md` §0.2's
 "a hard assertion would be red on arrival" is the same reasoning the seam ratchet is built on).
 
@@ -80,6 +80,7 @@ AUTHORED_PARSERS = {
     'descriptor_registry.yaml': {'tools/export_descriptors.py',
                                  'tools/ci_names_consistency.py',
                                  'tools/definitions_store.py',
+                                 'tools/descriptor_registry.py',
                                  'tools/quantity_registry.py',
                                  'tools/registry.py'},
     'module_contracts.yaml': {'tools/export_composition.py',
@@ -95,6 +96,8 @@ AUTHORED_PARSERS = {
 }
 
 _PATHISH = re.compile(r"(os\.path\.join|Path\(|open\(|load_yaml|safe_load|read_text|/ ['\"])")
+#: A name bound to a string literal — `_PATHS = ('references/x.yaml',)`, `SRC = '...'`.
+_BINDING = re.compile(r"[A-Za-z_][A-Za-z0-9_]*\s*(?::[^=]+)?=\s*[\(\[]?\s*['\"]")
 _OUT_BINDING = re.compile(r"^\s*(?:OUT|OUT_PATH|DEST|TARGET)\s*=.*$", re.M)
 
 
@@ -158,7 +161,19 @@ def _readers_under(root, names):
                 if not _quoted(n).search(ln):
                     continue
                 context = ' '.join(lines[max(0, i - 1):i + 1])
-                if _PATHISH.search(context):
+                # A module-level BINDING of the name counts too, even with no path call in
+                # sight. tools/descriptor_registry.py:16 is `_PATHS = ('references/
+                # descriptor_registry.yaml',)` with its `open(p)` eight lines below, so the
+                # two-line window could not see it and the file's own headline count of
+                # "five parsers" was wrong -- six, in tools/ alone. Found by an adversarial
+                # pass 2026-08-23, and it is the SAME blind-spot class the regex fix above
+                # had just claimed to close: one guard, corrected twice in one day, which is
+                # the argument for the pass rather than against the guard.
+                #
+                # This does not admit prose, because `_quoted` still requires the closing
+                # quote immediately after the name: `_MSG = 'see references/x.yaml for ...'`
+                # does not match, and that case is mutation-verified below.
+                if _PATHISH.search(context) or _BINDING.match(stripped):
                     found[n].add(rel)
     return found
 
@@ -211,7 +226,21 @@ def test_no_new_engine_reader_of_a_cooked_artifact():
 def test_no_new_parser_of_an_authored_surface():
     """RATCHET, shrink-only. Every tool that parses an authored surface directly is a second reader
     of a file the exporter is supposed to own. `world_initial_state.yaml` has exactly one and is
-    the worked example; `module_contracts.yaml` has TEN.
+    the worked example; `module_contracts.yaml` has TEN IN `tools/`.
+
+    ⚠ THAT SCOPE QUALIFIER IS LOAD-BEARING AND WAS MISSING. This test only ever walks `tools/`,
+    so every number it reports is a tools/-scoped number, and an unqualified "ten" reads as the
+    distance to §2's target state when it is roughly half of it. MEASURED 2026-08-23 with this
+    file's own detector: `tools/` 10, `skills/` 6, `tests/` 5 — twenty-one repo-wide. The
+    `skills/valoria-vector-audit/scripts/` cluster is six real path bindings, not mentions.
+    (An adversarial pass put the figure at nineteen and named two more files,
+    `contract_adjudicator.py` and `contract_flowchart.py`; both were re-checked and neither
+    parses the file — the adjudicator is HANDED already-parsed contracts by
+    `build_contract_index.py:129`, which is the pattern this test wants, not a violation of it.)
+
+    The walk is not widened here, deliberately: `skills/` is a different retirement question and
+    ratcheting it in this commit would bind a decision nobody has taken. The number is recorded
+    so the next session sees the real distance instead of the flattering one.
 
     ⚠ S5C DID NOT REDUCE THAT TEN, AND SAYING SO IS THE POINT. An earlier draft of this docstring
     read "has nine and is what S5c is for", which was wrong twice over. Nine was an undercount --

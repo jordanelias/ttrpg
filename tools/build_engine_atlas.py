@@ -17,10 +17,11 @@ companion (`systems/_architecture/engine_atlas_v1.md`). This tool's job is to re
 countable and to CHECK what was authored — not to replace it.
 
 COMPOSES, DOES NOT REINVENT (CLAUDE.md section 8). Every input has an existing owner:
-  * `references/module_contracts.yaml`   — authored contracts
+  * `references/module_contracts.yaml`   — authored contracts, AND build + port status
+                                           (`wiring:` facts, folded in from the retired
+                                           wiring_manifest.yaml, plan S5c — one source now,
+                                           listed once)
   * `references/key_graph.json`          — the registry<->contracts join (build_key_graph.py)
-  * `references/module_contracts.yaml`   — build + port status (`wiring:` facts, folded in
-                                           from the retired wiring_manifest.yaml, plan S5c)
   * `references/execution_map.json`      — per-module build/executes status
   * `references/execution_trace.json`    — what a SEEDED CAMPAIGN actually called
   * the flow skeletons                   — the authored as-built view

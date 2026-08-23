@@ -97,10 +97,21 @@ def validate_wiring(contracts):
     TWO OF THE FIVE RULES `tools/wiring_map_check.py --check` ENFORCED ARE GONE, AND NOT BECAUSE
     THEY WERE DROPPED. It checked that every wiring tag resolved to a module contract, and that
     module coverage was 27/27, against a SEPARATE registry keyed by the same module names. Folding
-    those facts onto the row they describe makes both unfailable: there is no longer a second key
-    space that can disagree. What replaces them is cheaper and stricter — rule 1 below asserts the
-    key is PRESENT, which is the only way the fold can now be undone by accident. The other three
-    (adapter resolution, adapter coverage, vocabulary) are ported verbatim below.
+    those facts onto the row they describe removes the second key space that could disagree.
+
+    ⚠ THAT IS TRUE ONLY BECAUSE RULE 1 BELOW ENFORCES THE KEYING, AND THE FIRST VERSION OF THIS
+    FUNCTION DID NOT. "The registry cannot disagree with itself" holds for a YAML MAP, which is
+    what the manifest was; `modules:` here is a LIST, where two rows may claim one name and a row
+    may claim none. Shipped that way, a duplicated row validated as 28 modules and an unnamed row
+    as 27 — both silent, and both fatal to consumers that re-key the list by name. So rule 1 is
+    three assertions, not one: named, uniquely named, and carrying wiring. Structural is a claim
+    about a data shape, and a list is not the shape that earns it for free.
+
+    The other three (adapter resolution, adapter coverage, vocabulary) are ported verbatim below.
+
+    FALSIFIER: `tests/valoria/test_wiring_validation.py`. It replaces the falsifier S5c deleted
+    with `wiring_map_check.py`, and it is not optional bookkeeping — for one commit these rules
+    lived in a tool with no test at all while the checks registry claimed they were verified.
 
     The adapter rules do NOT become structural, because adapter tags name FILES on disk rather than
     rows in this registry, so they are ported as-is.
@@ -112,16 +123,38 @@ def validate_wiring(contracts):
         return ['module_contracts.yaml: wiring_vocabularies is missing build_states/godot_states — '
                 'every wiring row below is unvalidatable without it.']
 
-    # 1) every module row carries wiring facts (the fold's 27/27 coverage, re-expressed)
+    # 1) every module row is NAMED, named UNIQUELY, and carries wiring facts.
+    #
+    # THE NAME RULES ARE NOT DECORATION, AND THEY ARE THE HALF THIS TOOL FIRST SHIPPED WITHOUT.
+    # The retired manifest stored wiring under a YAML MAP (`modules: {victory: {...}}`), so
+    # duplicate and missing keys were impossible by construction. `modules:` here is a LIST of
+    # rows, which has no such guarantee — and every consumer of the fold re-keys that list by
+    # `module` (build_contract_index's `wmods`, build_execution_map's `by_name`, build_fork's
+    # `states`), where a duplicate silently keeps the LAST row and an unnamed row silently
+    # becomes `None`. The commit that landed the fold claimed coverage was now "structural";
+    # an adversarial pass showed a duplicated row validating as 28 modules and an unnamed row
+    # validating as 27. Both are caught here, so the claim is true rather than nearly true.
     entries = []
-    for row in contracts.get('modules') or []:
+    seen = {}
+    for i, row in enumerate(contracts.get('modules') or []):
+        name = row.get('module')
+        if not name:
+            fails.append(f'modules[{i}] has no `module:` name. An unnamed row cannot be joined to '
+                         f'anything and disappears into every consumer that keys this list by name.')
+            continue
+        if name in seen:
+            fails.append(f'module:{name} is declared twice (rows {seen[name]} and {i}). Consumers '
+                         f're-key this list by name and silently keep the last row, so the earlier '
+                         f"contract's Key edges and wiring facts would vanish without an error.")
+            continue
+        seen[name] = i
         w = row.get('wiring')
         if not isinstance(w, dict):
-            fails.append(f"module:{row.get('module')} has no `wiring:` block — a module contract "
-                         f"without a build state is invisible to the port work-list. Add one, or "
-                         f"say in the row why this module has no build state.")
+            fails.append(f"module:{name} has no `wiring:` block — a module contract without a "
+                         f"build state is invisible to the port work-list. Add one, or say in the "
+                         f"row why this module has no build state.")
             continue
-        entries.append((f"module:{row.get('module')}", w))
+        entries.append((f'module:{name}', w))
 
     # 2) every adapter tag resolves to engine/cross_scale/<name>.py, and coverage is total
     declared = contracts.get('adapters') or {}

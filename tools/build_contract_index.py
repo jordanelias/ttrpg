@@ -2,7 +2,7 @@
 """build_contract_index.py — render the module contracts + Key graph as REVIEWABLE markdown.
 
 WHY THIS EXISTS. Everything needed to review the engine's spine already exists, and none of it is
-readable by a human in one sitting. `references/module_contracts.yaml` is 1,108 lines of authored
+readable by a human in one sitting. `references/module_contracts.yaml` is ~1,570 lines of authored
 YAML; `systems/_architecture/key_type_registry_v30.md` is 1,295 lines of prose-flavoured registry;
 `references/key_graph.json` is 62 KB of machine-readable join. A reviewer who wants to ask "what
 actually produces `state.succession`, who listens, and where does the chain break" has to hold
@@ -650,6 +650,28 @@ def _wiring_units(contracts):
         yield name, 'adapter', (a or {})
 
 
+def cmd_summary(contracts):
+    """Build-state / godot-status counts over all 35 conversion units.
+
+    PORTED FROM the retired `tools/wiring_map_check.py --summary` (plan S5c). It is here rather
+    than dropped because it is a CITED instrument, not a convenience:
+    `audit/2026-08-08-world-churn-audit/03_causal_model.md:26` sources its "live: 2 of 27" from
+    it, and retiring the only way to re-derive a published number turns that number into folklore.
+    """
+    import collections
+    units = list(_wiring_units(contracts))
+    b = collections.Counter(w.get('build') for _, _, w in units)
+    g = collections.Counter(w.get('godot') for _, _, w in units)
+    mods = sum(1 for _, k, _ in units if k == 'module')
+    print(f'coverage: {mods} modules · {len(units) - mods} adapters (one registry; the fold made '
+          f'module coverage structural)')
+    print('build-state: ' + ' · '.join(f'{k}:{v}' for k, v in b.most_common()))
+    print('godot-status: ' + ' · '.join(f'{k}:{v}' for k, v in g.most_common()))
+    portable = [n for n, _, w in units if w.get('godot') == 'python-oracle']
+    print(f'port surface: {len(portable)} units have a Python oracle awaiting GDScript; the rest '
+          f'need canon authored first.')
+
+
 def cmd_worklist(contracts):
     """The ranked Godot port work-list.
 
@@ -688,6 +710,9 @@ def cmd_worklist(contracts):
 def main(argv):
     if '--work-list' in argv:
         cmd_worklist(ci_common.load_yaml(CONTRACTS))
+        return 0
+    if '--summary' in argv:
+        cmd_summary(ci_common.load_yaml(CONTRACTS))
         return 0
     docs = build()
     check = '--check' in argv
