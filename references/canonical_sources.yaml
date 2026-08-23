@@ -342,7 +342,7 @@ systems:
   faction_canon_consolidation:
     note__lps2b: "LPS-2b (2026-05-30): faction tactics rolling faction-level L demoted to Mandate (Royal Decree/Excommunication/Sovereign Authority) in faction_canon §9 + Crown/Church sheets + stats_1_7_scale (matches factions_personal §8.2/8.4); PART B L/PS Dynamics marked per-territory; Seizure flagged FCN-SEIZURE-DRIFT. Detail: master _lps_structural_redesign_2026-05-30."
     design_doc: systems/factions/faction_canon_v30.md
-    canonical_sha__systems__factions__faction_canon_v30_md: "98a0d8df5f0a5d2e9e7517966f2be050b932aafd"
+    canonical_sha__systems__factions__faction_canon_v30_md: "3bf395a54497b07560736fec7eb4d00deb8ed096"
     canonical_sha__designs__provincial__faction_canon_v30_md: "354544eaf759b483d55bbd3e3c98728cbaf2c761"
     status: provisional
     added: '2026-05-08 Faction canon consolidation — Stage 1: Framework (§§1-12) + Crown + Church sheets. Stages 2-3 pending. Supersedes piecemeal lookup across faction_layer/faction_behavior/faction_state_authoring/factions_personal.'

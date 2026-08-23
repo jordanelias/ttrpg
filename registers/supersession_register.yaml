@@ -14,6 +14,51 @@
 
 entries:
 
+  - superseded_id: "systems/factions/faction_canon_v30.md §5.3 (Jordan ruling 2026-05-30)"
+    scope: >
+      "The 6-stat faction lineup is correct -- L and PS are per-territory, not faction stats."
+      That ruling settled a 6-vs-7 stat-schema conflict by making faction-level Legitimacy the
+      defect. HALF of it is superseded: faction-level Legitimacy is now a declared BASE descriptor.
+    superseded_by: "Jordan ruling 2026-08-23 (\"Legitimacy is a base\"); wired in ca0ff0c"
+    superseded_date: "2026-08-23"
+    replacement: >
+      `fac.legitimacy` is a BASE faction descriptor in references/descriptor_registry.yaml, scale
+      0-7, bound to the `Faction.L` field by tools/export_descriptors.py's FACTION_KEY_TO_FIELD.
+      The faction roster is SIX base stats (influence, legitimacy, wealth, military, intel,
+      stability), every one clamping from the registry via descriptors.faction_bounds(). Floor 0
+      per OPT-AV-18's default for a stat with no independently-declared floor -- the same precedent
+      that ratified Intel, not a number invented for this row.
+      Jordan's rationale: "now that we're using continuous, we don't have to worry near as much
+      either as we can just aggregate these stats as opposed to weird derivations."
+      ⚠ WHAT IS NOT SUPERSEDED: the settlement-scale L/PS pair under LPS-1, and Mandate remaining a
+      DERIVED size-weighted aggregate of settlement L/PS (settlement_layer §1.8). Mandate and
+      fac.legitimacy are different quantities. The `Faction.L`-serves-as-both conflation is older
+      than either ruling and is NOT resolved by this one -- what is settled is that the field is a
+      declared base descriptor with declared bounds, not what every call site writing it means.
+    files_to_recheck:
+      - systems/factions/faction_canon_v30.md   # §5.3 -- supersession banner ADDED 2026-08-23 (done)
+      - systems/factions/factions_personal_v30.md   # §8.1 6-stat faction sheet -- PENDING, states the roster
+      - systems/factions/faction_systems_overview_v30.md   # :47 "Legitimacy (L) as the cross-stat governance metric" -- PENDING
+      - engine/cross_scale/parliamentary_bridge.py   # "Mandate == Faction.L pre-LPS-1" comment -- PENDING, the live conflation
+
+  - superseded_id: "ED-IN-0029 / OPT-AV-14/D14 (Influence floor 1)"
+    scope: >
+      "Influence floors at 1 (never fully vanishes institutionally)" -- the one per-stat floor in
+      the 2026-07-08 docket that was not 0. Wired into Faction.adjust on 2026-08-22 (plan S5d).
+    superseded_by: "Jordan ruling 2026-08-23 (\"Influence can be 0\"); wired in ca0ff0c"
+    superseded_date: "2026-08-23"
+    replacement: >
+      All six faction stats floor at 0 and ceiling at 7. The rest of ED-IN-0029 stands -- it is the
+      docket that established per-stat floors at all, and its OPT-AV-18 default (0 for a stat with
+      no independently-declared floor) is what fac.legitimacy inherits.
+      ⚠ MEASURED AS INERT AT THE GOLDEN SEEDS: over 8 seeded 50-season campaigns, 605 of 1,979
+      .adjust() calls clamp differently under the 2026-08-23 rulings and ALL 605 are on `L`; ZERO
+      are on Influence, because Influence never sinks below 1 there. This row changes what the
+      registry declares; it changed no clamp that currently executes.
+    files_to_recheck:
+      - references/descriptor_registry.yaml   # faction_stats block header -- UPDATED 2026-08-23 (done)
+      - tests/valoria/test_faction_stat_bounds.py   # floor assertions -- UPDATED 2026-08-23 (done)
+
   - superseded_id: 250715f
     scope: "Engine v3 seizure threshold raised CI >= 60 -> CI >= 75"
     superseded_by: "(this commit)"

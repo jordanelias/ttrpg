@@ -238,7 +238,29 @@ Neither resolves cleanly. The mechanic needs either:
 
 **Stat values in Part B are PROVISIONAL pending design resolution of this issue.** Per-faction stat tables are reproduced from current canonical sources (`stats_1_7_scale.md` Starting Stats table) but should not be treated as load-bearing until scope is resolved.
 
-### §5.3 Stat schema conflict (RESOLVED 2026-05-30 by LPS-1 / Jordan ruling)
+### §5.3 Stat schema conflict (RESOLVED 2026-05-30 by LPS-1 / Jordan ruling; **PARTLY SUPERSEDED 2026-08-23**)
+
+> ⚠ **SUPERSESSION, 2026-08-23 — read this before the paragraph below.** Jordan ruled:
+> **"Legitimacy is a base."** `fac.legitimacy` is now a declared BASE faction descriptor in
+> `references/descriptor_registry.yaml`, bound to the `Faction.L` field, with the faction roster at
+> six stats. The 2026-05-30 ruling recorded below says the opposite in its own terms — "L and PS are
+> per-territory, not faction stats" — and that half of it no longer governs.
+>
+> **What the 2026-05-30 ruling still governs:** the SETTLEMENT-scale L/PS pair under LPS-1, and the
+> fact that **Mandate is a derived aggregate** of settlement L/PS (settlement_layer §1.8). Mandate
+> and `fac.legitimacy` are NOT the same quantity, and the new ruling does not make Mandate a base
+> stat.
+>
+> **The conflation this does NOT resolve, stated so nobody reads it as resolved:** the code field
+> `Faction.L` has served as both Legitimacy and Mandate at different times —
+> `engine/cross_scale/parliamentary_bridge.py` still comments *"Mandate == Faction.L pre-LPS-1"* —
+> and that is older than either ruling. What is settled is that the field is a declared base
+> descriptor with declared bounds (0-7, floor per OPT-AV-18's default). What is not settled is
+> whether every call site that writes it means Legitimacy or means Mandate.
+>
+> Jordan's rationale, which is what makes this a change of model rather than a reversal: *"now that
+> we're using continuous, we don't have to worry near as much either as we can just aggregate these
+> stats as opposed to weird derivations."*
 
 `factions_personal_v30 §8.1` documents a 6-stat faction sheet (Mandate / Influence / Wealth / Military / Intel / Stability). `params/factions/stats_1_7_scale.md` (post-ED-787; 7-stat header superseded — L/PS per-settlement per LPS-2e, lineup is 6-stat) documented a 7-stat lineup adding faction-level Legitimacy + Popular Support. **Jordan ruling (2026-05-30): the 6-stat faction lineup is correct** — L and PS are per-territory, not faction stats; Mandate (headline) aggregates them (settlement_layer §1.8). The "7-stat" faction lineup was the defect. Propagation: this consolidation + LPS-2 (stats_1_7_scale header + faction_behavior + faction_state_authoring corrected this session).
 
