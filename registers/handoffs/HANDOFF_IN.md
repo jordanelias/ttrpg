@@ -3538,7 +3538,8 @@ stable (verified over four rebuilds), so the flow-skeleton anchors into it are s
 the plan's S6 RESULT and in each commit message; not repeated here.
 
 **`deprecated/` is gone.** Its only live consumer — the 26 frozen ED-ledger fragments the blocking
-citation gate reads — is at **`registers/archive/`**, and `evacuation_plan.py`'s `R-REL-EDUNIVERSE`
+citation gate reads (25 parsed; the `.md` index is walked and skipped, at both locations) — is at
+**`registers/archive/`**, and `evacuation_plan.py`'s `R-REL-EDUNIVERSE`
 had ruled that relocation before the culling plan proposed deleting it. ED universe 1,264 before and
 after. **Do not recreate the directory**: retiring something now means deleting it and writing a
 `FORK:` row.
@@ -3564,10 +3565,12 @@ history and must not be "de-duplicated".
 
 ### ⚠ 6c DID NOT RUN — and it is reclassified, not deferred
 
-Measured across all ten handoff files: **1,680 lines marked complete, 4,740 marked open, 730
-unmarked**. 6c's "≥75% is narrative about completed work" is **23%**.
+Measured across all ten handoff files: **1,489 lines marked complete, 4,931 marked open, 730
+unmarked**. 6c's "≥75% is narrative about completed work" is **21%**. (First published as 23% / "14
+of 18" from a classifier that filed `IN PROGRESS` headings as complete; corrected after an
+adversarial pass, with the classifier now printed in the plan so it can be re-run.)
 
-And the 23% is not sweepable: **14 of 18 complete-marked sections carry open/held/`needs_jordan`
+And the 21% is not sweepable: **12 of 17 complete-marked sections carry open/held/`needs_jordan`
 content inside them** — `[DONE] ED-IN-0166/0167/0168` says "Still blocked: G2's second half
 (Jordan)"; `[DONE] ED-IN-0182` and `[DONE] ED-IN-0180` each have a "Still open" subsection;
 "W3 DELETION REHEARSAL — EXECUTED" has "### OPEN, and the reason `--check` is currently RED"; and
@@ -3587,3 +3590,53 @@ would delete the suspended Half-B classification that the plan's own S8 names as
 **Next action: S7** — and note it is apparatus/corpus work again. §1(c) of the plan still binds:
 nothing since the Q1 wiring has changed how the game plays, and **S8 Half B is the game**, suspended
 on a ruling.
+
+### Adversarial review of S6 (2026-08-23) — four read-only critics, and they broke my numbers
+
+Jordan asked for an adversarial review of the S6 work. Four `valoria-critic` agents (Read/Grep/Glob
+only, given the CLAIMS and not the reasoning) ran on separate lenses: measured claims, dedup and
+centralization, the L0/L1/L2 depth rule, and code logic. **Every lens found something**, and the
+corrections are in the tree rather than in a findings document (§0: the pass is a stage).
+
+**Two defects I shipped, both in code:**
+- `scan_text`'s de-duplication keyed on line TEXT, so two identical offending lines collapsed to
+  one. Reachable today with a single block-tier name — the opposite direction from the
+  double-counting it was written to prevent. Now keyed on line index.
+- `valoria_local` reported by bare script name while `ci_naming_check.py` ran twice at two tiers,
+  making a failure unattributable. Reports the invocation now.
+
+**Two guards I minted that should not have existed as written:**
+- `test_the_ed_universe_guard_can_fail` was a TAUTOLOGY — it built a path from `ARCHIVE_GLOBS[0]`
+  and asserted it started with `ARCHIVE_GLOBS`, never touching the tool. Deleted. §3a is explicit
+  that a mutation result is evidence for the commit message, not a permanent file.
+- `test_an_empty_tier_...` asserted on `inspect.getsource` TEXT; flipping the fail-safe's `return 1`
+  to `return 0` left it green. Rewritten behaviourally and mutation-verified against that exact flip.
+- The four `test_pathres.py` additions were consolidated to two after the depth critic showed they
+  failed §0.1 pt 5's predicate; the survivors also now probe dir-prefix CHILDREN, not just row keys.
+
+**A pre-existing dead control, found because it was the control for MY most-republished number.**
+`test_ed_citation_scope.py` called `v.load_universe()` — the function is `load_ed_universe` — behind
+a `hasattr` guard, so its `>= 1190` floor had **never executed**. The 1,264 figure had no live
+control at all. Repaired, and split into WALKED (26) vs PARSED (25) floors, because
+`editorial_ledger_index.md` is `.md` and is walked but never read — which also makes "26 files read"
+wrong at six surfaces, now corrected to 26 relocated / 25 parsed.
+
+**Numbers corrected:** 6c's share 23% → **21%**, and "14 of 18" → **12 of 17**; two MB exemplars
+withdrawn as false; the classifier is now printed in the plan so it can be re-run. 6f's accounting
+did not close (3 + 4 presented as 5, against a denominator of 10 that no reading produces) — it is
+**13 fork targets, 5 forked, 8 kept, 1 moved**, and `id_reservations_history.md` was a named target
+never adjudicated in writing (KEPT, and now on the record).
+
+**Claims retracted:** the six exact `FORK` rows do NOT "keep the anti-fabrication property exact" —
+a `deprecated/` dir-prefix FORK row is still live, so the namespace hole is inherited and unclosed.
+And `atomization_rules.yaml` declares an archive target for `HANDOFF.md` only, not for the lane files.
+
+**Unreported side effect, fixed:** relocating the fragments out of `deprecated/` dropped them
+through to the generic `**/*.yaml` catch-all and added three compliance warnings on frozen files
+nobody may edit. `registers/archive/*` now carries the same `skip` posture its old home had.
+
+**One pre-existing hole closed, in a file this branch rewrote:** `ci_naming_check`'s `EXCLUDE`
+matched `'audit/'` as a SUBSTRING, so every `skills/valoria-vector-audit/` script was exempt from
+the blocking naming gate. That is the ED-IN-0133 defect whose worked example in `pathres.py` is this
+exact collision. Rooted — and only `audit/`, because rooting `tests/` too would drop 28
+`engine/tests/` files out of a legitimate exemption.

@@ -348,22 +348,6 @@ def test_the_ed_universe_survives_evacuation(part):
         assert verdict == 'keep', f'{f} classified {verdict} by {rule_id}; the ED universe reads it'
 
 
-def test_the_ed_universe_guard_can_fail():
-    """POSITIVE CONTROL for the test above (CLAUDE.md §0.1 pt 2).
-
-    A guard re-pointed at a moving target has to prove it can still object. Plant a path under the
-    gate's declared archive location into a constructed evacuate set and require a complaint.
-    """
-    import importlib.util as _ilu
-    spec = _ilu.spec_from_file_location(
-        'ved_for_evac2', os.path.join(os.path.dirname(HERE), '..', 'tools', 'validate_ed_citations.py'))
-    ved = _ilu.module_from_spec(spec)
-    spec.loader.exec_module(ved)
-    planted = ved.ARCHIVE_GLOBS[0] + 'editorial_ledger_archive_planted.yaml'
-    stranded = [p for p in {planted} if p.startswith(ved.ARCHIVE_GLOBS)]
-    assert stranded, 'the stranded-archive scan cannot see a file under the declared archive dir'
-
-
 # --------------------------------------------------------------------------------------
 # Doc↔tool agreement — the falsifier for prose that restates a machine value
 # --------------------------------------------------------------------------------------

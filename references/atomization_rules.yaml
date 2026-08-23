@@ -140,6 +140,17 @@ policies:
   # fnmatch (not path-aware globbing) requires a literal "/" in the candidate, so a
   # leading "**/" pattern can never match a root-level file (see the compliance_check.py
   # fix in the same pass). Pruned narrative moved to registers/handoffs/HANDOFF_archive.md.
+  # THE FROZEN ED ARCHIVE (relocated out of deprecated/ 2026-08-23, S6/6b). Under deprecated/ these
+  # 26 fragments matched a `skip` rule; the move dropped them through every rule here to the generic
+  # `**/*.yaml` catch-all at 10,000 tokens, and three of them exceed it — so the relocation silently
+  # added three advisory warnings to a blocking gate's output. They are FROZEN, append-only history
+  # that `tools/validate_ed_citations.py` parses to tell a real ED id from an invented one; nobody
+  # may edit them, so a size cap on them is a warning nobody can act on, and warnings nobody can act
+  # on are how a warning tier stops being read. Same `skip` posture their previous home had.
+  - match: "registers/archive/*"
+    on_exceed: "skip"
+    note: "Frozen pre-cutover ED-ledger fragments, read by the blocking citation gate. Never edited; grows only by archival. Relocated from deprecated/{archives/editorial*,canon}/ on 2026-08-23 (S6/6b)."
+
   - match: "registers/handoffs/HANDOFF_archive.md"
     on_exceed: "skip"
     note: "Frozen archive of pruned HANDOFF.md narrative (2026-07-08). Grows by archival, not editing."

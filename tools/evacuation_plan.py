@@ -332,13 +332,35 @@ RULES = [
     # AND KEEP IT AT A NAMED REF, which is exactly what we want for a file nobody uses.
     #
     # The related worry was empty too, and CHECKING beat reasoning again: the old editorial-ledger
-    # files are not swept up here. `deprecated/archives/editorials/*` and `deprecated/canon/*` are
-    # caught by R-RELOCATE ABOVE this line and marked 'relocate'. The citation check reads them to
-    # tell a real ID from an invented one, and rule ORDER is what protects them.
+    # files were not swept up here. `deprecated/archives/editorials/*` and `deprecated/canon/*`
+    # were caught by R-RELOCATE ABOVE this line and marked 'relocate'.
+    #
+    # ⚠ THAT PROTECTION IS GONE, AND IT IS GONE BECAUSE IT SUCCEEDED (2026-08-23, S6/6b). The
+    # R-RELOCATE entry was `R-REL-EDUNIVERSE`, and its relocation EXECUTED: the 26 fragments now
+    # live at `registers/archive/` and are protected by their LOCATION (R-REGISTERS, 'keep')
+    # rather than by rule order. The rule itself was retired above as unfireable. The paragraph is
+    # kept because it is the record of a Jordan ruling, but a reader must not take its present
+    # tense at face value.
     #
     # THE LESSON, since this is the third time today: I reasoned about what two labels SUGGESTED
     # instead of running the classifier and reading what it DID. Two lines of work would have
     # shown the mechanism was already coherent.
+    # ⚠ R-DEPRECATED IS UNFIREABLE AS OF 2026-08-23 (S6/6a): `deprecated/` no longer exists, so
+    # `p.startswith('deprecated/')` cannot match any path in the tree. It is KEPT, and the reason it
+    # is kept differs from the reason `R-REL-EDUNIVERSE` two hundred lines up was retired, which is
+    # worth being explicit about since this file now does both:
+    #
+    #   * `R-REL-EDUNIVERSE` was a PROTECTION. An unfireable protection reads as cover that is not
+    #     there, so leaving it is worse than deleting it.
+    #   * `R-DEPRECATED` is a DEFINITION. `CLAUDE.md` §4 names this rule's inline reason string as
+    #     the worked example of "define a process term where it is INVOKED, not only where it is
+    #     described" — it is one of the two canonical definitions of what *retire* means in this
+    #     repository. Deleting it would delete a definition §4 points at, to remove a classification
+    #     that costs nothing while it cannot fire, and would silently classify a re-created
+    #     `deprecated/` as UNPARTITIONED.
+    #
+    # If the directory never returns, this row is a definition with a vestigial predicate. That is
+    # the intended state; do not "clean it up" without moving the definition somewhere §4 accepts.
     (lambda p: p.startswith('deprecated/'), 'evacuate', 'R-DEPRECATED',
      'where files go when we stop using them -- moved out of main, kept at a named ref. Covers '
      'both the 2026-08-05 batch and everything retired since (Jordan, ED-IN-0171/0179)'),

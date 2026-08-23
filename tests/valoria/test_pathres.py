@@ -248,45 +248,30 @@ def test_the_alias_map_is_not_empty():
 
 # ───────────────────────────────────────────── D1: ONE answer for what a FORK row resolves to
 #
-# Decided 2026-08-23 (S6). These live in pathres's own canary corpus rather than a new file
-# because the claim is about pathres's return value; a separate test file for it would be a new
-# guard surface for a rule that already has an owner.
-
-def test_a_fork_row_resolves_to_a_POINTER_not_just_a_REF():
-    """The paired form is the only one that can be CHECKED.
-
-    `FORK:<ref>` names a commit and leaves the reader to guess the path inside it.
-    `FORK:<ref>:<path>` is exactly what `git cat-file -e` takes, which is how
-    `test_forked_status.py` verifies every row.
-    """
-    r = pathres.resolve('params/core.md')
-    assert r.status == pathres.FORKED, f'expected FORKED, got {r}'
-    parts = r.live_path.split(':', 2)
-    assert len(parts) == 3 and parts[0] == 'FORK' and parts[2], (
-        f'a FORKED resolution must carry ref AND path, got {r.live_path!r}')
-
-
-def test_fork_pointer_is_idempotent():
-    """A caller may hold a sentinel of unknown provenance. Applying the rule twice must not
-    double-append — otherwise the two tools produce `FORK:ref:path:path` when both run."""
-    once = pathres.fork_pointer('FORK:abc123', 'a/b.md')
-    assert once == 'FORK:abc123:a/b.md'
-    assert pathres.fork_pointer(once, 'c/d.md') == once
-    # and it must not touch a non-fork value
-    assert pathres.fork_pointer('systems/combat/combat_v30.md', 'x') == 'systems/combat/combat_v30.md'
-
+# Decided 2026-08-23 (S6). TWO tests, not four. An adversarial pass observed that the first draft
+# spent four assertions on a six-line pure helper and on two tools agreeing, none of which crosses
+# into the engine, the exported params, the port or the needs_jordan queue — §0.1 pt 5's predicate.
+# What survives is the minimum that keeps the D1 result falsifiable (§0.1 pt 3): the cross-tool
+# agreement, and the ledger de-duplication. The pointer SHAPE and the idempotence property are
+# asserted inside them rather than as separate functions.
 
 def test_the_two_resolvers_AGREE_on_the_fork_shape():
     """THE D1 REGRESSION GUARD. Three answers were in circulation for one row shape — bdc's exact
-    branch (bare), bdc's dir-prefix branch (paired), and pathres (bare) — and 166 of 1,363 probes
-    disagreed. Every FORK row must now produce the identical string from both, UNLESS the path
-    still exists on disk, which is a tree/ledger disagreement rather than a resolver one.
+    branch (bare), bdc's dir-prefix branch (paired), and pathres (bare). Every FORK row must now
+    produce the identical string from both, UNLESS the path still exists on disk, which is a
+    tree/ledger disagreement rather than a resolver one.
 
     That escape hatch is written as a REQUIREMENT, not a tolerance: a divergence must be EXPLAINED
-    by on-disk existence, and any other divergence fails. It is also the only formulation that is
-    stable in a clean checkout — one of the two live divergences today
-    (`tools/observability/`) is an untracked `__pycache__` residue that does not exist in CI, so a
-    hardcoded pin of the divergent set would be red on a clean clone and green in a dirty one.
+    by on-disk existence, and any other divergence fails. It is also the only formulation stable in
+    a clean checkout — one live divergence (`tools/observability/`) is untracked `__pycache__`
+    residue absent from CI, so a hardcoded pin of the divergent set would be red on a clean clone
+    and green in a dirty one.
+
+    ⚠ THE POPULATION IS ROW KEYS **AND** SYNTHETIC CHILDREN OF DIR-PREFIX ROWS. The first draft
+    probed row keys only — about 260 of them — while the 166 disagreements it claims to have closed
+    were measured over 1,363 probes that included a synthetic path under every dir-prefix row. That
+    is precisely the branch `pathres.py` says the bare-concatenation defect lived in, so omitting it
+    left the guard blind to the case that motivated the fix.
 
     Scoped to FORK rows deliberately. The two functions DIFFER on non-fork rows by design: bdc's is
     a pure map lookup whose caller checks existence afterwards, pathres's folds the existence check
@@ -295,10 +280,17 @@ def test_the_two_resolvers_AGREE_on_the_fork_shape():
     """
     import broken_dependency_checker as bdc
     remap = bdc._load_restructure_map()
-    forked = [p for p in remap if str(remap[p]).startswith(pathres.FORK_PREFIX)]
-    assert len(forked) >= 80, f'only {len(forked)} FORK rows parsed — this would pass vacuously'
+    _exact, prefix_rows = pathres.load_alias_map()
+
+    probes = [p for p in remap if str(remap[p]).startswith(pathres.FORK_PREFIX)]
+    probes += [old + 'synthetic_child_probe.md' for old, new in prefix_rows
+               if str(new).startswith(pathres.FORK_PREFIX)]
+    assert len(probes) >= 300, (
+        f'only {len(probes)} FORK probes built (expected 300+: ~250 row keys plus a child under '
+        f'each of ~160 dir-prefix FORK rows) — the probe builder has stopped building')
+
     agreed, unexplained = 0, []
-    for p in forked:
+    for p in probes:
         a = bdc._resolve_remap(p, remap)
         b = pathres.resolve(p, max_hops=1).live_path
         if a == b:
@@ -309,9 +301,17 @@ def test_the_two_resolvers_AGREE_on_the_fork_shape():
         f'{len(unexplained)} FORK row(s) resolve differently in the two tools for a reason that is '
         f'NOT on-disk existence; the shape has one owner (pathres.fork_pointer) and something has '
         f'grown a second answer:\n  ' + '\n  '.join(unexplained[:5]))
-    assert agreed >= 80, (
-        f'only {agreed} FORK rows agreed — the comparison has stopped comparing, so the assertion '
-        f'above is measuring nothing')
+    assert agreed >= len(probes) - 5, (
+        f'only {agreed} of {len(probes)} probes agreed — the comparison has stopped comparing, so '
+        f'the assertion above is measuring nothing')
+
+    # THE SHAPE ITSELF, asserted here rather than in its own function: the paired form is the whole
+    # point, because `FORK:` + ref alone names a commit and leaves the reader guessing the path.
+    r = pathres.resolve('params/core.md')
+    assert r.status == pathres.FORKED, f'expected FORKED, got {r}'
+    parts = r.live_path.split(':', 2)
+    assert len(parts) == 3 and parts[0] == 'FORK' and parts[2], (
+        f'a FORKED resolution must carry ref AND path, got {r.live_path!r}')
 
 
 def test_a_repeated_ledger_key_resolves_to_the_LATER_row():
@@ -322,6 +322,10 @@ def test_a_repeated_ledger_key_resolves_to_the_LATER_row():
     `designs/arcs/` is the worked case — relocated to `arcs/` on 2026-07-16, then evacuated on
     2026-08-05. bdc called it FORKED; pathres followed the stale row to `arcs/`, found nothing, and
     called it DEAD. One ledger row, two answers.
+
+    ⚠ MEASURED SCOPE, because the eight is easy to misread: exactly ONE of the eight is a
+    dir-prefix key, so the code change here fixes one — the other seven are exact rows where the
+    dict comprehension already kept the last binding. The rule is uniform; the fix was not.
     """
     exact, prefix = pathres.load_alias_map()
     keys = [old for old, _ in prefix]
@@ -329,3 +333,10 @@ def test_a_repeated_ledger_key_resolves_to_the_LATER_row():
     r = pathres.resolve('designs/arcs/')
     assert r.status == pathres.FORKED, (
         f'designs/arcs/ resolved {r.status} — the earlier `-> arcs/` row is winning again')
+
+    # IDEMPOTENCE, folded in: both tools call fork_pointer, so a value that has already been paired
+    # must survive a second application unchanged or the two together emit `FORK:ref:path:path`.
+    once = pathres.fork_pointer('FORK:abc123', 'a/b.md')
+    assert once == 'FORK:abc123:a/b.md'
+    assert pathres.fork_pointer(once, 'c/d.md') == once
+    assert pathres.fork_pointer('systems/combat/combat_v30.md', 'x') == 'systems/combat/combat_v30.md'

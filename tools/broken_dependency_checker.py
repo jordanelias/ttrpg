@@ -139,7 +139,13 @@ def _load_restructure_map():
 # unresolvable that has a row" would erase the only difference between a forked file and a
 # fabricated one, which is the repo's anti-fabrication property. `tests/valoria/test_forked_status.py`
 # plants both cases and requires the gate to separate them.
-FORK_PREFIX = 'FORK:'
+# ONE OWNER for the sentinel and the predicate alike (S6/D1 follow-up, 2026-08-23). This module
+# already imports `pathres` for `fork_pointer`; declaring its own copy of the prefix string and its
+# own copy of the predicate meant three constants and two functions for one concept, in a file
+# whose whole subject is that references resolve consistently. Nothing asserted the two copies were
+# equal, and they gate different things: bdc's copy decides whether a live ledger citation reads as
+# EVACUATED or BROKEN in a blocking gate, pathres's decides what `resolve()` returns.
+FORK_PREFIX = _pathres.FORK_PREFIX
 
 
 def _is_forked(target):

@@ -160,7 +160,9 @@ BURN_DOWN_MAX = 10  # occurrences across those 5 pairs; measured 2026-08-01, a t
 # Editorial-archive locations (the ED universe is the active JSONL + these).
 #
 # ONE DIRECTORY, AND IT IS NO LONGER UNDER `deprecated/` (2026-08-23, S6/6b). The 26 frozen
-# ledger fragments that hold roughly ED-001..ED-1200 used to live in three directories under
+# ledger fragments (25 of which this loader actually PARSES — the filter below takes .yaml/.yml,
+# and `editorial_ledger_index.md` is walked and skipped, as it was at the old location too) used
+# to live in three directories under
 # `deprecated/`, which made a BLOCKING gate's universe depend on a tree the culling plan wants
 # to fork. `tools/evacuation_plan.py`'s R-REL-EDUNIVERSE had already ruled the answer —
 # relocate to `registers/archive/`, frozen archive beside the active register — and this is

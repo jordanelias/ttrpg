@@ -1600,7 +1600,8 @@ reading as unre-runnable.
 ## ED archives out of `deprecated/` → `registers/archive/` — 2026-08-23 (S6/6b, ED-IN-0194)
 
 The 26 frozen ledger fragments holding the pre-cutover flat-ID era are the **only** content anything
-still reads out of `deprecated/`: `tools/validate_ed_citations.py` — a BLOCKING gate — builds its ED
+still reads out of `deprecated/` (25 of the 26 are parsed — `editorial_ledger_index.md` is a `.md`
+and the loader takes `.yaml`/`.yml` only; it is walked and never read, before this move and after): `tools/validate_ed_citations.py` — a BLOCKING gate — builds its ED
 universe from them, and losing one of those directories once shrank the universe 1,167 → 1,107 and
 turned **110 valid citations into NONEXISTENT**.
 
@@ -1647,10 +1648,21 @@ pointing at nothing: it reads as protection.
 contains the content, per this file's own lesson three sections up. Every row verified with
 `git cat-file -e baf29d5:<path>` before being written.
 
-**Exact file rows, not a `deprecated/` dir-prefix row, deliberately.** `CLAUDE.md` §8 records that a
-dir-prefix `FORK:` row has no existence check, so it resolves *any* invented filename under that
-namespace — which shipped once and made a fabricated `MEASURED-BY:` path pass across 162 namespaces.
-Six rows cost six lines and keep the anti-fabrication property exact.
+**Exact file rows, not a new `deprecated/` dir-prefix row, deliberately.** `CLAUDE.md` §8 records
+that a dir-prefix `FORK:` row has no existence check, so it resolves *any* invented filename under
+that namespace — which shipped once and made a fabricated `MEASURED-BY:` path pass across 162
+namespaces. Six rows cost six lines and add no new namespace to that hole.
+
+⚠ **THE FIRST WORDING OF THIS PARAGRAPH SAID THESE ROWS "keep the anti-fabrication property exact",
+AND THAT IS FALSE. Retracted.** A `deprecated/` dir-prefix `FORK:` row **already exists** and is
+still live — see the `EVACUATED TO FORK — 2026-08-05` table — so
+`pathres.resolve('deprecated/tools/never_existed.py')` returns FORKED whether or not these six rows
+are here. What the exact rows actually buy is narrower and still worth six lines: they name the real
+ref (`baf29d5`, where the content is) rather than inheriting `c451bcb` (where it is not), and they
+add no *further* namespace. The namespace-level hole is inherited, unclosed, and belongs to whoever
+takes on the 162 prefix rows. Nothing on this branch closed it, and the earlier sentence claimed
+otherwise. The one gate that would be exposed by it is not: `ci_claim_provenance_check` asks
+`load_alias_map()` for exact rows and discards the prefix rows entirely.
 
 | Old Path | New Path | Status |
 |----------|----------|--------|
@@ -1680,12 +1692,37 @@ which the register-size validators deliberately avoid. Two of three, not three o
 
 ## Prose meta-registers retired; the throughlines map goes to `systems/` — 2026-08-23 (S6/6f, ED-IN-0194)
 
-Five files leave `main`; one moves. 6f names **ten** targets; each was checked individually against
-the tree rather than taken from the plan's list, and **five of the ten do not qualify** — three
-because a glob over-reached, four because the governing document says they are still in use. Both
-boxes are below.
+Five files leave `main`; one moves.
 
-**Why each of the nine is inert, in its own words:**
+**THE ACCOUNTING, corrected 2026-08-23 after an adversarial pass found it did not close.** The first
+version of this paragraph said "6f names **ten** targets … **five of the ten** do not qualify —
+three because a glob over-reached, four because the governing document says they are still in use",
+which is 3 + 4 = 7 presented as 5, against a denominator of 10 that no reading of 6f produces. The
+real count, with both globs expanded against the tree:
+
+| 6f target | outcome |
+|---|---|
+| `throughlines_meta.md`, `_infill.md`, `_solmund_appendix.md` (glob, 3 files) | **KEPT** — registered canonical source + an open Jordan item |
+| `id_reservations_history.md` | **KEPT** — see below; this one was never adjudicated in writing |
+| `canonical_sources_notes.md` | forked |
+| `canonical_sources_provenance.md` | forked |
+| `patch_register_index.md` | forked |
+| `editorial_ledger_migration_2026-05-28.md` | forked |
+| `params_board_game_split.yaml` | forked |
+| `godot/{scene_tree,gm_to_engine,data_serialization,implementation_sequence}` (glob, 4 files) | **KEPT** — the governing spec still uses them |
+| `throughlines_complete.md` | **MOVED** to `systems/_architecture/` |
+
+**13 fork targets, 5 forked, 8 kept, plus 1 move.** Not "five of ten".
+
+⚠ **`references/id_reservations_history.md` is a named 6f fork target that was never examined in
+writing.** The outcome is right — it stays — but the record was silent, which is the same defect
+class as a stale claim. It is the deliberate 2026-08-01 split (ED-MB-0063) of the most
+concurrency-contended file in the repo into STATE (`id_reservations.yaml`) and HISTORY, it is cited
+on eleven rows of that file, and `tests/valoria/test_id_reservations_walkback.py` fails without it.
+Forking a companion three weeks after it was deliberately created, against a live test, is not a
+cull. **KEPT, now on the record.**
+
+**Why each of the five is inert, in its own words:**
 
 * `canonical_sources_notes.md` — its own header: *"documentation-only; no hook or tool reads them
   at runtime."* Its content indexes `compilation/v0.14/`, a tree that no longer exists.

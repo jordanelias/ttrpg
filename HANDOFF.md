@@ -64,15 +64,15 @@ memoryless session that trusted this pointer would have re-done finished work. R
 own `state:` before starting.
 
 **S6 closed with five of six pieces landed and 6c RECLASSIFIED, not skipped.** `deprecated/` no
-longer exists (its 26 frozen ED-ledger fragments relocated to `registers/archive/`, universe
-unchanged at 1,264 ids); a `FORK:` row has one meaning, `FORK:<ref>:<path>`; the naming trio is two.
+longer exists (its 26 frozen ED-ledger fragments relocated to `registers/archive/` — 25 of them
+parsed, the `.md` index walked and skipped as before — universe unchanged at 1,264 ids); a `FORK:` row has one meaning, `FORK:<ref>:<path>`; the naming trio is two.
 Four of S6's six instructions were wrong when measured, and one would have cut a blocking gate's
 population 63 → 7 entries while reporting green. Read the plan's S6 RESULT before S7.
 
 ⚠ **6c (slim the handoffs) DID NOT RUN, and the reason binds anyone who tries it.** Its headline —
-"≥75% of `HANDOFF_IN.md` is narrative about completed work" — measures at **23%**, and that 23%
-cannot be swept either: **14 of 18 sections marked `[DONE]`/`[RULED]`/`EXECUTED` carry open, held or
-`needs_jordan` items inside them**, as does `HANDOFF_archive.md`, whose own header says it is "not a
+"≥75% of `HANDOFF_IN.md` is narrative about completed work" — measures at **21%** corpus-wide, and
+that 21% cannot be swept either: **12 of 17 sections marked `[DONE]`/`[RULED]`/`EXECUTED` carry
+open, held or `needs_jordan` items inside them**, as does `HANDOFF_archive.md`, whose own header says it is "not a
 continuity surface" and which carries "Residual for Jordan: 13 needs_jordan". **The disposition
 markers in this corpus do not mean what they say.** Pruning it is adjudication work, not a culling
 wave — the same correction this document's S7 already applies to `audit/`.

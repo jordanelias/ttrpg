@@ -355,7 +355,7 @@ aliases, machine-read by `broken_dependency_checker`). `git log CLAUDE.md` has t
 | `dashboard/`, `.github/`, `.claude/`, `skills/` | Published status site; CI workflows; hooks, agents and orchestration scripts; skills. |
 | `audit/` | The surviving audit corpus. ⚠️ **`§0` now forbids the adversarial pass from creating documents, which retires this as a CATEGORY** — do not add to it. |
 | ~~`deprecated/`~~ | **RETIRED TO THE FORK 2026-08-23 (S6/6a) — the directory is gone.** The operation it named survives and is unchanged: *retire* still means moved out of `main`, kept at a named ref; only the staging tree is gone, because a graveyard nothing visits is just a second copy of `git log`. Its last content left in two steps: the 26 frozen ED-ledger fragments `validate_ed_citations.py` reads to tell a real ID from an invented one **relocated to `registers/archive/`** (6b, universe unchanged at 1,264 ids — `evacuation_plan.py`'s `R-REL-EDUNIVERSE` had ruled exactly that), and the last six dead files went to `FORK:baf29d5` (6a) after a deletion rehearsal proved nothing reads them. Two `keep` rules protecting them named imports that no longer existed. |
-| `registers/archive/` | **The frozen ED-ledger fragments** (26 files, the pre-cutover flat-ID era), read by `tools/validate_ed_citations.py` to tell a real ID from an invented one. **Never edit them** — append-only history, frozen. Delete one and valid citations start reading as fabricated. |
+| `registers/archive/` | **The frozen ED-ledger fragments** (26 files relocated, **25 of them parsed** — `editorial_ledger_index.md` is `.md` and the loader takes `.yaml`/`.yml` only, so it is walked and never read), read by `tools/validate_ed_citations.py` to tell a real ID from an invented one. **Never edit them** — append-only history, frozen. Delete one and valid citations start reading as fabricated. |
 
 **Trees that were dissolved — do not recreate any of them:** `designs/` (retired 2026-07-19, contents
 now in `systems/`), `sim/` (retired 2026-07-21, now `engine/` + `systems/<sub>/sim/`), `arcs/` and
@@ -627,7 +627,14 @@ re-implement a rule.** Known violations of this invariant (treat as bugs, don't 
   `ci_claude_workflow_paths.py` was retired, and `ci_claim_provenance_check.py` — added as a reader the
   same day — routes through `pathres.load_alias_map()` rather than parsing the file itself. Remaining
   independent parsers: `broken_dependency_checker.py` and two `skills/valoria-vector-audit/scripts/`
-  modules.
+  modules — **still three, unchanged by S6/D1** (2026-08-23), which deliberately did not port them:
+  measured over every ledger row plus a synthetic child of every dir-prefix row, `bdc._resolve_remap`
+  and `pathres.resolve` disagree on **654 of 1,363 probes**, because the first is a pure map lookup
+  whose caller checks existence afterwards and the second folds the existence check in. They answer
+  different questions; a drop-in port would silently change 654 answers in a blocking gate. What D1
+  DID unify is narrower and worth stating so the next reader does not re-derive it: what a `FORK:`
+  row RESOLVES TO is now single-owned by `pathres.fork_pointer()` — the paired, followable
+  `FORK:<ref>:<path>` — and `broken_dependency_checker` imports it, along with `FORK_PREFIX`.
 
   ⚠ **`pathres.resolve()` MATCHES DIRECTORY PREFIXES, and a caller asking "is this exact file
   retired" must NOT use it.** The ledger carries ~162 directory-prefix `FORK:` rows, and a `FORK:`

@@ -19,13 +19,24 @@ comparison against one has failed, silently, in one of three directions:
    which reaches `engine/params/core.md` only through the alias map. The single largest affected
    group scored zero.
 
-WHY AN OWNER RATHER THAN A FOURTH FIX. Measurement before writing this: the alias ledger already
-had **four** independent parsers — `broken_dependency_checker` (single-hop, longest-dir-prefix),
+WHY AN OWNER RATHER THAN A FOURTH FIX. Measurement when this was written: the alias ledger had
+**four** independent parsers — `broken_dependency_checker` (single-hop, longest-dir-prefix),
 `ci_claude_workflow_paths` (chained, existence-checked, glob-aware — the richest, and the one this
 module is extracted from), and `skills/valoria-vector-audit/scripts/{vector_audit,workbench}.py`
 (each re-parsing the table locally). The anchored token grammar existed three more times. That is
 CLAUDE.md §8's "every rule lives once" violated four deep, and it is why the same defect keeps
 arriving: there was no one place where the lesson could be applied.
+
+⚠ RE-MEASURED 2026-08-23 (S6 review): the count is **three**, not four. `ci_claude_workflow_paths`
+— named above as the richest of them and as this module's own source — was RETIRED in culling wave
+3 (2026-08-21, ED-IN-0194) and no longer exists. The paragraph above is kept as the record of why
+this module was built; this note exists because a module whose thesis is "one owner, and here is
+the count that proves it" must not carry a stale count. The three that remain are
+`broken_dependency_checker` and the two vector-audit scripts, which is what CLAUDE.md §8 says.
+
+S6/D1 did NOT reduce that three. It unified what a FORK row RESOLVES TO (`fork_pointer` below,
+called by `broken_dependency_checker` too), and explicitly refused to port bdc's parser onto this
+one — see `resolve()` for the 654-probe measurement showing they answer different questions.
 
 So this module is NET REMOVAL, not new machinery: four parsers, two resolvers and three roster
 copies come out as it lands.
@@ -116,7 +127,25 @@ def fork_pointer(sentinel: str, path: str) -> str:
       pathres, either     `FORK:<ref>`              (bare, for both)
 
     Idempotent by construction: a sentinel that is already paired comes back unchanged, so a
-    caller may apply it to a value of unknown provenance without double-appending.
+    caller may apply it to a value of unknown provenance without double-appending. (Note what that
+    means at the boundary: re-pairing an already-paired sentinel with a DIFFERENT path keeps the
+    OLD path. Both call sites pass a value read fresh from the map, so it is unreachable — but it
+    is idempotence with a preference, not a no-op.)
+
+    PAIR WITH THE PATH AT THE REF, WHICH ON A CHAIN IS THE LAST HOP — not the original query.
+    `resolve()` passes `current`, so `references/params_core.md -> params/core.md -> FORK:c451bcb`
+    yields `FORK:c451bcb:engine/params/core.md`, because that is where the content sits at that
+    commit. `broken_dependency_checker` pairs with its query instead, which is the same value for
+    every input it has (it resolves one hop and never chains) and would diverge if it ever chained.
+
+    ⚠ THE PAIRED FORM IS CHECKABLE, WHICH MEANS IT CAN NOW BE CHECKABLY WRONG — and for ~77 rows it
+    is. `tests/valoria/test_forked_status.py` pins an `UNRESOLVABLE_CEILING` of 78: mostly
+    `designs/`-era rows whose paths had already moved before the ref they name was cut. For those,
+    the bare `FORK:<ref>` this replaced was vague-but-true and the pair is precise-and-false. That
+    is the right trade — a pointer nobody can follow is worse than one nobody can check, and the
+    ceiling exists to drive the number down — but it is a trade, not a free improvement, and the
+    ceiling is the thing that keeps it honest. Do not read "checkable" as "checked": nothing
+    verifies a RESOLVED pointer, only the ledger rows themselves.
     """
     if not sentinel.startswith(FORK_PREFIX):
         return sentinel

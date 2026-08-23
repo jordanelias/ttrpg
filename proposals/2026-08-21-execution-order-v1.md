@@ -38,7 +38,7 @@ requires a human decision; this document's decision requests are §4, addressed 
 before starting S7**: four of its six instructions were wrong when measured against the tree, and
 one — 6b's tombstone design — would have cut a blocking gate's population by 89% while reporting
 green. **6c is reclassified, not skipped**: the handoff corpus cannot be pruned by marker, because
-14 of 18 sections marked `[DONE]`/`[RULED]`/`EXECUTED` carry open, held or `needs_jordan` items
+12 of 17 sections marked `[DONE]`/`[RULED]`/`EXECUTED` carry open, held or `needs_jordan` items
 inside them — as does the archive whose own header says not to resume from it.
 
 **S5 IS DONE (5a/5b/5d/5e 2026-08-22; 5c 2026-08-23).** `engine/` no longer names `systems/` by
@@ -672,11 +672,27 @@ register items D5 and D7.
 
 **6c's headline is measured wrong.** It says *"≥75% of `HANDOFF_IN.md` is narrative about completed
 work"* and prescribes deleting the dated retrospectives and `[DONE]`/`[RULED]` sections, capping each
-lane at 100 lines, and deleting `HANDOFF_archive.md`. Classified by section header across all ten
-files: **1,680 lines marked complete, 4,740 marked open, 730 unmarked — 23%, not 75%.**
+lane at 100 lines, and deleting `HANDOFF_archive.md`.
 
-**And the 23% cannot be deleted either, because the markers do not mean what they say.** Scanning
-every complete-marked section for open/held/needs-Jordan content: **14 of 18 carry it inside** — counted at `baf29d5`, the state 6c faced, with a strict marker set (`[OPEN]`, `needs_jordan`, `NEXT ACTION`, `Still open`, `Still blocked`, `HELD FOR`, `needs/awaiting Jordan`), not bare prose words like "held".
+Classified by section header at `baf29d5` across all ten handoff files: **1,489 lines marked
+complete, 4,931 marked open, 730 unmarked — 21%, not 75%.**
+
+⚠ *Corrected from a first pass that published **23%** and **"14 of 18"**. Those came from a
+classifier that put `IN PROGRESS` headings in the complete bucket and used a looser inner-marker
+set; an adversarial pass showed neither figure was reproducible from the markers I had published,
+which makes them exactly the kind of number this document keeps catching. The classifier is stated
+below so the next reader can re-run it rather than trust it.* Note the denominator: 6c's ≥75% is
+about `HANDOFF_IN.md` alone (3,485 lines), while this is corpus-wide — the refutation still holds by
+bound, since 1,489 complete-marked lines across ten files is below 0.75 × 3,485 = 2,614 for one.
+
+```
+COMPLETE header : \[DONE\]|\[RULED\]|\[CLOSED\]|\bEXECUTED\b|\bRATIFIED\b|^## \d{4}-\d{2}-\d{2}|PORT NOTE|Catch-up
+OPEN header     : \[OPEN\]|^## Pending|^## Next actions|^## Decisions|SUSPENDED|^## Executive|IN PROGRESS   (tested FIRST)
+open-work marker: \[OPEN\]|needs_jordan|NEXT ACTION|Still open|Still blocked|HELD FOR|awaiting Jordan|needs Jordan|needing Jordan|Open after this|Open rulings|### OPEN
+```
+
+**And the 21% cannot be deleted either, because the markers do not mean what they say.** Scanning
+every complete-marked section for open/held/needs-Jordan content: **12 of 17 carry it inside**, counted at `baf29d5` with the classifier above.
 
 * `[DONE] ED-IN-0166/0167/0168` — *"Still blocked: G2's second half (Jordan, ED-IN-0163). Not
   started: G4, G5, G6, G10, G11"* and *"HELD FOR JORDAN, unchanged by this pass"*.
@@ -684,8 +700,11 @@ every complete-marked section for open/held/needs-Jordan content: **14 of 18 car
   *"### Still open after this wave"* subsection.
 * `W3 DELETION REHEARSAL — EXECUTED` carries *"### OPEN, and the reason `--check` is currently RED"*.
 * `2026-07-31 … RATIFIED` carries *"**OPEN — ED-IN-0113, needs Jordan.**"*
-* `MB`'s `Catch-up (2026-07-04)` and `2026-07-24 (IN PROGRESS)` both carry live
-  *"NEXT ACTION (resume here)"*.
+* ⚠ *Two exemplars published in the first pass are WITHDRAWN, because an adversarial pass checked
+  them and they are false.* `MB`'s `Catch-up (2026-07-04)` carries **no** strict open marker in its
+  span, and `MB`'s `2026-07-24` section is headed **"(IN PROGRESS)"** — which classifies as OPEN, so
+  it is not a member of the 17 at all. The finding never depended on them: all twelve confirmed
+  members are in `HANDOFF_IN.md`, listed above.
 * **Even `HANDOFF_archive.md`** — whose own header says *"this is provenance, not a continuity
   surface. Do not resume work from this file"* — carries *"**Residual for Jordan:** 13
   needs_jordan"*, *"D2/D3 still open"*, and *"UNMERGED — awaiting ratification"*.
@@ -707,9 +726,12 @@ true of the tree*, and a human for the held ones. Its two mechanical instruction
 carried forward as written: the **100-line cap** would delete the suspended Half-B classification
 that **S8 of this document names as the record** (`HANDOFF_FA.md`, 54 of its 224 lines), and
 **deleting `HANDOFF_archive.md`** would remove the `archive_target_pattern` that
-`references/atomization_rules.yaml` declares as the relief valve for `HANDOFF.md` and the lane files
-— recreating, deliberately, the exact defect S6's own token-room work fixed nine days ago when
-`tests/coverage_matrix.md`'s documented relief valve turned out not to exist.
+`references/atomization_rules.yaml` declares as the relief valve for `HANDOFF.md` — recreating,
+deliberately, the exact defect S6's own token-room work fixed nine days ago when
+`tests/coverage_matrix.md`'s documented relief valve turned out not to exist. ⚠ *An earlier wording
+said "for `HANDOFF.md` **and every lane file**". Half false: the lane rule
+(`match: "registers/handoffs/*.md"`) declares a 20,000-token cap and **no** archive target. The
+objection stands for the root file and is withdrawn for the lane files.*
 
 ---
 

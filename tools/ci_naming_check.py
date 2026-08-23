@@ -146,43 +146,87 @@ EXCLUDE = (
 )
 
 
+# Entries that must match as a ROOTED PREFIX, not as a substring anywhere in the path.
+#
+# ⚠ `audit/` WAS A SUBSTRING ENTRY AND SILENTLY EXEMPTED A DIFFERENT TREE. `is_excluded` tests
+# `x in p`, so `'audit/'` matches inside `skills/valoria-vector-audit/scripts/…` — every
+# vector-audit script was exempt from this BLOCKING gate, and from the merged warn tier, for a
+# reason nobody intended. That is verbatim the ED-IN-0133 unanchored-substring defect that
+# `tools/pathres.py` exists to prevent, and its docstring uses THIS EXACT COLLISION as its worked
+# example ("a scan for `audit/…` matched inside `skills/valoria-vector-audit/scripts/`") — the
+# lesson was written down and the gate kept the bug. Found by an adversarial pass 2026-08-23.
+#
+# ONLY `audit/` is rooted, deliberately. Measured before changing: rooting every bare top-level
+# entry would also root `tests/`, which would drop the 28 files under `engine/tests/` out of an
+# exemption they legitimately have. The exclusion list is not one kind of entry, so the fix is not
+# one rule for all of them.
+EXCLUDE_ROOTED = ('audit/',)
+
+
 def is_excluded(path):
     """True if `path` is a definitional/historical location exempt from the gate."""
     p = (path or '').replace('\\', '/')
-    return any(x in p for x in EXCLUDE)
+    if any(p.startswith(x) for x in EXCLUDE_ROOTED):
+        return True
+    return any(x in p for x in EXCLUDE if x not in EXCLUDE_ROOTED)
 
 
 def _scan(path, added_text, matchers):
     """THE rule, stated once: which added lines introduce a deprecated name.
 
-    Returns [(legacy, canonical, line), ...]. Both tiers and the edit-time hook run through
-    this; the two public wrappers below differ only in which matchers they pass and what shape
-    their caller already expects.
+    Returns [(line_index, legacy, canonical, line), ...]. Both tiers and the edit-time hook run
+    through this; the two public wrappers below differ only in which matchers they pass and what
+    shape their caller already expects.
+
+    The line INDEX is carried because the block tier collapses to one hit per line and must do so
+    by POSITION. Collapsing by line TEXT looks equivalent and is not: two identical offending
+    lines are two violations, and de-duplicating them by string silently reports one.
     """
     if is_excluded(path):
         return []
     hits = []
-    for line in (added_text or '').splitlines():
+    for idx, line in enumerate((added_text or '').splitlines()):
         for pat, legacy_name, canon, _key in matchers:
             if pat.search(line):
-                hits.append((legacy_name, canon, line.strip()))
+                hits.append((idx, legacy_name, canon, line.strip()))
     return hits
 
 
 def scan_text(path, added_text):
-    """BLOCK tier. Returns a list of offending line STRINGS.
+    """BLOCK tier. Returns a list of offending line STRINGS, ONE PER LINE.
 
     The shape is unchanged and deliberately so: `tools/hook_naming_guard.py` slices each hit as
     a string for its edit-time message. Widening this return value to satisfy the merge would
     have broken the one caller the merge is not about.
+
+    ⚠ THE COLLAPSE IS BY LINE POSITION, NOT BY LINE TEXT, AND THE DIFFERENCE IS REACHABLE TODAY.
+    `_scan` yields one hit per matching PATTERN, because the warn tier must name which legacy term
+    it found. The block tier's pre-merge implementation used `any()` and yielded one hit per LINE.
+    Two reasons the reconciliation is subtle:
+
+      * with two block-tier names on one line, per-pattern double-counts — currently unreachable,
+        since `names_index.yaml` declares one `block` entry, but reachable the moment a second is
+        promoted (CLAUDE.md §0.1 pt 1: correct when written, wrong once something else changes);
+      * with the SAME name on two IDENTICAL lines, de-duplicating by TEXT under-counts — and that
+        is reachable right now, with today's single name. The first draft of this collapse keyed
+        on the stripped line and had exactly that defect.
+
+    Keying on the line index handles both. Order is preserved.
     """
-    return [line for (_legacy, _canon, line) in _scan(path, added_text, matchers_for('block'))]
+    seen, out = set(), []
+    for (idx, _legacy, _canon, line) in _scan(path, added_text, matchers_for('block')):
+        if idx not in seen:
+            seen.add(idx)
+            out.append(line)
+    return out
 
 
 def scan_text_warn(path, added_text, matchers=None):
     """WARN tier. Returns [(legacy, canonical, line), ...] — the drift lint's shape, unchanged
     from `ci_names_check.scan_text`, including the injectable `matchers` its tests rely on."""
-    return _scan(path, added_text, matchers_for('warn') if matchers is None else matchers)
+    return [(legacy, canon, line)
+            for (_idx, legacy, canon, line) in
+            _scan(path, added_text, matchers_for('warn') if matchers is None else matchers)]
 
 
 def main(argv):
@@ -230,6 +274,16 @@ def _main_warn(mode):
     """
     matchers = matchers_for('warn')
     if not matchers:
+        # AN EMPTY WARN TIER AND AN UNREADABLE INDEX ARE NOT THE SAME STATE, and `names.all_legacy`
+        # cannot tell them apart: it returns {} on a missing PyYAML, an open failure, a parse
+        # failure and a non-dict root alike, never raising. So the emptiness of the warn tier is
+        # only meaningful if SOME tier loaded. FORBIDDEN is the block tier's import-time snapshot;
+        # if it is empty too, the index did not load and the affirmative sentence below would be a
+        # claim about contents nothing has read.
+        if not FORBIDDEN:
+            print("[NAMES DRIFT ERROR] no names loaded from references/names_index.yaml at either "
+                  "tier — the index is unreadable, not empty; the drift lint cannot report on it.")
+            return 1
         print("Names drift lint: no warn-tier legacy names in references/names_index.yaml.")
         return 0
 
