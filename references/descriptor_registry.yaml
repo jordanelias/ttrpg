@@ -127,28 +127,31 @@ territory_stats:
 # prior blanket "1-7" scale had lost the per-stat floor table in engine/params/bg/core.md §Stat
 # Ceilings and Floors.
 #
-# ⚠ LEGITIMACY'S FLOOR OF 0 IS AN INFERENCE BY THIS SESSION, NOT A RULING, AND THE FIRST VERSION OF
-# THIS NOTE OVERSTATED IT. It claimed "OPT-AV-18's DEFAULT for a stat with no independently-declared
-# floor is 0 -- that is how Intel was ratified", i.e. that a standing default supplied the number.
-# Checked, and retracted: the docket's per-item outcomes live in
-# `designs/audit/2026-07-08-attribute-value-coherence-audit/ed_options.md`, which is EVACUATED and
-# not on this tree, and the reachable summary records the opposite posture for an item with no
-# declared bound -- `registers/handoffs/HANDOFF_IN.md` notes OPT-AV-13 and OPT-AV-18's
-# Renown-cap sub-item were "left explicitly open -- no default stated, none invented". Intel's floor
-# was EXPLICITLY ratified (the "Intel-floor naming" sub-item), which is a different fact from a
-# default having supplied it.
+# LEGITIMACY'S FLOOR OF 0 IS RULED (Jordan, 2026-08-23: "floor ruling 0"). It is no longer an
+# inference, and the value did not change -- the ruling CONFIRMS what shipped on 2026-08-22, so no
+# golden moves and none was re-recorded. The question is closed; do not reopen it as open.
 #
-# WHAT ACTUALLY JUSTIFIES 0, stated as the weaker thing it is: after Jordan's "Influence can be 0",
-# every other faction stat floors at 0, so 0 makes the roster uniform and introduces no new
-# distinction. Jordan ruled that Legitimacy IS a base descriptor; he did not state its floor.
-# ⚠ NEEDS JORDAN: confirm 0, or set it otherwise. Changing it moves the seeded goldens and is a
-# one-line edit to this row plus a measured re-record.
+# THE HISTORY IS KEPT BECAUSE IT IS A WORKED EXAMPLE, not because the matter is unsettled. The first
+# version of this note claimed "OPT-AV-18's DEFAULT for a stat with no independently-declared floor
+# is 0 -- that is how Intel was ratified", i.e. that a standing default supplied the number. Checked,
+# and retracted: the docket's per-item outcomes live in
+# `designs/audit/2026-07-08-attribute-value-coherence-audit/ed_options.md`, which is EVACUATED and
+# not on this tree, and the reachable summary records the OPPOSITE posture for an item with no
+# declared bound -- `registers/handoffs/HANDOFF_IN.md` notes OPT-AV-13 and OPT-AV-18's Renown-cap
+# sub-item were "left explicitly open -- no default stated, none invented". Intel's floor was
+# EXPLICITLY ratified (the "Intel-floor naming" sub-item), which is a different fact from a default
+# having supplied it. The lesson survives the ruling: a session had reached the right number by the
+# wrong route, and dressing a choice as a precedent is the failure mode, not the number.
+#
+# What a session had to say before the ruling, and the shape a pending item should take: after
+# Jordan's "Influence can be 0", every other faction stat floors at 0, so 0 made the roster uniform
+# and introduced no new distinction -- an argument for a default, not a ratification of one.
 # ============================================================================
 faction_stats:
   source: engine/params/factions/stats_1_7_scale.md
   entries:
     - {key: fac.influence,  name: Influence,  scale: "0-7"}   # floor 1 -> 0, Jordan 2026-08-23 ("Influence can be 0"), superseding ED-IN-0029/OPT-AV-14
-    - {key: fac.legitimacy, name: Legitimacy, scale: "0-7"}   # BASE descriptor, Jordan 2026-08-23; floor per OPT-AV-18's default (no independently-declared floor)
+    - {key: fac.legitimacy, name: Legitimacy, scale: "0-7"}   # BASE descriptor AND floor 0, both RULED by Jordan 2026-08-23. The floor is his, not OPT-AV-18's default -- that justification was retracted (see the note above) before he ruled
     - {key: fac.wealth,     name: Wealth,     scale: "0-7"}
     - {key: fac.military,   name: Military,   scale: "0-7"}
     - {key: fac.intel,      name: Intel,      scale: "0-7"}   # floor ratified 2026-07-08, OPT-AV-18 (no prior declared floor anywhere)

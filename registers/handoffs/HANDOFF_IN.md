@@ -3507,12 +3507,21 @@ valid `ED-` citation read as fabricated.
 - *A count is only a success criterion if the detector can see everything.* 5c's parser ratchet was
   blind twice in one day, in the direction that flattered the result.
 
-**Open for Jordan, unchanged and still unruled:**
-- `fac.legitimacy`'s floor of **0** is AN INFERENCE BY A SESSION, not a ruling
-  (`references/descriptor_registry.yaml` header carries the flag).
-- S6 needs the ledger-cap decision (§4 Q8): `registers/editorial_ledger_in.jsonl` has ~108 tokens
-  of headroom under a blocking cap, so **no lane can file a row**. Raise, split, or accept.
-- Duplicate `ED-IN-0194` at `editorial_ledger_in.jsonl:50-51`.
+**Open for Jordan — ALL THREE CLOSED 2026-08-23. Kept, with their resolutions, because two of
+them were closed by finding the question was WRONG, and a reader of S6 will meet them again:**
+- ✅ `fac.legitimacy`'s floor of **0** — **RULED 0 by Jordan** ("floor ruling 0"). It confirms the
+  value that shipped 2026-08-22, so no golden moved. `descriptor_registry.yaml` no longer flags it.
+- ✅ The ledger cap (§4 Q8) — **THE QUESTION WAS STALE.** `editorial_ledger_in.jsonl` is at
+  **46,055 / 120,000** tokens, ~74k of headroom, not ~108. Jordan raised that cap 50k → 120k on
+  2026-08-21 and the plan text was never re-measured. Every one of the 24 registers is within
+  limits. **S6 has no ledger-cap decision to take.**
+- ✅ "Duplicate `ED-IN-0194` at lines 50-51" — **THERE IS NO DUPLICATE.** Line 50 is `ED-IN-0194`,
+  line 51 is `ED-IN-0195`. The only id with several rows is `ED-IN-0149` (×3), and those are
+  CORRECT append-only supersession — row 2 says so in its own text. Nothing to resolve.
+
+  ⚠ *All three were cited in the plan as live blockers. Two were phantoms, and both would have been
+  "fixed" by a session that trusted the document over the tree. Re-measure a cited number before
+  acting on it — the same defect `CLAUDE.md` §1 records for the duplicated date.*
 
 **Recorded, not acted on (apparatus, load-bearing on process only — §0.1 pt 5):**
 `tools/trace_execution_phases.py` is NON-DETERMINISTIC — the same seeded campaign gave

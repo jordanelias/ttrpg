@@ -579,9 +579,40 @@ reproduce its pairing format, which `bdc`'s caller checks — a drop-in port sil
 register-size validators deliberately avoid). **D4 is struck** — `bdc` absorbing `freshness_gate` is
 aggregation, not deduplication.
 
-**Unblock the ledger.** `registers/editorial_ledger_in.jsonl` has ~108 tokens of headroom under a
-blocking cap, which means **no lane can file a row at all** (ED-IN-0185 Q5, overdue). Raise, split,
-or accept — Jordan's call, §4 Q8. Also resolve the duplicate `ED-IN-0194` at lines 50-51.
+~~**Unblock the ledger.**~~ **STRUCK 2026-08-23 — BOTH CLAIMS WERE FALSE WHEN RE-MEASURED, and
+neither needed a ruling.** This item read: "`registers/editorial_ledger_in.jsonl` has ~108 tokens of
+headroom under a blocking cap, which means no lane can file a row at all (ED-IN-0185 Q5, overdue).
+Raise, split, or accept — Jordan's call, §4 Q8. Also resolve the duplicate `ED-IN-0194` at lines
+50-51."
+
+- **The cap.** The file is at **46,055 / 120,000** tokens — ~74k of headroom. Jordan raised that cap
+  50,000 → 120,000 on 2026-08-21 (`ci_register_size_check.py`, which carries the reasoning inline),
+  and this paragraph was written from the pre-raise number and never re-taken. All 24 registers are
+  within limits. **There is no decision here to take.**
+- **The duplicate.** Line 50 is `ED-IN-0194`; line 51 is `ED-IN-0195`. The only id carrying several
+  rows is `ED-IN-0149` (×3), and those are CORRECT append-only supersession — the second row opens
+  "SUPERSEDING ROW for ED-IN-0149 (append-only ledger: an id's effective status is its LAST row)".
+  "De-duplicating" them would have destroyed the mechanism the ledger runs on.
+
+⚠ **THIS DOCUMENT ALREADY KNEW, AND CONTRADICTED ITSELF FOR TWO DAYS.** §5's rulings table marks
+**Q8 "RULED AND EXECUTED 2026-08-21"** — it records the cap raise, notes the "~108 tokens" figure
+was *already* stale when re-measured (45,998/50,000, about four rows), and states the `ED-IN-0194`
+duplicate was split to `ED-IN-0195` along with nine more duplicate groups nobody had reported. So
+the correct answer sat in §5 while §3's S6 body still demanded a ruling for it. A step's body and
+the rulings table are two copies of one fact, and this is the second time in three days that a
+second copy is where the rot lived (see 5c's RESULT).
+
+⚠ **Both items would have been "fixed" by a session that trusted this document over the tree, and
+the second fix would have done damage** — "de-duplicating" `ED-IN-0149` destroys the append-only
+supersession the ledger runs on. Re-measure a cited number before acting on it.
+
+**What the token-room work actually was, done 2026-08-23** (Jordan: "just solve token room stuff"):
+`tests/coverage_matrix.md` was the only file near a cap — 14,117 / 15,000, **94%**, 883 tokens left
+— and its documented relief valve did not exist: `tests/coverage_matrix_archive.md` was deleted by
+the evacuation in `cadf9c7` while the live file's header went on pointing at it. That file is the
+one `ci_co_file_checker` rule 3 REQUIRES every simulation-output commit to append to, so the next
+such commit would have failed CI on SIZE. Archive restored, 26 settled sections (dated ≤ 2026-07-25)
+moved, live file 94% → 48%.
 
 **Re-home what `scope_ratchet` was measuring.** It reported REGRESSED on `ed.stale` (199 vs 76) and
 `ed.needs_jordan_stale` (83 vs 21) up to its deletion and nothing reports them now. Those are

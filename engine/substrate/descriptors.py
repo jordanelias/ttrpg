@@ -19,10 +19,13 @@ depend on it without creating a cycle. It reads the file once, at import.
 WHAT IT NOW DOES, corrected 2026-08-22 (plan S5d — this paragraph described the opposite until
 then) and again 2026-08-23. `faction_bounds()` IS the clamp: `Faction.adjust` reads it instead of
 applying a blanket floor 0.5 / ceiling 7.0 to every stat. ED-IN-0029's per-stat floors reached the
-executable model on 2026-08-22; Jordan then ruled twice on 2026-08-23 — "Legitimacy is a base" (so
-`fac.legitimacy` is declared and the roster is SIX) and "Influence can be 0" (superseding that
-docket's Influence floor of 1). All six declared faction stats floor at 0 and ceiling at 7. Both
-re-records measured the golden delta against an n=240-per-arm control first.
+executable model on 2026-08-22; Jordan then ruled three times on 2026-08-23 — "Legitimacy is a
+base" (so `fac.legitimacy` is declared and the roster is SIX), "Influence can be 0" (superseding
+that docket's Influence floor of 1), and "floor ruling 0" for Legitimacy itself. All six declared
+faction stats floor at 0 and ceiling at 7, and every one of those bounds is now RULED rather than
+inferred — the Legitimacy floor shipped on 2026-08-22 as a session's inference and the third ruling
+CONFIRMED it, so no golden moved for it. The two re-records that DID move goldens measured their
+delta against an n=240-per-arm control first.
 
 FIVE OF THE SIX FLOORS ARE REACHABLE. `fac.intel` is not: `MULTS` carries no `intel` key, so
 `adjust('intel', …)` raises `KeyError` before any bound is consulted, and the (0, 7) this returns
