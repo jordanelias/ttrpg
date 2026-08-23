@@ -3529,3 +3529,61 @@ them were closed by finding the question was WRONG, and a reader of S6 will meet
 embeds those counts. Nothing gates on them and the file is untracked, so this is a note for whoever
 next reads a diff of that artifact and thinks their change moved it. Structure and line counts ARE
 stable (verified over four rebuilds), so the flow-skeleton anchors into it are safe.
+
+---
+
+## 2026-08-23 — S6 CLOSED except 6c; S7 is next
+
+**Landed:** `bca82dc` 6b · `e8676ee` 6a · `430c003` D1 · `8f0c925` D2 · `3d9d123` 6f. Full detail in
+the plan's S6 RESULT and in each commit message; not repeated here.
+
+**`deprecated/` is gone.** Its only live consumer — the 26 frozen ED-ledger fragments the blocking
+citation gate reads — is at **`registers/archive/`**, and `evacuation_plan.py`'s `R-REL-EDUNIVERSE`
+had ruled that relocation before the culling plan proposed deleting it. ED universe 1,264 before and
+after. **Do not recreate the directory**: retiring something now means deleting it and writing a
+`FORK:` row.
+
+**Four of S6's six instructions were wrong when measured against the tree**, which is now the third
+consecutive step where that is true. The pattern is stable enough to state as a rule for S7:
+*a plan's target list is a claim about the tree at the moment it was written; re-measure each entry
+before acting on it.* The four:
+
+1. **6b's tombstone design** would have cut `ci_claim_provenance_check` from 63 in-scope entries to
+   **7** — its verification "no other field of a closed row is read by anything" is false.
+2. **D1's "then port"** rests on a claim measured false: 654 of 1,363 probes disagree because the two
+   resolvers answer different questions.
+3. **6f's `throughlines_meta*` glob** would have forked the PP-672/674 canonical vetting guide.
+4. **6f's four Godot docs** were staged for the fork and reverted on reading the governing spec,
+   which says two "remain valid" and cites the other two as open register items D5/D7.
+
+**Also found and ruled: eight `restructure_ledger.md` keys carry CONFLICTING targets** (`designs/arcs/`
+among them), and the two resolvers split on all eight — the exact-row dict kept the last binding
+while equal-length dir-prefix keys sorted as ties and file order made the first win. Ruled
+**later-row-wins**, which is the chronological semantics the file already had; the pair IS the
+history and must not be "de-duplicated".
+
+### ⚠ 6c DID NOT RUN — and it is reclassified, not deferred
+
+Measured across all ten handoff files: **1,680 lines marked complete, 4,740 marked open, 730
+unmarked**. 6c's "≥75% is narrative about completed work" is **23%**.
+
+And the 23% is not sweepable: **14 of 18 complete-marked sections carry open/held/`needs_jordan`
+content inside them** — `[DONE] ED-IN-0166/0167/0168` says "Still blocked: G2's second half
+(Jordan)"; `[DONE] ED-IN-0182` and `[DONE] ED-IN-0180` each have a "Still open" subsection;
+"W3 DELETION REHEARSAL — EXECUTED" has "### OPEN, and the reason `--check` is currently RED"; and
+`HANDOFF_archive.md`, whose header says "do not resume work from this file", carries
+"**Residual for Jordan:** 13 needs_jordan".
+
+**The disposition markers in this corpus do not mean what they say.** That is why the ~1,190 lines
+the weekly review flagged were never enumerated — it cannot be done mechanically. Pruning this is
+adjudication work needing a human for the held items, exactly as S7 says of `audit/`.
+
+Two of 6c's mechanical instructions must NOT be carried forward as written: the **100-line lane cap**
+would delete the suspended Half-B classification that the plan's own S8 names as the record
+(`HANDOFF_FA.md`), and **deleting `HANDOFF_archive.md`** would remove the `archive_target_pattern`
+`references/atomization_rules.yaml` declares as the relief valve for `HANDOFF.md` and every lane file
+— recreating the defect S6's token-room work fixed nine days ago for `tests/coverage_matrix.md`.
+
+**Next action: S7** — and note it is apparatus/corpus work again. §1(c) of the plan still binds:
+nothing since the Q1 wiring has changed how the game plays, and **S8 Half B is the game**, suspended
+on a ruling.

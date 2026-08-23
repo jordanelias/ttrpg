@@ -27,19 +27,32 @@ requires a human decision; this document's decision requests are §4, addressed 
 | S3 wave 3 + green the suite | **done** 2026-08-21 | apparatus removal | — |
 | S4 wave 5, untrack the generated layer | **done** 2026-08-22 `f84692c` | apparatus removal | — |
 | S5 contracts-as-registration | **done** 2026-08-22 / 2026-08-23 | **the engine** | **L0** |
-| **S6 wave 6 + FORK semantics + ledger cap** | **NEXT** — unblocked 2026-08-23 | apparatus + provenance | — |
-| S7 wave 4's residue: extraction | blocked-by S6 | audit corpus | — |
+| S6 wave 6 + FORK semantics + naming merge | **done** 2026-08-23 — **except 6c, which is RECLASSIFIED, not skipped** (see its RESULT) | apparatus + provenance | — |
+| **S7 wave 4's residue: extraction** | **NEXT** — unblocked 2026-08-23 | audit corpus | — |
 | S8 M1 juncture 1 | half-done; **Half B SUSPENDED** by Jordan | **the engine** | **L0** |
 | S9 cross-repo residue | blocked-by attaching `jordanelias/valoria-game` | port | — |
 | S10 errors become numbers | **unblocked**, not gating | **the engine** | **L0** |
 
+**S6 IS DONE except 6c (2026-08-23).** `deprecated/` no longer exists, the ED universe lives at
+`registers/archive/`, a FORK row has one meaning, and the naming trio is two. **Read S6's RESULT
+before starting S7**: four of its six instructions were wrong when measured against the tree, and
+one — 6b's tombstone design — would have cut a blocking gate's population by 89% while reporting
+green. **6c is reclassified, not skipped**: the handoff corpus cannot be pruned by marker, because
+14 of 18 sections marked `[DONE]`/`[RULED]`/`EXECUTED` carry open, held or `needs_jordan` items
+inside them — as does the archive whose own header says not to resume from it.
+
 **S5 IS DONE (5a/5b/5d/5e 2026-08-22; 5c 2026-08-23).** `engine/` no longer names `systems/` by
 import at all, the world's opening position is an authored table, ED-IN-0029's per-stat floors
 finally run, the bridge invariant is enforceable, and `module_contracts.yaml` is the single
-registration table. Read S5's RESULT section before starting S6 — in particular 5c's, because the
-fold's two corrections to this document's own instructions are the kind this document keeps
-issuing. S10 is unblocked and may be taken if Jordan directs it, but
-**do not take it ahead of S5 or S8 by rail-default** — it does not move `0/7`.
+registration table. S10 is unblocked and may be taken if Jordan directs it, but
+**do not take it ahead of S8 by rail-default** — it does not move `0/7`.
+
+⚠ **§1(c) STILL BINDS AND IS STILL UNSATISFIED.** S6 moved no game code, by design — it is an
+apparatus step. Counting from §1(c)'s own measure, the only commits since #311 that changed how the
+game plays are S8 Half A, S5b/S5d and the Q1 wiring. **S7 is `next` by the rail; S8's Half B is the
+game, and it is suspended on a ruling.** If the next session takes S7 because the board says so,
+that is a choice, not a dependency — the same sentence this document wrote about S4, which came
+true.
 
 **The depth rule binds every step, including any you invent.** §3a rules the tooling at **three
 layers** — L0 grow · L1 harden · L2 cap · **L3 never** — and
@@ -561,7 +574,7 @@ its cost.
 
 ---
 
-### S6 — Wave 6 consolidations, FORK semantics, and the ledger cap · `state: next` (S5 closed 2026-08-23)
+### S6 — Wave 6 consolidations, FORK semantics, and the naming merge · `state: done for 6b/6a/6f/D1/D2 (2026-08-23); 6c RECLASSIFIED — see its RESULT`
 
 **6b before 6a** — 6b's tombstones gate 6a, and `deprecated/archives/editorial*` is read by
 `validate_ed_citations.py`; delete it before the tombstone list lands and **every valid `ED-`
@@ -614,6 +627,92 @@ one `ci_co_file_checker` rule 3 REQUIRES every simulation-output commit to appen
 such commit would have failed CI on SIZE. Archive restored, 26 settled sections (dated ≤ 2026-07-25)
 moved, live file 94% → 48%.
 
+---
+
+**RESULT (2026-08-23) — five of six pieces landed, and the plan was wrong about four of them.**
+Commits `bca82dc` (6b), `e8676ee` (6a), `430c003` (D1), `8f0c925` (D2), `3d9d123` (6f).
+
+**6b — DONE, and NOT by the design this step specifies.** The tombstone design would have taken
+`ci_claim_provenance_check`'s population from **63 in-scope entries to 7** — an 89% cut to a
+blocking gate, reported green throughout — because 6b's verification ("no other field of a closed
+row is read by anything") is false: that gate parses the `description`/`provenance`/`measured_by`
+PROSE of four ledgers, two of them the archives 6b deletes. Its own header records the same defect
+happening once before at a quarter of the scale. And 6b's second justification, the ledger cap, was
+struck as a phantom the same week. So the only surviving reason to touch the ledgers is to let
+`deprecated/` go — which needs 60 archive-only ids to survive, not 1,150 rows deleted.
+`evacuation_plan.py`'s `R-REL-EDUNIVERSE` had already ruled the right answer: **relocate** the 26
+frozen fragments to `registers/archive/`. ED universe 1,264 before and after.
+
+**6a — DONE.** Six files to `FORK:baf29d5` after a deletion rehearsal (collection, not grep: 1,719
+tests still collected). **Two of the six were classified `keep`** by rules naming imports that no
+longer existed — `import descriptor_registry` resolves to `tools/`, and `compliance_check` stopped
+importing `github_ops`. `CLAUDE.md` also named six `deprecated/` paths that had already ceased to
+exist.
+
+**D1 — DONE, and the port is REFUSED.** One answer for a FORK row: `FORK:<ref>:<path>`, owned by
+`pathres.fork_pointer()`, shape disagreements 166 → 0. But "then port" rests on a claim measured
+false: **654 of 1,363 probes disagree**, because `_resolve_remap` is a pure map lookup and
+`resolve()` folds in an existence check. They answer different questions; a drop-in port changes 654
+answers in a blocking gate. Also found: **eight ledger keys carry conflicting targets**, ruled
+last-wins.
+
+**D2 — DONE.** `ci_names_check` merged into `ci_naming_check --warn`; equivalence proved 9/9 before
+the file was removed. `ci_names_consistency` left standalone, as this step directs.
+
+**6f — DONE for five of ten targets, and half the list did not qualify.** The
+`references/{throughlines_meta*}` glob would have forked the **PP-672/674 canonical vetting guide**,
+registered in `canonical_sources.yaml` with SHA pins, plus a `PROVISIONAL` file *"pending Jordan
+integration"*. The four Godot docs were staged for the fork and **reverted before commit**: the
+governing spec says two *"remain valid"* and cites the other two as the open left-hand side of
+register items D5 and D7.
+
+---
+
+### ⚠ 6c IS NOT A CULLING TASK, AND THIS IS THE ONE PIECE OF S6 THAT DID NOT LAND
+
+**6c's headline is measured wrong.** It says *"≥75% of `HANDOFF_IN.md` is narrative about completed
+work"* and prescribes deleting the dated retrospectives and `[DONE]`/`[RULED]` sections, capping each
+lane at 100 lines, and deleting `HANDOFF_archive.md`. Classified by section header across all ten
+files: **1,680 lines marked complete, 4,740 marked open, 730 unmarked — 23%, not 75%.**
+
+**And the 23% cannot be deleted either, because the markers do not mean what they say.** Scanning
+every complete-marked section for open/held/needs-Jordan content: **14 of 18 carry it inside** — counted at `baf29d5`, the state 6c faced, with a strict marker set (`[OPEN]`, `needs_jordan`, `NEXT ACTION`, `Still open`, `Still blocked`, `HELD FOR`, `needs/awaiting Jordan`), not bare prose words like "held".
+
+* `[DONE] ED-IN-0166/0167/0168` — *"Still blocked: G2's second half (Jordan, ED-IN-0163). Not
+  started: G4, G5, G6, G10, G11"* and *"HELD FOR JORDAN, unchanged by this pass"*.
+* `[DONE] ED-IN-0182` and `[DONE] ED-IN-0180` each carry a *"### Open after this pass"* /
+  *"### Still open after this wave"* subsection.
+* `W3 DELETION REHEARSAL — EXECUTED` carries *"### OPEN, and the reason `--check` is currently RED"*.
+* `2026-07-31 … RATIFIED` carries *"**OPEN — ED-IN-0113, needs Jordan.**"*
+* `MB`'s `Catch-up (2026-07-04)` and `2026-07-24 (IN PROGRESS)` both carry live
+  *"NEXT ACTION (resume here)"*.
+* **Even `HANDOFF_archive.md`** — whose own header says *"this is provenance, not a continuity
+  surface. Do not resume work from this file"* — carries *"**Residual for Jordan:** 13
+  needs_jordan"*, *"D2/D3 still open"*, and *"UNMERGED — awaiting ratification"*.
+
+So a sweep by marker deletes held-for-Jordan decisions and resume-here next actions, which §0's row
+gate says a session may not dispose of on its own. **Nothing in the handoff corpus was deleted.**
+
+**The reclassification, and the precedent for it is in this document.** S7 says of wave 4's residue:
+*"This is authorship work on game subjects and should be scheduled as such, not as a wave."* 6c is
+the same shape one lane over — **adjudication work on process items, scheduled as a wave.** The
+weekly review already said the enumeration had never been done (*"`HANDOFF_IN.md`'s own `## Pending`
+and `## Next actions`, ~1,190 lines, were not enumerated item-by-item"*); this measurement says why
+it cannot be done mechanically.
+
+**What 6c actually costs, stated so the next attempt can budget it:** ~6,400 lines across ten files
+where every disposition marker is unreliable, containing an unknown number of live `needs_jordan`
+items that a session may not close. It needs a pass that reads each item and asks *is this still
+true of the tree*, and a human for the held ones. Its two mechanical instructions should not be
+carried forward as written: the **100-line cap** would delete the suspended Half-B classification
+that **S8 of this document names as the record** (`HANDOFF_FA.md`, 54 of its 224 lines), and
+**deleting `HANDOFF_archive.md`** would remove the `archive_target_pattern` that
+`references/atomization_rules.yaml` declares as the relief valve for `HANDOFF.md` and the lane files
+— recreating, deliberately, the exact defect S6's own token-room work fixed nine days ago when
+`tests/coverage_matrix.md`'s documented relief valve turned out not to exist.
+
+---
+
 **Re-home what `scope_ratchet` was measuring.** It reported REGRESSED on `ed.stale` (199 vs 76) and
 `ed.needs_jordan_stale` (83 vs 21) up to its deletion and nothing reports them now. Those are
 **ledger** facts. If they are watched again, the instrument is a ledger-subject one — not a
@@ -621,7 +720,7 @@ five-ceiling repository ratchet.
 
 ---
 
-### S7 — Wave 4's residue: extraction, not culling · `state: blocked-by S6`
+### S7 — Wave 4's residue: extraction, not culling · `state: next` (unblocked 2026-08-23 — S6's culling pieces landed; 6c is reclassified out of the wave, not pending inside it)
 
 **16 of the 17 "delete outright" units are already gone** (#323 took them; residue 1,870 lines).
 `audit/` still holds 79,085 lines and that is almost entirely the **~33 game-subject working papers

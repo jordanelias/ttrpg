@@ -54,7 +54,28 @@ and this root file remains the one stable SessionStart entry point.
 document is still the authority on what each act is and why. If you are about to write a new plan
 instead of taking a step, that is the loop; take the step.
 
-`state: next` is **S4 — culling wave 5: untrack the generated data** (~38,000 lines).
+`state: next` is **S7 — wave 4's residue: extraction, not culling** (the `audit/` corpus: ~33
+game-subject working papers whose surviving conclusions belong in `systems/` heads or `proposals/`).
+S6 closed 2026-08-23.
+
+⚠ **This line was stale for three steps** — it said S4 while S4, S5 and S6 had all landed. The
+execution order's own `state:` fields are the authority when this file and a step disagree, and a
+memoryless session that trusted this pointer would have re-done finished work. Re-read the step's
+own `state:` before starting.
+
+**S6 closed with five of six pieces landed and 6c RECLASSIFIED, not skipped.** `deprecated/` no
+longer exists (its 26 frozen ED-ledger fragments relocated to `registers/archive/`, universe
+unchanged at 1,264 ids); a `FORK:` row has one meaning, `FORK:<ref>:<path>`; the naming trio is two.
+Four of S6's six instructions were wrong when measured, and one would have cut a blocking gate's
+population 63 → 7 entries while reporting green. Read the plan's S6 RESULT before S7.
+
+⚠ **6c (slim the handoffs) DID NOT RUN, and the reason binds anyone who tries it.** Its headline —
+"≥75% of `HANDOFF_IN.md` is narrative about completed work" — measures at **23%**, and that 23%
+cannot be swept either: **14 of 18 sections marked `[DONE]`/`[RULED]`/`EXECUTED` carry open, held or
+`needs_jordan` items inside them**, as does `HANDOFF_archive.md`, whose own header says it is "not a
+continuity surface" and which carries "Residual for Jordan: 13 needs_jordan". **The disposition
+markers in this corpus do not mean what they say.** Pruning it is adjudication work, not a culling
+wave — the same correction this document's S7 already applies to `audit/`.
 
 **S8 Half A LANDED — the game moved.** `sigma_leverage.roll_net_continuous` no longer rounds its
 pool, so Jordan's 2026-08-14 fractional-dice ruling is implemented rather than half-implemented. Six
