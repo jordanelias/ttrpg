@@ -1660,3 +1660,20 @@ Six rows cost six lines and keep the anti-fabrication property exact.
 | `deprecated/tools/atomizer.py` | `FORK:baf29d5` | FORKED |
 | `deprecated/tools/doc_index_gen.py` | `FORK:baf29d5` | FORKED |
 | `deprecated/tools/index_gen.py` | `FORK:baf29d5` | FORKED |
+
+## Naming-gate two-of-three merge — 2026-08-23 (S6/D2, ED-IN-0194)
+
+`ci_names_check.py` was a second implementation of ONE rule — *an added line must not introduce a
+deprecated name* — parameterised by `names_index.yaml`'s `enforce` tier. It shared the diff
+machinery, imported the block-tier tool's own `is_excluded`, and differed in a keyword argument and
+its output strings. Merged into `tools/ci_naming_check.py --warn`; both callers repointed in the
+same commit, and warn-tier output proved identical on nine cases before the file was removed.
+
+**`ci_names_consistency.py` is deliberately NOT merged**, as D2 directs: it asserts a different
+invariant (that the mirror fields in `descriptor_registry.yaml` / `proper_noun_registry.yaml` equal
+the index's canonical value) over the whole tree rather than a diff, and it hard-requires PyYAML,
+which the register-size validators deliberately avoid. Two of three, not three of three.
+
+| Old Path | New Path | Status |
+|----------|----------|--------|
+| `tools/ci_names_check.py` | `tools/ci_naming_check.py` | CONSOLIDATED |

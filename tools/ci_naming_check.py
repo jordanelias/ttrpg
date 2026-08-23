@@ -29,8 +29,27 @@ SOURCE OF TRUTH: the deprecated name(s) are no longer hardcoded here — they ar
 read from references/names_index.yaml (via tools/names.py): every entry whose
 `enforce` tier is `block` contributes its `legacy` names. That is the single
 place a name is changed. This file therefore enforces the index; it does not
-define the invariant. (The broader, report-only drift lint over `warn`-tier
-entries lives in tools/ci_names_check.py.)
+define the invariant.
+
+BOTH TIERS LIVE HERE (2026-08-23, S6/D2 — `tools/ci_names_check.py` merged in and
+retired). The rule is ONE rule — "an added line must not introduce a deprecated
+name" — parameterised by the index's `enforce` tier, and it was implemented twice:
+same diff machinery, same path exclusions (the warn tool imported THIS file's
+`is_excluded`), same scan loop, different output strings. CLAUDE.md §8's "every
+rule lives once", violated by two files that differed only in a keyword argument.
+
+    python tools/ci_naming_check.py            # block tier — BLOCKING
+    python tools/ci_naming_check.py --warn     # warn tier  — report-only by CALLER policy
+
+⚠ THE TWO TIERS DIFFER IN ONE PLACE ON PURPOSE, and it is not tidiable away: an
+EMPTY block tier is a broken index and returns 1 (a gate that cannot match
+anything must never report clean), while an empty warn tier is a legitimate end
+state — every entry triaged and promoted to `block` — and returns 0. Same rule,
+different meaning of "nothing to match".
+
+Exit codes are truthful in both tiers (1 on findings). The report-only POLICY for
+`--warn` lives in the callers, exactly as it did before the merge: CI runs it in
+`validators-report` (continue-on-error), `valoria_local.py` with blocking=False.
 """
 import re
 import sys
@@ -45,11 +64,21 @@ except ImportError:  # allow `python tools/ci_naming_check.py` from repo root
     import names
 
 
+def matchers_for(tier):
+    """(pattern, legacy, canonical, key) for every legacy name at `tier` in names_index.yaml.
+
+    Read fresh from the index so a name change needs no code edit. The canonical name travels
+    with the pattern because the warn tier's whole output is "use this instead" — the block tier
+    prints the mapping too, from the same source.
+    """
+    return [(re.compile(r'\b' + re.escape(legacy_name) + r'\b', re.IGNORECASE),
+             legacy_name, canon, key)
+            for (legacy_name, canon, key, _tier) in names.all_legacy(enforce=tier)]
+
+
 def _forbidden_patterns():
-    """Word-boundary, case-insensitive matchers for every `block`-tier legacy name
-    in names_index.yaml. Read fresh so a change to the index needs no code edit."""
-    return [re.compile(r'\b' + re.escape(legacy_name) + r'\b', re.IGNORECASE)
-            for (legacy_name, _canon, _key, _tier) in names.all_legacy(enforce='block')]
+    """Back-compat: the block tier's bare patterns. Derived, never a second list."""
+    return [pat for (pat, _l, _c, _k) in matchers_for('block')]
 
 
 # Built once at import; the index is the authoritative source (see module docstring).
@@ -123,21 +152,37 @@ def is_excluded(path):
     return any(x in p for x in EXCLUDE)
 
 
-def scan_text(path, added_text):
-    """
-    Pure core used by both the CLI and the edit-time hook.
+def _scan(path, added_text, matchers):
+    """THE rule, stated once: which added lines introduce a deprecated name.
 
-    Returns a list of offending line strings drawn from `added_text`. Returns []
-    if the path is excluded or nothing matches. `added_text` should be only the
-    newly-added content (a diff's + lines, or an edit's new_string).
+    Returns [(legacy, canonical, line), ...]. Both tiers and the edit-time hook run through
+    this; the two public wrappers below differ only in which matchers they pass and what shape
+    their caller already expects.
     """
     if is_excluded(path):
         return []
     hits = []
     for line in (added_text or '').splitlines():
-        if any(pat.search(line) for pat in FORBIDDEN):
-            hits.append(line.strip())
+        for pat, legacy_name, canon, _key in matchers:
+            if pat.search(line):
+                hits.append((legacy_name, canon, line.strip()))
     return hits
+
+
+def scan_text(path, added_text):
+    """BLOCK tier. Returns a list of offending line STRINGS.
+
+    The shape is unchanged and deliberately so: `tools/hook_naming_guard.py` slices each hit as
+    a string for its edit-time message. Widening this return value to satisfy the merge would
+    have broken the one caller the merge is not about.
+    """
+    return [line for (_legacy, _canon, line) in _scan(path, added_text, matchers_for('block'))]
+
+
+def scan_text_warn(path, added_text, matchers=None):
+    """WARN tier. Returns [(legacy, canonical, line), ...] — the drift lint's shape, unchanged
+    from `ci_names_check.scan_text`, including the injectable `matchers` its tests rely on."""
+    return _scan(path, added_text, matchers_for('warn') if matchers is None else matchers)
 
 
 def main(argv):
@@ -146,6 +191,9 @@ def main(argv):
         mode = 'staged'
     elif '--local' in argv:
         mode = 'local'
+
+    if '--warn' in argv:
+        return _main_warn(mode)
 
     if not FORBIDDEN:
         # Fail-safe: an empty matcher means the index could not be read (missing
@@ -172,6 +220,33 @@ def main(argv):
               "EXCLUDE in tools/ci_naming_check.py.")
         return 1
     print("Naming check: no new use of a deprecated name.")
+    return 0
+
+
+def _main_warn(mode):
+    """The warn-tier drift lint, merged in from tools/ci_names_check.py (S6/D2, 2026-08-23).
+
+    An empty matcher set is CLEAN here, unlike the block tier — see the module docstring.
+    """
+    matchers = matchers_for('warn')
+    if not matchers:
+        print("Names drift lint: no warn-tier legacy names in references/names_index.yaml.")
+        return 0
+
+    added = ci_common.get_added_lines(mode)
+    violations = []
+    for path, lines in added.items():
+        for legacy_name, canon, line in scan_text_warn(path, '\n'.join(lines), matchers):
+            violations.append((path, legacy_name, canon, line))
+
+    if violations:
+        print(f"[NAMING DRIFT (report-only): {len(violations)}]")
+        print("  Deprecated names found in added lines — use the canonical from "
+              "references/names_index.yaml (or run tools/valoria_rename.py):")
+        for path, legacy_name, canon, line in violations:
+            print(f'  {path}: "{legacy_name}" -> "{canon}"  |  {line[:100]}')
+        return 1
+    print("Names drift lint: no new use of a deprecated name.")
     return 0
 
 

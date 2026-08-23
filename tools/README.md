@@ -28,7 +28,7 @@ separately below, matching that job's own internal grouping.
 | `ci_editorial_checker.py` | `editorial-check` | blocking | Editorial paths carry `[EDITORIAL]`/`[PROVISIONAL]` markers |
 | `ci_naming_check.py` | `naming-check` | blocking | Naming invariant gate over `enforce: block` entries in `references/names_index.yaml` |
 | `ci_names_consistency.py` | `names-consistency` | blocking | descriptor/proper-noun registry mirrors agree with `names_index.yaml` |
-| `ci_names_check.py` | `names-drift` | report-only | Naming-drift lint over every `enforce: warn` entry in `names_index.yaml` |
+| `ci_naming_check.py --warn` | `names-drift` | report-only | Naming-drift lint over every `enforce: warn` entry in `names_index.yaml` (merged in from `ci_names_check.py`, 2026-08-23) |
 | `currency_consistency_check.py` | `currency-consistency` | report-only | Self-updating recency gate (ED-1087): stamps, ID ceilings, register headers, dead maintainer pointers |
 | `skills/valoria-module-adjudicator/scripts/contract_adjudicator.py` | `contract-conformance` | report-only | Module contracts conform to the Key Type Registry + canonical sources (not in `tools/`, listed here for completeness) |  **[RETIRED 2026-08-21 — culling waves 1-3, ED-IN-0194; at `FORK:1e4c6f4`]**
 | `ci_quantity_vocabulary_check.py` | `quantity-vocabulary-check` | report-only | A17 stat-vocabulary closure: identifiers resolve to descriptor_registry/names_index |
