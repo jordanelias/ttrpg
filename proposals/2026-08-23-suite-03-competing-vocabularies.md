@@ -350,7 +350,7 @@ divergence (§2.1) is not a mistake anybody made; it is the guaranteed output of
 it once.
 
 **S2 — The naming gate enforces exactly one rule.** `references/descriptor_registry.yaml` carries 113
-entries at `enforce: warn` and **1** at `block` (the Solmund/Galbados pair). Every other vocabulary
+entries at `enforce: warn` and **1** at `block` — the canonical-name pair the naming gate owns. Every other vocabulary
 rule in the tree is advisory. A `warn`-tier rule does not stop a divergence; it annotates one.
 
 **S3 — Some subsystems have no `CURRENT.md` row.** Convictions, Characters and `systems/world` have no
