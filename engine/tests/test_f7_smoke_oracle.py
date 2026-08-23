@@ -195,9 +195,15 @@ _FACTIONS = ['Crown', 'Church', 'Hafenmark', 'Varfell']
 # which 605 now clamp to a different value. ALL 605 are on `L`. ZERO are on Influence — Influence
 # never sinks below 1 at these seeds, so ruling 2 is DECLARED BUT INERT here. Saying "both rulings
 # moved the goldens" would be false; ruling 1 moved them.
-# ⚠ 605 differing out of roughly 1,277 L-adjustments means `L` sat ON the old 0.5 floor for about
-# half of its writes. It can now reach 0. That is a change in how Legitimacy behaves over a
-# campaign, not a rounding nudge, and it is the reason the win-shares below moved as much as they did.
+# ⚠ THE PER-STAT SPLIT, MEASURED rather than estimated (an earlier draft of this block said
+# "roughly 1,277 L-adjustments", derived from the 20-of-31 call-SITE ratio; call sites are not
+# executed uniformly, so it was replaced with a count):
+#     L 1,235 · W 339 · Sta 182 · Mil 172 · I 51   (total 1,979)
+# 605 of the 1,235 L-adjustments now clamp differently — 49% of them. `L` sat ON the old 0.5 floor
+# for about half its writes and can now reach 0. That is a change in how Legitimacy behaves over a
+# campaign, not a rounding nudge, and it is why the win-shares below moved as much as they did.
+# Influence is adjusted only 51 times in the whole batch and never reaches 1, which is the direct
+# reason ruling 2 is inert here rather than an inference from the absence of a diff.
 #
 # THE CONTROL, tools/balance_oracle.py, run at n=120 per arm TWICE before any golden was touched.
 # Arms patch `faction_bounds` back to its pre-ruling answers (I floors at 1, L undeclared), so both
