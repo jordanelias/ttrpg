@@ -1567,3 +1567,6 @@ reading as unre-runnable.
 | `tests/valoria/test_gen_audit.py` | `FORK:1e4c6f4` | FORKED |
 | `tests/valoria/test_audit_refresh_coverage.py` | `FORK:c9b0a86` | FORKED |
 | `tests/valoria/test_fork_divergence.py` | `FORK:c9b0a86` | FORKED |
+| `references/wiring_manifest.yaml` | `references/module_contracts.yaml` | CONSOLIDATED |
+| `tools/wiring_map_check.py` | `tools/export_composition.py` | CONSOLIDATED |
+| `tests/valoria/test_wiring_map_check.py` | `tools/export_composition.py` | CONSOLIDATED |

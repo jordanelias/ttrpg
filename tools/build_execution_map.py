@@ -8,7 +8,8 @@ tooling) and Markdown (for reading).
 WHAT MAKES IT DIFFERENT FROM WHAT ALREADY EXISTS, so this does not duplicate:
   * `tools/observability/build_graph.py` emits the PROPAGATION graph — who emits/consumes which
     Key. It has no notion of ORDER.
-  * `references/wiring_manifest.yaml` carries build state and port rank per module. It has no
+  * `references/module_contracts.yaml`'s `wiring:` facts carry build state and port rank per
+    module (folded in from the retired `wiring_manifest.yaml`, plan S5c). It has no
     notion of CALL SEQUENCE.
   * `references/key_graph.json` reconciles producers/consumers across two authored sources.
 This map adds the missing axis: **temporal order**, from `run_campaign` through the season loop
@@ -16,7 +17,7 @@ to the terminal condition, with every other view joined onto it.
 
 THE HONESTY RULE, which is the whole point. A boot-to-termination map of a game where most of the
 27 modules do not execute would, drawn naively, be a picture of intent presented as behaviour. So every
-node carries `executes`, derived from `wiring_manifest`'s build ladder, and the phases are
+node carries `executes`, derived from the `wiring:` build ladder, and the phases are
 derived from the ACTUAL call sequence in `engine/mc_v18.py` + `systems/overview/sim/season.py`,
 not from a design document. Nodes that do not run are IN the map and marked, because for a fork
 the un-run ones are the work-list.
@@ -25,8 +26,8 @@ SOURCES (nothing is invented; every row traces to a file):
   engine/mc_v18.py                        — boot, the season loop, terminal conditions
   systems/overview/sim/season.py          — the canonical 3-step season composition
   engine/cross_scale/scene_dispatch.py    — the scene phase
-  references/module_contracts.yaml        — Key IN -> resolver -> OUT, owned state, gates
-  references/wiring_manifest.yaml         — build state / godot state / port rank / parity
+  references/module_contracts.yaml        — Key IN -> resolver -> OUT, owned state, gates,
+                                            plus `wiring:` build/godot/port_rank/parity
   references/key_graph.json               — producers + consumers per Key type
   systems/_architecture/key_type_registry_v30.md — Key payload/scale/permanence
 
@@ -151,9 +152,14 @@ def _exists(rel):
     return os.path.exists(os.path.join(REPO, rel))
 
 
-def _code_path(name, contract, manifest_row):
-    """Declared code path for a unit. Adapters have no `sim_module` in module_contracts -- the
-    manifest declares `adapter: engine/cross_scale/` as their registry, so resolve there."""
+def _code_path(name, contract, kind):
+    """Declared code path for a unit. Adapters have no `sim_module` in module_contracts, and their
+    code is engine/cross_scale/<name>.py -- so `kind` decides, not a `tier:` field on the row.
+
+    `kind` USED TO BE READ OFF THE DATA (`manifest_row['tier']`). Plan S5c folded the wiring
+    manifest into module_contracts.yaml, where modules and adapters live under DIFFERENT top-level
+    keys, so the caller already knows which it is holding and a row can no longer mislabel itself.
+    """
     declared = contract.get('sim_module')
     # module_contracts writes an ABSENT code path as the literal string "none" (not YAML null),
     # so a naive truthiness check treats it as a declared path that fails to resolve -- which
@@ -171,7 +177,7 @@ def _code_path(name, contract, manifest_row):
     # implementation is a package cannot name one file.
     if declared:
         return declared
-    if manifest_row.get('tier') == 'adapter':
+    if kind == 'adapter':
         candidate = os.path.join('engine', 'cross_scale', f'{name}.py')
         if os.path.exists(os.path.join(REPO, candidate)):
             return candidate
@@ -207,13 +213,11 @@ EXECUTING = {'live', 'gated'}
 
 
 def build():
-    manifest = _load_yaml('references/wiring_manifest.yaml')
     contracts = _load_yaml('references/module_contracts.yaml')
     keygraph = _load_json('references/key_graph.json')
     trace = _load_json('references/execution_trace.json')
 
-    mods = manifest.get('modules') or {}
-    adapters = manifest.get('adapters') or {}
+    adapters = contracts.get('adapters') or {}
     cmods = contracts.get('modules') or contracts
 
     # ---- per-module join: manifest state + contract keys + FILE PATHS ----
@@ -240,14 +244,26 @@ def build():
                     out.append(v)
         return out
 
+    # (name, kind, contract_row, wiring_row). Modules carry their wiring on the contract row;
+    # adapters have no contract row at all, so the adapters: entry IS the wiring row.
+    units = [(n, 'module', by_name.get(n) or {}, (by_name.get(n) or {}).get('wiring') or {})
+             for n in by_name]
+    units += [(n, 'adapter', {}, a or {}) for n, a in adapters.items()]
+
     module_rows = {}
-    for name, m in list(mods.items()) + list(adapters.items()):
-        c = by_name.get(name) or {}
+    for name, kind, c, m in units:
         module_rows[name] = {
             "module": name,
-            "tier": m.get('tier'),
-            "scale": m.get('scale'),
-            "resolver": m.get('resolver') or c.get('resolver'),
+            "tier": kind,
+            # `scales` and `resolver` are the CONTRACT's, and only the contract's. The retired
+            # manifest carried its own copies and they had drifted -- it said articulation_layer
+            # resolves by armature_dot_product, the reading verification RU-4 had already
+            # corrected on the contract row. It also flattened `scales` to a single `scale`, which
+            # is lossy for the one module that spans two (settlement_layer: settlement+territory)
+            # and picked a different one than a first-element projection would; the list is
+            # carried whole rather than re-projected. Adapters have no contract row, hence none.
+            "scales": c.get('scales') or [],
+            "resolver": c.get('resolver'),
             "build": m.get('build'),
             "executes": m.get('build') in EXECUTING,
             "godot": m.get('godot'),
@@ -256,10 +272,10 @@ def build():
             # THE FILE MAP: where this unit's code and canon actually live, AND whether those
             # paths resolve. A file map whose paths do not exist is worse than none -- it reads
             # as coverage. Adapters carry no `sim_module` (they are not modules); their code is
-            # engine/cross_scale/<name>.py by the manifest's own registry declaration, so it is
+            # engine/cross_scale/<name>.py, so it is
             # derived rather than left blank.
-            "code": _code_path(name, c, m),
-            "code_exists": _exists(_code_path(name, c, m)),
+            "code": _code_path(name, c, kind),
+            "code_exists": _exists(_code_path(name, c, kind)),
             "doc": c.get('doc'),
             "doc_exists": _exists(c.get('doc')),
             "keys_in": _types(c.get('consumes')),
@@ -343,10 +359,10 @@ def build():
         "sources": [
             "engine/mc_v18.py", "systems/overview/sim/season.py",
             "engine/cross_scale/scene_dispatch.py", "references/module_contracts.yaml",
-            "references/wiring_manifest.yaml", "references/key_graph.json",
+            "references/key_graph.json",
         ],
         "reality_check": {
-            "modules_total": len(mods),
+            "modules_total": len(by_name),
             "adapters_total": len(adapters),
             "units_executing": len(executing),
             "executing": executing,
@@ -415,7 +431,7 @@ def render_md(d):
     for name in sorted(d['modules'], key=lambda n: (d['modules'][n]['port_rank'] is None,
                                                     d['modules'][n]['port_rank'] or 0, n)):
         m = d['modules'][name]
-        A(f"| `{name}` | {m['scale'] or ''} | {m['resolver'] or ''} | {m['build'] or ''} | "
+        A(f"| `{name}` | {', '.join(m['scales'])} | {m['resolver'] or ''} | {m['build'] or ''} | "
           f"{'✅' if m['executes'] else '—'} | {m['godot'] or ''} | {m['port_rank'] if m['port_rank'] is not None else ''} | "
           f"{len(m['keys_in'])} | {len(m['keys_out'])} |")
 

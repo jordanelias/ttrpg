@@ -232,7 +232,10 @@ jobs:
           w python3 tools/ci_module_shape_check.py
           # RETIRED culling wave 2 (ED-IN-0194, 2026-08-21): ci_workplan_pointer_check.py, with
           # the 11 workplans/POINTER_*.md files it guarded.
-          w python3 tools/wiring_map_check.py --check
+          # RETIRED plan S5c (2026-08-23): wiring_map_check.py, with references/wiring_manifest.yaml
+          # folded into references/module_contracts.yaml. Two of its rules became structural (a
+          # registry cannot disagree with itself); the surviving three run in the BLOCKING
+          # `export_composition.py --check` above, which is a promotion, not a drop.
           # RETIRED culling wave 2 (ED-IN-0194, 2026-08-21): scope_ratchet.py + scope_baseline.yaml
           # and ci_program_claim_check.py. `ci_vacuous_assertion_check` below is KEPT by Jordan's
           # ruling of 2026-08-21 (culling plan §5.6): it is a literal encoding of CLAUDE.md §0.1

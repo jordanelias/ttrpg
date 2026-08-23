@@ -181,7 +181,8 @@ def derive_transfer_candidate(world):
 def _emit_public_governance_transfer(world, initiator, holder, territory_id, deg) -> None:
     """Emit `da.public_governance` when a Parliamentary Transfer moves a territory.
 
-    WHY THIS EXISTS. `wiring_manifest.yaml`'s `save_replay_premise` is recorded `violated`:
+    WHY THIS EXISTS. `module_contracts.yaml`'s `foundation_gaps.save_replay_premise` is recorded
+    `violated` (it lived in `wiring_manifest.yaml` until plan S5c folded that file in):
     "the live strategic loop mutates World DIRECTLY (Faction.L, Territory.owner) with no Key
     trace, so the Key log cannot reconstruct strategic state." MEASURED 2026-08-03 against a
     seeded campaign, that note is now mostly out of date and the residue is precise:
@@ -197,7 +198,7 @@ def _emit_public_governance_transfer(world, initiator, holder, territory_id, deg
         mention of it in engine/+systems/ is a comment), and no owner write in 40 seeded
         campaigns. Its gate is not the obstacle -- CI >= 60 is met in 20/20 seeds and CI = 100,
         the FORCED declaration point where P(declare)=1, is reached in 8/20. FA lane; see
-        wiring_manifest's save_replay_premise note.
+        module_contracts.yaml's foundation_gaps.save_replay_premise note.
 
     ENCODING, and its one honest gap. `da.public_governance` is an EXISTING registered type
     ("Visible administrative or sovereign-role action", consumed by `faction_layer`) and every

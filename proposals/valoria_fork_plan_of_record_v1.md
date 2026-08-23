@@ -45,7 +45,7 @@ which already duplicated most of it.
 | # | Read | What you get wrong without it |
 |---|---|---|
 | 1 | `CLAUDE.md` §0, §0.1, §5, §8 | The currency protocol, the five measurement checks, and that every rule lives once |
-| 2 | **`references/wiring_manifest.yaml`** | Build/godot/port_rank/parity for 27 modules + 8 adapters. **Read it with §3's caveat** — it is analysis-derived and wrong about at least four modules |
+| 2 | **`references/module_contracts.yaml` `wiring:`** | Build/godot/port_rank/parity for 27 modules + 8 adapters. **Read it with §3's caveat** — it is analysis-derived and wrong about at least four modules |
 | 3 | `systems/_architecture/holonic_container_doctrine_v1.md` §1–§2 | That `Key IN → resolver → OUT` is CANONICAL and frozen, and a second interface dialect is a named forbidden failure |
 | 4 | `godot/godot_conversion_strategy_v1.md` Parts V–VIII | Gate-0's five preconditions, the Stage-1 spine, the per-module ritual. **Do not write a port plan without this** |
 | 5 | `tools/build_fork.py` | That the fork's assembly is already implemented as a tool. Read the code, not a description of it |
@@ -59,10 +59,9 @@ in favour of scoping it.
 **Orient by execution.** Every one of these works today:
 
 ```bash
-python3 tools/wiring_map_check.py --check      # 27/27 modules · 8/8 adapters · tags resolve
-python3 tools/wiring_map_check.py --work-list  # the ranked port order. THE work-list
+python3 tools/export_composition.py --check       # 27 modules · 8/8 adapters · wiring valid (blocking)
+python3 tools/build_contract_index.py --work-list  # the ranked port order. THE work-list
 python3 tools/build_fork.py --out /tmp/fork --verify-only   # fork assembly + self-containment
-python3 tools/review_core.py --check           # repo-state verdict vs review_baseline.yaml
 python3 tools/export_engine_params.py --check  # combat oracle → JSON round-trip (blocking)
 python3 tools/export_sim_params.py --check     # 324 constants, drift gate
 ```
@@ -104,7 +103,7 @@ label-dependent:
 4. **14 of 27 modules are `godot: no-oracle`** — there is nothing to port from — and 2 are marked
    `retire`, so **the live roster is 25, not 27**. This count is a direct field read, not a verdict.
 
-> **Reconciling with the tool.** `wiring_map_check --summary` reports over modules AND adapters
+> **Reconciling with the tool.** The wiring facts cover modules AND adapters
 > together — 35 units: `deferred:11 · design:9 · gated:6 · stub:4 · unwired:3 · live:2`. Modules alone
 > are 27 because modules are the conversion units (one contract = one unit = one parity target).
 > Adapters contribute the other 8. Both are correct; they count different populations.

@@ -7,7 +7,7 @@ authored surface; nothing else reads the artifact.
 
 ⚠ THAT SENTENCE IS NOT TRUE OF THE TREE TODAY, AND THIS FILE SAYS SO RATHER THAN ASSERTING IT.
 Written as a hard invariant it would be RED ON ARRIVAL — `key_types.json`'s one reader is not a leaf,
-`descriptor_registry.yaml` has five parsers, `module_contracts.yaml` has nine — and a gate that is
+`descriptor_registry.yaml` has five parsers, `module_contracts.yaml` has ten — and a gate that is
 red on arrival gets deleted by the next session, which loses the check entirely (`CLAUDE.md` §0.2's
 "a hard assertion would be red on arrival" is the same reasoning the seam ratchet is built on).
 
@@ -33,6 +33,7 @@ tree at large — that generality is what made the old checker apparatus about a
 from __future__ import annotations
 
 import collections
+import functools
 import pathlib
 import re
 
@@ -83,6 +84,7 @@ AUTHORED_PARSERS = {
                                  'tools/registry.py'},
     'module_contracts.yaml': {'tools/export_composition.py',
                               'tools/build_contract_index.py',
+                              'tools/build_execution_map.py',
                               'tools/build_engine_atlas.py',
                               'tools/build_fork.py',
                               'tools/build_key_graph.py',
@@ -122,6 +124,12 @@ def _writers():
     return found
 
 
+@functools.lru_cache(maxsize=None)
+def _quoted(name):
+    """The name appearing inside a string literal, at the end or after path separators."""
+    return re.compile(r"['\"][^'\"]*" + re.escape(name) + r"['\"]")
+
+
 def _readers_under(root, names):
     """Modules under `root` that BIND one of `names` as a path — not ones that mention it.
 
@@ -139,7 +147,15 @@ def _readers_under(root, names):
             if stripped.startswith('#'):
                 continue
             for n in names:
-                if f'"{n}"' not in ln and f"'{n}'" not in ln:
+                # The name must be INSIDE a string literal, but it need not be the WHOLE literal:
+                # `_load_yaml('references/module_contracts.yaml')` binds the path in one piece, and
+                # requiring a quote immediately BEFORE the name missed every reader written that
+                # way -- nine parsers were declared for module_contracts.yaml while
+                # build_execution_map.py, which opens it on one line, went uncounted. Corrected
+                # 2026-08-23 (plan S5c), where that count IS the step's success criterion and an
+                # undercount would have read as a win. A closing quote is still required, so a
+                # bare mention in prose or a docstring still does not match.
+                if not _quoted(n).search(ln):
                     continue
                 context = ' '.join(lines[max(0, i - 1):i + 1])
                 if _PATHISH.search(context):
@@ -195,7 +211,19 @@ def test_no_new_engine_reader_of_a_cooked_artifact():
 def test_no_new_parser_of_an_authored_surface():
     """RATCHET, shrink-only. Every tool that parses an authored surface directly is a second reader
     of a file the exporter is supposed to own. `world_initial_state.yaml` has exactly one and is
-    the worked example; `module_contracts.yaml` has nine and is what S5c is for."""
+    the worked example; `module_contracts.yaml` has TEN.
+
+    ⚠ S5C DID NOT REDUCE THAT TEN, AND SAYING SO IS THE POINT. An earlier draft of this docstring
+    read "has nine and is what S5c is for", which was wrong twice over. Nine was an undercount --
+    the detector above could not see a reader that names the file in one full-path literal, so
+    `build_execution_map.py` went uncounted until S5c corrected the regex. And S5c was never going
+    to move this number: it retired a DIFFERENT authored surface (`wiring_manifest.yaml`, four
+    parsers plus a fifth that read module_contracts by raw regex), and three of those four already
+    parsed this file, so the count stayed flat while one whole registry left the tree. A ratchet
+    that had been graded on "did the number go down" would have scored that as failure.
+
+    The number this step actually moved is the count of authored surfaces, which is not what this
+    test watches. Recorded here so the next session does not read a flat ten as a stalled step."""
     actual = _readers_under('tools', list(AUTHORED_PARSERS))
     problems = []
     for src, declared in AUTHORED_PARSERS.items():

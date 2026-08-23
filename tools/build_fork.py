@@ -77,9 +77,7 @@ CARRY = [
      "sigma-kernel parity oracle (m1_dice_sigma_core)"),
     # The machine-readable spine. These are DATA, not prose: the fork reads them.
     ("references/module_contracts.yaml", "references/module_contracts.yaml",
-     "Key IN -> resolver -> OUT contracts + owned state"),
-    ("references/wiring_manifest.yaml", "references/wiring_manifest.yaml",
-     "build state / godot state / port rank / parity per unit"),
+     "Key IN -> resolver -> OUT contracts + owned state, plus build/godot/port_rank/parity"),
     ("references/key_graph.json", "references/key_graph.json", "merged producer/consumer key graph"),
     ("references/execution_map.json", "references/execution_map.json", "boot->termination spine"),
     ("references/EXECUTION_MAP.md", "references/EXECUTION_MAP.md", "the same map, readable"),
@@ -412,7 +410,7 @@ def main(argv=None):
         if cls.get(k):
             print(f"        {k:20s} {len(cls[k]):>4}")
     # THE UNWIRED SUBSYSTEMS ARE THE BACKLOG, NOT NOISE -- 69 files in one bucket hides which
-    # subsystem and how much of it is real. Crossed with wiring_manifest's build state so the
+    # subsystem and how much of it is real. Crossed with each contract's `wiring:` build state so the
     # bucket reads as a work-list: `unwired` means tested code the loop never calls (the thing
     # the fork exists to fix), `design` means no code to wire yet.
     if cls.get('subsystem_unwired'):
@@ -421,20 +419,17 @@ def main(argv=None):
         # module_contracts' `sim_module` is the mapping, and it may be a FILE or a DIRECTORY.
         unit_of, states = {}, {}
         cpath = os.path.join(out, 'references', 'module_contracts.yaml')
-        mpath = os.path.join(out, 'references', 'wiring_manifest.yaml')
         if yaml is not None and os.path.exists(cpath):
             with open(cpath, encoding='utf-8') as fh:
                 contracts = yaml.safe_load(fh) or {}
             for c in contracts.get('modules') or []:
+                # Build state and the code pointer come off the SAME row now (plan S5c folded
+                # wiring_manifest.yaml in), so this join can no longer half-succeed.
+                states[c['module']] = (c.get('wiring') or {}).get('build')
                 code = c.get('sim_module')
                 if not isinstance(code, str) or code.strip().lower() in ('none', 'null', ''):
                     continue
                 unit_of[code.rstrip('/')] = c['module']
-        if yaml is not None and os.path.exists(mpath):
-            with open(mpath, encoding='utf-8') as fh:
-                m = yaml.safe_load(fh) or {}
-            for name, row in (m.get('modules') or {}).items():
-                states[name] = row.get('build')
 
         def unit_for(rel):
             """Longest matching sim_module prefix -- a directory pointer owns everything under it."""

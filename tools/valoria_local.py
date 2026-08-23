@@ -66,7 +66,6 @@ def main(argv):
         # ED-IN-0142: the register went stale 3x in one session and CI caught it every time,
         # because --check could not fail and this list did not run it. Both fixed.
         ('currency_consistency_check.py', [],        False),  # report-only recency gate (ED-1087)
-        ('wiring_map_check.py',          ['--check'], False),  # report-only wiring-manifest tag/coverage gate (ED-IN-0074)
         ('ci_claim_provenance_check.py', [mode_flag], True),   # a MEASURED ledger claim must name a re-runnable instrument (ED-PC-0040; blocking)
         # RETIRED culling wave 2/3 (ED-IN-0194, 2026-08-21). Two rationale blocks stood here and
         # both argued the posture of gates that no longer exist: `ci_wf_harness_check` /

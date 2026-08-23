@@ -2,7 +2,7 @@
 
 `references/KEY_INDEX.md` + `references/CONTRACT_INDEX.md` exist so the Key graph and the module
 contracts can be READ by a human — the reviewable form of `key_graph.json`, `module_contracts.yaml`
-and `wiring_manifest.yaml`. That makes them exactly the kind of artifact this repo keeps getting
+and (since plan S5c) that same file's `wiring:` facts. That makes them exactly the kind of artifact this repo keeps getting
 burned by: a rendering that was true when generated and quietly stopped being true, while still
 reading as authoritative.
 

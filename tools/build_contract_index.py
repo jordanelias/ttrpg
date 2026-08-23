@@ -15,7 +15,8 @@ This renders them. It is a VIEW — it decides nothing and derives nothing:
   * key rows come from `references/key_graph.json` (generated; the sole owner of the
     registry↔contracts join, including the disagreement classification and the family grouping),
   * module contract bodies come from `references/module_contracts.yaml` (the authored source),
-  * build/port status comes from `references/wiring_manifest.yaml`,
+  * build/port status comes from the same file's `wiring:` facts (folded in from the retired
+    `references/wiring_manifest.yaml`, plan S5c),
   * and the check verdicts come from `skills/valoria-module-adjudicator/scripts/contract_adjudicator.py`
     by IMPORT, not re-implementation (CLAUDE.md §8: never re-implement a rule).
 
@@ -67,7 +68,6 @@ import ci_common  # noqa: E402
 ROOT = ci_common.REPO
 GRAPH = os.path.join(ROOT, 'references', 'key_graph.json')
 CONTRACTS = os.path.join(ROOT, 'references', 'module_contracts.yaml')
-WIRING = os.path.join(ROOT, 'references', 'wiring_manifest.yaml')
 REGISTRY = os.path.join(ROOT, 'systems', '_architecture', 'key_type_registry_v30.md')
 SOURCES = os.path.join(ROOT, 'references', 'canonical_sources.yaml')
 ADJUDICATOR = os.path.join(ROOT, 'skills', 'valoria-module-adjudicator', 'scripts',
@@ -80,7 +80,7 @@ BANNER = ('> **GENERATED** by `tools/build_contract_index.py`. Do not hand-edit 
           'is rendered from a source file and a hand-edit is silently discarded on the next build.\n'
           '> Fix a fact at its source: keys in `systems/_architecture/key_type_registry_v30.md`, '
           'edges and owned state in `references/module_contracts.yaml`, build status in '
-          '`references/wiring_manifest.yaml`.')
+          'the same file\'s `wiring:` facts.')
 
 # How each reconciliation status reads to a reviewer, and — the part that matters — what KIND of
 # answer it needs. A subset is a filing task; a conflict is a design decision. The key graph draws
@@ -106,8 +106,7 @@ def load_all():
     with open(GRAPH, encoding='utf-8') as fh:
         graph = json.load(fh)
     contracts = ci_common.load_yaml(CONTRACTS)
-    wiring = ci_common.load_yaml(WIRING)
-    return graph, contracts, wiring
+    return graph, contracts
 
 
 def adjudicate():
@@ -457,17 +456,18 @@ def render_keys(graph, contracts) -> str:
 
 # ── CONTRACT_INDEX.md ────────────────────────────────────────────────────────
 
-def render_modules(graph, contracts, wiring, violations, warnings) -> str:
+def render_modules(graph, contracts, violations, warnings) -> str:
     mods = contracts['modules']
     mods = mods if isinstance(mods, list) else list(mods.values())
     mods = sorted(mods, key=lambda m: m.get('module') or '')
     gmods = graph['modules']
-    wmods = wiring.get('modules') or {}
+    # Wiring facts now hang off the contract row itself, so this join cannot miss.
+    wmods = {m.get('module'): (m.get('wiring') or {}) for m in mods}
 
     L = [f'# Valoria — Module Contract Index ({len(mods)} modules)', '', BANNER, '']
     L += ['**Sources joined:** `references/module_contracts.yaml` (authored contracts) + '
-          '`references/key_graph.json` (generated homes/authority) + '
-          '`references/wiring_manifest.yaml` (build + port status). '
+          '`references/key_graph.json` (generated homes/authority); build + port status are '
+          'the contracts file\'s own `wiring:` facts. '
           'Key-level companion: [KEY_INDEX.md](KEY_INDEX.md).', '']
     L += ['`authority` is derived, not stored (Jordan\'s 2026-08-02 precedence rule): **code** if a '
           'declared `sim_module` resolves on disk **or the module is on `build_key_graph.py`\'s '
@@ -561,8 +561,8 @@ def render_modules(graph, contracts, wiring, violations, warnings) -> str:
         ])
     L += table(['module', 'scales', 'resolver', 'authority', 'build', 'godot',
                 'IN', 'OUT', 'state', 'gates', 'derivations'], rows)
-    L += ['`build` / `godot` columns are from `wiring_manifest.yaml` '
-          f'(as_of {wiring.get("as_of")}); a blank means the module has no row there.', '']
+    L += ['`build` / `godot` columns are each module row\'s `wiring:` facts '
+          f'(as_of {contracts.get("wiring_as_of")}); a blank means the row declares none.', '']
 
     # ── per-module detail ──
     L += ['---', '', '## Module detail', '']
@@ -633,13 +633,62 @@ def render_modules(graph, contracts, wiring, violations, warnings) -> str:
 # ── driver ───────────────────────────────────────────────────────────────────
 
 def build():
-    graph, contracts, wiring = load_all()
+    graph, contracts = load_all()
     violations, warnings = adjudicate()
     return {OUT_KEYS: render_keys(graph, contracts),
-            OUT_MODULES: render_modules(graph, contracts, wiring, violations, warnings)}
+            OUT_MODULES: render_modules(graph, contracts, violations, warnings)}
+
+
+
+def _wiring_units(contracts):
+    """(name, kind, wiring_row) for every conversion unit — 27 modules + 8 adapters."""
+    mods = contracts.get('modules') or []
+    mods = mods if isinstance(mods, list) else list(mods.values())
+    for m in mods:
+        yield m.get('module'), 'module', (m.get('wiring') or {})
+    for name, a in (contracts.get('adapters') or {}).items():
+        yield name, 'adapter', (a or {})
+
+
+def cmd_worklist(contracts):
+    """The ranked Godot port work-list.
+
+    PORTED HERE FROM `tools/wiring_map_check.py`, which plan S5c retired along with the separate
+    manifest it queried. The gate half of that tool moved to `export_composition.py --check`
+    (the only blocking CI job over this registry); this is the query half, and it lands here
+    because this is already the tool that renders the registry for humans. It is not wired into
+    CI and is not meant to be — it answers a question, it does not enforce anything.
+    """
+    units = list(_wiring_units(contracts))
+    portable = sorted(((n, k, w) for n, k, w in units if w.get('godot') == 'python-oracle'),
+                      key=lambda t: (t[2].get('port_rank', 5), t[0]))
+    blocked = sorted((t for t in units if t[2].get('godot') == 'no-oracle'), key=lambda t: t[0])
+    ported = [t for t in units if t[2].get('godot') in ('gd-ported', 'typed-exported')]
+    retire = [n for n, k, w in units if w.get('godot') == 'retire']
+
+    print('═══ GODOT PORT WORK-LIST ═══  (source: references/module_contracts.yaml `wiring:`)\n')
+    print(f'✓ ALREADY PORTED ({len(ported)}): ' + ', '.join(n for n, _, _ in ported)
+          + '  — the golden path template\n')
+    print(f'▶ NEXT — has a Python oracle, no GDScript yet ({len(portable)}), ranked:')
+    for name, kind, w in portable:
+        print(f"   [{w.get('port_rank')}] {kind:7} {name:20} {w.get('build',''):9} "
+              f"parity:{w.get('parity','?'):12} {w.get('note','')}")
+    print(f'\n⛔ BLOCKED — no oracle; author canon first ({len(blocked)}):')
+    for name, kind, w in blocked:
+        print(f"       {kind:7} {name:20} {w.get('build',''):9} {w.get('note','')}")
+    if retire:
+        print(f"\n🗑  RETIRE (do not port): {', '.join(retire)}")
+    gaps = contracts.get('foundation_gaps') or {}
+    if gaps:
+        print('\n⚠ FOUNDATION GAPS (block whole tiers, not single units):')
+        for k, v in gaps.items():
+            print(f"       {k}: {(v or {}).get('note','')}")
 
 
 def main(argv):
+    if '--work-list' in argv:
+        cmd_worklist(ci_common.load_yaml(CONTRACTS))
+        return 0
     docs = build()
     check = '--check' in argv
     stale = []

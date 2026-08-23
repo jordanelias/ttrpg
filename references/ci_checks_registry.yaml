@@ -345,9 +345,9 @@ ci_checks:
     level: 5
     layer: L1
     posture: harden
-    role: "Registry -> typed-JSON: engine/engine_params/composition.json must match references/module_contracts.yaml composition_roles (--check mode). It is the writer for engine/substrate/composition.py, through which engine/mc_v18.py resolves its subsystem callables by ROLE instead of importing them by name."
+    role: "THE validator of references/module_contracts.yaml, and the writer of one block of it. (a) Registry -> typed-JSON: engine/engine_params/composition.json must match the composition_roles: block (--check mode); it is the writer for engine/substrate/composition.py, through which engine/mc_v18.py resolves its subsystem callables by ROLE instead of importing them by name. (b) Wiring validation, absorbed from the retired tools/wiring_map_check.py (plan S5c, 2026-08-23): every module row carries a wiring: block, every adapters: tag resolves to engine/cross_scale/<name>.py with 8/8 coverage, and every build/godot value is in wiring_vocabularies."
     ci_job: validators
-    notes: "Added 2026-08-20 (plan Act C3 seam 2). BLOCKING. It IMPORTS AND RESOLVES every declared target at export time, which is the whole reason import-by-string is safe here: a typo or a moved module reds this gate rather than failing a campaign run. Before this, engine/mc_v18.py:37-38 imported systems.factions.sim.faction_action and systems.overview.sim.season at module level — the root naming its own dependents, and one half of the live package cycle faction_action -> engine.autoload.game_state -> systems.factions.sim.treaty. Falsifier: tests/valoria/test_engine_does_not_import_systems.py asserts require() RAISES on an undeclared role (no silent default) and that every declared role resolves."
+    notes: "Added 2026-08-20 (plan Act C3 seam 2). BLOCKING. It IMPORTS AND RESOLVES every declared target at export time, which is the whole reason import-by-string is safe here: a typo or a moved module reds this gate rather than failing a campaign run. Before this, engine/mc_v18.py:37-38 imported systems.factions.sim.faction_action and systems.overview.sim.season at module level — the root naming its own dependents, and one half of the live package cycle faction_action -> engine.autoload.game_state -> systems.factions.sim.treaty. Falsifier: tests/valoria/test_engine_does_not_import_systems.py asserts require() RAISES on an undeclared role (no silent default) and that every declared role resolves. The wiring half arrived here in plan S5c because it is the ONLY blocking CI job over this registry — build_contract_index.py, the natural home on subject grounds, is wired into no workflow, so retiring the rules there would have deleted them while appearing to move them. Two of wiring_map_check's five rules are NOT ported and are not lost: 'every wiring tag resolves to a module contract' and 'coverage is 27/27' were checks against a SECOND registry keyed by the same names, and the fold makes them unfailable. All five surviving rules mutation-verified 2026-08-23."
 
   - path: tools/export_world_initial_state.py
     level: 5
@@ -376,14 +376,6 @@ ci_checks:
     role: "registers/mechanics_index.yaml schema + cross-reference validator: required fields, valid scale/test_status enums, gd_applicable resolves, sim_module/canon_sources paths exist, GD-1 victory_paths singularity."
     ci_job: validators-report
     notes: "Fully CI-shaped (--strict exit-code contract) but never wired before 2026-07-11 (Phase 2 item 7). Report-only (continue-on-error). Not listed in ci-summary's needs."
-
-  - path: tools/wiring_map_check.py
-    level: 5
-    layer: L1
-    posture: harden
-    role: "Report-only wiring-manifest gate (ED-IN-0074): every module:/adapter: tag in references/wiring_manifest.yaml resolves in its live registry (module_contracts.yaml, engine/cross_scale/), full 27/27 + 7/7 coverage, valid build/godot vocab. Backs the MC-wiring map (designs/audit/2026-07-17-mc-wiring-coverage-audit/wiring_map.html) — catches a module rename / moved adapter as a caught error, not silent drift."
-    ci_job: validators-report
-    notes: "Added 2026-07-18 (ED-IN-0074 follow-up). Report-only (continue-on-error): the manifest is analysis-derived, not ratified canon, so a legitimate rename shouldn't block an unrelated PR. Also runs locally via valoria_local.py --staged (report-only). The same tool also emits --work-list (ranked Godot port queue), --summary, and --emit-map-json (regenerates the map's embedded PORT block). Flip to blocking (drop continue-on-error, add to ci-summary needs) once the manifest ratifies."
 
   - path: tools/validate_ed_citations.py
     level: 5

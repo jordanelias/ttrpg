@@ -4,7 +4,8 @@ WHY THIS EXISTS, and it is a self-correction. On 2026-08-03 I measured `Faction.
 at 4 of 4 factions and recorded the evidence as merely "thin". It was not thin, it was ABSENT:
 three of the four sat exactly on the 0.5/7.0 clamps, and a clamped rebuild agrees with a clamped
 actual whether or not the deltas are right. The number was a measurement of the clamp, not of the
-log. `references/wiring_manifest.yaml` carries the corrected note.
+log. `references/module_contracts.yaml`'s `foundation_gaps.save_replay_premise` carries the
+corrected note (it was `wiring_manifest.yaml`'s until plan S5c folded that file in).
 
 Re-measured on horizons short enough that values have not saturated, so 3-4 factions per run are
 genuine comparisons:
@@ -106,7 +107,7 @@ def test_the_sample_is_informative(run):
 @pytest.mark.xfail(strict=True, reason=(
     "OPEN GAP, not a flake: 30 of Faction.adjust()'s 31 non-test call sites emit no Key, so the "
     "log lacks most L deltas. Strict, so this fails as XPASS the moment L starts reconstructing — "
-    "at which point update references/wiring_manifest.yaml's save_replay_premise note too."))
+    "at which point update module_contracts.yaml's foundation_gaps.save_replay_premise note too."))
 def test_faction_L_reconstructs_from_the_key_log(run):
     initial, final, log = run
     rebuilt = _rebuild_L(initial, log)

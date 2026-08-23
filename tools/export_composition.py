@@ -20,9 +20,20 @@ than the direct import it replaced.
 A row may declare `kind: value` for a module CONSTANT; the default `kind: callable` keeps the
 original assertion. See `_KINDS` for why that widening exists and why it is per-row.
 
+IT ALSO VALIDATES THE `wiring:` FACTS, and that is a second rule in one tool, so here is why.
+Plan S5c folded `references/wiring_manifest.yaml` — a second registry keyed by the same 27 module
+names — into this file. Three of that manifest's gate's rules survive the fold; two die because a
+join makes them unfailable (see `validate_wiring`). The survivors needed a home that CI actually
+runs, and this is the ONLY blocking CI gate whose subject is `references/module_contracts.yaml`:
+`build_contract_index.py`, the earlier candidate and the natural home on subject grounds, is wired
+into no workflow at all, so retiring the rules there would have deleted them while appearing to
+move them. The rule count over this registry goes 3 -> 2, in a tool that already parses it.
+
 Usage:
     python3 tools/export_composition.py           # write engine/engine_params/composition.json
     python3 tools/export_composition.py --check   # re-derive and diff vs committed (exit 1 on drift)
+
+Both modes also run `validate_wiring`; it is cheap and a broken wiring row is broken either way.
 """
 from __future__ import annotations
 
@@ -74,6 +85,70 @@ def _resolve(target, kind):
     return fn
 
 
+#: The directory the `adapters:` tags name. The retired manifest declared this as a `registries:`
+#: map entry alongside `key:` and `quantity:` rows that its own validator never read; only the
+#: adapter path was ever consumed, so it is a constant here rather than authored indirection.
+ADAPTER_DIR = os.path.join(REPO, 'engine', 'cross_scale')
+
+
+def validate_wiring(contracts):
+    """Return a list of failures in the `wiring:` facts (empty == green).
+
+    TWO OF THE FIVE RULES `tools/wiring_map_check.py --check` ENFORCED ARE GONE, AND NOT BECAUSE
+    THEY WERE DROPPED. It checked that every wiring tag resolved to a module contract, and that
+    module coverage was 27/27, against a SEPARATE registry keyed by the same module names. Folding
+    those facts onto the row they describe makes both unfailable: there is no longer a second key
+    space that can disagree. What replaces them is cheaper and stricter — rule 1 below asserts the
+    key is PRESENT, which is the only way the fold can now be undone by accident. The other three
+    (adapter resolution, adapter coverage, vocabulary) are ported verbatim below.
+
+    The adapter rules do NOT become structural, because adapter tags name FILES on disk rather than
+    rows in this registry, so they are ported as-is.
+    """
+    fails = []
+    vocab = contracts.get('wiring_vocabularies') or {}
+    builds, godots = set(vocab.get('build_states') or ()), set(vocab.get('godot_states') or ())
+    if not builds or not godots:
+        return ['module_contracts.yaml: wiring_vocabularies is missing build_states/godot_states — '
+                'every wiring row below is unvalidatable without it.']
+
+    # 1) every module row carries wiring facts (the fold's 27/27 coverage, re-expressed)
+    entries = []
+    for row in contracts.get('modules') or []:
+        w = row.get('wiring')
+        if not isinstance(w, dict):
+            fails.append(f"module:{row.get('module')} has no `wiring:` block — a module contract "
+                         f"without a build state is invisible to the port work-list. Add one, or "
+                         f"say in the row why this module has no build state.")
+            continue
+        entries.append((f"module:{row.get('module')}", w))
+
+    # 2) every adapter tag resolves to engine/cross_scale/<name>.py, and coverage is total
+    declared = contracts.get('adapters') or {}
+    try:
+        on_disk = {f[:-3] for f in os.listdir(ADAPTER_DIR)
+                   if f.endswith('.py') and not f.startswith('__')}
+    except OSError as exc:
+        return fails + [f'cannot read {os.path.relpath(ADAPTER_DIR, REPO)}: {exc}']
+    for name in sorted(set(declared) - on_disk):
+        fails.append(f'adapter:{name} does not resolve in engine/cross_scale/ — renamed or moved?')
+    # Coverage counts tags that RESOLVE, not tags that exist: a renamed row keeps len(declared)
+    # at 8 and would otherwise print "8/8" on the same run that reports the rename as a failure.
+    resolving = len(set(declared) & on_disk)
+    for name in sorted(on_disk - set(declared)):
+        fails.append(f'adapter coverage {resolving}/{len(on_disk)} — engine/cross_scale/{name}.py '
+                     f'is undeclared. Every cross-scale seam is a conversion unit; add its row.')
+    entries += [(f'adapter:{n}', e) for n, e in declared.items()]
+
+    # 3) valid vocabulary on every entry
+    for tag, e in entries:
+        if e.get('build') not in builds:
+            fails.append(f'{tag} bad build state {e.get("build")!r} — not in wiring_vocabularies.build_states')
+        if e.get('godot') not in godots:
+            fails.append(f'{tag} bad godot state {e.get("godot")!r} — not in wiring_vocabularies.godot_states')
+    return fails
+
+
 def build():
     contracts = ci_common.load_yaml(SRC, default=None)
     if not contracts:
@@ -108,6 +183,14 @@ def build():
 
 
 def main(argv):
+    contracts = ci_common.load_yaml(SRC, default=None) or {}
+    wiring_fails = validate_wiring(contracts)
+    if wiring_fails:
+        print('[composition] wiring FAILED validation in references/module_contracts.yaml:')
+        for f in wiring_fails:
+            print('   -', f)
+        return 1
+
     text = json.dumps(build(), indent=2, sort_keys=False) + '\n'
     if '--check' in argv:
         if not os.path.exists(OUT):
@@ -117,7 +200,9 @@ def main(argv):
             print(f'[composition] DRIFT — {os.path.relpath(OUT, REPO)} is stale. '
                   f'Run: python3 tools/export_composition.py')
             return 1
-        print(f'[composition] OK — {len(json.loads(text)["roles"])} role(s), every target resolved.')
+        print(f'[composition] OK — {len(json.loads(text)["roles"])} role(s), every target resolved; '
+              f'wiring valid for {len(contracts.get("modules") or [])} module(s) + '
+              f'{len(contracts.get("adapters") or {})} adapter(s).')
         return 0
     with open(OUT, 'w') as fh:
         fh.write(text)
