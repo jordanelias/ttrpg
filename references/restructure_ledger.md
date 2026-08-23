@@ -24,6 +24,32 @@
 #   skills/valoria-orchestrator/SKILL.md — params paths
 #   skills/valoria-simulator/SKILL.md — params, design paths
 
+## HOW A ROW IS READ (D1, decided 2026-08-23, S6/ED-IN-0194)
+
+Two rules govern every table in this file. They are stated here because this is where a reader
+meets a surprising row, and because until 2026-08-23 the two resolvers that read this file
+disagreed about both.
+
+1. **A LATER ROW SUPERSEDES AN EARLIER ONE FOR THE SAME KEY.** The file is appended
+   chronologically, so a second row for one path records a second, later move. **Eight keys carry
+   conflicting targets today** — `designs/arcs/`, `designs/arcs/arc_expansion_v30.md`,
+   `references/values_master.yaml` (each a 2026-08-05 evacuation superseding an earlier
+   relocation), three `designs/combat/*` rows and two `designs/conviction_track/*` rows (each a
+   later consolidation superseding the first move). Last-wins is right for all eight: the three
+   FORK rows are the evacuation, and in the five relocation cases the later row's target is the one
+   that exists on disk. Do not "de-duplicate" them — the pair IS the history, exactly as an
+   append-only ledger id's effective status is its last row.
+
+2. **A `FORK:` row resolves to `FORK:<ref>:<path>`, the paired form.** That is what
+   `git cat-file -e <ref>:<path>` takes, so it is the only shape in which the row's promise —
+   *the content is at this ref* — can be checked. `tools/pathres.py`'s `fork_pointer()` is the
+   single owner of that shape and `broken_dependency_checker` calls it; a bare `FORK:<ref>` names a
+   commit and leaves the reader guessing which path inside it.
+
+⚠ **Prefer an EXACT file row over a dir-prefix row when recording a fork.** A dir-prefix `FORK:`
+row has no existence check, so it resolves *any* invented filename under that namespace — which
+shipped once and made a fabricated `MEASURED-BY:` path pass across 162 namespaces (`CLAUDE.md` §8).
+
 ## MOVES (470 files)
 
 | Old Path | New Path | Status |

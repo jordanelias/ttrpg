@@ -21,7 +21,9 @@ import os, sys, re
 # owned by tools/ci_common.py — plan G7, ED-IN-0159 §8.3. See its module docstring;
 # the two lines below are the bootstrap, anchored on THIS file's directory.
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import ci_common  # noqa: E402
+import ci_common
+import pathres as _pathres  # noqa: E402 — the FORK-pointer shape has ONE owner (D1); the
+                                # ledger PARSER deliberately stays independent here, see _resolve_remap  # noqa: E402
 
 REPO_ROOT = ci_common.REPO
 
@@ -153,7 +155,11 @@ def _resolve_remap(ref, remap):
     None if nothing matches; the caller still verifies the mapped home actually exists,
     so a prefix match to a nonexistent path stays BROKEN (never a false pass)."""
     if ref in remap:
-        return remap[ref]          # may be a FORK:<ref> sentinel; the caller checks
+        # ONE OWNER FOR THE FORK SHAPE (D1, 2026-08-23, S6): pathres.fork_pointer. This branch used
+        # to return the sentinel BARE while the dir-prefix branch below returned it PAIRED — two
+        # answers inside one function, and a third in pathres, for the same row shape. Paired is
+        # the one that can be checked: `git cat-file -e <ref>:<path>`.
+        return _pathres.fork_pointer(remap[ref], ref) if _is_forked(remap[ref]) else remap[ref]
     best = None
     for old, new in remap.items():
         if old.endswith('/') and ref.startswith(old) and (best is None or len(old) > len(best[0])):
@@ -166,7 +172,7 @@ def _resolve_remap(ref, remap):
         # the original prefix, producing an unfollowable pointer like
         # `FORK:c451bcb2026-07-13-cross-scale-governance-grounding/README.md`. Keep the sentinel
         # followable by pairing it with the full original ref: `FORK:<ref>:<ref-path>`.
-        return f"{new}:{ref}"
+        return _pathres.fork_pointer(new, ref)
     return new + ref[len(old):]
 
 

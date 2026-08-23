@@ -98,6 +98,35 @@ LIVE, ALIASED, DEAD, FORKED = 'LIVE', 'ALIASED', 'DEAD', 'FORKED'
 FORK_PREFIX = 'FORK:'
 
 
+def fork_pointer(sentinel: str, path: str) -> str:
+    """THE one answer to "what does a FORK row resolve to" (D1, decided 2026-08-23, S6).
+
+    A FORK row's whole promise is *the content is at this ref*. The only form in which that promise
+    can be CHECKED is the paired one — `FORK:<ref>:<path>` — because that is what
+    `git cat-file -e <ref>:<path>` takes. A bare `FORK:<ref>` names a commit and leaves the reader
+    to guess which path inside it, and `broken_dependency_checker` already learned this the
+    expensive way: its dir-prefix branch carries a comment about a bare concatenation producing
+    `FORK:c451bcb2026-07-13-.../README.md`, an unfollowable pointer with the separator eaten.
+
+    Before this, THREE answers were in circulation for one row shape, and the divergence was
+    measured rather than assumed — 166 of 1,363 probes disagreed on the fork shape alone:
+
+      bdc, exact row      `FORK:<ref>`              (bare — the row key was dropped)
+      bdc, prefix row     `FORK:<ref>:<path>`       (paired — the form that works)
+      pathres, either     `FORK:<ref>`              (bare, for both)
+
+    Idempotent by construction: a sentinel that is already paired comes back unchanged, so a
+    caller may apply it to a value of unknown provenance without double-appending.
+    """
+    if not sentinel.startswith(FORK_PREFIX):
+        return sentinel
+    # `FORK:<ref>` splits into exactly 2 parts; `FORK:<ref>:<path>` into 3+. Refs used here are
+    # short SHAs and `refs/tags/...` names, neither of which contains a colon.
+    if len(sentinel.split(':')) >= 3:
+        return sentinel
+    return f'{sentinel}:{path}'
+
+
 @dataclasses.dataclass(frozen=True)
 class Resolution:
     """What a path reference actually points at. Deliberately not a string — see the module docstring."""
@@ -151,9 +180,25 @@ def load_alias_map(root: str = REPO) -> tuple[dict[str, str], list[tuple[str, st
     else:
         with open(path, encoding='utf-8') as fh:
             rows = _ROW_RE.findall(fh.read())
+        # LATER ROW WINS for a repeated key (D1, decided 2026-08-23, S6). The ledger is appended
+        # chronologically, so a second row for one path is a LATER move superseding an earlier one
+        # — `designs/arcs/ -> arcs/` (2026-07-16) then `designs/arcs/ -> FORK:c451bcb` (the
+        # 2026-08-05 evacuation). MEASURED: EIGHT keys carry conflicting targets, and last-wins is
+        # demonstrably right for every one — the three FORK cases are evacuations superseding a
+        # relocation, and in the five relocation cases the later row's target is the one that
+        # exists on disk.
+        #
+        # The exact-row dict below ALREADY did this (a comprehension keeps the last binding), so
+        # the rule is not new — it was simply not applied to prefix rows, where equal-length keys
+        # sort as ties and file order made the FIRST win. That single asymmetry is why
+        # `broken_dependency_checker` called `designs/arcs/` FORKED while this module called it
+        # DEAD: one ledger row, two answers, which is the defect D1 exists to end.
         exact = {old: new for old, new in rows if not old.endswith('/')}
-        prefix = sorted(((old, new) for old, new in rows if old.endswith('/')),
-                        key=lambda pair: -len(pair[0]))
+        _prefix_last = {}
+        for old, new in rows:
+            if old.endswith('/'):
+                _prefix_last[old] = new          # later row overwrites earlier
+        prefix = sorted(_prefix_last.items(), key=lambda pair: -len(pair[0]))
         result = (exact, prefix)
     _MAP_CACHE[root] = result
     return result
@@ -162,9 +207,22 @@ def load_alias_map(root: str = REPO) -> tuple[dict[str, str], list[tuple[str, st
 def resolve(ref: str, root: str = REPO, max_hops: int = MAX_ALIAS_HOPS) -> Resolution:
     """Resolve a repo-relative reference through the alias map to a file that exists.
 
-    `max_hops=1` reproduces `broken_dependency_checker`'s historical single-hop behaviour exactly;
-    the default chases chains (the ledger contains a real 2-hop chain:
-    `references/params_core.md` -> `params/core.md` -> `engine/params/core.md`).
+    `max_hops=1` matches `broken_dependency_checker`'s single HOP COUNT; the default chases chains
+    (the ledger contains a real 2-hop chain: `references/params_core.md` -> `params/core.md` ->
+    `engine/params/core.md`).
+
+    ⚠ IT DOES NOT REPRODUCE `_resolve_remap` — the claim that stood here until 2026-08-23 (D1) said
+    "reproduces ... exactly" and it was false in a way that would have broken a BLOCKING gate on
+    port. MEASURED over every ledger row plus a synthetic path under every dir-prefix row: **654 of
+    1,363 probes disagree**, and the disagreement is not a bug in either one. They answer different
+    questions. `_resolve_remap` is a pure MAP LOOKUP — "what does the ledger say this became" — and
+    its caller does its own existence check afterwards. `resolve()` folds the existence check in and
+    reports DEAD when the mapped target is absent. So every ledger row whose target no longer exists
+    (`canon/... -> tests/audit/...`, and 600-odd more) returns a path from one and DEAD from the
+    other, correctly, in both cases.
+
+    The fork SHAPE was a real divergence and is fixed — both now go through `fork_pointer()`. The
+    existence semantics are a real DIFFERENCE and porting one onto the other is not a refactor.
     """
     ref = ref.strip()
     if os.path.exists(os.path.join(root, ref)):
@@ -182,13 +240,13 @@ def resolve(ref: str, root: str = REPO, max_hops: int = MAX_ALIAS_HOPS) -> Resol
             nxt = exact[current]
             hops.append((current, nxt))
             if nxt.startswith(FORK_PREFIX):
-                return Resolution(ref, FORKED, nxt, tuple(hops))
+                return Resolution(ref, FORKED, fork_pointer(nxt, current), tuple(hops))
         else:
             for old, new in prefix:
                 if current.startswith(old):
                     if new.startswith(FORK_PREFIX):
                         hops.append((old, new))
-                        return Resolution(ref, FORKED, new, tuple(hops))
+                        return Resolution(ref, FORKED, fork_pointer(new, current), tuple(hops))
                     nxt = new + current[len(old):]
                     hops.append((old, new))
                     break
