@@ -305,20 +305,63 @@ def test_the_parity_oracle_is_not_evacuated():
 
 
 def test_the_ed_universe_survives_evacuation(part):
-    """The blocking citation gate reads its ED universe from three deprecated/ dirs.
+    """The blocking citation gate reads its ED universe from files on disk. They must be KEPT.
 
-    Evacuating them turns `validate_ed_citations` red on the evacuation commit — its own docstring
-    records losing ONE such dir turning 110 valid citations into NONEXISTENT. They must survive.
+    Evacuating them turns `validate_ed_citations` red — its own docstring records losing ONE such
+    directory turning 110 valid citations into NONEXISTENT.
+
+    ⚠ RE-EXPRESSED 2026-08-23 (S6/6b), AND THE REASON IS THE POINT. This test used to scan the
+    evacuate set for paths under `deprecated/archives/editorial{,s}/` and `deprecated/canon/`.
+    R-REL-EDUNIVERSE then MOVED every one of those files to `registers/archive/` and the three
+    directories ceased to exist — so the old assertion passed over an empty list, forever, and
+    would have gone on passing if the relocated archive were deleted tomorrow. A guard whose
+    subject moved is a guard that no longer observes anything.
+
+    It now reads the gate's OWN `ARCHIVE_GLOBS` rather than a hardcoded location, so the next
+    relocation cannot silently blind it either, and asserts what actually matters: every file the
+    ED universe is loaded from is classified `keep`.
     """
+    import importlib.util as _ilu
+    spec = _ilu.spec_from_file_location(
+        'ved_for_evac', os.path.join(os.path.dirname(HERE), '..', 'tools', 'validate_ed_citations.py'))
+    ved = _ilu.module_from_spec(spec)
+    sys.path.insert(0, os.path.join(os.path.dirname(HERE), '..', 'tools'))
+    spec.loader.exec_module(ved)
+
+    universe_dirs = ved.ARCHIVE_GLOBS
+    assert universe_dirs, 'the citation gate declares no archive location at all'
+
     evac = set(part['buckets']['evacuate'])
-    import fnmatch
-    stranded = [p for p in evac
-                if p.startswith(('deprecated/archives/editorial/',
-                                 'deprecated/archives/editorials/', 'deprecated/canon/'))
-                and ('ledger' in os.path.basename(p) or 'editorial' in os.path.basename(p))]
+    stranded = [p for p in evac if p.startswith(universe_dirs)]
     assert stranded == [], (
         f'{len(stranded)} ED-archive file(s) in the evacuate set would break the blocking '
         f'citation gate, e.g. {stranded[:3]}')
+
+    # ...and the classifier must actively say `keep`, not merely omit them. An archive that is in
+    # no bucket at all would pass the assertion above while being just as absent from the tree.
+    ledger_files = [f for f in ved._walk_archive_files() if 'editorial' in os.path.basename(f)]
+    assert len(ledger_files) >= 20, (
+        f'the ED archive holds {len(ledger_files)} ledger file(s); it has been thinned or moved '
+        f'out from under {universe_dirs}')
+    for f in ledger_files:
+        verdict, rule_id, _ = ep.classify(f)
+        assert verdict == 'keep', f'{f} classified {verdict} by {rule_id}; the ED universe reads it'
+
+
+def test_the_ed_universe_guard_can_fail():
+    """POSITIVE CONTROL for the test above (CLAUDE.md §0.1 pt 2).
+
+    A guard re-pointed at a moving target has to prove it can still object. Plant a path under the
+    gate's declared archive location into a constructed evacuate set and require a complaint.
+    """
+    import importlib.util as _ilu
+    spec = _ilu.spec_from_file_location(
+        'ved_for_evac2', os.path.join(os.path.dirname(HERE), '..', 'tools', 'validate_ed_citations.py'))
+    ved = _ilu.module_from_spec(spec)
+    spec.loader.exec_module(ved)
+    planted = ved.ARCHIVE_GLOBS[0] + 'editorial_ledger_archive_planted.yaml'
+    stranded = [p for p in {planted} if p.startswith(ved.ARCHIVE_GLOBS)]
+    assert stranded, 'the stranded-archive scan cannot see a file under the declared archive dir'
 
 
 # --------------------------------------------------------------------------------------

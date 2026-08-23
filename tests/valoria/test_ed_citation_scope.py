@@ -75,7 +75,8 @@ def test_the_ed_universe_still_contains_archived_ids(ved):
     losing the archives turns valid citations into NONEXISTENT and fails the build wrongly."""
     u = ved.load_ed_universe(warn=False)
     assert len(u) > 1150, f"ED universe collapsed to {len(u)} — archive loading is starved"
-    # ED-391 lives ONLY in deprecated/archives/editorials/, i.e. outside SCAN_PREFIXES entirely
+    # ED-391 lives ONLY in the frozen archive (registers/archive/, relocated out of
+    # deprecated/archives/editorials/ on 2026-08-23), i.e. outside SCAN_PREFIXES entirely
     assert u.get('ED-391') == 'resolved', "archive-only ids are missing from the universe"
 
 

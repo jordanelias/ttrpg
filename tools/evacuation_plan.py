@@ -125,26 +125,20 @@ RELOCATE = [
     (lambda p: p == 'audit/2026-06-03-contest-groundup/engine.py',
      'engine/reference/contest-groundup/', 'R-REL-ORACLE',
      'frozen parity oracle -- the last executable dependency of kept code on audit/'),
-    # THE ED UNIVERSE. tools/validate_ed_citations.py -- a BLOCKING CI gate -- builds its set of
-    # valid ED ids from registers/ PLUS three directories under deprecated/ (its ARCHIVE_GLOBS at
-    # :145): deprecated/archives/editorial/, .../editorials/, and deprecated/canon/. 26 files,
-    # roughly ED-001..ED-1200.
-    # R-DEPRECATED would evacuate all of them, and the gate's OWN docstring (:347-350) records what
-    # that costs: losing ONE of those dirs shrank the universe 1167 -> 1107 and turned 110 VALID
-    # citations into NONEXISTENT. NONEXISTENT is never deferred (:377-381), so the evacuation commit
-    # would turn a blocking gate red -- and the tempting field fix (suppress NONEXISTENT) would
-    # destroy the repo's only anti-fabrication citation check. The semantic being protected is
-    # ED-IN-0075's: an archived ED is LEGITIMATE, not missing. A partial universe cannot tell a
-    # typo from a fabrication from a correctly-archived id.
-    # So they relocate rather than evacuate -- and this IS Jordan's "start fresh for registers":
-    # frozen archive beside the active register, new work on a clean surface, provenance intact.
-    # EXECUTION NOTE: add 'registers/archive/' to ARCHIVE_GLOBS in the same commit, and re-run the
-    # gate to confirm the universe size is unchanged.
-    (lambda p: (p.startswith(('deprecated/archives/editorial/', 'deprecated/archives/editorials/',
-                              'deprecated/canon/'))
-                and ('ledger' in os.path.basename(p) or 'editorial' in os.path.basename(p))),
-     'registers/archive/', 'R-REL-EDUNIVERSE',
-     'ED archive read by the BLOCKING citation gate -- evacuating it turns CI red on day one'),
+    # THE ED UNIVERSE -- R-REL-EDUNIVERSE, EXECUTED AND RETIRED 2026-08-23 (S6/6b).
+    #
+    # It ruled that the 26 frozen ED-archive fragments under deprecated/archives/editorial/,
+    # .../editorials/ and deprecated/canon/ must RELOCATE to registers/archive/ rather than
+    # evacuate, because tools/validate_ed_citations.py -- a BLOCKING gate -- builds its ED
+    # universe by READING them, and losing one of those directories once shrank the universe
+    # 1167 -> 1107 and turned 110 VALID citations into NONEXISTENT.
+    #
+    # The move happened. All three source directories are gone, so the predicate can never match
+    # again, and a rule that cannot fire is not a weaker guard -- it is an absent one that reads
+    # like a present one (CLAUDE.md 0.1 pt 2). The property it protected did NOT go with it: the
+    # files are now covered by R-REGISTERS ('keep'), and the guard moved with them --
+    # tests/valoria/test_evacuation_plan.py::test_the_ed_universe_survives_evacuation now asserts
+    # the ED archive is kept AT ITS REAL LOCATION, which is a claim that can still fail.
 ]
 
 

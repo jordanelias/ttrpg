@@ -103,6 +103,14 @@ EXCLUDE = (
                                   # entry had matched nothing since — the same dead-path class
                                   # this exclusion now covers.
     'registers/editorial_ledger',
+    # The frozen ED archives, relocated out of `deprecated/` 2026-08-23 (S6/6b,
+    # evacuation_plan's R-REL-EDUNIVERSE). FOUR of the 26 fragments quote the deprecated
+    # name as historical DATA, and they were covered here only by the blanket
+    # 'deprecated/' entry two lines up — so the move would have taken them out of the
+    # gate's exemption and reddened it the first time anything touched one of them.
+    # A rename shows no added lines while git's rename detection holds, which is exactly
+    # the kind of protection that vanishes silently; this entry follows the data instead.
+    'registers/archive/',
     'CLAUDE.md',                  # documents the naming rule (names the token)
     'tools/ci_naming_check.py',   # this file names the token
     'tools/hook_naming_guard.py',

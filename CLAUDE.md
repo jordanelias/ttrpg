@@ -349,7 +349,7 @@ aliases, machine-read by `broken_dependency_checker`). `git log CLAUDE.md` has t
 | `proposals/` | Unratified proposals, surfaced BY LOCATION. |
 | `dashboard/`, `.github/`, `.claude/`, `skills/` | Published status site; CI workflows; hooks, agents and orchestration scripts; skills. |
 | `audit/` | The surviving audit corpus. ⚠️ **`§0` now forbids the adversarial pass from creating documents, which retires this as a CATEGORY** — do not add to it. |
-| `deprecated/` | **Where files go when we stop using them** — moved out of `main`, kept at a named ref. Never canonical. ⚠️ One exception, by rule order: the old ledger files under `deprecated/archives/editorial*` and `deprecated/canon/` are KEPT, because `validate_ed_citations.py` reads them to tell a real ID from an invented one; delete them and every valid citation reads as fabricated. |
+| `deprecated/` | **Where files go when we stop using them** — moved out of `main`, kept at a named ref. Never canonical. ⚠️ **The exception that used to live here is GONE, because the files moved rather than the rule changing (2026-08-23, S6/6b).** The 26 frozen ED-ledger fragments `validate_ed_citations.py` reads to tell a real ID from an invented one are now at **`registers/archive/`** — `tools/evacuation_plan.py`'s `R-REL-EDUNIVERSE` had ruled that relocation and this executed it, universe unchanged at 1,264 ids. So nothing under `deprecated/` is read by anything any more, and the tree is a pure graveyard again. |
 
 **Trees that were dissolved — do not recreate any of them:** `designs/` (retired 2026-07-19, contents
 now in `systems/`), `sim/` (retired 2026-07-21, now `engine/` + `systems/<sub>/sim/`), `arcs/` and

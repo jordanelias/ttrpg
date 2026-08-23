@@ -1570,3 +1570,29 @@ reading as unre-runnable.
 | `references/wiring_manifest.yaml` | `references/module_contracts.yaml` | CONSOLIDATED |
 | `tools/wiring_map_check.py` | `tools/export_composition.py` | CONSOLIDATED |
 | `tests/valoria/test_wiring_map_check.py` | `tools/export_composition.py` | CONSOLIDATED |
+
+## ED archives out of `deprecated/` → `registers/archive/` — 2026-08-23 (S6/6b, ED-IN-0194)
+
+The 26 frozen ledger fragments holding the pre-cutover flat-ID era are the **only** content anything
+still reads out of `deprecated/`: `tools/validate_ed_citations.py` — a BLOCKING gate — builds its ED
+universe from them, and losing one of those directories once shrank the universe 1,167 → 1,107 and
+turned **110 valid citations into NONEXISTENT**.
+
+This is not a new decision. `tools/evacuation_plan.py`'s **`R-REL-EDUNIVERSE`** already ruled it —
+*relocate* to `registers/archive/`, "frozen archive beside the active register, new work on a clean
+surface, provenance intact" — and carried the execution note this move follows: repoint
+`ARCHIVE_GLOBS` in the same commit and confirm the universe size is unchanged. **Measured: 1,264 ids
+before and after, 0 citation-integrity violations.**
+
+⚠ **A citation to an archived ED is legitimate, never missing** (ED-IN-0075). That is why these files
+relocate rather than fork: a partial universe cannot tell a typo from a fabrication from a correctly
+archived id, and `FORK:` rows do not help — the gate reads content, not a path.
+
+Dir-prefix rows, exact rather than approximate: every file under each of the three old directories
+moved, and none of the three directories still exists.
+
+| Old Path | New Path | Status |
+|----------|----------|--------|
+| `deprecated/archives/editorial/` | `registers/archive/` | RELOCATED |
+| `deprecated/archives/editorials/` | `registers/archive/` | RELOCATED |
+| `deprecated/canon/` | `registers/archive/` | RELOCATED |

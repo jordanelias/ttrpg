@@ -153,7 +153,18 @@ BURN_DOWN_ALLOW = frozenset({
 BURN_DOWN_MAX = 10  # occurrences across those 5 pairs; measured 2026-08-01, a test pins it both ways
 
 # Editorial-archive locations (the ED universe is the active JSONL + these).
-ARCHIVE_GLOBS = ('deprecated/archives/editorial/', 'deprecated/archives/editorials/', 'deprecated/canon/')
+#
+# ONE DIRECTORY, AND IT IS NO LONGER UNDER `deprecated/` (2026-08-23, S6/6b). The 26 frozen
+# ledger fragments that hold roughly ED-001..ED-1200 used to live in three directories under
+# `deprecated/`, which made a BLOCKING gate's universe depend on a tree the culling plan wants
+# to fork. `tools/evacuation_plan.py`'s R-REL-EDUNIVERSE had already ruled the answer —
+# relocate to `registers/archive/`, frozen archive beside the active register — and this is
+# that rule executed. Universe size is unchanged (1,264 ids), which is the check its own
+# EXECUTION NOTE demanded.
+#
+# The three old paths resolve through `references/restructure_ledger.md` dir-prefix rows, so
+# citations naming them still resolve.
+ARCHIVE_GLOBS = ('registers/archive/',)
 
 # JSONL archive siblings of the active ledger (registers/editorial_ledger.jsonl's own overflow
 # chunks, per the register-size cap in tools/ci_register_size_check.py — mirrors the
