@@ -77,6 +77,15 @@
 #
 # Field definitions:
 #   path             — script path
+#   args             — the invocation flags that select WHICH rule this row is about, when one
+#                      script serves more than one row. Added 2026-08-23 (S6/D2) for
+#                      `ci_naming_check.py`, which runs blocking for the index's `block` tier and
+#                      report-only for its `warn` tier. Declared here because an undeclared field
+#                      invented for a single row is a scale-local dialect (CLAUDE.md §10's
+#                      shape-divergence guardrail), and because `path` is existence-checked by
+#                      `broken_dependency_checker`, so the flags cannot simply be folded into it.
+#                      No consumer reads `args` today — it disambiguates the row for a HUMAN, and
+#                      two rows sharing a `path` is otherwise unreadable.
 #   level            — enforcement locus (3 or 5). WHERE the rule is applied.
 #   layer            — L0/L1/L2 depth of subject. WHAT the check is about. See the block above.
 #   posture          — grow (L0) / harden (L1) / cap (L2). What may happen to this layer's size.
@@ -194,13 +203,21 @@ ci_checks:
     ci_job: validators
     notes: "Also runs locally via valoria_local.py --staged (blocking)."
 
-  - path: tools/ci_names_check.py
+  # MERGED 2026-08-23 (S6/D2, ED-IN-0194): tools/ci_names_check.py retired into
+  # tools/ci_naming_check.py --warn. One rule -- "an added line must not introduce a deprecated
+  # name" -- parameterised by the index's enforce tier, and it had two implementations sharing the
+  # same diff machinery and the same path exclusions (the warn tool imported the block tool's
+  # is_excluded), differing only in a keyword argument and the output strings. This row stays as a
+  # SECOND row because the two tiers are wired to different CI jobs with different policies; the
+  # `path:` now names the surviving tool and the invocation that selects the tier.
+  - path: tools/ci_naming_check.py
+    args: "--warn"
     level: 5
     layer: L1
     posture: harden
-    role: "Report-only naming-drift lint over every enforce:warn entry in names_index.yaml; flags newly-added legacy terms and names the canonical replacement."
+    role: "Report-only naming-drift lint over every enforce:warn entry in names_index.yaml; flags newly-added legacy terms and names the canonical replacement. Same tool and same rule as the row above, other tier."
     ci_job: validators-report
-    notes: "continue-on-error in CI; report-only (blocking=False) in valoria_local.py. Flip an index entry warn->block to promote it under ci_naming_check."
+    notes: "continue-on-error in CI; report-only (blocking=False) in valoria_local.py. Flip an index entry warn->block and it is enforced by the blocking row above, with no code change."
 
   - path: tools/ci_names_consistency.py
     level: 5

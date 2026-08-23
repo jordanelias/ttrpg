@@ -105,7 +105,7 @@ Structural patterns across the 41 throughlines. Each subordinated to Μ modes. E
 
 ## §4 Τ — THROUGHLINES (25)
 
-Source: `references/throughlines_complete.md`.
+Source: `systems/_architecture/throughlines_complete.md`.
 
 **Τ-level question:** Which T's does this touch? For each: extend, preserve, or break? If break, is there deliberate supersession? Log breaks to `registers/supersession_register.yaml`.
 
@@ -283,7 +283,7 @@ No new registers. Uses existing:
 - `canon/editorial_ledger.yaml`: flagged concerns use Failure Lexicon terms.
 - `registers/supersession_register.yaml`: Τ-breaks with supersession.
 - `references/canonical_sources.yaml`: notes framework as vetting authority.
-- `references/throughlines_complete.md`: М-tag annotations per infill §3.1.
+- `systems/_architecture/throughlines_complete.md`: М-tag annotations per infill §3.1.
 
 ---
 

@@ -159,7 +159,9 @@ THRESHOLDS = {
     # "deprecated/archives/session/session_log_archive_part_7.md" RETIRED 2026-08-12
     # (plan step G2, §1.6): evacuated 2026-08-05 with the rest of deprecated/archives/
     # except the editorial-ledger archives the ED citation gate reads.
-    "registers/patch_register_index.md":         20_000,
+    # "registers/patch_register_index.md" RETIRED 2026-08-23 (S6/6f, ED-IN-0194): a generated
+    # index last built 2026-05-10 by index_gen.py, which itself went to the fork in 6a. A cap on a
+    # file that no generator maintains measures nothing.
 }
 
 # ── Early warning (ED-MB-0063 residual, 2026-08-01) ───────────────────────────

@@ -115,6 +115,11 @@ PROVENANCE_PATHS = {
     'references/deprecated_terms_registry.yaml',
     'references/alias_registry.yaml',
 }
+# ⚠ EMPTY SINCE 2026-08-23 (S6/6f): `references/splits/` held one file,
+# `params_board_game_split.yaml`, which mapped headings of `engine/params/board_game.md` — a file
+# in the tree evacuated 2026-08-05, so its `index_file:` already pointed at nothing. The prefix is
+# KEPT rather than deleted because it costs nothing and classifies correctly if such a file returns;
+# it is annotated rather than left silent so the next reader does not take it for a live tree.
 PROVENANCE_PREFIXES = ('references/splits/',)
 # Live docs that can make canonical claims.
 SCAN_PREFIXES = ('canon/', 'designs/', 'systems/', 'references/')  # engine/params/ evacuated 2026-08-05
@@ -153,7 +158,20 @@ BURN_DOWN_ALLOW = frozenset({
 BURN_DOWN_MAX = 10  # occurrences across those 5 pairs; measured 2026-08-01, a test pins it both ways
 
 # Editorial-archive locations (the ED universe is the active JSONL + these).
-ARCHIVE_GLOBS = ('deprecated/archives/editorial/', 'deprecated/archives/editorials/', 'deprecated/canon/')
+#
+# ONE DIRECTORY, AND IT IS NO LONGER UNDER `deprecated/` (2026-08-23, S6/6b). The 26 frozen
+# ledger fragments (25 of which this loader actually PARSES — the filter below takes .yaml/.yml,
+# and `editorial_ledger_index.md` is walked and skipped, as it was at the old location too) used
+# to live in three directories under
+# `deprecated/`, which made a BLOCKING gate's universe depend on a tree the culling plan wants
+# to fork. `tools/evacuation_plan.py`'s R-REL-EDUNIVERSE had already ruled the answer —
+# relocate to `registers/archive/`, frozen archive beside the active register — and this is
+# that rule executed. Universe size is unchanged (1,264 ids), which is the check its own
+# EXECUTION NOTE demanded.
+#
+# The three old paths resolve through `references/restructure_ledger.md` dir-prefix rows, so
+# citations naming them still resolve.
+ARCHIVE_GLOBS = ('registers/archive/',)
 
 # JSONL archive siblings of the active ledger (registers/editorial_ledger.jsonl's own overflow
 # chunks, per the register-size cap in tools/ci_register_size_check.py — mirrors the

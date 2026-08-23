@@ -125,26 +125,20 @@ RELOCATE = [
     (lambda p: p == 'audit/2026-06-03-contest-groundup/engine.py',
      'engine/reference/contest-groundup/', 'R-REL-ORACLE',
      'frozen parity oracle -- the last executable dependency of kept code on audit/'),
-    # THE ED UNIVERSE. tools/validate_ed_citations.py -- a BLOCKING CI gate -- builds its set of
-    # valid ED ids from registers/ PLUS three directories under deprecated/ (its ARCHIVE_GLOBS at
-    # :145): deprecated/archives/editorial/, .../editorials/, and deprecated/canon/. 26 files,
-    # roughly ED-001..ED-1200.
-    # R-DEPRECATED would evacuate all of them, and the gate's OWN docstring (:347-350) records what
-    # that costs: losing ONE of those dirs shrank the universe 1167 -> 1107 and turned 110 VALID
-    # citations into NONEXISTENT. NONEXISTENT is never deferred (:377-381), so the evacuation commit
-    # would turn a blocking gate red -- and the tempting field fix (suppress NONEXISTENT) would
-    # destroy the repo's only anti-fabrication citation check. The semantic being protected is
-    # ED-IN-0075's: an archived ED is LEGITIMATE, not missing. A partial universe cannot tell a
-    # typo from a fabrication from a correctly-archived id.
-    # So they relocate rather than evacuate -- and this IS Jordan's "start fresh for registers":
-    # frozen archive beside the active register, new work on a clean surface, provenance intact.
-    # EXECUTION NOTE: add 'registers/archive/' to ARCHIVE_GLOBS in the same commit, and re-run the
-    # gate to confirm the universe size is unchanged.
-    (lambda p: (p.startswith(('deprecated/archives/editorial/', 'deprecated/archives/editorials/',
-                              'deprecated/canon/'))
-                and ('ledger' in os.path.basename(p) or 'editorial' in os.path.basename(p))),
-     'registers/archive/', 'R-REL-EDUNIVERSE',
-     'ED archive read by the BLOCKING citation gate -- evacuating it turns CI red on day one'),
+    # THE ED UNIVERSE -- R-REL-EDUNIVERSE, EXECUTED AND RETIRED 2026-08-23 (S6/6b).
+    #
+    # It ruled that the 26 frozen ED-archive fragments under deprecated/archives/editorial/,
+    # .../editorials/ and deprecated/canon/ must RELOCATE to registers/archive/ rather than
+    # evacuate, because tools/validate_ed_citations.py -- a BLOCKING gate -- builds its ED
+    # universe by READING them, and losing one of those directories once shrank the universe
+    # 1167 -> 1107 and turned 110 VALID citations into NONEXISTENT.
+    #
+    # The move happened. All three source directories are gone, so the predicate can never match
+    # again, and a rule that cannot fire is not a weaker guard -- it is an absent one that reads
+    # like a present one (CLAUDE.md 0.1 pt 2). The property it protected did NOT go with it: the
+    # files are now covered by R-REGISTERS ('keep'), and the guard moved with them --
+    # tests/valoria/test_evacuation_plan.py::test_the_ed_universe_survives_evacuation now asserts
+    # the ED archive is kept AT ITS REAL LOCATION, which is a claim that can still fail.
 ]
 
 
@@ -186,14 +180,24 @@ RULES = [
     (lambda p: p == 'tests/sim/gauge_mb.py', 'keep', 'R-IMPORTED-MODULE',
      'imported as `import gauge_mb` by two KEPT shipping-gate tests (test_gauge_invariants, '
      'test_morale_write_sweep) -- evacuating it makes the whole suite uncollectable'),
-    (lambda p: p == 'deprecated/skills/valoria-orchestrator/scripts/descriptor_registry.py',
-     'keep', 'R-IMPORTED-MODULE',
-     'imported as `import descriptor_registry` by two kept tests and a kept skill script -- '
-     'filed under deprecated/ but still load-bearing on the shipping gate'),
-    (lambda p: p == 'deprecated/skills/valoria-orchestrator/scripts/github_ops.py',
-     'keep', 'R-IMPORTED-MODULE',
-     'imported by tools/compliance_check.py, a BLOCKING CI gate. CLAUDE.md §8 records this '
-     'import as the reason several tools were retired; the importer itself was never cleaned up'),
+    # THE TWO ORCHESTRATOR-SCRIPT `keep` ROWS THAT USED TO SIT HERE ARE RETIRED, 2026-08-23 (S6/6a),
+    # BECAUSE BOTH ASSERTED A LOAD-BEARING IMPORT THAT NO LONGER EXISTED.
+    #
+    #   `.../scripts/descriptor_registry.py` -- claimed to be what `import descriptor_registry`
+    #   resolves to. MEASURED (`__file__` printed, not inferred): it resolves to
+    #   `tools/descriptor_registry.py`, whose own docstring at :10 says the deprecated import path
+    #   is dead. The deprecated copy was a dead duplicate.
+    #
+    #   `.../scripts/github_ops.py` -- claimed to be imported by `tools/compliance_check.py`, a
+    #   BLOCKING gate. That import was removed; the only surviving mention in that file is the
+    #   docstring recording its removal.
+    #
+    # A `keep` rule protecting an import that is gone is not a conservative rule, it is a false
+    # statement the classifier repeats on demand -- the same shape as a `FORK:` row pointing at
+    # nothing. Both files went to the fork at `baf29d5`, and the whole `deprecated/` tree with them,
+    # after a deletion rehearsal proved collection, both suites and every validator unaffected.
+    # (`tests/sim/gauge_mb.py` above is the row this rule was written for and is UNCHANGED: that
+    # import is live, and deleting it stops `pytest tests/valoria` collecting.)
 
     (lambda p: p.startswith('tests/valoria/'), 'keep', 'R-SHIPGATE',
      'the shipping gate (CLAUDE.md 0.1) and the home of the fork plan\'s own falsifiers'),
@@ -328,13 +332,35 @@ RULES = [
     # AND KEEP IT AT A NAMED REF, which is exactly what we want for a file nobody uses.
     #
     # The related worry was empty too, and CHECKING beat reasoning again: the old editorial-ledger
-    # files are not swept up here. `deprecated/archives/editorials/*` and `deprecated/canon/*` are
-    # caught by R-RELOCATE ABOVE this line and marked 'relocate'. The citation check reads them to
-    # tell a real ID from an invented one, and rule ORDER is what protects them.
+    # files were not swept up here. `deprecated/archives/editorials/*` and `deprecated/canon/*`
+    # were caught by R-RELOCATE ABOVE this line and marked 'relocate'.
+    #
+    # ⚠ THAT PROTECTION IS GONE, AND IT IS GONE BECAUSE IT SUCCEEDED (2026-08-23, S6/6b). The
+    # R-RELOCATE entry was `R-REL-EDUNIVERSE`, and its relocation EXECUTED: the 26 fragments now
+    # live at `registers/archive/` and are protected by their LOCATION (R-REGISTERS, 'keep')
+    # rather than by rule order. The rule itself was retired above as unfireable. The paragraph is
+    # kept because it is the record of a Jordan ruling, but a reader must not take its present
+    # tense at face value.
     #
     # THE LESSON, since this is the third time today: I reasoned about what two labels SUGGESTED
     # instead of running the classifier and reading what it DID. Two lines of work would have
     # shown the mechanism was already coherent.
+    # ⚠ R-DEPRECATED IS UNFIREABLE AS OF 2026-08-23 (S6/6a): `deprecated/` no longer exists, so
+    # `p.startswith('deprecated/')` cannot match any path in the tree. It is KEPT, and the reason it
+    # is kept differs from the reason `R-REL-EDUNIVERSE` two hundred lines up was retired, which is
+    # worth being explicit about since this file now does both:
+    #
+    #   * `R-REL-EDUNIVERSE` was a PROTECTION. An unfireable protection reads as cover that is not
+    #     there, so leaving it is worse than deleting it.
+    #   * `R-DEPRECATED` is a DEFINITION. `CLAUDE.md` §4 names this rule's inline reason string as
+    #     the worked example of "define a process term where it is INVOKED, not only where it is
+    #     described" — it is one of the two canonical definitions of what *retire* means in this
+    #     repository. Deleting it would delete a definition §4 points at, to remove a classification
+    #     that costs nothing while it cannot fire, and would silently classify a re-created
+    #     `deprecated/` as UNPARTITIONED.
+    #
+    # If the directory never returns, this row is a definition with a vestigial predicate. That is
+    # the intended state; do not "clean it up" without moving the definition somewhere §4 accepts.
     (lambda p: p.startswith('deprecated/'), 'evacuate', 'R-DEPRECATED',
      'where files go when we stop using them -- moved out of main, kept at a named ref. Covers '
      'both the 2026-08-05 batch and everything retired since (Jordan, ED-IN-0171/0179)'),

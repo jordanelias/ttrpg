@@ -3529,3 +3529,114 @@ them were closed by finding the question was WRONG, and a reader of S6 will meet
 embeds those counts. Nothing gates on them and the file is untracked, so this is a note for whoever
 next reads a diff of that artifact and thinks their change moved it. Structure and line counts ARE
 stable (verified over four rebuilds), so the flow-skeleton anchors into it are safe.
+
+---
+
+## 2026-08-23 — S6 CLOSED except 6c; S7 is next
+
+**Landed:** `bca82dc` 6b · `e8676ee` 6a · `430c003` D1 · `8f0c925` D2 · `3d9d123` 6f. Full detail in
+the plan's S6 RESULT and in each commit message; not repeated here.
+
+**`deprecated/` is gone.** Its only live consumer — the 26 frozen ED-ledger fragments the blocking
+citation gate reads (25 parsed; the `.md` index is walked and skipped, at both locations) — is at
+**`registers/archive/`**, and `evacuation_plan.py`'s `R-REL-EDUNIVERSE`
+had ruled that relocation before the culling plan proposed deleting it. ED universe 1,264 before and
+after. **Do not recreate the directory**: retiring something now means deleting it and writing a
+`FORK:` row.
+
+**Four of S6's six instructions were wrong when measured against the tree**, which is now the third
+consecutive step where that is true. The pattern is stable enough to state as a rule for S7:
+*a plan's target list is a claim about the tree at the moment it was written; re-measure each entry
+before acting on it.* The four:
+
+1. **6b's tombstone design** would have cut `ci_claim_provenance_check` from 63 in-scope entries to
+   **7** — its verification "no other field of a closed row is read by anything" is false.
+2. **D1's "then port"** rests on a claim measured false: 654 of 1,363 probes disagree because the two
+   resolvers answer different questions.
+3. **6f's `throughlines_meta*` glob** would have forked the PP-672/674 canonical vetting guide.
+4. **6f's four Godot docs** were staged for the fork and reverted on reading the governing spec,
+   which says two "remain valid" and cites the other two as open register items D5/D7.
+
+**Also found and ruled: eight `restructure_ledger.md` keys carry CONFLICTING targets** (`designs/arcs/`
+among them), and the two resolvers split on all eight — the exact-row dict kept the last binding
+while equal-length dir-prefix keys sorted as ties and file order made the first win. Ruled
+**later-row-wins**, which is the chronological semantics the file already had; the pair IS the
+history and must not be "de-duplicated".
+
+### ⚠ 6c DID NOT RUN — and it is reclassified, not deferred
+
+Measured across all ten handoff files: **1,489 lines marked complete, 4,931 marked open, 730
+unmarked**. 6c's "≥75% is narrative about completed work" is **21%**. (First published as 23% / "14
+of 18" from a classifier that filed `IN PROGRESS` headings as complete; corrected after an
+adversarial pass, with the classifier now printed in the plan so it can be re-run.)
+
+And the 21% is not sweepable: **12 of 17 complete-marked sections carry open/held/`needs_jordan`
+content inside them** — `[DONE] ED-IN-0166/0167/0168` says "Still blocked: G2's second half
+(Jordan)"; `[DONE] ED-IN-0182` and `[DONE] ED-IN-0180` each have a "Still open" subsection;
+"W3 DELETION REHEARSAL — EXECUTED" has "### OPEN, and the reason `--check` is currently RED"; and
+`HANDOFF_archive.md`, whose header says "do not resume work from this file", carries
+"**Residual for Jordan:** 13 needs_jordan".
+
+**The disposition markers in this corpus do not mean what they say.** That is why the ~1,190 lines
+the weekly review flagged were never enumerated — it cannot be done mechanically. Pruning this is
+adjudication work needing a human for the held items, exactly as S7 says of `audit/`.
+
+Two of 6c's mechanical instructions must NOT be carried forward as written: the **100-line lane cap**
+would delete the suspended Half-B classification that the plan's own S8 names as the record
+(`HANDOFF_FA.md`), and **deleting `HANDOFF_archive.md`** would remove the `archive_target_pattern`
+`references/atomization_rules.yaml` declares as the relief valve for `HANDOFF.md` and every lane file
+— recreating the defect S6's token-room work fixed nine days ago for `tests/coverage_matrix.md`.
+
+**Next action: S7** — and note it is apparatus/corpus work again. §1(c) of the plan still binds:
+nothing since the Q1 wiring has changed how the game plays, and **S8 Half B is the game**, suspended
+on a ruling.
+
+### Adversarial review of S6 (2026-08-23) — four read-only critics, and they broke my numbers
+
+Jordan asked for an adversarial review of the S6 work. Four `valoria-critic` agents (Read/Grep/Glob
+only, given the CLAIMS and not the reasoning) ran on separate lenses: measured claims, dedup and
+centralization, the L0/L1/L2 depth rule, and code logic. **Every lens found something**, and the
+corrections are in the tree rather than in a findings document (§0: the pass is a stage).
+
+**Two defects I shipped, both in code:**
+- `scan_text`'s de-duplication keyed on line TEXT, so two identical offending lines collapsed to
+  one. Reachable today with a single block-tier name — the opposite direction from the
+  double-counting it was written to prevent. Now keyed on line index.
+- `valoria_local` reported by bare script name while `ci_naming_check.py` ran twice at two tiers,
+  making a failure unattributable. Reports the invocation now.
+
+**Two guards I minted that should not have existed as written:**
+- `test_the_ed_universe_guard_can_fail` was a TAUTOLOGY — it built a path from `ARCHIVE_GLOBS[0]`
+  and asserted it started with `ARCHIVE_GLOBS`, never touching the tool. Deleted. §3a is explicit
+  that a mutation result is evidence for the commit message, not a permanent file.
+- `test_an_empty_tier_...` asserted on `inspect.getsource` TEXT; flipping the fail-safe's `return 1`
+  to `return 0` left it green. Rewritten behaviourally and mutation-verified against that exact flip.
+- The four `test_pathres.py` additions were consolidated to two after the depth critic showed they
+  failed §0.1 pt 5's predicate; the survivors also now probe dir-prefix CHILDREN, not just row keys.
+
+**A pre-existing dead control, found because it was the control for MY most-republished number.**
+`test_ed_citation_scope.py` called `v.load_universe()` — the function is `load_ed_universe` — behind
+a `hasattr` guard, so its `>= 1190` floor had **never executed**. The 1,264 figure had no live
+control at all. Repaired, and split into WALKED (26) vs PARSED (25) floors, because
+`editorial_ledger_index.md` is `.md` and is walked but never read — which also makes "26 files read"
+wrong at six surfaces, now corrected to 26 relocated / 25 parsed.
+
+**Numbers corrected:** 6c's share 23% → **21%**, and "14 of 18" → **12 of 17**; two MB exemplars
+withdrawn as false; the classifier is now printed in the plan so it can be re-run. 6f's accounting
+did not close (3 + 4 presented as 5, against a denominator of 10 that no reading produces) — it is
+**13 fork targets, 5 forked, 8 kept, 1 moved**, and `id_reservations_history.md` was a named target
+never adjudicated in writing (KEPT, and now on the record).
+
+**Claims retracted:** the six exact `FORK` rows do NOT "keep the anti-fabrication property exact" —
+a `deprecated/` dir-prefix FORK row is still live, so the namespace hole is inherited and unclosed.
+And `atomization_rules.yaml` declares an archive target for `HANDOFF.md` only, not for the lane files.
+
+**Unreported side effect, fixed:** relocating the fragments out of `deprecated/` dropped them
+through to the generic `**/*.yaml` catch-all and added three compliance warnings on frozen files
+nobody may edit. `registers/archive/*` now carries the same `skip` posture its old home had.
+
+**One pre-existing hole closed, in a file this branch rewrote:** `ci_naming_check`'s `EXCLUDE`
+matched `'audit/'` as a SUBSTRING, so every `skills/valoria-vector-audit/` script was exempt from
+the blocking naming gate. That is the ED-IN-0133 defect whose worked example in `pathres.py` is this
+exact collision. Rooted — and only `audit/`, because rooting `tests/` too would drop 28
+`engine/tests/` files out of a legitimate exemption.

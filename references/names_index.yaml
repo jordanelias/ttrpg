@@ -8,7 +8,8 @@
 #
 # HOW IT IS READ (one source, many readers — all via tools/names.py):
 #   * tools/ci_naming_check.py   — hard gate; flags any `legacy` name of an `enforce: block` entry.
-#   * tools/ci_names_check.py    — report-only drift lint; flags `legacy` names of `enforce: warn` entries.
+#   * tools/ci_naming_check.py --warn — report-only drift lint; flags `legacy` names of `enforce: warn`
+#                                 entries. Same tool, same rule, other tier (merged 2026-08-23, S6/D2).
 #   * tools/valoria_rename.py    — the "change once" executor: edit a `canonical` here (or run the
 #                                  tool) and every occurrence across docs/params/registries is rewritten.
 #   * tools/ci_names_consistency.py — asserts the mirror name fields in descriptor_registry.yaml /
@@ -24,7 +25,7 @@
 #                conviction | pressure_point   (new 2026-07-21, Reconciliation R2 / ED-IN-0082)
 #     enforce:   block | warn
 #                  block = hard CI gate (ci_naming_check) — naming invariants.
-#                  warn  = report-only drift lint (ci_names_check) until triaged, then flipped.
+#                  warn  = report-only drift lint (ci_naming_check --warn) until triaged, then flipped.
 #     context:   [<regex terms>]  — OPTIONAL. When the `canonical` display collides with a
 #                  common English word (Faith / Order / Reason / …), the disambiguation terms
 #                  that must co-occur for a prose hit to count as THIS definition. The single

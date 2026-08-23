@@ -75,7 +75,8 @@ def test_the_ed_universe_still_contains_archived_ids(ved):
     losing the archives turns valid citations into NONEXISTENT and fails the build wrongly."""
     u = ved.load_ed_universe(warn=False)
     assert len(u) > 1150, f"ED universe collapsed to {len(u)} — archive loading is starved"
-    # ED-391 lives ONLY in deprecated/archives/editorials/, i.e. outside SCAN_PREFIXES entirely
+    # ED-391 lives ONLY in the frozen archive (registers/archive/, relocated out of
+    # deprecated/archives/editorials/ on 2026-08-23), i.e. outside SCAN_PREFIXES entirely
     assert u.get('ED-391') == 'resolved', "archive-only ids are missing from the universe"
 
 
@@ -200,8 +201,30 @@ def test_the_exemption_does_not_shrink_the_ED_universe():
     scan set and the universe, so an exclusion added for the scan side could silently starve the
     universe. It must not."""
     import validate_ed_citations as v
-    assert len(v._walk(v.ARCHIVE_GLOBS)) >= 26, \
+
+    # ⚠ THE UNIVERSE ASSERTION BELOW HAD NEVER EXECUTED (repaired 2026-08-23, S6 review).
+    # It read `v.load_universe() if hasattr(v, 'load_universe') else None`, then asserted only
+    # `if ids is not None`. The function is `load_ed_universe`; `load_universe` exists nowhere in
+    # the repository. So `hasattr` was False, `ids` was None, and the floor never ran — inside the
+    # test whose own docstring records losing 110 valid citations to a shrunken universe. A
+    # `hasattr`-guarded assertion is an assertion that opts out of itself the moment it is
+    # misspelled, and nothing observes the opt-out.
+    #
+    # WALKED vs PARSED are different numbers and the floor must be on PARSED. `_walk` yields 26
+    # files; the loader at load_ed_universe() only parses those whose name contains
+    # 'editorial_ledger' AND that end .yaml/.yml, which is 25 — `editorial_ledger_index.md` is
+    # walked and never read. Flooring on the walk count would pass while the parse population
+    # silently emptied.
+    walked = v._walk(v.ARCHIVE_GLOBS)
+    assert len(walked) >= 26, \
         'the generated-sidecar exclusion removed archive files from the ED universe'
-    ids = v.load_universe() if hasattr(v, 'load_universe') else None
-    if ids is not None:
-        assert len(ids) >= 1190, f'ED universe shrank to {len(ids)}'
+    parsed = [f for f in walked
+              if 'editorial_ledger' in os.path.basename(f) and f.endswith(('.yaml', '.yml'))]
+    assert len(parsed) >= 25, (
+        f'only {len(parsed)} archive fragment(s) are loadable into the ED universe (walked '
+        f'{len(walked)}); the loader filter and the archive contents have drifted apart')
+
+    ids = v.load_ed_universe(warn=False)
+    assert len(ids) >= 1190, (
+        f'ED universe shrank to {len(ids)} — the archives are starved and valid citations will '
+        f'start reading as NONEXISTENT (the tool docstring records 1167 -> 1107 costing 110)')

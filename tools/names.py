@@ -5,10 +5,10 @@ names.py — the single reader for references/names_index.yaml.
 names_index.yaml is the ONE place a definition's display name lives: change a
 `canonical` there (or run tools/valoria_rename.py) and that single edit
 propagates everywhere, while the naming gates (ci_naming_check.py,
-ci_names_check.py) read the deprecated->canonical mapping FROM here instead of
+ci_naming_check.py --warn) read the deprecated->canonical mapping FROM here instead of
 hardcoding it.
 
-ONE SOURCE, MANY READERS: ci_naming_check, ci_names_check, valoria_rename and
+ONE SOURCE, MANY READERS: ci_naming_check (both tiers), valoria_rename and
 ci_names_consistency all import this module; none re-parse the index themselves.
 
 Loading is fault-tolerant BY DESIGN. This module is imported transitively by the

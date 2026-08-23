@@ -48,7 +48,8 @@ def main(argv):
         ('ci_pp_frozen_check.py',       [],          True),   # PP frozen vocabulary (ED-IN-0190, Jordan 2026-08-14)
         ('ci_naming_check.py',          [mode_flag], True),
         ('ci_names_consistency.py',     [],          True),   # index <-> registry mirrors agree
-        ('ci_names_check.py',           [mode_flag], False),  # report-only naming-drift lint
+        ('ci_naming_check.py',          [mode_flag, '--warn'], False),  # report-only naming-drift lint
+                                        # (was ci_names_check.py; merged into the block-tier gate 2026-08-23, S6/D2)
         ('ci_co_file_checker.py',       [mode_flag], True),
         ('ci_editorial_checker.py',     [mode_flag], True),
         ('ci_register_size_check.py',   [],          True),
@@ -147,6 +148,20 @@ def main(argv):
     # Windows console (cp1252) when printing design-corpus text (em-dashes, etc.).
     child_env = dict(os.environ, PYTHONUTF8='1', PYTHONIOENCODING='utf-8')
 
+    def _label(script, extra):
+        """How a check is NAMED in the pass/fail summary.
+
+        It is the INVOCATION, not the filename, because a script may appear more than once at
+        different tiers: `ci_naming_check.py` runs blocking for the index's `block` tier and
+        report-only for its `warn` tier (S6/D2, 2026-08-23, when `ci_names_check.py` merged into
+        it). Reporting both as the bare filename makes a failure unattributable — and if both
+        fail, the summary names the same script as blocking AND report-only, which reads as a
+        contradiction. The mode flag is dropped because it is the same for every row and adds
+        only noise.
+        """
+        flags = [a for a in extra if a != mode_flag]
+        return f"{script} {' '.join(flags)}" if flags else script
+
     failed = []
     # Report-only failures were previously DISCARDED, not merely unreported — the `and blocking`
     # guard threw the result away, so the summary below could not have mentioned them even if it
@@ -156,10 +171,10 @@ def main(argv):
         path = os.path.join(HERE, script)
         if not os.path.exists(path):
             continue
-        print(f"\n--- {script} ---")
+        print(f"\n--- {_label(script, extra)} ---")
         r = subprocess.run([sys.executable, path] + extra, env=child_env)
         if r.returncode != 0:
-            (failed if blocking else failed_reportonly).append(script)
+            (failed if blocking else failed_reportonly).append(_label(script, extra))
 
     print()
     if failed:

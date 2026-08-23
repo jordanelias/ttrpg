@@ -24,6 +24,32 @@
 #   skills/valoria-orchestrator/SKILL.md — params paths
 #   skills/valoria-simulator/SKILL.md — params, design paths
 
+## HOW A ROW IS READ (D1, decided 2026-08-23, S6/ED-IN-0194)
+
+Two rules govern every table in this file. They are stated here because this is where a reader
+meets a surprising row, and because until 2026-08-23 the two resolvers that read this file
+disagreed about both.
+
+1. **A LATER ROW SUPERSEDES AN EARLIER ONE FOR THE SAME KEY.** The file is appended
+   chronologically, so a second row for one path records a second, later move. **Eight keys carry
+   conflicting targets today** — `designs/arcs/`, `designs/arcs/arc_expansion_v30.md`,
+   `references/values_master.yaml` (each a 2026-08-05 evacuation superseding an earlier
+   relocation), three `designs/combat/*` rows and two `designs/conviction_track/*` rows (each a
+   later consolidation superseding the first move). Last-wins is right for all eight: the three
+   FORK rows are the evacuation, and in the five relocation cases the later row's target is the one
+   that exists on disk. Do not "de-duplicate" them — the pair IS the history, exactly as an
+   append-only ledger id's effective status is its last row.
+
+2. **A `FORK:` row resolves to `FORK:<ref>:<path>`, the paired form.** That is what
+   `git cat-file -e <ref>:<path>` takes, so it is the only shape in which the row's promise —
+   *the content is at this ref* — can be checked. `tools/pathres.py`'s `fork_pointer()` is the
+   single owner of that shape and `broken_dependency_checker` calls it; a bare `FORK:<ref>` names a
+   commit and leaves the reader guessing which path inside it.
+
+⚠ **Prefer an EXACT file row over a dir-prefix row when recording a fork.** A dir-prefix `FORK:`
+row has no existence check, so it resolves *any* invented filename under that namespace — which
+shipped once and made a fabricated `MEASURED-BY:` path pass across 162 namespaces (`CLAUDE.md` §8).
+
 ## MOVES (470 files)
 
 | Old Path | New Path | Status |
@@ -1570,3 +1596,195 @@ reading as unre-runnable.
 | `references/wiring_manifest.yaml` | `references/module_contracts.yaml` | CONSOLIDATED |
 | `tools/wiring_map_check.py` | `tools/export_composition.py` | CONSOLIDATED |
 | `tests/valoria/test_wiring_map_check.py` | `tools/export_composition.py` | CONSOLIDATED |
+
+## ED archives out of `deprecated/` → `registers/archive/` — 2026-08-23 (S6/6b, ED-IN-0194)
+
+The 26 frozen ledger fragments holding the pre-cutover flat-ID era are the **only** content anything
+still reads out of `deprecated/` (25 of the 26 are parsed — `editorial_ledger_index.md` is a `.md`
+and the loader takes `.yaml`/`.yml` only; it is walked and never read, before this move and after): `tools/validate_ed_citations.py` — a BLOCKING gate — builds its ED
+universe from them, and losing one of those directories once shrank the universe 1,167 → 1,107 and
+turned **110 valid citations into NONEXISTENT**.
+
+This is not a new decision. `tools/evacuation_plan.py`'s **`R-REL-EDUNIVERSE`** already ruled it —
+*relocate* to `registers/archive/`, "frozen archive beside the active register, new work on a clean
+surface, provenance intact" — and carried the execution note this move follows: repoint
+`ARCHIVE_GLOBS` in the same commit and confirm the universe size is unchanged. **Measured: 1,264 ids
+before and after, 0 citation-integrity violations.**
+
+⚠ **A citation to an archived ED is legitimate, never missing** (ED-IN-0075). That is why these files
+relocate rather than fork: a partial universe cannot tell a typo from a fabrication from a correctly
+archived id, and `FORK:` rows do not help — the gate reads content, not a path.
+
+Dir-prefix rows, exact rather than approximate: every file under each of the three old directories
+moved, and none of the three directories still exists.
+
+| Old Path | New Path | Status |
+|----------|----------|--------|
+| `deprecated/archives/editorial/` | `registers/archive/` | RELOCATED |
+| `deprecated/archives/editorials/` | `registers/archive/` | RELOCATED |
+| `deprecated/canon/` | `registers/archive/` | RELOCATED |
+
+## `deprecated/` retired to the fork — 2026-08-23 (S6/6a, ED-IN-0194)
+
+The last six files leave `main`. With 6b's relocation of the ED archives, **nothing in the tree read
+anything under `deprecated/`** — proven by a deletion rehearsal, not by grep: with the whole tree
+removed, `pytest tests/valoria` still COLLECTS 1,719 tests (a bare-name import that has lost its
+module stops collection outright, which is the failure mode the W3 rehearsal was written to catch),
+`valoria_local --staged` passes, `compliance_check` reports 0 errors, `broken_dependency_checker`
+reports 0 broken, and the ED universe stays at 1,264.
+
+⚠ **TWO OF THE SIX WERE CLASSIFIED `keep` BY `evacuation_plan.py`, AND BOTH RULES WERE STALE.**
+`R-IMPORTED-MODULE` held that `.../scripts/descriptor_registry.py` is "imported as
+`import descriptor_registry` by two kept tests and a kept skill script" and that
+`.../scripts/github_ops.py` is "imported by `tools/compliance_check.py`, a BLOCKING CI gate".
+Measured: the bare-name import resolves to **`tools/descriptor_registry.py`** (`__file__` printed,
+not inferred) — the deprecated copy is a dead duplicate, and `tools/descriptor_registry.py:10` says
+so in its own docstring — and `compliance_check.py` has not imported `github_ops` since the import
+was removed; the only surviving mention is the docstring recording that removal. A `keep` rule
+asserting a load-bearing import that no longer exists is the same defect class as a `FORK` row
+pointing at nothing: it reads as protection.
+
+**THE REF IS `baf29d5`, `origin/main`'s own tip** — the newest ref already on `main` that still
+contains the content, per this file's own lesson three sections up. Every row verified with
+`git cat-file -e baf29d5:<path>` before being written.
+
+**Exact file rows, not a new `deprecated/` dir-prefix row, deliberately.** `CLAUDE.md` §8 records
+that a dir-prefix `FORK:` row has no existence check, so it resolves *any* invented filename under
+that namespace — which shipped once and made a fabricated `MEASURED-BY:` path pass across 162
+namespaces. Six rows cost six lines and add no new namespace to that hole.
+
+⚠ **THE FIRST WORDING OF THIS PARAGRAPH SAID THESE ROWS "keep the anti-fabrication property exact",
+AND THAT IS FALSE. Retracted.** A `deprecated/` dir-prefix `FORK:` row **already exists** and is
+still live — see the `EVACUATED TO FORK — 2026-08-05` table — so
+`pathres.resolve('deprecated/tools/never_existed.py')` returns FORKED whether or not these six rows
+are here. What the exact rows actually buy is narrower and still worth six lines: they name the real
+ref (`baf29d5`, where the content is) rather than inheriting `c451bcb` (where it is not), and they
+add no *further* namespace. The namespace-level hole is inherited, unclosed, and belongs to whoever
+takes on the 162 prefix rows. Nothing on this branch closed it, and the earlier sentence claimed
+otherwise. The one gate that would be exposed by it is not: `ci_claim_provenance_check` asks
+`load_alias_map()` for exact rows and discards the prefix rows entirely.
+
+| Old Path | New Path | Status |
+|----------|----------|--------|
+| `deprecated/claude/wf_return_to_game.js` | `FORK:baf29d5` | FORKED |
+| `deprecated/skills/valoria-orchestrator/scripts/descriptor_registry.py` | `FORK:baf29d5` | FORKED |
+| `deprecated/skills/valoria-orchestrator/scripts/github_ops.py` | `FORK:baf29d5` | FORKED |
+| `deprecated/tools/atomizer.py` | `FORK:baf29d5` | FORKED |
+| `deprecated/tools/doc_index_gen.py` | `FORK:baf29d5` | FORKED |
+| `deprecated/tools/index_gen.py` | `FORK:baf29d5` | FORKED |
+
+## Naming-gate two-of-three merge — 2026-08-23 (S6/D2, ED-IN-0194)
+
+`ci_names_check.py` was a second implementation of ONE rule — *an added line must not introduce a
+deprecated name* — parameterised by `names_index.yaml`'s `enforce` tier. It shared the diff
+machinery, imported the block-tier tool's own `is_excluded`, and differed in a keyword argument and
+its output strings. Merged into `tools/ci_naming_check.py --warn`; both callers repointed in the
+same commit, and warn-tier output proved identical on nine cases before the file was removed.
+
+**`ci_names_consistency.py` is deliberately NOT merged**, as D2 directs: it asserts a different
+invariant (that the mirror fields in `descriptor_registry.yaml` / `proper_noun_registry.yaml` equal
+the index's canonical value) over the whole tree rather than a diff, and it hard-requires PyYAML,
+which the register-size validators deliberately avoid. Two of three, not three of three.
+
+| Old Path | New Path | Status |
+|----------|----------|--------|
+| `tools/ci_names_check.py` | `tools/ci_naming_check.py` | CONSOLIDATED |
+
+## Prose meta-registers retired; the throughlines map goes to `systems/` — 2026-08-23 (S6/6f, ED-IN-0194)
+
+Five files leave `main`; one moves.
+
+**THE ACCOUNTING, corrected 2026-08-23 after an adversarial pass found it did not close.** The first
+version of this paragraph said "6f names **ten** targets … **five of the ten** do not qualify —
+three because a glob over-reached, four because the governing document says they are still in use",
+which is 3 + 4 = 7 presented as 5, against a denominator of 10 that no reading of 6f produces. The
+real count, with both globs expanded against the tree:
+
+| 6f target | outcome |
+|---|---|
+| `throughlines_meta.md`, `_infill.md`, `_solmund_appendix.md` (glob, 3 files) | **KEPT** — registered canonical source + an open Jordan item |
+| `id_reservations_history.md` | **KEPT** — see below; this one was never adjudicated in writing |
+| `canonical_sources_notes.md` | forked |
+| `canonical_sources_provenance.md` | forked |
+| `patch_register_index.md` | forked |
+| `editorial_ledger_migration_2026-05-28.md` | forked |
+| `params_board_game_split.yaml` | forked |
+| `godot/{scene_tree,gm_to_engine,data_serialization,implementation_sequence}` (glob, 4 files) | **KEPT** — the governing spec still uses them |
+| `throughlines_complete.md` | **MOVED** to `systems/_architecture/` |
+
+**13 fork targets, 5 forked, 8 kept, plus 1 move.** Not "five of ten".
+
+⚠ **`references/id_reservations_history.md` is a named 6f fork target that was never examined in
+writing.** The outcome is right — it stays — but the record was silent, which is the same defect
+class as a stale claim. It is the deliberate 2026-08-01 split (ED-MB-0063) of the most
+concurrency-contended file in the repo into STATE (`id_reservations.yaml`) and HISTORY, it is cited
+on eleven rows of that file, and `tests/valoria/test_id_reservations_walkback.py` fails without it.
+Forking a companion three weeks after it was deliberately created, against a live test, is not a
+cull. **KEPT, now on the record.**
+
+**Why each of the five is inert, in its own words:**
+
+* `canonical_sources_notes.md` — its own header: *"documentation-only; no hook or tool reads them
+  at runtime."* Its content indexes `compilation/v0.14/`, a tree that no longer exists.
+* `canonical_sources_provenance.md` — its own header: *"decorative — no hook parses them."* Zero
+  files in the tree cite it.
+* `patch_register_index.md` — *"auto-generated by index_gen.py — 2026-05-10"*. That generator went
+  to the fork in 6a. A generated index three months stale whose generator is retired is not a
+  register; it is a snapshot. Its `ci_register_size_check` cap row goes with it.
+* `editorial_ledger_migration_2026-05-28.md` — a one-off record of a migration that completed
+  three months ago, describing a file (`canon/editorial_ledger.jsonl`) that has moved twice since.
+* `params_board_game_split.yaml` — maps headings of `engine/params/board_game.md`. **Measured: that
+  file does not exist** (the `engine/params/` tree was evacuated 2026-08-05), so its `index_file:`
+  already pointed at nothing.
+
+`references/throughlines_complete.md` **MOVES** to `systems/_architecture/` rather than forking, as
+6f directs: it is a design artifact — the map of every causal chain crossing 3+ systems — filed under
+`references/` by accident of history.
+
+⚠ *It has a READER, and the reader fails silently.* `skills/valoria-vector-audit/scripts/
+vector_audit.py::parse_throughlines_complete` opens the file and returns `[]` if it is absent — so
+the move made the audit's SECOND throughline→systems source contribute nothing, with no error and
+no warning, exactly the false-absence shape `pathres`'s own docstring was written about. It was
+caught by `test_throughline_graph_extended_by_second_registry_source`, which asserts the graph is
+*extended* by that source rather than merely that the parse ran. Repointed in the same commit, and
+the `return []` is left alone deliberately: the test is the guard, and the comment now says so at
+the call site.
+
+⚠ **6f'S `references/{throughlines_meta*,…}` GLOB WOULD HAVE FORKED A REGISTERED CANONICAL SOURCE.**
+`throughlines_meta.md` is the **PP-672/PP-674 canonical vetting guide** — the N/Ω/Μ/М/Τ/Q tier
+framework, with authority over it explicitly split between Jordan and Claude — and it is registered
+in `references/canonical_sources.yaml` as `throughlines_framework` with SHA pins on both it and its
+infill. Forking it deletes live doctrine and reds the freshness gate. The third file the glob
+catches, `throughlines_meta_solmund_appendix.md`, is `PROVISIONAL` and *"pending Jordan
+integration"* — an open human item, which under `CLAUDE.md` §0's row gate is precisely what a
+session may not dispose of on its own. **All three KEPT.** A glob is a claim about every file it
+matches, and this one had been read as a claim about a filename prefix.
+
+| Old Path | New Path | Status |
+|----------|----------|--------|
+| `references/canonical_sources_notes.md` | `FORK:baf29d5` | FORKED |
+| `references/canonical_sources_provenance.md` | `FORK:baf29d5` | FORKED |
+| `registers/patch_register_index.md` | `FORK:baf29d5` | FORKED |
+| `registers/editorial_ledger_migration_2026-05-28.md` | `FORK:baf29d5` | FORKED |
+| `references/splits/params_board_game_split.yaml` | `FORK:baf29d5` | FORKED |
+| `references/throughlines_complete.md` | `systems/_architecture/throughlines_complete.md` | RELOCATED |
+
+⚠ **THE FOUR 2026-04-18 GODOT DOCS ARE NOT FORKED, AND THE GOVERNING SPEC IS WHY.** 6f lists
+`godot/{scene_tree_architecture,gm_to_engine_conversion,data_serialization_spec,implementation_sequence}.md`
+as fork targets on the grounds that they are "banner-stale since ED-1054" and "ship wrong schemas".
+Their banners say **PARTIALLY SUPERSEDED**, not dead, and `godot/godot_conversion_strategy_v1.md`
+— the governing spec — says which parts survive, in its own words:
+
+* `:4` — *"`scene_tree_architecture.md` and `gm_to_engine_conversion.md` **remain valid** with the
+  amendments noted in Parts III–IV."*
+* `:116` — *"The scene hierarchy (MainScene swap, UILayer/ModalLayer, transitions table) in
+  `scene_tree_architecture.md` **remains valid**."*
+* `:110` and `:112` — register items **D5** and **D7**, both still OPEN, name
+  `data_serialization_spec.md`'s schemas and `implementation_sequence.md`'s G1–G7 phasing as the
+  left-hand side of reconciliations nobody has performed. Forking them removes the thing the open
+  item is about while leaving the item.
+
+The four were staged for the fork and **reverted before commit** on reading the spec. The banner is
+a warning to implementers; it is not a disposition, and reading it as one would have deleted live
+GO-lane material on an IN-lane step. Their disposition belongs to the GO lane, with the strategy
+doc's register, not to a culling wave.

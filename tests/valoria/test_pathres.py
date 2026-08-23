@@ -244,3 +244,99 @@ def test_the_alias_map_is_not_empty():
     exact, prefix = pathres.load_alias_map()
     assert len(exact) > 100, f'only {len(exact)} exact alias rows parsed — the ledger regex broke'
     assert len(prefix) >= 10, f'only {len(prefix)} dir-prefix rows parsed'
+
+
+# ───────────────────────────────────────────── D1: ONE answer for what a FORK row resolves to
+#
+# Decided 2026-08-23 (S6). TWO tests, not four. An adversarial pass observed that the first draft
+# spent four assertions on a six-line pure helper and on two tools agreeing, none of which crosses
+# into the engine, the exported params, the port or the needs_jordan queue — §0.1 pt 5's predicate.
+# What survives is the minimum that keeps the D1 result falsifiable (§0.1 pt 3): the cross-tool
+# agreement, and the ledger de-duplication. The pointer SHAPE and the idempotence property are
+# asserted inside them rather than as separate functions.
+
+def test_the_two_resolvers_AGREE_on_the_fork_shape():
+    """THE D1 REGRESSION GUARD. Three answers were in circulation for one row shape — bdc's exact
+    branch (bare), bdc's dir-prefix branch (paired), and pathres (bare). Every FORK row must now
+    produce the identical string from both, UNLESS the path still exists on disk, which is a
+    tree/ledger disagreement rather than a resolver one.
+
+    That escape hatch is written as a REQUIREMENT, not a tolerance: a divergence must be EXPLAINED
+    by on-disk existence, and any other divergence fails. It is also the only formulation stable in
+    a clean checkout — one live divergence (`tools/observability/`) is untracked `__pycache__`
+    residue absent from CI, so a hardcoded pin of the divergent set would be red on a clean clone
+    and green in a dirty one.
+
+    ⚠ THE POPULATION IS ROW KEYS **AND** SYNTHETIC CHILDREN OF DIR-PREFIX ROWS. The first draft
+    probed row keys only — about 260 of them — while the 166 disagreements it claims to have closed
+    were measured over 1,363 probes that included a synthetic path under every dir-prefix row. That
+    is precisely the branch `pathres.py` says the bare-concatenation defect lived in, so omitting it
+    left the guard blind to the case that motivated the fix.
+
+    Scoped to FORK rows deliberately. The two functions DIFFER on non-fork rows by design: bdc's is
+    a pure map lookup whose caller checks existence afterwards, pathres's folds the existence check
+    in, and 654 probes differ on exactly that. Asserting full agreement would assert a falsehood,
+    and 'port one onto the other' is the instruction that assertion would license.
+    """
+    import broken_dependency_checker as bdc
+    remap = bdc._load_restructure_map()
+    _exact, prefix_rows = pathres.load_alias_map()
+
+    probes = [p for p in remap if str(remap[p]).startswith(pathres.FORK_PREFIX)]
+    probes += [old + 'synthetic_child_probe.md' for old, new in prefix_rows
+               if str(new).startswith(pathres.FORK_PREFIX)]
+    assert len(probes) >= 300, (
+        f'only {len(probes)} FORK probes built (expected 300+: ~250 row keys plus a child under '
+        f'each of ~160 dir-prefix FORK rows) — the probe builder has stopped building')
+
+    agreed, unexplained = 0, []
+    for p in probes:
+        a = bdc._resolve_remap(p, remap)
+        b = pathres.resolve(p, max_hops=1).live_path
+        if a == b:
+            agreed += 1
+        elif not os.path.exists(os.path.join(ROOT, p)):
+            unexplained.append(f'{p}: bdc={a!r} pathres={b!r}')
+    assert not unexplained, (
+        f'{len(unexplained)} FORK row(s) resolve differently in the two tools for a reason that is '
+        f'NOT on-disk existence; the shape has one owner (pathres.fork_pointer) and something has '
+        f'grown a second answer:\n  ' + '\n  '.join(unexplained[:5]))
+    assert agreed >= len(probes) - 5, (
+        f'only {agreed} of {len(probes)} probes agreed — the comparison has stopped comparing, so '
+        f'the assertion above is measuring nothing')
+
+    # THE SHAPE ITSELF, asserted here rather than in its own function: the paired form is the whole
+    # point, because `FORK:` + ref alone names a commit and leaves the reader guessing the path.
+    r = pathres.resolve('params/core.md')
+    assert r.status == pathres.FORKED, f'expected FORKED, got {r}'
+    parts = r.live_path.split(':', 2)
+    assert len(parts) == 3 and parts[0] == 'FORK' and parts[2], (
+        f'a FORKED resolution must carry ref AND path, got {r.live_path!r}')
+
+
+def test_a_repeated_ledger_key_resolves_to_the_LATER_row():
+    """EIGHT keys in the ledger carry conflicting targets, and the two resolvers used to split on
+    them: the exact-row dict keeps the last binding, while equal-length dir-prefix keys sorted as
+    ties and file order made the FIRST win.
+
+    `designs/arcs/` is the worked case — relocated to `arcs/` on 2026-07-16, then evacuated on
+    2026-08-05. bdc called it FORKED; pathres followed the stale row to `arcs/`, found nothing, and
+    called it DEAD. One ledger row, two answers.
+
+    ⚠ MEASURED SCOPE, because the eight is easy to misread: exactly ONE of the eight is a
+    dir-prefix key, so the code change here fixes one — the other seven are exact rows where the
+    dict comprehension already kept the last binding. The rule is uniform; the fix was not.
+    """
+    exact, prefix = pathres.load_alias_map()
+    keys = [old for old, _ in prefix]
+    assert len(keys) == len(set(keys)), 'dir-prefix rows are no longer de-duplicated by key'
+    r = pathres.resolve('designs/arcs/')
+    assert r.status == pathres.FORKED, (
+        f'designs/arcs/ resolved {r.status} — the earlier `-> arcs/` row is winning again')
+
+    # IDEMPOTENCE, folded in: both tools call fork_pointer, so a value that has already been paired
+    # must survive a second application unchanged or the two together emit `FORK:ref:path:path`.
+    once = pathres.fork_pointer('FORK:abc123', 'a/b.md')
+    assert once == 'FORK:abc123:a/b.md'
+    assert pathres.fork_pointer(once, 'c/d.md') == once
+    assert pathres.fork_pointer('systems/combat/combat_v30.md', 'x') == 'systems/combat/combat_v30.md'

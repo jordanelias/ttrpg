@@ -203,7 +203,7 @@ systems:
     canonical_sha__systems___architecture__conflict_architecture_proposal_md: "4f29b47e950acdbb4fafe01b4f1cd30c6685533e"
   throughlines_framework:
     design_doc: references/throughlines_meta.md
-    canonical_sha__references__throughlines_meta_md: "9dc9c5a093ffa44fc0c4fc09266bc68a5bdc4552"
+    canonical_sha__references__throughlines_meta_md: "cbbcd8f2180f5b6551570b1db038eb5b9ab0d1a2"
     infill: references/throughlines_meta_infill.md
     canonical_sha__references__throughlines_meta_infill_md: "663e6905da0ee3cc28359e9dfb57c07468618a9e"
 

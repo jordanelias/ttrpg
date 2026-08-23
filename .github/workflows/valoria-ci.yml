@@ -44,7 +44,7 @@ jobs:
       # (ED-IN-0194); the mechanism stays because it is the right one, not because a parser needs it.
       #
       # SHIPPED WITH THE `invoked_by` FIX, NOT BEFORE IT — see G9's note in
-      # tools/build_apparatus_registry.py (retired 2026-08-21). Being compiled is not being invoked, and the
+      # `build_apparatus_registry` under tools/ (retired 2026-08-21). Being compiled is not being invoked, and the
       # orphan census used to conflate the two. Expanding this list to name all 108 tools
       # would have been the obvious fix and would have driven the orphan count to zero.
       - name: Compile all validators and tools
@@ -223,7 +223,9 @@ jobs:
           # THE GAME SIGNAL, REWIRED HERE (see the note in the blocking job). review_core.py
           # retired in this wave and it was the only carrier of `m1.acceptance` into CI.
           w python3 tools/m1_acceptance.py --summary
-          w python3 tools/ci_names_check.py
+          # MERGED 2026-08-23 (S6/D2): was `ci_names_check` under tools/, a second implementation of
+          # the same rule at a different index tier. Still report-only, by THIS caller's policy.
+          w python3 tools/ci_naming_check.py --warn
           w python3 tools/currency_consistency_check.py
           w python3 tools/ci_quantity_vocabulary_check.py
           w python3 tools/mechanics_index_gen.py --strict
