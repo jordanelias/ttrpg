@@ -3485,3 +3485,38 @@ hazard transplanted from combat without reading the target. Jordan's *"read code
 by an independent read-only critic, none by the producer — budget for the relay.
 
 **Nothing here is ratified. §15.5 lists what is Jordan's, split into blocking vs non-blocking.**
+
+---
+
+## 2026-08-23 — S5 CLOSED (5c landed); S6 is next
+
+**S5c** folded `references/wiring_manifest.yaml` into `references/module_contracts.yaml`
+(`63cec8a`), reconciled against an independent critic in `06b5b91`. `wiring_map_check.py` and its
+test are retired; three of its five rules live in `export_composition.py --check` (blocking), two
+died structurally, and `build_contract_index.py` gained `--work-list` and `--summary`.
+
+**Next action: S6** (`proposals/2026-08-21-execution-order-v1.md`), now `state: next`. Order within
+it is **6b → 6a → 6f → 6c**, and 6b's constraint is load-bearing: `deprecated/archives/editorial*`
+is read by `validate_ed_citations.py`, so deleting it before the tombstone list lands makes every
+valid `ED-` citation read as fabricated.
+
+**Two things S6 must not repeat, both learned in 5c:**
+- *Check the CI wiring before re-homing a rule.* The 5c instruction named a home
+  (`build_contract_index`) that runs in no workflow. S6's D1 moves FORK-resolution logic between
+  three call sites — check which of them CI actually runs first.
+- *A count is only a success criterion if the detector can see everything.* 5c's parser ratchet was
+  blind twice in one day, in the direction that flattered the result.
+
+**Open for Jordan, unchanged and still unruled:**
+- `fac.legitimacy`'s floor of **0** is AN INFERENCE BY A SESSION, not a ruling
+  (`references/descriptor_registry.yaml` header carries the flag).
+- S6 needs the ledger-cap decision (§4 Q8): `registers/editorial_ledger_in.jsonl` has ~108 tokens
+  of headroom under a blocking cap, so **no lane can file a row**. Raise, split, or accept.
+- Duplicate `ED-IN-0194` at `editorial_ledger_in.jsonl:50-51`.
+
+**Recorded, not acted on (apparatus, load-bearing on process only — §0.1 pt 5):**
+`tools/trace_execution_phases.py` is NON-DETERMINISTIC — the same seeded campaign gave
+`victory: 383 / 378 / 379` over three runs of an unchanged tree, and `references/execution_map.json`
+embeds those counts. Nothing gates on them and the file is untracked, so this is a note for whoever
+next reads a diff of that artifact and thinks their change moved it. Structure and line counts ARE
+stable (verified over four rebuilds), so the flow-skeleton anchors into it are safe.

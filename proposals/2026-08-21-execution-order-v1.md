@@ -26,18 +26,19 @@ requires a human decision; this document's decision requests are §4, addressed 
 | S2 culling waves 1+2 | **done** 2026-08-21 | apparatus removal | — |
 | S3 wave 3 + green the suite | **done** 2026-08-21 | apparatus removal | — |
 | S4 wave 5, untrack the generated layer | **done** 2026-08-22 `f84692c` | apparatus removal | — |
-| S5 contracts-as-registration | **5a/5b/5d/5e done** 2026-08-22; **5c open** | **the engine** | **L0** |
-| **S6 wave 6 + FORK semantics + ledger cap** | **NEXT** (5c may be taken first — see S5) | apparatus + provenance | — |
+| S5 contracts-as-registration | **done** 2026-08-22 / 2026-08-23 | **the engine** | **L0** |
+| **S6 wave 6 + FORK semantics + ledger cap** | **NEXT** — unblocked 2026-08-23 | apparatus + provenance | — |
 | S7 wave 4's residue: extraction | blocked-by S6 | audit corpus | — |
 | S8 M1 juncture 1 | half-done; **Half B SUSPENDED** by Jordan | **the engine** | **L0** |
 | S9 cross-repo residue | blocked-by attaching `jordanelias/valoria-game` | port | — |
 | S10 errors become numbers | **unblocked**, not gating | **the engine** | **L0** |
 
-**S5 is four-fifths done (2026-08-22).** `engine/` no longer names `systems/` by import at all,
-the world's opening position is an authored table, ED-IN-0029's per-stat floors finally run, and the
-bridge invariant is enforceable. **What remains is 5c** — folding `wiring_manifest.yaml` into
-`module_contracts.yaml` — which is apparatus consolidation touching four generators, so a session
-may reasonably take S6 first. Read S5's RESULT section before either. S10 is unblocked and may be taken if Jordan directs it, but
+**S5 IS DONE (5a/5b/5d/5e 2026-08-22; 5c 2026-08-23).** `engine/` no longer names `systems/` by
+import at all, the world's opening position is an authored table, ED-IN-0029's per-stat floors
+finally run, the bridge invariant is enforceable, and `module_contracts.yaml` is the single
+registration table. Read S5's RESULT section before starting S6 — in particular 5c's, because the
+fold's two corrections to this document's own instructions are the kind this document keeps
+issuing. S10 is unblocked and may be taken if Jordan directs it, but
 **do not take it ahead of S5 or S8 by rail-default** — it does not move `0/7`.
 
 **The depth rule binds every step, including any you invent.** §3a rules the tooling at **three
@@ -387,7 +388,7 @@ wave 3.
 
 ---
 
-### S5 — Finish the centralization: one pattern, everywhere · `state: 5a/5b/5d/5e done (2026-08-22); 5c open`
+### S5 — Finish the centralization: one pattern, everywhere · `state: done (5a/5b/5d/5e 2026-08-22; 5c 2026-08-23, `63cec8a`+`06b5b91`)`
 
 **Goal:** centralized definitions and injectable code, consumed by wrappers and systems. This is the
 step the whole programme exists to reach.
@@ -484,16 +485,48 @@ second.** Guarded three ways now.
   `descriptor_registry.yaml`, but authoring `L` there would answer the open ruling on whether
   Legitimacy is a base descriptor. §5 already records Q1 as gating this deletion.
 
-**5c — NOT DONE. Deliberately deferred, and the reason is a scope correction to the instruction.**
-The instruction says fold `wiring_manifest.yaml` into `module_contracts.yaml` and retire
-`wiring_map_check.py` "into `export_composition --check`". Measured before starting: the manifest
-has FOUR programmatic readers (`build_execution_map`, `build_contract_index`, `build_fork`,
-`wiring_map_check`) plus three tests, and `export_composition` reads only the `composition_roles:`
-block — folding the wiring VALIDATION into it would make one tool own two unrelated rules, which is
-the §8 violation this programme is removing, not an instance of it. The natural home is
-`build_contract_index`, the existing builder over `modules:`. **This is apparatus consolidation with
-no game-facing half**, so it was ordered last within S5 and left for a session that can give it a
-full verification pass rather than appended to one already carrying four sub-steps.
+**5c — DONE 2026-08-23 (`63cec8a`, reconciled in `06b5b91`), and the 2026-08-22 deferral note that
+stood here was WRONG on its central point.** That note said the surviving rules' natural home was
+`build_contract_index`. **`build_contract_index` is wired into no workflow at all** — retiring them
+there would have deleted a live gate while appearing to move it. They went into
+`export_composition.py --check`, the plan's own literal instruction, which is the ONLY blocking CI
+job whose subject is this registry. The note's objection (one tool, two rules) survives in weakened
+form and is answered in the tool's docstring: the rule count over this registry goes 3 → 2.
+
+The module sets were IDENTICAL 27/27, so this was a per-row join, not a merge. Two of the retired
+gate's five rules die STRUCTURALLY — with the facts on the row they describe there is no second key
+space to disagree — replaced by a stricter rule that the key is present.
+
+  ⚠ *"Structural" is a claim about a DATA SHAPE, and a list does not earn it for free.*
+  `modules:` is a LIST where the manifest was a MAP: a row may be unnamed or duplicate a name, and
+  every consumer re-keys the list by name. Shipped that way, a duplicated row validated as 28
+  modules and an unnamed one as 27, both silent. Rule 1 is now three assertions.
+
+  ⚠ *The fold found the disagreement it was meant to prevent.* The manifest carried its own
+  `tier`/`scale`/`resolver` copies, and they had drifted: `armature_dot_product` for
+  `articulation_layer`, which is the reading verification RU-4 had already overturned on the
+  contract row. Its single `scale:` was also a lossy flattening for 8 of 27 modules. A THIRD copy
+  survived in `godot_conversion_strategy_v1.md` and was corrected in `06b5b91`.
+
+  ⚠ *Two defects in the same guard, one day apart.* `test_engine_params_bridge.py`'s parser
+  detector could not see a filename inside a longer path literal, nor a module-level tuple binding.
+  The declared count went 9 → 10 → and the descriptor roster 5 → 6. That count is 5c's own success
+  criterion, so both blindnesses would have read as wins. It is also now scoped honestly: ten is a
+  `tools/` number; repo-wide it is twenty-one.
+
+  ⚠ *5c did NOT reduce that count, and the ratchet says so.* It retired a DIFFERENT authored
+  surface, and three of that surface's four parsers already read this file. A ratchet graded on
+  "did the number go down" would have scored a whole registry leaving the tree as a failure.
+
+  ⚠ *The rules moved to a tool with no test.* Deleting `test_wiring_map_check.py` alongside its
+  tool left the ported rules unpinned while the checks registry claimed they were mutation-verified
+  — an unfalsifiable result claim under §0.1 pt 3, caught by the adversarial pass.
+  `tests/valoria/test_wiring_validation.py` is the artifact; mutation-verified 8/8.
+
+  ⚠ *The cap raise was paying for duplication introduced by the fold itself.* The first version
+  repeated an 82-char comment on all 27 rows — 553 tokens. Deduplicated, the fold is a net SHRINK of
+  437 tokens against the pre-fold sum, and the cap moved 24000 → 32000 rather than 33000. The
+  critic's stronger claim, that dedup would avoid the raise entirely, is refuted by measurement.
 
 **5d — DONE, and it is the one sub-step that changed how the game plays.** ED-IN-0029's per-stat
 floors (ratified 2026-07-08) reached `Faction.adjust` for the first time. Five goldens re-recorded
@@ -528,7 +561,7 @@ its cost.
 
 ---
 
-### S6 — Wave 6 consolidations, FORK semantics, and the ledger cap · `state: blocked-by S5`
+### S6 — Wave 6 consolidations, FORK semantics, and the ledger cap · `state: next` (S5 closed 2026-08-23)
 
 **6b before 6a** — 6b's tombstones gate 6a, and `deprecated/archives/editorial*` is read by
 `validate_ed_citations.py`; delete it before the tombstone list lands and **every valid `ED-`
