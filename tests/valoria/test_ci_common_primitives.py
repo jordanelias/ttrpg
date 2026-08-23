@@ -527,13 +527,16 @@ def test_the_bare_yaml_load_residual_can_only_shrink():
     """`load_yaml` is the INTENDED owner, not the only loader, and its docstring
     says so. This pins the residual so the honest number cannot rot upward.
 
-    44 bare `yaml.safe_load` calls remain in tools/, each doing something the
+    24 bare `yaml.safe_load` calls remain in tools/, each doing something the
     helper does not — loading a stream, a string, or wanting the exception on a
     missing file. If this fails HIGH, a new bare call was added; if it fails LOW,
     migrate the count in the docstring with it.
 
     Was 52 until 2026-08-13, when the G2 retirement (ED-IN-0175) carried 8 sites out of the
-    corpus. That is a SHRINKING CORPUS, not adoption — see tools/ci_common.py's own note.
+    corpus, and 26 until 2026-08-23, when plan S5c retired wiring_map_check.py and folded one
+    of build_fork.py's two manifest loads into its contracts load. That is a SHRINKING CORPUS,
+    not adoption — see tools/ci_common.py's own note. This docstring said 44 while the assert
+    read 52 and the tree held 26; three numbers for one fact, so it is now measured, not recalled.
     """
     total = 0
     for p in _tooling_py_files():

@@ -259,10 +259,34 @@ measured balance delta — Jordan: migrate, measure, **report before tuning**), 
 _(The two HELD degree sites that previously sat here as needing Jordan are **RULED** — see the
 section above. Nothing on the ED-IN-0185 agenda is awaiting a decision.)_
 
-### NEEDS JORDAN — faction stats (asked for 2026-08-15, evidence gathered, not ruled)
+### ✅ PARTLY RULED 2026-08-23 — faction stats (asked 2026-08-15, ruled 2026-08-23)
 
-Jordan asked to rule faction stats and the session closed first. Everything needed to rule is below;
-nothing was changed.
+> **Jordan ruled two of the four calls below. Read this box before the evidence, which is preserved
+> as it stood when the question was asked.**
+>
+> * **Call (1) — which roster.** RULED: **"Legitimacy is a base."** `fac.legitimacy` is declared in
+>   `references/descriptor_registry.yaml` and bound to the `Faction.L` field. The roster is **six**
+>   on both sides; the 5-vs-6 disagreement below is closed.
+> * **Call (4) — is the scale 0–7 or 1–7, uniformly.** RULED: **"Influence can be 0."** Uniformly
+>   **0–7**. This supersedes ED-IN-0029's Influence floor of 1, so the inconsistency the evidence
+>   below calls out as deciding "whether a faction can present a zero obstacle" is resolved — it can.
+> * Jordan's rationale, which is what makes call (1) a change of model rather than a reversal:
+>   *"now that we're using continuous, we don't have to worry near as much either as we can just
+>   aggregate these stats as opposed to weird derivations."*
+>
+> **STILL OPEN — calls (2) and (3), and they are not touched by the above:**
+> * **(2) is Mandate a base stat or derived from settlement L/PS.** Still derived. `fac.legitimacy`
+>   is NOT Mandate, and the ruling does not make Mandate a base stat. ⚠ The code stores Mandate *as*
+>   `Faction.L` in places (`parliamentary_bridge` still comments *"Mandate == Faction.L pre-LPS-1"*),
+>   so what is settled is that the FIELD is a declared descriptor with declared bounds — not what
+>   every call site writing it means. That conflation is ED-FA-0004 and is still open.
+> * **(3) does Treasury exist separately from Wealth.** Untouched.
+>
+> Wired in `ca0ff0c`; supersessions recorded in `registers/supersession_register.yaml`.
+
+The evidence below is preserved AS ASKED (2026-08-15) and is deliberately not rewritten — it is the
+record of what was put to Jordan. Where it states the roster as 5 or Influence as 1–7, read the box
+above.
 
 **The registry and the code disagree about what a faction *is*.**
 

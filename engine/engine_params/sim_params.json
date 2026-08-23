@@ -3,13 +3,13 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 83,
-    "total": 323,
-    "uncited": 240,
+    "total": 320,
+    "uncited": 237,
     "of_which_assumption_grade": 8
   },
-  "count": 323,
+  "count": 320,
   "by_module": {
-    "engine.autoload": 18,
+    "engine.autoload": 15,
     "engine.cross_scale": 15,
     "engine": 1,
     "characters": 7,
@@ -70,102 +70,6 @@
         "3": 5.5,
         "4": 6.5,
         "5": 7.0
-      },
-      "kind": "table",
-      "module": "engine.autoload",
-      "file": "engine/autoload/game_state.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "engine.autoload.STARTING_ACCORD",
-      "name": "STARTING_ACCORD",
-      "value": {
-        "T1": 3,
-        "T2": 3,
-        "T3": 3,
-        "T4": 2,
-        "T5": 2,
-        "T6": 2,
-        "T7": 2,
-        "T8": 3,
-        "T9": 4,
-        "T10": 2,
-        "T11": 2,
-        "T12": 2,
-        "T13": 1,
-        "T14": 3,
-        "T15": 0,
-        "T17": 2
-      },
-      "kind": "table",
-      "module": "engine.autoload",
-      "file": "engine/autoload/game_state.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "engine.autoload.STARTING_PT",
-      "name": "STARTING_PT",
-      "value": {
-        "T1": 3,
-        "T2": 3,
-        "T3": 3,
-        "T4": 2,
-        "T5": 3,
-        "T6": 1,
-        "T7": 3,
-        "T8": 3,
-        "T9": 5,
-        "T10": 3,
-        "T11": 2,
-        "T12": 2,
-        "T13": 1,
-        "T14": 3,
-        "T15": 3,
-        "T17": 3
-      },
-      "kind": "table",
-      "module": "engine.autoload",
-      "file": "engine/autoload/game_state.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "engine.autoload.STARTING_STATS",
-      "name": "STARTING_STATS",
-      "value": {
-        "Crown": {
-          "L": 5.0,
-          "Sta": 4.0,
-          "W": 4.0,
-          "I": 5.0,
-          "Mil": 4.0
-        },
-        "Church": {
-          "L": 5.0,
-          "Sta": 5.0,
-          "W": 5.0,
-          "I": 6.0,
-          "Mil": 4.0
-        },
-        "Hafenmark": {
-          "L": 4.0,
-          "Sta": 4.0,
-          "W": 5.0,
-          "I": 4.0,
-          "Mil": 3.0
-        },
-        "Varfell": {
-          "L": 4.0,
-          "Sta": 4.0,
-          "W": 4.0,
-          "I": 4.0,
-          "Mil": 4.0
-        }
       },
       "kind": "table",
       "module": "engine.autoload",

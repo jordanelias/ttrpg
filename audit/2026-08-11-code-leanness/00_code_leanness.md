@@ -287,7 +287,7 @@ I named `charter_liberties`, `home_sanctuary`, `hafenmark_equipment` and `infras
 as where to start tracing, on the strength of **two independent methods agreeing** they were uncalled
 — invoking §10's rank-by-independent-rediscovery.
 
-**All four are reached by a blocking test.** `engine/tests/test_pipeline_reach.py:749-755` lists them
+**All four are reached by a blocking test.** `engine/tests/test_pipeline_reach.py:777-783` lists them
 in `_OI17_FULL_MODULE_ENTRYPOINTS`; `test_oi17_full_module_conversions_are_stub_wired` (`:767-779`)
 asserts each resolves as `stub_wired`; re-run here, **1 passed**. All four are `stubwire.stub_resolve`
 no-ops whose docstrings carry Jordan directives recorded nowhere else — `home_sanctuary.py:5` (the T9

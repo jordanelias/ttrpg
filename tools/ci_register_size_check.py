@@ -72,6 +72,15 @@ THRESHOLDS = {
     # the policy file (one place) and this validator follows. Drift between the two
     # is caught by tests/valoria/test_coverage_matrix_threshold.py.
     "tests/coverage_matrix.md":   COVERAGE_MATRIX_LIMIT,
+    # The relief valve for the line above, RESTORED 2026-08-23 (Jordan: "just solve token room
+    # stuff"). It existed until cadf9c7 deleted it in the evacuation, while coverage_matrix.md's
+    # header went on pointing here — so the live file drifted to 94% of a BLOCKING cap with its
+    # documented relief valve absent, on a file ci_co_file_checker rule 3 REQUIRES every
+    # simulation-output commit to append to. Archiving 26 settled sections took it 94% -> 48%.
+    # Cap is a plain literal, not single-sourced from atomization_rules.yaml, matching the other
+    # _archive entries below; only the LIVE caps are in SINGLE_SOURCED
+    # (tests/valoria/test_coverage_matrix_threshold.py).
+    "tests/coverage_matrix_archive.md": 60_000,
     # "arcs/registers/arc_register.md" RETIRED 2026-08-12 (plan step G2, §1.6):
     # arcs/ was EVACUATED 2026-08-05 (ED-IN-0145); CLAUDE.md §3 says do not recreate.
     "references/propagation_map.md":         15_000,

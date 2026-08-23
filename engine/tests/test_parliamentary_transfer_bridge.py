@@ -1,7 +1,8 @@
 """
 engine/tests/test_parliamentary_transfer_bridge.py — OI-04 Territory Transfer motion oracle
 
-Guards `engine.cross_scale.parliamentary_bridge._derive_transfer` / `_run_transfer_motion` — the
+Guards `systems.factions.sim.parliamentary_transfer.derive_transfer_candidate` and
+`engine.cross_scale.parliamentary_bridge._run_transfer_motion` — the
 THIRD Parliamentary motion path wired 2026-07-29 (ED-IN-0091 plan §3 Wave 2, 07-14 Tier-1 #2 /
 GAP-A1). Before this, `systems.factions.sim.parliamentary_transfer.propose_transfer` had zero
 callers, so a faction's lost territory was a one-way ratchet (test_f7_smoke_oracle.py's
@@ -15,6 +16,13 @@ because this wiring now consumes extra `world.rng` draws whenever the auto-CB qu
 re-record is the World lane's declared job (wf_wave2_seams.js header correction / plan §3 Wave 2
 phase 2), not this lane's (file-ownership table: "L-transfer ->
 engine/cross_scale/parliamentary_bridge.py + systems/factions/sim/*"; golden test files are WORLD's).
+
+DERIVATION MOVED 2026-08-22 (plan step S5a). The derivation these tests exercise used to be
+`parliamentary_bridge._derive_transfer`; it read four members private to `parliamentary_transfer`
+(`_available_cb`, `_MODE_CB`, `PARL_LAST_TERRITORY_FLOOR`, `MODES`), so it now lives in that module
+as the public `derive_transfer_candidate`, and the bridge resolves it as the
+`territory_transfer_candidate` composition role. The calls below follow their subject; the function
+body is unchanged, which is what lets the seeded goldens serve as the control.
 """
 import os
 import sys
@@ -42,7 +50,7 @@ def _scheduled_world(seed):
     return w
 
 
-# ── _derive_transfer: no fabrication, canon-cited derivation ──────────────────────────────────
+# ── derive_transfer_candidate: no fabrication, canon-cited derivation ──────────────────────────────────
 
 def test_derive_transfer_none_when_crown_at_starting_territory_count():
     """Crown starts at exactly 6 territories (game_state.STARTING_OWNER); the auto-CB requires
@@ -51,7 +59,7 @@ def test_derive_transfer_none_when_crown_at_starting_territory_count():
     (plan §3 Wave 2 item 1)."""
     w = game_state.create_world(seed=42)
     assert len(w.factions['Crown'].territories) == 6
-    assert pb._derive_transfer(w) is None
+    assert parliamentary_transfer.derive_transfer_candidate(w) is None
 
 
 def test_derive_transfer_none_for_non_crown_factions_with_no_ledger():
@@ -75,18 +83,18 @@ def test_derive_transfer_finds_crown_restoration_cb_and_picks_largest_holder():
     # Known starting holdings at seed-agnostic STARTING_OWNER: Church=1 (T9, floor-protected),
     # Hafenmark=4 (T7,T8,T10,T17), Varfell=4 (T4,T11,T12,T13) -> tie broken by holder name asc
     # ('Hafenmark' < 'Varfell'); within Hafenmark the alphabetically-first territory id is 'T10'.
-    result = pb._derive_transfer(w)
+    result = parliamentary_transfer.derive_transfer_candidate(w)
     assert result == ('Crown', 'T10', 'adversarial')
 
 
 def test_derive_transfer_never_targets_last_territory_protected_holder():
     """Church holds a single territory (T9) at world creation — the §1.3 last-territory floor
-    means _derive_transfer must never propose Church as a holder, matching the block
+    means derive_transfer_candidate must never propose Church as a holder, matching the block
     propose_transfer itself would apply anyway (this derivation mirrors, not re-implements, that
     gate)."""
     w = game_state.create_world(seed=42)
     w.factions['Crown'].territories = w.factions['Crown'].territories[:5]
-    result = pb._derive_transfer(w)
+    result = parliamentary_transfer.derive_transfer_candidate(w)
     assert result is not None
     _, target_territory, _ = result
     assert target_territory not in w.factions['Church'].territories
@@ -213,9 +221,9 @@ def test_derive_transfer_excludes_an_arc_gated_initiator():
     motion (plan requirement: 'a gated-out season is byte-identical to today')."""
     w = game_state.create_world(seed=42)
     w.factions['Crown'].territories = w.factions['Crown'].territories[:5]
-    assert pb._derive_transfer(w) is not None, "fixture assumption: Crown should qualify pre-gate"
+    assert parliamentary_transfer.derive_transfer_candidate(w) is not None, "fixture assumption: Crown should qualify pre-gate"
     w.factions['Crown'].parl_transfer_used_this_arc = True
-    assert pb._derive_transfer(w) is None, (
+    assert parliamentary_transfer.derive_transfer_candidate(w) is None, (
         "an arc-gated initiator must be excluded from candidate derivation, not merely blocked "
         "once selected")
 

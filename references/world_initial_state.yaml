@@ -1,0 +1,74 @@
+# references/world_initial_state.yaml — the canonical starting configuration of the world.
+#
+# AUTHORED. This is the source; nothing derives it. `tools/export_world_initial_state.py` cooks
+# it into `engine/engine_params/world_initial_state.json` behind a blocking `--check`, and
+# `engine/substrate/world_initial_state.py` is its single runtime reader — the same pattern as
+# descriptor_registry -> descriptors.json -> substrate/descriptors.py.
+#
+# WHY IT EXISTS (plan S5b, 2026-08-22). These tables were Python literals at the top of
+# `engine/autoload/game_state.py`, carried forward from mc_v17.py L62-82 (itself from mc_v15.py)
+# with no authored source anywhere. They are WORLD DATA, not code: which territories exist, who
+# holds them at season 0, how settled and how prosperous each is, and where the garrisons start.
+# Editing the opening position of the campaign should be editing a table, not editing the engine.
+#
+# ⚠ THE VALUES BELOW WERE GENERATED FROM THE LIVE LITERALS, NOT RETYPED. The seeded campaign
+# goldens are the control: this file is a relocation, and any transcription error in it moves
+# them. Change a number here only when you mean to change the game.
+#
+# ⚠ WHAT IS DELIBERATELY NOT HERE: `MULTS`, the internal-units multipliers for faction and
+# territory stats. Its correct home is `references/descriptor_registry.yaml` — that registry
+# already states two of its values in prose ("Legitimacy (faction, derived) is Mandate x 20",
+# "Discipline (faction) is Stability x 10").
+#
+# ⚠ THE ORIGINAL REASON FOR HOLDING IT EXPIRED ON 2026-08-23 and this note is corrected rather than
+# left standing. It held MULTS pending Q1 — the then-open question of whether Legitimacy is a base
+# descriptor. Jordan ruled that it IS, `fac.legitimacy` is declared, and that objection
+# is discharged. TWO SMALLER REASONS SURVIVE, and they are engineering rather than a ruling:
+#   1. MULTS spans TWO registry blocks — `accord` and `pt` are Territory fields, so a faction-only
+#      move would split one dict across two homes, which is the defect the composition work spent
+#      two commits removing. The move wants `internal_multiplier` on both blocks, in one pass.
+#   2. Three of its numbers (100, 15, and the two territory 10s) have no provenance this session
+#      could find, and the anti-fabrication gate would rightly refuse them into an authored surface.
+# Do not resolve it by dropping MULTS into this file: it is not initial state, and a file whose name
+# lies is worse than a literal that is honest.
+#
+# This note is the TWIN of the one in `engine/autoload/game_state.py`. Both are pinned by
+# `tests/valoria/test_world_initial_state.py::test_mults_is_still_a_literal_and_its_reason_is_current`,
+# which reads BOTH files — an earlier version read only the Python half and let this one go stale.
+
+schema_version: 1
+
+# The 16 territory ids the campaign opens with. `fort_level` is deliberately NOT a column: the
+# engine derives it from `garrison` (1 if garrisoned, else 0), and authoring it separately would
+# give one number two owners — the defect this file exists to remove, reintroduced.
+# The 16 territory ids the campaign opens with. There is no T16 — the gap is in the source data
+# and is preserved rather than tidied. `playable` is authored per-territory rather than derived
+# from `owner`, because "unowned means unplayable" is a rule nobody has stated: today T15 is the
+# only territory with neither an owner nor playable status, and one row is not a rule.
+territories:
+  T1: {owner: "Crown", accord: 3, pt: 3, garrison: true, playable: true, prosperity: 2, templar: false}
+  T2: {owner: "Crown", accord: 3, pt: 3, garrison: false, playable: true, prosperity: 2, templar: false}
+  T3: {owner: "Crown", accord: 3, pt: 3, garrison: false, playable: true, prosperity: 2, templar: false}
+  T4: {owner: "Varfell", accord: 2, pt: 2, garrison: false, playable: true, prosperity: 1, templar: false}
+  T5: {owner: "Crown", accord: 2, pt: 3, garrison: false, playable: true, prosperity: 1, templar: false}
+  T6: {owner: "Crown", accord: 2, pt: 1, garrison: false, playable: true, prosperity: 1, templar: false}
+  T7: {owner: "Hafenmark", accord: 2, pt: 3, garrison: false, playable: true, prosperity: 1, templar: false}
+  T8: {owner: "Hafenmark", accord: 3, pt: 3, garrison: true, playable: true, prosperity: 2, templar: false}
+  T9: {owner: "Church", accord: 4, pt: 5, garrison: true, playable: true, prosperity: 2, templar: true}
+  T10: {owner: "Hafenmark", accord: 2, pt: 3, garrison: false, playable: true, prosperity: 1, templar: false}
+  T11: {owner: "Varfell", accord: 2, pt: 2, garrison: false, playable: true, prosperity: 1, templar: false}
+  T12: {owner: "Varfell", accord: 2, pt: 2, garrison: true, playable: true, prosperity: 1, templar: false}
+  T13: {owner: "Varfell", accord: 1, pt: 1, garrison: false, playable: true, prosperity: 1, templar: false}
+  T14: {owner: "Crown", accord: 3, pt: 3, garrison: false, playable: true, prosperity: 2, templar: false}
+  T15: {owner: null, accord: 0, pt: 3, garrison: false, playable: false, prosperity: 1, templar: false}
+  T17: {owner: "Hafenmark", accord: 2, pt: 3, garrison: false, playable: true, prosperity: 1, templar: false}
+
+# Opening faction stats. Field names are the `Faction` dataclass's own (L/Sta/W/I/Mil), not
+# registry keys, because that is what this table sets — see the MULTS note above for why this
+# file takes no position on whether `L` is a base descriptor.
+faction_starting_stats:
+  Crown: {L: 5.0, Sta: 4.0, W: 4.0, I: 5.0, Mil: 4.0}
+  Church: {L: 5.0, Sta: 5.0, W: 5.0, I: 6.0, Mil: 4.0}
+  Hafenmark: {L: 4.0, Sta: 4.0, W: 5.0, I: 4.0, Mil: 3.0}
+  Varfell: {L: 4.0, Sta: 4.0, W: 4.0, I: 4.0, Mil: 4.0}
+

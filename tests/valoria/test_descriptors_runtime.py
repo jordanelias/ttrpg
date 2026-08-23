@@ -68,7 +68,7 @@ def test_a_registry_edit_breaks_the_engine_end_to_end(tmp_path):
     import importlib.util
 
     src = (REPO / 'references' / 'descriptor_registry.yaml').read_text(encoding='utf-8')
-    anchor = '    - {key: fac.stability, name: Stability, scale: "0-7"}'
+    anchor = '    - {key: fac.stability,  name: Stability,  scale: "0-7"}'
     assert anchor in src, 'the registry\'s faction_stats block moved — re-anchor this test, do not drop it'
     doctored = tmp_path / 'registry.yaml'
     doctored.write_text(
@@ -110,13 +110,32 @@ def test_the_live_engine_roster_passes_the_check():
 
 
 def test_the_check_does_not_fire_on_code_fields_with_no_registry_entry():
-    """One-way by design: `L` is declared nowhere and must NOT raise.
+    """One-way by design — and as of 2026-08-23 it protects nothing that exists, which is exactly
+    when the property is worth testing rather than assuming.
 
-    Whether Legitimacy/Mandate is a base faction descriptor or a derived aggregate is an open
-    ruling. A check that failed on it would force a session to answer Jordan's question.
-    """
-    assert descriptors.faction_bounds('L') is None
-    descriptors.assert_faction_roster_is_covered({'L', 'Sta', 'W', 'I', 'Mil', 'intel'})
+    `L` used to be the live instance: declared nowhere, and a check that failed on it would have
+    forced a session to answer Jordan's question about whether Legitimacy is a base descriptor. He
+    ruled that it IS, so `fac.legitimacy` is declared and there is no unregistered Faction field
+    left. The one-way direction stays because the reason was never "there is currently one" — a NEW
+    dataclass field's registry status is a ruling, not a check's call.
+
+    So this now plants a HYPOTHETICAL unregistered field rather than naming a real one. That is the
+    only way to keep observing the property once the real case is gone; asserting it over the live
+    roster would pass whether or not the direction still held."""
+    assert descriptors.faction_bounds('L') == (0, 7), 'L is declared now — see the ruling of 2026-08-23'
+    assert descriptors.faction_bounds('reputation') is None, 'fixture assumption: no such registry key'
+
+    # The live roster PLUS a field the registry knows nothing about. One-way means this passes.
+    descriptors.assert_faction_roster_is_covered(
+        {'L', 'Sta', 'W', 'I', 'Mil', 'intel', 'reputation'})
+
+
+def test_the_roster_check_still_fires_in_the_direction_it_is_supposed_to():
+    """§0.1 pt 2 for the test above: "it does not raise" is also what a broken check does. Assert
+    the OTHER direction still bites — a registry stat whose field is missing must stop the import."""
+    import pytest as _pytest
+    with _pytest.raises(RuntimeError):
+        descriptors.assert_faction_roster_is_covered({'Sta', 'W', 'I', 'Mil', 'intel'})  # no L
 
 
 def test_the_registry_reader_reads_the_cooked_artifact_not_the_yaml():
@@ -139,14 +158,57 @@ def test_the_attribute_roster_declares_itself_open_until_the_tenth_is_named():
         assert not descriptors.ATTRIBUTES_PENDING_TENTH
 
 
+#: The ratified-but-unimplemented rows expected on disk. A row leaves this set ONLY by being
+#: implemented, and the commit that implements it edits this line — which is the whole point:
+#: deleting a row and deleting its name here are the same act, done deliberately, in one place.
+#: `per_stat_floors` left at plan S5d (2026-08-22), wired into `Faction.adjust`. `faction_L` left
+#: 2026-08-23: Jordan ruled "Legitimacy is a base", so `fac.legitimacy` is declared in the registry
+#: and bound to the `L` field. The register is EMPTY, which is the correct state when nothing is
+#: outstanding — and the set comparison below still observes an addition, which is the direction
+#: that matters now.
+EXPECTED_UNIMPLEMENTED = set()
+
+
 def test_ratified_but_unimplemented_items_stay_visible():
-    """These are RATIFIED canon decisions the executable model has not implemented. The list may
-    shrink as they land; it must never be emptied by deleting entries instead of implementing them."""
+    """These are RATIFIED canon decisions the executable model has not implemented.
+
+    ⚠ REWRITTEN 2026-08-22 after an adversarial pass, because the previous version could not
+    observe the failure its own docstring named. It said the list "must never be emptied by deleting
+    entries instead of implementing them" and then only iterated whatever rows happened to be
+    present, asserting each had a `needs` field. An emptied dict passes a loop over an empty dict —
+    §0.1 pt 2, in the file whose subject is the register that records exactly this class of debt.
+    It went green through S5d deleting a row from it.
+
+    Now the SET is pinned. Implementing an item and deleting its row is correct and requires editing
+    `EXPECTED_UNIMPLEMENTED` above; deleting a row because it was inconvenient fails here. Adding a
+    newly-discovered gap also fails here, which is right — a new ratified-but-unimplemented item is
+    a thing a human should see named.
+    """
     data = json.loads((REPO / 'engine' / 'engine_params' / 'descriptors.json').read_text())
     unimpl = data['unimplemented']
+    assert set(unimpl) == EXPECTED_UNIMPLEMENTED, (
+        f'the ratified-but-unimplemented register is now {sorted(unimpl)}, expected '
+        f'{sorted(EXPECTED_UNIMPLEMENTED)}. If an item was IMPLEMENTED, update the set above in the '
+        f'same commit and say where. If one was merely deleted, restore it.'
+    )
     for key, row in unimpl.items():
         assert row.get('needs'), f'{key} records no required action'
         assert row.get('why_it_matters'), f'{key} records no consequence'
+
+
+def test_the_unimplemented_register_guard_can_observe_an_unauthorised_deletion():
+    """§0.1 pt 2 for the test above — the property is "the set matches", and a set comparison that
+    is never exercised against a mismatch proves nothing about the guard."""
+    assert {'faction_L'} != EXPECTED_UNIMPLEMENTED, (
+        'faction_L must not compare equal — it was implemented on 2026-08-23'
+    )
+    assert {'per_stat_floors'} != EXPECTED_UNIMPLEMENTED, (
+        'a restored per_stat_floors row must not compare equal — it is implemented'
+    )
+    assert {'something_new'} != EXPECTED_UNIMPLEMENTED, (
+        'a newly-filed gap must not compare equal — an addition is the direction this guard still '
+        'protects now that the register is empty'
+    )
 
 
 def test_the_export_is_current():

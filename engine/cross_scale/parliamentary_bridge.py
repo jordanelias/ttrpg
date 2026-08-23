@@ -11,9 +11,10 @@ personal path remain future work; this activates contest resolution via the fact
 
 WHAT LANDS HERE (all behind ECHO_TRANSPORT — default OFF is byte-exact):
   - ED-SC-0006 (derivation): each season, derive a two-pole motion from world state and resolve it
-    with systems.social_contest.sim.parliamentary_vote.run_parliamentary_vote (the ratified §10 impl). A resolved
-    vote counts as a resolved contest (world.scenes_resolved) — closing N-1 (the kernel/vote was
-    unreachable from the loop) and the F7 scenes_resolved==0 gap.
+    with the ratified §10 vote implementation — resolved through the `parliamentary_vote` role, not
+    imported (see COMPOSITION below). A resolved vote counts as a resolved contest
+    (world.scenes_resolved) — closing N-1 (the kernel/vote was unreachable from the loop) and the
+    F7 scenes_resolved==0 gap.
   - ED-SC-0007 (outcome → world): the §10 Total-Victory Mandate penalty is applied by
     run_parliamentary_vote itself; the WINNER-side Domain Echo is composed here and emitted through
     the substrate (echo_transport) as a deferred faction stat write at the accounting boundary.
@@ -32,28 +33,40 @@ deterministic instantiation, flagged for retune — NOT a new canonical mechanic
   proposer; every other eligible faction ABSTAINS (supplying §10 resistance when Stability ≥ 6).
   Deterministic in world state (the only randomness is the §10 dice roll on world.rng).
 
+COMPOSITION — THIS MODULE NAMES NO SUBSYSTEM (plan step S5a, 2026-08-22).
+  It held the last three top-level `systems` imports in `engine/`. All three are gone: the §10 vote
+  and its two record types resolve through `engine.substrate.composition`, and
+  `references/module_contracts.yaml` names the providers (roles `parliamentary_vote`,
+  `parliamentary_motion`, `parliamentary_vote_declaration`, `territory_transfer_candidate`,
+  `territory_transfer_proposal`). Every target is imported and resolved at EXPORT time behind a
+  blocking gate, so the indirection cannot fail late in a campaign.
+
+  The same seam was owned twice — `systems/factions/sim/parliamentary_transfer.py` imported the
+  vote by name as well. Both now resolve the one declaration.
+
 OI-04 (ED-IN-0091 plan §3 Wave 2, 07-14 Tier-1 #2 / GAP-A1) — THE THIRD PARLIAMENTARY MOTION PATH:
-  `systems.factions.sim.parliamentary_transfer.propose_transfer` had zero callers, making a
-  faction's lost territory a one-way ratchet. This is a separate motion from the two-pole vote
-  above (which composes only a Domain Echo) and from `parliamentary_action.propose_censure` (the
-  Sanction sibling, wired at faction-action scale) — a CB-gated Territory Transfer, attempted every
-  season alongside the vote, independent of it. `_derive_transfer` uses ONLY
-  `parliamentary_transfer`'s own CB machinery (`_available_cb` / `_MODE_CB` /
-  `PARL_LAST_TERRITORY_FLOOR`) — it never invents or seeds a `world.casus_belli` entry. Today the
-  sole auto-populated CB is 'crown_constitutional_restoration' (Crown < 6 territories,
+  `parliamentary_transfer.propose_transfer` had zero callers, making a faction's lost territory a
+  one-way ratchet. This is a separate motion from the two-pole vote above (which composes only a
+  Domain Echo) and from `parliamentary_action.propose_censure` (the Sanction sibling, wired at
+  faction-action scale) — a CB-gated Territory Transfer, attempted every season alongside the vote,
+  independent of it.
+
+  ⚠ THE DERIVATION MOVED OUT OF THIS FILE AT S5a. `_derive_transfer` lived here and read four
+  members private to `parliamentary_transfer` (`_available_cb`, `_MODE_CB`,
+  `PARL_LAST_TERRITORY_FLOOR`, `MODES`) — the engine reaching into a subsystem to re-derive a rule
+  that lives in that subsystem. It is now `parliamentary_transfer.derive_transfer_candidate`, in
+  its owner, resolved here as the `territory_transfer_candidate` role; its canon notes travelled
+  with it. Behaviour is unchanged — it is a pure function of world state, and the seeded goldens
+  are the control.
+
+  Today the sole auto-populated CB is 'crown_constitutional_restoration' (Crown < 6 territories,
   parliamentary_transfer.py §3), which that module's own §2 table maps to 'adversarial' only; when
   no qualifying CB exists for any (initiator, holder) pair, `_run_transfer_motion` returns None and
-  the season proceeds exactly as before OI-04 — no behaviour change. WAVE-2 addition (§1.1
-  Frequency, "1 per arc per faction"): `_derive_transfer` also excludes any initiator whose
-  `Faction.parl_transfer_used_this_arc` is already set (game_state.py, reset per arc boundary by
-  season_manager.py's `advance_season`) — a gated-out season returns None exactly like a
-  no-qualifying-CB season, so the frequency limit costs zero extra world.rng draws. Target-territory selection is
-  NOT canon-determined (parliamentary_transfer_v30.md §1-§4 specify Pool/Ob/CB/vote mechanics, never
-  a target rule), so it is a [SEED] narrowest-option default (§0.1 "narrowest option, recorded as
-  [SEED]"): the largest current holder among eligible targets, mirroring the realist
-  extremal-selection precedent `parliamentary_action.select_censure_target` already established
-  (ED-SC-0006/0007) — no fabricated relationship signal, just the schema's own territory-count
-  field.
+  the season proceeds exactly as before OI-04 — no behaviour change. The §1.1 Frequency gate ("1
+  per arc per faction") excludes an initiator whose `Faction.parl_transfer_used_this_arc` is
+  already set (game_state.py, reset per arc boundary by season_manager.py's `advance_season`) — a
+  gated-out season returns None exactly like a no-qualifying-CB season, so the frequency limit
+  costs zero extra world.rng draws.
 
 Guardrails (holonic doctrine ED-1083 §2): local rule only; declared I/O only; no entity special-
 casing; no scale-local dialect.
@@ -61,12 +74,7 @@ casing; no scale-local dialect.
 from __future__ import annotations
 
 from engine.cross_scale import echo_transport
-from systems.factions.sim import parliamentary_transfer
-from systems.social_contest.sim.parliamentary_vote import Motion, VoteDeclaration, run_parliamentary_vote
-from systems.social_contest.sim.contest import (
-    PERSUASION_TOTAL_VICTORY,   # 9
-    PERSUASION_TOTAL_DEFEAT,    # 1
-)
+from engine.substrate import composition
 
 # ED-SC-0002 COMPOSED keying — genre → aggregate stat channel (Jordan ruling 2026-07-08).
 # Memory→L is canon-direct (SS6 Memory→Mandate; Mandate==Faction.L pre-LPS-1). Projection→I realizes
@@ -90,6 +98,8 @@ def _derive_vote(world):
     establishment = max((n for n in eligible if n != proposer),
                         key=lambda n: world.factions[n].L)              # highest Mandate defender
     season = int(getattr(world, "season", 0))
+    Motion = composition.require("parliamentary_motion")
+    VoteDeclaration = composition.require("parliamentary_vote_declaration")
     motion = Motion(motion_id=f"parl_s{season}", primary_genre=_SIDE_A_GENRE,
                     parliament_dominant_genre=None, lobbying_offset=0)
     decls = [VoteDeclaration(proposer, "A", _SIDE_A_GENRE),
@@ -99,78 +109,38 @@ def _derive_vote(world):
 
 def _winner_and_degree(vr):
     """Map the §10 VoteResult band → (winning_side, domain_echo degree). Committee (compromise) →
-    (None, 'Partial') = no echo, per ED-SC-0002's agreed 'Compromise fires nothing'."""
-    if vr.total_victory and vr.final_track >= PERSUASION_TOTAL_VICTORY:
-        return "A", "Overwhelming"
-    if vr.total_victory and vr.final_track <= PERSUASION_TOTAL_DEFEAT:
-        return "B", "Overwhelming"
-    if vr.status == "passed":
-        return "A", "Success"
-    if vr.status == "failed":
-        return "B", "Success"
-    return None, "Partial"
+    (None, 'Partial') = no echo, per ED-SC-0002's agreed 'Compromise fires nothing'.
 
+    READS THE VERDICT, DOES NOT RE-DERIVE IT (S5a). This used to compare `vr.final_track` against
+    `PERSUASION_TOTAL_VICTORY` / `PERSUASION_TOTAL_DEFEAT`, imported from `systems.social_contest`
+    — the engine recomputing, from the raw track, a classification the vote module had already made
+    and recorded on the result object. `vr.status` already names the winning side ('passed' = Side
+    A carried the motion, 'failed' = Side B did) and `vr.total_victory` already names the band.
 
-def _derive_transfer(world):
-    """[SEED — ED-SC-0006/0007 precedent; OI-04] Derive a Parliamentary Territory Transfer
-    candidate (initiator, target_territory, mode), reusing ONLY
-    `parliamentary_transfer._available_cb` / `_MODE_CB` / `PARL_LAST_TERRITORY_FLOOR` — never
-    inventing or seeding a `world.casus_belli` entry. Returns None when no (initiator, holder)
-    pair has a CB that qualifies for any mode.
-
-    Search: every parliamentary faction NOT already arc-gated (§1.1 Frequency, Wave-2 fix — see
-    module docstring's OI-04 note) as a candidate initiator, every OTHER faction above the §1.3
-    last-territory floor as a candidate holder (propose_transfer would block a floor-violating
-    holder anyway, so this mirrors the module's own gate rather than re-deriving a new one); for
-    each pair, the mode is the first `parliamentary_transfer.MODES`-order mode any available CB
-    source qualifies for (canon §2 `_MODE_CB`, not an invented mapping). Among all qualifying
-    triples, [SEED]: prefer the largest current holder (most territories) — the narrowest
-    non-fabricated tie-break available, matching `parliamentary_action.select_censure_target`'s
-    realist-targeting precedent; ties broken by initiator name then holder name (both ascending).
-    Within the chosen holder, the target territory is the alphabetically-first territory id, for
-    full determinism (canon does not specify one — no per-territory signal exists to prefer).
+    Value-identical, and `engine/tests/test_parliamentary_bridge.py::
+    test_winner_and_degree_is_identical_to_the_threshold_derivation_it_replaced` proves it
+    exhaustively over every reachable track rather than by argument. The ONE assumption it rests on
+    is canon's own ordering — TOTAL_VICTORY (9) >= WIN_THRESHOLD (7) and TOTAL_DEFEAT (1) <=
+    LOSS_THRESHOLD (3) — so a total victory always also passes or fails. That test fails loudly if
+    a retune ever breaks it, which is why it reads the real constants instead of hardcoding them.
     """
-    candidates = []
-    for initiator_name, initiator_fac in world.factions.items():
-        if not getattr(initiator_fac, "parliamentary", False):
-            continue
-        # OI-04 Wave-2 canon gate (parliamentary_transfer_v30.md §1.1 Frequency, "1 per arc per
-        # faction"): an initiator who already attempted this arc is excluded from candidate
-        # derivation entirely, not merely blocked once selected -- this is what keeps a
-        # gated-out season byte-identical to a no-qualifying-CB season (zero extra world.rng
-        # draws), matching propose_transfer's own gate (parliamentary_transfer.py) rather than
-        # re-deriving a second copy of the rule.
-        if getattr(initiator_fac, "parl_transfer_used_this_arc", False):
-            continue
-        for holder_name, holder_fac in world.factions.items():
-            if holder_name == initiator_name:
-                continue
-            if len(holder_fac.territories) <= parliamentary_transfer.PARL_LAST_TERRITORY_FLOOR:
-                continue
-            available = parliamentary_transfer._available_cb(initiator_name, holder_name, world)
-            if not available:
-                continue
-            for mode in parliamentary_transfer.MODES:
-                if any(cb in parliamentary_transfer._MODE_CB[mode] for cb in available):
-                    candidates.append((initiator_name, holder_name, mode, len(holder_fac.territories)))
-                    break
-    if not candidates:
-        return None
-    candidates.sort(key=lambda c: (-c[3], c[0], c[1]))
-    initiator, holder, mode, _ = candidates[0]
-    target_territory = sorted(world.factions[holder].territories)[0]
-    return initiator, target_territory, mode
+    if vr.status == "passed":
+        return "A", "Overwhelming" if vr.total_victory else "Success"
+    if vr.status == "failed":
+        return "B", "Overwhelming" if vr.total_victory else "Success"
+    return None, "Partial"
 
 
 def _run_transfer_motion(world, rng=None):
     """OI-04 — attempt the CB-gated Territory Transfer motion (see module docstring). A no-op
-    (returns None) when `_derive_transfer` finds no qualifying CB — the season proceeds exactly as
+    (returns None) when the derivation finds no qualifying CB — the season proceeds exactly as
     before OI-04 in that case. Never raises; never fabricates a CB."""
-    derived = _derive_transfer(world)
+    derived = composition.require("territory_transfer_candidate")(world)
     if derived is None:
         return None
     initiator, target_territory, mode = derived
-    result = parliamentary_transfer.propose_transfer(initiator, target_territory, mode, world, rng=rng)
+    result = composition.require("territory_transfer_proposal")(
+        initiator, target_territory, mode, world, rng=rng)
     return {
         "initiator": initiator, "target_territory": target_territory, "mode": mode,
         "cb_used": result.cb_used, "status": result.status,
@@ -196,7 +166,8 @@ def run_parliamentary_scene(world, rng=None):
                 "transfer": transfer}
     motion, decls, proposer, establishment = derived
 
-    vr = run_parliamentary_vote(motion, decls, world, rng)   # applies the §10 loser Mandate penalty
+    # applies the §10 loser Mandate penalty
+    vr = composition.require("parliamentary_vote")(motion, decls, world, rng)
 
     side, degree = _winner_and_degree(vr)
     winner = proposer if side == "A" else (establishment if side == "B" else None)

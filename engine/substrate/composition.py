@@ -34,14 +34,21 @@ _PATH = os.path.normpath(os.path.join(_HERE, '..', 'engine_params', 'composition
 with open(_PATH) as _fh:
     _DATA = json.load(_fh)
 
-#: {role -> {target, needed_by}} exactly as references/ declares it.
+#: {role -> {target, kind, needed_by}} exactly as references/ declares it.
 ROLES = _DATA['roles']
 
 _CACHE = {}
 
 
 def require(role):
-    """Return the callable `references/` binds to `role`. Raises if the role is undeclared.
+    """Return the module attribute `references/` binds to `role`. Raises if the role is undeclared.
+
+    Almost every role is a CALLABLE — a resolver, a builder, a state class. Two (`contest_side.a`
+    and `contest_side.b`) declare `kind: value` and resolve to a module CONSTANT: the side labels
+    `engine/cross_scale/scene_dispatch.py` compares a contest verdict against, which no callable
+    role could carry and which no authored surface declares. The kind is recorded per row so the
+    exporter's callable check stays on for everything that did not opt out; see
+    `tools/export_composition.py`'s `_KINDS`.
 
     Deliberately NOT `get(role, default)`: a missing role is a registry defect, and a silent default
     would let a campaign run with a subsystem quietly absent — the failure mode this indirection

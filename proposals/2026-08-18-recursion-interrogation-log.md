@@ -744,7 +744,7 @@ the counter useless for the ratchet signal in `tools/review_core.py`."* It retur
 - `engine/cross_scale/articulation.py:26-28` — *"a typed no-op instead of a crash, visible to
   structure_audit's `stub_wired` attribute and review_core's `stubs.count` ratchet by construction"*
 - `engine/autoload/npc_ai.py:25-27` — identical
-- `engine/cross_scale/scene_dispatch.py:363-365` — *"Visible via stubwire's greppable import +
+- `engine/cross_scale/scene_dispatch.py:365-367` — *"Visible via stubwire's greppable import +
   structure_audit's stub_wired attribute + review_core's stubs.count ratchet"*
 **Game-engine code is now written in a shape chosen to be legible to the audit apparatus.** And
 waves 2–3 delete every one of those consumers without noticing the engine-side residue.

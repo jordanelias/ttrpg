@@ -191,10 +191,10 @@ which is how it earns a ledger entry rather than a silent correction.
 
 | # | type_id | site | channel | what it actually does |
 |---|---|---|---|---|
-| 1 | `scene.accord_echo` | `engine/cross_scale/echo_transport.py:343` | **`apply=`** | writes `Settlement.order` at the accounting boundary |
+| 1 | `scene.accord_echo` | `engine/cross_scale/echo_transport.py:345` | **`apply=`** | writes `Settlement.order` at the accounting boundary |
 | 2 | `scene.contest_resolved` | `echo_transport.py:438` (via `KEY_TYPE_BY_SCENE`) | **`apply=`** | writes a faction stat delta at the accounting boundary |
 | 3 | `scene.combat_resolved` | `echo_transport.py:438` (same site, same map) | **`apply=`** | as above |
-| 4 | `da.public_governance` | `systems/factions/sim/parliamentary_transfer.py:176` | log-only | **nothing** — `# NO apply= -- log-only, byte-exact goldens cannot move` |
+| 4 | `da.public_governance` | `systems/factions/sim/parliamentary_transfer.py:240` | log-only | **nothing** — `# NO apply= -- log-only, byte-exact goldens cannot move` |
 | 5 | `scene.battle_concluded` | `systems/factions/sim/faction_action.py:394` | log-only | **nothing** — `# NO apply= — log-only, deferred nothing, writes nothing` |
 
 `KEY_TYPE_BY_SCENE` (`echo_transport.py:97-100`) maps exactly two scene types, with a guardrail
@@ -207,8 +207,8 @@ understates them: under a payload defect they log **nothing**, silently, and the
 is the silent one.
 
 **Reachability confirmed, not assumed.** `emit_scene_echo` has two production callers:
-`engine/cross_scale/parliamentary_bridge.py:212` (the contest leg) and
-`engine/cross_scale/scene_dispatch.py:392` (dispatched scenes).
+`engine/cross_scale/parliamentary_bridge.py:183` (the contest leg) and
+`engine/cross_scale/scene_dispatch.py:394` (dispatched scenes).
 
 **So the live bus is: 5 of 55 type_ids emitted (9%), of which 3 write state and 2 write nothing.**
 

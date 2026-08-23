@@ -170,8 +170,16 @@ def test_total_victory_pass_stacks_section10_rider_and_section5_4_effect():
     the §5.4 Censure Mandate −1. This pins the CURRENT composition of the two rules (−2 total on a TV
     pass); whether they SHOULD stack on the same faction is an emergent [SEED] composition flagged
     NEEDS-JORDAN in parliamentary_action.py, not settled canon — if a human caps it at −1 on a TV
-    pass, this golden is expected to change. Church starts Mandate 2.0; −1 (§10 TV) −1 (§5.4) = 0.0,
-    clamped to the Faction floor 0.5."""
+    pass, this golden is expected to change. Church starts Mandate 2.0; −1 (§10 TV) −1 (§5.4) = 0.0.
+
+    ⚠ UPDATED 2026-08-23 — the expected value moved 0.5 → 0.0 and the test got STRICTLY BETTER at
+    what it is for. Jordan ruled "Legitimacy is a base", so `fac.legitimacy` is declared and `L`
+    clamps from the registry at floor 0 rather than falling back to the blanket 0.5 it used while
+    its status was open. The stacking this test exists to pin is UNCHANGED: it is still −2 total.
+    What changed is that 2.0 − 2 = 0.0 now lands exactly, where the old floor CLAMPED it — so the
+    assertion used to pass at 0.5 whether the stack was −2 or −10, and now it can only pass at −2.
+    A floor that hides the quantity it is measuring is the §0.1 pt 2 defect; the ruling removed it
+    here by accident, and that is worth recording rather than silently re-pinning."""
     w = _strong_proposer_world(seed=1)
     target = pa.select_censure_target(w.factions['Crown'], w)
     assert target.name == 'Church'
@@ -180,8 +188,12 @@ def test_total_victory_pass_stacks_section10_rider_and_section5_4_effect():
     result = pa.propose_censure(w.factions['Crown'], w, random.Random(1))
 
     assert result == 'ParliamentarySanction_Censure:passed'
-    # Mandate: −2 total (−1 §10 TV rider + −1 §5.4), clamped to Faction floor 0.5.
-    assert target.L == pytest.approx(0.5), "stacked −2 Mandate clamps at the 0.5 Faction floor"
+    # Mandate: −2 total (−1 §10 TV rider + −1 §5.4). 2.0 − 2 = 0.0, and 0 IS the registry floor, so
+    # this now measures the stack exactly instead of through a clamp.
+    assert target.L == pytest.approx(0.0), (
+        "stacked −2 Mandate should land 2.0 -> 0.0 exactly; the registry floor for fac.legitimacy "
+        "is 0 as of Jordan's 2026-08-23 ruling, so nothing clamps here any more"
+    )
     # Stability: only the §5.4 −1 (the §10 TV rider is Mandate-only).
     assert target.Sta == pytest.approx(sta_before - 1.0)
 

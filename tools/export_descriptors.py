@@ -18,21 +18,22 @@ same shape as its four sibling exports: the markdown/YAML stays the AUTHORED, re
 code reads the cooked artifact. Emitting a generated `.py` would put executable code in a directory
 whose whole contract is "typed data the Godot port ingests", and would give the port nothing.
 
-WHAT IT DOES NOT DO. It does not resolve the roster disagreements it exposes; it RECORDS them, in
-the same shape `export_game_constants.py` uses, because each needs a ruling and not a value edit:
+WHAT IT USED TO RECORD, AND WHY THAT SECTION IS NOW EMPTY. This tool does not resolve roster
+disagreements; it RECORDS them in its `unimplemented` block, because each needs a ruling and not a
+value edit. It carried two, and BOTH ARE NOW CLOSED:
 
-  * `faction_stats` declares FIVE keys (influence, wealth, military, intel, stability). The Faction
-    dataclass implements SIX fields (L, Sta, W, I, Mil, intel) — `L` (Legitimacy/Mandate) is written
-    by 32 call sites and is declared NOWHERE in the registry. That is the 5-vs-6 half of the
-    faction-stats packet awaiting Jordan (HANDOFF.md; plan Q1).
-  * the registry's PER-STAT floors were ratified 2026-07-08 (ED-IN-0029, OPT-AV-14/D14 + OPT-AV-18):
-    Influence floors at 1, the rest at 0. `Faction.adjust` (game_state.py:127-131) applies a BLANKET
-    floor of 0.5 and ceiling of 7.0 to every stat, and no caller overrides it. **The ratified floors
-    have never been implemented.** Wiring them moves the seeded goldens, so it is a separate,
-    measured commit — not a side effect of adding this exporter.
-  * `attributes` ships NINE and Jordan ruled 2026-08-14 that it will be TEN. The tenth is unnamed, so
-    the export carries an explicit `pending_tenth` sentinel rather than silently shipping nine as if
-    the roster were closed (plan Q2).
+  * THE 5-vs-6 GAP — `faction_stats` declared FIVE keys while the Faction dataclass implemented SIX
+    fields, with `L` written by 20 of `.adjust()`'s 31 non-test call sites and declared NOWHERE.
+    RULED 2026-08-23: Jordan ruled "Legitimacy is a base", so `fac.legitimacy` is declared, bound to
+    `L` by `FACTION_KEY_TO_FIELD`, and the roster is SIX on both sides.
+  * THE UNIMPLEMENTED FLOORS — ED-IN-0029 (2026-07-08) ratified per-stat floors that
+    `Faction.adjust` ignored in favour of a blanket 0.5/7.0 for six weeks. WIRED 2026-08-22 (plan
+    S5d), then partly superseded 2026-08-23 by "Influence can be 0", which replaced that docket's
+    Influence floor of 1. All six stats floor at 0.
+
+An EMPTY `unimplemented` block is the correct state when nothing is outstanding, and it is not a
+licence to keep it empty: `tests/valoria/test_descriptors_runtime.py` pins the exact expected set,
+so a silent addition fails as loudly as an unauthorised deletion.
 
 Usage:
     python3 tools/export_descriptors.py           # write engine/engine_params/descriptors.json
@@ -60,14 +61,17 @@ OUT = os.path.join(REPO, 'engine', 'engine_params', 'descriptors.json')
 SCALE_RE = re.compile(r'^\s*(-?\d+(?:\.\d+)?)\s*-\s*(-?\d+(?:\.\d+)?)(\+?)\s*$')
 
 # Registry key -> the field name the Faction dataclass actually uses. Hand-confirmed against
-# engine/autoload/game_state.py:99-111 and MULTS at :45. `L` is deliberately absent: it has no
-# registry entry at all, which is the finding, not an oversight here.
+# engine/autoload/game_state.py's Faction dataclass and MULTS.
+# ⚠ `L` USED TO BE DELIBERATELY ABSENT here — it had no registry entry at all, and that absence was
+# the finding rather than an oversight. Jordan ruled 2026-08-23 that Legitimacy IS a base
+# descriptor, so `fac.legitimacy` is declared and bound below, and the roster is six on both sides.
 FACTION_KEY_TO_FIELD = {
-    'fac.influence': 'I',
-    'fac.wealth':    'W',
-    'fac.military':  'Mil',
-    'fac.stability': 'Sta',
-    'fac.intel':     'intel',
+    'fac.influence':  'I',
+    'fac.legitimacy': 'L',   # Jordan 2026-08-23: "Legitimacy is a base." Six stats, not five.
+    'fac.wealth':     'W',
+    'fac.military':   'Mil',
+    'fac.stability':  'Sta',
+    'fac.intel':      'intel',
 }
 
 
@@ -141,25 +145,16 @@ def build():
         'settlement_stats': _section(reg, 'settlement_stats'),
         'practitioner_stats': _section(reg, 'practitioner_stats'),
         'territory_stats': _section(reg, 'territory_stats'),
+        # ⚠ EMPTY AS OF 2026-08-23, AND THAT IS A RESULT RATHER THAN A DELETION.
+        # This block carried RATIFIED canon decisions the executable model had not implemented. Both
+        # are now implemented and their rows are gone in the commits that implemented them:
+        #   * `per_stat_floors` -- wired into Faction.adjust at plan S5d (2026-08-22).
+        #   * `faction_L` -- Jordan ruled 2026-08-23 that Legitimacy IS a base descriptor, so it is
+        #     declared in references/descriptor_registry.yaml and bound to the `L` field above.
+        # An empty register is the correct state when nothing is outstanding. It is NOT a licence to
+        # keep it empty: `tests/valoria/test_descriptors_runtime.py` pins the exact expected set, so
+        # both an unauthorised deletion AND a silent addition fail there.
         'unimplemented': {
-            'faction_L': {
-                'what': "engine/autoload/game_state.py's Faction dataclass carries `L` "
-                        "(Legitimacy/Mandate), written by 32 .adjust() call sites across engine/ and "
-                        "systems/. references/descriptor_registry.yaml declares no entry for it.",
-                'why_it_matters': 'The registry declares five faction stats; the code implements six. '
-                                  'This is the 5-vs-6 half of the faction-stats packet.',
-                'needs': 'ruling — is Legitimacy a base faction descriptor, or derived like Mandate?',
-            },
-            'per_stat_floors': {
-                'what': 'The per-stat floors above were RATIFIED 2026-07-08 (ED-IN-0029, OPT-AV-14/D14 '
-                        '+ OPT-AV-18): Influence floors at 1, the rest at 0. Faction.adjust '
-                        '(game_state.py:127-131) applies a blanket floor of 0.5 and ceiling of 7.0 to '
-                        'every stat, and none of its 32 callers overrides either.',
-                'why_it_matters': 'A ratified canon decision that has never reached the executable '
-                                  'model. Wiring it moves the seeded campaign goldens, so it is a '
-                                  'separate measured commit, not a side effect of this export.',
-                'needs': 'implementation with a measured golden delta',
-            },
         },
     }
 

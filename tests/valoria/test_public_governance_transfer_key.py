@@ -1,6 +1,7 @@
 """The third live Key emitter — `da.public_governance` on a Parliamentary Transfer (ED-IN-0123).
 
-WHY THIS EXISTS. `references/wiring_manifest.yaml` records `save_replay_premise: violated`:
+WHY THIS EXISTS. `references/module_contracts.yaml` records `save_replay_premise: violated`
+under `foundation_gaps:` (it was `wiring_manifest.yaml`'s until plan S5c folded that file in):
 "the live strategic loop mutates World DIRECTLY (Faction.L, Territory.owner) with no Key trace,
 so the Key log cannot reconstruct strategic state." The conversion strategy's Stage 1 specifies
 `save = serialize-the-log` and its Stage 2 makes Key-log equality the master parity check, so

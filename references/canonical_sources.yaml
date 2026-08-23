@@ -302,7 +302,7 @@ systems:
   faction_behavior:
     note__lps2: "LPS-2 (2026-05-30): faction-level L/PS DEMOTED per LPS-1 — faction_behavior §2/§3.4/§3.5/§3.6/§4 (Mandate now = round(mean controlled-territory 0.5L+0.5PS); strictness reads aggregate), faction_canon §3.4/§5.1/§5.2(RESOLVED)/§5.3, faction_state_authoring §8 (per-territory seed), stats_1_7_scale (6-stat header), derived_stats footnote. Detail: master _lps_structural_redesign_2026-05-30."
     design_doc: systems/factions/faction_behavior_v30.md
-    canonical_sha__systems__factions__faction_behavior_v30_md: "303d91f0e5a2ab3a999d8616143165213f57b751"
+    canonical_sha__systems__factions__faction_behavior_v30_md: "fbc855e60c03912b8e65060f62323bb562eae7c9"
     canonical_sha__designs__provincial__faction_behavior_v30_md: "303d91f0e5a2ab3a999d8616143165213f57b751"
     status: canonical
     added: '2026-05-01 PP-686 v2 ratification — faction architecture consuming PP-687'
@@ -342,7 +342,7 @@ systems:
   faction_canon_consolidation:
     note__lps2b: "LPS-2b (2026-05-30): faction tactics rolling faction-level L demoted to Mandate (Royal Decree/Excommunication/Sovereign Authority) in faction_canon §9 + Crown/Church sheets + stats_1_7_scale (matches factions_personal §8.2/8.4); PART B L/PS Dynamics marked per-territory; Seizure flagged FCN-SEIZURE-DRIFT. Detail: master _lps_structural_redesign_2026-05-30."
     design_doc: systems/factions/faction_canon_v30.md
-    canonical_sha__systems__factions__faction_canon_v30_md: "98a0d8df5f0a5d2e9e7517966f2be050b932aafd"
+    canonical_sha__systems__factions__faction_canon_v30_md: "57ce9ae51d0710f9389aeebbd5bcfd0b3221ccb8"
     canonical_sha__designs__provincial__faction_canon_v30_md: "354544eaf759b483d55bbd3e3c98728cbaf2c761"
     status: provisional
     added: '2026-05-08 Faction canon consolidation — Stage 1: Framework (§§1-12) + Crown + Church sheets. Stages 2-3 pending. Supersedes piecemeal lookup across faction_layer/faction_behavior/faction_state_authoring/factions_personal.'
@@ -461,7 +461,7 @@ systems:
     canonical_sha__systems__npcs__npc_behavior_v30_infill_md: "a0741a60b71889a53f64f28875c5f4efa5536611"
   module_contracts:
     design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "7e56c94ae199574dda3c4c72d9ffa05cffd2675c"
+    canonical_sha__references__module_contracts_yaml: "778382b0a7d693fcc72a9a0409e8a198ba3f23c0"
     canonized: "2026-06-10"
     canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
     note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."

@@ -225,8 +225,8 @@ consciousness-performed) are today enforced by prose and by nothing else.
 `Key.causes` is a list of antecedent key ids — the schema's provenance chain. Across the whole live
 tree there are **three** non-test sites that set it, and **two of those pass `causes=[]`**:
 
-- `engine/cross_scale/echo_transport.py:317` — `causes=[caused_by_key_id] if caused_by_key_id else []` (the only real one)
-- `systems/factions/sim/parliamentary_transfer.py:166` — `causes=[]`
+- `engine/cross_scale/echo_transport.py:319` — `causes=[caused_by_key_id] if caused_by_key_id else []` (the only real one)
+- `systems/factions/sim/parliamentary_transfer.py:230` — `causes=[]`
 - `systems/factions/sim/faction_action.py:389` — `causes=[]`
 
 So the ancestry graph exists in the schema and not in the data. Corroboration (§5.3), the Case
@@ -255,7 +255,7 @@ much smaller than expected. All four re-verified here at HEAD.
 
 ### §4b.1 The scene pipeline is built end-to-end. **`evaluable` is a one-element set.**
 
-`engine/cross_scale/scene_dispatch.py:344-360` already carries a live `elif st in ("fieldwork",
+`engine/cross_scale/scene_dispatch.py:348-362` already carries a live `elif st in ("fieldwork",
 "investigation")` branch that routes to the stubs and says so in its own comment:
 
 > "ctx/world are threaded through so a future real resolver drop-in needs no call-site change here."

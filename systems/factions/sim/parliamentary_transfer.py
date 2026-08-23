@@ -7,14 +7,21 @@ Status: [implemented 2026-05-31 — §1 Pool=Proposer Influence / Ob=Holder Legi
     §1.2 4-degree outcome, §1.3 protections, §2 four modes, §3 CB sources, §4 vote-wrapped resolution.]
 
 Dependencies:
-  - sim/personal/parliamentary_vote   — §10 vote contest (run_parliamentary_vote, Motion, VoteDeclaration)
+  - the §10 vote contest (run_parliamentary_vote, Motion, VoteDeclaration) — resolved through
+    engine.substrate.composition, NOT imported: references/module_contracts.yaml names the provider
+    (roles parliamentary_vote / parliamentary_motion / parliamentary_vote_declaration). The same
+    seam was owned twice, here and in the engine bridge; S5a made it one declaration.
   - sim/personal/parliamentary_stay   — §10.1 stay hook (available post-roll; caller-invoked per §4 step 7)
   - sim/autoload/dice_engine          — roll_pool + Degree (Continuous Engine, params/core.md)
   - sim/autoload/game_state           — Faction (I/L/Sta/standing/territories), Territory (.accord), ACCORD_MAP, MULTS
 
-Entry point:
+Entry points:
   - propose_transfer(initiator, target_territory, mode, world, *, side_a_allies=None,
                      side_b_allies=None, rng=None) -> TransferResult
+  - derive_transfer_candidate(world) -> (initiator, target_territory, mode) | None
+      [MOVED here from engine/cross_scale/parliamentary_bridge.py at plan step S5a — it reads only
+       this module's own CB machinery, so its owner is this module. The campaign bridge resolves it
+       through references/module_contracts.yaml's `territory_transfer_candidate` role.]
 
 Mutation: applies effects directly (territory move, L/Sta/Standing deltas, Accord set) AND returns a
 TransferResult — matching the sibling faction-action convention (crown_initiative.py adjusts in-place + returns).
@@ -39,8 +46,9 @@ season attempted a transfer with no per-arc limit. `Faction.parl_transfer_used_t
 now gates `propose_transfer` at the declaration stage per §1.1's Frequency clause; the flag is set
 at the same point CB is consumed (§1.1's Cost clause: an ATTEMPT pays whether it succeeds or
 fails). `arc` is unambiguous in this corpus -- `engine/autoload/season_manager.py`'s
-`SEASONS_PER_ARC = 4` + `World.arc`, no mapping ambiguity to record. `parliamentary_bridge.py`'s
-`_derive_transfer` was updated in the same change to skip an already-arc-gated initiator, so a
+`SEASONS_PER_ARC = 4` + `World.arc`, no mapping ambiguity to record. the derivation
+(`derive_transfer_candidate`, which lived in `parliamentary_bridge.py` until plan S5a moved it
+into this module) was updated in the same change to skip an already-arc-gated initiator, so a
 gated-out season is byte-identical to a no-qualifying-CB season (both return None with zero side
 effects, zero extra `world.rng` draws).
 """
@@ -51,7 +59,7 @@ from dataclasses import dataclass, field
 
 from engine.autoload.dice_engine import roll_pool, Degree
 from engine.autoload.game_state import ACCORD_MAP, MULTS
-from systems.social_contest.sim.parliamentary_vote import run_parliamentary_vote, Motion, VoteDeclaration
+from engine.substrate import composition
 
 # ── §1/§3/§5 constants (ledgered) ──
 PARL_MAJORITY_OB_BONUS = 2               # [§1.1 Ob = Holder Legitimacy + 2; §5 sensitivity: 2 canonical default]
@@ -113,10 +121,68 @@ def _available_cb(initiator, holder, world):
     return sources
 
 
+def derive_transfer_candidate(world):
+    """[SEED — ED-SC-0006/0007 precedent; OI-04] Derive a Parliamentary Territory Transfer
+    candidate `(initiator, target_territory, mode)` from world state, or None when no
+    (initiator, holder) pair has a CB that qualifies for any mode.
+
+    MOVED HERE FROM `engine/cross_scale/parliamentary_bridge.py` at plan step S5a, unchanged in
+    behaviour. It reads `_available_cb`, `_MODE_CB`, `PARL_LAST_TERRITORY_FLOOR` and `MODES` — all
+    four private to THIS module — so the engine bridge was reaching into a subsystem's internals to
+    re-derive a rule that lives here (`CLAUDE.md` §8: every rule lives once, in its owner). The
+    bridge now resolves this function through `references/module_contracts.yaml`'s
+    `territory_transfer_candidate` role and never names the module.
+
+    Search: every parliamentary faction NOT already arc-gated (§1.1 Frequency — see the module
+    docstring's OI-04 note) as a candidate initiator, every OTHER faction above the §1.3
+    last-territory floor as a candidate holder (`propose_transfer` would block a floor-violating
+    holder anyway, so this mirrors this module's own gate rather than re-deriving a new one); for
+    each pair, the mode is the first `MODES`-order mode any available CB source qualifies for
+    (canon §2 `_MODE_CB`, not an invented mapping). Among all qualifying triples, [SEED]: prefer
+    the largest current holder (most territories) — the narrowest non-fabricated tie-break
+    available, matching `parliamentary_action.select_censure_target`'s realist-targeting precedent;
+    ties broken by initiator name then holder name (both ascending). Within the chosen holder, the
+    target territory is the alphabetically-first territory id, for full determinism (canon does not
+    specify one — no per-territory signal exists to prefer).
+
+    Never fabricates or seeds a `world.casus_belli` entry.
+    """
+    candidates = []
+    for initiator_name, initiator_fac in world.factions.items():
+        if not getattr(initiator_fac, "parliamentary", False):
+            continue
+        # OI-04 Wave-2 canon gate (parliamentary_transfer_v30.md §1.1 Frequency, "1 per arc per
+        # faction"): an initiator who already attempted this arc is excluded from candidate
+        # derivation entirely, not merely blocked once selected -- this is what keeps a gated-out
+        # season byte-identical to a no-qualifying-CB season (zero extra world.rng draws),
+        # matching propose_transfer's own gate rather than re-deriving a second copy of the rule.
+        if getattr(initiator_fac, "parl_transfer_used_this_arc", False):
+            continue
+        for holder_name, holder_fac in world.factions.items():
+            if holder_name == initiator_name:
+                continue
+            if len(holder_fac.territories) <= PARL_LAST_TERRITORY_FLOOR:
+                continue
+            available = _available_cb(initiator_name, holder_name, world)
+            if not available:
+                continue
+            for mode in MODES:
+                if any(cb in _MODE_CB[mode] for cb in available):
+                    candidates.append((initiator_name, holder_name, mode, len(holder_fac.territories)))
+                    break
+    if not candidates:
+        return None
+    candidates.sort(key=lambda c: (-c[3], c[0], c[1]))
+    initiator, holder, mode, _ = candidates[0]
+    target_territory = sorted(world.factions[holder].territories)[0]
+    return initiator, target_territory, mode
+
+
 def _emit_public_governance_transfer(world, initiator, holder, territory_id, deg) -> None:
     """Emit `da.public_governance` when a Parliamentary Transfer moves a territory.
 
-    WHY THIS EXISTS. `wiring_manifest.yaml`'s `save_replay_premise` is recorded `violated`:
+    WHY THIS EXISTS. `module_contracts.yaml`'s `foundation_gaps.save_replay_premise` is recorded
+    `violated` (it lived in `wiring_manifest.yaml` until plan S5c folded that file in):
     "the live strategic loop mutates World DIRECTLY (Faction.L, Territory.owner) with no Key
     trace, so the Key log cannot reconstruct strategic state." MEASURED 2026-08-03 against a
     seeded campaign, that note is now mostly out of date and the residue is precise:
@@ -132,7 +198,7 @@ def _emit_public_governance_transfer(world, initiator, holder, territory_id, deg
         mention of it in engine/+systems/ is a comment), and no owner write in 40 seeded
         campaigns. Its gate is not the obstacle -- CI >= 60 is met in 20/20 seeds and CI = 100,
         the FORCED declaration point where P(declare)=1, is reached in 8/20. FA lane; see
-        wiring_manifest's save_replay_premise note.
+        module_contracts.yaml's foundation_gaps.save_replay_premise note.
 
     ENCODING, and its one honest gap. `da.public_governance` is an EXISTING registered type
     ("Visible administrative or sovereign-role action", consumed by `faction_layer`) and every
@@ -241,12 +307,14 @@ def propose_transfer(initiator, target_territory, mode, world, *,
     fac.parl_transfer_used_this_arc = True
 
     # §4 step 2-4 — §10 vote contest -> pool modifier. Bloc default proposer(A) vs holder(B) (FLAG: PROVISIONAL).
+    Motion = composition.require("parliamentary_motion")
+    VoteDeclaration = composition.require("parliamentary_vote_declaration")
     motion = Motion(f"parl_transfer_{target_territory}", primary_genre="Memory")
     side_a = [initiator] + list(side_a_allies or [])
     side_b = [holder] + list(side_b_allies or [])
     parties = ([VoteDeclaration(n, "A", motion.primary_genre) for n in side_a]
                + [VoteDeclaration(n, "B", motion.primary_genre) for n in side_b])
-    vote = run_parliamentary_vote(motion, parties, world, rng=rng)
+    vote = composition.require("parliamentary_vote")(motion, parties, world, rng=rng)
     res.vote = vote
     pool_mod = (PARL_VOTE_POOL_MOD if vote.status == "passed"
                 else -PARL_VOTE_POOL_MOD if vote.status == "failed" else 0)

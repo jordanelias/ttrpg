@@ -76,6 +76,117 @@ composition_roles:
     target: "systems.overview.sim.season:run_season"
     needed_by: "engine/mc_v18.py — composes advance_season -> action_callback -> run_accounting"
 
+  # ── The parliamentary seam (added 2026-08-22, plan S5a) ───────────────────────────────────────
+  # `engine/cross_scale/parliamentary_bridge.py` held the last three top-level `systems` imports in
+  # `engine/`, and the SAME seam was owned laterally as well. CORRECTED 2026-08-22 after an
+  # adversarial pass: the first version of this note said "owned twice" and converted two callers.
+  # It was owned THREE times across subsystem boundaries — `parliamentary_transfer.py` §4 and
+  # `parliamentary_action.py` §5.4 both imported the provider by name — and all three now resolve
+  # these roles. `systems/social_contest/sim/parliamentary_stay.py` also imports it and is left
+  # alone deliberately: that is social_contest importing its own sibling, which is not a
+  # cross-subsystem seam and needs no registry indirection.
+  parliamentary_vote:
+    target: "systems.social_contest.sim.parliamentary_vote:run_parliamentary_vote"
+    needed_by: "engine/cross_scale/parliamentary_bridge.py (the two-pole season vote), systems/factions/sim/parliamentary_transfer.py §4 (the vote-wrapped transfer resolution), and systems/factions/sim/parliamentary_action.py §5.4 (the Censure motion)"
+    note: "social_contest_v30 §10. Applies the Total-Victory Mandate penalty itself; callers read the VoteResult, they do not re-derive its bands."
+  parliamentary_motion:
+    target: "systems.social_contest.sim.parliamentary_vote:Motion"
+    needed_by: "the same three callers — the §10 motion record they construct before voting"
+  parliamentary_vote_declaration:
+    target: "systems.social_contest.sim.parliamentary_vote:VoteDeclaration"
+    needed_by: "the same three callers — one per faction taking a side under §10 step 2"
+  territory_transfer_candidate:
+    target: "systems.factions.sim.parliamentary_transfer:derive_transfer_candidate"
+    needed_by: "engine/cross_scale/parliamentary_bridge.py — OI-04 derivation of (initiator, territory, mode)"
+    note: "MOVED here from the bridge at S5a. It reads only parliamentary_transfer's own CB machinery (_available_cb / _MODE_CB / PARL_LAST_TERRITORY_FLOOR / MODES), so the engine was reaching into a subsystem's privates to re-derive a rule that lives in that subsystem."
+  territory_transfer_proposal:
+    target: "systems.factions.sim.parliamentary_transfer:propose_transfer"
+    needed_by: "engine/cross_scale/parliamentary_bridge.py — the §§1-4 CB-gated transfer motion itself"
+
+  # ── World composition: the eleven seams inside engine/autoload/game_state.py (S5a, 2026-08-22) ─
+  # These were FUNCTION-LOCAL imports, which is why they were invisible to the first ratchet and
+  # why `CLAUDE.md` §3 could claim "autoload is a leaf" while `game_state.py` named seven
+  # subsystems. A deferred import hides a cycle from the interpreter; it does not remove one. The
+  # concrete cycle they carried: systems/factions/sim/faction_action.py -> engine.autoload.
+  # game_state -> systems.factions.sim.treaty.
+  #
+  # `world_gen` runs at world creation. The `snapshot_state.*` rows are the save/restore
+  # deserializers: `serialize_world` writes a registry's rows as plain dicts, and
+  # `restore_world` needs the owning subsystem's dataclass to rehydrate them. The KEY is the
+  # snapshot field, so a reader can go from a save file straight to the class that owns it.
+  world_gen_settlements:
+    target: "systems.settlements.sim.registry:populate_from_geography"
+    needed_by: "engine/autoload/game_state.py create_world — OI-07, populates world.settlements from the canonical geography YAML"
+    note: "Deterministic, no RNG draw, so it cannot move an RNG-derived campaign golden."
+  snapshot_state.practitioners:
+    target: "systems.threadwork.sim.coherence:CoherenceState"
+    needed_by: "engine/autoload/game_state.py restore_world — schema migration #1"
+  snapshot_state.insurgencies:
+    target: "systems.world.sim.insurgency_pipeline:InsurgencyRecord"
+    needed_by: "engine/autoload/game_state.py restore_world — schema migration #1"
+  snapshot_state.npcs:
+    target: "systems.world.sim.npe:NPC"
+    needed_by: "engine/autoload/game_state.py restore_world — schema migration #1; a LIST per territory, not a single record"
+  snapshot_state.treaties:
+    target: "systems.factions.sim.treaty:TreatyRecord"
+    needed_by: "engine/autoload/game_state.py restore_world — schema migration #1"
+    note: "This row is the engine -> systems half of the package cycle CLAUDE.md §3 denied existed."
+  snapshot_state.convictions:
+    target: "systems.characters.sim.conviction:ConvictionState"
+    needed_by: "engine/autoload/game_state.py restore_world — schema migration #2"
+  snapshot_state.beliefs:
+    target: "systems.characters.sim.beliefs:Belief"
+    needed_by: "engine/autoload/game_state.py restore_world — schema migration #2; a LIST per holder"
+  snapshot_state.knots:
+    target: "systems.fieldwork.sim.knots:Knot"
+    needed_by: "engine/autoload/game_state.py restore_world — schema migration #2"
+  snapshot_state.territory_infrastructure:
+    target: "systems.settlements.sim.infrastructure:InfrastructureState"
+    needed_by: "engine/autoload/game_state.py restore_world — schema migration #2"
+  snapshot_state.threadcut_beings:
+    target: "systems.threadwork.sim.threadcut:ThreadcutState"
+    needed_by: "engine/autoload/game_state.py restore_world — schema migration #2"
+  snapshot_state.settlements:
+    target: "systems.settlements.sim.registry:Settlement"
+    needed_by: "engine/autoload/game_state.py restore_world — schema migration #3 (OI-07)"
+
+  # ── The last five function-local seams (S5a, 2026-08-22) ─────────────────────────────────────
+  # engine/cross_scale/scene_dispatch.py's four and echo_transport.py's one. With these,
+  # NESTED_BASELINE reaches 0 alongside BASELINE_TOTAL, and `engine/` names no subsystem at all —
+  # which is the condition CLAUDE.md §3's "acyclic" claim needed before it could be restated.
+  scene_resolver.combat:
+    target: "systems.combat.sim.combat:resolve_combat_round"
+    needed_by: "engine/cross_scale/scene_dispatch.py — the personal-combat scene branch"
+  scene_resolver.contest:
+    target: "systems.social_contest.sim.contest:resolve_contest"
+    needed_by: "engine/cross_scale/scene_dispatch.py — the promoted §Agon kernel (ED-SC-0006), paired with scene_builder.contest"
+  scene_builder.contest:
+    target: "systems.social_contest.sim.contest:build_contest"
+    needed_by: "engine/cross_scale/scene_dispatch.py — builds the contest the resolver then runs"
+  # The two side LABELS the verdict is compared against. `kind: value` because they are module
+  # constants ("a"/"b", contest/contract.py:7), not callables — the only two `value` rows in this
+  # block, and the reason that kind exists at all. The engine must not hardcode a subsystem's
+  # vocabulary: rename them in `contest` and the exporter's blocking gate catches it, where a
+  # literal "a" in scene_dispatch.py would silently start comparing false.
+  contest_side.a:
+    target: "systems.social_contest.sim.contest:A"
+    kind: value
+    needed_by: "engine/cross_scale/scene_dispatch.py — ED-SC-0002 emergency-council verdict -> echo degree"
+  contest_side.b:
+    target: "systems.social_contest.sim.contest:B"
+    kind: value
+    needed_by: "engine/cross_scale/scene_dispatch.py — ED-SC-0002 emergency-council verdict -> echo degree"
+  scene_resolver.fieldwork:
+    target: "systems.fieldwork.sim.fieldwork:run_fieldwork_scene"
+    needed_by: "engine/cross_scale/scene_dispatch.py — OI-02, stub-wired pending ED-916"
+  scene_resolver.investigation:
+    target: "systems.fieldwork.sim.investigation:resolve_npe_response"
+    needed_by: "engine/cross_scale/scene_dispatch.py — OI-02, stub-wired pending ED-916"
+  rs_track_delta:
+    target: "systems.overview.sim.rs_track:apply_rs_delta"
+    needed_by: "engine/cross_scale/echo_transport.py — the §5.5 Accord Domain Echo's RS leg"
+    note: "A Pass 2l armature stub (OI-17): self-flags as a typed no-op via stubwire until RS is built. Routing it as a role does not make it live."
+
 modules:
 
   - module: faction_state
@@ -144,6 +255,12 @@ modules:
       - "key_substrate_v30 §8.1, §8.6 [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
       - "settlement_layer_v30 §1.8 LPS-2e [READ: 2026-06-10]"
+    wiring:
+      build: deferred
+      godot: python-oracle
+      port_rank: 2
+      parity: key-log
+      note: the in-13 hub; action code (conquest/muster/govern/uniques) is live, resolver [ASSUMPTION].
 
   - module: npc_behavior
     aliases: ["NPC Behaviour"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
@@ -248,6 +365,12 @@ modules:
       - "political_dynamics_keys_migration_v30 full incl. §8 sequencing [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
       - "key_substrate_v30 §8.2, §8.3 [READ: 2026-06-10]"
+    wiring:
+      build: design
+      godot: no-oracle
+      port_rank: 8
+      parity: key-log
+      note: Procedures B/C/D/E; npc_ai.py is a 28-line stub. The in-12 hub — no oracle.
 
   - module: npc_memory
     registry_system: "npc_memory"   # Key Type Registry vocabulary
@@ -271,6 +394,12 @@ modules:
     sources:
       - "political_dynamics_keys_migration_v30 §2.3 [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+    wiring:
+      build: design
+      godot: no-oracle
+      port_rank: 8
+      parity: key-log
+      note: doc:null; schema lives in a doc-12 bridge.
 
   - module: piety_track
     aliases: ["Conviction Track"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
@@ -317,6 +446,12 @@ modules:
       - "key_substrate_v30 §8.4 [READ: 2026-06-10]"
       - "conviction_track_v1.md header + §1-§4 index [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+    wiring:
+      build: deferred
+      godot: python-oracle
+      port_rank: 3
+      parity: key-log
+      note: conviction.py Scar accumulation real; reached only via the unwired knot chain.
 
   - module: territorial_piety
     doc: systems/characters/conviction_track_v30.md
@@ -359,6 +494,12 @@ modules:
     sources:
       - "conviction_track_v30 index §1-§11 [READ: 2026-06-10]"
       - "clock_registry_v30 Shared Clocks table [READ: 2026-06-10]"
+    wiring:
+      build: deferred
+      godot: python-oracle
+      port_rank: 2
+      parity: key-log
+      note: CI generation live via ci_track; CANONICAL doc with ZERO Key integration.
 
   - module: threadwork
     registry_system: "threadwork"   # Key Type Registry vocabulary
@@ -391,6 +532,12 @@ modules:
       - "threadwork_v30 index Parts One-Two [READ: 2026-06-10]"
       - "scale_transitions_v30 §3.1/§3.5/§3.6 [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+    wiring:
+      build: unwired
+      godot: python-oracle
+      port_rank: 2
+      parity: key-log
+      note: 13 operations built, zero live callers; rendering is a stub.
 
   - module: fieldwork_knots
     aliases: ["Knots"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
@@ -446,6 +593,12 @@ modules:
       - "fieldwork_v30 index [READ: 2026-06-10]"
       - "key_substrate_v30 §8.4, §8.7 [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+    wiring:
+      build: stub
+      godot: no-oracle
+      port_rank: 8
+      parity: key-log
+      note: fieldwork/investigation raise; knots built but the scene runner is a stub.
 
   - module: scene_slate
     registry_system: "scene_slate"   # Key Type Registry vocabulary
@@ -480,6 +633,12 @@ modules:
       - "key_substrate_v30 §8.5 [READ: 2026-06-10]"
       - "settlement_layer_v30 §4.1 [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+    wiring:
+      build: deferred
+      godot: no-oracle
+      port_rank: 8
+      parity: key-log
+      note: doc:null; built = a 59-line queue, the canonical §4 generator is unbuilt.
 
   - module: game_director
     registry_system: "game_director"   # Key Type Registry vocabulary
@@ -510,6 +669,12 @@ modules:
     status: extracted
     sources:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+    wiring:
+      build: deferred
+      godot: no-oracle
+      port_rank: 8
+      parity: key-log
+      note: doc:null; scene lifecycle + zoom stack.
 
   - module: scene_timer
     registry_system: "scene_timer"   # Key Type Registry vocabulary
@@ -531,6 +696,12 @@ modules:
     status: extracted
     sources:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+    wiring:
+      build: deferred
+      godot: no-oracle
+      port_rank: 8
+      parity: n/a
+      note: doc:null observability sidecar.
 
   - module: audit
     registry_system: "audit"   # Key Type Registry vocabulary
@@ -553,6 +724,12 @@ modules:
     status: extracted
     sources:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+    wiring:
+      build: deferred
+      godot: no-oracle
+      port_rank: 8
+      parity: n/a
+      note: doc:null QA telemetry sink.
 
   - module: social_contest
     registry_system: "social_contest"   # Key Type Registry vocabulary
@@ -580,6 +757,12 @@ modules:
       - "key_substrate_v30 §8.5 (PP-683) [READ: 2026-06-10]"
       - "scale_transitions_v30 §3.4 [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+    wiring:
+      build: gated
+      godot: python-oracle
+      port_rank: 1
+      parity: key-log
+      note: Agon kernel built (1 of 4 games); reached live only via emergency_council.
 
   - module: mass_battle
     aliases: ["Mass Combat"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
@@ -608,6 +791,21 @@ modules:
       - "key_substrate_v30 §8.5 [READ: 2026-06-10]"
       - "scale_transitions_v30 §3.6-§3.8 [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+    wiring:
+      build: live
+      godot: python-oracle
+      port_rank: 1
+      parity: key-log
+      note: 'ED-MB-0043 RESOLVED 2026-08-03 by Jordan (commit/PR #274 indicates the canon tree). THE TWO TREES
+        ARE NOT TWO VERSIONS OF ONE ENGINE -- they are a LIVE-BUT-STALE engine and a DEVELOPED-BUT-UNWIRED one,
+        and the fork was about to carry the wrong one. CANON = tests/sim/mass_battle/ (28 modules, 11,269 LOC,
+        last touched 2026-07-31, carries the PC_* flags in 12 files, and is what CI byte-exact goldens run via
+        bat.py). LIVE = systems/mass_battle/sim/massbattle.py (5 modules, 2,375 LOC, last touched 2026-07-21,
+        ZERO PC_* flags) -- verified by resolving the import: faction_action.py:431 does `from systems.mass_battle.sim.massbattle
+        import resolve_mass_battle`, so the ~30-45 battles/campaign run on the SMALL tree. CONSEQUENCE: every
+        MB-lane result -- Track F, the flag bisects, the geometry spec S1-S4, the 9 red CI tests -- is measured
+        on a tree the campaign never executes. FORK IMPACT: plan of record section 5 says carry systems/*/sim
+        and LEAVE tests/, which would carry the stale engine and abandon canon. Section 5 corrected.'
 
   - module: domain_actions
     aliases: ["Domain Echo"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
@@ -651,6 +849,12 @@ modules:
       - "key_substrate_v30 §8.6 [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
       - "designs/audit/2026-07-08-pessimist-action-audit/ (ED-FA-0006 da.* crosswalk decision) [READ: 2026-07-08]"
+    wiring:
+      build: design
+      godot: no-oracle
+      port_rank: 8
+      parity: key-log
+      note: da.* 5-tag taxonomy; doc:null, zero code.
 
   - module: peninsular_strain
     registry_system: "peninsular_strain"   # Key Type Registry vocabulary
@@ -708,6 +912,16 @@ modules:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
       - "systems/overview/sim/ms_track.py, systems/overview/sim/accounting.py [READ: 2026-07-29]"
       - "engine/params/core.md §MS Baseline Decay (PP-255) [READ: 2026-07-29]"
+    wiring:
+      build: deferred
+      godot: no-oracle
+      port_rank: 8
+      parity: key-log
+      note: 'owns Turmoil + IP; env.* emitters + occupation ladder unbuilt. [CORRECTED 2026-08-10, ED-IN-0152:
+        this note previously claimed IP is not even a clocks key -- false on both readings. engine/autoload/game_state.py:244
+        seeds IP: 20.0 inside the clocks mapping, and clock_registry_v30.md:18 lists Institutional Pressure
+        (IP), start 20. What IS true is that no module writes IP after world-gen -- ip_track.py''s two entry
+        points are stubs with no production caller.]'
 
   - module: settlement_layer
     registry_system: "settlement_layer"   # Key Type Registry vocabulary
@@ -788,6 +1002,12 @@ modules:
     sources:
       - "settlement_layer_v30 §1.3/§1.8/§4.1 full [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+    wiring:
+      build: design
+      godot: python-oracle
+      port_rank: 3
+      parity: key-log
+      note: territory/ substrate built but unwired; Mandate aggregation (7T/(T+6)) unbuilt.
 
   - module: settlement_economy
     registry_system: "settlement_economy"   # Key Type Registry vocabulary
@@ -811,6 +1031,12 @@ modules:
     status: extracted
     sources:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+    wiring:
+      build: design
+      godot: retire
+      port_rank: 9
+      parity: n/a
+      note: phantom (in-3/out-0); ED-SE-0005 folds it into settlement_layer.
 
   - module: ci_political
     doc: systems/factions/ci_political_v30.md
@@ -837,6 +1063,12 @@ modules:
     sources:
       - "ci_political_v30 full [READ: 2026-06-10]"
       - "clock_registry_v30 Shared Clocks [READ: 2026-06-10]"
+    wiring:
+      build: deferred
+      godot: no-oracle
+      port_rank: 8
+      parity: key-log
+      note: CANONICAL doc, ZERO Key integration; card system unbuilt.
 
   - module: victory
     doc: systems/victory/victory_v30.md
@@ -881,6 +1113,12 @@ modules:
     status: extracted
     sources:
       - "victory_v30 §5 full + header [READ: 2026-06-10]"
+    wiring:
+      build: live
+      godot: python-oracle
+      port_rank: 1
+      parity: state read
+      note: GD-1; small + fully live. Easy first strategic port.
 
   - module: engine_clock
     registry_system: "engine_clock"   # Key Type Registry vocabulary
@@ -907,6 +1145,13 @@ modules:
     status: extracted
     sources:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+    wiring:
+      build: design
+      godot: no-oracle
+      port_rank: 8
+      parity: key-log
+      note: doc:null temporal spine — the sole remaining T0 blocker (ED-1051). Blocks the season/accounting
+        cadence port.
 
   - module: faction_politics
     registry_system: "faction_politics"   # Key Type Registry vocabulary
@@ -940,6 +1185,12 @@ modules:
     sources:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
       - "systems/factions/faction_politics_v30.md §1.0, §1.0a, §1.1-§1.4, §6, §10.1 [READ: 2026-07-29]"
+    wiring:
+      build: deferred
+      godot: python-oracle
+      port_rank: 3
+      parity: key-log
+      note: contest/faction.py succession/coalition math exists but unwired.
 
   - module: miraculous_event
     registry_system: "miraculous_event"   # Key Type Registry vocabulary
@@ -959,6 +1210,12 @@ modules:
     status: extracted
     sources:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+    wiring:
+      build: stub
+      godot: no-oracle
+      port_rank: 8
+      parity: key-log
+      note: trigger raises.
 
   - module: scenario_authoring
     registry_system: "scenario_authoring"   # Key Type Registry vocabulary
@@ -981,6 +1238,12 @@ modules:
     status: extracted
     sources:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+    wiring:
+      build: design
+      godot: no-oracle
+      port_rank: 8
+      parity: key-log
+      note: compile-time injection; execution unbuilt.
 
   - module: articulation_layer
     registry_system: "articulation"   # Key Type Registry vocabulary
@@ -1003,6 +1266,12 @@ modules:
     sources:
       - "key_substrate_v30 §8.7 [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+    wiring:
+      build: stub
+      godot: no-oracle
+      port_rank: 8
+      parity: key-log
+      note: the universal Key consumer — 3x raises. No consume-side oracle exists anywhere.
 
   - module: clock_registry
     doc: systems/overview/clock_registry_v30.md
@@ -1022,6 +1291,12 @@ modules:
     status: extracted
     sources:
       - "clock_registry_v30 full [READ: 2026-06-10]"
+    wiring:
+      build: design
+      godot: python-oracle
+      port_rank: 2
+      parity: data
+      note: pure catalog; ports as a data table.
 
   - module: personal_combat
     registry_system: "personal_combat"   # Key Type Registry vocabulary
@@ -1083,6 +1358,21 @@ modules:
       - "tests/sim/v32-combat-balance/{m1_dice_sigma_core,r1_sigma_resolution,r2_consequence_wounds}.py [READ: 2026-06-23]"
       - "registers/editorial_ledger.jsonl ED-900/904/1029/1040/1041 [READ: 2026-06-22]"
       - "personal-combat audit 2026-06-22 (this session) — model-correctness + drift findings folded in"
+    wiring:
+      build: unwired
+      godot: gd-ported
+      port_rank: 0
+      parity: key-log + typed-export round-trip
+      note: 'built + typed-exported + 2 of 11 EngineModules GDScript-ported (strike/wound) — the golden path
+        — BUT the mc_v18 loop never routes here, so end-to-end parity is unvalidated. BLOCKER IDENTIFIED 2026-08-03
+        (ED-IN-0123), and it is NOT the DISPATCH_COMBAT_BRIDGE flag: flipping that flag ON for a full seeded
+        campaign changes nothing at all — same 157 keys, same key-type composition, same winner, identical Faction.L
+        and Territory.owner. Measured cause: a whole campaign dispatches 29 scene slots and ALL 29 are `contest`.
+        queue_triggered_scenes is the only production caller of scene_slate.queue_scene, and evaluate_triggers
+        can only ever emit scene_type=contest (Stability Crisis -> emergency_council). No trigger anywhere produces
+        a combat scene — combat_bridge.py:37 and scene_dispatch.py:37 both already state this in prose. So wiring
+        personal_combat to live requires AUTHORING THE TRIGGER that says when a personal fight occurs in a campaign,
+        which is canon, not a flag flip or a wiring fix. Jordan call.'
 
   - module: campaign_architecture
     doc: systems/_architecture/campaign_architecture_v30.md
@@ -1100,6 +1390,12 @@ modules:
 
 # Canonical Accounting spine (doc-12 §8 + substrate §4.1). Module accounting_phase
 # entries must name a phase id below (checked by A12).
+    wiring:
+      build: design
+      godot: retire
+      port_rank: 9
+      parity: n/a
+      note: 'reclassified: a consolidation doc, not a runtime module.'
 accounting_sequence:
   - phase: season_tick
     does: "engine_clock emits mechanical.season_change"
@@ -1128,3 +1424,143 @@ accounting_sequence:
   - phase: settlement_accounting
     does: "derived-value-at-0-through-Accounting -> stat -1; Mandate feedback drift ±1; Knot strain decay check"
     source: "settlement §1.3/§1.8; knots §5"
+
+# ═══════════════════════════════════════════════════════════════════════════════════════════
+# WIRING — build state and Godot port status (folded in from references/wiring_manifest.yaml,
+# 2026-08-23, plan S5c). Filed ED-IN-0074 (2026-07-17 MC-wiring coverage audit).
+#
+# WHY IT LIVES HERE NOW. It was a second registry keyed by the SAME 27 module names as `modules:`
+# above, so "every wiring tag resolves to a module contract" and "coverage is 27/27" were CHECKED
+# invariants that a join makes STRUCTURAL — they cannot fail once the facts sit on the row they
+# describe. What the split actually bought was a place for the two registries to disagree, and
+# they did: the manifest carried `resolver: armature_dot_product` for articulation_layer, which is
+# the reading verification RU-4 had already corrected on the contract row ("the armature
+# dot-product is the SUBSTRATE interpretation primitive, NOT a system resolver"). Nothing joined
+# them, so the corrected fact and the stale one both shipped. `tier`/`scale`/`resolver` are NOT
+# carried here for that reason — the contract row owns them.
+#
+# Validated by tools/export_composition.py --check (blocking): adapter tags resolve in
+# engine/cross_scale/, coverage is 8/8, and every build/godot value is in the vocabularies below.
+# Ranked port work-list: python3 tools/build_contract_index.py --work-list
+#
+# Analysis-derived; build/godot fields are the audit's verdicts (adversarially verified over
+# 7-seed run_campaign + 6 lanes + a 4-vector coverage diff) — revise as the port advances.
+# ═══════════════════════════════════════════════════════════════════════════════════════════
+wiring_as_of: "2026-07-29"
+
+wiring_vocabularies:
+  build_states: [live, gated, deferred, unwired, stub, design]
+  #   live      — executes every season in the mc_v18 loop
+  #   gated     — runs only under a condition (flag / eligibility / trigger)
+  #   deferred  — reached but resolves nothing today
+  #   unwired   — real, tested code the loop never calls
+  #   stub      — raises NotImplementedError
+  #   design    — specified in a doc, zero code
+  godot_states: [gd-ported, typed-exported, python-oracle, no-oracle, retire]
+  #   gd-ported      — a GDScript port exists (the skeleton slice)
+  #   typed-exported — a CI-checked typed param export exists (config → JSON round-trip)
+  #   python-oracle  — real Python to port FROM; no GDScript yet   ← the port work-list
+  #   no-oracle      — nothing to port from; canon must be authored first (Gate-0.5 halts)
+  #   retire         — recommended for removal; do not port
+
+# The one proof-of-concept the whole strategy leans on.
+golden_path:
+  unit: personal_combat
+  chain: combat_engine_v1 (Python oracle) -> engine/engine_params/combat_engine_v1.json (typed export, CI
+    round-trip) -> godot/skeleton/engines/combat/ (strike + wound)
+  note: The only unit where Python oracle + typed export + GDScript port all exist. This is the template
+    every other port copies.
+
+# ADAPTERS (8 — the KeyBus / GameDirector seam). Cross-scale bridges; conversion units too
+# (godot_conversion_strategy_v1 §I.3 cross-cutting). Tags resolve to engine/cross_scale/<name>.py.
+adapters:
+  scene_dispatch:
+    build: deferred
+    godot: python-oracle
+    port_rank: 2
+    parity: key-log
+    note: down-scale seam; only 1 of 8 triggers fires.
+  combat_bridge:
+    build: gated
+    godot: python-oracle
+    port_rank: 2
+    parity: key-log
+    note: 'IN-side combat dispatch bridge (ED-IN-0093, OI-01): faction aggregates -> Combatant pair -> wrapper.fight,
+      behind DISPATCH_COMBAT_BRIDGE (default OFF); seam = wrapper.fight + Combatant ctor, PC-owned, consumed
+      as-is.'
+  parliamentary_bridge:
+    build: gated
+    godot: python-oracle
+    port_rank: 2
+    parity: key-log
+    note: runs every season (echo on); emits 13-65 keys/campaign — the ONLY live Key producer.
+  echo_transport:
+    build: gated
+    godot: python-oracle
+    port_rank: 2
+    parity: key-log
+    note: the paired apply-closure — the only live Key CONSUMER (writes Faction.L/I).
+  domain_echo:
+    build: gated
+    godot: python-oracle
+    port_rank: 2
+    parity: key-log
+    note: compute_domain_echo/accord/thread.
+  zoom_in_out:
+    build: gated
+    godot: python-oracle
+    port_rank: 2
+    parity: key-log
+    note: zoom protocol §4; maps to the Godot GameDirector zoom stack.
+  handoff_rules:
+    build: unwired
+    godot: python-oracle
+    port_rank: 3
+    parity: key-log
+    note: 8 §3 rules built, ZERO callers; §3.7 Mass->Personal Duel never fires.
+  articulation:
+    build: stub
+    godot: no-oracle
+    port_rank: 8
+    parity: key-log
+    note: the intended universal Key reader — stub. The consume/handoff half of the substrate has NO oracle
+      on either side.
+
+# FOUNDATION GAPS — not modules; they block whole tiers.
+foundation_gaps:
+  godot_spine:
+    godot: no-oracle
+    note: BaseEngine / EngineModule / KeyBus / Resolver / GameState are referenced by the skeleton but class_name
+      def = NONE anywhere. Gate-0; the skeleton is non-compilable. The map's Wrapper tier = this undefined
+      spine.
+  character_layer:
+    godot: no-oracle
+    note: No Character/Actor dataclass in World; 9- vs 10-attribute rival rosters, neither wired. Every
+      personal-scale port needs this first.
+  save_replay_premise:
+    status: partial
+    measured: 2026-08-03, seeded campaigns, ED-IN-0123 (SELF-CORRECTED same day)
+    note: 'Strategy premise ''save = initial conditions + Key log''. The two halves have DIFFERENT answers
+      and an earlier note on this line got the second one wrong -- recorded here because the way it was
+      wrong is the reusable part. TERRITORY.OWNER: RECONSTRUCTS. 8/8 ownership changes rebuild from the
+      log at every horizon tested (3/6/12/24 seasons) -- conquest via scene.battle_concluded (victor + territorial_outcome),
+      political transfer via da.public_governance (faction_id + target_territory_id), the latter added 2026-08-03
+      and previously the only untraced ownership write. Falsifier: tests/valoria/test_public_governance_transfer_key.py.
+      FACTION.L: DOES NOT RECONSTRUCT. The first pass scored it 4/4 and called the evidence merely "thin".
+      It was not thin, it was ABSENT: 3 of 4 factions sat exactly on the 0.5/7.0 clamps, where a clamped
+      rebuild agrees with a clamped actual whether or not the deltas are right. Re-measured on horizons
+      short enough that values have not saturated, so 3-4 factions per run are genuine comparisons: 0/3
+      rebuilt (seed 20260803, 5 and 6 seasons), 0/4 (seed 7, 8 seasons), best case 3/4 (seed 42, 3 seasons).
+      MECHANISM: Faction.adjust() is the single owner of faction-stat mutation and has 31 non-test call
+      sites across 9 files; exactly ONE of them (engine/cross_scale/echo_transport.py) emits a Key carrying
+      Target.stat_deltas. The other 30 mutate L/Sta/W/Mil with no Key at all. So the ORIGINAL "no Key trace"
+      wording was correct for this half and the correction over-claimed. Falsifier: tests/valoria/test_faction_l_reconstruction.py
+      (xfail, strict). THIRD OWNER-WRITE SITE, now measured rather than assumed: systems/factions/sim/mass_seizure.py
+      is not merely unexercised, it is UNREACHABLE -- zero production callers (every mention in engine/+systems/
+      is a comment), and it wrote no owner in 40 seeded campaigns. Its gate is not the problem: CI >= 60
+      is met in 20/20 seeds and CI = 100, the FORCED declaration point where P(declare)=1, is reached in
+      8/20. A ratified mechanic (victory_v30 section 3.2, supersession 250715f) whose trigger condition
+      is routinely satisfied and which never runs. FA lane. STILL AN INTERPRETATION: ''da.public_governance
+      + outcome success + target_territory_id means that territory is now owned by faction_id'' is not declared
+      by the key type registry. Sound for all three live emitters today; a dedicated da.territorial_transfer
+      type would state it rather than imply it. Jordan call; see the fork plan section 7.'

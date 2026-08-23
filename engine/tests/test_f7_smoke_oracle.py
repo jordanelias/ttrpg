@@ -120,15 +120,158 @@ _FACTIONS = ['Crown', 'Church', 'Hafenmark', 'Varfell']
 # `systems/combat/combat_engine_v1/core.py:56`. Measured 749 combat calls through
 # `workbench.balance.winrate`, ALL INTEGRAL — so combat is value-identical and its byte-exact
 # goldens did not move. They are what says this change touched only what it was aimed at.
-GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 12.5, 'Hafenmark': 0.0, 'Varfell': 37.5}
+# ══════════════════════════════════════════════════════════════════════════════════════════════
+# RE-PINNED 2026-08-22, plan S5d — ED-IN-0029's PER-STAT FLOORS, AND THIS ONE MOVED BALANCE-ADJACENT
+# OUTPUT, NOT ONLY THE RNG STREAM. Read this before re-recording again.
+#
+# WHAT CHANGED. `Faction.adjust` applied a blanket floor 0.5 / ceiling 7.0 to every faction stat.
+# It now reads `descriptors.faction_bounds()`, so the floors ratified 2026-07-08 (ED-IN-0029,
+# OPT-AV-14/D14 + OPT-AV-18) finally apply: Influence floors at 1, Wealth/Military/Stability at 0.
+# `L` keeps 0.5/7.0 — the registry declares no bounds for it and Q1 is Jordan's open ruling.
+#
+# BLAST RADIUS, measured rather than assumed (§0.1 pt 4). Over these 8 seeded campaigns there are
+# 1,969 `.adjust()` calls; 160 of them now clamp to a different value than before — 107 on Wealth
+# and 53 on Stability, both of which gained room BELOW the old floor. Zero on Influence and zero on
+# L at these seeds. So the change is real and it is concentrated in two stats.
+#
+# THE CONTROL, `tools/balance_oracle.py`, run at n=120 per arm TWICE before any golden was touched:
+#
+#   seed 20260819          blanket    per_stat   delta pp       z
+#   Church                   10.0%      15.8%      +5.8     +1.35
+#   Crown                    39.2%      43.3%      +4.2     +0.66
+#   Hafenmark                10.0%       3.3%      -6.7     -2.07   SIGNIFICANT
+#   Varfell                  40.8%      37.5%      -3.3     -0.53
+#
+#   seed 424242 (replication)
+#   Church                   12.5%      10.0%      -2.5     -0.61
+#   Crown                    45.0%      50.8%      +5.8     +0.90
+#   Hafenmark                 9.2%       9.2%      +0.0     +0.00
+#   Varfell                  33.3%      30.0%      -3.3     -0.56
+#
+#   POOLED, n=240 per arm (480 campaigns)
+#   Church                   11.2%      12.9%      +1.7     +0.56
+#   Crown                    42.1%      47.1%      +5.0     +1.10
+#   Hafenmark                 9.6%       6.2%      -3.3     -1.35
+#   Varfell                  37.1%      33.8%      -3.3     -0.76
+#
+# HOW TO READ THAT, honestly and in both directions (§0.1 pt 4 forbids asymmetric skepticism):
+#   * The first batch flagged Hafenmark SIGNIFICANT. It did NOT replicate — the second batch shows
+#     exactly zero effect on Hafenmark — and pooled over 480 campaigns nothing is significant. With
+#     four comparisons per batch, one |z| just past 1.96 is close to the expected false-positive
+#     rate; that is why it was replicated instead of banked.
+#   * Do NOT therefore record "no balance effect". The pooled Crown +5.0pp and Hafenmark -3.3pp
+#     point the same way in both batches. The control BOUNDS the effect; it does not exclude one.
+#   * The statistic itself under-detects here: both arms run the same seeds (deliberately — that is
+#     what makes the mechanic the only difference), and a two-proportion z assumes independence, so
+#     it overstates the standard error on paired arms. The bias runs toward the null.
+#
+# `scenes_resolved` moved 858 -> 947 (+10.4%), which is an AGGREGATE, not a win-share. It is left
+# unexplained rather than given a plausible story: the obvious candidate — more factions crossing
+# the `Sta <= 2` Stability-Crisis trigger — is NOT the mechanism, because a faction clamped at the
+# old 0.5 floor was already below 2 and already firing. What changed is what happens after: the
+# emergency-council contest's own `faculty = round(7 - Faction.Sta)` sees 7 where it used to see 6,
+# and Influence-derived pools floor at 1 rather than 0.5. Tracing which of those dominates was not
+# done, and saying so is better than a confident guess in a golden block.
+# ══════════════════════════════════════════════════════════════════════════════════════════════
+# PREVIOUS (pre-S5d, verified against 62ce837 rather than retyped):
+#   GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 12.5, 'Hafenmark': 0.0, 'Varfell': 37.5};
+#   GOLDEN_WINNERS = {'Varfell': 3, 'Crown': 4, 'Church': 1};
+#   GOLDEN_BATTLES_MEAN = 32.9; GOLDEN_SCENES_RESOLVED = 858
+# ══════════════════════════════════════════════════════════════════════════════════════════════
+# RE-PINNED 2026-08-23 — TWO JORDAN RULINGS ON THE FACTION-STAT ROSTER. Read before re-recording.
+#
+# WHAT CHANGED.
+#   1. "Legitimacy is a base." `fac.legitimacy` is now declared in references/descriptor_registry.yaml
+#      and bound to the `L` field, so `L` clamps from the REGISTRY (0-7). It previously fell back to
+#      the blanket 0.5/7.0 because the registry declared nothing for it — the "5-vs-6" gap this
+#      repository carried as `unimplemented.faction_L` for six weeks. That register is now EMPTY.
+#   2. "Influence can be 0." Supersedes ED-IN-0029's Influence floor of 1 (OPT-AV-14/D14), which
+#      plan S5d had wired ONE DAY EARLIER. All six faction stats floor at 0 and ceiling at 7.
+#
+# Jordan's rationale, recorded because it is what makes ruling 1 coherent rather than a reversal:
+# "now that we're using continuous, we don't have to worry near as much either as we can just
+# aggregate these stats as opposed to weird derivations."
+#
+# BLAST RADIUS, MEASURED (§0.1 pt 4), over these 8 seeded campaigns: 1,979 `.adjust()` calls, of
+# which 605 now clamp to a different value. ALL 605 are on `L`. ZERO are on Influence — Influence
+# never sinks below 1 at these seeds, so ruling 2 is DECLARED BUT INERT here. Saying "both rulings
+# moved the goldens" would be false; ruling 1 moved them.
+# ⚠ THE PER-STAT SPLIT, MEASURED rather than estimated (an earlier draft of this block said
+# "roughly 1,277 L-adjustments", derived from the 20-of-31 call-SITE ratio; call sites are not
+# executed uniformly, so it was replaced with a count):
+#     L 1,235 · W 339 · Sta 182 · Mil 172 · I 51   (total 1,979)
+# 605 of the 1,235 L-adjustments now clamp differently — 49% of them. `L` sat ON the old 0.5 floor
+# for about half its writes and can now reach 0. That is a change in how Legitimacy behaves over a
+# campaign, not a rounding nudge, and it is why the win-shares below moved as much as they did.
+# ⚠ RULING 2's INERTNESS IS MEASURED ON BOTH ARMS, and the first version of this block was not.
+# "Influence never sinks below 1 at these seeds" was originally established by a counterfactual on
+# the RULED trajectory alone — but the arms provably diverge (the win-shares below move, and
+# scenes_resolved 947 -> 967), so the pre-ruling campaign is a different campaign and a property of
+# one says nothing about the other. That is the setup-vs-statistics gap §0.1's preamble was written
+# about. Re-measured on each arm separately:
+#     pre_ruling arm: 49 Influence adjustments, 0 with a raw value below 1
+#     ruled arm:      51 Influence adjustments, 0 with a raw value below 1
+# The call counts differ, which is the divergence being real; the floor is reached on NEITHER. So
+# ruling 2 changes what the registry declares and changes no clamp that executes at these seeds —
+# now as a two-arm measurement rather than an inference from the absence of a diff.
+#
+# THE CONTROL, tools/balance_oracle.py, run at n=120 per arm TWICE before any golden was touched.
+# Arms patch `faction_bounds` back to its pre-ruling answers (I floors at 1, L undeclared), so both
+# arms read ONE cooked artifact and the only difference is the answer `adjust` gets:
+#
+#   seed 20260819        pre_ruling     ruled   delta pp       z
+#   Church                   15.8%     11.7%       -4.2   -0.94
+#   Crown                    43.3%     38.3%       -5.0   -0.79
+#   Hafenmark                 3.3%      7.5%       +4.2   +1.43
+#   Varfell                  37.5%     42.5%       +5.0   +0.79
+#
+#   seed 424242 (replication)
+#   Church                   10.0%      7.5%       -2.5   -0.69
+#   Crown                    50.8%     47.5%       -3.3   -0.52
+#   Hafenmark                 9.2%      9.2%       +0.0   +0.00
+#   Varfell                  30.0%     35.8%       +5.8   +0.96
+#
+#   POOLED, n=240 per arm (480 campaigns)
+#   Church                   12.9%      9.6%       -3.3   -1.16
+#   Crown                    47.1%     42.9%       -4.2   -0.92
+#   Hafenmark                 6.2%      8.3%       +2.1   +0.88
+#   Varfell                  33.8%     39.2%       +5.4   +1.23
+#
+# HOW TO READ IT, in both directions (§0.1 pt 4 forbids asymmetric skepticism):
+#   * Nothing is significant at |z| > 1.96, in either batch or pooled. Unlike the S5d measurement,
+#     no batch flagged a false positive that then failed to replicate.
+#   * That is NOT "no balance effect". Crown is down and Varfell is up in BOTH batches and pooled,
+#     which is the pattern a real small effect makes; the control bounds it, it does not exclude it.
+#   * The statistic UNDER-detects here: both arms run the same seeds by design (so the mechanic is
+#     the only difference), while a two-proportion z assumes independence. The bias is toward the
+#     null, which is the safe direction for a control and the unsafe one for concluding "no effect".
+#
+# `scenes_resolved` moved 947 -> 967. Left unexplained rather than given a story: the `Sta <= 2`
+# crisis trigger is untouched by these rulings, and tracing which downstream path dominates was not
+# done.
+# ══════════════════════════════════════════════════════════════════════════════════════════════
+# PREVIOUS (2026-08-22, per-stat floors — verified against 556449a rather than retyped):
+#   GOLDEN_WIN_SHARE = {'Crown': 25.0, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 50.0};
+#   GOLDEN_WINNERS = {'Varfell': 4, 'Church': 2, 'Crown': 2};
+#   GOLDEN_BATTLES_MEAN = 32.6; GOLDEN_SCENES_RESOLVED = 947
+#
+# ⚠ BOTH "PREVIOUS" BLOCKS IN THIS FILE WERE WRONG UNTIL 2026-08-23, IN A WAY NO TEST CAN SEE.
+# Each re-record copied the LIVE winners/battles values into the PREVIOUS line instead of reading
+# the superseded ones, so the historical record was internally impossible: `_win_share` derives
+# share from wins over n=8, and {Varfell 3, Church 2, Crown 3} yields {37.5, 25.0, 0.0, 37.5}, not
+# the {25.0, 25.0, 0.0, 50.0} recorded beside it. A golden test pins the LIVE constants; nothing
+# pins the prose, so a fabricated history stays green forever and the next re-recorder reasons from
+# it. Restored from git. Rule: a PREVIOUS line is read out of `git show <ref>:<file>`, never
+# copied from the constant you are about to overwrite.
+GOLDEN_WIN_SHARE = {'Crown': 37.5, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 37.5}
 # GOLDEN_WINNERS mirrors _win_share's raw `wins` dict shape: only factions with >=1 win get a key.
 # ⚠ The sentence here used to say "Church/Hafenmark win 0/8 now". That was true of the PREVIOUS
 # pin and false of this one — under the 2026-08-14 reband Church wins 2 of 8 and Hafenmark 0, so
 # Hafenmark alone is absent. Corrected rather than left: a comment explaining the shape of numbers
 # it no longer describes is how the next re-record gets reasoned about wrongly.
-GOLDEN_WINNERS = {'Varfell': 3, 'Crown': 4, 'Church': 1}
-GOLDEN_BATTLES_MEAN = 32.9
-GOLDEN_SCENES_RESOLVED = 858  # 862 -> 858 under fractional pools, 2026-08-21; see the RE-PINNED note above
+GOLDEN_WINNERS = {'Varfell': 3, 'Church': 2, 'Crown': 3}
+GOLDEN_BATTLES_MEAN = 30.1
+GOLDEN_SCENES_RESOLVED = 967  # 862 -> 858 (fractional pools, 08-21) -> 947 (per-stat floors, 08-22) -> 967 (roster rulings, 08-23)
 WALL_TIME_CEILING_S = 90.0  # n=8 runs ~16s; generous headroom for CI variance
 
 _CACHE = {}
@@ -205,7 +348,8 @@ def test_f7_hafenmark_elimination_lockout():
     itself (0-territory factions never act again) is untouched by this wave. Verified directly
     (2026-07-29, monkey-patched `propose_transfer` across the seed-42..49 batch): Crown's
     restoration motion fires 0-10 times per campaign depending on seed, and its [SEED]
-    largest-non-Crown-holder targeting (parliamentary_bridge._derive_transfer) sometimes selects
+    largest-non-Crown-holder targeting (parliamentary_transfer.derive_transfer_candidate, moved
+    out of parliamentary_bridge at plan S5a) sometimes selects
     Hafenmark as the target holder (e.g. seed 49: `('Crown', 'T10', 'Hafenmark', 'transferred')`)
     — Crown reclaiming territory FROM Hafenmark, working against Hafenmark's trajectory rather
     than for it, on top of the general RNG-stream shift from every attempt (success or failure)

@@ -71,21 +71,25 @@ def test_declared_code_paths_resolve(emap):
     assert not dead, f"module contracts point at files that do not exist: {dead}"
 
 
-def test_execution_claims_match_the_manifest(emap):
-    """`executes` must be derived, never asserted. Re-derives it from the manifest and compares."""
+def test_execution_claims_match_the_contracts(emap):
+    """`executes` must be derived, never asserted. Re-derives it from the registry and compares.
+
+    Reads `references/module_contracts.yaml` since plan S5c folded `wiring_manifest.yaml` into it.
+    That fold does NOT make this test redundant: the map is a separate generated artifact, and the
+    thing being excluded is the map asserting an `executes` the registry does not support.
+    """
     import yaml
-    with open(os.path.join(ROOT, 'references', 'wiring_manifest.yaml'), encoding='utf-8') as fh:
-        man = yaml.safe_load(fh)
-    live = set()
-    for group in ('modules', 'adapters'):
-        for name, row in (man.get(group) or {}).items():
-            if row.get('build') in ('live', 'gated'):
-                live.add(name)
+    with open(os.path.join(ROOT, 'references', 'module_contracts.yaml'), encoding='utf-8') as fh:
+        contracts = yaml.safe_load(fh)
+    live = {m['module'] for m in (contracts.get('modules') or [])
+            if (m.get('wiring') or {}).get('build') in ('live', 'gated')}
+    live |= {n for n, row in (contracts.get('adapters') or {}).items()
+             if (row or {}).get('build') in ('live', 'gated')}
     claimed = {n for n, m in emap['modules'].items() if m['executes']}
     assert claimed == live, (
-        f"execution map disagrees with wiring_manifest about what runs.\n"
-        f"  only in map:      {sorted(claimed - live)}\n"
-        f"  only in manifest: {sorted(live - claimed)}")
+        f"execution map disagrees with module_contracts about what runs.\n"
+        f"  only in map:       {sorted(claimed - live)}\n"
+        f"  only in contracts: {sorted(live - claimed)}")
     assert live, "no unit reads as executing — the join is broken, not the game"
 
 

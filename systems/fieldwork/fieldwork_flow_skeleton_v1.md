@@ -7,7 +7,7 @@
 
 **Subsystem:** `systems/fieldwork/` · **Lane:** `FI` · **Contracts:** `fieldwork_knots` (only
 contract-declared module in this subsystem; `fieldwork`/`investigation` have no
-`module_contracts.yaml` entry — `references/module_contracts.yaml:395`)
+`module_contracts.yaml` entry — `references/module_contracts.yaml:506`)
 **Code roots traced:** `systems/fieldwork/sim/fieldwork.py`, `systems/fieldwork/sim/investigation.py`,
 `systems/fieldwork/sim/knots.py`, `systems/fieldwork/__init__.py`, plus importers found by grep across
 `engine/`, `systems/`, `tests/`: `engine/cross_scale/scene_dispatch.py`, `engine/mc_v18.py`,
@@ -33,7 +33,7 @@ contract-declared module in this subsystem; `fieldwork`/`investigation` have no
 | `get_knot(knot_id, world)` | `systems/fieldwork/sim/knots.py:372 get_knot` | `—` (no caller found) |
 | `get_active_knots(world)` | `systems/fieldwork/sim/knots.py:376 get_active_knots` | `—` (no caller found) |
 | `reset_knots(world)` | `systems/fieldwork/sim/knots.py:380 reset_knots` | test helper only: `engine/tests/test_knots_ed912.py:43`, `engine/tests/test_knots_ed912.py:54` |
-| `Knot.from_dict(d)` | `systems/fieldwork/sim/knots.py:131 from_dict` | `engine/autoload/game_state.py:398` (world-snapshot deserialization) |
+| `Knot.from_dict(d)` | `systems/fieldwork/sim/knots.py:131 from_dict` | `engine/autoload/game_state.py:446` (world-snapshot deserialization) |
 
 ## 2. IN
 
@@ -47,12 +47,12 @@ contract-declared module in this subsystem; `fieldwork`/`investigation` have no
 | dice pool roll | `key` | `engine.autoload.dice_engine.roll_pool` | `systems/fieldwork/sim/knots.py:45 import`, `:222 roll_pool` call |
 | `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:52-59` |
 | `knot_id`, `strain_delta`, `source`, `world` | `arg` | `resolve_opposing_operations`'s locals (`a_knot_id`/`b_knot_id`, `knot_strain_delta`) | `systems/threadwork/sim/opposing.py:243-253` |
-| `world.knots` snapshot dict (on load) | `file` | save/load snapshot restore | `engine/autoload/game_state.py:396-398` |
+| `world.knots` snapshot dict (on load) | `file` | save/load snapshot restore | `engine/autoload/game_state.py:444-446` |
 
 ## 3. Flow
 
 - S1. `engine.cross_scale.scene_dispatch._resolve_slot` receives a `SceneSlot` whose
-  `scene_type` is `"fieldwork"` or `"investigation"`. `engine/cross_scale/scene_dispatch.py:344` (elif st in ("fieldwork", "investigation"))
+  `scene_type` is `"fieldwork"` or `"investigation"`. `engine/cross_scale/scene_dispatch.py:348` (elif st in ("fieldwork", "investigation"))
   - S1.1 `[branch]` `st == "fieldwork"` → calls `run_fieldwork_scene(ctx.get("scene"))`.
     `engine/cross_scale/scene_dispatch.py:353-354`
   - S1.2 `[branch]` `st == "investigation"` → calls
@@ -63,7 +63,7 @@ contract-declared module in this subsystem; `fieldwork`/`investigation` have no
     dispatcher copies `stub.reason`/`stub.stub` onto its own `out` dict and returns immediately —
     no further scene-phase steps (echo transport, zoom-out) run for this slot.
     `systems/fieldwork/sim/fieldwork.py:38-43`, `systems/fieldwork/sim/investigation.py:30-35`,
-    `engine/cross_scale/scene_dispatch.py:357-359`
+    `engine/cross_scale/scene_dispatch.py:359-361`
 - S2. `form_knot` — `[gate]` prerequisite chain, each a short-circuit return of `None`:
   - S2.1 `[gate]` caller must supply both `actor_a_obj`/`actor_b_obj`. `systems/fieldwork/sim/knots.py:182-183`
   - S2.2 `[gate]` `actor_a_obj.bonds >= KNOT_BONDS_MIN`. `systems/fieldwork/sim/knots.py:185-187`
@@ -103,20 +103,20 @@ contract-declared module in this subsystem; `fieldwork`/`investigation` have no
 
 | Output | Kind | Consumer | Anchor |
 |---|---|---|---|
-| `StubResult(module, io_contract, reason, stub=True)` | `key`-shaped no-op | `engine.cross_scale.scene_dispatch._resolve_slot`'s `out["reason"]`/`out["stub"]` | `systems/fieldwork/sim/fieldwork.py:39-43`, `engine/cross_scale/scene_dispatch.py:357-358` |
+| `StubResult(module, io_contract, reason, stub=True)` | `key`-shaped no-op | `engine.cross_scale.scene_dispatch._resolve_slot`'s `out["reason"]`/`out["stub"]` | `systems/fieldwork/sim/fieldwork.py:39-43`, `engine/cross_scale/scene_dispatch.py:359-360` |
 | `Knot | None` | `world-state` (inserted into `_store(world)`) | `_store(world)` (either `world.knots` or the module-level `_knots` dict) | `systems/fieldwork/sim/knots.py:247-248` |
 | `KnotState(knot, broke, ruptured, strain_after, notes)` | `arg` return value | caller of `sustain_knot`/`check_knot_rupture` (only live caller: `opposing.py`, itself orphaned — §7) | `systems/fieldwork/sim/knots.py:251-273`, `:275-312` |
 | consequences `dict` (`composure_damage`, `coherence_delta`, `disposition_set_to`, `wound`, `conviction_scar`) | `arg` return value | caller of `apply_knot_loss` (no live caller found — §7) | `systems/fieldwork/sim/knots.py:328-337` |
 | `apply_conviction_scar(...)` call | `lateral` | `systems.characters.sim.conviction` | `systems/fieldwork/sim/knots.py:349-353` |
 | `apply_coherence_delta(...)` call | `lateral` | `systems.threadwork.sim.coherence` | `systems/fieldwork/sim/knots.py:364-365` |
-| `world.knots[k].to_dict()` | `world-state` (serialized) | save-snapshot writer | `engine/autoload/game_state.py:315-316` |
+| `world.knots[k].to_dict()` | `world-state` (serialized) | save-snapshot writer | `engine/autoload/game_state.py:363-364` |
 
 ## 5. State touched
 
 | Field | R/W | Owning module | Anchor |
 |---|---|---|---|
-| `world.knots` (dict `knot_id -> Knot`) | RW | `engine.autoload.game_state` (`World` dataclass field); read/written by `systems.fieldwork.sim.knots` via `_store(world)` | field decl `engine/autoload/game_state.py:198`; router `systems/fieldwork/sim/knots.py:159-164` |
-| `world.knot_id_counter` | RW | `engine.autoload.game_state` field; incremented in `form_knot` | field decl `engine/autoload/game_state.py:199`; increment `systems/fieldwork/sim/knots.py:237-239` |
+| `world.knots` (dict `knot_id -> Knot`) | RW | `engine.autoload.game_state` (`World` dataclass field); read/written by `systems.fieldwork.sim.knots` via `_store(world)` | field decl `engine/autoload/game_state.py:246`; router `systems/fieldwork/sim/knots.py:159-164` |
+| `world.knot_id_counter` | RW | `engine.autoload.game_state` field; incremented in `form_knot` | field decl `engine/autoload/game_state.py:247`; increment `systems/fieldwork/sim/knots.py:237-239` |
 | module-level `_knots` dict (fallback store, no `world` supplied) | RW | `systems.fieldwork.sim.knots` | `systems/fieldwork/sim/knots.py:156` |
 | module-level `_knot_id_counter` (fallback counter) | RW | `systems.fieldwork.sim.knots` | `systems/fieldwork/sim/knots.py:156` |
 | `Knot.strain`, `.active`, `.log` | W | `systems.fieldwork.sim.knots` (`sustain_knot`, `check_knot_rupture`) | `systems/fieldwork/sim/knots.py:266-272`, `:302-309` |
@@ -127,10 +127,10 @@ contract-declared module in this subsystem; `fieldwork`/`investigation` have no
 
 | Direction | Peer | Mechanism | Anchor |
 |---|---|---|---|
-| `up` | `engine.cross_scale.scene_dispatch` | scene-type dispatch calls `run_fieldwork_scene`/`resolve_npe_response` (stub-wired) | `engine/cross_scale/scene_dispatch.py:344-359` |
+| `up` | `engine.cross_scale.scene_dispatch` | scene-type dispatch calls `run_fieldwork_scene`/`resolve_npe_response` (stub-wired) | `engine/cross_scale/scene_dispatch.py:348-361` |
 | `up` | `engine.autoload.scene_slate` | declares `"fieldwork"` as an example `scene_type` string on `SceneSlot`; no production `queue_scene("fieldwork", ...)` call site exists (§7) | `engine/autoload/scene_slate.py:26`, `engine/autoload/scene_slate.py:34` |
 | `up` | `engine.mc_v18` | season loop records a `stub_resolve` marker literally named `form_knot(world-gen|season-tick)` in place of calling `form_knot` | `engine/mc_v18.py:204-209` |
-| `up` | `engine.autoload.game_state` | `World.knots`/`World.knot_id_counter` fields own the state `_store(world)` reads/writes; `Knot.from_dict` used on snapshot restore | `engine/autoload/game_state.py:198-199`, `engine/autoload/game_state.py:315-316`, `engine/autoload/game_state.py:396-399` |
+| `up` | `engine.autoload.game_state` | `World.knots`/`World.knot_id_counter` fields own the state `_store(world)` reads/writes; `Knot.from_dict` used on snapshot restore | `engine/autoload/game_state.py:246-247`, `engine/autoload/game_state.py:363-364`, `engine/autoload/game_state.py:444-447` |
 | `lateral` | `engine.autoload.dice_engine` | `roll_pool` drives the §3.2 formation roll | `systems/fieldwork/sim/knots.py:46`, `systems/fieldwork/sim/knots.py:223` |
 | `lateral` | `systems.threadwork.sim.opposing` | `resolve_opposing_operations` calls `sustain_knot` when knot ids are supplied (module itself orphaned — §7) | `systems/threadwork/sim/opposing.py:243-256` |
 | `lateral` | `systems.threadwork.sim.coherence` | `apply_knot_loss` late-imports `apply_coherence_delta` on rupture | `systems/fieldwork/sim/knots.py:364-366` |
@@ -142,11 +142,11 @@ contract-declared module in this subsystem; `fieldwork`/`investigation` have no
 | Gap | Evidence anchor |
 |---|---|
 | `run_fieldwork_scene`/`advance_disposition`/`advance_evidence` (fieldwork.py) and `resolve_npe_response`/`evaluate_dialogue_lattice`/`apply_response_matrix` (investigation.py) are all typed no-op stubs — every call returns `stubwire.StubResult`, never real behavior. | `systems/fieldwork/sim/fieldwork.py:38-59`, `systems/fieldwork/sim/investigation.py:30-51` |
-| No production code path ever queues a `scene_type="fieldwork"` or `"investigation"` scene. `queue_triggered_scenes` (the sole caller of `scene_slate.queue_scene` in the whole tree — verified by grep, only call site) only ever fires `scene_type="contest"` for the "Stability Crisis" trigger; the other 7 canonical §4.3.2 triggers are explicitly deferred, not fabricated. The `("fieldwork", {})`/`("investigation", {})` branches in `_resolve_slot` are exercised only by a test that manually constructs a `SceneSlot` and calls `_resolve_slot` directly, bypassing `queue_triggered_scenes`/`evaluate_triggers` entirely — its own docstring states "today only 'contest' is ever organically queued, via Stability Crisis". | `engine/cross_scale/scene_dispatch.py:75-106` (`evaluate_triggers`/`queue_triggered_scenes`, only "Stability Crisis" → `scene_type: "contest"`); sole `queue_scene` call site `engine/cross_scale/scene_dispatch.py:105`; grep confirms no other `queue_scene(` call exists in `engine/`, `systems/`, `tests/`; test admission `engine/tests/test_pipeline_reach.py:283-298` |
+| No production code path ever queues a `scene_type="fieldwork"` or `"investigation"` scene. `queue_triggered_scenes` (the sole caller of `scene_slate.queue_scene` in the whole tree — verified by grep, only call site) only ever fires `scene_type="contest"` for the "Stability Crisis" trigger; the other 7 canonical §4.3.2 triggers are explicitly deferred, not fabricated. The `("fieldwork", {})`/`("investigation", {})` branches in `_resolve_slot` are exercised only by a test that manually constructs a `SceneSlot` and calls `_resolve_slot` directly, bypassing `queue_triggered_scenes`/`evaluate_triggers` entirely — its own docstring states "today only 'contest' is ever organically queued, via Stability Crisis". | `engine/cross_scale/scene_dispatch.py:77-108` (`evaluate_triggers`/`queue_triggered_scenes`, only "Stability Crisis" → `scene_type: "contest"`); sole `queue_scene` call site `engine/cross_scale/scene_dispatch.py:107`; grep confirms no other `queue_scene(` call exists in `engine/`, `systems/`, `tests/`; test admission `engine/tests/test_pipeline_reach.py:283-298` |
 | `form_knot` has NO auto-call anywhere in the season/campaign loop. `engine/mc_v18.py` deliberately records a `stubwire.stub_resolve` call under the literal string `'form_knot(world-gen|season-tick)'` as an "honest deferral" marker — this is not a call to `systems.fieldwork.sim.knots.form_knot`, just a stand-in name; `form_knot` itself is never imported by `engine/mc_v18.py` (grep confirms no `from systems.fieldwork.sim.knots import` or `knots.form_knot` in that file). `world.knots` is asserted to stay empty after a full seeded campaign. `form_knot`'s only real callers anywhere are unit tests. | `engine/mc_v18.py:196-209` (comment + `stub_resolve` call); `engine/tests/test_world_population.py:157-163` (`test_knots_stay_unpopulated_honest_deferral`, asserts `r.final_state.get('knots', {}) == {}`); only real caller `engine/tests/test_knots_ed912.py:55` |
 | `systems.threadwork.sim.opposing.resolve_opposing_operations` — the only non-test caller of `sustain_knot` — is itself unreachable: grep across `engine/`, `systems/`, `tests/` finds no import of `systems.threadwork.sim.opposing` or call to `resolve_opposing_operations` anywhere outside its own file, and `tests/valoria/test_oi12_orphan_census.py` independently lists `systems/threadwork/sim/opposing.py` in its `_OI12_VERIFIED_ORPHAN_NO_CALLSITE` tuple (cross-checked against `structure_audit`'s import graph). So the knot-strain-on-opposing-operations path is dead on both ends: unreachable caller, real callee. | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations`, `:236-249` (the `sustain_knot` call); grep found zero external references; `test_oi12_orphan_census.py` (RETIRED 2026-08-21 → `FORK:1e4c6f4`, culling plan v1 wave 1/3; was tests/valoria/test_oi12_orphan_census.py:49) |
 | `advance_disposition`, `advance_evidence` (fieldwork.py), `evaluate_dialogue_lattice`, `apply_response_matrix` (investigation.py), and `get_knot`, `get_active_knots` (knots.py) have no caller anywhere in `engine/`, `systems/`, or `tests/` — not even from a test. | grep of each symbol name across the repo returned only its own definition line in every case (see §1 rows) |
-| `module_contracts.yaml` declares a contract only for `fieldwork_knots`; `fieldwork.py`'s own module docstring states this explicitly and cites its "Entry points" docstring block as the substitute io_contract source (no registry entry backs it). `investigation.py` has no contract entry either. | `references/module_contracts.yaml:395` (only `fieldwork_knots` row; grep for `module: fieldwork`/`module: investigation` finds nothing else); `systems/fieldwork/sim/fieldwork.py:29-35` |
+| `module_contracts.yaml` declares a contract only for `fieldwork_knots`; `fieldwork.py`'s own module docstring states this explicitly and cites its "Entry points" docstring block as the substitute io_contract source (no registry entry backs it). `investigation.py` has no contract entry either. | `references/module_contracts.yaml:506` (only `fieldwork_knots` row; grep for `module: fieldwork`/`module: investigation` finds nothing else); `systems/fieldwork/sim/fieldwork.py:29-35` |
 | `RUPTURE_COHERENCE_LOSS` (the Coherence-on-rupture constant `apply_knot_loss` applies) is flagged `[UNVERIFIED post-ED-912]` in-code — retained provisionally, not a settled canonical value. Structural (not mechanical) implication: the `apply_knot_loss` → `apply_coherence_delta` lateral edge fires on a value the code itself marks unverified. | `systems/fieldwork/sim/knots.py:92-95`, `systems/fieldwork/sim/knots.py:361-362` |
 | `RUPTURE_WOUND_DISSOLUTION` (declared for the FR-Dissolution rupture Wound consequence) is never referenced outside its own declaration. `apply_knot_loss`'s signature takes no `trigger` parameter that could condition Wound application, and the consequences dict's `'wound'` key is initialized to 0 and never reassigned in either the `'break'` or `'rupture'` branch — the FR-Dissolution Wound consequence is structurally unreachable. | declaration `systems/fieldwork/sim/knots.py:97`; signature `systems/fieldwork/sim/knots.py:315-316 apply_knot_loss`; unreassigned `'wound'` init `systems/fieldwork/sim/knots.py:335` |
 | `COHERENCE_BAND_STRAIN_PACING` (a passive strain-accrual table) is declared and never read anywhere in the repo. | `systems/fieldwork/sim/knots.py:101-107` |

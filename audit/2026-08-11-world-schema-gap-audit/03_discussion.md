@@ -253,7 +253,7 @@ and if it did, half the roster would be indistinguishable on it.
 This is **scripting drift**, the failure mode CLAUDE.md §10 names, and the register ranks it high
 regardless of rediscovery count because the defect is structural rather than statistical.
 
-- `engine/autoload/game_state.py:231` — `templar=(tid == 'T9')`. A real, writable, persisted,
+- `engine/autoload/game_state.py:279` — `templar=(tid == 'T9')`. A real, writable, persisted,
   consequential field, set for exactly one territory by a hardcoded name comparison (G-15).
 - ⚠ Faction-unique behaviour dispatches on string equality — **2 production sites, not the 8 an
   earlier version of this line reported.** The regex `.name == 'Crown'|'Church'|'Hafenmark'|'Varfell'`
@@ -261,7 +261,7 @@ regardless of rediscovery count because the defect is structural rather than sta
   production dispatch sites matching it are `systems/factions/sim/faction_action.py:277` and `:293`.
   **The register's G-16 census is the correct one and is larger: 5 sites**, because three do not match
   that regex at all — `systems/overview/sim/ci_track.py:91` and `systems/factions/sim/mass_seizure.py:131`
-  compare `t.owner ==`, and `systems/factions/sim/parliamentary_transfer.py:107` compares `initiator ==`.
+  compare `t.owner ==`, and `systems/factions/sim/parliamentary_transfer.py:114` compares `initiator ==`.
   I substituted a literal string count for G-16's concept-level census and the two coincidentally
   collided on 8. **That is pattern-matching on the term instead of the concept — the error CLAUDE.md §0
   names as the costliest in this corpus — committed inside the paragraph arguing against scripting

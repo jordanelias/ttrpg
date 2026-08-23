@@ -34,30 +34,44 @@ from dataclasses import dataclass, field, fields as dc_fields
 # call site keeps working unchanged — engine/substrate/ has no internal dependents, so this import
 # does not reintroduce the cycle it was moved to break.
 from engine.substrate.canon_buckets import canonical_accord  # noqa: F401 (re-export)
-from engine.substrate import descriptors  # sole runtime reader of references/descriptor_registry.yaml
+from engine.substrate import composition
+from engine.substrate import descriptors
+from engine.substrate import world_initial_state  # sole runtime reader of references/world_initial_state.yaml
 
 
-# Canonical starting state (mc_v17.py L62-82, sourced from mc_v15.py)
-ALL_PLAYABLE_15 = frozenset({
-    'T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10',
-    'T11', 'T12', 'T13', 'T14', 'T17',
-})
+# ── The world's opening position (moved to references/ at plan S5b, 2026-08-22) ────────────────
+# These were six Python literals here, inherited from mc_v17.py L62-82 (itself from mc_v15.py) with
+# no authored source anywhere. They are WORLD DATA: which territories exist, who holds them at
+# season 0, how settled and prosperous each is, where the garrisons start, which is Templar-held,
+# and what each faction opens with. The authored source is references/world_initial_state.yaml, cooked by
+# tools/export_world_initial_state.py behind a blocking --check and read by the leaf below.
+#
+# The NAMES are unchanged on purpose — they are cited across flow skeletons, design docs and tests,
+# and renaming them while moving them would have made one change into two. `ALL_PLAYABLE_15` keeps
+# its count-bearing name here while the leaf exposes it as `ALL_PLAYABLE`; the count is a fact about
+# today's table, not a constraint on it.
+ALL_PLAYABLE_15 = world_initial_state.ALL_PLAYABLE
+STARTING_OWNER = world_initial_state.STARTING_OWNER
+STARTING_STATS = world_initial_state.STARTING_STATS
 
+# ⚠ MULTS STAYS A LITERAL, AND ITS REASON CHANGED ON 2026-08-23 — Q1 NO LONGER BLOCKS IT.
+# It was held because authoring `L` as a faction-stat row in references/descriptor_registry.yaml
+# would have answered the open ruling on whether Legitimacy is a base descriptor. Jordan ruled it
+# IS, so `fac.legitimacy` is declared and that objection is discharged. The registry is still the
+# correct home — it already states two of these values in prose ("Legitimacy (faction, derived) is
+# Mandate x 20", "Discipline (faction) is Stability x 10").
+#
+# TWO REASONS SURVIVE, and they are smaller and nameable rather than a ruling:
+#   1. MULTS spans TWO registry blocks. `accord` and `pt` are Territory fields, so a faction-only
+#      move would split one dict across two homes — the "one seam owned twice" defect S5a spent two
+#      commits removing. The move wants `internal_multiplier` on both `faction_stats` and
+#      `territory_stats` entries, in one pass.
+#   2. The numbers need provenance. 20 and 10 are stated in the registry's own prose; 100, 15 and
+#      the two territory 10s are stated nowhere this session could find, and the anti-fabrication
+#      gate would rightly refuse them into an authored surface uncited.
+# Do NOT resolve this by moving MULTS into world_initial_state.yaml: it is not initial state, and
+# a file whose name lies is worse than a literal that is honest.
 MULTS = {'L': 20, 'Sta': 10, 'W': 100, 'I': 15, 'Mil': 10, 'accord': 10, 'pt': 10}
-
-STARTING_OWNER = {
-    'T1': 'Crown', 'T2': 'Crown', 'T3': 'Crown', 'T4': 'Varfell',
-    'T5': 'Crown', 'T6': 'Crown', 'T7': 'Hafenmark', 'T8': 'Hafenmark',
-    'T9': 'Church', 'T10': 'Hafenmark', 'T11': 'Varfell', 'T12': 'Varfell',
-    'T13': 'Varfell', 'T14': 'Crown', 'T15': None, 'T17': 'Hafenmark',
-}
-
-STARTING_STATS = {
-    'Crown':     {'L': 5.0, 'Sta': 4.0, 'W': 4.0, 'I': 5.0, 'Mil': 4.0},
-    'Church':    {'L': 5.0, 'Sta': 5.0, 'W': 5.0, 'I': 6.0, 'Mil': 4.0},
-    'Hafenmark': {'L': 4.0, 'Sta': 4.0, 'W': 5.0, 'I': 4.0, 'Mil': 3.0},
-    'Varfell':   {'L': 4.0, 'Sta': 4.0, 'W': 4.0, 'I': 4.0, 'Mil': 4.0},
-}
 
 ACCORD_MAP = {0: 1.0, 1: 2.5, 2: 4.0, 3: 5.5, 4: 7.0}
 PT_MAP = {0: 1.0, 1: 2.5, 2: 4.0, 3: 5.5, 4: 6.5, 5: 7.0}
@@ -86,13 +100,10 @@ def canonical_pt(continuous_pt: float) -> int:
     return 5
 
 
-STARTING_ACCORD = {'T1': 3, 'T2': 3, 'T3': 3, 'T4': 2, 'T5': 2, 'T6': 2,
-                   'T7': 2, 'T8': 3, 'T9': 4, 'T10': 2, 'T11': 2, 'T12': 2,
-                   'T13': 1, 'T14': 3, 'T15': 0, 'T17': 2}
-STARTING_PT = {'T1': 3, 'T2': 3, 'T3': 3, 'T4': 2, 'T5': 3, 'T6': 1,
-               'T7': 3, 'T8': 3, 'T9': 5, 'T10': 3, 'T11': 2, 'T12': 2,
-               'T13': 1, 'T14': 3, 'T15': 3, 'T17': 3}
-STARTING_GARRISON = {'T1': True, 'T8': True, 'T9': True, 'T12': True}
+# The other three columns of the same table — see the block above.
+STARTING_ACCORD = world_initial_state.STARTING_ACCORD
+STARTING_PT = world_initial_state.STARTING_PT
+STARTING_GARRISON = world_initial_state.STARTING_GARRISON
 
 
 @dataclass
@@ -125,8 +136,60 @@ class Faction:
     # regardless of outcome.
     parl_transfer_used_this_arc: bool = False
 
+    #: The bounds `adjust` falls back to when `references/descriptor_registry.yaml` declares none.
+    #: ⚠ NO FACTION STAT REACHES THIS ANY MORE (2026-08-23). It existed for `L`, whose registry
+    #: status was the open Q1 ruling; Jordan ruled Legitimacy IS a base descriptor, so all six
+    #: faction stats are declared and clamp from the registry. What still reaches it is a caller
+    #: passing a stat that is not a faction descriptor at all — `MULTS` carries `accord` and `pt`,
+    #: which are Territory fields, and `echo_transport`'s dynamic write is gated on MULTS
+    #: membership rather than on the registry. So this is now a genuine fallback for a genuine
+    #: hole, not a placeholder for an unruled stat. These were the BLANKET bounds every stat used
+    #: before ED-IN-0029 was wired at plan S5d.
+    UNDECLARED_FLOOR = 0.5
+    # Same ceiling the registry declares for every stat it DOES declare, so the undeclared case is
+    # not quietly more permissive than the declared ones.
+    UNDECLARED_CEILING = 7.0  # [canonical: references/descriptor_registry.yaml faction_stats — scale "0-7"/"1-7"]
+
     def adjust(self, stat: str, granular_delta: float,
-               floor: float = 0.5, ceiling: float = 7.0):
+               floor: float | None = None, ceiling: float | None = None):
+        """Apply a granular delta to a faction stat, clamped to the bounds the REGISTRY declares.
+
+        ED-IN-0029 (ratified 2026-07-08, OPT-AV-14/D14 + OPT-AV-18) set per-stat floors: Influence
+        floors at 1 — an institution's influence never fully vanishes — and Wealth, Military,
+        Stability and Intel float at 0. This method applied a blanket 0.5/7.0 to every stat for the
+        six weeks after that ratification, and none of its 31 call sites overrode it, so a ratified
+        canon decision had never reached the executable model. `descriptors.faction_bounds()` is
+        the single owner of those numbers; this is its first runtime caller.
+
+        ⚠ FIVE OF THE SIX FLOORS REACH THE CODE. `intel` does not, and saying "the roster is
+        wired" without this qualification would be the false-claim class §1(a) of the plan exists to
+        stop. `MULTS` has no `intel` key, so `adjust('intel', …)` raises `KeyError` on the line
+        below before any bound is consulted — `faction_bounds('intel')` returns (0, 7) that no code
+        path can reach. That is consistent with the field's own history: `fac.intel` was added to
+        the dataclass at its ratified floor and is documented as unread and unwritten by live code.
+        Wiring it needs a multiplier, which is a canon value nobody has stated, so it is recorded
+        here rather than invented.
+
+        ⚠ RULED 2026-08-23, ONE DAY AFTER THIS METHOD STARTED READING THE REGISTRY. This paragraph
+        used to say `L` keeps the old bounds because the registry declared no entry for Legitimacy
+        and that was Jordan's open question. He answered it — "Legitimacy is a base" — so
+        `fac.legitimacy` is declared and `L` clamps from the registry like every other stat. Twenty
+        of the 31 non-test call sites adjust `L`, so that is the majority of all traffic through
+        here, and it moved. A second ruling the same day, "Influence can be 0", superseded
+        ED-IN-0029's Influence floor of 1. All six declared stats now floor at 0, ceiling at 7.
+
+        The order is worth keeping rather than tidying away: the floors were unrulable while they
+        did not execute. They reached the engine on 2026-08-22 and drew two rulings the next day.
+
+        The explicit `floor`/`ceiling` parameters survive with no live caller. They are how a call
+        site would state a locally-canonical bound, and removing an unused parameter is its own
+        change; what they no longer do is silently supply the DEFAULT for every stat.
+        """
+        bounds = descriptors.faction_bounds(stat)
+        if floor is None:
+            floor = bounds[0] if bounds else self.UNDECLARED_FLOOR
+        if ceiling is None:
+            ceiling = bounds[1] if bounds else self.UNDECLARED_CEILING
         mult = MULTS[stat]
         val = getattr(self, stat)
         val = max(floor, min(ceiling, val + granular_delta / mult))
@@ -151,15 +214,19 @@ class Faction:
 #
 # The check runs at import and ONE WAY: a faction stat declared in the registry with no field here
 # stops the engine from importing. It deliberately does NOT fail on the reverse, because exactly one
-# such field exists — `L` (Legitimacy/Mandate), written by 32 .adjust() call sites and declared
-# nowhere in the registry — and whether it is a base descriptor or derived like Mandate is Jordan's
-# ruling to make, not a check's.
+# such field existed — `L` (written by 20 of .adjust()'s 31 non-test call sites, AST-counted
+# 2026-08-22; the 32 this line used to claim was a grep that counted comments). It is DECLARED as
+# of 2026-08-23, so the count of unregistered Faction fields is zero and the one-way direction now
+# protects nothing that exists. It is kept because a NEW dataclass field's registry status is a
+# ruling, not a check's call — see assert_faction_roster_is_covered's own docstring.
 #
-# NOT YET WIRED, and the gap is recorded rather than quietly closed: the registry's PER-STAT floors
-# were ratified 2026-07-08 (ED-IN-0029) — Influence floors at 1, the rest at 0 — while `adjust`
-# above applies a blanket floor of 0.5 to every stat and no caller overrides it. Wiring
-# `descriptors.faction_bounds()` into `adjust` moves the seeded campaign goldens, so it belongs in
-# its own commit with the delta measured (CLAUDE.md §0.1 pt 4), not here.
+# WIRED 2026-08-22 (plan S5d), then RULED ON 2026-08-23. `Faction.adjust` above reads
+# `descriptors.faction_bounds()` rather than applying a blanket 0.5/7.0, so the registry is the
+# single owner of these bounds. Jordan then ruled twice: Legitimacy IS a base descriptor (so `L` is
+# declared, the roster is SIX, and the `unimplemented` register is empty), and Influence CAN be 0
+# (superseding ED-IN-0029's floor of 1). All six stats floor at 0 and ceiling at 7.
+# Both golden re-records are measured against tools/balance_oracle.py — see the RE-PINNED blocks in
+# engine/tests/.
 descriptors.assert_faction_roster_is_covered({f.name for f in dc_fields(Faction)})
 
 
@@ -251,9 +318,11 @@ def create_world(seed: int | None = None) -> World:
             accord=ACCORD_MAP[STARTING_ACCORD[tid]],
             pt=PT_MAP[STARTING_PT[tid]],
             garrison=STARTING_GARRISON.get(tid, False),
-            prosperity=2 if tid in {'T1', 'T2', 'T3', 'T8', 'T9', 'T14'} else 1,
+            prosperity=world_initial_state.STARTING_PROSPERITY[tid],
+            # fort_level stays DERIVED from garrison rather than authored: it is a rule, not data,
+            # and authoring it would give one number two owners.
             fort_level=1 if STARTING_GARRISON.get(tid, False) else 0,
-            templar=(tid == 'T9'),
+            templar=world_initial_state.STARTING_TEMPLAR[tid],
         )
         territories[tid] = t
 
@@ -279,8 +348,7 @@ def create_world(seed: int | None = None) -> World:
     # is now gone (OI-52a, ED-IN-0097, 2026-07-29: canonical_accord moved to
     # engine.substrate.canon_buckets, which both modules import at top level without a cycle).
     # Deterministic — no RNG draw, so this cannot move any RNG-derived campaign golden.
-    from systems.settlements.sim.registry import populate_from_geography
-    populate_from_geography(world)
+    composition.require('world_gen_settlements')(world)
     return world
 
 
@@ -387,47 +455,47 @@ def restore_world(snapshot: dict) -> World:
     # ─── Schema migration #1 registries ──────────────────────────────────
     # Late-import each owning module's dataclass for .from_dict
     if 'practitioners' in snapshot:
-        from systems.threadwork.sim.coherence import CoherenceState
+        CoherenceState = composition.require('snapshot_state.practitioners')
         w.practitioners = {k: CoherenceState.from_dict(v)
                             for k, v in snapshot['practitioners'].items()}
     if 'insurgencies' in snapshot:
-        from systems.world.sim.insurgency_pipeline import InsurgencyRecord
+        InsurgencyRecord = composition.require('snapshot_state.insurgencies')
         w.insurgencies = {k: InsurgencyRecord.from_dict(v)
                            for k, v in snapshot['insurgencies'].items()}
     if 'uncontrolled_streaks' in snapshot:
         w.uncontrolled_streaks = {frozenset(entry['tids']): entry['streak']
                                    for entry in snapshot['uncontrolled_streaks']}
     if 'npcs' in snapshot:
-        from systems.world.sim.npe import NPC
+        NPC = composition.require('snapshot_state.npcs')
         w.npcs = {tid: [NPC.from_dict(n) for n in npc_list]
                    for tid, npc_list in snapshot['npcs'].items()}
     w.npc_counter = snapshot.get('npc_counter', 0)
     if 'treaties' in snapshot:
-        from systems.factions.sim.treaty import TreatyRecord
+        TreatyRecord = composition.require('snapshot_state.treaties')
         w.treaties = {frozenset(entry['parties_key']): TreatyRecord.from_dict(entry['record'])
                        for entry in snapshot['treaties']}
 
     # ─── Schema migration #2 registries ──────────────────────────────────
     if 'convictions' in snapshot:
-        from systems.characters.sim.conviction import ConvictionState
+        ConvictionState = composition.require('snapshot_state.convictions')
         w.convictions = {k: ConvictionState.from_dict(v)
                           for k, v in snapshot['convictions'].items()}
     if 'beliefs' in snapshot:
-        from systems.characters.sim.beliefs import Belief
+        Belief = composition.require('snapshot_state.beliefs')
         w.beliefs = {k: [Belief.from_dict(b) for b in v]
                       for k, v in snapshot['beliefs'].items()}
     if 'knots' in snapshot:
-        from systems.fieldwork.sim.knots import Knot
+        Knot = composition.require('snapshot_state.knots')
         w.knots = {k: Knot.from_dict(v) for k, v in snapshot['knots'].items()}
     w.knot_id_counter = snapshot.get('knot_id_counter', 0)
     if 'territory_infrastructure' in snapshot:
-        from systems.settlements.sim.infrastructure import InfrastructureState
+        InfrastructureState = composition.require('snapshot_state.territory_infrastructure')
         w.territory_infrastructure = {k: InfrastructureState.from_dict(v)
                                        for k, v in snapshot['territory_infrastructure'].items()}
     if 'npc_drift_state' in snapshot:
         w.npc_drift_state = dict(snapshot['npc_drift_state'])
     if 'threadcut_beings' in snapshot:
-        from systems.threadwork.sim.threadcut import ThreadcutState
+        ThreadcutState = composition.require('snapshot_state.threadcut_beings')
         w.threadcut_beings = {k: ThreadcutState.from_dict(v)
                                for k, v in snapshot['threadcut_beings'].items()}
     if 'comovement_deck' in snapshot:
@@ -439,7 +507,7 @@ def restore_world(snapshot: dict) -> World:
 
     # ─── Schema migration #3 registry (OI-07) ─────────────────────────────
     if 'settlements' in snapshot:
-        from systems.settlements.sim.registry import Settlement
+        Settlement = composition.require('snapshot_state.settlements')
         w.settlements = {k: Settlement.from_dict(v) for k, v in snapshot['settlements'].items()}
 
     return w

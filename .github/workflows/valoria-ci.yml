@@ -139,6 +139,10 @@ jobs:
           # resolves through. Blocking, and it IMPORTS every target at export time, so a broken row
           # reds CI instead of failing a campaign run hours later.
           v python3 tools/export_composition.py --check
+          # references/world_initial_state.yaml -> the campaign's opening position, read at import
+          # by engine/substrate/world_initial_state.py. Blocking: game_state.py no longer carries
+          # these tables, so a stale artifact is a world with the wrong owners.
+          v python3 tools/export_world_initial_state.py --check
           # ED-IN-0142: the test register drifted 3x in one session and only the pytest suite
           # noticed, because --check could not fail. Both fixed; this is the CI half.
           # RETIRED culling wave 2 (ED-IN-0194, 2026-08-21): build_test_register.py + its
@@ -228,7 +232,10 @@ jobs:
           w python3 tools/ci_module_shape_check.py
           # RETIRED culling wave 2 (ED-IN-0194, 2026-08-21): ci_workplan_pointer_check.py, with
           # the 11 workplans/POINTER_*.md files it guarded.
-          w python3 tools/wiring_map_check.py --check
+          # RETIRED plan S5c (2026-08-23): wiring_map_check.py, with references/wiring_manifest.yaml
+          # folded into references/module_contracts.yaml. Two of its rules became structural (a
+          # registry cannot disagree with itself); the surviving three run in the BLOCKING
+          # `export_composition.py --check` above, which is a promotion, not a drop.
           # RETIRED culling wave 2 (ED-IN-0194, 2026-08-21): scope_ratchet.py + scope_baseline.yaml
           # and ci_program_claim_check.py. `ci_vacuous_assertion_check` below is KEPT by Jordan's
           # ruling of 2026-08-21 (culling plan §5.6): it is a literal encoding of CLAUDE.md §0.1

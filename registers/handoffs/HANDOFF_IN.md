@@ -2785,7 +2785,7 @@ A `valoria-critic` (Read/Grep/Glob only) was given both audits as prior art to a
 load-bearing claim was re-run with Bash here.
 
 - **The four "possibly-uncalled" factions modules are REACHED** —
-  `engine/tests/test_pipeline_reach.py:749-755`, oi17 test passes. All four are `stub_resolve` no-ops
+  `engine/tests/test_pipeline_reach.py:777-783`, oi17 test passes. All four are `stub_resolve` no-ops
   carrying Jordan directives found nowhere else. **Phase 3.1 is CLOSED, not started.** The reasoning
   error is the lesson: both my methods were blind to the *same* thing (string-path dispatch), so
   "two independent methods agreed" carried no information.
@@ -3485,3 +3485,47 @@ hazard transplanted from combat without reading the target. Jordan's *"read code
 by an independent read-only critic, none by the producer — budget for the relay.
 
 **Nothing here is ratified. §15.5 lists what is Jordan's, split into blocking vs non-blocking.**
+
+---
+
+## 2026-08-23 — S5 CLOSED (5c landed); S6 is next
+
+**S5c** folded `references/wiring_manifest.yaml` into `references/module_contracts.yaml`
+(`63cec8a`), reconciled against an independent critic in `06b5b91`. `wiring_map_check.py` and its
+test are retired; three of its five rules live in `export_composition.py --check` (blocking), two
+died structurally, and `build_contract_index.py` gained `--work-list` and `--summary`.
+
+**Next action: S6** (`proposals/2026-08-21-execution-order-v1.md`), now `state: next`. Order within
+it is **6b → 6a → 6f → 6c**, and 6b's constraint is load-bearing: `deprecated/archives/editorial*`
+is read by `validate_ed_citations.py`, so deleting it before the tombstone list lands makes every
+valid `ED-` citation read as fabricated.
+
+**Two things S6 must not repeat, both learned in 5c:**
+- *Check the CI wiring before re-homing a rule.* The 5c instruction named a home
+  (`build_contract_index`) that runs in no workflow. S6's D1 moves FORK-resolution logic between
+  three call sites — check which of them CI actually runs first.
+- *A count is only a success criterion if the detector can see everything.* 5c's parser ratchet was
+  blind twice in one day, in the direction that flattered the result.
+
+**Open for Jordan — ALL THREE CLOSED 2026-08-23. Kept, with their resolutions, because two of
+them were closed by finding the question was WRONG, and a reader of S6 will meet them again:**
+- ✅ `fac.legitimacy`'s floor of **0** — **RULED 0 by Jordan** ("floor ruling 0"). It confirms the
+  value that shipped 2026-08-22, so no golden moved. `descriptor_registry.yaml` no longer flags it.
+- ✅ The ledger cap (§4 Q8) — **THE QUESTION WAS STALE.** `editorial_ledger_in.jsonl` is at
+  **46,055 / 120,000** tokens, ~74k of headroom, not ~108. Jordan raised that cap 50k → 120k on
+  2026-08-21 and the plan text was never re-measured. Every one of the 24 registers is within
+  limits. **S6 has no ledger-cap decision to take.**
+- ✅ "Duplicate `ED-IN-0194` at lines 50-51" — **THERE IS NO DUPLICATE.** Line 50 is `ED-IN-0194`,
+  line 51 is `ED-IN-0195`. The only id with several rows is `ED-IN-0149` (×3), and those are
+  CORRECT append-only supersession — row 2 says so in its own text. Nothing to resolve.
+
+  ⚠ *All three were cited in the plan as live blockers. Two were phantoms, and both would have been
+  "fixed" by a session that trusted the document over the tree. Re-measure a cited number before
+  acting on it — the same defect `CLAUDE.md` §1 records for the duplicated date.*
+
+**Recorded, not acted on (apparatus, load-bearing on process only — §0.1 pt 5):**
+`tools/trace_execution_phases.py` is NON-DETERMINISTIC — the same seeded campaign gave
+`victory: 383 / 378 / 379` over three runs of an unchanged tree, and `references/execution_map.json`
+embeds those counts. Nothing gates on them and the file is untracked, so this is a note for whoever
+next reads a diff of that artifact and thinks their change moved it. Structure and line counts ARE
+stable (verified over four rebuilds), so the flow-skeleton anchors into it are safe.

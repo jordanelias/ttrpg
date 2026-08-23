@@ -53,7 +53,46 @@ _OFF_WIN_SHARE = {'Crown': 25.0, 'Church': 0.0, 'Hafenmark': 12.5, 'Varfell': 62
 # RE-PINNED 2026-08-21, M1 juncture 1: fractional dice pools (ED-IN-0187). `sigma_leverage.roll_net_continuous` no longer rounds its pool, so every sampled value changes and the RNG stream diverges. NOT a balance signal at this n — the control is `tools/balance_oracle.py` at 120 campaigns per arm, where no faction shifts significantly (all |z| < 0.53); see the RE-PINNED block in test_f7_smoke_oracle.py for the table.
 # NOTE _OFF_WIN_SHARE did NOT move: the flag-OFF path does not reach a fractional pool on
 # this batch, which is itself a useful signal about where fractional pools are produced.
-_ON_WIN_SHARE = {'Crown': 50.0, 'Church': 12.5, 'Hafenmark': 0.0, 'Varfell': 37.5}
+
+# RE-PINNED 2026-08-22, plan S5d — ED-IN-0029's PER-STAT FLOORS. `Faction.adjust` now reads
+# `descriptors.faction_bounds()` instead of a blanket 0.5/7.0, so Influence floors at 1 and
+# Wealth/Military/Stability at 0. Unlike the 2026-07-29 re-record, this one moves BOTH the
+# 8-campaign batch AND the single-campaign seed-42 pins, because the clamp is on the faction stats
+# every path reads — 160 of 1,979 `.adjust()` calls now land differently over the 8-campaign batch.
+# The full n=240-per-arm control table (two seed batches plus the pooled figures) is in
+# test_f7_smoke_oracle.py's RE-PINNED block; read it before re-recording these again.
+# PREVIOUS (pre-S5d, verified against 62ce837 rather than retyped):
+#   _ON_WIN_SHARE = {'Crown': 50.0, 'Church': 12.5, 'Hafenmark': 0.0, 'Varfell': 37.5};
+#   _ON_SCENES_RESOLVED = 110; _ON_KEYS_EMITTED = 173;
+#   _ON_KEYS_BY_TYPE = {'scene.battle_concluded': 83, 'scene.contest_resolved': 89,
+#                       'da.public_governance': 1};
+#   _ON_KEYLOG_HASH = '3ae923ad90230769809e86f0f089b0d9ca459f05e998e2bc88e43630949c6adb'
+# ⚠ `da.public_governance` went 1 -> 2: the Parliamentary Transfer emitter fires TWICE on seed 42
+# now. That is the emitter test_public_governance_transfer_key.py covers, and its count moving is
+# expected here rather than a new emitter appearing — the composition map gains no new key type.
+
+# RE-PINNED 2026-08-23 — the faction-stat roster rulings (Legitimacy is a base; Influence can be 0).
+# `L` now clamps from the registry rather than the blanket 0.5 floor, and 605 of 1,979 `.adjust()`
+# calls over the 8-campaign batch land differently, all of them on `L`. Both the batch win-share and
+# the single-campaign seed-42 pins move, for the same reason as the 08-22 re-record: the clamp is on
+# the faction stats every path reads. Full n=240-per-arm control table in test_f7_smoke_oracle.py.
+# PREVIOUS (2026-08-22, verified against 556449a rather than retyped):
+#   _ON_WIN_SHARE = {'Crown': 25.0, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 50.0};
+#   _ON_SCENES_RESOLVED = 125; _ON_KEYS_EMITTED = 186;
+#   _ON_KEYS_BY_TYPE = {'scene.battle_concluded': 80, 'scene.contest_resolved': 104,
+#                       'da.public_governance': 2};
+#   _ON_KEYLOG_HASH = '1378f082210393c0a1a536f4d63d0fcdef5d6b9114753778131356cac8a52b73'
+#
+# ⚠ HOW THESE TWO HISTORICAL BLOCKS WERE WRONG, because the mechanism will recur. Both re-records
+# updated the live constants with a whole-file string replace, which ALSO rewrote the identical
+# strings inside the PREVIOUS blocks above — so all three states carried the LIVE hash and key
+# count, and the before/after record said the hash did not move across a change that provably moves
+# it (one extra `scene.contest_resolved` entry in an append-only log). The live pins were correct
+# throughout and the suite was green, which is exactly why it survived: a fabricated HISTORY fails
+# no test. Restored from git. When re-recording, edit the live constant by line, never by value.
+# `_ON_SCENES_RESOLVED` is UNCHANGED at 125 and `da.public_governance` stays at 2 — the contest
+# count moved by one (104 -> 105), which is what carries the key total 186 -> 187.
+_ON_WIN_SHARE = {'Crown': 37.5, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 37.5}
 # ── GOLDEN RE-RECORD 2026-08-02 (ED-IN-0122) — deliberate, and here is the whole reason ────────
 # `systems/factions/sim/faction_action` gained a SECOND live Key emitter, `scene.battle_concluded`.
 # The KeyLog is append-only, so a new emitter necessarily changes both the count and the content
@@ -90,11 +129,11 @@ _ON_WIN_SHARE = {'Crown': 50.0, 'Church': 12.5, 'Hafenmark': 0.0, 'Varfell': 37.
 # MECHANISM: fractional pools change every sampled value, so the RNG stream diverges and a transfer
 # motion that previously missed its window now qualifies on this seed. Not a balance change — see
 # the control table in test_f7_smoke_oracle.py (120 campaigns per arm, all |z| < 0.53).
-_ON_KEYLOG_HASH = '3ae923ad90230769809e86f0f089b0d9ca459f05e998e2bc88e43630949c6adb'
-_ON_SCENES_RESOLVED = 110
-_ON_KEYS_EMITTED = 173
+_ON_KEYLOG_HASH = '92068b5eb1917b7a5fa7bef43dafb9b26ae78aad25da7b788ab489450ad785dc'
+_ON_SCENES_RESOLVED = 125
+_ON_KEYS_EMITTED = 187
 # The composition behind that total — the diagnostic half of the pin.
-_ON_KEYS_BY_TYPE = {'scene.battle_concluded': 83, 'scene.contest_resolved': 89, 'da.public_governance': 1}
+_ON_KEYS_BY_TYPE = {'scene.battle_concluded': 80, 'scene.contest_resolved': 105, 'da.public_governance': 2}
 # 2026-08-14 (ED-IN-0187): contest_resolved 13 -> 79 and battle_concluded 62 -> 76. The
 # contest jump is the larger and has a mechanism worth naming — more faction actions now land
 # in bands that open a scene, and the deleted Mil gate opens more conquests, so both emitters
@@ -187,6 +226,79 @@ def test_winner_and_degree_band_mapping():
     assert pb._winner_and_degree(_vr('passed', 8)) == ('A', 'Success')
     assert pb._winner_and_degree(_vr('failed', 2)) == ('B', 'Success')
     assert pb._winner_and_degree(_vr('committee', 5)) == (None, 'Partial')  # compromise fires nothing
+
+
+def test_winner_and_degree_is_identical_to_the_threshold_derivation_it_replaced():
+    """The falsifier for S5a's one behavioural-looking edit (§0.1 pts 2-3).
+
+    `_winner_and_degree` used to import `PERSUASION_TOTAL_VICTORY` / `PERSUASION_TOTAL_DEFEAT` from
+    `systems.social_contest` and re-derive, from the raw persuasion track, which side had won and
+    whether totally — a classification `run_parliamentary_vote` had ALREADY made and recorded on
+    the result it returned. S5a made it read `vr.status` + `vr.total_victory` instead, which is what
+    removed the last of `engine/`'s three top-level `systems` imports.
+
+    "Value-identical" is an argument, and an argument is not a measurement. This runs BOTH
+    implementations over every reachable (status, total_victory, track) triple and asserts they
+    never disagree. It reads the real canon constants rather than hardcoding 9/1/7/3, so if a
+    retune ever inverts the ordering the new form depends on — TOTAL_VICTORY >= WIN_THRESHOLD and
+    TOTAL_DEFEAT <= LOSS_THRESHOLD, i.e. "a total victory always also passes or fails" — this fails
+    here rather than silently changing which faction gets a Domain Echo.
+    """
+    from systems.social_contest.sim.contest import (
+        PERSUASION_TOTAL_VICTORY, PERSUASION_TOTAL_DEFEAT,
+        PERSUASION_WIN_THRESHOLD, PERSUASION_LOSS_THRESHOLD,
+    )
+
+    def old(vr):
+        """Verbatim the pre-S5a body."""
+        if vr.total_victory and vr.final_track >= PERSUASION_TOTAL_VICTORY:
+            return "A", "Overwhelming"
+        if vr.total_victory and vr.final_track <= PERSUASION_TOTAL_DEFEAT:
+            return "B", "Overwhelming"
+        if vr.status == "passed":
+            return "A", "Success"
+        if vr.status == "failed":
+            return "B", "Success"
+        return None, "Partial"
+
+    checked = 0
+    # The track is clamped to [_TRACK_FLOOR, _TRACK_CEIL] = [0, 10] in parliamentary_vote.py; the
+    # status and total_victory flags are derived from it there, so only these triples are reachable
+    # by a real vote. The zero-zero early return is the extra case: committee + not-total at ANY
+    # track, since it keeps the STARTING track rather than a computed one.
+    for track in range(0, 11):
+        if track >= PERSUASION_WIN_THRESHOLD:
+            status = 'passed'
+        elif track <= PERSUASION_LOSS_THRESHOLD:
+            status = 'failed'
+        else:
+            status = 'committee'
+        total = track >= PERSUASION_TOTAL_VICTORY or track <= PERSUASION_TOTAL_DEFEAT
+        for reachable in ((status, total), ('committee', False)):   # normal, then zero-zero
+            vr = _vr(reachable[0], track, total=reachable[1])
+            assert pb._winner_and_degree(vr) == old(vr), (
+                f'S5a changed behaviour at status={reachable[0]!r} track={track} '
+                f'total_victory={reachable[1]}: now {pb._winner_and_degree(vr)}, was {old(vr)}'
+            )
+            checked += 1
+    assert checked == 22, f'the sweep did not run over every reachable triple (checked {checked})'
+
+
+def test_the_equivalence_sweep_can_observe_a_divergence():
+    """§0.1 pt 2 — the sweep above must be able to FAIL. A comparison of a function against a copy
+    of itself is not evidence; this plants the divergence the sweep is meant to catch and asserts
+    the two forms really do differ there, so the sweep is comparing two distinct implementations.
+    """
+    from systems.social_contest.sim.contest import PERSUASION_TOTAL_VICTORY
+
+    # A total victory that did NOT pass — unreachable under canon's ordering (9 >= 7), which is
+    # precisely the assumption the new form rests on. The old threshold form calls it a Side-A
+    # overwhelming win; the new status-reading form calls it a compromise.
+    impossible = _vr('committee', PERSUASION_TOTAL_VICTORY, total=True)
+    assert pb._winner_and_degree(impossible) == (None, 'Partial')
+    assert impossible.total_victory and impossible.final_track >= PERSUASION_TOTAL_VICTORY, (
+        'the planted triple no longer trips the OLD form, so the sweep proves nothing'
+    )
 
 
 def test_bridge_is_inert_without_scheduler():

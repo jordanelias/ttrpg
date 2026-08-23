@@ -61,11 +61,11 @@ def main(argv):
         ('export_game_constants.py',    ['--check'], True),   # oracle -> Godot-facing constants round-trip (blocking)
         ('export_descriptors.py',       ['--check'], True),   # descriptor registry -> the artifact the engine reads at runtime (blocking)
         ('export_composition.py',       ['--check'], True),   # composition roles -> the map mc_v18 resolves through (blocking)
+        ('export_world_initial_state.py', ['--check'], True),  # authored opening position -> the artifact game_state reads (blocking)
         # MIGRATION-WINDOW gate: retire with engine/params/ (ED-IN-0139). See evacuation_plan R-PARAMS-DUMPED.
         # ED-IN-0142: the register went stale 3x in one session and CI caught it every time,
         # because --check could not fail and this list did not run it. Both fixed.
         ('currency_consistency_check.py', [],        False),  # report-only recency gate (ED-1087)
-        ('wiring_map_check.py',          ['--check'], False),  # report-only wiring-manifest tag/coverage gate (ED-IN-0074)
         ('ci_claim_provenance_check.py', [mode_flag], True),   # a MEASURED ledger claim must name a re-runnable instrument (ED-PC-0040; blocking)
         # RETIRED culling wave 2/3 (ED-IN-0194, 2026-08-21). Two rationale blocks stood here and
         # both argued the posture of gates that no longer exist: `ci_wf_harness_check` /

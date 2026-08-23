@@ -65,6 +65,7 @@ import random
 
 from engine.autoload import scene_slate
 from engine.cross_scale import handoff_rules, zoom_in_out
+from engine.substrate import composition
 from engine.substrate import stubwire
 
 
@@ -270,8 +271,8 @@ def _resolve_slot(slot, world, rng):
                 if not parts or len(parts) < 2:
                     out["reason"] = "context-derivation gap: no personal combat actors in aggregate world-state"
                     return out
-                import systems.combat.sim.combat as combat
-                rr = combat.resolve_combat_round(parts, scene=ctx.get("scene"), rng=rng)
+                rr = composition.require('scene_resolver.combat')(
+                    parts, scene=ctx.get("scene"), rng=rng)
                 out["resolved"] = True
                 out["result"] = getattr(rr, "__dict__", str(rr))
         elif st == "contest":
@@ -284,7 +285,8 @@ def _resolve_slot(slot, world, rng):
                 return out
             # ED-SC-0006: route to the PROMOTED kernel (build_contest/resolve_contest), retiring
             # the deprecated contest_legacy_stub.run_contest call this branch used to make.
-            import systems.social_contest.sim.contest as contest
+            build_contest = composition.require('scene_builder.contest')
+            resolve_contest = composition.require('scene_resolver.contest')
             proceeding = ctx.get("proceeding", EMERGENCY_COUNCIL_PROCEEDING)
             # The promoted kernel resolves off the GLOBAL `random` module, not an injectable rng
             # (resolver.py's own note: the 151 seeded kernel tests rely on the module-level
@@ -295,8 +297,8 @@ def _resolve_slot(slot, world, rng):
             prev_random_state = random.getstate()
             try:
                 random.seed(rng.getrandbits(32))
-                built = contest.build_contest(parts[0], parts[1], venue=proceeding)
-                (verdict, verdict_reason), _bout = contest.resolve_contest(built)
+                built = build_contest(parts[0], parts[1], venue=proceeding)
+                (verdict, verdict_reason), _bout = resolve_contest(built)
             finally:
                 random.setstate(prev_random_state)
             out["resolved"] = True
@@ -332,9 +334,9 @@ def _resolve_slot(slot, world, rng):
             # above) — a future contest stakes kind with a different actor/genre shape needs its
             # own mapping, not a silent fallthrough onto this one.
             if stakes.get("kind") == "emergency_council":
-                if verdict == contest.A:
+                if verdict == composition.require('contest_side.a'):
                     echo_degree = "Success"
-                elif verdict == contest.B:
+                elif verdict == composition.require('contest_side.b'):
                     echo_degree = "Failure"
                 else:
                     echo_degree = "Partial"
@@ -348,12 +350,11 @@ def _resolve_slot(slot, world, rng):
             # (stubwire.stub_resolve ignores them by construction — no-fabrication contract);
             # ctx/world are threaded through so a future real resolver drop-in needs no call-site
             # change here.
-            from systems.fieldwork.sim import fieldwork as _fieldwork_mod
-            from systems.fieldwork.sim import investigation as _investigation_mod
             if st == "fieldwork":
-                stub = _fieldwork_mod.run_fieldwork_scene(ctx.get("scene"))
+                stub = composition.require('scene_resolver.fieldwork')(ctx.get("scene"))
             else:
-                stub = _investigation_mod.resolve_npe_response(ctx.get("npc_id"), ctx.get("prompt"), world)
+                stub = composition.require('scene_resolver.investigation')(
+                    ctx.get("npc_id"), ctx.get("prompt"), world)
             out["reason"] = stub.reason
             out["stub"] = stub.stub
             return out

@@ -66,7 +66,77 @@ def _pool_arm(round_pool: bool):
     return lambda: setattr(SL, 'roll_net_continuous', original)
 
 
+def _pre_ruling_bounds_arm(pre: bool):
+    """Patch `faction_bounds` back to its PRE-2026-08-23 answers, or leave the ruled ones. Undo.
+
+    Two Jordan rulings landed that day and both change this clamp, so the arms compare the pair
+    rather than one at a time — separating them would need a third arm and would compare against a
+    state that never shipped:
+      * "Influence can be 0"  — Influence floored at 1 before (ED-IN-0029/OPT-AV-14).
+      * "Legitimacy is a base" — `L` was undeclared before, so it fell back to 0.5/7.0.
+
+    It patches the BOUNDS LOOKUP rather than the registry data, so both arms read one cooked
+    artifact and the only difference is the answer `adjust` gets.
+    """
+    from engine.autoload import game_state as gs
+    from engine.substrate import descriptors as d
+
+    original = d.faction_bounds
+    _PRE = {'I': (1, 7), 'L': None}
+
+    def patched(field):
+        if field in _PRE:
+            return _PRE[field]
+        return original(field)
+
+    if pre:
+        d.faction_bounds = patched
+        gs.descriptors.faction_bounds = patched
+    return lambda: (setattr(d, 'faction_bounds', original),
+                    setattr(gs.descriptors, 'faction_bounds', original))
+
+
+def _floor_arm(blanket: bool):
+    """Patch `Faction.adjust` to the pre-S5d blanket 0.5/7.0 bounds, or leave the registry-declared
+    per-stat bounds in place (ED-IN-0029). Returns undo.
+
+    The `blanket` arm reproduces the OLD behaviour by forcing the fallback bounds for every stat,
+    which is exactly what the method did before `descriptors.faction_bounds()` was wired. It patches
+    the METHOD rather than the descriptor data so both arms read the same registry — the point of
+    running them in one process is that the mechanic is the only difference.
+    """
+    from engine.autoload import game_state as gs
+
+    original = gs.Faction.adjust
+
+    def patched(self, stat, granular_delta, floor=None, ceiling=None):
+        return original(self, stat, granular_delta,
+                        floor=gs.Faction.UNDECLARED_FLOOR if floor is None else floor,
+                        ceiling=gs.Faction.UNDECLARED_CEILING if ceiling is None else ceiling)
+
+    if blanket:
+        gs.Faction.adjust = patched
+    return lambda: setattr(gs.Faction, 'adjust', original)
+
+
+#: The comparison this invocation runs. Swap in the pair you are measuring; keep exactly two arms,
+#: keep them in one process, and leave the retired pairs above as worked examples rather than
+#: deleting the function that documents what the old behaviour WAS.
 ARMS = {
+    'pre_ruling': lambda: _pre_ruling_bounds_arm(True),
+    'ruled':      lambda: _pre_ruling_bounds_arm(False),
+}
+
+#: Retired comparison from plan S5d, kept as the record of what `adjust` did before the registry
+#: owned its bounds. Restore into ARMS to re-run it.
+_ARMS_FLOOR = {
+    'blanket_0.5': lambda: _floor_arm(True),
+    'per_stat':    lambda: _floor_arm(False),
+}
+
+#: Retired comparison, kept because `_pool_arm` is the record of what `roll_net_continuous` did
+#: before M1 juncture 1 half A. Restore into ARMS to re-run it.
+_ARMS_POOL = {
     'rounded':    lambda: _pool_arm(True),
     'fractional': lambda: _pool_arm(False),
 }
@@ -85,7 +155,20 @@ def run_arm(setup, n, base_seed):
 
 
 def two_proportion_z(a_wins, b_wins, n):
-    """Pooled two-proportion z. Returns 0.0 when the pooled rate is degenerate (0 or 1)."""
+    """Pooled two-proportion z. Returns 0.0 when the pooled rate is degenerate (0 or 1).
+
+    ⚠ IT TREATS THE TWO ARMS AS INDEPENDENT SAMPLES, AND THEY ARE NOT. Both arms run the SAME seed
+    sequence (`base_seed + i`), which is the point — it removes between-sample variance so the
+    mechanic is the only difference. But a two-proportion z assumes independence, so on paired,
+    highly-correlated arms it OVERSTATES the standard error and therefore UNDER-DETECTS a real
+    shift. Read a non-significant result as "no shift large enough for an independence-assuming
+    test to see", not as "no shift". A paired test (McNemar over per-seed win/loss flips) would be
+    the right statistic and needs per-seed winners retained rather than counted; recorded here
+    rather than swapped in, because changing the statistic under a result already reported to
+    Jordan would be worse than naming its limitation.
+
+    The bias runs toward the null, which is the safe direction for a CONTROL — it makes "the goldens
+    moved from RNG divergence, not balance" harder to claim, not easier."""
     pooled = (a_wins + b_wins) / (2 * n)
     if pooled <= 0 or pooled >= 1:
         return 0.0

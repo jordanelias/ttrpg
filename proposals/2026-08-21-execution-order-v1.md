@@ -26,15 +26,19 @@ requires a human decision; this document's decision requests are §4, addressed 
 | S2 culling waves 1+2 | **done** 2026-08-21 | apparatus removal | — |
 | S3 wave 3 + green the suite | **done** 2026-08-21 | apparatus removal | — |
 | S4 wave 5, untrack the generated layer | **done** 2026-08-22 `f84692c` | apparatus removal | — |
-| **S5 contracts-as-registration** | **NEXT** | **the engine** | **L0** |
-| S6 wave 6 + FORK semantics + ledger cap | blocked-by S5 | apparatus + provenance | — |
+| S5 contracts-as-registration | **done** 2026-08-22 / 2026-08-23 | **the engine** | **L0** |
+| **S6 wave 6 + FORK semantics + ledger cap** | **NEXT** — unblocked 2026-08-23 | apparatus + provenance | — |
 | S7 wave 4's residue: extraction | blocked-by S6 | audit corpus | — |
 | S8 M1 juncture 1 | half-done; **Half B SUSPENDED** by Jordan | **the engine** | **L0** |
 | S9 cross-repo residue | blocked-by attaching `jordanelias/valoria-game` | port | — |
 | S10 errors become numbers | **unblocked**, not gating | **the engine** | **L0** |
 
-**Take S5.** It is the first step in the rail whose subject is the game rather than the apparatus,
-and the whole cull existed to get here. S10 is unblocked and may be taken if Jordan directs it, but
+**S5 IS DONE (5a/5b/5d/5e 2026-08-22; 5c 2026-08-23).** `engine/` no longer names `systems/` by
+import at all, the world's opening position is an authored table, ED-IN-0029's per-stat floors
+finally run, the bridge invariant is enforceable, and `module_contracts.yaml` is the single
+registration table. Read S5's RESULT section before starting S6 — in particular 5c's, because the
+fold's two corrections to this document's own instructions are the kind this document keeps
+issuing. S10 is unblocked and may be taken if Jordan directs it, but
 **do not take it ahead of S5 or S8 by rail-default** — it does not move `0/7`.
 
 **The depth rule binds every step, including any you invent.** §3a rules the tooling at **three
@@ -384,7 +388,7 @@ wave 3.
 
 ---
 
-### S5 — Finish the centralization: one pattern, everywhere · `state: next`
+### S5 — Finish the centralization: one pattern, everywhere · `state: done (5a/5b/5d/5e 2026-08-22; 5c 2026-08-23, `63cec8a`+`06b5b91`)`
 
 **Goal:** centralized definitions and injectable code, consumed by wrappers and systems. This is the
 step the whole programme exists to reach.
@@ -437,7 +441,127 @@ into any other commit.
 
 ---
 
-### S6 — Wave 6 consolidations, FORK semantics, and the ledger cap · `state: blocked-by S5`
+**RESULT (2026-08-22) — four of five sub-steps landed, and where each DEVIATED from the instruction
+above.** Commits `75ced64`, `96e56b5`, `de7eaab`, `556449a`, plus 5e.
+
+**5a — DONE, in two commits rather than one, and the plan's own next instruction was refused.**
+`BASELINE_TOTAL` 3 → 0 and `NESTED_BASELINE` 16 → 0. The three top-level imports needed three
+different answers, and treating them as one problem would have produced three bad fixes: the §10
+vote and its record types are genuine composition (roles); `parliamentary_transfer` was imported as
+a MODULE so the bridge could read four of its PRIVATE members, so the derivation MOVED to its owner
+as `derive_transfer_candidate` rather than declaring privates as roles; and
+`PERSUASION_TOTAL_VICTORY`/`_DEFEAT` were not composition at all — the engine re-deriving a band the
+vote had already recorded on its result, now read as `vr.status` + `vr.total_victory`.
+
+  ⚠ *The instruction to delete `test_the_documented_cycle_is_still_real` "when `BASELINE_TOTAL` hits
+  0" was NOT followed, and that was right.* The cycle's engine-side half was `game_state.py`'s
+  NESTED import of `treaty`, which that ratchet never counted; deleting the guard there would have
+  cleared it on a claim still false. It was deleted only once BOTH counts reached 0, and replaced
+  by a subprocess import probe — execution, not text.
+
+  ⚠ *"One seam, one declaration" was FALSE as first written and is now true.* The §10 vote was
+  imported by name in `parliamentary_action.py` as well; an adversarial pass found it and it was
+  converted. `parliamentary_stay.py` still imports it and is left alone deliberately —
+  social_contest importing its own sibling is not a cross-subsystem seam.
+
+  ⚠ **A 23rd SEAM EXISTS AND IS NOT AN IMPORT.** `engine/cross_scale/combat_bridge.py` puts
+  `systems/combat/combat_engine_v1/` on `sys.path` and loads `combatant`/`wrapper` by BARE NAME. It
+  was invisible to both ratchet regexes AND to the first import probe, which filtered `sys.modules`
+  by the `systems.` prefix. The probe now matches on each loaded module's FILE PATH and walks every
+  module under `engine/`; the seam is declared in `PATH_SEAM_ALLOWED` (one entry, shrink-only) with
+  a third detector scanning for the mechanism. Unconverted because `combat_engine_v1/` is a flat
+  module set whose own convention is bare imports and whose balance workbench loads it that way, so
+  dotted-path loading would give those modules a second identity — a PC-lane call.
+
+**5b — DONE, and the trap it fell into is worth more than the step.** `references/world_initial_state.yaml`
++ exporter + artifact + leaf; six literal tables gone from `game_state.py`. The first draft of the
+exporter sorted factions ALPHABETICALLY — an unremarkable "for determinism" habit — and moved the
+campaign goldens (Church 0.0 → 50.0) with every value identical, because `create_world` iterates
+that table to build `world.factions` and its order is the RNG draw sequence. **Determinism and
+canonical ORDER are different properties, and a sort applied for the first silently redefines the
+second.** Guarded three ways now.
+
+  ⚠ *`MULTS` was NOT moved, and that is a recorded dependency on Q1.* Its home is
+  `descriptor_registry.yaml`, but authoring `L` there would answer the open ruling on whether
+  Legitimacy is a base descriptor. §5 already records Q1 as gating this deletion.
+
+**5c — DONE 2026-08-23 (`63cec8a`, reconciled in `06b5b91`), and the 2026-08-22 deferral note that
+stood here was WRONG on its central point.** That note said the surviving rules' natural home was
+`build_contract_index`. **`build_contract_index` is wired into no workflow at all** — retiring them
+there would have deleted a live gate while appearing to move it. They went into
+`export_composition.py --check`, the plan's own literal instruction, which is the ONLY blocking CI
+job whose subject is this registry. The note's objection (one tool, two rules) survives in weakened
+form and is answered in the tool's docstring: the rule count over this registry goes 3 → 2.
+
+The module sets were IDENTICAL 27/27, so this was a per-row join, not a merge. Two of the retired
+gate's five rules die STRUCTURALLY — with the facts on the row they describe there is no second key
+space to disagree — replaced by a stricter rule that the key is present.
+
+  ⚠ *"Structural" is a claim about a DATA SHAPE, and a list does not earn it for free.*
+  `modules:` is a LIST where the manifest was a MAP: a row may be unnamed or duplicate a name, and
+  every consumer re-keys the list by name. Shipped that way, a duplicated row validated as 28
+  modules and an unnamed one as 27, both silent. Rule 1 is now three assertions.
+
+  ⚠ *The fold found the disagreement it was meant to prevent.* The manifest carried its own
+  `tier`/`scale`/`resolver` copies, and they had drifted: `armature_dot_product` for
+  `articulation_layer`, which is the reading verification RU-4 had already overturned on the
+  contract row. Its single `scale:` was also a lossy flattening for 8 of 27 modules. A THIRD copy
+  survived in `godot_conversion_strategy_v1.md` and was corrected in `06b5b91`.
+
+  ⚠ *Two defects in the same guard, one day apart.* `test_engine_params_bridge.py`'s parser
+  detector could not see a filename inside a longer path literal, nor a module-level tuple binding.
+  The declared count went 9 → 10 → and the descriptor roster 5 → 6. That count is 5c's own success
+  criterion, so both blindnesses would have read as wins. It is also now scoped honestly: ten is a
+  `tools/` number; repo-wide it is twenty-one.
+
+  ⚠ *5c did NOT reduce that count, and the ratchet says so.* It retired a DIFFERENT authored
+  surface, and three of that surface's four parsers already read this file. A ratchet graded on
+  "did the number go down" would have scored a whole registry leaving the tree as a failure.
+
+  ⚠ *The rules moved to a tool with no test.* Deleting `test_wiring_map_check.py` alongside its
+  tool left the ported rules unpinned while the checks registry claimed they were mutation-verified
+  — an unfalsifiable result claim under §0.1 pt 3, caught by the adversarial pass.
+  `tests/valoria/test_wiring_validation.py` is the artifact; mutation-verified 8/8.
+
+  ⚠ *The cap raise was paying for duplication introduced by the fold itself.* The first version
+  repeated an 82-char comment on all 27 rows — 553 tokens. Deduplicated, the fold is a net SHRINK of
+  437 tokens against the pre-fold sum, and the cap moved 24000 → 32000 rather than 33000. The
+  critic's stronger claim, that dedup would avoid the raise entirely, is refuted by measurement.
+
+**5d — DONE, and it is the one sub-step that changed how the game plays.** ED-IN-0029's per-stat
+floors (ratified 2026-07-08) reached `Faction.adjust` for the first time. Five goldens re-recorded
+against an n=240-per-arm control run TWICE; the first batch flagged Hafenmark significant and the
+replication showed exactly zero effect, so the pooled table and both batches are recorded inline at
+the golden rather than the convenient half. Four of the five floors reach code — `intel` has no
+`MULTS` multiplier, so its floor is unreachable, and that is pinned rather than fixed by inventing
+a canon value.
+
+**5e — DONE, and the invariant it enforces is NOT the one §2 states, because that one is not true.**
+Written as §2's paragraph — one exporter, one leaf, nothing else parses the authored surface — the
+test would be RED ON ARRIVAL, and a gate red on arrival gets deleted. So it splits the claim by what
+holds: **one writer per artifact is HARD** (true today, and two writers is how the bridge acquires a
+silent second owner); readers and authored-surface parsers are **shrink-only ratchets**. Distance to
+the target is recorded as a number rather than asserted away: 3 of the 4 runtime bindings are already
+one-artifact-one-leaf, `key_types.json` has one reader that is not a leaf, `descriptor_registry.yaml`
+has five parsers and `module_contracts.yaml` nine — which is what 5c is for. Both ratchets
+mutation-verified in both directions.
+
+  ⚠ *An earlier draft of 5e listed `key_types.json` with three engine readers and
+  `params_tables.yaml` with two.* That came from a grep that could not tell a path construction from
+  a docstring mentioning the filename. Re-measured by binding: four bindings exist in all of
+  `engine/`. The corrected detector requires the name as a string literal inside a path expression.
+
+**THE ADVERSARIAL PASS (CLAUDE.md §10) BROKE 20 CLAIMS ACROSS 5a/5b/5d** — the 23rd seam above, a
+fabricated `world_from_snapshot` citation in all ten new registry rows (the function is
+`restore_world`), a call-site count wrong on five surfaces, S5d shipping with no falsifier at all,
+and a guard on the ratified-but-unimplemented register that could not observe the deletion S5d made
+in it. All reconciled in `556449a`. What the critic could not check — the oracle runs, a moved-body
+diff — came back UNVERIFIABLE rather than inferred, which is the posture that makes the relay worth
+its cost.
+
+---
+
+### S6 — Wave 6 consolidations, FORK semantics, and the ledger cap · `state: next` (S5 closed 2026-08-23)
 
 **6b before 6a** — 6b's tombstones gate 6a, and `deprecated/archives/editorial*` is read by
 `validate_ed_citations.py`; delete it before the tombstone list lands and **every valid `ED-`
@@ -455,9 +579,40 @@ reproduce its pairing format, which `bdc`'s caller checks — a drop-in port sil
 register-size validators deliberately avoid). **D4 is struck** — `bdc` absorbing `freshness_gate` is
 aggregation, not deduplication.
 
-**Unblock the ledger.** `registers/editorial_ledger_in.jsonl` has ~108 tokens of headroom under a
-blocking cap, which means **no lane can file a row at all** (ED-IN-0185 Q5, overdue). Raise, split,
-or accept — Jordan's call, §4 Q8. Also resolve the duplicate `ED-IN-0194` at lines 50-51.
+~~**Unblock the ledger.**~~ **STRUCK 2026-08-23 — BOTH CLAIMS WERE FALSE WHEN RE-MEASURED, and
+neither needed a ruling.** This item read: "`registers/editorial_ledger_in.jsonl` has ~108 tokens of
+headroom under a blocking cap, which means no lane can file a row at all (ED-IN-0185 Q5, overdue).
+Raise, split, or accept — Jordan's call, §4 Q8. Also resolve the duplicate `ED-IN-0194` at lines
+50-51."
+
+- **The cap.** The file is at **46,055 / 120,000** tokens — ~74k of headroom. Jordan raised that cap
+  50,000 → 120,000 on 2026-08-21 (`ci_register_size_check.py`, which carries the reasoning inline),
+  and this paragraph was written from the pre-raise number and never re-taken. All 24 registers are
+  within limits. **There is no decision here to take.**
+- **The duplicate.** Line 50 is `ED-IN-0194`; line 51 is `ED-IN-0195`. The only id carrying several
+  rows is `ED-IN-0149` (×3), and those are CORRECT append-only supersession — the second row opens
+  "SUPERSEDING ROW for ED-IN-0149 (append-only ledger: an id's effective status is its LAST row)".
+  "De-duplicating" them would have destroyed the mechanism the ledger runs on.
+
+⚠ **THIS DOCUMENT ALREADY KNEW, AND CONTRADICTED ITSELF FOR TWO DAYS.** §5's rulings table marks
+**Q8 "RULED AND EXECUTED 2026-08-21"** — it records the cap raise, notes the "~108 tokens" figure
+was *already* stale when re-measured (45,998/50,000, about four rows), and states the `ED-IN-0194`
+duplicate was split to `ED-IN-0195` along with nine more duplicate groups nobody had reported. So
+the correct answer sat in §5 while §3's S6 body still demanded a ruling for it. A step's body and
+the rulings table are two copies of one fact, and this is the second time in three days that a
+second copy is where the rot lived (see 5c's RESULT).
+
+⚠ **Both items would have been "fixed" by a session that trusted this document over the tree, and
+the second fix would have done damage** — "de-duplicating" `ED-IN-0149` destroys the append-only
+supersession the ledger runs on. Re-measure a cited number before acting on it.
+
+**What the token-room work actually was, done 2026-08-23** (Jordan: "just solve token room stuff"):
+`tests/coverage_matrix.md` was the only file near a cap — 14,117 / 15,000, **94%**, 883 tokens left
+— and its documented relief valve did not exist: `tests/coverage_matrix_archive.md` was deleted by
+the evacuation in `cadf9c7` while the live file's header went on pointing at it. That file is the
+one `ci_co_file_checker` rule 3 REQUIRES every simulation-output commit to append to, so the next
+such commit would have failed CI on SIZE. Archive restored, 26 settled sections (dated ≤ 2026-07-25)
+moved, live file 94% → 48%.
 
 **Re-home what `scope_ratchet` was measuring.** It reported REGRESSED on `ed.stale` (199 vs 76) and
 `ed.needs_jordan_stale` (83 vs 21) up to its deletion and nothing reports them now. Those are
@@ -739,7 +894,7 @@ comment says *"it must NOT be swallowed SILENTLY either (audit ED-IN-0074 D7)"* 
 nowhere. A resolver that raises **before consuming RNG** (an `AttributeError` on a renamed field —
 precisely the fractional-pools class) leaves the RNG stream unchanged, every seeded golden green, the
 faction silently inactive, and the only trace is stderr nothing reads.
-`engine/cross_scale/scene_dispatch.py:372-374` turns a resolver crash into
+`engine/cross_scale/scene_dispatch.py:374-376` turns a resolver crash into
 `out["reason"] = f"resolver raised: {e!r}"`, which flows into `report["deferred"]` and is **dropped**
 at `mc_v18.py:149-150`, which reads only `["dispatch"]["resolved"]`. A resolver crash is currently
 indistinguishable from a designed deferral in every consumed output.
@@ -802,7 +957,7 @@ build per-module instrumentation for the 27 dark modules — **you cannot log wh
 their burn-down instrument is `test_pipeline_reach`'s XFAIL manifest and their census is
 `trace_execution_phases`, both of which exist · emit any Key from the error path (an error-Key moves
 `content_hash` and every determinism row; if error events ever belong in the KeyLog that is a design
-decision for the contract-registered `audit` module, `references/module_contracts.yaml:535`, and it
+decision for the contract-registered `audit` module, `references/module_contracts.yaml:650`, and it
 is Jordan's, not this step's) · fold any of this into an S5 sub-step's commit.
 
 **Falsifier for the whole programme, recorded in advance.** If after two months the counters have only
@@ -833,8 +988,8 @@ path, and those are exactly the commits where a pre-RNG `AttributeError` would t
 
 | Q | Question | Blocks | Where the evidence is |
 |---|---|---|---|
-| **Q1** | **The faction-stats roster.** Five surfaces disagree; `L` is written by 32 `.adjust()` call sites and declared nowhere in the registry. Is Legitimacy a base faction descriptor or derived like Mandate? | S2 Half B's final form; S4's roster deletion; S6's divergence list. **S2 proceeds provisionally against the coded six-field roster** — the banner authorises this. | `HANDOFF.md:209+`; ED-FA-0004 |
-| **Q1b** | **The ratified floors nobody implemented.** ED-IN-0029 (2026-07-08) floored Influence at 1 and the rest at 0. `Faction.adjust` has applied a blanket 0.5/7.0 ever since and no caller overrides it. Wire them, with the golden delta measured? | S4's final commit | `export_descriptors.py` `unimplemented.per_stat_floors` |
+| ~~Q1~~ | **RULED AND WIRED 2026-08-23 — "Legitimacy is a base."** `fac.legitimacy` is declared in `references/descriptor_registry.yaml` and bound to the `L` field; the roster is SIX and `unimplemented.faction_L` is gone, emptying that register for the first time. Jordan's rationale: *"now that we're using continuous, we don't have to worry near as much either as we can just aggregate these stats as opposed to weird derivations."* Floor 0 per OPT-AV-18's default for a stat with no independently-declared floor — the same precedent that ratified Intel, not a number invented for it. ⚠ `fac.legitimacy` is NOT Mandate, which remains the derived settlement aggregate; the `Faction.L`-as-Mandate conflation is older than this ruling and is not resolved by it. Five goldens re-recorded against an n=240-per-arm control. | — | `ca0ff0c`; ED-FA-0004 |
+| ~~Q1b~~ | **WIRED 2026-08-22 (S5d), THEN PARTLY SUPERSEDED 2026-08-23.** ED-IN-0029's per-stat floors reached `Faction.adjust` at S5d — it had been ratified canon that never ran for six weeks. Jordan then ruled **"Influence can be 0"**, superseding that docket's Influence floor of 1 one day later. All six stats now floor at 0. ⚠ Measured: that second ruling is DECLARED BUT INERT at the golden seeds — 605 of 1,979 `.adjust()` calls clamp differently and every one is on `L`, none on Influence, because Influence never sinks below 1 there. The order is worth keeping: the floors were unrulable while they did not execute. | — | `556449a`, `ca0ff0c` |
 | **Q2** | **Name the tenth attribute.** You ruled ten on 2026-08-14; the registry ships nine, and `Constants.gd:28` already declares `ATTRIBUTE_COUNT = 10`. The game is ahead of canon. | closing the `pending_tenth` sentinel | `CLAUDE.md` §5 |
 | **Q3** | **Godot 4.3 or 4.6?** `project.godot:11` and CI pin 4.3; `CLAUDE.md` and `godot/` say 4.6. | what the compile ratchet's 84 means | 2026-08-20 plan §1.D5 |
 | ~~Q4~~ | **RULED 2026-08-21 — `test_gate_coverage.py` is DELETED with `ci_gate_coverage.py` in S3.** Superseded by the ruling below: Wave 3 runs, and the gate-coverage pair is a Wave 3 target. Local-green may now drift from CI-green; that risk is accepted, and the four `export_*` round-trips it protected are individually blocking in CI regardless. | — | §3 S3 |
@@ -843,6 +998,12 @@ path, and those are exactly the commits where a pre-RNG `AttributeError` would t
 | ~~Q7~~ | **RULED 2026-08-21 — Wave 3 RUNS, `valoria-critic` is KEPT.** `.claude/wf_*.js`, `wf_harness.js`, the wiring-checkers and the session machinery go; `.claude/agents/valoria-critic.md` survives as a standalone agent definition, invoked through the Agent tool now that the workflow scripts are gone. Structurally-independent adversarial review therefore survives the wave that was written to end it. ⚠ **The cost this ruling carries: Wave 3 deletes `session_status.py`, so the §0.3 banner experiment ENDS.** S3 amends §0.3 in the same commit. | — | culling plan §5.7, held 2026-08-18 → ruled |
 | ~~m1_acceptance~~ | **RULED 2026-08-21 — CARVED OUT of Wave 1, kept.** Wave 1 as ratified deleted it; §0.2 made it the definition of `done` one day after that ratification. | — | §3 S2 |
 | ~~Q8~~ | **RULED AND EXECUTED 2026-08-21 — "merely fiat made trying to get work done."** Caps raised 50k→120k (live lane ledgers) and 150k→250k (their archives). The reported "~108 tokens of headroom" was itself STALE — measured 45,998/50,000, about four rows — and had been re-cited for six days without re-measurement. The duplicate `ED-IN-0194` was split (second row → `ED-IN-0195`, `next_free` 195→196), and a scan found **nine more duplicate-id groups nobody had reported**, five conflicting on `status`; all reconciled into declared parts without renumbering, because those ids are cited across the corpus. | — | `tools/ci_register_size_check.py:102-124` |
+
+**Q1 AND Q1b ARE NOW ANSWERED TOO (2026-08-23), and the pattern in how is worth noting: both were
+ruled the day AFTER the mechanism they govern started executing.** The per-stat floors sat ratified
+and unimplemented for six weeks and drew no ruling; they were wired on 2026-08-22 and drew two the
+next day. `CLAUDE.md` §0.2's "done means it runs" is usually read as a bar on claiming completion.
+This is the other half of it: a mechanic that does not execute is also one nobody can rule on.
 
 **The two that gated how deep the cull goes are now answered.** Q6 and Q7 had been held since
 2026-08-18; Jordan ruled both on 2026-08-21 and the answers are recorded above rather than left as

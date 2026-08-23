@@ -127,8 +127,10 @@ pin.
 - **P5 — attribute centralization: HARD-GATED on a Jordan ruling of OPT-AV-1** (the 7/9/10-with-Recall
   roster, explicitly left OPEN in ED-IN-0029). Collapse the 3 Combat-Pool definitions to one
   `kind: formula`; burn A17 toward 0.
-- **P6 — deliberately not done:** CI job regrouping (rejected, §4); folding `wiring_manifest.yaml` /
-  `proper_noun_registry.yaml`; any agent roster.
+- **P6 — deliberately not done:** CI job regrouping (rejected, §4); folding
+  `proper_noun_registry.yaml`; any agent roster. ⚠ The `wiring_manifest.yaml` half of this bullet
+  was DONE 2026-08-23 (plan S5c): it folded into `module_contracts.yaml` as per-row `wiring:`
+  facts, which discharged two of its gate's five rules structurally.
 
 ## 6. Consolidation map (summary; full appraisal → the register)
 VIEW (generated): `descriptor_registry.yaml`, `names_index.yaml`, then (P3) `alias_registry`,

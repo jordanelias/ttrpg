@@ -62,6 +62,7 @@ from engine.substrate import EmittedAt, Key, KeyLog, Target, TickScheduler, Type
 # It now reads the root. Value-identical by construction: registry.py:50 is `STAT_MIN, STAT_MAX =
 # 0, 5` and the registry declares (0, 5), so the seeded campaign goldens are the control — if they
 # move, this swap was wrong. They did not.
+from engine.substrate import composition
 from engine.substrate import descriptors
 
 _ORDER_FLOOR, _ORDER_CEILING = (descriptors.SETTLEMENT_STATS['set.order']['floor'],
@@ -361,8 +362,8 @@ def _apply_accord_echo(scene_type: str, scene_outcome: str, ar, echo_ctx: dict, 
         # self-flags as a typed no-op via stubwire until RS is built. Stays IMMEDIATE per canon
         # (:219) -- see the docstring's "W3 QUEUE-PARITY" section for why this is unaffected by
         # the settlement-Order queueing above.
-        from systems.overview.sim import rs_track
-        rs_track.apply_rs_delta(ar.rs_delta, source=f"accord_echo:{scene_type}", world=world)
+        composition.require('rs_track_delta')(
+            ar.rs_delta, source=f"accord_echo:{scene_type}", world=world)
 
     return {"accord_applied": [detail]}
 
@@ -441,6 +442,14 @@ def emit_scene_echo(scene_type: str, result, ctx: dict, world) -> dict:
             # domain_echo.delta is in STAT POINTS (§5.2 ±2 Mandate); Faction.adjust expects a
             # GRANULAR delta (points × MULTS) — mirror the §10 Mandate-penalty convention
             # (parliamentary_vote: adjust("L", -1 * MULTS["L"])), so ±N points lands as ±N.
+            # ⚠ `_stat in MULTS` IS NOT "is a faction stat", and since plan S5d wired ED-IN-0029's
+            # per-stat floors those are two different sets. MULTS carries 'accord' and 'pt', which
+            # are TERRITORY fields, and `most_relevant_stat` is caller-supplied and unvalidated —
+            # so a scene declaring `most_relevant_stat: 'accord'` passes this guard and then raises
+            # AttributeError inside a deferred apply. Pre-existing (the guard was always a
+            # multiplier-availability check wearing a stat-membership name), recorded here rather
+            # than widened, because narrowing it is a behaviour change on the live echo path and
+            # belongs in a commit that measures it. `hasattr(f, _stat)` is the check it should be.
             f = getattr(world, "factions", {}).get(faction)
             if f is not None and hasattr(f, "adjust") and _stat in MULTS:
                 f.adjust(_stat, _delta * MULTS[_stat])
