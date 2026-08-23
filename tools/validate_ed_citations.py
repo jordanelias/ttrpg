@@ -115,6 +115,11 @@ PROVENANCE_PATHS = {
     'references/deprecated_terms_registry.yaml',
     'references/alias_registry.yaml',
 }
+# ⚠ EMPTY SINCE 2026-08-23 (S6/6f): `references/splits/` held one file,
+# `params_board_game_split.yaml`, which mapped headings of `engine/params/board_game.md` — a file
+# in the tree evacuated 2026-08-05, so its `index_file:` already pointed at nothing. The prefix is
+# KEPT rather than deleted because it costs nothing and classifies correctly if such a file returns;
+# it is annotated rather than left silent so the next reader does not take it for a live tree.
 PROVENANCE_PREFIXES = ('references/splits/',)
 # Live docs that can make canonical claims.
 SCAN_PREFIXES = ('canon/', 'designs/', 'systems/', 'references/')  # engine/params/ evacuated 2026-08-05
