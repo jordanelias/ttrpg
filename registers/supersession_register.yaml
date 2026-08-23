@@ -25,9 +25,13 @@ entries:
       `fac.legitimacy` is a BASE faction descriptor in references/descriptor_registry.yaml, scale
       0-7, bound to the `Faction.L` field by tools/export_descriptors.py's FACTION_KEY_TO_FIELD.
       The faction roster is SIX base stats (influence, legitimacy, wealth, military, intel,
-      stability), every one clamping from the registry via descriptors.faction_bounds(). Floor 0
-      per OPT-AV-18's default for a stat with no independently-declared floor -- the same precedent
-      that ratified Intel, not a number invented for this row.
+      stability), every one clamping from the registry via descriptors.faction_bounds().
+      ⚠ THE FLOOR OF 0 IS THIS SESSION'S INFERENCE, NOT PART OF THE RULING. Jordan ruled Legitimacy
+      is a BASE descriptor; he did not state its floor. An earlier version of this row justified 0
+      by "OPT-AV-18's default", which is retracted: that docket's per-item outcomes are in an
+      EVACUATED file, and the reachable summary records the opposite posture for an item with no
+      declared bound. What justifies 0 is weaker and honest -- after "Influence can be 0" every
+      other faction stat floors at 0, so 0 makes the roster uniform. NEEDS JORDAN to confirm.
       Jordan's rationale: "now that we're using continuous, we don't have to worry near as much
       either as we can just aggregate these stats as opposed to weird derivations."
       ⚠ WHAT IS NOT SUPERSEDED: the settlement-scale L/PS pair under LPS-1, and Mandate remaining a
@@ -36,10 +40,17 @@ entries:
       than either ruling and is NOT resolved by this one -- what is settled is that the field is a
       declared base descriptor with declared bounds, not what every call site writing it means.
     files_to_recheck:
-      - systems/factions/faction_canon_v30.md   # §5.3 -- supersession banner ADDED 2026-08-23 (done)
+      - systems/factions/faction_canon_v30.md   # §5.3 banner + the §1 lineup box -- DONE 2026-08-23. NOTE the roster is a DIFFERENT six: Legitimacy replaces Mandate in the base set.
+      - systems/factions/faction_behavior_v30.md   # :400 "faction-level L/PS ... which do not exist" -- DONE 2026-08-23, the strongest surviving denial. Its MAIN claim (Mandate is not derived from faction L/PS) still stands.
       - systems/factions/factions_personal_v30.md   # §8.1 6-stat faction sheet -- PENDING, states the roster
       - systems/factions/faction_systems_overview_v30.md   # :47 "Legitimacy (L) as the cross-stat governance metric" -- PENDING
+      - systems/factions/sim/mass_seizure.py   # :29 cites the "7-stat lineup" canon -- PENDING
+      - systems/threadwork/sim/collective.py   # :14 cites the "7-stat lineup" canon -- PENDING
+      - references/module_contracts.yaml   # no `state:` row for fac.legitimacy -- PENDING, a half-registered quantity (CLAUDE.md §5's named hazard)
       - engine/cross_scale/parliamentary_bridge.py   # "Mandate == Faction.L pre-LPS-1" comment -- PENDING, the live conflation
+      - HANDOFF.md   # "NEEDS JORDAN -- faction stats" calls (1) and (4) -- DONE 2026-08-23
+      - references/world_initial_state.yaml   # MULTS note cited Q1 as the open blocker -- DONE 2026-08-23
+      - tests/valoria/test_faction_l_reconstruction.py   # hardcoded FLOOR 0.5, a second owner of the L clamp -- DONE 2026-08-23, now reads descriptors.faction_bounds
 
   - superseded_id: "ED-IN-0029 / OPT-AV-14/D14 (Influence floor 1)"
     scope: >
@@ -51,10 +62,12 @@ entries:
       All six faction stats floor at 0 and ceiling at 7. The rest of ED-IN-0029 stands -- it is the
       docket that established per-stat floors at all, and its OPT-AV-18 default (0 for a stat with
       no independently-declared floor) is what fac.legitimacy inherits.
-      ⚠ MEASURED AS INERT AT THE GOLDEN SEEDS: over 8 seeded 50-season campaigns, 605 of 1,979
-      .adjust() calls clamp differently under the 2026-08-23 rulings and ALL 605 are on `L`; ZERO
-      are on Influence, because Influence never sinks below 1 there. This row changes what the
-      registry declares; it changed no clamp that currently executes.
+      ⚠ MEASURED AS INERT AT THE GOLDEN SEEDS, ON BOTH ARMS. Over 8 seeded 50-season campaigns,
+      605 of 1,979 .adjust() calls clamp differently under the 2026-08-23 rulings and ALL 605 are
+      on `L`. Influence is adjusted 49 times on the pre-ruling trajectory and 51 on the ruled one,
+      with ZERO raw values below 1 on either -- the counts differ because the arms genuinely
+      diverge, and the floor is reached on neither. This row changes what the registry declares; it
+      changed no clamp that executes at these seeds. It says nothing about other seeds.
     files_to_recheck:
       - references/descriptor_registry.yaml   # faction_stats block header -- UPDATED 2026-08-23 (done)
       - tests/valoria/test_faction_stat_bounds.py   # floor assertions -- UPDATED 2026-08-23 (done)

@@ -61,8 +61,10 @@ OUT = os.path.join(REPO, 'engine', 'engine_params', 'descriptors.json')
 SCALE_RE = re.compile(r'^\s*(-?\d+(?:\.\d+)?)\s*-\s*(-?\d+(?:\.\d+)?)(\+?)\s*$')
 
 # Registry key -> the field name the Faction dataclass actually uses. Hand-confirmed against
-# engine/autoload/game_state.py:99-111 and MULTS at :45. `L` is deliberately absent: it has no
-# registry entry at all, which is the finding, not an oversight here.
+# engine/autoload/game_state.py's Faction dataclass and MULTS.
+# ⚠ `L` USED TO BE DELIBERATELY ABSENT here — it had no registry entry at all, and that absence was
+# the finding rather than an oversight. Jordan ruled 2026-08-23 that Legitimacy IS a base
+# descriptor, so `fac.legitimacy` is declared and bound below, and the roster is six on both sides.
 FACTION_KEY_TO_FIELD = {
     'fac.influence':  'I',
     'fac.legitimacy': 'L',   # Jordan 2026-08-23: "Legitimacy is a base." Six stats, not five.

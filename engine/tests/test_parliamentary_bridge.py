@@ -58,14 +58,15 @@ _OFF_WIN_SHARE = {'Crown': 25.0, 'Church': 0.0, 'Hafenmark': 12.5, 'Varfell': 62
 # `descriptors.faction_bounds()` instead of a blanket 0.5/7.0, so Influence floors at 1 and
 # Wealth/Military/Stability at 0. Unlike the 2026-07-29 re-record, this one moves BOTH the
 # 8-campaign batch AND the single-campaign seed-42 pins, because the clamp is on the faction stats
-# every path reads — 160 of 1,969 `.adjust()` calls now land differently over the 8-campaign batch.
+# every path reads — 160 of 1,979 `.adjust()` calls now land differently over the 8-campaign batch.
 # The full n=240-per-arm control table (two seed batches plus the pooled figures) is in
 # test_f7_smoke_oracle.py's RE-PINNED block; read it before re-recording these again.
-# PREVIOUS: _ON_WIN_SHARE = {'Crown': 50.0, 'Church': 12.5, 'Hafenmark': 0.0, 'Varfell': 37.5};
-#   _ON_SCENES_RESOLVED = 125; _ON_KEYS_EMITTED = 187;
+# PREVIOUS (pre-S5d, verified against 62ce837 rather than retyped):
+#   _ON_WIN_SHARE = {'Crown': 50.0, 'Church': 12.5, 'Hafenmark': 0.0, 'Varfell': 37.5};
+#   _ON_SCENES_RESOLVED = 110; _ON_KEYS_EMITTED = 173;
 #   _ON_KEYS_BY_TYPE = {'scene.battle_concluded': 83, 'scene.contest_resolved': 89,
 #                       'da.public_governance': 1};
-#   _ON_KEYLOG_HASH = '92068b5eb1917b7a5fa7bef43dafb9b26ae78aad25da7b788ab489450ad785dc'
+#   _ON_KEYLOG_HASH = '3ae923ad90230769809e86f0f089b0d9ca459f05e998e2bc88e43630949c6adb'
 # ⚠ `da.public_governance` went 1 -> 2: the Parliamentary Transfer emitter fires TWICE on seed 42
 # now. That is the emitter test_public_governance_transfer_key.py covers, and its count moving is
 # expected here rather than a new emitter appearing — the composition map gains no new key type.
@@ -75,11 +76,20 @@ _OFF_WIN_SHARE = {'Crown': 25.0, 'Church': 0.0, 'Hafenmark': 12.5, 'Varfell': 62
 # calls over the 8-campaign batch land differently, all of them on `L`. Both the batch win-share and
 # the single-campaign seed-42 pins move, for the same reason as the 08-22 re-record: the clamp is on
 # the faction stats every path reads. Full n=240-per-arm control table in test_f7_smoke_oracle.py.
-# PREVIOUS (2026-08-22): _ON_WIN_SHARE = {'Crown': 25.0, 'Church': 25.0, 'Hafenmark': 0.0,
-#   'Varfell': 50.0}; _ON_SCENES_RESOLVED = 125; _ON_KEYS_EMITTED = 187;
+# PREVIOUS (2026-08-22, verified against 556449a rather than retyped):
+#   _ON_WIN_SHARE = {'Crown': 25.0, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 50.0};
+#   _ON_SCENES_RESOLVED = 125; _ON_KEYS_EMITTED = 186;
 #   _ON_KEYS_BY_TYPE = {'scene.battle_concluded': 80, 'scene.contest_resolved': 104,
 #                       'da.public_governance': 2};
-#   _ON_KEYLOG_HASH = '92068b5eb1917b7a5fa7bef43dafb9b26ae78aad25da7b788ab489450ad785dc'
+#   _ON_KEYLOG_HASH = '1378f082210393c0a1a536f4d63d0fcdef5d6b9114753778131356cac8a52b73'
+#
+# ⚠ HOW THESE TWO HISTORICAL BLOCKS WERE WRONG, because the mechanism will recur. Both re-records
+# updated the live constants with a whole-file string replace, which ALSO rewrote the identical
+# strings inside the PREVIOUS blocks above — so all three states carried the LIVE hash and key
+# count, and the before/after record said the hash did not move across a change that provably moves
+# it (one extra `scene.contest_resolved` entry in an append-only log). The live pins were correct
+# throughout and the suite was green, which is exactly why it survived: a fabricated HISTORY fails
+# no test. Restored from git. When re-recording, edit the live constant by line, never by value.
 # `_ON_SCENES_RESOLVED` is UNCHANGED at 125 and `da.public_governance` stays at 2 — the contest
 # count moved by one (104 -> 105), which is what carries the key total 186 -> 187.
 _ON_WIN_SHARE = {'Crown': 37.5, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 37.5}

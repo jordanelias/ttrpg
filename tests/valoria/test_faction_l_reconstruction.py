@@ -39,12 +39,30 @@ if ROOT not in sys.path:
 pytest.importorskip('yaml')
 
 from . import _campaign  # noqa: E402  the single owner of the seeded-campaign runner (CLAUDE.md §8)
+from engine.substrate import descriptors  # noqa: E402  the single owner of faction stat bounds
 
 # Chosen because L has NOT saturated by here: 3 of 4 factions are off-clamp and therefore
 # informative. Longer horizons drive everything to 0.5/7.0 and the comparison becomes vacuous.
 SEED = 20260803
 SEASONS = 6
-FLOOR, CEIL = 0.5, 7.0
+
+# ⚠ THE CLAMP IS READ FROM THE REGISTRY, NOT HARDCODED — corrected 2026-08-23.
+# This file replayed L-deltas against a hardcoded `FLOOR, CEIL = 0.5, 7.0`, which was the engine's
+# blanket fallback at the time it was written. Jordan then ruled "Legitimacy is a base";
+# `fac.legitimacy` is declared and `Faction.adjust` now clamps L at 0, so a hardcoded 0.5 made this
+# oracle disagree with the engine at the bottom of the range — and, worse, made the anti-vacuity
+# guard below count a faction resting at the NEW clamp (0.0) as "off-clamp and therefore
+# informative". That is precisely the defect this file's own docstring exists to correct, walking
+# back in through a second, unregistered owner of the same numbers.
+#
+# `engine/substrate/descriptors.py` is the single owner. Reading it here means the next ruling that
+# moves this bound moves this oracle with it, instead of silently splitting them apart again.
+_L_BOUNDS = descriptors.faction_bounds('L')
+assert _L_BOUNDS is not None, (
+    "the registry no longer declares bounds for L. If that is a deliberate reversal of the "
+    "2026-08-23 ruling, this oracle needs an explicit fallback again — do not let it default."
+)
+FLOOR, CEIL = _L_BOUNDS
 
 
 def _rebuild_L(initial, log):

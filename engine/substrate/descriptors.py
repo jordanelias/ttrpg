@@ -17,12 +17,14 @@ IT IS A LEAF, DELIBERATELY. stdlib only, no `engine.*` or `systems.*` imports, s
 depend on it without creating a cycle. It reads the file once, at import.
 
 WHAT IT NOW DOES, corrected 2026-08-22 (plan S5d — this paragraph described the opposite until
-then). `faction_bounds()` IS the clamp: `Faction.adjust` reads it instead of applying a blanket
-floor 0.5 / ceiling 7.0 to every stat, so ED-IN-0029's per-stat floors (ratified 2026-07-08 —
-Influence at 1, the rest at 0) reach the executable model for the first time. That commit measured
-the golden delta against an n=240-per-arm control before re-recording.
+then) and again 2026-08-23. `faction_bounds()` IS the clamp: `Faction.adjust` reads it instead of
+applying a blanket floor 0.5 / ceiling 7.0 to every stat. ED-IN-0029's per-stat floors reached the
+executable model on 2026-08-22; Jordan then ruled twice on 2026-08-23 — "Legitimacy is a base" (so
+`fac.legitimacy` is declared and the roster is SIX) and "Influence can be 0" (superseding that
+docket's Influence floor of 1). All six declared faction stats floor at 0 and ceiling at 7. Both
+re-records measured the golden delta against an n=240-per-arm control first.
 
-FOUR OF THE FIVE FLOORS ARE REACHABLE. `fac.intel` is not: `MULTS` carries no `intel` key, so
+FIVE OF THE SIX FLOORS ARE REACHABLE. `fac.intel` is not: `MULTS` carries no `intel` key, so
 `adjust('intel', …)` raises `KeyError` before any bound is consulted, and the (0, 7) this returns
 for it is unreachable. Recorded rather than papered over — wiring it needs a multiplier nobody has
 stated.

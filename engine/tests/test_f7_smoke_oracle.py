@@ -173,9 +173,10 @@ _FACTIONS = ['Crown', 'Church', 'Hafenmark', 'Varfell']
 # and Influence-derived pools floor at 1 rather than 0.5. Tracing which of those dominates was not
 # done, and saying so is better than a confident guess in a golden block.
 # ══════════════════════════════════════════════════════════════════════════════════════════════
-# PREVIOUS (pre-S5d): GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 12.5, 'Hafenmark': 0.0,
-#   'Varfell': 37.5}; GOLDEN_WINNERS = {'Varfell': 3, 'Church': 2, 'Crown': 3};
-#   GOLDEN_BATTLES_MEAN = 30.1; GOLDEN_SCENES_RESOLVED = 858
+# PREVIOUS (pre-S5d, verified against 62ce837 rather than retyped):
+#   GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 12.5, 'Hafenmark': 0.0, 'Varfell': 37.5};
+#   GOLDEN_WINNERS = {'Varfell': 3, 'Crown': 4, 'Church': 1};
+#   GOLDEN_BATTLES_MEAN = 32.9; GOLDEN_SCENES_RESOLVED = 858
 # ══════════════════════════════════════════════════════════════════════════════════════════════
 # RE-PINNED 2026-08-23 — TWO JORDAN RULINGS ON THE FACTION-STAT ROSTER. Read before re-recording.
 #
@@ -202,8 +203,17 @@ _FACTIONS = ['Crown', 'Church', 'Hafenmark', 'Varfell']
 # 605 of the 1,235 L-adjustments now clamp differently — 49% of them. `L` sat ON the old 0.5 floor
 # for about half its writes and can now reach 0. That is a change in how Legitimacy behaves over a
 # campaign, not a rounding nudge, and it is why the win-shares below moved as much as they did.
-# Influence is adjusted only 51 times in the whole batch and never reaches 1, which is the direct
-# reason ruling 2 is inert here rather than an inference from the absence of a diff.
+# ⚠ RULING 2's INERTNESS IS MEASURED ON BOTH ARMS, and the first version of this block was not.
+# "Influence never sinks below 1 at these seeds" was originally established by a counterfactual on
+# the RULED trajectory alone — but the arms provably diverge (the win-shares below move, and
+# scenes_resolved 947 -> 967), so the pre-ruling campaign is a different campaign and a property of
+# one says nothing about the other. That is the setup-vs-statistics gap §0.1's preamble was written
+# about. Re-measured on each arm separately:
+#     pre_ruling arm: 49 Influence adjustments, 0 with a raw value below 1
+#     ruled arm:      51 Influence adjustments, 0 with a raw value below 1
+# The call counts differ, which is the divergence being real; the floor is reached on NEITHER. So
+# ruling 2 changes what the registry declares and changes no clamp that executes at these seeds —
+# now as a two-arm measurement rather than an inference from the absence of a diff.
 #
 # THE CONTROL, tools/balance_oracle.py, run at n=120 per arm TWICE before any golden was touched.
 # Arms patch `faction_bounds` back to its pre-ruling answers (I floors at 1, L undeclared), so both
@@ -240,9 +250,19 @@ _FACTIONS = ['Crown', 'Church', 'Hafenmark', 'Varfell']
 # crisis trigger is untouched by these rulings, and tracing which downstream path dominates was not
 # done.
 # ══════════════════════════════════════════════════════════════════════════════════════════════
-# PREVIOUS (2026-08-22, per-stat floors): GOLDEN_WIN_SHARE = {'Crown': 25.0, 'Church': 25.0,
-#   'Hafenmark': 0.0, 'Varfell': 50.0}; GOLDEN_WINNERS = {'Varfell': 3, 'Church': 2, 'Crown': 3};
-#   GOLDEN_BATTLES_MEAN = 30.1; GOLDEN_SCENES_RESOLVED = 947
+# PREVIOUS (2026-08-22, per-stat floors — verified against 556449a rather than retyped):
+#   GOLDEN_WIN_SHARE = {'Crown': 25.0, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 50.0};
+#   GOLDEN_WINNERS = {'Varfell': 4, 'Church': 2, 'Crown': 2};
+#   GOLDEN_BATTLES_MEAN = 32.6; GOLDEN_SCENES_RESOLVED = 947
+#
+# ⚠ BOTH "PREVIOUS" BLOCKS IN THIS FILE WERE WRONG UNTIL 2026-08-23, IN A WAY NO TEST CAN SEE.
+# Each re-record copied the LIVE winners/battles values into the PREVIOUS line instead of reading
+# the superseded ones, so the historical record was internally impossible: `_win_share` derives
+# share from wins over n=8, and {Varfell 3, Church 2, Crown 3} yields {37.5, 25.0, 0.0, 37.5}, not
+# the {25.0, 25.0, 0.0, 50.0} recorded beside it. A golden test pins the LIVE constants; nothing
+# pins the prose, so a fabricated history stays green forever and the next re-recorder reasons from
+# it. Restored from git. Rule: a PREVIOUS line is read out of `git show <ref>:<file>`, never
+# copied from the constant you are about to overwrite.
 GOLDEN_WIN_SHARE = {'Crown': 37.5, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 37.5}
 # GOLDEN_WINNERS mirrors _win_share's raw `wins` dict shape: only factions with >=1 win get a key.
 # ⚠ The sentence here used to say "Church/Hafenmark win 0/8 now". That was true of the PREVIOUS

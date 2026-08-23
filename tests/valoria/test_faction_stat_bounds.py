@@ -10,8 +10,11 @@ SUBJECT, under §0.1 pt 5: the clamp on faction stats in the live campaign loop 
 implementation of a Jordan-ratified canon decision (ED-IN-0029, 2026-07-08). Both halves of the
 predicate, like `test_faction_obstacle_conventions.py`.
 
-WHAT THE CANON SAYS: Influence floors at 1 — an institution's influence never fully vanishes —
-while Wealth, Military, Stability and Intel float at 0. Everything ceilings at 7.
+WHAT THE CANON SAYS, as of Jordan's rulings of 2026-08-23: ALL SIX declared faction stats floor at
+0 and ceiling at 7. That is two changes from ED-IN-0029 as ratified on 2026-07-08 — "Influence can
+be 0" superseded its Influence floor of 1 (whose rationale had been "an institution's influence
+never fully vanishes"), and "Legitimacy is a base" added `fac.legitimacy` to the roster, so `L`
+clamps from the registry instead of the blanket fallback it used while undeclared.
 """
 from __future__ import annotations
 

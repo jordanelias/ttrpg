@@ -161,7 +161,7 @@ class Faction:
         canon decision had never reached the executable model. `descriptors.faction_bounds()` is
         the single owner of those numbers; this is its first runtime caller.
 
-        ⚠ FOUR OF THE FIVE FLOORS REACH THE CODE. `intel` does not, and saying "ED-IN-0029 is now
+        ⚠ FIVE OF THE SIX FLOORS REACH THE CODE. `intel` does not, and saying "the roster is
         wired" without this qualification would be the false-claim class §1(a) of the plan exists to
         stop. `MULTS` has no `intel` key, so `adjust('intel', …)` raises `KeyError` on the line
         below before any bound is consulted — `faction_bounds('intel')` returns (0, 7) that no code
@@ -170,12 +170,16 @@ class Faction:
         Wiring it needs a multiplier, which is a canon value nobody has stated, so it is recorded
         here rather than invented.
 
-        `L` KEEPS THE OLD BOUNDS, and that is a decision rather than an omission. The registry
-        declares no entry for Legitimacy — whether it is a base faction descriptor or derived like
-        Mandate is Q1, open to Jordan — so `faction_bounds` returns None for it and this falls back
-        to 0.5/7.0. Twenty of the 31 call sites adjust `L`, so this is the majority of traffic and
-        it is deliberately unchanged: wiring a floor for a stat the registry does not declare would
-        be inventing canon, which is the one thing a wiring commit must not do.
+        ⚠ RULED 2026-08-23, ONE DAY AFTER THIS METHOD STARTED READING THE REGISTRY. This paragraph
+        used to say `L` keeps the old bounds because the registry declared no entry for Legitimacy
+        and that was Jordan's open question. He answered it — "Legitimacy is a base" — so
+        `fac.legitimacy` is declared and `L` clamps from the registry like every other stat. Twenty
+        of the 31 non-test call sites adjust `L`, so that is the majority of all traffic through
+        here, and it moved. A second ruling the same day, "Influence can be 0", superseded
+        ED-IN-0029's Influence floor of 1. All six declared stats now floor at 0, ceiling at 7.
+
+        The order is worth keeping rather than tidying away: the floors were unrulable while they
+        did not execute. They reached the engine on 2026-08-22 and drew two rulings the next day.
 
         The explicit `floor`/`ceiling` parameters survive with no live caller. They are how a call
         site would state a locally-canonical bound, and removing an unused parameter is its own
@@ -216,13 +220,13 @@ class Faction:
 # protects nothing that exists. It is kept because a NEW dataclass field's registry status is a
 # ruling, not a check's call — see assert_faction_roster_is_covered's own docstring.
 #
-# WIRED 2026-08-22 (plan S5d). The registry's PER-STAT floors, ratified 2026-07-08 (ED-IN-0029) —
-# Influence floors at 1, the rest at 0 — reach the executable model: `Faction.adjust` above reads
-# `descriptors.faction_bounds()` instead of applying a blanket 0.5 to every stat. It had been
-# ratified canon that never reached code for six weeks. `L` keeps the old bounds because the
-# registry declares no entry for it and Q1 (is Legitimacy a base descriptor?) is Jordan's open
-# ruling; inventing a floor for it here would be authoring canon inside a wiring commit.
-# The goldens moved and were re-recorded against a measured n=120 control — see that commit.
+# WIRED 2026-08-22 (plan S5d), then RULED ON 2026-08-23. `Faction.adjust` above reads
+# `descriptors.faction_bounds()` rather than applying a blanket 0.5/7.0, so the registry is the
+# single owner of these bounds. Jordan then ruled twice: Legitimacy IS a base descriptor (so `L` is
+# declared, the roster is SIX, and the `unimplemented` register is empty), and Influence CAN be 0
+# (superseding ED-IN-0029's floor of 1). All six stats floor at 0 and ceiling at 7.
+# Both golden re-records are measured against tools/balance_oracle.py — see the RE-PINNED blocks in
+# engine/tests/.
 descriptors.assert_faction_roster_is_covered({f.name for f in dc_fields(Faction)})
 
 

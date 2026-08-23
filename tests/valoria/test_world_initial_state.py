@@ -157,6 +157,20 @@ def test_mults_is_still_a_literal_and_its_reason_is_current():
         'reads an unexplained holdout.'
     )
 
+    # ⚠ THE NOTE HAS A TWIN, AND THIS TEST USED TO GUARD ONLY ONE OF THEM. The same rationale is
+    # written into references/world_initial_state.yaml, and when Q1 was ruled the Python half was
+    # corrected while the YAML half kept asserting Q1 was OPEN — an authored surface stating a
+    # closed question as live, guarded by a test that never opened it. Two owners of one note, one
+    # of them checked, is how the unchecked one rots.
+    yaml_src = (REPO / 'references' / 'world_initial_state.yaml').read_text(encoding='utf-8')
+    assert 'EXPIRED ON 2026-08-23' in yaml_src, (
+        'references/world_initial_state.yaml still states the pre-ruling reason for holding MULTS. '
+        'Q1 was ruled; correct the note there as well as in game_state.py.'
+    )
+    assert 'until Q1 is ruled' not in yaml_src, (
+        'the authored surface still says MULTS waits on Q1. That question is closed.'
+    )
+
 
 # ── 2. Every export-time validation can observe its own failure ───────────────────────────────
 

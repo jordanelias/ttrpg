@@ -397,6 +397,8 @@ This resolves the major audit P2-1 ambiguity: the architecture supports both, wi
 
 ## §4 Mandate (canonical faction aggregate — REVISED by LPS-2e)
 
+> ⚠ **PARTLY SUPERSEDED 2026-08-23.** The parenthetical below — *"which do not exist"* — is no longer true of L. Jordan ruled **"Legitimacy is a base"**, so faction-level Legitimacy EXISTS as a declared base descriptor (`references/descriptor_registry.yaml`, `fac.legitimacy`, 0–7). **Popular Support is untouched and remains per-settlement**, and the sentence's MAIN claim still stands: Mandate is not derived from faction-level L/PS. Mandate and `fac.legitimacy` are different quantities. See `registers/supersession_register.yaml` and `faction_canon_v30.md` §5.3.
+>
 > **[REVISED by LPS-1 (settlement_layer_v30 §1.8), Jordan ruling 2026-05-30.]** Mandate is **not** transitional and is **not** derived from faction-level L/PS (which do not exist — L/PS are per-settlement). Mandate is the **canonical faction headline stat, derived by aggregating per-settlement Legitimacy and Popular Support (size-weighted):**
 
 ```

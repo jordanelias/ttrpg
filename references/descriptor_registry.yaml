@@ -125,9 +125,24 @@ territory_stats:
 #
 # Per-entry floor/ceiling first RATIFIED 2026-07-08 (ED-IN-0029, OPT-AV-14/D14 + OPT-AV-18): the
 # prior blanket "1-7" scale had lost the per-stat floor table in engine/params/bg/core.md §Stat
-# Ceilings and Floors. OPT-AV-18's DEFAULT for a stat with no independently-declared floor is 0 --
-# that is how Intel was ratified, and it is the precedent `fac.legitimacy` inherits here rather
-# than a number invented for it.
+# Ceilings and Floors.
+#
+# ⚠ LEGITIMACY'S FLOOR OF 0 IS AN INFERENCE BY THIS SESSION, NOT A RULING, AND THE FIRST VERSION OF
+# THIS NOTE OVERSTATED IT. It claimed "OPT-AV-18's DEFAULT for a stat with no independently-declared
+# floor is 0 -- that is how Intel was ratified", i.e. that a standing default supplied the number.
+# Checked, and retracted: the docket's per-item outcomes live in
+# `designs/audit/2026-07-08-attribute-value-coherence-audit/ed_options.md`, which is EVACUATED and
+# not on this tree, and the reachable summary records the opposite posture for an item with no
+# declared bound -- `registers/handoffs/HANDOFF_IN.md` notes OPT-AV-13 and OPT-AV-18's
+# Renown-cap sub-item were "left explicitly open -- no default stated, none invented". Intel's floor
+# was EXPLICITLY ratified (the "Intel-floor naming" sub-item), which is a different fact from a
+# default having supplied it.
+#
+# WHAT ACTUALLY JUSTIFIES 0, stated as the weaker thing it is: after Jordan's "Influence can be 0",
+# every other faction stat floors at 0, so 0 makes the roster uniform and introduces no new
+# distinction. Jordan ruled that Legitimacy IS a base descriptor; he did not state its floor.
+# ⚠ NEEDS JORDAN: confirm 0, or set it otherwise. Changing it moves the seeded goldens and is a
+# one-line edit to this row plus a measured re-record.
 # ============================================================================
 faction_stats:
   source: engine/params/factions/stats_1_7_scale.md

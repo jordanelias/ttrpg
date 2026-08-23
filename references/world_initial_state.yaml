@@ -18,12 +18,23 @@
 # ⚠ WHAT IS DELIBERATELY NOT HERE: `MULTS`, the internal-units multipliers for faction and
 # territory stats. Its correct home is `references/descriptor_registry.yaml` — that registry
 # already states two of its values in prose ("Legitimacy (faction, derived) is Mandate x 20",
-# "Discipline (faction) is Stability x 10") — but binding `L` as a faction-stat row there would
-# answer Q1, the OPEN Jordan ruling on whether Legitimacy is a base descriptor or derived like
-# Mandate. The execution order records Q1 as gating exactly this deletion. So `MULTS` stays a
-# literal in game_state.py until Q1 is ruled, and that is a stated dependency rather than an
-# oversight. Do not resolve it by dropping MULTS into this file: it is not initial state, and
-# a file whose name lies is worse than a literal that is honest.
+# "Discipline (faction) is Stability x 10").
+#
+# ⚠ THE ORIGINAL REASON FOR HOLDING IT EXPIRED ON 2026-08-23 and this note is corrected rather than
+# left standing. It held MULTS pending Q1 — the then-open question of whether Legitimacy is a base
+# descriptor. Jordan ruled that it IS, `fac.legitimacy` is declared, and that objection
+# is discharged. TWO SMALLER REASONS SURVIVE, and they are engineering rather than a ruling:
+#   1. MULTS spans TWO registry blocks — `accord` and `pt` are Territory fields, so a faction-only
+#      move would split one dict across two homes, which is the defect the composition work spent
+#      two commits removing. The move wants `internal_multiplier` on both blocks, in one pass.
+#   2. Three of its numbers (100, 15, and the two territory 10s) have no provenance this session
+#      could find, and the anti-fabrication gate would rightly refuse them into an authored surface.
+# Do not resolve it by dropping MULTS into this file: it is not initial state, and a file whose name
+# lies is worse than a literal that is honest.
+#
+# This note is the TWIN of the one in `engine/autoload/game_state.py`. Both are pinned by
+# `tests/valoria/test_world_initial_state.py::test_mults_is_still_a_literal_and_its_reason_is_current`,
+# which reads BOTH files — an earlier version read only the Python half and let this one go stale.
 
 schema_version: 1
 
