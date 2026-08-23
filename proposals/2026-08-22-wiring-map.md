@@ -303,7 +303,15 @@ No succession or appointment event exists in the season loop; nothing writes `Se
 
 > **DESIGN GAP 14.** Who appoints or loses a governor, when, and what a governor id denotes. **No NPC exists to hold the office** — circularly dependent on A1. The harness uses bare strings like `"podesta-appointee"`.
 
-### D5 · `mass_seizure` — **the only D-item with no design gap**
+### D5 · `mass_seizure` — ⚠ **CORRECTED 2026-08-22: it is NOT purely a call site**
+
+> **This section first read "the only D-item with no design gap" and "the missing artifact is purely the call." A full read of the module broke that, and I verified it.** `mass_seizure.py:293` writes `t.accord = float(starting_accord)` — a **canonical index** (0–4) written raw into `Territory.accord`, which is a **continuous** field on the `ACCORD_MAP` scale `{0:1.0, 1:2.5, 2:4.0, 3:5.5, 4:7.0}` (`game_state.py:61`). The sibling transfer site does it correctly: `parliamentary_transfer.py:278` is `terr.accord = ACCORD_MAP[accord_level]`.
+>
+> A seizure intended at Accord 2 therefore stores **2.0** where canon means **4.0**, and reads back through `canonical_accord` as a lower bucket. `game_state.py:65-70` warns about exactly this class in its own words — modules looking up canon-keyed tables *"MUST bucket through these helpers"* — and the site's own comment half-admits it: *"Convert int accord to ACCORD_MAP-style continuous if needed; for now, set directly."*
+>
+> **So wiring D5 as-is ships a wrong-scale write into the live world.** The fix is the call **plus** the `ACCORD_MAP` conversion. It is still the shortest path in the map; it is no longer a free one. `mass_seizure` also has **zero test coverage of any kind**, unlike the six stubs in the same package, which are pinned by `test_pipeline_reach.py:750-755`.
+
+### D5 (continued) — the canon-specified trigger
 
 Recorded as measured at `parliamentary_transfer.py:127-135`: *"UNREACHABLE. Zero production callers … no owner write in 40 seeded campaigns. Its gate is not the obstacle — CI ≥ 60 is met in 20/20 seeds and CI = 100 … reached in 8/20."*
 

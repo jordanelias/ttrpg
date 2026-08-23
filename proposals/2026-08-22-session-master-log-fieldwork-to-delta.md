@@ -458,4 +458,108 @@ Doc 3's 14 steps, annotated with what the later censuses did to them.
 - The combat engine core (`wrapper`/`core`/`combatant`).
 - **Whether anything emits `state.succession`** — relevant to the governor gap.
 
-**The largest qualifier on this entire document:** **nothing was executed.** No campaign was run, no test invoked, no value traced end to end at runtime. Every claim is from reading and parsing. Doc 8 §9 names the one check that would settle its own most-doubtful claim — a single run with `record=True` and a print — and it was not performed, because this session's scope is design-only while another session owns the tree.
+**⚠ SUPERSEDED 2026-08-22 by §11.** This section read: *"The largest qualifier on this entire document: nothing was executed."* **That is no longer true.** The §11 coverage-closing pass ran three non-mutating in-memory checks — the `record=True` chain, the contest kernel's `mechanics_selftest()`, and a seeded `base_ob` sweep — writing nothing to disk. §11 records what they settled. The rest of the qualifier stands: no campaign was run, and every other claim in this document is from reading and parsing.
+
+**§10's not-opened list is now closed.** See §11 for what each file contained and which claims moved.
+
+---
+
+## §11 COVERAGE CLOSED — what the unread files contained
+
+Three Fable 5 read-only passes read §10's entire not-opened list in full: the 14 unread `systems/factions/sim/` modules plus `season.py`; the whole social-contest kernel, `parliamentary_vote`/`stay`, the combat engine core and four never-opened cross-scale modules; and the complete 530 KB `systems/npcs/` corpus plus `character_histories_v30_infill` and `conviction_track_v30*`.
+
+**Every claim below that changes a published statement was re-verified by me, by reading or parsing, before being written here.**
+
+### §11.1 The three open questions, settled
+
+| Question | Answer |
+|---|---|
+| Does `run_accounting` really fire every season? | **Yes — settled by read, not comment.** `mc_v18.py:260-267` → `season.py:69-72` (`run_accounting(world)`, unconditional, no flag) → `accounting.py:139` (`simulate_npc_actions`, unconditional). §10's open item is closed. |
+| Is the §10 Mandate penalty real code? | **Yes, and it is live every season** — `parliamentary_vote.py:207-219` performs a real `adjust("L", …)` world write, reached via `mc_v18.py:148-152` with ECHO_TRANSPORT default ON. It was never just a docstring. |
+| Does anything emit `state.succession`? | **No.** The only occurrences are articulation's consumer roster and a test. `key_graph.json` names its producer as `faction_politics` — **which exists only as a design doc**. And the Key's required payload (`prior_leader_id`, `new_leader_id`) has no coded source: `Faction` carries **no leader field of any kind**. Design gap 14 is three layers deep, not one. |
+
+### §11.2 The claim I most doubted was right — and it was executed
+
+Doc 8 §9 flagged its own E2 claim ("the contest Chronicle is one kwarg away") as most-likely-wrong, and named the check that would settle it. **The check was run.** At the exact live call shape, `resolve_contest(..., record=True)` → `_bout.log` (6 rows) → `narrative.summarize` → `Chronicle.render()` returned:
+
+> *"[CLEAR WIN] B took it by 26%, the case resting on logos on quality-ground."*
+
+**The chain is real.** The only missing piece is the destination (C2/C4), exactly as mapped.
+
+**One scope condition, found by executing the other branch:** the Chronicle is correct only for winners in `{a, b, draw, clinch}`. Fed a banded PersuasionTrack verdict — the 4 tracker-`required` proceedings — it misclassifies, because `narrative.py:114` catches only `"draw"` and `:126` treats every band string as side B. Demonstrated output: **"[CLEAR WIN] committee took it by 7%…"**. The live path (`guild_arbitration`, an a/b/draw ballot) is safe.
+
+### §11.3 A second unlabeled-rot hit — the Treaty mechanic is wholly inert
+
+§5's falsifier (ii) asked for large empty seams with no stub label, no docket, no guard. The session had two. **This is the third, and the largest.**
+
+`treaty_expiration_v30.md` is **CANONICAL** and calls the mechanic *"the primary Crown-nerf lever… without this mechanic Crown achieves 55-90% win-rate dominance."* In the live campaign it does nothing at all:
+
+- `propose_treaty` is honestly stubbed — but its stated canonical path is false. It says formation *"is resolved in crown_initiative"*; `crown_initiative.py` (317 lines, read in full) contains **no treaty-formation code**. Its single treaty mention (`:195`) is a precondition check. **Senator Outward is implemented nowhere.**
+- `process_treaty_expirations`, `register_treaty` and `get_active_treaties` have **zero callers of any kind, including tests** — and unlike the six stubs in the same package, they carry no stub label, no docket, and no pinning guard.
+- The arc-boundary detector its docstring names, `season_manager.check_arc_boundary`, **also has zero callers**.
+- `World.treaties` is declared, serialized and restored with **no production writer**.
+- **A defect I verified directly:** `treaty.py:137` reads `roll = 0.95  # default to high-lapse if no rng`. With `TREATY_LAPSE_RATE_DEFAULT = 0.90` and a documented range of 0.90–0.95, `0.95 < 0.90` is **False** — the fallback **can never lapse a treaty at any canonical rate**. The comment states the opposite of what the code does.
+- `register_treaty` keys by `tuple(sorted(parties))` while `game_state.py:190/:385` documents and rebuilds **frozenset** keys — a save/restore key-type asymmetry.
+
+**Mass moves from "honest deferral" to "unlabeled rot" here**, and §5's rival explanation is correspondingly weakened — though only for this seam. Everything else opened in these passes was uniformly labeled: the six faction stubs carry stubwire + reason + docket + design gate **and** are pinned by `test_pipeline_reach.py:750-755`.
+
+### §11.4 A live defect in the one path that runs every season
+
+**The §10 "one-season" Mandate penalty is permanent as coded.** `parliamentary_vote.py:218` defers restoration to `season_manager` — and `season_manager.py` has no temporary-modifier machinery whatsoever. `Faction.reset_seasonal` (`game_state.py:134-136`) clears exactly two booleans. I read both. A canonically temporary −1 Mandate is applied forever, on the path this document calls the one that actually runs every season.
+
+### §11.5 D5 is no longer a free win — my "shortest complete path" was wrong
+
+The wiring map called `mass_seizure` *"the only D-item with no design gap"* and *"purely the call."* **False.** `mass_seizure.py:293` writes `t.accord = float(starting_accord)` — a canonical index (0–4) into a **continuous** field on the `ACCORD_MAP` scale `{0:1.0, 1:2.5, 2:4.0, 3:5.5, 4:7.0}`. The sibling site does it correctly (`parliamentary_transfer.py:278`: `ACCORD_MAP[accord_level]`), and `game_state.py:65-70` warns in its own words that modules **"MUST bucket through these helpers."** Wiring D5 as-is ships a wrong-scale write. Corrected in doc 8 §4.
+
+### §11.6 §7.4 IS BROKEN — the corpus is dense with prose-and-constraint-in-one-record
+
+**This is the most consequential correction in the fold-in, and it is against my own critique.**
+
+§7.4 claimed our authored fields are *"descriptive and forbid nothing"*, unlike RimWorld where *"the prose and the constraint are the same record."* **True of the three registry fields it names. False of the authored corpus, decisively.** I verified both citations:
+
+- `npc_behavior_v30.md:52` — one table row: *"Ethical Framework | Virtue (Crown) | **Aligned: −1 Ob on public, visible, virtuous action. Contradictory: +1 Ob on covert/expedient action.**"* Characterization and mechanical modifier, same record. That **is** the RimWorld property.
+- `npc_behavior_v30.md:991` — *"An NPC with Disposition +4 or +5 toward their current faction **cannot** be targeted for recruitment"*, with **"Not recruitable"** as a table cell in the Ob ladder at `:1003`. That is a forbid, which is the specific thing I said we lacked.
+
+And the corpus forbids repeatedly: a heretic *"cannot hold Standing ≥ 1"*; Thread-level evidence *"does not function"* against TS-0 NPCs; the orator *"cannot pivot"* after RS declaration; Edeyja *"never leaves the Southernmost"*; Maret *"cannot target RM"*. The PC lifepath is a closer RimWorld analogue still — origin prose + granted skill + Truth value + Knot in one record, including *"Scarred by the Unreal — **Immune** to Composure loss"*.
+
+> **Corrected diagnosis.** Valoria does not lack authored constraint. It lacks an **executor** — every one of these forbids sits inside a resolution system with no runtime. The precedent comparison was aimed at the wrong layer. **Proposal 3's remedy survives** — the registry, the only parseable surface, really is constraint-free — but its rationale was wrong, and it should now read *"lift existing constraints into the parseable surface"* rather than *"invent one."*
+
+### §11.7 §7.9 is partly false — a null band already exists, at two levels
+
+I claimed we have no null band. The corpus specifies **when not to express** twice:
+
+- **Interaction level:** outreach requires Disposition ≥ +2, demands require ≤ −2 (`npc_behavior_v30.md:901-912`). **The mid-band −1..+1 generates no personal-scene entry at all** — a structural silence band — with volume caps of 3 outreach / 2 demands per season.
+- **Entity level:** Background NPCs render as *"Identity only… Reference only"*; demotion trigger 2 explicitly targets the mid-band (*"Disposition has been −1 to +1, unchanged for ≥ 4 seasons"*); non-named NPCs carry *"no Conviction, no Resonant Style, no Beliefs."*
+
+**Proposal 8 survives but must be restated** as *extending an existing null-band pattern* rather than introducing the concept. What genuinely does not exist is its specific ask: a conviction-weight threshold below which a conviction is never mentioned, and the prefer-conflicts rule.
+
+### §11.8 §7.6's "biased reading function" is already specified — twice, in canon
+
+I proposed per-character biased interpretation as the minimum state for personhood, citing WAWLT. The corpus already specifies it:
+
+- **The Ministry PAR census** is literally a per-perceiver reading function over one shared record: TS ≥ 30 reads the data as a Thread map *"automatic — no roll required"*; TS 10–29 gets *"an uneasy sense… cannot decode it"*; TS 0–9 *"sees only public health data. **No Thread-relevant information is perceived**"* (`npc_behavior_v30.md:339-347`).
+- **Resonant Style** is a typed per-NPC reading function over arguments.
+
+So §7.6 is not new design. It is the **unimplemented half of two existing CANONICAL specs** — and `npc_memory`, the contract that would hold it, greps to nothing tree-wide.
+
+### §11.9 The bottom line survives — and the gap is one missing field
+
+§6 concluded the scarcity is *"ingestion, and subject matter for arguments."* **The word doing the work is *runtime*, and it holds.** But the corpus is emphatically **not** all disposition and no proposition:
+
+Per-NPC Beliefs are **authored propositions** — first-person, contestable, specific: *"Constitutional procedure IS justice"*; *"Almud is faltering — I must be ready to act when he cannot"*; *"Something is wrong in the deep records… I am afraid to find out."* The contest system already requires an argument to *"specifically address a known Belief"*, and belief revision to *"textually address the commitment."* Subject matter, revision mechanics and stakes are all specified.
+
+**I parsed the registry to check where they live. They do not.** Its 22 top-level fields are `age, arc_trajectory, birthplace, certainty, coherence, convictions, cultural_label, faction, first_name, goals, id, last_name, notes, resonant_style, role, self_other_initial, source, stats, status, territory, title, ts`. **There is no `beliefs` field, and zero of 46 entries carry one.**
+
+> **So the ingestion gap and the subject-matter gap are the same gap, at one specific field.** The cheapest closure of *"no runtime object says what any contest is about"* is not render-time topic synthesis — it is lifting ~35 already-authored Belief strings into the parseable surface. **Proposal 4 stays right for generated NPCs and, for the authored 46, re-solves a solved problem.**
+
+### §11.10 What else changed
+
+- **§4's obstacle row undercounts.** "7 obstacle-bearing roll sites" is right for *sites passing `ob=` to the owner*; **three more in the same package bear an obstacle applied outside the roll call** — `faction_action.py:540-541` (Muster, Ob 1) and `:562-563` (Govern, Ob 2), both **live**, plus `mass_seizure.py:261-268`. "All in one lane" holds either way.
+- **Falsifier (i) survives a hard probe.** All four never-opened cross-scale modules were read in full — `domain_echo`, `zoom_in_out`, `handoff_rules`, `scene_slate`. **None imports the Key substrate or subscribes to anything.** Family 1 stands.
+- **The degree-ladder control case is confirmed and extended.** Every degree decision in the factions package routes to the owner, including an explicit adapter that calls itself *"NOT a second ladder."* The combat core's `degree()` is a **deliberate, labeled hold** with its measured reason, its ED, and a declared-hold guard named in its own docstring — the opposite of a fork.
+- **Doc 7 §2.1's orphan list grows.** Treaty Expiration joins it, and it is the only one carrying a live balance implication.
+- **New defects, latent unless noted:** `scene_dispatch.py:313` cites `dictionaries._APPEAL_TO_GENRE`, **a symbol that exists nowhere in the package**; `faction.py:23-25` stores `reb_ob` (the §5.5 Rebuttal Ob) and nothing reads it — a new member of the inert-obstacle census; `zoom_in_out.py` computes `contested_figure_wound_ob` and `pc_incap_applied` for no consumer; `compute_thread_echo` has zero callers; `rhetoric.py:380-386` claims the Doubt Marker's *"both pieces are wired this stage"* while **no Doubt Marker exists in any kernel code**.
+- **Content-in-code census.** `dictionaries.py` carries **12 authored player-facing `flavor` sentences**, declared *"real, final, player-facing UI-card copy"* and behaviourally pinned by tests that enforce honesty properties on the copy itself. **Zero campaign reach.** The §6 pattern — authored, finished, unreachable — reproduced in miniature inside the code.
+- **Three surfaces assign different convictions to the same NPC.** Beyond the four rival rosters, the registry, `npc_behavior_v30` and the migration roster disagree per-character (Vossen, Almud, Maret, Baralta each differ), and the consolidation's own tie-break rule is contradicted by the registry. **§8's open ruling 1 understates the problem: settling *which taxonomy* does not settle *which assignment*.**
+- **A fully-specified NPC is missing from the registry entirely** — Registrar Lennart Haelgrund, who carries three arcs, a home settlement, a TS value and the PAR mechanic, has no entry. NPC-004 is a *different* person sharing the surname.
+- **Corpus size corrected:** `systems/npcs/` is ≈530 KB, of which ~75 KB is a SUPERSEDED duplicate and ~32 KB is stale auto-generated indexes. §6's ≈460 KB is right for the live material.
