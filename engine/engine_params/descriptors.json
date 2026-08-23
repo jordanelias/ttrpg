@@ -27,7 +27,12 @@
   "faction_stats": {
     "fac.influence": {
       "name": "Influence",
-      "floor": 1,
+      "floor": 0,
+      "ceiling": 7
+    },
+    "fac.legitimacy": {
+      "name": "Legitimacy",
+      "floor": 0,
       "ceiling": 7
     },
     "fac.wealth": {
@@ -53,6 +58,7 @@
   },
   "faction_field_map": {
     "fac.influence": "I",
+    "fac.legitimacy": "L",
     "fac.wealth": "W",
     "fac.military": "Mil",
     "fac.stability": "Sta",
@@ -110,11 +116,5 @@
       "ceiling": 4
     }
   },
-  "unimplemented": {
-    "faction_L": {
-      "what": "engine/autoload/game_state.py's Faction dataclass carries `L` (Legitimacy/Mandate), written by 20 of .adjust()'s 31 non-test call sites across engine/ and systems/. references/descriptor_registry.yaml declares no entry for it.",
-      "why_it_matters": "The registry declares five faction stats; the code implements six. This is the 5-vs-6 half of the faction-stats packet.",
-      "needs": "ruling \u2014 is Legitimacy a base faction descriptor, or derived like Mandate?"
-    }
-  }
+  "unimplemented": {}
 }

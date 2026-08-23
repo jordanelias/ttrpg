@@ -133,18 +133,28 @@ def test_the_engine_no_longer_carries_the_opening_position_as_literals():
     )
 
 
-def test_mults_is_still_a_literal_and_still_says_why():
+def test_mults_is_still_a_literal_and_its_reason_is_current():
     """The ONE table S5b deliberately did not move, pinned so the reason survives the session that
-    wrote it. `MULTS` belongs in `descriptor_registry.yaml`, but authoring `L` as a faction-stat row
-    there would answer Q1 — the open Jordan ruling on whether Legitimacy is a base descriptor or
-    derived like Mandate. When Q1 is ruled, this test is the work-list entry: delete it, move MULTS,
-    and the ruling is recorded by the move."""
+    wrote it — and REWRITTEN 2026-08-23, because the original reason expired.
+
+    It was held because authoring `L` as a faction-stat row in `descriptor_registry.yaml` would
+    have answered Q1, the open ruling on whether Legitimacy is a base descriptor. Jordan ruled it
+    IS, so that objection is discharged and the note now names the two smaller reasons that
+    survive: MULTS spans faction AND territory stats (a faction-only move would split one dict
+    across two registry blocks), and three of its numbers have no provenance the anti-fabrication
+    gate would accept into an authored surface.
+
+    This test's job is unchanged: an unexplained holdout gets either moved or kept forever. What it
+    now asserts is that the explanation is the CURRENT one, not the expired one."""
     src = (REPO / 'engine' / 'autoload' / 'game_state.py').read_text(encoding='utf-8')
-    assert "MULTS = {'L': 20" in src, 'MULTS moved — if Q1 was ruled, say so here and delete this test'
-    assert 'Q1' in src, (
-        'the MULTS literal lost the note explaining why it is still a literal. Without it the next '
-        'session reads an unexplained holdout and either moves it (pre-empting a Jordan ruling) or '
-        'leaves it forever.'
+    assert "MULTS = {'L': 20" in src, 'MULTS moved — good; delete this test and say where it went'
+    assert 'Q1 NO LONGER BLOCKS IT' in src, (
+        'the MULTS note no longer records that Q1 is discharged. It was ruled on 2026-08-23; a note '
+        'still citing it as the blocker sends the next session to a closed question.'
+    )
+    assert 'territory_stats' in src and 'provenance' in src, (
+        'the MULTS note lost the two reasons that actually survive. Without them the next session '
+        'reads an unexplained holdout.'
     )
 
 

@@ -54,12 +54,21 @@ ALL_PLAYABLE_15 = world_initial_state.ALL_PLAYABLE
 STARTING_OWNER = world_initial_state.STARTING_OWNER
 STARTING_STATS = world_initial_state.STARTING_STATS
 
-# ⚠ MULTS STAYS A LITERAL, AND THAT IS A RECORDED DEPENDENCY, NOT AN OVERSIGHT.
-# Its correct home is references/descriptor_registry.yaml — which already states two of these
-# values in prose ("Legitimacy (faction, derived) is Mandate x 20", "Discipline (faction) is
-# Stability x 10"). Authoring `L` as a faction-stat row there would ANSWER Q1, the open Jordan
-# ruling on whether Legitimacy is a base descriptor or derived like Mandate, and the execution
-# order records Q1 as gating exactly this deletion. It waits on the ruling.
+# ⚠ MULTS STAYS A LITERAL, AND ITS REASON CHANGED ON 2026-08-23 — Q1 NO LONGER BLOCKS IT.
+# It was held because authoring `L` as a faction-stat row in references/descriptor_registry.yaml
+# would have answered the open ruling on whether Legitimacy is a base descriptor. Jordan ruled it
+# IS, so `fac.legitimacy` is declared and that objection is discharged. The registry is still the
+# correct home — it already states two of these values in prose ("Legitimacy (faction, derived) is
+# Mandate x 20", "Discipline (faction) is Stability x 10").
+#
+# TWO REASONS SURVIVE, and they are smaller and nameable rather than a ruling:
+#   1. MULTS spans TWO registry blocks. `accord` and `pt` are Territory fields, so a faction-only
+#      move would split one dict across two homes — the "one seam owned twice" defect S5a spent two
+#      commits removing. The move wants `internal_multiplier` on both `faction_stats` and
+#      `territory_stats` entries, in one pass.
+#   2. The numbers need provenance. 20 and 10 are stated in the registry's own prose; 100, 15 and
+#      the two territory 10s are stated nowhere this session could find, and the anti-fabrication
+#      gate would rightly refuse them into an authored surface uncited.
 # Do NOT resolve this by moving MULTS into world_initial_state.yaml: it is not initial state, and
 # a file whose name lies is worse than a literal that is honest.
 MULTS = {'L': 20, 'Sta': 10, 'W': 100, 'I': 15, 'Mil': 10, 'accord': 10, 'pt': 10}
@@ -128,9 +137,14 @@ class Faction:
     parl_transfer_used_this_arc: bool = False
 
     #: The bounds `adjust` falls back to when `references/descriptor_registry.yaml` declares none.
-    #: Today that is `L` alone — Legitimacy/Mandate, whose registry status is Q1, Jordan's open
-    #: ruling. These were the BLANKET bounds every stat used before ED-IN-0029 was wired at plan
-    #: S5d; they survive here as the undeclared-stat fallback rather than as the rule.
+    #: ⚠ NO FACTION STAT REACHES THIS ANY MORE (2026-08-23). It existed for `L`, whose registry
+    #: status was the open Q1 ruling; Jordan ruled Legitimacy IS a base descriptor, so all six
+    #: faction stats are declared and clamp from the registry. What still reaches it is a caller
+    #: passing a stat that is not a faction descriptor at all — `MULTS` carries `accord` and `pt`,
+    #: which are Territory fields, and `echo_transport`'s dynamic write is gated on MULTS
+    #: membership rather than on the registry. So this is now a genuine fallback for a genuine
+    #: hole, not a placeholder for an unruled stat. These were the BLANKET bounds every stat used
+    #: before ED-IN-0029 was wired at plan S5d.
     UNDECLARED_FLOOR = 0.5
     # Same ceiling the registry declares for every stat it DOES declare, so the undeclared case is
     # not quietly more permissive than the declared ones.
@@ -196,11 +210,11 @@ class Faction:
 #
 # The check runs at import and ONE WAY: a faction stat declared in the registry with no field here
 # stops the engine from importing. It deliberately does NOT fail on the reverse, because exactly one
-# such field exists — `L` (Legitimacy/Mandate), written by 20 of .adjust()'s 31 non-test call
-# sites (AST-counted 2026-08-22; the 32 this line used to claim was a grep that counted comments)
-# and declared
-# nowhere in the registry — and whether it is a base descriptor or derived like Mandate is Jordan's
-# ruling to make, not a check's.
+# such field existed — `L` (written by 20 of .adjust()'s 31 non-test call sites, AST-counted
+# 2026-08-22; the 32 this line used to claim was a grep that counted comments). It is DECLARED as
+# of 2026-08-23, so the count of unregistered Faction fields is zero and the one-way direction now
+# protects nothing that exists. It is kept because a NEW dataclass field's registry status is a
+# ruling, not a check's call — see assert_faction_roster_is_covered's own docstring.
 #
 # WIRED 2026-08-22 (plan S5d). The registry's PER-STAT floors, ratified 2026-07-08 (ED-IN-0029) —
 # Influence floors at 1, the rest at 0 — reach the executable model: `Faction.adjust` above reads

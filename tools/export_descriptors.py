@@ -64,11 +64,12 @@ SCALE_RE = re.compile(r'^\s*(-?\d+(?:\.\d+)?)\s*-\s*(-?\d+(?:\.\d+)?)(\+?)\s*$')
 # engine/autoload/game_state.py:99-111 and MULTS at :45. `L` is deliberately absent: it has no
 # registry entry at all, which is the finding, not an oversight here.
 FACTION_KEY_TO_FIELD = {
-    'fac.influence': 'I',
-    'fac.wealth':    'W',
-    'fac.military':  'Mil',
-    'fac.stability': 'Sta',
-    'fac.intel':     'intel',
+    'fac.influence':  'I',
+    'fac.legitimacy': 'L',   # Jordan 2026-08-23: "Legitimacy is a base." Six stats, not five.
+    'fac.wealth':     'W',
+    'fac.military':   'Mil',
+    'fac.stability':  'Sta',
+    'fac.intel':      'intel',
 }
 
 
@@ -142,21 +143,16 @@ def build():
         'settlement_stats': _section(reg, 'settlement_stats'),
         'practitioner_stats': _section(reg, 'practitioner_stats'),
         'territory_stats': _section(reg, 'territory_stats'),
+        # ⚠ EMPTY AS OF 2026-08-23, AND THAT IS A RESULT RATHER THAN A DELETION.
+        # This block carried RATIFIED canon decisions the executable model had not implemented. Both
+        # are now implemented and their rows are gone in the commits that implemented them:
+        #   * `per_stat_floors` -- wired into Faction.adjust at plan S5d (2026-08-22).
+        #   * `faction_L` -- Jordan ruled 2026-08-23 that Legitimacy IS a base descriptor, so it is
+        #     declared in references/descriptor_registry.yaml and bound to the `L` field above.
+        # An empty register is the correct state when nothing is outstanding. It is NOT a licence to
+        # keep it empty: `tests/valoria/test_descriptors_runtime.py` pins the exact expected set, so
+        # both an unauthorised deletion AND a silent addition fail there.
         'unimplemented': {
-            'faction_L': {
-                'what': "engine/autoload/game_state.py's Faction dataclass carries `L` "
-                        "(Legitimacy/Mandate), written by 20 of .adjust()'s 31 non-test call sites across engine/ and "
-                        "systems/. references/descriptor_registry.yaml declares no entry for it.",
-                'why_it_matters': 'The registry declares five faction stats; the code implements six. '
-                                  'This is the 5-vs-6 half of the faction-stats packet.',
-                'needs': 'ruling — is Legitimacy a base faction descriptor, or derived like Mandate?',
-            },
-            # per_stat_floors WAS HERE AND IS NOW IMPLEMENTED (plan S5d, 2026-08-22).
-            # ED-IN-0029's floors — Influence 1, the rest 0 — reach the executable model:
-            # Faction.adjust reads descriptors.faction_bounds() instead of applying a blanket 0.5.
-            # The row is DELETED rather than annotated `done`, because an "unimplemented" register
-            # that accumulates implemented rows stops being a list of gaps and starts being a
-            # history nobody reads. The history is the commit; this dict is the live gap list.
         },
     }
 

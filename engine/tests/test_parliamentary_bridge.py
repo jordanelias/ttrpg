@@ -62,14 +62,27 @@ _OFF_WIN_SHARE = {'Crown': 25.0, 'Church': 0.0, 'Hafenmark': 12.5, 'Varfell': 62
 # The full n=240-per-arm control table (two seed batches plus the pooled figures) is in
 # test_f7_smoke_oracle.py's RE-PINNED block; read it before re-recording these again.
 # PREVIOUS: _ON_WIN_SHARE = {'Crown': 50.0, 'Church': 12.5, 'Hafenmark': 0.0, 'Varfell': 37.5};
-#   _ON_SCENES_RESOLVED = 125; _ON_KEYS_EMITTED = 186;
+#   _ON_SCENES_RESOLVED = 125; _ON_KEYS_EMITTED = 187;
 #   _ON_KEYS_BY_TYPE = {'scene.battle_concluded': 83, 'scene.contest_resolved': 89,
 #                       'da.public_governance': 1};
-#   _ON_KEYLOG_HASH = '1378f082210393c0a1a536f4d63d0fcdef5d6b9114753778131356cac8a52b73'
+#   _ON_KEYLOG_HASH = '92068b5eb1917b7a5fa7bef43dafb9b26ae78aad25da7b788ab489450ad785dc'
 # ⚠ `da.public_governance` went 1 -> 2: the Parliamentary Transfer emitter fires TWICE on seed 42
 # now. That is the emitter test_public_governance_transfer_key.py covers, and its count moving is
 # expected here rather than a new emitter appearing — the composition map gains no new key type.
-_ON_WIN_SHARE = {'Crown': 25.0, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 50.0}
+
+# RE-PINNED 2026-08-23 — the faction-stat roster rulings (Legitimacy is a base; Influence can be 0).
+# `L` now clamps from the registry rather than the blanket 0.5 floor, and 605 of 1,979 `.adjust()`
+# calls over the 8-campaign batch land differently, all of them on `L`. Both the batch win-share and
+# the single-campaign seed-42 pins move, for the same reason as the 08-22 re-record: the clamp is on
+# the faction stats every path reads. Full n=240-per-arm control table in test_f7_smoke_oracle.py.
+# PREVIOUS (2026-08-22): _ON_WIN_SHARE = {'Crown': 25.0, 'Church': 25.0, 'Hafenmark': 0.0,
+#   'Varfell': 50.0}; _ON_SCENES_RESOLVED = 125; _ON_KEYS_EMITTED = 187;
+#   _ON_KEYS_BY_TYPE = {'scene.battle_concluded': 80, 'scene.contest_resolved': 104,
+#                       'da.public_governance': 2};
+#   _ON_KEYLOG_HASH = '92068b5eb1917b7a5fa7bef43dafb9b26ae78aad25da7b788ab489450ad785dc'
+# `_ON_SCENES_RESOLVED` is UNCHANGED at 125 and `da.public_governance` stays at 2 — the contest
+# count moved by one (104 -> 105), which is what carries the key total 186 -> 187.
+_ON_WIN_SHARE = {'Crown': 37.5, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 37.5}
 # ── GOLDEN RE-RECORD 2026-08-02 (ED-IN-0122) — deliberate, and here is the whole reason ────────
 # `systems/factions/sim/faction_action` gained a SECOND live Key emitter, `scene.battle_concluded`.
 # The KeyLog is append-only, so a new emitter necessarily changes both the count and the content
@@ -106,11 +119,11 @@ _ON_WIN_SHARE = {'Crown': 25.0, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 50.
 # MECHANISM: fractional pools change every sampled value, so the RNG stream diverges and a transfer
 # motion that previously missed its window now qualifies on this seed. Not a balance change — see
 # the control table in test_f7_smoke_oracle.py (120 campaigns per arm, all |z| < 0.53).
-_ON_KEYLOG_HASH = '1378f082210393c0a1a536f4d63d0fcdef5d6b9114753778131356cac8a52b73'
+_ON_KEYLOG_HASH = '92068b5eb1917b7a5fa7bef43dafb9b26ae78aad25da7b788ab489450ad785dc'
 _ON_SCENES_RESOLVED = 125
-_ON_KEYS_EMITTED = 186
+_ON_KEYS_EMITTED = 187
 # The composition behind that total — the diagnostic half of the pin.
-_ON_KEYS_BY_TYPE = {'scene.battle_concluded': 80, 'scene.contest_resolved': 104, 'da.public_governance': 2}
+_ON_KEYS_BY_TYPE = {'scene.battle_concluded': 80, 'scene.contest_resolved': 105, 'da.public_governance': 2}
 # 2026-08-14 (ED-IN-0187): contest_resolved 13 -> 79 and battle_concluded 62 -> 76. The
 # contest jump is the larger and has a mechanism worth naming — more faction actions now land
 # in bands that open a scene, and the deleted Mil gate opens more conquests, so both emitters

@@ -66,6 +66,36 @@ def _pool_arm(round_pool: bool):
     return lambda: setattr(SL, 'roll_net_continuous', original)
 
 
+def _pre_ruling_bounds_arm(pre: bool):
+    """Patch `faction_bounds` back to its PRE-2026-08-23 answers, or leave the ruled ones. Undo.
+
+    Two Jordan rulings landed that day and both change this clamp, so the arms compare the pair
+    rather than one at a time — separating them would need a third arm and would compare against a
+    state that never shipped:
+      * "Influence can be 0"  — Influence floored at 1 before (ED-IN-0029/OPT-AV-14).
+      * "Legitimacy is a base" — `L` was undeclared before, so it fell back to 0.5/7.0.
+
+    It patches the BOUNDS LOOKUP rather than the registry data, so both arms read one cooked
+    artifact and the only difference is the answer `adjust` gets.
+    """
+    from engine.autoload import game_state as gs
+    from engine.substrate import descriptors as d
+
+    original = d.faction_bounds
+    _PRE = {'I': (1, 7), 'L': None}
+
+    def patched(field):
+        if field in _PRE:
+            return _PRE[field]
+        return original(field)
+
+    if pre:
+        d.faction_bounds = patched
+        gs.descriptors.faction_bounds = patched
+    return lambda: (setattr(d, 'faction_bounds', original),
+                    setattr(gs.descriptors, 'faction_bounds', original))
+
+
 def _floor_arm(blanket: bool):
     """Patch `Faction.adjust` to the pre-S5d blanket 0.5/7.0 bounds, or leave the registry-declared
     per-stat bounds in place (ED-IN-0029). Returns undo.
@@ -93,6 +123,13 @@ def _floor_arm(blanket: bool):
 #: keep them in one process, and leave the retired pairs above as worked examples rather than
 #: deleting the function that documents what the old behaviour WAS.
 ARMS = {
+    'pre_ruling': lambda: _pre_ruling_bounds_arm(True),
+    'ruled':      lambda: _pre_ruling_bounds_arm(False),
+}
+
+#: Retired comparison from plan S5d, kept as the record of what `adjust` did before the registry
+#: owned its bounds. Restore into ARMS to re-run it.
+_ARMS_FLOOR = {
     'blanket_0.5': lambda: _floor_arm(True),
     'per_stat':    lambda: _floor_arm(False),
 }

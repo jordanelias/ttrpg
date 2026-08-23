@@ -174,17 +174,78 @@ _FACTIONS = ['Crown', 'Church', 'Hafenmark', 'Varfell']
 # done, and saying so is better than a confident guess in a golden block.
 # ══════════════════════════════════════════════════════════════════════════════════════════════
 # PREVIOUS (pre-S5d): GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 12.5, 'Hafenmark': 0.0,
-#   'Varfell': 37.5}; GOLDEN_WINNERS = {'Varfell': 4, 'Church': 2, 'Crown': 2};
-#   GOLDEN_BATTLES_MEAN = 32.6; GOLDEN_SCENES_RESOLVED = 858
-GOLDEN_WIN_SHARE = {'Crown': 25.0, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 50.0}
+#   'Varfell': 37.5}; GOLDEN_WINNERS = {'Varfell': 3, 'Church': 2, 'Crown': 3};
+#   GOLDEN_BATTLES_MEAN = 30.1; GOLDEN_SCENES_RESOLVED = 858
+# ══════════════════════════════════════════════════════════════════════════════════════════════
+# RE-PINNED 2026-08-23 — TWO JORDAN RULINGS ON THE FACTION-STAT ROSTER. Read before re-recording.
+#
+# WHAT CHANGED.
+#   1. "Legitimacy is a base." `fac.legitimacy` is now declared in references/descriptor_registry.yaml
+#      and bound to the `L` field, so `L` clamps from the REGISTRY (0-7). It previously fell back to
+#      the blanket 0.5/7.0 because the registry declared nothing for it — the "5-vs-6" gap this
+#      repository carried as `unimplemented.faction_L` for six weeks. That register is now EMPTY.
+#   2. "Influence can be 0." Supersedes ED-IN-0029's Influence floor of 1 (OPT-AV-14/D14), which
+#      plan S5d had wired ONE DAY EARLIER. All six faction stats floor at 0 and ceiling at 7.
+#
+# Jordan's rationale, recorded because it is what makes ruling 1 coherent rather than a reversal:
+# "now that we're using continuous, we don't have to worry near as much either as we can just
+# aggregate these stats as opposed to weird derivations."
+#
+# BLAST RADIUS, MEASURED (§0.1 pt 4), over these 8 seeded campaigns: 1,979 `.adjust()` calls, of
+# which 605 now clamp to a different value. ALL 605 are on `L`. ZERO are on Influence — Influence
+# never sinks below 1 at these seeds, so ruling 2 is DECLARED BUT INERT here. Saying "both rulings
+# moved the goldens" would be false; ruling 1 moved them.
+# ⚠ 605 differing out of roughly 1,277 L-adjustments means `L` sat ON the old 0.5 floor for about
+# half of its writes. It can now reach 0. That is a change in how Legitimacy behaves over a
+# campaign, not a rounding nudge, and it is the reason the win-shares below moved as much as they did.
+#
+# THE CONTROL, tools/balance_oracle.py, run at n=120 per arm TWICE before any golden was touched.
+# Arms patch `faction_bounds` back to its pre-ruling answers (I floors at 1, L undeclared), so both
+# arms read ONE cooked artifact and the only difference is the answer `adjust` gets:
+#
+#   seed 20260819        pre_ruling     ruled   delta pp       z
+#   Church                   15.8%     11.7%       -4.2   -0.94
+#   Crown                    43.3%     38.3%       -5.0   -0.79
+#   Hafenmark                 3.3%      7.5%       +4.2   +1.43
+#   Varfell                  37.5%     42.5%       +5.0   +0.79
+#
+#   seed 424242 (replication)
+#   Church                   10.0%      7.5%       -2.5   -0.69
+#   Crown                    50.8%     47.5%       -3.3   -0.52
+#   Hafenmark                 9.2%      9.2%       +0.0   +0.00
+#   Varfell                  30.0%     35.8%       +5.8   +0.96
+#
+#   POOLED, n=240 per arm (480 campaigns)
+#   Church                   12.9%      9.6%       -3.3   -1.16
+#   Crown                    47.1%     42.9%       -4.2   -0.92
+#   Hafenmark                 6.2%      8.3%       +2.1   +0.88
+#   Varfell                  33.8%     39.2%       +5.4   +1.23
+#
+# HOW TO READ IT, in both directions (§0.1 pt 4 forbids asymmetric skepticism):
+#   * Nothing is significant at |z| > 1.96, in either batch or pooled. Unlike the S5d measurement,
+#     no batch flagged a false positive that then failed to replicate.
+#   * That is NOT "no balance effect". Crown is down and Varfell is up in BOTH batches and pooled,
+#     which is the pattern a real small effect makes; the control bounds it, it does not exclude it.
+#   * The statistic UNDER-detects here: both arms run the same seeds by design (so the mechanic is
+#     the only difference), while a two-proportion z assumes independence. The bias is toward the
+#     null, which is the safe direction for a control and the unsafe one for concluding "no effect".
+#
+# `scenes_resolved` moved 947 -> 967. Left unexplained rather than given a story: the `Sta <= 2`
+# crisis trigger is untouched by these rulings, and tracing which downstream path dominates was not
+# done.
+# ══════════════════════════════════════════════════════════════════════════════════════════════
+# PREVIOUS (2026-08-22, per-stat floors): GOLDEN_WIN_SHARE = {'Crown': 25.0, 'Church': 25.0,
+#   'Hafenmark': 0.0, 'Varfell': 50.0}; GOLDEN_WINNERS = {'Varfell': 3, 'Church': 2, 'Crown': 3};
+#   GOLDEN_BATTLES_MEAN = 30.1; GOLDEN_SCENES_RESOLVED = 947
+GOLDEN_WIN_SHARE = {'Crown': 37.5, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 37.5}
 # GOLDEN_WINNERS mirrors _win_share's raw `wins` dict shape: only factions with >=1 win get a key.
 # ⚠ The sentence here used to say "Church/Hafenmark win 0/8 now". That was true of the PREVIOUS
 # pin and false of this one — under the 2026-08-14 reband Church wins 2 of 8 and Hafenmark 0, so
 # Hafenmark alone is absent. Corrected rather than left: a comment explaining the shape of numbers
 # it no longer describes is how the next re-record gets reasoned about wrongly.
-GOLDEN_WINNERS = {'Varfell': 4, 'Church': 2, 'Crown': 2}
-GOLDEN_BATTLES_MEAN = 32.6
-GOLDEN_SCENES_RESOLVED = 947  # 862 -> 858 (fractional pools, 2026-08-21) -> 947 (per-stat floors, 2026-08-22)
+GOLDEN_WINNERS = {'Varfell': 3, 'Church': 2, 'Crown': 3}
+GOLDEN_BATTLES_MEAN = 30.1
+GOLDEN_SCENES_RESOLVED = 967  # 862 -> 858 (fractional pools, 08-21) -> 947 (per-stat floors, 08-22) -> 967 (roster rulings, 08-23)
 WALL_TIME_CEILING_S = 90.0  # n=8 runs ~16s; generous headroom for CI variance
 
 _CACHE = {}

@@ -72,9 +72,14 @@ UNIMPLEMENTED = _DATA['unimplemented']
 
 def faction_bounds(field):
     """(floor, ceiling) the REGISTRY declares for a Faction dataclass field, or None if it declares
-    none. Returns None for `L` — Legitimacy/Mandate is written by 20 of the 31 call sites and is declared
-    nowhere in the registry, which is the 5-vs-6 half of the faction-stats packet awaiting a ruling.
-    Callers must handle None rather than substituting a default, so the gap stays visible."""
+    none.
+
+    ⚠ IT NO LONGER RETURNS None FOR ANY DECLARED FACTION STAT. Until 2026-08-23 it returned None for
+    `L`, the one Faction field the registry did not declare — the "5-vs-6" half of the faction-stats
+    packet. Jordan ruled that day that Legitimacy IS a base descriptor, so `fac.legitimacy` is
+    declared and bound to `L`, and the roster is six. Callers must STILL handle None, because a
+    caller may pass a stat that is not a faction descriptor at all (`MULTS` carries `accord` and
+    `pt`, which are Territory fields) — the contract is unchanged even though the L case is gone."""
     key = _FIELD_TO_KEY.get(field)
     if key is None:
         return None
@@ -104,11 +109,17 @@ def assert_faction_roster_is_covered(implemented_fields):
     A new registry stat fails stage 1 (nobody has said which field it is). A registry stat whose
     field was deleted fails stage 2. Both stop the import, which is what "load-bearing" means.
 
-    The check runs one way ONLY. Code fields with no registry entry are NOT an error here, because
-    exactly one exists — `L` — and whether it is a base descriptor or derived like Mandate is an
-    open ruling. Failing on it would force this session to answer a question that is Jordan's.
-    That one-way property is structural, not a special case: this function never enumerates
-    `implemented_fields`, only registry keys, so an unregistered field cannot reach either stage.
+    THE CHECK RUNS ONE WAY ONLY, and as of 2026-08-23 that direction protects nothing that exists —
+    which is exactly when it is worth stating why it is kept. A code field with no registry entry is
+    not an error here. Until that date one such field existed (`L`), and failing on it would have
+    forced a session to answer a question that was Jordan's; he answered it, `fac.legitimacy` is
+    declared, and the count of unregistered Faction fields is now zero.
+
+    The direction stays anyway, because the reason was never "there is currently one" — it was that
+    a NEW field appearing in the dataclass is a design act whose registry status is a ruling, and a
+    check that halts the engine over it would make this file the arbiter of canon. The property is
+    structural rather than a special case: this function never enumerates `implemented_fields`, only
+    registry keys, so an unregistered field cannot reach either stage.
     """
     have = set(implemented_fields)
 

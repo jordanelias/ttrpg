@@ -34,35 +34,58 @@ def _raised(stat, start=3.0):
     return getattr(f, stat)
 
 
-def test_influence_floors_at_one_not_at_the_old_blanket_half():
-    """The floor ED-IN-0029 actually changed the meaning of. Before S5d this returned 0.5."""
-    assert _sunk('I') == 1, (
-        'Influence no longer floors at 1. ED-IN-0029 (ratified 2026-07-08) floors it there because '
-        'an institution never fully loses influence; 0.5 would be the pre-S5d blanket floor '
-        'returning.'
+@pytest.mark.parametrize('stat', ['I', 'L', 'W', 'Sta', 'Mil'])
+def test_every_declared_faction_stat_floors_at_zero(stat):
+    """RULED 2026-08-23 by Jordan — TWO rulings that between them flattened this table.
+
+      * "Influence can be 0." SUPERSEDES ED-IN-0029's floor of 1 (OPT-AV-14/D14, rationale "never
+        fully vanishes institutionally"), which S5d had wired one day earlier.
+      * "Legitimacy is a base." `fac.legitimacy` joins the registry, so `L` — which twenty of
+        `adjust`'s 31 non-test call sites write, the majority of all traffic — clamps from the
+        registry instead of falling back to the blanket 0.5.
+
+    So all six declared faction stats now floor at 0. Before S5d every stat clamped at a blanket
+    0.5, which was wrong in BOTH directions: above the ratified floor for four stats, below it for
+    Influence. It is now one number, and it is the registry's."""
+    assert _sunk(stat) == 0, f'{stat} should floor at 0, got {_sunk(stat)}'
+
+
+def test_legitimacy_is_a_declared_base_descriptor():
+    """The ruling itself, pinned at the registry rather than at the clamp — so a future edit that
+    silently drops `fac.legitimacy` fails here with the ruling's name on it rather than as a
+    mysterious golden move.
+
+    ⚠ `fac.legitimacy` is NOT Mandate. Mandate remains the size-weighted derived aggregate of
+    settlement L/PS (settlement_layer §1.8). The code field `Faction.L` has served as both at
+    different times — `parliamentary_bridge` still comments "Mandate == Faction.L pre-LPS-1" — and
+    that conflation is older than this ruling and is not resolved by it."""
+    assert descriptors.faction_bounds('L') == (0, 7), (
+        'L lost its registry bounds. Jordan ruled 2026-08-23 that Legitimacy IS a base descriptor; '
+        'if that was reversed, say so here and restore the UNDECLARED fallback path.'
+    )
+    assert 'fac.legitimacy' in descriptors.FACTION_STATS
+    assert descriptors.FACTION_FIELD_MAP['fac.legitimacy'] == 'L'
+    assert len(descriptors.FACTION_STATS) == 6, (
+        f'the faction roster is {len(descriptors.FACTION_STATS)} stats, expected 6 '
+        f'(influence, legitimacy, wealth, military, intel, stability)'
     )
 
 
-@pytest.mark.parametrize('stat', ['W', 'Sta', 'Mil'])
-def test_the_other_declared_stats_float_to_zero(stat):
-    """Before S5d these clamped at 0.5, which is ABOVE the ratified floor — the blanket was wrong in
-    both directions, not merely conservative."""
-    assert _sunk(stat) == 0, f'{stat} should floor at 0 per ED-IN-0029, got {_sunk(stat)}'
-
-
-def test_legitimacy_keeps_the_undeclared_fallback_because_Q1_is_open():
-    """`L` is the one Faction field the registry declares nothing for, and whether Legitimacy is a
-    base descriptor or derived like Mandate is Q1, Jordan's open ruling. `adjust` therefore falls
-    back to the pre-S5d bounds for it. Twenty of the 31 non-test call sites adjust `L`, so this is
-    the majority of traffic and it is deliberately unchanged: giving it a floor here would be
-    authoring canon inside a wiring commit.
-
-    When Q1 is ruled, this test is the work-list entry."""
-    assert descriptors.faction_bounds('L') is None, (
-        'the registry now declares bounds for L — if Q1 was ruled, wire it and rewrite this test'
+def test_the_undeclared_fallback_is_now_unreachable_for_faction_stats_but_kept():
+    """`UNDECLARED_FLOOR`/`_CEILING` existed for `L` alone. With `L` declared, no faction stat
+    reaches them — but they are NOT dead, and deleting them would be the wrong cleanup: `MULTS`
+    carries `accord` and `pt`, which are Territory fields, and `echo_transport`'s dynamic write is
+    gated on MULTS membership rather than on the registry. A caller can still pass a stat the
+    registry knows nothing about."""
+    assert Faction.UNDECLARED_FLOOR == 0.5 and Faction.UNDECLARED_CEILING == 7.0
+    for stat in ('I', 'L', 'W', 'Sta', 'Mil'):
+        assert descriptors.faction_bounds(stat) is not None, (
+            f'{stat} fell back to the undeclared bounds — the registry should own every faction stat'
+        )
+    assert descriptors.faction_bounds('accord') is None, (
+        'accord is a Territory field; if the registry now declares it as a FACTION stat, that is a '
+        'roster change that needs saying out loud'
     )
-    assert _sunk('L') == Faction.UNDECLARED_FLOOR == 0.5
-    assert _raised('L') == Faction.UNDECLARED_CEILING == 7.0
 
 
 @pytest.mark.parametrize('stat', ['I', 'W', 'Sta', 'Mil', 'L'])
