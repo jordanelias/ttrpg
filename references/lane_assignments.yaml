@@ -82,7 +82,7 @@ lanes:
     name: "Infrastructure / Tooling / Governance"
     bootstrap_scope: ["infrastructure"]
     owns:
-      - "deprecated/skills/valoria-orchestrator/scripts/**"   # retired harness — moved to deprecated/ (LB-22)
+      - "deprecated/skills/valoria-orchestrator/scripts/**"   # retired harness — forked 2026-08-23 (S6/6a); pattern now matches nothing and is kept only so an old lane citation still reads
       - "references/**"                 # EXCEPT the shared_files below (canonical_sources / canonical_freshness)
       # - "tests/hooks/**"   # tree emptied 2026-08-01 (ED-IN-0119): 11 dead modules
       #                      # retired to deprecated/tests/hooks/, 2 live ones moved
@@ -92,7 +92,7 @@ lanes:
       - "session_logs/**"
       - "tools/**"
       - "deprecated/archives/**"
-      - "deprecated/skills/valoria-orchestrator/references/skill_registry.yaml"   # retired harness — moved to deprecated/ (LB-22)
+      - "deprecated/skills/valoria-orchestrator/references/skill_registry.yaml"   # retired harness — forked 2026-08-23 (S6/6a); pattern now matches nothing
     shared_not_exclusive:             # under references/** but co-owned — see shared_files
       - "references/canonical_sources.yaml"
       - "references/canonical_freshness.yaml"

@@ -180,14 +180,24 @@ RULES = [
     (lambda p: p == 'tests/sim/gauge_mb.py', 'keep', 'R-IMPORTED-MODULE',
      'imported as `import gauge_mb` by two KEPT shipping-gate tests (test_gauge_invariants, '
      'test_morale_write_sweep) -- evacuating it makes the whole suite uncollectable'),
-    (lambda p: p == 'deprecated/skills/valoria-orchestrator/scripts/descriptor_registry.py',
-     'keep', 'R-IMPORTED-MODULE',
-     'imported as `import descriptor_registry` by two kept tests and a kept skill script -- '
-     'filed under deprecated/ but still load-bearing on the shipping gate'),
-    (lambda p: p == 'deprecated/skills/valoria-orchestrator/scripts/github_ops.py',
-     'keep', 'R-IMPORTED-MODULE',
-     'imported by tools/compliance_check.py, a BLOCKING CI gate. CLAUDE.md §8 records this '
-     'import as the reason several tools were retired; the importer itself was never cleaned up'),
+    # THE TWO ORCHESTRATOR-SCRIPT `keep` ROWS THAT USED TO SIT HERE ARE RETIRED, 2026-08-23 (S6/6a),
+    # BECAUSE BOTH ASSERTED A LOAD-BEARING IMPORT THAT NO LONGER EXISTED.
+    #
+    #   `.../scripts/descriptor_registry.py` -- claimed to be what `import descriptor_registry`
+    #   resolves to. MEASURED (`__file__` printed, not inferred): it resolves to
+    #   `tools/descriptor_registry.py`, whose own docstring at :10 says the deprecated import path
+    #   is dead. The deprecated copy was a dead duplicate.
+    #
+    #   `.../scripts/github_ops.py` -- claimed to be imported by `tools/compliance_check.py`, a
+    #   BLOCKING gate. That import was removed; the only surviving mention in that file is the
+    #   docstring recording its removal.
+    #
+    # A `keep` rule protecting an import that is gone is not a conservative rule, it is a false
+    # statement the classifier repeats on demand -- the same shape as a `FORK:` row pointing at
+    # nothing. Both files went to the fork at `baf29d5`, and the whole `deprecated/` tree with them,
+    # after a deletion rehearsal proved collection, both suites and every validator unaffected.
+    # (`tests/sim/gauge_mb.py` above is the row this rule was written for and is UNCHANGED: that
+    # import is live, and deleting it stops `pytest tests/valoria` collecting.)
 
     (lambda p: p.startswith('tests/valoria/'), 'keep', 'R-SHIPGATE',
      'the shipping gate (CLAUDE.md 0.1) and the home of the fork plan\'s own falsifiers'),

@@ -1596,3 +1596,41 @@ moved, and none of the three directories still exists.
 | `deprecated/archives/editorial/` | `registers/archive/` | RELOCATED |
 | `deprecated/archives/editorials/` | `registers/archive/` | RELOCATED |
 | `deprecated/canon/` | `registers/archive/` | RELOCATED |
+
+## `deprecated/` retired to the fork — 2026-08-23 (S6/6a, ED-IN-0194)
+
+The last six files leave `main`. With 6b's relocation of the ED archives, **nothing in the tree read
+anything under `deprecated/`** — proven by a deletion rehearsal, not by grep: with the whole tree
+removed, `pytest tests/valoria` still COLLECTS 1,719 tests (a bare-name import that has lost its
+module stops collection outright, which is the failure mode the W3 rehearsal was written to catch),
+`valoria_local --staged` passes, `compliance_check` reports 0 errors, `broken_dependency_checker`
+reports 0 broken, and the ED universe stays at 1,264.
+
+⚠ **TWO OF THE SIX WERE CLASSIFIED `keep` BY `evacuation_plan.py`, AND BOTH RULES WERE STALE.**
+`R-IMPORTED-MODULE` held that `.../scripts/descriptor_registry.py` is "imported as
+`import descriptor_registry` by two kept tests and a kept skill script" and that
+`.../scripts/github_ops.py` is "imported by `tools/compliance_check.py`, a BLOCKING CI gate".
+Measured: the bare-name import resolves to **`tools/descriptor_registry.py`** (`__file__` printed,
+not inferred) — the deprecated copy is a dead duplicate, and `tools/descriptor_registry.py:10` says
+so in its own docstring — and `compliance_check.py` has not imported `github_ops` since the import
+was removed; the only surviving mention is the docstring recording that removal. A `keep` rule
+asserting a load-bearing import that no longer exists is the same defect class as a `FORK` row
+pointing at nothing: it reads as protection.
+
+**THE REF IS `baf29d5`, `origin/main`'s own tip** — the newest ref already on `main` that still
+contains the content, per this file's own lesson three sections up. Every row verified with
+`git cat-file -e baf29d5:<path>` before being written.
+
+**Exact file rows, not a `deprecated/` dir-prefix row, deliberately.** `CLAUDE.md` §8 records that a
+dir-prefix `FORK:` row has no existence check, so it resolves *any* invented filename under that
+namespace — which shipped once and made a fabricated `MEASURED-BY:` path pass across 162 namespaces.
+Six rows cost six lines and keep the anti-fabrication property exact.
+
+| Old Path | New Path | Status |
+|----------|----------|--------|
+| `deprecated/claude/wf_return_to_game.js` | `FORK:baf29d5` | FORKED |
+| `deprecated/skills/valoria-orchestrator/scripts/descriptor_registry.py` | `FORK:baf29d5` | FORKED |
+| `deprecated/skills/valoria-orchestrator/scripts/github_ops.py` | `FORK:baf29d5` | FORKED |
+| `deprecated/tools/atomizer.py` | `FORK:baf29d5` | FORKED |
+| `deprecated/tools/doc_index_gen.py` | `FORK:baf29d5` | FORKED |
+| `deprecated/tools/index_gen.py` | `FORK:baf29d5` | FORKED |

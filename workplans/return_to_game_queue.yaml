@@ -60,7 +60,7 @@ schema_version: 1
 program: return-to-game
 lane: IN
 created: "2026-08-19"
-driver_retired: "deprecated/claude/wf_return_to_game.js"   # was .claude/wf_return_to_game.js; RETIRED 2026-08-20 (plan Act A2). Kept at a named path for history, NOT for invocation.
+driver_retired: "FORK:baf29d5:deprecated/claude/wf_return_to_game.js"   # was .claude/wf_return_to_game.js; RETIRED 2026-08-20 (plan Act A2), then forked with the rest of deprecated/ on 2026-08-23 (S6/6a). Kept at a ref for history, NOT for invocation.
 authored_by: "adversarial-critique session 2026-08-19; 4 Fable-5 read-only nodes + measured execution"
 
 # The ordering thesis, so a later session does not 'improve' it into the loop it escapes:
