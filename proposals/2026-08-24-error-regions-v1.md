@@ -396,8 +396,33 @@ deleted `test_wf_harness_check.py`, one rung shallower and report-only. Adjacent
 crediting the bridge/exporter/milestone/§11 guards to the game side. Largest single block: **~2,700
 lines guarding `skills/valoria-vector-audit/scripts/`**.
 
-- **R11-D.** Apply §0.1 pt 5's predicate to that ~10,800 lines. `test_vacuous_assertion_check.py`,
-  `test_known_red_register.py` and the vector-audit cluster are the named candidates.
+- **R11-D. Apply §0.1 pt 5's predicate to that ~10,800 lines** — but NOT to
+  `ci_vacuous_assertion_check`.
+
+  ⚠ **CORRECTED 2026-08-24 by an adversarial relay. The first version of this item named
+  `test_vacuous_assertion_check.py` as a delete candidate. THAT CONTRADICTS A STANDING JORDAN
+  RULING**, and the ruling is recorded at the call site, in the workflow, verbatim:
+
+  > `.github/workflows/valoria-ci.yml:247-249` — *"`ci_vacuous_assertion_check` below is KEPT by
+  > Jordan's ruling of 2026-08-21 (culling plan §5.6): it is a literal encoding of CLAUDE.md §0.1
+  > point 2, and deleting it would have required striking §0.1 in the same commit."*
+
+  So the depth-4 chain **persists BY RULING, not by oversight**, and R11.3's framing of it as a
+  re-formed generator is wrong on this one instance. Deleting the pair needs a NEW Jordan ruling
+  AND a same-commit strike of §0.1 pt 2 — it is not a session call and not a predicate application.
+  `references/ci_checks_registry.yaml:34` independently records it as the file's ONLY `layer: L2`
+  row, i.e. already classified as the deliberate exception rather than an unnoticed rung.
+
+  **How the error happened, because it is the session's own pattern again:** one read-only critic
+  applied the predicate correctly *in the abstract* and never checked whether the artifact was
+  ruled; I relayed its recommendation into this document without checking either. A predicate is
+  not a licence to act where a ruling already decided — CLAUDE.md §0's five-test ladder puts
+  "superseded by a later ruling" FIRST for exactly this reason, and neither of us ran test 1.
+
+  What remains genuinely in scope for the predicate: `test_known_red_register.py` (111 lines
+  guarding a register of failing tests) and the ~2,700-line vector-audit cluster, whose subject is
+  `skills/valoria-vector-audit/scripts/`. Run test 1 on each before touching it.
+
 - **R11-E. PROTECT LIST — a cull must not take these.** All of `engine/tests/`;
   `test_combat_invariants.py`, `test_key_substrate.py`, `test_combat_draw_stream.py` + `_draw_stream.py`,
   `test_engine_does_not_import_systems.py`, `test_degree_ladder_single_owner.py`,
