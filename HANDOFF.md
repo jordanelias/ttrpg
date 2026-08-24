@@ -9,22 +9,27 @@ experiment it was the instrument for. Read this file, and your lane's, yourself.
 This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint machinery
 (which depended on the retired GitHub-API harness and token budgets).
 
-## ⚠ CURRENT — 2026-08-24 session (read this first)
+## ⚠ CURRENT — 2026-08-24 (read this first)
 
-`registers/handoffs/HANDOFF_2026-08-24_SESSION.md` — full state of the repository, the open
-mass-battle engine port, and where the culling / centralization plans actually stand.
+**`main` IS RED.** PR #329 merged at `dcf38ef` carrying a deliberately unfinished mass-battle engine
+port: 33 files now at `systems/mass_battle/sim/`, `tests/sim/mass_battle/` gone, and **22
+`tests/valoria` failures on `main`**. Blocking validators are green; `engine/tests` passed 2055
+locally but has **never been confirmed green on a runner** (fail-fast cancelled it every run).
 
-**DO NOT MERGE PR #329 at head `e4070d4`** — the last commit is a deliberate WIP with ~24 residual
-`tests/valoria` failures from a half-finished engine port (`engine/tests` is green at 2055). Every
-commit before it was green.
+A red `main` is the one thing CLAUDE.md §0 licenses working on with no milestone trace. **Confirm
+`engine/tests` on a runner first** — if the campaign suite is fine, all 22 are test-side expectations.
 
-**Recommended first action next session:** wire ONE of the 31 declared-but-unfired emit edges — five
-already have a live subscriber in `engine/cross_scale/articulation.py:116-130` — and watch
-`tools/contract_runtime_conformance.py` move `observed` from 3 to 4. It is the smallest falsifiable
-step on the hub-and-bus goal.
+**The master record is `registers/handoffs/HANDOFF_2026-08-24_SESSION.md`** — throughlines, warnings,
+loose ends, and the order to work in. Read it before anything else. Two executable plans sit beside
+it (`proposals/2026-08-24-completion-plan-v1.md`, `proposals/2026-08-24-error-regions-v1.md`); the
+master document says when to open them.
 
-**Also new:** `proposals/2026-08-24-error-regions-v1.md`, eleven regions of error from that session
-as executable plan items (Jordan-requested).
+**Before running any gate locally** — a bare local run diffs ONE commit while CI diffs the whole
+branch, so a local green can be vacuous:
+
+```sh
+git fetch origin main && export GITHUB_EVENT_NAME=pull_request GITHUB_BASE_REF=main
+```
 
 ## History
 
