@@ -53,10 +53,23 @@ def test_game_state_npe_cycle_is_gone():
         )
 
 
-def test_exactly_three_cycles_remain_and_they_are_the_expected_families():
+def test_exactly_two_cycles_remain_and_they_are_the_expected_families():
+    """TWO, not three — the mass-battle port DELETED one, which is worth stating as a result.
+
+    Through 2026-08-23 there were three: the social_contest family, the canon mass-battle family,
+    and `systems.mass_battle.sim.massbattle <-> systems.mass_battle.sim.units`. That third one was
+    the OLD engine's late-binding twin — `units.py` reached back into `massbattle.py`'s namespace
+    for constants and helpers, and `massbattle.py` re-exported the dataclasses `units.py` defined.
+    Jordan's port replaced both files: `units.py` is gone, and `massbattle.py` is now a thin
+    strategic adapter that imports the canon engine one way and is imported by nothing. The cycle
+    had nowhere left to close.
+
+    Recorded here rather than silently re-pinned, because a cycle count going DOWN is the kind of
+    result this repository usually only claims in prose.
+    """
     cycles = _real_cycles()
-    assert len(cycles) == 3, (
-        f"expected exactly 3 remaining cycles (contest + 2 MB families), got "
+    assert len(cycles) == 2, (
+        f"expected exactly 2 remaining cycles (contest + the canon MB family), got "
         f"{len(cycles)}: {cycles}"
     )
 
@@ -64,22 +77,27 @@ def test_exactly_three_cycles_remain_and_they_are_the_expected_families():
         return all(m.startswith(prefix) for m in cyc)
 
     contest = [c for c in cycles if _matches(c, 'systems.social_contest.sim.contest')]
-    mb_massbattle = [c for c in cycles
-                      if set(c) == {'systems.mass_battle.sim.massbattle', 'systems.mass_battle.sim.units'}]
-    mb_tests = [c for c in cycles if _matches(c, 'systems.mass_battle.sim')]
+    mb_canon = [c for c in cycles if _matches(c, 'systems.mass_battle.sim')]
+    # The massbattle<->units family is DELETED, not merely absent — asserted so a future edit that
+    # reintroduces it fails here rather than quietly restoring a cycle the port removed.
+    reintroduced = [c for c in cycles
+                    if set(c) == {'systems.mass_battle.sim.massbattle', 'systems.mass_battle.sim.units'}]
+    assert not reintroduced, (
+        f"the massbattle<->units cycle is back: {reintroduced}. It died with the 2026-08-24 port "
+        f"(units.py deleted, massbattle.py reduced to a strategic adapter). Reintroducing it means "
+        f"the adapter has grown a late-binding twin again.")
 
     checked = 0
     for family_name, family in (
         ('social_contest.contest', contest),
-        ('mass_battle.massbattle<->units', mb_massbattle),
-        ('systems.mass_battle.sim', mb_tests),
+        ('systems.mass_battle.sim', mb_canon),
     ):
         checked += 1
         assert len(family) == 1, f"{family_name}: expected exactly one cycle, found {family}"
     # assert-that-asserted (CLAUDE.md §0.1 point 2): confirm every named family was actually
     # looked up, not skipped by an early return.
-    assert checked == 3
+    assert checked == 2
 
-    # No family is a partial/renamed match of the other two — union covers all 3 cycles found.
-    accounted = contest + mb_massbattle + mb_tests
-    assert len(accounted) == len(cycles) == 3
+    # Neither family is a partial/renamed match of the other — the union covers both cycles found.
+    accounted = contest + mb_canon
+    assert len(accounted) == len(cycles) == 2

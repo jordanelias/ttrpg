@@ -25,9 +25,12 @@ import sys
 
 import pytest
 
-_SIM = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'sim'))
-if _SIM not in sys.path:
-    sys.path.insert(0, _SIM)
+# THE ENGINE MOVED (2026-08-24). It lived at `tests/sim/mass_battle/` and needed `tests/sim` on
+# sys.path to import itself as top-level `mass_battle.*`; Jordan's port made it a real dotted
+# package at `systems/mass_battle/sim/`, so the path seam is gone and the imports below resolve
+# natively. `_ENGINE_ROOT` is what the write-sweep at the bottom of this file walks.
+_ENGINE_ROOT = os.path.abspath(os.path.join(
+    os.path.dirname(__file__), '..', '..', 'systems', 'mass_battle', 'sim'))
 
 import systems.mass_battle.sim.orchestration as O  # noqa: E402
 from systems.mass_battle.sim.engine import build_army  # noqa: E402
@@ -232,7 +235,7 @@ def test_no_bare_assignment_to_a_cell_owned_field_on_the_engine_path(field):
     """
     spec = _CELL_OWNED[field]
     pattern = _assign_re(field)
-    root = pathlib.Path(_SIM) / 'mass_battle'
+    root = pathlib.Path(_ENGINE_ROOT)
     offenders = []
     for rel in _ENGINE_FILES:
         for n, line in enumerate((root / rel).read_text().splitlines(), 1):

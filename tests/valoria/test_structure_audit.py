@@ -360,28 +360,44 @@ def test_g_code_covers_simulation_code_not_just_tools():
     assert 'tools' in prefixes
     assert 'systems' in prefixes, "no systems/*/sim modules in G_code — per-subsystem sims invisible"
     assert 'engine' in prefixes, "no engine/ modules in G_code — the engine core is invisible"
-    # The live mass-battle engine sits under tests/ and is reachable only via EXTRA_CODE_ROOTS.
+    # The canon mass-battle engine — under `systems/` since the 2026-08-24 port, no longer
+    # reachable only via EXTRA_CODE_ROOTS.
     assert any(m.startswith('systems.mass_battle.sim') for m in mods), (
-        "the live mass-battle engine (tests/sim/mass_battle/, ~10.5k LOC) is not in G_code"
+        "the canon mass-battle engine (systems/mass_battle/sim/, ~11.3k LOC) is not in G_code"
     )
 
 
-def test_sys_path_alias_resolves_live_mass_battle_internal_edges():
-    """`tests/sim/mass_battle/` puts `tests/sim` on sys.path and imports itself as top-level
-    `mass_battle.*`. Without sys_path_aliases every internal edge fails to resolve and the
-    package lands in G_code as 28 EDGELESS nodes — reported as orphans. Visible-but-edgeless is
-    strictly worse than unscanned: it reads as a measured emptiness. (Mutation guard: dropping
-    the `aliases` argument from _resolve_internal drives this count to 0.)"""
+def test_the_canon_mass_battle_engine_resolves_its_internal_edges_natively():
+    """The engine's internal edges must resolve — and since 2026-08-24 they do so WITHOUT an alias.
+
+    ⚠ THIS TEST'S SUBJECT CHANGED, AND THE OLD SUBJECT IS GONE. It was
+    `test_sys_path_alias_resolves_live_mass_battle_internal_edges`, and it asserted that
+    `sys_path_aliases` mapped the engine's top-level `mass_battle.*` self-import back to a real
+    module. That mattered while the engine lived at `tests/sim/mass_battle/` and put `tests/sim` on
+    `sys.path` to import itself: without the alias every internal edge failed to resolve and the
+    package landed in G_code as 28 EDGELESS nodes — visible-but-edgeless, which reads as a measured
+    emptiness and is strictly worse than unscanned.
+
+    Jordan's port made it a real dotted package under `systems/`, so the path seam does not exist
+    and the alias is not what resolves anything. THE PROPERTY THE OLD TEST PROTECTED IS UNCHANGED
+    and is what is asserted here: the engine is in the graph WITH ITS EDGES. Measured after the
+    port: 80 internal edges, up from the >= 20 the aliased path used to manage.
+
+    Keeping the old assertion would have been worse than deleting it — its expected value was
+    rewritten by the port's repoint sweep into `tests.sim.systems.mass_battle.sim.engine`, a string
+    naming no module, which the test would then have demanded forever.
+    """
     root = sa.Path(_ROOT)
     mods = sa.collect_py_modules(root)
-    aliases = sa.sys_path_aliases(mods)
-    assert aliases.get('systems.mass_battle.sim.engine') == 'tests.sim.systems.mass_battle.sim.engine'
     g, _ = sa.build_g_code(root, mods)
     internal = sum(
         1 for m in g if m.startswith('systems.mass_battle.sim')
         for t in g[m] if t.startswith('systems.mass_battle.sim')
     )
-    assert internal >= 20, f"live mass-battle engine resolved only {internal} internal edges"
+    assert internal >= 20, (
+        f"the canon mass-battle engine resolved only {internal} internal edges — it is in G_code "
+        f"but effectively edgeless, which reports as orphans and reads as measured emptiness"
+    )
 
 
 # ── CLI entry-point detection (OI-55 open half, ED-IN-0092) ─────────────────
