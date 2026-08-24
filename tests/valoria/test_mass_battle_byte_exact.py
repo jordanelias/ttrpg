@@ -161,8 +161,7 @@ def test_mode_key_discriminates_every_digest_toggle():
 
     MUTATION: drop the `_cm` clause in bat._mode_key and this fails on the collision.
     """
-    sys.path.insert(0, os.path.join(REPO_ROOT, 'tests', 'sim'))
-    import mass_battle.bat as bat
+    import systems.mass_battle.sim.bat as bat
     cube = {(pc, fm, cm): bat._mode_key(pc, fm, cm)
             for pc in (0, 1) for fm in (0, 1) for cm in (0, 1)}
     assert len(set(cube.values())) == 8, f"mode key is not injective over the toggles: {cube}"

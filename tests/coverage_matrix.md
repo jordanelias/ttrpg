@@ -379,3 +379,25 @@ CLAUDE.md §4) — **except two 2026-07 blocks a blanket replace caught before t
 which now sit inconsistently beside their unchanged neighbours; disclosed in `bat.py`'s vocabulary
 block rather than tidied away.** `validators.py`'s separate `path='grid'|'node'` argument is filed,
 not swept.
+
+## 2026-08-24 — the canon mass-battle engine moves to `systems/mass_battle/sim/` (Jordan-directed)
+
+**Coverage is unchanged in extent; every path in this file that reads `tests/sim/mass_battle/` now
+lives at `systems/mass_battle/sim/`.** Historical dated entries above keep the old path (no-retrofit,
+CLAUDE.md §4) and resolve through the dir-prefix row added to `references/restructure_ledger.md`.
+
+What moved and why: `tests/sim/mass_battle/` (11,342 lines, 28 modules) was ported over
+`systems/mass_battle/sim/`, overwriting the 1,905-line engine the campaign had been running. An
+audit established that the tree under `tests/` was the game's most developed battle model — a live
+test calls it "the canon mass-battle engine", 43 of 156 `tests/valoria` files import it, and every
+recent ED-MB batch landed there — while the campaign ran the smaller one. Jordan ruled the port.
+
+**What this means for coverage claims made above.** The paragraph at :314 arguing that a file's
+location inside `tests/sim/mass_battle/` (the LIVE ENGINE directory) should not exempt it is now
+moot in its literal form and stronger in its substance: the live engine is no longer under `tests/`
+at all, so nothing there can claim a test-tree exemption. The claim at :322 — that what is covered
+here is the canon mass-battle engine — still holds; only its path changed.
+
+**Not a coverage change, recorded so a reader does not go looking:** `tests/sim/gauge_mb.py` and the
+package `__init__.py` files appear in this commit's changeset as deletions rather than additions.
+They moved with the engine; nothing was dropped.

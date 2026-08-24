@@ -104,12 +104,22 @@ def _successes(pool: float, rng) -> float:
     This now delegates to the canonical continuous d10 engine through the sigma-leverage layer, so
     the returned net is fractional rather than a count of whole dice.
 
-    ⚠ THE POOL IS STILL NOT FRACTIONAL, and an earlier draft of this docstring claimed it was.
-    `sigma_leverage.roll_net_continuous` does `effective_pool = max(1, int(round(pool)))` before
-    sampling (sigma_leverage.py:276), so a fractional pool is rounded to whole dice and floored at
-    one. Jordan ruled "fractional dice"; only the fractional RESULT is implemented. ED-IN-0187
-    recorded this correction and it was written into the ledger without being applied here — which
-    is worse than an unimplemented feature, because the call site asserted the opposite.
+    ✅ THE POOL IS FRACTIONAL, since S8 Half A. `sigma_leverage.roll_net_continuous` does
+    `effective_pool = max(1.0, float(pool))` (sigma_leverage.py:310) — the canonical pool floor
+    survives, the quantisation is gone. Jordan's "fractional dice" ruling is implemented for both
+    the pool and the result.
+
+    ⚠ THIS PARAGRAPH SAID THE OPPOSITE UNTIL 2026-08-24, and the way it was wrong is the point.
+    It read "THE POOL IS STILL NOT FRACTIONAL", quoted `max(1, int(round(pool)))`, and cited
+    `sigma_leverage.py:276` — a line that no longer says that. So a caller's docstring went on
+    asserting an unimplemented ruling for days after the ruling shipped, and a memoryless session
+    reading this call site would have re-opened a closed question and re-done landed work.
+
+    Note what the old text itself complained about: that ED-IN-0187 "was written into the ledger
+    without being applied here — which is worse than an unimplemented feature, because the call
+    site asserted the opposite." Exactly so, in the other direction. A prose claim about code
+    decays whichever way the code moves, which is why CLAUDE.md §0.05 makes code the mechanism and
+    prose reference. Found by a read-only contamination audit, not by any gate.
     """
     if pool <= 0:
         return 0.0

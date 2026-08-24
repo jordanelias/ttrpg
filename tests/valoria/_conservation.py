@@ -88,7 +88,7 @@ def assert_troop_conservation(*units, context=''):
     inside this owner — it cannot fail today, and that is its declared purpose, not a live check.
     Raises AssertionError naming the offending unit on the first divergence.
     """
-    cfg = sys.modules.get('mass_battle.config')
+    cfg = sys.modules.get('systems.mass_battle.sim.config')
     assert cfg is not None and getattr(cfg, 'PER_CELL', False), (
         "conservation requires PER_CELL=1 — the hp->cell mirror is PER_CELL-gated "
         "(orchestration.py:1968); at PER_CELL=0 this invariant is false of correct behaviour")

@@ -41,6 +41,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Optional
 
+from engine.substrate import descriptors
 from engine.substrate.canon_buckets import canonical_accord
 
 
@@ -74,10 +75,20 @@ LOYALTY_MAX = 3
 #  framework is the default for 60% of generated NPCs"]
 FACTION_DEFAULT_WEIGHT_PCT = 60
 
-# Conviction taxonomy (from canon reference)
-# [canonical: §NPC Genome Record axis 2 — "drawn from the existing conviction
-#  taxonomy (Faith, Order, Reason, Justice, Survival, Loyalty, Truth, Power)"]
-CONVICTIONS = ("Faith", "Order", "Reason", "Justice", "Survival", "Loyalty", "Truth", "Power")
+# Conviction taxonomy — READ, NOT DECLARED. Owner is
+# `references/descriptor_registry.yaml:conviction_roster`, cooked by `tools/export_descriptors.py`
+# and read by `engine.substrate.descriptors`.
+#
+# ⚠ THIS CHANGES GENERATED NPCs, deliberately. The eight names that stood here — Faith, Order,
+# Reason, Justice, Survival, Loyalty, Truth, Power — were transcribed from the NPE doc's own
+# parenthetical, and FIVE of them (Justice, Survival, Loyalty, Truth, Power) appear in no
+# conviction taxonomy in the corpus. `conv.*`, the 13x4 conviction-axis matrix, the contest styles
+# and the cultural-background templates all key on the registry's thirteen, so an NPC generated
+# with `worldview=['Survival']` could never be scored by any of them. Nothing downstream reads
+# `worldview` yet (world-npcs is an honest deferral, `engine/tests/test_pipeline_reach.py:152`), so
+# this costs no campaign golden today and stops the drift before it does.
+# [canonical: conviction_taxonomy_v30 §2 via references/descriptor_registry.yaml:conviction_roster]
+CONVICTIONS = descriptors.CONVICTIONS
 
 # Compromise profile categories
 # [canonical: §NPC Genome Record axis 4 — "Economic / Informational /
@@ -286,13 +297,30 @@ def generate_npc(faction: Optional[str], role: Optional[str], world,
             issue = rng.choice(list(stance.keys()))
             stance[issue] = STANCE_MAX if stance[issue] <= 2 else STANCE_MIN
         elif flip_choice == 1:
-            # Replace worldview with opposite-leaning conviction
-            opposites = {"Faith": "Reason", "Reason": "Faith",
-                         "Order": "Survival", "Survival": "Order",
-                         "Justice": "Power", "Power": "Justice",
-                         "Loyalty": "Truth", "Truth": "Loyalty"}
-            if worldview[0] in opposites:
-                worldview[0] = opposites[worldview[0]]
+            # Replace the primary worldview with a DIFFERENT canonical Conviction.
+            #
+            # ⚠ THIS REPLACED A HARDCODED `opposites` MAP AND THAT MAP WAS A LIVE ROSTER LEAK
+            # (found 2026-08-24 by an adversarial pass, hours after the roster was centralized).
+            # It paired eight names — {"Faith": "Reason", "Order": "Survival", "Justice": "Power",
+            # "Loyalty": "Truth"} and their inverses — SIX of which are not canonical Convictions.
+            # Once CONVICTIONS became the canonical thirteen, a deviation-flipped NPC whose primary
+            # was Faith got 'Reason' and one whose primary was Order got 'Survival': `generate_npc`
+            # could MINT names that `descriptors.resolve_conviction` raises on. The centralization
+            # commit missed it because its AST guard only inspected Tuple/List/Set literals, and
+            # this was a Dict — the guard covers Dict keys and values now.
+            #
+            # The pairs could not be salvaged by renaming: Justice↔Power and Loyalty↔Truth are not
+            # an opposition model any taxonomy in the corpus states, so re-keying them onto the
+            # thirteen would have invented canon rather than restored it. A GROUNDED opposition
+            # does exist on paper — the 13x4 conviction-axis matrix
+            # (systems/characters/conviction_axis_matrix_v30.md, registered as `map.conviction_axis`)
+            # would give "most anti-correlated Conviction" a real definition — but that matrix is
+            # prose and is not cooked into any artifact code reads. Until it is, a uniform draw over
+            # the other twelve is the honest deviation: it says "this NPC diverges from the faction
+            # default" without asserting a direction nobody has ruled on.
+            alternatives = [c for c in CONVICTIONS if c != worldview[0]]
+            if alternatives:
+                worldview[0] = rng.choice(alternatives)
         elif flip_choice == 2:
             # Hidden allegiance != affiliation
             other = [f for f in ('Crown', 'Church', 'Hafenmark', 'Varfell', 'RM') if f != npc_faction]

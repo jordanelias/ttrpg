@@ -86,11 +86,11 @@ three steps — `systems/overview/sim/season.py:48 run_season`, invoked at `engi
 - **S7 — Step 2, the action callback** supplied by the driver — `engine/mc_v18.py:124 _faction_actions_callback`.
   - **S7.1 Faction actions.** For each faction parliamentary *and* holding territory: `faction_take_action`,
     wrapped so one faction's exception cannot abort the season — `engine/mc_v18.py:132-144 _faction_actions_callback`;
-    resolver `systems/factions/sim/faction_action.py:197 faction_take_action`. Four state signals re-weight
+    resolver `systems/factions/sim/faction_action.py:207 faction_take_action`. Four state signals re-weight
     one probability vector, then a **single** `rng.random()` draw selects among faction-unique / conquest /
-    muster / govern — `systems/factions/sim/faction_action.py:220 faction_take_action`. Conquest resolves
-    through mass battle — `systems/factions/sim/faction_action.py:431-438 _try_conquest`; on an attacker
-    win, territory ownership transfers — `systems/factions/sim/faction_action.py:461-497 _try_conquest`.
+    muster / govern — `systems/factions/sim/faction_action.py:230 faction_take_action`. Conquest resolves
+    through mass battle — `systems/factions/sim/faction_action.py:441-448 _try_conquest`; on an attacker
+    win, territory ownership transfers — `systems/factions/sim/faction_action.py:471-507 _try_conquest`.
   - **S7.2 The scene phase.** `run_scene_phase` evaluates triggers, queues scenes, then drains the slate
     one slot at a time — `engine/cross_scale/scene_dispatch.py:418 run_scene_phase`, called at
     `engine/mc_v18.py:149 _faction_actions_callback`. Exactly **one** trigger is field-evaluable today
@@ -174,7 +174,7 @@ authoritative for them.
 notify, `engine/substrate/keys.py:510 emit` — and is the only place deferred world writes land,
 `engine/substrate/keys.py:581 accounting_boundary`. It is the **substrate owner, not the sole emitter**: of the
 four production sites constructing a `Key`, two are here — `engine/cross_scale/echo_transport.py:321 Key`,
-`engine/cross_scale/echo_transport.py:428 Key` — and two are FA-lane, `systems/factions/sim/faction_action.py:375 Key`
+`engine/cross_scale/echo_transport.py:428 Key` — and two are FA-lane, `systems/factions/sim/faction_action.py:385 Key`
 and `systems/factions/sim/parliamentary_transfer.py:226 Key`. Two of its three termination guards are
 structurally unreachable, the queue path they defend having no production caller —
 `engine/substrate/keys.py:525 schedule_emission` (§3a).
@@ -187,7 +187,7 @@ dormant rather than partially reachable — `engine/cross_scale/articulation.py:
 
 **`characters` — Conviction Scars, Beliefs, companions.** A plain function-call API over per-actor state on
 `world`, with a late-import cycle-break between the two halves and full serialize/restore round-tripping —
-`systems/characters/sim/conviction.py:167 apply_conviction_scar`. Nothing production-side calls it: its one live
+`systems/characters/sim/conviction.py:177 apply_conviction_scar`. Nothing production-side calls it: its one live
 caller chain terminates in a function with no production callers, and the sole constructor of Belief objects has
 zero callers, so a live campaign can never contain a Belief — `systems/characters/sim/beliefs.py:121 add_belief` (§3a).
 
@@ -200,10 +200,10 @@ flag — the blocker is a missing trigger, not a wiring bug — `engine/cross_sc
 **`factions` — the strategic actor layer.** Every season each parliamentary landholding faction re-weights four
 action buckets from state and takes one stochastic draw; conquest, muster, govern and faction-unique actions
 resolve here, as do the parliamentary vote, censure and territory-transfer motions —
-`systems/factions/sim/faction_action.py:197 faction_take_action`. It is the only non-substrate subsystem
+`systems/factions/sim/faction_action.py:207 faction_take_action`. It is the only non-substrate subsystem
 constructing Keys in production. Several of its modules are pure stub armature, and two faction identities have no
 unique action at all, falling through to the universal censure fallback —
-`systems/factions/sim/faction_action.py:315-318 _faction_specific_unique` (§3c, §3d).
+`systems/factions/sim/faction_action.py:325-328 _faction_specific_unique` (§3c, §3d).
 
 **`fieldwork` — investigation scenes and Knots.** The Knot half is implemented (formation prerequisites, strain,
 rupture) — `systems/fieldwork/sim/knots.py:172 form_knot`; the fieldwork and investigation scene resolvers are
@@ -220,7 +220,7 @@ and the failure is measured rather than asserted — `tests/valoria/test_j2_mass
 The two trees share no code, so any result measured on one is a result about that tree alone (§3g).
 
 **`npcs` — a doc-only folder.** Zero `.py`; the whole NPC implementation lives in the world subsystem —
-`systems/world/sim/npe.py:325 simulate_npc_actions` (live every season) and `systems/world/sim/npe.py:215 generate_npc`
+`systems/world/sim/npe.py:353 simulate_npc_actions` (live every season) and `systems/world/sim/npe.py:226 generate_npc`
 (never called); the engine-core AI shell is a pair of typed no-ops, `engine/autoload/npc_ai.py:33 select_action`. The
 folder owns neither the code nor, since a 2026-07-29 repoint, the doc of its own primary contract, and the currency
 authority still heads at the demoted doc — `CURRENT.md:35 npc_behavior_v30` (§3e).
@@ -266,7 +266,7 @@ undocumented by the contract — `engine/mc_v18.py:284-294 run_campaign` (§3b, 
 **`world` — world-gen, insurgency, NPC ecology, miracles, restoration.** Owns the `World` lifecycle and two genuinely
 live per-season pipelines — `systems/world/sim/insurgency_pipeline.py:139 check_insurgency_triggers`. Its contract
 coverage is inverted: the one module with a contract entry never executes, and the two modules carrying all of this
-subsystem's measured execution have no contract at all — `systems/world/sim/npe.py:325 simulate_npc_actions` (§3e).
+subsystem's measured execution have no contract at all — `systems/world/sim/npe.py:353 simulate_npc_actions` (§3e).
 ## 3. Gap kinds, and the cross-lane rows
 
 **This is not a complete register and does not claim to be.** Per-subsystem gap rows live in each skeleton's
@@ -292,19 +292,19 @@ the social-contest scene branch's `except Exception` swallow and its unreachable
 | a | The combat dispatch branch is dead at the *trigger*, not the wiring: no live trigger queues a `combat` scene, so neither the bridge nor the legacy engine is reachable, independent of the flag | combat, `_architecture` | `engine/cross_scale/scene_dispatch.py:77 evaluate_triggers` |
 | a | The knot-strain-on-opposing-operations path is dead at **both** ends — the only non-test caller of `sustain_knot` is itself an orphan | fieldwork, threadwork | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations` |
 | a | The world save/restore **read** direction is test-only: the write half runs every campaign, the read half has no production caller | characters, world, settlements | `engine/autoload/game_state.py:425 restore_world` |
-| a | NPC generation is fully implemented with no call site at world-gen or season-tick; a test pins the campaign NPC count at zero | world, npcs | `systems/world/sim/npe.py:215 generate_npc` |
+| a | NPC generation is fully implemented with no call site at world-gen or season-tick; a test pins the campaign NPC count at zero | world, npcs | `systems/world/sim/npe.py:226 generate_npc` |
 | b | The ratified per-settlement Mandate/Treasury pipeline has no step in the accounting cascade — recorded in the module's own port-blocking note | overview, settlements | `systems/overview/sim/accounting.py:11-13 run_accounting` |
 | c | Both engine-core NPC-AI entry points are unconditional no-ops with no production caller — the engine core's sole orphan | npcs, `_architecture` | `engine/autoload/npc_ai.py:33 select_action` |
 | c | The RS-track write is a no-op whose one call site sits behind an organically dormant branch — wired, never landing | overview, `_architecture` | `systems/overview/sim/rs_track.py:28 apply_rs_delta` |
 | c | Phase-boundary hooks named for threadwork are empty bodies called unconditionally every phase, in both battle trees | mass_battle, threadwork | `systems/mass_battle/sim/massbattle.py:301-303 threadwork_check` |
-| d | A faction module's in-code claim to be the first Key emitter outside the transport is stale, and its quoted per-campaign emission measurement cannot hold given the dormancy of the branch it measured | factions, `_architecture` | `systems/factions/sim/faction_action.py:342-345 _emit_battle_concluded` |
-| d | A comment declares a canonical thirteen-member Conviction set and calls the legacy nine "superseded" — directly above a nine-member tuple; a caller passes a name absent from it, so every such call silently no-ops. **Which surface is wrong is unsettled by the tree** | characters, fieldwork | `systems/characters/sim/conviction.py:43-46 CONVICTIONS` |
+| d | A faction module's in-code claim to be the first Key emitter outside the transport is stale, and its quoted per-campaign emission measurement cannot hold given the dormancy of the branch it measured | factions, `_architecture` | `systems/factions/sim/faction_action.py:352-355 _emit_battle_concluded` |
+| d | **CLOSED 2026-08-24.** Three incompatible Conviction rosters shipped (9 in `characters`, 8 in `world/npe`, 13 registered); a caller passed a name absent from the callee's, so ED-912 §6.1's Scar silently no-opped. The roster is now owned once by `references/descriptor_registry.yaml:conviction_roster` and read via `engine.substrate.descriptors`; an unknown name raises | characters, fieldwork | `systems/characters/sim/conviction.py:59 CONVICTIONS` |
 | e | The combat contract declares the engine as its own Key emitter and consumer; every production construction site lives outside the subsystem | combat, `_architecture` | `engine/cross_scale/echo_transport.py:428 Key` |
 | e | A track's design doc is homed in one subsystem while its code lives in another — and it executes despite its map flag saying otherwise | characters, overview | `systems/overview/sim/ci_track.py:170 apply_ci_delta` |
 | e | The static execution map declares the faction contract non-executing; the seeded trace records calls into it in **five of the seven** traced phases — all but `loop.s2.scenes` and `loop.victory` | factions | `references/execution_trace.json:33 faction_state` |
 | f | The driver's victory-threshold param is dead: the live gate is the victory module's own constant, a different owner with no wiring between them — pinned by a falsifier test that sweeps the dead param and moves no outcome | overview, victory | `engine/mc_v18.py:50-62 DEFAULT_PARAMS` |
 | f | One world clock is read as the political-stability victory gate and has **zero writers anywhere**, so that gate is permanently satisfied in every campaign | victory, overview | `engine/autoload/victory.py:73-74 check_peninsular_sovereignty` |
-| f | Permanently-placeholdered inputs: battle terrain is always passed as a placeholder, and the CI Assert/Suppress parameters are never supplied by the only caller | factions, overview | `systems/factions/sim/faction_action.py:436 _try_conquest` |
+| f | Permanently-placeholdered inputs: battle terrain is always passed as a placeholder, and the CI Assert/Suppress parameters are never supplied by the only caller | factions, overview | `systems/factions/sim/faction_action.py:446 _try_conquest` |
 | g | A contract-layer wiring cycle spans four subsystems | factions, npcs, characters, social_contest | `audit/2026-08-06-vector-audit/structure_audit/data/structure_metrics.json:337 cycles` |
 | g | The Church Tribunal is implemented **twice** — once as a kernel proceeding, once in the faction lane — sharing canon prose and no code | social_contest, factions | `systems/factions/sim/tribunal.py:87 run_excommunication_tribunal` |
 | g | Two uncoordinated settlement-scale entity families are built in the same world-creation call from two different sources, cross-validated by nothing but a report-only probe | settlements, world | `engine/autoload/game_state.py:304-305 create_world` |
@@ -370,7 +370,7 @@ restated here. Below are only the rows no generator emits, because this consolid
 | Which traced gaps are defects and which deliberate deferrals — every §7 across all 15 skeletons | per-lane | ED-IN-0152 (`registers/handoffs/HANDOFF_IN.md`) |
 | The combat trigger: what canon authorizes queueing a combat scene (a missing *trigger*, not a wiring bug) | PC | **no tracking item exists — PC lane to allocate.** An earlier draft cited ED-IN-0123; that is an IN-lane fork-plan entry and does not track this |
 | The two battle trees: which survives, and whether the strategic→cell unit mapping is authored | MB | J2 ruling (2026-08-03) vs the 2026-08-04 keep-set re-pin |
-| Whether the canonical Conviction set is the declared thirteen or the implemented nine — the tree cannot settle it | PC | §3, `systems/characters/sim/conviction.py:43-46 CONVICTIONS` |
+| ~~Whether the canonical Conviction set is the declared thirteen or the implemented nine~~ — SETTLED 2026-08-24 on architecture: the registry is the single owner and it declares thirteen | PC | §3, `systems/characters/sim/conviction.py:59 CONVICTIONS` |
 | Reconciling settlement-Order against territory-Accord (the probe measures; nothing reconciles) | SE | OI-37, deferred by the module's own note |
 | Retire-vs-merge for the phantom settlement-economy module and its edges | SE | `references/CONTRACT_INDEX.md:122 settlement_economy` `[OPEN — Jordan]`. ED-SE-0005 is **resolved** — it settled the settlement-action half only |
 | The threadwork head's doc-status ambiguity: a header reading "design proposal, requires editorial approval" over a CANONICAL POOL NOTICE | WR | `references/CONTRACT_INDEX.md:108 threadwork` `[OPEN — Jordan]` |

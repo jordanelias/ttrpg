@@ -22,8 +22,8 @@ if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
 import pytest
-from mass_battle.engine import build_army, SIDE_A_START_ROW
-from mass_battle.orchestration import _momentum_speed
+from systems.mass_battle.sim.engine import build_army, SIDE_A_START_ROW
+from systems.mass_battle.sim.orchestration import _momentum_speed
 
 
 def _subunit():

@@ -25,20 +25,19 @@ import math
 import os
 import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'sim'))  # tests/sim on path
 
 import pytest  # noqa: E402
 
-import mass_battle.hierarchy.units as _hu  # noqa: E402
-import mass_battle.orchestration as _orch  # noqa: E402
-import mass_battle.core.contact as _contact  # noqa: E402
-from mass_battle.geometry import (  # noqa: E402
+import systems.mass_battle.sim.hierarchy.units as _hu  # noqa: E402
+import systems.mass_battle.sim.orchestration as _orch  # noqa: E402
+import systems.mass_battle.sim.core.contact as _contact  # noqa: E402
+from systems.mass_battle.sim.geometry import (  # noqa: E402
     cellbox_from, engaged_frontage, _project_interval, _cellbox_corners,
     _normalize_heading, _rotate90,
 )
-from mass_battle.core.attrition import _lanchester_strength  # noqa: E402
-from mass_battle.engine import build_unit  # noqa: E402
-from mass_battle import validators as _val  # noqa: E402
+from systems.mass_battle.sim.core.attrition import _lanchester_strength  # noqa: E402
+from systems.mass_battle.sim.engine import build_unit  # noqa: E402
+from systems.mass_battle.sim import validators as _val  # noqa: E402
 
 from ._conservation import assert_troop_conservation  # noqa: E402
 
@@ -145,7 +144,7 @@ def test_lanchester_zero_frontage_no_casualties():
 
 
 def _hu_lanchester_ref():
-    from mass_battle.config import LANCHESTER_STRENGTH_REF
+    from systems.mass_battle.sim.config import LANCHESTER_STRENGTH_REF
     return LANCHESTER_STRENGTH_REF
 
 

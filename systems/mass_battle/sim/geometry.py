@@ -1,0 +1,607 @@
+"""systems.mass_battle.sim.geometry — cell layout, facing/octagon, support vectors, cell speed.
+Behaviour-frozen P-A extract. Depends only on config + stdlib.
+NB: explicit __all__ so underscore-prefixed helpers cross `import *`."""
+import math
+from dataclasses import dataclass
+from systems.mass_battle.sim.config import *
+
+__all__ = ['arrowhead_cells', 'line_cells', 'gapped_line_cells', 'column_cells', 'CELL_PATTERN_FN', 'footprint_for', 'oriented_pattern', 'cell_facing', 'octagon_angle', '_support_along_vector', 'atom_max_width', 'cells_to_orig_coords', '_oriented_abs_map', 'support_engage_frac', 'cell_speed', '_oriented', 'CellBox', 'cellbox_from', 'obb_overlap', 'obb_front_reach_overlap', '_normalize_heading', '_rotate90', '_cellbox_axes', '_cellbox_corners', '_sat_separated', 'engaged_frontage', '_project_interval', '_merge_intervals', '_interval_union_length']
+
+def arrowhead_cells(tier):
+    cells = []
+    for r in range(tier + 2):
+        width = 2 * r + 1
+        center_col = tier + 1
+        start = center_col - r
+        for c in range(start, start + width):
+            cells.append((r, c))
+    return cells
+
+def line_cells(tier):
+    sizes = {1: (3, 3), 2: (5, 3), 3: (5, 5), 4: (7, 5)}  # [canonical: geometry line_cells tier table (F2 derive-target); §A.3b deployment]
+    width, depth = sizes.get(tier, (7, 5))  # [canonical: line_cells default (F2 derive-target)]
+    return [(r, c) for r in range(depth) for c in range(width)]
+
+
+def column_cells(tier):
+    # Deep-narrow column = the Line block transposed (its wide rectangle stood on end):
+    # narrow frontage, deep files. The depth primitive for depth-vs-width tactics
+    # (phalanx / assault column; Leuctra's deep wing).
+    # [canonical: Jordan directive 2026-06-03 — depth wins by staying-power/breakthrough;
+    #  width's edge is envelopment. A deployable deep-narrow form lets that choice exist.]
+    return [(c, r) for (r, c) in line_cells(tier)]
+
+def gapped_line_cells(tier):
+    # [canonical: v10 — sized to match Line cell count at each tier so advantage
+    #  emerges from arrangement (the gap), not extra troops. Was 56 cells T3, now 24.]
+    sizes = {1: (2, 2), 2: (3, 3), 3: (4, 3), 4: (4, 4)}  # [canonical: geometry gapped_line_cells tier table (F2 derive-target); §A.3b]
+    half_w, depth = sizes.get(tier, (4, 4))  # [canonical: gapped_line_cells default (F2 derive-target)]
+    cells = []
+    for r in range(depth):
+        for c in range(half_w):
+            cells.append((r, c))
+        for c in range(half_w + 1, 2 * half_w + 1):
+            cells.append((r, c))
+    return cells
+
+CELL_PATTERN_FN = {
+    # [LC-8, ED-909, Jordan-approved 2026-07-02: "correct, retire them. those are emergent outcomes."]
+    # Horseshoe/RefusedFlank are RETIRED here as Subunit-level shapes -- envelopment and refused-flank
+    # are now Unit-level, multi-body, emergent compositions (engine.build_envelopment/
+    # build_refused_flank), not a single subunit's cell pattern. Only Line/Arrowhead/GappedLine/Column
+    # remain valid Subunit.shape values, per ED-909's taxonomy.
+    "Line": line_cells, "Arrowhead": arrowhead_cells, "GappedLine": gapped_line_cells,
+    "Column": column_cells,
+}
+
+# ─── CONTINUOUS-SCALE FOOTPRINT GENERATOR (Jordan directive 2026-06-03) ───
+# Dimension-parametric cell builders (the tier *_cells fns above stay for the legacy path).
+# footprint_for lays a continuous troop count into a shape at a user-set concentration,
+# bounded so per-cell troops stay in [CELL_FLOOR, CELL_CAP]; achievable density is the closest
+# the shape's discrete geometry allows within that bound.
+def _cells_line(width, depth):
+    return [(r, c) for r in range(depth) for c in range(width)]
+def _cells_arrowhead(depth):
+    cells = []
+    for r in range(depth):
+        w = 2 * r + 1; start = (depth - 1) - r
+        cells += [(r, c) for c in range(start, start + w)]
+    return cells
+def _cells_gapped_line(half_w, depth):
+    cells = []
+    for r in range(depth):
+        cells += [(r, c) for c in range(half_w)]
+        cells += [(r, c) for c in range(half_w + 1, 2 * half_w + 1)]
+    return cells
+
+# [LC-8] Horseshoe/RefusedFlank retired here too -- see CELL_PATTERN_FN's note.
+_SHAPE_BUILD = {
+    "Line":         (lambda s: dict(width=max(1, round(LINE_ASPECT * s)), depth=s), _cells_line),
+    "Arrowhead":    (lambda s: dict(depth=s),                                       _cells_arrowhead),
+    "GappedLine":   (lambda s: dict(half_w=s, depth=s),                             _cells_gapped_line),
+    "Column":       (lambda s: dict(width=max(1, round(s)), depth=max(1, round(LINE_ASPECT * LINE_ASPECT * s))), _cells_line),
+}
+
+def _build_shape_n(shape, n):
+    """Build a footprint of EXACTLY `n` cells in `shape`'s aspect, for any n>=1 (ED-MB-0025).
+    The legacy `_SHAPE_BUILD` size-parameter families only yield a SPARSE set of cell counts (a Line
+    could be 1,5,11,… never 2,3,4), so an explicit troops-per-cell density could not be honoured — a
+    133-troop subunit collapsed to 1 cell at every concentration. These builders instead lay out n cells
+    directly in the shape's characteristic silhouette, so `density` (troops/cell) truly bounds the cell
+    count. Cells are row-major (r = rank/depth, c = file/frontage); r=0 is the leading rank."""
+    n = max(1, int(n))
+    if shape == "Column":                                  # deep-narrow: LINE_ASPECT^2 depth:width
+        width = max(1, round(math.sqrt(n / (LINE_ASPECT * LINE_ASPECT))))
+        depth = math.ceil(n / width)
+        cells = [(r, c) for r in range(depth) for c in range(width)]
+    elif shape == "Arrowhead":                             # triangular wedge, apex forward (r=0 narrowest)
+        cells = []
+        r = 0
+        while len(cells) < n:
+            w = 2 * r + 1
+            for c in range(-r, -r + w):
+                cells.append((r, c));
+                if len(cells) >= n: break
+            r += 1
+        cmin = min(c for _r, c in cells)
+        cells = [(r, c - cmin) for r, c in cells]          # normalise cols to >=0
+    elif shape == "GappedLine":                            # two blocks with a 1-file central gap
+        half = max(1, round(math.sqrt(n / (2.0 * LINE_ASPECT))))
+        depth = max(1, math.ceil(n / (2 * half)))
+        cells = []
+        for r in range(depth):
+            for c in list(range(half)) + list(range(half + 1, 2 * half + 1)):
+                cells.append((r, c))
+                if len(cells) >= n: break
+            if len(cells) >= n: break
+    else:                                                  # Line (default): width:depth ~ LINE_ASPECT
+        depth = max(1, round(math.sqrt(n / LINE_ASPECT)))
+        width = math.ceil(n / depth)
+        cells = [(r, c) for r in range(depth) for c in range(width)]
+    return cells[:n]
+
+
+def footprint_for(shape, troops, concentration, troop_type=None, width=None, depth=None):
+    """Lay `troops` into `shape`, choosing the cell layout by the EXPLICIT primitive the caller gave
+    (ED-MB-0025):
+      • `width` (columns/frontage) AND `depth` (rows) both set -> an EXACT width×depth rectangular grid.
+        Frontage and depth are the coupled tactical axes (wide-shallow = frontage/envelopment; narrow-deep
+        = breakthrough/staying-power). Per-cell density = troops/(width·depth) falls out of the choice
+        (combat caps it at CELL_CAP downstream), so this honours 'explicitly define the number of columns
+        vs rows, which affect each other.'
+      • else `concentration` = target troops/cell, which BOUNDS the cell count: cells = round(troops/
+        concentration), clamped so per-cell stays in [CELL_FLOOR, cell_cap_for(troop_type)], built via
+        `_build_shape_n`. (The old sparse size-parameter search silently ignored this — a 133-troop Line
+        collapsed to 1 cell at every concentration, the M2 measurement bug.)
+    [P-DEC-3] A mounted troop_type caps lower (cell_cap_for) so the same troops deploy over MORE cells."""
+    if width is not None and depth is not None:                     # explicit frontage×depth grid
+        w, d = max(1, int(width)), max(1, int(depth))
+        return [(r, c) for r in range(d) for c in range(w)]
+    troops = max(1, int(troops))
+    lo = math.ceil(troops / cell_cap_for(troop_type))               # densest allowed (>= CELL_CAP/cell)
+    hi = max(lo, troops // CELL_FLOOR)                               # sparsest allowed (>= CELL_FLOOR/cell)
+    n = min(hi, max(lo, round(troops / max(1.0, float(concentration)))))
+    return _build_shape_n(shape, n)
+
+def oriented_pattern(shape, tier, advance_dir):
+    pattern = CELL_PATTERN_FN[shape](tier)
+    if advance_dir == -1:
+        return [(r, c, r, c) for r, c in pattern]
+    max_r = max(r for r, c in pattern)
+    return [(r, c, max_r - r, c) for r, c in pattern]
+
+def cell_facing(advance_dir):
+    # [canonical: v11 — legacy centroid facing, kept for fallback only]
+    return (advance_dir, 0)
+
+# v11: Per-cell octagon angle model
+# [canonical: Jordan design — octagon, 2 GREEN faces = 90°, 2 YELLOW = 45°+45°, 4 RED = 180°]
+# Facing = raw movement vector per cell (not snapped). Octagon rotates to facing direction.
+# Angle between attack vector and defender facing:
+#   GREEN  |diff| < 45°  → 0 modifier   (attacker in defender's front arc)
+#   YELLOW 45° ≤ |diff| < 90° → -1D     (attacker at defender's flank)
+#   RED    |diff| ≥ 90° → -2D           (attacker in defender's rear 180°)
+
+def octagon_angle(attacker_pos, defender_pos, defender_facing_vec):
+    """
+    Compute octagon zone (GREEN/YELLOW/RED) for an attack on defender.
+    defender_facing_vec: raw (dr, dc) movement vector of the defender cell.
+    Returns zone string and angle in degrees.
+    """
+    fr, fc = defender_facing_vec
+    fmag = max(1e-9, (fr*fr + fc*fc) ** 0.5)  # [canonical: epsilon: float magnitude guard]
+    # Vector from defender to attacker
+    dr = attacker_pos[0] - defender_pos[0]
+    dc = attacker_pos[1] - defender_pos[1]
+    amag = max(1e-9, (dr*dr + dc*dc) ** 0.5)  # [canonical: epsilon: float magnitude guard]
+    # Cosine of angle between defender facing and direction-to-attacker
+    cos_a = (dr * fr + dc * fc) / (amag * fmag)
+    cos_a = max(-1.0, min(1.0, cos_a))
+    angle_deg = math.degrees(math.acos(cos_a))
+    # [canonical: Jordan design — octagon: GREEN<45deg, YELLOW 45-90deg, RED>=90deg]
+    # 45.0 = half of GREEN 90deg face; 90.0 = boundary of rear hemisphere
+    # [ED-MB-0061, 2026-07-30] TWO FALSE CITATIONS REMOVED from the three lines below. They read
+    # "[canonical: mass_battle_v30.md §A.3b — 45deg octagon GREEN boundary]" and
+    # "[canonical: designs/provincial/mass_battle_v30.md §octagon]". Neither resolves:
+    # mass_battle_v30.md contains ZERO occurrences of "octagon", §A.3b is BATTLEFIELD GEOMETRY (grid
+    # dimensions, itself banner-flagged as superseded by config.py), and `designs/` is retired.
+    # This is CLAUDE.md §7's leaky-anti-fabrication-gate pattern — a fabricated citation passing the
+    # gate — sitting on the boundary constants of the facing model. Found by a read-only fable audit
+    # and re-derived by hand before removal (G12).
+    #
+    # The REAL provenance is the Jordan design line above plus ED-MB-0018 (config.py's
+    # OCTAGON_DMG_MULT block, Jordan 2026-07-22: front 1.0x / flank 1.5x / rear 2.0x damage-received).
+    # These boundaries are vertex-forward by construction: two 45deg front faces meeting at the
+    # forward VERTEX together span +/-45 (GREEN), the next face each side spans 45-90 (YELLOW), and
+    # the four rear faces span 90-180 both ways (RED). A face-forward octagon would put the
+    # boundaries at 22.5/67.5/112.5 — so the convention here already matches Jordan's 2026-07-30
+    # geometry spec S1/S6, and needs no rotation.
+    if angle_deg < 45.0:   return "GREEN",  angle_deg  # [canonical: ED-MB-0018 — octagon arc partition, vertex-forward]
+    if angle_deg < 90.0:   return "YELLOW", angle_deg  # [canonical: ED-MB-0018 — octagon arc partition, vertex-forward]
+    return "RED", angle_deg
+
+
+def _support_along_vector(cell, attacker_pos, friendly_cells):
+    """Supporting depth behind `cell` measured PARALLEL to the attacker's approach
+    vector, with partial-cell weighting.
+
+    Two geometric corrections over the old Y-column depth (`_depth_by_col`):
+      (1) Depth is counted along the push direction d = normalize(cell - attacker_pos),
+          NOT the formation's Y-column. A frontal hit therefore counts the file (Y),
+          a flank hit counts the row (X), a diagonal hit counts along the diagonal.
+          A cell hit along X no longer gets backed up by the cell behind it in Y.
+      (2) Each friendly cell counts by how much the 1-wide attack lane cuts through it:
+          weight = max(0, 1 - perp), where perp is the cell's perpendicular distance
+          from the lane axis. A cardinal lane counts only the exact line (perp 0 -> 1,
+          perp 1 -> 0); a diagonal lane counts on-lane cells fully and clipped cells
+          partially -- so we don't over-count cells barely in the path.
+
+    Only cells at or behind `cell` along d (t >= 0, i.e. away from the attacker) count
+    as supporting depth. Returns >= 1.0 (the cell itself, perp 0, contributes 1).
+    """
+    dr = cell[0] - attacker_pos[0]
+    dc = cell[1] - attacker_pos[1]
+    mag = (dr * dr + dc * dc) ** 0.5
+    if mag < 1e-9:  # [canonical: epsilon: float magnitude guard]
+        return 1.0
+    dr /= mag; dc /= mag
+    tot = 0.0
+    for (fr, fc) in friendly_cells:
+        rr = fr - cell[0]; rc = fc - cell[1]
+        t = rr * dr + rc * dc            # parallel distance along away-from-attacker dir
+        if t < -1e-9:                    # [canonical: epsilon: float projection tolerance] in front of cell (toward attacker): not depth
+            continue
+        pr = rr - t * dr; pc = rc - t * dc
+        perp = (pr * pr + pc * pc) ** 0.5
+        w = 1.0 - perp
+        if w > 0.0:
+            tot += w
+    return tot if tot > 0.0 else 1.0
+
+
+def atom_max_width(shape, tier):
+    pattern = CELL_PATTERN_FN[shape](tier)
+    by_row = {}
+    for r, c in pattern:
+        by_row.setdefault(r, []).append(c)
+    return max(len(v) for v in by_row.values())
+
+# ─── F-i: CELL SUPPORT STACKING ──────────────────────────────────────────────
+
+def _oriented_abs_map(atom):
+    """{ (abs_r,abs_c): (orig_r,orig_c) } for an atom's live cells — the abs->orig (pattern-identity)
+    recovery, built ONCE, FIRST-wins in oriented_pattern order (exactly matching the historical
+    break-on-first reverse-lookup). Centralizes the identity round-trip that cells_to_orig_coords /
+    _rotate_defender_facing / _atom_avg_facing each open-coded as an O(n^2) scan. Byte-exact (same
+    first-match). [movement-substrate review 06 — findings 4/8: this abs->orig reverse-lookup is the hard
+    grid dependency; centralizing it is the step toward threading the cell identity from the source.]"""
+    # [movement-substrate review 06 — findings 4/8: G] On the coordinate field the atom's live cells come
+    # from _node_pos (floats), file-binned as cells()/_node_cells does: (int(round(r)), int(round(c/COL_WIDTH))).
+    # The legacy cell_offsets lattice diverges from _node_pos under node cohesion, so amap MUST be keyed from
+    # _node_pos on ON or every consumer (cells_to_orig_coords / support_engage_frac / _rotate_defender_facing /
+    # _atom_avg_facing / octagon) would look up float cells against integer keys and silently drop them.
+    # Toggles read at call time from hierarchy.units (units imports geometry -> no top-level cycle). OFF branch
+    # is the verbatim prior cell_offsets build.
+    import systems.mass_battle.sim.hierarchy.units as _u
+    amap = {}
+    if _u.FIELD_MOVEMENT and _u.PC_NODE_COHESION and hasattr(atom, '_node_pos'):
+        # [Fable-audit B1 fix, 2026-07-24] Iterate the atom's LIVE continuous footprint (_oriented) and
+        # SKIP any id absent from _node_pos -- do NOT default a missing key to the origin (0,0). The prior
+        # version iterated oriented_pattern(shape,tier) (the LEGACY CELL_PATTERN_FN tier ids) while _node_pos
+        # is keyed by the continuous _build_shape_n/footprint_for ids. For any density-built subunit whose
+        # continuous footprint diverges from the tier pattern (Arrowhead: only 1/6 ids matched) every miss
+        # collapsed to abs (0,0) -> contact cells resolved to [] -> the pool floored -> the wedge lost 0/100.
+        # _oriented(atom) IS the footprint _node_pos was populated from, so the keys now match.
+        for orig_r, orig_c, or_r, or_c in _oriented(atom):
+            if (orig_r, orig_c) not in atom._node_pos:
+                continue                                        # unseeded cell: skip, never default to origin
+            _pr, _pc = atom._node_pos[(orig_r, orig_c)]
+            abs_r = int(round(_pr))
+            abs_c = int(round(_pc / _u.COL_WIDTH))
+            amap.setdefault((abs_r, abs_c), (orig_r, orig_c))   # FIRST-wins: matches the file-binned cells() keys
+        return amap
+    # [Fable-audit B1/B3 fix, 2026-07-24] Grid path: iterate _oriented(atom) — the SAME footprint
+    # cell_offsets is keyed by (units.py: "_oriented(self) is the sole source of the (or_r,or_c) offset").
+    # The prior version iterated oriented_pattern(shape,tier), which diverges from the footprint ids for any
+    # density-built continuous subunit, so this map disagreed with the octagon damage layer (which already
+    # open-coded off _oriented). Byte-identical for legacy troops=None subunits (_oriented falls back to
+    # oriented_pattern); consistent for continuous ones. This makes _oriented_abs_map the single identity map.
+    for orig_r, orig_c, or_r, or_c in _oriented(atom):
+        abs_r = (atom.starting_position[0] + or_r
+                 + atom.cell_offsets.get((orig_r, orig_c), 0) * atom.advance_dir)
+        abs_c = (atom.starting_position[1] + or_c
+                 + atom.cell_offsets_c.get((orig_r, orig_c), 0))
+        amap.setdefault((abs_r, abs_c), (orig_r, orig_c))   # FIRST-wins: matches the old break-on-first
+    return amap
+
+
+def cells_to_orig_coords(atom, abs_cells):
+    """orig (pattern-identity) coords for each of abs_cells that belongs to this atom, in abs_cells
+    order. Byte-exact refactor of the old per-cell reverse scan via the centralized abs->orig map."""
+    amap = _oriented_abs_map(atom)
+    return [amap[(r, c)] for (r, c) in abs_cells if (r, c) in amap]
+
+def support_engage_frac(atom, contact_abs_cells):
+    """F-i: support-stack-adjusted engage_frac.
+    Cells behind the contact zone contribute weighted support.
+    [canonical: Jordan handoff §(1)]"""
+    max_w = atom_max_width(atom.shape, atom.tier)
+    if not SUPPORT_STACK_ENABLED:
+        return len(set(contact_abs_cells)) / max_w
+
+    pattern = CELL_PATTERN_FN[atom.shape](atom.tier)
+    contact_orig = cells_to_orig_coords(atom, set(contact_abs_cells))
+
+    if not contact_orig:
+        return len(set(contact_abs_cells)) / max_w
+
+    contact_orig_set = set(contact_orig)
+    front_r = min(r for r, c in contact_orig)
+
+    supporter_total = 0.0
+    for orig_r, orig_c in pattern:
+        if (orig_r, orig_c) in contact_orig_set:
+            continue
+        if orig_r <= front_r:
+            continue
+        depth = orig_r - front_r
+        w = SUPPORT_WEIGHTS.get(depth, SUPPORT_WEIGHT_FLOOR)
+        supporter_total += w
+
+    effective_engaged = len(contact_orig) + supporter_total
+    return min(1.0, effective_engaged / max_w)
+
+# ─── F-iii: FACING HELPERS — RETIRED (ED-MB-0041 Tier-2) ─────────────────────
+#
+# `_cell_facing_key` / `_rotate_defender_facing` / `_init_dynamic_facings` / `_atom_avg_facing`
+# and the `dynamic_facings` dict they operated on are DELETED. They were a **write-only** parallel
+# facing store: `run_battle` built the dict, passed it into `resolve_engagements` (which never read
+# it), and `_rotate_defender_facing` wrote rotations into it after each sub-phase. Its only reader,
+# `_atom_avg_facing`, had ZERO call sites anywhere in the corpus.
+#
+# The concept it encoded — "an engaged defender's cells pivot to face their attacker" — is LIVE and
+# strictly better implemented by `Subunit.cell_facing_vec` (`hierarchy/units.py`): PC_FACING_ATTENTION
+# turns each cell toward the committed target, `_slew_facing` gates the turn rate by Discipline
+# (no instant full pivot), PC_FACING_ROUT flips a routed body's facing, and `get_cell_facing` is what
+# `_octagon_cell_mods` / `_cell_facing_for_box` actually read. `dynamic_facings` was the superseded
+# duplicate, not the mechanism.
+#
+# Deletion is behaviour-preserving by construction (nothing read the dict), so the byte-exact goldens
+# are unchanged. Per the audit's Tier-2 rule: wire or delete, no third option.
+
+# ─── PER-CELL SPEED ──────────────────────────────────────────────────────────
+
+def cell_speed(shape, tier, local_r, local_c):
+    # [LC-8] Horseshoe/RefusedFlank per-cell speed tables retired along with the shapes themselves
+    # (see CELL_PATTERN_FN's note) -- their differential-speed behaviour (wing tips faster than the
+    # center; an engaged front rank faster than a refused column) now emerges from the Unit-level
+    # build_envelopment/build_refused_flank presets' own timed-order release + per-subunit stance,
+    # not a per-cell lookup table keyed to a retired shape name.
+    if shape == "Line":    return 1
+    if shape == "Column":  return 1
+    if shape == "Arrowhead": return 2 if local_r == 0 else 1
+    if shape == "GappedLine": return 1
+    return 1
+
+
+def _oriented(su):
+    """Oriented base pattern for a subunit, as a list of (orig_r, orig_c, or_r, or_c) tuples.
+    Continuous path (su.troops set): footprint_for(shape, troops, concentration). Legacy path
+    (troops None): oriented_pattern(shape, tier) — byte-exact. Orientation matches
+    oriented_pattern exactly. [Jordan directive — continuous footprint]"""
+    troops = getattr(su, 'troops', None)
+    if troops is not None:
+        pat = footprint_for(su.shape, troops, su.concentration, getattr(su, 'troop_type', None),
+                            width=getattr(su, 'width', None), depth=getattr(su, 'depth', None))
+        if su.advance_dir == -1:
+            return [(r, c, r, c) for r, c in pat]
+        max_r = max(r for r, c in pat)
+        return [(r, c, max_r - r, c) for r, c in pat]
+    return oriented_pattern(su.shape, su.tier, su.advance_dir)
+
+
+# ─── OBB (ORIENTED BOUNDING BOX) CELL PRIMITIVE ──────────────────────────────
+# [spatial-model upgrade, circle->box foundation] Pure, deterministic geometry.
+# NOTHING calls this yet -- zero behaviour change to any existing code path.
+# Lattice conventions this matches (see hierarchy/units.py): COL_WIDTH = 1.0
+# (pitch), CELL_RADIUS = 0.5 (half pitch) -> a body-only CellBox (w=d=1.0,
+# reach_front=0) has the same footprint diameter as the legacy circle model.
+# Facing is the raw movement vector (dr, dc), not snapped -- see cell_facing/
+# octagon_angle above. Positions and extents are floats throughout.
+
+def _normalize_heading(heading):
+    """Unit-length (dr, dc). Zero (or near-zero) vector guards to the default
+    up-field heading (-1.0, 0.0) -- matches advance_dir=-1 ("up-field")."""
+    dr, dc = heading
+    mag = math.hypot(dr, dc)
+    # [antagonist reconcile, ED-MB-0011 v2 Stage A] Guard non-finite as well as near-zero: a NaN/inf
+    # heading would otherwise propagate NaN axes into SAT and silently return garbage overlaps. Out of
+    # the intended domain (headings are finite movement vectors) but cheap defense-in-depth on the
+    # foundation everything else builds on.
+    if not math.isfinite(mag) or mag < 1e-9:  # [canonical: epsilon: float magnitude guard]
+        return (-1.0, 0.0)
+    return (dr / mag, dc / mag)
+
+
+def _rotate90(v):
+    """Rotate a 2-vector 90 degrees: (x, y) -> (-y, x). Applied to a unit
+    heading this yields the box's width axis (perpendicular to depth/facing),
+    itself unit-length since rotation preserves magnitude."""
+    return (-v[1], v[0])
+
+
+@dataclass(frozen=True)
+class CellBox:
+    """Oriented bounding box for one cell. cr,cc = centre (row, col). w = full
+    width across the frontage axis (perpendicular to facing); d = full depth
+    along the facing axis (front-to-back); standard w=d=1.0 (matches the
+    legacy CELL_RADIUS=0.5 circle's footprint). heading = raw (dr, dc) facing
+    vector, normalized to unit length in __post_init__ (zero vector -> the
+    default (-1.0, 0.0) "up-field" heading -- see _normalize_heading).
+    reach_front >= 0 extends the FRONT face only (weapon reach); the back and
+    side faces are unaffected, so a box with reach_front > 0 is asymmetric
+    front-to-back. Half-extents: d/2 back, d/2 + reach_front front, w/2 each
+    side. Local axes: depth axis = heading; width axis = heading rotated 90
+    degrees (_rotate90)."""
+    cr: float
+    cc: float
+    w: float = 1.0
+    d: float = 1.0
+    heading: tuple = (-1.0, 0.0)
+    reach_front: float = 0.0
+
+    def __post_init__(self):
+        object.__setattr__(self, 'heading', _normalize_heading(self.heading))
+
+
+def cellbox_from(cr, cc, heading, w=1.0, d=1.0, reach_front=0.0):
+    """Convenience constructor mirroring CellBox's fields in a call-site-friendly
+    positional order (heading before the sizing kwargs)."""
+    return CellBox(cr=cr, cc=cc, w=w, d=d, heading=heading, reach_front=reach_front)
+
+
+def _cellbox_axes(box):
+    """The box's 2 local unit axes (depth, width) as (dr, dc) tuples -- the
+    SAT candidate separating axes contributed by this box."""
+    dr, dc = box.heading
+    return [(dr, dc), _rotate90((dr, dc))]
+
+
+def _cellbox_corners(box, use_reach):
+    """World-space (r, c) corners of the box's rectangle. use_reach=False is
+    the pure body (front half-extent = d/2, symmetric with the back); use_reach
+    =True extends the front half-extent by reach_front (back/sides unchanged)
+    -- this is what makes reach directional: it only pushes the FRONT corners
+    forward along heading, never the back corners."""
+    dr, dc = box.heading
+    wr, wc = _rotate90((dr, dc))
+    half_back = box.d / 2.0
+    half_front = box.d / 2.0 + (box.reach_front if use_reach else 0.0)
+    half_w = box.w / 2.0
+    return [
+        (box.cr - half_back * dr + half_w * wr, box.cc - half_back * dc + half_w * wc),
+        (box.cr - half_back * dr - half_w * wr, box.cc - half_back * dc - half_w * wc),
+        (box.cr + half_front * dr + half_w * wr, box.cc + half_front * dc + half_w * wc),
+        (box.cr + half_front * dr - half_w * wr, box.cc + half_front * dc - half_w * wc),
+    ]
+
+
+def _sat_separated(corners_a, corners_b, axis):
+    """True iff `axis` is a separating axis for the two corner sets (SAT):
+    their projections onto `axis` touch-or-don't-overlap. Strict overlap only
+    -- touching exactly (interval boundaries equal) counts as separated, so
+    two unit boxes at centre-distance exactly 1.0 do NOT overlap (documented
+    boundary; matches the legacy circle test's strict `<`)."""
+    ar, ac = axis
+    proj_a = [p[0] * ar + p[1] * ac for p in corners_a]
+    proj_b = [p[0] * ar + p[1] * ac for p in corners_b]
+    min_a, max_a = min(proj_a), max(proj_a)
+    min_b, max_b = min(proj_b), max(proj_b)
+    return max_a <= min_b or max_b <= min_a
+
+
+def _sat_overlap(corners_a, axes_a, corners_b, axes_b):
+    """Core SAT test over two corner sets and their combined candidate axes
+    (2 per box == 4 total for two rectangles -- sufficient since each box is
+    a rectangle, even the front-reach-extended asymmetric one: it is still a
+    quadrilateral with two pairs of parallel faces, so its face normals are
+    still exactly its depth/width axes). Overlap iff NO candidate axis
+    separates the two corner sets."""
+    for axis in axes_a:
+        if _sat_separated(corners_a, corners_b, axis):
+            return False
+    for axis in axes_b:
+        if _sat_separated(corners_a, corners_b, axis):
+            return False
+    return True
+
+
+def obb_overlap(a, b):
+    """Pure body-vs-body OBB overlap (Separating Axis Theorem, 2D): project
+    both boxes onto each box's 2 local axes (depth, width) -- 4 candidate
+    separating axes total -- and overlap iff none of them separates the
+    boxes. `reach_front` is ignored on both sides (ADR: use
+    obb_front_reach_overlap for the reach-aware engagement test). Symmetric
+    (obb_overlap(a,b) == obb_overlap(b,a)), translation-invariant, and
+    rotation-consistent by construction (SAT is a geometric fact about the
+    two shapes, independent of which box's axes are listed first)."""
+    corners_a = _cellbox_corners(a, use_reach=False)
+    corners_b = _cellbox_corners(b, use_reach=False)
+    return _sat_overlap(corners_a, _cellbox_axes(a), corners_b, _cellbox_axes(b))
+
+
+def obb_front_reach_overlap(a, b):
+    """Reach-aware engagement test: True iff EITHER box's reach-extended body
+    meets the OTHER box's plain body -- a's reach reaching b's body, OR b's
+    reach reaching a's body (a longer weapon reaches first; contact fires if
+    either side can reach the other). Reach is directional: `reach_front`
+    only extends a box's FRONT face along ITS OWN heading (see
+    _cellbox_corners), so a target directly ahead of a reaching box can be
+    engaged within reach_front even with no body overlap, while the identical
+    target placed directly BEHIND that box at the same distance is not
+    (reach never extends the back face). reach_front=0 on both sides makes
+    both extended corner sets identical to the plain-body corner sets, so
+    this collapses exactly to obb_overlap(a, b). Symmetric by construction
+    (both directions are checked explicitly)."""
+    a_ext = _cellbox_corners(a, use_reach=True)
+    b_body = _cellbox_corners(b, use_reach=False)
+    if _sat_overlap(a_ext, _cellbox_axes(a), b_body, _cellbox_axes(b)):
+        return True
+    b_ext = _cellbox_corners(b, use_reach=True)
+    a_body = _cellbox_corners(a, use_reach=False)
+    return _sat_overlap(b_ext, _cellbox_axes(b), a_body, _cellbox_axes(a))
+
+
+# ─── CONTINUOUS ENGAGED FRONTAGE (v2 Stage D — the last live integer removed) ──
+# [spatial_model_v2_plan.md §3 Stage D, ED-MB-0013] The pre-v2 melee frontage term
+# was len(set(int_col)) over the snapped engaged-cell recording — the ONLY integer
+# left on the live contact path (backwards_analysis.md). These helpers derive the
+# frontage as a CONTINUOUS front-overlap WIDTH from the OBB bodies instead: the
+# union length, along a side's frontage axis (perpendicular to its facing), of each
+# engaged cell body's width-interval clipped to the span the enemy bodies actually
+# cover on that axis. Pure/deterministic (float projection + interval merge, no set
+# iteration). Reduces to the old distinct-file count for axis-aligned unit boxes on
+# the integer lattice (each meeting file contributes ~1.0), so the grid-aligned
+# limit is recovered; the gauge shift comes only from offset/partial/rotated
+# meetings that integer snapping used to round to a whole file.
+
+def _project_interval(corners, axis):
+    """[Stage D] Min/max scalar projection of a corner set onto a (unit) axis."""
+    ps = [p[0] * axis[0] + p[1] * axis[1] for p in corners]
+    return (min(ps), max(ps))
+
+
+def _merge_intervals(intervals):
+    """[Stage D] Merge a list of (lo, hi) intervals into a sorted disjoint list.
+    Deterministic (sort on the float pairs); [] -> []."""
+    if not intervals:
+        return []
+    xs = sorted(intervals)
+    merged = [list(xs[0])]
+    for lo, hi in xs[1:]:
+        if lo > merged[-1][1]:
+            merged.append([lo, hi])
+        elif hi > merged[-1][1]:
+            merged[-1][1] = hi
+    return [(lo, hi) for lo, hi in merged]
+
+
+def _interval_union_length(intervals):
+    """[Stage D] Total covered length of a set of (lo, hi) intervals (union, not sum
+    -- overlapping/duplicate intervals count once, so depth-stacked cells in the same
+    file do not multiply-count the frontage)."""
+    return sum(hi - lo for lo, hi in _merge_intervals(intervals))
+
+
+def engaged_frontage(a_boxes, b_boxes, heading):
+    """[Stage D] Continuous engaged frontage WIDTH of side A (the `a_boxes` side).
+
+    A's frontage axis is perpendicular to `heading` (A's representative facing).
+    For each engaged A-cell body, take its width-interval on that axis clipped to
+    the span B's engaged cell bodies actually cover; union all such clipped pieces
+    and return the covered length. Bodies only (reach is a depth envelope, not a
+    lateral one -- frontage is a physical meeting width). Properties:
+      * axis-aligned integer-lattice limit: each distinct meeting file contributes
+        ~1.0 -> reduces to the legacy len(set(int_col)) distinct-column count;
+      * continuous: a half-file lateral offset yields ~0.5, not a rounded whole file;
+      * frontage-capped: can never exceed the enemy's covered span (the Lanchester
+        linear-law guarantee -- numerical superiority is a linear edge via overlap,
+        never square).
+    `a_boxes`/`b_boxes` are the ENGAGED cell boxes (those whose reach-box met an
+    enemy body); empty on either side -> 0.0."""
+    if not a_boxes or not b_boxes:
+        return 0.0
+    axis = _rotate90(_normalize_heading(heading))
+    b_ivals = _merge_intervals(
+        [_project_interval(_cellbox_corners(b, use_reach=False), axis) for b in b_boxes])
+    if not b_ivals:
+        return 0.0
+    pieces = []
+    for a in a_boxes:
+        a_lo, a_hi = _project_interval(_cellbox_corners(a, use_reach=False), axis)
+        for b_lo, b_hi in b_ivals:
+            lo = max(a_lo, b_lo)
+            hi = min(a_hi, b_hi)
+            if hi > lo:
+                pieces.append((lo, hi))
+    return _interval_union_length(pieces)

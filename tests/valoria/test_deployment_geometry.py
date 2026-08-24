@@ -11,19 +11,18 @@ research (research/diagrams/mass_battle_formations/SOURCES.md).
 import os
 import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'sim'))
 
 import pytest  # noqa: E402
 
-import mass_battle.orchestration as _orch  # noqa: E402
-from mass_battle.config import BATTLEFIELD_SIZE  # noqa: E402
-from mass_battle.engine import build_unit, build_army, build_envelopment, build_refused_flank  # noqa: E402
-from mass_battle import validators as _val  # noqa: E402
+import systems.mass_battle.sim.orchestration as _orch  # noqa: E402
+from systems.mass_battle.sim.config import BATTLEFIELD_SIZE  # noqa: E402
+from systems.mass_battle.sim.engine import build_unit, build_army, build_envelopment, build_refused_flank  # noqa: E402
+from systems.mass_battle.sim import validators as _val  # noqa: E402
 
 
 @pytest.fixture
 def field_path():
-    import mass_battle.hierarchy.units as _hu
+    import systems.mass_battle.sim.hierarchy.units as _hu
     saved = [(m, m.FIELD_MOVEMENT, m.PC_NODE_COHESION) for m in (_hu, _orch)]
     _val._set_movement_path('node')
     try:

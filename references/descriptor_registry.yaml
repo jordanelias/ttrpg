@@ -207,6 +207,50 @@ category_b_scalars:
     the Coherence 3-way-disagreement note below).
 
 # ============================================================================
+# CONVICTION ROSTER -- ENUMERATED HERE, 2026-08-24, AND THE REASON IS A LIVE DEFECT.
+# ============================================================================
+# This roster used to live ONLY in `by_reference` below ("authoritative content stays in the
+# source doc"). Under CLAUDE.md 0.05 that is the anti-pattern: a `.md` is reference, so a roster
+# stated only in prose is a roster no code can read -- and two subsystems therefore invented their
+# own. Measured 2026-08-24:
+#
+#   systems/characters/sim/conviction.py   9 names (Faith Order Reason Equity Precedent Autonomy
+#                                            Continuity Community Warden) -- 3 of them (Reason,
+#                                            Autonomy, Continuity) appear in no canonical set
+#   systems/world/sim/npe.py               8 names (Faith Order Reason Justice Survival Loyalty
+#                                            Truth Power) -- 6 appear in no canonical set
+#                                            (only Faith and Order are canonical)
+#   this registry                         13 by reference, enumerated nowhere
+#
+# The two code rosters overlapped in THREE names, and the cost was a silent no-op: the only game
+# caller of `apply_conviction_scar` passes `conviction='Loyalty'`, which is in npe's set and not in
+# conviction.py's, so ED-912 6.1's Close-Knot-break Conviction Scar never landed while the caller
+# reported that it had.
+#
+# RESOLVED ON ARCHITECTURE, not by picking a favourite: this registry is the centralized surface
+# every descriptor already resolves through, and it already declared the count as 13. So the 13
+# are transcribed here from `systems/characters/conviction_taxonomy_v30.md` 2, exported into
+# `engine/engine_params/descriptors.json` behind the existing blocking `--check`, and read by
+# `engine/substrate/descriptors.py`. Both subsystems now read the leaf. One roster, one home.
+conviction_roster:
+  source: "systems/characters/conviction_taxonomy_v30.md §2"
+  count: 13
+  names:
+    - Faith        # devotion to ecclesiastical authority and theological order
+    - Authority    # deference to and assertion of legitimate command
+    - Order        # procedural correctness, rule-following, institutional regularity
+    - Scholastic   # reasoned inquiry, learning, scholarly method
+    - Utility      # effectiveness, results, instrumental judgment
+    - Equity       # fairness across station; relief of injustice
+    - Liberty      # self-determination, freedom from imposed authority
+    - Precedent    # reverence for ancestral practice
+    - Community    # belonging to the immediate community; common life
+    - Identity     # membership in a categorical group; tribe, lineage, faction
+    - Warden       # stewardship of the dependent and the vulnerable
+    - Virtue       # cultivation of moral character
+    - Honor        # pledged oath, honor-code, reputation as binding
+
+# ============================================================================
 # REGISTERED BY REFERENCE -- authoritative content stays in the source doc (no re-transcription).
 # ============================================================================
 by_reference:

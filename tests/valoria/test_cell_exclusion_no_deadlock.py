@@ -37,14 +37,13 @@ import math
 import os
 import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'sim'))
 
 import pytest  # noqa: E402
 
-import mass_battle.hierarchy.units as _hu  # noqa: E402
-import mass_battle.orchestration as _orch  # noqa: E402
-from mass_battle import validators as _val  # noqa: E402
-from mass_battle.engine import build_unit  # noqa: E402
+import systems.mass_battle.sim.hierarchy.units as _hu  # noqa: E402
+import systems.mass_battle.sim.orchestration as _orch  # noqa: E402
+from systems.mass_battle.sim import validators as _val  # noqa: E402
+from systems.mass_battle.sim.engine import build_unit  # noqa: E402
 
 
 @pytest.fixture

@@ -20,6 +20,8 @@ import os
 import sys
 import random
 
+import pytest
+
 _REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)
@@ -121,3 +123,51 @@ def test_ed912_rupture_disposition_minus3_and_coherence():
     c = knots.apply_knot_loss("A", "KTEST", mode="rupture")
     assert c["disposition_set_to"] == -3, f"betrayal-rupture Disposition should be -3, got {c['disposition_set_to']}"
     assert c["coherence_delta"] == -1  # [UNVERIFIED post-ED-912] — matches the doc's retained value
+
+
+# ---------------------------------------------------------------------------
+# THE FALSIFIER for the 2026-08-24 conviction centralization (CLAUDE.md §0.1 pt 3).
+# ---------------------------------------------------------------------------
+# `test_ed912_break_disposition_minus3_and_positive_strain_close_scar` above asserts
+# `c["conviction_scar"] == 1` — the CONSEQUENCES DICT knots.py writes for itself. That dict was
+# always 1, and the Scar it announced never landed: knots.py passed conviction='Loyalty', a name
+# from npe.py's roster that conviction.py had never heard of, and conviction.py's unknown-name
+# branch returned a magnitude=0 record. Two halves that agreed with themselves, green over a no-op.
+# §0.1 pt 2 — an assertion must be able to OBSERVE the failure it excludes — and that one could not.
+#
+# These assert on the SCAR STORE instead of on the announcement. Revert knots.py to 'Loyalty' and
+# the first fails at the ValueError; make apply_conviction_scar swallow unknown names again and it
+# fails on before/after. Mutation-checked both ways.
+def test_a_broken_close_knot_actually_LANDS_the_conviction_scar():
+    from systems.characters.sim import conviction as conv
+
+    _make("Close", 5, knot_id="KSCAR")
+    actor = "actor-scar-falsifier"
+    before = conv.check_conviction_threshold(actor).scar_counts.get("Honor", 0)
+    c = knots.apply_knot_loss(actor, "KSCAR", mode="break")
+    after = conv.check_conviction_threshold(actor).scar_counts.get("Honor", 0)
+
+    assert c["conviction_scar"] == 1
+    assert after == before + 1, (
+        "knots.py reported a Conviction Scar and the scar store did not move — the announcement "
+        "and the mechanic have come apart again. Check the `conviction=` name knots.py passes "
+        "against engine.substrate.descriptors.CONVICTIONS."
+    )
+
+
+def test_an_unknown_conviction_name_raises_instead_of_scoring_zero():
+    from systems.characters.sim import conviction as conv
+
+    with pytest.raises(ValueError):
+        conv.apply_conviction_scar("actor-unknown", "src", magnitude=1, conviction="Loyalty")
+    # NOTHING IS TRANSLATED, including the two legacy tags this test briefly asserted WOULD be.
+    # `Reason` and `Autonomy` were aliased to Scholastic and Liberty for a few hours on 2026-08-24;
+    # conviction_taxonomy_v30.md:282 and references/alias_registry.yaml:658-663 both route legacy
+    # tags to PER-CHARACTER migration under PP-685 and name no single target, so the alias decided
+    # a ruling by accident. They raise like any other non-canonical name.
+    for legacy in ("Reason", "Autonomy", "Continuity"):
+        with pytest.raises(ValueError):
+            conv.apply_conviction_scar("actor-alias", "src", magnitude=1, conviction=legacy)
+    # A canonical name still lands a real scar.
+    r = conv.apply_conviction_scar("actor-canonical", "src", magnitude=1, conviction="Honor")
+    assert r.conviction == "Honor" and r.magnitude > 0

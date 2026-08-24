@@ -17,16 +17,15 @@ import os
 import statistics
 import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'sim'))  # tests/sim on path
 
 import pytest  # noqa: E402
 
-import mass_battle.config as _cfg  # noqa: E402
-import mass_battle.core.exchange as _exch  # noqa: E402
-import mass_battle.hierarchy.units as _hu  # noqa: E402
-import mass_battle.orchestration as _orch  # noqa: E402
-from mass_battle.engine import build_unit, build_army  # noqa: E402
-from mass_battle import validators as _val  # noqa: E402
+import systems.mass_battle.sim.config as _cfg  # noqa: E402
+import systems.mass_battle.sim.core.exchange as _exch  # noqa: E402
+import systems.mass_battle.sim.hierarchy.units as _hu  # noqa: E402
+import systems.mass_battle.sim.orchestration as _orch  # noqa: E402
+from systems.mass_battle.sim.engine import build_unit, build_army  # noqa: E402
+from systems.mass_battle.sim import validators as _val  # noqa: E402
 
 from ._conservation import assert_troop_conservation  # noqa: E402
 
@@ -92,7 +91,7 @@ def test_default_off_is_inert(field_path):
         "the 20 historical rows, 13 of 20 at exactly 1.0000; with it alone off, A 0.8625 / B 0.9390). "
         "That is an open engine defect, not a reason to re-gate the mechanic.")
     # ⚠ Pin it on ORCHESTRATION, not on config. `_draw_friction_cev` reads its own module global,
-    # populated by `from mass_battle.config import *` at import time — so every star-importing module
+    # populated by `from systems.mass_battle.sim.config import *` at import time — so every star-importing module
     # holds its own COPY of the flag and setting `_cfg.PC_FRICTION_CEV` reaches none of them. Caught by
     # this test failing with 5.717 != 1.0 after the config-side pin. It is the F20/§8 multiple-owners
     # problem in miniature, at the flag layer rather than the quantity layer.

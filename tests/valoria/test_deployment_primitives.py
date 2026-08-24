@@ -4,13 +4,12 @@ DISTRIBUTION gradient (front/rear/uniform). Plus the build_envelopment explicit-
 import os
 import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'sim'))
 
 import pytest  # noqa: E402
-from mass_battle.geometry import footprint_for  # noqa: E402
-from mass_battle.hierarchy.units import Subunit  # noqa: E402
-from mass_battle.engine import build_army, build_envelopment  # noqa: E402
-from mass_battle.config import SIDE_A_START_ROW  # noqa: E402
+from systems.mass_battle.sim.geometry import footprint_for  # noqa: E402
+from systems.mass_battle.sim.hierarchy.units import Subunit  # noqa: E402
+from systems.mass_battle.sim.engine import build_army, build_envelopment  # noqa: E402
+from systems.mass_battle.sim.config import SIDE_A_START_ROW  # noqa: E402
 
 
 def test_density_bounds_cell_count():
@@ -98,7 +97,7 @@ def test_build_refused_flank_honors_strong_position():
     """build_refused_flank sibling fix: with the strong wing explicitly placed and the refused wing
     auto-placed, the refused wing sits adjacent to the strong wing's ACTUAL span (echeloned back), not
     against a phantom field-center."""
-    from mass_battle.engine import build_refused_flank  # noqa: E402
+    from systems.mass_battle.sim.engine import build_refused_flank  # noqa: E402
     row = SIDE_A_START_ROW
     strong = [{'shape': 'Line', 'troop_type': 'infantry', 'troops': 133, 'concentration': 100,
                'starting_position': (row, 9)}]
@@ -118,7 +117,7 @@ def test_build_refused_flank_honors_strong_position():
 def test_explicit_width_depth_grid():
     """ED-MB-0026: explicit width×depth defines an exact frontage×depth grid; the two axes are coupled
     (cells = width·depth, density = troops/cells). Wide-shallow vs narrow-deep, same troops."""
-    from mass_battle.geometry import footprint_for  # noqa: E402
+    from systems.mass_battle.sim.geometry import footprint_for  # noqa: E402
     wide = footprint_for('Line', 400, None, None, width=8, depth=2)
     deep = footprint_for('Line', 400, None, None, width=2, depth=8)
     assert len(wide) == len(deep) == 16, "width×depth sets the exact cell count"

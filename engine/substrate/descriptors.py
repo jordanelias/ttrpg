@@ -149,3 +149,63 @@ def assert_faction_roster_is_covered(implemented_fields):
         )
 
     return len(FACTION_STATS)
+
+
+# ---------------------------------------------------------------------------
+# CONVICTIONS — added 2026-08-24. THIS IS THE ONLY CONVICTION ROSTER IN THE ENGINE.
+# ---------------------------------------------------------------------------
+# Before this, three incompatible rosters shipped: nine names in
+# `systems/characters/sim/conviction.py`, eight in `systems/world/sim/npe.py` (overlapping the
+# first in three), and thirteen registered `by_reference` in `references/descriptor_registry.yaml`
+# with a 13x4 axis map bound to them. The two CODE rosters were nearly disjoint, and the gap was
+# not cosmetic: `systems/fieldwork/sim/knots.py` scarred `conviction='Loyalty'` — a name only npe
+# knew — so ED-912 §6.1's Close-Knot-break Scar hit an unknown-name branch and returned
+# magnitude=0 forever while the caller reported `consequences['conviction_scar'] = 1`.
+#
+# The registry wins, and not by preference: it is the surface the axis matrix, the contest styles
+# and the cultural-background templates already resolve `conv.*` through, so any other choice
+# would have left the 13x4 matrix keyed on names no code could produce. Its thirteen are now
+# ENUMERATED there (they were registered by reference only) and cooked into the artifact, so the
+# names exist in one place and every consumer reads THEM.
+#
+# ⚠ THIS TUPLE IS NOT A SUPERSET OF WHAT IT REPLACED. Three of conviction.py's nine (Reason,
+# Autonomy, Continuity) and five of npe's eight (Justice, Survival, Loyalty, Truth, Power) are not
+# canonical names. `CONVICTION_ALIASES` below carries the two that have an unambiguous canonical
+# twin; the rest are gone, and a caller passing one now raises instead of silently scoring zero.
+CONVICTIONS = tuple(_DATA['conviction_roster']['names'])
+
+# ⚠ THERE IS NO ALIAS MAP, AND ITS REMOVAL IS THE POINT (corrected 2026-08-24, same day it was
+# added, by an adversarial pass). This module briefly carried
+# `CONVICTION_ALIASES = {'Reason': 'Scholastic', 'Autonomy': 'Liberty'}`, justified in a comment as
+# "a rename rather than a design call". TWO AUTHORED SURFACES EXPLICITLY REFUSE THAT MAPPING:
+#
+#   systems/characters/conviction_taxonomy_v30.md:282
+#       | Reason (legacy tag) | composite — see PP-685 per character |
+#   references/alias_registry.yaml:658-663
+#       legacy: [... 'Reason (legacy tag)', 'Continuity (legacy tag)'] with NO canonical target,
+#       note: "Per-character migration in PP-685 / conviction_migration_roster_v30."
+#
+# Reason is a COMPOSITE that migrates per character; collapsing it to Scholastic at runtime decides
+# a migration the corpus deliberately left open — and only *Epistemic* Reason maps primarily to
+# Scholastic, "+ (situational; some Utility)" (taxonomy_v30.md:279). `Autonomy` appears in neither
+# surface at all. So the alias map was inventing exactly the canon the comment beside it claimed to
+# refuse for Survival and Power, and it is gone: every non-canonical name now raises, and the error
+# names the migration rather than guessing its outcome.
+def resolve_conviction(name):
+    """`name` if it is a canonical Conviction, else raise ValueError. Nothing is translated.
+
+    THE RAISE IS THE POINT. The bug this module closes was a *silent* one — an unknown name scored
+    magnitude=0 and no caller could tell the difference between "this Scar was capped" and "this
+    Conviction does not exist". A wrong name is a defect in the caller, so it is loud here.
+    """
+    if name in CONVICTIONS:
+        return name
+    raise ValueError(
+        f'unknown Conviction {name!r}. The roster is owned by '
+        'references/descriptor_registry.yaml:conviction_roster and read here; the canonical '
+        f'{len(CONVICTIONS)} are: ' + ', '.join(CONVICTIONS) + '. If this is a LEGACY tag '
+        '(Reason, Continuity and the retired npe names), the corpus does not map it to a single '
+        'canonical Conviction — conviction_taxonomy_v30.md §6 and references/alias_registry.yaml '
+        'both route it to PER-CHARACTER migration under PP-685. Do the migration, or fix the '
+        'caller; do not add a local alias, which decides that migration by accident.'
+    )

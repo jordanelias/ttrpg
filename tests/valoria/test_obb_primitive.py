@@ -14,11 +14,10 @@ import os
 import random
 import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'sim'))  # tests/sim on path
 
-from mass_battle.geometry import CellBox, cellbox_from, obb_overlap, obb_front_reach_overlap  # noqa: E402
+from systems.mass_battle.sim.geometry import CellBox, cellbox_from, obb_overlap, obb_front_reach_overlap  # noqa: E402
 
-CELL_RADIUS = 0.5  # mirrors mass_battle.hierarchy.units.CELL_RADIUS (half the 1.0 lattice pitch)
+CELL_RADIUS = 0.5  # mirrors systems.mass_battle.sim.hierarchy.units.CELL_RADIUS (half the 1.0 lattice pitch)
 
 SEEDS = [1, 2, 3, 4, 5, 17, 42, 1001]
 
@@ -326,7 +325,7 @@ def test_non_finite_heading_guarded():
     """[antagonist reconcile] NaN/inf heading must not propagate NaN axes into SAT (would return
     garbage overlaps). It guards to the default up-field heading, same as the zero-vector case."""
     import math
-    from mass_battle.geometry import CellBox, obb_overlap
+    from systems.mass_battle.sim.geometry import CellBox, obb_overlap
     for bad in [(float('nan'), 0.0), (float('inf'), 0.0), (0.0, float('nan')), (float('inf'), float('inf'))]:
         box = CellBox(cr=0.0, cc=0.0, heading=bad)
         assert all(math.isfinite(x) for x in box.heading), f"heading {bad} not sanitized -> {box.heading}"

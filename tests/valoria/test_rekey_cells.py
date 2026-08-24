@@ -18,8 +18,8 @@ _SIM = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'sim'))
 if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
-import mass_battle.hierarchy.units as U                       # noqa: E402
-from mass_battle.engine import build_army                     # noqa: E402
+import systems.mass_battle.sim.hierarchy.units as U                       # noqa: E402
+from systems.mass_battle.sim.engine import build_army                     # noqa: E402
 
 # Containers rekey_cells owns. cell_morale / cell_start_troops / cell_breakpoint are EXCLUDED on
 # purpose: drift has no old->new bijection and their policy is a §6-class ruling (mean vs

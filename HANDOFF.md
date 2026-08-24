@@ -9,6 +9,23 @@ experiment it was the instrument for. Read this file, and your lane's, yourself.
 This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint machinery
 (which depended on the retired GitHub-API harness and token budgets).
 
+## ⚠ CURRENT — 2026-08-24 session (read this first)
+
+`registers/handoffs/HANDOFF_2026-08-24_SESSION.md` — full state of the repository, the open
+mass-battle engine port, and where the culling / centralization plans actually stand.
+
+**DO NOT MERGE PR #329 at head `e4070d4`** — the last commit is a deliberate WIP with ~24 residual
+`tests/valoria` failures from a half-finished engine port (`engine/tests` is green at 2055). Every
+commit before it was green.
+
+**Recommended first action next session:** wire ONE of the 31 declared-but-unfired emit edges — five
+already have a live subscriber in `engine/cross_scale/articulation.py:116-130` — and watch
+`tools/contract_runtime_conformance.py` move `observed` from 3 to 4. It is the smallest falsifiable
+step on the hub-and-bus goal.
+
+**Also new:** `proposals/2026-08-24-error-regions-v1.md`, eleven regions of error from that session
+as executable plan items (Jordan-requested).
+
 ## History
 
 Full narrative for the work below (2026-06-24 through 2026-07-02) moved to

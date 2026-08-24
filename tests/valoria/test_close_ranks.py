@@ -15,8 +15,8 @@ _SIM = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'sim'))
 if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
-from mass_battle.engine import build_army, SIDE_A_START_ROW  # noqa: E402
-import mass_battle.hierarchy.units as HU  # noqa: E402
+from systems.mass_battle.sim.engine import build_army, SIDE_A_START_ROW  # noqa: E402
+import systems.mass_battle.sim.hierarchy.units as HU  # noqa: E402
 
 
 def _deep_subunit(width=3, depth=5, conc=100):

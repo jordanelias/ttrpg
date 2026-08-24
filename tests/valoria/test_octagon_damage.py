@@ -18,7 +18,6 @@ bat.py digest + persubunit stress suite; this module exercises only the ON (defa
 import os
 import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'sim'))
 
 import contextlib  # noqa: E402
 import importlib  # noqa: E402
@@ -34,14 +33,14 @@ _MB_ENV = {'PER_CELL': '1', 'PC_REFUSE': '1', 'LANCHESTER_ENABLED': '1',
 def _load_mb(**overrides):
     """Reload the mass_battle modules under an explicit flag set, honouring os.environ as it
     stands. Callers own the env; this only rebuilds the modules from it."""
-    import mass_battle.config as C
+    import systems.mass_battle.sim.config as C
     importlib.reload(C)
-    import mass_battle.hierarchy.units as U
+    import systems.mass_battle.sim.hierarchy.units as U
     importlib.reload(U)
     U.FIELD_MOVEMENT = False
-    import mass_battle.orchestration as orch
+    import systems.mass_battle.sim.orchestration as orch
     importlib.reload(orch)
-    import mass_battle.core.contact as contact
+    import systems.mass_battle.sim.core.contact as contact
     importlib.reload(contact)
     return orch, contact, C
 
@@ -50,7 +49,7 @@ def _load_mb(**overrides):
 def _mb_modules(**overrides):
     """Load the mass_battle modules under a flag set AND PUT THEM BACK afterwards.
 
-    [ED-MB-0063] THE LEAK THIS CLOSES. The old fixture reloaded `mass_battle.config` under its own
+    [ED-MB-0063] THE LEAK THIS CLOSES. The old fixture reloaded `systems.mass_battle.sim.config` under its own
     env and set `units.FIELD_MOVEMENT = False`, with **no teardown**. `monkeypatch` restores the
     environment VARIABLES, but a reloaded module keeps the values it was built from — so every test
     that ran after this module in the same worker inherited this module's flags and a disabled
@@ -83,7 +82,7 @@ def _mb_modules(**overrides):
                 os.environ[k] = v
         # Rebuild from the RESTORED environment so the next test sees ambient state, not ours.
         _load_mb()
-        import mass_battle.hierarchy.units as U
+        import systems.mass_battle.sim.hierarchy.units as U
         importlib.reload(U)   # last word: undo the FIELD_MOVEMENT override too
 
 

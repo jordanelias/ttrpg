@@ -139,6 +139,11 @@ jobs:
           # resolves through. Blocking, and it IMPORTS every target at export time, so a broken row
           # reds CI instead of failing a campaign run hours later.
           v python3 tools/export_composition.py --check
+          # references/module_contracts.yaml's emits:/consumes: INTERFACE -> the cooked artifact.
+          # Blocking, and it is what stopped an ELEVENTH independent parser of that registry: the
+          # runtime-conformance instrument reads this instead, and gets the sim_module ->
+          # contract-module binding that nothing owned before.
+          v python3 tools/export_module_contracts.py --check
           # references/world_initial_state.yaml -> the campaign's opening position, read at import
           # by engine/substrate/world_initial_state.py. Blocking: game_state.py no longer carries
           # these tables, so a stale artifact is a world with the wrong owners.

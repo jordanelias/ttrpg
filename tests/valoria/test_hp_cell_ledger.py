@@ -14,8 +14,8 @@ if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
 import pytest
-from mass_battle.engine import build_army, SIDE_A_START_ROW
-from mass_battle.percell import distribute_casualties, _apply_with_spill
+from systems.mass_battle.sim.engine import build_army, SIDE_A_START_ROW
+from systems.mass_battle.sim.percell import distribute_casualties, _apply_with_spill
 
 
 class _FakeAtom:

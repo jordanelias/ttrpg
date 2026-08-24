@@ -11,7 +11,6 @@ import importlib
 import os
 import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'sim'))
 
 import pytest  # noqa: E402
 
@@ -19,17 +18,17 @@ import pytest  # noqa: E402
 def _reload(**flags):
     for k in ('PC_YIELD_EMERGENT', 'PC_YIELD_RALLY', 'PC_YIELD_POCKET'):
         os.environ[k] = '1' if flags.get(k) else '0'
-    import mass_battle.config as C
+    import systems.mass_battle.sim.config as C
     importlib.reload(C)
-    import mass_battle.core.exchange as X
+    import systems.mass_battle.sim.core.exchange as X
     importlib.reload(X)
-    import mass_battle.core.state as S
+    import systems.mass_battle.sim.core.state as S
     importlib.reload(S)
-    import mass_battle.hierarchy.units as U
+    import systems.mass_battle.sim.hierarchy.units as U
     importlib.reload(U)
-    import mass_battle.engine as E
+    import systems.mass_battle.sim.engine as E
     importlib.reload(E)
-    import mass_battle.orchestration as O
+    import systems.mass_battle.sim.orchestration as O
     importlib.reload(O)
     return C, X, S, U, E, O
 

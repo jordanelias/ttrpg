@@ -13,9 +13,9 @@ if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
 import pytest
-from mass_battle.config import PER_CELL, STAMINA_MAX
-from mass_battle.engine import build_army, SIDE_A_START_ROW
-from mass_battle.percell import sync_col_grid, _fatigue_sigma, _defender_depth
+from systems.mass_battle.sim.config import PER_CELL, STAMINA_MAX
+from systems.mass_battle.sim.engine import build_army, SIDE_A_START_ROW
+from systems.mass_battle.sim.percell import sync_col_grid, _fatigue_sigma, _defender_depth
 
 pytestmark = pytest.mark.skipif(not PER_CELL, reason="column view only exists under PER_CELL")
 

@@ -102,6 +102,28 @@ def _section(reg, name):
     return out
 
 
+def _conviction_roster(reg):
+    """The 13 Convictions, from the registry. The SOLE machine-readable statement of the roster.
+
+    Validated here rather than trusted: the count is declared alongside the names and they must
+    agree, because a roster that silently loses a name is exactly how the two subsystem copies
+    drifted apart in the first place.
+    """
+    block = reg.get('conviction_roster') or {}
+    names = [n for n in (block.get('names') or []) if isinstance(n, str)]
+    if not names:
+        raise SystemExit('descriptor_registry.yaml: conviction_roster.names is missing or empty. '
+                         'It is the single owner of the Conviction roster; two subsystems read it.')
+    declared = block.get('count')
+    if declared is not None and int(declared) != len(names):
+        raise SystemExit(f'descriptor_registry.yaml: conviction_roster declares count={declared} '
+                         f'but lists {len(names)} names. A roster whose own count disagrees with '
+                         f'itself is how the 9-vs-8-vs-13 split started.')
+    if len(set(names)) != len(names):
+        raise SystemExit('descriptor_registry.yaml: conviction_roster.names contains duplicates.')
+    return {'source': block.get('source'), 'count': len(names), 'names': names}
+
+
 def build():
     reg = ci_common.load_yaml(SRC, default=None)
     if not reg:
@@ -140,6 +162,11 @@ def build():
                 'the current roster for a closed one; delete it in the commit that names the tenth.'
             ) if len(roster) < 10 else None,
         },
+        # THE CONVICTION ROSTER, centralized 2026-08-24. Enumerated in the registry rather than
+        # left `by_reference` to a design document, because two subsystems had each invented their
+        # own roster in the absence of one code could read — and the disagreement was costing a
+        # ratified mechanic (a Close-Knot-break Scar that silently never landed).
+        'conviction_roster': _conviction_roster(reg),
         'faction_stats': faction,
         'faction_field_map': FACTION_KEY_TO_FIELD,
         'settlement_stats': _section(reg, 'settlement_stats'),

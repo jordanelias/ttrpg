@@ -1788,3 +1788,15 @@ The four were staged for the fork and **reverted before commit** on reading the 
 a warning to implementers; it is not a disposition, and reading it as one would have deleted live
 GO-lane material on an IN-lane step. Their disposition belongs to the GO lane, with the strategy
 doc's register, not to a culling wave.
+
+## 2026-08-24 — the canon mass-battle engine moves into `systems/` (Jordan-directed port)
+
+`tests/sim/mass_battle/` (11,342 lines, 28 modules) was ported over `systems/mass_battle/sim/`,
+overwriting the 1,905-line engine the campaign had been running. The tree it came from is gone.
+
+This is a **dir-prefix row and not a `FORK:` row**, because nothing was retired: every module still
+exists, at a new path, in `main`. Four live ledger entries (ED-MB-0016, ED-MB-0044) cite the old
+paths and resolve through this row rather than reading as broken.
+
+| `tests/sim/mass_battle/` | `systems/mass_battle/sim/` |
+

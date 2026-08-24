@@ -45,6 +45,40 @@ multi-agent mechanics live in §10; the disposition below applies whether you're
   that row requires a human decision** (`needs_jordan: true`). **A finding that needs no ruling is
   either fixed in this commit or dropped.**
 
+  **AMENDED 2026-08-24 (Jordan-directed) — `needs_jordan` IS NOT A PARKING SPACE, AND MOST OF WHAT
+  IS IN IT DOES NOT BELONG TO JORDAN.** Verbatim: *"I don't believe that I need to be involved in the
+  vast majority of pending decisions. Those decisions should be answerable as superseded or
+  irrelevant, by our design documents, by precedents, or by whatever makes most sense for code
+  architecture."*
+
+  So before a session flags a row `needs_jordan`, or leaves an existing one flagged, it must first
+  try to ANSWER it, in this order:
+
+  1. **Superseded** — a later ruling, commit or design head already decided it. Cite the successor
+     and close it. (ED-IN-0185's agenda was re-surfaced as open AFTER being ruled; that is the
+     failure this ordering prevents.)
+  2. **Irrelevant** — its subject was retired, evacuated or never built. Close it and say what died.
+  3. **Answered by a design document** — `CURRENT.md`'s head, the subsystem's `## Status:`, the
+     governing spec. Cite chapter and verse.
+  4. **Answered by precedent** — the tree has already decided this shape somewhere else. Follow it,
+     name the precedent.
+  5. **Answered by what makes sense for the architecture** — where 1-4 are silent but one option is
+     clearly right for the code, TAKE IT and record the reasoning. Do not escalate a call that has
+     an obvious engineering answer merely because it is a call.
+
+  **Escalate only what survives all five.** A genuine escalation is a live design choice where two
+  defensible options lead to materially different games, or where the answer would overwrite
+  ratified canon. `needs_jordan` means *"Jordan is the only person who can answer this"*, not
+  *"nobody got around to it"*.
+
+  ⚠ **This cuts BOTH ways, and the second half is the load-bearing one.** The queue held **156
+  rows** when this was ruled. Answering them is now session work — a session that finds a stale
+  `needs_jordan` on a settled question is expected to CLOSE it with its citation, not preserve it
+  out of caution. Preserving a dead question is not conservatism; it is how a 156-row queue formed.
+
+  The paragraph below is the ORIGINAL rationale for the gate and still holds for rows that survive
+  the five tests. It is not a licence to flag by default.
+
   Why the row gate rather than a row ban: rows are a principal carrier, and also a real persistence
   channel across a session boundary, and this repo has no context between sessions. Ban them
   outright and a real cross-lane game defect evaporates at Stop; allow them freely and the
@@ -88,6 +122,41 @@ multi-agent mechanics live in §10; the disposition below applies whether you're
   was retired 2026-08-21 with the rest of the session machinery (culling wave 3, ED-IN-0194), and
   §0.3 records the result of the experiment it was the instrument for. Orient from `§1` and
   `HANDOFF.md` instead, and do not build a replacement.
+
+### 0.05 CODE IS THE MECHANISM. PROSE IS REFERENCE. (RULED 2026-08-24 by Jordan)
+
+Verbatim: *"whatever mechanisms we have that rely on prose are worthless. we rely on code ONLY for
+the game work. our design documents in .MD are reference and information only."*
+
+**What this settles, in the cases this repository keeps getting wrong:**
+
+| a claim of the form… | is a mechanism? |
+|---|---|
+| a `## Status: RATIFIED` line on a `.md` | **no** — reference |
+| a design doc stating a formula, threshold or band | **no** — reference. The code is the formula. |
+| a `.md` describing what a module emits or consumes | **no** — reference |
+| a YAML/JSON registry **that code reads at runtime** | **yes** |
+| an exporter with a blocking `--check` round-trip | **yes** |
+| a test that executes the behaviour | **yes** |
+| a doc-derived count (`m1_acceptance` row 4) | **no** — and it says so itself |
+
+**Consequences that bind immediately.**
+
+- **A design document may not be cited as the reason a behaviour is correct.** It may be cited for
+  intent, history and vocabulary. If canon and code disagree, that is a defect in one of them and it
+  is resolved by deciding and then CHANGING THE CODE — never by declaring the prose authoritative.
+- **A value the engine uses must live where code reads it** — a typed artifact under
+  `engine/engine_params/` behind an exporter, or a single Python owner. `params_tables.yaml` is a
+  verbatim capture of prose TABLES; under this ruling it is reference, and the 321 numeric constants
+  still defined inside `systems/` are the migration backlog, not a filing problem.
+- **This does NOT demote `CLAUDE.md`, `CURRENT.md` or `HANDOFF.md`.** They are agent instruction and
+  continuity — they govern how a session works, not how the game resolves. The ruling is about
+  GAME MECHANISM. Do not read it as licence to stop maintaining them.
+- **It does not license deleting design docs.** They stay as reference; §7's extraction work is
+  unchanged. What changes is what may be treated as *binding*.
+
+**The test to apply:** *if this document were deleted, would the game behave differently?* If no, it
+is reference. If yes, the mechanism is in the wrong place and belongs in code.
 
 ### 0.1 Measurement discipline — five checks, each with an artifact (ED-MB-0042, 2026-07-25)
 
@@ -495,6 +564,16 @@ not treat any "structured" data layer as ground truth without checking it agains
   (`engine/engine_params/params_tables.yaml`). *[CORRECTED: `tools/export_params_constants.py` was a migration-window gate and was RETIRED with its source — the capture can no longer be regenerated, so its header's "NEVER hand-edit" is now absolute.]*
   Provenance citations naming `engine/params/…` **may cite the fork** — they do not block the deletion.
   Read the capture, or better, the typed layer; if you need to *change* a number, change the code.
+
+  ⚠⚠ **DO NOT TAKE A NUMBER OUT OF THE CAPTURE WITHOUT CHECKING THE CODE FIRST (2026-08-24).** The
+  instruction above — "read the capture" — is actively dangerous for anything that has since been
+  ruled on, and the degree ladder is the worked case: `params_tables.yaml`'s *Degrees of Success*
+  section holds the **pre-ruling** bands (Overwhelming at Net ≥ 2×Ob, Failure at Net ≤ 0) while the
+  live ladder is margin-based (`engine/autoload/dice_engine.py`, `degree_from_net`). A reader
+  following §5 in good faith gets a retracted model. The capture is a byte-frozen 2026-08 snapshot
+  of prose that can no longer be regenerated; under §0.05 it is **reference**, and the code is the
+  formula. Found by a read-only contamination audit; nothing gates it, because a frozen capture has
+  no freshness relationship to the code it describes.
 - **Numbers still live as prose in places.** Where they do (the `engine/params/*.md` tables, until they
   leave) they are markdown (unicode `×`, en-dashes, caveats like "minimum 5", footnotes) and a Godot
   importer **cannot ingest them directly**. The typed layer is now partly real, not absent:

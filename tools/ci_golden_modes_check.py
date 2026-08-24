@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Field-golden byte-exact gate — the shipped configuration's regression oracle (plan-v2 A1b).
 
-Runs `tests/sim/mass_battle/bat.py --check` in THREE modes with the FULL digest-relevant toggle
+Runs `systems/mass_battle/sim/bat.py --check` in THREE modes with the FULL digest-relevant toggle
 vector pinned: the two FIELD_MOVEMENT=1 modes (`unit_field` PER_CELL=0, `cell_field` PER_CELL=1)
 and the §4a cell-morale mode (`cell_legacy_mor1`, FIELD_MOVEMENT=0 PC_CELL_MORALE=1). The docstring
 said "two" while MODES held three from the moment the fifth golden landed. Complements tests/valoria/test_mass_battle_byte_exact.py,
@@ -40,7 +40,12 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import ci_common  # noqa: E402
 
 REPO = ci_common.REPO
-BAT = os.path.join(REPO, 'tests', 'sim', 'mass_battle', 'bat.py')
+# PATH MOVED 2026-08-24 (canon mass-battle engine ported to systems/mass_battle/sim/).
+# ⚠ THIS LINE SURVIVED A REPOINT SWEEP THAT REWROTE EVERY OTHER REFERENCE, because the sweep
+# matched the slash-form 'tests/sim/mass_battle' and this is the os.path.join COMPONENT form.
+# Same failure shape as the session's other discriminator defects: the predicate separated
+# what it matched, not what it meant. Caught by CI, not by the sweep.
+BAT = os.path.join(REPO, 'systems', 'mass_battle', 'sim', 'bat.py')
 
 # ── The single owner of the field-mode pin vector ──────────────────────────────
 # Keyed by ENV NAME (note SIGMA_HEAD, not SIGMA_HEAD_ENABLED — config.py:292).
@@ -127,6 +132,13 @@ def main(argv):
     failures = 0
     for mode, selectors in MODES.items():
         env = dict(os.environ)
+        # REPO ON PYTHONPATH (2026-08-24). `bat.py` is launched as a SCRIPT, so Python puts the
+        # script's own directory on sys.path, not `cwd`. That was fine while the engine lived at
+        # tests/sim/mass_battle/ and imported its siblings by bare name; after the port to
+        # systems/mass_battle/sim/ its imports are dotted (`from systems.mass_battle.sim.engine
+        # import ...`) and the child cannot see the repo root without this. Symptom was a bare
+        # `ModuleNotFoundError: No module named 'systems'` from inside every mode.
+        env['PYTHONPATH'] = REPO + (os.pathsep + env['PYTHONPATH'] if env.get('PYTHONPATH') else '')
         env.update(FIELD_PINS)
         env.update(selectors)
         env.update(perturb)

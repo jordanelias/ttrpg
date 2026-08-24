@@ -7,7 +7,7 @@ authored surface; nothing else reads the artifact.
 
 ⚠ THAT SENTENCE IS NOT TRUE OF THE TREE TODAY, AND THIS FILE SAYS SO RATHER THAN ASSERTING IT.
 Written as a hard invariant it would be RED ON ARRIVAL — `key_types.json`'s one reader is not a leaf,
-`descriptor_registry.yaml` has six parsers in tools/, `module_contracts.yaml` ten — and a gate that is
+`descriptor_registry.yaml` has six parsers in tools/, `module_contracts.yaml` eleven — and a gate that is
 red on arrival gets deleted by the next session, which loses the check entirely (`CLAUDE.md` §0.2's
 "a hard assertion would be red on arrival" is the same reasoning the seam ratchet is built on).
 
@@ -72,9 +72,10 @@ ENGINE_READERS = {
 
 #: {authored surface -> tools that PARSE it}. SHRINK-ONLY, toward the exporter alone.
 #: `world_initial_state.yaml` already conforms and is the worked example of the target state.
-#: `module_contracts.yaml` is the furthest away, and legitimately so for now — it is a
-#: multi-purpose registry whose `modules:` block predates `composition_roles:` and feeds the
-#: generated indexes. Folding those readers is plan step S5c.
+#: `module_contracts.yaml` is the furthest away — a multi-purpose registry whose `modules:` block
+#: predates `composition_roles:` and feeds the generated indexes. As of 2026-08-24 it finally HAS an
+#: exporter (`tools/export_module_contracts.py`), so its ten other parsers are a migration backlog
+#: with a destination rather than an unavoidable census. See the note on its entry below.
 AUTHORED_PARSERS = {
     'world_initial_state.yaml': {'tools/export_world_initial_state.py'},
     'descriptor_registry.yaml': {'tools/export_descriptors.py',
@@ -83,7 +84,18 @@ AUTHORED_PARSERS = {
                                  'tools/descriptor_registry.py',
                                  'tools/quantity_registry.py',
                                  'tools/registry.py'},
-    'module_contracts.yaml': {'tools/export_composition.py',
+    # ⚠ THE ELEVENTH ENTRY IS THE EXPORTER, AND ITS ARRIVAL CHANGES WHAT THE OTHER TEN MEAN
+    # (2026-08-24). Until now `module_contracts.yaml` had NO exporter, so ten independent parsers
+    # was the only way to read it and this set was a census rather than a debt. It has one now:
+    # `tools/export_module_contracts.py` cooks the emits:/consumes: INTERFACE into
+    # `engine/engine_params/module_contracts.json`, on the same pattern as descriptors /
+    # key_types / composition / world_initial_state — so the other ten are now a MIGRATION
+    # BACKLOG, and a new reader has somewhere to go. That is what this gate caught: the runtime
+    # conformance instrument was about to become the eleventh INDEPENDENT parser; it reads the
+    # cooked artifact instead, and gained the sim_module -> contract-module binding that nothing
+    # in the tree owned.
+    'module_contracts.yaml': {'tools/export_module_contracts.py',
+                              'tools/export_composition.py',
                               'tools/build_contract_index.py',
                               'tools/build_execution_map.py',
                               'tools/build_engine_atlas.py',

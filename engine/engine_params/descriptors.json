@@ -24,6 +24,25 @@
     "count": 9,
     "pending_tenth": "Jordan ruled 2026-08-14 that the roster WILL BE 10 attributes. The registry ships 9 and the tenth is UNNAMED. This sentinel exists so a reader cannot mistake the current roster for a closed one; delete it in the commit that names the tenth."
   },
+  "conviction_roster": {
+    "source": "systems/characters/conviction_taxonomy_v30.md \u00a72",
+    "count": 13,
+    "names": [
+      "Faith",
+      "Authority",
+      "Order",
+      "Scholastic",
+      "Utility",
+      "Equity",
+      "Liberty",
+      "Precedent",
+      "Community",
+      "Identity",
+      "Warden",
+      "Virtue",
+      "Honor"
+    ]
+  },
   "faction_stats": {
     "fac.influence": {
       "name": "Influence",

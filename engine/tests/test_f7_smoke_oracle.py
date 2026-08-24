@@ -263,15 +263,16 @@ _FACTIONS = ['Crown', 'Church', 'Hafenmark', 'Varfell']
 # pins the prose, so a fabricated history stays green forever and the next re-recorder reasons from
 # it. Restored from git. Rule: a PREVIOUS line is read out of `git show <ref>:<file>`, never
 # copied from the constant you are about to overwrite.
-GOLDEN_WIN_SHARE = {'Crown': 37.5, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 37.5}
+# REGENERATED 2026-08-24 — THE MASS-BATTLE ENGINE WAS SWAPPED (Jordan-directed). `systems/mass_battle/sim/` was 1,905 lines; it is now the 11,342-line engine ported from `tests/sim/mass_battle/`, which a live test called "the canon mass-battle engine" and which 43 of 156 tests/valoria files already imported. THE EXPERIMENT IS SINGLE-VARIABLE BY CONSTRUCTION: the strategic adapter (faction -> Unit construction, the garrison stub, the size-ratio -> degree map) was carried over FIELD-FOR-FIELD UNCHANGED in `systems/mass_battle/sim/massbattle.py`, so this delta is attributable to the RESOLUTION MODEL and to nothing else. ⚠ THIS IS NOT A BALANCE MEASUREMENT: n=2/seed-0 and n=8/seed-42 cannot distinguish a balance change from noise (test_f7_smoke_oracle.py:8 demands an n>=100 oracle that still does not exist). It is a reproducibility pin, and same-seed determinism was verified twice before re-recording.
+GOLDEN_WIN_SHARE = {'Crown': 62.5, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 12.5}
 # GOLDEN_WINNERS mirrors _win_share's raw `wins` dict shape: only factions with >=1 win get a key.
 # ⚠ The sentence here used to say "Church/Hafenmark win 0/8 now". That was true of the PREVIOUS
 # pin and false of this one — under the 2026-08-14 reband Church wins 2 of 8 and Hafenmark 0, so
 # Hafenmark alone is absent. Corrected rather than left: a comment explaining the shape of numbers
 # it no longer describes is how the next re-record gets reasoned about wrongly.
-GOLDEN_WINNERS = {'Varfell': 3, 'Church': 2, 'Crown': 3}
-GOLDEN_BATTLES_MEAN = 30.1
-GOLDEN_SCENES_RESOLVED = 967  # 862 -> 858 (fractional pools, 08-21) -> 947 (per-stat floors, 08-22) -> 967 (roster rulings, 08-23)
+GOLDEN_WINNERS = {'Crown': 5, 'Church': 2, 'Varfell': 1}
+GOLDEN_BATTLES_MEAN = 35.1
+GOLDEN_SCENES_RESOLVED = 975  # 862 -> 858 (fractional pools, 08-21) -> 947 (per-stat floors, 08-22) -> 967 (roster rulings, 08-23)
 WALL_TIME_CEILING_S = 90.0  # n=8 runs ~16s; generous headroom for CI variance
 
 _CACHE = {}

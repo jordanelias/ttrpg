@@ -185,11 +185,11 @@ def degrees(adj, nodes):
 CODE_ROOTS = ('engine', 'systems', 'tools')
 
 # Live engine code that sits UNDER a SKIP_DIR_PARTS directory and would otherwise be invisible.
-# `tests/sim/mass_battle/` is the actively-developed multi-unit battle engine (~10.5k LOC, last
+# `systems/mass_battle/sim/` is the actively-developed multi-unit battle engine (~10.5k LOC, last
 # advanced 2026-07-25) despite `tests/sim/README.md` declaring that tree a frozen run-output
 # archive — see engine/sim_reference_README.md's ED-IN-0074 D5 note. Allowlisted EXPLICITLY rather
 # than by dropping 'tests' from SKIP_DIR_PARTS, which would drag in the whole tests/ corpus.
-EXTRA_CODE_ROOTS = ('tests/sim/mass_battle',)
+EXTRA_CODE_ROOTS = ('systems/mass_battle/sim',)
 
 SKIP_DIR_PARTS = {'__pycache__', 'tests', 'test', 'deprecated', 'archives'}
 
@@ -240,8 +240,8 @@ def sys_path_aliases(modules):
     """{imported_name: collected_name} for roots that are put on `sys.path` at runtime and are
     therefore imported under a SHORTER dotted name than their repo path implies.
 
-    `tests/sim/mass_battle/` inserts `tests/sim` on `sys.path` and imports itself as top-level
-    `mass_battle.*`. Without this map its 28 modules collect as `tests.sim.mass_battle.*`, NO
+    `systems/mass_battle/sim/` inserts `tests/sim` on `sys.path` and imports itself as top-level
+    `mass_battle.*`. Without this map its 28 modules collect as `systems.mass_battle.sim.*`, NO
     internal edge resolves, and the whole package lands in the orphan list as 28 false positives
     — visible but edgeless is WORSE than unscanned, because it reads as a measured emptiness."""
     aliases = {}
