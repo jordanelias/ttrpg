@@ -205,6 +205,27 @@ def _symbol_covers(lines, start, end, leaf):
     return False
 
 
+#: Artifacts the `generated_layer` fixture REBUILDS from the live tree on every run, taken from that
+#: fixture's own roster so the two cannot drift. Their line numbering is a property of the last
+#: build, not of the claim being cited: touch campaign-reachable engine code and
+#: `execution_trace.json` renumbers, and an authored citation that says nothing wrong goes red.
+#: The mass-battle engine swap (2026-08-24) did exactly that to three citations in three documents.
+#:
+#: So for these targets the SYMBOL is binding and the LINE is advisory. That is not a weakening:
+#: a symbol that must occur in a regenerated file is falsifiable against the current tree, while a
+#: line number is falsifiable only against the build that produced it — and there is no such build
+#: to check against, because the file is untracked and rebuilt per run. A generated-file citation
+#: with no symbol asserts nothing at all and is a HARD failure here, which is stricter than before.
+#:
+#: This takes the durable fix the earlier docstring flagged for Jordan rather than re-anchoring the
+#: three citations to today's build (they would rot on the next campaign-code change, which is the
+#: recurrence signature §0.1 pt 5 names). It is answered by architecture, not escalated: CLAUDE.md
+#: §0 test 5 — where the design surfaces are silent and one option is clearly right for the code.
+from .conftest import _GENERATED_LAYER  # noqa: E402  the single owner of "which files are rebuilt"
+
+GENERATED_TARGETS = frozenset(a for _builder, arts in _GENERATED_LAYER for a in arts)
+
+
 def _anchor_failures(relpath):
     """Return (failures, checked) for one skeleton. `checked` counts symbol assertions only."""
     failures, checked = [], 0
@@ -216,6 +237,21 @@ def _anchor_failures(relpath):
         if not os.path.isfile(target):
             failures.append(f"{where}: file does not exist")
             continue
+
+        if filepath in GENERATED_TARGETS:
+            if not symbol:
+                failures.append(
+                    f"{where}: {filepath} is REBUILT every run, so a bare line number cites a build "
+                    f"rather than a claim. Cite a symbol — that is the half that stays checkable.")
+                continue
+            leaf = symbol.rsplit('.', 1)[-1]
+            checked += 1
+            if leaf not in _read(target):
+                failures.append(
+                    f"{where}: symbol {leaf!r} does not occur anywhere in {filepath}. The line is "
+                    f"advisory for a regenerated file; the symbol is not, and this one is absent.")
+            continue
+
         lines = _read(target).splitlines()
         start = int(start_s)
         if not 1 <= start <= len(lines):

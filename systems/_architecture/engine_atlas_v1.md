@@ -214,7 +214,7 @@ that absence with a named stub marker rather than inventing a trigger, so `world
 life of every campaign — `engine/mc_v18.py:212 _faction_actions_callback` (§3a).
 
 **`mass_battle` — faction-scale battle.** Two disjoint trees, both alive for different reasons. TREE A is retired
-by ruling yet carries the campaign's only battle seam — `systems/mass_battle/sim/massbattle.py:1791 resolve_mass_battle`.
+by ruling yet carries the campaign's only battle seam — `systems/mass_battle/sim/massbattle.py:99 resolve_mass_battle`.
 TREE B is ruled canon and unit/cell-scale, and cannot receive a strategically-built unit: feeding it one raises,
 and the failure is measured rather than asserted — `tests/valoria/test_j2_mass_battle_seam.py:65 _canon_accepts_a_strategic_unit`.
 The two trees share no code, so any result measured on one is a result about that tree alone (§3g).
@@ -249,7 +249,7 @@ one shared roll-and-degree spine — `systems/threadwork/sim/operations.py:160 _
 operation entry points in the `collective`, `opposing` and `threadcut` modules. No production caller reaches any of
 them: the driver imports no threadwork module, the dispatcher has no thread scene type, and the mass-battle phase
 hook named for threadwork is an empty body called every phase —
-`systems/mass_battle/sim/massbattle.py:301-303 threadwork_check` (§3a).
+`systems/mass_battle/sim/orchestration.py:333-335 threadwork_check` (§3a).
 
 **`ui` — design documentation and no code.** No `.py`, no `.gd`, no `.tscn`, no module contract, no `sim_module`
 pointer, no `CURRENT.md` row; its skeleton's sections 1–6 are legitimately empty and the absence is proven by direct
@@ -296,7 +296,7 @@ the social-contest scene branch's `except Exception` swallow and its unreachable
 | b | The ratified per-settlement Mandate/Treasury pipeline has no step in the accounting cascade — recorded in the module's own port-blocking note | overview, settlements | `systems/overview/sim/accounting.py:11-13 run_accounting` |
 | c | Both engine-core NPC-AI entry points are unconditional no-ops with no production caller — the engine core's sole orphan | npcs, `_architecture` | `engine/autoload/npc_ai.py:33 select_action` |
 | c | The RS-track write is a no-op whose one call site sits behind an organically dormant branch — wired, never landing | overview, `_architecture` | `systems/overview/sim/rs_track.py:28 apply_rs_delta` |
-| c | Phase-boundary hooks named for threadwork are empty bodies called unconditionally every phase, in both battle trees | mass_battle, threadwork | `systems/mass_battle/sim/massbattle.py:301-303 threadwork_check` |
+| c | Phase-boundary hooks named for threadwork are empty bodies called unconditionally every phase, in both battle trees | mass_battle, threadwork | `systems/mass_battle/sim/orchestration.py:333-335 threadwork_check` |
 | d | A faction module's in-code claim to be the first Key emitter outside the transport is stale, and its quoted per-campaign emission measurement cannot hold given the dormancy of the branch it measured | factions, `_architecture` | `systems/factions/sim/faction_action.py:352-355 _emit_battle_concluded` |
 | d | **CLOSED 2026-08-24.** Three incompatible Conviction rosters shipped (9 in `characters`, 8 in `world/npe`, 13 registered); a caller passed a name absent from the callee's, so ED-912 §6.1's Scar silently no-opped. The roster is now owned once by `references/descriptor_registry.yaml:conviction_roster` and read via `engine.substrate.descriptors`; an unknown name raises | characters, fieldwork | `systems/characters/sim/conviction.py:59 CONVICTIONS` |
 | e | The combat contract declares the engine as its own Key emitter and consumer; every production construction site lives outside the subsystem | combat, `_architecture` | `engine/cross_scale/echo_transport.py:428 Key` |

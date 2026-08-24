@@ -138,12 +138,29 @@ DIVERGENCES = {
 
 
 def _load_sources():
-    """Flatten the two committed exports into {qualified_key: value}. Composes; does not re-extract."""
+    """Flatten the two committed exports into {qualified_key: value}. Composes; does not re-extract.
+
+    A sim_params key is `<subsystem>.<NAME>`, which is NOT unique: two modules in one subsystem that
+    define the same constant name emit two rows under one key. `vals[key] = value` then keeps
+    whichever the extractor walked last — so the value that crosses into Godot would be chosen by
+    directory order. `mass_battle.SEED_BASE` is a live instance (bat.py 1_000_000,
+    lanchester_signature.py 2_000_000). Rather than pick, such a key is withheld: it is never a
+    valid owner, so any MAPPING entry naming it fails loudly in build() instead of shipping a
+    coin-flip. Keys whose rows all agree are unambiguous and are kept."""
     vals = {}
+    seen = {}
+    ambiguous = set()
     sp = json.load(open(os.path.join(REPO, 'engine', 'engine_params', 'sim_params.json')))
     for p in sp['params']:
         if p['kind'] != 'table' and isinstance(p['value'], (int, float, bool)):
+            if p['key'] in seen and seen[p['key']] != p['value']:
+                ambiguous.add(p['key'])
+            seen[p['key']] = p['value']
             vals[p['key']] = p['value']
+    for k in ambiguous:
+        del vals[k]
+    _AMBIGUOUS.clear()
+    _AMBIGUOUS.update(ambiguous)
     ce = json.load(open(os.path.join(REPO, 'engine', 'engine_params', 'combat_engine_v1.json')))
     for section, body in ce['sections'].items():
         for k, v in body.items():
@@ -153,13 +170,22 @@ def _load_sources():
     return vals
 
 
+#: Keys withheld by the most recent _load_sources() because two definition sites disagree on the
+#: value. Populated by _load_sources; read by build() to give the right diagnosis for a missing key.
+_AMBIGUOUS: set = set()
+
+
 def build():
     src = _load_sources()
     missing = sorted(k for k in MAPPING.values() if k not in src)
     if missing:
+        collided = [k for k in missing if k in _AMBIGUOUS]
         raise SystemExit(
             "MAPPING names owners that no exporter emits: " + ", ".join(missing) +
             "\nEither the owner moved (fix the key) or its exporter stopped emitting it (fix that first)."
+            + ("\nOf those, these resolve to MORE THAN ONE value in sim_params.json and were withheld "
+               "rather than guessed: " + ", ".join(sorted(collided)) +
+               ". Name the definition site you mean — do not let walk order pick." if collided else "")
         )
     return {
         '_generated': (

@@ -32,6 +32,7 @@ verified by counting emitter calls, not inferred. That golden therefore passed u
 emitter landed, which looks like "no regression" and is really "the golden cannot see this path".
 The seed used here is chosen because it DOES exercise it.
 """
+import ast
 import os
 import sys
 
@@ -45,7 +46,20 @@ pytest.importorskip('yaml')
 
 from . import _campaign  # noqa: E402  the single owner of the seeded-campaign runner (CLAUDE.md §8)
 
-SEED = 20260803          # exercises Parliamentary Transfer; seed 42 does not
+# RE-SEEDED 2026-08-24 — the mass-battle engine was swapped (`systems/mass_battle/sim/` replaced by
+# the 11,342-line engine ported from `tests/sim/mass_battle/`). A different resolution model draws a
+# different number of RNG values per battle, so every downstream faction-action roll shifts and the
+# set of seeds that qualify a Parliamentary Transfer motion is not preserved. 20260803 fired the
+# emitter before the swap and fires it ZERO times after, which is a re-seed, not a regression: the
+# path is still reachable. Measured over 14 seeds at 24 seasons, counting emitter CALLS rather than
+# inferring from the log:
+#
+#   fires:      0 -> 1 · 99 -> 2 · 2024 -> 1 · 555 -> 1 · 777 -> 1
+#   silent:     20260803, 42, 1, 7, 13, 123, 20260824, 1000, 31337
+#
+# 99 is chosen because it fires TWICE. A one-call seed proves reachability; a two-call seed also
+# survives a single qualification flipping, which is the fragility that put this test here.
+SEED = 99                # exercises Parliamentary Transfer twice; 20260803 no longer does
 SEASONS = 24
 GOLDEN_SEED = 42         # the seed engine/tests/test_parliamentary_bridge.py pins
 
@@ -133,23 +147,43 @@ def test_emission_is_log_only(seeded_transfer_campaign):
         "the log did not grow — the emitter is not firing, so 'log-only' is untested")
 
 
-def test_the_pinned_golden_seed_now_covers_this_path():
-    """THE BLIND SPOT CLOSED ITSELF, 2026-08-21 — inverted rather than deleted.
+def _golden_keys_by_type():
+    """Read `_ON_KEYS_BY_TYPE` out of the pinned golden by AST, not by import.
 
-    This test used to RECORD A BLIND SPOT: `engine/tests/test_parliamentary_bridge.py` pins the
-    Key-log composition on seed 42, that golden stayed green when this emitter landed, and the
-    reason was not coverage — seed 42 produced ZERO Parliamentary Transfers, so the pin could not
-    have seen the emitter either way. Left green-and-silent, that reads as coverage.
+    Importing that module would execute a test file; parsing it reads the same literal without
+    side effects, and it fails loudly if the constant is renamed rather than silently returning {}.
+    """
+    src = open(os.path.join(ROOT, 'engine', 'tests', 'test_parliamentary_bridge.py'),
+               encoding='utf-8').read()
+    tree = ast.parse(src)
+    for node in tree.body:
+        if (isinstance(node, ast.Assign) and len(node.targets) == 1
+                and isinstance(node.targets[0], ast.Name)
+                and node.targets[0].id == '_ON_KEYS_BY_TYPE'):
+            return ast.literal_eval(node.value)
+    raise AssertionError(
+        "engine/tests/test_parliamentary_bridge.py no longer defines a module-level "
+        "_ON_KEYS_BY_TYPE. This test polices what that map claims; if the map moved, point this at "
+        "its new home rather than deleting the check.")
 
-    Its own docstring said what to do if the situation changed: *"If seed 42 ever DOES start
-    transferring, this fails and the golden's composition map needs a da.public_governance row."*
-    Fractional dice pools (M1 juncture 1, 2026-08-21) shifted the RNG stream, a transfer motion now
-    qualifies on this seed, and the test failed exactly as designed and named the remedy. The row
-    was added: `_ON_KEYS_BY_TYPE` now carries `'da.public_governance': 1`.
 
-    So the assertion INVERTS. The blind spot is gone and the golden genuinely covers this emitter
-    now, which is a stronger position than before — and if the coverage is ever lost again, this
-    fails and says so, instead of the golden going quietly back to being green over nothing.
+def test_the_golden_map_and_the_golden_seed_agree_about_this_emitter():
+    """The map must claim this emitter's coverage IF AND ONLY IF the seed actually fires it.
+
+    HISTORY, because this assertion has now flipped twice and the next session should not read a
+    flip as a defect. It began (2026-08-03) RECORDING A BLIND SPOT: seed 42 produced zero
+    Parliamentary Transfers, so `engine/tests/test_parliamentary_bridge.py`'s composition pin stayed
+    green when this emitter landed — which looks like "no regression" and is really "the golden
+    cannot see this path". Fractional dice pools (2026-08-21) shifted the RNG stream, seed 42 began
+    firing it, and the assertion INVERTED to demand coverage; the map gained a
+    `'da.public_governance': 1` row. The mass-battle engine swap (2026-08-24) shifted the stream
+    again, seed 42 went back to zero, and the map's row was correctly dropped in the same commit.
+
+    So it is re-stated as the INVARIANT the two flips were both instances of, instead of as
+    whichever side happens to hold today. Either state is legitimate; a MISMATCH is not, and a
+    mismatch in the dangerous direction — the map claiming a row the seed cannot produce — is the
+    original "green over nothing" defect. Both directions fail here, so no future stream shift can
+    leave this quietly wrong again.
     """
     from engine import mc_v18
     import systems.factions.sim.parliamentary_transfer as PT
@@ -165,8 +199,14 @@ def test_the_pinned_golden_seed_now_covers_this_path():
         mc_v18.run_campaign(seed=GOLDEN_SEED, params={'ECHO_TRANSPORT': True})
     finally:
         PT._emit_public_governance_transfer = original
-    assert calls, (
-        f"seed {GOLDEN_SEED} no longer fires the transfer emitter, so "
-        f"engine/tests/test_parliamentary_bridge.py's _ON_KEYS_BY_TYPE is once again green over a "
-        f"path it cannot see. Either restore the coverage, or drop the da.public_governance row "
-        f"from that map and re-record its hash — do not leave the map claiming coverage it lacks.")
+
+    fired = len(calls)
+    claimed = _golden_keys_by_type().get('da.public_governance', 0)
+    assert fired == claimed, (
+        f"seed {GOLDEN_SEED} fires the transfer emitter {fired} time(s), but "
+        f"engine/tests/test_parliamentary_bridge.py's _ON_KEYS_BY_TYPE claims {claimed}. "
+        + ("The map claims coverage it does not have — it is green over a path it cannot see. Drop "
+           "the row and re-record the hash." if claimed > fired else
+           "The seed now exercises a path the map does not pin — add the row and re-record the "
+           "hash, or the golden will not observe this emitter changing.")
+    )

@@ -27,13 +27,28 @@ if REPO_ROOT not in sys.path:
 from systems.mass_battle.sim import massbattle as MB  # noqa: E402
 
 
+#: The ported engine's own standard line concentration for a test fixture
+#: (`systems/mass_battle/sim/validators.py:56` `_CONC`, "class-B test-fixture: standard line
+#: concentration"). Taken from the engine rather than chosen here so this fixture deploys the way
+#: the engine's own fixtures do.
+_CONC = 120
+
+
 def _unit(fac, row, advance_dir, troops, disc, stance='balanced'):
+    """Build a one-subunit melee Unit in CONTINUOUS mode.
+
+    `troops` and `concentration` are passed to the constructor, not assigned afterwards. The engine
+    validates the pair in `Subunit.__post_init__` (`hierarchy/units.py:505-511`: continuous mode is
+    troops + either a density or an explicit width x depth), and post-hoc assignment routes around
+    that check. This fixture previously did `su.troops = troops` inside `try/except Exception: pass`,
+    which swallowed the one signal that would have said the unit was illegal: the subunit reached
+    `footprint_for` with `concentration=None` and died on `float(None)` deep in geometry, eight tests
+    at a time, with a TypeError that named nothing about the real defect.
+    """
     su = MB.Subunit(shape='Line', troop_type='infantry', tier=4, starting_position=(row, 25),
-                    advance_dir=advance_dir, unit_type='melee', stance=stance)
-    try:
-        su.troops = troops
-    except Exception:
-        pass
+                    advance_dir=advance_dir, unit_type='melee', stance=stance,
+                    troops=troops, concentration=_CONC)
+    assert su.troops == troops, 'the engine did not accept the troop count this fixture asked for'
     return MB.Unit(name=fac, faction=fac, power=4, command=5, discipline=disc,
                    discipline_start=disc, morale=6, morale_start=6, subunits=[su],
                    dr=1, stance=stance, speed='Standard')
