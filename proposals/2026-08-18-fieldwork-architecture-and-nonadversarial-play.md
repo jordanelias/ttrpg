@@ -1,6 +1,6 @@
 # Fieldwork, Investigation and Non-Adversarial Play — an architecture, not a redesign
 
-## Status: PROPOSED — DESIGN-ONLY, HELD FOR JORDAN. No `.py` touched, no constant changed, no default flipped, no golden re-recorded, no key type allocated. Every repo claim below was read off the working tree at HEAD and carries a file:line; every precedent claim carries a confidence tag.
+## Status: DESIGN CALLS RULED 2026-08-18 (§13) — the nine §9 questions are answered and ED-FI-0006/0007/0008 are released; the ARCHITECTURE remains PROPOSED and unbuilt. Still design-only: No `.py` touched, no constant changed, no default flipped, no golden re-recorded, no key type allocated. Every repo claim below was read off the working tree at HEAD and carries a file:line; every precedent claim carries a confidence tag.
 
 **Date:** 2026-08-18 · **Lane:** FI (field investigation) · **IDs:** none allocated (design-only)
 **Bears on:** ED-916 (the FI design gate) · ED-FI-0001 (investigation_systems_v30 audited by no lane) · ED-FI-0002 (EP-6 counter-espionage) · `godot_conversion_strategy_v1.md` Gate-0 · CLAUDE.md §6 "porting is blocked on authoring canon first"
@@ -899,3 +899,134 @@ produce comparable claims about the world.
 **Filed, not fixed:** unifying the outcome payload is a cross-cutting IN/SC/FI change touching five
 registered types and their consumers. It is out of scope for an FI-lane proposal to execute, and it
 is the single highest-leverage thing this session found.
+
+---
+
+# §12 CORRECTIONS — three claims in this document are false
+
+Added 2026-08-18 after merge, from a read-only audit pass. Recorded inline rather than silently
+edited, per the convention §11 used. **All three were verified independently before filing.**
+
+## §12.1 §11.8's headline claim is false at roster scale
+
+§11.8 states five outcome vocabularies exist and *"not one of them is the degree ladder."* **True of
+the five types sampled; false of the 55-type roster.**
+
+- **`mechanical.scene_exited.outcome_class` (registry :403) is `overwhelming | success | partial | failure | unknown`** — verbatim the `dice_engine.Degree` enum values (`dice_engine.py:24-28`) plus `unknown`. A terminal outcome carrying the ladder **already exists**, is emitted by `game_director`, and is the closest in-roster precedent for the `resolution` field §11.8 proposes — closer than `investigation_resolved.finding`.
+- `scene.combat_hit.degree` (:943) carries the combat kernel's variant (`graze | partial | success | overwhelming`); `meta.thread_woven.degree_of_success` (:1065) is a third degree-shaped field with no declared vocabulary.
+
+**The census is also larger than five:** 9 enumerated verdict vocabularies, 7 before/after
+transition pairs, plus type-as-outcome splits (`state.project_completed` / `state.project_failed`).
+Two findings outrank the original: the **`da_outcome` family is headed "Domain Action results" and
+4 of its 5 members carry no outcome field at all**; and the **indeterminate outcome already exists
+roster-wide under five spellings** — `inconclusive` (investigation, coup), `unknown` (scene_exited),
+`stalemate` (dialogue, contest), `draw` (combat_resolved), null-`victor` (battle_concluded). That
+*strengthens* the unification case: the class is universal, only the naming is fragmented.
+
+**And the fragmentation already costs something in shipped code:** `echo_transport.py:103-108`
+(`_OUTCOME_BY_DEGREE`) down-converts the ladder into the bespoke vocabularies **lossily** at emit
+time — Overwhelming and Success collapse to one token — while `_derive_degree` (:187-197)
+reconstructs a degree going the other way. The seam pays conversion costs in both directions today.
+
+## §12.2 §5.2's "no call-site change needed" is false
+
+§5.2 states `fieldwork_action` "replaces the stub bodies in place; `scene_dispatch.py:349` needs no
+call-site change", citing that line's own comment: *"ctx/world are threaded through so a future real
+resolver drop-in needs no call-site change here."*
+
+**The comment is wrong about its own code.** `scene_dispatch.py:354` passes only
+`_fieldwork_mod.run_fieldwork_scene(ctx.get("scene"))` — **`world` is not passed**. Only the
+investigation branch (:356) receives it. A fieldwork resolver that must write a Leverage tag or
+reach the scheduler cannot, without a call-site change. This document took a code comment at face
+value instead of reading the line beneath it.
+
+## §12.3 §11.2's "adopt `state.belief_revised`" is falsified
+
+§11.2 proposed adopting `state.belief_revised` as the belief layer. It cannot serve:
+
+- `prior_belief`/`new_belief` are **free strings** (:1121-1122); **no confidence field** exists.
+- Its registered semantics are the **PC creed-Belief beat** — `fieldwork_socializing.md:104-110` is the Belief *Momentum* economy (aligned / challenging / betraying), `permanence: indelible`, Tier-2 cut scene — not an epistemic claim about the world.
+- `state.opinion_revised` (:1156-1177) is the shape template instead: `confidence_before/after int [1,5]`, `driver_memory_refs` provenance, `private_observers` visibility.
+- It is **inert**: zero emitters; its one code consumer (`articulation.py:126`) subscribes and routes to `stubwire.stub_resolve` without reading the payload.
+
+**Also, §11.8's reading that the "per fieldwork_socializing §5.5" citation resolves the standing
+attribution toward fieldwork is overdrawn.** The citation fixes the type's original referent as the
+PC creed beat; it does not settle who emits for NPC belief revision, and `module_contracts.yaml`
+carries a **three-way** tension (`npc_behavior` :187, `fieldwork_knots` :392, plus npc_behavior
+consuming it from `fieldwork_knots` :163). Still genuinely `[OPEN — Jordan]`.
+
+**Disposition:** superseded by `proposals/2026-08-18-epistemic-propositions-and-provenance.md`,
+written to Jordan's directive that epistemic propositions be available alongside provenance
+references. `state.belief_revised` keeps its registered meaning; the epistemic layer is a separate
+thing, homed in the already-declared-and-empty `npc_memory` module.
+
+## §12.4 What survived the audit unchanged
+
+§11.3 (no gossip/opinion emitter exists) was re-checked at full-tree scope — GDScript, YAML/JSON,
+and dynamic type construction, beyond the original `.py`-only grep — and **stands**. The live tree
+has exactly four `Key(` construction sites and none can produce those types; `npe.py` contains no
+`emit`, `Key(` or scheduler use at all. §11.1's ruling precedents and §11.7's unification are
+unaffected.
+
+---
+
+# §13 RULINGS LANDED — Jordan, 2026-08-18
+
+All nine §9 questions ruled in one sitting. **Two answers went beyond the options offered and are
+recorded verbatim, because both are general doctrine rather than fieldwork settlements.**
+
+## §13.1 Q1 RULED — and the ruling is broader than the question
+
+> **"Obstacles that are defined oppositionally (ie against a character, faction, attribute, etc) are
+> score/2. Obstacles that are not defined oppositionally, like a site, are a base plus relevant
+> modifiers."** — Jordan, 2026-08-18
+
+This supplies the discriminator §9 Q1 flagged as the *cost* of keeping both models: **the test is
+whether the obstacle is defined against something.** It is not a fieldwork rule — it settles, in one
+line, how every obstacle in the tree is derived, which root `HANDOFF.md` calls "the largest
+outstanding piece" (the 2026-08-14 score/2 ruling being wired nowhere).
+
+**Consequences:**
+- Fieldwork's Depth table (Ob 1/2/3/5/8) **stands** as a *base*, with situational modifiers added — it is non-oppositional by construction.
+- `fieldwork_v30` §4.6 Concealment Ob **changes**: contested investigation is oppositional, so it derives from the concealer's **score/2**, not from their roll.
+- §5.2's social actions were already score/2-shaped (`floor(NPC Cognition/2)+1`, `floor(NPC highest stat/2)+1`) — the ruling **generalizes what fieldwork already did** rather than overturning it.
+- ⚠ **This needs an IN-lane home.** It governs combat, contest, mass battle and faction actions equally; recording it only in a fieldwork proposal would be exactly the mis-homing this repo keeps filing. Flagged, not executed.
+
+## §13.2 Q2 RULED — conditionally, with an analytical task attached
+
+> **"Acquisition-layer, but interrogate it against player attributes as to whether it's truly
+> distinct."** — Jordan, 2026-08-18
+
+Adoption of the 2026-08-15 proposal's acquisition-layer answer **is conditional on a test that has
+not been run**: is the acquisition layer genuinely a distinct axis, or is it attributes wearing a
+different name? Until that is answered, no fieldwork pool may be written against either model.
+
+**The test, stated so it can fail:** take the fieldwork actions that would roll Research /
+Reconstruct / Interview, express each under (a) the acquisition layer and (b) ruled attributes, and
+check whether the two ever produce *different orderings between characters*. If they never diverge,
+the acquisition layer is a relabelling and the honest answer is attributes. This is the falsifier;
+it belongs to whoever executes Q2.
+
+## §13.3 The remaining seven
+
+| # | Ruled | Consequence |
+|---|---|---|
+| **Q3** | **Split the type** | Investigation findings and tribunal/inquiry verdicts become distinct types. Closes the standing `[OPEN — Jordan]` attribution by removing the collision rather than adjudicating it. Requires a new registration + `faction_state`/`npc_behavior` subscribing to both to preserve behaviour |
+| **Q4** | **Lattice first** | The Dialogue Lattice is the first-build Interview home, honouring ED-FI-0004 in full. Puts the REFINE gate on the critical path — ruled below |
+| **REFINE** | **Filters speak as named voices** | The Response Matrix surfaces its filters as characterised voices, not numbers. Consistent with `valoria_ui_ux_v4`'s "Disco Elysium's spiritual descendant" commitment and the social-contest proposal's `[HIGH]` skill-voices precedent. Unblocks the Matrix build; adds authored voice lines per filter |
+| **Q5** | **Only through consequence** | No verdict screen. Act on a finding and the world's response reveals whether you were right. P-08 stays intact; closure arrives as consequence. **Requires the consequence path to be legible as feedback** — a real design obligation on the Finding→Leverage/Dossier loops |
+| **Q6** | **Guarantee at generation, erosion allowed** | Solvability is a generation-time condition table; the world may then erode the chain and that erosion is content. Exactly the assassination-fuse shape. Erosion rate becomes telemetry, never a constraint |
+| **Q7** | **Confirm the P-06 swap** | Threadcut beings use **self-maintenance strain**, not Coherence. The FAIL-marked model never enters the sim. ED-FI-0008 released; knot-lifecycle wiring unblocked |
+| **Q8** | **+0.15 Ob per wound everywhere** | Propagate uniformly; strike the flat `+1 Ob` (§2.4) and the `−1D` remnant as stale prose. ED-FI-0006 / ED-FI-0007 released |
+| **Q9** | **Disposition joins Holdings in `npc_memory`** | Per-(NPC, PC) relational state lives with the proposition store. See the propositions proposal §10 — `npc_memory` becomes the epistemic **and** relational hub, which stretches its contract's "Memory store written from Keys" framing and should be re-worded when its doc is authored |
+| **Doc split** | **Leave whole** | This document stays one file despite exceeding §4's ~15k threshold. The gate is warn-only and the argument is continuous |
+
+## §13.4 What is now unblocked, and what still is not
+
+**Unblocked:** the vertical slice (§11.5) — Q1 gives it obstacle derivation, Q6 gives it a
+generation rule, Q7/Q8 clear the two canon contradictions in its path.
+
+**Still blocked:** Q2's acquisition-layer test (§13.2) gates any *pool* the slice rolls — the slice
+can proceed with a hand-set Ob and a placeholder pool, which is what every call site in the tree
+does today, but it cannot claim its numbers. And Q3's type split plus the REFINE voice lines are
+authoring work before the Lattice build.
