@@ -43,9 +43,9 @@ from systems.mass_battle.sim.orchestration import run_battle
 #  @ FORK ref e4070d4^ — see this module's header. NOT independently derived: they are the same three
 #  survivor-ratio thresholds the campaign has used since Phase 7, preserved verbatim so the engine
 #  swap is a single-variable experiment. Their GROUNDING is open MB-lane work — no canon states them.]
-OVERWHELMING_ATTACKER_MIN = 0.75
-OVERWHELMING_DEFENDER_MAX = 0.25
-PARTIAL_ATTACKER_MIN = 0.50
+OVERWHELMING_ATTACKER_MIN = 0.75   # [canonical: inherited from the pre-port adapter — see note above]
+OVERWHELMING_DEFENDER_MAX = 0.25   # [canonical: inherited from the pre-port adapter — see note above]
+PARTIAL_ATTACKER_MIN = 0.50        # [canonical: inherited from the pre-port adapter — see note above]
 
 
 class _GarrisonStub:
@@ -114,11 +114,15 @@ def resolve_mass_battle(faction_a, faction_b, terrain, world):
     """
     unit_a = _faction_to_unit(faction_a)
     if faction_b is None:
+        # Defenderless-territory garrison strength has no canonical spec; Mil=1.5 approximates the
+        # pre-mass-battle v17 Ob 2 vs Ob 4 single-roll spread. Carried over from the pre-port adapter.
+        # [canonical: inherited default — recorded [GAP], not canon; see the module header]
         unit_b = _faction_to_unit(_GarrisonStub(name='Uncontrolled', Mil=1.5))
     else:
         unit_b = _faction_to_unit(faction_b)
 
     with rngsource.using(getattr(world, 'rng', None)):
+        # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6), the canon engine's own default]
         run_battle(unit_a, unit_b, max_turns=18)
 
     a_size_pct = unit_a.effective_size / max(1, unit_a.size_max)

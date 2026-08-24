@@ -158,6 +158,32 @@ knowing about the handoff as much as about the fixes:
      a `FORK:` row, because nothing was retired: the modules exist in `main` at a new path, and a
      FORK row would send a reader to a ref for a file that is right there (the §8 hazard).
 
+### ⚠ RUN THE GATES IN CI MODE, OR YOUR LOCAL GREEN IS VACUOUS
+
+**This cost me four wrong predictions in a row and it is the most reusable thing in this handoff.**
+`tools/ci_common.py:_diff_args` resolves the changeset from the environment:
+
+| context | what it diffs |
+|---|---|
+| CI (pull_request) | `origin/main...HEAD` — **the whole branch** |
+| bare local run | `HEAD~1..HEAD` — **the last commit only** |
+| `valoria_local --staged` | `--cached` — **staged files only** |
+
+So every changeset-sensitive gate (`ci_co_file_checker`, `ci_sim_fabrication_check`,
+`ci_naming_check`, `ci_claim_provenance_check`) examines a *different and much smaller* set locally
+than in CI. I ran `ci_sim_fabrication_check`, got `[SIM-FABRICATION OK] no changed sim .py files —
+nothing to check`, and reported the gate fixed. It had checked nothing.
+
+**Reproduce CI exactly:**
+
+```sh
+git fetch origin main
+export GITHUB_EVENT_NAME=pull_request GITHUB_BASE_REF=main
+python3 tools/ci_sim_fabrication_check.py     # …and every other blocking validator
+```
+
+Under that env the whole blocking set passes on this branch — **verified, not predicted**.
+
 **`Validators (blocking)` is now GREEN** — all four of its port residuals are fixed (`b0…` series):
 `ci_co_file_checker` (the move is recorded in `tests/coverage_matrix.md`) and
 `ci_sim_fabrication_check` (the adapter's carried-over constants are cited as *inherited, with a
