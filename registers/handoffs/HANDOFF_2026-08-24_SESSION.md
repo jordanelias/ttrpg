@@ -148,6 +148,16 @@ Two Key types flow that **no contract declares**: `scene.accord_echo` and
 **Verified fixed after the WIP commit** (was 30 → now 26): `test_tool_input_paths_resolve` and the
 `Golden Modes Byte-Exact` CI job — see the sub-section below.
 
+**Two CI-only residuals fixed after the handoff was first written** (`88aba35`), both from the port's
+repoint sweep and neither in the original tail — the handoff was incomplete twice, which is worth
+knowing about the handoff as much as about the fixes:
+  1. `freshness_gate` read `references/module_contracts.yaml` STALE — the sweep edited that registry,
+     changing its blob, and the `canonical_sha__` pin was never re-synced. `--update`; 109 FRESH / 0 STALE.
+  2. Four live ledger rows (ED-MB-0016 ×3, ED-MB-0044) cite `tests/sim/mass_battle/*` paths the port
+     moved. Fixed with a **dir-prefix row** in `references/restructure_ledger.md` — deliberately NOT
+     a `FORK:` row, because nothing was retired: the modules exist in `main` at a new path, and a
+     FORK row would send a reader to a ref for a file that is right there (the §8 hazard).
+
 Also red locally: `ci_co_file_checker`, `ci_sim_fabrication_check`. `sim_params.json` grew 320 → 420
 constants and surfaced a genuine collision: **`SEED_BASE` is defined twice in the canon engine** —
 `bat.py` 1,000,000 vs `lanchester_signature.py` 2,000,000.
