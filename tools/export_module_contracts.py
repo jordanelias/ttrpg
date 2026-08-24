@@ -57,13 +57,27 @@ OUT = os.path.join(REPO, 'engine', 'engine_params', 'module_contracts.json')
 
 
 def _types(entry, side):
-    """The Key type_ids on one side of a contract. A `type` may be a bare string or a mapping."""
-    out = []
+    """(dotted type_ids, wildcard?) on one side of a contract.
+
+    ⚠ THE WILDCARD IS NOT NOISE AND MUST NOT BE FILTERED OUT. Two modules declare
+    `{type: "*", from: engine}` — `articulation_layer` (a universal reader of the full Key stream,
+    key_substrate §8.7) and `fieldwork_knots`. An earlier version of this function kept only entries
+    containing a '.', which silently dropped both, so `articulation_layer` cooked as
+    `consumes: []`. The conformance instrument then reported all THIRTEEN of its live subscriptions
+    as undeclared drift and named two of them as types no contract declares at all — a finding that
+    was entirely an artifact of this filter, and one I was one step away from "fixing" by
+    transcribing thirteen type names into a contract that already declared a superset of them.
+    """
+    out, wildcard = [], False
     for x in (entry.get(side) or []):
         t = x.get('type') if isinstance(x, dict) else x
-        if isinstance(t, str) and '.' in t and t not in out:
+        if not isinstance(t, str):
+            continue
+        if t.strip() == '*':
+            wildcard = True
+        elif '.' in t and t not in out:
             out.append(t)
-    return sorted(out)
+    return sorted(out), wildcard
 
 
 def _impl_path(entry):
@@ -88,11 +102,17 @@ def build():
         path = _impl_path(entry)
         if path is None:
             unattributable.append(name)
+        emits, emits_any = _types(entry, 'emits')
+        consumes, consumes_any = _types(entry, 'consumes')
         modules[name] = {
             'impl_path': path,
             'doc': entry.get('doc'),
-            'emits': _types(entry, 'emits'),
-            'consumes': _types(entry, 'consumes'),
+            'emits': emits,
+            'consumes': consumes,
+            # `{type: "*"}` — the module declares EVERY type on this side. A consumer that ignores
+            # these flags will report a universal reader's every subscription as undeclared drift.
+            'emits_any': emits_any,
+            'consumes_any': consumes_any,
         }
     # Longest-prefix-first, so `systems/social_contest/sim/contest/` wins over a shorter sibling.
     by_path = sorted(((v['impl_path'], k) for k, v in modules.items() if v['impl_path']),
@@ -107,6 +127,8 @@ def build():
         'module_count': len(modules),
         'emit_edge_count': sum(len(v['emits']) for v in modules.values()),
         'consume_edge_count': sum(len(v['consumes']) for v in modules.values()),
+        'wildcard_consumers': sorted(k for k, v in modules.items() if v['consumes_any']),
+        'wildcard_emitters': sorted(k for k, v in modules.items() if v['emits_any']),
         # module -> {impl_path, doc, emits, consumes}
         'modules': dict(sorted(modules.items())),
         # (impl_path, module) longest-prefix-first: the ONLY owner of directory -> contract module.
@@ -129,6 +151,7 @@ def main(argv):
         d = json.loads(text)
         print(f'[module_contracts] OK — {d["module_count"]} module(s), '
               f'{d["emit_edge_count"]} emit edge(s), {d["consume_edge_count"]} consume edge(s), '
+              f'{len(d["wildcard_consumers"])} wildcard consumer(s), '
               f'{len(d["unattributable"])} unattributable.')
         return 0
     with open(OUT, 'w') as fh:

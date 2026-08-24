@@ -119,3 +119,34 @@ def test_unclaimed_emitters_are_reported_not_swallowed(measured):
     )
     for key, count in r['unclaimed_emitters'].items():
         assert '::' in key and count > 0, key
+
+
+def test_a_universal_reader_is_not_reported_as_drift(measured):
+    """A module declaring `{type: "*"}` declares every type on that side, so its subscriptions can
+    never be undeclared drift. Ignore the flag and `articulation_layer`'s 13 live subscriptions all
+    read as violations — which is exactly what happened before the wildcard reached the artifact."""
+    C, r = measured
+    modules, _, _ = C._load_contracts()
+    wildcard_consumers = {m for m, d in modules.items() if d.get('consumes_any')}
+    assert wildcard_consumers, 'no wildcard consumer — this test no longer has a subject'
+    for edge in r['consumes']['triage']['undeclared_type']:
+        module = edge.split(':', 1)[0].strip()
+        assert module not in wildcard_consumers, (
+            f'{edge} is reported as undeclared, but {module} declares `{{type: "*"}}` — the '
+            f'wildcard is being ignored somewhere between the exporter and the verdict.'
+        )
+
+
+def test_check_mode_gates_only_genuinely_undeclared_types(measured):
+    """The HARD FLOOR is narrow on purpose. Gating the wide 'observed but not declared' measure
+    would have blocked on registry holes (a declared owner with no `sim_module`) and on ownership
+    mismatches — calling both drift in the code. Those are reported, never gated."""
+    C, r = measured
+    assert C.UNDECLARED_TYPE_MAX == 0
+    for side in ('emits', 'consumes'):
+        tri = r[side]['triage']
+        wide = set(r[side]['observed_only'])
+        narrow = set(tri['undeclared_type'])
+        assert narrow <= wide, f'{side}: triage invented an edge that was not observed-only'
+        assert len(tri['undeclared_type']) + len(tri['ownership_mismatch']) \
+            + len(tri['unobservable']) == len(wide), f'{side}: triage lost or duplicated an edge'

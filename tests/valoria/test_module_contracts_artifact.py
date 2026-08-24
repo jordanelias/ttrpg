@@ -41,7 +41,8 @@ def test_the_artifact_is_not_stale():
 def test_every_module_declares_its_interface_shape(art):
     assert art['module_count'] == len(art['modules']) == 27
     for name, m in art['modules'].items():
-        assert set(m) == {'impl_path', 'doc', 'emits', 'consumes'}, name
+        assert set(m) == {'impl_path', 'doc', 'emits', 'consumes',
+                          'emits_any', 'consumes_any'}, name
         assert isinstance(m['emits'], list) and isinstance(m['consumes'], list), name
 
 
@@ -79,3 +80,27 @@ def test_unattributable_means_no_path_not_a_guessed_one(art):
 def test_edge_counts_match_the_declared_lists(art):
     assert art['emit_edge_count'] == sum(len(m['emits']) for m in art['modules'].values())
     assert art['consume_edge_count'] == sum(len(m['consumes']) for m in art['modules'].values())
+
+
+def test_the_wildcard_survives_the_cook(art):
+    """`{type: "*"}` must reach the artifact as a FLAG, not be filtered out as a non-dotted string.
+
+    ⚠ THIS IS THE GUARD FOR A MEASURED, NEARLY-SHIPPED FALSE FINDING. The first exporter kept only
+    entries containing a '.', which silently dropped both wildcard declarations.
+    `articulation_layer` — a universal reader of the full Key stream (key_substrate §8.7) — cooked as
+    `consumes: []`, and the runtime-conformance instrument then reported all THIRTEEN of its live
+    subscriptions as undeclared, two of them as types NO contract declares. Every one of those was
+    an artifact of this filter. The next step would have been transcribing thirteen type names into
+    a contract that already declared a superset — creating the exact drifting twin the centralization
+    work exists to remove.
+    """
+    assert art['wildcard_consumers'], (
+        'no wildcard consumer in the artifact. Either the registry dropped both `{type: "*"}` '
+        'declarations — say so and update this test — or the exporter is filtering them out again, '
+        'which reads as 13 phantom drift findings downstream.'
+    )
+    for name in art['wildcard_consumers']:
+        assert art['modules'][name]['consumes_any'] is True, name
+    # Every module carries both flags, so a consumer cannot silently miss the field on one module.
+    for name, m in art['modules'].items():
+        assert isinstance(m['emits_any'], bool) and isinstance(m['consumes_any'], bool), name

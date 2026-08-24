@@ -5,12 +5,19 @@
   "module_count": 27,
   "emit_edge_count": 60,
   "consume_edge_count": 82,
+  "wildcard_consumers": [
+    "articulation_layer",
+    "fieldwork_knots"
+  ],
+  "wildcard_emitters": [],
   "modules": {
     "articulation_layer": {
       "impl_path": "engine/cross_scale/articulation.py",
       "doc": "systems/articulation/articulation_layer_v30.md",
       "emits": [],
-      "consumes": []
+      "consumes": [],
+      "emits_any": false,
+      "consumes_any": true
     },
     "audit": {
       "impl_path": null,
@@ -20,25 +27,33 @@
         "mechanical.scene_entered",
         "mechanical.scene_exited",
         "mechanical.scene_skipped"
-      ]
+      ],
+      "emits_any": false,
+      "consumes_any": false
     },
     "campaign_architecture": {
       "impl_path": null,
       "doc": "systems/_architecture/campaign_architecture_v30.md",
       "emits": [],
-      "consumes": []
+      "consumes": [],
+      "emits_any": false,
+      "consumes_any": false
     },
     "ci_political": {
       "impl_path": null,
       "doc": "systems/factions/ci_political_v30.md",
       "emits": [],
-      "consumes": []
+      "consumes": [],
+      "emits_any": false,
+      "consumes_any": false
     },
     "clock_registry": {
       "impl_path": null,
       "doc": "systems/overview/clock_registry_v30.md",
       "emits": [],
-      "consumes": []
+      "consumes": [],
+      "emits_any": false,
+      "consumes_any": false
     },
     "domain_actions": {
       "impl_path": null,
@@ -51,7 +66,9 @@
         "da.public_governance",
         "scene.draft_da"
       ],
-      "consumes": []
+      "consumes": [],
+      "emits_any": false,
+      "consumes_any": false
     },
     "engine_clock": {
       "impl_path": null,
@@ -60,7 +77,9 @@
         "mechanical.accounting",
         "mechanical.season_change"
       ],
-      "consumes": []
+      "consumes": [],
+      "emits_any": false,
+      "consumes_any": false
     },
     "faction_politics": {
       "impl_path": null,
@@ -71,7 +90,9 @@
         "state.standing_change",
         "state.succession"
       ],
-      "consumes": []
+      "consumes": [],
+      "emits_any": false,
+      "consumes_any": false
     },
     "faction_state": {
       "impl_path": "engine/autoload/game_state.py",
@@ -107,7 +128,9 @@
         "state.scar_acquired",
         "state.standing_change",
         "state.succession"
-      ]
+      ],
+      "emits_any": false,
+      "consumes_any": false
     },
     "fieldwork_knots": {
       "impl_path": "systems/fieldwork/sim/knots.py",
@@ -118,7 +141,9 @@
         "scene.gift",
         "state.belief_revised"
       ],
-      "consumes": []
+      "consumes": [],
+      "emits_any": false,
+      "consumes_any": true
     },
     "game_director": {
       "impl_path": null,
@@ -128,7 +153,9 @@
         "mechanical.scene_exited",
         "mechanical.scene_skipped"
       ],
-      "consumes": []
+      "consumes": [],
+      "emits_any": false,
+      "consumes_any": false
     },
     "mass_battle": {
       "impl_path": null,
@@ -136,7 +163,9 @@
       "emits": [
         "scene.battle_concluded"
       ],
-      "consumes": []
+      "consumes": [],
+      "emits_any": false,
+      "consumes_any": false
     },
     "miraculous_event": {
       "impl_path": "systems/world/sim/miraculous_event.py",
@@ -144,7 +173,9 @@
       "emits": [
         "meta.miraculous_event"
       ],
-      "consumes": []
+      "consumes": [],
+      "emits_any": false,
+      "consumes_any": false
     },
     "npc_behavior": {
       "impl_path": null,
@@ -194,7 +225,9 @@
         "state.scar_acquired",
         "state.standing_change",
         "state.succession"
-      ]
+      ],
+      "emits_any": false,
+      "consumes_any": false
     },
     "npc_memory": {
       "impl_path": null,
@@ -205,7 +238,9 @@
         "scene.interaction",
         "state.concern_resolved",
         "state.opinion_revised"
-      ]
+      ],
+      "emits_any": false,
+      "consumes_any": false
     },
     "peninsular_strain": {
       "impl_path": "systems/overview/sim",
@@ -216,7 +251,9 @@
         "env.peninsular_strain_shock",
         "env.population_change"
       ],
-      "consumes": []
+      "consumes": [],
+      "emits_any": false,
+      "consumes_any": false
     },
     "personal_combat": {
       "impl_path": "systems/combat/combat_engine_v1",
@@ -229,7 +266,9 @@
       "consumes": [
         "scene.combat_hit",
         "scene.combat_strike"
-      ]
+      ],
+      "emits_any": false,
+      "consumes_any": false
     },
     "piety_track": {
       "impl_path": "systems/characters/sim/conviction.py",
@@ -247,7 +286,9 @@
         "scene.insult",
         "scene.threat",
         "scene.witness"
-      ]
+      ],
+      "emits_any": false,
+      "consumes_any": false
     },
     "scenario_authoring": {
       "impl_path": null,
@@ -256,7 +297,9 @@
         "env.crisis",
         "env.disaster"
       ],
-      "consumes": []
+      "consumes": [],
+      "emits_any": false,
+      "consumes_any": false
     },
     "scene_slate": {
       "impl_path": "engine/autoload/scene_slate.py",
@@ -271,7 +314,9 @@
         "scene.threat",
         "scene.witness"
       ],
-      "consumes": []
+      "consumes": [],
+      "emits_any": false,
+      "consumes_any": false
     },
     "scene_timer": {
       "impl_path": null,
@@ -281,7 +326,9 @@
         "mechanical.scene_entered",
         "mechanical.scene_exited",
         "mechanical.scene_skipped"
-      ]
+      ],
+      "emits_any": false,
+      "consumes_any": false
     },
     "settlement_economy": {
       "impl_path": null,
@@ -290,7 +337,9 @@
       "consumes": [
         "da.economic_intervention",
         "env.population_change"
-      ]
+      ],
+      "emits_any": false,
+      "consumes_any": false
     },
     "settlement_layer": {
       "impl_path": "systems/settlements/sim/settlement.py",
@@ -301,7 +350,9 @@
       "consumes": [
         "env.disaster",
         "env.peninsular_strain_shock"
-      ]
+      ],
+      "emits_any": false,
+      "consumes_any": false
     },
     "social_contest": {
       "impl_path": "systems/social_contest/sim/contest",
@@ -314,13 +365,17 @@
       ],
       "consumes": [
         "state.opinion_revised"
-      ]
+      ],
+      "emits_any": false,
+      "consumes_any": false
     },
     "territorial_piety": {
       "impl_path": "systems/overview/sim/ci_track.py",
       "doc": "systems/characters/conviction_track_v30.md",
       "emits": [],
-      "consumes": []
+      "consumes": [],
+      "emits_any": false,
+      "consumes_any": false
     },
     "threadwork": {
       "impl_path": "systems/threadwork/sim/operations.py",
@@ -329,13 +384,17 @@
         "meta.thread_woven",
         "scene.thread_operation"
       ],
-      "consumes": []
+      "consumes": [],
+      "emits_any": false,
+      "consumes_any": false
     },
     "victory": {
       "impl_path": "engine/autoload/victory.py",
       "doc": "systems/victory/victory_v30.md",
       "emits": [],
-      "consumes": []
+      "consumes": [],
+      "emits_any": false,
+      "consumes_any": false
     }
   },
   "path_to_module": [

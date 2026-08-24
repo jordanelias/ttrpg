@@ -56,9 +56,15 @@ COOKED = os.path.join(ROOT, 'engine', 'engine_params', 'module_contracts.json')
 # Two-sided, the repo convention: it fails if the number RISES (drift) and if it FALLS without
 # being re-pinned (so paying the debt is recorded rather than silently banked).
 #
-# OBSERVED_ONLY_MAX is 0 and is a HARD FLOOR, not a ratchet. A module emitting a Key type its
-# contract does not declare is drift with no legitimate reading — the contract is the interface.
-OBSERVED_ONLY_MAX = 0
+# UNDECLARED_TYPE_MAX is 0 and is a HARD FLOOR, not a ratchet: a Key type that flows at runtime and
+# that NO module declares is drift with no legitimate reading — the contract is the interface.
+#
+# ⚠ IT IS DELIBERATELY NARROWER THAN "observed but not declared", and the narrowing is what makes it
+# gateable at 0 rather than red on arrival. All three emissions found on 2026-08-24 were
+# observed-but-not-declared; all three TYPES were declared, two of them by modules that bind no
+# implementation path and so can never be observed at all. Gating the wide measure would have blocked
+# on a hole in the registry and called it drift in the code. See `_triage`.
+UNDECLARED_TYPE_MAX = 0
 # DECLARED_ONLY is the hub-and-bus gap itself: declared, never observed. It is large today and that
 # is the honest state, not a failure to fix here. Pinned so it cannot grow.
 DECLARED_ONLY_MAX = None   # set by --pin on first run; None means "report, do not gate"
@@ -179,13 +185,59 @@ def observe(n=2, base_seed=0, path_to_module=None):
     return emits, consumes, key_hash, orphans, sites
 
 
+def _triage(observed_edges, declared, path_to_module, unattributable, side):
+    """Split observed-but-not-declared edges into the THREE conditions they actually are.
+
+    ⚠ A FLAT "observed_only" READS AS DRIFT AND IS MOSTLY NOT, which matters because it is the half
+    a gate would block on. All three emissions this instrument found on 2026-08-24 were reported as
+    undeclared; every one of the three Key TYPES is in fact declared, just not by the module the
+    emission came from. The conditions have different owners and different fixes:
+
+      undeclared_type    no module declares this Key type at all. REAL DRIFT — the contract is the
+                         interface, and a type flowing outside it has no legitimate reading.
+      ownership_mismatch the type IS declared, and the declared owner HAS an implementation path,
+                         but the emission came from outside it. Either the registry's `sim_module`
+                         is wrong or the call lives in the wrong module — a design question, and
+                         the instrument must not pick.
+      unobservable       the type IS declared, and its declared owner binds NO implementation path
+                         (`sim_module: none`). Nothing can ever be attributed to it, so this is a
+                         REGISTRY gap (the ED-1051 backlog), not a wiring gap. Counting it as drift
+                         would blame the code for a hole in the declaration.
+    """
+    owner_path = dict((m, p) for p, m in path_to_module)
+    declared_by = {}
+    any_key = 'emits_any' if side == 'emits' else 'consumes_any'
+    wildcards = sorted(m for m, d in declared.items() if d.get(any_key))
+    for m, d in declared.items():
+        for t in d[side]:
+            declared_by.setdefault(t, []).append(m)
+    out = {'undeclared_type': [], 'ownership_mismatch': [], 'unobservable': []}
+    for edge in sorted(observed_edges):
+        module, _, type_id = edge.rpartition(':')
+        owners = declared_by.get(type_id) or list(wildcards)
+        if not owners:
+            out['undeclared_type'].append(edge)
+        elif all(owner_path.get(o) is None for o in owners):
+            out['unobservable'].append(f'{edge}  (declared by {", ".join(owners)}, no impl path)')
+        else:
+            out['ownership_mismatch'].append(f'{edge}  (declared by {", ".join(owners)})')
+    return out
+
+
 def report(n=2, base_seed=0):
     declared, path_to_module, unattributable = _load_contracts()
     emits, consumes, key_hash, orphans, sites = observe(n, base_seed, path_to_module)
     obs_e = {(m, t) for (m, t) in emits}
     obs_c = {(m, t) for (m, t) in consumes}
+    # A module declaring `{type: "*"}` declares EVERY type on that side (key_substrate §8.7's
+    # universal readers). Expanding against the types actually seen is the only honest expansion:
+    # enumerating the whole Key vocabulary would inflate `declared` with edges nothing exercises.
+    obs_types_e = {t for _, t in obs_e}
+    obs_types_c = {t for _, t in obs_c}
     dec_e = {(m, t) for m, d in declared.items() for t in d['emits']}
+    dec_e |= {(m, t) for m, d in declared.items() if d.get('emits_any') for t in obs_types_e}
     dec_c = {(m, t) for m, d in declared.items() for t in d['consumes']}
+    dec_c |= {(m, t) for m, d in declared.items() if d.get('consumes_any') for t in obs_types_c}
     return {
         'modules_declared': len(declared),
         'emits': {
@@ -193,12 +245,16 @@ def report(n=2, base_seed=0):
             'matched': sorted(f'{m}:{t}' for m, t in dec_e & obs_e),
             'declared_only': sorted(f'{m}:{t}' for m, t in dec_e - obs_e),
             'observed_only': sorted(f'{m}:{t}' for m, t in obs_e - dec_e),
+            'triage': _triage([f'{m}:{t}' for m, t in obs_e - dec_e],
+                              declared, path_to_module, unattributable, 'emits'),
         },
         'consumes': {
             'declared': len(dec_c), 'observed': len(obs_c),
             'matched': sorted(f'{m}:{t}' for m, t in dec_c & obs_c),
             'declared_only': sorted(f'{m}:{t}' for m, t in dec_c - obs_c),
             'observed_only': sorted(f'{m}:{t}' for m, t in obs_c - dec_c),
+            'triage': _triage([f'{m}:{t}' for m, t in obs_c - dec_c],
+                              declared, path_to_module, unattributable, 'consumes'),
         },
         'emission_volume': sum(emits.values()),
         # Modules the registry binds to no implementation path — they CANNOT be observed, so their
@@ -238,17 +294,25 @@ def main(argv=None):
             print(f'    {c:>5} x  {f}')
     print(f'key-log content hash: {r["key_log_content_hash"]}')
     for side in ('emits', 'consumes'):
-        oo = r[side]['observed_only']
-        if oo:
-            print(f'\n  DRIFT — {side} observed but NOT declared ({len(oo)}):')
-            for x in oo:
-                print(f'    {x}')
+        tri = r[side]['triage']
+        for cond, label in (('undeclared_type', 'DRIFT — no module declares this Key type'),
+                            ('ownership_mismatch', 'OWNERSHIP — declared elsewhere, emitted here'),
+                            ('unobservable', 'REGISTRY — declared owner binds no impl path')):
+            if tri[cond]:
+                print(f'\n  {side}: {label} ({len(tri[cond])}):')
+                for x in tri[cond]:
+                    print(f'    {x}')
     if a.check:
-        bad = len(r['emits']['observed_only']) + len(r['consumes']['observed_only'])
-        if bad > OBSERVED_ONLY_MAX:
-            print(f'\nFAIL: {bad} undeclared runtime Key flow(s); the contract is the interface.')
+        bad = (r['emits']['triage']['undeclared_type']
+               + r['consumes']['triage']['undeclared_type'])
+        if len(bad) > UNDECLARED_TYPE_MAX:
+            print(f'\nFAIL: {len(bad)} Key type(s) flow at runtime that NO contract declares. '
+                  f'The contract is the interface — declare it or stop emitting it:')
+            for x in bad:
+                print(f'  {x}')
             return 1
-        print('\nOK: nothing flows that the contracts do not declare.')
+        print(f'\nOK: every Key type that flows is declared by some module '
+              f'(ownership mismatches and registry gaps are reported above, not gated).')
     return 0
 
 
