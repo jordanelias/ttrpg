@@ -798,7 +798,7 @@ modules:
       parity: key-log
       note: 'ED-MB-0043 RESOLVED 2026-08-03 by Jordan (commit/PR #274 indicates the canon tree). THE TWO TREES
         ARE NOT TWO VERSIONS OF ONE ENGINE -- they are a LIVE-BUT-STALE engine and a DEVELOPED-BUT-UNWIRED one,
-        and the fork was about to carry the wrong one. CANON = tests/sim/mass_battle/ (28 modules, 11,269 LOC,
+        and the fork was about to carry the wrong one. CANON = systems/mass_battle/sim/ (28 modules, 11,269 LOC,
         last touched 2026-07-31, carries the PC_* flags in 12 files, and is what CI byte-exact goldens run via
         bat.py). LIVE = systems/mass_battle/sim/massbattle.py (5 modules, 2,375 LOC, last touched 2026-07-21,
         ZERO PC_* flags) -- verified by resolving the import: faction_action.py:431 does `from systems.mass_battle.sim.massbattle

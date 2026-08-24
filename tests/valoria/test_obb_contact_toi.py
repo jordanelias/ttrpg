@@ -28,17 +28,16 @@ import math
 import os
 import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'sim'))  # tests/sim on path
 
 import pytest  # noqa: E402
 
-import mass_battle.hierarchy.units as _hu  # noqa: E402
-import mass_battle.orchestration as _orch  # noqa: E402
-import mass_battle.core.contact as _contact  # noqa: E402
-import mass_battle.geometry as _geo  # noqa: E402
-from mass_battle.geometry import cellbox_from, obb_overlap  # noqa: E402
-from mass_battle.engine import build_unit  # noqa: E402
-from mass_battle import validators as _val  # noqa: E402
+import systems.mass_battle.sim.hierarchy.units as _hu  # noqa: E402
+import systems.mass_battle.sim.orchestration as _orch  # noqa: E402
+import systems.mass_battle.sim.core.contact as _contact  # noqa: E402
+import systems.mass_battle.sim.geometry as _geo  # noqa: E402
+from systems.mass_battle.sim.geometry import cellbox_from, obb_overlap  # noqa: E402
+from systems.mass_battle.sim.engine import build_unit  # noqa: E402
+from systems.mass_battle.sim import validators as _val  # noqa: E402
 
 from ._conservation import assert_troop_conservation  # noqa: E402
 
@@ -126,7 +125,7 @@ def test_head_on_contact_fires_at_obb_touch(field_path):
     body across the gap) -- reach-DERIVED so this stays correct as weapon-class reach changes (v2 Stage E
     moved the default melee reach from 0.5 to reach_for('infantry')=0.1, so the threshold moved 1.5->1.1;
     pinning it to the live reach keeps the test a real geometry check, not a frozen constant)."""
-    from mass_battle.core.contact import find_contacts
+    from systems.mass_battle.sim.core.contact import find_contacts
     thr = 2 * _hu.CELL_RADIUS + _hu.reach_for('infantry')   # the OBB reach-touch centre-gap
     # place B just closer than OBB touch -> contact; and just beyond -> none. Build via a small helper.
     a = build_unit('Line', 3, 'A', 'A', 9)

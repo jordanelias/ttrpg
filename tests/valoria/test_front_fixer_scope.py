@@ -16,8 +16,8 @@ if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
 import inspect
-from mass_battle.orchestration import _compute_front_fixers, resolve_engagements
-from mass_battle.engine import build_army, SIDE_A_START_ROW, SIDE_B_START_ROW
+from systems.mass_battle.sim.orchestration import _compute_front_fixers, resolve_engagements
+from systems.mass_battle.sim.engine import build_army, SIDE_A_START_ROW, SIDE_B_START_ROW
 
 
 def _sub(faction, row, col, advance_dir):

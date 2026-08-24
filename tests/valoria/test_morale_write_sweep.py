@@ -29,8 +29,8 @@ _SIM = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'sim'))
 if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
-import mass_battle.orchestration as O  # noqa: E402
-from mass_battle.engine import build_army  # noqa: E402
+import systems.mass_battle.sim.orchestration as O  # noqa: E402
+from systems.mass_battle.sim.engine import build_army  # noqa: E402
 
 
 def _own_morale_unit():

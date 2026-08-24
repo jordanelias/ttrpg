@@ -28,7 +28,7 @@ _SIM = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'sim'))
 if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
-from mass_battle.resolution import (                      # noqa: E402
+from systems.mass_battle.sim.resolution import (                      # noqa: E402
     compute_degree, _sigma_net_boost, _DEGREE_EPS, _SIGMA_ZERO_SNAP,
 )
 

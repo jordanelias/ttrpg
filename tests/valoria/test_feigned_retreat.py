@@ -20,20 +20,19 @@ import os
 import random
 import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'sim'))
 
 import pytest  # noqa: E402
 
 
 def _reload(on):
     os.environ['PC_FEIGNED_RETREAT'] = '1' if on else '0'
-    import mass_battle.config as C
+    import systems.mass_battle.sim.config as C
     importlib.reload(C)
-    import mass_battle.resolution as R
+    import systems.mass_battle.sim.resolution as R
     importlib.reload(R)
-    import mass_battle.hierarchy.units as U
+    import systems.mass_battle.sim.hierarchy.units as U
     importlib.reload(U)
-    import mass_battle.orchestration as O
+    import systems.mass_battle.sim.orchestration as O
     importlib.reload(O)
     return C, O
 
@@ -125,7 +124,7 @@ def _build_unit(on):
     """A single-subunit Fast unit via the canonical engine.build_unit factory (the pool value itself is
     irrelevant here — only the overextended DELTA matters)."""
     C, _ = _reload(on=on)
-    from mass_battle.engine import build_unit  # noqa: E402
+    from systems.mass_battle.sim.engine import build_unit  # noqa: E402
     u = build_unit('Line', 3, 'p', 'A', 20, troop_type='cavalry',
                    power=4, command=4, discipline=5, morale=6, speed='Fast')
     return C, u

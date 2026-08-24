@@ -12,22 +12,21 @@ import os
 import random
 import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'sim'))
 
 import pytest  # noqa: E402
 
 
 def _reload(on):
     os.environ['PC_RESERVE_COMMIT'] = '1' if on else '0'
-    import mass_battle.config as C
+    import systems.mass_battle.sim.config as C
     importlib.reload(C)
-    import mass_battle.resolution as R
+    import systems.mass_battle.sim.resolution as R
     importlib.reload(R)
-    import mass_battle.hierarchy.units as U
+    import systems.mass_battle.sim.hierarchy.units as U
     importlib.reload(U)
-    import mass_battle.engine as E
+    import systems.mass_battle.sim.engine as E
     importlib.reload(E)
-    import mass_battle.orchestration as O
+    import systems.mass_battle.sim.orchestration as O
     importlib.reload(O)
     return C, E, O
 
@@ -46,8 +45,8 @@ def _pair(on, a_instructions=(), b_instructions=()):
 
 def test_unit_in_reserve_predicate():
     _, _, O = _reload(on=True), None, None  # noqa: F841
-    import mass_battle.orchestration as O2
-    import mass_battle.engine as E2
+    import systems.mass_battle.sim.orchestration as O2
+    import systems.mass_battle.sim.engine as E2
     reserve = E2.build_unit('Line', 3, 'R', 'A', 20, instructions=('reserve',))
     normal = E2.build_unit('Line', 3, 'N', 'A', 20, instructions=('hold',))
     assert O2.unit_in_reserve(reserve) is True

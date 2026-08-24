@@ -30,9 +30,9 @@ _SIM = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'sim'))
 if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
-import mass_battle.config as C
-from mass_battle.engine import build_army, SIDE_A_START_ROW
-from mass_battle.percell import _apply_with_spill
+import systems.mass_battle.sim.config as C
+from systems.mass_battle.sim.engine import build_army, SIDE_A_START_ROW
+from systems.mass_battle.sim.percell import _apply_with_spill
 
 
 def _atom(troops=300.0, conc=100.0):
@@ -236,7 +236,7 @@ def test_a_broken_cell_stops_fighting_but_its_men_remain():
     fighting part of the formation. Zeroing their troops instead would make a break indistinguishable
     from annihilation, which is the confusion this whole phase exists to remove.
     """
-    from mass_battle.core.exchange import _pair_engaged_troops
+    from systems.mass_battle.sim.core.exchange import _pair_engaged_troops
     a = _seeded()
     cells = list(a.cells())
     before_troops = sum(a.cell_troops.values())

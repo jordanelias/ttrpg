@@ -22,7 +22,7 @@ leaf both modules import at top level now), which deletes the npe -> game_state 
 Two other cycle families are OUT OF SCOPE and must NOT move:
   - the 9-module systems.social_contest.sim.contest.* cycle (documented intentional-during-rebuild)
   - the 2 mass-battle cycles (systems.mass_battle.sim.massbattle <-> .units;
-    the 5-module tests.sim.mass_battle.* cycle) — routed to the MB session's own plan
+    the 5-module systems.mass_battle.sim.* cycle) — routed to the MB session's own plan
 """
 import importlib.util
 import os
@@ -66,13 +66,13 @@ def test_exactly_three_cycles_remain_and_they_are_the_expected_families():
     contest = [c for c in cycles if _matches(c, 'systems.social_contest.sim.contest')]
     mb_massbattle = [c for c in cycles
                       if set(c) == {'systems.mass_battle.sim.massbattle', 'systems.mass_battle.sim.units'}]
-    mb_tests = [c for c in cycles if _matches(c, 'tests.sim.mass_battle')]
+    mb_tests = [c for c in cycles if _matches(c, 'systems.mass_battle.sim')]
 
     checked = 0
     for family_name, family in (
         ('social_contest.contest', contest),
         ('mass_battle.massbattle<->units', mb_massbattle),
-        ('tests.sim.mass_battle', mb_tests),
+        ('systems.mass_battle.sim', mb_tests),
     ):
         checked += 1
         assert len(family) == 1, f"{family_name}: expected exactly one cycle, found {family}"

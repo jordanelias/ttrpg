@@ -102,14 +102,20 @@ def _faction_action():
     return lambda net, ob: band(m._degree(net - ob))
 
 
-def _massbattle_twin():
-    m = importlib.import_module('systems.mass_battle.sim.massbattle')
-    return lambda net, ob: band(m.compute_degree(net, ob))
-
-
 def _massbattle_canon():
-    sys.path.insert(0, str(REPO / 'tests' / 'sim'))
-    m = _load('tests/sim/mass_battle/resolution.py', 'mb_resolution_probe')
+    """The mass-battle ladder. THERE IS NOW ONE OF THEM, WHICH IS THE POINT.
+
+    Until 2026-08-24 this file enrolled TWO: `systems/mass_battle/sim/massbattle.py`'s
+    `compute_degree` (the engine the campaign ran) and `tests/sim/mass_battle/resolution.py`'s
+    (the canon engine's). Jordan's port of the canon engine over `systems/mass_battle/sim/`
+    dissolved the twin — `massbattle.py` is now a thin strategic adapter with no ladder of its own,
+    and the single remaining implementation lives at `systems/mass_battle/sim/resolution.py`.
+
+    That is a real deduplication, not a bookkeeping change: two implementations of a degree ladder
+    that had to be kept equivalent by measurement are now one implementation. The enrolment shrinks
+    by one and this docstring is why.
+    """
+    m = importlib.import_module('systems.mass_battle.sim.resolution')
     return lambda net, ob: band(m.compute_degree(net, ob))
 
 
@@ -135,8 +141,7 @@ LADDERS = {
     'engine/autoload/dice_engine.py (OWNER)': _owner,
     'systems/threadwork/sim/operations.py': _threadwork_operations,
     'systems/factions/sim/faction_action.py': _faction_action,
-    'systems/mass_battle/sim/massbattle.py': _massbattle_twin,
-    'tests/sim/mass_battle/resolution.py': _massbattle_canon,
+    'systems/mass_battle/sim/resolution.py': _massbattle_canon,
     'skills/valoria-dice-model/valoria_dice.py': _dice_model_skill,
 }
 
@@ -273,8 +278,12 @@ LADDER_OWNERS = {
 
 DECLARED_ADAPTERS = {
     # — spells the ladder out instead of importing it, equivalence held by the test above —
-    'tests/sim/mass_battle/resolution.py': (
-        'The canon engine (J2), which deliberately takes no engine.* dependency.'),
+    'systems/mass_battle/sim/resolution.py': (
+        'The canon engine (J2), which deliberately takes no engine.* dependency. PATH MOVED '
+        '2026-08-24: it was tests/sim/mass_battle/resolution.py until Jordan ported the canon '
+        'engine over systems/mass_battle/sim/. The twin it used to be measured against — '
+        'massbattle.py compute_degree — is GONE with that port, so the enrolment above lost a '
+        'ladder rather than gaining one.'),
 
     # — imports the owner and RELABELS its output; trips the detector only on the fold's labels —
     'systems/threadwork/sim/opposing.py': (

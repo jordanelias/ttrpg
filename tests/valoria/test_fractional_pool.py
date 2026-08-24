@@ -16,8 +16,8 @@ if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
 import random  # noqa: E402
-import mass_battle.config as C  # noqa: E402
-import mass_battle.resolution as R  # noqa: E402
+import systems.mass_battle.sim.config as C  # noqa: E402
+import systems.mass_battle.sim.resolution as R  # noqa: E402
 
 
 def test_default_gated_off():

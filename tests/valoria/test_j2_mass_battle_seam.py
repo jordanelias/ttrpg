@@ -69,10 +69,9 @@ def _canon_accepts_a_strategic_unit() -> bool:
     strategic -> cell-based-Unit adapter makes the call work. Any OTHER exception propagates —
     a new failure mode should be read, not silently folded into "still blocked".
     """
-    sys.path.insert(0, str(ROOT / 'tests' / 'sim'))
     try:
         old = importlib.import_module('systems.mass_battle.sim.massbattle')
-        canon = importlib.import_module('mass_battle.orchestration')
+        canon = importlib.import_module('systems.mass_battle.sim.orchestration')
     except ImportError:
         return False
     finally:

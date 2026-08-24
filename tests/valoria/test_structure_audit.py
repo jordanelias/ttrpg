@@ -361,7 +361,7 @@ def test_g_code_covers_simulation_code_not_just_tools():
     assert 'systems' in prefixes, "no systems/*/sim modules in G_code — per-subsystem sims invisible"
     assert 'engine' in prefixes, "no engine/ modules in G_code — the engine core is invisible"
     # The live mass-battle engine sits under tests/ and is reachable only via EXTRA_CODE_ROOTS.
-    assert any(m.startswith('tests.sim.mass_battle') for m in mods), (
+    assert any(m.startswith('systems.mass_battle.sim') for m in mods), (
         "the live mass-battle engine (tests/sim/mass_battle/, ~10.5k LOC) is not in G_code"
     )
 
@@ -375,11 +375,11 @@ def test_sys_path_alias_resolves_live_mass_battle_internal_edges():
     root = sa.Path(_ROOT)
     mods = sa.collect_py_modules(root)
     aliases = sa.sys_path_aliases(mods)
-    assert aliases.get('mass_battle.engine') == 'tests.sim.mass_battle.engine'
+    assert aliases.get('systems.mass_battle.sim.engine') == 'tests.sim.systems.mass_battle.sim.engine'
     g, _ = sa.build_g_code(root, mods)
     internal = sum(
-        1 for m in g if m.startswith('tests.sim.mass_battle')
-        for t in g[m] if t.startswith('tests.sim.mass_battle')
+        1 for m in g if m.startswith('systems.mass_battle.sim')
+        for t in g[m] if t.startswith('systems.mass_battle.sim')
     )
     assert internal >= 20, f"live mass-battle engine resolved only {internal} internal edges"
 

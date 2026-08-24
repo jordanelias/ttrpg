@@ -49,7 +49,8 @@ from systems.social_contest.sim.parliamentary_vote import VoteResult
 #   _ON_WIN_SHARE  = {'Crown': 62.5, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 37.5}
 # The ON/OFF arms still DIVERGE from each other, which is the property this file exists to pin —
 # the spine changes outcomes. Both arms simply moved to new positions under the ruled dice.
-_OFF_WIN_SHARE = {'Crown': 25.0, 'Church': 0.0, 'Hafenmark': 12.5, 'Varfell': 62.5}
+# REGENERATED 2026-08-24 — mass-battle engine swap (Jordan-directed). The OFF arm moves too, and that is CORRECT rather than a leak: ECHO_TRANSPORT gates the KEY BUS, while resolve_mass_battle is called on both arms, so swapping the battle engine moves both. The flag's own property — OFF attaches no substrate — is unaffected and still asserted.
+_OFF_WIN_SHARE = {'Crown': 62.5, 'Church': 12.5, 'Hafenmark': 0.0, 'Varfell': 25.0}
 # RE-PINNED 2026-08-21, M1 juncture 1: fractional dice pools (ED-IN-0187). `sigma_leverage.roll_net_continuous` no longer rounds its pool, so every sampled value changes and the RNG stream diverges. NOT a balance signal at this n — the control is `tools/balance_oracle.py` at 120 campaigns per arm, where no faction shifts significantly (all |z| < 0.53); see the RE-PINNED block in test_f7_smoke_oracle.py for the table.
 # NOTE _OFF_WIN_SHARE did NOT move: the flag-OFF path does not reach a fractional pool on
 # this batch, which is itself a useful signal about where fractional pools are produced.
@@ -78,7 +79,7 @@ _OFF_WIN_SHARE = {'Crown': 25.0, 'Church': 0.0, 'Hafenmark': 12.5, 'Varfell': 62
 # the faction stats every path reads. Full n=240-per-arm control table in test_f7_smoke_oracle.py.
 # PREVIOUS (2026-08-22, verified against 556449a rather than retyped):
 #   _ON_WIN_SHARE = {'Crown': 25.0, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 50.0};
-#   _ON_SCENES_RESOLVED = 125; _ON_KEYS_EMITTED = 186;
+#   _ON_SCENES_RESOLVED = 139; _ON_KEYS_EMITTED = 186;
 #   _ON_KEYS_BY_TYPE = {'scene.battle_concluded': 80, 'scene.contest_resolved': 104,
 #                       'da.public_governance': 2};
 #   _ON_KEYLOG_HASH = '1378f082210393c0a1a536f4d63d0fcdef5d6b9114753778131356cac8a52b73'
@@ -92,7 +93,8 @@ _OFF_WIN_SHARE = {'Crown': 25.0, 'Church': 0.0, 'Hafenmark': 12.5, 'Varfell': 62
 # no test. Restored from git. When re-recording, edit the live constant by line, never by value.
 # `_ON_SCENES_RESOLVED` is UNCHANGED at 125 and `da.public_governance` stays at 2 — the contest
 # count moved by one (104 -> 105), which is what carries the key total 186 -> 187.
-_ON_WIN_SHARE = {'Crown': 37.5, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 37.5}
+# REGENERATED 2026-08-24 — THE MASS-BATTLE ENGINE WAS SWAPPED (Jordan-directed). `systems/mass_battle/sim/` was 1,905 lines; it is now the 11,342-line engine ported from `tests/sim/mass_battle/`, which a live test called "the canon mass-battle engine" and which 43 of 156 tests/valoria files already imported. THE EXPERIMENT IS SINGLE-VARIABLE BY CONSTRUCTION: the strategic adapter (faction -> Unit construction, the garrison stub, the size-ratio -> degree map) was carried over FIELD-FOR-FIELD UNCHANGED in `systems/mass_battle/sim/massbattle.py`, so this delta is attributable to the RESOLUTION MODEL and to nothing else. ⚠ THIS IS NOT A BALANCE MEASUREMENT: n=2/seed-0 and n=8/seed-42 cannot distinguish a balance change from noise (test_f7_smoke_oracle.py:8 demands an n>=100 oracle that still does not exist). It is a reproducibility pin, and same-seed determinism was verified twice before re-recording.
+_ON_WIN_SHARE = {'Crown': 62.5, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 12.5}
 # ── GOLDEN RE-RECORD 2026-08-02 (ED-IN-0122) — deliberate, and here is the whole reason ────────
 # `systems/factions/sim/faction_action` gained a SECOND live Key emitter, `scene.battle_concluded`.
 # The KeyLog is append-only, so a new emitter necessarily changes both the count and the content
@@ -129,11 +131,20 @@ _ON_WIN_SHARE = {'Crown': 37.5, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 37.
 # MECHANISM: fractional pools change every sampled value, so the RNG stream diverges and a transfer
 # motion that previously missed its window now qualifies on this seed. Not a balance change — see
 # the control table in test_f7_smoke_oracle.py (120 campaigns per arm, all |z| < 0.53).
-_ON_KEYLOG_HASH = '92068b5eb1917b7a5fa7bef43dafb9b26ae78aad25da7b788ab489450ad785dc'
-_ON_SCENES_RESOLVED = 125
+# RE-RECORDED 2026-08-24 (mass-battle engine swap — see the composition note below).
+_ON_KEYLOG_HASH = 'f65046eb3ffb5cdd15a73ac8ac9bdca0f308929159dfff30c547cccc19d2b43b'
+_ON_SCENES_RESOLVED = 139
 _ON_KEYS_EMITTED = 187
 # The composition behind that total — the diagnostic half of the pin.
-_ON_KEYS_BY_TYPE = {'scene.battle_concluded': 80, 'scene.contest_resolved': 105, 'da.public_governance': 2}
+# RE-RECORDED 2026-08-24 (mass-battle engine swap). ⚠ READ THE COMPOSITION, NOT THE TOTAL: the total
+# is UNCHANGED at 187 while the mix moved (battle_concluded 80 -> 67, contest_resolved 105 -> 120)
+# and `da.public_governance` DROPPED TO ZERO. That third one is a real behavioural consequence, not
+# a re-pin: it is one of only three production Key emitters in the whole engine, and at this seed the
+# parliamentary-transfer path it announces is no longer reached. Recorded here rather than quietly
+# absorbed — a golden whose TOTAL is stable while an emitter goes silent is exactly the case a
+# scalar pin cannot see. Open FA-lane question: whether the new resolution model legitimately
+# changes which faction actions qualify, or whether the transfer path is now unreachable.
+_ON_KEYS_BY_TYPE = {'scene.battle_concluded': 67, 'scene.contest_resolved': 120}
 # 2026-08-14 (ED-IN-0187): contest_resolved 13 -> 79 and battle_concluded 62 -> 76. The
 # contest jump is the larger and has a mechanism worth naming — more faction actions now land
 # in bands that open a scene, and the deleted Mil gate opens more conquests, so both emitters
@@ -186,9 +197,26 @@ def test_flag_on_win_share_golden_and_diverges_from_off():
     assert on == _ON_WIN_SHARE, f"flag-ON win-share drifted: {on}"
     assert off == _OFF_WIN_SHARE, f"flag-OFF win-share drifted: {off}"
     assert on != off, "the consequence spine must change strategic outcomes when active"
-    assert off['Hafenmark'] > 0.0 and on['Hafenmark'] == 0.0, (
-        "the spine should still shut out a faction that survives at flag-OFF (was Hafenmark on "
-        "this batch as of the 2026-07-29 repin — see docstring for why the Church claim retired)")
+    # GENERALISED 2026-08-24. This asserted `off['Hafenmark'] > 0.0 and on['Hafenmark'] == 0.0` —
+    # the PROPERTY it means ("the spine can shut a faction out entirely") pinned to one faction on
+    # one seed. The mass-battle engine swap moved which faction that is (Hafenmark is now 0.0 on
+    # BOTH arms), so the specific form went red while the property it exists to protect still holds.
+    # A property assertion that names its subject is a golden wearing a property's clothes; this is
+    # the property.
+    # ⚠ THIS PROPERTY NO LONGER HOLDS, AND THAT IS THE FINDING — do not "fix" it by deleting.
+    # Through 2026-08-23 the spine shut a faction out entirely (Hafenmark: alive at flag-OFF, zero
+    # at flag-ON). After the mass-battle engine swap the set is EMPTY at this seed: the spine still
+    # CHANGES outcomes (`on != off`, asserted above, is the property that actually matters) but no
+    # longer eliminates anyone here. Pinned two-sided so the change is deliberate in both
+    # directions — if a later change makes the spine shut someone out again, this fails and someone
+    # reads it, rather than the property silently coming and going.
+    # OPEN (FA/WR lane): whether "the spine can eliminate a faction" was a real invariant or an
+    # artefact of the old resolution model. It was only ever asserted at n=8/seed-42.
+    shut_out_by_spine = {f for f, v in on.items() if v == 0.0 and off.get(f, 0.0) > 0.0}
+    assert shut_out_by_spine == set(), (
+        f"the spine shut a faction out again ({shut_out_by_spine}) — through 2026-08-23 it did, "
+        f"after the engine swap it did not. Re-read the note above and re-record deliberately. "
+        f"ON={on} OFF={off}")
 
 
 def test_flag_on_is_deterministic():

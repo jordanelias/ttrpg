@@ -15,15 +15,14 @@ adapter (which does not expose `orders`)."""
 import os
 import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'sim'))  # tests/sim on path
 
 import pytest  # noqa: E402
 
-import mass_battle.hierarchy.units as _hu  # noqa: E402
-import mass_battle.orchestration as _orch  # noqa: E402
-from mass_battle.hierarchy.units import Subunit, Unit, Order, D_YIELD, YIELD_POOL_MULT  # noqa: E402
-from mass_battle.core.exchange import subunit_combat_pool  # noqa: E402
-from mass_battle.engine import run_battle  # noqa: E402
+import systems.mass_battle.sim.hierarchy.units as _hu  # noqa: E402
+import systems.mass_battle.sim.orchestration as _orch  # noqa: E402
+from systems.mass_battle.sim.hierarchy.units import Subunit, Unit, Order, D_YIELD, YIELD_POOL_MULT  # noqa: E402
+from systems.mass_battle.sim.core.exchange import subunit_combat_pool  # noqa: E402
+from systems.mass_battle.sim.engine import run_battle  # noqa: E402
 
 
 def _line(faction, row, advance_dir, troops=3000, **kw):
@@ -149,7 +148,7 @@ def test_yield_facing_stays_locked_toward_engaged_enemy():
     d = _line('B', 15, 1, troops=3000)
     a = _unit('A', 'A', atk, discipline=D_YIELD)
     dd = _unit('D', 'B', d)
-    from mass_battle.core.contact import check_orders
+    from systems.mass_battle.sim.core.contact import check_orders
     check_orders(a, 1, [c for c in dd.subunits[0].cells()])
     assert atk.yield_active
     run_battle(a, dd, max_turns=6)

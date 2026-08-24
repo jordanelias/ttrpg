@@ -26,17 +26,16 @@ grid state into whatever test runs next in the same pytest session."""
 import os
 import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'sim'))  # tests/sim on path
 
 import pytest  # noqa: E402
 
-from mass_battle import validators as _val  # noqa: E402
-import mass_battle.hierarchy.units as _hu  # noqa: E402
-import mass_battle.orchestration as _orch  # noqa: E402
+from systems.mass_battle.sim import validators as _val  # noqa: E402
+import systems.mass_battle.sim.hierarchy.units as _hu  # noqa: E402
+import systems.mass_battle.sim.orchestration as _orch  # noqa: E402
 
 # Lighter seed count than validators.py's own _SEEDS=20 default -- this is a CI acceptance gate
 # (does the maneuver reach its goal at all), not the full aggregate-confidence battery a manual
-# `python3 -m mass_battle.validators` run performs; keeps this file's runtime well inside
+# `python3 -m systems.mass_battle.sim.validators` run performs; keeps this file's runtime well inside
 # tests/valoria's shared 5-minute CI budget (measured ~7s per path per validator locally).
 _CI_SEEDS = 8
 

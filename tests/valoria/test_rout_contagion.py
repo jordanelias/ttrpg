@@ -21,8 +21,8 @@ _SIM = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'sim'))
 if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
-from mass_battle.config import ROUT_CASCADE_FRAC
-from mass_battle.engine import build_army, SIDE_A_START_ROW
+from systems.mass_battle.sim.config import ROUT_CASCADE_FRAC
+from systems.mass_battle.sim.engine import build_army, SIDE_A_START_ROW
 
 
 def _unit(n_sub=3, troops=300.0):
@@ -94,7 +94,7 @@ def test_default_is_inert():
 
 def test_a_lowered_threshold_breaks_the_army_early():
     """The mechanism itself: below 1.0, a decisive portion breaking is enough."""
-    import mass_battle.hierarchy.units as U
+    import systems.mass_battle.sim.hierarchy.units as U
     u = _unit(3)
     u.subunits[0].routed = True
     assert u._broken_share() == pytest.approx(1 / 3)

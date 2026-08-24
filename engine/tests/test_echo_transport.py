@@ -41,7 +41,8 @@ from engine.cross_scale import echo_transport
 # The flag-OFF arm moves too, which is the point of recording it: ECHO_TRANSPORT gates the echo
 # SPINE, not the dice, so a dice ruling is expected to move both arms. If OFF had held still while
 # ON moved, THAT would have been the anomaly worth investigating.
-_GOLDEN_WIN_SHARE = {'Crown': 25.0, 'Church': 0.0, 'Hafenmark': 12.5, 'Varfell': 62.5}
+# REGENERATED 2026-08-24 — mass-battle engine swap (Jordan-directed). The OFF arm moves too, and that is CORRECT rather than a leak: ECHO_TRANSPORT gates the KEY BUS, while resolve_mass_battle is called on both arms, so swapping the battle engine moves both. The flag's own property — OFF attaches no substrate — is unaffected and still asserted.
+_GOLDEN_WIN_SHARE = {'Crown': 62.5, 'Church': 12.5, 'Hafenmark': 0.0, 'Varfell': 25.0}
 
 
 # ── 1. Flag OFF: byte-exact, no substrate ────────────────────────────────────

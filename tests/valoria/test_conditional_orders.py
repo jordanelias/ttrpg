@@ -17,7 +17,7 @@ _SIM = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'sim'))
 if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
-from mass_battle.engine import build_army, Order, resolve_battle, SIDE_A_START_ROW, SIDE_B_START_ROW  # noqa: E402
+from systems.mass_battle.sim.engine import build_army, Order, resolve_battle, SIDE_A_START_ROW, SIDE_B_START_ROW  # noqa: E402
 
 
 def _adv_then_withdraw(faction, trigger_range):
@@ -101,7 +101,7 @@ def test_own_strength_fires_when_attrited():
 def test_own_strength_does_not_fire_at_full_strength():
     """own_strength:0.5 must NOT fire before the subunit is actually down to half — checked pre-battle."""
     sr = SIDE_A_START_ROW
-    from mass_battle.core.contact import check_orders
+    from systems.mass_battle.sim.core.contact import check_orders
     ua = build_army([{'shape': 'Line', 'troop_type': 'infantry', 'unit_type': 'melee', 'stance': 'balanced',
                       'width': 6, 'depth': 2, 'troops': 1200, 'starting_position': (sr, 25),
                       'orders': (Order(trigger='own_strength:0.5', behavior={'stance': 'retreat'}),)}], 'A', 'A')

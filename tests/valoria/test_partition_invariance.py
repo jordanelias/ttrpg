@@ -11,8 +11,8 @@ if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
 import pytest
-from mass_battle.orchestration import _convergence_scale
-from mass_battle.engine import build_army, SIDE_A_START_ROW, SIDE_B_START_ROW
+from systems.mass_battle.sim.orchestration import _convergence_scale
+from systems.mass_battle.sim.engine import build_army, SIDE_A_START_ROW, SIDE_B_START_ROW
 
 
 def _army(n_sub, total=600.0, conc=100.0, faction='A', anchor=10):
