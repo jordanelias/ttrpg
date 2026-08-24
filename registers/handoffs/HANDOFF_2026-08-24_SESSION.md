@@ -1,317 +1,330 @@
-# Session handoff — 2026-08-24, branch `claude/hub-and-bus-contract` (PR #329)
+# MASTER SESSION DOCUMENT — 2026-08-24
 
-> **⚠ DO NOT MERGE PR #329 AT ITS CURRENT HEAD (`e4070d4`).** The last commit is a deliberate WIP:
-> `engine/tests` is fully green (2055 passed) but `tests/valoria` has ~24 residual failures from a
-> half-finished engine port. The exact list is in §5. Everything BEFORE that commit (`d080a36` and
-> earlier) was green and is mergeable on its own.
-
-**Read next, in this order:** `proposals/2026-08-24-error-regions-v1.md` (11 error regions as
-executable plan items — this is the primary deliverable of the session), then §5 below (the port's
-open tail), then §6 (culling/centralization state).
+**Supersedes the earlier version of this file.** It is the single entry point for what happened, what
+it means, and what to do next. Two executable plans sit beside it and are referenced by name; do not
+read them until §6 tells you to.
 
 ---
 
-## 1. What was ruled this session (Jordan, all 2026-08-24)
+## 0. STOP — the state of `main`
 
-These are now in `CLAUDE.md` and bind future sessions:
+**PR #329 was merged at `dcf38ef`, carrying a deliberately unfinished engine port. `main` is RED.**
 
-1. **§0.05 — CODE IS THE MECHANISM, PROSE IS REFERENCE.** *"Whatever mechanisms we have that rely on
-   prose are worthless. We rely on code ONLY for the game work; our design documents in .MD are
-   reference and information only."* With a table of what is/isn't a mechanism and the test: *if this
-   document were deleted, would the game behave differently?*
-2. **§0 — `needs_jordan` is not a parking space.** Five-test escalation ladder (superseded /
-   irrelevant / answered by a design document / answered by precedent / answered by architecture).
-   Escalate only what survives all five.
-3. **No `.md` sweeping unless prose is explicitly named.** Enforced as a `PreToolUse` hook
-   (`tools/hook_md_sweep_guard.py`), not a paragraph.
-4. **Work-item triage** — if it doesn't concern code it isn't a work item; **but** unbuilt mechanic
-   proposals are kept ("code that doesn't exist yet is still code to me").
-5. **Port `tests/sim/mass_battle` over `systems/mass_battle/sim`** (§5).
-
-**⚠ §0.05 HAS A LIMIT I GOT WRONG AND A LATER SESSION MUST NOT REPEAT.** "The code is the formula"
-resolves **doc-vs-code**. It does **not** resolve doc-vs-doc when the code implements *neither*
-value, and it **cannot** resolve **code-vs-code**. I filed 20 ledger rows as "answered by §0.05";
-3 of 3 spot-checked were misfiled. `ED-SC-0004` is two live Argue-pool formulas in two live modules —
-a genuine Jordan fork, not a prose defect.
-
----
-
-## 2. Repository state — measured, not estimated
-
-| | lines | note |
-|---|---|---|
-| `engine/` + `systems/` (non-test) | **41,501** | includes the ported engine (was 30,159 before the port) |
-| `tests/valoria/` | 29,602 | ≈ the size of all game code |
-| `tools/` | 16,593 across **56** modules | was ~106 modules before the culling waves |
-| `engine/tests/` | 4,060 | **the only suite that executes the game** |
-
-**The shape to keep in view:** the *graded* surface (`tests/valoria`) is seven times the size of the
-surface that *plays the game* (`engine/tests`). An audit measured **~36% of `tests/valoria` (~51
-files, ≈10,800 lines) has apparatus — a tool, registry, ledger, doc or another test — as its
-subject**, after crediting the bridge/exporter/milestone guards to the game side.
-
-**A guard chain has re-formed at depth 4**, the shape §0.3 documents:
-`game ← tests ← tools/ci_vacuous_assertion_check.py ← tests/valoria/test_vacuous_assertion_check.py`.
-Report-only, one rung shallower than the deleted `test_wf_harness_check.py`.
-
-**This session's own output ratio was 11:1 apparatus-to-game** (+904 `tools/`, +436 `tests/valoria`,
-+120 game code), in a session whose subject was centralizing the game. That is §0.3's **T2** term,
-and §6 records that no plan addresses it.
-
----
-
-## 3. What actually shipped and is green (commits `5cd99ee` … `d080a36`)
-
-- **Convictions centralized.** Three incompatible rosters (9 / 8 / 13) collapsed to one owner:
-  `references/descriptor_registry.yaml:conviction_roster` → `tools/export_descriptors.py` →
-  `engine/engine_params/descriptors.json` → `engine.substrate.descriptors.CONVICTIONS` → read by
-  `conviction.py` and `npe.py`. **A ratified mechanic that was a silent no-op now runs**: ED-912
-  §6.1's Close-Knot-break Scar hit an unknown-name branch and returned `magnitude=0` on every call
-  while the caller reported `conviction_scar = 1`.
-- **`tools/export_module_contracts.py` + `engine/engine_params/module_contracts.json`** — the
-  contract interface is cooked, and its `path_to_module` block is the single owner of the
-  directory→contract-module binding that nothing owned before.
-- **`tools/contract_runtime_conformance.py`** — runs a seeded campaign and asks the engine what it
-  emits. **Not wired into CI anywhere** (deliberate; see §5).
-- **`tools/hook_md_sweep_guard.py`** + 12 tests pinning that it is *wired*, not merely present.
-
----
-
-## 4. The measurement that should drive the next session
-
-From `contract_runtime_conformance.py` (n=2, seed 0):
-
-```
-EMITS     declared 60   observed  3   matched 0
-CONSUMES  declared 82   observed 13   matched 0
-397 emissions, from exactly THREE call sites, none of which any contract claims.
-```
-
-The 60-edge gap splits cleanly:
-
-- **29 edges** belong to 7 modules with **no implementation path** — the ED-1051 authoring backlog.
-- **31 edges** belong to 10 modules that **have code and emit nothing** — the real wiring gap:
-
-```
-scene_slate (8) · fieldwork_knots (4) · peninsular_strain (4) · social_contest (4)
-faction_state (3) · personal_combat (3) · threadwork (2) · miraculous_event (1)
-piety_track (1) · settlement_layer (1)
-```
-
-**Five of those already have a live subscriber** (`mechanical.mission_shift`, `state.scar_acquired`,
-`meta.knot_formed`, `scene.combat_resolved`, `scene.combat_felled` — all subscribed at
-`engine/cross_scale/articulation.py:116-130`). Wiring one closes a loop end-to-end and moves
-`observed` from 3 to 4, which is falsifiable. **This is the recommended first action next session.**
-
-Two Key types flow that **no contract declares**: `scene.accord_echo` and
-`meta.cascade_cluster_event` (both in `key_types.json`, both subscribed). `--check` exits 1 today.
-
----
-
-## 5. THE OPEN PORT — `tests/sim/mass_battle` → `systems/mass_battle/sim` (commit `e4070d4`)
-
-**Done and verified:**
-- 11,342 lines / 28 modules moved; imports rewritten to `systems.mass_battle.sim.*`; the
-  `tests/sim` `sys.path` seam deleted from 42 test files.
-- **Determinism preserved** — the canon engine drew from the global `random` at 7 sites; the engine
-  it replaced threaded `rng` end-to-end after a documented 2026-05-20 fix. New
-  `systems/mass_battle/sim/rngsource.py` is the single owner; `resolve_mass_battle` scopes
-  `world.rng`. Verified byte-identical across two same-seed runs.
-- **The strategic adapter survived** — `massbattle.py` is now *only* `resolve_mass_battle`,
-  `_faction_to_unit`, the garrison stub and the degree map, carried over **field-for-field
-  unchanged** so the golden delta is attributable to the resolution model alone.
-- **A duplicate degree ladder was eliminated** (the `massbattle.compute_degree` twin died with the
-  port; one implementation remains at `systems/mass_battle/sim/resolution.py`).
-- All six campaign goldens re-recorded with notes. `engine/tests`: **2055 passed**.
-
-**Two findings inside the re-record that are NOT re-pins — do not absorb these silently:**
-1. **`da.public_governance` dropped to ZERO emissions** while the key total stayed at 187
-   (battle_concluded 80→67, contest_resolved 105→120). One of only three production emitters has
-   gone silent at seed 42. **Open, FA lane.**
-2. **"The spine can shut a faction out entirely" no longer holds.** Pinned two-sided with the open
-   question: real invariant, or artefact of the old resolution model?
-
-**Residual red in `tests/valoria` (26 at last full run) — the port's tail:**
-
-| family | n | what it needs |
-|---|---|---|
-| `test_mass_battle_systems_movement` | 8 | behavioural expectations written against the OLD engine — read each, decide whether the canon engine's behaviour is correct and re-pin, or whether it is a regression |
-| `test_flow_skeletons` | 5 | anchors into the rewritten `massbattle.py`. **Not remappable by diff** — the file is new, so these need re-authoring or the gate needs the R7-A decision |
-| `test_field_golden_pins` | 5 | env/pin classification over the new module set |
-| `test_public_governance_transfer_key` | 3 | the emitter that went silent (finding 1 above) — this is a real question, not a re-pin |
-| `test_export_sim_params` | 1 | `SEED_BASE` collision, below |
-| `test_link_values_pointers` | 1 | value↔pointer links over the new module set |
-| `test_structure_audit` | 1 | the `sys.path` alias register still expects the old mass-battle edges |
-| `test_morale_write_sweep` | 1 | `_CELL_OWNED` field register vs the canon engine's write sites |
-| `test_import_cycle_game_state_npe` | 1 | the declared cycle families moved with the port |
-
-**Verified fixed after the WIP commit** (was 30 → now 26): `test_tool_input_paths_resolve` and the
-`Golden Modes Byte-Exact` CI job — see the sub-section below.
-
-**Two CI-only residuals fixed after the handoff was first written** (`88aba35`), both from the port's
-repoint sweep and neither in the original tail — the handoff was incomplete twice, which is worth
-knowing about the handoff as much as about the fixes:
-  1. `freshness_gate` read `references/module_contracts.yaml` STALE — the sweep edited that registry,
-     changing its blob, and the `canonical_sha__` pin was never re-synced. `--update`; 109 FRESH / 0 STALE.
-  2. Four live ledger rows (ED-MB-0016 ×3, ED-MB-0044) cite `tests/sim/mass_battle/*` paths the port
-     moved. Fixed with a **dir-prefix row** in `references/restructure_ledger.md` — deliberately NOT
-     a `FORK:` row, because nothing was retired: the modules exist in `main` at a new path, and a
-     FORK row would send a reader to a ref for a file that is right there (the §8 hazard).
-
-### ⚠ RUN THE GATES IN CI MODE, OR YOUR LOCAL GREEN IS VACUOUS
-
-**This cost me four wrong predictions in a row and it is the most reusable thing in this handoff.**
-`tools/ci_common.py:_diff_args` resolves the changeset from the environment:
-
-| context | what it diffs |
+| | |
 |---|---|
-| CI (pull_request) | `origin/main...HEAD` — **the whole branch** |
-| bare local run | `HEAD~1..HEAD` — **the last commit only** |
-| `valoria_local --staged` | `--cached` — **staged files only** |
+| `main` head | `dcf38ef` (squash of #329 — its title still reads "⚠ DO NOT MERGE AT HEAD") |
+| canon mass-battle engine | **on `main`** — 33 files at `systems/mass_battle/sim/`; `tests/sim/mass_battle/` is gone |
+| `tests/valoria` | **22 failures** — the port's tail |
+| blocking validators | green (verified in real CI diff mode) |
+| `engine/tests` | 2055 passed **locally**; **never confirmed green on a runner** — fail-fast cancelled it every time |
 
-So every changeset-sensitive gate (`ci_co_file_checker`, `ci_sim_fabrication_check`,
-`ci_naming_check`, `ci_claim_provenance_check`) examines a *different and much smaller* set locally
-than in CI. I ran `ci_sim_fabrication_check`, got `[SIM-FABRICATION OK] no changed sim .py files —
-nothing to check`, and reported the gate fixed. It had checked nothing.
+**A red `main` is the one thing CLAUDE.md licenses work on with no milestone trace** — §0's max-effort
+amendment names it: *"a red `main`, which blocks everything and traces to nothing."* Fixing it is
+sanctioned for any session, immediately, without asking.
 
-**Reproduce CI exactly:**
+**Start here:** confirm `engine/tests` green on a runner. If the campaign suite is genuinely fine,
+all 22 are test-side expectations and the port is sound. If it is not, the port has a real defect and
+everything below re-prioritises.
 
+---
+
+## 1. THE THROUGHLINES
+
+Seven patterns, each with more than one instance, each costing real work this session. **These are
+the reason to read this document.** The plans are downstream of them.
+
+### T1 — Discriminators that do not discriminate
+
+**Eight instances.** A classifier, filter, or predicate gets built, trusted, and used to drive a bulk
+operation or publish a number — while separating something *other than* what its name claims.
+
+| what it claimed to separate | what it actually separated | cost |
+|---|---|---|
+| work items about code | what a row **cites** (it matched the `source:` field) | culled 149 rows incl. the hub-and-bus gap itself. Reverted. |
+| answered vs open questions | whether the row's **work** finished | cleared 17 rows; one was `ratified` while its code still said "held for Jordan". Reverted. |
+| emitting module | tree layout vs **logical** contract names | published "0 of 60 declared emissions happen" |
+| the emitter's module | a parent directory swallowing a sibling | battle Keys attributed to a module that never emits |
+| the emitter | the first **claimed ancestor** — i.e. a caller | laundered an unclaimed emitter onto a bystander |
+| declared Key types | dotted strings, silently dropping `{type: "*"}` | 13 phantom drift findings |
+| stale path references | the **slash-form**, missing the `os.path.join` component form | CI red on a job I had declared fixed |
+| what CI checks | **one commit** (`HEAD~1..HEAD`) vs CI's **whole branch** (`origin/main...HEAD`) | four wrong predictions in a row |
+
+**THE LESSON.** *Name the predicate by what it actually separates, then find one case on each side it
+must get right, and check those two by hand before it drives anything.* Every one of these had a
+counterexample findable in minutes. None was looked for, because **every one of them was plausible.
+Plausibility is the failure mode, not carelessness.**
+
+**COROLLARY.** *A discriminator demonstrated wrong must not drive a bulk operation, and the revert is
+total.* The 17 rows were all reverted though only 2 were proven wrong — the predicate that selected
+all 17 is what failed.
+
+### T2 — Checks that cannot observe the failure they exclude
+
+§0.1 pt 2, recurring five times:
+
+- A test asserted the **announcement dict** the code writes for itself, while the state it announced
+  never moved — green over a dead ratified mechanic.
+- A guard asserted "the attributed module binds a path" — **true of the very module the bug
+  mis-attributed to**, so it was green over the exact bug it was written for.
+- A triage fell back to wildcard consumers when nothing declared a type, making the failure branch
+  **unreachable** — the tool reported its hard floor MET.
+- A floor sat behind `hasattr()` on a function that did not exist — it had **never executed**.
+- My own local gate runs diffed one commit while CI diffed twelve — `no changed files, nothing to
+  check` read as a pass.
+
+**THE LESSON.** *Write the mutation before the assertion.* State the one-line change that must turn
+the guard red, apply it, confirm. **And never assert on a value the code under test produced about
+itself** — assert on the state it changed.
+
+### T3 — Optimising the measurement instead of the thing
+
+- The handoff recommended wiring an emitter **because it would move `observed` 3 → 4** — without
+  checking whether the number could be moved *honestly*. It cannot: every candidate needs invented
+  payload or is unreachable.
+- "108 declared / 13 matched" was **circular** — for a wildcard module, `matched == observed` by
+  construction. The number could not fail.
+- A key-log golden stayed at **exactly 187** while an emitter inside it went to zero. The total was
+  stable; the composition had collapsed.
+
+**THE LESSON.** *Before publishing a coverage or conformance number, ask what would make it go DOWN.
+If nothing can, it measures that the plumbing ran.* And **never take an action whose justification is
+that it moves a metric** — that is how an instrument starts lying.
+
+### T4 — A predicate is not a licence where a ruling already decided
+
+I recommended culling `test_vacuous_assertion_check.py` in a document I had **already committed**. A
+standing Jordan ruling keeps it, recorded verbatim at the call site
+(`.github/workflows/valoria-ci.yml:246-250`), and `ci_checks_registry.yaml:34` independently marks it
+the file's **only** `layer: L2` row — already classified as the deliberate exception.
+
+A read-only critic applied §0.1 pt 5 correctly *in the abstract* and never asked whether the artifact
+was ruled. I relayed it without asking either.
+
+**THE LESSON.** *CLAUDE.md §0's five-test ladder puts "superseded by a later ruling" FIRST for exactly
+this reason. Run test 1 before applying any predicate.* A correct predicate applied over a ruling is
+still wrong.
+
+### T5 — The graded surface is not the played surface (§0.3's T2 term)
+
+| | lines |
+|---|---|
+| `tests/valoria` — what a session is graded on | 29,602 |
+| `engine/tests` — what actually executes the game | 4,060 |
+
+**Seven to one.** ~36% of `tests/valoria` (~51 files, ~10,800 lines) has *apparatus* — a tool,
+registry, ledger, doc, or another test — as its subject.
+
+**This session's own output ran 11:1 apparatus-to-game** (+904 `tools/`, +436 `tests/valoria`, +120
+game code) in a session whose subject was centralizing the game.
+
+**No plan in the corpus addresses this, and two say so explicitly.** The execution order's own
+sharpest line: **"no game regression can currently red CI."** The Stop hook was emptied, which deleted
+the apparatus-facing grade **without installing a game-facing one**. T2 is now vacuum, not fixed.
+
+**THE LESSON, and it is the hardest one here.** *An instrument that measures the game is still
+apparatus.* §0.1 pt 5's load-bearing predicate licenses building it; it does not make building it game
+work. This session produced one game fix and a great deal of measurement about why more is not wired.
+
+### T6 — Deduplication is real; wiring is at zero
+
+What the directive asked for versus what happened:
+
+**Done — measured, not claimed:**
+
+| | before | after |
+|---|---|---|
+| Conviction rosters | 3 incompatible (9 / 8 / 13) | 1 |
+| mass-battle engines | 2 (campaign ran the smaller) | 1 |
+| degree ladders (MB) | 2, held equivalent *by measurement* | 1 |
+| real import cycles | 3 | 2 |
+| `sys.path` seams to the engine | 42 test files | 0 |
+| owners of engine randomness | 7 scattered `random.*` | 1 |
+
+**Not done:** the emit side is at **zero**. 60 declared emit edges, **3 observed, 0 matched**. 31
+edges belong to modules that have code and emit nothing; none was wired. `Faction.adjust` bypasses
+the bus at **30 of 31** call sites.
+
+**And the reason matters more than the number** — see §3, W1.
+
+### T7 — The relay works, and it is cheap
+
+Four Fable-5 critics against this session's published claims, then three planners and an independent
+antagonist against *their* output. Result: **four confident, well-cited recommendations killed — two
+of them mine, one already committed to the repo.**
+
+**Of the six defects the first round found, four were the instrument's model of the registry, not the
+engine.** None came from the game.
+
+**THE LESSON.** *Point an independent reader at the OUTPUT, never at the reasoning.* A critic that
+never saw why you believe something is the only one that can tell you the belief is unfounded. This
+is §10's agonist→antagonist relay and it earned its cost every time it ran.
+
+---
+
+## 2. WHAT THIS SESSION DID
+
+**Rulings recorded** (now binding, in `CLAUDE.md`):
+1. **§0.05 — code is the mechanism, prose is reference.** Test: *if this document were deleted, would
+   the game behave differently?*
+2. **§0 — `needs_jordan` is not a parking space.** Five-test escalation ladder.
+3. **No `.md` sweeping unless prose is named** — enforced as a `PreToolUse` hook, not a paragraph.
+4. **Unbuilt mechanic proposals are kept** — *"code that doesn't exist yet is still code to me."*
+5. **Port `tests/sim/mass_battle` over `systems/mass_battle/sim`** — done, unfinished, merged.
+
+**Shipped and green (through `d080a36`):**
+- Conviction roster centralized to one owner through the established chain, **reviving a ratified
+  mechanic that had been a silent no-op**: ED-912 §6.1's Scar hit an unknown-name branch and returned
+  `magnitude=0` on every call while the caller reported success.
+- `tools/export_module_contracts.py` + the cooked artifact — the contract interface, and the single
+  owner of the directory→module binding nothing owned before.
+- `tools/contract_runtime_conformance.py` — the first thing in this repo that asks the **engine** what
+  it emits. Not wired into CI.
+- The `.md` sweep hook, with 12 tests pinning that it is *wired*, not merely present.
+
+**The port (merged, unfinished):** 11,342 lines moved; determinism preserved via a new single owner of
+engine randomness (the canon engine drew from global `random` at 7 sites — porting as-is would have
+made the goldens **unpinnable**, not merely moved); the strategic adapter carried over field-for-field
+so the golden delta is attributable to the resolution model alone; six campaign goldens re-recorded.
+
+---
+
+## 3. WARNINGS — carry these forward
+
+**W1. The emit-side gap is NOT a wiring backlog.** Six candidates checked; **none is both cleanly
+emittable and campaign-reachable.** One is reachable but the engine has **no mission concept**; the
+rest are unreachable behind ruled deferrals, or their registry contract contradicts a ruling, or —
+the case that survived two rounds of attack — the module **refuses by design** to guess the payload
+(`echo_transport.py:278-283`: *"rather than a guessed settlement"*; the fallback map was deliberately
+deleted). **Do not emit any of them to move `observed` 3 → 4.** It would move the number and make the
+instrument lie.
+
+**W2. `declared == observed` is the WRONG completion target for the bus.** 29 edges are an authoring
+backlog and unobservable; **a centralized carrier is scored `ownership_mismatch` forever**, so driving
+that to zero would *dismantle the hub the directive asked for*; and `observed` is seed-conditional.
+The right DONE is in the completion plan §II.2.
+
+**W3. §0.05 has a limit, and I got it wrong in a way a later session will repeat.** It resolves
+doc-vs-**code**. It does **not** resolve doc-vs-doc where the code implements *neither* value, and it
+**cannot** resolve code-vs-code. I filed 20 ledger rows as "answered by §0.05"; 3 of 3 spot-checked
+were misfiled.
+
+**W4. Ledger status is not a discriminator — but do not overcorrect into doctrine.** A row can be
+`ratified` for the work it did while holding an unanswered escalation. **The flag was already there**
+(`needs_jordan: true` beside `status: ratified`), so no "code outranks ledger" rank rule is needed or
+supported. Check the code as *practice*; don't invent a hierarchy.
+
+**W5. Local gate runs are vacuous unless you set the CI env.** `ci_common._diff_args` reads the
+environment: CI diffs `origin/main...HEAD`; a bare local run diffs `HEAD~1..HEAD`; `--staged` sees
+only staged files. **Always:**
 ```sh
-git fetch origin main
-export GITHUB_EVENT_NAME=pull_request GITHUB_BASE_REF=main
-python3 tools/ci_sim_fabrication_check.py     # …and every other blocking validator
+git fetch origin main && export GITHUB_EVENT_NAME=pull_request GITHUB_BASE_REF=main
 ```
 
-Under that env the whole blocking set passes on this branch — **verified, not predicted**.
+**W6. Goldens are change detectors, not correctness claims.** At n=2 and n=8 they cannot separate a
+balance change from noise. Their job is *"did this move output, and did you know it would?"*
+**Re-record a value pin without ceremony; NEVER re-record a *property* assertion without deciding
+whether its claim is still true.** This session found two things a scalar pin could not see.
 
-**`Validators (blocking)` is now GREEN** — all four of its port residuals are fixed (`b0…` series):
-`ci_co_file_checker` (the move is recorded in `tests/coverage_matrix.md`) and
-`ci_sim_fabrication_check` (the adapter's carried-over constants are cited as *inherited, with a
-recorded gap* — not as canon, because no canon states them). The only blocking job still red is
-**`Validator Unit Tests`**, which is the genuine 26-failure port tail in the table above.
+**W7. A cull must not mint a guard.** The negative control is in the completion plan §I.3: over the
+whole cull, `git diff origin/main --stat -- tools/ tests/valoria/` must show **no new checker file**.
 
-`sim_params.json` grew 320 → 420
-constants and surfaced a genuine collision: **`SEED_BASE` is defined twice in the canon engine** —
-`bat.py` 1,000,000 vs `lanchester_signature.py` 2,000,000.
-
-### Fixed after the WIP commit — and the reason it was missed is the session's own lesson
-
-CI caught **`Golden Modes Byte-Exact`** failing on a path my repoint sweep missed. Two defects, both
-mine, both now fixed in `tools/ci_golden_modes_check.py`:
-
-1. `BAT = os.path.join(REPO, 'tests', 'sim', 'mass_battle', 'bat.py')` — the sweep matched the
-   **slash-form** `tests/sim/mass_battle` and this is the `os.path.join` **component form**. The
-   predicate separated what it matched, not what it meant. That is R1 in
-   `proposals/2026-08-24-error-regions-v1.md`, firing on the very sweep that was cleaning up after
-   the port.
-2. `bat.py` is launched as a **script** via `subprocess.run(['python3', BAT, ...])`, so Python puts
-   the script's directory on `sys.path`, not `cwd`. That was fine while the engine imported siblings
-   by bare name; after the port its imports are dotted, so the child needs the repo root on
-   `PYTHONPATH`. Symptom was a bare `ModuleNotFoundError: No module named 'systems'` in every mode.
-
-**Result, and it is a good signal for the port:** all three modes now report
-`[BYTE-EXACT OK] … matches baseline`. The ported engine reproduces its own field goldens **exactly**
-— so the port did not perturb the canon engine's behaviour; the campaign-golden movement in §5 comes
-from the campaign now running a *different engine*, not from the engine having changed.
+**W8. Two claims in the plan of record are wrong and will waste a session.** The culling plan says
+*"tag, push the tag"* — **tag pushes are refused by this environment**; use an on-origin-main ref. And
+`audit/2026-08-11-code-leanness/` is **deliberately exempt** for two independent reasons; "just fork
+`audit/`" re-breaks what PR #323 stepped around.
 
 ---
 
-## 6. Culling / optimization / centralization — where the plans actually stand
+## 4. LOOSE ENDS, TIED
 
-Surveyed from the full plan corpus. **Do not execute from the RATIFIED culling plan text** — four of
-S6's six instructions were measured wrong when run, and the corrections live only in the execution
-order's RESULT blocks. Nothing reconciles the two documents.
-
-**Done:** culling waves 1–3 (`dashboard/`, `tools/observability/`, session machinery, wf harness,
-meta-gates); wave 5 (untrack generated); `deprecated/` → `FORK:baf29d5`; 6b (ledger fragments →
-`registers/archive/`); 6e (`wiring_manifest` folded into `export_composition --check`); execution
-order S1–S6; the S5 exporter→artifact→leaf pattern now has **seven instances**.
-
-**Open, with owners:**
-- **S7 — `audit/` extraction.** 230 files / 79,126 lines. **It needs no design**: it already exists
-  executably in `tools/evacuation_plan.py` and as a named list in the culling plan. **Two
-  shipping-gate tests read `audit/` paths**, so a naive fork breaks CI:
-  `test_audit_plan_ids_are_allocated.py:245` (plus a `MIN_HEADER_DOCS = 40` corpus floor) and
-  `test_evacuation_plan.py:293-304` (which *requires* the contest-groundup parity oracle be
-  classified `relocate`). Sizing: ~6 files move to code homes, ~35–40 extract, ~185 (~72%) fork.
-- **⚠ The most dangerous single item in the tree:** the **Churn-engine parameterization exists only
-  in `audit/2026-07-05-emergent-narrative-engine/narrative_engine_design_v2_churn.md`** — a
-  `RATIFIED` head referenced by `CURRENT.md:40`, with **no implementation anywhere** in `engine/` or
-  `systems/`. Under §0.05 the game's ratified narrative layer has no mechanism at all. It must
-  **move, not fork** (already ruled at culling-plan `:220-221`).
-- **6d** (vocabulary fold) — blocked on re-ruling a standing "architecturally backwards" call.
-- **6c** — reclassified: its "≥75% narrative" headline measured **21%**, and 12/17 `[DONE]` sections
-  carry live `needs_jordan` content. It is adjudication work now, and the 2026-08-24 ruling licenses
-  a session to do most of it.
-- **S8 Half B** (three contradicting faction-action Ob conventions) — **suspended on a Jordan ruling**.
-- **S9 / B2 / B3** — game-repo ratchet + first executing GDScript test.
-- **S10** — zero-assertion counters; `faction_action_errors` / `scene_resolver_errors` appear nowhere
-  in `engine/`.
-
-**Two ledger/tree disagreements to reconcile before S7 compounds them:**
-`references/restructure_ledger.md:1277` declares `audit/2026-08-06-vector-audit/` forked while
-`structure_audit/data/structure_metrics.json` is still on disk and line-anchored from two live
-systems heads; inversely `audit/2026-08-03-session-oddities.md` is cited by `tools/build_fork.py:20`,
-is absent from disk, and has **no ledger row**.
-
-### The finding that matters most here
-
-**No plan addresses T2, and two say so explicitly.** `return-to-game-plan §6`: *"T2 is only
-half-addressed… rewriting the reward is a Jordan decision… deliberately not attempted here."* The
-Stop hook has since been **emptied**, which deleted the apparatus-facing grade **without installing a
-game-facing one**. `execution-order §3a` finding 2 is the sharpest statement: **"no game regression
-can currently red CI"** — `m1_acceptance.py` is one of 12 `level: 5` rows that cannot fail the build,
-and its own row 4 is DOC-DERIVED, so the one game signal is structurally incapable of a green verdict.
-
-Two concrete closures exist on paper and **neither has an owner**: wire `m1_acceptance` rows 1–2
-(the execution-bound ones) into a blocking tier, and execute S10.
+| # | loose end | status / where it goes |
+|---|---|---|
+| 1 | **22 red tests on `main`** | licensed work, start with the 8-test `TypeError` cluster — the only one that might be a port bug rather than a stale expectation |
+| 2 | **`engine/tests` never confirmed green on a runner** | fail-fast cancelled it every run. Confirm first — it re-prioritises everything |
+| 3 | **`da.public_governance` went silent** at seed 42 after the port, while the key total stayed at 187 | real behavioural finding; 3 of the 22 red tests. FA lane |
+| 4 | **"The spine can shut a faction out" stopped being true** | pinned two-sided with the open question recorded: real invariant, or artefact of the old resolution model? |
+| 5 | **`SEED_BASE` defined twice** in the canon engine (1,000,000 vs 2,000,000) | surfaced by the exporter; one of the 22 |
+| 6 | **Knot Pool formula** — ratified `+3, min 5`; code implements neither | ⚠ the **oracle** plays the wrong formula; the campaign plays none. Session-decidable, Jordan already ruled |
+| 7 | **Knot-break "+1 to both partners"** — code scars one. Same gap covers 4 Composure | session-decidable |
+| 8 | **`meta.knot_formed`** registry demands `Loose\|Medium\|Close`; ruled tiers are `Distant/Close` | registry stale by ruling. Second stale surface at `fieldwork_editorial.md:56` |
+| 9 | **Two Key types no contract declares** (`scene.accord_echo`, `meta.cascade_cluster_event`) | `--check` exits 1 on them today |
+| 10 | **`contract_runtime_conformance.py --check` wired nowhere** | under §0.05 an unwired instrument is not a mechanism |
+| 11 | **`test_gauge_invariants.py:43-49` imports from an `audit/` unit by bare name** | found only by the antagonist; no cull plan named it. Repoint in whatever commit moves that unit |
+| 12 | **154 `needs_jordan` rows** | the 17-row clearing was reverted in full. ~20–30 are genuinely Jordan's |
+| 13 | **Churn engine** — RATIFIED, referenced by `CURRENT.md`, implemented nowhere | **not a conflict** — an unexecuted juncture. Moves to `systems/narrative/`, does not fork |
+| 14 | **PC degree ladder held** at the pre-2026-08-14 model | Jordan's, and must go to him **with** the score/2 obstacle migration — the code says deciding them separately wastes the work |
+| 15 | **255 of 420 sim constants uncited** inside `systems/` | instrument is `export_sim_params.py:244-246`; §0.05's "321" predates the port |
+| 16 | **10 tools still parse `module_contracts.yaml`** directly | an exporter now exists; they are a migration backlog with a destination |
+| 17 | **13×4 conviction-axis matrix cooked nowhere** | its first consumer is already written and waiting (`npe.py:314-323` calls its uniform draw a placeholder) |
+| 18 | **`audit/` — 230 tracked files** | S7 unexecuted; needs no design, only execution |
+| 19 | **`main`'s merge commit title reads "⚠ DO NOT MERGE AT HEAD"** | cosmetic, permanent, not worth a rewrite |
 
 ---
 
-## 7. Largest unexecuted work, measured by the GAME
+## 5. WHAT IS GENUINELY JORDAN'S
 
-1. **The ruled-but-unwired obstacle model** — *"the obstacle is the opponent's score/2 plus that
-   instance's modifiers"* (Jordan, 2026-08-14/15). `HANDOFF.md:238` already calls it the largest
-   outstanding piece. `DECISIVE_OB = 3` is ruled dead; the migration has a measured balance delta
-   (a held case moves 2.5% → 47.5% against a 40% ceiling).
-2. **The MB canon-engine reconciliation** — *partly done by this session's port*, and the remaining
-   half is §5's tail plus the `da.public_governance` silence.
-3. **The `Faction.adjust` Key spine** — 30 of 31 call sites emit no Key. Everything centralized so
-   far is the **read** side; nothing yet centralizes the **emit** side. No plan step owns it.
-4. **The 321 numeric constants still defined inside `systems/`** — §0.05 names this the migration
-   backlog.
+Everything else is answerable by ruling, document, precedent, or architecture.
 
----
-
-## 8. On goldens, since it was asked
-
-They matter, but **not as correctness claims** — at n=2 and n=8 they cannot separate a balance change
-from noise, and `test_f7_smoke_oracle.py:8` still demands an n≥100 oracle that does not exist. What
-they are is **change detectors**: their job is *"did this move output, and did you know it would?"*
-That is worth more during active work, not less, because it is the only thing that catches an
-unintended behaviour change — and the values themselves are cheap to re-record.
-
-The real hazard is the one `CLAUDE.md` §7 already names: **the re-pin path is uncontrolled**, nothing
-verifies a regeneration was intended. This session is a worked example of the distinction — six
-goldens were re-recorded as routine, and the same run surfaced **two things a scalar pin could not
-see**: an emitter going silent while the key *total* stayed identical at 187, and a property
-assertion ("the spine can shut a faction out") that quietly stopped being true. Those two are worth
-more than all six re-pins combined.
-
-**Rule of thumb for the next session:** re-record a value pin without ceremony; **never** re-record a
-*property* assertion without reading what it claimed and deciding whether the claim is still true.
+1. **ED-SC-0004** — the Argue-pool fork, two live formulas, explicitly reserved. *(A third option
+   nobody had spotted: ED-FI-0005's ratified shape is the merge of the two candidates.)*
+2. **ED-IN-0187 + the obstacle model** — the degree-ladder hold and the score/2 migration, **together**.
+3. **The reachability deferrals** — whether campaign-scale world-gen may carry personal-scale actor
+   fields. **This is what actually gates the emit side.**
+4. **Whether to build the PP-686 mission mechanic at all.**
+5. **ED-PC-0016** (half-sword auto-switch) and **ED-PC-0049** (`ADEF_POINT` 1.2 vs ~1.53).
+6. **S8 Half B** — suspended; listed so nobody launders it into the cull.
+7. **T5 / the graded surface** — nothing can move it without you. *"No game regression can currently
+   red CI"* is the corpus's own finding, filed and never executed.
 
 ---
 
-## 9. Session error record
+## 6. DIRECTION — the order to work in
 
-`proposals/2026-08-24-error-regions-v1.md` — 11 regions, each a defect that shipped or was published,
-each with the lesson and the plan item. **The master pattern is R1: discriminators that do not
-discriminate** — six times a classifier or filter separated something other than what its name
-claimed, twice driving a bulk operation reverted in full (149 work items; 17 ledger rows). Both had a
-counterexample findable in two minutes; neither was looked for, because both predicates were
-*plausible*.
+```
+0.  Confirm engine/tests green on a runner            ← re-prioritises everything
+1.  Fix main's 22 (start: the 8-test TypeError cluster)   [licensed: red main]
+2.  Knot Pool + both-partners                              [game code, unblocked]
+3.  da.* registry row + the silent emitter                 [inside the 22]
+4.  Registry hygiene: knot tiers, the 2 undeclared types
+    → then wire contract_runtime_conformance --check into CI
+5.  S7 — the cull, from tools/evacuation_plan.py, not the ratified prose
+6.  Faction.adjust emit spine — one Key per EVENT, not per write
+7.  Read side: 10 parsers, the axis matrix, the constants
+8.  Queue drain, by lane, ≤20 rows/PR, every closure quoting disk evidence
+9.  Compile the Jordan docket ONCE, with options and recommended defaults
+```
 
-Four Fable-5 critics were run against this session's own published claims and overturned three
-numbers. **Four of the six defects they found were the instrument's model of the registry, not the
-engine** — none came from the game.
+**Why this order:** the two unblocked game fixes are cheap and verifiable; registry hygiene precedes
+the cull because the cull's gates read those registries; the emit spine follows the cull because S7
+changes what the conformance instrument sees; the drain goes last because the cull kills subjects
+first, converting judgement calls into citations.
+
+**Before any of it, always:** `git fetch origin main && export GITHUB_EVENT_NAME=pull_request
+GITHUB_BASE_REF=main` (W5).
+
+---
+
+## 7. WHERE EVERYTHING IS
+
+| document | what it is | read it when |
+|---|---|---|
+| **this file** | the master record — throughlines, warnings, loose ends, direction | first, always |
+| `proposals/2026-08-24-completion-plan-v1.md` | executable how-to for the cull, centralization, doc-vs-code; **records four killed recommendations as killed** | before executing §6 steps 4–8 |
+| `proposals/2026-08-24-error-regions-v1.md` | eleven error regions as plan items, with the lesson and files per region | when a defect smells familiar — it probably is |
+| `scratchpad/closeout/` | `agonist_emit_reachability.md`, `reconciliation.md`, `antagonist_verdicts.md` | to see how a conclusion was reached, or contest it |
+
+---
+
+## 8. THE ONE-PARAGRAPH VERSION
+
+This session deduplicated the largest duplications in the repo — three Conviction rosters to one, two
+mass-battle engines to one, two degree ladders to one, three import cycles to two, 42 path seams to
+zero — and revived a ratified mechanic that had silently been a no-op. It built the first instrument
+that asks the engine what it actually emits, and that instrument's answer is **3 of 60**, which is the
+real state of the hub-and-bus goal. It did **not** wire a single emitter, cull a single audit file, or
+close a single doc-vs-code conflict; and the reason the wiring is at zero turned out to be structural
+rather than lazy — no declared edge can be emitted honestly today. Against that, the session produced
+eleven lines of apparatus for every line of game code, which is the pattern §0.3 named and which no
+plan in this corpus addresses. **The most transferable thing it learned is that eight separate
+discriminators, four confident recommendations, and five guards were each wrong in the same way:
+they were plausible, and nobody checked one case on each side.**
