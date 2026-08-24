@@ -158,7 +158,13 @@ knowing about the handoff as much as about the fixes:
      a `FORK:` row, because nothing was retired: the modules exist in `main` at a new path, and a
      FORK row would send a reader to a ref for a file that is right there (the §8 hazard).
 
-Also red locally: `ci_co_file_checker`, `ci_sim_fabrication_check`. `sim_params.json` grew 320 → 420
+**`Validators (blocking)` is now GREEN** — all four of its port residuals are fixed (`b0…` series):
+`ci_co_file_checker` (the move is recorded in `tests/coverage_matrix.md`) and
+`ci_sim_fabrication_check` (the adapter's carried-over constants are cited as *inherited, with a
+recorded gap* — not as canon, because no canon states them). The only blocking job still red is
+**`Validator Unit Tests`**, which is the genuine 26-failure port tail in the table above.
+
+`sim_params.json` grew 320 → 420
 constants and surfaced a genuine collision: **`SEED_BASE` is defined twice in the canon engine** —
 `bat.py` 1,000,000 vs `lanchester_signature.py` 2,000,000.
 

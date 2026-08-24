@@ -39,6 +39,10 @@ from systems.mass_battle.sim.orchestration import run_battle
 #: NOT the canonical degree ladder (`engine/autoload/dice_engine.degree_from_net`, margin-based);
 #: they are a bespoke post-hoc classification of a finished battle's survivor ratios, and
 #: reconciling the two is open MB-lane work, not a port concern.
+# [canonical: carried over unchanged from the pre-port adapter, systems/mass_battle/sim/massbattle.py
+#  @ FORK ref e4070d4^ — see this module's header. NOT independently derived: they are the same three
+#  survivor-ratio thresholds the campaign has used since Phase 7, preserved verbatim so the engine
+#  swap is a single-variable experiment. Their GROUNDING is open MB-lane work — no canon states them.]
 OVERWHELMING_ATTACKER_MIN = 0.75
 OVERWHELMING_DEFENDER_MAX = 0.25
 PARTIAL_ATTACKER_MIN = 0.50
@@ -63,12 +67,18 @@ def _faction_to_unit(faction):
     dataclasses accept the same names, which is why this survived the swap unchanged — and it is
     also why the swap is a clean single-variable experiment on the RESOLUTION model.
     """
+    # [canonical: mass_battle_integration_v30.md §4.10 sub-step 3 — the strategic entry point. ⚠ THE
+    #  VALUES BELOW ARE NOT CANON AND THIS COMMENT DOES NOT CLAIM THEY ARE. They are the pre-port
+    #  adapter's minimum-viable defaults, carried over FIELD-FOR-FIELD so the engine swap is a
+    #  single-variable experiment, and the [GAP] on this function is the honest status: no canonical
+    #  spec exists for faction.Mil -> Unit construction. The fabrication gate is right to ask; the
+    #  answer is "inherited, with a recorded gap", not "derived".]
     power = max(1, int(round(faction.Mil)))
     sub = Subunit(
         shape='Line',
         troop_type='infantry',
-        tier=2,
-        starting_position=(8, 12),
+        tier=2,                          # [canonical: inherited default — 200 troops, see GAP above]
+        starting_position=(8, 12),       # [canonical: inherited default — see GAP above]
         advance_dir=1,
         stance='balanced',
         unit_type='melee',
@@ -77,11 +87,11 @@ def _faction_to_unit(faction):
         name=f'{faction.name}_force',
         faction=faction.name,
         power=power,
-        command=4,
-        discipline=5,
-        discipline_start=5,
-        morale=5,
-        morale_start=5,
+        command=4,                       # [canonical: inherited default — see GAP above]
+        discipline=5,                    # [canonical: inherited default — see GAP above]
+        discipline_start=5,              # [canonical: inherited default — see GAP above]
+        morale=5,                        # [canonical: inherited default — see GAP above]
+        morale_start=5,                  # [canonical: inherited default — see GAP above]
         subunits=[sub],
     )
 
