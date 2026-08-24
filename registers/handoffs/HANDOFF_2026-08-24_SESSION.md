@@ -131,7 +131,7 @@ Two Key types flow that **no contract declares**: `scene.accord_echo` and
 2. **"The spine can shut a faction out entirely" no longer holds.** Pinned two-sided with the open
    question: real invariant, or artefact of the old resolution model?
 
-**Residual red in `tests/valoria` (~24) — the port's tail:**
+**Residual red in `tests/valoria` (26 at last full run) — the port's tail:**
 
 | family | n | what it needs |
 |---|---|---|
@@ -144,6 +144,26 @@ Two Key types flow that **no contract declares**: `scene.accord_echo` and
 Also red locally: `ci_co_file_checker`, `ci_sim_fabrication_check`. `sim_params.json` grew 320 → 420
 constants and surfaced a genuine collision: **`SEED_BASE` is defined twice in the canon engine** —
 `bat.py` 1,000,000 vs `lanchester_signature.py` 2,000,000.
+
+### Fixed after the WIP commit — and the reason it was missed is the session's own lesson
+
+CI caught **`Golden Modes Byte-Exact`** failing on a path my repoint sweep missed. Two defects, both
+mine, both now fixed in `tools/ci_golden_modes_check.py`:
+
+1. `BAT = os.path.join(REPO, 'tests', 'sim', 'mass_battle', 'bat.py')` — the sweep matched the
+   **slash-form** `tests/sim/mass_battle` and this is the `os.path.join` **component form**. The
+   predicate separated what it matched, not what it meant. That is R1 in
+   `proposals/2026-08-24-error-regions-v1.md`, firing on the very sweep that was cleaning up after
+   the port.
+2. `bat.py` is launched as a **script** via `subprocess.run(['python3', BAT, ...])`, so Python puts
+   the script's directory on `sys.path`, not `cwd`. That was fine while the engine imported siblings
+   by bare name; after the port its imports are dotted, so the child needs the repo root on
+   `PYTHONPATH`. Symptom was a bare `ModuleNotFoundError: No module named 'systems'` in every mode.
+
+**Result, and it is a good signal for the port:** all three modes now report
+`[BYTE-EXACT OK] … matches baseline`. The ported engine reproduces its own field goldens **exactly**
+— so the port did not perturb the canon engine's behaviour; the campaign-golden movement in §5 comes
+from the campaign now running a *different engine*, not from the engine having changed.
 
 ---
 
