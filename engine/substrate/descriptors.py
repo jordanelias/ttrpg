@@ -149,3 +149,57 @@ def assert_faction_roster_is_covered(implemented_fields):
         )
 
     return len(FACTION_STATS)
+
+
+# ---------------------------------------------------------------------------
+# CONVICTIONS — added 2026-08-24. THIS IS THE ONLY CONVICTION ROSTER IN THE ENGINE.
+# ---------------------------------------------------------------------------
+# Before this, three incompatible rosters shipped: nine names in
+# `systems/characters/sim/conviction.py`, eight in `systems/world/sim/npe.py` (overlapping the
+# first in three), and thirteen registered `by_reference` in `references/descriptor_registry.yaml`
+# with a 13x4 axis map bound to them. The two CODE rosters were nearly disjoint, and the gap was
+# not cosmetic: `systems/fieldwork/sim/knots.py` scarred `conviction='Loyalty'` — a name only npe
+# knew — so ED-912 §6.1's Close-Knot-break Scar hit an unknown-name branch and returned
+# magnitude=0 forever while the caller reported `consequences['conviction_scar'] = 1`.
+#
+# The registry wins, and not by preference: it is the surface the axis matrix, the contest styles
+# and the cultural-background templates already resolve `conv.*` through, so any other choice
+# would have left the 13x4 matrix keyed on names no code could produce. Its thirteen are now
+# ENUMERATED there (they were registered by reference only) and cooked into the artifact, so the
+# names exist in one place and every consumer reads THEM.
+#
+# ⚠ THIS TUPLE IS NOT A SUPERSET OF WHAT IT REPLACED. Three of conviction.py's nine (Reason,
+# Autonomy, Continuity) and five of npe's eight (Justice, Survival, Loyalty, Truth, Power) are not
+# canonical names. `CONVICTION_ALIASES` below carries the two that have an unambiguous canonical
+# twin; the rest are gone, and a caller passing one now raises instead of silently scoring zero.
+CONVICTIONS = tuple(_DATA['conviction_roster']['names'])
+
+#: Retired roster names -> the canonical name they resolve to. Kept SMALL and only where the
+#: mapping is a rename rather than a design call: Reason and Scholastic are the same conviction
+#: under two labels, as are Autonomy and Liberty. Nothing else is aliased — mapping `Survival` or
+#: `Power` onto a canonical name would be inventing canon, so those simply fail.
+CONVICTION_ALIASES = {
+    'Reason': 'Scholastic',
+    'Autonomy': 'Liberty',
+}
+
+
+def resolve_conviction(name):
+    """Canonical Conviction name for `name`, or raise ValueError.
+
+    THE RAISE IS THE POINT. The bug this module closes was a *silent* one — an unknown name scored
+    magnitude=0 and no caller could tell the difference between "this Scar was capped" and "this
+    Conviction does not exist". A wrong name is a defect in the caller, so it is loud here.
+    """
+    if name in CONVICTIONS:
+        return name
+    alias = CONVICTION_ALIASES.get(name)
+    if alias is not None:
+        return alias
+    raise ValueError(
+        f'unknown Conviction {name!r}. The roster is owned by '
+        'references/descriptor_registry.yaml:conviction_roster and read here; the canonical '
+        f'{len(CONVICTIONS)} are: ' + ', '.join(CONVICTIONS) + '. Do not add a name to a local '
+        'tuple to make this pass — add it to the registry and re-run tools/export_descriptors.py, '
+        'or fix the caller.'
+    )

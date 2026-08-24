@@ -564,6 +564,16 @@ not treat any "structured" data layer as ground truth without checking it agains
   (`engine/engine_params/params_tables.yaml`). *[CORRECTED: `tools/export_params_constants.py` was a migration-window gate and was RETIRED with its source — the capture can no longer be regenerated, so its header's "NEVER hand-edit" is now absolute.]*
   Provenance citations naming `engine/params/…` **may cite the fork** — they do not block the deletion.
   Read the capture, or better, the typed layer; if you need to *change* a number, change the code.
+
+  ⚠⚠ **DO NOT TAKE A NUMBER OUT OF THE CAPTURE WITHOUT CHECKING THE CODE FIRST (2026-08-24).** The
+  instruction above — "read the capture" — is actively dangerous for anything that has since been
+  ruled on, and the degree ladder is the worked case: `params_tables.yaml`'s *Degrees of Success*
+  section holds the **pre-ruling** bands (Overwhelming at Net ≥ 2×Ob, Failure at Net ≤ 0) while the
+  live ladder is margin-based (`engine/autoload/dice_engine.py`, `degree_from_net`). A reader
+  following §5 in good faith gets a retracted model. The capture is a byte-frozen 2026-08 snapshot
+  of prose that can no longer be regenerated; under §0.05 it is **reference**, and the code is the
+  formula. Found by a read-only contamination audit; nothing gates it, because a frozen capture has
+  no freshness relationship to the code it describes.
 - **Numbers still live as prose in places.** Where they do (the `engine/params/*.md` tables, until they
   leave) they are markdown (unicode `×`, en-dashes, caveats like "minimum 5", footnotes) and a Godot
   importer **cannot ingest them directly**. The typed layer is now partly real, not absent:

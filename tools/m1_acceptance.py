@@ -33,7 +33,8 @@ row below reports its real value, pass or fail, never a guess (CLAUDE.md §0.1 p
 
 USAGE
   python3 tools/m1_acceptance.py --summary
-  python3 tools/m1_acceptance.py --json      (dashboard_data.py consumes this)
+  python3 tools/m1_acceptance.py --json      (no consumer since dashboard_data.py was retired,
+                                             culling wave 1, ED-IN-0194 — the flag is for humans now)
   python3 tools/m1_acceptance.py --check     exit 1 only on a MEASURED failure
 """
 
@@ -96,7 +97,8 @@ def _run_probe_season(seed):
     reset_invocations() monkeypatched to a no-op and the cumulative counter left at 6, this
     row still reported exactly 2. (2) engine/substrate/stubwire.py:70-72 declares
     reset_invocations() test-only and "never called from a production code path" — and
-    tools/dashboard_data.py imports this module and calls collect() IN-PROCESS, so the reset
+    tools/dashboard_data.py USED TO import this module and call collect() IN-PROCESS (retired in
+    culling wave 1, ED-IN-0194; kept as the reason the reset below exists), so the reset
     made a reporting surface mutate process-global engine state for no effect.
 
     Caps the campaign at 1 season via CAMPAIGN_SEASONS. Note `max_seasons` alone is DEAD:

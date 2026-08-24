@@ -20,8 +20,8 @@ prose about code should describe, or cite something that does not shift.)
    before it has even started drifting.
 2. **The roster is already duplicated four ways**, and the duplicates have already diverged:
    `keys.py`'s own docstring said "44-type" for the file it parses (wrong by 11, fixed ED-IN-0134);
-   `tools/dashboard_data.py:763-770` runs a SECOND independent parser (a `### ` line counter); and
-   `dashboard_data.build_keys()` carries a hand-typed family table. One source, four readers of it,
+   `tools/dashboard_data.py` RAN a second independent parser and carried a hand-typed family table
+   — both retired with it in culling wave 1 (ED-IN-0194). One source, four readers of it at the time,
    and every hand-maintained count drifted.
 3. **The goal is python/json-centric** — Python for logic, JSON for data, markdown for information
    paired to a system. A registry is data.

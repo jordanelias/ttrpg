@@ -41,6 +41,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Optional
 
+from engine.substrate import descriptors
 from engine.substrate.canon_buckets import canonical_accord
 
 
@@ -74,10 +75,20 @@ LOYALTY_MAX = 3
 #  framework is the default for 60% of generated NPCs"]
 FACTION_DEFAULT_WEIGHT_PCT = 60
 
-# Conviction taxonomy (from canon reference)
-# [canonical: §NPC Genome Record axis 2 — "drawn from the existing conviction
-#  taxonomy (Faith, Order, Reason, Justice, Survival, Loyalty, Truth, Power)"]
-CONVICTIONS = ("Faith", "Order", "Reason", "Justice", "Survival", "Loyalty", "Truth", "Power")
+# Conviction taxonomy — READ, NOT DECLARED. Owner is
+# `references/descriptor_registry.yaml:conviction_roster`, cooked by `tools/export_descriptors.py`
+# and read by `engine.substrate.descriptors`.
+#
+# ⚠ THIS CHANGES GENERATED NPCs, deliberately. The eight names that stood here — Faith, Order,
+# Reason, Justice, Survival, Loyalty, Truth, Power — were transcribed from the NPE doc's own
+# parenthetical, and FIVE of them (Justice, Survival, Loyalty, Truth, Power) appear in no
+# conviction taxonomy in the corpus. `conv.*`, the 13x4 conviction-axis matrix, the contest styles
+# and the cultural-background templates all key on the registry's thirteen, so an NPC generated
+# with `worldview=['Survival']` could never be scored by any of them. Nothing downstream reads
+# `worldview` yet (world-npcs is an honest deferral, `engine/tests/test_pipeline_reach.py:152`), so
+# this costs no campaign golden today and stops the drift before it does.
+# [canonical: conviction_taxonomy_v30 §2 via references/descriptor_registry.yaml:conviction_roster]
+CONVICTIONS = descriptors.CONVICTIONS
 
 # Compromise profile categories
 # [canonical: §NPC Genome Record axis 4 — "Economic / Informational /

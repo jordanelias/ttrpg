@@ -38,21 +38,31 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Optional
 
+from engine.substrate import descriptors
 
-# Canonical 13-Conviction set per PP-684 (taxonomy_v30); legacy 9-Conviction
-# from conviction_track_v1 §1 superseded by taxonomy_v30 per file header.
-# We list the canonical names used in §3 Thread Operation matrix.
-# [canonical: conviction_track_v1 §1 + taxonomy_v30 §4 weights]
-CONVICTIONS = (
-    "Faith", "Order", "Reason", "Equity", "Precedent",
-    "Autonomy", "Continuity", "Community", "Warden",
-)
+
+# THE CONVICTION ROSTER IS NOT DEFINED HERE. It is read from the one owner:
+# `references/descriptor_registry.yaml:conviction_roster` -> `tools/export_descriptors.py` ->
+# `engine/engine_params/descriptors.json` -> `engine.substrate.descriptors`. That is the same
+# authored-surface / one-exporter / one-leaf-reader path every other descriptor takes.
+#
+# WHAT USED TO BE HERE, and why it mattered (measured 2026-08-24): a hardcoded tuple of NINE names
+# under a comment claiming it was "the canonical 13-Conviction set per PP-684". `npe.py` shipped a
+# different EIGHT that overlapped it in three. `knots.py` scarred `conviction='Loyalty'`, a name
+# only npe knew, so ED-912 §6.1's Close-Knot-break Scar took the unknown-name branch below and
+# returned magnitude=0 on every call while the caller reported `conviction_scar = 1`. A ratified
+# mechanic was a no-op, and no test could see it because both halves agreed with themselves.
+#
+# Three of the nine (Reason, Autonomy, Continuity) are not canonical names. Reason and Autonomy
+# alias to Scholastic and Liberty; Continuity has no canonical twin and is GONE.
+# [canonical: conviction_taxonomy_v30 §2 via references/descriptor_registry.yaml:conviction_roster]
+CONVICTIONS = descriptors.CONVICTIONS
 
 # §2 Per-Conviction Scar thresholds
 # [canonical: §2 Per-Conviction Scar table]
 SCAR_DESTABILISE = 1     # Scar 1: Conviction X destabilises
 SCAR_SHIFT = 2           # Scar 2: weight may shift; Resonant Style activates
-SCAR_CRISIS = 3          # Scar 3+: Conviction crisis on X
+SCAR_CRISIS = 3          # Scar 3+: Conviction crisis on X  # [canonical: §2 Per-Conviction Scar table]
 
 # §3 Conditions
 # [canonical: §3 — "Season cap: Max 1 Scar per season from Thread witnessing per NPC"]
@@ -166,7 +176,7 @@ def _get_or_create(actor: str, world=None) -> ConvictionState:
 
 def apply_conviction_scar(actor: str, source: str, magnitude: int,
                           conviction: Optional[str] = None,
-                          certainty: int = 3,
+                          certainty: int = 3,   # [canonical: §2 — default certainty tier]
                           season: int = 0,
                           world=None) -> ScarRecord:
     """Apply a Scar on a specific Conviction.
@@ -188,9 +198,11 @@ def apply_conviction_scar(actor: str, source: str, magnitude: int,
         return ScarRecord(actor=actor, conviction="(none)", source=source,
                           magnitude=0, season=season, before=0, after=0)
 
-    if conviction not in CONVICTIONS:
-        return ScarRecord(actor=actor, conviction=conviction, source=source,
-                          magnitude=0, season=season, before=0, after=0)
+    # An unknown NAME is a caller defect and is now LOUD. It used to return a magnitude=0
+    # ScarRecord, which is indistinguishable from a season-capped one — that is precisely how the
+    # knots.py 'Loyalty' no-op survived. `resolve_conviction` also folds the two rename aliases, so
+    # a caller still saying 'Reason' scars Scholastic rather than falling off a cliff.
+    conviction = descriptors.resolve_conviction(conviction)
 
     state = _get_or_create(actor, world)
     before = state.scars.get(conviction, 0)
@@ -199,6 +211,7 @@ def apply_conviction_scar(actor: str, source: str, magnitude: int,
     # [canonical: §3 — "Max 1 Scar per season from Thread witnessing per NPC"]
     is_thread_source = source.lower().startswith('thread') or 'witness' in source.lower()
     if is_thread_source:
+        # [canonical: §3 — sentinel, not a mechanical constant: 'no prior scar this run']
         last_season = state.last_scar_season.get(conviction, -999)
         if season == last_season:
             # Already Scarred this season on this Conviction from Thread source
