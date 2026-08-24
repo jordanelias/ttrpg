@@ -220,7 +220,7 @@ and the failure is measured rather than asserted — `tests/valoria/test_j2_mass
 The two trees share no code, so any result measured on one is a result about that tree alone (§3g).
 
 **`npcs` — a doc-only folder.** Zero `.py`; the whole NPC implementation lives in the world subsystem —
-`systems/world/sim/npe.py:336 simulate_npc_actions` (live every season) and `systems/world/sim/npe.py:226 generate_npc`
+`systems/world/sim/npe.py:353 simulate_npc_actions` (live every season) and `systems/world/sim/npe.py:226 generate_npc`
 (never called); the engine-core AI shell is a pair of typed no-ops, `engine/autoload/npc_ai.py:33 select_action`. The
 folder owns neither the code nor, since a 2026-07-29 repoint, the doc of its own primary contract, and the currency
 authority still heads at the demoted doc — `CURRENT.md:35 npc_behavior_v30` (§3e).
@@ -266,7 +266,7 @@ undocumented by the contract — `engine/mc_v18.py:284-294 run_campaign` (§3b, 
 **`world` — world-gen, insurgency, NPC ecology, miracles, restoration.** Owns the `World` lifecycle and two genuinely
 live per-season pipelines — `systems/world/sim/insurgency_pipeline.py:139 check_insurgency_triggers`. Its contract
 coverage is inverted: the one module with a contract entry never executes, and the two modules carrying all of this
-subsystem's measured execution have no contract at all — `systems/world/sim/npe.py:336 simulate_npc_actions` (§3e).
+subsystem's measured execution have no contract at all — `systems/world/sim/npe.py:353 simulate_npc_actions` (§3e).
 ## 3. Gap kinds, and the cross-lane rows
 
 **This is not a complete register and does not claim to be.** Per-subsystem gap rows live in each skeleton's

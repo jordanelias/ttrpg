@@ -174,18 +174,25 @@ def assert_faction_roster_is_covered(implemented_fields):
 # twin; the rest are gone, and a caller passing one now raises instead of silently scoring zero.
 CONVICTIONS = tuple(_DATA['conviction_roster']['names'])
 
-#: Retired roster names -> the canonical name they resolve to. Kept SMALL and only where the
-#: mapping is a rename rather than a design call: Reason and Scholastic are the same conviction
-#: under two labels, as are Autonomy and Liberty. Nothing else is aliased — mapping `Survival` or
-#: `Power` onto a canonical name would be inventing canon, so those simply fail.
-CONVICTION_ALIASES = {
-    'Reason': 'Scholastic',
-    'Autonomy': 'Liberty',
-}
-
-
+# ⚠ THERE IS NO ALIAS MAP, AND ITS REMOVAL IS THE POINT (corrected 2026-08-24, same day it was
+# added, by an adversarial pass). This module briefly carried
+# `CONVICTION_ALIASES = {'Reason': 'Scholastic', 'Autonomy': 'Liberty'}`, justified in a comment as
+# "a rename rather than a design call". TWO AUTHORED SURFACES EXPLICITLY REFUSE THAT MAPPING:
+#
+#   systems/characters/conviction_taxonomy_v30.md:282
+#       | Reason (legacy tag) | composite — see PP-685 per character |
+#   references/alias_registry.yaml:658-663
+#       legacy: [... 'Reason (legacy tag)', 'Continuity (legacy tag)'] with NO canonical target,
+#       note: "Per-character migration in PP-685 / conviction_migration_roster_v30."
+#
+# Reason is a COMPOSITE that migrates per character; collapsing it to Scholastic at runtime decides
+# a migration the corpus deliberately left open — and only *Epistemic* Reason maps primarily to
+# Scholastic, "+ (situational; some Utility)" (taxonomy_v30.md:279). `Autonomy` appears in neither
+# surface at all. So the alias map was inventing exactly the canon the comment beside it claimed to
+# refuse for Survival and Power, and it is gone: every non-canonical name now raises, and the error
+# names the migration rather than guessing its outcome.
 def resolve_conviction(name):
-    """Canonical Conviction name for `name`, or raise ValueError.
+    """`name` if it is a canonical Conviction, else raise ValueError. Nothing is translated.
 
     THE RAISE IS THE POINT. The bug this module closes was a *silent* one — an unknown name scored
     magnitude=0 and no caller could tell the difference between "this Scar was capped" and "this
@@ -193,13 +200,12 @@ def resolve_conviction(name):
     """
     if name in CONVICTIONS:
         return name
-    alias = CONVICTION_ALIASES.get(name)
-    if alias is not None:
-        return alias
     raise ValueError(
         f'unknown Conviction {name!r}. The roster is owned by '
         'references/descriptor_registry.yaml:conviction_roster and read here; the canonical '
-        f'{len(CONVICTIONS)} are: ' + ', '.join(CONVICTIONS) + '. Do not add a name to a local '
-        'tuple to make this pass — add it to the registry and re-run tools/export_descriptors.py, '
-        'or fix the caller.'
+        f'{len(CONVICTIONS)} are: ' + ', '.join(CONVICTIONS) + '. If this is a LEGACY tag '
+        '(Reason, Continuity and the retired npe names), the corpus does not map it to a single '
+        'canonical Conviction — conviction_taxonomy_v30.md §6 and references/alias_registry.yaml '
+        'both route it to PER-CHARACTER migration under PP-685. Do the migration, or fix the '
+        'caller; do not add a local alias, which decides that migration by accident.'
     )

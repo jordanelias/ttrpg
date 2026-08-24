@@ -121,32 +121,86 @@ def test_unclaimed_emitters_are_reported_not_swallowed(measured):
         assert '::' in key and count > 0, key
 
 
-def test_a_universal_reader_is_not_reported_as_drift(measured):
-    """A module declaring `{type: "*"}` declares every type on that side, so its subscriptions can
-    never be undeclared drift. Ignore the flag and `articulation_layer`'s 13 live subscriptions all
-    read as violations — which is exactly what happened before the wildcard reached the artifact."""
+def test_a_wildcard_does_not_suppress_an_undeclared_type(measured):
+    """A wildcard grants a MODULE permission to consume. It does not DECLARE that a type exists.
+
+    ⚠ THIS TEST ASSERTED THE OPPOSITE FOR A FEW HOURS ON 2026-08-24, AND THAT IS WHY THE FLOOR WAS
+    UNFAILABLE. It read "a module declaring `{type: "*"}` declares every type on that side, so its
+    subscriptions can never be undeclared drift" — and `_triage` implemented it as
+    `declared_by.get(t) or list(wildcards)`, which cannot return empty while any wildcard consumer
+    exists. `undeclared_type` was unreachable on the consume side and the tool reported the floor
+    MET. CLAUDE.md §0.1 pt 2: an assertion that cannot observe the failure it excludes.
+
+    Two real gaps were hiding behind it. `scene.accord_echo` and `meta.cascade_cluster_event` are
+    both in the Key vocabulary (`engine/engine_params/key_types.json`) and NO module contract names
+    either, on either side — while `engine/cross_scale/articulation.py:125,129` subscribes to both.
+    """
     C, r = measured
     modules, _, _ = C._load_contracts()
     wildcard_consumers = {m for m, d in modules.items() if d.get('consumes_any')}
     assert wildcard_consumers, 'no wildcard consumer — this test no longer has a subject'
-    for edge in r['consumes']['triage']['undeclared_type']:
-        module = edge.split(':', 1)[0].strip()
-        assert module not in wildcard_consumers, (
-            f'{edge} is reported as undeclared, but {module} declares `{{type: "*"}}` — the '
-            f'wildcard is being ignored somewhere between the exporter and the verdict.'
+    explicit = {t for d in modules.values() for t in d['consumes']}
+    for edge in r['consumes']['observed_only']:
+        module, _, type_id = edge.rpartition(':')
+        if type_id in explicit:
+            continue
+        flagged = any(edge in x for x in r['consumes']['triage']['undeclared_type'])
+        assert flagged, (
+            f'{edge} is consumed at runtime, no contract declares the type, and the triage did not '
+            f'flag it — the wildcard is suppressing a real gap again.'
         )
 
 
+def test_matched_never_counts_a_wildcard_edge(measured):
+    """`matched` must mean "explicitly declared AND observed", or it measures nothing.
+
+    Folding wildcard expansion into `declared` makes `matched == observed` for that module BY
+    CONSTRUCTION — the number cannot fail. It shipped that way for a few hours as "108 declared /
+    13 matched"; every one of the 13 was `articulation_layer`, which declares `consumes: []` and so
+    matched only itself. The honest numbers are 82 declared / 13 observed / 0 matched.
+    """
+    C, r = measured
+    modules, _, _ = C._load_contracts()
+    explicit_c = {f'{m}:{t}' for m, d in modules.items() for t in d['consumes']}
+    explicit_e = {f'{m}:{t}' for m, d in modules.items() for t in d['emits']}
+    for edge in r['consumes']['matched']:
+        assert edge in explicit_c, f'{edge} counted as matched but is only wildcard-covered'
+    for edge in r['emits']['matched']:
+        assert edge in explicit_e, f'{edge} counted as matched but is only wildcard-covered'
+    # Wildcard coverage is reported, just never as conformance.
+    assert 'wildcard_covered' in r['consumes']
+
+
 def test_check_mode_gates_only_genuinely_undeclared_types(measured):
-    """The HARD FLOOR is narrow on purpose. Gating the wide 'observed but not declared' measure
-    would have blocked on registry holes (a declared owner with no `sim_module`) and on ownership
-    mismatches — calling both drift in the code. Those are reported, never gated."""
+    """The HARD FLOOR is narrow on purpose: gating the wide "observed but not declared" measure
+    would block on registry holes (a declared owner with no `sim_module`) and on ownership
+    questions — including the deliberate cross-scale carrier pattern. Those are reported, never
+    gated. But narrow must not mean UNFAILABLE, which is what the wildcard fallback made it."""
     C, r = measured
     assert C.UNDECLARED_TYPE_MAX == 0
     for side in ('emits', 'consumes'):
         tri = r[side]['triage']
         wide = set(r[side]['observed_only'])
-        narrow = set(tri['undeclared_type'])
-        assert narrow <= wide, f'{side}: triage invented an edge that was not observed-only'
-        assert len(tri['undeclared_type']) + len(tri['ownership_mismatch']) \
-            + len(tri['unobservable']) == len(wide), f'{side}: triage lost or duplicated an edge'
+        n = len(tri['undeclared_type']) + len(tri['ownership_mismatch']) + len(tri['unobservable'])
+        assert n == len(wide), f'{side}: triage lost or duplicated an edge ({n} vs {len(wide)})'
+
+
+def test_the_floor_is_currently_RED_and_says_so(measured):
+    """Records the honest state rather than a green claim.
+
+    Two Key types flow that no contract declares, so `--check` exits 1 today. This test exists so
+    that fixing them is a DELIBERATE act with a visible diff, not something that drifts to green —
+    and so that a future reader cannot mistake the earlier "floor MET" claim (produced by the
+    vacuous fallback) for a measurement. When the two are declared or accepted, delete this test
+    and say which in the commit.
+    """
+    _, r = measured
+    undeclared = (r['emits']['triage']['undeclared_type']
+                  + r['consumes']['triage']['undeclared_type'])
+    assert len(undeclared) == 2, (
+        f'the undeclared-type count moved to {len(undeclared)}: {undeclared}. If it went DOWN, the '
+        f'gap was closed — update or delete this test in the same commit and name what changed. If '
+        f'it went UP, a new Key type is flowing that no contract declares.'
+    )
+    joined = ' '.join(undeclared)
+    assert 'scene.accord_echo' in joined and 'meta.cascade_cluster_event' in joined

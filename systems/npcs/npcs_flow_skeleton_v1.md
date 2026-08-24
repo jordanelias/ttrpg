@@ -21,9 +21,9 @@ found elsewhere in the tree.]
 | Callable | Anchor | Called by |
 |---|---|---|
 | `generate_npc(faction, role, world, territory_id, rng)` | `systems/world/sim/npe.py:226 generate_npc` | `—` (no production call site; see §7 gap 1) |
-| `simulate_npc_actions(world)` | `systems/world/sim/npe.py:336 simulate_npc_actions` | `systems/overview/sim/accounting.py:138 simulate_npc_actions` |
-| `get_npcs_in_territory(territory_id, world)` | `systems/world/sim/npe.py:386 get_npcs_in_territory` | `—` (no caller found; see §7 gap 4) |
-| `reset_npcs(world)` | `systems/world/sim/npe.py:391 reset_npcs` | `—` (test-helper docstring; no caller found) |
+| `simulate_npc_actions(world)` | `systems/world/sim/npe.py:353 simulate_npc_actions` | `systems/overview/sim/accounting.py:138 simulate_npc_actions` |
+| `get_npcs_in_territory(territory_id, world)` | `systems/world/sim/npe.py:403 get_npcs_in_territory` | `—` (no caller found; see §7 gap 4) |
+| `reset_npcs(world)` | `systems/world/sim/npe.py:408 reset_npcs` | `—` (test-helper docstring; no caller found) |
 | `select_action(actor_id, world)` | `engine/autoload/npc_ai.py:33 select_action` | `—` (only reached by `engine/tests/test_pipeline_reach.py:791`, a stub-wired-check probe, not a production caller; see §7 gap 2) |
 | `evaluate_priority_stack(actor_id, world)` | `engine/autoload/npc_ai.py:41 evaluate_priority_stack` | `—` (no caller found; see §7 gap 2) |
 
@@ -36,8 +36,8 @@ found elsewhere in the tree.]
 | `world.rng` | world-state | campaign RNG, falls back to a fresh `random.Random()` when absent | `systems/world/sim/npe.py:242-245 rng` |
 | `faction`, `territory_id` | arg | optional caller overrides on `generate_npc` | `systems/world/sim/npe.py:226-228 generate_npc` |
 | `role` | arg | accepted parameter on `generate_npc`, never read in the function body — docstring marks it reserved for future use | `systems/world/sim/npe.py:237-238 generate_npc` |
-| `world.npcs` (per-territory NPC lists) | world-state | populated store `simulate_npc_actions` iterates | `systems/world/sim/npe.py:349 store` |
-| `world.season` | world-state | stamped onto emitted `NPCAction.season` | `systems/world/sim/npe.py:380 NPCAction` |
+| `world.npcs` (per-territory NPC lists) | world-state | populated store `simulate_npc_actions` iterates | `systems/world/sim/npe.py:366 store` |
+| `world.season` | world-state | stamped onto emitted `NPCAction.season` | `systems/world/sim/npe.py:397 NPCAction` |
 | `actor_id`, `world` | arg | `npc_ai` entry-point signatures (unused inside the stub bodies) | `engine/autoload/npc_ai.py:33-46 select_action` |
 
 ## 3. Flow
@@ -60,24 +60,24 @@ found elsewhere in the tree.]
 - **S7** `[branch]` Tier-2 deviation roll (`rng.randint(1, DEVIATION_DIE_MAX)`); above threshold,
   `is_arc_vector` is set and one of four live axes (Stance / Worldview / Compromise / Volatility)
   is flipped to its opposite extreme; a fifth branch (hidden allegiance) computes but never
-  applies — see §7 gap. `systems/world/sim/npe.py:290-316 dev_roll`
+  applies — see §7 gap. `systems/world/sim/npe.py:290-333 dev_roll`
 - **S8** `[write]` An `NPC` is constructed and appended to the territory's list in the resolved
   store (`world.npcs` when present, else the module-level fallback).
-  `systems/world/sim/npe.py:318-332 _next_npc_id_val`
-- **S9** `[emit]` `generate_npc` returns the constructed `NPC`. `systems/world/sim/npe.py:333 npc`
+  `systems/world/sim/npe.py:335-349 _next_npc_id_val`
+- **S9** `[emit]` `generate_npc` returns the constructed `NPC`. `systems/world/sim/npe.py:350 npc`
 - **T1** `simulate_npc_actions` resolves `world.rng` (or a fresh `random.Random()`) and reads the
-  NPC store. `systems/world/sim/npe.py:344-349 rng`
+  NPC store. `systems/world/sim/npe.py:361-366 rng`
 - **T2** `[loop]` For every same-territory NPC pair: `[gate]` skip unless worldviews share a
-  conviction. `systems/world/sim/npe.py:352-356 npcs`
+  conviction. `systems/world/sim/npe.py:369-373 npcs`
 - **T3** `[gate]` `[loop]` Collect issues where the pair's Stance values are exactly adjacent
-  (`abs(diff) == 1`); skip the pair if none. `systems/world/sim/npe.py:358-365 adj_pairs`
-- **T4** `[gate]` Roll `d6` against the pair's average Volatility. `systems/world/sim/npe.py:367-368 avg_vol`
+  (`abs(diff) == 1`); skip the pair if none. `systems/world/sim/npe.py:375-382 adj_pairs`
+- **T4** `[gate]` Roll `d6` against the pair's average Volatility. `systems/world/sim/npe.py:384-385 avg_vol`
 - **T5** `[write]` On pass, shift both NPCs' Stance on the first adjacent-issue pair toward each
-  other by one step. `systems/world/sim/npe.py:369-376 issue`
+  other by one step. `systems/world/sim/npe.py:386-393 issue`
 - **T6** `[emit]` Append an `NPCAction(action_type='stance_drift', ...)` descriptor.
-  `systems/world/sim/npe.py:377-382 NPCAction`
+  `systems/world/sim/npe.py:394-399 NPCAction`
 - **T7** `[emit]` Return the accumulated action list (discarded by its accounting caller — see §4).
-  `systems/world/sim/npe.py:383 actions` / `systems/overview/sim/accounting.py:138 simulate_npc_actions`
+  `systems/world/sim/npe.py:400 actions` / `systems/overview/sim/accounting.py:138 simulate_npc_actions`
 - **U1** `[gate]` `select_action` / `evaluate_priority_stack` unconditionally return
   `stubwire.stub_resolve(...)` — no branching, no world read, no NPC selected.
   `engine/autoload/npc_ai.py:33-46 select_action`
@@ -86,11 +86,11 @@ found elsewhere in the tree.]
 
 | Output | Kind | Consumer | Anchor |
 |---|---|---|---|
-| `NPC` (return value) | arg | caller of `generate_npc` — no in-tree production caller (§7 gap 1) | `systems/world/sim/npe.py:333 npc` |
-| `world.npcs[territory_id]` append | write | `world` (persisted via `game_state.serialize_world`/`restore_world`) | `systems/world/sim/npe.py:331-332 store` |
+| `NPC` (return value) | arg | caller of `generate_npc` — no in-tree production caller (§7 gap 1) | `systems/world/sim/npe.py:350 npc` |
+| `world.npcs[territory_id]` append | write | `world` (persisted via `game_state.serialize_world`/`restore_world`) | `systems/world/sim/npe.py:348-349 store` |
 | `world.npc_counter` increment | write | `world` state; read back as `CampaignResult.npcs_generated` telemetry | `systems/world/sim/npe.py:118-120 _next_npc_id` / `engine/mc_v18.py:307 npcs_generated` |
 | `list[NPCAction]` (return value) | arg | `systems/overview/sim/accounting.run_accounting`, which discards it by design | `systems/overview/sim/accounting.py:138 simulate_npc_actions` |
-| Mutated `NPC.stance` values (in-place) | write | `world.npcs` store (same objects `get_npcs_in_territory` would read) | `systems/world/sim/npe.py:371-376 issue` |
+| Mutated `NPC.stance` values (in-place) | write | `world.npcs` store (same objects `get_npcs_in_territory` would read) | `systems/world/sim/npe.py:388-393 issue` |
 | `StubResult(module, io_contract, reason)` | arg | caller of `select_action`/`evaluate_priority_stack` — none in production | `engine/autoload/npc_ai.py:34-38 select_action` |
 | `stubwire.invocations` increment | write | `engine/substrate/stubwire.py` module counter, folded into `CampaignResult.stub_hits` | `engine/substrate/stubwire.py:61 invocations` |
 
@@ -101,8 +101,8 @@ found elsewhere in the tree.]
 | `World.npcs` | RW | `engine/autoload/game_state.py` (declared) / `systems/world/sim/npe.py` (read+written) | `engine/autoload/game_state.py:277 npcs` |
 | `World.npc_counter` | RW | `engine/autoload/game_state.py` (declared) / `systems/world/sim/npe.py` (incremented) | `engine/autoload/game_state.py:278 npc_counter` |
 | `Territory.accord` / `.prosperity` / `.owner` | R | `engine/autoload/game_state.py` (`Territory`) | `systems/world/sim/npe.py:186-208 _ecology_weights` |
-| `World.rng` | R | `engine/autoload/game_state.py` | `systems/world/sim/npe.py:242 rng` / `systems/world/sim/npe.py:344 rng` |
-| `World.season` | R | `engine/autoload/game_state.py` | `systems/world/sim/npe.py:380 NPCAction` |
+| `World.rng` | R | `engine/autoload/game_state.py` | `systems/world/sim/npe.py:242 rng` / `systems/world/sim/npe.py:361 rng` |
+| `World.season` | R | `engine/autoload/game_state.py` | `systems/world/sim/npe.py:397 NPCAction` |
 | `_npcs_by_territory` / `_npc_counter` (module fallback) | RW | `systems/world/sim/npe.py` | `systems/world/sim/npe.py:106-107` |
 | serialized `snapshot['npcs']` / `snapshot['npc_counter']` | W (serialize) / R (restore) | `engine/autoload/game_state.py` | `engine/autoload/game_state.py:278-281 npc_counter` / `engine/autoload/game_state.py:425-428 restore_world` |
 
@@ -124,9 +124,9 @@ found elsewhere in the tree.]
 | `generate_npc` has no world-gen or season-tick call site — `engine/mc_v18.py` fires a `stubwire.stub_resolve('generate_npc(world-gen|season-tick)', ...)` in its place every season, and a dedicated test pins `npcs_generated == 0` on a seeded campaign. Only `simulate_npc_actions` (the drift half) is wired. | `engine/mc_v18.py:194-202 stub_resolve` · `engine/tests/test_world_population.py:142-154 test_generate_npc_has_no_automatic_call_site_this_wave` · `engine/mc_v18.py:307 npcs_generated` |
 | `engine/autoload/npc_ai.py`'s two declared entry points (`select_action`, `evaluate_priority_stack`) are unconditional `stubwire.stub_resolve` no-ops with no branching and no production caller anywhere in `engine/`, `systems/`, or `tests/` — the only reference outside the module itself is a test asserting the stub-wired shape, not a live call. | `engine/autoload/npc_ai.py:33-46 select_action` · `engine/tests/test_pipeline_reach.py:791 select_action` · `engine/tests/test_pipeline_reach.py:795-807 test_oi17_full_module_conversions_are_stub_wired` (grep confirms no other caller) |
 | The `npc_behavior` module contract (`references/module_contracts.yaml`) declares a full `consumes`/`emits`/`state`/`gates` Key-flow shape (Procedures B/C/D/E — all four declared accounting phases, none implemented) against `sim_module: none` — explicitly re-verified (OI-54, ED-IN-0097) that `systems/npcs/` holds zero `.py` files. None of this declared flow exists in code; `npc_ai.py` was considered and explicitly rejected as an implementation because it is itself a stub shell. The companion `npc_memory` contract (consumes 4 of `npc_behavior`'s emit types) is `doc: null`, `sim_module: none`, with its own gap note stating a grep for `npc_memory*` returns nothing tree-wide — no npc-memory store exists in code at all. | `references/module_contracts.yaml:265-280 npc_behavior` (sim_module: none) · `references/module_contracts.yaml:375-392 npc_memory` (doc: null, sim_module: none, "find/grep for npc_memory* across the tree returns nothing") |
-| `get_npcs_in_territory` and `reset_npcs` (`systems/world/sim/npe.py`) have no caller anywhere in `engine/`, `systems/`, or `tests/` other than their own definitions — `reset_npcs`'s own docstring calls it a "Test helper" but no test invokes it. | `systems/world/sim/npe.py:386-388 get_npcs_in_territory` · `systems/world/sim/npe.py:391-397 reset_npcs` (grep confirms no other reference) |
+| `get_npcs_in_territory` and `reset_npcs` (`systems/world/sim/npe.py`) have no caller anywhere in `engine/`, `systems/`, or `tests/` other than their own definitions — `reset_npcs`'s own docstring calls it a "Test helper" but no test invokes it. | `systems/world/sim/npe.py:403-405 get_npcs_in_territory` · `systems/world/sim/npe.py:408-414 reset_npcs` (grep confirms no other reference) |
 | `mechanics_index.yaml`'s `npc_ai_service` entry cites `systems/_architecture/complete_systems_reference.md#part-1` as its canon source and marks `test_status: contested`, flagging the priority-stack contents as possibly contaminated pending an audit — a doc↔code divergence the contract layer records but the code carries no trace of (the function bodies are pure stub calls, no priority-stack data structure exists). | `registers/mechanics_index.yaml:192-198 npc_ai_service` · `engine/autoload/npc_ai.py:6` · `engine/autoload/npc_ai.py:21-30` |
-| Tier-2 deviation's `flip_choice == 2` branch (hidden allegiance) computes a local `hidden_allegiance` value that is never passed to the `NPC(...)` constructor — the constructor call has no `hidden_allegiance=` kwarg, so this branch is dead: every generated NPC keeps the dataclass default (`None`) regardless of the roll. | `systems/world/sim/npe.py:307-310 hidden_allegiance` · `systems/world/sim/npe.py:319-330 NPC` |
+| Tier-2 deviation's `flip_choice == 2` branch (hidden allegiance) computes a local `hidden_allegiance` value that is never passed to the `NPC(...)` constructor — the constructor call has no `hidden_allegiance=` kwarg, so this branch is dead: every generated NPC keeps the dataclass default (`None`) regardless of the roll. | `systems/world/sim/npe.py:324-327 hidden_allegiance` · `systems/world/sim/npe.py:336-347 NPC` |
 | `PIETY_HIGH`/`PIETY_LOW` are declared but never referenced in `_ecology_weights` or `generate_npc` — the code comment there states Territory has no piety field and prosperity is used as a proxy instead. | `systems/world/sim/npe.py:57-58 PIETY_HIGH` · `systems/world/sim/npe.py:209-210 _ecology_weights` |
 | The `npc_behavior` contract's own `doc:` field was repointed (C-KEY-2, 2026-07-29) to a doc homed under `systems/factions/`, demoting `npc_behavior_v30.md` to a `sources:` citation — so this folder owns neither the code (`sim_module: none`) nor the doc of its own primary contract. `CURRENT.md`'s "NPC behaviour" row still heads at the demoted doc, so the currency authority and the contract layer disagree about this subsystem's head. | `references/module_contracts.yaml:262 npc_behavior` · `CURRENT.md:35 npc_behavior_v30` |
 | Zero `mechanics_index.yaml` entries resolve into `systems/npcs/` — no mechanic cites any `systems/npcs/` path in `canon_sources` or `sim_module`; the conceptually-matching `npc_ai_service` entry is canon'd and sim'd elsewhere. | `registers/mechanics_index.yaml:192 npc_ai_service` |

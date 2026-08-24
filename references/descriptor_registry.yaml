@@ -215,10 +215,11 @@ category_b_scalars:
 # own. Measured 2026-08-24:
 #
 #   systems/characters/sim/conviction.py   9 names (Faith Order Reason Equity Precedent Autonomy
-#                                            Continuity Community Warden) -- 4 of them appear in
-#                                            no canonical set
+#                                            Continuity Community Warden) -- 3 of them (Reason,
+#                                            Autonomy, Continuity) appear in no canonical set
 #   systems/world/sim/npe.py               8 names (Faith Order Reason Justice Survival Loyalty
-#                                            Truth Power) -- 5 appear in no canonical set
+#                                            Truth Power) -- 6 appear in no canonical set
+#                                            (only Faith and Order are canonical)
 #   this registry                         13 by reference, enumerated nowhere
 #
 # The two code rosters overlapped in THREE names, and the cost was a silent no-op: the only game

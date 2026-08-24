@@ -56,7 +56,15 @@ def test_the_roster_comes_from_the_registry_not_a_literal():
 
 
 def test_no_second_conviction_roster_in_code():
-    """A sequence literal holding 2+ canonical Conviction names is a re-hardcoded roster."""
+    """A literal holding 2+ canonical Conviction names is a re-hardcoded roster.
+
+    DICT LITERALS ARE INCLUDED, AND THEY ARE WHY THIS DOCSTRING EXISTS. The first version checked
+    only Tuple/List/Set, and a Dict slipped straight through: systems/world/sim/npe.py's
+    deviation-flip carried {"Faith": "Reason", "Order": "Survival", ...} — eight names, six of them
+    non-canonical — and survived the very commit that shipped this guard. Worse than a stale copy:
+    once CONVICTIONS became canonical, that map could MINT a name resolve_conviction raises on.
+    Keys AND values are inspected, because either half is a roster fragment.
+    """
     canon = _canonical()
     offenders = []
     for path in _py_files():
@@ -68,9 +76,13 @@ def test_no_second_conviction_roster_in_code():
         except SyntaxError:                                  # pragma: no cover - not our problem
             continue
         for node in ast.walk(tree):
-            if not isinstance(node, (ast.Tuple, ast.List, ast.Set)):
+            if isinstance(node, ast.Dict):
+                elts = [e for e in list(node.keys) + list(node.values) if e is not None]
+            elif isinstance(node, (ast.Tuple, ast.List, ast.Set)):
+                elts = node.elts
+            else:
                 continue
-            names = {e.value for e in node.elts
+            names = {e.value for e in elts
                      if isinstance(e, ast.Constant) and isinstance(e.value, str)}
             hits = names & canon
             if len(hits) >= 2:
@@ -83,12 +95,23 @@ def test_no_second_conviction_roster_in_code():
     )
 
 
-def test_a_retired_roster_name_still_raises_rather_than_scoring_zero():
+def test_every_non_canonical_name_raises_and_nothing_is_silently_migrated():
+    """No legacy name is translated — including the two that briefly WERE.
+
+    `Reason` and `Autonomy` were aliased to Scholastic and Liberty for a few hours on 2026-08-24,
+    justified as "a rename rather than a design call". Both conviction_taxonomy_v30.md:282 and
+    references/alias_registry.yaml:658-663 route legacy tags to PER-CHARACTER migration under
+    PP-685 and deliberately name no single target, so the alias decided a ruling by accident.
+    This pins that no future edit quietly reintroduces one.
+    """
     from engine.substrate import descriptors
-    # The five npe names with no canonical twin are GONE, and stay loud.
-    for dead in ('Justice', 'Survival', 'Loyalty', 'Truth', 'Power', 'Continuity'):
+    assert not hasattr(descriptors, 'CONVICTION_ALIASES'), (
+        'an alias map is back. A legacy Conviction tag has no single canonical target — see '
+        'conviction_taxonomy_v30.md §6 and references/alias_registry.yaml.')
+    for dead in ('Justice', 'Survival', 'Loyalty', 'Truth', 'Power',
+                 'Continuity', 'Reason', 'Autonomy'):
         with pytest.raises(ValueError):
             descriptors.resolve_conviction(dead)
-    # The two that are renames resolve.
-    assert descriptors.resolve_conviction('Reason') == 'Scholastic'
-    assert descriptors.resolve_conviction('Autonomy') == 'Liberty'
+    # A canonical name passes through unchanged — the function translates nothing.
+    for good in descriptors.CONVICTIONS:
+        assert descriptors.resolve_conviction(good) == good
