@@ -135,11 +135,18 @@ Two Key types flow that **no contract declares**: `scene.accord_echo` and
 
 | family | n | what it needs |
 |---|---|---|
-| `test_mass_battle_systems_movement` | 8 | behavioural expectations written against the old engine |
-| `test_flow_skeletons` | 5 | anchors into the rewritten `massbattle.py`; **not remappable by diff** — the file is new, they need re-authoring |
+| `test_mass_battle_systems_movement` | 8 | behavioural expectations written against the OLD engine — read each, decide whether the canon engine's behaviour is correct and re-pin, or whether it is a regression |
+| `test_flow_skeletons` | 5 | anchors into the rewritten `massbattle.py`. **Not remappable by diff** — the file is new, so these need re-authoring or the gate needs the R7-A decision |
 | `test_field_golden_pins` | 5 | env/pin classification over the new module set |
-| `test_public_governance_transfer_key` | 3 | the emitter that went silent |
-| `test_tool_input_paths_resolve`, `test_structure_audit`, `test_morale_write_sweep`, `test_import_cycle_game_state_npe` | 3 | path + cycle registers |
+| `test_public_governance_transfer_key` | 3 | the emitter that went silent (finding 1 above) — this is a real question, not a re-pin |
+| `test_export_sim_params` | 1 | `SEED_BASE` collision, below |
+| `test_link_values_pointers` | 1 | value↔pointer links over the new module set |
+| `test_structure_audit` | 1 | the `sys.path` alias register still expects the old mass-battle edges |
+| `test_morale_write_sweep` | 1 | `_CELL_OWNED` field register vs the canon engine's write sites |
+| `test_import_cycle_game_state_npe` | 1 | the declared cycle families moved with the port |
+
+**Verified fixed after the WIP commit** (was 30 → now 26): `test_tool_input_paths_resolve` and the
+`Golden Modes Byte-Exact` CI job — see the sub-section below.
 
 Also red locally: `ci_co_file_checker`, `ci_sim_fabrication_check`. `sim_params.json` grew 320 → 420
 constants and surfaced a genuine collision: **`SEED_BASE` is defined twice in the canon engine** —
