@@ -186,6 +186,46 @@ def trial_vector(ua, ub, r):
 # tests/valoria/test_mass_battle_maneuvers.py + test_obb_contact_toi.py. That is a separate
 # surface with its own two-value semantics; its docstring at validators.py:220 already says
 # "the legacy integer path", so it is inconsistent rather than misleading.
+#
+# ─── [ED-MB-0066, 2026-08-25, ALL FIVE MODES RE-RECORDED — Volley TN 6 -> 7] ──────────────────
+# Jordan, 2026-08-25, verbatim: "TN7 always. Never change TN anywhere ever." ED-037's provisional
+# "Volley phase uses TN 6 (not TN 7)" is superseded (registers/supersession_register.yaml).
+#
+# THE MECHANISM. orchestration.py `_roll_volley_pool` hand-rolled its own d10 loop scoring
+# `roll >= VOLLEY_TN` at 6, bypassing the owner. It now delegates to resolution.roll_pool at the
+# fixed TN-7 face window, and VOLLEY_TN is deleted from config.py. Rolling its own dice is exactly
+# why this survived the rest of the TN sweep: every other TN-varying site routed through a roller
+# that ignores `tn`, so those were inert. This one was live.
+#
+# WHY ALL FIVE MOVE. The battery's ('ranged', ...) row at :109 reaches volley in every mode, and
+# volley is not gated behind PER_CELL or FIELD_MOVEMENT — the same shared-code shape as the
+# DG-3/DG-4 and partition-invariance re-records above.
+#
+# CONTROLS, per CLAUDE.md §0.1 point 4 (a number without a control is not a measurement):
+#   1. CAMPAIGN GOLDENS DID NOT MOVE. engine/tests 1282 passed / 5 xfailed, byte-identical before
+#      and after — test_mc_v18_regression, test_f7_smoke_oracle and every key-log content hash
+#      unchanged. This is the load-bearing control: campaign armies are built melee-only
+#      (massbattle.py:84 unit_type='melee'), so volley is unreachable from a campaign and a
+#      campaign-golden move would have meant the forecast was wrong. It was not.
+#   2. DIRECTION. Per-die EV falls 0.50 -> 0.40 (TN 6 scores faces 6-9, TN 7 scores 7-9; fumble
+#      and crit unchanged), so volley net successes and therefore ranged casualties DECREASE.
+#      An increase would have meant the delegation inverted something.
+#   3. EQUIVALENCE AT TN 7 IS EXACT, so the only behavioural bit in this commit is 6 -> 7: the old
+#      loop and resolution.roll_pool map faces identically (1 -> -1, 7-9 -> +1, 10 -> +2) and draw
+#      one rngsource value per die in the same order. The `power_dice <= 0` guard is kept because
+#      roll_pool clamps to a 1-die minimum (PP-273), an engagement rule volley must not inherit.
+#   4. NOT A BALANCE MEASUREMENT. This is a 24-seed matchup battery, not the n>=100 oracle. No
+#      balance claim is made or implied. tools/balance_oracle.py exists for that and was not run,
+#      because volley is campaign-unreachable so both of its arms would be identical by
+#      construction — the honest control here is #1, not an oracle sweep.
+#
+# BEFORE -> AFTER
+#   unit_legacy_mor0   241f04e5b2a4… -> 977bf924dcff…
+#   cell_legacy_mor0   f58a9cb415cd… -> c41a6fa06252…
+#   unit_field_mor0    7d4a996cad34… -> af70014961a9…
+#   cell_field_mor0    717ad3b87ff7… -> 41a2e98485f3…
+#   cell_legacy_mor1   fbe2d87f02b4… -> 4cff46a32a54…
+# ─────────────────────────────────────────────────────────────────────────────────────────────
 EXPECTED = {
     # [2026-07-08, ED-MB-0004, partition-invariance fix, Jordan-ruled "genuine defect -- fix it"]
     # re-recorded a final time, all 4 modes -- orchestration.py's new `_convergence_scale` renormalizes
@@ -244,7 +284,7 @@ EXPECTED = {
     # ee0fdec4.../a7b01a0d..., then the flip was RETRACTED the same day (confounded measurement — see
     # config.py at the flag), so these revert to their pre-flip values. Recorded here because the next
     # attempt will move them again and should be able to see that this is the second, not the first.
-    'unit_legacy_mor0': '241f04e5b2a4e3d626024816872d7903f9a43507abd205cedc8a6c030d2f7794',
+    'unit_legacy_mor0': '977bf924dcff2cb0715952d362b91dd5d999ba39bb7403d09ba4e52e4b90eb59',
     # [2026-07-04, re-recorded a second time, caught by CI not local dev] 'cell' also moved after the
     # adversarial-review fixes (pair_pool_contribution's cell_troops iteration bug; the sibling-morale
     # pull reorder/snapshot fix) -- missed locally because test_byte_exact_cell_mode only hard-fails
@@ -300,7 +340,7 @@ EXPECTED = {
     # Controls: both moved modes reproduced their new digest on two consecutive runs (2/2), and
     # `cell` reproduced it again with PYTHONHASHSEED unset (fresh hash seed => hash-order
     # independent). Recorded on Linux/Python 3.11.15.
-    'cell_legacy_mor0': 'f58a9cb415cd2b273cb8cd2915537bc2bf5accd64db6bced67068217703fb189',
+    'cell_legacy_mor0': 'c41a6fa0625235433e496b15aba83ff4d49e9aea2d471d3c86c57df611ecfbf1',
     # [Stage A, 2026-07-01; TOI refactor 2026-07-02; re-recorded 2026-07-02 for LC-8 + ED-1089/1091]
     # The coordinate-field path's OWN golden digests (FIELD_MOVEMENT=1 + PC_NODE_COHESION=1 -- required
     # by run_battle's own assert; since the ED-1089 default flip this is what a BARE invocation runs).
@@ -413,7 +453,7 @@ EXPECTED = {
     # predicted this breakage; I checked it against the wrapper, saw skip/xfail, and recorded the
     # finding as overturned. It was not. CHECK THE GATE THAT GATES THE THING, not a neighbour.
     # was 0194efcc72118de125ed176b6e6d22d1f56f54dc9c9a76337953b6854d59cf0c
-    'unit_field_mor0': '7d4a996cad34a7ee8a811b844e49a381869130fe321c7768f869d7ecd489d019',
+    'unit_field_mor0': 'af70014961a9a16ff9c6a328d5e5fbf58deea4ae2ca8533d4929558ce3527a2f',
     # [2026-07-04, re-recorded a second time] cell_field alone moved again after the adversarial-
     # review fixes above (pair_pool_contribution's cell_troops iteration bug; the sibling-morale-pull
     # reorder/snapshot fix) -- unit/cell/unit_field all re-confirmed BYTE-IDENTICAL to their
@@ -489,7 +529,7 @@ EXPECTED = {
     # PC_CELL_EXCLUSION=0).
     # [ED-IN-0187, 2026-08-14] RE-RECORDED — the ruled degree ladder; see the note above.
     # was da6d685e7f8c4e6ebe0076772b487f19c334c0a34226719484aac2181967dea8
-    'cell_field_mor0': '717ad3b87ff72762d0e06ee0720f9b393aa5e85cb5500ba6ed989cf270793baf',
+    'cell_field_mor0': '41a2e98485f31420d70e248238d93a24695684dde33a04791ffbd2697ecffecd',
     # ─── [ED-MB-0053 / plan-v2 §4a, 2026-07-29] THE FIFTH MODE — freshly recorded ───────────────
     # PER_CELL=1 + PC_CELL_MORALE=1 (grid). The other four all run at PC_CELL_MORALE=0, where the
     # three cell-morale maps are EMPTY, so they verify float-order over every per-cell map EXCEPT
@@ -514,7 +554,7 @@ EXPECTED = {
     # A fix that moved any of them would have been touching something it did not claim to.
     # [ED-IN-0187, 2026-08-14] RE-RECORDED — the ruled degree ladder; see the note above.
     # was d11cb4fb97ea19605c9034033606457a1ead7a066b3f7a0c3df98620e9769ba9
-    'cell_legacy_mor1': 'fbe2d87f02b4017acdb985c3432718bb3574d69e46778014c67ebf3ecc577e4b',
+    'cell_legacy_mor1': '4cff46a32a54ce7586f851f55a138221c39ace8e24d9c8c44aa3c1ec3902b2c6',
 }
 
 
