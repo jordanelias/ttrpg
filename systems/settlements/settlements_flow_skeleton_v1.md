@@ -27,9 +27,9 @@
 | `seizure_ob_modifier(territory_id, world=None)` | `systems/settlements/sim/infrastructure.py:236 seizure_ob_modifier` | `systems/factions/sim/mass_seizure.py:258 seizure_ob_modifier` |
 | `ADJACENCY` (module constant, dict lookup) | `systems/settlements/sim/adjacency.py:9 ADJACENCY` | `systems/factions/sim/faction_action.py:42 ADJACENCY` (used at `:119`, `:168`); `systems/world/sim/insurgency_pipeline.py:116 ADJACENCY` (used at `:133`) |
 | `temperament_of(territory_id)` | `systems/settlements/sim/temperaments.py:97 temperament_of` | `—` (no importer; declared a dependency only in a docstring — see §7) |
-| `temperament_modifiers(territory_id, action_type)` | `systems/settlements/sim/temperaments.py:105 temperament_modifiers` | `—` (no importer) |
-| `apply_strain_shock(strain_delta, affected_territories, world=None)` | `systems/settlements/sim/temperaments.py:142 apply_strain_shock` | `—` (no importer) |
-| `get_faction_aggregate(faction_name)` | `systems/settlements/sim/temperaments.py:163 get_faction_aggregate` | `—` (no importer) |
+| `temperament_modifiers(territory_id, action_type, world=None)` | `systems/settlements/sim/temperaments.py:105 temperament_modifiers` | `—` (no importer) |
+| `apply_strain_shock(strain_delta, affected_territories, world=None)` | `systems/settlements/sim/temperaments.py:151 apply_strain_shock` | `—` (no importer) |
+| `get_faction_aggregate(faction_name)` | `systems/settlements/sim/temperaments.py:172 get_faction_aggregate` | `—` (no importer) |
 | `ledger_add` / `ledger_has` / `ledger_get` / `ledger_sweep` | `systems/settlements/sim/ledger.py:47`, `systems/settlements/sim/ledger.py:61`, `systems/settlements/sim/ledger.py:65`, `systems/settlements/sim/ledger.py:69` | Only via `Settlement.add_tag`/`has_tag`/`tags` (`systems/settlements/sim/registry.py:99-107`) and `succeed_governor`'s `ledger_sweep` call (`systems/settlements/sim/registry.py:206`) — itself uncalled in production; live tag-writers are only `tools/sim_harness/adapters/pr119_governance/*.py` |
 | `serialize_world(world)` settlements branch | `engine/autoload/game_state.py:290 settlements` | `engine/mc_v18.py:315 serialize_world` (end of `run_campaign`) |
 | `restore_world(snapshot)` settlements branch | `engine/autoload/game_state.py:290-292 settlements` | no production caller found (save/restore round-trip exercised only by `engine/tests/test_world_population.py`) |

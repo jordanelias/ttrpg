@@ -21,7 +21,7 @@ Dependencies:
 
 Entry points:
   - temperament_of(territory_id) -> str
-  - temperament_modifiers(territory_id, action_type) -> dict
+  - temperament_modifiers(territory_id, action_type, world=None) -> dict
 """
 from __future__ import annotations
 
@@ -102,7 +102,7 @@ def temperament_of(territory_id: str) -> str:
     return TERRITORY_TEMPERAMENTS.get(territory_id, "balanced")
 
 
-def temperament_modifiers(territory_id: str, action_type: str) -> dict:
+def temperament_modifiers(territory_id: str, action_type: str, world=None) -> dict:
     """Return α/β coefficients + any action-specific modifier dict for a territory.
 
     action_type is preserved in signature for callers (faction_action,
@@ -110,11 +110,20 @@ def temperament_modifiers(territory_id: str, action_type: str) -> dict:
     returns the canonical α/β pair regardless of action_type, since canon
     does not yet specify per-action-type α/β shifts.
 
+    `world` selects the drift store: `world.npc_drift_state` when supplied,
+    the module-level fallback otherwise — the same resolution `apply_strain_shock`
+    uses, so a read and a write with the same `world` always agree (ED-SE-0050).
+
     Returns dict with keys: alpha, beta, temperament, drift, drift_applied.
     """
     temp = temperament_of(territory_id)
     weights = TEMPERAMENT_WEIGHTS[temp]
-    drift = _drift_store().get(territory_id, 0.0)
+    # `world` is threaded through so the READ addresses the same store the WRITE
+    # used. Until ED-SE-0050 this was a bare `_drift_store()`, while
+    # `apply_strain_shock` wrote `_drift_store(world)` — so on a world-carrying
+    # campaign every recorded drift was invisible here and this returned 0.0
+    # forever (CLAUDE.md §0.1 pt 1, read/write asymmetry).
+    drift = _drift_store(world).get(territory_id, 0.0)
     # Drift biases toward outcomes-only per §4
     # [canonical: §4 — "Drift bias applies to faction effective-temperament
     #  recomputation each Accounting."]
