@@ -9,15 +9,35 @@ experiment it was the instrument for. Read this file, and your lane's, yourself.
 This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint machinery
 (which depended on the retired GitHub-API harness and token budgets).
 
-## ⚠ CURRENT — 2026-08-24 (read this first)
+## ⚠ CURRENT — 2026-08-25 (read this first)
 
-**`main` IS RED.** PR #329 merged at `dcf38ef` carrying a deliberately unfinished mass-battle engine
-port: 33 files now at `systems/mass_battle/sim/`, `tests/sim/mass_battle/` gone, and **22
-`tests/valoria` failures on `main`**. Blocking validators are green; `engine/tests` passed 2055
-locally but has **never been confirmed green on a runner** (fail-fast cancelled it every run).
+**`main` IS GREEN.** Measured 2026-08-25 at `571ae14`: `tests/valoria` **1723 passed, 23 skipped,
+15 xfailed, 0 failed**; `engine/tests` **2055 passed, 5 xfailed**. Both measured twice, by two
+independent sessions, agreeing.
 
-A red `main` is the one thing CLAUDE.md §0 licenses working on with no milestone trace. **Confirm
-`engine/tests` on a runner first** — if the campaign suite is fine, all 22 are test-side expectations.
+~~**`main` IS RED** … **22 `tests/valoria` failures on `main`**~~ — that block stood here from
+2026-08-24 and was falsified by the very next commit: `571ae14` (PR #331) fixed the port-tail
+failures and did not update this file. So the repo's front door — the file CLAUDE.md §1 tells every
+session to read second — kept directing work at a `main` that was already green. Struck rather than
+deleted, because the failure mode is the thing worth seeing: the tip commit fixed it and the
+continuity file never learned.
+
+✅ **THE RUNNER CAVEAT IS SOLVED, AND THE CAUSE WAS NOT FAIL-FAST.** `engine/tests` had never once
+completed on a CI runner, and the reason was mundane: **`sim-regression` carried
+`timeout-minutes: 5` while the suite takes ~6m15s** (375-383s, measured four times on 2026-08-25).
+The job was killed mid-run every time, deterministically. GitHub reports a timeout kill as
+`cancelled` rather than `failure`, and `All Gates Green` then fails on "not success" — which is how
+this got read as "fail-fast cancelled it every run" and stayed unexamined.
+
+It was never fail-fast, and no push was racing it: on PR #333 the cancellation reproduced three
+times, once with no push in the window and `origin/main` unmoved, always at ~5m15s. The 16-minute
+cap that made the timeout look impossible belongs to `unit-tests`, a different job.
+
+A §0.1 point 5 pattern defect — correct when written, broken because something else changed. The
+step's own comment said "~20s", true when the cap was set; the mass-battle port grew the suite by
+two orders of magnitude and nothing re-derived the cap. Raised to 20 minutes (ED-IN-0198), ~3x the
+measured runtime. **This means the campaign-level regression gate has been inert since the suite
+outgrew the cap — every merge in that window shipped without it.**
 
 **The master record is `registers/handoffs/HANDOFF_2026-08-24_SESSION.md`** — throughlines, warnings,
 loose ends, and the order to work in. Read it before anything else. Two executable plans sit beside
@@ -273,7 +293,11 @@ Jordan, in session. These close the two HELD degree sites and set the extension 
   surface, `engine/autoload/dice_engine.py` owns the ladder.
 - **TN 7 — "a roll of 7 or higher is a success"**, equivalently "above 6". Both readings were in
   circulation; they are the same rule and the ambiguity is now closed at the owner. **No constant
-  changed.** TN 6/7/8 (Controlled/Standard/Desperate) remains canon as a *situational* scale.
+  changed.** ~~TN 6/7/8 (Controlled/Standard/Desperate) remains canon as a *situational* scale.~~
+  ⚠ **SUPERSEDED 2026-08-25 — Jordan, verbatim: "TN7 always. Never change TN anywhere ever."** There
+  is no situational scale and no other TN. A varying difficulty is an **Ob**, never a TN. Enforced in
+  code, not prose: `engine/autoload/dice_engine` raises on any other value, and
+  `tests/valoria/test_tn7_always.py` fails on a re-introduction (ED-IN-0196, ED-MB-0066).
 - **All weapons are TN 7** — "now that we have a physics engine". Weapon speed is carried by the
   physics (reach, mass, percussion authority, recovery), never by the TN. ⚠ The engine **already**
   did this (`core.py:46`, `TN = SL.TN_STANDARD`); the per-weapon TN 5–8 existed only in prose and is

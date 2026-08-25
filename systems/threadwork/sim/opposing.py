@@ -36,7 +36,7 @@ from typing import Optional
 from engine.autoload import dice_engine
 from engine.autoload.dice_engine import roll_pool
 from systems.threadwork.sim.operations import (
-    DEPTH_OB, MENDING_OB, TN_STANDARD, TN_BINDING, TN_POP,
+    DEPTH_OB, MENDING_OB, TN_STANDARD,
     _actor_pool, COHERENCE_COST_BY_SCALE, FR_SURCHARGE, OperationResult,
 )
 from systems.threadwork.sim.coherence import apply_coherence_delta
@@ -123,18 +123,12 @@ def resolve_opposing_operations(actor_a, actor_b, op_type: str, target: dict,
     b_ob_mod = opposing_engagement_modifier(a_tps)
 
     scale = target.get('scale', 'Object')
+    # TN7 always (ED-IN-0196) — the op_type only selects the Ob now.
     if op_type == 'Mending':
         base_ob = MENDING_OB.get(scale, MENDING_OB['Relational'])
-        tn = TN_STANDARD
-    elif op_type in ('Locking', 'Dissolution'):
-        base_ob = DEPTH_OB.get(scale, 1)
-        tn = TN_BINDING
-    elif op_type == 'POP':
-        base_ob = DEPTH_OB.get(scale, 1)
-        tn = TN_POP
     else:
         base_ob = DEPTH_OB.get(scale, 1)
-        tn = TN_STANDARD
+    tn = TN_STANDARD
 
     a_ob = base_ob + a_ob_mod
     b_ob = base_ob + b_ob_mod

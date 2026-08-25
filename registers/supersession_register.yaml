@@ -421,3 +421,51 @@ entries:
       - designs/audit/2026-07-11-grounded-event-card-deck/grounded_event_card_deck_v1.md   # C.3 — PENDING
       - designs/audit/2026-07-12-governance-compendium/44_standing_institutions.md   # §44.2.7 — PENDING
       - designs/audit/2026-07-12-governance-compendium/45_hidden_longfuse_stats.md   # PENDING
+  - superseded_id: 'Every mechanism that made the d10 target number vary. (1) Situational TN scale (params/core.md
+      §TN Values): Controlled 6 / Standard 7 / Desperate 8, selected by situation — as carried at engine/autoload/sigma_leverage.py:83-86,
+      ruled 2026-08-15. (2) PP-619 threadwork TN differential: TN_BINDING 8 (Lock/Dissolution), TN_POP 8
+      (Past-Oriented Pulling), TN_POP_BINDING 9. (3) Combat §5 three-axis weapon TN matrix (WEAPON_TN_MOD
+      — reach/weight/type shifting TN across 5-8). (4) ED-037 provisional "Volley phase uses TN 6 (not TN
+      7)" (systems/mass_battle/sim/config.py VOLLEY_TN).'
+    scope: 'Four independent mechanisms across four subsystems. THREE WERE ALREADY INERT: engine/autoload/dice_engine.roll_pool
+      has never read its `tn` argument, so the situational scale, the threadwork differential and the weapon
+      matrix changed no roll that ever ran. The volley one was LIVE because it hand-rolled its own d10 loop
+      (orchestration.py _roll_volley_pool) and bypassed the owner entirely. That asymmetry is why collapsing
+      (1)-(3) is byte-neutral and collapsing (4) moves seeded goldens.'
+    superseded_by: 'Jordan ruling 2026-08-25, verbatim: "TN7 always. Never change TN anywhere ever." (ED-IN-0196)'
+    superseded_date: '2026-08-25'
+    replacement: 'TN is 7 everywhere - no situational, weapon, operation-class or phase modifier. A varying
+      difficulty is expressed as an Ob, never as a TN. NOTE THE DIRECTION: the ruling makes the OWNER correct
+      as written - _die_result ignoring `tn` was never the defect - and makes every TN-varying CALLER the
+      defect. It also subsumes the 2026-08-15 half-ruling ''all weapons are TN7'': not just weapons, everything.'
+    files_to_recheck:
+    - engine/autoload/dice_engine.py
+    - engine/autoload/sigma_leverage.py
+    - systems/combat/sim/combat.py
+    - systems/threadwork/sim/operations.py
+    - systems/threadwork/sim/opposing.py
+    - systems/threadwork/sim/collective.py
+    - systems/mass_battle/sim/resolution.py
+    - systems/mass_battle/sim/config.py
+    - systems/mass_battle/sim/orchestration.py
+    - systems/mass_battle/sim/hierarchy/units.py
+    execution_state_at_ED_IN_0196: 'READ THIS BEFORE CITING THE ROW ABOVE. The RULING is total; the SWEEP
+      is not yet complete, and this row is the plan plus its execution state, not a claim about the tree.
+      STILL LIVE: systems/mass_battle/sim/config.py VOLLEY_TN = 6, scored by a hand-rolled d10 loop at systems/mass_battle/sim/orchestration.py:1539
+      that bypasses dice_engine entirely (VOLLEY_ENABLED is True and the phase is WIRED per systems/mass_battle/sim/engine.py:65).
+      Deferred to its own commit because it is the one change in this sweep that moves seeded goldens. NOT
+      YET BUILT: (a) the owner-side refusal - engine/autoload/dice_engine.roll_pool still accepts any tn
+      and stores it in RollResult.tn unvalidated; (b) tests/valoria/test_tn7_always.py, the guard that would
+      fail on re-introduction. ALSO UNSWEPT, found by adversarial review and recorded rather than silently
+      left: tools/gen_sigma_parity_goldens.py TN_GRID still crosses [6,7,8] and will regenerate the 768
+      rows the parity suite now classifies as superseded; skills/valoria-dice-model/valoria_dice.py carries
+      its own TN 6/7/8 EV tables and a TN-aware die rule, and CLAUDE.md section 9 routes dice math to it;
+      tests/sim/v32-combat-balance/m3_weapon_class_layer.py still holds the full three-axis weapon TN matrix
+      this sweep deleted from systems/combat/sim/combat.py.'
+    note_on_neutrality: 'The sweep is ROLL-NEUTRAL, not byte-neutral, and the distinction is deliberate.
+      No die, draw order or numeric outcome moves - proven by tools/ci_golden_modes_check.py byte-exact
+      on all three pinned modes. Two RETURNED REPORT FIELDS do change: systems/combat/sim/combat.py ActionResult.notes
+      embeds the TN as text (''weapon TN 5'' -> ''weapon TN 7'' for short/light weapons, on the default-live
+      campaign path), and systems/threadwork/sim/operations.py OperationResult.tn reports 7 where it reported
+      8 for binding/POP operations. Both are report values catching up with what the engine was already
+      doing.'

@@ -29,7 +29,7 @@ from typing import Optional
 from systems.threadwork.sim.operations import (
     attempt_weaving, attempt_pulling, attempt_locking, attempt_dissolution,
     attempt_mending, attempt_past_pulling, attempt_leap,
-    DEPTH_OB, MENDING_OB, TN_STANDARD, TN_BINDING, TN_POP,
+    DEPTH_OB, MENDING_OB, TN_STANDARD,
     _actor_pool, _resolve_operation, OperationResult,
 )
 from engine.autoload import dice_engine
@@ -139,18 +139,12 @@ def attempt_collective_operation(actors: list, op_type: str, target: dict,
     # Resolve the operation with the pooled dice
     # Map op_type to depth-Ob lookup
     scale = target.get('scale', 'Object')
+    # TN7 always (ED-IN-0196) — the op_type only selects the Ob now.
     if op_type == 'Mending':
         ob = MENDING_OB.get(scale, MENDING_OB['Relational'])
-        tn = TN_STANDARD
-    elif op_type in ('Locking', 'Dissolution'):
-        ob = DEPTH_OB.get(scale, 1)
-        tn = TN_BINDING
-    elif op_type == 'POP':
-        ob = DEPTH_OB.get(scale, 1)
-        tn = TN_POP
     else:
         ob = DEPTH_OB.get(scale, 1)
-        tn = TN_STANDARD
+    tn = TN_STANDARD
 
     if lattice_fractured:
         ob += LATTICE_FRACTURE_OB_PENALTY

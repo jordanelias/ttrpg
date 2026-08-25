@@ -1500,7 +1500,8 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
 
 # ─── VOLLEY (Phase 2 — ranged fire at distance) ──────────────────────────────
 # [canonical: mass_battle_v30.md §A.7 Phase 2 — Volley fires before Manoeuvre.
-#  PP-503: Volley pool = Power dice vs TN 6. Net successes − ranged DR = Size loss.
+#  PP-503: Volley pool = Power dice. Net successes − ranged DR = Size loss.
+#  ⚠ PP-503's "vs TN 6" is SUPERSEDED — TN is 7 always (ED-MB-0066, under ED-IN-0196).
 #  Damage recorded in Phase 2 but APPLIED at Phase 6 Step 1 (simultaneous with engagement).]
 
 def _atom_distance(atom_a, atom_b):
@@ -1523,22 +1524,27 @@ def _atom_distance(atom_a, atom_b):
 
 
 def _roll_volley_pool(power_dice):
-    """Roll power_dice d10s vs TN=VOLLEY_TN. Returns net successes (count of d>=TN)
-    with the standard fumble/crit: 1 = -1 net, 10 = +2 net.
-    [canonical: mass_battle_v30.md §A.1 dice engine — TN-based successes, 1=-1, 10=+2]
+    """Roll power_dice d10s at TN 7, floored at 0. Returns net successes.
+
+    [canonical: mass_battle_v30.md §A.1 dice engine — 1=-1, 7-9=+1, 10=+2]
+    [canonical: Jordan ruling 2026-08-25 "TN7 always. Never change TN anywhere ever." — ED-MB-0066]
+
+    WAS TN 6, AND THIS IS THE ONE PLACE THE TN7 SWEEP ACTUALLY MOVED NUMBERS. This function
+    used to hand-roll its own d10 loop scoring `roll >= VOLLEY_TN` with VOLLEY_TN = 6, per
+    ED-037's provisional "Volley phase uses TN 6 (not TN 7)". Rolling its own dice is exactly
+    how it escaped the owner: every other TN-varying site routed through a roller that ignores
+    `tn`, so those were inert, while this one was live.
+
+    Now delegates to resolution.roll_pool, which removes the duplicate die-rule implementation
+    as well as the TN. Equivalence at TN 7 is exact: same face mapping (1 → -1, 7-9 → +1,
+    10 → +2) and one rngsource draw per die in the same order. The `power_dice <= 0` guard is
+    retained deliberately — roll_pool clamps to a 1-die minimum (PP-273), which is an
+    engagement-pool rule that volley must not inherit. The max(0, …) floor is likewise
+    retained: PP-273's minimum is for engagement, not for a volley result.
     """
     if power_dice <= 0:
         return 0
-    net = 0
-    for _ in range(power_dice):
-        roll = rngsource.get().randint(1, 10)
-        if roll == 1:
-            net -= 1
-        elif roll == 10:
-            net += 2
-        elif roll >= VOLLEY_TN:
-            net += 1
-    return max(0, net)  # floor at 0; PP-273 minimum pool is for engagement, not volley result
+    return max(0, roll_pool(power_dice))
 
 
 def _volley_density_mult(target_unit):
@@ -1558,7 +1564,7 @@ def _volley_density_mult(target_unit):
 def volley_phase(unit_a, unit_b):
     """Phase 2 Volley. Each ranged atom selects nearest in-range enemy atom and fires.
     Returns dict of total Size-loss to each side (applied simultaneously at end of turn).
-    Pool = Power; TN = VOLLEY_TN; ranged DR subtracts from net successes.
+    Pool = Power; TN 7 (ED-MB-0066); ranged DR subtracts from net successes.
     [canonical: mass_battle_v30.md §A.7 Phase 2 Volley; params/mass_combat.md §Ranged DR Table]
     """
     if not VOLLEY_ENABLED:

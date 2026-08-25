@@ -52,14 +52,24 @@ COMBAT_POOL_HISTORY_CONSTANT = 3
 WOUND_PENALTY_PER = -1                  # "Wounds: -1D per wound (cumulative)"
 OUT_OF_BREATH_PENALTY = -2              # "Stamina Out of Breath: -2D to all rolls"
 
-# §5 Weapon TN matrix base
+# §5 Weapon TN
+# TN IS 7. ALWAYS. [Jordan, 2026-08-25: "TN7 always. Never change TN anywhere ever."]
+# §5's three-axis TN matrix (reach/weight/type shifting TN to 5-8) is SUPERSEDED and its
+# WEAPON_TN_MOD table is deleted; see registers/supersession_register.yaml (ED-IN-0196).
+# The constant stays because it is exported to the Godot bridge
+# (tools/export_game_constants.py) — a varying difficulty is an Ob, not a TN.
+#
+# Deleting the matrix is ROLL-NEUTRAL: engine/autoload/dice_engine.roll_pool has never read
+# `tn` for any die (the face rule 1/-1, 2-6/0, 7-9/+1, 10/+2 is fixed), so the matrix has
+# been inert since this module was written. It changed no roll, ever.
+# ONE OBSERVABLE DOES CHANGE: ActionResult.notes embeds the TN as text, so a short and/or
+# light weapon now reports "weapon TN 7" where it reported "weapon TN 5". A report string,
+# not a die — but it IS a returned value, so this is not called byte-neutral.
 # [canonical: §5 — "Weapons are defined by three binary axes. Base TN = 7."]
+#   ^ RETAINED and still true: the BASE is 7 and that is what this constant is. What §5 also
+#     specified — the three-axis MODIFIER matrix shifting TN across 5-8 — is superseded.
+# [canonical: Jordan ruling 2026-08-25 "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
 WEAPON_TN_BASE = 7
-WEAPON_TN_MOD = {
-    'reach_short': -1, 'reach_long': 0,
-    'weight_light': -1, 'weight_heavy': 0,
-    'type_blade': 0, 'type_blunt': +1,
-}
 
 # §5 Damage formula constants (PP-232)
 # [canonical: §5 — "STR multiplier: Light×1, Heavy×2, Blade×1, Blunt×1.5. Multiplicative (Heavy Blunt=×3)"]
@@ -133,18 +143,6 @@ def _combat_pool(actor) -> int:
     return max(1, pool)
 
 
-def _weapon_tn(weapon: dict) -> int:
-    """§5 Weapon TN from 3 binary axes."""
-    tn = WEAPON_TN_BASE
-    if weapon.get('reach') == 'short':
-        tn += WEAPON_TN_MOD['reach_short']
-    if weapon.get('weight') == 'light':
-        tn += WEAPON_TN_MOD['weight_light']
-    if weapon.get('type') == 'blunt':
-        tn += WEAPON_TN_MOD['type_blunt']
-    return tn
-
-
 def _weapon_class(weapon: dict) -> str:
     """Map weapon to a string class for damage lookup."""
     weight = 'Heavy' if weapon.get('weight') == 'heavy' else 'Light'
@@ -205,14 +203,14 @@ def resolve_action(actor, target, action_type: str, scene=None, rng=None) -> Act
     if action_type == 'Strike':
         pool = _combat_pool(actor)
         weapon = getattr(actor, 'weapon', {'reach': 'short', 'weight': 'light', 'type': 'blade'})
-        tn = _weapon_tn(weapon)
+        tn = WEAPON_TN_BASE          # TN7 always (ED-IN-0196)
         # Offence pool — for simple round, allocate full pool to offence (caller
         # supplies the split for advanced Feint/Tie Up etc).
         offense_pool = getattr(actor, 'offense_dice', pool)
         defense_pool_target = getattr(target, 'defense_dice', _combat_pool(target) if target else 0)
 
         off_roll = roll_pool(offense_pool, tn=tn, rng=rng).net if offense_pool > 0 else 0
-        def_tn = _weapon_tn(getattr(target, 'weapon', {})) if target else 7
+        def_tn = WEAPON_TN_BASE
         def_roll = roll_pool(defense_pool_target, tn=def_tn, rng=rng).net if defense_pool_target > 0 else 0
 
         exchange_margin = off_roll - def_roll          # unclamped: a loss stays a loss

@@ -56,11 +56,37 @@ with open(_GOLDENS, encoding='utf-8') as _fh:      # deliberately unguarded: a m
     _TABLE = json.load(_fh)                        # parity target is an error, not a skip
 _ROWS = _TABLE["rows"]
 
+# ---------------------------------------------------------------------------
+# TN7-ONLY PARTITION (ED-IN-0196)
+# [Jordan, 2026-08-25: "TN7 always. Never change TN anywhere ever."]
+#
+# The golden table was generated when canon carried a three-value TN scale, so 768 of its
+# 1,758 rows exercise TN 6 (384) and TN 8 (384). Those TNs no longer exist: sigma_leverage's
+# PER_DIE now holds only the TN 7 row, so calling net_boost/p_success at 6 or 8 raises
+# KeyError by design.
+#
+# THE TABLE IS NOT REGENERATED. This file's own header forbids regenerating it to make a red
+# test green, and that rule is respected: the oracles were not re-derived and the committed
+# rows are untouched historical record. What changed is the CLAIM — parity is asserted on the
+# TN that exists, and the superseded rows are re-purposed below into a positive assertion
+# that non-7 TN is now refused. Coverage is not silently dropped; it is inverted.
+_TN_ARG_INDEX = {"net_boost": 2, "p_success": 3}   # positional TN, per _call's unpacking
+
+
+def _row_tn(row):
+    """The TN a row exercises, or None for the TN-independent functions."""
+    i = _TN_ARG_INDEX.get(row["fn"])
+    return row["args"][i] if i is not None and len(row["args"]) > i else None
+
+
+_LIVE_ROWS = [r for r in _ROWS if _row_tn(r) in (None, 7)]
+_SUPERSEDED_TN_ROWS = [r for r in _ROWS if _row_tn(r) not in (None, 7)]
+
 # Input grids for the property tests below (the parity grids live in the generator).
 NET_SIGMA_GRID = [-50.0, -5.0, -2.0, -1.5, -1.0, -0.5, 0.0,
                   0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 5.0, 10.0, 50.0]
 POOL_GRID = [1, 5, 10, 26]
-TN_GRID = [6, 7, 8]
+TN_GRID = [7]        # TN7 always (ED-IN-0196); 6 and 8 are superseded canon
 TOL = 1e-9  # tight float tolerance (math vs numpy, same IEEE-754 doubles)
 
 
@@ -92,8 +118,8 @@ def _call(fn: str, args: list):
 # ---------------------------------------------------------------------------
 
 @pytest.mark.parametrize(
-    "row", _ROWS,
-    ids=[f"{r['oracle']}:{r['fn']}:{','.join(str(a) for a in r['args'])}" for r in _ROWS])
+    "row", _LIVE_ROWS,
+    ids=[f"{r['oracle']}:{r['fn']}:{','.join(str(a) for a in r['args'])}" for r in _LIVE_ROWS])
 def test_parity_against_golden_table(row):
     got = _call(row["fn"], row["args"])
     want = row["want"]
@@ -110,13 +136,42 @@ def test_golden_table_is_not_vacuous():
     what the bare-except and the numpy gate each did -- cannot hide behind the other's rows.
     """
     from collections import Counter
-    by_oracle = Counter(r["oracle"] for r in _ROWS)
-    assert by_oracle["m1"] >= 1400, by_oracle
+    by_oracle = Counter(r["oracle"] for r in _LIVE_ROWS)
+    # m1's floor dropped 1400 -> 731 when the TN 6/8 rows left the live set (ED-IN-0196).
+    # groundup is unchanged at 259: every groundup row is TN-independent, so the ruling
+    # cost that arm nothing — which is itself the check that the partition hit only what
+    # it was meant to.
+    assert by_oracle["m1"] >= 731, by_oracle
     assert by_oracle["groundup"] >= 259, by_oracle
-    fns = {r["fn"] for r in _ROWS}
+    fns = {r["fn"] for r in _LIVE_ROWS}
     assert fns == {"sigma_n", "soft_cap", "sigma_space_ob_shift", "net_boost", "eff_ob",
                    "p_success", "levels_to_net_sigma", "level", "degree"}, sorted(fns)
     assert _TABLE["subject"] == "engine/autoload/sigma_leverage.py"
+
+
+def test_the_superseded_rows_are_exactly_the_non_7_TN_ones():
+    """The partition removed dead canon and nothing else (§0.1 point 2: assert it asserted).
+
+    A silent widening of this filter would quietly delete live parity coverage, so the
+    counts and the TN values are both pinned.
+    """
+    assert len(_LIVE_ROWS) + len(_SUPERSEDED_TN_ROWS) == len(_ROWS)
+    assert len(_SUPERSEDED_TN_ROWS) == 768, len(_SUPERSEDED_TN_ROWS)
+    assert {_row_tn(r) for r in _SUPERSEDED_TN_ROWS} == {6, 8}
+    assert all(_row_tn(r) in (None, 7) for r in _LIVE_ROWS)
+
+
+@pytest.mark.parametrize("tn", [6, 8])
+def test_a_superseded_TN_is_refused_not_silently_answered(tn):
+    """The inversion. These TNs used to have 384 parity rows each; now they must RAISE.
+
+    This is the point of the ruling in this module: a stray non-7 TN fails loudly instead of
+    resolving against a dead EV row. If sigma_leverage ever answers at TN 6 or 8 again,
+    someone has restored the superseded scale and this fails.
+    """
+    row = next(r for r in _SUPERSEDED_TN_ROWS if _row_tn(r) == tn)
+    with pytest.raises(KeyError):
+        _call(row["fn"], row["args"])
 
 
 # ---------------------------------------------------------------------------

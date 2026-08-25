@@ -47,7 +47,8 @@ def test_roll_pool_respects_pool_minimum_and_die_rule_bounds_property():
     checked = 0
     for _ in range(N_TRIALS):
         pool_size = rng_seeder.randint(-10, 200)  # includes <= 0 to exercise the minimum clamp
-        tn = rng_seeder.choice([6, 7, 8])
+        tn = 7  # TN7 always (ED-IN-0196); this test's subject is the pool minimum and the
+                # die-rule bounds, not TN, so pinning it weakens nothing here.
         trial_rng = random.Random(rng_seeder.randint(0, 2**32 - 1))
 
         result = de.roll_pool(pool_size, tn=tn, rng=trial_rng)

@@ -108,7 +108,7 @@ lane_ids:
   updated: "2026-07-29"
   cutover_ed: "ED-IN-0001"   # the entry that created this namespace; first-ever lane-tagged ED
   lanes:
-    MB: { name: "Mass battle",         next_free: 66 }   # block 0046-0060 was the 2026-07-29 dedicated-session reservation (now spent). ED-MB-0065 = J2 ruled-but-not-executable (strategic seam blocker); PENDING Jordan's re-issue as WITHDRAW/DEFER/EXECUTE — asserts no basis. ED-MB-0064 = the 2026-08-04 governance repair registering Jordan's J2 canon-tree ruling (closes ED-MB-0043 follow_on (b)); status resolved, no ruling needed. Per-ED detail: registers/editorial_ledger_mb.jsonl. Narrative: id_reservations_history.md#mb
+    MB: { name: "Mass battle",         next_free: 67 }   # block 0046-0060 was the 2026-07-29 dedicated-session reservation (now spent). ED-MB-0065 = J2 ruled-but-not-executable (strategic seam blocker); PENDING Jordan's re-issue as WITHDRAW/DEFER/EXECUTE — asserts no basis. ED-MB-0064 = the 2026-08-04 governance repair registering Jordan's J2 canon-tree ruling (closes ED-MB-0043 follow_on (b)); status resolved, no ruling needed. Per-ED detail: registers/editorial_ledger_mb.jsonl. Narrative: id_reservations_history.md#mb
     # Older MB history (moved to its own comment lines 2026-07-13 so a fresh OPEN citation on the
     # primary line above no longer inherits a "ratified"/"resolved" basis-keyword hit from these —
     # tools/validate_ed_citations.py's OPEN_AS_BASIS check is line-scoped; mirrors the PC lane's
@@ -203,7 +203,7 @@ lane_ids:
     # burden-parameterized gate; 0021 FORK B anti-collapse device; 0022 live bug batch (8 defects).
     # next_free bumped 17->23.
     # ED-SC-0011 allocated 2026-07-07 (status open): ed_options OPT-11 (contest live-dispatch acceptance criterion) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
-    FA: { name: "Faction actions",     next_free: 37 }  # block RELEASED 2026-07-30 (ED-IN-0098): 0037-0039 returned, max allocated ED-FA-0036. Narrative: id_reservations_history.md#fa
+    FA: { name: "Faction actions",     next_free: 38 }  # ED-FA-0037 allocated 2026-08-25 (mass-seizure Accord tier/continuous write). Block RELEASED 2026-07-30 (ED-IN-0098): 0037-0039 returned, max allocated ED-FA-0036 at that time. Narrative: id_reservations_history.md#fa
     # ED-FA-0004 + ED-FA-0005 allocated 2026-07-07 (status open): ed_options OPT-1 (faction-oracle reconciliation, banner-now sequencing ruled) + OPT-2 (elimination-lockout, no-permanent-lockout ruled) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
     WR: { name: "World",               next_free: 10 }   # block RELEASED 2026-07-30 (ED-IN-0098): 0010-0012 returned, max allocated ED-WR-0009. Narrative: id_reservations_history.md#wr
     # ED-WR-0004/0005/0006 allocated 2026-07-07 (status open): ed_options OPT-4 (Turmoil victory-gate, wire-the-clock ruled) / OPT-5 (threadwork execution reconciliation) / OPT-12 (NPC orphan triage ED) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
@@ -231,7 +231,7 @@ lane_ids:
     # renumbers): register-honesty fix to tools/observability/build_proposals.py --
     # obs_core.text_needs_jordan() rescues design-doc + flat-ledger Jordan-gating (register
     # needs_jordan 79->97). status resolved, no ruling needed. next_free 72->73.
-    IN: { name: "Infrastructure",      next_free: 196 }   # DELIBERATE GAP: CSO holds 0103-0111 (pinned by tests/valoria/test_id_reservations_walkback.py, which requires that string to stay in THIS file). Latest: ED-IN-0170..0194 (0187 degree ladder; 0189 Track A; 0190 PP frozen; 0192 resolver architecture; 0193 §5-§7 restore; 0194 weekly review + instrument sweep; 0195 the three-lens audit of it, split out 2026-08-21 from a duplicate ED-IN-0194 row whose needs_jordan CONFLICTED with its twin). Narrative: id_reservations_history.md#in
+    IN: { name: "Infrastructure",      next_free: 199 }   # DELIBERATE GAP: CSO holds 0103-0111 (pinned by tests/valoria/test_id_reservations_walkback.py, which requires that string to stay in THIS file). Latest: ED-IN-0170..0194 (0187 degree ladder; 0189 Track A; 0190 PP frozen; 0192 resolver architecture; 0193 §5-§7 restore; 0194 weekly review + instrument sweep; 0195 the three-lens audit of it, split out 2026-08-21 from a duplicate ED-IN-0194 row whose needs_jordan CONFLICTED with its twin). Narrative: id_reservations_history.md#in
     # [ED-IN-0064 DUP-KEY REPAIR] A stale duplicate `IN:` mapping once shadowed the authoritative one above (YAML last-key-wins). Neutralized; full incident write-up, including why a duplicate key is silent rather than an error: id_reservations_history.md#dup-key
     # 2026-07-07 (status open unless noted): ED-IN-0012/0013's edge-playability pair RENUMBERED to
     # ED-IN-0019/0020 (armature §5.10 decided + executed, see repair note above); ED-IN-0021..0025
@@ -242,7 +242,7 @@ lane_ids:
     # this comment's open-ED citations.
     # ED-IN-0028 allocated 2026-07-08 (status resolved — plumbing complete, downstream deferred): Key & Echo Armature PR-2a — deterministic echo-transport plumbing (ECHO_TRANSPORT flag, default OFF/byte-exact) un-orphaning domain_echo.py + the campaign's first substrate KeyLog. next_free bumped 28->29. Downstream owned by FA-comeback (ED-FA-0005) + SC context-derivation bridge (ED-SC-0006/0007).
     GO: { name: "Godot",               next_free: 2 }   # LANE ACTIVATED 2026-08-14 (Jordan ruling; ED-GO-0001 = the activation). Was next_free 1 with no ED ever allocated, which read as neglect rather than dormancy. Detail: registers/handoffs/HANDOFF_GO.md
-    SE: { name: "Settlements",         next_free: 50 }  # block RELEASED 2026-07-30 (ED-IN-0098): 0050-0052 returned, max allocated ED-SE-0049. Narrative: id_reservations_history.md#se
+    SE: { name: "Settlements",         next_free: 51 }  # ED-SE-0050 allocated 2026-08-25 (drift-store read/write asymmetry). Block RELEASED 2026-07-30 (ED-IN-0098): 0050-0052 returned, max allocated ED-SE-0049 at that time. Narrative: id_reservations_history.md#se
     # ED-SE-0003 + ED-SE-0004 allocated 2026-07-07 (status open): ed_options OPT-9 (armature keying wave) + OPT-16 (execute ED-SE-0001's own updates) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
 
 wiring_status:

@@ -42,12 +42,29 @@ from engine.autoload.dice_engine import roll_pool
 from systems.threadwork.sim.coherence import apply_coherence_delta
 
 
-# §TN Modifiers (PP-619 — canonical)
+# §TN — TN IS 7. ALWAYS.
+# [Jordan, 2026-08-25: "TN7 always. Never change TN anywhere ever."]
+# PP-619's TN differential (Lock/Dissolution 8, Past-Oriented Pulling 8, POP-binding 9) is
+# SUPERSEDED; TN_BINDING/TN_POP/TN_POP_BINDING are deleted. See ED-IN-0196 and
+# registers/supersession_register.yaml.
+#
+# This is ROLL-NEUTRAL — precisely, and the precision matters. Every threadwork roll goes
+# through engine/autoload/dice_engine.roll_pool, which has never read `tn` for any die, so
+# the differential was inert from the day it was written: Locking, Dissolution and POP have
+# always rolled at the same difficulty as Weaving. No die, draw or outcome moves.
+# ONE OBSERVABLE DOES CHANGE, and it is not a roll: OperationResult.tn is a returned field,
+# and it now reports 7 where it used to report 8 for the binding/POP operations. That is a
+# report value catching up with what the engine was already doing, not a behaviour change —
+# but 'byte-neutral' would be the wrong word for it, so it is not used.
+#
+# If binding operations SHOULD be harder, that is an Ob question under the ruling (the
+# Three-Axis Ob system below is where it belongs), and it is a threadwork design decision
+# — deliberately not smuggled in here.
 # [canonical: params/threadwork.md §TN Modifiers]
-TN_STANDARD = 7    # Weave, Pull, Mend, Leap, Community Weave
-TN_BINDING = 8     # Lock, Dissolution
-TN_POP = 8         # Past-Oriented Pulling
-TN_POP_BINDING = 9  # POP Lock or Dissolution
+#   ^ RETAINED and still true: 7 is that section's standard TN and that is what this constant
+#     is. What is superseded is the section's DIFFERENTIAL (binding 8, POP 8, POP-binding 9).
+# [canonical: Jordan ruling 2026-08-25 "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
+TN_STANDARD = 7    # every threadwork operation
 
 # §Three-Axis Ob System — Depth Ob (Fibonacci)
 # [canonical: params/threadwork.md §Depth Ob]
@@ -268,7 +285,7 @@ def attempt_pulling(actor, target: dict, world=None, rng=None) -> OperationResul
 
 
 def attempt_past_pulling(actor, target_moment: dict, world=None, rng=None) -> OperationResult:
-    """§2.4 Past-Oriented Pulling. TN 8.
+    """§2.4 Past-Oriented Pulling. TN 7 (ED-IN-0196; PP-619's TN 8 is superseded).
 
     target_moment: dict with 'recency' ('same_scene' / '1-2_seasons' / etc) and 'scale'.
     Per §3.2: POP costs −1 Coherence ADDITIONAL on top of standard Pulling cost.
@@ -283,12 +300,12 @@ def attempt_past_pulling(actor, target_moment: dict, world=None, rng=None) -> Op
     # Per-op cap per TW-05 (POP Coherence -1 additional IS subject to per-op cap)
     # Total POP Coherence cost capped at -1 max regardless of scale
     coh = max(-1, coh) if scale in ("Object", "Personal") else coh
-    return _resolve_operation("Past-Oriented Pulling", actor, ob, TN_POP,
+    return _resolve_operation("Past-Oriented Pulling", actor, ob, TN_STANDARD,
                               coherence_delta=coh, world=world, rng=rng)
 
 
 def attempt_locking(actor, target: dict, world=None, rng=None) -> OperationResult:
-    """§2.4 Locking — Unable to Become. TN 8. FR surcharge per PP-196.
+    """§2.4 Locking — Unable to Become. TN 7 (ED-IN-0196; PP-619's TN 8 is superseded). FR surcharge per PP-196.
 
     Coherence cost: scale + FR surcharge (cap-exempt). Per §3.2:
       Object/Personal scale: -1 total (FR surcharge only; scale cost = 0)
@@ -300,16 +317,16 @@ def attempt_locking(actor, target: dict, world=None, rng=None) -> OperationResul
     scale_cost = COHERENCE_COST_BY_SCALE.get(scale, 0)
     # FR surcharge is cap-exempt per PP-196
     coh = scale_cost + FR_SURCHARGE
-    return _resolve_operation("Locking", actor, DEPTH_OB.get(scale, 1), TN_BINDING,
+    return _resolve_operation("Locking", actor, DEPTH_OB.get(scale, 1), TN_STANDARD,
                               coherence_delta=coh, world=world, rng=rng)
 
 
 def attempt_dissolution(actor, target: dict, world=None, rng=None) -> OperationResult:
-    """§2.4 Dissolution — Unable to Be. TN 8. FR surcharge per PP-196."""
+    """§2.4 Dissolution — Unable to Be. TN 7 (ED-IN-0196; PP-619's TN 8 is superseded). FR surcharge per PP-196."""
     scale = target.get('scale', 'Object')
     scale_cost = COHERENCE_COST_BY_SCALE.get(scale, 0)
     coh = scale_cost + FR_SURCHARGE
-    return _resolve_operation("Dissolution", actor, DEPTH_OB.get(scale, 1), TN_BINDING,
+    return _resolve_operation("Dissolution", actor, DEPTH_OB.get(scale, 1), TN_STANDARD,
                               coherence_delta=coh, world=world, rng=rng)
 
 

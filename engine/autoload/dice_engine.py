@@ -61,20 +61,42 @@ def _die_result(face: int) -> int:
         return 2
 
 
-# Per-die EV table (params/core.md §Expected Value):
-#   TN 6: μ=0.50, σ=0.806
-#   TN 7: μ=0.40, σ=0.800
-#   TN 8: μ=0.30, σ=0.781
-_CONTINUOUS_PARAMS: dict[int, tuple[float, float]] = {
-    6: (0.50, 0.806),
-    7: (0.40, 0.800),
-    8: (0.30, 0.781),
-}
+# Per-die EV at TN 7 — the only TN there is.
+# [Jordan, 2026-08-25: "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
+# The table used to carry TN 6 (μ=0.50, σ=0.806) and TN 8 (μ=0.30, σ=0.781). Those rows are
+# dead under the ruling and are deleted rather than left as reachable-looking configuration.
+# The historical table survives, reference-only and NOT a mechanism (§0.05), in
+# engine/engine_params/params_tables.yaml.
+#
+# Note the TN 6 row was always in tension with `_die_result` below, which has never read `tn`:
+# μ=0.50 is only reachable if faces 6-9 score, and no face rule here has ever done that. The
+# ruling resolves that tension in favour of the die rule.
+_MU_PER_DIE: float = 0.40      # [canonical: params/core.md §Expected Value, TN 7]
+_SIGMA_PER_DIE: float = 0.800  # [canonical: params/core.md §Expected Value, TN 7]
+
+
+_TN_RULING = ('TN is 7. Always. Jordan, 2026-08-25: "TN7 always. Never change TN anywhere '
+              'ever." A varying difficulty is an Ob, not a TN. (ED-IN-0196)')
+
+
+def _require_tn7(tn: int) -> None:
+    """The owner refuses any TN but 7.
+
+    `tn` is kept as a parameter rather than deleted: it is carried on RollResult, ~30 call
+    sites pass tn=7 explicitly, and WEAPON_TN_BASE crosses to the Godot bridge. Removing it
+    would be a wide, behaviour-free churn. Validating it costs nothing and turns a silently
+    -ignored argument into a refused one — which is the entire point, because a silently
+    -ignored `tn` is what let four TN-varying mechanisms sit in the tree looking live.
+    """
+    # [canonical: Jordan ruling 2026-08-25 "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
+    if tn != 7:
+        raise ValueError(f"{_TN_RULING} Got tn={tn!r}.")
 
 
 def roll_pool(pool_size: int, tn: int = 7, ob: int | float | None = None,
               rng: random.Random | None = None) -> RollResult:
-    """Roll pool_size d10s under the canonical face rule. Pool minimum 1D."""
+    """Roll pool_size d10s under the canonical face rule at TN 7. Pool minimum 1D."""
+    _require_tn7(tn)
     if rng is None:
         rng = random.Random()
     effective_pool = max(1, pool_size)  # params/core.md §Pool Minimum
@@ -89,13 +111,14 @@ def continuous_engine_sample(pool: float, tn: int = 7,
     """Sample net successes from Normal(μ·N, σ·√N) per Decision E continuous engine.
 
     Canon: params/core.md §Continuous Engine — statistically equivalent to discrete.
-    Pool may be fractional (enables fractional Ob / TN modifiers).
+    Pool may be fractional (enables a fractional Ob).
     """
+    _require_tn7(tn)
     if rng is None:
         rng = random.Random()
     if pool <= 0:
         return 0.0
-    mu, sigma = _CONTINUOUS_PARAMS.get(tn, _CONTINUOUS_PARAMS[7])
+    mu, sigma = _MU_PER_DIE, _SIGMA_PER_DIE
     mean = mu * pool
     std = sigma * math.sqrt(pool)
     return rng.gauss(mean, std)

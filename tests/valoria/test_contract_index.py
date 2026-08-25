@@ -111,9 +111,14 @@ def test_every_contract_module_and_key_type_is_rendered(docs):
     assert not missing_mods, f'module(s) absent from CONTRACT_INDEX.md: {sorted(missing_mods)}'
 
 
-def test_adjudicator_verdicts_are_imported_not_reimplemented():
+def test_adjudicator_verdicts_are_imported_not_reimplemented(generated_layer):
     """CLAUDE.md §8: every rule lives once. The index must show the SAME violation count the
     adjudicator produces — if it ever diverges, someone has grown a second copy of the checks."""
+    # `generated_layer` requested per this file's own fixture contract: "Request this from any
+    # test that reads one of them." Reading an artifact without it passes serially (an earlier
+    # test in the same process built it) and fails under `-n auto`, where this test can land on
+    # a worker that never ran one. Which test fails is then scheduling-dependent, which is why
+    # it reads as a flake. Observed on PR #333.
     spec = importlib.util.spec_from_file_location('bci', BUILDER)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
@@ -135,7 +140,7 @@ def _load_builder():
     return mod
 
 
-def test_render_is_deterministic():
+def test_render_is_deterministic(generated_layer):
     """The same inputs must render the same bytes, or `--check` is a coin flip.
 
     Found 2026-08-10 (ED-IN-0152): the under-declaration grouping ranked modules by count alone,
@@ -178,7 +183,7 @@ def test_render_is_deterministic():
         'something in the render iterates a set or dict whose order is not pinned')
 
 
-def test_registry_only_reaches_a_review_queue():
+def test_registry_only_reaches_a_review_queue(generated_layer):
     """Every under-declared key must appear in SOME review queue.
 
     Found 2026-08-10 (ED-IN-0152): the §3 filter matched only `registry_superset`, so a key whose
@@ -208,7 +213,7 @@ def test_registry_only_reaches_a_review_queue():
         f'see them: {sorted(orphaned)}')
 
 
-def test_wildcard_consumers_are_not_reported_as_unauthored():
+def test_wildcard_consumers_are_not_reported_as_unauthored(generated_layer):
     """A wildcard consume is authored on purpose; calling it unauthored misdirects the reviewer.
 
     `articulation_layer` declares `{type: "*"}` — a deliberate universal read of the Key stream.
