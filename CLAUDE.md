@@ -148,6 +148,10 @@ the game work. our design documents in .MD are reference and information only."*
 - **A value the engine uses must live where code reads it** — a typed artifact under
   `engine/engine_params/` behind an exporter, or a single Python owner. `params_tables.yaml` is a
   verbatim capture of prose TABLES; under this ruling it is reference, and the 321 numeric constants
+  *[CORRECTED 2026-08-25: **415**, of which **248 uncited** and 11 assumption-grade — read from
+  `engine/engine_params/sim_params.json`'s own `citation_coverage`, reproducible with
+  `python tools/export_sim_params.py --build`. The 321 figure predates the mass-battle port. The
+  point of the sentence is unchanged and if anything stronger.]*
   still defined inside `systems/` are the migration backlog, not a filing problem.
 - **This does NOT demote `CLAUDE.md`, `CURRENT.md` or `HANDOFF.md`.** They are agent instruction and
   continuity — they govern how a session works, not how the game resolves. The ruling is about
@@ -202,7 +206,13 @@ artifact proving it happened, is the whole of the fix.**
 
    The old rule quantified over pattern *defects*, not over *subjects*, so it fired identically on a
    defect in the morale model and one in a test-register freshness checker. Apparatus outnumbers game
-   ~3.9:1 by line, so a session reading more apparatus finds more apparatus defects and **mints more
+   ~3.9:1 by line *[CORRECTED 2026-08-25: on EXECUTABLE PYTHON the ratio is **1.44:1** — 39,489
+   lines of `engine/`+`systems/` (excluding their tests) against 56,773 of `tools/`+`tests/`+
+   `engine/tests`. The 3.9:1 figure counts all tracked files including 506 markdown documents, so
+   the two measure different things and both are true of their own basis. **The predicate below is
+   unaffected — it needs only a ratio above 1:1, which 1.44 still is** — but a session citing 3.9:1
+   as the current state of the CODE would be wrong, and the August culling waves are why.]*, so a
+   session reading more apparatus finds more apparatus defects and **mints more
    apparatus guards**. That is the generator, and this predicate is what disarms it.
 
    **Load-bearing is not the same as "about the game".** The predicate KEEPS `test_morale_write_sweep.py`,
@@ -290,7 +300,9 @@ theme was leanness, `tools/` grew and CLAUDE.md grew 61,367 → 70,349 bytes.
 **The defect was subject-blindness, not the rules themselves.** `§0.1` pt 5 is a good rule that
 caught a real morale-model bug. But it quantified over pattern *defects*, not *subjects*, so it fired
 identically on a defect in the game and a defect in a freshness checker — and apparatus outnumbers
-game ~3.9:1, so every session found more apparatus defects and minted more apparatus guards. The
+game ~3.9:1 *[CORRECTED 2026-08-25: 1.44:1 on executable Python; see the §0.1 point 5 correction
+for the two bases. The diagnosis stands, the magnitude has shrunk.]*, so every session found more
+apparatus defects and minted more apparatus guards. The
 tree records the result at depth five: `ci_wf_harness_check` guards `wf_harness.js`,
 `test_wf_harness` guards the harness, `test_wf_harness_check` guards the guard — **1,718 lines
 guarding the prelude of the scripts that run the audits** — ending in
@@ -625,7 +637,10 @@ Do not represent the skeleton as a runnable head-start.
   match. The rule stands: **never let a port "correct" its oracle in-place** — fix canon via the ledger,
   then re-export. Key-log parity is still known-red, but only because RESIST/GAP_EXPOSURE/gap-game logic
   has not yet been re-exported to `weapon_resource.gd`/`strike_module.gd` (ED-1050 residual).
-- **~37% of contracts are not implementable specs.** In `references/module_contracts.yaml`, 10/27 modules
+- **~37% of contracts are not implementable specs.** In `references/module_contracts.yaml`, 9/27 modules *[CORRECTED 2026-08-25: **nine**, not ten. A naive `grep -c "doc: null"` returns 10;
+the tenth match is inside a quoted prose string, not a module field. Parsed count via
+`yaml.safe_load` over `references/module_contracts.yaml`: audit, domain_actions, engine_clock,
+game_director, npc_memory, scenario_authoring, scene_slate, scene_timer, settlement_economy.]* 
   have `doc: null` (no home design doc — including `engine_clock`, the temporal spine) and 11/27 resolvers
   are `[ASSUMPTION]`-grade. Porting beyond the combat slice is **blocked on authoring canon first** (start
   with `engine_clock`).
@@ -644,7 +659,7 @@ Do not represent the skeleton as a runnable head-start.
   partly stubbed (~19 `NotImplementedError`), with self-asserted `[PROVISIONAL]`/`[CANONICAL]` docstrings.
   Its `sim/README.md`/`CONVENTIONS.md` say "all modules are stubs" — **that is stale**; many modules are
   real and `mc_v18` runs campaigns.
-- **The sim's own balance output has no regression oracle beyond the §8 smoke test.** `engine/tests/` exists (a deterministic seeded regression + parity suite, CI job `sim-regression`), and ⚠️ *[CORRECTED 2026-08-20: the words that stood here — "but no CI job executes full `mc_v18` campaigns" — were STALE. `.github/workflows/valoria-ci.yml:321` runs `pytest engine/tests`, which executes full 50-season campaigns at n=2/seed-0 (`test_mc_v18_regression.py:15`) and n=8/seed-42 (`test_f7_smoke_oracle.py:16`), pinning exact win-share/winners/battles. Those goldens observe ANY output-moving change to campaign-reachable code — they are what proved the 2026-08-20 `echo_transport` seam swap was value-identical. **Two real gaps remain, and they are the ones to cite:** there is still no n≥100 balance oracle — which `test_f7_smoke_oracle.py:8` itself demands — so the small-N goldens cannot distinguish a balance regression from noise once someone legitimately re-pins; and the **re-pin path is uncontrolled**: nothing verifies a golden regeneration was intended.]* ⚠️ *[CORRECTED 2026-08-15 — THIS SECTION'S MOST-COPIED CLAIM WAS FALSE. It read "a seeded batch currently yields a degenerate win-share (one faction ~87%, two at 0%) that nothing flags." That figure was a SMALL-N ARTEFACT and is debunked at `engine/tests/test_f7_smoke_oracle.py:6`, which records that five docs cited it as a balance fact. Restoring it verbatim would have re-seeded a retracted number into the governing document.]* If you tune balance numbers for Godot, treat that gap as open —
+- **The sim's own balance output has no regression oracle beyond the §8 smoke test.** `engine/tests/` exists (a deterministic seeded regression + parity suite, CI job `sim-regression`), and ⚠️ *[CORRECTED 2026-08-20: the words that stood here — "but no CI job executes full `mc_v18` campaigns" — were STALE. `.github/workflows/valoria-ci.yml:321` runs `pytest engine/tests`, which executes full 50-season campaigns at n=2/seed-0 (`test_mc_v18_regression.py:15`) and n=8/seed-42 (`test_f7_smoke_oracle.py:16`), pinning exact win-share/winners/battles. Those goldens observe ANY output-moving change to campaign-reachable code — they are what proved the 2026-08-20 `echo_transport` seam swap was value-identical. **Two real gaps remain, and they are the ones to cite:** ~~there is still no n≥100 balance oracle — which `test_f7_smoke_oracle.py:8` itself demands~~ *[CORRECTED 2026-08-25: **it exists.** `tools/balance_oracle.py` was built 2026-08-21 and its own header cites this very sentence as what it closes. It is deliberately NOT a CI gate (240 campaigns ≈ 13 min). Use it for any campaign-level balance question — but note it is a CAMPAIGN instrument, so for a change that is campaign-unreachable both of its arms are identical by construction and running it would be a fake control; ED-MB-0066 is the worked example.]* — the ORIGINAL gap was that so the small-N goldens cannot distinguish a balance regression from noise once someone legitimately re-pins; and the **re-pin path is uncontrolled**: nothing verifies a golden regeneration was intended.]* ⚠️ *[CORRECTED 2026-08-15 — THIS SECTION'S MOST-COPIED CLAIM WAS FALSE. It read "a seeded batch currently yields a degenerate win-share (one faction ~87%, two at 0%) that nothing flags." That figure was a SMALL-N ARTEFACT and is debunked at `engine/tests/test_f7_smoke_oracle.py:6`, which records that five docs cited it as a balance fact. Restoring it verbatim would have re-seeded a retracted number into the governing document.]* If you tune balance numbers for Godot, treat that gap as open —
   **add a deterministic seeded smoke assertion before trusting any full-campaign sim output.**
 - **The anti-fabrication gate is leaky, though less than this said.** *[CORRECTED 2026-08-15: ED-1053 fixed the two mechanisms named here — the checker now matches by `(variable, value)` rather than bare value, and captures full float literals. It still scans the changeset only, and `validate_ed_citations` remains scoped to ED, so PP provenance is unvalidated (frozen as historical, ED-IN-0190).]* **Do not rely on it to catch a
   made-up number — verify provenance by hand against the cited `canonical_source`.**
