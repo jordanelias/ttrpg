@@ -3,11 +3,15 @@
 
 This file exists because the analysis makes a methodological claim — that adversarial
 independence catches what effort does not — and a claim like that is worthless without the
-record of it being tested on the analysis itself. Both of this run's errors are here in full,
-with how they were caught.
+record of it being tested on the analysis itself. **This analysis made four errors of its own.** All
+four are here in full, with how each was caught — and the pattern in *how* they were caught is the
+most useful thing in this file: not one was found by the producer re-reading its own work.
 
 ---
 
+# CORRECTION 1 — the `Standing` retraction
+
+*Caught by the structurally independent adversarial audit; verified by the orchestrator and retracted.*
 
 ## What I claimed
 That `ED-SC-0014` (2026-07-08) **ratified the officer ladder's range to 0–10** and left it
@@ -65,6 +69,10 @@ obligation to record that its own orchestrator did exactly that, and was caught 
 stage working as designed.
 
 ---
+
+# CORRECTION 2 — the counter-case, and the narrowing it forced
+
+*The pivotal question: is "built but unwritten" a pathology, or a normal mid-build state? I went looking for evidence against my own thesis and found some.*
 
 ## The counter-case is real, and it is strong
 `engine/tests/test_pipeline_reach.py` is not a graveyard. It is a **disciplined, live burn-down
@@ -210,3 +218,88 @@ bottom of that table, and none of them executes.
 and docstrings, and this tree comments unusually heavily. A comment-stripped count would shrink every
 row, but the *ratios* — which is what the argument rests on — would have to change materially for the
 conclusion to fail. Anyone re-running this should report ratios, not absolutes.
+
+# CORRECTION 3 — the stale golden, and why it is the worst of the four
+
+*Caught by Chapter 1's author while checking a figure I had supplied to everyone.*
+
+## What happened
+I instructed all five chapter writers, the index and the PR body: *"Do not propagate the retracted
+~87% degenerate win-share. The live golden is `{Crown: 37.5, Church: 12.5, Hafenmark: 12.5,
+Varfell: 37.5}`."*
+
+That substitute is itself stale. It sits at `engine/tests/test_f7_smoke_oracle.py:75` inside a block
+headed **"OLD (pre-OI-04, pre-transfer-motion) values, preserved for the before/after record"**. The
+live constant is at `:267`:
+
+```python
+GOLDEN_WIN_SHARE = {'Crown': 62.5, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 12.5}
+```
+
+regenerated 2026-08-24 when the mass-battle engine was swapped (1,905 lines replaced by an
+11,342-line ported engine).
+
+## Why it is the worst of the four
+The first two were reasoning failures. This is a **process failure inside the instruction warning
+against that exact failure** — I handed writers a stale number in the same sentence telling them not
+to propagate a stale number. Had Chapter 1's author not checked, four chapters would have carried it
+*with a citation*, which is precisely how the ~87% figure reached five documents.
+
+The rule that would have prevented it was already written down, forty lines from where I misread it,
+by someone who had been burned by the same trap (`:264-265`):
+
+> *"A golden test pins the LIVE constants; nothing pins the prose, so a fabricated history stays green
+> forever and the next re-recorder reasons from it. Rule: a PREVIOUS line is read out of
+> `git show <ref>:<file>`, never copied from the constant you are about to overwrite."*
+
+A guard, earned, placed at the point of use, in the right file — and it still did not stop the next
+reader, because prose beside a value enforces nothing. Under CLAUDE.md §0.05 that is the entire
+lesson: **the annotation is reference; only the code is mechanism.** A preserved historical constant
+sitting in a comment next to a live one is a trap no amount of labelling closes. The mechanism that
+would close it is to make the live constant the only copy reachable without an explicit `git show`.
+
+## A caveat that matters more than the number
+None of these figures is a balance fact. The file states (`:264-265`) that n=2/seed-0 and n=8/seed-42
+**"cannot distinguish a balance change from noise"**, and the n>=100 oracle its own line 8 demands
+still does not exist. They are reproducibility pins. Using them as evidence about Valoria's balance
+repeats the ~87% error in a new costume.
+
+---
+
+# CORRECTION 4 — "golden-safe by construction" is refuted, by experiment
+
+I banked as verified that loading persons at world-gen cannot move a seeded golden, reasoning from
+`populate_from_geography`'s docstring. Chapter 1's author tested it instead of reading it:
+
+- The two guards that this analysis, five Fable lanes and the Opus adversarial audit all described as
+  pinning the world's population **pin `generate_npc`'s call counter** (`world.npc_counter`), not
+  `world.npcs`.
+- Two NPCs loaded directly into `world.npcs` left **both guards green** at `npcs_generated = 0` —
+  **and moved seed-42's winner from Crown to Hafenmark.**
+- A control arm with `npe.simulate_npc_actions` neutered reproduced the baseline **byte-exact**,
+  isolating the channel: `simulate_npc_actions` draws `world.rng` at
+  `systems/overview/sim/accounting.py:139`.
+
+Two consequences worse than the retracted claim. **A social-drift simulator has been drawing from the
+campaign RNG over an empty dict** roughly 400 times per golden batch, for months, unobserved. And
+**the guards go silent rather than break** — a loader that populates `world.npcs` without calling
+`generate_npc` passes both. Failing to notice a change is strictly worse than failing on it, and it
+is CLAUDE.md §0.1 pt 2 — *an assertion must be able to observe the failure it excludes* — violated by
+guards written in that rule's own spirit.
+
+## The pattern across all four
+| # | Error | Caught by |
+|---|---|---|
+| 1 | `Standing` ratified 0–10 (a vocabulary collision promoted to a mechanism claim) | the structurally independent adversarial audit |
+| 2 | Ten absences over-generalised into one pattern | the same audit, narrowing it to seven |
+| 3 | A stale golden propagated inside a warning against stale goldens | a downstream writer checking a supplied figure |
+| 4 | "Golden-safe by construction" | a downstream writer **running a controlled experiment** |
+
+**None was caught by the producer re-reading its own work.** Two came from structural independence
+and two from a downstream reader refusing to take a supplied claim on trust. Error 4 in particular
+was invisible to six careful readers and fell out of one experiment with a control arm — which is
+CLAUDE.md §0.1's measurement discipline vindicating itself, and the strongest argument in this
+document for §0.2's rule that *done means it runs*.
+
+---
+

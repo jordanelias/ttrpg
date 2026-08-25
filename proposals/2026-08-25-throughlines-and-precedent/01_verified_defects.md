@@ -68,7 +68,43 @@ largely not loaded by Valoria.**
 
 ---
 
-## D7 — the precedent fix is GOLDEN-SAFE BY CONSTRUCTION, and that resolves D4's objection
+## ⚠ D7 IS REFUTED — READ THIS BEFORE THE SECTION BELOW (2026-08-25)
+
+**D7's central claim is false and is withdrawn.** It argued that loading persons at world-gen is
+"golden-safe by construction", reasoning from `populate_from_geography`'s docstring. Chapter 1's
+author refuted it by **controlled experiment** rather than by reading, which is the only way it could
+have been caught:
+
+- The two guards this analysis (and five lanes, and the adversarial audit, and the orchestrator)
+  described as pinning the world's population **pin `generate_npc`'s CALL COUNTER**
+  (`world.npc_counter`) — **not `world.npcs`**.
+- Two NPCs loaded directly into `world.npcs` at world-gen left **both guards green** with
+  `npcs_generated = 0` — **and moved seed-42's winner from Crown to Hafenmark.**
+- A control arm with `npe.simulate_npc_actions` neutered reproduced the baseline **byte-exact**,
+  identifying the channel precisely: `simulate_npc_actions` draws `world.rng` at
+  `systems/overview/sim/accounting.py:139`.
+
+**So populating the world DOES move seeded goldens**, unless the season NPC drift is first given its
+own RNG substream (Chapter 1's R1, which `create_world` already makes cheap — it accepts a seed and
+discards it). The honest sequence is R1 then the loader, not the loader alone.
+
+Two consequences worth stating separately, because they are worse than the retracted claim:
+
+1. **A social-drift simulator has been drawing from the campaign RNG over an empty dict** roughly 400
+   times per golden batch, for months, unobserved.
+2. **The guards go silent rather than break.** A loader that populates `world.npcs` without calling
+   `generate_npc` passes both of them. They would not have caught the change; they would have failed
+   to notice it. That is a strictly worse failure mode than a red test, and it is exactly CLAUDE.md
+   §0.1 pt 2's rule — *an assertion must be able to observe the failure it excludes* — violated by
+   guards written to enforce it.
+
+The section below is **retained unedited as the superseded argument**, because the reasoning it
+contains about `populate_from_geography` is still correct *about settlements* (that fix genuinely was
+deterministic and golden-free); what was wrong was generalising it to persons without testing.
+
+---
+
+## ~~D7 — the precedent fix is GOLDEN-SAFE BY CONSTRUCTION~~ [SUPERSEDED — see above]
 `systems/settlements/sim/registry.py:216-224`, `populate_from_geography`, docstring verbatim:
 > *"OI-07 (ED-IN-0091 plan §3 Wave 2 item 4) — register every settlement from the canonical geography
 > source at world-gen. **Deterministic: no RNG draw, so this cannot move any RNG-derived campaign

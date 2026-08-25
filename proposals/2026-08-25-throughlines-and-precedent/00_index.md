@@ -160,7 +160,16 @@ stage earns its cost.
 ## Standing caveats carried into every chapter
 
 - The **~87% degenerate win-share** figure is a **retracted small-N artefact** that five documents
-  propagated. The live golden is `{Crown: 37.5, Church: 12.5, Hafenmark: 12.5, Varfell: 37.5}`.
+  propagated. The live golden at HEAD is `engine/tests/test_f7_smoke_oracle.py:267` —
+  `GOLDEN_WIN_SHARE = {'Crown': 62.5, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 12.5}`,
+  regenerated 2026-08-24 at the mass-battle engine swap.
+  ⚠ **This caveat originally carried a stale value** — `{Crown: 37.5, Church: 12.5, Hafenmark: 12.5,
+  Varfell: 37.5}` — read out of a comment at `:75` that exists to preserve the PREVIOUS pin. That is
+  this analysis's third self-inflicted error and it is recorded in `03_method_and_corrections.md`
+  rather than silently fixed, because it happened *inside a warning against propagating a retracted
+  number*. And ⚠ **none of these figures is a balance fact**: the file states (`:264-265`) that
+  n=2/seed-0 and n=8/seed-42 "cannot distinguish a balance change from noise", and the n>=100 oracle
+  its own line 8 demands still does not exist. They are reproducibility pins.
 - `engine/engine_params/params_tables.yaml` is a **byte-frozen capture of prose** whose degree bands
   are the **pre-ruling, retracted** ones. The live ladder is margin-based in
   `engine/autoload/dice_engine.py::degree_from_net`. Never lift a number from the capture without
