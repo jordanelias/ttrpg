@@ -19,23 +19,38 @@ def _owner_degree(net, ob):
 # Godot videogame implementation. net ~ Normal(mu*N, sigma*sqrt(N)) per die at the active TN;
 # statistically equivalent to the discrete d10 rule below (validated to within 0.03 in mean/std,
 # pool sizes 5-17, Phase 5 sim 2026-05-15). The discrete rule stays canonical for TTRPG-mode play.
-_CONTINUOUS_MU = {6: 0.50, 7: 0.40, 8: 0.30}
-_CONTINUOUS_SIGMA = {6: 0.806, 7: 0.800, 8: 0.781}
+def _require_tn7(tn: int) -> None:
+    """TN is 7. Always. (Jordan, 2026-08-25) — a varying difficulty is an Ob, not a TN."""
+    if tn != 7:
+        raise ValueError(
+            f"TN is 7. Always. Jordan, 2026-08-25: \"TN7 always. Never change TN anywhere "
+            f"ever.\" Got {tn}. A varying difficulty is an Ob, not a TN. (ED-IN-0196)")
 
-def die_ev(tn: int) -> float:
+
+# ⚠ TN IS 7. ALWAYS. [Jordan, 2026-08-25: "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
+# The TN 6 and TN 8 rows are SUPERSEDED canon and are deleted. This module is the surface
+# CLAUDE.md §9 routes "dice/EV/pool math" to, so a live TN 6/8 table here would keep handing
+# out numbers for a mechanic the engine no longer has — found by adversarial review of the
+# ED-IN-0196 sweep, which had missed this file entirely.
+# Kept as dicts so a stray non-7 TN raises KeyError rather than resolving silently.
+_CONTINUOUS_MU = {7: 0.40}
+_CONTINUOUS_SIGMA = {7: 0.800}
+
+def die_ev(tn: int = 7) -> float:
+    _require_tn7(tn)
     p_minus = 0.1
     p_plus1 = max(0, (9 - tn + 1) / 10)
-    p_zero  = (tn - 2) / 10
     return p_minus * -1 + p_plus1 * 1 + 0.1 * 2
 
 def pool_ev(n: int, tn: int) -> float:
     return n * die_ev(tn)
 
-def _roll_die(tn: int, rng: Optional[random.Random] = None) -> int:
+def _roll_die(tn: int = 7, rng: Optional[random.Random] = None) -> int:
+    _require_tn7(tn)
     r = (rng or random).randint(1, 10)
     if r == 1:  return -1
     if r == 10: return 2
-    if r >= tn: return 1
+    if r >= 7:  return 1     # fixed face window; TN never moves it (ED-IN-0196)
     return 0
 
 def _roll_pool(n: int, tn: int, rng: Optional[random.Random] = None) -> int:

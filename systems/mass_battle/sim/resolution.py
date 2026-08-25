@@ -33,11 +33,17 @@ def tracing_on():
     computing-then-discarding via trace_event's own no-op branch. Query-only; no engine effect."""
     return _trace_on
 
-def roll_pool(n, tn=7):  # TN7 always (Jordan 2026-08-25; ED-IN-0196)
+# [canonical: Jordan ruling 2026-08-25 "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
+def roll_pool(n, tn=7):
     # `tn` is retained for call-signature compatibility and ASSERTED, not honoured: the success
     # window is the fixed canonical face rule. This line previously read `elif tn <= f <= 9`,
-    # which made this the one TN-aware roller in the tree — inert at the default, live only when
-    # a caller passed a non-7 value. VOLLEY_TN=6 was that caller.
+    # which made this the one TN-aware roller in the tree. It was never actually exercised at a
+    # non-7 value: every call site passes no `tn` (orchestration.py x14, plus the two internal
+    # recursions below), so the TN-awareness was latent capability, not live behaviour.
+    # NOT the volley path — `_roll_volley_pool` (orchestration.py:1534) hand-rolls its own d10
+    # loop and never calls this function, which is exactly why VOLLEY_TN=6 could be live while
+    # this roller stayed at 7.
+    # [canonical: Jordan ruling 2026-08-25 "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
     assert tn == 7, f"TN is 7. Always. (Jordan, 2026-08-25) — got {tn}; a varying difficulty is an Ob."
     net = 0
     for _ in range(max(1, n)):
@@ -47,8 +53,8 @@ def roll_pool(n, tn=7):  # TN7 always (Jordan 2026-08-25; ED-IN-0196)
         elif f == 10:      net += 2
     return net
 
-def roll_pool_fractional(pool, tn=7):  # TN7 always (Jordan 2026-08-25; ED-IN-0196)
-    assert tn == 7, f"TN is 7. Always. (Jordan, 2026-08-25) — got {tn}."
+# [canonical: Jordan ruling 2026-08-25 "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
+def roll_pool_fractional(pool, tn=7):
     """[ED-MB-0032, Jordan: "pool must be fractional."] Roll a CONTINUOUS combat pool without flooring it
     to an integer die count. The integer part rolls real d10s (the discrete stochastic base); the
     fractional remainder is realised as ONE extra real die rolled with probability `frac`.
@@ -61,6 +67,8 @@ def roll_pool_fractional(pool, tn=7):  # TN7 always (Jordan 2026-08-25; ED-IN-01
     restores the die's own variance, AND keeps the Failure boundary intact (an all-fractional sub-1 pool can
     now roll a 1 -> net<0 -> Failure). [canonical: params/core.md continuous engine — the discrete dice carry
     all variance; no deterministic mu-shift.]"""
+    # [canonical: Jordan ruling 2026-08-25 "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
+    assert tn == 7, f"TN is 7. Always. (Jordan, 2026-08-25) — got {tn}."
     lo = math.floor(max(0.0, pool))
     frac = max(0.0, pool - lo)
     net = roll_pool(lo, tn) if lo >= 1 else 0
@@ -211,6 +219,7 @@ _SIGMA_ZERO_SNAP = 1e-12   # [JUSTIFIED: "this value is arithmetically zero" thr
 
 
 def _sigma_net_boost(net_sigma, pool, tn=7):  # [canonical: params/core.md continuous engine; modifier_system_spec §2.1] mu-shift
+    # [canonical: Jordan ruling 2026-08-25 "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
     assert tn == 7, f"TN is 7. Always. (Jordan, 2026-08-25) — got {tn}."
     # Sigma per die at TN 7 — the only TN there is (ED-IN-0196). The TN 6/8 rows of the EV
     # table are dead under the ruling; the historical table survives, reference-only, in

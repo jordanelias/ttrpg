@@ -245,7 +245,7 @@ of a resolved contest: every wired output is a queued stat delta, and the one st
 production caller — `systems/social_contest/sim/contest/narrative.py:112 summarize` (§3a).
 
 **`threadwork` — Thread operations, Coherence, Co-Movement, Threadcut.** **Seven** operation resolvers route through
-one shared roll-and-degree spine — `systems/threadwork/sim/operations.py:170 _resolve_operation` — with three further
+one shared roll-and-degree spine — `systems/threadwork/sim/operations.py:177 _resolve_operation` — with three further
 operation entry points in the `collective`, `opposing` and `threadcut` modules. No production caller reaches any of
 them: the driver imports no threadwork module, the dispatcher has no thread scene type, and the mass-battle phase
 hook named for threadwork is an empty body called every phase —

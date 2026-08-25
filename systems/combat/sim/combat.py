@@ -59,9 +59,16 @@ OUT_OF_BREATH_PENALTY = -2              # "Stamina Out of Breath: -2D to all rol
 # The constant stays because it is exported to the Godot bridge
 # (tools/export_game_constants.py) — a varying difficulty is an Ob, not a TN.
 #
-# Deleting the matrix is BYTE-NEUTRAL: engine/autoload/dice_engine.roll_pool has never
-# read `tn` for any die (the face rule 1/-1, 2-6/0, 7-9/+1, 10/+2 is fixed), so the
-# matrix has been inert since this module was written. It changed no roll, ever.
+# Deleting the matrix is ROLL-NEUTRAL: engine/autoload/dice_engine.roll_pool has never read
+# `tn` for any die (the face rule 1/-1, 2-6/0, 7-9/+1, 10/+2 is fixed), so the matrix has
+# been inert since this module was written. It changed no roll, ever.
+# ONE OBSERVABLE DOES CHANGE: ActionResult.notes embeds the TN as text, so a short and/or
+# light weapon now reports "weapon TN 7" where it reported "weapon TN 5". A report string,
+# not a die — but it IS a returned value, so this is not called byte-neutral.
+# [canonical: §5 — "Weapons are defined by three binary axes. Base TN = 7."]
+#   ^ RETAINED and still true: the BASE is 7 and that is what this constant is. What §5 also
+#     specified — the three-axis MODIFIER matrix shifting TN across 5-8 — is superseded.
+# [canonical: Jordan ruling 2026-08-25 "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
 WEAPON_TN_BASE = 7
 
 # §5 Damage formula constants (PP-232)
