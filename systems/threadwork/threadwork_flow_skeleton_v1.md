@@ -13,17 +13,17 @@
 
 | Callable | Anchor | Called-by |
 |---|---|---|
-| `attempt_leap(actor, target_state, world, rng)` | `systems/threadwork/sim/operations.py:224 attempt_leap` | `systems/threadwork/sim/collective.py:93 attempt_leap` (internal, lateral) — no cross-subsystem or production caller found |
-| `attempt_weaving(actor, target, world, rng)` | `systems/threadwork/sim/operations.py:248 attempt_weaving` | `engine/tests/test_thread_mending_ed871.py:26 attempt_weaving` (test only) |
-| `attempt_pulling(actor, target, world, rng)` | `systems/threadwork/sim/operations.py:261 attempt_pulling` | — none found |
-| `attempt_past_pulling(actor, target_moment, world, rng)` | `systems/threadwork/sim/operations.py:270 attempt_past_pulling` | — none found |
-| `attempt_locking(actor, target, world, rng)` | `systems/threadwork/sim/operations.py:290 attempt_locking` | — none found |
-| `attempt_dissolution(actor, target, world, rng)` | `systems/threadwork/sim/operations.py:307 attempt_dissolution` | — none found |
-| `attempt_mending(actor, target, world, rng)` | `systems/threadwork/sim/operations.py:316 attempt_mending` | `engine/tests/test_thread_mending_ed871.py:26 attempt_mending` (test only) |
-| `attempt_collective_operation(actors, op_type, target, world, rng)` | `systems/threadwork/sim/collective.py:66 attempt_collective_operation` | — none found |
+| `attempt_leap(actor, target_state, world, rng)` | `systems/threadwork/sim/operations.py:234 attempt_leap` | `systems/threadwork/sim/collective.py:93 attempt_leap` (internal, lateral) — no cross-subsystem or production caller found |
+| `attempt_weaving(actor, target, world, rng)` | `systems/threadwork/sim/operations.py:258 attempt_weaving` | `engine/tests/test_thread_mending_ed871.py:26 attempt_weaving` (test only) |
+| `attempt_pulling(actor, target, world, rng)` | `systems/threadwork/sim/operations.py:271 attempt_pulling` | — none found |
+| `attempt_past_pulling(actor, target_moment, world, rng)` | `systems/threadwork/sim/operations.py:280 attempt_past_pulling` | — none found |
+| `attempt_locking(actor, target, world, rng)` | `systems/threadwork/sim/operations.py:300 attempt_locking` | — none found |
+| `attempt_dissolution(actor, target, world, rng)` | `systems/threadwork/sim/operations.py:317 attempt_dissolution` | — none found |
+| `attempt_mending(actor, target, world, rng)` | `systems/threadwork/sim/operations.py:326 attempt_mending` | `engine/tests/test_thread_mending_ed871.py:26 attempt_mending` (test only) |
+| `attempt_collective_operation(actors, op_type, target, world, rng)` | `systems/threadwork/sim/collective.py:67 attempt_collective_operation` | — none found |
 | `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations` | — none found |
-| `opposing_engagement_modifier(opponent_tps)` | `systems/threadwork/sim/opposing.py:79 opposing_engagement_modifier` | — none found |
-| `apply_coherence_delta(actor, delta, source, world)` | `systems/threadwork/sim/coherence.py:138 apply_coherence_delta` | `systems/threadwork/sim/operations.py:194 apply_coherence_delta` (internal); `systems/threadwork/sim/collective.py:179 apply_coherence_delta` (internal); `systems/threadwork/sim/opposing.py:228 apply_coherence_delta` (internal); `systems/fieldwork/sim/knots.py:374 apply_coherence_delta` (cross-subsystem, lateral, on Knot rupture — the only cross-subsystem production call site found) |
+| `opposing_engagement_modifier(opponent_tps)` | `systems/threadwork/sim/opposing.py:80 opposing_engagement_modifier` | — none found |
+| `apply_coherence_delta(actor, delta, source, world)` | `systems/threadwork/sim/coherence.py:138 apply_coherence_delta` | `systems/threadwork/sim/operations.py:204 apply_coherence_delta` (internal); `systems/threadwork/sim/collective.py:173 apply_coherence_delta` (internal); `systems/threadwork/sim/opposing.py:228 apply_coherence_delta` (internal); `systems/fieldwork/sim/knots.py:374 apply_coherence_delta` (cross-subsystem, lateral, on Knot rupture — the only cross-subsystem production call site found) |
 | `check_coherence_zero_transition(actor, world)` | `systems/threadwork/sim/coherence.py:161 check_coherence_zero_transition` | — none found |
 | `get_state(actor, world)` | `systems/threadwork/sim/coherence.py:186 get_state` | — none found |
 | `draw_comovement_card(op_type, depth, world, rng)` | `systems/threadwork/sim/co_movement.py:87 draw_comovement_card` | — none found |
@@ -40,7 +40,7 @@
 | Input | Kind | Origin | Anchor |
 |---|---|---|---|
 | `actor` (duck-typed practitioner: `.spirit`, `.ts`, `.history`, `.actor_id`) | `arg` | caller-supplied; no World practitioner-stat schema exists | `systems/threadwork/sim/operations.py:15-19` (module docstring ASSUMPTION) |
-| `target` / `target_state` / `target_moment` dict (`scale`, `recency`, ...) | `arg` | caller-supplied | `systems/threadwork/sim/operations.py:224 target_state`, `:248 target` |
+| `target` / `target_state` / `target_moment` dict (`scale`, `recency`, ...) | `arg` | caller-supplied | `systems/threadwork/sim/operations.py:234 target_state`, `:248 target` |
 | `world.practitioners` (Coherence store) | `world-state` | `engine/autoload/game_state.py` `World` dataclass | `engine/autoload/game_state.py:274 practitioners` |
 | `world.threadcut_beings` | `world-state` | `engine/autoload/game_state.py` `World` dataclass | `engine/autoload/game_state.py:292 threadcut_beings` |
 | `world.comovement_deck` | `world-state` | `engine/autoload/game_state.py` `World` dataclass | `engine/autoload/game_state.py:293 comovement_deck` |
@@ -53,29 +53,29 @@
 
 ## 3. Flow
 
-**S1. [gate] Leap — Personal → Thread scale entry.** `attempt_leap` checks the TS eligibility gate; on failure returns a Failure `OperationResult` with no roll. `systems/threadwork/sim/operations.py:224-245 attempt_leap`
+**S1. [gate] Leap — Personal → Thread scale entry.** `attempt_leap` checks the TS eligibility gate; on failure returns a Failure `OperationResult` with no roll. `systems/threadwork/sim/operations.py:234-255 attempt_leap`
 
 - S1.1 [branch] Below the TS eligibility gate → immediate Failure, no Coherence cost. `systems/threadwork/sim/operations.py:233-239`
 - S1.2 [branch] At/above the TS eligibility gate → Ob set by the Leap Ob TS-band gate, routed into the shared resolver `_resolve_operation`. `systems/threadwork/sim/operations.py:241-245`
 
-**S2. [gate] Shared single-actor operation resolution.** `_resolve_operation` computes the actor's pool (`_actor_pool`), rolls via `engine.autoload.dice_engine.roll_pool`, derives a degree, applies a Coherence delta, and (for Weaving/Pulling/Locking/Dissolution) a Mending Stability delta. `systems/threadwork/sim/operations.py:160-221 _resolve_operation`
+**S2. [gate] Shared single-actor operation resolution.** `_resolve_operation` computes the actor's pool (`_actor_pool`), rolls via `engine.autoload.dice_engine.roll_pool`, derives a degree, applies a Coherence delta, and (for Weaving/Pulling/Locking/Dissolution) a Mending Stability delta. `systems/threadwork/sim/operations.py:170-231 _resolve_operation`
 
-- S2.1 `_actor_pool` reads `.spirit`, `.ts`, `.history` off the actor. `systems/threadwork/sim/operations.py:145-157 _actor_pool`
+- S2.1 `_actor_pool` reads `.spirit`, `.ts`, `.history` off the actor. `systems/threadwork/sim/operations.py:155-167 _actor_pool`
 - S2.2 [branch] pool > 0 → roll; else net_successes = 0. `systems/threadwork/sim/operations.py:176`
-- S2.3 `_compute_degree` maps net successes vs Ob to Failure/Partial/Success/Overwhelming. `systems/threadwork/sim/operations.py:134-142 _compute_degree`
+- S2.3 `_compute_degree` maps net successes vs Ob to Failure/Partial/Success/Overwhelming. `systems/threadwork/sim/operations.py:145-152 _compute_degree`
 - S2.4 [branch] Partial/Failure on any op except Mending → additional −1 Coherence (ED-871 exemption). `systems/threadwork/sim/operations.py:189-191`
 - S2.5 [write] Coherence delta applied via `coherence.apply_coherence_delta` when nonzero. `systems/threadwork/sim/operations.py:193-194`
 - S2.6 [branch] Weaving/Pulling degree-driven MS delta; Locking/Dissolution flat −1 MS. `systems/threadwork/sim/operations.py:197-209`
 
 **S3. [emit] Per-operation entry points build on S2** with operation-specific Ob/TN/Coherence-cost lookups: `attempt_weaving`/`attempt_pulling` (Depth Ob, standard TN), `attempt_past_pulling` (recency-banded Ob, TN_POP, extra −1 Coherence), `attempt_locking`/`attempt_dissolution` (Depth Ob, TN_BINDING, FR surcharge), `attempt_mending` (Mending Ob table, 0 Coherence at every degree per ED-871). `systems/threadwork/sim/operations.py:248-334`
 
-**S4. [gate][branch][loop] Collective operation.** `attempt_collective_operation` ranks actors by TS descending (Anchor = highest); all actors Leap independently (S1) in the same round. `systems/threadwork/sim/collective.py:66-96 attempt_collective_operation`
+**S4. [gate][branch][loop] Collective operation.** `attempt_collective_operation` ranks actors by TS descending (Anchor = highest); all actors Leap independently (S1) in the same round. `systems/threadwork/sim/collective.py:67-189 attempt_collective_operation`
 
 - S4.1 [branch] Anchor's Leap fails → no lattice forms, return early. `systems/threadwork/sim/collective.py:98-105`
 - S4.2 [branch] Anchor succeeds → pool sums Anchor's solo pool + successful helpers' `_helper_contribution` (floor(Cognition/2)); lattice fracture (+1 Ob) computed by comparing remaining pool to expected pool. `systems/threadwork/sim/collective.py:107-137`
 - S4.3 [loop][write] pooled roll resolved directly (own degree table, not `_resolve_operation`); Coherence applied per successful-Leap participant. `systems/threadwork/sim/collective.py:163-179`
 
-**S5. [gate][branch] Opposing operation.** `resolve_opposing_operations` computes an Ob modifier for each side from the opponent's TPS (`opposing_engagement_modifier`, floor(TPS/2) floored by the `OPPOSING_OB_MODIFIER_MIN` gate), rolls both actors' pools independently, and looks up outcome/consequences in a 3×3 (Meets/Partial/Failure) table. `systems/threadwork/sim/opposing.py:103-224 resolve_opposing_operations`
+**S5. [gate][branch] Opposing operation.** `resolve_opposing_operations` computes an Ob modifier for each side from the opponent's TPS (`opposing_engagement_modifier`, floor(TPS/2) floored by the `OPPOSING_OB_MODIFIER_MIN` gate), rolls both actors' pools independently, and looks up outcome/consequences in a 3×3 (Meets/Partial/Failure) table. `systems/threadwork/sim/opposing.py:103-259 resolve_opposing_operations`
 
 - S5.1 [write] Coherence deltas applied to both actors per the resolved cell. `systems/threadwork/sim/opposing.py:227-232`
 - S5.2 [branch][write] `world.clocks['MS']` present → MS delta routed through `systems.overview.sim.ms_track.apply_ms_delta`. `systems/threadwork/sim/opposing.py:235-239`
@@ -104,9 +104,9 @@
 
 | Output | Kind | Consumer | Anchor |
 |---|---|---|---|
-| `OperationResult` (degree, net_successes, pool, coherence_delta, mending_stability_delta) | return value | caller (test only in practice) | `systems/threadwork/sim/operations.py:120-131 OperationResult` |
-| `CollectiveResult` | return value | caller (no found caller) | `systems/threadwork/sim/collective.py:44-54 CollectiveResult` |
-| `OpposingResult` | return value | caller (no found caller) | `systems/threadwork/sim/opposing.py:62-76 OpposingResult` |
+| `OperationResult` (degree, net_successes, pool, coherence_delta, mending_stability_delta) | return value | caller (test only in practice) | `systems/threadwork/sim/operations.py:131-142 OperationResult` |
+| `CollectiveResult` | return value | caller (no found caller) | `systems/threadwork/sim/collective.py:46-55 CollectiveResult` |
+| `OpposingResult` | return value | caller (no found caller) | `systems/threadwork/sim/opposing.py:64-77 OpposingResult` |
 | `CoherenceState` (per-practitioner track) | `world-state write` | `world.practitioners`, read back by `engine/autoload/game_state.py` snapshot restore | `systems/threadwork/sim/coherence.py:83-95 CoherenceState`; `engine/autoload/game_state.py:415-417` |
 | `CoMovementCard` | return value | caller of `apply_comovement_effects` (no found production caller) | `systems/threadwork/sim/co_movement.py:55-62 CoMovementCard` |
 | MS clock delta (`world.clocks['MS']`) | `world-state write` | `systems.overview.sim.ms_track` (shared MS surface) | `systems/threadwork/sim/opposing.py:238-239`; `systems/threadwork/sim/co_movement.py:142-143` |
@@ -134,7 +134,7 @@
 | Direction | Peer | Mechanism | Anchor |
 |---|---|---|---|
 | down (import) | `engine.autoload.dice_engine` | `roll_pool` for all dice resolution | `systems/threadwork/sim/operations.py:40 roll_pool`; `systems/threadwork/sim/opposing.py:36 roll_pool` |
-| out (write) | `systems.overview.sim.ms_track` | `apply_ms_delta` — shared Mending Stability arithmetic surface | `systems/threadwork/sim/opposing.py:238 apply_ms_delta`; `systems/threadwork/sim/co_movement.py:142 apply_ms_delta` |
+| out (write) | `systems.overview.sim.ms_track` | `apply_ms_delta` — shared Mending Stability arithmetic surface | `systems/threadwork/sim/opposing.py:233 apply_ms_delta`; `systems/threadwork/sim/co_movement.py:142 apply_ms_delta` |
 | out (write) | `systems.fieldwork.sim.knots` | `sustain_knot` — Knot strain on opposing-operation outcome | `systems/threadwork/sim/opposing.py:245 sustain_knot` |
 | in (call) | `systems.fieldwork.sim.knots` | `apply_coherence_delta` — the only cross-subsystem caller into threadwork found | `systems/fieldwork/sim/knots.py:373-374 apply_coherence_delta` |
 | up (declared, not wired) | `engine.cross_scale.handoff_rules` | `SCALE_PERSONAL↔SCALE_THREAD`, `SCALE_THREAD↔SCALE_FACTION`, `SCALE_THREAD↔SCALE_MASS` procedure descriptors — returns prose steps, calls no threadwork function | `engine/cross_scale/handoff_rules.py:102-114`, `:153-183` |

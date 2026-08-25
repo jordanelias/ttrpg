@@ -33,16 +33,22 @@ def tracing_on():
     computing-then-discarding via trace_event's own no-op branch. Query-only; no engine effect."""
     return _trace_on
 
-def roll_pool(n, tn=7):  # [canonical: params/core.md §TN Values — TN 7 standard]
+def roll_pool(n, tn=7):  # TN7 always (Jordan 2026-08-25; ED-IN-0196)
+    # `tn` is retained for call-signature compatibility and ASSERTED, not honoured: the success
+    # window is the fixed canonical face rule. This line previously read `elif tn <= f <= 9`,
+    # which made this the one TN-aware roller in the tree — inert at the default, live only when
+    # a caller passed a non-7 value. VOLLEY_TN=6 was that caller.
+    assert tn == 7, f"TN is 7. Always. (Jordan, 2026-08-25) — got {tn}; a varying difficulty is an Ob."
     net = 0
     for _ in range(max(1, n)):
         f = rngsource.get().randint(1, 10)
         if f == 1:         net -= 1
-        elif tn <= f <= 9: net += 1  # [canonical: params/core.md — canonical face rule 1=-1, 2-6=0, 7-9=+1, 10=+2]
+        elif 7 <= f <= 9: net += 1  # [canonical: params/core.md — canonical face rule 1=-1, 2-6=0, 7-9=+1, 10=+2]
         elif f == 10:      net += 2
     return net
 
-def roll_pool_fractional(pool, tn=7):  # [canonical: params/core.md §TN Values — TN 7 standard]
+def roll_pool_fractional(pool, tn=7):  # TN7 always (Jordan 2026-08-25; ED-IN-0196)
+    assert tn == 7, f"TN is 7. Always. (Jordan, 2026-08-25) — got {tn}."
     """[ED-MB-0032, Jordan: "pool must be fractional."] Roll a CONTINUOUS combat pool without flooring it
     to an integer die count. The integer part rolls real d10s (the discrete stochastic base); the
     fractional remainder is realised as ONE extra real die rolled with probability `frac`.
@@ -205,7 +211,11 @@ _SIGMA_ZERO_SNAP = 1e-12   # [JUSTIFIED: "this value is arithmetically zero" thr
 
 
 def _sigma_net_boost(net_sigma, pool, tn=7):  # [canonical: params/core.md continuous engine; modifier_system_spec §2.1] mu-shift
-    _SIG = {6: 0.806, 7: 0.800, 8: 0.781}     # [canonical: params/core.md EV table] sigma per die at TN
+    assert tn == 7, f"TN is 7. Always. (Jordan, 2026-08-25) — got {tn}."
+    # Sigma per die at TN 7 — the only TN there is (ED-IN-0196). The TN 6/8 rows of the EV
+    # table are dead under the ruling; the historical table survives, reference-only, in
+    # engine/engine_params/params_tables.yaml.
+    _SIG_PER_DIE = 0.800   # [canonical: params/core.md EV table, TN 7]
     if abs(net_sigma) < _SIGMA_ZERO_SNAP:
         return 0.0
-    return _sigma_softcap(net_sigma) * _SIG.get(tn, 0.800) * math.sqrt(max(1, pool))  # [canonical: params/core.md EV table — sigma per die at TN, default TN 7 = 0.800]
+    return _sigma_softcap(net_sigma) * _SIG_PER_DIE * math.sqrt(max(1, pool))  # [canonical: params/core.md EV table — sigma per die at TN, default TN 7 = 0.800]

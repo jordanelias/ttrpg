@@ -70,20 +70,23 @@ from engine.autoload import dice_engine
 # TN → (mu_per_die, sigma_per_die)
 # [canonical: params/core.md §Expected Value (per die)]
 # ---------------------------------------------------------------------------
+# Kept as a dict keyed by TN, deliberately: `net_boost` and `p_success` index PER_DIE[tn], so a
+# stray non-7 tn now fails LOUDLY with a KeyError instead of silently resolving to a TN 6 or TN 8
+# row. The TN 6/8 rows are deleted under the ruling below.
 PER_DIE: dict[int, tuple[float, float]] = {
-    6: (0.50, 0.806),   # [canonical: params/core.md §Expected Value (per die)]
     7: (0.40, 0.800),   # [canonical: params/core.md §Expected Value (per die)]
-    8: (0.30, 0.781),   # [canonical: params/core.md §Expected Value (per die)]
 }
 
 # TN 7 MEANS "A FACE OF 7 OR HIGHER SUCCEEDS" — equivalently, "roll above 6". Both readings are
 # the same rule and both are in circulation; RULED 2026-08-15 (Jordan: "TN7, roll of 7 or higher is
 # success") so the ambiguity stops here rather than being re-derived. The die rule it indexes:
 # face 1 = -1 success, 2-6 = 0, 7-9 = +1, 10 = +2.
-# ⚠ 7 is the STANDARD mode, not the only TN. Canon (params/core.md §TN Values, captured in
-# engine/engine_params/params_tables.yaml) is a three-value scale: Controlled 6 / Standard 7 /
-# Desperate 8, selected by SITUATION. It is never a property of the weapon — Jordan, 2026-08-15:
-# "all weapons are TN7 now that we have a physics engine", which this module already implemented.
+# ⚠ TN IS 7. ALWAYS. THERE IS NO OTHER TN.
+# [Jordan, 2026-08-25, verbatim: "TN7 always. Never change TN anywhere ever."]
+# This SUPERSEDES the 2026-08-15 situational scale that stood here — "Controlled 6 / Standard 7 /
+# Desperate 8, selected by SITUATION" — which is now dead canon. The earlier half of that same
+# ruling ("all weapons are TN7") is subsumed: not just weapons, everything. A varying difficulty
+# is an Ob, never a TN. See ED-IN-0196 and registers/supersession_register.yaml.
 TN_STANDARD = 7         # [canonical: params/core.md §TN Values -- FORK: c451bcb]
 
 # ---------------------------------------------------------------------------

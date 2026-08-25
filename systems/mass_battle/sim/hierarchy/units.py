@@ -2101,8 +2101,19 @@ class Subunit:
             cells_sorted = sorted(cells, key=lambda c: (c[0], c[1]))
             anchor = cells_sorted[0]
             for trailing in cells_sorted[1:]:
-                # Discipline check: d10 roll vs unit's discipline value
-                # [canonical: params/core.md — d10 vs TN; here TN = unit_discipline]
+                # Discipline check: a single d10 rolled UNDER the unit's discipline
+                # (p = discipline/10). NOT a TN — TN is 7, always, everywhere
+                # [Jordan, 2026-08-25: "TN7 always. Never change TN anywhere ever."].
+                # The prior comment read "[canonical: params/core.md — d10 vs TN; here
+                # TN = unit_discipline]", which mislabelled a roll-under attribute check as a
+                # varying TN. Canon frames it as discipline (mass_battle_integration_v30.md),
+                # and the live discipline checks elsewhere in this engine roll discipline as a
+                # POOL against an Ob (orchestration.py feigned-retreat and morale-cascade),
+                # not roll-under.
+                # RELABEL ONLY, no behaviour change: `resolve_internal_collisions` has zero
+                # call sites (orchestration.py:1948 says so), so this primitive is dead. If it
+                # is ever wired, the MB lane picks between roll-under and the pool-vs-Ob shape
+                # its siblings use — that is a design call, not a comment fix. (ED-IN-0196)
                 roll = rngsource.get().randint(1, 10)
                 if roll <= unit_discipline:
                     # PASS: revert trailing cell to its previous position (formation held)

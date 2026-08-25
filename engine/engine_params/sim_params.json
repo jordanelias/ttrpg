@@ -3,24 +3,24 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 168,
-    "total": 420,
-    "uncited": 252,
+    "total": 416,
+    "uncited": 248,
     "of_which_assumption_grade": 12
   },
-  "count": 420,
+  "count": 416,
   "by_module": {
     "engine.autoload": 15,
     "engine.cross_scale": 15,
     "engine": 1,
     "characters": 7,
-    "combat": 13,
+    "combat": 12,
     "factions": 65,
     "fieldwork": 15,
     "mass_battle": 139,
     "overview": 12,
     "settlements": 24,
     "social_contest": 52,
-    "threadwork": 37,
+    "threadwork": 34,
     "world": 25
   },
   "params": [
@@ -628,24 +628,6 @@
       "name": "WEAPON_TN_BASE",
       "value": 7,
       "kind": "scalar",
-      "module": "combat",
-      "file": "systems/combat/sim/combat.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "combat.WEAPON_TN_MOD",
-      "name": "WEAPON_TN_MOD",
-      "value": {
-        "reach_short": -1,
-        "reach_long": 0,
-        "weight_light": -1,
-        "weight_heavy": 0,
-        "type_blade": 0,
-        "type_blunt": 1
-      },
-      "kind": "table",
       "module": "combat",
       "file": "systems/combat/sim/combat.py",
       "note": "",
@@ -4646,46 +4628,13 @@
       "citation_grade": null
     },
     {
-      "key": "threadwork.TN_BINDING",
-      "name": "TN_BINDING",
-      "value": 8,
-      "kind": "scalar",
-      "module": "threadwork",
-      "file": "systems/threadwork/sim/operations.py",
-      "note": "Lock, Dissolution",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "threadwork.TN_POP",
-      "name": "TN_POP",
-      "value": 8,
-      "kind": "scalar",
-      "module": "threadwork",
-      "file": "systems/threadwork/sim/operations.py",
-      "note": "Past-Oriented Pulling",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "threadwork.TN_POP_BINDING",
-      "name": "TN_POP_BINDING",
-      "value": 9,
-      "kind": "scalar",
-      "module": "threadwork",
-      "file": "systems/threadwork/sim/operations.py",
-      "note": "POP Lock or Dissolution",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
       "key": "threadwork.TN_STANDARD",
       "name": "TN_STANDARD",
       "value": 7,
       "kind": "scalar",
       "module": "threadwork",
       "file": "systems/threadwork/sim/operations.py",
-      "note": "Weave, Pull, Mend, Leap, Community Weave",
+      "note": "every threadwork operation",
       "citation": null,
       "citation_grade": null
     },

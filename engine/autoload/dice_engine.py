@@ -61,15 +61,18 @@ def _die_result(face: int) -> int:
         return 2
 
 
-# Per-die EV table (params/core.md §Expected Value):
-#   TN 6: μ=0.50, σ=0.806
-#   TN 7: μ=0.40, σ=0.800
-#   TN 8: μ=0.30, σ=0.781
-_CONTINUOUS_PARAMS: dict[int, tuple[float, float]] = {
-    6: (0.50, 0.806),
-    7: (0.40, 0.800),
-    8: (0.30, 0.781),
-}
+# Per-die EV at TN 7 — the only TN there is.
+# [Jordan, 2026-08-25: "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
+# The table used to carry TN 6 (μ=0.50, σ=0.806) and TN 8 (μ=0.30, σ=0.781). Those rows are
+# dead under the ruling and are deleted rather than left as reachable-looking configuration.
+# The historical table survives, reference-only and NOT a mechanism (§0.05), in
+# engine/engine_params/params_tables.yaml.
+#
+# Note the TN 6 row was always in tension with `_die_result` below, which has never read `tn`:
+# μ=0.50 is only reachable if faces 6-9 score, and no face rule here has ever done that. The
+# ruling resolves that tension in favour of the die rule.
+_MU_PER_DIE: float = 0.40      # [canonical: params/core.md §Expected Value, TN 7]
+_SIGMA_PER_DIE: float = 0.800  # [canonical: params/core.md §Expected Value, TN 7]
 
 
 def roll_pool(pool_size: int, tn: int = 7, ob: int | float | None = None,
@@ -95,7 +98,7 @@ def continuous_engine_sample(pool: float, tn: int = 7,
         rng = random.Random()
     if pool <= 0:
         return 0.0
-    mu, sigma = _CONTINUOUS_PARAMS.get(tn, _CONTINUOUS_PARAMS[7])
+    mu, sigma = _MU_PER_DIE, _SIGMA_PER_DIE
     mean = mu * pool
     std = sigma * math.sqrt(pool)
     return rng.gauss(mean, std)

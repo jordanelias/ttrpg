@@ -152,8 +152,8 @@ the return value is consumed):
 | `world.battle_count` | W | `systems/factions/sim/faction_action.py` (outside this subsystem's own folder — see §6) | `systems/factions/sim/faction_action.py:525` |
 | **ENGINE** | | | |
 | `unit.hp` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Unit`) | write `systems/mass_battle/sim/orchestration.py:2064-2065` |
-| `unit.morale` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Unit.set_morale`, `Unit.cascade_morale_hit`) | `systems/mass_battle/sim/hierarchy/units.py:2456 set_morale` |
-| `unit.routed` / `atom.routed` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Unit.derive_rout`) | `systems/mass_battle/sim/hierarchy/units.py:2439 derive_rout`; write site `systems/mass_battle/sim/orchestration.py:2154-2161` |
+| `unit.morale` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Unit.set_morale`, `Unit.cascade_morale_hit`) | `systems/mass_battle/sim/hierarchy/units.py:2467 set_morale` |
+| `unit.routed` / `atom.routed` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Unit.derive_rout`) | `systems/mass_battle/sim/hierarchy/units.py:2450 derive_rout`; write site `systems/mass_battle/sim/orchestration.py:2154-2161` |
 | `unit.stamina` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Subunit.drain_stamina`) | `systems/mass_battle/sim/hierarchy/units.py:710 drain_stamina` |
 | `unit.col_grid` (per-column grid, `PER_CELL` only) | RW | `systems/mass_battle/sim/percell.py` | `systems/mass_battle/sim/orchestration.py:2120-2121 sync_col_grid` |
 
