@@ -9,7 +9,7 @@ against the old-default golden pin — or vice versa. Either way THIS test goes
 red first, naming the drifted flag.
 
 Also guards the name mapping (every pinned name is genuinely read via
-os.environ somewhere under tests/sim/mass_battle — catches renames like
+os.environ somewhere under systems/mass_battle/sim — catches renames like
 SIGMA_HEAD_ENABLED's env name being SIGMA_HEAD, and pins that rot when a flag
 is retired).
 
@@ -22,7 +22,15 @@ import re
 import sys
 
 _ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-_MB = os.path.join(_ROOT, 'tests', 'sim', 'mass_battle')
+# REPOINTED 2026-08-24 — the engine moved. `tests/sim/mass_battle/` was ported over
+# `systems/mass_battle/sim/` (ledger row in `references/restructure_ledger.md`), so this walk
+# returned an EMPTY tree and every scan below silently found nothing. Four of the five assertions
+# here caught it anyway, each because it carries an anti-vacuity clause (§0.1 point 2): the
+# defaults dict came back `{}`, the pending-rebase set came back empty, `_KNOWN_INERT` members
+# "no longer appear in the engine", and the inert-scope guard reported itself vacuous. That is
+# what those clauses are for — without them this file would have gone green over an empty
+# directory, which is the exact failure it was written to prevent.
+_MB = os.path.join(_ROOT, 'systems', 'mass_battle', 'sim')
 
 import importlib.util
 
@@ -148,7 +156,7 @@ def test_pins_match_source_defaults():
         if name in _PENDING_REBASE:
             continue   # [ED-MB-0061] declared divergence; see the block above and its own guard
         assert name in defaults, (
-            f"pin {name} has no environ.get default in tests/sim/mass_battle — "
+            f"pin {name} has no environ.get default in systems/mass_battle/sim — "
             f"renamed or retired? Update tools/ci_golden_modes_check.py deliberately.")
         if defaults[name] != pinned:
             mismatches.append(f"{name}: pinned {pinned!r} vs source default {defaults[name]!r}")
