@@ -48,7 +48,7 @@ from typing import Optional
 
 from engine.autoload import dice_engine
 from engine.autoload.dice_engine import roll_pool
-from engine.autoload.game_state import canonical_pt
+from engine.autoload.game_state import ACCORD_MAP, canonical_pt
 from systems.settlements.sim.infrastructure import (
     count_infrastructure, seizure_ob_modifier, BUILDING_CHAPEL,
     BUILDING_CHURCH, BUILDING_CATHEDRAL,
@@ -288,9 +288,12 @@ def resolve_mass_seizure(world, rng=None) -> list[SeizureResult]:
         # Apply ownership transfer + accord on success
         if seized:
             t.owner = 'Church'
-            # Convert int accord to ACCORD_MAP-style continuous if needed; for now,
-            # set directly using same continuous scale game_state uses
-            t.accord = float(starting_accord)
+            # `starting_accord` is a canonical TIER; `Territory.accord` is the CONTINUOUS
+            # field. ACCORD_MAP is the tier->continuous table and canon_buckets.canonical_accord
+            # its inverse, so a raw `float(tier)` write loses tiers: canonical_accord(2.0) == 1
+            # and canonical_accord(3.0) == 1, and 2/3 are the only values a seizure can produce.
+            # Mapped write, matching parliamentary_transfer.py:346. (ED-FA-0037)
+            t.accord = ACCORD_MAP[starting_accord]
 
     return results
 

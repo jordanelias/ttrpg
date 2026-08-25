@@ -203,7 +203,7 @@ lane_ids:
     # burden-parameterized gate; 0021 FORK B anti-collapse device; 0022 live bug batch (8 defects).
     # next_free bumped 17->23.
     # ED-SC-0011 allocated 2026-07-07 (status open): ed_options OPT-11 (contest live-dispatch acceptance criterion) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
-    FA: { name: "Faction actions",     next_free: 37 }  # block RELEASED 2026-07-30 (ED-IN-0098): 0037-0039 returned, max allocated ED-FA-0036. Narrative: id_reservations_history.md#fa
+    FA: { name: "Faction actions",     next_free: 38 }  # ED-FA-0037 allocated 2026-08-25 (mass-seizure Accord tier/continuous write). Block RELEASED 2026-07-30 (ED-IN-0098): 0037-0039 returned, max allocated ED-FA-0036 at that time. Narrative: id_reservations_history.md#fa
     # ED-FA-0004 + ED-FA-0005 allocated 2026-07-07 (status open): ed_options OPT-1 (faction-oracle reconciliation, banner-now sequencing ruled) + OPT-2 (elimination-lockout, no-permanent-lockout ruled) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
     WR: { name: "World",               next_free: 10 }   # block RELEASED 2026-07-30 (ED-IN-0098): 0010-0012 returned, max allocated ED-WR-0009. Narrative: id_reservations_history.md#wr
     # ED-WR-0004/0005/0006 allocated 2026-07-07 (status open): ed_options OPT-4 (Turmoil victory-gate, wire-the-clock ruled) / OPT-5 (threadwork execution reconciliation) / OPT-12 (NPC orphan triage ED) — 2026-07-07 consolidated ruling pass, see ED-IN-0026

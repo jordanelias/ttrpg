@@ -134,7 +134,12 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     # assertion message below prescribes, not a revert of the walk-back: the frozen
     # pre-walk-back SE pointer was 53 -- ED-IN-0098 'returned' 0050-0052 per this lane's own
     # annotation in references/id_reservations.yaml -- so 51 cannot be reached by reverting it.
-    released = {'SC': 31, 'FA': 37, 'WR': 10, 'SE': 51}
+    # PIN UPDATED 2026-08-25: FA 37 -> 38. ED-FA-0037 allocated for the mass-seizure Accord
+    # write fix (a canonical tier index was assigned into the continuous Territory.accord
+    # field). The entry exists in registers/editorial_ledger_fa.jsonl. Same update-the-pin-
+    # and-say-so path: ED-IN-0098 'returned' 0037-0039 per this lane's annotation in
+    # references/id_reservations.yaml, so reverting the walk-back would give 40, not 38.
+    released = {'SC': 31, 'FA': 38, 'WR': 10, 'SE': 51}
     checked = 0
     for lane, expected in released.items():
         assert nf[lane] == expected, (
