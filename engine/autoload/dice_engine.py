@@ -75,9 +75,27 @@ _MU_PER_DIE: float = 0.40      # [canonical: params/core.md §Expected Value, TN
 _SIGMA_PER_DIE: float = 0.800  # [canonical: params/core.md §Expected Value, TN 7]
 
 
+_TN_RULING = ('TN is 7. Always. Jordan, 2026-08-25: "TN7 always. Never change TN anywhere '
+              'ever." A varying difficulty is an Ob, not a TN. (ED-IN-0196)')
+
+
+def _require_tn7(tn: int) -> None:
+    """The owner refuses any TN but 7.
+
+    `tn` is kept as a parameter rather than deleted: it is carried on RollResult, ~30 call
+    sites pass tn=7 explicitly, and WEAPON_TN_BASE crosses to the Godot bridge. Removing it
+    would be a wide, behaviour-free churn. Validating it costs nothing and turns a silently
+    -ignored argument into a refused one — which is the entire point, because a silently
+    -ignored `tn` is what let four TN-varying mechanisms sit in the tree looking live.
+    """
+    if tn != 7:
+        raise ValueError(f"{_TN_RULING} Got tn={tn!r}.")
+
+
 def roll_pool(pool_size: int, tn: int = 7, ob: int | float | None = None,
               rng: random.Random | None = None) -> RollResult:
-    """Roll pool_size d10s under the canonical face rule. Pool minimum 1D."""
+    """Roll pool_size d10s under the canonical face rule at TN 7. Pool minimum 1D."""
+    _require_tn7(tn)
     if rng is None:
         rng = random.Random()
     effective_pool = max(1, pool_size)  # params/core.md §Pool Minimum
@@ -92,8 +110,9 @@ def continuous_engine_sample(pool: float, tn: int = 7,
     """Sample net successes from Normal(μ·N, σ·√N) per Decision E continuous engine.
 
     Canon: params/core.md §Continuous Engine — statistically equivalent to discrete.
-    Pool may be fractional (enables fractional Ob / TN modifiers).
+    Pool may be fractional (enables a fractional Ob).
     """
+    _require_tn7(tn)
     if rng is None:
         rng = random.Random()
     if pool <= 0:
