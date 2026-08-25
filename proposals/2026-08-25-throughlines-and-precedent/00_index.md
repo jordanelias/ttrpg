@@ -120,13 +120,13 @@ chapters carry all three wherever the claim appears: the emit/consume asymmetry 
 
 ## The chapters
 
-| | Chapter | Thesis |
-|---|---|---|
-| 1 | **The World Has No People In It** | One absent object explains the largest connected group of Valoria's disconnected substrate; the absence is guarded rather than pending, and 46 authored officeholders are waiting on a loader with a proven in-tree template. |
-| 2 | **The Ladder Runs Both Ways, On Paper** | Jordan's three asks need almost nothing designed and nearly everything wired: 88 up-gates and 74 demotion cells are authored, the relational substrate executes, and what is missing is one owned Standing, one writer per direction, and one decision that reads a divergent interest. |
-| 3 | **One Resolver, Four Scales, One Scalar** | The margin ladder is exemplary and is being fed two constants — `net` ignores TN across 28 call sites, `ob` is hand-set against a ruling that says derive it — and one level up, everything that crosses a scale boundary crosses as a single scalar. |
-| 4 | **Weights Bias, Noise Chooses** | VSG's architecture survived every audit and its calibration survived none; it should ship behind an executing expressive-range gate. |
-| 5 | **What We Should Not Do** | Ten documented failures from acclaimed games, converted into guards on named Valoria modules — plus the four problems the field has not solved and this project should not pretend to have. |
+| | Chapter | File | Thesis |
+|---|---|---|---|
+| 1 | **The World Has No People In It** | `04_ch1…` | One absent object explains the largest connected group of Valoria's disconnected substrate; the absence is guarded rather than pending, and 46 authored officeholders are waiting on a loader with a proven in-tree template. |
+| 2 | **The Ladder Runs Both Ways, On Paper** | `05_ch2…` | Jordan's three asks need almost nothing designed and nearly everything wired: **74 rungs are authored across ten tables, each carrying an entry gate *and* a demotion cell**, plus ≥15 cross-cutting down mechanisms — against **0 up and 0 down paths executing**. The sharpest finding is not an absence: `_emergency_council_parties` is a **default-ON intra-faction two-sided contest firing ~975× per golden batch** — the contest, trigger, resolver and consequence all exist, and neither side is anybody. |
+| 3 | **One Resolver, Four Scales, One Scalar** | `06_ch3…` | The margin ladder is exemplary and is being fed a constant: **`roll_pool` accepts `tn`, records it, and discards it** — pinned to TN 7, wrong by 21.2 percentage points on Failure at 6D/Ob 2/TN 8, across **19 production call sites**. (The obstacle half of this thesis was *refuted* during review — see Correction 7.) One level up, the same defect: **every executing cross-scale crossing carries one scalar and no person, three of them the same field, `Faction.Mil`.** |
+| 4 | **Weights Bias, Noise Chooses** | `07_ch4…` | VSG's architecture survived every audit and its calibration survived none; it should ship behind an executing expressive-range gate. |
+| 5 | **What We Should Not Do** | `08_ch5…` | Ten documented failures from acclaimed games, converted into guards on named Valoria modules — plus the four problems the field has not solved and this project should not pretend to have. |
 
 Supporting registers, which are the shortest path from this session to running behaviour:
 
@@ -136,26 +136,31 @@ Supporting registers, which are the shortest path from this session to running b
 
 ---
 
-## What this analysis got wrong
+## What this analysis got wrong — seven corrections
 
-Recorded here rather than buried, because the analysis argues that Valoria's characteristic hazard is
-mistaking a shared word for a shared mechanism, and its own orchestrator did exactly that.
+Recorded in `03_method_and_corrections.md` rather than buried, because the analysis argues that
+Valoria's characteristic hazards are mistaking a shared word for a shared mechanism and citing prose
+as evidence of behaviour — and its orchestrator did both.
 
-1. **The `Standing` claim is RETRACTED.** The orchestrator asserted that `Standing` was ratified to
-   0–10 on 2026-07-08 and left unexecuted, so the officer ladder was written against a nonexistent
-   scale. False. **Three genuinely distinct mechanisms share the name** — a contest ethos float
-   (`primitives.py:31-48`), an unclamped `Faction.standing: int` (`game_state.py:129`), and the
-   prose-only officer rank ladder 0–7. The 2026-07-08 ruling identified the homonym and ordered the
-   senses **scope-tagged apart**; it did not unify a range. Chapter 2 carries the correction, and the
-   real defect it exposed — an unclamped integer read straight into a dice pool — is worth more than
-   the claim it replaced.
-2. **The first thesis over-generalised.** Ten absences were presented as one pattern; the audit
-   narrowed them to seven, and showed that three belonged to three different classes.
+| # | The error | Caught by |
+|---|---|---|
+| 1 | `Standing` "ratified 0–10 and unexecuted" — **a vocabulary collision promoted to a mechanism claim.** Three distinct mechanisms share the name; the ruling ordered them *scope-tagged apart*. | the independent adversarial audit |
+| 2 | Ten absences over-generalised into one pattern | the same audit, narrowing it to seven |
+| 3 | **A stale golden propagated inside a warning against stale goldens** | Chapters 1, 2 and 5, independently |
+| 4 | "Golden-safe by construction" — populating the world **does** move seeded goldens | Chapter 1, by controlled experiment |
+| 5 | "46 records each with stats" — **exactly one has stats**; 7 have territory | Chapter 2, by counting |
+| 6 | `temperaments.py` called **executed**; it has zero callers and zero tests — *executable*, not executed | Chapter 4 |
+| 7 | **R2: a recommendation that would have overwritten a live Jordan hold** — sourced from a stale docstring | Chapter 3 |
 
-Both were caught by the **structurally independent** adversarial stage — a reader that never saw the
-producer's reasoning — and neither by the producer re-reading its own work. That is §10's relay doing
-the job it was designed for, and it is the strongest evidence in this document that the adversarial
-stage earns its cost.
+**Not one was caught by the producer re-reading its own work.** Two came from structural independence
+and five from downstream authors refusing to take a supplied claim on trust — three of those by
+measuring or counting rather than reading. That is CLAUDE.md §10's relay and §0.1's measurement
+discipline both earning their cost, on this document, in this session.
+
+Error 7 is the one worth dwelling on: a register built to catch decisions that outran their evidence
+sourced one of its two headline rows from **a comment** — written by someone rigorous, in the right
+file, about their own function, and simply older than the measurement that superseded it. The lesson
+at its narrowest: **prose ages silently and code does not.**
 
 ## Standing caveats carried into every chapter
 

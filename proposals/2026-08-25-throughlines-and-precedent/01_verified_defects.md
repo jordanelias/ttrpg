@@ -225,7 +225,7 @@ the two engines holds *only* at TN 7.
 | 10D | 5.0 | 4.0 | 3.0 | **4.0** |
 
 A 6D roll at TN 8 should net 1.8 and nets 2.4 — **+33%**, comfortably a full degree band on a
-margin-based ladder. **28 production call sites pass `tn` to `roll_pool`**, including (per L1) the
+margin-based ladder. **19 production call sites pass `tn` to `roll_pool`** ⚠ *(corrected from 28 by Chapter 3's author, who counted them: 14 of the 33 raw grep hits call mass battle's OWN TN-honouring roller, not this one)*, including (per L1) the
 Weapon TN Matrix. Every one of them at TN ≠ 7 is silently resolving on TN-7 odds.
 
 ## NERS verdict
@@ -252,9 +252,16 @@ REMEDIATION (worst-first):
               `mean(roll_pool(n, tn)) ≈ _CONTINUOUS_PARAMS[tn][0] * n` for tn ∈ {6,7,8} over a seeded
               batch. It fails today at TN 6 and TN 8 and passes at TN 7 — which is the control
               proving the test can observe the defect (§0.1 pt 2).
-  MED   E   → once TN is live, the 28 call sites need auditing: some may have been tuned to
-              compensate for the dead lever, so fixing this WILL move behaviour. Expect goldens to
-              move; that is the honest cost and it must be stated, not absorbed.
+  MED   E   → once TN is live, the 19 call sites need auditing: some may have been tuned to
+              compensate for the dead lever.
+              ⚠ **CORRECTED — the fix is FREE, and this was measured rather than argued.** This block
+              originally said "expect goldens to move; that is the honest cost". Chapter 3's author
+              measured it instead: the TN-parameterised face rule ALREADY EXISTS at
+              `systems/mass_battle/sim/resolution.py:36-42`, its moments reproduce
+              `_CONTINUOUS_PARAMS` bit-exactly at TN 6/7/8, and it is **bit-identical to the current
+              rule at tn=7** (all ten faces enumerated). Both goldens ran GREEN under an in-memory
+              patch. **Golden cost: ZERO.** Lifting an existing correct implementation is cheaper
+              than the fix I proposed and carries none of the cost I attributed to it.
 ```
 
 ## Why nothing caught it
@@ -265,5 +272,5 @@ for the mirror-image case. `tn` is also faithfully stored on `RollResult`, so an
 The defect is invisible to every assertion that does not vary TN and check the *distribution*.
 
 **This one belongs in the analysis' front matter**: it is executed, it is measured, it is in the core
-resolver, it fails three NERS criteria, it silently affects 28 call sites across scales, and the fix
+resolver, it fails three NERS criteria, it silently affects 19 call sites across scales, and the fix
 is roughly ten lines plus a falsifier.

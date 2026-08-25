@@ -280,8 +280,23 @@ I banked as verified that loading persons at world-gen cannot move a seeded gold
   isolating the channel: `simulate_npc_actions` draws `world.rng` at
   `systems/overview/sim/accounting.py:139`.
 
-Two consequences worse than the retracted claim. **A social-drift simulator has been drawing from the
-campaign RNG over an empty dict** roughly 400 times per golden batch, for months, unobserved. And
+Two consequences worse than the retracted claim. **A social-drift simulator is invoked roughly 400
+times per golden batch (50 seasons x 8 campaigns) over an empty dict, and is one non-empty dict away
+from consuming campaign entropy.**
+
+⚠ *Precision owed to Chapter 5's author, who checked this rather than accepting my wording.* An
+earlier version of this paragraph said the simulator "has been drawing from the campaign RNG" all
+along. **It has not.** `npe.simulate_npc_actions` binds `rng` and then iterates
+`for tid, npcs in store.items()` (`systems/world/sim/npe.py:353-368`) — with an empty store the loop
+body never executes and **zero** draws occur. The hazard is *latent*, not active.
+
+That distinction makes Chapter 1's experiment sharper rather than weaker: the guards look green today
+precisely because nothing draws; the instant the world is populated, entropy consumption begins and
+the seeded goldens move — which is exactly what the experiment observed. A dormant stochastic
+consumer sitting behind an empty container is a worse failure mode than an active one, because
+nothing about today's green suite predicts tomorrow's red one. And
+
+
 **the guards go silent rather than break** — a loader that populates `world.npcs` without calling
 `generate_npc` passes both. Failing to notice a change is strictly worse than failing on it, and it
 is CLAUDE.md §0.1 pt 2 — *an assertion must be able to observe the failure it excludes* — violated by
@@ -303,3 +318,162 @@ document for §0.2's rule that *done means it runs*.
 
 ---
 
+---
+
+# CORRECTION 5 — I overstated what the 46 authored records contain, and the fix improves the recommendation
+
+*Caught by Chapter 2's author, who counted the fields instead of trusting my summary. Verified.*
+
+## What I claimed
+That `references/npc_registry.yaml` holds 46 authored officeholders *"each with stats, territory,
+goals and weighted convictions"*, and I put that in the index and the pull-request body.
+
+## What the file actually contains
+Counted by parsing it (non-null values, 46 records):
+
+| Field | Coverage | | Field | Coverage |
+|---|---:|---|---|---:|
+| `id`, `first_name`, `faction`, `role`, `status`, `convictions`, `source` | **46 / 46** | | `ts` | 10 / 46 |
+| `last_name` | 44 / 46 | | `certainty` | 8 / 46 |
+| `arc_trajectory` | 36 / 46 | | `territory` | **7 / 46** |
+| `resonant_style` | 18 / 46 | | `title` | 7 / 46 |
+| `goals`, `cultural_label` | 17 / 46 | | `birthplace` | 5 / 46 |
+| `notes` | 15 / 46 | | `coherence` | 1 / 46 |
+| | | | **`stats`** | **1 / 46** (NPC-001 only) |
+
+**"Each with stats" was wrong by a factor of forty-six.** Exactly one record carries a stat block.
+Territory is on seven, not all.
+
+## Why this makes the recommendation better rather than worse
+The error mattered because it inflated what a loader would deliver. Corrected, the picture is sharper
+and it resolves a question the analysis had been treating as either/or.
+
+**What all 46 records genuinely carry is identity, an office, a faction, a provenance, and a weighted
+conviction vector** — `convictions: {primary: [{conviction, weight}, ...], cultural_label,
+self_other_initial}`, present on every single one. That is precisely the VSG-shaped payload: a
+weighted vector with a cultural conditioning label.
+
+**What they do not carry is mechanical stats.** And the tree already contains the thing that produces
+those: `npe.generate_npc`'s Tier-1 archetype seed, which derives the five axes from
+`_ecology_weights(world, territory_id)` — the territory's own prosperity and accord.
+
+So the right architecture is neither "load the registry" nor "run the generator". It is **both, in
+order**:
+
+> **Load authored identity, office, faction and conviction vector from the registry; derive the
+> mechanical stats through the existing territory-conditioned generator.**
+
+That composes the two existing pieces instead of choosing between them, it keeps every authored fact
+citable (no fabrication — the constraint OI-05's deferral exists to protect), and it confines the
+stochastic half to the fields nobody authored. It also splits the golden cost cleanly: the authored
+half is deterministic; only the derived half touches `world.rng`, and Correction 4 already establishes
+that the drift channel needs its own substream first.
+
+**Sequence, therefore: RNG substream → authored-identity loader → stat derivation.** Three commits,
+each independently verifiable, with the golden-moving step isolated in the last.
+
+## A live defect found in the same file, by the same author
+`references/npc_registry.yaml:835` and `:850` carry unquoted `#` characters inside a value:
+
+```yaml
+faction: Hafenmark (Inner Council #4)     # parses as 'Hafenmark (Inner Council'
+faction: Varfell (Jarl Council #5)        # parses as 'Varfell (Jarl Council'
+```
+
+**YAML eats `#4)` and `#5)` as comments.** NPC-081 and NPC-082 therefore land in singleton faction
+namespaces that match nothing. A two-character fix — quote the strings — that **must land before any
+loader**, or those two officers silently join factions that do not exist.
+
+This is the *same failure class* as the Gustav colon (`01_verified_defects.md` D5): a structural
+character inside an unquoted YAML scalar, in a file nothing loads, undetected because nothing loads
+it. Two instances in one 46-record file is not bad luck; it is what an unparsed register looks like.
+
+And the truncated text is itself the finding: **`Inner Council #4` and `Jarl Council #5` are seat
+numbers encoded in a free-text faction string.** The officer object is trying to exist inside a
+`str`. That is the strongest single piece of evidence in this analysis that the object is missing —
+the authors kept writing seats down because there was nowhere to put them.
+
+---
+
+# CORRECTION 6 — `temperaments.py` is executable, not executed, and I said executed
+
+*Caught by Chapter 4's author. Verified.*
+
+I claimed, in the front matter and in the orchestrator's own spine, that
+`systems/settlements/sim/temperaments.py` is the one VSG slice that **executes** — pointing at its
+five-typology ⟨α,β⟩ table (`:34-38`, carrying Goldenfurt's authored `"traditional": {alpha: 0.3,
+beta: 0.7}`) and its strain-driven drift toward `outcomes-only` (`:124-131`).
+
+The module is real and it runs when called. **Nothing calls it.** Grep across every `.py`: the only
+occurrence outside the module itself is a docstring mention at
+`systems/settlements/sim/registry.py:15`. There are **zero production callers and zero tests**.
+
+Under CLAUDE.md §0.2 — *done means it runs, and something ran it* — that makes it **executable, not
+executed**, and the distinction is the one this entire analysis is built on. I asserted the stronger
+word about the single example I was using to prove the method is implementable. Chapter 4 also notes
+its drift is one-directional (`if drift > 0`), which places it in the same accrual-without-restoration
+class the chapter's own T-04 describes.
+
+The corrected version is still good news for the argument, just weaker than I put it: **the slice is
+written, correct and one call site away** — it is evidence the method is cheap to land, not evidence
+that any of it is landed.
+
+---
+
+# CORRECTION 7 — the most dangerous one: a recommendation that would have overwritten a Jordan hold
+
+*Caught by Chapter 3's author. Verified. This is the error that would have done real damage.*
+
+## What I published
+`02_ruled_but_unexecuted.md` row **R2** claimed Jordan's 2026-08-14 obstacle-derivation ruling was
+**ruled and unexecuted**, and the register's summary recommended it as *"perhaps thirty lines of code
+plus falsifiers"* — the second of its two headline actionable items.
+
+## Why it is wrong, twice
+**(a) The evidence was a stale comment.** My warrant was `engine/autoload/dice_engine.py:118-123`
+asserting *"THAT DERIVATION IS IMPLEMENTED NOWHERE — every call site in the tree still passes a
+hand-set Ob."* Under §0.05 that is prose, and it is **out of date**.
+`tests/valoria/test_faction_obstacle_conventions.py` records the measurement, 2026-08-21:
+
+> *"the M1 board records that derivation as 'wired NOWHERE'. **Measured 2026-08-21, that is FALSE:**
+> of the three sites that roll against a target faction's score, **one already implements the ruling
+> exactly, one implements it under a condition, and one contradicts it** — each citing its own canon."*
+
+**(b) The work is not pending. It is deliberately suspended.** Same file:
+
+> *"Jordan **suspended the work 2026-08-21** and flagged it for later systems work **rather than
+> having a session reconcile three ratified numbers on its own authority.**"*
+
+And a guard exists for precisely this: the test pins all three conventions so that none drifts while
+the question is held — *"including a well-meaning 'let's just make them consistent'."*
+
+**That is my recommendation, described in advance, by the guard built to stop it.** Had anyone acted
+on R2, they would have overwritten a live Jordan hold, reconciled three ratified numbers on a
+session's own authority, and broken the test protecting them.
+
+## The lesson, at its narrowest
+I built a register whose entire purpose is to catch claims that outran their evidence — decisions
+recorded as done that the code does not obey — and populated one of its two headline rows from **a
+comment**. Not a careless comment: one written by someone rigorous, in the correct file, about their
+own function. It was simply older than the measurement that superseded it.
+
+> **A comment is not a measurement — including a comment written by someone careful, in the right
+> file, about their own code.** §0.05 is usually read as a rule about design documents. Its sharpest
+> application is to the docstring three lines above the function you are citing.
+
+The general form, and the reason this analysis keeps tripping on it: **prose ages silently and code
+does not.** A stale comment produces no failing test, no diff, no signal of any kind. The only way to
+catch one is to check the behaviour it describes — which is what Chapter 3's author did, and what I
+did not.
+
+## What replaced it
+The row is struck rather than deleted, with the refutation in place, so that the next reader of this
+register meets the correction rather than the claim. And CH3's parallel finding on the TN defect
+(`01_verified_defects.md`) runs the same way but in the opposite direction: I said fixing `roll_pool`
+would move the seeded goldens and cost a re-pin. Measured, it costs **nothing** — a TN-parameterised
+face rule already exists at `systems/mass_battle/sim/resolution.py:36-42`, reproduces
+`_CONTINUOUS_PARAMS` bit-exactly at 6/7/8, and is bit-identical at tn=7. Both goldens ran green under
+an in-memory patch.
+
+Twice, then, in the same chapter's review: I overstated a cost and understated a risk, and both were
+settled by someone measuring instead of reading.
