@@ -107,9 +107,14 @@ withdrawn.** What survives, and what the chapters argue:
 > absence is not schedule state. It is *ratified and guarded*: a `strict=True` xfail
 > (`engine/tests/test_pipeline_reach.py:625`) and a seeded golden (`test_f7_smoke_oracle.py:335`,
 > `assert npcs == 0`) both fail if the world ever populates. Its stated blocker — that no canon names
-> an initial population count — is answerable today from **46 authored `status: canonical` records**,
-> by the same deterministic, golden-safe manoeuvre `populate_from_geography` already used to fix the
+> an initial population count — is answerable today from **35 authored `status: canonical` records** (of 46 total; 11 are `status: proposed`, and loading *those* would be the very fabrication the deferral protects),
+> by the same deterministic manoeuvre `populate_from_geography` used for
 > identical defect for settlements.
+>
+> ⚠ **That manoeuvre is NOT golden-safe for persons** — Correction 4 refutes the
+> extrapolation. The settlements docstring's claim is true *about settlements*, which have no
+> per-season RNG-drawing consumer; `world.npcs` does (`npe.simulate_npc_actions`, called from
+> `systems/overview/sim/accounting.py:139`). The honest sequence is **RNG substream → loader**.
 
 Three discriminators separate this from the vacuous "an unfinished game is unfinished", and the
 chapters carry all three wherever the claim appears: the emit/consume asymmetry is **one-directional**
@@ -122,7 +127,7 @@ chapters carry all three wherever the claim appears: the emit/consume asymmetry 
 
 | | Chapter | File | Thesis |
 |---|---|---|---|
-| 1 | **The World Has No People In It** | `04_ch1…` | One absent object explains the largest connected group of Valoria's disconnected substrate; the absence is guarded rather than pending, and 46 authored officeholders are waiting on a loader with a proven in-tree template. |
+| 1 | **The World Has No People In It** | `04_ch1…` | One absent object explains the largest connected group of Valoria's disconnected substrate; the absence is guarded rather than pending, and 35 canonical officeholders are waiting on a loader — though the in-tree template is *not* as free as first claimed (see Correction 8). |
 | 2 | **The Ladder Runs Both Ways, On Paper** | `05_ch2…` | Jordan's three asks need almost nothing designed and nearly everything wired: **74 rungs are authored across ten tables, each carrying an entry gate *and* a demotion cell**, plus ≥15 cross-cutting down mechanisms — against **0 up and 0 down paths executing**. The sharpest finding is not an absence: `_emergency_council_parties` is a **default-ON intra-faction two-sided contest firing ~975× per golden batch** — the contest, trigger, resolver and consequence all exist, and neither side is anybody. |
 | 3 | **One Resolver, Four Scales, One Scalar** | `06_ch3…` | The margin ladder is exemplary and is being fed a constant: **`roll_pool` accepts `tn`, records it, and discards it** — pinned to TN 7, wrong by 21.2 percentage points on Failure at 6D/Ob 2/TN 8, across **19 production call sites**. (The obstacle half of this thesis was *refuted* during review — see Correction 7.) One level up, the same defect: **every executing cross-scale crossing carries one scalar and no person, three of them the same field, `Faction.Mil`.** |
 | 4 | **Weights Bias, Noise Chooses** | `07_ch4…` | VSG's architecture survived every audit and its calibration survived none; it should ship behind an executing expressive-range gate. |
@@ -136,7 +141,7 @@ Supporting registers, which are the shortest path from this session to running b
 
 ---
 
-## What this analysis got wrong — seven corrections
+## What this analysis got wrong — eleven corrections
 
 Recorded in `03_method_and_corrections.md` rather than buried, because the analysis argues that
 Valoria's characteristic hazards are mistaking a shared word for a shared mechanism and citing prose
@@ -151,10 +156,19 @@ as evidence of behaviour — and its orchestrator did both.
 | 5 | "46 records each with stats" — **exactly one has stats**; 7 have territory | Chapter 2, by counting |
 | 6 | `temperaments.py` called **executed**; it has zero callers and zero tests — *executable*, not executed | Chapter 4 |
 | 7 | **R2: a recommendation that would have overwritten a live Jordan hold** — sourced from a stale docstring | Chapter 3 |
+| 8 | "46 `status: canonical` records" — **35 are canonical; loading the other 11 would be the fabrication the deferral forbids** | CH1 antagonist pass |
+| 9 | **The `Standing` retraction was itself partly wrong** — the ledger entry (never opened until the third pass) ratifies a range *and* orders the scope-tag | CH2 antagonist pass |
+| 10 | **"No n≥100 balance oracle exists"** — `tools/balance_oracle.py` exists and has been the control on three golden re-pins. Inherited from **CLAUDE.md §7, which is stale**, and propagated without a grep | cross-chapter antagonist pass |
+| 11 | **Incomplete propagation** — three retractions each missed a document, leaving one directory holding both a retraction and its retracted claim | cross-chapter antagonist pass |
 
-**Not one was caught by the producer re-reading its own work.** Two came from structural independence
-and five from downstream authors refusing to take a supplied claim on trust — three of those by
-measuring or counting rather than reading. That is CLAUDE.md §10's relay and §0.1's measurement
+**Not one of the eleven was caught by the producer re-reading its own work.** Six came from
+structurally independent readers, five from downstream authors refusing to take a supplied claim on
+trust — and four of those by *measuring, counting or grepping* rather than reading.
+
+Error 10 is the sharpest indictment of the method and the strongest argument for it at once: an
+analysis whose central rule is *verify against code, never inherit from prose* inherited from prose —
+from CLAUDE.md itself — the claim that **a particular file does not exist**, and eleven agents
+repeated it without running `ls`. That is CLAUDE.md §10's relay and §0.1's measurement
 discipline both earning their cost, on this document, in this session.
 
 Error 7 is the one worth dwelling on: a register built to catch decisions that outran their evidence
@@ -175,6 +189,17 @@ at its narrowest: **prose ages silently and code does not.**
   number*. And ⚠ **none of these figures is a balance fact**: the file states (`:264-265`) that
   n=2/seed-0 and n=8/seed-42 "cannot distinguish a balance change from noise", and the n>=100 oracle
   its own line 8 demands still does not exist. They are reproducibility pins.
+- ⚠ **`tools/balance_oracle.py` EXISTS, and this analysis said four times that it did not.** It is the
+  n≥100 controlled comparison — 120 campaigns per arm, both arms in one process, two-proportion z —
+  and it has been run **three times as the control before a golden re-pin**
+  (`engine/tests/test_f7_smoke_oracle.py:106, :137, :218`). The claim was inherited from
+  **CLAUDE.md §7 and `test_f7_smoke_oracle.py:8`, both stale**, and propagated without a grep — the
+  run's own no-pattern-matching failure, one level up. What does not exist is a *CI-gated standing*
+  oracle, and the tool's author argues against making it one (`balance_oracle.py:11-13`: *"a gate
+  that slow gets skipped, which is worse than a tool that gets run"*). **Consequence: every
+  recommendation here that hedged "this re-pin cannot honestly be called neutral, because no control
+  exists" is wrong, and becomes concrete — add an arm to `tools/balance_oracle.py` and run it before
+  touching the golden.**
 - `engine/engine_params/params_tables.yaml` is a **byte-frozen capture of prose** whose degree bands
   are the **pre-ruling, retracted** ones. The live ladder is margin-based in
   `engine/autoload/dice_engine.py::degree_from_net`. Never lift a number from the capture without

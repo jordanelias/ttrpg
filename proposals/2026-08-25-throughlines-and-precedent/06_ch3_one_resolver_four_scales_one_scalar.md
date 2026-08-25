@@ -841,3 +841,14 @@ nothing guards**, which is the same shape as every finding in this chapter.
 Chapter 1 owns the person loader; Chapter 2 owns the officer ladder and the `Standing` homonym
 correction; Chapter 4 owns VSG; Chapter 5 owns the precedent-failure catalogue. Where their material
 touches mine — and it does, at every EMPTY cell in §5.3 — I have cited rather than re-derived.
+
+
+---
+
+## Adversarial pass
+
+This chapter was attacked by a structurally read-only `valoria-critic` (Read/Grep/Glob only), which
+opened 64 locators across this chapter and Chapter 4 — **55 exact (86%)**, this chapter scoring ~82%.
+**Seven corrections apply to this chapter, two of which change a conclusion**, including a downgrade
+of the `roll_pool` **S** severity from HIGHEST to HIGH-latent. They are recorded in
+`09_adversarial_pass.md`, together with what survived the attack.

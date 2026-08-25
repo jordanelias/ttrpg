@@ -16,7 +16,7 @@ Valoria has four working resolution engines and no populated world to run them o
 object — a persistent named person instantiated at world-gen — is the largest connected cause of the
 disconnected substrate. That absence is not schedule state; it is a considered, documented, reviewed
 disposition, reclassified into permanence and held there by two guards. Its stated blocker is
-answerable today from 46 authored `status: canonical` records by a manoeuvre the tree has already
+answerable today from 35 authored `status: canonical` records (of 46 total — **11 are `status: proposed`**) by a manoeuvre the tree has already
 performed once.
 
 That is the thesis. On its own it is nearly vacuous — *"an unfinished game is unfinished"* is a
@@ -261,7 +261,7 @@ A `populate_from_registry` would read authored records and register them. There 
 must not be one. Adding a draw to it — randomising which of the 46 load, or jittering their stats —
 would be the **N-inverse**: apparatus added to a mechanism that does not need it, buying variance
 Valoria has an entire generator for, and destroying the one property that makes the manoeuvre
-citable rather than fabricated (every record has `status: canonical` and a `source`). The correct
+citable rather than fabricated (35 of 46 records carry `status: canonical` and every record carries a `source`). The correct
 verdict here is a refusal to issue one.
 
 **`_emergency_council_parties`' derived contest — a rolling engine whose ENGINE is sound and whose
@@ -387,7 +387,7 @@ unchanged.
 ### R2 — Write `populate_from_registry`, modelled line-for-line on `populate_from_geography`.
 **Changes:** `systems/settlements/sim/registry.py` gains a sibling loader — or, better, a new
 `systems/world/sim/npc_loader.py::populate_from_registry(world, path=None)` — reading
-`references/npc_registry.yaml`'s 46 `status: canonical` records into `world.npcs` keyed by
+`references/npc_registry.yaml`'s 35 `status: canonical` records into `world.npcs` keyed by
 `territory`, and setting `Settlement.npc_ids` and `Settlement.governor_id` where a record's `role`
 names a governorship. Called from `engine/autoload/game_state.py::create_world` alongside
 `populate_from_geography`.
@@ -517,3 +517,114 @@ file says so at `:8`.
   `world-npcs`, but it is not the same case: knot formation genuinely needs a rule nobody has
   specified, while `world.npcs` needs a loader whose data already exists. Bundling them let the
   harder one's justification carry the easier one. Untangling knots is not this chapter's work.
+
+
+---
+
+## Adversarial pass — corrections applied to this chapter
+
+*Per CLAUDE.md §0 the adversarial pass is a STAGE, not a deliverable: its output is edits to the thing
+under review. A structurally read-only `valoria-critic` (Read/Grep/Glob only) attacked this chapter
+against the tree and opened 30 locators — **25 exact, 2 marginal, 3 wrong, 2 refuted by the file they
+cite**, ~83% clean. The substantive corrections are folded into the text above; the five that change a
+conclusion are recorded here, because a chapter that quietly absorbed them would be claiming a
+cleanliness it did not have.*
+
+**1. The registry is 35 canonical, not 46 — and the difference is the whole justification.**
+`references/npc_registry.yaml` carries **35 `status: canonical`** records and **11 `status: proposed`**
+(`:820, :837, :852, :867, :883, :897, :912, :927, :942, :957, :972`). This chapter's loader
+recommendation rests on the claim that loading authored records *fabricates nothing* — the exact value
+OI-05's deferral protects (`engine/mc_v18.py:196-200`). **Loading the 11 `proposed` records would be
+that fabrication.** The loader must therefore filter on `status == 'canonical'` and **raise** on any
+other value: registering a `proposed` record is the failure mode, and a silent skip is the
+second-worst.
+
+**2. Territory keying is the loader's first real problem, not a detail.** `world.npcs` is
+`dict[territory_id, list[NPC]]` (`engine/autoload/game_state.py:277`). Only **6** canonical records
+carry a non-null `territory`, and every one is free text rather than the bare id the store is keyed
+on: `'T15 (Southernmost)'`, `'T16 (Schoenland)'`, `'T1 (Valorsplatz)'`, `'T9 (Himmelenger)'`. The
+other 29 must land somewhere principled — a null-territory bucket, or a faction-keyed store — and that
+is a design call this chapter does not make. `Settlement.npc_ids` cannot be set from this data at all:
+the registry has no settlement-level referent, only province-grain territory strings.
+
+> One convergence worth noting, since it arrived from two directions: the single canonical officer
+> bound to **T16 (Schoenland)** is bound to the one territory missing as a key from the settlement
+> adjacency graph (`01_verified_defects.md` D1). The officer the loader would place has nowhere to
+> stand.
+
+**3. `Key.causes` has no production reader — this chapter's Class-(a) claim is withdrawn.** The four
+"consumers" named above (corroboration independence, case-board known-unknowns, evidence quality,
+`Holding.independent_support`) **do not exist in Python**: greps for `independent_support`,
+`known_unknown` and `evidence_quality` return zero hits, and `corroboration` returns only an unrelated
+social-contest referent. The only non-test reader of `.causes` is `KeyLog`'s own invariant validator
+(`engine/substrate/keys.py:385`), which checks a cited id is already logged and consumes nothing;
+`:166` is serialization. **So `Key.causes` is Class (c), not Class (a)** — an honestly-written field
+with no reader, the same writer-gap topology as the rest of this chapter with the arrows reversed.
+Nothing in this chapter qualifies as Class (a).
+> This is the error this analysis keeps making, made once more and caught once more: a shared *word*
+> read as a shared *mechanism*. Four consumers exist in design prose; citing them as consumers is
+> prose-as-mechanism under §0.05.
+
+**4. Discriminator 3 is one verified instance, not a measured class.** The obstacle-derivation
+instance stands. The octagon damage partition does **not**: `OCTAGON_DMG_MULT` is live at
+`systems/mass_battle/sim/config.py:210`, `PC_OCTAGON_DMG` defaults **ON** at `:211`, it executes at
+`orchestration.py:757, 1127-1131, 1233`, and it is golden-pinned ON at
+`tests/valoria/test_mass_battle_byte_exact.py:77-80`. The third instance ("Ruling B at
+`operations.py:48-50`") does not exist — those lines are live TN constants and `Ruling B` appears
+nowhere in any `operations.py`. **One instance is an anecdote, not a standing class**, so
+Discriminator 3 does not carry the thesis; per this chapter's own rule, Discriminators 1 and 2 do.
+
+**5. The re-pin cost was understated by roughly 2.5×.** Because the loader is called from
+`create_world`, every seeded world inherits the stream shift — not just the 8-campaign oracle. The
+pinned constants at risk are **at least ten across four files**: `test_f7_smoke_oracle.py:267/273/274/275`,
+`test_mc_v18_regression.py:98/99/101`, `test_echo_transport.py:45`, and
+`test_parliamentary_bridge.py:177-178` — **the last of which pins a KeyLog content hash, the same
+artifact `tools/m1_acceptance.py` row 2 reads.** `test_f7_smoke_oracle.py:334`'s `insurgencies == 0`
+is additionally at risk of tripping. This *strengthens* the R1→R2 ordering argument: the RNG substream
+removes all of it, and without R1 this is a ten-constant re-record down the uncontrolled re-pin path
+CLAUDE.md §7 names.
+
+**6. A third guard exists, and its sibling shows the instrument that would have worked.**
+`engine/tests/test_world_population.py:152` asserts the same `npcs_generated == 0` counter, and its
+docstring at `:143` says it mirrors the f7 oracle. So **three** guards pin the counter, not two. The
+sharper fact is next to it: the knots half is guarded on **state** —
+`r.final_state.get('knots', {}) == {}` at `:163` — and `serialize_world` emits `'npcs'` under the
+identical pattern (`game_state.py:392-394`). Both halves were reclassified in the same wave under the
+same header; one got a state guard, the other a call-count proxy. **That asymmetry, not the
+reclassification, is what let the population be guarded without being guarded.**
+
+**7. Two claims withdrawn as over-reach.** The `hidden_allegiance` defect is *not* an instance of
+§0.1 pt 1's read/write asymmetry (that rule is about a getter diverging from its setters; this is a
+computed local never passed to the constructor), and the `_CELL_OWNED` guard proposed for it **cannot
+fire**: `test_morale_write_sweep.py` walks seven hardcoded files under `systems/mass_battle/sim`
+(`:32-33, :137-145`) and its regex matches dotted attribute writes only (`:222-223`). A key there
+would pass vacuously forever — which is the failure that file's own `:191-205` note records, having
+already litigated this exact move. The falsifier that works is behavioural: once `generate_npc` has a
+call site, assert that some NPC with `deviation_roll >= 5` carries a non-None `hidden_allegiance`
+across a seeded batch. Its NERS filing is corrected too — this is a correctness bug in the modal path,
+not an **R** failure; **R** is behaviour at the extremes, and filing it there borrows the framework's
+authority for something the framework does not measure.
+
+**8. Two invocation/exec claims qualified.** "400 invocations per seeded golden batch" is an **upper
+bound**, not a measurement — `engine/mc_v18.py:268-270` breaks early on a victory condition, so the
+true count is unknown without instrumenting it, and an uncontrolled number is exactly what §0.1 pt 4
+forbids. And `PI_RUNAWAY_SUSTAINED` appears in **zero** `.py` files (its only tree occurrence is one
+line of `systems/_architecture/_identifier_census.yaml`); Π's calibration is Chapter 4's lane and the
+reference is withdrawn from here.
+
+### What the critic could not break
+The mechanism behind this chapter's headline finding survived in full, statically: `npcs_generated`
+reads `world.npc_counter` (`mc_v18.py:100, 307`), which is incremented **only** in `_next_npc_id`
+(`npe.py:116-122`), called **only** from `generate_npc` (`:335`) — so a loader constructing `NPC(...)`
+directly leaves all three guards green. `world.npcs` has exactly three consumers tree-wide, and only
+`simulate_npc_actions` has behaviour, drawing `rng.randint(1, 6)` from `world.rng` (`npe.py:361, 385`)
+under an unconditional per-season call from `accounting.py:139`. The critic found **no fourth
+channel** and could construct no alternative cause for the observed golden move — while noting
+correctly that it could not re-run the probe, so the specific seed-42 result rests on this chapter's
+execution and not on its own. One precision accepted: the draw is at `npe.py:385`; `accounting.py:139`
+is the call site.
+
+And the discriminator this chapter rests on was confirmed as its best insight: **settlements have no
+per-season RNG-drawing consumer and `world.npcs` does**, which is why `populate_from_geography` was
+free and this loader is not — independently corroborated by `test_world_population.py:93-104`, which
+asserts `w.rng.getstate()` is unchanged across the settlements load.

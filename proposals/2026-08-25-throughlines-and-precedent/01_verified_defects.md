@@ -28,12 +28,31 @@ in the geography (`:214`), with an explicit coastal edge `{from: T1, to: T16, ty
 republic whose only connection is the coastal link, i.e. the territory whose connectivity is
 special-cased. A one-line fix; the geography already states the correct edge.
 
-## D2 — `Standing`'s range was ratified 0–10 on 2026-07-08 and never executed
-Full detail in the orchestrator spine report. `ED-SC-0014` (`references/id_reservations_history.md:73`):
-*"Standing range collision ratified (BG faction track 0-10 …); **execution pending**."*
-Code says 0–10 (`systems/social_contest/sim/contest/primitives.py:127`); the canonical officer ladder
-head says 0–7 with gates at Std 4/6/7 (`systems/factions/faction_politics_v30.md:6,1141`). Under
-§0.05 the code wins, so the entire published ladder is specified against a nonexistent scale.
+## ⚠ D2 — RETRACTED AND RE-ADJUDICATED TWICE. Do not cite the text below.
+
+*This section originally read "`Standing`'s range was ratified 0–10 on 2026-07-08 and never executed
+… the entire published ladder is specified against a nonexistent scale." It was retracted, then the
+retraction was itself partly overturned. The full sequence is in `03_method_and_corrections.md`
+Corrections 1 and 9; the settled position is R1 in `02_ruled_but_unexecuted.md`.*
+
+**What is true.** `registers/editorial_ledger_sc.jsonl:15` (the ledger entry — every earlier pass
+quoted the one-line summary at `references/id_reservations_history.md:73` instead) says **both**:
+the **BG faction track's range IS RATIFIED at 0–10** per `references/glossary.md:138`, *and* the
+homonym is to be **scope-tagged apart**. Execution was deferred and never happened.
+
+**What was wrong.** (a) The original claim attached that ruling to the **officer rank ladder** (0–7,
+prose) — a third mechanism the ruling does not address. (b) Its code evidence,
+`systems/social_contest/sim/contest/primitives.py:127`, is the **contest ethos float** (`class
+Standing: LO, HI, START = 0.0, 10.0, 5.0` at `:31-47`, with `build()`/`strip()`), not a rank ladder —
+and `:127` is not even the class. That is a vocabulary collision promoted to a mechanism claim, by
+the document warning against exactly that. (c) The retraction then over-corrected, denying that any
+range had been ratified.
+
+**The live defect that survives all of it** is narrower and real: `Faction.standing` is an unbounded
+`int` (`engine/autoload/game_state.py:129`) written by ten bare `+=`/`-=` sites and read into a
+rolled pool at `systems/factions/sim/crown_initiative.py:81`, against a range ratified fourteen
+months of sessions ago. And `systems/overview/clock_registry_v30.md:53`'s `| Standing | 0–5 |` is not
+a rival mechanism's range — it is **the error the ruling named for correction**, still uncorrected.
 
 ## D3 — `hidden_allegiance` is computed and then dropped (a write that never lands)
 `systems/world/sim/npe.py:327` computes `hidden_allegiance = rng.choice(other)` as one of five
@@ -50,12 +69,17 @@ executing code models intra-faction divergence"; this is *why* — not absence, 
 ## D4 — the empty world is a guarded invariant, not an oversight
 `engine/tests/test_pipeline_reach.py:625-628` holds `test_world_npcs_populated_after_a_seeded_campaign`
 at `@pytest.mark.xfail(strict=True)`, section-headed *"permanently xfail, not 'until a later wave'"*.
-`engine/tests/test_f7_smoke_oracle.py:335` asserts `npcs == 0`. `strict=True` means populating the
+`engine/tests/test_f7_smoke_oracle.py:335` asserts `npcs == 0`. ⚠ **There is a THIRD guard, missed by
+every document in this analysis until the adversarial pass:**
+`engine/tests/test_world_population.py:152` asserts the same counter, and its docstring at `:143` says
+it mirrors the f7 oracle. Its message already couples the change to the golden — *"if this is an
+intentional wire-up, update this test AND test_f7_smoke_oracle.py's golden together"* — which is the
+coupling this analysis reports discovering. Any loader commit must rewrite all three. `strict=True` means populating the
 world **breaks the suite**. Any proposal to populate must re-pin both in the same commit — and that
 re-pin is the uncontrolled golden-regeneration path CLAUDE.md §7 flags as unguarded, so it must be
 called out rather than performed quietly.
 
-## D5 — `references/npc_registry.yaml`: 46 canonical officeholders, zero runtime loaders
+## D5 — `references/npc_registry.yaml`: 46 officeholders (**35 canonical**, 11 `proposed`), zero runtime loaders
 Only `.py` mention is `tests/valoria/test_references_yaml_parse.py`, which asserts it parses. The file
 *"was unparseable for the whole of its visible git history and NOTHING NOTICED"* — and the syntax
 error was `faction: Church (dual-loyalty: Crown Inner Circle agent for Himlensendt)`, i.e. the single

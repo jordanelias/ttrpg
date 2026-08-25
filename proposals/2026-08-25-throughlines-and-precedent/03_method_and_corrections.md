@@ -477,3 +477,202 @@ an in-memory patch.
 
 Twice, then, in the same chapter's review: I overstated a cost and understated a risk, and both were
 settled by someone measuring instead of reading.
+
+---
+
+# CORRECTION 8 — "46 canonical records" is 35, and the other 11 are the fabrication
+
+*Caught by the `valoria-critic` antagonist pass on Chapter 1. Verified.*
+
+I wrote, in the front matter, the pull-request body and three places in Chapter 1, that
+`references/npc_registry.yaml` holds **46 authored `status: canonical` records**. Parsed:
+
+```
+total records: 46
+status counts: {'canonical': 35, 'proposed': 11}
+```
+
+**Thirty-five canonical, eleven proposed.** And the eleven are not a rounding error — they are the
+whole argument. The loader recommendation rests on the claim that loading authored records
+*fabricates nothing*, which is precisely the value OI-05's deferral exists to protect
+(`engine/mc_v18.py:196-200`: *"Honest deferral, not fabrication"*). **Loading eleven unratified people
+into the world is that fabrication.** A reader following the recommendation as I first published it
+would have forfeited its only citable ground while believing they were honouring it.
+
+The corrected recommendation is stricter than the original and better for it: the loader must filter
+on `status == 'canonical'` and **raise** on any other value. Registering a `proposed` record is the
+failure mode; a silent skip is the second-worst, because it would make the count drift invisibly.
+
+## The second half, which is worse for the plan
+Only **6** of the 35 canonical records carry a non-null `territory`, and every one is free text rather
+than the bare id `world.npcs` is keyed on (`engine/autoload/game_state.py:277`):
+`'T15 (Southernmost)'`, `'T16 (Schoenland)'`, `'T1 (Valorsplatz)'`, `'T9 (Himmelenger)'`.
+
+So "load the registry into `world.npcs` keyed by territory" populates at most six slots, under keys
+that match nothing. The other 29 need a principled home, and choosing one is a design call this
+analysis does not make. `Settlement.npc_ids` cannot be filled from this data at all — the registry has
+no settlement-level referent, only province-grain strings.
+
+One convergence, arrived at from two directions and worth recording: the single canonical officer
+bound to **T16 (Schoenland)** is bound to the one territory **missing as a key from the settlement
+adjacency graph** (`01_verified_defects.md` D1). The officer the loader would place has nowhere to
+stand.
+
+## Why this is the most representative error of the eight
+Every previous correction was a claim that needed narrowing. This one is a claim that **inverted under
+inspection**: the artifact I put forward as the answer to a no-fabrication constraint turns out to
+contain, in a quarter of its rows, exactly the fabrication that constraint forbids. Nothing about the
+file's surface says so — `status` is one field among twenty, and a reader who greps for `role` gets 46
+every time.
+
+The general lesson, and it is the same one as Correction 7 in a different costume: **counting a file's
+rows is not reading its schema.** I verified that 46 records existed and that each had a `role`. I did
+not check what the records *claimed to be*.
+
+---
+
+# CORRECTION 9 — a correction to Correction 1: the `Standing` ruling DID ratify a range
+
+*Caught by the `valoria-critic` antagonist pass on Chapter 2, which opened the ledger entry itself
+rather than the one-line summary everyone before it had quoted. Verified.*
+
+This is the third pass over `Standing` and it is the one that lands. Recording the full sequence,
+because the sequence is the point:
+
+1. **The orchestrator claimed** ED-SC-0014 ratified Standing at 0–10 and left it unexecuted, and that
+   the officer ladder was therefore written against a nonexistent scale.
+2. **Correction 1 retracted that**, on the grounds that the ruling ordered the *homonym scope-tagged
+   apart* rather than unifying a range — and that three distinct mechanisms share the name.
+3. **Correction 1 was itself partly wrong.** Both the original claim and the retraction quoted the
+   **summary line** at `references/id_reservations_history.md:73`. Neither opened the ledger.
+
+`registers/editorial_ledger_sc.jsonl:15`, the primary source, says **both things**:
+
+> *"Standing range collision … same-name **0-10 (BG faction track)** vs **0-5 (contest kernel)** range
+> collision, plus a cross-scale homonym between the two … **RATIFIED: the BG faction track's range is
+> 0-10 per glossary (correct `references/clock_registry_v30.md`, which disagrees)**; rename or
+> scope-tag one homonym half so 'Standing' unambiguously resolves per scale; add as a 4th entry to
+> `name_collision_database.yaml` … Decision-ratified, **execution deferred**."*
+
+So a range **is** ratified — the BG faction track at **0–10**, per `references/glossary.md:138`
+(*"Reputation track. Range 0–10 … **No in-game benefit above 7; 10 is cosmetic maximum**"*) — **and**
+the scope-tag was ordered. Not either/or. Both.
+
+## What this changes, precisely
+- **`clock_registry_v30.md:53` — `| Standing | 0–5 |` — is not a competing mechanism's range. It is
+  the error the ruling explicitly named for correction**, and both my original claim and my retraction
+  re-published it as live evidence of a three-way collision.
+- **`Faction.standing` has a ratified range and no clamp.** That makes the unclamped-int finding
+  *stronger*, not weaker: it is not "nobody decided what this should be", it is "it was decided
+  fourteen months of sessions ago and nothing enforced it."
+- **`references/name_collision_database.yaml:142` still carries `Standing  # faction attribute (also
+  Key type — exempt)`** — the pre-ruling exemption the ledger said to replace with a real fourth
+  entry. Also unexecuted.
+- What remains genuinely open is narrow and is **not** a range question: which registry home the
+  clamp lives in. `references/descriptor_registry.yaml:285` lists `Standing` under
+  `not_descriptors: tracks:` — ratified in the same ED-IN-0029 docket — so promoting it to
+  `faction_stats` would overwrite a ratified classification. The tree's own precedent for a bounded
+  non-descriptor scalar is `category_b_scalars` (`:184-189`).
+
+## One live inconsistency this surfaced, and I am not ruling on it
+The ledger characterises the **contest kernel** as `0-5`. The code says `LO, HI = 0.0, 10.0`
+(`systems/social_contest/sim/contest/primitives.py:32`). One of those is stale. That is an SC-lane
+question, it is recorded here so the session executing the scope-tag is not ambushed by it, and this
+analysis does not decide it.
+
+## Why this correction is the most instructive of the nine
+Three passes, three different readings, and **every one before the last quoted a summary line instead
+of the record**. `id_reservations_history.md:73` is a faithful, well-written précis; it simply cannot
+carry the disjunction the full entry carries. My retraction was more careful than my claim and still
+wrong, because being more careful about the *same secondary source* is not the same as reading the
+primary one.
+
+> **The rule this earns: a ruling is read at the ledger, never at the index.** `CLAUDE.md §1` already
+> says all ledger files are authoritative and to read all of them. What it does not say — and what
+> cost three passes here — is that a summary of a ledger row is not a ledger row.
+
+And the process point, since this analysis argues the adversarial stage earns its cost: **the
+structurally independent reader caught this on the third pass, after two rounds of the producer being
+increasingly careful.** Care converged on the wrong answer twice. Opening a different file settled it
+in one step.
+
+---
+
+# CORRECTION 10 — the balance oracle exists, and this analysis said four times that it did not
+
+*Caught by the cross-chapter antagonist pass, which greppped for the file instead of trusting the
+governing document. Verified.*
+
+Chapters 2, 3, 5 and the front matter all state that the n≥100 balance oracle
+`engine/tests/test_f7_smoke_oracle.py:8` has demanded since it was written **does not exist**.
+Chapter 3 built a recommendation on it (*"one missing instrument with two customers … building it
+once"*).
+
+`tools/balance_oracle.py` is 9,838 bytes on disk, and its first line reads:
+
+> *"balance_oracle.py — **the n>=100 controlled balance comparison this repo has been missing.**"*
+
+It runs both arms in one process, defaults to 120 campaigns per arm, applies a two-proportion z, and
+exposes an arm-patching API. It has been **run three times as the control before a golden re-pin** —
+`test_f7_smoke_oracle.py:106` (n=120, 2026-08-21), `:137` (n=120 twice, pooled 240, 2026-08-22),
+`:218` (2026-08-23).
+
+## Where the error came from, and why it is the run's own failure one level up
+The claim was inherited, not invented: **CLAUDE.md §7 says *"there is still no n≥100 balance
+oracle"*, and `test_f7_smoke_oracle.py:8` says the same.** Both are stale. The same file that says at
+`:266` that the oracle does not exist reports three runs of it at `:106`, `:137` and `:218`.
+
+Five Fable lanes, an Opus audit, five Opus chapters and the orchestrator all repeated it, and **not
+one grepped for the filename.** This analysis's central methodological rule is that a claim must be
+verified against code rather than inherited from prose. The claim we inherited from prose, without
+checking, was a claim *about whether a piece of code exists*.
+
+## What actually survives, stated precisely
+The instrument exists and has three recorded uses. What does not exist is a **CI-gated standing**
+oracle — and the tool's own author argues deliberately against creating one
+(`tools/balance_oracle.py:11-13`): *"It is NOT a CI gate and must not become one — 240 campaigns take
+roughly 13 minutes, and **a gate that slow gets skipped, which is worse than a tool that gets run**."*
+
+## The consequence, which is the useful part and is favourable
+Several recommendations across this analysis hedged that a golden re-pin *"cannot honestly be called
+neutral, because no control exists"*. **That hedge is void.** The control exists, it is the documented
+procedure for exactly that re-pin, and it has been used for it three times. Those recommendations
+become concrete and cheap: **add an arm to `tools/balance_oracle.py` and run it before touching the
+golden.** Chapter 3's "build it once" is mostly already built — the residual is a K-S arm and the
+equivalence pairing, not the harness. And Chapter 5's row-8 guard specifying "CI-gated" contradicts
+the in-tree owner's stated refusal and must either engage it or be respecified as a pre-re-pin
+procedure with a recorded artifact.
+
+⚠ **Out of this analysis's lane but worth flagging to the IN lane:** CLAUDE.md §7 and
+`test_f7_smoke_oracle.py:8`/`:266` are stale against `tools/balance_oracle.py`, and that file
+contradicts itself internally. This analysis does not dispose of governing-document currency.
+
+---
+
+# CORRECTION 11 — incomplete propagation: the retractions did not reach every document
+
+*Caught by the cross-chapter antagonist pass, the only reader positioned to see it.*
+
+Three corrections were applied to some documents and missed in others, leaving one directory
+containing both a retraction and the claim it retracts:
+
+| Defect | Fixed in | Missed in |
+|---|---|---|
+| "golden-safe by construction" (Correction 4) | `01` banner, `02` R1, Chapter 1 | **`00_index.md`** — the document a reader opens first |
+| The `Standing` retraction (Correction 1) | `00_index.md`, `02` R1, Chapter 2 | **`01_verified_defects.md` D2**, published in full and unmarked |
+| TN blast radius 28 → 19 | `01_verified_defects.md` | **`00_index.md`** |
+
+All three are now fixed. But the failure mode is worth naming, because it is not the same as the
+other ten corrections: **nothing here was wrong when written.** Each was a correct edit applied to an
+incomplete set of targets. A retraction is only as good as its propagation, and propagation across
+nine cross-referencing documents has no instrument behind it — I did it by hand, from memory, three
+times, and missed a target each time.
+
+The fair characterisation, which the critic supplied and I accept: *this is incomplete propagation,
+not an absent process* — `01`'s D7 supersession banner and `02`'s R1 rewrite both landed correctly
+and cleanly. Two of four propagation paths closed properly.
+
+**The mechanism that would fix it** is the one this analysis keeps recommending for the game and did
+not apply to itself: a single owner. A retracted claim should live in exactly one place, with every
+other document citing it rather than restating it. Nine documents restating the same finding is nine
+places for a retraction to fail to land.
