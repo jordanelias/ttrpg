@@ -370,7 +370,21 @@ jobs:
     name: Sim Reference Regression
     runs-on: ubuntu-latest
     needs: syntax-check
-    timeout-minutes: 5
+    # RAISED 5 -> 20 (ED-IN-0198, 2026-08-25). THIS JOB HAD NEVER ONCE COMPLETED.
+    #
+    # `engine/tests` measured ~6m15s (375-383s across four runs, 2026-08-25), against a FIVE
+    # minute cap — so the job was killed mid-run every time, deterministically. GitHub reports a
+    # timeout kill as `cancelled`, not `failure`, and `All Gates Green` then fails on
+    # "not success". That is the whole of the mystery recorded in HANDOFF.md as
+    # "never confirmed green on a runner (fail-fast cancelled it every run)": it was never
+    # fail-fast, and no push was racing it. The suite simply could not fit.
+    #
+    # Textbook §0.1 point 5 pattern defect — correct when written, broken because something else
+    # changed. The `~20s` in the step comment below was true when this cap was set; the
+    # mass-battle port and the seeded campaign goldens grew the suite by two orders of magnitude
+    # and nothing re-derived the cap. 20 minutes is ~3x the measured runtime, still bounded, and
+    # under the 25 this workflow already allows lanchester-signature.
+    timeout-minutes: 20
     permissions:
       contents: read
     steps:
@@ -383,7 +397,11 @@ jobs:
       # Deterministic seeded oracle for the sim reference the Godot port validates
       # against (ED-1053). Before this, the reference had zero tests and never ran in
       # CI, so a degenerate-balance regression could land unflagged. Relocated from
-      # sim/tests/ to engine/tests/ in the sim/ hollow-out (ED-IN-0071 P4 cont.). ~20s.
+      # sim/tests/ to engine/tests/ in the sim/ hollow-out (ED-IN-0071 P4 cont.).
+      # RUNTIME: ~6m15s (measured 2026-08-25, four runs, 375-383s). The "~20s" that stood here
+      # was the pre-mass-battle-port figure and is what made a 5-minute cap look generous.
+      # Kept SERIAL deliberately: this suite pins seeded campaign goldens and key-log content
+      # hashes, so `-n auto` is not a free speedup here the way it is for tests/valoria.
       - run: python -m pytest engine/tests -q
 
   field-goldens:

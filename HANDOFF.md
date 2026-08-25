@@ -22,14 +22,22 @@ session to read second — kept directing work at a `main` that was already gree
 deleted, because the failure mode is the thing worth seeing: the tip commit fixed it and the
 continuity file never learned.
 
-⚠ **THE RUNNER CAVEAT IS STILL TRUE, AND ITS STATED CAUSE IS PROBABLY WRONG.** `engine/tests` has
-still never completed on a CI runner. The old text blamed "fail-fast cancelled it every run".
-Observed directly on PR #333, 2026-08-25: the job was cancelled ~5m into a **16-minute** cap, with
-no push from this session during the window and with `origin/main` unmoved, so neither the timeout
-nor `concurrency: cancel-in-progress` explains it. Every other job in the same run — including
-Golden Modes Byte-Exact — completed green. **Do not repeat the fail-fast explanation as fact.**
-The open question is what actually kills `sim-regression` around the 5-minute mark; re-running that
-single job in isolation is the obvious next probe and has not been done.
+✅ **THE RUNNER CAVEAT IS SOLVED, AND THE CAUSE WAS NOT FAIL-FAST.** `engine/tests` had never once
+completed on a CI runner, and the reason was mundane: **`sim-regression` carried
+`timeout-minutes: 5` while the suite takes ~6m15s** (375-383s, measured four times on 2026-08-25).
+The job was killed mid-run every time, deterministically. GitHub reports a timeout kill as
+`cancelled` rather than `failure`, and `All Gates Green` then fails on "not success" — which is how
+this got read as "fail-fast cancelled it every run" and stayed unexamined.
+
+It was never fail-fast, and no push was racing it: on PR #333 the cancellation reproduced three
+times, once with no push in the window and `origin/main` unmoved, always at ~5m15s. The 16-minute
+cap that made the timeout look impossible belongs to `unit-tests`, a different job.
+
+A §0.1 point 5 pattern defect — correct when written, broken because something else changed. The
+step's own comment said "~20s", true when the cap was set; the mass-battle port grew the suite by
+two orders of magnitude and nothing re-derived the cap. Raised to 20 minutes (ED-IN-0198), ~3x the
+measured runtime. **This means the campaign-level regression gate has been inert since the suite
+outgrew the cap — every merge in that window shipped without it.**
 
 **The master record is `registers/handoffs/HANDOFF_2026-08-24_SESSION.md`** — throughlines, warnings,
 loose ends, and the order to work in. Read it before anything else. Two executable plans sit beside
