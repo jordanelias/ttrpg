@@ -3,6 +3,11 @@
   "schema_version": 2,
   "source": "references/module_contracts.yaml#composition_roles",
   "roles": {
+    "accounting": {
+      "target": "systems.overview.sim.accounting:run_accounting",
+      "kind": "callable",
+      "needed_by": "engine/autoload/engine_clock.py \u2014 the ACCOUNTING_BOUNDARY phase body of run_tick"
+    },
     "contest_side.a": {
       "target": "systems.social_contest.sim.contest:A",
       "kind": "value",
@@ -66,7 +71,7 @@
     "season_driver": {
       "target": "systems.overview.sim.season:run_season",
       "kind": "callable",
-      "needed_by": "engine/mc_v18.py \u2014 composes advance_season -> action_callback -> run_accounting"
+      "needed_by": "engine/mc_v18.py \u2014 the per-season driver it calls. The composition itself is engine/autoload/engine_clock.py:run_tick as of ED-IN-0199; this row names the SEAM, not the owner."
     },
     "snapshot_state.beliefs": {
       "target": "systems.characters.sim.beliefs:Belief",

@@ -576,8 +576,9 @@ def test_direction6b_accord_echo_leg_receives_a_genuine_in_log_causal_id():
 
 def test_direction7a_temporal_cadence_fires():
     """directional_coverage_v1.md #7 — cadence half, PARTIALLY WIRED. TickScheduler's
-    accounting_boundary/next_tick cadence primitives (used live by mc_v18's per-season boundary)
-    are directly callable and actually advance state."""
+    accounting_boundary/next_tick cadence primitives (called live by
+    engine/autoload/engine_clock.py:run_tick at the tick's phase seam — they sat in mc_v18's
+    action callback until ED-IN-0199) are directly callable and actually advance state."""
     world = _world_with_scheduler(seed=5)
     sched = world.echo_scheduler
     before_season = sched.log._season_counters.copy() if hasattr(sched.log, "_season_counters") else None

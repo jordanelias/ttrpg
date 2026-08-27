@@ -54,7 +54,9 @@ first-draft.
 
 ## O.1 The clock model: season is the tick
 
-There is no sub-season fixed timestep today. The season is the tick. `run_season` composes exactly three steps in order (season.py:57-72): SEASON_TICK → ACTION → ACCOUNTING_BOUNDARY, the last itself a fixed five-step composition (accounting.py:37-79). engine_clock owns this composition and is the only module that may advance the season counter.
+There is no sub-season fixed timestep today. The season is the tick. `engine_clock.run_tick` composes exactly three steps in order (`engine/autoload/engine_clock.py:95-105`): SEASON_TICK → ACTION → ACCOUNTING_BOUNDARY, the last itself a fixed six-step composition (`systems/overview/sim/accounting.py:96-143`). engine_clock owns this composition and is the only module that may advance the season counter.
+
+⚠ **CORRECTED 2026-08-27 (ED-IN-0199), and the correction is the point of the sentence.** This line read "`run_season` composes exactly three steps in order (season.py:57-72)" — naming a `systems/`-lane function as the owner of the composition that the very next clause assigns to engine_clock. That contradiction was not cosmetic: the module this section names **did not exist**, `systems/overview/sim/season.py:run_season` held the ordering, and the scheduler's two phase calls consequently sat at the tail of `mc_v18._faction_actions_callback` — inside the ACTION phase's own body, so the boundary was crossed before accounting was reached. `engine_clock` now exists and `run_season` is an adapter over it that defines no ordering. The "five-step" count was also stale: `run_accounting` has six steps, the sixth being the report-only province-Accord drift probe.
 
 | Named phase | Registry phase id | What it does | Code binding |
 |---|---|---|---|

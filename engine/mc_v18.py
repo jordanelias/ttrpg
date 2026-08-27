@@ -159,18 +159,18 @@ def _faction_actions_callback(world):
         if _pr.get("resolved"):
             world.scenes_resolved += 1
 
-    # ACTION->ACCOUNTING boundary (ED-IN-0028, OF-7): any echo Keys emitted during the scene
-    # phase logged LIVE; their deferred faction/territory applies land here as accounting
-    # begins, then the per-tick emission counter resets for next season. No-op when
-    # ECHO_TRANSPORT is off (no scheduler) or while all scenes defer (empty queue).
-    _sched = getattr(world, "echo_scheduler", None)
-    if _sched is not None:
-        _sched.accounting_boundary()
-        _sched.next_tick()
+    # ACTION->ACCOUNTING boundary: MOVED OUT 2026-08-27 (ED-IN-0199) to
+    # engine/autoload/engine_clock.py:run_tick. `accounting_boundary()` and `next_tick()` were
+    # called here, at the tail of the ACTION phase's own body — so the boundary was crossed
+    # before accounting was reached, and `next_tick()` put the scheduler back in _PHASE_ACTION
+    # for the whole of accounting. Output-identical today (accounting emits no Keys), and the
+    # move is what stops the first accounting-phase emitter from inheriting a one-tick deferral
+    # off-by-one. See that module's docstring for the full statement and the control.
 
     # OI-05/OI-07 (ED-IN-0091 plan §3 Wave 2 items 3-4) — the Accounting-adjacent point: this is
-    # the last thing that runs in the season's action_callback before season.run_season's Step 3
-    # (systems/overview/sim/season.py) hands off to accounting.run_accounting.
+    # the last thing that runs in the season's action_callback before engine_clock.run_tick
+    # crosses the ACCOUNTING_BOUNDARY and calls accounting.run_accounting (ED-IN-0199 moved
+    # that seam here from season.py, where an earlier version of this comment pointed).
     #
     # OI-05 half already reachable, no change needed here: accounting.run_accounting already
     # calls systems.world.sim.npe.simulate_npc_actions every season (systems/overview/sim/
@@ -269,7 +269,10 @@ def run_campaign(seed: int | None = None, max_seasons: int = 50,
         if world.winner:
             break
 
-        # season.run_season composes: advance_season → action_callback → run_accounting
+        # engine_clock.run_tick composes: advance_season → action_callback →
+        # accounting_boundary → run_accounting → next_tick (ED-IN-0199). The
+        # `season_driver` role still resolves to season.run_season, which is now the
+        # adapter over it — the role name is the seam, not the owner.
         # [canonical: designs/architecture/campaign_architecture_v30.md;
         #  Deferred Migration Batch 2026-05-20 — replaces inline composition]
         composition.require('season_driver')(world, action_callback=_faction_actions_callback)
