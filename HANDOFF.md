@@ -9,7 +9,93 @@ experiment it was the instrument for. Read this file, and your lane's, yourself.
 This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint machinery
 (which depended on the retired GitHub-API harness and token budgets).
 
-## ⚠ CURRENT — 2026-08-25 (read this first)
+## ⚠ CURRENT — 2026-08-27 (read this first)
+
+**`main` IS GREEN, and so is PR #334's head.** Measured 2026-08-27 at `d7578a6`:
+`pytest tests/valoria -q -n auto` **1772 passed, 23 skipped, 15 xfailed**; `pytest engine/tests`
+**1030 passed, 5 xfailed**; contest kernel suite **389/389**; `tools/valoria_local.py` all gates
+passed; CI **All Gates Green**, including `Sim Reference Regression` — the campaign-gate that
+ED-IN-0198 un-inerted, now completing in ~6m30s under its raised 20-minute cap.
+
+### What landed 2026-08-27, and the one thing that moved output
+
+Four commits. **Three were byte-identical and that was the point of each.** The evidence trail is
+`registers/session_records/2026-08-27/` — two campaign captures and what they measure — and the
+instrument is `tools/campaign_output_probe.py`, promoted out of `/tmp` where it had spent the
+session licensing three commits.
+
+| ED | what | output |
+|---|---|---|
+| **ED-IN-0199** | `engine/autoload/engine_clock.py` exists. `propagation_spec_v1.md` §O.1 has said since 2026-07-02 that engine_clock owns the tick composition; the module did not exist, `season.run_season` held the ordering, and the scheduler's two phase calls sat *inside* the ACTION phase's body. `next_tick()` left the scheduler in `_PHASE_ACTION` for all of accounting, and `keys.py` defers an `apply` on exactly that condition. | **identical** |
+| **ED-SC-0031** | The ninth degree ladder — `sigma_leverage.degree`, the one the 2026-08-12 census missed — migrates to `dice_engine.degree_from_net`. | **MOVED** |
+| **ED-SC-0032** | The injection seam: `dice_engine.BandExtension`. The contest's de-saturation rule leaves the engine for the subsystem that owns it and is injected by its wrapper. | **identical** |
+| **ED-PC-0041** | The 40% covert-plate-killer ceiling is **abolished** (Jordan: *"stop arbitrary fiat capping"*). No replacement threshold. | n/a (test-only) |
+
+**The ED-SC-0031 move is not a balance result.** Six of eight campaigns change winner at n=8;
+`tools/balance_oracle.py` at n=120 per arm shows max |z| = 0.80 against a 1.96 threshold. Six
+goldens were re-pinned on that basis. Full table in the session record.
+
+### THE HIGHEST-VALUE WARNING FROM THIS SESSION
+
+**ED-SC-0032 broke `tools/balance_oracle.py` and nothing caught it.** Moving `degree` out of the
+engine left the oracle's arm reading `SL.degree`, so the default invocation raised AttributeError.
+That is the instrument CLAUDE.md §7 names as *the* campaign-level balance control, and the one
+whose n=120 run had licensed the previous commit's six golden re-pins — disabled by that commit's
+own successor, found by an adversarial pass rather than by anything automated.
+
+**The cause generalises and is the thing to carry forward: a deliberately-uncalled instrument has
+no freshness relationship to the code it measures.** The oracle is not a CI gate on purpose (240
+campaigns, ~13 min) and that is still right — but "not a gate" was silently doing the work of "not
+tested at all". `tests/valoria/test_balance_oracle_arms.py` now constructs both arms and asserts
+they band differently; it runs zero campaigns and costs milliseconds. **If you add another
+deliberately-uncalled instrument, add its liveness test in the same commit.**
+
+### Cross-lane items now OPEN
+
+- **[PC — the big one] Derive Ob from the DEFENDER.** Jordan, 2026-08-15: Ob is *"their
+  corresponding score/2 plus whatever specific modifiers exist for them in that instance"*, and
+  `DECISIVE_OB` is dead. The sequence is settled and is the opposite of the obvious one: **derive
+  Ob first, THEN combat's bands migrate.** This is genuine new mechanism, it is the last declared
+  HOLD in `tests/valoria/test_degree_ladder_single_owner.py`, and it is what makes guandao reach
+  47.5% on its own merits. The fiat ceiling that stood in its way is gone. See `HANDOFF_PC.md`.
+- **[IN] §4.1's drain topology is NOT implemented.** `engine_clock.run_tick` calls
+  `run_accounting` RAW — the shape `propagation_spec_v1.md` §4.1 explicitly names as its rejected
+  earlier draft ("that was unbounded"). Bounded today only because accounting emits no Keys.
+  Closing it is Phase E and is blocked on **R-1** (the D.6 double-count) and **R-4** (ORD-3
+  observer ordering). See `HANDOFF_IN.md`.
+- **[IN] ~38 flow-skeleton `file:line` anchors were re-based +5** when `module_contracts.yaml`
+  grew a composition role. That preserves each anchor's existing offset and nothing more. An
+  adversarial sample of 23 found **12 already stale** by larger, non-uniform offsets. **Nothing in
+  CI validates a `.md` anchor's CONTENT** — `test_flow_skeletons` checks only symbol proximity.
+  Repairing them is bounded but separate; a partial repair would present the unsampled remainder
+  as verified.
+- **[FA/WR] The parliamentary bridge's shut-out set has taken three values** under three unrelated
+  mechanic changes (`{'Hafenmark'}` → `set()` → `{'Church'}`). That is evidence the property
+  "the spine can eliminate a faction" tracks the seed, not the spine. Only ever measured at
+  n=8/seed-42. Settling it needs the n≥100 arm.
+- **[SC] The seam has exactly one consumer.** `PoolDesaturation` is the only `BandExtension` in
+  the tree, so its contract ("veto the top band, nothing else") is proven by hostile probes rather
+  than by a second real user. Expect that power to be what comes under pressure when a second
+  subsystem wants an extension; widen it by ruling and ledger entry, never by convenience.
+
+### Rulings received 2026-08-27, all executed or accepted
+
+Recorded verbatim in the `RULINGS` block at `tests/valoria/test_degree_ladder_single_owner.py`,
+which is now the single home for the degree-ladder rulings — it exists because ED-SC-0032 nearly
+deleted its own authority (removing the HELD entry that was the *only* in-tree record of the
+ruling authorising its shape).
+
+1. *"so plan to resolve it then if you know what to do!"* → the injection seam. **Executed.**
+2. *"yes accept. if you don't have enough dice you don't have enough dice"* → a pool-2 contest can
+   never resolve Overwhelming. **Accepted, settled, not to be re-raised.**
+3. *"dude guandao not being able to hit 47.5% on its own merits is fucked up. stop arbitrary fiat
+   capping"* → the 40% ceiling. **Abolished**, and it **overrode a sequencing objection I had
+   raised** — recorded rather than dropped, because the objection was about convenience and the
+   ruling is about whether the thing should exist.
+
+---
+
+## Prior — 2026-08-25
 
 **`main` IS GREEN.** Measured 2026-08-25 at `571ae14`: `tests/valoria` **1723 passed, 23 skipped,
 15 xfailed, 0 failed**; `engine/tests` **2055 passed, 5 xfailed**. Both measured twice, by two
