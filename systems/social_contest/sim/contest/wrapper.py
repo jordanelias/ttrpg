@@ -24,6 +24,7 @@ from engine.substrate import stubwire
 
 from .contract import A, B, Adjudicator, Panel
 from .primitives import Stasis, Standing, Face, Dossier, EvidenceItem, TRACKERS, RETIRED_TRACKERS
+from .degree_extension import CONTEST_DEGREE_EXTENSION
 from .resolver import (Bout, Contestant, Venue, run, PersuasionTrack, TallyAtClose,
                        ThresholdRace, ProofBar, GraceThreshold, VoteAtClose)
 from .modes import (ContestedMode, PROCEEDINGS, CANONICAL_PROCEEDINGS, CANONICAL_ADJUDICATORS,
@@ -61,7 +62,8 @@ class Contest:
        (game, proceeding, adjudicator type + its primary attribute, derived resistance, track start).
        RESOLVES NOTHING — resolve_contest(contest) runs it."""
     def __init__(self, *, side_a, side_b, venue, adjudicator, game, proceeding,
-                 adjudicator_type, primary_attribute, resistance, track_start, stakes=None):
+                 adjudicator_type, primary_attribute, resistance, track_start, stakes=None,
+                 degree_extension=CONTEST_DEGREE_EXTENSION):
         self.side_a = side_a
         self.side_b = side_b
         self.venue = venue
@@ -77,6 +79,13 @@ class Contest:
                                                        # the reserved ED stub (contest_rebuild, ED-1055..1079).
         self.track_start = track_start                # §2 Step 4 Persuasion-Track start
         self.stakes = stakes or {}
+        # ED-SC-0032: the ladder extension this contest resolves under. An ADAPTER-side choice —
+        # `resolve_contest` reads it and injects it into the Bout — so substituting a policy is a
+        # CONSTRUCTOR ARGUMENT, not an edit to the engine or the kernel. It was a hardcoded
+        # attribute for the length of one commit, which an adversarial pass called correctly: an
+        # affordance you reach by poking a returned object is not an injection point. `None` here
+        # resolves on the owner's unmodified ladder.
+        self.degree_extension = degree_extension
 
 
 def _as_contestant(side):
@@ -99,7 +108,7 @@ def _as_contestant(side):
 
 
 def build_contest(side_a, side_b, *, venue, adjudicator=None, stakes=None, world=None,
-                  use_tracker=None):
+                  use_tracker=None, degree_extension=CONTEST_DEGREE_EXTENSION):
     """Faction/side → Contest ADAPTER (the wrapper's adapter duty). `venue` names a canonical proceeding
        (a key of modes.PROCEEDINGS, e.g. 'formal_contest') OR is a prebuilt Venue. `adjudicator` names a
        canonical adjudicator type (a key of CANONICAL_ADJUDICATORS) OR is a prebuilt Adjudicator/Panel OR
@@ -183,7 +192,8 @@ def build_contest(side_a, side_b, *, venue, adjudicator=None, stakes=None, world
     return Contest(side_a=ca, side_b=cb, venue=the_venue, adjudicator=the_adj,
                    game="agon", proceeding=proc_name, adjudicator_type=adj_type,
                    primary_attribute=primary, resistance=resistance,
-                   track_start=track_start, stakes=stakes)
+                   track_start=track_start, stakes=stakes,
+                   degree_extension=degree_extension)
 
 
 # ─── GAMES ROUTER TABLE ───────────────────────────────────────────────────────────────────────────
@@ -194,7 +204,16 @@ def _resolve_agon(contest, *, policy_a, policy_b, record=False):
     """Route game='agon' to the canonical agôn path: the promoted-kernel Bout on the proceeding's Venue
        + Adjudicator, resolving on the Persuasion-Track banding (or exchange-majority for untracked
        proceedings). Transparent pass-through — the outcome is computed by the kernel, not here."""
-    bout = Bout(contest.side_a, contest.side_b, contest.venue, contest.adjudicator, record=record)
+    # ED-SC-0032 — THE WRAPPER INJECTS THE ENGINE. Jordan, 2026-08-15: "if a system does require
+    # any modification or extension, then the wrapper needs to inject the engine in such a manner
+    # that it can be modified cleanly." Passed EXPLICITLY here rather than relied on as Bout's
+    # default: this line is the answer to "where does the contest's ladder modification come
+    # from", and a default alone would leave that answer inside the kernel. `contest`
+    # may carry its own — `build_contest` puts CONTEST_DEGREE_EXTENSION there — and a caller
+    # substituting a different policy, or None for the owner's unmodified ladder, does it by
+    # setting that attribute rather than by editing the engine.
+    bout = Bout(contest.side_a, contest.side_b, contest.venue, contest.adjudicator, record=record,
+                degree_extension=getattr(contest, 'degree_extension', CONTEST_DEGREE_EXTENSION))
     return bout.resolve(policy_a, policy_b), bout
 
 

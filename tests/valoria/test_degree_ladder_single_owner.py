@@ -132,10 +132,13 @@ def _combat_engine():
 
 
 def _contest_surface():
-    from engine.autoload import sigma_leverage
+    # MOVED 2026-08-27 (ED-SC-0032): this was `engine.autoload.sigma_leverage.degree`. The
+    # contest's pool-aware rule left the engine for the subsystem that owns it, and now reaches
+    # the ladder through `dice_engine.BandExtension` instead of post-filtering the owner's answer.
+    from systems.social_contest.sim.contest import degree_extension
     # Pool-less form: the contest kernel's unit-test contract. The pool-aware branch is a
     # different function of (net, ob, pool) and is not on this two-argument domain at all.
-    return lambda net, ob: sigma_leverage.degree(net, ob)
+    return lambda net, ob: degree_extension.degree(net, ob)
 
 
 def _dice_model_skill():
@@ -156,7 +159,7 @@ LADDERS = {
     # two-argument domain entirely (it needs `pool`), which is why enrolling the pool-less form
     # here is the whole claim and not a partial one. The extension's own contract is pinned by
     # engine/tests/test_sigma_leverage_parity.py::TestPoolAwareDegree.
-    'engine/autoload/sigma_leverage.py': _contest_surface,
+    'systems/social_contest/sim/contest/degree_extension.py': _contest_surface,
 }
 
 # ── THE RULINGS THIS FILE ENFORCES, kept verbatim ──────────────────────────────────────────────
@@ -176,26 +179,57 @@ RULINGS = {
         "obstacle without exceeding it is a Partial. Owner: engine/autoload/dice_engine.py's "
         "degree_from_net. Ruled out by name: Ob-scaled Overwhelming (net >= 2*Ob), the separate "
         "PP-232 net >= 3 floor, and the Ob-20 exception."),
+    '2026-08-27 — the small-pool consequence, ACCEPTED': (
+        "Under the owner's ladder a pool-2 contest can never resolve Overwhelming at all: it "
+        "would need net >= 5 from two dice, whose maximum is 4. Raised as a disclosed cost of "
+        "the one-ladder ruling; Jordan, verbatim: 'yes accept. if you don't have enough dice "
+        "you don't have enough dice.' SETTLED — do not reintroduce a small-pool carve-out, and "
+        "do not re-raise this as an open question."),
+    '2026-08-27 — no fiat outcome caps': (
+        "Jordan, verbatim: 'dude guandao not being able to hit 47.5% on its own merits is "
+        "fucked up. stop arbitrary fiat capping.' The 40% covert-plate-killer ceiling in "
+        "tests/valoria/test_combat_invariants.py is ABOLISHED (ED-PC-0041) and no replacement "
+        "threshold was invented — a differently-numbered cap is the same fiat. This ruling is "
+        "about the CLASS: an assertion that bounds how often an outcome may occur, rather than "
+        "measuring the mechanism that produces it, is not a guard. It also overrides the "
+        "sequencing objection raised against it (that abolishing the ceiling before combat's "
+        "ladder migrates 'deletes a guard and gains nothing'): the cap is illegitimate on its "
+        "own terms, independent of when guandao reaches 47.5%."),
     '2026-08-15 — scope, and how an extension may be built': (
         "Jordan, verbatim: 'systems should not need different degree bands. it should be "
         "consistent in application. if a system does require any modification or extension, then "
         "the wrapper needs to inject the engine in such a manner that it can be modified "
-        "cleanly.' ⚠ ED-SC-0031 satisfies the FIRST clause and not the second: sigma_leverage's "
-        "bands are now the owner's, but its de-saturation bar is a hard-coded post-filter inside "
-        "the subsystem, not an extension the wrapper injects into a parameterised engine. Do not "
-        "read that migration as having closed this ruling."),
+        "cleanly.' BOTH CLAUSES NOW EXECUTED. ED-SC-0031 did the first (the bands became the "
+        "owner's). ED-SC-0032 did the second: `dice_engine.BandExtension` is the seam, the "
+        "contest's de-saturation rule MOVED OUT of the engine to "
+        "`systems/social_contest/sim/contest/degree_extension.py`, and "
+        "`wrapper._resolve_agon` injects it. The demote-only constraint is STRUCTURAL now, not "
+        "a comment: `may_overwhelm` returns a bool consulted in one branch, so no extension can "
+        "promote a band or move a lower boundary whatever it wants to do."),
     '2026-08-15 — combat, and the sequence': (
         "Jordan, verbatim: 'DECISIVE_OB for combat is stupid as hell and is dead because Ob "
         "should be determined by your opponent more than anything.' The order is settled and is "
         "the opposite of the obvious one: derive Ob from the DEFENDER first (score/2 plus that "
         "instance's modifiers), THEN the owner's ladder applies. Migrating combat's bands against "
         "the fixed Ob first is wasted work."),
-    '2026-08-25 — the combat ceiling': (
-        "Jordan, verbatim: 'one degree ladder. guandao should be 47.5%, and 40% ceiling is to be "
-        "abolished.' The 40% ceiling is test_combat_invariants.py's covert-plate-killer bound. "
-        "⚠ NOT EXECUTED. The two halves are one ruling: guandao only reaches 47.5% AFTER combat's "
-        "ladder migrates, and that migration is gated on the Ob derivation above. Abolishing the "
-        "ceiling alone would delete a guard and gain nothing."),
+    '2026-08-25 — the combat ceiling, EXECUTED 2026-08-27': (
+        "Jordan, 2026-08-25, verbatim: 'one degree ladder. guandao should be 47.5%, and 40% "
+        "ceiling is to be abolished.' ⚠ THIS ENTRY READ 'NOT EXECUTED' UNTIL 2026-08-27 AND THAT "
+        "IS NOW WRONG — the 40% covert-plate-killer ceiling is ABOLISHED (ED-PC-0041). It also "
+        "carried a sequencing argument that Jordan OVERRODE on 2026-08-27 ('stop arbitrary fiat "
+        "capping'): the argument was that abolishing the ceiling before combat's ladder migrates "
+        "'deletes a guard and gains nothing', since guandao only reaches 47.5% after the "
+        "migration. The answer is that the cap is illegitimate on its own terms, independent of "
+        "when guandao gets there. WHAT REMAINS OPEN is the other half and only the other half: "
+        "combat's ladder still has not migrated, and per this same 2026-08-15 ruling the step "
+        "that comes FIRST is deriving Ob from the DEFENDER (score/2 plus that instance's "
+        "modifiers), which is new mechanism rather than a re-siting. That is the live PC-lane "
+        "item. ⚠ THE FAILURE THIS CORRECTION RECORDS: for the length of one commit this dict "
+        "held two entries contradicting each other about whether the ceiling existed — the "
+        "2026-08-27 row said ABOLISHED and this one still said NOT EXECUTED, forty lines apart. "
+        "Found by an adversarial pass, and it is verbatim the defect the comment at the bottom of "
+        "this file lectures about: a targeted string edit never forces anyone to re-read the rest "
+        "of the structure. Twice in two commits, in the same file."),
 }
 
 

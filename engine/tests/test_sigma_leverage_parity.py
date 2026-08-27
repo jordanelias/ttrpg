@@ -46,6 +46,10 @@ if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)
 
 from engine.autoload import sigma_leverage as SL  # noqa: E402
+# ED-SC-0032: `degree` and the de-saturation bar MOVED out of the engine into the subsystem
+# that owns them. This file still tests the sigma layer; the degree half now addresses the
+# contest package, and that relocation is itself the point of the ruling being executed.
+from systems.social_contest.sim.contest import degree_extension as CD  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Golden table — the parity oracle, committed as data.
@@ -214,8 +218,8 @@ def test_the_superseded_degree_rows_are_the_pre_ruling_ladder():
     The 47 moved cells are the ruling's own three boundary changes: `net == ob` Success -> Partial,
     `0 < net < ob` Partial -> Failure, and the retired pool-less `net >= 2*ob` Overwhelming bar.
     """
-    moved = [r for r in _PRE_RULING_DEGREE_ROWS if SL.degree(*r["args"]) != r["want"]]
-    kept = [r for r in _PRE_RULING_DEGREE_ROWS if SL.degree(*r["args"]) == r["want"]]
+    moved = [r for r in _PRE_RULING_DEGREE_ROWS if CD.degree(*r["args"]) != r["want"]]
+    kept = [r for r in _PRE_RULING_DEGREE_ROWS if CD.degree(*r["args"]) == r["want"]]
 
     # ⚠ THE SET, NOT THE COUNT. An earlier draft asserted `len(moved) == 47`, which is invariant
     # under any change that makes one kept row disagree while making one moved row agree — the
@@ -242,8 +246,8 @@ def test_the_superseded_degree_rows_are_the_pre_ruling_ladder():
     # Every moved row must move in a direction the ruling accounts for: the old ladder was more
     # generous at every one of its three changed boundaries, so no cell may band HIGHER now.
     for r in moved:
-        assert SL.degree(*r["args"]) < r["want"], (
-            f"degree{tuple(r['args'])} banded UP ({r['want']} -> {SL.degree(*r['args'])}); the "
+        assert CD.degree(*r["args"]) < r["want"], (
+            f"degree{tuple(r['args'])} banded UP ({r['want']} -> {CD.degree(*r['args'])}); the "
             "2026-08-14 ruling only ever tightened this surface"
         )
 
@@ -459,7 +463,7 @@ class TestPoolAwareDegree:
             ob = ob10 / 10.0
             for net4 in range(-20, 61):    # net -5.0 .. 15.0 in quarters
                 net = net4 / 4.0
-                assert SL.degree(net, ob) == DE.DEGREE_ORDINAL[DE.degree_from_net(net, ob)], (
+                assert CD.degree(net, ob) == DE.DEGREE_ORDINAL[DE.degree_from_net(net, ob)], (
                     f"sigma_leverage.degree({net}, {ob}) disagrees with the owner"
                 )
                 checked += 1
@@ -467,11 +471,11 @@ class TestPoolAwareDegree:
 
     def test_the_named_ruling_cells(self):
         """The three cells the 2026-08-14 ruling moved, pinned by value so the flip is explicit."""
-        assert SL.degree(3, 3) == 1      # margin 0 — met, not exceeded -> Partial (was 2)
-        assert SL.degree(2, 3) == 0      # margin -1 -> Failure (was 1, the old `net < ob` Partial)
-        assert SL.degree(6, 3) == 3      # margin 3 -> Overwhelming (unchanged)
-        assert SL.degree(0, 3) == 0
-        assert SL.degree(-2, 3) == 0
+        assert CD.degree(3, 3) == 1      # margin 0 — met, not exceeded -> Partial (was 2)
+        assert CD.degree(2, 3) == 0      # margin -1 -> Failure (was 1, the old `net < ob` Partial)
+        assert CD.degree(6, 3) == 3      # margin 3 -> Overwhelming (unchanged)
+        assert CD.degree(0, 3) == 0
+        assert CD.degree(-2, 3) == 0
 
     def test_the_extension_only_ever_demotes_the_top_band(self):
         """The contest extension's declared contract, asserted as a property over the domain.
@@ -484,8 +488,8 @@ class TestPoolAwareDegree:
         for pool in (1, 2, 4, 8, 12, 20, 30):
             for net4 in range(-20, 81):
                 net = net4 / 4.0
-                base = SL.degree(net, 2.0)
-                ext = SL.degree(net, 2.0, pool)
+                base = CD.degree(net, 2.0)
+                ext = CD.degree(net, 2.0, pool)
                 if ext != base:
                     assert base == 3 and ext == 2, (
                         f"pool={pool} net={net}: extension moved {base} -> {ext}; it may only "
@@ -513,9 +517,9 @@ class TestPoolAwareDegree:
         def p_overwhelming(pool, ob, with_ext):
             mean = SL.MU_PER_DIE * pool
             sd = SL.SD_PER_DIE * math.sqrt(pool)
-            bar = ob + SL._OVERWHELMING_MARGIN     # the OWNER's bar, read off the owner
+            bar = ob + CD.owner_overwhelming_margin()   # the OWNER's bar, read off the owner
             if with_ext:
-                bar = max(bar, SL.overwhelm_bar(pool))
+                bar = max(bar, CD.overwhelm_bar(pool))
             return 1.0 - SL._phi((bar - mean) / sd)
 
         # (1) FALSIFIABLE: the saturation the extension exists to prevent.
@@ -528,7 +532,7 @@ class TestPoolAwareDegree:
         # (2) THE IDENTITY, asserted as one. It fails if the bar stops scaling as mu*pool +
         # k*sigma*sqrt(pool) — e.g. a fixed offset, or sqrt dropped — which is the real way this
         # property breaks, and which the six-float spread check could never see.
-        expected = 1.0 - SL._phi(SL.OVERWHELM_SIGMA)
+        expected = 1.0 - SL._phi(CD.OVERWHELM_SIGMA)
         for pool in (8, 12, 16, 20, 25, 30):
             assert abs(p_overwhelming(pool, 2.0, with_ext=True) - expected) < 1e-12, (
                 f"pool {pool}: the extension's rate is not 1-Phi(OVERWHELM_SIGMA); the bar has "
@@ -537,9 +541,9 @@ class TestPoolAwareDegree:
 
         # (3) FALSIFIABLE, and the claim an earlier draft got wrong: where it is inert depends on
         # `ob`. "Pool 8" was a measurement of resolver.py's default obstacle, not a contract.
-        assert [SL.crossover_pool(ob) for ob in (1.0, 2.0, 3.0)] == [6, 8, 10]
+        assert [CD.crossover_pool(ob) for ob in (1.0, 2.0, 3.0)] == [6, 8, 10]
         for ob in (1.0, 2.0, 3.0):
-            x = SL.crossover_pool(ob)
+            x = CD.crossover_pool(ob)
             for pool in range(1, x):
                 assert p_overwhelming(pool, ob, True) == p_overwhelming(pool, ob, False), (
                     f"ob {ob}, pool {pool}: below its crossover the extension must be inert"
@@ -567,7 +571,7 @@ class TestPoolAwareDegree:
                 for net4 in range(-20, 4 * (2 * max(pool, 3)) + 1):
                     net = net4 / 4.0
                     owner = DE.DEGREE_ORDINAL[DE.degree_from_net(net, ob)]
-                    got = SL.degree(net, ob, pool)
+                    got = CD.degree(net, ob, pool)
                     checked += 1
                     if got == owner:
                         continue
@@ -575,7 +579,7 @@ class TestPoolAwareDegree:
                     assert (owner, got) == (3, 2), (
                         f"pool={pool} ob={ob} net={net}: {owner} -> {got}, only 3 -> 2 is legal"
                     )
-                    assert net < SL.overwhelm_bar(pool), (
+                    assert net < CD.overwhelm_bar(pool), (
                         f"pool={pool} ob={ob} net={net} was demoted while clearing the bar"
                     )
         assert checked >= 9_000, f"only {checked} pool-aware cells checked"

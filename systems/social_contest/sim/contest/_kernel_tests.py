@@ -5,7 +5,7 @@ from .contract import A, B, other, Move, FaultState, Adjudicator, Panel
 from .primitives import (Stasis, Appeal, Standing, Reserve, Pool, SelfGating, Leverage, Room,
                         Resonance, Readiness, DefeatCatalogue)
 from .resolver import (ContestState, ThresholdRace, TallyAtClose, ProofBar, GraceThreshold, Venue)
-from engine.autoload.sigma_leverage import degree
+from .degree_extension import degree   # ED-SC-0032: MOVED out of engine/autoload/sigma_leverage.py
 from engine.substrate.stubwire import StubResult
 from .modes import ContestedMode, DyadicMode
 from .policy import (logos_spammer as LOG, demagogue as DEM, courtier as COU,
@@ -36,7 +36,7 @@ ck("sigma_N", isclose(E.sigma_N(16), 3.2))
 # RE-PINNED 2026-08-27 (ED-SC-0031): degree(3,3) was 2, is now 1. `net == ob` means the obstacle
 # is MET but not EXCEEDED, which Jordan's 2026-08-14 ladder ruling bands as Partial. This is the
 # exact cell test_degree_ladder_single_owner.py's HELD entry named as the one the ruling flips.
-ck("degree bands", (E.degree(0,3), E.degree(3,3), E.degree(6,3)) == (0,1,3))  # [canonical: Jordan ruling 2026-08-14, the margin ladder — engine/autoload/dice_engine.py degree_from_net]
+ck("degree bands", (degree(0,3), degree(3,3), degree(6,3)) == (0,1,3))  # [canonical: Jordan ruling 2026-08-14, the margin ladder — engine/autoload/dice_engine.py degree_from_net]
 
 print("== contract: Panel aggregation ==")
 pan = Panel((Adjudicator(char_logos=.7, char_ethos=.2, char_pathos=.1, discipline=.8, learned=True),
@@ -491,9 +491,9 @@ ck(f"de-saturation PAIRED: owner saturates at pool 30 ({_p_own:.2f}), extension 
 # The exact-inertness claim, and the reason it is NOT "below pool 8": the crossover moves with the
 # obstacle. `crossover_pool` owns that derivation; pinning 8 here was a measurement of resolver.py's
 # default ob (2.0) presented as a contract. ob 1.0 crosses at 6, ob 3.0 at 10.
-from engine.autoload.sigma_leverage import crossover_pool as _xover
+from .degree_extension import crossover_pool as _xover   # ED-SC-0032: moved with the extension
 ck("de-saturation: the crossover is a function of ob, not the constant 8",
-   [_xover(o) for o in (1.0, 2.0, 3.0)] == [6, 8, 10])  # [JUSTIFIED: derived by sigma_leverage.crossover_pool() from the bar's own constants, not authored here — ED-SC-0031]
+   [_xover(o) for o in (1.0, 2.0, 3.0)] == [6, 8, 10])  # [JUSTIFIED: derived by contest.degree_extension.crossover_pool() from the bar's own constants, not authored here — ED-SC-0031/0032]
 ck("de-saturation: the extension is inert below its crossover, for EVERY ob (paired, exact)",
    all(degree(n, o, p) == degree(n, o, None)
        for o in (1.0, 2.0, 3.0) for p in range(1, _xover(o)) for n in range(-2 * p, 2 * p + 1)))

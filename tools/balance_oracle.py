@@ -120,81 +120,76 @@ def _floor_arm(blanket: bool):
 
 
 def _contest_ladder_arm(pre: bool):
-    """Patch `sigma_leverage.degree` back to its PRE-ED-SC-0031 private ladder, or leave the
-    owner's. Returns undo.
+    """Patch the CONTEST's degree path back to its PRE-ED-SC-0031 private ladder. Returns undo.
 
     THE MECHANIC. Until 2026-08-27 the social-contest surface carried its own degree bands — the
     ninth ladder, and the one the 2026-08-12 census missed. Two of its three lower boundaries
     contradicted Jordan's 2026-08-14 ruling (`net == ob` -> Success where the ruling says Partial;
     `0 < net < ob` -> Partial where it says Failure) and its pool-less top band was the Ob-scaled
-    `net >= 2*ob` bar the ruling struck by name. It now returns `dice_engine.degree_from_net`'s
-    bands with one declared extension that may only demote Overwhelming to Success.
+    `net >= 2*ob` bar the ruling struck by name. It now resolves through
+    `dice_engine.degree_from_net` with a declared, injected extension (ED-SC-0032).
 
     The `pre` arm below is a VERBATIM copy of the retired implementation, kept here as the record
-    of what it did — same convention as `_pool_arm` and `_floor_arm` above. It is patched onto the
-    module rather than reconstructed at the call sites, because `degree` reaches the campaign loop
-    through `contest/agon_harness.py` and the resolver, and patching the owner is the only way to
-    make the ladder the single difference between arms.
-    """
-    original = SL.degree
+    of what it did — same convention as `_pool_arm` and `_floor_arm` above.
 
-    def pre_ruling(net, ob, pool=None):
+    ⚠ THIS ARM WAS BROKEN FOR THE LENGTH OF ONE COMMIT, and the repair is the interesting part.
+    It read `original = SL.degree` and `SL.OVERWHELM_SIGMA`; ED-SC-0032 moved both out of the
+    engine into the subsystem that owns them, so `python3 tools/balance_oracle.py` — the
+    documented default invocation, and the instrument CLAUDE.md §7 names as THE campaign-level
+    balance control — raised AttributeError on its first arm. Found by an adversarial pass, not by
+    a test, because NOTHING EXECUTES THIS FILE: it is deliberately not a CI gate (240 campaigns,
+    ~13 minutes), so it has no freshness relationship to the code it measures. The instrument that
+    produced ED-SC-0031's control was disabled by ED-SC-0031's own successor commit.
+    `tests/valoria/test_balance_oracle_arms.py` now constructs both arms, which is cheap and
+    catches exactly this.
+
+    SCOPE, which the repair also had to get right. Post-ED-SC-0032 the contest reaches the ladder
+    through `resolver`'s module-level `degree_from_net` binding plus the contest's own `degree`
+    adapter. Patching `dice_engine.degree_from_net` globally would re-band the WHOLE GAME — mass
+    battle, threadwork, faction actions — which is a different experiment from the one this arm
+    exists to run. Only the contest's two bindings are patched.
+    """
+    from engine.autoload.dice_engine import Degree
+    from systems.social_contest.sim.contest import degree_extension as CD
+    from systems.social_contest.sim.contest import resolver as _res
+
+    _ORDINAL_TO_DEGREE = {0: Degree.FAILURE, 1: Degree.PARTIAL,
+                          2: Degree.SUCCESS, 3: Degree.OVERWHELMING}
+
+    def pre_ruling_ordinal(net, ob, pool=None):
         if net <= 0:                       return 0
         if net < ob:                       return 1
         if pool is not None:
             thresh = (SL.MU_PER_DIE * pool
-                      + SL.OVERWHELM_SIGMA * SL.SD_PER_DIE * math.sqrt(max(1, pool)))
+                      + CD.OVERWHELM_SIGMA * SL.SD_PER_DIE * math.sqrt(max(1, pool)))
             if net >= thresh and net >= max(3, ob): return 3
             return 2
         if net >= 2 * ob and net >= 3:     return 3
         return 2
 
+    def pre_ruling_degree_from_net(net, ob, extension=None, pool=None, **context):
+        """The shape `resolver._reception` calls. `extension` is IGNORED by construction: the
+        pre-ruling ladder had no seam, and honouring one here would measure a hybrid that never
+        shipped."""
+        return _ORDINAL_TO_DEGREE[pre_ruling_ordinal(net, ob, pool)]
+
     if not pre:
         return lambda: None
 
-    # `systems/social_contest/sim/contest/resolver.py:24` does `from engine.autoload.sigma_leverage
-    # import ... degree`, binding the function OBJECT into its own namespace at import time.
-    # Patching only `SL.degree` would leave the live campaign call site — `resolver._reception`,
-    # which feeds the band into `_advance(magnitude=deg)` — on the original, giving two identical
-    # arms. A fake control is worse than no control, and it is exactly the confound CLAUDE.md §0.1
-    # exists for.
-    #
-    # ⚠ AN EARLIER VERSION HARD-CODED THREE MODULES AND ASSERTED `len(bound) == 3`, with a comment
-    # claiming that made a missed importer loud. It did not: the list it counted was the same
-    # hard-coded tuple, so a NEW importer would never enter it, the assert would pass, and the arm
-    # would be silently half-fake — the precise failure the comment invoked §0.1 to prevent. The
-    # sweep below discovers bindings instead of listing them, so an importer added tomorrow is
-    # patched without anyone remembering to come here.
-    #
-    # The campaign path must be IMPORTED before the sweep, or its binding does not exist yet to be
-    # found. `mc_v18` is already imported at module scope, but it reaches the contest lazily.
-    import importlib
-    importlib.import_module('systems.social_contest.sim.contest.resolver')
+    originals = [(_res, 'degree_from_net', _res.degree_from_net),
+                 (CD, 'degree', CD.degree)]
+    # Assert the sites are what we think they are BEFORE patching. A binding that has moved makes
+    # this arm silently half-fake — two nearly-identical arms and a meaningless z — which is the
+    # confound §0.1 pt 4 exists for, and is precisely how this function broke.
+    assert _res.degree_from_net.__name__ == 'degree_from_net', (
+        'resolver no longer binds degree_from_net at module level; this arm would not reach the '
+        'live campaign call site and the comparison would be fake')
+    assert CD.degree.__module__.endswith('degree_extension'), (
+        'the contest degree adapter has moved; re-derive this arm before trusting a result')
 
-    bound = []
-    for mod in list(sys.modules.values()):
-        if mod is None:
-            continue
-        try:
-            names = vars(mod)
-        except TypeError:                      # extension modules without a __dict__
-            continue
-        for name, value in list(names.items()):
-            if value is original:
-                bound.append((mod, name))
-
-    # Not a count pin: a floor plus the one binding that MUST be there. The floor catches the sweep
-    # silently finding nothing (a rename, a reload); the explicit check catches the live campaign
-    # site specifically, which is the only one whose absence makes the result meaningless.
-    assert len(bound) >= 2, f'sweep found {len(bound)} bindings of degree — it is not working'
-    live = [m.__name__ for m, _ in bound]
-    assert 'systems.social_contest.sim.contest.resolver' in live, (
-        f'the live campaign call site is not among the rebound bindings {sorted(live)} — this arm '
-        'would not change the campaign and the comparison would be fake'
-    )
-    for m, a in bound:
-        setattr(m, a, pre_ruling)
-    return lambda: [setattr(m, a, original) for m, a in bound]
+    setattr(_res, 'degree_from_net', pre_ruling_degree_from_net)
+    setattr(CD, 'degree', lambda net, ob, pool=None: pre_ruling_ordinal(net, ob, pool))
+    return lambda: [setattr(m, a, orig) for m, a, orig in originals]
 
 
 #: The comparison this invocation runs. Swap in the pair you are measuring; keep exactly two arms,

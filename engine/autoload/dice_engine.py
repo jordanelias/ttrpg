@@ -1,5 +1,7 @@
 """
-sim/autoload/dice_engine.py — d10 dice pool, TN values, degree of success, continuous engine
+engine/autoload/dice_engine.py — d10 dice pool, TN values, degree of success, continuous engine
+(The header read `sim/autoload/...` until 2026-08-27; that tree was retired 2026-07-21. Its twin
+in sigma_leverage.py was fixed the same day and this one was missed — §0.1 pt 5's sweep-the-pattern.)
 
 Canon source: params/core.md (Die Rule, TN Values, Degrees of Success, Continuous Engine Decision E)
 Params source: params/core.md
@@ -11,7 +13,8 @@ Dependencies:
 Entry points:
   - roll_pool(pool_size: int, tn: int, rng=None) -> RollResult
   - continuous_engine_sample(pool: float, tn: int, rng=None) -> float
-  - degree_from_net(net: int | float, ob: int | float) -> Degree
+  - degree_from_net(net, ob, extension: BandExtension | None = None, **context) -> Degree
+  - BandExtension — the ED-SC-0032 injection seam a subsystem's wrapper passes as `extension`
 """
 from __future__ import annotations
 
@@ -48,6 +51,91 @@ DEGREE_ORDINAL: dict["Degree", int] = {
     Degree.SUCCESS: 2,
     Degree.OVERWHELMING: 3,
 }
+
+
+# ══════════════════════════════════════════════════════════════════════════════════════
+# THE EXTENSION SEAM (ED-SC-0032). Jordan, 2026-08-15, verbatim:
+#
+#   "systems should not need different degree bands. it should be consistent in application.
+#    if a system does require any modification or extension, then the wrapper needs to inject
+#    the engine in such a manner that it can be modified cleanly."
+#
+# ED-SC-0031 satisfied the first clause — every subsystem's bands became this module's — and
+# NOT the second: the social contest's pool-aware de-saturation survived as a hard-coded
+# post-filter inside `sigma_leverage`, with no hook here and nothing stopping the next
+# subsystem bolting on a differently-shaped one. This is the hook, and the point of putting it
+# HERE rather than leaving each subsystem to police itself is that the constraint becomes
+# STRUCTURAL:
+#
+#   * an extension's only power is to VETO the top band. `may_overwhelm`'s return is coerced with
+#     `not` and consulted in exactly one branch below — the OVERWHELMING one — so the only band
+#     transition an extension can express is 3 -> 2. There is no signature by which it could
+#     promote a band, move the Partial window, or touch Failure.
+#   * `context` is the subsystem's own state (the contest passes its pool). The engine neither
+#     interprets it nor stores it. Unknown keys are REFUSED rather than swallowed (below).
+#
+# ⚠ THE LIMIT OF "STRUCTURAL", stated because an adversarial pass broke the stronger claim this
+# comment first made. Two sentences are retracted. (1) "the ladder itself is never passed to the
+# extension, so an extension cannot re-derive it" — FALSE: `may_overwhelm` is arbitrary Python and
+# can import `degree_from_net` in one line. What the design prevents is RETURNING a different
+# band, not re-deriving one. (2) "whatever its author intends" — OVERSTATED: an extension runs in
+# this process with access to this module's mutable state, and `DEGREE_ORDINAL` is a plain dict a
+# hostile extension could mutate mid-call. The honest claim is narrower and still worth having:
+# an extension that confines itself to its own contract CANNOT express any band change but 3 -> 2,
+# and any attempt to do more has to reach outside the seam, where it is visible in a diff. That is
+# an auditable convention with a structurally-bounded return channel — not a sandbox, and this
+# module should not be read as promising one.
+#
+# WHY VETO-THE-TOP-BAND IS THE RIGHT AND ONLY POWER, rather than a general hook: it is the one
+# shape the two real cases need. The contest's bar de-saturates Overwhelming as pools grow (a
+# large pool clears a fixed margin nearly every roll, so without it the band stops
+# discriminating). Nothing in the tree has ever needed to make a band EASIER, and a hook that
+# allowed it would re-admit the private ladders this seam exists to end. Widening this contract
+# is a design decision with a ledger entry, not a convenience.
+class BandExtension:
+    """What a subsystem may inject into the ladder. Subclass and override `may_overwhelm`.
+
+    Deliberately a class rather than a bare callable: an extension is a NAMED, declared policy
+    that a wrapper injects, and a name is what makes it auditable in a stack trace, in a repr,
+    and in the registry. `tests/valoria/test_degree_ladder_single_owner.py` enrols them.
+    """
+
+    #: Short human name, used in reprs and in the ladder registry's roster.
+    name = "band-extension"
+
+    #: Context keys this extension reads. The engine REFUSES any other key (see below).
+    context_keys: tuple = ()
+
+    def may_overwhelm(self, net, ob, **context) -> bool:
+        """Return False to demote an Overwhelming to Success. Default: never vetoes."""
+        return True
+
+    def validate_context(self, context) -> None:
+        """Refuse a context key this extension does not declare. Called by the ladder.
+
+        ⚠ THIS EXISTS BECAUSE THE SEAM SHIPPED WITH A SILENT-NO-OP HOLE, found by an adversarial
+        pass on the commit that built it. `**context` accepts any keyword, and an extension that
+        defaults its parameter (`pool=None` -> abstain) turns a MISSPELLED OR RENAMED key into a
+        band change: `degree_from_net(net, ob, extension=E, poool=8)` returned Overwhelming where
+        `pool=8` would have returned Success, with no error and no warning. That is CLAUDE.md
+        §0.1 point 1's read/write asymmetry exactly — the write silently misses the read — and it
+        is the failure mode a seam must not have, because the whole point of a declared extension
+        is that its inputs are declared.
+
+        An extension declaring no `context_keys` accepts none, so the default is strict rather
+        than permissive: a new extension that forgets to declare fails loudly on its first call
+        instead of quietly abstaining forever.
+        """
+        unknown = set(context) - set(self.context_keys)
+        if unknown:
+            raise TypeError(
+                f"{type(self).__name__} does not declare context key(s) {sorted(unknown)}; "
+                f"it reads {sorted(self.context_keys)}. An undeclared key would be swallowed by "
+                "**context and silently change the band — declare it or fix the caller."
+            )
+
+    def __repr__(self) -> str:      # pragma: no cover - diagnostics only
+        return f"<{type(self).__name__} {self.name!r}>"
 
 
 @dataclass
@@ -136,7 +224,8 @@ def continuous_engine_sample(pool: float, tn: int = 7,
     return rng.gauss(mean, std)
 
 
-def degree_from_net(net: int | float, ob: int | float) -> Degree:
+def degree_from_net(net: int | float, ob: int | float,
+                    extension: "BandExtension | None" = None, **context) -> Degree:
     """THE degree ladder. Single owner for every scale of the game (Jordan ruling, 2026-08-14).
 
     The ladder reads the MARGIN — how far the dice cleared the obstacle — never the obstacle's
@@ -177,6 +266,11 @@ def degree_from_net(net: int | float, ob: int | float) -> Degree:
       * The Ob-20 exception (Overwhelming unavailable, Partial needing net >= 10) — "always"
         admits no ceiling case.
 
+    `extension` is the ED-SC-0032 injection seam: a subsystem's declared `BandExtension`, which
+    may VETO an Overwhelming and can do nothing else. It is passed BY THE SUBSYSTEM'S WRAPPER,
+    never resolved here — the engine does not know which subsystems exist, and a default of None
+    means the unmodified ladder. `**context` is forwarded to the extension untouched.
+
     Behaviour change, stated rather than buried (CLAUDE.md 0.1 point 4): the Partial band was
     `0 < net < Ob`, so a roll that cleared zero but fell far short of a hard obstacle read as a
     Partial. It now reads as a Failure. Partial is the near-miss-by-nothing outcome, not the
@@ -188,6 +282,14 @@ def degree_from_net(net: int | float, ob: int | float) -> Degree:
     if margin < 1:
         return Degree.PARTIAL
     if margin >= 3:
+        # THE ONE BRANCH AN EXTENSION CAN REACH (ED-SC-0032). See `BandExtension` above for why
+        # this is the only one, and why the constraint is structural rather than a convention a
+        # subsystem is asked to respect. Note the ladder result is NOT passed to the extension:
+        # it is asked whether an Overwhelming is permissible, never what the band should be.
+        if extension is not None:
+            extension.validate_context(context)
+            if not extension.may_overwhelm(net, ob, **context):
+                return Degree.SUCCESS
         return Degree.OVERWHELMING
     return Degree.SUCCESS
 

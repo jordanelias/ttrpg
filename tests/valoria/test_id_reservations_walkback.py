@@ -145,7 +145,12 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     # registers/editorial_ledger_sc.jsonl. Same update-the-pin-and-say-so path as the four
     # notes above: the frozen pre-walk-back SC pointer was 21, so 32 cannot be reached by
     # reverting ED-IN-0098.
-    released = {'SC': 32, 'FA': 38, 'WR': 10, 'SE': 51}
+    # PIN UPDATED 2026-08-27: SC 32 -> 33. ED-SC-0032 allocated for the ladder-extension seam —
+    # the second clause of Jordan's 2026-08-15 ruling ("the wrapper needs to inject the engine"),
+    # which ED-SC-0031 explicitly did not satisfy. The entry exists in
+    # registers/editorial_ledger_sc.jsonl. Same update-the-pin-and-say-so path: the frozen
+    # pre-walk-back SC pointer was 21, so 33 cannot be reached by reverting ED-IN-0098.
+    released = {'SC': 33, 'FA': 38, 'WR': 10, 'SE': 51}
     checked = 0
     for lane, expected in released.items():
         assert nf[lane] == expected, (

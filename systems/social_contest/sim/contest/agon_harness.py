@@ -103,7 +103,8 @@ from typing import Dict, List, Optional, Tuple
 from .contract import A, B, other, Move, ContestView, Panel
 from .primitives import Stasis, Appeal, Reserve, Pool, EvidenceItem, Dossier
 from .resolver import (Bout, Contestant, PersuasionTrack, TallyAtClose, ProofBar,
-                       GraceThreshold, VoteAtClose, roll_net, degree)
+                       GraceThreshold, VoteAtClose, roll_net)
+from .degree_extension import degree   # ED-SC-0032: the contest's own adapter, not the engine's
 from .wrapper import build_contest
 from .policy import POLICIES, logos_spammer
 from .dictionaries import STYLES_TABLE, PROCEEDINGS_TABLE, ADJUDICATORS_TABLE, derive_interaction
