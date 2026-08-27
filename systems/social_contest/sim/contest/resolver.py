@@ -21,7 +21,9 @@ from .primitives import (Stasis, Appeal, Standing, Reserve, Pool, SelfGating, Le
 # GLOBAL-random stream (sigma_leverage.roll_net(rng=random) draws from the module-level RNG the
 # 151 seeded tests rely on; passing rng=None would use a fresh Random and desync the seed).
 from engine.autoload import sigma_leverage as _sigma
-from engine.autoload.sigma_leverage import effective_ob, degree, net_boost
+from engine.autoload.dice_engine import DEGREE_ORDINAL, degree_from_net
+from engine.autoload.sigma_leverage import effective_ob, net_boost
+from .degree_extension import CONTEST_DEGREE_EXTENSION as _DEFAULT_DEGREE_EXTENSION
 
 def roll_net(pool):
     """Behavior-preserving wrapper: canonical d10 roll drawn from the GLOBAL random stream
@@ -234,7 +236,8 @@ class _Side:
         return FaceScale.face_current(self.face, self.charisma)
 
 class Bout:
-    def __init__(self, ca, cb, venue, adjudicator=None, record=False, armature=None):
+    def __init__(self, ca, cb, venue, adjudicator=None, record=False, armature=None,
+                 degree_extension=_DEFAULT_DEGREE_EXTENSION):
         self.c = {A: _Side(ca, venue.split_standing), B: _Side(cb, venue.split_standing)}
         self.v = venue
         self.adj = adjudicator or Adjudicator()
@@ -254,6 +257,17 @@ class Bout:
         # genre' to match (judge finding 1). This makes the armature=None golden-trace agôn path byte-
         # identical to the pre-Stage-3 engine (parity restored — see _kernel_tests).
         self.armature = armature
+        # ── THE INJECTED LADDER EXTENSION (ED-SC-0032) ────────────────────────────────────
+        # Jordan, 2026-08-15: "if a system does require any modification or extension, then the
+        # wrapper needs to inject the engine in such a manner that it can be modified cleanly."
+        # This is that injection point. `degree_extension` is a `dice_engine.BandExtension`; the
+        # engine consults it in exactly one branch of the ladder and it can only VETO an
+        # Overwhelming. Defaulted rather than required so a Bout built directly (tests, the agôn
+        # harness) behaves as the contest does; pass `degree_extension=None` for the owner's
+        # unmodified ladder, or another BandExtension to substitute a policy. Substituting is
+        # what "modified cleanly" means, and before this it was not possible at all: the rule
+        # was a hard-coded post-filter inside engine/autoload/sigma_leverage.py.
+        self.degree_extension = degree_extension
 
     def _view(self, side, i):
         c, opp = self.c[side], self.c[other(side)]
@@ -286,7 +300,12 @@ class Bout:
         pool = Pool.size(c.faculty) + max(0.0, pool_bonus)
         lev = Leverage.net(c.faculty, on_ground=True) + max(0.0, dsigma_bonus)   # armature δσ enters the CR6 leverage term (continuous μ-shift, not the rounded pool)
         net = roll_net(pool) + net_boost(lev, pool)             # σ-leverage as mu-shift (ED-884/934): base_ob untouched, Ob floor never breached
-        return degree(net, self.v.base_ob, pool)                # pool-aware degree -> σ-gated Overwhelming; effective_ob now display-only
+        # ED-SC-0032: the OWNER's ladder, with this contest's injected extension consulted on
+        # the top band only. Was `degree(net, self.v.base_ob, pool)` — sigma_leverage's own
+        # pool-aware function, which is retired. Value-identical by construction: same bands,
+        # same bar, same operands; the seeded campaign goldens are the control.
+        return DEGREE_ORDINAL[degree_from_net(
+            net, self.v.base_ob, extension=self.degree_extension, pool=pool)]
 
     def _bias(self, side):
         if self.pr.toward != side: return 1.0

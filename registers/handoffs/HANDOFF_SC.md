@@ -360,3 +360,95 @@ index; see it for cross-lane/global items.
 - **contest_rebuild Stage 1+ gates** — each stage ratified individually (Gate 0 ratified
   2026-06-30; ED 1055-1079 / PP 800-809 reserved; Gates A–C ratified through 2026-07-02; also
   tracked at `decision_queue.md` item 15).
+
+---
+
+## 2026-08-27 — the ninth degree ladder migrated to the single owner (ED-SC-0031)
+
+**WHAT LANDED.** `engine/autoload/sigma_leverage.degree` returns `dice_engine.degree_from_net`'s
+bands (as `DEGREE_ORDINAL`), with ONE declared extension: a pool-aware de-saturation bar that may
+only demote Overwhelming to Success. The HELD entry in
+`tests/valoria/test_degree_ladder_single_owner.py` is gone; one hold remains
+(`combat_engine_v1/core.py`).
+
+**CONTROL:** `tools/balance_oracle.py --n 120`, arms `private_ladder` vs `owner_ladder` in one
+process — max |z| 0.80, nothing significant. Six campaign goldens moved and were re-pinned on that
+basis.
+
+### ✅ THE RULING IS NOW FULLY EXECUTED (ED-SC-0032, 2026-08-27) — this section is the record
+
+Jordan, 2026-08-27: *"so plan to resolve it then if you know what to do!"* Executed.
+`dice_engine.BandExtension` is the seam; the contest's de-saturation rule MOVED OUT of the engine
+to `systems/social_contest/sim/contest/degree_extension.py` taking `OVERWHELM_SIGMA` with it; and
+`build_contest` / `Contest` / `_resolve_agon` / `Bout` thread the extension through so a caller can
+substitute a policy or pass `None` for the owner's unmodified ladder, end to end. Byte-identical
+campaign output. What the seam guarantees is narrower than "sandbox" and the module says so: an
+extension confined to its contract cannot express any band change but Overwhelming -> Success;
+one reaching outside it can do more, and `tests/valoria/test_band_extension_seam.py` pins that
+honestly with a hostile probe rather than letting the stronger reading stand.
+
+**The section below is what the ruling looked like BEFORE it was executed. Kept as the record of
+what was wrong, since the next subsystem to want an extension needs to know what the bad shape was.**
+
+### (HISTORICAL) THE RULING WAS HALF-EXECUTED
+
+Jordan, 2026-08-15: *"if a system does require any modification or extension, then the wrapper needs
+to inject the engine in such a manner that it can be modified cleanly."*
+
+The **first** clause ("systems should not need different degree bands") is satisfied and verified
+cell-for-cell. The **second is not.** What landed is a hard-coded post-filter inside the subsystem,
+whose constants (`MU_PER_DIE`, `SD_PER_DIE`, `OVERWHELM_SIGMA`) the subsystem still owns.
+`degree_from_net` exposes no hook, takes no policy argument, and does not know an extension exists.
+Nothing composes, and nothing would stop a second subsystem bolting on a differently-shaped filter —
+the recurrence detector's own comment records that it would MISS an integer post-filter, which is
+what this now is. **Do not read "explicit, named extension" as closing the ruling.** It belongs with
+the subsystem-wrapper/orchestrator work.
+
+### Open
+
+- **A disclosed game-facing cost.** Uniformity of the Overwhelming rate across SMALL pools got
+  WORSE: at ob 2.0 the rate over pools 2-7 is now .000 .010 .038 .084 .140 .203 (monotone), against
+  the retired ladder's ~.07 .17 .29 .20 .14 .21 — and **a pool-2 contest can never resolve
+  Overwhelming at all** (it would need net >= 5 from two dice, max 4). That is a consequence of
+  Jordan's one-ladder ruling, not a choice made here. Whether it is acceptable is a design call.
+- **The bridge's shut-out set has now taken three values** under three unrelated mechanic changes
+  (`{'Hafenmark'}` -> `set()` -> `{'Church'}`). Evidence that "the spine can eliminate a faction"
+  tracks the seed, not the spine. Only ever measured at n=8/seed-42; settling it needs the n>=100
+  arm. **FA/WR-lane.**
+- **Combat's ladder (the remaining hold) is NOT migrated,** and neither is the 40% covert-plate-killer
+  ceiling abolished. Those are one ruling with two halves (Jordan, 2026-08-25: *"one degree ladder.
+  guandao should be 47.5%, and 40% ceiling is to be abolished"*), and the half that comes first is
+  the **Ob derivation from the defender** (score/2 + that instance's modifiers), which is new
+  mechanism rather than a re-siting. Abolishing the ceiling alone deletes a guard and gains nothing.
+  All four degree-ladder rulings are now recorded verbatim in `RULINGS` at
+  `tests/valoria/test_degree_ladder_single_owner.py`.
+
+
+---
+
+## 2026-08-27 (later) — the seam landed, and the instrument it broke (ED-SC-0032)
+
+**Read this before touching `tools/balance_oracle.py`.** ED-SC-0032 moved `degree` and
+`OVERWHELM_SIGMA` out of `engine/autoload/sigma_leverage.py` and thereby **broke the balance
+oracle's live arm**, which read both off the engine. `python3 tools/balance_oracle.py` raised
+AttributeError. Nothing caught it, because nothing executes that file — it is deliberately not a
+CI gate (240 campaigns, ~13 min), so it has no freshness relationship to the code it measures.
+The instrument that produced ED-SC-0031's control was disabled by ED-SC-0031's own successor.
+
+Repaired, and `tests/valoria/test_balance_oracle_arms.py` now constructs both arms and asserts
+they band differently at `degree(3, 3)` — cheap, runs no campaigns, mutation-verified.
+**The general lesson, which is not confined to this tool:** a deliberately-uncalled instrument
+needs a cheap liveness test or it rots silently. If you add another one, add its arm test too.
+
+### Still open in this lane
+
+- **Nothing about the degree ladder.** All four rulings are executed or accepted; the RULINGS
+  block at `tests/valoria/test_degree_ladder_single_owner.py` is the record.
+- **The bridge's shut-out set** has taken three values under three unrelated mechanic changes
+  (`{'Hafenmark'}` -> `set()` -> `{'Church'}`), which is evidence it tracks the seed, not the
+  spine. Only ever measured at n=8/seed-42. Settling it needs the n>=100 arm. **FA/WR-lane.**
+- **The seam has exactly one consumer.** `PoolDesaturation` is the only `BandExtension` in the
+  tree. That is correct today — no other subsystem has asked for one — but it means the contract
+  is proven by probes rather than by a second real user. If a second subsystem wants an
+  extension, expect the "veto the top band only" power to be the thing under pressure, and widen
+  it by ruling and ledger entry rather than by convenience.

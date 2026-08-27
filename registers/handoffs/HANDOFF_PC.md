@@ -1004,3 +1004,38 @@ nothing in the corpus defined how it happens. Carried forward verbatim.
    duplicates. See `audit/2026-08-06-vector-audit/05_gm_resolution_register.md`.
 3. `combat_c4_draft_v0.md` and `scene_combat_design_v1.md` were deliberately left standalone — a draft
    and a scene-envelope doc, not duplicates. Revisit only if they start claiming head status.
+
+---
+
+## 2026-08-27 — the 40% covert-plate-killer ceiling is ABOLISHED (ED-PC-0041)
+
+Jordan, verbatim: *"dude guandao not being able to hit 47.5% on its own merits is fucked up. stop
+arbitrary fiat capping."* Assertion (C) of
+`test_plate_participation_tracks_armour_defeat_capability` is deleted. **No replacement threshold
+was invented** — a differently-numbered cap is the same fiat, and the ruling is about the class:
+an assertion that bounds how often an outcome may occur, rather than measuring the mechanism that
+produces it, is not a guard.
+
+**It also overrode a sequencing objection I had raised** (that abolishing the ceiling before
+combat's ladder migrates "deletes a guard and gains nothing"). Recorded rather than dropped: the
+objection was about sequencing convenience; the ruling is about whether the thing should exist.
+
+**What it costs, stated plainly.** The ceiling was the only assertion that would trip if
+penetration decoupled from armour-defeat capability again (the ED-PC-0038 class). Nothing replaces
+that job. What survives points the other way — (A) FORWARD and the `strong` class check catch
+plate going *mute* for weapons that defeat it. A recurrence of the decoupling will now surface as
+a balance observation, not a red test. The replacement is a `print`, and "report-only" is weaker
+than it sounds: pytest captures stdout of a passing test, so it shows only under `-s`.
+
+### THE NEXT PC ITEM, and it is the big one
+
+**Derive Ob from the DEFENDER.** Jordan, 2026-08-15: *"DECISIVE_OB for combat is stupid as hell
+and is dead because Ob should be determined by your opponent more than anything"* — the obstacle
+is *"their corresponding score/2 plus whatever specific modifiers exist for them in that
+instance"*. The sequence is settled and is the opposite of the obvious one: **derive Ob first,
+THEN combat's bands migrate to the owner's ladder.** Migrating the bands against the fixed
+`DECISIVE_OB` first is wasted work — `core.py`'s own docstring predicted it.
+
+That derivation is genuine new mechanism, not a re-siting, and it is what makes guandao reach
+47.5% *on its own merits*. It is the last declared HOLD in
+`tests/valoria/test_degree_ladder_single_owner.py`. The ceiling that stood in its way is gone.

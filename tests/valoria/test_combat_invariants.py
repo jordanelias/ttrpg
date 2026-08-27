@@ -1490,12 +1490,29 @@ def test_plate_participation_tracks_armour_defeat_capability(n=40):
     reference can barely mark a harness (its own cap is 0.504), so every weapon that decides at all wins ~0.9-1.0
     of what it decides. The decided-RATE is the only statistic with physics in it at this tier.
 
-    KNOWN-OPEN (disclosed, not guarded away): the ranseur clears nothing (cap 0.284) yet still settles ~12% of its
-    plate fights, and wins all of them. Capability-gating is a graded threshold multiplier
-    (`PEN_DEFICIT_K`), not a hard gate, so a large enough raw magnitude still gets through — the ranseur is a heavy
-    two-handed lugged spear and has that magnitude. The ceiling below is set to CATCH a regression toward the old
-    ungated behaviour while ACKNOWLEDGING the current residual; tightening it is the fix for that residual, not a
-    change to this test."""
+    ⚠ THE 40% CONVERSE CEILING IS ABOLISHED (Jordan, 2026-08-27). Verbatim: *"dude guandao not being
+    able to hit 47.5% on its own merits is fucked up. stop arbitrary fiat capping."* Assertion (C) used
+    to read `killers = {w: decided[w] for w in under if decided[w] >= 0.40}; assert not killers` — a
+    hard cap on how often a low-capability weapon may settle a plate fight. It is gone, and no
+    replacement threshold is invented, because a differently-numbered cap would be the same fiat under
+    a new coat of paint.
+
+    WHAT THE RULING COSTS AND WHAT SURVIVES, stated plainly rather than papered over. The ceiling was
+    doing one real job — it would trip if penetration decoupled from armour-defeat capability again —
+    and nothing here replaces that job. Two things do still bite in the same direction and are why this
+    is a deletion rather than a hole: (A) FORWARD and the `strong` class check below still catch the
+    opposite and far more common failure (plate going mute for the weapons that defeat it), and the
+    capability partition assertion still fails if `adef_cap` or the heavy threshold moves. What is no
+    longer asserted is any claim about the RATE at which a weak weapon may win. If that decoupling
+    recurs it will now surface as a balance observation, not a red test.
+
+    ITS FORMER RESIDUAL, kept as measurement rather than deleted with the assertion: the ranseur clears
+    nothing (cap 0.284) yet settles ~12% of its plate fights and wins all of them. Capability-gating is
+    a graded threshold multiplier (`PEN_DEFICIT_K`), not a hard gate, so a large enough raw magnitude
+    gets through — the ranseur is a heavy two-handed lugged spear and has that magnitude. Under the old
+    ceiling that was a disclosed exception living under a cap; under the ruling it is simply what the
+    physics produces, and the fix for it (if it needs one) is `PEN_DEFICIT_K`, never a bound on the
+    outcome."""
     C, core, S, WP, CFG = _mods()
     AP = _instrument()
 
@@ -1539,12 +1556,20 @@ def test_plate_participation_tracks_armour_defeat_capability(n=40):
             f"{w} clears the heavy threshold (cap {cap[w]:.2f} >= {thr}) yet settled {decided[w]:.0%} of its plate "
             f"fights — the marginal band has been gated off entirely")
 
-    # (C) CONVERSE: a weapon that comes nowhere near defeating a harness must not be a covert plate-killer.
-    killers = {w: decided[w] for w in under if decided[w] >= 0.40}
-    assert not killers, (
-        f"covert plate-killer(s): {', '.join(f'{w} (cap {cap[w]:.2f}, decided {decided[w]:.0%})' for w in sorted(killers))} "
-        f"— capability is far below the {thr} threshold yet they settle plate fights freely, so penetration has "
-        f"decoupled from armour-defeat capability again")
+    # (C) CONVERSE — DELETED 2026-08-27 by Jordan's ruling ("stop arbitrary fiat capping"). It read:
+    #     killers = {w: decided[w] for w in under if decided[w] >= 0.40}
+    #     assert not killers, "covert plate-killer(s): ..."
+    # A weapon's decided-rate against plate is now whatever the damage path produces. The `under`
+    # partition is still COMPUTED and still asserted non-empty above, because the partition itself
+    # collapsing is a real signal that `adef_cap` or the heavy threshold moved — that check is not a
+    # cap on outcomes and stays. Reported, never asserted, so the number remains visible to a reader
+    # of the run without being a gate:
+    ceilingless = {w: decided[w] for w in under if decided[w] > 0.0}
+    if ceilingless:
+        print("[plate] low-capability weapons that still settle plate fights (REPORT-ONLY, no ceiling "
+              "since 2026-08-27): "
+              + ", ".join(f"{w} cap {cap[w]:.2f} decided {decided[w]:.0%}"
+                          for w in sorted(ceilingless, key=lambda k: -ceilingless[k])))
 
 
 # ── META-GATE: THE GUARDS MUST THEMSELVES BE MUTATION-TESTED (ED-PC-0040) ─────────────────────────

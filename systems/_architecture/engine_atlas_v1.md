@@ -238,7 +238,7 @@ families exist per province, built in the same `create_world` call from two diff
 nothing but a report-only probe — `systems/overview/sim/accounting.py:53 _probe_province_accord_drift` (§3g).
 
 **`social_contest` — the Agôn kernel and the parliamentary vote.** The kernel resolves an exchange loop with stasis,
-reserves, faults, evidence and a terminal win-condition — `systems/social_contest/sim/contest/wrapper.py:229 resolve_contest`;
+reserves, faults, evidence and a terminal win-condition — `systems/social_contest/sim/contest/wrapper.py:248 resolve_contest`;
 separately a self-contained faction-scale vote resolves every season —
 `systems/social_contest/sim/parliamentary_vote.py:124 run_parliamentary_vote`. The subsystem emits no durable record
 of a resolved contest: every wired output is a queued stat delta, and the one structured-record producer has no

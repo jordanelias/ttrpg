@@ -18,13 +18,15 @@ to the terminal condition, with every other view joined onto it.
 THE HONESTY RULE, which is the whole point. A boot-to-termination map of a game where most of the
 27 modules do not execute would, drawn naively, be a picture of intent presented as behaviour. So every
 node carries `executes`, derived from the `wiring:` build ladder, and the phases are
-derived from the ACTUAL call sequence in `engine/mc_v18.py` + `systems/overview/sim/season.py`,
-not from a design document. Nodes that do not run are IN the map and marked, because for a fork
+derived from the ACTUAL call sequence in `engine/mc_v18.py` + `engine/autoload/engine_clock.py`,
+not from a design document. (Until ED-IN-0199 the second file was `systems/overview/sim/season.py`,
+which held the composition; engine_clock owns it now and season.py is an adapter over it.) Nodes that do not run are IN the map and marked, because for a fork
 the un-run ones are the work-list.
 
 SOURCES (nothing is invented; every row traces to a file):
   engine/mc_v18.py                        — boot, the season loop, terminal conditions
-  systems/overview/sim/season.py          — the canonical 3-step season composition
+  engine/autoload/engine_clock.py         — the canonical 3-phase tick composition (ED-IN-0199;
+                                            was systems/overview/sim/season.py, now an adapter)
   engine/cross_scale/scene_dispatch.py    — the scene phase
   references/module_contracts.yaml        — Key IN -> resolver -> OUT, owned state, gates,
                                             plus `wiring:` build/godot/port_rank/parity
@@ -62,7 +64,7 @@ OUT_MD = os.path.join(REPO, 'references', 'EXECUTION_MAP.md')
 #
 # HAND-TRANSCRIBED FROM CODE, and that is a deliberate choice with a cost. The call sequence
 # could be derived by static analysis, but the result would be a call graph, not a *phase*
-# structure -- run_season's three steps are a documented composition, not something an AST
+# structure -- run_tick's three phases are a documented composition, not something an AST
 # reveals as phases. So the spine is transcribed, each step carries the file:line it came from,
 # and `test_execution_map.py` re-checks every anchor still exists. If a step's anchor stops
 # matching, the map is stale and the test says so rather than the map silently lying.
@@ -90,12 +92,15 @@ SPINE = [
 
     ("loop", None, "Season loop — `for _ in range(max_s)`",
      "engine/mc_v18.py", "for _ in range(max_s):", [], "Breaks on `world.winner`."),
-    ("loop.s1", "loop", "Step 1 — advance_season",
-     "systems/overview/sim/season.py", "sr = advance_season(world)", ["engine_clock"],
-     "Season counter, arc boundary, per-arc + per-season faction flag resets. The temporal "
-     "spine `engine_clock` is `doc: null` — ED-1051, the sole remaining T0 blocker."),
-    ("loop.s2", "loop", "Step 2 — action_callback",
-     "systems/overview/sim/season.py", "action_callback(world)", [],
+    ("loop.s1", "loop", "SEASON_TICK — advance_season",
+     "engine/autoload/engine_clock.py", "result = advance_season(world)", ["engine_clock"],
+     "Season counter, arc boundary, per-arc + per-season faction flag resets. MOVED here from "
+     "season.py 2026-08-27 (ED-IN-0199): propagation_spec_v1 §O.1 makes engine_clock the owner "
+     "of this composition and \"the only module that may advance the season counter\", and the "
+     "module it named did not exist. `season.run_season` is now an adapter over `run_tick`. "
+     "The contract's `doc: null` (ED-1051) is a SEPARATE, still-open question."),
+    ("loop.s2", "loop", "ACTION — action_callback",
+     "engine/autoload/engine_clock.py", "action_callback(world)", [],
      "The injection point. mc_v18 passes `_faction_actions_callback`; **Godot passes its own to "
      "drive UI scene flow** (season.py's own docstring). This is the seam the port hangs on."),
     ("loop.s2.factions", "loop.s2", "Faction actions, per parliamentary faction holding territory",
@@ -114,13 +119,17 @@ SPINE = [
     ("loop.s2.parliament", "loop.s2", "Parliamentary vote (flag-gated on the scheduler)",
      "engine/mc_v18.py", "parliamentary_bridge.run_parliamentary_scene(world, world.rng)",
      ["social_contest"], "Resolves on aggregate state; composes a winner Domain Echo."),
-    ("loop.s2.boundary", "loop.s2", "ACTION->ACCOUNTING boundary — deferred applies land",
-     "engine/mc_v18.py", "_sched.accounting_boundary()", [],
+    ("loop.boundary", "loop", "ACCOUNTING_BOUNDARY opens — deferred applies land",
+     "engine/autoload/engine_clock.py", "sched.accounting_boundary()", [],
      "OF-7. Keys emitted during the scene phase were logged LIVE; their `apply` closures execute "
-     "HERE. Then `next_tick()` resets the per-tick emission counter. This is the orchestration "
-     "contract: emission is immediate, effect is deferred to a named boundary."),
-    ("loop.s3", "loop", "Step 3 — run_accounting",
-     "systems/overview/sim/season.py", "run_accounting(world)",
+     "HERE. NOTE THE RE-PARENTING (ED-IN-0199, 2026-08-27): this step used to be `loop.s2.boundary`, "
+     "a CHILD of the action phase, because both clock calls sat at the tail of mc_v18's action "
+     "callback — so the boundary was crossed before accounting was reached and `next_tick()` left "
+     "the scheduler in _PHASE_ACTION for the whole of accounting. It is a sibling of the phases "
+     "now, which is what it always was in the spec. Output-identical at the move (accounting "
+     "emits no Keys today); see engine_clock.py's docstring."),
+    ("loop.s3", "loop", "ACCOUNTING_BOUNDARY — run_accounting (resolved by role)",
+     "engine/autoload/engine_clock.py", "composition.require('accounting')(world)",
      ["territorial_piety", "npc_behavior", "faction_state"],
      "SIX steps, read from the function body (accounting.py:95-142) rather than its summary. An "
      "earlier version of this note said 'CI calc + MS decay + NPC' and attributed "
@@ -130,6 +139,12 @@ SPINE = [
      "cadence; (3) check_insurgency_triggers [GD-3 a-b]; (4) check_insurgency_promotion over a "
      "SNAPSHOT of the insurgency ids, since promotion mutates the dict; (5) simulate_npc_actions "
      "[NPE stance drift]; (6) _probe_province_accord_drift, report-only and deliberately last."),
+    ("loop.close", "loop", "Tick closes — next_tick()",
+     "engine/autoload/engine_clock.py", "sched.next_tick()", [],
+     "Resets the per-tick emission counter and returns the scheduler to the ACTION phase. LAST, "
+     "so the Level-B emission cap spans BOTH phases — propagation_spec §4.1's \"Level B's cap "
+     "applies tick-wide, both phases.\" Pre-ED-IN-0199 this ran before accounting, giving each "
+     "phase its own budget."),
     ("loop.victory", "loop", "Victory check (GD-1)",
      "engine/mc_v18.py", "results = victory.check_all_factions(world)", ["victory"],
      "Sets `world.winner`, which breaks the loop on the NEXT iteration."),

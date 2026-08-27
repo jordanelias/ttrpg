@@ -74,7 +74,12 @@ composition_roles:
     note: "GD-2 mandatory-actions precedence is enforced inside the callable, not by the caller."
   season_driver:
     target: "systems.overview.sim.season:run_season"
-    needed_by: "engine/mc_v18.py — composes advance_season -> action_callback -> run_accounting"
+    needed_by: "engine/mc_v18.py — the per-season driver it calls. The composition itself is engine/autoload/engine_clock.py:run_tick as of ED-IN-0199; this row names the SEAM, not the owner."
+    note: "As of ED-IN-0199 this is a thin adapter over engine/autoload/engine_clock.py:run_tick, which owns the composition per propagation_spec_v1 §O.1. The role stays because run_season's SeasonResult is a systems-lane return shape with its own callers; the ordering is no longer its to define."
+  accounting:
+    target: "systems.overview.sim.accounting:run_accounting"
+    needed_by: "engine/autoload/engine_clock.py — the ACCOUNTING_BOUNDARY phase body of run_tick"
+    note: "Added ED-IN-0199. engine_clock owns the SEASON_TICK -> ACTION -> ACCOUNTING_BOUNDARY composition (propagation_spec_v1 §O.1) and therefore has to reach accounting; resolving it by role is what keeps `systems` out of `engine`'s import graph, which test_engine_does_not_import_systems.py holds at zero."
 
   # ── The parliamentary seam (added 2026-08-22, plan S5a) ───────────────────────────────────────
   # `engine/cross_scale/parliamentary_bridge.py` held the last three top-level `systems` imports in

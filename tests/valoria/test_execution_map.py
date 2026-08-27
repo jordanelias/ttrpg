@@ -3,9 +3,10 @@
 `references/EXECUTION_MAP.md` + `execution_map.json` answer "how does the game run, boot to
 termination, with every module, contract, Key and owned scalar". Most of it is JOINED from live
 registries and cannot rot independently. One part cannot be: the execution SPINE — the phase
-order — is hand-transcribed from `engine/mc_v18.py` and `systems/overview/sim/season.py`, because
-run_season's three steps are a documented composition rather than something an AST reveals as
-phases.
+order — is hand-transcribed from `engine/mc_v18.py` and `engine/autoload/engine_clock.py`, because
+run_tick's three phases are a documented composition rather than something an AST reveals as
+phases. (Re-pointed 2026-08-27, ED-IN-0199: the composition was `systems/overview/sim/season.py`'s
+until engine_clock — the module propagation_spec_v1 §O.1 names as its owner — was built.)
 
 Hand-transcription is the failure mode this repo keeps hitting: a map that was true when written
 and quietly stopped being true. So every phase carries the exact source anchor it came from, and

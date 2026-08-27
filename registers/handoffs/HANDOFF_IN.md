@@ -3640,3 +3640,43 @@ matched `'audit/'` as a SUBSTRING, so every `skills/valoria-vector-audit/` scrip
 the blocking naming gate. That is the ED-IN-0133 defect whose worked example in `pathres.py` is this
 exact collision. Rooted — and only `audit/`, because rooting `tests/` too would drop 28
 `engine/tests/` files out of a legitimate exemption.
+
+---
+
+## 2026-08-27 — engine_clock exists, and the tick's clock calls left the ACTION phase (ED-IN-0199)
+
+**WHAT LANDED.** `engine/autoload/engine_clock.py` now owns `run_tick`: SEASON_TICK -> ACTION ->
+ACCOUNTING_BOUNDARY, the composition `systems/_architecture/propagation_spec_v1.md` §O.1 has
+assigned to it since 2026-07-02 and that no module implemented. `systems/overview/sim/season.py`'s
+`run_season` is an adapter over it and defines no ordering; accounting is resolved by a new
+`accounting` composition role rather than imported, so `systems` stays out of `engine`'s import
+graph.
+
+**THE DEFECT, AND WHY IT WAS WORTH FIXING WHILE INERT.** `sched.accounting_boundary()` and
+`sched.next_tick()` sat at the tail of `mc_v18._faction_actions_callback` — inside the ACTION
+phase's own body. `next_tick()` sets `_phase = _PHASE_ACTION`, and `keys.py:_emit_at_depth` defers
+an `apply` exactly on that condition, so an accounting-phase emission carrying a settlement effect
+would have been queued to the NEXT season's boundary. `accounting.py` emits no Keys today, so
+nothing was mis-deferred — but the first accounting-phase emitter would have inherited it, and its
+symptom (an effect landing one season late) reads as a balance question.
+
+**CONTROL:** five seeded campaigns and both pinned batches byte-identical including
+`key_log_hash`. **Falsifier:** `tests/valoria/test_engine_clock_phases.py`, mutation-verified two
+ways.
+
+### Open, and NOT closed by this
+
+- **§4.1's drain topology.** `run_tick` calls `run_accounting` RAW — the shape §4.1 explicitly
+  names as its rejected earlier draft ("that was unbounded"). Bounded today only because accounting
+  emits nothing. Closing it means seeding accounting's emissions into the same cascade_depth-capped
+  drain as the action phase's. **Phase E work; blocked on R-1 (the D.6 double-count) and R-4
+  (ORD-3 observer ordering).**
+- **ED-1051** — `engine_clock`'s `doc: null` / `[ASSUMPTION]` grade in `references/module_contracts.yaml`.
+  Deliberately NOT flipped. The module existing does not by itself retire the contract's grade;
+  §O.2 supplies the candidate contract and Jordan has not ruled it.
+- **~38 file:line anchors into `references/module_contracts.yaml`** were re-based +5 across the 14
+  live flow skeletons, which preserves each anchor's existing offset and nothing more. An
+  adversarial sample of 23 found **12 already stale by larger, non-uniform offsets** (e.g.
+  `victory_flow_skeleton`'s victory contract cited at `:957-999`, actually at `:1078+`). Nothing in
+  CI validates a `.md` anchor's CONTENT. Repairing them is a bounded but separate job; a partial
+  repair would present the unsampled remainder as verified.

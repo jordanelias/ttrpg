@@ -1,5 +1,6 @@
 """
-sim/autoload/sigma_leverage.py — σ-leverage advantage layer atop the d10 dice engine.
+engine/autoload/sigma_leverage.py — σ-leverage advantage layer atop the d10 dice engine.
+(The header read `sim/autoload/...` until 2026-08-27; that tree was retired 2026-07-21.)
 
 Canon source: modifier_system_spec.md (the implementation-pass rewrite)
 Params source: params/core.md, modifier_system_spec.md
@@ -106,13 +107,13 @@ SIGMA_N_COEFF = 0.8     # sigma_N = 0.8 * sqrt(Pool)      # [canonical: modifier
 # Contest engine surface constants (audit/2026-06-03-contest-groundup/engine.py)
 OB_MIN = 1              # [canonical: params/core.md §Obstacle Scale]
 
-# Contest-surface per-die stats (params/core.md §Expected Value): TN7 μ/σ per die.
-# The contest degree() Overwhelming bar is pool-aware (see degree() below).
+# Per-die stats (params/core.md §Expected Value): TN7 μ/σ per die. GENERAL, not contest-specific
+# — the contest's de-saturation extension reads them from here (ED-SC-0032).
 MU_PER_DIE = 0.40       # [canonical: params/core.md §Expected Value (per die), TN7]
 SD_PER_DIE = 0.80       # [canonical: params/core.md §Expected Value (per die), TN7]
-# De-saturation bar (contest diagnostic Lesson 2, groundup engine.py): live degree-3 bar
-# = pool mean + OVERWHELM_SIGMA·σ, holding the Overwhelming rate ~uniform across pool sizes.
-OVERWHELM_SIGMA = 0.85  # [canonical: audit/2026-06-03-contest-groundup/engine.py §degree]
+# OVERWHELM_SIGMA MOVED 2026-08-27 (ED-SC-0032) to
+# systems/social_contest/sim/contest/degree_extension.py. It is a contest constant — its own
+# citation is the contest groundup engine — and it belongs with the extension that reads it.
 
 
 # ---------------------------------------------------------------------------
@@ -315,48 +316,18 @@ def roll_net_continuous(pool: float, tn: int = TN_STANDARD, rng: random.Random |
 
 
 # ---------------------------------------------------------------------------
-# Contest-surface degree (pool-aware integer bands)
+# Contest-surface degree — RETIRED FROM THIS MODULE 2026-08-27 (ED-SC-0032)
 # ---------------------------------------------------------------------------
-
-def degree(net: float, ob: float, pool: float | None = None) -> int:
-    """Contest-surface degree bands: 0 Failure / 1 Partial / 2 Success / 3 Overwhelming.
-
-    ⚠ HELD AT THE PRE-2026-08-14 BANDS (ED-IN-0187). Jordan's ruling unified the ladder on the
-    margin `net - ob` — bands at 0/1/3, owner `dice_engine.degree_from_net` — and every other
-    resolver in the tree now routes through it. THIS ONE DOES NOT, and it is the second and last
-    declared hold. Two of its three lower boundaries contradict the ruling outright:
-    `net == ob` returns 2 (Success) where the ruling says Partial, and `0 < net < ob` returns 1
-    (Partial) where the ruling says Failure.
-
-    Why it is held rather than migrated: the top band here is a POOL-AWARE bar that is a
-    deliberate, documented design decision (below), so migrating means deciding whether the
-    ruling overrides a contract that was chosen on purpose — a design call, not a mechanical
-    one. It is also load-bearing on the 151 groundup tests named below plus the contest kernel's
-    own `_kernel_tests.py`, which pins `degree(3, 3) == 2` — the exact cell the ruling flips.
-    Recorded in `tests/valoria/test_degree_ladder_single_owner.py`'s HELD registry, which fails
-    if the divergence ever silently disappears.
-
-    RECONCILIATION NOTE (Stage 1b, degree carry-across — NOT a fork):
-    This is a DISTINCT contract from dice_engine.degree_from_net. The social
-    contest kernel needs (a) INTEGER bands it uses as a numeric magnitude in
-    _advance, and (b) a POOL-AWARE Overwhelming bar (pool mean + OVERWHELM_SIGMA·σ)
-    that de-saturates the degree-3 rate to ~uniform across pool sizes (diagnostic
-    Lesson 2). These are contest-specific reception semantics, so the pool-aware
-    integer degree lives here on the contest surface rather than overwriting the
-    combat enum degree. Ported verbatim from
-    audit/2026-06-03-contest-groundup/engine.py §degree; the 151 groundup
-    tests are the behavior-preserving guard. TN7-only (D0-3): contest is unaffected
-    by the TN6/8 boost divergence.
-
-    With `pool` given (live reception): Overwhelming requires clearing a σ-scaled
-    bar. Pool-less calls keep the legacy 2·ob bar (unit tests only).
-    [canonical: audit/2026-06-03-contest-groundup/engine.py §degree]
-    """
-    if net <= 0:                       return 0
-    if net < ob:                       return 1
-    if pool is not None:
-        thresh = MU_PER_DIE * pool + OVERWHELM_SIGMA * SD_PER_DIE * math.sqrt(max(1, pool))
-        if net >= thresh and net >= max(3, ob): return 3
-        return 2
-    if net >= 2 * ob and net >= 3:     return 3   # legacy, pool-less unit tests only
-    return 2
+# `degree(net, ob, pool)`, `overwhelm_bar`, `crossover_pool` and `OVERWHELM_SIGMA` lived here and
+# are now at `systems/social_contest/sim/contest/degree_extension.py`. They were never general:
+# the pool-aware de-saturation is ONE SUBSYSTEM'S rule, and OVERWHELM_SIGMA's own citation says
+# so (`audit/2026-06-03-contest-groundup/engine.py §degree`). The engine carrying it was half of
+# what made Jordan's 2026-08-15 ruling unsatisfied — the other half being that there was no seam,
+# which `dice_engine.BandExtension` now is.
+#
+# WHAT TO CALL INSTEAD: `dice_engine.degree_from_net(net, ob, extension=..., **context)` for the
+# ladder, and the contest package's own `degree()` adapter if you want the ordinal with the
+# contest's extension applied. Nothing in `engine/` should reach for the second.
+#
+# The MU/SD per-die constants stay here: those ARE general, and the extension reads them from
+# this module.
