@@ -37,6 +37,18 @@ DEGREE_LABEL: dict["Degree", str] = {
     Degree.FAILURE: "Failure",
 }
 
+# The same four bands as an ORDINAL. The social-contest kernel uses the degree as a numeric
+# magnitude (`contest/_advance` multiplies by it), so it needs 0-3 rather than an enum — and
+# before ED-SC-0031 it got there by keeping a private ladder that returned ints directly, which
+# is how the ninth ladder survived a census. Owning the encoding here means a caller that needs
+# a number still resolves its BANDS through `degree_from_net`; only the spelling is local.
+DEGREE_ORDINAL: dict["Degree", int] = {
+    Degree.FAILURE: 0,
+    Degree.PARTIAL: 1,
+    Degree.SUCCESS: 2,
+    Degree.OVERWHELMING: 3,
+}
+
 
 @dataclass
 class RollResult:

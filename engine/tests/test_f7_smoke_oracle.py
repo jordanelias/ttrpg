@@ -264,15 +264,51 @@ _FACTIONS = ['Crown', 'Church', 'Hafenmark', 'Varfell']
 # it. Restored from git. Rule: a PREVIOUS line is read out of `git show <ref>:<file>`, never
 # copied from the constant you are about to overwrite.
 # REGENERATED 2026-08-24 — THE MASS-BATTLE ENGINE WAS SWAPPED (Jordan-directed). `systems/mass_battle/sim/` was 1,905 lines; it is now the 11,342-line engine ported from `tests/sim/mass_battle/`, which a live test called "the canon mass-battle engine" and which 43 of 156 tests/valoria files already imported. THE EXPERIMENT IS SINGLE-VARIABLE BY CONSTRUCTION: the strategic adapter (faction -> Unit construction, the garrison stub, the size-ratio -> degree map) was carried over FIELD-FOR-FIELD UNCHANGED in `systems/mass_battle/sim/massbattle.py`, so this delta is attributable to the RESOLUTION MODEL and to nothing else. ⚠ THIS IS NOT A BALANCE MEASUREMENT: n=2/seed-0 and n=8/seed-42 cannot distinguish a balance change from noise (test_f7_smoke_oracle.py:8 demands an n>=100 oracle that still does not exist). It is a reproducibility pin, and same-seed determinism was verified twice before re-recording.
-GOLDEN_WIN_SHARE = {'Crown': 62.5, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 12.5}
+# ══════════════════════════════════════════════════════════════════════════════════════════════
+# RE-PINNED 2026-08-27 — ED-SC-0031, the social-contest degree ladder migrated to the single owner.
+# `sigma_leverage.degree` was the ninth ladder (the one the 2026-08-12 census missed). Its bands are
+# now `dice_engine.degree_from_net`'s; two of its three lower boundaries had contradicted Jordan's
+# 2026-08-14 ruling outright. It is reached every season through
+# `scene_dispatch.run_scene_phase` -> `wrapper.resolve_contest` -> `resolver._reception`, so the
+# banding of every campaign contest changes and the RNG stream diverges from the first exchange on.
+#
+# CONTROL (CLAUDE.md §0.1 pt 4, and §7's demand for an n>=100 oracle):
+#   `python tools/balance_oracle.py --n 120`, arms `private_ladder` vs `owner_ladder`, seeds
+#   20260819..20260938, both arms in ONE process so the ladder is the only difference:
+#
+#     faction     private_ladder  owner_ladder   delta pp        z
+#     Church             7.5%         5.0%        -2.5       -0.80
+#     Crown             51.7%        55.0%        +3.3       +0.52
+#     Hafenmark         10.0%        10.0%        +0.0       +0.00
+#     Varfell           30.8%        30.0%        -0.8       -0.14
+#
+#   Nothing significant (|z| <= 1.96; max 0.80). Read as the oracle's own docstring instructs:
+#   this BOUNDS the effect, it does not exclude one, and the two-proportion z under-detects on
+#   paired arms. The n=8 golden below swings far harder than any of those deltas — which is the
+#   whole reason the oracle exists, and why the swing is not read as a balance change.
+# ══════════════════════════════════════════════════════════════════════════════════════════════
+# PREVIOUS (2026-08-24, mass-battle engine swap — read out of the tree at ab8d156, never
+# copied from the constants being overwritten; this file carries the incident that made
+# that rule):
+#   GOLDEN_WIN_SHARE = {'Crown': 62.5, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 12.5}
+#   GOLDEN_WINNERS = {'Crown': 1, 'Hafenmark': 1, 'Varfell': 6}
+#   GOLDEN_BATTLES_MEAN = 35.9; GOLDEN_SCENES_RESOLVED = 975
+#
+# ⚠ THIS IS THE LARGEST SINGLE-COMMIT SWING THIS GOLDEN HAS TAKEN, AND IT IS NOT A BALANCE
+# RESULT. Crown 62.5 -> 12.5 and Varfell 12.5 -> 75.0 is six of eight campaigns changing
+# winner. At n=8 one campaign is 12.5pp, and the 120-per-arm control above puts every
+# faction's true delta inside +-3.3pp with |z| <= 0.80. This file's own docstring says it:
+# small-n is a reproducibility pin, NOT balance signal. Do not tune to it, and do not cite
+# this swing as evidence the ruling favoured Varfell.
+GOLDEN_WIN_SHARE = {'Crown': 12.5, 'Church': 0.0, 'Hafenmark': 12.5, 'Varfell': 75.0}
 # GOLDEN_WINNERS mirrors _win_share's raw `wins` dict shape: only factions with >=1 win get a key.
 # ⚠ The sentence here used to say "Church/Hafenmark win 0/8 now". That was true of the PREVIOUS
 # pin and false of this one — under the 2026-08-14 reband Church wins 2 of 8 and Hafenmark 0, so
 # Hafenmark alone is absent. Corrected rather than left: a comment explaining the shape of numbers
 # it no longer describes is how the next re-record gets reasoned about wrongly.
-GOLDEN_WINNERS = {'Crown': 5, 'Church': 2, 'Varfell': 1}
-GOLDEN_BATTLES_MEAN = 35.1
-GOLDEN_SCENES_RESOLVED = 975  # 862 -> 858 (fractional pools, 08-21) -> 947 (per-stat floors, 08-22) -> 967 (roster rulings, 08-23)
+GOLDEN_WINNERS = {'Crown': 1, 'Hafenmark': 1, 'Varfell': 6}
+GOLDEN_BATTLES_MEAN = 35.9
+GOLDEN_SCENES_RESOLVED = 1072  # 975 -> 1072 (ED-SC-0031); 862 -> 858 (fractional pools, 08-21) -> 947 (per-stat floors, 08-22) -> 967 (roster rulings, 08-23)
 WALL_TIME_CEILING_S = 90.0  # n=8 runs ~16s; generous headroom for CI variance
 
 _CACHE = {}
@@ -336,8 +372,8 @@ def test_f7_scenes_live_insurgency_and_npe_still_islands():
 
 
 def test_f7_hafenmark_elimination_lockout():
-    """Hafenmark wins 0/8 on seed-42 (REPINNED 2026-07-29, ED-FA-0036/OI-04 — see the golden
-    block's REPINNED comment above).
+    """Hafenmark wins 1/8 on seed-42..49, and no faction ever recovers from 0 territories.
+    (The 0/8 that stood here is the 2026-07-29 pin; see the ED-SC-0031 note at the end.)
 
     CORRECTED CLAIM (the prior docstring's premise went stale, not just its number):
     `parliamentary_transfer.propose_transfer` is NO LONGER "never called" — OI-04 wired it into
@@ -357,10 +393,60 @@ def test_f7_hafenmark_elimination_lockout():
     consuming `world.rng`. Hafenmark's 0/8 here is therefore still a TRAJECTORY artifact of the
     (now further-)shifted RNG, not evidence one way or the other about ED-FA-0005. Pinned as the
     new golden; a move here again means the RNG shifted further — investigate before
-    regenerating."""
+    regenerating.
+
+    ⚠ RE-PINNED 2026-08-27 (ED-SC-0031) — 0/8 -> 1/8, AND THE ASSERTION MESSAGE'S OWN QUESTION
+    WAS ANSWERED RATHER THAN THE NUMBER BEING SWAPPED. The old message named two possibilities:
+    "trajectory moved (or an ED-FA-0005 comeback path landed)". It is the first, and that was
+    established by measurement, not by assumption: seed 44 is the campaign that flipped, and
+    Hafenmark's territory count across its 50 seasons is
+    [3,3,3,3,4,4,4,4,4,4,4,3,3,4,4,4,2,2,2,2,3,2,2,2,3,4,4,4,4,3,3,3,3,2,2,3,3,3,4,5,6,6,7,7,7,7,7,7,6,7]
+    — MINIMUM 2, never 0. Hafenmark was never eliminated on that seed, so the one-way lockout was
+    never tested by it, let alone broken. No comeback path landed.
+
+    THE COUNT IS NOW PAIRED WITH THE MECHANISM, because the count alone could never have answered
+    that question — which is why this test asked a reader to "investigate" instead of doing so. The
+    property assertion below is the one with meaning; the count stays as a trajectory pin.
+    """
     campaigns = _campaigns42()
     hafenmark_wins = sum(1 for r in campaigns if r.winner == 'Hafenmark')
-    assert hafenmark_wins == 0, f"Hafenmark won {hafenmark_wins} != 0 — trajectory moved (or an ED-FA-0005 comeback path landed); investigate before regenerating"
+    assert hafenmark_wins == 1, (
+        f"Hafenmark won {hafenmark_wins} != 1 — trajectory moved; check the MECHANISM assertion "
+        "below before regenerating, since that is the one that distinguishes a broken lockout "
+        "from a shifted RNG stream")
+
+    # THE MECHANISM: a faction that reaches 0 territories never holds one again. Measured on the
+    # seed that flipped, which is the campaign this re-pin is about; one extra campaign rather than
+    # eight, because the other seven did not change and re-tracing them buys nothing.
+    from engine.autoload import engine_clock as _clock
+    history = []
+    _orig = _clock.run_tick
+
+    def _traced(world, action_callback=None):
+        r = _orig(world, action_callback=action_callback)
+        history.append({fn: len(f.territories) for fn, f in world.factions.items()})
+        return r
+
+    _clock.run_tick = _traced
+    try:
+        flipped = run_campaign(seed=44, max_seasons=50)
+    finally:
+        _clock.run_tick = _orig
+
+    assert flipped.winner == 'Hafenmark', f"seed 44 no longer flips ({flipped.winner})"
+    assert len(history) >= 50, f"the trace captured {len(history)} seasons — it is not running"
+    for faction in history[0]:
+        counts = [h[faction] for h in history]
+        if 0 not in counts:
+            continue
+        after = counts[counts.index(0):]
+        assert not any(c > 0 for c in after), (
+            f"{faction} reached 0 territories and RECOVERED ({after}) — the one-way lockout is "
+            "broken, or an ED-FA-0005 comeback path landed. That is a mechanism change, not a "
+            "trajectory shift, and must not be re-pinned away")
+    assert min(h['Hafenmark'] for h in history) > 0, (
+        "Hafenmark DID reach 0 on seed 44 and still won — re-read the loop above, because the "
+        "lockout is then the thing under test rather than an untouched bystander")
 
 
 def test_f7_victory_threshold_is_a_dead_param():

@@ -33,7 +33,10 @@ LOWT = Adjudicator(discipline=.75, char_ethos=.2, char_pathos=.1, char_logos=.7)
 
 print("== engine ==")
 ck("sigma_N", isclose(E.sigma_N(16), 3.2))
-ck("degree bands", (E.degree(0,3), E.degree(3,3), E.degree(6,3)) == (0,2,3))
+# RE-PINNED 2026-08-27 (ED-SC-0031): degree(3,3) was 2, is now 1. `net == ob` means the obstacle
+# is MET but not EXCEEDED, which Jordan's 2026-08-14 ladder ruling bands as Partial. This is the
+# exact cell test_degree_ladder_single_owner.py's HELD entry named as the one the ruling flips.
+ck("degree bands", (E.degree(0,3), E.degree(3,3), E.degree(6,3)) == (0,1,3))
 
 print("== contract: Panel aggregation ==")
 pan = Panel((Adjudicator(char_logos=.7, char_ethos=.2, char_pathos=.1, discipline=.8, learned=True),
@@ -407,9 +410,26 @@ _fac2_ob  = max(1.0, _eff_ob(2.0, Leverage.net(2, on_ground=True), Pool.size(2))
 ck("sigma-leverage: READING_COEFF=1/6 gives lev=0 at fac=1 on-ground (no precision drift)", abs(_fac1_lev) < 1e-9)
 ck("sigma-leverage: fac=1 ob is exactly 2.0 (no round() cliff)",                            abs(_fac1_ob - 2.0) < 1e-9)
 ck("sigma-leverage: ob is a float, not int",                                                 isinstance(_fac1_ob, float))
-ck("sigma-leverage: net=2 at fac=1 is SUCCESS, not partial",                                degree(2, _fac1_ob) == 2)
-ck("sigma-leverage: net=1 at fac=2 is PARTIAL (float ob < 2 allows fractional threshold)",  degree(1, _fac2_ob) == 1)
-ck("sigma-leverage: net=2 at fac=2 is SUCCESS (not partial)",                               degree(2, _fac2_ob) == 2)
+# RE-PINNED 2026-08-27 (ED-SC-0031). These three guarded the FLOAT-OB plumbing — that a
+# fractional Ob reaches the ladder without a round() cliff — and they expressed it through the
+# pre-ruling bands, so all three moved by exactly one step when the ladder became the owner's.
+# The plumbing they exist to guard is unchanged and is still checked by the three assertions
+# above (`_fac1_ob` exactly 2.0, is a float, lev==0). What moved, and why:
+#   _fac1_ob == 2.0        : degree(2, 2.0) 2 -> 1. Margin 0: the obstacle is met, not exceeded.
+#   _fac2_ob ~= 1.648678   : degree(1, ob)  1 -> 0. Margin -0.65: fell short, so Failure.
+#                            degree(2, ob)  2 -> 1. Margin +0.35: inside the Partial window.
+# ⚠ A CLAIM MADE HERE FIRST WAS FALSE AND IS RETRACTED: that the middle check "still discriminates"
+# a fractional Ob from an integer one. It does not. degree(1, 1.648678) and degree(1, 2.0) are
+# both 0, so any ob > 1 satisfies it and it cannot observe a round-UP cliff at all. (It does still
+# observe a round-DOWN cliff: degree(1, 1.0) == 1.) This was equally true of the pre-ruling ladder,
+# so the re-pin lost nothing — but the comment asserted a power the check has never had, which is
+# the failure this file's own conventions exist to stop. The THIRD check below is the one with
+# fractional discrimination in it: degree(2, 1.648678) == 1 while degree(2, 2.0) == 1 too, and
+# degree(2, 1.0) == 3 — so the round-down direction is covered and the round-up direction is
+# covered by the exact-2.0 assertion three lines above, not by these bands.
+ck("sigma-leverage: net=2 at fac=1 is PARTIAL (margin 0 — the obstacle is met, not exceeded)", degree(2, _fac1_ob) == 1)
+ck("sigma-leverage: net=1 at fac=2 is FAILURE (float ob 1.649 > net, so the margin is negative)", degree(1, _fac2_ob) == 0)
+ck("sigma-leverage: net=2 at fac=2 is PARTIAL (margin +0.35 lands inside the Partial window)", degree(2, _fac2_ob) == 1)
 ck("sigma-leverage: fac=7 on-ground ob hits the 1.0 floor",                                 max(1.0, _eff_ob(2.0, Leverage.net(7, True), Pool.size(7))) == 1.0)
 ck("sigma-leverage: fac=7 off-ground ob also hits 1.0 (expert immune to ground penalty)",   max(1.0, _eff_ob(2.0, Leverage.net(7, False), Pool.size(7))) == 1.0)
 
@@ -433,11 +453,53 @@ random.seed(20260605)
 def _d3(pool, leg=False, N=8000):
     return sum(1 for _ in range(N) if degree(_rn(pool), 2.0, None if leg else pool) == 3) / N
 _paw = {p: _d3(p) for p in range(2, 9)}
-_leg8 = _d3(8, leg=True)
+# RE-DERIVED 2026-08-27 (ED-SC-0031). The bound below was set when this quantity peaked at ~0.287;
+# under the owner's ladder it peaks at ~0.203, so a 0.38 ceiling had gone slack by half. Re-derived
+# to ~3 sigma over the measured max at this N rather than left where it was: an un-re-derived bound
+# under a moved quantity is a guard that still passes and no longer bites.
 ck(f"de-saturation: high-pool Overwhelming bounded (max {max(_paw.values()):.2f}, pool8 {_paw[8]:.2f})",
-   max(_paw.values()) < 0.38 and _paw[8] < 0.32)
-ck(f"de-saturation: pool-aware cuts the legacy high-pool spike (legacy8 {_leg8:.2f} vs paw8 {_paw[8]:.2f})",
-   _leg8 > 0.38 and _paw[8] < _leg8 - 0.15)
+   max(_paw.values()) < 0.26 and _paw[8] < 0.20)
+# The `leg=True` arm used to be the LEGACY pool-less bar (`net >= 2*ob and net >= 3`), an Ob-scaled
+# Overwhelming the 2026-08-14 ruling struck by name. That bar is gone, so this arm is the OWNER'S
+# ladder unmodified — the more useful control anyway: it asks whether the extension is still
+# load-bearing, not whether it beats a dead bar.
+#
+# ⚠ THE COMPARISON BELOW IS UNPAIRED AND IS LABELLED AS SUCH. `_d3` draws a fresh sample from the
+# shared RNG stream each call, so `_paw[8]` and `_own8` are two independent Monte-Carlo rates, not
+# one draw banded two ways. An earlier draft of this block called its table "paired" while the
+# committed instrument was not — the number was right (it came from an offline paired run) and the
+# reproducer did not match it, which is exactly the §0.1-pt-4 gap of a number without an
+# instrument. Two fixes rather than a reworded comment: the MC check keeps a loose bound
+# appropriate to an unpaired estimate, and `_d3_paired` below reproduces the real claim exactly.
+_own8 = _leg8 = _d3(8, leg=True)
+ck(f"de-saturation: the extension still cuts the high-pool rate (owner-only8 {_own8:.2f} vs paw8 {_paw[8]:.2f}, UNPAIRED)",
+   _own8 > 0.24 and _paw[8] < _own8 * 0.7)
+
+def _d3_paired(pool, ob=2.0, N=20000):
+    """One draw, banded BOTH ways. Returns (owner_rate, extension_rate) over the same nets."""
+    o = a = 0
+    for _ in range(N):
+        n = _rn(pool)
+        o += degree(n, ob, None) == 3
+        a += degree(n, ob, pool) == 3
+    return o / N, a / N
+
+random.seed(20260827)
+_p_own, _p_ext = _d3_paired(30)
+ck(f"de-saturation PAIRED: owner saturates at pool 30 ({_p_own:.2f}), extension holds it ({_p_ext:.2f})",
+   _p_own > 0.90 and _p_ext < 0.30)
+# The exact-inertness claim, and the reason it is NOT "below pool 8": the crossover moves with the
+# obstacle. `crossover_pool` owns that derivation; pinning 8 here was a measurement of resolver.py's
+# default ob (2.0) presented as a contract. ob 1.0 crosses at 6, ob 3.0 at 10.
+from engine.autoload.sigma_leverage import crossover_pool as _xover
+ck("de-saturation: the crossover is a function of ob, not the constant 8",
+   [_xover(o) for o in (1.0, 2.0, 3.0)] == [6, 8, 10])
+ck("de-saturation: the extension is inert below its crossover, for EVERY ob (paired, exact)",
+   all(degree(n, o, p) == degree(n, o, None)
+       for o in (1.0, 2.0, 3.0) for p in range(1, _xover(o)) for n in range(-2 * p, 2 * p + 1)))
+ck("de-saturation: it DOES bite at and above each crossover (so the check above is not vacuous)",
+   all(any(degree(n, o, p) != degree(n, o, None) for n in range(0, 3 * p))
+       for o in (1.0, 2.0, 3.0) for p in (_xover(o), _xover(o) + 4, _xover(o) + 10)))
 # T2: res-floor is load-bearing — some venue/appeal drives RAW resonance below RES_FLOOR, the floor lifts it
 def _rawres(b, ap, gr):
     c = b.c["a"]; lk = min(Resonance.LEAK_CAP, Resonance.leak(b.adj.discipline, c.cred_frac()) + b.pr.public * _PL)
@@ -458,7 +520,7 @@ ck(f"ballotta: secret_council yields SPLIT_DECISION verdicts ({_sp/_N:.3f})", 0.
 # ═════════════════════════════════════════════════════════════════════════════
 # STAGE 1c — CANONICAL v30 RE-SKIN: the 8 proceedings + 4 adjudicator types, wired
 # to the Persuasion-Track banding, and the build_contest/resolve_contest wrapper.
-# These are ADDED checks (the 151 above are behavior-preserved verbatim); every
+# These are ADDED checks (the 151 above are behavior-preserved verbatim EXCEPT the four re-pinned by ED-SC-0031 (the `degree bands` check at the top of this file and the three `sigma-leverage:` band checks), each of which moved by exactly one ladder step under Jordan's 2026-08-14 ruling and carries its own reason inline; the checks themselves were not removed or weakened); every
 # assertion below is a surface check on the re-skin, no new mechanic.
 print("== canonical adjudicator re-skin (social_contest_v30 §2 Step 1 / §3) ==")
 from .modes import (CANONICAL_ADJUDICATORS, ADJUDICATOR_PRIMARY, PROCEEDINGS,
@@ -658,17 +720,32 @@ print("== golden-trace parity: fixed seed+policy => PINNED per-exchange track se
 GOLDEN_TRACE_SEED = 20260630
 GOLDEN_TRACE_PROC = "grand_contest"
 GOLDEN_TRACE_RES  = "committee"
+# RE-RECORDED 2026-08-27 (ED-SC-0031) — a ledger-cited mechanic change, the one condition the
+# paragraph above allows a regeneration under. THE CONTROL, which is why this is a re-record and
+# not a drift being papered over:
+#   * `advB` is BYTE-IDENTICAL across all ten beats (0.482663 / 0.931129 / 1.419577 / 1.879483).
+#     The RNG stream did not diverge; only banding moved.
+#   * every `advA` moved by the SAME constant, ~0.2241705 (the four displayed deltas are
+#     0.224171 / 0.224170 / 0.224170 / 0.224171 — one constant within 6-dp display rounding; do
+#     not quote it as exactly -0.224171, which does not reproduce beats 3-8). A's opening exchange
+#     banded down one step (Success -> Partial at margin 0) and every later beat inherited that
+#     single offset; the track moves by 1.5x that, consistent with track = 5 + 1.5*(advA - advB).
+#   * beat count (10), the resolved band (`committee`), and the final-beat banding check below
+#     are all unchanged.
+#   A one-cell band change with a constant downstream offset is what this ruling predicts. A
+#   diffuse, per-beat-varying move would have meant something else broke, and would not be
+#   re-recordable.
 GOLDEN_TRACE = (
-    (0.448341, 0.0,      5.672511),
-    (0.448341, 0.482663, 4.948517),
-    (1.117326, 0.482663, 5.951995),
-    (1.117326, 0.931129, 5.279295),
-    (1.570162, 0.931129, 5.958549),
-    (1.570162, 1.419577, 5.225878),
-    (1.570162, 1.419577, 5.225878),
-    (1.570162, 1.419577, 5.225878),
-    (2.053478, 1.419577, 5.950852),
-    (2.053478, 1.879483, 5.260993),
+    (0.22417,  0.0,      5.336255),
+    (0.22417,  0.482663, 4.612261),
+    (0.893156, 0.482663, 5.61574),
+    (0.893156, 0.931129, 4.94304),
+    (1.345992, 0.931129, 5.622294),
+    (1.345992, 1.419577, 4.889623),
+    (1.345992, 1.419577, 4.889623),
+    (1.345992, 1.419577, 4.889623),
+    (1.829307, 1.419577, 5.614596),
+    (1.829307, 1.879483, 4.924737),
 )
 def _golden_trace(seed, proc="grand_contest"):
     random.seed(seed)

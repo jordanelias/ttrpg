@@ -119,10 +119,95 @@ def _floor_arm(blanket: bool):
     return lambda: setattr(gs.Faction, 'adjust', original)
 
 
+def _contest_ladder_arm(pre: bool):
+    """Patch `sigma_leverage.degree` back to its PRE-ED-SC-0031 private ladder, or leave the
+    owner's. Returns undo.
+
+    THE MECHANIC. Until 2026-08-27 the social-contest surface carried its own degree bands — the
+    ninth ladder, and the one the 2026-08-12 census missed. Two of its three lower boundaries
+    contradicted Jordan's 2026-08-14 ruling (`net == ob` -> Success where the ruling says Partial;
+    `0 < net < ob` -> Partial where it says Failure) and its pool-less top band was the Ob-scaled
+    `net >= 2*ob` bar the ruling struck by name. It now returns `dice_engine.degree_from_net`'s
+    bands with one declared extension that may only demote Overwhelming to Success.
+
+    The `pre` arm below is a VERBATIM copy of the retired implementation, kept here as the record
+    of what it did — same convention as `_pool_arm` and `_floor_arm` above. It is patched onto the
+    module rather than reconstructed at the call sites, because `degree` reaches the campaign loop
+    through `contest/agon_harness.py` and the resolver, and patching the owner is the only way to
+    make the ladder the single difference between arms.
+    """
+    original = SL.degree
+
+    def pre_ruling(net, ob, pool=None):
+        if net <= 0:                       return 0
+        if net < ob:                       return 1
+        if pool is not None:
+            thresh = (SL.MU_PER_DIE * pool
+                      + SL.OVERWHELM_SIGMA * SL.SD_PER_DIE * math.sqrt(max(1, pool)))
+            if net >= thresh and net >= max(3, ob): return 3
+            return 2
+        if net >= 2 * ob and net >= 3:     return 3
+        return 2
+
+    if not pre:
+        return lambda: None
+
+    # `systems/social_contest/sim/contest/resolver.py:24` does `from engine.autoload.sigma_leverage
+    # import ... degree`, binding the function OBJECT into its own namespace at import time.
+    # Patching only `SL.degree` would leave the live campaign call site — `resolver._reception`,
+    # which feeds the band into `_advance(magnitude=deg)` — on the original, giving two identical
+    # arms. A fake control is worse than no control, and it is exactly the confound CLAUDE.md §0.1
+    # exists for.
+    #
+    # ⚠ AN EARLIER VERSION HARD-CODED THREE MODULES AND ASSERTED `len(bound) == 3`, with a comment
+    # claiming that made a missed importer loud. It did not: the list it counted was the same
+    # hard-coded tuple, so a NEW importer would never enter it, the assert would pass, and the arm
+    # would be silently half-fake — the precise failure the comment invoked §0.1 to prevent. The
+    # sweep below discovers bindings instead of listing them, so an importer added tomorrow is
+    # patched without anyone remembering to come here.
+    #
+    # The campaign path must be IMPORTED before the sweep, or its binding does not exist yet to be
+    # found. `mc_v18` is already imported at module scope, but it reaches the contest lazily.
+    import importlib
+    importlib.import_module('systems.social_contest.sim.contest.resolver')
+
+    bound = []
+    for mod in list(sys.modules.values()):
+        if mod is None:
+            continue
+        try:
+            names = vars(mod)
+        except TypeError:                      # extension modules without a __dict__
+            continue
+        for name, value in list(names.items()):
+            if value is original:
+                bound.append((mod, name))
+
+    # Not a count pin: a floor plus the one binding that MUST be there. The floor catches the sweep
+    # silently finding nothing (a rename, a reload); the explicit check catches the live campaign
+    # site specifically, which is the only one whose absence makes the result meaningless.
+    assert len(bound) >= 2, f'sweep found {len(bound)} bindings of degree — it is not working'
+    live = [m.__name__ for m, _ in bound]
+    assert 'systems.social_contest.sim.contest.resolver' in live, (
+        f'the live campaign call site is not among the rebound bindings {sorted(live)} — this arm '
+        'would not change the campaign and the comparison would be fake'
+    )
+    for m, a in bound:
+        setattr(m, a, pre_ruling)
+    return lambda: [setattr(m, a, original) for m, a in bound]
+
+
 #: The comparison this invocation runs. Swap in the pair you are measuring; keep exactly two arms,
 #: keep them in one process, and leave the retired pairs above as worked examples rather than
 #: deleting the function that documents what the old behaviour WAS.
 ARMS = {
+    'private_ladder': lambda: _contest_ladder_arm(True),
+    'owner_ladder':   lambda: _contest_ladder_arm(False),
+}
+
+#: Retired comparison (ED-IN-0029 / the 2026-08-23 Influence + Legitimacy rulings). Restore into
+#: ARMS to re-run it.
+_ARMS_BOUNDS = {
     'pre_ruling': lambda: _pre_ruling_bounds_arm(True),
     'ruled':      lambda: _pre_ruling_bounds_arm(False),
 }

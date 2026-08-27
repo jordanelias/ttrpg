@@ -139,7 +139,13 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     # field). The entry exists in registers/editorial_ledger_fa.jsonl. Same update-the-pin-
     # and-say-so path: ED-IN-0098 'returned' 0037-0039 per this lane's annotation in
     # references/id_reservations.yaml, so reverting the walk-back would give 40, not 38.
-    released = {'SC': 31, 'FA': 38, 'WR': 10, 'SE': 51}
+    # PIN UPDATED 2026-08-27: SC 31 -> 32. ED-SC-0031 allocated for the sigma_leverage.degree
+    # migration — the ninth degree ladder, the one the 2026-08-12 census missed, now returning
+    # the owner's bands with a single declared demote-only extension. The entry exists in
+    # registers/editorial_ledger_sc.jsonl. Same update-the-pin-and-say-so path as the four
+    # notes above: the frozen pre-walk-back SC pointer was 21, so 32 cannot be reached by
+    # reverting ED-IN-0098.
+    released = {'SC': 32, 'FA': 38, 'WR': 10, 'SE': 51}
     checked = 0
     for lane, expected in released.items():
         assert nf[lane] == expected, (

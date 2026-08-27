@@ -13,8 +13,14 @@ independently found a NINTH live ladder the census never enrolled — `sigma_lev
 social-contest surface, sitting in the SAME PACKAGE as the owner. An instrument's roster is a
 claim about the tree, not a measurement of it: this file's roster is therefore paired with a
 source sweep (`test_no_new_hand_rolled_ladder`) so a ladder that nobody enrolled still fails
-something. Six ladders are migrated; two are declared HOLDs with measured reasons; the tree does
-NOT collapse to a single implementation and this file must not be read as claiming it does.
+something.
+
+⚠ STATE AS OF 2026-08-27 (ED-SC-0031): SEVEN ladders are migrated and ONE hold remains
+(`combat_engine_v1/core.py`). `sigma_leverage.degree` — the ninth ladder above — left HELD this
+commit: it returns the owner's bands through `dice_engine.DEGREE_ORDINAL`, and its pool-aware
+Overwhelming bar survives as a declared extension that may only demote Overwhelming to Success.
+The tree still does NOT collapse to a single implementation and this file must not be read as
+claiming it does — the remaining hold is real and is asserted to still diverge below.
 
 THE UNIT OF REPAIR IS THE PATTERN, NOT THE EIGHT SITES (CLAUDE.md 0.1 point 5). A ladder is four
 lines of `if`, which is exactly why it kept being retyped: writing one is cheaper than finding the
@@ -143,9 +149,62 @@ LADDERS = {
     'systems/factions/sim/faction_action.py': _faction_action,
     'systems/mass_battle/sim/resolution.py': _massbattle_canon,
     'skills/valoria-dice-model/valoria_dice.py': _dice_model_skill,
+    # MIGRATED 2026-08-27 (ED-SC-0031) out of HELD. The ninth ladder — the one the 2026-08-12
+    # census missed despite it living in the owner's own package — now returns the owner's bands
+    # via DEGREE_ORDINAL, with no local re-banding. Its pool-aware Overwhelming bar survives as a
+    # declared extension that may ONLY demote Overwhelming to Success, and is off this
+    # two-argument domain entirely (it needs `pool`), which is why enrolling the pool-less form
+    # here is the whole claim and not a partial one. The extension's own contract is pinned by
+    # engine/tests/test_sigma_leverage_parity.py::TestPoolAwareDegree.
+    'engine/autoload/sigma_leverage.py': _contest_surface,
 }
 
-# ── the TWO declared HOLDs ──────────────────────────────────────────────────────────────────────
+# ── THE RULINGS THIS FILE ENFORCES, kept verbatim ──────────────────────────────────────────────
+# ⚠ THIS BLOCK EXISTS BECAUSE ED-SC-0031 NEARLY DELETED ITS OWN AUTHORITY. The 2026-08-15 ruling
+# below was recorded in exactly ONE place in the tree — the `sigma_leverage` HELD entry — and that
+# entry was removed when the site migrated. An adversarial pass caught it: after the removal, the
+# clause authorising the SHAPE of the migration survived only inside the artifact it authorised,
+# self-attested. CLAUDE.md §7's "verify provenance by hand against the cited source" had nowhere to
+# land. A ruling must outlive the hold that happened to be carrying it, so it lives here now,
+# beside the registry both the migrated and the held entries read.
+#
+# Provenance for anyone checking: this text is recoverable from the HELD entry at
+# `git show 3d04568:tests/valoria/test_degree_ladder_single_owner.py`, lines ~152-190.
+RULINGS = {
+    '2026-08-14 — the ladder itself': (
+        "The margin `net - ob` decides the band; '3 or more is always overwhelming'; meeting the "
+        "obstacle without exceeding it is a Partial. Owner: engine/autoload/dice_engine.py's "
+        "degree_from_net. Ruled out by name: Ob-scaled Overwhelming (net >= 2*Ob), the separate "
+        "PP-232 net >= 3 floor, and the Ob-20 exception."),
+    '2026-08-15 — scope, and how an extension may be built': (
+        "Jordan, verbatim: 'systems should not need different degree bands. it should be "
+        "consistent in application. if a system does require any modification or extension, then "
+        "the wrapper needs to inject the engine in such a manner that it can be modified "
+        "cleanly.' ⚠ ED-SC-0031 satisfies the FIRST clause and not the second: sigma_leverage's "
+        "bands are now the owner's, but its de-saturation bar is a hard-coded post-filter inside "
+        "the subsystem, not an extension the wrapper injects into a parameterised engine. Do not "
+        "read that migration as having closed this ruling."),
+    '2026-08-15 — combat, and the sequence': (
+        "Jordan, verbatim: 'DECISIVE_OB for combat is stupid as hell and is dead because Ob "
+        "should be determined by your opponent more than anything.' The order is settled and is "
+        "the opposite of the obvious one: derive Ob from the DEFENDER first (score/2 plus that "
+        "instance's modifiers), THEN the owner's ladder applies. Migrating combat's bands against "
+        "the fixed Ob first is wasted work."),
+    '2026-08-25 — the combat ceiling': (
+        "Jordan, verbatim: 'one degree ladder. guandao should be 47.5%, and 40% ceiling is to be "
+        "abolished.' The 40% ceiling is test_combat_invariants.py's covert-plate-killer bound. "
+        "⚠ NOT EXECUTED. The two halves are one ruling: guandao only reaches 47.5% AFTER combat's "
+        "ladder migrates, and that migration is gated on the Ob derivation above. Abolishing the "
+        "ceiling alone would delete a guard and gain nothing."),
+}
+
+
+# ── the ONE declared HOLD ───────────────────────────────────────────────────────────────────────
+# ⚠ This header read "the TWO declared HOLDs" until 2026-08-27, 143 lines below the same file's
+# own header, which HAD been updated. That is verbatim the failure the comment at the bottom of
+# this file lectures about — a claim about a data structure that a targeted string edit never
+# forces anyone to re-read. Found by the adversarial pass on ED-SC-0031, not by a test, because
+# nothing can test a count written in a comment.
 # A hold is not an exemption. It is a divergence with a measured reason and an owner, and it is
 # asserted to STILL DIVERGE below — so when it is resolved, this file fails and forces the update.
 # Silence would let a resolved hold sit here forever looking like a live exception.
@@ -168,24 +227,6 @@ HELD = {
         "damage constants were calibrated against the old placement, and the same ruling's "
         "score/2 Ob derivation would move the bands again, so calibrating the fixed-Ob form first "
         "is wasted work. Held for Jordan — ED-IN-0187."),
-    'engine/autoload/sigma_leverage.py': (
-        _contest_surface,
-        "⚠ RULED 2026-08-15 — MIGRATES. Jordan: 'systems should not need different degree bands. it "
-        "should be consistent in application. if a system does require any modification or extension, "
-        "then the wrapper needs to inject the engine in such a manner that it can be modified "
-        "cleanly.' That answers the question this hold was waiting on: the unified ladder DOES "
-        "override the deliberate pool-aware bar, and if the contest still needs pool-awareness it "
-        "becomes an explicitly injected extension over the owner rather than a private re-banding. "
-        "Not executed yet — it flips degree(3,3) from 2 to 1, which is pinned by the 151 groundup "
-        "tests and _kernel_tests.py, so it is a measured change with real fallout, not a refactor. "
-        "Original reason follows: "
-        "The social-contest surface. Two lower boundaries contradict the ruling — net==ob returns "
-        "Success where the ruling says Partial, and 0<net<ob returns Partial where it says Failure "
-        "— but its TOP band is a deliberate POOL-AWARE bar (pool mean + OVERWHELM_SIGMA*sigma) "
-        "chosen to hold the Overwhelming rate ~uniform across pool sizes. Migrating means ruling "
-        "on whether the unified ladder overrides a contract picked on purpose, and it is pinned by "
-        "the 151 groundup tests plus _kernel_tests.py's degree(3,3)==2 — the exact cell the ruling "
-        "flips. Held for Jordan — ED-IN-0187."),
 }
 
 

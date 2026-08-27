@@ -1,5 +1,6 @@
 """
-sim/autoload/sigma_leverage.py — σ-leverage advantage layer atop the d10 dice engine.
+engine/autoload/sigma_leverage.py — σ-leverage advantage layer atop the d10 dice engine.
+(The header read `sim/autoload/...` until 2026-08-27; that tree was retired 2026-07-21.)
 
 Canon source: modifier_system_spec.md (the implementation-pass rewrite)
 Params source: params/core.md, modifier_system_spec.md
@@ -56,6 +57,7 @@ Entry points:
   - p_success(base_ob: float, pool: float, net_sigma: float = 0.0, tn: int = TN_STANDARD, capped: bool = True) -> float
   - roll_net(pool: float, tn: int = TN_STANDARD, rng: random.Random | None = None) -> int
   - roll_net_continuous(pool: float, tn: int = TN_STANDARD, rng: random.Random | None = None) -> float
+  - degree(net: float, ob: float, pool: float | None = None) -> int  (the owner's ladder + one extension)
 """
 from __future__ import annotations
 
@@ -318,45 +320,122 @@ def roll_net_continuous(pool: float, tn: int = TN_STANDARD, rng: random.Random |
 # Contest-surface degree (pool-aware integer bands)
 # ---------------------------------------------------------------------------
 
-def degree(net: float, ob: float, pool: float | None = None) -> int:
-    """Contest-surface degree bands: 0 Failure / 1 Partial / 2 Success / 3 Overwhelming.
+# Read off the owner rather than written as literals, so the two encodings cannot drift.
+_SUCCESS = dice_engine.DEGREE_ORDINAL[dice_engine.Degree.SUCCESS]
+_OVERWHELMING = dice_engine.DEGREE_ORDINAL[dice_engine.Degree.OVERWHELMING]
 
-    ⚠ HELD AT THE PRE-2026-08-14 BANDS (ED-IN-0187). Jordan's ruling unified the ladder on the
-    margin `net - ob` — bands at 0/1/3, owner `dice_engine.degree_from_net` — and every other
-    resolver in the tree now routes through it. THIS ONE DOES NOT, and it is the second and last
-    declared hold. Two of its three lower boundaries contradict the ruling outright:
-    `net == ob` returns 2 (Success) where the ruling says Partial, and `0 < net < ob` returns 1
-    (Partial) where the ruling says Failure.
 
-    Why it is held rather than migrated: the top band here is a POOL-AWARE bar that is a
-    deliberate, documented design decision (below), so migrating means deciding whether the
-    ruling overrides a contract that was chosen on purpose — a design call, not a mechanical
-    one. It is also load-bearing on the 151 groundup tests named below plus the contest kernel's
-    own `_kernel_tests.py`, which pins `degree(3, 3) == 2` — the exact cell the ruling flips.
-    Recorded in `tests/valoria/test_degree_ladder_single_owner.py`'s HELD registry, which fails
-    if the divergence ever silently disappears.
+def overwhelm_bar(pool: float) -> float:
+    """The contest extension's de-saturation bar at a pool size. ONE definition.
 
-    RECONCILIATION NOTE (Stage 1b, degree carry-across — NOT a fork):
-    This is a DISTINCT contract from dice_engine.degree_from_net. The social
-    contest kernel needs (a) INTEGER bands it uses as a numeric magnitude in
-    _advance, and (b) a POOL-AWARE Overwhelming bar (pool mean + OVERWHELM_SIGMA·σ)
-    that de-saturates the degree-3 rate to ~uniform across pool sizes (diagnostic
-    Lesson 2). These are contest-specific reception semantics, so the pool-aware
-    integer degree lives here on the contest surface rather than overwriting the
-    combat enum degree. Ported verbatim from
-    audit/2026-06-03-contest-groundup/engine.py §degree; the 151 groundup
-    tests are the behavior-preserving guard. TN7-only (D0-3): contest is unaffected
-    by the TN6/8 boost divergence.
+    Exposed rather than inlined in `degree` because three tests and `tools/balance_oracle.py`
+    need it, and each of them re-deriving `MU_PER_DIE*pool + OVERWHELM_SIGMA*SD_PER_DIE*sqrt(...)`
+    is how a guard drifts from the thing it guards (CLAUDE.md §8).
 
-    With `pool` given (live reception): Overwhelming requires clearing a σ-scaled
-    bar. Pool-less calls keep the legacy 2·ob bar (unit tests only).
-    [canonical: audit/2026-06-03-contest-groundup/engine.py §degree]
+    `max(1, pool)` floors only the sqrt term, not the mean term — carried over verbatim from the
+    retired implementation. It makes no difference for any reachable pool (the live floor is
+    `Pool.size`, which is >= 5) and is kept rather than silently "fixed", since changing it would
+    be a behaviour change wearing a tidy-up's clothes.
     """
-    if net <= 0:                       return 0
-    if net < ob:                       return 1
-    if pool is not None:
-        thresh = MU_PER_DIE * pool + OVERWHELM_SIGMA * SD_PER_DIE * math.sqrt(max(1, pool))
-        if net >= thresh and net >= max(3, ob): return 3
-        return 2
-    if net >= 2 * ob and net >= 3:     return 3   # legacy, pool-less unit tests only
-    return 2
+    return MU_PER_DIE * pool + OVERWHELM_SIGMA * SD_PER_DIE * math.sqrt(max(1, pool))
+
+
+def crossover_pool(ob: float, limit: int = 200) -> int | None:
+    """Smallest integer pool at which the extension can demote, for this `ob`. None if never.
+
+    The extension bites exactly when its bar exceeds the owner's Overwhelming bar `ob + 3`, so
+    the crossover MOVES WITH THE OBSTACLE: ob 1.0 -> 6, ob 2.0 -> 8, ob 3.0 -> 10. Tests used to
+    hard-code 8, which was a measurement of `resolver.py`'s default ob presented as a contract.
+    """
+    owner_bar = ob + _OVERWHELMING_MARGIN
+    for pool in range(1, limit + 1):
+        if overwhelm_bar(pool) > owner_bar:
+            return pool
+    return None
+
+
+#: The owner's Overwhelming margin, DERIVED rather than typed: the smallest whole margin
+#: `degree_from_net` bands Overwhelming. Reading it off the owner means a future change to the
+#: ladder moves this with it instead of leaving a stale literal in a helper.
+_OVERWHELMING_MARGIN = next(
+    m / 4 for m in range(0, 41)
+    if dice_engine.degree_from_net(m / 4, 0.0) is dice_engine.Degree.OVERWHELMING
+)
+
+
+def degree(net: float, ob: float, pool: float | None = None) -> int:
+    """Contest-surface degree: the OWNER'S ladder, plus one declared extension (ED-SC-0031).
+
+    MIGRATED 2026-08-27. This was the ninth ladder — and the one the 2026-08-12 degree-vocabulary
+    census missed entirely, despite it sitting in the same package as the owner. It returned its
+    own bands from its own `if` chain, and two of its three lower boundaries contradicted the
+    2026-08-14 ruling outright: `net == ob` returned Success where the ruling says Partial, and
+    `0 < net < ob` returned Partial where it says Failure.
+
+    WHAT AUTHORISES THE SHAPE BELOW, quoted rather than inferred. Jordan, 2026-08-15:
+
+        "systems should not need different degree bands. it should be consistent in application.
+         if a system does require any modification or extension, then the wrapper needs to inject
+         the engine in such a manner that it can be modified cleanly."
+
+    So the BANDS are `dice_engine.degree_from_net`'s, with no local re-decision — and the contest's
+    pool-aware requirement survives as an EXPLICIT, NAMED EXTENSION over that result rather than as
+    a private re-banding. The extension can only ever DEMOTE Overwhelming to Success; it cannot
+    promote, cannot move any other boundary, and cannot be reached at all when `pool` is None. That
+    is the narrowest form the extension can take and still do its job, which is why it is the one
+    chosen: an extension that could move a lower boundary would be the old ladder wearing a
+    different name.
+
+    WHY THE EXTENSION EXISTS AND IS NOT DELETED WITH THE REST. The bar is
+    `MU_PER_DIE*pool + OVERWHELM_SIGMA*SD_PER_DIE*sqrt(pool)` — roughly "beat your own pool's mean
+    by 0.85 sigma". Without it the Overwhelming rate SATURATES as pools grow: a large pool clears a
+    fixed margin almost every roll, so at high pool nearly every contest resolves Overwhelming and
+    the band stops discriminating. The contest kernel uses the degree as a numeric magnitude in
+    `resolver._advance`, so a saturating top band collapses the whole track.
+
+    WHERE IT BINDS IS A FUNCTION OF `ob`, NOT THE CONSTANT "pool 8" AN EARLIER DRAFT CLAIMED.
+    The extension is inert exactly while `bar(pool) <= ob + 3`, so the crossover moves with the
+    obstacle: ob 1.0 -> binds from pool 6, ob 2.0 -> pool 8, ob 3.0 -> pool 10. The tests measured
+    ob 2.0 and the docstring generalised from one obstacle; `crossover_pool()` below computes it
+    instead, and the tests now sweep several. It happens to be pool 8 in the live campaign only
+    because `resolver.py:155` declares `base_ob: float = 2.0` and passes it unmodified — a
+    coincidence of one default, and `sigma_leverage.OB_MIN` is 1, which is reachable through
+    `eff_ob`'s floor.
+
+    ⚠ A GAME-FACING COST OF THE RULING, recorded because it is real and runs against the stated
+    design goal. The bar was chosen (groundup "diagnostic Lesson 2") to hold the Overwhelming rate
+    ~uniform ACROSS POOL SIZES. Under the owner's ladder that uniformity now holds only where the
+    extension binds. Below the crossover the owner's fixed margin bar governs, and at ob 2.0 the
+    rate across pools 2-7 is .000 .010 .038 .084 .140 .203 — monotone rather than flat, and A
+    POOL-2 CONTEST CAN NEVER RESOLVE OVERWHELMING AT ALL (it would need net >= 5 from two dice,
+    whose maximum is 4). Under the retired private ladder those same pools ran ~.07 .17 .29 .20
+    .14 .21. This is a consequence of Jordan's one-ladder ruling, not a choice made here, and it
+    is not papered over: uniformity across small pools got WORSE, and that is a disclosed cost
+    rather than the "division of labour" an earlier draft of this docstring called it.
+
+    THE POOL-LESS LEGACY BAR IS GONE, not carried across. It was `net >= 2*ob and net >= 3` — an
+    Ob-scaled Overwhelming, which is the first thing the 2026-08-14 ruling struck by name
+    ("Overwhelming no longer depends on difficulty"). Its own comment said "legacy, pool-less unit
+    tests only". Pool-less callers now get the owner's ladder unmodified, which is the correct
+    answer for a caller that has declined to supply the context the extension needs.
+
+    ⚠ WHAT THIS IS NOT, stated because the ruling's second clause is NOT satisfied by it.
+    Jordan asked that an extension be injected BY THE WRAPPER "in such a manner that it can be
+    modified cleanly". This is not injection: `dice_engine.degree_from_net` exposes no hook, takes
+    no policy argument, and does not know an extension exists. What is below is a hard-coded
+    post-filter inside the subsystem module, whose constants (`MU_PER_DIE`, `SD_PER_DIE`,
+    `OVERWHELM_SIGMA`) are still subsystem-owned. The demote-only constraint is a real discipline
+    and it makes the surface auditable — it does not make it composable, and nothing here would
+    stop a second subsystem bolting on a differently-shaped filter. The first clause of the ruling
+    ("systems should not need different degree bands") IS satisfied: the bands are the owner's,
+    verified cell-for-cell. The second is open, and belongs with the subsystem-wrapper work rather
+    than being closed by this commit's wording.
+
+    Returns the ordinal 0 Failure / 1 Partial / 2 Success / 3 Overwhelming — the encoding is
+    `dice_engine.DEGREE_ORDINAL`, so even the numbering is not re-decided here.
+    """
+    base = dice_engine.DEGREE_ORDINAL[dice_engine.degree_from_net(net, ob)]
+    if pool is None or base < _OVERWHELMING:
+        return base
+    # The one declared extension: a de-saturation bar on the top band only.
+    return _OVERWHELMING if net >= overwhelm_bar(pool) else _SUCCESS

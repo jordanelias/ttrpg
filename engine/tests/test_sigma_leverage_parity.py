@@ -82,6 +82,27 @@ def _row_tn(row):
 _LIVE_ROWS = [r for r in _ROWS if _row_tn(r) in (None, 7)]
 _SUPERSEDED_TN_ROWS = [r for r in _ROWS if _row_tn(r) not in (None, 7)]
 
+# ---------------------------------------------------------------------------
+# PRE-RULING-LADDER PARTITION (ED-SC-0031)
+#
+# The table's 255 `degree` rows were generated from the groundup oracle's own private ladder,
+# which `sigma_leverage.degree` re-implemented. That ladder was retired 2026-08-27: the bands
+# are now `dice_engine.degree_from_net`'s (Jordan's 2026-08-14 ruling), with one declared
+# extension that may only demote Overwhelming to Success.
+#
+# 47 of the 255 rows record cells the ruling MOVED; the other 208 still agree. Splitting the
+# rows by whether they happen to agree would be exactly the WRONG partition — it keeps a subset
+# chosen BY the current implementation's answers, which is a table that agrees with the code by
+# construction and proves nothing. So the whole function leaves the parity arm, on the honest
+# ground that the oracle behind those rows is superseded, and its coverage is replaced by
+# `TestPoolAwareDegree::test_bands_are_the_owners`, which checks ~4,900 cells against the owner
+# rather than 255 against a retired oracle.
+#
+# THE TABLE IS NOT REGENERATED — same rule as the TN partition above. The rows stay as committed
+# historical record, and the inversion below turns them into a positive assertion.
+_LIVE_ROWS = [r for r in _LIVE_ROWS if r["fn"] != "degree"]
+_PRE_RULING_DEGREE_ROWS = [r for r in _ROWS if r["fn"] == "degree"]
+
 # Input grids for the property tests below (the parity grids live in the generator).
 NET_SIGMA_GRID = [-50.0, -5.0, -2.0, -1.5, -1.0, -0.5, 0.0,
                   0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 5.0, 10.0, 50.0]
@@ -138,14 +159,17 @@ def test_golden_table_is_not_vacuous():
     from collections import Counter
     by_oracle = Counter(r["oracle"] for r in _LIVE_ROWS)
     # m1's floor dropped 1400 -> 731 when the TN 6/8 rows left the live set (ED-IN-0196).
-    # groundup is unchanged at 259: every groundup row is TN-independent, so the ruling
-    # cost that arm nothing — which is itself the check that the partition hit only what
-    # it was meant to.
+    # groundup dropped 259 -> 4 when the 255 `degree` rows left it (ED-SC-0031). Stated rather
+    # than quietly lowered: that arm is now four `level` rows plus inverted coverage. The
+    # replacement for the 255 is TestPoolAwareDegree::test_bands_are_the_owners — a stronger
+    # claim over a wider domain — but it lives in this file, not in the table, so this floor
+    # must not pretend the table still carries them.
     assert by_oracle["m1"] >= 731, by_oracle
-    assert by_oracle["groundup"] >= 259, by_oracle
+    assert by_oracle["groundup"] >= 4, by_oracle
+    assert len(_PRE_RULING_DEGREE_ROWS) == 255, len(_PRE_RULING_DEGREE_ROWS)
     fns = {r["fn"] for r in _LIVE_ROWS}
     assert fns == {"sigma_n", "soft_cap", "sigma_space_ob_shift", "net_boost", "eff_ob",
-                   "p_success", "levels_to_net_sigma", "level", "degree"}, sorted(fns)
+                   "p_success", "levels_to_net_sigma", "level"}, sorted(fns)
     assert _TABLE["subject"] == "engine/autoload/sigma_leverage.py"
 
 
@@ -155,10 +179,13 @@ def test_the_superseded_rows_are_exactly_the_non_7_TN_ones():
     A silent widening of this filter would quietly delete live parity coverage, so the
     counts and the TN values are both pinned.
     """
-    assert len(_LIVE_ROWS) + len(_SUPERSEDED_TN_ROWS) == len(_ROWS)
+    assert len(_LIVE_ROWS) + len(_SUPERSEDED_TN_ROWS) + len(_PRE_RULING_DEGREE_ROWS) == len(_ROWS)
     assert len(_SUPERSEDED_TN_ROWS) == 768, len(_SUPERSEDED_TN_ROWS)
     assert {_row_tn(r) for r in _SUPERSEDED_TN_ROWS} == {6, 8}
     assert all(_row_tn(r) in (None, 7) for r in _LIVE_ROWS)
+    # The two partitions must not overlap, or the sum above balances by double-counting.
+    assert not [r for r in _PRE_RULING_DEGREE_ROWS if _row_tn(r) not in (None, 7)]
+    assert not [r for r in _LIVE_ROWS if r["fn"] == "degree"]
 
 
 @pytest.mark.parametrize("tn", [6, 8])
@@ -172,6 +199,53 @@ def test_a_superseded_TN_is_refused_not_silently_answered(tn):
     row = next(r for r in _SUPERSEDED_TN_ROWS if _row_tn(r) == tn)
     with pytest.raises(KeyError):
         _call(row["fn"], row["args"])
+
+
+def test_the_superseded_degree_rows_are_the_pre_ruling_ladder():
+    """The degree inversion. These 255 rows are not deleted — they are re-read as history.
+
+    The claim asserted here is what the partition above says out loud: the rows record the
+    PRE-RULING ladder, so a specific, enumerated subset of them must now DISAGREE with the port,
+    and the rest must still agree because the two ladders genuinely coincide there. Pinning the
+    disagreement count is what makes this an assertion rather than a shrug: if a future change
+    re-broadens `sigma_leverage.degree` back toward the old private bands, the count falls and
+    this fails, which a deletion of the rows could never catch.
+
+    The 47 moved cells are the ruling's own three boundary changes: `net == ob` Success -> Partial,
+    `0 < net < ob` Partial -> Failure, and the retired pool-less `net >= 2*ob` Overwhelming bar.
+    """
+    moved = [r for r in _PRE_RULING_DEGREE_ROWS if SL.degree(*r["args"]) != r["want"]]
+    kept = [r for r in _PRE_RULING_DEGREE_ROWS if SL.degree(*r["args"]) == r["want"]]
+
+    # ⚠ THE SET, NOT THE COUNT. An earlier draft asserted `len(moved) == 47`, which is invariant
+    # under any change that makes one kept row disagree while making one moved row agree — the
+    # rows it replaced were POINTWISE, so a cardinality pin was strictly weaker on exactly the
+    # domain it was standing in for. The `ob` here is `args[1]`, and the three obs the generator
+    # sweeps land 9 / 15 / 23 disagreements respectively.
+    by_ob = {}
+    for r in moved:
+        by_ob[r["args"][1]] = by_ob.get(r["args"][1], 0) + 1
+    assert by_ob == {1.0: 9, 2.0: 15, 3.0: 23}, (
+        f"the pre-ruling disagreements are distributed as {by_ob}, expected "
+        "{1.0: 9, 2.0: 15, 3.0: 23} — the ladder has moved since ED-SC-0031 and this disposition "
+        "needs re-deriving, not re-pinning"
+    )
+    assert len(moved) == 47 and len(kept) == 208
+    # Every disagreement must be on a row the ruling's three boundary changes account for, i.e.
+    # the pre-ruling answer is one the new ladder cannot produce for that (net, ob).
+    for r in moved:
+        net, ob = r["args"][0], r["args"][1]
+        assert net > 0 and net < ob + 3, (
+            f"degree{tuple(r['args'])} disagrees but is outside the bands the ruling moved "
+            "(0 < net < ob+3) — this is a disagreement the disposition does not explain"
+        )
+    # Every moved row must move in a direction the ruling accounts for: the old ladder was more
+    # generous at every one of its three changed boundaries, so no cell may band HIGHER now.
+    for r in moved:
+        assert SL.degree(*r["args"]) < r["want"], (
+            f"degree{tuple(r['args'])} banded UP ({r['want']} -> {SL.degree(*r['args'])}); the "
+            "2026-08-14 ruling only ever tightened this surface"
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -359,29 +433,156 @@ class TestLevelsToNetSigma:
 
 
 class TestPoolAwareDegree:
-    """degree(net, ob, pool) — pool-aware INTEGER bands (contest surface), distinct from
-    dice_engine.degree_from_net. Cross-oracle parity is the golden table; these pin the named
-    boundary cases.
+    """degree(net, ob, pool) — the OWNER'S ladder as an ordinal, plus one declared extension.
 
-    ⚠ The description "combat enum, 2*Ob bar" that stood here is STALE as of 2026-08-14: the owner
-    no longer has a 2*Ob bar (Jordan's ruling replaced it with a margin ladder, ED-IN-0187). The
-    contest surface is a declared HOLD against that ruling, so these cases still pass — but they
-    pin the HELD behaviour, not canonical behaviour."""
+    MIGRATED 2026-08-27 (ED-SC-0031). This class used to pin the contest surface's own private
+    bands, held against Jordan's 2026-08-14 ladder ruling. The hold is over: the bands are
+    `dice_engine.degree_from_net`'s, and the only contest-specific behaviour left is a
+    de-saturation bar that can DEMOTE Overwhelming to Success and do nothing else.
 
-    def test_bands_basic(self):
-        assert (SL.degree(0, 3), SL.degree(3, 3), SL.degree(6, 3)) == (0, 2, 3)
+    So these tests now do two different jobs and both are needed. `test_bands_are_the_owners`
+    proves there is no local re-banding at all — over a domain, not at three named points, since
+    three points is exactly what let the old private ladder look equivalent. The extension tests
+    then pin the one thing that IS local.
+    """
 
-    def test_failure_and_partial(self):
+    def test_bands_are_the_owners(self):
+        """No local re-banding anywhere on the pool-less domain, integer AND fractional.
+
+        Point-wise equality with `degree_from_net` over the whole domain is the assertion that
+        cannot be satisfied by a second ladder that happens to agree at the named cells — which
+        is how `sigma_leverage.degree` escaped the 2026-08-12 degree-vocabulary census.
+        """
+        from engine.autoload import dice_engine as DE
+        checked = 0
+        for ob10 in range(0, 61):          # ob 0.0 .. 6.0 in tenths
+            ob = ob10 / 10.0
+            for net4 in range(-20, 61):    # net -5.0 .. 15.0 in quarters
+                net = net4 / 4.0
+                assert SL.degree(net, ob) == DE.DEGREE_ORDINAL[DE.degree_from_net(net, ob)], (
+                    f"sigma_leverage.degree({net}, {ob}) disagrees with the owner"
+                )
+                checked += 1
+        assert checked >= 4000, f"only {checked} cells checked — the domain loop is broken"
+
+    def test_the_named_ruling_cells(self):
+        """The three cells the 2026-08-14 ruling moved, pinned by value so the flip is explicit."""
+        assert SL.degree(3, 3) == 1      # margin 0 — met, not exceeded -> Partial (was 2)
+        assert SL.degree(2, 3) == 0      # margin -1 -> Failure (was 1, the old `net < ob` Partial)
+        assert SL.degree(6, 3) == 3      # margin 3 -> Overwhelming (unchanged)
         assert SL.degree(0, 3) == 0
         assert SL.degree(-2, 3) == 0
-        assert SL.degree(1, 3) == 1
-        assert SL.degree(2, 3) == 1
 
-    def test_legacy_pool_less_overwhelming(self):
-        """pool=None → legacy 2*ob bar (net>=2*ob and net>=3)."""
-        assert SL.degree(6, 3, None) == 3
-        assert SL.degree(5, 3, None) == 2
-        assert SL.degree(2, 1, None) == 2   # net<3 blocks legacy Overwhelming
+    def test_the_extension_only_ever_demotes_the_top_band(self):
+        """The contest extension's declared contract, asserted as a property over the domain.
+
+        It may turn Overwhelming into Success. It may not promote, and it may not touch Failure,
+        Partial, or Success. An extension that could move a lower boundary would be the old
+        private ladder under a new name, so this is the assertion that keeps the migration real.
+        """
+        moved = 0
+        for pool in (1, 2, 4, 8, 12, 20, 30):
+            for net4 in range(-20, 81):
+                net = net4 / 4.0
+                base = SL.degree(net, 2.0)
+                ext = SL.degree(net, 2.0, pool)
+                if ext != base:
+                    assert base == 3 and ext == 2, (
+                        f"pool={pool} net={net}: extension moved {base} -> {ext}; it may only "
+                        "demote Overwhelming to Success"
+                    )
+                    moved += 1
+        assert moved > 0, "the extension never fired — this property test is vacuous"
+
+    def test_the_extension_de_saturates(self):
+        """WHY the extension exists: without it the top band saturates as pools grow.
+
+        Measured against the ACTUAL net distribution — N(mu*pool, sigma*sqrt(pool)), the
+        continuous engine's own model — not against a share of the net axis. The axis-share
+        reading is the wrong one and was tried first: it says the owner bands 92% of the range
+        Overwhelming at pool 30 while the true rate is 95%.
+
+        ⚠ THE FLATNESS ASSERTION AN EARLIER DRAFT PUT HERE WAS AN ALGEBRAIC IDENTITY AND COULD
+        NOT FAIL. Where the extension binds, `bar - mean == OVERWHELM_SIGMA*SD_PER_DIE*sqrt(pool)`
+        and `sd == SD_PER_DIE*sqrt(pool)`, so `z` is IDENTICALLY `OVERWHELM_SIGMA` and the rate is
+        `1 - Phi(0.85)` at every binding pool. Asserting those six identical floats span < 0.05
+        is `0.0 < 0.05`. That identity is the extension's actual design property, so it is
+        asserted AS an identity below — deliberately, where it can at least catch the bar losing
+        its sqrt(pool) scaling — and the falsifiable claims are stated separately.
+        """
+        def p_overwhelming(pool, ob, with_ext):
+            mean = SL.MU_PER_DIE * pool
+            sd = SL.SD_PER_DIE * math.sqrt(pool)
+            bar = ob + SL._OVERWHELMING_MARGIN     # the OWNER's bar, read off the owner
+            if with_ext:
+                bar = max(bar, SL.overwhelm_bar(pool))
+            return 1.0 - SL._phi((bar - mean) / sd)
+
+        # (1) FALSIFIABLE: the saturation the extension exists to prevent.
+        assert p_overwhelming(30, 2.0, with_ext=False) > 0.9, (
+            "precondition failed: the owner's ladder is supposed to saturate at high pool, and "
+            "if it no longer does then the extension has lost its reason to exist"
+        )
+        assert p_overwhelming(30, 2.0, with_ext=True) < 0.25
+
+        # (2) THE IDENTITY, asserted as one. It fails if the bar stops scaling as mu*pool +
+        # k*sigma*sqrt(pool) — e.g. a fixed offset, or sqrt dropped — which is the real way this
+        # property breaks, and which the six-float spread check could never see.
+        expected = 1.0 - SL._phi(SL.OVERWHELM_SIGMA)
+        for pool in (8, 12, 16, 20, 25, 30):
+            assert abs(p_overwhelming(pool, 2.0, with_ext=True) - expected) < 1e-12, (
+                f"pool {pool}: the extension's rate is not 1-Phi(OVERWHELM_SIGMA); the bar has "
+                "stopped tracking the pool's own mean and sigma"
+            )
+
+        # (3) FALSIFIABLE, and the claim an earlier draft got wrong: where it is inert depends on
+        # `ob`. "Pool 8" was a measurement of resolver.py's default obstacle, not a contract.
+        assert [SL.crossover_pool(ob) for ob in (1.0, 2.0, 3.0)] == [6, 8, 10]
+        for ob in (1.0, 2.0, 3.0):
+            x = SL.crossover_pool(ob)
+            for pool in range(1, x):
+                assert p_overwhelming(pool, ob, True) == p_overwhelming(pool, ob, False), (
+                    f"ob {ob}, pool {pool}: below its crossover the extension must be inert"
+                )
+            assert p_overwhelming(x, ob, True) < p_overwhelming(x, ob, False), (
+                f"ob {ob}: the extension does nothing at its own crossover pool {x}"
+            )
+
+    def test_the_extension_is_the_owner_at_every_band_but_the_top_pool_aware_too(self):
+        """The pool-AWARE domain, checked against the owner rather than against a retired oracle.
+
+        ⚠ THIS TEST EXISTS BECAUSE THE PARTITION ABOVE LOST COVERAGE THE FIRST WRITE-UP CLAIMED
+        IT HAD REPLACED. Of the 255 removed `degree` rows, 225 are pool-AWARE; the
+        `test_bands_are_the_owners` sweep passes no third argument and replaces only the 30
+        pool-less ones. Saying the removal was "replaced by ~4,900 cells" compared two different
+        domains. This is the pool-aware half: every cell must be the owner's band, EXCEPT where
+        the declared extension demotes 3 to 2, and that exception must itself be exactly
+        `net < overwhelm_bar(pool)`.
+        """
+        from engine.autoload import dice_engine as DE
+        demoted = checked = 0
+        for pool in (1, 2, 5, 9, 16, 22, 25, 30):
+            for ob10 in range(0, 41, 5):
+                ob = ob10 / 10.0
+                for net4 in range(-20, 4 * (2 * max(pool, 3)) + 1):
+                    net = net4 / 4.0
+                    owner = DE.DEGREE_ORDINAL[DE.degree_from_net(net, ob)]
+                    got = SL.degree(net, ob, pool)
+                    checked += 1
+                    if got == owner:
+                        continue
+                    demoted += 1
+                    assert (owner, got) == (3, 2), (
+                        f"pool={pool} ob={ob} net={net}: {owner} -> {got}, only 3 -> 2 is legal"
+                    )
+                    assert net < SL.overwhelm_bar(pool), (
+                        f"pool={pool} ob={ob} net={net} was demoted while clearing the bar"
+                    )
+        assert checked >= 9_000, f"only {checked} pool-aware cells checked"
+        assert demoted >= 100, (
+            f"only {demoted} cells demoted across the sweep — the extension is barely reachable "
+            "on this domain and the test is close to vacuous"
+        )
 
 
 class TestRollNet:

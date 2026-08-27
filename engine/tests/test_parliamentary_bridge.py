@@ -94,7 +94,7 @@ _OFF_WIN_SHARE = {'Crown': 62.5, 'Church': 12.5, 'Hafenmark': 0.0, 'Varfell': 25
 # `_ON_SCENES_RESOLVED` is UNCHANGED at 125 and `da.public_governance` stays at 2 — the contest
 # count moved by one (104 -> 105), which is what carries the key total 186 -> 187.
 # REGENERATED 2026-08-24 — THE MASS-BATTLE ENGINE WAS SWAPPED (Jordan-directed). `systems/mass_battle/sim/` was 1,905 lines; it is now the 11,342-line engine ported from `tests/sim/mass_battle/`, which a live test called "the canon mass-battle engine" and which 43 of 156 tests/valoria files already imported. THE EXPERIMENT IS SINGLE-VARIABLE BY CONSTRUCTION: the strategic adapter (faction -> Unit construction, the garrison stub, the size-ratio -> degree map) was carried over FIELD-FOR-FIELD UNCHANGED in `systems/mass_battle/sim/massbattle.py`, so this delta is attributable to the RESOLUTION MODEL and to nothing else. ⚠ THIS IS NOT A BALANCE MEASUREMENT: n=2/seed-0 and n=8/seed-42 cannot distinguish a balance change from noise (test_f7_smoke_oracle.py:8 demands an n>=100 oracle that still does not exist). It is a reproducibility pin, and same-seed determinism was verified twice before re-recording.
-_ON_WIN_SHARE = {'Crown': 62.5, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 12.5}
+_ON_WIN_SHARE = {'Crown': 12.5, 'Church': 0.0, 'Hafenmark': 12.5, 'Varfell': 75.0}
 # ── GOLDEN RE-RECORD 2026-08-02 (ED-IN-0122) — deliberate, and here is the whole reason ────────
 # `systems/factions/sim/faction_action` gained a SECOND live Key emitter, `scene.battle_concluded`.
 # The KeyLog is append-only, so a new emitter necessarily changes both the count and the content
@@ -132,9 +132,30 @@ _ON_WIN_SHARE = {'Crown': 62.5, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 12.
 # motion that previously missed its window now qualifies on this seed. Not a balance change — see
 # the control table in test_f7_smoke_oracle.py (120 campaigns per arm, all |z| < 0.53).
 # RE-RECORDED 2026-08-24 (mass-battle engine swap — see the composition note below).
-_ON_KEYLOG_HASH = 'f65046eb3ffb5cdd15a73ac8ac9bdca0f308929159dfff30c547cccc19d2b43b'
-_ON_SCENES_RESOLVED = 139
-_ON_KEYS_EMITTED = 187
+# ── RE-PINNED 2026-08-27 — ED-SC-0031, the social-contest degree ladder migrated to the owner ──
+# `sigma_leverage.degree` is reached every season through scene_dispatch -> wrapper.resolve_contest
+# -> resolver._reception, so every campaign contest re-bands and the RNG stream diverges from the
+# first exchange. The KeyLog hash is a content hash over an append-only log whose contents ARE the
+# campaign, so it necessarily moves with it.
+#
+# CONTROL (n=120 per arm, `python tools/balance_oracle.py`, arms private_ladder vs owner_ladder,
+# both in one process): Church -2.5pp z=-0.80, Crown +3.3 z=+0.52, Hafenmark 0.0 z=0.00,
+# Varfell -0.8 z=-0.14. Nothing significant. The n=8 shares below swing far harder than any of
+# those deltas — small-n is a reproducibility pin, not balance signal.
+#
+# WHAT MOVED, with the diagnostic half read rather than the total:
+#   scenes_resolved  139 -> 124   contest_resolved 120 -> 104   battle_concluded 67 -> 65
+#   keys_emitted     187 -> 169   key_log_hash f65046eb... -> 59009dc2...
+#   _ON_WIN_SHARE  {'Crown': 62.5, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 12.5} -> below
+#   _OFF_WIN_SHARE UNCHANGED — and that is the control that matters here: the flag-OFF arm does
+#     not resolve contests, so a contest-ladder change must not touch it, and it does not.
+# PREVIOUS (2026-08-24, mass-battle engine swap), read out of the tree at ab8d156:
+#   _ON_KEYLOG_HASH = 'f65046eb3ffb5cdd15a73ac8ac9bdca0f308929159dfff30c547cccc19d2b43b'
+#   _ON_SCENES_RESOLVED = 139; _ON_KEYS_EMITTED = 187
+#   _ON_KEYS_BY_TYPE = {'scene.battle_concluded': 65, 'scene.contest_resolved': 104}
+_ON_KEYLOG_HASH = '59009dc238b0b6a75133da63dc0ad57e5c042fdfbf1cbc31e643ce396fa2e31b'
+_ON_SCENES_RESOLVED = 124
+_ON_KEYS_EMITTED = 169
 # The composition behind that total — the diagnostic half of the pin.
 # RE-RECORDED 2026-08-24 (mass-battle engine swap). ⚠ READ THE COMPOSITION, NOT THE TOTAL: the total
 # is UNCHANGED at 187 while the mix moved (battle_concluded 80 -> 67, contest_resolved 105 -> 120)
@@ -144,7 +165,7 @@ _ON_KEYS_EMITTED = 187
 # absorbed — a golden whose TOTAL is stable while an emitter goes silent is exactly the case a
 # scalar pin cannot see. Open FA-lane question: whether the new resolution model legitimately
 # changes which faction actions qualify, or whether the transfer path is now unreachable.
-_ON_KEYS_BY_TYPE = {'scene.battle_concluded': 67, 'scene.contest_resolved': 120}
+_ON_KEYS_BY_TYPE = {'scene.battle_concluded': 65, 'scene.contest_resolved': 104}
 # 2026-08-14 (ED-IN-0187): contest_resolved 13 -> 79 and battle_concluded 62 -> 76. The
 # contest jump is the larger and has a mechanism worth naming — more faction actions now land
 # in bands that open a scene, and the deleted Mil gate opens more conquests, so both emitters
@@ -212,11 +233,30 @@ def test_flag_on_win_share_golden_and_diverges_from_off():
     # reads it, rather than the property silently coming and going.
     # OPEN (FA/WR lane): whether "the spine can eliminate a faction" was a real invariant or an
     # artefact of the old resolution model. It was only ever asserted at n=8/seed-42.
+    #
+    # ⚠ 2026-08-27, ED-SC-0031: THE SET CAME BACK, WITH A DIFFERENT FACTION. It is now {'Church'}
+    # (Church 12.5 at flag-OFF, 0.0 at flag-ON). The note above asked for exactly this to be read
+    # rather than re-pinned, so: read.
+    #
+    # THE EVIDENCE THIS ADDS TO THE OPEN QUESTION, which the 2026-08-24 note could not have had.
+    # The set has now moved THREE times under changes with no relationship to elimination:
+    #     through 2026-08-23   {'Hafenmark'}   (pre mass-battle swap)
+    #     2026-08-24           set()           (mass-battle resolution model swapped)
+    #     2026-08-27           {'Church'}      (social-contest degree ladder migrated)
+    # A property that empties and refills with a different member each time an unrelated mechanic
+    # diverges the RNG stream is tracking the SEED, not the spine's power. Combined with it only
+    # ever having been measured at n=8 on one seed, the honest reading is that "the spine can
+    # eliminate a faction" is a per-seed trajectory outcome and not an invariant. Settling it needs
+    # the n>=100 arm (`tools/balance_oracle.py`), which is FA/WR-lane work and is not done here.
+    #
+    # Re-pinned rather than deleted, deliberately: the two-sided tripwire is what surfaced this
+    # third data point, and deleting it would trade a noisy signal for none. What is NOT asserted
+    # any more is any claim about WHICH faction or WHETHER the set is empty being meaningful.
     shut_out_by_spine = {f for f, v in on.items() if v == 0.0 and off.get(f, 0.0) > 0.0}
-    assert shut_out_by_spine == set(), (
-        f"the spine shut a faction out again ({shut_out_by_spine}) — through 2026-08-23 it did, "
-        f"after the engine swap it did not. Re-read the note above and re-record deliberately. "
-        f"ON={on} OFF={off}")
+    assert shut_out_by_spine == {'Church'}, (
+        f"the spine's shut-out set moved again ({shut_out_by_spine}) — that is now the FOURTH "
+        f"value. Add it to the table above before re-pinning; a fourth move is itself the answer "
+        f"to the OPEN question and should be reported, not absorbed. ON={on} OFF={off}")
 
 
 def test_flag_on_is_deterministic():
