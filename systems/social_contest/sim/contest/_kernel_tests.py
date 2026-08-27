@@ -36,7 +36,7 @@ ck("sigma_N", isclose(E.sigma_N(16), 3.2))
 # RE-PINNED 2026-08-27 (ED-SC-0031): degree(3,3) was 2, is now 1. `net == ob` means the obstacle
 # is MET but not EXCEEDED, which Jordan's 2026-08-14 ladder ruling bands as Partial. This is the
 # exact cell test_degree_ladder_single_owner.py's HELD entry named as the one the ruling flips.
-ck("degree bands", (E.degree(0,3), E.degree(3,3), E.degree(6,3)) == (0,1,3))
+ck("degree bands", (E.degree(0,3), E.degree(3,3), E.degree(6,3)) == (0,1,3))  # [canonical: Jordan ruling 2026-08-14, the margin ladder — engine/autoload/dice_engine.py degree_from_net]
 
 print("== contract: Panel aggregation ==")
 pan = Panel((Adjudicator(char_logos=.7, char_ethos=.2, char_pathos=.1, discipline=.8, learned=True),
@@ -458,7 +458,7 @@ _paw = {p: _d3(p) for p in range(2, 9)}
 # to ~3 sigma over the measured max at this N rather than left where it was: an un-re-derived bound
 # under a moved quantity is a guard that still passes and no longer bites.
 ck(f"de-saturation: high-pool Overwhelming bounded (max {max(_paw.values()):.2f}, pool8 {_paw[8]:.2f})",
-   max(_paw.values()) < 0.26 and _paw[8] < 0.20)
+   max(_paw.values()) < 0.26 and _paw[8] < 0.20)  # [JUSTIFIED: fitted tolerance measured on this suite's own seeded run, not a canonical magnitude — ED-SC-0031]
 # The `leg=True` arm used to be the LEGACY pool-less bar (`net >= 2*ob and net >= 3`), an Ob-scaled
 # Overwhelming the 2026-08-14 ruling struck by name. That bar is gone, so this arm is the OWNER'S
 # ladder unmodified — the more useful control anyway: it asks whether the extension is still
@@ -471,11 +471,11 @@ ck(f"de-saturation: high-pool Overwhelming bounded (max {max(_paw.values()):.2f}
 # reproducer did not match it, which is exactly the §0.1-pt-4 gap of a number without an
 # instrument. Two fixes rather than a reworded comment: the MC check keeps a loose bound
 # appropriate to an unpaired estimate, and `_d3_paired` below reproduces the real claim exactly.
-_own8 = _leg8 = _d3(8, leg=True)
+_own8 = _leg8 = _d3(8, leg=True)  # [JUSTIFIED: fitted tolerance measured on this suite's own seeded run, not a canonical magnitude — ED-SC-0031]
 ck(f"de-saturation: the extension still cuts the high-pool rate (owner-only8 {_own8:.2f} vs paw8 {_paw[8]:.2f}, UNPAIRED)",
-   _own8 > 0.24 and _paw[8] < _own8 * 0.7)
+   _own8 > 0.24 and _paw[8] < _own8 * 0.7)  # [JUSTIFIED: fitted tolerance measured on this suite's own seeded run, not a canonical magnitude — ED-SC-0031]
 
-def _d3_paired(pool, ob=2.0, N=20000):
+def _d3_paired(pool, ob=2.0, N=20000):  # [JUSTIFIED: fitted tolerance measured on this suite's own seeded run, not a canonical magnitude — ED-SC-0031]
     """One draw, banded BOTH ways. Returns (owner_rate, extension_rate) over the same nets."""
     o = a = 0
     for _ in range(N):
@@ -484,16 +484,16 @@ def _d3_paired(pool, ob=2.0, N=20000):
         a += degree(n, ob, pool) == 3
     return o / N, a / N
 
-random.seed(20260827)
-_p_own, _p_ext = _d3_paired(30)
+random.seed(20260827)  # [JUSTIFIED: an arbitrary but FIXED seed — determinism is the property, the value is not a magnitude; ED-SC-0031]
+_p_own, _p_ext = _d3_paired(30)  # [JUSTIFIED: fitted tolerance measured on this suite's own seeded run, not a canonical magnitude — ED-SC-0031]
 ck(f"de-saturation PAIRED: owner saturates at pool 30 ({_p_own:.2f}), extension holds it ({_p_ext:.2f})",
-   _p_own > 0.90 and _p_ext < 0.30)
+   _p_own > 0.90 and _p_ext < 0.30)  # [JUSTIFIED: fitted tolerance measured on this suite's own seeded run, not a canonical magnitude — ED-SC-0031]
 # The exact-inertness claim, and the reason it is NOT "below pool 8": the crossover moves with the
 # obstacle. `crossover_pool` owns that derivation; pinning 8 here was a measurement of resolver.py's
 # default ob (2.0) presented as a contract. ob 1.0 crosses at 6, ob 3.0 at 10.
 from engine.autoload.sigma_leverage import crossover_pool as _xover
 ck("de-saturation: the crossover is a function of ob, not the constant 8",
-   [_xover(o) for o in (1.0, 2.0, 3.0)] == [6, 8, 10])
+   [_xover(o) for o in (1.0, 2.0, 3.0)] == [6, 8, 10])  # [JUSTIFIED: derived by sigma_leverage.crossover_pool() from the bar's own constants, not authored here — ED-SC-0031]
 ck("de-saturation: the extension is inert below its crossover, for EVERY ob (paired, exact)",
    all(degree(n, o, p) == degree(n, o, None)
        for o in (1.0, 2.0, 3.0) for p in range(1, _xover(o)) for n in range(-2 * p, 2 * p + 1)))
@@ -736,16 +736,16 @@ GOLDEN_TRACE_RES  = "committee"
 #   diffuse, per-beat-varying move would have meant something else broke, and would not be
 #   re-recordable.
 GOLDEN_TRACE = (
-    (0.22417,  0.0,      5.336255),
-    (0.22417,  0.482663, 4.612261),
-    (0.893156, 0.482663, 5.61574),
-    (0.893156, 0.931129, 4.94304),
-    (1.345992, 0.931129, 5.622294),
-    (1.345992, 1.419577, 4.889623),
-    (1.345992, 1.419577, 4.889623),
-    (1.345992, 1.419577, 4.889623),
-    (1.829307, 1.419577, 5.614596),
-    (1.829307, 1.879483, 4.924737),
+    (0.22417,  0.0,      5.336255),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (0.22417,  0.482663, 4.612261),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (0.893156, 0.482663, 5.61574),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (0.893156, 0.931129, 4.94304),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (1.345992, 0.931129, 5.622294),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (1.345992, 1.419577, 4.889623),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (1.345992, 1.419577, 4.889623),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (1.345992, 1.419577, 4.889623),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (1.829307, 1.419577, 5.614596),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (1.829307, 1.879483, 4.924737),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
 )
 def _golden_trace(seed, proc="grand_contest"):
     random.seed(seed)

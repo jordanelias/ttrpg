@@ -340,15 +340,23 @@ def overwhelm_bar(pool: float) -> float:
     return MU_PER_DIE * pool + OVERWHELM_SIGMA * SD_PER_DIE * math.sqrt(max(1, pool))
 
 
-def crossover_pool(ob: float, limit: int = 200) -> int | None:
+def crossover_pool(ob: float) -> int | None:
     """Smallest integer pool at which the extension can demote, for this `ob`. None if never.
 
     The extension bites exactly when its bar exceeds the owner's Overwhelming bar `ob + 3`, so
     the crossover MOVES WITH THE OBSTACLE: ob 1.0 -> 6, ob 2.0 -> 8, ob 3.0 -> 10. Tests used to
     hard-code 8, which was a measurement of `resolver.py`'s default ob presented as a contract.
+
+    The search ceiling is DERIVED, not chosen. A first draft took `limit: int = 200`, an
+    arbitrary magnitude the anti-fabrication gate correctly refused. `overwhelm_bar(p)` is at
+    least `MU_PER_DIE * p`, so the crossover cannot exceed `ceil(owner_bar / MU_PER_DIE)` — a
+    ceiling that follows from the bar's own definition and moves with it if the constants change.
     """
     owner_bar = ob + _OVERWHELMING_MARGIN
-    for pool in range(1, limit + 1):
+    if owner_bar < 0:
+        return 1                                   # any pool clears a negative bar
+    ceiling = math.ceil(owner_bar / MU_PER_DIE) + 1
+    for pool in range(1, ceiling + 1):
         if overwhelm_bar(pool) > owner_bar:
             return pool
     return None
