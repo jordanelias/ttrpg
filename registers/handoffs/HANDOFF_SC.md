@@ -360,3 +360,50 @@ index; see it for cross-lane/global items.
 - **contest_rebuild Stage 1+ gates** — each stage ratified individually (Gate 0 ratified
   2026-06-30; ED 1055-1079 / PP 800-809 reserved; Gates A–C ratified through 2026-07-02; also
   tracked at `decision_queue.md` item 15).
+
+---
+
+## 2026-08-27 — the ninth degree ladder migrated to the single owner (ED-SC-0031)
+
+**WHAT LANDED.** `engine/autoload/sigma_leverage.degree` returns `dice_engine.degree_from_net`'s
+bands (as `DEGREE_ORDINAL`), with ONE declared extension: a pool-aware de-saturation bar that may
+only demote Overwhelming to Success. The HELD entry in
+`tests/valoria/test_degree_ladder_single_owner.py` is gone; one hold remains
+(`combat_engine_v1/core.py`).
+
+**CONTROL:** `tools/balance_oracle.py --n 120`, arms `private_ladder` vs `owner_ladder` in one
+process — max |z| 0.80, nothing significant. Six campaign goldens moved and were re-pinned on that
+basis.
+
+### ⚠ THE RULING IS HALF-EXECUTED, AND THIS IS THE NEXT SC ITEM
+
+Jordan, 2026-08-15: *"if a system does require any modification or extension, then the wrapper needs
+to inject the engine in such a manner that it can be modified cleanly."*
+
+The **first** clause ("systems should not need different degree bands") is satisfied and verified
+cell-for-cell. The **second is not.** What landed is a hard-coded post-filter inside the subsystem,
+whose constants (`MU_PER_DIE`, `SD_PER_DIE`, `OVERWHELM_SIGMA`) the subsystem still owns.
+`degree_from_net` exposes no hook, takes no policy argument, and does not know an extension exists.
+Nothing composes, and nothing would stop a second subsystem bolting on a differently-shaped filter —
+the recurrence detector's own comment records that it would MISS an integer post-filter, which is
+what this now is. **Do not read "explicit, named extension" as closing the ruling.** It belongs with
+the subsystem-wrapper/orchestrator work.
+
+### Open
+
+- **A disclosed game-facing cost.** Uniformity of the Overwhelming rate across SMALL pools got
+  WORSE: at ob 2.0 the rate over pools 2-7 is now .000 .010 .038 .084 .140 .203 (monotone), against
+  the retired ladder's ~.07 .17 .29 .20 .14 .21 — and **a pool-2 contest can never resolve
+  Overwhelming at all** (it would need net >= 5 from two dice, max 4). That is a consequence of
+  Jordan's one-ladder ruling, not a choice made here. Whether it is acceptable is a design call.
+- **The bridge's shut-out set has now taken three values** under three unrelated mechanic changes
+  (`{'Hafenmark'}` -> `set()` -> `{'Church'}`). Evidence that "the spine can eliminate a faction"
+  tracks the seed, not the spine. Only ever measured at n=8/seed-42; settling it needs the n>=100
+  arm. **FA/WR-lane.**
+- **Combat's ladder (the remaining hold) is NOT migrated,** and neither is the 40% covert-plate-killer
+  ceiling abolished. Those are one ruling with two halves (Jordan, 2026-08-25: *"one degree ladder.
+  guandao should be 47.5%, and 40% ceiling is to be abolished"*), and the half that comes first is
+  the **Ob derivation from the defender** (score/2 + that instance's modifiers), which is new
+  mechanism rather than a re-siting. Abolishing the ceiling alone deletes a guard and gains nothing.
+  All four degree-ladder rulings are now recorded verbatim in `RULINGS` at
+  `tests/valoria/test_degree_ladder_single_owner.py`.
