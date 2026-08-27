@@ -3680,3 +3680,50 @@ ways.
   `victory_flow_skeleton`'s victory contract cited at `:957-999`, actually at `:1078+`). Nothing in
   CI validates a `.md` anchor's CONTENT. Repairing them is a bounded but separate job; a partial
   repair would present the unsampled remainder as verified.
+
+---
+
+## 2026-08-27 — contracts, centralized and hierarchical (ED-IN-0200) — RULED, NOT EXECUTED
+
+Jordan: *"key contracts and module contracts etc need to be explicitly defined in a centralized
+hierarchical manner."* Filed **`status: open`, NOT `needs_jordan`** — he has ruled; what is
+missing is execution, and flagging it back at him would be the parking-space misuse §0 forbids.
+
+**Measured current state**, so the next session starts from a fact: three registries, none
+hierarchically related to the others — `references/module_contracts.yaml` (27 modules + 27
+composition roles), `engine/engine_params/key_types.json` (55 types, exporter-gated),
+`references/descriptor_registry.yaml` (attributes, aggregates, stat bounds). Three **flat**
+namespaces referencing each other by string. No surface descends game → subsystem → module → Key →
+field.
+
+**Why it was not done in that session, stated rather than left as a gap:** it needs a decision
+about what the levels ARE, whether the three become views of one artifact or stay separate with a
+declared parent, and what the round-trip story is for the composite. Nesting the three under a new
+top-level key would be a hierarchy in shape and not in meaning — worse than the honest flat state,
+because it would look done.
+
+**Read first:** `propagation_spec_v1.md` §O.2's engine_clock contract is the worked example of a
+module contract stated properly; **ED-1051** is whether that form is ratified; and **9 of 27
+modules carry `doc: null` with 11 of 27 resolvers `[ASSUMPTION]`-grade** — a third of the surface
+is not an implementable spec yet, so a hierarchy over it would centralise the holes as much as the
+content. Authoring the missing contracts is plausibly the first half of this work.
+
+**Related, deliberately separate:** the wrapper/orchestrator architecture (each subsystem's
+wrapper owns all Key I/O; inputs trickle down with granularity, outputs aggregate up) is the
+RUNTIME half of the same idea. ED-SC-0032 executed **one instance** of it — the degree-ladder
+extension seam. That is one seam, not the architecture.
+
+## 2026-08-27 — an id-allocation gate does not exist, and the predicate says not to build one
+
+A post-merge audit found a **duplicate ED id shipped in #334** (`ED-PC-0041`, already allocated
+2026-07-29; renumbered to `ED-PC-0057`) plus six pre-existing duplicates in this lane's own ledger
+(`0012, 0013, 0016, 0029, 0149, 0162` — §4 documents the first two, not the rest). Nothing in CI
+cross-checks a lane's allocated ids against `id_reservations.yaml`; the audit was a one-line
+script.
+
+**Not built, and the reasoning is the point.** §0.1 pt 5's predicate admits a guard only where the
+defective artifact is load-bearing on the game, a Jordan decision, the exported params, or the
+port. An id-allocation checker is load-bearing on **this repository's process** — the predicate's
+own worked-example exclusion. So the honest state is: this class recurs, it is cheap to detect,
+and the doctrine says not to mint the guard. **Flagged to Jordan as a genuine tension rather than
+resolved unilaterally.**

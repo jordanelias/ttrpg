@@ -1007,7 +1007,14 @@ nothing in the corpus defined how it happens. Carried forward verbatim.
 
 ---
 
-## 2026-08-27 — the 40% covert-plate-killer ceiling is ABOLISHED (ED-PC-0041)
+## 2026-08-27 — the 40% covert-plate-killer ceiling is ABOLISHED (ED-PC-0057)
+
+> ⚠ **Filed as ED-PC-0041 and renumbered to ED-PC-0057 the same day.** ED-PC-0041 was already
+> allocated on 2026-07-29 (the E0 batch), so this row was a duplicate id for the length of one
+> merge. `next_free` for PC read **57** and I filed 0041 — CLAUDE.md §4 says read `next_free`
+> and allocate THAT, never a number you reasoned to. Caught by a post-merge audit of the
+> ledgers against `id_reservations.yaml`, not by a gate: **nothing in CI cross-checks a lane's
+> allocated ids against its pointer**, which is a real gap and is recorded in `HANDOFF_IN.md`.
 
 Jordan, verbatim: *"dude guandao not being able to hit 47.5% on its own merits is fucked up. stop
 arbitrary fiat capping."* Assertion (C) of

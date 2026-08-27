@@ -29,11 +29,41 @@ session licensing three commits.
 | **ED-IN-0199** | `engine/autoload/engine_clock.py` exists. `propagation_spec_v1.md` §O.1 has said since 2026-07-02 that engine_clock owns the tick composition; the module did not exist, `season.run_season` held the ordering, and the scheduler's two phase calls sat *inside* the ACTION phase's body. `next_tick()` left the scheduler in `_PHASE_ACTION` for all of accounting, and `keys.py` defers an `apply` on exactly that condition. | **identical** |
 | **ED-SC-0031** | The ninth degree ladder — `sigma_leverage.degree`, the one the 2026-08-12 census missed — migrates to `dice_engine.degree_from_net`. | **MOVED** |
 | **ED-SC-0032** | The injection seam: `dice_engine.BandExtension`. The contest's de-saturation rule leaves the engine for the subsystem that owns it and is injected by its wrapper. | **identical** |
-| **ED-PC-0041** | The 40% covert-plate-killer ceiling is **abolished** (Jordan: *"stop arbitrary fiat capping"*). No replacement threshold. | n/a (test-only) |
+| **ED-PC-0057** | The 40% covert-plate-killer ceiling is **abolished** (Jordan: *"stop arbitrary fiat capping"*). No replacement threshold. | n/a (test-only) |
 
 **The ED-SC-0031 move is not a balance result.** Six of eight campaigns change winner at n=8;
 `tools/balance_oracle.py` at n=120 per arm shows max |z| = 0.80 against a 1.96 threshold. Six
 goldens were re-pinned on that basis. Full table in the session record.
+
+### ⚠ POST-MERGE AUDIT (2026-08-27) — "are all decisions logged, ratified and propagated?"
+
+Asked after #334 merged. **The answer was no, in three ways**, all now fixed. Recording the
+result rather than only the fix, because each is a class this repo will hit again.
+
+1. **A DUPLICATE ED ID SHIPPED.** The ceiling abolition was filed as `ED-PC-0041`, which had been
+   allocated on 2026-07-29. `next_free` for PC read **57**; I filed 0041. CLAUDE.md §4 says read
+   `next_free` and allocate THAT — never max+1, never a number you reasoned to. Renumbered to
+   **ED-PC-0057** and propagated. **Nothing in CI cross-checks a lane's allocated ids against its
+   pointer**, which is why a merged PR carried it; the audit was a one-line Python script.
+2. **TWO JORDAN RULINGS WERE RECORDED NOWHERE.** A grep for their own words returned zero files:
+   *"one faction write mechanism"* and *"key contracts and module contracts etc need to be
+   explicitly defined in a centralized hierarchical manner"*. Both were given in the same
+   conversation as "one degree ladder", which drew four commits. **The shape to watch: a ruling
+   delivered alongside another, and satisfied by the tree's current state, is the one that gets
+   silently dropped** — nobody decides against it, it just never becomes a work item.
+   → **ED-FA-0038** (executed: the faction-write ruling was already substantially true, so what
+   landed is the guard that was missing) and **ED-IN-0200** (ruled, NOT executed, filed `open`).
+3. **PRE-EXISTING, NOT MINE, RECORDED NOT FIXED:** six duplicate ids in the IN ledger
+   (`0012, 0013, 0016, 0029, 0149, 0162`, all July–August). CLAUDE.md §4 documents 0012/0013;
+   the other four are undocumented. Not touched — the ED-306 precedent §4 cites says merged
+   ledger lines are not rewritten unilaterally.
+
+**The one gap left open by this audit:** no gate checks ledger ids against `id_reservations.yaml`.
+A ~10-line test would have caught (1) and (3). It is not written here because minting a guard is
+governed by §0.1 pt 5's predicate, and an id-allocation checker is load-bearing on this
+repository's process rather than on the game — the predicate's own worked-example exclusion. The
+honest disposition is that this class recurs and is cheap to detect, and that the predicate says
+not to mint the guard. **Flagged for Jordan as a genuine tension, not resolved by me.**
 
 ### THE HIGHEST-VALUE WARNING FROM THIS SESSION
 

@@ -222,3 +222,31 @@ while this is suspended; if a ruling lands, that test is where the new conventio
   `registers/handoffs/HANDOFF_IN.md`):** raw `designs/provincial/ci_political_v30.md` is ~26k but tracked
   read returns 0 (index-routes) — this is a routing/tooling bug, not a faction-content decision,
   but the affected file is faction/political content so cross-referenced here.
+
+---
+
+## 2026-08-27 — "one faction write mechanism" (ED-FA-0038)
+
+**The ruling was already substantially true, and that is why it nearly vanished.** Jordan gave it
+in the same message as "one degree ladder". The degree half drew four commits; this drew none, and
+was recorded nowhere in the tree until a post-merge audit grepped for its own words and got zero
+files.
+
+**Measured:** `engine.autoload.game_state.Faction.adjust` is the single owner — it resolves bounds
+from `descriptors.faction_bounds`, applies `MULTS` granularity, clamps, writes. Across `engine/`
+and `systems/`, non-test: **zero** bypassing writes. Two of CLAUDE.md §0.1 pt 5's three
+requirements met; **the third — a guard that fails on recurrence — was missing.**
+
+**Landed:** `tests/valoria/test_faction_write_sweep.py`, the sibling of `test_morale_write_sweep.py`.
+Mutation-verified. `DECLARED_WRITERS` is **empty by measurement**, and a test pins that so the
+first genuine exception has to be declared with a reason in a diff.
+
+### Two things worth not re-deriving
+
+- **Scope the stat roster by the Faction dataclass, not by `MULTS`.** `MULTS` also carries
+  `accord` and `pt` — Territory fields. The first version flagged `mass_seizure.py:296` and
+  `parliamentary_transfer.py:346` as bypassing faction writes; they write `Territory.accord`, a
+  different field on a different class sharing a granularity table.
+- **Those two sites are a real divergence, in the SE lane.** `accounting.py`'s own docstring
+  records two uncoordinated write paths for provincial Accord (OI-37). This guard deliberately
+  does not police them — two rules in one file is the shape §8 forbids.
