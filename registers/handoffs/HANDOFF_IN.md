@@ -3792,3 +3792,97 @@ thinness.
 `compliance_check` (0 errors, no new file size-exceeded), `currency_consistency_check`,
 `validate_ed_citations`. CI all-green on PR #337; counts are on the run, not copied here.
 
+
+---
+
+## 2026-08-28 (session close) — precedent companion, ED-IN-0201, and the harvest provenance
+
+**Where the work is.** PR #336 and #337 are merged. **PR #338 is open and green** on branch
+`claude/gameplay-actions-scales-fb6ahu`.
+
+| landed | what |
+|---|---|
+| #336 (merged) | `research/cross_scale_action_catalogue_v1.md` · `research/personnel_muster_integration_master_v1.md` |
+| #337 (merged `d73b5d3d`) | `valoria_systems_integration_master_v1{,_part2,_part3,_part4}.md` · companion Parts 1–2 · the Compact→Leverage fix |
+| #338 (open, green) | Companion Parts 3–8 · **ED-IN-0201** · `research/provenance/2026-08-28-systems-integration-harvest/` |
+
+**Read in this order if you are picking this up cold:** the integration master's `_part4` §5 (what
+the tree actually is), then the companion's `_part3` (how it compares to the genre), then `_part8`
+(the ruling that now governs all of it).
+
+### THE RULING THAT CHANGES THE ORDER OF EVERYTHING — ED-IN-0201
+
+Jordan, 2026-08-28: **faction actions, settlement governance and mass battles are predicated on
+people existing.** No leader → no faction action. And the leader *influences which action is chosen*
+from the same option set with the same information — as do a settlement's governor and a battle's
+commander. Filed `status: open`, **not** `needs_jordan`; he has ruled, execution is missing.
+
+**Why this reorders the queue:** under the gate, with `world.npcs` empty, a campaign performs **zero
+faction actions.** The person loader is no longer an enhancement — it is a precondition of the engine
+running, and leaders must exist at world-gen before season 1.
+
+**Two things it decides for you.** It settles the CK3-vs-CK2 population fork in favour of *generate
+on demand, not on a clock* (an ambient spawner cannot guarantee a leader exists when the loop asks).
+And it makes `contest/faction.py::succession` load-bearing — currently unreachable *because* `Faction`
+has no leader field; under the gate, a faction with no viable successor stops acting, which is the
+collapse mechanism the tree presently lacks.
+
+**Two things it leaves open, and they block execution step 3:**
+1. **What a leader IS, structurally** — one of the 46 authored characters, a generated officer, or a
+   role held by whoever has highest Standing. The schema cannot be typed without this.
+2. **"No commander, no battle"** — a gate (cannot declare a conquest) or a penalty (an unled army
+   fights worse, the Dominions shape). Different games. My reading is the gate; I did not decide it.
+
+### Next actions
+
+1. **NPE RNG substream from the campaign seed, then re-point the three population guards at
+   `world.npcs`.** These are the only two steps provable **byte-identical**, and under ED-IN-0201 the
+   loader's golden movement is now unavoidable rather than optional — so land these first or the
+   first campaign that obeys the ruling is also the first nobody can attribute. The guards observe
+   `world.npc_counter`, which only `generate_npc` increments and a loader never touches.
+2. **Run `tools/balance_oracle.py` on the parliament Total Victory rider** before anyone rules on it
+   or patches the comment. It docks the *losing coalition's* highest-L faction — the leader on one
+   branch, the lowest-Stability proposer on the other — so its sign is unknown and the widespread
+   "it is the anti-runaway damper" belief is uncontrolled.
+3. **`InsurgencyRecord.L` writer** — still the cheapest change that adds an agent to the world.
+4. **Do not treat any subtractive verdict in the master's `_part4` §6 as final.**
+   `throughlines_meta.md:233-238` requires an independent pass to steelman each action for KEEP first.
+   Precedent: the 2026-07-08 application of the same method to 97 actions produced **zero top-level
+   CUTs**.
+
+### Two instrument rules, because both classes recur here
+
+1. **Reachability is not an import graph.** §3: dependencies are declared in `references/` and
+   resolved by string at first call. `treaty.py` and `beliefs.py` have zero textual importers and are
+   both live via `composition.require` in `restore_world`. **Check `module_contracts.yaml` as well as
+   grep before calling anything dead.**
+2. **Agreement across surfaces is evidence only where the surfaces are independent.** Prose descended
+   from a common ancestor agrees with itself whatever the ancestor said. Resolve a repeated claim
+   against the code and the register, never against the count of documents carrying it.
+
+### Provenance, and what is deliberately absent from it
+
+`research/provenance/2026-08-28-systems-integration-harvest/` holds the 1,079 harvest records (as
+`.md` and as `records.json`), the four governing briefs, the three synthesis agents' raw output, the
+corpus and code inventories, the extraction scripts, and **the source of the published page** at
+`claude.ai/code/artifact/a186da98-967f-4c0e-a642-9ebbbdd7719d` — without that file the artifact cannot
+be updated. Its README lists what was excluded and why; the one worth knowing is **`hist-6311caa/`,
+819 files of the pre-restructure tree, which is already in git at `FORK:6311caa8`** and must not be
+re-imported.
+
+⚠ **The records are append-only and are NOT reference to reason from.** They predate the adversarial
+gate's corrections — six of which trace to a single date window, where the lanes' sources predate
+thirteen commits landing 2026-08-22 to 08-27. **The corrected statements live in the master.** The
+records exist so a claim can be traced, not re-used.
+
+### Standing coverage limits
+
+`systems/fieldwork/` (21 docs) and `systems/social_contest/` (6 docs + ~18 modules) were on no lane's
+manifest and have no flatten. **A coverage hole, not a finding that they are thin.** And six precedent
+titles are surveyed thinly or not at all — companion `_part1` §2.13 registers them with the question
+each would answer; four of the six are declared precedents in Valoria's own design heads with no pass
+ever testing whether they support what they are cited for.
+
+**Verification at close.** Green on the head: full `pytest tests/valoria`, `valoria_local --staged`,
+`compliance_check` (0 errors), `currency_consistency_check`, `validate_ed_citations` (0 violations).
+CI all-green on #338; counts are on the run, not copied here.

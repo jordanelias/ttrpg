@@ -1,0 +1,658 @@
+<title>The Inert Fifteen Percent</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,600;6..96,800&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ink:#171a1f; --ink-2:#3d444e; --ink-3:#6b7280;
+  --paper:#f2f2ee; --paper-2:#e8e9e3; --paper-3:#dcded6;
+  --rule:#c8cbc1; --rule-2:#b0b4a8;
+  --verd:#2f6b62; --verd-hi:#3f8a7e; --verd-wash:#dfe9e5;
+  --built:#3f6b4a; --inert:#a8562a; --designed:#4a5c86; --proposed:#7a6a3f; --ruled:#7d4a6b;
+  --shadow:0 1px 0 var(--rule), 0 8px 24px -18px rgba(23,26,31,.5);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ink:#e7e8e2; --ink-2:#b6bab2; --ink-3:#868b84;
+  --paper:#14171a; --paper-2:#1c2024; --paper-3:#252a2f;
+  --rule:#333a40; --rule-2:#454d55;
+  --verd:#69b7a8; --verd-hi:#8ad3c3; --verd-wash:#1b2b29;
+  --built:#7fb98d; --inert:#e08a55; --designed:#8fa5d8; --proposed:#c4ae70; --ruled:#c98cb4;
+  --shadow:0 1px 0 var(--rule), 0 8px 24px -18px #000;
+}}
+:root[data-theme="dark"]{
+  --ink:#e7e8e2; --ink-2:#b6bab2; --ink-3:#868b84;
+  --paper:#14171a; --paper-2:#1c2024; --paper-3:#252a2f;
+  --rule:#333a40; --rule-2:#454d55;
+  --verd:#69b7a8; --verd-hi:#8ad3c3; --verd-wash:#1b2b29;
+  --built:#7fb98d; --inert:#e08a55; --designed:#8fa5d8; --proposed:#c4ae70; --ruled:#c98cb4;
+  --shadow:0 1px 0 var(--rule), 0 8px 24px -18px #000;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;font-weight:400;
+  font-size:17px;line-height:1.62;margin:0;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:0 28px 120px}
+.col{max-width:68ch}
+h1,h2,h3,.disp{font-family:"Bodoni Moda",Didot,"Bodoni MT",Georgia,serif;text-wrap:balance}
+code,.mono,td.n,th.n{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace}
+code{font-size:.86em;background:var(--paper-2);border:1px solid var(--rule);
+  padding:.06em .34em;border-radius:3px;color:var(--ink-2)}
+a{color:var(--verd)}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-3);margin:0 0 14px}
+
+/* ── masthead ── */
+header{border-bottom:2px solid var(--ink);padding:64px 0 0;margin-bottom:0}
+h1{font-size:clamp(44px,7.2vw,86px);font-weight:800;line-height:.98;letter-spacing:-.018em;
+  margin:0 0 20px;max-width:15ch}
+h1 em{font-style:italic;font-weight:400;color:var(--verd)}
+.dek{font-size:clamp(18px,2.1vw,21px);color:var(--ink-2);max-width:60ch;margin:0 0 34px;font-weight:300}
+.byline{display:flex;flex-wrap:wrap;gap:0 26px;font-family:"IBM Plex Mono",monospace;
+  font-size:11.5px;letter-spacing:.06em;color:var(--ink-3);border-top:1px solid var(--rule);
+  padding:14px 0 16px;text-transform:uppercase}
+
+/* ── the number ── */
+.headline{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);gap:0 48px;
+  align-items:start;padding:52px 0;border-bottom:1px solid var(--rule)}
+.bignum{font-family:"Bodoni Moda",serif;font-size:clamp(96px,17vw,190px);line-height:.82;
+  font-weight:800;letter-spacing:-.04em;color:var(--inert)}
+.bignum span{font-size:.42em;letter-spacing:0}
+.headline p{margin:.4em 0 0}
+.headline p:first-of-type{font-size:20px;margin-top:.1em}
+
+/* ── status bar ── */
+.statbar{display:flex;height:44px;border:1px solid var(--rule-2);border-radius:3px;
+  overflow:hidden;margin:26px 0 10px}
+.statbar div{display:flex;align-items:center;justify-content:center;
+  font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;color:#fff;
+  letter-spacing:.03em;min-width:0}
+.statkey{display:flex;flex-wrap:wrap;gap:6px 20px;font-family:"IBM Plex Mono",monospace;
+  font-size:11.5px;color:var(--ink-2)}
+.statkey b{font-weight:600}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:7px;
+  vertical-align:baseline;position:relative;top:1px}
+
+section{padding:56px 0;border-bottom:1px solid var(--rule)}
+h2{font-size:clamp(28px,3.6vw,40px);font-weight:600;letter-spacing:-.012em;margin:0 0 6px;max-width:22ch}
+h2 .num{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:500;letter-spacing:.14em;
+  color:var(--verd);display:block;margin-bottom:12px}
+h3{font-size:20px;font-weight:600;margin:34px 0 8px;letter-spacing:-.005em}
+.lede{font-size:19px;color:var(--ink-2);max-width:64ch;font-weight:300;margin:0 0 30px}
+p{margin:0 0 1.05em}
+
+/* ── tables ── */
+.tw{overflow-x:auto;margin:24px 0;border:1px solid var(--rule);border-radius:4px;background:var(--paper-2)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:520px}
+th{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--ink-3);text-align:left;padding:13px 16px;border-bottom:1px solid var(--rule-2);
+  font-weight:600;white-space:nowrap;background:var(--paper-3)}
+td{padding:12px 16px;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.45}
+tr:last-child td{border-bottom:none}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td strong{font-weight:600}
+
+/* ── chips ── */
+.chip{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:600;
+  letter-spacing:.07em;text-transform:uppercase;padding:3px 7px;border-radius:3px;
+  border:1px solid currentColor;white-space:nowrap}
+.c-built{color:var(--built)} .c-inert{color:var(--inert)} .c-designed{color:var(--designed)}
+.c-proposed{color:var(--proposed)} .c-ruled{color:var(--ruled)}
+.c-pass{color:var(--built)} .c-fail{color:var(--inert)}
+
+/* ── findings ── */
+.finds{display:grid;gap:2px;background:var(--rule);border:1px solid var(--rule);border-radius:4px;
+  overflow:hidden;margin-top:30px}
+.find{background:var(--paper);padding:24px 26px;display:grid;
+  grid-template-columns:58px minmax(0,1fr);gap:0 20px;align-items:start}
+.find .fid{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;color:var(--verd);
+  letter-spacing:.05em;padding-top:3px}
+.find h3{margin:0 0 8px;font-size:19px;line-height:1.28}
+.find p{margin:0 0 .7em;font-size:15.5px;color:var(--ink-2)}
+.find p:last-child{margin-bottom:0}
+.find p strong{color:var(--ink);font-weight:600}
+
+/* ── matrix ── */
+.mx td:first-child,.mx th:first-child{position:sticky;left:0;background:var(--paper-3);
+  font-weight:600;white-space:nowrap}
+.mx td:first-child{background:var(--paper-2)}
+.mx td{font-size:13px}
+.mx .dot{color:var(--verd);font-weight:600}
+
+/* ── proposals ── */
+.props{display:grid;gap:22px;margin-top:32px}
+@media(min-width:900px){.props{grid-template-columns:1fr 1fr}}
+.prop{background:var(--paper-2);border:1px solid var(--rule);border-radius:5px;
+  padding:26px 28px 24px;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.prop .pid{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;
+  color:var(--ink-3);text-transform:uppercase;margin-bottom:10px}
+.prop h3{font-family:"Bodoni Moda",serif;font-size:25px;font-weight:600;margin:0 0 4px;
+  letter-spacing:-.01em;line-height:1.1}
+.prop .tag{font-style:italic;color:var(--ink-3);font-size:15px;margin:0 0 16px}
+.prop p{font-size:15.5px;color:var(--ink-2)}
+.verdict{margin-top:auto;padding-top:18px;border-top:1px solid var(--rule)}
+.verdict .vh{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+.verdict p{font-size:14.5px;margin:0}
+
+.callout{border-left:3px solid var(--verd);background:var(--verd-wash);padding:20px 24px;
+  border-radius:0 4px 4px 0;margin:28px 0}
+.callout p{margin:0;font-size:16px}
+.callout p+p{margin-top:.8em}
+.warn{border-left-color:var(--inert);background:color-mix(in srgb,var(--inert) 8%,var(--paper))}
+
+ol.order{counter-reset:o;list-style:none;padding:0;margin:26px 0 0}
+ol.order li{counter-increment:o;position:relative;padding:0 0 22px 62px;margin:0}
+ol.order li::before{content:counter(o);position:absolute;left:0;top:-4px;
+  font-family:"Bodoni Moda",serif;font-size:34px;font-weight:600;color:var(--verd);line-height:1}
+ol.order li::after{content:"";position:absolute;left:17px;top:34px;bottom:0;width:1px;background:var(--rule)}
+ol.order li:last-child::after{display:none}
+ol.order b{font-weight:600}
+
+/* matrix */
+.mtx table{font-size:13.5px;min-width:760px}
+.mtx th{background:var(--paper-3);position:sticky;top:0}
+.mtx td:first-child,.mtx th:first-child{font-weight:600;white-space:nowrap;background:var(--paper-2)}
+.mtx tr:last-child td{background:color-mix(in srgb,var(--verd) 9%,var(--paper-2));font-weight:500}
+.mtx tr:last-child td:first-child{color:var(--verd);font-weight:700;letter-spacing:.04em}
+.mtx td em.ns{color:var(--ink-3);font-style:italic}
+h3.mh{margin:38px 0 4px;font-size:18px}
+h3.mh span{display:block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--verd);font-weight:600;margin-bottom:6px}
+.mnote{font-size:14.5px;color:var(--ink-2);margin:14px 0 0;max-width:70ch}
+/* verdict rows */
+.vrow{display:grid;grid-template-columns:180px minmax(0,1fr);gap:0 24px;padding:20px 0;
+  border-bottom:1px solid var(--rule);align-items:start}
+.vrow:last-child{border-bottom:none}
+.vsys{font-family:"Bodoni Moda",serif;font-size:19px;font-weight:600;line-height:1.2}
+.vsys .vtag{display:block;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.1em;
+  text-transform:uppercase;font-weight:600;margin-top:7px}
+.v-below{color:var(--inert)} .v-front{color:var(--proposed)} .v-ahead{color:var(--built)}
+.vrow p{margin:0;font-size:15.5px;color:var(--ink-2)}
+.vrow p+p{margin-top:.6em}
+.moves{display:grid;gap:20px;margin-top:30px}
+@media(min-width:880px){.moves{grid-template-columns:1fr 1fr}}
+.move{background:var(--paper-2);border:1px solid var(--rule);border-left:3px solid var(--verd);
+  border-radius:0 5px 5px 0;padding:24px 26px;display:flex;flex-direction:column}
+.move.fork{border-left-color:var(--inert)}
+.move .mid{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;
+  color:var(--ink-3);text-transform:uppercase;margin-bottom:9px}
+.move h3{font-family:"Bodoni Moda",serif;font-size:23px;font-weight:600;margin:0 0 12px;
+  letter-spacing:-.01em;line-height:1.15}
+.move p{font-size:15px;color:var(--ink-2);margin:0 0 .8em}
+.move .disp{margin-top:auto;padding-top:16px;border-top:1px solid var(--rule);font-size:14px}
+.move .disp b{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:5px;font-weight:600}
+footer{padding:44px 0 0;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-3);line-height:1.7}
+</style>
+
+<div class="wrap">
+<header>
+  <p class="eyebrow">Valoria · systems integration master v1 · 2026-08-28</p>
+  <h1>Finished machinery with <em>no hand on the key</em></h1>
+  <p class="dek">Every faction, personnel, settlement, governance, territory, NPC and politics mechanic in the repository — collated, sliced, flattened, compared, and resolved into four rival proposals. This is what the measurement found.</p>
+  <div class="byline">
+    <span>1,079 records · 11 harvest lanes</span><span>338 things classified</span>
+    <span>10 systems · 2 coverage holes</span><span>PR #337 · reference, not canon</span>
+  </div>
+</header>
+
+<div class="headline">
+  <div class="bignum">15<span>%</span></div>
+  <div>
+    <p><strong>51 of 338 catalogued things are finished, correct code that nothing calls.</strong></p>
+    <p>That is the same size as the entire unbuilt proposal corpus, and roughly half the size of everything that actually runs. Valoria is not underdesigned — 30% of the corpus is ratified canon — and almost none of the inert code is defective. <code>succeed_governor</code> sweeps expired ledger tags and lets durable ones survive a handover, which is the subtle thing done right. It has zero callers.</p>
+    <p>The parts are not connected to each other. That single fact reorganised every conclusion below.</p>
+  </div>
+</div>
+
+<section>
+  <h2><span class="num">§5.0 · the distribution</span>Where 338 things stand</h2>
+  <div class="statbar">
+    <div style="flex:109;background:var(--built)">109</div>
+    <div style="flex:100;background:var(--designed)">100</div>
+    <div style="flex:51;background:var(--proposed)">51</div>
+    <div style="flex:43;background:var(--inert)">43</div>
+    <div style="flex:21;background:var(--ruled)">21</div>
+    <div style="flex:14;background:var(--ink-3)">14</div>
+  </div>
+  <p class="statkey">
+    <span><i class="sw" style="background:var(--built)"></i><b>BUILT</b> a production path reaches it</span>
+    <span><i class="sw" style="background:var(--designed)"></i><b>DESIGNED</b> canon, no code</span>
+    <span><i class="sw" style="background:var(--proposed)"></i><b>PROPOSED</b> not canon</span>
+    <span><i class="sw" style="background:var(--inert)"></i><b>INERT</b> correct, uncalled</span>
+    <span><i class="sw" style="background:var(--ruled)"></i><b>RULED-UNEXECUTED</b></span>
+    <span><i class="sw" style="background:var(--ink-3)"></i><b>MIXED</b> defect or unreachable</span>
+  </p>
+  <div class="col">
+  <p style="margin-top:26px">The last band is mixed and the fold has to be exact rather than gestured at: of its 14 items, 6 are <em>built-with-a-defect</em> — they run, they are simply wrong — and 8 are inert in substance. Adding those 8 to the 43 gives the 51.</p>
+  </div>
+
+  <h3>Two coverage holes, stated rather than papered over</h3>
+  <div class="col">
+  <p><code>systems/fieldwork/</code> (21 documents) and <code>systems/social_contest/</code> (6 documents plus ~18 Python modules) appeared on no harvest lane's manifest. No flatten is written for either. <strong>That is a coverage hole, not a finding that they are thin.</strong> Separately, code citations from six of eleven lanes were advisory — every code claim reproduced in the document was re-verified against disk, and unverifiable ones were dropped.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">§5.1 · F1 · the convergence</span>Eight lanes, asked separately, all named a writer</h2>
+  <p class="lede">Each lane was asked for the cheapest change that would make its system playable, without seeing what the others said. Not one asked for a new mechanic. Not one asked for a design ruling.</p>
+  <div class="tw"><table>
+    <thead><tr><th>System</th><th>Cheapest change</th><th>Shape</th></tr></thead>
+    <tbody>
+      <tr><td>economy-accounting</td><td>One line of seasonal Wealth income in <code>run_accounting</code></td><td>writer</td></tr>
+      <tr><td>faction-strategy</td><td>A <code>grudge</code> dict + four one-line writes at outcomes that already fire</td><td>writer</td></tr>
+      <tr><td>parliament-politics</td><td>Give the motion a subject in <code>_derive_vote</code></td><td>writer</td></tr>
+      <tr><td>settlement-governance</td><td><code>tick_settlements(world)</code> — composed almost entirely of existing functions</td><td><strong>caller</strong></td></tr>
+      <tr><td>territory-world</td><td>Give <code>InsurgencyRecord.L</code> a writer</td><td>writer</td></tr>
+      <tr><td>People</td><td>Load the 46 authored characters into <code>world.npcs</code></td><td><strong>loader</strong></td></tr>
+      <tr><td>cross-scale-plumbing</td><td>Declare the accord echo's outcome and target</td><td>writer</td></tr>
+      <tr><td>mass-battle-seam</td><td>Pass a commander's Charisma and Cognition through <code>_faction_to_unit</code></td><td>writer</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout warn">
+    <p><strong>A unanimous result is exactly what to distrust, so it was attacked.</strong> The falsifier came from the People lane, which ran the experiment instead of reasoning about it: loading two NPCs moved the seed-42 campaign winner from Crown to Hafenmark, because <code>simulate_npc_actions</code> draws the shared campaign RNG once per qualifying pair per season and re-phases every downstream consumer. Three population guards could not see it — all three observe <code>world.npc_counter</code>, which only <code>generate_npc</code> increments and a direct loader never touches.</p>
+    <p>So the honest version is <em>seven of eight are writers; one is a writer plus a determinism precondition</em> — and that narrowing turned out to matter more than the finding.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">§5.1 · F2 – F10</span>What the comparison found</h2>
+  <div class="finds">
+
+    <div class="find"><div class="fid">F2</div><div>
+      <h3>The absent person is the highest-fan-out blocker in the tree</h3>
+      <p>Six of ten systems name <code>personnel-roster</code> as their blocking dependency, and it is empty. <strong>In every seeded campaign the population of Valoria is zero.</strong> Settlements need a governor to appoint, parliament needs seat-holders for 74 authored ladder rungs, faction succession is unreachable <em>by construction</em> because <code>Faction</code> has no leader field, and <code>derive_command</code> — whose flag already defaults on — silently falls back to a hardcoded 4 because nothing supplies a commander's attributes.</p>
+      <p>The circularity is exact: <strong>nothing appoints a governor because there is nobody to appoint, and nobody is generated because no mechanic needs one.</strong> Meanwhile <code>generate_npc</code> is a complete two-tier generator with no call site, and 46 authored characters sit in a registry with zero runtime loaders. Deleting that file would change nothing the engine does.</p>
+    </div></div>
+
+    <div class="find"><div class="fid">F3</div><div>
+      <h3>The primitive four systems are each asking for is already built, and inert</h3>
+      <p>Faction has no grudge — <code>parliamentary_action.py</code> says so in its own comment. Parliament has no motion history. <code>NPC.persistent_state</code> is declared, serialised and never assigned. Across fifteen traced flow skeletons, Key-typed <em>inputs</em> were 7 of 165.</p>
+      <p>And <code>ledger.py</code> ships five tag families with dedupe, TTL sweep and succession survival — <strong>and zero production writers.</strong> A faction grudge and a settlement Grudge tag are the same primitive at two scales.</p>
+      <p><strong>The enum is closed at five, and the fifth is <code>Leverage</code>.</strong> A recurring term-limited claim — a Compact — is a <code>Debt</code> subtype, ruled July 2026. Four fiscal proposals were adjudicated before that ruling reached the prose and are <em>unjudged</em> against the <code>Debt</code> form, one of them rated "ratify as-is".</p>
+    </div></div>
+
+    <div class="find"><div class="fid">F4</div><div>
+      <h3>Every homeostatic loop is open at one end, or has no damper</h3>
+      <p><code>Faction.standing</code> is a bare int mutated at eleven sites outside the clamping method, feeding two pools whose outcomes write it back. Settlement pressure Π has a restoring term that saturates at ±1 while six ambition clocks supply up to +3.0/season — the ceiling is pinned arithmetically. Wealth has four write sites in the whole engine, <strong>all costs, no income anywhere</strong>. Turmoil, IP, PI and Strain are set at world-gen and never written again: four pressure gauges, all painted on. <code>InsurgencyRecord.L</code> is assigned 1.0 once and promotion needs 3 — the world's only mechanism for producing new political agents is a closed loop with the exit welded shut.</p>
+    </div></div>
+
+    <div class="find"><div class="fid">F5</div><div>
+      <h3>Seven live name collisions, each a real defect the moment both halves are built</h3>
+      <p><em>Standing</em> means three things. <em>Disposition</em> means three. <em>Officer</em> is a unit commander and a political rank. <em>Territory</em> in code is what the ruling calls a Province. <em>Mandate</em> is both a directly-written stat and a derived aggregate of a field that does not exist. And five scale vocabularies are live, with only "Personal" appearing in all of them.</p>
+      <p>The scale row is not a naming cleanup: two different concepts — <strong>what size of thing an event is about</strong>, and <strong>what administrative tier owns it</strong> — have been forced into one field. Each of the five rosters was right about a different question. The consequence for sequencing is that the naming pass is a <em>precondition</em> of the person primitive, not a tidy-up after it.</p>
+    </div></div>
+
+    <div class="find"><div class="fid">F6</div><div>
+      <h3>Three rival action economies, and the only live budget belongs to none of them</h3>
+      <p>Faction scale carries a single weighted RNG draw (the one that runs), a typed card-hand-with-cooldowns economy, and a six-tier AI posture stack — none superseding another, none acknowledging the others. Settlement scale carries two, and both were <em>already ruled</em>; the rulings are unexecuted, so the fork keeps re-presenting itself to anyone reading the documents rather than the rulings.</p>
+      <p>Every proposed action economy wants a budget. One exists — <code>AP = 2 + facility_tier</code>. A repo-wide grep for its accessor returns no matches at all.</p>
+    </div></div>
+
+    <div class="find"><div class="fid">F7</div><div>
+      <h3>The proposal corpus is roughly four ideas with ~150 instantiations</h3>
+      <p>About 117 of 471 catalogued gaps are measurably duplicates in disguise. Twenty-one deeply-researched fiscal mechanics — <em>iltizam</em>, the Ferme Générale, John Law, the Salt Certificate — all want the same two things: a Wealth quantity that flows, and a durable claim tag. Both are single primitives named elsewhere in this list. Nine parallel bounded personal meters differ only in their trigger lists.</p>
+    </div></div>
+
+    <div class="find"><div class="fid">F8</div><div>
+      <h3>The one working cross-scale crossing works <em>because</em> it needs no person</h3>
+      <p>Eight scale handoffs are specified; one pair is production-reachable, through a dispatch dict whose two entries both point at it. Eight mandatory zoom-in triggers are specified; one is evaluable. It fires an emergency council whose two sides are derived from <strong>the same faction's own aggregates</strong> — one scoring <code>round(L)</code>, the other <code>round(7 − Sta)</code>. The single working personal↔strategic crossing in the game is a faction arguing with itself, and it works precisely because it needs nobody in the room.</p>
+    </div></div>
+
+    <div class="find"><div class="fid">F9</div><div>
+      <h3>What is good, and must survive every proposal</h3>
+      <p>The Key substrate — typed, append-only, with deferred-apply that preserves same-tick causal chaining. The resolution kernel, which closed its TN question by making non-conformance <em>impossible</em> rather than merely discouraged. <code>ledger.py</code>. <code>derive_parties</code> returning <code>None</code> on a derivation gap rather than fabricating an actor. The mass-battle engine. A cut list is only credible next to a defend list.</p>
+    </div></div>
+
+    <div class="find"><div class="fid">F10</div><div>
+      <h3>The binding constraint is not cost. It is attribution.</h3>
+      <p>Eight changes are individually cheap — call it 250 lines. Land them in one commit and you get <strong>eight simultaneous golden movements and no way to attribute any of them.</strong> A number without a control is not a measurement, so that is not a fast path; it is an unmeasurable one.</p>
+      <p>The real constraint on integration is <em>ordering</em>. Determinism-neutral changes first, state-writing changes in increasing order of blast radius, each with a stated control. That ordering separates the four proposals below more than their content does.</p>
+    </div></div>
+
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">§5.2 · the synergy matrix</span>Where a fix in one system pays in another</h2>
+  <p class="lede">Three columns dominate. Person unblocks eight systems, the generalised ledger seven, and Wealth income unblocks an entire proposal corpus by itself. Everything else is local.</p>
+  <div class="tw"><table class="mx">
+    <thead><tr><th>Build this</th><th>faction</th><th>parliament</th><th>settlement</th><th>territory</th><th>People</th><th>plumbing</th><th>economy</th><th>battle</th></tr></thead>
+    <tbody>
+      <tr><td>Person entity</td><td class="dot">leader, succession</td><td class="dot">seat-holders</td><td class="dot">governor, recall</td><td class="dot">cascade officers</td><td>—</td><td class="dot">6 of 7 Scope conditions</td><td class="dot">tax-farmer NPC</td><td class="dot">command derivation</td></tr>
+      <tr><td>Generalised ledger</td><td class="dot">grudge, memory</td><td class="dot">motion history</td><td>its home</td><td class="dot">occupation record</td><td class="dot">memory, edges</td><td class="dot">causes[] as biography</td><td class="dot">durable claims</td><td>—</td></tr>
+      <tr><td>AP budget, all scales</td><td class="dot">replaces the draw</td><td class="dot">motions cost</td><td>its home</td><td class="dot">reach-cap</td><td class="dot">actions per roster</td><td>—</td><td class="dot">prices every verb</td><td>—</td></tr>
+      <tr><td>Wealth income</td><td class="dot">conquest pays</td><td>—</td><td class="dot">compliance yield</td><td class="dot">holding pays</td><td class="dot">recruitment costs</td><td>—</td><td class="dot"><strong>all 21 mechanics</strong></td><td class="dot">upkeep</td></tr>
+      <tr><td>Naming pass</td><td class="dot">Standing ×2</td><td class="dot">Sanction</td><td class="dot">Standing ×3</td><td class="dot">Territory tier</td><td class="dot">Officer, Disposition</td><td class="dot">5 vocabularies</td><td>—</td><td class="dot">Officer</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2><span class="num">§6 · four rival proposals</span>Each attacked against NERS, scope gate first</h2>
+  <p class="lede">NERS applies to systems that resolve by <em>rolling</em>. A ledger, a budget or a loader does not roll, and manufacturing a verdict for one is the exact error the methodology warns against — so where a proposal is out of scope, that is said plainly and no verdict is invented. Two attacks broke their own proposals rather than blessing them, and the repairs are the most useful output here.</p>
+
+  <div class="props">
+    <div class="prop">
+      <p class="pid">Proposal 1</p>
+      <h3>Close the Circuits</h3>
+      <p class="tag">Add nothing. Cut nothing. Connect what exists, one variable at a time.</p>
+      <p>Eleven steps, ordered by blast radius, each a single-variable experiment with a stated control. Determinism-neutral changes first — the RNG substream and re-pointing the population guards at <code>world.npcs</code> rather than a counter they cannot see through. Then the writers, with the Muster 100× scaling fix deliberately landing <em>after</em> seasonal income so the correction is visible rather than fatal.</p>
+      <p>Its weakness is stated rather than hidden: it makes the existing game <em>work</em>. It does not make it <em>good</em>.</p>
+      <div class="verdict"><p class="vh">NERS · <span class="chip c-pass">Passes</span></p>
+      <p>Nine of eleven steps touch no resolution — out of scope, no verdict offered. Two are in scope and pass; Wealth saturates at the registry ceiling, so income is negative feedback on the leader. <strong>Conditional on one addition:</strong> a grudge counter with no decay is an unbounded ramp that feeds the selection which generates more grudge. Decay is a hard precondition, not a nicety.</p></div>
+    </div>
+
+    <div class="prop">
+      <p class="pid">Proposal 2</p>
+      <h3>Three Primitives</h3>
+      <p class="tag">Person, ledger, budget — build them once, merge everything that duplicates them.</p>
+      <p>Six representations of a person collapse into one entity with a composable <code>roles</code> set. Six bespoke memory stores collapse into tags on a ledger widened from settlement-scoped to any-entity-scoped. Nine parallel personal meters distil to two — one public, one private. The weighted draw and the card-hand economy are both cut in favour of a generalised action budget.</p>
+      <div class="verdict"><p class="vh">NERS · <span class="chip c-fail">Fails</span> → repaired</p>
+      <p><strong>A flat AP currency spanning both canonical engines breaks P-ii.</strong> One point returns a flat 0.10 in the Domain Action Resolver; an added die in the sigma engine returns ≈0.204σ at Pool 5 and ≈0.115σ at Pool 18 — about 8.1 versus 4.6 percentage points at the mode, and obstacle-dependent on top. The same AP is worth ~1.8× more on a small pool, so a player routes it wherever it pays. This is the flat-shift trap one level up. <strong>Repair: AP buys actions, never modifiers</strong> — which also takes the budget back out of the resolution arithmetic entirely.</p></div>
+    </div>
+
+    <div class="prop">
+      <p class="pid">Proposal 3</p>
+      <h3>The Disposal</h3>
+      <p class="tag">Delete, as-if-built, what would not survive contact with a player.</p>
+      <p>Six dead modules and the dead surfaces of two more; the six faction stubs that are why two of four factions are string-comparison-identical in play; a 74-rung ladder across twelve ladders distilled to one track plus a power-base type; the non-compiling Godot skeleton; and a canon table of four unique faction actions the code implements <em>none</em> of — which makes it retracted, not unimplemented.</p>
+      <div class="verdict"><p class="vh">NERS · out of scope, except one</p>
+      <p>Deleting inert modules changes no resolution path, so no verdict is offered. The exception: <strong>cutting the four upper Sanction tiers fails P-iv</strong> — it leaves parliament with exactly one severity setting. The repair is better than either option: keep the <em>parameterisation</em>, drop the <em>tiers</em>, and let the proposer buy a magnitude. A continuous dial where the design had five discrete rungs.</p></div>
+    </div>
+
+    <div class="prop">
+      <p class="pid">Proposal 4</p>
+      <h3>The Season Is a Person's Season</h3>
+      <p class="tag">Stop iterating factions. Iterate people. A faction acts because someone in it acts.</p>
+      <p>The most radical, and the one that answers the question every within-system analysis ends on. It forces the person primitive, gives parliament motions an author, gives battles a commander, makes six of seven Sufficient Scope conditions reachable, and turns <code>Key.causes[]</code> from a provenance chain into a biography — which is what the substrate was built for and has never once been used as.</p>
+      <div class="verdict"><p class="vh">NERS · <span class="chip c-fail">Fails</span> → repaired</p>
+      <p><strong>A roster-aggregated pool is a monotone ramp to certainty, violating P-iii.</strong> μ grows linearly with roster size while σ grows as a square root, so z grows as √Pool with no ceiling: four people at score 3 reach 84% against Ob 2; twelve reach 99.5%. Nothing caps a roster. <strong>Repair: the acting person's own score is the pool; the roster sets how many actions, not how big each one is.</strong> A 1–7 faculty maps to pools of 8–14 — squarely inside the band the engine is calibrated for.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">§6.5 · recommendation</span>The order the attacks produced</h2>
+  <p class="lede">They are not mutually exclusive, and the NERS attacks shaped the sequence more than the content did.</p>
+  <ol class="order">
+    <li><b>Run the disposal first.</b> Close to free, and it removes the standing hazard of a future session building toward a <code>## Status: BUILT</code> header with no code under it. Two holds: the Sanction item the attack converted from CUT to REFINE, and the fact that no verdict has been steelmanned — so run the deletions as rehearsals with an independent KEEP argument attached, not as a sweep.</li>
+    <li><b>Then the circuits, in order, with the accord echo deferred behind its two rulings.</b> Ten execution artifacts is ten more than the seven milestone junctures currently have — and under the repo's own standard, that, not this document, is what would move the milestone.</li>
+    <li><b>Then the primitives, once the naming pass is done.</b> A <code>roles</code> field cannot be typed while <em>officer</em>, <em>Standing</em> and <em>Disposition</em> each mean two or three things.</li>
+    <li><b>The person's season whenever the schema exists</b> — it is not sequenced behind the primitives. Its failure is repaired by any bounded action counter and it can define its own; what the two proposals share is the <em>shape</em> of that counter, which argues for building it once, not for ordering them.</li>
+  </ol>
+
+  <div class="callout">
+    <p><strong>The most valuable single item is not the one it first appears to be.</strong> The obvious candidate is the accord echo — a finished, tested, correct, Key-driven state-write loop that has never fired. The adversarial pass showed it is <em>not cheap</em>: it is dormant on two declarations, and the second, a faction→settlement targeting rule, is a ruling the code is deliberately refusing to guess. Worth doing, worth doing properly, not worth mistaking for a one-line write.</p>
+    <p>The best <em>cheap</em> item is giving <code>InsurgencyRecord.L</code> a writer. One accrual rule, in a pipeline that already forms insurgencies from real contiguity data and already checks every open record for promotion each season. It is the only cheap change here that <strong>adds an agent to the world</strong> — neglected ground starts producing rebellions that grow into factions that can invade the power whose neglect made them.</p>
+  </div>
+
+  <div class="callout warn">
+    <p><strong>And the one that needs measuring rather than ruling.</strong> Parliament's permanent Mandate penalty is widely assumed to be the strategic layer's anti-runaway damper. It is an uncontrolled asymmetry whose <em>sign depends on which branch fires</em>: on one branch it docks the leader, on the other the weakest faction. That is a campaign-level balance claim with no control, and the balance oracle can settle it in about thirteen minutes. Run it before anyone rules on it, and before anyone quietly patches the comment.</p>
+  </div>
+</section>
+
+
+
+<section>
+  <h2><span class="num">§12 · the matrix</span>The games side by side, on the same question</h2>
+  <p class="lede">Everything above this section argues. This section does not. For each Valoria system, the surveyed games are laid out on the <em>same</em> question, with Valoria as the last row in the same columns — so the comparison can be inspected rather than taken on trust.</p>
+  <p class="col"><strong><em>— not surveyed</em> is a real and common cell.</strong> It means the corpus does not cover that game on that question, <em>not</em> that the game lacks the feature. Those cells are the point: they show where a conclusion above rests on three games rather than nine.</p>
+
+  <h3 class="mh"><span>12.1</span>The strategic actor — what a faction <em>is</em></h3>
+  <div class="tw mtx"><table>
+    <thead><tr><th>Game</th><th>What the faction object holds</th><th>How it acts in a turn</th><th>What gives it an interior</th><th>Documented failure</th></tr></thead>
+    <tbody>
+      <tr><td>Victoria 3</td><td>Interest groups holding <strong>clout</strong>; government is a subset, the rest are opposition; Legitimacy 0–100 derived from governing clout</td><td>Law enactment; IG pressure; movements</td><td><strong>Interest groups</strong> — a coalition that can lose members</td><td>Below 25 legitimacy it can pass nothing. Critics: "deep as a puddle"</td></tr>
+      <tr><td>CK3</td><td>Characters with titles; vassals on <strong>negotiable contracts</strong>; crown authority at four levels gating what the liege may attempt</td><td>Character actions, schemes, council tasks</td><td>Vassals, court positions, councillors, family</td><td>Opinion bonuses paper over structural factors — "you can generally succeed at things kings wanted to do but were unable to pull off"</td></tr>
+      <tr><td>EU4</td><td>Three <strong>estates</strong>, each with Loyalty <em>and</em> Influence tracked separately</td><td>Monarch points; estate interactions</td><td>Estates</td><td>The canonical ignorable mechanic — loyalty floor near 40, nothing crossed it</td></tr>
+      <tr><td>Old World</td><td>A ruler with attitudes; <strong>families</strong> with desires; ambitions from the intersection</td><td>Orders; ambitions as victory conditions</td><td>Families, and mortality — ambitions go on a clock when the ruler dies</td><td><em class="ns">— not surveyed</em></td></tr>
+      <tr><td>Imperator: Rome</td><td>Governors carrying Loyalty, on an action-currency</td><td>Governor actions</td><td>Governors</td><td>Loyalty dropped 20+ <strong>on appointment alone</strong>; the whole currency scrapped in four months</td></tr>
+      <tr><td>Kremlin <em>(board)</em></td><td>You hold <strong>influence over</strong> politicians in a pyramid; you never own them</td><td>Place influence; move your man to the rostrum</td><td>The politicians, who are not yours</td><td>—</td></tr>
+      <tr><td>John Company <em>(board)</em></td><td>Offices held by <strong>different players</strong></td><td>Office actions; a Parliament phase that changes the rules</td><td>Distributed, complementary office powers — most ventures need several</td><td>—</td></tr>
+      <tr><td>Republic of Rome <em>(board)</em></td><td>Senate factions — <strong>and the state</strong>, which can lose</td><td>Proposals, votes, prosecutions</td><td>Factions plus a <strong>shared-loss</strong> condition</td><td>—</td></tr>
+      <tr><td>Suzerain</td><td>A cabinet advising <strong>in their own interest</strong></td><td>Choice under pressure</td><td>Interested advisors</td><td>Branch selection — choosing between authored futures, not operating a system</td></tr>
+      <tr><td>Mount &amp; Blade</td><td>Lords with fiefs; kingdoms with policies</td><td>Party play, then kingdom decisions</td><td>Lords</td><td><em class="ns">— thinly surveyed; used only as comparator and failure pole</em></td></tr>
+      <tr><td>VALORIA</td><td>Six scalars, a territory list, four turn-flags</td><td><strong>One <code>rng.random()</code></strong> against a re-weighted prior</td><td><strong>Nothing.</strong> Personality is <code>if faction.name == 'Crown'</code></td><td>Swap two factions in the starting table and the campaign is unchanged</td></tr>
+    </tbody>
+  </table></div>
+  <p class="mnote">Eight of ten give a faction <em>parts</em> that can disagree. Valoria's has none — which is why most of the genre's faction-scale vocabulary is untypeable here rather than merely unbuilt.</p>
+
+  <h3 class="mh"><span>12.2</span>Deliberation — turning talk into a decision</h3>
+  <div class="tw mtx"><table>
+    <thead><tr><th>Game</th><th>Is passing a measure an event or a process?</th><th>Who controls the agenda</th><th>Does a defeated motion leave anything?</th></tr></thead>
+    <tbody>
+      <tr><td>Victoria 3</td><td><strong>A process.</strong> Multi-stage, running success vs stall; <strong>three setbacks fail it</strong> and lock it out two years. 100-day base stage; ×2 for governing principles; legitimacy &gt;90 cuts 25%. <strong>Attempting it mobilises the opposition</strong></td><td>Government composition</td><td>No</td></tr>
+      <tr><td>Republic of Rome</td><td>An event</td><td>The presiding official</td><td>No</td></tr>
+      <tr><td>John Company</td><td>An event, in a dedicated phase</td><td>Chairman</td><td>No</td></tr>
+      <tr><td>Die Macher</td><td>Positions and public opinion are <strong>separate tracks</strong>; the distance scores</td><td>—</td><td>—</td></tr>
+      <tr><td>Roman Senate <em>(historical — no surveyed game has it)</em></td><td>An event</td><td><strong><em>Relatio</em></strong> — the wording fixes which question the body is sitting at. <strong><em>Discessio</em></strong> — with several motions live the chair picks which to put, and in what order</td><td><strong>Yes — <em>senatus auctoritas</em>:</strong> carried, vetoed, and persisting with no force and full citability</td></tr>
+      <tr><td>Ming Secretariat <em>(historical)</em></td><td>—</td><td><strong><em>Piaoni</em></strong> — the drafter attaches a proposed rescript, reducing the sovereign to accept/reject/return</td><td><em>Fengbo</em> — an edict returned sealed by the clerical layer</td></tr>
+      <tr><td>VALORIA</td><td><strong>An event, and a free one.</strong> Pool = Σ <code>int(L)</code>; a track from 5; ≥7 passes</td><td><strong>Nobody.</strong> The bridge derives <em>who</em>, never <em>what</em></td><td>No</td></tr>
+    </tbody>
+  </table></div>
+  <p class="mnote">The most-cited loan in the corpus has no analogue in any other surveyed game — and the three richest procedural mechanisms come from <em>history</em>, because no surveyed game implements them. That is why recorded defeat is rated "nearly free, and very few games have it."</p>
+
+  <h3 class="mh"><span>12.5</span>People — loyalty, defection, and what the player is told</h3>
+  <div class="tw mtx"><table>
+    <thead><tr><th>Game</th><th>The loyalty model</th><th>Threshold visible?</th><th>Inputs visible?</th><th>Idleness cost</th><th>Population model</th></tr></thead>
+    <tbody>
+      <tr><td>Jagged Alliance 2</td><td>Five-layer morale stack; <strong>±25 pairwise matrix</strong>; event deltas; prejudice axes</td><td><strong>No</strong> — hidden tolerance clock</td><td><strong>Not originally.</strong> v1.13 shipped an audit tool itemising every pairwise opinion by source — it <em>exposed the models rather than changing them</em></td><td><strong>Yes</strong> — docks merc morale <em>and</em> town loyalty after three days</td><td>Fixed hireable roster</td></tr>
+      <tr><td>Jagged Alliance 3</td><td><strong>All of that compressed to</strong> "liked squadmate present: +1 AP; disliked: −1 AP"</td><td>No</td><td>Yes</td><td>—</td><td>Fixed roster</td></tr>
+      <tr><td>RoTK</td><td>Officer <strong>LOY</strong>, with a recruiter-side tell at ≤ 70</td><td>Partly — the tell <em>is</em> the mechanic</td><td>Yes</td><td><strong>Yes</strong> — officers want posts</td><td>Historical roster</td></tr>
+      <tr><td>Three Kingdoms</td><td><strong>Satisfaction</strong></td><td>No</td><td>Yes</td><td><strong>Yes</strong> — "give them something to do" is the named top mitigation</td><td>Historical + generated</td></tr>
+      <tr><td>CK3</td><td>Opinion web modified by <strong>dread</strong></td><td>No</td><td>Partly — opaque dread interplay</td><td><strong>Yes</strong> — unlanded courtiers leave at 2%/month</td><td><strong>Ambient spawn</strong> — ~6–7 parentless 16-year-olds monthly; saves past <strong>24,000 characters</strong>; two mods pulling in opposite directions</td></tr>
+      <tr><td>CK2</td><td>Opinion</td><td>No</td><td>Partly</td><td>—</td><td><strong>Births plus scripted events, no ambient queue</strong> — the corpus's recommended shape</td></tr>
+      <tr><td>Triangle Strategy</td><td>Three hidden conviction axes</td><td><strong>No</strong></td><td>Partly</td><td>—</td><td>Fixed roster</td></tr>
+      <tr><td>Radiata Stories</td><td>—</td><td>—</td><td>—</td><td>—</td><td><strong>175 NPCs as config rows</strong> with a static 2–3 block schedule — "pure spatial theatre", zero connection to persuasion or office-holding</td></tr>
+      <tr><td>VALORIA</td><td><strong>None.</strong> No Disposition field. Nearest relative is <code>affiliation_loyalty</code> (0–3), set at construction with <strong>no mutator</strong> — an NPC cannot change faction</td><td>n/a</td><td>n/a</td><td><strong>None.</strong> An unassigned person is inert, not restless</td><td><strong>46 authored rows, zero loaders.</strong> <code>generate_npc</code> is complete and has no call site</td></tr>
+    </tbody>
+  </table></div>
+  <p class="mnote">Every surveyed system is <strong>primarily a relationship model indexed by a roster.</strong> Valoria authored the index — role, faction, convictions on 46/46 — and none of the model: capability 1/46, relationships 0/46.</p>
+
+  <h3 class="mh"><span>12.6</span>Recruitment — what a soldier costs</h3>
+  <div class="tw mtx"><table>
+    <thead><tr><th>Game</th><th>Levy channel</th><th>Professional channel</th><th>Cost besides money</th><th>On non-payment</th></tr></thead>
+    <tbody>
+      <tr><td>CK3</td><td><strong>Levies cost zero gold</strong> — a standing entitlement, rationed <em>politically</em> (contract %, control, opinion) and <em>temporally</em> (muster travel)</td><td>Men-at-arms: gold <strong>plus prestige</strong>, maintenance <strong>even while unraised</strong>, <strong>tripling once fielded</strong></td><td>Vassal opinion</td><td>Desert</td></tr>
+      <tr><td>Shogun 2</td><td><strong>Ashigaru</strong> — start at −4 morale, almost no building requirement</td><td><strong>Samurai</strong> — behind building chains</td><td>Honour</td><td><strong>Auto-culls units</strong></td></tr>
+      <tr><td>Medieval II</td><td>—</td><td>Retinue and buildings</td><td>—</td><td>Manual disbanding</td></tr>
+      <tr><td>Jagged Alliance 2</td><td>Train militia <strong>≈ $75/head</strong></td><td>Buy regulars <strong>≈ $440/head</strong>, at 2× the daily upkeep</td><td><strong>Town loyalty per unit purchased</strong> — 0.1 regular, <strong>0.15 veteran</strong>, charged <em>globally</em>, not to the receiving sector</td><td>—</td></tr>
+      <tr><td>RoTK VIII</td><td>Conscript, a domestic command</td><td>—</td><td><strong>City order drops.</strong> Below 50, capacity and income fall; <strong>below 25 (revolt), conscription is unavailable</strong></td><td>—</td></tr>
+      <tr><td>TW: Three Kingdoms</td><td>—</td><td><strong>Unit types gated on the commander's class</strong> — a mixed-archetype army is the intended way to a full roster</td><td>—</td><td>—</td></tr>
+      <tr><td>Heroes of Might and Magic</td><td colspan="4"><em class="ns">— not surveyed. The shape the corpus lacks: accrual as a property of a built structure in a place, piling up whether or not you visit</em></td></tr>
+      <tr><td>VALORIA</td><td><strong>Does not exist</strong></td><td><code>pool = Mil + floor(W/2)</code>, Ob 1, no failure penalty</td><td><strong>Nothing</strong> — no Accord cost, no order gate</td><td><strong>N/A — Wealth has no source.</strong> Four write sites, all costs; Muster's charge is scaled wrong at 0.01</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 class="mh"><span>12.7</span>Mass battle — and what a person does to it</h3>
+  <div class="tw mtx"><table>
+    <thead><tr><th>Game</th><th>Composition varies by</th><th>Garrison is</th><th>Commander's effect</th><th>Failure direction</th></tr></thead>
+    <tbody>
+      <tr><td>Total War</td><td>Building chains, roster, general's class <em>(TK)</em></td><td><strong>An assignment of the same pool</strong></td><td><strong>Lord aura</strong> — flat</td><td><strong>Scale-blind</strong> — dominates small, negligible large</td></tr>
+      <tr><td>Dominions</td><td>Nation, recruitment sites</td><td>—</td><td>The army is <strong>anchored to its commander</strong></td><td>"The biggest army in the universe will rout if its single commander is killed" <em class="ns">[unverified — community]</em></td></tr>
+      <tr><td>Mount &amp; Blade</td><td>Party composition, upgrades</td><td>—</td><td>The player fights <strong>in</strong> the battle, same engine</td><td><strong>Fully fused</strong> — consistent, and the personal actor becomes irrelevant as N grows</td></tr>
+      <tr><td>Brigandine</td><td>Knight + monsters under him</td><td>—</td><td><strong>Knights never die — they retreat.</strong> What is lost are monsters killed, <em>or stranded outside his Rune Area when he withdraws</em></td><td>—</td></tr>
+      <tr><td>Unicorn Overlord</td><td>Squad composition</td><td>An assignment</td><td>—</td><td>—</td></tr>
+      <tr><td>Jagged Alliance 2</td><td>Squad, gear, training</td><td><strong>An assignment</strong> — and JA2's garrisons <em>can move offensively</em></td><td>Merc-level</td><td>—</td></tr>
+      <tr><td>TW: Three Kingdoms</td><td>Commander class</td><td>Assignment</td><td><strong>Two-tier defeat</strong> — a general's death destroys his retinue <em>only if the whole army also routs</em></td><td>—</td></tr>
+      <tr><td>VALORIA</td><td><strong>Nothing.</strong> Both sides get one Line subunit, tier 2, position (8,12), command 4, discipline 5, morale 5 — <strong>only <code>power</code> differs</strong></td><td>A <strong>boolean</strong>, written once, read once</td><td><code>derive_command</code> exists, is clamped, flag defaults ON — and the adapter sets neither attribute, so it falls back to 4</td><td><strong>Both poles, in the same sixteen lines</strong> — one flat regardless of size, one decaying as 1/√N</td></tr>
+    </tbody>
+  </table></div>
+  <p class="mnote">Every row is one pole or the other. <em>"No precedent demonstrates a mechanism whose personal-scale contribution is provably leverage-in-band from N=1 to N=1000+."</em> Well-funded teams tried.</p>
+
+  <h3 class="mh"><span>12.8</span>Playing it out versus resolving it fast</h3>
+  <div class="tw mtx"><table>
+    <thead><tr><th>Game</th><th>Fast path</th><th>Same engine?</th><th>Calibration target</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td>Football Manager</td><td>Instant result, or commentary</td><td><strong>Yes — three fidelities of one match engine</strong>, and every fixture is <em>specific</em></td><td><strong>Instant ≈ played</strong></td><td>The model of the shape that works</td></tr>
+      <tr><td>Total War</td><td>Autoresolve</td><td><strong>No — a different algorithm</strong></td><td><strong>Never published, in twenty years</strong></td><td>Unsolved and exploited both directions; the two dominant complaints are mirror images of one cause</td></tr>
+      <tr><td>XCOM</td><td>Abstracted missions</td><td>The slate surfaces <em>specific</em> missions; you play the ones that matter</td><td>—</td><td>—</td></tr>
+      <tr><td>Dominions / Mount &amp; Blade</td><td><strong>None</strong></td><td>n/a — consistency by never offering a second path</td><td>n/a</td><td>"Don't build a second resolver at all" is <strong>the first option on the table</strong></td></tr>
+      <tr><td>VALORIA</td><td>The parliamentary bridge auto-resolves a vote</td><td>The played counterpart is the contest kernel</td><td><strong>Open</strong> — the parity harness is the acceptance gate and does not exist</td><td>A <strong>generic per-season roll</strong>, not the resolution of a specific motion — the Total War shape, not the Football Manager one</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 class="mh"><span>12.11</span>Coverage, made visible</h3>
+  <div class="tw mtx"><table>
+    <thead><tr><th>Valoria system</th><th>Games with a substantive row</th><th>Thin or absent</th></tr></thead>
+    <tbody>
+      <tr><td>Strategic actor</td><td>9</td><td>Mount &amp; Blade (thin)</td></tr>
+      <tr><td>Deliberation</td><td>5 — and the three richest mechanisms come from history because <strong>no game has them</strong></td><td>—</td></tr>
+      <tr><td>Settlement governance</td><td>4</td><td><strong>HoMM (absent)</strong>, Mount &amp; Blade (thin)</td></tr>
+      <tr><td>Conquest terms</td><td>4 — <strong>and the model is historical</strong></td><td>Mount &amp; Blade (thin)</td></tr>
+      <tr><td>People</td><td>8</td><td>—</td></tr>
+      <tr><td>Recruitment</td><td>6</td><td><strong>HoMM (absent)</strong></td></tr>
+      <tr><td>Mass battle + seam</td><td>7</td><td>—</td></tr>
+      <tr><td>Fidelity ladder</td><td>4</td><td>—</td></tr>
+      <tr><td>Resolver</td><td>4</td><td>—</td></tr>
+      <tr><td>Expression</td><td>6</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout warn">
+    <p><strong>Two conclusions above rest on thinner evidence than their phrasing suggests, and this is where to see it.</strong> The settlement-governance verdict draws on four games, one of which — Total War — is the source of the "no convergent answer" null itself. And the conquest-terms model is carried almost entirely by Venice rather than by any game. Both are stated more confidently elsewhere in this page than this table supports.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">§7 · the critique</span>Valoria judged against the precedent for its own systems</h2>
+  <p class="lede">Not a feature list. For each system: what the genre treats as <em>table stakes</em> for a system of this kind, where Valoria sits relative to that floor — and, in two cases, where it is ahead of the precedent and does not know it.</p>
+
+  <p class="statkey" style="margin-bottom:8px">
+    <span><i class="sw" style="background:var(--inert)"></i><b>BELOW THE FLOOR</b> no surveyed title ships this system in this state</span>
+    <span><i class="sw" style="background:var(--proposed)"></i><b>AT THE FRONTIER</b> where the genre is, on a problem the genre has not solved</span>
+    <span><i class="sw" style="background:var(--built)"></i><b>AHEAD, UNAWARE</b> already built, not running</span>
+  </p>
+
+  <div style="margin-top:30px">
+    <div class="vrow"><div class="vsys">Faction strategy<span class="vtag v-below">below the floor</span></div><div>
+      <p><strong>Table stakes: a faction has an interior that can disagree with itself.</strong> Victoria 3 has interest groups holding clout. CK3 has negotiable vassal contracts and crown-authority levels gating what the liege may even attempt. Old World emits goals from a ruler crossed with the influential families. Kremlin holds influence <em>over</em> politicians rather than owning them.</p>
+      <p>Valoria: one <code>rng.random()</code> draw per season, two of four factions with any branch at all, and personality implemented as a string comparison. <strong>No surveyed title models a faction as an undifferentiated scalar bundle</strong>, because a thing with no interior cannot have politics inside it — so most of the genre's faction-scale vocabulary is not merely unbuilt here, it is <em>untypeable</em>.</p>
+    </div></div>
+
+    <div class="vrow"><div class="vsys">Parliament<span class="vtag v-below">below the floor</span></div><div>
+      <p><strong>Table stakes: procedure is the game; the vote is the formality.</strong> Agenda control, speaking order, the chair's choice of which motion to put, the veto and its record, and who drafts the response.</p>
+      <p>Valoria has the arithmetic of a vote and none of the procedure — no chamber, no seats, no agenda, no subject, no cost, no scarcity. <strong>And it fails in the exact mirror of EU4:</strong> EU4's estates never fire; Valoria's motion fires unconditionally every season for free. Same defect — a firing rate decoupled from anything the player does — at zero and at one.</p>
+    </div></div>
+
+    <div class="vrow"><div class="vsys">Settlement governance<span class="vtag v-ahead">ahead, unaware</span></div><div>
+      <p><strong>There are no table stakes, and that is the finding.</strong> Total War added, removed and re-added the governor role three times in twenty years. <em>"There is no convergent answer — this is a real, unsettled design tension, not a solved problem you are behind on."</em></p>
+      <p>But one component is agreed, and Valoria already solved it. Dwarf Fortress's documented failure is that demotion leaves no residual — a comeback that resets to zero is a reset button. <code>succeed_governor</code> calls <code>ledger_sweep</code>, and durable tags survive the handover. <strong>That is exactly the residual DF lacks, built correctly, with zero callers.</strong> The critique is not the design: <em>a finished-and-parked system is indistinguishable from an unbuilt one from the player's seat</em>, and the genre has no example of one shipping that way.</p>
+    </div></div>
+
+    <div class="vrow"><div class="vsys">Territory &amp; conquest<span class="vtag v-below">below the floor</span></div><div>
+      <p><strong>Table stakes: conquest is a negotiation; a decree is a compliance roll.</strong> Venice's <em>dedizione</em> left subject cities their statutes and councils in exchange for loyalty — <em>what you leave standing determines what governing costs for the rest of the game.</em></p>
+      <p>Valoria commits the survey's named <strong>"single most common error in governance games"</strong> — the decree that just works — one level up, at conquest. And Turmoil, IP, PI and Strain are set at world-gen and never written: four gauges painted on, one of which is <strong>the third clause of the sole victory condition</strong>, so the win condition is materially one clause shorter than it reads.</p>
+    </div></div>
+
+    <div class="vrow"><div class="vsys">People<span class="vtag v-below">below the floor, inside-out</span></div><div>
+      <p>The quantitative version is that the population is zero. <strong>The structural version is sharper.</strong> Every surveyed personnel system is <em>primarily a relationship ledger with a roster attached</em> — JA2's pairwise matrix, CK's opinion web, RoTK's loyalty. The roster is the index; the relationships are the mechanism.</p>
+      <p>Valoria authored identity on <strong>46/46</strong>, capability on <strong>1/46</strong> — and that one records its social value as the string <code>"3–4"</code> — and relationships on <strong>0/46</strong>. It has the half that is content and none of the half that is mechanism, which is why the loader keeps reading as easy and keeps not being. There is nothing to load the content <em>into</em>.</p>
+    </div></div>
+
+    <div class="vrow"><div class="vsys">Economy<span class="vtag v-below">below the floor</span></div><div>
+      <p>Four Wealth write sites in the whole engine, all costs, no income. <strong>No surveyed title has a resource with no source</strong>, so the survey supplies no failure mode — there is nothing to compare it to. And the 4/4 levy-versus-professional finding indicts Muster specifically: its own grounding is Wallenstein, a contractor paid regardless, which <em>is</em> the professional model. The levy half is absent and unnamed.</p>
+    </div></div>
+
+    <div class="vrow"><div class="vsys">Mass battle<span class="vtag v-ahead">engine ahead</span><span class="vtag v-below">seam below</span></div><div>
+      <p>The engine expresses troop types, equipment, formations, per-cell morale, Lanchester signatures and encirclement. The seam above it builds both armies with <strong>identical shape, tier, position, facing, command, discipline and morale — only one integer differs.</strong> Every strategic battle is geometrically symmetric before it starts; no surveyed title does that.</p>
+      <p><code>terrain</code> is a declared parameter that appears nowhere in the function body. <code>derive_command</code> exists, is clamped, and its flag defaults on — and the adapter never sets either attribute, so the campaign path falls back to a hardcoded 4.</p>
+    </div></div>
+
+    <div class="vrow"><div class="vsys">Cross-scale<span class="vtag v-front">at the frontier</span></div><div>
+      <p><strong>Nobody has solved this</strong> — no precedent makes a personal actor's contribution leverage-in-band from N=1 to N=1000+. So Valoria is at the frontier, not behind it. That is the uncomfortable part.</p>
+      <p>Valoria's own doctrine defines its differentiating clause <em>against</em> <strong>"Mount &amp; Blade's faction politics vs character combat"</strong> as the paradigm of mechanically isolated layers. And Valoria currently sits where M&amp;B sits: one reachable handoff, one evaluable trigger, a default-off bridge with no producer — and <strong>both leverage failure poles live in the same sixteen lines</strong>, one flat regardless of battle size, one decaying as 1/√N. Being unreachable is why nobody has had to decide; when a producer lands, those two become the semantics <em>by default</em>.</p>
+    </div></div>
+
+    <div class="vrow"><div class="vsys">Resolution kernel<span class="vtag v-ahead">ahead on ownership</span><span class="vtag v-below">behind on calibration</span></div><div>
+      <p>One owner for the dice, one for the ladder, both guarded, and non-conformance made <em>impossible</em> rather than discouraged — no surveyed title governs its own resolver that way.</p>
+      <p>But the same audit Blades never ran, run here, fails: at fixed Ob 3 failure collapses 93% → 6% across the pool range, and even with an opponent-scaled obstacle <strong>the Partial band still falls monotonically 0.320 → 0.093</strong>, because its window is a fixed one-success width over a spread growing as √N. No obstacle derivation cures that — only a band width that scales with the pool.</p>
+    </div></div>
+
+    <div class="vrow"><div class="vsys">Social contest<span class="vtag v-front">before the known failure</span></div><div>
+      <p>Burning Wheel's <em>Duel of Wits</em> collapsed because players found the two highest-damage manoeuvres and stopped. Valoria has the resolution chassis and <strong>has not authored the manoeuvre set</strong> — so it stands at the point <em>before</em> the documented failure, knowing what causes it. That is a genuinely advantaged position, and it converts a warning into a constraint that can still be met.</p>
+    </div></div>
+  </div>
+
+  <div class="callout" style="margin-top:34px">
+    <p><strong>The pattern.</strong> Six systems sit below a floor the genre established decades ago — and in <strong>four of those six the missing piece is a caller rather than a mechanic.</strong> Two are at or past the frontier, and both are throttled by a seam below them.</p>
+    <p>Nothing here is a case that Valoria is over-ambitious. It is a case that <strong>the ambitious parts are built and the ordinary parts are not.</strong></p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">§8–9 · reconcile, then unify</span>Four moves, not twenty-four imports</h2>
+  <p class="lede">A precedent survey that ends in a list of twenty-four imports has not finished its job — twenty-four additions to a tree already carrying 51 uncalled mechanisms is the same failure, reached from a new direction. So: first reconcile the imports against each other, then unify them.</p>
+
+  <h3>Seven collisions, where two good imports would each produce two mechanisms doing one job</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Collision</th><th>Resolution</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Three accrual clocks</strong> — CK's levy entitlement, HoMM's dwelling, Valoria's AP</td><td>One accrual primitive, several <em>typed</em> consumers. The settlement layer's death-spiral is already arithmetic — three more accrual sources is that failure three more times</td></tr>
+      <tr><td><strong>Six borrowings land on one ledger</strong></td><td>All six are already <code>(kind, key, value, ttl)</code>. The only schema change any of them needs is <strong>provenance</strong>, and it serves all six</td></tr>
+      <tr><td><strong>Three effort-over-time models</strong> — enactment clock, AP budget, Persuasion Track</td><td>Different horizons, not rivals: the Track resolves one motion, the budget rations how many you raise, the clock spans seasons after one passes. Say so before either unbuilt one is scheduled</td></tr>
+      <tr><td><strong>Disclosure with no owner</strong></td><td>Reproduces JA2's split directly — a loved half and a resented half in the same game, separated by nothing but visibility</td></tr>
+      <tr><td><strong>Class-gating blocked by a name</strong></td><td>The gate must name a class, and <em>officer</em> means two things. The naming pass is a <em>precondition of an import</em>, not a cleanup</td></tr>
+      <tr><td><strong>Custody vs a ratified aggregate</strong></td><td>Does not reconcile at the design level — <strong>it is a ruling</strong>, and it comes before the import, not after</td></tr>
+      <tr><td><strong>Idleness decay</strong></td><td>If posts are fewer than people, some are <em>structurally</em> idle and a flat decay is Imperator's shipped defect exactly. Rate must be a function of available posts</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 style="margin-top:36px">The four moves</h3>
+  <div class="moves">
+    <div class="move">
+      <p class="mid">U-1 · cost: DOC</p>
+      <h3>The Disclosure Contract</h3>
+      <p><strong>Publish every input. Show a band, not a number. Never publish the trigger point.</strong> One rule, owned once, inherited by every surface that will ever show the player a reason.</p>
+      <p>Valoria has no GM — nobody narrates why a governor defected. The only direct evidence about that constraint is JA2, where the <em>same game's</em> social layer was loved and its tactical math resented, separated by nothing but whether the model was visible, and whose community fix <strong>exposed the models rather than changing them</strong>.</p>
+      <div class="disp"><b>Displaces</b>The unstated default — which in a no-GM engine means the player is told nothing. Free, and a precondition for every later import being <em>felt</em> rather than merely computed.</div>
+    </div>
+
+    <div class="move">
+      <p class="mid">U-2 · cost: MOVES + one field</p>
+      <h3>One accrual, one ledger, one budget</h3>
+      <p>A place fills up; a ledger remembers; a budget spends. Every Tier-1 and Tier-2 import lands on one of the three — and the ledger alone receives <strong>six independent borrowings</strong>.</p>
+      <p>This is the integration master's Proposal 2 reached from precedent instead of from code, and it supplies the accrual primitive P2 never names — the one that would finally give <code>facility_tier</code> a writer.</p>
+      <div class="disp"><b>Displaces</b>Six bespoke memory stores, three rival accrual clocks, and the weighted draw as top-level driver. <strong>The budget buys actions, never modifiers</strong> — otherwise one currency spanning two engines is worth ~1.8× more on a small pool.</div>
+    </div>
+
+    <div class="move">
+      <p class="mid">U-3 · cost: RULING, then MOVES</p>
+      <h3>The person as a relationship ledger with a roster attached</h3>
+      <p>Invert how it has been built. Define the person object by its <em>edges</em> first — who owes whom, who was passed over by whom, who is whose client — because that is what every surveyed system actually is.</p>
+      <p>Unblocks five imports at once: Old World's emitted ambitions, Kremlin's mortality clock and custodian split, the three-band demoted state, and the idleness convergence.</p>
+      <div class="disp"><b>Displaces</b><code>if faction.name == 'Crown'</code> as faction personality. Two preconditions, both non-negotiable: the naming pass, and the NPE's own RNG substream.</div>
+    </div>
+
+    <div class="move fork">
+      <p class="mid">U-4 · cost: RULING — and a genuine fork</p>
+      <h3>Couple the scales, or stop claiming the differentiator</h3>
+      <p>Valoria's doctrine defines its differentiating clause against Mount &amp; Blade's isolated layers. Part 7 finds Valoria sitting in the same place. <strong>There are two defensible options, and Valoria is taking a third that has no precedent behind it.</strong></p>
+      <p>Either ship an explicit, imperfect crossing — every surveyed game does one or the other — or say the layers are adjacent rather than coupled, and revise the doctrine that claims otherwise.</p>
+      <div class="disp"><b>Displaces</b>A flag whose off-state is indistinguishable from the seam not existing. ⚠ The guard belongs <em>before</em> the producer: a personal→unit effect must be a fraction of the unit's own size, never a flat amount.</div>
+    </div>
+  </div>
+</section>
+
+<section style="border-bottom:none">
+  <h2><span class="num">method</span>How this was built, and how it was checked</h2>
+  <p class="lede">Producing and checking are different jobs, so different agents did them. Eleven parallel harvest lanes read the corpus and emitted 1,079 structured records; an adversarial gate attacked the harvest; three synthesis groups flattened and analysed; then a second independent critic — read-only, with no write tools, so its independence is structural rather than declared — attacked the finished comparison and proposals against the working tree. Corrections are edits to the document, not appendices to it.</p>
+  <p class="col">Two instrument rules came out of it, and they generalise past this document:</p>
+  <div class="finds" style="margin-top:24px">
+    <div class="find"><div class="fid">i</div><div>
+      <h3>Reachability here is not an import graph</h3>
+      <p>Subsystem dependencies in this repository are declared in <code>references/</code> and resolved <em>by string</em> at first call, so a module with zero textual importers can still be load-bearing — two are reached only through the composition registry, during save-restore. <strong>Any claim that something is dead has to be checked against <code>module_contracts.yaml</code>, not only by grep.</strong></p>
+    </div></div>
+    <div class="find"><div class="fid">ii</div><div>
+      <h3>Agreement is evidence only between independent sources</h3>
+      <p>Prose descended from a common ancestor agrees with itself whatever the ancestor said, so counting the documents that carry a claim measures propagation rather than truth. A repeated claim gets resolved against the code and the register instead. That decided several verdicts here — among them which ledger tag families exist, and how a term-limited fiscal claim is modelled.</p>
+    </div></div>
+  </div>
+  <p style="margin-top:26px" class="col">Claims that were attacked and held: the ledger's tag families, the budget's zero readers, the four Wealth cost sites, the four unwritten clocks, the emergency council's self-derived parties, and the monotone-ramp arithmetic — recomputed, including a check that dropping the continuity correction was right, since applying one would have <em>strengthened</em> the finding.</p>
+</section>
+
+<footer>
+  <p>Valoria — design source of truth · <code>research/valoria_systems_integration_master_v1{,_part2,_part3,_part4}.md</code><br>
+  Reference under §0.05, not canon. The four proposals are held back and are not ratified by merge.<br>
+  1,772 tests passing · compliance clean · PR #337</p>
+</footer>
+</div>
