@@ -1,0 +1,7261 @@
+[
+ {
+  "path": "systems/settlements/settlement_layer_v30.md",
+  "tree": "systems",
+  "bytes": 107530,
+  "lines": 1216,
+  "tok": 26882,
+  "hits": 1306,
+  "top": [
+   [
+    399,
+    "settlement"
+   ],
+   [
+    188,
+    "faction"
+   ],
+   [
+    170,
+    "province"
+   ],
+   [
+    151,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/faction_politics_v30.md",
+  "tree": "systems",
+  "bytes": 167044,
+  "lines": 1182,
+  "tok": 41761,
+  "hits": 914,
+  "top": [
+   [
+    164,
+    "standing"
+   ],
+   [
+    133,
+    "faction"
+   ],
+   [
+    105,
+    "caste"
+   ],
+   [
+    95,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "research/rise_to_power_roster_system_research_v1.md",
+  "tree": "research",
+  "bytes": 157509,
+  "lines": 771,
+  "tok": 39377,
+  "hits": 758,
+  "top": [
+   [
+    206,
+    "standing"
+   ],
+   [
+    144,
+    "npc"
+   ],
+   [
+    98,
+    "succession"
+   ],
+   [
+    73,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/overview/peninsular_strain_v30.md",
+  "tree": "systems",
+  "bytes": 50588,
+  "lines": 602,
+  "tok": 12647,
+  "hits": 689,
+  "top": [
+   [
+    152,
+    "accord"
+   ],
+   [
+    126,
+    "territor"
+   ],
+   [
+    110,
+    "faction"
+   ],
+   [
+    74,
+    "settlement"
+   ]
+  ]
+ },
+ {
+  "path": "research/proactive_governance_scale_research_v1.md",
+  "tree": "research",
+  "bytes": 79959,
+  "lines": 306,
+  "tok": 19989,
+  "hits": 676,
+  "top": [
+   [
+    196,
+    "settlement"
+   ],
+   [
+    166,
+    "faction"
+   ],
+   [
+    116,
+    "territor"
+   ],
+   [
+    72,
+    "standing"
+   ]
+  ]
+ },
+ {
+  "path": "research/historical_concerns_action_catalogue_v1.md",
+  "tree": "research",
+  "bytes": 158015,
+  "lines": 344,
+  "tok": 39503,
+  "hits": 654,
+  "top": [
+   [
+    127,
+    "settlement"
+   ],
+   [
+    114,
+    "standing"
+   ],
+   [
+    112,
+    "faction"
+   ],
+   [
+    69,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/npcs/npc_behavior_v30.md",
+  "tree": "systems",
+  "bytes": 104814,
+  "lines": 1259,
+  "tok": 26203,
+  "hits": 574,
+  "top": [
+   [
+    189,
+    "npc"
+   ],
+   [
+    124,
+    "faction"
+   ],
+   [
+    75,
+    "territor"
+   ],
+   [
+    39,
+    "mandate"
+   ]
+  ]
+ },
+ {
+  "path": "research/historical/precedents_analysis.md",
+  "tree": "research",
+  "bytes": 57972,
+  "lines": 398,
+  "tok": 14493,
+  "hits": 571,
+  "top": [
+   [
+    184,
+    "govern"
+   ],
+   [
+    122,
+    "governance"
+   ],
+   [
+    56,
+    "settlement"
+   ],
+   [
+    51,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "research/governance/governance_modes.md",
+  "tree": "research",
+  "bytes": 138984,
+  "lines": 470,
+  "tok": 34746,
+  "hits": 557,
+  "top": [
+   [
+    111,
+    "govern"
+   ],
+   [
+    80,
+    "governance"
+   ],
+   [
+    63,
+    "standing"
+   ],
+   [
+    53,
+    "legitimacy"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/faction_canon_v30.md",
+  "tree": "systems",
+  "bytes": 53611,
+  "lines": 731,
+  "tok": 13402,
+  "hits": 502,
+  "top": [
+   [
+    181,
+    "faction"
+   ],
+   [
+    66,
+    "mandate"
+   ],
+   [
+    54,
+    "settlement"
+   ],
+   [
+    44,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/faction_layer_v30.md",
+  "tree": "systems",
+  "bytes": 57440,
+  "lines": 720,
+  "tok": 14360,
+  "hits": 477,
+  "top": [
+   [
+    137,
+    "faction"
+   ],
+   [
+    66,
+    "mandate"
+   ],
+   [
+    60,
+    "territor"
+   ],
+   [
+    38,
+    "parliament"
+   ]
+  ]
+ },
+ {
+  "path": "systems/victory/victory_v30.md",
+  "tree": "systems",
+  "bytes": 59248,
+  "lines": 836,
+  "tok": 14812,
+  "hits": 476,
+  "top": [
+   [
+    118,
+    "territor"
+   ],
+   [
+    109,
+    "faction"
+   ],
+   [
+    58,
+    "mandate"
+   ],
+   [
+    46,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/player_agency_v30.md",
+  "tree": "systems",
+  "bytes": 54400,
+  "lines": 601,
+  "tok": 13600,
+  "hits": 457,
+  "top": [
+   [
+    118,
+    "faction"
+   ],
+   [
+    99,
+    "npc"
+   ],
+   [
+    53,
+    "standing"
+   ],
+   [
+    47,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "systems/settlements/settlements_flow_skeleton_v1.md",
+  "tree": "systems",
+  "bytes": 28851,
+  "lines": 151,
+  "tok": 7212,
+  "hits": 443,
+  "top": [
+   [
+    180,
+    "settlement"
+   ],
+   [
+    59,
+    "accord"
+   ],
+   [
+    53,
+    "faction"
+   ],
+   [
+    45,
+    "province"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/factions_flow_skeleton_v1.md",
+  "tree": "systems",
+  "bytes": 32877,
+  "lines": 190,
+  "tok": 8219,
+  "hits": 440,
+  "top": [
+   [
+    263,
+    "faction"
+   ],
+   [
+    66,
+    "parliament"
+   ],
+   [
+    50,
+    "territor"
+   ],
+   [
+    14,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "research/fa_se_historical_precedent_research_v1.md",
+  "tree": "research",
+  "bytes": 59776,
+  "lines": 324,
+  "tok": 14944,
+  "hits": 373,
+  "top": [
+   [
+    86,
+    "settlement"
+   ],
+   [
+    69,
+    "faction"
+   ],
+   [
+    47,
+    "govern"
+   ],
+   [
+    20,
+    "muster"
+   ]
+  ]
+ },
+ {
+  "path": "systems/ui/valoria_ui_ux_v4_1_max_audit.md",
+  "tree": "systems",
+  "bytes": 101386,
+  "lines": 742,
+  "tok": 25346,
+  "hits": 362,
+  "top": [
+   [
+    87,
+    "faction"
+   ],
+   [
+    66,
+    "settlement"
+   ],
+   [
+    45,
+    "npc"
+   ],
+   [
+    30,
+    "parliament"
+   ]
+  ]
+ },
+ {
+  "path": "research/governance/political_hierarchy_standing.md",
+  "tree": "research",
+  "bytes": 125434,
+  "lines": 487,
+  "tok": 31358,
+  "hits": 359,
+  "top": [
+   [
+    143,
+    "standing"
+   ],
+   [
+    46,
+    "faction"
+   ],
+   [
+    26,
+    "legitimacy"
+   ],
+   [
+    24,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "systems/npcs/npc_relational_graph_v30.md",
+  "tree": "systems",
+  "bytes": 59294,
+  "lines": 682,
+  "tok": 14823,
+  "hits": 343,
+  "top": [
+   [
+    145,
+    "npc"
+   ],
+   [
+    68,
+    "faction"
+   ],
+   [
+    48,
+    "settlement"
+   ],
+   [
+    17,
+    "officer"
+   ]
+  ]
+ },
+ {
+  "path": "research/governance/conflicts_power_struggles.md",
+  "tree": "research",
+  "bytes": 128905,
+  "lines": 419,
+  "tok": 32226,
+  "hits": 341,
+  "top": [
+   [
+    57,
+    "succession"
+   ],
+   [
+    54,
+    "legitimacy"
+   ],
+   [
+    46,
+    "faction"
+   ],
+   [
+    42,
+    "standing"
+   ]
+  ]
+ },
+ {
+  "path": "systems/settlements/valoria_political_hierarchy_v30.md",
+  "tree": "systems",
+  "bytes": 21378,
+  "lines": 172,
+  "tok": 5344,
+  "hits": 341,
+  "top": [
+   [
+    94,
+    "settlement"
+   ],
+   [
+    76,
+    "province"
+   ],
+   [
+    40,
+    "territor"
+   ],
+   [
+    33,
+    "politic"
+   ]
+  ]
+ },
+ {
+  "path": "systems/ui/valoria_ui_ux_v4.md",
+  "tree": "systems",
+  "bytes": 141952,
+  "lines": 2474,
+  "tok": 35488,
+  "hits": 320,
+  "top": [
+   [
+    88,
+    "npc"
+   ],
+   [
+    56,
+    "faction"
+   ],
+   [
+    52,
+    "settlement"
+   ],
+   [
+    29,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/integration_proposal_v30.md",
+  "tree": "systems",
+  "bytes": 61228,
+  "lines": 437,
+  "tok": 15307,
+  "hits": 319,
+  "top": [
+   [
+    93,
+    "faction"
+   ],
+   [
+    57,
+    "npc"
+   ],
+   [
+    53,
+    "territor"
+   ],
+   [
+    31,
+    "standing"
+   ]
+  ]
+ },
+ {
+  "path": "research/personnel_muster_integration_master_v1.md",
+  "tree": "research",
+  "bytes": 52357,
+  "lines": 865,
+  "tok": 13089,
+  "hits": 318,
+  "top": [
+   [
+    49,
+    "govern"
+   ],
+   [
+    46,
+    "faction"
+   ],
+   [
+    37,
+    "settlement"
+   ],
+   [
+    37,
+    "muster"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-25-throughlines-and-precedent/05_ch2_the_ladder_runs_both_ways.md",
+  "tree": "proposals",
+  "bytes": 54796,
+  "lines": 759,
+  "tok": 13699,
+  "hits": 303,
+  "top": [
+   [
+    85,
+    "faction"
+   ],
+   [
+    56,
+    "standing"
+   ],
+   [
+    37,
+    "officer"
+   ],
+   [
+    31,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/governance_type_registry_v1.md",
+  "tree": "systems",
+  "bytes": 31368,
+  "lines": 299,
+  "tok": 7842,
+  "hits": 299,
+  "top": [
+   [
+    60,
+    "faction"
+   ],
+   [
+    59,
+    "settlement"
+   ],
+   [
+    32,
+    "govern"
+   ],
+   [
+    31,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/key_type_registry_v30.md",
+  "tree": "systems",
+  "bytes": 58119,
+  "lines": 1296,
+  "tok": 14529,
+  "hits": 290,
+  "top": [
+   [
+    74,
+    "faction"
+   ],
+   [
+    65,
+    "npc"
+   ],
+   [
+    53,
+    "territor"
+   ],
+   [
+    42,
+    "settlement"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/faction_behavior_v30.md",
+  "tree": "systems",
+  "bytes": 28801,
+  "lines": 551,
+  "tok": 7200,
+  "hits": 277,
+  "top": [
+   [
+    108,
+    "faction"
+   ],
+   [
+    38,
+    "settlement"
+   ],
+   [
+    37,
+    "npc"
+   ],
+   [
+    27,
+    "legitimacy"
+   ]
+  ]
+ },
+ {
+  "path": "systems/social_contest/social_contest_v30.md",
+  "tree": "systems",
+  "bytes": 95725,
+  "lines": 725,
+  "tok": 23931,
+  "hits": 276,
+  "top": [
+   [
+    84,
+    "faction"
+   ],
+   [
+    53,
+    "standing"
+   ],
+   [
+    41,
+    "npc"
+   ],
+   [
+    27,
+    "mandate"
+   ]
+  ]
+ },
+ {
+  "path": "systems/npcs/npc_behavior_system_v1.md",
+  "tree": "systems",
+  "bytes": 65510,
+  "lines": 829,
+  "tok": 16377,
+  "hits": 274,
+  "top": [
+   [
+    134,
+    "npc"
+   ],
+   [
+    52,
+    "faction"
+   ],
+   [
+    38,
+    "territor"
+   ],
+   [
+    13,
+    "politic"
+   ]
+  ]
+ },
+ {
+  "path": "research/cross_scale_action_catalogue_v1.md",
+  "tree": "research",
+  "bytes": 60658,
+  "lines": 912,
+  "tok": 15164,
+  "hits": 266,
+  "top": [
+   [
+    47,
+    "faction"
+   ],
+   [
+    37,
+    "govern"
+   ],
+   [
+    29,
+    "settlement"
+   ],
+   [
+    24,
+    "mandate"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/franchise_v30.md",
+  "tree": "systems",
+  "bytes": 15579,
+  "lines": 206,
+  "tok": 3894,
+  "hits": 266,
+  "top": [
+   [
+    80,
+    "territor"
+   ],
+   [
+    39,
+    "franchise"
+   ],
+   [
+    34,
+    "faction"
+   ],
+   [
+    29,
+    "parliament"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/ci_political_v30.md",
+  "tree": "systems",
+  "bytes": 25816,
+  "lines": 430,
+  "tok": 6454,
+  "hits": 255,
+  "top": [
+   [
+    50,
+    "faction"
+   ],
+   [
+    45,
+    "mandate"
+   ],
+   [
+    43,
+    "territor"
+   ],
+   [
+    25,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/throughlines_complete.md",
+  "tree": "systems",
+  "bytes": 51839,
+  "lines": 378,
+  "tok": 12959,
+  "hits": 252,
+  "top": [
+   [
+    68,
+    "faction"
+   ],
+   [
+    58,
+    "npc"
+   ],
+   [
+    28,
+    "politic"
+   ],
+   [
+    19,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/governance_ripple_substrate_v1.md",
+  "tree": "systems",
+  "bytes": 44449,
+  "lines": 560,
+  "tok": 11112,
+  "hits": 246,
+  "top": [
+   [
+    66,
+    "settlement"
+   ],
+   [
+    33,
+    "govern"
+   ],
+   [
+    31,
+    "standing"
+   ],
+   [
+    27,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/settlements/governance_play_redesign_v1.md",
+  "tree": "systems",
+  "bytes": 35218,
+  "lines": 338,
+  "tok": 8804,
+  "hits": 239,
+  "top": [
+   [
+    64,
+    "settlement"
+   ],
+   [
+    51,
+    "govern"
+   ],
+   [
+    36,
+    "npc"
+   ],
+   [
+    36,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/settlements/scale_hierarchy_v1.md",
+  "tree": "systems",
+  "bytes": 13171,
+  "lines": 188,
+  "tok": 3292,
+  "hits": 233,
+  "top": [
+   [
+    50,
+    "territor"
+   ],
+   [
+    39,
+    "settlement"
+   ],
+   [
+    37,
+    "province"
+   ],
+   [
+    37,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/ui/valoria_ui_ux_v4_1.md",
+  "tree": "systems",
+  "bytes": 81112,
+  "lines": 1431,
+  "tok": 20278,
+  "hits": 232,
+  "top": [
+   [
+    55,
+    "faction"
+   ],
+   [
+    42,
+    "settlement"
+   ],
+   [
+    41,
+    "npc"
+   ],
+   [
+    22,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "systems/social_contest/social_contest_flow_skeleton_v1.md",
+  "tree": "systems",
+  "bytes": 45651,
+  "lines": 185,
+  "tok": 11412,
+  "hits": 222,
+  "top": [
+   [
+    112,
+    "parliament"
+   ],
+   [
+    95,
+    "faction"
+   ],
+   [
+    5,
+    "territor"
+   ],
+   [
+    5,
+    "standing"
+   ]
+  ]
+ },
+ {
+  "path": "research/historical/precedents_warfare.md",
+  "tree": "research",
+  "bytes": 32024,
+  "lines": 327,
+  "tok": 8006,
+  "hits": 221,
+  "top": [
+   [
+    54,
+    "territor"
+   ],
+   [
+    26,
+    "faction"
+   ],
+   [
+    26,
+    "accord"
+   ],
+   [
+    24,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/world/insurgency_pipeline_v30.md",
+  "tree": "systems",
+  "bytes": 24873,
+  "lines": 348,
+  "tok": 6218,
+  "hits": 214,
+  "top": [
+   [
+    62,
+    "parliament"
+   ],
+   [
+    61,
+    "territor"
+   ],
+   [
+    60,
+    "faction"
+   ],
+   [
+    6,
+    "politic"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/grounded_event_card_deck_v1.md",
+  "tree": "proposals",
+  "bytes": 51472,
+  "lines": 336,
+  "tok": 12868,
+  "hits": 212,
+  "top": [
+   [
+    45,
+    "settlement"
+   ],
+   [
+    33,
+    "govern"
+   ],
+   [
+    28,
+    "standing"
+   ],
+   [
+    26,
+    "mandate"
+   ]
+  ]
+ },
+ {
+  "path": "systems/mass_battle/mass_battle_v30.md",
+  "tree": "systems",
+  "bytes": 78182,
+  "lines": 999,
+  "tok": 19545,
+  "hits": 211,
+  "top": [
+   [
+    56,
+    "territor"
+   ],
+   [
+    51,
+    "faction"
+   ],
+   [
+    23,
+    "officer"
+   ],
+   [
+    21,
+    "accord"
+   ]
+  ]
+ },
+ {
+  "path": "systems/fieldwork/fieldwork_v30.md",
+  "tree": "systems",
+  "bytes": 79267,
+  "lines": 908,
+  "tok": 19816,
+  "hits": 205,
+  "top": [
+   [
+    77,
+    "npc"
+   ],
+   [
+    60,
+    "territor"
+   ],
+   [
+    41,
+    "faction"
+   ],
+   [
+    10,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/characters/conviction_track_v30.md",
+  "tree": "systems",
+  "bytes": 33466,
+  "lines": 531,
+  "tok": 8366,
+  "hits": 203,
+  "top": [
+   [
+    102,
+    "territor"
+   ],
+   [
+    29,
+    "mandate"
+   ],
+   [
+    24,
+    "faction"
+   ],
+   [
+    9,
+    "settlement"
+   ]
+  ]
+ },
+ {
+  "path": "systems/npcs/character_canon_v30.md",
+  "tree": "systems",
+  "bytes": 32696,
+  "lines": 440,
+  "tok": 8174,
+  "hits": 196,
+  "top": [
+   [
+    140,
+    "npc"
+   ],
+   [
+    22,
+    "roster"
+   ],
+   [
+    22,
+    "faction"
+   ],
+   [
+    3,
+    "succession"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/factions_personal_v30.md",
+  "tree": "systems",
+  "bytes": 30056,
+  "lines": 437,
+  "tok": 7514,
+  "hits": 193,
+  "top": [
+   [
+    65,
+    "faction"
+   ],
+   [
+    35,
+    "mandate"
+   ],
+   [
+    22,
+    "territor"
+   ],
+   [
+    20,
+    "domain action"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-25-throughlines-and-precedent/04_ch1_the_world_has_no_people.md",
+  "tree": "proposals",
+  "bytes": 46584,
+  "lines": 631,
+  "tok": 11646,
+  "hits": 187,
+  "top": [
+   [
+    81,
+    "npc"
+   ],
+   [
+    36,
+    "settlement"
+   ],
+   [
+    20,
+    "faction"
+   ],
+   [
+    12,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "systems/settlements/generation_sourcebook_v1.md",
+  "tree": "systems",
+  "bytes": 18178,
+  "lines": 199,
+  "tok": 4544,
+  "hits": 183,
+  "top": [
+   [
+    45,
+    "settlement"
+   ],
+   [
+    45,
+    "faction"
+   ],
+   [
+    21,
+    "territor"
+   ],
+   [
+    14,
+    "province"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/scale_transitions_v30.md",
+  "tree": "systems",
+  "bytes": 29249,
+  "lines": 345,
+  "tok": 7312,
+  "hits": 183,
+  "top": [
+   [
+    61,
+    "faction"
+   ],
+   [
+    24,
+    "territor"
+   ],
+   [
+    21,
+    "npc"
+   ],
+   [
+    19,
+    "settlement"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/conflict_architecture_proposal.md",
+  "tree": "systems",
+  "bytes": 20175,
+  "lines": 177,
+  "tok": 5043,
+  "hits": 183,
+  "top": [
+   [
+    50,
+    "settlement"
+   ],
+   [
+    30,
+    "govern"
+   ],
+   [
+    24,
+    "province"
+   ],
+   [
+    22,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/derived_stats_v30.md",
+  "tree": "systems",
+  "bytes": 46375,
+  "lines": 606,
+  "tok": 11593,
+  "hits": 178,
+  "top": [
+   [
+    47,
+    "faction"
+   ],
+   [
+    28,
+    "mandate"
+   ],
+   [
+    17,
+    "settlement"
+   ],
+   [
+    14,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/mass_battle/military_layer_v30.md",
+  "tree": "systems",
+  "bytes": 27311,
+  "lines": 413,
+  "tok": 6827,
+  "hits": 176,
+  "top": [
+   [
+    50,
+    "territor"
+   ],
+   [
+    40,
+    "faction"
+   ],
+   [
+    34,
+    "muster"
+   ],
+   [
+    11,
+    "accord"
+   ]
+  ]
+ },
+ {
+  "path": "systems/fieldwork/investigation_systems_v30.md",
+  "tree": "systems",
+  "bytes": 37325,
+  "lines": 460,
+  "tok": 9331,
+  "hits": 174,
+  "top": [
+   [
+    126,
+    "npc"
+   ],
+   [
+    20,
+    "territor"
+   ],
+   [
+    10,
+    "faction"
+   ],
+   [
+    6,
+    "accord"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/faction_systems_overview_v30.md",
+  "tree": "systems",
+  "bytes": 17033,
+  "lines": 309,
+  "tok": 4258,
+  "hits": 173,
+  "top": [
+   [
+    97,
+    "faction"
+   ],
+   [
+    31,
+    "parliament"
+   ],
+   [
+    15,
+    "territor"
+   ],
+   [
+    9,
+    "politic"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-22-wiring-map.md",
+  "tree": "proposals",
+  "bytes": 44862,
+  "lines": 475,
+  "tok": 11215,
+  "hits": 170,
+  "top": [
+   [
+    38,
+    "npc"
+   ],
+   [
+    25,
+    "settlement"
+   ],
+   [
+    22,
+    "faction"
+   ],
+   [
+    20,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "systems/npcs/npcs_flow_skeleton_v1.md",
+  "tree": "systems",
+  "bytes": 15199,
+  "lines": 134,
+  "tok": 3799,
+  "hits": 170,
+  "top": [
+   [
+    129,
+    "npc"
+   ],
+   [
+    24,
+    "territor"
+   ],
+   [
+    9,
+    "accord"
+   ],
+   [
+    8,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-25-throughlines-and-precedent/07_ch4_weights_bias_noise_chooses.md",
+  "tree": "proposals",
+  "bytes": 54653,
+  "lines": 329,
+  "tok": 13663,
+  "hits": 168,
+  "top": [
+   [
+    58,
+    "settlement"
+   ],
+   [
+    24,
+    "npc"
+   ],
+   [
+    21,
+    "faction"
+   ],
+   [
+    12,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/faction_succession_split_v30.md",
+  "tree": "systems",
+  "bytes": 13975,
+  "lines": 172,
+  "tok": 3493,
+  "hits": 167,
+  "top": [
+   [
+    54,
+    "faction"
+   ],
+   [
+    24,
+    "succession"
+   ],
+   [
+    23,
+    "settlement"
+   ],
+   [
+    13,
+    "province"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-15-character-and-faction-stats-and-progression.md",
+  "tree": "proposals",
+  "bytes": 111144,
+  "lines": 1677,
+  "tok": 27786,
+  "hits": 163,
+  "top": [
+   [
+    39,
+    "faction"
+   ],
+   [
+    30,
+    "roster"
+   ],
+   [
+    25,
+    "govern"
+   ],
+   [
+    23,
+    "standing"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/ners_vsg_reconciliation_v1.md",
+  "tree": "systems",
+  "bytes": 25738,
+  "lines": 240,
+  "tok": 6434,
+  "hits": 162,
+  "top": [
+   [
+    32,
+    "governance"
+   ],
+   [
+    32,
+    "govern"
+   ],
+   [
+    29,
+    "settlement"
+   ],
+   [
+    21,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-22-session-master-log-fieldwork-to-delta.md",
+  "tree": "proposals",
+  "bytes": 67480,
+  "lines": 566,
+  "tok": 16870,
+  "hits": 160,
+  "top": [
+   [
+    56,
+    "npc"
+   ],
+   [
+    41,
+    "faction"
+   ],
+   [
+    13,
+    "settlement"
+   ],
+   [
+    9,
+    "roster"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-23-suite-02-narrative-texture-census.md",
+  "tree": "proposals",
+  "bytes": 21007,
+  "lines": 447,
+  "tok": 5251,
+  "hits": 156,
+  "top": [
+   [
+    44,
+    "npc"
+   ],
+   [
+    40,
+    "settlement"
+   ],
+   [
+    22,
+    "faction"
+   ],
+   [
+    15,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/early_game_ignition_analysis.md",
+  "tree": "systems",
+  "bytes": 35702,
+  "lines": 288,
+  "tok": 8925,
+  "hits": 154,
+  "top": [
+   [
+    55,
+    "faction"
+   ],
+   [
+    17,
+    "territor"
+   ],
+   [
+    14,
+    "accord"
+   ],
+   [
+    13,
+    "politic"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/fractional_province_ownership_v30.md",
+  "tree": "systems",
+  "bytes": 10010,
+  "lines": 152,
+  "tok": 2502,
+  "hits": 153,
+  "top": [
+   [
+    60,
+    "settlement"
+   ],
+   [
+    52,
+    "province"
+   ],
+   [
+    24,
+    "faction"
+   ],
+   [
+    4,
+    "domain action"
+   ]
+  ]
+ },
+ {
+  "path": "systems/settlements/lps_wiring_v1.md",
+  "tree": "systems",
+  "bytes": 15888,
+  "lines": 228,
+  "tok": 3972,
+  "hits": 152,
+  "top": [
+   [
+    46,
+    "settlement"
+   ],
+   [
+    35,
+    "faction"
+   ],
+   [
+    22,
+    "mandate"
+   ],
+   [
+    11,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/engine_atlas_v1.md",
+  "tree": "systems",
+  "bytes": 37860,
+  "lines": 399,
+  "tok": 9465,
+  "hits": 152,
+  "top": [
+   [
+    67,
+    "faction"
+   ],
+   [
+    24,
+    "npc"
+   ],
+   [
+    23,
+    "settlement"
+   ],
+   [
+    11,
+    "parliament"
+   ]
+  ]
+ },
+ {
+  "path": "systems/overview/overview_flow_skeleton_v1.md",
+  "tree": "systems",
+  "bytes": 30538,
+  "lines": 182,
+  "tok": 7634,
+  "hits": 147,
+  "top": [
+   [
+    75,
+    "faction"
+   ],
+   [
+    18,
+    "parliament"
+   ],
+   [
+    18,
+    "accord"
+   ],
+   [
+    14,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/_architecture_flow_skeleton_v1.md",
+  "tree": "systems",
+  "bytes": 33610,
+  "lines": 203,
+  "tok": 8402,
+  "hits": 142,
+  "top": [
+   [
+    57,
+    "faction"
+   ],
+   [
+    40,
+    "parliament"
+   ],
+   [
+    15,
+    "accord"
+   ],
+   [
+    12,
+    "settlement"
+   ]
+  ]
+ },
+ {
+  "path": "systems/npcs/npc_roster_v30.md",
+  "tree": "systems",
+  "bytes": 34964,
+  "lines": 420,
+  "tok": 8741,
+  "hits": 140,
+  "top": [
+   [
+    27,
+    "territor"
+   ],
+   [
+    25,
+    "npc"
+   ],
+   [
+    22,
+    "faction"
+   ],
+   [
+    14,
+    "mandate"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-25-throughlines-and-precedent/03_method_and_corrections.md",
+  "tree": "proposals",
+  "bytes": 42833,
+  "lines": 679,
+  "tok": 10708,
+  "hits": 137,
+  "top": [
+   [
+    28,
+    "npc"
+   ],
+   [
+    28,
+    "faction"
+   ],
+   [
+    27,
+    "standing"
+   ],
+   [
+    16,
+    "settlement"
+   ]
+  ]
+ },
+ {
+  "path": "systems/settlements/goldenfurt_slice/sim_build_spec.md",
+  "tree": "systems",
+  "bytes": 12937,
+  "lines": 205,
+  "tok": 3234,
+  "hits": 134,
+  "top": [
+   [
+    34,
+    "settlement"
+   ],
+   [
+    30,
+    "npc"
+   ],
+   [
+    19,
+    "govern"
+   ],
+   [
+    16,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/political_dynamics_keys_migration_v30.md",
+  "tree": "systems",
+  "bytes": 28215,
+  "lines": 640,
+  "tok": 7053,
+  "hits": 132,
+  "top": [
+   [
+    111,
+    "npc"
+   ],
+   [
+    13,
+    "faction"
+   ],
+   [
+    7,
+    "politic"
+   ],
+   [
+    1,
+    "standing"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/faction_state_authoring_v30.md",
+  "tree": "systems",
+  "bytes": 19452,
+  "lines": 373,
+  "tok": 4863,
+  "hits": 131,
+  "top": [
+   [
+    54,
+    "faction"
+   ],
+   [
+    16,
+    "politic"
+   ],
+   [
+    11,
+    "governance"
+   ],
+   [
+    11,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/threadwork/threadwork_v30.md",
+  "tree": "systems",
+  "bytes": 83765,
+  "lines": 1020,
+  "tok": 20941,
+  "hits": 129,
+  "top": [
+   [
+    40,
+    "territor"
+   ],
+   [
+    21,
+    "faction"
+   ],
+   [
+    16,
+    "govern"
+   ],
+   [
+    13,
+    "settlement"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md",
+  "tree": "proposals",
+  "bytes": 82532,
+  "lines": 1033,
+  "tok": 20633,
+  "hits": 127,
+  "top": [
+   [
+    30,
+    "npc"
+   ],
+   [
+    24,
+    "settlement"
+   ],
+   [
+    23,
+    "faction"
+   ],
+   [
+    9,
+    "roster"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-23-competing-vocabularies-index.md",
+  "tree": "proposals",
+  "bytes": 43227,
+  "lines": 419,
+  "tok": 10806,
+  "hits": 125,
+  "top": [
+   [
+    27,
+    "roster"
+   ],
+   [
+    21,
+    "npc"
+   ],
+   [
+    19,
+    "territor"
+   ],
+   [
+    19,
+    "settlement"
+   ]
+  ]
+ },
+ {
+  "path": "systems/settlements/settlement_layer_v30_index.md",
+  "tree": "systems",
+  "bytes": 10589,
+  "lines": 152,
+  "tok": 2647,
+  "hits": 125,
+  "top": [
+   [
+    47,
+    "settlement"
+   ],
+   [
+    22,
+    "faction"
+   ],
+   [
+    10,
+    "govern"
+   ],
+   [
+    10,
+    "duchy"
+   ]
+  ]
+ },
+ {
+  "path": "systems/world/world_flow_skeleton_v1.md",
+  "tree": "systems",
+  "bytes": 24123,
+  "lines": 187,
+  "tok": 6030,
+  "hits": 125,
+  "top": [
+   [
+    49,
+    "npc"
+   ],
+   [
+    24,
+    "territor"
+   ],
+   [
+    18,
+    "faction"
+   ],
+   [
+    13,
+    "accord"
+   ]
+  ]
+ },
+ {
+  "path": "systems/npcs/npc_character_analyses_v30_infill.md",
+  "tree": "systems",
+  "bytes": 45570,
+  "lines": 119,
+  "tok": 11392,
+  "hits": 125,
+  "top": [
+   [
+    24,
+    "politic"
+   ],
+   [
+    13,
+    "npc"
+   ],
+   [
+    12,
+    "govern"
+   ],
+   [
+    12,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/npcs/npc_foils_v30_infill.md",
+  "tree": "systems",
+  "bytes": 32389,
+  "lines": 135,
+  "tok": 8097,
+  "hits": 125,
+  "top": [
+   [
+    29,
+    "caste"
+   ],
+   [
+    24,
+    "settlement"
+   ],
+   [
+    24,
+    "govern"
+   ],
+   [
+    19,
+    "governance"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/campaign_architecture_v30.md",
+  "tree": "systems",
+  "bytes": 18849,
+  "lines": 279,
+  "tok": 4712,
+  "hits": 123,
+  "top": [
+   [
+    27,
+    "govern"
+   ],
+   [
+    15,
+    "territor"
+   ],
+   [
+    14,
+    "politic"
+   ],
+   [
+    14,
+    "governance"
+   ]
+  ]
+ },
+ {
+  "path": "systems/npcs/npc_behavior_v30_infill.md",
+  "tree": "systems",
+  "bytes": 19287,
+  "lines": 183,
+  "tok": 4821,
+  "hits": 118,
+  "top": [
+   [
+    79,
+    "npc"
+   ],
+   [
+    23,
+    "faction"
+   ],
+   [
+    3,
+    "standing"
+   ],
+   [
+    3,
+    "politic"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/propagation_spec_v1.md",
+  "tree": "systems",
+  "bytes": 54935,
+  "lines": 408,
+  "tok": 13733,
+  "hits": 116,
+  "top": [
+   [
+    45,
+    "settlement"
+   ],
+   [
+    39,
+    "faction"
+   ],
+   [
+    10,
+    "territor"
+   ],
+   [
+    8,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "systems/npcs/npc_roster_v30_infill.md",
+  "tree": "systems",
+  "bytes": 32797,
+  "lines": 122,
+  "tok": 8199,
+  "hits": 116,
+  "top": [
+   [
+    27,
+    "npc"
+   ],
+   [
+    20,
+    "caste"
+   ],
+   [
+    15,
+    "faction"
+   ],
+   [
+    13,
+    "politic"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/parliamentary_transfer_v30.md",
+  "tree": "systems",
+  "bytes": 12323,
+  "lines": 180,
+  "tok": 3080,
+  "hits": 116,
+  "top": [
+   [
+    46,
+    "parliament"
+   ],
+   [
+    31,
+    "faction"
+   ],
+   [
+    23,
+    "territor"
+   ],
+   [
+    6,
+    "accord"
+   ]
+  ]
+ },
+ {
+  "path": "systems/combat/combat_reference_v1.md",
+  "tree": "systems",
+  "bytes": 52451,
+  "lines": 703,
+  "tok": 13112,
+  "hits": 114,
+  "top": [
+   [
+    31,
+    "faction"
+   ],
+   [
+    29,
+    "npc"
+   ],
+   [
+    16,
+    "settlement"
+   ],
+   [
+    11,
+    "officer"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/session_a_spec_patches.md",
+  "tree": "systems",
+  "bytes": 8627,
+  "lines": 182,
+  "tok": 2156,
+  "hits": 113,
+  "top": [
+   [
+    30,
+    "settlement"
+   ],
+   [
+    22,
+    "govern"
+   ],
+   [
+    9,
+    "province"
+   ],
+   [
+    9,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/tensions_pair_validation.md",
+  "tree": "systems",
+  "bytes": 15930,
+  "lines": 276,
+  "tok": 3982,
+  "hits": 111,
+  "top": [
+   [
+    42,
+    "faction"
+   ],
+   [
+    18,
+    "governance"
+   ],
+   [
+    18,
+    "govern"
+   ],
+   [
+    9,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-23-MASTER-vocabulary-and-rulings.md",
+  "tree": "proposals",
+  "bytes": 33328,
+  "lines": 417,
+  "tok": 8332,
+  "hits": 108,
+  "top": [
+   [
+    21,
+    "faction"
+   ],
+   [
+    19,
+    "settlement"
+   ],
+   [
+    15,
+    "territor"
+   ],
+   [
+    13,
+    "roster"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-19-subsystem-delta-and-narrative-robustness.md",
+  "tree": "proposals",
+  "bytes": 28671,
+  "lines": 258,
+  "tok": 7167,
+  "hits": 105,
+  "top": [
+   [
+    40,
+    "npc"
+   ],
+   [
+    19,
+    "settlement"
+   ],
+   [
+    15,
+    "faction"
+   ],
+   [
+    6,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "systems/characters/conviction_track_v1_pp718_vetting.md",
+  "tree": "systems",
+  "bytes": 38287,
+  "lines": 281,
+  "tok": 9571,
+  "hits": 105,
+  "top": [
+   [
+    50,
+    "npc"
+   ],
+   [
+    33,
+    "faction"
+   ],
+   [
+    10,
+    "politic"
+   ],
+   [
+    6,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/governance_consolidation_v1.md",
+  "tree": "systems",
+  "bytes": 21968,
+  "lines": 213,
+  "tok": 5492,
+  "hits": 104,
+  "top": [
+   [
+    17,
+    "govern"
+   ],
+   [
+    16,
+    "governance"
+   ],
+   [
+    15,
+    "settlement"
+   ],
+   [
+    15,
+    "mandate"
+   ]
+  ]
+ },
+ {
+  "path": "systems/npcs/npc_behavior_v30_index.md",
+  "tree": "systems",
+  "bytes": 12877,
+  "lines": 238,
+  "tok": 3219,
+  "hits": 101,
+  "top": [
+   [
+    69,
+    "npc"
+   ],
+   [
+    22,
+    "faction"
+   ],
+   [
+    2,
+    "territor"
+   ],
+   [
+    2,
+    "succession"
+   ]
+  ]
+ },
+ {
+  "path": "systems/victory/victory_flow_skeleton_v1.md",
+  "tree": "systems",
+  "bytes": 16046,
+  "lines": 127,
+  "tok": 4011,
+  "hits": 98,
+  "top": [
+   [
+    58,
+    "faction"
+   ],
+   [
+    25,
+    "territor"
+   ],
+   [
+    7,
+    "accord"
+   ],
+   [
+    5,
+    "parliament"
+   ]
+  ]
+ },
+ {
+  "path": "systems/threadwork/thread_horizontal_integration_spec.md",
+  "tree": "systems",
+  "bytes": 19611,
+  "lines": 294,
+  "tok": 4902,
+  "hits": 98,
+  "top": [
+   [
+    25,
+    "territor"
+   ],
+   [
+    23,
+    "settlement"
+   ],
+   [
+    21,
+    "npc"
+   ],
+   [
+    14,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/settlements/settlement_adjacency_v30.md",
+  "tree": "systems",
+  "bytes": 10674,
+  "lines": 147,
+  "tok": 2668,
+  "hits": 97,
+  "top": [
+   [
+    60,
+    "settlement"
+   ],
+   [
+    17,
+    "province"
+   ],
+   [
+    9,
+    "territor"
+   ],
+   [
+    4,
+    "accord"
+   ]
+  ]
+ },
+ {
+  "path": "systems/settlements/settlement_generator_v1.md",
+  "tree": "systems",
+  "bytes": 17683,
+  "lines": 225,
+  "tok": 4420,
+  "hits": 96,
+  "top": [
+   [
+    25,
+    "settlement"
+   ],
+   [
+    13,
+    "governance"
+   ],
+   [
+    13,
+    "govern"
+   ],
+   [
+    12,
+    "politic"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/canonical_registry.md",
+  "tree": "systems",
+  "bytes": 14835,
+  "lines": 322,
+  "tok": 3708,
+  "hits": 96,
+  "top": [
+   [
+    26,
+    "territor"
+   ],
+   [
+    18,
+    "accord"
+   ],
+   [
+    13,
+    "faction"
+   ],
+   [
+    12,
+    "politic"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/faction_politics_v30_index.md",
+  "tree": "systems",
+  "bytes": 13214,
+  "lines": 206,
+  "tok": 3303,
+  "hits": 88,
+  "top": [
+   [
+    22,
+    "caste"
+   ],
+   [
+    19,
+    "faction"
+   ],
+   [
+    18,
+    "standing"
+   ],
+   [
+    9,
+    "politic"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/key_echo_armature_v1.md",
+  "tree": "systems",
+  "bytes": 36367,
+  "lines": 353,
+  "tok": 9091,
+  "hits": 87,
+  "top": [
+   [
+    28,
+    "settlement"
+   ],
+   [
+    17,
+    "faction"
+   ],
+   [
+    9,
+    "npc"
+   ],
+   [
+    8,
+    "politic"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-25-throughlines-and-precedent/08_ch5_what_we_should_not_do.md",
+  "tree": "proposals",
+  "bytes": 43836,
+  "lines": 507,
+  "tok": 10959,
+  "hits": 86,
+  "top": [
+   [
+    23,
+    "npc"
+   ],
+   [
+    20,
+    "faction"
+   ],
+   [
+    17,
+    "standing"
+   ],
+   [
+    8,
+    "settlement"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/factions_personal_v30_infill.md",
+  "tree": "systems",
+  "bytes": 12925,
+  "lines": 87,
+  "tok": 3231,
+  "hits": 86,
+  "top": [
+   [
+    35,
+    "faction"
+   ],
+   [
+    13,
+    "territor"
+   ],
+   [
+    10,
+    "politic"
+   ],
+   [
+    8,
+    "domain action"
+   ]
+  ]
+ },
+ {
+  "path": "systems/ui/valoria_ui_ux_v4_2_workplan.md",
+  "tree": "systems",
+  "bytes": 35889,
+  "lines": 594,
+  "tok": 8972,
+  "hits": 85,
+  "top": [
+   [
+    23,
+    "settlement"
+   ],
+   [
+    14,
+    "faction"
+   ],
+   [
+    10,
+    "parliament"
+   ],
+   [
+    10,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/baralta_crown_claim_v30.md",
+  "tree": "systems",
+  "bytes": 13673,
+  "lines": 205,
+  "tok": 3418,
+  "hits": 83,
+  "top": [
+   [
+    25,
+    "mandate"
+   ],
+   [
+    22,
+    "succession"
+   ],
+   [
+    14,
+    "faction"
+   ],
+   [
+    5,
+    "parliament"
+   ]
+  ]
+ },
+ {
+  "path": "systems/world/worldbuilding_v30.md",
+  "tree": "systems",
+  "bytes": 19341,
+  "lines": 342,
+  "tok": 4835,
+  "hits": 80,
+  "top": [
+   [
+    24,
+    "territor"
+   ],
+   [
+    10,
+    "mandate"
+   ],
+   [
+    7,
+    "parliament"
+   ],
+   [
+    6,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/mass_battle/mass_battle_flow_skeleton_v1.md",
+  "tree": "systems",
+  "bytes": 28056,
+  "lines": 198,
+  "tok": 7014,
+  "hits": 80,
+  "top": [
+   [
+    75,
+    "faction"
+   ],
+   [
+    2,
+    "garrison"
+   ],
+   [
+    1,
+    "territor"
+   ],
+   [
+    1,
+    "settlement"
+   ]
+  ]
+ },
+ {
+  "path": "research/rhetoric_oratory_contest/rhetoric_oratory_contest_research.md",
+  "tree": "research",
+  "bytes": 91581,
+  "lines": 524,
+  "tok": 22895,
+  "hits": 79,
+  "top": [
+   [
+    30,
+    "parliament"
+   ],
+   [
+    18,
+    "standing"
+   ],
+   [
+    13,
+    "politic"
+   ],
+   [
+    4,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/settlements/march_layer_v30.md",
+  "tree": "systems",
+  "bytes": 14736,
+  "lines": 200,
+  "tok": 3684,
+  "hits": 79,
+  "top": [
+   [
+    45,
+    "settlement"
+   ],
+   [
+    14,
+    "faction"
+   ],
+   [
+    11,
+    "territor"
+   ],
+   [
+    4,
+    "garrison"
+   ]
+  ]
+ },
+ {
+  "path": "systems/world/solmund_master_document.md",
+  "tree": "systems",
+  "bytes": 47769,
+  "lines": 585,
+  "tok": 11942,
+  "hits": 79,
+  "top": [
+   [
+    24,
+    "territor"
+   ],
+   [
+    19,
+    "faction"
+   ],
+   [
+    9,
+    "standing"
+   ],
+   [
+    8,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/repo-reorganization-v1.md",
+  "tree": "proposals",
+  "bytes": 45142,
+  "lines": 164,
+  "tok": 11285,
+  "hits": 77,
+  "top": [
+   [
+    14,
+    "territor"
+   ],
+   [
+    14,
+    "settlement"
+   ],
+   [
+    14,
+    "faction"
+   ],
+   [
+    10,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "systems/characters/character_histories_v30.md",
+  "tree": "systems",
+  "bytes": 38977,
+  "lines": 543,
+  "tok": 9744,
+  "hits": 74,
+  "top": [
+   [
+    26,
+    "faction"
+   ],
+   [
+    16,
+    "territor"
+   ],
+   [
+    9,
+    "settlement"
+   ],
+   [
+    8,
+    "domain action"
+   ]
+  ]
+ },
+ {
+  "path": "systems/npcs/npc_character_analyses_v30.md",
+  "tree": "systems",
+  "bytes": 21231,
+  "lines": 276,
+  "tok": 5307,
+  "hits": 74,
+  "top": [
+   [
+    16,
+    "npc"
+   ],
+   [
+    9,
+    "faction"
+   ],
+   [
+    7,
+    "mandate"
+   ],
+   [
+    6,
+    "succession"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/videogame_mode_spec.md",
+  "tree": "systems",
+  "bytes": 16455,
+  "lines": 206,
+  "tok": 4113,
+  "hits": 73,
+  "top": [
+   [
+    23,
+    "npc"
+   ],
+   [
+    23,
+    "faction"
+   ],
+   [
+    9,
+    "territor"
+   ],
+   [
+    4,
+    "settlement"
+   ]
+  ]
+ },
+ {
+  "path": "systems/threadwork/threadwork_v25_historical.md",
+  "tree": "systems",
+  "bytes": 96933,
+  "lines": 1013,
+  "tok": 24233,
+  "hits": 70,
+  "top": [
+   [
+    29,
+    "territor"
+   ],
+   [
+    18,
+    "faction"
+   ],
+   [
+    7,
+    "mandate"
+   ],
+   [
+    6,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/canonical_nomenclature_v1.md",
+  "tree": "proposals",
+  "bytes": 19793,
+  "lines": 343,
+  "tok": 4948,
+  "hits": 69,
+  "top": [
+   [
+    19,
+    "settlement"
+   ],
+   [
+    11,
+    "faction"
+   ],
+   [
+    10,
+    "roster"
+   ],
+   [
+    7,
+    "legitimacy"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-16-system-scores-census.md",
+  "tree": "proposals",
+  "bytes": 22159,
+  "lines": 302,
+  "tok": 5539,
+  "hits": 67,
+  "top": [
+   [
+    16,
+    "faction"
+   ],
+   [
+    11,
+    "settlement"
+   ],
+   [
+    8,
+    "govern"
+   ],
+   [
+    6,
+    "standing"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/social_contest_consolidation_integration_v1.md",
+  "tree": "proposals",
+  "bytes": 58020,
+  "lines": 782,
+  "tok": 14505,
+  "hits": 65,
+  "top": [
+   [
+    23,
+    "faction"
+   ],
+   [
+    14,
+    "standing"
+   ],
+   [
+    9,
+    "mandate"
+   ],
+   [
+    6,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-23-suite-04-wiring-gaps-and-orphans.md",
+  "tree": "proposals",
+  "bytes": 15186,
+  "lines": 262,
+  "tok": 3796,
+  "hits": 64,
+  "top": [
+   [
+    15,
+    "faction"
+   ],
+   [
+    13,
+    "npc"
+   ],
+   [
+    12,
+    "settlement"
+   ],
+   [
+    4,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/complete_systems_reference.md",
+  "tree": "systems",
+  "bytes": 15906,
+  "lines": 236,
+  "tok": 3976,
+  "hits": 64,
+  "top": [
+   [
+    14,
+    "npc"
+   ],
+   [
+    9,
+    "mandate"
+   ],
+   [
+    8,
+    "faction"
+   ],
+   [
+    8,
+    "accord"
+   ]
+  ]
+ },
+ {
+  "path": "systems/articulation/articulation_layer_v30.md",
+  "tree": "systems",
+  "bytes": 22102,
+  "lines": 400,
+  "tok": 5525,
+  "hits": 64,
+  "top": [
+   [
+    23,
+    "faction"
+   ],
+   [
+    17,
+    "npc"
+   ],
+   [
+    9,
+    "accord"
+   ],
+   [
+    5,
+    "roster"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-20-return-to-game-plan-v1.md",
+  "tree": "proposals",
+  "bytes": 44889,
+  "lines": 490,
+  "tok": 11222,
+  "hits": 63,
+  "top": [
+   [
+    19,
+    "faction"
+   ],
+   [
+    14,
+    "roster"
+   ],
+   [
+    9,
+    "parliament"
+   ],
+   [
+    7,
+    "accord"
+   ]
+  ]
+ },
+ {
+  "path": "systems/settlements/goldenfurt_slice/generation_methodology.md",
+  "tree": "systems",
+  "bytes": 12654,
+  "lines": 191,
+  "tok": 3163,
+  "hits": 63,
+  "top": [
+   [
+    22,
+    "settlement"
+   ],
+   [
+    9,
+    "npc"
+   ],
+   [
+    9,
+    "govern"
+   ],
+   [
+    6,
+    "governance"
+   ]
+  ]
+ },
+ {
+  "path": "systems/settlements/settlements_currency_v1.md",
+  "tree": "systems",
+  "bytes": 6582,
+  "lines": 26,
+  "tok": 1645,
+  "hits": 62,
+  "top": [
+   [
+    22,
+    "settlement"
+   ],
+   [
+    9,
+    "governance"
+   ],
+   [
+    9,
+    "govern"
+   ],
+   [
+    8,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "systems/npcs/npc_behavior_system_v1_index.md",
+  "tree": "systems",
+  "bytes": 8565,
+  "lines": 159,
+  "tok": 2141,
+  "hits": 61,
+  "top": [
+   [
+    49,
+    "npc"
+   ],
+   [
+    8,
+    "faction"
+   ],
+   [
+    2,
+    "succession"
+   ],
+   [
+    2,
+    "officer"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-25-throughlines-and-precedent/06_ch3_one_resolver_four_scales_one_scalar.md",
+  "tree": "proposals",
+  "bytes": 57166,
+  "lines": 855,
+  "tok": 14291,
+  "hits": 60,
+  "top": [
+   [
+    37,
+    "faction"
+   ],
+   [
+    7,
+    "npc"
+   ],
+   [
+    6,
+    "parliament"
+   ],
+   [
+    3,
+    "standing"
+   ]
+  ]
+ },
+ {
+  "path": "systems/overview/clock_registry_v30.md",
+  "tree": "systems",
+  "bytes": 9381,
+  "lines": 144,
+  "tok": 2345,
+  "hits": 59,
+  "top": [
+   [
+    18,
+    "settlement"
+   ],
+   [
+    18,
+    "faction"
+   ],
+   [
+    7,
+    "territor"
+   ],
+   [
+    5,
+    "standing"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/fail_forward_pp177.md",
+  "tree": "systems",
+  "bytes": 6738,
+  "lines": 125,
+  "tok": 1684,
+  "hits": 58,
+  "top": [
+   [
+    16,
+    "standing"
+   ],
+   [
+    16,
+    "faction"
+   ],
+   [
+    7,
+    "domain action"
+   ],
+   [
+    6,
+    "mandate"
+   ]
+  ]
+ },
+ {
+  "path": "systems/settlements/goldenfurt_slice/npc_cast.md",
+  "tree": "systems",
+  "bytes": 13635,
+  "lines": 128,
+  "tok": 3408,
+  "hits": 57,
+  "top": [
+   [
+    16,
+    "govern"
+   ],
+   [
+    13,
+    "npc"
+   ],
+   [
+    11,
+    "faction"
+   ],
+   [
+    9,
+    "settlement"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/faction_layer_v30_infill.md",
+  "tree": "systems",
+  "bytes": 13359,
+  "lines": 123,
+  "tok": 3339,
+  "hits": 57,
+  "top": [
+   [
+    17,
+    "faction"
+   ],
+   [
+    10,
+    "parliament"
+   ],
+   [
+    5,
+    "territor"
+   ],
+   [
+    5,
+    "officer"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-25-throughlines-and-precedent/01_verified_defects.md",
+  "tree": "proposals",
+  "bytes": 19827,
+  "lines": 301,
+  "tok": 4956,
+  "hits": 55,
+  "top": [
+   [
+    21,
+    "npc"
+   ],
+   [
+    14,
+    "settlement"
+   ],
+   [
+    8,
+    "faction"
+   ],
+   [
+    4,
+    "standing"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-21-execution-order-v1.md",
+  "tree": "proposals",
+  "bytes": 83966,
+  "lines": 1155,
+  "tok": 20991,
+  "hits": 53,
+  "top": [
+   [
+    18,
+    "faction"
+   ],
+   [
+    8,
+    "roster"
+   ],
+   [
+    7,
+    "govern"
+   ],
+   [
+    6,
+    "parliament"
+   ]
+  ]
+ },
+ {
+  "path": "systems/overview/peninsular_strain_v30_index.md",
+  "tree": "systems",
+  "bytes": 6886,
+  "lines": 108,
+  "tok": 1721,
+  "hits": 52,
+  "top": [
+   [
+    22,
+    "accord"
+   ],
+   [
+    10,
+    "territor"
+   ],
+   [
+    10,
+    "faction"
+   ],
+   [
+    4,
+    "settlement"
+   ]
+  ]
+ },
+ {
+  "path": "systems/settlements/territory_temperaments_v30.md",
+  "tree": "systems",
+  "bytes": 7649,
+  "lines": 113,
+  "tok": 1912,
+  "hits": 52,
+  "top": [
+   [
+    24,
+    "territor"
+   ],
+   [
+    14,
+    "faction"
+   ],
+   [
+    6,
+    "settlement"
+   ],
+   [
+    5,
+    "province"
+   ]
+  ]
+ },
+ {
+  "path": "systems/fieldwork/fieldwork_v30_infill.md",
+  "tree": "systems",
+  "bytes": 27708,
+  "lines": 159,
+  "tok": 6927,
+  "hits": 52,
+  "top": [
+   [
+    24,
+    "npc"
+   ],
+   [
+    20,
+    "territor"
+   ],
+   [
+    6,
+    "faction"
+   ],
+   [
+    1,
+    "legitimacy"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-19-obstacle-stat-and-identity-census.md",
+  "tree": "proposals",
+  "bytes": 25868,
+  "lines": 273,
+  "tok": 6467,
+  "hits": 50,
+  "top": [
+   [
+    21,
+    "faction"
+   ],
+   [
+    10,
+    "mandate"
+   ],
+   [
+    8,
+    "roster"
+   ],
+   [
+    3,
+    "settlement"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/key_substrate_v30.md",
+  "tree": "systems",
+  "bytes": 29576,
+  "lines": 628,
+  "tok": 7394,
+  "hits": 49,
+  "top": [
+   [
+    23,
+    "npc"
+   ],
+   [
+    10,
+    "faction"
+   ],
+   [
+    4,
+    "settlement"
+   ],
+   [
+    3,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/valoria_fork_plan_of_record_v1.md",
+  "tree": "proposals",
+  "bytes": 40573,
+  "lines": 523,
+  "tok": 10143,
+  "hits": 48,
+  "top": [
+   [
+    13,
+    "territor"
+   ],
+   [
+    13,
+    "faction"
+   ],
+   [
+    10,
+    "roster"
+   ],
+   [
+    4,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/npcs/companion_specification_v30.md",
+  "tree": "systems",
+  "bytes": 11203,
+  "lines": 224,
+  "tok": 2800,
+  "hits": 47,
+  "top": [
+   [
+    21,
+    "npc"
+   ],
+   [
+    13,
+    "faction"
+   ],
+   [
+    5,
+    "officer"
+   ],
+   [
+    4,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/world/miraculous_event_v30.md",
+  "tree": "systems",
+  "bytes": 10587,
+  "lines": 150,
+  "tok": 2646,
+  "hits": 45,
+  "top": [
+   [
+    16,
+    "territor"
+   ],
+   [
+    11,
+    "faction"
+   ],
+   [
+    4,
+    "settlement"
+   ],
+   [
+    4,
+    "accord"
+   ]
+  ]
+ },
+ {
+  "path": "research/pre_firearms_formations/11_throughlines_ners_audit.md",
+  "tree": "research",
+  "bytes": 33056,
+  "lines": 423,
+  "tok": 8264,
+  "hits": 43,
+  "top": [
+   [
+    23,
+    "faction"
+   ],
+   [
+    6,
+    "territor"
+   ],
+   [
+    6,
+    "politic"
+   ],
+   [
+    5,
+    "settlement"
+   ]
+  ]
+ },
+ {
+  "path": "systems/settlements/goldenfurt_slice/README.md",
+  "tree": "systems",
+  "bytes": 8344,
+  "lines": 89,
+  "tok": 2086,
+  "hits": 43,
+  "top": [
+   [
+    16,
+    "npc"
+   ],
+   [
+    7,
+    "settlement"
+   ],
+   [
+    7,
+    "govern"
+   ],
+   [
+    4,
+    "governance"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-18-epistemic-propositions-and-provenance.md",
+  "tree": "proposals",
+  "bytes": 19032,
+  "lines": 266,
+  "tok": 4758,
+  "hits": 42,
+  "top": [
+   [
+    31,
+    "npc"
+   ],
+   [
+    3,
+    "parliament"
+   ],
+   [
+    2,
+    "govern"
+   ],
+   [
+    2,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/npcs/npc_roster_v30_index.md",
+  "tree": "systems",
+  "bytes": 5050,
+  "lines": 102,
+  "tok": 1262,
+  "hits": 42,
+  "top": [
+   [
+    19,
+    "npc"
+   ],
+   [
+    11,
+    "roster"
+   ],
+   [
+    6,
+    "caste"
+   ],
+   [
+    2,
+    "succession"
+   ]
+  ]
+ },
+ {
+  "path": "systems/social_contest/social_contest_system_v2.md",
+  "tree": "systems",
+  "bytes": 29455,
+  "lines": 423,
+  "tok": 7363,
+  "hits": 42,
+  "top": [
+   [
+    20,
+    "faction"
+   ],
+   [
+    10,
+    "parliament"
+   ],
+   [
+    4,
+    "mandate"
+   ],
+   [
+    4,
+    "domain action"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-18-ruling-execution-plan.md",
+  "tree": "proposals",
+  "bytes": 21904,
+  "lines": 213,
+  "tok": 5476,
+  "hits": 40,
+  "top": [
+   [
+    16,
+    "npc"
+   ],
+   [
+    13,
+    "faction"
+   ],
+   [
+    2,
+    "roster"
+   ],
+   [
+    2,
+    "politic"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/treaty_expiration_v30.md",
+  "tree": "systems",
+  "bytes": 10358,
+  "lines": 198,
+  "tok": 2589,
+  "hits": 40,
+  "top": [
+   [
+    18,
+    "faction"
+   ],
+   [
+    10,
+    "standing"
+   ],
+   [
+    6,
+    "territor"
+   ],
+   [
+    6,
+    "parliament"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-23-suite-03-competing-vocabularies.md",
+  "tree": "proposals",
+  "bytes": 21446,
+  "lines": 379,
+  "tok": 5361,
+  "hits": 39,
+  "top": [
+   [
+    11,
+    "roster"
+   ],
+   [
+    7,
+    "npc"
+   ],
+   [
+    6,
+    "territor"
+   ],
+   [
+    6,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/faction_layer_v30_index.md",
+  "tree": "systems",
+  "bytes": 6874,
+  "lines": 138,
+  "tok": 1718,
+  "hits": 39,
+  "top": [
+   [
+    13,
+    "faction"
+   ],
+   [
+    12,
+    "parliament"
+   ],
+   [
+    4,
+    "territor"
+   ],
+   [
+    4,
+    "officer"
+   ]
+  ]
+ },
+ {
+  "path": "systems/characters/conviction_track_v30_infill.md",
+  "tree": "systems",
+  "bytes": 6364,
+  "lines": 61,
+  "tok": 1591,
+  "hits": 37,
+  "top": [
+   [
+    16,
+    "territor"
+   ],
+   [
+    9,
+    "faction"
+   ],
+   [
+    4,
+    "govern"
+   ],
+   [
+    3,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/factions_personal_v30_index.md",
+  "tree": "systems",
+  "bytes": 2519,
+  "lines": 60,
+  "tok": 629,
+  "hits": 37,
+  "top": [
+   [
+    27,
+    "faction"
+   ],
+   [
+    4,
+    "duchy"
+   ],
+   [
+    2,
+    "politic"
+   ],
+   [
+    2,
+    "parliament"
+   ]
+  ]
+ },
+ {
+  "path": "systems/overview/wc_survival_spine.md",
+  "tree": "systems",
+  "bytes": 10531,
+  "lines": 123,
+  "tok": 2632,
+  "hits": 36,
+  "top": [
+   [
+    20,
+    "faction"
+   ],
+   [
+    5,
+    "npc"
+   ],
+   [
+    4,
+    "politic"
+   ],
+   [
+    2,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-18-recursion-interrogation-log.md",
+  "tree": "proposals",
+  "bytes": 55072,
+  "lines": 795,
+  "tok": 13768,
+  "hits": 35,
+  "top": [
+   [
+    10,
+    "faction"
+   ],
+   [
+    5,
+    "settlement"
+   ],
+   [
+    4,
+    "roster"
+   ],
+   [
+    3,
+    "standing"
+   ]
+  ]
+ },
+ {
+  "path": "systems/ui/valoria_ui_ux_supplement_derived_settlement.md",
+  "tree": "systems",
+  "bytes": 2861,
+  "lines": 67,
+  "tok": 715,
+  "hits": 35,
+  "top": [
+   [
+    15,
+    "settlement"
+   ],
+   [
+    6,
+    "province"
+   ],
+   [
+    4,
+    "govern"
+   ],
+   [
+    3,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/ci_political_v30_index.md",
+  "tree": "systems",
+  "bytes": 4099,
+  "lines": 90,
+  "tok": 1024,
+  "hits": 35,
+  "top": [
+   [
+    13,
+    "politic"
+   ],
+   [
+    4,
+    "territor"
+   ],
+   [
+    4,
+    "legitimacy"
+   ],
+   [
+    4,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "research/pre_firearms_formations/08_pre_columbian.md",
+  "tree": "research",
+  "bytes": 30833,
+  "lines": 317,
+  "tok": 7708,
+  "hits": 34,
+  "top": [
+   [
+    13,
+    "politic"
+   ],
+   [
+    6,
+    "standing"
+   ],
+   [
+    4,
+    "territor"
+   ],
+   [
+    3,
+    "caste"
+   ]
+  ]
+ },
+ {
+  "path": "systems/characters/conviction_taxonomy_v30.md",
+  "tree": "systems",
+  "bytes": 16125,
+  "lines": 350,
+  "tok": 4031,
+  "hits": 34,
+  "top": [
+   [
+    15,
+    "npc"
+   ],
+   [
+    11,
+    "faction"
+   ],
+   [
+    3,
+    "roster"
+   ],
+   [
+    2,
+    "politic"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-24-suite-07-reconciliation-against-main.md",
+  "tree": "proposals",
+  "bytes": 17150,
+  "lines": 278,
+  "tok": 4287,
+  "hits": 33,
+  "top": [
+   [
+    9,
+    "faction"
+   ],
+   [
+    8,
+    "roster"
+   ],
+   [
+    4,
+    "npc"
+   ],
+   [
+    3,
+    "settlement"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-25-throughlines-and-precedent/00_index.md",
+  "tree": "proposals",
+  "bytes": 15380,
+  "lines": 211,
+  "tok": 3845,
+  "hits": 33,
+  "top": [
+   [
+    13,
+    "faction"
+   ],
+   [
+    8,
+    "settlement"
+   ],
+   [
+    5,
+    "standing"
+   ],
+   [
+    3,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "research/pre_firearms_formations/06_renaissance_islamic_steppe.md",
+  "tree": "research",
+  "bytes": 43854,
+  "lines": 422,
+  "tok": 10963,
+  "hits": 33,
+  "top": [
+   [
+    15,
+    "politic"
+   ],
+   [
+    8,
+    "territor"
+   ],
+   [
+    3,
+    "caste"
+   ],
+   [
+    2,
+    "succession"
+   ]
+  ]
+ },
+ {
+  "path": "systems/npcs/npc_foils_v30.md",
+  "tree": "systems",
+  "bytes": 5081,
+  "lines": 214,
+  "tok": 1270,
+  "hits": 33,
+  "top": [
+   [
+    8,
+    "govern"
+   ],
+   [
+    7,
+    "mandate"
+   ],
+   [
+    6,
+    "governance"
+   ],
+   [
+    3,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "systems/settlements/goldenfurt_slice/event_deck.md",
+  "tree": "systems",
+  "bytes": 14428,
+  "lines": 139,
+  "tok": 3607,
+  "hits": 32,
+  "top": [
+   [
+    10,
+    "npc"
+   ],
+   [
+    3,
+    "standing"
+   ],
+   [
+    3,
+    "govern"
+   ],
+   [
+    3,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/hybrid_gaps_v30_infill.md",
+  "tree": "systems",
+  "bytes": 7558,
+  "lines": 58,
+  "tok": 1889,
+  "hits": 32,
+  "top": [
+   [
+    26,
+    "faction"
+   ],
+   [
+    2,
+    "succession"
+   ],
+   [
+    2,
+    "domain action"
+   ],
+   [
+    1,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-23-rulings-and-adversarial-review.md",
+  "tree": "proposals",
+  "bytes": 21951,
+  "lines": 268,
+  "tok": 5487,
+  "hits": 31,
+  "top": [
+   [
+    25,
+    "faction"
+   ],
+   [
+    3,
+    "roster"
+   ],
+   [
+    2,
+    "parliament"
+   ],
+   [
+    1,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "research/pre_firearms_formations/05_late_med_renaissance_europe.md",
+  "tree": "research",
+  "bytes": 68039,
+  "lines": 651,
+  "tok": 17009,
+  "hits": 31,
+  "top": [
+   [
+    15,
+    "standing"
+   ],
+   [
+    11,
+    "politic"
+   ],
+   [
+    1,
+    "territor"
+   ],
+   [
+    1,
+    "officer"
+   ]
+  ]
+ },
+ {
+  "path": "research/governance/00_MANIFEST.md",
+  "tree": "research",
+  "bytes": 4182,
+  "lines": 67,
+  "tok": 1045,
+  "hits": 30,
+  "top": [
+   [
+    9,
+    "governance"
+   ],
+   [
+    9,
+    "govern"
+   ],
+   [
+    4,
+    "standing"
+   ],
+   [
+    2,
+    "politic"
+   ]
+  ]
+ },
+ {
+  "path": "systems/characters/conviction_track_v1.md",
+  "tree": "systems",
+  "bytes": 9927,
+  "lines": 107,
+  "tok": 2481,
+  "hits": 30,
+  "top": [
+   [
+    26,
+    "npc"
+   ],
+   [
+    2,
+    "roster"
+   ],
+   [
+    2,
+    "politic"
+   ]
+  ]
+ },
+ {
+  "path": "research/pre_firearms_formations/16_historical_vs_gamedesign_audit.md",
+  "tree": "research",
+  "bytes": 21398,
+  "lines": 245,
+  "tok": 5349,
+  "hits": 29,
+  "top": [
+   [
+    26,
+    "faction"
+   ],
+   [
+    2,
+    "politic"
+   ],
+   [
+    1,
+    "caste"
+   ]
+  ]
+ },
+ {
+  "path": "systems/characters/character_generation_questionnaire_v30.md",
+  "tree": "systems",
+  "bytes": 8477,
+  "lines": 117,
+  "tok": 2119,
+  "hits": 29,
+  "top": [
+   [
+    22,
+    "npc"
+   ],
+   [
+    4,
+    "roster"
+   ],
+   [
+    2,
+    "faction"
+   ],
+   [
+    1,
+    "caste"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-24-error-regions-v1.md",
+  "tree": "proposals",
+  "bytes": 34222,
+  "lines": 527,
+  "tok": 8555,
+  "hits": 28,
+  "top": [
+   [
+    9,
+    "faction"
+   ],
+   [
+    6,
+    "roster"
+   ],
+   [
+    4,
+    "parliament"
+   ],
+   [
+    2,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "systems/ui/valoria_ui_ux_v4_1_index.md",
+  "tree": "systems",
+  "bytes": 13220,
+  "lines": 270,
+  "tok": 3305,
+  "hits": 28,
+  "top": [
+   [
+    12,
+    "settlement"
+   ],
+   [
+    8,
+    "faction"
+   ],
+   [
+    2,
+    "province"
+   ],
+   [
+    2,
+    "parliament"
+   ]
+  ]
+ },
+ {
+  "path": "systems/world/worldbuilding_v30_infill.md",
+  "tree": "systems",
+  "bytes": 6878,
+  "lines": 73,
+  "tok": 1719,
+  "hits": 28,
+  "top": [
+   [
+    6,
+    "territor"
+   ],
+   [
+    6,
+    "parliament"
+   ],
+   [
+    3,
+    "succession"
+   ],
+   [
+    3,
+    "governance"
+   ]
+  ]
+ },
+ {
+  "path": "systems/fieldwork/fieldwork_godot.md",
+  "tree": "systems",
+  "bytes": 11262,
+  "lines": 133,
+  "tok": 2815,
+  "hits": 28,
+  "top": [
+   [
+    15,
+    "npc"
+   ],
+   [
+    7,
+    "faction"
+   ],
+   [
+    6,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md",
+  "tree": "proposals",
+  "bytes": 76347,
+  "lines": 972,
+  "tok": 19086,
+  "hits": 27,
+  "top": [
+   [
+    10,
+    "roster"
+   ],
+   [
+    5,
+    "govern"
+   ],
+   [
+    4,
+    "settlement"
+   ],
+   [
+    3,
+    "politic"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-19-subsystem-input-shape-and-narrative-robustness.md",
+  "tree": "proposals",
+  "bytes": 11213,
+  "lines": 138,
+  "tok": 2803,
+  "hits": 26,
+  "top": [
+   [
+    11,
+    "npc"
+   ],
+   [
+    4,
+    "settlement"
+   ],
+   [
+    4,
+    "faction"
+   ],
+   [
+    2,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-19-roll-and-resolution-inventory.md",
+  "tree": "proposals",
+  "bytes": 16885,
+  "lines": 231,
+  "tok": 4221,
+  "hits": 26,
+  "top": [
+   [
+    11,
+    "faction"
+   ],
+   [
+    6,
+    "settlement"
+   ],
+   [
+    3,
+    "parliament"
+   ],
+   [
+    2,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/hybrid_gaps_v30.md",
+  "tree": "systems",
+  "bytes": 7099,
+  "lines": 150,
+  "tok": 1774,
+  "hits": 26,
+  "top": [
+   [
+    22,
+    "faction"
+   ],
+   [
+    2,
+    "succession"
+   ],
+   [
+    1,
+    "territor"
+   ],
+   [
+    1,
+    "mandate"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-18-breaking-the-recursion.md",
+  "tree": "proposals",
+  "bytes": 56415,
+  "lines": 853,
+  "tok": 14103,
+  "hits": 25,
+  "top": [
+   [
+    4,
+    "standing"
+   ],
+   [
+    4,
+    "roster"
+   ],
+   [
+    3,
+    "mandate"
+   ],
+   [
+    3,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-25-throughlines-and-precedent/02_ruled_but_unexecuted.md",
+  "tree": "proposals",
+  "bytes": 7664,
+  "lines": 40,
+  "tok": 1916,
+  "hits": 25,
+  "top": [
+   [
+    9,
+    "faction"
+   ],
+   [
+    7,
+    "standing"
+   ],
+   [
+    3,
+    "settlement"
+   ],
+   [
+    2,
+    "legitimacy"
+   ]
+  ]
+ },
+ {
+  "path": "systems/world/ms_trajectory_v1.md",
+  "tree": "systems",
+  "bytes": 17053,
+  "lines": 156,
+  "tok": 4263,
+  "hits": 25,
+  "top": [
+   [
+    19,
+    "territor"
+   ],
+   [
+    2,
+    "govern"
+   ],
+   [
+    1,
+    "politic"
+   ],
+   [
+    1,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "systems/victory/victory_v30_infill.md",
+  "tree": "systems",
+  "bytes": 5522,
+  "lines": 70,
+  "tok": 1380,
+  "hits": 25,
+  "top": [
+   [
+    12,
+    "faction"
+   ],
+   [
+    9,
+    "territor"
+   ],
+   [
+    2,
+    "politic"
+   ],
+   [
+    1,
+    "parliament"
+   ]
+  ]
+ },
+ {
+  "path": "systems/npcs/npc_character_analyses_v30_index.md",
+  "tree": "systems",
+  "bytes": 4787,
+  "lines": 82,
+  "tok": 1196,
+  "hits": 25,
+  "top": [
+   [
+    19,
+    "npc"
+   ],
+   [
+    4,
+    "roster"
+   ],
+   [
+    2,
+    "caste"
+   ]
+  ]
+ },
+ {
+  "path": "research/pre_firearms_formations/09_throughlines_matchup.md",
+  "tree": "research",
+  "bytes": 44390,
+  "lines": 396,
+  "tok": 11097,
+  "hits": 24,
+  "top": [
+   [
+    15,
+    "politic"
+   ],
+   [
+    2,
+    "standing"
+   ],
+   [
+    2,
+    "faction"
+   ],
+   [
+    2,
+    "caste"
+   ]
+  ]
+ },
+ {
+  "path": "systems/world/worldbuilding_canon_audit_v30.md",
+  "tree": "systems",
+  "bytes": 5086,
+  "lines": 129,
+  "tok": 1271,
+  "hits": 24,
+  "top": [
+   [
+    8,
+    "mandate"
+   ],
+   [
+    7,
+    "territor"
+   ],
+   [
+    4,
+    "govern"
+   ],
+   [
+    4,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/victory/victory_v30_index.md",
+  "tree": "systems",
+  "bytes": 8824,
+  "lines": 150,
+  "tok": 2206,
+  "hits": 24,
+  "top": [
+   [
+    10,
+    "faction"
+   ],
+   [
+    8,
+    "territor"
+   ],
+   [
+    4,
+    "accord"
+   ],
+   [
+    2,
+    "succession"
+   ]
+  ]
+ },
+ {
+  "path": "systems/fieldwork/fieldwork_exploration.md",
+  "tree": "systems",
+  "bytes": 8741,
+  "lines": 73,
+  "tok": 2185,
+  "hits": 24,
+  "top": [
+   [
+    20,
+    "territor"
+   ],
+   [
+    2,
+    "faction"
+   ],
+   [
+    1,
+    "settlement"
+   ],
+   [
+    1,
+    "muster"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-23-suite-05-precedent-and-proposals.md",
+  "tree": "proposals",
+  "bytes": 14171,
+  "lines": 180,
+  "tok": 3542,
+  "hits": 23,
+  "top": [
+   [
+    13,
+    "npc"
+   ],
+   [
+    7,
+    "settlement"
+   ],
+   [
+    2,
+    "faction"
+   ],
+   [
+    1,
+    "standing"
+   ]
+  ]
+ },
+ {
+  "path": "systems/settlements/goldenfurt_slice/verification_findings.md",
+  "tree": "systems",
+  "bytes": 7206,
+  "lines": 60,
+  "tok": 1801,
+  "hits": 23,
+  "top": [
+   [
+    13,
+    "npc"
+   ],
+   [
+    4,
+    "govern"
+   ],
+   [
+    2,
+    "succession"
+   ],
+   [
+    2,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/world/calamity_radiation_v30.md",
+  "tree": "systems",
+  "bytes": 11886,
+  "lines": 171,
+  "tok": 2971,
+  "hits": 23,
+  "top": [
+   [
+    8,
+    "territor"
+   ],
+   [
+    5,
+    "province"
+   ],
+   [
+    3,
+    "settlement"
+   ],
+   [
+    3,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/fieldwork/fieldwork_exposure.md",
+  "tree": "systems",
+  "bytes": 4854,
+  "lines": 83,
+  "tok": 1213,
+  "hits": 23,
+  "top": [
+   [
+    16,
+    "territor"
+   ],
+   [
+    4,
+    "npc"
+   ],
+   [
+    3,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/fieldwork/fieldwork_bg_v30.md",
+  "tree": "systems",
+  "bytes": 2852,
+  "lines": 48,
+  "tok": 713,
+  "hits": 23,
+  "top": [
+   [
+    9,
+    "territor"
+   ],
+   [
+    7,
+    "faction"
+   ],
+   [
+    3,
+    "govern"
+   ],
+   [
+    2,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "systems/fieldwork/fieldwork_socializing.md",
+  "tree": "systems",
+  "bytes": 10583,
+  "lines": 166,
+  "tok": 2645,
+  "hits": 23,
+  "top": [
+   [
+    19,
+    "npc"
+   ],
+   [
+    3,
+    "faction"
+   ],
+   [
+    1,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-23-suite-06-method-corrections-and-queue.md",
+  "tree": "proposals",
+  "bytes": 12489,
+  "lines": 238,
+  "tok": 3122,
+  "hits": 22,
+  "top": [
+   [
+    5,
+    "mandate"
+   ],
+   [
+    4,
+    "faction"
+   ],
+   [
+    3,
+    "roster"
+   ],
+   [
+    3,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "research/pre_firearms_formations/07_renaissance_east_asia.md",
+  "tree": "research",
+  "bytes": 31505,
+  "lines": 278,
+  "tok": 7876,
+  "hits": 22,
+  "top": [
+   [
+    9,
+    "politic"
+   ],
+   [
+    6,
+    "officer"
+   ],
+   [
+    4,
+    "standing"
+   ],
+   [
+    2,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/campaign_modes_v30.md",
+  "tree": "systems",
+  "bytes": 9963,
+  "lines": 223,
+  "tok": 2490,
+  "hits": 22,
+  "top": [
+   [
+    12,
+    "faction"
+   ],
+   [
+    4,
+    "mandate"
+   ],
+   [
+    2,
+    "politic"
+   ],
+   [
+    2,
+    "parliament"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/generational_transition_v30.md",
+  "tree": "systems",
+  "bytes": 3441,
+  "lines": 56,
+  "tok": 860,
+  "hits": 22,
+  "top": [
+   [
+    6,
+    "npc"
+   ],
+   [
+    5,
+    "faction"
+   ],
+   [
+    4,
+    "territor"
+   ],
+   [
+    1,
+    "standing"
+   ]
+  ]
+ },
+ {
+  "path": "systems/fieldwork/knots_v30.md",
+  "tree": "systems",
+  "bytes": 24209,
+  "lines": 369,
+  "tok": 6052,
+  "hits": 22,
+  "top": [
+   [
+    19,
+    "npc"
+   ],
+   [
+    1,
+    "politic"
+   ],
+   [
+    1,
+    "parliament"
+   ],
+   [
+    1,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/subsystem_flow_skeletons_v1.md",
+  "tree": "systems",
+  "bytes": 12370,
+  "lines": 177,
+  "tok": 3092,
+  "hits": 21,
+  "top": [
+   [
+    7,
+    "npc"
+   ],
+   [
+    4,
+    "roster"
+   ],
+   [
+    4,
+    "faction"
+   ],
+   [
+    3,
+    "settlement"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-24-completion-plan-v1.md",
+  "tree": "proposals",
+  "bytes": 22962,
+  "lines": 309,
+  "tok": 5740,
+  "hits": 20,
+  "top": [
+   [
+    5,
+    "faction"
+   ],
+   [
+    3,
+    "settlement"
+   ],
+   [
+    3,
+    "accord"
+   ],
+   [
+    2,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "systems/characters/character_histories_v30_infill.md",
+  "tree": "systems",
+  "bytes": 16263,
+  "lines": 122,
+  "tok": 4065,
+  "hits": 20,
+  "top": [
+   [
+    7,
+    "faction"
+   ],
+   [
+    4,
+    "territor"
+   ],
+   [
+    4,
+    "politic"
+   ],
+   [
+    3,
+    "settlement"
+   ]
+  ]
+ },
+ {
+  "path": "systems/world/geography_v30.md",
+  "tree": "systems",
+  "bytes": 7660,
+  "lines": 166,
+  "tok": 1915,
+  "hits": 20,
+  "top": [
+   [
+    18,
+    "territor"
+   ],
+   [
+    1,
+    "settlement"
+   ],
+   [
+    1,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/world/southernmost_v30.md",
+  "tree": "systems",
+  "bytes": 10038,
+  "lines": 198,
+  "tok": 2509,
+  "hits": 20,
+  "top": [
+   [
+    11,
+    "faction"
+   ],
+   [
+    3,
+    "officer"
+   ],
+   [
+    2,
+    "territor"
+   ],
+   [
+    2,
+    "standing"
+   ]
+  ]
+ },
+ {
+  "path": "systems/world/southernmost_v30_infill.md",
+  "tree": "systems",
+  "bytes": 8612,
+  "lines": 60,
+  "tok": 2153,
+  "hits": 20,
+  "top": [
+   [
+    11,
+    "faction"
+   ],
+   [
+    5,
+    "officer"
+   ],
+   [
+    2,
+    "standing"
+   ],
+   [
+    1,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "systems/npcs/edeyja_npc.md",
+  "tree": "systems",
+  "bytes": 9720,
+  "lines": 93,
+  "tok": 2430,
+  "hits": 20,
+  "top": [
+   [
+    7,
+    "faction"
+   ],
+   [
+    6,
+    "politic"
+   ],
+   [
+    5,
+    "territor"
+   ],
+   [
+    1,
+    "standing"
+   ]
+  ]
+ },
+ {
+  "path": "systems/settlements/settlement_adjacency_v30_index.md",
+  "tree": "systems",
+  "bytes": 1749,
+  "lines": 46,
+  "tok": 437,
+  "hits": 19,
+  "top": [
+   [
+    17,
+    "settlement"
+   ],
+   [
+    2,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/auto_manual_resolution_duality_v1.md",
+  "tree": "systems",
+  "bytes": 9287,
+  "lines": 85,
+  "tok": 2321,
+  "hits": 19,
+  "top": [
+   [
+    5,
+    "parliament"
+   ],
+   [
+    5,
+    "npc"
+   ],
+   [
+    3,
+    "faction"
+   ],
+   [
+    2,
+    "succession"
+   ]
+  ]
+ },
+ {
+  "path": "systems/characters/conviction_migration_roster_v30.md",
+  "tree": "systems",
+  "bytes": 10428,
+  "lines": 296,
+  "tok": 2607,
+  "hits": 19,
+  "top": [
+   [
+    7,
+    "roster"
+   ],
+   [
+    7,
+    "faction"
+   ],
+   [
+    3,
+    "npc"
+   ],
+   [
+    2,
+    "succession"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/baralta_crown_claim_v30_infill.md",
+  "tree": "systems",
+  "bytes": 4646,
+  "lines": 41,
+  "tok": 1161,
+  "hits": 19,
+  "top": [
+   [
+    9,
+    "succession"
+   ],
+   [
+    3,
+    "faction"
+   ],
+   [
+    2,
+    "mandate"
+   ],
+   [
+    2,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/cogload_moderate_target.md",
+  "tree": "systems",
+  "bytes": 15663,
+  "lines": 290,
+  "tok": 3915,
+  "hits": 18,
+  "top": [
+   [
+    8,
+    "faction"
+   ],
+   [
+    5,
+    "territor"
+   ],
+   [
+    2,
+    "npc"
+   ],
+   [
+    1,
+    "mandate"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/campaign_architecture_v30_index.md",
+  "tree": "systems",
+  "bytes": 5247,
+  "lines": 92,
+  "tok": 1311,
+  "hits": 18,
+  "top": [
+   [
+    6,
+    "settlement"
+   ],
+   [
+    6,
+    "faction"
+   ],
+   [
+    4,
+    "politic"
+   ],
+   [
+    2,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "systems/world/worldbuilding_v30_index.md",
+  "tree": "systems",
+  "bytes": 5718,
+  "lines": 107,
+  "tok": 1429,
+  "hits": 18,
+  "top": [
+   [
+    6,
+    "governance"
+   ],
+   [
+    6,
+    "govern"
+   ],
+   [
+    2,
+    "territor"
+   ],
+   [
+    2,
+    "succession"
+   ]
+  ]
+ },
+ {
+  "path": "systems/social_contest/social_contest_currency_v1.md",
+  "tree": "systems",
+  "bytes": 5164,
+  "lines": 24,
+  "tok": 1291,
+  "hits": 17,
+  "top": [
+   [
+    5,
+    "mandate"
+   ],
+   [
+    5,
+    "faction"
+   ],
+   [
+    4,
+    "parliament"
+   ],
+   [
+    1,
+    "settlement"
+   ]
+  ]
+ },
+ {
+  "path": "systems/threadwork/threadwork_v30_infill.md",
+  "tree": "systems",
+  "bytes": 40583,
+  "lines": 196,
+  "tok": 10145,
+  "hits": 17,
+  "top": [
+   [
+    8,
+    "territor"
+   ],
+   [
+    4,
+    "mandate"
+   ],
+   [
+    3,
+    "faction"
+   ],
+   [
+    1,
+    "politic"
+   ]
+  ]
+ },
+ {
+  "path": "systems/combat/combat_flow_skeleton_v1.md",
+  "tree": "systems",
+  "bytes": 28060,
+  "lines": 150,
+  "tok": 7015,
+  "hits": 16,
+  "top": [
+   [
+    16,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/player_agency_v30_index.md",
+  "tree": "systems",
+  "bytes": 6407,
+  "lines": 136,
+  "tok": 1601,
+  "hits": 16,
+  "top": [
+   [
+    8,
+    "npc"
+   ],
+   [
+    4,
+    "faction"
+   ],
+   [
+    2,
+    "succession"
+   ],
+   [
+    2,
+    "officer"
+   ]
+  ]
+ },
+ {
+  "path": "systems/fieldwork/fieldwork_rationale.md",
+  "tree": "systems",
+  "bytes": 7358,
+  "lines": 70,
+  "tok": 1839,
+  "hits": 16,
+  "top": [
+   [
+    8,
+    "govern"
+   ],
+   [
+    6,
+    "territor"
+   ],
+   [
+    1,
+    "npc"
+   ],
+   [
+    1,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-23-suite-00-index.md",
+  "tree": "proposals",
+  "bytes": 8626,
+  "lines": 139,
+  "tok": 2156,
+  "hits": 15,
+  "top": [
+   [
+    4,
+    "settlement"
+   ],
+   [
+    4,
+    "roster"
+   ],
+   [
+    2,
+    "npc"
+   ],
+   [
+    2,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/scale_transitions_v30_infill.md",
+  "tree": "systems",
+  "bytes": 4529,
+  "lines": 61,
+  "tok": 1132,
+  "hits": 15,
+  "top": [
+   [
+    10,
+    "faction"
+   ],
+   [
+    2,
+    "npc"
+   ],
+   [
+    1,
+    "territor"
+   ],
+   [
+    1,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/mass_battle/mass_battle_integration_v30.md",
+  "tree": "systems",
+  "bytes": 30379,
+  "lines": 476,
+  "tok": 7594,
+  "hits": 15,
+  "top": [
+   [
+    8,
+    "faction"
+   ],
+   [
+    3,
+    "territor"
+   ],
+   [
+    1,
+    "roster"
+   ],
+   [
+    1,
+    "muster"
+   ]
+  ]
+ },
+ {
+  "path": "systems/combat/scene_combat_design_v1.md",
+  "tree": "systems",
+  "bytes": 8094,
+  "lines": 120,
+  "tok": 2023,
+  "hits": 14,
+  "top": [
+   [
+    8,
+    "standing"
+   ],
+   [
+    2,
+    "roster"
+   ],
+   [
+    2,
+    "npc"
+   ],
+   [
+    2,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/integration_proposal_v30_index.md",
+  "tree": "systems",
+  "bytes": 5889,
+  "lines": 106,
+  "tok": 1472,
+  "hits": 14,
+  "top": [
+   [
+    6,
+    "faction"
+   ],
+   [
+    4,
+    "territor"
+   ],
+   [
+    2,
+    "parliament"
+   ],
+   [
+    2,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/faction_succession_split_v30_index.md",
+  "tree": "systems",
+  "bytes": 1773,
+  "lines": 44,
+  "tok": 443,
+  "hits": 14,
+  "top": [
+   [
+    7,
+    "succession"
+   ],
+   [
+    7,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/fieldwork/fieldwork_editorial.md",
+  "tree": "systems",
+  "bytes": 5215,
+  "lines": 78,
+  "tok": 1303,
+  "hits": 14,
+  "top": [
+   [
+    5,
+    "npc"
+   ],
+   [
+    3,
+    "govern"
+   ],
+   [
+    2,
+    "territor"
+   ],
+   [
+    1,
+    "standing"
+   ]
+  ]
+ },
+ {
+  "path": "systems/articulation/articulation_flow_skeleton_v1.md",
+  "tree": "systems",
+  "bytes": 13459,
+  "lines": 132,
+  "tok": 3364,
+  "hits": 13,
+  "top": [
+   [
+    4,
+    "accord"
+   ],
+   [
+    2,
+    "roster"
+   ],
+   [
+    2,
+    "faction"
+   ],
+   [
+    1,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "systems/ui/valoria_ui_ux_v4_index.md",
+  "tree": "systems",
+  "bytes": 12657,
+  "lines": 276,
+  "tok": 3164,
+  "hits": 12,
+  "top": [
+   [
+    8,
+    "settlement"
+   ],
+   [
+    2,
+    "province"
+   ],
+   [
+    2,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/derived_stats_v30_index.md",
+  "tree": "systems",
+  "bytes": 4131,
+  "lines": 84,
+  "tok": 1032,
+  "hits": 12,
+  "top": [
+   [
+    6,
+    "settlement"
+   ],
+   [
+    6,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/videogame_mode_spec_index.md",
+  "tree": "systems",
+  "bytes": 3524,
+  "lines": 66,
+  "tok": 881,
+  "hits": 12,
+  "top": [
+   [
+    4,
+    "settlement"
+   ],
+   [
+    4,
+    "npc"
+   ],
+   [
+    4,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/world/geography_v30_infill.md",
+  "tree": "systems",
+  "bytes": 5454,
+  "lines": 42,
+  "tok": 1363,
+  "hits": 12,
+  "top": [
+   [
+    10,
+    "territor"
+   ],
+   [
+    1,
+    "governance"
+   ],
+   [
+    1,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-23-suite-01-rulings-and-execution.md",
+  "tree": "proposals",
+  "bytes": 18579,
+  "lines": 310,
+  "tok": 4644,
+  "hits": 11,
+  "top": [
+   [
+    11,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "research/pre_firearms_formations/03_early_medieval.md",
+  "tree": "research",
+  "bytes": 27907,
+  "lines": 303,
+  "tok": 6976,
+  "hits": 11,
+  "top": [
+   [
+    4,
+    "standing"
+   ],
+   [
+    4,
+    "politic"
+   ],
+   [
+    2,
+    "territor"
+   ],
+   [
+    1,
+    "mandate"
+   ]
+  ]
+ },
+ {
+  "path": "systems/overview/ms_budget.md",
+  "tree": "systems",
+  "bytes": 9022,
+  "lines": 142,
+  "tok": 2255,
+  "hits": 11,
+  "top": [
+   [
+    4,
+    "faction"
+   ],
+   [
+    2,
+    "territor"
+   ],
+   [
+    2,
+    "npc"
+   ],
+   [
+    2,
+    "accord"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/fractional_province_ownership_v30_index.md",
+  "tree": "systems",
+  "bytes": 1715,
+  "lines": 44,
+  "tok": 428,
+  "hits": 11,
+  "top": [
+   [
+    11,
+    "province"
+   ]
+  ]
+ },
+ {
+  "path": "systems/fieldwork/fieldwork_investigation.md",
+  "tree": "systems",
+  "bytes": 12139,
+  "lines": 112,
+  "tok": 3034,
+  "hits": 11,
+  "top": [
+   [
+    7,
+    "territor"
+   ],
+   [
+    2,
+    "faction"
+   ],
+   [
+    1,
+    "govern"
+   ],
+   [
+    1,
+    "domain action"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/scale_transitions_v30_index.md",
+  "tree": "systems",
+  "bytes": 5012,
+  "lines": 106,
+  "tok": 1253,
+  "hits": 10,
+  "top": [
+   [
+    8,
+    "faction"
+   ],
+   [
+    2,
+    "accord"
+   ]
+  ]
+ },
+ {
+  "path": "systems/characters/conviction_track_v30_index.md",
+  "tree": "systems",
+  "bytes": 4931,
+  "lines": 96,
+  "tok": 1232,
+  "hits": 10,
+  "top": [
+   [
+    6,
+    "territor"
+   ],
+   [
+    2,
+    "faction"
+   ],
+   [
+    2,
+    "domain action"
+   ]
+  ]
+ },
+ {
+  "path": "systems/characters/character_histories_v30_index.md",
+  "tree": "systems",
+  "bytes": 5755,
+  "lines": 114,
+  "tok": 1438,
+  "hits": 10,
+  "top": [
+   [
+    6,
+    "faction"
+   ],
+   [
+    2,
+    "territor"
+   ],
+   [
+    2,
+    "settlement"
+   ]
+  ]
+ },
+ {
+  "path": "systems/world/worldbuilding_canon_audit_v30_infill.md",
+  "tree": "systems",
+  "bytes": 6095,
+  "lines": 51,
+  "tok": 1523,
+  "hits": 10,
+  "top": [
+   [
+    4,
+    "territor"
+   ],
+   [
+    2,
+    "politic"
+   ],
+   [
+    2,
+    "govern"
+   ],
+   [
+    2,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/mass_battle/military_layer_v30_index.md",
+  "tree": "systems",
+  "bytes": 4149,
+  "lines": 90,
+  "tok": 1037,
+  "hits": 10,
+  "top": [
+   [
+    4,
+    "muster"
+   ],
+   [
+    4,
+    "accord"
+   ],
+   [
+    2,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/social_contest/social_contest_v30_infill.md",
+  "tree": "systems",
+  "bytes": 6377,
+  "lines": 63,
+  "tok": 1594,
+  "hits": 10,
+  "top": [
+   [
+    3,
+    "parliament"
+   ],
+   [
+    3,
+    "faction"
+   ],
+   [
+    2,
+    "domain action"
+   ],
+   [
+    1,
+    "standing"
+   ]
+  ]
+ },
+ {
+  "path": "systems/fieldwork/investigation_systems_v30_index.md",
+  "tree": "systems",
+  "bytes": 4616,
+  "lines": 96,
+  "tok": 1154,
+  "hits": 10,
+  "top": [
+   [
+    8,
+    "npc"
+   ],
+   [
+    2,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "research/pre_firearms_formations/04_high_medieval.md",
+  "tree": "research",
+  "bytes": 38945,
+  "lines": 378,
+  "tok": 9736,
+  "hits": 9,
+  "top": [
+   [
+    2,
+    "territor"
+   ],
+   [
+    2,
+    "standing"
+   ],
+   [
+    2,
+    "politic"
+   ],
+   [
+    2,
+    "garrison"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/campaign_modes_v30_infill.md",
+  "tree": "systems",
+  "bytes": 6129,
+  "lines": 55,
+  "tok": 1532,
+  "hits": 9,
+  "top": [
+   [
+    6,
+    "faction"
+   ],
+   [
+    1,
+    "territor"
+   ],
+   [
+    1,
+    "succession"
+   ],
+   [
+    1,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/world/narrative_voice_canon_v30.md",
+  "tree": "systems",
+  "bytes": 7226,
+  "lines": 72,
+  "tok": 1806,
+  "hits": 9,
+  "top": [
+   [
+    6,
+    "npc"
+   ],
+   [
+    2,
+    "faction"
+   ],
+   [
+    1,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "systems/factions/varfell_path_b_v30.md",
+  "tree": "systems",
+  "bytes": 4019,
+  "lines": 103,
+  "tok": 1004,
+  "hits": 9,
+  "top": [
+   [
+    3,
+    "territor"
+   ],
+   [
+    2,
+    "accord"
+   ],
+   [
+    1,
+    "politic"
+   ],
+   [
+    1,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-18-next-session-handoff.md",
+  "tree": "proposals",
+  "bytes": 18372,
+  "lines": 304,
+  "tok": 4593,
+  "hits": 8,
+  "top": [
+   [
+    3,
+    "roster"
+   ],
+   [
+    2,
+    "settlement"
+   ],
+   [
+    1,
+    "npc"
+   ],
+   [
+    1,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/holonic_container_doctrine_v1.md",
+  "tree": "systems",
+  "bytes": 9809,
+  "lines": 112,
+  "tok": 2452,
+  "hits": 8,
+  "top": [
+   [
+    5,
+    "roster"
+   ],
+   [
+    1,
+    "territor"
+   ],
+   [
+    1,
+    "standing"
+   ],
+   [
+    1,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/repo_state_armature_v1.md",
+  "tree": "systems",
+  "bytes": 13390,
+  "lines": 158,
+  "tok": 3347,
+  "hits": 8,
+  "top": [
+   [
+    6,
+    "roster"
+   ],
+   [
+    1,
+    "mandate"
+   ],
+   [
+    1,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/characters/conviction_axis_matrix_v30.md",
+  "tree": "systems",
+  "bytes": 12245,
+  "lines": 251,
+  "tok": 3061,
+  "hits": 8,
+  "top": [
+   [
+    3,
+    "npc"
+   ],
+   [
+    2,
+    "standing"
+   ],
+   [
+    2,
+    "faction"
+   ],
+   [
+    1,
+    "succession"
+   ]
+  ]
+ },
+ {
+  "path": "systems/world/solmund_voice_v30.md",
+  "tree": "systems",
+  "bytes": 17207,
+  "lines": 215,
+  "tok": 4301,
+  "hits": 8,
+  "top": [
+   [
+    6,
+    "standing"
+   ],
+   [
+    2,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "systems/social_contest/social_contest_v30_index.md",
+  "tree": "systems",
+  "bytes": 5899,
+  "lines": 108,
+  "tok": 1474,
+  "hits": 8,
+  "top": [
+   [
+    4,
+    "parliament"
+   ],
+   [
+    2,
+    "succession"
+   ],
+   [
+    2,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/threadwork/thread_horizontal_integration_spec_index.md",
+  "tree": "systems",
+  "bytes": 3963,
+  "lines": 74,
+  "tok": 990,
+  "hits": 8,
+  "top": [
+   [
+    4,
+    "settlement"
+   ],
+   [
+    4,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/pc_formation_system.md",
+  "tree": "proposals",
+  "bytes": 30278,
+  "lines": 288,
+  "tok": 7569,
+  "hits": 7,
+  "top": [
+   [
+    3,
+    "govern"
+   ],
+   [
+    2,
+    "governance"
+   ],
+   [
+    1,
+    "territor"
+   ],
+   [
+    1,
+    "standing"
+   ]
+  ]
+ },
+ {
+  "path": "research/pre_firearms_formations/10_battle_phase_choreography.md",
+  "tree": "research",
+  "bytes": 38228,
+  "lines": 548,
+  "tok": 9557,
+  "hits": 7,
+  "top": [
+   [
+    4,
+    "politic"
+   ],
+   [
+    1,
+    "territor"
+   ],
+   [
+    1,
+    "standing"
+   ],
+   [
+    1,
+    "officer"
+   ]
+  ]
+ },
+ {
+  "path": "systems/ui/ui_flow_skeleton_v1.md",
+  "tree": "systems",
+  "bytes": 7315,
+  "lines": 61,
+  "tok": 1828,
+  "hits": 7,
+  "top": [
+   [
+    2,
+    "settlement"
+   ],
+   [
+    2,
+    "roster"
+   ],
+   [
+    2,
+    "faction"
+   ],
+   [
+    1,
+    "standing"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/repository_keep_set_v1.md",
+  "tree": "systems",
+  "bytes": 24767,
+  "lines": 376,
+  "tok": 6191,
+  "hits": 7,
+  "top": [
+   [
+    2,
+    "standing"
+   ],
+   [
+    2,
+    "govern"
+   ],
+   [
+    2,
+    "faction"
+   ],
+   [
+    1,
+    "governance"
+   ]
+  ]
+ },
+ {
+  "path": "systems/world/calamity_radiation_v30_infill.md",
+  "tree": "systems",
+  "bytes": 4508,
+  "lines": 42,
+  "tok": 1127,
+  "hits": 7,
+  "top": [
+   [
+    4,
+    "territor"
+   ],
+   [
+    3,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/npcs/baralta_v30.md",
+  "tree": "systems",
+  "bytes": 3941,
+  "lines": 46,
+  "tok": 985,
+  "hits": 7,
+  "top": [
+   [
+    4,
+    "npc"
+   ],
+   [
+    2,
+    "faction"
+   ],
+   [
+    1,
+    "standing"
+   ]
+  ]
+ },
+ {
+  "path": "research/pre_firearms_formations/14_methodology_audit.md",
+  "tree": "research",
+  "bytes": 26173,
+  "lines": 295,
+  "tok": 6543,
+  "hits": 6,
+  "top": [
+   [
+    4,
+    "faction"
+   ],
+   [
+    1,
+    "territor"
+   ],
+   [
+    1,
+    "settlement"
+   ]
+  ]
+ },
+ {
+  "path": "research/pre_firearms_formations/12_moment_by_moment_dynamic_spacing.md",
+  "tree": "research",
+  "bytes": 74937,
+  "lines": 941,
+  "tok": 18734,
+  "hits": 6,
+  "top": [
+   [
+    2,
+    "officer"
+   ],
+   [
+    2,
+    "faction"
+   ],
+   [
+    1,
+    "standing"
+   ],
+   [
+    1,
+    "politic"
+   ]
+  ]
+ },
+ {
+  "path": "systems/combat/combat_engine_v1/phase4_5_plan_v1.md",
+  "tree": "systems",
+  "bytes": 51783,
+  "lines": 327,
+  "tok": 12945,
+  "hits": 6,
+  "top": [
+   [
+    3,
+    "govern"
+   ],
+   [
+    1,
+    "standing"
+   ],
+   [
+    1,
+    "roster"
+   ],
+   [
+    1,
+    "mandate"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/companion_app_design_note.md",
+  "tree": "systems",
+  "bytes": 2604,
+  "lines": 46,
+  "tok": 651,
+  "hits": 6,
+  "top": [
+   [
+    3,
+    "faction"
+   ],
+   [
+    2,
+    "npc"
+   ],
+   [
+    1,
+    "politic"
+   ]
+  ]
+ },
+ {
+  "path": "systems/characters/characters_flow_skeleton_v1.md",
+  "tree": "systems",
+  "bytes": 21778,
+  "lines": 150,
+  "tok": 5444,
+  "hits": 6,
+  "top": [
+   [
+    6,
+    "roster"
+   ]
+  ]
+ },
+ {
+  "path": "systems/fieldwork/fieldwork_hybrid_v30.md",
+  "tree": "systems",
+  "bytes": 1627,
+  "lines": 30,
+  "tok": 406,
+  "hits": 6,
+  "top": [
+   [
+    4,
+    "faction"
+   ],
+   [
+    1,
+    "territor"
+   ],
+   [
+    1,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/overview/clock_registry_v30_infill.md",
+  "tree": "systems",
+  "bytes": 645,
+  "lines": 16,
+  "tok": 161,
+  "hits": 5,
+  "top": [
+   [
+    3,
+    "faction"
+   ],
+   [
+    1,
+    "territor"
+   ],
+   [
+    1,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/mass_battle_fighting_withdrawal_v1.md",
+  "tree": "proposals",
+  "bytes": 21448,
+  "lines": 287,
+  "tok": 5362,
+  "hits": 4,
+  "top": [
+   [
+    2,
+    "standing"
+   ],
+   [
+    2,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-18-culling-plan-v1.md",
+  "tree": "proposals",
+  "bytes": 26420,
+  "lines": 432,
+  "tok": 6605,
+  "hits": 4,
+  "top": [
+   [
+    2,
+    "standing"
+   ],
+   [
+    1,
+    "npc"
+   ],
+   [
+    1,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/ui/valoria_ui_ux_v4_2_workplan_index.md",
+  "tree": "systems",
+  "bytes": 2743,
+  "lines": 64,
+  "tok": 685,
+  "hits": 4,
+  "top": [
+   [
+    2,
+    "settlement"
+   ],
+   [
+    2,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/ui/valoria_ui_ux_v4_1_max_audit_index.md",
+  "tree": "systems",
+  "bytes": 4449,
+  "lines": 88,
+  "tok": 1112,
+  "hits": 4,
+  "top": [
+   [
+    2,
+    "settlement"
+   ],
+   [
+    2,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/social_contest/social_contest_system_v2_index.md",
+  "tree": "systems",
+  "bytes": 4427,
+  "lines": 92,
+  "tok": 1106,
+  "hits": 4,
+  "top": [
+   [
+    2,
+    "parliament"
+   ],
+   [
+    2,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/threadwork/threadwork_flow_skeleton_v1.md",
+  "tree": "systems",
+  "bytes": 26103,
+  "lines": 161,
+  "tok": 6525,
+  "hits": 4,
+  "top": [
+   [
+    4,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/fieldwork/fieldwork_flow_skeleton_v1.md",
+  "tree": "systems",
+  "bytes": 21553,
+  "lines": 154,
+  "tok": 5388,
+  "hits": 4,
+  "top": [
+   [
+    4,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "systems/fieldwork/fieldwork_bg_v30_infill.md",
+  "tree": "systems",
+  "bytes": 961,
+  "lines": 16,
+  "tok": 240,
+  "hits": 4,
+  "top": [
+   [
+    3,
+    "faction"
+   ],
+   [
+    1,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/2026-08-25-throughlines-and-precedent/09_adversarial_pass.md",
+  "tree": "proposals",
+  "bytes": 6345,
+  "lines": 88,
+  "tok": 1586,
+  "hits": 3,
+  "top": [
+   [
+    2,
+    "faction"
+   ],
+   [
+    1,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "research/pre_firearms_formations/15_methodology_resolutions_handoff.md",
+  "tree": "research",
+  "bytes": 25593,
+  "lines": 355,
+  "tok": 6398,
+  "hits": 3,
+  "top": [
+   [
+    3,
+    "politic"
+   ]
+  ]
+ },
+ {
+  "path": "research/pre_firearms_formations/01_ancient.md",
+  "tree": "research",
+  "bytes": 18018,
+  "lines": 150,
+  "tok": 4504,
+  "hits": 3,
+  "top": [
+   [
+    3,
+    "standing"
+   ]
+  ]
+ },
+ {
+  "path": "research/pre_firearms_formations/13_verification_corrections.md",
+  "tree": "research",
+  "bytes": 23998,
+  "lines": 317,
+  "tok": 5999,
+  "hits": 3,
+  "top": [
+   [
+    1,
+    "politic"
+   ],
+   [
+    1,
+    "govern"
+   ],
+   [
+    1,
+    "accord"
+   ]
+  ]
+ },
+ {
+  "path": "systems/combat/combat_currency_v1.md",
+  "tree": "systems",
+  "bytes": 5203,
+  "lines": 24,
+  "tok": 1300,
+  "hits": 3,
+  "top": [
+   [
+    2,
+    "roster"
+   ],
+   [
+    1,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/combat/combat_engine_v1/ability_armature.md",
+  "tree": "systems",
+  "bytes": 15428,
+  "lines": 182,
+  "tok": 3857,
+  "hits": 3,
+  "top": [
+   [
+    3,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/world/solmund_v30.md",
+  "tree": "systems",
+  "bytes": 8615,
+  "lines": 77,
+  "tok": 2153,
+  "hits": 3,
+  "top": [
+   [
+    3,
+    "territor"
+   ]
+  ]
+ },
+ {
+  "path": "systems/fieldwork/fieldwork_hybrid_v30_infill.md",
+  "tree": "systems",
+  "bytes": 907,
+  "lines": 13,
+  "tok": 226,
+  "hits": 3,
+  "top": [
+   [
+    2,
+    "npc"
+   ],
+   [
+    1,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "research/historical/mass_battle_gauge_grounding.md",
+  "tree": "research",
+  "bytes": 31296,
+  "lines": 183,
+  "tok": 7824,
+  "hits": 2,
+  "top": [
+   [
+    1,
+    "standing"
+   ],
+   [
+    1,
+    "politic"
+   ]
+  ]
+ },
+ {
+  "path": "research/pre_firearms_formations/02_classical.md",
+  "tree": "research",
+  "bytes": 28644,
+  "lines": 269,
+  "tok": 7161,
+  "hits": 2,
+  "top": [
+   [
+    1,
+    "officer"
+   ],
+   [
+    1,
+    "garrison"
+   ]
+  ]
+ },
+ {
+  "path": "systems/_architecture/cogload_moderate_target_index.md",
+  "tree": "systems",
+  "bytes": 4737,
+  "lines": 88,
+  "tok": 1184,
+  "hits": 2,
+  "top": [
+   [
+    2,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/mass_battle/mass_battle_v30_index.md",
+  "tree": "systems",
+  "bytes": 6963,
+  "lines": 110,
+  "tok": 1740,
+  "hits": 2,
+  "top": [
+   [
+    2,
+    "officer"
+   ]
+  ]
+ },
+ {
+  "path": "systems/threadwork/threadwork_v30_index.md",
+  "tree": "systems",
+  "bytes": 8772,
+  "lines": 184,
+  "tok": 2193,
+  "hits": 2,
+  "top": [
+   [
+    2,
+    "settlement"
+   ]
+  ]
+ },
+ {
+  "path": "systems/fieldwork/fieldwork_summary.md",
+  "tree": "systems",
+  "bytes": 1560,
+  "lines": 21,
+  "tok": 390,
+  "hits": 2,
+  "top": [
+   [
+    1,
+    "territor"
+   ],
+   [
+    1,
+    "faction"
+   ]
+  ]
+ },
+ {
+  "path": "systems/fieldwork/fieldwork_v30_index.md",
+  "tree": "systems",
+  "bytes": 8944,
+  "lines": 162,
+  "tok": 2236,
+  "hits": 2,
+  "top": [
+   [
+    2,
+    "npc"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/weapon_physics_and_concentration_model.md",
+  "tree": "proposals",
+  "bytes": 11691,
+  "lines": 97,
+  "tok": 2922,
+  "hits": 1,
+  "top": [
+   [
+    1,
+    "roster"
+   ]
+  ]
+ },
+ {
+  "path": "systems/combat/combat_engine_v1/tradition_decomposition_v1.md",
+  "tree": "systems",
+  "bytes": 12697,
+  "lines": 162,
+  "tok": 3174,
+  "hits": 1,
+  "top": [
+   [
+    1,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "systems/world/solmund_artifacts_v30.md",
+  "tree": "systems",
+  "bytes": 3621,
+  "lines": 54,
+  "tok": 905,
+  "hits": 1,
+  "top": [
+   [
+    1,
+    "standing"
+   ]
+  ]
+ },
+ {
+  "path": "systems/threadwork/threadwork_philosophical_reference_v30_infill.md",
+  "tree": "systems",
+  "bytes": 12314,
+  "lines": 39,
+  "tok": 3078,
+  "hits": 1,
+  "top": [
+   [
+    1,
+    "govern"
+   ]
+  ]
+ },
+ {
+  "path": "proposals/multiunit_envelopment_plan.md",
+  "tree": "proposals",
+  "bytes": 13829,
+  "lines": 90,
+  "tok": 3457,
+  "hits": 0,
+  "top": []
+ },
+ {
+  "path": "research/pre_firearms_formations/00_MANIFEST.md",
+  "tree": "research",
+  "bytes": 3558,
+  "lines": 59,
+  "tok": 889,
+  "hits": 0,
+  "top": []
+ },
+ {
+  "path": "research/diagrams/mass_battle_formations/README.md",
+  "tree": "research",
+  "bytes": 3973,
+  "lines": 58,
+  "tok": 993,
+  "hits": 0,
+  "top": []
+ },
+ {
+  "path": "research/diagrams/mass_battle_formations/SOURCES.md",
+  "tree": "research",
+  "bytes": 3584,
+  "lines": 62,
+  "tok": 896,
+  "hits": 0,
+  "top": []
+ },
+ {
+  "path": "research/diagrams/mass_battle_formations/perimeter_model/README.md",
+  "tree": "research",
+  "bytes": 1273,
+  "lines": 19,
+  "tok": 318,
+  "hits": 0,
+  "top": []
+ },
+ {
+  "path": "systems/combat/combat_c4_draft_v0.md",
+  "tree": "systems",
+  "bytes": 11292,
+  "lines": 210,
+  "tok": 2823,
+  "hits": 0,
+  "top": []
+ },
+ {
+  "path": "systems/combat/combat_engine_v1/combat_throughlines_v1.md",
+  "tree": "systems",
+  "bytes": 4489,
+  "lines": 63,
+  "tok": 1122,
+  "hits": 0,
+  "top": []
+ },
+ {
+  "path": "systems/combat/combat_engine_v1/REARCHITECTURE_v1.md",
+  "tree": "systems",
+  "bytes": 7482,
+  "lines": 96,
+  "tok": 1870,
+  "hits": 0,
+  "top": []
+ },
+ {
+  "path": "systems/combat/combat_engine_v1/README.md",
+  "tree": "systems",
+  "bytes": 1343,
+  "lines": 18,
+  "tok": 335,
+  "hits": 0,
+  "top": []
+ },
+ {
+  "path": "systems/combat/combat_engine_v1/engagement_psychology_recovered.md",
+  "tree": "systems",
+  "bytes": 5164,
+  "lines": 70,
+  "tok": 1291,
+  "hits": 0,
+  "top": []
+ },
+ {
+  "path": "systems/combat/combat_engine_v1/combat_balancing_methodology.md",
+  "tree": "systems",
+  "bytes": 7722,
+  "lines": 106,
+  "tok": 1930,
+  "hits": 0,
+  "top": []
+ },
+ {
+  "path": "systems/_architecture/decision_policy_v1.md",
+  "tree": "systems",
+  "bytes": 9528,
+  "lines": 173,
+  "tok": 2382,
+  "hits": 0,
+  "top": []
+ },
+ {
+  "path": "systems/world/solmund_philosophy_v30.md",
+  "tree": "systems",
+  "bytes": 4791,
+  "lines": 71,
+  "tok": 1197,
+  "hits": 0,
+  "top": []
+ },
+ {
+  "path": "systems/mass_battle/mass_battle_v30_infill.md",
+  "tree": "systems",
+  "bytes": 3391,
+  "lines": 46,
+  "tok": 847,
+  "hits": 0,
+  "top": []
+ },
+ {
+  "path": "systems/factions/varfell_path_b_v30_infill.md",
+  "tree": "systems",
+  "bytes": 2020,
+  "lines": 22,
+  "tok": 505,
+  "hits": 0,
+  "top": []
+ },
+ {
+  "path": "systems/threadwork/threadwork_v25_historical_index.md",
+  "tree": "systems",
+  "bytes": 8157,
+  "lines": 182,
+  "tok": 2039,
+  "hits": 0,
+  "top": []
+ },
+ {
+  "path": "systems/threadwork/threadwork_philosophical_reference_v30.md",
+  "tree": "systems",
+  "bytes": 860,
+  "lines": 52,
+  "tok": 215,
+  "hits": 0,
+  "top": []
+ }
+]
