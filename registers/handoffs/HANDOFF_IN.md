@@ -3735,28 +3735,27 @@ resolved unilaterally.**
 **Landed.** `research/valoria_systems_integration_master_v1{,_part2,_part3,_part4}.md` — the whole
 faction/personnel/settlement/governance/territory/NPC/politics corpus collated, sliced, flattened,
 compared and resolved into four proposals. Reference under §0.05; **the four proposals are held back
-and are NOT ratified by merge** (called out loudly in the PR body per ED-1094). Also
-`research/cross_scale_action_catalogue_v1.md` corrected — see the ruling note below.
+and are NOT ratified by merge** (called out loudly in the PR body per ED-1094).
 
-**The measurement worth carrying forward.** Of 338 classified things: 109 BUILT · 100 DESIGNED ·
-51 PROPOSED · 43 INERT · 21 RULED-UNEXECUTED · 14 mixed. Folding the inert family (43 + 4
-unreachable + 2 no-op + 2 dormant) gives **51, 15% — finished correct code with no caller.** Eight
-lanes, asked independently, all named a writer/caller/loader as their system's cheapest fix.
+**The measurement worth carrying forward** — the status distribution and its exact fold live in
+`_part4` §5.0 and are not restated here. The shape of it: a sixth of everything catalogued is
+finished, correct code with no production caller, and eight lanes asked independently all named a
+writer, caller or loader as their system's cheapest fix.
 
-**Two methodological failures of mine, recorded because they will recur otherwise.**
+**Two instrument rules for the next session, because both classes recur here.**
 
-1. **`grep import` is the wrong instrument in this tree.** I reported `treaty.py` and `beliefs.py` as
-   having zero production importers and proposed cutting them. Both are reached **by string** through
-   `composition.require` in `restore_world` (`game_state.py:474,:484`;
-   `module_contracts.yaml:135-144`). §3 says dependencies resolve by string; a cut list built from an
-   import grep is unsound here. **Check `references/module_contracts.yaml` as well as grep.**
-2. **Convergence is not evidence.** Six harvest lanes independently reported `Compact` as the fifth
-   `ledger.TAG_KINDS` family. All six were reading prose descended from one pre-ruling source. The
-   enum's fifth member is `Leverage` (`ledger.py:30`) and **ED-IN-0046 D3 ruled 2026-07-13** that a
-   Compact models as `Debt(key="compact:<quota>", ttl=term, recurs=True)`
-   (`supersession_register.yaml:406-418`). My own merged baseline was the strongest carrier; fixed in
-   `a2ead9b9`. Four fiscal proposals (Encabezamiento, Salt Certificate, State Arsenal, Borrow) were
-   adjudicated against the phantom family — one rated "ratify as-is" — and are **unjudged**, not wrong.
+1. **Reachability in this tree is not an import graph.** §3: subsystem dependencies are declared in
+   `references/` and resolved by string at first call. `treaty.py` and `beliefs.py` have zero textual
+   importers and are both live — `restore_world` reaches them via `composition.require` at
+   `game_state.py:474,:484`, registered at `module_contracts.yaml:135-144`. **Check the contracts
+   registry as well as grep before calling anything dead.**
+2. **Agreement across surfaces is evidence only if the surfaces are independent.** Prose descended
+   from a common ancestor agrees with itself whatever the ancestor said. Resolve a repeated claim
+   against the code and the register, never against the count of documents carrying it. Worked case:
+   the fifth `ledger.TAG_KINDS` family is `Leverage` (`ledger.py:30`); a Compact is a `Debt` subtype
+   per ED-IN-0046 D3 (`supersession_register.yaml:406-418`). Encabezamiento, Salt Certificate, State
+   Arsenal and Borrow were adjudicated before that reached the prose and are **unjudged** against the
+   `Debt` form.
 
 **Next actions, in the order the NERS attacks produced.**
 
@@ -3789,7 +3788,7 @@ lanes, asked independently, all named a writer/caller/loader as their system's c
 (6 docs + ~18 modules) were on no lane's manifest and have no flatten. Do not read their absence as
 thinness.
 
-**Verification.** `pytest tests/valoria` 1772 passed / 23 skipped / 15 xfailed · `valoria_local
---staged` all gates passed · `compliance_check` 0 errors, none of the four new files size-exceeded ·
-`currency_consistency_check` current · `validate_ed_citations` 0 violations.
+**Verification.** Green on the merged head: full `pytest tests/valoria`, `valoria_local --staged`,
+`compliance_check` (0 errors, no new file size-exceeded), `currency_consistency_check`,
+`validate_ed_citations`. CI all-green on PR #337; counts are on the run, not copied here.
 

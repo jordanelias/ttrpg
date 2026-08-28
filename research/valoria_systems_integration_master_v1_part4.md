@@ -125,15 +125,12 @@ settlement Grudge tag are *the same primitive at two scales*. Parliament's missi
 a `Precedent` tag. NPC memory is a tag with a salience value. Four systems are each asking for a
 bespoke version of one built, correct, inert module.
 
-⚠ **And this is where I was wrong, so the correction belongs in the finding rather than a footnote.**
-I reported the sixth tag family `Compact` as an open six-lane convergence. **ED-IN-0046 D3 ruled it
-on 2026-07-13** — *"Compact models as a recurring Debt subtype, not a 6th ledger.TAG_KINDS family"*
-— and the live enum's fifth member is `Leverage`. All six lanes agreed because all six were reading
-prose descended from one pre-ruling source, **including my own merged baseline at
-`research/cross_scale_action_catalogue_v1.md` §2.4**, which is the strongest surviving carrier of the
-error and needs a correcting edit. Convergence measured agreement, not truth. At least four fiscal
-proposals (Encabezamiento, Salt Certificate, State Arsenal, Borrow) were adjudicated against the
-phantom family and one was rated "ratify as-is"; none may be authored on that premise.
+⚠ **The enum is closed at five, and a Compact is not a sixth.** ED-IN-0046 D3 ruled 2026-07-13 that
+a recurring term-limited claim is a `Debt` subtype — `Debt(key="compact:<quota>", ttl=term,
+recurs=True)` — with `Leverage` remaining the built fifth family
+(`registers/supersession_register.yaml:406-418`). Four fiscal proposals — Encabezamiento, Salt
+Certificate, State Arsenal, Borrow — were adjudicated before that ruling reached the prose, one rated
+"ratify as-is". **They are unjudged against the `Debt` form and may not be authored until re-judged.**
 
 ---
 
@@ -160,9 +157,9 @@ feedback. On the `track ≤ TOTAL_DEFEAT` branch the loser is side A, the *lowes
 proposer, so the penalty lands on the weakest faction and acts as **positive** feedback.
 
 Which branch dominates over a campaign is an empirical question, and **this document does not
-answer it.** The tempting sentence — *the game is currently balanced by a bug* — is a campaign-level
-balance claim with no control, which is precisely what `CLAUDE.md` §0.1 point 4 forbids in either
-direction. It is also **measurable**: `tools/balance_oracle.py` exists, the change is
+answer it.** The tempting reading — that the rider is the layer's anti-runaway damper — is a
+campaign-level balance claim with no control, which is precisely what `CLAUDE.md` §0.1 point 4
+forbids in either direction. It is also **measurable**: `tools/balance_oracle.py` exists, the change is
 campaign-reachable so its two arms are not degenerate by construction, and 240 campaigns is about
 thirteen minutes. Until that is run, treat the rider as *an uncontrolled asymmetry of unknown sign*,
 not as the layer's load-bearing damper.
@@ -292,24 +289,20 @@ A cut list is only credible next to a defend list.
 #### F10 — The binding constraint is not cost. It is attribution.
 
 F1 says eight changes are individually cheap — call it 250 lines all told. The naive conclusion is
-"do all eight," and the People lane found one case where that goes wrong: a two-NPC load moved the
-seed-42 winner, through a channel (`world.rng` phase) that no amount of reading would have predicted
-and that three separate population guards could not see, because all three observe
-`world.npc_counter` — which only `generate_npc` increments and a direct loader never touches. The
-mechanism is real and inspectable: `npe.py:361` takes `world.rng` and `:385` draws
-`rng.randint(1, 6)` inside a per-pair loop, and `simulate_npc_actions` is wired every season at
-`accounting.py:139`.
+"do all eight", and there is a measured case where that goes wrong: a two-NPC load moves the seed-42
+campaign winner, through a channel three separate population guards cannot see, because all three
+observe `world.npc_counter` — which only `generate_npc` increments and a direct loader never touches.
+The mechanism is inspectable: `npe.py:361` takes `world.rng` and `:385` draws `rng.randint(1, 6)`
+inside a per-pair loop, and `simulate_npc_actions` is wired every season at `accounting.py:139`, so
+adding people adds draws and re-phases every downstream consumer of the shared stream.
 
-**One case is not a proof, and the honest scope is narrower than "all changes."** The RNG-phase
-channel opens only for a change that adds or removes *draws*. Steps 3, 7 and 8 below set a field,
-add an income term and fix a constant — none adds a draw, and their golden movements are
-attributable by inspecting which field moved. The sequence itself concedes this by marking two
-steps byte-identical.
+**That channel is narrow — it opens only for a change that adds or removes draws.** Steps 3, 7 and 8
+below set a field, add an income term and fix a constant; none adds a draw, and their golden
+movements are attributable by inspecting which field moved.
 
-The recommendation survives on a different footing, and a stronger one: `CLAUDE.md` §0.1 point 4
-requires a stated control **per change**, whether or not the RNG channel applies. Ordering is
-mandated by measurement discipline; the seed-42 result shows what it costs to skip it, not that it
-is the only thing that could.
+Ordering is required on a broader footing than that one channel: `CLAUDE.md` §0.1 point 4 requires a
+stated control **per change**, whether or not RNG phase is in play. The seed-42 result shows what
+skipping it costs.
 
 Land all eight writers in one commit and you get **eight simultaneous golden movements and no way to
 attribute any of them.** Under `CLAUDE.md` §0.1 point 4 — *a number without a control is not a
@@ -356,16 +349,14 @@ resolves the failure — and are judged **as-if-built**. Its cardinal rule, verb
 
 Nothing below is cut for being unbuilt; things are cut for being *the wrong thing to have built*.
 
-⚠ **Every subtractive verdict below is PROVISIONAL, and the standard itself says so.**
-`throughlines_meta.md:233-238` sets two binding guards this document does not yet satisfy: *(1) a
-subtractive verdict is a scope reduction only if it names the downstream work it retires or shrinks
-— otherwise it drops to an ordinary finding; (2) no CUT/PRUNE/MERGE/DISTILL is final until an
-independent adversarial pass has **steelmanned the action** — argued, as-if-built, for KEEP — and
-failed against direct source.* The adversarial pass run on this document attacked the *proposals*;
-it did not steelman each verdict. So read every CUT and MERGE below as a **candidate**, and note the
-precedent that should temper them: the 2026-07-08 application of this same method to 97 actions
-produced **zero top-level CUTs**, and the disposition landed against real over-articulation rather
-than against the actions themselves.
+⚠ **Every subtractive verdict below is a CANDIDATE, not a disposition.**
+`throughlines_meta.md:233-238` sets two guards that gate finality: *(1) a subtractive verdict is a
+scope reduction only if it names the downstream work it retires or shrinks — otherwise it drops to an
+ordinary finding; (2) no CUT/PRUNE/MERGE/DISTILL is final until an independent adversarial pass has
+**steelmanned the action** — argued, as-if-built, for KEEP — and failed against direct source.*
+Neither has been done for the rows below. The precedent that should temper them: the 2026-07-08
+application of this method to 97 actions produced **zero top-level CUTs**, with the disposition
+landing against real over-articulation rather than against the actions themselves.
 
 **Method note on the NERS attacks.** Every proposal gets the **scope gate first**: NERS applies to
 systems that *resolve by rolling*. A ledger, a budget or a loader does not roll, and manufacturing a
@@ -557,15 +548,15 @@ balance.
 
 **Cut list — code.**
 
-⚠ **Read the instrument note first, because it changed this list.** The obvious check — grep for
-`import` — is **the wrong instrument in this tree**, and using it cost two rows. `CLAUDE.md` §3 is
-explicit that subsystem dependencies are *"declared in `references/` and resolved by string at first
-call"*, so a module with zero textual importers can still be load-bearing. `engine/autoload/game_state.py`'s
-`restore_world` reaches `treaty.py` and `beliefs.py` through
-`composition.require('snapshot_state.treaties')` at `:474` and `composition.require('snapshot_state.beliefs')`
-at `:484`, registered in `references/module_contracts.yaml:135-144`. **Deleting either module breaks
-save restore for any campaign carrying that registry.** The rows below are corrected accordingly; the
-remaining six were re-checked against the contracts registry as well as by grep.
+⚠ **Reachability in this tree is not an import graph.** `CLAUDE.md` §3 is explicit that subsystem
+dependencies are *"declared in `references/` and resolved by string at first call"*, so a module with
+zero textual importers can still be load-bearing, and **a cut list must be checked against
+`references/module_contracts.yaml` as well as by grep.** Two modules below are live only through that
+path: `engine/autoload/game_state.py`'s `restore_world` reaches `treaty.py` and `beliefs.py` via
+`composition.require('snapshot_state.treaties')` at `:474` and
+`composition.require('snapshot_state.beliefs')` at `:484`, registered at
+`module_contracts.yaml:135-144`. **Deleting either breaks save restore for any campaign carrying that
+registry.** The remaining six rows were checked against the registry as well as by grep.
 
 | module | as-if-built reasoning |
 |---|---|
@@ -674,14 +665,13 @@ which is what the substrate was built for and has never once been used as.
   — squarely inside the 5–18D band the sigma engine is calibrated for. Roster size becomes an
   **action count** rather than a pool multiplier, which restores the P-iii bound.
 
-  **What this does *not* establish, though an earlier draft claimed it.** The repair needs *a bounded
-  action counter*; Proposal 2's Primitive C is *one such counter*, derived from `facility_tier` rather
-  than from roster cardinality — and P2's own NERS repair reduces AP to a bare action counter anyway
-  ("one AP is one attempt"). So any bounded counter satisfies P4, including one P4 defines for itself.
-  **P4 does not depend on P2; the two need the same *shape* of primitive.** That is still a real
-  finding — it argues for building the counter once rather than twice, and it is corroborated by the
-  fact that P2's Primitive C and P4's CUT of the weighted draw are *the same change* reached from two
-  different premises — but it is not an ordering constraint, and §6.5 no longer treats it as one.
+  **The repair does not imply a dependency on Proposal 2.** It needs *a bounded action counter*; P2's
+  Primitive C is one such counter, derived from `facility_tier` rather than from roster cardinality —
+  and P2's own NERS repair reduces AP to a bare action counter anyway ("one AP is one attempt"). Any
+  bounded counter satisfies P4, including one P4 defines for itself. **The two need the same *shape*
+  of primitive, not the same instance** — which argues for building the counter once rather than
+  twice, and is corroborated by P2's Primitive C and P4's CUT of the weighted draw being *the same
+  change* reached from two different premises. It is not an ordering constraint.
 - **P-i legible odds — IMPROVED, substantially.** After the repair, an action has an author, a score
   you can see, and a reason. "Konrad rolled his Influence against the holder's Legitimacy" is legible
   in a way "the Crown drew 0.34 and got the conquest bucket" never is.
@@ -727,10 +717,9 @@ analysis ends on.
 3. **Then P2, once the naming pass in F5 is done.** It cannot be typed while *officer*, *Standing*
    and *Disposition* each mean two or three things. Ship Primitive C under the restriction the attack
    forced: **AP buys actions, never modifiers.**
-4. **P4 whenever the person schema exists** — not, as an earlier draft had it, strictly after P2. Its
-   P-iii failure is repaired by any bounded action counter, and P4 can define its own. What the two
-   share is the *shape* of that counter, which is an argument for building it once, not for
-   sequencing.
+4. **P4 whenever the person schema exists** — it is not sequenced behind P2. Its P-iii failure is
+   repaired by any bounded action counter and P4 can define its own; what the two share is the
+   *shape* of that counter, which argues for building it once, not for ordering them.
 
 **The most valuable single item, and it is not the one it first appears to be.** The obvious
 candidate is `scene.accord_echo` — a finished, tested, correct, Key-driven state-write loop that has
@@ -748,8 +737,8 @@ made them, which is the one place the design already says the world should gener
 opposition instead of waiting for a player.
 
 **And the one that most needs measuring rather than ruling.** Parliament's permanent Mandate penalty
-is an uncontrolled asymmetry whose *sign depends on which branch fires* (F4). It is widely assumed —
-including in an earlier draft of this document — to be the strategic layer's anti-runaway damper.
-That is a campaign-level balance claim with no control, and `tools/balance_oracle.py` can settle it
-in about thirteen minutes against a change that is campaign-reachable. **Run the oracle before
-anyone rules on it, and before anyone quietly patches the comment.**
+is an uncontrolled asymmetry whose *sign depends on which branch fires* (F4), and it is widely
+assumed to be the strategic layer's anti-runaway damper. That is a campaign-level balance claim with
+no control, and `tools/balance_oracle.py` can settle it in about thirteen minutes against a change
+that is campaign-reachable. **Run the oracle before anyone rules on it, and before anyone quietly
+patches the comment.**

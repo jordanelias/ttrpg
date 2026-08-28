@@ -51,11 +51,11 @@ and their beats:
    failure in 34 sampled; H3/H4: 7 in 14). Every code claim reproduced in this document was
    re-verified against disk before inclusion; claims that could not be re-verified were dropped.
 
-### 1.3 The correction that mattered most
+### 1.3 Currency of the code claims
 
-The adversarial gate on §2 confirmed **six overturns**, and their root cause was a single date
-window: the harvest's design-doc sources are dated 2026-08-15 through 08-19, and thirteen commits
-landed between 08-22 and 08-27. Corrected here and carried into every later section:
+The harvest's design-doc sources are dated 2026-08-15 through 08-19; thirteen commits landed between
+08-22 and 08-27. Every code claim in this document is measured against the working tree at
+2026-08-28, which is newer than several of the sources. The tree state that matters most:
 
 - `Faction.adjust` now reads per-stat bounds from `descriptors.faction_bounds` (2026-08-22/23), so
   "unbounded stats" is false for the six declared stats — but **true for `Faction.standing`**, which
@@ -67,14 +67,10 @@ landed between 08-22 and 08-27. Corrected here and carried into every later sect
 - The mass-battle canon engine was ported over Tree A on 2026-08-24; `massbattle.py` is now a
   146-line adapter, not the 1,905-line engine. Every record describing Tree A as live is closed.
 
-A seventh correction is **mine**, and it is the sharpest methodological lesson in the exercise. I
-reported the ledger tag family `Compact` as an open six-lane convergence. It is not open: ED-IN-0046
-D3 **ruled it on 2026-07-13** — *"Compact models as a recurring Debt subtype, not a 6th
-ledger.TAG_KINDS family"* — and the live enum's fifth member is `Leverage`. Six lanes agreed with
-each other because all six were reading prose descended from one pre-ruling source, **including my
-own merged baseline at `research/cross_scale_action_catalogue_v1.md` §2.4, which is the strongest
-surviving carrier of the error.** Convergence measured agreement, not truth. That document needs a
-separate correcting edit; it is named here so the error does not propagate again.
+**One method note, because it decided several verdicts.** Where multiple sources agree, that
+agreement is evidence only if the sources are independent. Prose descended from a common ancestor
+agrees with itself regardless of whether the ancestor was right, so a claim repeated across lanes was
+resolved against the code and the register, never against the count of surfaces carrying it.
 
 ### 1.4 The twelve systems
 
