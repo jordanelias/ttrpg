@@ -29,10 +29,11 @@ the single most useful number in this document:
 | RULED-UNEXECUTED — Jordan decided, the code does not reflect it | 21 | 6% |
 | BUILT with a stated defect, or built and unreachable | 14 | 4% |
 
-Fold the last two rows of the inert family together — INERT plus *dormant* plus *no-op* plus
-*unreachable* — and it comes to **51 things, 15% of everything catalogued: finished machinery with
-no hand on the key.** That is within four items of the entire PROPOSED corpus, and roughly half the
-size of everything that actually runs.
+The last row is a mixed bucket, so the fold has to be stated exactly rather than gestured at. Of
+its 14 items, **6 are BUILT-with-a-defect** (they run, they are simply wrong) and **8 are inert in
+substance** — 4 built-but-unreachable, 2 no-ops, 2 dormant. Adding those 8 to the 43 gives
+**51 things, 15% of everything catalogued: finished machinery with no hand on the key.** That is
+the same size as the entire PROPOSED corpus and roughly half the size of everything that runs.
 
 **This is the finding the whole exercise converges on.** Valoria's problem is not that it is
 underdesigned — 30% of the corpus is ratified canon. It is not that the code is wrong — almost
@@ -148,13 +149,23 @@ bearing on whether the game is balanceable at all.
 | `Faction.W` (Wealth) | four write sites in the whole engine, **all costs, no income anywhere** | **monotone decreasing, no source** |
 | Turmoil / IP / PI / Strain | initialised at world-gen, never written again — four pressure gauges, all painted on | **open at both ends** |
 | `InsurgencyRecord.L` | assigned 1.0 at formation, never written; promotion needs ≥3 | **exit welded shut** |
-| Parliament's Total Victory rider | flagged in its own comment as a one-season penalty; `season_manager` has no temporary-modifier facility, so it is permanent and compounds | **negative, and accidental** |
+| Parliament's Total Victory rider | flagged in its own comment as a one-season penalty; `season_manager` defines only `advance_season`/`SEASONS_PER_ARC` and has no temporary-modifier facility, so it is permanent and compounds | **sign depends on the branch — see below** |
 
-The last row is the sharpest. The permanent Mandate bleed on whoever is currently leading is
-**the strongest negative-feedback force in the strategic layer** — it is genuinely doing the balance
-work that keeps a runaway leader in check — and it exists because a deferral note was never
-honoured. The game is currently balanced by a bug. Fixing it "correctly" removes the only
-anti-runaway pressure in the layer, which is why this is a ruling and not a patch.
+The last row is the sharpest, and it needs stating more carefully than it usually is.
+`parliamentary_vote.py:207-219` docks **the losing coalition's highest-Legitimacy member**, not
+"whoever is currently leading" — and which faction that is depends on the branch. On the
+`track ≥ TOTAL_VICTORY` branch the loser is side B, which `parliamentary_bridge.py:97-99` builds as
+the `max(…, key=L)` establishment, so the penalty lands on the leader and acts as **negative**
+feedback. On the `track ≤ TOTAL_DEFEAT` branch the loser is side A, the *lowest-Stability*
+proposer, so the penalty lands on the weakest faction and acts as **positive** feedback.
+
+Which branch dominates over a campaign is an empirical question, and **this document does not
+answer it.** The tempting sentence — *the game is currently balanced by a bug* — is a campaign-level
+balance claim with no control, which is precisely what `CLAUDE.md` §0.1 point 4 forbids in either
+direction. It is also **measurable**: `tools/balance_oracle.py` exists, the change is
+campaign-reachable so its two arms are not degenerate by construction, and 240 campaigns is about
+thirteen minutes. Until that is run, treat the rider as *an uncontrolled asymmetry of unknown sign*,
+not as the layer's load-bearing damper.
 
 ---
 
@@ -235,9 +246,22 @@ dark. That is not a coincidence to note in passing; it is F2 expressed as an exe
 Immediately adjacent: `scene.accord_echo` is **the one fully closed Key-driven state-write loop in
 the engine** — scene resolves, Key emitted with an honest `causes[]` chain, `stat_deltas` collected
 at emission and applied at the accounting boundary, `Settlement.order` written. It is finished,
-tested and correct, and it has never fired, because nothing in the campaign loop declares
-`echo['scene_outcome']` and the classifier deliberately refuses to infer one from `scene_type`.
-**One field on one dict** stands between the substrate being a write-only log and being a loop.
+tested and correct, and it has never fired.
+
+⚠ **It is dormant on TWO missing declarations, not one, and the second is a design decision.**
+`echo_transport.py:302-313` reads `echo_ctx["target_settlement"]`, and returns
+`applied: False, reason: "no resolvable target_settlement in echo block"` when it is absent. The
+contest branch's echo block at `scene_dispatch.py:344-345` carries exactly four keys —
+`actor_faction`, `target_faction`, `most_relevant_stat`, `degree` — and no `target_settlement`.
+Separately, `scene_outcome` must be a member of the closed §5.5 vocabulary `_ACCORD_SCENE_OUTCOMES`
+and is validated before it is trusted (`echo_transport.py:145-181`); the module states at
+`:133-142` that inferring the category from `scene_type` *"was itself a small fabrication of exactly
+the kind CLAUDE.md §5/§7 warns against"* and belongs to the SC/PC-lane derivation bridge.
+
+So closing this loop needs (a) a §5.5 outcome classification for a faction-internal Stability Crisis
+and (b) a faction→settlement targeting rule. **Both are rulings, and the code is deliberately
+refusing to guess either.** That is the correct posture and it is why this is not the free win it
+first appears to be.
 
 ---
 
@@ -254,8 +278,9 @@ A cut list is only credible next to a defend list.
   should be held to.
 - **`ledger.py`.** Dedupe by `(kind, key)`, TTL sweep, `Reputation` single-valued, durable tags
   surviving succession. Inert, and the best-shaped primitive in the corpus.
-- **`derive_parties` returning `None` on a derivation gap** rather than fabricating an actor.
-  Preserve this behaviour through any repair of the combat bridge.
+- **`derive_parties` returning `None` on a derivation gap** (`engine/cross_scale/combat_bridge.py:114-128`)
+  rather than fabricating an actor — its docstring is explicit that flagging the gap is the caller's
+  job, *"never this module inventing a substitute."* Preserve this through any repair of the bridge.
 - **`populate_from_geography` raising on an illegal settlement type.** The in-tree pattern for a
   deterministic, no-RNG, fully-cited loader — and the template the NPC loader should copy.
 - **The mass-battle engine** as ported 2026-08-24: troop types, equipment, formations, per-cell
@@ -267,11 +292,24 @@ A cut list is only credible next to a defend list.
 #### F10 — The binding constraint is not cost. It is attribution.
 
 F1 says eight changes are individually cheap — call it 250 lines all told. The naive conclusion is
-"do all eight." That conclusion is wrong, and the People lane proved it by execution rather than
-argument: a two-NPC load moved the seed-42 winner, through a channel (`world.rng` phase) that no
-amount of reading would have predicted and that three separate population guards could not see,
-because all three observe `world.npc_counter` — which only `generate_npc` increments and a direct
-loader never touches.
+"do all eight," and the People lane found one case where that goes wrong: a two-NPC load moved the
+seed-42 winner, through a channel (`world.rng` phase) that no amount of reading would have predicted
+and that three separate population guards could not see, because all three observe
+`world.npc_counter` — which only `generate_npc` increments and a direct loader never touches. The
+mechanism is real and inspectable: `npe.py:361` takes `world.rng` and `:385` draws
+`rng.randint(1, 6)` inside a per-pair loop, and `simulate_npc_actions` is wired every season at
+`accounting.py:139`.
+
+**One case is not a proof, and the honest scope is narrower than "all changes."** The RNG-phase
+channel opens only for a change that adds or removes *draws*. Steps 3, 7 and 8 below set a field,
+add an income term and fix a constant — none adds a draw, and their golden movements are
+attributable by inspecting which field moved. The sequence itself concedes this by marking two
+steps byte-identical.
+
+The recommendation survives on a different footing, and a stronger one: `CLAUDE.md` §0.1 point 4
+requires a stated control **per change**, whether or not the RNG channel applies. Ordering is
+mandated by measurement discipline; the seed-42 result shows what it costs to skip it, not that it
+is the only thing that could.
 
 Land all eight writers in one commit and you get **eight simultaneous golden movements and no way to
 attribute any of them.** Under `CLAUDE.md` §0.1 point 4 — *a number without a control is not a
@@ -307,11 +345,27 @@ income** unblocks an entire proposal corpus by itself. Everything else is local.
 Four proposals. They are genuinely rival — different theories of what is wrong — and §6.5 says which
 combination I would actually run and why.
 
-**Method note on the disposition tables.** Verdicts use the ED-IN-0027 vocabulary
-(KEEP · REFINE · DISTILL · MERGE · PRUNE · CUT) and are judged **as-if-built**, per its ratified
-rule: *"A stub can be a KEEP; a fully-wired action can be a CUT. The moment a verdict leans on 'it
-isn't wired yet,' it has changed subject from design to schedule, and is void."* Nothing below is
-cut for being unbuilt; things are cut for being *the wrong thing to have built*.
+**Method note on the disposition tables.** Verdicts use the ED-IN-0027 ladder — least to most
+removed, `KEEP → REFINE → DISTILL → MERGE → PRUNE → CUT`, preferring the weakest verdict that
+resolves the failure — and are judged **as-if-built**. Its cardinal rule, verbatim from
+`references/throughlines_meta.md:209-214`:
+
+> *"A never-built action whose realized contribution is load-bearing is **KEEP**; a fully-built
+> action that would be dominant or redundant even when realized is **CUT**. **Any subtractive
+> verdict citing build-state as a reason is invalid by construction.**"*
+
+Nothing below is cut for being unbuilt; things are cut for being *the wrong thing to have built*.
+
+⚠ **Every subtractive verdict below is PROVISIONAL, and the standard itself says so.**
+`throughlines_meta.md:233-238` sets two binding guards this document does not yet satisfy: *(1) a
+subtractive verdict is a scope reduction only if it names the downstream work it retires or shrinks
+— otherwise it drops to an ordinary finding; (2) no CUT/PRUNE/MERGE/DISTILL is final until an
+independent adversarial pass has **steelmanned the action** — argued, as-if-built, for KEEP — and
+failed against direct source.* The adversarial pass run on this document attacked the *proposals*;
+it did not steelman each verdict. So read every CUT and MERGE below as a **candidate**, and note the
+precedent that should temper them: the 2026-07-08 application of this same method to 97 actions
+produced **zero top-level CUTs**, and the disposition landed against real over-articulation rather
+than against the actions themselves.
 
 **Method note on the NERS attacks.** Every proposal gets the **scope gate first**: NERS applies to
 systems that *resolve by rolling*. A ledger, a budget or a loader does not roll, and manufacturing a
@@ -334,7 +388,12 @@ pools, where `net ~ Normal(0.4·Pool, 0.8·√Pool)` and one added die is worth
 **Thesis.** 15% of the catalogued corpus is finished code with no caller (§5.0), and eight lanes
 independently named a writer as their cheapest fix (F1). Proposal 1 takes those eight, plus two
 preconditions, and lands them in an order where each is a single-variable experiment with a stated
-control. It is the only proposal that requires no design ruling at all.
+control.
+
+**It is the proposal with the fewest ruling dependencies — not none.** Two survive scrutiny and are
+named rather than buried: step 3 needs the two §5.5 decisions in F8, and the `Faction.standing`
+REFINE needs a `MULTS['standing']` multiplier that no canon surface states. Both are called out in
+place below.
 
 **The sequence, ordered by blast radius.** Determinism-neutral first; state-writing after; each
 step's control named.
@@ -343,7 +402,7 @@ step's control named.
 |---:|---|---:|---|
 | 1 | Derive a dedicated `random.Random` for the NPE from the campaign seed | 10 | goldens must be **byte-identical**; that is the whole point of doing it first |
 | 2 | Re-point the three population guards at `world.npcs` rather than `world.npc_counter` | 5 | guards must still pass; they currently cannot see the change they exist to catch |
-| 3 | Set `echo['scene_outcome']` on the contest branch of `scene_dispatch` | 1 | goldens move once, in `Settlement.order`, attributable to one field |
+| 3 | Close the accord echo: a §5.5 `scene_outcome` classification **and** a `target_settlement` targeting rule (F8 — **needs a ruling**, do not guess either) | ~15 + 2 rulings | goldens move once, in `Settlement.order`; without both, `applied: False` and nothing moves |
 | 4 | `tick_settlements(world)` as a seventh accounting step: `ledger_sweep`, L/PS seed load, `succeed_governor` where `governor_id is None` | ~40 | first campaign in which settlement state moves at all |
 | 5 | Give `InsurgencyRecord.L` an accrual writer | ~15 | promotion becomes reachable; count promotions per 50-season run |
 | 6 | Give Turmoil a writer from its already-live inputs | ~20 | restores the third clause of GD-1; measure win-rate delta |
@@ -359,7 +418,7 @@ step's control named.
 |---|---|---|
 | `ledger.py` and its five tag families | **KEEP** | Best-shaped primitive in the corpus; the fix is a caller, not a change |
 | `succeed_governor`, `AP`, `generate_npc`, `apply_conviction_scar`, `scene.accord_echo` | **KEEP** | Finished and correct; each needs exactly one caller |
-| `Faction.standing` | **REFINE** | Route the eleven `+=` sites through `adjust()` so it sees the registry clamps; rename to end the collision with the officer ladder |
+| `Faction.standing` | **REFINE** — *blocked on one number* | Routing the eleven `+=` sites through `adjust()` is the right shape, but `MULTS` at `game_state.py:74` has **no `standing` key**, so `adjust('standing', …)` raises `KeyError` before any bound is consulted — the identical case the method already documents for `intel` at `:164-171`, whose stated conclusion is that wiring it *"needs a multiplier, which is a canon value nobody has stated, so it is recorded here rather than invented."* No `descriptor_registry.yaml` row declares bounds for it either, so F4's "escapes the registry clamps" is loose: **there are no clamps for it to escape.** The rename is unblocked and can land alone |
 | Parliament's permanent Mandate rider | **REFINE**, not fix | It is the layer's only anti-runaway force (F4). Ratify permanence *or* replace it — do not silently restore the point |
 | Muster's Wealth constant | **REFINE** | Off by 100×; land it after income so the correction is visible rather than fatal |
 | — | **no CUTs** | By construction. That is this proposal's weakness, not its virtue |
@@ -368,12 +427,16 @@ step's control named.
 
 *Scope gate.* Nine of eleven steps touch no resolution — a loader, a scheduler, an RNG substream,
 four writers to non-rolling state. **NERS does not apply to those and no verdict is offered for
-them.** Three steps are in scope: grudge retargeting (7, 9), Wealth income (7) and the Muster fix (8).
+them.** Two steps are genuinely in scope because they change a pool: **Wealth income (7)** and
+**the Muster fix (8)**.
 
-- **P-i legible odds — IMPROVED.** Grudge retargeting is the largest legibility gain available at
-  this price. Today a faction is censured because it has the highest Legitimacy, which the player
-  cannot see and would not recognise as a reason. After, it is censured because it censured you.
-  Same arithmetic, a cause the player can name.
+**Grudge retargeting (9) is NOT in scope, and saying otherwise would be the error the gate exists to
+prevent.** It changes *which faction is selected as a target*; it changes no pool, no obstacle and no
+probability. What it improves is the legibility of **motive**, which is a different property from
+P-i's legible **odds**. It is a large improvement and it belongs in the design argument, not in a
+NERS verdict — today a faction is censured for having the highest Legitimacy, which the player
+cannot see and would not recognise as a reason; after, it is censured because it censured you. Same
+arithmetic, a cause the player can name.
 - **P-ii uniform, in-band leverage — PASSES.** Wealth buys Muster dice through
   `pool = Mil + floor(W/2)`, so 2 Wealth buys 1 die. In the sigma engine one die is worth
   `Δz = 0.4/(0.8·√Pool)` — **more to a small pool than a large one.** That is self-damping and
@@ -448,14 +511,22 @@ the seam is where it breaks.
 
 - **P-ii uniform, in-band leverage — FAILS.** Suppose 1 AP can be spent either as a modifier in the
   Domain Action Resolver or as a die in a sigma-leverage roll. In the DAR the return is flat by
-  construction: `SLOPE · M` at 0.10 per point, engine-wide. In the sigma engine the return is
-  `Δz = 0.4/(0.8·√Pool)`. Work it: at **Pool 5**, one die is ≈ 0.224σ, worth roughly 8–9 percentage
-  points near the middle of the curve. At **Pool 18**, one die is ≈ 0.118σ, worth roughly 4–5 points.
-  So the same AP is worth about **twice as much** spent on a small pool as a large one, and its value
-  relative to the flat 0.10 DAR point swings by a factor of two depending on which engine the player
-  routes it into. A player who notices converts AP wherever it pays most, every season. **This is the
-  flat-shift trap one level up:** not a flat modifier inside one engine, but a flat *currency* across
-  two engines with different leverage curves.
+  construction: `SLOPE · M` at 0.10 per point, engine-wide. In the sigma engine it is not.
+
+  *The arithmetic, with its step shown, because the two cases need different expressions.* For a
+  **σ-space modifier** of size `X`, `Δz = X / (0.8·√Pool)` — σ is unchanged, so this is exact. For an
+  **added die**, μ and σ both move, and at a balanced check (`Ob = 0.4·Pool`) the true value is
+  `0.5/√(Pool+1)`: **0.204σ at Pool 5** and **0.115σ at Pool 18**. Converting to probability at the
+  mode, `φ(0)·Δz = 0.3989 × 0.204 ≈ 8.1` points against `0.3989 × 0.115 ≈ 4.6` points.
+
+  So the same AP is worth **≈1.8× as much** spent on a small pool as a large one — and note that the
+  die expression is also obstacle-dependent (at Pool 5 it ranges ≈0.107σ at Ob 0 to ≈0.302σ at Ob 4),
+  so there is no single "value of a die" to price AP against at all. Its value relative to the flat
+  0.10 DAR point therefore swings by roughly a factor of two depending on which engine the player
+  routes it into, and by more once the obstacle varies. A player who notices converts AP wherever it
+  pays most, every season. **This is the flat-shift trap one level up:** not a flat modifier inside
+  one engine, but a flat *currency* across two engines with different — and, on the sigma side,
+  non-constant — leverage curves.
 - **P-iii bounded and monotonic — PASSES.** AP is `2 + facility_tier + bonus` with `facility_tier`
   capped at 3, so the budget is bounded by construction.
 - **P-i / P-iv / P-v — UNCHANGED** by the primitive itself.
@@ -484,19 +555,28 @@ the corpus is not merely disconnected but **oversized**: ~150 strong-sense gaps 
 proposals against four things that actually run is not a backlog, it is a design nobody can finish or
 balance.
 
-**Cut list — code.** Verified: each has zero production importers; every occurrence outside its own
-file is a comment or a docstring.
+**Cut list — code.**
+
+⚠ **Read the instrument note first, because it changed this list.** The obvious check — grep for
+`import` — is **the wrong instrument in this tree**, and using it cost two rows. `CLAUDE.md` §3 is
+explicit that subsystem dependencies are *"declared in `references/` and resolved by string at first
+call"*, so a module with zero textual importers can still be load-bearing. `engine/autoload/game_state.py`'s
+`restore_world` reaches `treaty.py` and `beliefs.py` through
+`composition.require('snapshot_state.treaties')` at `:474` and `composition.require('snapshot_state.beliefs')`
+at `:484`, registered in `references/module_contracts.yaml:135-144`. **Deleting either module breaks
+save restore for any campaign carrying that registry.** The rows below are corrected accordingly; the
+remaining six were re-checked against the contracts registry as well as by grep.
 
 | module | as-if-built reasoning |
 |---|---|
-| `systems/factions/sim/treaty.py` | Three functions, zero callers, and with no RNG the fallback roll is fixed at 0.95 against a 0.90 hazard, so `0.95 < 0.90` is false and **lapse is impossible on that path**. As-if-built it is a no-op with a hazard constant |
-| `engine/autoload/npc_ai.py` | Two typed no-ops; its docstring names `faction_action` as a *dependency*, which is backwards. The live loop calls `faction_take_action` directly |
+| `systems/factions/sim/treaty.py` — **the dead surfaces only, not the module** | `propose_treaty` and `process_treaty_expirations` have no production caller, and with no RNG the fallback roll is fixed at 0.95 against a 0.90 hazard, so `0.95 < 0.90` is false and **lapse is impossible on that path** — while the inline comment at `:137` reads *"default to high-lapse if no rng"*, asserting the opposite of what the constant does. That comment is itself a defect. **`TreatyRecord` is KEEP** — `restore_world` requires it by string |
+| `systems/characters/sim/beliefs.py` — **the dead surfaces only, not the module** | `add_belief` is the **sole constructor** of a `Belief` and has zero production callers, so a live campaign can never contain one and both revision paths always take their not-found branch. **`Belief` is KEEP** — `restore_world` requires it by string, and `systems/social_contest/sim/contest_legacy_stub.py:240` carries a guarded production import |
+| `engine/autoload/npc_ai.py` | Two typed no-ops; `module_contracts.yaml:278-282` records `resolver: none`. Its docstring names `faction_action` as a *dependency*, which is backwards — the live loop calls `faction_take_action` directly |
 | `systems/world/sim/miraculous_event.py` | Stub, zero callers, and its effect (SA +1 to every present faction) targets a stat that has no field |
 | `systems/overview/sim/ip_track.py` | Both entry points are typed no-ops; IP is one of the four painted-on gauges |
 | `systems/world/sim/restoration_movement.py` | Both entry points are typed no-ops; GD-3 Stages 1–2 |
 | `systems/settlements/sim/temperaments.py` | Zero importers; the α/β ethical axis it maintains is read by nothing |
-| `systems/characters/sim/beliefs.py` | `add_belief` is the **sole constructor** of a `Belief` and has zero callers, so a live campaign can never contain one and both revision paths always take their not-found branch |
-| the six faction stubs (`charter_liberties`, `hafenmark_equipment`, `home_sanctuary`, `infrastructure_reclamation`, `varfell_mandate_action`, `varfell_territorial_acquisition`) | Typed `stub_resolve` no-ops. Their existence is why Hafenmark and Varfell "have unique actions" on paper and are string-comparison-identical in play |
+| the six faction stubs (`charter_liberties`, `hafenmark_equipment`, `home_sanctuary`, `infrastructure_reclamation`, `varfell_mandate_action`, `varfell_territorial_acquisition`) | Typed `stub_resolve` no-ops, test-only references. Their existence is why Hafenmark and Varfell "have unique actions" on paper and are string-comparison-identical in play. (`home_sanctuary.py` carries two stub sites, `:31` and `:39`) |
 
 `mass_seizure.py` is the deliberate exception: it is **fully implemented, correct, and has zero
 production callers**, gated on `CI ≥ 60` which nothing drives to 60, and one-shot per campaign.
@@ -535,8 +615,11 @@ Sanction ladder, because it governs the magnitude of a resolved outcome.
 **Verdict: the code cuts are out of scope and PASS. The Sanction cut FAILS P-iv and is replaced by
 the REFINE above.**
 
-**What it buys.** It is free — nothing it deletes has a caller — and it is the only proposal that
-improves the tree's signal-to-noise rather than adding to it. It also removes the standing hazard
+**What it buys.** It is close to free — after the two corrections above, nothing it deletes has a
+caller by import *or* by string — and it is the only proposal that improves the tree's
+signal-to-noise rather than adding to it. "Free" is not "final", though: per the method note in §6,
+none of these subtractive verdicts has been steelmanned by an independent pass arguing as-if-built
+for KEEP, which ED-IN-0027's second guard requires before a CUT is final. It also removes the standing hazard
 that a future session reads `npc_relational_graph_v30.md`'s "BUILT 2026-06-09" header, or the
 skeleton, and builds toward something that does not exist.
 
@@ -585,12 +668,20 @@ which is what the substrate was built for and has never once been used as.
   Resolver would be the honest engine, and now the same action is resolving on two different engines
   depending on how many people a faction has.
 - **Repair.** *The acting person's own score is the pool; the roster sets how many actions a faction
-  gets per season, not how big each pool is.* Every roll then sits on a person's 1–7 scale — squarely
-  in the healthy 5–18D band — and roster size becomes an **action budget** rather than a pool
-  multiplier. **That budget is Proposal 2's Primitive C.** Which means Proposal 4 is not independent
-  of Proposal 2: it fails NERS without it, and passes with it. That dependency is a finding, not a
-  coincidence — two proposals derived from different premises converge on the same primitive because
-  it is the only thing that bounds the other.
+  gets per season, not how big each pool is.* Every roll then sits on a person's 1–7 scale. That the
+  band works out is checkable rather than asserted: `systems/social_contest/sim/contest/_kernel_tests.py:51`
+  pins `Pool.size(-9) == 5` and `Pool.size(4) == 11`, so a 1–7 faculty maps to pools of roughly 8–14
+  — squarely inside the 5–18D band the sigma engine is calibrated for. Roster size becomes an
+  **action count** rather than a pool multiplier, which restores the P-iii bound.
+
+  **What this does *not* establish, though an earlier draft claimed it.** The repair needs *a bounded
+  action counter*; Proposal 2's Primitive C is *one such counter*, derived from `facility_tier` rather
+  than from roster cardinality — and P2's own NERS repair reduces AP to a bare action counter anyway
+  ("one AP is one attempt"). So any bounded counter satisfies P4, including one P4 defines for itself.
+  **P4 does not depend on P2; the two need the same *shape* of primitive.** That is still a real
+  finding — it argues for building the counter once rather than twice, and it is corroborated by the
+  fact that P2's Primitive C and P4's CUT of the weighted draw are *the same change* reached from two
+  different premises — but it is not an ordering constraint, and §6.5 no longer treats it as one.
 - **P-i legible odds — IMPROVED, substantially.** After the repair, an action has an author, a score
   you can see, and a reason. "Konrad rolled his Influence against the holder's Legitimacy" is legible
   in a way "the Crown drew 0.34 and got the conquest bucket" never is.
@@ -598,9 +689,9 @@ which is what the substrate was built for and has never once been used as.
   a stable, in-band `Δz`.
 - **P-iv graded output — UNCHANGED.** The margin ladder is untouched.
 
-**Verdict: FAILS as first stated. PASSES only in combination with Proposal 2's budget primitive**,
-under the restriction that the roster buys actions rather than dice — which is the same restriction
-Proposal 2 needed independently.
+**Verdict: FAILS as first stated. PASSES under the repair** — the roster buys actions, not dice.
+That is the same restriction Proposal 2 needed independently, arrived at from a different premise,
+which is why §6.5 recommends building the counter once. It is not a reason to sequence P4 behind P2.
 
 **What it costs.** The most of the four, and it is the only one that changes what the game *is*
 rather than whether it works. It is also the only one that answers the question every within-system
@@ -613,40 +704,52 @@ analysis ends on.
 | | P1 Close the Circuits | P2 Three Primitives | P3 The Disposal | P4 A Person's Season |
 |---|---|---|---|---|
 | **theory of the defect** | disconnected | duplicated | oversized | impersonal |
-| **needs a Jordan ruling?** | no | yes (person schema, naming) | yes (what is retracted) | yes (the loop inverts) |
-| **cost** | ~250 lines | large | negative | largest |
+| **needs a Jordan ruling?** | **two** — the §5.5 accord-echo pair, and `MULTS['standing']` | yes (person schema, naming) | yes (what is retracted) | yes (the loop inverts) |
+| **cost** | ~250 lines + 2 rulings | large | negative | largest |
 | **NERS as first stated** | passes, with grudge decay | **fails P-ii** | out of scope; Sanction cut fails P-iv | **fails P-iii and P-v** |
-| **NERS after repair** | passes | passes with AP→actions | passes with Sanction REFINE | passes only *with* P2 |
+| **NERS after repair** | passes, with grudge decay | passes with AP→actions | passes with Sanction REFINE | passes with roster→actions |
 | **execution artifacts (§0.2)** | 11, each seeded and attributable | few and large | deletion rehearsals | one, very large |
 | **what it leaves open** | everything about design | the connection work | the connection work | nothing, and that is the risk |
 
-**They are not mutually exclusive, and the NERS attacks determined the order more than the content
-did.**
+**They are not mutually exclusive, and the NERS attacks shaped the order more than the content did.**
 
-1. **Run P3 first, and run it now.** It is free, it has no ruling dependency, nothing it deletes has
-   a caller, and it removes the standing hazard of a future session building toward a
-   `## Status: BUILT` header with no code under it. Hold back only the Sanction item, which the
-   attack converted from a CUT into a REFINE.
-2. **Then P1, in the stated order.** Steps 1–2 are determinism-neutral and must land first, because
-   F10 is the binding constraint: without the RNG substream, step 10's golden movement is
-   unattributable, and the People lane demonstrated that by execution rather than argument. Eleven
-   execution artifacts is eleven more than the seven M1 junctures currently have.
-3. **Then P2, once the naming pass in F5 is done.** It needs a ruling on the person schema, and it
-   cannot be typed while *officer*, *Standing* and *Disposition* each mean two or three things. Ship
-   Primitive C under the restriction the attack forced: **AP buys actions, never modifiers.**
-4. **P4 last, and only after P2.** Not because it is the most expensive — because it *fails NERS
-   without P2's budget*, and the repair for its P-iii failure is precisely P2's Primitive C. Running
-   P4 before P2 ships a monotone ramp to certainty.
+1. **Run P3 first.** It is close to free, nothing it deletes has a caller by import or by string
+   (after the two corrections its own section records), and it removes the standing hazard of a
+   future session building toward a `## Status: BUILT` header with no code under it. Two holds: the
+   Sanction item, which the attack converted from CUT to REFINE, and the fact that no verdict here
+   has been steelmanned — so run the deletions as rehearsals with an independent KEEP argument
+   attached, per ED-IN-0027's second guard, rather than as a sweep.
+2. **Then P1, in the stated order, with step 3 deferred behind its two rulings.** Steps 1–2 are
+   determinism-neutral and land first: §0.1 point 4 requires a stated control per change, and the
+   seed-42 result shows what skipping that costs on any step that adds an RNG draw. Ten execution
+   artifacts is ten more than the seven M1 junctures currently have — and under §0.2 that, not this
+   document, is what would move the milestone.
+3. **Then P2, once the naming pass in F5 is done.** It cannot be typed while *officer*, *Standing*
+   and *Disposition* each mean two or three things. Ship Primitive C under the restriction the attack
+   forced: **AP buys actions, never modifiers.**
+4. **P4 whenever the person schema exists** — not, as an earlier draft had it, strictly after P2. Its
+   P-iii failure is repaired by any bounded action counter, and P4 can define its own. What the two
+   share is the *shape* of that counter, which is an argument for building it once, not for
+   sequencing.
 
-**The single most valuable thing in this document, if it comes to one line.** `scene.accord_echo` is
-a finished, tested, correct, Key-driven state-write loop that has never fired, because nothing in the
-campaign loop sets one field on one dict. It is step 3 of Proposal 1. It converts the Key substrate
-from a write-only log into a loop with an observable output, gives the other seven down-seams a
-working template instead of a specification, and produces the first execution artifact for a
-cross-scale juncture that is not a test.
+**The most valuable single item, and it is not the one it first appears to be.** The obvious
+candidate is `scene.accord_echo` — a finished, tested, correct, Key-driven state-write loop that has
+never fired. It is genuinely the highest-value target in the tree, and the adversarial pass showed it
+is **not cheap**: it is dormant on two declarations, and the second, a faction→settlement targeting
+rule, is a ruling the code is deliberately refusing to guess (F8). Worth doing, worth doing properly,
+not worth mistaking for a one-line write.
 
-**And the one that most needs a ruling.** Parliament's permanent Mandate penalty is a bug that is
-currently doing the game's anti-runaway balance work (F4). Every proposal above leaves it alone,
-because fixing it "correctly" removes the strongest negative-feedback force in the strategic layer
-and none of the four supplies a replacement. It should be ratified as permanent, or replaced
-deliberately — but it should not be quietly patched by whoever next reads the comment.
+The best *cheap* item is P1's step 5: **give `InsurgencyRecord.L` a writer.** One accrual rule, in a
+pipeline that already forms insurgencies from real contiguity data and already iterates every open
+record every season looking for promotion, blocked only because `L` is set to 1.0 once and promotion
+needs 3. It is the only cheap change in this document that **adds an agent to the world** — neglected
+ground starts producing rebellions that grow into factions that can invade the power whose neglect
+made them, which is the one place the design already says the world should generate its own
+opposition instead of waiting for a player.
+
+**And the one that most needs measuring rather than ruling.** Parliament's permanent Mandate penalty
+is an uncontrolled asymmetry whose *sign depends on which branch fires* (F4). It is widely assumed —
+including in an earlier draft of this document — to be the strategic layer's anti-runaway damper.
+That is a campaign-level balance claim with no control, and `tools/balance_oracle.py` can settle it
+in about thirteen minutes against a change that is campaign-reachable. **Run the oracle before
+anyone rules on it, and before anyone quietly patches the comment.**
