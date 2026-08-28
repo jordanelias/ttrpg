@@ -3680,3 +3680,68 @@ ways.
   `victory_flow_skeleton`'s victory contract cited at `:957-999`, actually at `:1078+`). Nothing in
   CI validates a `.md` anchor's CONTENT. Repairing them is a bounded but separate job; a partial
   repair would present the unsampled remainder as verified.
+
+---
+
+## 2026-08-28 — Systems integration master (PR #337, branch `claude/gameplay-actions-scales-fb6ahu`)
+
+**Landed.** `research/valoria_systems_integration_master_v1{,_part2,_part3,_part4}.md` — the whole
+faction/personnel/settlement/governance/territory/NPC/politics corpus collated, sliced, flattened,
+compared and resolved into four proposals. Reference under §0.05; **the four proposals are held back
+and are NOT ratified by merge** (called out loudly in the PR body per ED-1094). Also
+`research/cross_scale_action_catalogue_v1.md` corrected — see the ruling note below.
+
+**The measurement worth carrying forward.** Of 338 classified things: 109 BUILT · 100 DESIGNED ·
+51 PROPOSED · 43 INERT · 21 RULED-UNEXECUTED · 14 mixed. Folding the inert family (43 + 4
+unreachable + 2 no-op + 2 dormant) gives **51, 15% — finished correct code with no caller.** Eight
+lanes, asked independently, all named a writer/caller/loader as their system's cheapest fix.
+
+**Two methodological failures of mine, recorded because they will recur otherwise.**
+
+1. **`grep import` is the wrong instrument in this tree.** I reported `treaty.py` and `beliefs.py` as
+   having zero production importers and proposed cutting them. Both are reached **by string** through
+   `composition.require` in `restore_world` (`game_state.py:474,:484`;
+   `module_contracts.yaml:135-144`). §3 says dependencies resolve by string; a cut list built from an
+   import grep is unsound here. **Check `references/module_contracts.yaml` as well as grep.**
+2. **Convergence is not evidence.** Six harvest lanes independently reported `Compact` as the fifth
+   `ledger.TAG_KINDS` family. All six were reading prose descended from one pre-ruling source. The
+   enum's fifth member is `Leverage` (`ledger.py:30`) and **ED-IN-0046 D3 ruled 2026-07-13** that a
+   Compact models as `Debt(key="compact:<quota>", ttl=term, recurs=True)`
+   (`supersession_register.yaml:406-418`). My own merged baseline was the strongest carrier; fixed in
+   `a2ead9b9`. Four fiscal proposals (Encabezamiento, Salt Certificate, State Arsenal, Borrow) were
+   adjudicated against the phantom family — one rated "ratify as-is" — and are **unjudged**, not wrong.
+
+**Next actions, in the order the NERS attacks produced.**
+
+1. **Do not treat any subtractive verdict in §6 as final.** `throughlines_meta.md:233-238` requires an
+   independent pass to steelman each action for KEEP before a CUT stands, and requires a subtractive
+   verdict to name the downstream work it retires. Neither was done. Precedent to weigh: the
+   2026-07-08 application of the same method to 97 actions produced **zero top-level CUTs**.
+2. **Run `tools/balance_oracle.py` on the parliament Total Victory rider before anyone rules on it or
+   patches the comment.** It docks the *losing coalition's* highest-L faction — the leader on the
+   TOTAL_VICTORY branch, the weakest faction on TOTAL_DEFEAT — so its sign is unknown and the
+   widespread "it is the layer's anti-runaway damper" belief is uncontrolled. Campaign-reachable, so
+   the oracle's two arms are not degenerate.
+3. **Cheapest real win: give `InsurgencyRecord.L` a writer** (`insurgency_pipeline.py`). Formation and
+   promotion both already run every season; `L` is set to 1.0 once and promotion needs 3. The only
+   cheap change that adds an agent to the world.
+4. **Before any NPC loader, derive a dedicated `random.Random` for the NPE from the campaign seed.**
+   A two-NPC load moved the seed-42 winner via `world.rng` phase (`npe.py:361,:385` draw inside a
+   per-pair loop, wired at `accounting.py:139`). The three population guards observe
+   `world.npc_counter`, which a direct loader never touches — re-point them at `world.npcs`.
+5. **The accord echo needs two rulings, not one field.** `echo_transport.py:302-313` also requires
+   `echo_ctx["target_settlement"]`, which the contest branch (`scene_dispatch.py:344-345`) never
+   sets, and `scene_outcome` must be a validated §5.5 member the module refuses to infer. A
+   faction→settlement targeting rule is a design call.
+6. **Two blocked-on-a-number items:** `MULTS` has no `standing` key, so routing `Faction.standing`
+   through `adjust()` needs a canon multiplier (same case as `intel`, `game_state.py:164-171`); and
+   the AP budget, if generalised, must buy **actions not modifiers** or it breaks NERS P-ii across the
+   two engines.
+
+**Coverage holes, not findings.** `systems/fieldwork/` (21 docs) and `systems/social_contest/`
+(6 docs + ~18 modules) were on no lane's manifest and have no flatten. Do not read their absence as
+thinness.
+
+**Verification.** `pytest tests/valoria` 1772 passed / 23 skipped / 15 xfailed · `valoria_local
+--staged` all gates passed · `compliance_check` 0 errors, none of the four new files size-exceeded ·
+`currency_consistency_check` current · `validate_ed_citations` 0 violations.
