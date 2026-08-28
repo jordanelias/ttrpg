@@ -3727,3 +3727,68 @@ port. An id-allocation checker is load-bearing on **this repository's process** 
 own worked-example exclusion. So the honest state is: this class recurs, it is cheap to detect,
 and the doctrine says not to mint the guard. **Flagged to Jordan as a genuine tension rather than
 resolved unilaterally.**
+
+---
+
+## 2026-08-28 — Systems integration master (PR #337, branch `claude/gameplay-actions-scales-fb6ahu`)
+
+**Landed.** `research/valoria_systems_integration_master_v1{,_part2,_part3,_part4}.md` — the whole
+faction/personnel/settlement/governance/territory/NPC/politics corpus collated, sliced, flattened,
+compared and resolved into four proposals. Reference under §0.05; **the four proposals are held back
+and are NOT ratified by merge** (called out loudly in the PR body per ED-1094).
+
+**The measurement worth carrying forward** — the status distribution and its exact fold live in
+`_part4` §5.0 and are not restated here. The shape of it: a sixth of everything catalogued is
+finished, correct code with no production caller, and eight lanes asked independently all named a
+writer, caller or loader as their system's cheapest fix.
+
+**Two instrument rules for the next session, because both classes recur here.**
+
+1. **Reachability in this tree is not an import graph.** §3: subsystem dependencies are declared in
+   `references/` and resolved by string at first call. `treaty.py` and `beliefs.py` have zero textual
+   importers and are both live — `restore_world` reaches them via `composition.require` at
+   `game_state.py:474,:484`, registered at `module_contracts.yaml:135-144`. **Check the contracts
+   registry as well as grep before calling anything dead.**
+2. **Agreement across surfaces is evidence only if the surfaces are independent.** Prose descended
+   from a common ancestor agrees with itself whatever the ancestor said. Resolve a repeated claim
+   against the code and the register, never against the count of documents carrying it. Worked case:
+   the fifth `ledger.TAG_KINDS` family is `Leverage` (`ledger.py:30`); a Compact is a `Debt` subtype
+   per ED-IN-0046 D3 (`supersession_register.yaml:406-418`). Encabezamiento, Salt Certificate, State
+   Arsenal and Borrow were adjudicated before that reached the prose and are **unjudged** against the
+   `Debt` form.
+
+**Next actions, in the order the NERS attacks produced.**
+
+1. **Do not treat any subtractive verdict in §6 as final.** `throughlines_meta.md:233-238` requires an
+   independent pass to steelman each action for KEEP before a CUT stands, and requires a subtractive
+   verdict to name the downstream work it retires. Neither was done. Precedent to weigh: the
+   2026-07-08 application of the same method to 97 actions produced **zero top-level CUTs**.
+2. **Run `tools/balance_oracle.py` on the parliament Total Victory rider before anyone rules on it or
+   patches the comment.** It docks the *losing coalition's* highest-L faction — the leader on the
+   TOTAL_VICTORY branch, the weakest faction on TOTAL_DEFEAT — so its sign is unknown and the
+   widespread "it is the layer's anti-runaway damper" belief is uncontrolled. Campaign-reachable, so
+   the oracle's two arms are not degenerate.
+3. **Cheapest real win: give `InsurgencyRecord.L` a writer** (`insurgency_pipeline.py`). Formation and
+   promotion both already run every season; `L` is set to 1.0 once and promotion needs 3. The only
+   cheap change that adds an agent to the world.
+4. **Before any NPC loader, derive a dedicated `random.Random` for the NPE from the campaign seed.**
+   A two-NPC load moved the seed-42 winner via `world.rng` phase (`npe.py:361,:385` draw inside a
+   per-pair loop, wired at `accounting.py:139`). The three population guards observe
+   `world.npc_counter`, which a direct loader never touches — re-point them at `world.npcs`.
+5. **The accord echo needs two rulings, not one field.** `echo_transport.py:302-313` also requires
+   `echo_ctx["target_settlement"]`, which the contest branch (`scene_dispatch.py:344-345`) never
+   sets, and `scene_outcome` must be a validated §5.5 member the module refuses to infer. A
+   faction→settlement targeting rule is a design call.
+6. **Two blocked-on-a-number items:** `MULTS` has no `standing` key, so routing `Faction.standing`
+   through `adjust()` needs a canon multiplier (same case as `intel`, `game_state.py:164-171`); and
+   the AP budget, if generalised, must buy **actions not modifiers** or it breaks NERS P-ii across the
+   two engines.
+
+**Coverage holes, not findings.** `systems/fieldwork/` (21 docs) and `systems/social_contest/`
+(6 docs + ~18 modules) were on no lane's manifest and have no flatten. Do not read their absence as
+thinness.
+
+**Verification.** Green on the merged head: full `pytest tests/valoria`, `valoria_local --staged`,
+`compliance_check` (0 errors, no new file size-exceeded), `currency_consistency_check`,
+`validate_ed_citations`. CI all-green on PR #337; counts are on the run, not copied here.
+
