@@ -179,6 +179,26 @@ RULINGS = {
         "obstacle without exceeding it is a Partial. Owner: engine/autoload/dice_engine.py's "
         "degree_from_net. Ruled out by name: Ob-scaled Overwhelming (net >= 2*Ob), the separate "
         "PP-232 net >= 3 floor, and the Ob-20 exception."),
+    '(same session) — one faction write mechanism': (
+        "Jordan, verbatim: 'one faction write mechanism'. Given in the SAME MESSAGE as 'one "
+        "degree ladder' — and where the degree half drew four commits, this one drew none and was "
+        "recorded NOWHERE in the tree until a post-merge audit grepped for it. Now ED-FA-0038. "
+        "The measured answer was that the ruling was already substantially true — "
+        "`Faction.adjust` is the single owner and zero live sites bypass it — but the THIRD of "
+        "0.1 pt 5's three requirements was missing: no guard that fails on recurrence. "
+        "`tests/valoria/test_faction_write_sweep.py` is that guard. This entry exists as much for "
+        "the lateness as for the ruling: a ruling delivered alongside another, satisfied by the "
+        "tree's current state, is the shape that gets silently dropped."),
+    '(same session) — contracts, centralized and hierarchical': (
+        "Jordan, verbatim: 'key contracts and module contracts etc need to be explicitly defined "
+        "in a centralized hierarchical manner'. RULED, NOT EXECUTED, and also unrecorded until "
+        "the same audit. Now ED-IN-0200, filed `status: open` and deliberately NOT needs_jordan — "
+        "he has ruled, what is missing is execution. Measured state: three registries "
+        "(`module_contracts.yaml`, `key_types.json`, `descriptor_registry.yaml`) that are three "
+        "FLAT namespaces referencing each other by string, with no surface from which a reader or "
+        "the Godot port can descend game -> subsystem -> module -> Key -> field. Not faked here: "
+        "nesting the three under a new top-level key would be a hierarchy in shape and not in "
+        "meaning, which is worse than the honest flat state because it would look done."),
     '2026-08-27 — the small-pool consequence, ACCEPTED': (
         "Under the owner's ladder a pool-2 contest can never resolve Overwhelming at all: it "
         "would need net >= 5 from two dice, whose maximum is 4. Raised as a disclosed cost of "
@@ -188,7 +208,7 @@ RULINGS = {
     '2026-08-27 — no fiat outcome caps': (
         "Jordan, verbatim: 'dude guandao not being able to hit 47.5% on its own merits is "
         "fucked up. stop arbitrary fiat capping.' The 40% covert-plate-killer ceiling in "
-        "tests/valoria/test_combat_invariants.py is ABOLISHED (ED-PC-0041) and no replacement "
+        "tests/valoria/test_combat_invariants.py is ABOLISHED (ED-PC-0057) and no replacement "
         "threshold was invented — a differently-numbered cap is the same fiat. This ruling is "
         "about the CLASS: an assertion that bounds how often an outcome may occur, rather than "
         "measuring the mechanism that produces it, is not a guard. It also overrides the "
@@ -215,7 +235,7 @@ RULINGS = {
     '2026-08-25 — the combat ceiling, EXECUTED 2026-08-27': (
         "Jordan, 2026-08-25, verbatim: 'one degree ladder. guandao should be 47.5%, and 40% "
         "ceiling is to be abolished.' ⚠ THIS ENTRY READ 'NOT EXECUTED' UNTIL 2026-08-27 AND THAT "
-        "IS NOW WRONG — the 40% covert-plate-killer ceiling is ABOLISHED (ED-PC-0041). It also "
+        "IS NOW WRONG — the 40% covert-plate-killer ceiling is ABOLISHED (ED-PC-0057). It also "
         "carried a sequencing argument that Jordan OVERRODE on 2026-08-27 ('stop arbitrary fiat "
         "capping'): the argument was that abolishing the ceiling before combat's ladder migrates "
         "'deletes a guard and gains nothing', since guandao only reaches 47.5% after the "

@@ -150,7 +150,13 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     # which ED-SC-0031 explicitly did not satisfy. The entry exists in
     # registers/editorial_ledger_sc.jsonl. Same update-the-pin-and-say-so path: the frozen
     # pre-walk-back SC pointer was 21, so 33 cannot be reached by reverting ED-IN-0098.
-    released = {'SC': 33, 'FA': 38, 'WR': 10, 'SE': 51}
+    # PIN UPDATED 2026-08-27: FA 38 -> 39. ED-FA-0038 allocated for "one faction write mechanism"
+    # — a Jordan ruling that had gone unrecorded until a post-merge audit grepped for it, and whose
+    # missing piece was the §0.1-pt-5 guard rather than the owner. The entry exists in
+    # registers/editorial_ledger_fa.jsonl. Same update-the-pin-and-say-so path as the notes above:
+    # ED-IN-0098 "returned" 0037-0039 per this lane's own annotation in
+    # references/id_reservations.yaml, so reverting the walk-back would give 40, not 39.
+    released = {'SC': 33, 'FA': 39, 'WR': 10, 'SE': 51}
     checked = 0
     for lane, expected in released.items():
         assert nf[lane] == expected, (

@@ -30,7 +30,7 @@ point of each of them.**
 | `ab8d156` | ED-IN-0199 — `engine_clock` exists; the tick's clock calls leave the ACTION phase | **BYTE-IDENTICAL** |
 | `63efdc0` | ED-SC-0031 — the ninth degree ladder migrates to the single owner | **MOVED** (see below) |
 | `784d252` | the anti-fabrication gate fix | no code path touched |
-| `d7578a6` | ED-SC-0032 / ED-PC-0041 — the injection seam, the ceiling abolition | **BYTE-IDENTICAL** |
+| `d7578a6` | ED-SC-0032 / ED-PC-0057 — the injection seam, the ceiling abolition | **BYTE-IDENTICAL** |
 
 The whole delta between these two captures is attributable to `63efdc0`:
 
@@ -66,7 +66,7 @@ regression.
 
 - **The adversarial-pass reports.** Three read-only critics reviewed these commits and found 32
   defects between them. Every finding is folded into the ledger rows (`ED-IN-0199`,
-  `ED-SC-0031`, `ED-SC-0032`, `ED-PC-0041`) and the commit messages, which is where CLAUDE.md §0
+  `ED-SC-0031`, `ED-SC-0032`, `ED-PC-0057`) and the commit messages, which is where CLAUDE.md §0
   says a pass's output belongs — "edits to the thing under review, and at most one paragraph in
   the commit message", never a document. Preserving the reports would be creating the category
   §0 retired.
