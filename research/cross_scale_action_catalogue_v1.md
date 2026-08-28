@@ -240,7 +240,7 @@ Season order: **Directive (mandatory) → Governance Phase (spend AP) → Person
 | **Investigate** | 1–2 | Cognition + relevant history | vs concealment | **DO** | **DISTILL:** reuses the fieldwork Investigation resolver. What is new is the four-way post-discovery fork: expose · expel · co-opt · shelter |
 | **Retain Clerks** | 1 + `W −1` | auto, no roll | — | none | +1 effective AP per Clerk Capacity point (0–3), uncapped by FacilityTier. Silently increments a hidden **Clerk Corruption** counter raising Intrigue-card weight. Ming–Qing *muyou*/*shúlì*. ED-SE-0022 |
 | **Survey** | 2 | Cognition + Governance-history | `floor(Prosperity/2) + 1`; ~8-season cooldown | U | Writes/refreshes an **Assessment** tag locking `assessed_base`. Toyotomi *Taikō Kenchi* / *kokudaka*. New failure mode: a stale-high Assessment strips a declined settlement below subsistence *by neglect*. ED-SE-0018 |
-| **Negotiate Quota** (Levy method) | 2 | Charisma/Cognition + history vs Local Actors as a mass social contest | §7 | **BI** | Converts variable Levy into a fixed multi-season **Compact** (4–6 seasons). Castilian *encabezamiento*. Grants Local Actors one Petition per term the governor must Hold Court on. ED-SE-0019 |
+| **Negotiate Quota** (Levy method) | 2 | Charisma/Cognition + history vs Local Actors as a mass social contest | §7 | **BI** | Converts variable Levy into a fixed multi-season **Compact** (4–6 seasons) — modelled as `Debt(key="compact:<quota>", ttl=term)`, not a tag family of its own (ED-IN-0046 D3). Castilian *encabezamiento*. Grants Local Actors one Petition per term the governor must Hold Court on. ED-SE-0019 |
 | **Bind the Cells** (Keep Order method) | 1 | — | — | U | Partitions Local Actors into five-household cells with reporting leaders; Order +1. Any member's infraction stamps a **Collective Liability** tag on the whole cell. Three tags → "Cell Revolt" Crisis card. Hideyoshi 1597 / Tokugawa *goningumi*. ED-SE-0020 |
 | **Ordenanza: Ratify / Reject / Amend** (Hold Court branch) | — | Amend: Charisma/Cognition vs Guild Master, Ob 2 | 2 | **SO** | **RATIFIED** ED-SE-0023. Ratify → guild bonus + Guild Influence +1; Reject → Disposition −2 + Grudge; Amend → half bonus, no Influence. Ratifying an entry-standard clause locks caste exclusion in as settlement policy. Spanish *gremios* |
 | **Petition / Defy** (Directive response) | 0 AP | Bargain = social contest vs PA | — | **BI** | see below |
@@ -264,8 +264,22 @@ its state; the Directive and the Needs routinely conflict and your AP cannot ser
 
 **Precedent** (biases related events ±1 Ob) · **Grudge** (raises hostile-action weight, seeds
 Intrigue cards) · **Debt** (fires once, when called in) · **Reputation** (Just/Harsh/Generous/Weak/
-Hated — modifies Local-Actor starting Disposition) · **Compact** (fires *every season of its term*).
+Hated — modifies Local-Actor starting Disposition) · **Leverage**.
 Tags persist across tenure and **survive succession**.
+
+⚠ **CORRECTED 2026-08-28. This paragraph previously named the fifth family "Compact", and it was
+wrong twice over.** The live enum is `TAG_KINDS = {"Precedent", "Grudge", "Debt", "Reputation",
+"Leverage"}` (`systems/settlements/sim/ledger.py:30`), and **ED-IN-0046 D3 ruled on 2026-07-13**
+that *"Compact models as a recurring Debt subtype, not a 6th ledger.TAG_KINDS family"* — so a
+recurring term-limited claim is `Debt(key="compact:<quota>", ttl=term)`, which is exactly the
+"fires every season of its term" behaviour this paragraph attributed to a family of its own.
+
+The error mattered because it propagated. Six independent harvest lanes converged on "Compact" as
+the fifth family and read that agreement as confirmation; all six were reading prose descended from
+one pre-ruling source, and **this document was the strongest surviving carrier.** At least four
+fiscal proposals (Encabezamiento, Salt Certificate, State Arsenal, Borrow) were adjudicated against
+the phantom family, one of them rated "ratify as-is" — none may be authored on that premise until
+they are re-judged against `Debt`. Convergence measured agreement, not truth.
 
 ### 2.5 Other settlement actions (design-only)
 
@@ -862,7 +876,8 @@ tradeoffs, and Football Manager for the played/witnessed/auto fidelity ladder.
 3. **Then** the roster: one object, `household_roster` + `upward_patron` edges on the existing Knots
    graph, `clientele_breadth` as a derived query (the research explicitly proposes no new storage).
 4. **Then** the holdings model — LPS-1 (per-settlement L/PS), which closes ED-FA-0004 and unblocks
-   Fiscal Stance, the Assessment/Compact tags and the Directive.
+   Fiscal Stance, the Assessment tag, the Compact-as-`Debt`-subtype (ED-IN-0046 D3, see §2.4)
+   and the Directive.
 
 ---
 
