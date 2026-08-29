@@ -242,9 +242,9 @@ as volume. **Ship D or do not ship the rest.**
 |---|---|---|
 | **Jordan, 2026-08-29** | elegance = distill without losing emergent possibility or robust choosing | **§1**, and the one-line loss statement required of every object |
 | **Jordan, 2026-08-29** | minimise the playing surface; keep the hard work under the hood | **§2**, the `substrate`/`surface` declaration, and `10`'s scene budget |
-| **ED-IN-0201** (2026-08-28) | no leader → no faction action; no governor → no settlement governance; no commander → no battle. The person shapes *which* action from the same option set with the same information | **05 §1** (the gate) · **01 §5.3** and **05 §3** (`remit` as a gate on the option set, never a modifier on a roll) |
+| **ED-IN-0201** (2026-08-28) | no leader → no faction action; no governor → no settlement governance; no commander → no battle. The person shapes *which* action from the same option set with the same information | **05 §1** (the gate) · **01 §4.3** and **05 §3** (`remit` as a gate on the option set, never a modifier on a roll) |
 | **ED-IN-0200** (2026-08-27) | Key and module contracts defined centrally and hierarchically | **§3** and the contract shape in **§7** |
-| **Jordan, 2026-08-14** | an obstacle is the target's corresponding score/2 plus instance-specific modifiers | **E-1**, `01 §8`. Every roll derives its obstacle through one owner |
+| **Jordan, 2026-08-14** | an obstacle is the target's corresponding score/2 plus instance-specific modifiers | **E-1**, `01 §6`. Every roll derives its obstacle through one owner |
 | **Jordan, 2026-08-25** (ED-IN-0196) | TN is 7. Always | inherited; no design here names a TN. `dice_engine._require_tn7` refuses any other |
 | **Jordan, 2026-08-14** (margin ladder) | `margin ≥ 3` Overwhelming · `≥ 1` Success · `[0,1)` Partial · `< 0` Failure | inherited; **no design here has a consequence firing only on Partial** (§8, P0-3) |
 | **Jordan, 2026-08-14** | the attribute roster **will be ten**; nine ship, the tenth is unnamed | `01 §1.2` — capability is keyed on `descriptors.ATTRIBUTES`; nothing names an attribute literally |
@@ -252,7 +252,7 @@ as volume. **Ship D or do not ship the rest.**
 | **Jordan, 2026-07-13** | factions hold **people**; the number of people and the weight of their positions carry a faction's value | **06** — derived weight aggregates over held posts, not territory |
 | `propagation_spec_v1` AU-1 | no aggregate is ever written | **the one write rule**, §4.2 |
 | **ED-SC-0032** | a ladder extension injects a declared `BandExtension` whose only power is to veto an Overwhelming | **05 §6**; `dice_engine.BandExtension` is the existing owner |
-| **ED-912** (2026-06-28) | Knot tiers are Distant/Close on a bidirectional −5…+5 bond-strain gauge; rupture at +5 | **cited, not designed** — `01 §7.3` reads it from `systems/fieldwork/knots_v30.md` |
+| **ED-912** (2026-06-28) | Knot tiers are Distant/Close on a bidirectional −5…+5 bond-strain gauge; rupture at +5 | **cited, not designed** — `01 §7.5` reads it from `systems/fieldwork/knots_v30.md` |
 
 ### 5.1 Waited on — named, not guessed
 
@@ -263,7 +263,7 @@ as volume. **Ship D or do not ship the rest.**
 | **Q-3** | **The Partial band collapses across the pool range** | nothing — P0-3 forbids depending on it | Changing band widths edits a ruled surface |
 | **Q-4** | **The name of the faction-scale acceptance aggregate** | `06 §2` uses `faction.acceptance` provisionally | *Mandate* is live under three incompatible readings |
 | **Q-5** | **Whether down-targeted place deltas are disjoint from what the up-aggregate reads** | the convergence claim in `06 §4` | `propagation_spec_v1` §3 D.6 flags it HIGH PRIORITY and forbids resolving it locally |
-| **Q-6** | **Is the `−1 Coherence on rupture` rule live?** | nothing in this suite; it is canon's own open item | `systems/fieldwork/knots_v30.md:203` carries it `[UNVERIFIED post-ED-912]` — PP-632 was struck and ED-912 did not restate it. `01 §7.3` cites it as unverified and depends on nothing |
+| **Q-6** | **Is the `−1 Coherence on rupture` rule live?** | nothing in this suite; it is canon's own open item | `systems/fieldwork/knots_v30.md:203` carries it `[UNVERIFIED post-ED-912]` — PP-632 was struck and ED-912 did not restate it. `01 §7.5` cites it as unverified and depends on nothing |
 | **J-N** | **Does the substrate get cross-season latency at all?** Today it has none: `drain_tick` has zero production callers and `next_tick` **raises** on a non-empty queue, so the guard *prevents* cascades rather than scheduling them late | `09` projects and `11` world events — both must advance by **reading state at the boundary**, never by an emission that lands later | Filed by `audit/2026-08-08-world-churn-audit` Part III. Building one-hop-per-season carry is a design act, not a property in hand. `01 part 2 §9.1` states the constraint |
 | **J-O** | **Should the Key substrate be promoted from telemetry spine to churn engine at all** — or kept as an append-only telemetry/causality log with churn driven at the boundary directly? | potentially **wholesale**: every part of this suite that leans on Key *consumption* | That audit's Part VII names it as the one open question that can invalidate a whole programme rather than one item, and notes the alternative *"is never weighed anywhere"*. Every v2 document that depends on Key consumption says so, so the affected parts stay identifiable |
 | **ED-SC-0002** | **The Debate→Domain-Echo keying fork** — band-keyed (`scale_transitions §5.4`) vs genre-keyed (`social_contest §6`) vs composed | every echo this suite's wrappers emit from a resolved contest | Pre-existing P0 docket item. `audit/2026-07-08-contest-settlement-faction-interface` finds one ruling here unblocks ED-SC-0007 and closes the AU-5 seam its whole report traces. **This suite names the fork and takes no side** |
@@ -285,10 +285,10 @@ block; this table collects every one so each can be vetoed individually.
 | # | What is overridden | Tier | Where | Decision |
 |---|---|---|---|---|
 | **O-1** | v1's "identity is immutable and carries `place.kind` / `person.capability`" | this suite's own v1 | `01 §Overrides` | It made settlements ungrowable and characters unprogressable. Corrected by the **form** bucket, not loosened |
-| **O-2** | v1's closed six-member `relation` enum, **and this suite's own draft eight-kind table** | this suite's own v1 and draft | `01 §Overrides`, `01 part 2 §7.2` | **Both cut, superseded by `systems/npcs/npc_relational_graph_v30.md` (PP-724)**, which already ships six NPC↔NPC edge types with per-type semantics and a decision log. Re-deriving a worse taxonomy to keep authorship is the failure §1 names |
-| **O-3** | v1's `disposition` gauge on every edge | this suite's own v1 | `01 part 2 §7.3` | For NPC↔NPC pairs that stores an aggregate over edge strengths, which v1's own write rule forbids. PP-724 derives it instead |
-| **O-4** | **PP-724 §13's "relational edges file (separate)" storage decision** | **ratified-adjacent** (Class A, PROVISIONAL) | `01 part 2 §7.3` | **The one real point of disagreement.** Edges become entities in the general store rather than an NPC-only file, so one provenance rule, one disclosure contract and one Key surface cover every binding kind — which is what Part VI's *"shared Key surface"* asks for. **Only storage moves; every per-kind semantic stays where PP-724 put it** |
-| **O-5** | v1's "distributor" framing of the subsystem wrapper | this suite's own v1 | `01 part 2 §9.0` | Reframed to Part III's **herald** criterion: the wrapper populates `targets[]` and routes nothing |
+| **O-2** | v1's closed six-member `relation` enum, **and this suite's own draft eight-kind table** | this suite's own v1 and draft | `01 §Overrides`, `01 §7.2` | **Both cut, superseded by `systems/npcs/npc_relational_graph_v30.md` (PP-724)**, which already ships six NPC↔NPC edge types with per-type semantics and a decision log. Re-deriving a worse taxonomy to keep authorship is the failure §1 names |
+| **O-3** | v1's `disposition` gauge on every edge | this suite's own v1 | `01 §7.3` | For NPC↔NPC pairs that stores an aggregate over edge strengths, which v1's own write rule forbids. PP-724 derives it instead |
+| **O-4** | **PP-724 §13's "relational edges file (separate)" storage decision** | **ratified-adjacent** (Class A, PROVISIONAL) | `01 §7.3` | **The one real point of disagreement.** Edges become entities in the general store rather than an NPC-only file, so one provenance rule, one disclosure contract and one Key surface cover every binding kind — which is what Part VI's *"shared Key surface"* asks for. **Only storage moves; every per-kind semantic stays where PP-724 put it** |
+| **O-5** | v1's "distributor" framing of the subsystem wrapper | this suite's own v1 | `01 part 2 §9.1` | Reframed to Part III's **herald** criterion: the wrapper populates `targets[]` and routes nothing |
 | **O-6** | The arc-compile calibration set — the 138 register arcs | **evacuated** | `09` | Neither obeyable nor overridable: the corpus is gone. The template + binding-slot grammar and the anti-oatmeal defence stand on their own; the missing calibration set is a **named gap**, not a step |
 
 **Preserved by construction, not merely respected** — the three anti-unification rulings Part VI
@@ -300,7 +300,7 @@ conflate"*), **PP-724 §0** (PC↔NPC and NPC↔NPC *"do not collapse into one m
 **Adopted whole rather than overridden, on merit** — recorded because deciding *not* to override is
 also a decision. The **Light Function** (ED-IN-0011, ratified) is taken entire, and the salience
 sketch this suite first drafted is discarded as the weaker duplicate (`10 §0`). The **herald
-criterion** (`world-churn-audit` Part III, held) is adopted entire (`01 part 2 §9.0`).
+criterion** (`world-churn-audit` Part III, held) is adopted entire (`01 part 2 §9.1`).
 
 ## 6. Design principles this suite is held to
 
@@ -321,7 +321,7 @@ criterion** (`world-churn-audit` Part III, held) is adopted entire (`01 part 2 �
 6. **Compress, and say what you cut.** Every document states its shipped set and its candidate set
    separately, and names what it refused.
 7. **State the loop, name its bound, and say "unmeasured" where the gain is unmeasured.**
-8. **The player is a person holding a post** (`01 §5.4`). No player entity, no player flag, no
+8. **The player is a person holding a post** (`01 §4.4`). No player entity, no player flag, no
    player-only module. An unattended post resolves through the **same module run headless**, never a
    second cheaper path.
 9. **The surface is narrow and the substrate is rich** (§2). New machinery adds situations, not
