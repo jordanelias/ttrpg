@@ -264,9 +264,8 @@ that they believe **Torben killed the envoy** when he did not. The false picture
 justification, and the shape cannot carry one.
 
 **What can:** a claim with an id of its own, held with a stance — already designed, its five design
-calls **Jordan-ruled** (`proposals/2026-08-18-epistemic-propositions-and-provenance.md` §3 the design,
-§10 the rulings). Adopted here **as a tag kind**, because field-for-field a Holding is what the Memory
-row already was:
+calls **Jordan-ruled** (`proposals/2026-08-18-epistemic-propositions-and-provenance.md` §3, §10).
+Adopted here **as a tag kind**, because field-for-field a Holding is what the Memory row already was:
 
 ```
 Holding: owner_ref = the holder (person)          kind = Holding
@@ -306,9 +305,9 @@ suite's provenance rule answers the first and never pretends to answer the secon
 
 **The `Proposition` store is not a fifth stored kind, and this page does not admit one.** A Proposition
 is `(subject, predicate, object, qualifier)` and its id is a hash of exactly those, so the store is a
-**memo table** — a cache of hash preimages. It holds no history, has no owner, is never a write target,
-and is fully reconstructible from the tuples the tags already carry. It also does not scale with
-population: it grows with **distinct claims**, not with `population × claims` (ruled design §10.2).
+**memo table** — a cache of hash preimages, with no history, no owner and no write target, fully
+reconstructible from the tuples the tags carry. Nor does it scale with population: it grows with
+**distinct claims**, not with `population × claims` (ruled design §10.2).
 
 > **The hashing rule the ruled design leaves open (§10.3, *"still the first thing to nail down"*) has an
 > in-suite answer: `10 §2.2`.** `candidate_id = H(emitter ‖ kind ‖ anchor ‖ sorted(subject_refs) ‖
@@ -605,11 +604,11 @@ roll/degree implementations.
 **It adds to the engine and repoints nothing.** The three existing derivation sites whose reconciliation
 is suspended are a different lane's question, and a greenfield module has no ratified canon to overwrite.
 
-**One leverage note, because it is the obvious objection.** Raising an attribute adds a die, worth
-`≈0.204σ` at pool 5 against `≈0.115σ` at pool 18 — so capability investment is worth about 1.8× as much
-to a weak actor as a strong one. That is **non-uniform in the correct direction**: self-damping, and the
-shape a bounded system wants. It is a property of the continuous engine, recorded so a later reader does
-not mistake it for an unnoticed P-ii defect.
+**One leverage note, because it is the obvious objection.** §5.3's per-die arithmetic (`≈0.204σ` at pool
+5 against `≈0.115σ` at pool 18) applies to capability too: raising an attribute is worth about 1.8× as
+much to a weak actor as a strong one. Unlike a spendable modifier, that is **non-uniform in the correct
+direction** — self-damping, the shape a bounded system wants. Recorded so a later reader does not
+mistake it for an unnoticed P-ii defect.
 
 
 ### 6.1 The commensurability gate — a target score must live on the pool's scale

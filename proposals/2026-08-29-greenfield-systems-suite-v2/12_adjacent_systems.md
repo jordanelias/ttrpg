@@ -412,6 +412,17 @@ resolution either way.
 
 ## 5. The deliberative body — carried forward, now a composition of Posts *and* Edges
 
+**The motion has one design, and it is this document's — settled, not merely claimed.** `05`'s own
+first draft carried a one-line `act.motion` family row (`DO`, target *"the opposing coalition"*)
+beside `ad.motion` below; `05`'s owner has weighed the two and cut theirs to a pointer, in their own
+words: *"`12`'s is the fuller design and it wins. The row is cut to a pointer; `ad.motion` is
+self-contained (`remit: [head, minister]`, its own `post.budget` cost), so nothing is orphaned"*
+(`05_faction_actions.md` Overrides, O-5.12). **`ad.motion` (§6) is therefore the sole design and the
+sole module** — `price(magnitude) = k·magnitude`, `vote_bar(magnitude)` monotone, and the relational
+`vote_weight` term below, none of it duplicated in `05`. A reader who finds `act.motion` still named
+in `05 §5`'s family table should read it as the retired pointer O-5.12 describes, not a second design
+to reconcile against this one.
+
 ### 5.1 What is unchanged from v1 `09 §3`
 
 A body has no state of its own: it is a **set of posts** (membership = holding a post whose kind
@@ -541,7 +552,7 @@ that a surface table longer than the substrate table means the ratio is backward
 | what the player touches | how, how often |
 |---|---|
 | **who commands a unit** (appointing/recalling a `commander` post) | through `04`'s appointment flow — this document supplies the gate the appointment satisfies, not a verb of its own |
-| **whether to order a unit field ↔ garrison** | one of the existing strategic action-family invocations (`05`), spent from the commander's own `post.budget` — no new verb |
+| **whether to order a unit field ↔ garrison** | `ad.unit`'s own transition (§2.2) — "a post action, not a roll," gated on the commander's order and spent from the commander's own `post.budget` — no new verb, and no `05` action-family invocation either: `05 §5`'s eight rows (`05p2 §5`) have no unit-assignment family, and this document's own transition already supplies the gate and the cost without needing one |
 | **a motion, if the player holds a body-eligible post** | propose (choose subject tag + magnitude) or vote — the body's only two verbs, both already in v1 |
 
 | what the player never touches |
