@@ -447,30 +447,61 @@ already exists in code and **nothing produces it**: `beliefs.add_belief` has no 
 `create_world` leaves `convictions`/`beliefs` as empty dicts *"not populated during world-gen"*
 (`:92`). **The missing producer is character generation.** That is the gap `02` closes.
 
-### 6.2 The composition — no new primitive, no new tag kind
+### 6.2 The composition — a creed-Belief is a marked Holding, not a second object
 
-| part | primitive | leaf |
+| part | primitive | leaf / owner |
 |---|---|---|
-| **which propositions this person holds** — the active set, `≤ 3` | `form.beliefs` on the person (C-4) | 4 — form transition |
-| **how firmly** | a `credence.<proposition>` **Gauge** per held proposition, declared on a bounded **0–5** scale (part 2 §10.1) | 1 — gauge deposit, provenance required |
-| **what the proposition is** | a **row** in `references/content_registry.yaml` | data, not a branch |
+| **which propositions this person holds as creed** — the active set, `≤ 3` | `form.beliefs`: a list of `prop_id`s on the person (C-4) | 4 — form transition, `02`'s own leaf |
+| **the claim itself, and who else might hold it** | a **`Proposition`**, content-addressed, in the shared FI store (`proposals/2026-08-18-epistemic-propositions-and-provenance.md §3.1`) — one row per distinct claim, not per holder | data, not owned by `02` |
+| **how firmly, and with what support** | a **`Holding`** (`holder`, `prop_id`, `stance`, `confidence [1,5]`, `support_refs`) | `npc_memory`'s leaf (epistemic proposal §4), not `02`'s — `02` names the seed, it does not write it |
 | **what happens when one is given up** | a `Precedent` **Tag** — canon's Scar | 2 — tag append |
 
-**Why a Gauge and not a Tag.** `01 §3.1` closes the Tag enum at six and demands a two-part argument
-for a seventh; this design **does not open it**. A belief needs the two things a Tag lacks and a Gauge
-has: a **rest value** — the prior the person's origin supplies, so an unreinforced belief drifts back
-toward what their caste, place and institution ambiently teach — and **geometric decay toward it**
-(`01 §5.1`). Right dynamics for conviction in a proposition; wrong dynamics for salience of a memory.
+**Cut: the standalone `credence` Gauge and its content-registry proposition-with-firmness row.** An
+earlier draft of this section proposed a per-proposition `credence` Gauge, bounded 0–5, and named it
+**this document's own weakest claim** (§11.5, part 2) for resting on a cap that might move. It was
+right to flag it and right that the fix was a cut, not a defense: the 2026-08-18 epistemic-propositions
+ruling (five Jordan rulings) landed the general object this section was reaching for — a
+content-addressed `Proposition` plus a per-holder `Holding` whose `confidence` sits on the **same
+`[1,5]` ladder** `state.opinion_revised` already uses — and it is FI's, owned once, not a second one
+`02` invents. **A creed-Belief is a marked subset of a person's Holdings, not a second object**: the
+same move `01`'s owner is making for the Memory tag, applied here first.
 
-**Why the gauge-count objection does not apply, though it killed gauge-per-memory.** `01 §3.2` refused
-a Gauge per Memory because the count grows with everything anyone ever saw. **Beliefs are capped at
-three per person by canon**, not by a parameter this document chose. A cited bound versus an unbounded
-ramp is the whole argument — and if the cap moves, this decision is re-examined, not tuned.
+**Why the mark, not a second store.** Canon caps the *active, creed* set at three
+(`character_canon_v30 §6.1`); the ruled design places no such cap on Holdings generally — an NPC may
+hold hundreds of ordinary propositions (gossip, suspicion, testimony) with no creed status at all.
+`form.beliefs` **is** that cap, expressed as the form field listing which of a person's `prop_id`s are
+currently load-bearing on their Conviction ladder and eligible for a Scar. **What was cut is the
+duplicate confidence gauge, not the cap** — the cap was always canon's and survives untouched, and it
+answers the gauge-count objection the same way the earlier draft did: a cited bound, not an unbounded
+ramp, so if the cap moves this decision is re-examined, not tuned.
 
-**Canon's own precedent for the shape.** The `truth` track is already a 0–5 oscillating gauge whose
-poles are two competing accounts of what is true — *"5 = Solmund orthodoxy, 0 = Thread-truth
-acceptance"* — that *"varies by background"*, players seeing *"qualitative bands only"*
-(`clock_registry_v30.md:71`). A belief gauge is that shape over a registry of propositions.
+**What generation does, and what it does not.** A stage grants a creed-belief the way it already
+grants a Knot candidate (§5.2's pattern, reused): `cg.stage` adds a `prop_id` to `form.beliefs` (leaf
+4, bounded `≤3`) and **names the seed Holding** — `holder`, `prop_id`, `stance: asserts`, an initial
+`confidence`, `support_refs: [this stage's own form.transitioned Key]` — for `npc_memory` to write.
+**`02` does not write the Holding**; `npc_memory`'s state already claims that row, and a second writer
+would violate the single-owner grep `01 §2.4` argues for (part 2 §10 restates this as the module
+contract's own note). ⚠ **Open dependency, named rather than hidden:** `npc_memory` is `## Status:
+DESIGN CALLS RULED … PROPOSED and unbuilt` (epistemic proposal, its own status line) — until it is
+built, generation's creed grant has nowhere to deposit the Holding, and `form.beliefs` would carry
+`prop_id`s with no confidence anywhere in the tree. Tracked at part 2 §11.3.
+
+**The drift-toward-ambient-prior dynamic survives, as a derivation rather than a second gauge.** An
+earlier draft argued a belief should carry a `rest` value — the prior a person's origin ambiently
+teaches — and decay geometrically toward it absent reinforcement. **That dynamic is absent from the
+ruled epistemic design and is genuinely good; it does not need a stored gauge to keep it.**
+Recommended here for whoever builds `npc_memory`, not owned by `02`: compute an *effective* confidence
+at read time as `confidence + (rest − confidence) · (1 − decay^elapsed_seasons)`, where `confidence` is
+the Holding's own stored `[1,5]` int (moved only by a `state.proposition_revised` deposit) and `rest`
+is derived from the holder's `origin_node`'s `presences{}` (`07 §4`) — a pure read, no write leaf, and
+therefore no gauge count to bound. This is a **derivation over Holding data**, the same shape `03`'s
+`wp.lineage` is a derivation over edge data (`03 §11`/§12).
+
+**Canon's own precedent for the shape, unaffected by the cut.** The `truth` track is already a 0–5
+oscillating gauge whose poles are two competing accounts of what is true — *"5 = Solmund orthodoxy, 0 =
+Thread-truth acceptance"* — that *"varies by background"*, players seeing *"qualitative bands only"*
+(`clock_registry_v30.md:71`). That precedent motivated the shape this document wanted; the ruled
+`Holding.confidence` on `[1,5]` delivers the same shape without a second gauge family to maintain.
 
 ### 6.3 Revision — canon owns *when*, this document owns *where it is stored*
 
@@ -479,14 +510,15 @@ outcome against the holder; the winning argument used their primary or secondary
 argument **specifically engaged the Belief** — then *"Old Belief → permanent Scar. New Belief forms."*
 **This document does not redesign or weaken that.** The mapping is one line:
 
-> Canon's three conditions are the **gate on a revising-magnitude deposit**. The gauge's declared
-> band fires the **form transition** that drops the proposition and appends the Precedent tag.
-> Ordinary evidence deposits move credence and fire nothing.
+> Canon's three conditions are the **gate on a revising-magnitude deposit into the Holding's
+> `confidence`**. The band on that Holding's *effective* confidence (§6.2's derivation) fires the
+> **form transition** that drops the `prop_id` from `form.beliefs` and appends the Precedent tag.
+> Ordinary evidence deposits move confidence and fire nothing.
 
-Two properties follow that a bare flag lacks. **A belief can be worn down and still held** — credence
-below the band is a person losing an argument over seasons, the state this setting is full of. And
-**the transition is a gate, never a roll** (`01 §2.2`): the uncertainty was in the contests that moved
-the gauge, and re-rolling at the threshold charges for it twice.
+Two properties follow that a bare flag lacks. **A belief can be worn down and still held** — effective
+confidence below the band is a person losing an argument over seasons, the state this setting is full
+of. And **the transition is a gate, never a roll** (`01 §2.2`): the uncertainty was in the contests
+that moved the Holding, and re-rolling at the threshold charges for it twice.
 
 **Reversibility.** Dropping a proposition is `reversible: false` — canon makes the old Belief a
 permanent Scar, and coming to hold the *same* proposition later is a **new** row with a new provenance
@@ -496,16 +528,17 @@ scars **every** revision, so changing your mind on good evidence counts the same
 
 ### 6.4 The worked case, end to end
 
-The Movement's *"threadwork is folklore"* (`campaign_architecture_v30.md:57`) is one content-registry
-row. A generated Movement-affiliated person holds it with a `rest` set by their origin's presences.
-Thread phenomena become publicly visible; evidence deposits accumulate; canon's three outcomes
-(`:71-75`) are not three branches but three reachable states of the same objects:
+The Movement's *"threadwork is folklore"* (`campaign_architecture_v30.md:57`) is one `Proposition`,
+content-addressed. A generated Movement-affiliated person holds it as a creed-marked Holding, whose
+effective confidence carries a `rest` set by their origin's presences (§6.2). Thread phenomena become
+publicly visible; evidence deposits accumulate; canon's three outcomes (`:71-75`) are not three
+branches but three reachable states of the same objects:
 
 | canon outcome | what the substrate does | owner |
 |---|---|---|
-| **Embrace** | credence crosses the band → transition drops the proposition, Precedent tag appended, a new proposition enters the active set | this document |
-| **Denial** | credence stays above the band under sustained pressure — the person is visibly, mechanically wrong, and the world can read it | this document |
-| **Schism** | the faction's post-holders' credences split; the movement's `divergence` rises; a **bloc** forms | `06 §2`, `06 §3` |
+| **Embrace** | the Holding's effective confidence crosses the band → transition drops the `prop_id` from `form.beliefs`, Precedent tag appended, a new `prop_id` enters the active set | this document |
+| **Denial** | effective confidence stays above the band under sustained pressure — the person is visibly, mechanically wrong, and the world can read it | this document |
+| **Schism** | the faction's post-holders' Holdings split; the movement's `divergence` rises; a **bloc** forms | `06 §2`, `06 §3` |
 
 **No branch names the Restoration Movement** — `00 §6` principle 2 satisfied on the case most likely
 to tempt a special case.
@@ -513,11 +546,17 @@ to tempt a special case.
 *Emergent possibility lost if beliefs were cut:* nobody could be **persuaded** — only outfought,
 outvoted or outbid — and an institution founded on a false premise could never discover it.
 
-**Out of scope, stated once.** A general epistemic layer — machine-comparable propositions held per
-agent with graded confidence and provenance, so two characters can *compare* what they believe — is a
-Phase-2 corpus item, not designed here. §6 ships the creed-Belief canon already names. If that layer
-lands, `credence` and its confidence field are candidates to be **one field**, and the right outcome
-is a cut, not a synthesis keeping both.
+**No longer out of scope — the epistemic layer landed, and §6.2 executes the cut this section
+pre-committed to.** An earlier draft of this paragraph flagged a general epistemic layer as a Phase-2
+item not designed here, and pre-committed: *"if that layer lands, `credence` and its confidence field
+are candidates to be one field, and the right outcome is a cut, not a synthesis keeping both."* The
+layer **was ruled** 2026-08-18 (five Jordan rulings,
+`proposals/2026-08-18-epistemic-propositions-and-provenance.md §10`), and §6.2 is that cut, executed
+rather than deferred again. What §6 still owns, and the epistemic layer does not attempt: **the cap,
+the Scar, and the fact that dropping a creed-Belief is a form transition** — creed semantics the ruled
+proposal explicitly walls off as a separate, narrower thing (`epistemic proposal §2`: *"leave
+`state.belief_revised` as the creed-Belief beat it was registered for. The epistemic layer is a
+separate, new thing sitting alongside it"*).
 
 ---
 
