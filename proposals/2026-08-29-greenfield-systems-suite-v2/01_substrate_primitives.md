@@ -30,6 +30,15 @@ this suite exists to stop.** `00 §5.3` collects these so Jordan can veto them i
 | **O-3** | v1's `disposition` **Gauge on every edge** | this suite's own v1 | for NPC↔NPC pairs that stores an aggregate over edge strengths, which v1's own write rule forbids. PP-724 `:331-345` derives it. §7.3 |
 | **O-4** | PP-724 §13's *"relational edges file (separate)"* storage decision | ratified-adjacent (Class A, **PROVISIONAL**) | edges become entities in the general store rather than an NPC-only file, so one provenance rule, one disclosure contract and **one Key surface** cover every binding kind — which is what Part VI asks for. **Only storage moves; every per-kind semantic stays where PP-724 put it.** §7.3 |
 | **O-5** | v1 `01 §7`'s **"distributor"** framing of the subsystem wrapper | this suite's own v1 | reframed to Part III's herald criterion: it populates `targets[]` and routes nothing. §9.1 |
+| **O-6** | **this document's own v2 draft `Memory` tag kind** | this suite's own v2 draft | **cut, and `Holding` admitted in its place.** A Memory is a Holding field-for-field, and the one thing `Memory` was justified by — carrying a **false picture** — is the one thing `key`+`value` cannot express, because neither slot can say *what* is misremembered. A `prop_id` whose proposition fails to obtain can. Adopted from `proposals/2026-08-18-epistemic-propositions-and-provenance.md`, whose **five design calls are Jordan-ruled** (its §10) though the design itself is PROPOSED. Enum count is unchanged. §3.1 |
+| **O-7** | **this document's own v2 draft edge roster**, which shipped two scope extensions | this suite's own v2 draft | **a third, `allegiance` (person → faction), is added.** A scope extension, not an override of PP-724: person↔faction is outside its NPC↔NPC scope (`:18`), so R-1/R-2/R-3 are untouched — an allegiance is neither a Knot nor an NPC↔NPC tie. §7.2 |
+
+**Two downstream overrides are ABSORBED here rather than left standing against a document that no
+longer says what they override:** `09`'s **O-A1** (the tag enum opens to seven for `Ambition`) and
+**O-A2** (the `progress` gauge row is cut as an AU-1 violation) are **executed in this text** — §3 and
+§5.2. `09`'s own falsifier is *"no contract declares a state row named `progress`"*, and this document,
+built first in Phase 1, was the one place that still would have. An append against `01`-as-drafted
+would have raised on the seventh kind; it no longer does.
 
 **Not overridden, deliberately:** ED-POL-11, PP-724 §0 and PP-724 §3.3 (§7.1's R-1/R-2/R-3) are
 **preserved by construction** in §7.3, not merely respected. Part VI's unified-bond prohibition is
@@ -39,9 +48,10 @@ this suite exists to stop.** `00 §5.3` collects these so Jordan can veto them i
 **v2 delta against v1 `01`:** the entity gains a **form** bucket (change A); the write rule gains a
 **fourth leaf** and hysteresis becomes mandatory; the edge becomes a **shared container with per-kind
 semantics and explicit converters**, adopting canon's taxonomy rather than inventing one, with the
-Knot held **outside** it (change E, §7); Tag gains **Memory**; the wrapper is reframed as a **herald**
-(§9). The decay law, `derive_ob`, the disclosure contract, the player model and the relational-share
-cap survived the critique and are carried with their reasoning.
+Knot held **outside** it (change E, §7); Tag gains **`Holding`** (§3.1 — a v2 draft `Memory` kind was
+written here and is **cut for it**, O-6); the edge gains an **`allegiance`** kind (§7.2, O-7); the
+wrapper is reframed as a **herald** (§9). The decay law, `derive_ob`, the disclosure contract, the
+player model and the relational-share cap survived the critique and are carried with their reasoning.
 
 ---
 
@@ -126,6 +136,24 @@ setter because the primitives it derives from are the only things with one. **Th
 narrower than the three it joins, not wider** — a gauge deposit needs only provenance; a form
 transition needs a declared row, a gate over readable state, a cost, an emission, and, if reversible, a
 hysteresis band.
+
+**An aggregate is not a stock, and AU-1 forbids only the first.** The rule is stated here in the one
+form that stops the mislabel, because the mislabel has already happened twice in this suite.
+
+| | **aggregate** | **stock** |
+|---|---|---|
+| definition | a value **current state can recompute** | a value with a **spend history**, so it is **path-dependent** |
+| test | recompute it from the primitives; do you get it back? | two owners with identical current holdings and different spending are **different states**, and only the history separates them |
+| examples | `faction.divergence`, NPC↔NPC disposition (§7.3), a project's `progress` (`09` O-A2) | `accrual.entitlement`, spent directly at place scale (`07 §8.3`, `:537`) — **already shipped** — and `post.budget` (§5.3) |
+| how it is written | **never.** No setter exists | **leaf 1, twice**: a Gauge deposited into and drawn down |
+
+⚠ **The test is "can current state recompute it?", never "does it look like a total?"** A quantity that
+is **spent** cannot be a derivation, and declaring one `writable: false, owner: <x>.derive` is not a
+filing choice — it is a defect that makes **every spend a silent no-op**, since there is no setter to
+decrement. That is exactly the read/write asymmetry `CLAUDE.md §0.1` point 1 names as the hazard, and
+the guard it asks for is a grep over the field's **assignments**, not its readers. **A stock is a
+faction-, place- or post-owned Gauge**, deposited at the accounting boundary and drawn down by the
+verbs that spend it. It is not an exception to AU-1; it was never in AU-1's scope.
 
 ### 2.2 The transition row
 

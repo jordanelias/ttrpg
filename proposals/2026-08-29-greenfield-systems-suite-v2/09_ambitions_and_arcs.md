@@ -34,7 +34,7 @@ module contracts and the property audit (§§8–13). Section numbers run contin
 ## Overrides
 
 Listed, tiered and argued (`00 §5.3`). **A silent override is the corpus disease this suite exists
-to stop**, and three of the five below are this document overriding *its own suite's draft* because
+to stop**, and three of the six below are this document overriding *its own suite's draft* because
 something already on disk beat it — *"may the best ideas win"* cutting against authorship.
 
 | # | What is overridden | Tier | Why |
@@ -44,6 +44,7 @@ something already on disk beat it — *"may the best ideas win"* cutting against
 | **O-A2b** | `references/module_contracts.yaml:343`'s `{name: "projects", bucket: clock, writable: true}` — canon stores project progress as a monotone 0→10 clock | **canonical contract** (`political_dynamics_keys_migration_v30.md:6` is `## Status: CANONICAL`) | A storage divergence, recorded rather than hidden. This design derives the same number, and **the ratchet case is reproduced exactly** (§3.2), so a port keeping canon's stored clock and one deriving it fire on the same season. Only the write leaf differs — and only one of the two obeys AU-1 |
 | **O-A3** | `00 §9.2`'s three proposed key types **`project.declared` / `project.fired` / `project.lapsed`** | this suite's own `00` | **CUT as duplicates. Three of the four already exist and are registered** under ED-935: `mechanical.project_advanced` (`key_type_registry_v30.md:446`), `state.project_completed` (`:691`), `state.project_failed` (`:710`), all with `emitting_systems: [npc_behavior]` and live contract edges at `module_contracts.yaml:318-320, :333-335`. Only **formation** is missing, and `audit/2026-08-11-world-schema-gap-audit/01_gap_register_part2.md:281` (G-29) already proposed `state.project_formed` for it. §10 |
 | **O-A4** | `systems/settlements/governance_play_redesign_v1.md:241` — *"every significant NPC **advances their ambition by 1**… unless the player or another actor intervened"* | **PROPOSAL, unratified** (`:3`) | Its **schema and its argument are adopted** (§5, §9); its **advance rule is replaced**. A `+1` per season on a stored counter is a timer whose only obstruction is a bespoke intervention. Here advance is a **read of world state**, so obstruction is *any* act that moves a term the project reads — and needs no verb of its own |
+| **O-A5** | `proposals/2026-08-18-epistemic-propositions-and-provenance.md §3.4`'s **Condition** row — *"a proposition (or **conjunction**) the engine evaluates"* | a **DESIGN whose five calls are RULED by Jordan** (`:3`), the design itself still PROPOSED | **Generalized, not replaced.** An advance term **is** that Condition, exactly; but a conjunction cannot express *k*-of-*n* or unequal weights, both of which the corpus already contains (§3.2's coup counter). The composite is the more general object and the direction of travel runs **from** this page **to** that one. Ownership splits on the ruled **P4**: P4 owns the leaf predicate vocabulary, `09` owns the composite over it. §3.4 |
 
 **Inherited, not re-decided:** `00 §5.3` O-6 — the **138-arc calibration set is evacuated**, so the
 instruction at `narrative_engine_design_v2_churn.md:91` (*"the compiled generator must reproduce them
@@ -62,7 +63,7 @@ override is as much a decision as overriding.
 
 | kept | tier it *was* | why it is kept **on merit** | what would have made me drop it |
 |---|---|---|---|
-| **The arc-vector template + binding-slot grammar** (ED-IN-0011) | ratified canon | **derived from 138 real authored arcs**, not from a preference; and its anti-oatmeal defence — *specificity from binding at instantiation* — is exactly the property a project object needs and a naive generator lacks. Replacing a decomposition drawn from 138 arcs with one drawn from zero would be a worse proposal wearing my name. §1 | if the ~13 shapes could not express the four-verb lifecycle. **They can** — §1's slot table maps it with nothing left over |
+| **The arc-vector template + binding-slot grammar** (ED-IN-0011) | ratified canon | **derived from 138 real authored arcs**, not from a preference; and its anti-oatmeal defence — *specificity from binding at instantiation* — is exactly the property a project object needs and a naive generator lacks. Replacing a decomposition drawn from 138 arcs with one drawn from zero would be a worse proposal wearing my name. §1 | if the ~13 shapes could not express the four-verb lifecycle. **They can** — §1's slot table maps it with nothing left over. ⚠ **That is the easy direction; §1.2 runs the converse**, where two shapes are only partly expressible and three fail outright in documents other than this one |
 | **The hook grammar** — *the script is the PREDICATE* (2026-08-18) | a Jordan ruling | it **solves scripting drift better than the alternatives**: the authored part is a *predicate over world state*, which cannot special-case an entity, and everything downstream stays emergent. Plus **three worked in-tree precedents**, so it is tested rather than proposed. §4 | if it forced authored content into code branches. **It does not** — §10.2 makes every hook a registry row |
 
 **One place this document does extend past both, argued rather than assumed** (§3.1): the templates
@@ -70,7 +71,8 @@ and all three precedents are **unweighted** — a conjunction that must fully ob
 must reach `k`. This design generalizes to a **weighted sum of indicator terms**, subsuming both as
 special cases and adding partial progress neither can express. **One formula replacing two shapes**,
 which is the elegance criterion's distillation side — listed here rather than slipped in, because it
-extends a ruled grammar.
+extends a ruled grammar. **§3.4 states the same extension against the epistemic layer** and files it as
+**O-A5**, since that is where the leaf vocabulary is ruled to live.
 
 ---
 
@@ -114,6 +116,26 @@ otherwise:
    decision procedure, not a slot. In v2's terms: **the effect table is DATA in
    `content_registry.yaml`, or the row is `firing: false`.** It is never an `if owner == X` branch —
    that is scripting drift and `00 §6` principle 2 rejects it.
+
+### 1.2 The check run in the other direction — can the lifecycle express the shapes?
+
+The `## Overrides` table above asks whether the ~13 ratified shapes can express **this object's
+lifecycle** and answers yes. **That is the easy direction, and running only it was a real methodological
+hole**: the load-bearing question is the converse — *can a project row express the shapes?* Two of the
+thirteen are named here because the answer is **partly**, and a partial answer stated as a pass is the
+disease this suite exists to stop.
+
+| ratified shape | expressible as a project row? |
+|---|---|
+| **COLLISION A–J** (8) — *"cross-arc-collision predicate over ≥2 other arcs' state"* (`_workings_joined.md:1931`) | **yes, and only since §3.1's `tag age` term.** *Both arcs live* is two tag-existence terms — an Ambition tag exists exactly while its project is live. What tag-existence alone could **not** say is *within a window*: two grievances three seasons apart and two thirty seasons apart read identically, and a collision that admits any separation is not a collision. `tag age` closes it, over a field the tag already carries |
+| **BG-CV-01..05** (5) — *"multi-stat-AND one-time trigger → permanent bump"* | **partial, and the limit is structural.** The multi-stat AND is §3.1's equal-weight conjunction and the one-time trigger is §6.2's terminality — both exact. The **permanent bump** is expressible only where a **discrete** form value happens to exist to move to: `01 §5.1`'s decay law gives every gauge `λ ∈ (0,1]`, `rest` and `λ` are declared at load with **no setter** (`01 §5`), so a gauge deposit *always* relaxes to rest and **a permanent continuous change is forbidden by the substrate.** Permanence lives in leaves 2–4 only — a durable Tag, a post grant, a form transition. Where a shape's "permanent bump" has a form row (`place.kind`, a presence band), it is exact; where it does not, this design **cannot** express it, and no weighting of terms recovers it |
+
+**What this document does *not* claim.** B's shape check also found three shapes that fail outright,
+and **none of the three is fixable here**: person↔faction allegiance has no edge kind with a magnitude
+(`01`'s registry), belief has one writer (`02`/`08`/`11`), and no one can refuse an offer (`04`'s
+`pm.appoint`). They are recorded in this table's neighbourhood because **this is the document where the
+shape check is run**, not because this page owns the edits. Do not read §1's "nothing left over" as
+covering them; it covers the lifecycle direction only, which is what it says.
 
 ---
 
@@ -170,10 +192,28 @@ progress(P, season) = Σ_i  w_i · [ term_i holds at season ]           # intege
 threshold(P)        = declared on the project kind's row
 ```
 
-Each `term_i` is a **predicate over readable state** — a gauge band, a form value, the existence of a
-tag, a post's holder, an edge's state, a season index. **Nothing is stored, nothing is written, and
-the resolver is `derivation`** (`00 §7`). This is AU-1 obeyed rather than asserted: a stored progress
-counter is an aggregate over the terms, and `01 §2.1` forbids writing one.
+Each `term_i` is a **predicate over readable state**, and the admissible term kinds are enumerated —
+a closed list, because an open one is where a predicate grammar becomes a scripting language:
+
+| term kind | reads | example |
+|---|---|---|
+| gauge band | `gauge_band(g, season)` (`01 §5`) | `place.condition.order` at or below `strained` |
+| form value | a declared `form_registry.yaml` field | `target.kind == Ruin` |
+| tag existence | `tag(owner, kind, key)` exists | a `Precedent:failure_mark.*` is present |
+| **tag age** *(added — item 4 below)* | `season − tag.created_season` against a declared window | two grievances appended **within 3 seasons of each other** |
+| post holder | a post's `holder_id`, its kind, its tier node | the target's parent tier post is vacant |
+| edge state | an edge's `state` / declared per-kind gauge (`01 §7`) | a charter edge is `intact` |
+| season index | the absolute season counter | `season >= 8` (the fuse precedent, §4) |
+
+**Nothing is stored, nothing is written, and the resolver is `derivation`** (`00 §7`). This is AU-1
+obeyed rather than asserted: a stored progress counter is an aggregate over the terms, and `01 §2.1`
+forbids writing one.
+
+⚠ **`tag age` is an addition to the grammar this document shipped in v2, and it is disclosed as one.**
+It was added because without it the ratified **COLLISION** shape is only partly expressible (§1.2), and
+it costs **no new state**: `created_season` is a field every Tag already carries and that `01 §3.2`
+already reads to derive salience. It is a *non-ratchet* term — it can go false as time passes — which is
+consistent with §3.2, where monotonicity is a property of ratchet terms only and never of the formula.
 
 **Why this is the same object as the hook grammar (§4).** A conjunction hook — *"Crown eliminated,
 **and** Baralta alive, **and** Hafenmark Mandate ≥ 4"* — is the case where every `w_i` is equal and
@@ -235,6 +275,54 @@ consequences, and the third is a prohibition this document is bound by:
    crossed** — and nothing else. **No emitter in this document publishes a forecast**, and the
    forecast/imminence terms of `10`'s ratified light are computed by `10` from realized state, never
    handed to it by a project.
+
+### 3.4 An advance term **is** a Condition — and the composite over them is the more general object (O-A5)
+
+`proposals/2026-08-18-epistemic-propositions-and-provenance.md` is `## Status: DESIGN CALLS RULED
+2026-08-18` (`:3`) — **five Jordan rulings, P1–P5** — and its §3.4 gives three things over one grammar:
+
+| | who holds it | what it is |
+|---|---|---|
+| **Fact** | the world | the proposition obtains in world state |
+| **Belief** | an agent | a `Holding` — may be false, revisable, with provenance |
+| **Condition** | a scripted hook | *"a proposition (or conjunction) the **engine** evaluates"* |
+
+**An advance term is that third row exactly** — not analogously. Its own worked example is one of
+mine: *"A Crown Claim's `Hafenmark Mandate ≥ 4` … [is] the same kind of object"* (`:107-109`), and that is
+§4's third precedent, term for term. So §3.1's table is not a private grammar; it is the Condition
+vocabulary, and it should be **read from a registry rather than restated here.**
+
+**But the weighted sum with a threshold is not a proposition. It is a composite *over* propositions**,
+and it is strictly more general than the ruled wording: a conjunction is the case where every `w_i` is
+equal and `threshold = Σ w_i` (§3.1), and the ruled grammar has no way to say *three of these five, and
+this one counts double.* The division of ownership that follows is clean, and it uses the ruled **P4**
+split rather than inventing one:
+
+| layer | owner | why |
+|---|---|---|
+| the **leaf vocabulary** — which predicates exist and which are engine-evaluable | **P4, ruled**: IN owns engine-evaluable predicates, FI owns claim-only, plus a promotion rule | a hook predicate must be *computable*; a claim predicate need only be *sayable*. §3.1's seven term kinds are all engine-evaluable and belong to IN's half by that test — none of them is claim-only |
+| the **composite** — weights, threshold, `required`, `ratchet`, bands | **this document** | it is the object P4 does not have and does not want: a registry of predicates says nothing about how many of them, weighted how, make a thing fire |
+
+**And that flows back.** This is an override of a ruled design's shape, listed rather than slipped in:
+the ruled *"proposition (or conjunction)"* should **generalize to the weighted composite**, because the
+conjunction it names is already the composite's degenerate case and the corpus contains hooks (`k`-of-`n`
+counters, §3.2) that a conjunction cannot express. `## Overrides` **O-A5** records the direction of
+travel. Nothing here amends that proposal — it is a proposal, and this is a proposal reading it.
+
+**Two-way benefit, and it is not rhetorical.** The ruled design's **independence metric** —
+*"the number of `support_refs` whose `Key.causes` ancestries are disjoint"* (`:85`) — is uncomputable
+today because `Key.causes` is unpopulated. This suite's provenance-required-everywhere rule
+(`01 §3.3`) is exactly the emission discipline that populates it, and **§5's `supporters` /
+`obstructors` derivation is its first consumer**: a set computed by walking `causes[]` for the terms
+that moved. A project that fires *is* a corroboration query, run on the world instead of on a witness.
+
+⚠ **Two honest blockers, both the ruled design's own and neither closed by this integration.**
+`Key.causes` is populated at three non-test sites, only one of them conditionally non-empty
+(`echo_transport.py`, `faction_action.py`, `parliamentary_transfer.py`) — the standing blocker
+shrinks *because* of the integration, it does not disappear. And **the content-address hashing rule is
+unspecified** (`:260-262`, *"still the first thing to nail down"*); with the leaf vocabulary shared, that now
+gates **two** mechanisms rather than one. Neither is this document's to fix; both are named so that a
+reader does not mistake the integration for a completion.
 
 ---
 
@@ -412,7 +500,8 @@ declared-but-unreachable registry row. This document wires it, and the wiring is
 ```yaml
 project_kind: found_settlement
 class: substrate                       # a faction or bloc ambition; NEVER a player menu item
-owner_binding: {entity_kind: faction|bloc, gate: <holds a post whose remit includes founding>}
+owner_binding: {entity_kind: faction|bloc,
+                gate: <owner holds a post of kind head|governor at target's PARENT tier node>}
 slots: [target]     # target MUST be an EXISTING kind: Ruin node (07 §3.5). A project never creates
                     # an entity and never touches the adjacency graph — there is no such write leaf.
 advance_terms:                                                        # equal weights -> conjunction
@@ -424,6 +513,21 @@ threshold: 4        horizon: 12         # SHAPE PROPOSAL, seasons; lapse leaves 
 fire: {guaranteed: true,
        effect: tag_append{kind: Precedent, key: founding_claim, owner: <target>}}    # write leaf 2
 ```
+
+⚠ **The `owner_binding` gate above is a CORRECTION, and the defect it fixes was fatal rather than
+cosmetic.** v2 shipped `gate: <holds a post whose remit includes founding>`. **A `remit` names
+MODULES** — `01 §4.3`: *"a module is invocable only by a post whose remit names it"*, and `00`'s remit
+rule says the same — and **no module named or resembling `founding` exists anywhere in this suite**,
+because §6.3's whole design is that founding is *verb-free*. So the gate named a module that the design
+guarantees will never exist: **no post kind could ever satisfy it, no `founding_claim` Tag could ever be
+deposited, `07`'s `place_found` could never fire, and every `kind: Ruin` placeholder node `07 §3.5`
+declares was permanent dead weight.** The row existed and could not bind — which is strictly worse than
+§13.4's "no rows yet", because a row that cannot bind looks like coverage.
+
+The fix costs a clause. `head`/`governor` are **post kinds** (`04 §3`), a post sits at a **tier node**
+(`04 §2`), and `target's parent tier node` is the same object the adjacent advance term already reads
+one line down (`owner holds a charter edge to target's parent node`). Nothing new is introduced;
+the gate now names two things that exist instead of one that cannot.
 
 **Two properties worth naming.** (1) The fire effect is a **Tag append**; the *transition* stays
 `07`'s, applied by the herald when `07`'s own gate next reads that Tag. **`09` never transitions a
