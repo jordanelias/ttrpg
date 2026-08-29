@@ -1,22 +1,20 @@
 # 07 — Alignment: Factions That Scale Continuously
 
 ## Status: PROPOSED (2026-08-29) — a from-scratch design. Nothing here ratifies on merge.
-## Lane: FA (alignment) · Composes on: `01_substrate.md` §1.2, §1.3, §1.4, §2, §3, §4.1
-## Method: derived from Jordan's A-2/A-4 and the substrate's two relations. No prior faction document constrains it.
+## Lane: FA (alignment) · Composes on `01_substrate.md` §1.2–1.4, §2, §3, §4, §4.1
+## Answers the question §4 delegates here: whether offices + alignment suffice for the Church's four Dicasteries and the guilds' grade ladders.
 
-**The single structural idea of this lane.** A faction is a *proposition* plus a *map from persons
-to a degree of commitment*, and that is the whole object — there is no tier, no level, no size class,
-no scale field, and no verb. Everything a faction appears to do is a person doing it and saying who
-for. Everything a faction appears to *be* — national, local, dangerous, spent — is recomputed from
-the commitment map by observers who may be wrong about it. Growth and collapse are the same
-operation, `commit(person, faction, Δdegree)`, run with different signs, and the reason a faction can
-grow from two brothers to a realm-scale body without an authoring act is that **there is no size at
-which any reader of the object changes what it reads.**
+**The single structural idea.** A faction is a *proposition* plus a *map from persons to a degree of
+commitment*. There is no tier, no level, no size class, no scale field, and **no verb**. Everything a
+faction appears to do is a person doing it and saying who for. Everything it appears to *be* is
+recomputed by observers from their own incomplete ledgers. Growth and collapse are one operation,
+`commit(person, faction, Δdegree)`, run with different signs — and the reason two brothers can become
+a realm-scale body without an authoring act is that **no consumer of the object changes what it reads
+at any size.**
 
-The prior failure this lane exists to escape made faction a *tier*. A tier has boundaries; a boundary
-needs a crossing act; a crossing act has to be authored; and once one is authored, the world can only
-contain the factions somebody wrote. Here the world contains every faction any two people have ever
-sworn anything about, most of them tiny, most of them never noticed, and the interesting ones are
+The prior failure made faction a tier. A tier has boundaries; a boundary needs a crossing act; a
+crossing act must be authored; and then the world contains only the factions somebody wrote. Here the
+world contains every faction any two people ever swore anything about, and the interesting ones are
 interesting because of *where their members stand*, never because of how many there are.
 
 ---
@@ -24,404 +22,350 @@ interesting because of *where their members stand*, never because of how many th
 ## 1. The faction object, completely
 
 ```
-Faction  := Proposition                                  # the identity. nothing else identifies it.
-Edge     := (person, faction, degree, avowal, since, cause)
+Faction := Proposition                                   # the identity. nothing else identifies it.
+Edge    := (person, faction, degree, avowal, since, cause)
 ```
 
-There is no member list held on the faction. Edges live on persons, exactly like every other thing a
-person carries, and the "membership" of a faction is a query over persons — which is what makes the
-object cheap enough to have ten thousand of them.
+No member list is held on the faction. Edges live on persons; "membership" is a query.
 
-### 1.1 The proposition — the same object an argument can attack
+### 1.1 The proposition — the same object an argument attacks
 
-A proposition is a claim tuple in the **deontic mood**. The substrate's memory rows are
-`(subject, predicate, value, when, source, confidence)` in the indicative — *the granary is full*. A
-proposition is `(subject, predicate, value, when, mood)` with `mood ∈ {is, ought, will}`, and a
-faction's identity is a proposition in `ought`:
+The substrate's memory rows are `(subject, predicate, value, when, source, confidence)` in the
+indicative. A proposition is the same tuple with a mood field, `mood ∈ {is, ought, will}`, and a
+faction's identity is a proposition in `ought` or `will`:
 
 | faction | proposition |
 |---|---|
-| Halvar and Odd Uln, sworn over their sister's refused Masterpiece | *(Reeve Bertold of Grauwald, answers-for, the Uln barn, before next levy day, **ought**)* |
+| Halvar and Odd Uln, sworn over their sister's refused Masterpiece | *(Reeve Bertold, answers-for, the Uln barn, before levy day, **ought**)* |
 | The Kettlemakers of Goldenfurt | *(the Free Master gate, admits, only examined hands, all-time, **ought**)* |
 | The Church of Solmund | *(the peninsula, holds, Solmundan Orthodoxy, all-time, **ought**)* |
-| The Dicastery for the Defense of the Faith | *(heterodox practice, is-suppressed-by, force where persuasion fails, all-time, **ought**)* |
+| The party of the Defense of the Faith | *(heterodox practice, is-suppressed-by, force where persuasion fails, all-time, **ought**)* |
 | The Restoration Movement | *(Einhir communities, govern, themselves by consensus, all-time, **ought**)* |
-| The Baralta Crown Claim | *(Inge Baralta, holds, the Valorian throne, on the next vacancy, **will**)* |
+| The Baralta Crown Claim | *(Inge Baralta, holds, the throne, on the next vacancy, **will**)* |
 
-This matters for exactly one reason and it is the reason the whole lane holds together: **an argument
-attacks a proposition, and a faction *is* a proposition, so attacking a faction and attacking a claim
-are the same operation with the same moves.** The fallback ladder — deny the act, deny the label,
-admit and justify, challenge the venue — runs against *(Bertold answers-for the barn)* exactly as it
-runs against *(the granary is full)*. Nothing in this lane needs an argument subsystem written for
-factions; it needs the argument lane to accept a mood field, and this document is the request.
+This matters for one reason and it is what holds the lane together: **an argument attacks a
+proposition, and a faction *is* a proposition, so attacking a faction and attacking a claim are the
+same operation with the same moves.** The fallback ladder — deny the act, deny the label, admit and
+justify, challenge the venue — runs against *(Bertold answers-for the barn)* exactly as against *(the
+granary is full)*. This lane needs no faction-specific argument machinery; it needs the argument lane
+to accept a mood field, and this is the request.
 
-Because identity is the proposition, **there is no found-a-faction operation.** Two persons in Oastad
-who independently hold a strong stance toward *(Einhir communities govern themselves by consensus)*
-are not yet a faction — a stance is not a commitment. The faction begins when one of them performs
-`commit` for the first time: takes an oath, hides a cell courier, hands over grain. That is one
-person's act, at a place, at a time, witnessable. This is the whole of "the Restoration Movement can
-emerge spontaneously from territorial neglect": repeated dropped petitions write grievance stances
-toward the container into hundreds of ledgers; the stances converge on one proposition because the
-proposition is the obvious negation of the thing that was refused; and then somebody acts.
+Because identity *is* the proposition, **there is no found-a-faction operation.** Two people in Oastad
+who independently hold a strong stance toward the same proposition are not yet a faction — a stance is
+not a commitment. The faction begins at the first `commit`: an oath taken, a courier hidden, grain
+handed over. One person's act, at a place, at a time, witnessable. That is the whole of "the
+Restoration can emerge spontaneously from territorial neglect": dropped petitions write grievance
+stances into hundreds of ledgers, the stances converge on one proposition because the proposition is
+the obvious negation of what was refused, and then somebody acts.
 
-- **Closed loop.** Produced by grievance and by tellings that name the proposition; carried as a
-  stance-table referent on each person and as the identity of any edges pointing at it; consumed by
-  the argument system, by requisition, and by every profile roll-up.
-- **N-line.** Cut the proposition and a faction becomes a bag of names — nothing to argue against,
-  nothing to schism over, and no way for two strangers to discover they are already on the same side.
+- **Loop.** Produced by grievance and by tellings that name it; carried as a stance-table referent and
+  as the identity of edges; consumed by the argument system, requisition, and every roll-up.
+- **N-line.** Cut it and a faction is a bag of names — nothing to argue against, nothing to schism
+  over, no way for two strangers to discover they were already on the same side.
 
-### 1.2 The commitment degree, and what each degree licenses
+### 1.2 The commitment degree, and what each licenses
 
-| d | name | weight `w(d)` | what it licenses (and nothing beyond) |
+| d | name | `w(d)` | licenses — and nothing beyond |
 |---|---|---|---|
-| 0 | none | 0 | — (an edge at 0 is a deleted edge; departure needs no operation) |
-| 1 | sympathy | 0.15 | will not testify against a member; may be told cell-safe claims; stance weight toward the proposition applies at view assembly |
-| 2 | sympathiser | 0.40 | may be asked for material, shelter, or carriage at low cost; may `carry` a petition whose proposition is the faction's |
-| 3 | member | 1.00 | may be *requisitioned* for acts inside their ordinary capability; may `avow`; counts in the faction's judging weight |
-| 4 | sworn | 1.60 | may be requisitioned for acts **against their own container's interest**; refusal is witnessed by every d≥3 member and costs regard with all of them |
-| 5 | constitutive | 2.20 | the proposition occupies a Conviction-primary slot; no regard offer and no material offer enters the refusal check at all; refusal is a Coherence event |
+| 0 | none | 0 | — (degree 0 *is* deletion; departure needs no operation) |
+| 1 | sympathy | 0.15 | will not testify against a member; may be told cell-safe claims; stance weight applies at view assembly |
+| 2 | sympathiser | 0.40 | may be asked for material, shelter, carriage at low cost; may `carry` a petition of the faction's proposition |
+| 3 | member | 1.00 | may be **requisitioned** for acts inside their ordinary capability; may `avow` |
+| 4 | sworn | 1.60 | may be requisitioned for acts **against their own container's interest**; refusal is witnessed by every d≥3 member |
+| 5 | constitutive | 2.20 | the proposition holds a Conviction-primary slot; **no offer term enters the refusal check at all**; refusal is a Coherence event |
 
-Degree 5 is where the refusal *"relationship modifiers large enough to dissolve structural conflict"*
-is paid for. A rival cannot buy Odd Uln off his oath, because at d=5 the offer term is not in the
-formula. That is not a big number resisting a big number; it is a term that is absent.
+Degree 5 is where *"relationship modifiers large enough to dissolve structural conflict"* is refused
+concretely. Nobody buys Odd Uln off his oath — not because the number is large, but because the offer
+term is absent from the formula.
 
 **Requisition** is the only channel from a faction to an act, and it is an ask between two persons:
 
 ```
 requisition(asker, member, act, node)
-  obstacle = base(act) + burden(member, act) − 2·w(d) − regard(member→asker)/2 − conviction_bonus
-  burden   = cost to the member's own computed need
-           + 2 · (harm to the member's container's stake)
-           + 3 · (marks the act collides with)
+  obstacle = base(act) + burden − 2·w(d) − regard(member→asker)/2 − conviction_bonus
+  burden   = cost to the member's computed need
+           + 2 · harm to the member's container's stake
+           + 3 · marks the act collides with
 ```
 
-Refuse with low burden and the edge loses a degree; refuse with high burden and it does not — a
-faction that asks the impossible loses nobody, and a faction that asks the trivial and is refused
-learns something true. `conviction_bonus` is the substrate's Momentum term: acting on a
-Conviction-primary is what Momentum is for, so a d=5 requisition is the cheapest ask in the game and
-also the one that spends a person's whole position.
+Refuse at low burden and the edge drops a degree; refuse at high burden and it does not — a faction
+that asks the impossible loses nobody, and one that asks the trivial and is refused has learned
+something true. `conviction_bonus` is the substrate's Momentum term, so a d=5 ask is the cheapest in
+the game and also the one that spends a person's whole position.
 
-- **Closed loop.** Produced by `commit` acts (oath, shelter, payment, betrayal); carried as edges on
-  persons; consumed by requisition, by capacity, by the profile roll-up, and by the judging sets that
-  punish or reward discovered membership.
-- **N-line.** Cut the degree and every member is either in or out, so a Restoration sympathiser who
-  slips bread cannot exist, informers cannot be recruited from the shallow end, and a faction cannot
-  be *hollowed* — only shattered.
+- **Loop.** Produced by `commit` acts; carried as edges on persons; consumed by requisition, capacity,
+  the roll-ups, and the judging sets that punish or reward discovery.
+- **N-line.** Cut degree and everyone is in or out: no sympathiser slipping bread, no shallow end to
+  recruit informers from, and no way to *hollow* a faction rather than shatter it.
 
 ### 1.3 Secrecy is not a property of the secret
 
 Each edge carries `avowal ∈ {avowed, private, covert}`.
 
-- **Avowed** — an act was performed that deposits the claim `(person, member-of, faction, …)` into
-  the judging set of the person's community by the ordinary witnessing path.
-- **Private** — no public claim exists. Discoverable by anyone who witnesses a requisition being
-  honoured, or who is told.
-- **Covert** — members additionally perform concealment acts, and may `tell` a *cover claim*: an
-  assertion of a different edge, or of none. Niflhel's dockworkers and the Burned run every edge
-  covert by construction, and Niflhel is caste-open *because* covert work at the Baralta waterfront
-  requires Southern Einhir members whose marks let them stand there unremarked — the caste-openness
-  is a consequence of the operational requirement, not a policy.
+- **Avowed** — an act deposited the membership claim into the person's community judging set by the
+  ordinary witnessing path.
+- **Private** — no public claim. Discoverable by witnessing a requisition honoured, or by being told.
+- **Covert** — members additionally perform concealment acts and may `tell` a *cover claim*: an
+  assertion of a different edge, or of none. Niflhel runs every edge covert, and is caste-open
+  *because* covert work at the Baralta waterfront needs Southern Einhir members whose marks let them
+  stand there unremarked. The caste-openness is a consequence of the operational requirement, not a
+  policy anyone wrote.
 
-There is **no "known %" on a membership**, because there is no knower on such a number. Who knows is
-a row in a knower's ledger, discovered by the ordinary investigation path: an investigator
-accumulates claims about a person's acts and deposits an *inference* claim about the edge, whose
-confidence comes from corroboration — and corroboration fails closed, so one rumour retold three
-times through Riverside supports the inference exactly once.
+There is **no "known %" on a membership** — no knower on such a number. Who knows is a row in a
+knower's ledger, deposited by the ordinary investigation path as an `inferred` claim whose confidence
+comes from corroboration. Corroboration fails closed, so one rumour retold three times through
+Riverside supports the inference exactly once.
 
 **Exposure is derived, never stored:**
 
 ```
-exposure(edge) = Σ over persons q holding a claim about the edge of
-                 confidence(q's claim) · hostility(q → faction's proposition)
+exposure(edge) = Σ over persons q holding a claim about it of
+                 confidence(q's claim) · hostility(q → the proposition)
 ```
 
-It rises when an investigation actually spends acts, because that is the only thing that puts claims
-into ledgers. It cannot rise on a clock.
+It rises only when an investigation spends acts, because acts are the only thing that puts claims in
+ledgers. It cannot rise on a clock.
 
-**What a discovered covert membership costs is computed from the observers, not from the secret.**
-The claim enters the judging set; each member applies their own stance toward the proposition and
-their own stance toward the discovered person's marks. So the identical discovery — *this man is
-Restoration at degree 3* — costs a Goldenfurt Free Master his committee seat, because the
-Kettlemakers' committee holds strong stances against the proposition and against Southern Einhir
-hands both; costs an Oastad fisherman nothing, because his neighbours are already sympathisers; and
-makes a Southern Einhir Canon a scandal at Himmelenger, because the Church's standing marks and the
-proposition collide in every observer's table at once. One mechanism, three outcomes, no
-faction-wide reputation number anywhere.
+**What a discovered covert membership costs is computed from the observers, not from the secret.** The
+claim enters a judging set; each member applies their own stance toward the proposition *and* toward
+the person's marks. So one identical discovery — *this man is Restoration at degree 3* — costs a
+Goldenfurt Free Master his committee seat, because the Kettlemakers' committee holds stances against
+both the proposition and Southern Einhir hands; costs an Oastad fisherman nothing, because his
+neighbours are already sympathisers; and makes a Southern Einhir Canon a scandal at Himmelenger,
+because standing marks and proposition collide in every observer's table at once. One mechanism, three
+outcomes, and no faction-wide reputation number anywhere.
 
-- **Closed loop.** Produced by concealment and by investigation acts; carried in observers' ledgers;
-  consumed by judging sets, by requisition (you cannot ask a man to act openly for a faction he must
-  hide), and by threat assessment.
-- **N-line.** Cut avowal and every faction is public, which deletes infiltration, informers, the
-  Burned, cover identities, and the entire reason a Restoration cell is organised as a cell.
+- **N-line.** Cut avowal and every faction is public: no infiltration, no informers, no Burned, no
+  cover identities, and no reason a Restoration cell is organised as a cell.
 
 ---
 
 ## 2. Capacity routes through persons — a faction has no verbs
 
-This is the sharpest claim in the lane and the one that makes size stop mattering.
-
 ```
 capacity(f, node, act) = ∃ P ⊆ members(f) with address ⊆ node such that
-                           requires(act, P) is satisfied
-                         and ∀p ∈ P : eligible(p, act, node)
-                         and ∀p ∈ P : requisition(asker, p, act, node) succeeds
+                           requires(act, P) holds,
+                           ∀p ∈ P: eligible(p, act, node),
+                           ∀p ∈ P: requisition(asker, p, act, node) succeeds
 ```
 
-Three things to notice.
+**It is an existential over persons, not a sum over size.** `presence` does not appear. Two members,
+one of them a gate warden, opens a gate. Nine thousand members and no gate warden does not, and no
+amount of growth changes it, because growth changes a quantity the formula never reads.
 
-**It is an existential over persons, not a sum over size.** `presence` does not appear. A faction
-with two members and one of them a gate warden has capacity to open a gate; a faction with nine
-thousand members and none of them a gate warden does not, and no amount of growth changes that,
-because growth changes `presence` and `presence` is not in the formula.
-
-**`eligible` is the substrate's ordinary per-person act eligibility and it never consults the
-faction.** Faction membership does not unlock an act. This is what keeps the game from acquiring a
-second, faction-shaped action economy sitting parallel to the person one.
+**`eligible` is the substrate's ordinary per-person eligibility and never consults the faction.**
+Membership unlocks no act. This is what stops a second, faction-shaped action economy growing beside
+the person one.
 
 **`requires(act, P)` is a predicate over person-*sets*, which is how multi-person acts work without a
-faction ever getting an action-point pool.** The tithe reckoning at Goldenfurt requires the praefect,
-the parish priest and the guild burgher to sit together; a levy exemption requires a majority of the
-Free Masters present at the standing date; a night raid requires one person who holds the keys and
-one who holds the door. A faction performs such an act only if it holds *enough different persons in
-enough different posts*, all of whom pass requisition in the same season — and any one of them can
-simply not turn up.
+faction ever getting an action-point pool.** The tithe reckoning at Goldenfurt needs the praefect, the
+parish priest and the guild burgher sitting together; a levy exemption needs a majority of Free
+Masters present at the standing date; a night entry needs one who holds the keys and one who holds the
+door. A faction performs such an act only if it holds enough *different persons in different posts*,
+all passing requisition in one season — and any one of them can simply not turn up.
 
-**Attribution is a separate, contestable claim.** When a person acts, they may attach
-`for(faction)`. That attachment is an assertion, and like every assertion it can be false, denied, or
-manufactured. A Niflhel operative burning a warehouse and leaving a Restoration marker is one act and
-two claims, and the second one is what everybody's threat assessment will read.
+**Nobody, including the faction's own leader, computes true capacity.** A leader decides from a view,
+so what they act on is their *estimate* of who will comply. Discovering that a sworn member will
+refuse is a normal, frequent, and dramatic event.
 
-- **Closed loop.** Produced by requisition succeeding on a person who is eligible at a node; carried
-  as an ordinary act with an attribution claim; consumed by the resolver, and by every witness whose
-  ledger now holds *this faction did that here.*
-- **N-line.** Cut person-routed capacity and factions get verbs; the moment they do, a faction with
-  a big number can act anywhere, T1 dies, and the strategic layer detaches from the people in it.
+**Attribution is a separate contestable claim.** A person may attach `for(faction)` to an act. That is
+an assertion — falsifiable, deniable, and forgeable. A Niflhel operative burning a warehouse and
+leaving a Restoration marker is one act and two claims, and the second is what everyone's threat
+assessment reads.
+
+- **Loop.** Produced by requisition succeeding on an eligible person at a node; carried as an ordinary
+  act plus an attribution claim; consumed by the resolver and by every witness.
+- **N-line.** Cut person-routed capacity and factions get verbs; then a faction with a big number acts
+  anywhere, T1 dies, and the strategic layer detaches from the people in it.
 
 ---
 
-## 3. The derived profile, which gates nothing and changes everything
+## 3. The two profiles
+
+The substrate splits these and this lane holds the split, because the obvious implementation is a back
+door wide enough to void the signature rule.
 
 ```
-presence(f, n)  = Σ over p ∈ members(f) with address(p) ⊆ n of w(degree(p,f))
+presence(f, n)  = Σ over members inside n of w(degree)
 density(f, n)   = presence(f, n) / weighted_population(n)
-footprint(f)    = { n : presence(f, n) > 0 }        # upward-closed in the containment tree
+footprint(f)    = { n : presence(f, n) > 0 }     # upward-closed in the containment tree
 ```
 
-Roll-up is one pass up the tree: each node sums its children. Nothing is stored; the profile is
-recomputed and can never be stale.
-
-**What reads the profile:**
-
-| reader | what it does with it |
-|---|---|
-| perception | how loudly a faction registers to a person standing at a node |
-| reputation | how strangers price a person's known membership |
-| threat assessment | who bothers to oppose you, and with what |
-| recruitment salience | whether the proposition is even *available* as a stance referent to a person here |
-
-**What does not read it:** capacity, eligibility, requisition, contest resolution, the argument
-system. Nothing that decides an outcome reads a scale number, ever.
-
-And the profile a decision-maker actually acts on is not the true one:
+| | computed from | consumed by |
+|---|---|---|
+| **true profile** | actual memberships, covert included | **exactly one consumer: `resolve`.** Revolt is a comparison between how many people are really committed at a node and what the coercive apparatus can hold — a fact about the world, resolver-side. **No `choose` may take it.** |
+| **estimated profile** | one observer's own claim ledger | that observer, inside their view: perception, reputation, threat assessment, recruitment salience |
 
 ```
-perceived_presence(f, n | observer o) =
-    Σ over p ∈ n for whom o's ledger holds a membership claim about (p, f)
-      of w(claimed degree) · confidence(that claim)
+estimate(f, n | observer o) = Σ over persons p in n for whom o holds a membership claim
+                                of w(claimed degree) · confidence(that claim)
 ```
 
-Covert edges contribute zero until discovered. So underestimation and overestimation are free, and
-both are wrong in the direction the observer's evidence is thin.
+Every observer holds a different estimate of the same faction. Covert edges are simply absent until
+somebody's claim names them, so misjudgement is the default rather than a special case.
 
-*Underestimated:* Duke Magnus Vaynard reads the Restoration in Grauwald at perceived density 0.02
-because two men have been caught. The true figure is 0.19 across four hamlets, and it is spread
-across sympathisers who have never been asked to do anything visible. He allocates one Knight of the
-Peace.
+**Nothing that decides an outcome reads either profile.** Capacity, eligibility, requisition, contest
+resolution and the argument system are all person-reads. Size buys being *noticed*.
 
-*Feared before it acts:* the Kettlemakers of Goldenfurt are 140 avowed persons at density 0.31 in one
-community. Everyone can count them. They have not moved on anything for eleven seasons and their
-capacity at the Court Parliament is zero, because their one burgher's seat lapsed. The praefect
-negotiates with them anyway, because his threat assessment reads density and his ledger holds no
-claim about the lapsed seat.
+*Underestimated:* Duke Magnus Vaynard's estimate of the Restoration in Grauwald is density 0.02 —
+two men caught. The true figure is 0.19 across four hamlets, spread over sympathisers never asked to
+do anything visible. He sends one Knight of the Peace.
 
-- **Closed loop.** Produced by the roll-up over the commitment map each tick; carried nowhere (true
-  profile) and in observers' ledgers (perceived); consumed by perception, reputation and threat
-  assessment only.
-- **N-line.** Cut the profile and a small faction cannot be underestimated and a large one cannot be
-  feared before it acts — every faction is exactly as frightening as what it has already done.
+*Feared before acting:* the Kettlemakers are 140 avowed persons at density 0.31 in one community.
+Anyone can count them. They have moved on nothing for eleven seasons and their capacity at the Court
+Parliament is zero, because their burgher's seat lapsed. The praefect negotiates anyway: his estimate
+reads density, and his ledger holds no claim about the lapsed seat.
+
+- **N-line.** Cut the estimated profile and a conspiracy of nine cannot be read as a rabble, or a
+  rabble as a conspiracy — and every act taken against a wrong estimate goes with it.
 
 ---
 
 ## 4. POWER_BASE: the shape of a support set, and its paired cut
 
-Standing is **one shared rank space**, `standing(p, n) ∈ 0..7`, per person per node. There is no
-second seat-space and no faction rank ladder.
+Standing is **one shared rank space**, `standing(p, n) ∈ 0..7`. There is no faction rank ladder and no
+second seat-space.
 
 Standing is **computed, never stored**, from a **support set** `S(p, n)` — the named persons whose
-compliance or regard is what makes the standing real:
+compliance or regard makes the standing real:
 
 ```
-standing(p, n) = clamp₀₇ ( Σ over q ∈ S(p,n) of contribution(q, p, n) )
-contribution(q, p, n) = f( standing(q, n), regard(q → p), compliance(q, p) )
+standing(p, n) = clamp₀₇ Σ over q ∈ S(p,n) of contribution( standing(q,n), regard(q→p), compliance(q,p) )
 ```
 
 Because it is computed, there is **no scheduled recovery tick**: standing moves when and only when
-something happens to a member of `S`. A person whose support set is untouched does not decay, and a
-person whose patron dies does not need a timer to fall.
+something happens to a member of `S`. A person whose support set is untouched does not decay; a person
+whose patron dies needs no timer to fall.
 
-`power_base(p, n)` is the **topology of S** — a distribution of mass over seven shapes. It is not an
-eligibility filter and it gates no action, because gating capability on biography is refused: gate on
-a class and losing a person is a promotion opportunity; gate on "the one with the cavalry history"
-and losing one person costs you cavalry forever. What the basis types is not what you may do. **It
-types how your standing can be taken away.**
+`power_base(p, n)` is the **topology of S** — mass distributed over seven shapes. It is **not an
+eligibility filter and gates no action**: gating capability on biography means losing one person costs
+a faction a capability permanently. What the basis types is not what you may do. It types **how your
+standing can be taken away.**
 
-| basis | shape of S | how standing rises | the characteristic cut | what an investigator must learn to find the cut | cost / cadence of the cut |
+| basis | shape of S | how it rises | the characteristic cut | what an investigator must learn to find the cut | cost / cadence |
 |---|---|---|---|---|---|
-| **patronage** | a rooted tree; every contribution conditioned on the root's | the patron sponsors, appoints, vouches | remove the root — every conditioned contribution voids in one event, fanning into N simultaneous demotions | *who sponsored whom, in what order* — a chain of witnessed admission and appointment acts | one act against one person, who is usually the best-defended person available |
-| **merit / credential** | the body holding the criterion, plus everyone who defers to the credential | pass the gate (the Masterpiece Examination is exactly this) | rewrite the criterion, or void a specific examination — retroactive, because the credential's force lives as a claim in *other people's* ledgers about what it means | who sits the committee now, what the criterion currently says, and which sitting holders would fail a rewritten one | cheap in violence, expensive in the committee's regard, and slow: it needs a standing date |
-| **kinship** | living kin plus the hearth's succession pointer | birth, marriage, fostering, legitimation | break the pointer (disinherit, legitimate a rival) — or simply outlast it: failing to place a child for one generation decays the precedent by demography, with no violence at all | the hearth's marriages, the pointer's current target, which kin are of an age, and who has no heirs | free if you can wait; a generation is the cadence |
-| **bureaucratic** | the persons who *must route through* p to reach something | volume filtered, not rank — a clerk with standing 1 who reads every petition outranks a minister | a single bypass, used publicly once. S empties, because its members were never loyal — only routed | what actually routes through p, and whether an alternative route exists that nobody has used yet | near-free once found; the entire difficulty is finding it |
-| **military** | armed persons whose larders p fills | pay, plunder, victory | interrupt the larder. Unpaid armed men do not disperse — they become their own faction and treat plunder as wages | the pay cadence, the arrears, and *who physically hands out the coin* | cheap if a revenue stream is cuttable; dangerous, because the cut manufactures a hostile faction with military capacity |
-| **purchased** | holders of a transferable instrument — a charter, a farmed levy, a debt | buy it | outbid, or devalue the instrument with a dispensation that changes its terms | what the instrument is, who holds it, its price, and its written terms | money; the only basis whose cut is symmetrically available to any rich rival, which is why it never consolidates far |
-| **ideological** | persons whose Conviction-primary matches the proposition | the proposition spreads by tellings | a hypocrisy: a witnessed act by p contradicting the proposition, deposited into S's ledgers. It fires on everyone holding that Conviction *simultaneously* | what p actually did, and a witness who will `tell` it credibly into the right ledgers | hardest to obtain, cheapest to fire, and irreversible — obstinacy resists re-opening |
+| **patronage** | a rooted tree; every contribution conditioned on the root's | the patron sponsors, appoints, vouches | remove the root — every conditioned contribution voids in one event, fanning into N simultaneous demotions | *who sponsored whom, in what order* — a chain of witnessed admission and appointment acts | one act against one person, usually the best-defended person available |
+| **merit / credential** | the body holding the criterion, plus everyone deferring to the credential | pass the gate — the Masterpiece Examination is exactly this | rewrite the criterion, or void a specific examination. Retroactive, because the credential's force lives as claims in *other people's* ledgers about what it means | who sits the committee now, what the criterion says, and which sitting holders would fail a rewritten one | cheap in violence, expensive in the committee's regard, slow: it needs a standing date |
+| **kinship** | living kin plus the hearth's succession pointer | birth, marriage, fostering, legitimation | break the pointer (disinherit, legitimate a rival) — or outlast it: failing to place a child for one generation decays the precedent by demography, with no violence at all | the hearth's marriages, the pointer's target, which kin are of an age, who has no heir | free if you can wait; the cadence is a generation |
+| **bureaucratic** | the persons who *must route through* p | volume filtered, not rank — a clerk at standing 1 who reads every petition outranks a minister | a single bypass, used publicly once. S empties, because its members were never loyal — only routed | what actually routes through p, and whether an unused alternative route exists | near-free once found; the whole difficulty is finding it |
+| **military** | armed persons whose larders p fills | pay, plunder, victory | interrupt the larder. Unpaid armed men do not disperse — they become their own faction and treat plunder as wages | the pay cadence, the arrears, and who physically hands out the coin | cheap if a revenue stream is cuttable; dangerous, because the cut manufactures a hostile faction that has military capacity |
+| **purchased** | holders of a transferable instrument — a charter, a farmed levy, a debt | buy it | outbid, or devalue the instrument with a dispensation changing its terms | what the instrument is, who holds it, its price, its written terms | money — the only basis whose cut is symmetrically available to any rich rival, which is why it never consolidates far |
+| **ideological** | persons whose Conviction-primary matches the proposition | the proposition spreads by tellings | a hypocrisy: a witnessed act by p contradicting the proposition, deposited into S's ledgers. Fires on everyone holding that Conviction *simultaneously* | what p actually did, and a witness who will `tell` it credibly into the right ledgers | hardest to obtain, cheapest to fire, irreversible — obstinacy resists re-opening |
 
-**Every one of those "what an investigator must learn" cells is a claim tuple the investigation lane
-already produces.** None of them is a hidden die roll. That is the discipline the precedent demands:
-a vulnerability the player cannot read is a coin-flip wearing a mechanic's clothes.
+**Every "what an investigator must learn" cell is a claim tuple the investigation lane already
+produces.** None is a hidden roll. That is the discipline: a vulnerability the player cannot read is a
+coin-flip wearing a mechanic's clothes.
 
 ### 4.1 Consolidation is self-limiting by construction
 
-A person who consolidates does not replace one basis with another; they **add** bases. Duchess Inge
-Baralta's claim rests on kinship (a cadet deed-family's proximity), purchased instruments (Hafenmark
-charters), bureaucratic position (the Parliament's business routes through her people), and — since
-the Almud–Schoenland trade opening — ideological mass among merchants who read the Crown as having
-sold the peninsula. Four bases. Four independent cuts, none of which the others protect against:
+Consolidating does not replace one basis with another; it **adds** them. Duchess Inge Baralta's claim
+rests on kinship (a cadet deed-family's earned proximity), purchased instruments (Hafenmark charters),
+bureaucratic position (Parliament's business routes through her people), and — since Almud's
+Schoenland trade opening — ideological mass among merchants who read the Crown as having sold the
+peninsula. Four bases, four independent cuts, none protecting against the others.
 
 ```
 cuts_available(p, n) = |{ b : mass_b(p, n) > 0 }|      # monotone non-decreasing in consolidation
 ```
 
-The more a person consolidates, the more distinct ways there are to take them apart. No balance patch
-is doing this; it is a property of the object.
+No balance patch is doing this. It is a property of the object.
 
 ### 4.2 The coalition threshold, and who pays for waiting
 
-A single challenger can execute at most one basis-cut inside one standing-date window. Therefore:
+A single challenger can execute at most one basis-cut inside one standing-date window.
 
 ```
-unwind_cost(p, n) = Σ over bases b of mass_b · cut_cost_b(|S_b|)
-single_handed  iff  ∃b : mass_b ≥ 0.8
-otherwise the challenge requires a coalition able to land ⌈k⌉ cuts inside one window,
-where k = the number of bases carrying mass ≥ 0.2
+single-handed  iff  ∃b : mass_b ≥ 0.8
+otherwise the challenge needs a coalition landing ⌈k⌉ cuts inside one window,
+where k = |{ b : mass_b ≥ 0.2 }|
 ```
 
-**Published to the player as a band, never as a number**, with all inputs visible: the bases, their
-rough masses, the named persons in each S the player has claims about, and a verdict of
-`SINGLE-HANDED` / `NEEDS ALLIES` / `NEEDS A COALITION OF THREE OR MORE`. The player can see everything
-feeding the judgement and cannot see the trigger point. That is the substitute for a GM, and it costs
-no mechanics.
+**Published as a band with every input visible, and never as a number**: the bases, their rough
+masses, the named persons in each `S` the player holds claims about, and a verdict of
+`SINGLE-HANDED` / `NEEDS ALLIES` / `NEEDS A COALITION OF THREE OR MORE`. The player sees everything
+feeding the judgement and never the trigger point. That is the substitute for a GM and it costs no
+mechanics.
 
-**The R-check on the fork this creates.** The player's fork is *challenge now* against *wait and
-investigate*.
+**R-check on the fork it creates** — *challenge now* against *wait and investigate*:
 
-- Waiting **gains**: each season of investigation may convert an unknown basis into a readable cut,
-  which can collapse `k` from 3 to 1. Gain grows, then saturates when the cuts are all found.
-- Waiting **costs**: `k` rises as the target consolidates, and each new basis adds a new S to
+- Waiting **gains**: each season of investigation may convert an unread basis into a readable cut,
+  collapsing `k` from 3 to 1. Gain grows, then saturates when the cuts are found.
+- Waiting **costs**: `k` rises as the target consolidates, and each new basis is a new `S` to
   penetrate. Cost grows.
-- Challenging now **gains**: the target's S is smaller and the coalition is cheaper.
-- Challenging now **costs**: acting on unread bases means cutting the wrong one, which is witnessed,
-  which raises the target's ideological mass (a survived attack is a proof of enemies).
+- Acting now **gains**: `S` is smaller, the coalition cheaper.
+- Acting now **costs**: cutting an unread basis is cutting the wrong one, which is witnessed — and a
+  survived attack *raises* ideological mass, because it is proof of enemies.
 
-Both arms have growing gain and growing cost, and they cross at a point that depends on how fast the
-player can investigate versus how fast the target can consolidate. Neither arm is structurally
-dominant. **Power in this design is never invulnerable — it is expensive to unwind, and the bill is
-paid by whoever waited too long.**
+Both arms have growing gain and growing cost, crossing at a point set by how fast the player can
+investigate against how fast the target can consolidate. Neither is structurally dominant. **Power is
+never invulnerable — only expensive to unwind, and the bill is paid by whoever waited too long.**
 
-- **Closed loop.** Produced by the acts that place persons into support sets — sponsorship, payment,
-  marriage, appointment, conversion; carried as the support-set edges plus each member's regard;
-  consumed by `standing`, by `unwind_cost`, and by every investigation that asks *how do I take this
-  person down.*
-- **N-line.** Cut power_base and every rise is the same rise and every fall is a generic contest
-  roll; you lose the entire class of play where the way somebody got where they are *is* the way to
-  remove them, and you lose the reason investigation matters to the strategic layer at all.
+- **N-line.** Cut power_base and every rise is the same rise and every fall a generic contest roll.
+  You lose the whole class of play where *how somebody got where they are* is the way to remove them,
+  and with it the reason investigation matters to the strategic layer.
 
 ---
 
 ## 5. Growth and shrink as one operation
 
-There is one operation: `commit(person, faction, Δdegree)`.
-
-| the thing it looks like | what it actually is |
+| what it looks like | what it is |
 |---|---|
-| **schism** | a subset of members whose degree toward proposition A falls to 0 while their degree toward a rival proposition B rises. The Restoration fracturing over whether Einhir practice is political inheritance or Thread inheritance is two propositions and a few dozen commits. |
-| **merger** | members of A committing to B. A does not disappear; it becomes a proposition with no edges, which is indistinguishable from a proposition nobody has sworn to yet. |
-| **growth into a national body** | many commits, over seasons, in many places. The profile changes continuously as they land. |
+| **schism** | a subset whose degree toward A falls to 0 while degree toward a rival proposition B rises. The Restoration fracturing over political-inheritance versus Thread-inheritance is two propositions and a few dozen commits. |
+| **merger** | members of A committing to B. A becomes a proposition with no edges — indistinguishable from one nobody has sworn to yet. |
+| **growth into a national body** | many commits over seasons in many places. |
 | **collapse** | many commits with negative Δ. Same op, same tick, same readers. |
 | **founding** | the first commit. |
 
 ### 5.1 The continuity lemma, stated so it can be falsified
 
-*Claim:* there is no size at which any consumer of the faction object changes behaviour in kind.
+Enumerate the consumers. `presence`/`density` are sums of `w(d)`, continuous in the map. `capacity` is
+an existential over persons — one commit can flip it, but on *which person*, never on how many.
+`requisition` reads one edge. `contest` resolves through named persons (§9). `standing` reads support
+sets, which are person sets. `unwind_cost` is a sum over bases. The argument system reads only the
+proposition, which does not change with membership at all.
 
-*Proof shape:* enumerate the consumers. `presence` and `density` are sums of `w(d)`, continuous in
-the map. `capacity` is an existential over persons — one commit can flip it, but it flips on *which
-person*, not on how many. `requisition` reads one edge. `contest` (§8) resolves through named
-persons. `standing` reads support sets, which are person sets. `unwind_cost` is a sum over bases. The
-argument system reads the proposition, which does not change with membership at all.
+**No consumer contains a term of the form `if |members| > K then <different object>`.** The only
+thresholds in the lane are band thresholds on published readouts, which change what a player is
+*told*, and the coalition threshold, which changes an *option set* rather than an object type. The
+falsifier is mechanical: any later size-conditioned branch in that list breaks the lemma.
 
-Every one of those is either a per-person read or a monotone function of `Σ w(d)`. **No consumer
-contains a term of the form `if |members| > K then <different object>`.** The only thresholds in the
-entire lane are (a) band thresholds on published readouts, which change what a player is *told*, and
-(b) the coalition threshold, which changes the *option set* rather than the object type. A design
-that later adds a size-conditioned branch anywhere in that list breaks this lemma, and that is the
-falsifier: grep the consumers for a comparison against a member count.
-
-### 5.2 Shadow standing — derived by subtraction, not a new track
+### 5.2 Shadow standing — a subtraction, not a track
 
 ```
 shadow(p, n) = standing(p, n) − licensed_standing(office(p, n))
 ```
 
-What your support set actually delivers, minus what your post entitles you to. It is a subtraction of
-two already-computed quantities; it is not a meter and nothing writes it.
+What your support set delivers, minus what your post entitles you to. Two already-computed quantities;
+nothing writes it.
 
-When `shadow(p, n) > 0` and the formal office-holder `h` attempts an act whose `requires` predicate
-includes persons in `S(p, n)`, `h`'s capacity computation returns **zero** — not a penalty, an empty
-existential. Repeat that two or three times and `h`'s own best available act is **legalisation**:
-issue a dispensation naming `p`'s function. This costs nothing coercive, converts `p`'s shadow into
-licensed standing, and `h` keeps the post.
-
-That is dual legitimacy rather than replacement, and it is how the Uln brothers become a house
-becomes a faction without the object ever changing type: at no point did anyone promote anything.
-`shadow` crept above zero, and the man with the seal found that the cheapest thing he could do was
-write it down.
+When `shadow > 0` and the formal holder `h` attempts an act whose `requires` predicate includes persons
+in `S(p, n)`, `h`'s capacity returns **zero** — not a penalty, an empty existential. Repeat that twice
+and `h`'s cheapest remaining act is **legalisation**: a dispensation naming `p`'s function. It costs
+nothing coercive, converts shadow into licensed standing, and `h` keeps the post. Dual legitimacy, not
+replacement — and it is how the Ulns become a house becomes a faction without the object changing
+type. Nobody promoted anything; `shadow` crept above zero and the man with the seal found that writing
+it down was cheaper than fighting it.
 
 ### 5.3 Fragmentation on death — nothing implements it
 
-Patronage support sets are rooted. When the root dies, every contribution conditioned on it voids in
-one event. Each former client who has a nonzero support set of their own at some node keeps their
-standing *there* and is now a root. The graph lost one vertex; nobody ran a spin-off routine. When
-the first Almqvist died in the 1218-AG hunting accident, this is the shape that fired, and the
-question of who fired it is still open in every ledger that holds a claim about that day.
+Patronage support sets are rooted. When the root dies, every conditioned contribution voids in one
+event. Each former client with a nonzero support set of their own at some node keeps their standing
+*there* and is now a root. The graph lost a vertex; no spin-off routine ran. The 1218-AG hunting
+accident is this shape, and who caused it is still an open claim in every ledger that holds one.
 
 ### 5.4 Recognition-fission — a charter moves no edges, because it cannot
 
-A negotiated charter is a **dispensation** naming a subset predicate: *the parishes north of the
-Grauwald ridge are of the new Dicastery.* It moves no commitment edge, because there is no set
-operation in this design that could move one. What it does is deposit a claim into every person in
-scope, changing what each person's own commit is worth to them.
+A negotiated charter is a **dispensation** naming a subset predicate — *the parishes north of the
+Grauwald ridge are of the new see.* It moves no commitment edge, because no set operation exists that
+could. It deposits a claim into everyone in scope, changing what each person's own commit is worth to
+them. Then the long tail: each person decides individually, as tellings arrive and requisitions land,
+whose asks they honour. People who honour both are not an error state — they are the most interesting
+persons of the period, and eventually somebody discovers the double edge. Contested allegiance ends
+when requisition conflicts stop occurring, which may be never, and no tick resolves it.
 
-Then the long tail: each person individually decides, as tellings reach them and as requisitions
-arrive, whose asks they honour. Persons who honour both sides are not an error state — they are the
-most interesting persons in the period, and they are also the ones whose double edge will eventually
-be discovered by somebody. Contested allegiance ends when requisition conflicts stop occurring, which
-may be never, and there is no tick that resolves it.
-
-- **Closed loop (all of §5).** Produced by `commit`, an act by one person; carried as edges; consumed
-  by profile, capacity, requisition and standing — all of which are continuous or per-person.
-- **N-line.** Cut single-operation growth and every faction is the size somebody wrote it at; you
-  lose schisms, defections, hollowing, spontaneous emergence from neglect, and the possibility that
-  the Duke discovers a faction he had no reason to think existed.
+- **N-line (all of §5).** Cut single-operation growth and every faction is the size somebody wrote it
+  at: no schisms, no defections, no hollowing, no spontaneous emergence from neglect, and no Duke
+  discovering a faction he had no reason to think existed.
 
 ---
 
@@ -429,55 +373,76 @@ may be never, and there is no tick that resolves it.
 
 | | **Halvar & Odd Uln** | **Kettlemakers of Goldenfurt** | **Church of Solmund** | **Restoration Movement** |
 |---|---|---|---|---|
-| proposition | Bertold answers for the barn | the Free Master gate admits only examined hands | the peninsula holds Solmundan Orthodoxy | Einhir communities govern themselves by consensus |
-| edges | 2 at d=5 | 140 avowed, mostly d=3, committee at d=4 | ~9,000 across the realm, d=1..5 | ~2,400, most at d=1–2, cells at d=3–4 |
-| presence at its home node | 2.2·2 = 4.4 in one hearth | 140 in one community | 4 in that same hamlet | 19 across four hamlets |
-| footprint | 1 node | 1 community, upward-closed | every settlement with a parish | scattered, no realm-level post |
-| power_base mass | kinship 1.0 | merit 0.7, purchased 0.2, kinship 0.1 | ideological 0.4, purchased 0.3 (the Altonian containment grant's tax exemption and the education monopoly), bureaucratic 0.2, patronage 0.1 | ideological 1.0 |
-| how it acts | Odd sets a fire | the committee sits at the examination | a priest performs a catechesis; a Cardinal issues a dispensation | a cell member carries a petition; a member avows at a market |
-| its characteristic cut | one brother's death, or the other's fire being witnessed | rewrite the examination criterion | a hypocrisy witnessed and told; or the grant revoked | a hypocrisy — and nothing else, because it holds no coin and no swords |
+| proposition | Bertold answers for the barn | the gate admits only examined hands | the peninsula holds Solmundan Orthodoxy | Einhir communities govern themselves by consensus |
+| edges | 2 at d=5 | 140 avowed, mostly d=3 | ~9,000 realm-wide, d=1..5 | ~2,400, most at d=1–2 |
+| presence at home node | 4.4, one hearth | 140, one community | 4 in that same hamlet | 19 across four hamlets |
+| footprint | 1 node | 1 community, upward-closed | every settlement with a parish | scattered; no realm post |
+| power_base mass | kinship 1.0 | merit 0.7, purchased 0.2, kinship 0.1 | ideological 0.4, purchased 0.3 (the Altonian grant's tax exemption and the education monopoly), bureaucratic 0.2, patronage 0.1 | ideological 1.0 |
+| how it acts | Odd sets a fire | the committee sits at the examination | a priest performs a catechesis; a Cardinal issues a dispensation | a member carries a petition; a member avows at a market |
+| its cut | one brother dead, or the other's fire witnessed | rewrite the examination criterion | a hypocrisy told; or the grant revoked | a hypocrisy — and nothing else, holding neither coin nor swords |
 
-Four rows of the same table. The Kettlemakers' membership nearly coincides with a community node,
-and that coincidence is a fact about who lives on that street — the code contains no guild type. The
-Church has four Dicasteries, and those are **four factions with four propositions and heavy
-membership overlap**, not four sub-tiers: nearly every Dicastery member is also a Church member at
-d≥3, which is a set inclusion that happens to hold rather than a containment relation that is
-enforced. The Dicastery for Temporal Affairs wants the Baralta tithe exemption preserved; the
-Dicastery for the Defense of the Faith wants a purge in Grauwald that will cost exactly that
-exemption. Two propositions, jointly unsatisfiable over one stake at one standing date, with the same
-persons committed to both. That is an institution at war with itself, and it needed no institutional
-machinery.
+Four rows of one table. The Kettlemakers' membership nearly coincides with a community node; that is a
+fact about who lives on that street, not a guild type in the code. Two hundred years of institutional
+build shows up in exactly one place: the Church's support sets are *old*, so most of the persons in
+them were placed by persons now dead — patronage mass low, bureaucratic and ideological mass high. The
+cage became a school, and mechanically the education monopoly is a bureaucratic chokepoint, which is
+the basis a single bypass empties.
 
-The Restoration has no Mandate, no military and no wealth by ideology, and this is not a handicap in
-the formulas — it is a power_base mass of 1.0 ideological, which means it has exactly one
-vulnerability and it is the cheapest one to fire and the hardest one to obtain. Its **presence
-markers** are the `avow` act used deliberately: converting covert edges to avowed raises
-`perceived_presence` for every observer at a node, which changes threat assessment without changing
-capacity by one point. That is a real fork with a real cost — avowed members lose standing wherever
-their marks collide with the proposition, and there is no way to un-avow.
+The Restoration's poverty is not a handicap in any formula: ideological mass 1.0 means one
+vulnerability, the cheapest to fire and the hardest to obtain. Its **presence markers** are `avow`
+used deliberately — converting covert edges to avowed raises every observer's *estimate* at a node
+without changing capacity by one point. A real fork with a real cost: avowed members lose standing
+wherever their marks collide with the proposition, and there is no un-avow.
 
-Two hundred years of institutional build shows up in exactly one place: the Church's support sets are
-*old*, which means most of the persons in them were placed there by persons who are dead, which means
-its patronage mass is low and its bureaucratic and ideological mass are high. The cage became a
-school, and mechanically that means the education monopoly is a bureaucratic chokepoint — every
-literate person in three duchies routed through it — which is the basis a single bypass empties.
+### 6.1 The question §4 delegates here: a Dicastery is an office cluster, and that suffices
+
+The substrate rules that the Church is a faction, a parish is a community, and a Dicastery is
+*neither* — an office cluster — then asks whether offices plus alignment carry it. **They do, and here
+is the decomposition.** An office cluster is:
+
+1. **a named set of offices**, each of which is already containment-rung state — a mark plus a binding
+   power, held by a person, revocable, sitting on whatever node owns it;
+2. **a proposition** — what the cluster is *for* — which is a faction identity like any other; and
+3. **the appointment acts** that fill those offices, performed by persons who hold others in the set —
+   which is precisely a patronage-topology support set.
+
+Nothing else is required. Test it against everything a Dicastery has: the seal is an instrument, a
+mark on a person. The archive is a holding at Himmelenger with claimants. The right to adjudicate is a
+binding power on the Cardinal's office. The Cardinalate's succession is that office's appointment rule,
+held on the node that owns the office. **None of it needs a second tree.** Guild grade ladders resolve
+the same way and settle the no-parallel-tracks refusal into the bargain: apprentice, journeyman, Free
+Master and burgher are **marks conferred by admission acts at a community** — not a rank space. They
+gate nothing directly; they enter play through other persons' stances and through `requires`
+predicates that name them (*a majority of Free Masters present*).
+
+**The honest cost, which should be stated rather than discovered later.** An office cluster whose
+offices sit on different containment nodes has no single node that owns it, so *"the Dicastery
+decided"* is never expressible. Only *"the four persons holding these posts each did something."* You
+cannot address a petition to a Dicastery; you address it to a person holding one of its offices, and
+that person can drop it. I take this as the correct cost — it is T1 refusing to be talked around — but
+it does mean the fiction must never render an institution as a speaker.
+
+And it buys something large immediately: because the *party* is a faction and the *Dicastery* is an
+office cluster, the four clusters can be at war inside one Church with no institutional machinery at
+all. The party holding Temporal Affairs wants the Baralta tithe exemption preserved. The party holding
+the Defense of the Faith wants a Grauwald purge that will cost exactly that exemption. Two
+propositions, jointly unsatisfiable over one stake at one standing date, with many of the same persons
+committed to both.
 
 ---
 
 ## 7. Institutions that cause harm nobody intends
 
-The Church of Solmund is canonically the **unwitting** suppressor of Thread Sensitivity: its
-essentialist theology forecloses the perceptual preconditions for sensitivity, and this is emergent,
-not designed. If that is a scripted institutional effect, the setting's central irony is a cutscene.
-Here is the mechanism, composed entirely from the substrate.
+The Church is canonically the **unwitting** suppressor of Thread Sensitivity — emergent, not designed.
+If that is a scripted institutional effect, the setting's central irony is a cutscene. Here is the
+mechanism, composed entirely from the substrate.
 
-**The precondition.** TS grows from *unresolved anomalous witnessing*. At view assembly, a claim `c`
-is **unresolved** for person `p` if `p`'s ledger holds no explanation claim `e` with
-`confidence(e) > confidence(c)` that entails `c`'s predicate. Then:
+**The precondition.** TS grows from *unresolved anomalous witnessing*. At view assembly, a claim `c` is
+**unresolved** for `p` if `p` holds no explanation claim `e` with `confidence(e) > confidence(c)` that
+entails `c`'s predicate.
 
 ```
-ts_gain(p, season) = κ(p) · Σ over unresolved anomalous claims c of
-                              confidence(c) · seasons_unresolved(c)
+ts_gain(p, season) = κ(p) · Σ over unresolved anomalous claims c of confidence(c) · seasons_unresolved(c)
 ```
 
 Once a higher-confidence explanation arrives, `c` resolves and stops contributing — and obstinacy
@@ -491,244 +456,209 @@ e = (the world, is-of-kind, essence-fixed-and-given, all-time,
 ```
 
 Children have high credulity and high regard toward the priest who buried their grandmother. So `e`
-lands **early**, at **high confidence**, and — this is the whole of it — it is **general**. One
-general explanation of high confidence resolves an unbounded family of specific anomalies in advance.
-The child who sees something at the edge of the water does not accumulate an unresolved claim; she
-accumulates a resolved one, filed under a predicate that entails it.
+lands **early**, at **high confidence**, and — this is the whole of it — it is **general**. A single
+general explanation resolves an unbounded family of specific anomalies *in advance*. The girl who sees
+something at the edge of the water does not accumulate an unresolved claim; she accumulates a resolved
+one, filed under a predicate that entails it.
 
-**The consequence, which nobody chose.**
+**The consequence nobody chose.** `E[ts_gain]` at a node falls with parish density and with mean
+regard toward priests. No rule names the Church. No member's stance table contains "Thread
+Sensitivity" as a referent — Confessor Arne Himlensendt's does not. He is sincerely devout and
+completely wrong, and his acts are pastoral: he comforts frightened children. A neighbour watching him
+deposits *he consoled her*; the child's own ledger deposits *the thing I saw was a sin of the eye*.
+One act, two predicates, produced by the substrate's divergent witnessing with no special case.
+Pastoral compassion and ethnic suppression are the same act because they are the same call to `tell`.
 
-```
-E[ts_gain] at node n falls with parish density(n) and with mean regard toward priests at n
-```
+**The geography is output, not authorship.** Lower Church penetration in the south means fewer early
+general explanations, so the model predicts higher TS emergence in Grauwald, Stillhelm, Oastad and the
+western-fjord pockets. Canon's map is what the model produces, which is the only kind of agreement
+worth having. And it runs backwards: if Duke Magnus Vaynard succeeds at expelling Church and Altonian
+residue from Varfell, parish density falls and TS emergence rises over a generation. He did not intend
+that either.
 
-No rule anywhere names the Church. No member's stance table contains "Thread Sensitivity" as a
-referent — Confessor Arne Himlensendt's stance table does not have that row. He is sincerely devout
-and completely wrong, and his acts are pastoral: he comforts frightened children. A neighbour
-witnessing him do it deposits *he consoled her*. The child's own ledger deposits *the thing I saw was
-a sin of the eye*. One act, two predicates, and the substrate's divergent witnessing produces both
-without a special case. Pastoral compassion and ethnic suppression are the same act because they are
-literally the same call to `tell`.
+**The general shape, so this is not a Church rule:**
 
-**The geography falls out rather than being authored.** Southern Einhir have lower Church
-penetration; lower parish density means fewer early general explanations; the model predicts higher
-TS emergence in Grauwald, Stillhelm, Oastad and the western-fjord pockets. Canon's map is the model's
-output, which is the only kind of agreement worth having.
+> Any faction whose implementation acts deposit an **early, general, high-confidence** explanation into
+> the ledgers of persons in its scope forecloses whatever inferences that explanation pre-empts —
+> including inferences no member has ever considered.
 
-**It is playable in both directions, and that is the test.** If Duke Magnus Vaynard succeeds at Path
-B and expels the Church's residue from Varfell, parish density falls, and TS emergence in Varfell
-rises over a generation. He did not intend that either. An institution that produces outcomes no
-member chose is not a Church rule; it is the general shape:
+The Kettlemakers do it too, smaller and identically. Committee members performing an ordinary
+examination deposit *(Southern hands, produce, coarse work, all-time)* as a general explanation of one
+specific failed piece. Twenty years on, a committee holding no malice at all fails Maret Uln, because
+the explanation resolved before she walked in. Caste reproduced by institutions rather than by
+individual malice — which the setting says is the intent — is one mechanism running at two scales.
 
-> **Any faction whose implementation acts deposit an early, general, high-confidence explanation into
-> the ledgers of persons within its scope forecloses whatever inferences that explanation
-> pre-empts — including inferences no member has ever considered.**
-
-The Kettlemakers do it too, at a smaller scale, and it is the same three lines. Committee members
-performing an ordinary examination deposit `(Southern hands, produce, coarse work, all-time)` into
-apprentices' ledgers as a general explanation of a specific failed piece. Twenty years later a
-committee that holds no malice at all fails Maret Uln, because the explanation was already resolved
-before she walked in. Caste reproduced by institutions rather than by individual malice, which the
-setting says explicitly is the intent, and which here is one mechanism running at two scales.
-
-- **Closed loop.** Produced by every `tell` performed by any member implementing the proposition —
-  catechesis, confession, examination feedback, parish schooling; carried in the hearer's claim
-  ledger; consumed by the unresolved-anomaly count at view assembly, which the TS check and every
-  subsequent inference read.
+- **Loop.** Produced by every `tell` performed by any member implementing the proposition — catechesis,
+  confession, examination feedback, parish schooling; carried in the hearer's ledger; consumed by the
+  unresolved-anomaly count at view assembly, which the TS check and every later inference read.
 - **N-line.** Cut this and every harm in the game is somebody's plan. You lose the institution that
-  destroys the thing it never noticed, the sincere man whose kindness is the mechanism, and any
-  possibility that the player's own successful reform produces a consequence nobody in the world
-  wanted.
+  destroys the thing it never noticed, the sincere man whose kindness is the mechanism, and any chance
+  that the player's own successful reform produces a consequence nobody wanted.
 
 ---
 
-## 8. What is refused here, and what replaces each refusal
+## 8. What is refused here, and what replaces it
 
-- **A faction tier, level, or scale field.** Replaced by §3's recomputed profile. Declaring scale is
-  what makes growth discontinuous.
-- **A faction-wide reputation scalar.** Replaced by per-person regard toward a referent. The Church
-  is loved in Himmelenger and hated three valleys south, and one number cannot hold both.
-- **Merge / split / promote / found-at-size operations.** Replaced by `commit` run in two directions
-  (§5), and by proposition-identity, which means founding is one person's act.
-- **A faction action-point pool or any faction verb.** Replaced by `requisition`, whose cost is paid
-  in the *member's* time, the member's regard, and the member's exposure.
-- **Relationship modifiers large enough to dissolve structural conflict.** Two propositions are
-  **positionally opposed** when they are jointly unsatisfiable over the same stake at the same
-  standing date. The satisfiability test contains no regard term. Regard decides who carries a
-  petition and who is believed; it never decides whether both sides can win, because sometimes they
-  cannot and no amount of liking anybody changes it. At d=5 the offer term is absent from the
-  refusal check entirely.
-- **Parallel rank tracks.** One shared rank space, `standing(p, n) ∈ 0..7`, plus exactly four named
-  auxiliary meters, each substituting in at exactly one named gate:
+- **A faction tier, level, or scale field** → §3's recomputed profiles.
+- **A faction-wide reputation scalar** → per-person regard toward a referent. The Church is loved in
+  Himmelenger and hated three valleys south; one number cannot hold both.
+- **Merge / split / promote / found-at-size** → `commit` in two directions, plus proposition-identity,
+  which makes founding one person's act.
+- **A faction action-point pool, or any faction verb** → `requisition`, paid in the member's time,
+  regard and exposure.
+- **Relationship modifiers large enough to dissolve structural conflict** → two propositions are
+  **positionally opposed** when jointly unsatisfiable over one stake at one standing date, and the
+  satisfiability test contains no regard term. Regard decides who carries and who is believed; it never
+  decides whether both can win. At d=5 the offer term is absent from the refusal check entirely.
+- **Parallel rank tracks** → one shared rank space, `standing ∈ 0..7`, plus exactly four auxiliary
+  meters, each substituting at exactly one gate:
 
-  | meter | range | the *only* gate it substitutes at |
+  | meter | range | its *only* gate |
   |---|---|---|
   | commitment degree | 0–5 | the requisition check |
-  | regard / disposition | −5..+5 | the carry check and the telling-credence check |
+  | regard | −5..+5 | the carry check and the telling-credence check |
   | support-set mass | derived | the unwind check |
   | shadow | derived | the legalisation check |
 
-  There is no fifth, and `presence`/`density` are not meters — they are reads.
-- **A leader as a flat bonus on a roll.** A flat shift of size X is worth `X / (0.8·√Pool)`, so it is
-  worth systematically *more* to a weak faction than a strong one — which is backwards. The in-band
-  form: **a leader changes the option set and the pool source, never a modifier.** Concretely, Yrsa
-  Vossen contributes three things and none of them is a number added to a die roll: (1) she is a
-  person whose eligibility makes certain acts *exist* at nodes where she stands; (2) a contest
-  resolved through her draws its pool from *her* capability rather than another member's — choosing
-  which member acts is choosing a different pool, not buying a bonus; (3) her regard with d≥3 members
-  lowers their requisition obstacles, which changes *who will act*, not how well they roll.
-- **A scheduled recovery tick on standing.** Standing is computed from support sets, so it moves on
+  There is no fifth. Guild grades are marks, not a track (§6.1); presence and density are reads, not
+  meters.
+- **A leader as a flat bonus on a roll** → a flat shift of X is worth `X / (0.8·√Pool)`, so it is worth
+  systematically *more* to a weak faction than a strong one, which is backwards. The in-band form:
+  **the leader changes the option set and the pool source, never a modifier.** Yrsa Vossen contributes
+  three things, none a number added to a die: (1) she is a person whose eligibility makes certain acts
+  *exist* at nodes where she stands; (2) a contest resolved through her draws its pool from *her*
+  capability — choosing which member acts is choosing a different pool, not buying a bonus; (3) her
+  regard with d≥3 members lowers their requisition obstacles, changing *who will act*, not how well.
+- **A scheduled recovery tick on standing** → standing is computed from support sets, so it moves on
   events and cannot drift back on a cadence.
-- **A "known %" on a membership, and a stored exposure counter.** Both replaced by claims in knowers'
-  ledgers and a derived exposure read.
-- **Gating capability on power_base.** Considered — the precedent literature proposes power_base as
-  an eligibility filter on scale-actions — and **refused**, because gating on biography means losing
-  one person costs a faction a capability permanently. `power_base` types the *cut*, not the *act*.
-- **A grievance-to-revolt threshold.** Revolt is a density of commitments to a rival proposition
-  crossing what a settlement's coercive apparatus can hold, and every person in it has a name, a
-  hearth, and a specific man they blame.
+- **A "known %" and a stored exposure counter** → claims in knowers' ledgers, and a derived exposure.
+- **power_base as an eligibility filter** → considered, and refused: gating on biography means losing
+  one person costs a capability permanently. It types the cut, not the act.
+- **A grievance-to-revolt threshold** → revolt is a true-profile density crossing what the coercive
+  apparatus holds, and everyone in it has a name, a hearth, and a specific man they blame.
 
 ---
 
 ## 9. Contested rather than owned
 
-**No object in this lane has an `owner` field of faction type.** Offices are held by persons.
-Holdings have *claimants* — a set of `(person, claim, basis)` triples. Institutions are containers
-with judging sets and standing dates. The word "control" never appears as state.
+**No object in this lane has an `owner` field of faction type.** Offices are held by persons. Holdings
+have *claimants* — a set of `(person, claim, basis)`. Institutions are containers with judging sets and
+standing dates. The word "control" never appears as state.
 
-So what does it mean for the Kettlemakers to control Kettlemakers' Row? It means: of the persons
-holding the Row's posts, four are Kettlemakers at d≥3. Contesting the Row is contesting *those four
-persons* — by cutting the merit basis that put them there, by outbidding the purchased one, by
-turning one of them, or by getting a fifth post created and filled by someone else. Nothing changes a
-control field, because there is no control field to change. A faction can lose an institution without
-losing a single contest: three persons' commitment edges moved and the fourth retired.
+So what does it mean for the Kettlemakers to control the Row? That of the persons holding the Row's
+posts, four are Kettlemakers at d≥3. Contesting the Row is contesting *those four persons* — cutting
+the merit basis that put them there, outbidding the purchased one, turning one, or getting a fifth post
+created and filled otherwise. A faction can lose an institution without losing a single contest: three
+edges moved and the fourth man retired.
 
-And the substrate's `contest(container, prize, claimants)` composes here with one required binding,
-which this document supplies: **claimants are factions, but resolution runs through each claimant's
-best-placed member**, selected by the capacity existential of §2. A faction with realm-scale presence
-and no eligible person at the node enters the contest with an empty set and does not resolve — it is
-not defeated, it is *absent*, and everyone can see it was absent.
+The substrate's `contest(container, prize, claimants)` composes here with one binding this document
+supplies: **claimants are factions, resolution runs through each claimant's best-placed member as
+selected by §2's existential, and a claimant with an empty existential is *absent* rather than
+defeated** — and everyone can see it was absent.
 
-The genre solved shared control decades ago by declining to make ownership a scalar. Applied here:
-the tithe reckoning at Goldenfurt is `requires(P)` where P must contain a Crown praefect, a parish
-priest, and a guild burgher. Those are three persons in three posts, each committed to two or three
-different factions at different degrees, and none of the factions can perform the act alone. When the
-Baralta Crown Claim reaches a standing date and the Church's own succession is contested at the same
-season, the same handful of persons are required at two overlapping `requires` predicates, and the
-consecration crisis is a **capacity conflict** — not a scripted event, just two acts asking for the
-same three men in the same month.
+Applied: the tithe reckoning at Goldenfurt is `requires(P)` for a Crown praefect, a parish priest and a
+guild burgher. Three persons in three posts, each committed to two or three different factions at
+different degrees, and no faction can perform the act alone. When the Baralta Crown Claim reaches a
+standing date while the Church's own succession is contested, the same handful of persons are required
+by two overlapping `requires` predicates at once. The consecration crisis is a **capacity conflict** —
+not a scripted event, just two acts asking for the same three men in the same month.
 
 ---
 
 ## 10. Two worked traces
 
-### 10.1 A two-person grudge becoming realm-scale, with no discontinuity anywhere
+### 10.1 A two-person grudge reaching realm scale, with no discontinuity anywhere
 
-**Season 1.** Maret Uln, Southern Einhir, is failed at the Masterpiece Examination in Goldenfurt.
-Her brothers Halvar and Odd each `commit` to *(Reeve Bertold answers-for the Uln barn, before levy
-day)* at d=5. Faction exists; edges 2; `presence = 4.4` at Hearth of Uln; `footprint` = 1 hearth;
-`power_base` kinship 1.0; `capacity(f, Goldenfurt, arson) = 1` because Odd is eligible and, at d=5,
-passes his own requisition trivially.
+**S1.** Maret Uln, Southern Einhir, is failed at the Masterpiece Examination. Her brothers Halvar and
+Odd each `commit` at d=5. Faction exists; presence 4.4 at one hearth; power_base kinship 1.0;
+`capacity(f, Goldenfurt, arson) = 1`, because Odd is eligible and at d=5 passes his own requisition.
 
-**Season 3.** Odd burns Bertold's outbuilding. Two witnesses deposit different predicates: a Knight
-of the Peace deposits *arson*; four hamlet neighbours deposit *the Ulns answered for the barn.* The
-second predicate is a telling that spreads. Nineteen hamlet persons acquire a stance toward the
-proposition. **No commits yet** — a stance is not a commitment.
+**S3.** Odd burns Bertold's outbuilding. A Knight of the Peace deposits *arson*; four neighbours
+deposit *the Ulns answered for the barn.* The second predicate spreads. Nineteen persons acquire a
+stance toward the proposition — **and no commits yet**, because a stance is not a commitment.
 
-**Season 5.** The neighbours raise a petition to remit Maret's examination fee. The guild burgher
-whose seat it would cost drops it publicly, because the Kettlemakers' judging set would punish him
-for carrying an Einhir grievance. Grievance stances deposit toward the container and toward him
-personally.
+**S5.** The neighbours petition for Maret's fee to be remitted. The guild burgher whose seat it would
+cost drops it publicly, because the Kettlemakers' judging set would punish him for carrying an Einhir
+grievance. Grievance deposits toward the container and toward him personally.
 
-**Season 6.** A Restoration cell member, hearing the story third-hand and angrier than it happened,
-performs `tell` naming *(Einhir communities govern themselves by consensus)* to eleven of those
-nineteen. Six `commit` at d=1, two at d=2. The Uln faction still has two members; the Restoration's
-`presence` at the Einhir hamlet moves from 3.0 to 4.5. Nothing crossed a boundary.
+**S6.** A Restoration cell member, hearing it third-hand and angrier than it happened, `tell`s
+*(Einhir communities govern themselves by consensus)* to eleven of the nineteen. Six commit at d=1,
+two at d=2. The Uln faction still has two members; the Restoration's presence at the hamlet moves 3.0
+→ 4.5. Nothing crossed anything.
 
-**Seasons 7–14.** The same shape runs at Stillhelm and two western-fjord pockets, because the same
-petitions are being dropped by different burghers for the same structural reason. Restoration
-`presence` in Grauwald reaches 61; `density` 0.19; `footprint` now includes Grauwald and, by
-upward-closure, Varfell and the Realm. `perceived_presence` for Duke Magnus Vaynard is 6 — two men
-caught, at claimed d=3, confidence 1.0.
+**S7–14.** The same shape at Stillhelm and two fjord pockets, because the same petitions are being
+dropped by different burghers for the same structural reason. Restoration presence in Grauwald reaches
+61, density 0.19, footprint now upward-closed to Varfell and the Realm. Vaynard's estimate is 6.
 
-**Season 15.** Halvar Uln, now d=3 Restoration as well as d=5 in his own two-man faction, is admitted
-to a cell that includes a Vaynard household clerk. Vaynard's proposition — expel the Church and
-Altonian residue, break the caste system — is not the Restoration's proposition and never becomes it.
-But it is *not jointly unsatisfiable* with it over the Grauwald stake, which means the two factions
-can each requisition the same persons for the same act without either absorbing the other.
+**S15.** Halvar, now d=3 Restoration as well as d=5 in his own two-man faction, joins a cell containing
+a Vaynard household clerk. Vaynard's proposition — expel Church and Altonian residue, break the caste
+system — never becomes the Restoration's. But it is *not jointly unsatisfiable* with it over the
+Grauwald stake, so both factions can requisition the same persons for the same act without either
+absorbing the other.
 
-**Season 19.** The Baralta Crown Claim creates a realm standing date. The Restoration's capacity at
-the Court Parliament is still zero — it holds no one there — but Vaynard's is not, and the clerk who
-is d=3 in both is the person through whom the demand travels. It reaches the Parliament as Vaynard's
-proposition, amended, with the Restoration's backing invisible in the record. Realm-scale.
+**S19.** The Baralta Crown Claim creates a realm standing date. Restoration capacity at the Court
+Parliament is still zero — it holds no one there — but Vaynard's is not, and the clerk who is d=3 in
+both is the person the demand travels through. It arrives as Vaynard's proposition, amended, with the
+Restoration's backing invisible in the record.
 
-At no point in nineteen seasons did any operation other than `commit` run, and at no point did any
-reader of the faction object behave differently because the faction had become larger.
+Nineteen seasons, one operation, and not one reader of the object behaved differently because the
+faction had got larger.
 
 ### 10.2 A large faction that cannot act
 
-**The setup.** The Dicastery for the Defense of the Faith wants a man arrested in Riverside, the
-dock district of Baralta. Its realm `presence` is 3,100; `density` at the realm 0.06; `footprint`
-includes every settlement with a parish. By every number anyone can read, it is one of the four most
-powerful factions in Valoria.
+**Setup.** The party of the Defense of the Faith wants a man arrested in Riverside, the dock district
+of Baralta. Realm presence 3,100; footprint every settlement with a parish. By every number anyone can
+read, one of the four most powerful factions in Valoria.
 
-**The computation.** `capacity(Dicastery, Riverside, arrest)`. `requires(arrest, P)` needs a person
-holding a binding post at that node plus two persons able to lay hands on a man in a crowd.
+**Computation.** `requires(arrest, P)` needs a person holding a binding post at that node plus two who
+can lay hands on a man in a crowd. Members addressed inside Riverside: **one** — a parish priest, d=3,
+holding a post that binds nobody and commanding no armed persons. `eligible(priest, arrest,
+Riverside)` is false. The harbour warden holds the binding post; he is a Crown officer, his regard
+toward the party is −2, and he is d=2 in Niflhel. He is not a member, so requisition is not even
+available — there is no edge to read. **The existential is empty. Capacity is zero.** Not reduced. Not
+penalised. Zero, in a district three streets long, for a faction with three thousand members. And note
+the Dicastery itself owns no office at Riverside at all — an office cluster is a set of posts, and none
+of these are in it.
 
-Members of the Dicastery whose address falls inside Riverside: **one** — a parish priest, d=3, who
-holds a post that binds nobody and commands no armed persons. `eligible(priest, arrest, Riverside)` =
-false. The harbour warden holds the binding post; he is a Crown officer, his regard toward the
-Dicastery is −2, and he is d=2 in Niflhel. He is not a member, so requisition is not even available —
-there is no edge to read. **The existential is empty. Capacity is zero.**
+**Meanwhile.** Niflhel's realm presence is 84, under three percent, invisible to any threat assessment
+reading density. Inside Riverside: the harbour warden at d=2, two dockworkers at d=3, one of the Burned
+at d=4. `capacity(Niflhel, Riverside, arrest) = 1`, and it happens tonight if anyone asks.
 
-Not "reduced". Not "at a penalty". Zero, in a district three streets long, for a faction with three
-thousand members.
+**What the party can actually do**, every option a person-placement act, slow and visible: send a
+priest who holds a binding post (seasons, and he must be admitted); requisition a Templar from its
+military basis two rungs up and march him in (visible, and it converts a police matter into a caste
+incident on a waterfront that is caste-open by design); commit the harbour warden by finding what he
+wants — the only fast option, and it is an investigation rather than a decree; or issue a dispensation
+and discover that a dispensation is a telling and a telling is not an arrest.
 
-**Meanwhile.** Niflhel's realm `presence` is 84 — under three percent of the Dicastery's, invisible
-in any threat assessment that reads density. Its members inside Riverside: the harbour warden at
-d=2, two dockworkers at d=3, one of the Burned at d=4. `capacity(Niflhel, Riverside, arrest) = 1`,
-and it will happen the same night if anyone asks.
-
-**What the Dicastery can actually do**, and every option is a person-placement act, slow and visible:
-send a priest with a post (seasons, and it must be admitted); requisition a Templar from the Defense
-of the Faith's military basis at a node two rungs up and march him in (visible, and it converts a
-police problem into a caste incident on a waterfront that is caste-open by design); commit the
-harbour warden by raising his regard or finding what he wants (this is the only fast option and it is
-an investigation, not a decree); or issue a dispensation and discover that a dispensation is a
-telling and a telling is not an arrest.
-
-**The lesson the trace exists to make unarguable.** Size buys you *being noticed*, and nothing else.
-Capacity is a question about persons and posts, and the answer at any given street corner is
-frequently no. A faction that has confused its profile for its reach finds out at the moment it
-needs the reach, and the finding-out is the scene.
+**The point.** Size buys being noticed. Capacity is a question about persons and posts, and at any
+given street corner the answer is frequently no. A faction that has confused its profile for its reach
+finds out at the moment it needs the reach, and the finding-out is the scene.
 
 ---
 
-## CHALLENGE — where I diverge, and one coordination request
+## CHALLENGE — one divergence, one binding, one coordination note
 
-**1. A numbering collision, not a disagreement.** The spine's §5.3 forward-references "document 07"
-as the argument system that composes on the standing-date hook. This lane is assigned document 07.
-Both cannot be 07; I have written to my lane assignment and flag the collision rather than silently
-renumbering somebody else's reference.
+**1. The binding I add to `contest`, which the spine leaves ambiguous.** §4.1 says claimants are
+*factions*; §1.3 and §2 say capacity routes through *persons*. Read literally together, a faction with
+realm presence and nobody at the node is a valid claimant — which readmits scale as a gate through the
+back door. §9 resolves it: resolution runs through the best-placed member, and an empty existential is
+absence, not defeat. I believe this is what the spine intends; it does not say so, and the difference
+is load-bearing.
 
-**2. A binding I am adding to the spine's `contest`, which the spine leaves ambiguous.** §4.1 states
-that `contest(container, prize, claimants)` takes *factions* as claimants, while §1.3 and §2 state
-that capacity routes through *persons*. Read literally together, a faction with realm presence and no
-person at the node is a valid claimant, which would reintroduce scale as a gate through the back
-door. §9 above resolves it: **claimants are factions, resolution runs through each claimant's
-best-placed member, and a claimant with an empty capacity existential is absent rather than
-defeated.** I believe this is what the spine intends; it does not say so, and the difference is
-load-bearing.
+**2. Where I diverge, narrowly.** The spine's §4 leaves open whether offices plus alignment suffice for
+the Dicasteries and the grade ladders. §6.1 answers **yes** and pays the price out loud: an office
+cluster has no owning node, so *"the Dicastery decided"* is permanently inexpressible, and the fiction
+must never render an institution as a speaker. If that cost is judged too high, the only alternative I
+can see is a second tree for institutional internal structure — which I recommend against, because it
+reintroduces exactly the multi-parent containment §1.1 refuses, and it would let an institution acquire
+a verb.
 
-**3. One place I think the spine's wording undersells itself.** §1.3 says the derived profile "gates
-nothing," which is true and which I have held to — no resolution path reads it. But the profile is
-not therefore inert: it is the input to every other person's threat assessment, so it determines who
-is opposed, who is ignored, and who is negotiated with before acting. The honest statement is that it
-gates no *outcome* while being one of the most causally potent quantities in the game, and a later
-reader who takes "gates nothing" to mean "is decorative" will delete the wrong thing.
+**3. A numbering collision, not a disagreement.** The spine now references "document 07" twice: §5.3
+for the argument system, §4 for the institutional question this lane answers. Both cannot be 07. I
+have written to my lane assignment rather than silently renumbering another lane's reference.
 
-**4. A degree scale is a composition, not a divergence.** §1.2 of the spine says the difference
-between a sympathiser and a member is "a number on one edge." §1.2 above makes that number an ordinal
-0–5 with a licence table, because requisition needs to know what may be asked. If the spine intends
-that number to be continuous rather than ordinal, the licence table becomes a set of bands over it
-and nothing else in this document changes.
+**4. The degree scale is composition, not divergence.** The spine says the difference between
+sympathiser and member is "a number on one edge." §1.2 makes it an ordinal 0–5 with a licence table,
+because requisition must know what may be asked. If the intent is a continuous number, the licence
+table becomes bands over it and nothing else here changes.

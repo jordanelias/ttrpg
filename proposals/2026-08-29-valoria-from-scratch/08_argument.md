@@ -25,7 +25,7 @@ not ludic, and I will say plainly what is adapted and what is invented:
 | Cheap talk as the default | Diplomacy's total absence of enforcement | the binding-instrument menu and its pricing |
 | Negotiation as a venue | **nothing. This is invention.** | the reservation set, the *read* of the reservation set, and the fact that a proposal is a telling |
 
-Everything else below is derived from `01_substrate.md` and does not need a precedent.
+Everything else is derived from `01_substrate.md` and needs no precedent.
 
 ---
 
@@ -96,11 +96,9 @@ Before choosing a tactic, a party diagnoses **what the fight is about**. Four ru
 | **3** | **Quality** | it happened, it is that, and it was right | offers a **counter-ground** | the act, and its label |
 | **4** | **Jurisdiction** | this chamber may not hear it | the venue's **admissibility** | the act, the label, and (usually) that it was wrong |
 
-**Descending is irrevocable and public.** A party begins at the highest rung it is willing to hold.
-`descend` moves it down exactly one rung, and everything above the new rung is written into the
-record as **conceded**. You cannot go back up in the sitting, and — because the concession is a
-record row — you cannot go back up in a *later* sitting either without triggering fault F2
-(contradicting your own record).
+**Descending is irrevocable and public.** A party opens at the highest rung it will hold. `descend`
+moves it down exactly one rung, and everything above the new rung is written into the record as
+**conceded** — you cannot go back up in the sitting, nor in a *later* one without triggering F2.
 
 This is why the ladder is terrain and not a menu. Rung 1 is strongest and most brittle: hold it and
 you must survive every challenge to your denial. Rung 4 is nearly always available and nearly always
@@ -135,7 +133,7 @@ whatever rung it currently occupies).
 | **F4** | **Shifting the ground** | your answer's proposition does not overlap the challenged one on subject **or** interval | descend | the *cheapest* dodge in the game becomes the best one |
 | **F5** | **Repetition** | re-asserting an answered ground with no new `support[]` | strike | the exchange budget can be burned by restating, which advantages whoever has more to lose from a close |
 | **F6** | **The quibble** | your challenge turns on an equivocation of the predicate rather than the value — formally: your attack would still stand if the opponent's `value` were reversed | close | this is the self-gate. Remove it and cheap tactics need a rule *each*; keep it and they are disciplined by one line |
-| **F7** | **Rootless ground** | challenged at provenance, the ground's `support[]` bottoms out in a synthetic rumour root (§3, one story told three times corroborates once) | strike | common voice becomes proof and the grade table is decorative |
+| **F7** | **Rootless ground** | challenged at provenance, the ground's `support[]` has no surviving firsthand root — either it bottoms out in a synthetic rumour root (§3, one story told three times corroborates once) or every real root it had has been contradicted by a higher-grade claim | strike | common voice becomes proof and the grade table is decorative |
 | **F8** | **Conceding and pressing anyway** | you admit the opponent's decisive ground while still moving your motion | close | "agree with everything and win anyway"; the concession loses its price |
 | **F9** | **Deficient pleading** | you pleaded fewer grounds than the motion type requires, each separately proved | close | the *ordo*'s articles collapse into one omnibus assertion, and one strong claim carries an arbitrarily large motion |
 | **F10** | **Speaking without standing** | you are not in the judging set and hold no leave from a member | strike | jurisdiction stops being a real rung |
@@ -237,12 +235,11 @@ terms.** It is fully citable. It is nearly free, and very few games have it.
 
 What it buys:
 
-1. A ground supported by a carried-without-force row enters a later sitting at **G4** — it is an
-   instrument, in custody, and its content is *the room agreed*. Not *the thing is true*; the room
-   agreed. That distinction is the whole of its honesty.
-2. The person who vetoed it is now named in a record row that says he opposed the proposition. Every
-   later position he takes runs the **F2** check against it. Vetoing is therefore not free: it banks
-   a permanent contradiction hazard against the vetoer's own future arguments.
+1. A ground supported by a carried-without-force row enters a later sitting at **G4** — an instrument,
+   in custody, whose content is *the room agreed*. Not *the thing is true*; the room agreed. That
+   distinction is the whole of its honesty.
+2. The vetoer is now named in a record row saying he opposed the proposition, and every later position
+   he takes runs the **F2** check against it. Vetoing banks a permanent contradiction hazard.
 3. The `pattern` counter (§7.2) increments. A proposition carried-without-force four times is a
    different political object from one raised once, with no decay timer anywhere.
 
@@ -308,11 +305,10 @@ A grievance raised and refused four times, then coupled to a fresh occurrence, i
 fresh one of the same grade, because the record shows a pattern and the judging set can read it. That
 is the suppression rule inverted into a virtue: what an institution refuses to hear it makes heavier.
 
-**R check on this fork.** Banking recorded defeats has *compounding* gain and *one-time* cost (regard
-lost for pressing a motion that fails, plus the permanent burn of every support-ref that gets struck).
-Pressing now has *immediate* gain and *compounding* cost (the pattern counter runs against you too if
-you are the side that keeps refusing). Neither shape dominates: banking is worthless if no hook ever
-appears, and every banked row is evidence a struck claim can never be re-pleaded. The fork is real.
+**R check.** Banking recorded defeats has *compounding* gain and *one-time* cost (regard lost for a
+failed motion, plus the permanent burn of every struck support-ref). Pressing now has *immediate* gain
+and *compounding* cost — the pattern counter runs against the refusing side too. Neither shape
+dominates: banking is worthless if no hook appears, and every banked row burned evidence to get there.
 
 - Closed loop: produced by the substrate's standing dates plus subject-sharing between propositions;
   carried nowhere (recomputed at plead time); consumed by admissibility and by ground weight.
@@ -347,20 +343,19 @@ Nobody authors a negotiation topic.
 
 ### 8.2 The counterparty is not an obstacle number
 
-Each party has a **reservation set** — the set of clause-bundles they would accept, computed from
-their needs, their stances, and their alternatives (what they get if talks fail). It is never seen by
-anyone, including themselves as a set; it is evaluated on demand against a specific bundle.
-
-What a negotiator actually acts on is a **read**: claims in their own ledger of the form
+Each party has a **reservation set** — the clause-bundles they would accept, computed from needs,
+stances, and what they get if talks fail. Nobody ever sees it as a set, themselves included; it is
+evaluated on demand against a specific bundle. What a negotiator acts on is a **read**: claims in
+their own ledger of the form
 
 ```
 (other_party, would_accept, clause_bundle, when, source, confidence)
 ```
 
-sourced from tellings, from prior sittings' record rows, from what the other side conceded on the
-stasis ladder in some earlier chamber, and from **inference off marks** — which is where caste does
-its quiet damage, because inferring a Southern Einhir counterparty's reservation set from their marks
-is exactly how a Crown negotiator gets it wrong.
+sourced from tellings, from record rows, from what the other side conceded on the stasis ladder in an
+earlier chamber, and from **inference off marks** — which is where caste does its quiet damage, since
+inferring a Southern Einhir counterparty's reservation set from their marks is exactly how a Crown
+negotiator gets it wrong.
 
 **A read can be wrong, and nothing corrects it except collision** (§3.2). There is no cap: a
 negotiator who believes the Löwenritter can be bought will spend the whole negotiation offering money.
@@ -397,15 +392,14 @@ Binding is an **expensive exception**, and every instrument is expensive because
 | **Bond of holdings** | a hearth's holdings are pledged; the larder shrinks immediately | breach transfers the holding by the venue's ordinary allocation, no new mechanic |
 | **Marriage** | two hearths' succession pointers are edited | breach cannot be undone; the tie persists into the next generation |
 
-That table is why Princess Elske's marriage to Doux Alexios Laskaris is a *binding instrument* and the
-Almud–Schoenland trade opening is *cheap talk*, and why the second keeps wobbling while the first does
-not. Nothing about either was scripted; they are two rows of the same table.
+That table is why Princess Elske's marriage to Doux Alexios Laskaris binds and the Almud–Schoenland
+trade opening is cheap talk, and why the second keeps wobbling while the first does not. Neither was
+scripted; they are two rows of one table.
 
-**And why the Restoration Movement cannot be treatied with**: its cells have no record custody and no
-office-holder whose decision binds a member (§4 — office is the thing they refuse). No instrument in
-that table is executable by a consensus cell except a hostage or a marriage, both of which are
-person-level. This is an ideological commitment producing a mechanical fact, with no rule naming the
-Restoration.
+**And why the Restoration Movement cannot be treatied with**: its cells hold no record custody and no
+office whose holder's decision binds a member (§4 — office is what they refuse). Nothing in that table
+is executable by a consensus cell except a hostage or a marriage, both person-level. An ideological
+commitment producing a mechanical fact, with no rule naming the Restoration.
 
 - Closed loop: clauses produced by computed needs; carried as proposals, which are tellings into the
   counterparty's ledger; consumed by the counterparty's reservation evaluation and, on execution, by
@@ -422,7 +416,6 @@ Restoration.
 
 The refusal is exact: *a manoeuvre must alter a primitive, not just apply a formula.* Duel of Wits
 players converged on two moves and stopped, because the moves differed only in output size.
-
 
 | Manoeuvre | The primitive it alters | Persists outside the sitting? |
 |---|---|---|
@@ -620,10 +613,10 @@ Master.
 - Aldwin's F6 costs him regard with every Free Master whose stance weights Honor or Precedent, and
   nothing with those who weight Community and dislike the admission anyway. Regard moves per person,
   not as a guild scalar — which is why the Row is now split rather than uniformly cooler.
-- **Ground A2 was never struck.** It was never reached. Common voice on fitness survives the sitting
-  intact, at G0, and `pattern(fitness-of-Southern-Einhir-candidates)` is now **1**. The institution
-  lost this examination and its bias is undamaged, because the bias lives in a floor parameter and not
-  in a claim anyone had to defend. That is the setting's thesis, produced rather than asserted.
+- **Ground A2 was never struck — it was never reached.** Common voice on fitness survives intact at
+  G0, and `pattern(fitness-of-Southern-Einhir-candidates)` is now **1**. The institution lost this
+  examination and its bias is undamaged, because the bias lives in a floor parameter, not in a claim
+  anyone had to defend. That is the setting's thesis, produced rather than asserted.
 
 ---
 
@@ -660,11 +653,11 @@ Inge reads it through `r₁` — she believes the Order follows blood, so a dema
 be **a price dressed as a principle**, i.e. a bluff to raise the endowment. She counters by raising the
 endowment.
 
-**Exchange 3.** Sigrid `press`es the consecration clause. Inge has no answer that engages it, because
-in her view there is nothing there to engage — her answer moves to the endowment again. Her reply's
-proposition does not overlap the challenged one on subject: **F4, shifting the ground**, severity
-`descend`. In a private venue with no third-party judging set, the descent costs no regard with a room;
-it costs the only thing there is to lose here, which is Sigrid's read of *her*.
+**Exchange 3.** Sigrid `press`es the consecration clause. Inge has no answer that engages it — in her
+view there is nothing there to engage — and moves to the endowment again. Her reply's proposition does
+not overlap the challenged one on subject: **F4, shifting the ground**, severity `descend`. In a private
+venue there is no room whose regard she loses; what she loses is the only thing on offer, Sigrid's read
+of her.
 
 **Exchange 4.** Inge `withdraw`s, believing the Order's price is above what neutrality is worth.
 

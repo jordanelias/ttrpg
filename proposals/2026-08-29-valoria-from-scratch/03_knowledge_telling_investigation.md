@@ -89,6 +89,9 @@ at a district entails `LOCATED` at its settlement; `ALIGNED` at member entails `
 sympathiser; a narrower interval entails nothing about a wider one but is *contradicted* by a wider
 denial. Twelve forms, one entailment table, no grammar.
 
+- Closed loop: the twelve forms and the one entailment table are authored once, alongside the act
+  list; carried inside every claim's `predicate` field; consumed by collision, entailment and
+  relevance — the three routines that make any two claims in the game relatable at all.
 - **Cut the closure and you lose:** nothing at first, and then everything — because within three
   mechanics someone writes a predicate whose contradiction rule is a special case, and after that no
   two claims in the game can be automatically found to disagree.
@@ -585,32 +588,29 @@ ratio.
 **Bindings, all by composition, none by exception:**
 
 - **The Church's four Dicasteries are four parallel channels to four Cardinals, and the channel an item
-  enters is determined by its proposition's subject — which makes routing itself contestable.** A
-  denunciation of a Southern Einhir Canon can be routed to *Defense of the Faith* (a heresy matter,
-  ruinous), to *Doctrinal Adjudication* (a question of interpretation, survivable), or to *Temporal
-  Affairs* (a jurisdiction question, deferrable). Whoever holds the routing seat holds the outcome, and
-  no rule anywhere names the Dicasteries — they are four channels with different Cardinals' stances at
-  the end. A Confessor is the channel to a monarch's conscience: sincerity is not a mitigation, because
-  his construal selection (§2) runs on a Conviction-primary of Faith, and the reading he attaches is the
-  one under which suppression *is* pastoral care. An institution causing harm nobody intends, as one
-  construal table and one channel.
-- **A ducal household** is chamberlain → steward → the Duke: three seats, three sets of stances. A
-  duchy that retains a Parliament has a **second, competing** channel with different filter-holders, so
-  a petition can be tabled instead of carried. That structural difference — two channels versus one —
-  is the entire reason two duchies' politics feel different, and nothing was scripted to make it so.
+  enters is set by its proposition's subject — so routing is itself contestable.** A denunciation of a
+  Southern Einhir Canon routes to *Defense of the Faith* (heresy: ruinous), *Doctrinal Adjudication*
+  (interpretation: survivable), or *Temporal Affairs* (jurisdiction: deferrable). Whoever holds the
+  routing seat holds the outcome — and no rule names the Dicasteries; they are four channels with
+  different Cardinals' stances at the end. A Confessor is the channel to a monarch's conscience, and
+  sincerity is not a mitigation: his construal selection (§2) runs on a Conviction-primary of Faith, so
+  the reading he attaches is the one under which suppression *is* pastoral care. An institution causing
+  harm nobody intends, as one construal table and one channel.
+- **A ducal household** is chamberlain → steward → Duke: three seats, three sets of stances. A duchy
+  retaining a Parliament has a **second, competing** channel with different filter-holders, so a
+  petition can be tabled instead of carried. Two channels versus one is the whole reason two duchies'
+  politics differ, and nothing was scripted to make it so.
 - **The Crown** is reached by the household channel, by a military-religious order's Grandmaster
-  reporting directly on the order's own matters, and by the Confessor. Three channels, three
-  filter-holders, and a dynastic claim's whole fight is over which channel a given claim about an heir
-  travels down.
+  reporting directly on the order's own matters, and by the Confessor — three channels, three
+  filter-holders, and a dynastic claim's fight is over which one a claim about an heir travels down.
 
-**Counter-play (R).** A petitioner routes around a channel three ways, with three cost shapes: find a
-person holding a **Knot** to the principal, since a Knot is a channel with bandwidth and bypasses
-correspondence entirely (cost: strain, and the partner's own stance); make the item **public**, so the
-principal witnesses it directly (cost: publicity binds the principal to respond and courts a hostile
-construal); or suborn the channel-holder (cost: a person who now holds something on you). None
-dominates. And suppression is not free — the suppressed petition writes grievance into its backers *if
-and when they learn*, and whether they learn is a telling, so a channel-holder's real exposure is one
-backer with an `interview` act.
+**Counter-play (R).** Three routes around a channel, three cost shapes: a **Knot** to the principal,
+which is a channel with bandwidth and bypasses correspondence entirely (cost: strain, and the
+partner's stance); making the item **public** so the principal witnesses it directly (cost: publicity
+binds him to respond and courts a hostile construal); or suborning the holder (cost: a person who now
+holds something on you). None dominates. And suppression is not free: the suppressed petition writes
+grievance into its backers *if and when they learn*, which is a telling — so a channel-holder's real
+exposure is one backer with an `interview` act.
 
 - Closed loop: produced by petitions and tellings arriving at a container; carried by named persons in
   the channel, each of whom disposes; consumed by the principal's view — or by nobody, which writes
@@ -671,19 +671,22 @@ degradation is identical. If removing institutions changed the barrier, it was s
 so it is not.
 
 **P-13 — Southernmost knowledge is untransmittable to non-sensitives** is the same mechanism with the
-floor set highest, and it carries the corollary the setting needs: **between sensitives it transmits
-perfectly.** Communities with higher baseline sensitivity therefore hold knowledge the rest of the
-peninsula cannot audit — not because they conceal it, but because every attempt to share it arrives as
-poetry. That is a caste's epistemic position derived from one floor, and it is why the stigma is
-self-reinforcing: the untransmittable thing looks exactly like a lie.
+floor set highest, plus the corollary the setting needs: **between sensitives it transmits perfectly.**
+Communities with higher baseline sensitivity hold knowledge the peninsula cannot audit — not because
+they conceal it, but because every attempt to share it arrives as poetry. That is a caste's epistemic
+position from one floor, and it is why the stigma is self-reinforcing: the untransmittable thing looks
+exactly like a lie.
 
 **P-09 — memory-pulling.** Pulling a claim deletes the row and writes an **orphaned configuration**: a
-rendering-side facet with high retention on both the person and the place. It is findable two ways.
-A sensitive finds it by Thread-Read. **And a non-sensitive finds it by bookkeeping**, because the SAID
-rows that pointed at the deleted claim now point at nothing, and `reconstruct` reports a dangling
-reference in the provenance graph. Two independent detection channels, one supernatural and one purely
-clerical, and the second is free — it falls straight out of "no null source."
+high-retention rendering-side facet on both the person and the place. A sensitive finds it by
+Thread-Read. **A non-sensitive finds it by bookkeeping**, because the SAID rows that pointed at the
+deleted claim now point at nothing and `reconstruct` reports a dangling reference. Two independent
+detection channels, one supernatural and one clerical, and the second is free — it falls straight out
+of "no null source."
 
+- Closed loop: produced by `resolve` emitting rendering-side facets and by `tell` degrading them at
+  deposit; carried as the presence or absence of rows in one ledger; consumed by that person's view
+  like anything else — the barrier has no organ of its own, which is exactly why no one can open it.
 - **Cut the registration floor and you lose:** the setting's central asymmetry, and with it any
   structural reason a caste with more perception has less standing.
 
@@ -702,13 +705,13 @@ salience factors listed beside each.
 And, greyed out beneath it: **the claims you hold that were crowded out by stance weight**, labelled
 *you know this and you are not thinking about it.*
 
-That one panel is this document's answer to N-2. The field's failures all narrowed scope — a facet band
-with templated text, a closed trait vocabulary, hand-written variants — because they tried to *describe*
-interior state. This does not describe anything. The interior state already **is** a ranked list of
-claims with named multipliers over a closed set of twelve predicate forms and thirteen Convictions, so
-rendering it is a table, and it stays legible at any content volume because the vocabulary is finite
-while the referents are not. Whether that counts as expression rather than tracking is a fair question;
-what is certain is that it does not narrow as the world grows, which every prior attempt did.
+That panel is this document's answer to the interior-state null. Prior attempts all narrowed scope —
+templated text over a facet band, a closed trait vocabulary, hand-written variants — because they tried
+to *describe* interior state. This describes nothing. The interior state already **is** a ranked list of
+claims with named multipliers over twelve predicate forms and thirteen Convictions, so rendering it is
+a table, and it stays legible at any content volume because the vocabulary is finite while the
+referents are not. Whether that is expression rather than tracking is a fair question; what is certain
+is that it does not narrow as the world grows, which every prior attempt did.
 
 **Other people.** Inputs and a band, never the value and never the threshold.
 
@@ -727,6 +730,9 @@ what is certain is that it does not narrow as the world grows, which every prior
   **"you do not know what he believes"** — not a greyed meter, not a question mark on a scale.
   Ignorance, not uncertainty, in the interface too.
 
+- Closed loop: produced by the player's own ledger and by the same salience computation `choose` runs;
+  carried by the interface; consumed by the player, who is the only reader — nothing the player is
+  shown is written anywhere or read back by anyone else.
 - **Cut the band discipline and you lose:** the no-GM answer. Either the player is handed truth the
   engine's own agents cannot see, or they are handed nothing and cannot plan.
 
@@ -792,11 +798,11 @@ stance(Aldwin→Halvard) = +2, stance(Aldwin→Gerik) = −1, marks_kinship = 0.
 Maret deposits **c2** at share 0.73 → confidence 0.39. Aldwin deposits **c1** at share 0.62 →
 confidence 0.45.
 
-**Note what is and is not in conflict.** F1, F2 and F4 are identical in both ledgers, same values, same
-intervals. *They agree on everything that happened.* The disagreement is entirely in construals, which
-are `inferred`, which means they never corroborate and never collide as testimony. Two honest witnesses,
-no lie anywhere, and an unbridgeable difference. Consensus broadcast cannot produce this; noise on a
-single truth cannot either.
+**Note what is and is not in conflict.** F1, F2 and F4 are identical in both ledgers — same values,
+same intervals. *They agree on everything that happened.* The disagreement is entirely in construals,
+which are `inferred`, so they never corroborate and never collide as testimony. Two honest witnesses, no
+lie anywhere, an unbridgeable difference. Consensus broadcast cannot produce this; nor can noise on a
+single truth.
 
 **Maret acts.** She raises a petition that the reckoning-warrant be withdrawn from Halvard, backed by
 forty-one persons of the hamlet and the Row whose own witnessing ran like hers. It must be carried:
@@ -840,8 +846,10 @@ and warm stance toward the praefect deposit the SAID row and the content at 0.15
 do not believe her. **The town does not reach consensus, and that is correct.**
 
 **The consequences are the substrate's, not this document's.** Twenty-three persons' stance toward
-Aldwin falls. Nine of them `commit` to a cell whose proposition is that the praefecture's channel be
-replaced by a consensus assembly — which is a petition about a *channel*, the most dangerous kind. The
+Aldwin falls. Nine of them `commit` to a Restoration cell whose proposition is that the praefecture's
+channel be replaced by a consensus assembly — a petition about a **channel**, the most dangerous
+kind, and the exact grievance that links Southern Einhir exclusion to the Movement without anyone
+having authored the link. The
 cell's density at Goldenfurt rises. Maret's Masterpiece Examination committee, whose members' stances
 have now moved because she made trouble in their hall, will apply those stances to her marks at the
 gate — the Free Master gate doing caste work through no rule that mentions caste.
