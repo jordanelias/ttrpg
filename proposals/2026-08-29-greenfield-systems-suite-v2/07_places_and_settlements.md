@@ -394,7 +394,7 @@ scenery — visible in `presences{}` but with nothing at stake, which collapses 
 in ordinary play, and 01's normative table already fixes this. The type is one of the eight declared
 in `valoria_geography_v30.yaml:675`: **plains · forest · highland · mountain · mountain_pass ·
 fjord_coast · coast · marsh**, assigned at world-gen by which polygon a node's coordinates fall
-within (`:676-752`). Mountain terrain (`terrain_cost_matrix: mountain: 999.0`, `:766`, effectively
+within (`:676-752`). Mountain terrain (`terrain_cost_matrix: mountain: 999.0`, `:768`, effectively
 impassable) sites no settlement in practice, which is why none of the 35 do.
 
 **Genuinely open, not designed here.** Whether a place's terrain may ever change (a Calamity event
@@ -412,7 +412,7 @@ different scale**, not this document's eight identity types read directly. `12_a
 owns that mapping. What `07` supplies to it: (a) the place's terrain identity (§6.1); (b) whether a
 `facilities[]` entry of kind `garrison`/`walls` is present (§3.3), which is what the mass-battle
 `Walls / fortifications` row actually keys on, per `settlement_layer_v30.md`'s own Fortress-chokepoint
-example (`:906-910`: a Fortress "cannot be bypassed unless the invader's Military exceeds the Fortress
+example (`:912`: a Fortress "cannot be bypassed unless the invader's Military exceeds the Fortress
 Defense by 3+"). **07 supplies the facts; 12 supplies the mapping.**
 
 ---

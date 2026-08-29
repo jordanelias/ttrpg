@@ -189,9 +189,8 @@ not.
 
 ### 2.5 Church of Solmund and the Restoration Movement — birth **biases**, it does not **gate**
 
-Two canonical institutions reach a person at generation, and they reach them by three different
-routes. **None of the three is a new mechanism**; each is a composition on something `01` or `07`
-already owns.
+Two canonical institutions reach a person at generation, by three routes. **None is a new
+mechanism**; each composes on something `01` or `07` already owns.
 
 | route | primitive | how caste enters | canon |
 |---|---|---|---|
@@ -205,13 +204,12 @@ distribution rather than in a branch: Northern Einhir **ideologically suspect** 
 (`faction_politics_v30:668`). The Church's is the mirror (`:660`), with one caste-neutral exception
 branch canon names explicitly.
 
-**The worked case, and it is the reason §6 exists.** The Movement holds a proposition that canon
-states is **false**: *"RM does not believe threadwork is real. Threadwork is folklore to RM"*
-(`systems/_architecture/campaign_architecture_v30.md:57`) — and canon states the revision, with
-three declared outcomes: **Embrace** (integrate), **Denial** (hold and be disadvantaged), **Schism**
-(the movement splits) (`:71-75`). Read against this suite's primitives that is not three special
-cases. It is one belief crossing a band, and its third outcome is **a bloc** (`06 §3`). Generation's
-only job is to make the belief exist on the right people — which is §6.
+**The worked case, and the reason §6 exists.** The Movement holds a proposition canon states is
+**false** — *"RM does not believe threadwork is real. Threadwork is folklore to RM"*
+(`systems/_architecture/campaign_architecture_v30.md:57`) — and canon states the revision with three
+declared outcomes: **Embrace**, **Denial**, **Schism** (`:71-75`). Against this suite's primitives
+that is not three special cases: it is one belief crossing a band, whose third outcome is **a bloc**
+(`06 §3`). Generation's only job is to put the belief on the right people — which is §6.
 
 ---
 
@@ -391,16 +389,14 @@ argue and can be argued out of (§6); TS gates Knot formation and the Warden lad
 ### 5.1 Six edge kinds, adopted from PP-724 — v1's enum is cut
 
 `01 §7.2` cut v1's six-member `relation` enum and this suite's own draft table, superseded by
-`systems/npcs/npc_relational_graph_v30.md` (PP-724, Class A, PROVISIONAL), which ships six canonical
-NPC↔NPC edge types with per-type formation, strain, break and decay rules and a decision log
-(`:46-56`). **Generation adopts them and adds nothing:**
-
-`sworn-bond` (symmetric) · `liege-vassal` (liege→vassal) · `kinship` (symmetric; asymmetric
-parent→child) · `patronage` (patron→client) · `rivalry` · `feud` (hereditary), strengths 1–3.
+`systems/npcs/npc_relational_graph_v30.md` (PP-724, Class A, PROVISIONAL): six canonical NPC↔NPC
+edge types with per-type formation, strain, break and decay rules and a decision log (`:46-56`) —
+`sworn-bond` · `liege-vassal` · `kinship` · `patronage` · `rivalry` · `feud`, strengths 1–3.
+**Generation adopts them and adds nothing.**
 
 **A person is born owing someone something, and leaves generation entangled.** v1 required at least
-two edges (one upward, one lateral) and was right; v2 requires **at least one edge per walked
-stage**, which for a full ladder is at least four, mapped to what canon says each stage produces:
+two edges (one upward, one lateral) and was right; v2 requires **one edge per walked stage** — at
+least four for a full ladder — mapped to what canon says each stage produces:
 
 | stage | edge canon names | kind |
 |---|---|---|
@@ -409,14 +405,12 @@ stage**, which for a full ladder is at least four, mapped to what canon says eac
 | Vocation | *"what you do"* — a trade, a post, a chapter | `liege-vassal` or a second `patronage`; a peer `sworn-bond`; or a `rivalry` where the conditioned draw put two people on one rung |
 | Catalyst | *"what changed everything"* (`:58`) | `rivalry`, or `feud` where the stage's precedent tag names a lineage |
 
-**Disposition is stored for PC↔NPC and derived for NPC↔NPC** (`01 §7.3`, PP-724 `:331-345`). A
-generated NPC↔NPC pair therefore gets **no disposition gauge** — C-3. That is not a loss: it removes
-a stored aggregate the write rule forbade, and PP-724 derives the value from edge state.
-
-**Rivalries and feuds are escalation tracks, not strain tracks** (PP-724 `:674`, cited in `01 §7.2`).
-A generated rivalry is not a weak feud; a stage may grant either, never one as a magnitude of the
-other. **Kinship does not break by strain** (`:334-340`) — a generated family survives estrangement,
-which is why the Origin edge is durable enough to still matter at Catalyst.
+**Disposition is stored for PC↔NPC and derived for NPC↔NPC** (`01 §7.3`, PP-724 `:331-345`), so a
+generated NPC↔NPC pair gets **no disposition gauge** — C-3, which removes a stored aggregate the write
+rule forbade. **Rivalries and feuds are escalation tracks, not strain tracks** (`:674`): a generated
+rivalry is not a weak feud, and a stage grants either, never one as a magnitude of the other.
+**Kinship does not break by strain** (`:334-340`) — a generated family survives estrangement, which is
+why the Origin edge still matters at Catalyst.
 
 ### 5.2 Knots: generation proposes, canon disposes
 
@@ -638,10 +632,9 @@ any other path that constructs people without going through the generator.
 ## 9. The player-facing surface — counted against `00 §2`'s budget
 
 **`02` spends zero of the whole-game single-digit verb budget.** Character generation is where a deep
-game most often explodes its surface, and canon has already ruled the opposite way: *"the player
-never sees Conviction weights, Self-Other values, or cultural template assignments"*
-(`questionnaire:32`); *"a personality-and-competence simulation where the player never touches a stat
-sheet"* (`:24`).
+game most often explodes its surface; canon already ruled the opposite way — *"the player never sees
+Conviction weights, Self-Other values, or cultural template assignments"* (`questionnaire:32`),
+*"a simulation where the player never touches a stat sheet"* (`:24`).
 
 | what the player is asked | how many | how often |
 |---|---|---|
@@ -662,11 +655,10 @@ adopted edge kinds · flaw rows · belief propositions · 2 identity fields. Sur
 questions, 0 verbs.** The substrate table is longer than the surface table, which is the ratio
 `00 §2.3` point 4 requires.
 
-**The 12–16 questions are not a verb and the distinction is load-bearing.** A verb is a thing a
-player selects from a menu **every season**; the budget is about recurring cognitive load. A
-one-time authoring interface that the player never revisits costs the *learning* budget once and the
-*per-season* budget never. If that argument is rejected, the correct response is to shorten canon's
-question set — not to move the derivation onto the player.
+**The 12–16 questions are not a verb, and the distinction is load-bearing.** A verb is selected from
+a menu **every season**; the budget is about recurring load. A one-time interface the player never
+revisits costs the *learning* budget once and the *per-season* budget never. If that is rejected, the
+fix is to shorten canon's question set — never to move the derivation onto the player.
 
 ---
 
@@ -805,11 +797,11 @@ The one roll in this document's blast radius is **canon's Knot formation roll**,
 
 | dependency | tier | if it moves |
 |---|---|---|
-| `character_canon_v30.md` (the belief object, the `≤3` cap, the revision conditions) | **PROVISIONAL** | §6's cap loses its citation and becomes a parameter — at which point the gauge-per-belief decision must be re-argued against `01 §3.2`, not tuned |
+| `character_canon_v30.md` (belief object, `≤3` cap, revision conditions) | **PROVISIONAL** | §6's cap becomes a parameter — the gauge-per-belief decision is then re-argued against `01 §3.2`, not tuned |
 | `npc_relational_graph_v30.md` (PP-724) | Class A, **PROVISIONAL** | §5.1's kinds change; the *container* does not (`01 §7.3`) |
-| `faction_politics_v30.md §3.2` | **CANONICAL** | `04`'s gate changes; `02` is unaffected — it supplies the input, not the rule |
-| Key **consumption** (`cg.demand`'s `consumes:` row) | **J-O** open | `cg.demand` becomes a boundary read over vacant posts. Nothing else here consumes a Key |
-| cross-season latency | **J-N** open | §3.4's career gate is written as a boundary state read precisely so it survives either ruling |
+| `faction_politics_v30.md §3.2` | **CANONICAL** | `04`'s gate changes; `02` supplies the input, not the rule |
+| Key **consumption** (`cg.demand`'s one `consumes:` row) | **J-O** open | it becomes a boundary read over vacant posts; nothing else here consumes a Key |
+| cross-season latency | **J-N** open | §3.4's career gate is a boundary state read precisely so it survives either ruling |
 
 ### 11.4 N / R / S / E
 

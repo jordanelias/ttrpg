@@ -393,7 +393,7 @@ PP-724's cascade rather than a second one.
 
 **Elegant** — four modules, one new entity kind, no elimination routine, no per-faction branch, no court
 system, no succession system, and a player surface of one verb and two reads. **The honest deduction:
-the contested object on this page is the bloc**, because it is the one thing here that is a new stored
+the contested object in this document is the bloc**, because it is the one thing here that is a new stored
 entity rather than a derivation or an adopted mechanism. §3 argues it — no ethos, no treasury, no
 posture, one gauge, membership by post — rather than assuming it, and if the argument fails the correct
 verdict is *cut the bloc and lose court politics*, not *shrink it further*.

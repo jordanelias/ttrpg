@@ -75,7 +75,9 @@ Under the amended authority model these were re-examined on merit rather than in
   `[NEEDS TESTING — SIM-DEFECT]` caveat is carried forward unupgraded (§9.1).
 - **PP-724's six edge kinds as the bloc-connectivity basis** — kept, and each earns its place rather than
   being inherited wholesale (§3.2).
-- **ED-IN-0201**'s no-leader-no-action gate — `05`'s, read here and not restated.
+- **ED-IN-0201** (`registers/editorial_ledger_in.jsonl:57`, RULED by Jordan 2026-08-28, `status: open`,
+  not executed) — the no-leader-no-action gate is `05`'s, read here and not restated. It is why §7's
+  Silent band is a *pause* rather than a failure mode needing machinery of its own.
 
 ---
 
@@ -108,7 +110,13 @@ Faction (entity kind: faction — 01 §1.1)
 
 **Every quantity a faction has is derived, and that is AU-1 made structural, not remembered.** There is
 no `Faction.stat` to write because `01 §2.1`'s four write leaves contain no faction scalar. The
-enforceable form is `writable: false` on every derivation row in §8.
+enforceable form is `writable: false` on every derivation row in §8 — and that enforcement is the point,
+because **the rule's own author says it is not self-enforcing**:
+`systems/_architecture/propagation_spec_v1.md:151` states AU-1, and `:181` concedes it is *"a standing
+authoring discipline, not a self-enforcing schema property"*, since the generic per-observer write path
+cannot tell a derived faction stat from a legitimately direct-written personal one. A faction with **no
+writable scalar at all** removes the distinction the substrate cannot make. That is a stronger position
+than the spec asks for, and it is available only because every faction quantity here is a derivation.
 
 ⚠ **A wart, named rather than hidden.** `00 §7`'s contract schema requires every `state:` row to name a
 bucket from `entity | gauge | tag | post`, and **a derivation is stored in none of them**. v1 wrote
@@ -457,7 +465,9 @@ anything, and the mechanism is a boundary read. §7 is the same shape applied to
 
 ### 4.5 The double-count hazard (Q-5) — declared, not resolved
 
-`propagation_spec_v1` §3 D.6 flags it HIGH PRIORITY and forbids resolving it locally. **What this
+`systems/_architecture/propagation_spec_v1.md:260` (§D.6, *"Open flags for Jordan"*) holds it open, and
+`:272` records that cross-tick convergence is **conditional** on it being ruled disjoint. It is not
+resolvable locally. **What this
 document does instead:** every derivation here reads **settlement-owned gauges only** and writes
 nothing back; `05`'s down-targeted deltas write those same gauges. So the magnitude crosses in exactly
 one direction and this page never carries it in the other — `01 part 2 §9.2`'s "which of its two

@@ -46,25 +46,24 @@ from their trigger states"*) is neither obeyable nor overridable. §7.3 states i
 
 **Jordan, 2026-08-29 (mid-drafting):** *"existing work is not necessarily required to keep all the way
 through to things like obstacles being stat/2 or whatever is ratified and canon"* · *"I just want the
-best possible proposal."* Under this, **nothing in the tree is out of bounds** — not ratified canon,
-not a prior Jordan ruling. The delta spec's tier-1 *"follow it"* and tier-2 *"integrate, don't
-duplicate"* become **evidence to weigh**, and only the `## Overrides` disclosure rule survives intact.
+best possible proposal."* So **nothing in the tree is out of bounds** — not ratified canon, not a
+prior Jordan ruling. The delta spec's tier-1 *"follow it"* and tier-2 *"integrate, don't duplicate"*
+become **evidence to weigh**, and only the `## Overrides` disclosure rule survives intact.
 
-**Two things this document could now override, and does not. Recording the decision not to override
-is as much a decision as overriding.**
+**Two things this document could now override and does not.** Recording the decision *not* to
+override is as much a decision as overriding.
 
 | kept | tier it *was* | why it is kept **on merit** | what would have made me drop it |
 |---|---|---|---|
-| **The arc-vector template + binding-slot grammar** (ED-IN-0011, ratified) | ratified canon | It is **derived from 138 real authored arcs**, not from a preference, and its anti-oatmeal defence — *specificity from binding at instantiation* — is the exact property a project object needs and the exact property a naive generator lacks. Re-deriving a decomposition from zero arcs to replace one derived from 138 would be a worse proposal wearing my name. §1 | if the ~13 shapes could not express a project's four-verb lifecycle. **They can** — §1's slot table maps it with nothing left over |
-| **The hook grammar** — *the script is the PREDICATE* (Jordan, 2026-08-18) | a Jordan ruling | It is **solving scripting drift**, and it solves it better than the alternatives: it puts the authored part in a *predicate over world state* where it cannot special-case an entity, and leaves everything downstream emergent. It also comes with **three worked in-tree precedents**, so it is tested rather than proposed. §4 | if it forced authored content into code branches. **It does not** — §10.2 makes every hook a registry row |
+| **The arc-vector template + binding-slot grammar** (ED-IN-0011) | ratified canon | **derived from 138 real authored arcs**, not from a preference; and its anti-oatmeal defence — *specificity from binding at instantiation* — is exactly the property a project object needs and a naive generator lacks. Replacing a decomposition drawn from 138 arcs with one drawn from zero would be a worse proposal wearing my name. §1 | if the ~13 shapes could not express the four-verb lifecycle. **They can** — §1's slot table maps it with nothing left over |
+| **The hook grammar** — *the script is the PREDICATE* (2026-08-18) | a Jordan ruling | it **solves scripting drift better than the alternatives**: the authored part is a *predicate over world state*, which cannot special-case an entity, and everything downstream stays emergent. Plus **three worked in-tree precedents**, so it is tested rather than proposed. §4 | if it forced authored content into code branches. **It does not** — §10.2 makes every hook a registry row |
 
-**And one place this document does extend past both, argued rather than assumed** (§3.1): the ratified
-templates and all three hook precedents are **unweighted** — a conjunction that must fully obtain, or
-a counter that must reach `k`. This design generalizes to a **weighted sum of indicator terms**, which
-subsumes both as special cases (equal weights + full threshold = the conjunction; tag-existence terms =
-the ratchet) and adds partial progress the precedents cannot express. **That is one formula replacing
-two shapes, which is the elegance criterion's distillation side** — and it is listed here rather than
-slipped in, because it is an extension of a ruled grammar.
+**One place this document does extend past both, argued rather than assumed** (§3.1): the templates
+and all three precedents are **unweighted** — a conjunction that must fully obtain, or a counter that
+must reach `k`. This design generalizes to a **weighted sum of indicator terms**, subsuming both as
+special cases and adding partial progress neither can express. **One formula replacing two shapes**,
+which is the elegance criterion's distillation side — listed here rather than slipped in, because it
+extends a ruled grammar.
 
 ---
 
@@ -339,8 +338,8 @@ of its ideas are better than anything this document would have invented and are 
   so escalation is *lapse-and-redeclare*. That is canon's `generate_replacement_project`
   (`political_dynamics_keys_migration_v30.md:196-215`) expressed with zero additions.
 - **Speccing for friction** (`:246-250`) — orthogonal convictions, **overlapping ambitions** (two
-  owners with the same target force a third party to be kingmaker), cross-cutting relationships. This
-  is authoring guidance for the registry, not mechanism, and it is where the density comes from.
+  owners with the same target force a third party to be kingmaker), cross-cutting relationships.
+  Authoring guidance for the registry, not mechanism, and where the density comes from.
 - **The four-conflict-surfaces argument** (`:264`) — one well-specified person generates a petition, a
   friction, an intrigue and an ambition. **This is the playing-surface budget's whole thesis** (`00
   §2.2`): depth from *which situation arrives and what it is entangled with*, never from menu breadth.
@@ -418,18 +417,14 @@ and `01 §3.3` requires **non-empty provenance on every tag** precisely so *"`Ke
 biography rather than a write-only chain."* **This document is the consumer those two rules were
 written for.**
 
-### 7.1 One stream, projected
+### 7.1 One stream, projected — and what it buys, at the ratified strength and no higher
 
 `narrative_engine_design_v2_churn.md §1` is ratified on this and is not restated: there is **one beat
 stream**, and a character's story, a faction's campaign and the world chronicle are **projections** of
-it, filtered by holon. **A project's arc is a projection filtered by the project's tag key.** It is a
-query, not a subsystem.
-
-### 7.2 What this buys, stated at the ratified strength and no higher
-
-`§4` of the ratified document is explicit about what its coherence invariants deliver: **a legible
-chronicle, not a guaranteed satisfying plot.** This document claims the same and no more. What it adds
-is that the chain is **walkable by construction** — every link is a required field, not a convention.
+it, filtered by holon. **A project's arc is a projection filtered by the project's tag key** — a
+query, not a subsystem. And `§4` is explicit about what its coherence invariants deliver: **a legible
+chronicle, not a guaranteed satisfying plot.** This document claims the same and no more; what it adds
+is that the chain is **walkable by construction**, every link a required field rather than a convention.
 
 ### 7.3 The named gap — the calibration set is gone
 
@@ -756,13 +751,10 @@ expresses the game.**
 
 ### 13.4 Reachability, in both directions
 
-The same bar `11` gets, and it is a **content** obligation on the registry rather than a code check:
-
-- **A project kind whose conjunction has never held in a seeded campaign is decoration.** It should
-  be cut or its terms loosened.
-- **A kind that fires for most owners most seasons is weather**, and its threshold is too low.
-- **A kind that is declared and always lapses** is a worse failure than either, because it costs a
-  budget point and a `PROJECT_CAP` slot and returns nothing but a residue.
+The same bar `11` gets, a **content** obligation on the registry rather than a code check. A kind
+whose conjunction has **never held** in a seeded campaign is decoration; one that **fires for most
+owners most seasons** is weather; and one that is **declared and always lapses** is worse than
+either, because it costs a budget point and a `PROJECT_CAP` slot and returns only a residue.
 
 None of the three is checkable until rows exist, and **none of them is checkable at all without the
 calibration set §7.3 says is gone.** That is the honest state.
