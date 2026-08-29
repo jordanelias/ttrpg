@@ -77,12 +77,37 @@ simply someone whose neighbours' regard is high enough that they will be listene
 square. Capacity routes through persons (T1), and scale is left as what it honestly is: a
 **perceptual and reputational profile**. Density is what a stranger reads off you. It sets how loudly
 you register, who bothers to oppose you, and what the Inquisitors think they are dealing with. It
-gates nothing.
+gates no option.
 
-- Closed loop: produced by rolling up member addresses each tick; carried nowhere (recomputed);
-  consumed by perception, reputation and threat assessment.
-- **Cut it and you lose:** the ability for a small faction to be underestimated and a large one to be
-  feared before it acts.
+Precisely: **no act is unlocked or forbidden by a faction's size, and no roll takes it as a term.** It
+is not, however, inert — §5.1's revolt is a comparison between how many people are actually committed
+at a node and what the coercive apparatus there can hold, and that is a fact about the world rather
+than about anyone's estimate. The distinction is worth stating because the loose phrase *"scale gates
+nothing"* would be false one section later: scale determines no OPTION, and outcomes still depend on
+how many people are really standing there.
+
+**And the profile is never read from true state.** This is the correction that matters, because the
+obvious implementation is a back door wide enough to void §3. Rolling up *actual* membership — secret
+commitments included — and handing the result to perception or threat assessment would let a decision
+function consume a derivation of truth that never passed through `witness`. That is the banned object
+of §6 in aggregate form.
+
+So there are two profiles, and only one of them may be read by anybody:
+
+| | computed from | who may read it |
+|---|---|---|
+| **the true profile** | actual memberships | **nobody.** It exists for the designer's bookkeeping and for tests. No decision function takes it. |
+| **an estimated profile** | *one person's own claim ledger* — the memberships they have been told of, witnessed, or inferred | that person, inside their own view |
+
+Every observer therefore holds a *different* estimate of the same faction, and a covert membership is
+absent from an estimate until somebody's claim names it. Underestimation is not a special case; it is
+the default, produced by the same incomplete ledgers that produce everything else.
+
+- Closed loop: produced per-observer by rolling up the memberships **in that observer's ledger**;
+  carried nowhere (recomputed); consumed by that observer's perception, reputation and threat
+  assessment, inside their view.
+- **Cut it and you lose:** the ability for a faction to be misjudged — a conspiracy of nine read as a
+  rabble, or a rabble read as a conspiracy — and with it every act taken against a wrong estimate.
 
 ### 1.4 Growth and shrink are one operation
 
@@ -122,7 +147,7 @@ each field.
 | **Capability** | Aptitudes and practices — the pool the resolver rolls. Without it a person cannot attempt anything. |
 | **Stance** | One table, from *referent* → attitude, where referents are persons, factions, propositions and places. Feelings and beliefs-about-value both live here. |
 | **Memory** | The claim ledger of §3. |
-| **Ties** | Ordinary contacts, plus **Knots** — a person's few deep bindings, typed differently because a Knot is a *channel with bandwidth*: it carries states and tellings that ordinary acquaintance does not, and it is how a person with no post gets news, opportunity and obligation. |
+| **Ties** | Ordinary contacts, plus **Knots** — a person's few deep bindings, typed differently because a Knot is a *channel with bandwidth*: it carries states and tellings that ordinary acquaintance does not, and it is how a person with no post gets news, opportunity and obligation. **The setting gates this on Thread Sensitivity, so roughly half the peninsula cannot form one — a deliberate asymmetry, stated so nobody later "fixes" it: every formal institution gates Southern Einhir OUT, and the deepest informal channel, being TS-gated, gates them IN. That is why Niflhel recruits on the waterfront, and why the Restoration's weaving works with no wealth and no soldiers.** |
 
 Six fields, and two deliberate fusions. Feelings toward people and stances toward propositions are
 **one table**, because both are read by the same routine — how much weight do I give this, how much
@@ -133,7 +158,25 @@ contradiction) and nothing more; §6 says why the rest is cut.
 **Needs are not a field.** They are computed each tick from the person's situation: their hearth's
 larder against its mouths, their standing against their siblings-in-container, their unmet
 stance-commitments, their exposure to a dispensation's terms. Storing them would be a second copy of
-the world that can go stale. Computing them means a person's wants change the instant the world does.
+the world that can go stale.
+
+**But they do not all read the same thing, and this is a correction to an earlier draft of this
+section.** That draft said computing needs means a person's wants change the instant the world does.
+That is right for the body and the room and *wrong for the polity*, and left standing it would break
+T4 inside the needs function — a treaty would change the wants of every person in scope before any of
+them had heard of it, with no lie and no telling anywhere.
+
+| need | reads |
+|---|---|
+| subsistence — the larder against the mouths | **the world.** You feel hunger whether or not anyone told you about it. |
+| standing — your regard among your siblings-in-container | **the world.** Their faces are in front of you. |
+| commitment — a faction's proposition you hold, unsatisfied | **the view.** You must believe it unmet. |
+| exposure — what a dispensation's terms do to your options | **the view.** You must have heard of it, in whatever version reached you. |
+
+So the honest claim is: **needs are never stale relative to the person's view, and are supposed to be
+stale relative to the world.** A fisher whose Duke signed a treaty three days ago has no changed need
+until the crier reaches him — and if the crier's version is distorted, his need is computed from the
+distortion. That is the design, not a lag to be fixed.
 
 **A person with no office can still act.** Action eligibility never consults office. Every act is
 offered to every person; office changes only whether your decision *binds others*, and marks and
@@ -147,6 +190,17 @@ all. When an event names one of them, or when a cohort's stance spread widens pa
 one answer is honest, the cohort **individuates**: it splits into a person and a smaller cohort, same
 schema, same fields. Nothing in the game is written for elites-only, because the elite and the cohort
 are the same type at different resolutions.
+
+**Individuation has an inverse, and it is a design principle rather than a budget cap.** Without one,
+a long campaign accumulates persons monotonically — the same unbounded-population failure, reached by
+a different route. A person re-merges into a cohort when they hold no Knot, no office, no live
+petition, and **no other person's ledger names them**. Which is to say:
+
+> **A person persists exactly as long as somebody remembers them.**
+
+The persons who survive a hundred-year campaign are therefore precisely the ones who mattered to
+someone, which is the correct set — and it is arrived at by reference-counting the world's memory
+rather than by an authoring budget or a cull.
 
 ---
 
@@ -270,8 +324,24 @@ moves when they do.
 Setting content at this rung: craft guilds and their grades (apprentice, journeyman, Free Master,
 burgher status), Einhir hamlets and Crown-Latinate quarters as ethnic communities inside the same
 wall, parish congregations as the Church's presence at the rung where it actually touches people, and
-Restoration consensus cells — which are communities whose admission gate is consensus rather than a
-masters' vote, and are otherwise the same object.
+Restoration consensus cells — with a caveat that must be stated rather than left to a reader, because
+containment and alignment answer different questions and a cell can be either.
+
+**A cell people live in is a community; a cell people belong to while living elsewhere is a faction.**
+A Restoration cell drawn from three hamlets and two guilds is *alignment* — joining it does not change
+Greta's address, which is exactly why she can be a sympathiser without her neighbours knowing. A
+weaving-house whose members share a roof, eat together and judge each other's conduct is *containment*
+— moving in changes your address and your judging set. The Restoration runs both, and the difference
+is observable in the fiction: the first can be secret, the second cannot, because you cannot hide
+where you sleep.
+
+The same test settles institutions generally. **The Church of Solmund is a faction; a parish is a
+community; a Dicastery is neither** — it is an *office cluster*, and offices live on containment rungs
+(§4, Settlement and upward) while the faction that fills them does not. This is the honest cost of
+single-parent containment: an institution's internal structure is not containment, so it must be
+carried as offices plus alignment rather than as a second tree. Whether that suffices for the Church's
+four Dicasteries and the guilds' grade ladders is a real question, and it belongs to document 07
+rather than being assumed here.
 
 - **Cut it and you lose:** exclusion. Caste stops being enforceable by anybody, guilds become labels,
   and there is no rung between the hearth and the town where an outsider can be kept out by people who
@@ -382,6 +452,12 @@ before the same date are in conflict with each other and both sides know when th
 is all the substrate provides; the argument system composes on top of it (document 07), and it needs a
 *proposition* to attack — which the substrate now supplies.
 
+- Closed loop: produced by a container's own calendar and by any instrument that sets an expiry;
+  carried as a published fact anyone in scope may hold a claim about; consumed by every petition and
+  dispensation that must resolve before it.
+- **Cut it and you lose:** deadlines, and with them the whole class of politics that exists because
+  two sides know when the argument ends — no reason to concede, to stall, to bundle, or to move now.
+
 ---
 
 ## 6. What is refused, under E-as-a-ratio
@@ -436,8 +512,9 @@ moved. The guild burgher whose seat it would cost **drops** it, and says so publ
 Kettlemakers' judging set would punish him for carrying an Einhir grievance. Greta learns of the drop
 from her cousin, at second hand, in a version that is angrier than what happened. Her commitment to
 the cell goes from sympathiser to member. Thirty others do the same. The cell's density at Goldenfurt
-crosses what the praefecture can hold — and the Duke, reading only the *profile*, discovers a faction
-he had no reason to think existed.
+crosses what the praefecture can hold — and the Duke — whose estimate of that cell
+was built from two informants' claims and is years out of date — discovers a faction he had no reason
+to think existed. He was not lied to. Nobody had told him.
 
 Nothing in that paragraph was authored. Every step is one of the six person fields, the two relations,
 the three signatures, and the two stroke objects.
