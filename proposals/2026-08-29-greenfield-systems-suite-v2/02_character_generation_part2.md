@@ -215,22 +215,34 @@ targets it with nothing. A later document that wants to may, and must then decla
 
 ## 11. Property audit
 
-### 11.1 Engine class — and the scope gate, honoured
+### 11.1 Scope, honoured — no NERS verdict manufactured for a document that does not roll
 
-**Nothing in this document rolls.** A conditioned categorical draw is not the continuous engine and
-every transition here is a **gate** (`00 §6` principle 4). Per the suite's rule — *do not manufacture
-a NERS verdict for a module that does not roll* — the properties below are diagnosed against the
-generator directly, and where one is about resolution it says so rather than being scored. The single
-roll in this document's blast radius is **canon's Knot formation roll** (`01 §7.5`,
+**Nothing in this document rolls.** Three of the five modules are `derivation` and two are `gate`; a
+conditioned categorical draw has no obstacle, and every transition here is a **gate** (`00 §6`
+principle 4). **A NERS verdict is not manufactured for them** — the same refusal `06 §11` and `10 §11`
+make for their own gates and derivations, and the one this document's own first draft did not make,
+redefining P-i's "legible odds" into "legible result" to keep a table of passes standing. That
+redefinition is the methodology's own named error, and this section retracts it rather than repeating
+it. The single roll in this document's blast radius is **canon's Knot formation roll** (`01 §7.5`,
 `knots_v30.md:76-83`): cited, not designed, not audited here.
 
-| property | verdict | reasoning and falsifier |
+**What follows instead is what the generator actually does, each claim on its own merits, plus every
+loop and gate with its bound (§11.2).** The content below is the same content the retracted table
+carried — nothing here is new — stripped of the "pass" verdicts that dressed it as a five-property
+audit it was never entitled to run.
+
+| # | Claim | Falsifier |
 |---|---|---|
-| **P-i** legible odds | **pass, scoped** | The player does not choose against this draw, so its odds are not a decision they make. What P-i requires here is a legible *result*: `capability_provenance`, the conditioning inputs and every caste verdict are published (`01 §8`; `04`). **Falsifier:** a test asserting every `cg.*` state row carries a disclosure block and none sets `trigger: published` |
-| **P-ii** uniform leverage | **pass** | §3.5 — additive log-odds with a bounded shift; a unit of conditioning moves the distribution by the same amount wherever it lands. The multiplicative form fails this and is the version not built. **Falsifier:** apply a fixed signal to a tail category and a head category and assert the log-odds delta is identical |
-| **P-iii** bounded, monotonic | **pass, with the layering caveat** | Capability moves one axis by at most one band per stage, clamped; conviction reweights sum into the declared band; `Δ_MAX` bounds conditioning, `p_floor` bounds degeneracy. **The caveat is real:** these bounds were proved for ONE application in v1 and now apply `S` times. **Falsifier:** §3.5's terminal-distribution test, plus a test that no generated capability exceeds `ATTRIBUTE_CEILING` after the longest reachable ladder |
-| **P-iv** graded, recoverable | **pass** | §8 — generation is total, and the load-bearing event (can a required post be filled) cannot fail. Stage skipping is graded, not all-or-nothing. **Falsifier:** a test asserting every well-formed demand returns a person, and that `Origin` is present on **every** person in a seeded world |
-| **P-v** right engine | **pass** | Not a contest, so neither canonical resolver applies; a draw from a declared distribution is the right tool, and a contested roll here would resolve something that is a construction. Every *transition* is a gate: the uncertainty was upstream |
+| **1** | **Disclosure stands in for odds the player never chooses against.** The player does not choose against this draw, so there is nothing to make legible as odds; what is published instead is the *result*: `capability_provenance`, the conditioning inputs and every caste verdict (`01 §8`; `04`) | A test asserting every `cg.*` state row carries a disclosure block and none sets `trigger: published` |
+| **2** | **The conditioning kernel is additive log-odds, not multiplicative** (§3.5) — a unit of conditioning moves the distribution by the same amount wherever it lands; the multiplicative form is the version not built | Apply a fixed signal to a tail category and a head category and assert the log-odds delta is identical |
+| **3** | **Capability moves are bounded and clamped, composed `S` times, not once.** One axis by at most one band per stage, clamped to `ATTRIBUTE_CEILING`; conviction reweights sum into the declared band; `Δ_MAX` bounds conditioning per stage, `p_floor` bounds degeneracy (§3.5). **The caveat is real, and lives here rather than under a "pass":** these bounds were proved for ONE application in v1 and now apply `S` times | §3.5's terminal-distribution test, plus a test that no generated capability exceeds `ATTRIBUTE_CEILING` after the longest reachable ladder |
+| **4** | **Generation is total.** Every well-formed demand returns a person, and `Origin` is never skipped (§8) | A test asserting every well-formed demand returns a person, and that `Origin` is present on **every** person in a seeded world |
+| **5** | **A draw is the right engine here, not a contest.** Nothing in this document is uncertain in the way a contest is uncertain; a contested roll would resolve a construction rather than an unknown, and every *transition* is a gate because the uncertainty was upstream | A test asserting no `cg.*` module declares `resolver: d_sigma`, and that every module's `ob_sites:` is empty (§10.1) |
+
+Above all five: `00 §0.1`'s scope limit binds this page exactly as it binds every other — satisfying
+every claim above says the generator is sound, not that the world it populates is worth living in.
+That second question is the elegance criterion, and its answers here are the `## Overrides` block and
+the one-line loss statements throughout part 1, judgments rather than checks.
 
 ### 11.2 Loops, each with its bound
 
