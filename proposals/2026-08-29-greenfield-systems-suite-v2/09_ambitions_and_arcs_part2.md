@@ -59,6 +59,7 @@ rules the other way:
 | depends on Key **consumption**? | survives a "telemetry only" ruling? |
 |---|---|
 | `am.advance` / `am.fire` / `am.lapse` — **all three read state, consume nothing** | **yes** |
+| §6.4's **place auto-declaration** — a gate over the place's own state at the boundary, `consumes: []` like the rest | **yes.** It is the strongest case on this table: a rising forms because the settlement *is* a certain way, never because a Key arrived |
 | the arc chain (§7): `Tag.provenance` → Key, `causes[]` | **yes** — that is telemetry and causality, exactly what the alternative keeps |
 | the emission side (`mechanical.project_advanced`, `state.project_completed`, `state.project_failed`) | **yes** as a log |
 | the `consumes: []` lists in §11 — **already empty** | **not applicable** |
@@ -81,13 +82,19 @@ design that advances by reading state does not care whether the mesh is a churn 
 | a project's **arc chain** — *what has this been, and who moved it* | nothing — a read, on demand, never pushed | on demand |
 
 **Never touched:** any NPC's, bloc's or faction's project (substrate — experienced only as a
-situation arriving on the Slate) · `am.advance` / `am.fire` / `am.lapse`, all boundary-run · a
-project's **threshold**, its **progress number** or any **forecast** of when it will fire (§3.3) ·
-an **obstruct** verb, because there is none (§5).
+situation arriving on the Slate) · **any `place`-bound project, which no entity in the game declares
+at all** (§6.4) · `am.advance` / `am.fire` / `am.lapse`, all boundary-run · a project's **threshold**,
+its **progress number** or any **forecast** of when it will fire (§3.3) · an **obstruct** verb,
+because there is none (§5).
 
 **Substrate objects here: 1 tag kind · 1 registry block of project kinds · 4 verbs of which 3 are
 headless · 0 new gauges · 0 new entity kinds. Surface: 1 verb, 2 reads.** The ratio is the right way
 round (`00 §2.3` point 4).
+
+⚠ **Against the suite-wide playing-surface budget, this document's contribution is ONE and §6.4 does
+not change it.** Auto-declaration is a *gate over state*, not a decision anyone is asked to make, so it
+adds no Slate item and no season-budget charge — the distinction `00 §2.2` row 3 turns on. A reader
+summing the suite's surface should count `09` as **1**, before and after §6.4.
 
 ### 9.1 The payoff — long-range agency from a small verb set
 
@@ -162,11 +169,20 @@ kinds are a **block** in `references/content_registry.yaml`:
 project_kinds:
   - id: <kind id>                      # an arc-vector TEMPLATE (§1)
     class: substrate | surface         # surface ONLY for kinds a player may declare
-    owner_binding: {entity_kind: person|bloc|faction|place, gate: <predicate>}
+    owner_binding:
+      entity_kind: person|bloc|faction|place
+      gate: <predicate>                # for entity_kind: place this is ALSO the AUTO-DECLARE
+                                       # predicate — nobody declares a place-bound kind (§6.4)
+      hysteresis: <band>               # REQUIRED for entity_kind: place, forbidden otherwise:
+                                       # auto-declare/lapse is a reversible pair (01 §2.3, §6.4)
     slots: [target, terms]             # the ratified binding slots (:80)
     advance_terms:                     # each: a predicate over READABLE STATE. No RNG. No Key. (§8)
       - {w: <int bp>, term: <predicate>, required: <bool>, ratchet: <bool>}
-    threshold: <int bp>                # HIDDEN — a trigger (01 §8)
+      # `term` draws from §3.1's CLOSED table of seven kinds — gauge band · form value · tag
+      # existence · tag age · post holder · edge state · season index. A term outside it is a
+      # registry error, not an extension: an open predicate grammar is a scripting language.
+    threshold: <int bp>                # HIDDEN — a trigger (01 §8). STATIC — see §6.4's honest
+                                       # limit: nothing lowers a threshold at runtime
     bands: [(<bp>, <label>)]           # PUBLISHED — what a reader sees
     horizon: <seasons> | null          # null permitted for ratchet kinds only (§6.1)
     stall_ttl: <seasons>               # the Ambition tag's ttl; canon's default is 8
@@ -177,6 +193,12 @@ project_kinds:
 ```
 
 **Adding a project kind — and therefore an arc shape — is data.** `00 §6` principle 3.
+
+⚠ **Two registry checks this schema now requires and this suite does not have.** (1) `hysteresis:`
+present iff `entity_kind: place` — without it a place-bound kind strobes. (2) The **successor graph**
+(a kind whose `advance_terms` read another kind's `residue`) must be **acyclic**; §6.4's
+rising → suppressed → rising ladder is the concrete cycle risk, and §13.1 already records that no such
+check exists. Both are declaration-time checks over one file, needing no campaign run.
 
 ---
 
@@ -196,6 +218,13 @@ contract rather than promised in prose, and is why §8.1 can claim robustness un
   resolver: gate               # eligibility + the remit/caste gate. Declaring is never a roll.
   remit: [head, governor, minister, commander, envoy]       # clerk cannot declare; §9
   budget: {gauge: post.budget, cost: 1}
+  # ⚠ ONE conditional, and it is the only one in this document (§6.4). For a kind whose
+  # owner_binding.entity_kind is `place`, this module is invoked BY THE HERALD at the boundary for
+  # every place whose gate holds, with remit: [] and budget: null — a place holds no post and owns
+  # no budget gauge, so neither field has anything to read. Same module, same gate resolver, same
+  # tag.ambition write leaf, same state.project_formed emission (formation_cause names the gate).
+  # The tag write therefore stays in the module that DECLARES it and does not leak into
+  # am.advance, whose `state: []` row is empty on purpose. NO NEW MODULE AND NO NEW VERB.
   emits: [{type: state.project_formed, terminal: false}]    # BLOCKED on P0-1 + G-17 (§10.1)
   state: [{name: tag.ambition, bucket: tag, writable: true, owner: substrate.ledger}]
   transitions: []
@@ -267,6 +296,8 @@ document holds itself to, reproduced rather than paraphrased:
 | a **cross-season advance carry** | **rejected as non-existent, not as unwanted** | §8 — the transport is not in the tree (**J-N**) |
 | a **project-specific salience term** | **rejected** | `10` owns the light. §11.1 |
 | **decay on `progress`** | **rejected for ratchet kinds** | §3.2 — monotonicity comes from the append-only tag ledger, not from an exemption to `01 §5.1` |
+| a **`pl.revolt`** verb, or an unrest row in `11` | **rejected — and §6.4 is why it is not needed** | a revolt verb needs an actor holding a post, which is exactly what a population is not; an `11` row would make the rising a **weather event with a hazard rate** rather than a project with obstructable terms. `place`-bound auto-declaration gets a mass actor from a gate over state, with no verb, no row and no budget |
+| a **runtime-mutable `threshold`** (the research's *re-arms at a lower threshold*) | **rejected as unavailable, not as unwanted** | a threshold is a static registry field and nothing writes registry rows. §6.4 reaches the effect through a **successor kind**, and says plainly that this is weaker than the pattern it models |
 
 ---
 
@@ -293,6 +324,7 @@ expresses the game.**
 | ratchet terms → progress → fire | **terminating by construction**: terms monotone, threshold fixed, fire terminal | **bounded** — the only proved bound here, and it is the coup counter's property, not this design's |
 | fire → Slate candidate → player attention → player acts → a term moves | **the scene budget** (`10`); the light is **subtract-only** (`churn:197-204`) so it cannot accelerate a project | **unmeasured**; the severance is `10`'s to enforce, not this page's |
 | obstruction → progress falls → owner's method escalates → new obstruction | **the `ttl` horizon and `PROJECT_CAP`** | **unmeasured** |
+| **auto-declare → fire → post revoked → order falls further → the gate holds again → auto-declare** (§6.4) | **the `hysteresis:` band `owner_binding` is required to declare** (`01 §2.3`), plus `horizon` and `PROJECT_CAP` on the place | **unmeasured, and the loop this document is least sure of.** The band is what stands between a rising and a permanent revolt every season; `H_MIN` is computable from the gauge's own fields (`01 §2.3`), so the bound is arithmetic — but *whether the resulting cadence is a game* is a campaign question, and `tools/balance_oracle.py` is the instrument |
 | a Key-driven advance cascade within a season | **does not exist.** `DEFAULT_CASCADE_DEPTH_MAX = 0`, and `consumes:` is empty on all four modules (§8, §11) | **not a loop today.** If **J-N** rules for reactive chains this becomes a real loop with no bound yet |
 
 ### 13.2 Gates, each with what it reads
@@ -301,6 +333,7 @@ expresses the game.**
 |---|---|---|
 | `am.declare` eligibility | the owner's posts and their `remit`; the kind's `owner_binding`; one budget point | the kind is not in the option set — **an absence, not a penalty** (`01 §4.3`) |
 | `am.lapse` unreachability | any `required: true` term that is permanently false | no lapse |
+| **place auto-declare / auto-lapse** (§6.4) | `owner_binding.gate` over the place's own gauges, form and tags, **through its declared `hysteresis:` band** | no project forms; a live one lapses and leaves its residue. **Never a penalty and never a Slate item** — nobody was asked |
 | `PROJECT_CAP` | the owner's live Ambition tags, counted | declaration unavailable until one ends |
 | `am.fire` threshold | the derived progress against the hidden threshold — **state only, never a received Key** | no fire; the project stays live |
 | `am.lapse` horizon | the Ambition tag's `ttl` against the season index — **elapsed time, a pure function** | no lapse |
@@ -318,9 +351,13 @@ expresses the game.**
 | **No entity or outcome is special-cased** | a grep asserting no project kind's `owner_binding`, `advance_terms` or `fire.effect` contains a literal entity id. **This is the one falsifier that cannot be run yet** — there are no rows |
 | **Monotonicity needs no exemption to the decay law** (§3.2) | a test asserting this document declares no gauge at all, and that every ratchet term resolves to a tag-existence predicate on a `ttl: None` tag |
 | **Obstruction needs no verb** (§5) | a seeded campaign in which a project's progress falls after an unrelated actor's action, with no module having named the project. **If it never happens, the advance terms read state nobody else touches and the projects are timers after all.** The weakest-supported claim on the page, and this is how to break it |
-| **`place_found` is reachable** (§6.3) | a seeded campaign in which a `found_settlement` project fires and `07`'s `place_found` transition follows. **If no such kind exists in `content_registry.yaml`, or none ever fires, `07`'s row is dormant** — and the defect is in this document, not that one |
+| **`place_found` is reachable** (§6.3) | **run this one before any campaign, because v2 failed it statically.** First falsifier, arithmetic and immediate: *for every `owner_binding.gate` in the registry, every module and post kind it names exists.* v2's `found_settlement` gated on *"a post whose remit includes founding"* and **a `remit` names modules** (`01 §4.3`) — no such module exists or ever will, so the row could not bind, `07`'s `place_found` could never fire, and every `Ruin` node `07` declares was dead weight. **A row that cannot bind reads as coverage, which is worse than an empty registry.** Second falsifier, campaign-level: a seeded run in which a `found_settlement` project fires and `place_found` follows |
+| **A `place`-bound kind is instantiable at all** (§6.4) | *for every `owner_binding` with `entity_kind: place`, some path in the suite declares it.* **v2 failed this too** — the schema admitted the branch and `am.declare` required a post-holder, a remit and a budget point, so the branch was a **registry ghost**. It now passes by the herald invoking `am.declare` with `remit: []`. Run it as a **schema-level** check over `content_registry.yaml`: any `entity_kind` no declaration path can reach is a ghost, whatever the row says |
+| **A place-bound kind cannot strobe** (§6.4) | *`hysteresis:` present iff `entity_kind: place`*, plus `01 §2.3`'s `H_MIN` arithmetic on the gauge the gate reads. **Load-bearing on the game:** without it a rising declares and lapses on alternate seasons, which is the anti-strobe defect one layer down from §3.3's |
+| **Two-signal resonance actually gates** (§6.4) | a seeded campaign in which a place reaches the strain band with **no** legitimating tag and **no rising forms** — the *"a bare grievance fizzles"* property (`conflicts_power_struggles.md:32`). If a rising ever forms on strain alone, `required: true` is not doing what §3.1 says it does, and the pattern has been imported in name only |
 | **Every project ends** (§6.1) | a seeded campaign assertion that no Ambition tag survives `max(horizon, stall_ttl)` seasons past its last band crossing, and that live projects per owner never exceed `PROJECT_CAP` |
 | **~13 template shapes cover the arc space** | **NOT CLAIMED.** The calibration corpus is evacuated (§7.2). Do not cite the figure as validated coverage |
+| **A project row can express the ratified shapes** (the converse of §1's check) | **NOT CLAIMED IN GENERAL, and §1.2 names the two shapes it has actually run.** No count is offered: the *"~13"* is a range (12–15) over collapse *families*, not an enumerated list, so *"n of 13 pass"* would be a fabricated denominator. COLLISION passes only because §3.1 admits a `tag age` term; **BG-CV is permanently partial** — `01 §5.1` gives every gauge `λ ∈ (0,1]` with `rest` and `λ` declared at load and **no setter**, so a permanent *continuous* bump is forbidden by the substrate and no weighting recovers it. Falsifier: pick a BG-CV entry whose effect is a permanent stat change with no discrete form row to land on, and try to write its row. **If that succeeds, this limit is wrong and I want to know** |
 
 ### 13.4 Reachability, in both directions
 

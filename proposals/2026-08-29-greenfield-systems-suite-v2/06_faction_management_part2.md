@@ -102,7 +102,7 @@ Read at the accounting boundary, from state. **No emission carries anything acro
 | **Whole** | head post seated | acts at every tier where it holds a post (`05`) |
 | **Contracted** | head seated; **no post at province tier or above** | acts locally only. `footing` falls at the higher nodes because the sum has fewer terms — nothing writes it down. Charters whose patron is this faction begin lapsing (§4.4). This is canon's **city-state** (`settlement_layer_v30.md:1073-1075`) with no partial stat sheet, because every stat was already a derivation over what is held |
 | **Silent** | head post **vacant** | takes no action at any tier (ED-IN-0201, `05`). Its other posts fall vacant on their own terms; its holdings' governance posts become claimable. Its ledger, ethos and blocs persist |
-| **Dissolved** | head vacant **AND** `04`'s `pm.candidates` returns **empty** for `DISSOLVE_DWELL` consecutive seasons | `posture → dissolved`, `reversible: false`. Posts revoked, charter edges transitioned to `lapsed`, holdings' governance posts vacant. **The entity and its ethos persist in the store** |
+| **Dissolved** | head vacant **AND** `04` yields **no seatable candidate** for `DISSOLVE_DWELL` consecutive seasons — `pm.candidates` empty, **or** every candidate in it fails `04 §4.0`'s acceptance gate (v3: `04` now lets a person refuse a post, so a non-empty list of refusers is the same institutional fact as an empty one) | `posture → dissolved`, `reversible: false`. Posts revoked, charter edges transitioned to `lapsed`, holdings' governance posts vacant. **The entity and its ethos persist in the store** |
 
 Every band is **visible**, **graded**, and reached by a gate over readable state. Three of the four are
 exited in both directions.
@@ -121,7 +121,11 @@ The fix is one distinction, and it preserves the delta spec §9.5 carry-forward 
 - **Demand is always expressible.** The head post's vacancy resolves at a node that cannot be lost, so
   the world always knows this faction *wants* a head. That is v1's recoverability, unchanged, and it is
   what stops a vacancy being an instant death.
-- **Supply is bounded and can be empty.** `03`'s population is bounded and `04`'s candidate gate is
+- **Supply is bounded and can be empty — and v3 adds a second way for it to be empty that is better
+  drama than the first.** A faction can fail to find anyone *qualified*; it can also fail to find anyone
+  *willing*. `04 §4.0`'s acceptance gate makes the second reachable, and an institution nobody will
+  serve is a more legible end than an institution with nobody left. Both routes feed the same gate.
+- `03`'s population is bounded and `04`'s candidate gate is
   real — a rank floor, the caste matrix (`faction_politics_v30.md:653-668`), remit, and canon's own
   successor requirement at **Standing 4+** (`settlement_layer_v30.md:1077`). An empty candidate set is
   a reachable state, and sustaining it for `DISSOLVE_DWELL` seasons is what ends an institution.
@@ -157,9 +161,9 @@ nothing: identity is immutable, so a dissolved faction is a perfectly good thing
 
 ## 8. Module contracts
 
-Four modules, in `00 §7`'s shape. **`fm.derive` and `fm.bloc` consume nothing** — both read state at
-the accounting boundary — which is why §9.3's J-N constraint and §9.4's J-O exposure are both narrow
-here.
+**Five modules** (v3: `fm.fisc` is new, C-7), in `00 §7`'s shape. **Every one of them consumes
+nothing** — all five read state at the accounting boundary — which is why §9.3's J-N constraint and
+§9.4's J-O exposure are both narrow here.
 
 ```yaml
 - module: fm.derive
@@ -177,9 +181,9 @@ here.
     - {name: faction.divergence, bucket: gauge, writable: false, owner: fm.derive}
     - {name: faction.footing,   bucket: gauge, writable: false, owner: fm.derive}   # per node; §4.2
     - {name: faction.weight,     bucket: gauge, writable: false, owner: fm.derive}
-    - {name: faction.treasury,   bucket: gauge, writable: false, owner: fm.derive}   # yield: 07 owns it
     - {name: faction.force,      bucket: gauge, writable: false, owner: fm.derive}   # units: 12 owns them
     - {name: bloc.pull,          bucket: gauge, writable: false, owner: fm.derive}
+    - {name: bloc.members,       bucket: gauge, writable: false, owner: fm.derive}   # v3, C-8: §3.1
   form: []
   transitions: []
   disclosure:
@@ -187,9 +191,29 @@ here.
     - {of: faction.divergence, inputs: published, presentation: band,  trigger: hidden}
     - {of: faction.footing,   inputs: published, presentation: band,  trigger: hidden}
     - {of: faction.weight,     inputs: published, presentation: exact, trigger: hidden}
-    - {of: faction.treasury,   inputs: published, presentation: exact, trigger: hidden}
     - {of: faction.force,      inputs: published, presentation: band,  trigger: hidden}
     - {of: bloc.pull,          inputs: published, presentation: band,  trigger: hidden}
+    - {of: bloc.members,       inputs: published, presentation: exact, trigger: hidden}  # who is in the wing IS the read (§10)
+
+# v3, C-7 — the treasury is a STOCK, not a derivation (§4.6). It left fm.derive because 00 §7.1's
+# falsifier forbids a `writable: false` name from being a real gauge id, and it needs one.
+# Shape precedent: 07's pl.gauges, the suite's existing boundary-accrual module.
+- module: fm.fisc
+  parent: faction_management
+  class: substrate
+  scales: [peninsula]
+  tier: null
+  resolver: accrual
+  remit: []                 # nobody spends an action to collect revenue
+  budget: null
+  consumes: []              # reads 07's residual(place) over controlled places at the boundary
+  emits: []
+  state:
+    - {name: faction.treasury, bucket: gauge, writable: true, owner: substrate.gauge}
+  form: []
+  transitions: []
+  disclosure:
+    - {of: faction.treasury, inputs: published, presentation: exact, trigger: hidden}   # exact BECAUSE spent directly, per 07:537
 
 - module: fm.bloc
   parent: faction_management
@@ -204,7 +228,7 @@ here.
   state:
     - {name: bloc.cohesion, bucket: gauge, writable: true, owner: fm.bloc}
     - {name: tag,           bucket: tag,   writable: true, owner: substrate.ledger}
-  form: [{entity_kind: bloc, field: members}, {entity_kind: bloc, field: state}]
+  form: [{entity_kind: bloc, field: state}]      # v3, C-8: `members` is DERIVED, never a form field (§3.1)
   transitions:
     - bloc.form_latent          # gate: §3.2
     - bloc.latent_to_open       # reversible pair -> hysteresis REQUIRED (§3.4)
@@ -253,6 +277,13 @@ written*; a contract row declaring one writable is a defect the shape check catc
 remembering the rule. `fm.posture` is the only row with a non-empty `remit`, which is the whole of this
 document's player surface.
 
+**The count is still seven, and that is arithmetic rather than luck.** v3 removed `faction.treasury`
+from the derivations (C-7 — it is a stock, §4.6) and added `bloc.members` to them (C-8 — it was stored
+form and is now derived, §3.1). The two fixes are the *same* fix pointed in opposite directions: v2 had
+one stock mislabelled as a derivation and one derivation mislabelled as stored form. **Exactly one
+faction-scoped gauge is `writable: true` across this document — `faction.treasury`, in `fm.fisc`** —
+which is a one-line grep and the narrowed form of §1's claim.
+
 **Why `faction.weight` and `faction.footing` are not magnitude variants of one another** — the
 under-distillation test from `00 §1`, applied where it is closest to failing. `weight` reads **posts and
 places held** (what you hold; Jordan's 2026-07-13 ruling that factions hold *people* and that the number
@@ -274,6 +305,7 @@ they could not diverge, one would be the other's magnitude variant and this docu
 | **bloc state flicker** — `latent ↔ open` | `θ↑ − θ↓ ≥ H_MIN(cohesion)` and `dwell ≥ 1`, checked **at load** (`01 §2.3`) | **bounded arithmetically.** The only loop here with a proved bound, and why hysteresis is mandatory |
 | **footing ↔ settlement acceptance** | canon's saturating `T/(T+K)`; `∂footing/∂q` shrinks as `T` grows (`settlement_layer_v30.md:168`) | **MEASURED, and it is canon's measurement, not this suite's**: bounded 0–7 and convergent over 30 seasons under mission shocks (`:173`). The only measured bound cited in this document |
 | **defection cascade** — a bloc edge breaks → Fragility → sever threshold → more breaks | hop-attenuation ½/hop, Fragility cap +3 with −1/season decay, Suppress brake, tier-3 hard cap (`npc_relational_graph_v30.md:501-519`) | canon's own verdict is **damped and bounded**, carrying canon's own `[NEEDS TESTING — SIM-DEFECT]`: *"the per-cycle-gain bound is a design argument, not yet sim-measured."* Repeated here rather than upgraded |
+| **treasury** *(v3, §4.6)* — residual → treasury → contract muster → units → upkeep → treasury | `rest + a/λ` from `01 §5.1`, checked **at declaration** against the descriptor registry with no campaign run. Upkeep is a *negative* flow, so the loop is self-damping in the direction that matters: more units means less money means fewer units | **bounded arithmetically**; per-cycle gain **unmeasured**, and it is campaign-reachable, so `tools/balance_oracle.py` is the instrument if `05` lands the spender |
 | **collapse** | **terminating.** `posture → dissolved` is `reversible: false`, so the faction leaves the loop permanently (§7.2) | not a gain loop; a one-way absorbing state with a dwell in front of it |
 
 ### 9.2 Gates, each with what it reads
@@ -285,7 +317,9 @@ they could not diverge, one would be the other's magnitude variant and this docu
 | schism | `bloc.pull`, divergence, cohesion, dwell | the bloc stays open; its project keeps advancing (`09`) |
 | posture change | the posture row's gate, the divergence band, `post.budget ≥ 1` | the posture is **not in the option set** — an absence, not a penalty (`01 §4.3`) |
 | charter lapse | the patron's derived footing at the boundary | privileges lapse automatically; nobody revoked anything (`settlement_layer_v30.md:651-661`) |
-| dissolution | the head post's `holder_id`, and `04`'s candidate set, for `DISSOLVE_DWELL` seasons | the faction stays Silent — recoverable, and that is the point |
+| dissolution | the head post's `holder_id`, and whether `04` yields any candidate who both qualifies **and** accepts, for `DISSOLVE_DWELL` seasons | the faction stays Silent — recoverable, and that is the point |
+| bloc dissolution *(v3)* | `\|members(b)\| < 2` **and** `cohesion ≤ θ_dissolve` — the gauge term is what keeps a derived-membership gate legal under `01 §2.4` (§3.4) | the bloc stays in its current state |
+| charter *(v3, §3.5a)* | **`05`'s gate, not this page's** — `06` supplies `bloc.state == in-schism` plus five values and emits the crossing fact | **`05` has no such row today. If it never lands, `in-schism` is a terminal sink** — §11.1's falsifier is written against exactly that |
 
 ### 9.3 ⚠ J-N — no cross-season latency, and this page does not assume any
 
@@ -333,9 +367,15 @@ table is longer than its substrate table, the ratio is backwards.
 | `practice`, `divergence` or `footing` as **numbers**, or any band edge |
 | the **schism** gate, the **charter-lapse** gate, or the **dissolution** gate — all boundary reads |
 | creating, chartering or ending a **faction** — `05` and `12` own the acts; the gates own the rest |
+| **collecting revenue** — `fm.fisc` is an accrual at the boundary (§4.6); the player spends the treasury through `05`, and never operates the filling of it |
 
-**Substrate objects: 1 entity kind (bloc) · 7 derivations · 6 bloc/faction form transitions · 1 gauge ·
-0 new registry files. Surface: 1 verb, 2 reads.**
+**Substrate objects: 1 entity kind (bloc) · 7 derivations · 6 bloc form transitions + 1 faction one ·
+2 gauges (`bloc.cohesion`, `faction.treasury`) · 0 new registry files. Surface: 1 verb, 2 reads.**
+⚠ **v3 moved two objects between buckets and added no new kind of thing.** `faction.treasury` moved
+out of the derivations into the gauges (C-7); `bloc.members` moved out of the **form bucket** into the
+derivations (C-8) — note the transition count is unchanged at six, because **all six always targeted
+`bloc.state` and none ever targeted `members`, which is precisely why storing `members` in `form` was
+illegal.** The document gained one module (`fm.fisc`) and **no player verb**.
 
 ---
 
@@ -351,7 +391,7 @@ loss statements, the `## Overrides` block, and §8's under-distillation defence 
 
 | property | verdict | reasoning |
 |---|---|---|
-| **P-iii** bounded, monotonic | **pass on divergence and footing; bounded-with-unmeasured-gain on the loops** | `divergence ∈ [0,1]` by arithmetic on two normalised vectors — no clamp, no campaign run. `footing ∈ [0,7]` by canon's saturating form, with canon's own 30-season convergence result. `cohesion` is bounded at `rest + a/λ` at declaration. **Monotone in the aggregate and deliberately not in one officer's distance** (§2.3 pt 4) — a designed non-monotonicity, stated rather than hidden |
+| **P-iii** bounded, monotonic | **pass on divergence and footing; bounded-with-unmeasured-gain on the loops** | `divergence ∈ [0,1]` by arithmetic on two normalised vectors — no clamp, no campaign run. `footing ∈ [0,7]` by canon's saturating form, with canon's own 30-season convergence result. `cohesion` **and, from v3, `treasury`** are bounded at `rest + a/λ` at declaration, by the same registry check and with no new arithmetic (§4.6). **Monotone in the aggregate and deliberately not in one officer's distance** (§2.3 pt 4) — a designed non-monotonicity, stated rather than hidden |
 | **P-v** right engine | **pass** | every module here is `derivation` or `gate`. A faction's worth, its drift and its wings are computations over state already on the board; rolling for any of them would be a resolution where the answer exists. Every form transition is a gate on purpose (`01 §2.2`) |
 | **P-iv** graded failure | **pass, and it is what C-4 restores** | §7's four bands are visible, graded and gated; three of four are exited in both directions; the fourth has a dwell in front of it. **The claim is only true if the end is reachable** — which is the first falsifier below, and the exact thing v1 got wrong |
 
@@ -360,7 +400,10 @@ loss statements, the `## Overrides` block, and §8's under-distillation defence 
 | claim | falsifier | load-bearing on |
 |---|---|---|
 | **Collapse is reachable in both directions** (§7.3) | a seeded campaign in which **at least one faction reaches `dissolved`** and **at least one recovers from Silent to seated**. If dissolution never fires across the seeded set, v1's dead end is back and C-4 failed | the game — whether the world can lose an institution |
-| **No aggregate is written** (§1, §8) | a test asserting **no `writable: false` state name appears as a gauge id in `references/descriptor_registry.yaml`**, and that no module contract declares a `fm.derive` row writable | the write rule itself; it is the one hazard the `bucket:` wart opens |
+| **No aggregate is written, and exactly one faction stock is** (§1, §4.6, §8) | **two halves, and v3 needs both.** (a) no `writable: false` state name appears as a gauge id in `references/descriptor_registry.yaml`, and no `fm.derive` row is declared writable; (b) **exactly one faction-scoped gauge id in this document is `writable: true`, and it is `faction.treasury`** — a second one is a new stored faction stat and the thing §1 forbids. Half (b) is what keeps C-7 from being a hole in AU-1 rather than an exception to it | the write rule itself; it is the one hazard the `bucket:` wart opens |
+| **The treasury is a stock and not an aggregate** (§4.6) | a test that `faction.treasury` has **no derivation** anywhere in the suite — no function computes it from current state — and that its only writers are `fm.fisc`'s boundary deposit and `05`'s spends. **If anyone writes a `treasury()` derivation, the C-7 argument is false and the row should go back to `fm.derive`** | the muster economy: whether `05 part 2:68` can be built at all |
+| **Bloc membership is derived, never stored** (§3.1, C-8) | a test that no `bloc` entity carries a persisted `members` field, that `fm.bloc`'s `form:` names only `state`, and that `members(b)` recomputed twice in the same season from the same graph returns the same set. **Plus the negative:** mutate a `patronage` edge inside a bloc and assert `members(b)` changes at the *next read* with no transition having fired | the exact defect this suite prosecutes as `01`'s O-3 — a stored snapshot of a graph fact |
+| **A schism can finish** (§3.5a, T2-1) | **an end-to-end test, not a unit one:** a seeded campaign in which a bloc reaches `in-schism` **and a new faction entity exists afterwards** whose `identity.ethos` equals `practice(members)` at the schism season and whose `charter_season` is that season. **If `05` ships no `act.charter`, this fails and `in-schism` is proved a terminal sink** — which is the honest verdict, not a missing test | the marquee possibility of change C: a new institution emerging from inside an old one |
 | **Divergence is bounded without a clamp** (§2.3) | an arithmetic test over the registry alone: for every faction, `ethos` and every `conviction_projection` normalise to `Σ\|w\| = 1`, therefore `divergence ∈ [0,1]`. **Fails at load** if any ethos row is unnormalised | the difference between a bounded measure and one that needs a clamp nobody checks |
 | **`divergence` is `None`, not `0.0`, at zero seated posts** (§2.3 pt 3) | a test constructing a faction with every post vacant and asserting every consumer **declines to fire** rather than reading perfect alignment | the Silent band behaving as succession pressure rather than as a healthy institution |
 | **Blocs cannot form on spiritual ties** (§3.2, ED-POL-11) | a test that the bloc connectivity set contains exactly PP-724's six kinds and **excludes `knot`**; and that a faction whose officers share only `knot` edges produces **no** bloc | the anti-conflation ruling, honoured by construction |
@@ -376,11 +419,12 @@ is silent.
 
 ### 11.2 The four qualitative verdicts
 
-**Necessary** — one new entity kind (bloc), seven derivations each with a named consumer, and one form
-field. The relation taxonomy is PP-724's, adopted not invented; the footing arithmetic is canon's,
-adopted not invented; the collapse condition is canon's, restored not invented. What this page
-genuinely adds is **divergence**, **the bloc**, and **the summation domain that makes footing
-multi-scale** — three objects, each with a stated loss-if-cut.
+**Necessary** — one new entity kind (bloc), seven derivations each with a named consumer, one form
+field, and one stock. The relation taxonomy is PP-724's, adopted not invented; the footing arithmetic
+is canon's, adopted not invented; the collapse condition is canon's, restored not invented. What this
+page genuinely adds is **divergence**, **the bloc**, and **the summation domain that makes footing
+multi-scale** — three objects, each with a stated loss-if-cut. **The treasury (§4.6) is not a fourth
+addition:** the quantity was already being spent by `05`; v3 only put it in a bucket that can hold it.
 
 **Robust** — tested at both extremes. A faction with no holdings still has weight from its posts and can
 still seat a head. A faction with every holding is bounded by canon's saturating footing and by
@@ -391,9 +435,17 @@ fully described by that officer, and a faction with none returns `None` rather t
 derivation with three consumers; `footing` is one derivation at three tiers; a bloc's collapse is
 PP-724's cascade rather than a second one.
 
-**Elegant** — four modules, one new entity kind, no elimination routine, no per-faction branch, no court
+**Elegant** — five modules, one new entity kind, no elimination routine, no per-faction branch, no court
 system, no succession system, and a player surface of one verb and two reads. **The honest deduction:
-the contested object in this document is the bloc**, because it is the one thing here that is a new stored
-entity rather than a derivation or an adopted mechanism. §3 argues it — no ethos, no treasury, no
-posture, one gauge, membership by post — rather than assuming it, and if the argument fails the correct
-verdict is *cut the bloc and lose court politics*, not *shrink it further*.
+the contested object in this document is still the bloc**, because it is the one thing here that is a new
+stored entity rather than a derivation or an adopted mechanism. §3 argues it — no ethos, no treasury, no
+posture, one gauge, **membership derived rather than stored (v3, C-8)** — rather than assuming it.
+
+⚠ **And v3 tested that deduction rather than repeating it.** Cutting the bloc and re-deriving a wing on
+demand was drafted and **fails on three counts that are not stylistic**: a re-derived component has no
+identity, so it cannot accumulate a voting record; it cannot hold `in-schism` as a *terminal* state,
+because a derivation has no terminal states; and it **cannot freeze `ethos = practice(members)` at the
+schism season**, which is §3.5a's entire handoff and this suite's only route from an existing
+institution to a new one. **What the cut correctly identified was the membership storage, and that is
+what v3 removed.** If the argument still fails, the correct verdict remains *cut the bloc and lose court
+politics and faction emergence*, not *shrink it further* — the shrinking has now been done.

@@ -226,58 +226,133 @@ frozen at creation — no growth, no decline, no career, no ruin.
 
 ## 3. P-2 — Tag
 
-Durable, discrete memory on **any** entity. Six otherwise-unrelated requirements land here: a faction's
-grudge, a place's precedent, a person's obligation, a body's record of a defeated motion, a fiscal
-claim outliving its season, and the demoted officeholder's residual.
+Durable, discrete memory on **any** entity. Seven otherwise-unrelated requirements land here: a
+faction's grudge, a place's precedent, a person's obligation, a body's record of a defeated motion, a
+fiscal claim outliving its season, the demoted officeholder's residual — and **what somebody believes**.
 
 ```
 Tag: owner_ref (person|faction|place|post|edge|bloc) · kind · key (the dedupe axis) · value
      created_season · ttl (None = durable) · provenance : key_id  REQUIRED, NON-EMPTY
-kind : Precedent | Grudge | Debt | Reputation | Leverage | Memory      ← SIX (§3.1)
+     fields{} : declared PER KIND in the tag registry, never globally (§3.1)
+kind : Precedent | Grudge | Debt | Reputation | Leverage | Holding | Ambition   ← SEVEN (§3.1)
 ```
 
-### 3.1 Memory is the sixth kind, and the argument for opening a closed enum
+`Ambition` is `09`'s (O-A1), admitted by running the two-part test below; it is enumerated here because
+**this page owns the enum**, and an append against a six-member enum raises.
 
-v1 closed the enum at five and was right to: a mechanic must not be smuggled in as a tag family.
-Opening it costs something real, so the argument is made rather than asserted.
+### 3.1 The enum stands at seven — `Holding` in, the drafted `Memory` out (O-6)
 
-**The five are third-person institutional record** — what the faction holds against you, what is said
-of you, what was done here. Each is a claim whose `value` is the claim's **magnitude**, deduped to one
-row per `(owner, kind, key)`. **A Memory is first-person and perceptual**: it belongs to a person, it is
-about an event **they perceived**, and its `value` is **salience**. Two properties make it
-inexpressible inside the five:
+v1 closed the enum at five and was right to: a mechanic must not be smuggled in as a tag family. The
+procedure for opening it is a two-part argument — **(1)** the thing is inexpressible inside the existing
+kinds, and **(2)** reusing one of them is a *structural* collision, not a stylistic preference. `09`
+ran that procedure and admitted **`Ambition`** as the seventh (O-A1). It is run again here, on this
+page's own drafted `Memory` kind, which **fails it** — so the count does not move; the membership does.
 
-1. **Its existence is conditioned on perception, not on the event.** A Grudge exists because something
-   happened; a Memory because someone *saw* it. That distinction is the entire mechanic — nobody can act
-   on a false picture unless what a person knows is a separate object from what is true.
-2. **`Reputation` is single-valued per owner by the dedupe rule**, so `Reputation(owner=perceiver,
-   key=event)` would either break that rule or collapse every memory a person has into one row. The
-   collision is structural, not stylistic.
+**v2 drafted `Memory` here and it does not survive its own test.** The argument for Memory turned
+entirely on one claim: *nobody can act on a false picture unless what a person knows is a separate
+object from what is true.* That claim is right, and **a Memory tag cannot deliver it.** A tag has a
+`key` — the dedupe axis — and a `value` — a magnitude. Neither slot can say **what** is misremembered:
+`Memory(key=event_id, value=salience)` records *that* someone perceived something and how strongly, not
+that they believe **Torben killed the envoy** when he did not. The false picture was the whole
+justification, and the shape cannot carry one.
 
-**Six kinds, and the enum closes again at six.** A seventh needs the same two-part argument; "a
-mechanic wants somewhere to live" is not it.
+**What can:** a claim with an id of its own, held with a stance — already designed, its five design
+calls **Jordan-ruled** (`proposals/2026-08-18-epistemic-propositions-and-provenance.md` §3 the design,
+§10 the rulings). Adopted here **as a tag kind**, because field-for-field a Holding is what the Memory
+row already was:
 
-*Emergent possibility lost if Memory were cut:* nobody could act on a false or partial picture, so
-deception, rumour and misjudgement would all be impossible.
+```
+Holding: owner_ref = the holder (person)          kind = Holding
+         key       = prop_id            # content-addressed; ONE holding per holder per proposition
+         value     = confidence, int [1,5]        # the SAME ladder as state.opinion_revised (ruled §3.2)
+         created_season = acquired_season         ttl = None (durable) unless the sweep drops it (§3.2)
+         provenance : key_id REQUIRED, NON-EMPTY  # WHY THIS ROW EXISTS
+         fields  : stance ∈ {asserts, denies, suspects}   (P2)
+                   support_refs : [key_id], MAY BE EMPTY  (P3)   # HOW THE HOLDER KNOWS
+```
+
+**The two-part test, run.**
+
+1. **Inexpressible in the other six.** Every other kind's `value` is the magnitude of something that
+   **obtained** — a thing done, suffered, owed, attributed, held — or, for `Ambition`, of something
+   **intended**. A Holding's subject matter **may simply be false**, and it is the only kind of which
+   that is true. There is no slot anywhere else for *the content of a claim*; `prop_id` is one, and
+   truth is evaluated separately by the engine against world state (ruled design §3.4), never stored
+   on the row.
+2. **Reuse is false-friend reuse, which is prohibited.** `Reputation` is single-valued per owner by
+   the dedupe rule, so every belief a person has would collapse into one row — the same structural
+   collision the Memory argument correctly identified. And a consumer reading `Precedent` or
+   `Reputation` **as evidence** would silently ingest a belief as a fact: the term-vs-concept error
+   `06_master_synthesis.md:566` names and the corpus has pre-empted twice.
+
+**Two fields, declared per kind — and this is `§7.3`'s discipline, not a new one.** The edge container
+declares its gauges **per kind** (§7.3); the tag ledger declares its extra fields the same way. A kind
+with no stance has no `stance`. The precedent is already in this document's own cut list: `Debt(recurs=
+True, ttl=term)` (§10) is a per-kind field on a tag.
+
+⚠ **`provenance` and `support_refs` are NOT the same list, and conflating them breaks a ruling.**
+`provenance` is the Key that **caused this row to exist** — the scene where the rumour was heard, the
+interrogation, the forgery — and §3.3 requires it non-empty, without exception. `support_refs` are the
+Keys that **bear on whether the claim is true**, and **P3 rules they may be empty**, because rumour,
+prejudice and fabrication must be representable. The ruled design says this itself: *"'do you believe
+it?' and 'how do you know?' are now genuinely separate queries."* Two questions, two lists; the
+suite's provenance rule answers the first and never pretends to answer the second.
+
+**The `Proposition` store is not a fifth stored kind, and this page does not admit one.** A Proposition
+is `(subject, predicate, object, qualifier)` and its id is a hash of exactly those, so the store is a
+**memo table** — a cache of hash preimages. It holds no history, has no owner, is never a write target,
+and is fully reconstructible from the tuples the tags already carry. It also does not scale with
+population: it grows with **distinct claims**, not with `population × claims` (ruled design §10.2).
+
+> **The hashing rule the ruled design leaves open (§10.3, *"still the first thing to nail down"*) has an
+> in-suite answer: `10 §2.2`.** `candidate_id = H(emitter ‖ kind ‖ anchor ‖ sorted(subject_refs) ‖
+> provenance)` is specified there as **a fixed cross-platform hash — never Python's per-process-salted
+> `hash()`, never wall-clock, identical bytes on Python and GDScript.** Apply that discipline verbatim
+> over `(subject ‖ predicate ‖ object ‖ qualifier)`, with the same rule about what is deliberately *not*
+> an input. This page proposes it; the ruled design remains the owner of the grammar.
+
+**Seven kinds, and the enum closes again at seven.** An eighth needs the same two-part argument; "a
+mechanic wants somewhere to live" is not it. The seven now sort into **three families**, which is the
+cleaner statement: five are **third-person institutional record** (Precedent, Grudge, Debt, Reputation,
+Leverage), one is **first-person belief** (Holding), one is **first-person intent** (Ambition).
+
+*Emergent possibility lost if `Holding` were cut:* nobody could act on a false picture, so deception,
+rumour, contradictory testimony and misjudgement would all be impossible — and unlike the drafted
+`Memory`, this shape can actually produce them.
 
 ### 3.2 Salience decay without a second decay law — a decision, not an oversight
 
-A Tag's `value` does not decay; decay is a Gauge property. Salience must decay. Giving each Memory a
-Gauge means one gauge per memory per person — the count grows with everything anyone ever saw. Adding a
-decay field to Tag means a second decay law in the substrate and five kinds that never use it. So:
+A Tag's `value` does not decay; decay is a Gauge property. **Confidence must not decay either** — an
+agent whose credence relaxes toward zero every season is one who forgets *what they think*, which is a
+different and much worse game. What must decay is **salience**: how present a holding is to its holder.
+Giving each holding a Gauge means one gauge per proposition per person — the count grows with everything
+anyone was ever told. Adding a decay field to Tag means a second decay law in the substrate and six
+kinds that never use it. So:
 
 ```
-salience(memory, t) = value · (1 − λ_mem)^(t − created_season)        # derived at read
+salience(holding, t) = value · (1 − λ_sal)^(t − created_season)        # derived at read
 ```
 
 Same geometric law as §5.1, **one owner, no setter, no new stored field, no write** — a derivation over
-data the tag already carries. `λ_mem` is one suite-level constant in the descriptor registry.
+data the tag already carries, with `value` (confidence) as its amplitude, so a strongly-held belief
+stays present longer than a half-heard one. `λ_sal` is one suite-level constant in the descriptor
+registry. The same derivation applies to any tag kind that declares a salience reading; only `Holding`
+does today.
 
-**The bound this needs.** Memories per person are capped at `MEMORY_CAP`, retained **top-K by derived
-salience** at the sweep; without it the tag list is an unbounded ramp on a person's whole observed
-history and every selection function reading memory gets slower and noisier forever. Reachability bar:
-**at `MEMORY_CAP`, a memory of the maximum reachable salience must still displace the weakest retained
+**The bound this needs.** Holdings per person are capped at `HOLDING_CAP`, retained **top-K by derived
+salience** at the sweep; without it the tag list is an unbounded ramp on everything a person was ever
+told, and every selection function reading belief gets slower and noisier forever. Reachability bar:
+**at `HOLDING_CAP`, a holding of the maximum reachable salience must still displace the weakest retained
 one** — otherwise the cap is a first-come lock, not a relevance filter.
+
+> **This answers two open items in the ruled design, and says so rather than assuming them.** §10.2
+> files *"growth is unbounded without a forgetting rule — `Key.permanence` and confidence decay are the
+> two levers already in the substrate; which applies is undecided"*, and separately files the
+> population cost that **P1** created by ruling that every NPC holds propositions. The answer here is
+> **neither of the two levers it names**: confidence is stored and does not decay, `Key.permanence` is
+> not consulted, and forgetting is a **derived-salience top-K sweep** — which bounds the store at
+> `population × HOLDING_CAP` by construction rather than by tuning. Proposed, not ruled; the FI lane
+> owns the call and this is a design offered to it.
 
 ### 3.3 Provenance is required, dedupe is the bound, the sweep is the release
 
@@ -295,9 +370,10 @@ selection. With it, count is bounded by `candidates × posts`.
 survive succession** — a place remembers what was done to it after the officeholder is gone, the
 residual the genre's best-documented demotion failure lacks.
 
-> **Falsifier.** A test asserting no reachable tag in a seeded campaign has empty provenance, and no
-> person exceeds `MEMORY_CAP`. Load-bearing on the game — the mechanic is *why did this actor turn on
-> me*.
+> **Falsifier.** A test asserting no reachable tag in a seeded campaign has empty `provenance`, and no
+> person exceeds `HOLDING_CAP`. Load-bearing on the game — the mechanic is *why did this actor turn on
+> me*. ⚠ **The same test must NOT assert non-empty `support_refs`**: P3 rules that list may be empty,
+> and a guard conflating the two would make rumour unrepresentable (§3.1).
 
 ### 3.4 A tag may bias a decision; it may never substitute for one
 
@@ -318,7 +394,8 @@ be positional and unbuyable.**
 It binds hardest on custody (§4.2): a `Leverage` tag biases a holder toward the controller's
 preferences; it never replaces them. A custodian who fully determined a holder's choices would make
 custody strictly better than holding the post at a fraction of the exposure — the mechanic eating
-itself. **Memory is inside the cap, not beside it**: misperception shifts weighting, never the board.
+itself. **A `Holding` is inside the cap, not beside it**: a false picture shifts weighting, never the
+board. That is what keeps deception a *bias* on a decision rather than a substitute for one.
 **Reachability bar: at the maximum reachable relational total, the structurally-worst option must still
 be unable to outrank the structurally-best one.**
 
@@ -435,6 +512,7 @@ hysteresis guard needs no campaign run.
 |---|---|---|
 | `disposition.pc_npc` | edge (PC↔NPC only — NPC↔NPC is **derived**, §7.3) | a bespoke loyalty scalar per subsystem |
 | **`strain.<kind>`** *(v2)* | edge, **declared per relation kind; the kinds never sum** (§7.3) | a bespoke wear counter per relationship kind |
+| **`allegiance.strength`** *(v2)* | edge (`allegiance` kind only — person → faction, §7.2.1) | a per-faction loyalty clock per arc; **the state the corpus's most duplicated arc shape reads** |
 | `standing` · `exposure` | person | the public and private halves of nine parallel personal meters |
 | **`thread_sensitivity`** *(v2)* | person | a per-subsystem TS field; canon scales it 0–100 (`systems/overview/clock_registry_v30.md:72`) |
 | `acceptance.{legitimacy,support}` | place | per-settlement political acceptance |
@@ -442,7 +520,7 @@ hysteresis guard needs no campaign run.
 | `pressure` | place | the candidate-emission driver (`10`) |
 | **`presence.<institution>`** *(v2)* | place | a bespoke Church/Guild/Warden reach field (`07 §4`) |
 | `accrual.entitlement` | place | the levy channel's supply |
-| **`progress`** *(v2)* | any project owner | a bespoke timer per ambition (`09 §2`) |
+| **`information`** *(v2)* | faction | a bespoke intel counter per action family (`05 §5.3` declares it and owns its scale) |
 | **`cohesion`** *(v2)* | bloc | any second faction-like stat block on a bloc (`06 §3`) |
 | `budget` | post | every proposed action economy in the corpus |
 
@@ -450,6 +528,17 @@ hysteresis guard needs no campaign run.
 bars a player watches; the triggers were the design, the meters were duplication.
 `thread_sensitivity` is a third **only because canon already scales and gates on it** (§7.5) — cited,
 not invented.
+
+⚠ **`progress` was a row here and is CUT** (`09` O-A2): it is an **aggregate** in §2.1's exact sense —
+current state recomputes it from the project's advance terms — not a stock, because nothing spends it.
+Removed rather than annotated, since `09`'s falsifier is *"no contract declares a state row named
+`progress`"* and an annotated row still declares one.
+
+⚠ **`information` is declared here and its SCALE is not.** `05 §5.3` ships it as a writable state row
+(`05 p2 :311`) and gates option-set availability on its band, but declares no ceiling — so §2.3's
+`H_MIN`, §5.1's fixed-point falsifier and §6.1's commensurability gate are **all three silently inert
+on it**, the same three-guard hole §6.2 records for `prac.thread_sensitivity`. `05` owns the number;
+this page owns noticing.
 
 ### 5.3 Budget is a gauge, and it buys actions — never modifiers
 
@@ -603,8 +692,8 @@ version carried only the one-sided envelope; applied to a **DO** site it admits 
 differential cannot reach — a **false pass**, exactly what §6.1 exists to catch.
 
 **Verified in the kernel, not taken on report.** `05 §4.1` passes `net_c − net_d` as the ladder's
-`net` and the entrenchment lead as its `ob`, and `degree_from_net` reads `margin = net − ob` and
-nothing else (`engine/autoload/dice_engine.py:279`). So the envelope must describe the **difference of
+`net` and the entrenchment lead as its `ob`, and `degree_from_net` (`engine/autoload/dice_engine.py:227`)
+reads `margin = net − ob` (`:279`) and nothing else. So the envelope must describe the **difference of
 two independently rolled pools**:
 
 - **The per-die moments are EXACT, not fitted.** `_die_result` maps `1 → −1`, `2–6 → 0`, `7–9 → +1`,
@@ -668,7 +757,7 @@ below is from another family and was never a "score" in the sense Jordan's rulin
 | **Composure 3–21 · Concentration 5–35 · Stamina 5–47 · Health 13–55** | `derived_stats_v30.md` via `clock_registry_v30.md` | **FAIL.** These are damage and resource pools, not scores. Nothing in this suite targets them, and this row exists so nothing later does |
 | **Thread Sensitivity 0–100 (hard cap)** | `systems/overview/clock_registry_v30.md:72` | **FAIL, catastrophically** — ob 50 against μ 7.2. **It is a gate target, not an obstacle target**, and canon already uses it as exactly that: `TS ≥ 30` (§7.5). The failure is not in the gauge; it is in ever passing it to `derive_ob` |
 | **`prac.thread_sensitivity`** | **floor 0, ceiling `None`** in `engine/engine_params/descriptors.json` | **UNEVALUABLE — a second, independent defect.** The cooked registry declares *no ceiling*, while canon declares a 0–100 hard cap. A gauge with no ceiling cannot be checked by this gate, by §5.1's fixed-point falsifier, or by §2.3's `H_MIN`. **Three declaration-time guards are silently inert on it.** Recorded, not fixed here: the registry row is the FI/IN lane's to correct |
-| `standing`, `exposure`, `pressure`, `acceptance.*`, `accrual.entitlement` | **scale undeclared in this suite** | **unverifiable today.** Each must declare a ceiling before it can be a target |
+| `standing`, `exposure`, `pressure`, `acceptance.*`, `accrual.entitlement`, **`information`** | **scale undeclared in this suite** | **unverifiable today.** Each must declare a ceiling before it can be a target. **`information` was in no roster, no descriptor and not even this row until now** — three declaration-time guards inert on a gauge nothing had declared (§5.2) |
 | `presence.<institution>` | **0–7**, declared by `07 §4.2` after this gate was raised | **pass, and it is the gate's first live use.** `05 §4.1` is the suite's only opposed site: `shape: DO`, `Ob = derive_ob(presence_defender, −presence_challenger/2 + place_terms)`, modifier bound 2, so `Ob_max = 7/2 + 2 = 5.5` against the **differential** envelope `8.247` (§6.1.2). Passes with room. Under the one-sided form the admissible ceiling was `12.49`; under the correct opposed form it is **`≤ 12`** — `07` chose 7 deliberately, so the tightening did not bite |
 
 **Re-checked against `OB_MIN = 1`; no verdict moved — recorded because a re-check that changes nothing

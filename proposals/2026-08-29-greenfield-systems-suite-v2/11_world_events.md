@@ -429,9 +429,18 @@ world_events:
   - event: we.crop_failure
     family: Crisis                origin: exogenous     scope: place
     triggers:
-      - place.terrain in {plains, marsh, highland}   # the arable/marginal-arable terrains (§6.1's
+      - place.terrain in {plains, highland}          # the arable/marginal-arable terrains (§6.1's
                                                        # descriptions: Feldmark/Kronmark plains as
-                                                       # breadbasket, highland as "limited arable")
+                                                       # breadbasket, highland as "limited arable").
+                                                       # `marsh` deliberately EXCLUDED: canon's only
+                                                       # marsh polygon is Askeheim, explicitly 0
+                                                       # settlements (`settlement_layer_v30.md:310`) —
+                                                       # a `place` entity that is never a settlement
+                                                       # owns no `condition.prosperity` gauge to deposit
+                                                       # into, so admitting `marsh` here is exactly the
+                                                       # dead branch §4.1's own reachability check exists
+                                                       # to catch. If Askeheim gains a settlement, this
+                                                       # is the line to revisit, not before
       - "world.season % 4 == 2"                                  # the growing-season quarter (§2.1)
     hazard_pool: 10                                               # shape proposal — §2.2's gate margin
     resilience: {target_score: condition.prosperity, modifiers: terrain_penalty(place.terrain), M_max: 1}

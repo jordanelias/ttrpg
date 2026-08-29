@@ -42,6 +42,12 @@ to stop.** Each row is vetoable on its own.
 
 | **O-5.7** | `01 §6` point 2's narrowing: *"the `modifiers` argument is reserved for terms genuinely properties of the target"* | this suite's own `01` | Correct as a general rule and **wrong for a contested quantity.** Presence has no single owner: it is a *share* of a place, and the meaningful difficulty is the incumbent's **lead**, not their total. `act.contest_influence` therefore derives its obstacle from `presence_defender − presence_challenger`, which is expressible inside `derive_ob` as an instance-specific modifier and is **not** an actor-advantage leaking into obstacle-space by the back door. §4.1 argues it and states the leverage consequence. **This deletes an object** — the capped σ-space foothold boost an earlier draft of §4.1 carried — rather than adding one. ⚠ **Compatible with, and made safe by, `01 §6`'s new obstacle-reachability gate.** That gate's point 3 observes that `derive_ob`'s `modifiers` argument is unbounded in its signature, so a site must **declare** its `modifier_max`. That declaration is what converts this override from *a reading of the ruling* into something **checkable**: a contested lead is a legitimate instance modifier precisely because it is now bounded and audited rather than asserted. The site's declaration is `part 2 §9`; its status is §4.1a |
 
+| **O-5.8** | **Canon's Faction Declaration as a roll** — `settlement_layer_v30.md:1046` prices it as a Domain Action (Influence pool = Renown ÷ 2, Ob 3), and `:1049-1063` (ED-790) ships a founded faction's starting stat sheet | **canon**, under the authority amendment below | `part 2 §5.4` ships `act.charter` as a **gate**. The uncertainty canon spends on the Declaration roll is, in this suite, already spent getting a project to its threshold (`09`'s `am.advance` → `am.fire`); rolling again **charges twice for uncertainty already paid**, which is verbatim `07 §9.2`'s argument for gating a growth threshold rather than re-rolling it (`00 §6` principle 4). ED-790's stat sheet is **superseded structurally, not by preference**: every faction quantity in this suite except `treasury` is a *derivation* (`06 part 2 §9`), so a founded faction cannot be *given* starting values for them — it computes them on its first boundary from what it holds. Three identity fields and one gauge at floor are the whole of a founding |
+| **O-5.9** | **This document's own first draft of `fa.select`** — *"consumes no randomness"*, ties broken by cost then registry order | this document, against **the ratified engine** | **v2 had silently deleted stochastic NPC selection that the ratified engine has, and this row retracts it.** `systems/factions/sim/faction_action.py:251` draws `roll = rng.random()` against state-re-weighted action weights, and `:457`/`:566` draw the *target* with `rng.choice`; `audit/2026-07-05-emergent-narrative-engine/narrative_engine_design_v2_churn.md:129-132` states it in as many words — *"faction priority trees are NOT fully deterministic … `faction_action.py` draws action and target."* A pure argmax is a fork that resolves identically in every reachable world state, which is not a fork. §3.5 now declares a **softmax over `appeal`** at `APPEAL_TEMPERATURE`, drawn from a per-post substream (`10 §6.4`). One constant; determinism-per-seed is preserved exactly |
+| **O-5.10** | **`06 part 2 §9`'s `faction.treasury` row** — `bucket: gauge, writable: false, owner: fm.derive` | this suite's own `06` | **You cannot decrement a derivation**, and `part 2 §5.2` spends it. `01 §2.1`'s aggregate-vs-stock distinction resolves it: an aggregate is recomputable from *current* state; a treasury carrying spend history is **path-dependent**, so it is a **stock**, and a stock is an ordinary gauge with a declared depositor. It leaves `fm.derive`'s state list and becomes a **faction-owned gauge** — deposited at the boundary from `07 §5.1`'s `residual(place)` over places this faction controls, spent by contract muster and upkeep (`part 2 §5.2a`). The precedent shipped a scale down: `accrual.entitlement`, likewise spent directly (`07 §8.3`) |
+| **O-5.11** | **`08 §8`'s `sm.act` and `sm.gate` as modules** | this suite's own `08`, coordinated by contract rather than by editing it | They are `fa.resolve` and `fa.gate` in a settlement costume, and **both documents say so in their own sentences** — *"a faction action at the peninsula rung and a settlement verb are the same object at different rungs"* (`part 2 §10.1`), *"a governance response and a faction action remain the same object at different tiers"* (`08 §9.2`). `fa.resolve` already declares `remit: [head, governor, minister, envoy, commander]` and `fa.gate` already iterates **every** declared rung. `part 2 §5.5` absorbs them: `08`'s eight rows land here as action rows with `tiers: [settlement]`, `remit_kinds: [governor]`. **`sm.respond` is untouched and survives** — a directive addressed to a holder is a genuinely different object. **Zero outcomes lost; zero surface verbs added** |
+| **O-5.12** | **This document's own `act.motion` row** | this document | The motion was designed **twice, with different shapes**: a one-line family row here (DO, target *"the opposing coalition"*) against `12 §5`'s full design — `price(magnitude) = k·magnitude` in the proposer's own `standing`, a monotone `vote_bar(magnitude)`, and a published `vote_weight` carrying change E's bounded relational term. **`12`'s is the fuller design and it wins.** The row is cut to a pointer; `ad.motion` is self-contained (`remit: [head, minister]`, its own `post.budget` cost), so nothing is orphaned |
+
 **⚠ The authority model was amended mid-draft (Jordan, 2026-08-29): *"existing work is not
 necessarily required to keep all the way through to things like obstacles being stat/2 or whatever is
 ratified and canon … I just want the best possible proposal."*** Jordan named the **score/2 obstacle
@@ -62,7 +68,7 @@ and its no-elimination-on-failure rule are carried **with their reasoning**, not
 ## 0. The playing surface — what a player is actually asked, and how often
 
 `00 §2` is the binding constraint on this page, and faction action menus are precisely where deep
-games drown a player. **The seven-plus-one action families below are a strategic *capability* list,
+games drown a player. **The eight action families below are a strategic *capability* list,
 not a menu** (`00 §2.3` point 2). Most are invoked headlessly by NPC post-holders. The split is
 explicit and it is the point of the whole design:
 
@@ -79,14 +85,20 @@ explicit and it is the point of the whole design:
 | *Direct this season's action for a post you hold* | a Slate item, when that post's tier has an action worth a decision | at most once per held post per season, and only if the Slate lit it | **the top `SHORTLIST_K` actions by `appeal`, ≤ 4** — genuinely different in kind because the ranking spreads them across the symbolic axes |
 | *inspect the full ranking* | on demand from that item | never pushed | read-only |
 
-**Substrate objects on this page: 8 action rows · 1 per-tier gate · 1 per-post budget · 1 appeal
-derivation · 1 contested-influence resolver · 1 flat ceiling. Surface affordances: 1 decision, 1
-inspection.** Six-to-one, which is the ratio `00 §2.3` point 4 asks for.
+**Substrate objects on this page: 8 action *families* · 1 per-tier gate · 1 per-post budget · 1 appeal
+derivation with a declared draw · 1 contested-influence resolver · 1 flat ceiling. Surface affordances:
+1 decision, 1 inspection.** Six-to-one, which is the ratio `00 §2.3` point 4 asks for.
+
+⚠ **Families, not rows — and the distinction now matters, because the row count grew and the family
+count did not.** A family is a schema entry; its *rows* are registry data (§4.5). `part 2 §5.5` absorbs
+`08`'s eight settlement rows into the `act.govern` family, which adds **eight rows and zero families,
+zero modules and zero surface verbs**. The playing-surface budget this page bills is unchanged at
+**one**, and `08` keeps its own one for `sm.respond`.
 
 **`05` contributes exactly ONE verb-slot to the game's single-digit budget** — *direct a post's
 action* — and it is the same slot whether the post is a national head, a provincial minister or a
 settlement governor, because it is the same module. **Everything that looks like breadth is the
-`appeal` ranking's job, not the player's.** The eight families are eight registry rows the engine
+`appeal` ranking's job, not the player's.** The eight families are registry rows the engine
 chooses among; a player who never opens the inspection view never learns their names.
 
 > **The test `00 §2.3` point 5 asks:** *could this be removed from the player's hands entirely and
@@ -119,6 +131,12 @@ for tier in declared_tiers:                      # from references/form_registry
         continue                                 # no action AT THIS TIER; other tiers unaffected
     run the action phase for those posts (§2)
 ```
+
+⚠ **`action_modules` is the whole game's invocable set, not this document's.** It is every module any
+post's remit may name — `fa.*` here, `pm.*` (`04`), `ad.motion` and `ad.unit` (`12`), and, per O-5.11,
+the settlement rows now carried by `act.govern`. A faction whose only seated post is a `commander` is
+**acting** when that commander orders a unit's assignment, so the gate must not read "does this post's
+remit contain a `fa.*` row" or a commander-only faction goes silent for a reason nobody designed.
 
 **It is a precondition, not a penalty** — carried from v1 unchanged. Nothing resolves, no roll is made
 at a disadvantage, no gauge is docked. The faction simply does not act *there*, and a Key says so with
@@ -231,9 +249,12 @@ that it becomes decorative while everyone assumes it is load-bearing. So: **the 
 the leading faction in a stated fraction of controlled campaigns.** If it does not, it is lowered or
 dropped — never left in place as reassurance.
 
-**Truncation is deterministic and consumes no RNG.** When the ceiling binds, the surviving actions are
-the highest-`appeal` ones across all tiers, ties broken by §3.5. A ceiling resolved by a draw would put
-a random number in the one place a player must be able to reason about.
+**Truncation consumes no RNG of its own** — amended for O-5.9, because the unqualified claim is no
+longer true of *selection*. When the ceiling binds, the surviving actions are the highest-`appeal` ones
+across all tiers, ties broken by §3.5's ordering rule. Each post's selection draw has already resolved
+by then, so truncation is a deterministic function of its inputs. A ceiling resolved by a **second**
+draw would put a random number in the one place a player must be able to reason about, and that is
+still refused.
 
 ### 2.3 The loop, and what is unmeasured
 
@@ -312,11 +333,18 @@ anywhere in this suite. A faction's character is `identity.ethos` — a vector i
 against the same option set every faction shares. A faction that reliably reaches for the sacred option
 does so because its ethos projects onto the sacred axis, not because a branch says so.
 
-> **Falsifier (the strongest one this page has).** A permutation test: **swap the `ethos` vectors of
-> any two factions in the registry, hold every other input fixed, replay a seeded season, and their
-> chosen actions must swap exactly.** If they do not, something in the tree is reading a faction's
-> identity rather than its data, and that is scripting drift by definition. Load-bearing on the game:
-> it is the difference between AI factions with character and AI factions with a script.
+> **Falsifier (the strongest one this page has), in two halves since O-5.9.** A permutation test:
+> **swap the `ethos` vectors of any two factions in the registry, hold every other input fixed, replay
+> a seeded season.**
+> **(a) Their `appeal` vectors must swap exactly, byte for byte.** `appeal` is a derivation and is
+> unaffected by the softmax, so this half is exact and is the half that catches scripting drift.
+> **(b) Their chosen actions must swap exactly at `T → 0`.**
+> ⚠ **The halves are separated deliberately.** The draw is keyed on `post_id` (§3.5), not on faction,
+> so at the declared `T > 0` two swapped factions' *choices* are distributional rather than identical.
+> A single test written against the old wording — *"their chosen actions must swap exactly"* — would
+> now fail intermittently, and the reflex fix is to loosen it into something that proves nothing.
+> Splitting it keeps an exact assertion where an exact assertion is available. Load-bearing on the
+> game: it is the difference between AI factions with character and AI factions with a script.
 
 **Faction-unique actions are the same rows with a narrower `remit_kinds`.** A row invocable only by a
 head post of a kind that only one faction's registry declares is unique to that faction, with no branch
@@ -339,17 +367,56 @@ obvious candidate is sustained `divergence`, which is `06 §2`'s to declare). **
 `posture`; it declares no transition and names none.** Stated explicitly so the two documents do not
 both claim the field.
 
-### 3.5 Determinism, ties, and disclosure
+### 3.5 The selection draw, ties, and disclosure — AMENDED, O-5.9
 
-- **Selection consumes no randomness.** It is a `derivation`. A draw here would be the wrong tool for a
-  decision and would re-phase every downstream consumer for no gain (P0-2's attributability).
-- **Ties break deterministically:** lower budget cost first, then declared registry order. Never a
-  draw, and never the *first* rule alone, so a cheap action is preferred to an expensive equal one.
-- **Disclosure.** Each term of `appeal` is published **per available action as a band**: the player sees
-  that their head strongly favours a martial option on conviction, that the institution mildly
-  disfavours it, and that a rival holds some leverage. **The resolved ordering's margin and the
-  tie-break are not published.** Publish every input; publish a band; never publish the trigger
+**This section's first draft said selection *"consumes no randomness"*, and that was a regression
+against ratified code rather than a design choice.** It is retracted here rather than quietly
+corrected, because the deletion was silent and a silent override is the one thing `00 §5.3` forbids.
+
+- **`appeal` is a derivation; the choice over it is a draw.**
+
+```
+P(action)  =  exp( appeal(action) / T )  /  Σ_a exp( appeal(a) / T )     T = APPEAL_TEMPERATURE
+draw from     seed(post) = H( campaign_seed ‖ accounting_index ‖ post_id )      # 10 §6.4's construction
+```
+
+  `T` is **one constant and a shape proposal like the others** (`part 2 §10.3`). `T → 0` is the argmax
+  this page first shipped; `T → ∞` is a uniform pick over the option set. **Its reachability bar, in
+  both directions, because a temperature can be decorative either way:** at the declared `T` the
+  top-`appeal` action must be the **modal** choice, *and* the second-ranked action must be taken in a
+  stated fraction of seasons. A `T` that yields the argmax every season is the argmax with extra
+  arithmetic; a `T` that flattens the ranking deletes ethos, which is change C.
+- **Why a draw at all — this is a restoration, not an addition.** The ratified engine already draws
+  (`faction_action.py:251`, `:457`, `:566`), and the churn design records that it must
+  (`narrative_engine_design_v2_churn.md:129-132`). Beyond provenance, the argument on the merits: a
+  pure argmax over a derivation is a **fork that resolves identically in every reachable world state**
+  — the same faction in the same position always does the same thing, so a player learns the table once
+  and the strategic layer stops being a world and becomes a lookup. The softmax is also what makes the
+  *institution/holder* split observable: two heads with near-equal `appeal` on two options read as a
+  faction that could go either way, which is what "who holds the post matters" is supposed to feel like.
+- **The substream is what keeps it order-free, and it is not optional.** Keyed on `post_id`, **not**
+  drawn from a shared sequential stream — otherwise whether the player attended one Slate item changes
+  how many draws are consumed before another post resolves, silently re-rolling it. That is
+  `10 §6.4`(3) verbatim, and `10 part 2 §10` row 4's bit-identity test is the falsifier for exactly
+  this property. **`05` adds one axis to that discipline; it does not invent a second one.**
+- **Ties are now rare and are still ruled**, because the *published ordering* still exists and
+  truncation (§2.2) still reads it: lower budget cost first, then declared registry order. Never the
+  first rule alone, so a cheap action is preferred to an expensive equal one.
+- **Disclosure, and the honest cost of O-5.9.** Each term of `appeal` is published **per available
+  action as a band**: the player sees that their head strongly favours a martial option on conviction,
+  that the institution mildly disfavours it, and that a rival holds some leverage. `T` is a published
+  constant. **The resolved ordering's margin, the tie-break, and the draw itself are not published.**
+  So a player can read the *distribution* and cannot predict the *pick* — that is a real loss against
+  the argmax draft's perfect predictability, it is stated here rather than buried, and it is the price
+  of a faction that can surprise you. Publish every input; publish a band; never publish the trigger
   (`01 §8`).
+
+⚠ **`00 §7`'s four resolver kinds have no name for this**, and this page will not mislabel it to fit.
+`fa.select` writes nothing, so `derivation` remains correct on the rule `00 §7` actually states
+(*"never use when anything writes it"*) — but a **declared draw over a derivation** is a fifth thing
+its table does not describe, and `d_sigma` is wrong (this is not a σ-space roll on the dice kernel).
+The contract at `part 2 §9` therefore declares the draw explicitly in a field the schema does not yet
+have. **Reported to `00 §7`'s owner as a schema gap, not resolved locally.**
 - **The shortlist is truncation, not concealment.** `SHORTLIST_K ≤ 4` (shape proposal) is what reaches
   the Slate item; the full ranked list is one inspection away. A menu that is *ranked and truncated* is
   the playing-surface budget done honestly; a menu that is *hidden* is a different and worse thing.
@@ -598,7 +665,8 @@ following were considered and **refused**:
 | a per-institution presence *primitive* | it is a Gauge keyed by institution id (`01 §5.2`), which is what a registry of kinds means |
 
 **Eight families, not thirteen** — and the eighth justifies its slot against the five above, which is
-the test the brief sets: each of them is this row with two fields changed, and shipping them separately
+the test the brief sets (**still eight after O-5.12 cuts `act.motion` and `part 2 §5.4` adds
+`act.charter`**; the membership moved, the count did not): each of them is this row with two fields changed, and shipping them separately
 would mean five effects tables to keep total and five places for the Partial band to rot.
 
 ---

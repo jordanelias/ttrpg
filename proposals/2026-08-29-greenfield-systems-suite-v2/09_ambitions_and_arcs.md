@@ -19,9 +19,10 @@ composition of `01`'s four.
 *Emergent possibility lost if the project were cut:* **nothing in the world would ever pursue
 anything, and every event would be an incident rather than a development.**
 
-**This document adds one player verb and three headless ones.** Everything else it adds is
-`substrate` in the sense of `00 §2.1`. Its surface table (§9) is three rows — **one verb and two
-reads** — and its substrate table is the rest of both parts.
+**This document adds one player verb and three headless ones** — and one rule (§6.4) under which a
+**place** declares a project with no verb at all, which is where the world's populations get to act.
+Everything else it adds is `substrate` in the sense of `00 §2.1`. Its surface table (§9) is three
+rows — **one verb and two reads** — and its substrate table is the rest of both parts.
 
 **In two parts, in reading order** (`CLAUDE.md` §4): **part 1** — the arc grammar, the composition,
 derived progress, the hook grammar, obstruction, the four verbs, arcs as tag chains (§§1–7).
@@ -121,9 +122,11 @@ otherwise:
 
 The `## Overrides` table above asks whether the ~13 ratified shapes can express **this object's
 lifecycle** and answers yes. **That is the easy direction, and running only it was a real methodological
-hole**: the load-bearing question is the converse — *can a project row express the shapes?* Two of the
-thirteen are named here because the answer is **partly**, and a partial answer stated as a pass is the
-disease this suite exists to stop.
+hole**: the load-bearing question is the converse — *can a project row express the shapes?* **Two of the
+ratified shapes are named here because the answer for them is *partly*** — and a partial answer stated as
+a pass is the disease this suite exists to stop. (Both are named exactly, not counted: `_workings_joined.md:1931`
+identifies them as the two templates the 13 event-tier arcs collapse to, which is why they are the two
+this document could check without the evacuated corpus.)
 
 | ratified shape | expressible as a project row? |
 |---|---|
@@ -410,9 +413,13 @@ no obstruct verb, no obstruct module, and no knowledge of the project at all.**
 3. **Canon already names the record for it.** `state.project_completed`'s payload carries
    `supporters` and `obstructors` (`key_type_registry_v30.md:691-706`), and Procedure C writes
    per-supporter and per-obstructor memory references with `salience: 4` and a `relationship_tag`
-   (`political_dynamics_keys_migration_v30.md:219-256`). **That is `01 §3.1`'s Memory tag kind,
+   (`political_dynamics_keys_migration_v30.md:219-256`). **That is `01 §3.1`'s perceptual tag kind,
    arriving from canon** — two designs converging without either knowing about the other, which is
-   the strongest evidence either is right.
+   the strongest evidence either is right. ⚠ **Named by role, not by label, deliberately:** `01`'s own
+   T4 edit cuts the `Memory` kind in favour of the ruled **`Holding`** (a `prop_id` + stance +
+   `support_refs`, which can carry *what* is misremembered where `key`+`value` cannot). This paragraph
+   is indifferent to which name lands — the object is *the first-person record of a perception*, and
+   §3.4 is why the Holding version is the better home for it.
 
 **`supporters` / `obstructors` are derived at fire**, not accumulated during the project: the set of
 actors whose Keys appear in `causes[]` for the terms that moved. No stored list, no aggregate written.
@@ -450,7 +457,9 @@ am.lapse     horizon or stall reached without threshold → expires, leaving a P
 
 `am.advance`, `am.fire` and `am.lapse` are **never invoked by a post** — the herald runs them at the
 boundary (`01 part 2 §9.2`, W-5) and publishes their Keys. `am.declare` is the **one surface verb**
-this document adds (§9).
+this document adds (§9) — and for **`place`-bound kinds it is not invoked either**: those declare
+themselves at the boundary from their own gate (§6.4), which is how the world gets ambitions that no
+post-holder authored.
 
 ### 6.1 Lapse is the whole reason the queue does not become immortal clutter
 
@@ -536,6 +545,96 @@ obeyed across a document boundary. (2) `target.kind == Ruin` is `required: true`
 project whose node someone else settles first **lapses** instead of firing into an occupied node —
 §4.1's *generate-solvable-then-erode* doing real work rather than being asserted.
 
+### 6.4 A **place-bound** kind declares itself — closing a registry ghost, and the suite's missing mass actor
+
+**The defect first, because it is this document's and it was invisible.** §10.2's schema admits
+`owner_binding: {entity_kind: place}`. But `am.declare` is a **surface** module: it requires a
+post-holder whose `remit` names it and it costs **one point of `post.budget`** (§11). **A place holds no
+post and owns no budget gauge**, and the three headless verbs advance, fire and lapse — none of them
+declares. So a `place`-bound kind is declarable **by nobody**: a row shape the registry admits and no
+path in the suite can ever instantiate. A **registry ghost** — the same failure as §6.3's gate, one
+schema line further up.
+
+**What the ghost was costing is much larger than a dead schema branch.** Across this suite, control of a
+place changes *"by exactly two routes"* — `act.campaign` (force) and `04`'s appointment path
+(`05 §4`, *"Nothing here transfers a place, ever"*) — **and `11` ships no unrest row at all** (a grep for `unrest`, `revolt`, `riot` over
+`11_world_events.md` returns nothing). Both surviving routes are exercised by an entity that already
+holds a post. **So no population can act, anywhere in the suite**, and the two governance patterns the
+research corpus verified across four civilizations — **two-signal resonance** and **suppression-backfire**
+(`research/governance/conflicts_power_struggles.md:32`, `:37`) — have no revolt-grade instantiation to
+live in.
+
+**The rule, and it is one rule.**
+
+> **A project kind whose `owner_binding.entity_kind` is `place` AUTO-DECLARES at the accounting
+> boundary, for every place whose `owner_binding.gate` holds, and LAPSES when that gate stops holding.**
+
+**Why this is a gate and not a verb** — five costs it does *not* pay, each checkable:
+
+| what it does not add | why not |
+|---|---|
+| a verb | **the surface budget is unchanged at one** (`am.declare`, §9). Nobody declares a rising; it is the world doing it |
+| a budget point | a place has no post and no `budget` gauge. **The gate *is* the price** — its terms are state a place must actually reach, which is a costlier bar than one budget point, not a cheaper one |
+| a module | it is **`am.declare` itself**, invoked by the herald at the boundary with `remit: []` and `budget: null` — the two fields a place has nothing to read for. Same resolver, same `tag.ambition` write leaf, same emission. The declaration write stays in the module that owns it and never leaks into `am.advance`, whose `state:` row is empty on purpose (§11) |
+| a key type | `state.project_formed`'s optional `formation_cause` (G-29's field, adopted at §10.1) carries the gate, so an auto-declared project is **not causally anonymous** |
+| an exemption | it is `am.lapse` under `01 §3.3`'s ordinary sweep. Nothing is immortal and nothing new decays |
+
+⚠ **One thing it DOES cost, and it is the interesting one: a hysteresis band.** §6.2 argues a project
+needs none because *fire is terminal*. **That argument does not cover auto-declaration**, which is a
+genuinely **reversible pair** — the same predicate declares and un-declares — and `01 §2.3` requires a
+declared band on exactly that shape or the kind strobes on and off every season. **A `place`-bound kind
+must therefore declare `hysteresis:` on its `owner_binding.gate`, and it is the only place in this
+document where a band is required.** Recorded here rather than discovered later, because §6.2's
+terminality sentence would otherwise read as covering it.
+
+**And it obliges one amendment to §6.2, stated rather than smuggled.** §6.2 forbids *"a consequence the
+owner could not have reached through a module in some post's remit"* — a test that presumes the owner
+**holds a post**, which a place by construction does not. For a place-bound kind the test reads: **the
+consequence must be one some module already in this suite reaches.** The point of the clause is
+preserved exactly — no power exists only for project-holders — and it becomes checkable for an owner
+with no remit.
+
+**The worked kind, built from the verified patterns and nothing else.**
+
+```yaml
+project_kind: rising
+class: substrate                      # NEVER a menu item — no entity in the game can declare it
+owner_binding:
+  entity_kind: place
+  gate: <settlement-tier place with a governance post>          # auto-declare / lapse predicate
+  hysteresis: <band>                                            # REQUIRED — reversible pair, 01 §2.3
+slots: [target]                       # target = this place's own governance post
+advance_terms:
+  # TWO-SIGNAL RESONANCE: both required. A bare grievance fizzles (conflicts_power_struggles.md:32)
+  - {w: 1, required: true, term: "condition.order at or below <band>"}            # objective strain
+  - {w: 1, required: true, term: "tag(place, Precedent, key=legitimating.*) exists"}  # sanction
+  - {w: 1, term: "acceptance.legitimacy at or below <band>"}
+  - {w: 1, term: "the strain band has held for >= 3 seasons"}          # §3.1's tag-age term kind
+threshold: 3        horizon: 8        stall_ttl: 8               # SHAPE PROPOSALS
+fire: {guaranteed: true, effect: post_revoke{post: <target>}}    # write leaf 3 — 04's pm.recall
+residue: {on_fire: Precedent:rising.succeeded, on_lapse: Precedent:rising.suppressed}
+```
+
+**`required: true` on both signals is the whole of two-signal resonance** — an objective strain **and**
+an independent legitimating tag, the Janissary-plus-fatwa shape, with the failure mode the research
+names built in: strain alone never reaches threshold, because a `required` term that is false makes the
+composite unreachable regardless of the other weights. **Nothing is special-cased**; the legitimating
+tag is appended by whatever module observed the sanction, exactly as §3.2's failure marks are.
+
+**Suppression-backfire, and the honest limit on it.** A faction suppresses by force (`act.campaign`
+deposits into `condition.order`), the gate goes false, the project lapses, and §6.1's residue lands:
+`Precedent:rising.suppressed`, durable. A **successor kind** then declares its gate at a *lower* strain
+band and reads that residue as a `required: true` term — so suppression buys quiet now and a cheaper
+rising later, which is the pattern `:37` describes. ⚠ **But `threshold` and every band live in a
+static registry row, so nothing in this design can LOWER a threshold at runtime** — the effect is
+reached by *a second row*, not by mutating the first. That is weaker than the research's wording and is
+stated as such: **succession of kinds, not a re-armable threshold.** It also puts real weight on the
+successor-graph acyclicity check §13.1 records as **not existing** — a rising→suppressed→rising cycle
+is now a concrete way that gap bites, not a hypothetical one.
+
+**What this buys, in one sentence.** Control of a place gains a **third route** — and it is the first
+one in the suite that no post-holder exercises, which is what *mass actor* means.
+
 ---
 
 ## 7. Arcs are tag chains — the answer to "narrative arcs", with no narrative engine
@@ -544,7 +643,8 @@ project whose node someone else settles first **lapses** instead of firing into 
 
 ```
 Ambition tag (declared)                       provenance → Key K0
-   └─ Precedent / Memory rows deposited by advances and obstructions,
+   └─ Precedent rows, and perceptual rows (Memory / Holding — §5), deposited by advances and
+      obstructions,
       each with provenance → Ki,  each Ki citing its predecessors in causes[]
         └─ Precedent (fired)  or  Precedent (lapsed)                      provenance → Kn
 ```

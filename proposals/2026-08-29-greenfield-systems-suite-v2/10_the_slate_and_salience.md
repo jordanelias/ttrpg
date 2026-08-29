@@ -52,7 +52,7 @@ term by term, having read `narrative_engine_design_v2_churn.md` §4 (`:190-285`)
 
 | ratified term | attacked how | kept? |
 |---|---|---|
-| **light-inertia** (attention has momentum) | This is the term an earlier draft of the delta spec tried to replace with **novelty** — the *opposite shape*. I re-ran that argument from scratch, because "surface what is new" is the intuitive design and it is worth knowing why it is wrong. **It is wrong because the world produces ~125 candidates a season (§1.3) and almost all of them are new.** A novelty term in a world with that emission rate ranks by *arrival*, which is a random variable, and the result strobes: the player is handed six unrelated first-time situations every season and no thread ever develops. Inertia is what makes a season the continuation of a season. **Kept, and the earlier draft's instinct is now understood rather than merely overruled** | **kept** |
+| **light-inertia** (attention has momentum) | This is the term an earlier draft of the delta spec tried to replace with **novelty** — the *opposite shape*. I re-ran that argument from scratch, because "surface what is new" is the intuitive design and it is worth knowing why it is wrong. **It is wrong because the world produces ~195 candidates a season (§1.3) and almost all of them are new.** A novelty term in a world with that emission rate ranks by *arrival*, which is a random variable, and the result strobes: the player is handed six unrelated first-time situations every season and no thread ever develops. Inertia is what makes a season the continuation of a season. **Kept, and the earlier draft's instinct is now understood rather than merely overruled** | **kept** |
 | **casting severed from forecast** | The tempting simplification is one score. I traced what one score does: forecast → surface → player acts → forecast strengthens. That is the rubber-banding loop at `:274`, and it is *invisible in play* — the game would feel prescient rather than broken. **A term I would not have thought to sever, and could not have discovered by reasoning about my own design.** Kept, and it is what turns one score into two (§4) | **kept** |
 | **exempt-cap + reserved promotion slice** | The obvious design is "player-engaged threads are exempt from demotion", full stop, and it is what I would have written. The ratified text caps it *and* reserves a slice, because uncapped exemption lets a player engaging `B`-many threads starve imminence permanently. **It is also what makes §5.3's monotonicity proof go through** — a cap is score-independent where a threshold is not. Two independent reasons, neither of which I had | **kept** |
 | **anti-strobe floor** | This is P-iii hysteresis under another name, and `01 §2.3` requires the same shape of every reversible form transition. Consistent with the suite by construction | **kept** |
@@ -129,27 +129,73 @@ retune them.** Every other constant in this document is a **shape proposal** and
 here because "minimise the playing surface" is an unfalsifiable instruction until someone writes down
 the ratio it is asking for.
 
+⚠ **RE-DERIVED (v3). The v2.0 figures on this line were computed from a formula this document
+deletes.** `10 §2.4` rules `08`'s per-place draw *"deleted, not scaled"*, and `08 §5` O-6 has now
+executed that. But v2.0's `08` row here read *"v1's `n = 1 + floor(pressure_band)` per place; five
+bands, mean band ≈ 1 → ≈ 70–75"* — **the numerator of the headline ratio was the output of the very
+quota the change removes.** A headline number resting on a deleted formula is worse than no number,
+so it is recomputed below on the emission basis that actually ships, with every basis stated.
+
 Per season, over a world of **37 settlements** (35 in-kingdom + 2 special-case march targets,
 `systems/settlements/settlement_layer_v30.md:310`):
 
+**`08`, re-derived per place from `08 §5`'s six qualifying rows** — there is no longer a draw, so the
+rate is the expected count of *qualifying items*, not a quota:
+
+| `08 §5` row | basis | items / place / season |
+|---|---|---|
+| 1 · open `Grudge` on the place or its governor | a stock, not a flow: deduped on `(owner, kind, key)`, appended by Defy (`08 §4.2`), by failed `05` rows and by world events, swept at `ttl` | ≈ **1.5** |
+| 2 · unserved `Debt` with a running term | `Debt` is issued only by Commute, which is *gated* and is one of ≤4 responses to one directive per season; term ≈ 3 seasons | ≈ **0.4** |
+| 3 · a gauge at or near an extreme band | **13 gauges per place** (`acceptance` ×2, `condition` ×3, `pressure`, `accrual.entitlement`, `presence.<institution>` ×6 — `07 §4.2`'s six institution kinds). **Not uniform over five bands:** `01 §5.1`'s geometric decay concentrates the stationary distribution near `rest`, so p ≈ 0.10 per gauge, and `pressure` qualifies at a lower band (p ≈ 0.20) | ≈ **1.4** |
+| 4 · a `Precedent` tested by a new event | needs a *new* event touching an *existing* Precedent: 1 directive/place/season + ≈0.14 world events/place, × ≈0.15 hit rate | ≈ **0.2** |
+| 5 · an adjacent settlement at an extreme band | **0 — collapsed into row 3 by `08 §5`'s dedupe rule.** Without that rule this row alone would have multiplied every crisis by the adjacency degree | **0** |
+| 6 · an open `investigation_surface` row with a matching unresolved tag | needs an enabling facility/presence **and** an unresolved tag; facilities are tier-gated and sparse | ≈ **0.3** |
+| **per place** | | **≈ 3.8** |
+
 | emitter | rate basis | candidates / season |
 |---|---|---|
-| `08` place business | v1's `n = 1 + floor(pressure_band)` per place; five bands, mean band ≈ 1 | ≈ 70–75 |
+| `08` place business | **the table above × 37 places** (v2.0: ≈70–75, from the deleted quota) | ≈ **135–145** |
 | `09` projects | one advance/fire/lapse emission per active project; ~75 project-holding actors (≈30 named NPCs per churn `:76`, plus local actors at `settlement_layer_v30 §4.5`'s ruled per-type counts), ~⅓ emitting | ≈ 25 |
-| `05`/`06` faction activity | 4–8 factions (count unreconciled, churn `:107`) × declared actions across tiers | ≈ 20 |
+| `05`/`06` faction activity | 4–8 factions (count unreconciled, churn `:107`) × declared actions across tiers. **Unchanged in kind by `08` O-5:** the eight up-stroke rows move here as `tiers: [settlement]` rows, but they were already counted as `08` substrate output and are not double-counted | ≈ 20 |
 | `11` world events | rate-bounded by `11`'s own declared ceiling | ≤ 5 |
 | `01 §2` form transitions | places and people crossing gated bands | ≈ 3 |
 | `04` vacancies / appointments | posts falling vacant, terms expiring | ≈ 5 |
-| **total** | | **≈ 125–130** |
+| **total** | | **≈ 190–200** |
 
-| ratio | value |
-|---|---|
-| candidates : Slate entries (Normal, B = 6) | **≈ 21 : 1** |
-| candidates : scene actions (Normal, A = 4) | **≈ 32 : 1** |
-| over a 50-season campaign (`engine/tests/test_mc_v18_regression.py:16` runs 50-season campaigns) | ≈ **6,400 candidates resolve** · ≈ **300 surface** · ≈ **200 are played** |
-| **fraction of what happens that the player ever sees** | **≈ 4.7%** |
-| **fraction the player acts on** | **≈ 3.1%** |
-| **fraction that resolves** | **100%** |
+| ratio | v3 value | v2.0 value |
+|---|---|---|
+| candidates : Slate entries (Normal, B = 6) | **≈ 33 : 1** | ≈ 21 : 1 |
+| candidates : scene actions (Normal, A = 4) | **≈ 49 : 1** | ≈ 32 : 1 |
+| over a 50-season campaign (`engine/tests/test_mc_v18_regression.py:16` runs 50-season campaigns) | ≈ **9,750 candidates resolve** · ≈ **300 surface** · ≈ **200 are played** | ≈ 6,400 · 300 · 200 |
+| **fraction of what happens that the player ever sees** | **≈ 3.1%** | ≈ 4.7% |
+| **fraction the player acts on** | **≈ 2.1%** | ≈ 3.1% |
+| **fraction that resolves** | **100%** | 100% |
+
+### 1.3a What the re-derivation actually showed, including the part that is against this document
+
+**The number went UP and its evidential quality went DOWN. Both halves matter.**
+
+1. **The ratio improved, and that is the self-serving direction, so it needs a control.** D deletes
+   `08`'s quota; deleting the quota roughly doubles `08`'s emission; `08`'s emission is the largest
+   term in the numerator of the ratio D cites as its own justification. **A change that inflates its
+   own headline metric has to be judged on the metric it would have had without the change.** That
+   control is v2.0's own column: at the *pre-deletion* rate the ratio is **≈ 21 : 1**, still seven
+   times claim 11's cut threshold. **D's case does not depend on the deletion**, which is the only
+   reason the deletion is allowed to improve the number.
+2. **The basis got weaker even as the number got larger.** The v2.0 figure rested on **one** stated
+   basis — a formula and a band mean, both auditable in one line. The v3 figure rests on **six
+   independent shape assumptions**, and rows 1 and 3 alone carry **≈ 76%** of the per-place mass.
+   **Neither is bounded by any document in this suite**: no document caps open `Grudge`s per place,
+   and the p ≈ 0.10 stationary-band estimate is asserted from the shape of `01 §5.1`'s decay law
+   rather than computed from declared `λ` and `rest` values, which `07` has not published. **This is
+   a genuinely less trustworthy number than the one it replaces, and it is published as such.**
+3. **A second falsifier direction opened that claim 11 did not have.** Under the quota the only risk
+   was the rate being too *low* (D not earning its keep). Without the quota there is a risk in the
+   other direction: if row 1 or row 3 is materially unbounded, the **Shade** grows without limit —
+   and every shaded candidate still resolves at full fidelity (`§6`), which is what the *"fraction
+   that resolves: 100%"* row commits to. That cost lands on the **simulation's per-season work**, not
+   on the Slate, and nothing in this document would show it. Claim 11 is amended to measure both
+   directions.
 
 **That last row is the whole design.** The other 95% is not skipped, deferred, or approximated away —
 it is resolved, at the same fidelity the AI would have given it had the player attended (§6), and it
@@ -176,6 +222,14 @@ produced"* and never defines a candidate. Here is the definition.
 A candidate is **derived, never stored** (§7). It is a value an emitter returns at the accounting
 boundary, in this shape:
 
+> **The transport is the boundary return, and it is the only one.** A candidate is **never** a Key.
+> `sl.candidates` declares `consumes: []` *"because emitters return at the boundary, not by
+> subscription"* (part 2 §10, §8), and `00 §9.2` registers **no** candidate-carrying key type. v2.0's
+> `08` contract emitted `place.business_item_offered`, a type `00 §9.2` does not register and this
+> document does not consume — **two answers to one seam, and this sentence is the single one.** `08`
+> §8 has been corrected to `emits: []`. **No key type is minted for a candidate, so nothing about the
+> candidate contract is blocked on P0-1.**
+
 ```yaml
 candidate:
   candidate_id:   <deterministic hash; §2.2>
@@ -192,8 +246,11 @@ candidate:
   # ── the forecast terms, which may govern DEPTH and never ENTRY (§4.2) ──────
   horizon:        {band: <int>, foreclosure_in: <int|null>}  # from Layer-A only, M1
   # ── resolution ─────────────────────────────────────────────────────────────
-  resolver_ref:   <module id>            # the ONE module that resolves this, at either fidelity
-  responses:      [<3..5 response ids from resolver_ref's declared option set>]
+  informational:  <bool>                 # §2.1a; default false. True ⇒ news, not a situation:
+                                         # exempt from C-4 and C-5, rendered and never resolved
+  resolver_ref:   <module id | null>     # the ONE module that resolves this, at either fidelity.
+                                         # null IFF informational
+  responses:      [<3..5 response ids from resolver_ref's declared option set>]   # [] IFF informational
   mandatory:      <bool>                 # §5.4; enumerated rows only
   # ── epistemics and honesty ────────────────────────────────────────────────
   witness:        {channel: chronicle | witness_key | document_key | post_remit | co_located,
@@ -209,9 +266,44 @@ candidate:
 | **C-1** | **`provenance` is required and non-empty**, exactly as `01 §3.3` requires of every Tag. A candidate with no causing Key cannot be constructed. | The channel by which a situation appears for no reason. In a game with no GM this is the property that makes the layer trustworthy — v1 `08 §5` got this right and it is carried verbatim in substance |
 | **C-2** | **`witness` is required and non-empty** (§3). | A salient thing the player cannot know about leaking through the Slate — P-08's barrier being quietly institutional rather than metaphysical |
 | **C-3** | **An emitter supplies realized-state terms only.** `durability_bp` and `identity_touch_bp` are functions of state on the board. An emitter may not supply, and the Slate may not read from it, any term computed from a *projected* future other than through `horizon`. | Part VI's world-visible-imminence prohibition and `01 §8`'s *"never publish the trigger"*, which are one rule seen from two sides |
-| **C-4** | **`resolver_ref` names a module that already exists in `module_contracts.yaml` and resolves this candidate at *both* fidelities.** The Slate never names a "summary" or "auto" module. | A second cheaper resolution path — the Total War seam ED-SC-0024 records the community finding and exploiting |
-| **C-5** | **`responses` is 3–5 ids drawn from `resolver_ref`'s declared option set, filtered by the player's `remit`.** The candidate does not invent responses. | Verb creep. `00 §2.2` caps responses at 3–5 *"genuinely different in kind"*; a candidate that could mint its own would route around the cap |
+| **C-4** | **`resolver_ref` names a module that already exists in `module_contracts.yaml` and resolves this candidate at *both* fidelities.** The Slate never names a "summary" or "auto" module. **Exempt iff `informational` (§2.1a).** | A second cheaper resolution path — the Total War seam ED-SC-0024 records the community finding and exploiting |
+| **C-5** | **`responses` is 3–5 ids drawn from `resolver_ref`'s declared option set, filtered by the player's `remit`.** The candidate does not invent responses. **Exempt iff `informational` (§2.1a).** | Verb creep. `00 §2.2` caps responses at 3–5 *"genuinely different in kind"*; a candidate that could mint its own would route around the cap |
 | **C-6** | **An emitter emits; it never presents, ranks, or checks the budget.** It does not know `B`, does not know what else was emitted, and cannot see the Slate. | The reason this is one function and not eight competing ones. v1's `sm.business` drew `1 + floor(pressure_band)` items *and presented them* — a per-place budget with no global view, which is how a 37-place world manufactures 75 undifferentiated demands |
+
+### 2.1a `informational` — the world's own news, which the contract otherwise excluded
+
+**The contract as written could not carry a crossing fact, and `§2.4` lists an emitter of exactly
+those.** C-4 requires `resolver_ref` to name a module that resolves the candidate at both fidelities;
+C-5 requires 3–5 responses from that module's option set. **`substrate.form` emits *"form transitions,
+as crossing facts"* — a village grew, a bloc formed, a presence crossed a band — and a crossing fact
+has no resolver and no response set**, because it has already happened and there is nothing to decide
+about it. So either that emitter could construct no legal candidate and the player is never told the
+village grew, or the contract is violated on every one of its ≈3 emissions a season. Neither is
+acceptable, and the second is worse because it would be silent.
+
+**The fix is one boolean.** `informational: true` marks a candidate as *news*:
+
+| | informational candidate |
+|---|---|
+| **C-1 provenance** · **C-2 witness** | **bind exactly as before.** News still has a cause and still must be knowable. These are the two rules that make the Slate trustworthy and neither is relaxed |
+| **C-3 realized-terms-only** | binds. A crossing fact is the *most* realized thing the Slate carries |
+| **C-4 `resolver_ref`** | **exempt.** `resolver_ref: null`. There is no resolution and no fidelity, so no second cheap path can hide here |
+| **C-5 `responses`** | **exempt.** `responses: []` |
+| **C-6 emitter never ranks** | binds |
+| costs a **Slate seat** (`B`)? | **yes** — it is one of the things the season is about, and it competes for the seat on `cast_score` like everything else |
+| costs a **scene action** (`A`)? | **no.** There is nothing to attend. It is read, and reading is free (§9) |
+| can ever be `engaged`? | **no** — no scene action can be spent on it, so it can never enter the exempt set `E`. Stated because §5.3's proof reads that set |
+| can be `mandatory`? | **yes**, and three of the five world-state triggers in `scale_transitions_v30 §4.3.3` are exactly this shape |
+
+**The crowding risk is real and is bounded by a constant, not by hope.** Nothing above stops a season
+of quiet news from filling the Slate with items the player cannot act on. `INFO_CAP ⟨shape: 2⟩` caps
+informational members of the Slate. It is a **count cap on a disjoint subset, never a score
+threshold** — the same discipline §5.3 shows is load-bearing — so it is score-independent and the
+monotonicity proof still goes through (§5.3 checks it explicitly).
+
+*Emergent possibility lost if the boolean were not added:* the player would learn nothing about the
+world except through things they can act on, which is precisely a world with no outside — the failure
+`08 §3` refuses one document earlier.
 
 ### 2.2 `candidate_id`, and why the season is deliberately not in it
 
@@ -250,12 +342,12 @@ is one set.
 
 | emitter | owned by | supplies | notes |
 |---|---|---|---|
-| `sm.business` | `08` | place business from tags and gauge bands | **Its per-place `1 + floor(pressure_band)` draw is deleted, not scaled.** It emits *all* qualifying items; the global budget does the cutting. This is `08`'s single largest simplification |
+| `sm.business` | `08` | place business from tags and gauge bands | **Its per-place `1 + floor(pressure_band)` draw is deleted, not scaled.** It emits *all* qualifying items; the global budget does the cutting. This is `08`'s single largest simplification. **Executed in `08 §5` O-6, and §1.3's numerator re-derived on the new basis** — v2.0's ≈70–75 was computed from this very formula |
 | `am.advance` / `am.fire` / `am.lapse` | `09` | project beats | J-N: these fire because the world *is* a certain way at the boundary (§8) |
 | `we.fire` | `11` | conditioned exogenous events | Routes **through** the Slate, never around it — Part VI's second surfacing path prohibition |
 | `fa.*` | `05`/`06` | faction directives, bloc friction, divergence crossings | mostly NPC-invoked; what reaches the player is a candidate |
 | `pm.vacancy` / `pm.tenure` | `04` | vacancies, terms expiring, contested appointments | |
-| `substrate.form` | `01 §2` | form transitions, as **crossing facts** | Part VI: `threshold_crossed` carries crossing facts, never forecasts |
+| `substrate.form` | `01 §2` | form transitions, as **crossing facts** | Part VI: `threshold_crossed` carries crossing facts, never forecasts. **These are `informational: true` by construction (§2.1a)** — a crossing fact has no resolver and no response set, and before v3 the contract could not carry one |
 | **the eight mandatory triggers** | `scale_transitions_v30 §4.3.2` | Priority-0 rows | enumerated, `mandatory: true` (§5.4) |
 | **the five world-state triggers** | `scale_transitions_v30 §4.3.3` | clock band transitions, treaties, control changes, Warden emergencies | |
 | **Duty / Conviction / Outreach scans** | `player_agency_v30 §4.2` Steps 3–5 | the player-rooting terms, which is invariant (iii) of the Light Function | reads `references/names_index.yaml` per O-10.2 |
@@ -360,6 +452,35 @@ depth_score(c) = cast_score(c) × forecast_mass(c) × imminence(c.horizon.band)
 Computed **only for candidates already cast**, and it may change nothing about membership. It governs
 how much the item is rendered, in how much detail, with how much anticipation texture.
 
+⚠ **`imminence` had no producer, and without one the term is vacuous over this suite's candidates.**
+`09 §3` point 3 forbids a project publishing how close it is to firing (*"a project may never publish
+how close it is to firing"*, Part VI, adopted without reservation); `11 §3` sets `world.event_fired`'s
+`horizon` to `{band: 0, foreclosure_in: null}` because a fired event is realized; and nothing anywhere
+computes a Layer-A horizon. So **every candidate this suite emits arrives with a null or zero
+horizon**, `imminence(c.horizon.band)` is constant, and `depth_score` collapses to `cast_score ×
+forecast_mass`. The ratified design's own motivating case — *"a quiet arc about to foreclose should
+foreground **before** it fires"* — cannot happen.
+
+**The smallest fix, and it is deliberately not a re-weighting: `sl.rank` DERIVES a coarse horizon
+band.** The emitter still publishes nothing about proximity, which is what `09` and Part VI actually
+forbid. `sl.rank` reads what `01 §8` already publishes as an **input** — the candidate's advance terms
+and its subject gauges' **bands** — and derives `horizon.band` as a monotone function of *band
+distance* to the nearest gate the candidate's own kind declares. **Three properties make this legal
+where a published forecast would not be:**
+
+1. **The threshold stays hidden.** Band distance is computed from published bands; the *trigger* — the
+   numeric threshold — is never read and never shown (`01 §8`, `09 §3` point 2).
+2. **It cannot reach `cast_score`.** `horizon` enters only `depth_score`, and §4.2's severance means
+   `depth_score` **cannot change membership**. So the rubber-banding loop the churn doc `:274` severs
+   stays severed *by the same construction*, not by a new promise.
+3. **No emitter changed.** This is a derivation the Slate performs on candidates it already holds —
+   C-3 is untouched, because the emitter still supplies no projected term.
+
+**What this does not do:** it does not re-weight the Light Function, add a seventh term, or give
+`forecast_mass` a producer. `forecast_mass` remains **unproduced** and is named in part 2 §11.5 as
+such. This fix makes *one* of the two forecast terms non-vacuous; the honest state is one of two, and
+saying "the forecast terms now work" would be false.
+
 **Why the severance matters concretely, in one sentence:** without it, forecasting that a settlement
 will revolt makes the engine surface the settlement, which makes the player act on it, which changes
 the forecast — the rubber-banding loop the churn doc `:274` severs structurally, and which fixture F8
@@ -387,12 +508,14 @@ proposals; the ratified surface (`narrative_engine_design_v2_churn.md:279`) is w
 ```
 INPUT   C = { candidates emitted this boundary that pass the §3 cast gate }
 CONST   X = exempt cap ⟨shape: 2⟩          R = reserved promotion slice ⟨shape: 1; ratified minimum 1⟩
+        I = informational cap ⟨shape: 2⟩   # §2.1a; a COUNT cap on a disjoint subset, never a threshold
 
 1. M  := { c ∈ C : c.mandatory }                                     # §5.4, enumerated
    if |M| ≥ B:  Slate := M ;  goto 6                                 # mandatory-only; canon :314
 2. E  := top-X of { c ∈ C∖M : engaged(c) } by cast_score             # demotion-exempt, but CAPPED
 3. k  := max(0, B − |M| − |E| − R)                                   # free slots — score-independent
-   F  := top-k of { c ∈ C∖(M∪E) } by cast_score
+   F  := top-k of { c ∈ C∖(M∪E) } by cast_score,
+              admitting at most I members with informational = true      # §2.1a
 4. P  := top-R of { c ∈ C∖(M∪E∪F) : never_lit(c) } by cast_score     # the reserved slice
 5. Slate := M ∪ E ∪ F ∪ P
 6. Shade := C ∖ Slate                                                # → §6, headless, all of it
@@ -404,6 +527,28 @@ order **total**, which is what §5.3 needs and what a score-only comparator does
 `engaged(c)` = the player spent a scene action on `c` in a prior season and it has not terminated —
 the ratified demotion-exemption for player-pursued threads (`:222`). `never_lit(c)` = no
 `slate.item_surfaced` Key exists for `candidate_id` (§7).
+
+⚠ **`engaged(c)` read state nothing wrote, and §5.3's monotonicity proof leans on it. Fixed here.**
+Candidates are derived and never stored (§2.3); `slate.item_surfaced`'s registered payload is
+*"candidate id, salience components, rank, whether mandatory"* (`00 §9.2`) and carries **no attendance
+or fidelity**; and no key type in `00 §9.2` records a scene-action spend. So next season's Step 2 had
+**no data source**, `|E|` was undefined rather than merely uncomputed, and a proof whose second bullet
+is *"engagement is a fact about past seasons"* rested on a fact nothing recorded.
+
+**Fix: one field.** `slate.item_surfaced` gains `fidelity: played | witnessed | auto` — the label §5.5
+already computes and already names. Then `engaged(c)` ⟺ a `slate.item_surfaced` exists for this
+`candidate_id` with `fidelity = played` and `c` has not terminated; `never_lit(c)` is unchanged.
+
+**One sequencing consequence, or the field records nothing.** The label is final only once attendance
+is settled, so `slate.item_surfaced` is emitted at the **close** of the boundary, not at truncation.
+That costs nothing: §6.2 establishes the Slate does not dispatch — the Key is a **log entry** and
+nothing downstream waits on it — and §7 reads the same log for inertia either way.
+
+⚠ **This is a Key-type change and `00 §8` P0-1 blocks it.** `slate.item_surfaced` was *already* on the
+blocked list (part 2 §10), so this adds a field to work already blocked rather than a new blocker.
+**Until P0-1 clears, `engaged(c)` is unimplementable and Step 2 is `E := ∅`** — a degraded Slate, not
+a broken one: `X` is a cap, so `|E| = 0` returns those seats to `F`, and every proof in §5.2–§5.3
+holds at `|E| = 0`. Stated so the blocked state is a known configuration rather than a hole.
 
 **Why `X` and `R` both exist, per `:223`:** exempt-only would let a player who engages `B`-many threads
 starve every emergent and imminent candidate forever — the refuter's starvation case. The cap bounds
@@ -426,7 +571,8 @@ If `B − |M| − |E| − R ≥ 0` the sum is exactly `B`; if negative, `k = 0` 
 remains, so the Slate is never empty while the world produces anything — the *"never surface an emptier
 Slate than the band floor"* clause `player_agency_v30.md:295` distilled into Step 6's backfill. **Here
 the backfill is unnecessary**, because the emitters are no longer per-place-rationed (§2.4) and `C` is
-two orders of magnitude larger than `B`. **That is a real simplification the truncation buys: a global
+**well over an order of magnitude** larger than `B` (§1.3: ≈33 : 1 — *not* the "two orders" v2.0
+claimed here, which was loose even on its own smaller numerator). **That is a real simplification the truncation buys: a global
 budget makes underfill structurally impossible, so the floor clause can be deleted rather than
 implemented.**
 
@@ -451,6 +597,9 @@ monotone in each element's key **provided `n` does not depend on the keys**. Che
   `|E|`, and raising one candidate's score could evict an unrelated one. **The ratified text says
   `cap`; the cap is what makes the proof go through.** Do not "improve" it into a threshold.)*
 - `R` is a constant. ✔
+- `I` is a constant capping a **disjoint subset** of `F` chosen by a boolean field, not a score.
+  Score-independent ✔ — same trap as `X`, same answer. A rule of the form *"admit informational items
+  only above score `t`"* would move `|F|`'s composition with the scores and break the proof.
 - Therefore `k = max(0, B − |M| − |E| − R)` is score-independent, and each of Steps 2–4 is a monotone
   top-`n`. Composition of monotone selections over disjoint residues is monotone. ∎
 
@@ -478,14 +627,16 @@ Coherence spent. Adopted whole.
 ### 5.5 What the Slate hands downstream
 
 `sl.truncate` emits one `slate.item_surfaced` Key per Slate member (`00 §9.2`), carrying
-`candidate_id`, the score components, rank, and whether mandatory, and it writes a **fidelity label**
-onto each candidate in the boundary's derived candidate set:
+`candidate_id`, the score components, rank, whether mandatory, and — **added in v3, §5.1** — the
+**`fidelity`** label, emitted at the close of the boundary once attendance is settled. That label is
+written onto each candidate in the boundary's derived candidate set:
 
 | label | who gets it | what it means |
 |---|---|---|
-| `played` | Slate members the player spends a scene action on | interactive; the player supplies the decisions |
+| `played` | Slate members the player spends a scene action on | interactive; the player supplies the decisions. **The only writer of `engaged(c)`** (§5.1) |
 | `witnessed` | mandatory overflow | present, one roll, no direction |
 | `auto` | everything else — Slate members not attended, **and the whole Shade** | headless; NPC-AI supplies the decisions |
+| *(none)* | an `informational` Slate member (§2.1a) | nothing resolves it; it is rendered and it ends. Logged as `auto` for uniformity; no resolver is invoked |
 
 **The Slate does not resolve anything.** The label is a datum; the candidate's own `resolver_ref`
 module, invoked by **its own subsystem's herald** (`01 part 2 §9.1`), does the resolving. See §6.2 —
@@ -494,121 +645,11 @@ rhetorical.
 
 ---
 
-## 6. Headless auto-resolution — the same module, run headless
+**Continues in [`10_the_slate_and_salience_part2.md`](10_the_slate_and_salience_part2.md)** — §6 headless
+resolution and its three invariance properties · §7 light-inertia without storage and **J-N** · §8 **J-O** ·
+§9 the player surface · §10 module contracts · §11 the property audit.
 
-### 6.1 Fork A, restated because it is already ruled
-
-`auto_manual_resolution_duality_v1.md:75` (RULED, Jordan, 2026-07-08, ED-SC-0013):
-
-> **auto = the contest kernel run headless, played = the same kernel run interactively.** Not two
-> mechanics — one engine at two fidelities. … same engine ⇒ consistent by construction.
-
-The delta spec's *"auto-resolution is the same module run headless, never a second cheaper path"* is
-this ruling. **This document adds nothing to it and takes nothing from it.** What it adds is the three
-properties that make *"consistent by construction"* true of the *Slate*, which fork A asserts of the
-*kernel* and which does not follow automatically once a filter sits above it.
-
-### 6.2 The Slate has no resolver, and that is the anti-distributor argument
-
-Part VI's strongest negative (`audit/2026-08-08-world-churn-audit/06_master_synthesis.md:551`, **held,
-not ratified**): *"a distributor wrapper or 'world director'. Distribution is `targets[]` data plus
-subscription; a router module is the god-loop with better PR."*
-
-**An attention system is the single most likely thing in this suite to become that.** So:
-
-1. **The Slate holds no resolver and no effect rule.** Its four modules (§10) are three `derivation`s
-   and one `gate`. `state: []` in all four. It cannot deposit into a gauge, append a tag, grant a post,
-   or transition a form.
-2. **It does not dispatch.** It labels. Each candidate names its own `resolver_ref`, written by the
-   **emitter**, and that module is invoked by that subsystem's **own herald** at the boundary. There is
-   no central invocation and no map from candidate to module held anywhere but on the candidate itself.
-3. **It is subtract-only by construction, not by rule.** Its outputs are a subset, an ordering, and a
-   label. It has no channel by which it could inject a candidate, alter a resolution, accelerate a
-   clock, or emit a pressure-bearing Key — the ratified discipline at `:198`, made structural.
-
-> **Falsifier.** If a future version of this document gives an `sl.*` module a `state:` row, a `form:`
-> row, a `transitions:` row, or a resolver other than `gate`/`derivation`, that version has built the
-> prohibited thing, and this paragraph is the test.
-
-### 6.3 The three invariance properties
-
-| # | Property | Statement |
-|---|---|---|
-| **P-A** | **Fidelity neutrality of the world** | For every pair of candidates `c ≠ c′`: the outcome of `c′` is **bit-identical** whether `c` was played, witnessed, shaded, or absent from the Slate |
-| **P-B** | **Baseline parity** | `E[outcome(c) \| auto] = E[outcome(c) \| AI-played]`. The auto path *is* the AI playing it — not a summary, not a table, not a cheaper approximation |
-| **P-C** | **Order neutrality** | The season's outcome is invariant under any permutation of the order in which candidates are resolved, and under the order in which the player attends their scenes |
-
-**P-A is the load-bearing one.** If surfacing changed outcomes, the filter would be a cheat: the player
-would be farming the attention system rather than playing the world, and every claim in §1 about the
-other 95% would be false.
-
-### 6.4 What makes them true
-
-**Three mechanisms, and all three are necessary.**
-
-**(1) One snapshot.** Every candidate resolves against the **settled state at the accounting boundary**
-— the same snapshot the candidate set was derived from. No resolver reads a state another resolver
-wrote this season. This is not an extra rule; it is what `01 part 2 §9.3` already forces, because the
-substrate has no latency: a form gate reads current state, a gauge decays on elapsed time, and nothing
-carries an emission forward. **The absence of latency, which is a limitation everywhere else in this
-suite, is exactly what buys simultaneity here.**
-
-**(2) Commutative effects, with the two non-commutative cases decided.** All effects are collected and
-applied at the boundary:
-
-| write leaf | commutes? | rule |
-|---|---|---|
-| gauge deposit | **yes** — addition | none needed |
-| tag append | **yes**, given a rule | `01 §3.3` dedupes on `(owner, kind, key)`; on collision **the higher `value` wins, ties broken by `provenance` key id ascending**. Deterministic and order-free |
-| post grant / revoke | **no** | **At most one post operation per post per boundary.** A second is a gate failure and emits `faction.action_declined`. Contention is a *situation*, not a race |
-| form transition | **yes**, by sequencing | transitions fire **after** all deposits, reading the settled result. `01 §2.2` already gates them on state rather than on a received Key |
-
-**(3) A per-candidate RNG substream.** This is the mechanism most likely to be omitted and it is the
-one that actually carries P-A.
-
-```
-seed(c) = H( campaign_seed ‖ accounting_index ‖ candidate_id )        # 64-bit, fixed hash
-```
-
-**Not** a shared sequential stream. On a shared stream, surfacing candidate `c` changes how many draws
-are consumed before `c′` is resolved, so **whether the player attended one thing silently re-rolls
-everything after it.** That is a real, subtle, and completely invisible leak — a game could ship with
-it and nobody would find it by playing. The construction mirrors the churn doc's ensemble seed
-(`:180`) and composes with `00 §8` P0-2's dedicated generation substream: same discipline, one more
-axis.
-
-### 6.5 The skill premium — answering ED-SC-0026 head-on
-
-**ED-SC-0026** (`registers/editorial_ledger_sc.jsonl`, open, `needs_jordan: true`) states the sharpest
-objection to everything above:
-
-> *under our OWN ratified doctrine, playing a contest is currently strictly wasted attention* … *if
-> E[auto] ≈ E[played] AND every output is a scalar, the promised "richness" does not exist and
-> auto-resolving is strictly correct play. The played fidelity can only justify itself if playing
-> shapes **WHICH** consequences occur, not their expected size.*
-
-**That last sentence is the design.** Stated precisely, and this is the reading O-10.3 takes:
-
-| | |
-|---|---|
-| **P-B binds the magnitude** | `E[outcome(c) \| auto] = E[outcome(c) \| AI-played]`. Nobody gains expected value by choosing a fidelity. Mode-shopping is dead |
-| **Playing selects the branch** | The player substitutes their decisions for the AI policy's **at the same decision points, from the same option set** (`remit`-as-gate, `00 §7`). Same distribution of *magnitudes*; different *which* — which tag is written, whose Grudge, which Precedent, which edge strains |
-| **The premium is real and is paid for** | Play above the AI baseline is a legitimate gain — ED-SC-0024's Football Manager argument, where *"a watched match diverges from an unwatched one exactly by the manager's live interventions."* It is not mode-shopping because it **cannot be had without spending a scene action**, and the budget is 3–5 |
-
-**So the scene budget is the price of the skill premium, and that is what makes triage a real decision
-rather than an interface.** A player who attends nothing gets an honest AI campaign. A player who
-attends well gets a better one, in the 3–5 places a season where they chose to be. `player_agency_v30`
-already said this in prose (`:308`, *"the revolt you didn't attend to resolves based on garrison
-strength alone"*); this section is the arithmetic under it.
-
-**⚠ This is a reading of a ruled doctrine, not a ruling.** ED-SC-0024 is filed, open, and
-`needs_jordan: true` precisely because it amends `auto_manual_resolution_duality_v1.md:65`. **If Jordan
-rules for strict expert-parity instead, nothing in §§2–5 or §6.1–6.4 changes** — only the parity
-harness's baseline moves, and §6.5's premium becomes zero. The design is robust to the ruling; the
-*reason to play* is not, which is why ED-SC-0026 says CIP-9b must not be ruled separately from CIP-1.
-
----
-
-**Continues in [`10_the_slate_and_salience_part2.md`](10_the_slate_and_salience_part2.md)** — §7 light-inertia
-without storage and **J-N** · §8 **J-O** · §9 the player surface · §10 module contracts · §11 the property
-audit.
+> **§6 moved to part 2 in v3, keeping its number.** Part 1 grew past the ~14k-token split threshold
+> (`CLAUDE.md §4`, `references/atomization_rules.yaml`) when §1.3 was re-derived and §2.1a added.
+> **Every `10 §6.x` citation in the suite still resolves** — the section number, its subsection
+> numbers and its text are unchanged; only which of the two part-files holds it moved.

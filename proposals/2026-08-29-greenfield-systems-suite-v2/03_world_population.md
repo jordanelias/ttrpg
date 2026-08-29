@@ -226,11 +226,12 @@ transitionable field on `person` identity/form split (`01 §1.1`), and this docu
 vocabulary and the transition rows the field needs to do anything.
 
 **The vocabulary is deliberately coarse, and narrower than `02`'s generation pipeline — stated so a
-reader does not conflate the two.** `02`'s life-*path* (Origin → Childhood → Formation → Entry →
-Career) is the **content-generation walk**: it decides what capability, traits, edges and
-convictions a person is generated with, and it runs once, at creation, gated by the person's age at
-that instant. It is not a persistent field — nothing reads "which generation stage did this person
-stop at" after generation completes. **`life_stage` is the persistent field population and `04` need
+reader does not conflate the two.** `02`'s life-*path* (Origin → Formation → Vocation → Catalyst,
+canon's four verbatim — `02`'s C-1 cuts the delta spec's own five-stage draft in favour of them,
+`02 §3.1`) is the **content-generation walk**: it decides what capability, traits, edges and
+convictions a person is generated with, and it runs once at creation (plus a Career stage repeating
+in play, `02 §3.4`), gated by the person's age at that instant. It is not a persistent field —
+nothing reads "which generation stage did this person stop at" after generation completes. **`life_stage` is the persistent field population and `04` need
 for an ongoing question — is this person old enough to hold a post — and it needs exactly two values
 to answer it:**
 

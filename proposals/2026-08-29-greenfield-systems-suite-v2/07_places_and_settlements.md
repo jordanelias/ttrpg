@@ -47,7 +47,9 @@ form(place)      MUTABLE, only through a declared transition (§3)
 
 gauges  : acceptance.{legitimacy,support} · condition.{order,prosperity,defense} · pressure ·
           presence.<institution> · accrual.entitlement          — all P-4, declared once (`01 §5.2`)
-tags    : Precedent · Grudge · Debt · Reputation · Leverage · Memory, on this place as owner
+tags    : Precedent · Grudge · Debt · Reputation · Leverage · Memory · Ambition, on this place as owner
+          — seven, since `09 §2.1` opened the enum to seven; a place-owned Ambition tag is what a
+          `owner_binding: place` project kind (`09`) deposits here
 posts   : [post_id] sited here, per §1.3
 residents (derived) : persons whose `origin_node` is this place, absent a later relocation
                        tag (§8's WR gap — 03 owns the mechanism; not designed here)
@@ -295,16 +297,23 @@ not code — rows in `references/content_registry.yaml`:
 ```yaml
 presence_kinds:
   - {id: church,       cites: "settlement_layer_v30.md §3.3 row 1"}
-  - {id: guild,        cites: "settlement_layer_v30.md §3.3 row 2"}
-  - {id: restoration,  cites: "settlement_layer_v30.md §3.3 row 5; peninsular_strain_v30.md:162"}
+  - {id: guilds,       cites: "settlement_layer_v30.md §3.3 row 2"}
+  - {id: restoration_movement, cites: "settlement_layer_v30.md §3.3 row 5; peninsular_strain_v30.md:162"}
   - {id: warden,       cites: "settlement_layer_v30.md §3.3 row 6"}
   - {id: military_order, cites: "settlement_layer_v30.md §3.3 row 4 (Löwenritter)"}
-  - {id: covert,       cites: "settlement_layer_v30.md §3.3 row 7 (Niflhel) — presence undisclosed
-                              until discovered; see §4.5"}
+  - {id: niflhel,      covert: true, cites: "settlement_layer_v30.md §3.3 row 7 — presence undisclosed
+                              until discovered; see §4.2 point 2"}
 ```
 
-Six institution kinds, cited from the live canonical `§3.3` table — this document adds no institution
-canon does not already name a subnational management relationship for.
+**Ids match `04`'s caste-gate institution keys, one roster, not two.** `guild` → `guilds`,
+`restoration` → `restoration_movement`, and `covert` is no longer a second id: it is a **property** of
+the `niflhel` row (`covert: true`), the same row `04 §3.2`'s `caste_gate` matrix already keys on
+(`crown`, `church`, `church.temperance`, `guilds`, `niflhel`, `warden`, `restoration_movement`). Before
+this fix, `institution_id` meant two different things across the two registry blocks the moment both
+landed — the exact collision `04`'s owner is proposing a shared roster block to close; this row set is
+written to match it rather than to re-derive a third vocabulary. Six institution kinds, cited from the
+live canonical `§3.3` table — this document adds no institution canon does not already name a
+subnational management relationship for.
 
 ### 4.1a Presence's declared range — closing `01 §6.2`'s open row
 
@@ -382,7 +391,7 @@ same anti-fabrication posture as every other threshold this document proposes (�
    it is a named, typed thing fieldwork can target** — a Chapel, a Guildhall, a Warden watch-post, each
    an object with a Depth axis (`fieldwork_v30 §…`, cited not restated). **`08` owns the build verb;
    this document owns the fact that a facility, once built, is a citable investigation surface.**
-   Niflhel's `covert` presence is the one exception: it gates no visible facility, and its existence is
+   The `niflhel` presence is the one exception: `covert: true` marks it as gating no visible facility, and its existence is
    a `Memory`/`Precedent` tag a discovering investigator writes, not a `facilities[]` entry — this
    preserves canon's "not visible unless discovered" (`settlement_layer_v30.md §4.2` row 3).
 3. **Adds a stratum to the place's economy** — §5.

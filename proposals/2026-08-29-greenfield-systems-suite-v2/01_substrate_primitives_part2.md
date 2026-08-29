@@ -26,7 +26,7 @@ The three, found and read rather than taken on summary:
 | # | ruling | what it forbids |
 |---|---|---|
 | **R-1** | **ED-POL-11** — *"Patronage vs. Knot distinction. **Maintained.** Patronage is political/institutional; Knot is spiritual/personal. Use in separate contexts; **do not conflate**."* (`systems/factions/faction_politics_v30.md:1093`) | treating a Knot as a strong patronage tie, or either as a magnitude of the other |
-| **R-2** | **PP-724 §0** — *"PC-NPC and NPC-NPC ties compose through shared participation in scenes but **do not collapse into one mechanic**."* (`systems/npcs/npc_relational_graph_v30.md:22`) | one mechanic spanning the PC↔NPC and NPC↔NPC layers |
+| **R-2** | **PP-724 §0** — *"PC-NPC and NPC-NPC ties compose through shared participation in scenes but **do not collapse into one mechanic**."* (`systems/npcs/npc_relational_graph_v30.md:18`) | one mechanic spanning the PC↔NPC and NPC↔NPC layers |
 | **R-3** | **PP-724 §3.3** — *"**Knot strain (PC-NPC) and edge strain (NPC-NPC) do not aggregate into one counter** — they are distinct state and resolved separately"*; *"each relational edge is a **distinct binding**"* (`:162`, `:167`) | a single strain axis, capacity, or break rule across binding kinds |
 
 **All three forbid unifying *semantics*. None forbids sharing *storage*.** That distinction is the
@@ -45,24 +45,81 @@ taxonomy to keep authorship is the failure `00 §1` names.
 `kinship` (symmetric; asymmetric parent→child) · `patronage` (patron→client) · `rivalry` · `feud`
 (hereditary), strengths 1–3. With them, three rules that are *per-kind* and stay that way: **kinship
 does not break by strain** — severance is an institutional act and the historical kinship survives it
-(`:334-340`); **rivalry and feud are escalation tracks, not strain tracks** (`:674`); **NPC↔NPC
-Disposition is DERIVED from edge state, never stored** (`:331-345`, `:675`).
+(§3.4, `:169-175`; capacity table `:129`; decision log `:672`); **rivalry and feud are escalation
+tracks, not strain tracks** (`:674`); **NPC↔NPC Disposition is DERIVED from edge state, never stored**
+(`:331-345`, `:675`).
 
-**Two kinds are added in a scope PP-724 declares out of bounds** (it is NPC↔NPC only, `:22`):
-`treaty` (faction ↔ faction) and `charter` (faction → place). Extensions into empty scope, not
-overrides. `treaty` replaces v1's `Debt`-tag-pair representation, which was two representations of
-one relationship while faction enmity was already an edge.
+**Three kinds are added in a scope PP-724 declares out of bounds** (it is NPC↔NPC only, `:18`):
+`treaty` (faction ↔ faction), `charter` (faction → place) and **`allegiance` (person → faction)**.
+Extensions into empty scope, not overrides. `treaty` replaces v1's `Debt`-tag-pair representation,
+which was two representations of one relationship while faction enmity was already an edge.
 
 **`client` is not shipped.** Endpoints are ordered, so `patronage(a→b)` read from b's end *is* the
 client relation; a `client` row is a perspective variant — `00 §1`'s under-distilled failure. It is a
 query helper. Nothing is lost, and PP-724 agrees: it ships `patronage` with a direction, not a pair.
+
+### 7.2.1 `allegiance` — the person→faction track, and why it is one registry row (O-7)
+
+**What is missing without it.** This suite ships exactly two personal meters, `standing` and `exposure`
+(§5.2), both **public/private halves of a person's general position** — neither is *toward* anybody.
+`disposition.pc_npc` is stored but is **PC↔NPC only**. So there is **no magnitude anywhere in the suite
+for how a person stands toward a faction**, and the distillation that correctly cut *"nine parallel
+personal meters"* cut this one with them.
+
+**What that costs, measured rather than asserted.** The world-churn census sorts the register's 81
+faction-tier arcs into ~7 recurring families and names the largest: *"faction+NPC personal-track
+threshold cascade (~12-15 arcs, the ARC-S07 'Torben Loyalty Clock' shape — **the capstone target itself
+is the single most duplicated shape in the corpus**)"*
+(`audit/2026-07-05-emergent-narrative-engine/_workings_joined.md:1933-1935`; the 138-arc register and
+the ~13-shape collapse at `narrative_engine_design_v2_churn.md:21`, `:80`). The **monotone** subcase of
+that family — a loyalty counter that only ever runs down to a coup — is already expressible: it is a
+ratcheting project, and `09 §3.2` reproduces canon's monotone clock exactly. The **recoverable,
+bidirectional** subcase — a person who is turning and can be turned back, which is most of the family
+and the whole reason the shape is interesting — is **not**, because there is nothing to move in either
+direction. Advance terms are predicates over readable state (`09 p2 :165-167`), and the readable state
+they would need does not exist.
+
+**The fix is one registry row and zero new primitives.** §7.3 already declares edge gauges **per kind**,
+so an `allegiance` row simply declares one:
+
+```
+relation: allegiance      endpoints: (person → faction), ORDERED       # asymmetric by construction
+form(state) : {aligned, wavering, estranged}      # a per-kind state set, like every other kind's
+gauges      : allegiance.strength — a STORED gauge, private to this kind, bounded, geometric decay (§5.1)
+tags        : the favours, slights and oaths that moved it, each with provenance
+```
+
+**Why it is STORED and not derived, in §2.1's vocabulary.** Allegiance is a **stock, not an aggregate**:
+it is the accumulated residue of favours granted, slights borne and oaths sworn, and **current state
+does not recompute it** — two people holding identical posts under identical ethos, one of whom was
+passed over three seasons ago, are in different states and only the history says so. Contrast NPC↔NPC
+disposition, which PP-724 derives precisely because it *is* recomputable from the edge graph (§7.3, O-3).
+The two verdicts are opposite because the two quantities are different in kind, and §2.1's test is what
+separates them.
+
+⚠ **R-1, R-2 and R-3 are untouched, and this is not a courtesy claim.** An `allegiance` edge is
+**neither a Knot nor an NPC↔NPC tie.** Its endpoints are a *person and a faction*, so it lies outside
+PP-724's declared scope entirely (`:18`) — R-2's PC↔NPC/NPC↔NPC layer distinction does not reach it,
+because it is on neither layer. Its gauge is `allegiance.strength`, declared per kind, which **never
+sums with edge strain or Knot strain** (R-3) and is not a magnitude of either. And it is
+political/institutional, which is exactly the side of ED-POL-11's line **patronage** is on — R-1 forbids
+conflating patronage with the Knot, and this row is on the patronage side of that line, not across it.
+The three rulings govern person↔person bindings; this is the first person→*institution* binding the
+container has held.
+
+**Why an edge and not a person gauge.** A person may stand differently toward four factions at once, so
+a gauge on the person would need a key — which is an edge with the naming hidden. The edge also gives
+the track a tag owner (the slights that produced it) and puts it in the one store where `causes[]`
+chains across binding kinds (§7.3), which is how *"he turned because of what was done to his brother"*
+becomes a queryable chain rather than a coincidence.
 
 ### 7.3 The container, and exactly what it does and does not unify
 
 ```
 identity(edge) : endpoints (ORDERED where the kind is asymmetric) · relation (one registry row per kind)
 form(edge)     : state — from the set THIS KIND admits, declared per kind, never globally
-gauges         : declared PER KIND. A kind with no strain axis has no strain gauge.
+gauges         : declared PER KIND. A kind with no strain axis has no strain gauge, and a kind
+                 whose magnitude is a STOCK (allegiance, §7.2.1) declares a stored one. Never global.
 tags           : what has passed between them, with provenance — including a treaty's terms
 ```
 
@@ -95,8 +152,10 @@ them.**
 every edge**. For NPC↔NPC pairs that stores a value PP-724 derives — and deriving it is not merely
 PP-724's preference, it is **this suite's own write rule**: a stored NPC↔NPC disposition is an
 aggregate over edge strengths, and no aggregate is ever written (§2.1). **v1 violated its own rule and
-PP-724 caught it.** Disposition is stored for PC↔NPC and derived for NPC↔NPC. Per-kind semantics, in
-the substrate, doing real work.
+PP-724 caught it.** Disposition is stored for PC↔NPC, derived for NPC↔NPC, and **allegiance is stored
+for person→faction** — three verdicts, each falling out of §2.1's one test rather than out of taste: the
+NPC↔NPC value is recomputable from the edge graph, the other two are path-dependent stocks. Per-kind
+semantics, in the substrate, doing real work.
 
 ### 7.4 Converters — the gap Part VI actually names
 
@@ -319,8 +378,11 @@ must also record what was cut because something on disk beat it.
 | **a v2-invented relation taxonomy** | **CUT, superseded by PP-724** | §7.2. Six period-grounded types with per-type semantics and a decision log already exist on disk. Rebuilding a worse one to keep authorship is the elegance failure, whoever wrote it |
 | a **`client`** relation kind | rejected | §7.2 — a reading direction, not a row |
 | a **stored NPC↔NPC disposition** | **CUT** | §7.3 — an aggregate over edge strengths, and no aggregate is ever written. v1 violated its own rule; PP-724 caught it |
-| a **Memory** primitive | rejected; it is a **Tag kind** | §3.1 — a primitive would need its own store, sweep and provenance rule, all of which Tag already has |
-| a **salience** stored field, or a **second decay law** | rejected | §3.2 — derived at read from `value`, `created_season` and one declared `λ_mem` |
+| a **`Memory`** tag kind | **CUT, and `Holding` admitted in its place** | §3.1 (O-6) — a Memory is a Holding field-for-field, and `key`+`value` cannot carry the false picture that was Memory's entire justification. Enum count unchanged |
+| a **`Proposition`** stored kind | rejected | §3.1 — content-addressing makes the store a **memo table**, not state: no history, no owner, never a write target, reconstructible from the tuples the tags carry. This is why P1 (every NPC holds propositions) is affordable |
+| a **salience** stored field, or a **second decay law** | rejected | §3.2 — derived at read from `value`, `created_season` and one declared `λ_sal`. **Confidence, by contrast, is stored and does NOT decay** |
+| a **`loyalty`/`allegiance` Gauge on the person** | rejected; it is an **edge kind** | §7.2.1 — a person stands differently toward several factions at once, so a person gauge needs a key, which is an edge with the naming hidden. As an edge it also gets a tag owner and a `causes[]` chain |
+| **nine parallel personal meters** | still rejected | §5.2. `allegiance` is not a re-opening of that cut: it is **one** track, on the edge rather than the person, and it is the state the corpus's most duplicated arc shape reads |
 | a **cross-season emission carry** | **rejected as non-existent, not as unwanted** | §9.3 — the transport is not in the tree; designing on it would be designing on a mechanism nobody built (**J-N**) |
 | a **second resolver** | rejected | the only surveyed franchise with two resolution paths is also the only one with a two-decade unfixed divergence, exploited in both directions |
 | a **view** primitive | rejected | disclosure stores nothing and resolves nothing; it is a declaration attached to state (E-2), which is what makes it checkable |
@@ -345,11 +407,12 @@ and the thinnest surface. Everything below is **read-only**; the substrate expos
 | firing a **form transition**, or running a **converter** — a marriage becoming a treaty is something they *learn about* |
 | appending a **tag** or depositing into a **gauge** directly |
 | a gauge's exact **value**, any transition's **threshold**, or any **forecast** of either (§8) |
-| **strain**, **salience**, **divergence**, **presence levels** — substrate, surfaced only as a situation |
+| **strain**, **salience**, **divergence**, **presence levels**, **allegiance strength** — substrate, surfaced only as a situation |
+| another person's **holdings** — what an NPC believes is inferred from what they do, never read off a sheet (§3.1). Only the *player's own* holdings are inspectable, and only as stance plus provenance |
 
-**Substrate objects here: 6 entity kinds · 6 tag kinds · 6 adopted relation kinds + 2 scope extensions +
-Knot held separately · 3 converters · 4 primitives · 2 extensions. Surface affordances: 3 reads, 0
-verbs.** If a later document's surface table is longer than its substrate table, that document has the
+**Substrate objects here: 6 entity kinds · 7 tag kinds (§3.1; `Ambition` is `09`'s, O-A1) · 6 adopted
+relation kinds + 3 scope extensions + Knot held separately · 3 converters · 4 primitives · 2 extensions.
+Surface affordances: 3 reads, 0 verbs.** If a later document's surface table is longer than its substrate table, that document has the
 ratio backwards.
 
 ---
@@ -412,6 +475,9 @@ once rather than three times.
     # PC<->NPC disposition is STORED (canon's track). NPC<->NPC disposition is DERIVED from edge state
     # and is deliberately NOT a state row here (PP-724 :331-345; O-3).
     - {name: edge.disposition.pc_npc, bucket: gauge, writable: true, owner: substrate.edge}
+    # person->faction allegiance is STORED: a path-dependent STOCK, not an aggregate (§2.1, §7.2.1).
+    # Declared on the `allegiance` kind ONLY, and it never sums with edge strain or Knot strain (R-3).
+    - {name: edge.allegiance.strength, bucket: gauge, writable: true, owner: substrate.edge}
   form: [{entity_kind: edge, field: state}, {entity_kind: edge, field: tier}]
   transitions:
     - knot.intact_to_ruptured     # gate: strain >= 5; reversible: false      (knots_v30 :180)
@@ -422,9 +488,14 @@ once rather than three times.
     - patronage.to_sworn_bond     # converter: retainer_ripening             (§7.4)
     - kinship.to_treaty           # converter: marriage_to_treaty            (§7.4)
     - rivalry.to_feud             # converter: PP-724 §2.6 escalation        (§7.4)
+    - allegiance.aligned_to_wavering    # reversible pair -> hysteresis REQUIRED (§2.3), band declared
+    - allegiance.wavering_to_aligned    #   in references/form_registry.yaml, not here
+    - allegiance.wavering_to_estranged  # reversible pair -> hysteresis REQUIRED (§2.3)
+    - allegiance.estranged_to_wavering  #   the recoverable half — the subcase §7.2.1 exists for
   disclosure:
     - {of: edge.strain.<kind>, inputs: published, presentation: band, trigger: hidden}
     - {of: edge.disposition.pc_npc, inputs: published, presentation: band, trigger: hidden}
+    - {of: edge.allegiance.strength, inputs: published, presentation: band, trigger: hidden}
 
 - module: substrate.post
   parent: substrate         class: substrate
@@ -445,7 +516,12 @@ once rather than three times.
 points are things the player acts on directly this season, and hiding them would obscure an input rather
 than a threshold. **Note what is absent from `substrate.edge`:** a shared strain counter, a shared
 capacity, a shared break rule, and any NPC↔NPC disposition row. Their absence is the container's
-compliance with R-1, R-2 and R-3, expressed in the contract rather than promised in prose.
+compliance with R-1, R-2 and R-3, expressed in the contract rather than promised in prose. **The
+`allegiance` rows change none of that** — `edge.allegiance.strength` is a third *separate* gauge on a
+third *separate* kind, and the count of shared counters is still zero. Its four transitions are two
+reversible pairs, so §2.3's hysteresis guard binds on all four at load time; a loyalty track that
+flickers between wavering and aligned every season is the exact failure that guard exists to catch, and
+it is the one this kind is most exposed to.
 
 ---
 
@@ -477,9 +553,10 @@ list and the `## Overrides` block — judgments, not checks.
 | gauge deposit → band → module gating → deposit | the fixed point `rest + a/λ`, checked at declaration (§5.1) | **unmeasured**; campaign-reachable, so measurable with a control, and it should be measured before any writer lands |
 | form transition ↔ its reverse | **`θ↑ − θ↓ ≥ H_MIN` plus `dwell ≥ D`, checked at load** (§2.3) | **bounded arithmetically** — the only loop here with a proved bound, and why hysteresis is mandatory rather than advised |
 | Knot strain → rupture → conviction scar → conviction weight → behaviour → strain | **terminating**: rupture is `reversible: false`, so the edge leaves the loop permanently; strain is gauge-bounded −5…+5 per tier (`knots_v30.md:49-52`) | **unmeasured**, and it is **canon's loop, not this suite's** — the FI lane inherits the measurement obligation |
-| NPC↔NPC edge strain → derived disposition → behaviour → strain | per-kind capacity (PP-724 `:673`); kinship cannot break by strain at all (`:334`); rivalry and feud escalate rather than accumulate toward break (`:674`) | **unmeasured** — and the three kinds are bounded by **three different mechanisms**, which is the per-kind semantics doing its job rather than a gap |
+| NPC↔NPC edge strain → derived disposition → behaviour → strain | per-kind capacity (PP-724 §3.1 `:123-134`, decision log `:671`); kinship cannot break by strain at all (§3.4 `:171`); rivalry and feud escalate rather than accumulate toward break (`:674`) | **unmeasured** — and the three kinds are bounded by **three different mechanisms**, which is the per-kind semantics doing its job rather than a gap |
 | **do the two strain loops couple?** | **no. By R-3 they never sum.** A node in both takes both effects independently (PP-724 `:162-167`) | **not a loop** — the row exists because a reader will ask, and the answer is the anti-unification property, verified by the *absence* of a shared counter in §12 |
-| memory salience → weighting → behaviour → new perception → memory | **`MEMORY_CAP` top-K at the sweep, geometric salience decay, and `RELATION_SHARE_MAX`** (§3.2, §3.4) | **unmeasured**. Three independent bounds is not a measured gain, and this page does not claim it is |
+| holding salience → weighting → behaviour → new perception → holding | **`HOLDING_CAP` top-K at the sweep, geometric salience decay, and `RELATION_SHARE_MAX`** (§3.2, §3.4) | **unmeasured**. Three independent bounds is not a measured gain, and this page does not claim it is. ⚠ The store is bounded at `population × HOLDING_CAP` **by construction**, which is the cost P1 created and §3.2 answers |
+| **allegiance: slight → allegiance falls → worse treatment → slight** | the gauge's own fixed point `rest + a/λ` (§5.1), plus `RELATION_SHARE_MAX` on every selection function that reads it (§3.4) | **unmeasured, and it is the one new loop this revision adds.** It is campaign-reachable, so it is measurable with a control, and it should be measured before any writer lands. The bound is arithmetic and load-time; the *gain* is not |
 | tag append → selection → outcome → tag append | dedupe on `(owner, kind, key)` bounds count by `candidates × posts`; magnitude bounded by the gauge the value deposits into (§3.3) | **unmeasured** |
 | **a Key-driven cascade within a season** | **`DEFAULT_CASCADE_DEPTH_MAX = 0`** — the guard **prevents cascades outright** rather than pacing them (§9.3) | **not a loop today.** If **J-N** rules for reactive chains this becomes a real loop with no bound yet, and §9.3 is what to revisit |
 
@@ -500,10 +577,13 @@ list and the `## Overrides` block — judgments, not checks.
 
 ### 13.3 The four qualitative verdicts, applied to the substrate rather than to a resolver
 
-**Necessary** — four primitives, six entity kinds, six tag kinds. The relation taxonomy is **adopted,
-not invented**, so its necessity argument is PP-724's own decision log (`:669`) rather than a claim this
-page has to make; the two additions occupy a scope PP-724 declares out of bounds. §10 records fourteen
-candidates refused, three of them cut because something on disk beat them. **Robust** — the failure
+**Necessary** — four primitives, six entity kinds, **seven** tag kinds. The relation taxonomy is
+**adopted, not invented**, so its necessity argument is PP-724's own decision log (`:669`) rather than a
+claim this page has to make; the **three** additions occupy a scope PP-724 declares out of bounds. §10
+records seventeen candidates refused, four of them cut because something on disk beat them — and the two
+newest refusals are the sharpest, because in both cases the thing on disk was **this page's own draft**:
+`Memory` lost to the ruled `Holding` grammar (O-6) and a person-side loyalty meter lost to an edge kind
+(§7.2.1). **Robust** — the failure
 directions the corpus measured are closed by arithmetic: an unrecoverable pinned gauge by the geometric
 law, a flickering threshold by the hysteresis band, and **a silently-dead resolution by the
 commensurability gate** (§6.1), which is shape-aware and so does not false-pass an opposed site

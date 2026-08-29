@@ -37,19 +37,24 @@ consequences, stated plainly rather than silently absorbed:
 
 | # | What is overridden | Tier | Why |
 |---|---|---|---|
-| **O-1** | v1 `08 §4`'s `sm.verb` — a **player-browsable menu**, four verbs × two forks, spent every season | this suite's own v1 | The playing-surface budget (`00 §2`, Jordan 2026-08-29) forbids it outright, not just its size. **Reclassified `class: substrate`** (§3): the same registry rows still run, every season, chosen by the post-holder's own preference exactly as an unattended post already works (`01 §4.4`) — no possibility is lost, only the player's obligation to browse it |
+| **O-1** | v1 `08 §4`'s `sm.verb` — a **player-browsable menu**, four verbs × two forks, spent every season | this suite's own v1 | The playing-surface budget (`00 §2`, Jordan 2026-08-29) forbids it outright, not just its size. **Rehoused as `05` action rows** (§3, O-5): the same registry rows still run, every season, chosen by the post-holder's own preference exactly as an unattended post already works (`01 §4.4`) — no possibility is lost, only the player's obligation to browse it |
 | **O-2** | v1's four always-available directive responses (Comply / Bargain / Commute / Defy), and its bespoke post-scoped `suspicion` gauge | this suite's own v1 | §4 demotes Bargain and Commute from *always offered* to *gated by readable state*, sharpening a rule v1 already half-had for Commute alone. `suspicion` is **retired as a distinct gauge**: it is exactly the person-scoped `exposure` meter `01 §5.2` already ships ("two personal meters, not nine") wearing a settlement-specific name. No new object; an existing one, correctly attributed to the **person**, so it now survives a governor's reassignment instead of resetting at the post |
 | **O-3** | v1's `sm.business` contract declaring `resolver: derivation` while writing the `pressure` gauge | this suite's own v1 | `00 §7`'s resolver table is stricter than the one v1 wrote against: *"derivation — never use when anything writes it."* Corrected to `resolver: accrual`, which is what a bounded per-season deposit into a decaying gauge already is (`01 §5.1`). No behavioural change; the tag was wrong, not the module |
 | **O-4** | *(evaluated, not taken)* replacing `derive_ob`'s `score/2` for settlement obstacles | — | See the authority note above and `§4.1`. Kept on the merits: the modifier slot already absorbs everything settlement-specific that a bespoke formula would have bought, and single-ownership is worth more than a domain-flavoured curve with no argued advantage |
+| **O-5** *(v3)* | **this document's own v2.0 modules `sm.act` and `sm.gate`** | this suite's own v2.0 | Deleted as modules. `sm.gate` admitted at `§1` that it was *"the same shape as `05 §1`, one tier down"*, and `§9.2` asserted *"a governance response and a faction action remain the same object at different tiers"* while shipping two of them; `05 part 2 §10.1` states the identity independently. `fa.resolve` already declares `remit: [head, governor, minister, envoy, commander]` and is explicitly a dispatcher; `fa.gate` already iterates every declared rung including settlement. The eight `sm.act` rows become `05` action rows with `tiers: [settlement]`, `remit_kinds: [governor]` (§3). **Zero outcomes lost; two modules and one duplicated gate deleted** |
+| **O-6** *(v3)* | **`sm.business`'s per-place draw `n = 1 + floor(pressure_band)`**, which v2.0 marked *"unchanged"* | this suite's own v2.0 | Deleted, not scaled. `10 §2.4` rules the deletion in those words and `10` C-6 forbids the shape outright — *"an emitter emits; it never presents, ranks, or checks the budget."* Two documents cannot both ration; `10` owns rationing and wins the seam. §5. The arithmetic consequence is re-derived and published at `10 §1.3` rather than left resting on a deleted formula |
 
 ---
 
-## 1. The gate
+## 1. The gate — `05`'s, and no copy of it
 
-Same shape as `05 §1`, one tier down, and not re-derived: a settlement whose governance post is
-vacant runs no governance modules this season and emits `faction.action_declined(place,
-reason="vacant_governor")`. Recoverable by the same path — the vacancy raises a demand, and
-generation is total (`01 §4`). Zero player surface; substrate.
+v2.0 shipped `sm.gate` while admitting in the same sentence that it was *"the same shape as `05 §1`,
+one tier down."* **It is deleted** (O-5). `05 §1`'s `fa.gate` already loops `for tier in
+declared_tiers` and already emits `faction.action_declined(faction, tier, reason="vacant_post")` —
+which is the row `00 §9.2` registers, with the reason string it registers, where `sm.gate`'s
+`reason="vacant_governor"` was a second string for one fact. A settlement whose governance post is
+vacant **is** the settlement rung of that loop. Recoverable by the same path — the vacancy raises a
+demand, and generation is total (`01 §4`). Zero player surface, and now zero modules.
 
 ---
 
@@ -64,40 +69,73 @@ generation is total (`01 §4`). Zero player surface; substrate.
 
 | what runs without the player | how often |
 |---|---|
-| the season's business draw (`§5`) | every season, for every settlement, whether attended or not |
-| the settlement's own governance effort — development, order, adjudication, construction | every season, chosen by the governor's own preference, whether attended or not |
+| the season's business **emission** (`§5`) — every qualifying item, no per-place quota | every season, for every settlement, whether attended or not |
+| the settlement's own governance effort — development, order, adjudication, construction | every season, as `05` action rows at the settlement rung, ranked by `fa.select`'s `appeal`, whether attended or not (§3) |
 | investigation-surface bookkeeping (`§6`) | continuous |
 
 **This is the whole answer to `00 §2.3` point 4's ratio test.** One mandatory row against three
 substrate rows, and the second table is where the actual government of the settlement happens.
+**Note what the middle row now says:** the government of a settlement is not run by a module this
+document owns. It is run by `05`'s dispatcher over rows this document hands it (§3).
 
 ---
 
-## 3. The up-stroke is retired as a player object — what replaces it
+## 3. The up-stroke is retired as a player object, and its rows go to `05`
 
 v1 shipped `sm.verb`: four verbs (Develop, Order, Court, Build), two forks each, a menu the player
 spent `post.budget` against every season. **That object is cut.** Not shrunk — cut, as a thing the
 player opens.
 
-**What produces the outcome instead.** The eight registry rows survive unchanged in *content* —
-Develop still develops, Build still builds — but move to a single substrate module, `sm.act`
-(§8), invoked **by the post**, resolved **by the post-holder's own preference**, every season,
-exactly the machinery `01 §4.4` already specifies for an unattended post. There is no second,
-cheaper algorithm: an attended governor's post runs the identical module. **What changes is only
-whether the player supplied the choice or the holder's convictions did** — and per `01 §4.3`'s
-`remit` argument, that difference is a fork in *who chooses*, never a fork in the odds.
+**v2.0 rehoused those eight rows in a settlement-scoped module, `sm.act`. v3 deletes that module
+too** (O-5), because it was `05`'s dispatcher in a settlement costume — and this document said so in
+its own audit: *"a governance response and a faction action remain the same object at different
+tiers"* (§9.2), which `05 part 2 §10.1` reaches independently as *"a faction action at the peninsula
+rung and a settlement verb are the same object at different rungs."* Two documents asserting the
+identity and then shipping two modules for it is the elegance failure `00 §1` names.
 
-**No bespoke "promotion" mechanism is built to let this reach the player anyway.** `sm.act`'s
-results are ordinary Keys — a gauge deposit, a tag, occasionally a named form transition (§8) — and
+**What produces the outcome instead.** The eight rows survive unchanged in *content* — Develop still
+develops, Build still builds — as **`05` action rows** under `05 part 2 §5`'s schema, each carrying:
+
+```yaml
+tiers:        [settlement]
+remit_kinds:  [governor]
+```
+
+They are dispatched by **`fa.resolve`**, whose `remit` already reads `[head, governor, minister,
+envoy, commander]` and whose `ob_sites: []` is *deliberately* empty precisely because it is a
+dispatcher and the obstacle target belongs to the resolved row. They are gated by **`fa.gate`**,
+which already iterates every declared rung including settlement (§1). Both are shipped machinery;
+the rows run through it unchanged. And selection when nobody is watching becomes `fa.select`'s
+`appeal` ranking — the same *"post-holder's own preference"* `01 §4.4` specifies, now one algorithm
+instead of two.
+
+**What the collapse costs, stated rather than glossed — one field in `05`.** `05 part 2 §5`'s row
+schema has no slot for a **named form transition**, and `fa.resolve` declares `transitions: []`. The
+Build family names facility-tier advances, whose rows are owned by `07`'s `form_registry.yaml`. So
+the receiving schema needs one optional field in its `effects` branches — `names_transition:
+<transition id | null>`, applied by the herald under W-5, exactly as `§6.3` below already does for a
+resolved Finding. **That is the entire cost of the collapse: one optional field, against two deleted
+modules and eight duplicated rows.** It is named here because the receiving author must add it;
+nothing else in the handover is new.
+
+**One residual to confirm with `05`/`04`, not asserted away.** `fa.gate` iterates `posts(faction,
+tier)` — a *faction's* rungs. A settlement whose governance post is held under no faction would never
+be iterated, where v2.0's settlement-local gate would have caught it. `05 §7` has control changing by
+exactly two routes, campaign and appointment, and both seat a faction's post, so the case may be
+unreachable — but *may be* is not *is*. **If it is reachable, it is fixed in `fa.gate`'s loop, not by
+restoring a second gate here.**
+
+**No bespoke "promotion" mechanism is built to let this reach the player anyway.** These rows'
+results are ordinary Keys — a gauge deposit, a tag, occasionally a named form transition — and
 whether any one of them is salient enough to reach the Slate is `10`'s question, answered by the
 same Light Function that ranks everything else in the game. Inventing a settlement-specific
 escalation rule here would be exactly the shape-divergence `00 §6.2` forbids: a second dialect for
 "this subsystem's version of mattering."
 
-*Emergent possibility lost if `sm.act`'s rows were cut instead of merely rehoused:* a settlement
-would stop developing, adjudicating, keeping order or building the moment nobody was looking at it —
-the opposite of a world with an outside. Cutting the **menu** loses nothing; cutting the **rows**
-would.
+*Emergent possibility lost if the eight rows were cut instead of rehoused:* a settlement would stop
+developing, adjudicating, keeping order or building the moment nobody was looking at it — the
+opposite of a world with an outside. Cutting the **menu** loses nothing; cutting the **rows** would.
+**Moving them to `05` loses nothing either, and it deletes two modules.**
 
 ---
 
@@ -166,8 +204,8 @@ supplies no cross-season latency (`01 part 2 §9.3`, filed as open ruling **J-N*
 transport by which a Key posted this season arrives next season. A Commute term therefore does not
 "schedule" its next firing — the `Debt` tag's `ttl` is **read at the accounting boundary** each
 season, and the claim fires because the tag *is still live when read*, never because something was
-queued to deliver it. The same is true of any `sm.act` row that spans seasons, and of the
-investigation-surface state in `§6`. **If J-N is later ruled the other way, this section is what to
+queued to deliver it. The same is true of any of §3's handed-over `05` rows that spans seasons, and
+of the investigation-surface state in `§6`. **If J-N is later ruled the other way, this section is what to
 revisit** — nothing here should be re-read as already having latency it does not.
 
 ---
@@ -176,20 +214,50 @@ revisit** — nothing here should be re-read as already having latency it does n
 
 Unchanged in its central argument from v1: **the season's business is drawn from the settlement's
 own ledger, never authored**, so it needs no content to function and cannot present something the
-world has not caused. What changes under change D is the destination of the draw.
+world has not caused. What changes under change D is that there is no longer a *draw*.
 
-```
-n = 1 + floor(pressure_band)          # unchanged; 01 §5.2 names pressure the candidate-emission driver
-```
+**O-6 — the per-place draw is deleted, not scaled.** v2.0 shipped `n = 1 + floor(pressure_band)` and
+marked it *"unchanged"*: a per-place quota, chosen with no view of what any other place emitted.
+`10` C-6 forbids exactly that shape — *"an emitter emits; it never presents, ranks, or checks the
+budget… v1's `sm.business` drew `1 + floor(pressure_band)` items **and presented them** — a per-place
+budget with no global view"* — and `10 §2.4` rules the deletion in those words. Two documents cannot
+both ration the same stream; **`10` owns rationing and wins the seam.** `sm.business` emits **every
+qualifying item** and the global budget does the cutting. The arithmetic consequence — this emitter
+roughly doubles its output — is re-derived and published at `10 §1.3` rather than left resting on a
+formula that no longer exists.
 
 | candidate source | becomes |
 |---|---|
 | an open `Grudge` tag on the place or its governor | someone acts on a grievance this season |
 | an unserved `Debt` tag whose term is running | a claim comes due |
-| a gauge at or near an extreme band | the condition itself is the business |
+| a gauge at or near an extreme band — with `pressure` qualifying at a **lower** band than the rest | the condition itself is the business |
 | a `Precedent` tag being tested by a new event | the past ruling is cited back |
-| an adjacent settlement at an extreme band | a neighbour's crisis is visible from here (`07`) |
+| an adjacent settlement at an extreme band | a neighbour's crisis is visible from here (`07`) — **not a second candidate; see the collapse rule below** |
 | **a facility or presence with an open `investigation_surface` row and a matching unresolved tag (`§6`)** | *(v2)* an investigation opportunity |
+
+**Rows 3 and 5 are ONE candidate, and this rule is what stops deleting the draw from multiplying the
+world's crises by its adjacency degree.** A place at an extreme band qualifies under row 3 at itself
+*and* under row 5 at every neighbour; while the quota bounded output at `1 + floor(pressure_band)`
+that fan-out was invisible, and with the quota gone nothing caps it. The fix needs no new mechanism —
+only the identity `10 §2.2` already defines. A row-5 emission sets `anchor` to **the settlement in
+crisis, never the observer**, and `subject_refs` to the sorted set of that settlement *and all its
+adjacent settlements*, computed once and therefore byte-identical from every observer. `candidate_id
+= H(emitter ‖ kind ‖ anchor ‖ sorted(subject_refs) ‖ provenance)` then collapses the `1 + degree`
+emissions into one candidate — which is also the right answer for the player, because it is one
+situation. Nothing is lost: every neighbouring governor is in `subject_refs`, so `10 §3.1`'s
+`post_remit` channel still carries the item to them and **no sixth witness channel is needed.**
+*Found while re-deriving `10 §1.3` on the post-deletion basis, not before it.*
+
+**`pressure`'s surviving job, since the draw was its only reader.** `01 §5.2` names `pressure` *"the
+candidate-emission driver (`10`)"* — a description of the formula O-6 just deleted, which now names
+nothing. Its job is **qualifying, not scaling**: `pressure` is row 3's gauge for the place *as a
+whole*, the one gauge of the thirteen a place carries whose entire content is unanswered business
+(Suppress deposits into it, `§6.2`; world events deposit into it, `07 §8.1`), and it therefore
+qualifies row 3 at a **lower band** than the other twelve, which qualify only at an extreme. That is
+one reader, it is the reader `§9.1`'s third loop already assumes, and it keeps the gauge from being
+state that is deposited into and read by nothing. ⚠ **One cell in a file this document does not own
+needs the matching correction:** `01 §5.2`'s `pressure` row should read *"the qualifying band for a
+place's own unanswered business (`08 §5`)"*. **Flagged, not made.**
 
 **`sm.business` stops resolving these into the player's face and starts emitting them.** Each drawn
 item is addressed, by composition role, to `10`'s intake — not wrapped in a new "Candidate"
@@ -266,6 +334,24 @@ commits to, once that Key exists, is the translation:
 | a record of what was found, regardless of verdict | a `Precedent` tag, provenance = the Finding's Key |
 | the implicated facility or presence should register the exposure | a `gauge_deposit` on `condition.order` or `presence.<institution>` (sign per verdict) |
 | the implicated facility should close | a **named** form transition — `sm.business` *names* it; the herald applies it (W-5, `01 part 2 §9.2`); the transition row itself belongs to `07`'s `form_registry.yaml`, not to this document |
+| **what its witnesses now believe** *(v3)* | a `gauge_deposit` on **`credence.<proposition>`** for each person in the Finding's witness set, sign and magnitude per verdict and discounted by the reliability tag below |
+
+**Why that last row is here, and it is not a settlement concern by accident.** `credence` is declared
+writable by exactly one module — `cg.stage` (`02 part 2 §10.1`), which is *generation* — and `11 §2.3`
+permits a world event to deposit only on **place**- or **faction**-owned gauges. So across the whole
+suite **nothing could move a person's belief after they were generated**, and `02 §6.4`'s
+Embrace / Denial / Schism showpiece was unreachable end to end: **Denial — credence staying high under
+sustained pressure — was its only reachable member, because nothing could apply the pressure.** A
+resolved investigation moving what its witnesses believe is the smallest available fix and the better
+story: it is the one event in this suite that is *about what is true*, delivered to the people who
+saw it. `02 §6.2` already specifies the deposit's meaning (*"ordinary evidence deposits move credence
+and fire nothing"*); this row supplies the depositor it lacked.
+
+⚠ **Two things this depends on, neither of them made here.** (1) `02 part 2 §10.1`'s `credence` row
+reads `owner: cg.stage` — a **module**, where every other gauge in the suite names a **write leaf**
+(`owner: substrate.gauge`, `01 part 2 §12`). It must read `substrate.gauge` for this deposit to be
+legal; **flagged, not made.** (2) This is the `08` route of the either/or: **`11 §2.3`'s may-table
+must NOT also be extended with person-gauge deposits.** One fix, not two.
 
 No investigation outcome writes an aggregate and none bypasses the herald. The reliability tag the
 FI lane already attaches (`fieldwork_investigation.md §4.3`) is read, not re-derived: a Finding built
@@ -287,18 +373,22 @@ about — two systems in the same game, permanently unaware of each other.
 
 ## 7. The verb budget, counted against `00 §2`
 
-| | v1 | v2 (this document) |
-|---|---|---|
-| player-invoked modules | `sm.respond` (always 4 responses), `sm.verb` (freely browsable, 4 verbs × 2 forks) | `sm.respond` only |
-| distinct leaf choices reachable in a single season | up to **12** (4 + 8) | **2 to 4**, gated by readable state, never browsable beyond what the state admits |
-| menus the player opens without being prompted by a situation | 1 (`sm.verb`) | **0** |
-| this document's contribution to the whole-game single-digit verb budget (`00 §2.2`) | — | **1** (`sm.respond`) |
+| | v1 | v2.0 | v3 (this document) |
+|---|---|---|---|
+| player-invoked modules | `sm.respond` (always 4 responses), `sm.verb` (freely browsable, 4 verbs × 2 forks) | `sm.respond` only | `sm.respond` only |
+| distinct leaf choices reachable in a single season | up to **12** (4 + 8) | **2 to 4**, gated by readable state | **2 to 4**, unchanged |
+| menus the player opens without being prompted by a situation | 1 (`sm.verb`) | **0** | **0** |
+| **modules this document ships** | 5 | 5 | **3** — `sm.directive`, `sm.business`, `sm.respond` |
+| this document's contribution to the whole-game single-digit verb budget (`00 §2.2`) | — | **1** (`sm.respond`) | **1** (`sm.respond`), unchanged |
 
 **The cut list, with what replaced each entry:**
 
 | v1 object | cut or kept | what produces the outcome now |
 |---|---|---|
-| `sm.verb` as a player menu | **cut** | `sm.act`, substrate, run every season by the post-holder's preference (§3) |
+| `sm.verb` as a player menu | **cut** | its eight rows, as `05` action rows at the settlement rung, dispatched by `fa.resolve` and ranked by `fa.select` (§3) |
+| `sm.act` as a module *(v3)* | **cut** | `fa.resolve` — the dispatcher the rows always needed (O-5) |
+| `sm.gate` as a module *(v3)* | **cut** | `fa.gate`'s settlement rung, which already existed (O-5, §1) |
+| the per-place business draw *(v3)* | **cut** | `10`'s global truncation, which is the only rationer in the game (O-6, §5) |
 | Bargain always offered | **cut down to gated** | offered only when `post.budget` and `exposure_band` admit it (§4.2) |
 | Commute always offered | **kept as v1 already gated it**, gate tightened in wording only | unchanged in substance |
 | `suspicion` as a bespoke post gauge | **cut** | the person-scoped `exposure` gauge (`01 §5.2`) |
@@ -309,14 +399,9 @@ about — two systems in the same game, permanently unaware of each other.
 ## 8. Module contracts
 
 ```yaml
-- module: sm.gate
-  parent: settlement_management        class: substrate
-  scales: [settlement]                 tier: settlement
-  resolver: gate                       remit: []          budget: null
-  consumes: [{type: post.vacant, from: [pm.vacancy]}]
-  emits: [{type: faction.action_declined, terminal: true}]
-  state: []          form: []          transitions: []
-  disclosure: [{of: decline_reason, inputs: published, presentation: exact, trigger: hidden}]
+# sm.gate — DELETED (O-5). Its predicate is `fa.gate`'s settlement rung; see §1.
+# sm.act  — DELETED (O-5). Its eight rows are `05` action rows with
+#           tiers: [settlement], remit_kinds: [governor]; see §3.
 
 - module: sm.business
   parent: settlement_management        class: substrate
@@ -326,9 +411,11 @@ about — two systems in the same game, permanently unaware of each other.
   consumes:
     - {type: investigation.resolved, from: ["<FI lane module, not yet contracted>"]}
       # GAP, named in §6.3 — not minted here; blocked on P0-1 like every new key type in this suite
-  emits:
-    - {type: place.business_item_offered, terminal: false}
-      # working name; 10 owns the candidate contract's final shape (§5)
+  emits: []
+      # v3: NO KEY. A candidate is a value RETURNED at the accounting boundary, never a posted Key —
+      # 10 §2.1 and 10 part 2 §10's `consumes: []`. v2.0 named a key type,
+      # `place.business_item_offered`, that 00 §9.2 does not register and 10 does not consume; the
+      # transport is the boundary return and this is the seam's single answer.
   state:
     - {name: pressure, bucket: gauge, writable: true, owner: substrate.gauge}
     - {name: tag, bucket: tag, writable: true, owner: substrate.ledger}
@@ -356,7 +443,8 @@ about — two systems in the same game, permanently unaware of each other.
   budget: {gauge: post.budget, cost: 1}
   consumes:
     - {type: place.directive_issued, from: [sm.directive]}
-    - {type: place.business_item_offered, from: [sm.business]}    # via 10's truncation, not directly
+    # business items are NOT consumed as Keys — 10 labels the boundary's derived candidate set and
+    # sm.respond reads its own labelled entries there (10 §5.5). No key type, no subscription.
   emits: [{type: place.directive_answered, terminal: false}]
   state:
     - {name: exposure, bucket: gauge, writable: true, owner: substrate.gauge}     # person-scoped; O-2
@@ -371,26 +459,6 @@ about — two systems in the same game, permanently unaware of each other.
       # the GATE that decides which of the four is offered is itself published in full — §4.2's
       # availability is an input, never a hidden trigger
 
-- module: sm.act
-  parent: settlement_management        class: substrate      # O-1: reclassified from v1's implicit surface
-  scales: [settlement]                 tier: settlement
-  resolver: d_sigma        # unattended and attended runs are the SAME module; only the chooser differs
-  remit: [governor]
-  budget: {gauge: post.budget, cost: 1}      # per-row cost overrides in the row, unchanged from v1
-  consumes: []
-  emits: []             # ordinary state writes only; whether one reaches the Slate is 10's call
-  state:
-    - {name: condition.order,      bucket: gauge, writable: true, owner: substrate.gauge}
-    - {name: condition.prosperity, bucket: gauge, writable: true, owner: substrate.gauge}
-    - {name: condition.defense,    bucket: gauge, writable: true, owner: substrate.gauge}
-    - {name: acceptance.support,   bucket: gauge, writable: true, owner: substrate.gauge}
-    - {name: accrual.entitlement,  bucket: gauge, writable: true, owner: substrate.gauge}
-    - {name: tag,                  bucket: tag,   writable: true, owner: substrate.ledger}
-  form: []
-  transitions: [<facility-tier advance rows — owned by 07's form_registry; sm.act may NAME them>]
-  disclosure:
-    - {of: pool, inputs: published, presentation: exact, trigger: hidden}
-    - {of: obstacle, inputs: published, presentation: exact, trigger: hidden}
 ```
 
 `sm.directive` stays `derivation`, not `accrual` or `gate`: which order fires is a read over the
@@ -401,27 +469,30 @@ resolver kind was written for.
 
 ## 9. Property audit
 
-**Scope.** `sm.gate`, `sm.business` and `sm.directive` do not roll — diagnosed on P-iii and P-v only.
-`sm.respond` (Bargain branch) and `sm.act` roll and are diagnosed on all five. Above all of it sits
+**Scope.** `sm.business` and `sm.directive` do not roll — diagnosed on P-iii and P-v only.
+`sm.respond` (Bargain branch) is the only rolling module this document still ships and is diagnosed
+on all five. **The eight up-stroke rows are audited by `05 part 2 §10`, not here**, which is the
+point of handing them over: one audit for one shape (O-5). Above all of it sits
 `00 §0.1`: this section cannot certify that a settlement is worth governing, only that its resolvers
 are sound.
 
 | property | verdict | reasoning |
 |---|---|---|
 | **P-i** legible odds | pass | pool and obstacle for both rolling modules are published exactly; only the tipping point and the pressure draw threshold are hidden (E-2). §4.2's gate conditions for Bargain/Commute are themselves published inputs, never a hidden trigger |
-| **P-ii** uniform leverage | pass | every response and every `sm.act` row resolves at a governor-scale pool inside the calibrated band; forks change which gauges move, never the pool or obstacle shape; `post.budget` buys attempts, never a modifier (`01 §5.3`) |
+| **P-ii** uniform leverage | pass | every response resolves at a governor-scale pool inside the calibrated band; forks change which gauges move, never the pool or obstacle shape; `post.budget` buys attempts, never a modifier (`01 §5.3`). The handed-over rows inherit `05 §6`'s pool shape, which is the same one |
 | **P-iii** bounded, monotonic | pass | every gauge here is floor/ceiling-bounded with geometric decay (`01 §5.1`); `pressure`'s fixed point is finite for any bounded accrual, checked at declaration |
-| **P-iv** graded, recoverable | pass | every response and every `sm.act` row is total over the four bands (P0-3); Failure is fail-forward (a `Precedent` tag, no removal); no outcome here revokes the governor's post |
+| **P-iv** graded, recoverable | pass | every response is total over the four bands (P0-3); Failure is fail-forward (a `Precedent` tag, no removal); no outcome here revokes the governor's post. `05 part 2 §10.1`'s P-iv test — *"every action row's `effects` map is total over the four `Degree` members"* — is the same assertion and now covers the handed-over rows |
 | **P-v** right engine | pass | the response table is three resolver kinds matched to three question shapes (deterministic choice / genuine uncertainty / threshold on the place's own state); `sm.directive` and `sm.business` are correctly ungated by a roll they do not need |
 
 ### 9.1 Loops, each with its bound
 
 | loop | bound | gain |
 |---|---|---|
-| `sm.act` → gauge → `sm.business` draw → `sm.act` | gauge ceilings + geometric decay; finite fixed point either way | **unmeasured** — campaign-reachable, should be measured before any writer lands |
+| a settlement-rung `05` row → gauge → `sm.business` qualification → the same row again | gauge ceilings + geometric decay; finite fixed point either way. **The loop crosses documents now; the bound does not change, but `05` owns the near half of it** | **unmeasured** — campaign-reachable, should be measured before any writer lands |
 | directive response → `standing`/`exposure` → next season's Bargain obstacle → response | `derive_ob`'s floor + `exposure`'s own ceiling; the obstacle cannot exceed `ceiling/2 + max_modifier` | **unmeasured** |
 | investigation-surface open → Suppress → `pressure` deposit → business draw → re-offer | dedupe on `(owner, kind, key)` bounds the tag ramp; `pressure`'s own fixed point bounds the re-offer rate | **unmeasured**, and it is the one loop this document adds — flagged rather than assumed safe |
-| facility → `sm.act` (Build-shaped rows) → facility tier → `sm.act` | per-kind facility ceiling, named from the other end in `07` | **unmeasured**, unchanged from v1's own admission |
+| facility → a Build-shaped `05` row → facility tier → the same row | per-kind facility ceiling, named from the other end in `07` | **unmeasured**, unchanged from v1's own admission |
+| ***(v3, and this is the one O-6 adds)*** un-drawn qualifying item stays qualifying → emitted again next season → still not surfaced | **`10`'s truncation, and nothing here.** Deleting the quota means an unanswered item re-emits every season it remains true. That is correct (`10 §2.2`: *"it was never answered"*) and it is bounded at the far end by `candidate_id` stability, which makes the re-emission the *same* candidate rather than a new one, so it accrues inertia instead of volume | **bounded by construction at `10`; the emission rate itself is re-derived at `10 §1.3` and is unmeasured** |
 
 ### 9.2 What survives, what was cut, and the honest weak point
 
@@ -430,12 +501,22 @@ changes a different gauge pair) is what stops a fifth option ever being a magnit
 first. **R** — the two failure directions the corpus measured are still closed structurally: the
 unrecoverable pressure state by the decay law, and the collapse-to-two-best-options by never
 presenting more options than the state has earned. **S** — a governance response and a faction
-action remain the same object at different tiers. **E** — five modules, none of them a menu; the one
-carrying the most weight, `sm.business`, still needs no authored content because the ledger is the
-deck, and now the deck deals to `10` instead of to the player's face directly.
+action remain the same object at different tiers — **and v3 stopped merely asserting that and acted
+on it: the up-stroke rows now run through `05`'s dispatcher, so the sentence is enforced by there
+being one module rather than by two documents agreeing** (O-5). **E** — three modules, none of them
+a menu; the one carrying the most weight, `sm.business`, still needs no authored content because the
+ledger is the deck, and now the deck deals to `10` instead of to the player's face directly.
 
-**The weakest claim in this document** is the investigation-surface loop's bound (§9.1, row three):
+**The weakest claim in this document, unchanged by v3** is the investigation-surface loop's bound (§9.1, row three):
 it is asserted safe by analogy to `pressure`'s already-proven fixed point, but nobody has written the
 arithmetic for the compound case — Suppress feeding pressure *and* leaving the tag that re-opens the
 surface next season. That compound has not been checked the way §2.3's hysteresis guard was checked
 in `01`, and it should be, before `06.1`'s block is treated as more than a shape proposal.
+
+**The weakest claim v3 ADDS** is `§5`'s row-3/row-5 collapse. It is correct as an identity argument —
+`candidate_id` is a pure function of five fields and the rule makes all five equal across observers —
+but it assumes the emitter can enumerate a place's adjacency cheaply and identically at every
+observer, and `07` owns adjacency and has not declared that it is a stable sorted set rather than a
+derived neighbourhood. **If adjacency is not stable within a boundary, the hashes differ and the
+collapse silently stops collapsing** — which would restore exactly the fan-out O-6 uncapped, with no
+symptom except a larger Slate. That is a one-line confirmation `07` can give and this document cannot.

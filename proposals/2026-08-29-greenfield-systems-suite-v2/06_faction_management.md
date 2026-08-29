@@ -52,6 +52,8 @@ Listed, tiered and argued (`00 §5.3` collects them so each can be vetoed indivi
 | **C-4** | v1 `06 §6`: *"There is no collapse procedure, no elimination check … A faction that stops acting can **always** produce a claimant"* | this suite's own v1, **plus a narrow amendment to the delta spec's §9.5 carry-forward** | The restored end condition is at `settlement_layer_v30.md:1077` — *"if the faction leader is killed or captured and no successor exists with Standing 4+, the **faction dissolves**"* — but it is kept **because it is right**, not because it is canon: a world that cannot lose an institution cannot gain one in its place, and v1's arrangement left a faction that can neither act nor end. §7 restores the end **as a gate with a dwell**, keeps the recoverability §9.5 carries forward, and does so by narrowing what the immortal seat node guarantees. **This is the one place this document amends a §9 carry-forward; flagged loudly rather than folded in** |
 | **C-5** | v1 `06 §4`'s bespoke faction↔faction `disposition` gauge and `hostility()` sum | this suite's own v1, superseded by `01 §7` | Faction enmity is now a `treaty` edge (or its absence) in the shared container with per-kind semantics, and `01 §7.3` already forbids the stored aggregate v1's disposition term was. Target selection is `05`'s, reading edges; this page does not restate it |
 | **C-6** | `settlement_layer_v30.md:165`'s **fixed 50/50 blend** `q_s = 0.5·L_s + 0.5·PS_s`, taken *before* aggregation | **ratified canon — a narrow amendment, proposed and flagged, NOT taken unilaterally** | The same document keeps **aggregate L and aggregate PS separate** at `:170` *because consumers need them separately*, then discards the distinction one line earlier by pre-blending. Institutional acceptance and popular backing are the two axes this setting is *about* — a chartered Church with L 6 / PS 1 and a Restoration cell with L 1 / PS 6 are opposite objects and this blend makes them identical. **The better shape is to aggregate the two axes separately and blend at the consumer**, where the weight is the consumer's question. ⚠ **This invalidates canon's calibrated `K = 6` and its Stage-4 convergence result** (`:166`, `:173`) — a re-calibration is a sim job, not a proposal's. So §4.2 ships canon's blend **as-is** and this row records the amendment as a **flagged proposal for the SE lane**, with the reason it is not taken here stated plainly: an unre-calibrated improvement is worse than the thing it improves |
+| **C-7** *(v3)* | **This document's own `§1`: *"gauges: NONE owned at faction scale. Every continuous faction quantity is DERIVED."*** | this page's own v2 | **A blanket claim that was false the moment `05` spent the treasury, and it is narrowed here rather than defended.** `05 part 2:68` pays contract muster from "the faction's derived treasury", with recurring upkeep at `:71`. **A derivation has no setter, so it cannot be decremented** — the two documents could not both be implemented. The resolution is in the suite's own vocabulary and does **not** weaken AU-1: AU-1 forbids storing an **aggregate**, *a value current state can recompute*. **A treasury with spend history is path-dependent — it is a STOCK, and a stock is not an aggregate.** `01:428` already ships the general form (*"a budget is an accrual with a spender"*) and the suite already ships the precedent one scale down (`accrual.entitlement`, a place-scale spendable stock, `07:537`). §4.6 makes `faction.treasury` a **faction-owned gauge** with a declared decay, deposited at the boundary from `07 §5.1`'s residual and spent by `05`; it leaves `fm.derive`'s state list, which `00 §7.1`'s own falsifier **requires** once it is a real gauge. The narrowed claim, which is the one this page can defend: **every faction *measure* is derived; the faction owns exactly one stored gauge, and it is a stock, not a measure** |
+| **C-8** *(v3)* | This document's own `§3`: `bloc.members` stored in the `form` bucket | this page's own v2 | **The stored snapshot of a derivation — the exact defect this suite prosecutes** as `01 §7.3`'s O-3 and that `03 §8.1` refuses for lineage (*"a graph fact is read, never stored"*). §3.2 computed the connected component at the boundary and then **stored** it, while this page's own `transitions:` list declared six rows and **none of them touched `members`** — so membership either mutated outside every declared write leaf (`01 §2.1` leaf 4, `01 part 2:254` W-5) or drifted stale from the graph that defined it. §3.1 now **derives membership at read**, from an immutable anchor, using the same component computation the formation gate already runs. ⚠ **The entity is NOT cut, and that was drafted and rejected rather than assumed:** a re-derived component has no persistent identity, so it cannot accumulate a voting record, cannot hold `in-schism` as a terminal state, and — decisively — **cannot freeze `ethos = practice(members)` at the schism season** (§3.5), which is this suite's only path to a new faction emerging from inside an existing institution. **The storage goes; the entity stays** |
 
 ### Kept because they are right — recorded, since deciding not to override is also a decision
 
@@ -94,7 +96,8 @@ Faction (entity kind: faction — 01 §1.1)
 │   └── ethos           {conviction: weight} — what the institution is FOR (§2.1)
 ├── form       posture — one value from a declared registry row; moved only by a form transition (§6)
 ├── tags       Precedent · Grudge · Debt · Reputation · Leverage (the faction's ledger)
-├── gauges     NONE owned at faction scale. Every continuous faction quantity is DERIVED (§4).
+├── gauges     EXACTLY ONE — `treasury`, a stock with a spender (§4.6, C-7). Every faction
+│              MEASURE is derived (§4); the one stored gauge is not a measure.
 └── posts      the interior: different kinds, different holders, different remits, different convictions
 ```
 
@@ -108,15 +111,22 @@ Faction (entity kind: faction — 01 §1.1)
 | faction↔faction `disposition` gauge | **an edge** | `01 §7` — `treaty` kind, per-kind semantics (C-5) |
 | a faction's character | **derived** | `distance(ethos, practice)` (§2.3) |
 
-**Every quantity a faction has is derived, and that is AU-1 made structural, not remembered.** There is
-no `Faction.stat` to write because `01 §2.1`'s four write leaves contain no faction scalar. The
+**Every faction MEASURE is derived, and that is AU-1 made structural, not remembered.** There is
+no `Faction.stat` to write because `01 §2.1`'s four write leaves contain no faction scalar — a faction's
+worth, drift, reach and force are all recomputed from posts, places and holders. **The one exception is
+declared, not hidden: `treasury` is a stock, and §4.6 argues why a stock is not the thing AU-1 forbids.**
+It is written by leaf 1 (a gauge deposit) like any other gauge, so it opens no new write path. The
 enforceable form is `writable: false` on every derivation row in §8 — and that enforcement is the point,
 because **the rule's own author says it is not self-enforcing**:
 `systems/_architecture/propagation_spec_v1.md:151` states AU-1, and `:181` concedes it is *"a standing
 authoring discipline, not a self-enforcing schema property"*, since the generic per-observer write path
-cannot tell a derived faction stat from a legitimately direct-written personal one. A faction with **no
-writable scalar at all** removes the distinction the substrate cannot make. That is a stronger position
-than the spec asks for, and it is available only because every faction quantity here is a derivation.
+cannot tell a derived faction stat from a legitimately direct-written personal one. A faction whose
+only writable scalar is **one declared stock** removes almost all of the distinction the substrate
+cannot make, and makes the remainder a one-line grep: exactly one faction-scoped gauge id may be
+`writable: true`, and it is named in §8. That is still a stronger position than the spec asks for.
+**v2 claimed "no writable scalar at all" and that claim was false in the suite as shipped** (C-7); the
+weaker claim is the one this page can defend, and an indefensible strong claim is worse than a
+defensible narrow one.
 
 ⚠ **A wart, named rather than hidden.** `00 §7`'s contract schema requires every `state:` row to name a
 bucket from `entity | gauge | tag | post`, and **a derivation is stored in none of them**. v1 wrote
@@ -124,6 +134,10 @@ bucket from `entity | gauge | tag | post`, and **a derivation is stored in none 
 opens with a falsifier instead of a fifth bucket: **no `writable: false` state name may appear as a
 gauge id in `references/descriptor_registry.yaml`.** A derivation that acquires a gauge instance has
 become a stored aggregate, and that test catches it at load. Reported to `01` as a schema gap.
+**The falsifier cuts both ways, and C-7 is the case that proves it is live:** `treasury` is `writable:
+true`, so it **must** appear as a gauge id in `descriptor_registry.yaml` with a declared floor, ceiling,
+rest and `λ`. A stock that is not declared there is unbounded, and `01 §5.1`'s load-time bound
+(`rest + a/λ ≤ ceiling`) is exactly what stops a faction's money from running away.
 
 ---
 
@@ -228,10 +242,11 @@ appointment"* — a situation on the Slate (`10`), never a screen.
 
 ```
 Bloc
-├── identity   faction_ref · formed_season                       IMMUTABLE
-├── form       members [post_id] · state ∈ {latent, open, in-schism, reconciled, dissolved}
+├── identity   faction_ref · formed_season · anchor_post          IMMUTABLE
+├── form       state ∈ {latent, open, in-schism, reconciled, dissolved}   — the ONLY form field
 ├── gauges     cohesion   — THE ONLY ONE (01 §5.2)
 ├── tags       its record: which motions it carried, who it passed over
+├── members    DERIVED at read (§3.1, C-8) — never stored, never in the form bucket
 └── project    at most one, owned per 09
 ```
 
@@ -245,12 +260,40 @@ court of influence, a wing, a succession party, a coalition purge and the gradua
 military order are all **untypeable** — faction politics collapses to individuals disagreeing with no
 way to act together.
 
-### 3.1 Membership is posts, not persons — and that is what makes it survive a succession
+### 3.1 Membership is a derivation over posts — never stored, and never persons (v3, C-8)
 
-A bloc's `members` are **post ids**. A wing that loses its founder but keeps the seats is still the
-wing; a person who resigns their post leaves the bloc by leaving the post. Storing persons would make
-every bloc dissolve on the first death and would put the same fact in two places (a person's membership
-and their post's).
+A bloc's `members` are **post ids**, and they are **computed at read from the same component
+computation §3.2's formation gate runs** — not stored, not in the `form` bucket, not written by any
+transition:
+
+```
+members(b)  =  the connected component of candidates(faction_ref(b)) that contains b.anchor_post,
+               under §3.2's six political edge kinds
+               =  ∅   if anchor_post is no longer in candidates(faction_ref(b))
+```
+
+**`anchor_post` is identity, and identity is what a derivation needs to have a subject.** It is the
+highest-`w(post.kind)` post in the component at formation, ties broken by post id — deterministic, no
+draw. Without it, "which component is *this* bloc" has no answer across seasons and the entity would be
+indistinguishable from a fresh re-derivation, which is the failure mode C-8 records having tested.
+
+**Two things this fixes, and one it costs.**
+
+- **It fixes a write with no leaf.** v2 stored `members` in `form` while declaring six transitions,
+  **none of which touched `members`** — so every departure and arrival either mutated form outside a
+  declared row (forbidden: `01 §2.1` leaf 4, W-5 at `01 part 2:254`) or silently failed, leaving a
+  stored list drifting from the graph that produced it. A derivation cannot drift from its inputs.
+- **It fixes a stored snapshot of a graph fact** — `03 §8.1`'s exact refusal, applied one object over.
+- **The cost, stated:** a bloc whose anchor post falls vacant, or whose anchor's holder stops being a
+  candidate, has `members = ∅` and dissolves under §3.4. That is not a bug being tolerated: §3.4 already
+  rules that a later wing is a **new bloc entity** with a different founding season and a different
+  membership, and a wing that loses the seat it formed around is exactly that case.
+
+**Posts, not persons**, for the reason v1 gave and it still holds: a wing that loses its founder but
+keeps the seats is still the wing; a person who resigns their post leaves the bloc by leaving the post.
+Storing persons would make every bloc dissolve on the first death and would put the same fact in two
+places (a person's membership and their post's) — and now that membership is derived, that second copy
+would be a *third*.
 
 ### 3.2 Formation is a gate over the edge graph — never a bespoke rule
 
@@ -262,6 +305,8 @@ components    = connected components of candidates(f) under PP-724's SIX politic
                 {sworn-bond, liege-vassal, kinship, patronage, rivalry, feud}  — NEVER knot (ED-POL-11)
 gate          = divergence(f) ≥ θ_form  AND  |component| ≥ 2  AND  component is coherent:
                 max pairwise conviction distance within it ≤ θ_coherence
+on creation   = the bloc's IMMUTABLE anchor_post := argmax w(post.kind) over the component,
+                ties by post id.  Membership is NOT copied anywhere (§3.1, C-8)
 ```
 
 Three things this buys that a bespoke rule would not:
@@ -313,7 +358,16 @@ Rows in `references/form_registry.yaml` (`00 §9`); every one is a **gate, never
 | `open` → `latent` | cohesion ≤ θ↓ | yes | as above |
 | `open` → `in-schism` | §2.4's schism gate | **no** — terminal for this bloc | not applicable |
 | `open` → `reconciled` | divergence falls below θ_form **or** the faction's posture moves to one the bloc's practice supports | **no** | — |
-| any → `dissolved` | fewer than two seated members for `dwell` seasons | **no** | — |
+| any → `dissolved` | `\|members(b)\| < 2` for `dwell` seasons **and** `cohesion ≤ θ_dissolve` | **no** | — |
+
+⚠ **Why the dissolution gate gained a gauge term in v3, and it is C-8's bill.** `01 §2.4` forbids a
+form transition that gates *"on a derived value alone, with no gauge — a derivation has no history, so
+the transition would have no auditable cause."* While `members` was stored form, `|members| < 2` read
+form and the rule was satisfied. Deriving membership makes that term derived, so the gate would have
+become derived-only and illegal. `cohesion` supplies the history: a bloc whose members are gone accrues
+nothing and relaxes to `rest`, so the gauge term is not a second condition bolted on — it is the
+*record* that the first condition has held. **This is the one place C-8's fix cost something, and it is
+recorded rather than absorbed.**
 
 **Why `latent ↔ open` must have a band and the others must not.** It is the one reversible pair here,
 and `01 §2.3` is exact about the failure: a cohesion gauge sitting on a single threshold **oscillates
@@ -348,6 +402,34 @@ drift, a schism would be indistinguishable from a policy argument.
 with a roll and an obstacle). This page supplies the **ethos vector** the new faction is founded on and
 the gate that makes the moment arrive. **This is faction emergence with no faction-emergence
 subsystem.**
+
+### 3.5a The charter seam, stated as a contract because v2 left it as a sentence (v3, T2-1)
+
+**v2 handed the chartering act to `05` and `05` shipped eight action rows, none of them a charter.** So
+a bloc could reach `in-schism`, its project could become a founding claim, and **the claim had no
+executor in any of the three documents that shared the seam** — the marquee possibility of change C,
+dead at the last step. `07`'s places dodge this class of failure through pre-declared `Ruin` nodes;
+**factions have no placeholder equivalent**, because a faction is not a node on a map. A prose handoff
+is not a contract, so here is the contract. `05`'s author owns the row; **this is exactly what `06`
+hands over, and in exactly what form.**
+
+| `05`'s `act.charter` needs | what `06` supplies | where it comes from |
+|---|---|---|
+| **gate term** | `bloc.state == in-schism` — a form field on a stored entity, readable at the boundary, terminal and irreversible (§3.4), so it cannot flicker the gate | `fm.bloc`'s `bloc.open_to_schism` transition |
+| **the founding `ethos`** | the vector `practice(members(b))` **evaluated once, at the schism season, and passed by value**. Membership is derived (§3.1), so the vector is read from the graph at that instant and then belongs to the new faction's IMMUTABLE identity — `06` never stores it and never updates it | §2.2 `practice`, §3.1 `members` |
+| **the founding `seat_node`** | the tier node of `anchor_post` at the schism season. It is `identity`, so it is the one node the new faction can never lose (§7.3) | `bloc.anchor_post` (§3.1) |
+| **the founding membership** | the post ids in `members(b)` at the schism season, **as an argument, not as a stored list** — `05` uses them to decide which posts the new faction claims and which stay put | §3.1 |
+| **the obstacle's subject** | the **parent** faction — the institution being split from. `06` names the subject; `05` owns `derive_ob` and the shape | §2.4 |
+| **provenance** | the schism `form.transitioned` Key, so `Tag.provenance` and `causes[]` run unbroken from the first `Grudge` to the new charter | §9.4 |
+
+**What `06` does NOT hand over, so the boundary is unambiguous:** no roll, no obstacle number, no
+success table, no entity creation, no naming. `06` emits the crossing fact and supplies five values.
+
+**Both outcomes are already declared above and neither is new machinery.** On a fire, `05` charters the
+entity; on a lapse, the bloc dissolves under §3.4 and the parent keeps a `Precedent` tag. ⚠ **If `05`
+does not ship `act.charter`, `06 §3.5` is unreachable and the `in-schism` state is a terminal sink with
+no exit** — say that plainly rather than let the seam read as closed. The falsifier in §11.1 is written
+against exactly that.
 
 ---
 
@@ -475,5 +557,57 @@ channels carries the magnitude, and never both", stated as a property of this pa
 convention someone must apply. **That keeps this suite internally disjoint. It is not a resolution of
 the general question**, and a later design that routes a faction-scale magnitude back down onto the
 same gauges reintroduces the hazard regardless of this paragraph.
+
+### 4.6 `treasury` is a STOCK, and that is why it is the one stored faction gauge (v3, C-7)
+
+`05 part 2:68` pays contract muster from the treasury and `:71` charges recurring upkeep against it.
+**v2 declared the same quantity `writable: false, owner: fm.derive` — a derivation — and a derivation
+has no setter, so it cannot be decremented.** The two documents could not both be built. This section
+resolves it in the suite's own vocabulary rather than by carving an exception.
+
+> **AU-1 forbids storing an AGGREGATE — a value current state can recompute. A treasury is not one.**
+> Two factions with identical holdings, identical posture and identical presences have different
+> treasuries if one of them fought a war last decade. **The quantity is path-dependent: it is a STOCK,
+> and its history is its content, not a stale copy of something derivable.** Storing it is not a
+> shortcut for a computation; there is no computation.
+
+The suite already ships this exact object twice, one scale down and one scale up, and neither is an
+AU-1 violation:
+
+| stock | scale | filled by | spent by |
+|---|---|---|---|
+| `accrual.entitlement` | place | the place's own accrual (`07:537`, presented **exact** *because* it is spent directly) | `05`'s `act.muster.levy` |
+| `post.budget` | post | accrual (`01:428`: *"a budget is an accrual with a spender"*) | every budgeted verb in the suite |
+| **`faction.treasury`** *(v3)* | **faction** | a boundary deposit of `Σ residual(place)` over controlled places (`07 §5.1`) | `05`'s `act.muster.contract` and its upkeep |
+
+**The shape, and it introduces no primitive.** `treasury` is a Gauge (`01 §5`), owner `faction`,
+`writable: true`, deposited by leaf 1 like every other gauge. Filling it is a **flow**, not a
+re-derivation:
+
+```
+deposit(f, season) = Σ_{place : controller(place) == f}  residual(place)        # 07 §5.1
+                     − Σ upkeep(units assigned)                                 # 05, a negative flow
+```
+
+- **Bounded by `01 §5.1`'s standard bound, with no new arithmetic.** It decays geometrically like every
+  other gauge, so its fixed point is `rest + a/λ` and it is checked **at declaration** against the
+  registry with no campaign run. A non-zero `λ` on money is not a fudge: an institution that neither
+  spends nor loses carrying cost is the runaway-hoard failure, and `λ` is the standing cost of being an
+  institution. `rest`, `floor`, `ceiling` and `λ` are **shape proposals**; the *bound* is not.
+- **It leaves `fm.derive` and gets its own module.** §8 adds `fm.fisc` (`resolver: accrual`, `remit: []`
+  — nobody spends an action to collect revenue), on the precedent of `07`'s `pl.gauges`, which is the
+  suite's existing boundary-accrual module. `00 §7.1`'s falsifier **requires** this once treasury is a
+  real gauge id: a `writable: false` name may not appear as a gauge id, so it could not have stayed.
+- **Q-5's double-count discipline still holds, and this is the row that had to be checked.** §4.5's
+  claim is that faction-scale magnitude crosses **downward** only. `residual(place)` is `07`'s
+  derivation over place-owned gauges, read once at the boundary and deposited into a faction-owned
+  gauge; **nothing writes `residual` back down**, and `treasury` is not an input to `footing`,
+  `weight`, `practice` or `divergence`. The direction is preserved.
+- **What is deliberately NOT done:** the treasury is not a second currency, has no interest term, is not
+  presented as a national economy, and is not spendable by this page — `06` declares and fills it, `05`
+  spends it. **A's alternative** (price contracts in the post's `budget` gauge plus a recurring `Debt`
+  tag) is a coherent fallback and is **not shipped alongside this**: two fiscal spines is the
+  under-distillation failure `00 §1` names. If `05`'s author prefers the fallback, this section is what
+  gets deleted, not what gets added to.
 
 ---
