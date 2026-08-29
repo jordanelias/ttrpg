@@ -155,7 +155,10 @@ not carried over from `01`'s own table, which does not spell the renamed key out
 8` (crop failure and route-severed) or `10` (plague, headroom for a declared `M_max = 1` terrain
 modifier), `μ = 0.4·N`, `σ = 0.8·√N`: top-band reachability `derive_ob(5, M_max) + 3 ≤ μ + 1.645σ`
 holds for both pool sizes (`6.5 ≤ 6.92` at N=8, M_max=1; `6.5 ≤ 8.16` at N=10, M_max=1); bottom-band
-reachability holds trivially since `OB_MIN ≥ 0 > μ − 1.645σ` at both sizes. **Every `resilience.
+reachability holds trivially since `OB_MIN > μ − 1.645σ` at both sizes — **`OB_MIN` is pinned at
+**1** (`engine/autoload/sigma_leverage.py:108`, `[canonical: params/core.md §Obstacle Scale]`,
+enforced at `:177` and asserted by `engine/tests/test_sigma_leverage_parity.py:355-357`), not
+symbolic and not merely `≥ 0`; the real constant makes this inequality stronger, not weaker. **Every `resilience.
 target_score` in §7 declares its `M_max` explicitly for exactly this reason**, and `acceptance.
 legitimacy` — flagged `UNVERIFIABLE` in `01 §6.2`'s own table (undeclared ceiling under that name) —
 is deliberately **not used** as a target anywhere in this document; §7's Altonian-pressure row targets
