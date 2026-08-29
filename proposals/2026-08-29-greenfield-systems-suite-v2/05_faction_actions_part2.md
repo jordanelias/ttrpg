@@ -9,7 +9,7 @@
 
 ---
 
-## 5. The action set — eight rows, one shape
+## 5. The action set — eight families, one shape
 
 An action is a **row, never a branch.** Adding one is a registry edit.
 
@@ -82,8 +82,8 @@ different from leaving a hole.
 | **the consumption** (here) | the degree drives an Entry Terms fork: on a lesser margin the taken place keeps its arrangements and seeds `acceptance.legitimacy` high; on a decisive one it does not |
 
 Its interface is specified in both directions, so the caller is complete and testable against a
-stand-in, and the seam returns a `Degree` — the currency every other action consumes — so whatever
-implements it cannot introduce a second degree semantics.
+stand-in, and the seam returns a `Degree` — the currency every other action consumes — so nothing
+implementing it can introduce a second degree semantics.
 
 ### 5.2 `act.muster` — two economies, separated at birth
 
@@ -106,8 +106,8 @@ Scoping the gate to that band keeps it from double-counting the dial. `act.muste
 wrong-engine defect this tree is most prone to.
 
 **Muster raises no aggregate.** It produces a unit record (`12 §2.1`). Faction military weight is
-*derived* from units held; building it the other way — mustering raising the number that gates what
-mustering can produce — is a loop with no external term in it at all.
+*derived* from units held; the other way round — mustering raising the number that gates what mustering
+can produce — is a loop with no external term at all.
 
 ### 5.2a The treasury is a **stock**, not a derivation — the defect and the fix (O-5.10)
 
@@ -178,8 +178,8 @@ band does exactly two things:
    (`dice_engine.py:95`, ED-SC-0032). Your ceiling drops; your odds of Success are untouched.
 
 Neither adds a die, shifts an obstacle, or touches the Partial or Failure boundaries. An extension's
-only power is to veto the top band — the return channel is structurally bounded to `3 → 2` — and the
-seam refuses undeclared context keys rather than swallowing them.
+only power is to veto the top band — the return channel is bounded to `3 → 2` — and the seam refuses
+undeclared context keys rather than swallowing them.
 ### 5.4 `act.charter` — where a schism finishes, and the hole it closes
 
 **The hole, stated first because this page was where it died.** `06 §3.5` hands the chartering act
@@ -294,7 +294,7 @@ preference dressed as a principle.** The schemas differ in two fields — `remit
 totality under the same P0-3 audit, per-row rate bound, `ob_site` declaration and `10 §2.1` hand-off.
 
 **Both extensions are the same move, which is why they are cheap: the dispatcher's KEY, POOL and
-ORDERING come from the row, not from the module.**
+ORDERING come from the ROW, not from the module.**
 
 | module | the row supplies | actor case | actorless case |
 |---|---|---|---|
@@ -312,9 +312,9 @@ is needed.** `11`'s declared 8 and 10 satisfy it; the bar is for rows nobody has
 
 **G-1 lands in `fa.select`, scoped by `remit_kinds: []`: a second ORDERING, not a second module.**
 `11 §3.1` is right that the softmax cannot be reused — a drought has no ethos, so there is no `appeal`
-to rank. But the *object* is the same: **rank the eligible set by a declared ordering, take one, remove
-the losers from this pass.** Only the key (post vs target) and the ordering source (softmax vs registry
-priority) vary. A second module for a second ordering would rebuild the dispatcher the merge deleted.
+to rank. But the *object* is the same: **rank the eligible set by a declared ordering, take one, drop
+the rest this pass.** Only the key (post vs target) and the ordering source (softmax vs priority) vary.
+A second module for a second ordering rebuilds the dispatcher the merge deleted.
 
 ```
 for target in targets(row.scope):                    # fa.gate's domain
@@ -681,12 +681,12 @@ binding slot (§4.5), two modules and one duplicate motion design (O-5.12) remov
    shape proposals, not ledger constants.** None is cited to a `PP-NNN` or an `ED-NNN`, because none has
    one. They are declared with justifications and reachability bars so that tuning them is an act with a
    named target, not a preference.
-2. **Both loops' per-cycle gains are unmeasured** (§2.3, §4.4) and are stated as unmeasured. They are
-   campaign-reachable, so the instrument exists; running it with a control is work this page does not do.
+2. **Both loops' per-cycle gains are unmeasured** (§2.3, §4.4) and stated so. They are campaign-reachable,
+   so the instrument exists; running it with a control is work this page does not do.
 3. **The DO-plus-lead-obstacle shape is the page's most contestable design call** (§4.1). It is argued,
-   listed at O-5.4 and O-5.7, and each half is *reversible in one line*: dropping `net_d` from the
-   differential returns the SO the delta spec named, and dropping the negative instance term returns the
-   absolute-presence obstacle — with every other part of the action unchanged either way.
+   listed at O-5.4 and O-5.7, and each half is *reversible in one line*: dropping `net_d` returns the
+   SO the delta spec named, dropping the negative instance term returns the absolute-presence obstacle,
+   with every other part of the action unchanged either way.
 4. **`act.contest_influence` depends on a gauge ceiling that does not exist yet, and the dependency is
    now exact.** `01 §6`'s gate is built and this site declares six of its seven fields; the seventh,
    `presence.<institution>`'s ceiling, is `07`'s and is undeclared. The constraint handed to `07` is
