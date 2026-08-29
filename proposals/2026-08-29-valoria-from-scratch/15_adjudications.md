@@ -203,6 +203,63 @@ truer and cheaper than any legitimacy meter.
 The condition, which 12 states itself: derived strain must stay derived. Caching it would void the
 substrate's refusal of container gauges.
 
+### A-5 · `resolve` takes an act SET, not one act — ACCEPTED, spine amended
+*Raised by 09 (churn).* Conflict resolution is impossible under a singular signature: to know two
+acts touch the same granary, the world must see both.
+
+**Ruling: amended to `resolve(acts, world) -> events`.** This weakens nothing. The constraint the
+signature rule enforces is that *agents* cannot see true state; the world seeing everything is what
+the world is for. And the reason to make it explicit is exact: a singular signature pushes conflict
+handling into a per-act pre-pass, **which is where a hidden turn order gets born.**
+
+### A-6 · The salience floor — TWO LANES DISAGREED, AND THE RESOLUTION KEEPS BOTH
+*Raised by 09 against 03's design. This is the only direct conflict between two lanes in the suite,
+and it is worth the space because both arguments are right about different claims.*
+
+**03's position.** Motivated reasoning is a multiplicative stance weight clamped to a floor of 0.05.
+A Templar's exonerating claim is retrievable, at roughly twenty times the evidence. Attenuation is on
+**retrieval, not value** — once retrieved, a claim decides at full strength.
+
+**09's objection.** If the stance weight can be strong enough, a person with a hard stance can never
+surface the claim that argues against it, at any confidence. Obstinacy is then never tested, and the
+spine's promise that *"correction comes from collision with the world"* cannot be kept — the
+collision happens and the claim never enters a view. 09 needs this: a false claim about an ally must
+be correctable, and a sixty-year-old revelation must move people who do not want to be moved.
+
+**Ruling: both, and they compose cleanly because they govern different sources.**
+
+| claim source | rule | why |
+|---|---|---|
+| `firsthand` | **09's floor.** salience ≥ `recency × confidence`. A thing you saw yourself, recently, with high confidence ALWAYS makes your working set. | You may refuse to believe your own eyes — that is obstinacy's job, and obstinacy is the right place for the resistance. You may not fail to *consider* them. |
+| `told_by`, `inferred` | **03's clamp.** Stance weight applies, floored at 0.05. | This is where motivated reasoning belongs. What you were *told* is exactly what a committed person should be able to not think about. |
+
+The composition is not a compromise; it is the correct division. **Motivated reasoning stays a
+strong bias over testimony and stops being an epistemic prison over experience**, for the cost of one
+`max` on one source class. Without it, 03's own Templar could never be corrected by walking into the
+room and seeing the thing — which neither lane wants.
+
+### B-10 · An empty existential is ABSENCE, not defeat — ACCEPTED
+*Raised by 07.* The spine says contest claimants are factions while capacity routes through persons;
+read literally, a faction with realm presence and nobody at the node is a valid claimant, which
+readmits scale as a gate through the back door.
+
+**Ruling: resolution runs through the claimant's best-placed member, and a claimant with no such
+member is ABSENT rather than defeated — and everyone can see it was absent.** This is the spine's
+intent; it did not say so, and the difference is load-bearing.
+
+### B-11 · An office cluster has no owning node — ACCEPTED, with the cost stated
+*Raised by 07, answering a question the spine delegated to it.* Offices plus alignment DO suffice for
+the Church's four Dicasteries and the guilds' grade ladders: an office cluster is a named set of
+offices, plus a proposition, plus the appointment acts that fill them — which is a patronage-topology
+support set. No second tree.
+
+**The price, accepted deliberately rather than discovered later: "the Dicastery decided" is
+permanently inexpressible.** Only "the four persons holding these posts each did something." You
+cannot address a petition to a Dicastery; you address it to a person, and that person can drop it.
+That is T1 refusing to be talked around, and **the fiction must never render an institution as a
+speaker.** The alternative — a second tree for institutional structure — is rejected: it reintroduces
+the multi-parent containment the spine refuses and would let an institution acquire a verb.
+
 ---
 
 ## C. The orchestrator's own error, recorded because it is the most instructive one here
