@@ -260,6 +260,43 @@ That is T1 refusing to be talked around, and **the fiction must never render an 
 speaker.** The alternative — a second tree for institutional structure — is rejected: it reintroduces
 the multi-parent containment the spine refuses and would let an institution acquire a verb.
 
+### A-1b · A-1 NARROWED — standing reads the peer SET from the world and the regard VALUES from a ledger
+*Forced by the audit (16 §3.1) and by the correction pass, which had to split the formula to fix it.*
+
+A-1 ruled that the standing need reads the world. The audit showed the formula reads peers' **true
+stance rows**, concealed contempt included, so a secretly hostile burgher moves your need before any
+act expresses it — and that its input is another agent's *interior*, which is neither the world nor
+the observer's view.
+
+**Narrowed: the peer set is a world read (who is contained alongside you is a fact about the world);
+the regard values are a ledger read (only regard you hold a claim about).** The register should have
+drawn a THREE-WAY distinction from the start — **world / view / another agent's interior** — and the
+third is readable by nobody except through a claim. A-1 as originally written is superseded by this
+row on the standing term only; its split of the other three need terms stands.
+
+### B-12 · `chain` owns command reach; `transmit` is an INPUT to it, not a parallel mechanism
+*Raised by the correction pass, which declined to invent a resolution — correctly.*
+
+Two mechanisms governed whether an order reaches a subordinate body, by different arithmetic, with no
+cross-reference: `chain(C)` (the fraction of a body whose command path reaches an occupied role,
+requiring the subordinate to hold a **current claim naming their superior**) and
+`transmit(officer)` (a per-officer channel quality derived from capability). That is the
+three-leader-formulas defect one rung down.
+
+**Ruling: `chain` is the single owner of command reach, and `transmit` feeds it.** They are not
+rivals because they answer different questions, and the composition is the honest one:
+
+- **`chain` answers WHETHER** — is there a path, and does the subordinate currently believe who
+  commands them? That is a claim question, and claims are already how everything else in this design
+  propagates.
+- **`transmit` answers HOW RELIABLY THAT CLAIM STAYS CURRENT** — a capable officer keeps his people
+  knowing who they answer to; an incapable one lets it decay. So `transmit` is the rate at which an
+  officer refreshes the naming claim, and it enters the model **only through `chain`**.
+
+This preserves the property that makes the succession rule good — a commander killed in a wood at
+dusk leaves his share unallocated until a runner is chosen, survives, and is *believed* — and it
+stops a second arithmetic from deciding the same thing.
+
 ---
 
 ## C. The orchestrator's own error, recorded because it is the most instructive one here
