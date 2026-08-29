@@ -33,12 +33,11 @@ this suite exists to stop.** `00 §5.3` collects these so Jordan can veto them i
 | **O-6** | **this document's own v2 draft `Memory` tag kind** | this suite's own v2 draft | **cut, and `Holding` admitted in its place.** A Memory is a Holding field-for-field, and the one thing `Memory` was justified by — carrying a **false picture** — is the one thing `key`+`value` cannot express, because neither slot can say *what* is misremembered. A `prop_id` whose proposition fails to obtain can. Adopted from `proposals/2026-08-18-epistemic-propositions-and-provenance.md`, whose **five design calls are Jordan-ruled** (its §10) though the design itself is PROPOSED. Enum count is unchanged. §3.1 |
 | **O-7** | **this document's own v2 draft edge roster**, which shipped two scope extensions | this suite's own v2 draft | **a third, `allegiance` (person → faction), is added.** A scope extension, not an override of PP-724: person↔faction is outside its NPC↔NPC scope (`:18`), so R-1/R-2/R-3 are untouched — an allegiance is neither a Knot nor an NPC↔NPC tie. §7.2 |
 
-**Two downstream overrides are ABSORBED here rather than left standing against a document that no
-longer says what they override:** `09`'s **O-A1** (the tag enum opens to seven for `Ambition`) and
-**O-A2** (the `progress` gauge row is cut as an AU-1 violation) are **executed in this text** — §3 and
-§5.2. `09`'s own falsifier is *"no contract declares a state row named `progress`"*, and this document,
-built first in Phase 1, was the one place that still would have. An append against `01`-as-drafted
-would have raised on the seventh kind; it no longer does.
+**Two downstream overrides are ABSORBED, not left standing against a document that no longer says what
+they override:** `09`'s **O-A1** (the enum opens to seven for `Ambition`) and **O-A2** (the `progress`
+gauge row is cut as an AU-1 violation) are **executed in this text** — §3 and §5.2. An append against
+`01`-as-drafted would have raised on the seventh kind, and `09`'s falsifier — *"no contract declares a
+state row named `progress`"* — would have failed on this page, which was the last one declaring it.
 
 **Not overridden, deliberately:** ED-POL-11, PP-724 §0 and PP-724 §3.3 (§7.1's R-1/R-2/R-3) are
 **preserved by construction** in §7.3, not merely respected. Part VI's unified-bond prohibition is
@@ -158,11 +157,10 @@ the guard it asks for is a grep over the field's **assignments**, not its reader
 faction-, place- or post-owned Gauge**, deposited at the accounting boundary and drawn down by the
 verbs that spend it. It is not an exception to AU-1; it was never in AU-1's scope.
 
-**The worked case, whose disposition belongs to its owner and not to this page.** A faction treasury is
-deposited into at the accounting boundary and drawn down by muster and upkeep, so by the test above it
-is a **stock**. `06` owns that row and the call between routing it as a faction-owned gauge or pricing
-those actions out of an existing post `budget`; **this page owns only the rule that whichever route is
-taken, the spent quantity cannot be `writable: false`.**
+**The worked case, whose disposition belongs to its owner.** A faction treasury is deposited into at
+the boundary and drawn down by muster and upkeep, so by the test above it is a **stock**. `06` owns the
+row and the choice between a faction-owned gauge and pricing those actions out of an existing post
+`budget`; **this page owns only the rule that either way, a spent quantity cannot be `writable: false`.**
 
 ### 2.2 The transition row
 
@@ -294,10 +292,9 @@ Holding: owner_ref = the holder (person)          kind = Holding
    `Reputation` **as evidence** would silently ingest a belief as a fact: the term-vs-concept error
    `06_master_synthesis.md:566` names and the corpus has pre-empted twice.
 
-**Two fields, declared per kind — and this is `§7.3`'s discipline, not a new one.** The edge container
-declares its gauges **per kind** (§7.3); the tag ledger declares its extra fields the same way. A kind
-with no stance has no `stance`. The precedent is already in this document's own cut list: `Debt(recurs=
-True, ttl=term)` (§10) is a per-kind field on a tag.
+**Two fields, declared per kind — §7.3's discipline, not a new one.** The edge container declares its
+gauges per kind; the tag ledger declares its extra fields the same way, and a kind with no stance has no
+`stance`. The precedent is already in this page's own cut list: `Debt(recurs=True, ttl=term)` (§10).
 
 ⚠ **`provenance` and `support_refs` are NOT the same list, and conflating them breaks a ruling.**
 `provenance` is the Key that **caused this row to exist** — the scene where the rumour was heard, the
@@ -354,14 +351,13 @@ told, and every selection function reading belief gets slower and noisier foreve
 **at `HOLDING_CAP`, a holding of the maximum reachable salience must still displace the weakest retained
 one** — otherwise the cap is a first-come lock, not a relevance filter.
 
-> **This answers two open items in the ruled design, and says so rather than assuming them.** §10.2
-> files *"growth is unbounded without a forgetting rule — `Key.permanence` and confidence decay are the
-> two levers already in the substrate; which applies is undecided"*, and separately files the
-> population cost that **P1** created by ruling that every NPC holds propositions. The answer here is
-> **neither of the two levers it names**: confidence is stored and does not decay, `Key.permanence` is
-> not consulted, and forgetting is a **derived-salience top-K sweep** — which bounds the store at
-> `population × HOLDING_CAP` by construction rather than by tuning. Proposed, not ruled; the FI lane
-> owns the call and this is a design offered to it.
+> **This answers two open items in the ruled design.** §10.2 files *"growth is unbounded without a
+> forgetting rule — `Key.permanence` and confidence decay are the two levers already in the substrate;
+> which applies is undecided"*, and separately files the population cost **P1** created by ruling that
+> every NPC holds propositions. The answer is **neither lever it names**: confidence is stored and does
+> not decay, `Key.permanence` is not consulted, and forgetting is a **derived-salience top-K sweep**,
+> which bounds the store at `population × HOLDING_CAP` by construction rather than by tuning. Proposed,
+> not ruled — the FI lane owns the call and this is a design offered to it.
 
 ### 3.3 Provenance is required, dedupe is the bound, the sweep is the release
 
@@ -538,10 +534,9 @@ bars a player watches; the triggers were the design, the meters were duplication
 `thread_sensitivity` is a third **only because canon already scales and gates on it** (§7.5) — cited,
 not invented.
 
-⚠ **`progress` was a row here and is CUT** (`09` O-A2): it is an **aggregate** in §2.1's exact sense —
-current state recomputes it from the project's advance terms — not a stock, because nothing spends it.
-Removed rather than annotated, since `09`'s falsifier is *"no contract declares a state row named
-`progress`"* and an annotated row still declares one.
+⚠ **`progress` was a row here and is CUT** (`09` O-A2): an **aggregate** in §2.1's exact sense — current
+state recomputes it from the advance terms — and not a stock, because nothing spends it. Removed rather
+than annotated, since an annotated row still declares one.
 
 ⚠ **`information` is declared here and its SCALE is not.** `05 §5.3` ships it as a writable state row
 and gates option-set availability on its band, but declares no ceiling — so §2.3's `H_MIN`, §5.1's

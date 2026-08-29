@@ -121,9 +121,11 @@ the aggregate label is simply wrong. **The precedent shipped a scale down and is
 `accrual.entitlement` is a place gauge that funds the levy channel and is `spent directly`
 (`07 §8.3`); nobody proposed deriving it.
 
-**So `faction.treasury` becomes a faction-owned gauge**, and it leaves `fm.derive`'s state list —
-which `00 §7.1`'s own falsifier requires once it is writable, since `fm.derive` declares every row it
-owns `writable: false`.
+**So `faction.treasury` becomes a faction-owned gauge**, and it must leave `fm.derive`'s state list —
+this is forced, not preferred. `00 §7.1`'s falsifier is *"no state name declared `writable: false` may
+appear as a gauge id in `references/descriptor_registry.yaml`"*, and a real spendable treasury **is** a
+declared gauge id there (§10.4). Leaving `fm.derive`'s row in place would trip that falsifier the day
+the gauge is declared, which is the mechanism working correctly.
 
 ```
 treasury : gauge, owner substrate.gauge, scale faction, floor 0, geometric decay per 01 §5.1
@@ -151,7 +153,7 @@ treasury cannot pay is a **`12`** question (its `unit_kind`/`assignment` form tr
 floor gate is the only thing stopping an unbounded standing army and it stops the wrong end* — and
 declines to design a disbandment it does not own.
 
-⚠ **A's alternative was considered and is NOT shipped.** Pricing contract muster in the post's
+⚠ **The alternative was considered and is NOT shipped.** Pricing contract muster in the post's
 `budget` gauge with a recurring `Debt` tag is a valid fallback if the stock route is rejected. It is
 **not shipped alongside** this one: two mechanisms for one economy is the shape-divergence defect the
 suite exists to stop, and §2.4 already forbids `post.budget` from buying anything but attempts.
@@ -660,7 +662,7 @@ Named here so none is lost at a document boundary — the posture §4.1a already
 | `12` | the consequence of **unpaid upkeep** on a unit | §5.2a. Without it the treasury floor is the only brake on a standing army, and it brakes the wrong end |
 | `00 §7` | a schema home for **`draw:`** and for **generation** | §9 declares both in fields the schema does not have. Reported together because they are one gap: the contract describes what a module *reads and writes*, never what it *chooses* or *brings into being* |
 
-**And one thing this page was asked to add and REFUSES to (A-F9).** `12:544` bills *"whether to order a
+**And one thing this page was asked to add and REFUSES to add.** `12:544` bills *"whether to order a
 unit field ↔ garrison"* to *"one of the existing strategic action-family invocations (`05`)"*. **No such
 family exists here, and none should be added.** `12`'s own `ad.unit` contract (`:486-499`) already
 declares `remit: [commander]`, `budget: {gauge: post.budget, cost: 1}`, `form: [{unit, assignment}]` and
