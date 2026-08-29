@@ -353,7 +353,10 @@ emits:    [{type: <key type id>, terminal: <bool>}]
 state:    [{name: <id>, bucket: entity|gauge|tag|post, writable: <bool>, owner: <module>}]
 form:     [{entity_kind: <kind>, field: <form field this module may transition>}]   # NEW (v2)
 transitions: [<transition id from references/form_registry.yaml>]                   # NEW (v2)
-ob_sites: [{target: <gauge id>, modifier_max: <int>, pool_max: <int>}]             # NEW (v2)
+ob_sites: [{target: <gauge id>, shape: U|SO|DO|BI|GATE,                            # NEW (v2)
+            pool_min: <int>, pool_max: <int>,
+            ob_modifier_min: <int>, ob_modifier_max: <int>,
+            pool_opposed_min: <int>, pool_opposed_max: <int>}]   # last two: DO/BI only
 disclosure: [{of: <state id>, inputs: published, presentation: band|exact, trigger: hidden}]
 ```
 
@@ -378,6 +381,15 @@ corrected the gate's first draft:
   minimum of 1. A site's maximum pool is a property of the pool expression that site declares, which
   is why the gate is **per-site** rather than global, and why a check stated at one pool size is not
   a check.
+- **`shape`, and `pool_opposed_*` for `DO`/`BI`** — **the gate's first form was one-sided, and an
+  opposed site checked one-sidedly FALSE-PASSES.** An opposed ladder reads a differential, so its
+  moments are `μ_diff = 0.4(N_c − N_d)` and `σ_diff = 0.8·√(N_c + N_d)`, which is **stricter**: at
+  `N_c = 18` against `N_d = 6` the envelope admits `Ob ≤ 8.247` where the one-sided form admits
+  `9.783`. Obstacles in that gap look checked and are unreachable. **That is the gate's own failure
+  class reappearing inside the gate**, found by `05`'s author after `01`'s owner had already
+  corrected the check once and I had proposed it wrong before that. Three readers, three different
+  derivations — which is the real argument for `derive_ob` having one owner, stronger than the one
+  originally given. Without `pool_opposed_*` an opposed site is **unevaluable**, not passing.
 
 **Two sites are blocked on this today and are named so they cannot be forgotten:**
 `presence.<institution>` has no declared numeric range — `07` must declare its ceiling — and `05`'s

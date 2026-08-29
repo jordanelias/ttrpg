@@ -304,7 +304,7 @@ list and the `## Overrides` block — judgments, not checks.
 | Knot capacity `< floor(Bonds/2) + 1` | the person's `knot` edges, counted; no stored counter | formation unavailable (`knots_v30.md:70`) |
 | Knot Thread contact `TS ≥ 30` (either party) | the person gauge, 0–100 | formation unavailable (`knots_v30.md:69`) |
 | converter gate (§7.4) | both endpoints' posts and factions, and the source edge's state | no new edge; the source edge is untouched either way |
-| **`derive_ob` commensurability** (§6.1) — top and bottom bands reachable at the site's `N_max`, **after** modifiers | the target gauge's declared ceiling and floor, the site's declared modifier bound, and its pool expression — **all at declaration time, no campaign run** | **the registry row is rejected when written.** Falsifier: a test evaluating both inequalities for every declared `derive_ob` site, failing on any that cannot reach all four bands. Load-bearing on the game — it is the difference between a live mechanic and one that silently returns Failure forever |
+| **`derive_ob` commensurability** (§6.1) — top and bottom bands reachable, **after** modifiers, against **the envelope its declared `shape` selects**: one-sided for U/SO/GATE, differential for DO/BI (§6.1.2) | the target gauge's ceiling and floor, the site's modifier bounds, its pool bounds, and — for an opposed site — `pool_opposed_min`/`pool_opposed_max` — **all at declaration time, no campaign run** | **the registry row is rejected when written.** Falsifier: a test evaluating both inequalities for every declared `derive_ob` site under its own shape, failing on any that cannot reach all four bands. **A test that evaluates an opposed site one-sidedly is itself the defect** — it false-passes `Ob ∈ (8.247, 9.783]` at `N_c=18` vs `N_d=6`. Load-bearing on the game: the difference between a live mechanic and one that silently returns Failure forever |
 | disclosure block present · `consumes:` row has rule content (W-6) | the contract, at check time | the contract check fails · the row is not declared |
 
 ### 13.3 The four qualitative verdicts, applied to the substrate rather than to a resolver
@@ -315,7 +315,8 @@ page has to make; the two additions occupy a scope PP-724 declares out of bounds
 candidates refused, three of them cut because something on disk beat them. **Robust** — the failure
 directions the corpus measured are closed by arithmetic: an unrecoverable pinned gauge by the geometric
 law, a flickering threshold by the hysteresis band, and **a silently-dead resolution by the
-commensurability gate** (§6.1) — all three load-time checks needing no campaign run. A fourth — the
+commensurability gate** (§6.1), which is shape-aware and so does not false-pass an opposed site
+(§6.1.2) — all three load-time checks needing no campaign run. A fourth — the
 substrate quietly acquiring a latency it does not have — is closed by §9.3 stating the absence rather
 than assuming the presence. **One honest hole remains and is named rather than smoothed:
 `prac.thread_sensitivity` declares no ceiling in the cooked registry, which makes all three arithmetic

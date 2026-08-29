@@ -105,8 +105,12 @@ hazard_pool: <int>                    # E-1's roller — the event's own base se
 resilience:
   target_score: <gauge id>            # what `derive_ob` reads — the defender's score
   modifiers: <terrain/season adjustment, a property of THIS target in THIS instance>
+  M_max: <number>                     # REQUIRED — 01 §6.1.1 pt.3's obligation on every derive_ob site (§2.2)
 cooldown: <int seasons, ≥ 1>          # REQUIRED — §3.2
 excludes: [<event id>, …]             # mutually exclusive this season, same shape as the card grammar
+durability_bp: <int>                  # the candidate contract's realized-state term — §5, 10 §2.1
+identity_touch_bp: <int>              # the candidate contract's realized-state term — §5, 10 §2.1
+mandatory: <bool>                     # default false — 10 §5.4's rare, enumerated bypass
 deposits:                              # leaves 1–2 ONLY — never 3 or 4 (§2.3)
   overwhelming: [...]   success: [...]   partial: [...]   failure: []   # TOTAL over all four bands (P0-3)
 follow_on:                             # a Tag, never a scheduled Key (§2.4 — J-N)
@@ -260,39 +264,50 @@ every declared band on every gauge the row's `triggers:` predicate reads (`descr
 per-gauge `bands` list, itself finite by declaration — `01 §5`). Evaluate the AND-predicate over that
 finite space. **A row with an empty satisfying set is unreachable content and fails at load.**
 
-This is the identical shape to `01 §2.3`'s hysteresis check and `07`(v1)'s `V-3`: a property computed
-over declared, bounded registry data, with no campaign run and no sampling — because every input the
-gate reads is drawn from an enumerable set by construction (terrain is a closed identity enum; bands
-are a closed declared list; tags are boolean presence).
+This is the identical shape to `01 §2.3`'s hysteresis check and `07`'s own `L-3`/`L-4`
+(`07_places_and_settlements.md §2.1`): a property computed over declared, bounded registry data, with
+no campaign run and no sampling — because every input the gate reads is drawn from an enumerable set
+by construction (terrain is a closed identity enum; bands are a closed declared list; tags are boolean
+presence).
 
 > **Falsifier.** The load-time enumeration above, run over every row in `content_registry.yaml`'s
 > `world_events:` block; any row whose satisfying set is empty fails the load, named by id.
 
 ### 4.2 (b) Every row's effects are reachable BY THE PLAYER
 
-**`07` owns what is reachable at a place** — its facilities, its presences, its investigation surfaces
-(`00_INDEX.md:449`: *"presences; strata; terrain"*). This document does not know `07`'s eventual
-content, and the procedure below is written so it does not need to: it is **structural**, checking the
-*shape* of reachability rather than a hardcoded list of `07`'s facility names.
+**`07` owns what is reachable at a place, and already names this document by name.**
+`07_places_and_settlements.md §8.1` ("World events (`11`) — the exogenous surface") states, independently
+of this page: *"a world event may only read state and deposit — never target a form field directly.
+Reachable: `condition.{order,prosperity,defense}`, `pressure`, `accrual.entitlement`,
+`presence.<institution>` … and Tag appends. **Not reachable directly:** `kind`, `tier`,
+`facilities[]`."* **This confirms §2.3's own leaf-1/2-only restriction independently** — the two
+documents converged without coordinating, which is stronger evidence than either asserting it alone.
 
-**Procedure.** For every state row a `world_events` row's `deposits:` names as a target:
+**Procedure**, still stated generally so a later `07`/`08` content change cannot silently break it. For
+every state row a `world_events` row's `deposits:` names as a target:
 
 1. its `disclosure.inputs` must be `published` (E-2, `01 §8`) — an undisclosed target is invisible by
-   construction, whatever else is true of it;
+   construction, whatever else is true of it. `07 §8.3` already publishes every gauge this document's
+   four worked rows touch (`condition.*`, `presence.<institution>`) as `band`, and `accrual.entitlement`
+   as `exact`;
 2. it must be **read** by at least one *other* module contract's `gate:` predicate, `derive_ob`
    `modifiers`, or a declared form-transition's gate, where that consuming module's `remit:` is
    **non-empty** — i.e., some post-holder's option set changes in response to this exact gauge or tag.
+   `08`'s `sm.act` (`08_settlement_management.md:374-393`, `remit: [governor]`) already reads and
+   writes `condition.order/prosperity/defense` and `accrual.entitlement` — the exact family §7's four
+   rows deposit into — which is a **verified, existing pass** of check (2) for this document's own
+   worked rows, not merely a structural possibility.
 
 A target passing (1) but failing (2) is visible but inert: the player can see the number move and can
 do nothing that reads it — churn with no purchase, the thing root cause E's own diagnosis (a season
-"presenting undifferentiated volume," `ARCHIVED.md`) already named as the failure one layer over.
+"presenting undifferentiated volume," `2026-08-28-greenfield-systems-suite/ARCHIVED.md`) already named
+as the failure one layer over.
 
 > **Falsifier.** A load-time closure check over the cooked `module_contracts.json` and
 > `form_registry.json`: for every `world_events` deposit target, assert (1) and search for at least one
-> contract satisfying (2). A target with no such contract fails, named by row id and target. **This
-> check is silent about whether `07` or `08` HAS in fact wired such a contract yet — it fails loudly if
-> neither ever does**, which is the honest reading of "reachable": a property this document can require
-> and cite, not one it can single-handedly guarantee before its neighbors are written.
+> contract satisfying (2). A target with no such contract fails, named by row id and target. **Verified
+> by hand for this document's own four rows against `07`'s and `08`'s real contracts above**; the
+> general procedure remains the load-time guard for any row a later content-authoring pass adds.
 
 ---
 
@@ -392,17 +407,26 @@ file). Cooked by the same exporter pattern as every other registry in this suite
 (`00 §9.1`). **Four worked rows, illustrative of the schema — not a claim about the eventual table's
 size**, which is `13`-lane content-authoring work.
 
+**Terrain values below are the real closed eight** (`07_places_and_settlements.md:395`, verified
+against `valoria_geography_v30.yaml:675`): `plains · forest · highland · mountain · mountain_pass ·
+fjord_coast · coast · marsh`. No row uses an invented terrain type.
+
 ```yaml
 world_events:
   - event: we.crop_failure
     family: Crisis                origin: exogenous     scope: place
     triggers:
-      - place.terrain in {arid, plains, river_valley, upland}   # NOT coastal/urban-only kinds
+      - place.terrain in {plains, marsh, highland}   # the arable/marginal-arable terrains (§6.1's
+                                                       # descriptions: Feldmark/Kronmark plains as
+                                                       # breadbasket, highland as "limited arable")
       - "world.season % 4 == 2"                                  # the growing-season quarter (§2.1)
-    hazard_pool: 4                                                # shape proposal
-    resilience: {target_score: condition.prosperity, modifiers: terrain_penalty(place.terrain)}
+    hazard_pool: 10                                               # shape proposal — §2.2's gate margin
+    resilience: {target_score: condition.prosperity, modifiers: terrain_penalty(place.terrain), M_max: 1}
     cooldown: 2
     excludes: []
+    durability_bp: 3000          # shape proposal — a season's bad harvest is citable a few accountings
+    identity_touch_bp: 500       # shape proposal — low; weather does not implicate a conviction
+    mandatory: false
     deposits:
       overwhelming: [{leaf: gauge_deposit, target: condition.prosperity, delta: -3}]
       success:      [{leaf: gauge_deposit, target: condition.prosperity, delta: -2}]
@@ -410,25 +434,32 @@ world_events:
       failure: []
     follow_on: {on_fire: {tag: Precedent, key: "we_cooldown:we.crop_failure:<place>", ttl: 2}}
     emits: world.event_fired
-    # terrain is a bound SLOT, not three separate rows — arid reads as drought, river_valley/upland
-    # as blight/frost in render only (10's beat-template lexicon, narrative_engine_design_v2_churn
-    # :344-351's "slot fillers bound from live data" — this document names the slot, not the prose)
+    # terrain is a bound SLOT, not three separate rows — plains reads as drought/flood, highland as
+    # blight/frost in render only (10's beat-template lexicon; narrative_engine_design_v2_churn.md
+    # :346-347's "slot fillers bound from live data" — this document names the slot, not the prose)
 
   - event: we.plague
     family: Crisis                origin: exogenous     scope: place
     triggers:
-      - place.form.presences.get(port, 0) >= 1  OR  place.kind == Cathedral   # contact-bearing sites
+      - place.form.kind in {Port, Cathedral}   # contact-bearing KIND, not a presence
+                                                # (07_places_and_settlements.md:43 — Port/Cathedral
+                                                # are declared `kind` values; conflating a kind with a
+                                                # `presence.<institution>` gauge was this row's first
+                                                # draft error, corrected here)
       - NOT tag_present(owner=place, kind=Precedent, key="we_cooldown:we.plague:<place>")
-    hazard_pool: 5
-    resilience: {target_score: condition.order, modifiers: 0}
+    hazard_pool: 10
+    resilience: {target_score: condition.order, modifiers: 0, M_max: 0}
     cooldown: 3
     excludes: [we.crop_failure]           # a place does not draw both this season — G-1's global
                                            # exclusivity already forbids the double-fire; excludes:
                                            # is declared anyway for symmetry with the existing card
                                            # grammar (governance_play_redesign_v1.md:176), harmless
+    durability_bp: 4000
+    identity_touch_bp: 500
+    mandatory: false
     deposits:
       overwhelming: [{leaf: gauge_deposit, target: condition.order, delta: -3},
-                      {leaf: gauge_deposit, target: acceptance.legitimacy, delta: -1}]
+                      {leaf: gauge_deposit, target: condition.prosperity, delta: -1}]
       success:      [{leaf: gauge_deposit, target: condition.order, delta: -2}]
       partial:      [{leaf: gauge_deposit, target: condition.order, delta: -1}]
       failure: []
@@ -438,12 +469,16 @@ world_events:
   - event: we.route_severed
     family: Crisis                origin: exogenous     scope: place        # targets a waypoint node
     triggers:
-      - place.terrain in {mountain_pass, coastal}          # where weather can sever a route at all
+      - place.terrain in {mountain_pass, fjord_coast, coast}   # where weather can sever a physical
+                                                                 # route at all — the real terrain set
       - place in adjacency(<any settlement's traced grain route>)     # settlement_layer_v30.md:816-826
-    hazard_pool: 3
-    resilience: {target_score: condition.defense, modifiers: 0}
+    hazard_pool: 8
+    resilience: {target_score: condition.defense, modifiers: 0, M_max: 0}
     cooldown: 2
     excludes: []
+    durability_bp: 3000
+    identity_touch_bp: 500
+    mandatory: false
     deposits:
       overwhelming: [{leaf: tag_append, kind: Precedent, key: "route_cut:<place>", value: severe}]
       success:      [{leaf: tag_append, kind: Precedent, key: "route_cut:<place>", value: moderate}]
@@ -453,19 +488,30 @@ world_events:
     emits: world.event_fired
     # NOTE: `route_cut:<place>` is a NAMED SHAPE PROPOSAL for the flag `settlement_layer_v30.md
     # :822`'s occupation/blockade/siege cause would ALSO need to write. This document does not own
-    # route-cut storage (07/12 do, per adjacency §7 of the v1 07 predecessor) — it proposes the key
-    # so both an exogenous and a military cause converge on one flag, and defers the final name to
-    # whichever document formalizes it.
+    # route-cut storage (that lives with the adjacency graph, `07_places_and_settlements.md §7` in
+    # its v1 predecessor) — it proposes the key so both an exogenous and a military cause converge on
+    # one flag, and defers the final name to whichever document formalizes it.
 
   - event: we.altonian_pressure
     family: Opportunity            origin: exogenous     scope: faction      # not place — peninsula-scale
     triggers:
-      - faction.identity.ethos has a charter/treaty edge naming an Altonian counterpart   # §2's edge kinds, 01 §7.2
-      - institutional_pressure.band in {rising, high}       # the topmost place's own IP gauge (Overrides §2)
-    hazard_pool: 3
-    resilience: {target_score: acceptance.legitimacy, modifiers: 0}    # read on the faction's own seat
+      - faction has a charter or treaty edge naming an Altonian counterpart   # 01 §7.2's scope
+                                                                                # extensions to PP-724
+      - institutional_pressure.band in {rising, high}       # the top-tier place's own gauge —
+                                                              # a NEW gauge this row proposes, flagged
+                                                              # in Overrides §2, NOT yet 07's/12's own
+    hazard_pool: 8
+    resilience: {target_score: condition.order, modifiers: 0, M_max: 0}   # read on the faction's seat
+                                                                            # place, per 01 §1.4's
+                                                                            # `posts` derivation — NOT
+                                                                            # acceptance.legitimacy,
+                                                                            # flagged UNVERIFIABLE by
+                                                                            # 01 §6.2 (§2.2 above)
     cooldown: 4
     excludes: []
+    durability_bp: 6000           # a diplomatic demand outlasts a bad harvest
+    identity_touch_bp: 2000       # higher — it bears on the faction's own charter relationship
+    mandatory: false
     deposits:
       overwhelming: [{leaf: gauge_deposit, target: institutional_pressure, delta: +2},
                       {leaf: tag_append, kind: Grudge, key: "altonian_demand", value: 2}]
@@ -478,8 +524,11 @@ world_events:
     # kind). Its deposit target is the gauge itself, never a faction-scoped aggregate — AU-1 holds.
 ```
 
-**Every numeric value above — `hazard_pool`, `cooldown`, every `delta` — is a shape proposal, not a
-ledger constant.** None is cited to a `PP-NNN`/`ED-NNN`; none should be read as calibrated.
+**Every numeric value above — `hazard_pool`, `cooldown`, `durability_bp`, `identity_touch_bp`, every
+`delta` — is a shape proposal, not a ledger constant.** None is cited to a `PP-NNN`/`ED-NNN`; none
+should be read as calibrated. `hazard_pool` and `M_max` were sized specifically to clear §2.2's
+commensurability gate against `condition.*`'s confirmed 0–5 ceiling (`descriptors.json:97-111`) — that
+arithmetic is the one number-shaped claim on this page that is checked rather than merely proposed.
 
 ---
 

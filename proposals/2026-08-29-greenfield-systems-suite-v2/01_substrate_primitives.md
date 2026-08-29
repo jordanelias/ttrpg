@@ -497,7 +497,6 @@ target score's scale is commensurate with the net's, and `score/2` is meaningful
 | target gauge | ceiling | `derive_ob` | P(Overwhelming) at pool 18 |
 |---|---|---|---|
 | a `0–7` stat | 7 | 3.5 | 0.58 |
-| Concentration | 35 | 17.5 | 0.000045 |
 | **Thread Sensitivity** | **100** | **50** | **0.000000** |
 
 **Every band but Failure becomes unreachable, and nothing currently catches it.** The gauge exists,
@@ -542,34 +541,32 @@ by 3 and back up by `z·σ`:
 The two agree to 4% at pool 18 **by accident** — `+3` happens to approximate `z·σ − 3 = 2.58` there —
 and diverge badly below it. A check that is only correct at one pool size is not a check.
 
-**2. `POOL_MAX` does not exist.** There is no such constant in `engine/`; `roll_pool` enforces only a
-pool *minimum* of 1 (`:202`). **The bound is per-site**, and it has to be: a site's maximum pool is a
-property of the pool expression its module declares, not of the engine. Where this document needs a
-concrete figure it uses the **practical range 5–18** that §5.3's own σ arithmetic is stated over, and
-says so rather than minting an engine constant.
+**2. `POOL_MAX` does not exist.** No such constant is in `engine/`; `roll_pool` enforces only a pool
+*minimum* of 1 (`:202`). **The bound is per-site**, and has to be: a site's maximum pool is a property
+of the pool expression its own module declares. Where a figure is needed this document uses the **practical range 5–18**
+that §5.3's σ arithmetic already stands over, rather than minting a constant.
 
 **3. It must check the post-modifier obstacle.** `derive_ob`'s `modifiers` argument is **unbounded in
-the signature**, so checking a bare ceiling is meaningless if a site may add +10 of target-property
-modifiers. Hence `M_max` above, and hence a new obligation: **a module contract declaring a
-`derive_ob` site must declare its modifier bound.** Without that the gate is unevaluable — which is
-the same defect one level up.
+the signature**, so checking a bare ceiling is meaningless if a site may add +10. Hence `M_max`, and
+hence a new obligation: **a module contract declaring a `derive_ob` site must declare its modifier
+bound.** Without it the gate is unevaluable — the same defect one level up.
 
 
 ### 6.1.2 The opposed form, and why the one-sided form false-passes without it
 
-**Found by `05`'s author against this gate — the gate's own failure class, one level up.** §6.1's
-first version carried only the one-sided envelope. Applied to a **DO** site it admits obstacles the
-differential cannot reach: a **false pass**, which is exactly what §6.1 exists to catch.
+**Found by `05`'s author against this gate — its own failure class, one level up.** §6.1's first
+version carried only the one-sided envelope; applied to a **DO** site it admits obstacles the
+differential cannot reach — a **false pass**, exactly what §6.1 exists to catch.
 
-**Verified in the kernel rather than taken on report.** `05 §4.1` passes `net_c − net_d` as the
-ladder's `net` and the entrenchment lead as its `ob`, and `degree_from_net` reads `margin = net − ob`
-and nothing else (`engine/autoload/dice_engine.py:279`). So the quantity the envelope must describe is
-the **difference of two independently rolled pools**, and:
+**Verified in the kernel, not taken on report.** `05 §4.1` passes `net_c − net_d` as the ladder's
+`net` and the entrenchment lead as its `ob`, and `degree_from_net` reads `margin = net − ob` and
+nothing else (`engine/autoload/dice_engine.py:279`). So the envelope must describe the **difference of
+two independently rolled pools**:
 
 - **The per-die moments are EXACT, not fitted.** `_die_result` maps `1 → −1`, `2–6 → 0`, `7–9 → +1`,
-  `10 → +2` (`:153-161`), giving `μ = 0.400000` and `Var = 0.640000` (`σ = 0.800000`) by direct
-  computation over the ten faces — precisely `_MU_PER_DIE` and `_SIGMA_PER_DIE` (`:174-175`). So
-  variance-addition below is exact arithmetic, not an approximation.
+  `10 → +2` (`:153-161`), giving `μ = 0.400000` and `Var = 0.640000` by direct computation over the ten
+  faces — precisely `_MU_PER_DIE` and `_SIGMA_PER_DIE` (`:174-175`). Variance-addition below is
+  therefore exact arithmetic, not an approximation.
 - **Independence holds.** The two sides are separate `roll_pool` / `continuous_engine_sample` calls
   drawing independently (`:202-205`, `:218-224`); no term is shared. Hence `Var(net_c − net_d) =
   0.64·N_c + 0.64·N_d`, giving **`μ_diff = 0.4(N_c − N_d)`** and **`σ_diff = 0.8·√(N_c + N_d)`**.
@@ -595,13 +592,12 @@ minimum** — at `D_min = 1` the bound is `9.536`. The gate reads the corner fro
 construction whenever the defender can match the challenger. It is kept because a site with
 `D_max < N_min` — a permanently outmatched defender — is expressible, and there it bites.
 
-**Why this belongs here and not in `05`.** `05`'s author found the hole and deliberately declined to
-patch it locally, which was correct. The stronger argument, though, is what the two passes actually
-demonstrate: **this page identified the hazard and still got the arithmetic wrong on its first attempt,
-and so did the coordinator relaying it.** A rule that three readers derive differently is precisely the
-rule that must have one owner and one expression — restating it per document does not make it more
-robust, it multiplies the surfaces on which it can be got wrong. That is a better justification for
-E-1's single ownership than "the obstacle had a ruling and no owner", and it is the one to cite.
+**Why this belongs here and not in `05`.** `05`'s author found the hole and declined to patch it
+locally, which was correct. The stronger argument is what the two passes demonstrate: **this page
+identified the hazard and still got the arithmetic wrong on its first attempt, and so did the reader
+relaying it.** A rule three readers derive differently is exactly the rule that must have one owner and
+one expression — restating it per document multiplies the surfaces on which it can be got wrong. That
+is a better justification for E-1's single ownership than "the obstacle had a ruling and no owner".
 
 **What the module contract must carry.** A site declaring a `derive_ob` call declares
 `shape`, `pool_max`, `pool_min`, `ob_modifier_max`, `ob_modifier_min`, and — **for `DO`/`BI` only** —
@@ -610,10 +606,9 @@ is the §6.1.1 point-3 defect recurring at the shape level.
 
 ### 6.2 What fails the gate today
 
-**The pattern is not a coincidence and is worth stating plainly.** Canon's **`0–7` stat family** —
-attributes (`descriptors.json`: floor 1, ceiling 7), all six faction stats, and the settlement stats
-at 0–7 or 0–5 — is **pool-commensurate by construction**: `ceiling/2 ≤ 3.5`, which sits in the
-band-reachable zone across the whole practical pool range. Everything that fails is from a different
+**The pattern is not a coincidence.** Canon's **`0–7` stat family** — attributes, all six faction
+stats, the settlement stats — is **pool-commensurate by construction** (`ceiling/2 ≤ 3.5`, inside the
+band-reachable zone across the whole practical pool range). Everything that fails is from another
 family and was never a "score" in the sense Jordan's ruling means.
 
 | gauge | scale, and its source | verdict as a `derive_ob` target |
@@ -628,11 +623,10 @@ family and was never a "score" in the sense Jordan's ruling means.
 | `standing`, `exposure`, `pressure`, `acceptance.*`, `accrual.entitlement` | **scale undeclared in this suite** | **unverifiable today.** Each must declare a ceiling before it can be a target |
 | `presence.<institution>` | **0–7**, declared by `07 §4.2` after this gate was raised | **pass, and it is the gate's first live use.** `05 §4.1` is the suite's only opposed site: `shape: DO`, `Ob = derive_ob(presence_defender, −presence_challenger/2 + place_terms)`, modifier bound 2, so `Ob_max = 7/2 + 2 = 5.5` against the **differential** envelope `8.247` (§6.1.2). Passes with room. Under the one-sided form the admissible ceiling was `12.49`; under the correct opposed form it is **`≤ 12`** — `07` chose 7 deliberately, so the tightening did not bite |
 
-**The opposed form flipped no verdict in this table.** Re-run against §6.1.2's stricter envelope, the
-only opposed site in the suite (`05 §4.1`, targeting `presence`) still passes, because `07` declared
-`0–7` rather than spending the headroom the looser form would have allowed. That is a **near miss, not
-a clean bill**: had `07` taken the `12.49` the one-sided form permitted, the correction would have
-invalidated a ceiling already declared and propagated. Stated plainly rather than reported as a pass.
+**The opposed form flipped no verdict here.** The suite's only opposed site (`05 §4.1`, targeting
+`presence`) still passes, because `07` declared `0–7` rather than spending the headroom the looser form
+allowed. That is a **near miss, not a clean bill**: had `07` taken the `12.49` the one-sided form
+permitted, this correction would have invalidated an already-propagated ceiling.
 
 **Nothing in this suite currently targets a failing gauge.** The gate's value is mostly prospective: it
 makes the failure impossible to introduce rather than expensive to discover.
