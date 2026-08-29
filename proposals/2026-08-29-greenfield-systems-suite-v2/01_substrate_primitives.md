@@ -497,9 +497,7 @@ target score's scale is commensurate with the net's, and `score/2` is meaningful
 | target gauge | ceiling | `derive_ob` | P(Overwhelming) at pool 18 |
 |---|---|---|---|
 | a `0–7` stat | 7 | 3.5 | 0.58 |
-| Composure | 21 | 10.5 | 0.035 |
 | Concentration | 35 | 17.5 | 0.000045 |
-| Health | 55 | 27.5 | ~0 |
 | **Thread Sensitivity** | **100** | **50** | **0.000000** |
 
 **Every band but Failure becomes unreachable, and nothing currently catches it.** The gauge exists,
@@ -535,12 +533,11 @@ width term, so it is not a reachability condition at any pool except by coincide
 band offset's sign backwards, since Overwhelming needs `net ≥ ob + 3`, which pushes the bound *down*
 by 3 and back up by `z·σ`:
 
-| N_max | correct bound | as proposed | proposed ÷ correct |
+| N_max | correct | as proposed | ratio |
 |---|---|---|---|
 | 5 | 1.94 | 5.00 | **2.57×** too permissive |
 | 10 | 5.16 | 7.00 | 1.36× |
 | 18 | 9.78 | 10.20 | 1.04× |
-| 25 | 13.58 | 13.00 | 0.96× |
 
 The two agree to 4% at pool 18 **by accident** — `+3` happens to approximate `z·σ − 3 = 2.58` there —
 and diverge badly below it. A check that is only correct at one pool size is not a check.
@@ -577,8 +574,7 @@ the **difference of two independently rolled pools**, and:
   drawing independently (`:202-205`, `:218-224`); no term is shared. Hence `Var(net_c − net_d) =
   0.64·N_c + 0.64·N_d`, giving **`μ_diff = 0.4(N_c − N_d)`** and **`σ_diff = 0.8·√(N_c + N_d)`**.
 - **Normality is better here, not worse.** A difference of two independent normals is exactly normal,
-  so the `z` quantile is exact for the continuous engine and a CLT approximation only in the discrete
-  one — the same standing as the one-sided case.
+  so `z` is exact in the continuous engine and a CLT approximation only in the discrete one.
 
 | | envelope | `Ob_max` |
 |---|---|---|
@@ -588,18 +584,16 @@ the **difference of two independently rolled pools**, and:
 **The differential is stricter**, so evaluating an opposed site one-sidedly admits `Ob ∈ (8.247,
 9.783]` that cannot in fact reach Overwhelming. The finding's arithmetic reproduces exactly.
 
-**Which corner to evaluate — proved, so the check is two evaluations and not a search.** The top-band
-envelope's derivative in `D` is `−0.4 + 0.4·z/√(N + D)`, which is zero only at `N + D = z² = 2.706`.
-For any real pool the envelope therefore **strictly decreases in `D`**, so its maximum sits at
-`D = D_min`. That is why the form above takes `D_min` and not a nominal opposing pool: **`N_d = 6` is
-the right figure only if 6 is that site's declared minimum**, and at `D_min = 1` the bound would be
-`9.536`. The gate reads the corner from the registry; it does not assume one.
+**Which corner to evaluate — proved, so the check is two evaluations, not a search.** The top-band
+envelope's derivative in `D` is `−0.4 + 0.4·z/√(N + D)`, zero only at `N + D = z² = 2.706`, so for any
+real pool the envelope **strictly decreases in `D`** and its maximum sits at `D = D_min`. Hence the
+form takes `D_min`, not a nominal opposing pool: **`N_d = 6` is right only if 6 is that site's declared
+minimum** — at `D_min = 1` the bound is `9.536`. The gate reads the corner from the registry.
 
-**The bottom band rarely binds on a DO site, and the honest statement is that it usually cannot.**
-With `N_min = 5` against `D_max = 18`, `μ_diff − z·σ_diff = −11.5`, and `derive_ob` floors at `OB_MIN
-≥ 0`, so Failure is reachable by construction whenever the defender's pool can match the challenger's.
-It is kept in the form because a site with `D_max < N_min` — a permanently outmatched defender — is
-where it starts to bite, and that site is expressible.
+**The bottom band rarely binds on a DO site.** With `N_min = 5` against `D_max = 18`,
+`μ_diff − z·σ_diff = −11.5` while `derive_ob` floors at `OB_MIN ≥ 0`, so Failure is reachable by
+construction whenever the defender can match the challenger. It is kept because a site with
+`D_max < N_min` — a permanently outmatched defender — is expressible, and there it bites.
 
 **Why this belongs here and not in `05`.** `05`'s author found the hole and deliberately declined to
 patch it locally, which was correct. The stronger argument, though, is what the two passes actually

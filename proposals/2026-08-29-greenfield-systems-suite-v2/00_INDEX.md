@@ -10,7 +10,8 @@
 
 **Reading order:** 00 Index → [01 Substrate · stored primitives](01_substrate_primitives.md) →
 [01 part 2 · extensions and seams](01_substrate_primitives_part2.md) →
-[02 Character Generation](02_character_generation.md) → [03 World Population](03_world_population.md) →
+[02 Character Generation](02_character_generation.md) → [02 part 2](02_character_generation_part2.md) →
+[03 World Population](03_world_population.md) →
 [04 Personnel](04_personnel_management.md) → [05 Faction Actions](05_faction_actions.md) →
 [05 part 2](05_faction_actions_part2.md) →
 [06 Faction Management](06_faction_management.md) → [06 part 2](06_faction_management_part2.md) →
@@ -514,6 +515,7 @@ reference, and the registry is the mechanism.
 | [`01_substrate_primitives.md`](01_substrate_primitives.md) | **The four stored primitives.** Entity + **form**; form transitions and hysteresis; the four-leaf write rule; Tag incl. **Memory**; Post; Gauge | A, P-1…P-4 |
 | [`01_substrate_primitives_part2.md`](01_substrate_primitives_part2.md) | **The extensions and seams.** `derive_ob`; **the open edge registry and Knot** (with its `## Overrides` block); the disclosure contract; **the wrapper as a herald, not a distributor**; the no-latency constraint; the player model; the substrate's own contracts | E, E-1, E-2 |
 | [`02_character_generation.md`](02_character_generation.md) | **life paths as stages**; caste and heritage as identity; beliefs vs convictions; virtues and flaws | A, F |
+| [`02_character_generation_part2.md`](02_character_generation_part2.md) | knots at generation; the player surface; module contracts; property audit | A, F |
 | [`03_world_population.md`](03_world_population.md) | population as a function of posts and places; the bound; the idleness rule; life-stage and lineage | — |
 | [`04_personnel_management.md`](04_personnel_management.md) | vacancy, candidate gate + **the caste gating matrix**, appointment, tenure, audit, recall, succession, custody | F |
 | [`05_faction_actions.md`](05_faction_actions.md) | the C1 gate **per tier**; ethos in `appeal`; the per-post budget; **`act.contest_influence`** | C |

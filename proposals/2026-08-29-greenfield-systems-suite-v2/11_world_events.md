@@ -296,39 +296,42 @@ do nothing that reads it — churn with no purchase, the thing root cause E's ow
 
 ---
 
-## 5. Candidates, not surfacing — `10` ranks, this document does not
+## 5. Candidates, not surfacing — `10` ranks, this document only satisfies its contract
 
-> ⚠ **Read `10_the_slate_and_salience.md` and the ratified Light Function
-> (`narrative_engine_design_v2_churn.md §4`, ED-IN-0011) before assuming otherwise.** This section
-> states the boundary once, loudly, because building a second salience score quietly is precisely the
-> failure the ratifying session already refused once (`00_INDEX.md:301-303`).
+> ⚠ **Read `10_the_slate_and_salience.md §§0–2` before assuming otherwise.** `10` states its own
+> refusal to design a second salience function at length (`10 §0`); this section states the mirror
+> obligation — `11` does not design one either, and does not compute any term `10` already owns.
 
-**`world.event_fired` is a realized fact, not a forecast** — it carries what already happened, at the
-degree the roll actually produced. The ratified Light Function's own severance rule applies directly:
-*"casting is severed from forecast: slate entry and summons key on the tie-graph + REALIZED state only"*
-(`narrative_engine_design_v2_churn.md:206-207`). A realized world event is exactly the kind of thing
-that rule was written to admit cleanly — it needs no forecast-mass or imminence term because it is not
-a prediction of anything; it already happened.
+`10 §2.1` defines **the candidate contract every emitter satisfies**, and names `we.fire` as one of
+its emitters explicitly: *"`we.fire` | `11` | conditioned exogenous events | Routes **through** the
+Slate, never around it — Part VI's second surfacing path prohibition"* (`10 §2.4`). This document
+conforms to that contract rather than restating it. Per field:
 
-**What this document supplies on the emitted Key, and no more:**
+| candidate field (`10 §2.1`) | how `we.fire` supplies it |
+|---|---|
+| `emitter`, `kind` | `"we.fire"`; the fired row's `event` id (§2, §7) |
+| `anchor` | the fired target's `entity_id` (a place for scope `place`; a faction for scope `faction`) |
+| `scale` | `settlement` for a place-scoped fire; `peninsula` for a faction-scoped one touching a peninsula-wide clock (§7's Altonian-pressure row) |
+| `subject_refs` | the anchor plus every other entity a `targets[]` delta names (§4.2's closure — populating this richly is this document's real obligation, not ranking) |
+| `durability_bp` | **declared per row, a shape proposal** (§7) — how many accountings the fact stays citable. This document supplies the number; `10` decides what it does with it |
+| `identity_touch_bp` | **declared per row, a shape proposal** — deliberately low for weather (nobody's convictions are implicated by a bad harvest), higher for Altonian pressure (it bears on a faction's charter relationship, `01 §7.2`) |
+| `tie_proximity_bp` | **not supplied — `10` derives it** (C-3, `10 §2.1`) from `subject_refs` against the edge graph. This document supplies the graph inputs (`targets[]`), never the derived term |
+| `horizon` | `{band: 0, foreclosure_in: null}` — `world.event_fired` is **realized**, not forecast, so it has no meaningful horizon; §4.2's Light Function severance (`narrative_engine_design_v2_churn.md:206-207`, cited already in `10 §4`) means this null value can only ever affect **render depth**, never whether the candidate is cast |
+| `resolver_ref` | an **existing** module that already resolves the response at both fidelities — never a `we.*` module, since `we.fire` produces the fact, it does not resolve a player's reply to it. For a place-scoped fire: `sm.act` (`08_settlement_management.md:374-393` — governor-remit, `d_sigma`, spends `post.budget`, writes exactly the `condition.*`/`acceptance.*`/`accrual.entitlement` gauges this document also deposits into). For the faction-scoped fire: `fa.resolve` (`05_faction_actions_part2.md:222-243` — head/governor/minister/envoy/commander remit, `d_sigma`, same budget shape). **This document names the natural fit; confirming the exact response row is `08`'s/`05`'s content, not this document's to finalize** |
+| `responses` | 3–5 ids from `resolver_ref`'s own declared option set (C-5) — this document invents none |
+| `mandatory` | `false` on all four worked rows (§7). None claims the rare, enumerated bypass (`10 §5.4`); a future row could, but that is a content decision for whoever authors it, argued the same way `10`'s own mandatory set is argued |
+| `witness` | `{channel: post_remit, ref: <the post whose remit includes the resolver_ref module at the anchor>}` for a place/faction with a sited post; `{channel: co_located, ref: <anchor>}` where the player is physically present. **Required, non-empty (C-2)** — a world event with no eligible witness at its anchor does not construct a candidate at all, which is a real, if rare, consequence of §4.2's own closure check finding no consuming post |
+| `provenance` | the `world.event_fired` Key's id, published by the herald (W-1) before the candidate is gathered |
+| `disclosure_ref` | the deposited gauge/tag's own `disclosure:` block (E-2), already required by §4.2(1) |
 
-| field | what it carries | who computes it |
-|---|---|---|
-| `targets[]` | every affected place/faction, with the deltas *that target* received (`01 part2 §9.2`, W-3/W-4) | `we.fire`, at emission |
-| the preconditions that held | the gate's realized inputs, disclosed per E-2 | `we.fire`, verbatim from the gate evaluation |
-| `causes[]` | the roll's own provenance chain | the herald, per W-1 |
-| a declared **durability** | how many seasons this fact stays citable as a "meaningfulness" input — a per-row constant, a shape proposal | the registry row, not derived |
+**What this document explicitly does not compute:** `tie_proximity_bp`, `cast_score`, `depth_score`,
+forecast mass, imminence, or light-inertia carryover — all `10`'s (`10 §4`). Its only two authored
+numbers on the candidate are `durability_bp` and `identity_touch_bp`, both declared per row exactly
+like `hazard_pool` and `cooldown` — **shape proposals**, not ledger constants.
 
-**What this document explicitly does not compute:** tie-proximity, identity-touch magnitude, forecast
-mass, imminence, light-inertia carryover, scale-allocation weight, or any combination of them into a
-score. Those are `10`'s selection-score terms (`narrative_engine_design_v2_churn.md:239-249`), and `10`
-derives tie-proximity and identity-touch from `targets[]` against the realized state graph — which is
-why this document's only obligation is to populate `targets[]` richly (§4.2's reachability closure is
-what makes that population meaningful) and declare `durability`, never to rank anything itself.
-
-If a term the ratified score needs turns out to be missing from what `world.event_fired` can supply,
-that is a **ruling request** for `00`'s open-rulings table, not a license for this document to add a
-field unilaterally (`00_INDEX.md §7` — extending the ratified surface is explicitly not this suite's
+If a term the ratified contract needs turns out to be unsuppliable by `world.event_fired`, that is a
+**ruling request** for `00`'s open-rulings table, not a license for this document to extend the
+candidate schema unilaterally (`10 §2.1` — extending the contract is explicitly not this document's
 call).
 
 ---
@@ -355,6 +358,8 @@ call).
   remit: []                     # ED-IN-0201 does not bind an actorless module (§2.2)
   budget: null
   consumes: []
+  ob_sites:                     # NEW obligation, 01 §6.1.1 point 3 — every derive_ob site declares M_max
+    - {target: "<row.resilience.target_score>", modifier_max: "<row.resilience.M_max>"}   # per-row, §2's schema
   emits: [{type: world.event_fired, terminal: false}]      # blocked on P0-1, §2
   state:
     # the specific gauge/tag targets are PER ROW, declared in content_registry.yaml — this module
@@ -366,10 +371,17 @@ call).
     - {of: "we.fire.gate_inputs", inputs: published, presentation: band, trigger: hidden}   # E-2
 ```
 
-Two modules, not one, for the same reason `07`(v1) split `pl.registry` from `pl.gauges` from
-`pl.yield`: **a filter and a roll are different resolver kinds** (`gate` vs `d_sigma`), and folding
-them into one module contract would hide which half is deterministic from a reader grepping the
-contract for resolver type.
+Two modules, not one, for the same reason `07` split `pl.registry` from `pl.gauges` from `pl.yield`
+(`07_places_and_settlements.md §10`): **a filter and a roll are different resolver kinds** (`gate` vs
+`d_sigma`), and folding them into one module contract would hide which half is deterministic from a
+reader grepping the contract for resolver type.
+
+**`we.fire`'s result, at the accounting boundary, is two things, not one** — matching `08`'s and `05`'s
+own emitters (`10 §2.4`): (1) the deposits and Key the herald applies and publishes (W-1, W-5), and
+(2) where the roll produced a non-Failure band, a **candidate** conforming to `10 §2.1`'s contract
+(§5 above), gathered by `sl.candidates` (`10 part2 §10`) the same way `08`'s `sm.business` and `09`'s
+`am.*` are gathered. `we.fire` **never** presents, ranks, or checks the scene budget (C-6) — it returns
+a value and stops.
 
 ---
 
