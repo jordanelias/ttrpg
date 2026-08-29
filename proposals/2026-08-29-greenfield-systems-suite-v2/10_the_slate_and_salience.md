@@ -378,7 +378,7 @@ highly would be exactly that failure**, delivered by the attention system rather
 |---|---|---|
 | `post_remit` | the player holds a post whose `remit` covers the subject | the institutional record — inputs published, band presentation, trigger hidden (`01 §8`) |
 | `co_located` | the player's person is at the anchor place | direct perception |
-| `witness_key` | a person with an edge to the player perceived it, and holds the **Memory** (`01 §3.1`) | **the witness's memory, which may be false** — §3.2 |
+| `witness_key` | a person with an edge to the player perceived it, and holds the **`Holding`** (`01 §3.1`) | **the witness's claim, whose proposition may fail to obtain** — §3.2 |
 | `document_key` | a document, letter or record exists and has reached the player | the document's claim, with its own reliability |
 | `chronicle` | the sanctioned past-tense register, for retrospective catch-up | `scale_transitions_v30 §4.4` — *about the player's relationship to the event*, never a replay |
 
@@ -389,11 +389,20 @@ that fits none of the five is shaded, whatever it scores.
 ### 3.2 The three consequences that make this a mechanic and not a filter
 
 1. **Misperception reaches the Slate; the world's state does not.** A `witness_key` candidate is built
-   from the witness's Memory tag, whose `value` is salience and whose content may be wrong. The
-   disclosure contract still holds exactly, because what is published is **the witness's claim with its
-   provenance**, not the world's state. This is what `01 §3.1` bought when it opened the tag enum to
-   six, and the Slate is its principal consumer. **Memory sits inside `01 §3.4`'s relational cap** — it
-   shifts weighting, never the board.
+   from the witness's **`Holding`** (`01 §3.1`) — `key = prop_id`, `value = confidence`, `stance ∈
+   {asserts, denies, suspects}` — and **the proposition it names may simply fail to obtain.**
+   ⚠ **That is a stronger guarantee than v2.0 could actually make.** This clause used to read *"the
+   witness's Memory tag … whose content may be wrong"*, and the drafted `Memory` kind had only a `key`
+   and a magnitude — so *"may be wrong"* was a hope about content the row had **no slot for**. `01` O-6
+   cut that kind for exactly this reason and admitted `Holding` in its place at a constant enum count
+   of seven. A `prop_id` **is** the content, and the engine evaluates it against world state separately
+   (`01 §3.1`; ruled design §3.4), storing no truth value on the row. The disclosure contract still
+   holds exactly, because what is published is **the witness's claim with its provenance**, not the
+   world's state — and `01 §3.1`'s two-list split matters here: `provenance` says *why the holder has
+   this belief*, `support_refs` says *how they know*, and **P3 rules `support_refs` MAY BE EMPTY**,
+   which is what makes a rumour-borne Slate item representable at all. **The Slate is this kind's
+   principal consumer**, and **a `Holding` sits inside `01 §3.4`'s relational cap** — which now says so
+   in those words: a false picture shifts weighting, never the board.
 2. **A P-08-barred candidate is not suppressed; it arrives thinner.** A Thread-constituted situation
    reaching a non-sensitive is cast through its **surface effects** — the failing harvest, the sick
    cattle — with the Thread-level payload absent. The player sees that something is happening and
@@ -505,7 +514,7 @@ the forecast — the rubber-banding loop the churn doc `:274` severs structurall
 | **novelty** | The ratified term is **light-inertia**, which is the *opposite shape*: attention has momentum. An earlier draft of the delta spec proposed novelty; it was struck. **Do not reintroduce it without a ruling** |
 | **emitter identity / step number** | O-10.1. Ranking by *where a candidate came from* cannot express that a small thing is about the player's brother |
 | **anything the player did last season** other than through inertia and tie-proximity | both already carry it, and a third channel would double-count |
-| **any relational term above `01 §3.4`'s cap** | Memory and edge terms enter through `tie_proximity_bp` and are bounded by `RELATION_SHARE_MAX`. **Reachability bar:** at the maximum reachable relational total, the structurally-least-meaningful candidate must still be unable to outrank the structurally-most-meaningful one |
+| **any relational term above `01 §3.4`'s cap** | `Holding` and edge terms enter through `tie_proximity_bp` and are bounded by `RELATION_SHARE_MAX`. **Reachability bar:** at the maximum reachable relational total, the structurally-least-meaningful candidate must still be unable to outrank the structurally-most-meaningful one |
 
 ---
 
