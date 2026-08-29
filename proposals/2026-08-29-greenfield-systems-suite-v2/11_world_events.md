@@ -287,16 +287,24 @@ documents converged without coordinating, which is stronger evidence than either
 every state row a `world_events` row's `deposits:` names as a target:
 
 1. its `disclosure.inputs` must be `published` (E-2, `01 §8`) — an undisclosed target is invisible by
-   construction, whatever else is true of it. `07 §8.3` already publishes every gauge this document's
-   four worked rows touch (`condition.*`, `presence.<institution>`) as `band`, and `accrual.entitlement`
-   as `exact`;
+   construction, whatever else is true of it. `07 §8.3` already publishes `condition.*` as `band`,
+   which covers three of §7's four rows (`we.crop_failure`, `we.plague`, `we.route_severed`'s tag
+   target, and the `condition.prosperity` co-deposit under `we.plague`);
 2. it must be **read** by at least one *other* module contract's `gate:` predicate, `derive_ob`
    `modifiers`, or a declared form-transition's gate, where that consuming module's `remit:` is
    **non-empty** — i.e., some post-holder's option set changes in response to this exact gauge or tag.
    `08`'s `sm.act` (`08_settlement_management.md:374-393`, `remit: [governor]`) already reads and
-   writes `condition.order/prosperity/defense` and `accrual.entitlement` — the exact family §7's four
-   rows deposit into — which is a **verified, existing pass** of check (2) for this document's own
-   worked rows, not merely a structural possibility.
+   writes `condition.order/prosperity/defense` — a **verified, existing pass** of both checks for
+   those same three rows, not merely a structural possibility.
+
+**§7's fourth row does not pass yet, and that is stated here rather than smoothed over.**
+`we.altonian_pressure` deposits into `institutional_pressure` — the gauge Overrides §2 already flags
+as proposed, not yet declared by `07` or `12`. It has no `disclosure:` block anywhere on disk today,
+and no module contract in this suite currently reads it in a gate. **This row fails check (1) and (2)
+as of this document alone** — which is honest, not a defect to paper over: §4.2's own falsifier below
+would catch exactly this row, named by id, until `07`/`12` registers the gauge and something reads it.
+Building the fourth row anyway is deliberate — it is the worked example that shows the peninsula-scale
+case, and its failing status is the point §2 of Overrides exists to record.
 
 A target passing (1) but failing (2) is visible but inert: the player can see the number move and can
 do nothing that reads it — churn with no purchase, the thing root cause E's own diagnosis (a season
@@ -306,8 +314,10 @@ as the failure one layer over.
 > **Falsifier.** A load-time closure check over the cooked `module_contracts.json` and
 > `form_registry.json`: for every `world_events` deposit target, assert (1) and search for at least one
 > contract satisfying (2). A target with no such contract fails, named by row id and target. **Verified
-> by hand for this document's own four rows against `07`'s and `08`'s real contracts above**; the
-> general procedure remains the load-time guard for any row a later content-authoring pass adds.
+> by hand for three of this document's own four rows against `07`'s and `08`'s real contracts above;
+> `we.altonian_pressure` is a KNOWN, NAMED failure of this exact check today**, not a hidden one — this
+> falsifier, run right now, would fail on it, and would keep failing until `07`/`12` declares
+> `institutional_pressure`'s disclosure and something gates on it.
 
 ---
 
