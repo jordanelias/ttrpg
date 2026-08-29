@@ -183,7 +183,6 @@ Doc 10 owns the resolver. Capability contributes exactly two things and they are
 contributed(actor, attempt) = attr[triad_axis(attempt.practice)]      1..7
                             + practice[attempt.practice].rank         0..5   (absent → 0, unpracticed)
                             + thread_pool                             only if attempt.verb is thread-typed
-                            + momentum_spent                          0..4   (§3.5)
 ```
 The resolver adds tool, situation, opposition and standard. Capability supplies the first block and
 nothing else; it never supplies a modifier to someone else's roll.
@@ -303,26 +302,6 @@ Authority and Honor and *suppresses* Faith relative to the parish around it.
 - **Cut Convictions and you lose:** the ability of a person to have a position on something they
   have never encountered — which is what makes a new dispensation land differently on two
   neighbours on the day it is cried.
-
-### 3.5 Momentum
-
-There is no session in a no-GM engine, so Momentum is not a per-session pool. It is a streak:
-
-```
-momentum(person) = consecutive resolved attempts whose conviction signature agreed in sign
-                   with the person's highest-weight primary Conviction.  cap 4.
-                   reset to 0 by any resolved attempt opposing it, or by spending.
-spend: the actor declares an attempt conviction-driven → +momentum dice, momentum → 0
-```
-
-- **Loop:** produced by the resolver on every resolved attempt · carried as an integer · consumed
-  by pool assembly.
-- **Cut it and you lose:** a person with low capability mattering at a decisive moment *because they
-  have been consistent*. This is not decoration — it is the only mechanical account of how Yrsa
-  Vossen's Restoration Movement, which has no Mandate, no Military and no Wealth, produces outcomes
-  at all.
-- **R-shape:** gain is bounded (≤4 dice, then zero) and non-compounding; cost is the expedient
-  option foregone at each step, also non-compounding. Neither branch dominates.
 
 ---
 
@@ -624,7 +603,6 @@ Rejected 3–3 against a standard requiring four. No global rule fired at any po
 - *Coherence.* He resolved an attempt (passing) opposing his primary Identity (w5) at
   valence-distance ≥ 3. **Coherence 8 → 7: Dissonant.** His presented marks now read at −1
   confidence. Passing has become harder because he passed.
-- *Momentum.* Was 0 — the attempt opposed his primary. Stays 0.
 - *The Knot.* Strain +2 → `bandwidth = 2 − floor(2/3) = 2`. Maret Uln receives, unbidden, with no
   speaker and no distortion: `(Gerik, distress, high, this season, firsthand_via_knot, 0.7)`. She is
   in Oastad, three days away, and nobody told her. Coherence contagion does **not** fire: his drop
@@ -666,6 +644,14 @@ provenance, one hysteresis line, one coherence band, one bandwidth number, and f
 - **A tenth attribute with invented content.** Reserved, inert, and honestly flagged (§2.1).
 - **Any unique-person capability key.** Rarity is derived from the containment roll-up, so losing a
   person is a promotion.
+- **Momentum, in any form — CUT, and this is a retraction rather than a simplification.** An
+  earlier draft of this document carried a §3.5 Momentum streak that fed `+momentum_spent` into the
+  pool. It is gone, and the N-line it claimed (*"the only mechanical account of how the Restoration
+  produces outcomes"*) was false: a Conviction **is** a stance row (adjudication B-8), and stance
+  rows already gate the willingness function, a negotiator's option set, concord, and view salience.
+  Convictions keep their resolver consequence with Momentum deleted. What Momentum actually added
+  was `+1 die` — a flat pool bonus, the one shape §2.3 and doc 10 §6 both refuse. Doc 10 §9 records
+  the full disposition.
 - **A trigger point published to the player.** Bands and inputs are published; thresholds are not.
 
 ---
@@ -709,7 +695,6 @@ design principle rather than a budget cap, and I think it belongs in the substra
 | Stance row | `revise` | the person | salience, judging, backing, commitment, needs | every non-forced motive |
 | Weight-as-hysteresis | `revise` | the row | future `revise` | zealots and converts |
 | Conviction signature | authored with each proposition | the proposition | seeding a stance row | a position on the unencountered |
-| Momentum | resolver, per attempt | integer | pool | consistency mattering without resources |
 | Tie | co-presence, kinship, trade | edge | telling latency | hostile information channels |
 | Knot | `form_knot` | bidirectional edge | unbidden deposit, buffering, counsel, contagion | news reaching the unposted first |
 | Strain / bandwidth | five named uses; `invest` | the edge | deposit rate, rupture | depth having a price you can watch |

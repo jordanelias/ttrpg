@@ -87,8 +87,9 @@ requisition(asker, member, act, node)
 
 Refuse at low burden and the edge drops a degree; refuse at high burden and it does not — a faction
 asking the impossible loses nobody, and one asking the trivial and refused has learned something true.
-`conviction_bonus` is the substrate's Momentum term, so a d=5 ask is the cheapest in the game and the
-one that spends a person's whole position.
+`conviction_bonus` reads the member's own stance row for the faction's proposition — a Conviction is a
+stance row (B-8), not a separate store and not a spendable pool — so a d=5 ask is the cheapest in the
+game and the one that spends a person's whole position.
 
 - **Loop.** Produced by `commit` acts; carried as edges on persons; consumed by requisition, capacity,
   the roll-ups, and the judging sets that punish or reward discovery.
@@ -541,7 +542,8 @@ each substituting at exactly one gate:
 
 There is no fifth. Guild grades are marks, not a track (§6.1); presence and density are reads.
 
-**A leader as a flat bonus on a roll.** A flat shift of X is worth `X / (0.8·√Pool)`, so it is worth
+**A leader as a flat bonus on a roll.** A flat shift of X is worth `X / (0.671·√Pool)` (doc 10 §6 owns
+the constant for this die), so it is worth
 systematically *more* to a weak faction than a strong one — backwards. The in-band form: **the leader
 changes the option set and the pool source, never a modifier.** Yrsa Vossen contributes three things,
 none of them a number added to a die: (1) she is a person whose eligibility makes certain acts *exist*

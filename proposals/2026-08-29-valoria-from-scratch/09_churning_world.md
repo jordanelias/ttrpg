@@ -305,11 +305,41 @@ question about **reach** — can the player find out who holds 0.25, get near hi
 access and investigation problem (T9's territory). This document does not solve it; it makes it the
 right problem.
 
-**The falsifier.** Run a fixed intervention — assassinate the highest-share officer — against formations
-at N = 10, 100, 1000, 10000 and measure the shift in the outcome distribution *as a fraction of that
-distribution's own spread*. Flat in N: the bound holds. Decaying: `chain` recovers too fast and the
-succession-by-witness rule is mis-parameterised. Growing: commander `role_weight` is too high relative
-to depth.
+**The falsifier — and note that an earlier draft of this section stated it inverted, so a reader who
+meets the old wording elsewhere should treat it as retracted.** The retracted version normalised the
+intervention's effect by *the outcome distribution's own spread* and asserted that flatness in N meant
+the bound held. That is backwards, and a correct implementation would have failed it. Under the
+construction, killing the highest-share officer shifts the outcome's mean by a quantity proportional to
+`φ·Q(C)` — that is, proportional to the collective's own weight W — while the aggregate spread of a
+body of W independent contributors grows only as √W. So the spread-normalised statistic grows as √N
+**whenever the bound is holding exactly**, and it would go flat only if the fractional effect were
+*decaying* in N, which is the failure the section exists to detect. The old test passed broken builds
+and failed correct ones.
+
+**The falsifier, measuring the claim it belongs to.** The claim is that personal contribution as a
+*fraction of outcome* is invariant in N. So normalise by the outcome, not by its noise. Run a fixed
+intervention — assassinate the highest-share officer — against formations at N = 10, 100, 1000, 10000,
+holding role composition and depth constant, and measure
+
+```
+L(N) = ( E[outcome | no intervention] − E[outcome | officer killed] ) / E[outcome | no intervention]
+```
+
+— the shift in the outcome's **mean, as a fraction of that mean**, with enough replicates that the
+standard error on `L(N)` is small compared to the differences between the four values of N. **Flat in
+N: the bound holds**, and this is the reading that follows from `Δ(C) = φ·Q(C)` with φ dimensionless —
+both numerator and denominator scale with `Q(C)`, so the ratio is scale-free by construction.
+**Growing in N: commander `role_weight` is too high relative to depth** — a person is capturing a
+larger fraction of a larger body, which is exactly the leverage inflation §4.2 exists to prevent.
+**Decaying in N: `chain` recovers too fast** and the succession-by-witness rule is mis-parameterised —
+the graph is healing the hole faster than word of the death can travel.
+
+Two controls make `L(N)` honest rather than merely computable. First, hold **depth** fixed across the
+sweep and report it: §4.2's whole result is that φ falls with organisational depth, so a sweep that
+lets depth grow with N measures the depth law and not the bound. Second, run the null arm — kill a
+`role_weight`-1 standard-bearer instead — and confirm `L(N)` for it is both small and equally flat; a
+statistic that reports the same effect for a commander and a standard-bearer is measuring the harness,
+not the construction.
 
 - Loop: Φ and share produced by the pool assembler from persons present and their command claims →
   carried nowhere, recomputed per exchange → consumed by `lead` and the factor sheet.
@@ -397,15 +427,26 @@ something rather than about virtue.
 
 ## 6. THE LEADER IS NOT A MODIFIER
 
-A flat shift of size X on a d-pool is worth ≈ `X / (0.8·√Pool)` — **more to a small pool than a large
+A flat shift of size X on a d-pool is worth ≈ `X / (0.671·√Pool)` — **more to a small pool than a large
 one** — so a flat leader bonus is systematically worth more to a weak faction, inverting every intuition
-the strategic layer depends on. The in-band form:
+the strategic layer depends on. (0.671 is doc 10 §6's constant for this die, cited rather than
+re-derived; an earlier draft of this section used 0.8, which belongs to a different die. The direction
+of the argument is unaffected — the term is `1/√Pool` either way.) The in-band form:
 
-> **The leader operator.** `lead(P, C, act)` does exactly two things.
+> **The leader operator — and THIS SECTION IS THE SINGLE OWNER OF IT.** `lead(P, C, act)` does exactly
+> two things.
 > **(a) OPTION SET** — `vocabulary(C) ∪= practices(P)` for this exchange.
 > **(b) POOL SOURCE** — on the fraction `φ = Φ(C)·share(P,C)` of C's weight, that weight's roll draws
 > the named attribute **from P instead of C's own mean**. The remaining `1−φ` rolls its own.
 > **No third thing. No addend. There is no leadership stat.**
+
+**One formula, and it lives here.** The suite briefly carried three: this one, doc 10 §6's
+`ΔPool = f × Pool_base` keyed to "the leader's own rating," and doc 12's gambit table, which
+substituted the pool source for a *whole* exchange and so let persons determine 100% of an outcome
+straight through Φ₀'s 0.60 ceiling. Both of the others have been withdrawn and now defer here. The
+φ-fraction restriction is not a detail of this formula, it **is** the formula: without it there is no
+command budget, §4.2's whole result evaporates, and a commander with a good gambit is once again a
+leader bonus wearing a different word.
 
 Direction check: substitution moves `W·φ·(P's attribute − C's mean)`, proportional to W. As a fraction
 of an outcome also proportional to W it is **constant in N** — the exact inverse of the flat-bonus

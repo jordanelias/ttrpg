@@ -202,7 +202,7 @@ Each of these is refused because it re-enables a failure the design closed struc
 | a knowledge value stored on the thing known | knowledge with no knower cannot be planted or refuted |
 | a second resolver, an auto-resolve formula, a fast path | guaranteed divergence, unsolved in the genre for twenty years |
 | a `tier`, `level` or `scale` field on a faction | growth becomes discontinuous |
-| a flat additive modifier from a person onto a roll | worth X/(0.8·√Pool), so it helps weak pools more — backwards |
+| a flat additive modifier from a person onto a roll | worth X/(0.671·√Pool) — doc 10 §6's constant — so it helps weak pools more, backwards |
 | a personal effect on a group that is not a fraction of that group | the only concrete anti-leverage rule the precedent corpus supplies |
 | a scheduled recovery tick on standing | converts a consequence system into a treadmill |
 | a per-entity branch anywhere in the resolver | scripting drift; the exception becomes the mechanism |

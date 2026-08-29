@@ -79,17 +79,32 @@ Max, not sum, so it saturates honestly at 1.
 **The worked case the substrate demands.** Praefect Aldwin of Goldenfurt orders his watch to disperse
 a gathering in the Southern Einhir hamlet outside the wall.
 
-| watchman | stance→Aldwin | sever | conviction Order | will | outcome |
-|---|---|---|---|---|---|
-| Bertil, Kettlemakers' Row, no kin outside the wall | +2 | 0.00 | 0.20 | 0.30+0.16+0.02−0.03 = **0.65** | obeys |
-| Hakon, levied from the hamlet itself | +1 | 0.80 (community) | 0.10 | 0.30+0.08+0.01−0.44−0.03 = **−0.08 → 0.00** | refuses |
-| Karsten, Southern Einhir, quartered from Stillhelm, kin nowhere near | +1 | 0.50 (heritage) | 0.15 | 0.30+0.08+0.015−0.275−0.03 = **0.09** | refuses |
-| Sister-Sergeant Ida, Löwenritter, Authority-primary, backs the order's proposition | 0 | 0.00 | 0.60 | 0.30+0.06+0.18−0.03 = **0.51** | obeys |
+The `stance→proposition` column is shown explicitly because an earlier version of this table omitted
+it while two of the four rows silently used it, and Bertil's row consequently published a total
+(**0.65**) that its own listed terms do not produce — they sum to 0.45, which is *below* the 0.50 line
+and means "complies badly," not "obeys." The row is recomputed below with the missing term stated
+rather than the total restored. `obeyed_claims` is 0 for all four (none of these men has a prior
+record of Aldwin's orders being obeyed or refused), and severity is `disperse` = 0.2 → −0.03
+throughout.
 
-Twenty men of the watch is not twenty men. Against *that* target set it is Bertil and eleven like
-him — Hold = 12 × reach 2 = 24, against a hamlet where two hundred have committed. The same twenty
-against a Crown-Latinate grain riot in the market are a Hold near 50, because `sever` runs the other
-way. **A garrison drawn from the community it is ordered against is a different quantity from the
+| watchman | stance→Aldwin | stance→prop | sever | conviction Order | will | outcome |
+|---|---|---|---|---|---|---|
+| Bertil, Kettlemakers' Row, no kin outside the wall | +2 | +1 (the hamlet gathering has no business outside the wall) | 0.00 | 0.20 | 0.30+0.16+0.06+0.02−0.03 = **0.51** | obeys, barely |
+| Hakon, levied from the hamlet itself | +1 | 0 | 0.80 (community) | 0.10 | 0.30+0.08+0.00+0.01−0.44−0.03 = **−0.08 → 0.00** | refuses |
+| Karsten, Southern Einhir, quartered from Stillhelm, kin nowhere near | +1 | 0 | 0.50 (heritage) | 0.15 | 0.30+0.08+0.00+0.015−0.275−0.03 = **0.09** | refuses |
+| Sister-Sergeant Ida, Löwenritter, Authority-primary, backs the order's proposition | 0 | +3 | 0.00 | 0.60 | 0.30+0.00+0.18+0.06−0.03 = **0.51** | obeys |
+
+Bertil at 0.51 is worth dwelling on rather than rounding away: the man with no kin beyond the wall,
+positive toward his praefect and mildly for the order, still clears obedience by one hundredth. That is
+the section's claim in its sharpest form — **there is no such thing as a reliable watch, only a watch
+whose margin you have not yet tested** — and one bad season of arrears (−0.20) puts Bertil under 0.30
+and into outright refusal.
+
+Twenty men of the watch is not twenty men. `Hold` sums `reach × will`, not bodies: against *that*
+target set it is Bertil and eleven like him at will ≈ 0.51 and reach 2 — **Hold ≈ 12 × 2 × 0.51 ≈ 12**,
+against a hamlet where two hundred have committed. The same twenty against a Crown-Latinate grain riot
+in the market have `sever` near zero and will near 0.9, so **Hold ≈ 20 × 2 × 0.9 ≈ 36** — three times
+the force from the identical roster, because `sever` runs the other way. **A garrison drawn from the community it is ordered against is a different quantity from the
 same number of outsiders**, and the difference is `0.55 × 0.80 = 0.44` of every man's willingness.
 
 This is also why the setting's two caste-open institutions are the Löwenritter and Niflhel, without
@@ -222,29 +237,36 @@ the commander, there is no side.
 
 ### 3.1 The commander changes the option set and the pool source, never a modifier
 
-The precedent's arithmetic is the reason: **a flat shift of size X is worth X / (0.8·√Pool)** standard
-deviations.
+The precedent's arithmetic is the reason: **a flat shift of size X is worth X / (0.671·√Pool)** standard
+deviations. (0.671 is doc 10 §6's constant for this die and is cited, not re-derived; an earlier draft
+of this table used 0.8, which belongs to a different die. The σ figures below are recomputed; the ratio,
+which is what the argument turns on, is unchanged because the constant cancels.)
 
 | Pool | value of a flat +2 |
 |---|---|
-| 4 | 1.25 σ |
-| 9 | 0.83 σ |
-| 25 | 0.50 σ |
+| 4 | 1.49 σ |
+| 9 | 0.99 σ |
+| 25 | 0.60 σ |
 
 A commander bonus is therefore worth 2.5× as much to a weak side as to a strong one — backwards from
 every intent anyone has when they add it. So commanders add nothing.
 
 What a commander does is choose a **gambit** from `options(commander.view, field, sections)`, and a
-gambit does two things: it names *which persons' capability the roll draws from*, and it names *what
-is spent*.
+gambit does two things: it **adds acts to the option set** and it **substitutes the pool source on the
+φ fraction**, where `φ = Φ(C)·share(commander, C)` — doc 09 §6's leader operator, which is the single
+owner of this shape and which this table implements rather than restates. **A gambit never substitutes
+the whole pool.** The remaining `1−φ` of every section always rolls its own capability, which is what
+keeps Φ₀'s 0.60 ceiling from being routed around: a commander who could swap the entire exchange onto
+his own Acuity would be determining 100% of an outcome the budget caps at 60%, and an earlier draft of
+this table did exactly that. What is *spent* is the third column and is unchanged.
 
-| gambit | pool source | spends | available only if |
-|---|---|---|---|
-| Hold the line | Σ section endurance × cohesion | cohesion | always |
-| Break them at dawn | commander's **Acuity** vs enemy commander's **Focus** | commander's own exposure | a claim in his view that the enemy is unready |
-| Turn the ford | one section's Agility, unopposed | that section leaves the line for a round | a claim in his view that the ford exists |
-| Give ground and bleed them | enemy's supply | your own territory's larder | you are inside your own containment scope |
-| Parley | the argument system, not this one | a standing date | both commanders willing |
+| gambit | option-set effect | pool source **on the φ fraction only** | spends | available only if |
+|---|---|---|---|---|
+| Hold the line | none — the default act | the sections' own endurance × cohesion (φ substitutes nothing; this is the null gambit) | cohesion | always |
+| Break them at dawn | makes a pre-dawn assault legal for sections under his share | commander's **Acuity** against the enemy commander's **Focus**; the other `1−φ` of each section rolls its own Acuity against the enemy's own | commander's own exposure | a claim in his view that the enemy is unready |
+| Turn the ford | makes `flank` legal for one section | that section's Agility on the φ share reachable through its officer, unopposed; the rest of the section holds | that section leaves the line for a round | a claim in his view that the ford exists |
+| Give ground and bleed them | makes withdrawal-in-contact legal without a cohesion check | the enemy's supply, attacked on the φ fraction of your own weight he can actually direct | your own territory's larder | you are inside your own containment scope |
+| Parley | opens the argument system's rung set | the argument system, not this one | a standing date | both commanders willing |
 
 **The commander acts on his view, never the world** (substrate §3). `Turn the ford` is not in his
 option list if nobody told him about the ford, and it *is* in his list, disastrously, if the claim in
@@ -262,9 +284,14 @@ dispensation it reaches persons only by travelling through named persons. Here t
 channel.
 
 ```
-transmit(officer) = 0.40 + 0.06 × (Charisma + Focus)      →  0.52 .. 0.94   (attributes 1..7)
+transmit(officer) = min(1.0, 0.40 + 0.06 × (Charisma + Focus))   →  0.52 .. 1.00   (attributes 1..7)
 transmit(None)    = 0
 ```
+
+The clamp is not decoration and the stated range was wrong before it: with attributes running 1..7 the
+unclamped maximum is `0.40 + 0.06 × 14 = 1.24`, and a channel fraction above 1 is meaningless — it would
+have a section receive more of an order than was given. An exceptional officer (Charisma + Focus ≥ 10)
+transmits everything; there is nothing above everything. The floor of 0.52 stands as derived.
 
 A section with no living officer does not receive the gambit at all. It performs its own default,
 chosen by its own cohesion: `C ≥ 0.5 → hold`, `C < 0.5 → break`. **Killing an officer makes a section

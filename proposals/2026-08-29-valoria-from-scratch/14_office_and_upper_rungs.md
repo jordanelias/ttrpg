@@ -64,7 +64,8 @@ other, which is the first place `binds = persons-by-presence` is a coherent thin
 
 ### 1.2 Office changes the option set and the pool source — never a modifier
 
-A flat shift of size X on a pool roll is worth `X / (0.8·√Pool)`, which means it helps a weak side
+A flat shift of size X on a pool roll is worth `X / (0.671·√Pool)` — doc 10 §6 owns the constant —
+which means it helps a weak side
 *more* than a strong one — backwards from what "a leader" is supposed to mean. So no office anywhere
 adds a number to a roll. Two substitutions instead:
 

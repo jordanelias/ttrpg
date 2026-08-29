@@ -200,7 +200,6 @@ One act, one delta, four behaviours. No liar flag, no deception stat.
 Speaker pool = Charisma + practice(Bearing|Persuasion)
              + 1 per corroborating claim the HEARER already holds
              − 2 × δ_visible                      # the bigger the lie, the harder the tell
-             + Momentum spend
 
 Hearer pool  = (8 − credulity) + Acuity
              − stance(hearer → speaker)           # I believe my friends
