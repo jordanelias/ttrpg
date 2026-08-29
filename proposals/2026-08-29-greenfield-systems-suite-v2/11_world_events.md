@@ -142,6 +142,21 @@ bad season better than a neglected one, for free, out of arithmetic already in t
 carry a declared, non-empty effect (severe/moderate/minor); Failure carries none. Firing on three of
 four bands, never exclusively the narrow one, is what P0-3 actually forbids excluding.
 
+**The commensurability gate (`01 §6.1`), checked per site, not assumed.** `01 §6.1.1` point 3 makes
+this a standing obligation on every `derive_ob` caller: *"a module contract declaring a `derive_ob`
+site must declare its modifier bound."* Verified rather than assumed, against the cooked registry:
+`condition.{prosperity,order,defense}` are this suite's name for `set.{prosperity,order,defense}`
+(`engine/engine_params/descriptors.json:97-111` — floor 0, ceiling 5 each, confirmed by direct read,
+not carried over from `01`'s own table, which does not spell the renamed key out). At `hazard_pool =
+8` (crop failure and route-severed) or `10` (plague, headroom for a declared `M_max = 1` terrain
+modifier), `μ = 0.4·N`, `σ = 0.8·√N`: top-band reachability `derive_ob(5, M_max) + 3 ≤ μ + 1.645σ`
+holds for both pool sizes (`6.5 ≤ 6.92` at N=8, M_max=1; `6.5 ≤ 8.16` at N=10, M_max=1); bottom-band
+reachability holds trivially since `OB_MIN ≥ 0 > μ − 1.645σ` at both sizes. **Every `resilience.
+target_score` in §7 declares its `M_max` explicitly for exactly this reason**, and `acceptance.
+legitimacy` — flagged `UNVERIFIABLE` in `01 §6.2`'s own table (undeclared ceiling under that name) —
+is deliberately **not used** as a target anywhere in this document; §7's Altonian-pressure row targets
+`condition.order` instead, which is in the confirmed-ceiling family.
+
 **No actor, so `remit` does not gate this.** ED-IN-0201's "no leader, no action" clause (`00 §5`) binds
 modules a **post-holder** invokes. A world event has no holder — weather does not sit a post — so the
 C1 gate is inapplicable by construction, not overridden. `we.fire`'s `remit: []` records this the same

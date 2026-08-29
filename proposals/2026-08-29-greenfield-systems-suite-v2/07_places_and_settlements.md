@@ -133,11 +133,11 @@ All four are arithmetic over the registry, need no campaign run, and are load-ti
 **New, v2:** **L-5** — every `reversible: true` transition row satisfies `01 §2.3`'s
 `θ↑ − θ↓ ≥ H_MIN(gauge)` and `dwell ≥ 1`. This is `01`'s own falsifier, instantiated here because
 place-kind pairs are where it first has teeth. **L-6** — `Σ_institution max_share(institution) ≤ 1`
-(§5.1). **L-7** — every gauge this document declares as a `derive_ob` target elsewhere in the suite
-(today: `presence.<institution>`, §4.1a) has a **non-null** floor and ceiling, and that ceiling
-satisfies `01 §6.1`'s reachability inequalities against the practical pool range — `01`'s own
-commensurability gate, instantiated here because an undeclared ceiling on this document's data is
-unevaluable rather than passing, per `00 §7`'s `ob_sites:` note.
+(§5.1). **L-7** — every gauge this document declares that some `ob_sites:` row elsewhere in the suite
+targets (today: `presence.<institution>`, §4.1a) has a **non-null** floor and ceiling, and that
+ceiling satisfies `01 §6.1`'s reachability inequalities against **that row's own declared**
+`pool_max`/`modifier_max` — `01`'s own commensurability gate, instantiated here because an undeclared
+ceiling on this document's data is unevaluable rather than passing, per `00 §7`'s `ob_sites:` note.
 
 ---
 
@@ -314,6 +314,13 @@ directly (`Ob = derive_ob(presence_defender, modifiers = −presence_challenger/
 exact position a target's scale must be commensurate with the net for. An undeclared ceiling is not
 provisionally fine; per `00 §7`'s `ob_sites:` note it is **unevaluable**, which is worse than failing.
 
+**The two declarations trade against each other, and `05` has already run the arithmetic against his
+own site.** `fa.contest_influence`'s `ob_sites:` row declares `pool_max: 18` (`attr` 1–7 twice plus
+`POOL_BASE = 4`) and `modifier_max: 2`. At that pair, `01 §6.1`'s one-sided bound admits a ceiling up
+to **12.49** (10.49 at `modifier_max: 3`; 16.49 at 0) — so **07's ceiling and 05's `modifier_max` are
+not independently free**, and neither of us gets to declare in isolation without the other's number in
+hand. This is why "declare a scale" was the wrong ask on its own; this is the corrected one.
+
 ```yaml
 gauge: presence.<institution>
 floor: 0
@@ -323,13 +330,23 @@ rest: <rest, per-institution>
 bands: [dormant, marginal, established, dominant]     # illustrative edges only — SHAPE PROPOSAL
 ```
 
-**Floor 0, ceiling 7 — the same family as every other place gauge, chosen for the reason `01 §6.2`
-gives, not merely to match.** `ceiling/2 = 3.5`, which is the exact value `01 §6.2`'s table already
-scores **pass** for `set.legitimacy`/`set.popular_support`/attributes/`fac.*` — presence lands in that
-row rather than opening a new one. This is the path the coordinator's guidance names as least
-surprising, and nothing in this document's design needed a wider range: §4.2's four jobs (contest,
-facility-gating, strata, reachability) are all **relative** or **banded** reads, never a use that
-wanted more than seven discriminable levels.
+**Floor 0, ceiling 7 — inside `05`'s admissible ceiling with headroom, not merely inside it.** `12.49`
+is the number `fa.contest_influence`'s current declaration admits; `7` clears it by very nearly a
+factor of two. That headroom is deliberate, for a reason beyond safety margin: **`ceiling/2 = 3.5` is
+the exact value `01 §6.2`'s table already scores `pass` for `set.legitimacy`/`set.popular_support`/
+attributes/`fac.*`** — presence lands in the row every other 0–7 canon stat already occupies, rather
+than opening a new, wider one that would need its own case each time a sibling document's pool or
+modifier bound changes. Nothing in this document's own design wanted more than seven discriminable
+levels (§4.2's four jobs — contest, facility-gating, strata, reachability — are all relative or
+banded reads), so there was no reason to spend the headroom `12.49` would have allowed.
+
+**Contingent on `01 §6`'s opposed-site form, and declared with that in mind.** `05`'s obstacle is a
+**differential** (`presence_defender − presence_challenger`), which `01`'s owner has been told makes
+the one-sided envelope above too permissive — an opposed form is stricter, and if it lands, `12.49`
+comes down. **`0–7` is chosen with headroom precisely because of this**: even a materially tighter
+opposed-form bound has to fall a long way before it threatens a ceiling of `7`, so this declaration
+should not need to be revisited when that correction lands. If it ever does turn out to bite, the fix
+is a `descriptor_registry.yaml` edit to this one gauge's ceiling, not a redesign of `presences{}`.
 
 **Not a gate target.** Unlike Thread Sensitivity (`01 §7.5`, correctly a gate target at `TS ≥ 30`,
 never an obstacle), presence is *designed* to be rolled against — `05`'s whole `act.contest_influence`
@@ -345,12 +362,16 @@ edge of an "established" band, with 6–7 reserved for a presence that has becom
 authority (§4.4's Church Governor case). **The band edges above are illustrative, not ratified** — the
 same anti-fabrication posture as every other threshold this document proposes (§3.2, §5.1).
 
-> **Falsifier (L-7).** A declaration-time test (the same instrument `01 §6.1` specifies) computing, for
-> `presence.<institution>` at `ceiling=7`, `modifier_max=0` (the gauge's own declared range carries no
-> modifier — any site-specific modifier bound is that site's to declare, per `00 §7`'s `ob_sites:`
-> split of concerns) and the practical pool range `N_max ∈ [5,18]`: both the top-band and bottom-band
-> reachability inequalities from `01 §6.1` hold. **Load-bearing on the game**: it is what makes
-> `act.contest_influence` an action with four outcomes rather than one that always fails.
+> **Falsifier (L-7).** `N_max` and `M_max` in `01 §6.1`'s inequalities are properties of the **rolling
+> site**, declared once per `ob_sites:` row (`00 §7`) — not a range this document sweeps. The check is:
+> for every module contract anywhere in the suite whose `ob_sites:` names `presence.<institution>` as
+> `target`, `01 §6.1`'s top-band and bottom-band inequalities hold using **that row's own** declared
+> `pool_max`/`modifier_max` against this document's `ceiling: 7`. Evaluated today against
+> `fa.contest_influence`'s declared `{pool_max: 18, modifier_max: 2}`, both inequalities hold with
+> headroom (admissible ceiling 12.49 ≥ 7). **Load-bearing on the game**: it is what makes
+> `act.contest_influence` an action with four outcomes rather than one that always fails. **This
+> verdict is provisional on `01 §6`'s opposed-site-form correction** (§4.1a above) and must be
+> re-run, not merely re-asserted, once that lands.
 
 ### 4.2 The four things presence does — each closing an absence the delta spec named
 
@@ -645,7 +666,7 @@ deferred rather than fabricated. If a reviewer judges that trade not worth it, t
 | the node graph never gains or loses an entry at runtime (§3.5) | a test asserting the count of `place` entities and the edge set of `references/form_registry.yaml`'s `nodes:` list are identical before and after any seeded campaign run, regardless of how many `place_found`/`place_ruin` transitions fired |
 | growth/decay cannot flicker (§3.2, L-5) | the load-time test from `01 §2.3`, instantiated over every place-kind pair this document declares `reversible: true` |
 | strata claims cannot exceed yield (§5.1, L-6) | a load-time test summing `max_share(institution)` per place-kind and asserting ≤ 1 |
-| `presence.<institution>`'s declared range (floor 0, ceiling 7) passes `01 §6.1`'s commensurability gate (§4.1a, L-7) | the declaration-time test `01 §6.1` specifies, run against this document's `ceiling: 7` and `N_max ∈ [5,18]`; both the top-band and bottom-band reachability inequalities must hold |
+| `presence.<institution>`'s declared range (floor 0, ceiling 7) passes `01 §6.1`'s commensurability gate against every `ob_sites:` row that targets it (§4.1a, L-7) | for each such row (today: `fa.contest_influence`, `pool_max: 18`, `modifier_max: 2`), `01 §6.1`'s top-band and bottom-band inequalities hold at `ceiling: 7`; re-run against every new site declared later, and re-run wholesale if `01 §6`'s opposed-site-form correction changes the inequality's shape |
 | `controller(place)` never drifts from the sited governor post (07-O-1) | a test asserting no code path stores a place-level controller field; the only read path is the post query |
 | no form transition here is ever named directly by a world event or a Key (§8.1) | a static check that no `11`-lane emitter's result names a `form:` field this document declares — the gate always intervenes |
 | a facility, once built, is disclosed `exact` and citable by fieldwork (§8.2) | a test asserting every `facilities[]` entry carries a `disclosure:` row with `presentation: exact` |
