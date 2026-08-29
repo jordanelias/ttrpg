@@ -275,6 +275,24 @@ declaration and is never maintained against the sim.** A project whose target pl
 key ally dies, or whose terms are made unreachable by another actor **lapses** (§6.1) — that is not a
 bug in the hook, it is the texture, and it is why `lapse` is a real outcome rather than a consolation.
 
+### 4.2 The extension, and why it still stops scripting drift
+
+All three precedents are **singular authored hooks** — one coup counter, one fuse per campaign, one
+crown claim. This document generalizes the grammar to a **population**: every NPC, bloc and faction
+holds projects built from the same object. That is a real extension of the ruling's scope, and it is
+where a drift objection would land, so here is the answer — four guards, each checkable:
+
+| the drift risk | what blocks it | falsifier |
+|---|---|---|
+| a hook that names an entity — `if faction == X` | a kind's `owner_binding` is a **predicate**, never an id; instantiation binds slots at runtime (`churn:93`) | §13.3 row 5 — grep for a literal entity id in any row |
+| a hook that names an outcome | `fire.effect` must terminate at one of `01 §2.1`'s **four write leaves** *and* be reachable by a module already in some post's remit (§6.2) | §13.3 row 3 |
+| an inexpressible effect smuggled in as code | the kind is marked **`firing: false`** and **counted** (§1.1) — the ratified honest-residue discipline (`churn:97-104`) applied to this object | the count of `firing: false` rows is a number, not a feeling |
+| a hook that is really a scripted arc | the script is one **predicate** and one **consequence**. Everything between the world reaching the predicate and everything after the consequence is emergent, including who pushed it there (§5) | §13.3 row 7 — if progress never falls from an unrelated actor's action, these are timers |
+
+**The generalization lowers the drift risk rather than raising it.** A singular authored hook is
+special-cased by definition — it exists for one actor. A population of hooks built from one row shape
+cannot be, because the shape has nowhere to put the special case.
+
 ---
 
 ## 5. Obstruction needs no verb — the mechanism, named
@@ -430,7 +448,10 @@ evidence is at the fork. Closing it needs a replacement corpus, which is a conte
 
 ## 8. ⚠ J-N — the substrate supplies NO cross-season latency, and this is the constraint that shapes §3
 
-**Verified independently against the tree for this document**, not taken on report:
+**This is the one constraint on this page that is not a ruling and cannot be argued with. It is what
+the code does.** The amended authority model (see the note after `## Overrides`) puts canon and
+rulings in scope for override; it does not put the interpreter in scope. **Verified independently
+against the tree for this document**, not taken on report:
 
 | claim | verified at |
 |---|---|
@@ -455,8 +476,9 @@ evidence is at the fork. Closing it needs a replacement corpus, which is a conte
 
 **This is not a limitation this design works around; it is the reason §3 is a derivation.** A project
 that advanced by receiving something would need the transport. A project that advances by *looking*
-needs only the boundary, which already runs. **J-N is the ruling that would change this**, and if it
-rules for reactive chains, §3 and §6 are what to revisit — nothing else on this page moves.
+needs only the boundary, which already runs. **This design therefore requires no latency to be built
+and is not blocked on J-N.** J-N is the ruling that would *permit* an alternative, not one this page
+waits on; if it rules for reactive chains, §3 and §6 are what to revisit and nothing else here moves.
 
 ### 8.1 ⚠ J-O — what this document does and does not lean on
 
@@ -656,8 +678,10 @@ over one registry column, per `00 §7`'s rule that a module may only transition 
 
 Every emission above is a **Slate candidate**, and this document **does not rank it**.
 `narrative_engine_design_v2_churn.md §4`'s **Light Function is RATIFIED (ED-IN-0011)** and
-[`10_the_slate_and_salience.md`](10_the_slate_and_salience.md) owns the surfacing side. Three bindings
-this document is held to, reproduced rather than paraphrased:
+[`10_the_slate_and_salience.md`](10_the_slate_and_salience.md) owns the surfacing side. It is in scope
+for override under the amended authority model — **but not by this page**, which is a producer of
+candidates and would be re-deriving a ranking function it has no reason to touch. Three bindings this
+document holds itself to, reproduced rather than paraphrased:
 
 - **Strictly selective / subtract-only** — the light rations among candidates the churn produced and
   can never inject content, accelerate a clock or emit a pressure-bearing Key (`:197-204`). **A

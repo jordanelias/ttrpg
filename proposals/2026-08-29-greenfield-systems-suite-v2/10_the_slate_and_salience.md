@@ -9,10 +9,20 @@
 ## `systems/_architecture/auto_manual_resolution_duality_v1.md` (**RULED** Jordan 2026-07-08, ED-SC-0013) ·
 ## `systems/_architecture/scale_transitions_v30.md` §4.3–§4.4 · `canon/02_canon_constraints.md` (P-08) ·
 ## `engine/autoload/scene_slate.py` · `registers/editorial_ledger_sc.jsonl` (ED-SC-0024, ED-SC-0026)
+## Continues in: [`10_the_slate_and_salience_part2.md`](10_the_slate_and_salience_part2.md) — §§7–11
 
 ---
 
-## 0. ⚠ THIS DOCUMENT DOES NOT DESIGN A SALIENCE FUNCTION
+## 0. THIS DOCUMENT DOES NOT DESIGN A SALIENCE FUNCTION — a decision, not a prohibition
+
+⚠ **Authority note (2026-08-29, Jordan-directed, mid-flight).** The instruction under which this
+document began said the Light Function is ratified and may not be replaced. **That instruction was
+withdrawn while this was being written:** *"existing work is not necessarily required to keep all the
+way through to things like obstacles being stat/2 or whatever is ratified and canon"* … *"I just want
+the best possible proposal."* Nothing in the tree is out of bounds, including this.
+
+**So the sentence below is a judgement made on the merits, with the ratified text read line by line
+first, and it is defended in §0.1 rather than asserted.**
 
 **The salience function is ratified canon and lives elsewhere.** `narrative_engine_design_v2_churn.md`
 §4 — the **Light Function** — was ratified by Jordan on 2026-07-05 (ED-IN-0011) and is named as the
@@ -34,6 +44,32 @@ does not have and cannot supply for itself:
 **If v2 needs a scoring term the ratified set lacks, that is a ruling request, not an edit.** This
 document requests none. Every score term named below is one of the ratified six.
 
+### 0.1 Read on the merits, and kept — including the two terms I tried hardest to break
+
+Under the amended authority the correct output is not compliance but a verdict. Here is the verdict,
+term by term, having read `narrative_engine_design_v2_churn.md` §4 (`:190-285`) line by line.
+
+| ratified term | attacked how | kept? |
+|---|---|---|
+| **light-inertia** (attention has momentum) | This is the term an earlier draft of the delta spec tried to replace with **novelty** — the *opposite shape*. I re-ran that argument from scratch, because "surface what is new" is the intuitive design and it is worth knowing why it is wrong. **It is wrong because the world produces ~125 candidates a season (§1.3) and almost all of them are new.** A novelty term in a world with that emission rate ranks by *arrival*, which is a random variable, and the result strobes: the player is handed six unrelated first-time situations every season and no thread ever develops. Inertia is what makes a season the continuation of a season. **Kept, and the earlier draft's instinct is now understood rather than merely overruled** | **kept** |
+| **casting severed from forecast** | The tempting simplification is one score. I traced what one score does: forecast → surface → player acts → forecast strengthens. That is the rubber-banding loop at `:274`, and it is *invisible in play* — the game would feel prescient rather than broken. **A term I would not have thought to sever, and could not have discovered by reasoning about my own design.** Kept, and it is what turns one score into two (§4) | **kept** |
+| **exempt-cap + reserved promotion slice** | The obvious design is "player-engaged threads are exempt from demotion", full stop, and it is what I would have written. The ratified text caps it *and* reserves a slice, because uncapped exemption lets a player engaging `B`-many threads starve imminence permanently. **It is also what makes §5.3's monotonicity proof go through** — a cap is score-independent where a threshold is not. Two independent reasons, neither of which I had | **kept** |
+| **anti-strobe floor** | This is P-iii hysteresis under another name, and `01 §2.3` requires the same shape of every reversible form transition. Consistent with the suite by construction | **kept** |
+| **integer basis points** | The ordering crosses the Python↔GDScript port. Float accumulation order differs. Non-negotiable | **kept** |
+| **meaningfulness = durability × tie-proximity × identity-touch** | The only term I would still like evidence for is the **product** form: a candidate with zero identity-touch scores zero however durable and close it is. That is probably right (a thing that touches nobody's identity is not a story) but it is asserted, not shown. **Recorded as a live question, not proposed as an override** — the weight set is exposed data (`:279`), so if the product form is wrong it is tunable to near-additive without re-ratification | **kept, with one question** |
+
+**One reconciliation, which is not an override but should not pass silently.** The ratified text
+describes inertia as a *"persistent priority term whose carryover decays"* — a carried value. `01 part
+2 §9.3` establishes, verified against the tree, that **the substrate has no mechanism to carry
+anything across a season.** Two true statements that cannot both be implemented as written. §7 resolves
+them by computing the identical arithmetic as a **derivation over the append-only Key log**: same decay
+law, same floor, same integer discipline, nothing stored and nothing carried. **The ratified property is
+preserved exactly; only its implementation is relocated from a carried field to a derived read.**
+
+**What I did not do, and would flag if I had:** propose a replacement term, add a second scoring
+function beside the ratified one, or reweight the ratified constants. Two mechanisms doing one job is
+the elegance failure `00 §1` names, whoever wrote either.
+
 *Emergent possibility lost if the Slate were cut:* **none — cutting it adds volume.** What is lost is
 the player's ability to perceive any of it. This is the one change in the suite that is pure
 distillation, and it is why `00 §8` P0-5 lands it before B, F and G.
@@ -47,6 +83,7 @@ distillation, and it is why `00 §8` P0-5 lands it before B, F and G.
 | **O-10.1** | `player_agency_v30.md:311-327` — the **cross-step lexicographic pruning algorithm** (sort non-mandatory entries by `(step_number, internal_index)`, take the first *k*) | **(2) ratified canon** | **Superseded by the Light Function's cast score.** Two ratified surfaces answer the same question and disagree: a step-order sort is *provenance-ranked* (a Duty-aligned entry always outranks an NPC-outreach entry, whatever is at stake in either), while ED-IN-0011 ranks on **meaningfulness × tie-proximity × identity-touch × inertia** and claims the relevance function as *"the engine's central object"*. The later ratification wins on both date (2026-07-05 vs 2026-04-17) and merit: step order cannot express *"this small thing is about your brother"*. **What survives untouched:** every Step-1..6 generator (they become emitters, §2.4), the budget (§1.2), mandatory bypass, Witness Mode, and the §4.5 not-pursued consequence table. Only the *comparator* changes |
 | **O-10.2** | `player_agency_v30.md:262-272` — the Step-4 Conviction scan's **inline roster of NPC names, faction names, 17 territory names, ~25 keywords and 11 role→NPC mappings** | **(2) ratified canon**, mechanically minor | The scan is kept whole; its **tables move to `references/names_index.yaml`**, which `CLAUDE.md §4` already names as the single owner of definition naming. A generator that names Almud, Baralta and Ehrenwall inline is the `if faction == X` shape `00 §6` principle 2 rejects. Intent unchanged; storage corrected |
 | **O-10.3** | `auto_manual_resolution_duality_v1.md:65` — *"consistency makes the fidelity choice free of strategic advantage"*, read as **E[auto] ≈ E[expert-played]** | **(1) a Jordan ruling — NOT overridden here; flagged** | **This document takes the AI-played-baseline reading** (§6.4) and says so, because a design must take one to be buildable. It does **not** claim authority to amend the ruling. **ED-SC-0024** (`registers/editorial_ledger_sc.jsonl`, `status: open`, `needs_jordan: true`) already files exactly this amendment, and **ED-SC-0026** supplies the argument that forces it: under the strict reading *"playing a contest is strictly wasted attention."* **If Jordan rules for strict parity instead, only the parity harness's baseline changes — no structure in this document moves** (§6.4, last paragraph) |
+| **O-10.5** | **The Light Function itself** (`narrative_engine_design_v2_churn.md` §4, ED-IN-0011) | **(2) ratified canon — CONSIDERED FOR OVERRIDE AND DECLINED** | Recorded here rather than left silent, because under the 2026-08-29 authority amendment *not* overriding is now also a decision that needs an argument. **§0.1 is that argument, term by term.** Verdict: adopted entire, unreweighted, with no term added and no second scoring function beside it. The one term carrying an open question — the *product* form of meaningfulness — is named there and is tunable data, not a structural override |
 | **O-10.4** | *(not an override — recorded so the seam is not mistaken for one)* `engine/autoload/scene_slate.py` | shipped code | It is a 59-line priority **queue** (`queue_scene` / `next_scene`, sorted by an integer `priority`), with no budget, no salience, no truncation and no fidelity. `references/module_contracts.yaml:611` calls it a *"deterministic 7-priority slate generation"*; the file does not generate anything. It is **adopted as the dispatch buffer downstream of `sl.truncate`** (§5.5), not replaced |
 
 **Adopted whole rather than overridden**, recorded because deciding *not* to override is also a
@@ -570,225 +607,3 @@ harness's baseline moves, and §6.5's premium becomes zero. The design is robust
 *reason to play* is not, which is why ED-SC-0026 says CIP-9b must not be ruled separately from CIP-1.
 
 ---
-
-## 7. Light-inertia without storing anything, and **J-N**
-
-The ratified inertia term (`:220`) is a **carryover across seasons**: `inertia_bp = inertia_bp · NUM // DEN`,
-integer, a pure function of the accounting index, with an anti-strobe floor. Carryover across seasons is
-exactly what `01 part 2 §9.3` says the substrate cannot do.
-
-**Resolution: inertia is *derived from the Key log*, not carried and not stored.**
-
-```
-last_lit(c)   = the accounting_index of the most recent slate.item_surfaced Key with this candidate_id
-inertia_bp(c) = 0                                   if none
-              = INERTIA_BASE · NUM^(t − last_lit(c)) // DEN^(t − last_lit(c))     otherwise
-anti-strobe:    if 0 < t − last_lit(c) ≤ STROBE_MIN ⟨shape: 2⟩ :
-                    inertia_bp(c) := max(inertia_bp(c), STROBE_FLOOR)  ⟨shape⟩
-```
-
-`INERTIA_BASE`, `NUM`/`DEN`, `STROBE_MIN` and `STROBE_FLOOR` are **shape proposals**; they belong to
-the ratified F-F weight surface (`:279`) as exposed versioned data.
-
-**Three things this buys.**
-
-1. **No fifth stored kind, no new write leaf, no aggregate written (AU-1).** A derivation over an
-   append-only log the engine already keeps.
-2. **J-N compliance, exactly.** `01 part 2 §9.3` forbids *"a module reacting to a Key by publishing a
-   Key that lands next season"* and prescribes *"it reads state at the boundary."* Reading the log is
-   reading state. **Nothing is posted to next season's Slate; next season's Slate re-derives
-   everything, including how much attention this thing already had.** ⚠ **What J-N forbids here,
-   concretely: there is no "carry this candidate forward" flag, no deferred-item queue, and no
-   next-season promise.** A situation reappears next season because it is *still true*, or it does not
-   reappear at all. **J-N is the ruling that would change this.**
-3. **J-O robustness.** This reads the Key log as **telemetry**, which `01 part 2 §9.4` records as
-   surviving a "telemetry only" ruling. Inertia does not depend on the consumer mesh.
-
-**Fallback if the log is not queryable by `candidate_id` at acceptable cost:** a `Tag` with
-`kind: Memory` on the candidate's anchor, `key = candidate_id`, `value = INERTIA_BASE`, decaying by
-`01 §3.2`'s derived-salience law — the same arithmetic, one stored row per lit candidate, bounded by
-`MEMORY_CAP`. **Named so the fallback is a decision and not an improvisation.** Prefer the log.
-
----
-
-## 8. ⚠ This document leans on Key consumption — **J-O**
-
-Per `00 §5.1` and `01 part 2 §9.4`, stated so the affected parts stay identifiable if J-O rules that
-the Key mesh stays a telemetry spine:
-
-| what it depends on | survives a "telemetry only" ruling? |
-|---|---|
-| **inertia derived from `slate.item_surfaced`** (§7) | **yes** — append-only log read; that is telemetry |
-| **`provenance` on every candidate** (C-1) and `causes[]` as the chain a player follows | **yes** — telemetry and causality are what the alternative keeps |
-| **emitters returning candidates at the boundary** (§2.4) | **yes** — they are boundary derivations over state, not Key reactions. This was chosen deliberately; an emitter subscribing to Keys would have been the natural design and would have been J-O-fragile |
-| **`slate.item_surfaced` as an emission** | **yes** as a log entry |
-| **the fidelity label reaching a subsystem herald as a Key** (§5.5) | **no** — this becomes a boundary read of the derived candidate set. **The only J-O-fragile line in this document**, and it is one line |
-
-**This document takes no position on J-O.**
-
----
-
-## 9. What the player actually touches
-
-**Per `00 §2.3` item 4, and the ratio is the point.**
-
-**Surface — 1 verb, 2 reads:**
-
-| what the player is asked | how often | budget |
-|---|---|---|
-| **attend a Slate item** — spend a scene action, then pick one of 3–5 responses the item supplies | 3–5 times per season | `A`, from §1.2 |
-| *read:* the Slate — item, anchor, witness channel, the tag saying what generated it (`player_agency_v30.md:299`) | once per season | — |
-| *read:* an item's published inputs — never its score, threshold, or rank arithmetic (`01 §8`) | on demand | — |
-
-**Substrate — 4 modules, 6 derived terms, 2 orderings, 3 fidelities, 5 witness channels, 1 hash, 0
-stored objects.**
-
-The player never sees the word *salience*, never sees `cast_score`, never sees a candidate that was
-shaded, never sets a filter, never configures a priority, and never learns that 125 things happened and
-6 arrived. **They see a season with six things in it, and each one is about something.**
-
----
-
-## 10. Module contracts
-
-Per `00 §7`. Four modules; **`state: []` in all four**; no `form:`, no `transitions:`; `remit: []`
-because none is invoked by a post-holder — they run at the boundary for every player. Per W-6, every
-`consumes:` row names what the consumer does.
-
-```yaml
-- module: sl.candidates
-  parent: slate
-  class: surface                  # the only surface subsystem in v2 (00 §4.3)
-  scales: [personal, settlement, territory, peninsula]
-  tier: null
-  resolver: derivation            # gathers emitter returns; invents nothing
-  remit: []
-  budget: null
-  consumes: []                    # emitters return at the boundary, not by subscription (§8)
-  emits: []
-  state: []
-  form: []
-  transitions: []
-  disclosure: [{of: candidate_set, inputs: published, presentation: exact, trigger: hidden}]
-
-- module: sl.cast
-  parent: slate
-  class: surface
-  scales: [personal, settlement, territory, peninsula]
-  tier: null
-  resolver: gate                  # knowability + realized; no roll, no score (§3)
-  remit: []
-  budget: null
-  consumes: []
-  emits: []
-  state: []
-  form: []
-  transitions: []
-  disclosure: [{of: witness_channel, inputs: published, presentation: exact, trigger: hidden}]
-  # the channel is an INPUT and is published — a player may reason about what they cannot know
-
-- module: sl.rank
-  parent: slate
-  class: surface
-  scales: [personal, settlement, territory, peninsula]
-  tier: null
-  resolver: derivation            # cast_score and depth_score; read-only, writes nothing
-  remit: []
-  budget: null
-  consumes: []
-  emits: []
-  state: []
-  form: []
-  transitions: []
-  disclosure: [{of: cast_score, inputs: published, presentation: band, trigger: hidden}]
-  # components published; the composed score is a band; the budget arithmetic is the trigger
-
-- module: sl.truncate
-  parent: slate
-  class: surface
-  scales: [personal, settlement, territory, peninsula]
-  tier: null
-  resolver: derivation            # top-n under a total order; §5
-  remit: []
-  budget: null
-  consumes: []
-  emits: [{type: slate.item_surfaced, terminal: false}]
-  state: []
-  form: []
-  transitions: []
-  disclosure: [{of: slate, inputs: published, presentation: exact, trigger: hidden}]
-```
-
-**`slate.item_surfaced` is blocked on `00 §8` P0-1** (`references/rendering_dispositions.yaml` must
-exist before any key type is appended). Named so the blocked work is specific.
-
----
-
-## 11. Property audit
-
-**Scope gate, honoured (`00 §0.1`, delta spec §10): none of the four modules rolls.** Three are
-`derivation` and one is `gate`. **A NERS verdict is not manufactured for them.** They are diagnosed on
-their loops and gates instead, below, and on P-iii (no oscillation) and P-v (no dominant option) which
-do apply to a selection function.
-
-### 11.1 Claims and falsifiers
-
-| # | Claim | Falsifier |
-|---|---|---|
-| **1** | **This document designs no salience function** (§0) | Grep every score expression here against `narrative_engine_design_v2_churn.md:239-246`. A term appearing here that is not one of the ratified six — or the struck **novelty** term reappearing — falsifies it |
-| **2** | **Truncation is bounded:** `|Slate| ≤ B` in every reachable state (§5.2) | A property test over random `(|C|, |M|, |E|)` triples asserting `|Slate| ≤ B`. **Separately measurable and NOT assumed:** the frequency of `|M| ≥ B` over a seeded 50-season campaign. If it exceeds a stated rate, the mandatory enumeration is too wide and §5.4 is wrong |
-| **3** | **Truncation is monotone** (§5.3) | A property test: sample a candidate set and a comparator, raise one candidate's `cast_score`, assert it did not leave the Slate and that no candidate ranked below it entered. **Mutation check that the proof is load-bearing:** redefine the exempt set by a score *threshold* instead of a count *cap* and confirm the test then fails |
-| **4** | **P-A — a candidate's outcome does not depend on whether any other was surfaced** (§6.3) | Run a seeded season twice with identical state, differing only in which Slate items were attended, with all attended items forced to the AI policy. Assert the resulting world state is **bit-identical**. **This is the single most important test in the document.** Mutation check: replace the per-candidate substream with a shared sequential stream and confirm it fails |
-| **5** | **P-C — order neutrality** (§6.3) | Resolve one season's candidate set under `n` random permutations; assert one state. Mutation check: allow two post operations on one post per boundary and confirm it fails |
-| **6** | **P-B — baseline parity** | The **parity harness** of `auto_manual_resolution_duality_v1.md:67`, comparing auto against **AI-played** on matched inputs. ⚠ **The tolerance is fork C, genuinely open**, and this document does not set it. Until the harness lands, P-B is **asserted and unverified** |
-| **7** | **No unknowable candidate reaches the Slate** (§3) | A test asserting every Slate member has a non-empty `witness` on one of the five channels, and that no Thread-constituted candidate is cast to a person below the canonical Thread Sensitivity gate. This is P-08's own falsifier applied to the attention system |
-| **8** | **The Slate writes nothing** (§6.2) | A contract test asserting all four `sl.*` modules have `state: []`, no `form:`, no `transitions:`, and a resolver in `{gate, derivation}` |
-| **9** | **Candidate identity is stable across seasons** (§2.2) | A seeded campaign asserting a persisting situation keeps one `candidate_id` across ≥ 3 seasons. Mutation check: add `accounting_index` to the hash and confirm inertia stops carrying |
-| **10** | **Zero new player verbs** (§1.4) | Count verbs across the suite before and after `10`. This document must add 0 and does add 0 — it adds one *interaction* (attend) which is the budget's own unit, not a verb over the world |
-| **11** | **The funnel ratios of §1.3** | They are **estimates with stated bases, not measurements**. Falsified by instrumenting one seeded 50-season campaign and counting emitted candidates per season. **If the true rate is under ~3× the budget, the Slate is not earning its keep and D should be cut** |
-
-**On guards (`00 §8` P0-4, `CLAUDE.md §0.1` point 5).** Every test above is load-bearing on **the
-game**: 2, 3, 5 and 9 on whether the player's season is coherent; 4 and 6 on whether the attention
-system is honest; 7 on a canon constraint. **None guards apparatus.**
-
-### 11.2 Loops, each with its bound
-
-| loop | bound | measured? |
-|---|---|---|
-| **light → slate → played → changed state → next season's light** — the ratified North-Star loop (`:272`), and the reason this document exists | Bounded by `B` per season and by the truncation's monotone top-`n`. **The dangerous form is across accountings, not within one**, and it is severed structurally: casting reads realized state only (§4.2), forecast objects are actor-invisible, and allocation is **one-pass per accounting** — no fixed-point iteration | **unmeasured.** Fixture F8 (`:283`) is the ratified test that would measure it and it does not exist |
-| **inertia → lit → inertia** (attention self-reinforcing) | Bounded above by geometric decay (`NUM/DEN < 1`) and below by `STROBE_FLOOR` for `STROBE_MIN` seasons; the **exempt cap `X`** bounds how much of `B` past attention can occupy, and the **reserved slice `R ≥ 1`** guarantees a seat it cannot reach | **unmeasured.** The ratified fixture is F6 (`:553`) |
-| **unserved candidate → pressure deposit → higher band → more candidates** | Owned by `08`/`07`, not here. Bounded by geometric decay to a finite fixed point `rest + a/λ` (`01 §5.1`). **The Slate does not participate**: it neither creates nor suppresses the deposit, because a shaded candidate resolves (§6) exactly as a surfaced one does | bounded by construction; rate unmeasured |
-| **player attends → thread persists → engaged → exempt → attends again** | `X` — a count cap, and §5.3 shows why it must be a cap | **unmeasured** |
-
-### 11.3 Gates, each with what it reads
-
-| gate | reads | rolls? |
-|---|---|---|
-| `sl.cast` knowability | the five witness channels; Thread Sensitivity for P-08-barred subjects | no |
-| mandatory enumeration | the nine closed trigger predicates, with canon's own hysteresis and dedupe | no |
-| exempt eligibility | whether a scene action was spent on this `candidate_id` in a prior season | no |
-| reserved slice eligibility | whether any `slate.item_surfaced` exists for this `candidate_id` | no |
-| one-post-op-per-boundary (§6.4) | the boundary's collected post operations | no |
-
-### 11.4 P-iii and P-v, which do apply
-
-**P-iii — no oscillation.** The failure a naive attention system has is *strobing*: a candidate on the
-score boundary enters and leaves the Slate every season. The **anti-strobe floor** (§7) is the
-hysteresis band, and it is the ratified mechanism, not an invention here. It is the same shape `01 §2.3`
-requires of every reversible form transition, and it is required for the same reason.
-
-**P-v — no dominant option.** The response set is 3–5 *"genuinely different in kind"* (`00 §2.2`) and
-is supplied by the resolver, not by the Slate. **A dominant response is a defect in the resolver's
-option set, not in the Slate** — and the Slate cannot mask one, because it can neither add nor remove
-a response (C-5).
-
-### 11.5 The three weakest points, named rather than buried
-
-1. **P-B is asserted and unverified**, and it depends on a fork Jordan has not closed (fork C, the
-   tolerance) plus a reading of a ruled doctrine that is itself filed as needing him (ED-SC-0024,
-   ED-SC-0026). **§6.5 is the least-supported paragraph in this document.**
-2. **§1.3's funnel ratios are estimates.** They are the argument for the whole change, and they are not
-   measured. Claim 11 is how they get measured, and it names the number at which the change should be
-   cut instead of shipped.
-3. **`|M| ≥ B` is reachable** and degrades the game to mandatory-only. Canon handles it; nobody has
-   measured how often it happens.

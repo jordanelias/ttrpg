@@ -40,16 +40,34 @@ Listed, tiered and argued (`00 §5.3` collects them so each can be vetoed indivi
 |---|---|---|---|
 | **C-1** | v1 `06 §3`: *"a faction's character is who holds its head post … swap two factions' names in the starting data and nothing else changes, because there is nothing else to change"* | this suite's own v1 | It is the ARCHIVED critique's root cause C. Deleting the per-faction branch was right; replacing it with nothing left **no institution for anyone to be in tension with** and no continuity across a succession. Corrected by `identity.ethos` + derived `divergence` (§2) — still no `if faction == X` anywhere |
 | **C-2** | v1 `06 §5`'s three orthogonal policy rows (fiscal stance · muster stance · succession rule) | this suite's own v1 | `01 §1.1` gives a faction **exactly one** form field, `posture`, and `01 part 2 §12` lists it as the only faction row in `substrate.form`. Three switches cannot land. They become **one posture value per row in the form registry**, each row carrying its own fiscal, muster and succession terms — `00 §1`'s "one object with a registry of kinds" corollary (§6) |
-| **C-3** | v1 `06 §2`'s provisional `faction.acceptance` derivation | **ratified canon — integrate, don't duplicate** | `settlement_layer_v30.md:158-171` already ships a size-weighted, **saturating**, settlement-sourced aggregate with a calibrated constant and a 30-season convergence result (`:173`). v1 invented a weaker one beside it. **Adopted whole** (§4.2). Q-4's *name* question stays open and untouched; what closes is the invention of a second arithmetic |
-| **C-4** | v1 `06 §6`: *"There is no collapse procedure, no elimination check … A faction that stops acting can **always** produce a claimant"* | **ratified canon — integrate**, plus a narrow amendment to the delta spec's §9.5 carry-forward | `settlement_layer_v30.md:1077` ratifies a real end: *"If the faction leader is killed or captured and no successor exists with Standing 4+, the **faction dissolves**."* v1 silently removed it, leaving a faction that can neither act nor end. §7 restores the end **as a gate with a dwell**, and keeps the recoverability the delta spec §9.5 carries forward — by narrowing what the immortal seat node guarantees. **This is the one place this document amends a §9 carry-forward; it is flagged loudly rather than folded in** |
+| **C-3** | v1 `06 §2`'s provisional `faction.acceptance` derivation | this suite's own v1, **superseded on merit by ratified canon** | `settlement_layer_v30.md:158-171` already ships a size-weighted, **saturating**, settlement-sourced aggregate with a calibrated constant and a 30-season convergence result (`:173`). v1 invented a weaker one beside it. **Adopted whole** (§4.2) — not because it is canon, but because nothing this page could design without a sim would beat a calibrated saturating form with a convergence result attached. Q-4's *name* question stays open and untouched; what closes is the invention of a second arithmetic |
+| **C-4** | v1 `06 §6`: *"There is no collapse procedure, no elimination check … A faction that stops acting can **always** produce a claimant"* | this suite's own v1, **plus a narrow amendment to the delta spec's §9.5 carry-forward** | The restored end condition is at `settlement_layer_v30.md:1077` — *"if the faction leader is killed or captured and no successor exists with Standing 4+, the **faction dissolves**"* — but it is kept **because it is right**, not because it is canon: a world that cannot lose an institution cannot gain one in its place, and v1's arrangement left a faction that can neither act nor end. §7 restores the end **as a gate with a dwell**, keeps the recoverability §9.5 carries forward, and does so by narrowing what the immortal seat node guarantees. **This is the one place this document amends a §9 carry-forward; flagged loudly rather than folded in** |
 | **C-5** | v1 `06 §4`'s bespoke faction↔faction `disposition` gauge and `hostility()` sum | this suite's own v1, superseded by `01 §7` | Faction enmity is now a `treaty` edge (or its absence) in the shared container with per-kind semantics, and `01 §7.3` already forbids the stored aggregate v1's disposition term was. Target selection is `05`'s, reading edges; this page does not restate it |
+| **C-6** | `settlement_layer_v30.md:165`'s **fixed 50/50 blend** `q_s = 0.5·L_s + 0.5·PS_s`, taken *before* aggregation | **ratified canon — a narrow amendment, proposed and flagged, NOT taken unilaterally** | The same document keeps **aggregate L and aggregate PS separate** at `:170` *because consumers need them separately*, then discards the distinction one line earlier by pre-blending. Institutional acceptance and popular backing are the two axes this setting is *about* — a chartered Church with L 6 / PS 1 and a Restoration cell with L 1 / PS 6 are opposite objects and this blend makes them identical. **The better shape is to aggregate the two axes separately and blend at the consumer**, where the weight is the consumer's question. ⚠ **This invalidates canon's calibrated `K = 6` and its Stage-4 convergence result** (`:166`, `:173`) — a re-calibration is a sim job, not a proposal's. So §4.2 ships canon's blend **as-is** and this row records the amendment as a **flagged proposal for the SE lane**, with the reason it is not taken here stated plainly: an unre-calibrated improvement is worse than the thing it improves |
 
-**Not overridden, deliberately.** **ED-POL-11** (`systems/factions/faction_politics_v30.md:1093`) —
-*"Patronage is political/institutional; Knot is spiritual/personal. Use in separate contexts; **do not
-conflate**"* — is **preserved by construction** in §3.2: bloc connectivity reads PP-724's six political
-edge kinds and **never `knot`**, so a spiritual tie can never assemble a court faction. **PP-724 §7-§8**'s
-defection cascade (`:501-528`) is adopted as the mechanism a bloc's collapse *already has*, not rebuilt.
-**ED-IN-0201**'s no-leader-no-action gate is `05`'s and is read here, not restated.
+### Kept because they are right — recorded, since deciding not to override is also a decision
+
+Under the amended authority model these were re-examined on merit rather than inherited.
+
+- **ED-POL-11** (`systems/factions/faction_politics_v30.md:1093`) — *"Patronage is political/institutional;
+  Knot is spiritual/personal … **do not conflate**."* **Kept, and it is right.** `01 §7.5`'s per-kind table
+  shows the two are not magnitudes of one another: a Knot's disposition is *stored*, an NPC↔NPC edge's is
+  *derived*; a Knot's strain is a different object with different bounds; a Knot *ruptures* where a
+  patronage *breaks*. Letting a Knot assemble a court faction would make a Thread-constituted binding into
+  a strong political tie, which is exactly the conflation, and it would also make the Warden ladder — whose
+  whole point is Thread Sensitivity — silently the best route to political power.
+  **But the ruling's reach is narrower than "Knots are politically inert", and this page takes only what
+  it needs:** `knot` is excluded from **bloc connectivity** (§3.2) and from nothing else. A Knot still
+  moves a person's convictions through a conviction scar (`01 §7.5`), and those convictions still feed
+  `practice`, `divergence` and `05`'s `appeal`. A Knot changes what an officer *believes*; it never
+  decides which wing they are in. That is the distinction ED-POL-11 is protecting, stated as a mechanism.
+- **PP-724 §7–§8**'s defection cascade (`:501-528`) — **kept, and adopted rather than rebuilt.** It already
+  ships hop-attenuation, a capped-and-decaying gain term, a player brake and a hard depth cap, with an
+  explicit no-double-count clause. Anything this page wrote would be a worse version of it. Its own
+  `[NEEDS TESTING — SIM-DEFECT]` caveat is carried forward unupgraded (§9.1).
+- **PP-724's six edge kinds as the bloc-connectivity basis** — kept, and each earns its place rather than
+  being inherited wholesale (§3.2).
+- **ED-IN-0201**'s no-leader-no-action gate — `05`'s, read here and not restated.
 
 ---
 
@@ -319,7 +337,7 @@ subsystem.**
 | grade | what it is | how it is represented | can it act? |
 |---|---|---|---|
 | **post** | the faction holds the governance post at the place's tier node | a `Post` whose `principal` is this faction (`01 §4`) | yes — `05`'s gate is satisfied at that tier |
-| **charter** | a standing privilege at a place the faction does not govern | a `charter` **edge**, faction → place (`01 §7.2`) | no; it draws yield and gates facilities |
+| **charter** | a chartered privilege at a place the faction does not govern | a `charter` **edge**, faction → place (`01 §7.2`) | no; it draws yield and gates facilities |
 | **presence** | institutional reach short of any right | a `presence.<institution>` gauge on the place (`07`, `01 §5.2`) | no; it is what `act.contest_influence` moves (`05`) |
 
 **`holdings` is not a field.** It is *"the places whose governance post's principal is this faction"* —
@@ -340,20 +358,20 @@ not restated, per `00 §5.3`'s *"adopt what is better even when it is not yours"
 W_s  = base(Type) + Prosperity_s + FacilityTier_s                    settlement_layer :159-163
 q_s  = 0.5·L_s + 0.5·PS_s                                            :165
 T    = Σ_s  W_s · (q_s / 7)                                          :165
-standing = clamp( round( 7 · T / (T + K) ), 0, 7 ),   K = 6          :166  (K calibrated by canon's sim)
+footing  = clamp( round( 7 · T / (T + K) ), 0, 7 ),   K = 6          :166  (K calibrated by canon's sim)
 ```
 
 **The one thing this page adds is the summation domain**, and it adds it in a direction canon already
 went:
 
 ```
-standing(faction, node) : T sums over every place in NODE's subtree where the faction has a footing,
+footing(faction, node) : T sums over every place in NODE's subtree where the faction has a footing,
                           each weighted by its grade —  post: W_s ·  charter: γ_c · W_s
                           presence: γ_p(band) · W_s
 ```
 
 - **Evaluating at different nodes is what makes it multi-scale.** The same function at a settlement
-  node, a province node and the peninsula gives settlement-, province- and peninsula-level standing.
+  node, a province node and the peninsula gives settlement-, province- and peninsula-level footing.
   One derivation, three tiers, no third quantity to keep consistent.
 - **Extending `T` over non-governed places is canon's own move, not an invention.**
   `settlement_layer_v30.md:171` already sums `T` over **Presence localities** for a territoryless
@@ -362,12 +380,12 @@ standing(faction, node) : T sums over every place in NODE's subtree where the fa
 - `γ_c` and `γ_p` are **shape proposals**, `0 < γ_p < γ_c < 1`, with the ordering doing the work: a
   right is worth less than governance and more than reach.
 - **Bounded and saturating for free.** `T/(T+K)` gives diminishing returns and holds the result in
-  `[0,7]` for any holding, which canon names as its own Lesson-5 bound (`:168`) — `∂standing/∂q`
+  `[0,7]` for any holding, which canon names as its own Lesson-5 bound (`:168`) — `∂footing/∂q`
   shrinks as `T` grows. This is a **measured** bound, not an argued one: canon records a Stage-4 sim
   over 30 seasons under mission shocks with no runaway (`:173`). That is the only measured loop bound
   cited anywhere in this document, and it is canon's, not this suite's.
 
-**Q-4 is untouched.** This page calls the quantity `faction.standing` and takes **no position** on
+**Q-4 is untouched.** This page calls the quantity `faction.footing` and takes **no position** on
 whether it is what canon calls Mandate. What C-3 closes is narrower and worth being precise about:
 v1 invented a *second arithmetic* beside a ratified one. The name question stays exactly as open as
 `00 §5.1` leaves it.
@@ -384,7 +402,7 @@ depends on the resolution, but an SE/FA-lane reader should know the two sections
 `settlement_layer_v30.md:1027-1047` ships a five-stage ladder — Cell · Organization · Movement ·
 Faction · Hegemon — with per-stage requirements stated in terms this derivation already reads
 (settlements controlled, provinces, province seats). Under v2 those become **bands on
-`standing(faction, peninsula)` plus footing counts**, derived at read.
+`footing(faction, peninsula)` plus footing counts**, derived at read.
 
 **A stored stage counter would be an aggregate with a setter**, and AU-1 forbids it. It would also need
 a writer at every conquest, every charter lapse and every governance revocation — four writers for a
@@ -392,13 +410,13 @@ number that is a function of state already on the board. The bands are `gauge_ba
 (`01 §5.1`), and the mapping from canon's stage requirements to band edges is a **shape proposal**:
 canon's thresholds are ratified for canon's Renown-keyed ladder, not for this derivation.
 
-### 4.4 What standing gates
+### 4.4 What footing gates
 
 | gate | reads | owner |
 |---|---|---|
-| **charter lapse** — a chartered privilege whose backing institution's standing falls below a band **lapses automatically at the next Accounting, with nothing revoking it** | `standing(patron, node)`, at the boundary | canon, `settlement_layer_v30.md:651-661` (RATIFIED ED-SE-0021) — expressed here as an `edge` form transition `granted → lapsed`, `reversible: false` |
-| deliberative vote weight; diplomatic reach | `standing(faction, node)` | `12` |
-| per-tier action | **a post at that tier**, not standing | `05` — stated so the two are not confused |
+| **charter lapse** — a chartered privilege whose backing institution's footing falls below a band **lapses automatically at the next Accounting, with nothing revoking it** | `footing(patron, node)`, at the boundary | canon, `settlement_layer_v30.md:651-661` (RATIFIED ED-SE-0021) — expressed here as an `edge` form transition `granted → lapsed`, `reversible: false` |
+| deliberative vote weight; diplomatic reach | `footing(faction, node)` | `12` |
+| per-tier action | **a post at that tier**, not footing | `05` — stated so the two are not confused |
 
 The first row is worth naming as a template. Canon's Za-guild charter is **collapse by gate in
 miniature**: the privilege ends because a condition stopped holding, nobody rolled, nobody detected
@@ -458,7 +476,7 @@ posture: <id>
 fiscal:      {yield_multiplier: <float>, per_season_deposit: {gauge: acceptance.support, delta: <float>}}
 muster:      <which act.muster channel 05 prefers>
 succession:  <designation | claim-contest>
-gate:        <predicate over divergence band, bloc states, standing band>
+gate:        <predicate over divergence band, bloc states, footing band>
 ```
 
 | | |
@@ -500,7 +518,7 @@ Read at the accounting boundary, from state. **No emission carries anything acro
 | band | gate | what it means |
 |---|---|---|
 | **Whole** | head post seated | acts at every tier where it holds a post (`05`) |
-| **Contracted** | head seated; **no post at province tier or above** | acts locally only. `standing` falls at the higher nodes because the sum has fewer terms — nothing writes it down. Charters whose patron is this faction begin lapsing (§4.4). This is canon's **city-state** (`settlement_layer_v30.md:1073-1075`) with no partial stat sheet, because every stat was already a derivation over what is held |
+| **Contracted** | head seated; **no post at province tier or above** | acts locally only. `footing` falls at the higher nodes because the sum has fewer terms — nothing writes it down. Charters whose patron is this faction begin lapsing (§4.4). This is canon's **city-state** (`settlement_layer_v30.md:1073-1075`) with no partial stat sheet, because every stat was already a derivation over what is held |
 | **Silent** | head post **vacant** | takes no action at any tier (ED-IN-0201, `05`). Its other posts fall vacant on their own terms; its holdings' governance posts become claimable. Its ledger, ethos and blocs persist |
 | **Dissolved** | head vacant **AND** `04`'s `pm.candidates` returns **empty** for `DISSOLVE_DWELL` consecutive seasons | `posture → dissolved`, `reversible: false`. Posts revoked, charter edges transitioned to `lapsed`, holdings' governance posts vacant. **The entity and its ethos persist in the store** |
 
@@ -566,7 +584,7 @@ here.
   state:
     - {name: faction.practice,   bucket: gauge, writable: false, owner: fm.derive}
     - {name: faction.divergence, bucket: gauge, writable: false, owner: fm.derive}
-    - {name: faction.standing,   bucket: gauge, writable: false, owner: fm.derive}   # per node; §4.2
+    - {name: faction.footing,   bucket: gauge, writable: false, owner: fm.derive}   # per node; §4.2
     - {name: faction.weight,     bucket: gauge, writable: false, owner: fm.derive}
     - {name: faction.treasury,   bucket: gauge, writable: false, owner: fm.derive}   # yield: 07 owns it
     - {name: faction.force,      bucket: gauge, writable: false, owner: fm.derive}   # units: 12 owns them
@@ -576,7 +594,7 @@ here.
   disclosure:
     - {of: faction.practice,   inputs: published, presentation: band,  trigger: hidden}
     - {of: faction.divergence, inputs: published, presentation: band,  trigger: hidden}
-    - {of: faction.standing,   inputs: published, presentation: band,  trigger: hidden}
+    - {of: faction.footing,   inputs: published, presentation: band,  trigger: hidden}
     - {of: faction.weight,     inputs: published, presentation: exact, trigger: hidden}
     - {of: faction.treasury,   inputs: published, presentation: exact, trigger: hidden}
     - {of: faction.force,      inputs: published, presentation: band,  trigger: hidden}
@@ -644,10 +662,10 @@ written*; a contract row declaring one writable is a defect the shape check catc
 remembering the rule. `fm.posture` is the only row with a non-empty `remit`, which is the whole of this
 document's player surface.
 
-**Why `faction.weight` and `faction.standing` are not magnitude variants of one another** — the
+**Why `faction.weight` and `faction.footing` are not magnitude variants of one another** — the
 under-distillation test from `00 §1`, applied where it is closest to failing. `weight` reads **posts and
 places held** (what you hold; Jordan's 2026-07-13 ruling that factions hold *people* and that the number
-of people and the weight of their positions carry a faction's value). `standing` reads **acceptance
+of people and the weight of their positions carry a faction's value). `footing` reads **acceptance
 gauges** (what is accepted of you). They diverge in both directions and the divergence is the game: a
 conquering occupier is heavy and unaccepted; the Church in a cathedral city is light and accepted. If
 they could not diverge, one would be the other's magnitude variant and this document would ship one.
@@ -663,7 +681,7 @@ they could not diverge, one would be the other's magnitude variant and this docu
 | **divergence** — divergence → bloc forms → members act together → appointments shift → practice moves → divergence | `divergence ∈ [0,1]` by arithmetic (§2.3); membership bounded by the faction's post count, which is data-computable | **unmeasured.** Campaign-reachable, so measurable against a control before any writer lands. `tools/balance_oracle.py` is the campaign instrument (`CLAUDE.md` §7); note it is a *campaign* instrument, so a change that is campaign-unreachable gets two identical arms and a fake control |
 | **cohesion** — cohesion → bloc state → members act together → cohesion | `rest + a/λ` for bounded per-season accrual, checked **at declaration** from the descriptor registry with no campaign run (`01 §5.1`) | **bounded arithmetically**; per-cycle gain **unmeasured** |
 | **bloc state flicker** — `latent ↔ open` | `θ↑ − θ↓ ≥ H_MIN(cohesion)` and `dwell ≥ 1`, checked **at load** (`01 §2.3`) | **bounded arithmetically.** The only loop here with a proved bound, and why hysteresis is mandatory |
-| **standing ↔ settlement acceptance** | canon's saturating `T/(T+K)`; `∂standing/∂q` shrinks as `T` grows (`settlement_layer_v30.md:168`) | **MEASURED, and it is canon's measurement, not this suite's**: bounded 0–7 and convergent over 30 seasons under mission shocks (`:173`). The only measured bound cited in this document |
+| **footing ↔ settlement acceptance** | canon's saturating `T/(T+K)`; `∂footing/∂q` shrinks as `T` grows (`settlement_layer_v30.md:168`) | **MEASURED, and it is canon's measurement, not this suite's**: bounded 0–7 and convergent over 30 seasons under mission shocks (`:173`). The only measured bound cited in this document |
 | **defection cascade** — a bloc edge breaks → Fragility → sever threshold → more breaks | hop-attenuation ½/hop, Fragility cap +3 with −1/season decay, Suppress brake, tier-3 hard cap (`npc_relational_graph_v30.md:501-519`) | canon's own verdict is **damped and bounded**, carrying canon's own `[NEEDS TESTING — SIM-DEFECT]`: *"the per-cycle-gain bound is a design argument, not yet sim-measured."* Repeated here rather than upgraded |
 | **collapse** | **terminating.** `posture → dissolved` is `reversible: false`, so the faction leaves the loop permanently (§7.2) | not a gain loop; a one-way absorbing state with a dwell in front of it |
 
@@ -675,7 +693,7 @@ they could not diverge, one would be the other's magnitude variant and this docu
 | bloc `latent ↔ open` | cohesion band and the dwell, against the registry at load | load failure for a missing band; no transition at runtime |
 | schism | `bloc.pull`, divergence, cohesion, dwell | the bloc stays open; its project keeps advancing (`09`) |
 | posture change | the posture row's gate, the divergence band, `post.budget ≥ 1` | the posture is **not in the option set** — an absence, not a penalty (`01 §4.3`) |
-| charter lapse | the patron's derived standing at the boundary | privileges lapse automatically; nobody revoked anything (`settlement_layer_v30.md:651-661`) |
+| charter lapse | the patron's derived footing at the boundary | privileges lapse automatically; nobody revoked anything (`settlement_layer_v30.md:651-661`) |
 | dissolution | the head post's `holder_id`, and `04`'s candidate set, for `DISSOLVE_DWELL` seasons | the faction stays Silent — recoverable, and that is the point |
 
 ### 9.3 ⚠ J-N — no cross-season latency, and this page does not assume any
@@ -685,7 +703,7 @@ they could not diverge, one would be the other's magnitude variant and this docu
 scheduling them late. Filed as open ruling **J-N**.
 
 **Every gate on this page reads state at the accounting boundary.** Divergence is recomputed, cohesion
-is read, the candidate set is queried, the patron's standing is derived. **Nothing here is posted to and
+is read, the candidate set is queried, the patron's footing is derived. **Nothing here is posted to and
 fires later.** A dwell requirement is not a latency: it is a gate that reads *how long a condition has
 held*, which is a property of current state (a tag's `created_season`, a post's vacancy season), not a
 message in flight. **J-N is the ruling that would change this**, and if it rules for reactive chains,
@@ -715,13 +733,13 @@ table is longer than its substrate table, the ratio is backwards.
 
 | what the player reads (never operates) | how it reaches them |
 |---|---|
-| the **band** of their faction's divergence and standing — *"the ministry is drifting"*, *"you are a power in Gransol and nowhere else"* | on a Slate item or a faction summary; band, never a number |
+| the **band** of their faction's divergence and footing — *"the ministry is drifting"*, *"you are a power in Gransol and nowhere else"* | on a Slate item or a faction summary; band, never a number |
 | **that a wing exists, and who is in it** — the bloc's members, not its cohesion value | as a **situation** on the Slate (`10`), never a screen |
 
 | substrate the player never touches |
 |---|
 | forming, joining, dissolving or naming a **bloc** · `cohesion` · `bloc.pull` |
-| `practice`, `divergence` or `standing` as **numbers**, or any band edge |
+| `practice`, `divergence` or `footing` as **numbers**, or any band edge |
 | the **schism** gate, the **charter-lapse** gate, or the **dissolution** gate — all boundary reads |
 | creating, chartering or ending a **faction** — `05` and `12` own the acts; the gates own the rest |
 
@@ -738,11 +756,11 @@ a gate** — manufacturing one for state with no draw is the error the methodolo
 right to refuse it. Above that sits `00 §0.1`: **a resolution-scoped audit cannot ask whether a design
 expresses the game.** This page could pass everything below and still be the wrong model of an
 institution; the instrument for that is the elegance criterion, and its answers here are the one-line
-loss statements, the `## Overrides` block, and §8's under-distillation defence of `weight` vs `standing`.
+loss statements, the `## Overrides` block, and §8's under-distillation defence of `weight` vs `footing`.
 
 | property | verdict | reasoning |
 |---|---|---|
-| **P-iii** bounded, monotonic | **pass on divergence and standing; bounded-with-unmeasured-gain on the loops** | `divergence ∈ [0,1]` by arithmetic on two normalised vectors — no clamp, no campaign run. `standing ∈ [0,7]` by canon's saturating form, with canon's own 30-season convergence result. `cohesion` is bounded at `rest + a/λ` at declaration. **Monotone in the aggregate and deliberately not in one officer's distance** (§2.3 pt 4) — a designed non-monotonicity, stated rather than hidden |
+| **P-iii** bounded, monotonic | **pass on divergence and footing; bounded-with-unmeasured-gain on the loops** | `divergence ∈ [0,1]` by arithmetic on two normalised vectors — no clamp, no campaign run. `footing ∈ [0,7]` by canon's saturating form, with canon's own 30-season convergence result. `cohesion` is bounded at `rest + a/λ` at declaration. **Monotone in the aggregate and deliberately not in one officer's distance** (§2.3 pt 4) — a designed non-monotonicity, stated rather than hidden |
 | **P-v** right engine | **pass** | every module here is `derivation` or `gate`. A faction's worth, its drift and its wings are computations over state already on the board; rolling for any of them would be a resolution where the answer exists. Every form transition is a gate on purpose (`01 §2.2`) |
 | **P-iv** graded failure | **pass, and it is what C-4 restores** | §7's four bands are visible, graded and gated; three of four are exited in both directions; the fourth has a dwell in front of it. **The claim is only true if the end is reachable** — which is the first falsifier below, and the exact thing v1 got wrong |
 
@@ -768,18 +786,18 @@ is silent.
 ### 11.2 The four qualitative verdicts
 
 **Necessary** — one new entity kind (bloc), seven derivations each with a named consumer, and one form
-field. The relation taxonomy is PP-724's, adopted not invented; the standing arithmetic is canon's,
+field. The relation taxonomy is PP-724's, adopted not invented; the footing arithmetic is canon's,
 adopted not invented; the collapse condition is canon's, restored not invented. What this page
-genuinely adds is **divergence**, **the bloc**, and **the summation domain that makes standing
+genuinely adds is **divergence**, **the bloc**, and **the summation domain that makes footing
 multi-scale** — three objects, each with a stated loss-if-cut.
 
 **Robust** — tested at both extremes. A faction with no holdings still has weight from its posts and can
-still seat a head. A faction with every holding is bounded by canon's saturating standing and by
+still seat a head. A faction with every holding is bounded by canon's saturating footing and by
 `05`'s flat action ceiling, which does not scale with success. A faction with one seated officer is
 fully described by that officer, and a faction with none returns `None` rather than a plausible lie.
 
 **Smooth** — a faction, a bloc and a place are the same primitives at different owners; `practice` is one
-derivation with three consumers; `standing` is one derivation at three tiers; a bloc's collapse is
+derivation with three consumers; `footing` is one derivation at three tiers; a bloc's collapse is
 PP-724's cascade rather than a second one.
 
 **Elegant** — four modules, one new entity kind, no elimination routine, no per-faction branch, no court

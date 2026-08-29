@@ -30,14 +30,19 @@ disease this suite exists to stop.
 | **C-2** | **`traits.virtues`** in the person's form bucket (delta spec §2.1; `01 §1.1`) | this suite's own `01` | **Virtue is Conviction #12 of the thirteen** (`systems/characters/conviction_taxonomy_v30.md:40`; the taxonomy separates it from Utility at `:49` and from Warden at `:54`). A parallel virtue trait is a second object for one job, and it would be a flat bonus on a person — the shape `01 §4.3` refuses. **Cut. `traits` ships `flaws` only.** §7 |
 | **C-3** | v1 `02 §2.4`'s *"at least two edges, both carrying a `disposition` gauge"* | this suite's own v1, corrected by `01` | The gauge half is already cut by `01 §7.3` (O-3): a stored NPC↔NPC disposition is an aggregate over edge strengths and no aggregate is ever written. Generation now attaches **PP-724 edges** with per-kind semantics and derives disposition. The *count* survives and rises. §5 |
 | **C-4** | The person's normative form table in `01 §1.1` gains **`beliefs`** | this suite's own `01` | §6. A creed-Belief is a proposition a person holds, canon caps the active set, and dropping one is exactly a form transition. **Net field count is unchanged**: C-2 removes one member, this adds one. |
+| **C-5** | **`faction_politics_v30 §3.3`'s halved public Renown and §3.4's `+1 Ob` Initiation Duty for Southern Einhir** (`:670-676`, `:679-690`) | **ratified canon** (CANONICAL, PP-660) — the strongest tier, so the strongest argument | Both are **modifiers on the actor**. A flat `Ob` shift is worth ~1.8× more to a small pool than a large one (`01 §6`), so canon's caste penalty is *harsher on the weak*, making caste a competence tax a strong character buys out of; and a halved rate is multiplicative **and invisible**. **What canon protects — that the stigmatised caste is pushed off the visible path onto the covert one (`:677`) — is kept and made stronger**, re-expressed as an option-set difference: a different duty row, and public-deed candidates that do not reach the Slate absent a sponsor. §2.4 |
 
-**Not overridden, deliberately.** The **caste × ladder gating matrix** (`faction_politics_v30 §3.2`,
-`:655-668`, CANONICAL) is **cited and handed to `04`**, not restated with adjustments. **PP-724's six
-edge kinds** are adopted as `01 §7.2` adopted them. **Canon's Knot gate** (`01 §7.5`, reading
-`systems/fieldwork/knots_v30.md`) is obeyed, including its cap; generation may not bypass it. **v1
-`02`'s bounded log-odds conditioning, entropy floor, determinism substream and totality property**
-are carried with their reasoning intact (`00 §... delta §9` items 1 and 4 in spirit), because the
-critique did not touch them — what changes is that they run **once per stage** instead of once.
+**Not overridden, deliberately — recorded because deciding *not* to override is also a decision.**
+`faction_politics_v30 §3.2`'s **rank-advancement gating matrix** (`:655-668`) and **§3.5's Disposition
+seeds** (`:692-721`) are adopted **whole**, because a gate on an option set and a seeded starting
+value are already the shapes this suite argues for — §2.4 makes that case rather than asserting it.
+**PP-724's six edge kinds** are adopted as `01 §7.2` adopted them, for the reason `01` gave: six
+period-grounded types with per-type semantics and a decision log beat any taxonomy re-derived here.
+**Canon's Knot gate** (`01 §7.5`) is obeyed including its cap — the alternative is a generator that
+manufactures Thread-constituted bindings the Thread layer never sanctioned. **v1 `02`'s bounded
+log-odds conditioning, entropy floor, determinism substream and totality property** are carried with
+their reasoning intact, because the critique did not touch them — what changes is that they now run
+**once per stage** instead of once, which makes the entropy floor *more* load-bearing (§3.5).
 
 **Out of scope, and named so the seam is visible.** A general **epistemic layer** — machine-comparable
 propositions held per agent with graded confidence and provenance, so two characters can disagree
@@ -141,7 +146,56 @@ the design intent canon states.
 the game's central social injustice becomes a difficulty slider, and the covert ladders lose the
 reason they exist.
 
-### 2.4 Church of Solmund and the Restoration Movement — birth **biases**, it does not **gate**
+### 2.4 Caste is a **gate** and a **seed** — never a modifier (C-5)
+
+Canon expresses caste four ways. **Two are the right shape and are adopted whole; two are the
+leverage failure this suite rules out one level up, and are overridden.** Adopting all four because
+they are ratified would import a defect the rest of the suite spends its arithmetic avoiding.
+
+| canon mechanism | `:line` | verdict |
+|---|---|---|
+| **§3.2 rank-advancement gating** — `open / gated(named requirement) / closed(unless named exception)` | `:655-668` | **ADOPTED WHOLE.** A gate on an option set: it changes *which* rungs exist for this person, not how well they roll. `04` applies it verbatim |
+| **§3.5 inner-circle Disposition floor** — starting Dispositions by caste (Central `+1`, Northern `+2` from the Southern column) | `:692-721` | **ADOPTED.** A starting value is a **seed**, not a modifier: deposited once at generation with provenance, then decayed and moved by play like any other deposit (`01 §5.1`) |
+| **§3.4 Initiation Duty `+1 Ob` for Southern Einhir** | `:679-690` | **OVERRIDDEN** |
+| **§3.3 Renown from public actions in Northern/Central territories halved** | `:670-676` | **OVERRIDDEN** |
+
+**What the overridden two were protecting, and why it must survive.** Both encode something true and
+central: the system's incentives push the stigmatised caste off the visible path onto the covert one
+— canon says so in the same breath (`:677`, citing Gerik Strand's observation, and naming Warden,
+Niflhel and RM as where they are driven). **That fact is not in dispute. The arithmetic is.**
+
+- **`+1 Ob` is a flat obstacle shift on the actor's own roll**, and a flat shift is worth
+  systematically more to a small pool than a large one — `≈0.204σ` at pool 5 against `≈0.115σ` at
+  pool 18 (`01 §6` note; `01 §5.3`). So canon's caste penalty is roughly **1.8× harsher on a weak
+  character than a strong one**, which inverts what a structural injustice should do: it becomes a
+  *competence tax a high-capability character buys out of*. `01 §6` also reserves `derive_ob`'s
+  `modifiers` for properties of the **target**; caste is a property of the **actor**, so this is the
+  wrong argument slot as well as the wrong magnitude.
+- **Halving a gain rate is multiplicative**, the same non-uniformity in the categorical layer that
+  §3.5 rules out for conditioning — and it is **invisible**: a player never sees a rate they did not
+  receive, which fails the disclosure contract's *publish every input* half.
+
+**The replacement, which protects canon's fact more strongly rather than less.** Both become
+**option-set differences** — where this suite puts every "the person changes what is available"
+(`01 §4.3`; ED-IN-0201 clause 2):
+
+| canon's effect | v2 shape | who owns it |
+|---|---|---|
+| Southern Initiation Duty is *harder* (`Ob 2 → Ob 3`) | the Southern candidate is offered a **different duty row** — the sponsored or covert route canon says they are pushed onto — whose obstacle `derive_ob` derives from **its own** target. Same odds arithmetic, a different thing to do | `04` (candidacy), `08` (the duty) |
+| Southern public Renown *halved* | public-deed candidates **do not reach the Slate** at a Northern/Central place absent a sponsor; covert candidates do. The rate is untouched; **what is reachable** changes | `10` |
+
+**This is harder on the player, not softer**, which is the test that it has not quietly softened the
+setting: a halved rate can be ground out with volume; a route that is not offered cannot. And it is
+**legible** — an unoffered route is disclosable under §2.3's ruled exception, where a silently
+halved number is not. The one thing canon had that this loses is *granularity*: `+1 Ob` is a dial and
+a gate is not. That is a real cost, accepted, because the dial is the part that misbehaves.
+
+⚠ **Scope.** `02` owns the argument because `02` is where caste becomes a mechanical object. It does
+**not** implement the replacement: the duty row is `04`/`08`'s and the Slate filter is `10`'s. If
+either declines the override, canon's version stands and this section is the record of why it should
+not.
+
+### 2.5 Church of Solmund and the Restoration Movement — birth **biases**, it does not **gate**
 
 Two canonical institutions reach a person at generation, and they reach them by three different
 routes. **None of the three is a new mechanism**; each is a composition on something `01` or `07`
