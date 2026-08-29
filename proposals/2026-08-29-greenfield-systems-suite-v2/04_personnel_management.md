@@ -117,10 +117,10 @@ against Southern Einhir:
 |---|---|---|---|---|
 | **Crown** | full | full | Std 0→3 open; higher rungs need a named exception (Public Deed, inner-circle sponsorship burning Disposition, or bloodline-extinction/deed-claim) | `:657` |
 | **Church** | full | full | strongly gated; Canon+ "a scandal"; **Temperance branch (Klapp) is the canon's own carve-out — caste-neutral in practice** | `:660` |
-| **Guild** (`guild`) | full | full | variable; Free Master examination biased; Guild Master/Comptroller near-closed | `:665` |
+| **Guild** (`guilds`) | full | full | variable; Free Master examination biased; Guild Master/Comptroller near-closed | `:665` |
 | **Niflhel** (`niflhel`) | full | full | **favoured — "caste-blind by necessity"** | `:613`, `:666` |
 | **Warden of the Thread** (`warden`) | **gated** — lower baseline Thread Sensitivity makes the initiation threshold harder | slightly gated | **favoured** — higher baseline TS, cultural familiarity | `:636`, `:667` |
-| **Restoration Movement** (`restoration`) | ideologically suspect (gated) | variable | ideologically favoured — the RM's base | `:668` |
+| **Restoration Movement** (`restoration_movement`) | ideologically suspect (gated) | variable | ideologically favoured — the RM's base | `:668` |
 
 **The Warden and RM rows are the design intent this document is told, correctly, not to normalise
 away.** `:636` states it in prose: *"The Wardens are, effectively, the resistance infrastructure for
@@ -154,9 +154,9 @@ caste_gate:
     clerk:    {southern_einhir: open}   # "accessible but suspicious" is disposition, not a gate (:660)
   church.temperance:                     # canon's own carve-out, not this suite's invention (:660)
     minister: {southern_einhir: open}
-  guild:                                 # v3, A-F10: was `guilds`; 07's roster spells it singular
-    head:     {southern_einhir: {closed: {unless: "Precedent:guild.marginal_trade_exception"}}}
-    minister: {southern_einhir: {gated:  {predicate: "person holds Precedent:guild.free_master_examination_passed"}}}
+  guilds:                                 # v3, A-F10: was `guilds`; 07's roster spells it singular
+    head:     {southern_einhir: {closed: {unless: "Precedent:guilds.marginal_trade_exception"}}}
+    minister: {southern_einhir: {gated:  {predicate: "person holds Precedent:guilds.free_master_examination_passed"}}}
   niflhel:                               # v3, A-F10: 07 spells this presence `covert`; see §3.2.2a —
     governor: {northern_einhir: open, central_einhir: open, southern_einhir: open}   # :613, :666
   warden:
@@ -164,7 +164,7 @@ caste_gate:
       northern_einhir: {gated: {predicate: "gauge_band(person.thread_sensitivity) >= warden.northern_threshold"}}
       central_einhir:  {gated: {predicate: "gauge_band(person.thread_sensitivity) >= warden.central_threshold"}}
       southern_einhir: open                                                          # the favoured direction, :636/:667
-  restoration:                           # v3, A-F10: was `restoration_movement`
+  restoration_movement:                           # v3, A-F10: was `restoration_movement`
     minister:
       northern_einhir: {gated: {predicate: "person holds Precedent:rm.ideological_vetting"}}
       southern_einhir: open                                                          # the RM's base, :668
@@ -195,10 +195,10 @@ blocks in it on incompatible id sets:**
 
 | this document's `caste_gate` keys | `07:296-303`'s `presence_kinds` ids |
 |---|---|
-| `crown` · `church` · `church.temperance` · `guilds` · `niflhel` · `warden` · `restoration_movement` | `church` · `guild` · `restoration` · `warden` · `military_order` · `covert` |
+| `crown` · `church` · `church.temperance` · `guilds` · `niflhel` · `warden` · `restoration_movement` | `church` · `guilds` · `restoration_movement` · `warden` · `military_order` · `covert` |
 
 The moment both blocks land, **`institution_id` means two things inside one file** — three referents
-spelled two ways (`guilds`/`guild`, `restoration_movement`/`restoration`, `niflhel`/`covert`) — and that
+spelled two ways (`guilds`/`guilds`, `restoration_movement`/`restoration_movement`, `niflhel`/`covert`) — and that
 is exactly the disease `00:428-431` says this suite exists to stop. It is worse than the `standing`
 collision `00 §7.1` records, because that one was two *scopes* and this is one field.
 
@@ -213,8 +213,8 @@ institutions:
   - {id: crown,             presence: false, cites: "faction_politics_v30.md:657"}   # sovereign, not a subnational presence
   - {id: church,            presence: true,  cites: "settlement_layer_v30.md §3.3 row 1"}
   - {id: church.temperance, parent: church,  presence: false, cites: "faction_politics_v30.md:660"}
-  - {id: guild,             presence: true,  cites: "settlement_layer_v30.md §3.3 row 2"}
-  - {id: restoration,       presence: true,  cites: "settlement_layer_v30.md §3.3 row 5"}
+  - {id: guilds,             presence: true,  cites: "settlement_layer_v30.md §3.3 row 2"}
+  - {id: restoration_movement,       presence: true,  cites: "settlement_layer_v30.md §3.3 row 5"}
   - {id: warden,            presence: true,  cites: "settlement_layer_v30.md §3.3 row 6"}
   - {id: military_order,    presence: true,  cites: "settlement_layer_v30.md §3.3 row 4 (Löwenritter)"}
   - {id: niflhel,           presence: true,  covert: true,
