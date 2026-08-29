@@ -103,14 +103,13 @@ back(p, P, mode):
   weight(p,P) =  stance(p, prop) × (1 + credibility(p))     # credibility derived from marks + grade
 ```
 
-The first precondition is the whole of "it must route through the telling machinery." Nobody backs
-what they have not heard of. A petition raised at the hamlet well reaches the hamlet; a petition
-raised in the Kettlemakers' hall reaches the Row; a petition that crosses between them did so because
-some named person told someone across the line, and that person's Knot or trade relationship is why
-the coalition exists. Backing propagation is telling propagation and needs no separate mechanism.
+The first precondition is the whole of "it routes through the telling machinery." A petition raised at
+the hamlet well reaches the hamlet; one raised in the Kettlemakers' hall reaches the Row; one that
+crosses between them did so because a named person told someone across the line, and that person's Knot
+or trade tie is why the coalition exists. Backing propagation *is* telling propagation.
 
-The second precondition means a person may back something they do not want, for the petitioner's sake.
-That lend is visible in the route and is the thing a later betrayal is measured against.
+The second lets a person back what they do not want, for the petitioner's sake — a lend, visible in the
+route, and the thing a later betrayal is measured against.
 
 ### 2.2 Two modes, two costs, and why neither dominates
 
@@ -123,19 +122,17 @@ for each j ∈ judging_sets(p):
     deposit claim(j, "p backs P", firsthand or told)      ← durable, and read at every later allocation
 ```
 
-Note the sign: this is *positive* where the judging set agrees. A hamlet fisher backing a hamlet grain
-petition pays nothing inside the hamlet and a great deal outside it, because his judging sets are the
-hamlet's. Hedda Brann, a Kettlemakers' journeyman whose Free Master candidacy sits before a committee
-that reads exactly this claim, pays enormously. The same act has opposite costs for two people, and no
-rule mentions caste to produce that.
+Note the sign: it is *positive* where the judging set agrees. A hamlet fisher backing a hamlet grain
+petition pays nothing inside the hamlet, because his judging sets are the hamlet's. Hedda Brann, a
+Kettlemakers' journeyman whose Free Master candidacy sits before a committee that reads exactly this
+claim, pays enormously. Same act, opposite costs, and no rule mentions caste to produce it.
 
 **Concealed backing** is a single `tell(p, carrier, "I back P")` to the carrier alone. No judging-set
 deposit, no exposure claim, no regard gain — and, critically, **no entry on any public roll**. It
 counts only toward the carrier's private total.
 
-The dominance check (see §9): concealed looks free, but a carrier valuing whether to spend his seat
-gains regard only from backers who are *known* to have backed, so a petition backed only in secret is
-one nobody will carry. The trade is real: safety against carriability.
+Dominance check (§9): concealed looks free, but a carrier gains regard only from backers *known* to
+have backed, so a petition backed only in secret is one nobody will carry. Safety against carriability.
 
 ### 2.3 How backing is read by the person deciding
 
@@ -147,11 +144,10 @@ Three different numbers exist and they routinely disagree.
 | `visible_backing(P, reader)` | each reader, differently | the subset of the roll the reader's own ledger holds claims about |
 | `asserted_total` | whatever the carrier says | a `tell`, which may be false and is catchable |
 
-This is the correspondence-filtering steal made structural: the man who carries the petition is also
-the man who reports how many wanted it, and his report is a speech act with a source row in the
-hearer's ledger. A carrier who inflates a roll to make a proposition look inevitable is doing
-something a rival can investigate and expose, and the exposure is an ordinary claim, not a special
-event.
+The man who carries the petition is also the man who reports how many wanted it, and his report is a
+speech act with a source row in the hearer's ledger. A carrier who inflates a roll to make a
+proposition look inevitable is doing something a rival can investigate and expose — and the exposure is
+an ordinary claim, not a special event.
 
 - **Closed loop:** produced by `back` acts, which are produced by tellings; carried on the petition
   (truth) and in ledgers (knowledge); consumed by carriers valuing a carriage and by respondents
@@ -179,23 +175,17 @@ carry(c, P):
 credit must arrange for the credit to be heard, and that is an act.
 
 **Seat scarcity is the reason DROP exists at all.** Every container's standing date (substrate §5.3)
-hears a finite number of items — a term of the container, and therefore a thing a dispensation can
+hears a finite number of items — a term of the container, and therefore something a dispensation can
 change, which makes procedural reform a real political move. The Grauwald territory court hears eleven
-items a sitting; a praefect holds one seat and carries one thing with it. Filtering is not a policy.
-It is arithmetic about hours, and it is the same arithmetic that makes a fisher choose between the
-tide and the chapel.
-
-A person petitioning their **own** container carries it himself: he is a person at that container. The
-substrate's rule that a petition cannot enter a container by itself is satisfied trivially, and the
-first rung of every up-stroke costs nothing but the person's own hour.
+items a sitting; a praefect holds one seat and carries one thing with it. Filtering is not a policy but
+arithmetic about hours — the same arithmetic that makes a fisher choose between the tide and the chapel.
 
 ### 3.2 FORWARD / AMEND / BUNDLE / DROP
 
-**FORWARD.** The proposition is unchanged; the petition's respondent becomes the container one rung
-up (or the current container's decision is taken). The backing roll travels intact — but every reader
-at the new rung reads it through their own ledger, so a roll of four hundred that nobody upstream has
-heard of reads as a roll of nine. Forwarding is the cheapest act and the least transformative, and it
-is what an honest carrier with no ambition does.
+**FORWARD.** Proposition unchanged; the respondent becomes the container one rung up. The roll travels
+intact — but every reader at the new rung reads it through their own ledger, so a roll of four hundred
+nobody upstream has heard of reads as a roll of nine. The cheapest act, and what an honest carrier with
+no ambition does.
 
 **AMEND.** `amend(c, P, prop')` replaces the proposition and keeps the roll.
 
@@ -205,21 +195,19 @@ distance(prop, prop') = |{ fields of the proposition tuple (subject, action, obj
 ```
 
 **The backers are not notified. Ever.** Notification is a telling, and the carrier chooses whether to
-perform it and what to assert. Three consequences fall straight out:
+perform it and what to assert. Three consequences:
 
 - A backer who **learns** and finds `stance(backer, prop') < 0` may `withdraw` — but only at the next
-  standing date, which is frequently after the decision. Withdrawal is an act with its own exposure.
-- A backer who **never learns** stays on the roll of a proposition he never wanted. If it is refused,
-  he takes grievance for the refusal of something he did not ask for, and if it is granted, he is on
-  record as having wanted it.
-- A carrier who amends and then tells the backers a false version — `tell(c, backer, "I carried your
-  grain petition")` while `proposition_as_carried` reads *the hamlet's fishing right is commuted to a
-  cash levy* — has performed an ordinary lie against an ordinary route record. Catchable by
-  investigation, citable forever afterwards.
+  standing date, frequently after the decision, and withdrawal carries its own exposure.
+- A backer who **never learns** stays on the roll of a proposition he never wanted: refused, he takes
+  grievance for something he did not ask for; granted, he is on record as having wanted it.
+- A carrier who amends and tells the backers a false version — `tell(c, backer, "I carried your grain
+  petition")` while `proposition_as_carried` reads *the hamlet's fishing right is commuted to a cash
+  levy* — has told an ordinary lie against an ordinary route record. Catchable by investigation,
+  citable forever.
 
-Amendment is where a carrier converts other people's grievance into his own instrument. It is the
-sharpest act in the up-stroke and it costs nothing at the moment of performance, which is exactly why
-it must be discoverable rather than penalised.
+Amendment is where a carrier converts other people's grievance into his own instrument. It costs
+nothing at the moment of performance, which is why it must be discoverable rather than penalised.
 
 **BUNDLE.** `bundle(c, [P₁..Pₙ]) → P*`, one item of seat capacity for n constituencies. Two shapes,
 and they are not the same move:
@@ -269,19 +257,17 @@ He carries Ansgar's. He drops the grain bundle. What he weighed:
 5. **His belief about consequence.** His ledger holds *no claim* that the Southern Einhir hamlet can
    hurt him.
 
-Point 5 is the payload of this entire document. **Aldwin is not accepting a risk. He cannot see one.**
-The Restoration cell in the hamlet is concealed alignment; concealed alignment deposits no claims; a
-person with no claims about a danger acts from ignorance and not from uncertainty (substrate §3.1). A
-relevance score would have made this a tuning question. Making it a man's valuation over his own
-ledger makes it a *mistake he had every reason to make*, which is the only version of filtering that
-produces politics rather than friction.
+Point 5 is the payload. **Aldwin is not accepting a risk. He cannot see one.** The cell in the hamlet
+is concealed alignment; concealed alignment deposits no claims; a person with no claims about a danger
+acts from ignorance, not uncertainty (substrate §3.1). A relevance score would make this a tuning
+question. A man's valuation over his own ledger makes it a *mistake he had every reason to make* — the
+only version of filtering that produces politics rather than friction.
 
-**Stated versus silent.** Aldwin drops **silent**. A stated drop declares to the judging set that he
-refused it — cheap in regard with them, and guaranteed to reach the backers eventually with his name
-attached. Silent tells no one, and the sixty-seven apprentices go on believing it is pending. He
-chooses silence because the apprentices are inside the Row and he may want their backing one day,
-while the hamlet's forty-four are people he does not need. That is a legible human reason and no rule
-produced it.
+**Stated versus silent.** Aldwin drops **silent**. A stated drop declares the refusal to the judging
+set — cheap with them, and it reaches the backers eventually with his name on it. Silent tells no one,
+and the sixty-seven apprentices go on believing it pending. He chooses silence because the apprentices
+sit inside the Row and he may want their backing one day, while the hamlet's forty-four are people he
+does not need. A legible human reason, and no rule produced it.
 
 **Lapse.** At the container's next standing date, a petition neither heard nor forwarded has lapsed.
 Lapse is not an act by anybody — it is the date passing. Whether the backers learn that it lapsed, or
@@ -298,20 +284,17 @@ amplification(chain) = Π over retellings (1 + bias(teller, referent))
 Δstance(p → container)    = m × (1 − names_person(claim))
 ```
 
-Two things worth stating plainly.
-
 **The telling's grammar decides where the grudge lands.** A claim whose predicate names an actor —
-*"Aldwin carried his son's name instead of our grain"* — deposits on Aldwin. A claim naming only the
-container — *"the court heard no grain item"* — deposits on the praefecture. This matters enormously
-downstream, because a grudge at a person is discharged by removing the person and a grudge at a
-container is not (§8.2). Nothing had to be designed to produce that asymmetry; it is a consequence of
-stance rows having referents.
+*"Aldwin carried his son's name instead of our grain"* — deposits on Aldwin. One naming only the
+container — *"the court heard no grain item"* — deposits on the praefecture. That matters downstream:
+a grudge at a person is discharged by removing the person, a grudge at a container is not (§8.2).
+Nothing was designed to produce the asymmetry; it follows from stance rows having referents.
 
 **Distortion is self-limiting without a cap.** Each retelling raises `amplification` and lowers
-confidence. Confidence is a salience term in view assembly (substrate §3.1), so the angriest version
-of a story is also the least likely to surface in a decision — *unless* the person's stance weight on
-the referent is already high, in which case it surfaces anyway. That is motivated reasoning producing
-radicalisation with no radicalisation mechanic, and it costs one multiplication that already existed.
+confidence, and confidence is a salience term in view assembly (substrate §3.1) — so the angriest
+version of a story is the least likely to surface in a decision, *unless* the hearer's stance weight on
+the referent is already high, in which case it surfaces anyway. Motivated reasoning producing
+radicalisation with no radicalisation mechanic, for one multiplication that already existed.
 
 - **Closed loop:** produced by `drop`/lapse plus a telling; carried as ordinary stance rows in the
   backers' tables; consumed by every subsequent valuation the backer makes, including `commit`.
@@ -331,11 +314,11 @@ person. Its only special property is what it does to a valuation: a person weigh
 toward* values that commitment by their grievance magnitude. Grievance makes commitment cheap. That is
 its whole mechanical role.
 
-**Spontaneous emergence needs no recruiter.** The Restoration Movement's proposition is a *claim*, and
-claims travel by telling independently of any member travelling. A hamlet with no cell, holding
-Yrsa Vossen's proposition at confidence 0.4 and a fresh grievance whose referent that proposition
-addresses, produces commits. The setting's requirement that the Movement can emerge spontaneously from
-territorial neglect is satisfied by two mechanisms that already exist, with nothing added.
+**Spontaneous emergence needs no recruiter.** A proposition is a *claim*, and claims travel by telling
+independently of any member travelling. A hamlet with no cell, holding Yrsa Vossen's proposition at
+confidence 0.4 plus a fresh grievance whose referent that proposition addresses, produces commits. The
+setting's requirement that the Restoration Movement can emerge spontaneously from territorial neglect
+is satisfied by two mechanisms that already exist.
 
 ### 5.2 The coercive computation
 
@@ -425,10 +408,9 @@ attempt's structural failure.
 
 **SUPPLICATION** (`form = supplication`). Petitioner → office-holder, seeking **grace**: an exception
 to terms, for named persons, leaving the terms intact. Available across any rank gap. The ask
-presupposes the giver's right to give, so raising one is an act of submission and is read as such by
-the judging set. Refusal deposits grievance on the *person*, because the request was framed as
-personal. No ladder follows a refusal; a second supplication on the same proposition is simply a
-second ask, valued lower by a respondent who already said no.
+presupposes the giver's right to give, so it is an act of submission and read as such by the judging
+set. Refusal deposits grievance on the *person*, the request having been framed as personal. No ladder
+follows; a second supplication is a second ask, valued lower by a man who already said no.
 
 **REMONSTRANCE** (`form = remonstrance`). Requires the petitioner to hold **standing at an institution
 with a registered right of remonstrance** — the Hafenmark Parliament, a guild's Free Masters in
@@ -438,15 +420,14 @@ operation* — and it enters the record whether or not it succeeds. A recorded r
 and full citability, forever. That is nearly free and it is what a later argument (doc 07) or a later
 investigation attacks with.
 
-**The caste consequence, produced by one precondition and no caste rule.** Remonstrance requires
-standing at an institution. The setting's institutions rank-gate standing per institution: the Crown
-gates Standing 3+ behind public deeds or inner-circle sponsorship, the Church strongly (a Southern
-Einhir Canon is a scandal), the guilds variably through the Masterpiece Examination. So a Southern
-Einhir person is, in the ordinary case, structurally confined to supplication — able to beg for grace,
-unable to contest a measure. And the two caste-open institutions, the Löwenritter and Niflhel, are
-therefore the *only* routes by which a Southern Einhir voice reaches the remonstrance ladder. That is
-the setting's stated design (caste reproduced by institutions, not by malice) falling out of a
-precondition, with no rule anywhere naming a heritage.
+**The caste consequence, from one precondition and no caste rule.** Remonstrance requires standing at
+an institution, and the setting's institutions rank-gate standing individually: the Crown behind public
+deeds or inner-circle sponsorship, the Church strongly (a Southern Einhir Canon is a scandal), the
+guilds through the Masterpiece Examination. So a Southern Einhir person is ordinarily confined to
+supplication — able to beg for grace, unable to contest a measure — and the two caste-open
+institutions, the Löwenritter and Niflhel, are the *only* routes by which a Southern Einhir voice
+reaches the ladder. Caste reproduced by institutions rather than malice, out of a precondition, with no
+rule naming a heritage.
 
 ### 6.2 COMMON versus PRIVATE — computed, not declared
 
@@ -462,10 +443,10 @@ form(P) = COMMON   if scope(proposition) is a container (all persons at n)
 | grievance on refusal | petitioner and a few backers | every backer, and every person in scope who learns |
 | conversion | — | **the generalizing bundle converts PRIVATE → COMMON** |
 
-The conversion is the interesting object. A carrier who generalizes four grain supplications into one
-common proposition has taken four things that were cheap to grant and made one thing that is expensive
-to grant. He has raised the refusal rate and broadened the grievance in the same act. Aggregation is
-not free, and that is why an aggregator is a dangerous person rather than a helpful one.
+A carrier who generalizes four grain supplications into one common proposition has taken four things
+cheap to grant and made one thing expensive to grant — raising the refusal rate and broadening the
+grievance in the same act. Aggregation is not free, which is why an aggregator is a dangerous person
+rather than a helpful one.
 
 ### 6.3 The escalation ladder
 
@@ -479,23 +460,21 @@ A remonstrance that the issuer resists runs a real four-step ladder. `step` is a
 | 3 | **iterated remonstrance** | the assembly again | suspension resumes; the record now carries two objections, both citable, and the assembly's members are named |
 | 4 | **session of enforcement** | the issuer, **in person, at the institution's own seat** | registration is compelled; the assembly's right of remonstrance on this proposition is spent for the term |
 
-The costs are asymmetric and shaped differently, which is what makes the ladder a fork rather than a
-countdown.
+The costs are asymmetric, which makes the ladder a fork rather than a countdown.
 
 - Step 2 is cheap for the issuer and buys a season.
-- Step 4 is expensive and **structural**: the issuer must be bodily present in a room full of persons
-  whose stance he has just overridden, which is a witnessed event depositing a very high-salience
-  claim in every attendee's ledger. Δstance for each attendee scales with `step`, so the fourth step
-  after two iterations costs far more than the same act would have cost at the first.
-- Step 3 costs the assembly **exposure**: iterating names them, and the names are readable by anyone
-  who later wants to know who opposed the Crown.
+- Step 4 is expensive and **structural**: he must be bodily present in a room full of persons whose
+  stance he has just overridden — a witnessed event depositing a high-salience claim in every
+  attendee's ledger. Δstance per attendee scales with `step`, so the fourth step after two iterations
+  costs far more than the same act at the first.
+- Step 3 costs the assembly **exposure**: iterating names them, readable by anyone who later wants to
+  know who opposed the Crown.
 
-The gift is that a duchess remonstrating against a Crown levy is *not rebelling*. Duchess Inge
-Baralta, whose Crown claim makes every one of her acts readable as preparation, can contest a measure
-in a form that publicly performs the Crown's right to levy. She acquires a record of loyal opposition
-and a citable grievance at the same time. That is the space between silence and revolt, and it is also
-— because the record is citable and the ladder is public — the visible approach march to a Crown
-Succession Contest that everyone can see coming and nobody can name as treason.
+The gift is that a duchess remonstrating against a Crown levy is *not rebelling*. Duchess Inge Baralta,
+whose Crown claim makes every act of hers readable as preparation, can contest a measure in a form that
+publicly performs the Crown's right to levy — acquiring a record of loyal opposition and a citable
+grievance at once. That is the space between silence and revolt, and, because the record is citable and
+the ladder public, the visible approach march to a Crown Succession Contest nobody can name as treason.
 
 ### 6.4 Rank-indexed form, and the insult
 
@@ -522,15 +501,15 @@ gap ≥ 3   supplication only; must be carried; AND requires an INTERCESSOR whos
 ```
 
 **A petition in the wrong form is not rejected. It is received as an insult.** The respondent's stance
-toward the petitioner moves negative, and the judging set witnesses a person who does not know his
-place, depositing a claim that *confirms the mark*: "Southern Einhir do not know the forms." The
-protocol table reproduces caste with no rule mentioning caste, and — this is the important part — the
-wrong form is always the *faster* route, so it is permanently tempting.
+toward the petitioner moves negative, and the judging set witnesses a man who does not know his place,
+depositing a claim that *confirms the mark*: "Southern Einhir do not know the forms." The protocol
+table reproduces caste with no rule mentioning caste — and the wrong form is always the *faster* route,
+so it stays permanently tempting.
 
 **Intercession.** The outcome is modified by the intercessor's standing with the respondent, not the
-petitioner's. So a fisher's realistic route at gap 3 is *finding a person who can speak to the man*,
-and that search — through Knots, through the parish, through a trade tie — is the up-stroke's actual
-gameplay at long rank gaps.
+petitioner's. A fisher's realistic route at gap 3 is therefore *finding someone who can speak to the
+man*, and that search — through Knots, the parish, a trade tie — is the up-stroke's gameplay at long
+rank gaps.
 
 - **N-line:** cut rank-indexed form and caste becomes a difficulty modifier on a roll instead of a
   structure a person can be trapped by, mis-navigate, or learn to route around.
@@ -579,14 +558,13 @@ per duchy and Magnus's defection stops being a secession, by arithmetic.
 Low-rank mass propagates upward **exactly as far as the first thin layer it reaches.** Eleven Free
 Masters coalescing at Goldenfurt sever nothing, because the layer above them is thick with eleven
 equivalent seats. But eleven Free Masters coalescing to *deny Aldwin the regard his carriage depends
-on* make Aldwin's carriage impossible — and **Aldwin is the thin layer.** Same formula, opposite
-consequence, depending only on where in the tree the thinness sits.
+on* make his carriage impossible — and **Aldwin is the thin layer.** Same formula, opposite
+consequence, depending only on where the thinness sits.
 
-This is also why aggregate low-rank leverage works at a territory court and is unavailable at the
-Realm: the Realm's seats are three ducal proxies, four Cardinals and the Crown. There is no mid-rank
-mass to coalesce. A demand that must reach the Realm has no route but through one of eight persons,
-and that is the containment axiom and T5 producing, together, the reason the peninsula's politics look
-the way they do.
+It is also why the leverage works at a territory court and is unavailable at the Realm, whose seats are
+three ducal proxies, four Cardinals and the Crown: there is no mid-rank mass to coalesce, so a demand
+that must reach the Realm has no route but through one of eight persons. The containment axiom and T5
+together are why the peninsula's politics look the way they do.
 
 - **N-line:** cut thinness and every defection is worth its holder's rank, which makes reforming a
   charter meaningless and makes the question "who is irreplaceable here?" unaskable.
@@ -630,18 +608,17 @@ of named persons in Goldenfurt, and if those persons die without heirs the rows 
 dormant row referencing that proposition, at every holder, everywhere. A structural fix is a
 structural fix.
 
-**Killing the man does not.** Removing Aldwin clears rows whose *referent is Aldwin* — and there will
-be forty-four of them, because §4.1's telling named him. It does not touch a single row whose referent
-is the praefecture. So the personnel fix works exactly on the part it addresses and fails exactly on
-the rest, and which part is larger was decided seasons earlier by the grammar of a rumour. Nothing
-asserts "structural fixes are better." It is computed.
+**Killing the man does not.** Removing Aldwin clears rows whose *referent is Aldwin* — forty-four of
+them, because §4.1's telling named him — and touches no row whose referent is the praefecture. The
+personnel fix works exactly on the part it addresses and fails exactly on the rest, and which part is
+larger was decided seasons earlier by the grammar of a rumour. Nothing asserts that structural fixes
+are better. It is computed.
 
 **Bound to the setting.** Southern Einhir grievance is precisely a body of dormant rows: the
-Catastrophe's blame, the exclusion from the Secession War coalition leadership, and every subsequent
-suppression, held per-person across generations, re-arming on each new institutional refusal. The
+Catastrophe's blame, exclusion from the Secession War coalition leadership, and every subsequent
+suppression, held per-person across generations and re-arming on each new institutional refusal. The
 Restoration Movement's spontaneous emergence from territorial neglect (§5.1) is those rows re-arming
-in a place where the proposition happens to have arrived by telling. Neither needed authoring, and
-neither is a special case.
+where the proposition happened to arrive by telling. Neither needed authoring.
 
 - **Closed loop:** produced by `suppress`; carried as flagged stance rows, transmitted by succession;
   consumed by the re-arm check on every incoming claim, and cleared only by a satisfying dispensation.
