@@ -186,6 +186,23 @@ stance row", 03 as "a Conviction is a stance at maximal generality". Independent
 strongest signal available in this process, and two lanes converging on one derivation is better
 evidence than either lane's argument.
 
+### B-9 · Office's "binding power" is observed compliance, not a field — ACCEPTED as a strengthening
+*Raised by 12 (coercion and force) as a refinement rather than a divergence.*
+
+The spine says office is "a mark plus a binding power." 12 narrows *binding power* to **observed
+compliance**: an order binds exactly insofar as the persons receiving it comply, and a witnessed
+refusal deposits a claim — *an order of X was not obeyed* — which then feeds every later willingness
+computation.
+
+**Ruling: accepted, and it strengthens the spine rather than straining it.** A stored authority field
+would be a container-level scalar of exactly the kind the design refuses everywhere else, and it
+would make authority immune to the thing that actually destroys authority. Under 12's reading,
+**refusal is contagious through the ledger and authority collapses like a bank run** — which is both
+truer and cheaper than any legitimacy meter.
+
+The condition, which 12 states itself: derived strain must stay derived. Caching it would void the
+substrate's refusal of container gauges.
+
 ---
 
 ## C. The orchestrator's own error, recorded because it is the most instructive one here
