@@ -58,8 +58,15 @@ from routing the respondent through the ledger instead of through a lookup.
 | respondent | Goldenfurt settlement (praefect) | Realm; and a separate remonstrance to the Dicastery of Doctrinal Adjudication |
 
 Identical computation. The Duke's reach is higher because his act menu is larger, and his act menu is
-larger because he holds an office whose dispensations bind others — which is exactly the only thing
-office does in this design. Nothing consults post; post shows up as more entries in `own_acts`.
+larger because he holds an office whose dispensations bind others — the only thing office does in this
+design. Nothing consults post; post shows up as more entries in `own_acts`.
+
+A **cadet branch** is the case where this runs permanently hot. A cadet hearth's succession pointer
+does not lead to the main line's holdings (substrate §4), so its members' standing needs are never
+satisfied by inheritance and their shortfall never closes on its own. Cadet sons are therefore the
+game's most prolific petitioners — to the Church for a canonry, to a guild for a grade, to the
+Löwenritter for a commission, to a house for a marriage — and every one of those petitions is the
+same function producing the same object. No ambition trait was required to get them there.
 
 - **Closed loop:** produced by the tick's need computation over larder, standing and terms; carried
   nowhere (recomputed, never stored); consumed by `choose` as one more entry on the act menu.
@@ -614,6 +621,14 @@ personnel fix works exactly on the part it addresses and fails exactly on the re
 larger was decided seasons earlier by the grammar of a rumour. Nothing asserts that structural fixes
 are better. It is computed.
 
+**Suppression does not require a cruel man.** `suppress` names no intent. Confessor Arne Himlensendt of
+the Church of Solmund, sincerely devout and pastorally compassionate, ends a hamlet's Thread practice
+by absorbing it into orthodox observance and believes he has healed something. The acts stop; the terms
+that produced the need are untouched; the rows go dormant at full magnitude with his name in their
+re-arm predicate. Two generations on, a Dicastery of Defense of the Faith inquest into the same hamlet
+re-arms four hundred of them at once, and nobody involved did anything but their office. Institutional
+harm nobody intends is the setting's stated model, and it is what this mechanism produces by default.
+
 **Bound to the setting.** Southern Einhir grievance is precisely a body of dormant rows: the
 Catastrophe's blame, exclusion from the Secession War coalition leadership, and every subsequent
 suppression, held per-person across generations and re-arming on each new institutional refusal. The
@@ -629,83 +644,70 @@ where the proposition happened to arrive by telling. Neither needed authoring.
 
 ## 9. R-criterion check on this design
 
-Every fork, shape of gain against shape of cost over time. Decaying gain against compounding cost is a
+Every fork: shape of gain against shape of cost over time. Decaying gain against compounding cost is a
 structural failure, not a tuning note.
 
-**(a) Petition versus act-alone.** No hazard: petitioning is one entry on an act menu and competes on
-expected value. If it is never worth it for a given person, that person has no political voice, which
-is a true fact about hamlet fishers and not a design flaw.
+| fork | shape of gain | shape of cost | verdict |
+|---|---|---|---|
+| (a) petition vs act alone | competes on expected value like any act | one hour | live. A person for whom it never pays has no political voice — true of hamlet fishers, not a flaw |
+| (b) **repeated petitioning** | `P(grant)·U`, decaying geometrically per refusal | exposure claims, durable and accumulating | **would be dominated — fixed below** |
+| (c) revolt vs petition | step function | catastrophic, personal, non-repeatable | **hazard runs the other way — fixed below** |
+| (d) carrier: drop vs carry | immediate regard, non-decaying | delayed, conditional grievance | **would be dominant — fixed below** |
+| (e) public vs concealed backing | concealed avoids all exposure | concealed yields the carrier no regard, so nobody carries it | live. Safety against carriability |
+| (f) stated vs silent drop | silent buys delay and personal cover today | silent deposits on the *person* when it breaks; stated deposits on the container now | live, different shapes |
+| (g) supplication vs remonstrance | grace: cheap, private, immediate | remonstrance: suspends the measure for everyone and spends the institution's right for the term | live, and only a fork for persons with standing |
+| (h) **suppress vs concede** | suppression's gain decays as rows re-arm | durable, compounding | **would be dominated both ways — fixed below** |
 
-**(b) Repeated petitioning — the named hazard, and it was real.** Gain per attempt is
-`P(grant) × U`. Each refusal deposits grievance and lowers the respondent's stance toward the
-petitioner, so `P(grant)` falls geometrically on repetition, while the exposure claims are durable and
-accumulate. **That is exactly the shape Jordan condemned in the Comply/Defy fork, and left unfixed it
-makes petitioning dominated by not petitioning.**
-
-The fix is structural, not a constant. Refusal produces an **asset**:
+**(b) Repeated petitioning — the named hazard, and it was real.** Gain per attempt is `P(grant) × U`.
+Each refusal deposits grievance and lowers the respondent's stance toward the petitioner, so `P(grant)`
+falls geometrically on repetition while the exposure claims are durable and accumulate. **That is
+exactly the shape Jordan condemned in the Comply/Defy fork, and left unfixed it makes petitioning
+dominated by not petitioning.** The fix is structural, not a constant: refusal produces an **asset**.
 
 ```
 value(attempt) = P(grant)·U  +  (1 − P(grant))·G
 ```
 
-where `G` is the grievance capital deposited in the backers — which is the input to commitment
-(§5.1), to carriage mass (§7.1), and to the citable record (§6.1). As `P(grant)` decays, the second
-term *rises*, and it rises in proportion to how publicly the refusal happened. The sum does not decay.
-A petition campaign that never wins anything is building the thing that wins without petitioning, and
-a respondent who refuses cheaply every time is manufacturing his own opposition. Neither branch is
-dominant.
+`G` is the grievance capital deposited in the backers — the input to commitment (§5.1), to carriage
+mass (§7.1) and to the citable record (§6.1). As `P(grant)` decays the second term *rises*, in
+proportion to how publicly the refusal happened, and the sum does not decay. A petition campaign that
+never wins anything is building the thing that wins without petitioning, and a respondent who refuses
+cheaply every time is manufacturing his own opposition.
 
-**(c) Revolt versus petition.** Revolt's gain is a step function and its cost on failure is
-catastrophic and personal. The dominance hazard runs the *other* way: if suppression's ratchet makes
-each subsequent attempt easier, a patient faction should always wait rather than rise. Fixed
-structurally: the ratchet operates on the **container**, and the persons who rise and lose are
-removed. Their dormant rows go to heirs and to strangers. The payoff of your failed revolt accrues to
-your children, and a person choosing to rise values that only through their stance toward their hearth
-and toward the proposition. That is a genuine, non-dominant choice, and it is also the honest
-explanation of why doomed risings happen.
+**(c) Revolt versus petition.** The dominance hazard runs backwards here: if suppression's ratchet
+makes each subsequent attempt easier, a patient faction should always wait rather than rise. Fixed
+structurally — the ratchet operates on the **container**, while the persons who rise and lose are
+removed, and their dormant rows pass to heirs and strangers. The payoff of your failed revolt accrues
+to your children, and a person choosing to rise values that only through their stance toward their
+hearth and toward the proposition. A genuine non-dominant choice, and the honest explanation of why
+doomed risings happen.
 
-**(d) The carrier's fork — is DROP dominant?** It looks it: dropping costs nothing at the container
-and gains the judging set's approval immediately, while the grievance is delayed and conditional. The
-structural counterweight is the carrier's **own shortfall**. Standing at a container is contested
-(substrate §4.1) and claimants' capacity routes through the persons who back them; a seatholder who
-carries nothing accumulates regard only with a judging set that already likes him and acquires no new
-backing anywhere. A perpetual dropper ends as a man with a seat and no constituency, and loses the
-seat at the next contest. The field that types his rise types his vulnerability. Not dominant.
+**(d) Is DROP dominant?** It looks it. The counterweight is the carrier's **own shortfall**: standing
+at a container is contested (substrate §4.1) and claimants' capacity routes through the persons who
+back them, so a seatholder who carries nothing accumulates regard only with a judging set that already
+likes him and acquires no new backing anywhere. A perpetual dropper ends as a man with a seat and no
+constituency, and loses the seat at the next contest. The field that types his rise types his
+vulnerability.
 
-**(e) Public versus concealed backing.** Concealed costs nothing but yields no regard gain to the
-carrier, so a petition backed only in secret is one nobody will carry. Real trade, both branches live.
-
-**(f) Stated versus silent drop.** Silent looks dominant (the grievance may never arrive), but it
-leaves backers believing the matter pending — so they raise nothing new, and when they eventually
-learn they learn through a distorted chain that names the carrier as a deceiver, depositing on the
-*person*. Stated deposits on the container and buys the carrier personal cover. Different shapes,
-neither dominates.
-
-**(g) Supplication versus remonstrance.** Only a fork for persons with institutional standing. For
-them: supplication is cheap and buys a private exception; remonstrance is expensive, suspends the
-measure for everyone, and spends the institution's right for the term. Genuine.
-
-**(h) Suppress versus concede — the ruler's fork, and the one the ratchet could have broken.**
-Suppression's gain is immediate and large and *decays* as rows re-arm; its cost is durable and
-compounds. Read naively that is dominated, which would be a mechanism engineered never to fire. It is
-not, because suppression correctly buys **a window**, and its value depends on what the ruler does
-inside it: suppress-then-concede-structurally clears the rows and is the strongest available line of
-play, while suppress-and-do-nothing is dominated and should be. And concede is not dominant either,
-because the settlement stake is zero-sum between the communities inside it (substrate §4) — granting a
-COMMON proposition manufactures a fresh shortfall in whoever the old terms favoured. Conceding to the
-hamlet produces the Row's petition.
+**(h) Suppress versus concede — the fork the ratchet could have broken.** Suppression's gain is
+immediate and large and *decays* as rows re-arm; its cost is durable and compounds. Read naively that
+is dominated, i.e. a mechanism engineered never to fire. It is not, because suppression correctly buys
+**a window**, and its value depends on what the ruler does inside it: suppress-then-concede-structurally
+clears the rows and is the strongest line available, while suppress-and-do-nothing is dominated and
+should be. Concede is not dominant either — the settlement stake is zero-sum between the communities
+inside it (substrate §4), so granting a COMMON proposition manufactures a fresh shortfall in whoever
+the old terms favoured. Conceding to the hamlet produces the Row's petition.
 
 **(i) Maximum mitigation against maximum accrual.** Required, because a mechanism tuned never to reach
 its failure state is indistinguishable from one that does not exist. Run a ruler who suppresses every
-event and concedes nothing, for four generations. Rows accrue and are inherited; re-arm thresholds
-fall; eventually every hearth in the settlement holds an armed dormant row and `hold(n, ·)` has decayed
-because the watch lives in the town. **Is that recoverable?** Yes, and expensively, by exactly two
-routes: the satisfying dispensation is available at *every* accrual level and clears every row
-referencing its proposition in one stroke; and inheritance transmits at reduced magnitude, so a
-lineage's grievance decays geometrically in the absence of re-arm, which a reformed container does not
-supply. Maximum accrual is recoverable by one costly structural act plus a generation of not
-re-offending. It is not recoverable cheaply, and it is not recoverable at all by removing people. That
-is the intended shape.
+event and concedes nothing for four generations: rows accrue and are inherited, re-arm thresholds fall,
+and eventually every hearth holds an armed dormant row while `hold(n, ·)` has decayed because the watch
+lives in the town. **Recoverable?** Yes, expensively, by exactly two routes — the satisfying
+dispensation is available at *every* accrual level and clears every row referencing its proposition in
+one stroke; and inheritance transmits at reduced magnitude, so a lineage's grievance decays
+geometrically absent re-arm, which a reformed container does not supply. Maximum accrual is recoverable
+by one costly structural act plus a generation of not re-offending. It is not recoverable cheaply, and
+it is not recoverable at all by removing people.
 
 ---
 

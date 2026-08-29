@@ -134,6 +134,28 @@ reckoning, a vacancy, a truce's expiry. A larder reckoning allocates nothing and
 is bookkeeping, and it ticks **once per cohort**, with only an individuated hearth carrying its own.
 The distinguishing test, which is now the rule: *if it has no claimants, it is not a standing date.*
 
+### B-5 · A private negotiation is a venue with no container — ALLOWED as presentation, and the
+### writer's own reading is adopted
+*Raised by 08 (argument and negotiation).*
+
+Every venue in 08 is a container plus a prize plus a date plus decision parameters — but a private
+negotiation has no container, which the substrate does not contemplate.
+
+**Ruling: the venue framing is presentational and is kept, because the presentation is an elegance
+win rather than a fiction.** 08's own honest reading is correct and is adopted: a private negotiation
+is *not* a rung mechanism. It is two persons performing `tell` acts at each other under a
+mutually-known deadline, and every mechanism 08 gives it — a proposal that deposits claims, a
+reservation set read from one's own ledger, a withdrawal that deposits where your floor lies — is
+already the substrate's transport layer doing its ordinary job.
+
+Keeping the venue row is what makes 08 §10's table *visibly one mechanic* across a parliament, a
+Dicastery, a guild board, a settlement court, a consensus cell and a private negotiation. Collapsing
+it would hide that unity behind two vocabularies for one thing, which costs more than the row does.
+
+**The condition on the ruling:** because it is presentational, nothing may *depend* on a negotiation
+having a container. If a later mechanism reads a negotiation's container, that mechanism is wrong,
+not the framing.
+
 ---
 
 ## C. The orchestrator's own error, recorded because it is the most instructive one here
