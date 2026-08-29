@@ -147,7 +147,20 @@ from: levy   to: regular
 gate: discipline ≥ θ↑ (illustrative; θ↑ set in unit.discipline's descriptor row)
 reversible: true
 hysteresis: {band: "θ↑ − θ↓ ≥ H_MIN(discipline)", dwell: 1}   # per 01 §2.3's formula, numbers TBD by the descriptor row
+---
+transition: unit.regular_to_levy   entity_kind: unit   field: unit_kind   # the mirror — §6's module
+from: regular   to: levy                                                  # contract already names it
+gate: discipline ≤ θ↓ (same descriptor row; θ↓ < θ↑, the same band §2.3's hysteresis declares)
+reversible: true
+hysteresis: {band: "θ↑ − θ↓ ≥ H_MIN(discipline)", dwell: 1}   # the identical declared band, both directions
 ```
+
+**The reverse row, named rather than left implicit.** An earlier draft declared `reversible: true` and
+a two-sided hysteresis band on `unit.levy_to_regular` alone, then listed `unit.regular_to_levy` in
+§6's `transitions:` with no row defining it — a name with no gate anywhere, the exact defect this
+suite's own `references/form_registry.yaml` discipline exists to catch at load. The mirror above is
+`unit.field_to_garrison`'s own pattern (§2.2: "mirror, same dwell") applied to the gauge-gated case:
+same band, same dwell, opposite direction, `θ↓` supplied by the same descriptor row `θ↑` already names.
 
 Both `θ↑`/`θ↓` and `discipline`'s `λ`/`rest`/`ceiling` are shape proposals belonging to this document's
 own `unit.discipline` gauge (§2.4) — no number here is a ledger constant.
@@ -173,6 +186,43 @@ happens.
 Two-tier defeat severity is carried forward unchanged: a unit on the winning side takes a `discipline`
 deposit with `experience` intact; a unit whose side breaks takes the harsher outcome. Losing a battle
 and losing an army stay different events.
+
+### 2.5 `unit.size`'s decay is an argued choice, not the gauge primitive's silent default (A-F13)
+
+Every Gauge decays geometrically toward a declared `rest` (`01 §5.1`). Leaving `unit.size`'s `λ`/`rest`
+unstated, as an earlier draft of §2.1 did, ships **unattended attrition nobody designed** — an army
+that shrinks every season whether or not anyone touches it. That is exactly the test `01 §1.3` used to
+move capability out of the gauge shape in the first place: *"an attribute decaying toward a rest value
+means skills rot every season, which is a different game."*
+
+**Capability failed that test; `size` does not, and the difference is the argument an earlier draft was
+missing.** There is no in-world reason a soldier's *competence* should erode absent practice — that is
+why `discipline` and `experience` stay gauges but `capability` moved to form (`01 §1.3`). A unit's
+*raised strength* is a different quantity: attrition without supply is a real, wanted military
+dynamic — a standing levy nobody pays, feeds or reinforces does bleed strength to desertion and
+disease, independent of any battle. So the decay is **kept, and made a decision instead of a default**:
+
+```yaml
+gauge: unit.size
+floor: 0
+ceiling: <raised strength, per-unit>                     # SHAPE PROPOSAL, this document's own
+lambda: 0.03            # SHAPE PROPOSAL — slow: an unsupplied unit halves toward rest over roughly
+                        # 23 seasons, not one. Peacetime attrition, never a battle result
+rest: 0.6 · raised_size  # SHAPE PROPOSAL — the standing cadre that does not walk away: veterans,
+                        # officers, the locally-rooted levy. Never zero — a unit hollows out toward
+                        # its durable core, it does not evaporate for want of a season's pay
+```
+
+**What this decay is not.** Battle losses are not this gauge's decay — they are the `overwhelming`/
+`success`/`partial`/`failure` bands' own explicit deposits, landing through leaf 1 exactly like any
+other combat effect, unchanged from §2 above. The geometric term is the *only* thing that moves `size`
+when nobody musters, reinforces, or fights with the unit, and it runs at a rate an order of magnitude
+slower than `discipline`'s or `experience`'s own decay.
+
+> **Falsifier.** A declaration-time test asserting `unit.size`'s `λ` is present, `> 0`, and at least
+> 5× smaller than both `unit.discipline`'s and `unit.experience`'s own declared `λ` — the arithmetic
+> check that this is argued as slow peacetime bleed, not silently inherited from whatever value the
+> registry's other gauges happen to use.
 
 ---
 
