@@ -1,5 +1,11 @@
 # 04 — Personnel management
 
+> ⚠ **ARCHIVED / SUPERSEDED (2026-08-29).** This is the **pre-critique** version. It is retained
+> unedited so the adversarial findings against it stay checkable — **do not build from it.** Six of
+> its claims are known false; see [`ARCHIVED.md`](ARCHIVED.md). The live suite is
+> `proposals/2026-08-29-greenfield-systems-suite-v2/`.
+
+
 ## Status: PROPOSED (2026-08-28) — held back from ratification-on-merge
 ## Reads: [`00_INDEX.md`](00_INDEX.md) · [`01_substrate_primitives.md`](01_substrate_primitives.md) · [`03_world_population.md`](03_world_population.md)
 ## Produces: the assignment surface — the layer where, in every surveyed game that has people, the player spends most of their decisions
