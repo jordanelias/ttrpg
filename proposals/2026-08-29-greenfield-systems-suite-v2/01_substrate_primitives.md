@@ -137,8 +137,11 @@ narrower than the three it joins, not wider** — a gauge deposit needs only pro
 transition needs a declared row, a gate over readable state, a cost, an emission, and, if reversible, a
 hysteresis band.
 
-**An aggregate is not a stock, and AU-1 forbids only the first.** The rule is stated here in the one
-form that stops the mislabel, because the mislabel has already happened twice in this suite.
+**An aggregate is not a stock, and AU-1 forbids only the first.** Stated here in the form that stops
+the mislabel, because it has already happened once in this suite — on the fiscal spine, found
+independently by two critics reading from opposite ends (*what does the muster economy spend?* and
+*does the fiscal spine fit the four write leaves?*), which is the signature of a real defect rather
+than a reading.
 
 | | **aggregate** | **stock** |
 |---|---|---|
@@ -154,6 +157,12 @@ decrement. That is exactly the read/write asymmetry `CLAUDE.md §0.1` point 1 na
 the guard it asks for is a grep over the field's **assignments**, not its readers. **A stock is a
 faction-, place- or post-owned Gauge**, deposited at the accounting boundary and drawn down by the
 verbs that spend it. It is not an exception to AU-1; it was never in AU-1's scope.
+
+**The worked case, whose disposition belongs to its owner and not to this page.** A faction treasury is
+deposited into at the accounting boundary and drawn down by muster and upkeep, so by the test above it
+is a **stock**. `06` owns that row and the call between routing it as a faction-owned gauge or pricing
+those actions out of an existing post `budget`; **this page owns only the rule that whichever route is
+taken, the spent quantity cannot be `writable: false`.**
 
 ### 2.2 The transition row
 

@@ -637,9 +637,11 @@ is where the player's existing verbs answer it — not a new one.
 
 **Zero standing verbs added** — the playing-surface budget this suite is held to (`00 §2.2`) is
 satisfied by construction: this document's entire player-facing surface is two rows, both reads,
-against nine substrate objects (two module contracts, four registry rows, one new schema field, one
-Tag-based persistence convention, one shared route-cut flag proposal). If a later revision of this
-document's surface table grows longer than this substrate table, it has the ratio backwards
+against eight substrate objects (**zero new module contracts** — §6 collapsed onto `05`'s, one
+extension each on `fa.gate`/`fa.resolve` and one new target-keyed selection rule, four registry rows,
+one new schema field, one Tag-based persistence convention, one shared route-cut flag proposal). If a
+later revision of this document's surface table grows longer than this substrate table, it has the
+ratio backwards
 (`00 §2.3` point 4).
 
 ---
