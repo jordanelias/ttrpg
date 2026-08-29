@@ -40,7 +40,7 @@ something already on disk beat it — *"may the best ideas win"* cutting against
 
 | # | What is overridden | Tier | Why |
 |---|---|---|---|
-| **O-A1** | `01 §3.1`'s closing sentence — *"Six kinds, and the enum closes again at six"* | this suite's own `01` | **Seven.** A project declaration is a forward commitment; every one of the six records something **realized**. The two-part test `01 §3.1` itself specifies is run in §2.1, and the enum closes again at seven. This is `01`'s own procedure executed, not a bypass of it |
+| **O-A1** | `01 §3.1`'s v2 closing sentence — *"Six kinds, and the enum closes again at six"* | this suite's own `01` | **Seven — and `01` has since ADOPTED this**, so the row now records the argument rather than a live disagreement; `01 §3.1` reads *"the enum stands at seven"* and lists `Ambition`. Keep it listed: a disclosed override that was accepted is still the reason the enum moved. A project declaration is a forward commitment; every one of the six records something **realized**. The two-part test `01 §3.1` itself specifies is run in §2.1, and the enum closes again at seven. This is `01`'s own procedure executed, not a bypass of it |
 | **O-A2** | `01 §5.2`'s **`progress` Gauge** row — *"`progress` (v2) · any project owner"* | this suite's own `01` | **CUT. Progress is derived at read, never stored.** A stored progress is an aggregate over the project's advance terms, and **no aggregate is ever written** (`01 §2.1`, AU-1). This is structurally the same defect `01 §7.3` caught in v1's edge disposition, one document later. §3 |
 | **O-A2b** | `references/module_contracts.yaml:343`'s `{name: "projects", bucket: clock, writable: true}` — canon stores project progress as a monotone 0→10 clock | **canonical contract** (`political_dynamics_keys_migration_v30.md:6` is `## Status: CANONICAL`) | A storage divergence, recorded rather than hidden. This design derives the same number, and **the ratchet case is reproduced exactly** (§3.2), so a port keeping canon's stored clock and one deriving it fire on the same season. Only the write leaf differs — and only one of the two obeys AU-1 |
 | **O-A3** | `00 §9.2`'s three proposed key types **`project.declared` / `project.fired` / `project.lapsed`** | this suite's own `00` | **CUT as duplicates. Three of the four already exist and are registered** under ED-935: `mechanical.project_advanced` (`key_type_registry_v30.md:446`), `state.project_completed` (`:691`), `state.project_failed` (`:710`), all with `emitting_systems: [npc_behavior]` and live contract edges at `module_contracts.yaml:318-320, :333-335`. Only **formation** is missing, and `audit/2026-08-11-world-schema-gap-audit/01_gap_register_part2.md:281` (G-29) already proposed `state.project_formed` for it. §10 |
@@ -165,7 +165,9 @@ same two-part argument; 'a mechanic wants somewhere to live' is not it."* Here i
 
 1. **Every one of the six records something realized; an Ambition records something that has not
    happened.** A Precedent is a thing that was done, a Grudge a thing suffered, a Debt a thing owed,
-   a Reputation a thing attributed, a Leverage a hold currently held, a Memory a thing perceived. All
+   a Reputation a thing attributed, a Leverage a hold currently held, a Holding a thing perceived or
+   believed (`01 §3.1`, which cut the drafted `Memory` kind in its favour — the argument below is
+   indifferent to that rename, since a belief is still a record of something taken to have happened). All
    six have a `value` that is the **magnitude of a fact**. An Ambition's payload is a **target and
    terms** — a commitment about the future. There is no magnitude to carry, and every consumer that
    reads a tag as evidence would read this one as evidence of something that did not occur.
