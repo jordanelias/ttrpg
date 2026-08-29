@@ -95,6 +95,9 @@ this page exists partly to say that plainly rather than let a completed suite re
 | **P0-4** | **`01 §6.1` must carry the opposed-site (differential) envelope**, not only the one-sided one | every DO/BI site's gate verdict | DOC | **CLOSED 2026-08-29.** `01 §6.1.2` selects the envelope by the site's declared `shape`. **No verdict flipped — and that is a near miss, not a clean bill:** had `07` spent the headroom the loose form allowed, this correction would have invalidated an already-propagated ceiling |
 | **P0-5** | `engine/engine_params/descriptors.json` declares **`prac.thread_sensitivity` with `ceiling: None`** against canon's 0–100 hard cap | three declaration-time guards are silently inert on it | MOVES when fixed | **open, FI/IN lane's row.** Verified 2026-08-29 |
 | **P0-4b** | **an opposed site's `pool_opposed_min` must be the site's real declared minimum** | which corner the gate evaluates | DOC | **open, and cheap.** The top-band envelope strictly decreases in the opposing pool, so its maximum is at `D_min` — the check is **two evaluations, not a search**. But the worked figure `N_d = 6` is only correct if 6 is that site's declared minimum; at `D_min = 1` the bound rises to **9.536**. The gate reads the corner from the registry rather than assuming one, so `05` must declare a minimum it can defend |
+| **P0-7** | **the Turmoil victory leg is vacuous.** `victory.py:73` reads the clock, `game_state.py:338` initialises it to `0.0`, **nothing writes it** — verified 2026-08-29, those are the only two non-test occurrences | **every campaign-scored control in this plan** | MOVES when fixed | **open, and it is Phase 0.** Until it is fixed or pinned-as-vacuous with a test, any churn programme silently mis-scores its own campaigns |
+| **P0-8** | **`faction.treasury` is declared a derivation and spent as a stock.** `06_faction_management_part2.md:180` declares it `bucket: gauge, writable: false, owner: fm.derive`; `05_faction_actions_part2.md:68` pays muster from "the faction's derived treasury". **You cannot pay from a derivation — there is no setter to decrement** | `05`'s muster and upkeep | DOC | **open.** The fix is in the suite's own vocabulary: **AU-1 forbids storing an *aggregate*, a value current state can recompute. A treasury with spend history is a path-dependent *stock*, which is not an aggregate.** The suite already ships the precedent at place scale — `accrual.entitlement`, a spendable stock (`07:537`). Treasury becomes a faction-owned gauge and leaves `fm.derive`'s state list, which `00 §7.1`'s own falsifier requires once it is real |
+| **P0-9** | **`acceptance.legitimacy` has essentially one depositor** — the Entry Terms seed at control transfer (`05_faction_actions_part2.md:53`) — while routine deposits target `acceptance.support`. A geometrically-decaying gauge seeded once per transfer **relaxes to rest and dies**, while `07 §7`'s `compliance` term reads it | the fiscal spine's compliance term | DOC | **open.** This is the suite's own worst failure class — *a mechanic that looks live and is dead* (`01 §6.1`) — occurring in the suite rather than in canon. The fix costs no new object: SE-1's Weberian routing table is **effect-row data** saying which verbs deposit into legitimacy (oath, confirmation, court held, stance kept) versus support (dearth relieved, defence, festival) |
 | **P0-6** | the two new registries — `references/form_registry.yaml`, `references/content_registry.yaml` — plus their exporters and blocking `--check` | every form transition; every content row | INERT | **open** |
 
 **Nothing appends a Key type until P0-1 exists.** Appending while a ratified precondition is
@@ -114,6 +117,20 @@ the control that would show it wrong.
 | P0-6's two registries + exporters with blocking `--check` | every later phase writes rows into them; building them late means hand-editing what a generator should own | the round-trip `--check` fails on a hand-edit |
 | `01 §6.1`'s commensurability gate as a **declaration-time** check, carrying **both** envelopes (P0-4) | it is the only guard in the suite that prevents a **dead mechanic that looks live** | a synthetic row targeting Thread Sensitivity (0–100) is **rejected**; one targeting a 0–7 stat **passes** |
 | `references/rendering_dispositions.yaml` (P0-1) | unblocks every key type | the registry gate stops being report-only |
+| **fix, or explicitly pin-as-vacuous, the Turmoil victory leg (P0-7)** | **every campaign-scored control in this plan is scored through it** | a seeded campaign in which a faction meeting territory and accord thresholds is *denied* victory on political stability. Today that is unreachable |
+
+⚠ **P0-7 is the single highest-leverage item in this plan and it was missing from the first draft.**
+Critic C found it; I verified it. `engine/autoload/victory.py:73` reads `world.clocks.get('Turmoil', 0.0)`
+and tests `ps_ok = ps <= PS_MAX`. `engine/autoload/game_state.py:338` initialises `Turmoil` to `0.0`.
+**Those are the only two non-test occurrences of the clock in the tree — nothing writes it**, so
+`ps_ok` is unconditionally true and the Political Stability leg of the victory check does not exist.
+
+**Why it is Phase 0 and not a later tidy-up:** Phase 2's control is `tools/balance_oracle.py`
+win-shares and Phase 5's is the bloc-gate campaign measurement — *the one measurement this suite says
+is worth buying*. Both are scored by a victory check with a dead leg. **`CLAUDE.md` §0.1 point 4: a
+control run on a mis-scoring instrument is not a control.** Fixing it after those runs means
+re-running them; fixing it first costs nothing. It is also not a design item this suite can supersede
+— it is the **scoring instrument**, and it is broken today regardless of what the suite proposes.
 
 **Phase 0 ships no behaviour and is still the right first phase**, because every item is a guard that
 makes a later phase's defect impossible rather than expensive. Each earns its existence under
