@@ -179,8 +179,8 @@ that precondition exists to stop.
 `00 §7` now requires every module to declare `ob_sites: [{target, modifier_max, pool_max}]`, because
 without it `01 §6.1`'s commensurability gate is a rule nothing can check. **Every module in `02`
 declares `ob_sites: []`, and that is a fact about the design rather than an omission:** nothing here
-rolls. Four of the five modules are `derivation` and the fifth is a `gate`; a conditioned categorical
-draw has no obstacle, and **every form transition is gated, never rolled** (`01 §2.2`).
+rolls. Three of the five modules are `derivation` and two are `gate`; a conditioned categorical draw
+has no obstacle, and **every form transition is gated, never rolled** (`01 §2.2`).
 
 Two obstacles are nonetheless reachable from this document, and both belong to someone else:
 
