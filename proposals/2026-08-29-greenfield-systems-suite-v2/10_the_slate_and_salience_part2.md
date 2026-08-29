@@ -1,8 +1,8 @@
 # The Slate — Inertia, Contracts and Property Audit (part 2)
 
 ## Status: PROPOSED (2026-08-29) — held back from ratification-on-merge
-## Version: v3 — §6 received from part 1 · §11.2 stale `pressure` loop restated · §11.4 dominance hand-off
-## · claims 12–15 · §11.5 fifth weak point
+## Version: v3 — §6 received from part 1 · §7 Memory fallback CUT + §7.1 inertia bootstrap fix ·
+## §11.2 stale `pressure` loop restated · §11.4 dominance hand-off · claims 12–16 · §11.5
 ## Reads: [`10_the_slate_and_salience.md`](10_the_slate_and_salience.md) — **part 1 first; this continues it**
 ## Part 1: §§0–5 (the override list, the funnel numbers, the candidate contract, the cast gate,
 ## the two orderings, truncation with its proofs)
@@ -162,10 +162,83 @@ the ratified F-F weight surface (`:279`) as exposed versioned data.
 3. **J-O robustness.** This reads the Key log as **telemetry**, which `01 part 2 §9.4` records as
    surviving a "telemetry only" ruling. Inertia does not depend on the consumer mesh.
 
-**Fallback if the log is not queryable by `candidate_id` at acceptable cost:** a `Tag` with
-`kind: Memory` on the candidate's anchor, `key = candidate_id`, `value = INERTIA_BASE`, decaying by
-`01 §3.2`'s derived-salience law — the same arithmetic, one stored row per lit candidate, bounded by
-`MEMORY_CAP`. **Named so the fallback is a decision and not an improvisation.** Prefer the log.
+**The fallback is CUT in v3, and the reason is worth more than the fallback was.** v2.0 named one:
+*"if the log is not queryable by `candidate_id` at acceptable cost,"* store a `Tag` with `kind: Memory`
+on the anchor, `key = candidate_id`, `value = INERTIA_BASE`, bounded by `MEMORY_CAP`. `01` O-6 has
+since cut the `Memory` kind — its `key`+`value` cannot say *what* is misremembered, and `Holding`
+replaces it — which forced this line open again. **Re-opened, it fails on three counts that have
+nothing to do with the kind's name, so it is deleted rather than renamed.**
+
+1. **The cost it insures against cannot arise, by this document's own boundedness proof.** The log is
+   written by `sl.truncate` **once per Slate member**, and §5.2 proves `|Slate| ≤ B` with `B ≤ 9`
+   (`player_agency_v30.md:305`). So it grows at **≤ 9 rows per season and ≤ 450 over the 50-season
+   campaign** `engine/tests/test_mc_v18_regression.py:16` runs, and `inertia_bp` needs one `max` over
+   the rows carrying a given `candidate_id`. **The number that could have made this expensive is the
+   candidate rate — ≈195/season, ≈9,750/campaign (§1.3) — and the log does not record candidates, only
+   LIT ones.** The fallback confused the two, and re-deriving §1.3 is what made the gap between them
+   visible.
+2. **It gave `sl.*` a tag write, which §6.2 forbids in its own falsifier** — *"it cannot deposit into a
+   gauge, **append a tag**, grant a post, or transition a form"* — and §10 declares `state: []` in all
+   four modules. **This was equally true under `Memory`;** the kind's removal exposed the breach rather
+   than caused it. Cutting the fallback is what finally makes **claim 8 honest**, since claim 8 asserts
+   precisely the property this paragraph was contradicting.
+3. **The proposed landing, `Precedent(owner=anchor, key=candidate_id)`, is worse than what it replaces,
+   and specifically so.** `08 §5` row 4 draws candidates from *"a `Precedent` tag being tested by a new
+   event"* on the place. A Precedent-kind attention marker sitting on the anchor would therefore feed
+   the Slate's own output back into `sm.business`'s input — **a channel by which the Slate injects its
+   next season's candidates**, which is the exact property §6.2 point 3 claims to hold *by
+   construction*. Separately, `01 §3.2` states the salience derivation applies to *"any tag kind that
+   declares a salience reading; only `Holding` does today"* — so the decay this fallback depends on is
+   not even available on `Precedent` without extending `01` as well.
+
+**There is therefore no store and no bound to declare, which is the strongest available form of that
+answer.** The log is the only mechanism; it is bounded at `B` per season by a proved theorem rather
+than by a cap; §11.2's inertia loop is unchanged. **A bounded fallback was considered and rejected:**
+adding a store that breaches this document's own structural prohibition, to insure against a cost the
+document proves cannot occur, is the trade §0 exists to refuse.
+
+### 7.1 What happens when there is no log at all — and the defect that question exposed
+
+`slate.item_surfaced` is blocked on `00 §8` P0-1 (§10), so there is a real window in which `last_lit(c)`
+is undefined for **every** candidate. Working out what the Slate does in that window surfaced a defect
+that is **not** confined to it:
+
+> **As written above, `inertia_bp(c) = 0` when a candidate has never been lit — and §4.1's `cast_score`
+> MULTIPLIES by it. So a never-lit candidate scores zero, and a candidate scoring zero cannot be lit.**
+> Every candidate begins never-lit, so on a cold start every `cast_score` is `0`, the comparator falls
+> through to its `candidate_id ASC` tie-break, and **the Slate ranks the world by hash.** The reserved
+> slice does not rescue it: Step 4 also orders by `cast_score`, so it picks by hash too — and Step 3's
+> free pool `F`, which is most of the Slate, is in the same state. This is a bootstrap deadlock, and it
+> is reachable on season 1 of every campaign.
+
+**Fix, and it is the smaller of the two available.** `inertia` is a **momentum** term: the ratified
+reading is that attention *has* momentum, not that inattention *annihilates* meaningfulness. Its
+neutral value is therefore `1`, not `0`:
+
+```
+INERTIA_NEUTRAL = 10000 bp  ⟨shape; 1.0 in basis points⟩
+inertia_bp(c) = INERTIA_NEUTRAL                                    if never lit
+              = INERTIA_NEUTRAL + INERTIA_BASE · NUM^d // DEN^d    otherwise,  d = t − last_lit(c)
+anti-strobe:    if 0 < d ≤ STROBE_MIN ⟨shape: 2⟩ :
+                    inertia_bp(c) := max(inertia_bp(c), STROBE_FLOOR)  ⟨shape⟩
+```
+
+**What this preserves, and the one thing it changes.** The ratified property — *a recently-lit
+candidate outranks an otherwise-identical un-lit one by a margin that decays geometrically to nothing*
+— is preserved exactly; the decay law, the anti-strobe floor and the integer discipline are untouched.
+What changes is only **the baseline the boost is measured from**, and the `0` baseline was never a
+design choice anyone made. §5.3's monotonicity proof is unaffected: it quantifies over *raising* a
+score and reads `|M|`, `|E|`, `X`, `R` and `I`, none of which is a function of inertia's baseline.
+
+**And it makes the P0-1 window benign rather than catastrophic.** With no log, every candidate sits at
+`INERTIA_NEUTRAL` and `cast_score` reduces to `meaningfulness × scale_weight` — a Slate with no
+momentum, correctly ordered. That is the exact parallel of §5.1's `E := ∅`, and **both blocked-state
+behaviours are now named configurations rather than holes.**
+
+⚠ **Scope, stated plainly: this is beyond what v3 set out to change here.** It was found by asking what
+the deleted fallback was insuring against. It is fixed in place rather than filed because it needs no
+ruling — an absent multiplicative case written as `0` is an oversight, not a design call — which is
+`CLAUDE.md §0`'s *fix it in this commit or drop it*. Its falsifier is **claim 16**.
 
 ---
 
@@ -300,7 +373,7 @@ do apply to a selection function.
 | **5** | **P-C — order neutrality** (§6.3) | Resolve one season's candidate set under `n` random permutations; assert one state. Mutation check: allow two post operations on one post per boundary and confirm it fails |
 | **6** | **P-B — baseline parity** | The **parity harness** of `auto_manual_resolution_duality_v1.md:67`, comparing auto against **AI-played** on matched inputs. ⚠ **The tolerance is fork C, genuinely open**, and this document does not set it. Until the harness lands, P-B is **asserted and unverified** |
 | **7** | **No unknowable candidate reaches the Slate** (§3) | A test asserting every Slate member has a non-empty `witness` on one of the five channels, and that no Thread-constituted candidate is cast to a person below the canonical Thread Sensitivity gate. This is P-08's own falsifier applied to the attention system |
-| **8** | **The Slate writes nothing** (§6.2) | A contract test asserting all four `sl.*` modules have `state: []`, no `form:`, no `transitions:`, and a resolver in `{gate, derivation}` |
+| **8** | **The Slate writes nothing** (§6.2) | A contract test asserting all four `sl.*` modules have `state: []`, no `form:`, no `transitions:`, and a resolver in `{gate, derivation}`. **⚠ This claim was FALSE in v2.0 and nobody noticed**, because §7's inertia fallback appended a tag from `sl.*`. v3 cut the fallback (§7 point 2); the claim is now honest and this test would actually have caught it |
 | **9** | **Candidate identity is stable across seasons** (§2.2) | A seeded campaign asserting a persisting situation keeps one `candidate_id` across ≥ 3 seasons. Mutation check: add `accounting_index` to the hash and confirm inertia stops carrying |
 | **10** | **Zero new player verbs** (§1.4) | Count verbs across the suite before and after `10`. This document must add 0 and does add 0 — it adds one *interaction* (attend) which is the budget's own unit, not a verb over the world |
 | **11** | **The funnel ratios of §1.3, re-derived in v3** | They are **estimates with stated bases, not measurements**, and §1.3a records that the v3 basis is *weaker* than the v2.0 one it replaces even though the number is larger. Falsified by instrumenting one seeded 50-season campaign and counting emitted candidates per season, **broken out per `08 §5` row**, because rows 1 and 3 carry ≈76% of the mass and neither is bounded by any document. **⚠ v3 amends this to test BOTH directions.** *Too low:* if the true rate is under **~3× the budget** (≈18/season), the Slate is not earning its keep and **D should be cut**. *Too high:* if `08`'s per-place rate exceeds **~8** (≈300/season peninsula-wide), the Shade — all of which still resolves at full fidelity (§6) — is a per-season simulation cost nothing in this document would surface, and the answer is a bound in `08 §5`, **never a second rationer here** |
@@ -308,12 +381,14 @@ do apply to a selection function.
 | **13** *(v3)* | **An `informational` candidate is rendered and never resolved** (§2.1a) | A test asserting every `informational: true` candidate has `resolver_ref: null` and `responses: []`, that no resolver is invoked for one, that it never enters the exempt set `E`, and that `\|{informational} ∩ Slate\| ≤ I`. **Mutation check:** relax C-1 or C-2 for informational rows and confirm the §3 cast-gate test (claim 7) then fails — the exemption is C-4/C-5 only |
 | **14** *(v3)* | **A candidate never crosses a seam as a Key** (§2.1) | A test asserting no module contract in the suite declares an `emits:` row whose type carries a candidate, and that `00 §9.2` registers none. **This is what makes the `08`↔`10` seam single-valued**; v2.0 had `08` emitting `place.business_item_offered` while this document consumed nothing |
 | **15** *(v3)* | **`imminence` has a producer and it cannot reach `cast_score`** (§4.2) | Two assertions in one test: that `sl.rank` derives a non-constant `horizon.band` over a seeded season's candidate set, **and** that permuting every candidate's `horizon` leaves the Slate's *membership* bit-identical. The second is the load-bearing half — it is what keeps the derivation on the render side of the ratified severance. **Mutation check:** let `horizon` into `cast_score` and confirm the second assertion fails |
+| **16** *(v3)* | **A never-lit candidate can be lit — no bootstrap deadlock** (§7.1) | Rank a seeded season's candidate set with an **empty** `slate.item_surfaced` history and assert the resulting Slate is ordered by `meaningfulness × scale_weight` and is **not** equal to the first `B` candidates under `candidate_id ASC`. Then assert the same at a non-empty history, so the test covers both the cold start and the P0-1 window. **Mutation check:** set `INERTIA_NEUTRAL = 0`, restoring v2.0's arithmetic, and confirm the Slate becomes hash-ordered. **This is the cheapest test on the list and the defect it catches makes season 1 of every campaign meaningless** |
 
 **On guards (`00 §8` P0-4, `CLAUDE.md §0.1` point 5).** Every test above is load-bearing on **the
 game**: 2, 3, 5, 9 and 12 on whether the player's season is coherent; 4 and 6 on whether the attention
 system is honest; 7 on a canon constraint; 13 on whether the player is ever told what the world did;
 14 on whether one seam has one answer; 15 on whether a ratified severance survives a fix that touches
-it. **None guards apparatus.** Note 11 is a *measurement*, not a guard, and §1.3a is explicit that it
+it; **16 on whether the first season of a campaign is ordered by meaning or by hash.** **None guards
+apparatus.** Note 11 is a *measurement*, not a guard, and §1.3a is explicit that it
 now cuts in two directions.
 
 ### 11.2 Loops, each with its bound
@@ -363,7 +438,7 @@ state*. It belongs in the build order and not here for a reason this document ca
 (C-5), so it has no access to the quantity the test compares. **The Slate does not own dominance
 testing, cannot own it, and this paragraph is the hand-off — not a second disclaimer.**
 
-### 11.5 The five weakest points, named rather than buried
+### 11.5 The six weakest points, named rather than buried
 
 1. **P-B is asserted and unverified**, and it depends on a fork Jordan has not closed (fork C, the
    tolerance) plus a reading of a ruled doctrine that is itself filed as needing him (ED-SC-0024,
@@ -377,14 +452,22 @@ testing, cannot own it, and this paragraph is the hand-off — not a second disc
    point 1). Claim 11 is how both directions get measured.
 3. **`|M| ≥ B` is reachable** and degrades the game to mandatory-only. Canon handles it; nobody has
    measured how often it happens.
-4. **`forecast_mass` still has no producer, and §4.2 only fixed `imminence`.** The v3 derivation
+4. **Two structural claims in this document were false in v2.0 and were found only when an unrelated
+   edit forced their section open** — §6.2's *"the Slate writes nothing"* (contradicted by §7's own
+   fallback) and §7's inertia baseline (a bootstrap deadlock on every cold start). Both are fixed in
+   v3 and both now have falsifiers (claims 8, 16). **The weak point is not the two defects; it is that
+   neither was found by the four rounds of review this suite has had, and both were sitting inside
+   sections the review passed.** The honest inference is that prose-level review does not catch a
+   contradiction between a normative table and a paragraph six sections away, and that claims 8 and 16
+   should be among the first tests written rather than among the last.
+5. **`forecast_mass` still has no producer, and §4.2 only fixed `imminence`.** The v3 derivation
    gives `imminence` a real input (a coarse band derived from published band-distance, render-side
    only). It does **nothing** for the other forecast term. So `depth_score` is now
    `cast_score × forecast_mass × imminence` with **one of the two multiplicands still constant**, and
    the honest description of the forecast layer is *half-produced*, not *working*. Naming a producer
    for `forecast_mass` needs a Layer-A forecast object that no document in this suite ships, and
    inventing one here would be the second scoring function §0 refuses.
-5. **The product form of meaningfulness is asserted, not shown** (part 1 §0.1). A candidate with zero
+6. **The product form of meaningfulness is asserted, not shown** (part 1 §0.1). A candidate with zero
    `identity_touch_bp` scores zero however durable and close it is. That is probably right and is
    certainly the ratified shape — but this document adopted it on the strength of the ratification and
    an intuition, not on evidence. **The falsifier is cheap and worth running early:** score one seeded
