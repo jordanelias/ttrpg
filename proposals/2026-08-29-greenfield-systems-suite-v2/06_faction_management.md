@@ -21,6 +21,19 @@ cited by `path:line` and named as canon's. Nothing here invents a number and pre
 
 ## Overrides
 
+**The authority model this block is written under (Jordan, 2026-08-29, mid-suite):** *"existing work is
+not necessarily required to keep all the way through to things like obstacles being stat/2 or whatever
+is ratified and canon"* · *"I just want the best possible proposal."* **Nothing in the tree is out of
+bounds** — not ratified canon, not a prior ruling. Tier no longer decides *whether* something may be
+overridden; it decides **how strong the argument has to be**. The one hard rule is unchanged: **an
+override is explicit, listed and argued, and silence is the only thing forbidden.**
+
+The counterweight binds equally, and it is the one this page acted on more often: **re-deriving a worse
+version of a shipped design to keep authorship is its own failure.** Three of the six rows below are
+this page adopting or restoring something it did not write, because the existing thing is better. Where
+this page keeps a ruling, it keeps it **because the ruling is right**, and says why — never because it
+is a ruling.
+
 Listed, tiered and argued (`00 §5.3` collects them so each can be vetoed individually).
 
 | # | What is overridden | Tier | Why |

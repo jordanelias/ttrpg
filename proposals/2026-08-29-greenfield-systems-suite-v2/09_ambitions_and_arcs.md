@@ -42,13 +42,38 @@ something already on disk beat it — *"may the best ideas win"* cutting against
 instruction at `narrative_engine_design_v2_churn.md:91` (*"the compiled generator must reproduce them
 from their trigger states"*) is neither obeyable nor overridable. §7.3 states it as a **named gap**.
 
+### Adopted on merit, not because it binds — the amended authority model
+
+**Jordan, 2026-08-29 (mid-drafting):** *"existing work is not necessarily required to keep all the way
+through to things like obstacles being stat/2 or whatever is ratified and canon"* · *"I just want the
+best possible proposal."* Under this, **nothing in the tree is out of bounds** — not ratified canon,
+not a prior Jordan ruling. The delta spec's tier-1 *"follow it"* and tier-2 *"integrate, don't
+duplicate"* become **evidence to weigh**, and only the `## Overrides` disclosure rule survives intact.
+
+**Two things this document could now override, and does not. Recording the decision not to override
+is as much a decision as overriding.**
+
+| kept | tier it *was* | why it is kept **on merit** | what would have made me drop it |
+|---|---|---|---|
+| **The arc-vector template + binding-slot grammar** (ED-IN-0011, ratified) | ratified canon | It is **derived from 138 real authored arcs**, not from a preference, and its anti-oatmeal defence — *specificity from binding at instantiation* — is the exact property a project object needs and the exact property a naive generator lacks. Re-deriving a decomposition from zero arcs to replace one derived from 138 would be a worse proposal wearing my name. §1 | if the ~13 shapes could not express a project's four-verb lifecycle. **They can** — §1's slot table maps it with nothing left over |
+| **The hook grammar** — *the script is the PREDICATE* (Jordan, 2026-08-18) | a Jordan ruling | It is **solving scripting drift**, and it solves it better than the alternatives: it puts the authored part in a *predicate over world state* where it cannot special-case an entity, and leaves everything downstream emergent. It also comes with **three worked in-tree precedents**, so it is tested rather than proposed. §4 | if it forced authored content into code branches. **It does not** — §10.2 makes every hook a registry row |
+
+**And one place this document does extend past both, argued rather than assumed** (§3.1): the ratified
+templates and all three hook precedents are **unweighted** — a conjunction that must fully obtain, or
+a counter that must reach `k`. This design generalizes to a **weighted sum of indicator terms**, which
+subsumes both as special cases (equal weights + full threshold = the conjunction; tag-existence terms =
+the ratchet) and adds partial progress the precedents cannot express. **That is one formula replacing
+two shapes, which is the elegance criterion's distillation side** — and it is listed here rather than
+slipped in, because it is an extension of a ruled grammar.
+
 ---
 
-## 1. Bind to the ratified arc grammar — a project kind **is** an arc-vector template
+## 1. The arc grammar — a project kind **is** an arc-vector template
 
-**This document does not author an arc model.** One is ratified. `narrative_engine_design_v2_churn.md`
-(`## Status: RATIFIED (Jordan, 2026-07-05 … ED-IN-0011)`, `:3`) already names *"ambitions/projects"*
-among the durable substrate (`:76`) and already owns the arc question with a specific answer (`:80`):
+**This document authors no arc model, because a better one exists and is ratified.**
+`narrative_engine_design_v2_churn.md` (`## Status: RATIFIED (Jordan, 2026-07-05 … ED-IN-0011)`, `:3`)
+already names *"ambitions/projects"* among the durable substrate (`:76`) and already owns the arc
+question with a specific answer (`:80`):
 
 > **Arc-vector TEMPLATES with binding slots** — the ~13 structural shapes the 138 register arcs
 > collapse to … trigger predicates over state-graph FAMILIES × binding slots (faction × territory ×
@@ -214,8 +239,12 @@ consequences, and the third is a prohibition this document is bound by:
 > it with the coup counter, for example."**
 > — Jordan, 2026-08-18 (`proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md:618`)
 
-**This is a ruling, so it binds** (`00 §5`, tier: a Jordan ruling). It hands this document its shape
-with three worked precedents already in the tree, so nothing here is invented.
+**Under the amended authority model this ruling is evidence, not a fence** (see the note after
+`## Overrides`) — and it is adopted anyway, on merit, for a reason worth stating: **it is the only
+formulation in the tree that stops scripting drift without banning authored content.** The authored
+part is a *predicate over world state*, which by its shape cannot name an entity or an outcome; every
+consequence of the predicate holding is emergent. And it arrives with **three worked precedents
+already in the tree**, so nothing here is invented or untested.
 
 | precedent | what IS scripted | what is NOT | the project row that expresses it |
 |---|---|---|---|

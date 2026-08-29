@@ -515,16 +515,16 @@ rows; this document supplies the deposits that move the gauge.
 
 ### 4.4 The loop this opens, its bound, and what stays unmeasured
 
-**The loop:** presence at a place → a larger `boost_c` → cheaper further contests there → more
+**The loop:** presence at a place → a smaller obstacle → cheaper further contests there → more
 presence. Positive feedback, and naming it is not optional.
 
 | damper | kind | binds? |
 |---|---|---|
-| `boost_c` is **capped** at a declared ceiling | hard cap | yes, by construction |
+| the discount **saturates at `OB_MIN`** — past parity, further presence buys the challenger nothing | hard floor, **structural** | yes, by the shape rather than by a constant (§4.1) |
 | **one contest per (faction, place, season)** — a gate, not a cost | hard cap | yes; stacking posts on one place is impossible, so the strategy is spread, not mash |
 | every contest costs **one budget point of one staffed post** | opportunity cost | yes, and it is the real bound: holding presence at *N* places costs *N* officers' seasons |
 | the presence gauge is bounded with geometric decay, fixed point `rest + a/λ` | structural | yes — `01 §5.1`'s declaration-time falsifier applies unchanged |
-| a rising presence raises the `Ob` **anyone else** faces at that place | derived | yes for third parties; **no** for the incumbent-in-progress |
+| a rising presence raises the `Ob` **anyone else** faces at that place | derived | yes for third parties, and the same lead arithmetic applies to them, so a third challenger with a foothold is not locked out |
 
 **The honest residue: the per-cycle gain is UNMEASURED.** It is campaign-reachable, so it is
 measurable — `tools/balance_oracle.py` is the campaign instrument and it is deliberately not a CI gate
@@ -647,7 +647,7 @@ Every action here that rolls, rolls the same way.
 | **actor** | the post-holder invoking the module — **never "the faction"** |
 | **pool** | `attr[a] + attr[b] + POOL_BASE`, `[a, b]` the row's declared attribute pair, keyed on `descriptors.ATTRIBUTES` |
 | **obstacle** | `derive_ob(target_score, target_modifiers)` — E-1 and nowhere else. **In the DO shape, the differential is the `net` and the entrenchment is the `ob`** (§4.1) |
-| **modifiers** | σ-space μ-shifts via `sigma_leverage.net_boost`; never obstacle shifts, never extra dice |
+| **modifiers** | σ-space μ-shifts via `sigma_leverage.net_boost`; never extra dice. **One exception, argued and listed at O-5.7:** a *contested* quantity's obstacle derives from the lead, inside `derive_ob` (§4.1) |
 | **degree** | `degree_from_net`, unmodified, with an extension only where §5.3 declares one |
 | **TN** | never named. `_require_tn7` raises (`dice_engine.py:182`) |
 
@@ -856,7 +856,7 @@ below is of `fa.resolve`, `fa.contest_influence` and `fa.inquire`, which roll.
 | property | verdict | falsifier |
 |---|---|---|
 | **P-i** legible odds | **pass, and still the strongest in the suite.** Pool is a named person's two named attributes plus a declared constant; obstacle is the target's score halved; **the DO differential is two published nets minus a published obstacle.** Selection is a published ranking rather than a draw, so a player can read *why this action and not that one* | A test asserting every rolling module's `disclosure:` publishes `pool` and `obstacle` at `exact`, and that `fa.select` publishes every `appeal` term. **If any input to a roll or a ranking is unpublished, P-i is false** |
-| **P-ii** uniform leverage | pass, **with one recorded non-uniformity in the correct direction** (§4.1) | A test asserting no module contract declares a `budget:` whose cost is consumed inside a pool or obstacle expression (`01 §5.3`'s falsifier, applied here), **plus**: no action row's modifier reaches the roll except through `sigma_leverage.net_boost`. A flat additive obstacle modifier that is not a property of the target falsifies it |
+| **P-ii** uniform leverage | pass, **with one recorded non-uniformity in the correct direction** (§4.1) | A test asserting no module contract declares a `budget:` whose cost is consumed inside a pool or obstacle expression (`01 §5.3`'s falsifier, applied here), **plus**: no action row's modifier reaches the roll except through `sigma_leverage.net_boost` **or** `derive_ob`'s declared instance term, and no row declares both for the same quantity. A modifier applied twice through two channels — the defect the two-channel draft of §4.1 would have shipped — falsifies it |
 | **P-iii** bounded, monotonic | pass, **with two loops stated and both gains unmeasured** (§2.3, §4.4) | `01 §5.1`'s declaration-time check — `rest + max_seasonal_accrual/λ ≤ ceiling` — applied to `presence.<institution>` with `act.contest_influence` counted among its depositors. **A controlled campaign pair on `tools/balance_oracle.py` showing presence share diverging without bound falsifies it** |
 | **P-iv** graded, recoverable | pass | A test asserting every action row's `effects` map is **total over the four `Degree` members** and that **no `failure` branch revokes a post or removes a faction**. A row with a Partial-only effect, or an empty Failure branch, falsifies it |
 | **P-v** right engine | pass | Three questions, three tools: selection is a **derivation** (a decision, not an uncertainty); affordability and eligibility are **gates**; contested outcomes are `d_sigma` at pools 6–18. **A test asserting every `resolver:` matches `00 §7`'s table** — in particular that nothing determinate rolls. `fa.muster` declared `d_sigma` would falsify it |
@@ -881,7 +881,7 @@ shape, **no per-faction branch anywhere**, and five would-be verbs collapsed int
 
 ### 10.3 The three claims on this page that are weakest, named rather than buried
 
-1. **`FACTION_ACTION_CEILING`, `POOL_BASE`, `SHORTLIST_K`, `d₁…d₃`, `e₁…e₂` and the `boost_c` cap are
+1. **`FACTION_ACTION_CEILING`, `POOL_BASE`, `SHORTLIST_K`, `d₁…d₃` and `e₁…e₂` are
    shape proposals, not ledger constants.** None is cited to a `PP-NNN` or an `ED-NNN`, because none has
    one. They are declared with justifications and reachability bars so that tuning them is an act with a
    named target, not a preference.
