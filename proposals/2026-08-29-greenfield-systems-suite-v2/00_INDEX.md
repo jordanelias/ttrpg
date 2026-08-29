@@ -123,12 +123,49 @@ not a screen.
 |---|---|---|
 | distinct player verbs across the whole game | ~20 verb-fork leaves + 7 action families, all menu-selectable | **a single digit** |
 | responses to any one situation | varies | **3–5, genuinely different in kind** |
-| decisions per season | unbounded — every place × every verb | **the scene budget, and nothing else** |
+| decisions per season | unbounded — every place × every verb | **the scene budget, plus at most three self-initiated slots** — see §2.2a |
 
 **Depth comes from which situation arrives and what it is entangled with, never from menu breadth.**
 Ten verbs against a rich, remembering, entangled place is a deeper game than forty verbs against a
 stat block, and it is a smaller game to learn, build and balance.
 
+
+### 2.2a The whole-game surface, summed — because until now nobody had
+
+⚠ **The budget was declared "hard" in v2 and never once totalled.** Each document audited its own
+count; **none audited the row the fan-out actually breaks.** A read-only critic summed it
+independently, got **9 with zero headroom**, and reported that whether the true figure was 9 or 6–7
+was *undecidable from the documents* — because `05` and `04` each described the same appointment
+decision without either saying whose slot it was. That ambiguity was the finding, not the number.
+
+**The sum, after the v3 fixes, with every fusion named:**
+
+| document | slots | what it is, and why it is one |
+|---|---:|---|
+| **`05`** | **1** | *direct a post's action.* **The same slot at every tier and for every family** — national head, provincial minister or settlement governor, because it is the same module. `part 2 §5.5` absorbed `08`'s eight settlement rows into `act.govern`: **eight rows, zero families, zero new verbs** |
+| **`08`** | **1** | `sm.respond` — answering a directive. Distinct from `05`'s slot because it is a **response** to something done to you, not an initiation |
+| **`06`** | **1** | `fm.posture`, head post only |
+| **`09`** | **1** | `am.declare` |
+| **`12`** | **2** | propose · vote — *"the body's only two verbs"*. `ad.unit`'s field↔garrison order adds **0**: it is a post action spent from the commander's own budget, needing no `05` family |
+| **`04`** | **0** | its three decisions route through `05`'s `act.commission` and reach the player as Slate items. **This is the fusion the critic could not resolve from the documents; it is now stated on both sides** |
+| `01`–`03`, `07`, `10`, `11` | **0** | substrate. The Slate adds **zero** verbs — it filters, it never offers |
+| | **6** | **single digit, with three slots of headroom** |
+
+### 2.2b The row-3 breach, amended honestly rather than defended
+
+The table above says decisions are capped at the scene budget *"and nothing else"*. **That was false as
+shipped**, and the fix is an amendment, not a denial: `fm.posture`, `am.declare`, and `propose` are
+**self-initiated** — a player may spend them without a Slate item prompting it.
+
+**They are capped anyway, by a tighter constraint than the scene budget:** each costs a point from its
+own post's `budget` gauge, and a post's budget is finite per season. So the real cap is
+`scene budget + (at most 3 self-initiated slots, each individually post-budget-limited)`, which is
+what the row now says.
+
+**Why not force all three through the Slate instead?** Because a Slate item is *something that
+happened*, and these three are the player **initiating** rather than responding. A game in which you
+may only ever answer is a game with no ambition in it — which is the thing `09` exists to provide.
+The honest statement is that the surface has two kinds of decision, not that it has one.
 ### 2.3 What this forces, concretely
 
 1. **`08` must SHRINK, not grow.** If a fork is only ever correct in one situation, it is not a
