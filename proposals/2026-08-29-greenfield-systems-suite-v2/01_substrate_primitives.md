@@ -483,6 +483,101 @@ to a weak actor as a strong one. That is **non-uniform in the correct direction*
 shape a bounded system wants. It is a property of the continuous engine, recorded so a later reader does
 not mistake it for an unnoticed P-ii defect.
 
+
+### 6.1 The commensurability gate — a target score must live on the pool's scale
+
+**Found by `05`'s author, who correctly refused to fix it locally.** `derive_ob` has no check that the
+target score's scale is commensurate with the net's, and `score/2` is meaningful only if it is.
+
+**The arithmetic, verified against the engine rather than taken on report.** `net ~ Normal(0.4·N,
+0.8·√N)` — `_MU_PER_DIE = 0.40`, `_SIGMA_PER_DIE = 0.800`, applied in `continuous_engine_sample`
+(`engine/autoload/dice_engine.py:174-175`, `:209-224`). The ladder reads the margin: Overwhelming
+`≥ 3`, Success `≥ 1`, Partial `[0,1)`, Failure `< 0`. So at pool 18, μ = 7.2 and σ = 3.394, and:
+
+| target gauge | ceiling | `derive_ob` | P(Overwhelming) at pool 18 |
+|---|---|---|---|
+| a `0–7` stat | 7 | 3.5 | 0.58 |
+| Composure | 21 | 10.5 | 0.035 |
+| Concentration | 35 | 17.5 | 0.000045 |
+| Health | 55 | 27.5 | ~0 |
+| **Thread Sensitivity** | **100** | **50** | **0.000000** |
+
+**Every band but Failure becomes unreachable, and nothing currently catches it.** The gauge exists,
+the obstacle derives, the roll resolves, and the site returns one degree forever — *a mechanic that
+looks live and is dead*, which is the worst failure class in the suite because it passes every
+structural check.
+
+**The gate, checked at declaration time, per call site.** For a site whose target score has declared
+ceiling `S_max` and floor `S_min`, whose declared modifier bound is `M_max`, and whose **maximum
+reachable pool** is `N_max`:
+
+```
+top band reachable:      derive_ob(S_max, M_max) + 3  ≤  0.4·N_max + z·0.8·√N_max
+bottom band reachable:   derive_ob(S_min, M_min)      >  0.4·N_max − z·0.8·√N_max
+                                                          z = 1.645   (ε = 5%, declared, not folded in)
+```
+
+Both must hold, or the row is rejected when it is written rather than discovered in a playtest.
+
+### 6.1.1 Three corrections to the form the finding proposed
+
+The finding's shape is right and its diagnosis is right. Its expression is not, in three ways, and
+since this is the single owner's page the corrected version is the one that binds.
+
+**1. It must carry the σ term.** The proposal was `ceiling / 2 < 0.4 · POOL_MAX + 3`. That has no
+width term, so it is not a reachability condition at any pool except by coincidence — and it has the
+band offset's sign backwards, since Overwhelming needs `net ≥ ob + 3`, which pushes the bound *down*
+by 3 and back up by `z·σ`:
+
+| N_max | correct bound | as proposed | proposed ÷ correct |
+|---|---|---|---|
+| 5 | 1.94 | 5.00 | **2.57×** too permissive |
+| 10 | 5.16 | 7.00 | 1.36× |
+| 18 | 9.78 | 10.20 | 1.04× |
+| 25 | 13.58 | 13.00 | 0.96× |
+
+The two agree to 4% at pool 18 **by accident** — `+3` happens to approximate `z·σ − 3 = 2.58` there —
+and diverge badly below it. A check that is only correct at one pool size is not a check.
+
+**2. `POOL_MAX` does not exist.** There is no such constant in `engine/`; `roll_pool` enforces only a
+pool *minimum* of 1 (`:202`). **The bound is per-site**, and it has to be: a site's maximum pool is a
+property of the pool expression its module declares, not of the engine. Where this document needs a
+concrete figure it uses the **practical range 5–18** that §5.3's own σ arithmetic is stated over, and
+says so rather than minting an engine constant.
+
+**3. It must check the post-modifier obstacle.** `derive_ob`'s `modifiers` argument is **unbounded in
+the signature**, so checking a bare ceiling is meaningless if a site may add +10 of target-property
+modifiers. Hence `M_max` above, and hence a new obligation: **a module contract declaring a
+`derive_ob` site must declare its modifier bound.** Without that the gate is unevaluable — which is
+the same defect one level up.
+
+### 6.2 What fails the gate today
+
+**The pattern is not a coincidence and is worth stating plainly.** Canon's **`0–7` stat family** —
+attributes (`descriptors.json`: floor 1, ceiling 7), all six faction stats, and the settlement stats
+at 0–7 or 0–5 — is **pool-commensurate by construction**: `ceiling/2 ≤ 3.5`, which sits in the
+band-reachable zone across the whole practical pool range. Everything that fails is from a different
+family and was never a "score" in the sense Jordan's ruling means.
+
+| gauge | scale, and its source | verdict as a `derive_ob` target |
+|---|---|---|
+| attributes; `fac.*`; `set.legitimacy/popular_support`; `set.prosperity/defense/order`; `terr.fort_level` | 1–7 / 0–7 / 0–5 / 0–4, `engine/engine_params/descriptors.json` | **pass** |
+| `disposition.pc_npc`, `strain.<kind>` | −5…+5; PP-724 capacity 3/5/7 | **pass** |
+| Piety Track 0–5 · Truth 0–5 · Momentum 0–4 | `systems/overview/clock_registry_v30.md` | **pass** |
+| Coherence 0–10 · Persuasion Track 0–10 · Church Attention Pool 0–10 | same | **borderline** — ob 5, P(Overwhelming) ≈ 0.41 at pool 18 and ≈ 0.001 at pool 5. Passes at a large `N_max`, fails at a small one. **Site-dependent, so the per-site form of the gate is what decides it** |
+| **Composure 3–21 · Concentration 5–35 · Stamina 5–47 · Health 13–55** | `derived_stats_v30.md` via `clock_registry_v30.md` | **FAIL.** These are damage and resource pools, not scores. Nothing in this suite targets them, and this row exists so nothing later does |
+| **Thread Sensitivity 0–100 (hard cap)** | `systems/overview/clock_registry_v30.md:72` | **FAIL, catastrophically** — ob 50 against μ 7.2. **It is a gate target, not an obstacle target**, and canon already uses it as exactly that: `TS ≥ 30` (§7.5). The failure is not in the gauge; it is in ever passing it to `derive_ob` |
+| **`prac.thread_sensitivity`** | **floor 0, ceiling `None`** in `engine/engine_params/descriptors.json` | **UNEVALUABLE — a second, independent defect.** The cooked registry declares *no ceiling*, while canon declares a 0–100 hard cap. A gauge with no ceiling cannot be checked by this gate, by §5.1's fixed-point falsifier, or by §2.3's `H_MIN`. **Three declaration-time guards are silently inert on it.** Recorded, not fixed here: the registry row is the FI/IN lane's to correct |
+| `standing`, `exposure`, `pressure`, `acceptance.*`, `accrual.entitlement` | **scale undeclared in this suite** | **unverifiable today.** Each must declare a ceiling before it can be a target |
+| `presence.<institution>` | **`07`'s to declare; does not exist yet** | **unverifiable today**, and this suite does not assume a scale for it. `05 §4` targets an incumbent's presence level through `derive_ob`'s `modifiers`, so **`07` must declare presence's ceiling and `05` its modifier bound, or that site cannot pass this gate** |
+
+**Nothing in this suite currently targets a failing gauge.** The gate's value is prospective: it makes
+the failure impossible to introduce rather than expensive to discover.
+
+*Emergent possibility lost if the gate were cut:* none — it removes no possibility, it removes a class
+of silently-dead mechanic. It is the one addition on this page that is pure subtraction of failure,
+and by `00 §1`'s own test that is what a distillation looks like.
+
 ---
 
 ## 7. Edges: a shared container with per-kind semantics (change E, redesigned)

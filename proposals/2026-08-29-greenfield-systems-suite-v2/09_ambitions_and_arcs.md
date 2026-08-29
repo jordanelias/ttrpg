@@ -296,8 +296,8 @@ cannot be, because the shape has nowhere to put the special case.
 The delta brief's hardest requirement: **a project must be obstructable by another actor, or it is a
 timer.** Here is the mechanism, and its whole strength is that it costs nothing.
 
-**Advance is a read of world state. Therefore any act that moves a term a project reads obstructs
-it — with no obstruct verb, no obstruct module, and no knowledge of the project at all.**
+**Advance is a read of world state. So any act that moves a term a project reads obstructs it — with
+no obstruct verb, no obstruct module, and no knowledge of the project at all.**
 
 | the project's term reads… | any actor obstructs it by… | with a verb that already exists |
 |---|---|---|
@@ -314,11 +314,11 @@ it — with no obstruct verb, no obstruct module, and no knowledge of the projec
 2. **Obstruction can be accidental**, which is where the interesting stories are. A governor who
    raises order for their own reasons has just killed a rival's ambition and may never learn it.
 3. **Canon already names the record for it.** `state.project_completed`'s payload carries
-   `supporters` and `obstructors` (`key_type_registry_v30.md:691-706`), and Procedure C already
-   writes per-supporter and per-obstructor memory references with `salience: 4` and a
-   `relationship_tag` (`political_dynamics_keys_migration_v30.md:219-256`). **That is `01 §3.1`'s
-   Memory tag kind, arriving from canon** — the two designs converge without either knowing about
-   the other, which is the strongest evidence either is right.
+   `supporters` and `obstructors` (`key_type_registry_v30.md:691-706`), and Procedure C writes
+   per-supporter and per-obstructor memory references with `salience: 4` and a `relationship_tag`
+   (`political_dynamics_keys_migration_v30.md:219-256`). **That is `01 §3.1`'s Memory tag kind,
+   arriving from canon** — two designs converging without either knowing about the other, which is
+   the strongest evidence either is right.
 
 **`supporters` / `obstructors` are derived at fire**, not accumulated during the project: the set of
 actors whose Keys appear in `causes[]` for the terms that moved. No stored list, no aggregate written.
@@ -391,9 +391,40 @@ leaves** — a gauge deposit, a tag append, a post grant/revoke, or a form trans
 | an effect not expressible as data | then the row is `firing: false` and is **counted** (§1.1) |
 
 **A project is terminal on fire.** It transitions to `fired` and cannot re-fire, so there is no
-reversible pair and `01 §2.3`'s hysteresis requirement does not apply. **State that explicitly**: it
-is the one place in this suite where a threshold has no band, and the reason is terminality, not
-oversight.
+reversible pair and `01 §2.3`'s hysteresis requirement does not apply — the one place in this suite
+where a threshold has no band, and the reason is terminality, not oversight.
+
+### 6.3 Worked kind — the founding project, and the `07` seam it closes
+
+`07`'s **`place_found`** transition (`07_places_and_settlements.md:242-248`) gates on *"a Tag
+{kind: Precedent, key: founding_claim, owner: this place} exists, deposited by the firing effect of a
+Project (09 `am.fire`) naming this transition"*, and it is **verb-free on purpose** (`:264`) —
+*"colonization is what a faction's ambition looks like when it succeeds"*, never a `pl.*` menu item.
+**Nothing else in this suite deposits that Tag**, so without a project kind that does, `07`'s row is a
+declared-but-unreachable registry row. This document wires it, and the wiring is a **row, not a verb**:
+
+```yaml
+project_kind: found_settlement
+class: substrate                       # a faction or bloc ambition; NEVER a player menu item
+owner_binding: {entity_kind: faction|bloc, gate: <holds a post whose remit includes founding>}
+slots: [target]     # target MUST be an EXISTING kind: Ruin node (07 §3.5). A project never creates
+                    # an entity and never touches the adjacency graph — there is no such write leaf.
+advance_terms:                                                        # equal weights -> conjunction
+  - {w: 1, term: "target.kind == Ruin", required: true}
+  - {w: 1, term: "owner holds a charter edge to target's parent node"}
+  - {w: 1, term: "some place adjacent to target is at or above its prosperity band"}
+  - {w: 1, term: "owner's post budget accrual band >= <declared>"}    # SHAPE PROPOSAL
+threshold: 4        horizon: 12         # SHAPE PROPOSAL, seasons; lapse leaves the residue (§6.1)
+fire: {guaranteed: true,
+       effect: tag_append{kind: Precedent, key: founding_claim, owner: <target>}}    # write leaf 2
+```
+
+**Two properties worth naming.** (1) The fire effect is a **Tag append**; the *transition* stays
+`07`'s, applied by the herald when `07`'s own gate next reads that Tag. **`09` never transitions a
+place's kind** — it leaves behind the state `07` reads, which is `01 part 2 §9.3`'s no-latency rule
+obeyed across a document boundary. (2) `target.kind == Ruin` is `required: true`, so a founding
+project whose node someone else settles first **lapses** instead of firing into an occupied node —
+§4.1's *generate-solvable-then-erode* doing real work rather than being asserted.
 
 ---
 
@@ -409,10 +440,9 @@ Ambition tag (declared)                       provenance → Key K0
 ```
 
 Walking it needs **no new store, no join table and no arc object**: `01 §7.3` puts every edge in the
-general entity store precisely so *"`causes[]` chains cross relationship kinds without a join table"*,
-and `01 §3.3` requires **non-empty provenance on every tag** precisely so *"`Key.causes[]` is a
-biography rather than a write-only chain."* **This document is the consumer those two rules were
-written for.**
+general store so *"`causes[]` chains cross relationship kinds without a join table"*, and `01 §3.3`
+requires **non-empty provenance on every tag** so *"`Key.causes[]` is a biography rather than a
+write-only chain."* **This document is the consumer those two rules were written for.**
 
 ### 7.1 One stream, projected — and what it buys, at the ratified strength and no higher
 
@@ -563,9 +593,9 @@ would be exactly the duplication `00 §1` names as the under-distilled failure.
 
 **G-29's own words** (`:281`): *"no key type exists for project or ambition FORMATION … so the moment
 an NPC forms a new goal is generated in-process and announced to nothing."* Its proposal —
-`state.project_formed`, family `state_transition`, payload `npc_id, project_id, project_domain,
-goal_short`, optional `prior_project_id, formation_cause` — **is adopted as-is**, generalized only in
-that `npc_id` becomes an entity id, because a bloc and a faction declare projects too.
+`state.project_formed`, payload `npc_id, project_id, project_domain, goal_short`, optional
+`prior_project_id, formation_cause` — **is adopted as-is**, generalized only in that `npc_id` becomes
+an entity id, because blocs and factions declare projects too.
 
 ⚠ **Nothing is appended here.** `00 §8` P0-1 blocks any key-type append until
 `references/rendering_dispositions.yaml` exists; G-29 blocks it additionally on G-17. **Both blocks
@@ -652,9 +682,9 @@ contract rather than promised in prose, and is why §8.1 can claim robustness un
   disclosure: [{of: tag.precedent, inputs: published, presentation: exact, trigger: hidden}]
 ```
 
-**`am.fire` is the only module in this suite whose `transitions:` list is supplied by data.** That is
-deliberate and it is the auditable seam: the set of form transitions a project can cause is a grep
-over one registry column, per `00 §7`'s rule that a module may only transition a field it declares.
+**`am.fire` is the only module in this suite whose `transitions:` list is supplied by data** — the
+auditable seam: the set of form transitions a project can cause is a grep over one registry column,
+per `00 §7`'s rule that a module may only transition a field it declares.
 
 ### 11.1 The candidate hand-off — this document produces, `10` ranks
 
@@ -667,13 +697,13 @@ document holds itself to, reproduced rather than paraphrased:
 
 - **Strictly selective / subtract-only** — the light rations among candidates the churn produced and
   can never inject content, accelerate a clock or emit a pressure-bearing Key (`:197-204`). **A
-  project must therefore never be advanced, delayed or fired by the light.** Salience is downstream of
+  project is therefore never advanced, delayed or fired by the light**; salience is downstream of
   `am.advance`, never an input to it.
-- **Casting is severed from forecast** (`:205-208`) — slate entry keys on **realized state** only. So
+- **Casting is severed from forecast** (`:205-208`) — slate entry keys on **realized state** only, so
   a project's candidate carries `durability`, `tie-proximity`, `identity-touch` and its holon, and
   **never** how close it is to firing (§3.3).
-- **No salience or forecast function is designed here.** If `10` needs a light term this document does
-  not supply, that is a ruling request, not an edit to this page.
+- **No salience or forecast function is designed here.** If `10` needs a term this page does not
+  supply, that is a ruling request, not an edit here.
 
 ---
 
@@ -736,13 +766,14 @@ expresses the game.**
 
 | claim | falsifier |
 |---|---|
-| **No aggregate is written.** Progress is derived (O-A2) | a test asserting no module contract in this suite declares a `state:` row named `progress`, and that no write path deposits into one. **Load-bearing on the game:** it is `01 §2.1`'s write rule, and violating it is the defect `01 §7.3` caught in v1 |
-| **A project reads state and consumes nothing** (§8, J-N) | a test asserting `am.*` contracts have empty `consumes:`, and a seeded-campaign assertion that no project's progress changes within a tick in response to an emission. **Load-bearing:** if it fails, the design is resting on a transport the tree does not have |
+| **No aggregate is written.** Progress is derived (O-A2) | a test asserting no contract in this suite declares a `state:` row named `progress`, and no write path deposits into one. **Load-bearing on the game:** it is `01 §2.1`'s write rule, and violating it is the defect `01 §7.3` caught in v1 |
+| **A project reads state and consumes nothing** (§8, J-N) | a test asserting `am.*` contracts have empty `consumes:`, plus a seeded-campaign assertion that no project's progress changes within a tick in response to an emission. **Load-bearing:** if it fails, the design rests on a transport the tree does not have |
 | **Fire is a gate, never a roll** (§4) | a test asserting no `am.*` module has `resolver: d_sigma` and that no fire consequence reaches `roll_pool` |
 | **No forecast is published** (§3.3) | `01 §8`'s falsifier extended: no key type emitted here carries a field whose value is a **future** state, and `mechanical.project_advanced` carries only `progress_before` / `progress_after` — both crossings already made |
 | **No entity or outcome is special-cased** | a grep asserting no project kind's `owner_binding`, `advance_terms` or `fire.effect` contains a literal entity id. **This is the one falsifier that cannot be run yet** — there are no rows |
-| **Monotonicity needs no exemption to the decay law** (§3.2) | a test asserting no gauge declared by this document exists at all (it declares none), and that every ratchet term resolves to a tag-existence predicate on a `ttl: None` tag |
-| **Obstruction needs no verb** (§5) | a seeded campaign in which a project's progress falls after an unrelated actor's action, with no module having named the project. **If it never happens, the advance terms are reading state nobody else touches, and the projects are timers after all.** This is the weakest-supported claim on the page and this is how to break it |
+| **Monotonicity needs no exemption to the decay law** (§3.2) | a test asserting this document declares no gauge at all, and that every ratchet term resolves to a tag-existence predicate on a `ttl: None` tag |
+| **Obstruction needs no verb** (§5) | a seeded campaign in which a project's progress falls after an unrelated actor's action, with no module having named the project. **If it never happens, the advance terms read state nobody else touches and the projects are timers after all.** The weakest-supported claim on the page, and this is how to break it |
+| **`place_found` is reachable** (§6.3) | a seeded campaign in which a `found_settlement` project fires and `07`'s `place_found` transition follows. **If no such kind exists in `content_registry.yaml`, or none ever fires, `07`'s row is dormant** — and the defect is in this document, not that one |
 | **Every project ends** (§6.1) | a seeded campaign assertion that no Ambition tag survives `max(horizon, stall_ttl)` seasons past its last band crossing, and that live projects per owner never exceed `PROJECT_CAP` |
 | **~13 template shapes cover the arc space** | **NOT CLAIMED.** The calibration corpus is evacuated (§7.3). Do not cite the figure as validated coverage |
 

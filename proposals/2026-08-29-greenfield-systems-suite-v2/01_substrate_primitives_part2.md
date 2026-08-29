@@ -304,6 +304,7 @@ list and the `## Overrides` block — judgments, not checks.
 | Knot capacity `< floor(Bonds/2) + 1` | the person's `knot` edges, counted; no stored counter | formation unavailable (`knots_v30.md:70`) |
 | Knot Thread contact `TS ≥ 30` (either party) | the person gauge, 0–100 | formation unavailable (`knots_v30.md:69`) |
 | converter gate (§7.4) | both endpoints' posts and factions, and the source edge's state | no new edge; the source edge is untouched either way |
+| **`derive_ob` commensurability** (§6.1) — top and bottom bands reachable at the site's `N_max`, **after** modifiers | the target gauge's declared ceiling and floor, the site's declared modifier bound, and its pool expression — **all at declaration time, no campaign run** | **the registry row is rejected when written.** Falsifier: a test evaluating both inequalities for every declared `derive_ob` site, failing on any that cannot reach all four bands. Load-bearing on the game — it is the difference between a live mechanic and one that silently returns Failure forever |
 | disclosure block present · `consumes:` row has rule content (W-6) | the contract, at check time | the contract check fails · the row is not declared |
 
 ### 13.3 The four qualitative verdicts, applied to the substrate rather than to a resolver
@@ -311,11 +312,15 @@ list and the `## Overrides` block — judgments, not checks.
 **Necessary** — four primitives, six entity kinds, six tag kinds. The relation taxonomy is **adopted,
 not invented**, so its necessity argument is PP-724's own decision log (`:669`) rather than a claim this
 page has to make; the two additions occupy a scope PP-724 declares out of bounds. §10 records fourteen
-candidates refused, three of them cut because something on disk beat them. **Robust** — the two failure
+candidates refused, three of them cut because something on disk beat them. **Robust** — the failure
 directions the corpus measured are closed by arithmetic: an unrecoverable pinned gauge by the geometric
-law, and a flickering threshold by the hysteresis band, both load-time checks. A third — the substrate
-quietly acquiring a latency it does not have — is closed by §9.3 stating the absence rather than
-assuming the presence. **Smooth** — one decay law, one obstacle owner, one disclosure contract, one write
+law, a flickering threshold by the hysteresis band, and **a silently-dead resolution by the
+commensurability gate** (§6.1) — all three load-time checks needing no campaign run. A fourth — the
+substrate quietly acquiring a latency it does not have — is closed by §9.3 stating the absence rather
+than assuming the presence. **One honest hole remains and is named rather than smoothed:
+`prac.thread_sensitivity` declares no ceiling in the cooked registry, which makes all three arithmetic
+guards inert on it** (§6.2); that row is the FI/IN lane's to correct, and until it is, this document's
+robustness claim has a hole it can point at. **Smooth** — one decay law, one obstacle owner, one disclosure contract, one write
 rule with four leaves, one registry for the mutable-shape axis, one Key surface for every binding kind.
 **Elegant** — six modules, one new registry from this page, no branch on any entity's identity anywhere,
 and a player surface of three reads and zero verbs. The honest deduction: **the edge container is the

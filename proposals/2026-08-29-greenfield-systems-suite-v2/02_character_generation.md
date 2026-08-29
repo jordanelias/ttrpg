@@ -33,16 +33,15 @@ disease this suite exists to stop.
 | **C-5** | **`faction_politics_v30 §3.3`'s halved public Renown and §3.4's `+1 Ob` Initiation Duty for Southern Einhir** (`:670-676`, `:679-690`) | **ratified canon** (CANONICAL, PP-660) — the strongest tier, so the strongest argument | Both are **modifiers on the actor**. A flat `Ob` shift is worth ~1.8× more to a small pool than a large one (`01 §6`), so canon's caste penalty is *harsher on the weak*, making caste a competence tax a strong character buys out of; and a halved rate is multiplicative **and invisible**. **What canon protects — that the stigmatised caste is pushed off the visible path onto the covert one (`:677`) — is kept and made stronger**, re-expressed as an option-set difference: a different duty row, and public-deed candidates that do not reach the Slate absent a sponsor. §2.4 |
 
 **Not overridden, deliberately — recorded because deciding *not* to override is also a decision.**
-`faction_politics_v30 §3.2`'s **rank-advancement gating matrix** (`:655-668`) and **§3.5's Disposition
-seeds** (`:692-721`) are adopted **whole**, because a gate on an option set and a seeded starting
-value are already the shapes this suite argues for — §2.4 makes that case rather than asserting it.
-**PP-724's six edge kinds** are adopted as `01 §7.2` adopted them, for the reason `01` gave: six
-period-grounded types with per-type semantics and a decision log beat any taxonomy re-derived here.
-**Canon's Knot gate** (`01 §7.5`) is obeyed including its cap — the alternative is a generator that
-manufactures Thread-constituted bindings the Thread layer never sanctioned. **v1 `02`'s bounded
-log-odds conditioning, entropy floor, determinism substream and totality property** are carried with
-their reasoning intact, because the critique did not touch them — what changes is that they now run
-**once per stage** instead of once, which makes the entropy floor *more* load-bearing (§3.5).
+`faction_politics_v30 §3.2`'s **gating matrix** (`:655-668`) and **§3.5's Disposition seeds**
+(`:692-721`) are adopted **whole**, because a gate on an option set and a seeded starting value are
+already the shapes this suite argues for (§2.4 makes that case rather than asserting it). **PP-724's
+six edge kinds** are adopted for `01 §7.2`'s reason: six period-grounded types with per-type semantics
+and a decision log beat any taxonomy re-derived here. **Canon's Knot gate** (`01 §7.5`) is obeyed
+including its cap — the alternative is a generator manufacturing Thread-constituted bindings the
+Thread layer never sanctioned. **v1's bounded log-odds conditioning, entropy floor, determinism
+substream and totality** are carried with their reasoning intact; what changes is that they run **once
+per stage**, which makes the entropy floor *more* load-bearing (§3.5).
 
 **Out of scope, and named so the seam is visible.** A general **epistemic layer** — machine-comparable
 propositions held per agent with graded confidence and provenance, so two characters can disagree
@@ -156,36 +155,34 @@ central: the system's incentives push the stigmatised caste off the visible path
 — canon says so in the same breath (`:677`, citing Gerik Strand's observation, and naming Warden,
 Niflhel and RM as where they are driven). **That fact is not in dispute. The arithmetic is.**
 
-- **`+1 Ob` is a flat obstacle shift on the actor's own roll**, and a flat shift is worth
-  systematically more to a small pool than a large one — `≈0.204σ` at pool 5 against `≈0.115σ` at
-  pool 18 (`01 §6` note; `01 §5.3`). So canon's caste penalty is roughly **1.8× harsher on a weak
-  character than a strong one**, which inverts what a structural injustice should do: it becomes a
-  *competence tax a high-capability character buys out of*. `01 §6` also reserves `derive_ob`'s
-  `modifiers` for properties of the **target**; caste is a property of the **actor**, so this is the
-  wrong argument slot as well as the wrong magnitude.
-- **Halving a gain rate is multiplicative**, the same non-uniformity in the categorical layer that
-  §3.5 rules out for conditioning — and it is **invisible**: a player never sees a rate they did not
-  receive, which fails the disclosure contract's *publish every input* half.
+- **`+1 Ob` is a flat obstacle shift on the actor's own roll**, worth systematically more to a small
+  pool than a large one — `≈0.204σ` at pool 5 against `≈0.115σ` at pool 18 (`01 §6`; `01 §5.3`). So
+  canon's caste penalty is ~**1.8× harsher on a weak character than a strong one**, inverting what a
+  structural injustice should do: it becomes a *competence tax a strong character buys out of*.
+  `01 §6` also reserves `derive_ob`'s `modifiers` for properties of the **target**, and caste is a
+  property of the **actor** — the wrong argument slot as well as the wrong magnitude.
+- **Halving a gain rate is multiplicative**, the same non-uniformity §3.5 rules out for conditioning,
+  and it is **invisible**: a player never sees a rate they did not receive, failing the disclosure
+  contract's *publish every input* half.
 
-**The replacement, which protects canon's fact more strongly rather than less.** Both become
-**option-set differences** — where this suite puts every "the person changes what is available"
-(`01 §4.3`; ED-IN-0201 clause 2):
+**The replacement protects canon's fact more strongly, not less.** Both become **option-set
+differences** — where this suite puts every "the person changes what is available" (`01 §4.3`;
+ED-IN-0201 clause 2):
 
 | canon's effect | v2 shape | who owns it |
 |---|---|---|
 | Southern Initiation Duty is *harder* (`Ob 2 → Ob 3`) | the Southern candidate is offered a **different duty row** — the sponsored or covert route canon says they are pushed onto — whose obstacle `derive_ob` derives from **its own** target. Same odds arithmetic, a different thing to do | `04` (candidacy), `08` (the duty) |
 | Southern public Renown *halved* | public-deed candidates **do not reach the Slate** at a Northern/Central place absent a sponsor; covert candidates do. The rate is untouched; **what is reachable** changes | `10` |
 
-**This is harder on the player, not softer**, which is the test that it has not quietly softened the
-setting: a halved rate can be ground out with volume; a route that is not offered cannot. And it is
-**legible** — an unoffered route is disclosable under §2.3's ruled exception, where a silently
-halved number is not. The one thing canon had that this loses is *granularity*: `+1 Ob` is a dial and
-a gate is not. That is a real cost, accepted, because the dial is the part that misbehaves.
+**This is harder on the player, not softer** — the test that it has not quietly softened the setting:
+a halved rate can be ground out with volume, a route that is not offered cannot. And it is **legible**:
+an unoffered route is disclosable under §2.3's ruled exception where a silently halved number is not.
+What it loses is *granularity* — `+1 Ob` is a dial and a gate is not. A real cost, accepted, because
+the dial is the part that misbehaves.
 
-⚠ **Scope.** `02` owns the argument because `02` is where caste becomes a mechanical object. It does
-**not** implement the replacement: the duty row is `04`/`08`'s and the Slate filter is `10`'s. If
-either declines the override, canon's version stands and this section is the record of why it should
-not.
+⚠ **Scope.** `02` owns the argument because `02` is where caste becomes a mechanical object; it does
+**not** implement the replacement (the duty row is `04`/`08`'s, the Slate filter `10`'s). If either
+declines, canon's version stands and this section is the record of why it should not.
 
 ### 2.5 Church of Solmund and the Restoration Movement — birth **biases**, it does not **gate**
 
@@ -305,29 +302,23 @@ and §3.1's whole argument evaporates for exactly the population the world makes
 ### 3.4 Career advance in play is the **same module**, not a second one
 
 The elegance test (`00 §1`, under-distilled: *two objects doing one job*) refuses a `cg.career`
-module. There is one stage walker, `cg.stage` (§10), and it has two callers:
-
-| caller | when | gate it satisfies |
-|---|---|---|
-| `cg.demand` → the generation loop | a person is created | age |
-| the accounting boundary | a person has held a post for `N` seasons | age **and** service |
-
-Both paths run the identical registry row, take the identical form transition, emit the identical
-`form.transitioned` Key, and are therefore ranked by the Slate identically. **A promotion and a
-backstory are the same object seen at different times**, which is the strongest form of `00 §6`
-principle 8 (one engine, several entry points) this suite can offer for people.
+module. There is one stage walker, `cg.stage` (§10), with two callers: **`cg.demand`'s generation
+loop** when a person is created (gate: age), and **the accounting boundary** when a person has held a
+post for `N` seasons (gate: age **and** service). Both run the identical registry row, take the
+identical form transition and emit the identical `form.transitioned` Key, so the Slate ranks them
+identically. **A promotion and a backstory are the same object seen at different times** — the
+strongest form of `00 §6` principle 8 this suite can offer for people.
 
 ⚠ **This reads state at the boundary; it is not a scheduled reaction.** `01 part 2 §9.3` (**J-N**):
 the substrate has **no cross-season emission carry** — `next_tick` raises on a non-empty queue. A
 career stage fires because the person **is** `N` seasons into a post at the boundary, never because
-something was posted to them earlier. If J-N rules for reactive chains, this paragraph is what to
-revisit; nothing else here changes.
+something was posted earlier. If J-N rules for reactive chains, this paragraph is what to revisit.
 
 ### 3.5 Conditioning runs once per stage — v1's arithmetic, carried
 
-v1 `02 §2.2`'s condition-then-reify pipeline is unchanged in substance and is now **layered**: stage
-`k`'s output is part of stage `k+1`'s conditioning input. Both bounds survive and both matter more
-now, because conditioning applies four-plus times instead of once:
+v1 `02 §2.2`'s condition-then-reify pipeline is unchanged in substance and now **layered**: stage
+`k`'s output is part of stage `k+1`'s conditioning input. Both bounds survive and matter more, because
+conditioning now applies four-plus times instead of once:
 
 ```
 logit_i = logit(prior_i) + clamp( Σ_c w_c · signal_c(i), −Δ_MAX, +Δ_MAX )      # bounded log-odds
@@ -335,16 +326,15 @@ p_i     = softmax(logit)_i
 p'_i    = (1 − ε)·p_i + ε/n          ⇒  p'_i ≥ p_floor for every i             # entropy floor
 ```
 
-**Additive log-odds, not multiplicative factors**, for the same reason `01 §5.3` keeps budget out of
-the pool: a multiplicative factor is worth far more to a category already likely than to one in the
-tail, so a unit of conditioning would not move the distribution by a consistent amount. That is the
-non-uniformity the kernel rules out, appearing in a categorical draw.
+**Additive log-odds, not multiplicative factors**, for the reason `01 §5.3` keeps budget out of the
+pool: a multiplicative factor is worth far more to an already-likely category than to a tail one, so a
+unit of conditioning would not move the distribution by a consistent amount — the kernel's
+non-uniformity, appearing in a categorical draw.
 
 **The entropy floor is the load-bearing one under layering, and its bar is now stricter.** Composing
 `S` conditioning steps composes the drift; without a floor applied **at every stage**, a person from
-an extreme place converges to a single archetype by Vocation and every Southern frontier character
-is the same character — which reads to a player as authored, and is precisely the failure
-conditioning exists to avoid.
+an extreme place converges to a single archetype by Vocation and every Southern frontier character is
+the same character — which reads as authored, the exact failure conditioning exists to avoid.
 
 > **Reachability bar (per stage, not per person):** at the map's most extreme node, after **all**
 > stages, every conviction, flaw and belief the catalogue admits must still have probability
@@ -373,14 +363,13 @@ the whole interface between a stage row and the substrate, and it is deliberatel
 | **knot candidate** | nothing — it is a **proposal to canon's gate** | ≤ 2 across the whole creation ladder | §5.2. Generation never writes a Knot |
 | **gauge seed** (`truth`, `thread_sensitivity`, `standing`, `exposure`) | 1 — gauge deposit | provenance required | the deposit's provenance is the stage's `form.transitioned` Key |
 
-**Every granted field must be load-bearing on at least one resolution branch, and the consuming
-module is named before the field is added.** Carried from v1 `02 §2.3` unchanged, because it is the
-gate that stops a generator becoming a characterisation engine: a field nobody reads will be cited
-as flavour and will never change an outcome. Current consumers: capability is the pool of every roll
-(`01 §6`); convictions rank a post-holder's option set (`05 §3`); edges are read by appointment,
-patronage, succession and defection; flaws emit candidates (`10`); beliefs gate what a person will
-argue and can be argued out of (§6); TS gates Knot formation and the Warden ladder
-(`01 §7.5`; `faction_politics_v30:667`); Truth is canon's own piety meter.
+**Every granted field must be load-bearing on at least one resolution branch, and its consuming
+module is named before it is added.** Carried from v1 `02 §2.3` — the gate that stops a generator
+becoming a characterisation engine, since a field nobody reads gets cited as flavour and never changes
+an outcome. Consumers: capability is the pool of every roll (`01 §6`); convictions rank a post-holder's
+option set (`05 §3`); edges are read by appointment, patronage, succession and defection; flaws emit
+candidates (`10`); beliefs gate what a person will argue and can be argued out of (§6); TS gates Knot
+formation and the Warden ladder (`01 §7.5`; `faction_politics_v30:667`); Truth is canon's piety meter.
 
 ---
 
@@ -493,26 +482,25 @@ acceptance"* — that *"varies by background"*, players seeing *"qualitative ban
 
 ### 6.3 Revision — canon owns *when*, this document owns *where it is stored*
 
-`character_canon_v30 §6.2` states three **conjunctive** conditions for revision: a decisive contest
-outcome against the holder; the winning argument used the holder's primary or secondary Resonant
-Style; the argument **specifically engaged the Belief**. Then: *"Old Belief → permanent Scar. New
-Belief forms."*
-
-**This document does not redesign that and does not weaken it.** The mapping is one line:
+`character_canon_v30 §6.2` states three **conjunctive** conditions for revision — a decisive contest
+outcome against the holder; the winning argument used their primary or secondary Resonant Style; the
+argument **specifically engaged the Belief** — then *"Old Belief → permanent Scar. New Belief forms."*
+**This document does not redesign or weaken that.** The mapping is one line:
 
 > Canon's three conditions are the **gate on a revising-magnitude deposit**. The gauge's declared
-> band is what fires the **form transition** that drops the proposition from the active set and
-> appends the Precedent tag. Ordinary evidence deposits move credence and never fire anything.
+> band fires the **form transition** that drops the proposition and appends the Precedent tag.
+> Ordinary evidence deposits move credence and fire nothing.
 
-Two properties follow that a bare flag would not have. **A belief can be worn down and still held** —
-credence below the band is a person who is losing an argument over seasons, which is the state the
-setting is full of. And **the transition is a gate, never a roll** (`01 §2.2`): the uncertainty was
-in the contests that moved the gauge, and re-rolling at the threshold charges for it twice.
+Two properties follow that a bare flag lacks. **A belief can be worn down and still held** — credence
+below the band is a person losing an argument over seasons, the state this setting is full of. And
+**the transition is a gate, never a roll** (`01 §2.2`): the uncertainty was in the contests that moved
+the gauge, and re-rolling at the threshold charges for it twice.
 
-**Reversibility and hysteresis.** Dropping a proposition is `reversible: false` — canon says the old
-Belief becomes a permanent Scar, and a person may later come to hold the *same* proposition again,
-which is a **new** row with a new provenance chain and the Scar still on the sheet. **No hysteresis
-band is required or permitted**, because there is no reversible pair (`01 §2.3`).
+**Reversibility.** Dropping a proposition is `reversible: false` — canon makes the old Belief a
+permanent Scar, and coming to hold the *same* proposition later is a **new** row with a new provenance
+chain and the Scar still on the sheet. **No hysteresis band is permitted**: there is no reversible
+pair (`01 §2.3`). ⚠ One objection recorded and not resolved, because it is an NPC-lane call: canon
+scars **every** revision, so changing your mind on good evidence counts the same as being broken.
 
 ### 6.4 The worked case, end to end
 
@@ -527,17 +515,17 @@ Thread phenomena become publicly visible; evidence deposits accumulate; canon's 
 | **Denial** | credence stays above the band under sustained pressure — the person is visibly, mechanically wrong, and the world can read it | this document |
 | **Schism** | the faction's post-holders' credences split; the movement's `divergence` rises; a **bloc** forms | `06 §2`, `06 §3` |
 
-**No branch names the Restoration Movement.** That is `00 §6` principle 2 satisfied on the case most
-likely to tempt a special case.
+**No branch names the Restoration Movement** — `00 §6` principle 2 satisfied on the case most likely
+to tempt a special case.
 
 *Emergent possibility lost if beliefs were cut:* nobody could be **persuaded** — only outfought,
 outvoted or outbid — and an institution founded on a false premise could never discover it.
 
 **Out of scope, stated once.** A general epistemic layer — machine-comparable propositions held per
 agent with graded confidence and provenance, so two characters can *compare* what they believe — is a
-Phase-2 corpus item and is not designed here. §6 ships the creed-Belief canon already names. If that
-layer lands, `credence` and its confidence field are candidates to be **one field**, and the correct
-outcome is a cut, not a synthesis that keeps both.
+Phase-2 corpus item, not designed here. §6 ships the creed-Belief canon already names. If that layer
+lands, `credence` and its confidence field are candidates to be **one field**, and the right outcome
+is a cut, not a synthesis keeping both.
 
 ---
 
@@ -606,24 +594,24 @@ Carried from v1 `02 §4-5`, unchanged in substance, restated because they now co
 substream = Random( H(campaign_seed, "cg", tier_node, faction, ordinal, stage_index) )
 ```
 
-`stage_index` is the only addition, and it is required: without it a person walking four stages would
-consume four draws from one position and re-phase every later person. **The generator draws from its
-own substream, never the shared campaign stream** (P0-2), so population size cannot re-phase any
-other consumer of randomness.
+`stage_index` is the only addition and it is required: without it a person walking four stages
+consumes four draws from one position and re-phases every later person. **The generator draws from its
+own substream, never the shared campaign stream** (P0-2), so population size cannot re-phase any other
+consumer of randomness.
 
-**Generation is total.** For any well-formed demand, the ladder returns a person; there is no failure
-branch and no "no suitable candidate". Ill-formed demands are **load-time validation errors**. This is
-what lets ED-IN-0201's gate be a precondition rather than a trap: a faction's head post can always be
+**Generation is total.** For any well-formed demand the ladder returns a person; there is no failure
+branch and no "no suitable candidate", and ill-formed demands are **load-time validation errors**.
+That is what lets ED-IN-0201's gate be a precondition rather than a trap: a head post can always be
 filled by *someone*; whether that someone is any good is the game.
 
-**Totality now has a second obligation, because stages can fail their gates.** A stage whose gate does
-not hold is **skipped, not retried** — and skipping is a legitimate outcome, not an error: a person
-who never had a Formation is a person who never had a mentor, and the world should be able to make
-one. **What may never be skipped is Origin**, which is where identity is fixed. Falsifier below.
+**Totality gains a second obligation, because stages can fail their gates.** A stage whose gate does
+not hold is **skipped, not retried**, and skipping is legitimate: a person who never had a Formation
+never had a mentor, and the world should be able to make one. **Origin may never be skipped** — it is
+where identity is fixed. Falsifier in §11.1.
 
 ⚠ **A guard that counts generator calls does not observe any of this.** Carried from v1: a population
 guard must read the **person store**, because a call counter is invisible to a loader, a restore, or
-any other path that constructs people without going through the generator.
+any other path constructing people without the generator.
 
 ---
 
