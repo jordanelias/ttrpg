@@ -366,50 +366,101 @@ tiers:  any rung at which the acting post's remit contains this row
 *Emergent possibility lost if it were cut:* **every faction that is not an army becomes decoration**,
 and the only story the strategic layer can tell is conquest.
 
-### 4.1 The shape is **DO**, with an entrenchment obstacle — the override argued
+### 4.1 The shape is **DO**, and the obstacle is the incumbent's **lead**
 
 ```
-net_c   = continuous net of the challenger's post-holder            (§6's pool shape)
-net_d   = continuous net of the defender's post-holder              (§6's pool shape)
-boost_c = sigma_leverage.net_boost(...)  from the challenger's OWN presence at the place, CAPPED
-Ob      = derive_ob(defending institution's presence level at the place, place_modifiers)
+net_c  = continuous net of the challenger's post-holder                 (§6's pool shape)
+net_d  = continuous net of the defender's post-holder                   (§6's pool shape)
+Ob     = derive_ob( presence_defender ,  modifiers = −presence_challenger/2 + place_terms )
+       = max( OB_MIN , (presence_defender − presence_challenger)/2 + place_terms )
 
-degree  = degree_from_net( (net_c + boost_c) − net_d , Ob )
+degree = degree_from_net( net_c − net_d , Ob )
 ```
 
 `degree_from_net(net, ob)` reads `margin = net − ob` and nothing else
-(`engine/autoload/dice_engine.py:227`), so passing the differential as `net` and entrenchment as `ob`
-produces **`margin = (net_c + boost_c) − net_d − Ob`** on the single-owned ladder, with **no second
+(`engine/autoload/dice_engine.py:227`), so passing the differential as `net` and the entrenchment lead
+as `ob` produces **`margin = (net_c − net_d) − Ob`** on the single-owned ladder, with **no second
 degree semantics invented.** TN is 7 and is never named here: `_require_tn7` raises on anything else
 (`dice_engine.py:182`, ED-IN-0196). `derive_ob` is the obstacle's only owner (`01 §6`); this document
-computes no obstacle of its own.
+computes no obstacle of its own, and that single-owner property is the thing actually worth protecting.
 
 **Why DO rather than the SO the spec named (O-5.4).** Under an SO the incumbent does not roll, so the
 one action aimed squarely at another faction's officer is the one action in which that officer's
-identity is irrelevant — which is ED-IN-0201 clause 2 satisfied on the attacking side and abandoned on
-the defending side. A contest for influence *is* two institutions with two people in the room.
+identity is irrelevant — ED-IN-0201 clause 2 satisfied on the attacking side and abandoned on the
+defending side. A contest for influence *is* two institutions with two people in the room.
 
-**What each side contributes, and why this is not double-counting the incumbent.** It is exactly the
+**Why the lead and not the absolute level (O-5.7).** `01 §6` point 2 reserves `derive_ob`'s
+`modifiers` for *"terms genuinely properties of the target"*, which is the right general rule — it is
+what stops an actor's own advantages leaking into obstacle-space, where leverage is non-uniform. It is
+the wrong rule **for a contested quantity**, and presence is the only quantity in this suite that is
+inherently a *share* rather than a possession. Three consequences, and they are why this is better
+rather than merely different:
+
+| | absolute (`Ob = P_d/2`) | **lead (`Ob = (P_d − P_c)/2`)** |
+|---|---|---|
+| two institutions both deeply established at one place | the contest is near-impossible for both, forever — a stalemate the world cannot resolve | `Ob` floors at `OB_MIN`: a genuinely even contest is a **coin-weighted-by-officers**, which is what it should be |
+| a first incursion into a stronghold | hard | hard, by the same arithmetic |
+| the runaway loop (§4.4) | the discount channel is a **separate capped σ-space boost** — a second object, a second constant, a second place to get the cap wrong | the discount **is** the obstacle, and it **saturates at `OB_MIN`**: past parity, further presence buys nothing at all. The feedback term has a hard stop built into the shape rather than bolted on |
+
+**It deletes an object.** An earlier draft of this section carried a capped σ-space `net_boost` from
+the challenger's own foothold *in addition* to the absolute obstacle — two channels, two constants,
+one job. `00 §1`'s under-distilled failure is *two objects doing one job*, and this is one.
+
+**What each side contributes, and why the incumbent is not counted twice.** It is exactly the
 institution/holder split change C introduced, applied to a roll instead of to a ranking:
 
 | | the person | the institution |
 |---|---|---|
-| **challenger** | `net_c` — their post-holder's pool | `boost_c` — a **σ-space** μ-shift from their own foothold, capped |
-| **defender** | `net_d` — their post-holder's pool | `Ob` — `derive_ob(presence)`, the ruled score/2 |
+| **challenger** | `net_c` — their post-holder's pool | their presence, as a **reduction** in `Ob` |
+| **defender** | `net_d` — their post-holder's pool | their presence, as an **increase** in `Ob` |
 
-The channels are asymmetric **because the suite's general rule is asymmetric**, not because this action
-is special: `01 §6` point 2 reserves `derive_ob`'s `modifiers` argument for terms *"genuinely
-properties of the target"* and names *"an incumbent's presence level (`05 §4`)"* as an example. An
-actor's own advantages reach the roll through the σ-space modifier channel, everywhere in this suite.
-Routing the challenger's foothold through `derive_ob` would violate that rule; routing the incumbent's
-entrenchment through σ-space would abandon the ruled obstacle derivation.
+Symmetric channels for symmetric things, which the two-channel draft was not. The defender's *person*
+rolls and the defender's *institution* sets the bar; they are different quantities, so this is not
+double-counting.
 
 **One recorded consequence, so a later reader does not mistake it for an unnoticed defect.** The
-obstacle lives in success-space and the boost in σ-space, and the differential's spread is wider than
-either side's alone (`σ_diff = √(σ_c² + σ_d²)`), so a fixed `Ob` is worth less per point here than in a
-one-sided check, and entrenchment protects **most** against weak challengers. That is non-uniform *in
-the correct direction* — self-damping, the shape a bounded system wants — and it is the same property
-`01 §6` records for capability investment.
+obstacle lives in success-space while the differential's spread is wider than either side's alone
+(`σ_diff = √(σ_c² + σ_d²)`), so a fixed `Ob` is worth less per point here than in a one-sided check —
+and, because success-space terms are non-uniform in pool, an entrenchment lead protects **most**
+against a weak challenging officer. That is non-uniform *in the correct direction* — self-damping, the
+shape a bounded system wants — and it is the same property `01 §6` records for capability investment.
+
+### 4.1a Is `score/2` the right derivation here? — weighed on the merits, kept, with a condition
+
+Jordan, 2026-08-29, named this rule as the worked example of something a proposal may replace. So it
+is answered here as a design question rather than cited as a settled one.
+
+**Kept, and the argument is not "it was ruled".** Three properties earn it:
+
+1. **Halving is what puts the obstacle inside the range the ladder discriminates over.** The ladder's
+   bands are `<0`, `[0,1)`, `[1,3)`, `≥3` in *net successes* (`dice_engine.py:227`). A pool of 6–18
+   produces `μ = 0.4·Pool ∈ [2.4, 7.2]`. An obstacle taken at full score would sit on the same scale as
+   the score, which for any gauge with a two-digit ceiling puts every contest past the ladder's
+   discriminating range; halving is the cheapest correction that keeps the four bands all reachable.
+2. **One divisor beats one per verb.** The alternative anybody reaches for — a per-action difficulty
+   coefficient — is exactly the fork `01 §6` measured six private copies of. A single derivation that
+   is *approximately* right everywhere is worth more than eight that are each locally tuned and drift.
+3. **It is auditable by a reader.** *Half the target's score* is a sentence a player can hold; a
+   calibrated curve is not, and P-i is this page's strongest property.
+
+**⚠ The condition the ruling does not carry, and this page found while testing it — the finding is
+not local to `05`.** `score/2` is only meaningful when **the score's scale is commensurate with the
+net's scale.** Nothing in the tree checks that, and the tree contains at least one gauge that would
+break it: canon scales Thread Sensitivity **0–100** (`01 §5.2`, citing
+`systems/overview/clock_registry_v30.md:72`). A gauge on a 0–100 scale used as a `derive_ob`
+`target_score` yields obstacles up to **50** against nets whose μ tops out near **7.2** — every band
+but Failure unreachable, a mechanic that looks live and is dead. Since `presence.<institution>`'s
+scale is `07`'s to declare and is **not yet declared**, this is a live hazard on the very action this
+page introduces, not a hypothetical.
+
+> **Falsifier, and it belongs in `01 §6` rather than here** — flagged for that document's author
+> rather than duplicated into a second owner. A **declaration-time** check over the descriptor
+> registry: for every gauge declared as a `derive_ob` target, `ceiling/2` must leave all four ladder
+> bands reachable for the pools that roll against it — i.e. `ceiling/2 < μ_max + 3` where
+> `μ_max = 0.4 · POOL_MAX`. It needs no campaign run. **Load-bearing on the game**
+> (`CLAUDE.md §0.1` point 5): it is the difference between an action with four outcomes and an action
+> with one. On the scales this page assumes for presence it passes; on a 0–100 gauge it fails, which
+> is the point of having it.
 
 ### 4.2 An unstaffed defender does not roll — that is a gate, not a cheaper path
 
