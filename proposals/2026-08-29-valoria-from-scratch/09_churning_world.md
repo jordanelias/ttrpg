@@ -16,16 +16,13 @@ times, and at what resolution**, and makes one structural claim:
 > it are held as records rather than as cohort weight.
 
 Aimed at three nulls. **N-4**: auto-resolve was never calibrated because a *process* and a *formula*
-can only agree on average. There is no second slice here — F0 runs the same exchange loop and rolls
-cohorts **variance-matched**, exact to the second moment, not just the mean (§2.4). **N-3**: §4 makes
-personal contribution a **budget the collective owns and persons compete for**, not a quantity persons
-add, which bounds leverage at a constant fraction of outcome at every N. I claim a bound, not a
-solution, and §4.4 names what it misses. **N-9**: Phase 4 reads views and Phase 5 reads the world, and
-no phase joins them; §11 traces a season where three people act on three false things and the world
-resolves all of it without noticing.
+can only agree on average; there is no second slice here, and F0 rolls cohorts **variance-matched**,
+exact to the second moment (§2.4). **N-3**: §4 makes personal contribution a **budget the collective
+owns and persons compete for**, not a quantity persons add — a bound, not a solution, and §4.4 names
+what it misses. **N-9**: P4 reads views and P5 reads the world and no phase joins them; §11 traces a
+season where three people act on three false things and nothing notices.
 
-Every object below carries a closed loop and an N-line. §12 is what I cut. §13 amends the spine
-openly rather than diverging from it.
+Every object carries a closed loop and an N-line. §12 is what I cut. §13 amends the spine openly.
 
 ---
 
@@ -35,11 +32,10 @@ openly rather than diverging from it.
 
 **The tick is a season. Every person and every cohort commits exactly one act per season.**
 
-The spine already named the stake: politics is the container and the alignment wanting different
-things from the same hour of a life. Unlimited acts means the collision never happens — he serves
-both. One act makes it compulsory and free. An act is not everything a person does in three months;
-it is the **one discretionary commitment**. Subsistence, craft and travel-in-progress are Phase 1 and
-happen *to* you.
+The spine named the stake: politics is the container and the alignment wanting different things from
+the same hour of a life. Unlimited acts and the collision never happens — he serves both. An act is
+not everything a person does in three months; it is the **one discretionary commitment**. Subsistence,
+craft and travel-in-progress are P1 and happen *to* you.
 
 - Loop: produced by `choose` → carried in the season's act queue → consumed by `resolve`.
 - **Cut it and you lose:** scarcity of attention, therefore *priority*, therefore every dilemma. A
@@ -82,13 +78,12 @@ individuate; persons nobody remembers de-individuate (§8.2).
 ### 1.3 Simultaneity, and the scene
 
 **Reaction latency at person scale is one season.** If Praefect Roth opens the granary to the Row and
-not the hamlet, the hamlet's answer is next season's act. Consequence worth naming: **surprise is
-structurally possible**, because no policy can say "if he does X, I do Y, this turn." You anticipated
-or you are late.
+not the hamlet, the hamlet's answer is next season's act. So **surprise is structurally possible** — no
+policy can say "if he does X, I do Y, this turn." You anticipated or you are late.
 
-The exception is the bridge to §2: **inside a contest the tick subdivides.** A contest opens a nested
-loop of **exchanges** running P3–P6 over a smaller person set on a shorter clock. Fidelity is how deep
-that nesting individuates, and nothing else.
+The exception bridges to §2: **inside a contest the tick subdivides**, opening a nested loop of
+**exchanges** running P3–P6 over a smaller person set on a shorter clock. Fidelity is how deep that
+nesting individuates, and nothing else.
 
 ### 1.4 Resolution strata, each with its reason
 
@@ -123,11 +118,10 @@ rank-ordered tiebreak is a hidden power stat that never appears on a factor shee
 two paths and the only one with a twenty-year unsolved divergence. So: **one function, `resolve`, and
 F0/F1/F2 are the same call with one integer changed.**
 
-The finding that makes this affordable, stated before the table because it reframes everything: §10's
-arithmetic shows a fully individuated battle costs ~9,600 `choose` calls, which is nothing. **F0
-exists because the player cannot watch two hundred contests a season, not because the machine cannot
-run them.** Therefore the correct difference between F0 and F2 is *as little as possible*, and any
-difference must be justified by attention, never by cost.
+The finding that makes this affordable, stated before the table because it reframes everything: §10
+shows a fully individuated battle costs ~9,600 `choose` calls, which is nothing. **F0 exists because
+the player cannot watch two hundred contests a season, not because the machine cannot run them.** So
+the correct difference between F0 and F2 is *as little as possible*, justified by attention, never cost.
 
 ### 2.2 The exchange loop — the process, stated once
 
@@ -145,9 +139,9 @@ contest(place, sides, stake, fidelity):
             | the clock (the date closes, night falls, the tide turns)
 ```
 
-This is the only resolver in the game. A battle outside Stillhelm, the Masterpiece Examination
-committee, a Doctrinal Adjudication hearing, and two brothers arguing over a barn are the same call
-with different act vocabularies and different stakes.
+The only resolver in the game. A battle outside Stillhelm, the Masterpiece Examination committee, a
+Doctrinal Adjudication hearing, and two brothers arguing over a barn are the same call with different
+act vocabularies and stakes.
 
 ### 2.3 The fidelity table — exactly what is dropped
 
@@ -177,22 +171,22 @@ Rolled as a block on a bare mean it produces the right mean and **zero** varianc
 successes(C) = round( W·μ(p) + sqrt(W)·σ(p)·Z ),   Z ~ standard normal, clamped ±3
 ```
 
-Exact to the second moment by construction, at the cost of one roll instead of *W*. Auto-resolve
-results feel wrong not because they are biased but because they are **too close to the mean** — the
-underdog never wins, the rout never happens. This is the fix, and it is arithmetic rather than tuning.
+Exact to the second moment, at the cost of one roll instead of *W*. Auto-resolve results feel wrong
+not because they are biased but because they are **too close to the mean** — the underdog never wins,
+the rout never happens. Arithmetic, not tuning.
 
-Genuinely lost: **third and higher moments** — the cascade where one specific man's failure
-propagates. Bounded by two rules:
+Genuinely lost: **third and higher moments**, the cascade where one man's failure propagates. Bounded
+by two rules.
 
 **Rule A — decisive individuals are never in a cohort.** *D* always includes anyone whose act could
 produce a named-subject event with downstream consequence: an occupied role, a Knot partner, an
 office-holder, anyone carrying a named object (a standard, a writ, the Examination piece), anyone
-another participant's ledger names, and anyone whose act this exchange has outcome variance above a
-threshold. Every cascade path is individuated at every fidelity; cohorts carry interchangeable mass only.
+another participant's ledger names, anyone whose act this exchange has outcome variance above a
+threshold. Every cascade path is individuated at every fidelity.
 
 **Rule B — casualties individuate retroactively, into memory that already existed.** When a cohort
-loses weight, the dead are named only for persons already in someone's ledger. If nobody knew his
-name, nobody notices he is gone. T4-correct, free, and the same primitive that bounds population (§8.2).
+loses weight the dead are named only for persons already in someone's ledger. If nobody knew his name,
+nobody notices he is gone — T4-correct, free, and the same primitive that bounds population (§8.2).
 
 - Loop: produced by the exchange loop at any fidelity → events with named subjects → `witness`,
   identically at all three fidelities.
@@ -215,10 +209,10 @@ is the test twenty years of mean-calibration never ran. Rule A passes it.
 by a two-sample shape statistic, never by means. Variance-matching passes it; a failure names *which*
 moment was lost.
 
-**T-F — F1 IS THE DANGEROUS TIER.** Structurally closest to scalar collapse, and the reason is precise:
-**at F1 the player is present and their own choices are being auto-filled.** If standing orders are a
-slider — *aggressive / balanced / cautious* — then the player's presence produces a worse result than
-their absence, because a slider is the one place a scalar re-enters the decision path. So:
+**T-F — F1 IS THE DANGEROUS TIER.** Closest to scalar collapse, for a precise reason: **at F1 the
+player is present and their own choices are being auto-filled.** If standing orders are a slider —
+*aggressive / balanced / cautious* — the player's presence produces a worse result than their absence,
+because a slider is the one place a scalar re-enters the decision path. So:
 
 > **Standing orders are written in the same act vocabulary as F2 choices** — an ordered list of
 > conditional acts over the player's own view:
@@ -296,9 +290,9 @@ bounded at every N **by construction, not by tuning**.
 Not by adding to the outcome — that channel is closed — but by **acting on the share graph**: kill the
 man holding 0.25 and his share redistributes at a cohesion cost, and **only once someone has been
 told** (§5.2); turn him and `concord` falls across all the weight under him; vacate a role that cannot
-be refilled (§5.3); cut `supply`, which is the larder, which is the hearth rung, which is where one
-smuggler with a boat operates. At N = 1 the share graph has one node and this degenerates correctly.
-The mechanism is continuous across the range because the graph is the same object at both ends.
+be refilled (§5.3); cut `supply`, which is the larder, which is the hearth rung, where one smuggler
+with a boat operates. At N = 1 the graph has one node and this degenerates correctly. Continuous across
+the range because the graph is the same object at both ends.
 
 ### 4.4 Bounded, not solved
 
@@ -352,12 +346,12 @@ persons who came when she called.
 
 ### 5.2 Losing a specific person, three ways
 
-**(a) The share, and a succession that must be seen.** When a share-holder dies the succession rule
-names the next occupant — but the share does not transfer until **the subordinates hold a claim naming
-him**, because `chain` counts only currently-asserted links. A commander killed in the open, in view of
-the line, costs one exchange of degradation. A commander killed in a wood at dusk leaves his share
-*unallocated* until a runner is chosen, survives and is believed — and `chain` bleeds throughout.
-`witness` doing load-bearing work in the middle of a melee is T4 at the seam, and it costs nothing new.
+**(a) The share, and a succession that must be seen.** The succession rule names the next occupant, but
+the share does not transfer until **the subordinates hold a claim naming him** — `chain` counts only
+currently-asserted links. A commander killed in the open costs one exchange of degradation; a commander
+killed in a wood at dusk leaves his share *unallocated* until a runner is chosen, survives and is
+believed, and `chain` bleeds throughout. `witness` load-bearing in the middle of a melee is T4 at the
+seam, and costs nothing new.
 
 **(b) The Knots.** A partner's death is a rupture trigger: Disposition → −3, mutual Composure damage,
 Coherence −1, and for a Close Knot a **Conviction scar**. A death in the line at Stillhelm propagates
@@ -452,18 +446,17 @@ Kyriakos makes the Doux a legal respondent for Almud's merchants, and nothing el
 season. The same `choose(person, view) -> act`. **The interface is the view, rendered.**
 
 **What they get that an NPC does not: deliberation time, and only that.** An NPC's `choose` runs a
-bounded policy over K = 12 ranked claims. The player may sit with the same twelve for an hour, re-read
+bounded policy over K = 12 ranked claims; the player may sit with the same twelve for an hour, re-read
 their ledger, chase provenance, plan four seasons out. That is the entire advantage — and it is large,
-because a player who models other persons' views will consistently out-plan a bounded policy. It is
-also the right advantage, being an advantage at exactly the thing the game is about.
+because a player who models other persons' views will out-plan a bounded policy. It is also the right
+advantage, being an advantage at exactly what the game is about.
 
-**What they do NOT get.** No world argument, ever. No omniscient map — a province they have had no news
-from displays the **last claim they hold**, with its date and source visible; **stale claims render as
-current**, because that is what a belief is. The date is shown; staleness is not flagged. If Duchess
-Inge Baralta's banner still flies over Oastad on your map, it is because that is the last thing you were
-told. No pause-the-world: the tick runs whether or not you submit, and **a player who does not act has
-chosen `abide`.** No event feed — news is your ledger's new rows, with sources. No extra acts, no extra
-reach, no faction-level verbs.
+**What they do NOT get.** No world argument, ever. No omniscient map — a province with no recent news
+displays the **last claim they hold**, date and source visible, and **stale claims render as current**,
+because that is what a belief is. The date is shown; staleness is not flagged. If Duchess Inge Baralta's
+banner still flies over Oastad on your map, that is the last thing you were told. No pause-the-world:
+**a player who does not act has chosen `abide`.** No event feed — news is your ledger's new rows. No
+extra acts, no extra reach, no faction-level verbs.
 
 **Ignorance must cost, and here are four mechanisms, none of them a timer.**
 
@@ -503,10 +496,10 @@ ledger · they occupy a role or office · they enter a Knot · they are individu
 contest.
 
 Minting draws address from the cohort, marks from the cohort plus its variation, capability from its
-distribution conditioned on whatever the naming event implies, stance from its aggregate plus dispersion.
-**Memory is the trick that makes it consistent:** tellings are stored *at the channel*, not per person,
-until individuation — so a person minted in season 40 is handed the claims their address's channels would
-have deposited. They have a plausible past because their *channel* has a real one.
+distribution conditioned on the naming event, stance from its aggregate plus dispersion. **Memory is the
+trick that makes it consistent:** tellings are stored *at the channel*, not per person, until
+individuation, so a person minted in season 40 is handed the claims their address's channels would have
+deposited. They have a plausible past because their *channel* has a real one.
 
 ### 8.2 Reabsorption — the bound CK3 lacked
 
@@ -554,12 +547,12 @@ From a fully aggrieved `s = −4.5`: mitigation gives `+1 − (5.5 × 0.427) = �
 `−5 + (3.65 × 0.380) = −3.61`. **Net +0.89 per season with both at maximum.**
 
 **Verdict: it fires, it is recoverable, and the recovery costs everything.** Sixteen act-slots — the
-governor, three carriers, twelve standing-holders — is essentially Goldenfurt's entire governing capacity
-for the season. No granary work, no wall, no trade; which raises next season's needs, which raises next
-season's petitions. Neither pole: mitigation genuinely works (not EU4's estates), and it is not
-unavoidable (not Imperator's governors). The *actually* superior line is not to spend sixteen slots on
-remedy but to **stop dropping petitions** — which costs the carriers their standing with their own
-judging sets, which is a different person's problem, which is politics.
+governor, three carriers, twelve standing-holders — is essentially Goldenfurt's whole governing capacity
+for the season: no granary work, no wall, no trade, which raises next season's needs and therefore next
+season's petitions. Neither pole: mitigation genuinely works (not EU4's estates) and is not unavoidable
+(not Imperator's governors). The superior line is not sixteen slots of remedy but to **stop dropping
+petitions** — which costs the carriers their standing with their own judging sets, which is a different
+person's problem, which is politics.
 
 **R check on the carrier's fork.** CARRY gains the backers' regard and costs the opposing judging set's;
 DROP is the inverse. Both are durable stance rows and **neither decays on a clock**, so neither has
@@ -637,9 +630,8 @@ simulation. Modelled population ~1.2 million **as weight**; the record count is 
 
 **Witness fan-out is the real cost, and the cohort tames it.** An event's witness set is the persons
 present plus the channels it touches, and **a channel deposits into a cohort as one claim, not into its
-members.** A crier's proclamation of a ducal dispensation in Goldenfurt deposits ~6 cohort claims and ~40
-individuated claims — not 12,000. A cohort member who later individuates inherits the cohort's channel
-claims (§8.1). One primitive, three jobs.
+members.** A crier's proclamation in Goldenfurt deposits ~6 cohort claims and ~40 individuated claims,
+not 12,000; a cohort member who later individuates inherits them (§8.1). One primitive, three jobs.
 
 **Contest cost.** F0 battle: 12 exchanges × ~70 participants (20 cohorts + 15 individuated a side) = **840
 `choose` calls.** F2 fully individuated at 400 a side: 12 × 800 = **9,600** plus presentation. Both
@@ -711,9 +703,9 @@ toward Roth.
 
 **What the player comes home to in spring.** They hold a Close Knot with Gerik, so across the winter they
 felt strain accrue and Coherence drop — **a state, not a telling.** Something was wrong; nothing said what.
-On arrival they learn it from Gerik, in Gerik's version, which includes at 0.6 confidence and delivered as
-fact that Aldwin Roth turned on them. Their first act home is likely to be against Roth — on an inference
-from a rumour that was itself a distortion, none of which anyone lied about.
+On arrival they learn it in Gerik's version, which delivers as fact, at 0.6 confidence, that Aldwin Roth
+turned on them. Their first act home is likely to be against Roth — on an inference from a rumour that was
+itself a distortion, none of which anyone lied about.
 
 **The bill for one season's absence.** One Free Master seat not gained, and its guild vote. One ally turned
 by a false claim that a single `tell` before departure would have prevented. One reprisal armed that one act
@@ -750,12 +742,12 @@ But it must be made explicitly, because a singular signature pushes conflict han
 which is where a hidden turn order gets born.
 
 **(2) Salience needs a floor, or correction becomes unreachable in principle.** The spine ranks claims by
-`recency × confidence × relevance × stance weight` and gets T3 for one multiplication — elegant and true. But
+`recency × confidence × relevance × stance weight`, getting T3 for one multiplication — elegant and true. But
 if stance weight is unbounded and stance can be strong, a person with a hard stance can never surface the
-claim that argues against it, at any confidence. Their obstinacy is then never tested, and §3.2's promise that
+claim that argues against it, at any confidence. Obstinacy is then never tested, and §3.2's promise that
 *"correction comes from collision with the world"* cannot be kept: the collision happens and the claim never
-enters a view. This document leans on that correction path directly — Aldwin's false claim must be
-correctable; the 1218 revelation must be able to move people who do not want it to.
+enters a view. This document leans on that path directly — Aldwin's false claim must be correctable, and the
+1218 revelation must move people who do not want it to.
 
 Proposed: salience = `max(stance-weighted score, floor)`, where `floor = recency × confidence` for claims with
 `source = firsthand`. A thing you saw yourself, recently, with high confidence **always** makes your twelve.
