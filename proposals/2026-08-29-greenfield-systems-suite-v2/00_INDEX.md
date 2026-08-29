@@ -16,6 +16,7 @@
 [06 Faction Management](06_faction_management.md) → [06 part 2](06_faction_management_part2.md) →
 [07 Places](07_places_and_settlements.md) →
 [08 Settlement Management](08_settlement_management.md) → [09 Ambitions and Arcs](09_ambitions_and_arcs.md) →
+[09 part 2](09_ambitions_and_arcs_part2.md) →
 [10 The Slate](10_the_slate_and_salience.md) → [10 part 2](10_the_slate_and_salience_part2.md) →
 [11 World Events](11_world_events.md) →
 [12 Adjacent Systems](12_adjacent_systems.md) → [13 Handoff](13_handoff_build_order.md)
@@ -482,12 +483,27 @@ Blocked on P0-1. Named so the blocked work is specific.
 | `post.vacant` | 04 `pm.vacancy` | post id, tier node, reason |
 | `faction.action_declined` | 05 `fa.gate` | faction, tier, reason (`vacant_post` \| `budget_exhausted`) |
 | `edge.formed` / `edge.transitioned` | 01 `substrate.edge` | endpoints, relation, from-state, to-state, cause |
-| `project.declared` / `project.fired` / `project.lapsed` | 09 `am.*` | owner, project kind, target, terms, residue |
+| ~~`project.declared` / `project.fired` / `project.lapsed`~~ → **`state.project_formed` only** | 09 `am.declare` | owner, project kind, target, terms |
 | `world.event_fired` | 11 `we.fire` | event row id, place/faction targets, the preconditions that held |
 | `slate.item_surfaced` | 10 `sl.truncate` | candidate id, salience components, rank, whether mandatory |
 | `place.directive_issued` / `place.directive_answered` | 08 `sm.directive`, `sm.respond` | place, directive kind, principal; response and degree where one was rolled |
 
 Each has a producer and a consumer **in this suite**; none is declared speculatively.
+
+⚠ **CORRECTED — this table proposed three key types that already exist, and `09`'s author caught it.**
+Verified against `systems/_architecture/key_type_registry_v30.md`: **`mechanical.project_advanced`
+(`:446`), `state.project_completed` (`:691`) and `state.project_failed` (`:710`) are already
+registered**, under ED-935, with live contract edges and canon's Procedure C behind them. Three of
+the four project moments were never missing. Only **formation** is, and `state.project_formed` was
+already proposed independently as G-29
+(`audit/2026-08-11-world-schema-gap-audit/01_gap_register_part2.md:281`).
+
+**So the work blocked on P0-1 is one key type, not four.** That is a real reduction in this suite's
+cost, and it was found only because an author checked the registry instead of trusting this index.
+Treat the rest of this table the same way: **it is a proposal, and every row in it should be checked
+against the ratified registry before anyone appends anything.** The suite's own head being wrong
+about what already exists is precisely the failure mode `§0.05` warns about — a design document is
+reference, and the registry is the mechanism.
 
 ---
 
@@ -507,6 +523,7 @@ Each has a producer and a consumer **in this suite**; none is declared speculati
 | [`07_places_and_settlements.md`](07_places_and_settlements.md) | the Place object; **growth/decay transitions with hysteresis**; **presences**; strata; terrain | A, F |
 | [`08_settlement_management.md`](08_settlement_management.md) | the Directive down-stroke; a **shrunken** verb set; investigation ⇄ infrastructure; business now **emits candidates** | D |
 | [`09_ambitions_and_arcs.md`](09_ambitions_and_arcs.md) | **new** — project as a composition; declare/advance/fire/lapse; arcs as tag chains | B |
+| [`09_ambitions_and_arcs_part2.md`](09_ambitions_and_arcs_part2.md) | the project registry; obstruction; arcs through `causes[]`; contracts; property audit | B |
 | [`10_the_slate_and_salience.md`](10_the_slate_and_salience.md) | **new** — candidates, salience, truncation to the scene budget, headless auto-resolution | D |
 | [`10_the_slate_and_salience_part2.md`](10_the_slate_and_salience_part2.md) | inertia without storage; J-N/J-O; the player surface; contracts; property audit | D |
 | [`11_world_events.md`](11_world_events.md) | **new** — conditioned exogenous rows, rate bounds, reachability in both directions | G |

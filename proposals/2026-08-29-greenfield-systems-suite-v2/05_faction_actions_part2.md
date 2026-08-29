@@ -20,6 +20,10 @@ An action is a **row, never a branch.** Adding one is a registry edit.
   binds: {<slot>: <registry id>}                          # NEW (v2) — §4.5
   attrs: [<attr_a>, <attr_b>]                             # keys on descriptors.ATTRIBUTES; never literal
   target: <what supplies target_score for derive_ob>
+  ob_site: {target: <gauge id>, modifier_max: <int>, pool_max: <int>}   # NEW (v2) — 01 §6's
+                                          # obstacle-reachability gate. `pool_max` is 18 for
+                                          # every row by §6's pool shape; `modifier_max` is
+                                          # the row's own ceiling on POSITIVE Ob modifiers
   symbolic_vector: {hierarchical: ±, sacred: ±, instrumental: ±, traditional: ±}
   signal_weight: {<world signal>: <weight>}
   cost: {budget: 1, gauge_deposits: [...]}
@@ -224,6 +228,10 @@ declared speculatively.
   remit: [head, governor, minister, envoy, commander]
   budget: {gauge: post.budget, cost: 1}
   consumes: []
+  ob_sites: []            # DELIBERATELY EMPTY. fa.resolve is a dispatcher: the obstacle's target is
+                          # the RESOLVED ROW's `target`, so each action row carries its own `ob_site`
+                          # (§5) and 01 §6's gate evaluates rows, not this module. Declaring a site
+                          # here would name a target this module does not have.
   emits: []                                      # the herald emits per the resolved row (W-1)
   state:
     - {name: gauge, bucket: gauge, writable: true, owner: substrate.gauge}
@@ -243,6 +251,15 @@ declared speculatively.
   remit: [head, governor, minister, envoy]
   budget: {gauge: post.budget, cost: 1}
   consumes: []                                   # reads presence at the boundary; §8.1
+  ob_sites:                                      # NEW — 01 §6's obstacle-reachability gate. §4.1a
+    - target: presence.<institution>             #   ceiling UNDECLARED (07's) -> site UNVERIFIABLE
+      modifier_max: 2                            #   positive `place_terms` only; the challenger's
+                                                 #   lead term is strictly non-positive (O-5.7) and
+                                                 #   so cannot threaten band reachability
+      pool_max: 18                               #   §6: attr 1-7 twice + POOL_BASE 4. Site-local.
+      shape: DO                                  #   ⚠ the gate must use the DIFFERENTIAL's moments,
+                                                 #   mu=0.4(Nc-Nd), sigma=0.8*sqrt(Nc+Nd) -- STRICTER
+                                                 #   than one-sided (Ob<=8.247 vs 9.783). §4.1a
   emits: []                                      # the herald emits; a band crossing is 07's
                                                  # form.transitioned, not a second emission here
   state:
@@ -284,6 +301,11 @@ declared speculatively.
   remit: [head, governor, minister, envoy, clerk]
   budget: {gauge: post.budget, cost: 1}
   consumes: []
+  ob_sites: []            # DELIBERATELY EMPTY, and NOT because there is no site. fa.inquire rolls
+                          # against "the concealing party's relevant score, WHERE ONE EXISTS" (§5.3)
+                          # -- the target is row-declared and, for some rows, absent. Each row that
+                          # declares a target declares its own `ob_site`; a row with no target does
+                          # not roll. Naming a single target here would fabricate one.
   emits: []
   state:
     - {name: information, bucket: gauge, writable: true, owner: substrate.gauge}
@@ -308,7 +330,7 @@ and the methodology's own rule forbid manufacturing a NERS verdict for a module 
 **no N/R/S/E verdict is offered for those three** — their loops and gates are §10.2 instead. The audit
 below is of `fa.resolve`, `fa.contest_influence` and `fa.inquire`, which roll.
 
-### 10.1 The five properties, each with the falsifier that would show it wrong
+### 10.1 The properties, each with the falsifier that would show it wrong
 
 | property | verdict | falsifier |
 |---|---|---|
@@ -316,6 +338,7 @@ below is of `fa.resolve`, `fa.contest_influence` and `fa.inquire`, which roll.
 | **P-ii** uniform leverage | pass, **with one recorded non-uniformity in the correct direction** (§4.1) | A test asserting no module contract declares a `budget:` whose cost is consumed inside a pool or obstacle expression (`01 §5.3`'s falsifier, applied here), **plus**: no action row's modifier reaches the roll except through `sigma_leverage.net_boost` **or** `derive_ob`'s declared instance term, and no row declares both for the same quantity. A modifier applied twice through two channels — the defect the two-channel draft of §4.1 would have shipped — falsifies it |
 | **P-iii** bounded, monotonic | pass, **with two loops stated and both gains unmeasured** (§2.3, §4.4) | `01 §5.1`'s declaration-time check — `rest + max_seasonal_accrual/λ ≤ ceiling` — applied to `presence.<institution>` with `act.contest_influence` counted among its depositors. **A controlled campaign pair on `tools/balance_oracle.py` showing presence share diverging without bound falsifies it** |
 | **P-iv** graded, recoverable | pass | A test asserting every action row's `effects` map is **total over the four `Degree` members** and that **no `failure` branch revokes a post or removes a faction**. A row with a Partial-only effect, or an empty Failure branch, falsifies it |
+| **P-vi** *(new)* **reachable bands** | ⚠ **UNVERIFIABLE for `act.contest_influence`; declared for the rest** | `01 §6`'s obstacle-reachability gate: `derive_ob(S_max, M_max) + 3 ≤ 0.4·N_max + z·0.8·√N_max`, `z = 1.645`, **per site**, evaluated for a DO site on the differential's moments (§4.1a). The test that would show this site wrong: **assert the top band is reachable at the site's most favourable configuration** — at `N_c = 18` against `N_d = 6` the envelope is `11.247`, so `derive_ob(presence_ceiling, 2) ≤ 8.247`, which requires `presence.<institution>`'s ceiling `≤ 12`. **It cannot be run today**: that ceiling is `07`'s and is undeclared, and an undeclared ceiling is not a passing one. The worked failure the gate exists to catch is real and in this tree — a 0–100 gauge yields `P(Overwhelming) = 0` |
 | **P-v** right engine | pass | Three questions, three tools: selection is a **derivation** (a decision, not an uncertainty); affordability and eligibility are **gates**; contested outcomes are `d_sigma` at pools 6–18. **A test asserting every `resolver:` matches `00 §7`'s table** — in particular that nothing determinate rolls. `fa.muster` declared `d_sigma` would falsify it |
 
 **N** — under ED-IN-0201 this is the layer the ruling is *about*; it is not optional. No roll here is
@@ -348,8 +371,11 @@ shape, **no per-faction branch anywhere**, and five would-be verbs collapsed int
    listed at O-5.4 and O-5.7, and each half is *reversible in one line*: dropping `net_d` from the
    differential returns the SO the delta spec named, and dropping the negative instance term returns the
    absolute-presence obstacle — with every other part of the action unchanged either way.
-4. **`act.contest_influence` depends on a gauge scale that does not exist yet.** `presence.<institution>`
-   is `07`'s to declare, and §4.1a shows the obstacle derivation is only meaningful if that scale is
-   commensurate with the net's. **This page cannot verify its own central action until `07` declares that
-   scale**, and it proposes the declaration-time falsifier rather than assuming a value. Naming this is
-   the honest alternative to picking a ceiling here and calling the question closed.
+4. **`act.contest_influence` depends on a gauge ceiling that does not exist yet, and the dependency is
+   now exact rather than general.** `01 §6`'s gate is built; this site declares `pool_max: 18` and
+   `modifier_max: 2`; the third field, `presence.<institution>`'s ceiling, is `07`'s and is undeclared.
+   The constraint handed to `07` is **`ceiling ≤ 12`** (§4.1a). Until it lands the site's status is
+   **unverifiable, not passing** — picking a ceiling here to turn the row green would be exactly the
+   confounded measurement `CLAUDE.md §0.1` was written about. **This page's own first form of that gate
+   was wrong** (2.57× too permissive at pool 5), which is the strongest argument available that the
+   check belongs at one owner and not restated per document.

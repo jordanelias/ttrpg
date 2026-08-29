@@ -132,7 +132,12 @@ archived doc's own `V-1..V-4`, and updated for the new roster
 All four are arithmetic over the registry, need no campaign run, and are load-time raises.
 **New, v2:** **L-5** — every `reversible: true` transition row satisfies `01 §2.3`'s
 `θ↑ − θ↓ ≥ H_MIN(gauge)` and `dwell ≥ 1`. This is `01`'s own falsifier, instantiated here because
-place-kind pairs are where it first has teeth.
+place-kind pairs are where it first has teeth. **L-6** — `Σ_institution max_share(institution) ≤ 1`
+(§5.1). **L-7** — every gauge this document declares as a `derive_ob` target elsewhere in the suite
+(today: `presence.<institution>`, §4.1a) has a **non-null** floor and ceiling, and that ceiling
+satisfies `01 §6.1`'s reachability inequalities against the practical pool range — `01`'s own
+commensurability gate, instantiated here because an undeclared ceiling on this document's data is
+unevaluable rather than passing, per `00 §7`'s `ob_sites:` note.
 
 ---
 
@@ -332,8 +337,8 @@ obstacle is a presence differential — so declaring it as a small commensurate 
 gated threshold, is the only shape that lets that action exist at all.
 
 **Grounded, not merely convenient.** Canon's closest existing precedent is the Restoration Movement's
-own **Presence marker cap of 5 per territory** (`systems/victory/victory_v30.md`, "Presence marker
-cap: 5 per settlement" — search-verified in-tree). That is a **different grain** (discrete markers,
+own **Presence marker cap of 5 per territory** (`systems/victory/victory_v30.md:444`, "Presence
+marker cap: 5 per territory" — verbatim). That is a **different grain** (discrete markers,
 province/territory scale) from this gauge (a continuous, decaying, settlement-grain value per `01
 §5.1`), so the two are not asserted equal — but 5 sits comfortably inside a 0–7 ceiling as the natural
 edge of an "established" band, with 6–7 reserved for a presence that has become the place's *de facto*
@@ -530,7 +535,8 @@ owns the fact that a built thing is a legible object.**
 | assigning `presences{}`, `terrain`, or `parent` |
 
 **Substrate objects here: 1 entity kind reused (place) · 10 `kind` values · 4 form fields · 6
-gauge families (one is per-institution) · 6 tag kinds reused · 2 new load-time checks (L-5, L-6) · 1
+gauge families (one is per-institution, floor/ceiling declared per §4.1a) · 6 tag kinds reused ·
+3 new load-time checks (L-5, L-6, L-7) · 1
 new content_registry block (presence kinds). Surface affordances: 3 reads, 0 verbs.** The ratio this
 document's own §0.1 test demands.
 
@@ -564,7 +570,7 @@ Growth, decay, founding and ruin need **no module of their own** (§3.1) — the
     - {name: condition.defense,     bucket: gauge, writable: true, owner: substrate.gauge}
     - {name: pressure,              bucket: gauge, writable: true, owner: substrate.gauge}
     - {name: accrual.entitlement,   bucket: gauge, writable: true, owner: substrate.gauge}
-    - {name: presence.<institution>,bucket: gauge, writable: true, owner: substrate.gauge}   # one per content_registry row, §4.1
+    - {name: presence.<institution>,bucket: gauge, writable: true, owner: substrate.gauge}   # one per content_registry row; floor 0, ceiling 7 per §4.1a
   form: []                  transitions: []
   disclosure: [see §8.3's table — one row per state entry above]
 
