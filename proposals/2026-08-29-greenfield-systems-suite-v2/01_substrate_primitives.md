@@ -4,19 +4,19 @@
 ## Reads: [`00_INDEX.md`](00_INDEX.md) · `engine/substrate/{descriptors,composition,keys}.py` ·
 ## `engine/autoload/dice_engine.py` · `systems/npcs/npc_relational_graph_v30.md` (PP-724) ·
 ## `systems/fieldwork/knots_v30.md` · `audit/2026-08-08-world-churn-audit/06_master_synthesis.md`
-## Continues in: [`01_substrate_primitives_part2.md`](01_substrate_primitives_part2.md) — §§9–13
+## Continues in: [`01_substrate_primitives_part2.md`](01_substrate_primitives_part2.md) — §§7–13
 
 Everything in this suite is a composition of what is on this page. If a later document needs a fifth
 kind of stored thing, that is a defect in this page, not a licence to add a field somewhere else.
 
 **Everything on this page is `substrate`** in the sense of `00 §2.1`, without exception. §11 (part 2)
-is the whole player-facing surface of this document: three read-only affordances and zero verbs.
+is the whole player-facing surface of both parts: three read-only affordances and zero verbs.
 
 **This document is in two parts, in reading order** (`CLAUDE.md` §4): **part 1** — the four
-primitives, the form bucket and its transitions, `derive_ob`, the edge container and the Knot, and the
-disclosure contract (§§1–8). **[Part 2](01_substrate_primitives_part2.md)** — the herald, the cut list,
-the player surface, the module contracts and the property audit (§§9–13). Section numbers run
-continuously across both.
+primitives, the form bucket and its transitions, and `derive_ob` with its commensurability gate
+(§§1–6). **[Part 2](01_substrate_primitives_part2.md)** — the edge container and the Knot, disclosure,
+the herald, the cut list, the player surface, the module contracts and the property audit (§§7–13).
+Section numbers run continuously across both.
 
 ## Overrides
 
@@ -457,6 +457,13 @@ def derive_ob(target_score: float, modifiers: float = 0.0) -> float:
     return max(OB_MIN, target_score / 2.0 + modifiers)
 ```
 
+**`OB_MIN` is `1`** — pinned, canonically tagged and guarded: `engine/autoload/sigma_leverage.py:108`
+(`# [canonical: params/core.md §Obstacle Scale]`), applied at `:177`, with
+`test_sigma_leverage_parity.py:355-357` asserting the floor holds at extreme leverage. ⚠ **It lives in
+`sigma_leverage`, not in `dice_engine`, so `derive_ob` must IMPORT it, never restate it.** A second
+copy of a pinned constant beside the function that floors on it is exactly the §8 "never re-implement a
+rule" violation, and it would be invisible until the two drifted.
+
 It belongs beside `roll_pool` in `engine/autoload/dice_engine.py`, for a reason the corpus measured: the
 margin ladder is single-owned and guarded (`degree_from_net`) while the obstacle is derived locally in
 most resolving subsystems and arrives at the roller as a bare parameter. **Ruling the obstacle without
@@ -501,8 +508,8 @@ target score's scale is commensurate with the net's, and `score/2` is meaningful
 
 **Every band but Failure becomes unreachable, and nothing currently catches it.** The gauge exists,
 the obstacle derives, the roll resolves, and the site returns one degree forever — *a mechanic that
-looks live and is dead*, which is the worst failure class in the suite because it passes every
-structural check.
+looks live and is dead*, the worst failure class in the suite because it passes every structural
+check.
 
 **The gate, checked at declaration time, per call site.** The envelope on the right-hand side is **the
 distribution of whatever quantity the site passes to `degree_from_net` as `net`** — which is not the
@@ -511,7 +518,7 @@ same quantity for every shape. So the site's declared **shape** selects the form
 ```
                      ONE-SIDED  (U · SO · GATE — the site rolls one pool against a static Ob)
   top band:      derive_ob(S_max, M_max) + 3  ≤  0.4·N_max + z·0.8·√N_max
-  bottom band:   derive_ob(S_min, M_min)      >  0.4·N_max − z·0.8·√N_max
+  bottom band:   derive_ob(S_min, M_min)      >  0.4·N_min − z·0.8·√N_min
 
                      DIFFERENTIAL  (DO · BI — the ladder reads net_c − net_d)
   top band:      derive_ob(S_max, M_max) + 3  ≤  0.4·(N_max − D_min) + z·0.8·√(N_max + D_min)
@@ -521,6 +528,15 @@ same quantity for every shape. So the site's declared **shape** selects the form
 ```
 
 Both must hold, or the row is rejected when it is written rather than discovered in a playtest.
+
+⚠ **The two bands use opposite corners, each being the one where that band is hardest to reach.**
+Overwhelming is hardest against the largest obstacle, so the top band pairs `S_max, M_max` with the
+*strongest* actor; Failure is hardest against the smallest, so the bottom band pairs `S_min, M_min`
+with the *weakest*. **An earlier draft used `N_max` in both** — asking whether the strongest actor can
+still fail the easiest task, which has no design content and rejects sound sites: a `0–10` target
+floors at `derive_ob = 1`, and `1 > 1.617` is false at `N_max = 18` but `1 > −0.943` is true at
+`N_min = 5`. The DO form was written with the right corners, so **the two disagreed, which is what
+exposed it.**
 
 ### 6.1.1 Three corrections to the form the finding proposed
 
@@ -588,16 +604,18 @@ form takes `D_min`, not a nominal opposing pool: **`N_d = 6` is right only if 6 
 minimum** — at `D_min = 1` the bound is `9.536`. The gate reads the corner from the registry.
 
 **The bottom band rarely binds on a DO site.** With `N_min = 5` against `D_max = 18`,
-`μ_diff − z·σ_diff = −11.5` while `derive_ob` floors at `OB_MIN ≥ 0`, so Failure is reachable by
+`μ_diff − z·σ_diff = −11.5`, while `derive_ob` floors at **`OB_MIN = 1`**
+(`sigma_leverage.py:108`) — so the inequality clears by more than twelve, and Failure is reachable by
 construction whenever the defender can match the challenger. It is kept because a site with
 `D_max < N_min` — a permanently outmatched defender — is expressible, and there it bites.
 
 **Why this belongs here and not in `05`.** `05`'s author found the hole and declined to patch it
-locally, which was correct. The stronger argument is what the two passes demonstrate: **this page
-identified the hazard and still got the arithmetic wrong on its first attempt, and so did the reader
-relaying it.** A rule three readers derive differently is exactly the rule that must have one owner and
-one expression — restating it per document multiplies the surfaces on which it can be got wrong. That
-is a better justification for E-1's single ownership than "the obstacle had a ruling and no owner".
+locally, which was correct. The stronger argument is what these passes demonstrate: **this page
+identified the hazard and still got the arithmetic wrong twice — the one-sided envelope, then the
+bottom-band corner — and so did the reader relaying it.** A rule three readers derive differently is
+exactly the rule that must have one owner and one expression; restating it per document multiplies the
+surfaces on which it can be got wrong. That is a better justification for E-1's single ownership than
+"the obstacle had a ruling and no owner".
 
 **What the module contract must carry.** A site declaring a `derive_ob` call declares
 `shape`, `pool_max`, `pool_min`, `ob_modifier_max`, `ob_modifier_min`, and — **for `DO`/`BI` only** —
@@ -607,9 +625,11 @@ is the §6.1.1 point-3 defect recurring at the shape level.
 ### 6.2 What fails the gate today
 
 **The pattern is not a coincidence.** Canon's **`0–7` stat family** — attributes, all six faction
-stats, the settlement stats — is **pool-commensurate by construction** (`ceiling/2 ≤ 3.5`, inside the
-band-reachable zone across the whole practical pool range). Everything that fails is from another
-family and was never a "score" in the sense Jordan's ruling means.
+stats, the settlement stats — is **pool-commensurate by construction**: `ceiling/2 ≤ 3.5`, so
+`Ob + 3 ≤ 6.5` clears the envelope from about `N_max = 8` upward. It is *not* unconditional — a site
+declaring `N_max = 5` cannot overwhelm a score-7 target (`6.5 > 4.94`), which is a true design fact
+rather than a defect — so **every site is still checked on its own `N_max`.** Everything that fails
+below is from another family and was never a "score" in the sense Jordan's ruling means.
 
 | gauge | scale, and its source | verdict as a `derive_ob` target |
 |---|---|---|
@@ -623,6 +643,17 @@ family and was never a "score" in the sense Jordan's ruling means.
 | `standing`, `exposure`, `pressure`, `acceptance.*`, `accrual.entitlement` | **scale undeclared in this suite** | **unverifiable today.** Each must declare a ceiling before it can be a target |
 | `presence.<institution>` | **0–7**, declared by `07 §4.2` after this gate was raised | **pass, and it is the gate's first live use.** `05 §4.1` is the suite's only opposed site: `shape: DO`, `Ob = derive_ob(presence_defender, −presence_challenger/2 + place_terms)`, modifier bound 2, so `Ob_max = 7/2 + 2 = 5.5` against the **differential** envelope `8.247` (§6.1.2). Passes with room. Under the one-sided form the admissible ceiling was `12.49`; under the correct opposed form it is **`≤ 12`** — `07` chose 7 deliberately, so the tightening did not bite |
 
+**Re-checked against `OB_MIN = 1`; no verdict moved — recorded because a re-check that changes nothing
+is still a check.** The floor cannot touch the top band: at any `S_max` worth gating `S_max/2 + M_max >
+1`, so the `max()` is inactive. It touches only the bottom band, where a *higher* floor makes Failure
+**easier** to reach — every bottom-band verdict is strengthened, not narrowed. The **borderline** row
+checked explicitly: a `0–10` gauge gives `derive_ob(0) = 1`, and `1 > −0.943` holds at `N_min = 5`, so
+it passes on the corrected corner; Coherence, the Persuasion Track and the Church Attention Pool stay
+borderline for the *same* reason as before — `Ob = 5` is site-dependent at the top, not the bottom.
+**One real consequence:** with a floor of 1 a target scoring `≤ 2` yields the same obstacle as one
+scoring `0`, so **the bottom two points of every gauge are not discriminable as obstacle targets.** No
+site here reads a target in that band, and one that did would be measuring nothing.
+
 **The opposed form flipped no verdict here.** The suite's only opposed site (`05 §4.1`, targeting
 `presence`) still passes, because `07` declared `0–7` rather than spending the headroom the looser form
 allowed. That is a **near miss, not a clean bill**: had `07` taken the `12.49` the one-sided form
@@ -634,192 +665,3 @@ makes the failure impossible to introduce rather than expensive to discover.
 *Emergent possibility lost if the gate were cut:* none — it removes no possibility, it removes a class
 of silently-dead mechanic. It is the one addition on this page that is pure subtraction of failure,
 and by `00 §1`'s own test that is what a distillation looks like.
-
----
-
-## 7. Edges: a shared container with per-kind semantics (change E, redesigned)
-
-### 7.1 The prohibition, and the three rulings on disk
-
-`audit/2026-08-08-world-churn-audit/06_master_synthesis.md:552` (Part VI, **HELD not ratified** —
-`:4`) prohibits **"a unified bond primitive"**: *"Three anti-unification rulings already on disk. The
-real gap is **converters** (marriage-as-treaty, retainer-ripening) and a **shared Key surface**."*
-The three, found and read rather than taken on summary:
-
-| # | ruling | what it forbids |
-|---|---|---|
-| **R-1** | **ED-POL-11** — *"Patronage vs. Knot distinction. **Maintained.** Patronage is political/institutional; Knot is spiritual/personal. Use in separate contexts; **do not conflate**."* (`systems/factions/faction_politics_v30.md:1093`) | treating a Knot as a strong patronage tie, or either as a magnitude of the other |
-| **R-2** | **PP-724 §0** — *"PC-NPC and NPC-NPC ties compose through shared participation in scenes but **do not collapse into one mechanic**."* (`systems/npcs/npc_relational_graph_v30.md:22`) | one mechanic spanning the PC↔NPC and NPC↔NPC layers |
-| **R-3** | **PP-724 §3.3** — *"**Knot strain (PC-NPC) and edge strain (NPC-NPC) do not aggregate into one counter** — they are distinct state and resolved separately"*; *"each relational edge is a **distinct binding**"* (`:162`, `:167`) | a single strain axis, capacity, or break rule across binding kinds |
-
-**All three forbid unifying *semantics*. None forbids sharing *storage*.** That distinction is the
-whole of the argument below.
-
-### 7.2 What is cut, and what is adopted — "may the best ideas win"
-
-**v1's six-kind `relation` enum and this suite's own draft eight-kind table are CUT, superseded by
-`systems/npcs/npc_relational_graph_v30.md` (PP-724, Class A, PROVISIONAL).** That document already
-ships what change E reached for, and better: **six canonical NPC↔NPC edge types**, each with its own
-formation conditions, strain sources, capacity, break and rupture rules, decay and period precedent,
-plus a decision log arguing the taxonomy's closure on elegance grounds (`:669`). Re-deriving a worse
-taxonomy to keep authorship is the failure `00 §1` names.
-
-**Adopted, cited not restated** (`:46-56`): `sworn-bond` (symmetric) · `liege-vassal` (liege→vassal) ·
-`kinship` (symmetric; asymmetric parent→child) · `patronage` (patron→client) · `rivalry` · `feud`
-(hereditary), strengths 1–3. With them, three rules that are *per-kind* and stay that way: **kinship
-does not break by strain** — severance is an institutional act and the historical kinship survives it
-(`:334-340`); **rivalry and feud are escalation tracks, not strain tracks** (`:674`); **NPC↔NPC
-Disposition is DERIVED from edge state, never stored** (`:331-345`, `:675`).
-
-**Two kinds are added in a scope PP-724 declares out of bounds** (it is NPC↔NPC only, `:22`):
-`treaty` (faction ↔ faction) and `charter` (faction → place). Extensions into empty scope, not
-overrides. `treaty` replaces v1's `Debt`-tag-pair representation, which was two representations of
-one relationship while faction enmity was already an edge.
-
-**`client` is not shipped.** Endpoints are ordered, so `patronage(a→b)` read from b's end *is* the
-client relation; a `client` row is a perspective variant — `00 §1`'s under-distilled failure. It is a
-query helper. Nothing is lost, and PP-724 agrees: it ships `patronage` with a direction, not a pair.
-
-### 7.3 The container, and exactly what it does and does not unify
-
-```
-identity(edge) : endpoints (ORDERED where the kind is asymmetric) · relation (one registry row per kind)
-form(edge)     : state — from the set THIS KIND admits, declared per kind, never globally
-gauges         : declared PER KIND. A kind with no strain axis has no strain gauge.
-tags           : what has passed between them, with provenance — including a treaty's terms
-```
-
-| the container supplies | the container does NOT supply |
-|---|---|
-| an id, so an edge is a tag owner and a Key target like any entity | formation gates — **each kind's are its own** |
-| one **provenance** rule and one **disclosure** contract | strain sources — **each kind's are its own, and they never sum** (R-3) |
-| one **Key surface** (`edge.formed` / `edge.transitioned`) — *which is what Part VI says the real gap is* | break and rupture rules — **each kind's are its own** |
-| one **store**, so `causes[]` chains cross relationship kinds without a join table | a shared strain counter, capacity, or disposition derivation |
-
-**The test set for this section: does a shared container make a Knot look like a strong `sworn`
-edge?** No, and here is why it cannot.
-
-| | `sworn-bond` (PP-724) | `knot` (canon, §7.5) |
-|---|---|---|
-| scope | NPC ↔ NPC | PC ↔ NPC — **a different layer** (R-2) |
-| formation | PP-724 §3 edge conditions | Disposition +5 **and** TS ≥ 30 **and** Bonds ≥ 5 **and** capacity **and** a roll |
-| strain | edge strain, capacity 3/5/7 by strength | **its own** −5…+5 tiered bond-strain gauge |
-| do the counters ever sum? | **never** (R-3) | **never** |
-| disposition | **derived** from edge state (`:331`) | **stored** — canon's PC↔NPC track; the gate reads it at +5 |
-| end state | break, or escalate | **rupture** — Thread-structural, irreversible |
-| in PP-724's taxonomy? | yes, type 1 of six | **no. A Knot is a distinct binding kind and is not one of the six.** |
-
-The last three rows are the answer. A kind whose disposition is *stored* while another's is
-*derived*, whose strain is a different object with different bounds, and whose end state is a
-different transition, is not a magnitude of the other. **The container holds them; it does not equate
-them.**
-
-⚠ **This corrects a v1 defect, found by taking PP-724 seriously.** v1 put a `disposition` **Gauge on
-every edge**. For NPC↔NPC pairs that stores a value PP-724 derives — and deriving it is not merely
-PP-724's preference, it is **this suite's own write rule**: a stored NPC↔NPC disposition is an
-aggregate over edge strengths, and no aggregate is ever written (§2.1). **v1 violated its own rule and
-PP-724 caught it.** Disposition is stored for PC↔NPC and derived for NPC↔NPC. Per-kind semantics, in
-the substrate, doing real work.
-
-### 7.4 Converters — the gap Part VI actually names
-
-**A converter is a form transition (§2) that CREATES an edge of another kind. It never merges two
-kinds and never moves state between them.**
-
-```yaml
-converter: marriage_to_treaty
-source_kind: kinship    creates_kind: treaty
-gate: <both endpoints hold posts in distinct factions AND the kinship edge is cooperative>
-source_after: unchanged        # THE SOURCE EDGE PERSISTS. Nothing is consumed.
-emits: edge.formed             reversible: false
-```
-
-| converter | source → creates | why it is a conversion, not a merge |
-|---|---|---|
-| `marriage_to_treaty` | `kinship` → `treaty` | the two then have **separate strain, separate break rules, separate parties**. The marriage surviving a denounced treaty is the interesting case, and only separate objects express it |
-| `retainer_ripening` | `patronage` at sustained strength → `sworn-bond` | PP-724 ships both with different semantics; ripening is the *transition between them*, which neither type owns |
-| `rivalry_to_feud` | `rivalry` → `feud` | PP-724 §2.6 owns the escalation; naming it a converter stops it being re-implemented |
-
-**A converter may not produce a `knot`.** Knot formation is canon's procedure with its own gates and
-its own roll; ripening a patronage into a Knot is exactly the conflation R-1 forbids.
-
-### 7.5 The Knot — canon, cited, not designed here
-
-**A Knot is not a strong relationship and must not be modelled as one.** It is Thread-constituted:
-gated on Thread Sensitivity, carrying its own strain axis, **rupturing rather than breaking**. *Knots
-are constitutive, not contractual.* Everything below is read from canon and cited; this suite designs
-none of it, invents no number, and adds it to no taxonomy.
-
-| canon fact | value | citation (`systems/fieldwork/knots_v30.md`) |
-|---|---|---|
-| gate — disposition | Disposition **+5** with the target | `:68` |
-| gate — Thread contact | **either party TS ≥ 30**; TS scale 0–100 hard cap | `:69`; `systems/overview/clock_registry_v30.md:72` |
-| gate — capacity | **Knot count < `floor(Bonds/2) + 1`** — **the canonical cap on Knots per person** | `:70`, restated `:31`, `:38` (PP-632) |
-| gate — uniqueness | no existing Knot with this NPC | `:71` |
-| gate — Bonds | **PC Bonds ≥ 5** (attribute 1–7; it does *not* cap Disposition) | `:72` (ED-912); `:28`, `:40` |
-| formation roll | **Spirit × 2 + History (Relationships), TN 7, Ob 2** | `:76` |
-| outcome by degree | Overwhelming → Close, strain −2 · Success → Distant, strain 0 · Partial → no Knot, Disposition holds +5 · Failure → no Knot, Disposition drops to +4 | `:78-83` |
-| tiers | **Distant** (−2…+5, starts 0) · **Close** (−5…+5, starts −2) | `:49-52` (ED-912) |
-| rupture threshold | **strain +5, both tiers**, checked at Accounting | `:54`, `:180` |
-| tempered | **strain −5, Close only** — absorbs the next rupture trigger once, then resets to 0 | `:54`, `:180` |
-| strain decay | at Accounting, **−1 if no strain added that season AND Disposition ≥ +3** | `:170` |
-| strain sources | remote Thread-Read **+1/use** · Composure buffer **+1/use** · counsel re-query **+1** (first free) · FR Lock/Dissolution near a partner **+1** · witnessing a Conviction Scar fire in the partner **+1 at Accounting** · Disposition < +3 for two consecutive seasons **+1 at Accounting** · each opposing-operations event **+1** | `:160-168` |
-| break consequence | Disposition → **−3** (floor −5) · **both partners take 4 Composure** · all Knot-mediated benefits cease · the capacity slot frees | `:184-188` |
-| **conviction scar** | a **Close** Knot that broke **from positive strain** → **Conviction Scar +1 to both partners** | `:189` |
-| rupture triggers (bypass strain) | public citation of private counsel · partner's death · FR Dissolution targeting the partner (**+1 Wound, no armour**) · permanent Conviction shift to an opposing Conviction · player dissolution at Accounting (**2 Composure**) | `:193-201` |
-| ⚠ **not settled** | mandatory **−1 Coherence on rupture**, flagged **[UNVERIFIED post-ED-912]** — PP-632 was struck and ED-912 did not restate it | `:203`; same warning at `systems/fieldwork/sim/knots.py:53-56` |
-
-**How it lands, with no new primitive and no shared semantics:** the Knot is an **edge** with
-`relation: knot` and **its own registry row, outside PP-724's six**; Distant/Close is a `tier` value
-in its **form**; strain is **a Gauge private to this kind**, with `λ` chosen so canon's "−1 per quiet
-season at Disposition ≥ +3" *is* the decay rather than a special case, and it never sums with edge
-strain (R-3); rupture at +5 is a **form transition** `intact → ruptured`, `reversible: false` — canon's
-own irreversibility is why no hysteresis is needed; the capacity cap is a **gate** counting the
-person's `knot` edges, with no stored counter; the conviction scar is a **Tag** (`kind: Precedent`)
-whose conviction name resolves through `descriptors.resolve_conviction` and **raises** on an unknown
-name (§1.2).
-
-⚠ **One gap recorded, not filled.** `tempered → intact` on absorbing a trigger is a **reversible
-pair**, so §2.3 requires a declared hysteresis band. Canon states the reset (`:54`) and **states no
-band**. That is an FI-lane canon question, not a number this suite may invent. **Q-6** (`00 §5.1`)
-likewise stands open, and nothing here depends on the unverified −1 Coherence rule.
-
-*Emergent possibility lost if the shared container were cut and each kind given its own store:*
-`causes[]` could not chain across relationship kinds, so a treaty denounced because of a feud
-inherited through a marriage would be three unlinked records — and that chain is the mechanism the
-whole suite calls a biography.
----
-
-## 8. E-2 — The disclosure block
-
-There is no GM. Nobody narrates why a candidate was passed over, why a faction declined to act, or why
-a place's pressure rose. The only surveyed evidence bearing on that constraint is a game whose social
-layer was loved and whose tactical math was resented *in the same title*, separated by nothing but
-whether the model was visible — and whose community fix **exposed the models rather than changing them**.
-
-> **Publish every input. Publish a band, never a number. Never publish the trigger point.**
-
-Asymmetric on purpose. Five independent sources keep the threshold hidden; four say legibility is what
-separates a celebrated system from a resented one. Publishing the trigger destroys the mechanic;
-publishing the inputs is what makes the outcome feel principled rather than arbitrary.
-
-```yaml
-disclosure:
-  - {of: pressure, inputs: published, presentation: band, trigger: hidden}
-    # every deposit and its provenance inspectable · "strained", not 6.4 · never the draw threshold
-```
-
-**It is a registry field, not documentation** — a state row without a `disclosure:` block fails the
-contract check. **Three v2 consequences.** (1) A **form transition's gate is a trigger**: its threshold
-is hidden while its inputs are published, so the player sees every gauge feeding a settlement's growth
-and not the number. (2) **A forecast is a trigger published in instalments** (§2.2), which is why the
-imminence-Key prohibition and this contract are one rule seen from two sides. (3) **The caste gate is
-the one ruled exception** (`00 §6` principle 5, `04`): an *input*, published in full, because concealing
-it would make the system's central injustice invisible.
-
-> **Falsifier.** A test asserting every state row carries a disclosure block, none sets
-> `trigger: published`, and no emitted key type carries a field whose value is a **future** state — with
-> the caste-gate row as the single declared, named exemption.
-
----
-
