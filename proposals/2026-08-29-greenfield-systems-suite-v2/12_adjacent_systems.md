@@ -195,6 +195,26 @@ history=history)`, leaving every other field at the class's own default. `derive
 reads `ctx['factions'] = (fid_a, fid_b)` (`:114-128`); nothing about terrain is consumed anywhere in the
 bridge today.
 
+**⚠ Verified, and stronger than "unconsumed": nothing in production constructs `ctx['factions']` at
+all.** A sweep of every writer of that key across `engine/` and `systems/` finds exactly two
+construction sites, both tests, both the same hardcoded pair:
+`engine/tests/test_pipeline_reach.py:277,756` and `engine/tests/test_combat_bridge_seam.py:44` et seq.
+— `context={"factions": ("Crown", "Church")}`. `scene_dispatch.py:241` reads it unconditionally
+(`fid_a, fid_b = ctx.get("factions")`) and `:237` carries a declared `"context-derivation gap"` reason
+string for exactly the state a live campaign is always in. `systems/combat/combat_flow_skeleton_v1.md:36`
+independently confirms this in its own traced-structure table: *"queued scene context (never populated
+live — §7)"* — and that document's §7 goes further still: **no live trigger ever queues a `combat`-type
+scene at all** — `evaluate_triggers` (`scene_dispatch.py:77-101`) fires only `scene_type: "contest"`,
+and the repo's one `queue_scene(...)` call site (`:107`) only ever passes that. So the entire
+`derive_parties` path this section designs against is **unreached from the season loop today**,
+independent of the `DISPATCH_COMBAT_BRIDGE` flag's value.
+
+**What follows is a design for the caller that does not exist yet**, not an extension of a live
+contract — there is no live contract to extend. Framed that way, this section is not weaker for it: it
+means nothing already constrains the `ctx` shape, so this document **specifies** the contract the first
+production caller (a future `05` action queuing a `combat` scene) must satisfy, rather than inferring
+one from an existing convention that turns out not to exist.
+
 ### 3.2 Two ways terrain could reach the force model, priced against each other
 
 | option | cost | verdict |
@@ -216,10 +236,16 @@ the place the battle is fought at. **Missing or unresolved `site_id` degrades to
 not a context-derivation gap** — unlike missing `factions` (`derive_parties` correctly returns `None`
 there, `:126-127`), terrain is an enhancement, not a precondition for combat existing at all.
 
-**Role semantics on the existing tuple.** `ctx['factions'] = (fid_a, fid_b)` already has an order; this
-document assigns it meaning rather than adding a field: `fid_a` is the side whose faction action queued
-the campaign (attacker), `fid_b` is the incumbent holder of the target place (defender). Both are
-already resolvable at scene-queue time by whichever `05` action declares the campaign.
+**Role is a named field, not a tuple position.** Because no production caller exists, there is no
+convention to preserve, and reusing `fids[0]`/`fids[1]` positionally would hand the *next* author of the
+real caller an ordering they cannot recover from the data itself — a future misreading silently swaps
+attacker and defender with no error. So this document specifies: the caller populates
+`ctx['attacker']` and `ctx['defender']` (explicit faction ids), not a two-tuple read positionally.
+`derive_parties` is extended (still IN-owned, still not crossing into `combat_engine_v1`) to read these
+when present, and to fall back to `ctx['factions']`'s existing positional order (`fids[0]` = attacker)
+only to keep the two pre-existing test fixtures above passing unmodified. The attacker is the side whose
+faction action queued the campaign; the defender is the incumbent holder of the target place — both
+resolvable at scene-queue time by whichever future `05` action declares the campaign.
 
 **The formula, applied inside `_combatant_from_faction_mil` (now parameterised by role):**
 
@@ -260,6 +286,13 @@ stat no army ever felt.
    coefficient lies in a bounded band (illustrative: `[0.7, 1.3]`) and that no terrain kind other than
    `open` rounds to `1.00`/`1.00` for both roles — a table that doesn't discriminate is decoration, the
    same reachability-bar shape used elsewhere in this suite.
+3. **Reachability, stated honestly rather than assumed.** The falsifier for "terrain reaches the force
+   model" is that some production path constructs `ctx['attacker']`/`ctx['defender']` (or legacy
+   `ctx['factions']`) and that `queue_scene` is ever called with `scene_type == "combat"`. **Today,
+   neither is true** — verified above by grep and by `combat_flow_skeleton_v1.md §7`'s independent
+   trace — and this document does not claim otherwise. What it ships is the coefficient table and the
+   contract the caller must meet; reachability is a separate, currently-open gap this document did not
+   create and cannot close from here.
 
 **J-N / J-O:** neither applies here. The lookup is a same-tick read of already-resolved `World` state,
 not a Key consumption and not a cross-season carry.

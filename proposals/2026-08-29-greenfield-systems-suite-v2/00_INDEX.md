@@ -12,9 +12,12 @@
 [01 part 2 · extensions and seams](01_substrate_primitives_part2.md) →
 [02 Character Generation](02_character_generation.md) → [03 World Population](03_world_population.md) →
 [04 Personnel](04_personnel_management.md) → [05 Faction Actions](05_faction_actions.md) →
-[06 Faction Management](06_faction_management.md) → [07 Places](07_places_and_settlements.md) →
+[05 part 2](05_faction_actions_part2.md) →
+[06 Faction Management](06_faction_management.md) → [06 part 2](06_faction_management_part2.md) →
+[07 Places](07_places_and_settlements.md) →
 [08 Settlement Management](08_settlement_management.md) → [09 Ambitions and Arcs](09_ambitions_and_arcs.md) →
-[10 The Slate](10_the_slate_and_salience.md) → [11 World Events](11_world_events.md) →
+[10 The Slate](10_the_slate_and_salience.md) → [10 part 2](10_the_slate_and_salience_part2.md) →
+[11 World Events](11_world_events.md) →
 [12 Adjacent Systems](12_adjacent_systems.md) → [13 Handoff](13_handoff_build_order.md)
 
 ---
@@ -348,12 +351,37 @@ emits:    [{type: <key type id>, terminal: <bool>}]
 state:    [{name: <id>, bucket: entity|gauge|tag|post, writable: <bool>, owner: <module>}]
 form:     [{entity_kind: <kind>, field: <form field this module may transition>}]   # NEW (v2)
 transitions: [<transition id from references/form_registry.yaml>]                   # NEW (v2)
+ob_sites: [{target: <gauge id>, modifier_max: <int>, pool_max: <int>}]             # NEW (v2)
 disclosure: [{of: <state id>, inputs: published, presentation: band|exact, trigger: hidden}]
 ```
 
 **A module may only transition a form field it declares in `form:`, using a transition row it names
 in `transitions:`.** That is what keeps the fourth write leaf auditable: the set of modules that can
 change a place's tier is a grep over one field, not over the whole tree.
+
+**`ob_sites:` is what makes `01 §6.1`'s commensurability gate evaluable, and without it that gate is
+a rule nothing can check.** Every site that calls `derive_ob` declares three things: the gauge it
+targets, the **maximum total modifier** it may add, and the **maximum pool** its own pool expression
+can produce. All three are required, and each closes a specific hole the single owner found when it
+corrected the gate's first draft:
+
+- **`target`** — the gate needs a declared ceiling to divide. A gauge whose ceiling is undeclared, or
+  declared `None`, is **unevaluable**, not passing. (`engine/engine_params/descriptors.json` declares
+  `prac.thread_sensitivity` with `ceiling: None` against canon's 0–100 hard cap, which is exactly
+  this hole and is the FI/IN lane's row to correct.)
+- **`modifier_max`** — `derive_ob`'s `modifiers` argument is **unbounded in its signature**, so
+  checking a bare ceiling proves nothing if a site may add +10. The bound must be declared, not
+  inferred.
+- **`pool_max`** — there is **no `POOL_MAX` constant in `engine/`**; `roll_pool` enforces only a
+  minimum of 1. A site's maximum pool is a property of the pool expression that site declares, which
+  is why the gate is **per-site** rather than global, and why a check stated at one pool size is not
+  a check.
+
+**Two sites are blocked on this today and are named so they cannot be forgotten:**
+`presence.<institution>` has no declared numeric range — `07` must declare its ceiling — and `05`'s
+`act.contest_influence` targets an incumbent's presence through `derive_ob`'s modifiers, so `05` must
+declare that site's `modifier_max`. Until both land, that site **cannot be shown to pass the gate**,
+and the honest status is unverifiable rather than fine.
 
 **Four resolver kinds, and picking the wrong one is the most common defect the precedent survey
 found.**
@@ -371,6 +399,34 @@ different remits. The person changes the option set by being eligible for differ
 a gate, not a bonus. **The choice differs; the odds do not.**
 
 ---
+
+### 7.1 Two schema hazards the authors found, recorded because the next reader will hit them
+
+**A derived value has no legal bucket.** Every `state:` row must name `entity | gauge | tag | post`,
+and a derivation is stored in none of them — it is recomputed at read. v1 wrote
+`bucket: gauge, writable: false` and this suite keeps that shape, because inventing a fifth bucket to
+describe a thing that is *not stored* would be the exact error `01` exists to prevent. The hazard is
+that `writable: false` is a convention rather than a mechanism, so the guard is a falsifier instead:
+**no state name declared `writable: false` may appear as a gauge id in
+`references/descriptor_registry.yaml`.** If one does, a derivation has silently acquired storage, and
+AU-1 is broken. `01` should give this a proper home; until it does, the falsifier is the whole
+enforcement.
+
+**⚠ "Standing" now means three different things, and one of them is new.** `06`'s author nearly
+shipped a third meaning before catching it:
+
+| the word | what it means | whose |
+|---|---|---|
+| `standing` | a **person** gauge | `01 §5.2` |
+| Standing | the ratified **0–7 rank ladder** | `systems/factions/faction_politics_v30.md:38` |
+| ~~standing~~ → **`footing`** | a **faction's** multi-scale presence at a node | `06 §4`, **renamed** |
+
+He renamed his to `footing` and neither existing meaning is touched. Recorded here rather than only
+in `06` because **this is precisely the disease that gave the tree three definitions of Combat Pool
+and two of Mandate** — and it was caught by an author checking his own vocabulary against the tree,
+which is the only thing that catches it. Any later document introducing a fourth sense of a word
+already in `references/names_index.yaml` or `descriptor_registry.yaml` must rename, not disambiguate
+by context.
 
 ## 8. Preconditions the whole suite sits on
 
@@ -445,11 +501,14 @@ Each has a producer and a consumer **in this suite**; none is declared speculati
 | [`03_world_population.md`](03_world_population.md) | population as a function of posts and places; the bound; the idleness rule; life-stage and lineage | — |
 | [`04_personnel_management.md`](04_personnel_management.md) | vacancy, candidate gate + **the caste gating matrix**, appointment, tenure, audit, recall, succession, custody | F |
 | [`05_faction_actions.md`](05_faction_actions.md) | the C1 gate **per tier**; ethos in `appeal`; the per-post budget; **`act.contest_influence`** | C |
+| [`05_faction_actions_part2.md`](05_faction_actions_part2.md) | the eight action rows; resolution; effects constraints; J-N/J-O; contracts | C |
 | [`06_faction_management.md`](06_faction_management.md) | ethos and **divergence**; **blocs**; multi-scale derivation; collapse by gate | C |
+| [`06_faction_management_part2.md`](06_faction_management_part2.md) | the six political compositions; posture; **collapse by gate**; loops; the player surface | C |
 | [`07_places_and_settlements.md`](07_places_and_settlements.md) | the Place object; **growth/decay transitions with hysteresis**; **presences**; strata; terrain | A, F |
 | [`08_settlement_management.md`](08_settlement_management.md) | the Directive down-stroke; a **shrunken** verb set; investigation ⇄ infrastructure; business now **emits candidates** | D |
 | [`09_ambitions_and_arcs.md`](09_ambitions_and_arcs.md) | **new** — project as a composition; declare/advance/fire/lapse; arcs as tag chains | B |
 | [`10_the_slate_and_salience.md`](10_the_slate_and_salience.md) | **new** — candidates, salience, truncation to the scene budget, headless auto-resolution | D |
+| [`10_the_slate_and_salience_part2.md`](10_the_slate_and_salience_part2.md) | inertia without storage; J-N/J-O; the player surface; contracts; property audit | D |
 | [`11_world_events.md`](11_world_events.md) | **new** — conditioned exogenous rows, rate bounds, reachability in both directions | G |
 | [`12_adjacent_systems.md`](12_adjacent_systems.md) | succession and collapse; units and the personnel↔battle seam; terrain into the force seam; **treaty-as-edge**; the deliberative body | E |
 | [`13_handoff_build_order.md`](13_handoff_build_order.md) | build order, impact classes, controls, falsifiers, guards and their load-bearing predicate, what is blocked on what | — |

@@ -26,11 +26,11 @@ disease this suite exists to stop.
 
 | # | What is overridden | Tier | Why |
 |---|---|---|---|
-| **C-1** | **The delta spec's own five-stage ladder** (`Origin · Childhood · Formation · Entry · Career`), and v1 `02 §2`'s four one-shot pipeline stages | this suite's own spec, beaten by **ratified canon** | `systems/characters/character_generation_questionnaire_v30.md` is **`## Status: CANONICAL`** (`:2`, direction accepted 2026-05-08) and already ships a four-stage life path — **Origin → Formation → Vocation → Catalyst** (`:43`, `:45`) — with a per-stage derivation table naming exactly what each stage produces (`:55-58`). Re-deriving a fifth-stage vocabulary beside it is `00 §1`'s under-distilled failure: two objects doing one job. **Canon's four are adopted verbatim as the creation ladder.** §3.1 |
-| **C-2** | **`traits.virtues`** in the person's form bucket (delta spec §2.1; `01 §1.1`) | this suite's own `01` | **Virtue is Conviction #12 of the thirteen** (`systems/characters/conviction_taxonomy_v30.md:40`; the taxonomy separates it from Utility at `:49` and from Warden at `:54`). A parallel virtue trait is a second object for one job, and it would be a flat bonus on a person — the shape `01 §4.3` refuses. **Cut. `traits` ships `flaws` only.** §7 |
-| **C-3** | v1 `02 §2.4`'s *"at least two edges, both carrying a `disposition` gauge"* | this suite's own v1, corrected by `01` | The gauge half is already cut by `01 §7.3` (O-3): a stored NPC↔NPC disposition is an aggregate over edge strengths and no aggregate is ever written. Generation now attaches **PP-724 edges** with per-kind semantics and derives disposition. The *count* survives and rises. §5 |
+| **C-1** | **The delta spec's own five-stage ladder** (`Origin · Childhood · Formation · Entry · Career`), and v1 `02 §2`'s four one-shot pipeline stages | this suite's own spec, beaten by **ratified canon** | `character_generation_questionnaire_v30.md` is **`## Status: CANONICAL`** (`:2`, accepted 2026-05-08) and already ships a four-stage life path — **Origin → Formation → Vocation → Catalyst** (`:43`, `:45`) — with a table naming exactly what each stage produces (`:55-58`). Re-deriving a fifth vocabulary beside it is `00 §1`'s under-distilled failure. **Canon's four are adopted verbatim.** §3.1 |
+| **C-2** | **`traits.virtues`** in the person's form bucket (delta spec §2.1; `01 §1.1`) | this suite's own `01` | **Virtue is Conviction #12 of the thirteen** (`conviction_taxonomy_v30.md:40`, separated from Utility at `:49` and Warden at `:54`). A parallel virtue trait is a second object for one job, and a flat bonus on a person — the shape `01 §4.3` refuses. **Cut; `traits` ships `flaws` only.** §7 |
+| **C-3** | v1 `02 §2.4`'s *"at least two edges, both carrying a `disposition` gauge"* | this suite's own v1, corrected by `01` | The gauge half is cut by `01 §7.3` (O-3): a stored NPC↔NPC disposition is an aggregate over edge strengths, and no aggregate is written. Generation attaches **PP-724 edges** and derives disposition. The *count* survives and rises. §5 |
 | **C-4** | The person's normative form table in `01 §1.1` gains **`beliefs`** | this suite's own `01` | §6. A creed-Belief is a proposition a person holds, canon caps the active set, and dropping one is exactly a form transition. **Net field count is unchanged**: C-2 removes one member, this adds one. |
-| **C-5** | **`faction_politics_v30 §3.3`'s halved public Renown and §3.4's `+1 Ob` Initiation Duty for Southern Einhir** (`:670-676`, `:679-690`) | **ratified canon** (CANONICAL, PP-660) — the strongest tier, so the strongest argument | Both are **modifiers on the actor**. A flat `Ob` shift is worth ~1.8× more to a small pool than a large one (`01 §6`), so canon's caste penalty is *harsher on the weak*, making caste a competence tax a strong character buys out of; and a halved rate is multiplicative **and invisible**. **What canon protects — that the stigmatised caste is pushed off the visible path onto the covert one (`:677`) — is kept and made stronger**, re-expressed as an option-set difference: a different duty row, and public-deed candidates that do not reach the Slate absent a sponsor. §2.4 |
+| **C-5** | **`faction_politics_v30 §3.3`'s halved public Renown and §3.4's `+1 Ob` Initiation Duty for Southern Einhir** (`:670-676`, `:679-690`) | **ratified canon** (CANONICAL, PP-660) — the strongest tier, so the strongest argument | Both are **modifiers on the actor**. A flat `Ob` shift is worth ~1.8× more to a small pool than a large one (`01 §6`), so canon's caste penalty is *harsher on the weak* — a competence tax a strong character buys out of; and a halved rate is multiplicative **and invisible**. **What canon protects — the stigmatised caste pushed off the visible path onto the covert one (`:677`) — is kept and made stronger**, re-expressed as an option-set difference: a different duty row, and public-deed candidates that do not reach the Slate absent a sponsor. §2.4 |
 
 **Not overridden, deliberately — recorded because deciding *not* to override is also a decision.**
 `faction_politics_v30 §3.2`'s **gating matrix** (`:655-668`) and **§3.5's Disposition seeds**
@@ -63,11 +63,9 @@ things change, and only three:
 | **where capability lives** | `identity.capability` — and identity was unwritable, so nobody advanced | `form.capability`, moved only by a declared transition (`01 §2`) — so a career **is** the mechanism |
 | **what setting contributes** | nothing; caste, heritage, Church and Movement were absent | **identity** fields with a ratified gate elsewhere, and stage rows conditioned on them |
 
-Everything else about v1 `02` was right and is carried.
-
-**Two claims this document will not make.** It does not claim the generator *expresses* the setting —
-`00 §0.1`'s scope limit binds here. And it does not claim canon supplies more than it does: §2.2
-records, plainly, an axis the setting names and does not populate.
+Everything else about v1 `02` was right and is carried. **Two claims this document will not make:**
+that the generator *expresses* the setting (`00 §0.1`'s scope limit binds), and that canon supplies
+more than it does — §2.2 records an axis the setting names and does not populate.
 
 ---
 
@@ -82,16 +80,14 @@ here (`systems/factions/faction_politics_v30.md:647-649`, CANONICAL, PP-660):
 |---|---|---|
 | **Northern Einhir** | Varfell highlands, Hafenmark, Crown heartland; unstigmatised; **baseline low TS**; full Church penetration; the "default" cultural position | `:647` |
 | **Central Einhir** | Valorsmark core, Hafenmark lowlands; unstigmatised; central cultural position | `:648` |
-| **Southern Einhir** | Southernmost-adjacent territories; stigmatised; **higher baseline TS**; **lower Church penetration**; structurally excluded from the post-war settlement — economically suppressed, culturally pressured, ethnically targeted by Church enforcement | `:649` |
+| **Southern Einhir** | Southernmost-adjacent territories; stigmatised; **higher baseline TS**; **lower Church penetration**; structurally excluded from the post-war settlement — economically suppressed, ethnically targeted by Church enforcement | `:649` |
 
-**Caste is identity and is never written** (`01 §1.1`, normative). That is not a modelling
-convenience: a caste a person could change is not a caste. What is mutable is how institutions
-**treat** it, and that lives in a registry where it can be read, argued with and reformed —
-`faction_politics_v30 §3.2`'s matrix, which `04` applies.
-
-Canon already puts caste at character creation and calls the choice structural, not a difficulty
-setting: *"A Southern Einhir character facing the Crown is not playing a harder version of the same
-game — they are playing a different game"* (`systems/_architecture/player_agency_v30.md:475`, `:484`).
+**Caste is identity and is never written** (`01 §1.1`, normative) — not a modelling convenience: a
+caste a person could change is not a caste. What is mutable is how institutions **treat** it, and that
+lives in a registry where it can be read, argued with and reformed (§3.2's matrix, applied by `04`).
+Canon already puts caste at creation and calls the choice structural, not a difficulty setting:
+*"A Southern Einhir character facing the Crown is not playing a harder version of the same game — they
+are playing a different game"* (`systems/_architecture/player_agency_v30.md:475`, `:484`).
 
 ### 2.2 Heritage — what canon supplies, and what it does not
 
@@ -105,22 +101,20 @@ nations"* (`systems/world/worldbuilding_v30.md:213`) — and what canon names is
 (`systems/settlements/settlement_layer_v30.md:435`). A grep over `systems/` and `canon/` for
 *Altonian descent / heritage / residue / settler* returns one hit, and it is institutional.
 
-**So heritage ships as a lineage field with two populated sources and no invented third:** the caste
-lineage canon already names, and `origin_node` where that node is foreign or Altonian-connected. **A
-fourth caste value or an Altonian-descent category would be canon authorship, not design**, and this
-suite proposes no canon. Recorded as a **WR-lane gap**, not filled: *is heritage a second axis, or is
-it caste's own name?* If the same, `01 §1.1` should drop one field. The field is kept meanwhile
-because `01 §1.1` is normative and lists both, and quietly shipping one field where the substrate
-declares two is the shape divergence this suite claims immunity to.
+**So heritage ships with two populated sources and no invented third:** the caste lineage canon names,
+and `origin_node` where that node is foreign or Altonian-connected. **A fourth caste value or an
+Altonian-descent category would be canon authorship, not design**, and this suite proposes no canon.
+Recorded as a **WR-lane gap**, not filled: *is heritage a second axis, or caste's own name?* If the
+same, `01 §1.1` should drop one field. The field is kept meanwhile because `01 §1.1` is normative and
+lists both, and shipping one field where the substrate declares two is shape divergence.
 
 ### 2.3 Where the gate lives, and why it is published
 
-**This document sets no caste modifier and no caste gate.** The ratified matrix — twelve ladder rows
-× three castes (`faction_politics_v30:655-668`) — is applied at **`pm.candidates`** (`04`), which is
-the eligibility gate and therefore the right and only place. `02`'s contribution is to make the
-matrix's *input* exist: a person whose caste is a first-class immutable identity field, disclosed.
-
-Three canon shapes `04` will need, cited here so `04` does not re-derive them:
+**This document sets no caste gate.** The ratified matrix — twelve ladder rows × three castes
+(`faction_politics_v30:655-668`) — is applied at **`pm.candidates`** (`04`), the eligibility gate and
+therefore the only right place. `02`'s contribution is to make the matrix's *input* exist: a person
+whose caste is a first-class immutable identity field, disclosed. Three canon shapes `04` will need,
+cited so `04` does not re-derive them:
 
 | shape | canon | why it matters to generation |
 |---|---|---|
@@ -128,14 +122,14 @@ Three canon shapes `04` will need, cited here so `04` does not re-derive them:
 | **the Warden ladder is favourable to the most stigmatised caste** | `:667`, `:636` — *"the Wardens are, effectively, the resistance infrastructure for the caste system's victims"* | the TS baseline `02` seeds (§4) is *why*. The mechanism must express this, not merely permit it |
 | **Riskbreakers and Niflhel are favoured or caste-blind** | `:663`, `:666` | covert paths are structurally open where overt advancement is structurally closed |
 
-**Disclosure: the caste gate is the suite's one ruled exception** (`00 §6` principle 5; `01 §8`). It
-is an *input*, published in full — a player must be able to see that a candidate was excluded on
-caste. Concealing it would make the system's central injustice invisible, which is the opposite of
-the design intent canon states.
+**Disclosure: the caste gate is the suite's one ruled exception** (`00 §6` principle 5; `01 §8`) — an
+*input*, published in full, because a player must be able to see that a candidate was excluded on
+caste. Concealing it would make the system's central injustice invisible, the opposite of the design
+intent canon states.
 
-*Emergent possibility lost if caste were form rather than identity, or if the gate were a modifier:*
-the game's central social injustice becomes a difficulty slider, and the covert ladders lose the
-reason they exist.
+*Emergent possibility lost if caste were form rather than identity, or the gate a modifier:* the
+game's central social injustice becomes a difficulty slider, and the covert ladders lose their reason
+to exist.
 
 ### 2.4 Caste is a **gate** and a **seed** — never a modifier (C-5)
 
@@ -191,15 +185,14 @@ mechanism**; each composes on something `01` or `07` already owns.
 
 | route | primitive | how caste enters | canon |
 |---|---|---|---|
-| **what you were taught is true** | `truth` gauge — canon's own 0–5 oscillating meter, **5 = Solmund orthodoxy, 0 = Thread-truth acceptance**, and canon says it *"varies by background"* | Northern = full Church penetration; Southern = lower Church penetration (`:647`, `:649`) | `systems/overview/clock_registry_v30.md:71`; the Origin stage derives *"starting Truth"* (`questionnaire:55`) |
-| **what you can perceive** | `thread_sensitivity` gauge (`01 §5.2`; 0–100 hard cap) | Northern baseline low, Southern baseline higher (`:647`, `:649`) | `clock_registry_v30.md:72`; Origin derives *"TS baseline"* (`questionnaire:55`) |
-| **who you already know inside them** | a PP-724 **edge** to a local post-holder, weighted by the birth place's `presences{}` (`07`) | the Church's and the Movement's reach at a place is a presence level, not a person's caste — caste enters through *where people of that caste are born* | `01 §7.2`; `07 §4` |
+| **what you were taught is true** | `truth` gauge — canon's 0–5 oscillating meter, **5 = Solmund orthodoxy, 0 = Thread-truth acceptance**, which canon says *"varies by background"* | Northern full Church penetration; Southern lower (`:647`, `:649`) | `clock_registry_v30.md:71`; Origin derives *"starting Truth"* (`questionnaire:55`) |
+| **what you can perceive** | `thread_sensitivity` gauge (`01 §5.2`; 0–100 hard cap) | Northern baseline low, Southern higher (`:647`, `:649`) | `clock_registry_v30.md:72`; Origin derives *"TS baseline"* (`:55`) |
+| **who you already know inside them** | a PP-724 **edge** to a local post-holder, weighted by the birth place's `presences{}` (`07`) | institutional reach at a place is a presence level, not a person's caste — caste enters through *where people of that caste are born* | `01 §7.2`; `07 §4` |
 
-**The Movement's affiliation bias is ratified and asymmetric**, and it belongs in the conditioning
-distribution rather than in a branch: Northern Einhir **ideologically suspect** · Central
-**variable** · Southern **ideologically favoured — the RM's base is Southern Einhir**
-(`faction_politics_v30:668`). The Church's is the mirror (`:660`), with one caste-neutral exception
-branch canon names explicitly.
+**The Movement's affiliation bias is ratified and asymmetric**, and belongs in the conditioning
+distribution rather than a branch: Northern **ideologically suspect** · Central **variable** ·
+Southern **ideologically favoured — the RM's base is Southern Einhir** (`faction_politics_v30:668`).
+The Church's is the mirror (`:660`), with one caste-neutral exception branch canon names.
 
 **The worked case, and the reason §6 exists.** The Movement holds a proposition canon states is
 **false** — *"RM does not believe threadwork is real. Threadwork is folklore to RM"*
@@ -234,10 +227,10 @@ per-stage derivations (`:55-58`), reproduced because they are the contract this 
 | **Vocation** | History tag, skills, **Belief #1 generation**, content-access assignment | `:57` |
 | **Catalyst** | arc-initiating event, Goal, final Conviction calibration, **possible starting Scar** | `:58` |
 
-**Career is the fifth and it is not a creation stage.** Canon's ladder ends at Catalyst — *"your
-story begins"* (`:45`). A career stage is the same row shape walked **in play**, once per `N`
-seasons of holding a post. That is the delta spec's requirement satisfied at **no new mechanism**
-(§3.4), and it is why 1a is fixed rather than papered over.
+**Career is the fifth and it is not a creation stage.** Canon's ladder ends at Catalyst — *"your story
+begins"* (`:45`). A career stage is the same row shape walked **in play**, once per `N` seasons of
+holding a post: the delta spec's requirement at **no new mechanism** (§3.4), and why 1a is fixed
+rather than papered over.
 
 *Emergent possibility lost if stages were cut and the draw made one-shot again:* two people with the
 same numbers would be the same person, and nobody could become someone — in generation or in play.
@@ -289,15 +282,13 @@ generated at a young age has walked two stages; one generated old has walked fou
 career stages, **and the stages they walked are why their capability, edges and flaws look as they
 do**. Nothing else in the design needs an age concept.
 
-> `AGE_FORMATION`, `AGE_VOCATION`, `AGE_CATALYST`, and `N` (career-stage period in seasons) are
-> **shape proposals with no canon backing found**. They are declared in `form_registry.yaml` gates,
-> not buried, and each carries the **reachability bar** below.
+> `AGE_FORMATION`, `AGE_VOCATION`, `AGE_CATALYST` and `N` (career-stage period, seasons) are **shape
+> proposals with no canon backing found**, declared in `form_registry.yaml` gates rather than buried.
 
-**Reachability bar, both directions** (`00`'s standing requirement on any declared rate): at the
-oldest generated age the world admits, the career-stage count must be **bounded** — otherwise
-capability ratchets without limit and an old NPC is unbeatable by construction; and at the youngest,
-at least **two** stages must have been walked — otherwise a young person is an unconditioned draw
-and §3.1's whole argument evaporates for exactly the population the world makes most of.
+**Reachability bar, both directions:** at the oldest generated age the world admits the career-stage
+count must be **bounded**, or capability ratchets without limit and an old NPC is unbeatable by
+construction; at the youngest, at least **two** stages must have been walked, or a young person is an
+unconditioned draw and §3.1's argument evaporates for exactly the population the world makes most of.
 
 ### 3.4 Career advance in play is the **same module**, not a second one
 
@@ -418,16 +409,14 @@ Three consequences, and the second is the interesting one:
 1. **The cap is canon's and needs no counter.** `floor(Bonds/2) + 1` (`01 §7.5`, `knots_v30.md:70`)
    is a **gate counting the person's `knot` edges** — no stored count, nothing to drift.
 2. **Most generated people leave with no Knot, and *which* people do is caste-legible.** Canon's gate
-   requires Thread contact, and canon says TS is *"0 for non-practitioners"*
-   (`clock_registry_v30.md:72`) with a **higher baseline in Southern Einhir populations**
-   (`faction_politics_v30:649`, `:667`). Nothing in this document arranges that. It falls out of two
-   ratified facts meeting, which is what change F was for: **the caste system is legible in who has
-   Knots at all**, and that is also why the Warden ladder is open to the caste the rest of the
-   system closes.
-3. **A candidate that fails the gate is not discarded** — the stage's fallback is a strong edge of a
-   PP-724 kind. A person who *could not* form a Knot with the person who mattered to them at
-   fifteen has a `sworn-bond` and a Precedent tag instead. That is a better character than a
-   silently-dropped seed, and it costs one line in the stage row.
+   requires Thread contact; canon says TS is *"0 for non-practitioners"* (`clock_registry_v30.md:72`)
+   with a **higher baseline in Southern Einhir populations** (`faction_politics_v30:649`, `:667`).
+   Nothing here arranges that — it falls out of two ratified facts meeting, which is what change F was
+   for: **the caste system is legible in who has Knots at all**, and that is also why the Warden ladder
+   is open to the caste the rest of the system closes.
+3. **A candidate that fails the gate is not discarded** — the fallback is a strong PP-724 edge. Someone
+   who *could not* form a Knot with the person who mattered to them at fifteen has a `sworn-bond` and a
+   Precedent tag instead: a better character than a silently-dropped seed, at one line in the row.
 
 *Emergent possibility lost if knot candidates were cut from generation:* every Knot in the game
 would be one the player made in play, so the Thread layer would arrive at the start of the campaign
@@ -439,21 +428,18 @@ with no history and nobody would have already lost one.
 
 ### 6.1 Beliefs are not Convictions, and canon keeps them apart
 
-**Convictions are what a person values; beliefs are what they think is true.** Canon carries both
-and does not merge them: the thirteen-Conviction taxonomy is one object (`conviction_taxonomy_v30.md`,
-PP-684), and a Belief is another — *"Per-NPC sheets carry 1–3 Beliefs as first-person quoted
-strings"* (`systems/npcs/character_canon_v30.md`, §6.1 region, PROVISIONAL) with its own revision
-rule at §6.2 (`:192`).
-
-⚠ **Tier, stated honestly:** `character_canon_v30.md` is **`## Status: PROVISIONAL — pending
-ratification`** (`:6`). It is the best statement of the belief object in the tree and this document
-composes on it; it is **not** ratified canon and a later ruling may move it.
+**Convictions are what a person values; beliefs are what they think is true.** Canon carries both and
+does not merge them: the thirteen-Conviction taxonomy is one object (`conviction_taxonomy_v30.md`,
+PP-684); a Belief is another — *"Per-NPC sheets carry 1–3 Beliefs as first-person quoted strings"*
+(`systems/npcs/character_canon_v30.md` §6.1) with its own revision rule at §6.2 (`:192`). ⚠ **Tier,
+stated honestly:** that file is **`## Status: PROVISIONAL — pending ratification`** (`:6`) — the best
+statement of the belief object in the tree, composed on here, but not ratified.
 
 **A measured tree fact that makes this section necessary rather than decorative.** The belief object
-already exists in code and **nothing produces it**: `beliefs.add_belief` has no callers and
+already exists in code and **nothing produces it**: `beliefs.add_belief` has no callers,
 `beliefs.revise_belief` is uncalled (`systems/characters/characters_flow_skeleton_v1.md:30-31`), and
 `create_world` leaves `convictions`/`beliefs` as empty dicts *"not populated during world-gen"*
-(`:92`). The missing producer is **character generation**. That is the gap `02` closes.
+(`:92`). **The missing producer is character generation.** That is the gap `02` closes.
 
 ### 6.2 The composition — no new primitive, no new tag kind
 
@@ -534,13 +520,11 @@ is a cut, not a synthesis keeping both.
 ### 7.1 Virtues are cut (C-2)
 
 **Virtue is Conviction #12 of the thirteen** (`conviction_taxonomy_v30.md:40`). A virtuous person is
-a person with a high Virtue weight, plus the Precedent tags recording what they actually did. A
-parallel `virtues` trait list would be a second object doing that job — `00 §1`'s under-distilled
-failure — and, worse, it would be a **flat bonus attached to a person**, the shape `01 §4.3` refuses
-because a flat shift is worth systematically more to a small pool than a large one.
-
-**`traits` therefore ships `flaws` only**, and `01 §1.1`'s schema should drop the `virtues` member
-unless another document populates it.
+one with a high Virtue weight plus the Precedent tags recording what they actually did. A parallel
+`virtues` trait list is a second object doing that job — `00 §1`'s under-distilled failure — and worse,
+a **flat bonus attached to a person**, the shape `01 §4.3` refuses because a flat shift is worth
+systematically more to a small pool than a large one. **`traits` ships `flaws` only**, and `01 §1.1`'s
+schema should drop the `virtues` member unless another document populates it.
 
 ### 7.2 A flaw declares when it binds, and it must open something
 
@@ -735,16 +719,16 @@ fix is to shorten canon's question set — never to move the derivation onto the
     - {of: truth,              inputs: published, presentation: band, trigger: hidden}
 ```
 
-**Two contract facts worth stating rather than leaving to be inferred.** No module here declares a
-`budget:` — generation is not an action economy, and a budget that bought characters would be the
-modifier-shaped currency `01 §5.3` refuses. And `cg.stage` is the **only** module in this suite
-declaring `form: person.capability`, so the set of things that can move a person's competence is a
-grep over one field — which is the entire point of the fourth write leaf being declared rather than
-free (`01 §2.4`).
+**Two contract facts, stated rather than left to be inferred.** No module here declares a `budget:` —
+generation is not an action economy, and a budget that bought characters would be the modifier-shaped
+currency `01 §5.3` refuses. And `cg.stage` is the **only** module in this suite declaring
+`form: person.capability`, so what can move a person's competence is a grep over one field — the whole
+point of the fourth write leaf being declared rather than free (`01 §2.4`).
 
-**Key types used: `form.transitioned`, `person.generated`, `edge.formed` — all three already declared
-in `00 §9.2`. This document appends none**, which matters because P0-1 (`references/rendering_dispositions.yaml`)
-is unexecuted and appending a type while it is would be the drift that precondition exists to stop.
+**Key types used: `form.transitioned`, `person.generated`, `edge.formed`, all three already in
+`00 §9.2`. This document appends none** — which matters because P0-1
+(`references/rendering_dispositions.yaml`) is unexecuted, and appending a type meanwhile is the drift
+that precondition exists to stop.
 
 ---
 
@@ -763,7 +747,7 @@ roll in this document's blast radius is **canon's Knot formation roll** (`01 §7
 |---|---|---|
 | **P-i** legible odds | **pass, scoped** | The player does not choose against this draw, so its odds are not a decision they make. What P-i requires here is a legible *result*: `capability_provenance`, the conditioning inputs and every caste verdict are published (`01 §8`; `04`). **Falsifier:** a test asserting every `cg.*` state row carries a disclosure block and none sets `trigger: published` |
 | **P-ii** uniform leverage | **pass** | §3.5 — additive log-odds with a bounded shift; a unit of conditioning moves the distribution by the same amount wherever it lands. The multiplicative form fails this and is the version not built. **Falsifier:** apply a fixed signal to a tail category and a head category and assert the log-odds delta is identical |
-| **P-iii** bounded, monotonic | **pass, with the layering caveat** | Capability moves one axis by at most one band per stage and is clamped; conviction reweights sum into the declared band; `Δ_MAX` bounds conditioning and `p_floor` bounds degeneracy. **The caveat is real:** these bounds were proved for ONE application in v1 and now apply `S` times. **Falsifier:** §3.5's terminal-distribution test, plus a test asserting no generated capability exceeds `descriptors.ATTRIBUTE_CEILING` after the longest reachable ladder |
+| **P-iii** bounded, monotonic | **pass, with the layering caveat** | Capability moves one axis by at most one band per stage, clamped; conviction reweights sum into the declared band; `Δ_MAX` bounds conditioning, `p_floor` bounds degeneracy. **The caveat is real:** these bounds were proved for ONE application in v1 and now apply `S` times. **Falsifier:** §3.5's terminal-distribution test, plus a test that no generated capability exceeds `ATTRIBUTE_CEILING` after the longest reachable ladder |
 | **P-iv** graded, recoverable | **pass** | §8 — generation is total, and the load-bearing event (can a required post be filled) cannot fail. Stage skipping is graded, not all-or-nothing. **Falsifier:** a test asserting every well-formed demand returns a person, and that `Origin` is present on **every** person in a seeded world |
 | **P-v** right engine | **pass** | Not a contest, so neither canonical resolver applies; a draw from a declared distribution is the right tool, and a contested roll here would resolve something that is a construction. Every *transition* is a gate: the uncertainty was upstream |
 
@@ -771,11 +755,11 @@ roll in this document's blast radius is **canon's Knot formation roll** (`01 §7
 
 | loop | bound | gain |
 |---|---|---|
-| demand → generation → post filled → (later vacancy) → demand | demands are raised only by vacancies and scenes, both bounded by the map; satisfying a demand **removes** it | **not a gain loop** (carried from v1) |
-| stage `k` → conditions stage `k+1` → … | the stage ladder is finite and age-gated; `reversible: false` on every stage transition means no cycle exists | **bounded by construction** |
-| career stage → capability up → better outcomes → post retained → career stage | `N`-season period; one axis by one band per stage; `ATTRIBUTE_CEILING` clamps | **positive feedback, bounded above. Gain UNMEASURED** — nothing has run a campaign long enough to observe whether an incumbent becomes unbeatable before the ceiling binds. §3.3's upper reachability bar is the guard, and it is unverified |
-| belief evidence → credence → revision → Scar → conviction shift (`character_canon §6.3`) → new belief | active set ≤ 3 by canon; canon's own Scar ladder terminates at "3+ — crisis" | **gain UNMEASURED**, and the escalation is canon's, not this document's |
-| flaw binds → candidate → scene → challenge → transition | the Slate's scene budget (`10`) bounds how many ever reach the player; `challenge` is `reversible: false` | **bounded by the Slate**, which is why P0-5 orders `10` before F |
+| demand → generation → post filled → (later vacancy) → demand | demands come only from vacancies and scenes, both bounded by the map; satisfying one **removes** it | **not a gain loop** (carried from v1) |
+| stage `k` → conditions stage `k+1` → … | finite and age-gated; `reversible: false` on every stage transition, so no cycle exists | **bounded by construction** |
+| career stage → capability up → better outcomes → post retained → career stage | `N`-season period; one axis by one band per stage; `ATTRIBUTE_CEILING` clamps | **positive feedback, bounded above. Gain UNMEASURED** — no campaign has run long enough to see whether an incumbent becomes unbeatable before the ceiling binds. §3.3's upper reachability bar is the guard and it is unverified |
+| belief evidence → credence → revision → Scar → conviction shift (`character_canon §6.3`) → new belief | active set ≤ 3 by canon; canon's Scar ladder terminates at "3+ — crisis" | **gain UNMEASURED**; the escalation is canon's, not this document's |
+| flaw binds → candidate → scene → challenge → transition | the Slate's scene budget (`10`) bounds how many reach the player; `challenge` is `reversible: false` | **bounded by the Slate** — why P0-5 orders `10` before F |
 
 ### 11.3 What this document depends on that could move
 
