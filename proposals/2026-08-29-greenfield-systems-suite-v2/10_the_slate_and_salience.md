@@ -1,7 +1,9 @@
 # The Slate — Candidates, Truncation, and Headless Resolution
 
 ## Status: PROPOSED (2026-08-29) — held back from ratification-on-merge
-## Version: v2.0 · Lane: IN (touches SC, SE, WR, FA) · Change **D**
+## Version: v3 · Lane: IN (touches SC, SE, WR, FA) · Change **D**
+## v3: §1.3 funnel RE-DERIVED after `08` O-6 deleted the draw · §2.1a `informational` · §2.1 transport
+## rule · §4.2 an `imminence` producer · §5.1 `engaged(c)`'s `fidelity` field · §6 moved to part 2
 ## Reads: [`00_INDEX.md`](00_INDEX.md) · [`01_substrate_primitives.md`](01_substrate_primitives.md) ·
 ## [`01_substrate_primitives_part2.md`](01_substrate_primitives_part2.md) ·
 ## `audit/2026-07-05-emergent-narrative-engine/narrative_engine_design_v2_churn.md` §1–§4 (**RATIFIED**, ED-IN-0011) ·
@@ -9,7 +11,7 @@
 ## `systems/_architecture/auto_manual_resolution_duality_v1.md` (**RULED** Jordan 2026-07-08, ED-SC-0013) ·
 ## `systems/_architecture/scale_transitions_v30.md` §4.3–§4.4 · `canon/02_canon_constraints.md` (P-08) ·
 ## `engine/autoload/scene_slate.py` · `registers/editorial_ledger_sc.jsonl` (ED-SC-0024, ED-SC-0026)
-## Continues in: [`10_the_slate_and_salience_part2.md`](10_the_slate_and_salience_part2.md) — §§7–11
+## Continues in: [`10_the_slate_and_salience_part2.md`](10_the_slate_and_salience_part2.md) — §§6–11
 
 ---
 
@@ -146,7 +148,7 @@ rate is the expected count of *qualifying items*, not a quota:
 |---|---|---|
 | 1 · open `Grudge` on the place or its governor | a stock, not a flow: deduped on `(owner, kind, key)`, appended by Defy (`08 §4.2`), by failed `05` rows and by world events, swept at `ttl` | ≈ **1.5** |
 | 2 · unserved `Debt` with a running term | `Debt` is issued only by Commute, which is *gated* and is one of ≤4 responses to one directive per season; term ≈ 3 seasons | ≈ **0.4** |
-| 3 · a gauge at or near an extreme band | **13 gauges per place** (`acceptance` ×2, `condition` ×3, `pressure`, `accrual.entitlement`, `presence.<institution>` ×6 — `07 §4.2`'s six institution kinds). **Not uniform over five bands:** `01 §5.1`'s geometric decay concentrates the stationary distribution near `rest`, so p ≈ 0.10 per gauge, and `pressure` qualifies at a lower band (p ≈ 0.20) | ≈ **1.4** |
+| 3 · a gauge at or near an extreme band | **13 gauges per place** (`acceptance` ×2, `condition` ×3, `pressure`, `accrual.entitlement`, `presence.<institution>` ×6 — `07 §4.1`'s six institution kinds). **Not uniform over five bands:** `01 §5.1`'s geometric decay concentrates the stationary distribution near `rest`, so p ≈ 0.10 per gauge, and `pressure` qualifies at a lower band (p ≈ 0.20) | ≈ **1.4** |
 | 4 · a `Precedent` tested by a new event | needs a *new* event touching an *existing* Precedent: 1 directive/place/season + ≈0.14 world events/place, × ≈0.15 hit rate | ≈ **0.2** |
 | 5 · an adjacent settlement at an extreme band | **0 — collapsed into row 3 by `08 §5`'s dedupe rule.** Without that rule this row alone would have multiplied every crisis by the adjacency degree | **0** |
 | 6 · an open `investigation_surface` row with a matching unresolved tag | needs an enabling facility/presence **and** an unresolved tag; facilities are tier-gated and sparse | ≈ **0.3** |
@@ -480,6 +482,16 @@ where a published forecast would not be:**
 `forecast_mass` a producer. `forecast_mass` remains **unproduced** and is named in part 2 §11.5 as
 such. This fix makes *one* of the two forecast terms non-vacuous; the honest state is one of two, and
 saying "the forecast terms now work" would be false.
+
+⚠ **And it is partial even for `imminence`, which is this fix's weakest point.** Band-distance is only
+defined for a candidate whose **kind declares a gate to be distant from** — a project with a
+`threshold`, a form transition with a band edge, a gauge approaching a declared band. A candidate
+emitted from an open `Grudge` or an unserved `Debt` (`08 §5` rows 1–2, together ≈50% of the largest
+emitter's output, §1.3) declares no gate, so its `horizon.band` stays 0 and its render depth is
+unchanged. **So `imminence` goes from vacuous over *all* candidates to meaningful over *some*, and the
+fraction is not measured.** That is a real improvement over a term with no producer at all, and it is
+not the same thing as the term working. Claim 15's first assertion is deliberately *"non-constant"*
+rather than *"populated"* for exactly this reason.
 
 **Why the severance matters concretely, in one sentence:** without it, forecasting that a settlement
 will revolt makes the engine surface the settlement, which makes the player act on it, which changes

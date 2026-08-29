@@ -39,7 +39,6 @@ An action is a **row, never a branch.** Adding one is a registry edit.
 | **`act.muster`** | raise a unit at a place (§5.2) | **gate** | — |
 | **`act.govern`** | act on a place you hold — deposit into its `acceptance`, `condition` and `accrual` gauges, or name a facility-tier advance. **`08`'s eight settlement rows are rows of this family** (§5.5) | **U** | the place's own condition |
 | **`act.campaign`** | declare a campaign against an adjacent holding (§5.1) | gate, then a declared seam | — |
-| **`act.motion`** | raise a motion in the deliberative body on a named subject (`12`) | **DO** | the opposing coalition |
 | **`act.treat`** | offer a bilateral agreement — **creates a `treaty` edge with its terms in its tags** (O-5.5; `12` owns the kind) | **SO** | the counterparty's `acceptance` |
 | **`act.commission`** | appoint, recall, or attempt custody — routes to `04` | gate / **SO** | per `04` |
 | **`act.inquire`** | spend an action to learn (§5.3) | **U** | the concealing party's relevant score, where one exists |
@@ -632,5 +631,41 @@ binding slot (§4.5), two modules and one duplicate motion design (O-5.12) remov
    The constraint handed to `07` is **`ceiling ≤ 12`** (§4.1a). Until it lands the site's status is
    **unverifiable, not passing** — picking a ceiling here to turn the row green would be exactly the
    confounded measurement `CLAUDE.md §0.1` was written about. **This page's own first form of that gate
-   was wrong** (2.57× too permissive at pool 5), which is the strongest argument available that the
-   check belongs at one owner and not restated per document.
+   was wrong** (2.57× too permissive at pool 5), **and its own declaration of the site was wrong twice
+   over** (three fields where seven are required, §9) — which is the strongest argument available that
+   the check belongs at one owner and not restated per document.
+5. **`act.charter` creates an entity, and creation has no home in the contract schema** (§5.4). It is
+   licensed by `00 §4.1`'s P-1 (*"created at load or by generation"*) and precedented on this same page
+   by `act.muster` producing a `unit` (`12 §2.1`), so the *design* is not novel — but `00 §7`'s `state:`
+   buckets are `entity|gauge|tag|post` with no way to say *"and one of these comes into being"*, and
+   `entity.created` is **not a registered Key type**, so **P0-1 blocks the emission.** One registration
+   serves two callers. Declared as a dependency rather than assumed away.
+6. **`APPEAL_TEMPERATURE` is the one shape proposal here with no reachability evidence at all.** The
+   others have arithmetic behind their bars; this one has a two-sided bar (part 1 §3.5) and **no
+   measurement**. It is campaign-reachable, so `tools/balance_oracle.py` with a control is the
+   instrument. A `T` picked to look reasonable and never measured is precisely the decorative-threshold
+   failure §2.2 refuses for the ceiling, and refusing it there while accepting it here would be
+   asymmetric skepticism rather than a standard.
+
+### 10.4 Dependencies this page declares and does not own
+
+Named here so none is lost at a document boundary — the posture §4.1a already takes with `07`'s ceiling.
+
+| owed by | what | why it blocks something here |
+|---|---|---|
+| `01 §2.1` | the **aggregate-vs-stock** sentence | O-5.10 and §5.2a cite it. Without it the mislabel that produced `writable: false` on a spent treasury recurs — and it has already recurred once |
+| `01 §5.2` | declare **`treasury`** (faction, stock) and **`information`** (target, **0–5**) in the gauge roster | **neither is in the roster today**, and `fa.muster` and `fa.inquire` each write one. An undeclared gauge silently escapes `01 §5.1`'s declaration-time bound check, which is the only bound `information` has |
+| `06 part 2 §9` | drop `faction.treasury` from `fm.derive`'s `state:` list | it is `writable: false` there and writable here. **Two owners for one gauge is worse than the original defect**, so this must land in the same merge as O-5.10 |
+| `07` | `presence.<institution>`'s **ceiling ≤ 12** | §4.1a. It now blocks **two** fields of the same `ob_sites` row — `target`'s divisor and `ob_modifier_min` |
+| `12` | the consequence of **unpaid upkeep** on a unit | §5.2a. Without it the treasury floor is the only brake on a standing army, and it brakes the wrong end |
+| `00 §7` | a schema home for **`draw:`** and for **generation** | §9 declares both in fields the schema does not have. Reported together because they are one gap: the contract describes what a module *reads and writes*, never what it *chooses* or *brings into being* |
+
+**And one thing this page was asked to add and REFUSES to (A-F9).** `12:544` bills *"whether to order a
+unit field ↔ garrison"* to *"one of the existing strategic action-family invocations (`05`)"*. **No such
+family exists here, and none should be added.** `12`'s own `ad.unit` contract (`:486-499`) already
+declares `remit: [commander]`, `budget: {gauge: post.budget, cost: 1}`, `form: [{unit, assignment}]` and
+`transitions: [unit.field_to_garrison, unit.garrison_to_field]` — **the executor already exists in `12`;
+what is wrong is the sentence pointing away from it.** Minting an `act.*` family to satisfy a
+cross-reference would create a second invoker of one transition pair, which is the shape-divergence
+defect, to fix a typo. **The one-line correction belongs in `12:544`**, and meanwhile nothing is
+blocked: `fa.gate` counts `ad.unit` in `action_modules` (part 1 §1), so a commander-only faction acts.

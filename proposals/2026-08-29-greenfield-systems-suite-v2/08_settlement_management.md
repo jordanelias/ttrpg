@@ -1,11 +1,15 @@
 # 08 — Settlement management: the governor's one decision
 
 ## Status: PROPOSED (2026-08-29) — held back from ratification-on-merge
+## Version: v3 — O-5 (delete `sm.act`/`sm.gate`), O-6 (delete the per-place draw), `credence` write-back
 ## Reads: [`00_INDEX.md`](00_INDEX.md) · [`01_substrate_primitives.md`](01_substrate_primitives.md) ·
 ## [`01_substrate_primitives_part2.md`](01_substrate_primitives_part2.md) ·
-## `07_places_and_settlements.md` (not yet authored — this document binds to its `place.form`
+## `07_places_and_settlements.md` (**authored** — this document binds to its `place.form`
 ## interface as declared in `01 §1.1`, not to its content) ·
-## `10_the_slate_and_salience.md` (not yet authored — this document emits; `10` ranks and truncates) ·
+## [`10_the_slate_and_salience.md`](10_the_slate_and_salience.md) (**authored** — this document emits;
+## `10` ranks and truncates, and under O-6 `10` is the ONLY rationer) ·
+## [`05_faction_actions.md`](05_faction_actions.md) + `_part2` (**authored** — under O-5 this document's
+## up-stroke rows and its vacancy gate are `05`'s, not its own) ·
 ## `systems/fieldwork/fieldwork_v30.md` §1 (Depth Axis) · `systems/fieldwork/fieldwork_investigation.md`
 ## §4 · `systems/settlements/settlement_layer_v30.md:162,708` (facility-tier ladder; fieldwork
 ## settlement-anchoring)
@@ -120,7 +124,7 @@ nothing else in the handover is new.
 
 **One residual to confirm with `05`/`04`, not asserted away.** `fa.gate` iterates `posts(faction,
 tier)` — a *faction's* rungs. A settlement whose governance post is held under no faction would never
-be iterated, where v2.0's settlement-local gate would have caught it. `05 §7` has control changing by
+be iterated, where v2.0's settlement-local gate would have caught it. `05 §4.1a` has control changing by
 exactly two routes, campaign and appointment, and both seat a faction's post, so the case may be
 unreachable — but *may be* is not *is*. **If it is reachable, it is fixed in `fa.gate`'s loop, not by
 restoring a second gate here.**

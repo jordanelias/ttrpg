@@ -289,10 +289,14 @@ budget: {gauge: post.budget, cost: 1}
 to one member of the candidate set; if the offer is accepted, four writes follow, the fourth
 conditional:
 
+0. **`accepts(candidate, post)`** — the appointee's own gate (§4.0, v3). **If it fails, none of the four
+   writes below fires**: the post stays vacant, a `Precedent` lands on the refuser, and the principal
+   has still spent the budget point.
 1. `post_grant(post, person)` — `holder_id` set, `granted_season` stamped.
 2. **Every passed-over candidate receives** `Grudge(owner_ref=(person, id), key=post_id,
-   provenance=<the grant Key>)` — **unconditional**, regardless of what kind of edge exists between the
-   candidate and the principal.
+   provenance=<the grant Key>)` — **unconditional given a grant**, regardless of what kind of edge exists
+   between the candidate and the principal. *(v3: "given a grant" is the added clause. On a refusal nobody
+   was passed over, because nobody was appointed — §4.0's ordering note.)*
 3. **v2 correction (O-04-1).** *If* an edge already exists between the passed-over candidate and the
    principal's holder **and `01 §7.3` classifies it as PC↔NPC**, additionally deposit into
    `edge.disposition.pc_npc`. If the edge is NPC↔NPC, **no deposit is made** — disposition there is
@@ -355,9 +359,9 @@ preference(post → candidate) =
   provenance=<the `post.vacant` Key that raised the occasion>)`. A `post.refused` key type was drafted
   and **dropped**: `00 §8`'s P0-1 forbids appending a key type until `rendering_dispositions.yaml`
   exists, and the tag carries the fact without one. **This is a gate plus a tag append — leaves 3 and 2
-  of `01 §2.1` — and nothing else.** — the refusal is on the record, it travels with the person (§7), and it is readable by
-  `pm.candidates`'s "not barred" row and by `06`'s bloc formation. **That tag is the story artifact**:
-  the season the Ehrenwall heir refused the ministry is a fact the world remembers.
+  of `01 §2.1` — and nothing else.** The refusal is on the record, it travels with the person (§7), and
+  it is readable by `pm.candidates`'s "not barred" row and by `06`'s bloc formation. **That tag is the
+  story artifact**: the season the Ehrenwall heir refused the ministry is a fact the world remembers.
 - **`caste_gate` is untouched.** It filters the set *before* the principal ranks it (§4.2), and
   acceptance runs *after* — three stages, no composition into one number.
 

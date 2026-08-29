@@ -334,10 +334,13 @@ position. **Reachability bar, both directions:** at the maximum reachable diverg
 able to produce **two or more distinct components**, and at low divergence it must produce **none**. A
 θ pair that yields exactly one bloc at every divergence is a decoration, not a gate.
 
-### 3.3 `cohesion` — the only gauge, and what it is for
+### 3.3 `cohesion` — the bloc's only gauge, and what it is for
 
 Declared in `descriptor_registry.yaml` (`01 §5.2` already lists it), owner `bloc`, geometric decay per
-`01 §5.1`, so it is bounded at `rest + a/λ` and checked at declaration with no campaign run.
+`01 §5.1`, so it is bounded at `rest + a/λ` and checked at declaration with no campaign run. **A bloc
+still owns exactly one gauge** — v3's `faction.treasury` (§4.6) is owned by the *faction*, and a bloc
+deliberately has no treasury of its own (§3), which is one of the four things that stop it being a
+second faction.
 
 | deposits into cohesion | reads |
 |---|---|
@@ -398,27 +401,33 @@ the institution was actually doing. It is also why ethos must be immutable: if t
 drift, a schism would be indistinguishable from a policy argument.
 
 ⚠ **The chartering act itself is `05`'s**, not this page's — creating an entity is generation
-(`00 §4.1`), and canon already owns the shape at `settlement_layer_v30.md:1046` (a formal Declaration
-with a roll and an obstacle). This page supplies the **ethos vector** the new faction is founded on and
-the gate that makes the moment arrive. **This is faction emergence with no faction-emergence
+(`00 §4.1`). It is `act.charter`, `05 part 2 §5.4`, shipped in v3; §3.5a is the contract between the two
+halves. This page supplies the **ethos vector** the new faction is founded on and the gate that makes
+the moment arrive. **This is faction emergence with no faction-emergence
 subsystem.**
 
 ### 3.5a The charter seam, stated as a contract because v2 left it as a sentence (v3, T2-1)
 
-**v2 handed the chartering act to `05` and `05` shipped eight action rows, none of them a charter.** So
-a bloc could reach `in-schism`, its project could become a founding claim, and **the claim had no
-executor in any of the three documents that shared the seam** — the marquee possibility of change C,
-dead at the last step. `07`'s places dodge this class of failure through pre-declared `Ruin` nodes;
-**factions have no placeholder equivalent**, because a faction is not a node on a map. A prose handoff
-is not a contract, so here is the contract. `05`'s author owns the row; **this is exactly what `06`
-hands over, and in exactly what form.**
+**v2 handed the chartering act to `05` in a sentence, and `05` shipped eight action rows, none of them
+a charter.** So a bloc could reach `in-schism`, its project could become a founding claim, and **the
+claim had no executor in any of the three documents that shared the seam** — the marquee possibility of
+change C, dead at the last step. `07`'s places dodge this class of failure through pre-declared `Ruin`
+nodes; **factions have no placeholder equivalent**, because a faction is not a node on a map.
+
+**v3: `05 part 2 §5.4` now ships `act.charter` and the seam is closed.** This section is `06`'s half of
+it, stated as a contract rather than a sentence — **exactly what this page hands over, and in exactly
+what form** — so that a later edit to either side has something to fail against. Every row below is
+checked against `05`'s shipped row, and **where the two differed, `05`'s choice was adopted**, not
+argued with (noted inline).
 
 | `05`'s `act.charter` needs | what `06` supplies | where it comes from |
 |---|---|---|
 | **gate term** | `bloc.state == in-schism` — a form field on a stored entity, readable at the boundary, terminal and irreversible (§3.4), so it cannot flicker the gate | `fm.bloc`'s `bloc.open_to_schism` transition |
 | **the founding `ethos`** | the vector `practice(members(b))` **evaluated once, at the schism season, and passed by value**. Membership is derived (§3.1), so the vector is read from the graph at that instant and then belongs to the new faction's IMMUTABLE identity — `06` never stores it and never updates it | §2.2 `practice`, §3.1 `members` |
-| **the founding `seat_node`** | the tier node of `anchor_post` at the schism season. It is `identity`, so it is the one node the new faction can never lose (§7.3) | `bloc.anchor_post` (§3.1) |
-| **the founding membership** | the post ids in `members(b)` at the schism season, **as an argument, not as a stored list** — `05` uses them to decide which posts the new faction claims and which stay put | §3.1 |
+| **the founding `seat_node`** | **`05`'s choice, adopted:** the tier node of the *invoking* post, not of `anchor_post`. It is better — a wing founds **where the member who acts stands**, so the act has a location the player chose, and `06` supplies nothing here at all. It is `identity`, so it is the one node the new faction can never lose (§7.3) | `05 part 2 §5.4`'s `generates.identity.seat_node` |
+| **the founding membership** | the post ids in `members(b)` at the schism season, **as a derivation read at that instant, not a stored list** (C-8). `05` uses it twice: its third gate term (*"the invoking post is held by a member of that bloc"*) and its `post_revoke`/`post_grant` effect that transfers each member's post to the new faction. ⚠ **`05 part 2:205` cites this as "`06 §3.2`'s `members[]`" — the bracket notation predates C-8; the value is the same, the storage is not** | §3.1 |
+| **the founding `posture`** | **nothing — `05` reads the parent faction's `posture` directly** (`generates.form.posture`). Recorded so nobody adds a `06`-side supplier for a field that already has one | `05 part 2 §5.4` |
+| **the founding `treasury`** | **nothing — it opens at floor** (`05`'s `gauge: treasury opens at floor`), which is C-7's shape working as intended: a stock cannot be inherited by derivation, so a new institution starts poor | §4.6, `05 part 2 §5.2a` |
 | **the obstacle's subject** | the **parent** faction — the institution being split from. `06` names the subject; `05` owns `derive_ob` and the shape | §2.4 |
 | **provenance** | the schism `form.transitioned` Key, so `Tag.provenance` and `causes[]` run unbroken from the first `Grudge` to the new charter | §9.4 |
 
@@ -426,10 +435,13 @@ hands over, and in exactly what form.**
 success table, no entity creation, no naming. `06` emits the crossing fact and supplies five values.
 
 **Both outcomes are already declared above and neither is new machinery.** On a fire, `05` charters the
-entity; on a lapse, the bloc dissolves under §3.4 and the parent keeps a `Precedent` tag. ⚠ **If `05`
-does not ship `act.charter`, `06 §3.5` is unreachable and the `in-schism` state is a terminal sink with
-no exit** — say that plainly rather than let the seam read as closed. The falsifier in §11.1 is written
-against exactly that.
+entity; on a lapse, the bloc dissolves under §3.4 and the parent keeps a `Precedent` tag.
+
+⚠ **The residual risk is now a regression risk, not a hole.** `in-schism` is `reversible: false` (§3.4),
+so if `act.charter` is ever cut or its gate is narrowed, **the state becomes a terminal sink with no
+exit** and the failure is silent — no error, just blocs that reach `in-schism` and stop. §11.1's
+falsifier is an *end-to-end* test for exactly that reason: a unit test on either side would pass while
+the seam was broken, which is how the hole survived v2.
 
 ---
 

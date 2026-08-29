@@ -87,36 +87,76 @@ like stat blocks waiting for a governor to arrive rather than places things were
 
 ---
 
-## 2. The event row
+## 2. The event row — an actorless `05 §5` action row, not a second schema
 
-A row is **not** a random draw. It is a registry entry with a **gate** (deterministic; must hold) and,
-only once gated-eligible, a **roll** (the stochastic component the task names explicitly — conditioned,
-not instead of chance, but never chance alone).
+**Field by field, this catalogue's row and `05 §5`'s action row are one object, not two — the same
+finding `05p2:349-350` and `08:432-433` reach about their own seam, reached here independently.** A
+gate over state; `d_sigma` through `derive_ob`; effects total over four bands under the same P0-3
+audit; a per-row rate bound; one obstacle-site declaration each; the same `10 §2.1` candidate hand-off.
+**Two real deltas, not a parallel catalogue's worth:**
+
+1. **`remit_kinds: []`.** A `05` row is invoked by a post-holder (`05p2 §6`: *"the actor is the
+   post-holder invoking the module — never 'the faction'"*); a world event has no holder at all. An
+   empty remit is already a legal value in `05`'s own grammar — it is what marks a row nobody chooses
+   to invoke, herald-driven instead (§2.2 below).
+2. **`hazard_pool`.** `05`'s rows roll `attr[a] + attr[b] + POOL_BASE` — a named person's own two
+   attributes (`05p2 §6`). A `remit_kinds: []` row has no person to draw attributes from, so it needs
+   its own fixed pool size in the same slot `05` reserves for the actor's attribute pair. `hazard_pool`
+   *is* that slot's value for a holderless row, not a second pool concept.
+
+Everything else below is `05 §5`'s field, reused by name where `05` already declares it, and this
+catalogue's own addition only where it answers a question a `05` row never has to ask (a card family
+for the Slate's deck grammar, a per-row `cooldown` in place of the budget economy that naturally
+rate-limits an actor — see §3.2 — and `excludes`, needed here because two of *this catalogue's* rows
+compete for one target the way two of one *actor's* options compete through `appeal`, which a
+holderless row does not have):
 
 ```yaml
-event: <id>                          family: Opportunity | Crisis            # existing families only —
-                                                                              # §2.3 table below, no new member
-origin: exogenous                    # the ONE new field on the existing card shape (§1) — marks rows
-                                      # this document seeds, distinct from NPC/directive-seeded rows
+event: <id>                          # = 05's `action:` field, renamed for this catalogue's readability
+family: Opportunity | Crisis          # THIS CATALOGUE'S OWN — the Slate's deck grammar (§1), which a
+                                      # `05` row never carries because it is chosen by a holder, not
+                                      # drawn as a card; existing families only, §2.3, no new member
+origin: exogenous                    # THIS CATALOGUE'S OWN — the ONE new field on the existing card
+                                      # shape (§1), marking rows this document seeds
 scope: place | faction                # never "world" — the top-tier place node IS world scope (Overrides §2)
-triggers:                             # gate — state predicates, ALL must hold, never a roll (§2.1)
+remit_kinds: []                       # DELTA 1 — always empty here; §2.2 argues why this is not a
+                                      # weaker gate than `05`'s C1 clause, it is the clause's own
+                                      # inapplicable-by-construction case
+triggers:                             # = 05's gate half — state predicates, ALL must hold, never a
+                                      # roll (§2.1); `05`'s per-post gate and this catalogue's per-row
+                                      # gate are the identical shape at a different iteration axis (§6)
   - <predicate over identity, form, gauge band, or tag existence>
-hazard_pool: <int>                    # E-1's roller — the event's own base severity, a fixed die count
-resilience:
-  target_score: <gauge id>            # what `derive_ob` reads — the defender's score
+hazard_pool: <int>                    # DELTA 2 — stands in for 05's `attr[a]+attr[b]+POOL_BASE` where
+                                      # there is no actor to draw attributes from; the event's own base
+                                      # severity, a fixed die count
+resilience:                           # = 05's `ob_site` block, same fields, this catalogue's names
+  target_score: <gauge id>            # = ob_site.target — what `derive_ob` reads, the defender's score
   modifiers: <terrain/season adjustment, a property of THIS target in THIS instance>
-  M_max: <number>                     # REQUIRED — 01 §6.1.1 pt.3's obligation on every derive_ob site (§2.2)
-cooldown: <int seasons, ≥ 1>          # REQUIRED — §3.2
-excludes: [<event id>, …]             # mutually exclusive this season, same shape as the card grammar
+  M_max: <number>                     # = ob_site.ob_modifier_max — REQUIRED, 01 §6.1.1 pt.3 (§2.2)
+cooldown: <int seasons, ≥ 1>          # THIS CATALOGUE'S OWN — REQUIRED, §3.2. `05`'s rows are
+                                      # rate-bounded by the actor's scarce `post.budget` instead; a
+                                      # holderless row has no budget to spend, so it needs an explicit
+                                      # per-row bound in its place, not a weaker one
+excludes: [<event id>, …]             # THIS CATALOGUE'S OWN — mutually exclusive this season; the
+                                      # holderless equivalent of two of one actor's options competing
+                                      # through `appeal`, which is unavailable here (§6)
 durability_bp: <int>                  # the candidate contract's realized-state term — §5, 10 §2.1
 identity_touch_bp: <int>              # the candidate contract's realized-state term — §5, 10 §2.1
 mandatory: <bool>                     # default false — 10 §5.4's rare, enumerated bypass
-deposits:                              # leaves 1–2 ONLY — never 3 or 4 (§2.3)
+deposits:                              # = 05's `effects:` field, this catalogue's name — leaves 1–2
+                                      # ONLY, never 3 or 4 (§2.3)
   overwhelming: [...]   success: [...]   partial: [...]   failure: []   # TOTAL over all four bands (P0-3)
 follow_on:                             # a Tag, never a scheduled Key (§2.4 — J-N)
   on_fire: {tag: Precedent, key: "we_cooldown:<event>:<target>", ttl: <cooldown>}
 emits: world.event_fired               # blocked on P0-1 (`00 §8`), named here so the blocked work is specific
 ```
+
+**What this is not.** Renaming `event:`/`resilience:`/`deposits:` to `05`'s `action:`/`ob_site:`/
+`effects:` outright, rather than declaring them as aliases, is `05`'s call to make across both
+catalogues at once — a rename this document does not perform unilaterally on a registry block `05`
+does not own. What this section commits to is narrower and load-bearing regardless of that naming
+call: **there is one schema**, checkable field-for-field against `05 §5` above, and **the two modules
+that used to process it are retired in favour of `05`'s own** (§6).
 
 ### 2.1 The gate — conditioned, never rolled for its own sake
 
@@ -166,8 +206,9 @@ is deliberately **not used** as a target anywhere in this document; §7's Altoni
 
 **No actor, so `remit` does not gate this.** ED-IN-0201's "no leader, no action" clause (`00 §5`) binds
 modules a **post-holder** invokes. A world event has no holder — weather does not sit a post — so the
-C1 gate is inapplicable by construction, not overridden. `we.fire`'s `remit: []` records this the same
-way `substrate.form` does (`01 part2 §12`): herald-applied, never post-invoked.
+C1 gate is inapplicable by construction, not overridden. Every row's `remit_kinds: []` (§2) records
+this the same way `substrate.form` does (`01 part2 §12`): herald-applied, never post-invoked — and the
+same value `05`'s own grammar already accepts, not a second convention (§2 above).
 
 ### 2.3 What a world event's effects may do, and may not
 
@@ -489,11 +530,27 @@ world_events:
     emits: world.event_fired
 
   - event: we.route_severed
-    family: Crisis                origin: exogenous     scope: place        # targets a waypoint node
+    family: Crisis                origin: exogenous     scope: place        # targets the SETTLEMENT a
+                                                                              # severed route serves,
+                                                                              # never the terrain tile
+                                                                              # the route crosses. §4's
+                                                                              # own load check catches
+                                                                              # exactly the prior draft's
+                                                                              # error: a mountain-pass or
+                                                                              # coastal waypoint is not a
+                                                                              # `place` entity and owns
+                                                                              # no gauge — the roster is
+                                                                              # 37 settlements plus Ruin
+                                                                              # placeholders, full stop
+                                                                              # (`07 §1.1`)
     triggers:
-      - place.terrain in {mountain_pass, fjord_coast, coast}   # where weather can sever a physical
-                                                                 # route at all — the real terrain set
-      - place in adjacency(<any settlement's traced grain route>)     # settlement_layer_v30.md:816-826
+      - place.kind not in {Ruin}                                 # a real, active settlement
+      - place has a traced grain route whose path crosses terrain in
+        {mountain_pass, fjord_coast, coast}    # settlement_layer_v30.md:816-826 — the dangerous
+                                                # terrain is a fact about the ROUTE'S PATH, read off
+                                                # the adjacency graph (§2), never off `place.terrain`:
+                                                # the targeted settlement may itself sit on plains and
+                                                # still depend on a route that crosses a pass
     hazard_pool: 8
     resilience: {target_score: condition.defense, modifiers: 0, M_max: 0}
     cooldown: 2

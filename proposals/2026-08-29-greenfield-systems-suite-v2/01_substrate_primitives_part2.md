@@ -412,8 +412,8 @@ and the thinnest surface. Everything below is **read-only**; the substrate expos
 
 **Substrate objects here: 6 entity kinds · 7 tag kinds (§3.1; `Ambition` is `09`'s, O-A1) · 6 adopted
 relation kinds + 3 scope extensions + Knot held separately · 3 converters · 4 primitives · 2 extensions.
-Surface affordances: 3 reads, 0 verbs.** If a later document's surface table is longer than its substrate table, that document has the
-ratio backwards.
+Surface affordances: 3 reads, 0 verbs.** If a later document's surface table is longer than its
+substrate table, that document has the ratio backwards.
 
 ---
 
@@ -580,10 +580,9 @@ list and the `## Overrides` block — judgments, not checks.
 **Necessary** — four primitives, six entity kinds, **seven** tag kinds. The relation taxonomy is
 **adopted, not invented**, so its necessity argument is PP-724's own decision log (`:669`) rather than a
 claim this page has to make; the **three** additions occupy a scope PP-724 declares out of bounds. §10
-records seventeen candidates refused, four of them cut because something on disk beat them — and the two
-newest refusals are the sharpest, because in both cases the thing on disk was **this page's own draft**:
-`Memory` lost to the ruled `Holding` grammar (O-6) and a person-side loyalty meter lost to an edge kind
-(§7.2.1). **Robust** — the failure
+records seventeen candidates refused, **four** of them cut because something on disk beat them — and the
+newest of the four is the sharpest, because the thing beaten was **this page's own draft**: `Memory`
+lost to the ruled `Holding` grammar (O-6). **Robust** — the failure
 directions the corpus measured are closed by arithmetic: an unrecoverable pinned gauge by the geometric
 law, a flickering threshold by the hysteresis band, and **a silently-dead resolution by the
 commensurability gate** (§6.1), which is shape-aware and so does not false-pass an opposed site

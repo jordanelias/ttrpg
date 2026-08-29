@@ -1,6 +1,8 @@
 # The Slate — Inertia, Contracts and Property Audit (part 2)
 
 ## Status: PROPOSED (2026-08-29) — held back from ratification-on-merge
+## Version: v3 — §6 received from part 1 · §11.2 stale `pressure` loop restated · §11.4 dominance hand-off
+## · claims 12–15 · §11.5 fifth weak point
 ## Reads: [`10_the_slate_and_salience.md`](10_the_slate_and_salience.md) — **part 1 first; this continues it**
 ## Part 1: §§0–5 (the override list, the funnel numbers, the candidate contract, the cast gate,
 ## the two orderings, truncation with its proofs)
@@ -291,7 +293,7 @@ do apply to a selection function.
 
 | # | Claim | Falsifier |
 |---|---|---|
-| **1** | **This document designs no salience function** (§0) | Grep every score expression here against `narrative_engine_design_v2_churn.md:239-246`. A term appearing here that is not one of the ratified six — or the struck **novelty** term reappearing — falsifies it |
+| **1** | **This document designs no salience function** (§0) | Grep every score expression here against `narrative_engine_design_v2_churn.md:239-246`. A term appearing here that is not one of the ratified six — or the struck **novelty** term reappearing — falsifies it. **⚠ v3's derived horizon (§4.2) is NOT a seventh term:** `imminence` is one of the ratified six and was already in `depth_score`; what v3 adds is a *producer for its input*, which is why claim 15's second assertion (membership invariant under `horizon`) is the one that matters |
 | **2** | **Truncation is bounded:** `\|Slate\| ≤ B` in every reachable state (§5.2) | A property test over random `(\|C\|, \|M\|, \|E\|)` triples asserting `\|Slate\| ≤ B`. **Separately measurable and NOT assumed:** the frequency of `\|M\| ≥ B` over a seeded 50-season campaign. If it exceeds a stated rate, the mandatory enumeration is too wide and §5.4 is wrong |
 | **3** | **Truncation is monotone** (§5.3) | A property test: sample a candidate set and a comparator, raise one candidate's `cast_score`, assert it did not leave the Slate and that no candidate ranked below it entered. **Mutation check that the proof is load-bearing:** redefine the exempt set by a score *threshold* instead of a count *cap* and confirm the test then fails |
 | **4** | **P-A — a candidate's outcome does not depend on whether any other was surfaced** (§6.3) | Run a seeded season twice with identical state, differing only in which Slate items were attended, with all attended items forced to the AI policy. Assert the resulting world state is **bit-identical**. **This is the single most important test in the document.** Mutation check: replace the per-candidate substream with a shared sequential stream and confirm it fails |
@@ -308,8 +310,11 @@ do apply to a selection function.
 | **15** *(v3)* | **`imminence` has a producer and it cannot reach `cast_score`** (§4.2) | Two assertions in one test: that `sl.rank` derives a non-constant `horizon.band` over a seeded season's candidate set, **and** that permuting every candidate's `horizon` leaves the Slate's *membership* bit-identical. The second is the load-bearing half — it is what keeps the derivation on the render side of the ratified severance. **Mutation check:** let `horizon` into `cast_score` and confirm the second assertion fails |
 
 **On guards (`00 §8` P0-4, `CLAUDE.md §0.1` point 5).** Every test above is load-bearing on **the
-game**: 2, 3, 5 and 9 on whether the player's season is coherent; 4 and 6 on whether the attention
-system is honest; 7 on a canon constraint. **None guards apparatus.**
+game**: 2, 3, 5, 9 and 12 on whether the player's season is coherent; 4 and 6 on whether the attention
+system is honest; 7 on a canon constraint; 13 on whether the player is ever told what the world did;
+14 on whether one seam has one answer; 15 on whether a ratified severance survives a fix that touches
+it. **None guards apparatus.** Note 11 is a *measurement*, not a guard, and §1.3a is explicit that it
+now cuts in two directions.
 
 ### 11.2 Loops, each with its bound
 

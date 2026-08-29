@@ -183,7 +183,11 @@ nothing** — all five read state at the accounting boundary — which is why §
     - {name: faction.weight,     bucket: gauge, writable: false, owner: fm.derive}
     - {name: faction.force,      bucket: gauge, writable: false, owner: fm.derive}   # units: 12 owns them
     - {name: bloc.pull,          bucket: gauge, writable: false, owner: fm.derive}
-    - {name: bloc.members,       bucket: gauge, writable: false, owner: fm.derive}   # v3, C-8: §3.1
+    # v3, C-8 (§3.1). `bucket: gauge` is 00 §7.1's declared WART, and this row shows it at its worst:
+    # members is a SET of post ids, not a scalar. The bucket enum has no home for a derivation, and
+    # inventing a fifth bucket is the error 01 exists to prevent — so the falsifier does the work:
+    # `writable: false` guarantees it never acquires a gauge instance. Reported to 01 with the rest.
+    - {name: bloc.members,       bucket: gauge, writable: false, owner: fm.derive}
   form: []
   transitions: []
   disclosure:
@@ -319,7 +323,7 @@ they could not diverge, one would be the other's magnitude variant and this docu
 | charter lapse | the patron's derived footing at the boundary | privileges lapse automatically; nobody revoked anything (`settlement_layer_v30.md:651-661`) |
 | dissolution | the head post's `holder_id`, and whether `04` yields any candidate who both qualifies **and** accepts, for `DISSOLVE_DWELL` seasons | the faction stays Silent — recoverable, and that is the point |
 | bloc dissolution *(v3)* | `\|members(b)\| < 2` **and** `cohesion ≤ θ_dissolve` — the gauge term is what keeps a derived-membership gate legal under `01 §2.4` (§3.4) | the bloc stays in its current state |
-| charter *(v3, §3.5a)* | **`05`'s gate, not this page's** — `06` supplies `bloc.state == in-schism` plus five values and emits the crossing fact | **`05` has no such row today. If it never lands, `in-schism` is a terminal sink** — §11.1's falsifier is written against exactly that |
+| charter *(v3, §3.5a)* | **`05`'s gate, not this page's** — `05 part 2 §5.4`'s `act.charter` reads `bloc.state == in-schism`, a `founding_claim` Precedent, and bloc membership; `06` supplies the values and emits the crossing fact | the claim stands and the bloc waits. ⚠ `in-schism` is `reversible: false`, so **if `act.charter` is ever cut the state becomes a silent terminal sink** — §11.1's end-to-end falsifier is written against exactly that |
 
 ### 9.3 ⚠ J-N — no cross-season latency, and this page does not assume any
 
@@ -403,7 +407,7 @@ loss statements, the `## Overrides` block, and §8's under-distillation defence 
 | **No aggregate is written, and exactly one faction stock is** (§1, §4.6, §8) | **two halves, and v3 needs both.** (a) no `writable: false` state name appears as a gauge id in `references/descriptor_registry.yaml`, and no `fm.derive` row is declared writable; (b) **exactly one faction-scoped gauge id in this document is `writable: true`, and it is `faction.treasury`** — a second one is a new stored faction stat and the thing §1 forbids. Half (b) is what keeps C-7 from being a hole in AU-1 rather than an exception to it | the write rule itself; it is the one hazard the `bucket:` wart opens |
 | **The treasury is a stock and not an aggregate** (§4.6) | a test that `faction.treasury` has **no derivation** anywhere in the suite — no function computes it from current state — and that its only writers are `fm.fisc`'s boundary deposit and `05`'s spends. **If anyone writes a `treasury()` derivation, the C-7 argument is false and the row should go back to `fm.derive`** | the muster economy: whether `05 part 2:68` can be built at all |
 | **Bloc membership is derived, never stored** (§3.1, C-8) | a test that no `bloc` entity carries a persisted `members` field, that `fm.bloc`'s `form:` names only `state`, and that `members(b)` recomputed twice in the same season from the same graph returns the same set. **Plus the negative:** mutate a `patronage` edge inside a bloc and assert `members(b)` changes at the *next read* with no transition having fired | the exact defect this suite prosecutes as `01`'s O-3 — a stored snapshot of a graph fact |
-| **A schism can finish** (§3.5a, T2-1) | **an end-to-end test, not a unit one:** a seeded campaign in which a bloc reaches `in-schism` **and a new faction entity exists afterwards** whose `identity.ethos` equals `practice(members)` at the schism season and whose `charter_season` is that season. **If `05` ships no `act.charter`, this fails and `in-schism` is proved a terminal sink** — which is the honest verdict, not a missing test | the marquee possibility of change C: a new institution emerging from inside an old one |
+| **A schism can finish** (§3.5a, T2-1) | **an end-to-end test, not a unit one:** a seeded campaign in which a bloc reaches `in-schism` **and a new faction entity exists afterwards** whose `identity.ethos` equals `practice(members)` at the schism season and whose `charter_season` is that season. **Unit tests on either side pass while the seam is broken — which is how v2 shipped with no charter at all** — so the test has to span both | the marquee possibility of change C: a new institution emerging from inside an old one |
 | **Divergence is bounded without a clamp** (§2.3) | an arithmetic test over the registry alone: for every faction, `ethos` and every `conviction_projection` normalise to `Σ\|w\| = 1`, therefore `divergence ∈ [0,1]`. **Fails at load** if any ethos row is unnormalised | the difference between a bounded measure and one that needs a clamp nobody checks |
 | **`divergence` is `None`, not `0.0`, at zero seated posts** (§2.3 pt 3) | a test constructing a faction with every post vacant and asserting every consumer **declines to fire** rather than reading perfect alignment | the Silent band behaving as succession pressure rather than as a healthy institution |
 | **Blocs cannot form on spiritual ties** (§3.2, ED-POL-11) | a test that the bloc connectivity set contains exactly PP-724's six kinds and **excludes `knot`**; and that a faction whose officers share only `knot` edges produces **no** bloc | the anti-conflation ruling, honoured by construction |
