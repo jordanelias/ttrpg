@@ -34,9 +34,9 @@ something already on disk beat it — *"may the best ideas win"* cutting against
 |---|---|---|---|
 | **O-A1** | `01 §3.1`'s closing sentence — *"Six kinds, and the enum closes again at six"* | this suite's own `01` | **Seven.** A project declaration is a forward commitment; every one of the six records something **realized**. The two-part test `01 §3.1` itself specifies is run in §2.1, and the enum closes again at seven. This is `01`'s own procedure executed, not a bypass of it |
 | **O-A2** | `01 §5.2`'s **`progress` Gauge** row — *"`progress` (v2) · any project owner"* | this suite's own `01` | **CUT. Progress is derived at read, never stored.** A stored progress is an aggregate over the project's advance terms, and **no aggregate is ever written** (`01 §2.1`, AU-1). This is structurally the same defect `01 §7.3` caught in v1's edge disposition, one document later. §3 |
-| **O-A2b** | `references/module_contracts.yaml:343`'s `{name: "projects", bucket: clock, writable: true}` — canon stores project progress as a monotone 0→10 clock | **canonical contract** (`political_dynamics_keys_migration_v30.md:6` is `## Status: CANONICAL`) | A storage divergence, recorded rather than hidden. This design derives the same number. **The ratchet case is reproduced exactly** — §3.2 shows the monotone counter falling out of the append-only tag ledger — so a port that keeps canon's stored clock and one that derives it fire on the same season. Only the write leaf differs, and only one of the two obeys AU-1 |
+| **O-A2b** | `references/module_contracts.yaml:343`'s `{name: "projects", bucket: clock, writable: true}` — canon stores project progress as a monotone 0→10 clock | **canonical contract** (`political_dynamics_keys_migration_v30.md:6` is `## Status: CANONICAL`) | A storage divergence, recorded rather than hidden. This design derives the same number, and **the ratchet case is reproduced exactly** (§3.2), so a port keeping canon's stored clock and one deriving it fire on the same season. Only the write leaf differs — and only one of the two obeys AU-1 |
 | **O-A3** | `00 §9.2`'s three proposed key types **`project.declared` / `project.fired` / `project.lapsed`** | this suite's own `00` | **CUT as duplicates. Three of the four already exist and are registered** under ED-935: `mechanical.project_advanced` (`key_type_registry_v30.md:446`), `state.project_completed` (`:691`), `state.project_failed` (`:710`), all with `emitting_systems: [npc_behavior]` and live contract edges at `module_contracts.yaml:318-320, :333-335`. Only **formation** is missing, and `audit/2026-08-11-world-schema-gap-audit/01_gap_register_part2.md:281` (G-29) already proposed `state.project_formed` for it. §10 |
-| **O-A4** | `systems/settlements/governance_play_redesign_v1.md:241` — *"every significant NPC **advances their ambition by 1**… unless the player or another actor intervened"* | **PROPOSAL, unratified** (`:3`) | Its **schema and its argument are adopted** (§5, §9). Its **advance rule is replaced**: a `+1` per season on a stored counter is a timer whose only obstruction is a bespoke intervention, and it is exactly the shape the delta brief names as failing. Here advance is a **read of world state**, so obstruction is *any* act that moves a term the project reads — and needs no verb of its own |
+| **O-A4** | `systems/settlements/governance_play_redesign_v1.md:241` — *"every significant NPC **advances their ambition by 1**… unless the player or another actor intervened"* | **PROPOSAL, unratified** (`:3`) | Its **schema and its argument are adopted** (§5, §9); its **advance rule is replaced**. A `+1` per season on a stored counter is a timer whose only obstruction is a bespoke intervention. Here advance is a **read of world state**, so obstruction is *any* act that moves a term the project reads — and needs no verb of its own |
 
 **Inherited, not re-decided:** `00 §5.3` O-6 — the **138-arc calibration set is evacuated**, so the
 instruction at `narrative_engine_design_v2_churn.md:91` (*"the compiled generator must reproduce them
@@ -524,8 +524,7 @@ round (`00 §2.3` point 4).
 
 ### 9.1 The payoff — long-range agency from a small verb set
 
-This is the argument the whole document exists to make, and it is the answer to the obvious objection
-that `00 §2.2`'s single-digit verb budget makes a shallow game.
+The answer to the obvious objection that `00 §2.2`'s single-digit verb budget makes a shallow game.
 
 **Every other verb in this suite resolves inside one season.** An appointment, a directive, a contest,
 a response to a Slate item — each is a move whose consequence lands now. A player with only those
@@ -583,10 +582,9 @@ stand.** This section's contribution is that the blocked work is now **one type 
 needs — which is convergent evidence that G-29's proposal was right before this design existed.
 
 **One adjacent defect, recorded not fixed** (found while verifying): `module_contracts.yaml:1418`
-still annotates all three registered types `[unreg]` in the canonical accounting-sequence block,
-while `:362` and `:364` record that ED-935 registered them on 2026-06-14. **The file contradicts
-itself about ED-935.** G-29 found the same thing. It is an IN-lane contract-truth item, it is not this
-suite's to fix, and no design here depends on it.
+still annotates all three registered types `[unreg]`, while `:362` and `:364` record that ED-935
+registered them on 2026-06-14 — **the file contradicts itself about ED-935.** G-29 found the same.
+An IN-lane contract-truth item, not this suite's to fix, and nothing here depends on it.
 
 ### 10.2 The registry rows
 
@@ -692,17 +690,16 @@ document holds itself to, reproduced rather than paraphrased:
 | Considered | Verdict | Why |
 |---|---|---|
 | a **Project entity kind** (a seventh) | **rejected** | it would need its own store, sweep, provenance rule and disclosure contract — all of which Tag already has. §2 |
-| a stored **`progress` Gauge** | **CUT** (O-A2) | an aggregate over the advance terms, and no aggregate is ever written. §3 |
+| a stored **`progress` Gauge** | **CUT** (O-A2) | an aggregate over the advance terms; no aggregate is ever written. §3 |
 | a **`+1` per season** advance rule (`governance_play_redesign_v1:241`) | **replaced** (O-A4) | a timer whose only obstruction is a bespoke intervention. §5 |
-| an **`am.obstruct`** verb | **rejected — and this is the document's best cut** | obstruction is *any* verb that moves a term a project reads. Adding the verb would make obstruction intentional-only and would put a project on the player's menu. §5 |
-| an **`am.abandon`** verb | **rejected** | it is letting the `ttl` run out, which the player already does by not acting — and the residue is the same either way |
-| an **`am.reprioritise`** verb | **rejected** | it is declaring a different project, which `am.declare` is |
-| a **project→project dependency graph** | **rejected** | a predecessor project's residue is a Precedent tag, which is already a legal advance term. The graph is derived by walking `causes[]`, not stored. §7 |
-| an **arc object**, an arc store, or an arc scheduler | **rejected** | §7 — an arc is a projection of the one beat stream (`churn §1`, ratified). A second store would fork save/replay and the causal graph |
+| an **`am.obstruct`** verb | **rejected — the document's best cut** | obstruction is *any* verb that moves a term a project reads. The verb would make obstruction intentional-only and put a project on the player's menu. §5 |
+| an **`am.abandon`** / **`am.reprioritise`** verb | **rejected** | abandoning is letting the `ttl` run out, which the player already does by not acting; reprioritising is declaring a different project |
+| a **project→project dependency graph** | **rejected** | a predecessor's residue is a Precedent tag, already a legal advance term; the graph is derived by walking `causes[]`. §7 |
+| an **arc object**, store or scheduler | **rejected** | §7 — an arc is a projection of the one beat stream. A second store would fork save/replay and the causal graph |
 | three new key types (`00 §9.2`) | **CUT** (O-A3) | three of the four moments are registered already. §10.1 |
 | a **cross-season advance carry** | **rejected as non-existent, not as unwanted** | §8 — the transport is not in the tree (**J-N**) |
-| a **project-specific salience term** | **rejected** | the Light Function is ratified and `10` owns it. §11.1 |
-| **decay on `progress`** | **rejected for ratchet kinds, structural for the rest** | §3.2 — monotonicity comes from the append-only tag ledger, not from an exemption to `01 §5.1` |
+| a **project-specific salience term** | **rejected** | `10` owns the light. §11.1 |
+| **decay on `progress`** | **rejected for ratchet kinds** | §3.2 — monotonicity comes from the append-only tag ledger, not from an exemption to `01 §5.1` |
 
 ---
 

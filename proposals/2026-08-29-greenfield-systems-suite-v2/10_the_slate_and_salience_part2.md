@@ -220,7 +220,7 @@ is supplied by the resolver, not by the Slate. **A dominant response is a defect
 option set, not in the Slate** — and the Slate cannot mask one, because it can neither add nor remove
 a response (C-5).
 
-### 11.5 The three weakest points, named rather than buried
+### 11.5 The four weakest points, named rather than buried
 
 1. **P-B is asserted and unverified**, and it depends on a fork Jordan has not closed (fork C, the
    tolerance) plus a reading of a ruled doctrine that is itself filed as needing him (ED-SC-0024,

@@ -53,12 +53,10 @@ about a fact of the world — is a **Phase-2 corpus item and is not designed her
 
 ## 1. The problem, restated after the critique
 
-v1 `02` satisfied four requirements — total, conditioned, non-uniform, deterministic — and it did so
-by drawing a person **once**. The critique's root cause 1a is that this makes a character an
-outcome rather than a history: two people with the same drawn numbers are the same person, and
-nobody can *become* someone, in generation or in play.
-
-Three things change, and only three:
+v1 `02` satisfied four requirements — total, conditioned, non-uniform, deterministic — by drawing a
+person **once**. Root cause 1a is that this makes a character an outcome rather than a history: two
+people with the same drawn numbers are the same person, and nobody can *become* someone. Three
+things change, and only three:
 
 | | v1 | v2 |
 |---|---|---|
@@ -279,13 +277,11 @@ grants:                    # every member is a leaf write; see §4 for the close
   tag:         {kind: Precedent, count: 0..1}
 ```
 
-**Why two rows and not one.** The transition is *how a person's shape may change* and belongs with
-every other transition, where a single grep answers "what can move a person's life stage". The grant
-table is *what the world contains* and belongs with project kinds, event rows and the caste matrix.
-Merging them would put a vocabulary and a catalogue in one file — the failure ED-IN-0200 names.
-
-**A stage row is data.** Adding a stage, a flaw or a belief proposition is a row, never a branch
-(`00 §6` principle 3). Nothing in this design names a faction, a place or a person.
+**Why two rows and not one.** The transition is *how a person's shape may change*, so a single grep
+answers "what can move a person's life stage"; the grant table is *what the world contains*. Merging
+them puts a vocabulary and a catalogue in one file — the failure ED-IN-0200 names. **A stage row is
+data**: adding a stage, a flaw or a belief proposition is a row, never a branch (`00 §6` principle 3),
+and nothing in this design names a faction, a place or a person.
 
 ### 3.3 Age gates the stage count, and that is the whole of the age model
 
@@ -486,22 +482,20 @@ already exists in code and **nothing produces it**: `beliefs.add_belief` has no 
 | **what happens when one is given up** | a `Precedent` **Tag** — canon's Scar | 2 — tag append |
 
 **Why a Gauge and not a Tag.** `01 §3.1` closes the Tag enum at six and demands a two-part argument
-for a seventh; this design **does not open it**. A belief needs the two things a Tag deliberately
-lacks and a Gauge structurally has: a **rest value** — the prior the person's origin supplies, so an
-unreinforced belief drifts back toward what their caste, place and institution ambiently teach —
-and **geometric decay toward it** (`01 §5.1`), which is exactly the right dynamics for conviction in
-a proposition and exactly the wrong dynamics for salience-of-a-memory.
+for a seventh; this design **does not open it**. A belief needs the two things a Tag lacks and a Gauge
+has: a **rest value** — the prior the person's origin supplies, so an unreinforced belief drifts back
+toward what their caste, place and institution ambiently teach — and **geometric decay toward it**
+(`01 §5.1`). Right dynamics for conviction in a proposition; wrong dynamics for salience of a memory.
 
-**Why the gauge-count objection does not apply here, though it killed gauge-per-memory.** `01 §3.2`
-refused a Gauge per Memory because the count grows with everything anyone ever saw. **Beliefs are
-capped at three per person by canon**, not by a parameter this document chose. That difference —
-a cited bound versus an unbounded ramp — is the whole of the argument, and if canon's cap moves, this
-decision must be re-examined rather than tuned.
+**Why the gauge-count objection does not apply, though it killed gauge-per-memory.** `01 §3.2` refused
+a Gauge per Memory because the count grows with everything anyone ever saw. **Beliefs are capped at
+three per person by canon**, not by a parameter this document chose. A cited bound versus an unbounded
+ramp is the whole argument — and if the cap moves, this decision is re-examined, not tuned.
 
 **Canon's own precedent for the shape.** The `truth` track is already a 0–5 oscillating gauge whose
 poles are two competing accounts of what is true — *"5 = Solmund orthodoxy, 0 = Thread-truth
-acceptance"* — that *"varies by background"* and whose players *"see qualitative bands only"*
-(`clock_registry_v30.md:71`). A belief gauge is that shape, generalised to a registry of propositions.
+acceptance"* — that *"varies by background"*, players seeing *"qualitative bands only"*
+(`clock_registry_v30.md:71`). A belief gauge is that shape over a registry of propositions.
 
 ### 6.3 Revision — canon owns *when*, this document owns *where it is stored*
 

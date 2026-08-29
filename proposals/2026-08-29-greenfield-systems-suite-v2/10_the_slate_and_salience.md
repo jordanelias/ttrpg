@@ -41,8 +41,9 @@ does not have and cannot supply for itself:
 | **truncation to the scene budget**, proved bounded and monotone | it names a budget and a cap; the arithmetic of the cut is not written down |
 | **headless resolution and its invariance** — the property that makes the filter honest rather than a cheat | it is subtract-only *by rule*; nothing yet makes that true *by construction* |
 
-**If v2 needs a scoring term the ratified set lacks, that is a ruling request, not an edit.** This
-document requests none. Every score term named below is one of the ratified six.
+**Every score term named below is one of the ratified six**, and this document proposes no seventh.
+Under the amended authority it *could* — but §0.1 is where that option was exercised and declined, and
+a term proposed there would have gone in the `## Overrides` block like anything else.
 
 ### 0.1 Read on the merits, and kept — including the two terms I tried hardest to break
 
