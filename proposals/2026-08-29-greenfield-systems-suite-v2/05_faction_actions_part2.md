@@ -115,11 +115,9 @@ leaves?"* — which is the strongest signal available that it is not a wording p
 | examples here | `capacity(faction, tier)` (§2), `faction.weight`, `faction.footing`, `divergence` | `treasury`, `accrual.entitlement`, `post.budget`, every `condition.*` |
 | why the rule | a stored copy can disagree with the world; there is no correct setter | there is no other representation — a spend history is not derivable from anything else |
 
-`treasury` was mislabelled because *"sum of what my places yield"* **looks** like an aggregate, and it
-is one **until something spends from it.** The moment a spend exists the quantity is path-dependent and
-the aggregate label is simply wrong. **The precedent shipped a scale down and is exact:**
-`accrual.entitlement` is a place gauge that funds the levy channel and is `spent directly`
-(`07 §8.3`); nobody proposed deriving it.
+`treasury` was mislabelled because *"sum of what my places yield"* **looks** like an aggregate — and is
+one **until something spends from it.** The precedent shipped a scale down: `accrual.entitlement` funds
+the levy channel and is *spent directly* (`07 §8.3`); nobody proposed deriving it.
 
 **So `faction.treasury` becomes a faction-owned gauge**, and it must leave `fm.derive`'s state list —
 this is forced, not preferred. `00 §7.1`'s falsifier is *"no state name declared `writable: false` may
@@ -236,22 +234,19 @@ is verbatim `07 §9.2`'s argument for gating a growth threshold rather than re-r
 principle 4). It also fails P-iv the other way: a failed Declaration roll on a fired project is an
 irreversible loss on a routinely-reached roll, and §7 forbids exactly that.
 
-**Canon's ED-790 starting stat sheet is superseded structurally, which is the stronger claim than
-overriding it.** `settlement_layer_v30.md:1049-1063` gives a founded faction L 2 / PS 3 / I / W / Mil 1
-/ Int 2 / Sta 3. In this suite **every one of those quantities is a derivation** — `practice`,
+**Canon's ED-790 starting stat sheet is superseded structurally, which is a stronger claim than
+overriding it.** `settlement_layer_v30.md:1049-1063` gives a founded faction L 2 / PS 3 / Mil 1 / Sta 3
+and the rest. In this suite **every one of those quantities is a derivation** — `practice`,
 `divergence`, `footing`, `weight`, `force` are computed by `fm.derive` from what the faction holds, and
-`acceptance.{legitimacy,support}` are *place* gauges belonging to the places themselves. A founded
-faction therefore **cannot be given** starting values for them; it computes them on its first
-accounting boundary, and a weak new faction is weak because it holds four posts and one node, not
-because a table said `Mil 1`. **Three identity fields, one form field and one gauge at floor are the
-whole of a founding.** The only thing lost is Renown, which this suite does not carry at all — named
-here as a canon object deliberately not ported, not as an oversight.
+`acceptance.{legitimacy,support}` are *place* gauges belonging to the places. A founded faction
+therefore **cannot be given** starting values for them; it computes them on its first boundary, and a
+new faction is weak because it holds four posts and one node, not because a table said `Mil 1`. The
+only thing lost is Renown, which this suite does not carry at all — named as a canon object
+deliberately not ported, not as an oversight.
 
-**What this refuses to add.** No `faction_dissolve` (§7's no-elimination rule stands, and §1.2's
-vacancy path is the recoverable alternative); no charter roll; no faction-count cap — the bound is
-`06 §3.2`'s bloc-formation gate and `θ_coherence`, upstream, where it already exists. **A charter with
-no upstream bound would be the one loop on this page with no external term**, and it does not have one
-because it did not need a new one.
+**What this refuses to add.** No `faction_dissolve` (§7's no-elimination rule stands; §1.2's vacancy
+path is the recoverable alternative); no charter roll; no faction-count cap — the bound is `06 §3.2`'s
+bloc-formation gate and `θ_coherence`, upstream, where it already exists.
 
 *Emergent possibility lost if `act.charter` were cut:* **the game could not produce a new faction, at
 all, ever** — the world would ship with its factions and end with them, and change C's whole argument
