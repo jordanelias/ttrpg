@@ -716,10 +716,10 @@ expresses the game.**
 
 | loop | bound | gain |
 |---|---|---|
-| declare → advance → fire → consequence changes world → a term of another project moves → that project advances | **`PROJECT_CAP` per owner and the `ttl` horizon.** Every project ends: it fires (terminal) or it lapses (swept) | **unmeasured.** Campaign-reachable, so measurable with a control — `tools/balance_oracle.py` is the instrument, and this is a campaign-level change so both arms genuinely differ |
-| lapse → Precedent residue → an advance term of a successor project kind → declare | **the residue is a durable tag under `01 §3.3`'s dedupe**, so it refreshes rather than stacks; and each successor consumes a `PROJECT_CAP` slot | **unmeasured, and this is the loop most likely to run hot.** §5.1's escalation ladder is finite by declaration (`lawful → factional → violent/covert`), but nothing in the substrate enforces that a kind's successor chain terminates. **A registry check should require the successor graph to be acyclic**; it does not exist |
-| ratchet terms → progress → fire | **terminating by construction**: ratchet terms are monotone, threshold is fixed, fire is terminal | **bounded** — the only loop here with a proved bound, and it is the coup counter's own property, not this design's |
-| project fires → Slate candidate → player attention → player acts → a term moves | **the scene budget** (`10`), and the light is **subtract-only** (`churn:197-204`) so it cannot accelerate a project | **unmeasured**, and the severance is `10`'s to enforce, not this page's |
+| declare → advance → fire → world changes → another project's term moves → it advances | **`PROJECT_CAP` per owner and the `ttl` horizon.** Every project ends: it fires (terminal) or it lapses (swept) | **unmeasured.** Campaign-reachable, so measurable with a control — `tools/balance_oracle.py` is the instrument, and a campaign-level change makes its two arms genuinely differ |
+| lapse → Precedent residue → an advance term of a successor kind → declare | **the residue is a durable tag under `01 §3.3`'s dedupe**, so it refreshes rather than stacks; each successor consumes a `PROJECT_CAP` slot | **unmeasured, and the loop most likely to run hot.** §5.1's ladder is finite by declaration, but nothing in the substrate enforces that a successor chain terminates. **A registry check should require the successor graph to be acyclic**; it does not exist |
+| ratchet terms → progress → fire | **terminating by construction**: terms monotone, threshold fixed, fire terminal | **bounded** — the only proved bound here, and it is the coup counter's property, not this design's |
+| fire → Slate candidate → player attention → player acts → a term moves | **the scene budget** (`10`); the light is **subtract-only** (`churn:197-204`) so it cannot accelerate a project | **unmeasured**; the severance is `10`'s to enforce, not this page's |
 | obstruction → progress falls → owner's method escalates → new obstruction | **the `ttl` horizon and `PROJECT_CAP`** | **unmeasured** |
 | a Key-driven advance cascade within a season | **does not exist.** `DEFAULT_CASCADE_DEPTH_MAX = 0`, and `consumes:` is empty on all four modules (§8, §11) | **not a loop today.** If **J-N** rules for reactive chains this becomes a real loop with no bound yet |
 
@@ -728,10 +728,10 @@ expresses the game.**
 | gate | reads | fails to |
 |---|---|---|
 | `am.declare` eligibility | the owner's posts and their `remit`; the kind's `owner_binding`; one budget point | the kind is not in the option set — **an absence, not a penalty** (`01 §4.3`) |
+| `am.lapse` unreachability | any `required: true` term that is permanently false | no lapse |
 | `PROJECT_CAP` | the owner's live Ambition tags, counted | declaration unavailable until one ends |
 | `am.fire` threshold | the derived progress against the hidden threshold — **state only, never a received Key** | no fire; the project stays live |
 | `am.lapse` horizon | the Ambition tag's `ttl` against the season index — **elapsed time, a pure function** | no lapse |
-| `am.lapse` unreachability | any `required: true` term that is permanently false | no lapse |
 | `firing: false` | the registry row | the kind is never instantiated, and is **counted** in the honest-residue ledger (§1.1) |
 | successor-graph acyclicity | **nothing — this check does not exist** (§13.1) | **an open gap, stated rather than assumed** |
 

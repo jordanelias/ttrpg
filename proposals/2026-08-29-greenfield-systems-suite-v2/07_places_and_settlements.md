@@ -586,9 +586,7 @@ rows, with the harder half (the founding gate's content, the province-assignment
 deferred rather than fabricated. If a reviewer judges that trade not worth it, the fix is to delete
 §3.5 and accept `Outpost` as the true floor (§3.4) — nothing else in this document depends on it.
 
----
-
-## Property audit — falsifiers (per the author brief)
+### 11.3 Falsifiers — for every property this document claims
 
 | claim | falsifier |
 |---|---|
