@@ -49,10 +49,15 @@ Thread layer never sanctioned. **v1's bounded log-odds conditioning, entropy flo
 substream and totality** are carried with their reasoning intact; what changes is that they run **once
 per stage**, which makes the entropy floor *more* load-bearing (§3.5).
 
-**Out of scope, and named so the seam is visible.** A general **epistemic layer** — machine-comparable
-propositions held per agent with graded confidence and provenance, so two characters can disagree
-about a fact of the world — is a **Phase-2 corpus item and is not designed here.** §6 ships only the
-**creed-Belief** canon already names, and says where the seam is.
+**Not designed here, but no longer out of scope to compose on.** A general **epistemic layer** —
+machine-comparable propositions held per agent with graded confidence and provenance, so two
+characters can disagree about a fact of the world — was a Phase-2 item when an earlier draft of this
+document was written. **It has since been ruled** (five Jordan rulings,
+`proposals/2026-08-18-epistemic-propositions-and-provenance.md`), and §6 composes on it: a creed-Belief
+is a marked subset of the ruled `Holding` object, not a second one this document builds. §6 still owns
+only the **creed-Belief** semantics canon already names — the cap, the Scar, the fact that dropping one
+is a form transition — never the general layer itself, which is `npc_memory`'s (FI-owned, and still
+unbuilt — §6.2 names the dependency).
 
 ---
 

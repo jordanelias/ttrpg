@@ -85,7 +85,7 @@ so an `allegiance` row simply declares one:
 ```
 relation: allegiance      endpoints: (person → faction), ORDERED       # asymmetric by construction
 form(state) : {aligned, wavering, estranged}      # a per-kind state set, like every other kind's
-gauges      : allegiance.strength — a STORED gauge, private to this kind, bounded, geometric decay (§5.1)
+gauges      : allegiance.strength — a STORED gauge, private to this kind, −5…+5, geometric decay (§5.1)
 tags        : the favours, slights and oaths that moved it, each with provenance
 ```
 
@@ -106,6 +106,13 @@ political/institutional, which is exactly the side of ED-POL-11's line **patrona
 conflating patronage with the Knot, and this row is on the patronage side of that line, not across it.
 The three rulings govern person↔person bindings; this is the first person→*institution* binding the
 container has held.
+
+⚠ **The scale is declared, and declaring it was not optional.** `allegiance.strength` runs **−5…+5** —
+chosen to match `disposition.pc_npc` and `strain.<kind>`, the two edge gauges already on that scale,
+rather than minted. Without a ceiling this row would have joined `information` and
+`prac.thread_sensitivity` in §6.2's *scale undeclared* list, where **§2.3's `H_MIN`, §5.1's fixed-point
+falsifier and §6.1's commensurability gate are all three silently inert** — a new gauge added by the
+same page that prosecutes that hole. On −5…+5 it clears the gate in the `0–7` family's company (§6.2).
 
 **Why an edge and not a person gauge.** A person may stand differently toward four factions at once, so
 a gauge on the person would need a key — which is an edge with the naming hidden. The edge also gives

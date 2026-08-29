@@ -105,8 +105,8 @@ fix is to shorten canon's question set — never to move the derivation onto the
     - {name: person.life_stage,  bucket: entity, writable: true, owner: cg.stage}
     - {name: person.capability,  bucket: entity, writable: true, owner: cg.stage}
     - {name: person.traits,      bucket: entity, writable: true, owner: cg.stage}
-    - {name: person.beliefs,     bucket: entity, writable: true, owner: cg.stage}
-    - {name: credence,           bucket: gauge,  writable: true, owner: cg.stage}
+    - {name: person.beliefs,     bucket: entity, writable: true, owner: cg.stage}   # [prop_id], not a
+                                 # credence gauge — the Holding itself is npc_memory's, not owned here
     - {name: tag,                bucket: tag,    writable: true, owner: substrate.ledger}
   form:
     - {entity_kind: person, field: life_stage}
@@ -118,7 +118,8 @@ fix is to shorten canon's question set — never to move the derivation onto the
   disclosure:
     - {of: person.life_stage, inputs: published, presentation: exact, trigger: hidden}
     - {of: person.traits,     inputs: published, presentation: exact, trigger: hidden}
-    - {of: credence,          inputs: published, presentation: band,  trigger: hidden}
+    # no credence disclosure row — 02 declares no Gauge; a Holding's disclosure is npc_memory's to
+    # declare (§6.2's cut, part 1; the standing dependency is tracked at §11.3 below)
 
 - module: cg.draw
   parent: character_generation

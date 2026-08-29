@@ -516,7 +516,7 @@ hysteresis guard needs no campaign run.
 |---|---|---|
 | `disposition.pc_npc` | edge (PC↔NPC only — NPC↔NPC is **derived**, §7.3) | a bespoke loyalty scalar per subsystem |
 | **`strain.<kind>`** *(v2)* | edge, **declared per relation kind; the kinds never sum** (§7.3) | a bespoke wear counter per relationship kind |
-| **`allegiance.strength`** *(v2)* | edge (`allegiance` kind only — person → faction, §7.2.1) | a per-faction loyalty clock per arc; **the state the corpus's most duplicated arc shape reads** |
+| **`allegiance.strength`** *(v2)* | edge (`allegiance` kind only — person → faction, §7.2.1); **−5…+5**, the same scale the other two edge gauges already use | a per-faction loyalty clock per arc; **the state the corpus's most duplicated arc shape reads** |
 | `standing` · `exposure` | person | the public and private halves of nine parallel personal meters |
 | **`thread_sensitivity`** *(v2)* | person | a per-subsystem TS field; canon scales it 0–100 (`systems/overview/clock_registry_v30.md:72`) |
 | `acceptance.{legitimacy,support}` | place | per-settlement political acceptance |
@@ -754,7 +754,7 @@ below is from another family and was never a "score" in the sense Jordan's rulin
 | gauge | scale, and its source | verdict as a `derive_ob` target |
 |---|---|---|
 | attributes; `fac.*`; `set.legitimacy/popular_support`; `set.prosperity/defense/order`; `terr.fort_level` | 1–7 / 0–7 / 0–5 / 0–4, `engine/engine_params/descriptors.json` | **pass** |
-| `disposition.pc_npc`, `strain.<kind>` | −5…+5; PP-724 capacity 3/5/7 | **pass** |
+| `disposition.pc_npc`, `strain.<kind>`, **`allegiance.strength`** | −5…+5; PP-724 capacity 3/5/7 | **pass** — and `allegiance` was **scaled to −5…+5 in order to land here** (§7.2.1), rather than declared bounded-but-unscaled and joining the *scale undeclared* row below. A new gauge that cannot be checked by this gate is the defect this table exists to catch, and shipping one two rows above the row that names it would have been the sharpest possible version of it |
 | Piety Track 0–5 · Truth 0–5 · Momentum 0–4 | `systems/overview/clock_registry_v30.md` | **pass** |
 | Coherence 0–10 · Persuasion Track 0–10 · Church Attention Pool 0–10 | same | **borderline** — ob 5, P(Overwhelming) ≈ 0.41 at pool 18 and ≈ 0.001 at pool 5. Passes at a large `N_max`, fails at a small one. **Site-dependent, so the per-site form of the gate is what decides it** |
 | **Composure 3–21 · Concentration 5–35 · Stamina 5–47 · Health 13–55** | `derived_stats_v30.md` via `clock_registry_v30.md` | **FAIL.** These are damage and resource pools, not scores. Nothing in this suite targets them, and this row exists so nothing later does |
