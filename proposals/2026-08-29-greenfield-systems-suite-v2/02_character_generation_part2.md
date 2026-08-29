@@ -56,7 +56,7 @@ Conviction weights, Self-Other values, or cultural template assignments"* (`ques
 | what the player never touches |
 |---|
 | a stage row, a conditioning distribution, a `Δ_MAX`, a `p_floor`, an entropy floor |
-| a capability number, a conviction weight, a credence value, a TS or Truth number (**bands only** — `clock_registry_v30.md:71`) |
+| a capability number, a conviction weight, a Holding's confidence value, a TS or Truth number (**bands only** — `clock_registry_v30.md:71`) |
 | a flaw's `binds_when` predicate, a belief's revision band, an age gate's threshold — **triggers are hidden** (`01 §8`) |
 | the caste **matrix** — but its **verdict on a named candidate is published in full** (`04`; `00 §6` principle 5) |
 | whether a knot candidate passed canon's gate — they experience the relationship, not the roll |
@@ -257,7 +257,7 @@ the one-line loss statements throughout part 1, judgments rather than checks.
 | demand → generation → post filled → (later vacancy) → demand | demands come only from vacancies and scenes, both bounded by the map; satisfying one **removes** it | **not a gain loop** (carried from v1) |
 | stage `k` → conditions stage `k+1` → … | finite and age-gated; `reversible: false` on every stage transition, so no cycle exists | **bounded by construction** |
 | career stage → capability up → better outcomes → post retained → career stage | `N`-season period; one axis by one band per stage; `ATTRIBUTE_CEILING` clamps | **positive feedback, bounded above. Gain UNMEASURED** — no campaign has run long enough to see whether an incumbent becomes unbeatable before the ceiling binds. §3.3's upper reachability bar is the guard and it is unverified |
-| belief evidence → credence → revision → Scar → conviction shift (`character_canon §6.3`) → new belief | active set ≤ 3 by canon; canon's Scar ladder terminates at "3+ — crisis" | **gain UNMEASURED**; the escalation is canon's, not this document's |
+| belief evidence → Holding confidence → revision → Scar → conviction shift (`character_canon §6.3`) → new belief | active set ≤ 3 by canon; canon's Scar ladder terminates at "3+ — crisis" | **gain UNMEASURED**; the escalation is canon's, not this document's |
 | flaw binds → candidate → scene → challenge → transition | the Slate's scene budget (`10`) bounds how many reach the player; `challenge` is `reversible: false` | **bounded by the Slate** — why P0-5 orders `10` before F |
 
 ### 11.3 What this document depends on that could move
@@ -284,9 +284,16 @@ new registry file, no new stored primitive, no new Tag kind, no new Key type, no
 
 ### 11.5 The weakest claim in this document, named
 
-**That a belief belongs in a Gauge.** It rests on canon's `≤3` cap, and that cap is **PROVISIONAL**.
-If the cap moves — or if a later layer wants propositions held by *every* person about *many* facts —
-the gauge-per-belief count grows exactly the way `01 §3.2` refused for memories, and the correct
-response is to re-derive credence at read from tag data rather than to raise a limit. The falsifier
-is cheap and should be run before any belief content is authored: **count `credence` gauge instances
-in a seeded world and assert the per-person count is `≤ 3` and the world total is `≤ 3 × persons`.**
+**That `npc_memory` will exist, with a working content-address hash, before any creed-Belief content
+is authored.** An earlier draft's weakest claim — that a belief belongs in a Gauge — is resolved: §6.2
+cuts it in favour of the ruled `Holding`. What replaces it is a dependency this document cannot close
+from here. `npc_memory` is `## Status: DESIGN CALLS RULED … PROPOSED and unbuilt`
+(`proposals/2026-08-18-epistemic-propositions-and-provenance.md`), and that same document's own §10.3
+says the content-address hashing rule is still unspecified — *"if two agents hash the same claim
+differently, every property this design rests on fails silently."* Until both land, a `cg.stage` creed
+grant produces a `prop_id` with **no Holding anywhere to give it confidence**, and two generated
+people who should hold the identical claim (the same Movement doctrine, say) may silently fail to
+share one `Proposition.id`. **The falsifier, cheap and worth running before any belief content is
+authored:** once `npc_memory` exists, generate two people from the same Origin-stage row that grants
+the same content-registry belief, and assert their Holdings' `prop_id`s are identical — not merely
+equal in content, the same id, by construction of the hash.

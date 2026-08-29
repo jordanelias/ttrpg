@@ -608,12 +608,21 @@ advance_terms:
   # TWO-SIGNAL RESONANCE: both required. A bare grievance fizzles (conflicts_power_struggles.md:32)
   - {w: 1, required: true, term: "condition.order at or below <band>"}            # objective strain
   - {w: 1, required: true, term: "tag(place, Precedent, key=legitimating.*) exists"}  # sanction
-  - {w: 1, term: "acceptance.legitimacy at or below <band>"}
-  - {w: 1, term: "the strain band has held for >= 3 seasons"}          # §3.1's tag-age term kind
+  - {w: 1, term: "acceptance.legitimacy at or below <band>"}          # see the caveat below
+  - {w: 1, term: "tag age: the legitimating tag is >= 2 seasons old"} # §3.1's tag-age term kind
 threshold: 3        horizon: 8        stall_ttl: 8               # SHAPE PROPOSALS
 fire: {guaranteed: true, effect: post_revoke{post: <target>}}    # write leaf 3 — 04's pm.recall
 residue: {on_fire: Precedent:rising.succeeded, on_lapse: Precedent:rising.suppressed}
 ```
+
+⚠ **Two caveats on that row, both real.** (1) **"A gauge band SUSTAINED for N seasons" is not
+expressible** in §3.1's term grammar and the fourth term above is deliberately not it: only a gauge's
+*current* band is readable state, and a dwell counter would be a stored aggregate `01 §2.1` forbids. Where
+a shape needs duration, it must ride on a **tag** whose `created_season` records the crossing — which is
+what the row does, and it is the reason `tag age` was worth adding rather than a convenience. (2) The
+`acceptance.legitimacy` term is deliberately **not** `required: true`: that gauge currently has one
+depositor in this suite, so a kind whose formation *depended* on it would inherit that defect. If
+legitimacy gains routine depositors, promote the term; the kind works either way today.
 
 **`required: true` on both signals is the whole of two-signal resonance** — an objective strain **and**
 an independent legitimating tag, the Janissary-plus-fatwa shape, with the failure mode the research
