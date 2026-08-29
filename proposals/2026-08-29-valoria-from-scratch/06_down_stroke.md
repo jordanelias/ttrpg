@@ -29,13 +29,13 @@ Every term is one of:
 
 | Term type | What it changes | Real example |
 |---|---|---|
-| `PriceTerm(good, multiplier)` | the cost of an act involving *good* | Duke Vaynard's coastal blockade sets `salt × 3.5` in scope Grauwald coast |
+| `PriceTerm(good, multiplier)` | the cost of an act involving *good* | Goldenfurt's assize of bread, fixing the loaf below its scarcity price through a dearth |
 | `ProhibitionTerm(act, exempt_marks)` | forbids an act, except for marked persons | conscription order forbidding fishing-boat departure, exempt: Löwenritter-chartered vessels |
 | `LevyTerm(fraction, base)` | extracts a share at the next standing date | the grain levy funding the Baralta Crown Claim's counter-armament, `0.15 × hearth larder` |
 | `ExemptionTerm(act, marks)` | waives a cost or prohibition for marked persons | Vaynard's Examination-fee waiver for Southern Einhir apprentices |
 | `EntryStandardTerm(gate_delta)` | changes an admission gate's marks-test | the Kettlemakers raising the sponsorship bar after a caste-transgression scandal |
 | `ExcommunicationTerm(person_or_faction)` | strips Church-conferred marks and standing at every node in scope | the Dicastery of Doctrinal Adjudication against a Southern Einhir Canon |
-| `BlockadeTerm(node_pair, goods)` | prohibits transit of *goods* between two nodes | Almud's fleet closing Baralta's port to Altonian grain ships |
+| `BlockadeTerm(node_pair, goods)` | prohibits transit of *goods* between two nodes | Almud's fleet closing Baralta's port to Altonian grain ships; Duke Vaynard's coastal blockade closing the Grauwald coast to salt (§4) |
 | `TreatyClause(terms, collateral)` | any of the above, issued by two persons, with an optional bound act (§7) | the Elske–Alexios marriage treaty's trade-lane terms |
 | `OrdenanzaTerm(rule)` | a settlement's own standing market/conduct rule | Goldenfurt's market-day weighing ordinance |
 
@@ -140,21 +140,49 @@ A Dispensation changes nothing about this routine. It changes `current_claims(pe
 in the ledger, deposited by publication (§2) — and the routine, run again, returns a different set.
 **Worked case, the substrate's own:**
 
-Torvald Fiskersen, Southern Einhir, no post, lives at the fjord's edge outside Stillhelm. His fields:
-`capability` includes *owns a boat*; `ties` includes a Distant Knot with a smuggler cousin in
-Schoenland waters. Duke Vaynard's blockade `Dispensation(issuer=Vaynard, proposition="cut Grauwald's
-salt supply", scope=[Grauwald coast], terms=[PriceTerm(salt, ×3.5)])` publishes. The crier's cry reaches
-Torvald three days late and mangled (§2); his cousin's Knot-tell reaches him the same night, intact.
-Before the claim landed, `EV(smuggling run) < EV(sell salt at market)`. After it lands:
+Torvald Fiskersen, Southern Einhir, no post, lives at the fjord's edge outside Stillhelm, on the
+Grauwald coast. His fields: `capability` includes *owns a boat*; `ties` includes a Distant Knot with a
+smuggler cousin in Schoenland waters. Duke Vaynard's blockade publishes:
 
 ```
-EV(run) = (price_smuggled − price_home) × volume − p(detection) × penalty
+Dispensation(issuer   = Vaynard,
+             proposition = "cut Grauwald's salt supply",
+             scope    = [Grauwald coast],
+             terms    = [BlockadeTerm(node_pair = (Grauwald coast, external salt sources),
+                                      goods     = {salt})])
 ```
 
-The `×3.5` term is exactly the input that flips `price_smuggled − price_home` positive and past the
-risk term. `opening_set(Torvald)` now contains *run salt to Schoenland*. **Nobody authored this for
-him.** No opportunity object was created, targeted, or rolled for him; his own capability, his own tie,
-and one new claim, run through the routine every person is already run through, produced it.
+**The term stops the flow; it does not name a price** — an earlier draft of this trace encoded the
+blockade as `PriceTerm(salt, ×3.5)`, which is the issuer decreeing the *consequence* of his own act.
+That is the authored outcome this whole document exists to refuse, sitting in the one trace built to
+prove nothing was authored. A duke can close a coast. He cannot decree what salt will then be worth,
+and the difference is the entire down-stroke.
+
+The ×3.5 is therefore an **output**. Doc 13 §4 owns it: `price = base_value × demand/supply`, and the
+blockade removes the `import_flow` term from Grauwald's `supply`. Grauwald's own coastal holdings never
+produced salt (13 §2), so supply collapses toward zero against unchanged mouths and the local price runs
+up to roughly 3.5× base over the following season — a number nobody wrote down, reached by a formula
+that would have produced 1.8 or 9.0 from different holdings and would produce **1.0 in a settlement that
+makes its own salt**, where the identical decree is politically inert.
+
+The crier's cry reaches Torvald three days late and mangled (§2); his cousin's Knot-tell reaches him the
+same night, intact. Before the claim landed, `EV(smuggling run) < EV(fish as usual)`. After it lands, he
+runs doc 13 §4's carry EV over the route he can actually reach:
+
+```
+EV(run) = (price(destination) − price(origin) − transport_cost) × volume − p(interception) × penalty
+```
+
+**And the direction is INTO the blockaded coast, not out of it** — the earlier draft had him running
+salt *to* Schoenland, which is backwards on its own numbers: salt is dear at home precisely because the
+blockade made it scarce there, so the profitable act is to buy cheap in Schoenland waters and land it on
+the Grauwald coast at ×3.5. A blockade is worth running *inward*. That is what a blockade is, it is what
+every blockade in history has produced, and here it falls out of a subtraction rather than out of
+anybody's intent. `opening_set(Torvald)` now contains *land Schoenland salt on the Grauwald coast*.
+**Nobody authored this for him.** No opportunity object was created, targeted, or rolled for him; his
+own capability, his own tie, and one new claim, run through the routine every person is already run
+through, produced it — and Vaynard, who wanted Grauwald starved of salt, has manufactured the exact
+incentive that supplies it.
 
 **Explicit refusal.** This document does not define a `Quest`, `Opportunity`, or `Contract` object with
 a `target_person` field. Such an object requires an author to decide, per person, that this is the

@@ -163,7 +163,21 @@ slow progress. Study alone does not cross the barrier.
 
 **Gate on role, never on biography.** A practice is never a unique key. `rarity(practice, rank,
 node)` is *derived* by rolling up the containment tree exactly as substrate §1.3 derives presence —
-how many persons inside this node hold it at ≥ rank. Nothing in the game ever asks "does the person
+how many persons inside this node hold it at ≥ rank.
+
+⚠ **`rarity` therefore rolls up TRUE practice holdings, and it takes the same two-profile split
+adjudication A-2 imposed on the faction profile — it did not get one, and the omission was a leak.**
+`rarity_true(practice, rank, node)` exists for bookkeeping, for tests, and **for the resolver**, which
+is the world and is allowed to see everything. It is readable by **no agent**. Any person reasoning
+about how rare a skill is — a guild deciding whether it can afford to expel a chaser, a duke deciding
+whether he can replace an engineer, a recruiter deciding where to look — reads
+`rarity_est(practice, rank, node, observer)`, built from that observer's own claims about who holds
+what. The failure without the split is exactly A-2's: a covertly-held practice (a Niflhel man's
+poisoning, a Southern Einhir woman's letters kept quiet in a house that would punish them) counts
+toward everyone's estimate the moment it exists, so **underestimating a rival's depth becomes
+impossible** and the guild that thinks it is irreplaceable can never be wrong about it. With the split,
+being wrong about your own scarcity is the default, which is what makes the census a thing worth
+running and worth falsifying. Nothing in the game ever asks "does the person
 who did X exist"; it asks "does this container hold someone at rank ≥ 3." Kill the Kettlemakers'
 best chaser and the second-best is promoted and the guild is worse, measurably, for a generation.
 Kill the only person with a scripted history and the guild is broken forever. The first is a
@@ -344,7 +358,10 @@ and only the first is the substrate's headline:
 1. **Unbidden deposit.** A material state change in one partner — severe need, coherence drop ≥2,
    death, a stance revision of |Δ| = 2 on a primary Conviction — deposits a low-precision claim in
    the other's ledger **with no speaker, no latency and no intermediary distortion.** Source is
-   `firsthand_via_knot`, which corroborates independently of any telling.
+   `firsthand_via_knot`, which corroborates independently of any telling — **but does not mint a new
+   root: it reuses the originating event's id** (doc 03 §5). Five partners feeling one rupture hold one
+   root between them, not five, or a well-bonded person could manufacture corroboration out of a single
+   crisis.
    ```
    bandwidth(k) = max(0, 2 − floor(strain / 3))     # unbidden deposits per season
    ```
@@ -444,9 +461,12 @@ decision time.
 SUBSISTENCE   reads the WORLD (hearth larder — you feel hunger)
   urgency = clamp( 5 − floor( hearth.larder_days / (10 × hearth.mouth_weight) ), 0, 5 )
 
-STANDING      reads the WORLD (your neighbours' faces are in front of you)
-  peers = siblings in the person's community node
-  r     = percentile of Σ(peer.stance[person].valence) among peers, 0..1
+STANDING      reads the WORLD for WHO IS THERE, and the LEDGER for WHAT THEY HAVE SHOWN
+  peers = siblings in the person's community node          # world: their faces are in front of you
+  regard(peer) = Σ valence over the person's OWN claims about how `peer` regards them
+                 — deposited by witnessed acts: a greeting, a cut, a sponsorship, a refusal,
+                   a telling that reached them. NEVER read off peer.stance directly.
+  r     = percentile of regard(peer) among peers, 0..1     # over peers with at least one such claim
   care  = max( stance[prop:Honor].weight, stance[prop:Identity].weight ) / 5
   urgency = round( 5 × (1 − r) × care )
   ── losing rank only hurts a person who holds rank as a value.
@@ -460,6 +480,24 @@ EXPOSURE      reads the VIEW
   for each dispensation claim in the ledger whose scope contains the person's address:
     urgency = |Δ in the value of the person's own reachable options under the asserted terms|
 ```
+
+**EXPRESSED regard, never true regard — a correction, and it narrows adjudication A-1.** An earlier
+version of STANDING read `Σ(peer.stance[person].valence)` directly: the peers' **true interiors**,
+concealed contempt included. That is a derivation of true state reaching a decision input without
+passing through `witness` — adjudication A-2's banned object, arrived at through the stance table
+instead of through the faction profile. Its concrete failure: a burgher who despises you and has never
+shown it moves your STANDING urgency, so you feel a slight nobody has committed, and the whole politics
+of the concealed enemy — the man who smiles at you for six seasons and then votes — becomes
+unexpressible, because the game already told you.
+
+A-1 ruled that standing reads the world, and it still does for the half of the term that is genuinely
+in front of you: **who your peers are.** You cannot fail to notice that the Row is full of men. What you
+cannot read is what is behind their faces. So the peer *set* is a world read and the regard *values* are
+a ledger read, and a peer who has never expressed anything toward you contributes nothing rather than
+contributing their hidden valence. The correction makes the substrate's own claim sharper rather than
+weaker: **standing is not what your neighbours think of you, it is what your neighbours have let you
+know they think of you** — which is the historical quantity, and the reason a man can be ruined in one
+afternoon by a cut delivered in public that changed nobody's mind.
 
 **The substrate says needs "change the instant the world does." Two of the four terms must not,
 and the distinction is load-bearing.** Needs from the body and the room read the world. Needs from

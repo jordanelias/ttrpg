@@ -74,9 +74,37 @@ reads:
 | `IN_FORCE` | (container, proposition) | dispensations, prohibitions, treaty clauses |
 | `INTENDS` | (person, proposition) | motive, and `INTENDS(p, deceive)` — see §3 |
 | `SAID` | (speaker, claim, when, place) | the provenance graph |
-| `CAUSED` | (event\|act, event\|act\|condition) | the only constructed form; §6's product |
+| `CAUSED` | (event\|act, event\|act\|condition) | a constructed form; §6's product |
+| `CONTRADICTED` | (source, source) | *two accounts of one thing cannot both stand* — §3.1's collision product, deposited when C and D disagree and their roots differ. Its arguments are **sources, not contents**, which is why it is its own form and not a value on another: what it asserts is about the provenance graph, not about the world. |
+| `HOLDS_STANCE` | (person, referent, valence_band) | *what someone thinks* — a claim **about an interior**: `HOLDS_STANCE(Aldwin, prop:Order, primary)`, `HOLDS_STANCE(Bertil, Maret, cold)`. Deposited by Thread-Read (§6), by counsel through a Knot (doc 02 §4.2), by `reconstruct` over observed acts, and by anyone who was simply told. |
 
-Twelve forms, and they close one loop the spine leaves open. The substrate's *estimated profile* of a
+**Fourteen forms, and the count was twelve until this document was audited against its own use.** Two
+forms were in circulation without being declared, which is exactly the closure failure the section
+opens by warning against — a closed set with undeclared members is an open set that has not admitted
+it. `CONTRADICTED(source, source)` is deposited three sections later in §3.1 and produced by
+`reconstruct` in §6.1. A form for claims about an interior was never declared at all, yet **Thread-Read
+yields "a person's Conviction-primary" (§6.1), counsel extraction reads a stance row (doc 02 §4.2), and
+the player UI displays "he holds Order at primary" (§10)** — three mechanisms depositing a kind of claim
+the vocabulary did not contain. Declaring them is the correction; leaving the count at twelve while
+using fourteen was the defect.
+
+**Closure survives at fourteen, and it survives for the reason it survived at twelve** — the argument is
+about the *cost function*, not the number. Each of the three operations is a table of size |forms|
+(collision and entailment are |forms|², sparse), authored once alongside the act list; fourteen changes
+the table's dimension and changes nothing about who authors it or when. What would break closure is a
+form whose contradiction rule is a **special case** — and neither new form has one. `CONTRADICTED`
+collides with nothing (it is an assertion about provenance, and two such assertions are compatible) and
+entails nothing; it is a leaf, which is why it can be added freely. `HOLDS_STANCE` collides with
+`HOLDS_STANCE` on the same (person, referent) at incompatible bands, exactly as `CONDITION` collides
+with `CONDITION`, and entails at coarser grain exactly as `ALIGNED` does — *primary* entails *held*,
+*hostile* entails *not warm*. Both are ordinary rows in the tables that already exist.
+
+The test to apply to a fifteenth, and it is the test that admitted these two: **is the new form already
+being deposited somewhere in this design?** If yes it is not an extension, it is an omission, and
+declaring it makes the set smaller in the only sense that matters. If no, it needs the argument the
+twelve originally got — that some `choose` reads a kind of thing none of the existing forms carries.
+
+These forms also close one loop the spine leaves open. The substrate's *estimated profile* of a
 faction — the only profile any decision function may read — is computed by an observer rolling up
 memberships **in their own ledger**. Those memberships are `ALIGNED` claims, deposited by `witness`,
 `tell` and `reconstruct` like everything else. So a covert commitment is absent from an estimate until
@@ -86,10 +114,11 @@ somebody's claim names it, underestimation is the default rather than a special 
 **Value** is typed by form (a polarity, a band, or a referent), so negation is a value,
 not a form — which is why assert and deny land on the same row. **Entailment** is one table: `LOCATED`
 at a district entails `LOCATED` at its settlement; `ALIGNED` at member entails `ALIGNED` at
-sympathiser; a narrower interval entails nothing about a wider one but is *contradicted* by a wider
-denial. Twelve forms, one entailment table, no grammar.
+sympathiser; `HOLDS_STANCE` at *primary* entails `HOLDS_STANCE` at *held*; a narrower interval entails
+nothing about a wider one but is *contradicted* by a wider denial. Fourteen forms, one entailment table,
+no grammar.
 
-- Closed loop: the twelve forms and the one entailment table are authored once, alongside the act
+- Closed loop: the fourteen forms and the one entailment table are authored once, alongside the act
   list; carried inside every claim's `predicate` field; consumed by collision, entailment and
   relevance — the three routines that make any two claims in the game relatable at all.
 - **Cut the closure and you lose:** nothing at first, and then everything — because within three
@@ -107,7 +136,7 @@ consensus broadcast with jitter: every witness is arranged around the truth and 
 correct. Divergence must come from **selection among readings the event actually offers**, never from
 error on a single reading.
 
-So `resolve` emits, alongside the event, a set of **facets** — atomic claims in the twelve forms that
+So `resolve` emits, alongside the event, a set of **facets** — atomic claims in the fourteen forms that
 the event makes available, each with a `persists` window and a retention curve. `persists = [t,t]` is a
 moment; `[t, t+2 seasons]` is what §6's `examine` reads off the scene later. **Facet and residue are
 one object at two persistences.**
@@ -162,9 +191,22 @@ Three properties fall out that the assertion alone would not give you:
 3. **Vantage does real work through the exclusion rule.** A witness who missed the provocation cannot
    reach `lawful_correction` at all — not at low weight, not ever, until someone tells him.
 
-**Cohorts.** `witness` runs once per cohort; if its Conviction spread gives two construals comparable
-share, the cohort **individuates along that line**, and the market crowd fissions into those who saw
-order restored and those who saw an arm broken — the substrate's existing operation, at any rung.
+**Cohorts — and what a cohort claim actually stores.** `witness` runs once per cohort, and **what it
+deposits is the share distribution over the construal set, not the argmax.** A cohort holds
+`{c1: 0.41, c3: 0.35, c4: 0.24}`, computed by running the selection above against the cohort's own
+Conviction spread and stance dispersion rather than against a single stance row. This matters and is
+stated explicitly because the tempting shortcut — deposit the cohort's modal construal as one claim and
+let members inherit it — is **consensus broadcast at cohort scale**, the very thing the top of this
+section refuses, and it would put one value with one sign into hundreds of people. A cohort claim is a
+**compressed set of divergent claims**, never a shared one.
+
+Two consequences follow, and they are the same rule read twice. If the spread gives two construals
+comparable share, the cohort **individuates along that line**, and the market crowd fissions into those
+who saw order restored and those who saw an arm broken — the substrate's existing operation, at any
+rung. And when a single member individuates for any other reason, they **draw** their construal from
+the stored distribution using their own now-specific stance and Convictions; they do not inherit the
+cohort's. Doc 09 §10 owns the compute accounting for this and reaches the same object from the fan-out
+side.
 
 - Closed loop: produced by `resolve` emitting facets; carried through `witness` into one ledger per
   person; consumed by view assembly.
@@ -336,8 +378,19 @@ If no claim has relevance > 0 for the question, the person does **not** act unce
    with a findable origin and can be refuted by investigation like any other.
 2. **Rumour draw.** If the place holds an ambient claim on this subject/predicate, draw it at 0.2,
    source `told_by(unknown, σ)` — see §5.
-3. **Container norm.** The aggregate stance of the person's community on the proposition, computed on
-   demand (the substrate's §4 already supplies it), at 0.25.
+3. **What the person believes his neighbours hold.** Not the container's true aggregate — **an
+   inference over the claims this person actually holds about his neighbours' expressed positions**,
+   at 0.25, with source `inferred({HOLDS_STANCE(n₁, prop, band), HOLDS_STANCE(n₂, prop, band), …})`
+   naming those claims as its root. An earlier draft of this rung read the community's aggregate stance
+   computed on demand and deposited it **with no source constructor at all**, which broke two rules of
+   this document at once: it is a true-state read reaching a decision without passing `witness`
+   (adjudication A-1/A-2's defect), and it violates *no null source* — a claim with no root cannot be
+   attacked at its provenance, cannot be refuted by investigation, and is therefore the one thing §1
+   says no claim may be. Its practical failure was worse than the principle: a person would correctly
+   infer "my community is turning against the guild" from a shift nobody had voiced to him, so a
+   silent community would still leak its mind, and the man who genuinely misreads the room — the whole
+   of what makes a miscalculation a miscalculation — could not exist. A person with **no** claims about
+   his neighbours' positions on the proposition falls through this rung entirely, to rule 4.
 4. If all three are silent, **the option leaves the person's act list.** They act on a question their
    view can answer.
 
@@ -355,16 +408,33 @@ That fourth rule is the sharp edge and it is worth stating as a law of the engin
 
 ## 5. Corroboration that fails closed
 
-Every claim's source is `firsthand(event_id)`, `told_by(person, handle)`, or `inferred(claim_id…)`.
-There is no null source, and there is no operation anywhere in the game that mints a root token except
-**`witness`**. That sentence is the whole proof; the rest is bookkeeping.
+Every claim's source is `firsthand(event_id)`, `told_by(person, handle)`, `inferred(claim_id…)`, or
+`firsthand_via_knot(event_id)`. There is no null source, and **`witness` is the only operation that
+MINTS a root token.** That sentence is the whole proof; the rest is bookkeeping.
+
+⚠ **The fourth constructor, stated because an earlier version of this section named three and the
+sentence was therefore false.** Doc 02 §4.2's Knot deposits a claim into a bonded partner with no
+speaker, no latency and no intermediary distortion, at source `firsthand_via_knot` — a fourth
+constructor this document did not list. **It does not mint.** The rule, which closes the hole:
+
+> **A Knot deposit REUSES the originating event's id as its root token.** `roots(firsthand_via_knot(e))
+> = { e }` — the same `e` the originating `witness` minted, never a fresh token.
+
+Without that rule, one distress event reaching four Knot partners produces four distinct root tokens
+for one event, `support = 4`, and the corroboration multiplier climbs to 1.7 on **a single thing that
+happened once**. That is Knot-laundered corroboration: a well-bonded person could manufacture proof out
+of their own crisis, and a Niflhel cell with five Close Knots into one household would be the
+best-evidenced body in the game. With the rule, five partners feeling the same rupture supply one
+token, exactly as five men repeating one rumour supply one σ — which is the same principle this
+section already applies everywhere else, extended to the channel that was missed.
 
 **Root sets.**
 
 ```
-roots( firsthand(e) )        = { e }
-roots( told_by(p, h) )       = h.rootprint                      # opaque tokens, asserted by the speaker
-roots( inferred(c₁…cₙ) )     = ⋃ roots(cᵢ)                      # union, never fresh
+roots( firsthand(e) )            = { e }                            # the only MINT
+roots( firsthand_via_knot(e) )   = { e }                            # REUSE, never a fresh token
+roots( told_by(p, h) )           = h.rootprint                  # opaque tokens, asserted by the speaker
+roots( inferred(c₁…cₙ) )         = ⋃ roots(cᵢ)                  # union, never fresh
 ```
 
 **The rootprint.** When p tells h, the telling carries p's *asserted* root-set as opaque tokens. The
@@ -396,10 +466,11 @@ corroboration_multiplier = min( 1 + 0.35 · log₂(support), 2.0 )
 ```
 
 **Proof that correlated rumour cannot be laundered into corroboration.** Support counts *distinct
-tokens*. Three routes exist to add a token and no others: (a) `firsthand`, which requires an actual
+tokens*. Four routes exist to add a token and no others: (a) `firsthand`, which requires an actual
 event and an actual witness with vantage — the only minting operation in the game; (b) `told_by`, which
 copies tokens and cannot create them; (c) `inferred`, which unions premises and, if the union is empty,
-**refuses the inference**. A rumour told three times supplies σ, σ, σ, so |{σ}| = 1 and the multiplier
+**refuses the inference**; (d) `firsthand_via_knot`, which reuses the originating event's token and
+therefore also cannot create one. A rumour told three times supplies σ, σ, σ, so |{σ}| = 1 and the multiplier
 is 1.0. A chain of ten inferences from one observation supplies one token. The F-14 failure — empty
 ancestries being pairwise disjoint, so three retellings counted as three supports — is unreachable,
 because there is no path to an empty ancestry: every constructor either mints, inherits, or is refused.
@@ -645,29 +716,48 @@ composition, not a special case. Delete the theology and the mechanism is still 
 whatever else concentrates Conviction.
 
 **P-08 — the barrier is INACCESSIBILITY, not suppression.** The trap the brief names is real: a barrier
-implemented as an empty channel is institutional, because an institution could open it. So the barrier
-must live in `witness`, not in `tell`.
+implemented as an empty channel is institutional, because an institution could open it.
 
-Mechanism: a rendering-side claim's subject is a **configuration**, a referent for which a
-non-sensitive's ledger has no address. When such a claim is told to a non-sensitive, `tell` cannot
-deposit the content — there is no representable subject. What deposits is a **degraded claim**: subject
-replaced by the nearest referent the hearer does have (the person, the place), predicate replaced by the
-nearest of the twelve forms, value collapsed to a band. `SAW(configuration κ at the mill, torn)` arrives
-as `CONDITION(the mill, wrong)` at 0.2.
+⚠ **An earlier version of this paragraph said the barrier "must live in `witness`, not in `tell`" and
+then implemented it at tell-deposit — stated in one place and built in another, which left the exact
+hole P-08 forbids open.** With degradation on the telling path only, a sensitive writes a rendering
+claim into an archive as a document and a non-sensitive **researches** it: `read_of(record)` is not
+`tell`, so nothing degrades, and study crosses the barrier through the archive. An institution that
+maintains an archive would then be, precisely, an institution that can open the barrier.
+
+**The mechanism lives in the HEARER'S LEDGER REFERENT SPACE, and that is neither `witness` nor `tell`.**
+A rendering-side claim's subject is a **configuration** — a referent class for which a non-sensitive's
+ledger **has no address**. Not "an address it declines to fill": no address, the way a ledger has no
+address for a colour a person cannot see. Degradation is therefore a property of **deposit into that
+ledger**, and it happens on **every** deposit path without any path needing to know about it:
+`tell` and `read_of(record)` and `reconstruct`'s inference output and `examine`'s facet registration and
+the Knot's unbidden deposit alike. There is no privileged channel to leave open, because there is no
+channel-side check to write.
+
+What deposits is a **degraded claim**: subject replaced by the nearest referent the hearer does have
+(the person, the place), predicate replaced by the nearest available form, value collapsed to a band.
+`SAW(configuration κ at the mill, torn)` arrives as `CONDITION(the mill, wrong)` at 0.2 — whether it
+arrived from a speaker's mouth, off a page in the Dicastery archive, or out of the hearer's own
+inference over two claims he already held.
 
 **That is "religious poetry", and it is produced with no suppression anywhere in the pipeline.** The
 speaker did not lie: δ = 0. The hearer did not disbelieve: the roll was won. The information did not
 survive the type conversion.
 
-And this is the exact test P-08 demands: **study cannot cross it**, because study operates on claims,
-and the claim that arrives is already degraded. Raise the hearer's Focus, literacy, archive access and
-patronage to the ceiling and nothing changes, because degradation happened at deposit, before any of
-those terms are read. The only thing that changes it is TS crossing the floor — the hearer becoming able
+And this is the exact test P-08 demands, now actually met: **study cannot cross it**, because study
+ends in a deposit into the student's own ledger and that ledger has nowhere to put the subject. Raise
+the hearer's Focus, literacy, archive access and patronage to the ceiling and nothing changes — and
+critically, **give him the sensitive's own written testimony, in the sensitive's own hand, and nothing
+changes either.** The document is intact; the reader is not equipped to hold what it says. That is the
+version of the barrier a researcher cannot route around, and the tell-side version was not. The only thing that changes it is TS crossing the floor — the hearer becoming able
 to **witness**, not to **learn**.
 
-**The falsifier for the institutional reading:** delete every institution in the peninsula and the
-degradation is identical. If removing institutions changed the barrier, it was suppression. It does not,
-so it is not.
+**The falsifier for the institutional reading, kept and now stronger:** delete every institution in the
+peninsula and the degradation is identical. If removing institutions changed the barrier, it was
+suppression. It does not, so it is not. The relocation strengthens rather than threatens this test —
+under the tell-side version, deleting the archives *would* have changed what a non-sensitive could
+reach, which means the old implementation would have failed its own falsifier had anyone run it against
+the research path. Under the ledger-side version there is nothing institutional left to delete.
 
 **P-13 — Southernmost knowledge is untransmittable to non-sensitives** is the same mechanism with the
 floor set highest, plus the corollary the setting needs: **between sensitives it transmits perfectly.**
@@ -683,9 +773,11 @@ deleted claim now point at nothing and `reconstruct` reports a dangling referenc
 detection channels, one supernatural and one clerical, and the second is free — it falls straight out
 of "no null source."
 
-- Closed loop: produced by `resolve` emitting rendering-side facets and by `tell` degrading them at
-  deposit; carried as the presence or absence of rows in one ledger; consumed by that person's view
-  like anything else — the barrier has no organ of its own, which is exactly why no one can open it.
+- Closed loop: produced by `resolve` emitting rendering-side facets, and degraded by the **receiving
+  ledger's referent space** on any deposit path whatever — telling, reading a document, inference,
+  examination, Knot; carried as the presence or absence of rows in one ledger; consumed by that
+  person's view like anything else — the barrier has no organ of its own, which is exactly why no one
+  can open it.
 - **Cut the registration floor and you lose:** the setting's central asymmetry, and with it any
   structural reason a caste with more perception has less standing.
 
@@ -707,7 +799,7 @@ And, greyed out beneath it: **the claims you hold that were crowded out by stanc
 That panel is this document's answer to the interior-state null. Prior attempts all narrowed scope —
 templated text over a facet band, a closed trait vocabulary, hand-written variants — because they tried
 to *describe* interior state. This describes nothing. The interior state already **is** a ranked list of
-claims with named multipliers over twelve predicate forms and thirteen Convictions, so rendering it is
+claims with named multipliers over fourteen predicate forms and thirteen Convictions, so rendering it is
 a table, and it stays legible at any content volume because the vocabulary is finite while the
 referents are not. Whether that is expression rather than tracking is a fair question; what is certain
 is that it does not narrow as the world grows, which every prior attempt did.

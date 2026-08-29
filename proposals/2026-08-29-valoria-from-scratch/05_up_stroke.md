@@ -187,6 +187,41 @@ change, which makes procedural reform a real political move. The Grauwald territ
 items a sitting; a praefect holds one seat and carries one thing with it. Filtering is not a policy but
 arithmetic about hours — the same arithmetic that makes a fisher choose between the tide and the chapel.
 
+**And a NAMED PERSON composes the eleven.** The court has seventeen seatholders and hears eleven items,
+so six carried petitions do not reach the floor — and an earlier version of this document said nothing
+about what selects them, which left the engine deciding which grievances matter with no person in the
+loop. That is the exact thing §1.1 forswears in its opening, committed six items at a time at every
+sitting in the game.
+
+```
+convener(container) = the office named by the container's charter as holding `compose_agenda`
+                      — the Grauwald court's ducal proxy; a settlement court's magistrate;
+                        Parliament's speaker; a Dicastery's proctor; a guild board's warden.
+                      It is an ordinary office (doc 14 §1): conferred, revocable, vacant-able.
+
+compose_agenda(v, container, date):
+  input:   the petitions v HOLDS A CLAIM OF — not the petitions that exist (§1.2)
+  act:     v ranks them by his own valuation, the same `choose(person, view)` every other
+           act in this document runs through, and admits the top `capacity(container)`
+  cost:    one of v's own acts for the season
+  regard_cost / regard_gain: identical in form to `carry`'s, over the judging set and over
+           the backers of every petition he admits or omits, as and when they learn
+```
+
+**An omitted petition is a DROP, and deposits exactly as one.** §4.1's grammar applies unchanged: a
+telling that names the convener — *"the proxy would not put our grain on the list"* — lands on him; one
+naming only the court — *"the sitting heard no grain item"* — lands on the praefecture. No new object,
+no new deposit rule, and the grievance from an item that never reached the floor is the same substance
+as the grievance from one a carrier abandoned, which is right, because to the hamlet they are the same
+thing.
+
+**What this buys, beyond closing the hole.** The convening office becomes worth holding, worth
+conferring, worth revoking, and worth killing for — a man who can keep an item off the list for four
+sittings running has more power over Grauwald than most of the men who vote on it, and he exercises it
+by an act that is witnessable, tellable, and attributable to him by name. It also gives procedural
+reform a second lever beside capacity: change the charter's `compose_agenda` holder and you have
+changed which grievances the duchy is capable of hearing, without touching a single vote.
+
 ### 3.2 FORWARD / AMEND / BUNDLE / DROP
 
 **FORWARD.** Proposition unchanged; the respondent becomes the container one rung up. The roll travels

@@ -96,15 +96,31 @@ Before choosing a tactic, a party diagnoses **what the fight is about**. Four ru
 | **3** | **Quality** | it happened, it is that, and it was right | offers a **counter-ground** | the act, and its label |
 | **4** | **Jurisdiction** | this chamber may not hear it | the venue's **admissibility** | the act, the label, and (usually) that it was wrong |
 
-**Descending is irrevocable and public.** A party opens at the highest rung it will hold. `descend`
-moves it down exactly one rung, and everything above the new rung is written into the record as
-**conceded** — you cannot go back up in the sitting, nor in a *later* one without triggering F2.
+**The position you stand on is what you conceded, and how you arrived there does not matter.** One
+rule, stated as one rule because an earlier draft wrote concession only on `descend` and thereby made
+the ladder a menu after all:
 
-This is why the ladder is terrain and not a menu. Rung 1 is strongest and most brittle: hold it and
-you must survive every challenge to your denial. Rung 4 is nearly always available and nearly always
-worth almost nothing, because arriving there has already given away the substance — a party that opens
-at rung 4 has conceded the case to buy a delay until the next standing date, which is sometimes
-exactly the right trade. That is the fork.
+> **Opening at rung r writes every rung above r into the record as conceded, exactly as descending to
+> r would.** `descend` moves a party down exactly one rung and writes the rung it left. Descending is
+> irrevocable and public; you cannot go back up in the sitting, nor in a *later* one without
+> triggering F2. **Concession is a function of the rung you are standing on, never of the path.**
+
+**Why the rule is one line and not a refinement.** Under the old wording, a party that opened at rung 2
+and held wrote nothing conceded and paid concession 0, while a party driven from rung 1 to rung 2 paid
+1/4 *and* banked a permanent contradiction hazard — for the **same final rung and the same substantive
+position**. Opening at the rung you intend to hold therefore strictly dominated opening any higher, rung
+1 was a trap option nobody with sense takes, and the ladder's claim to be terrain rather than a menu
+failed on its own arithmetic. With the rule above the dominance is gone: opening low buys defensibility
+and pays for it at the door; opening high keeps everything and risks paying more.
+
+This is why the ladder is terrain and not a menu. Rung 1 is strongest and most brittle: it concedes
+nothing at the open, and hold it and you must survive every challenge to your denial — but every step
+you are driven down costs you the rung you left, so the strongest opening is also the one with the most
+to lose. Rung 4 is nearly always available and nearly always worth almost nothing, because *standing*
+there has already given away the substance whether you walked there or started there — a party that
+opens at rung 4 has conceded the case to buy a delay until the next standing date, which is sometimes
+exactly the right trade. That is the fork, and it is now a real one at every rung rather than only at
+the bottom.
 
 - Closed loop: produced by the party's own `choose(person, view)` at the sitting's open and at each
   `descend`; carried on the case and, on close, into the record row; consumed by the concession
@@ -198,22 +214,28 @@ ones fails on the weak ones, because **grade does not average**. That is the *or
 already measures that, because it is the stasis rung.
 
 ```
-concession(winner) = rungs_descended(winner) / 4
+concession(winner) = (rung_final(winner) − 1) / 4
 ```
+
+**Read from the final rung, not from the descent count** (§2). An earlier draft of this formula counted
+`rungs_descended`, which let a party open at rung 2 and hold it for a concession of 0 while a party
+driven to rung 2 paid 1/4 — same rung, same position, different price, and the cheaper option was always
+available at the open. The formula now reads only where you are standing, because that is what the
+record now says you conceded.
 
 The motion carries, and the venue simultaneously issues a **rider** amending the motion's `OUGHT`
 proposition and scaling the thing allocated:
 
-| rungs descended by the winner | disposition |
-|---|---|
-| 0 | motion carries whole |
-| 1 | carries, with the loser's strongest surviving ground admitted as a proviso |
-| 2 | carries at half the stake; the other half is deferred to the next standing date |
-| 3 | carries in name only — the terms change, the stake does not move this date |
+| winner's final rung | rungs conceded | disposition |
+|---|---|---|
+| 1 Denial | 0 | motion carries whole |
+| 2 Definition | 1 | carries, with the loser's strongest surviving ground admitted as a proviso |
+| 3 Quality | 2 | carries at half the stake; the other half is deferred to the next standing date |
+| 4 Jurisdiction | 3 | carries in name only — the terms change, the stake does not move this date |
 
-One rule, not a subsystem. It converts "both roll, one wins" into "both outcomes bind," and it is why
-being driven down from rung 1 is materially worse than opening at rung 2 and holding — the tactical
-texture the ladder was built to produce.
+One rule, not a subsystem. It converts "both roll, one wins" into "both outcomes bind," and it prices
+the winner's position rather than his route to it — a man who wins from the jurisdiction rung has won
+almost nothing whether he retreated there under fire or stood there from the first word.
 
 - Closed loop: produced at close from the case's rung history; carried as the rider clause on the
   disposition; consumed by document 06's dispensation issuance and by the stake allocation at the
@@ -436,8 +458,14 @@ itself off:
 
 ```
 if  |best_grade(A.decisive_ground) − best_grade(B.decisive_ground)| ≥ 3
-    → the sitting DISPOSES IMMEDIATELY, no exchanges, at concession 0.
+    → the sitting DISPOSES IMMEDIATELY, no exchanges,
+      at the winner's OPENING-RUNG concession (§5), not at 0.
 ```
+
+The concession is read off the rung the winner opened at, because §2 writes the rungs above it as
+conceded at the open. A party that opened at rung 1 on a G4 instrument concedes nothing — the usual
+case here. A party that opened at rung 4 and *still* won by three grades has bought its win with the
+substance, and the rider says so.
 
 A Free Master with the guild's sealed register (G4) against a challenger with common voice (G0) does
 not get a debate. He gets a ruling, and the loser gets a record row. **The rich option space earns its
@@ -694,8 +722,11 @@ container memory, no second knowledge model, and forgery for free). Three additi
 Argument or any debate pool, a persuasion threshold, a per-chamber ruleset — each because a parameter
 row already reaches it.
 
-**R.** Forks checked for shape, not balance. *Rung 1 vs rung 2 at open*: rung 1's gain is high and its
-cost is a cliff; rung 2's gain is capped and its cost is flat. Neither dominates. *Press now vs bank a
+**R.** Forks checked for shape, not balance. *Rung 1 vs rung 2 at open*: rung 1's gain is high, it
+concedes nothing at the door, and its cost is a cliff; rung 2's gain is capped and its cost is a flat
+1/4 **paid at the open, whether or not anyone drives you there** (§2). Neither dominates — and note that
+this fork did not exist before §2's opening rule, because rung 2 was previously free at the open and
+therefore strictly dominated rung 1. *Press now vs bank a
 recorded defeat*: compounding gain against one-time cost, versus immediate gain against compounding
 cost. *Produce an instrument vs hold it*: producing raises your grade now and makes the object's
 existence public, arming attacks on its custody forever. *Cheap talk vs a binding instrument*: cost up

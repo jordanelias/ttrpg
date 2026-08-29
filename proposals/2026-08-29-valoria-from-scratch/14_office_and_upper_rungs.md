@@ -159,14 +159,33 @@ vacate(office, cause)   cause ∈ { death, revocation, resignation, incapacity, 
 
 Nothing is written to the world. Four things become true by computation:
 
-1. **Every standing dispensation the holder issued keeps its terms and loses its complier.** 06's
-   compliance contest reads the local stance toward *the issuer*. The issuer is now a dead man toward
-   whom nobody is forming a new stance. Compliance across the whole scope drops in the same tick, with
-   no decree and no event. **The interregnum is abolished by arithmetic**, exactly as doc 04 found for
-   hearth seats: a *normal* conferral hands the successor a stance inherited through the `post:` mark
-   and the conferrer's name; a *contested* one leaves the stance column empty everywhere at once, which
-   is precisely "every settlement's acceptance re-opens for renegotiation."
-2. **`S_post` empties and `licensed_standing` goes to zero.** The establishment's compliance was
+1. **Every standing dispensation the holder issued keeps its terms and loses its complier — AT TELLING
+   SPEED, not in the same tick.** 06's compliance contest reads the local stance toward *the issuer*.
+   The issuer is now a dead man toward whom nobody is forming a new stance. **But compliance drops for
+   each person as and when a claim of the death reaches them, and not one moment before.**
+
+   ⚠ **This corrects the passage, which read "compliance across the whole scope drops in the same tick,
+   with no decree and no event." That is a violation of adjudication A-1**, and of the same shape A-1
+   ruled on: a polity-facing quantity computed off true world state, so persons react to a death they
+   have not heard of. A courier's week becomes invisible, and the Crown loses a province's obedience
+   before the province has lost its Duke.
+
+   **What the correction buys is the thing the section wanted anyway.** A withheld death-notice is now
+   one of the most powerful acts in the game — the household that keeps the Duke's body quiet for a
+   season keeps his dispensations enforced for a season, and every day the news travels is a day
+   somebody is choosing whether to carry it. The interregnum is not abolished; it is **smeared along the
+   channels**, arriving in the capital in three days and in the fjord hamlets in six weeks, and the map
+   of where obedience has lapsed is exactly the map of where the news has gone. That is a better object
+   than a synchronous drop and it needs no new machinery: it is `tell` doing its ordinary job.
+
+   The rest of the original claim survives intact, per-person rather than globally: a *normal* conferral
+   hands the successor a stance inherited through the `post:` mark and the conferrer's name; a
+   *contested* one leaves the stance column empty **for each person as they learn of it**, which is
+   precisely "every settlement's acceptance re-opens for renegotiation," settlement by settlement, in
+   the order the roads allow.
+2. **`S_post` empties and `licensed_standing` goes to zero**, on the same telling-speed rule and for the
+   same reason — though in practice the establishment is the first to know, because it is the set of
+   persons standing nearest the body. The establishment's compliance was
    routed through a remit that now has no holder. Their own needs and their own faction edges are what
    remain. This is the akıncı case in domestic miniature: the corps outlives the bey and stops being
    his.

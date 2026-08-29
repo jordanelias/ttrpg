@@ -357,13 +357,26 @@ The first Almqvist earned the throne by Secession War command with no blood clai
 
 ```
 deed_weight(line, seat) = Σ over service events attributed to `line` at the seat's founding,
-                          each weighted by the number of LIVING persons holding a firsthand-rooted
-                          claim of that event
+                          each weighted by the number of LIVING persons whose claim of that event
+                          has source == firsthand
 ```
+
+**`source == firsthand`, NOT "firsthand-rooted" — and the distinction is the whole mechanism.** An
+earlier draft of this formula counted living persons holding a *firsthand-rooted* claim, which does not
+decay at all: a rootprint anchors to the **event**, not to the holder, so every retold claim is
+firsthand-rooted forever. A veteran's son holding his father's telling is firsthand-rooted; so is his
+grandson; so is a tavern's worth of men who heard it third-hand from him. Under that reading the count
+holds up for centuries and the presumption never weakens. **The witnesses die; their roots do not.**
+The formula therefore reads the claim's own source field — `firsthand`, deposited only by `witness` at
+the event itself — and a `told_by` claim rooted in that same event contributes **nothing** to
+`deed_weight`, however impeccable its provenance and however much weight it carries everywhere else.
+A later reader will be tempted to relax this back to rooted, because "rooted in the founding" sounds
+like the thing being measured; it is not. What is being measured is **how many people can still say
+they were there.**
 
 Because the weight is proportional to living firsthand witnesses, **the deed presumption decays every
 season as veterans die**, and it cannot be renewed, because you cannot manufacture a firsthand root
-for a war that has ended. Ducal houses are cadet and deed families; their presumptions are decaying on
+for a war that has ended — nor inherit one, which is the same refusal read from the other end. Ducal houses are cadet and deed families; their presumptions are decaying on
 the same clock. Succession is cognatic-senior — a *presumption*, which means it wins by default when
 unopposed and is rebutted at a venue by argument. There is no rule anywhere saying deed-presumption is
 rebuttable. It is rebuttable because presumptions are, and because its numerator is mortal.

@@ -111,7 +111,18 @@ forgotten, because there is nothing to initialise.
 **Two module rules follow, and they are the whole of the architecture's discipline:**
 
 - **R-1** A rung module may read its own state and any message addressed to it. It may **not** read a
-  sibling's state and may **not** read a descendant's state — it receives aggregates.
+  sibling's state and may **not** read a descendant's state directly. It **may COMPUTE an aggregate over
+  its descendants on demand**, when asked; it may **not** receive a pushed aggregate, and it may **not
+  store one**.
+
+  ⚠ **This rule was written as "it receives aggregates" and that wording is retracted — adjudication
+  C-1 corrected it, and this document is older than the correction.** As written, R-1 forbade the very
+  aggregations the suite computes everywhere (a settlement's Order capacity, a faction's estimated
+  profile, `carriage_mass`, `Hold`, `concord`, `rarity`, `price`), and simultaneously licensed the one
+  thing the architecture exists to abolish: a per-tick push flow, which requires somewhere for the
+  pushed value to land, which is stored aggregate state — the row three lines down in §7's forbidden
+  list. The corrected rule says the opposite on both halves. **Compute-on-demand, never push, never
+  store.**
 - **R-2** A rung module may write only its own state. Upward influence is emitting an aggregate;
   downward influence is emitting a refraction. **No module reaches through another.**
 
@@ -198,6 +209,8 @@ Each of these is refused because it re-enables a failure the design closed struc
 | a `World` parameter on any decision function | T4 collapses; every belief mechanism becomes decoration |
 | a `view_of(world, person)` that masks rather than assembles | someone eventually masks nothing |
 | any function taking `[Person]` and one `Event` | consensus broadcast; divergent perspective dies |
+| **a deposit into a cohort that carries a VALUE rather than a DISTRIBUTION** | consensus broadcast laundered through the cohort type — one sign and one magnitude into hundreds of people, and the type checker sees a single legal write. A cohort claim stores the construal spread its members would have produced (doc 03 §2); an individuating member **draws** from it and never inherits it (doc 09 §10). This row exists because the defect passed every other row in this table. |
+| a pushed aggregate, or a field one is stored in | R-1; a push needs a landing site and the landing site is stored aggregate state |
 | a stored aggregate, norm, density, unrest or reputation field | dead state that reads as mechanism |
 | a knowledge value stored on the thing known | knowledge with no knower cannot be planted or refuted |
 | a second resolver, an auto-resolve formula, a fast path | guaranteed divergence, unsolved in the genre for twenty years |

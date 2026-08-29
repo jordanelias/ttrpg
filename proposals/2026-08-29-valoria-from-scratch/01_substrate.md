@@ -502,7 +502,8 @@ already reaches the same emergence.
 
 Greta is Southern Einhir, contained in the Einhir hamlet outside Goldenfurt, aligned at low degree
 with a Restoration cell whose members come from three hamlets and one guild. Varfell's Duke signs a
-treaty; a **dispensation** changes the salt price in scope Grauwald; the claim reaches Greta from the
+treaty; a **dispensation** closes the Grauwald coast to salt, and the price follows from the scarcity
+rather than from the decree (doc 06 §4, doc 13 §4); the claim reaches Greta from the
 crier, distorted, three days late, and reaches her cousin intact through a **Knot**. Her hearth's
 larder plus the new terms compute a need; her capability and her cousin's boat compute an opening; she
 runs salt. A Knight of the Peace witnesses it — and what he deposits is *smuggling*, while what her

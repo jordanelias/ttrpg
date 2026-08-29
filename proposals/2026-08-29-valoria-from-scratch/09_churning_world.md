@@ -540,7 +540,11 @@ Minting draws address from the cohort, marks from the cohort plus its variation,
 distribution conditioned on the naming event, stance from its aggregate plus dispersion. **Memory is the
 trick that makes it consistent:** tellings are stored *at the channel*, not per person, until
 individuation, so a person minted in season 40 is handed the claims their address's channels would have
-deposited. They have a plausible past because their *channel* has a real one.
+deposited. They have a plausible past because their *channel* has a real one. **Handed, not copied:**
+each stored channel claim carries the construal distribution of §10, and the minted person draws from
+it rather than receiving the cohort's reading — two brothers minted out of the same hamlet in the same
+season can hold opposite construals of the same twenty-year-old proclamation, which is what a real
+hamlet contains and what a shared value could never express.
 
 ### 8.2 Reabsorption — the bound CK3 lacked
 
@@ -584,10 +588,27 @@ outside Goldenfurt, weight 400.
 | | 12 standing-holders `vouch` | — | 0.80 agg. | +1 | 0.700 |
 | | *combined* | | | | **0.427** |
 
-From a fully aggrieved `s = −4.5`: mitigation gives `+1 − (5.5 × 0.427) = −1.35`; accrual then gives
-`−5 + (3.65 × 0.380) = −3.61`. **Net +0.89 per season with both at maximum.**
+**The ordering convention, stated because the answer depends on it and an earlier draft left it
+unstated.** These moves are multiplicative on the remaining distance, so they do not commute, and the
+size of the non-commutation is not small: from `s = −4.5`, mitigation-then-accrual yields **+0.89**
+while accrual-then-mitigation yields **+3.02** — a 3.4× swing produced entirely by an ordering nobody
+had written down. A headline number quoted without the convention is therefore not a measurement.
 
-**Verdict: it fires, it is recoverable, and the recovery costs everything.** Sixteen act-slots — the
+**The convention is §1.4's stratum order, and it settles this case:** the acts that *create* the
+grievance are binding decisions at the docket (four petitions dropped) and a material allocation (the
+granary opened to the Row only) — strata 2 and 4 — while the bulk of the mitigation is stratum 5, the
+social acts (`appear`, `vouch`, the carriers' work) that are *about* what happened. §1.4's own stated
+reason for putting social last is that "a season's gossip is about that season's deeds." Mitigation is
+answering; it cannot resolve before the thing it answers. **So accrual applies first, then mitigation,
+and this is the convention for any composed stance move in a season, not a convenience for this table.**
+
+Under it, from a fully aggrieved `s = −4.5`: accrual gives `−5 + (0.5 × 0.380) = −4.81`; mitigation then
+gives `+1 − (5.81 × 0.427) = −1.48`. **Net +3.02 per season with both at maximum.**
+
+**Verdict: it fires, it is recoverable, and the recovery costs everything.** Note what the corrected
+ordering does to the shape of the answer: recovery is *faster* than the retracted +0.89 suggested —
+roughly two seasons from the floor rather than five — so the thing that makes it hard is not duration.
+It is price, and the price is the next paragraph. Sixteen act-slots — the
 governor, three carriers, twelve standing-holders — is essentially Goldenfurt's whole governing capacity
 for the season: no granary work, no wall, no trade, which raises next season's needs and therefore next
 season's petitions. Neither pole: mitigation genuinely works (not EU4's estates) and is not unavoidable
@@ -669,10 +690,30 @@ simulation. Modelled population ~1.2 million **as weight**; the record count is 
 | **witness deposits** | **≤ 120,000 / tick** | see below |
 | contests | 0–3 battles, 20–200 social | see below |
 
-**Witness fan-out is the real cost, and the cohort tames it.** An event's witness set is the persons
-present plus the channels it touches, and **a channel deposits into a cohort as one claim, not into its
-members.** A crier's proclamation in Goldenfurt deposits ~6 cohort claims and ~40 individuated claims,
-not 12,000; a cohort member who later individuates inherits them (§8.1). One primitive, three jobs.
+**Witness fan-out is the real cost, and the cohort tames it — but a cohort claim is a COMPRESSED SET OF
+DIVERGENT CLAIMS, never one shared claim.** An earlier draft of this paragraph said a channel deposits
+into a cohort "as one claim" and that an individuating member "inherits" it. That is consensus broadcast
+laundered through the cohort type: one value, one sign, one magnitude, into hundreds of people — the
+exact object doc 11 lists as a type error, arrived at by the back door. Corrected:
+
+> **A cohort deposit carries a distribution, not a value.** The claim a channel writes into a cohort
+> stores the **construal spread its members would have produced** — doc 03 §2's construal scores
+> evaluated against the cohort's own Conviction spread and stance dispersion, retained as shares over
+> that closed construal set, together with the registered-facet set and its confidence band. When a
+> member individuates, they do not inherit the cohort's claim; they **draw their own construal from
+> that distribution** (doc 03 §2's selection, run with their now-specific stance and Convictions), and
+> what they hold from then on is theirs and can differ in sign from their neighbour's.
+
+This costs a distribution where a scalar sat and buys back the property the whole design is for: the
+crowd that heard one proclamation does not agree about it, and did not agree about it *before* anybody
+individuated — the disagreement was already in the record, merely uncompressed. It also composes with
+doc 03 §2's existing rule that a cohort whose construal shares are comparable **fissions**: that rule is
+now reading the same object this deposit writes, rather than two mechanisms about one thing.
+
+The compute claim is unaffected, which is why the correction is cheap. A crier's proclamation in
+Goldenfurt still deposits ~6 cohort claims and ~40 individuated claims, not 12,000; a cohort claim is a
+handful of shares over a closed construal set (four, for `strike_by_officer`), not a per-member record.
+One primitive, three jobs.
 
 **Contest cost.** F0 battle: 12 exchanges × ~70 participants (20 cohorts + 15 individuated a side) = **840
 `choose` calls.** F2 fully individuated at 400 a side: 12 × 800 = **9,600** plus presentation. Both
