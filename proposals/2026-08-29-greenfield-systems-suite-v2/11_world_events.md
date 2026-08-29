@@ -34,13 +34,18 @@ declined:
    reuse wins on its own merits, not out of deference.**
 2. **Whether to invent a seventh `Entity` kind for peninsula-scale state (Mending Stability,
    Institutional Pressure, Turmoil — `systems/overview/clock_registry_v30.md:16-19`) was considered
-   and declined.** `01 §1`'s own words — *"a settlement, a territory, a province and a country are the
-   same object at different tiers"* — already answer this: the topmost `place` node (whatever kind the
-   form registry names the peninsula-scope container) is a Place like any other, just at the top of the
-   tier ladder, and its gauges are ordinary `place`-owned Gauges (`01 §5`). No new kind is needed and
-   none is proposed. **This is the one thing this document needed from the primitive layer that §1
-   does not say outright — flagged in the closing report as the finding it is, not smuggled in as a
-   fact.**
+   and declined.** `07_places_and_settlements.md:44` already gives `form(place).tier` the value
+   `country` at the top of its ladder (`settlement | territory | province | country`) — so the
+   peninsula-scope container is a `place` like any other, just at the top rung, and its gauges are
+   ordinary `place`-owned Gauges (`01 §5`). No new kind is needed and none is proposed. **Two things
+   this document needed from its neighbors that neither says outright, flagged here rather than
+   smuggled in as settled fact:** (i) which node counts as that top rung is `07`'s to name, not
+   assumed by this document; (ii) `07 §1.1:48-49`'s own declared place-gauge list (`acceptance.*,
+   condition.*, pressure, presence.<institution>, accrual.entitlement`) does not yet include a
+   peninsula-wide clock like Institutional Pressure — `we.altonian_pressure` (§7) proposes
+   `institutional_pressure` as a new `place`-owned Gauge on that top-tier node, using `01 §5`'s
+   primitive and no new kind, but its registration is `07`'s or `12`'s to confirm, not this
+   document's to claim by using it in an example row.
 
 Nothing here touches `derive_ob`'s formula, the margin ladder, TN 7, or any other ruled surface — it
 is a **consumer**, not a claimant, of all three.
@@ -208,9 +213,8 @@ G-1 and a required cooldown, a single row's maximum fire count over a campaign o
 already-existing per-tick emission cap the whole substrate shares (`keys.py:561-565` raises past it).
 **This document's necessary (not sufficient) obligation:** the worst-case count of `world.event_fired`
 emissions in one season — bounded by G-1 to at most one per registry-declared place-node plus one per
-faction, both counts validated at load by whichever document owns the node registry (`07`'s `V-1`/`V-2`
-in the v1 predecessor, `01_substrate_primitives.md:...` §1 pattern generalized) — must not by itself
-exceed 64.
+faction, both counts validated at load by `07`'s own load-time checks (`07_places_and_settlements.md
+§2.1`, carried from v1's `V-1`/`V-2`) — must not by itself exceed 64.
 
 > **Falsifier.** A load-time test computing `place_node_count + faction_count` from the cooked form
 > registry and asserting it is `≤ DEFAULT_EMISSIONS_PER_TICK_MAX`. **What this does not check, stated

@@ -345,7 +345,7 @@ edge of an "established" band, with 6–7 reserved for a presence that has becom
 authority (§4.4's Church Governor case). **The band edges above are illustrative, not ratified** — the
 same anti-fabrication posture as every other threshold this document proposes (§3.2, §5.1).
 
-> **Falsifier.** A declaration-time test (the same instrument `01 §6.1` specifies) computing, for
+> **Falsifier (L-7).** A declaration-time test (the same instrument `01 §6.1` specifies) computing, for
 > `presence.<institution>` at `ceiling=7`, `modifier_max=0` (the gauge's own declared range carries no
 > modifier — any site-specific modifier bound is that site's to declare, per `00 §7`'s `ob_sites:`
 > split of concerns) and the practical pool range `N_max ∈ [5,18]`: both the top-band and bottom-band
@@ -645,6 +645,7 @@ deferred rather than fabricated. If a reviewer judges that trade not worth it, t
 | the node graph never gains or loses an entry at runtime (§3.5) | a test asserting the count of `place` entities and the edge set of `references/form_registry.yaml`'s `nodes:` list are identical before and after any seeded campaign run, regardless of how many `place_found`/`place_ruin` transitions fired |
 | growth/decay cannot flicker (§3.2, L-5) | the load-time test from `01 §2.3`, instantiated over every place-kind pair this document declares `reversible: true` |
 | strata claims cannot exceed yield (§5.1, L-6) | a load-time test summing `max_share(institution)` per place-kind and asserting ≤ 1 |
+| `presence.<institution>`'s declared range (floor 0, ceiling 7) passes `01 §6.1`'s commensurability gate (§4.1a, L-7) | the declaration-time test `01 §6.1` specifies, run against this document's `ceiling: 7` and `N_max ∈ [5,18]`; both the top-band and bottom-band reachability inequalities must hold |
 | `controller(place)` never drifts from the sited governor post (07-O-1) | a test asserting no code path stores a place-level controller field; the only read path is the post query |
 | no form transition here is ever named directly by a world event or a Key (§8.1) | a static check that no `11`-lane emitter's result names a `form:` field this document declares — the gate always intervenes |
 | a facility, once built, is disclosed `exact` and citable by fieldwork (§8.2) | a test asserting every `facilities[]` entry carries a `disclosure:` row with `presentation: exact` |
