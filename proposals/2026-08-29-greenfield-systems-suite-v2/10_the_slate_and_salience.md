@@ -534,7 +534,7 @@ subscription; a router module is the god-loop with better PR."*
 | # | Property | Statement |
 |---|---|---|
 | **P-A** | **Fidelity neutrality of the world** | For every pair of candidates `c ≠ c′`: the outcome of `c′` is **bit-identical** whether `c` was played, witnessed, shaded, or absent from the Slate |
-| **P-B** | **Baseline parity** | `E[outcome(c) | auto] = E[outcome(c) | AI-played]`. The auto path *is* the AI playing it — not a summary, not a table, not a cheaper approximation |
+| **P-B** | **Baseline parity** | `E[outcome(c) \| auto] = E[outcome(c) \| AI-played]`. The auto path *is* the AI playing it — not a summary, not a table, not a cheaper approximation |
 | **P-C** | **Order neutrality** | The season's outcome is invariant under any permutation of the order in which candidates are resolved, and under the order in which the player attends their scenes |
 
 **P-A is the load-bearing one.** If surfacing changed outcomes, the filter would be a cheat: the player
@@ -590,7 +590,7 @@ objection to everything above:
 
 | | |
 |---|---|
-| **P-B binds the magnitude** | `E[outcome(c) | auto] = E[outcome(c) | AI-played]`. Nobody gains expected value by choosing a fidelity. Mode-shopping is dead |
+| **P-B binds the magnitude** | `E[outcome(c) \| auto] = E[outcome(c) \| AI-played]`. Nobody gains expected value by choosing a fidelity. Mode-shopping is dead |
 | **Playing selects the branch** | The player substitutes their decisions for the AI policy's **at the same decision points, from the same option set** (`remit`-as-gate, `00 §7`). Same distribution of *magnitudes*; different *which* — which tag is written, whose Grudge, which Precedent, which edge strains |
 | **The premium is real and is paid for** | Play above the AI baseline is a legitimate gain — ED-SC-0024's Football Manager argument, where *"a watched match diverges from an unwatched one exactly by the manager's live interventions."* It is not mode-shopping because it **cannot be had without spending a scene action**, and the budget is 3–5 |
 
@@ -607,3 +607,7 @@ harness's baseline moves, and §6.5's premium becomes zero. The design is robust
 *reason to play* is not, which is why ED-SC-0026 says CIP-9b must not be ruled separately from CIP-1.
 
 ---
+
+**Continues in [`10_the_slate_and_salience_part2.md`](10_the_slate_and_salience_part2.md)** — §7 light-inertia
+without storage and **J-N** · §8 **J-O** · §9 the player surface · §10 module contracts · §11 the property
+audit.

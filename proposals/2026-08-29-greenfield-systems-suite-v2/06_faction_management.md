@@ -220,8 +220,8 @@ Bloc
 ```
 
 **Keep it minimal, and here is what "minimal" cost.** A bloc has **no ethos of its own** — its position
-is `practice(members)`, the §2.2 derivation applied to a subset. It has **no treasury, no standing, no
-posture**. It is not a second faction; adding any of those would make it one, and then the elegance
+is `practice(members)`, the §2.2 derivation applied to a subset. It has **no treasury, no footing of
+its own, no posture**. It is not a second faction; adding any of those would make it one, and then the elegance
 failure is two objects doing one job.
 
 *Emergent possibility lost if the bloc were cut:* there is no object between a faction and a post, so a
@@ -258,6 +258,14 @@ Three things this buys that a bespoke rule would not:
 3. **A rivalry edge can hold a bloc together.** PP-724 ships `rivalry` and `feud` as edge kinds with
    negative valence (`:56`), and connectivity does not care about sign — two officers bound by a shared
    feud against a third are one component. That is a real court dynamic and it costs nothing.
+
+**All six kinds are admitted, and each earns it rather than being inherited wholesale** — the set was
+re-examined rather than adopted on PP-724's authority. `patronage` and `liege-vassal` are the direct
+political spine. `sworn-bond` is the oath-brotherhood that outlives the office. `kinship` is the single
+most historically standard way a court faction assembles, and excluding it would make marriage
+politically inert in a setting that has a marriage-to-treaty converter (`01 §7.4`). `rivalry` and `feud`
+enter for the reason above. **The one kind excluded is `knot`**, and that exclusion is argued on merit in
+the `## Overrides` block's *kept because they are right* list, not taken from the ruling's authority.
 
 ⚠ **`θ_coherence` is the bar against the degenerate case**: without it, every disaffected officer in a
 large faction is one component and the "bloc" is just "everyone who disagrees" — an object with no
@@ -331,6 +339,23 @@ subsystem.**
 
 `05` owns **acting** at a tier: no post-holder at a tier, no action at that tier. This section owns
 **being** at a tier, and it is one function evaluated at different nodes — not three quantities.
+
+### 4.0 ⚠ A naming collision this document nearly shipped, caught and fixed
+
+The obvious word for this quantity is *standing*, and **the tree already has two live meanings for it**:
+
+| # | what it names | where |
+|---|---|---|
+| 1 | a **person** gauge — the public half of a person's reputation, paired with `exposure` | `01 §5.2` |
+| 2 | a **person's rank inside one faction**, the ratified 0–7 ladder with per-rung gates, demotion magnitudes and a −1 dismissal | `systems/factions/faction_politics_v30.md:38`, `:61-94` |
+
+A third, faction-scoped, multi-scale meaning is exactly how the tree acquired three readings of Combat
+Pool and two of Mandate — the disease `00 §5.3` says this suite exists to stop. **This document's
+derivation is therefore named `footing`**, which is the word §4.1 already needed for the three grades,
+is ordinary English for *how firmly established you are somewhere*, and yields the same meaning to a
+reader with no memory of this repo (`CLAUDE.md` §4's idempotent-and-idiomatic test). **Neither existing
+meaning is overridden or renamed** — a rename at that volume costs more than it buys, and both are
+correct in their own scope. Reported to `00` as a vocabulary finding rather than fixed here.
 
 ### 4.1 Three grades of footing, and none of them is stored
 
@@ -540,9 +565,18 @@ The fix is one distinction, and it preserves the delta spec §9.5 carry-forward 
   the world always knows this faction *wants* a head. That is v1's recoverability, unchanged, and it is
   what stops a vacancy being an instant death.
 - **Supply is bounded and can be empty.** `03`'s population is bounded and `04`'s candidate gate is
-  real — a Standing floor, the caste matrix (`faction_politics_v30.md:653-668`), remit, and canon's own
+  real — a rank floor, the caste matrix (`faction_politics_v30.md:653-668`), remit, and canon's own
   successor requirement at **Standing 4+** (`settlement_layer_v30.md:1077`). An empty candidate set is
   a reachable state, and sustaining it for `DISSOLVE_DWELL` seasons is what ends an institution.
+
+⚠ **The gate is `04`'s candidate set being empty — not "Standing 4+" — and the difference matters under
+the amended authority model.** Canon's *Standing 4+* is one term inside that gate, and it is cited as
+evidence that a rank floor belongs there at all, not adopted as a threshold this page owns. **If the
+ratified 0–7 ladder is later replaced — its granularity changed, its rungs renamed, or the whole track
+re-derived — §7.2's dissolution band is unaffected**, because it reads *"is the candidate set empty"*
+and never *"is anyone at rung 4"*. That independence is deliberate: the collapse gate is the single most
+irreversible thing in the game, and binding it to a number in another lane's ladder would make a rank
+retune silently able to dissolve a duchy.
 
 `DISSOLVE_DWELL` is a **shape proposal** and its job is to keep a one-season accident from dissolving a
 duchy. Canon states the condition (`:1077`) and states no dwell; the dwell is this page's, and it is

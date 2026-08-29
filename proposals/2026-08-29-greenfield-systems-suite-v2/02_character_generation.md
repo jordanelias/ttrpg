@@ -100,27 +100,21 @@ game — they are playing a different game"* (`systems/_architecture/player_agen
 
 `identity.heritage` is declared by `01 §1.1` as a field distinct from caste. **This document
 populates it from canon and records that canon populates it thinly.** Measured, not recalled:
-
-- Canon uses *"heritage"* as a **synonym for caste** in every person-level use found
-  (`canon/03_canonical_timeline.md:80` *"Northern Einhir heritage"*; `:144` *"Southern Einhir
-  heritage"*; `faction_politics_v30:237` *"Northern Einhir heritage"*).
-- **Altonia is a colonial overlay, not a person-level lineage.** The three provinces are *"Altonian
-  colonial administrative overlays, not indigenous nations"* (`systems/world/worldbuilding_v30.md:213`),
-  and what canon names is **residue to be expelled** at the *institutional* level (`canon/03_canonical_timeline.md:144`)
-  plus one foreign node, Schoenland (`systems/settlements/settlement_layer_v30.md:435`).
-- **No canonical Altonian-descended person category exists.** A grep over `systems/` and `canon/` for
-  *Altonian descent / heritage / residue / settler* returns exactly one hit, and it is
-  institutional, not personal.
+canon uses *"heritage"* as a **synonym for caste** in every person-level use found
+(`canon/03_canonical_timeline.md:80`, `:144`; `faction_politics_v30:237`); Altonia is a **colonial
+overlay, not a person-level lineage** — *"Altonian colonial administrative overlays, not indigenous
+nations"* (`systems/world/worldbuilding_v30.md:213`) — and what canon names is institutional
+*residue* (`03_canonical_timeline.md:144`) plus one foreign node, Schoenland
+(`systems/settlements/settlement_layer_v30.md:435`). A grep over `systems/` and `canon/` for
+*Altonian descent / heritage / residue / settler* returns one hit, and it is institutional.
 
 **So heritage ships as a lineage field with two populated sources and no invented third:** the caste
 lineage canon already names, and `origin_node` where that node is foreign or Altonian-connected. **A
 fourth caste value or an Altonian-descent category would be canon authorship, not design**, and this
 suite proposes no canon. Recorded as a **WR-lane gap**, not filled: *is heritage a second axis, or is
-it caste's own name?* If it is the same axis, `01 §1.1` should drop one field.
-
-⚠ **The field is kept anyway, and the reason is not tidiness.** `01 §1.1` is normative and lists
-both; a document that quietly ships one field where the substrate declares two is the shape
-divergence this suite claims immunity to. The honest move is the field plus the gap.
+it caste's own name?* If the same, `01 §1.1` should drop one field. The field is kept meanwhile
+because `01 §1.1` is normative and lists both, and quietly shipping one field where the substrate
+declares two is the shape divergence this suite claims immunity to.
 
 ### 2.3 Where the gate lives, and why it is published
 
@@ -688,37 +682,16 @@ question set — not to move the derivation onto the player.
 `cg.stage` is the only addition** — it is where change A lands for people.
 
 ```yaml
+# cg.demand and cg.condition are UNCHANGED from v1 02 §6 and share one shape, given once:
+#   parent: character_generation · class: substrate · tier: null · remit: [] (not player-invocable)
+#   budget: null · emits: [] · form: [] · transitions: []
 - module: cg.demand
-  parent: character_generation
-  class: substrate
-  scales: [personal]
-  tier: null
-  resolver: gate
-  remit: []                       # not player-invocable; raised by other modules
-  budget: null
-  consumes:
-    - {type: post.vacant, from: [pm.vacancy]}     # → raises one demand per vacant post
-  emits: []
-  state: []
-  form: []
-  transitions: []
-  disclosure: []
-
+  scales: [personal]     resolver: gate         state: []      disclosure: []
+  consumes: [{type: post.vacant, from: [pm.vacancy]}]     # → one demand per vacant post
 - module: cg.condition
-  parent: character_generation
-  class: substrate
-  scales: [personal, settlement]
-  tier: null
-  resolver: derivation
-  remit: []
-  budget: null
-  consumes: []
-  emits: []
+  scales: [personal, settlement]   resolver: derivation   consumes: []
   state: []                       # pure; consumes no RNG and stores nothing
-  form: []
-  transitions: []
-  disclosure:
-    - {of: distribution, inputs: published, presentation: band, trigger: hidden}
+  disclosure: [{of: distribution, inputs: published, presentation: band, trigger: hidden}]
 
 - module: cg.stage                # NEW (v2). Walks ONE stage row. Two callers: generation, boundary.
   parent: character_generation
@@ -846,15 +819,14 @@ The one roll in this document's blast radius is **canon's Knot formation roll**,
 
 ### 11.4 N / R / S / E
 
-**Necessary** — a game gated on people existing cannot omit the thing that makes people, and the
-belief object already in the tree has **no producer** (`characters_flow_skeleton_v1.md:30-31`, `:92`).
-**Robust** — the two failure directions are each bounded by a declared parameter with an arithmetic
-check, and the layering that v2 adds is the one place that robustness is *weaker* than v1's, which
-§11.1 P-iii says rather than hides. **Smooth** — one pipeline for authored and generated characters,
-one substream, one stage walker serving both creation and career, one attribute roster read from the
-registry, zero attributes and zero convictions named literally. **Elegant** — four stages adopted
-from canon rather than invented, one grant vocabulary of eight members, one new module, **no new
-registry file, no new stored primitive, no new Tag kind, no new Key type, and no in-play verb**.
+**Necessary** — a game gated on people existing cannot omit what makes people, and the belief object
+already in the tree has **no producer** (`characters_flow_skeleton_v1.md:30-31`, `:92`). **Robust** —
+both failure directions are bounded by a declared parameter with an arithmetic check; layering is the
+one place robustness is *weaker* than v1's, which §11.1 P-iii says rather than hides. **Smooth** —
+one pipeline for authored and generated characters, one substream, one stage walker serving both
+creation and career, zero attributes and zero convictions named literally. **Elegant** — four stages
+adopted from canon rather than invented, one grant vocabulary of eight members, one new module, **no
+new registry file, no new stored primitive, no new Tag kind, no new Key type, no in-play verb**.
 
 ### 11.5 The weakest claim in this document, named
 

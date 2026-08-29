@@ -174,7 +174,7 @@ do apply to a selection function.
 | # | Claim | Falsifier |
 |---|---|---|
 | **1** | **This document designs no salience function** (§0) | Grep every score expression here against `narrative_engine_design_v2_churn.md:239-246`. A term appearing here that is not one of the ratified six — or the struck **novelty** term reappearing — falsifies it |
-| **2** | **Truncation is bounded:** `|Slate| ≤ B` in every reachable state (§5.2) | A property test over random `(|C|, |M|, |E|)` triples asserting `|Slate| ≤ B`. **Separately measurable and NOT assumed:** the frequency of `|M| ≥ B` over a seeded 50-season campaign. If it exceeds a stated rate, the mandatory enumeration is too wide and §5.4 is wrong |
+| **2** | **Truncation is bounded:** `\|Slate\| ≤ B` in every reachable state (§5.2) | A property test over random `(\|C\|, \|M\|, \|E\|)` triples asserting `\|Slate\| ≤ B`. **Separately measurable and NOT assumed:** the frequency of `\|M\| ≥ B` over a seeded 50-season campaign. If it exceeds a stated rate, the mandatory enumeration is too wide and §5.4 is wrong |
 | **3** | **Truncation is monotone** (§5.3) | A property test: sample a candidate set and a comparator, raise one candidate's `cast_score`, assert it did not leave the Slate and that no candidate ranked below it entered. **Mutation check that the proof is load-bearing:** redefine the exempt set by a score *threshold* instead of a count *cap* and confirm the test then fails |
 | **4** | **P-A — a candidate's outcome does not depend on whether any other was surfaced** (§6.3) | Run a seeded season twice with identical state, differing only in which Slate items were attended, with all attended items forced to the AI policy. Assert the resulting world state is **bit-identical**. **This is the single most important test in the document.** Mutation check: replace the per-candidate substream with a shared sequential stream and confirm it fails |
 | **5** | **P-C — order neutrality** (§6.3) | Resolve one season's candidate set under `n` random permutations; assert one state. Mutation check: allow two post operations on one post per boundary and confirm it fails |
@@ -230,3 +230,11 @@ a response (C-5).
    cut instead of shipped.
 3. **`|M| ≥ B` is reachable** and degrades the game to mandatory-only. Canon handles it; nobody has
    measured how often it happens.
+4. **The product form of meaningfulness is asserted, not shown** (part 1 §0.1). A candidate with zero
+   `identity_touch_bp` scores zero however durable and close it is. That is probably right and is
+   certainly the ratified shape — but this document adopted it on the strength of the ratification and
+   an intuition, not on evidence. **The falsifier is cheap and worth running early:** score one seeded
+   season's candidate set under the product form and under a weighted-sum form, and inspect the two
+   Slates side by side. If the product form drops items a reader judges obviously belong, the weight
+   set is exposed data (`narrative_engine_design_v2_churn.md:279`) and is tunable toward additive
+   **without re-ratification** — which is exactly why keeping the ratified shape costs nothing now.

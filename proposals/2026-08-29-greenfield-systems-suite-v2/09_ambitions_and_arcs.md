@@ -621,52 +621,44 @@ In `00 §7`'s shape. `consumes:` is empty on all four, which is §8's constraint
 contract rather than promised in prose, and is why §8.1 can claim robustness under J-O.
 
 ```yaml
+# ALL FOUR: parent: ambitions · scales: all four · tier: null · form: []
+#           consumes: []   <- J-N (§8): nothing is ever posted to a project
+# The three below `am.declare` are boundary-run by the herald (01 part 2 §9.2, W-5), so all three
+# carry remit: [] and budget: null — they are not invocable by any post, including the player's.
+
 - module: am.declare
-  parent: ambitions            class: surface        # the ONLY surface row in this document
-  scales: [personal, settlement, territory, peninsula]      tier: null
-  resolver: gate               # eligibility + the caste/remit gate. Declaring is never a roll.
+  class: surface               # the ONLY surface row in this document
+  resolver: gate               # eligibility + the remit/caste gate. Declaring is never a roll.
   remit: [head, governor, minister, commander, envoy]       # clerk cannot declare; §9
   budget: {gauge: post.budget, cost: 1}
-  consumes: []                 # J-N: nothing is posted to a project (§8)
   emits: [{type: state.project_formed, terminal: false}]    # BLOCKED on P0-1 + G-17 (§10.1)
-  state:
-    - {name: tag.ambition, bucket: tag, writable: true, owner: substrate.ledger}
-  form: []                     transitions: []
+  state: [{name: tag.ambition, bucket: tag, writable: true, owner: substrate.ledger}]
+  transitions: []
   disclosure: [{of: tag.ambition, inputs: published, presentation: exact, trigger: hidden}]
 
 - module: am.advance
-  parent: ambitions            class: substrate
-  scales: [personal, settlement, territory, peninsula]      tier: null
+  class: substrate
   resolver: derivation         # progress is DERIVED (O-A2). Nothing writes it.
-  remit: []                    # boundary-run by the herald (01 part 2 §9.2, W-5)
-  budget: null                 consumes: []
   emits: [{type: mechanical.project_advanced, terminal: false}]   # on a BAND crossing only (§3.3)
   state: []                    # a derivation owns no state — this row is empty on purpose
-  form: []                     transitions: []
+  transitions: []
   disclosure: [{of: progress, inputs: published, presentation: band, trigger: hidden}]
 
 - module: am.fire
-  parent: ambitions            class: substrate
-  scales: [personal, settlement, territory, peninsula]      tier: null
+  class: substrate
   resolver: gate               # guaranteed at threshold; no attempt/failure variance (§4)
-  remit: []                    budget: null        consumes: []
   emits: [{type: state.project_completed, terminal: false}]
-  state:
-    - {name: tag.ambition, bucket: tag, writable: true, owner: substrate.ledger}   # -> fired residue
-  form: []
+  state: [{name: tag.ambition, bucket: tag, writable: true, owner: substrate.ledger}]  # -> residue
   transitions: [<whichever the kind's fire.effect names; each declared in form_registry.yaml>]
   disclosure: [{of: tag.ambition, inputs: published, presentation: exact, trigger: hidden}]
 
 - module: am.lapse
-  parent: ambitions            class: substrate
-  scales: [personal, settlement, territory, peninsula]      tier: null
+  class: substrate
   resolver: gate               # ttl expiry / required-term unreachability. Reads elapsed time only.
-  remit: []                    budget: null        consumes: []
   emits: [{type: state.project_failed, terminal: false}]
-  state:
-    - {name: tag.ambition, bucket: tag, writable: true, owner: substrate.ledger}   # swept
-    - {name: tag.precedent, bucket: tag, writable: true, owner: substrate.ledger}  # the residue
-  form: []                     transitions: []
+  state: [{name: tag.ambition, bucket: tag, writable: true, owner: substrate.ledger},   # swept
+          {name: tag.precedent, bucket: tag, writable: true, owner: substrate.ledger}]  # residue
+  transitions: []
   disclosure: [{of: tag.precedent, inputs: published, presentation: exact, trigger: hidden}]
 ```
 
