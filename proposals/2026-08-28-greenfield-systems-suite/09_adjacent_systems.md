@@ -1,5 +1,11 @@
 # 09 — Adjacent systems
 
+> ⚠ **ARCHIVED / SUPERSEDED (2026-08-29).** This is the **pre-critique** version. It is retained
+> unedited so the adversarial findings against it stay checkable — **do not build from it.** Six of
+> its claims are known false; see [`ARCHIVED.md`](ARCHIVED.md). The live suite is
+> `proposals/2026-08-29-greenfield-systems-suite-v2/`.
+
+
 ## Status: PROPOSED (2026-08-28) — held back from ratification-on-merge
 ## Reads: [`00_INDEX.md`](00_INDEX.md) · [`01_substrate_primitives.md`](01_substrate_primitives.md) · [`05_faction_actions.md`](05_faction_actions.md) · [`06_faction_management.md`](06_faction_management.md)
 ## Produces: the four systems the eight named ones cannot be built without
