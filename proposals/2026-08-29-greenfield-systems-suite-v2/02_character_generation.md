@@ -556,11 +556,11 @@ unless another document populates it.
 
 ### 7.2 A flaw declares when it binds, and it must open something
 
-Canon has no formal flaw mechanic, but it has the **shape**, authored per NPC:
-`systems/npcs/npc_roster_v30.md:165-173` ships a summary table whose columns are **Compromise ·
-AI Flaw · Key Consequence** — the condition, the bias, and what it costs *and buys*. One row is the
-whole argument: *"PROCEDURALIST (slow) → Investigations +1 season **but Overwhelming**"* (`:170`).
-The flaw is a different way of doing the job, not a subtraction from it.
+Canon has no formal flaw mechanic but has the **shape**, authored per NPC:
+`systems/npcs/npc_roster_v30.md:165-173` ships a table whose columns are **Compromise · AI Flaw ·
+Key Consequence** — the condition, the bias, and what it costs *and buys*. One row is the whole
+argument: *"PROCEDURALIST (slow) → Investigations +1 season **but Overwhelming**"* (`:170`). A flaw
+is a different way of doing the job, not a subtraction from it.
 
 ```yaml
 flaw: <id>                        # a row in references/content_registry.yaml
@@ -574,25 +574,23 @@ class: substrate
 
 **Three rules, and the third is the one that keeps the design honest.**
 
-1. **A flaw never touches the option set and never touches the odds.** It is not a remit filter — that
-   would break ED-IN-0201 clause 2, which says the person shapes *which* action from the **same**
-   option set with the same information (`00 §5`, `01 §4.3`). It is not a modifier — `01 §6` keeps
-   modifiers in σ-space and reserves them for properties of the *target*. **A flaw emits a
-   candidate**: when its predicate holds, a situation arrives. That is `00 §2.3` point 3 exactly —
-   new objects add situations, not verbs — and it is why this document adds **zero player verbs**.
+1. **A flaw touches neither the option set nor the odds.** Not a remit filter — that breaks
+   ED-IN-0201 clause 2, which says the person shapes *which* action from the **same** option set with
+   the same information (`00 §5`, `01 §4.3`). Not a modifier — `01 §6` keeps modifiers in σ-space and
+   reserves them for properties of the *target*. **A flaw emits a candidate**: when its predicate
+   holds, a situation arrives. That is `00 §2.3` point 3 — new objects add situations, not verbs —
+   and it is why this document adds **zero player verbs**.
 2. **A flaw that only subtracts is a debuff, not play.** Every row declares `opens` as well as
-   `emits_candidate`, or it does not ship. The canon precedent above is the test case, and the
-   reachability bar is: **the `opens` candidate must be reachable in a seeded campaign**, or the
-   flaw is a penalty wearing a costume.
+   `emits_candidate` or it does not ship, with the reachability bar: **the `opens` candidate must be
+   reachable in a seeded campaign**, or the flaw is a penalty wearing a costume.
 3. **A flaw is challengeable, and challenging it is a scene, not a purchase.** `challenge` names a
-   form transition whose gate is a **resolved scene outcome**, not a spend. Passing tempers or
-   retires the trait; it emits `form.transitioned` like every other transition, so the world notices
-   that this person is not who they were.
+   form transition gated on a **resolved scene outcome**, never a spend. Passing tempers or retires
+   the trait and emits `form.transitioned`, so the world notices this person is not who they were.
 
 **Where flaws come from.** A stage row (§4) or a Conviction Scar taken in play — canon's Catalyst
-stage already produces a *"possible starting Scar"* (`questionnaire:58`), and canon's own Scar ladder
-(`character_canon_v30 §6.3`) is what escalates them. Generation seeds; play accumulates; the
-challenge transition is the only way down.
+stage already produces a *"possible starting Scar"* (`questionnaire:58`) and canon's Scar ladder
+(`character_canon_v30 §6.3`) escalates them. Generation seeds; play accumulates; the challenge
+transition is the only way down.
 
 *Emergent possibility lost if flaws were cut:* nobody could be **reliably** wrong in a way another
 actor can anticipate and exploit, so there would be nothing to know about a person that is worth
@@ -766,22 +764,20 @@ is unexecuted and appending a type while it is would be the drift that precondit
 
 ### 11.1 Engine class — and the scope gate, honoured
 
-**Nothing in this document rolls.** A conditioned categorical draw is not the continuous engine, and
-every transition here is a **gate** (`00 §6` principle 4). Per `00 §... delta §10`'s rule — *do not
-manufacture a NERS verdict for a module that does not roll* — the four qualitative properties are
-diagnosed against the generator directly, and where a property is about resolution it says so rather
-than being scored.
-
-The one roll in this document's blast radius is **canon's Knot formation roll**, which canon owns
-(`01 §7.5`, `knots_v30.md:76-83`). It is cited, not designed, and it is not audited here.
+**Nothing in this document rolls.** A conditioned categorical draw is not the continuous engine and
+every transition here is a **gate** (`00 §6` principle 4). Per the suite's rule — *do not manufacture
+a NERS verdict for a module that does not roll* — the properties below are diagnosed against the
+generator directly, and where one is about resolution it says so rather than being scored. The single
+roll in this document's blast radius is **canon's Knot formation roll** (`01 §7.5`,
+`knots_v30.md:76-83`): cited, not designed, not audited here.
 
 | property | verdict | reasoning and falsifier |
 |---|---|---|
-| **P-i** legible odds | **pass, scoped** | The player does not choose against this draw, so predicting its odds is not a decision they make. What P-i requires here is that the *result* be legible: `capability_provenance`, the conditioning inputs and every caste verdict are published (`01 §8`; `04`). **Falsifier:** a test asserting every `cg.*` state row carries a disclosure block and none sets `trigger: published` |
+| **P-i** legible odds | **pass, scoped** | The player does not choose against this draw, so its odds are not a decision they make. What P-i requires here is a legible *result*: `capability_provenance`, the conditioning inputs and every caste verdict are published (`01 §8`; `04`). **Falsifier:** a test asserting every `cg.*` state row carries a disclosure block and none sets `trigger: published` |
 | **P-ii** uniform leverage | **pass** | §3.5 — additive log-odds with a bounded shift; a unit of conditioning moves the distribution by the same amount wherever it lands. The multiplicative form fails this and is the version not built. **Falsifier:** apply a fixed signal to a tail category and a head category and assert the log-odds delta is identical |
 | **P-iii** bounded, monotonic | **pass, with the layering caveat** | Capability moves one axis by at most one band per stage and is clamped; conviction reweights sum into the declared band; `Δ_MAX` bounds conditioning and `p_floor` bounds degeneracy. **The caveat is real:** these bounds were proved for ONE application in v1 and now apply `S` times. **Falsifier:** §3.5's terminal-distribution test, plus a test asserting no generated capability exceeds `descriptors.ATTRIBUTE_CEILING` after the longest reachable ladder |
 | **P-iv** graded, recoverable | **pass** | §8 — generation is total, and the load-bearing event (can a required post be filled) cannot fail. Stage skipping is graded, not all-or-nothing. **Falsifier:** a test asserting every well-formed demand returns a person, and that `Origin` is present on **every** person in a seeded world |
-| **P-v** right engine | **pass** | Not a contest, so neither canonical resolver applies; a draw from a declared distribution is the right tool, and a contested roll here would be a resolution where the answer is a construction. Every *transition* is a gate because the uncertainty was upstream |
+| **P-v** right engine | **pass** | Not a contest, so neither canonical resolver applies; a draw from a declared distribution is the right tool, and a contested roll here would resolve something that is a construction. Every *transition* is a gate: the uncertainty was upstream |
 
 ### 11.2 Loops, each with its bound
 

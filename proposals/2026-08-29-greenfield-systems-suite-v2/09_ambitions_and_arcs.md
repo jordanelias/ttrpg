@@ -238,29 +238,26 @@ consequences, and the third is a prohibition this document is bound by:
 > it with the coup counter, for example."**
 > — Jordan, 2026-08-18 (`proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md:618`)
 
-**Under the amended authority model this ruling is evidence, not a fence** (see the note after
-`## Overrides`) — and it is adopted anyway, on merit, for a reason worth stating: **it is the only
-formulation in the tree that stops scripting drift without banning authored content.** The authored
-part is a *predicate over world state*, which by its shape cannot name an entity or an outcome; every
-consequence of the predicate holding is emergent. And it arrives with **three worked precedents
-already in the tree**, so nothing here is invented or untested.
+**Under the amended authority model this ruling is evidence, not a fence** (the note after
+`## Overrides`) — and it is adopted anyway, on merit: **it is the only formulation in the tree that
+stops scripting drift without banning authored content.** The authored part is a *predicate over
+world state*, which by its shape cannot name an entity or an outcome; every consequence of it holding
+is emergent. And it arrives with **three worked in-tree precedents**, so nothing here is untested.
 
 | precedent | what IS scripted | what is NOT | the project row that expresses it |
 |---|---|---|---|
-| **Löwenritter coup counter** (`factions_personal_v30_infill.md:74-76`) | a private counter that **never decrements**; a **guaranteed** fire at threshold 3 at the next seasonal accounting; a fixed consequence | when it trips, who pushed it there, what the player does, everything downstream | §3.2 — ratchet terms over durable tags, `fire.guaranteed: true` |
+| **Löwenritter coup counter** (`factions_personal_v30_infill.md:74-76`) | a private counter that **never decrements**; a **guaranteed** fire at threshold 3 at the next accounting; a fixed consequence | when it trips, who pushed it there, what the player does, everything downstream | §3.2 — ratchet terms over durable tags, `fire.guaranteed: true` |
 | **Royal Assassination fuse** (`conflict_architecture_proposal.md:87`, `:89`; `## Status: CANONICAL`, `:2`) | one per campaign; fires at S8+; ***"succeeds when it fires — no attempt/failure variance"***; target fixed at start | the season within the window, the target, whether the player detects and averts it, the whole consequence arc | a single season-index term, `fire.guaranteed: true`, `resolver: gate` — **no roll** |
-| **Baralta's Crown Claim** (`baralta_crown_claim_v30.md:26-40`; `## Status: DESIGN`, `:6`) | a scripted **conjunction of world facts**: Crown eliminated (Mandate 0 + Loyalty 0) **or** Royal Deposition; then per-claimant conditions — *Baralta alive + Hafenmark Mandate ≥ 4*, *Löwenritter Autonomy ≥ 3*, *CI ≥ 40* | whether those facts ever obtain, by what route, who else qualifies, who wins the resulting contest | §3.1 — equal-weight conjunction, `threshold = |terms|` |
+| **Baralta's Crown Claim** (`baralta_crown_claim_v30.md:26-40`; `## Status: DESIGN`, `:6`) | a scripted **conjunction of world facts**: Crown eliminated **or** Royal Deposition; then per-claimant conditions — *Baralta alive + Hafenmark Mandate ≥ 4*, *Löwenritter Autonomy ≥ 3*, *CI ≥ 40* | whether those facts ever obtain, by what route, who else qualifies, who wins the resulting contest | §3.1 — equal-weight conjunction, `threshold = |terms|` |
 
 > **The script is the PREDICATE. The arc is emergent.**
 
-**Two permissions taken explicitly**, so a later reader does not read them as drift:
-
-- **A guaranteed fire at threshold is allowed.** No attempt/failure variance is required, and two
-  canonical precedents do exactly that. **Every project's fire is a `gate`, never a `d_sigma`** —
-  `00 §6` principle 4 and `01 §2.2`'s reasoning verbatim: *the uncertainty was in getting the state
-  there, and re-rolling at the threshold charges for it twice.*
-- **A monotone counter is allowed**, and §3.2 takes it without an exemption to the geometric-decay
-  default. `01 §5.1`'s decay law is untouched by this document.
+**Two permissions taken explicitly**, so a later reader does not read them as drift. **(1) A
+guaranteed fire at threshold is allowed** — no attempt/failure variance, as two canonical precedents
+do, so **every project's fire is a `gate`, never a `d_sigma`** (`00 §6` principle 4; `01 §2.2`: *the
+uncertainty was in getting the state there, and re-rolling at the threshold charges for it twice*).
+**(2) A monotone counter is allowed**, and §3.2 takes it without an exemption — `01 §5.1`'s decay law
+is untouched by this document.
 
 **Note the second precedent's status caveat, carried honestly:** `baralta_crown_claim_v30.md:6` is
 `## Status: DESIGN`, not canonical. **Two canonical precedents plus one design-tier one; the ruling
@@ -269,10 +266,10 @@ rests on the first two**, and this document's shape does too.
 ### 4.1 Generate solvable, let the world erode it
 
 The same ruling's generalization (`:660-670`): *"Solvability is a generation-time precondition, never
-an ongoing constraint."* Applied here: **a project kind's conjunction may be guaranteed reachable at
-declaration and is never maintained against the sim.** A project whose target place is sacked, whose
-key ally dies, or whose terms are made unreachable by another actor **lapses** (§6.1) — that is not a
-bug in the hook, it is the texture, and it is why `lapse` is a real outcome rather than a consolation.
+an ongoing constraint."* Applied here: **a kind's conjunction may be guaranteed reachable at
+declaration and is never maintained against the sim.** A project whose target place is sacked or
+whose terms another actor makes unreachable **lapses** (§6.1) — not a bug in the hook but the
+texture, and why `lapse` is a real outcome rather than a consolation.
 
 ### 4.2 The extension, and why it still stops scripting drift
 
