@@ -139,14 +139,19 @@ exactly what `01 part 2 §9.3` says the substrate cannot do.
 
 ```
 last_lit(c)   = the accounting_index of the most recent slate.item_surfaced Key with this candidate_id
-inertia_bp(c) = 0                                   if none
-              = INERTIA_BASE · NUM^(t − last_lit(c)) // DEN^(t − last_lit(c))     otherwise
-anti-strobe:    if 0 < t − last_lit(c) ≤ STROBE_MIN ⟨shape: 2⟩ :
+d             = t − last_lit(c)
+inertia_bp(c) = INERTIA_NEUTRAL                                    if none      # v3 — was 0; see §7.1
+              = INERTIA_NEUTRAL + INERTIA_BASE · NUM^d // DEN^d    otherwise
+anti-strobe:    if 0 < d ≤ STROBE_MIN ⟨shape: 2⟩ :
                     inertia_bp(c) := max(inertia_bp(c), STROBE_FLOOR)  ⟨shape⟩
 ```
 
-`INERTIA_BASE`, `NUM`/`DEN`, `STROBE_MIN` and `STROBE_FLOOR` are **shape proposals**; they belong to
-the ratified F-F weight surface (`:279`) as exposed versioned data.
+⚠ **The `if none` line read `0` in v2.0 and that was a bootstrap deadlock** — inertia multiplies into
+`cast_score` (§4.1), so a never-lit candidate scored zero and could never be lit. **§7.1 is the
+argument; this block is the corrected arithmetic, and there is only one of it.** Falsifier: claim 16.
+
+`INERTIA_NEUTRAL`, `INERTIA_BASE`, `NUM`/`DEN`, `STROBE_MIN` and `STROBE_FLOOR` are **shape proposals**;
+they belong to the ratified F-F weight surface (`:279`) as exposed versioned data.
 
 **Three things this buys.**
 
@@ -213,15 +218,9 @@ that is **not** confined to it:
 
 **Fix, and it is the smaller of the two available.** `inertia` is a **momentum** term: the ratified
 reading is that attention *has* momentum, not that inattention *annihilates* meaningfulness. Its
-neutral value is therefore `1`, not `0`:
-
-```
-INERTIA_NEUTRAL = 10000 bp  ⟨shape; 1.0 in basis points⟩
-inertia_bp(c) = INERTIA_NEUTRAL                                    if never lit
-              = INERTIA_NEUTRAL + INERTIA_BASE · NUM^d // DEN^d    otherwise,  d = t − last_lit(c)
-anti-strobe:    if 0 < d ≤ STROBE_MIN ⟨shape: 2⟩ :
-                    inertia_bp(c) := max(inertia_bp(c), STROBE_FLOOR)  ⟨shape⟩
-```
+neutral value is therefore `1` — `INERTIA_NEUTRAL = 10000 bp` ⟨shape; 1.0 in basis points⟩ — and the
+boost is **added to** that baseline rather than replacing it. **The corrected arithmetic is in §7's
+block above; it is not restated here, so there is exactly one formula to implement.**
 
 **What this preserves, and the one thing it changes.** The ratified property — *a recently-lit
 candidate outranks an otherwise-identical un-lit one by a margin that decays geometrically to nothing*
