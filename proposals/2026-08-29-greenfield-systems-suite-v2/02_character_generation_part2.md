@@ -164,11 +164,15 @@ fix is to shorten canon's question set — never to move the derivation onto the
     - {of: truth,              inputs: published, presentation: band, trigger: hidden}
 ```
 
-**Two contract facts, stated rather than left to be inferred.** No module here declares a `budget:` —
+**Three contract facts, stated rather than left to be inferred.** No module here declares a `budget:` —
 generation is not an action economy, and a budget that bought characters would be the modifier-shaped
-currency `01 §5.3` refuses. And `cg.stage` is the **only** module in this suite declaring
+currency `01 §5.3` refuses. `cg.stage` is the **only** module in this suite declaring
 `form: person.capability`, so what can move a person's competence is a grep over one field — the whole
-point of the fourth write leaf being declared rather than free (`01 §2.4`).
+point of the fourth write leaf being declared rather than free (`01 §2.4`). And `cg.stage`'s `state:`
+list carries **zero Gauges** — `person.beliefs` is a form field of `prop_id`s, never a `credence`
+row — so `01 §2.3`'s H_MIN guard, `01 §5.1`'s fixed-point falsifier and the commensurability gate have
+nothing new to check on this page (part 1 §6.2's cut); the Holding a creed-belief grant names is
+`npc_memory`'s to write, never this module's (§11.3's open dependency).
 
 **Key types used: `form.transitioned`, `person.generated`, `edge.formed`, all three already in
 `00 §9.2`. This document appends none** — which matters because P0-1
@@ -198,19 +202,20 @@ same holds for the other seeds: `truth` is seeded and read, never targeted. This
 later author extending the life-path design does not reach for TS as an obstacle, which is now a
 known-dead mechanic rather than an untested one.
 
-**`credence` is the one new gauge this document introduces, so declaring its bound is `02`'s job, not
-a later lane's.** `01 §6.2` lists `standing`, `exposure`, `pressure` and others as *"unverifiable
-today — scale undeclared in this suite"*, and a new gauge that silently joined that list would be
-three declaration-time guards inert on it (`01 §2.3`'s `H_MIN`, `01 §5.1`'s fixed-point falsifier, and
-the commensurability gate). So: **`credence` is declared on a bounded `0–5` scale in
-`references/descriptor_registry.yaml`**, matching canon's own belief-adjacent meter — the Truth track
-is 0–5 (`clock_registry_v30.md:71`) and `01 §6.2` scores that family **pass**. `credence` therefore
-inherits a passing verdict *by construction* rather than being left unverifiable, and `02` still
-targets it with nothing. A later document that wants to may, and must then declare the site.
+**`02` introduces zero new Gauges — a stronger position than declaring one's bound, not a weaker one.**
+An earlier draft of this section declared `credence` on a bounded `0–5` scale here, precisely to keep
+`01`'s three declaration-time guards (`01 §2.3`'s `H_MIN`, `01 §5.1`'s fixed-point falsifier, the
+commensurability gate) from silently skipping an undeclared gauge. Part 1 §6.2 now cuts `credence`
+outright in favour of composing on the ruled epistemic layer's `Holding.confidence` — an `int [1,5]`,
+FI-owned, not a Gauge and not declared here. **The three guards have nothing new to check on this page
+at all**, which is what "zero new Gauges" means in practice: there is no undeclared scale to worry
+about because there is no new scale.
 
-> **Falsifier.** A declaration-time test asserting every gauge this document introduces has a declared
-> non-`None` ceiling, and that no `cg.*` module declares a non-empty `ob_sites:`. Load-bearing on the
-> game: a gauge with no ceiling is one `01`'s three arithmetic guards silently skip.
+> **Falsifier.** A declaration-time test asserting `cg.*`'s module contracts declare **zero** `state:`
+> rows with `bucket: gauge` (grep the contracts in §10 for `bucket: gauge` owned by any `cg.*` module
+> and assert the count is 0), and that no `cg.*` module declares a non-empty `ob_sites:`. Load-bearing
+> on the game: a gauge with no ceiling is one `01`'s three arithmetic guards silently skip, and the
+> strongest way to pass that check is to introduce none.
 
 ---
 
@@ -259,7 +264,8 @@ the one-line loss statements throughout part 1, judgments rather than checks.
 
 | dependency | tier | if it moves |
 |---|---|---|
-| `character_canon_v30.md` (belief object, `≤3` cap, revision conditions) | **PROVISIONAL** | §6's cap becomes a parameter — the gauge-per-belief decision is then re-argued against `01 §3.2`, not tuned |
+| `character_canon_v30.md` (belief object, `≤3` cap, revision conditions) | **PROVISIONAL** | §6's cap becomes a parameter on `form.beliefs`'s bound, re-argued against `01 §3.2`, not tuned |
+| `proposals/2026-08-18-epistemic-propositions-and-provenance.md` (`Holding`/`Proposition` grammar, `npc_memory`) | **RULED, design PROPOSED and unbuilt** | §6.2's creed-Belief has nowhere to deposit a Holding until `npc_memory` is built; `form.beliefs` would carry `prop_id`s with no confidence anywhere in the tree meanwhile. The content-address hashing rule is also unspecified there (`epistemic proposal §10.3`) — until it is, two agents can hash the same claim to two different `prop_id`s and §6.2's "same claim, same id" property fails silently |
 | `npc_relational_graph_v30.md` (PP-724) | Class A, **PROVISIONAL** | §5.1's kinds change; the *container* does not (`01 §7.3`) |
 | `faction_politics_v30.md §3.2` | **CANONICAL** | `04`'s gate changes; `02` supplies the input, not the rule |
 | Key **consumption** (`cg.demand`'s one `consumes:` row) | **J-O** open | it becomes a boundary read over vacant posts; nothing else here consumes a Key |
@@ -270,7 +276,7 @@ the one-line loss statements throughout part 1, judgments rather than checks.
 **Necessary** — a game gated on people existing cannot omit what makes people, and the belief object
 already in the tree has **no producer** (`characters_flow_skeleton_v1.md:30-31`, `:92`). **Robust** —
 both failure directions are bounded by a declared parameter with an arithmetic check; layering is the
-one place robustness is *weaker* than v1's, which §11.1 P-iii says rather than hides. **Smooth** —
+one place robustness is *weaker* than v1's, which §11.1's claim 3 says rather than hides. **Smooth** —
 one pipeline for authored and generated characters, one substream, one stage walker serving both
 creation and career, zero attributes and zero convictions named literally. **Elegant** — four stages
 adopted from canon rather than invented, one grant vocabulary of eight members, one new module, **no
