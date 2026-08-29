@@ -3,12 +3,15 @@
 ## Status: PROPOSED (2026-08-29) — held back from ratification-on-merge
 ## Reads: [`00_INDEX.md`](00_INDEX.md) · [`01_substrate_primitives.md`](01_substrate_primitives.md) ·
 ## [`01_substrate_primitives_part2.md`](01_substrate_primitives_part2.md) ·
+## [`07_places_and_settlements.md`](07_places_and_settlements.md) ·
+## [`10_the_slate_and_salience.md`](10_the_slate_and_salience.md) +
+## [`10_the_slate_and_salience_part2.md`](10_the_slate_and_salience_part2.md) ·
 ## `engine/substrate/keys.py` · `engine/cross_scale/echo_transport.py` · `engine/autoload/dice_engine.py` ·
 ## `engine/autoload/season_manager.py` ·
 ## `audit/2026-08-08-world-churn-audit/06_master_synthesis.md` ·
 ## `audit/2026-07-05-emergent-narrative-engine/narrative_engine_design_v2_churn.md` (RATIFIED, ED-IN-0011) ·
 ## `systems/settlements/governance_play_redesign_v1.md` · `systems/settlements/settlement_layer_v30.md` ·
-## `systems/overview/clock_registry_v30.md`
+## `systems/overview/clock_registry_v30.md` · `references/valoria_geography_v30.yaml`
 
 This document is change **G** (`00_INDEX.md:231`). It is new — there is no v1 predecessor to correct.
 v1's root cause E, restated in the archived suite's own words: *"the world has no outside — every

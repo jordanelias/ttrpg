@@ -460,14 +460,58 @@ but Failure unreachable, a mechanic that looks live and is dead. Since `presence
 scale is `07`'s to declare and is **not yet declared**, this is a live hazard on the very action this
 page introduces, not a hypothetical.
 
-> **Falsifier, and it belongs in `01 §6` rather than here** — flagged for that document's author
-> rather than duplicated into a second owner. A **declaration-time** check over the descriptor
-> registry: for every gauge declared as a `derive_ob` target, `ceiling/2` must leave all four ladder
-> bands reachable for the pools that roll against it — i.e. `ceiling/2 < μ_max + 3` where
-> `μ_max = 0.4 · POOL_MAX`. It needs no campaign run. **Load-bearing on the game**
-> (`CLAUDE.md §0.1` point 5): it is the difference between an action with four outcomes and an action
-> with one. On the scales this page assumes for presence it passes; on a 0–100 gauge it fails, which
-> is the point of having it.
+**⚠ THE GATE WAS BUILT, AND THE FORM THIS PAGE FIRST PROPOSED FOR IT WAS WRONG.** An earlier draft of
+this section proposed the check as `ceiling/2 < 0.4·POOL_MAX + 3` and flagged it for `01 §6`'s author
+rather than duplicating it. That author built it and **rejected the inequality on three counts**, two
+of which change what this page must do. Recorded here rather than quietly corrected, because the
+finding was this page's and so was the error:
+
+| # | what was wrong | consequence |
+|---|---|---|
+| 1 | it **omits the σ term** and has the band offset's **sign backwards** — Overwhelming needs `net ≥ ob + 3`, so the obstacle is bounded *below* the envelope, not compared to a mean plus 3 | **2.57× too permissive at pool 5** (it admits `Ob < 5.0` where the correct form admits `Ob ≤ 1.943`), and it agreed at pool 18 only by coincidence |
+| 2 | **`POOL_MAX` does not exist** in `engine/` — `roll_pool` enforces only a minimum of 1 (`dice_engine.py:196`) | the gate is necessarily **per-site**: a site's maximum pool is a property of its own pool expression, not a global |
+| 3 | **`derive_ob`'s `modifiers` argument is unbounded in its signature**, so checking a bare ceiling proves nothing if a site may add +10 | a site must **declare** `modifier_max`; this is also what makes O-5.7 checkable rather than asserted |
+
+The correct form, owned by `01 §6` and not restated as a rule here:
+
+```
+derive_ob(S_max, M_max) + 3  ≤  0.4·N_max + z·0.8·√N_max          z = 1.645
+```
+
+**And one further correction this site forces, handed back to `01 §6`.** That inequality's right-hand
+side is the envelope of a **one-sided** net, `μ = 0.4·N`, `σ = 0.8·√N`. `act.contest_influence` is a
+**DO**: the quantity the ladder reads is a *differential*, whose envelope is
+
+```
+μ_diff = 0.4·(N_c − N_d)          σ_diff = 0.8·√(N_c + N_d)
+```
+
+so the gate must evaluate a DO site with the differential's moments or it will pass this site on the
+wrong arithmetic. It is **stricter, not laxer** — at the most favourable reachable configuration
+(strongest challenger `N_c = 18` against weakest defender `N_d = 6`) the envelope is **11.247**, so
+`Ob ≤ 8.247`, against **9.783** for a one-sided pool-18 site. Evaluating this site one-sidedly would
+be a **false pass**, which is exactly the class of defect the gate exists to catch. ⚠ Flagged to
+`01 §6`'s author as a second case the gate must carry; **this page does not implement a second gate.**
+
+**What this site declares, and what follows for `07`** (the block itself is at `part 2 §9`):
+
+| field | value | basis |
+|---|---|---|
+| `target` | `presence.<institution>` | the gauge the obstacle derives from |
+| `pool_max` | **18** | §6's pool shape — `attr` 1–7 twice plus `POOL_BASE = 4`. Not a global; this site's own expression |
+| `modifier_max` | **2** *(shape proposal)* | the ceiling on positive `place_terms` — a charter edge, a cathedral facility. **The challenger's lead term is strictly non-positive and cannot threaten reachability**, so the declared bound is the positive side only, which is the worst case the gate must evaluate |
+
+Solving the DO form at `M_max = 2` gives the constraint this page hands to `07`:
+
+> **`presence.<institution>` must be declared with a ceiling of `≤ 12`**, or `act.contest_influence`
+> has no reachable Overwhelming band. (At `M_max = 2` the bound is `12.49`; at `M_max = 0` it is
+> `16.49`, at `M_max = 3` it is `10.49` — so the modifier ceiling and the gauge ceiling trade against
+> each other and both must be declared together.)
+
+**STATUS: UNVERIFIABLE, not passing.** `presence.<institution>`'s ceiling is `07`'s to declare and
+does not exist yet. **An undeclared ceiling is not a passing one**, and this page will not assume a
+value to manufacture a green result — that is the confounded-measurement failure `CLAUDE.md §0.1`
+exists to prevent. Two of the three fields are declared and the third is a named dependency.
 
 ### 4.2 An unstaffed defender does not roll — that is a gate, not a cheaper path
 

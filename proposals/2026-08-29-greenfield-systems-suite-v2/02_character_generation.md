@@ -224,8 +224,8 @@ per-stage derivations (`:55-58`), reproduced because they are the contract this 
 |---|---|---|
 | **Origin** | cultural template, **caste**, early Conviction seeding, **starting Truth**, **TS baseline**, **first Knot seed** | `:55` |
 | **Formation** | Conviction weight calibration, skill direction, Self-Other initial setting, **second Knot seed** | `:56` |
-| **Vocation** | History tag, skills, **Belief #1 generation**, content-access assignment | `:57` |
-| **Catalyst** | arc-initiating event, Goal, final Conviction calibration, **possible starting Scar** | `:58` |
+| **Vocation** | History tag, skills, **Belief #1 generation**, content-access | `:57` |
+| **Catalyst** | arc-initiating event, Goal, final Conviction calibration, **possible Scar** | `:58` |
 
 **Career is the fifth and it is not a creation stage.** Canon's ladder ends at Catalyst — *"your story
 begins"* (`:45`). A career stage is the same row shape walked **in play**, once per `N` seasons of
@@ -380,9 +380,9 @@ least four for a full ladder — mapped to what canon says each stage produces:
 
 | stage | edge canon names | kind |
 |---|---|---|
-| Origin | *"family situation, first relationship"* (`questionnaire:55`) | `kinship` (and a second where the family is a household with a head) |
+| Origin | *"family situation, first relationship"* (`questionnaire:55`) | `kinship`, plus a second where the family is a household with a head |
 | Formation | *"mentor/teacher"* (`:56`) | `patronage` — the mentor is the patron; ordered, so read from the other end it *is* the client relation (`01 §7.2` refuses a `client` row) |
-| Vocation | *"what you do"* — a trade, a post, a chapter | `liege-vassal` or a second `patronage`; a peer `sworn-bond`; or a `rivalry` where the conditioned draw put two people on one rung |
+| Vocation | *"what you do"* — a trade, a post, a chapter | `liege-vassal`, a second `patronage`, a peer `sworn-bond`, or a `rivalry` where the draw put two people on one rung |
 | Catalyst | *"what changed everything"* (`:58`) | `rivalry`, or `feud` where the stage's precedent tag names a lineage |
 
 **Disposition is stored for PC↔NPC and derived for NPC↔NPC** (`01 §7.3`, PP-724 `:331-345`), so a
@@ -602,9 +602,8 @@ any other path constructing people without the generator.
 ## 9. The player-facing surface — counted against `00 §2`'s budget
 
 **`02` spends zero of the whole-game single-digit verb budget.** Character generation is where a deep
-game most often explodes its surface; canon already ruled the opposite way — *"the player never sees
-Conviction weights, Self-Other values, or cultural template assignments"* (`questionnaire:32`),
-*"a simulation where the player never touches a stat sheet"* (`:24`).
+game most often explodes its surface; canon already ruled the other way — *"the player never sees
+Conviction weights, Self-Other values, or cultural template assignments"* (`questionnaire:32`).
 
 | what the player is asked | how many | how often |
 |---|---|---|

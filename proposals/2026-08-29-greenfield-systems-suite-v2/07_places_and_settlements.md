@@ -301,6 +301,52 @@ presence_kinds:
 Six institution kinds, cited from the live canonical `§3.3` table — this document adds no institution
 canon does not already name a subnational management relationship for.
 
+### 4.1a Presence's declared range — closing `01 §6.2`'s open row
+
+**`01 §6.2` lists `presence.<institution>` as unverifiable pending this declaration**, because
+`05 §4.1`'s `act.contest_influence` feeds `presence_defender` into `derive_ob` as its `target_score`
+directly (`Ob = derive_ob(presence_defender, modifiers = −presence_challenger/2 + place_terms)`) — the
+exact position a target's scale must be commensurate with the net for. An undeclared ceiling is not
+provisionally fine; per `00 §7`'s `ob_sites:` note it is **unevaluable**, which is worse than failing.
+
+```yaml
+gauge: presence.<institution>
+floor: 0
+ceiling: 7
+lambda: <λ, per-institution, declared in descriptor_registry.yaml>
+rest: <rest, per-institution>
+bands: [dormant, marginal, established, dominant]     # illustrative edges only — SHAPE PROPOSAL
+```
+
+**Floor 0, ceiling 7 — the same family as every other place gauge, chosen for the reason `01 §6.2`
+gives, not merely to match.** `ceiling/2 = 3.5`, which is the exact value `01 §6.2`'s table already
+scores **pass** for `set.legitimacy`/`set.popular_support`/attributes/`fac.*` — presence lands in that
+row rather than opening a new one. This is the path the coordinator's guidance names as least
+surprising, and nothing in this document's design needed a wider range: §4.2's four jobs (contest,
+facility-gating, strata, reachability) are all **relative** or **banded** reads, never a use that
+wanted more than seven discriminable levels.
+
+**Not a gate target.** Unlike Thread Sensitivity (`01 §7.5`, correctly a gate target at `TS ≥ 30`,
+never an obstacle), presence is *designed* to be rolled against — `05`'s whole `act.contest_influence`
+obstacle is a presence differential — so declaring it as a small commensurate score, not as a wide
+gated threshold, is the only shape that lets that action exist at all.
+
+**Grounded, not merely convenient.** Canon's closest existing precedent is the Restoration Movement's
+own **Presence marker cap of 5 per territory** (`systems/victory/victory_v30.md`, "Presence marker
+cap: 5 per settlement" — search-verified in-tree). That is a **different grain** (discrete markers,
+province/territory scale) from this gauge (a continuous, decaying, settlement-grain value per `01
+§5.1`), so the two are not asserted equal — but 5 sits comfortably inside a 0–7 ceiling as the natural
+edge of an "established" band, with 6–7 reserved for a presence that has become the place's *de facto*
+authority (§4.4's Church Governor case). **The band edges above are illustrative, not ratified** — the
+same anti-fabrication posture as every other threshold this document proposes (§3.2, §5.1).
+
+> **Falsifier.** A declaration-time test (the same instrument `01 §6.1` specifies) computing, for
+> `presence.<institution>` at `ceiling=7`, `modifier_max=0` (the gauge's own declared range carries no
+> modifier — any site-specific modifier bound is that site's to declare, per `00 §7`'s `ob_sites:`
+> split of concerns) and the practical pool range `N_max ∈ [5,18]`: both the top-band and bottom-band
+> reachability inequalities from `01 §6.1` hold. **Load-bearing on the game**: it is what makes
+> `act.contest_influence` an action with four outcomes rather than one that always fails.
+
 ### 4.2 The four things presence does — each closing an absence the delta spec named
 
 1. **What `act.contest_influence` moves.** `05`'s new action family raises a rival's `presence.<inst>`
