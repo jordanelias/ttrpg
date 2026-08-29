@@ -405,52 +405,43 @@ call).
 
 ---
 
-## 6. Module contracts
+## 6. Module contracts — retired, composed on `05`'s dispatcher instead
 
-```yaml
-- module: we.eligible
-  parent: world_events        class: substrate
-  scales: [settlement, territory, peninsula]      tier: null
-  resolver: gate               # §2.1 — the gate, never the roll
-  remit: []                    # no actor; herald-driven (§2.2)
-  budget: null
-  consumes: []                 # reads STATE only, never a received Key — same shape as substrate.form
-  emits: []                    # a pure filter; produces the eligible set for we.fire, writes nothing
-  state: []
-  form: []          transitions: []
-  disclosure: []                # nothing is disclosed here; nothing is decided here either
+**Zero new module contracts.** An earlier draft of this section shipped `we.eligible`/`we.fire` as a
+second `gate`/`d_sigma` module pair beside `05 §9`'s `fa.gate`/`fa.resolve` — a duplicate dispatcher
+for the same two resolver kinds, the exact object T3-2 names. **Both are retired.** `we.eligible` and
+`we.fire` remain this document's names for *what a `remit_kinds: []` row does when `05`'s own
+dispatcher runs it* — they are no longer modules this document ships, and the table below replaces the
+YAML block a prior draft declared here.
 
-- module: we.fire
-  parent: world_events        class: substrate
-  scales: [settlement, territory, peninsula]      tier: null
-  resolver: d_sigma             # §2.2 — the graded, uncertain outcome
-  remit: []                     # ED-IN-0201 does not bind an actorless module (§2.2)
-  budget: null
-  consumes: []
-  ob_sites:                     # NEW obligation, 01 §6.1.1 point 3 — every derive_ob site declares M_max
-    - {target: "<row.resilience.target_score>", modifier_max: "<row.resilience.M_max>"}   # per-row, §2's schema
-  emits: [{type: world.event_fired, terminal: false}]      # blocked on P0-1, §2
-  state:
-    # the specific gauge/tag targets are PER ROW, declared in content_registry.yaml — this module
-    # owns none of them; it deposits through substrate.gauge / substrate.ledger like any other caller.
-    - {name: "<row.resilience.target_score>", bucket: gauge, writable: true, owner: substrate.gauge}
-    - {name: "we_cooldown.<event>.<target>",  bucket: tag,   writable: true, owner: substrate.ledger}
-  form: []          transitions: []       # never leaf 4 — §2.3
-  disclosure:
-    - {of: "we.fire.gate_inputs", inputs: published, presentation: band, trigger: hidden}   # E-2
-```
+| this document's name | who actually runs it |
+|---|---|
+| **the gate** (§2.1) | `05`'s `fa.gate` (`05p2 §9`), already rung-agnostic — *"`fa.gate` already iterates every declared rung"* (`05p2 §5.5`) — **extended to iterate by target as well as by post**, the one addition a `remit_kinds: []` row needs, since there is no post to iterate by |
+| **the roll** (§2.2) | `05`'s `fa.resolve` (`05p2 §9`), **extended to source its pool from `hazard_pool` instead of `attr[a]+attr[b]+POOL_BASE`** whenever a row's `remit_kinds` is empty (§2's DELTA 2) — `derive_ob`, the margin ladder and the effects-total rule are untouched, reused exactly |
+| the gate-inputs disclosure (E-2, `01 §8`) | moves to `fa.gate`'s own disclosure list for `remit_kinds: []` rows — publishing which predicate held, never the threshold, same obligation this document always carried |
+| the cooldown tag, the deposit targets, the candidate hand-off | unchanged — §2.4, §5. Deposits still go through `substrate.gauge`/`substrate.ledger` like any other caller; no module here owns a gauge or tag, per row, any more than the retired contracts did |
 
-Two modules, not one, for the same reason `07` split `pl.registry` from `pl.gauges` from `pl.yield`
-(`07_places_and_settlements.md §10`): **a filter and a roll are different resolver kinds** (`gate` vs
-`d_sigma`), and folding them into one module contract would hide which half is deterministic from a
-reader grepping the contract for resolver type.
+**The one piece with real friction, named rather than smoothed over: §3.1's priority order and G-1's
+exclusivity.** `05`'s existing selection step, `fa.select`, ranks an **actor's own** option set by a
+softmax over `appeal` (O-5.9) — an ethos-and-holder-conditioned score a holderless row does not have.
+G-1 is a different shape: not *"which of my options do I take"*, but *"of every currently
+gate-eligible actorless row at this target, which fires, and the rest are excluded this season."*
+That is a second, narrower selection rule, keyed by **target** rather than by post, and it cannot be
+`fa.select`'s softmax reused as-is — there is no `appeal` to rank without a holder's ethos and
+convictions feeding it. **It belongs beside `fa.select`, scoped to `remit_kinds: []` rows only**: for
+each target, take the declared priority order among its gate-eligible rows, resolve the first through
+the extended `fa.resolve`, and remove the target from this pass on any non-Failure band (§3.1). Naming
+where this lives is this document's obligation under the merge — `05`'s owner should not have to
+rediscover it from the schema alone.
 
-**`we.fire`'s result, at the accounting boundary, is two things, not one** — matching `08`'s and `05`'s
+**The result, at the accounting boundary, is still two things, not one** — matching `08`'s and `05`'s
 own emitters (`10 §2.4`): (1) the deposits and Key the herald applies and publishes (W-1, W-5), and
 (2) where the roll produced a non-Failure band, a **candidate** conforming to `10 §2.1`'s contract
 (§5 above), gathered by `sl.candidates` (`10 part2 §10`) the same way `08`'s `sm.business` and `09`'s
-`am.*` are gathered. `we.fire` **never** presents, ranks, or checks the scene budget (C-6) — it returns
-a value and stops.
+`am.*` are gathered. A fired row **never** presents, ranks, or checks the scene budget (C-6) — it
+returns a value and stops. **What this buys:** zero new resolver kinds, zero new modules — the four
+rows of §7 are `05`-schema rows with `remit_kinds: []`, dispatched by `05`'s own gate and roll through
+the one extension and the one new narrow selection rule named above.
 
 ---
 
@@ -656,9 +647,9 @@ document's surface table grows longer than this substrate table, it has the rati
 ## 10. J-O — this document leans on Key consumption for exactly one thing
 
 Per `00 §5.1`/`01 part2 §9.4`, every document depending on Key **consumption** states so, because a
-"telemetry only" ruling on J-O would rewrite it. **`we.eligible`'s gate reads STATE, never a received
-Key** (`consumes: []` in both module contracts, §6) — so the *reaction* half J-O actually threatens does
-not exist here at all. What this document depends on is narrower: **the emission side**
+"telemetry only" ruling on J-O would rewrite it. **The gate (§2.1, run by `05`'s `fa.gate`, §6) reads
+STATE, never a received Key** for a `remit_kinds: []` row — so the *reaction* half J-O actually
+threatens does not exist here at all. What this document depends on is narrower: **the emission side**
 (`world.event_fired` as a log entry `targets[]`/`causes[]` can chain through) — which `01 part2 §9.4`'s
 own table already marks as surviving a "telemetry only" ruling. **This document is robust to J-O**,
 because it was written against the no-latency constraint from the start rather than assuming a mesh
@@ -668,11 +659,13 @@ that reacts to itself.
 
 ## 11. Property audit
 
-**Scope, honestly.** `we.eligible` is a gate; `we.fire` is `d_sigma`, consuming `derive_ob` and the
-margin ladder rather than producing a new resolution mechanism. Both verdicts below apply to those two
-modules and to the registry rows they read; neither this section nor any other in this document offers
-an N/R/S/E verdict for a gate on its own, per the methodology's own rule (`01 part2 §13`) — the roll
-inside `we.fire` inherits the dice engine's own verified properties rather than re-deriving them.
+**Scope, honestly.** The gate (`we.eligible`'s name for it) is a `gate`; the roll (`we.fire`'s name for
+it) is `d_sigma`, consuming `derive_ob` and the margin ladder rather than producing a new resolution
+mechanism — and, since §6, run by `05`'s own `fa.gate`/`fa.resolve` rather than by a module this
+document ships. Both verdicts below apply to the registry rows §7 declares and to the two resolver
+kinds they invoke, whoever runs them; neither this section nor any other in this document offers an
+N/R/S/E verdict for a gate on its own, per the methodology's own rule (`01 part2 §13`) — the roll
+inherits the dice engine's own verified properties rather than re-deriving them.
 
 Above both: `00 §0.1`'s scope limit binds this page exactly as it binds every other — a clean audit
 below says the mechanism is sound, not that the game is better for having weather in it. That second
@@ -702,17 +695,19 @@ question is the one-line loss statements in §1, §2.4 and §8, and they are jud
 
 ### 11.3 The four qualitative verdicts
 
-**Necessary** — one registry block, two modules, one schema field (`origin:`) added to an existing
-grammar rather than a new one. §8 records seven candidates refused, three of them ("Calamity
+**Necessary** — one registry block, **zero new modules** (§6 — collapsed onto `05`'s dispatcher, T3-2),
+one schema field (`origin:`) and one selection rule (§6's target-keyed priority pass) added to
+existing grammars rather than new ones. §8 records seven candidates refused, three of them ("Calamity
 aftershock," a Knot-targeting event, a bespoke sampler) refused specifically because nothing on disk
 or in canon licenses them, not because they were merely unwanted. **Robust** — the two failure
 directions the task names by name (never fires / fires every season) are closed by G-1 and by
 `cooldown ≥ 1`, both load-time checks; the "content that cannot be reached" failure is closed by §4.1's
 enumeration; the "content the player cannot act on" failure is closed by §4.2's structural closure
 check. **Smooth** — one obstacle owner, one decay law, one disclosure contract, one write rule with
-four leaves, all reused, none re-derived. **Elegant** — the corollary in `00 §1` asked for "one object
-with a registry of kinds" for exactly this document; §7's four rows are one row shape with a terrain
-slot rather than four bespoke mechanisms, and the whole design adds zero standing verbs (§9). The
+four leaves, one action-row schema (§2, shared with `05`), all reused, none re-derived. **Elegant** —
+the corollary in `00 §1` asked for "one object with a registry of kinds" for exactly this document;
+§7's four rows are one row shape with a terrain slot rather than four bespoke mechanisms, that one row
+shape is itself `05`'s and not a second one, and the whole design adds zero standing verbs (§9). The
 honest deduction, matching `01`'s own candor about its edge container: **the route-severed row's
 shared flag (§7) is the one object in this document whose ownership is genuinely unsettled** — named
 as a shape proposal for `07`/`12` rather than asserted as this document's to decide.

@@ -76,8 +76,8 @@ that family — a loyalty counter that only ever runs down to a coup — is alre
 ratcheting project, and `09 §3.2` reproduces canon's monotone clock exactly. The **recoverable,
 bidirectional** subcase — a person who is turning and can be turned back, which is most of the family
 and the whole reason the shape is interesting — is **not**, because there is nothing to move in either
-direction. Advance terms are predicates over readable state (`09 p2 :165-167`), and the readable state
-they would need does not exist.
+direction. `09`'s `project_kinds` schema makes every advance term *"a predicate over READABLE STATE"*
+— and the readable state this one would need does not exist.
 
 **The fix is one registry row and zero new primitives.** §7.3 already declares edge gauges **per kind**,
 so an `allegiance` row simply declares one:

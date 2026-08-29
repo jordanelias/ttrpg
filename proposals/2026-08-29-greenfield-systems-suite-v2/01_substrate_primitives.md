@@ -144,7 +144,7 @@ form that stops the mislabel, because the mislabel has already happened twice in
 |---|---|---|
 | definition | a value **current state can recompute** | a value with a **spend history**, so it is **path-dependent** |
 | test | recompute it from the primitives; do you get it back? | two owners with identical current holdings and different spending are **different states**, and only the history separates them |
-| examples | `faction.divergence`, NPC↔NPC disposition (§7.3), a project's `progress` (`09` O-A2) | `accrual.entitlement`, spent directly at place scale (`07 §8.3`, `:537`) — **already shipped** — and `post.budget` (§5.3) |
+| examples | `faction.divergence`, NPC↔NPC disposition (§7.3), a project's `progress` (`09` O-A2) | `accrual.entitlement`, spent directly at place scale (`07 §8.3`) — **already shipped** — and `post.budget` (§5.3) |
 | how it is written | **never.** No setter exists | **leaf 1, twice**: a Gauge deposited into and drawn down |
 
 ⚠ **The test is "can current state recompute it?", never "does it look like a total?"** A quantity that
@@ -535,10 +535,10 @@ Removed rather than annotated, since `09`'s falsifier is *"no contract declares 
 `progress`"* and an annotated row still declares one.
 
 ⚠ **`information` is declared here and its SCALE is not.** `05 §5.3` ships it as a writable state row
-(`05 p2 :311`) and gates option-set availability on its band, but declares no ceiling — so §2.3's
-`H_MIN`, §5.1's fixed-point falsifier and §6.1's commensurability gate are **all three silently inert
-on it**, the same three-guard hole §6.2 records for `prac.thread_sensitivity`. `05` owns the number;
-this page owns noticing.
+and gates option-set availability on its band, but declares no ceiling — so §2.3's `H_MIN`, §5.1's
+fixed-point falsifier and §6.1's commensurability gate are **all three silently inert on it**, the same
+three-guard hole §6.2 records for `prac.thread_sensitivity`. `05` owns the number; this page owns
+noticing.
 
 ### 5.3 Budget is a gauge, and it buys actions — never modifiers
 
