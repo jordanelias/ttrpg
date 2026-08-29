@@ -678,9 +678,9 @@ The two agree to 4% at pool 18 **by accident** — `+3` happens to approximate `
 and diverge badly below it. A check that is only correct at one pool size is not a check.
 
 **2. `POOL_MAX` does not exist.** No such constant is in `engine/`; `roll_pool` enforces only a pool
-*minimum* of 1 (`:202`). **The bound is per-site**, and has to be: a site's maximum pool is a property
-of the pool expression its own module declares. Where a figure is needed this document uses the **practical range 5–18**
-that §5.3's σ arithmetic already stands over, rather than minting a constant.
+*minimum* of 1 (`:202`). **The bound is per-site**, and has to be: a site's maximum pool is a property of
+the pool expression its own module declares. Where a figure is needed this document uses §5.3's
+**practical range 5–18** rather than minting a constant.
 
 **3. It must check the post-modifier obstacle.** `derive_ob`'s `modifiers` argument is **unbounded in
 the signature**, so checking a bare ceiling is meaningless if a site may add +10. Hence `M_max`, and
@@ -754,7 +754,7 @@ below is from another family and was never a "score" in the sense Jordan's rulin
 | gauge | scale, and its source | verdict as a `derive_ob` target |
 |---|---|---|
 | attributes; `fac.*`; `set.legitimacy/popular_support`; `set.prosperity/defense/order`; `terr.fort_level` | 1–7 / 0–7 / 0–5 / 0–4, `engine/engine_params/descriptors.json` | **pass** |
-| `disposition.pc_npc`, `strain.<kind>`, **`allegiance.strength`** | −5…+5; PP-724 capacity 3/5/7 | **pass** — and `allegiance` was **scaled to −5…+5 in order to land here** (§7.2.1), rather than declared bounded-but-unscaled and joining the *scale undeclared* row below. A new gauge that cannot be checked by this gate is the defect this table exists to catch, and shipping one two rows above the row that names it would have been the sharpest possible version of it |
+| `disposition.pc_npc`, `strain.<kind>`, **`allegiance.strength`** | −5…+5; PP-724 capacity 3/5/7 | **pass** — and `allegiance` was **scaled to −5…+5 in order to land here** (§7.2.1) rather than shipped bounded-but-unscaled into the *scale undeclared* row below, which is where a new gauge this gate cannot check would have gone |
 | Piety Track 0–5 · Truth 0–5 · Momentum 0–4 | `systems/overview/clock_registry_v30.md` | **pass** |
 | Coherence 0–10 · Persuasion Track 0–10 · Church Attention Pool 0–10 | same | **borderline** — ob 5, P(Overwhelming) ≈ 0.41 at pool 18 and ≈ 0.001 at pool 5. Passes at a large `N_max`, fails at a small one. **Site-dependent, so the per-site form of the gate is what decides it** |
 | **Composure 3–21 · Concentration 5–35 · Stamina 5–47 · Health 13–55** | `derived_stats_v30.md` via `clock_registry_v30.md` | **FAIL.** These are damage and resource pools, not scores. Nothing in this suite targets them, and this row exists so nothing later does |
@@ -774,10 +774,9 @@ borderline for the *same* reason as before — `Ob = 5` is site-dependent at the
 scoring `0`, so **the bottom two points of every gauge are not discriminable as obstacle targets.** No
 site here reads a target in that band, and one that did would be measuring nothing.
 
-**The opposed form flipped no verdict here.** The suite's only opposed site (`05 §4.1`, targeting
-`presence`) still passes, because `07` declared `0–7` rather than spending the headroom the looser form
-allowed. That is a **near miss, not a clean bill**: had `07` taken the `12.49` the one-sided form
-permitted, this correction would have invalidated an already-propagated ceiling.
+**The opposed form flipped no verdict here — a near miss, not a clean bill.** Had `07` taken the `12.49`
+the one-sided form permitted rather than declaring `0–7`, this correction would have invalidated an
+already-propagated ceiling.
 
 **Nothing in this suite currently targets a failing gauge.** The gate's value is mostly prospective: it
 makes the failure impossible to introduce rather than expensive to discover.
