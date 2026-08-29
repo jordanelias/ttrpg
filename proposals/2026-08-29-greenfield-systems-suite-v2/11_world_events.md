@@ -537,7 +537,7 @@ arithmetic is the one number-shaped claim on this page that is checked rather th
 | Considered | Verdict | Why |
 |---|---|---|
 | a bespoke weighted-draw / Bernoulli sampler for the stochastic component | **cut** | reuses `d_sigma`/`derive_ob`/the margin ladder instead (Overrides §1) — a seventh private roll implementation is the exact defect `01 §6` was written to end |
-| a new `world` Entity kind for peninsula-scale clocks | **cut** | the topmost `place` node already is this, at a different tier (`01 §1`; Overrides §2) |
+| a new `world` Entity kind for peninsula-scale clocks | **cut** | the topmost `place` node (`tier: country`, `07_places_and_settlements.md:44`) already is this, at a different tier (Overrides §2) |
 | a "Calamity aftershock" event family | **cut, not designed** | no canon source defines this term; inventing one here would be exactly the fabrication the brief forbids. If Thread-residue-driven exogenous events are wanted, they belong to whichever document formalizes Thread Exploitation Sites (`settlement_layer_v30.md §4.9`) reading `thread_sensitivity`, not to a term coined in this page |
 | a rumour/latency transport so an event's effect could surface a season later | **rejected as non-existent, not as unwanted** | J-N (§2.4) — the transport is not in the tree; designing on it designs on a mechanism nobody built |
 | a Knot-targeting event (a "Thread flare" strains a Knot) | **rejected** | `01 §7.5`'s strain-source list is closed and canon-owned; this document adds nothing to it |
