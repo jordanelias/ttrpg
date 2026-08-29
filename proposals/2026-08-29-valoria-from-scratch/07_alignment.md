@@ -5,17 +5,16 @@
 ## Answers the question §4 delegates here: whether offices + alignment suffice for the Church's four Dicasteries and the guilds' grade ladders.
 
 **The single structural idea.** A faction is a *proposition* plus a *map from persons to a degree of
-commitment*. There is no tier, no level, no size class, no scale field, and **no verb**. Everything a
-faction appears to do is a person doing it and saying who for. Everything it appears to *be* is
-recomputed by observers from their own incomplete ledgers. Growth and collapse are one operation,
-`commit(person, faction, Δdegree)`, run with different signs — and the reason two brothers can become
-a realm-scale body without an authoring act is that **no consumer of the object changes what it reads
-at any size.**
+commitment*. No tier, no level, no size class, no scale field, and **no verb**. Everything a faction
+appears to do is a person doing it and saying who for; everything it appears to *be* is recomputed by
+observers from their own incomplete ledgers. Growth and collapse are one operation,
+`commit(person, faction, Δdegree)`, run with different signs, and two brothers reach realm scale without
+an authoring act because **no consumer of the object changes what it reads at any size.**
 
 The prior failure made faction a tier. A tier has boundaries; a boundary needs a crossing act; a
-crossing act must be authored; and then the world contains only the factions somebody wrote. Here it
-contains every faction any two people ever swore anything about, and the interesting ones are
-interesting because of *where their members stand*, never how many there are.
+crossing act must be authored; and then the world holds only the factions somebody wrote. Here it holds
+every faction any two people ever swore anything about, and the interesting ones are interesting for
+*where their members stand*.
 
 ---
 
@@ -155,10 +154,10 @@ the person one.
 
 **`requires(act, P)` is a predicate over person-*sets*, which is how multi-person acts work without a
 faction ever getting an action-point pool.** The tithe reckoning at Goldenfurt needs the praefect, the
-parish priest and the guild burgher sitting together; a levy exemption needs a majority of Free
-Masters present at the standing date; a night entry needs one who holds the keys and one who holds the
-door. A faction performs such an act only if it holds enough *different persons in different posts*,
-all passing requisition in one season — and any one of them can simply not turn up.
+parish priest and the guild burgher sitting together; a levy exemption needs a majority of Free Masters
+present at the standing date; a night entry needs one who holds the keys and one who holds the door. A
+faction performs such an act only if it holds enough *different persons in different posts*, all passing
+requisition in one season — and any one can simply not turn up.
 
 **Nobody, the faction's own leader included, computes true capacity.** A leader decides from a view, so
 what they act on is an *estimate* of who will comply; discovering that a sworn member refuses is a
@@ -315,14 +314,14 @@ never invulnerable — only expensive to unwind, and the bill is paid by whoever
 
 Enumerate the consumers. `presence`/`density` are sums of `w(d)`, continuous in the map. `capacity` is
 an existential over persons — one commit can flip it, but on *which person*, never how many.
-`requisition` reads one edge. `contest` resolves through named persons (§9). `standing` reads support
-sets. `unwind_cost` is a sum over bases. The argument system reads only the proposition, which does not
+`requisition` reads one edge; `contest` resolves through named persons (§9); `standing` reads support
+sets; `unwind_cost` sums over bases; the argument system reads only the proposition, which does not
 change with membership at all.
 
 **No consumer contains a term of the form `if |members| > K then <different object>`.** The only
-thresholds in the lane are band thresholds on published readouts, which change what a player is
-*told*, and the coalition threshold, which changes an *option set* rather than an object type. The
-falsifier is mechanical: any later size-conditioned branch in that list breaks the lemma.
+thresholds in the lane are band thresholds on published readouts, which change what a player is *told*,
+and the coalition threshold, which changes an *option set* rather than an object type. The falsifier is
+mechanical: any later size-conditioned branch in that list breaks the lemma.
 
 ### 5.2 Shadow standing — a subtraction, not a track
 
@@ -386,8 +385,8 @@ empties.
 The Restoration's poverty is no handicap in any formula: ideological mass 1.0 means one vulnerability,
 cheapest to fire and hardest to obtain. Its **presence markers** are `avow` used deliberately —
 converting covert edges to avowed raises every observer's *estimate* at a node without changing capacity
-by one point. A real fork with a real cost: avowed members lose standing wherever their marks collide
-with the proposition, and there is no un-avow.
+by one point. A real fork with a real cost, since avowed members lose standing wherever their marks
+collide with the proposition, and there is no un-avow.
 
 ### 6.1 The question §4 delegates here: a Dicastery is an office cluster, and that suffices
 
@@ -417,11 +416,11 @@ Dicastery; you address it to a person holding one of its offices, and that perso
 this as the correct cost — T1 refusing to be talked around — but it means the fiction must never render
 an institution as a speaker.
 
-It buys something large immediately. Because the *party* is a faction and the *Dicastery* is an office
-cluster, the four clusters can be at war inside one Church with no institutional machinery at all. The
-party holding Temporal Affairs wants the Baralta tithe exemption preserved; the party holding the
-Defense of the Faith wants a Grauwald purge that will cost exactly that exemption. Two propositions,
-jointly unsatisfiable over one stake at one standing date, many of the same persons committed to both.
+It buys something large immediately. Because the *party* is a faction and the *Dicastery* an office
+cluster, four clusters can be at war inside one Church with no institutional machinery at all. The party
+holding Temporal Affairs wants the Baralta tithe exemption preserved; the party holding the Defense of
+the Faith wants a Grauwald purge that costs exactly that exemption. Two propositions, jointly
+unsatisfiable over one stake at one standing date, many of the same persons committed to both.
 
 ---
 
@@ -455,13 +454,13 @@ explanation resolves an unbounded family of specific anomalies *in advance*. The
 at the edge of the water does not accumulate an unresolved claim; she accumulates a resolved one, filed
 under a predicate that entails it.
 
-**The consequence nobody chose.** `E[ts_gain]` at a node falls with parish density and with mean
-regard toward priests. No rule names the Church. No member's stance table contains "Thread
-Sensitivity" as a referent — Confessor Arne Himlensendt's does not. He is sincerely devout and
-completely wrong, and his acts are pastoral: he comforts frightened children. A neighbour watching him
-deposits *he consoled her*; the child's own ledger deposits *the thing I saw was a sin of the eye*.
-One act, two predicates, produced by the substrate's divergent witnessing with no special case.
-Pastoral compassion and ethnic suppression are the same act because they are the same call to `tell`.
+**The consequence nobody chose.** `E[ts_gain]` at a node falls with parish density and with mean regard
+toward priests. No rule names the Church, and no member's stance table contains "Thread Sensitivity" as
+a referent — Confessor Arne Himlensendt's does not. He is sincerely devout and completely wrong, and his
+acts are pastoral: he comforts frightened children. A neighbour watching deposits *he consoled her*; the
+child's ledger deposits *the thing I saw was a sin of the eye*. One act, two predicates, from the
+substrate's divergent witnessing with no special case. Pastoral compassion and ethnic suppression are
+the same act because they are the same call to `tell`.
 
 **The geography is output, not authorship.** Lower Church penetration in the south means fewer early
 general explanations, so the model predicts higher TS emergence in Grauwald, Stillhelm, Oastad and the
@@ -469,11 +468,9 @@ western-fjord pockets: canon's map is what the model produces. It runs backwards
 succeeds at expelling Church and Altonian residue from Varfell, parish density falls and TS emergence
 rises over a generation. He did not intend that either.
 
-**The general shape, so this is not a Church rule:**
-
-> Any faction whose implementation acts deposit an **early, general, high-confidence** explanation into
-> the ledgers of persons in its scope forecloses whatever inferences that explanation pre-empts —
-> including inferences no member has ever considered.
+**The general shape, so this is not a Church rule:** *any faction whose implementation acts deposit an
+early, general, high-confidence explanation into the ledgers of persons in its scope forecloses whatever
+inferences that explanation pre-empts — including inferences no member has ever considered.*
 
 The Kettlemakers do it too, smaller and identically. Committee members performing an ordinary
 examination deposit *(Southern hands, produce, coarse work, all-time)* as a general explanation of one
@@ -492,19 +489,26 @@ setting's stated intent — is one mechanism at two scales.
 
 ## 8. What is refused here, and what replaces it
 
-- **A faction tier, level, or scale field** → §3's recomputed profiles.
-- **A faction-wide reputation scalar** → per-person regard toward a referent. The Church is loved in
-  Himmelenger and hated three valleys south; one number cannot hold both.
-- **Merge / split / promote / found-at-size** → `commit` in two directions, plus proposition-identity,
-  which makes founding one person's act.
-- **A faction action-point pool, or any faction verb** → `requisition`, paid in the member's time,
-  regard and exposure.
-- **Relationship modifiers large enough to dissolve structural conflict** → two propositions are
-  **positionally opposed** when jointly unsatisfiable over one stake at one standing date, and the
-  satisfiability test contains no regard term. Regard decides who carries and who is believed; it never
-  decides whether both can win. At d=5 the offer term is absent from the refusal check entirely.
-- **Parallel rank tracks** → one shared rank space, `standing ∈ 0..7`, plus exactly four auxiliary
-  meters, each substituting at exactly one gate:
+| refused | replaced by |
+|---|---|
+| a faction tier, level, or scale field | §3's two recomputed profiles |
+| a faction-wide reputation scalar | per-person regard toward a referent — the Church is loved in Himmelenger and hated three valleys south, and one number cannot hold both |
+| merge / split / promote / found-at-size | `commit` in two directions, plus proposition-identity, which makes founding one person's act |
+| a faction action-point pool, or any faction verb | `requisition`, paid in the member's time, regard and exposure |
+| a "known %" on a secret, a stored exposure counter | claims in knowers' ledgers; exposure derived |
+| a scheduled recovery tick on standing | standing computed from support sets, so it moves on events and cannot drift back on a cadence |
+| power_base as an eligibility filter | considered and refused — gating on biography means losing one person costs a capability permanently. It types the cut, not the act. |
+| a grievance-to-revolt threshold | a true-profile density crossing what the coercive apparatus holds, with everyone in it holding a name, a hearth, and a specific man they blame |
+
+Four refusals carry mechanism rather than a back-reference, and they are stated in full.
+
+**Relationship modifiers large enough to dissolve structural conflict.** Two propositions are
+**positionally opposed** when jointly unsatisfiable over one stake at one standing date, and the
+satisfiability test contains **no regard term**. Regard decides who carries and who is believed; it
+never decides whether both can win. At d=5 the offer term is absent from the refusal check entirely.
+
+**Parallel rank tracks.** One shared rank space, `standing ∈ 0..7`, plus exactly four auxiliary meters,
+each substituting at exactly one gate:
 
   | meter | range | its *only* gate |
   |---|---|---|
@@ -513,29 +517,22 @@ setting's stated intent — is one mechanism at two scales.
   | support-set mass | derived | the unwind check |
   | shadow | derived | the legalisation check |
 
-  There is no fifth. Guild grades are marks, not a track (§6.1); presence and density are reads, not
-  meters.
-- **A leader as a flat bonus on a roll** → a flat shift of X is worth `X / (0.8·√Pool)`, so it is worth
-  systematically *more* to a weak faction than a strong one, which is backwards. The in-band form:
-  **the leader changes the option set and the pool source, never a modifier.** Yrsa Vossen contributes
-  three things, none a number added to a die: (1) she is a person whose eligibility makes certain acts
-  *exist* at nodes where she stands; (2) a contest resolved through her draws its pool from *her*
-  capability — choosing which member acts is choosing a different pool, not buying a bonus; (3) her
-  regard with d≥3 members lowers their requisition obstacles, changing *who will act*, not how well.
-- **A scheduled recovery tick on standing** → standing is computed from support sets, so it moves on
-  events and cannot drift back on a cadence.
-- **A "known %" and a stored exposure counter** → claims in knowers' ledgers, and a derived exposure.
-- **power_base as an eligibility filter** → considered, and refused: gating on biography means losing
-  one person costs a capability permanently. It types the cut, not the act.
-- **A grievance-to-revolt threshold** → revolt is a true-profile density crossing what the coercive
-  apparatus holds, and everyone in it has a name, a hearth, and a specific man they blame.
+There is no fifth. Guild grades are marks, not a track (§6.1); presence and density are reads.
+
+**A leader as a flat bonus on a roll.** A flat shift of X is worth `X / (0.8·√Pool)`, so it is worth
+systematically *more* to a weak faction than a strong one — backwards. The in-band form: **the leader
+changes the option set and the pool source, never a modifier.** Yrsa Vossen contributes three things,
+none of them a number added to a die: (1) she is a person whose eligibility makes certain acts *exist*
+at nodes where she stands; (2) a contest resolved through her draws its pool from *her* capability, so
+choosing which member acts is choosing a different pool rather than buying a bonus; (3) her regard with
+d≥3 members lowers their requisition obstacles, changing *who will act*, not how well.
 
 ---
 
 ## 9. Contested rather than owned
 
-**No object in this lane has an `owner` field of faction type.** Offices are held by persons. Holdings
-have *claimants* — a set of `(person, claim, basis)`. Institutions are containers with judging sets and
+**No object in this lane has an `owner` field of faction type.** Offices are held by persons; holdings
+have *claimants*, a set of `(person, claim, basis)`; institutions are containers with judging sets and
 standing dates. The word "control" never appears as state.
 
 So what does it mean for the Kettlemakers to control the Row? That of the persons holding the Row's
@@ -578,23 +575,20 @@ Grievance deposits toward the container and toward him personally.
 consensus proposition to eleven of the nineteen. Six commit at d=1, two at d=2. The Uln faction still
 has two members; Restoration presence at the hamlet moves 3.0 → 4.5. Nothing crossed anything.
 
-**S7–14.** The same shape at Stillhelm and two fjord pockets, because the same petitions are being
-dropped by different burghers for the same structural reason. Restoration presence in Grauwald reaches
-61, density 0.19, footprint upward-closed to Varfell and the Realm. Vaynard's estimate is 6.
+**S7–14.** The same shape at Stillhelm and two fjord pockets, because the same petitions are dropped by
+different burghers for the same structural reason. Restoration presence in Grauwald reaches 61, density
+0.19, footprint upward-closed to Varfell and the Realm. Vaynard's estimate is 6.
 
 **S15.** Halvar, now d=3 Restoration as well as d=5 in his own two-man faction, joins a cell containing a
 Vaynard household clerk. Vaynard's proposition — expel Church and Altonian residue, break the caste
-system — never becomes the Restoration's, but it is *not jointly unsatisfiable* with it over the
-Grauwald stake, so both can requisition the same persons for the same act without either absorbing the
-other.
+system — never becomes the Restoration's, but it is *not jointly unsatisfiable* with it over the Grauwald
+stake, so both can requisition the same persons without either absorbing the other.
 
 **S19.** The Baralta Crown Claim creates a realm standing date. Restoration capacity at the Court
 Parliament is still zero — it holds no one there — but Vaynard's is not, and the clerk who is d=3 in both
-is the person the demand travels through. It arrives as Vaynard's proposition, amended, the Restoration's
-backing invisible in the record.
-
-Nineteen seasons, one operation, and not one reader of the object behaved differently because the
-faction had got larger.
+is who the demand travels through. It arrives as Vaynard's proposition, amended, the Restoration's
+backing invisible in the record. Nineteen seasons, one operation, and not one reader of the object
+behaved differently because the faction had got larger.
 
 ### 10.2 A large faction that cannot act
 
@@ -618,9 +612,9 @@ at d=4. `capacity(Niflhel, Riverside, arrest) = 1`, and it happens tonight if an
 **What the party can actually do**, every option a person-placement act, slow and visible: send a priest
 holding a binding post (seasons, and he must be admitted); requisition a Templar from its military basis
 two rungs up and march him in (visible, and it converts a police matter into a caste incident on a
-waterfront that is caste-open by design); commit the harbour warden by finding what he wants — the only
-fast option, and an investigation rather than a decree; or issue a dispensation and discover that a
-dispensation is a telling and a telling is not an arrest.
+waterfront that is caste-open by design); or commit the harbour warden by finding what he wants — the
+only fast option, and an investigation rather than a decree. Issuing a dispensation discovers that a
+dispensation is a telling, and a telling is not an arrest.
 
 **The point.** Size buys being noticed. Capacity is a question about persons and posts, and at any given
 street corner the answer is frequently no. A faction that has confused its profile for its reach finds
@@ -645,11 +639,11 @@ alternative I can see is a second tree for institutional internal structure — 
 because it reintroduces the multi-parent containment §1.1 refuses and would let an institution acquire a
 verb.
 
-**3. A numbering collision, not a disagreement.** The spine now references "document 07" twice: §5.3
-for the argument system, §4 for the institutional question this lane answers. Both cannot be 07. I
-have written to my lane assignment rather than silently renumbering another lane's reference.
+**3. A numbering collision, not a disagreement.** The spine references "document 07" twice — §5.3 for
+the argument system, §4 for the institutional question this lane answers. Both cannot be 07; I have
+written to my lane assignment rather than renumber another lane's reference.
 
-**4. The degree scale is composition, not divergence.** The spine says the difference between
-sympathiser and member is "a number on one edge." §1.2 makes it an ordinal 0–5 with a licence table,
-because requisition must know what may be asked. If the intent is a continuous number, the licence
-table becomes bands over it and nothing else here changes.
+**4. The degree scale is composition, not divergence.** The spine calls the sympathiser/member
+difference "a number on one edge." §1.2 makes it an ordinal 0–5 with a licence table, because
+requisition must know what may be asked. If the intent is a continuous number, the licence table becomes
+bands over it and nothing else here changes.

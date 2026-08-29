@@ -156,6 +156,36 @@ it would hide that unity behind two vocabularies for one thing, which costs more
 having a container. If a later mechanism reads a negotiation's container, that mechanism is wrong,
 not the framing.
 
+### B-6 · `witness` returns a set, not a single claim — ACCEPTED
+*Raised by 03 (knowledge).* One event yields several registered facets plus at most one construal, so
+the signature is `witness(person, event) -> claim*`. Small, real, correctly flagged rather than
+quietly pluralised. Nothing in the spine depended on the arity.
+
+### B-7 · A telling carries a rootprint — ACCEPTED, and the reasoning is the ruling
+*Raised by 03.* Independence (does this claim share an origin with that one?) must be computable by
+the hearer, but a module may not read another person's state.
+
+**Ruling: the rootprint is OPAQUE AND ASSERTED, not read.** The hearer learns *that* two of their
+claims share an origin, never *what* it was — which is epistemically exact (you can tell two men are
+repeating one story without knowing whose), and the speaker may assert a false one at the usual cost
+of any lie. The alternative — computing independence globally — reintroduces `world` into a place it
+must never be. Taking the widening deliberately is correct; taking the global computation would have
+been the same failure as A-1 and A-2 in a third disguise.
+
+### B-8 · Convictions weight construal, and the spine refused trait vectors — ACCEPTED
+*Raised by 03, and independently derived by 02.*
+
+**Ruling: a Conviction is not a trait. It is a stance toward a proposition of maximal generality**,
+and the spine already keeps stance as one table whose referents include propositions. So
+`ConvW(person, Order)` *is* `stance(person -> "order is worth its cost")` — no new field, and no
+second copy that can disagree with the first.
+
+**What makes this bankable rather than merely defensible:** 02 and 03 reached it separately, without
+sight of each other's work, and built the same object — 02 as "Convictions are priors that seed a
+stance row", 03 as "a Conviction is a stance at maximal generality". Independent rediscovery is the
+strongest signal available in this process, and two lanes converging on one derivation is better
+evidence than either lane's argument.
+
 ---
 
 ## C. The orchestrator's own error, recorded because it is the most instructive one here
