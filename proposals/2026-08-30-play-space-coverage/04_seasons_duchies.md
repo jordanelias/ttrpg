@@ -103,8 +103,8 @@ large; her reach on this proposition is not, and §1.5 is why.
 ### 1.4 The view, and one claim she holds that does not surface
 
 `03 §4` / `01 §3.1`: K = 12 claims, ranked by `recency × confidence × relevance × stance weight`. Her
-working set this season, from a duchy of settlements most of which report to her through cohort rows
-rather than named persons (`14 §3.1`):
+working set this season, from a duchy most of whose settlements report to her as cohort rows rather
+than named persons (`14 §3.1`):
 
 1. The Crown's consecration warrant sits in Church custody, and **two of four Cardinal seats are
    candidates rather than occupants** (FINDING 4) — so custody at the Dicastery of Doctrine and
@@ -115,12 +115,11 @@ rather than named persons (`14 §3.1`):
 4. The count of living Secession War veterans in her own ledger — the numerator of
    `deed_weight(Almqvist, Crown)` (`04 §3.4`).
 
-**The claim that does not surface** is (2) read correctly. Her ledger holds *the mine's draw is
-down*; it does not hold *the seam is depleting*, because `13 §5` says the depletion rate *"is never
-published… discoverable only by investigation."* Her stance weight ranks the mine's arithmetic below
-the Crown Claim, and the salience multiplication (`01 §3.1`, motivated reasoning for one
-multiplication) is what keeps it below the K-line. She is funding a counter-armament against a seam
-she has not measured.
+**The claim that does not surface** is (2) read correctly. Her ledger holds *the mine's draw is down*;
+it does not hold *the seam is depleting*, because `13 §5` never publishes the depletion rate —
+*"discoverable only by investigation."* Her stance weight ranks the mine below the Crown Claim, and
+that one multiplication (`01 §3.1`) is what keeps it under the K-line. **She is funding a
+counter-armament against a seam she has not measured.**
 
 ### 1.5 The option set — every act, and why each is legal. **The gaps live here.**
 
@@ -193,21 +192,19 @@ quarterly sitting.
 
 ### 1.7 What propagates
 
-**Down-stroke: none.** Legitimation issues no terms and changes nobody's `opening_set` by
-publication. **Up-stroke: none.** No petition was carried.
+**Down-stroke: none** — legitimation issues no terms. **Up-stroke: none** — no petition was carried.
 
-What propagates is neither stroke. It is the **judging set** (`04 §4.1`) and, one rung out, the
-`banked_claims` register: the legitimated cadet now sits in the Baralta seat list, so `04 §3.2`'s
-watch predicate on the ducal vacancy has a claimant with capacity where it had none — and every rival
-cadet branch's own claim is worth less against a named competitor than against an empty pointer.
-Reach: Hafenmark's communities by ambient publicity; the Crown and Varfell only if someone tells
-them, which is an act nobody has yet performed.
+What propagates is neither stroke. It is the **judging set** (`04 §4.1`), and, one rung out, the
+`banked_claims` register: `04 §3.2`'s watch predicate on the ducal vacancy now has a claimant with
+capacity where it had none, and every rival cadet branch's claim is worth less against a named
+competitor than against an empty pointer. Reach: Hafenmark's communities by ambient publicity; the
+Crown and Varfell only if somebody tells them, which nobody has yet done.
 
 **And the thing that did not propagate is the finding.** A duchess spent her season's one act and
-changed the terms of exactly zero containers. Under `06 §9`'s own test — *"pick any person with no
-post inside a Dispensation's scope… their `opening_set`, queried before and after, should differ"* —
-this season is silent, because it issued no dispensation. Legitimation is a Hearth-rung act performed
-by a Duchy-rung person, and the ladder carried it nowhere.
+changed the terms of exactly zero containers. Under `06 §9`'s own test — query any postless person's
+`opening_set` before and after — this season is silent, because it issued no dispensation.
+Legitimation is a Hearth-rung act performed by a Duchy-rung person, and the ladder carried it
+nowhere.
 
 ### 1.8 Diagnostic — **RICH, with a BLOCKED core**
 
@@ -431,28 +428,24 @@ Hafenmark's proposition at high degree, avowed. Marks: caste-advantaged, no hous
 **Option set.** `carry` at the Parliament (she holds standing at the container, `05 §3.1`'s
 precondition); `tell`; be `dispatch`ed as **establishment**; sit in the judging set; `commit`.
 
-**The diagnostic turns on two derivations that make her more powerful than her title.**
+**Two derivations make her more powerful than her title.**
 
 First, `14 §1.2`: an act by remit draws its pool from *the dispatched establishment member actually
 performing it*, not from the office-holder. So when Inge argues a precedent at her own Parliament,
 **Torvi's Precedent 0.70 and Evidence style are the pool.** She is not a bonus on the Duchess; she is
 the roll.
 
-Second, `07 §5.2` + `14 §1.4`: `shadow(p,n) = standing(p,n) − licensed_standing(p,n)`, and
-`licensed_standing` sums only contributions *routed through a remit*. **Torvi holds no remit, so her
-licensed standing is zero and her entire standing is shadow.** `07 §5.2` then fires structurally: when
-Inge attempts an act whose `requires` predicate includes persons in Torvi's support set and Torvi is
-not with her, capacity returns an *empty existential* — not a penalty, an absence. Twice, and Inge's
-cheapest remaining act is **legalisation**: a dispensation naming Torvi's function.
+Second, `07 §5.2` + `14 §1.4`: `licensed_standing` sums only contributions routed through a remit.
+**Torvi holds no remit, so her licensed standing is zero and her entire standing is shadow.** `07 §5.2`
+then fires structurally: an act of Inge's whose `requires` predicate names persons in Torvi's support
+set returns an *empty existential* if Torvi is not with her — an absence, not a penalty. Twice, and
+Inge's cheapest remaining act is **legalisation**: a dispensation naming Torvi's function. **A
+councillor with no office is the design's own generator of new offices.** Her power_base is
+`07 §4`'s **bureaucratic** — *"a clerk at standing 1 who reads every petition outranks a minister"* —
+cut by *"a single bypass, used publicly once."*
 
-**A councillor with no office is the design's own generator of new offices**, and her power_base under
-`07 §4` is **bureaucratic** — *"the persons who must route through p… a clerk at standing 1 who reads
-every petition outranks a minister"* — whose characteristic cut is *"a single bypass, used publicly
-once."*
-
-**Verdict: RICH.** Not because her act menu is long — it is short — but because two computed
-quantities she does not control put her on a one-way ratchet toward an office, and the cut that
-removes her is a single public act anyone can perform once they find it.
+**Verdict: RICH.** Not for the length of her act menu, which is short, but because two quantities she
+does not control ratchet her toward an office, and the cut that removes her is one public act.
 
 ### 3.2 Olaf Geirson — Military Commander, Hafenmark Inner Council (Order 0.70, Consequence style)
 
@@ -497,19 +490,18 @@ act_reach(p, ·, office) = 1.0  if p holds a vote or seat under the container's 
                           0.1  otherwise
 ```
 
-Her constituency is communes. Commune members hold no seat at the Court Parliament (`14 §5`: ENTER
-seat-holders and their attendants; SPEAK seat-holders only). So they score **0.1 each**, and it takes
-ten of them to equal one seat-holder — against a prize whose contest also multiplies by
-`(1 + 0.3 · leverage(hearth, seat))` (`04 §8`), a term that reads a hearth's placements across past
-holders and which a commune representative's hearth has none of.
+Commune members hold no seat at the Court Parliament (`14 §5`: ENTER seat-holders and attendants;
+SPEAK seat-holders only), so they score **0.1 each** — ten to equal one seat-holder, against a prize
+whose contest also multiplies by `(1 + 0.3 · leverage(hearth, seat))`, a term reading past placements
+her hearth has none of.
 
-**The design has no route from popular support to a heritable seat**, and that is arguably correct for
-a monarchy — but it means Uta's stated arc is unreachable by arithmetic rather than by opposition.
+**The design has no route from popular support to a heritable seat.** Arguably correct for a monarchy
+— but Uta's stated arc is unreachable by arithmetic rather than by opposition.
 
-**Verdict: BLOCKED on her stated arc; THIN otherwise.** She retains one genuinely valuable act:
-`04 §5`'s norm mechanism — *"they do not attack the norm, they change the membership, and the norm
-follows"* — and `norm` enters `contest` as `score(f) = capacity × (1 + 0.5 · norm)`. She can move a
-multiplier she cannot benefit from.
+**Verdict: BLOCKED on her stated arc; THIN otherwise.** She keeps one valuable act: `04 §5`'s norm
+mechanism — *"they do not attack the norm, they change the membership, and the norm follows"* — and
+`norm` enters `contest` as `score(f) = capacity × (1 + 0.5 · norm)`. She can move a multiplier she
+cannot benefit from.
 
 ### 3.4 Björn Holdar — Senior Jarl of the Western Highlands, Varfell (Warden 0.70)
 
@@ -540,14 +532,12 @@ on demand, *"and a player can move it one person at a time, by name, by Knot, at
 carry at `venue_factor 1.0–1.5` across many communities is the design's only broad lever on `norm`,
 and `norm` is worth up to **+50% capacity** in every contest at those containers.
 
-What she cannot do: bind anyone (no remit), gate anything (`01 §1.3`: *"no act is unlocked or
-forbidden by a faction's size"*, and what she moves is estimates and stances, which gate no option),
-or reach anyone outside a telling chain.
+What she cannot do: bind anyone, gate anything (what she moves is stances and estimates, and `01 §1.3`
+is explicit that those gate no option), or reach anyone outside a telling chain.
 
-**Verdict: RICH, slowly.** Her mode is pure Epistemic + Relational with zero Political-down, and the
-design pays that mode properly through one multiplier. She is also the counter-example to the claim
-that office is what matters at this rung: she has none and moves the largest single coefficient in
-`contest`.
+**Verdict: RICH, slowly.** Pure Epistemic + Relational with zero Political-down, and the design pays
+that mode properly through one multiplier. She is also the counter-example to the idea that office is
+what matters at this rung: she holds none and moves the largest single coefficient in `contest`.
 
 ### 3.6 Njal Torberg — Military Jarl, Varfell (*proposed*; Identity 0.60, Honor 0.20)
 

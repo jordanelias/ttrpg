@@ -398,9 +398,20 @@ person by anyone who knows.
 
 - **Loop:** produced by `form_knot` (Disposition +5, TS ≥ 30 both, Bonds ≥ 5, free slot) · carried
   as a bidirectional edge · consumed by unbidden deposit, social contests, counsel, coherence.
-- **Cut Knots and you lose:** the only channel by which a person holding no post receives news,
-  opportunity and obligation faster and cleaner than the crier. Without it S-DOWN reaches the
-  unposted only through public channels, which are exactly the channels the powerful control.
+- **Cut Knots and you lose:** *(Corrected N-line — the original claimed too much, and the word doing
+  the overclaiming was "only".)* It read *"the only channel by which a person holding no post receives
+  news, opportunity and obligation faster and cleaner than the crier."* That is false as stated. An
+  ordinary tie already carries tellings, with its own probability and latency (§4.1), and a published
+  dispensation deposits into every person in its scope **by presence and channel, never by post**
+  (substrate §7) — through the crier, the priest, the guild notice, the market. **The unposted are
+  reached without any Knot**, which is the design's own point about how a decree lands on a hamlet.
+  What the Knot uniquely owns is narrower and is the thing actually worth keeping: the **unbidden,
+  speakerless, undistorted** deposit — a state that arrives with **no teller, no roll and no
+  intermediary distortion**, which no other channel in this design produces, since every other arrival
+  is somebody choosing to tell you and the telling can be withheld, delayed, or bent on the way. So
+  cut Knots and S-DOWN still reaches the unposted; what it loses is the one arrival nobody sent,
+  nobody can suppress, and nobody can distort — Gerik's distress in his sister's ledger the season it
+  happens, which no crier was ever going to carry.
 
 ---
 
