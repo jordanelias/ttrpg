@@ -145,8 +145,7 @@ against her proposition, so `03 §10`'s disclosure panel renders it exactly as d
 "you know this and you are not thinking about it."* That panel makes her signature failure legible
 without a trait, and it is the best thing in the suite for a character of this shape.
 
-**THE OPTION SET.** Every act available to her, and why each is legal. This is the load-bearing
-section, so it is exhaustive rather than illustrative.
+**THE OPTION SET**, exhaustive rather than illustrative — every act available to her, and why legal.
 
 | # | act | legality | what it costs |
 |---|---|---|---|
@@ -179,19 +178,16 @@ says office adds.** Claim tested; claim held.
 
 ### 1.6 FINDING 2 — a faction cannot hold a standing date, so its leader can never start a clock
 
-`01 §5.3`: *"**Containers** carry standing dates: scheduled moments at which a prize is allocated… A
-standing date makes a proposition contestable, because petitions and dispensations addressing the same
-proposition before the same date are in conflict with each other and both sides know when the argument
-ends."*
+`01 §5.3`: *"**Containers** carry standing dates… A standing date makes a proposition contestable,
+because petitions and dispensations addressing the same proposition before the same date are in conflict
+and both sides know when the argument ends."* A faction is not a container, and `05 §3.1` makes the
+agenda-setter an **office** — `convener(container)` is *the office named by the container's charter as
+holding `compose_agenda`*. A Restoration cell has no charter and no office, by ideology.
 
-A faction is not a container. `05 §3.1` makes the agenda-setter an **office**: `convener(container) =
-the office named by the container's charter as holding compose_agenda`. A Restoration cell has no
-charter and no office by ideology.
-
-So: **the whole class of politics that exists because two sides know when the argument ends is
-unreachable from inside this lane.** Vossen's proposition can only ever be contested at somebody
-else's date, in somebody else's venue, entered by somebody else's carrier, ordered by somebody else's
-convener. She cannot force a reckoning; she can only wait for one and hope to be on the list.
+**So the whole class of politics that exists because two sides know when the argument ends is
+unreachable from inside this lane.** Vossen's proposition can only be contested at somebody else's date,
+in somebody else's venue, entered by somebody else's carrier, ordered by somebody else's convener. She
+cannot force a reckoning; she can only wait for one and hope to be on the list.
 
 There is an internal collision in the suite here, and I report it without resolving it. `04 §7`'s
 community roster lists **Restoration consensus cells** as a community with standing dates *"whenever
@@ -245,18 +241,17 @@ But run the **R-check** — does any option dominate by shape of gain against sh
 | `admit` | one member | one voice among unanimity |
 | `avow` / inspire avowal | §8 | §8 |
 
-**`tell` dominates, and it dominates because the alternatives are gated on things she does not have.**
-Gain compounds; cost is flat; there is no counterweight in her column the way `05 §9(d)`'s counterweight
-exists for a dropping carrier (a perpetual dropper loses his seat — she has no seat to lose). The
-design's own dominance-breaker for repeated asking is *refusal produces an asset*, which raises the
-value of her preferred act rather than lowering it.
+**`tell` dominates, because the alternatives are gated on things she does not have.** Gain compounds;
+cost is flat; and there is no counterweight in her column the way `05 §9(d)` supplies one for a dropping
+carrier (a perpetual dropper loses his seat — she has no seat to lose). The design's own dominance-
+breaker for repeated asking, *refusal produces an asset*, raises the value of her preferred act rather
+than lowering it.
 
-So her season is: **speak, and hope.** That is a coherent and even a moving game, and it is the correct
-game for Rosa Luxemburg. It is one option deep. **THIN by the plan's own definition — options exist,
-one dominates.**
+Her season is: **speak, and hope.** A coherent and even a moving game, and the right game for Rosa
+Luxemburg. It is one option deep. **THIN by the plan's own definition.**
 
-**Three empty cells this season proves rather than asserts**, all of them things nobody else in the
-matrix will hit, because everyone else has a post to fall back on:
+**Three empty cells this season proves rather than asserts**, none of which any other lane will hit,
+because everyone else has a post to fall back on:
 
 - **no address** → four of nine season sections undefined (§1.2);
 - **no standing date** → she can never start a clock (§1.6);
@@ -279,41 +274,31 @@ to speak. `Political-up` reached **only as backing**, never as carriage. `Politi
 *visible* leadership). D: TS **0**, non-practitioner; lower Charisma than Vossen, higher Circles in
 logistics and street networks.
 
-**First, a correction to my own brief.** I was told all his canon fields are null. **They are not.**
-The *registry* row is null, but `npc_behavior_system_v1 §2.7` gives him Equity primary / Autonomy
-secondary, Consequence then Evidence resonant styles, TS 0, Truth 3, and two first-person beliefs:
-*"The movement needs infrastructure, not speeches — I will build what Yrsa inspires"* and *"Every cell
-that is compromised is a community that suffers — I will protect our people."* The registry's own issue
-log records this at item 12 (*"Hann → Equity/Liberty (was null)"*) — and note that even the log
-disagrees with the behavior file on his secondary. **The hole is a registry-propagation hole, not a
-canon hole**, and a lane that reports Hann as unwritten would be reporting the index rather than the
-corpus.
+**A correction to my own brief.** I was told all his canon fields are null. **They are not.** The
+*registry* row is; `npc_behavior_system_v1 §2.7` gives him Equity/Autonomy, Consequence then Evidence
+styles, TS 0, Truth 3, and two beliefs: *"The movement needs infrastructure, not speeches — I will build
+what Yrsa inspires"* and *"Every cell that is compromised is a community that suffers."* The registry's
+own issue log records the resolution at item 12 and even *it* disagrees with the behavior file on his
+secondary. **A registry-propagation hole, not a canon hole.**
 
-**Derived proposition, and the finding.** Under `07 §1.1`, **identity *is* the proposition**, so a
-different proposition is a different faction. Hann's stated beliefs are not Vossen's. Hers is
-*(Einhir communities, govern, themselves by consensus, all-time, ought)*. His is operational:
-*(the movement's cells, remain, uncompromised, all-time, ought)*.
+**Derived proposition.** Under `07 §1.1` identity *is* the proposition, so a different proposition is a
+different faction. Vossen's is *(Einhir communities, govern, themselves by consensus, ought)*; Hann's is
+operational — *(the movement's cells, remain, uncompromised, ought)*. **Hann therefore leads a second
+faction with heavy membership overlap**, which `07 §10.1 S15` handles directly: two propositions not
+jointly unsatisfiable, so both may requisition the same persons.
 
-That means **Hann leads a second faction with heavy membership overlap**, not a wing of hers — and the
-suite has the machinery for exactly this (`07 §10.1 S15`: two propositions that are *not* jointly
-unsatisfiable, so both may requisition the same persons without either absorbing the other).
+**And then they are opposed over one act.** Presence markers are `avow`, and avowal is irreversible.
+Under Hann's proposition **every avowal is a compromise** — an avowed member can no longer be asked to
+act covertly (`07 §1.3`) and his cell's security falls. Under Vossen's, avowal is the movement's only
+growth instrument. **Jointly unsatisfiable over one stake — whether a given member avows.** Two
+overlapping factions, no institution above either, incompatible over one act. **That is the
+Feldhaus/Kessler probe running again inside the Restoration, and it was not authored:** it falls out of
+two sentences of canon belief text passed through `07 §1.1`.
 
-**And then they are opposed over one act.** `07 §6`: presence markers are `avow` used deliberately, and
-avowal is irreversible. Under Hann's proposition, **every avowal is a compromise** — a member who avows
-can no longer be asked to act covertly (`07 §1.3`: you cannot ask a man to act openly for a faction he
-must hide), and his cell's security falls. Under Vossen's, avowal is the movement's only growth
-instrument. **Jointly unsatisfiable over one stake — whether a given member avows — at every moment a
-member is deciding.** Two overlapping factions, no institution above either, incompatible over one act.
-
-**That is the Feldhaus/Kessler probe running a second time, inside the Restoration, and it was not
-authored.** It falls out of two sentences of canon belief text passed through `07 §1.1`.
-
-**Act menu.** Wider than Vossen's on the operational side and narrower on the visible: `interview`
-(his logistics Circles are exactly `03 §6.1`'s interview graph), `surveil` (counter-infiltration —
-finding the informer *is* an ordinary investigation), `plant` (a false claim into a suspected leak),
-`reconstruct` (which is the only act in the game that finds *who* lied rather than *that* someone did),
-`requisition`, `commit`, `tell`. He also **cannot** hold a Knot (TS 0), so his counter-intelligence runs
-on witnessable channels — which is precisely the exposure his own proposition is about.
+**Act menu.** `interview` (his logistics Circles *are* `03 §6.1`'s interview graph), `surveil`, `plant`,
+`reconstruct` (the only act that finds *who* lied rather than *that* someone did), `requisition`,
+`commit`, `tell`. He **cannot** hold a Knot (TS 0), so his counter-intelligence runs on witnessable
+channels — precisely the exposure his own proposition is about.
 
 > **VERDICT: RICH.** Four investigative acts with four different shapes of gain against cost
 > (`03 §6.2`'s R-check applies unmodified), a live opposition to his own leader that the design
@@ -332,24 +317,21 @@ on witnessable channels — which is precisely the exposure his own proposition 
 **Coordinates.** A: Hearth / Community, southwest. B: none. C: RM, degree ≥ 2, **covert**. D: Community
 0.50 / Equity 0.30, Solidarity; caste position unstated.
 
-**What he probes: epistemic play as resistance — teaching as an act that deposits claims.** The design
-handles this better than anything else in my lane, and it does it with zero new mechanism.
+**What he probes: epistemic play as resistance.** The design handles it better than anything else in
+this lane, with zero new mechanism.
 
 `07 §7` derives the Church's unintended suppression of Thread sensitivity entirely from `tell`.
-Catechesis deposits `(the world, is-of-kind, essence-fixed-and-given, all-time, told_by(priest))` into
-children who have **high credulity and high regard**, so it lands *early*, at *high confidence*, and —
-the whole of it — it is **general**. One general explanation pre-resolves an unbounded family of
-specific anomalies *in advance*, so `ts_gain` never accumulates. `03 §9` gives the second half:
-`admitting_share(witness)` is the share of a witness's Convictions whose construal sets admit a
-rendering-side reading, and catechesis concentrates Conviction in rendering-blind construals.
+Catechesis deposits a general explanation into children with **high credulity and high regard**, so it
+lands *early*, at *high confidence*, and it is **general** — one explanation pre-resolves an unbounded
+family of anomalies *in advance*, so `ts_gain` never accumulates. `03 §9` supplies the second half:
+`admitting_share` is the share of a witness's Convictions whose construal sets admit a rendering-side
+reading, and catechesis concentrates Conviction in rendering-blind construals.
 
-**Askeland is the identical call with the sign flipped.** A hedge-school teacher depositing an Einhir
-general explanation — one whose construal set *admits* rendering-side readings — raises
-`admitting_share` in the same children the parish would otherwise have narrowed, and leaves anomalies
-*unresolved* so they contribute to `ts_gain`. The measurable output is **higher TS emergence in the
-southwest a generation later**, which is exactly the geography canon already asserts.
-
-Nobody wrote "education is resistance." It is one construal set against another in the same formula.
+**Askeland is the identical call with the sign flipped.** An Einhir general explanation whose construal
+set *admits* rendering-side readings raises `admitting_share` in the same children the parish would have
+narrowed, and leaves anomalies unresolved so they feed `ts_gain`. The measurable output is **higher TS
+emergence in the southwest a generation later** — exactly the geography canon asserts. Nobody wrote
+"education is resistance"; it is one construal set against another in one formula.
 
 **His safety is structural, not lucky.** `publicity = venue_factor × √n × mark_salience`, and a private
 dwelling is **0.2**: nine children in a kitchen ≈ 0.2 × 3 × 1.2 ≈ **0.7**, the band that reaches the
@@ -388,16 +370,13 @@ Evidence style. Canon: *"each copy takes weeks, possession is a heresy charge, n
 **What she probes: the instrument — a written claim has a physical carrier and a place, survives its
 writer, and is found by a search act.** Four results, three good and one empty.
 
-**(1) Her copies are worth exactly one proof grade less than the Church's, and nobody wrote that rule.**
-`08 §4.1`: **G4 Instrument** = a claim rooted `firsthand(read_of(object))` *where the object is a record
-held in a **declared custody***. A hidden copy has no declared custody. Reading it deposits an ordinary
-firsthand claim → **G2 Witnessed**. Two independently-rooted copies → **G3**. The ceiling is G3.
-
-Meanwhile the Dicastery of Doctrine and Archives holds custody of the instruments everyone else's G4
-grounds rest on, which `08 §4.1` calls *the largest single power in the game, needing no rule saying so.*
-**The suppression of a text and the devaluation of a text are the same operation:** take away its
-custody and its grade falls one rung, permanently, in every chamber. That is a superb result and it
-costs nothing.
+**(1) Her copies are worth one proof grade less than the Church's, and nobody wrote that rule.**
+`08 §4.1`: **G4 Instrument** requires a claim rooted `firsthand(read_of(object))` *where the object is
+held in a **declared custody***. A hidden copy has none, so reading it deposits an ordinary firsthand
+claim → **G2**; two independently-rooted copies → **G3**. That is the ceiling. Meanwhile the Dicastery
+of Doctrine and Archives holds custody of the instruments everyone else's G4 grounds rest on.
+**Suppressing a text and devaluing a text are the same operation** — take away its custody and its grade
+falls one rung, permanently, in every chamber.
 
 **(2) Her life's work is unreadable in principle by half her audience.** `03 §9`, P-08: a rendering-side
 claim's subject is a *configuration*, a referent class a non-sensitive's ledger **has no address for**,
@@ -413,17 +392,14 @@ copies are the peninsula's one archive with **no admission gate** — which is p
 `14 §6` names as the Restoration's victory condition, shrinking the denominator of institutional
 control.
 
-**(4) THE EMPTY CELL — what a root token resolves to after its person is gone.** `01 §2`:
-*"A person persists exactly as long as somebody remembers them"* — a person with no Knot, no office, no
-live petition and **no other person's ledger naming them** re-merges into a cohort. Vedel is covert by
-design; being named in ledgers is the thing she avoids. So she is a strong candidate for
-de-individuation.
-
-But her copies carry **root tokens minted by her copying act**, and `01 §3.3` rules that corroboration
-fails closed: *there is no null source and no untraceable claim.* So a `reconstruct` on a copy fifty
-years on must resolve a root to a person the world has reabsorbed. **The suite never says what that
-returns.** It is a small hole with a sharp point: it decides whether a martyr can be found by
-investigation after she is forgotten, which is the entire dramatic proposition of a Lollard copyist.
+**(4) THE EMPTY CELL — what a root token resolves to after its person is gone.** `01 §2`: *"a person
+persists exactly as long as somebody remembers them"*, and one with no Knot, office, live petition or
+ledger entry naming them re-merges into a cohort. Vedel is covert by design; being named is the thing
+she avoids. But her copies carry **root tokens minted by her copying act**, and `01 §3.3` rules that
+corroboration fails closed — *no null source, no untraceable claim*. So `reconstruct` on a copy fifty
+years on must resolve a root to a person the world has reabsorbed, and **the suite never says what that
+returns.** A small hole with a sharp point: it decides whether a martyr can be found by investigation
+after she is forgotten, which is the whole dramatic proposition of a Lollard copyist.
 
 > **VERDICT: RICH.** Three live acts (copy, place, conceal), each with a different shape of cost; a
 > proof-grade consequence produced by the absence of custody rather than by a rule; and a P-08
@@ -458,25 +434,24 @@ province, Church/Crown suppression actions against RM in that province take +1 O
 **density** and modifies an **obstacle**. `07 §3` forbids it in terms: *"Nothing that decides an outcome
 reads either profile… Size buys being noticed."*
 
-The suite's substitute is available, and it is better. Suppression is `Force(actor, targets, disperse,
-warrant=office)` (`12 §4`), and it *requires Hold*. `hold(n, tgt) = Σ martial × readiness × compliance`,
-where compliance is **the output of a decision**, not a stat (`05 §5.2`). A cell spread over three
-settlements presents **three separate existentials**: at each node the suppressor needs a person with a
-binding post *there* who will comply against *those* neighbours. `07 §10.2` runs precisely this case and
-finds capacity **zero** for a faction of three thousand in a three-street district. Marching a Templar in
-from two rungs up is the alternative, and it *"converts a police matter into a caste incident."*
+The suite's substitute is available and better. Suppression is `Force(…, disperse, warrant=office)`
+(`12 §4`) and it *requires Hold*, where `hold(n, tgt) = Σ martial × readiness × compliance` and
+compliance is **the output of a decision, not a stat** (`05 §5.2`). A cell spread over three settlements
+presents **three separate existentials**: at each node the suppressor needs a person with a binding post
+*there* who will comply against *those* neighbours. `07 §10.2` runs exactly this case and finds capacity
+**zero** for a faction of three thousand in a three-street district; marching a Templar in from two rungs
+up *"converts a police matter into a caste incident."*
 
-**So: distributed cells are harder to suppress, exactly as canon says, computed from persons rather than
-from a marker count.** Canon's +1 Ob should be read as a summary of the mechanism, not as the mechanism.
-That is a clean vindication, and it is worth stating because it is the kind of rule a port would
-otherwise transcribe.
+**Distributed cells are harder to suppress, exactly as canon says, computed from persons rather than
+from a marker count.** Canon's +1 Ob is a summary of the mechanism, not the mechanism — worth saying,
+because it is the kind of rule a port would transcribe.
 
-**Her fork this season.** Canon (v1.1 fix npc-F3) has her escalate on *neglect*, not only on force: if
-blocked without force she shifts to deeper-covert cell-export. Under the suite that is `commit` chains
-along channels that deposit no claim into a judging set — i.e. **Knots** — and her Einhir heritage is
-what makes that channel available to her and not to Vossen (§1.3). Her cover claim's risk is the
-`interview` act: `03 §6.1` notes an interview *"deposits INTENDS(you, investigate X) in their ledger,
-tellable onward"* — so Curate Wessel questioning her neighbours is itself an event her cell can witness.
+**Her fork this season.** Canon has her escalate on *neglect*, not only on force: blocked without force,
+she shifts to deeper-covert cell-export — `commit` chains along channels depositing no claim into a
+judging set, i.e. **Knots**, which her Einhir heritage makes available to her and not to Vossen (§1.3).
+Her cover claim's risk is `interview`, which *"deposits INTENDS(you, investigate X)"* in the hearer's
+ledger, tellable onward — so Curate Wessel questioning her neighbours is itself an event her cell can
+witness.
 
 > **VERDICT: RICH.** Five distinguishable acts (commit, export, cover-tell, shelter, block-by-veto),
 > a genuine two-sided exposure fork under `03 §7`'s paired counters, and a real relationship between
@@ -572,19 +547,15 @@ Parliament, a guild's Free Masters in assembly, a Dicastery, a duchy's court —
 Crown's council.**
 
 > **So the venue Grindvold is defined by admits no remonstrance, and she has no right of audience in
-> it.** At the Crown court she is confined to supplication, which `05 §6.1` says *presupposes the
-> giver's right to give* — an act of submission, read as such — for a woman whose whole brief is
-> defending guild autonomy *against* Crown regulation. She must perform deference to contest deference.
+> it.** She is confined to supplication, which `05 §6.1` says *presupposes the giver's right to give* —
+> an act of submission, read as such — for a woman whose brief is defending guild autonomy *against*
+> Crown regulation. She must perform deference to contest deference.
 
-That is not a gap. It is `14 §6`'s Crown made concrete: weak everywhere it must ask, procedurally
-absolute in the one room it owns.
-
-**Her live move is the venue objection.** `08 §2` rung 4, **Jurisdiction** — *this chamber may not hear
-it* — is nearly always available and concedes the substance to buy a delay. Combined with `14 §5`'s
-`admissible_source` column, forum-shopping is a first-class act: move the motion to a venue whose
-registered right she *does* hold. She holds standing at the Free Masters' assembly and, through the
-Compact's seats, reach into Hafenmark's Parliament, whose decision rule is a majority of seats the Crown
-holds none of.
+Not a gap: `14 §6`'s Crown made concrete, weak everywhere it must ask and procedurally absolute in the
+one room it owns. **Her live move is the venue objection** — `08 §2` rung 4, *this chamber may not hear
+it*, which concedes substance to buy a delay. Forum-shopping is first-class: she holds standing at the
+Free Masters' assembly and, through the Compact's seats, reach into Hafenmark's Parliament, whose
+decision rule is a majority of seats the Crown holds none of.
 
 > **VERDICT: RICH by re-venuing; BLOCKED at the venue that names her.** The design supports the escape
 > explicitly, which is the strongest thing I can say about it. The reportable item is that a canon role
@@ -603,23 +574,21 @@ independently-rooted surveys → **G3**. **G4 requires a declared custody** (`08
 custodies in the venue table are the Church's registers, the praefect's roll, and the **guild
 register** — which is the one he can reach, and which is held by a warden (§6.6).
 
-**And the sharp result: he cannot refute the rumour in a chamber.** What he is disproving is a
-*conspiracy narrative* — **G0 common voice**, synthetic-root, which `08 §4.1` describes as *"below most
-floors… nothing needs to attack it."* There is no venue at which a G0 proposition is the motion.
+**And the sharp result: he cannot refute the rumour in a chamber.** What he disproves is a *conspiracy
+narrative* — **G0 common voice**, synthetic-root, which `08 §4.1` calls *"below most floors… nothing
+needs to attack it."* There is no venue at which a G0 proposition is the motion.
 
 > **A rumour cannot be defeated in a room. It can only be out-graded somewhere else.**
 
-I take that as correct rather than as a hole, with a cost that must be said out loud: the narrative
-keeps operating in **judging sets**, which is where decisions are actually made, indefinitely, while
-his G3 sits in a register nobody reads.
+Correct rather than a hole, with a cost worth saying: the narrative goes on operating in **judging
+sets** — where decisions are actually made — while his G3 sits in a register nobody reads.
 
-**The economic payoff is real and it needs no office.** `13 §4`: `import_flow(r, good, season)` is the
-sum of individual acts, each a person running `EV = (price(dest) − price(origin) − transport_cost) ×
-volume − p(interception) × penalty`. If the route is *physically* blocked, `transport_cost` is
-effectively infinite and every act premised on opening it politically has an EV computed from a false
-claim. **Bergvall's survey, told into the right ledgers, changes the expected value of an entire class
-of acts for everyone who believes him** — capacity with no coin, no post and no seat, delivered purely
-by depositing a better-rooted claim.
+**The economic payoff needs no office.** `13 §4`'s `import_flow` is the sum of individual acts, each a
+person running `EV = (price(dest) − price(origin) − transport_cost) × volume − p(interception) ×
+penalty`. If the route is *physically* blocked, `transport_cost` is effectively infinite and every act
+premised on opening it politically has an EV computed from a false claim. **Bergvall's survey, told into
+the right ledgers, changes the expected value of a whole class of acts for everyone who believes him** —
+capacity with no coin, post or seat, delivered by depositing a better-rooted claim.
 
 > **VERDICT: RICH.** Four investigative acts with genuinely different cost shapes, a real economic
 > consequence carried by a claim, and one honest structural limit (G0 is unattackable) that the design
@@ -645,22 +614,19 @@ vindication in this document, and it comes from a minor NPC's dossier rather tha
 
 **And the counter is priced without anyone pricing it.** `forestall` is *"high-δ… a strong,
 publicity-scaled negative stance the instant it is caught"*, and `06 §5`'s targeting order blames the
-grain merchant seen forestalling **before** the duke who set the levy, because a firsthand local claim
-outranks distant hearsay on every salience term. **Tallow's strongest move makes him the first person a
-rising comes for.** Genuine fork.
+grain merchant seen forestalling **before** the duke who set the levy. **Tallow's strongest move makes
+him the first person a rising comes for.** Genuine fork.
 
-**THE FINDING — his stated ambition is unbuyable.** He wants a **perpetual** charter over the ford toll.
-`07 §5.4`: a charter is a **dispensation**. `07 §4`, purchased basis: its characteristic cut is *"outbid,
-or **devalue the instrument with a dispensation changing its terms**."* And `14 §2.4` makes revocation
-an ordinary act of whoever can issue at that scope.
+**THE FINDING — his stated ambition is unbuyable.** He wants a **perpetual** charter. `07 §5.4` makes a
+charter a **dispensation**; `07 §4`'s purchased basis has as its characteristic cut *"outbid, or
+**devalue the instrument with a dispensation changing its terms**"*; `14 §2.4` makes revocation ordinary.
 
-> **Perpetuity is not purchasable in this design.** Any charter he wins is exactly as durable as the
-> next office-holder's willingness to leave it alone. He can have the toll; he cannot have *forever*.
+> **Perpetuity is not purchasable in this design.** Any charter he wins is as durable as the next
+> office-holder's willingness to leave it alone. He can have the toll; he cannot have *forever*.
 
-That is not obviously wrong — `13 §6`'s Almud Free Bond shows a term outliving its issuer by two
-generations purely because nobody countermanded it — but it means **a four-season canon ambition
-resolves to the same object as an ordinary decree, with no additional prize.** The design has no
-entrenchment instrument, and this is the character who wants one.
+Not obviously wrong — `13 §6`'s Almud Free Bond outlived its issuer by two generations because nobody
+countermanded it — but **a four-season canon ambition resolves to the same object as an ordinary decree,
+with no additional prize.** There is no entrenchment instrument, and this is the character who wants one.
 
 > **VERDICT: RICH in method, BLOCKED in its stated end.** Every step to the charter is playable; the
 > charter's advertised property does not exist.
@@ -711,10 +677,10 @@ binding: claimants are factions, **resolution runs through each claimant's best-
 claimant with an empty existential is **absent rather than defeated — and everyone can see it was
 absent.** Two persons, two propositions, one prize, one function.
 
-**Does anything break?** One thing needs saying, and it is the honest cost `07 §6.1` already names:
-*"the fiction must never render an institution as a speaker."* **"The Guilds decided" is permanently
-inexpressible**, and so is a petition addressed to the Guilds — you address a person, and that person
-can drop it. Under Jordan's ruling that is not a cost at all; it is the correct output.
+**Does anything break?** One honest cost, which `07 §6.1` already names: *"the fiction must never render
+an institution as a speaker."* **"The Guilds decided" is permanently inexpressible**, and so is a
+petition addressed to the Guilds — you address a person, and that person can drop it. Under Jordan's
+ruling that is not a cost; it is the correct output.
 
 > **PROBE A PASSES, and it passes better than a unitary Guild would have.** With one body, Feldhaus
 > and Kessler's disagreement would have had to be a *stability* number on a faction sheet — which is

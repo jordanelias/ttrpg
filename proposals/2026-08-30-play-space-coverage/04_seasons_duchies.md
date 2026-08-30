@@ -14,28 +14,21 @@ Four declarations. Three are branches I take without resolving; one is a fifth c
 roster did not catch, reported per FINDING 3's convention.
 
 **0.1 The conferral dilemma — I assume OFFICE-ROOTED, and mark where it matters.** The suite asserts
-both and resolves neither (`00_INDEX §3.2`). It bites this lane in one specific place and I flag it
-there rather than hiding it in an average: `14 §1.5`'s post roster makes **praefect** a Crown
-appointment, revocable by the Crown, sitting on settlements *inside* Varfell and Hafenmark. Under the
-office-rooted branch, a Crown succession hands the successor the power to revoke every praefect in
-both duchies, which makes a Crown vacancy a simultaneous contest for thirty-odd settlement offices.
-Under the person-rooted branch, Almud's death leaves those praefectures with a **dead conferrer**,
-irrevocable and unreplaceable, and both dukes wake up governing settlements administered by men
-nobody living can remove. Both branches are playable. They are not the same game, and Inge Baralta's
-season below reads differently under each — I say where.
+both and resolves neither (`00_INDEX §3.2`). It bites here in one place: `14 §1.5` makes **praefect** a
+Crown appointment, revocable by the Crown, sitting on settlements *inside* Varfell and Hafenmark.
+Office-rooted, a Crown succession hands the successor the power to revoke every praefect in both
+duchies. Person-rooted, Almud's death leaves those praefectures with a **dead conferrer** —
+irrevocable, unreplaceable, and both dukes governing settlements administered by men nobody living can
+remove. Both are playable; they are not the same game. Full statement at F10.
 
 **0.2 The act budget is contradicted inside the suite, and the contradiction lands on this rung.**
-`09 §1.1`: *"The tick is a season. Every person and every cohort commits exactly one act per season…
-it is the one discretionary commitment."* `14 §8`: *"A worked season — Vaynard, one turn, **ten
-acts**, no faction verbs,"* and the trace then spends `convene`, `issue`, two `dispatch`es, `confer`,
-`revoke`, `carry` and `commit`. `14 §1.3` treats `seat_items` as a personal budget (*"an office's
-standing dates consume the holder's own hours… holding two offices does not double a day"*), while
-`05 §3.1` treats it as a **container** capacity (*"Every container's standing date hears a finite
-number of items — a term of the container"*) and separately charges `compose_agenda` *"one of v's own
-acts for the season."* Three budgets, two owners for one field, and a factor of ten between the two
-readings of a duke's season. **I write both dukes at one act per season, per `09`, because `09` owns
-the tick** — and I record in §5 what changes if `14 §8` is right, because the answer to this lane's
-question depends on it more than on anything else in the design.
+`09 §1.1`: *"Every person and every cohort commits exactly one act per season… it is the one
+discretionary commitment."* `14 §8`: *"A worked season — Vaynard, one turn, **ten acts**"* — spending
+`convene`, `issue`, two `dispatch`es, `confer`, `revoke`, `carry` and `commit`. And `seat_items` has
+two owners: `14 §1.3` calls it the holder's own hours, `05 §3.1` calls it the container's capacity and
+separately charges `compose_agenda` *"one of v's own acts for the season."* **I write both dukes at
+one act per season, per `09`, because `09` owns the tick** — and record at F1 what changes if `14 §8`
+is right, because this lane's answer depends on it more than on anything else in the design.
 
 **0.3 A fifth canon collision, of FINDING 1's shape but at the level of mechanism.**
 `04 §10`'s Trace A gives Duchess Inge Baralta *"a banked claim on the Crown seat (basis: **marriage**,
@@ -83,36 +76,29 @@ holds it, re-opening at every standing date, depositing grievance each time. Ope
 death is a larger event for Hafenmark than Almud's is for the Crown, and it is a condition of her
 person fields rather than a plot.
 
-**Absence two: she has no world-read need at all.** `01 §2`'s table splits needs into two that read
-the world (subsistence, standing) and two that read the view (commitment, exposure). Her ducal
-hearth is Provisioned, so `need(subsistence) = clamp(0,1,(2.0 − margin)/2.0) = 0` and `04 §1.2`'s
-unbounded coercive term never fires. Her `expected_standing` from a ducal house mark and her
-`held_standing` at her own duchy are both at the ceiling, so `need(standing) = (7−7)/3 = 0`. **Both
-formulas the suite actually wrote produce zero for her.** Everything Inge wants therefore comes from
-the two needs the suite names and never computes. That is §5's Finding 2 and it is not decoration:
-it means a duchess's entire agenda is a function of her ledger, so a magnate who is lied to wants the
-wrong things — which is a fine property, and it currently has no arithmetic behind it.
+**Absence two: she has no world-read need at all.** `01 §2` splits needs into two that read the world
+(subsistence, standing) and two that read the view (commitment, exposure). Her hearth is Provisioned,
+so `need(subsistence) = clamp(0,1,(2.0 − margin)/2.0) = 0` and `04 §1.2`'s unbounded coercive term
+never fires. Her `expected_standing` and `held_standing` are both at the ceiling, so
+`need(standing) = (7−7)/3 = 0`. **Both formulas the suite actually wrote produce zero for her**, so
+everything she wants comes from the two needs it names and never computes (F2). A magnate's entire
+agenda is therefore a function of her ledger — a fine property with no arithmetic behind it.
 
-**Ties.** Knots are TS-gated (`01 §2`); her TS is `[GAP]`, so whether the deepest informal channel in
-the game is open to her is unresolved in canon. If it is not, her only channels are institutional,
-which is exactly the profile `06 §2` says receives *sharp* decrees and *no* whispers.
+**Ties.** Knots are TS-gated (`01 §2`); her TS is `[GAP]`. If she cannot form one, her only channels
+are institutional — the profile `06 §2` says receives *sharp* decrees and *no* whispers.
 
 ### 1.3 Computed needs, with the arithmetic
 
-- `need(subsistence)` = **0**. Shown above.
-- `need(standing)` = **0**. Shown above.
+- `need(subsistence)` = **0** · `need(standing)` = **0**. Both shown above.
 - `need(commitment)` — the Crown proposition, unsatisfied. **No formula exists.** `05 §1.1` needs an
-  `urgency(prop)` to compute `shortfall = urgency − reach`, and its own worked table hands Duke
-  Vaynard `urgency 0.91` with nothing deriving it. I take Inge's Crown urgency as high and say
-  plainly that I am asserting it, because the suite does.
-- `need(exposure)` — what a dispensation's terms do to her options, read from her view. Live: the
-  Church tithe runs through Hafenmark under the Dicastery of Temporal Affairs' `LevyTerm` (`13 §7`),
-  and every settlement in her duchy is administered by a **Crown-conferred praefect** she cannot
-  revoke (`14 §1.5`, §2.4).
+  `urgency(prop)` to compute `shortfall = urgency − reach`, and its own worked table hands Vaynard
+  `urgency 0.91` with nothing deriving it. I assert Inge's as high, and say so, because the suite does.
+- `need(exposure)` — live: the Church tithe runs through Hafenmark under the Dicastery of Temporal
+  Affairs' `LevyTerm` (`13 §7`), and every settlement in her duchy is administered by a
+  **Crown-conferred praefect** she cannot revoke (`14 §1.5`, §2.4).
 
-`shortfall(Inge, the throne) = urgency − reach`, and `reach` is *"max over her own acts of expected
-satisfaction, taken over her VIEW"* (`05 §1.1`). Her act menu is large. Her reach on this particular
-proposition is not, and §1.5 is why.
+`reach` is *"max over her own acts of expected satisfaction, taken over her VIEW."* Her act menu is
+large; her reach on this proposition is not, and §1.5 is why.
 
 ### 1.4 The view, and one claim she holds that does not surface
 
@@ -186,28 +172,24 @@ by a distance the most interesting thing on her list.
 She takes act 8. **She legitimates a cadet Baralta into the seat list**, at the Parliament's
 quarterly sitting.
 
-- **P0 CALENDAR.** The Court Parliament's quarterly date fires; so does the tithe reckoning at two of
-  her settlements and her mine's dues reckoning. Option availability recomputes.
+- **P0 CALENDAR.** The Parliament's quarterly date fires; so do the tithe reckoning at two settlements
+  and the mine's dues reckoning.
 - **P1 SETTLE.** Larders consume; the mine's `base(H)` silently decrements again (`13 §5`); the
-  harbour's `transport_cost` accrues silt. No social quantity moves — `09 §1.2` puts that in P1 by
-  phase membership, so nothing here is a decision.
-- **P2 NEEDS.** Both computed needs return 0 (§1.3). The act is driven entirely by an uncomputed
-  commitment need.
+  harbour accrues silt. No social quantity moves — `09 §1.2` enforces that by phase membership.
+- **P2 NEEDS.** Both computed needs return 0. The act is driven entirely by an uncomputed one.
 - **P3 VIEW.** K = 12. The mine claim ranks 14th and does not enter.
-- **P4 CHOOSE.** Her one act. Note what it *costs* her under `09 §1.1`: this season she does not
-  convene an agenda, does not issue the dredging levy, and does not dispatch anyone. One act.
-- **P5 RESOLVE.** Legitimation is an **assertion** (`04 §2.2`), performed at a venue whose
-  `venue_factor` is 2.0 (parliament, `04 §4.1`). It is not adjudicated in this phase; it is *done*,
-  and it is contestable later.
-- **P6 WITNESS.** `publicity = 2.0 × √(witness count) × mark_salience`, and her `mark_salience` is at
-  the top of the scale. Every seat-holder, their attendants, and — by ambient and Knot clauses —
-  Hafenmark's communities inside one to two seasons. The judging set deposits divergently: her Precedent-
-  and Authority-primary councillors read *the succession is secured*; her commune constituency reads,
-  through `04 §4.1`'s marks term, *a cadet was raised over persons with standing*. Every cadet Baralta
-  hearth whose members' `need(standing)` was 1.0 now holds a claim that the ladder moved for someone
-  else.
-- **P7 RECKON.** Confidence decays; ledgers evict; the new seat-list row is permanent world state and
-  the *claim* of it is not.
+- **P4 CHOOSE.** Her one act — so this season she does not convene an agenda, does not issue the
+  dredging levy, and does not dispatch anyone.
+- **P5 RESOLVE.** Legitimation is an **assertion** (`04 §2.2`) at `venue_factor` 2.0. Not adjudicated
+  here; *done*, and contestable later.
+- **P6 WITNESS.** `publicity = 2.0 × √(witness count) × mark_salience`, hers at the top of the scale:
+  every seat-holder, then Hafenmark's communities within a season or two. The judging set deposits
+  divergently — her Precedent- and Authority-primary councillors read *the succession is secured*; her
+  commune constituency reads, through `04 §4.1`'s marks term, *a cadet was raised over persons with
+  standing*. Every cadet Baralta hearth at `need(standing)` 1.0 now holds a claim that the ladder moved
+  for someone else.
+- **P7 RECKON.** Confidence decays; the seat-list row is permanent world state and the *claim* of it
+  is not.
 
 ### 1.7 What propagates
 
@@ -242,18 +224,14 @@ forgery rather than through anything a duchy does.
   accumulates standing and precedent leverage (`04 §3.3`) from the day it is signed. Cost: the cadet
   is now a claimant with capacity *while she lives*, and `07 §5.2` says shadow standing above zero
   makes her cheapest future act legalisation. Also compounds. **Not dominant.**
-- *Wait, per `14 §9`* — the suite argues hoarding the deed presumption has *"zero cost and a gain that
-  decays to zero with certainty."* **It is wrong in Inge's case, and this is the sharpest R-finding in
-  the lane.** `04 §3.4` computes `deed_weight` from living **firsthand** witnesses, and canon says the
-  Baralta ducal status was *itself* earned through Secession-era deeds (`03_canonical_timeline.md:90`),
-  with `14 §1.5` recording the ducal conferrer as *"nobody living — deed at the Secession War."* The
-  war ended 45 years ago; a firsthand witness of it is at least sixty. **The numerator decaying under
-  the Almqvists is the same numerator decaying under the Baraltas.** Waiting does not differentially
-  advantage her — it dissolves the warrant for *her own office* at the same rate. `14 §9`'s claim that
-  her strategy is *"she needs the last men who saw the Secession War to die"* is true only if her
-  claim rests on a basis the Crown lacks; her kinship basis is a hearth-held banked claim (§0.3) and
-  her purchased and bureaucratic bases (`07 §4.1`) are what actually survive the clock. Waiting is
-  therefore a race between two decays, not a free option, and the suite scores it as free.
+- *Wait, per `14 §9`* — the suite calls hoarding the deed presumption *"zero cost and a gain that
+  decays to zero with certainty"* and derives her whole strategy from it. **It is wrong here.**
+  `04 §3.4` counts living **firsthand** witnesses; canon roots the **Baralta** ducal status in the same
+  Secession-era deeds, and `14 §1.5` gives its conferrer as *"nobody living — deed at the Secession
+  War."* The war ended 45 years ago, so a firsthand witness is at least sixty — and **the numerator
+  decaying under the Almqvists is the same numerator decaying under the Baraltas.** Waiting dissolves
+  the warrant for her own office at the same rate. What survives the clock is her purchased and
+  bureaucratic mass (`07 §4.1`), not the deed. A race between two decays, scored by the suite as free.
 - *Dredge or arm* (`13 §5`) — dredging: compounding gain (a route half the peninsula's grain relies
   on), flat cost. Arming: flat gain (one claim window), compounding cost (a depleting seam). Neither
   dominates; the crossing point is whether anyone investigates the seam. **The design has tied her
@@ -279,23 +257,22 @@ avowed alignment` · `caste-advantaged × house name × no Church standing`.
 | **D · marks** | **Southern Einhir heritage** — the caste-excluded mark, worn by a duke · **Thread-sensitive** from environmental exposure (canon) · house name Vaynard |
 | **E · modes reachable** | all eight, and this is the point: Vaynard is the one character in this lane who is simultaneously caste-advantaged by office and caste-excluded by mark |
 
-Convictions: Equity 0.35, Utility 0.30, self/other −0.40 (NPC-052). Equity-primary is what makes the
-caste act sincere; Utility-secondary is what makes it instrumental; self/other −0.40 is what makes it
-*his*.
+Convictions: Equity 0.35, Utility 0.30, self/other −0.40 (NPC-052) — sincerity, instrumentality and
+ego, as three stance rows.
 
 ### 2.2 Opening state, and what is conspicuously absent
 
-`04 §4.1`'s `mark_salience = 1 + 0.2 × (number of the actor's marks that any community member holds a
-strong stance toward)` runs at its maximum for him in a Crown-Latinate quarter and near its floor in
-an Einhir hamlet. So the same act by the same duke *travels twice as far* in the places most hostile
-to it. **A Southern Einhir duke cannot act quietly anywhere north of his own fjords**, and `14 §1.3`
-already charges every act-by-remit at `venue_factor ≥ 1.0` on top of that.
+`04 §4.1`'s `mark_salience` counts the actor's marks any community member holds a *strong* stance
+toward. His runs at maximum in a Crown-Latinate quarter and near its floor in an Einhir hamlet, so the
+same act *travels twice as far* in the places most hostile to it — and `14 §1.3` charges every
+act-by-remit at `venue_factor ≥ 1.0` on top. **A Southern Einhir duke cannot act quietly anywhere
+north of his own fjords.**
 
-What is absent: **an establishment large enough for his scope.** `14 §9`'s own worked accrual case is
-Varfell — *"twelve settlements, a ducal household of nine dispatchable persons."* `06 §8`'s reach cap
-then reads: nine nodes get publication-with-enforcement, three get publication with
-`enforcer_presence = 0` and compliance craters there structurally, and the western-fjord pockets get
-whatever folk gossip carries, degraded by hop count with nothing to reset it (`06 §2`).
+What is absent: **an establishment large enough for his scope.** `14 §9`'s own accrual case is Varfell
+— *"twelve settlements, a ducal household of nine dispatchable persons."* Under `06 §8`'s reach cap,
+nine nodes get publication-with-enforcement, three get `enforcer_presence = 0` and crater
+structurally, and the western-fjord pockets get folk gossip degraded by hop count with nothing to
+reset it.
 
 ### 2.3 Computed needs
 
@@ -361,22 +338,19 @@ Examination-fee waiver for Southern Einhir apprentices"*).
 This is Path B expressed as an admission coefficient, exactly as `04 §12`'s challenge says: *"Duke
 Magnus Vaynard's whole Path B is a dispensation editing β."*
 
-- **P0.** The Masterpiece Examination's date is on the docket at three Varfell settlements. So is the
-  tithe reckoning, which is the Church's `LevyTerm` collecting inside his duchy through offices he
-  cannot revoke (`13 §7`, `14 §2.4`).
-- **P1.** Larders; the fjord pockets' `season_factor` rolls badly.
-- **P2.** Needs. Zero and zero, plus the uncomputed one.
-- **P3.** View, K = 12, most of the duchy present as cohorts.
-- **P4.** `issue`. One act, per `09 §1.1` — which means **this season he does not publish it with
-  enforcement anywhere**, because publication-with-enforcement consumes establishment per node
-  (`06 §8`) and he has spent his act on the issuing.
-- **P5.** The term is written. `06 §3`: *a published Dispensation does not apply* — it lands per node
-  as a compliance contest reading `enforcer_presence`, the local judging-set stance, and distance.
-- **P6.** Publication as telling, distorting (`06 §2`). And now `06 §2`'s first free consequence
-  fires against him: *"terms drop before values distort"* — the headline term (*the gate is open to
-  Einhir hands*) survives every hop; the qualifiers (which gates, which fees, the scope boundary) shed
-  first. What reaches the western fjords is **stronger than what he signed**.
-- **P7.** Reckon.
+- **P0.** The Masterpiece Examination's date is on the docket at three Varfell settlements; so is the
+  tithe reckoning, the Church's `LevyTerm` collecting inside his duchy through offices he cannot
+  revoke (`13 §7`, `14 §2.4`).
+- **P1–P3.** Larders; the fjord pockets roll a bad `season_factor`. Needs zero and zero plus the
+  uncomputed one. View K = 12, most of the duchy present as cohorts.
+- **P4.** `issue`. One act — so **this season he does not publish it with enforcement anywhere**,
+  because publication-with-enforcement consumes establishment per node (`06 §8`).
+- **P5.** `06 §3`: *a published Dispensation does not apply* — it lands per node as a compliance
+  contest reading `enforcer_presence`, local judging-set stance, and distance.
+- **P6.** Publication as telling, distorting. `06 §2`'s first free consequence fires against him —
+  *"terms drop before values distort"*: the headline (*the gate is open to Einhir hands*) survives
+  every hop, the qualifiers shed first. **What reaches the western fjords is stronger than what he
+  signed.**
 
 ### 2.7 What propagates, and the consequence he did not intend
 
@@ -497,11 +471,10 @@ is computed toward Inge; if Olaf orders, toward Olaf. His one accumulating asset
 and nowhere else (`12 §6.3`): *"one public refusal in front of sixty people lowers sixty people's
 willingness on the next order."*
 
-Canon gives Hafenmark **Military 3**, the lowest of the five great factions, against Varfell's 4 and
-the Löwenritter's 5. Under `13 §2` those canon numbers are computed bands rather than stored dials, so
-Military 3 is an *output*: it is what a duchy whose power_base is purchased and bureaucratic produces.
-And `12 §1.2`'s `sever` term applies against his own city: a Hafenmark watch ordered against Hafenmark
-communities loses `0.55 × 0.80 = 0.44` of every man's willingness.
+Canon gives Hafenmark **Military 3**, the lowest of the great factions. Under `13 §2` that is a
+computed band, not a stored dial — an *output* of a duchy whose power_base is purchased and
+bureaucratic. And `12 §1.2`'s `sever` term applies against his own city: a Hafenmark watch ordered
+against Hafenmark communities loses `0.55 × 0.80 = 0.44` of every man's willingness.
 
 **Verdict: THIN.** He has a real act — the `Order` — but every consequence of it is computed from
 other people's stances toward him personally, he holds no remit that survives his own reputation, and
@@ -550,11 +523,10 @@ is `12 §6.2`'s **overt refusal in front of everyone**, which deposits `(order o
 false)` into every witness's ledger and lowers every subsequent order's willingness.
 
 **Verdict: RICH — and identical in shape to Vaynard's own season at smaller scope.** That is the
-lane's answer to its own question showing up in a probe: a Senior Jarl's option set is a Duke's option
-set with a smaller `scope_node` and a shorter establishment list. Warden 0.70 gives him one distinctive
-stance — `12 §1.2`'s `conviction_weight(p, {Authority, Order, Duty-of-post})` reads nothing from
-Warden, so he gets no willingness bonus from his own primary conviction, and his men's willingness
-toward *him* is computed the same way as toward anyone.
+lane's question answered inside a probe: a Senior Jarl's option set is a Duke's option set with a
+smaller `scope_node` and a shorter establishment list. Note that `12 §1.2`'s
+`conviction_weight(p, {Authority, Order, Duty-of-post})` reads nothing from Warden, so his primary
+conviction buys him no willingness anywhere.
 
 ### 3.5 Ingrid Stenskald — Skald-Chief, Varfell Jarl Council (Community 0.70, Solidarity style)
 
@@ -629,12 +601,10 @@ Thread-sensitive at TS ~50, no house name, no guild grade, no Church standing.
    channel a covert commitment can run on.** The suite states this as the reason Niflhel recruits on
    the waterfront; it applies to her exactly and nobody wrote it for her.
 
-2. **Her cover is a function of her marks, and it fails geographically.** `04 §4.1`:
-   `publicity = venue_factor × √witness_count × mark_salience`, where `mark_salience` counts marks any
-   community member holds a *strong* stance toward. In the fjords, near zero. In a Crown-Latinate
-   quarter, maximal. **She is operationally invisible where Vaynard needs no intelligence and
-   maximally visible where he does.** That is a derived constraint on the whole Varfell intelligence
-   apparatus, from one publicity formula.
+2. **Her cover is a function of her marks, and it fails geographically.** `mark_salience` is near zero
+   in the fjords and maximal in a Crown-Latinate quarter, so **she is operationally invisible where
+   Vaynard needs no intelligence and maximally visible where he does** — a constraint on the whole
+   Varfell intelligence apparatus, derived from one publicity formula.
 
 3. **PP-486's succession fallback has exactly one mechanism, and performing it destroys her.** She is
    not Vaynard's kin. `14 §2`: a duchy's vacancy resolves by `04`'s succession pointer, a **hearth**
@@ -657,13 +627,10 @@ Thread-sensitive at TS ~50, no house name, no guild grade, no Church standing.
    *"shrink the denominator to nothing: dissolve offices with binding power."* Any Restoration
    requisition asking her to act against Varfell's intelligence apparatus carries maximal `harm to the
    container's stake`, so it fails **and costs her nothing.** She stays a covert member at her degree
-   forever. Her canon arc — *"Dual loyalty — personal sympathy vs professional duty"* — therefore
-   resolves only through **somebody else's investigation** (`07 §1.3`: `exposure` rises only when an
-   investigation spends acts). **Her agency in her own defining conflict is zero.**
-
-   And if she *does* take the duchy under PP-486 while holding that edge, the stall gets worse: she
-   would hold an office whose existence her own faction's proposition negates, and the same
-   high-burden rule guarantees she is never asked to act on it.
+   forever, and her canon arc — *"Dual loyalty — personal sympathy vs professional duty"* — resolves
+   only through **somebody else's investigation** (`07 §1.3`). **Her agency in her own defining
+   conflict is zero**, and it gets worse if she takes the duchy: she would then hold an office her own
+   faction's proposition negates, protected from ever being asked to act on it by the same rule.
 
 **Option set.** `tell` / `lie` / `conceal`; the investigation acts (`03 §6.1`) — and `03 §6.2` says
 these are *"playable with no office"*, which is the whole of her job; `commit`; requisition along a
@@ -707,16 +674,15 @@ Strip that away and what is genuinely distinctive at Duchy scale is a short list
 acts, (c) a hearth seat fused to it, and (d) no living conferrer.** Two of those four — the ledger and
 the hearth fusion — are genuinely new modes of play. The other two are magnitude and absence.
 
-**And the act budget decides whether even that is enough.** Under `09 §1.1`'s one act per season, a
-duke's season is a choice among four move-shapes — issue a term, move a person into or out of an
-office, spend a seat item at a venue, or edit the hearth's pointer — and both my FULL seasons above
-demonstrate the cost: Inge legitimated an heir and therefore did not convene, issue or dispatch;
-Vaynard issued a reform and therefore could not publish it with enforcement anywhere. That is a
-genuinely sharp game and it is also very close to **THIN**: four shapes, one pick, and the differences
-between two of the four are cosmetic in most seasons. Under `14 §8`'s ten acts, a duke's season is
-plainly richer than a praefect's — and the reason is *an unstated scaling of the act budget by office*,
-which contradicts `14`'s own founding claim that an office *"adds no verb to the game"* and that both
-run the same `choose(person, view)`.
+**And the act budget decides whether even that is enough.** Under one act per season, a duke's season
+is a choice among four move-shapes — issue a term, move a person into or out of an office, spend a
+seat item at a venue, or edit the hearth's pointer — and both FULL seasons above pay the cost: Inge
+legitimated an heir and therefore did not convene, issue or dispatch; Vaynard issued a reform and
+therefore could not publish it with enforcement anywhere. That is a sharp game, and it is also close
+to **THIN**: four shapes, one pick, two of them cosmetically different in most seasons. Under
+`14 §8`'s ten acts a duke's season is plainly richer than a praefect's — and the reason would be *an
+unstated scaling of the act budget by office*, contradicting `14`'s own founding claim that an office
+*"adds no verb to the game"*.
 
 **Stated plainly, as the brief asks:** Duchy-scale play is not Settlement-scale play with a larger
 stake — it has two mechanisms of its own — but it is *closer to that* than the design's rung-ownership
@@ -727,69 +693,59 @@ about how many acts a person gets in a season.
 
 ## 5. FINDINGS
 
-**F1 — The act budget is contradicted between `09 §1.1` and `14 §8`, and the answer decides whether
-this rung is rich.** One act per season versus a ten-act worked season for the same character. A third
-budget, `seat_items`, has two owners: `14 §1.3` calls it the holder's own hours, `05 §3.1` calls it the
-container's capacity. **This is the highest-value thing in this document.** Settle it and the lane's
-central question has an answer; leave it and both answers are defensible from the same suite.
+Each is argued in full in the season it came out of; the citation is the argument.
+
+**F1 — The act budget is contradicted between `09 §1.1` (one act per season) and `14 §8` (a ten-act
+worked season for the same character), and `seat_items` has two owners (`14 §1.3` the holder's hours,
+`05 §3.1` the container's capacity).** §0.2, §4. **This is the highest-value item here:** settle it and
+this lane's central question has an answer; leave it and both answers are defensible from one suite.
 
 **F2 — Two of the four computed needs have no formula, and they are the only two a magnate has.**
-`01 §2`'s table names subsistence, standing, commitment and exposure. `04` computes the first two.
-Nothing anywhere computes commitment or exposure. For a duke, `need(subsistence) = 0` (Provisioned)
-and `need(standing) = 0` (at ceiling), so **100% of a magnate's motivation comes from the uncomputed
-half.** `05 §1.1`'s own worked table hands Vaynard `urgency 0.91` with nothing deriving it. The design
-that computes a hamlet fisher's want exactly must currently hand-author a duke's.
+`01 §2` names subsistence, standing, commitment, exposure; `04` computes the first two; nothing
+computes the last two. For a duke both computed needs return **0** (§1.2), so 100% of a magnate's
+motivation comes from the uncomputed half — and `05 §1.1`'s own worked table hands Vaynard
+`urgency 0.91` with nothing deriving it. The design computes a fisher's want exactly and must
+hand-author a duke's.
 
-**F3 — Duchess Inge Baralta's stated goal is unreachable and no act of hers touches the blocker.**
-`08 §10.1`: article 3 of a Crown Succession Contest needs consecration consent, an instrument in
-Church custody, and indeterminate custody makes it ungradable for every claimant. FINDING 4 says
-custody is indeterminate at game start. She cannot confer, revoke or convene anything in the Church's
-conferral graph, and `14 §5`'s door rules exclude her from three of four Dicastery venues. Her only
-route is acquiring a person inside the Dicastery of Doctrine and Archives — an investigation problem,
-not a Duchy-rung act. **The most interesting thing a duke can do is not a Duchy-rung act**, which is
-itself a finding about the rung.
+**F3 — Inge Baralta's stated goal is unreachable and no act of hers touches the blocker.** Article 3
+of a Crown Succession Contest needs consecration consent, an instrument in Church custody, which is
+indeterminate at game start (FINDING 4) and therefore ungradable for every claimant (`08 §10.1`).
+None of her eleven acts reaches the Church's conferral graph (§1.5). **The most interesting thing a
+duke can do — put a person inside the Dicastery of Doctrine and Archives — is not a Duchy-rung act.**
 
-**F4 — `14 §9` scores "hoard the deed presumption" wrongly for Baralta.** It calls hoarding *"zero
-cost and a gain that decays to zero with certainty"* and derives her whole strategy from it. But canon
-(`03_canonical_timeline.md:90`) and `14 §1.5` both root the **Baralta ducal office** in the same
-Secession-era deed, with the same dead conferrer. The numerator decays for her too. Waiting is a race
-between two decays, not a free option, and the suite's own R-check does not notice.
+**F4 — `14 §9` scores "hoard the deed presumption" wrongly for Baralta.** Canon
+(`03_canonical_timeline.md:90`) and `14 §1.5` root the **Baralta ducal office** in the same
+Secession-era deed with the same dead conferrer, so the numerator decays for her too. Waiting is a race
+between two decays, not the free option the suite's R-check scores it as (§1.8).
 
 **F5 — `12 §1.2` weights loyalty-to-person above loyalty-to-cause, 0.08 to 0.06, and a canon character
-denies it.** Njal Torberg *"fights for Einhir, not Vaynard personally."* The willingness formula makes
-the man worth 4:3 against the cause, and its conviction term reads only Authority, Order and
-Duty-of-post — which gives an Identity/Honor character nothing. The result is a shrug (comply badly)
-where canon promises a fracture. Reported, not patched.
+denies it.** Njal Torberg *"fights for Einhir, not Vaynard personally"*; the formula makes the man
+worth 4:3 against the cause and gives an Identity/Honor character nothing from the conviction term.
+The result is a shrug where canon promises a fracture (§3.6).
 
-**F6 — Varfell is structurally not a duchy in the sense Hafenmark is, and no document says so.**
-Canon's *"Varfell retains territorial independence"* plus `14 §2.4`'s conferral-subtree rule plus
-`14 §1.1`'s definition of `dispatch` as requisition on an *establishment* member means that if the
-jarldoms are heritable deed-seats, Vaynard can neither revoke, dispatch, nor sub-remit over his own
-Jarl Council. `14 §9`'s "maximum mitigation" answer for Varfell — delegate five territory sub-remits —
-is then unavailable over ground the jarls hold. Two duchies, two different objects, one row in the
-post roster.
+**F6 — Varfell is structurally not a duchy in the sense Hafenmark is, and no document says so.** If the
+jarldoms are heritable deed-seats — which is what canon's *"Varfell retains territorial independence"*
+says — Vaynard can neither `revoke`, `dispatch`, nor sub-remit over his own Jarl Council (§2.5), and
+`14 §9`'s "maximum mitigation" answer for Varfell is unavailable over ground the jarls hold.
 
 **F7 — A covert commitment held by a person with a large container stake is permanently stable.**
 `07 §1.2`'s *"refuse at high burden and it does not [drop a degree]"* means Maret Uln's dual loyalty
-can never resolve through her own choices; only a third party's investigation can move it. Covert
-alignment high on the ladder has exactly one failure mode, and the person holding it has no agency in
-it.
+can move only through a third party's investigation (§3.7.4). Covert alignment high on the ladder has
+exactly one failure mode and its holder has no agency in it.
 
-**F8 — The design has no route from popular support to a heritable seat.** `04 §8`'s
-`act_reach(p, ·, office)` pays 1.0 for a seat-holder and 0.1 for everyone else, and `14 §10` refuses a
-mandate meter. Uta Falkenrath's canon succession path (*"popular mandate"*) is therefore unreachable
-by arithmetic. This may well be correct for a monarchy; it should be a stated design position rather
-than an emergent one, because canon has a named character whose whole arc depends on the opposite.
+**F8 — There is no route from popular support to a heritable seat.** `04 §8` pays `act_reach` 1.0 for a
+seat-holder and 0.1 for everyone else, and `14 §10` refuses a mandate meter — so Uta Falkenrath's canon
+succession path is unreachable by arithmetic (§3.3). Defensible for a monarchy; it should be a stated
+position rather than an emergent one, because canon has a named character whose arc depends on it.
 
-**F9 — `04 §10`'s Trace A gives Inge Baralta a marriage-basis banked claim that canon forbids her to
-have created.** Survivable by reading `04 §3.2` literally (banked claims are held at the *hearth*), but
-the suite does not state that reading. FINDING 1's shape, at the level of mechanism rather than name.
+**F9 — `04 §10`'s Trace A gives Inge a marriage-basis banked claim her canon facts forbid her to have
+created.** Survivable by reading `04 §3.2` literally (claims are held at the *hearth*), which the suite
+does not state. §0.3 — FINDING 1's shape at the level of mechanism.
 
-**F10 — The conferral dilemma has a specific, nameable consequence at this rung.** Person-rooted, a
-Crown succession leaves every praefecture inside Hafenmark and Varfell with a dead conferrer:
-irrevocable, unreplaceable, administered forever by whoever holds the seal. Office-rooted, a Crown
-succession is simultaneously a contest for thirty-odd settlement offices *inside two duchies whose
-dukes cannot touch them*. Reported per `00_PLAN §5`; not resolved.
+**F10 — The conferral dilemma's consequence at this rung.** Person-rooted: a Crown succession leaves
+every praefecture inside both duchies with a dead conferrer, irrevocable and unreplaceable.
+Office-rooted: a Crown succession is simultaneously a contest for thirty-odd settlement offices *inside
+two duchies whose dukes cannot touch them*. Reported per `00_PLAN §5`; not resolved.
 
 ---
 
@@ -814,17 +770,17 @@ dukes cannot touch them*. Reported per `00_PLAN §5`; not resolved.
 
 ## 7. CELLS I FOUND EMPTY
 
-1. **Province/Duchy × Epistemic, as an act.** A duke's ledger coarseness is the best idea at this rung
+1. **Province/Duchy × Epistemic, as an act.** Ledger coarseness is the best idea at this rung
    (`14 §3.1`), and there is **no act that buys fidelity except `dispatch`** — which competes directly
    with enforcement for the same nine persons. No survey, no census, no correspondence net, no
-   commissioned inquiry. `03 §8`'s correspondence filtering exists and is written for a *household*
-   scale. The mode is live at the rung and has one verb.
+   commissioned inquiry (`03 §8`'s correspondence filtering is written at household scale). The mode is
+   live at the rung and has one verb.
 
-2. **Province/Duchy × Political-up.** A duke petitions the Realm by spending a seat item. That is the
-   whole of it. There is no instrument by which one duke asks another for anything except a treaty
-   (`06 §7`, two office-holders issuing jointly) — so **duke-to-duke is either a treaty or nothing**,
-   and the register between them is empty. Inge and Magnus are canon's *"total opposition"* foil pair
-   and the design gives them no channel that is not a joint dispensation or a venue.
+2. **Province/Duchy × Political-up, laterally.** A duke petitions the Realm by spending a seat item,
+   and that is all. There is no instrument by which one duke asks another for anything except a treaty
+   (`06 §7`, two office-holders issuing jointly), so **duke-to-duke is a treaty or nothing.** Inge and
+   Magnus are canon's *"total opposition"* foil pair and share no channel that is not a joint
+   dispensation or a venue.
 
 3. **Any act by which a duke reaches inside another faction's conferral graph.** F3's blocker. Not a
    Duchy-rung gap alone — it is the general shape: the conferral graph is a graph, and there is no
@@ -847,11 +803,10 @@ dukes cannot touch them*. Reported per `00_PLAN §5`; not resolved.
    is nothing, and that is precisely the register the setting says it lives in (`12 §4`).
 
 7. **A Duchy-rung act that changes a person's `opening_set` without an establishment member to carry
-   it.** `06 §8`'s reach cap plus `09 §1.1`'s one act means a duke's down-stroke reaches, at most,
-   nine nodes a season and usually fewer. Everything past that is publication without enforcement,
-   which `06 §3` says craters structurally. **The down-stroke's advertised reach and the Duchy's actual
-   reach differ by a factor of the establishment size**, and nothing in the design closes it except
-   hiring more people, which `07 §4`'s military basis says you then have to keep paying.
+   it.** `06 §8`'s reach cap plus one act per season means a duke's down-stroke reaches nine nodes at
+   most and usually fewer; everything past that craters (`06 §3`). **The down-stroke's advertised reach
+   and a Duchy's actual reach differ by a factor of the establishment size**, and nothing closes the gap
+   except hiring people you must then keep paying (`07 §4`, the military basis).
 
 ---
 
