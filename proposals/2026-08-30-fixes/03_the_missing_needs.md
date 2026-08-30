@@ -4,6 +4,8 @@
 ## Fixes: `09_GAP_REPORT.md` **D-3** · collision register **S15** (and, as a consequence, **S5** and **S20**)
 ## Composes on: `01_substrate.md` §2, §3, §5.2 · `02_the_person.md` §6 · `04_hearth_and_community.md` §1.2, §4.1
 ## `05_up_stroke.md` §1.1, §6.2 · `06_down_stroke.md` §3, §4 · `07_alignment.md` §1.1–1.3 · `15_adjudications.md` A-1, A-1b, A-2
+## Sibling fixes filed alongside: `01_the_floor.md` (D-1) · `02_the_act_economy.md` (D-2) · `04_relational_at_settlement.md`
+## (D-4, D-5) · `05_the_blocked_cores.md` (the §1 headline). This document does not duplicate any of them.
 ## Adds no object and no act. Two formulas, one range reconciliation, and one matching predicate that is
 ## genuinely new and is named rather than hidden.
 
@@ -385,9 +387,10 @@ hold the claim), so `05 §1.1`'s `shortfall` puts three different petitions and 
 menu where before there was one act driven by hunger.
 
 **This does not fix D-1, and must not be reported as if it did.** Her acts still do not propagate — that is
-`mark_salience` = 1.0, untouched. Her capability still yields no verbs — that is verb-gating at rank 3+,
-untouched. What changes is that the floor now *wants* four different things for four different reasons.
-D-1's two named fixes remain the report's priority; this is a mitigation of one symptom.
+`mark_salience` = 1.0, untouched here. Her capability still yields no verbs — that is verb-gating at rank 3+,
+untouched here. **Both of those belong to `01_the_floor.md`, filed alongside this**, and they remain the
+report's priority. What changes here is only that the floor now *wants* four different things for four
+different reasons — a mitigation of one symptom, from a document that was written for a different defect.
 
 ---
 

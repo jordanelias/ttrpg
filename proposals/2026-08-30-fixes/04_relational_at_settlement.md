@@ -6,7 +6,9 @@
 ## Composes on: `01_substrate.md` §1.1, §4, §6 · `04_hearth_and_community.md` §4.2, §5, §6, §8, §9
 ## `08_argument.md` §10 · `12_coercion_and_force.md` §9 · `14_office_and_upper_rungs.md` §1.1, §2.3, §5
 ## `15_adjudications.md` B-1, B-5
-## Adds: **one conferral row, two venue rows, and one widening of a field.** No new object, no new act.
+## Sibling fixes filed alongside: `01_the_floor.md` (D-1) · `02_the_act_economy.md` (D-2) ·
+## `03_the_missing_needs.md` (D-3) · `05_the_blocked_cores.md` (the §1 headline). Not duplicated here.
+## Adds: **one conferral row, four venue rows, and one field derived rather than declared.** No new object, no new act.
 
 ---
 
