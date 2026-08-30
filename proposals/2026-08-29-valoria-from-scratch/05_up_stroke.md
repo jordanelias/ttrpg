@@ -700,14 +700,31 @@ exactly the shape Jordan condemned in the Comply/Defy fork, and left unfixed it 
 dominated by not petitioning.** The fix is structural, not a constant: refusal produces an **asset**.
 
 ```
-value(attempt) = P(grant)·U  +  (1 − P(grant))·G
+value(attempt) = P(grant)·U  +  (1 − P(grant)) · p(learn) · G
 ```
 
 `G` is the grievance capital deposited in the backers — the input to commitment (§5.1), to carriage
 mass (§7.1) and to the citable record (§6.1). As `P(grant)` decays the second term *rises*, in
-proportion to how publicly the refusal happened, and the sum does not decay. A petition campaign that
-never wins anything is building the thing that wins without petitioning, and a respondent who refuses
-cheaply every time is manufacturing his own opposition.
+proportion to how publicly the refusal happened, and the sum does not decay **so long as somebody
+learns**. A petition campaign that never wins anything is building the thing that wins without
+petitioning, and a respondent who refuses cheaply every time is manufacturing his own opposition.
+
+**`p(learn)` is in that formula because the deposit is conditional, and the faucet is held by the
+respondent.** §4.1 is explicit that the deposit fires *when a backer learns* — grievance is a stance
+row written by a telling, not by the refusal itself — so the honest form carries the term, and the
+term is not a constant. It is partly the **refuser's own choice**: fork (f) below is precisely the
+choice to suppress it, and Aldwin takes it, dropping silent so that sixty-seven apprentices go on
+believing the item pending (§4). **A respondent who refuses quietly every time keeps `p(learn)` near
+zero, the second term never rises, and the decaying sum comes back exactly as it was before this fix.**
+
+So state the fix's range rather than its headline. It **holds at campaign scale** — enough refusals
+across enough backers and somebody eventually tells, because silence is a per-refusal act and the
+tellings are many — and it **holds for public refusals**, where the judging set is the witness and
+`p(learn) ≈ 1`. It **does not hold for the lone supplicant refused in private**: no backers, no
+witnesses, nobody to tell, `p(learn) ≈ 0`, and that petitioner faces the dominated fork this fix was
+written to close. That case is stated rather than patched, because the only remedy is a leak the
+refuser cannot control, and this design has no such channel — which is the same fact, seen from the
+other side, that makes concealed backing safe.
 
 **(c) Revolt versus petition.** The dominance hazard runs backwards here: if suppression's ratchet
 makes each subsequent attempt easier, a patient faction should always wait rather than rise. Fixed
@@ -721,8 +738,20 @@ doomed risings happen.
 at a container is contested (substrate §4.1) and claimants' capacity routes through the persons who
 back them, so a seatholder who carries nothing accumulates regard only with a judging set that already
 likes him and acquires no new backing anywhere. A perpetual dropper ends as a man with a seat and no
-constituency, and loses the seat at the next contest. The field that types his rise types his
-vulnerability.
+constituency. The field that types his rise types his vulnerability.
+
+**Qualified: the seat-loss half of that counterweight is elected-seat-shaped, and this document's own
+worked example is the case it does not fit.** *"Loses the seat at the next contest"* holds where the
+judging set that fills the seat is reachable by the people he dropped — a guild board, a magistracy, a
+community's own seat, anything allocated locally and contested among claimants the backers can move.
+It is **not** true of Praefect Aldwin Storr, who holds a **Crown post** (§4): the Crown allocates it,
+the Crown's judging set is not the hamlet's forty-four, and no quantity of Goldenfurt grievance reaches
+it. For appointed office the counterweight is therefore the **grievance channel alone** — dormant rows
+(§8.1), commitment made cheap against the referent he now carries (§5.1), carriage mass assembling
+against him (§7.1), and whatever eventually reaches the man who conferred the post, through a chain of
+tellings with its own valuation at every step. That is slower, less certain, and routed through
+somebody with his own reasons. The fork stays live for appointed office; it is live on thinner grounds
+than the row claims, and the row claimed the stronger case for both.
 
 **(h) Suppress versus concede — the fork the ratchet could have broken.** Suppression's gain is
 immediate and large and *decays* as rows re-arm; its cost is durable and compounds. Read naively that
