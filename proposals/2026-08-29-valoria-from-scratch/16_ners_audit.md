@@ -97,6 +97,46 @@ defect is entirely in the handoff between finding and application. A finding rec
 decided until it is applied, and a §2 that says CUT is evidence of nothing while the document it names
 still carries the object.
 
+**⚠ EXTENDED 2026-08-30 — the pattern is not confined to §2, and the count is worse than the paragraph
+above states.** Seven dispositions in §2 and §3 were recorded as decided: three cuts (§2.1, §2.2,
+§2.3), two softenings (the Knot's N-line and Composure's, below), and two partial retractions of the
+orchestrator's own rulings (§3.1, §3.2). **Two were applied in the original correction pass** —
+Momentum, and A-1's narrowing, which reached both doc 02's standing formula and the register as row
+A-1b. **Two more were applied later**, when the play-space exercise read `07` against this document:
+the licence column and the shadow trigger rule. **The remaining three were applied only now**, and
+again only because a downstream exercise read the documents against each other: the two softenings,
+which had never been carried into `02` and `10` at all, and §3.2's retraction of A-6, which had never
+reached `15_adjudications.md`. That last is the most damaging instance and it is worth being exact
+about why: **the register is what a later session reads to learn what was decided**, and it went on
+heading A-6 *"the resolution keeps both"* and carrying the *"ALWAYS makes your working set"* gloss that
+§3.2 calls unsatisfiable — so a reader who consulted the register got the opposite of the finding, and
+consulting the register is the correct thing for that reader to do. A-6b now carries it, and A-6 is
+marked.
+
+**And re-checking A-6 turned up the same defect one layer further down, in its accepted half.** The
+firsthand salience floor — the part of the ruling this audit did *not* retract — is written nowhere in
+the design. Doc 03 §4, which owns salience, still computes the flat product
+`recency × confidence_live × relevance × stanceweight` with the 0.05 clamp and no `max`, and its prose
+still says a devastating firsthand contradiction *"does not enter the top-K"* without twenty times the
+evidence. The floor exists as 09's proposal and as a register ruling, and in no formula. So A-6 was
+half-retracted and half-unimplemented, which means **neither** of its two halves was in the state the
+suite believed. A-6b says so.
+
+**§4.2 was worse than an unapplied finding: it asserted an application it had not checked.** Its
+closing words were *"and the document now says so."* `05` did not say so — it carried the mechanism
+(stated versus silent drops, learning-gated deposits, grievance rising *"in proportion to how publicly
+the refusal happened"*) but its R-check still stated `value = P·U + (1−P)·G` with no `p(learn)` term
+and no statement that the fix fails for the lone supplicant refused in private. §4.3's qualification
+was likewise never carried into `05`'s fork (d), which asserted the seat-loss counterweight unqualified
+over a worked example holding a Crown post. Both are now applied.
+
+**The defect, named exactly: a finding recorded as decided is not decided until it is applied, and
+nothing in this process checked application against record.** The audit wrote dispositions; the
+correction passes applied a subset; no step ever compared the two, and every gap that has been closed
+was closed by a later exercise happening to read two documents side by side. **No validator is proposed
+here and none should be.** The finding is that this process had no check — not that it needs another
+instrument.
+
 **Two N-lines were softened rather than cut**, because they named something real and claimed too
 much: the Knot's (*"the only channel by which a person holding no post receives news"* — ties and
 dispensations already reach the unposted; what is unique is the *unbidden, speakerless, undistorted*

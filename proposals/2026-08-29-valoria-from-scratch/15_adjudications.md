@@ -279,14 +279,21 @@ drawn a THREE-WAY distinction from the start — **world / view / another agent'
 third is readable by nobody except through a claim. A-1 as originally written is superseded by this
 row on the standing term only; its split of the other three need terms stands.
 
-### A-6b · A-6 RETRACTED IN PART — the firsthand floor stands, the testimony half is UNRESOLVED
+### A-6b · A-6 RETRACTED IN PART — the firsthand floor stands but is unimplemented; the testimony half is UNRESOLVED
 *Forced by the audit (16 §3.2). Recorded here rather than left in the audit because THIS register is
 what a later session reads to learn what was decided — and until this row existed it asserted the
 opposite of the finding.*
 
-**The firsthand floor stands, and it is correctly applied.** `salience ≥ recency × confidence` on
-`firsthand` claims is a real rule, it is the half of 09's objection the ruling did reach, and nothing
-below disturbs it.
+**The firsthand floor stands as a ruling — but it has not reached the document that owns the formula,
+and this row will not repeat the mistake of saying otherwise.** `salience ≥ recency × confidence` on
+`firsthand` claims is the half of 09's objection the ruling did reach, and nothing below disturbs it.
+It is nonetheless **unimplemented**: doc 03 §4's salience is still the flat product
+`recency × confidence_live × relevance × stanceweight`, with the 0.05 clamp and no `max`, and its own
+prose runs the other way — *"a devastating firsthand contradiction … can still cross, but it takes
+roughly twenty times the evidence"*, and *"it does not enter the top-K."* The only place the floor is
+written as a formula is 09's original challenge, which proposed it. So the accepted half of A-6 is a
+ruling with no owner in the design, and a session implementing salience from doc 03 would build the
+clamp and never see this row. Carrying it into 03 is outstanding work, not a settled fact.
 
 **The testimony half is NOT resolved.** 09's stated need was that *a sixty-year-old revelation must move
 people who do not want to be moved* — and a revelation arrives as `told_by`, which this ruling left
