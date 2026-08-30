@@ -403,15 +403,15 @@ person by anyone who knows.
   news, opportunity and obligation faster and cleaner than the crier."* That is false as stated. An
   ordinary tie already carries tellings, with its own probability and latency (§4.1), and a published
   dispensation deposits into every person in its scope **by presence and channel, never by post**
-  (substrate §7) — through the crier, the priest, the guild notice, the market. **The unposted are
+  (substrate §5.2) — through the crier, the priest, the guild notice, the market. **The unposted are
   reached without any Knot**, which is the design's own point about how a decree lands on a hamlet.
   What the Knot uniquely owns is narrower and is the thing actually worth keeping: the **unbidden,
   speakerless, undistorted** deposit — a state that arrives with **no teller, no roll and no
   intermediary distortion**, which no other channel in this design produces, since every other arrival
   is somebody choosing to tell you and the telling can be withheld, delayed, or bent on the way. So
   cut Knots and S-DOWN still reaches the unposted; what it loses is the one arrival nobody sent,
-  nobody can suppress, and nobody can distort — Gerik's distress in his sister's ledger the season it
-  happens, which no crier was ever going to carry.
+  nobody can suppress, and nobody can distort — Gerik's distress landing in Maret Uln's ledger in
+  Oastad, three days away, in the season it happens, with nobody having told her (§9).
 
 ---
 
