@@ -15,11 +15,10 @@ appears nowhere in `references/npc_registry.yaml`, `references/proper_noun_regis
 surface. Her household names (Nils, Rannveig, Gerd) are likewise new.
 
 **One address contradiction, reported and not resolved.** The Goldenfurt slice
-(`systems/settlements/goldenfurt_slice/`) places S-006 Goldenfurt in **Kronmark province, Valorsmark /
-Crown duchy, Provincial Authority = the Crown**. The merged suite's worked traces place Goldenfurt in
-**Grauwald / Varfell** throughout (01 §7, 02 §9, 05 §4, 05 §10). These are different towns wearing one
-name. I use canon's address for canon's people and the suite's mechanisms for everything else, and I
-flag every place the difference changes an answer. It changes one: who Alvid's praefect answers to.
+(`systems/settlements/goldenfurt_slice/`) places S-006 Goldenfurt in **Kronmark province, Valorsmark / Crown duchy**; the merged suite's worked
+traces place it in **Grauwald / Varfell** throughout (01 §7, 02 §9, 05 §4, 05 §10). Different towns
+wearing one name. I use canon's address for canon's people and the suite's mechanisms for everything
+else. It changes exactly one answer: who Alvid's praefect answers to.
 
 ---
 
@@ -49,11 +48,10 @@ peninsula's most important couple, and what they have instead is `tie(a,b) = (fa
 last_contact, channel_class)` — a rolled, latent, distortable channel like any other. Nothing in the
 suite notices this; it falls out of one threshold meeting one canon stat.
 
-**Memory.** His ledger's Valorian rows come from three sources and no others: Elske, Prince Torben, and
-returning Altonian merchant-captains (the exact channel 06 §7's own worked trace uses to deliver him a
-treaty breach). He holds **no** claims deposited by a crier, a parish, a guild notice, or an
-institutional relay inside Valoria, because 06 §2's relay clause requires *his institution's presence at
-the node* and he has none.
+**Memory.** His ledger's Valorian rows come from three sources and no others: Elske, Torben, and
+returning merchant-captains (06 §7's own worked trace uses exactly that channel to deliver him a treaty
+breach). He holds **no** claims from a crier, a parish, a guild notice or an institutional relay inside
+Valoria — 06 §2's relay clause requires *his institution's presence at the node* and he has none.
 
 **Conspicuously absent:** any standing at any Valorian container. Doc 05 §3.1's `carry` precondition is
 "c holds STANDING at respondent_container(P)". He holds none, anywhere, at any rung, in Valoria.
@@ -79,18 +77,15 @@ they point in opposite directions. That is the whole season, computed, with noth
 
 ## 4. The view, and the claim that does not surface
 
-K = 12 by salience (09 §1.2 P3). Top rows: the directive's text; the merchant-captains' report of a
-new Valorian duty; Elske's own account of her brother's court; Torben's household expenses; three
-imperial peers' letters; the harvest.
+K = 12 by salience (09 §1.2 P3). Top rows: the directive's text; the captains' report of a new Valorian
+duty; Elske's account of her brother's court; three imperial peers' letters; the harvest.
 
-**The claim that does not surface:** a captain told him, two seasons back and at confidence 0.4, that a
+**The claim that does not surface:** a captain told him two seasons back, at confidence 0.4, that a
 Varfell duke is agitating to expel Church and Altonian residue from his duchy (07 §10.1's Vaynard
-proposition). Salience = recency × confidence × **relevance to the pending decision** × stance weight.
-Its relevance to *the frontier-posture directive* is low; its stance weight is low because he holds no
-row for a Varfell internal question. It ranks about nineteenth and never enters his choose. Vaynard's
-programme is the single largest threat to Altonian interests in the peninsula and Laskaris will not
-think of it this season — not because he was deceived, but because his ledger ranked it correctly
-against the question he was actually asked.
+proposition). Its relevance to *the frontier-posture directive* is low and he holds no stance row for a
+Varfell internal question, so it ranks about nineteenth and never enters his choose. **The single
+largest threat to Altonian interests in the peninsula, and he will not think of it this season** — not
+because he was deceived, but because his ledger ranked it correctly against the question he was asked.
 
 ## 5. The option set — the load-bearing section
 
@@ -119,17 +114,14 @@ the best thing in this season or a hole, and I report it rather than deciding.
 
 ## 6. The choice, through the seven phases
 
-**P0 CALENDAR.** The trade-lane clause carries a standing date at the season's close. Option
-availability recomputes; nothing new becomes legal.
-**P1 SETTLE.** Larders, production, travel. A captain's ship completes a leg.
-**P2 NEEDS.** Standing 3 · Exposure 3, opposed.
-**P3 VIEW.** K = 12 as above.
-**P4 CHOOSE.** He publishes the directive to his two coastal settlements at full fidelity and to the
-five inland nodes not at all — spending two riders of the seven the office employs. The frontier is
-posted; the interior is not. To the capital's ledger, the directive is published.
-**P5 RESOLVE.** Two publication events. No Valorian object is touched by any act of his this season.
-**P6 WITNESS.** Altonian persons deposit. **Zero Valorian ledgers receive a row naming Laskaris.**
-**P7 RECKON.** Confidence decays. His unspent riders are not state; there is nothing to carry forward.
+**P0** the trade-lane clause's standing date fires onto the docket; nothing new becomes legal.
+**P1** larders, production, a captain's ship completes a leg. **P2** standing 3 · exposure 3, opposed.
+**P3** K = 12 as above. **P4** he publishes the directive to his two coastal settlements at full fidelity
+and to the five inland nodes not at all — two riders of the seven the office employs. The frontier is
+posted; the interior is not; to the capital's ledger, the directive is published. **P5** two publication
+events; no Valorian object is touched by any act of his. **P6** Altonian persons deposit — **zero
+Valorian ledgers receive a row naming Laskaris.** **P7** confidence decays; unspent riders are not state,
+so nothing carries forward.
 
 ## 7. What propagates
 
@@ -171,19 +163,14 @@ Valorian actor. A price is not an act and a proposition is not a member. So the 
 question — *"can Altonia matter without an agent in Valoria?"* — is **yes**, and the suite already
 supplies the mechanism twice over without having noticed that it did.
 
-**What remains genuinely open is narrower and harder.** All three routes require *some* modelled
-Altonian person: a merchant to stop sailing, a captain to carry a telling, a Doux to sign. The
-unanswerable case is a change in the off-board polity's **interior** that no modelled person produced —
-an imperial succession, a defeat in the east, a new Emperor's temper. Two branches, and they are
-different games:
-
-- **Simulate Altonia's interior.** Then "off-board" is a fiction: it is on-board at low fidelity, it
-  costs a cohort budget, and the question dissolves.
-- **Author Altonia's state and let it deposit claims.** Then a change with no `choose` behind it enters
-  ledgers, which is exactly `01_substrate.md` §6's banned object — *"any broadcast that deposits the
-  same value into many persons"* — arriving through a border instead of a back door.
-
-The choice is between paying for a second peninsula and permitting one authored actor. **Not this
+**What remains open is narrower and harder.** All three routes need *some* modelled Altonian person: a
+merchant to stop sailing, a captain to carry a telling, a Doux to sign. The unanswerable case is a change
+in the off-board polity's **interior** that no modelled person produced — an imperial succession, a
+defeat in the east. Two branches, two different games: **simulate Altonia's interior**, and "off-board"
+is a fiction (on-board at low fidelity, at a cohort budget, question dissolved); or **author Altonia's
+state and let it deposit claims**, and a change with no `choose` behind it enters ledgers, which is
+`01_substrate.md` §6's banned object — *"any broadcast that deposits the same value into many persons"* —
+arriving through a border instead of a back door. A second peninsula, or one authored actor. **Not this
 lane's call.**
 
 ---
@@ -204,14 +191,13 @@ lane's call.**
 | **D · marks** | `heritage = Central Einhir` (open, 0.9) · `church = communicant` (attested) · `house` none · `grade` none · `office` none · `sensitivity = none`, TS 4. **Caste-advantaged only in the negative sense: she is not excluded because she is not read.** |
 | **E · modes reached** | see §5 — 2 of 8 modes live at any strength |
 
-**Which community?** This is not a trivial question and the answer is a finding. Doc 04 §7's community
-roster has seven parameterisations: craft guild, Einhir hamlet, Crown-Latinate quarter, parish
-congregation, Restoration cell, Löwenritter chapter, Niflhel crew. Alvid is in none of six — she has no
-guild grade, no stigmatised heritage, no wall-side privilege, no alignment, no oath. **The only rule in
-the roster that admits her is the parish's, "every hearth in a district, by presence."** So for a person
-with nothing, the Church is structurally the only community they have, and the parish priest is by
-default their judging set, their gate, and their intercessor. Curate Wessel's probe (§III) is therefore
-not adjacent to Alvid's season; it is inside it.
+**Which community?** The answer is a finding. Doc 04 §7's roster has seven parameterisations — craft
+guild, Einhir hamlet, Crown-Latinate quarter, parish congregation, Restoration cell, Löwenritter chapter,
+Niflhel crew — and Alvid qualifies for none of six: no guild grade, no stigmatised heritage, no wall-side
+privilege, no alignment, no oath. **The only rule that admits her is the parish's, "every hearth in a
+district, by presence."** For a person with nothing, the Church is structurally the only community they
+have, and the priest is by default their judging set, their gate and their intercessor. Curate Wessel's
+probe is therefore not adjacent to Alvid's season; it is inside it.
 
 ⚠ **And that same rule collides with single-parent containment.** A Kettlemaker's hearth is contained in
 Kettlemakers' Row *and* falls inside a parish district by presence. Doc 01 §1.1 forbids two parents;
@@ -230,20 +216,18 @@ Rannveig, his mother (elder 0.7) · three children, 11, 7 and 3 (0.5 × 3 = 1.5)
 (provenance: Hearth of Bekk, her mother; idiom: none recorded) · `Marketing 1`. Coherence 8, Whole.
 Convictions: Community w4 (primary), Order w3, Faith w3, Precedent w2. Credulity 3, obstinacy 2.
 
-**Read that capability line again, because it is the mechanical definition of "ordinary."** Doc 02 §2.3:
-a practice at **rank ≥ 3** adds verbs to the actor's option list; at rank ≥ 5 it adds verbs unreachable
-below that. **Alvid holds nothing at rank 3.** She therefore has *no reach terms at all* — her option
-list is the bare universal list with nothing added by anything she can do well. Ordinary capability is
-not a smaller pool. It is an empty verb set.
+**That capability line is the mechanical definition of "ordinary."** Doc 02 §2.3: a practice at **rank
+≥ 3** adds verbs to the option list. **Alvid holds nothing at rank 3**, so she has *no reach terms at
+all* — her option list is the bare universal list with nothing added by anything she can do well.
+Ordinary capability is not a smaller pool. It is an empty verb set.
 
-**Knots:** slots = `floor(Bonds/2)+1 = 2`. Both empty, and **permanently unfillable**: `form_knot`
-requires TS ≥ 30 on both sides and she is TS 4. Doc 02 §11.2 states the consequence and asks that it not
-be "fixed": *"the Knot is how a person with no post gets news… half the peninsula cannot form one."*
-Alvid is that half. The design's own named channel for the unposted is closed to her by a number she was
-born with.
+**Knots:** slots = `floor(Bonds/2)+1 = 2`, both empty and **permanently unfillable** — `form_knot`
+requires TS ≥ 30 on both sides. Doc 02 §11.2 states the consequence and asks that it not be "fixed":
+*"the Knot is how a person with no post gets news… half the peninsula cannot form one."* Alvid is that
+half, and the design's named channel for the unposted is closed to her by a number she was born with.
 
-**Conspicuously not there:** a house mark, a grade, an alignment row, a banked claim, an obligation edge
-to anyone who holds anything, a sponsor, and — the one that decides her season — **any mark toward
+**Conspicuously not there:** a house mark, a grade, an alignment row, a banked claim, an obligation
+edge to anyone who holds anything, a sponsor, and — the one that decides her season — **any mark toward
 which any member of her community holds a strong stance.**
 
 ## 3. Computed needs — with the arithmetic, and the three that come back zero
@@ -297,15 +281,14 @@ bread is dearer; a named reeve collected the levy in the square; her sister Gerd
 bed; the carting work is short; the curate preached on the tithe; the ford toll rose; five neighbours'
 faces.
 
-**What does not surface.** Twelve days ago, coming back late along the bank, she saw two men land sacks
-below the ford. It is in her ledger: `(a landing below the ford, at night, this season, firsthand, 0.9)`
-— **a firsthand root**, and under 01 §3 independence is measured on firsthand roots. It is the only
-independent corroborator in Goldenfurt for a claim about Tomas Vorn's traffic, and three parties would
-pay for it: Bailiff Ems, who wants leverage; Curate Wessel, who wants a denunciation; Magistrate Hedda
-Vorn, who wants it buried.
+**What does not surface.** Twelve days ago she saw two men land sacks below the ford. Her ledger holds
+`(a landing below the ford, at night, this season, firsthand, 0.9)` — **a firsthand root**, and under
+01 §3 independence is measured on firsthand roots. It is the only independent corroborator in Goldenfurt
+for a claim about Tomas Vorn's traffic, and three parties would pay for it: Ems wants leverage, Wessel
+wants a denunciation, Hedda Vorn wants it buried.
 
-Salience = recency (0.6) × confidence (0.9) × **relevance to the pending decision** (feeding five
-mouths: about 0.05) × **stance weight** (she holds no row on smuggling: 0). It ranks about fortieth.
+Salience = recency (0.6) × confidence (0.9) × **relevance to the pending decision** (feeding five mouths:
+about 0.05) × **stance weight** (no row on smuggling: 0). It ranks about fortieth.
 
 > **The poorest person in the town holds the most valuable claim in it, and the design guarantees she
 > will never surface it — because salience is weighted by relevance to *her* decision, and her decision
@@ -396,18 +379,14 @@ undominated gain against an absent cost — and it is bounded only by how many k
 Every other arm in her set is slower (petition), worse (migrate, which resets a larder and destroys a
 standing she does not have), catastrophic (the knife), or free-and-inert (back, tell, hoard).
 
-**What is genuinely live and worth saying.** She is not a SPECTATOR. `back` and `tell` feed 05 §9's
-`value(attempt) = P(grant)·U + (1 − P(grant))·G` — the grievance-capital term that makes a losing
-petition campaign build the thing that wins without petitions. Her stance rows are real inputs to
-`norm()`, `capacity()` and `carriage_mass()`. She is *aggregable*. But aggregable is what the design
-does with her, not what she does.
+**What is genuinely live.** She is not a SPECTATOR. `back` and `tell` feed 05 §9's `value(attempt) =
+P(grant)·U + (1 − P(grant))·G`, the grievance-capital term that makes a losing petition campaign build
+the thing that wins without petitions, and her stance rows are real inputs to `norm()`, `capacity()` and
+`carriage_mass()`. She is *aggregable* — which is what the design does with her, not what she does.
 
-**The honest summary of the floor.** The design gives an ordinary person acts, and gives her almost
-nothing to decide. Three of four needs are structurally zero; her capability adds no verbs; her marks
-make her inaudible; the channel the design names for the unposted is closed to her by birth; her only
-legal voice runs through a priest who reports on the town; her most valuable knowledge cannot surface;
-and her best act is unpriced. **A design that only works for people with names, offices, factions or
-marks does not work, and this season is what that looks like from inside.**
+**The honest summary of the floor.** The design gives an ordinary person acts and gives her almost
+nothing to decide. **A design that only works for people with names, offices, factions or marks does not
+work, and this season is what that looks like from inside.**
 
 ## 9. Cells populated
 
@@ -427,12 +406,12 @@ sixty-four. Institutional: zero at every rung. Argument: one cell, at the smalle
 / Authority 0.30, "sincere imperialist" (`npc_registry.yaml:964`). Canon function: **decides whether
 Altonia probes, presses, or invades.**
 
-**Option set.** *Invade* is fully specified: 12 §7's muster → march → battle → siege, every part built
+**Option set.** *Invade* is fully specified: 12 §7's muster → march → battle → siege, built entirely
 from existing objects, with foraging as hundreds of coercive acts against named hearths. *Probe* and
-*press* have no verbs. A probe is an investigation act requiring presence she does not have. A press is
-a dispensation she cannot publish into a scope she does not hold (06 §2's every channel needs presence).
-A demand backed by force needs a shared venue, and 14 §5's venues are institution-scoped: **there is no
-inter-realm venue anywhere in the suite**, so 08's negotiation machinery has no room to run in.
+*press* have no verbs — a probe is an investigation act needing presence she lacks; a press is a
+dispensation she cannot publish into a scope she does not hold (every channel in 06 §2 needs presence);
+a demand backed by force needs a shared venue, and 14 §5's venues are institution-scoped, so **there is
+no inter-realm venue anywhere in the suite** and 08's negotiation machinery has no room to run in.
 
 **Diagnostic — BLOCKED.** Her stated function is a three-way choice and the design supplies one arm. The
 gap is nameable precisely: **there is no coercive-diplomatic act between "issue a dispensation in your
@@ -455,11 +434,11 @@ manufactures) · `LevyTerm` and `BlockadeTerm` within his scope · cite an ancie
 port venue where Solberg also stands · 06 §8's Cordon-Complete makes him an **AND**-term in anyone
 else's chain, so a single bribed or absent captain at his node voids a cordon elsewhere.
 
-His stated function — enforcing ancient treaties — lands squarely on 08 §4.1's graded proof, which is
-computed from claim sources. A two-century-old clause proves at whatever grade its document's provenance
-supports, and 09 §9 makes a written claim persist at a place and be found by `search`. Note the irony
-the suite hands him: 04 §2.2 records that **Altonia destroyed the Almqvist records**, and Altonia's own
-trade prefect is the peninsula's leading citer of ancient text.
+His stated function lands on 08 §4.1's graded proof, computed from claim sources: a two-century-old
+clause proves at whatever grade its document's provenance supports, and 09 §9 makes a written claim
+persist at a place and be found by `search`. Note the irony the suite hands him — 04 §2.2 records that
+**Altonia destroyed the Almqvist records**, and Altonia's own trade prefect is the peninsula's leading
+citer of ancient text.
 
 **Diagnostic — RICH.** Material, epistemic, argument and political-down all live, with real forks. He is
 the only foreign character in this lane who is rich, and the reason generalises: **the design is
@@ -519,13 +498,12 @@ perfectly. P-13, exactly as canon states it, with no organ anyone could open.
    content** — they receive her crises as poetry through the one channel in the game that does not
    distort. That band is where the Restoration's practitioners sit.
 
-**Diagnostic — THIN, and the isolation is mechanical rather than tragic.** She has real acts — Thread
-ops, Mending, `examine`, assess and admit an arrival, hold a Knot with a northern practitioner — and
-they matter. But every option that would *change her situation* is closed by the same floor, and the
-differences between her available options are cosmetic against a losing trend she can measure and cannot
-report. Canon says it in one line and the suite reproduces it exactly: *she needs help she cannot ask
-for from people who don't know she exists.* **She is a destination, not an actor.** Playable — for
-whoever reaches her. Not playable as her.
+**Diagnostic — THIN, and the isolation is mechanical rather than tragic.** Her acts are real and they
+matter — Thread ops, Mending, `examine`, assess and admit an arrival, hold a Knot northward. But every
+option that would *change her situation* is closed by the same floor, and the rest are cosmetic against
+a losing trend she can measure and cannot report. Canon says it in one line and the suite reproduces it
+exactly: *she needs help she cannot ask for from people who don't know she exists.* **She is a
+destination, not an actor** — playable for whoever reaches her, not playable as her.
 
 ### Orm — Second Senior Warden, TS 60, thirty-one years at the Southernmost
 
@@ -547,11 +525,10 @@ will fire identically on Grandmaster Ehrenwall's oath and on any Conviction the 
 ## Goldenfurt ground
 
 > ⚠ The six dossiers in `systems/settlements/goldenfurt_slice/npc_cast.md` are written in a *governance*
-> vocabulary — AP verbs, `fires_card`, ambition `progress +1 each season`, Π homeostat, Disposition ±1 —
-> with no counterpart in the merged suite, and its authored numbers are design-only. The translation is
-> itself the probe, and one result is uniform: **every NPC's "autonomous advance +1/season" is a
-> scheduled tick, which the suite refuses in three places** (02 §2.2 no experience clock; 04 §11 no
-> scheduled restoration of standing; 09 §1.2 P1 admits metabolism only). What replaces it is `needs()`
+> vocabulary — AP verbs, `fires_card`, ambition `progress +1 each season`, Π homeostat — with no
+> counterpart in the merged suite, and their authored numbers are design-only. The translation is itself
+> the probe, and one result is uniform: **every "autonomous advance +1/season" is a scheduled tick, which
+> the suite refuses in three places** (02 §2.2, 04 §11, 09 §1.2's P1). What replaces it is `needs()`
 > recomputed each season. **The cast survives translation. Their clocks do not.**
 
 ### Hedda Vorn — Magistrate
@@ -560,12 +537,12 @@ will fire identically on Grandmaster Ehrenwall's oath and on any Conviction the 
 shield the weak have" · wants a provincial-magistrate seat and a parliamentary voice · **secretly shields
 her brother Tomas.**
 
-**Option set.** Wide. She allocates the granary (13 §3 — and the allocation *does not divide*, so every
-opening is exclusive and manufactures a loser by construction). She confers gate wardenships (14 §2.3,
-`δ = 1.5`, her determination alone). She holds court, which is a venue with a computed proof grade
-(08 §4.1). She may `carry` and, if her charter names her, `compose_agenda` (05 §3.1) — the quiet power to
-keep an item off a list for four sittings running. Her ambition is `contest(province, office,
-claimants)`, whose score reads `capacity × norm × leverage`, all three of which she can work on by name.
+**Option set.** Wide. She allocates the granary (13 §3 — the allocation *does not divide*, so every
+opening is exclusive and manufactures a loser by construction); confers gate wardenships (14 §2.3,
+`δ = 1.5`, her determination alone); holds court, a venue with a computed proof grade (08 §4.1); may
+`carry`, and if her charter names her, `compose_agenda` (05 §3.1) — the quiet power to keep an item off a
+list for four sittings running. Her ambition is `contest(province, office, claimants)`, whose score reads
+`capacity × norm × leverage`, all three of which she can work on by name.
 
 **Her secret is an omission, and the suite handles that correctly.** She is not passing a mark and holds
 no covert alignment edge. What she does is *not spend an investigation act*. 02 §1.2: *"Exposure is never
@@ -582,10 +559,10 @@ vulnerability that is discoverable rather than hidden.
 upgraded to a Church.
 
 **What he is, mechanically, and it is larger than his dossier suggests.** He is a **channel** (06 §2:
-parish priest, moderate fidelity, *coloured by the priest's own stance*). Every dispensation reaching his
-congregation arrives in his version. That is a free, unlimited, weekly act of refraction over the only
-community a person like Alvid has — and, per §II §5, he is also the **only legal intercessor** by which
-anyone at rank 1 in his parish can address the magistrate. He sponsors into `support()`'s γ term. His
+parish priest, moderate fidelity, *coloured by the priest's own stance*), so every dispensation reaching
+his congregation arrives in his version — a free, unlimited, weekly act of refraction over the only
+community a person like Alvid has. Per §II §5 he is also the **only legal intercessor** by which anyone
+at rank 1 in his parish can address the magistrate. He sponsors into `support()`'s γ term, and his
 informing is an ordinary `tell` up an institutional relay, witnessable by the couriers.
 
 **And his stated ambition is unreachable.** Upgrading a Chapel to a Church is *building a thing*, and
@@ -605,9 +582,8 @@ BLOCKED on the goal canon gives him.
 
 **He is `enforcer_presence`.** 06 §3 makes a published dispensation land as a compliance contest whose
 first term is *"is a person in the issuer's employ actually stationed here this cycle"*, and 06 §8 makes
-the Crown's reach a **count of dispatchable persons**. Konrad is one of them. That is genuine structural
-importance — and 14 §6's *"a King's decree is the least enforced instrument in the game"* is a statement
-about how few Konrads there are.
+the Crown's reach a **count of dispatchable persons**. 14 §6's *"a King's decree is the least enforced
+instrument in the game"* is a statement about how few Konrads there are.
 
 **Both of his defining features terminate in missing mechanisms.**
 
@@ -635,13 +611,12 @@ through an intercessor who is Wessel. All three have the control's option set: e
 need terms, `mark_salience` 1.0, no Knot. The design does not distinguish them from Alvid Bekk by
 anything except what is in their ledgers — and that is the whole finding.
 
-**Old Brun, ferryman.** He holds the same object Alvid does and holds more of it: **firsthand roots**
-about who crosses at night. Under 01 §3, independence is measured on firsthand roots, and a rumour with
-no findable origin gets one synthetic root shared by every retelling — so Brun is not one voice among
-many, he is the *only* corroborator, and a story about Tomas Vorn corroborates exactly once without him
-and twice with him. Three parties want it. His decision — tell Ems, tell Hedda, tell nobody, or lie — has
-materially different consequences and is a real fork. **But it is one fork, once.** The season he spends
-his root he becomes the control. **Diagnostic — THIN**, and the finding generalises: *the design gives a
+**Old Brun, ferryman.** He holds what Alvid holds, and more of it: **firsthand roots** about who
+crosses at night. Under 01 §3 a rumour with no findable origin gets one synthetic root shared by every
+retelling, so Brun is not one voice among many — he is the *only* corroborator, and a story about Tomas
+Vorn corroborates once without him and twice with him. His decision (tell Ems, tell Hedda, tell nobody,
+lie) is a real fork with materially different outcomes. **But it is one fork, once**, and the season he
+spends his root he becomes the control. **Diagnostic — THIN**, and it generalises: *the design gives a
 bottom-rung person genuine richness at exactly the moment they spend the one scarce claim they hold, and
 returns them to the floor immediately afterward.*
 
