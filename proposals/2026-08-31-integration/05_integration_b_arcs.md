@@ -639,12 +639,15 @@ answer needed is a list, not a principle.
 
 - **It does not address two of the ten LOST units.** **Loop D** (`03:524`) is verdicted *"LOST on
   mechanism"* with no per-unit mechanism named, so I have nothing to propose against; and **ARC 5
-  Torben** dies on a Loyalty clock decrementing on a schedule — which `09` §8.3 refuses **by name**
-  and correctly — plus **D-9, vacancy-by-absence**, which is a play-space finding
-  (`proposals/2026-08-30-play-space-coverage/09_GAP_REPORT.md:113`) and belongs to lane (a). I add one
-  piece of arc-side evidence to D-9 and no fix: the arc corpus supplies an independent demand for it
-  from the fiction side (a hostage prince whom no institution can treat as absent), found by a lane
-  that was reading arcs rather than the roster.
+  Torben** dies on two things, neither of them mine to fix. Its Loyalty clock decrementing on a
+  schedule is refused by `09` §8.3, which admits clock movement only for *matter, bodies, and the
+  confidence of a memory* — loyalty is none of the three, and the refusal is correct. Its second
+  blocker is **D-9, vacancy-by-absence**, a play-space finding
+  (`proposals/2026-08-30-play-space-coverage/09_GAP_REPORT.md:113`) that belongs to lane (a). **I do
+  not claim the arcs corroborate D-9 independently**, and P-2 is the reason: lane 3's header declares
+  the gap report a cross-read, so its ARC 5 note citing D-9 is a citation, not a rediscovery. What the
+  arcs add is one fiction-side case with a shape the roster does not contain — a hostage prince whom
+  no institution can treat as absent — and no fix.
 - **It proposes no measure, validator, guard, register or process document** — not for convergence
   (I-A-7), not for provenance (§1.2), not for the arcs. Where a finding's natural repair was
   apparatus, the output is a stated claim and a stop.
