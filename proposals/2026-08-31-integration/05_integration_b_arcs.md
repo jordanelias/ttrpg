@@ -163,10 +163,15 @@ valleys south — which is most of the setting"*, and a peninsula-wide Thread nu
 identical case for the Thread. The corpus itself supplies the evidence that this is a real loss and
 not a purity argument: `03_arcs_41_55_and_emergent.md:160` records that the old global MS *"unravelled
 him peninsula-wide the season the band changed"* and that the local replacement is *"more causal, more
-local"*. And **the arcs asked for place-scoping directly**: arc 22's blocker is stated as *"no world-side
-Thread state for an operation to damage, **no site**, and no entity"* (`02:173`). The critic's
-constraint and the corpus's demand are the same demand from two directions, which is the only place
-in this lane where those two things converge without either having seen the other.
+local"*. And **the arcs asked for place-scoping directly**: arc 22's blocker is stated as *"the design defines
+no Thread operation other than Thread-Read, no world-side Thread state for an operation to damage,
+**no site**, and no entity"* (`02:183–184`), and lane 2's demand list repeats it — *"no Gap, **no
+site**, no operation vocabulary beyond reading, and no entity"* (`02:42`). So the reviewer's
+constraint and the corpus's demand ask for the same object. **I do not claim these converged
+independently, and P-2 is why:** the reviewer of body (b) read the lane reports, so it had access to
+arc 22's "no site" and this is a shared-source agreement, not a rediscovery. What it does establish is
+that place-scoping costs the arcs nothing — the units that need the object were asking for the
+place-scoped version of it.
 
 **Why this is the omission, not a refusal — and one piece of evidence the arc lanes did not have.**
 The suite prices an operation set it never defines. `10` §8.3 (`:201`) charges *"every Thread attempt
@@ -192,14 +197,22 @@ is the reading the tree supports.
   00b names.** Does something already provide it? Three candidates. The **granary** (`13` §3) is
   shared and place-held but is *allocated by a named office-holder at a standing date*, so its
   depletion is somebody's decision — the opposite shape. The **larder** (`13` §1) is hearth-private.
-  **Ore grade and siltation** (`13` §5) are shared and place-held but move on a clock and *no player
-  act accelerates them* — `03:264–265` says exactly this. So the suite holds nothing that is
-  simultaneously shared, place-held and act-degraded. **The N-line survives the test.**
+  **Ore grade and siltation** (`13` §5) are shared and place-held but move on a clock, and *no player
+  act accelerates them* — `03:264–265` says exactly this. (Siltation is act-*mitigable*: `13` §5 makes
+  it *"uncompensated unless a dredging LevyTerm is actively funded"*. Mitigable is not driven; nothing
+  a person does makes the channel silt faster, which is the direction the commons shape needs.) So the
+  suite holds nothing that is simultaneously shared, place-held and act-degraded. **The N-line
+  survives the test.**
 - **E, as a ratio against N and R.** One field. Zero new verbs (`alter` exists), zero new phases
   (P5 exists), zero new resolvers, zero thresholds, and it deletes a dangling pointer. Against the N
   above and the R below, this is the cheapest object in the proposal.
-- **R.** The fork it creates at a practitioner's seat: *operate here now* against *operate elsewhere,
-  later, or not at all*. The anti-dominance term is structural rather than tuned: the condition is an
+- **R, and RULE 3's precondition answered first.** *Is a practitioner's seat playable?* I take it to
+  be, on two grounds in the suite rather than on assumption: `10` §8.3 writes the Coherence bands as
+  player-facing consequences with the reachability check run over a campaign span, and `02` §5.2's
+  bands are framed as removals of *"a capability of the person as a social object"*. **If the seat
+  list L-4 asks for rules otherwise, this R-line converts to characterisation and stops being an
+  argument for the object** — the object would then stand on N alone. Granting the seat: the fork is
+  *operate here now* against *operate elsewhere, later, or not at all*. The anti-dominance term is structural rather than tuned: the condition is an
   obstacle term (`10` §2), so degrading a site raises the obstacle for **the next operation at that
   site**, and a practitioner who works one place repeatedly pays first. **I state the failure mode
   rather than assuming it away:** if travel is free, rotating sites makes *operate* dominant and the
@@ -503,9 +516,9 @@ else.**"*
 
 **What is requested.** Extend the row to **primary physical state held at the place** — and note that
 this is not a widening for the Thread's benefit. **The table is already inconsistent with the suite as
-filed**, and this is checkable in two minutes: `13_material_life.md` §1 holds `stores(h)` on a hearth;
-§5 holds `base(H_mine)`, decremented by `depletion(H_mine)` every season; §5 holds `transport_cost`
-accruing silt every season. None of those is a stake, a judging set or a standing date. All three are
+filed**, and this is checkable in two minutes: `04` §1.2 (restated at `13` §1) holds `stores(h)` on a
+hearth, which is a rung; `13` §5 holds `base(H_mine)`, decremented by `depletion(H_mine)` every
+season; `13` §5 holds `transport_cost` accruing silt every season. None of those is a stake, a judging set or a standing date. All three are
 primary physical state at a place, and all three are load-bearing on `13`'s two slow fuses, which the
 document names as *"the shape this whole exercise exists to recover from per-tick simulation."*
 
@@ -542,7 +555,7 @@ seam rather than nowhere.
 not a body and not a memory, and a silting harbour channel is neither; both are clock-driven; both are
 already in the suite; both are housed in *Material Life*. So the class "matter" in `09` §8.3 already
 covers **non-living physical stock at a place that changes without an act** — a reading lane 3 states
-independently at `03:264–265`: *"`09` §8.3 explicitly allows matter to be clock-driven, and `13` §5
+in the same terms at `03:264–265`: *"`09` §8.3 explicitly allows matter to be clock-driven, and `13` §5
 proves it."* If the Thread substrate
 is physical in this setting, it is that class. If it is not — if the Thread is a relation between
 minds and the world rather than a thing the world contains — then it is not matter, it has no home
@@ -552,7 +565,7 @@ object somewhere and letting the placement decide by default.
 
 **Cost of NOT making it.** I-A-1 has no home. It cannot go in `09`, whose §12 refuses container gauges
 and whose subject is the tick; it cannot go in `01`, which is the spine and holds no quantities; a new
-document fails 00b's P-5 outright. Without AR-2a the five Blocker-A units in §2.0 stay lost.
+document fails 00b's P-5 outright. Without AR-2a, the six substrate-blocked rows in §2.0 stay lost.
 
 ### AR-2b · The clock half — **requested to be REFUSED for now**, and held as live choice L-1
 
@@ -565,11 +578,13 @@ exemption from it at all: `resolve` writes world state in response to acts, by s
 and nothing restricts what kind of state that is. So the clause binds only the baseline-decay half —
 the corpus's *"MS baseline decay (−1/year, PP-255)"* (`01_arcs_01_18.md:254`).
 
-**And the arc evidence for the clock half is thin: exactly one unit.** Of the five Blocker-A LOST
-units, 48 is act-driven by its own thesis (*"the commons that practitioners deplete by practising"*),
-22 and 27 are operation-driven (a ritual, a Dissolution), and ARC 7 carries GM-set thresholds that are
-refused for other reasons. Only Arc 5 runs on the baseline. **Four of five recover without touching
-`09` §8.3's clause; one does not.** Under 00b's P-4 — prefer the interpretation that costs the design
+**And the arc evidence for the clock half is thin: exactly one unit.** The rows in §2.0 that recover
+on this object are Arc 5, 22, 27, 48, ARC 7 and — on lane 3's group assertion only — Scenario 9. Of
+those, 48 is act-driven by its own thesis (*"the commons that practitioners deplete by practising"*,
+`03:266`); 22 and 27 are operation-driven (a ritual, a Dissolution); ARC 7's other blocker is GM-set
+thresholds, refused for reasons that have nothing to do with a clock. **Only Arc 5 runs on the
+baseline** — its mechanics line leads with *"Mending Stability (MS) baseline decay (−1/year,
+PP-255)"*. So five of the six recover without touching `09` §8.3's clause, and one does not. Under 00b's P-4 — prefer the interpretation that costs the design
 more — I therefore decline to request the clock half, and put it in §4 as **L-1** where it belongs: it
 is the same object as I-A-3's stated limit, seen from the other side, because a world that runs down
 on a clock **is** the world's own agency, which is precisely what the design refused deliberately.
@@ -601,8 +616,10 @@ death unroots the graph beneath him in one instant. **C-7** bounds this: *"needs
 material was never put through the test. **The evidence points one way; the sweep does not close.**
 `00_INDEX.md` §3.2 says of this question: *"Two defensible answers, materially different games. Not
 an audit's call."* **I therefore do not rule it.** Recommendation, offered as evidence rather than as
-a verdict: office-rooted, with the note that the arc corpus is fiction written years before the design
-and is therefore independent evidence, not a re-reading of it.
+a verdict: office-rooted, with one qualification about what kind of evidence this is. The arc
+*documents* were written years before the design, so their demands are not a re-reading of it — but
+the lane that extracted the demands read the design while extracting them, so the extraction is not
+blind and P-2 applies to the framing even though it does not apply to the source.
 
 **L-3 · Is `13_material_life.md` the right home, or should the Thread condition wait for a document of
 its own?** Housing it in *Material Life* makes AR-2a's ruling structurally rather than by declaration
