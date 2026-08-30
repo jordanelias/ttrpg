@@ -85,6 +85,18 @@ What shadow uniquely adds is a legibility readout, plus a *"repeat twice → leg
 is **asserted rather than derived** — who counts to two? Keep the subtraction as a published band;
 delete the rule.
 
+**⚠ Only one of the three was applied, and that is a process failure worth recording (noted
+2026-08-30).** All three were found by this audit and written up above as decided. The correction pass
+that followed applied **Momentum** (§2.1) and stopped there: the licence column (§2.2) and the shadow
+trigger rule (§2.3) were never cut, so `07_alignment.md` went on shipping both objects while this
+document said they were gone, and a later reader had no way to tell which of the two was current. The
+contradiction was caught by the play-space coverage exercise's machine-view lane, which read `07` and
+`16` against each other and found them asserting opposite things. Both cuts are now applied in `07`.
+**Nothing about the design changed in the meantime and none of the three findings was wrong** — the
+defect is entirely in the handoff between finding and application. A finding recorded as decided is not
+decided until it is applied, and a §2 that says CUT is evidence of nothing while the document it names
+still carries the object.
+
 **Two N-lines were softened rather than cut**, because they named something real and claimed too
 much: the Knot's (*"the only channel by which a person holding no post receives news"* — ties and
 dispensations already reach the unposted; what is unique is the *unbidden, speakerless, undistorted*
