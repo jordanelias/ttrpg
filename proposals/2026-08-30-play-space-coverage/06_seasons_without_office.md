@@ -88,31 +88,23 @@ states outright that Elder Kaldring at TS 22 *cannot anchor Community Weaving*.
 
 ### 1.3 FINDING 1 — the design's stated reason the Restoration works does not reach its leader
 
-`01 §2`, on Knots, in the substrate's own words:
-
-> *"the deepest informal channel, being TS-gated, gates them IN. That is why Niflhel recruits on the
-> waterfront, and why the Restoration's weaving works with no wealth and no soldiers."*
-
-And `07 §1.3`:
-
-> *"A covert requisition needs a channel that deposits no claim into a judging set, and ordinary asking
-> is witnessable. So a covert cell recruits and requisitions along Knots… **A covert faction's capacity
-> is therefore bounded by its members' Bonds.**"*
+`01 §2` says of Knots: *"the deepest informal channel, being TS-gated, gates them IN… why the
+Restoration's weaving works with no wealth and no soldiers."* `07 §1.3` says a covert requisition needs
+a channel that deposits no claim into a judging set, ordinary asking is witnessable, so *"a covert cell
+recruits and requisitions along Knots… **A covert faction's capacity is therefore bounded by its
+members' Bonds.**"*
 
 Put those together with the gate. **The Restoration's covert operating capacity runs entirely through
-its Southern Einhir members — who carry the higher TS baseline — and structurally excludes Yrsa
-Vossen and Aldric Hann, both of whom sit below 30.** The movement's two named visible leaders are the
-two people in it who cannot use the channel the design says the movement runs on.
+its Southern Einhir members — who carry the higher TS baseline — and structurally excludes Yrsa Vossen
+and Aldric Hann, both below 30.** The movement's two named visible leaders are the two people in it who
+cannot use the channel the design says the movement runs on.
 
-I want to be careful about what this is. **It is not a defect.** It is the sharpest possible
-demonstration that capacity routes through persons and not through leadership: the leader is a person,
-persons have marks and thresholds, and hers exclude her. It produces, with no authoring, exactly the
-shape canon asserts — *"visibility as vulnerability… she cannot lead from hiding"* (`npc_roster_v30 §3`)
-— because she is mechanically incapable of the covert channel and therefore has only the open one.
-
-But it has a consequence nobody has written down: **every account of a Restoration act that runs
-through Vossen personally is wrong.** She does not run cells. She cannot requisition covertly. What
-she does is narrower and it is the whole of §1.5.
+**This is not a defect.** It is the sharpest available demonstration that capacity routes through
+persons rather than leadership, and it produces canon's own claim — *"visibility as vulnerability… she
+cannot lead from hiding"* (`npc_roster_v30 §3`) — with no authoring, because she is mechanically
+incapable of the covert channel and has only the open one. But it has a consequence nobody has written
+down: **every account of a Restoration act that runs through Vossen personally is wrong.** She does not
+run cells and cannot requisition covertly.
 
 ### 1.4 Computed needs, with the arithmetic
 
@@ -359,13 +351,11 @@ southwest a generation later**, which is exactly the geography canon already ass
 
 Nobody wrote "education is resistance." It is one construal set against another in the same formula.
 
-**His safety is structural, not lucky.** `04 §4.1`: `publicity = venue_factor × √n × mark_salience`, and
-a private dwelling is **0.2**. Nine children in a kitchen: 0.2 × 3 × ~1.2 ≈ **0.7** — the 0.5–1.0 band,
-*the community within one season*. Push it to a workshop (0.5) and it crosses 1.0 into adjacent
-communities. And `03 §7`: exposure rises only when he extracts value, and discovery is proportional to
-a rival's **actual investigation spend**. A teacher who never extracts and whom nobody is investigating
-is never found. **The hedge school is safe until a named person spends acts on it** — which is what a
-Field Inquisitor is for.
+**His safety is structural, not lucky.** `publicity = venue_factor × √n × mark_salience`, and a private
+dwelling is **0.2**: nine children in a kitchen ≈ 0.2 × 3 × 1.2 ≈ **0.7**, the band that reaches the
+community and no further. And `03 §7` makes discovery proportional to a rival's **actual investigation
+spend**, with exposure rising only on extraction. **The hedge school is safe until a named person
+spends acts on it** — which is what a Field Inquisitor is for.
 
 **THE GAP, and it is a real one.** `09 §1.1`: *every person commits exactly one act per season.* And
 `tell(speaker, hearer, claim, as_asserted)` names **one hearer**. So either:
@@ -410,21 +400,18 @@ custody and its grade falls one rung, permanently, in every chamber. That is a s
 costs nothing.
 
 **(2) Her life's work is unreadable in principle by half her audience.** `03 §9`, P-08: a rendering-side
-claim's subject is a *configuration*, a referent class for which a non-sensitive's ledger **has no
-address**. Degradation is a property of **deposit**, on *every* path — and the document says so
-explicitly about hers: *"give him the sensitive's own written testimony, in the sensitive's own hand,
-and nothing changes… The document is intact; the reader is not equipped to hold what it says."*
-So whatever in the Einhir texts is rendering-side arrives at a non-sensitive reader as *religious
-poetry*, with no suppression anywhere in the pipeline. She is copying, at weeks per copy, under a
-heresy charge, a thing that most of the peninsula cannot receive. **That is not a defect. It is the
-setting's central tragedy delivered by a type conversion.**
+claim's subject is a *configuration*, a referent class a non-sensitive's ledger **has no address for**,
+and degradation is a property of **deposit** on *every* path — the document says so about hers exactly:
+*"give him the sensitive's own written testimony, in the sensitive's own hand, and nothing changes…
+The document is intact; the reader is not equipped to hold what it says."* She is copying, at weeks per
+copy, under a heresy charge, a thing most of the peninsula cannot receive. **The setting's central
+tragedy, delivered by a type conversion.**
 
-**(3) She is discovered by an act, never by a clock.** `03 §6`: `retention(f) = base(facet_kind) ×
-2^(−age/halflife) × (1 − concealment_spend)`. A book is a high-retention facet at a place. `examine`
-finds it; `research` cannot, because research is gated by an admission act and her copies are the one
-archive in the peninsula with **no admission gate**. She has built an un-gated archive, which is
-precisely the operation `14 §6` says the Restoration's victory condition is — shrinking the denominator
-of institutional control.
+**(3) She is discovered by an act, never by a clock.** A book is a high-retention facet at a place
+(`03 §6`). `examine` finds it; `research` cannot, because research is gated by an admission act and her
+copies are the peninsula's one archive with **no admission gate** — which is precisely the operation
+`14 §6` names as the Restoration's victory condition, shrinking the denominator of institutional
+control.
 
 **(4) THE EMPTY CELL — what a root token resolves to after its person is gone.** `01 §2`:
 *"A person persists exactly as long as somebody remembers them"* — a person with no Knot, no office, no
@@ -505,14 +492,11 @@ and by the design's `will()` gate**.
 
 ## 6. Five persons, at least four propositions, and no body above any of them
 
-Written as Jordan ruled them: **not one faction.** Canon supports the ruling from three directions —
+Written as Jordan ruled them: **not one faction.** Canon supports it from three directions —
 `faction_state_authoring_v30` enumerates six canonical factions and the Guilds are **not among them**;
 `factions_personal_v30 §280` describes a *rotating* Guildmaster Council with no single leader;
-`faction_politics_v30 §546` calls the guild layer *dual-parented*, Hafenmark-commercial and/or
-independent. So the object canon actually has is a **set of overlapping propositions held by named
-merchants**, which is what `07 §1.1` says a faction is.
-
-I write the five as what they are.
+`faction_politics_v30 §546` calls the guild layer *dual-parented*. What canon actually holds is a **set
+of overlapping propositions held by named merchants** — which is what `07 §1.1` says a faction is.
 
 ### 6.1 Annika Feldhaus — the Artisans' Compact
 
@@ -529,19 +513,16 @@ by `07 §4.2` a challenger needs a coalition landing ⌈k⌉ cuts in one standin
 single-handedly removable, and consolidation made her *more* vulnerable, not less — which is the
 property the design says is not a balance patch.
 
-**The BLOCKED sub-cell, and it governs her canon arc.** Canon: her supply chain includes Thread-touched
-goods sourced through the Virke network; she has TS 0 and *"no conceptual framework for Thread
-metaphysics"*; the authored arc is that a PC diagnoses the merchandise and reveals it.
+**The BLOCKED sub-cell, and it governs her canon arc.** Her supply chain includes Thread-touched goods
+through the Virke network; she has TS 0 and *"no conceptual framework for Thread metaphysics"*; the
+authored arc is that a PC diagnoses the merchandise and reveals it.
 
 Under `03 §9`, **that revelation cannot be delivered to her by telling, reading, inference or witness.**
-A rendering-side claim's subject is a referent class her ledger has no address for; it degrades on
-*every* deposit path into the nearest referent she does have. She receives *(the goods, condition,
-wrong)* at confidence 0.2. Raise her Focus, her literacy, her archive access, her patronage — nothing
-changes.
-
-So the design **converts canon's revelation scene into a material fact she can only learn materially**:
-revenue falling, households sickening, a Dicastery opening an inquest into her ledgers. That is a
-better story and it is a change canon has to accept. **Report it; do not patch it.**
+It degrades on *every* deposit path into the nearest referent she holds: *(the goods, condition, wrong)*
+at confidence 0.2. Raise her Focus, literacy, archive access and patronage to the ceiling and nothing
+changes. So the design **converts canon's revelation scene into a fact she can only learn materially** —
+revenue falling, households sickening, a Dicastery inquest into her ledgers. A better story, and a
+change canon has to accept. **Report it; do not patch it.**
 
 > **VERDICT: RICH, with one genuinely BLOCKED channel.** She has material acts at three rungs, a
 > three-basis position with three named cuts, and an arc whose trigger the epistemics forbid — which
@@ -662,11 +643,11 @@ C: guild-aligned, avowed; **purchased** relationship with Bailiff Konrad Ems. D:
 **Four authored escalation steps, four existing acts, zero additions.** That is the single strongest
 vindication in this document, and it comes from a minor NPC's dossier rather than from a design trace.
 
-**And the counter is priced without anyone pricing it.** `forestall` is *"high-δ… the judging set
-deposits a strong, publicity-scaled negative stance the instant it is caught"*, and `06 §5`'s targeting
-order says the grain merchant seen forestalling is blamed **before** the duke who set the levy, because
-a firsthand local claim outranks a distant hearsay one on every salience term. **Tallow's strongest move
-makes him the first person a rising comes for.** Genuine fork.
+**And the counter is priced without anyone pricing it.** `forestall` is *"high-δ… a strong,
+publicity-scaled negative stance the instant it is caught"*, and `06 §5`'s targeting order blames the
+grain merchant seen forestalling **before** the duke who set the levy, because a firsthand local claim
+outranks distant hearsay on every salience term. **Tallow's strongest move makes him the first person a
+rising comes for.** Genuine fork.
 
 **THE FINDING — his stated ambition is unbuyable.** He wants a **perpetual** charter over the ford toll.
 `07 §5.4`: a charter is a **dispensation**. `07 §4`, purchased basis: its characteristic cut is *"outbid,
@@ -709,10 +690,10 @@ the roster, at exactly the coordinate the design says matters most.
 
 Feldhaus and Kessler, checked against the machinery rather than asserted.
 
-**Are they two factions?** Yes, and necessarily. `07 §1.1`: *identity is the proposition, and nothing
-else identifies a faction.* Maximum-revenue and mandate-over-revenue are different propositions. There
-is no operation that could make them one object without a merge — and `07 §5` deletes merge, split,
-promote and found-at-size in favour of `commit` in two directions.
+**Are they two factions?** Necessarily. `07 §1.1`: *identity is the proposition, and nothing else
+identifies a faction.* Maximum-revenue and mandate-over-revenue are different propositions, and no
+operation could fuse them — `07 §5` deletes merge, split, promote and found-at-size in favour of
+`commit` in two directions.
 
 **Are they positionally opposed?** `07 §8`'s test: *jointly unsatisfiable over one stake at one
 standing date*, and **the satisfiability test contains no regard term**. At the dues reckoning, funding
@@ -767,15 +748,14 @@ It buys three things, all traceable:
    `compliance` is a decision each of them makes about *these* neighbours. A watch that now believes
    its neighbours are numerous computes differently, and the watch lives in the town.
 
-**Does the cost exist?** Yes, and it is heavy and irreversible. `07 §1.3`: one identical discovery
-*"costs a Goldenfurt Free Master his committee seat… costs an Oastad fisherman nothing… and makes a
-Southern Einhir Canon a scandal."* Avowal also **closes the covert channel for that person forever** —
-you cannot ask a man to act openly for a faction he must hide — so every marker converts an operative
-into a symbol. And `03 §7` gives no cover: exposure falls only by spending `cover` acts, and an avowal
-is extraction with cover unavailable.
+**Does the cost exist?** Heavily, and irreversibly. `07 §1.3`: one identical discovery *"costs a
+Goldenfurt Free Master his committee seat… costs an Oastad fisherman nothing… and makes a Southern
+Einhir Canon a scandal."* Avowal also **closes the covert channel for that person forever**, so every
+marker converts an operative into a symbol; and `03 §7` gives no cover, since avowal is extraction with
+`cover` unavailable.
 
-**So both arms are real, and the shapes are right.** Gain compounds slowly and saturates; cost is
-immediate, durable, and irreversible. Not dominated in either direction.
+**Both arms are real and the shapes are right.** Gain compounds slowly and saturates; cost is immediate,
+durable, irreversible. Not dominated in either direction.
 
 > **BUT — the sign of the fork is set by the avower's marks, and the decision is taken by someone
 > whose marks are different.**
