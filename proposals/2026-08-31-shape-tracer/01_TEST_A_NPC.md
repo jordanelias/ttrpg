@@ -18,15 +18,15 @@
 |---|---|
 | cases | **27 named NPCs**, specs written by three lanes **blind to the shape** |
 | verdict | **22 BLOCKED · 4 NOT-ASSESSED · 1 DEGRADED · 0 PLAYABLE** |
-| probes | 65 executed attempts against the shape — **18 PASS, 1 PARTIAL, 46 gaps** |
-| trace | 79 acts, 116 events, 334 class-checked writes |
+| probes | 65 executed attempts against the shape — **19 PASS, 1 PARTIAL, 45 gaps** |
+| trace | 80 acts, 117 events, 337 class-checked writes |
 | gap kinds | 29 NO-PRODUCER · 11 UNSPECIFIED · 4 FORBIDDEN · 3 COLLISION |
 
 **A case is BLOCKED when a need its own lane graded `core` maps to a probe that could not
 execute.** Not one of twenty-seven named characters has a season that runs end to end.
 
 ⚠ **THE PROBE VERDICTS ARE THE HARD RESULT. THE CASE VERDICTS ARE ADVISORY.** Needs are routed onto
-probes by keyword, and keyword routing is crude: it mis-fired four times in ways I caught (§5) and
+probes by keyword, and keyword routing is crude: it mis-fired six times (§5), two of them caught only by audits and
 is certainly still mis-firing in ways I did not. **`NOT-ASSESSED` is the instrument admitting it
 did not aim** — a case more than half of whose `core` needs failed to route is reported as untested
 rather than graded, because grading it PLAYABLE would be the instrument flattering the shape by
@@ -35,7 +35,7 @@ exact count.
 
 ## §2 · WHAT SUCCEEDED — and one of these is excellent
 
-Eighteen probes pass, and they are not trivial passes; each is an execution.
+Nineteen probes pass, and they are not trivial passes; each is an execution.
 
 **The three that matter most:**
 
@@ -135,16 +135,38 @@ does not survive the stated model.
 **What fails is the interior half and the scarcity half** — doubt, publicness, triage, and an
 institution's slow judgement of him.
 
-### 3.3 One declared seam, reached by execution
+### 3.3 ⚠ RETRACTED — the declared seam is CLOSED, and this probe was measuring my own bug
 
-`A12` kills a person and tries to end their tenures. Death is churn row 3, an **Event** at MATTER.
-A `hold` on an office is a **`social: true`** row, which an Event may not write. So **a dead king
-still holds the crown.** The suite declares this itself in `05` §7 — *"a death DOES end a tenure,
-and the column alone does not explain why a storm may not"* — and churn row 3's own N-line is
-*"succession never fires; every office is held forever."* **The Partition as keyed blocks the
-mechanism row 3 exists to provide.** The tracer reaches it by execution and prices it.
+**This section previously reported that a dead king still holds the crown.** It said `A12` kills a
+person, tries to end their tenures, finds `(Tenure, hold)` is `social: true` so an Event may not
+write it, and concluded *"the Partition as keyed blocks the mechanism churn row 3 exists to
+provide."* It cited `05` §7's residual caveat.
 
----
+**It is wrong, and the error was mine.** `02` §5.1 rules the seam closed, in terms:
+
+> **"RULED: `(Tenure, until)` is `social: false`.** Otherwise death cannot end a tenure and the
+> entire succession mechanism has no producer." … **"This is a RULE, not a column, and it is the
+> Partition's one declared seam."**
+
+Death writes **`until`**, not `hold`. `04`:167 calls it *"the only Tenure write in the MATTER
+class"*, and the `04` §4 matrix carries the row. **My tracer's Partition table simply omitted
+`(Tenure, until)`**, and the probe wrote the wrong key — so a closed seam reported as open.
+
+**And the suite's answer is better than the one I was about to propose.** What stops a storm
+vacating a praefecture is not the column; it is a causation rule — *an actorless row may write
+`until` only on a `(Person, exists)` change the same row also caused.* A plague that kills the
+praefect ends his tenure through the death; a storm cannot touch it. That is keyed on causation
+within the row rather than on the instance, which is what keeps it from being the "death may,
+storms may not" special case the suite's own falsifier forbids.
+
+`A12` now implements the ruled row and the causation rule, tests both directions, and **passes**.
+
+> ⚠ **THIS IS INSTRUMENT DEFECT FIVE AND IT IS THE FIRST TO POINT THE DAMNING WAY.** The other
+> four flattered the shape. This one made a closed seam look open, and it slipped through *because
+> the guard I had written was asymmetric* — `test_rows_the_suite_lacks_stay_absent` catches an
+> **invented** row and nothing caught an **omitted** one. A guard against the failure you already
+> made does not catch the failure you have not. There is now a `RULED_ROWS` table asserting the
+> rows the suite has explicitly ruled are present **and correct**, which is the symmetric half.
 
 ## §4 · LESSONS
 
@@ -187,17 +209,32 @@ because the tracer gates every finding above.
 | the loader dropped truncated lane output | a whole arc lane's cases lost | repair to whole entries, discarding partial edges without inventing content |
 | the bare words **"threshold"** and **"condition"** routed to `W2` (band strobing) and `W1` (site decay) | **16 and 5 core needs** attributed to the wrong mechanism, and several cases graded PLAYABLE off a harbour probe. Found only when the corpus grew from 47 to 78 cases | both regexes narrowed to their real subjects; **two probes added** (`P34`, `P35`) for what the mis-routed needs were actually asking; four router self-tests |
 | a case whose `core` needs mostly failed to route was graded **PLAYABLE** | the instrument flattering the shape **by failing to aim at it** — the same direction as the other four | fourth verdict `NOT-ASSESSED`; a self-test asserts the three-way grading cannot come back |
+| the bare word **`enforce`** routed to `A17` | *"a policy he **enforces**"* came back **PASS**, so this report claimed the King was blocked on a probe his own case had passed. **Five needs.** Found by an audit, not by me | `A17` narrowed to require the *separation* structure; four router self-tests |
+| **`(Tenure, until)` was MISSING from the Partition table** — a row the suite explicitly RULES | `A12` wrote `(Tenure, hold)` instead and reported a **closed seam as open**: *"a dead king still holds the crown."* **The first defect to point the DAMNING way**, and the guard I had written was asymmetric — it caught invented rows, not omitted ones | the ruled row added with its causation rule; `A12` rewritten to test both directions and now **passes**; a `RULED_ROWS` table asserts ruled rows are present and correct |
+| the bare words **`counter`** and **`ambient`** | `counter` matched inside *"counter-productive"*; `ambient` matched *"ambient environmental quality"*, which is **matter, and already served**. These two regexes price Law 1's central refusal and the question that goes to Jordan — **`A13` fell from 8 arcs to 3** when they were narrowed | both keyed on their real subjects; a self-test names them as the two most expensive routes in the file |
+
+**Six defects, and the last three were found by audits that never saw my reasoning.** That is the
+relay working exactly as `CLAUDE.md` §10 describes it — structural independence, not a declared
+posture. It is also the honest reading of the self-review I did before them: four passes of my own
+adversarial checking did not find any of the three.
 
 **Narrowing a bad route is only half a fix.** Cutting `W2`'s regex without adding `P34` would have
 turned sixteen real findings into `UNMAPPED` — silence that reads as absence. The rule this build
 ended on: **when a route is wrong, read what it was catching before you cut it**, because the
 mis-catch is usually a capability the probe set does not have.
 
+**And the direction of the error matters more than the count.** Four defects flattered the shape,
+one damned it, one did both. **Every time the measurement got more careful, the shape's bill got
+smaller** — the arc-ending refusal fell from 40% to 16%, `A13` from 8 arcs to 3, and `A12` from
+FORBIDDEN to PASS. That is a fact about instruments as much as about this shape: **a crude
+instrument systematically overstates a strict design's cost**, because a strict design refuses
+precisely-specified things and a crude instrument matches imprecisely.
+
 **Known remaining weakness, stated rather than hidden:** routing is still keyword-based and still
 imperfect — `NPC-005`'s *"a capability she secretly has"* routes to `A2`, which is not what that need
 is about. **This is why §1 marks case verdicts advisory and probe verdicts hard.** The honest
-instrument reports **228 `UNMAPPED` needs of 527** rather than pretending to cover them, and marks
-16 cases `NOT-ASSESSED` rather than passing them. At 78 cases keyword routing is at its ceiling; a
+instrument reports **243 `UNMAPPED` needs of 527** rather than pretending to cover them, and marks
+15 cases `NOT-ASSESSED` rather than passing them. At 78 cases keyword routing is at its ceiling; a
 larger corpus needs the lanes to emit a capability tag, not prose the runner greps.
 
 ---

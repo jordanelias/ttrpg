@@ -191,9 +191,9 @@
    "doc": "something ripens over many seasons and pays off late"
   },
   "A12": {
-   "verdict": "FORBIDDEN",
-   "detail": "[FORBIDDEN] an Event writing social row (Tenure, hold)  @Tenure.hold  needs: an Act by a person",
-   "doc": "a person is killed, and their tenures end"
+   "verdict": "PASS",
+   "detail": "OK \u2014 death ends the tenure and a storm cannot. The seam `05` \u00a77 leaves open is CLOSED by `02` \u00a75.1, and it is closed by a causation rule rather than by the column",
+   "doc": "a person is killed, and their tenures end \u2014 and a storm may NOT do the same"
   },
   "P18": {
    "verdict": "NO-PRODUCER",
@@ -328,12 +328,12 @@
  },
  "need_rows": 527,
  "need_verdicts": {
-  "FORBIDDEN": 39,
-  "NO-PRODUCER": 123,
-  "UNMAPPED": 226,
+  "FORBIDDEN": 14,
+  "NO-PRODUCER": 129,
+  "UNMAPPED": 243,
   "COLLISION": 12,
   "UNSPECIFIED": 32,
-  "PASS": 95
+  "PASS": 97
  },
  "case_verdicts": {
   "ARC-01": "BLOCKED",
@@ -380,7 +380,7 @@
   "ARC-39": "BLOCKED",
   "ARC-40": "BLOCKED",
   "ARC-41": "BLOCKED",
-  "ARC-42": "BLOCKED",
+  "ARC-42": "NOT-ASSESSED",
   "ARC-43": "BLOCKED",
   "ARC-44": "BLOCKED",
   "ARC-45": "BLOCKED",
@@ -461,14 +461,14 @@
     },
     {
      "need": "when a background track bottoms out in a territory, the system must be able to force a previously-open, never-stated question into a concrete binary position, with the forcing coming from the track itself rather than from any actor choosing to force it",
-     "probe": "A13",
-     "verdict": "FORBIDDEN",
+     "probe": null,
+     "verdict": "UNMAPPED",
      "hardness": "core"
     },
     {
      "need": "UNCLEAR: what mechanically happens once the background track's floor triggers 'Restoration Movement Emergence' is not specified \u2014 the source calls this 'latent faction mechanics, pending design'",
-     "probe": "A13",
-     "verdict": "FORBIDDEN",
+     "probe": null,
+     "verdict": "UNMAPPED",
      "hardness": "important"
     }
    ]
@@ -612,8 +612,8 @@
     },
     {
      "need": "a subordinate's trust/loyalty in a patron must be able to erode from that patron's inaction alone, on a track with no mechanic to actively increase it \u2014 an asymmetric, one-directional gauge",
-     "probe": "P19",
-     "verdict": "NO-PRODUCER",
+     "probe": "A13",
+     "verdict": "FORBIDDEN",
      "hardness": "core"
     },
     {
@@ -948,8 +948,8 @@
     },
     {
      "need": "assisting someone's continued high-risk activity must itself be able to carry the same terminal risk to the same tracked resource, so that 'helping' is not automatically a safe action",
-     "probe": "A2",
-     "verdict": "FORBIDDEN",
+     "probe": null,
+     "verdict": "UNMAPPED",
      "hardness": "important"
     }
    ]
@@ -1147,8 +1147,8 @@
     },
     {
      "need": "a reactive procedural objection must be able to fire automatically and identically every time its trigger condition is met, functioning as a standing tax on a category of action rather than a deliberated response",
-     "probe": "A2",
-     "verdict": "FORBIDDEN",
+     "probe": null,
+     "verdict": "UNMAPPED",
      "hardness": "important"
     },
     {
@@ -1222,8 +1222,8 @@
     },
     {
      "need": "an operative's caution trait must be able to automatically veto a planned action based on a condition created by an ENTIRELY SEPARATE, earlier arc's unresolved consequence",
-     "probe": "A2",
-     "verdict": "FORBIDDEN",
+     "probe": null,
+     "verdict": "UNMAPPED",
      "hardness": "important"
     },
     {
@@ -1758,14 +1758,14 @@
     },
     {
      "need": "crossing an accumulating threshold on the spiking background quantity must trigger an automatic, self-sustaining escalation procedure that continues running each period without further single decisions",
-     "probe": "A13",
+     "probe": "A2",
      "verdict": "FORBIDDEN",
      "hardness": "core"
     },
     {
      "need": "a target who repels the accusation must be able to leverage held evidence of a separate misconduct by the institution to open a counter-offensive",
-     "probe": "A2",
-     "verdict": "FORBIDDEN",
+     "probe": null,
+     "verdict": "UNMAPPED",
      "hardness": "important"
     },
     {
@@ -1915,8 +1915,8 @@
     },
     {
      "need": "a frozen-but-still-high background quantity must remain crossable by unrelated later events even though the institution that normally drives it is gone, via its own remnant apparatus",
-     "probe": "A13",
-     "verdict": "FORBIDDEN",
+     "probe": null,
+     "verdict": "UNMAPPED",
      "hardness": "important"
     },
     {
@@ -1953,8 +1953,8 @@
     },
     {
      "need": "the chosen alignment must change the ongoing rate of a separate, unrelated escalating pressure quantity on one path, and open automatic passive intelligence leakage to a hostile power on the other",
-     "probe": "A2",
-     "verdict": "FORBIDDEN",
+     "probe": "A5",
+     "verdict": "NO-PRODUCER",
      "hardness": "core"
     },
     {
@@ -2004,8 +2004,8 @@
     },
     {
      "need": "the failure branch must produce behavior that is objectively counter-productive to the character's own interests while looking, to him, like the correct reading of his experience -- and must remain actable-upon with his full institutional resources",
-     "probe": "A2",
-     "verdict": "FORBIDDEN",
+     "probe": null,
+     "verdict": "UNMAPPED",
      "hardness": "core"
     },
     {
@@ -2060,8 +2060,8 @@
     },
     {
      "need": "the ambient world-health quantity's pre-existing band must change what a bad outcome does next -- the same numeric penalty must cross into a qualitatively worse global band if the ambient quantity was already low, or be absorbed if it was high",
-     "probe": "A13",
-     "verdict": "FORBIDDEN",
+     "probe": "W2",
+     "verdict": "NO-PRODUCER",
      "hardness": "core"
     },
     {
@@ -2266,8 +2266,8 @@
     },
     {
      "need": "an institutional surveillance track targeting a specific individual must accumulate independently from unrelated prior encounters and reach its own threshold in the same window as the leader's private track, without either track's owner aware of the other",
-     "probe": "A2",
-     "verdict": "FORBIDDEN",
+     "probe": null,
+     "verdict": "UNMAPPED",
      "hardness": "core"
     },
     {
@@ -2504,8 +2504,8 @@
     },
     {
      "need": "a rare individual who crosses the perceptual threshold and encounters the hidden property incidentally, while doing an unrelated job, must have a personal behavioral reason to avoid reporting it, generating an accumulating cost to herself rather than resolving immediately",
-     "probe": "A2",
-     "verdict": "FORBIDDEN",
+     "probe": null,
+     "verdict": "UNMAPPED",
      "hardness": "important"
     },
     {
@@ -2696,14 +2696,14 @@
    "rows": [
     {
      "need": "a hidden personal capability in a loyal enforcer must remain completely dormant until an unrelated, ambient environmental quality, degraded by the cumulative effect of several other storylines, drops into a specific band specifically in the territories his job routinely sends him to",
-     "probe": "A13",
-     "verdict": "FORBIDDEN",
+     "probe": "W2",
+     "verdict": "NO-PRODUCER",
      "hardness": "core"
     },
     {
      "need": "the ambient quality's degraded band must specifically escalate its local effects in territories closer to a specific hazard-source, such that identical ambient conditions produce categorically stronger effects the closer a territory is",
-     "probe": "A13",
-     "verdict": "FORBIDDEN",
+     "probe": "W2",
+     "verdict": "NO-PRODUCER",
      "hardness": "important"
     },
     {
@@ -2760,8 +2760,8 @@
     },
     {
      "need": "the debate's outcome, regardless of which side wins, must be able to trigger a small positive change in a separate, unrelated ambient world-health quantity, conditioned only on whether rare-sensitivity participants are present in the room",
-     "probe": "A13",
-     "verdict": "FORBIDDEN",
+     "probe": null,
+     "verdict": "UNMAPPED",
      "hardness": "core"
     },
     {
@@ -2800,26 +2800,26 @@
     },
     {
      "need": "the pre-existing local condition of an ambient world-health quantity must determine whether the same tripled cost from one failed high-risk action crosses into a qualitatively worse global band versus being merely absorbed",
-     "probe": "A13",
-     "verdict": "FORBIDDEN",
+     "probe": "W2",
+     "verdict": "NO-PRODUCER",
      "hardness": "core"
     },
     {
      "need": "a territory whose ambient world-health condition is already degraded must independently generate spontaneous hazardous manifestations at a fixed chance per period, without requiring any deliberate reality-altering action",
-     "probe": "A13",
-     "verdict": "FORBIDDEN",
+     "probe": null,
+     "verdict": "UNMAPPED",
      "hardness": "important"
     },
     {
      "need": "a severe outcome at this battle must permanently escalate the ambient hazard condition of multiple adjacent territories by one severity band each",
-     "probe": "A13",
-     "verdict": "FORBIDDEN",
+     "probe": "W2",
+     "verdict": "NO-PRODUCER",
      "hardness": "important"
     },
     {
      "need": "a remote group whose ongoing function is to actively counteract the ambient world-health quantity's decline must have their own operational capacity degrade as a direct consequence of this battle's outcome, even though absent and non-participating",
-     "probe": "A13",
-     "verdict": "FORBIDDEN",
+     "probe": null,
+     "verdict": "UNMAPPED",
      "hardness": "important"
     }
    ]
@@ -3018,8 +3018,8 @@
     },
     {
      "need": "the game must be able to track a large but bounded set of named individual characters at different levels of tracked detail, and move a character between those levels automatically based on elapsed time, or manually on request.",
-     "probe": "A2",
-     "verdict": "FORBIDDEN",
+     "probe": null,
+     "verdict": "UNMAPPED",
      "hardness": "important"
     },
     {
@@ -3334,8 +3334,8 @@
     },
     {
      "need": "A perception or capability she secretly has (Thread Sensitivity) must be able to be true and mechanically active while remaining completely unknown to the institution she serves, with that institution's own rules treating mere discovery of the secret as automatically disqualifying, regardless of her competence or loyalty.",
-     "probe": "A2",
-     "verdict": "FORBIDDEN",
+     "probe": "A3",
+     "verdict": "PASS",
      "hardness": "core"
     },
     {
@@ -3947,8 +3947,8 @@
    "rows": [
     {
      "need": "A faction representative must be able to repeatedly grow one faction stat at the direct, automatic expense of a second faction stat every season, as her default behavior rather than a one-time choice offered to the player.",
-     "probe": "A2",
-     "verdict": "FORBIDDEN",
+     "probe": null,
+     "verdict": "UNMAPPED",
      "hardness": "core"
     },
     {
@@ -4085,8 +4085,8 @@
     },
     {
      "need": "This office-holder must be able to hold an automatic, standing hostile bias toward one category of person (Thread practitioners) that does not itself depend on which of his two loyalties is currently active, distinguishing 'things he does because he is a Church man' from 'things he does because he is favoring one master.'",
-     "probe": "A2",
-     "verdict": "FORBIDDEN",
+     "probe": "A3",
+     "verdict": "PASS",
      "hardness": "flavour"
     },
     {
@@ -4155,8 +4155,8 @@
     },
     {
      "need": "The leader must be able to formally and publicly recognize another person's deed in a way that changes what that person may subsequently do, and this recognition must be withholdable, not automatic.",
-     "probe": "A2",
-     "verdict": "FORBIDDEN",
+     "probe": null,
+     "verdict": "UNMAPPED",
      "hardness": "important"
     },
     {
@@ -4536,8 +4536,8 @@
     },
     {
      "need": "Sustained private argument and demonstrated intellectual soundness from this person must be able to fail to move the decision-maker specifically because his blocking state is uncertainty rather than opposition, and the game must not treat sound argument as automatically persuasive against an uncertain target.",
-     "probe": "A2",
-     "verdict": "FORBIDDEN",
+     "probe": "A4",
+     "verdict": "NO-PRODUCER",
      "hardness": "important"
     },
     {
@@ -4560,8 +4560,8 @@
     },
     {
      "need": "Ascending to supreme authority through this path must be able to instantly and permanently redefine what the ruling institution stands for, flipping an ambient, privately-held policy uncertainty into an explicit, declared doctrine, rather than merely changing which person occupies the seat.",
-     "probe": "A13",
-     "verdict": "FORBIDDEN",
+     "probe": null,
+     "verdict": "UNMAPPED",
      "hardness": "important"
     },
     {
@@ -4795,6 +4795,16 @@
    "hardness": "core"
   },
   {
+   "case": "ARC-01",
+   "need": "when a background track bottoms out in a territory, the system must be able to force a previously-open, never-stated question into a concrete binary position, with the forcing coming from the track itself rather than from any actor choosing to force it",
+   "hardness": "core"
+  },
+  {
+   "case": "ARC-01",
+   "need": "UNCLEAR: what mechanically happens once the background track's floor triggers 'Restoration Movement Emergence' is not specified \u2014 the source calls this 'latent faction mechanics, pending design'",
+   "hardness": "important"
+  },
+  {
    "case": "ARC-02",
    "need": "a third party must be able to choose, as a discrete scene, to disclose a hidden fact about a person's own condition to that person, with the person's subsequent trajectory depending on whether they were told",
    "hardness": "core"
@@ -4900,6 +4910,11 @@
    "hardness": "core"
   },
   {
+   "case": "ARC-09",
+   "need": "assisting someone's continued high-risk activity must itself be able to carry the same terminal risk to the same tracked resource, so that 'helping' is not automatically a safe action",
+   "hardness": "important"
+  },
+  {
    "case": "ARC-10",
    "need": "a political actor must be able to construct a proposal worded so precisely that either of an opponent's two possible responses damages the opponent's institutional position -- a genuine forced dilemma",
    "hardness": "core"
@@ -4981,6 +4996,11 @@
   },
   {
    "case": "ARC-13",
+   "need": "a reactive procedural objection must be able to fire automatically and identically every time its trigger condition is met, functioning as a standing tax on a category of action rather than a deliberated response",
+   "hardness": "important"
+  },
+  {
+   "case": "ARC-13",
    "need": "a previously-neutral institution's inertia must be able to become contestable -- vulnerable to being won by an outside faction -- only once specific, hard-to-reach conditions among OTHER factions are simultaneously true",
    "hardness": "core"
   },
@@ -5018,6 +5038,11 @@
    "case": "ARC-14",
    "need": "a documented personal vulnerability of a specific figure receiving an offer must be able to change the numeric size of that offer's cost if a faction exploits it via a social action",
    "hardness": "flavour"
+  },
+  {
+   "case": "ARC-14",
+   "need": "an operative's caution trait must be able to automatically veto a planned action based on a condition created by an ENTIRELY SEPARATE, earlier arc's unresolved consequence",
+   "hardness": "important"
   },
   {
    "case": "ARC-14",
@@ -5216,6 +5241,11 @@
   },
   {
    "case": "ARC-21",
+   "need": "a target who repels the accusation must be able to leverage held evidence of a separate misconduct by the institution to open a counter-offensive",
+   "hardness": "important"
+  },
+  {
+   "case": "ARC-21",
    "need": "reversing a wrongly-decided formal judgment must require its own separate, high-cost formal procedure rather than a simple appeal",
    "hardness": "important"
   },
@@ -5275,6 +5305,11 @@
    "hardness": "core"
   },
   {
+   "case": "ARC-24",
+   "need": "a frozen-but-still-high background quantity must remain crossable by unrelated later events even though the institution that normally drives it is gone, via its own remnant apparatus",
+   "hardness": "important"
+  },
+  {
    "case": "ARC-25",
    "need": "a neutral third-party actor must independently evaluate several unrelated background quantities each period and select a strategic alignment based on that composite read, without a player directly setting the alignment",
    "hardness": "core"
@@ -5293,6 +5328,11 @@
    "case": "ARC-25",
    "need": "the third party's default disposition must remain profit-seeking/neutral even under alignment, able to pull back into self-interest rather than becoming a committed ally or true enemy",
    "hardness": "flavour"
+  },
+  {
+   "case": "ARC-26",
+   "need": "the failure branch must produce behavior that is objectively counter-productive to the character's own interests while looking, to him, like the correct reading of his experience -- and must remain actable-upon with his full institutional resources",
+   "hardness": "core"
   },
   {
    "case": "ARC-26",
@@ -5346,6 +5386,11 @@
   },
   {
    "case": "ARC-32",
+   "need": "an institutional surveillance track targeting a specific individual must accumulate independently from unrelated prior encounters and reach its own threshold in the same window as the leader's private track, without either track's owner aware of the other",
+   "hardness": "core"
+  },
+  {
+   "case": "ARC-32",
    "need": "a formal collective decision body must be able to intervene to defend or abandon an accused individual via a multi-round contest, with the losing side's consequence being a fully asymmetric tribunal with no defense procedure available",
    "hardness": "important"
   },
@@ -5378,6 +5423,11 @@
    "case": "ARC-37",
    "need": "a legitimate, ordinary supply chain must carry a good whose hazardous property is invisible to everyone below a specific rare perceptual threshold, such that its builders and vendors are neither lying nor negligent",
    "hardness": "core"
+  },
+  {
+   "case": "ARC-37",
+   "need": "a rare individual who crosses the perceptual threshold and encounters the hidden property incidentally, while doing an unrelated job, must have a personal behavioral reason to avoid reporting it, generating an accumulating cost to herself rather than resolving immediately",
+   "hardness": "important"
   },
   {
    "case": "ARC-38",
@@ -5431,6 +5481,11 @@
   },
   {
    "case": "ARC-42",
+   "need": "the debate's outcome, regardless of which side wins, must be able to trigger a small positive change in a separate, unrelated ambient world-health quantity, conditioned only on whether rare-sensitivity participants are present in the room",
+   "hardness": "core"
+  },
+  {
+   "case": "ARC-42",
    "need": "this debate must be unable to occur meaningfully until several other independent storylines have advanced to specific states, functioning as a convergence node rather than an independently-triggerable event",
    "hardness": "core"
   },
@@ -5438,6 +5493,16 @@
    "case": "ARC-43",
    "need": "any reality-altering ability used specifically within a large-scale, multi-unit engagement must have its underlying cost multiplied by a fixed large factor relative to the same ability used outside mass combat",
    "hardness": "core"
+  },
+  {
+   "case": "ARC-43",
+   "need": "a territory whose ambient world-health condition is already degraded must independently generate spontaneous hazardous manifestations at a fixed chance per period, without requiring any deliberate reality-altering action",
+   "hardness": "important"
+  },
+  {
+   "case": "ARC-43",
+   "need": "a remote group whose ongoing function is to actively counteract the ambient world-health quantity's decline must have their own operational capacity degrade as a direct consequence of this battle's outcome, even though absent and non-participating",
+   "hardness": "important"
   },
   {
    "case": "ARC-44",
@@ -5493,6 +5558,11 @@
    "case": "EMG-11",
    "need": "a finite, per-location capacity must be able to gate a character's rank advancement, such that reaching the qualifying rank with no capacity available produces a distinct, named provisional state rather than either blocking the advancement outright or granting it for free.",
    "hardness": "core"
+  },
+  {
+   "case": "EMG-11",
+   "need": "the game must be able to track a large but bounded set of named individual characters at different levels of tracked detail, and move a character between those levels automatically based on elapsed time, or manually on request.",
+   "hardness": "important"
   },
   {
    "case": "EMG-11",
@@ -5716,6 +5786,11 @@
   },
   {
    "case": "NPC-007",
+   "need": "A faction representative must be able to repeatedly grow one faction stat at the direct, automatic expense of a second faction stat every season, as her default behavior rather than a one-time choice offered to the player.",
+   "hardness": "core"
+  },
+  {
+   "case": "NPC-007",
    "need": "An economic actor's supply chain must be able to carry a hidden property that she has no way to detect given her own perceptual limits, such that she is materially responsible for a consequence she is structurally incapable of becoming aware of through her own effort.",
    "hardness": "core"
   },
@@ -5747,6 +5822,11 @@
   {
    "case": "NPC-034",
    "need": "A third party must be able to discover which of his two loyalties actually governed a specific past action of his, and that discovery must damage his standing in the institution he was seen to have subordinated, without necessarily being provable to the institution he was actually protecting.",
+   "hardness": "important"
+  },
+  {
+   "case": "NPC-020",
+   "need": "The leader must be able to formally and publicly recognize another person's deed in a way that changes what that person may subsequently do, and this recognition must be withholdable, not automatic.",
    "hardness": "important"
   },
   {
@@ -5853,6 +5933,11 @@
    "case": "NPC-032",
    "need": "An external, unpredictable event unrelated to this person's own choices must be able to instantly convert her from an influence-only actor into the sole holder of supreme authority, with every downstream political relationship reconfiguring around the change in the same event.",
    "hardness": "core"
+  },
+  {
+   "case": "NPC-032",
+   "need": "Ascending to supreme authority through this path must be able to instantly and permanently redefine what the ruling institution stands for, flipping an ambient, privately-held policy uncertainty into an explicit, declared doctrine, rather than merely changing which person occupies the seat.",
+   "hardness": "important"
   },
   {
    "case": "NPC-032",
@@ -6195,9 +6280,9 @@
   },
   {
    "kind": "FORBIDDEN",
-   "what": "an Event writing social row (Tenure, hold)",
-   "where": "Tenure.hold",
-   "needs": "an Act by a person",
+   "what": "an actorless row writing `until` on a tenure whose holder it did not kill",
+   "where": "Tenure.until",
+   "needs": "the same row must also have caused a (Person, exists) change on the holder \u2014 a plague that kills the praefect ends his tenure; a storm may not",
    "case": "PROBE-A12",
    "season": 0,
    "step": null

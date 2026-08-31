@@ -952,8 +952,8 @@
   [CENSUS]
 
 === CASE PROBE-A12 ===
-    W    Tenure.contain[almud] <- None  class=MATTER driver=Event
-    !!   FORBIDDEN: an Event writing social row (Tenure, hold) @Tenure.hold
+    W    Tenure.until[almud] <- 0  class=MATTER driver=Event
+    !!   FORBIDDEN: an actorless row writing `until` on a tenure whose holder it did not kill @Tenure.until
 
 === CASE PROBE-P18 ===
     !!   NO-PRODUCER: staged institutional judgement: a stage computed as a Query over current stances REVERTS the moment the stances do, so an army that has decided its king is unfit un-decides it after one good season. A ratchet needs state that survives its inputs, and Law 3 forbids exactly that state @P18 loyalty stages

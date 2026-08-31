@@ -279,9 +279,9 @@
   },
   {
    "kind": "FORBIDDEN",
-   "what": "an Event writing social row (Tenure, hold)",
-   "where": "Tenure.hold",
-   "needs": "an Act by a person",
+   "what": "an actorless row writing `until` on a tenure whose holder it did not kill",
+   "where": "Tenure.until",
+   "needs": "the same row must also have caused a (Person, exists) change on the holder \u2014 a plague that kills the praefect ends his tenure; a storm may not",
    "case": "PROBE-A12",
    "season": 0,
    "step": null

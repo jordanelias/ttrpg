@@ -9,7 +9,9 @@
 
 **SCOPE AS RUN: 50 arcs.** The 18 of the `gm_ref` current series, the root series' arcs 16–19 and
 20–45, and 2 cases from the emergent corpus. Together with a:NPC's 27 characters that is **78 cases
-and 527 `season_requires` rows** driven through 65 probes.
+and 527 `season_requires` rows** driven through 65 probes. **The corpus is committed at
+`cases/`** — it used to be read from a session scratchpad, which meant nothing here was
+reproducible by anyone but the session that ran it.
 
 ---
 
@@ -18,8 +20,8 @@ and 527 `season_requires` rows** driven through 65 probes.
 | | |
 |---|---|
 | cases | **50 arcs** |
-| verdict | **39 BLOCKED · 10 NOT-ASSESSED · 1 PLAYABLE** |
-| top core blockers | `A2` threshold-ending (10) · `A13` ambient social drift (8) · `P34` hidden self-accumulation (7) · `P4` conviction motion (7) · `P3` covert action (5) · `P26` accumulated harm (5) · `A5` unbounded spiral (4) · `A4` provenance (4) |
+| verdict | **38 BLOCKED · 11 NOT-ASSESSED · 1 PLAYABLE** |
+| top core blockers | `A2` threshold-ending (8) · `P34` hidden self-accumulation (7) · `P4` conviction motion (7) · `A5` unbounded spiral (5) · `P3` covert action (5) · `P26` accumulated harm (5) · `A4` provenance (4) · **`A13` ambient social drift (3)** |
 
 **One arc runs.** `ARC-06`, *The Debate That Won the Wrong Thing* — and it runs because its subject
 is the one thing the shape gets right for free (§4).
@@ -87,29 +89,40 @@ residue, and it is a fifth of what the small sample implied.
 
 Ranked by how many arcs stop on each, counting only needs the arc's own lane graded `core`.
 
-### 3.1 `A2` — the arc ends at a counter, with nobody deciding *(FORBIDDEN — 10 arcs)*
+### 3.1 `A2` — the arc ends at a counter, with nobody deciding *(FORBIDDEN — 8 arcs)*
 
 The largest single blocker in the corpus, and **it is the shape working exactly as designed.** An
 Event may not write a `social: true` row, so no counter can depose a governor, force a question, or
-close a crisis on its own. Ten arcs are built on a counter that does exactly that.
+close a crisis on its own.
 
-> **This confirms PR #350's own estimate and doubles it.** `06` §6.1 says that in its measured band
-> *"three end at a counter… and lose their ending"*. Measured across fifty arcs by execution, ten
-> `core` needs across the corpus die here. The refusal is real, it is deliberate, and **it is more
-> expensive than the suite priced it.**
+> ⚠ **This count was 10 and is 8, after the route was narrowed off the bare substring `counter`,
+> which was matching inside *"counter-productive"*.** The correction is worth more than the two rows
+> it removed: **8 is now exactly what the independent ending classification counted** — a pass that
+> saw only the lanes' `ends_when` strings and no probe at all. Two instruments looking at different
+> things and landing on the same number is the strongest evidence in this report, and it did not
+> exist until the loose regex was fixed. A self-test now fails if the two ever diverge.
 
-### 3.2 `A13` — an ambient social quantity cannot drift from nobody acting *(FORBIDDEN — 8 arcs)*
+### 3.2 `A13` — an ambient social quantity cannot drift from nobody acting *(FORBIDDEN — 3 arcs, was 8)*
 
-`ARC-01`'s entire engine is a cultural track drifting toward a pole **purely from the absence of any
-faction's action**, compounding two rulers' separate restraint into a shared crisis. Seven more arcs
-need the same motion.
+⚠ **THE MOST EXPENSIVE CORRECTION IN THIS REPORT. This blocker was reported as 8 arcs and it is 3.**
+The route keyed on the bare word `ambient`, which caught four rows about an *ambient world-health*
+or *ambient environmental* quantity — `ARC-27`, `ARC-41`, `ARC-42`, `ARC-43`. **Those are matter,
+they are lawful, and the shape already serves them** (`A3` passes: the substrate is a `Site` kind).
+**I sent Jordan a bill for eight arcs and the real number is three.** Found by a read-only audit
+that named `ARC-41` specifically.
+
+The three that genuinely need it: `ARC-01`'s cultural track, `ARC-44`'s per-location cultural
+allegiance, and `ARC-04`'s subordinate whose trust erodes from a patron's inaction alone.
+
+`ARC-01`'s engine is a cultural track drifting toward a pole **purely from the absence of any
+faction's action**, compounding two rulers' separate restraint into a shared crisis.
 
 The shape does exactly this for **matter**: `wear` writes `(Site, condition)`, which is
 `social: false`. It **cannot** do it for a population's disposition, because that is a stance and
 `(Person, stance)` is `social: true`. The probe executes both and the second raises.
 
 **So: the harbour silts on its own; the town's mood cannot.** That asymmetry is Law 4 working
-exactly as designed, and it costs eight arcs their mechanism.
+exactly as designed, and it costs **three** arcs their mechanism.
 
 ### 3.3 `P34` — a quantity accumulates in a person from their OWN acts, unreadable by them *(NO-PRODUCER — 7 arcs)*
 
@@ -190,12 +203,14 @@ act necessarily reveals its actor.** Attribution and occurrence are one thing wh
 
 ## §5 · LESSONS
 
-1. **The biggest refusal is mostly a misreading of what the corpus wants.** `A2` and `A13` are one
-   law seen twice — *a social quantity may not change without a decider* — and they are the top two
-   blockers. But the ending classification says only **8 of 50** arcs actually need a counter to
-   *act*, while **19** need a counter to *compel someone to act*. The shape forbids the first and
-   has no mechanism for the second, and building the second is the cheap fix that recovers most of
-   the loss. **A refusal is not a bill until you have checked what was actually being bought.**
+1. **The biggest refusal is mostly a misreading of what the corpus wants, and the bill was
+   overstated twice over.** `A2` and `A13` are one law seen twice — *a social quantity may not
+   change without a decider.* The ending classification says only **8 of 50** arcs need a counter to
+   *act*, while **19** need a counter to *compel someone to act*: the shape forbids the first and has
+   no mechanism for the second, and building the second is the cheap fix. Then the routes were
+   narrowed and the counts themselves fell — `A2` 10→8, `A13` 8→3. **A refusal is not a bill until
+   you have checked what was actually being bought, and then checked that your instrument was
+   pointing at it.**
 2. **The world may decay; society may not.** `wear` is the shape's best mechanism and it is
    available *only* to matter.
 3. **The arcs need a noun the shape almost has.** `Record` is the right object and is inert.
@@ -247,10 +262,9 @@ change.
 3. **Give abstention a producer.** An emitted abstention makes restraint witnessable, which
    simultaneously fixes `P19`, `A15` and the King's invisible doubt from a:NPC.
 4. **Separate the deed from the doer.** Attribution as a per-witness claim distinct from occurrence.
-5. **Decide the ambient-social question.** Either social quantities may drift without a decider —
-   a real amendment to Law 4 — or eight arcs lose their engine and the design says so out loud.
+5. **Decide the ambient-social question** — now worth **three** arcs, not eight.
 6. **Let a person cease to be an agent**, one way only.
 
 **Deliberately NOT recommended:** re-admitting thresholds that fire outcomes. `A2` is the shape
-working, and ten arcs pay for it — that is a price, not a defect. The right move is to make *what
+working, and eight arcs pay for it — that is a price, not a defect. The right move is to make *what
 people do about a crossing* cheap and legible, not to let the counter act.

@@ -1,0 +1,210 @@
+```yaml
+        versing the original world-health decline, whose successful use is the loop's
+        stated counter-mechanism.
+      why: >-
+        the group's own deliberate weaving/repair action, when it succeeds, reduces the
+        same quantity that opened its access — this is the loop's one deliberate
+        off-switch.
+      hardness: core
+    - need: >-
+        a separate automatic consequence of the same world-health decline (a stability
+        check tied to the low band) must be able to strip that group's ability to use its
+        own counter-action, at the specific moment the counter-action is most needed.
+      why: >-
+        this is the self-defeating property explicitly called out — the same root cause
+        must be able to both open the window and disable the only actor who can act
+        inside it, via two unrelated-seeming rules.
+      hardness: core
+  temporal:
+    span_seasons: "ongoing"
+    needs_memory_of: >-
+      the world-health quantity's value (to know if the access threshold is currently
+      crossed) and the specific group's own institutional-standing value (to know
+      whether its counter-action is currently blocked).
+    needs_deadline: "no fixed date, but functionally yes — the window is described as capable of closing on its own"
+  who_acts:
+    - "newly-capable individuals (choose whether to act now that access is open)"
+    - "the specific group's leadership (chooses whether to attempt the counter-action, when able)"
+    - "NOBODY decides that the access threshold opens, that visible use feeds the other clock, or that the group's standing check strips its own counter-capability — all three automatic"
+  knowledge:
+    - >-
+      not primarily epistemic; the one epistemic note is that visible new practitioners
+      must be perceivable by an opposing institution as a condition of the loop's second
+      stage.
+  ends_when: >-
+    the group successfully applies its counter-action before its own standing collapses,
+    reversing the decline and holding the window open, or its standing collapses first,
+    closing the window and leaving the underlying decline to continue via other loops.
+
+- id: EMG-10
+  name: "The Endgame Configuration (nine simultaneous conditions)"
+  one_line: >-
+    The campaign's ending state is defined not by a single victory condition but by how
+    many of nine independently-achieved conditions across different systems are true at
+    once, evaluated at an unspecified moment with no named mechanism for performing the
+    check.
+  scale: realm
+  season_requires:
+    - need: >-
+        nine named conditions, each belonging to a different subsystem (a person's
+        perceptual development, a public knowledge-state, a succession outcome, a
+        loyalty-track outcome, a world-health band, two separate clock thresholds, a
+        private counter's value, and a ritual's success grade), must each be
+        independently trackable as true or false at any given moment.
+      why: >-
+        the "endgame configuration" is explicitly a checklist across unrelated systems,
+        not a single meter — every one of the nine must be a real, queryable boolean
+        derived from that subsystem's own state.
+      hardness: core
+    - need: >-
+        the game must be able to evaluate "at least three of nine," "all nine," and
+        "none of nine" as distinct, meaningfully different outcomes, each with its own
+        described consequence.
+      why: >-
+        outcomes are graded by count-of-conditions-met, not by which specific three —
+        the counting itself must be a mechanism, and different counts must produce
+        different described endings.
+      hardness: core
+    - need: >-
+        at least one of the nine conditions (a private counter reaching a floor) must be
+        achievable only by never letting more than a small number of its underlying
+        triggers fire across the entire campaign, since that counter is stated elsewhere
+        in this corpus to never decrement.
+      why: >-
+        this makes that condition categorically different from the other eight — it
+        cannot be repaired late, only preserved from the start — and the system must be
+        able to represent a condition satisfiable only via full-campaign abstention
+        rather than a late corrective action.
+      hardness: core
+    - need: >-
+        a specific evaluation moment (a season, a triggering event, or a continuous
+        check) at which the nine conditions are read together must exist.
+      why: >-
+        UNCLEAR — the source says the campaign's central question "answers itself when...
+        true simultaneously" but never names when in the campaign this check occurs,
+        whether it is continuous, or what performs it.
+      hardness: important
+    - need: >-
+        the ritual-outcome condition must specify which of that ritual's several named
+        success grades counts as satisfying the endgame checklist, since the same ritual
+        is elsewhere given multiple distinct success grades with different effects.
+      why: >-
+        UNCLEAR — the endgame table only says the ritual must "succeed," without stating
+        whether a lesser, explicitly-named partial-success grade defined for the same
+        ritual elsewhere counts.
+      hardness: important
+  temporal:
+    span_seasons: "ongoing, evaluated at an unspecified endgame point"
+    needs_memory_of: >-
+      the current true/false state of all nine conditions, several of which require
+      memory of irreversible past events (the private counter, the loyalty track, the
+      world-health band), not just present values.
+    needs_deadline: "UNCLEAR — no season or date is named for when the configuration is checked"
+  who_acts:
+    - "a person's own passive/random development (condition 1)"
+    - "the accumulated effect of many prior arcs (condition 2)"
+    - "a faction's or player's deliberate action across one of several named paths (condition 3)"
+    - "a sustained multi-season Domain Action (condition 4)"
+    - "aggregate play across many systems (conditions 5-7)"
+    - "the avoidance of triggers by many different actors over the whole campaign (condition 8)"
+    - "a specific ritual attempt's roll (condition 9) — no single actor controls the checklist as a whole"
+  knowledge:
+    - >-
+      not primarily epistemic, though one of the nine conditions is itself a public
+      knowledge-state resolving — meaning at least one condition is gated on collective
+      public knowledge, not just private game-state.
+  ends_when: >-
+    UNCLEAR whether this case "ends" at all as a discrete event — the source frames it as
+    a standing description of what a satisfying ending looks like, not a triggered check;
+    absent a named evaluation moment, the most honest reading is that it never formally
+    concludes on its own within the mechanics as described.
+
+- id: EMG-11
+  name: "'Throughline resolution' — closing cross-system design-integration gaps"
+  one_line: >-
+    This document's "throughlines" are ten open integration questions between rules
+    systems, not story arcs, closed by a single canonical patch — a different, unrelated
+    use of the word "throughline" from the rest of this corpus, where it means how a
+    narrative arc concludes.
+  scale: realm
+  season_requires:
+    - need: >-
+        when multiple independent progress-clocks are scheduled to change state in the
+        same accounting step, a fixed, named order of resolution must be applied — one
+        category of event fully resolving before the next begins — rather than resolving
+        them simultaneously or in an undefined order.
+      why: >-
+        the source gives an explicit three-step sequence (succession, then a
+        coup-threshold check, then foreign-pressure effects) specifically because an
+        undefined order was identified as a live ambiguity across four converging
+        systems.
+      hardness: core
+    - need: >-
+        a finite, per-location capacity must be able to gate a character's rank
+        advancement, such that reaching the qualifying rank with no capacity available
+        produces a distinct, named provisional state rather than either blocking the
+        advancement outright or granting it for free.
+      why: >-
+        a rank-holder with no available capacity becomes a named provisional status
+        carrying reduced permanence, requiring a repeating check to maintain and
+        reverting on failure — a three-way branch (wait, pay to expand, or hold a fragile
+        placeholder) must all be representable.
+      hardness: core
+    - need: >-
+        the game must be able to track a large but bounded set of named individual
+        characters at different levels of tracked detail, and move a character between
+        those levels automatically based on elapsed time, or manually on request.
+      why: >-
+        a roster-capacity mechanism with tiers and automatic demotion after a set number
+        of seasons of no engagement is presented as a genuine constraint on how many
+        characters can be "live" at once, distinct from any in-fiction rule.
+      hardness: important
+    - need: >-
+        a sub-track's operating cost must be able to scale with a separate,
+        already-existing clock's value without requiring a brand-new clock to be
+        introduced for that sub-track specifically.
+      why: >-
+        the source explicitly designs one ladder's cost curve as "the mirror" of another
+        already-tracked clock, stating this is deliberate — to avoid adding a clock —
+        rather than incidental.
+      hardness: important
+    - need: >-
+        a rank ladder must be able to be deliberately left without ranks at its top end,
+        by design, for a thematic reason rather than an unfinished-spec reason, and the
+        game must represent "no rank exists here on purpose" distinctly from "not yet
+        specified."
+      why: >-
+        one faction's ladder explicitly terminates early with its top ranks stated as
+        omitted "by design" because the faction's premise rejects hierarchy — this must
+        not be indistinguishable from an ordinary content gap.
+      hardness: important
+    - need: >-
+        a unique identifier scheme for individually-resolved design/editorial items must
+        guarantee that two different resolved items never share the same identifier.
+      why: >-
+        UNCLEAR / DEFECT — this document itself reuses the identical identifier across at
+        least four distinct, differently-described resolutions in its own summary table
+        and its own "items raised" table; if not a typo, the scheme as demonstrated
+        cannot distinguish which of four resolutions a later citation refers to.
+      hardness: important
+  temporal:
+    span_seasons: "n/a — a rules-integration patch applied to the design corpus at a single moment, not an in-fiction case that plays out over campaign seasons"
+    needs_memory_of: >-
+      which of the ten integration questions have already been resolved and by which
+      patch, so a later session doesn't re-raise a closed question.
+    needs_deadline: "no in-fiction deadline; one future trigger is named for a different, unrelated future action (splitting a referenced document once it grows past a size threshold)"
+  who_acts:
+    - "the design/editorial process itself (identifies the ten integration questions via a post-commit audit)"
+    - "a named human authority (the document states its resolutions were approved by name)"
+  knowledge:
+    - >-
+      not an in-fiction epistemic case; the closest analogue is that the ten questions
+      were themselves invisible in one register until explicitly cross-posted to a
+      second, more commonly-read register for discoverability — the same design fact can
+      be recorded but effectively unknown to a reader who checks only one register.
+  ends_when: >-
+    each of the ten questions is marked resolved by this document, except one (a pending
+    mechanical spec for rank dismissal) and one (a cross-reference dependency on a
+    separate stress test) which are explicitly left open pending future work — so the
+    case as a whole does not fully end here.
+```

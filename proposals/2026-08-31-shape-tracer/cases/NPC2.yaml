@@ -1,0 +1,387 @@
+```yaml
+- id: NPC-004
+  name: Sæmund Haelgrund
+  one_line: A Church Field Inquisitor whose "investigative instinct" is actually unrecognized Thread perception, deployed against heresy under conditions that can produce confident false convictions.
+  scale: person
+  season_requires:
+    - need: "A completed investigation must be able to produce a plausible-but-wrong conclusion that its holder cannot distinguish from a correct one, and the holder must be able to act on it as true until later evidence or events contradict it."
+      why: "This is the whole Bellarmine/Savonarola premise -- without it Sæmund is just a competent detective, not a case study in confident, institutionally-blinkered error."
+      hardness: core
+    - need: "A person must be able to possess a perceptual capacity he does not know he has, whose outputs he misattributes to a mundane cause (professional instinct), such that his real competence has a hidden, unacknowledged source."
+      why: "Without this, TS 12 latency and the 'attributes hunches to experience' framing collapse -- he becomes an ordinary skilled investigator with no hidden self to discover."
+      hardness: core
+    - need: "A second person with the right capability must be able to run a targeted check ON Sæmund and learn something about him (his latent Thread Sensitivity) that he cannot detect in himself by any means available to him."
+      why: "This is the Diagnosis mechanic; without it no PC or rival can ever surface his TS and the entire defection/suppression arc branch is permanently inert."
+      hardness: core
+    - need: "An institution must be able to make one of its investigators' authority to act vary by whose territory he is standing in -- full authority in home ground, conditional on another office-holder's formal request elsewhere, actively blocked in a third jurisdiction, and merely covert in unclaimed ground."
+      why: "Without jurisdictional variance, 'Field Inquisitor' has no edges, and the peninsula's cross-faction political texture around heresy enforcement disappears."
+      hardness: important
+    - need: "A third party must be able to spend a resource to plant false evidence into an investigation already in progress, degrading a conclusion that would otherwise have resolved correctly."
+      why: "Without this counter-play, investigations are unopposed puzzles rather than contested space that a faction under suspicion can actively defend."
+      hardness: important
+    - need: "A party trying to stay hidden from an investigation must be able to spend ongoing effort, scene by scene, to raise the investigator's difficulty, with that difficulty lapsing the moment they are not present to maintain it."
+      why: "Without an active, lapsing concealment cost, hiding is either free forever or permanent regardless of effort, losing the tension of a hunted party managing exposure in real time."
+      hardness: important
+    - need: "Revealing this investigator's hidden nature must be able to remove him from his institution's service in a way that measurably degrades that institution's future capability in the same domain, not merely embarrass him personally."
+      why: "Without an institutional cost, discovering Sæmund's TS is a private secret with no stakes for the Church's Inquisition apparatus as a whole."
+      hardness: important
+    - need: "A subordinate investigator's authority to pursue a sufficiently important target must be gated on a named superior's authorization, distinct from the subordinate's own competence or rank."
+      why: "Sæmund answers to Cardinal Justice Olafsson; without an authorization gate above a severity threshold, 'reports to the Cardinal' is unenforced texture."
+      hardness: important
+    - need: "UNCLEAR: the sources give Sæmund the title 'Field Inquisitor' but never map it onto the Church's own formal Inquisitor rank ladder (Scribe / Junior / Inquisitor / Senior / Inquisitor-General), so what he is and is not personally authorized to do by rank -- versus by informal reputation as 'the Church's best investigator' -- is unspecified."
+      why: "Without resolving this, it's unclear whether his authority is a fixed rank-gated remit or an ad hoc exception granted by reputation, which changes what removing or overruling him would require."
+      hardness: important
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: "the Evidence Track value for each open investigation (persists across seasons and territories); whether any PC has successfully Diagnosed his TS; any counter-evidence planted against him; each investigation's Desperate Trail state"
+    needs_deadline: "no fixed date, but 3 consecutive failed actions on the same investigation trigger Desperate Trail (harsher terms) until a breakthrough or a season change clears it"
+  who_acts:
+    - Sæmund Haelgrund
+    - the PC or NPC attempting to Diagnose his Thread Sensitivity
+    - Cardinal Arnlod Olafsson (authorizes / receives reports)
+    - the concealing party under investigation
+    - a rival faction agent planting counter-evidence
+    - the Church faction AI (the AP >= 3 deployment trigger)
+  knowledge:
+    - "Sæmund does not know he is Thread Sensitive; the engine must prevent him from learning this except via another qualified person's successful, targeted Diagnosis check."
+    - "Whoever receives a Failed Reconstruct must not be told the conclusion is wrong; they must be able to act on it as though it were true."
+    - "Neither the investigator nor an outside observer should be able to tell, from outside the mechanic, whether a concealing target is currently succeeding or failing at concealment."
+  ends_when: "never fully -- a single investigation ends when Reconstructed (successfully or not), but Sæmund's personal arc (undiscovered / defected / suppressed-and-degrading) persists indefinitely until the TS-revelation branch fires"
+
+- id: NPC-033
+  name: Kolbrun Thale
+  one_line: Crown's Spymaster and sole formal channel to the peninsula's informal intelligence-broker networks, operating on the edge of institutional propriety with a possibly-relevant hidden heritage.
+  scale: faction
+  season_requires:
+    - need: "An office must be able to be the sole official channel between an institution and an entire class of informal, deniable actors, such that removing that one office-holder severs the institution's access rather than merely weakening it."
+      why: "Without exclusivity, 'sole inner-circle contact to settlement-layer intelligence brokers' is decorative rather than the structural chokehold the source states it is."
+      hardness: core
+    - need: "A spymaster must be able to surface a hidden actor operating in a territory through sustained investigative effort against active concealment, at a cost that scales with how hard the concealed party is working to stay hidden."
+      why: "This is the basic verb of the office; without it 'Spymaster' has no action to perform."
+      hardness: core
+    - need: "On surfacing a hidden actor, the office-holder must be able to choose among structurally different dispositions of the discovery -- expose it, remove it, absorb it into her own network, or shelter it -- each carrying a distinct downstream consequence, rather than one universal 'resolve' outcome."
+      why: "This is what makes intelligence work a genuine branching decision rather than a pass/fail spot check, and is the actual content of the office's power."
+      hardness: important
+    - need: "A formal advisor holding a position of institutional trust must be bound to secrecy about what her principal reveals to her in that capacity, as an obligation distinct from ordinary Disposition-gated information sharing."
+      why: "Without a distinct confidentiality obligation, 'Spymaster' and 'any high-Disposition confidant' are mechanically identical, erasing the specific weight of her betraying that trust."
+      hardness: important
+    - need: "A person's private, undisclosed heritage or sympathy must be able to bias which of her discoveries she reports faithfully and which she quietly softens or withholds, without the player or her principal being able to verify, in any single instance, which she did."
+      why: "Without an unverifiable private bias, her rumored Southern Einhir heritage and caste-sympathy are inert flavour rather than something that can secretly steer state action."
+      hardness: important
+    - need: "Two office-holders within the same institution whose remits abut (covert reach vs. doctrinal suspicion) must be able to carry a standing mutual wariness seeded by a specific past friction, coloring their dealings without either being able to simply overrule the other."
+      why: "This is what 'Disposition toward Haelgrund starts at -1' needs to mean mechanically -- a cross-office rivalry with no adjudicating superior in the loop."
+      hardness: flavour
+    - need: "The office must be able to continue functioning (brokered deals still resolving, information still flowing) across a season in which the player takes no action involving her at all."
+      why: "She is Tier-3 background infrastructure most seasons; without passive persistence, the inner-circle roster would require weekly authored content none of it has."
+      hardness: flavour
+    - need: "UNCLEAR: no formal ladder of subordinate field agents that Kolbrun personally commands is specified -- her only named organizational link is an informal, deniable relationship with a different faction's covert ladder (Löwenritter's Riskbreakers) -- so what happens when she needs to order rather than merely liaise is unstated."
+      why: "Without this, it's unclear whether she can compel a subordinate at all, or only negotiate with independent actors as equals."
+      hardness: important
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: "which covert actors she has surfaced and how she disposed of each (exposed/expelled/co-opted/sheltered, each creating an ongoing obligation or enemy); her standing rivalry-disposition with Sæmund Haelgrund; whether her Southern Einhir ancestry rumor has ever been confirmed"
+    needs_deadline: "no"
+  who_acts:
+    - Kolbrun Thale
+    - Almud Almqvist (her principal)
+    - the concealed actor she investigates
+    - Sæmund Haelgrund (cross-office friction)
+    - the settlement-layer intelligence broker she contacts
+  knowledge:
+    - "Kolbrun's Southern Einhir ancestry is stated as rumored and unconfirmed; the engine must be able to leave this permanently ambiguous unless a specific investigation targets her directly."
+    - "What Kolbrun reports to Almud about a given brokered deal may not be the complete truth, and neither the player nor other NPCs have a way to check this except by independently investigating the same lead."
+    - "The actor she investigates does not know, going in, whether she will expose, expel, co-opt, or shelter them once found."
+  ends_when: "never specified -- she is a persistent office with no authored personal arc or end condition in the sources"
+
+- id: NPC-083
+  name: Hedda Kronvald
+  one_line: Governor of Ehrenfeld, a five-adjacency geographic chokepoint, whose season is a closed loop of a mandatory faction Directive above her and independent settlement demands below her, both of which she cannot fully satisfy.
+  scale: settlement
+  season_requires:
+    - need: "A governor must be able to spend a limited, renewing per-season budget across a menu of distinct administrative actions such that doing everything the settlement needs in one season is structurally impossible."
+      why: "Without a hard budget constraint, governing collapses to 'do everything,' and Hedda's chokepoint position -- competing demands from every side -- has no teeth."
+      hardness: core
+    - need: "Each administrative action must be resolvable by more than one method, where the choice of method hands durable influence over the settlement to a different internal faction, rather than the raw magnitude of the action being the only thing that changes."
+      why: "Without method-choice, governing a contested chokepoint reduces to stat-pumping; the positional pressure of five adjacencies has nowhere to bite."
+      hardness: core
+    - need: "The governor's controlling authority must be able to issue a mandatory seasonal order she can comply with, negotiate down, or defy -- each option costing something different to the authority above versus the populace below -- with repeated defiance accumulating toward a threshold that eventually forces a reckoning."
+      why: "This dual-authority squeeze is what makes a chokepoint governorship politically alive rather than administratively static."
+      hardness: core
+    - need: "The settlement itself must be able to generate demands (a dispute, a shortfall, an ambition) independent of and often in direct conflict with what the controlling authority ordered, such that the governor cannot satisfy both with the resources she has."
+      why: "This is the second jaw of the vise; without an independent local demand-stream she answers only to her faction, and the whole 'governing between two powers' framing collapses."
+      hardness: core
+    - need: "A governor's past rulings must be able to persist as durable marks on the settlement (a standing precedent, a grudge, an owed favor, a reputation) that bias future events, and a successor must inherit these rather than starting clean."
+      why: "Without persistence across a change of office-holder, an accumulated political entanglement resets to nothing whenever the governor changes, breaking the chokepoint's weight across a multi-season campaign."
+      hardness: important
+    - need: "Named local actors under a governor's authority must be able to want incompatible things from EACH OTHER (not just from her), so that resolving one actor's grievance necessarily worsens another's, independent of any single choice she makes."
+      why: "Without actor-vs-actor conflict, every scene reduces to governor-vs-single-petitioner, losing the multi-actor pressure a five-adjacency chokepoint should generate."
+      hardness: important
+    - need: "The settlement's overall pressure must rise on its own when demands go unmet and fall when the governor resolves them, so that an ignored settlement escalates and a well-managed one still keeps generating events rather than going permanently quiet."
+      why: "Without self-adjusting pressure, the settlement either flatlines or spirals unsurvivably -- either breaks a multi-season governorship."
+      hardness: important
+    - need: "UNCLEAR / structural: the mechanics this case depends on are themselves an unratified proposal explicitly gated on a settlement registry that does not yet exist in the engine, so it is unresolved whether any of the above is currently buildable as specified rather than only intended."
+      why: "If the prerequisite registry is absent, none of Hedda's season can execute as designed regardless of how well-specified the individual verbs are."
+      hardness: core
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: "the settlement's Ledger tags (Precedent/Grudge/Debt/Reputation) accrued under her tenure; each subnational NPC's ambition progress and Disposition toward her; the Provincial Authority's suspicion track from past Defy/Divert choices; any locked Assessment/Compact extraction figures"
+    needs_deadline: "yes, intermittently -- a Directive response is owed every season, and a negotiated Compact runs a fixed 4-6 season term that must be renewed or lapses"
+  who_acts:
+    - Hedda Kronvald
+    - the Provincial/Crown authority issuing the Directive
+    - the settlement's Local Actors
+    - rival subnational factions maneuvering at the chokepoint
+    - a retained clerk/deputy she may delegate to
+  knowledge:
+    - "The governor does not automatically know a delegated clerk's corruption is accruing -- it is discoverable only through an active Investigate action, never surfaced up front."
+    - "A Local Actor's true grievance versus their stated petition may differ, and a Read-style action is needed to distinguish them."
+    - "The Provincial Authority does not see the settlement's internal Need-state directly -- only her pattern of compliance or defiance, which is what actually feeds its suspicion track."
+  ends_when: "not specified to conclude on its own -- the governorship ends only on removal, death, or promotion; the churn is designed to continue indefinitely otherwise"
+
+- id: NPC-008
+  name: Peder Almstedt
+  one_line: The Ministry's Chief Parliamentary Clerk, whose custody of the sole surviving record of the founding settlement's terms lets him passively obstruct any reform that would alter it.
+  scale: faction
+  season_requires:
+    - need: "A bureaucratic office-holder must be able to make any action that changes how the governing body itself functions strictly harder to accomplish, purely by holding the office, without an explicit hostile action or spent resource each time."
+      why: "This passive, standing tax on reform is Almstedt's entire mechanical existence; without it he is an NPC with an opinion, not a systemic obstacle."
+      hardness: core
+    - need: "The same office-holder must simultaneously make one specific class of routine, stabilizing action easier or faster to accomplish, as the compensating flip side of the reform tax."
+      why: "Without a genuine benefit, he becomes a pure roadblock rather than the ambiguous 'the system's immune response, and the system is not always good' the source insists on."
+      hardness: important
+    - need: "A person seeking institutional change must be able to overcome this obstruction only through one of a small, named set of costly alternatives -- winning him over directly, or removing him from office entirely -- with no free third route around it."
+      why: "An unenumerated set of workarounds makes the obstruction either unbeatable or pointless; the closed set is what preserves the real cost of change."
+      hardness: core
+    - need: "An office-holder must be able to hold institutional memory -- exact knowledge of an original founding agreement's terms -- that no other living actor holds, such that a proposal to alter those terms can be checked only against a standard nobody else can independently verify."
+      why: "Sole custody of the standard is what turns his role into actual power rather than paperwork -- he alone gets to say what counts as violating the founding deal."
+      hardness: core
+    - need: "That sole-custody knowledge must be reusable to block multiple different actors' otherwise-unrelated reform proposals for the same underlying reason (each alters the terms he alone remembers), rather than needing a bespoke justification authored per proposer."
+      why: "Without a reusable single justification, his blocking Lenneth's, Baralta's, and Vaynard's very different reforms isn't actually the same mechanism operating each time."
+      hardness: important
+    - need: "Removing the office-holder must erase the passive stabilizing benefit for a bounded period afterward, rather than the benefit persisting unaffected or the obstruction vanishing the instant it's needed."
+      why: "Without a lingering post-removal gap, removal becomes a strictly free, dominant solution, collapsing the tradeoff the source specifies as a genuine cost."
+      hardness: important
+    - need: "The office, not the individual, must be the thing that actually persists -- Almstedt's specific removal should interrupt but not permanently end the obstruction/benefit mechanic, since the Ministry as an institution continues and can eventually refill the role."
+      why: "Without institution-level persistence, destroying the person and destroying the office become the same event, collapsing a distinction the source explicitly draws."
+      hardness: flavour
+    - need: "UNCLEAR: one source places Almstedt as Hafenmark Parliament's own Standing-6 Senior Parliamentary Chair (mentoring Hafenmark's rank ladder), while the character registry files him under Crown (Ministry) faction -- whether he is a Crown-Ministry officer who happens to chair Hafenmark's Parliament, a cross-faction Ministry figure misfiled in one document, or something else is unresolved."
+      why: "This determines which faction's Directive/Standing systems, if either, actually govern him, and whether his obstruction applies to Crown reforms, Hafenmark reforms, or both."
+      hardness: important
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: "the exact founding-settlement terms only he remembers; whether he has been co-opted (Influence vs Ob 3) or removed by scandal, and how many seasons remain on any post-removal stabilization gap"
+    needs_deadline: "no -- he functions as a standing background modifier rather than a clocked event"
+  who_acts:
+    - Peder Almstedt
+    - any leader or PC proposing a Parliamentary-structure-changing action (e.g. Lenneth, Baralta, Vaynard)
+    - the Ministry as an institution (in his absence)
+  knowledge:
+    - "No one but Almstedt currently knows the founding settlement's exact original terms; checking a reform proposal against those terms must route through him or accept a gap in verification."
+    - "The player does not automatically know whether a given proposal 'counts' as altering the founding terms until his obstruction actually fires or is bypassed."
+  ends_when: "never on its own -- the mechanism persists at the institutional level past his personal removal; only the Ministry's own dissolution would end it"
+
+- id: NPC-038
+  name: Arnlod Olafsson
+  one_line: Cardinal Justice, the Church's institutional head of the Inquisition, whose own hidden compromising connection is a standing liability to the entire apparatus he authorizes.
+  scale: faction
+  season_requires:
+    - need: "An institution's investigative-and-punitive branch must have a single named superior whose sponsorship, approval, or authorization is a formal precondition for that branch's members to act above a defined severity or target-importance threshold."
+      why: "Without a gating superior, 'oversees the Inquisition' has no mechanical content and his authority over every Field Inquisitor becomes purely narrative."
+      hardness: core
+    - need: "That superior must be able to act against his own nominal superior's explicit instruction, at a real risk of outright failure (worse than compliance) and a cost attached even to success."
+      why: "Without genuine failure risk and a cost on success, Cardinal Independence is a rubber stamp rather than real institutional-layer friction."
+      hardness: important
+    - need: "The superior's own hidden compromising connection must be discoverable by an external party through sustained, high-quality effort, and that discovery must remove him from office AND specifically degrade every subordinate operation under his branch for a bounded period -- not just embarrass him personally."
+      why: "This is what makes him load-bearing rather than decorative: his personal exposure has to ripple down to every Field Inquisitor's difficulty and to the apparatus's temporary paralysis."
+      hardness: core
+    - need: "The institution must be able to choose, in advance of exposure, to sacrifice this office-holder pre-emptively at a smaller but permanent cost, giving it a genuine bet to make under uncertainty about whether exposure is coming."
+      why: "Without a pre-emptive option, the institution can only wait to be exposed, removing an entire axis of strategic play at the faction layer."
+      hardness: important
+    - need: "The office's pattern of dispatching investigators must be able to fall unevenly on one population group even though the stated justification for each individual dispatch is doctrinal rather than ethnic, without the system anywhere forcing that disparity to be named or corrected."
+      why: "The 'enforcement pattern is ethnic even if the doctrine is theological' claim is only real if ordinary rule application actually produces that skew, rather than the game asserting it as prose."
+      hardness: important
+    - need: "This office-holder must be able to remain a purely institutional, non-directly-playable modifier under ordinary conditions, and only become a personally-acting, decision-making NPC once the institution falls below a stability threshold."
+      why: "Without state-gated activation, he is either always an expensive full character or never one, losing the schism-behavior payoff entirely."
+      hardness: important
+    - need: "Once activated by institutional crisis, this office-holder must be able to direct his branch's investigative machinery inward, at a peer who nominally holds equivalent rank, not only outward at external heretics."
+      why: "Without turning the Inquisition on the Church's own leadership, 'may target other Cardinals' under schism has nothing to point at."
+      hardness: flavour
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: "whether his broker connection has been discovered or pre-emptively self-removed; the Church's current Stability value (gates his activation as an independent actor); the running count and targets of Heresy Investigations his branch has opened"
+    needs_deadline: "no fixed date, but exposure/removal effects (2-season operation suspension, until-replacement Ob penalty) run on a fixed duration once triggered"
+  who_acts:
+    - Arnlod Olafsson
+    - Confessor Arne Himlensendt (nominal superior)
+    - Sæmund Haelgrund and the rest of the Inquisitor ladder (subordinates)
+    - a rival faction's agent pursuing exposure of his broker connection
+    - the Church as an institution deciding whether to pre-emptively remove him
+  knowledge:
+    - "No faction knows Olafsson's broker connection exists until a specific high-quality intelligence action against the Church succeeds in a settlement with broker presence."
+    - "It is unspecified whether the Church's own leadership can know about the connection before the wider public does, though the pre-emptive-removal option implies someone inside could act on it first."
+  ends_when: "his tenure ends on exposure-removal, pre-emptive removal, or a Grand Inquisitor succession event; otherwise never"
+
+- id: NPC-013
+  name: Aldric Tormann
+  one_line: The Fourth Cardinal (Prudence), whose aggressive tithe policy enriches the Church every season while quietly radicalizing the parishes it squeezes.
+  scale: faction
+  season_requires:
+    - need: "An office-holder must be able to take a repeatable seasonal action that reliably improves one faction-wide resource, with the improvement scaling by how many subordinate territories the office applies it to."
+      why: "Without a repeatable, scaling lever, aggressive tithe collection has no season-to-season mechanical shape -- it is just a personality trait."
+      hardness: core
+    - need: "That same action must automatically and simultaneously degrade a slower-moving political resource in each affected territory, tracked separately per territory, with the accumulated damage converting to its faction-wide effect only at a periodic accounting point rather than immediately."
+      why: "Without a delayed, per-territory-tracked cost, the tithe-vs-mandate tradeoff washes out instantly, losing the 'flush with resources but losing popular support' texture that only shows up over time."
+      hardness: core
+    - need: "The political erosion this office-holder causes in a territory must be able to make that territory's population measurably more receptive to a rival, unaligned political movement, as an emergent side effect rather than a targeted action of his own."
+      why: "The irony is load-bearing only if a loyal officer's diligence hands recruits to the Restoration Movement as a byproduct, not a scripted betrayal."
+      hardness: important
+    - need: "The resource this office-holder generates must be spendable, elsewhere in the same institution, in a way that is thematically opposed to the harm his generation of it causes, without the system suppressing or resolving that standing contradiction."
+      why: "The 'inadvertently funds charity while undermining the authority charity exists to secure' irony has to fall out of two independently correct subsystems interacting, not be authored as a one-off aside."
+      hardness: flavour
+    - need: "Sustained harm from this office-holder's pattern in a given locality must be able to accumulate toward a distinct, nameable crisis event, rather than simply continuing to degrade a number indefinitely."
+      why: "Without a threshold, the named 'Parish Revolt arc' has nothing to trigger it, and his excesses can never come to a head."
+      hardness: important
+    - need: "A player character must be able to intervene directly in this office-holder's tithe-collection pattern in one specific territory, altering the outcome there without requiring institutional authority over the Cardinal himself."
+      why: "The source names a 'PC intervention path' as an explicit alternative to the Parish Revolt arc, so a personal-scale lever must exist independent of Church rank."
+      hardness: important
+    - need: "UNCLEAR: the registry's stated convictions (Order/Liberty) do not match the behavioral description of him as an OPTIMISER defined by aggressive wealth extraction, which reads closer to Order/Utility or Authority/Utility -- which pairing actually drives his Conviction-gated mechanics is unresolved."
+      why: "This affects how any social-contest or Response-Matrix interaction with him would actually resolve, since those systems key directly off named convictions."
+      hardness: important
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: "which 2-3 territories were over-tithed this season (fractional Mandate damage accrues per-territory, converted to an integer effect only at Year-End); cumulative cultural-erosion in those territories; whether a Parish Revolt has already fired in any of them"
+    needs_deadline: "yes, in one sense -- the fractional per-territory damage only resolves into its faction-wide effect at a fixed Year-End accounting point"
+  who_acts:
+    - Aldric Tormann
+    - the parish leaders and populace in over-tithed territories
+    - the Restoration Movement (recruiting the discontented)
+    - a PC choosing to intervene
+    - Confessor Himlensendt (nominal superior, if Tormann is ever ordered to stop)
+  knowledge:
+    - "The engine must track, per territory, whether it has been squeezed this season -- a state the Church's own leadership may not act on even though it exists."
+    - "UNCLEAR: no mechanism is specified for how a PC discovers WHICH territories are currently over-tithed before choosing to intervene."
+  ends_when: "never automatically -- only a fired Parish Revolt or a PC-driven resolution closes a given territory's version of the problem; his own tenure has no end condition tied to this behavior"
+
+- id: NPC-007
+  name: Annika Feldhaus
+  one_line: The Guilds' economic representative, whose profit-maximizing stewardship has made the Guilds wealthy and politically irrelevant, and whose supply chain is unknowingly Thread-tainted.
+  scale: faction
+  season_requires:
+    - need: "A faction representative must be able to repeatedly grow one faction stat at the direct, automatic expense of a second faction stat every season, as her default behavior rather than a one-time choice offered to the player."
+      why: "Profit-maximizing is only real if the wealth-for-influence trade is the baked-in outcome of her simply doing her job each season, not a decision point she is asked to make."
+      hardness: core
+    - need: "An economic actor's supply chain must be able to carry a hidden property that she has no way to detect given her own perceptual limits, such that she is materially responsible for a consequence she is structurally incapable of becoming aware of through her own effort."
+      why: "Without an undetectable-by-her taint, a clever player could simply have her investigate and learn the truth, collapsing the entire 'no framework for it' premise."
+      hardness: core
+    - need: "Two separate economic actors who each independently built one half of the same tainted supply chain must have their exposure risks linked, such that revealing the taint through EITHER one damages BOTH, even though neither caused nor fully understands the connection."
+      why: "Without linkage, exposing her and exposing Virke are two unrelated events, losing what the source calls the roster's most mechanically consequential NPC relationship."
+      hardness: core
+    - need: "A person must be able to hold two distinct organizational offices at once -- a cross-faction liaison seat and a rank within her home institution's own ladder -- each with its own advancement conditions, usable somewhat independently."
+      why: "Without genuinely separable dual offices, 'holds dual rank' is one title with two names, and her standing in one office cannot rise or fall independent of the other."
+      hardness: important
+    - need: "An internal rival within the same faction must be able to campaign, on an ongoing basis, for the opposite priority (collective standing over raw wealth) that this office-holder pursues, generating a live internal fork a player can take a side in."
+      why: "Without an active in-faction counter-figure, her wealth-maximizing drift has no internal pressure and no scene where a player pushes back on it from within the Guilds."
+      hardness: important
+    - need: "A formal institutional gate she benefits from (an examination or credentialing process) must be able to carry a procedural, plausibly-deniable bias against a specific population, so that individual gatekeepers can point to 'the rules' rather than to her personal order, while she still benefits from the aggregate effect."
+      why: "The source describes this as historical and structural, not as her issuing explicit instructions -- deniability has to be built into the mechanism itself."
+      hardness: flavour
+    - need: "UNCLEAR: no threshold or trigger is specified for Feldhaus's own half of the supply chain becoming personally discoverable by investigation, unlike Virke's side which has an explicit cascading Domain Echo -- whether a player can target Feldhaus's half directly, or must always approach through Virke first, is unstated."
+      why: "This determines whether the exposure chain has two independent entry points or effectively one, which changes how a player would actually go about surfacing it."
+      hardness: important
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: "Guilds Wealth versus Mandate trend over time; whether the Thread-touched supply chain has been exposed from either her side or Virke's; the standing progress of the internal rival's opposing ambition"
+    needs_deadline: "no"
+  who_acts:
+    - Annika Feldhaus
+    - Dalla Virke (linked exposure chain)
+    - the internal Guild rival opposing her wealth focus
+    - a PC investigator pursuing the Thread-touched goods lead
+    - the Free-Masters examination committee she structurally benefits from
+  knowledge:
+    - "Feldhaus does not and structurally cannot know her goods are Thread-touched (no Thread Sensitivity, no conceptual framework) -- this must remain true even under her own good-faith investigation."
+    - "Revealing the taint via Virke must be able to implicate Feldhaus even if the player never investigated Feldhaus's side directly, and vice versa."
+  ends_when: "not specified to conclude -- resolves only through the (also open-ended) supply-chain revelation or recall arcs tied to Virke, or a direct exposure of Feldhaus's own half"
+
+- id: NPC-071
+  name: Torvi Heljason
+  one_line: Baralta's Legal Advisor in Hafenmark's Inner Council, specified almost entirely by a single extreme Precedent conviction with no authored goal, arc, or mechanical remit.
+  scale: person
+  season_requires:
+    - need: "A ruler's formal legal advisor must be able to give her frank counsel without that act of advising itself exposing her to personal consequence -- advising truthfully must be a protected kind of exchange, distinct from ordinary conversation."
+      why: "Without a protected-frankness channel, her Precedent-based counsel collapses into ordinary Disposition-gated speech, losing the institutionally-obligatory-counsel function the source names for this class of advisor."
+      hardness: core
+    - need: "An advisor whose sole articulated commitment is precedent and consistency must have every persuasive approach toward her scored differently depending on whether it appeals to established rule or to ad hoc circumstance, with the ad hoc approach yielding systematically less even when otherwise persuasive."
+      why: "This is the one concrete mechanical lever the source actually gives her (Hafenmark's Categorical-Imperative filter); without it her single extreme conviction weight has no way to bite on play."
+      hardness: core
+    - need: "This advisor must be able to appear in a scripted relationship-rupture beat even though she has no authored personal arc, goal, or belief beyond her single conviction tag, and the scene must still be coherent."
+      why: "The source itself flags this exact gap -- a cut-scene firing on her with 'only one anchored dimension to draw from' -- so the season must survive that thinness rather than silently assuming content that doesn't exist."
+      hardness: important
+    - need: "UNCLEAR: the source never specifies what her office of Legal Advisor actually lets her DO mechanically -- block an illegitimate action, certify a treaty, merely offer non-binding opinion -- unlike Almstedt's explicit procedural-obstruction remit, hers is asserted by title alone."
+      why: "Without this, it's undetermined whether she has any power a player could contest, negotiate with, or route around at all."
+      hardness: core
+    - need: "UNCLEAR: no goal, ambition, leverage (wants/fears/secret), or relationship is specified for her anywhere in the corpus, despite the governance and relational frameworks elsewhere requiring exactly these fields to make an NPC scene-capable."
+      why: "Without at least one of these, it is unresolved whether she is meant to generate or receive conflict this season at all, or exists purely as a background stat other systems reference."
+      hardness: core
+    - need: "UNCLEAR: her single-conviction weight (0.70) is far higher than the roughly 0.5/0.2-0.3 split typical of other named NPCs, and it is not stated whether this reflects deliberate monomaniacal design or an unfilled second slot."
+      why: "This affects whether her behavior should read as intentionally singular or as an artifact of incomplete authoring."
+      hardness: flavour
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: "UNCLEAR -- no state, ambition, or relationship field is specified for her to persist across seasons"
+    needs_deadline: "no"
+  who_acts:
+    - Torvi Heljason
+    - Baralta (her principal)
+    - "UNCLEAR -- no named counterpart is specified for the 'Knot rupture trigger' scene that references her"
+  knowledge:
+    - "UNCLEAR: no epistemic state beyond her Truth rating is specified for her -- what she knows, suspects, or conceals is not authored anywhere in the corpus."
+  ends_when: "UNCLEAR -- no arc, trajectory, or end condition is specified anywhere in the source; she is explicitly below the corpus's own stated minimum for individual arc tracking"
+
+- id: NPC-034
+  name: Gustav Linder
+  one_line: The Archbishop's Representative seated in the Crown's Inner Circle, whose formal permission is the sole legal conduit for Church heresy jurisdiction on Crown soil while his true loyalty answers to the Confessor.
+  scale: faction
+  season_requires:
+    - need: "A person embedded in one institution's inner circle must be able to be the single necessary formal conduit through which a SECOND institution's authority -- to which he actually answers -- can legally act inside the first institution's territory; without him, that authority does not exist there procedurally."
+      why: "This is Linder's entire mechanical function (Church heresy jurisdiction on Crown soil routes through him specifically); without a sole-conduit requirement, 'Archbishop's Representative' is a courtesy title with no gatekeeping content."
+      hardness: core
+    - need: "The institution he is embedded in must be able to refuse the request he is required to make on his true institution's behalf, under a specific named condition, so that his advocacy can fail even when he performs his function correctly."
+      why: "Without a real chance of refusal, the conduit role always succeeds as a formality, and there is no tension in his being the bottleneck."
+      hardness: important
+    - need: "A person must be able to sit in formal council for one institution while his substantive loyalty and reporting duty run to a different institution's leadership, such that the two institutions could in principle issue him contradictory instructions in the same season."
+      why: "Without the structural possibility of contradiction, dual loyalty is a backstory note rather than a mechanical conflict the season can actually generate."
+      hardness: core
+    - need: "This person's confidentiality obligation to the council he sits on must be able to come into direct tension with his reporting obligation to his true master, such that honoring one at some point requires violating the other, with a real consequence attached to the choice."
+      why: "Without a forced choice between the two loyalties, the word 'dual' is never tested -- he simply serves one interest twice under two names."
+      hardness: core
+    - need: "A third party must be able to discover which of his two loyalties actually governed a specific past action of his, and that discovery must damage his standing in the institution he was seen to have subordinated, without necessarily being provable to the institution he was actually protecting."
+      why: "Without asymmetric discovery, dual loyalty carries no risk -- he could favor either side freely with no chance of being caught."
+      hardness: important
+    - need: "This office-holder must be able to hold an automatic, standing hostile bias toward one category of person (Thread practitioners) that does not itself depend on which of his two loyalties is currently active, distinguishing 'things he does because he is a Church man' from 'things he does because he is favoring one master.'"
+      why: "Without a loyalty-independent baseline, every one of his actions becomes ambiguous evidence for the loyalty-detection mechanic above, making it impossible to ever cleanly attribute a choice to either side."
+      hardness: flavour
+    - need: "UNCLEAR: no goal, ambition, or arc trajectory is authored for Gustav Linder anywhere in the corpus -- what his dual loyalty is FOR (surveillance of Crown policy? softening Crown actions toward the Church? preparing for a specific eventuality?) is unstated, so the tension his office permits has no content to resolve toward."
+      why: "Without this, the season can represent that the conflict is structurally possible but has nothing specific driving it toward any particular outcome."
+      hardness: core
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: "whether Almud is currently in his Reformer arc (gates whether Linder's Crown permission-requests succeed automatically or require a contested check); any past instance where a third party attempted to determine which master a specific action of his served"
+    needs_deadline: "situational -- each time the Church needs to act in Crown territory, his request is a per-instance gate, not a standing one"
+  who_acts:
+    - Gustav Linder
+    - Confessor Himlensendt (true superior)
+    - Almud Almqvist (nominal council principal and the gate-check target)
+    - Crown Inner Circle peers who might notice divided loyalty
+    - the Church's Inquisitor apparatus he is enabling access for
+  knowledge:
+    - "The Crown Inner Circle, as his formal colleagues, do not know the specifics of what he reports to Himlensendt -- the engine must be able to keep this concealed from them by default under the standing advisor-confidentiality convention."
+    - "Whether a given permission-request or piece of advice from Linder was motivated by Church interest or Crown interest must remain ambiguous to observers even after the fact, unless a specific investigation targets him directly."
+  ends_when: "UNCLEAR -- no removal, exposure, or resolution condition is specified for the dual-loyalty tension itself; only the territorial-jurisdiction sub-mechanic (his permission request) resolves per-instance, each season it is invoked"
+```
+
+Source file: `/tmp/claude-0/-home-user-ttrpg/78360267-ece4-57b1-8568-be13abd76bad/scratchpad/lane2_output.yaml` (validated as parseable YAML, 9 entries).
+
+Key sources consulted: `/home/user/ttrpg/references/npc_registry.yaml`; `/home/user/ttrpg/systems/npcs/npc_roster_v30.md`, `npc_behavior_v30.md`, `npc_character_analyses_v30_infill.md`, `character_canon_v30.md`; `/home/user/ttrpg/systems/factions/faction_politics_v30.md`, `faction_canon_v30.md`; `/home/user/ttrpg/systems/fieldwork/investigation_systems_v30.md`, `fieldwork_v30.md`; `/home/user/ttrpg/systems/settlements/governance_play_redesign_v1.md`; `/home/user/ttrpg/systems/_architecture/player_agency_v30.md`; `/home/user/ttrpg/systems/world/worldbuilding_v30.md`.
+
+Notable gaps surfaced during extraction (flagged inline as UNCLEAR in the YAML): Torvi Heljason (NPC-071) is specified far below the corpus's own stated minimum for named NPCs — no goal, arc, remit, or relationships exist for her anywhere; Peder Almstedt's faction affiliation conflicts between the character registry (Crown/Ministry) and the faction-politics ladder (Hafenmark Senior Parliamentary Chair); Kolbrun Thale has no specified command chain over any subordinate; Gustav Linder's dual loyalty has a working jurisdictional gate mechanic but no authored purpose (goals: null) driving what the tension is actually for; and Hedda Kronvald's entire governance case rests on an explicitly unratified proposal gated on an engine registry that doesn't yet exist.

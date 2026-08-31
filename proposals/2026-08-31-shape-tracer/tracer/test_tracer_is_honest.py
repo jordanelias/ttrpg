@@ -243,3 +243,94 @@ def test_choose_returns_exactly_one_act_which_is_the_finding_p36_reports():
     SeasonLoop(w).run({"k": once})
     assert len(calls) == 1, ("the shape calls choose once per person per season; if this ever "
                              "returns >1 the action-budget finding is obsolete and P36 must go")
+
+
+# --- the OTHER direction. Four defects flattered the shape; the fifth damned it. ------------
+
+RULED_ROWS = {
+    # (record-kind, field): (social, the ruling that fixes it)
+    ("Tenure", "until"): (False, "`02` §5.1: 'RULED: (Tenure, until) is social: false. Otherwise "
+                                 "death cannot end a tenure and the entire succession mechanism "
+                                 "has no producer.' Called the Partition's ONE DECLARED SEAM."),
+    ("Site", "condition"): (False, "`04` §4 matrix: MATTER writes it via `wear`."),
+    ("Person", "stance"): (True, "`04` §4 matrix: RESOLVE only, act-driven."),
+    ("Office", "post"): (True, "`04` §4 matrix: conferral/revocation are acts."),
+}
+
+
+@pytest.mark.parametrize("key,expected", [(k, v) for k, v in RULED_ROWS.items()])
+def test_rows_the_suite_HAS_RULED_are_present_and_correct(key, expected):
+    """Instrument defect five, and the first to point the DAMNING way.
+
+    `test_rows_the_suite_lacks_stay_absent` guards against INVENTING a row — the flattering
+    direction, which is the one four earlier defects took. Nothing guarded against OMITTING a
+    row the suite has explicitly ruled, and that omission is worse: it makes a closed seam look
+    open. `A12` reported for hours that a dead king still holds the crown, because this table
+    lacked `(Tenure, until)` and the probe wrote `(Tenure, hold)` instead. That is a defect in
+    the tracer reported as a defect in the shape, and it was found by an audit, not by me.
+    """
+    social, ruling = expected
+    assert key in SOCIAL, f"{key} is RULED and MISSING from the tracer's Partition table. {ruling}"
+    assert SOCIAL[key] is social, f"{key} is ruled social={social}. {ruling}"
+
+
+def test_the_declared_seam_is_bounded_by_causation_not_by_the_column():
+    """`02` §5.1: what stops a storm vacating a praefecture is NOT the column — it is the rule
+    that an actorless row may write `until` only on a (Person, exists) change the same row
+    caused. If the column alone gated it, social:false would let any Event end any tenure."""
+    w = _w()
+    w.persons["p"] = Person(id="p")
+    w._step = Step.MATTER
+    w._died_this_row = {"p"}
+    assert w.write("Tenure", "until", "p", 1, WriteClass.MATTER, driver="Event")
+    w._died_this_row = set()
+    with pytest.raises(Forbidden):
+        w.write("Tenure", "until", "p", 1, WriteClass.MATTER, driver="Event")
+
+
+def test_the_two_most_expensive_routes_are_not_substring_matches():
+    """`A2` prices Law 1's central refusal and `A13` prices the question that goes to Jordan, so
+    a loose regex on either is the most expensive mistake in the router. Bare `counter` matched
+    inside "counter-productive"; bare `ambient` matched "ambient environmental quality", which
+    is MATTER and already served."""
+    from run_cases import route
+    assert route("behaviour objectively counter-productive to his own interests") != "A2"
+    assert route("an unrelated, ambient environmental quality degrades") != "A13"
+    assert route("the ambient world-health quantity's pre-existing band") != "A13"
+    # and the genuine cases must survive the narrowing
+    assert route("a private, monotonically-increasing counter reaching its ceiling") == "A2"
+    assert route("a background quantity tied to a population's cultural situation must drift "
+                 "toward a pole purely from the absence of any faction acting") == "A13"
+
+
+def test_the_endings_classification_is_committed_parseable_and_agrees_with_execution():
+    """§3.3's 19-of-50 carries the whole "the corpus wants a summons, not a firing counter"
+    argument, and it is an AGENT CLASSIFICATION OF PROSE — the weakest evidence in the suite.
+    Two things make it usable, and this test pins both.
+
+    1. It is reproducible: the rows are committed with their deciding phrases, so any call can
+       be checked by hand. It used to live only in a session transcript.
+    2. It INDEPENDENTLY REPRODUCES the executed number. The classifier counted 8 arcs closing at
+       a threshold with nobody deciding, having seen only `ends_when` strings. The runner counts
+       8 arc `core` needs blocked by A2, having seen only probes. Two instruments looking at
+       different things and landing on 8 is worth more than either alone — and it only became
+       true after the A2 route was narrowed off the bare substring `counter`.
+    """
+    import yaml, json, collections, os
+    here = os.path.dirname(os.path.abspath(__file__))
+    rows = yaml.safe_load(open(os.path.join(here, "..", "cases", "ENDINGS_CLASSIFIED.yaml")))
+    assert len(rows) == 50
+    labels = collections.Counter(r["label"] for r in rows)
+    assert labels["THRESHOLD"] == 8
+    assert sum(1 for r in rows if r["forced_by_threshold"] is True) == 19
+    assert all(r.get("phrase") for r in rows), "every call must carry its deciding phrase"
+
+    res = json.load(open(os.path.join(here, "..", "results.json")))
+    a2 = sum(1 for cid, c in res["cases"].items()
+             if c["lane"].startswith("ARC") and cid != "ARC-META-COLLISION"
+             for r in c["rows"] if r["probe"] == "A2" and r["hardness"] == "core"
+             and r["verdict"] not in ("PASS", "PARTIAL", "UNMAPPED"))
+    assert a2 == labels["THRESHOLD"], (
+        f"the two instruments have diverged: classifier says {labels['THRESHOLD']} arcs close at "
+        f"a threshold, runner says A2 blocks {a2}. One of them has drifted and the convergence "
+        "that licenses citing the classification is gone.")

@@ -681,27 +681,50 @@ def a11(w=None):
             "except by re-reading the log")
 
 
-@probe("A12", "a person is killed, and their tenures end")
+@probe("A12", "a person is killed, and their tenures end — and a storm may NOT do the same")
 def a12(w=None):
+    """⚠ THIS PROBE PREVIOUSLY REPORTED A DEFECT IN THE SHAPE THAT WAS A DEFECT IN THIS TRACER.
+
+    It wrote `("Tenure","hold")` at MATTER, got FORBIDDEN, and reported that a dead king still
+    holds the crown. But `02` §5.1 RULES the seam closed: death writes **`until`**, not `hold`,
+    and `(Tenure, until)` is `social: false` — "the Partition's ONE DECLARED SEAM", bounded by a
+    causation rule. The tracer's Partition table simply omitted the ruled row, so the probe was
+    measuring an omission of mine. Found by a read-only audit; instrument defect five, and the
+    first that pointed the DAMNING way rather than the flattering one.
+
+    What the probe tests now is the thing actually worth testing: the seam is bounded.
+    """
     w = w or _world()
     w.persons["almud"] = Person(id="almud")
     w.offices["crown"] = Office(id="crown", post="King", rung="realm")
     w.tenures["h"] = Tenure(id="h", subject="almud", object="crown", kind="hold", since=0)
-    w.tenures["c"] = Tenure(id="c", subject="almud", object="settl", kind="contain", since=0)
     w._step = Step.MATTER
-    # ageing/illness/death is churn row 3, an Event at MATTER.
-    w.write("Tenure", "contain", "almud", None, WriteClass.MATTER, driver="Event")
     try:
-        # the `hold` on the office is a SOCIAL row -- an Event may not write it.
-        # This is the seam `05` §7 DECLARES and does not close: "a death DOES end a tenure, and
-        # the column alone does not explain why a storm may not". The tracer reaches it by
-        # execution, and shows what it costs: churn row 3's N-line is "succession never fires;
-        # every office is held forever", so the Partition as keyed BLOCKS the very mechanism
-        # row 3 exists to provide.
-        w.write("Tenure", "hold", "almud", None, WriteClass.MATTER, driver="Event")
+        # 1. a plague that kills him ends his tenure: the same row caused (Person, exists).
+        w._died_this_row = {"almud"}
+        w.write("Tenure", "until", "almud", w.tick, WriteClass.MATTER, driver="Event")
+        succession_fires = True
+
+        # 2. a storm, which killed nobody, must NOT be able to vacate the praefecture.
+        w._died_this_row = set()
+        storm_blocked = False
+        try:
+            w.write("Tenure", "until", "almud", w.tick, WriteClass.MATTER, driver="Event")
+        except Forbidden:
+            storm_blocked = True
     finally:
         w._step = None
-    return "unreachable"
+        w._died_this_row = set()
+
+    if not (succession_fires and storm_blocked):
+        raise Collision(
+            "the declared seam is not bounded: death and storm are not distinguished",
+            "A12 seam",
+            needs="`02` §5.1's causation rule — an actorless row may write `until` only on a "
+                  "(Person, exists) change the SAME row caused",
+        )
+    return ("OK — death ends the tenure and a storm cannot. The seam `05` §7 leaves open is "
+            "CLOSED by `02` §5.1, and it is closed by a causation rule rather than by the column")
 
 
 # ===========================================================================

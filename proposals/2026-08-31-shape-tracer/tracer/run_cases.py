@@ -25,8 +25,11 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from probes import PROBES, PROBE_DOC, run_all           # noqa: E402
 from trace_log import TRACE                              # noqa: E402
 
-CASE_DIR = ("/tmp/claude-0/-home-user-ttrpg/"
-            "78360267-ece4-57b1-8568-be13abd76bad/scratchpad/cases")
+# The corpus is COMMITTED next to the runner. It used to be read from a session scratchpad,
+# which meant the run was not reproducible by anyone but the session that made it — a read-only
+# audit caught that `04_UNIFIED_SHAPE.md`'s own falsifier ("re-run the classification") was not
+# executable from what was committed. An unreproducible measurement is a reading.
+CASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "cases")
 
 # need-text -> probe. Ordered; first match wins. Keys are regexes over the lowercased need.
 ROUTES: list[tuple[str, str]] = [
@@ -55,7 +58,13 @@ ROUTES: list[tuple[str, str]] = [
      r"|on (crossing|reaching) (a |its |the )?threshold|threshold[- ]triggered"
      r"|trigger\w* (an?|the) .* on (crossing|reaching)|use-threshold", "P26"),
     # -- ARC-driven routes, added after the arc lanes reported (sixth wave)
-    (r"ambient|drift toward|background (quantity|track|cultural)|absence of any faction|passive drift", "A13"),
+    # A13 is ambient SOCIAL drift. Keying it on the bare word "ambient" caught four rows about
+    # an ambient WORLD-HEALTH or ENVIRONMENTAL quantity — which is matter, already lawful, and
+    # already served (A3 passes: the substrate is a Site kind). Those four were inflating the
+    # bill this test sends to Jordan. Key on the SUBJECT being social.
+    (r"(ambient|background|drift\w*|erod\w+|passive)\b[^.]{0,80}(cultural|allegiance|loyalty|mood|opinion|sentiment|disposition|population|popular|social)"
+     r"|(cultural|allegiance|loyalty|mood|sentiment|disposition)[^.]{0,60}(drift|erod|decay|sour|decline)"
+     r"|absence of any faction|purely from the absence|from the absence of any", "A13"),
     (r"invisible to himself|nobody .* deciding|no actor triggers|spontaneous(ly)? .* (check|change)"
      r"|without any actor", "A14"),
     (r"held in reserve|once per arc|usable once|reserved resource|optimal .* window", "A15"),
@@ -124,7 +133,14 @@ ROUTES: list[tuple[str, str]] = [
     (r"nobody chose|no actor|world .* itself|weather|harvest|season(al)? change", "W3"),
     (r"off-?board|foreign power|altonia|empire|outside the peninsula|invasion", "W4"),
     (r"ends at a (sitting|meeting)|resolved at a|comes to a head at", "A1"),
-    (r"counter|clock reach|threshold fires|automatic(ally)?|when .* reaches", "A2"),
+    # A2 is a threshold FIRING AN OUTCOME with nobody deciding. Bare `counter` matched inside
+    # "counter-productive"; bare `automatic` matched "not automatically a safe action". Both
+    # inflate the corpus's single largest blocker, which is the number that prices Law 1's
+    # refusal — so a loose regex here is the most expensive one in the file.
+    (r"\bcounters?\b(?![-\w])|clock reach|threshold fires|when .{0,40} reaches"
+     r"|(trigger|fire)\w* an? (automatic|unavoidable|immediate)"
+     r"|automatic(ally)?,? (and )?(simultaneous|unavoidab|self-sustain|at the (direct|expense))"
+     r"|must automatically", "A2"),
     (r"substrate|thread|seam|metaphysic|forgetting|calamity", "A3"),
     (r"caus(e|al)|provenance|trace back|why it happened|chain of", "A4"),
     (r"spiral|escalat|feedback|runaway|compound|vicious", "A5"),

@@ -101,6 +101,13 @@ SOCIAL: dict[tuple[str, str], bool] = {
     ("Office", "post"): True,
     ("Office", "establishment"): True,
     ("Tenure", "hold"): True,
+    # ⚠ ADDED 2026-08-31 after a read-only audit found it MISSING, which is instrument defect
+    # five and the first to point the DAMNING way — an omitted ruled row makes the shape look
+    # WORSE than it is, and the guard at test_tracer_is_honest.py only covered invented rows.
+    # `02` §5.1 RULES this outright: "(Tenure, until) is social: false. Otherwise death cannot
+    # end a tenure and the entire succession mechanism has no producer." It is called "the
+    # Partition's one declared seam" and it is bounded by a causation rule, enforced below.
+    ("Tenure", "until"): False,
     ("Tenure", "contain"): False,     # a body may be moved by a landslide
     ("Tenure", "commit"): True,
     ("Tenure", "oblige"): True,
@@ -136,6 +143,9 @@ class World:
         self.log: list["Event"] = []
         self.records: dict[str, "Record"] = {}
         self._step: Optional[Step] = None
+        # the set of persons whose (Person, exists) the CURRENT actorless row changed.
+        # `02` §5.1's causation rule reads this and nothing else.
+        self._died_this_row: set[str] = set()
 
     # -- the write gate -----------------------------------------------------
     def write(self, record_kind: str, field_name: str, subject: str,
@@ -165,6 +175,18 @@ class World:
                 f"an Event writing social row ({record_kind}, {field_name})",
                 f"{record_kind}.{field_name}",
                 needs="an Act by a person",
+            )
+
+        # `02` §5.1's causation rule, which is what actually stops a storm vacating a
+        # praefecture — NOT the column. "An actorless row's effects may write `until` ONLY on a
+        # (Person, exists) change the same row also caused." Without this the seam is a hole:
+        # social:false would let any Event end any tenure.
+        if key == ("Tenure", "until") and driver == "Event" and subject not in self._died_this_row:
+            raise Forbidden(
+                "an actorless row writing `until` on a tenure whose holder it did not kill",
+                "Tenure.until",
+                needs="the same row must also have caused a (Person, exists) change on the "
+                      "holder — a plague that kills the praefect ends his tenure; a storm may not",
             )
 
         TRACE.write(self._step, wclass, record_kind, field_name, subject, driver, value)

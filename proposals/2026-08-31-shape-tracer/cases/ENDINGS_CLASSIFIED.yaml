@@ -1,0 +1,224 @@
+# How each arc CLOSES — classified from the lanes' own `ends_when` strings by a pass that saw
+# NOTHING ELSE: no shape document, no probe, no report. Committed because
+# `04_UNIFIED_SHAPE.md` §3.3's 19/50 is load-bearing on the whole proposal, and an
+# unreproducible number is a reading rather than a measurement (CLAUDE.md §0.1 point 4).
+#
+# THIS IS AN AGENT CLASSIFICATION OF PROSE, NOT AN EXECUTION. It is the weakest evidence in the
+# suite and is labelled as such wherever it is cited. What makes it worth keeping: it was made
+# blind, it quotes its deciding phrase per row so every call is checkable by hand, and its
+# headline (8 THRESHOLD of 50) INDEPENDENTLY REPRODUCES the executed A2 core-blocker count of 8
+# after the router was corrected. Two instruments that saw different things agreeing on 8 is
+# worth more than either alone.
+#
+# labels:
+#   DECIDER   a person, body, tribunal, vote or the players chooses, and that choice ends it
+#   ROLL      a check resolves it; the person acted but the roll's result closes it
+#   THRESHOLD a counter/clock/tracked resource/scheduled review fires, NOBODY named as choosing
+#   NEVER     the record says it does not end, or has no closing condition by design
+#   UNCLEAR   the record itself says UNCLEAR, or names no condition
+#
+# forced_by_threshold: a crossing FORCES the moment even where a person makes the final call.
+#   This is the load-bearing column. 19 of 50.
+#
+# COUNTS: DECIDER=20 ROLL=9 THRESHOLD=8 NEVER=10 UNCLEAR=3   FORCED=19
+
+- id: ARC-01
+  label: THRESHOLD
+  forced_by_threshold: yes
+  phrase: "background cultural track bottoms out ... forcing an Emergence crisis"
+- id: ARC-02
+  label: UNCLEAR
+  forced_by_threshold: no
+  phrase: "nobody in-world is named as deciding Klapp's trajectory if players do not tell him"
+- id: ARC-03
+  label: DECIDER
+  forced_by_threshold: yes
+  phrase: "the reserved resource is finally used"
+- id: ARC-04
+  label: DECIDER
+  forced_by_threshold: yes
+  phrase: "the patron is forced to choose publicly among defend/abandon/extract"
+- id: ARC-05
+  label: NEVER
+  forced_by_threshold: no
+  phrase: "never, absent player action -- the arc is explicitly an open spiral"
+- id: ARC-06
+  label: ROLL
+  forced_by_threshold: no
+  phrase: "the enforcement roll (dice-resolved, not scheduled) is what actually decides"
+- id: ARC-07
+  label: ROLL
+  forced_by_threshold: no
+  phrase: "a successful restoration action (once the condition is discovered and someone attempts it)"
+- id: ARC-08
+  label: DECIDER
+  forced_by_threshold: no
+  phrase: "chooses how to dispose of its accumulated intelligence"
+- id: ARC-09
+  label: THRESHOLD
+  forced_by_threshold: yes
+  phrase: "reaches its irreversible zero-point -- an automatic, unrecoverable transition that nobody decides"
+- id: ARC-10
+  label: ROLL
+  forced_by_threshold: yes
+  phrase: "the reversal's dice outcome determines whether the punishment is fully reversed"
+- id: ARC-11
+  label: UNCLEAR
+  forced_by_threshold: no
+  phrase: "UNCLEAR -- the source names no closing condition"
+- id: ARC-12
+  label: THRESHOLD
+  forced_by_threshold: yes
+  phrase: "by default once enough seasons have passed and the effects simply become visible"
+- id: ARC-13
+  label: ROLL
+  forced_by_threshold: yes
+  phrase: "it is that roll's outcome, not a scheduled date, that resolves the arc"
+- id: ARC-14
+  label: DECIDER
+  forced_by_threshold: no
+  phrase: "the ruler (or the Crown player) -- accepts/rejects the crisis-ending offer"
+- id: ARC-15
+  label: DECIDER
+  forced_by_threshold: no
+  phrase: "the arc's end is that holder's deliberate choice of timing and disclosure mode"
+- id: ARC-16
+  label: NEVER
+  forced_by_threshold: no
+  phrase: "never, by design -- explicitly a persistent background arc"
+- id: ARC-17
+  label: THRESHOLD
+  forced_by_threshold: yes
+  phrase: "determined by a threshold lookup on his own internal state, not a deliberation"
+- id: ARC-18
+  label: DECIDER
+  forced_by_threshold: yes
+  phrase: "he chooses among three named dispositions for the administrator"
+- id: ARC-20
+  label: THRESHOLD
+  forced_by_threshold: no
+  phrase: "the sent heir's status locks in (recovered, extracted, or lost)"
+- id: ARC-21
+  label: ROLL
+  forced_by_threshold: no
+  phrase: "the immediate consequence cascade from the single roll stabilizes"
+- id: ARC-22
+  label: ROLL
+  forced_by_threshold: no
+  phrase: "an Overwhelming result triggers an endgame-level structural change"
+- id: ARC-23
+  label: ROLL
+  forced_by_threshold: no
+  phrase: "the battle resolves and its immediate command-state consequence is set"
+- id: ARC-24
+  label: NEVER
+  forced_by_threshold: no
+  phrase: "never universally -- no single terminal condition covers all branches"
+- id: ARC-25
+  label: NEVER
+  forced_by_threshold: no
+  phrase: "never fully -- an ongoing background disposition that can flip again"
+- id: ARC-26
+  label: NEVER
+  forced_by_threshold: no
+  phrase: "never absolutely -- success opens into an ongoing high-level political integration arc"
+- id: ARC-27
+  label: ROLL
+  forced_by_threshold: no
+  phrase: "the operation resolves in one roll -- a single-scene event"
+- id: ARC-28
+  label: NEVER
+  forced_by_threshold: no
+  phrase: "never -- this is a durable state that persists for the remainder of the campaign"
+- id: ARC-29
+  label: DECIDER
+  forced_by_threshold: no
+  phrase: "ends the moment he formally vacates the throne"
+- id: ARC-30
+  label: DECIDER
+  forced_by_threshold: no
+  phrase: "a further political-action sub-arc ends when the act she was building toward is finally taken"
+- id: ARC-31
+  label: DECIDER
+  forced_by_threshold: no
+  phrase: "the tribunal resolves and its immediate consequence fires"
+- id: ARC-32
+  label: DECIDER
+  forced_by_threshold: no
+  phrase: "the tribunal/vote resolves and the accused's fate is set"
+- id: ARC-33
+  label: ROLL
+  forced_by_threshold: no
+  phrase: "the battle resolves and a long-term substrate-management cycle begins or fails to begin"
+- id: ARC-34
+  label: DECIDER
+  forced_by_threshold: yes
+  phrase: "whose ceiling issues a formal ultimatum resolved through the ordinary civic debate mechanism"
+- id: ARC-35
+  label: DECIDER
+  forced_by_threshold: yes
+  phrase: "the internal tribunal resolves (conviction or retention) -- a definite conclusion"
+- id: ARC-36
+  label: NEVER
+  forced_by_threshold: no
+  phrase: "never cleanly -- both are structural end-conditions, not calendar dates"
+- id: ARC-37
+  label: THRESHOLD
+  forced_by_threshold: yes
+  phrase: "the exposure event fires (or is suppressed) -- a definite conclusion"
+- id: ARC-38
+  label: NEVER
+  forced_by_threshold: no
+  phrase: "never cleanly -- it resolves into full external pressure returning"
+- id: ARC-39
+  label: NEVER
+  forced_by_threshold: yes
+  phrase: "resolves into either reaching a trained specialist or burning out (a degraded steady state)"
+- id: ARC-40
+  label: DECIDER
+  forced_by_threshold: no
+  phrase: "the head of state's forced choice is made (act, abdicate, or be replaced)"
+- id: ARC-41
+  label: DECIDER
+  forced_by_threshold: yes
+  phrase: "the crisis resolves into defection, suppression, or institutional destruction"
+- id: ARC-42
+  label: DECIDER
+  forced_by_threshold: no
+  phrase: "the debate resolves (decisive win for either side, or inconclusive)"
+- id: ARC-43
+  label: THRESHOLD
+  forced_by_threshold: yes
+  phrase: "its ambient-quantity consequence locks in at the next accounting"
+- id: ARC-44
+  label: THRESHOLD
+  forced_by_threshold: yes
+  phrase: "never, until the aggregate threshold is crossed (a discrete count-of-locations condition)"
+- id: ARC-45
+  label: DECIDER
+  forced_by_threshold: yes
+  phrase: "the head of state's chosen response is enacted and its immediate consequence locks in"
+- id: ARC-R16
+  label: DECIDER
+  forced_by_threshold: yes
+  phrase: "players complete a triage response addressing (or accepting) the accumulated consequences"
+- id: ARC-R17
+  label: DECIDER
+  forced_by_threshold: no
+  phrase: "the leverage action is executed (successfully or not) against the chosen target"
+- id: ARC-R18
+  label: DECIDER
+  forced_by_threshold: no
+  phrase: "the vote resolves (clean win, clean loss, or tie)"
+- id: ARC-R19
+  label: DECIDER
+  forced_by_threshold: yes
+  phrase: "the triage choice takes effect"
+- id: EMG-10
+  label: UNCLEAR
+  forced_by_threshold: no
+  phrase: 'UNCLEAR whether this case "ends" at all as a discrete event'
+- id: EMG-11
+  label: NEVER
+  forced_by_threshold: no
+  phrase: "the case as a whole does not fully end here"
