@@ -379,3 +379,117 @@ The three enlargements stand. The watch, the petition→date retyping and the op
 unchanged in kind; §5's compounding chain is unaffected; and the low end is still right. **The
 corrections are one arithmetic restatement that strengthens the case, one reclassification that
 strengthens it further, and three engineering requirements on the third enlargement.**
+
+---
+
+## 7. WHAT THE BODY-(a) REVIEW DOES TO THE SHAPE (`02_review_a_findings.md`)
+
+Three consequences. **One resolves a dependency the relay declared blocked, one supplies a fourth
+instance of the watch pattern, and one adds a fourth enlargement I did not have.**
+
+### 7.1 ⚠ THE WATCH DISSOLVES S19 — and S19 was blocking the petition retyping
+
+The review found a dependency chain no stage had stated:
+
+> **D-7 (office clusters unpetitionable) is blocked on S19 (a containerless cluster vacancy has no
+> clock and no convener).** The repair queues at the vacancy date when an office is vacant — *except a
+> cluster office's vacancy has no date.*
+
+**Why S19 exists:** a conferral standing date opens *"at the horizon **the container** carries"*
+(`14:195`), and a cluster root has no container. So the date has nowhere to come from.
+
+**The watch supplies exactly what is missing.** A watch does not need a container to carry a horizon —
+**it needs a condition.** *"The seat is vacant"* is a condition. So the vacancy schedules its own
+conferral date, and the deadlock — three-of-four conclave, two seats already vacant, a Confessorate
+vacancy unfillable — **is not a soft-lock and never was; it was a missing clock.**
+
+**This requires one refinement to §3.2, and I am making it explicitly rather than letting it pass:**
+
+> **A watch belongs to whatever holds standing dates — and an OFFICE holds its own conferral date.**
+> Not only containers. The ownership rule becomes *"a thing that holds dates may hold watches on
+> them"*, which is not a new kind of state: it is the same field on the same object, reachable from
+> both of the two things in this design that hold dates.
+
+**And now the two enlargements compose into one repair of D-7:** the watch supplies the vacancy's
+clock; the retyped petition addresses the date the watch scheduled. **Neither alone fixes it. Together
+they do, using no object either one did not already need.**
+
+**Falsifier, and it is the thing to attack:** *if an office cannot be shown to hold a standing date in
+its own right — if dates are container-owned by necessity rather than by convention — then the watch
+has nowhere to live for a cluster office, S19 stands, and D-7 remains blocked.* That is one read of
+`14` §5 and `05` §3.1 and it has not been done.
+
+### 7.2 D-9's repair IS a watch — the fourth instance
+
+The review filed a repair direction nobody had: **presence is already a substrate roll-up**, so an
+absence predicate can be written over *presence at the container across the seat's existing horizon
+table* — **no `exercise`, no new standing dates.**
+
+**That is a watch, exactly.** A predicate over state the container can already read, which when true
+**schedules a vacancy date.** And it is the direct answer to the defect that killed the previous
+attempt: `exercise` is identically zero at a hearth because a hearth has no remit; **presence is
+defined at every rung, because every rung has bodies in it.**
+
+So the watch now has **four** instances rather than three — banked claims, the vacancy a death emits,
+dormant rows re-arming, and absence-vacancy. **§6.2's claim that the watch names a shipped pattern
+rather than adding a class gets stronger with each one**, and this fourth arrived from the other body
+entirely.
+
+**What it buys in play:** *"make him absent instead of killing him"* — the setting's entire hostage
+politics — currently has **no mechanical consequence at the hearth rung**, because a living absent
+holder freezes a seat indefinitely. With the watch, absence costs a seat. **And the repricing fires on
+the King's household first**, which is the correct place for it to bite.
+
+### 7.3 A FOURTH ENLARGEMENT I did not have: the transfer act
+
+`13` **refuses a currency** — *"What dies: the flavour of coin"* — while `12` **spends coin as live
+mechanism throughout**: retinues costing *"coin per season, at a standing date"*; *"a standing date
+each season at which coin is due"*; *"his needs are computed from a larder that the coin was filling"*;
+*"Paying outsiders requires coin."* And `12`'s own levy-versus-hire check **passes only because the
+hire arm exists.**
+
+> **The coercion document's central fork rests on an object the material document refuses to model.**
+> No producer, no transfer act, no unit. `12` asserts wage-fed hearths; `13`'s `draw(h)` has no term
+> for them.
+
+**This is not the filing-artifact class.** It is a hole in the ideal: **there is no act by which one
+person gives another person anything.** What it forecloses is large — the wage-labourer, the bribe,
+the purchase, the mercenary, the corrupt official; the holdingless have **no material verb at all**.
+
+**The shape it must take, given what killed the last attempt:** a **new, clean act** — not a
+precondition dropped from `settle_in_full`, whose *defining property* is that the judging set never
+fires on it, and which the previous attempt broke by turning it into a deposit-carrying act. **A
+transfer is witnessed; a settlement is not.** They are different acts and the last attempt collapsed
+them.
+
+**One act plus one yield term, not a currency.** `stores` already denominates. That is the whole of it,
+and the play it opens is out of all proportion to its size — which is the correct measure per §5.
+
+### 7.4 What the review did NOT overturn, including the thing I most expected it to
+
+**The matrix survives.** I flagged the contamination sweep as possibly invalidating a large part of
+body (a), and it came back **negative**: no verdict inverts, because the false reading lived in lane
+rhetoric while the verdicting machinery used the correct one. **I was wrong to suspect it wholesale,
+and the negative result is worth as much as a positive one would have been.**
+
+**Every strike re-checked held.** No Part 1–3 strike was itself wrong.
+
+**And the three enlargements stand**, now with a fourth. The shape is unchanged; it does more than it
+did an hour ago.
+
+---
+
+## 8. THE SHAPE, RESTATED — four enlargements, one object
+
+| # | enlargement | what it is | what it opens |
+|---|---|---|---|
+| **1** | **The watch** | a predicate that **schedules a date and decides nothing** — four shipped instances, now named once | termination for every slow condition · obstruction as visible play · a future tense · **the cluster vacancy's missing clock (7.1)** · absence costing a seat (7.2) |
+| **2** | **Petition → date** | a petition's respondent is **a standing date**, not a container | play against every institution · venue choice · jurisdiction as an argument · **and, with 1, the repair D-7 could not have alone** |
+| **3** | **Damage removes an option** | commons degradation is an **option-set change**, not a modifier — with a sizing rule, cross-rung semantics, and band-quantized exposure (§6.3) | the tragedy-of-commons class · places with identity · a faction forming from a physical fact |
+| **4** | **The transfer act** | **one clean witnessed act** by which a person gives another person something, plus one yield term | the wage-labourer, the bribe, the purchase, the mercenary · and it makes `12`'s existing coercion arithmetic implementable |
+
+**All four are the same object seen from four sides: the sitting, and what makes people go to one.**
+A watch puts a matter on the calendar. A petition addresses the calendar. A lost option and an unpaid
+wage are what people convene *about*.
+
+**Nothing here is a system. Four acts and rules, on primitives the ideal already had.**
