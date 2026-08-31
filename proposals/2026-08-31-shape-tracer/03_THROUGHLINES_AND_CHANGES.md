@@ -135,3 +135,93 @@ Stated because a change-list is judged by what it refuses.
 - **No second resolver, no faction verb, no per-entity branch.** Nothing in 47 cases needed one.
 - **No new guard, validator or checker.** The one apparatus this work licenses is the tracer itself,
   and it is load-bearing on the game rather than on this repository's process.
+
+---
+
+## §6 · WHAT ARRIVED AFTER THIS LIST WAS WRITTEN
+
+C1–C9 above were drafted against **20 arcs**. The corpus then doubled to 50 and two independent
+read-only passes ran over the result. **Three of the nine change materially, and one of them changes
+because the list was aimed at the wrong target.** This section is kept separate rather than folded
+in, so that what the list said before the evidence arrived stays legible.
+
+### 6.1 · C9 is probably mis-framed — the corpus wants a SUMMONS, not a drift
+
+C9 escalated a trilemma: accept the loss, amend Law 4, or re-express ambient drift as many small
+acts. That framing assumed the corpus wants **a social quantity to change with nobody deciding**.
+Measured across fifty arcs, it mostly does not.
+
+| how the arc closes | n |
+|---|---|
+| a person chooses | 20 |
+| a roll resolves it | 9 |
+| never, by design | 10 |
+| **a threshold fires with nobody deciding** | **8** |
+| unclear | 3 |
+
+**8 of 50, not 8 of 20.** But the same pass found **19 of 50 arcs are `forced_by_threshold: yes`** —
+a counter crossing *forces the moment*, and then a person chooses. In the lanes' own words: *"the
+patron is **forced** to choose publicly among defend/abandon/extract"*, *"the head of state's
+**forced** choice is made (act, abdicate, or be replaced)"*, *"whose ceiling **issues a formal
+ultimatum**"*, *"background cultural track bottoms out … **forcing** an Emergence crisis"*.
+
+> **The corpus does not want the counter to ACT. It wants the counter to COMPEL SOMEONE TO ACT.**
+> Law 1 forbids only the first.
+
+So there is a **fourth option C9 did not list**: a crossing produces a **summons** — a thing at a
+venue that a named person must now answer, whose refusal is itself witnessable by C4. The shape
+already carries an unused `oblige` edge kind. The obstacle is real and must be cleared honestly:
+`(Tenure, hold)` is `social: true`, so an Event may **not** write an obligation onto a person. The
+candidate is that the crossing writes a **Record at a venue** — matter-side, `social: false` — which
+the person's own `choose` then sees. **Whether that composes or merely launders a social write
+through a matter object is exactly what the adversarial audit was asked to break**, and this
+section does not assume the answer.
+
+### 6.2 · C3 gains a constraint it did not have, and a much stronger evidence base
+
+The new probe `P34` is the third-largest arc blocker (7 arcs). Five arcs independently want a
+quantity that
+
+1. climbs from the person's **own** ordinary acts, taken for ordinary reasons;
+2. is **not readable by that person**;
+3. **fires** on crossing.
+
+C3 as drafted covers (1) and is silent on (2) and (3). Both additions matter: (2) is interior state
+whose owner is not its reader, which is a genuinely new epistemic position in a suite built on
+*nobody is omniscient*; (3) is `A2`'s forbidden threshold wearing a hat **unless the firing produces
+somebody else's Act** — which is 6.1's summons again, arriving from the other direction. The two
+findings are one finding.
+
+### 6.3 · One genuinely missing primitive that no change on this list names
+
+An independent clustering of the 95 unrouted `core` needs found roughly a third are restatements of
+C1–C9 (**19 of them the `Record` alone**, which is the strongest possible confirmation that C1 is
+aimed right) and about nine need no engine capability. Of the genuine remainder it identified
+exactly one candidate primitive:
+
+> **An ordered periodic settlement pass with capped, contested shared capacity.**
+
+Raised independently by `ARC-R19` and `EMG-11`, and it is **`P35`'s hole seen from the other side**:
+`resolve(Act[], World) -> Event[]` applies acts independently, so two people cannot contend for one
+scarce thing in one season. A blocker cannot hold a line; helping one claimant cannot starve
+another; a shortfall cannot produce a *pending* state. **Scarcity is what makes politics, and the
+shape currently has none of it at the moment of resolution.**
+
+This is the hardest item on the page, because the obvious fix — group acts by target inside
+`resolve` — is a second resolver, and the shape's own meta-rule forbids that.
+
+### 6.4 · Two clusters that look like demands and are not
+
+Recorded because a change-list is judged by what it refuses, and both are large enough to be
+tempting:
+
+- **branching named outcomes (11 needs)** — arcs want a resolution to produce three or more
+  categorically different named results. This is an **authoring convention over `Record`**, not a
+  primitive. Nothing is missing.
+- **a hidden per-person bias (9 needs)** — nine cases each want *this one NPC* to carry a private
+  modifier. That is C3 plus a visibility rule, repeated nine times in different dress. Building a
+  "hidden modifier system" for it would be **scripting drift with a registry.**
+
+And one that is neither: the **political-escalation cluster (8 needs)** — forced dilemmas,
+letter-versus-spirit compliance, cross-thread interruption — is **scene dramaturgy**. It is what a
+designer does with the primitives, and no primitive is missing for it.
