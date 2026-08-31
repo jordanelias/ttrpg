@@ -126,9 +126,9 @@ Every record, every field. **Closed sets are enumerated in full.** `⛔` = state
 ### §2.1 The four carriers
 
 ```
-Person    := (id, address, marks, capability, stance, ledger, ties)
-Cohort    := (id, rung, weight, marks, capability, stance, ledger, ties)
-Rung := (id, kind, stake[], judging_set_rule, dates[], matter, envelope)
+Person    := (id, weight, marks, capability, stance, ledger, ties)   -- ONE tuple. weight >= 1.
+                                                                     -- weight > 1 IS a cohort.
+Rung      := (id, kind, stake[], judging_set_rule, dates[], matter, envelope)
 Office    := (id, post, rung?, remit, conferral, revocation, establishment,
               dates[], upkeep)
 Site      := (id, rung, kind, condition, drawers[])
@@ -142,7 +142,7 @@ Site      := (id, rung, kind, condition, drawers[])
 | `Person.stance` | `map[referent → (valence, weight, provenance)]` | valence −5..+5, weight 0..5 | `ABS:73`; `provenance` is claim ids |
 | `Person.ledger` | `[Claim]` | budget `L`, `ABS:641` gives 200 as ASSUMPTION | evicted at WITNESS |
 | `Person.ties` | derived from `tie`/`knot` Tenures | — | same view/edge ruling as `address` |
-| `Cohort.weight` | integer | ≥ 1 | **at weight 1 the record IS a person** — no conversion operation (`02:553-555`) |
+| `Person.weight` | integer | **≥ 1, default 1** | **at weight 1 the record IS a person; above 1 it is a cohort** — no conversion operation (`02:553-555`). **This is the one-type guarantee, and it is what prevents elite-only politics by construction.** ⚠ *An earlier version of this catalogue printed two tuples while claiming no conversion existed* |
 | `Rung.kind` | the ladder, §2.7 | 7 rungs, extensible | `SUP:96` |
 | `Rung.stake[]` | contested material stakes | — | `SUP:322-325` |
 | `Rung.judging_set_rule` | a rule, not a set | — | the set is `judging_set(c)`, §5 |
@@ -155,7 +155,7 @@ Site      := (id, rung, kind, condition, drawers[])
 | `Office.establishment` | `[Person]` | — | **the office's throughput** under one-act |
 | `Office.upkeep` | `Stores` | — | ⛔ magnitude unstated |
 | `Site.condition` | float | `[0,1]` | **primary state, written at RESOLVE only** |
-| `Site.drawers[]` | `[Person \| Cohort]` | — | the denominator of `share(actor, site)` |
+| `Site.drawers[]` | `[Person]` — including records at `weight > 1` | — | the denominator of `share(actor, site)` |
 
 ⚠ **`seat_items` is DELETED** from `Office` (`SUP:416`'s nine-field form). It and `capacity(date)` are
 one quantity seen from two sides (`ARCH §7`, D-2).
@@ -353,18 +353,24 @@ Envelope   := (rung, counts_by_age_band[], marks_bundle, capability_distribution
 
 ### §2.8 The fourteen refusals, and where each new object was walked
 
-Full walk at `ARCH §9`. **Ten new objects × fourteen rows each.**
+Full walk at `ARCH §9`. **Eleven new objects × fourteen rows each, plus a twelfth walk for the EVENT
+driver of `mint`/`efface`** — because the ten original objects were walked against those modes **as act
+modes only**, and Jordan's partition gives them a second driver.
+
+> **THE UNCLEARED VERDICTS ARE FOUR, ACROSS TWO ROWS**: row 4 once (`Site`), row 11 three times
+> (`Site`'s `exclude` limb, act-driven `efface`, `Record`'s `efface` limb). **Every other cell of
+> 11 × 14 + 14 clears.** ⚠ *An earlier version of this index disagreed with the walk it indexes.*
 
 | # | forbidden | objects walked against it | not cleared |
 |---|---|---|---|
 | 1 | a `World` parameter on any decision function | all ten | — |
 | 2 | a `view_of(world, person)` that masks rather than assembles | all ten | — |
 | 3 | any function taking `[Person]` and one `Event` | all ten | — (Record's near-crossing is closed by the gate) |
-| 4 | a deposit into a cohort carrying a VALUE rather than a DISTRIBUTION | all ten | ⚠ **Site** — the construal-spread rule is under-specified upstream |
+| 4 | a deposit into a cohort carrying a VALUE rather than a DISTRIBUTION | all eleven, **plus the event driver** | ⚠ **Site (1)** — the construal-spread rule is under-specified upstream at `SUP:1737`. ⚠ **And `03:196-209` supplies most of what it needs and was unread: a cohort claim stores *"the share distribution over the construal set, not the argmax"*, and an individuating member DRAWS from it** |
 | 5 | a pushed aggregate, or a field one is stored in | all ten | — |
 | 6 | a stored aggregate, norm, density, unrest or reputation field | all ten | — |
 | 7 | a knowledge value stored on the thing known | all ten | — |
-| 8 | a second resolver, an auto-resolve formula, a fast path | all ten | ⚠ carried: the `R ≤ 1` branch, §11 |
+| 8 | a second resolver, an auto-resolve formula, a fast path | all eleven, **plus the event driver** | **none.** ⚠ *The `R ≤ 1` obstacle branch is carried open at §11; it is a question about the SHIPPED obstacle formula, not a verdict in this walk, and an earlier version of this index listed it here* |
 | 9 | a `tier`, `level` or `scale` field on a faction | all ten | — |
 | 10 | a flat additive modifier from a person onto a roll | all ten | — |
 | 11 | a personal effect on a group that is not a fraction of that group | all ten | ⚠ **`efface`** — the discrete limb, inherited and **widened by four object classes** |
@@ -401,9 +407,9 @@ Full walk at `ARCH §9`. **Ten new objects × fourteen rows each.**
 | 19 | `Date.docket[]` | DocketItems | `ARCH §5.5` | the item dies with the date |
 | 20 | `DocketItem.matter` | Petition \| Motion \| Report \| Conferral \| Determination | `ARCH §5.5` | — |
 | 21 | `Petition.respondent` | Rung \| Office | `SUP:840-841` | **a vacant office is a legal respondent** |
-| 22 | `Petition.backing[]` | `[Person \| Cohort]` | `SUP:843-845` | per backer |
+| 22 | `Petition.backing[]` | `[Person]` — including records at `weight > 1` | `SUP:843-845` | per backer |
 | 23 | `Site.rung` | Rung | `ARCH §2.1` | effacing a Rung effaces its Sites |
-| 24 | `Site.drawers[]` | `[Person \| Cohort]` | `ARCH §2.1` | recomputes `share` |
+| 24 | `Site.drawers[]` | `[Person]` — including records at `weight > 1` | `ARCH §2.1` | recomputes `share` |
 | 25 | `ConveningCondition.holder` | Rung \| Office | `ARCH §5.12` | dies with the holder |
 | 26 | `Dispensation.scope` | `[Rung]` | `SUP:1121` | per Rung |
 | 27 | substream tuple | `(world_seed, tick, subject_id, purpose)` | `ARCH §2.2` | **`subject_id` now resolves — every record carries one** |
