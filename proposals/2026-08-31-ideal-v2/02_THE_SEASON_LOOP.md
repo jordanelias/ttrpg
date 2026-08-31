@@ -537,7 +537,8 @@ RESOLVE(acts, world):
 
 ### §5.1 The touch graph and the conflict rule
 
-Every Act declares `touches[]`, each entry `(target, mode, field?, delta?)` (`ARCH §2.4`).
+Every Act declares `changes[]`, each a `StateChange(subject, mode, field?, delta?, spec?)`, plus
+`reads[]` and `contests[]` (`ARCH §2.4`). **Every Event declares `changes[]` and nothing else.**
 
 > **THE CONFLICT RULE.** Two acts conflict iff they share a target and **either mode is
 > `exclude`/`efface`**, **or both `alter` an `exclusive` field**, **or both `mint` edges that jointly
@@ -802,7 +803,7 @@ knowledge.**
 | it may not | because |
 |---|---|
 | take a `Person` parameter | `SUP:148-149`: the world does not know who is asking, which is what keeps the resolver from acquiring per-actor special cases |
-| branch on `verb` | `ARCH §2.4`: a verb is a name, `touches[]` is the mechanism, and an open verb list must not grow the resolver |
+| branch on `verb`, or on an Event's `kind` | `ARCH §2.4`: a verb and an event kind are both **names**; `changes[]` is the mechanism, and open vocabularies must not grow the resolver |
 | branch on a named entity | §14 row 13 |
 | carry a second resolver, an auto-resolve formula or a fast path | §14 row 8; the three fidelities differ only in **who is asked to choose** (`SUP:617-620`) |
 | write a ledger | that is WITNESS's class, and `witness` is the only bridge |
@@ -848,8 +849,8 @@ corroboration mechanism and it fails closed.**
 
 ```
 Claim = (id, subject, predicate, value, when, source, confidence, visibility)
-source ∈ firsthand(event_id) | told_by(person, handle) | inferred(claim_id…)
-       | firsthand_via_knot(event_id) | documented(record_id)
+source ∈ firsthand(event_id) | told_by(person | record, handle) | inferred(claim_id…)
+       | firsthand_via_knot(event_id)                      -- CLOSED, 4
 ```
 
 **`when` is a mandatory closed interval and it is universal, never existential** — a claim asserts its

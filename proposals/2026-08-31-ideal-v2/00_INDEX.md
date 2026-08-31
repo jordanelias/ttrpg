@@ -11,7 +11,7 @@
 
 | # | file | what it owns |
 |---|---|---|
-| **1** | **`01_ARCHITECTURE.md`** | **The primitives and the refusals.** Four carriers · one edge with seven kinds · one act with five modes · the query category · the amended owner table · the three signatures · determinism · **all seven reserved forks worked** · the seam the three deferred subsystems attach at · **the fourteen refusal rows walked for every new object** · every departure from the prior design with its ground · what is carried open |
+| **1** | **`01_ARCHITECTURE.md`** | **The primitives and the refusals.** Four carriers · one edge with seven kinds · **one state change with three modes and two drivers** · the query category · the amended owner table · the three signatures · determinism · **all seven reserved forks worked** · the seam the three deferred subsystems attach at · **the fourteen refusal rows walked for every new object** · every departure from the prior design with its ground · what is carried open |
 | **2** | **`02_THE_SEASON_LOOP.md`** | **How a season executes on those primitives.** Six steps, four barriers, four write classes · one detailed section per step with its pseudocode, reads, writes, invariants and refusals · three seasons walked end to end · the write matrix · order independence · what the loop refuses to do |
 | **3** | **`03_COMPENDIUM.md`** | **The cross-referenced register.** Identity · types with every closed set enumerated · the reference map and its inverse index · functions · the Query catalogue · vocabulary · collisions · gaps · five cross-reference indices · what is inherited and not restated · the substrate precedent |
 
@@ -34,17 +34,28 @@ every transition that fails is a change to what exists, or to who holds it.*
 change?**
 
 ```
-Person · Cohort · Rung · Office · Site        -- the carriers
-Tenure                                             -- the one edge, seven kinds
-Act(touches[]), mode ∈ read|alter|exclude|mint|efface
-Query                                            -- never stored, always recomputed
+Person · Rung · Office · Site               -- the carriers. A cohort is a Person at weight > 1
+Tenure                                      -- the one edge, seven kinds
+StateChange := (subject, mode, driver)      -- mode ∈ mint|alter|efface
+                                            -- driver ∈ Act | Event, and the SUBJECT decides which
+Query                                       -- never stored, always recomputed
 
-choose  : (Person, View, Sensation) -> Act         -- no World, ever
-resolve : (Act[], World)            -> Event[]     -- no Person
-witness : (Person, Event)           -> Claim[]     -- a collection is a type error
+choose  : (Person, View, Sensation) -> Act      -- no World
+resolve : (Act[], World)            -> Event[]  -- no Person
+witness : (Person, Event)           -> Claim[]  -- per person; never a collection
 
 CALENDAR · MATTER · DELIBERATE · RESOLVE · WITNESS · CENSUS
 ```
+
+> **JORDAN'S PARTITION governs everything above.** A state change whose **subject is peninsular human
+> society** — polities, institutions, offices, organizations, occupations, religion, settlements,
+> marriage — is **driven by a character's choice, always.** A change whose subject is anything else —
+> weather, the non-peninsular, tears in the metaphysical substrate — is **an event acting on the
+> world.** **Creation and deletion included: events create and destroy too.**
+>
+> **A plague may kill bodies. It may NOT efface a settlement — the village empties and still legally
+> exists until an office strikes it from the roll.** Villages do not cease to exist because everyone
+> died.
 
 **Scope.** The seasonal loop, and all of it: worldly state, clocks, pressures, threats, world churn,
 character generation, event generation, governance at every scale, advancement and demotion, conflict,
@@ -59,7 +70,8 @@ about them.
 
 ## The seven forks
 
-Six are answered, each with its cost and the line that would falsify it. **One is Jordan's.**
+**All seven are answered.** Five dissolve under a primitive; **two were ruled by Jordan**, and one of
+those reversed an answer this suite had already given.
 
 | fork | disposition | what carries it |
 |---|---|---|
@@ -68,8 +80,8 @@ Six are answered, each with its cost and the line that would falsify it. **One i
 | **F2** is `stores` the denominator | **dissolves** | `Stores := map[MatterKind → quantity]` |
 | **F3** S19, the rootless vacancy | **dissolves** | a conferral rule may name **the office's own judging set** |
 | **F4** the Coherence-0 ontology | **not a fork** | de-individuation by another cause |
-| **F5** off-board polities | **resolves** | a Rung with an establishment; the one-actor rule keeps **no exception** |
-| **F6** is the world dying or misunderstood | **STAYS JORDAN'S** | **the code is identical and only the game differs** — which is the signature of a real fork. The other six each changed the code |
+| **F5** off-board polities | ⚠ **REVERSED — they are an EVENT SOURCE, not a simulated realm** | non-peninsular by definition, so they act through events. **No off-map realm is simulated** — a large deletion — and the one-actor rule is preserved *properly*, since it governs persons and Altonia is not a person |
+| **F6** dying or misunderstood | ⚠ **RULED BY JORDAN — NEITHER. THE WORLD IS IN FLUX** | *"If the world is not tended to by anyone, it will die. If it is tended to by everyone, it will thrive."* **A third answer neither branch offered: the direction is an OUTPUT, the sum of what people do about it.** Cost: one constant, `wear`, and zero objects |
 
 ---
 
@@ -96,4 +108,17 @@ the world · two witnesses of one event can disagree · a person with no office 
 receive an opportunity · order independence — **have not been run, and cannot be until something runs
 them.**
 
-**Thirty gaps are carried open** (`03_COMPENDIUM.md` §8), and one fork is returned to Jordan.
+**Every one of the seven forks is now answered**; F6 and F5 by Jordan's own rulings, and F5's earlier
+answer was wrong and is reversed.
+
+⚠ **AND THE MOST IMPORTANT LIMIT IN THIS SUITE IS ABOUT HOW IT WAS AUDITED.**
+`proposals/2026-08-29-valoria-from-scratch/03_knowledge_telling_investigation.md` — **980 lines, the
+largest document in #342 and the declared owner of the claim, the predicate vocabulary, view assembly,
+salience, corroboration, concealment and field investigation — was never read** by two review rounds,
+five parallel audit runners, a 982-line identity audit, or the first draft of these documents. **It is
+cited three times across 3,840 lines of derivative text, which made it look covered. Citation count is
+not coverage.** The cost was two FATAL errors, a reinvented claim source, and an invented `investigate`
+verb standing where six shipped acts already were. **Every audit was derivative-facing, and agreement
+between derivative documents read as corroboration when it was correlated error with one root** — the
+failure this design's own corroboration rule exists to prevent, arriving in the process that produced
+the design. `01_ARCHITECTURE.md` §12.8.

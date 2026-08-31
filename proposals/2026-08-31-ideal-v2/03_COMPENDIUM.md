@@ -54,7 +54,7 @@ cataloguing coinage is self-refuting**, so this document introduces no term of i
 - **`⛔`** — the type, range, producer or owner is stated nowhere in any surface. Every `⛔` has a row in
   §8.
 - **`RESERVED`** — a fork carried rather than answered. Six of the seven the prior design reserved are
-  answered at `ARCH §7`; one is not, and it is Jordan's.
+  answered at `ARCH §7`. **All seven are now answered; two were ruled by Jordan.**
 - **NEW** — introduced by `ARCH`/`LOOP`; **SHIPPED** — inherited from `SUP` or #342 unchanged;
   **AMENDED** — inherited and changed, with the departure listed at `ARCH §10`.
 
@@ -76,7 +76,8 @@ space (`SUP:229-234`); *nameable as a stance referent* is against the **closed**
 | **Site** | `id` NEW | `id` | yes | its Rung | `mint` (building) | `efface` (razing) | **yes**, NEW | **yes**, as `Place` NEW |
 | **Tenure** | `id` NEW | `id`; secondarily `(subject, object, kind, since)` | yes | **its SUBJECT** (`SUP:337`) | `confer`, `commit`, `admit`, a naming act, co-presence, `form_knot`, kinship | `revoke`, degree→0, re-naming, decay, rupture, discharge — **each sets `until`, none deletes** | **yes**, and this is the thesis-critical one | no |
 | **Act** | `id` NEW | `id` | one tick | its actor | `choose` | — | ⛔ unstated | no |
-| **Touch** | — | position in `Act.touches[]` | one tick | its Act | — | — | no | no |
+| **StateChange** | — | `(subject, mode, driver)` — position in its driver's `changes[]` | one tick | its driver | — | — | no | no |
+| **Event** *(as driver)* | `id` | `id` | permanent | the event log | the world, at MATTER | never | as a `source` payload; **and as a `Claim.subject`, because an event is as disputable as an act** | no |
 | **Event** | `id` | `id` — required by `firsthand(event_id)` (`SUP:243`) | permanent | the event log | `resolve` | never | as a `source` payload | no |
 | **Claim** | `id` NEW | `(ledger owner, id)` — **a two-part address** | evictable at WITNESS | **one Person's ledger** | `witness`, and nothing else | eviction; decay to zero | **yes** — `SAID(Aldwin, C, s12)` | no |
 | **Proposition** | `id` NEW | `id`; structural equality over `(mood, subject, predicate, value, when, scope)` is the **fallback** | yes | the Person who uttered it | **uttered inside an ordinary act** — no constructor | never; it persists as long as anything names it | yes | **yes** |
@@ -247,8 +248,13 @@ Sensation   := (subsistence, standing)                              -- TWO scala
 - **`when` is a mandatory closed interval and is universal, never existential** (`SUP:223-226`).
 - **Claims collide iff same subject, same predicate form, same arguments, intersecting `when`,
   incompatible values** — computed at deposit time, **in one ledger at a time** (`SUP:228-229`).
-- **The predicate vocabulary is CLOSED; the referent space is OPEN** (`SUP:231-234`). ⛔ **Its actual
-  membership is enumerated nowhere.** One worked example: `SAID(Aldwin, C, season 12)`.
+- **The predicate vocabulary is CLOSED; the referent space is OPEN** (`SUP:231-234`). **Its membership
+  is enumerated in full at `03:66-79` — FOURTEEN forms**, listed in §2.7, with **one entailment table
+  and no grammar**, and a stated test for a fifteenth: *is the new form already being deposited
+  somewhere in this design?* ⚠ *An earlier version of this row said the membership was enumerated
+  nowhere, with `SAID` as its one worked example.*
+- **Negation is a VALUE, not a form** (`03:100-101`), which is why assert and deny land on the same row
+  and collide by computation rather than by a coincidence of naming.
 - ⚠ **THERE IS NO FIFTH SOURCE.** An earlier version of this suite added `documented(record_id)`.
   **`03:528` already ships it**: `research(archive, question)` produces **`told_by(record, …)` with
   VERIFIED rootprints**, and archives are *"the only non-person root-bearers"*. **A record is a speaker
