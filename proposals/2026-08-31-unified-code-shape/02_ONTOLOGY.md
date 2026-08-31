@@ -606,13 +606,13 @@ qualifier does not travel into GDScript's flat, global `class_name` namespace.
 > **PUTTING `World` FIRST ON EVERY RESOLVER-SIDE QUERY IS THE ENFORCEMENT.** Calling one from inside
 > `choose` then **fails at the call site for want of an argument.**
 >
-> **This suite's own catalogue is 25 rows — 18 resolver-side and 7 person-side**
+> **This suite's own catalogue is 26 rows — 18 resolver-side and 8 person-side**
 > (`08_FUNCTION_SURFACE.md` §2). With the three top-level signatures that is **21 call sites that fail
 > for want of an argument**; the 7 person-side rows are enforced by the opposite omission — they take no
 > world and cannot acquire one.
 >
 > ⚠ **DO NOT QUOTE AN ADDITIVE TOTAL.** A *"23"* circulates in three places over a differently-scoped
-> table of 20 rows, and it is `3 + 20` — **a sum that names nothing.** Adding this suite's 25 to 3 would
+> table of 20 rows, and it is `3 + 20` — **a sum that names nothing.** Adding this suite's 26 to 3 would
 > re-mint the identical error with a new number.
 
 > ⊕ **AND A CACHE RULE, WITHOUT WHICH THE PARALLELISM LICENCE IS A DATA RACE.**

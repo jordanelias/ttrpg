@@ -44,7 +44,6 @@ parameter list rather than by a table a reader must honour.**
 | # | signature | returns | notes |
 |---|---|---|---|
 | 1 | `leaders(w, prop, rung)` | Person[] | resolver-side, **for the resolver only.** Comparator: *commitment degree x backing raisable*. **Deposition is this returning somebody else** |
-| 1b | `leaders_as_claimed(person, prop, rung)` | Person[] | ⚠ **person-side, and REQUIRED — see the note below.** What *this observer* takes the leadership to be, from their own ledger |
 | 2 | `presence(w, prop, rung)` | int | barrier-built index; never a scan per call |
 | 3 | `density(w, prop, rung)` | ratio | |
 | 4 | `footprint(w, prop)` | Rung[] | a faction's extent — **derived, never a `scale` field** |
@@ -78,16 +77,17 @@ tidier-sounding claim than the design can make and would leave `opening_set` una
 | 23 | `address(person)` | Rung[] | the derived view of their one `contain` Tenure |
 | 24 | `trace(person, claim)` | provenance tree | **a view, not a store** — *only as good as what they went and got* |
 | 25 | `need(person, kind)` | (Proposition, urgency)[] | **ranked, never summed** (`07` §3.1) |
+| 26 | `leaders_as_claimed(person, prop, rung)` | Person[] | ⚠ **REQUIRED, and it is not a convenience — see below.** What *this observer* takes the leadership to be, from their own ledger |
 
-> **THIS CATALOGUE IS 25 ROWS — 18 RESOLVER-SIDE (1–18) AND 7 PERSON-SIDE (19–25).** With the three
+> **THIS CATALOGUE IS 26 ROWS — 18 RESOLVER-SIDE (1–18) AND 8 PERSON-SIDE (19–26).** With the three
 > top-level signatures, **21 call sites fail for want of an argument** if a decision function reaches for
 > world truth; the 7 person-side rows are enforced by the opposite omission — they take no world and
 > cannot acquire one. **It converts a table a reader must remember into a call that does not compile.**
 >
 > ⚠ **DO NOT QUOTE AN ADDITIVE TOTAL.** A figure of *"23"* circulates in three places over a
 > differently-scoped table of 20 rows, and it is `3 + 20` — **a sum that names nothing.** An earlier
-> draft of this line said *"3 to 28"*, which is `3 + 25`: **the identical error, re-minted with a new
-> number.** Name the catalogue and its two sides.
+> draft of this line said *"3 to 28"* — **the identical error, re-minted with a new number.** Name the
+> catalogue and its two sides.
 
 >  ⚠ **AND `leaders` NEEDS ITS PERSON-SIDE TWIN, OR COVERT MEMBERSHIP LEAKS AT THE ONE SEAT IT EXISTS
 > FOR.** A `commit` edge carries an **avowal** of `avowed | private | covert` (`02` §4.2). A
