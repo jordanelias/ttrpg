@@ -41,11 +41,38 @@ form `NN:LLL` is `proposals/2026-08-29-valoria-from-scratch/NN_*.md`, line `LLL`
 > document says, not a report of what a program did. Under `CLAUDE.md` §0.2 none of it is done, and it
 > cannot be: the subject does not run either.
 
-**What survived re-verification.** Thirty-three findings were filed by the reviewing pass. **All
-thirty-three were re-read against disk before being carried here** — quote present at the cited line,
-contradiction holding on the text, and not already dispositioned in §17.5's round-1 (C-1..C-24) or
-round-2 (D-1..D-16) change logs. **One was MISFILED against the wrong object and is RE-FILED and MERGED;
-twenty-seven carry unchanged; five were corrected downward.** All six are marked ⚠ where they appear.
+**What survived re-verification, and what did not survive a SECOND reviewer.** Thirty-three findings
+were filed and re-read against disk before being carried here. **That re-verification was not good
+enough, and the honest record of this file is the record of what a structurally independent antagonist
+then broke in it.**
+
+> ⚠ **AN INDEPENDENT ANTAGONIST PASS BROKE FOUR OF THIS REVIEW'S CLAIMS, INCLUDING THE ONE IT CALLED
+> #1. All four were re-verified on disk here and all four are applied.**
+>
+> - **F1** falsified this file's central boxed absolute **four separate ways**, one of them using this
+>   file's own §1.2 as the counter-example. Narrowed at this §1.1.
+> - **F2** falsified *"every licensed non-act channel is a subtraction"* — the rhetoric the whole
+>   existence argument leaned on. Struck at this §1.1 and this §2.7.
+> - **F3** substantially refuted **A7** — *and refuted a ⚠ correction this file had already made to
+>   A7*, so the correction was wrong in the same direction as the finding. Rewritten at this §2.7.
+> - **F4** collapsed **A8**, this review's #1 finding, and showed that the flagship quotation A8 rested
+>   on was **truncated in both places this file quotes it, without an ellipsis.** Rewritten at this §2.8
+>   and restored in full at this §1.1 and this §2.8.
+>
+> **This review's own re-verification caught none of the four.** It found six other problems and missed
+> every one of these. **And its claim that every quote was checked at its cited line was false** — the
+> §2 cohort block drifts +3 to +5 lines throughout, and `:1179` lands on unrelated text (the compliance
+> quote is at `:1167`). That claim is struck rather than patched, because a fidelity claim that was
+> itself unverified is worth less than no claim; the citations the antagonist named are re-derived, the
+> rest are not warranted.
+>
+> **The direction of the error is the result worth carrying: this review over-claimed toward
+> ABSOLUTES** — *never*, *nothing*, *no route at all*, *monotonically shrinking* — and every one of the
+> four breaks was an absolute meeting a counter-example the document already contained. This §7 records
+> it as a limit.
+
+**One new finding was added on that pass and is filed at this §3.7 (O1).** The corrections from the
+first pass all still stand, and are marked ⚠ in place:
 
 > ⚠ **MISFILED AND RE-FILED — A12, on Jordan's correction, recorded here rather than quietly rewritten.**
 >
@@ -126,14 +153,29 @@ signed"*), and *not telling*. Those are all ways of **preventing** a claim from 
 them removes a claim that has already landed.** An idea, once deposited in a ledger, can only fade —
 never be taken out by anybody.
 
-> **THE DESIGN HAS A RICH VOCABULARY FOR CHANGING THE STATE OF THINGS THAT EXIST, AND ALMOST NONE FOR
-> CHANGING WHICH THINGS EXIST OR WHO HOLDS THEM.** Stance, `condition`, standing, commitment,
-> compliance, confidence, degree — all richly movable by named persons. **Persons, sites, offices,
-> containers, propositions, claims and holdings — not one of them can be brought into, removed from, or
-> moved between holders by any act in the document.**
+⚠ **AN EARLIER VERSION OF THIS BOX WAS FALSE FOUR WAYS AND IS NARROWED, NOT SOFTENED (F1).** It read
+*"persons, sites, offices, containers, propositions, claims and holdings — not one of them can be
+brought into, removed from, or **moved between holders** by any act."* Four counter-examples, all in the
+subject and two of them already scored elsewhere in this same file:
 
-**The proof is a five-item list, and it is short enough to check.** The only operations in all 2,017
-lines that change what exists or who holds it are:
+| the absolute said | the document says |
+|---|---|
+| holdings cannot move | `transfer` moves `stores` between hearths **by an act** (`:1425-1427`) — and this file's own B4 is a finding *about* that act |
+| tenure cannot move | `confer`/`revoke` change office tenure (`:423`, `:367-368`) — and this file's own §1.2 scores *"lose an office WORKS"* |
+| addresses cannot move | **Admission** *"is an act by persons who already hold standing, changing another person's address"* (`:312-313`); `migrate` is one of the five shipped channels (`:1409-1410`) |
+| claims cannot be created | tellings deposit claims constantly (`:1128-1131`) — and this file calls tellings *"the best material in the suite"* two paragraphs later |
+
+**The narrow claim, which survives all four and is what the rest of this review rests on:**
+
+> **NO ACT CREATES OR DESTROYS A SITE, A CONTAINER, OR AN OFFICE. AND NO TENURE RELATION EXISTS OVER
+> SITES OR NODES** — so nothing can come to hold ground, and property in land cannot change hands.
+>
+> Alongside it, at person scale: **no birth, no character generation, no advancement** (this §2.1–§2.3).
+> Those were never contested and they stand as filed.
+
+**The proof is a five-item list, and it is short enough to check.** ⚠ *Retitled: this is the list of
+operations that change **EXISTENCE**. It is not a list about tenure, which the box above no longer
+claims.* The only operations in all 2,017 lines that change what exists are:
 
 1. **death** — P1 `:648`, metabolism, **decider-free**
 2. **de-individuation** — P7 `:654` and §2 `:212`, **decider-free**
@@ -141,15 +183,23 @@ lines that change what exists or who holds it are:
 4. **individuation** — P7 `:654`, the single additive operation, firing when *"an event names one of its
    members"* (`:209`) — **decider-free at the point of firing**, and whose four other #342 triggers and
    whole minting procedure (`09:535-548`) were dropped
-5. **holdings moving on death** — the hearth's succession pointer, §4.1 `:304-307`, fired by a P1 death.
-   **The only route by which property changes hands anywhere in the document** (this §2.10), and it too is
-   decider-free
+5. **holdings passing on death** — the hearth's succession pointer, §4.1 `:304-307`, fired by a P1
+   death. ⚠ *An earlier version called this "the only route by which property changes hands." **False**
+   — `transfer` moves `stores` by an act at `:1425-1427`. The narrow true claim is that it is the only
+   route by which a **holding in land** passes* (this §2.10), and it is decider-free
 
 > **ALL FIVE ARE DECIDER-FREE. FOUR OF THE FIVE ARE SUBTRACTIVE.** In a design whose thesis is that
 > every active decision is made by a character, and whose §13.1 rule is *"if no person acts, the thing
-> does not occur"*, **no character can add or remove a single object from the world, or move a single
-> thing from one holder to another.** Existence and tenure are the two registers the persons do not
-> touch — and they are the registers that empty on their own.
+> does not occur"*, **no character can bring a site, a container or an office into the world, or take
+> one out of it.** Existence is the register the persons do not touch.
+
+⚠ **And the stronger rhetoric that used to close this paragraph is struck as FALSE (F2).** It read
+*"they are the registers that empty on their own."* **They are not.** `:1603` — *"**Production is
+metabolism** — nature yields, larders consume, bodies age. No act required."* — and P1 rolls `yield`
+(`:648`) with the `(3 + d10)/8.5` term at `:1396-1400` ranging **0.47× to 1.53×**. **A good year raises
+a hearth's stores with nobody acting.** This file's own C11 quotes that term and its own §2.7 then
+called every non-act channel a subtraction. The production limb has an upper half; the argument does
+not need the overstatement and is better without it.
 
 **And TENURE is worse than existence, because the design does not have the relation at all.** §4.2's
 ownership table `:339` gives a faction exactly two possessions — **`| Faction | its proposition and its
@@ -158,60 +208,72 @@ Jordan defines as the thing factions have, therefore has **no material referent 
 design.** The same hole on the person's side is `holdings` sitting in §4.1 as dead state that no act
 reads, writes or moves. **One missing primitive, two victims** (this §2.10).
 
-**One of the missing objects is far worse than the rest, and it is the single sharpest result in this
-review. A PROPOSITION CANNOT BE CREATED BY ANY ROUTE AT ALL** (this §2.8).
+⚠ **THIS SECTION USED TO NAME A8 — *"a Proposition cannot be created by any route at all"* — AS THE
+REVIEW'S #1 FINDING. IT LARGELY COLLAPSES, AND THE COLLAPSE IS RECORDED HERE RATHER THAN THE CLAIM
+QUIETLY SHRINKING (F4).**
 
-§1.3 `:112`: *"A **faction** is a proposition plus a map from persons to a degree of commitment. **That
-is the entire object.**"* Founding a faction therefore means minting a proposition, and no operation
-anywhere mints one. Persons, claims, sites and cohorts at least change population by a decider-free
-channel; **a proposition has no channel of any kind.**
+**Propositions are not registered objects requiring a constructor. They are FREE-FORM CONTENT**, and
+the document says so in the course of arguing something else — `:1036`: *"famine is not stored,
+**propositions are free-form**, and liveness is a semantic judgment."* They are produced wherever a
+person utters one, at four shipped sites:
 
-> **AND A FACTION IS THE DESIGN'S POLITY OBJECT AT EVERY SCALE.** `:71`: *"a faction is a proposition
-> plus a commitment map **at any scale**."* `:113`: *"Two brothers who have sworn to burn out the reeve
-> are a faction; **so is the Church of Solmund**."* `:318`: *"the Church is a faction, a parish is a
-> community."*
->
-> **So this is not a defect about two brothers founding a conspiracy. NO NEW REALM, DUCHY, CHURCH,
-> KNIGHTLY ORDER OR POLITY OF ANY SCALE CAN EVER COME INTO EXISTENCE. The entire political map is frozen
-> at world creation, and the only permitted motion is commitment draining out of the propositions the
-> world shipped with.** Under §1.3 `:130`'s own rule — *"Degree to zero is departure"* — a faction whose
-> commitment reaches zero is gone, and nothing can bring it or any successor back. **The political map is
-> therefore not merely static. It is monotonically shrinking.**
+| site | line |
+|---|---|
+| `Petition(petitioner, proposition, respondent, backing)` — *"**Produced by a person** whose computed need exceeds what their own acts can reach"* | `:840`, `:843` |
+| `Dispensation(issuer, proposition, scope, terms)` — issued by a named office-holder | `:1121` |
+| `Ground = (proposition, warrant, support[])` — pleaded by a party at a sitting | `:1516` |
+| *"his stance **emits a proposition**"* | `:1490` |
 
-**That falsifies a Jordan requirement in its own words.** *"All starting national royal factions may
-collapse in the game to be replaced with **dynamically generated ones**."* Collapse is expressible —
-`commit` to zero for every member. **Replacement is not**, because a dynamically generated Kingdom **is**
-a minted Proposition, and there is no operation that mints one. **The design can lose every realm it
-shipped with and grow none.**
+A faction is a proposition plus a commitment map, so **committing to a newly uttered proposition IS the
+faction forming.** There is no object waiting on a constructor, and the strong claims built on the
+assumption that there was — *"can never come to exist"*, *"the entire political map is frozen"*,
+*"monotonically shrinking"*, *"the design can lose every realm it shipped with and grow none"* — **are
+withdrawn in full.**
 
-**Two further objects are missing and are smaller than that, but real.**
+⚠ **And the flagship quotation this file built the argument on was TRUNCATED, in both places it
+appears, without an ellipsis.** The full sentence at `:1229-1230`:
+
+> *"and 'the seam must be restored' is a proposition, and the people whose practice used it are already
+> committed to it, so **a political faction forms out of a physical fact with no authoring at all**
+> (§1.3's faction object, unchanged)."*
+
+**The parenthetical this file cut is the document's own answer to the objection this file was raising.**
+Cutting it and then declaring the sentence *"false"* and *"unreachable"* is precisely the citation
+failure this review criticises elsewhere. Restored here and at this §2.8; the *"flagship claim is
+false"* verdict is withdrawn.
+
+**What survives, and it is a real but ordinary Tier-1 gap: PROPOSITION CREATION IS UNDER-SPECIFIED.**
+`:1490` gives it a single clause — *"his stance emits a proposition"* — with **no act, no cost, no
+witness and no phase**, and nothing anywhere states that `commit` to a novel proposition is legal or how
+any other person comes to hold a claim about it. That is worth fixing and it is not worth a #1 slot.
+It is now filed at this §2.8 at its true weight.
+
+> **THE REVIEW'S #1 FINDING IS THEREFORE A6 · A10 · A12, TAKEN TOGETHER** (this §2.6, this §2.10):
+> **no act creates or destroys a site, a container or an office, and no tenure relation exists over
+> sites or nodes.** Nothing survived a challenge in that cluster, it is what the narrow box above
+> states, and it is what this §6's ranks 1 and 2 close. **A1–A3 — no birth, no character generation, no
+> advancement — sit beside it, uncontested, at person scale.**
+
+**Two further gaps are real and smaller.**
 
 - **A faction has no leader, and the design owes a derivation it never supplies** (this §2.9).
-- **`holdings` is dead state** (this §2.10). It occurs twice, both descriptively; no act reads it, writes
-  it or moves it, and none of the nine typed Dispensation terms grants, confiscates or forfeits anything.
+- **`holdings` is dead state** (this §2.10): two descriptive occurrences, no act that reads, writes or
+  moves it, and none of the nine typed Dispensation terms grants, confiscates or forfeits anything.
 
 **And one filed finding in this family was MISFILED and is re-filed.** A12 claimed the containment
 tree's immutability made annexation inexpressible; it does not, because a Kingdom is a faction and
-winning its people is `commit` at scale. **What is true instead is bigger: no faction can hold a node,
-so annexation has no object to transfer** — the Kingdom can win the Duchy's members and still nothing
-changes who holds the ground. Merged into A10 at this §2.10. The residue of the original claim — **the
-tree cannot gain or lose a node, so no settlement can be founded or razed** — is folded into A6 (this
-§2.6), and **re-parenting is moot**: the tree is geography, allegiance lives in factions, and geography
-being static about places that already exist is defensible design rather than a defect.
+winning its people is `commit` at scale. **What is true instead: no faction can hold a node, so
+annexation has no object to transfer** — the Kingdom can win the Duchy's members and still nothing
+changes who holds the ground. Merged into A10 at this §2.10. The residue — **the tree cannot gain or
+lose a node, so no settlement can be founded or razed** — is folded into A6 (this §2.6), and
+**re-parenting is moot**: the tree is geography, allegiance lives in factions, and geography being
+static about places that already exist is defensible design rather than a defect.
 
-**And that is why the flagship emergence claim in the whole exercise is false as the document stands.**
-§10.1 `:1228-1230`, the most-quoted sentence in the suite:
-
-> *"and 'the seam must be restored' is a proposition, and the people whose practice used it are already
-> committed to it, so **a political faction forms out of a physical fact with no authoring at all**"*
-
-Nothing makes that proposition exist. Nothing makes anyone committed to it before it does. **The
-design's most celebrated emergent behaviour — the one §10 is built to produce and §14 row 9 is cleared
-on — rests entirely on the one primitive the document does not have.**
-
-**So A1, A2, A3, A6, A7, A8, A9, A10·A12 and A11 are not nine findings. They are one finding with nine
-faces**, and they should be read and fixed as one. This §6's first four ranks are the changes that close
-them.
+**So A1, A2, A3, A6, A9, A10·A12 and A11 are not seven findings. They are one finding with seven
+faces** — the design cannot bring a person, a rank, a site, a container or an office into being, and
+cannot move tenure over ground — and they should be read and fixed as one. This §6's ranks 1 and 2
+close them. **A7 and A8 are no longer in that cluster: both were substantially refuted and are
+restated at their surviving weight.**
 
 ### §1.2 The trajectory test — the central finding measured on Jordan's own arcs
 
@@ -453,9 +515,25 @@ discipline rigorously to convening conditions (§7.2, `:731-741`) and **never re
 rule** — which is round 2's finding, *the newest prose is the most defective prose*, recurring one round
 later.
 
-**THE FIX.** Replace row 4's rule with #342's: **construal distributions are stored at the CHANNEL, not
-at the cohort**, and an individuating person draws from the channel's stored claims. Cite `09:541-548`.
-Row 4 gets shorter and the cohort loses a field it could not hold.
+⚠ **THE FIX THIS REVIEW PROPOSED IS WITHDRAWN (M1).** It was: *store construal distributions at the
+CHANNEL, per `09:541-548`.* **That breaks two rules of the subject at once.** `:74-75`: *"**Knowledge
+lives only in ledgers.**"* A channel is not a ledger. And §4.2's ownership table `:334-340` has exactly
+five owners — Person, Container, Office, Faction, Nobody — **and a channel is none of them**, so the fix
+proposes state with no owner in the document whose ownership table this review spends §4.6 defending.
+#342 may store claims at channels; **this document's own rules do not let it**, and importing the
+mechanism without importing the ownership model is the error this review flags elsewhere as smuggling.
+
+⚠ **And one supporting argument is withdrawn with it.** This finding argued that *"a cohort cannot hold
+a spread by construction"* because §2 `:202-205` makes shared **stance** the membership criterion.
+**Construal spread and stance spread are different quantities** — two people can hold the same attitude
+toward the reeve and different readings of what the proclamation said — so the impossibility claim does
+not follow.
+
+**What survives is the observation, not the repair: §14 row 4's rule is UNDER-SPECIFIED.** It requires a
+cohort's claim to *"store the construal spread its members would have produced"* without saying where
+that spread lives under §4.2's five owners, what produces it, or what an individuating member's draw is
+a draw from. **This review could not close it within the document's stated refusals, and says so rather
+than proposing a fix that violates them.** It is the same posture this review takes on A5 (this §2.5).
 
 ### §2.5 · A5 — `choose` HAS NO CHANNEL FOR NEEDS, AND NEEDS ARE THE MOTIVE FOR EVERY ACT
 
@@ -482,18 +560,22 @@ snapshot and their own ledger"*, which is a world argument in prose that the sig
 and is the trigger for all five of the postless person's channels. It is the single most consequential
 number in a person's turn, and there is no legal way for it to reach the function that uses it.
 
-> **THE FIX, and it REMOVES A CATEGORY rather than adding a channel: a need is a sensation, and a
-> sensation is a claim.**
->
-> Mint needs at P2 as **firsthand claims in the person's own ledger**, source `firsthand(body)` — §3.2
-> `:243` already supplies the source vocabulary and forbids a null source. View assembly then picks them
-> up at P3 by the ordinary salience rule; `choose` keeps its signature unchanged and gains nothing;
-> *"supposed to be stale relative to the world"* (`:191`) becomes automatic rather than asserted; and
-> **the category "need" is deleted from the design** — it becomes a claim like everything else, and the
-> Nobody row loses an entry.
->
-> It also buys something the design wants and currently cannot do: **hunger becomes arguable at a
-> sitting** (§12), because a claim is what a `Ground`'s `support[]` is made of (`:1515`).
+⚠ **THE FIX THIS REVIEW PROPOSED IS WITHDRAWN (M8), AND NO REPLACEMENT IS OFFERED.** It was: *mint
+needs at P2 as firsthand claims in the person's own ledger, source `firsthand(body)`.* **It breaks two
+rules, one of them a rule this same review defends at length.**
+
+- `:244-245`: *"There is no null source, and **`witness` is the only operation that mints a root
+  token.**"* Minting a claim at P2 makes P2 a second root-token minter, which is exactly the
+  second-path defect this review's B3 objects to in the resolver.
+- **It makes hunger evictable.** Once a need is an ordinary claim in the ledger, P7 `:654` evicts it by
+  salience — **the precise hazard this review spends the whole of B6 (this §3.6) arguing against.** A
+  starving man forgetting he is hungry is a worse outcome than the gap the fix was closing.
+
+> **THE FINDING STANDS AND NO FIX WITHIN THE DOCUMENT'S STATED REFUSALS WAS FOUND — by this review or
+> by the antagonist pass that broke its proposal.** The structural gap is real: needs are computed at
+> P2, forbidden storage, forbidden in the View, and consumed by a function that takes no world. **It is
+> stated as an open problem rather than closed with a repair that violates the design**, which is what
+> §17.5's round-1 record says this document's own best work looked like.
 
 ### §2.6 · A6 — NOTHING IN THE DESIGN CREATES A STRUCTURE; THE WORLD CAN ONLY LOSE THEM
 
@@ -535,121 +617,119 @@ city-builder and 4X seat.
 it; `mint` on a Site is building; `mint` on an Office is establishment. **Re-parenting is not added and
 should not be** — who holds the ground is `Tenure` (rank 2), not a parent pointer.
 
-### §2.7 · A7 — THE FOUR LICENSED NON-ACT CHANNELS DO NOT MEET THE SEASONAL-CHANGE GUARANTEE, BECAUSE ONE IS INERT AND THE OTHER THREE ARE DECAY
+### §2.7 · A7 — `season_factor`'s DISTRIBUTION IS UNSPECIFIED  *(⚠ substantially REFUTED and narrowed)*
 
-**The claim.** Absent NPC acts, the world can only run down.
+⚠ **FILED AS *"the matter-event channel is INERT — nothing generates one"*. THAT IS FALSE, AND SO WAS
+THE ⚠ CORRECTION THIS FILE HAD ALREADY APPLIED TO IT. Both are recorded (F3).**
 
-**The evidence.** §13.2 `:1636-1641` licenses **exactly four** non-act channels, *"these four, and only
-these four."* Audited:
+**What the document actually says**, at `:1348-1350`, in §10.4, describing siltation:
 
-| # | channel | state |
-|---|---|---|
-| 1 | **metabolism and nature** — larders, bodies, `yield` | **live** — and every limb of it is consumption or ageing |
-| 2 | **matter events** — a storm, a silted channel, a worked-out seam | ⚠ **INERT.** §13.2 `:1640` licenses it and §10.6 `:1370-1378` gates it with three conditions — and **nothing in the document generates one.** There is no matter-event generator anywhere. §10.4 `:1332` makes `condition` **act-only** by ruling (D-1), and §15.19 `:1836` records the narrowing: *"A site that decays with nobody touching it cannot be written as a term in the condition accumulator; it must be a matter event under §10.6's three conditions."* **The one channel that could produce untouched material change was closed, and its replacement was never written** |
-| 3 | **memory confidence decay** | **live** — decay |
-| 4 | **the calendar, LAPSE ONLY** | **live** — a deadline passing |
+> *"…while **a storm remains what #342 makes it — a bad `season_factor` roll** closing the channel *for
+> a season*, temporary by construction."*
 
-So the guaranteed seasonal change, absent NPC acts, is: **larders draw down, bodies age and die, memories
-fade, deadlines pass.** Every one is a subtraction. NPC acts are the real churn engine and they are
-genuine and good — but §2.1 removes their population's inflow, so even that decays.
+**That is the matter-event generator, named, for the exact instance §13.2's exception 2 lists** (*"a
+storm, a silted channel, a worked-out seam"*, `:1640`). #342 confirms it at `13:183-184`: *"Silt accrual
+folds invisibly into `transport_cost` until a storm (a bad `season_factor` roll) triggers a channel
+closure."* **So the channel is not inert, nothing is missing from §13.2's list, and the following claims
+are struck: *"INERT"*, *"nothing generates one"*, *"there is no matter-event generator anywhere in the
+document"*, and *"the one channel that could produce untouched material change was closed and its
+replacement was never written."***
 
-**Why it matters to play.** *"The world is always in flux"* is the specification. Flux is not decay. A
-world that changes only by running down teaches the player that absence always means loss, which is
-precisely the failure §13.3 `:1670-1674` identifies and tries to answer — *"a world that only ever fails
-you by omission is grim and, worse, **predictable**"* — and §13.3's answer, coincidence, is entirely made
-of NPC acts.
+⚠ **And this file's own earlier correction was wrong in the same direction.** It asserted that
+*"`season_factor` is NOT currently a roll"*, citing `:1404`'s *"the shipped territory multiplier that a
+blockade, a march or a collapsing Order moves"*. **`:1348` calls it a roll in plain words.** Both
+sentences are in the document; the reviewer read one and the corrector read the other, and **neither
+checked for the third.** That is struck too.
 
-> ⚠ **THE FIX, corrected from the form it was filed in.** The reviewing pass proposed reusing *"the
-> `season_factor` roll the design already ships"*. **`season_factor` is not a roll in this document.**
-> `:1404` calls it *"the shipped territory multiplier that a blockade, a march or a collapsing Order
-> moves"* — acts move it — and the per-season roll is `(3 + d10)/8.5` at `:1396`, which is per-holding,
-> not per-territory.
->
-> **The corrected fix, still with zero new primitives and no new write class: DECLARE
-> `season_factor(territory)` a per-territory, per-season DRAW with a published band, resolved in P1, and
-> define a matter event as an extreme draw on it.** A storm is a bad `season_factor`; a good year is a
-> good one. It is already territory-scoped, already impermanent by construction (`13:70-71` assigns
-> permanence to `base(H)` and impermanence to `season_factor`), already inside a licensed write class
-> (P1/matter), and already an operand of `yield` and nothing else — so it **cannot** violate D-1's
-> act-only `condition` accumulator, because it never touches `condition`.
->
-> **This also gives the world its first non-subtractive non-act channel**, since a draw has an upper
-> half. That is the whole of what exception 2 needed and it was never written. **this §6 rank 4.**
+### What survives, and it is a parameter gap rather than a missing mechanism
 
-### §2.8 · A8 — NO POLITY OF ANY SCALE CAN COME INTO EXISTENCE, AND THE POLITICAL MAP IS MONOTONICALLY SHRINKING
+**`season_factor(territory)` is read four times and its distribution is never stated.** It is an operand
+of `yield` at `:1331` and `:1396`; it is *"the temporary one"* against `base(H)`'s permanence
+(`:1405`, citing `13:70-71`); acts move it (`:1404`); and an extreme draw on it is a storm (`:1348`).
+**What is nowhere: its range, its mean, its shape, or what a "bad" draw is.** Contrast the term beside
+it in the same formula — `(3 + d10)/8.5` — which `:1399-1400` specifies exactly: *"it ranges `0.47×base`
+to `1.53×base` with mean exactly 1.0"*, with *"a bad season is `d10 ≤ 3` — a 30% event"*.
 
-**⚠ This is the review's #1 finding.** It was filed as a defect about founding a conspiracy; Jordan's
-clarification that a faction is the design's polity object **at every scale** makes it a defect about
-the existence of realms.
+**Why it matters to play.** `season_factor` is the only lever the world has for territory-scale
+material change, and §10.6's three conditions gate an outcome — a verb leaving a list — on where its
+draw lands. **A band edge whose distribution is unstated is a threshold nobody can reason about**, and
+§10.4's *"a storm … closing the channel for a season"* is unpriced: nobody can say whether that is a
+once-a-decade event or a once-a-generation one, and the difference is the difference between a design
+where Hafenmark's silt is a live political issue and one where it is scenery.
 
-**The claim.** A **Proposition** is an object no act can create; a faction is a proposition plus a
-commitment map at any scale; therefore **no new realm, duchy, church, knightly order or polity of any
-size can ever come into existence**, and the political map is frozen at world creation and can only
-drain.
+**THE FIX, matching the treatment the neighbouring term already gets.** Specify `season_factor`'s draw
+in §11.1 the way `(3 + d10)/8.5` is specified one line above it: a range, a mean of 1.0, and a named
+tail — *"a storm is `season_factor ≤ X`"* — so that §10.4's storm and §10.6's band edge have a stated
+frequency. **One line, no new object**, and it is bookkeeping rather than mechanism, which is why this
+finding is no longer in this review's top cluster.
 
-**The evidence.** §1.3 `:112`: *"A **faction** is a proposition plus a map from persons to a degree of
-commitment. **That is the entire object.**"* §1.3 `:130-133` ships **one** membership operation:
 
-> *"**One membership operation:** `commit(person, faction, Δdegree)`. Degree to zero is departure. A
-> schism is a subset whose commitment **migrates to a rival proposition**; a merger is **members of A
-> committing to B**; growth into a national body is many commits."*
+### §2.8 · A8 — PROPOSITION CREATION IS UNDER-SPECIFIED  *(⚠ substantially REFUTED and demoted)*
 
-`commit` takes a **faction**, not a proposition, and all three worked cases presuppose the target
-exists. Searched exhaustively, the document contains **no operation that mints a proposition**. The only
-two mentions are `:1490` — *"his stance emits a proposition"*, one clause in a worked example, with no
-act, no cost, no witness, no phase, no signature — and `:1742`, §14 row 9, which **clears a refusal row
-on the strength of a faction that "forms"** with no operation that forms it. #342 settles the lineage at
-`02:746`: **`Conviction signature | authored with each proposition`.** Authored. Content.
+⚠ **THIS WAS FILED, AND CARRIED THROUGH TWO REVISIONS OF THIS FILE, AS THE REVIEW'S #1 FINDING. IT IS
+SUBSTANTIALLY REFUTED. The refutation is recorded in full because the claim was load-bearing and
+because this file's own re-verification did not catch it.**
 
-**Consequence 1, and it is the whole weight of this finding — THE SCALE.** A faction is not a small
-object. `:71`: *"a faction is a proposition plus a commitment map **at any scale**."* `:113`: *"Two
-brothers who have sworn to burn out the reeve are a faction; **so is the Church of Solmund**."* `:318`:
-*"the Church is a faction, a parish is a community."*
+### What was claimed, and why it is wrong
 
-> **So the missing primitive does not block two brothers from founding a conspiracy. IT BLOCKS THE
-> EXISTENCE OF POLITIES. No new realm, duchy, church, knightly order, guild, military order or polity of
-> any scale can ever come into being. The entire political map is fixed at world creation, and the only
-> motion the design permits is commitment draining out of the propositions the world shipped with.**
->
-> And §1.3 `:130` makes the drain **irreversible**: *"Degree to zero is departure."* A faction whose
-> commitment reaches zero is gone, nothing recreates it, and nothing creates a successor. **The political
-> map is therefore not merely static — it is monotonically shrinking**, exactly as the population
-> (§2.1), the structures (§2.6) and the licensed non-act channels (§2.7) are. It is the same disease on
-> the object the whole strategic layer is made of.
+**Claimed:** *a Proposition is an object no act can create; a faction is a proposition plus a commitment
+map at any scale; therefore no realm, duchy, church or polity of any scale can ever come into existence,
+the political map is frozen at world creation and is monotonically shrinking.*
 
-**And it falsifies Jordan's requirement in that requirement's own words.** *"All starting national royal
-factions may collapse in the game to be replaced with **dynamically generated ones**."* Collapse is
-expressible — `commit` to zero for every member, which the design does elegantly. **Replacement is not,
-because a dynamically generated Kingdom IS a minted Proposition, and no operation mints one.** The
-design can lose every realm it shipped with and grow none.
+**Refuted on four lines of the subject.** A proposition is not a registered object with a missing
+constructor. **It is free-form content**, which the document states while arguing something else —
+`:1036`: *"famine is not stored, **propositions are free-form**, and liveness is a semantic judgment."*
+And it is produced wherever a person utters one:
 
-**Consequence 2 — §10.1's flagship claim is false.**
-`:1228-1230`:
+| shipped production site | line |
+|---|---|
+| `Petition(petitioner, proposition, respondent, backing)`, *"**Produced by a person** whose computed need exceeds what their own acts can reach"* | `:840`, `:843` |
+| `Dispensation(issuer, proposition, scope, terms)`, issued by a named office-holder | `:1121` |
+| `Ground = (proposition, warrant, support[])`, pleaded by a party at a sitting | `:1516` |
+| *"his stance **emits a proposition**"* | `:1490` |
 
-> *"and 'the seam must be restored' is a proposition, and the people whose practice used it are already
-> committed to it, so **a political faction forms out of a physical fact with no authoring at all**"*
+**A faction is a proposition plus a commitment map**, so committing to a proposition somebody just
+uttered **is** the faction forming. Nothing waits on a constructor. **Every strong claim built on the
+contrary assumption is withdrawn**: *"can never come to exist"*, *"no operation mints a proposition"*,
+*"the entire political map is frozen at world creation"*, *"monotonically shrinking"*, *"the design can
+lose every realm it shipped with and grow none"*, and the reading of Jordan's dynamically-generated-
+factions requirement as unreachable.
 
-Nothing makes that proposition exist. Nothing makes anyone committed to it before it does. **The
-design's most celebrated emergent behaviour — the one §10 is built to produce and §14 row 9 is cleared
-on — rests entirely on the one primitive the document does not have.** The sentence is not merely
-unproven; it is unreachable on the document's own object list.
+⚠ **And the quotation the argument rested on was truncated in both places this file used it.** `:1229-1230`
+in full, with the clause this file cut:
 
-**Why a Proposition is worse than every other missing constructor.** Persons, claims, sites and cohorts
-at least change population by a decider-free channel (death, eviction, individuation, P1). **A
-proposition has no channel of any kind** — not act, not clock, not metabolism. Once absent, it can never
-come to exist.
+> *"…so **a political faction forms out of a physical fact with no authoring at all** (§1.3's faction
+> object, unchanged)."*
 
-⚠ **And do NOT read this as a case for a `found_faction` verb or a merge verb.** §1.3 `:131-133` refuses
-*"merge, split, promote, or found-at-size"* and is **right** to: founding at size is the discontinuity
-the derived-scale argument exists to abolish, and §14 row 9 `:1742` forbids the field that would carry
-it. What is needed is founding **at one** — a single person committing to a proposition that did not
-exist a moment ago — which is `mint` plus the shipped `commit`, and is continuous by construction.
+**That parenthetical is the document answering the exact objection this review was raising**, and
+cutting it without an ellipsis and then calling the sentence *"false"* and *"unreachable"* is the
+citation failure this review criticises in others. **The *"flagship claim is false"* verdict is
+withdrawn.** §10.1's sentence stands as written.
 
-**THE FIX.** this §6 rank 1, applied to a Proposition. `mint` on a Proposition **is** faction founding;
-`efface` on one is a faction dissolving rather than merely emptying. And it repairs `02:746` in the
-right direction: **the conviction signature stops being authored content and is derived from the minting
-person's stance at the moment of the act** — which is §5.1 `:511`'s own discipline, *"the target is
-computed, never assigned"*, applied one level up.
+### What survives, at its true weight
+
+**Proposition creation is under-specified, and it is a Tier-1 gap for one narrow reason: the design's
+central discipline is that every act has a cost, a witness and a phase, and this operation has none of
+the three.**
+
+`:1490` is the only place the document describes a proposition coming into being — *"his stance emits a
+proposition"* — **one clause, inside a worked example, with no act, no cost, no witness and no phase.**
+And nothing anywhere states that `commit` to a **novel** proposition is legal, or how any second person
+comes to hold a claim about a proposition that exists only in the first person's head. §1.3 `:131-133`'s
+three worked cases — schism *"migrates to a rival proposition"*, merger *"members of A committing to B"*,
+growth *"many commits"* — all describe movement between propositions that already have adherents, and
+none describes the first commit.
+
+**Why it still matters to play.** A faction's founding is the moment a political object becomes
+contestable, and under §3's rules **nobody can oppose, join or even mention a proposition they hold no
+claim about.** Without a stated production path, the first-mover problem is undefined: the Restoration's
+founder utters his proposition, and the design does not say what event other people witness.
+
+**THE FIX, and it is small.** State the production path in §1.3, in one line, using shipped machinery:
+**uttering a proposition is part of an ordinary act — a petition, a dispensation, a ground at a sitting,
+or a telling — so it is witnessed by presence like anything else, and the claim it deposits is what lets
+a second person `commit`.** No new object, no new verb, no cost beyond the act that carried it. That
+turns `:1490`'s clause into a rule and closes the gap without reinstating any of the withdrawn claims.
 
 
 ### §2.9 · A9 — A FACTION HAS NO LEADER, AND THE DESIGN OWES A DERIVATION IT NEVER SUPPLIES
@@ -845,10 +925,27 @@ and the convening office is *"worth holding, worth conferring, worth revoking, a
 The defect is also **new** — it is a residue of the D-5 fix, which restored *"`carry` spends one of
 each"* without re-checking what the second one was for.
 
-> **THE FIX: `capacity(date)` is a SELECTION CAP, never a currency. `carry` spends `seat_items` only.**
-> Delete the `# 05:176` cost line from §8.2's block and re-word §4.3's `capacity(date)` row from *"a
-> carried petition **claims** one of these slots"* to *"a carried petition **competes for** one of these
-> slots"*.
+⚠ **THE FIX MUST ENGAGE D-5, WHICH THIS REVIEW'S FIRST WORDING SILENTLY REVERSED (M3).** *"`carry`
+spends `seat_items` only"* **is the exact change §17.5's round 2 withdrew**, at `:401-404`: *"An earlier
+version of this document re-denominated `carry` to `seat_items` alone, which silently overrode `05:176`
+— and did so against §3.4's own conflict rule, since doc 05's declared subject is carriage. Both costs
+are restored and neither document is overruled (D-5)."* Proposing it again without citing `05:176` or
+§3.4 would repeat the defect D-5 was raised to fix.
+
+⚠ **And the *"the defect is new"* attribution is struck.** This review called the double-count *"a
+residue of the D-5 fix"*. **It is not new**: `05:176` charges the docket slot and `05:190-191` uses
+`capacity(date)` as the admission cap in #342 itself. **D-5 faithfully restored a contradiction that
+was already shipped.** The contradiction is real; its parentage is not this document's.
+
+> **THE FIX, stated so that it overrules a document rather than ignoring one.** `05:176` and `05:190-191`
+> **collide** — one spends `capacity(date)` at carriage, the other selects against it at composition, and
+> both cannot hold. That is a fifth collision for §3.4's table, and §3.4's conflict rule decides it:
+> **doc 05 is the declared subject of both lines, so the rule does not select** — exactly as it failed
+> to select on `exposure` at `:288-295`. **So this needs a ruling by fiat, named as one**, which is the
+> move §3.4 already models: **`capacity(date)` is a SELECTION CAP and never a currency; `carry` spends
+> `seat_items` only; `05:176` is overruled explicitly, with the reason stated** — that a quantity cannot
+> be both the price of entry and the cap on selection without making §4.3's *"carried items may exceed
+> capacity"* arithmetically impossible and emptying §8.4 of its subject.
 >
 > **This also repairs §4.3's own thesis, which is currently false in kind.** `:389` claims *"Every price
 > charged anywhere in this document is denominated in one of exactly two quantities"* — and one of the
