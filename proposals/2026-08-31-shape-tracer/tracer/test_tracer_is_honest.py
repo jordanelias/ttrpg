@@ -204,3 +204,42 @@ def test_every_new_probe_is_reachable_from_some_route():
     from run_cases import route
     assert route("a leader's repeated use must silently accumulate a hidden personal quantity") == "P34"
     assert route("building toward a use-threshold must be contestable by an opposing actor's action") == "P35"
+
+
+def test_the_word_enforce_does_not_manufacture_a_pass():
+    """Fourth greedy-keyword defect, found by an independent read-only audit rather than by me:
+    "a policy he ENFORCES" routed to A17 (winning vs enforcing are separate events) and came back
+    PASS, so a report claimed the King was blocked on a probe his own case had passed. A false
+    PASS is the dangerous direction and this one also corrupted a downstream change list."""
+    from run_cases import route
+    assert route("a leader's own long-held private doubt about a policy he enforces must be able "
+                 "to persist for many seasons without forcing a decision") == "P19"
+    assert route("an enforcer's valued professional trait must become a liability") != "A17"
+    # the genuine A17 shape must still route
+    assert route("a formal contest with a trackable winner must produce a ruling entirely "
+                 "separate from its implementation") == "A17"
+
+
+def test_an_action_budget_need_is_not_a_spiral():
+    """`A5` is a self-reinforcing loop. The King's "unaddressed ones COMPOUNDING" landed there on
+    the word "compound" when the need is an action budget — Jordan's stated player model is ~5
+    scenes and so ~5 acts per season, and the shape gives exactly one."""
+    from run_cases import route
+    assert route("a single leader must be able to face several independent, ongoing pressure "
+                 "sources in one season and only be able to substantively address a subset of "
+                 "them, with the unaddressed ones compounding rather than pausing") == "P36"
+
+
+def test_choose_returns_exactly_one_act_which_is_the_finding_p36_reports():
+    """P36 must rest on an executed property of the shape, not on a reading of it."""
+    w = _w()
+    w.persons["k"] = Person(id="k")
+    calls = []
+
+    def once(p, v, s):
+        calls.append(p)
+        return Act(actor="k", verb="tell", target="settl")
+
+    SeasonLoop(w).run({"k": once})
+    assert len(calls) == 1, ("the shape calls choose once per person per season; if this ever "
+                             "returns >1 the action-budget finding is obsolete and P36 must go")

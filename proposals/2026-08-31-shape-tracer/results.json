@@ -319,16 +319,21 @@
    "verdict": "NO-PRODUCER",
    "detail": "[NO-PRODUCER] contested quantity: both acts resolved and emitted ['restore', 'wreck']; the site's condition took both deltas independently. That is correct for matter and it is NOT contest \u2014 nothing in `resolve()` sees that two acts addressed one target in one season, so there is no net, no opposition, and no way for a blocker to hold a line  @P35 opposed acts on one target  needs: either an explicit statement that opposition is emergent from summed deltas and arcs must be written that way, or a resolve() that groups acts by target \u2014 the second is a second resolver and the shape's own meta-rule forbids it",
    "doc": "an actor is stopped by an opponent building the SAME quantity in the same place"
+  },
+  "P36": {
+   "verdict": "NO-PRODUCER",
+   "detail": "[NO-PRODUCER] action budget: `choose(Person, View, Sensation) -> Act` returns ONE Act, and DELIBERATE called it 1 time(s). A season is one act per person, so nobody triages, nothing is left undone, and a King's scarcity is identical to a copyist's. Note what this also voids: `14` closes the petition-spray defect 'PROVISIONALLY by one act per person', a fix that does not survive the stated player model of ~5  @P36 acts per season  needs: `choose` returning an ORDERED Act[] bounded by a per-person budget, with the budget itself a Query (office, condition, distance travelled) rather than a constant \u2014 and a re-answer to petition-spray that survives a budget above one",
+   "doc": "a person gets ~5 acts in a season and must choose which pressures to leave unaddressed"
   }
  },
  "need_rows": 527,
  "need_verdicts": {
   "FORBIDDEN": 39,
-  "NO-PRODUCER": 117,
-  "UNMAPPED": 228,
+  "NO-PRODUCER": 123,
+  "UNMAPPED": 226,
   "COLLISION": 12,
-  "UNSPECIFIED": 31,
-  "PASS": 100
+  "UNSPECIFIED": 32,
+  "PASS": 95
  },
  "case_verdicts": {
   "ARC-01": "BLOCKED",
@@ -387,12 +392,12 @@
   "NPC-086": "BLOCKED",
   "NPC-075": "BLOCKED",
   "NPC-005": "BLOCKED",
-  "NPC-010": "NOT-ASSESSED",
+  "NPC-010": "BLOCKED",
   "NPC-012": "BLOCKED",
   "NPC-002": "NOT-ASSESSED",
   "NPC-004": "BLOCKED",
   "NPC-033": "BLOCKED",
-  "NPC-083": "NOT-ASSESSED",
+  "NPC-083": "BLOCKED",
   "NPC-008": "NOT-ASSESSED",
   "NPC-038": "NOT-ASSESSED",
   "NPC-013": "BLOCKED",
@@ -404,8 +409,8 @@
   "NPC-050": "BLOCKED",
   "NPC-052": "BLOCKED",
   "NPC-070": "BLOCKED",
-  "NPC-003": "DEGRADED",
-  "NPC-032": "NOT-ASSESSED",
+  "NPC-003": "NOT-ASSESSED",
+  "NPC-032": "BLOCKED",
   "NPC-031": "BLOCKED",
   "NPC-030": "BLOCKED",
   "NPC-001": "BLOCKED"
@@ -2375,8 +2380,8 @@
     },
     {
      "need": "whether the counter's holder enforces her position at the resulting confrontation must be resolvable via a mass-combat engagement whose outcome retroactively validates or invalidates the deposed authority's legitimacy",
-     "probe": "A17",
-     "verdict": "PASS",
+     "probe": "F2",
+     "verdict": "UNSPECIFIED",
      "hardness": "important"
     }
    ]
@@ -2703,20 +2708,20 @@
     },
     {
      "need": "an enforcer's positive, valued professional trait (rigorous documentation) must, without any change in his behavior, become the specific mechanism constructing a damning case against himself once what he is documenting is his own anomalous perception",
-     "probe": "A17",
-     "verdict": "PASS",
+     "probe": null,
+     "verdict": "UNMAPPED",
      "hardness": "core"
     },
     {
      "need": "a third party who can independently verify the enforcer's hidden condition must have a real choice between at least three distinct outcomes -- report to his institution, report to him directly, or withhold -- each producing a different consequence chain",
-     "probe": "A17",
-     "verdict": "PASS",
+     "probe": null,
+     "verdict": "UNMAPPED",
      "hardness": "core"
     },
     {
      "need": "withholding disclosure must not freeze the situation -- the enforcer's own unassisted, ongoing documentation must reach the same self-incriminating conclusion independently after a further delay",
-     "probe": "A17",
-     "verdict": "PASS",
+     "probe": null,
+     "verdict": "UNMAPPED",
      "hardness": "important"
     }
    ]
@@ -2737,8 +2742,8 @@
    "rows": [
     {
      "need": "a formal, evidence-based decision procedure must support citing a specific, previously-established, verifiable fact as a bonus-granting move, mechanically distinct from generic argument, and that fact must originate from a separate, ongoing long-term research arc",
-     "probe": null,
-     "verdict": "UNMAPPED",
+     "probe": "A17",
+     "verdict": "PASS",
      "hardness": "important"
     },
     {
@@ -3381,8 +3386,8 @@
    "rows": [
     {
      "need": "A non-faction, non-institutional actor must be able to hold and trade a resource (information, trust, access) that no faction's own action economy owns or produces -- a market that exists outside every faction's resource pools.",
-     "probe": null,
-     "verdict": "UNMAPPED",
+     "probe": "P36",
+     "verdict": "NO-PRODUCER",
      "hardness": "core"
     },
     {
@@ -3700,8 +3705,8 @@
    "rows": [
     {
      "need": "A governor must be able to spend a limited, renewing per-season budget across a menu of distinct administrative actions such that doing everything the settlement needs in one season is structurally impossible.",
-     "probe": null,
-     "verdict": "UNMAPPED",
+     "probe": "P36",
+     "verdict": "NO-PRODUCER",
      "hardness": "core"
     },
     {
@@ -4114,14 +4119,14 @@
    "rows": [
     {
      "need": "A single leader must be able to face several independent, ongoing pressure sources in one season and only be able to substantively address a subset of them, with the unaddressed ones compounding rather than pausing.",
-     "probe": "A5",
+     "probe": "P36",
      "verdict": "NO-PRODUCER",
      "hardness": "core"
     },
     {
      "need": "A leader's own long-held private doubt about a policy he enforces must be able to persist for many seasons without forcing a decision, and that persistence must itself count as a consequential choice rather than a null state.",
-     "probe": "A17",
-     "verdict": "PASS",
+     "probe": "P19",
+     "verdict": "NO-PRODUCER",
      "hardness": "core"
     },
     {
@@ -4138,8 +4143,8 @@
     },
     {
      "need": "The leader must be structurally unable to act on a piece of private knowledge or sympathy without incurring a cost that a lower-status person acting the same way would not incur.",
-     "probe": null,
-     "verdict": "UNMAPPED",
+     "probe": "P21",
+     "verdict": "NO-PRODUCER",
      "hardness": "core"
     },
     {
@@ -4239,7 +4244,7 @@
     },
     {
      "need": "The same enforcement apparatus must be able to treat a follower differently purely based on which territory that follower is standing in when investigated.",
-     "probe": "A17",
+     "probe": "F5",
      "verdict": "PASS",
      "hardness": "important"
     },
@@ -4470,8 +4475,8 @@
     },
     {
      "need": "A leader must be able to choose, season after season, between consolidating her base in fewer places or spreading it thinly across many, with that choice producing a measurably different vulnerability to a specific opposing institution's enforcement action.",
-     "probe": "A17",
-     "verdict": "PASS",
+     "probe": null,
+     "verdict": "UNMAPPED",
      "hardness": "core"
     },
     {
@@ -4525,8 +4530,8 @@
    "rows": [
     {
      "need": "A person with a genuine political programme and real institutional standing must be able to have no independent action economy of her own, so that everything she wants to achieve routes entirely through influencing a different person's decisions.",
-     "probe": null,
-     "verdict": "UNMAPPED",
+     "probe": "P36",
+     "verdict": "NO-PRODUCER",
      "hardness": "core"
     },
     {
@@ -4657,8 +4662,8 @@
    "rows": [
     {
      "need": "A person with no independent action economy, off the primary board entirely, must still be able to make another character's every relevant decision legible as being driven by concern for her specific safety.",
-     "probe": null,
-     "verdict": "UNMAPPED",
+     "probe": "P36",
+     "verdict": "NO-PRODUCER",
      "hardness": "core"
     },
     {
@@ -4771,7 +4776,7 @@
     },
     {
      "need": "Her cooperation must be reachable through several structurally different paths \u2014 sponsorship by a rival faction, ideological embrace by a popular movement, a party's own independently founded organization, patronage from a member of the ruling family, or an independent crisis with no faction involved \u2014 each producing a different governance shape for the group she leads once it becomes politically active.",
-     "probe": "P12",
+     "probe": "A17",
      "verdict": "PASS",
      "hardness": "flavour"
     }
@@ -5405,8 +5410,18 @@
    "hardness": "important"
   },
   {
-   "case": "ARC-42",
-   "need": "a formal, evidence-based decision procedure must support citing a specific, previously-established, verifiable fact as a bonus-granting move, mechanically distinct from generic argument, and that fact must originate from a separate, ongoing long-term research arc",
+   "case": "ARC-41",
+   "need": "an enforcer's positive, valued professional trait (rigorous documentation) must, without any change in his behavior, become the specific mechanism constructing a damning case against himself once what he is documenting is his own anomalous perception",
+   "hardness": "core"
+  },
+  {
+   "case": "ARC-41",
+   "need": "a third party who can independently verify the enforcer's hidden condition must have a real choice between at least three distinct outcomes -- report to his institution, report to him directly, or withhold -- each producing a different consequence chain",
+   "hardness": "core"
+  },
+  {
+   "case": "ARC-41",
+   "need": "withholding disclosure must not freeze the situation -- the enforcer's own unassisted, ongoing documentation must reach the same self-incriminating conclusion independently after a further delay",
    "hardness": "important"
   },
   {
@@ -5561,11 +5576,6 @@
   },
   {
    "case": "NPC-010",
-   "need": "A non-faction, non-institutional actor must be able to hold and trade a resource (information, trust, access) that no faction's own action economy owns or produces -- a market that exists outside every faction's resource pools.",
-   "hardness": "core"
-  },
-  {
-   "case": "NPC-010",
    "need": "She must be discoverable, killable, buyable, or turnable by an outside actor as four textually distinct outcomes with different consequences for her network, not variations on one generic 'remove her' resolution.",
    "hardness": "core"
   },
@@ -5638,11 +5648,6 @@
    "case": "NPC-033",
    "need": "The office must be able to continue functioning (brokered deals still resolving, information still flowing) across a season in which the player takes no action involving her at all.",
    "hardness": "flavour"
-  },
-  {
-   "case": "NPC-083",
-   "need": "A governor must be able to spend a limited, renewing per-season budget across a menu of distinct administrative actions such that doing everything the settlement needs in one season is structurally impossible.",
-   "hardness": "core"
   },
   {
    "case": "NPC-083",
@@ -5746,11 +5751,6 @@
   },
   {
    "case": "NPC-020",
-   "need": "The leader must be structurally unable to act on a piece of private knowledge or sympathy without incurring a cost that a lower-status person acting the same way would not incur.",
-   "hardness": "core"
-  },
-  {
-   "case": "NPC-020",
    "need": "A crisis inside the leader's own family (an heir's death, a spouse's death, an heir's capture) must be able to fire unpredictably and reconfigure what the leader does for many subsequent seasons, visibly to every other actor.",
    "hardness": "important"
   },
@@ -5841,13 +5841,13 @@
   },
   {
    "case": "NPC-003",
-   "need": "A local population must be able to unilaterally shift its own governance to this movement's control the moment its existing governance completely collapses, without the movement's central leadership needing to have taken any action there that season.",
-   "hardness": "flavour"
+   "need": "A leader must be able to choose, season after season, between consolidating her base in fewer places or spreading it thinly across many, with that choice producing a measurably different vulnerability to a specific opposing institution's enforcement action.",
+   "hardness": "core"
   },
   {
-   "case": "NPC-032",
-   "need": "A person with a genuine political programme and real institutional standing must be able to have no independent action economy of her own, so that everything she wants to achieve routes entirely through influencing a different person's decisions.",
-   "hardness": "core"
+   "case": "NPC-003",
+   "need": "A local population must be able to unilaterally shift its own governance to this movement's control the moment its existing governance completely collapses, without the movement's central leadership needing to have taken any action there that season.",
+   "hardness": "flavour"
   },
   {
    "case": "NPC-032",
@@ -5868,11 +5868,6 @@
    "case": "NPC-031",
    "need": "The heir's maturation from a dependent status into an independent political actor with his own agenda must be able to be triggered by any of several different kinds of event \u2014 elapsed time, his own accumulated preparation, a crisis in the ruling institution, or the current ruler's death \u2014 whichever comes first.",
    "hardness": "important"
-  },
-  {
-   "case": "NPC-030",
-   "need": "A person with no independent action economy, off the primary board entirely, must still be able to make another character's every relevant decision legible as being driven by concern for her specific safety.",
-   "hardness": "core"
   },
   {
    "case": "NPC-030",
@@ -5921,13 +5916,13 @@
   }
  ],
  "trace_summary": {
-  "acts": 79,
-  "events": 116,
-  "writes": 334,
-  "gaps_total": 46,
+  "acts": 80,
+  "events": 117,
+  "writes": 337,
+  "gaps_total": 47,
   "gaps_by_kind": {
    "UNSPECIFIED": 11,
-   "NO-PRODUCER": 28,
+   "NO-PRODUCER": 29,
    "COLLISION": 3,
    "FORBIDDEN": 4
   },
@@ -5977,7 +5972,8 @@
    "PROBE-A18": 1,
    "PROBE-A19": 1,
    "PROBE-P34": 1,
-   "PROBE-P35": 1
+   "PROBE-P35": 1,
+   "PROBE-P36": 1
   }
  },
  "gaps": [
@@ -6392,6 +6388,15 @@
    "where": "P35 opposed acts on one target",
    "needs": "either an explicit statement that opposition is emergent from summed deltas and arcs must be written that way, or a resolve() that groups acts by target \u2014 the second is a second resolver and the shape's own meta-rule forbids it",
    "case": "PROBE-P35",
+   "season": 1,
+   "step": "CENSUS"
+  },
+  {
+   "kind": "NO-PRODUCER",
+   "what": "action budget: `choose(Person, View, Sensation) -> Act` returns ONE Act, and DELIBERATE called it 1 time(s). A season is one act per person, so nobody triages, nothing is left undone, and a King's scarcity is identical to a copyist's. Note what this also voids: `14` closes the petition-spray defect 'PROVISIONALLY by one act per person', a fix that does not survive the stated player model of ~5",
+   "where": "P36 acts per season",
+   "needs": "`choose` returning an ORDERED Act[] bounded by a per-person budget, with the budget itself a Query (office, condition, distance travelled) rather than a constant \u2014 and a re-answer to petition-spray that survives a budget above one",
+   "case": "PROBE-P36",
    "season": 1,
    "step": "CENSUS"
   }

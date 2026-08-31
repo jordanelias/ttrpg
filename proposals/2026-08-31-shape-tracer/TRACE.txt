@@ -1759,6 +1759,24 @@
   [CENSUS]
     !!   NO-PRODUCER: contested quantity: both acts resolved and emitted ['restore', 'wreck']; the site's condition took both deltas independently. That is correct for matter and it is NOT contest — nothing in `resolve()` sees that two acts addressed one target in one season, so there is no net, no opposition, and no way for a blocker to hold a line @P35 opposed acts on one target
 
+=== CASE PROBE-P36 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(almud)   (omits World)
+    ACT  almud :: tell -> settl
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 tell @settl causes=[]
+  [WITNESS]
+    call witness(almud<-E1.0)
+    W    Person.ledger[almud] <- 'tell@settl'  class=INTERIOR driver=Event
+  [CENSUS]
+    !!   NO-PRODUCER: action budget: `choose(Person, View, Sensation) -> Act` returns ONE Act, and DELIBERATE called it 1 time(s). A season is one act per person, so nobody triages, nothing is left undone, and a King's scarcity is identical to a copyist's. Note what this also voids: `14` closes the petition-spray defect 'PROVISIONALLY by one act per person', a fix that does not survive the stated player model of ~5 @P36 acts per season
+
 === CASE ARC1:ARC-01 ===
 
 === CASE ARC1:ARC-02 ===

@@ -9,7 +9,7 @@
 
 **SCOPE AS RUN: 50 arcs.** The 18 of the `gm_ref` current series, the root series' arcs 16–19 and
 20–45, and 2 cases from the emergent corpus. Together with a:NPC's 27 characters that is **78 cases
-and 527 `season_requires` rows** driven through 64 probes.
+and 527 `season_requires` rows** driven through 65 probes.
 
 ---
 
@@ -19,7 +19,7 @@ and 527 `season_requires` rows** driven through 64 probes.
 |---|---|
 | cases | **50 arcs** |
 | verdict | **39 BLOCKED · 10 NOT-ASSESSED · 1 PLAYABLE** |
-| top core blockers | `A2` threshold-ending (10) · `A13` ambient social drift (8) · `P34` hidden self-accumulation (7) · `P4` conviction motion (7) · `P3` covert action (5) · `P26` accumulated harm (5) |
+| top core blockers | `A2` threshold-ending (10) · `A13` ambient social drift (8) · `P34` hidden self-accumulation (7) · `P4` conviction motion (7) · `P3` covert action (5) · `P26` accumulated harm (5) · `A5` unbounded spiral (4) · `A4` provenance (4) |
 
 **One arc runs.** `ARC-06`, *The Debate That Won the Wrong Thing* — and it runs because its subject
 is the one thing the shape gets right for free (§4).

@@ -1235,3 +1235,37 @@ def p35(w=None):
               "arcs must be written that way, or a resolve() that groups acts by target — the "
               "second is a second resolver and the shape's own meta-rule forbids it",
     )
+
+
+@probe("P36", "a person gets ~5 acts in a season and must choose which pressures to leave unaddressed")
+def p36(w=None):
+    """NPC-020 (Almud) core, and Jordan's stated player model: ~5 playable scenes per season,
+    which may mean ~5 actions.
+
+    The lane's words: 'a single leader must be able to face several independent, ongoing pressure
+    sources in one season and ONLY BE ABLE TO SUBSTANTIVELY ADDRESS A SUBSET of them, with the
+    unaddressed ones COMPOUNDING rather than pausing.' That is an action budget, and triage is the
+    whole game at high office.
+    """
+    w = w or _world()
+    w.persons["almud"] = Person(id="almud")
+    loop = SeasonLoop(w)
+    n = 0
+
+    def greedy(p, v, s):
+        nonlocal n
+        n += 1
+        return Act(actor="almud", verb="tell", target="settl")
+
+    loop.run({"almud": greedy})
+    raise NoProducer(
+        f"action budget: `choose(Person, View, Sensation) -> Act` returns ONE Act, and DELIBERATE "
+        f"called it {n} time(s). A season is one act per person, so nobody triages, nothing is left "
+        "undone, and a King's scarcity is identical to a copyist's. Note what this also voids: "
+        "`14` closes the petition-spray defect 'PROVISIONALLY by one act per person', a fix that "
+        "does not survive the stated player model of ~5",
+        "P36 acts per season",
+        needs="`choose` returning an ORDERED Act[] bounded by a per-person budget, with the budget "
+              "itself a Query (office, condition, distance travelled) rather than a constant — and "
+              "a re-answer to petition-spray that survives a budget above one",
+    )

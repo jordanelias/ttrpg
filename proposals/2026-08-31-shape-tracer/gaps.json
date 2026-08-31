@@ -1,12 +1,12 @@
 {
  "summary": {
-  "acts": 79,
-  "events": 116,
-  "writes": 334,
-  "gaps_total": 46,
+  "acts": 80,
+  "events": 117,
+  "writes": 337,
+  "gaps_total": 47,
   "gaps_by_kind": {
    "UNSPECIFIED": 11,
-   "NO-PRODUCER": 28,
+   "NO-PRODUCER": 29,
    "COLLISION": 3,
    "FORBIDDEN": 4
   },
@@ -56,7 +56,8 @@
    "PROBE-A18": 1,
    "PROBE-A19": 1,
    "PROBE-P34": 1,
-   "PROBE-P35": 1
+   "PROBE-P35": 1,
+   "PROBE-P36": 1
   }
  },
  "gaps": [
@@ -471,6 +472,15 @@
    "where": "P35 opposed acts on one target",
    "needs": "either an explicit statement that opposition is emergent from summed deltas and arcs must be written that way, or a resolve() that groups acts by target \u2014 the second is a second resolver and the shape's own meta-rule forbids it",
    "case": "PROBE-P35",
+   "season": 1,
+   "step": "CENSUS"
+  },
+  {
+   "kind": "NO-PRODUCER",
+   "what": "action budget: `choose(Person, View, Sensation) -> Act` returns ONE Act, and DELIBERATE called it 1 time(s). A season is one act per person, so nobody triages, nothing is left undone, and a King's scarcity is identical to a copyist's. Note what this also voids: `14` closes the petition-spray defect 'PROVISIONALLY by one act per person', a fix that does not survive the stated player model of ~5",
+   "where": "P36 acts per season",
+   "needs": "`choose` returning an ORDERED Act[] bounded by a per-person budget, with the budget itself a Query (office, condition, distance travelled) rather than a constant \u2014 and a re-answer to petition-spray that survives a budget above one",
+   "case": "PROBE-P36",
    "season": 1,
    "step": "CENSUS"
   }

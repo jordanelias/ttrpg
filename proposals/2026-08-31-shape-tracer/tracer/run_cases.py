@@ -34,6 +34,13 @@ ROUTES: list[tuple[str, str]] = [
     # -- generic world rules first and mis-routed "degrade his PERSONAL condition" to W1 (site
     # -- decay) and "maintenance labor" to A3 (substrate), turning two BLOCKED cases into false
     # -- PLAYABLEs. A greedy keyword is worse than no keyword.
+    # -- EIGHTH WAVE. The King's first core need routed to A5 (spirals) on the word "compound";
+    # -- it is an ACTION BUDGET, and Jordan's stated player model is ~5 scenes and so ~5 acts
+    # -- per season. The shape gives exactly one. Triage is the whole game at high office.
+    (r"address a subset|only .{0,30}(address|act on) .{0,20}(some|a subset|part)"
+     r"|unaddressed .{0,20}compound|several independent, ongoing pressure|actions? per season"
+     r"|limited .{0,30}per-season (budget|pool)|menu of distinct .{0,20}actions"
+     r"|action economy|renewing per-season", "P36"),
     # -- SEVENTH WAVE routes. Ordering defect found when the expanded arc corpus landed: the
     # -- bare word "threshold" was routing 16 core needs onto W2 (band strobing), which is a
     # -- different mechanism entirely. Mis-routing did not flatter the shape here (W2 is also a
@@ -54,7 +61,12 @@ ROUTES: list[tuple[str, str]] = [
     (r"held in reserve|once per arc|usable once|reserved resource|optimal .* window", "A15"),
     (r"procedural (stage|timetable)|advance .* on its own|regardless of whether .* acts"
      r"|fixed procedural", "A16"),
-    (r"won .* contest .* separate|enforce|implementation .* fail|ruling .* separate", "A17"),
+    # FOURTH greedy-keyword defect, found by the comparative audit: the bare word "enforce"
+    # routed five needs here, including the King's "a policy he ENFORCES", which then read
+    # as PASS. A17 is specifically WINNING vs ENFORCING as two events; require that shape.
+    (r"(won|winning|victor\w*|ruling|contest|argument).{0,60}(separate|distinct|independent)"
+     r"|implementation .* fail|enforc\w+ .{0,40}(separate|fail|its own)"
+     r"|(separate|distinct) .{0,30}enforc", "A17"),
     (r"persist(ent|s)? .* after the (battle|scene)|outlives the scene that|lingering|carries into"
      r"|condition .* not automatically cleared", "A18"),
     (r"irreversib|no exit|permanently and irrecoverab|zero-point|can no longer choose", "A19"),
@@ -70,9 +82,12 @@ ROUTES: list[tuple[str, str]] = [
     (r"two (independent )?(rank|standing|reputation)|parallel .* track|separate ladder"
      r"|covert reputation|private reputation", "P33"),
     (r"reassess.{0,30}(loyal|stage)|in stages|gradual(ly)? .* reassess|does not revert", "P18"),
-    (r"inaction|not acting|persist .* without forcing a decision|deferr|uncertainty is itself", "P19"),
+    (r"inaction|not acting|persist\w* .{0,40}without forcing a decision|deferr"
+     r"|uncertainty is itself|persistence must itself count|rather than a null state"
+     r"|erode from .{0,20}inaction|from (that |the )?(patron|leader|ruler).s inaction", "P19"),
     (r"diverge from what .* intended|carried out differently|acting in .* name .* diverge", "P20"),
-    (r"more constrained by visibility|publicness|higher status .* cost|visible .* cost more", "P21"),
+    (r"more constrained by visibility|publicness|higher status .* cost|visible .* cost more"
+     r"|lower-status .{0,40}would not|a cost that a (lower|higher)\b|status .{0,20}asymmetr", "P21"),
     (r"private setting at no cost|confidential counsel|frank .* private|public(ly)? .* would cost", "P22"),
     (r"cannot be retried|cooldown|un-repeatable|fail(ed)?, cost .* standing", "P23"),
     (r"revocable by the collective|body that grants it|revoke .* authority it granted", "P24"),

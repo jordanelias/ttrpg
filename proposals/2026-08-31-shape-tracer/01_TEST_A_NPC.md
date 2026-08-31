@@ -17,16 +17,16 @@
 | | |
 |---|---|
 | cases | **27 named NPCs**, specs written by three lanes **blind to the shape** |
-| verdict | **19 BLOCKED · 6 NOT-ASSESSED · 2 DEGRADED · 0 PLAYABLE** |
-| probes | 64 executed attempts against the shape — **18 PASS, 1 PARTIAL, 45 gaps** |
+| verdict | **22 BLOCKED · 4 NOT-ASSESSED · 1 DEGRADED · 0 PLAYABLE** |
+| probes | 65 executed attempts against the shape — **18 PASS, 1 PARTIAL, 46 gaps** |
 | trace | 79 acts, 116 events, 334 class-checked writes |
-| gap kinds | 28 NO-PRODUCER · 11 UNSPECIFIED · 4 FORBIDDEN · 3 COLLISION |
+| gap kinds | 29 NO-PRODUCER · 11 UNSPECIFIED · 4 FORBIDDEN · 3 COLLISION |
 
 **A case is BLOCKED when a need its own lane graded `core` maps to a probe that could not
 execute.** Not one of twenty-seven named characters has a season that runs end to end.
 
 ⚠ **THE PROBE VERDICTS ARE THE HARD RESULT. THE CASE VERDICTS ARE ADVISORY.** Needs are routed onto
-probes by keyword, and keyword routing is crude: it mis-fired three times in ways I caught (§5) and
+probes by keyword, and keyword routing is crude: it mis-fired four times in ways I caught (§5) and
 is certainly still mis-firing in ways I did not. **`NOT-ASSESSED` is the instrument admitting it
 did not aim** — a case more than half of whose `core` needs failed to route is reported as untested
 rather than graded, because grading it PLAYABLE would be the instrument flattering the shape by
@@ -65,12 +65,13 @@ investigation (`P25`).
 
 | probe | core-blocks | what breaks |
 |---|---|---|
+| **P36** | **5** | `choose` returns **one** Act and the loop calls it **once per person per season**. There is no action budget, so nobody triages and a King's scarcity equals a copyist's |
 | **A4** | **4** | `resolve()` emits Events with an **empty `causes[]`**. Nothing in the specified loop populates the causal edge that `06` §1 calls *"the arc itself"* |
 | **P29** | **3** | A `Record` is homed as **Rung matter** — it sits at a *place*, never in a person's hands. *"She was found with it"* is not expressible |
 | **A2** | **3** | A threshold firing with nobody deciding is **FORBIDDEN** — correctly, and it costs |
 | **F6** | **3** | A sitting convenes; `judging_set_rule` is a named Rung field that **no document specifies**, so nothing is decided there |
 | **P4** · **P18** · **P26** · **P28** · **P30** | 2 each | conviction motion · staged institutional judgement · accumulated harm crossing a limit · making a durable thing · work spanning seasons |
-| **P31** · **P33** · **P3** · **P19** · **P16** | 1 each | worn by where you stand · two standings at once · covert action · restraint that emits · feeding yourself |
+| **P31** · **P33** · **P3** · **P19** · **P21** · **P16** | 1 each | worn by where you stand · two standings at once · covert action · restraint that emits · the cost of being watched · feeding yourself |
 
 ### 3.1 The four that recur across the whole spectrum
 
@@ -98,19 +99,41 @@ one accumulator, the claim ledger, and it **decays by universal rule and evicts 
 accumulation is a race against forgetting, and the ratchet the cases need is precisely the stored
 state Law 3 forbids.
 
-### 3.2 The King is blocked, and on what
+### 3.2 The King is blocked, and on what — **corrected after an independent audit**
 
-Almud's lane graded five needs `core`. Three of them fail:
-- *his standing army gradually reassessing its loyalty in stages that do not revert* — **`P18`**;
-- *his long-held private doubt persisting for seasons, that persistence itself being a choice* —
-  **`P19`**: a person who chooses nothing produces no Act, so no Event, so **nothing enters anyone's
-  ledger. A king's sustained refusal to decide is invisible and indistinguishable from his absence**;
-- *being more constrained by visibility than a private person would be* — **`P21`**: the same act by
-  a king and by a copyist produces Events identical in scope, because nothing in `Act`, `Event` or
-  `witness()` reads the actor's office.
+⚠ **This section originally named `P18`, `P19` and `P21` as Almud's three failures. At the time it
+was written the instrument supported only `P18`.** A read-only comparative audit that had never seen
+my reasoning checked the claim against `results.json` and found that Almud's doubt need had routed
+to `A17` and come back **PASS**, and his publicness need was **UNMAPPED** — *"report prose overriding
+its own instrument, in the direction §1 of the same report warns against."* **It was right.** The
+cause was a fourth greedy-keyword defect: `A17` is *winning versus enforcing are two events*, and
+the bare word **`enforce`** in *"a policy he enforces"* matched it, manufacturing a PASS on a probe
+about implementation failure. Four other needs were caught the same way.
 
-**What passes for him is the delegation half** (`P9`, `P20`, `P24`). **What fails is the interior
-half** — doubt, publicness, and an institution's slow judgement of him.
+**With the route fixed, the corrected picture is worse than the claim it replaces, not better.**
+Almud's lane graded five needs `core`. **Four fail; one passes.**
+
+| his need | probe | verdict |
+|---|---|---|
+| facing several ongoing pressures and **only being able to address a subset**, the rest compounding | **`P36`** | NO-PRODUCER |
+| a long-held private doubt persisting for seasons, **that persistence itself a choice** | **`P19`** | NO-PRODUCER |
+| a standing army **gradually reassessing** its loyalty in stages that do not revert | **`P18`** | NO-PRODUCER |
+| being **unable to act on private knowledge without a cost a lower-status person would not pay** | **`P21`** | NO-PRODUCER |
+| acts taken in his name **diverging** from what he intended | `P20` | **PASS** |
+
+**`P36` is new, and it is now the single largest blocker on the NPC side (5 cases).** It is the
+action budget: `choose(Person, View, Sensation) -> Act` returns **one** Act, and the loop calls it
+**once per person per season** — asserted by execution in `test_tracer_is_honest.py`. So nobody
+triages, nothing is left undone, and **a King's scarcity is identical to a copyist's.** Against
+Jordan's stated player model — *~5 playable scenes per season, which may mean ~5 actions* — the shape
+is out by a factor of five, and the gap is not the count. **It is that triage is the whole game at
+high office and the shape has no object for it.** Note what a budget above one also voids: `14`
+records the petition-spray defect as *"closed — PROVISIONALLY by one act per person"*, a fix that
+does not survive the stated model.
+
+**What passes for him is still the delegation half** (`P20`, and `P9`/`P24` at the probe level).
+**What fails is the interior half and the scarcity half** — doubt, publicness, triage, and an
+institution's slow judgement of him.
 
 ### 3.3 One declared seam, reached by execution
 
@@ -139,6 +162,15 @@ mechanism row 3 exists to provide.** The tracer reaches it by execution and pric
 4. **"A person with no office can act" is necessary and nowhere near sufficient.** The shape wins
    its own stated test (`P1`) and still cannot run Carin Vedel's season, because acting once is not
    having a life.
+5. **The scarcity is missing, and it was invisible until the King.** One act per person per season
+   means the only thing anyone ever chooses is *what to do*, never *what to leave undone*. Triage —
+   which pressure gets this season and which one compounds — is most of what it is to hold high
+   office, and it costs the shape one field to have. **This is the finding that a reader of the
+   documents could not reach**, because every document is written about the act that happens.
+6. **The report was wrong about the King and an audit that never saw my reasoning caught it.** §3.2
+   claimed three blockers the instrument had produced one of. The relay works: structural
+   independence — a critic with no write tools and no access to the producer's thinking — found in
+   one pass a defect that four self-review passes had missed.
 
 ---
 
