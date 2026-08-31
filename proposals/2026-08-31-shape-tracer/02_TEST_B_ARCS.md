@@ -37,7 +37,49 @@ This is the most valuable single distribution the test produced, because it is t
 PR #350's Law 1 cuts along. Each arc's lane recorded `ends_when` independently, with no knowledge
 of the shape; the classification below was made by a separate pass that saw only those strings.
 
-<!--ENDINGS-->
+| how the arc closes | count | what Law 1 says |
+|---|---|---|
+| **a person chooses** — an officer, a tribunal, a vote, the players | **20** | ✅ exactly what the shape is built for |
+| **a roll resolves it** — someone acted; the dice decided | **9** | ✅ `resolve()` already does this |
+| **never** — persistent by design, or no single terminal condition | **10** | ✅ the shape has no arc object to close anyway |
+| **a threshold fires with nobody deciding** | **8** | ❌ **FORBIDDEN** |
+| UNCLEAR — the source names no condition | 3 | — |
+
+**Eight of fifty close in the one way Law 1 forbids. That is 16%, not the 40% the twenty-arc run
+reported** — and the correction is in the shape's favour. The earlier figure came from a smaller
+sample read by a regex; this one was classified from the lanes' own `ends_when` strings by a pass
+that saw nothing else.
+
+### But the useful number is the other one.
+
+The classifier was also asked, for every arc, whether a threshold **forces the moment** even where a
+person makes the final call.
+
+> ## **19 of 50 arcs — 38% — are `forced_by_threshold: yes`.**
+
+Read the phrases it returned and the pattern is unmistakable:
+
+- `ARC-04` — *"the patron is **forced** to choose publicly among defend/abandon/extract"*
+- `ARC-40` — *"the head of state's **forced** choice is made (act, abdicate, or be replaced)"*
+- `ARC-34` — *"whose ceiling **issues a formal ultimatum** resolved through the ordinary civic debate mechanism"*
+- `ARC-R16` — *"players complete a **triage response** addressing (or accepting) the accumulated consequences"*
+- `ARC-01` — *"background cultural track bottoms out … **forcing** an Emergence crisis"*
+
+**The corpus overwhelmingly does not want the counter to ACT. It wants the counter to COMPEL SOMEONE
+TO ACT.** Those are different mechanisms and the shape refuses only the first.
+
+This is the most consequential thing either test found, because **it dissolves most of `A2`'s bill
+without touching Law 1.** A crossing that produces an *outcome* is forbidden and should stay
+forbidden. A crossing that produces **a summons — a thing at a venue that a named person must now
+answer, and whose refusal is itself witnessable** — writes no social row, needs no decider-free
+social change, and is what 19 arcs are actually asking for. The 8 pure-THRESHOLD arcs are the real
+residue, and it is a fifth of what the small sample implied.
+
+> **One classification note, recorded because it argues with itself.** `ARC-17`'s source says the
+> superior *"chooses"* and then immediately reclassifies that same act as *"determined by a
+> threshold lookup on his own internal state … a stat, not a deliberation."* It is counted as
+> THRESHOLD, following the source's own correction. **An arc whose text cannot decide whether a
+> person decided is itself evidence for how blurred this line is in the corpus.**
 
 ---
 
@@ -148,10 +190,12 @@ act necessarily reveals its actor.** Attribution and occurrence are one thing wh
 
 ## §5 · LESSONS
 
-1. **The two FORBIDDEN blockers are the top two, and together they are 18 arcs.** `A2` and `A13`
-   are one law seen twice: *a social quantity may not change without a decider.* That law is right
-   about polities and it is what the arc corpus is overwhelmingly built on. **This is the design's
-   central bill, and doubling the corpus doubled it rather than diluting it.**
+1. **The biggest refusal is mostly a misreading of what the corpus wants.** `A2` and `A13` are one
+   law seen twice — *a social quantity may not change without a decider* — and they are the top two
+   blockers. But the ending classification says only **8 of 50** arcs actually need a counter to
+   *act*, while **19** need a counter to *compel someone to act*. The shape forbids the first and
+   has no mechanism for the second, and building the second is the cheap fix that recovers most of
+   the loss. **A refusal is not a bill until you have checked what was actually being bought.**
 2. **The world may decay; society may not.** `wear` is the shape's best mechanism and it is
    available *only* to matter.
 3. **The arcs need a noun the shape almost has.** `Record` is the right object and is inert.
@@ -160,6 +204,17 @@ act necessarily reveals its actor.** Attribution and occurrence are one thing wh
    Seven arcs, five of them from a corpus half nobody had read when the change list was drafted,
    independently want a person's own ordinary conduct to build something they cannot see. It only
    became visible when a bad keyword route was investigated instead of merely deleted.
+6. **The 228 needs that did not route were read, not dropped.** A separate pass clustered the 95
+   graded `core` and found **roughly a third are restatements of the existing change list** — 19 of
+   them the `Record` alone — and about nine need no engine capability at all. Of the genuine
+   remainder exactly **one** looks like a missing primitive: *an ordered periodic settlement pass
+   with capped, contested shared capacity*, raised independently by `ARC-R19` and `EMG-11`. It is
+   the same hole `P35` reaches from the other side — **`resolve(Act[], World)` applies acts
+   independently, so two people cannot contend for one scarce thing in one season.** Two of the
+   largest unmapped clusters (branching named outcomes, n=11; a hidden per-person bias, n=9) are
+   authoring conventions over `Record`, not systems the engine lacks, and the political-escalation
+   cluster (n=8) is scene dramaturgy. **The unmapped territory is narrow, and naming it that way is
+   worth more than the count.**
 
 ---
 
