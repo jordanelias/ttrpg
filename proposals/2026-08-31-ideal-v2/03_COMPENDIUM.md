@@ -234,8 +234,8 @@ clamp **once**.
 
 ```
 Claim       := (id, subject, predicate, value, when, source, confidence, visibility)
-source      ∈ firsthand(event_id) | told_by(person, handle) | inferred(claim_id…)
-            | firsthand_via_knot(event_id) | documented(record_id)      -- CLOSED, 5
+source      ∈ firsthand(event_id) | told_by(person | record, handle)
+            | inferred(claim_id…) | firsthand_via_knot(event_id)        -- CLOSED, 4
 Proposition := (id, mood, subject, predicate, value, when, scope)   mood ∈ HOLDS | OUGHT
 Case        := (id, holder, motion, rung, grounds[])
 Ground      := (id, proposition, warrant, support[])                -- claim ids
@@ -249,8 +249,16 @@ Sensation   := (subsistence, standing)                              -- TWO scala
   incompatible values** — computed at deposit time, **in one ledger at a time** (`SUP:228-229`).
 - **The predicate vocabulary is CLOSED; the referent space is OPEN** (`SUP:231-234`). ⛔ **Its actual
   membership is enumerated nowhere.** One worked example: `SAID(Aldwin, C, season 12)`.
-- **`documented(record_id)` is the fifth source, NEW.** It does not break `witness`'s monopoly on root
-  tokens: reading a record is an act, which resolves to an Event, which `witness` turns into a token.
+- ⚠ **THERE IS NO FIFTH SOURCE.** An earlier version of this suite added `documented(record_id)`.
+  **`03:528` already ships it**: `research(archive, question)` produces **`told_by(record, …)` with
+  VERIFIED rootprints**, and archives are *"the only non-person root-bearers"*. **A record is a speaker
+  that cannot lie and cannot be interviewed** — its rootprint is *verified* where a person's is
+  *asserted*, and that is the entire difference.
+- **Closure is PROVED, not asserted** (`03:432-464`): `firsthand` mints and needs an event and a
+  witness with vantage; `told_by` **copies**; `inferred` **unions** and **refuses an empty union**;
+  `firsthand_via_knot` **reuses** the originating event's id. **There is no path to an empty ancestry,
+  so repetition cannot become corroboration** — a rumour told three times hashes to one synthetic root
+  and the multiplier stays 1.0.
 - ⚠ **`Sensation` carries TWO scalars, not four.** Only `subsistence` and `standing` read the world
   (`SUP:187-188`); `commitment` and `exposure` read the **view** (`SUP:189-190`) and are computed inside
   `choose` from claims already held.
@@ -297,7 +305,7 @@ Envelope   := (rung, counts_by_age_band[], marks_bundle, capability_distribution
 | **`Tenure` kinds** | hold · commit · contain · succeed · tie · knot · **oblige** | **7** | AMENDED |
 | **write classes** | CALENDAR · MATTER · ACTS · **INTERIOR** | **4** | AMENDED from `SUP:661-678`'s 3 |
 | **loop steps** | CALENDAR · MATTER · DELIBERATE · RESOLVE · WITNESS · CENSUS | **6 steps, 4 barriers** | AMENDED from `SUP:641-654`'s 8 labels |
-| **`Claim.source`** | firsthand · told_by · inferred · firsthand_via_knot · **documented** | **5** | AMENDED from `SUP:243-245`'s 4 |
+
 | **stance referent kinds** | Person · Proposition · **Place (= Rung \| Site)** | **3** | AMENDED from `ABS:188`'s 4; `Faction` and `Proposition` denoted the same thing after `ARCH §2.7`, and `Place` was defined nowhere |
 | **the owner table** | Person · Rung · Office · **Nobody** | **4** | AMENDED from `SUP:334-340`'s 5; the Faction row is deleted and re-homed |
 | **`remit.acts`** | issue · determine · confer/revoke · dispatch · convene | 5 | SHIPPED, `SUP:421-424` |
@@ -411,7 +419,7 @@ Full walk at `ARCH §9`. **Ten new objects × fourteen rows each.**
 | **Proposition** | 1, 2 (`commit`), 15, 20, 26; `Ground.proposition`; `norm(c, prop)` |
 | **Claim** | 15 (`provenance`), 16, 17 (`inferred`), 18 |
 | **Event** | 17 (`firsthand`, `firsthand_via_knot`) |
-| **Record** | 17 (`documented`) — **and this edge is the purge limb's whole mechanism** |
+| **Record** | 17 (`told_by(record, …)`) — **and this edge is the purge limb's whole mechanism** |
 | **Date** | 11, 19; `ConveningCondition.date_form`; `capacity(date)` |
 | **Tenure** | ⚠ **nothing pointed at a Tenure in the prior design, which is why it could not be disputed.** Now: `Claim.subject`, `Ground.support[]`'s subject matter, and `entrenchment` |
 
@@ -539,8 +547,8 @@ Annexation is `confer` of a `hold` Tenure over a Rung. `secede` additionally col
 | **conflict** | two acts conflict iff they share a target and either mode is `exclude`/`efface`, **or** both `alter` an `exclusive` field, **or** both `mint` edges that jointly break a declared cardinality | closed by `touch.field`, by the `mint` parent-touch, and by the cardinality table |
 | **tiebreak** | `H(act_id, world_seed)` — **never rank, office or list position** | `act_id` now exists |
 | **field commutativity** | `additive` vs `exclusive`, declared on the field; **default `exclusive`**; the resolver sums a season's deltas and clamps **once** | — |
-| **eviction ranking** | `confidence_live × recency`, and **nothing else** | must be a **different function** from retrieval's `salience`; ⛔ `relevance(c, q)` |
-| **retrieval ranking** | `salience(c) = recency × confidence_live × relevance(c,q) × stanceweight`; `stanceweight = clamp(1 + (obstinacy/5)·agreement, 0.05, 2.0)` | ⛔ `relevance`, ⛔ `q` |
+| **eviction ranking** | `confidence_live × recency`, and **nothing else** | must be a **different function** from retrieval's `salience`, because **`relevance(c, q)` is defined against a question and eviction has no `q` in scope** |
+| **retrieval ranking** | `salience(c) = recency × confidence_live × relevance(c,q) × stanceweight`; `recency = 2^(−age/halflife)`, **halflife 4, or 12 if the subject is a Knot partner, a hearth member or a Conviction-primary referent** (`03:337-339`); `relevance = 1.0` in `q`'s read-set, `0.3` within two graph edges, `0` otherwise (`03:342-344`); `stanceweight = clamp(1 + (obstinacy/5)·agreement, 0.05, 2.0)`. **Ties break firsthand > told_by > inferred, then more recent, then lower claim id — never randomly** (`03:369-372`) | ⛔ `relevance`, ⛔ `q` |
 | **view budget** | `K = 7 + Focus + 2 per Knot consulted − Coherence penalty (Dissonant 1 … Severed 5)`; **K = 3 per cohort** | ruled over `09:63`'s flat 12 |
 | **substream** | `H(world_seed, tick, subject_id, purpose)` | ⛔ `purpose`'s vocabulary is open; **its stability across runs IS the determinism requirement** |
 | **pool** | `Pool = Attribute[relevant] + Practice[practice]`; attributes 1–7, practice 0–5, pool 1–12 | ruled over `10:33`'s 0–7 |
@@ -564,6 +572,16 @@ Annexation is `confer` of a `hold` Tenure over a Rung. `secede` additionally col
 
 ## §5 · THE DERIVED CATALOGUE
 
+> ### ⚠ EVERY RESOLVER-SIDE QUERY TAKES `World` AS ITS FIRST PARAMETER, AND THAT IS THE ENFORCEMENT
+>
+> GDScript has no module system and no way to scope an identifier out of a function body, so omitting
+> `World` from `choose` makes world access **unwritten, not unwritable** (`ARCH §3.1a`). **The repair
+> is to make the world a value that must be passed**: with `World` as parameter one, calling a
+> resolver-side query from inside `choose` **fails at the call site for want of an argument.** Twelve
+> signatures plus one rule — *no live world state behind any global name* — take enforcement-by-omission
+> from **3 signatures to 23**, and turn the **side** column below from a table a reader must honour into
+> a call-site impossibility. **Person-side queries take no `World` and must never acquire one.**
+
 **Kept separate from §4 deliberately: a Query never writes and is never stored, and merging them is how
 a query becomes a field.** The **side** column is the design's central rule — a **resolver-side** query
 may read true state; a **person-side** query may read only the asking person's ledger.
@@ -571,10 +589,10 @@ may read true state; a **person-side** query may read only the asking person's l
 | # | name | signature | side | range / units | reads | replaces | gaps |
 |---|---|---|---|---|---|---|---|
 | 1 | `faction` | `Proposition → Set[Tenure]` | resolver | a set | all `commit` Tenures | a stored faction object | needs the object-side inverse index (§3.2) |
-| 2 | `leaders` | `(Proposition, Rung, Person) → List[Person]` | **person** | ranked | the observer's own ledger | a faction **leader field** | ⛔ **the comparator.** `REV:772-778` proposes `commitment degree × backing raisable`; **an entire political mechanism rests on it and it is not ruled** |
-| 3 | `presence` | `(Proposition, Rung) → count` | resolver | ℕ | member addresses | faction scale | — |
-| 4 | `density` | `(Proposition, Rung) → [0,1]` | resolver | fraction of members at the rung | member addresses | faction scale | breaches `[0,1]` if `contain` cardinality is violated |
-| 5 | `footprint` | `Proposition → Set[Rung]` | resolver | a set | member addresses | faction scale | ⚠ **one argument** — the prior brief gave all three the same two-argument signature |
+| 2 | `leaders` | `(Proposition, Rung, Person)` — **three arguments: the faction, the place, and the OBSERVER** | **person** | ranked | the observer's own ledger only | a faction **leader field** | ⛔ **the comparator.** `REV:772-778` proposes `commitment degree × backing raisable`; **an entire political mechanism rests on it and it is not ruled** |
+| 3 | `presence` | `(World, Proposition, Rung) → scalar` | resolver | **a WEIGHTED SUM, not a count**: `Σ over members inside n of w(degree)` (`07_alignment.md:222`) | member addresses and commitment degrees | faction scale | ⚠ *an earlier version typed this `→ count`* |
+| 4 | `density` | `(World, Proposition, Rung) → [0,1]` | resolver | `presence / weighted_population(n)` (`07_alignment.md:223`) | member addresses | faction scale | breaches `[0,1]` if `contain` cardinality is violated |
+| 5 | `footprint` | `(World, Proposition) → Set[Rung]` | resolver | `{ n : presence(f, n) > 0 }`, **upward-closed in the tree** (`07_alignment.md:224`) | member addresses | faction scale | ⚠ **one subject argument** — the pre-v2 brief gave all three the same two-argument signature |
 | 6 | `sovereign_fraction` | `Rung → [0,1]` | resolver | **PARTIAL — total only over the office-rooted subgraph** | the conferral graph | stored control | ⛔ root-uniqueness is a political condition, not an invariant; callers must handle plurality **and** partiality |
 | 7 | `condition` | `Rung → [0,1] ∪ ⊥` | resolver | draw-weighted mean of its Sites and children; **⊥ at a Site-less leaf** | Sites, `draw_share` | a stored coarse condition | the base case is NEW — the prior form had none and was not total |
 | 8 | `verbs` | `(Site, Rung) → Set[Verb]` | **resolver** | — | `condition`, band floors | — | **world truth; never in `choose`'s scope** |
@@ -589,7 +607,10 @@ may read true state; a **person-side** query may read only the asking person's l
 | 17 | `capacity` | `Date → ℕ` | resolver | items the sitting processes | the date's own term | **the second allowance** | ⚠ **never spent — it caps selection**; spending it as well as `seat_items` was the double-count |
 | 18 | `entrenchment` | `(Person, Object) → [0,1]` | resolver | `min(1, seasons_held/60)` | `since`, `until` | a stored tenure counter | needs `until?`, which is why it was added |
 | 19 | `address` | `Person → Path` | resolver | a path to the root | the `contain` chain | a stored field | **becomes a SET, not a value, if cardinality is violated** |
-| 20 | `regard` | `(Person, Rung) → scalar` | resolver | member-stance sum | stances | a stored reputation | ⛔ sign convention |
+| 20 | `regard` | `(World, Person, Rung) → scalar` | resolver | member-stance sum | stances | a stored reputation | ⛔ sign convention |
+| 21 | `retention` | `(World, Facet) → [0,1]` | **resolver** | `base(facet_kind) × 2^(−age/halflife(facet_kind)) × (1 − concealment_spend)` (`03:499`) | the facet's kind, age and any concealment spend | **the GM setting an investigation threshold** | ⛔ `base` and `halflife` per facet kind |
+| 22 | `trace` | `(Person, Claim) → ProvenanceTree` | **person** | — | **that person's own SAID rows, rootprints and collision records, and nothing else** (`03:538-540`) | a clue counter, a case file, an investigation score | *"only as good as what they went and got"* — **a free provenance query is omniscience with an extra step** (`03:840`) |
+| 23 | `filter_share` | `(World, Person) → [0,1]` | resolver | items dispositioned ÷ items reaching the office this season (`03:653`) | the channel's traffic | **a power stat.** A person with `filter_share 0.6` in a ducal household **structurally outranks ministers while holding no standing whatever** | — |
 
 **Nothing stores an aggregate. Every one of these is a query, and that is why power is not static.**
 
@@ -612,7 +633,7 @@ redesign. **Idem.** = idempotent in meaning; **Idio.** = idiomatic in choosing (
 | **`Sensation`** | `ARCH §3.1` | the two-scalar record a body reports to `choose` | pass | pass | **KEPT, and BOUND.** Risk: the scalars already have a name — **`needs`** (`SUP:183-190`). **Binding, stated once so the next session cannot derive two objects: `Sensation` is the RECORD; `needs` are what it reports, and only TWO of the four reach it** |
 | **`leaders`** | `ARCH §2.5` | the ranked query that replaces a faction leader field | pass | pass | **ADOPTED** over `principals`, which carries three ordinary readings plus a homophone this design uses heavily (*principle*), and which `systems/factions/_identifier_census.yaml:3371` uses for a **fourth** thing — the parties present in a scene. The row's own gloss said what it meant: *"replaces a faction **leader** field"* |
 | **`oblige`** | `ARCH §5.10` | the seventh Tenure kind: kin obligation | pass | pass | **ADOPTED.** Ordinary English; and the edge it names is `SUP:302-304`'s shipped *obligation edge* |
-| **`documented`** | `ARCH §5.4` | the fifth `Claim.source` constructor | pass | pass | **ADOPTED.** It matches `admissible_source`'s shipped sense of *instruments* (`SUP:1589`) |
+| **`documented`** | — | — | — | — | ⚠ **WITHDRAWN. A reinvention of `told_by(record, …)`, which ships at `03:528`.** The source set is four and stays four |
 | **`avowed`** | — | — | — | — | **DELETED as a field.** The word is fine and is inherited; the **type** was silently narrowed from a three-state enum to an optional flag. It returns as `commit`'s payload: `avowal ∈ {avowed, private, covert}` |
 | **`annex` / `secede`** | — | — | — | — | **DELETED as verbs.** Zero occurrences in the prior corpus, and `secede` collides with `05:594`'s shipped use of *secession* for a duke's **defection** |
 
@@ -624,7 +645,7 @@ redesign. **Idem.** = idempotent in meaning; **Idio.** = idiomatic in choosing (
 | `Envelope` | `ARCH §2.6` | the **inflow reservoir only** — counts by age band, marks bundle, capability distribution. **It is matter and does not act** |
 | `Site` | `ARCH §2.1` | a carrier with an identity, holding `condition` as **primary state** at the node an act names |
 | `DocketItem` | `ARCH §5.5` | the object `carry` mints on a Date, which is what gives a matter a clock |
-| `Record` | `ARCH §5.4` | a register, charter, deed, roll or letter — matter at a Rung, `efface`-able, citable by `documented` |
+| `Record` | `ARCH §5.4` | a register, charter, deed, roll or letter — matter at a Rung, `efface`-able, and cited through the shipped `told_by(record, …)` |
 | `Candidate` | `ARCH §3.2` | what `opening_set` returns: `(verb, target_spec[], believed_obstacle_band)` — **not an Act** |
 | `spec` | `ARCH §2.4` | what a `mint` touch carries in place of a reference: `(type, kind?, parent, initial[], slot)` |
 | `payload` (Tenure) | `ARCH §2.3` | the kind's own record, for the state the eight named fields cannot hold |
@@ -673,13 +694,13 @@ Every `⛔`, with what would close it. **`RESERVED` rows must not be closed by a
 | id | what is unstated | where it bites | what closing it requires | status |
 |---|---|---|---|---|
 | G-01 | **the question `q`** the View is assembled against — type, producer, lifetime | `assemble`; `salience`'s `relevance(c, q)`; every retrieval | a producer for `q`. `LOOP §4.1` names a defensible default — the highest-ranked unmet need — **and does not assert it** | open |
-| G-02 | **`relevance(c, q)`** — never defined anywhere in the corpus | retrieval ranking | a definition. **Eviction is unaffected: it ranks on `confidence_live × recency`** | open |
-| G-03 | **`Profile`** — the return type of `estimated_profile` | every faction reading | a record. Described in prose at `SUP:124-128`, never given fields | open |
+| G-02 | ⚠ **CLOSED — struck.** `relevance(c, q)` is defined in full at `03:342-344`. This row previously said it was never defined anywhere in the corpus | — | nothing; the definition exists. **What is open is `q`'s producer, which is G-01** | **CLOSED** |
+| G-03 | **`Profile`'s FIELD LIST.** ⚠ **Narrowed — it is not undefined.** `07_alignment.md:217-231` defines the two profiles and gives the arithmetic: `presence(f, n) = Σ over members inside n of w(degree)`, `density = presence / weighted_population(n)`, `footprint(f) = { n : presence(f, n) > 0 }`, upward-closed | every faction reading | a record grouping the three, nothing more | open, narrowed |
 | G-04 | **`leaders`' comparator** | deposition, every negotiation above the office ladder | a ruling. `REV:772-778` proposes `commitment degree × backing raisable` | open |
 | G-05 | **where the channel store lives** | a minted person's *plausible past* | a home that is a ledger. **Ruled against three ways** (`ARCH §5.3`): `SUP:74-75`, `SUP:355-360`, `SUP:746-748`; §14 row 7 independently forbids the near alternative | open |
 | G-06 | **§14 row 4's construal-spread rule** — where a cohort's spread lives, what produces it, what a member draws from | every cohort witnessing; `LOOP §7.3` | a placement inside the four owners. **The review could not close it inside the design's refusals** | open |
 | G-07 | **`season_factor(territory)`'s distribution** — range, mean, shape, tail | `yield`, every season; §10.6's band edge | a statement in the form the term beside it already has (`0.47×`–`1.53×`, mean 1.0, `d10 ≤ 3` is bad) | open |
-| G-08 | **the closed predicate vocabulary's membership** | collision, entailment, relevance — all three | an enumeration. One worked example exists: `SAID(…)` | open |
+| G-08 | ⚠ **CLOSED — struck.** The predicate vocabulary is enumerated in full at `03:66-79`, **fourteen forms**, with a stated test for a fifteenth. This row previously said one worked example existed | — | nothing; §2.7 carries the roster | **CLOSED** |
 | G-09 | **`Venue`'s eight once-occurring parameters** | the sitting | values, or deletion. It is a **12-field tuple plus a 5-field door** | open |
 | G-10 | **`standard`** in the advancement and demotion gates | both gates | a definition of *a standard above its rank* | open |
 | G-11 | **`Act.payload`** | anything a verb needs beyond its touches | a type, or its deletion in favour of the `touch` fields | open |
