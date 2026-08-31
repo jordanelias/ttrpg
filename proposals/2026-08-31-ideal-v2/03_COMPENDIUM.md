@@ -70,7 +70,7 @@ space (`SUP:229-234`); *nameable as a stance referent* is against the **closed**
 | object | id | identity tuple | stable / season | owner | minted by | effaced by | claim subject | stance referent |
 |---|---|---|---|---|---|---|---|---|
 | **Person** | `id` NEW | `id` | **yes** — `id` is a substream hash, not a path | itself | individuation, at CENSUS | death at MATTER; `efface` at RESOLVE | **yes** (`SUP:238`) | **yes** |
-| **Cohort** | `id` NEW | `id` | yes | itself | envelope weight ≥ 1 | weight → 0 | yes | yes |
+| **Cohort** | *not a separate object* | — | — | — | — | — | — | — ⚠ **ONE TUPLE. A cohort is a `Person` record at `weight > 1`; at `weight = 1` the record IS a person and no conversion operation exists** (`02:553-555`). An earlier version of this register gave it its own row and its own tuple while claiming no conversion existed |
 | **Rung** | `id` NEW | `id` | yes | itself | `mint` | `efface` | **yes**, NEW | **yes**, as `Place` NEW |
 | **Office** | `id` NEW | `id` | yes | itself | `mint` (establishment) | `efface` | **yes**, NEW | **no** — an office is not a Person, Proposition or Place; you hold an attitude to its holder or its proposition |
 | **Site** | `id` NEW | `id` | yes | its Rung | `mint` (building) | `efface` (razing) | **yes**, NEW | **yes**, as `Place` NEW |
@@ -147,7 +147,7 @@ Site      := (id, rung, kind, condition, drawers[])
 | `Rung.stake[]` | contested material stakes | — | `SUP:322-325` |
 | `Rung.judging_set_rule` | a rule, not a set | — | the set is `judging_set(c)`, §5 |
 | `Rung.matter` | ⚠ **must be STRUCTURED, not one untyped field** | — | it is asked to hold five distinct kinds — Sites, `stores`, the envelope, Records, the transmission pointer — and four of the five are addressed **by name** from elsewhere. A field with no declared structure cannot be indexed |
-| `Rung.envelope` | `Envelope` | — | matter; **does not act** |
+| `Rung.envelope` | `Envelope` | — | matter; **does not act**. ⚠ **It is named as its own field rather than folded into `matter`, deliberately: `matter` is the untyped-and-must-be-structured field of the row above, and the envelope is addressed by name from person-minting.** Listing it twice would be the two-homes defect |
 | `Office.rung?` | `Rung \| null` | — | **null is the office-cluster case** and S19's home |
 | `Office.remit` | `(acts[], scope_rung, binds)` | `acts[]` from the closed five | `SUP:417-424` |
 | `Office.conferral` | names a **Rung**, a **parent Office**, **or the office's own judging set** | — | AMENDED, `ARCH §7` F3; the third limb is what closes S19 |
@@ -273,6 +273,8 @@ DocketItem         := (id, date, matter, placed_by, placed_at)
 Petition           := (id, petitioner, proposition, respondent, backing[])
                       respondent ∈ Rung | Office
 ConveningCondition := (id, holder, predicate, date_form, set_by, set_at)
+   -- SIX fields. `SUP:710` ships FIVE: (holder, predicate, date_form, set_by, set_at).
+   -- `id` is this suite's addition, per §2.2's rule that every record carries one.
                       date_form = (venue, horizon, convener office)
 Dispensation       := (id, issuer, proposition, scope, terms)
 Venue              := (rung, prize, standing_date, judging_set_rule, decision_rule,
@@ -643,7 +645,7 @@ redesign. **Idem.** = idempotent in meaning; **Idio.** = idiomatic in choosing (
 |---|---|---|
 | `Cohort` | `ARCH §2.6` | **persons at coarse fidelity — one record, a weight, evaluated once, applied to all. IT ACTS**, once per season, and is **exactly one type** with an individuated person |
 | `Envelope` | `ARCH §2.6` | the **inflow reservoir only** — counts by age band, marks bundle, capability distribution. **It is matter and does not act** |
-| `Site` | `ARCH §2.1` | a carrier with an identity, holding `condition` as **primary state** at the node an act names |
+| `Site` | `ARCH §2.1` | a carrier with an identity, holding `condition` as **primary state at the finest Rung an act names** ⚠ *an earlier version of this row used the refused word "node"* |
 | `DocketItem` | `ARCH §5.5` | the object `carry` mints on a Date, which is what gives a matter a clock |
 | `Record` | `ARCH §5.4` | a register, charter, deed, roll or letter — matter at a Rung, `efface`-able, and cited through the shipped `told_by(record, …)` |
 | `Candidate` | `ARCH §3.2` | what `opening_set` returns: `(verb, target_spec[], believed_obstacle_band)` — **not an Act** |
@@ -709,7 +711,7 @@ Every `⛔`, with what would close it. **`RESERVED` rows must not be closed by a
 | G-14 | **`Rung.matter`'s structure** | four things are addressed **by name** inside it — Sites, `stores`, Records, the pointer — and an unstructured field cannot be indexed | a typed sub-record per kind | open |
 | G-15 | **age-band boundaries** in `Envelope` | births, deaths, capability draws | an enumeration | open |
 | G-16 | **channel latency values** | every telling; the news map that vacancy and arson both ride | per-channel-class latencies | open |
-| G-17 | **an act declared by a person who dies at MATTER of the same season** | `Act.actor` | a rule. Neither the prior design nor these documents state one | open |
+| G-17 | ⚠ **CLOSED — it cannot arise.** MATTER runs **before** DELIBERATE, so a person who dies at MATTER never reaches `choose` and declares no act. This row was written against a mis-ordering of the very loop it cites | — | nothing | **CLOSED** |
 | G-18 | **`upkeep`'s magnitude; establishment size; who authors the first one** | D-2's residue; the office economy | authoring | open |
 | G-19 | **the empty judging set** | F3's own falsifier — an office with an empty judging set has no self-convening route | a floor | open |
 | G-20 | **the Coherence-0 officeholder** | F4's own cost — a frozen seat | vacancy-by-absence reaching them | open |

@@ -746,7 +746,9 @@ Sensation := (subsistence, standing)      -- exactly two scalars
 and exposure read **the view** (`SUP:189-190`) and are therefore computed inside `choose` from the
 View the person already holds — they need no channel because they already have one.
 
-**What the record is, and what it is not.** It is computed at MATTER over the frozen world, **never
+**What the record is, and what it is not.** It is **computed inside DELIBERATE, over the world as
+frozen at the end of MATTER** — by `sense(person, frozen_world)`, which is not a decision function and
+may therefore take a `World`. It is **never
 stored**, **carries no references**, and **answers no query**. `choose` still cannot see the world; it
 sees what a body reports. The type now tells the truth the prose already stated.
 
@@ -1789,7 +1791,7 @@ demographic envelope** · **`Record` as an `efface` target and a `told_by` root-
 | # | verdict and ground |
 |---|---|
 | 1 | **Clear, and this is the row it was built for.** `Sensation` is **two floats**. It carries no references, answers no query, and cannot be widened into a masked world — that is the whole of the argument, and it is checkable by reading the type |
-| 2 | **Clear.** It is not a View and cannot be coerced to one; it is computed at MATTER and passed beside the View, not inside it |
+| 2 | **Clear.** It is not a View and cannot be coerced to one; it is computed inside DELIBERATE over the post-MATTER frozen world and passed beside the View, not inside it |
 | 3 | **Clear.** It is per-person, computed in the per-person map, and no signature takes a set of persons and one Sensation |
 | 4 | **Clear.** A cohort's subsistence and standing are each a single well-defined scalar over one record at one weight — no distribution is required because no distribution is lost |
 | 5 | **Clear.** Nothing is pushed and nothing is stored; it exists for the duration of one `choose` call |
@@ -2110,6 +2112,32 @@ Stated so no later document can cite this one as though these were closed.
    could not see each other — the channel store's missing licence, the loop's barrier count, `mint`
    outside the conflict rule, and the purge limb's missing claim source. Everything else in them is one
    reader's argument.
-7. **This document is REFERENCE, not mechanism** (`CLAUDE.md` §0.05). If it were deleted, no behaviour
+7. ⚠ **THE PURITY GUARANTEES ARE CONVENTIONS WITH NAMED CHECKS, NOT TYPE-LEVEL GUARANTEES, ON THE PORT
+   TARGET.** *"Omniscience is something an author cannot write"* and *"a consensus broadcast is a type
+   error"* are both **false in GDScript** (§3.1a). They are restated here as *unreachable-by-name* plus
+   an explicit `World` parameter — human-checkable, not compiler-checked.
+8. ⚠ **THE MOST IMPORTANT LIMIT IN THIS SUITE, AND IT IS ABOUT HOW THE SUITE WAS AUDITED.**
+   **`proposals/2026-08-29-valoria-from-scratch/03_knowledge_telling_investigation.md` — 980 lines, the
+   largest document in #342 and the declared owner of the claim, the predicate vocabulary, view
+   assembly, salience, corroboration, concealment and field investigation — WAS NEVER READ** by the
+   prior review, by the five parallel audit runners, by the 982-line keys audit, or by the first draft
+   of these three documents.
+
+   **It is cited twice in the 1,823-line review and once in the 2,017-line superseding document, which
+   made it LOOK covered. Citation count is not coverage.**
+
+   **The cost, measured:** two FATAL errors — *"`relevance(c, q)` is never defined anywhere in the
+   corpus"* (it is, at `03:342-344`) and *"the predicate vocabulary's membership is enumerated
+   nowhere"* (fourteen forms, `03:66-79`) — a reinvented fifth claim source that `03:528` already
+   ships, and **an entire invented `investigate` verb standing where six shipped acts, an obstacle
+   owner, a derived query and a counter-investigation layer already were.**
+
+   > **THE DIAGNOSIS: EVERY AUDIT IN THIS EXERCISE WAS DERIVATIVE-FACING.** Two review rounds, five
+   > parallel runners and an identity audit all checked derivative documents **against each other**,
+   > and the agreement between them read as corroboration. **It was correlated error with one root** —
+   > which is the exact failure this design's own §5 corroboration rule exists to prevent, arriving in
+   > the process that produced the design. **Nothing in a set of derivative documents can reveal an
+   > unread source.**
+9. **This document is REFERENCE, not mechanism** (`CLAUDE.md` §0.05). If it were deleted, no behaviour
    would change, because no behaviour exists yet. **The test to apply to every line above: what would
    have to run for this to be true?**
