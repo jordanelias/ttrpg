@@ -196,16 +196,29 @@ stored once at the lower id.
 ### §2.3 The one act
 
 ```
-Act    := (id, actor, verb, touches[], payload)
-touch  := (target, mode, field?, delta?)
-target := object_id | spec
-spec   := (type, kind?, parent, initial[], slot)          -- mint only
-mode   ∈ read | alter | exclude | mint | efface            -- CLOSED, 5
+StateChange := (subject, mode, driver, field?, delta?, spec?)
+   mode    ∈ mint | alter | efface                          -- CLOSED, 3
+   driver  ∈ Act | Event                                    -- the SUBJECT decides which is legal
+
+Act    := (id, actor, verb, changes[], reads[], contests[], payload)   -- a character's choice
+Event  := (id, kind, subject, changes[], emitted_at)                   -- the world acting on itself
+spec   := (type, kind?, parent, initial[], slot)            -- mint only
 ```
+
+> **THE PARTITION (Jordan).** A state change whose **subject is peninsular human society** — polities,
+> institutions, offices, organizations, occupations, religion, settlements, marriage — is **driven by a
+> character's choice, always.** A state change whose subject is anything else — weather, the
+> non-peninsular, tears in the metaphysical substrate — is **an event acting on the world.** **The mode
+> is orthogonal: events create and destroy too, within their half.**
+
+⚠ **`read` and `exclude` are NO LONGER MODES.** They were not state changes. `reads[]` is a declaration
+on the Act so the conflict rule can see a dependency; `contests[]` is a claim on contention — what
+`exclude` meant — which routes the act to `contest`. **An Event carries `changes[]` only**: it does not
+read, because it is not deciding, and it does not contest, because it is not an agent.
 
 | field | notes |
 |---|---|
-| `verb` | **domain OPEN by construction, and the resolver never branches on it.** A verb is a bundle of `touches` with an eligibility predicate and an obstacle composer. `remit.acts`' closed five is **not** the act vocabulary — it is the set an office's remit makes eligible where it otherwise is not |
+| `verb` | **domain OPEN by construction, and the resolver never branches on it** — nor on an Event's `kind`. A verb is a bundle of `changes` with an eligibility predicate and an obstacle composer; an event kind is a bundle of changes plus a locus. `remit.acts`' closed five is **not** the act vocabulary — it is the set an office's remit makes eligible where it otherwise is not |
 | `field?` | null for `read`, `exclude`, `efface`. **Required for `alter`**, because the conflict rule quantifies over a field |
 | `delta?` | the signed amount, for an `additive` field |
 | `spec.slot` | the index that makes the minted id computable: `H(world_seed, tick, actor_id, "mint:" + slot)` |
@@ -279,7 +292,8 @@ Envelope   := (rung, counts_by_age_band[], marks_bundle, capability_distribution
 
 | set | members | count | source |
 |---|---|---|---|
-| **`touches` modes** | read · alter · exclude · **mint** · **efface** | **5** | AMENDED from `SUP:689`'s 3 |
+| **`StateChange` modes** | **mint · alter · efface** | **3** | AMENDED. `SUP:689` ships `read \| alter \| exclude`; an earlier version of this suite made it five by adding `mint`/`efface` as act modes. **Jordan's partition makes them modes of a change with two drivers**, and `read`/`contest` are re-sited off the mode set entirely |
+| **change drivers** | **`Act` (a character's choice) · `Event` (the world acting on itself)** | **2** | NEW — Jordan's partition. **The subject decides which is legal** |
 | **`Tenure` kinds** | hold · commit · contain · succeed · tie · knot · **oblige** | **7** | AMENDED |
 | **write classes** | CALENDAR · MATTER · ACTS · **INTERIOR** | **4** | AMENDED from `SUP:661-678`'s 3 |
 | **loop steps** | CALENDAR · MATTER · DELIBERATE · RESOLVE · WITNESS · CENSUS | **6 steps, 4 barriers** | AMENDED from `SUP:641-654`'s 8 labels |
@@ -315,6 +329,13 @@ Envelope   := (rung, counts_by_age_band[], marks_bundle, capability_distribution
 | **what a Knot adds over a maxed tie** | unbidden deposit · Composure buffering · counsel extraction · Coherence contagion | 4 | SHIPPED, `ABS:305` |
 | **manoeuvres at declaration** | reframe the pool source · contest the venue not the fight · escalate the stake · draw aid from a Knot | 4 | SHIPPED, `ABS:308` |
 | **force forms** | seize · restrain · strike · burn · expel · disperse · kill | 7 | SHIPPED, `ABS:261` |
+| **predicate forms** | `LOCATED`(subject, place) · `DID`(actor, act_kind, object) · `HOLDS`(person, office \| holding \| mark) · `MARKED`(person, mark) · `CONDITION`(subject, condition) · `ALIGNED`(person, faction, degree_band) · `TIED`(person, person, tie_kind) · `QUANTITY`(rung, stake, band) · `IN_FORCE`(rung, proposition) · `INTENDS`(person, proposition) · `SAID`(speaker, claim, when, place) · `CAUSED`(event\|act, event\|act\|condition) · `CONTRADICTED`(source, source) · `HOLDS_STANCE`(person, referent, valence_band) | **14** | SHIPPED and **enumerated in full at `03:66-79`.** `03:81`: *"Fourteen forms, and the count was twelve until this document was audited against its own use."* ⚠ **An earlier version of this compendium called this set unenumerated with `SAID` as its one worked example. See `ARCH §12.8`** |
+| **claim source constructors** | `firsthand(event_id)` · `told_by(person \| record, handle)` · `inferred(claim_id…)` · `firsthand_via_knot(event_id)` | **4** | SHIPPED, `SUP:243-245`, `03:411-413`. ⚠ **An earlier version of this suite added a fifth, `documented(record_id)`. It was a reinvention: `03:528`'s `research` already produces `told_by(record, …)` with VERIFIED rootprints, and archives are *"the only non-person root-bearers"*. Withdrawn** |
+| **investigative acts** | `examine` · `interview` · `research` · `surveil` · `reconstruct` · `Thread-Read` | **6** | SHIPPED at `03:526-531`, each with a pool, a product and a cost. ⚠ **An earlier version invented a single `investigate` verb "built here entirely from existing parts"** |
+| **deception deltas** | sincere (δ=0) · **lie** (value flipped) · **overclaim** (confidence inflated) · **false witness** (provenance inflated) · **invention** (content absent from ledger) | **5** | SHIPPED, `03:243-249`. *"One act, one delta, four behaviours. No liar flag, no deception stat"* |
+| **visibility** | `open` · `discreet` · `concealed` | **3** | SHIPPED, `03:628`. One field, two application sites — on an act it hides the deed; on a channel it is `withhold` |
+| **channel dispositions** | **approve** · **suppress** · **surface** | **3** | SHIPPED, `03:635-644`. *"Surfacing is more powerful than suppressing and leaves less trace"* |
+| **the empty-view ladder** | marks-based expectation (0.35) · rumour draw (0.2) · what he believes his neighbours hold (0.25) · **the option leaves the act list** | **4, ordered** | SHIPPED, `03:377-407` |
 | **the fourteen refusals** | §2.8 | 14 | SHIPPED, `SUP:1732-1747` |
 | **refusals outside the fourteen** | no apparatus · no threshold firing an outcome / stored gauge / second resolver / pushed aggregate · variable not threshold | 3 | SHIPPED, `SUP:1749-1765` |
 | **structural tests** | no decision function can see the world · two witnesses of one event can disagree · a person with no office can act, petition and receive an opportunity · order independence | 4, **none run** | SHIPPED, `SUP:1767-1770` |
