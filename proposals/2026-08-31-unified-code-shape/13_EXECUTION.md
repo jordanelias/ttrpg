@@ -80,9 +80,9 @@ than a strong one.
 > to discover it at step 6.
 
 **And one correction to the record while we are here:** the substrate's own docstring lists campaign-loop
-wiring as not implemented; **it is wired.** Two test files assert that no large-N balance oracle exists;
+wiring as not implemented; **it is wired.** **Three** test files assert that no large-N balance oracle exists;
 **one has existed since 2026-08-21 and cites the very line that denies it.** A golden test's docstring
-states win-shares that **contradict the constant twelve lines below it.** *A stale comment is not a bug
+states win-shares that **contradict the live constant 287 lines below it.** *A stale comment is not a bug
 until someone plans against it — and this path plans against exactly these files.*
 
 ---

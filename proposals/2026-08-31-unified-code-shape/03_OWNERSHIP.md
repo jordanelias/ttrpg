@@ -73,7 +73,7 @@ once, never written, and cited for seasons as though it meant something.
 
 - a settlement's `legitimacy` and `popular_support` — **never read, never written**, and the module
   says so itself;
-- a territory's turmoil — **written at exactly one site, read at exactly one site**, connecting nothing;
+- the peninsula's `Turmoil` clock — **initialised once, never written again**, and read at exactly one site, where it makes a victory condition's stability term **unconditionally true**. *(The suite first wrote this as a **territory's** turmoil, following a registry row that labels a world-scale clock territory-scoped. The mis-scoping was inherited; the corrected fact is the sharper example — dead state inside a win check.)*;
 - a faction's `intel` — **declared in the registry and in the dataclass, and unreachable**: the
   multiplier table has no entry for it, so a write raises.
 

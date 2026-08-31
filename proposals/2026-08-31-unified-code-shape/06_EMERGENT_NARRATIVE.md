@@ -351,9 +351,9 @@ authoring it, the mechanism that produces it, and what is lost if the mechanism 
 | 15 | **suppression breeds return at magnitude** | scars ratchet the arming threshold; dormant rows cleared only by terms | suppression is a delete |
 | 16 | **prejudice as a refutable default, not a stored penalty** | empty-ledger defaults + mark legibility in each observer's own table | caste becomes an obstacle modifier |
 | 17 | **the doctrine fight about how to tend the world** | two `OUGHT` Propositions over one site class collide automatically | Jordan's flux ruling has conflict but no carrier for it |
-| 19 | **the hypocrite, and the movement discredited by its founder** | a faction's Proposition is an **uttered Belief**, so the founder's acts are checkable against it by anyone holding both claims | a faction's banner is authored rather than somebody's morals; nobody can fall short of their own stated position |
-| 18 | **a season in which the interesting thing is what you did NOT get to** | one act per person, universally | scarcity disappears; refusal, delay and obstruction stop mattering |
+| 18 | **the hypocrite, and the movement discredited by its founder** | a faction's Proposition is an **uttered Belief**, so the founder's acts are checkable against it by anyone holding both claims | a faction's banner is authored rather than somebody's morals; nobody can fall short of their own stated position |
+| 19 | **a season in which the interesting thing is what you did NOT get to** | one act per person, universally | scarcity disappears; refusal, delay and obstruction stop mattering |
 
-**Eighteen rows, and not one of them is a feature.** Every one is two or three primitives meeting. **That
+**Nineteen rows, and not one of them is a feature.** Every one is two or three primitives meeting. **That
 is what emergence means here, and it is the only test this document accepts: if a row needs a mechanism
 of its own, the row is content and does not belong in an engine.**

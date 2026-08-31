@@ -518,6 +518,17 @@ Proposition subject) unowned, and the Rung and Office rows silent about Tenures 
 **A meaning in executing code outranks a meaning in prose** (`CLAUDE.md` §0.05), so the disambiguation
 had to survive the fifth one, and the register that first ruled on `hold` did not know it existed.
 
+### §4.9 ⊕ `yield` — the second entry in this register, and the suite minted this one itself
+
+| meaning | spelling that survives |
+|---|---|
+| the MATTER harvest — *once per season, here and nowhere else* | **`harvest`**. Renamed |
+| the argument act — conceding a point at a venue | **`yield`**, kept: it is the ordinary English word for exactly this |
+
+⚠ **This collision is the suite's OWN**, minted after §4.8 was written — and it is worse than the `hold`
+case on one axis: **`yield` is a Python keyword**, so the harvest sense cannot be spelled as a function
+name in the oracle at all. **The harvest is `harvest`; the concession keeps the word.**
+
 ---
 
 ## §5 · THE ONE STATE CHANGE, AND THE QUERY CATEGORY
@@ -637,7 +648,7 @@ qualifier does not travel into GDScript's flat, global `class_name` namespace.
 >
 > **This suite's own catalogue is 26 rows — 18 resolver-side and 8 person-side**
 > (`08_FUNCTION_SURFACE.md` §2). With the three top-level signatures that is **21 call sites that fail
-> for want of an argument**; the 7 person-side rows are enforced by the opposite omission — they take no
+> for want of an argument**; the 8 person-side rows are enforced by the opposite omission — they take no
 > world and cannot acquire one.
 >
 > ⚠ **DO NOT QUOTE AN ADDITIVE TOTAL.** A *"23"* circulates in three places over a differently-scoped

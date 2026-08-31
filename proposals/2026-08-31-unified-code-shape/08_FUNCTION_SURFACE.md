@@ -81,7 +81,7 @@ tidier-sounding claim than the design can make and would leave `opening_set` una
 
 > **THIS CATALOGUE IS 26 ROWS — 18 RESOLVER-SIDE (1–18) AND 8 PERSON-SIDE (19–26).** With the three
 > top-level signatures, **21 call sites fail for want of an argument** if a decision function reaches for
-> world truth; the 7 person-side rows are enforced by the opposite omission — they take no world and
+> world truth; the 8 person-side rows are enforced by the opposite omission — they take no world and
 > cannot acquire one. **It converts a table a reader must remember into a call that does not compile.**
 >
 > ⚠ **DO NOT QUOTE AN ADDITIVE TOTAL.** A figure of *"23"* circulates in three places over a
