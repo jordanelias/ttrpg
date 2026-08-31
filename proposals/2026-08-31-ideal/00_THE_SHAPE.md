@@ -493,3 +493,96 @@ A watch puts a matter on the calendar. A petition addresses the calendar. A lost
 wage are what people convene *about*.
 
 **Nothing here is a system. Four acts and rules, on primitives the ideal already had.**
+
+---
+
+## 9. ⚠ CORRECTION, Jordan-directed — the petition retyping was WRONG, and why
+
+> *"I am confused about the petition's respondent being a date, not a container. We still want every
+> decision made in the game to be done by a character… and we can also accept that a vacant office
+> means that there can be an absence of a decision, which itself is an emergent opportunity because
+> nothing active occurring can still impact the petitioner (eg food is never sent during a famine,
+> instructions never given to a garrison commander). It seems to me moreso that the petition itself
+> can expire over time if world churn causes it to be superseded?"*
+
+**This is right and §2.3 is withdrawn.** I typed a petition's respondent as **a mechanism** — a date —
+to solve a plumbing problem, and in doing so traded away the design's central commitment: **every
+decision is made by a character.** A date cannot drop a petition. B-11's price — *"you address it to a
+person, and that person can drop it"* — is not a cost to engineer around. **It is the thing being
+bought.**
+
+### 9.1 The correct retyping: an OFFICE
+
+> **`respondent ∈ ContainmentNode | Office`.**
+
+An office is **held by a person, or vacant.** That preserves the whole of B-11: a named holder hears
+it and may drop it. It reaches every cluster — the four Dicasteries, the order, the trans-settlement
+guilds — because a cluster **has offices even though it has no owning node.** That is precisely what a
+cluster is.
+
+**And it needs no new object at all**, which the date version did not manage: an office already exists,
+is already conferred and revocable, and is already vacant-able.
+
+### 9.2 The correction that matters more: ABSENCE OF DECISION IS NOT A GAP
+
+**I treated a vacant office as a defect to route around. It is the design's most characteristic
+outcome, and it needed consequences, not elimination.**
+
+> Nothing happening **is** something happening to the petitioner. Food is never sent during the famine.
+> Instructions never reach the garrison commander. The grain sits in a granary whose praefect is dead
+> and unreplaced, and people starve inside a system that is working exactly as written.
+
+That is better play than any resolution, and **it is unreachable in a design that manufactures a
+decider whenever one is missing.** S19 — a containerless cluster vacancy with no clock — is therefore
+**not a bug to fix.** A vacant Cardinalate means no conferral is convened, so the Church stalls, the
+stall harms people, and **breaking it is political work for characters.** The way out of a
+three-of-four conclave with two seats empty is a schism, a Crown intervention, an off-map appeal —
+**stories, not a mechanism.**
+
+**§7.1 is retracted.** The watch does not need to *dissolve* S19, and it should not. What §7.1 got
+right is smaller and survives: **a watch belongs to whatever holds standing dates, and an office holds
+its own** — useful, but no longer load-bearing on a deadlock that turns out to be content.
+
+### 9.3 The mechanism that WAS missing: a petition expires by supersession
+
+**This is Jordan's, and it is the right primitive.** A petition that is never heard should not sit
+forever waiting for a decider who may never exist.
+
+> **A petition lapses when world churn supersedes it** — the famine ended, the seat was filled by other
+> means, the war started, the proposition it addressed is no longer live. **Nobody decides this. It is
+> the world moving on.**
+
+**It is already in the family.** `lapse` exists and is defined as *"not an act by anybody — it is the
+date passing"*; **supersession is lapse's sibling — not the date passing, but the subject passing.**
+Neither is an actor; neither decides anything; both resolve a matter against whoever needed the
+affirmative act.
+
+**What it buys, and it is a lot for one rule:**
+- **Time pressure on petitioners with no threshold anywhere.** Getting heard *soon* matters, because
+  the thing you are asking about can stop existing.
+- **Obstruction gets its teeth without a counter.** A convener who buries an item is no longer merely
+  slow — **he is running out the clock**, and everyone can see the subject decaying. That is the
+  stalling register §5.2 wanted, and it arrives with no new object.
+- **The up-stroke becomes lossy in a way that is true to the fiction.** Petitions die on the way up
+  because the world changed underneath them. That is what happens to real petitions.
+- **It prices absence honestly.** A vacant office does not merely delay; it lets matters expire.
+  **The cost of an unfilled seat becomes visible in the petitions that died in it.**
+
+### 9.4 The shape, corrected
+
+| # | enlargement | corrected form |
+|---|---|---|
+| **1** | **The watch** | unchanged — a predicate that **schedules a date and decides nothing**. Four shipped instances |
+| **2** | ~~Petition → date~~ **Petition → OFFICE, and petitions EXPIRE** | respondent is a containment node **or an office** — always a person or a vacancy, **never a mechanism**; and a petition **lapses by supersession**, which is `lapse`'s sibling and needs no actor |
+| **3** | **Damage removes an option** | unchanged, with §6.3's three requirements |
+| **4** | **The transfer act** | unchanged |
+
+**And the design keeps something it was about to lose.** The corrected version does not make every
+matter reachable — it makes **failing to be heard** a real, priced, visible thing. *"Nobody ever
+decided"* stays a possible ending, and it is now an ending with a cost attached rather than a matter
+suspended forever.
+
+**What I should have noticed:** every one of my three original enlargements pushed toward *making
+things resolve*. The design's actual problem was never that too little resolves — **it is that
+nothing was at stake in things failing to resolve.** Expiry fixes the real defect; the retyping fixed
+a symptom and cost a principle to do it.
