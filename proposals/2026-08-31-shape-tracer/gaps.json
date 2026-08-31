@@ -1,14 +1,14 @@
 {
  "summary": {
-  "acts": 68,
-  "events": 98,
-  "writes": 284,
-  "gaps_total": 38,
+  "acts": 79,
+  "events": 116,
+  "writes": 334,
+  "gaps_total": 46,
   "gaps_by_kind": {
-   "UNSPECIFIED": 10,
-   "NO-PRODUCER": 22,
+   "UNSPECIFIED": 11,
+   "NO-PRODUCER": 28,
    "COLLISION": 3,
-   "FORBIDDEN": 3
+   "FORBIDDEN": 4
   },
   "gaps_by_case": {
    "PROBE-P2": 1,
@@ -48,7 +48,15 @@
    "PROBE-P30": 1,
    "PROBE-P31": 1,
    "PROBE-P32": 1,
-   "PROBE-P33": 1
+   "PROBE-P33": 1,
+   "PROBE-A13": 1,
+   "PROBE-A14": 1,
+   "PROBE-A15": 1,
+   "PROBE-A16": 1,
+   "PROBE-A18": 1,
+   "PROBE-A19": 1,
+   "PROBE-P34": 1,
+   "PROBE-P35": 1
   }
  },
  "gaps": [
@@ -393,6 +401,78 @@
    "case": "PROBE-P33",
    "season": 0,
    "step": null
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "an Event writing social row (Person, stance)",
+   "where": "Person.stance",
+   "needs": "an Act by a person",
+   "case": "PROBE-A13",
+   "season": 0,
+   "step": null
+  },
+  {
+   "kind": "UNSPECIFIED",
+   "what": "(Person, capability) has no row in the Partition schema",
+   "where": "Person.capability",
+   "needs": "a social: bool column entry",
+   "case": "PROBE-A14",
+   "season": 0,
+   "step": null
+  },
+  {
+   "kind": "NO-PRODUCER",
+   "what": "reserve: nothing marks an act as once-per-arc, nothing records that it is being WITHHELD, and nothing lets its value decay while unused. Holding a hammer is indistinguishable from not having one (and see P19 \u2014 the holding itself emits nothing)",
+   "where": "A15 held reserve",
+   "needs": "an act kind with a use-once flag and a value that varies with world state, so that waiting is a priced decision rather than an absence",
+   "case": "PROBE-A15",
+   "season": 4,
+   "step": "CENSUS"
+  },
+  {
+   "kind": "NO-PRODUCER",
+   "what": "procedural advance: an accusation, a probate, a licence application \u2014 a process with STAGES that advance on their own timetable \u2014 has no carrier. A Record is inert (A9 shows even its ttl is never decremented), and CALENDAR fires dates rather than advancing processes. So a case against you cannot ripen while you do nothing",
+   "where": "A16 procedural stages",
+   "needs": "a staged Record that MATTER advances, whose stage gates what acts are available",
+   "case": "PROBE-A16",
+   "season": 3,
+   "step": "CENSUS"
+  },
+  {
+   "kind": "NO-PRODUCER",
+   "what": "persistent condition: an Event is a fact in the log, not a state on a thing. Nothing carries 'this unit is stuck', 'this person is disgraced', 'this place is under interdict' \u2014 a condition that outlives its scene and gates later acts. `09`'s seam returns Events from a contest and stops there",
+   "where": "A18 lingering condition",
+   "needs": "a condition Record attached to a carrier, with a clearing act \u2014 the same shape A16 and P30 need, which is one gap seen three ways",
+   "case": "PROBE-A18",
+   "season": 1,
+   "step": "CENSUS"
+  },
+  {
+   "kind": "NO-PRODUCER",
+   "what": "loss of agency: the loop hands EVERY person in `world.persons` to `choose`. There is no state in which a person exists, is lucid, and may no longer choose \u2014 so an irreversible personal floor cannot be represented, and the arc that exists BECAUSE the rule has no exit has no rule",
+   "where": "A19 irreversible floor",
+   "needs": "a per-person agency predicate the DELIBERATE map consults, and an act class that can cross it one way only",
+   "case": "PROBE-A19",
+   "season": 1,
+   "step": "CENSUS"
+  },
+  {
+   "kind": "NO-PRODUCER",
+   "what": "self-accumulating hidden exposure: the duke performed 5 ordinary acts and the shape retains them ONLY as Events in the world log and as decaying Claims in whoever witnessed them. There is no per-person quantity that (a) climbs from the person's own acts, (b) is NOT readable by that person, and (c) can fire. The nearest thing, the claim ledger, is the wrong shape three ways over: it is other people's, it decays, and its holder reads it",
+   "where": "P34 hidden self-accumulation",
+   "needs": "a monotone interior counter fed by the actor's OWN acts at WITNESS, excluded from that person's own View, with a firing rule that produces an Act by SOMEONE ELSE rather than an outcome \u2014 otherwise it is A2's forbidden threshold wearing a hat",
+   "case": "PROBE-P34",
+   "season": 5,
+   "step": "CENSUS"
+  },
+  {
+   "kind": "NO-PRODUCER",
+   "what": "contested quantity: both acts resolved and emitted ['restore', 'wreck']; the site's condition took both deltas independently. That is correct for matter and it is NOT contest \u2014 nothing in `resolve()` sees that two acts addressed one target in one season, so there is no net, no opposition, and no way for a blocker to hold a line",
+   "where": "P35 opposed acts on one target",
+   "needs": "either an explicit statement that opposition is emergent from summed deltas and arcs must be written that way, or a resolve() that groups acts by target \u2014 the second is a second resolver and the shape's own meta-rule forbids it",
+   "case": "PROBE-P35",
+   "season": 1,
+   "step": "CENSUS"
   }
  ]
 }

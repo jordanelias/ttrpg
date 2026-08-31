@@ -1042,3 +1042,196 @@ def p33(w=None):
         "P33 covert standing",
         needs="standing as a Query over a NAMED audience, not a global scalar",
     )
+
+
+# ===========================================================================
+# SIXTH WAVE — driven by UNMAPPED needs the b:ARCS cases raised.
+# ===========================================================================
+
+@probe("A13", "an ambient SOCIAL quantity drifts from the ABSENCE of anyone acting")
+def a13(w=None):
+    """ARC-01 core: a cultural track drifts toward a pole purely because no faction acted."""
+    w = w or _world()
+    w._step = Step.MATTER
+    try:
+        # `wear` does exactly this for Sites, because (Site, condition) is social:false.
+        w.write("Site", "condition", "harbour", 520, WriteClass.MATTER, driver="Event")
+        # The arc needs the same shape for a POPULATION'S disposition. That is a stance —
+        # (Person, stance) is social:true, so an Event may not write it.
+        w.write("Person", "stance", "populace", -1, WriteClass.MATTER, driver="Event")
+    finally:
+        w._step = None
+    return "unreachable"
+
+
+@probe("A14", "a person changes with nobody — including them — deciding")
+def a14(w=None):
+    """ARC-02 core: Klapp develops a sensitivity; 'no actor triggers this'."""
+    w = w or _world()
+    w.persons["klapp"] = Person(id="klapp", capability={"perceive": 0})
+    w._step = Step.MATTER
+    try:
+        w.write("Person", "capability", "klapp", 1, WriteClass.MATTER, driver="Event")
+    finally:
+        w._step = None
+    return "unreachable"
+
+
+@probe("A15", "a once-per-arc resource is held in reserve, and the window can close unannounced")
+def a15(w=None):
+    """ARC-03 core: Baralta's hammer. Holding it is the play; the window closes silently."""
+    w = w or _world()
+    w.persons["baralta"] = Person(id="baralta")
+    loop = SeasonLoop(w)
+    for _ in range(4):
+        loop.run({"baralta": lambda p, v, s: None})       # she deliberately holds
+    raise NoProducer(
+        "reserve: nothing marks an act as once-per-arc, nothing records that it is being WITHHELD, "
+        "and nothing lets its value decay while unused. Holding a hammer is indistinguishable from "
+        "not having one (and see P19 — the holding itself emits nothing)",
+        "A15 held reserve",
+        needs="an act kind with a use-once flag and a value that varies with world state, so that "
+              "waiting is a priced decision rather than an absence",
+    )
+
+
+@probe("A16", "a formal process advances on its own stages regardless of anyone acting")
+def a16(w=None):
+    """ARC-04 core: the Inquisitors' case proceeds whether or not Vaynard acts."""
+    w = w or _world()
+    w.records["case"] = Record(id="case", rung="realm", kind="accusation", ttl=None)
+    loop = SeasonLoop(w)
+    for _ in range(3):
+        loop.run({})
+    raise NoProducer(
+        "procedural advance: an accusation, a probate, a licence application — a process with "
+        "STAGES that advance on their own timetable — has no carrier. A Record is inert (A9 shows "
+        "even its ttl is never decremented), and CALENDAR fires dates rather than advancing "
+        "processes. So a case against you cannot ripen while you do nothing",
+        "A16 procedural stages",
+        needs="a staged Record that MATTER advances, whose stage gates what acts are available",
+    )
+
+
+@probe("A17", "winning the argument and enforcing the win are SEPARATE events, and the second can fail")
+def a17(w=None):
+    """ARC-06 core: 'the gap between a won contest and a successful enforcement is the arc'."""
+    w = w or _world()
+    w.persons["orator"] = Person(id="orator")
+    w.persons["crown"] = Person(id="crown")
+    loop = SeasonLoop(w)
+    evs = loop.run({"orator": lambda p, v, s: Act(actor="orator", verb="win_debate",
+                                                  target="tithe_rule")})
+    # The ruling exists as an Event. Does anything make it BINDING, and separately ENFORCED?
+    ruling = evs[0]
+    loop.run({"crown": lambda p, v, s: Act(actor="crown", verb="enforce", target="tithe_rule")})
+    return ("OK: the two are separate acts by separate persons in separate seasons, and the second "
+            "can fail on its own — the shape gets this right for free, because a Dispensation is "
+            "published as a telling and compliance is each hearer's own choose")
+
+
+@probe("A18", "a rare roll leaves a condition that outlives the scene that produced it")
+def a18(w=None):
+    """ARC-07 core: two failed sub-checks leave an army mechanically unable to stand down."""
+    w = w or _world()
+    w.persons["cmdr"] = Person(id="cmdr")
+    loop = SeasonLoop(w)
+    loop.run({"cmdr": lambda p, v, s: Act(actor="cmdr", verb="give_battle", target="settl")})
+    # The battle resolves into Events. Is there anywhere to put "this unit cannot stand down"?
+    raise NoProducer(
+        "persistent condition: an Event is a fact in the log, not a state on a thing. Nothing "
+        "carries 'this unit is stuck', 'this person is disgraced', 'this place is under "
+        "interdict' — a condition that outlives its scene and gates later acts. `09`'s seam "
+        "returns Events from a contest and stops there",
+        "A18 lingering condition",
+        needs="a condition Record attached to a carrier, with a clearing act — the same shape "
+              "A16 and P30 need, which is one gap seen three ways",
+    )
+
+
+@probe("A19", "a person crosses an irreversible personal floor and stops being an agent")
+def a19(w=None):
+    """ARC-09 core: Coherence zero. 'The arc exists because the rule has no exit.'"""
+    w = w or _world()
+    w.persons["prac"] = Person(id="prac", capability={"coherence": 1})
+    loop = SeasonLoop(w)
+    loop.run({"prac": lambda p, v, s: Act(actor="prac", verb="thread_op", target="seam")})
+    # Does anything stop this person from being handed to `choose` next season?
+    still_a_decider = "prac" in w.persons
+    if still_a_decider:
+        raise NoProducer(
+            "loss of agency: the loop hands EVERY person in `world.persons` to `choose`. There is "
+            "no state in which a person exists, is lucid, and may no longer choose — so an "
+            "irreversible personal floor cannot be represented, and the arc that exists BECAUSE "
+            "the rule has no exit has no rule",
+            "A19 irreversible floor",
+            needs="a per-person agency predicate the DELIBERATE map consults, and an act class "
+                  "that can cross it one way only",
+        )
+    return "OK"
+
+
+# ===========================================================================
+# SEVENTH WAVE — raised by the EXPANDED arc corpus (arcs 19-45, lane ARC2).
+#
+# These exist because folding 31 more arcs in exposed a routing defect, not
+# because the shape changed: sixteen core needs were landing on `W2` (band
+# strobing) on the bare word "threshold". Reading them showed they are one
+# capability the probe set did not have, and it is the single most frequent
+# structural demand in the whole corpus. Narrowing W2's route without adding
+# the probe would have converted a real finding into `UNMAPPED`.
+# ===========================================================================
+
+@probe("P34", "a quantity accumulates in a person from their OWN ordinary acts, unknown to them")
+def p34(w=None):
+    """Five arcs, independently: ARC-26, ARC-31, ARC-32, ARC-35, ARC-39.
+
+    Each says the same thing in different clothes — a leader's repeated use of an asset, an
+    official's long routine service, a surveillance file that grows from unrelated encounters —
+    a quantity climbs from acts the person took for ordinary reasons, THE PERSON CANNOT SEE IT,
+    and crossing fires something at them.
+    """
+    w = w or _world()
+    w.persons["duke"] = Person(id="duke")
+    loop = SeasonLoop(w)
+    for _ in range(5):
+        loop.run({"duke": lambda p, v, s: Act(actor="duke", verb="tutor", target="duke")})
+    own = [e for e in w.log if e.family == "tutor"]
+    # The acts happened. Where does the residue live?
+    raise NoProducer(
+        f"self-accumulating hidden exposure: the duke performed {len(own)} ordinary acts and the "
+        "shape retains them ONLY as Events in the world log and as decaying Claims in whoever "
+        "witnessed them. There is no per-person quantity that (a) climbs from the person's own "
+        "acts, (b) is NOT readable by that person, and (c) can fire. The nearest thing, the claim "
+        "ledger, is the wrong shape three ways over: it is other people's, it decays, and its "
+        "holder reads it",
+        "P34 hidden self-accumulation",
+        needs="a monotone interior counter fed by the actor's OWN acts at WITNESS, excluded from "
+              "that person's own View, with a firing rule that produces an Act by SOMEONE ELSE "
+              "rather than an outcome — otherwise it is A2's forbidden threshold wearing a hat",
+    )
+
+
+@probe("P35", "an actor is stopped by an opponent building the SAME quantity in the same place")
+def p35(w=None):
+    """ARC-R17 core, and the contested half of P27: two people push one local quantity in
+    opposite directions, and only the NET matters."""
+    w = w or _world()
+    for pid in ("pusher", "blocker"):
+        w.persons[pid] = Person(id=pid)
+    loop = SeasonLoop(w)
+    evs = loop.run({
+        "pusher": lambda p, v, s: Act(actor="pusher", verb="restore", target="harbour"),
+        "blocker": lambda p, v, s: Act(actor="blocker", verb="wreck", target="harbour"),
+    })
+    fams = sorted({e.family for e in evs})
+    raise NoProducer(
+        f"contested quantity: both acts resolved and emitted {fams}; the site's condition took "
+        "both deltas independently. That is correct for matter and it is NOT contest — nothing "
+        "in `resolve()` sees that two acts addressed one target in one season, so there is no "
+        "net, no opposition, and no way for a blocker to hold a line",
+        "P35 opposed acts on one target",
+        needs="either an explicit statement that opposition is emergent from summed deltas and "
+              "arcs must be written that way, or a resolve() that groups acts by target — the "
+              "second is a second resolver and the shape's own meta-rule forbids it",
+    )

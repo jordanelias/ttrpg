@@ -34,6 +34,30 @@ ROUTES: list[tuple[str, str]] = [
     # -- generic world rules first and mis-routed "degrade his PERSONAL condition" to W1 (site
     # -- decay) and "maintenance labor" to A3 (substrate), turning two BLOCKED cases into false
     # -- PLAYABLEs. A greedy keyword is worse than no keyword.
+    # -- SEVENTH WAVE routes. Ordering defect found when the expanded arc corpus landed: the
+    # -- bare word "threshold" was routing 16 core needs onto W2 (band strobing), which is a
+    # -- different mechanism entirely. Mis-routing did not flatter the shape here (W2 is also a
+    # -- gap, so the cases stayed BLOCKED) but it ATTRIBUTED the block to the wrong cause, which
+    # -- is how a change-list gets aimed at the wrong object. These run first.
+    (r"hidden (personal )?(quantity|exposure|track)|silently accumulate|invisible until"
+     r"|accumulat\w* (a )?hidden|without (his|her|their|the character.s) (own )?knowledge"
+     r"|unaware .* accumulat|not visible to (him|her|them)self", "P34"),
+    (r"contestable by an opposing|opposing actor.s action in the same|net effect"
+     r"|push(ing)? .* in opposite|counter(ed|ing) by another actor", "P35"),
+    (r"(cross|reach|pass)\w* (a |its |multiple |the )?(hard )?threshold\w*"
+     r"|on (crossing|reaching) (a |its |the )?threshold|threshold[- ]triggered"
+     r"|trigger\w* (an?|the) .* on (crossing|reaching)|use-threshold", "P26"),
+    # -- ARC-driven routes, added after the arc lanes reported (sixth wave)
+    (r"ambient|drift toward|background (quantity|track|cultural)|absence of any faction|passive drift", "A13"),
+    (r"invisible to himself|nobody .* deciding|no actor triggers|spontaneous(ly)? .* (check|change)"
+     r"|without any actor", "A14"),
+    (r"held in reserve|once per arc|usable once|reserved resource|optimal .* window", "A15"),
+    (r"procedural (stage|timetable)|advance .* on its own|regardless of whether .* acts"
+     r"|fixed procedural", "A16"),
+    (r"won .* contest .* separate|enforce|implementation .* fail|ruling .* separate", "A17"),
+    (r"persist(ent|s)? .* after the (battle|scene)|outlives the scene that|lingering|carries into"
+     r"|condition .* not automatically cleared", "A18"),
+    (r"irreversib|no exit|permanently and irrecoverab|zero-point|can no longer choose", "A19"),
     (r"(degrade|wear|erode|cost).{0,40}(personal|his|her|their) (condition|health|body)"
      r"|proximity|exposure to .* damage|standing next to", "P31"),
     (r"death .* (produce|buy|purchase|different)|sacrific|spending (his|her|their) life"
@@ -73,8 +97,15 @@ ROUTES: list[tuple[str, str]] = [
     (r"claim .* (press|sovereign)|pretend|title to|legitimacy of a claim", "F4"),
     (r"confer|appoint|invest|revoke|remove from office|grant an office", "F5"),
     (r"sitting|council|parliament|assembly|vote|motion|convene|decide together", "F6"),
-    (r"decay|condition|disrepair|neglect|verb .* unavailable|falls into", "W1"),
-    (r"band|threshold|tipping|equilibrium|maintain(ing)? .* against", "W2"),
+    # W1 is SITE decay. The bare word "condition" was catching "nine named conditions",
+    # "the underlying situation", "a pre-existing condition" — the third greedy-keyword
+    # defect of this build, and the reason case verdicts are now advisory-only (see §5).
+    (r"disrepair|falls into (disrepair|ruin)|neglect(ed)? (site|place|building|harbour)"
+     r"|(site|place|building|harbour|road|fort)\w* .{0,30}(decay|degrade|deteriorat)"
+     r"|decay .{0,20}(site|place|building|infrastructure)|verb .* unavailable"
+     r"|condition of (a|the) (site|place|building)", "W1"),
+    (r"\bband\b|tipping point|equilibrium|maintain(ing)? .* against (decay|wear|entropy)"
+     r"|oscillat|strobe|flap", "W2"),
     (r"nobody chose|no actor|world .* itself|weather|harvest|season(al)? change", "W3"),
     (r"off-?board|foreign power|altonia|empire|outside the peninsula|invasion", "W4"),
     (r"ends at a (sitting|meeting)|resolved at a|comes to a head at", "A1"),
@@ -192,8 +223,16 @@ def main():
                     and r["verdict"] not in ("PASS", "PARTIAL", "UNMAPPED")]
         any_bad = [r for r in d["rows"]
                    if r["verdict"] not in ("PASS", "PARTIAL", "UNMAPPED")]
-        verdicts[cid] = ("BLOCKED" if core_bad else
-                         "DEGRADED" if any_bad else "PLAYABLE")
+        core = [r for r in d["rows"] if r["hardness"] == "core"]
+        core_unmapped = [r for r in core if r["verdict"] == "UNMAPPED"]
+        # A case whose core needs mostly did not route was not tested. Calling it PLAYABLE is the
+        # instrument flattering the shape by failing to aim at it — the exact direction §5 warns
+        # about. BLOCKED still wins over NOT-ASSESSED: one executed core failure is a real result.
+        verdicts[cid] = (
+            "BLOCKED" if core_bad else
+            "NOT-ASSESSED" if core and len(core_unmapped) * 2 >= len(core) else
+            "DEGRADED" if any_bad else
+            "PLAYABLE")
 
     print("\n== case verdicts ==")
     print(Counter(verdicts.values()))

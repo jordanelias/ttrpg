@@ -1488,6 +1488,375 @@
 === CASE PROBE-P33 ===
     !!   NO-PRODUCER: two standings: `Sensation.standing` is a single scalar defined as what EVERYONE reads off you, so a reputation held only among people who can never publicly credit you has no carrier — and a covert operative's whole economy is that second, unreadable standing @P33 covert standing
 
+=== CASE PROBE-A13 ===
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    !!   FORBIDDEN: an Event writing social row (Person, stance) @Person.stance
+
+=== CASE PROBE-A14 ===
+    !!   UNSPECIFIED: (Person, capability) has no row in the Partition schema @Person.capability
+
+=== CASE PROBE-A15 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(baralta)   (omits World)
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+-- SEASON 2 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 480  class=MATTER driver=Event
+    EVT  E2.band.harbour band_crossed @harbour causes=[]
+    W    Site.condition[seam] <- 750  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(baralta)   (omits World)
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+-- SEASON 3 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 440  class=MATTER driver=Event
+    W    Site.condition[seam] <- 725  class=MATTER driver=Event
+    EVT  E3.band.seam band_crossed @seam causes=[]
+  [DELIBERATE]
+    call choose(baralta)   (omits World)
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+-- SEASON 4 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 400  class=MATTER driver=Event
+    W    Site.condition[seam] <- 700  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(baralta)   (omits World)
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+    !!   NO-PRODUCER: reserve: nothing marks an act as once-per-arc, nothing records that it is being WITHHELD, and nothing lets its value decay while unused. Holding a hammer is indistinguishable from not having one (and see P19 — the holding itself emits nothing) @A15 held reserve
+
+=== CASE PROBE-A16 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+-- SEASON 2 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 480  class=MATTER driver=Event
+    EVT  E2.band.harbour band_crossed @harbour causes=[]
+    W    Site.condition[seam] <- 750  class=MATTER driver=Event
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+-- SEASON 3 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 440  class=MATTER driver=Event
+    W    Site.condition[seam] <- 725  class=MATTER driver=Event
+    EVT  E3.band.seam band_crossed @seam causes=[]
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+    !!   NO-PRODUCER: procedural advance: an accusation, a probate, a licence application — a process with STAGES that advance on their own timetable — has no carrier. A Record is inert (A9 shows even its ttl is never decremented), and CALENDAR fires dates rather than advancing processes. So a case against you cannot ripen while you do nothing @A16 procedural stages
+
+=== CASE PROBE-A17 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(orator)   (omits World)
+    ACT  orator :: win_debate -> tithe_rule
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 win_debate @tithe_rule causes=[]
+  [WITNESS]
+    call witness(orator<-E1.0)
+    W    Person.ledger[orator] <- 'win_debate@tithe_rule'  class=INTERIOR driver=Event
+    call witness(crown<-E1.0)
+    W    Person.ledger[crown] <- 'win_debate@tithe_rule'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 2 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 480  class=MATTER driver=Event
+    EVT  E2.band.harbour band_crossed @harbour causes=[]
+    W    Site.condition[seam] <- 750  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(crown)   (omits World)
+    ACT  crown :: enforce -> tithe_rule
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E2.2 enforce @tithe_rule causes=[]
+  [WITNESS]
+    call witness(orator<-E2.2)
+    W    Person.ledger[orator] <- 'enforce@tithe_rule'  class=INTERIOR driver=Event
+    call witness(crown<-E2.2)
+    W    Person.ledger[crown] <- 'enforce@tithe_rule'  class=INTERIOR driver=Event
+  [CENSUS]
+
+=== CASE PROBE-A18 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(cmdr)   (omits World)
+    ACT  cmdr :: give_battle -> settl
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 give_battle @settl causes=[]
+  [WITNESS]
+    call witness(cmdr<-E1.0)
+    W    Person.ledger[cmdr] <- 'give_battle@settl'  class=INTERIOR driver=Event
+  [CENSUS]
+    !!   NO-PRODUCER: persistent condition: an Event is a fact in the log, not a state on a thing. Nothing carries 'this unit is stuck', 'this person is disgraced', 'this place is under interdict' — a condition that outlives its scene and gates later acts. `09`'s seam returns Events from a contest and stops there @A18 lingering condition
+
+=== CASE PROBE-A19 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(prac)   (omits World)
+    ACT  prac :: thread_op -> seam
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 thread_op @seam causes=[]
+  [WITNESS]
+    call witness(prac<-E1.0)
+    W    Person.ledger[prac] <- 'thread_op@seam'  class=INTERIOR driver=Event
+  [CENSUS]
+    !!   NO-PRODUCER: loss of agency: the loop hands EVERY person in `world.persons` to `choose`. There is no state in which a person exists, is lucid, and may no longer choose — so an irreversible personal floor cannot be represented, and the arc that exists BECAUSE the rule has no exit has no rule @A19 irreversible floor
+
+=== CASE PROBE-P34 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(duke)   (omits World)
+    ACT  duke :: tutor -> duke
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 tutor @duke causes=[]
+  [WITNESS]
+    call witness(duke<-E1.0)
+    W    Person.ledger[duke] <- 'tutor@duke'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 2 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 480  class=MATTER driver=Event
+    EVT  E2.band.harbour band_crossed @harbour causes=[]
+    W    Site.condition[seam] <- 750  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(duke)   (omits World)
+    ACT  duke :: tutor -> duke
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E2.2 tutor @duke causes=[]
+  [WITNESS]
+    call witness(duke<-E2.2)
+    W    Person.ledger[duke] <- 'tutor@duke'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 3 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 440  class=MATTER driver=Event
+    W    Site.condition[seam] <- 725  class=MATTER driver=Event
+    EVT  E3.band.seam band_crossed @seam causes=[]
+  [DELIBERATE]
+    call choose(duke)   (omits World)
+    ACT  duke :: tutor -> duke
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E3.4 tutor @duke causes=[]
+  [WITNESS]
+    call witness(duke<-E3.4)
+    W    Person.ledger[duke] <- 'tutor@duke'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 4 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 400  class=MATTER driver=Event
+    W    Site.condition[seam] <- 700  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(duke)   (omits World)
+    ACT  duke :: tutor -> duke
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E4.5 tutor @duke causes=[]
+  [WITNESS]
+    call witness(duke<-E4.5)
+    W    Person.ledger[duke] <- 'tutor@duke'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 5 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 360  class=MATTER driver=Event
+    W    Site.condition[seam] <- 675  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(duke)   (omits World)
+    ACT  duke :: tutor -> duke
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E5.6 tutor @duke causes=[]
+  [WITNESS]
+    call witness(duke<-E5.6)
+    W    Person.ledger[duke] <- 'tutor@duke'  class=INTERIOR driver=Event
+  [CENSUS]
+    !!   NO-PRODUCER: self-accumulating hidden exposure: the duke performed 5 ordinary acts and the shape retains them ONLY as Events in the world log and as decaying Claims in whoever witnessed them. There is no per-person quantity that (a) climbs from the person's own acts, (b) is NOT readable by that person, and (c) can fire. The nearest thing, the claim ledger, is the wrong shape three ways over: it is other people's, it decays, and its holder reads it @P34 hidden self-accumulation
+
+=== CASE PROBE-P35 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(pusher)   (omits World)
+    ACT  pusher :: restore -> harbour
+    call choose(blocker)   (omits World)
+    ACT  blocker :: wreck -> harbour
+  [RESOLVE]
+    call resolve(2 acts)   (omits Person)
+    EVT  E1.0 restore @harbour causes=[]
+    EVT  E1.1 wreck @harbour causes=[]
+  [WITNESS]
+    call witness(pusher<-E1.0)
+    W    Person.ledger[pusher] <- 'restore@harbour'  class=INTERIOR driver=Event
+    call witness(blocker<-E1.0)
+    W    Person.ledger[blocker] <- 'restore@harbour'  class=INTERIOR driver=Event
+    call witness(pusher<-E1.1)
+    W    Person.ledger[pusher] <- 'wreck@harbour'  class=INTERIOR driver=Event
+    call witness(blocker<-E1.1)
+    W    Person.ledger[blocker] <- 'wreck@harbour'  class=INTERIOR driver=Event
+  [CENSUS]
+    !!   NO-PRODUCER: contested quantity: both acts resolved and emitted ['restore', 'wreck']; the site's condition took both deltas independently. That is correct for matter and it is NOT contest — nothing in `resolve()` sees that two acts addressed one target in one season, so there is no net, no opposition, and no way for a blocker to hold a line @P35 opposed acts on one target
+
+=== CASE ARC1:ARC-01 ===
+
+=== CASE ARC1:ARC-02 ===
+
+=== CASE ARC1:ARC-03 ===
+
+=== CASE ARC1:ARC-04 ===
+
+=== CASE ARC1:ARC-05 ===
+
+=== CASE ARC1:ARC-06 ===
+
+=== CASE ARC1:ARC-07 ===
+
+=== CASE ARC1:ARC-08 ===
+
+=== CASE ARC1:ARC-09 ===
+
+=== CASE ARC1:ARC-10 ===
+
+=== CASE ARC1:ARC-11 ===
+
+=== CASE ARC1:ARC-12 ===
+
+=== CASE ARC1:ARC-13 ===
+
+=== CASE ARC1:ARC-14 ===
+
+=== CASE ARC1:ARC-15 ===
+
+=== CASE ARC1:ARC-16 ===
+
+=== CASE ARC1:ARC-17 ===
+
+=== CASE ARC1:ARC-18 ===
+
+=== CASE ARC2:ARC-R16 ===
+
+=== CASE ARC2:ARC-R17 ===
+
+=== CASE ARC2:ARC-R18 ===
+
+=== CASE ARC2:ARC-R19 ===
+
+=== CASE ARC2:ARC-20 ===
+
+=== CASE ARC2:ARC-21 ===
+
+=== CASE ARC2:ARC-22 ===
+
+=== CASE ARC2:ARC-23 ===
+
+=== CASE ARC2:ARC-24 ===
+
+=== CASE ARC2:ARC-25 ===
+
+=== CASE ARC2:ARC-26 ===
+
+=== CASE ARC2:ARC-27 ===
+
+=== CASE ARC2:ARC-28 ===
+
+=== CASE ARC2:ARC-29 ===
+
+=== CASE ARC2:ARC-30 ===
+
+=== CASE ARC2:ARC-31 ===
+
+=== CASE ARC2:ARC-32 ===
+
+=== CASE ARC2:ARC-33 ===
+
+=== CASE ARC2:ARC-34 ===
+
+=== CASE ARC2:ARC-35 ===
+
+=== CASE ARC2:ARC-36 ===
+
+=== CASE ARC2:ARC-37 ===
+
+=== CASE ARC2:ARC-38 ===
+
+=== CASE ARC2:ARC-39 ===
+
+=== CASE ARC2:ARC-40 ===
+
+=== CASE ARC2:ARC-41 ===
+
+=== CASE ARC2:ARC-42 ===
+
+=== CASE ARC2:ARC-43 ===
+
+=== CASE ARC2:ARC-44 ===
+
+=== CASE ARC2:ARC-45 ===
+
+=== CASE ARC2:ARC-META-COLLISION ===
+
 === CASE ARC3:EMG-10 ===
 
 === CASE ARC3:EMG-11 ===

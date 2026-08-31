@@ -155,3 +155,52 @@ def test_every_probe_either_passes_or_records_a_gap():
     errs = {k: v for k, (v, _) in results.items() if v == "TRACER-ERROR"}
     assert not errs, f"tracer bugs, not findings: {errs}"
     assert set(results) == set(probes.PROBES), "a probe went unrun"
+
+
+# --- the ROUTER must not flatter either (added when the corpus grew to 78 cases) ---------
+
+def test_generic_world_keywords_do_not_swallow_person_scale_needs():
+    """The third greedy-keyword defect: `W1` is SITE decay, and the bare word "condition" was
+    routing "nine named conditions" and "the underlying situation" onto it, manufacturing PASSes
+    on a probe about harbours. Regression on the whole class, not just the one word."""
+    from run_cases import route
+    for need in [
+        "the game must evaluate nine named conditions as distinct endgame states",
+        "a resolution roll's failure must leave the underlying situation completely unresolved",
+        "a superior's response must be determined by his own current internal condition",
+    ]:
+        assert route(need) != "W1", f"{need!r} routed to the site-decay probe"
+
+
+def test_threshold_language_does_not_route_to_band_strobing():
+    """`W2` is a site oscillating across a band edge. Sixteen core needs about a hidden quantity
+    crossing a firing threshold were landing there on the bare word "threshold", attributing the
+    block to the wrong mechanism."""
+    from run_cases import route
+    for need in [
+        "a hidden personal quantity must cross a threshold and trigger a one-time check",
+        "building a local quantity toward a use-threshold must be contestable",
+        "a formal, threshold-triggered diplomatic demand must remain suppressed",
+    ]:
+        assert route(need) != "W2", f"{need!r} routed to band strobing"
+
+
+def test_a_mostly_unrouted_case_is_not_reported_playable():
+    """A case whose core needs did not route was NOT TESTED. Grading it PLAYABLE is the
+    instrument flattering the shape by failing to aim at it."""
+    import run_cases
+    rows = [{"need": "x", "probe": None, "verdict": "UNMAPPED", "hardness": "core"},
+            {"need": "y", "probe": "P1", "verdict": "PASS", "hardness": "core"}]
+    core = [r for r in rows if r["hardness"] == "core"]
+    unmapped = [r for r in core if r["verdict"] == "UNMAPPED"]
+    assert len(unmapped) * 2 >= len(core), "this fixture must trip the NOT-ASSESSED rule"
+    assert "NOT-ASSESSED" in open(run_cases.__file__).read(), \
+        "the four-way verdict must survive; three-way silently re-creates the false PLAYABLE"
+
+
+def test_every_new_probe_is_reachable_from_some_route():
+    """A probe nothing routes to is a probe that never grades a case. P34/P35 were added
+    BECAUSE needs existed for them; if a later edit narrows a regex past them, say so loudly."""
+    from run_cases import route
+    assert route("a leader's repeated use must silently accumulate a hidden personal quantity") == "P34"
+    assert route("building toward a use-threshold must be contestable by an opposing actor's action") == "P35"
