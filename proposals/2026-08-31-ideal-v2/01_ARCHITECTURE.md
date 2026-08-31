@@ -1479,6 +1479,11 @@ are answered**, each with the line that would falsify it.
 
 ### D-2 · THE ACT ECONOMY
 
+⚠ **THIS RESOLUTION MAY BE A RE-DERIVATION AND IS NOT PRESENTED AS NOVEL.**
+`proposals/2026-08-30-fixes/02_the_act_economy.md` (426 lines) **is D-2 already worked out**, and this
+suite did not read it. **Read it before treating anything below as the design's answer**; where the two
+differ, the earlier document has the prior claim and this one has not examined it.
+
 > **ONE ACT PER PERSON OR COHORT PER SEASON. UNIVERSALLY. No office, rank, or holding changes it,
 > ever.**
 >
@@ -1622,6 +1627,14 @@ SOURCE.** The earlier answer is withdrawn.
 > acting on the world — a fleet appears, a levy is demanded, a border is crossed, a subsidy stops —
 > witnessed per person by presence and channel like every other event, and **as disputable as the
 > weather.**
+
+⚠ **AND THE CHANNEL IS ALREADY BUILT, IN A DOCUMENT THIS SUITE DID NOT READ.**
+`proposals/2026-08-29-greenfield-systems-suite-v2/11_world_events.md` (715 lines) ships the actorless
+event row with rate bounds, two-way reachability and a registry block, and it ships
+**`we.altonian_pressure`** by name (`11:45`, `11:345`) — *the exact channel Jordan described.* It also
+records `external_shock` as *"never defined by anything on disk"* and states that it is that definition
+(`11:59-61`). **So this section is a re-derivation, not an invention, and it should be read as a
+pointer to `11_world_events.md` rather than as a design.**
 
 **Three things this buys that person-generation did not:**
 
@@ -1789,7 +1802,7 @@ demographic envelope** · **`Record` as an `efface` target and a `told_by` root-
 | 11 | **The `alter` limb is CLEAR and is what the sizing rule exists for.** `Δ = −condition × f(degree) × share(actor, site)` is a degree-scaled fraction sized by the actor's own share, and **falls as the number of drawers rises**. At `share = 1` there is no group. ⚠ **The `exclude` limb is NOT CLEARED** and is inherited from `SUP:1839-1844`: one person destroying an undefended shared thing is bounded only by the `contest` against whoever defends it, and where nothing defends it there is no bound |
 | 12 | **Clear, on the row's own subject.** The row governs **standing**, a social quantity. `condition`'s only non-act term is `season_factor`, which is weather and lives in `yield`, not in the accumulator |
 | 13 | **Clear.** Any site may lose a verb. No branch names one |
-| 14 | **Clear, and improved.** A lost verb reaches a person through the same computed `opening_set` any dispensation reaches them through. Nothing is authored for anybody |
+| 14 | **Clear, and improved.** A lost verb reaches a person through the same computed `opening_set` any dispensation reaches them through. Nothing is authored for anybody. ⚠ **And the general question — *how does anything get put in front of a decider* — is designed at length in `…-v2/10_the_slate_and_salience.md` + `_part2` (1,152 lines), which this suite did not read** |
 
 ### 9.3 · `Sensation`
 
@@ -2044,7 +2057,7 @@ a person with no office can act, petition, and receive an opportunity · order i
 | 24 | Annexation is a `hold` Tenure over a Rung; `annex`/`secede` are deleted | the prior brief's `confer` on a `contain` edge | the tree is geography and allegiance lives in factions; `secede` additionally collides with `05:594`'s shipped use for defection |
 | 25 | The docket item is a first-class object | nothing — the up-stroke had no dated item | S19 was unstatable without one, and lapse had nothing to be computed against |
 | 26 | The cohort **acts**; the envelope is inflow only | the prior brief's replacement of the cohort | matter does not act; the replacement manufactured elite-only politics by construction |
-| 27 | `Faction` is struck from the stance referent set; `Place = Rung | Site` is defined | `ABS:188`'s closed four | `Faction` and `Proposition` denote the same thing after §2.7, and `Place` was defined nowhere |
+| 27 | `Faction` is struck from the stance referent set; `Place = Rung | Site` is defined | `ABS:188`'s closed four | `Faction` and `Proposition` denote the same thing after §2.7, and `Place` was not defined in any document this suite read |
 | 28 | Claimants in `contest` are person sets under a proposition | `SUP:327` (factions) vs `SUP:1141` (`{enforcement, resistance}`) | `resolve` has no Person parameter and must not acquire a claimant-type branch |
 
 ---
@@ -2123,7 +2136,23 @@ Stated so no later document can cite this one as though these were closed.
    TARGET.** *"Omniscience is something an author cannot write"* and *"a consensus broadcast is a type
    error"* are both **false in GDScript** (§3.1a). They are restated here as *unreachable-by-name* plus
    an explicit `World` parameter — human-checkable, not compiler-checked.
-8. ⚠ **THE MOST IMPORTANT LIMIT IN THIS SUITE, AND IT IS ABOUT HOW THE SUITE WAS AUDITED.**
+8. ⚠ **THE LARGEST LIMIT IN THIS SUITE: IT WAS BUILT ON ~12% OF THE CORPUS.** Of **123 proposal
+   documents over 200 lines, 108 are cited nowhere** in this suite or in the two documents it
+   supersedes. **Four mechanisms presented here as new or missing are already designed in uncited
+   documents:** the actorless event channel **including `we.altonian_pressure`**
+   (`…-v2/11_world_events.md`, 715 lines); ambition's carrier with derived-at-read `progress`
+   (`…-v2/09_ambitions_and_arcs.md` + `_part2`, 1,065); the act-economy reconciliation
+   (`2026-08-30-fixes/02_the_act_economy.md`, 426); and slate/salience
+   (`…-v2/10_the_slate_and_salience.md` + `_part2`, 1,152).
+
+   > **EVERY "THERE IS NO X" CLAIM IN THIS SUITE IS SCOPED TO THE DOCUMENTS IT READ, AND THAT SCOPE IS
+   > A MINORITY OF THE CORPUS.**
+
+   ⚠ **And the sweep stopped at `proposals/`.** Two load-bearing `systems/` documents are also
+   uncited — `systems/_architecture/governance_ripple_substrate_v1.md` (559, **the event deck's own
+   governing spec**) and `systems/settlements/governance_play_redesign_v1.md` (337). **The next gap is
+   likelier to come from `systems/` than from `proposals/`.**
+9. ⚠ **AND THE MECHANISM BEHIND LIMIT 8 IS HOW THE SUITE WAS AUDITED.**
    **`proposals/2026-08-29-valoria-from-scratch/03_knowledge_telling_investigation.md` — 980 lines, the
    largest document in #342 and the declared owner of the claim, the predicate vocabulary, view
    assembly, salience, corroboration, concealment and field investigation — WAS NEVER READ** by the
@@ -2152,6 +2181,6 @@ Stated so no later document can cite this one as though these were closed.
    > which is the exact failure this design's own §5 corroboration rule exists to prevent, arriving in
    > the process that produced the design. **Nothing in a set of derivative documents can reveal an
    > unread source.**
-9. **This document is REFERENCE, not mechanism** (`CLAUDE.md` §0.05). If it were deleted, no behaviour
+10. **This document is REFERENCE, not mechanism** (`CLAUDE.md` §0.05). If it were deleted, no behaviour
    would change, because no behaviour exists yet. **The test to apply to every line above: what would
    have to run for this to be true?**

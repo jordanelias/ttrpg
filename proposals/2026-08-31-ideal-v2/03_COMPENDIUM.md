@@ -317,7 +317,7 @@ Envelope   := (rung, counts_by_age_band[], marks_bundle, capability_distribution
 | **write classes** | CALENDAR · MATTER · ACTS · **INTERIOR** | **4** | AMENDED from `SUP:661-678`'s 3 |
 | **loop steps** | CALENDAR · MATTER · DELIBERATE · RESOLVE · WITNESS · CENSUS | **6 steps, 4 barriers** | AMENDED from `SUP:641-654`'s 8 labels |
 
-| **stance referent kinds** | Person · Proposition · **Place (= Rung \| Site)** | **3** | AMENDED from `ABS:188`'s 4; `Faction` and `Proposition` denoted the same thing after `ARCH §2.7`, and `Place` was defined nowhere |
+| **stance referent kinds** | Person · Proposition · **Place (= Rung \| Site)** | **3** | AMENDED from `ABS:188`'s 4; `Faction` and `Proposition` denoted the same thing after `ARCH §2.7`, and `Place` was not defined in any document this suite read |
 | **the owner table** | Person · Rung · Office · **Nobody** | **4** | AMENDED from `SUP:334-340`'s 5; the Faction row is deleted and re-homed |
 | **`remit.acts`** | issue · determine · confer/revoke · dispatch · convene | 5 | SHIPPED, `SUP:421-424` |
 | **`convene`'s two operations** | setting a date · ordering its items (`compose_agenda`) | 2 | SHIPPED, `SUP:426-431` |
@@ -506,7 +506,7 @@ Columns: printed signature · reads · writes · **write class** · invariant ma
 | **writes** | **nothing but the returned Act** | everything else | **that one person's ledger only** |
 | **class** | — | ACTS | INTERIOR |
 | **invariant** | **no `World` in scope, ever** — by omission, not by inspection (`SUP:143-147`) | **no `Person` parameter**, so no per-actor special case (`SUP:148-149`); order-independent | **a collection of persons and one Event is a TYPE ERROR** (`SUP:150-151`); the only root-token minter |
-| **gaps** | ⛔ the question `q` the View is assembled against has no producer, type or lifetime; ⛔ `Act.payload` untyped | ⛔ `World` is defined nowhere in any surface | ⛔ `Event`'s record is defined nowhere; it is known only to carry `id` and the degree band |
+| **gaps** | ⛔ the question `q` the View is assembled against has no producer, type or lifetime; ⛔ `Act.payload` untyped | ⛔ `World` is not defined in any document this suite read, including any surface | ⛔ `Event`'s record is defined nowhere; it is known only to carry `id` and the degree band |
 
 **Supporting functions, and why each is legal:**
 
