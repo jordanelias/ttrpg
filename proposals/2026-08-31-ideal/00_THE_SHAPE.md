@@ -674,3 +674,93 @@ the one the design could not previously express — and it is, in the fiction, *
 
 Production and metabolism are the licensed exceptions and they are nature, not caretaking. **Anything
 else that happens by itself is the GM this design does not have, hiding in the engine.**
+
+---
+
+## 11. COINCIDENCE — the half of §10 I left out, and the falsifier corrected
+
+> *"there's always happenstance and coincidence. You could end up with petitioners asking for food due
+> to famine, but then food arrives from another source entirely, and the granary ends up being needed
+> the next season somewhere else."*
+
+### 11.1 The falsifier was too strong, and the correction makes it sharper
+
+I wrote: *"find a beneficial effect that occurs without a named person having acted."* **In Jordan's
+example, a named person did act — several did.** A factor was moving grain for profit and prices made
+this the destination; a rival lord wanted to be seen as generous; a captain ran from a storm into the
+wrong harbour with a full hold. **All acts, by named persons, for their own reasons. Not one of them
+intended to save these petitioners.**
+
+So the rule is not weakened; it was **mis-stated**:
+
+> **CORRECTED: no beneficial effect may be supplied BY THE ENGINE. Every effect traces to somebody's
+> act — but to nobody who intended it.**
+>
+> **Coincidence is not an exception to no-fallback. It is what no-fallback PRODUCES** when many people
+> act for their own reasons in a world they share.
+
+The GM this design does not have is *the engine deciding the grain arrives because the story needs it*.
+**A merchant arriving because grain was dear here and cheap there is the opposite of that** — it is
+the world working.
+
+### 11.2 ⚠ §10 was asymmetric, and that is a real defect in it
+
+§10.3 lists only harms — the vacancy as a weapon, neglect made attributable, institutions strangled by
+omission. **Every consequence I drew from no-fallback was a way for the world to hurt you.** That is
+half the mechanism.
+
+> **The same machinery produces unintended RESCUE as readily as unintended ruin.** Indifference cuts
+> both ways: nobody is coming to save you, *and* somebody may arrive anyway for reasons of their own.
+
+**This matters for play more than the harms do.** A world that only ever fails you by omission is
+grim and, worse, **predictable** — the player learns that absence means loss and stops attending to
+it. A world where absence sometimes resolves in your favour by accident is one where **you have to
+keep watching**, and where being saved is as unearned and as memorable as being ruined.
+
+And it is the honest model. Institutions fail people constantly; people also survive constantly for
+reasons no institution intended.
+
+### 11.3 What coincidence REQUIRES, and it is already on the list
+
+For unintended rescue to be possible at all, **effects must reach people who were not the object of the
+act.** That has one hard prerequisite:
+
+> **Goods must be able to move between unrelated persons.** Without a transfer act (§7.3), the only
+> thing that can ever reach you is a dispensation from your own hierarchy — **so the world can harm
+> you by omission but can never save you by accident.**
+
+**That makes enlargement 4 load-bearing on this entire register**, and upgrades it from *"a hole in
+the material layer"* to *"the precondition of the design's good luck."* A grain factor sailing for
+profit is exactly the kind of person whose self-interested act lands on a stranger — and today he
+cannot exist, because there is no act by which he gives anyone anything.
+
+### 11.4 The second half of the example — supersession is RELOCATION, not decay
+
+> *"the granary ends up being needed the next season somewhere else."*
+
+**This corrects §9.3's framing of expiry.** I wrote supersession as a *subject decaying* — the famine
+ends, the matter goes stale. Jordan's version is better: **the subject does not vanish, it MOVES.**
+The granary still matters enormously; it matters *there* now.
+
+That is a much richer object:
+- A petition dies not because the world forgot the question but because **the answer is needed
+  somewhere else** — and someone else is now asking for the same thing, with a better claim on it.
+- **The contested stake relocates.** What you fought a whole season for becomes irrelevant to you and
+  decisive for a rival, with no authoring.
+- It gives the player **dramatic irony as a mechanic**: you can win the argument and find the prize has
+  moved. That is a real feeling, and this design can produce it without a scripted reversal.
+
+**And it composes with the watch:** the granary being needed elsewhere is a *condition*, so it
+schedules a sitting there. **Your loss is somebody else's agenda item, and both are the same
+mechanism.**
+
+### 11.5 The corrected falsifier, in full
+
+> **Find a beneficial effect that no person's act produced.**
+>
+> Licensed exceptions, and only these: **metabolism and nature** — larders consume, crops yield,
+> wounds close or fester, bodies age, weather happens. Everything else that helps anybody must be
+> traceable to somebody's act, **though never necessarily to anybody who meant to help.**
+
+**A design that passes this has no caretaker and still has luck.** That is the target, and it is
+strictly better than what §10 described.
