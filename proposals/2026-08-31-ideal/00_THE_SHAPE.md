@@ -202,3 +202,100 @@ express, the inversion is too weak and the scalar was right after all.
 
 **These three are the next thing to attack, and they are the argument to run — not the seventeen
 documents' disagreements with each other.**
+
+---
+
+## 5. THE ENLARGEMENT — what the idealized system can do that it could not before
+
+> *"#342 is idealized, and this massive PR is an extension of that idealized work based upon testing it
+> against some real constraints / considerations. Through that, we are enlarging our idealized work so
+> it can do even more work."* — Jordan, 2026-08-31
+
+**This section restates §4 under the correct measure.** §4 counted the delta and was quietly proud of
+its smallness. That is the wrong axis. **The measure is how much more the idealized system can do**,
+and a small addition that unlocks a great deal is not a modest change — it is a load-bearing one.
+
+### 5.1 The three enlargements are ONE enlargement
+
+They are not three features. **They enlarge the same object.**
+
+> **The standing date stops being one object among many and becomes the spine.**
+> A **watch** creates dates. A **petition** addresses dates. A **lost option** gives people something
+> to convene about. Everything routes through the sitting.
+
+That is why the delta is small: it is one structural promotion, seen from three sides. And it is why
+it does so much: the sitting was already the design's best object — the one place a matter is decided
+by a named person who could have decided otherwise — and it was reachable by only one route.
+
+### 5.2 What the WATCH lets the design do
+
+- **Any slow condition becomes a story with an ending.** Famine, debt, siltation, a seam running out,
+  a grievance accumulating — each schedules a sitting instead of firing an outcome. The prior corpus
+  needed an authored trigger inventory for this; a watch needs none.
+- **Obstruction becomes play.** The convener who will not convene must now *refuse in public*, and a
+  refusal is an act, and an act is witnessed and deposited. **The design gains an entire register of
+  political behaviour — stalling, burying, calendar-packing — that was previously invisible.**
+- **Anticipation becomes play.** A watch is published as a band with no trigger point, so people can
+  see a sitting coming and *maneuver before it*: pre-commit, gather claims, buy a seat, discredit a
+  witness. **The design acquires a future tense.**
+- **The calendar becomes contested terrain.** Who gets to put what on which agenda is now a prize, and
+  prizes already route through `contest(container, prize, claimants)`.
+- **Dormancy generalises.** Anything can sleep and wake — a claim, a seat, a treaty, a debt — with one
+  named mechanism instead of three unnamed ones.
+- **The world gets a heartbeat without getting agency.** It never decides. It only makes people face
+  questions on a schedule they can see.
+
+### 5.3 What PETITION→DATE lets the design do
+
+- **Play against every institution opens.** The Church's four Dicasteries, the knightly order, every
+  trans-settlement guild — an entire direction of play that was structurally closed.
+- **Venue choice becomes strategy.** Which sitting do I address? A friendly convener, a hostile one, a
+  slow one, a public one. **Forum-shopping is now expressible and is exactly what real petitioners do.**
+- **Jurisdiction becomes arguable.** Two dates could hear this; which is proper? That is an argument,
+  and the design already has an argument system with a stasis ladder and named faults.
+- **Getting a date scheduled becomes an objective in its own right** — which composes directly with
+  the watch, since a watch is the other way to make one exist.
+- **Scale stops gating access.** A hearth can address a realm sitting if it can get on the agenda.
+  Reach is about *getting heard*, not about rung. That is the containment ladder doing its job instead
+  of standing in the way.
+
+### 5.4 What COMMONS-AS-OPTION-REMOVAL lets the design do
+
+- **The tragedy-of-commons story class becomes reachable** — many rational private acts making
+  everyone's practice worse, including the actor's.
+- **Places acquire identity without stat blocks.** A place is *what you can do there.* Two harbours
+  differ by verb sets, not by numbers.
+- **Those who lose a verb are a faction by construction.** Alignment needs a proposition and a
+  commitment map; *"the seam must be restored"* is a proposition and the people whose practice used it
+  are already committed. **A political faction forms out of a physical fact with no authoring at all.**
+- **Restoration becomes play.** Somebody can act to bring an option back, which is a project, which
+  needs a sitting, which needs a convener — the loop closes on itself.
+- **Migration and geography become mechanical** without a map system: options gone here, present
+  there, and people move for reasons the engine can state.
+- **Degradation is legible without a gauge**, so the refusal of meters costs nothing in
+  comprehensibility — the player sees a missing verb, which is more concrete than a falling number.
+
+### 5.5 The compounding, which is the real result
+
+Each enlargement makes the other two worth more:
+
+| | watch | petition→date | option-removal |
+|---|---|---|---|
+| **watch** | — | a watch creates the date a petition can address | a watch fires on the commons degrading |
+| **petition→date** | a petition can ask for a date to be *set* | — | the lost verb is what the petition is about |
+| **option-removal** | gives watches something physical to watch | gives petitions a grievance with a referent | — |
+
+**A silted harbour removes a verb → a watch notices the commons has crossed a band → it schedules a
+sitting → the people whose practice died petition that sitting → a convener must hear it or refuse in
+public → and the refusal is witnessed and becomes the next season's politics.**
+
+**Not one step of that is authored, and every step uses a primitive the ideal already had.** That
+chain is the enlargement. It is what the idealized work could not do on 2026-08-29 and can do now.
+
+### 5.6 What this does NOT enlarge, stated so the claim stays honest
+
+- **No new actor.** The world still never acts. A watch schedules; only persons decide.
+- **No new knowledge channel.** Everything above is still learned by `witness` and carried by claims.
+- **No new resolver, no second path, no threshold that fires.**
+- **No stored social quantity.** Not one gauge is added anywhere.
+- **And the low end is untouched**, because testing showed it was already right.
