@@ -252,12 +252,13 @@ available to a review that measured nothing.
 > investigative verb — and it is **eleven of twelve**. Transition 7, occupation, is the honest residue:
 > it is genuinely unwritten, and it is small.
 
-> **And two of the eleven transitions were added by Jordan AFTER the first pass, and neither required a
-> new fix.** Both are closed by `mint`/`efface` and `principals`, which were already on the table — and
-> one of them, **deposition, closes with no mechanism whatsoever**, falling out of two operations the
-> design already ships. **A fix set that absorbs new requirements without growing is the signature of a
-> correct primitive; one that needs a new rule per requirement is a feature list.** This one absorbed
-> two and grew by nothing.
+> **Jordan added four of these twelve rows AFTER the first pass — acquire a faction, be deposed, and
+> both halves of polity absorption — and NOT ONE required a new fix.** Two were already closed by
+> `mint`/`efface` and `principals`; one, **9b-i, turned out to be already SHIPPED and correct**; and
+> **deposition closes with no mechanism whatsoever**, falling out of `commit` and `principals` together.
+> The fourth, 9b-ii, is closed by `Tenure`, which was already rank 2 for a different reason. **A fix set
+> that absorbs new requirements without growing is the signature of a correct primitive; one that needs
+> a new rule per requirement is a feature list.** This one absorbed four and grew by nothing.
 
 ### §1.3 Where the design is a direct hit, and it must be said first
 
@@ -319,13 +320,19 @@ found it holding: the findings below cluster on §4.3, §8.4, §10.4 and §14 ro
 
 ### §1.4 Tier counts
 
-| tier | filed | carried | corrected downward |
+| tier | filed | carried | corrected |
 |---|---|---|---|
-| **1 — fatal** | 12 | 12 | 1 (A7's fix re-worded) |
+| **1 — fatal** | 12 | **11** (A10 and A12 merged) | 2 — A7's fix re-worded · **A12 misfiled, re-filed against the right object and merged** |
 | **2 — mechanism contradictions** | 6 | 6 | 0 |
-| **3 — uniformity, typing, primitives** | 15 | 15 | 3 (C1's count, C3's scope, C15 inverted) · 2 reclassified as proposals (C13, C14) |
+| **3 — uniformity, typing, primitives** | 15 | 15 | 3 — C1's count · C3's scope · C15 **inverted** · *(plus C9 narrowed, counted below)* |
 | **4 — coverage** | table | table | 0 |
-| **total** | **33** | **33** | **4** |
+| **total** | **33 filed** | **32 carried** | **6 corrected**, all marked ⚠ in place: A7, A12, C1, C3, C9, C15 |
+
+**Nothing was dropped, and nothing was silently rewritten.** One finding (A12) was filed against a
+misreading of the design's ontology; it is recorded as misfiled, re-filed against the object that is
+actually missing, and merged with the finding it duplicates. **Two of the six corrections — A12 and C9 —
+came from Jordan and made the review's central finding sharper rather than weaker**, which is the
+outcome an adversarial relay is for.
 
 
 ## §2 · TIER 1 — FATAL
@@ -1356,7 +1363,7 @@ the rest should be held to.**
 | **birth and natality** | **0.** `grep -ci "birth\|natality"` = 0. §2.1 |
 | **occupations and roles distinct from office** | **0.** `occupation` and `profession` = 0. A person's economic identity is `Practice` (§2 `:173`) and nothing else; there is no role a person occupies that is not an office. §2.11 |
 | **property, grant and confiscation** | ⚠ **`holdings` is DEAD STATE** — two descriptive occurrences, no act that reads, writes or moves it; `confiscat`/`enfeoff`/`dispossess`/`seize` = 0. §2.10 |
-| **borders, annexation, secession** | ⚠ **THE CONTAINMENT TREE IS IMMUTABLE.** `annex`/`seced`/`conquer`/`vassal`/`absorb`/`border`/`reparent` = 0; no node can be added, removed or re-parented. §2.12 |
+| **holding, annexation, secession** | ⚠ **NO TENURE RELATION EXISTS.** §4.2 `:339` gives a faction *"its proposition and its commitment map"* and nothing else, so a Duchy cannot hold its Territory; `holdings` on the person's side is dead state. `confiscat`/`enfeoff`/`dispossess`/`seize` = 0. ⚠ *Winning a polity's PEOPLE does work — §1.3's merger — and the design is right about it.* this §2.10 |
 | **faction leadership** | ⚠ **NO LEADER AND NO DERIVATION.** `founder`/`leadership`/`spokesman` = 0; both occurrences of `leader` are §4.4's office-pool argument. §2.9 |
 | **field investigation** | ⚠ **ONE SENTENCE**, `:1715-1717`, asserted as *"the engine's answer to its own epistemics, not a subsystem: when the same fact is disputed and it matters, somebody goes and looks, which is an act, by a person, who can be lied to."* **No verb, no cost, no resolution path, no obstacle owner.** The claim is right and the mechanism is absent |
 | **threats and pressures** | **0.** `plague` = 0, `invasion` = 0, `threat` = 0. Off-board polities are §16's last unresolved live choice, and §16 `:1873` states the cost honestly: *"allow an actorless pressure … would be the only exception to §1.1 in the design"* |
@@ -1372,14 +1379,14 @@ simulation · management · interactive fiction · detective · historical prece
 | lineage | the seat in this design | state |
 |---|---|---|
 | **interactive fiction / political sim** | the sitting: stasis ladder plus twelve named faults (§12) | **BUILT, and it is the best object in the suite** |
-| **grand strategy** | the down-stroke: one order, thirty-five executors, reports-as-claims (§9.3) | **BUILT and excellent** — for what a realm *does*. ⚠ For what a realm *becomes*, see 4X below: the map cannot change (this §2.12) |
+| **grand strategy** | the down-stroke: one order, thirty-five executors, reports-as-claims (§9.3) | **BUILT and excellent** — for what a realm *does*. ⚠ For what a realm *becomes*: allegiance moves correctly (§1.3's merger) and **ground never does** (this §2.10) |
 | **political simulation** | petition, carriage, agenda, burial, expiry (§8) | **BUILT** |
 | **historical precedent** | caste at the second gate, cadet branches, hostage politics, non-delivery versus refusal | **BUILT, and it is the design's strongest claim to originality** |
 | **detective** | field investigation | ⚠ **ONE SENTENCE** (`:1715-1717`). The epistemics layer that would carry it is world-class. **The detective seat is the largest built-adjacent opportunity in the design — everything it needs already exists** and what is missing is a verb, a cost and an obstacle owner |
 | **RPG** | advancement, character growth | ⚠ **GONE** (§2.3) |
 | **RPG / world churn** | character generation, birth | ⚠ **GONE** (§2.1, §2.2) |
 | **city builder / management** | building, founding, infrastructure | ⚠ **ABSENT** (this §2.6) |
-| **4X** | expansion, founding, borders | ⚠ **ABSENT, and worse than thin.** No act adds a node (this §2.6); **no act re-parents one either, so annexation, conquest, secession, partition, independence and vassalage are all inexpressible** (this §2.12); three of seven rungs own nothing (this §4.9) |
+| **4X** | expansion, founding, borders | ⚠ **HALF-ABSENT, and the half that ships is the right one.** Winning another polity's people is `commit` at scale and works (§1.3 `:131-132`). **Coming to hold its ground does not** — no tenure relation exists (this §2.10) — and **no act founds or razes a settlement** (this §2.6). Conquest is expressible as allegiance and inexpressible as possession |
 | **economic simulation** | market, price, exchange | ⚠ **STATED AS FAILING BY THE DOCUMENT ITSELF** (§11.5 `:1500-1508`, §15.6): gift constructs, market does not |
 | **strategy / external threat** | plague, invasion, off-board pressure | ⚠ **ABSENT.** §5.2 |
 
@@ -1393,9 +1400,15 @@ strongest form of corroboration available to a review that measured nothing.
 
 ## §6 · THE TEN CHANGES THAT WOULD DO THE MOST, RANKED
 
-Ranked by design bought per unit of change. **Six of the ten are subtractions, and ranks 1–4 are the four
-changes that take Jordan's own long-arc trajectories from three of ten transitions to nine of ten**
-(§1.2) — which is why they are ranked together, ahead of changes that are individually larger.
+Ranked by design bought per unit of change. **Six of the ten are subtractions, and ranks 1–4 are the
+four changes that take Jordan's own long-arc trajectories from FIVE OF TWELVE transitions to TEN OF
+TWELVE** (this §1.2) — which is why they are ranked together, ahead of changes that are individually
+larger. Add the investigative verb from the closing note and it is eleven of twelve.
+
+⚠ **Rank 2 changed shape during this review and did not change position.** `Tenure` was first argued on
+a job that included absorbing `commit` and re-parenting the containment tree; **both were withdrawn on
+Jordan's correction, and it holds rank 2 on a smaller job with a better justification** — it is the only
+proposal that keeps a faction, a territory and the holding between them as three objects instead of two.
 
 
 ### Rank 1 · ADD `mint` AND `efface` TO §6.4's `touches` MODES
@@ -1635,30 +1648,35 @@ Stated so that nobody cites this file as more than it is.
    **every finding is an argument against text**, and every fix is a proposed edit whose consequences are
    reasoned, not observed. Where a finding says a mechanism cannot work, the honest reading is *the
    document as written does not describe a mechanism that works*, not *a program failed*.
-2. **It is one reader.** The relay's structural independence is real — this pass never saw the agonist's
+2. **It read the ontology wrong once, and only a correction from Jordan caught it.** A12 was filed
+   against *Duchy-as-containment-node* when the design means *Duchy-as-faction*, and C9 was filed as a
+   governance gap when the architecture answers it. **Both were structural misreadings of the subject,
+   not slips**, and neither the reviewing pass nor this re-verification caught either — this file's own
+   §0 re-verification found four other problems and missed these two. Weight the rest accordingly.
+3. **It is one reader.** The relay's structural independence is real — this pass never saw the agonist's
    reasoning, only its output — but independence is not plurality. Twenty-eight findings by one reader
    with one set of priors is a sample of one, and the three findings this pass had to correct downward
    during re-verification (§0) are the measured rate at which a filed finding turns out to be
    overstated: **three in twenty-eight, all in the direction of over-claiming.** Apply that prior to what
    is left.
-3. **Docs 06 and 12 of #342 remain unverified by the fact base, and this review inherits that.** The
+4. **Docs 06 and 12 of #342 remain unverified by the fact base, and this review inherits that.** The
    subject document states it at §15.18 `:1846-1851`: `09_citation_ledger.md`'s own coverage note reads
    *"Not covered: `06_down_stroke.md` and `12_coercion_and_force.md` beyond grep hits"*. Doc 06 carries
    §9, which §5.3 rates as one of the design's best objects; doc 12 carries the coin hole, the watch
    naming ruling and §15.17's `burn` inheritance. **This review read both directly where it cited them
    and re-verified nothing else in either.**
-4. **No arc corpus and no NPC-season matrix was re-run.** The testing exercise that produced the four
+5. **No arc corpus and no NPC-season matrix was re-run.** The testing exercise that produced the four
    enlargements is upstream of this file and was not re-examined. §15.9 and §15.10's warnings about that
    instrument — that it detects **absence, not failure**, and that its closure-axis count is not citable
    in its original form — stand unaudited here.
-5. **The findings are against the terminal document only.** `10_SUPERSEDING.md` is 2,017 lines of a
+6. **The findings are against the terminal document only.** `10_SUPERSEDING.md` is 2,017 lines of a
    ~21,000-line suite. #342's seventeen documents were read only where cited. `00_THE_SHAPE.md`, the
    three review files and the NERS audit were read for context and were **not** reviewed. A defect that
    exists only in a superseded document is not a defect and is not reported.
-6. **The three deferred subsystems were not read at all.** Mass battle, personal combat and social
+7. **The three deferred subsystems were not read at all.** Mass battle, personal combat and social
    contest are out of scope by Jordan's ruling, and nothing here should be taken as a statement about
    them — including §5.3's genre table, which maps only the seats the seasonal loop is responsible for.
-7. **The ten changes in §6 were not checked exhaustively for interaction with each other.** They are
+8. **The ten changes in §6 were not checked exhaustively for interaction with each other.** They are
    ranked individually and argued individually. Four interactions are named where they were noticed —
    `Tenure` is a precondition of `mint` on a Node (rank 2), commutativity is a precondition of `mint`
    conflicting correctly (rank 7), `Allowance` is what makes `mint`'s cost sayable (rank 5), and the
