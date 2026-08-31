@@ -84,7 +84,7 @@ because it is the failure mode of every bound of this kind:
 > is stored, monotone, **never-decaying** unrest in all but name — **worse than the field L3 banned,
 > because the banned field could at least go down.**
 
-**The bound that holds is a closed roster, not a provenance rule.**
+**The bound that holds is a read-side rule, not a provenance rule — and it took two audits to find.**
 
 > **L3, amended — TWO clauses, and the second is the one that binds:**
 >
