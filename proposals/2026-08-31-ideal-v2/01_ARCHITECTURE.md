@@ -148,12 +148,20 @@ Office    := (id, post, rung?, remit, conferral, revocation, establishment,
 Site      := (id, rung, kind, condition, drawers[])
 ```
 
-**`Rung` is the name, and `Node` is refused.** `SUP:337` already calls the object *"Rung (a
-rung)"* and `ABS:50` carries it forward. `Node` would be a third name for one object — the failure
-`CLAUDE.md` §4 records this repository having paid for once — **and it collides head-on with the port
-target**: `Node` is Godot's scene-tree base class, written `root (Node)` at
-`godot/scene_tree_architecture.md:16`, and `CLAUDE.md` §6 makes the port the live destination. Two
-independent grounds, one word, no cost to using it.
+**`Rung` is the name. `Node` and `Container` are BOTH refused, and the second refusal corrects this
+document's own earlier choice.**
+
+⚠ **An earlier version named the object `Container`, on the ground that `SUP:337` calls it *"Container
+(a rung)"* and that `Node` collides with Godot's scene-tree base class (`root (Node)`,
+`godot/scene_tree_architecture.md:16`). The first half was right; the second half landed on a WORSE
+collision.** `Container` is **also a Godot built-in** — the `Control`-derived base of `VBoxContainer`
+and its family — so `class_name Container` collides too, **and collides worse**: `Node` would have
+failed loudly and at once, while `Container` surfaces as a confusing shadow of a UI type.
+
+**`Rung` is the tree's own word** — it is the parenthetical inside `SUP:337`'s own gloss — it collides
+with nothing in Godot, nothing in this repository and nothing in the design, and `ABS:50` carries the
+same object forward. `CLAUDE.md` §6 makes the port the live destination, which is what makes a
+`class_name` collision a design defect rather than a cosmetic one.
 
 ⚠ **`Site` IS A CARRIER, and the brief that deleted it is reversed.** The deletion made `Site` matter
 held by a Rung, keyed the `condition` accumulator to the Rung, and derived a coarse
@@ -872,8 +880,8 @@ refute that placement:**
 2. The Rung row's own test is *"The line is provenance, not location"* (`SUP:355-360`). **Stored
    tellings ARE derived from persons and DO go stale against them**, so they fail the row's test.
 3. **The dormancy ruling already decided this exact move** (`SUP:746-748`): *"a banked claim is a
-   claim, and claims live in ledgers; and the alternative is a stored flag on a rung, which the
-   amended Rung row admits only for matter."* The placement is not merely unlicensed; it is ruled
+   claim, and claims live in ledgers; and the alternative is a stored flag on a container, which the
+   amended Container row admits only for matter."* The placement is not merely unlicensed; it is ruled
    against.
 
 §14 row 7 independently forbids a knowledge value stored on the thing known. **The channel store is
