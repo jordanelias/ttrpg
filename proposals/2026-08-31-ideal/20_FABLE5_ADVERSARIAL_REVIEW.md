@@ -91,7 +91,7 @@ first pass all still stand, and are marked ⚠ in place:
 > claims — a faction holds a node, and the two objects stay distinct. **The design has neither.** §4.2's
 > ownership table `:339` gives the Faction row in full: **`| Faction | its proposition and its commitment
 > map |`** and nothing else. Verified by grep: `holds a territory` 0 · `territorial` 0 · the single
-> `faction hold` at `:118` is *"does this faction hold a **person** who can act there"*, which is
+> `faction hold` at `:118` is *"does this faction hold a person who can act there"*, which is
 > membership. **A faction can hold nothing.** So A12 is re-filed against the right object and **merged
 > with A10**, which is the same gap seen from the person's side: this §2.10.
 >
@@ -162,7 +162,7 @@ subject and two of them already scored elsewhere in this same file:
 |---|---|
 | holdings cannot move | `transfer` moves `stores` between hearths **by an act** (`:1425-1427`) — and this file's own B4 is a finding *about* that act |
 | tenure cannot move | `confer`/`revoke` change office tenure (`:423`, `:367-368`) — and this file's own §1.2 scores *"lose an office WORKS"* |
-| addresses cannot move | **Admission** *"is an act by persons who already hold standing, changing another person's address"* (`:312-313`); `migrate` is one of the five shipped channels (`:1409-1410`) |
+| addresses cannot move | **Admission** *"is an act by persons who already hold standing, changing another person's address"* (`:311-313`); `migrate` is one of the five shipped channels (`:1409-1410`) |
 | claims cannot be created | tellings deposit claims constantly (`:1128-1131`) — and this file calls tellings *"the best material in the suite"* two paragraphs later |
 
 **The narrow claim, which survives all four and is what the rest of this review rests on:**
@@ -178,10 +178,10 @@ operations that change **EXISTENCE**. It is not a list about tenure, which the b
 claims.* The only operations in all 2,017 lines that change what exists are:
 
 1. **death** — P1 `:648`, metabolism, **decider-free**
-2. **de-individuation** — P7 `:654` and §2 `:212`, **decider-free**
+2. **de-individuation** — P7 `:654` and §2 `:209`, **decider-free**
 3. **eviction of a claim** — P7 `:654`, **decider-free** (and see this §3.6: it is also an unlicensed channel)
 4. **individuation** — P7 `:654`, the single additive operation, firing when *"an event names one of its
-   members"* (`:209`) — **decider-free at the point of firing**, and whose four other #342 triggers and
+   members"* (`:203-204`) — **decider-free at the point of firing**, and whose four other #342 triggers and
    whole minting procedure (`09:535-548`) were dropped
 5. **holdings passing on death** — the hearth's succession pointer, §4.1 `:304-307`, fired by a P1
    death. ⚠ *An earlier version called this "the only route by which property changes hands." **False**
@@ -307,12 +307,17 @@ exist. Every transition that fails is a change to WHAT exists, or to WHO HOLDS I
 this §1.1's finding arriving on Jordan's own arcs rather than on a grep, which is the strongest corroboration
 available to a review that measured nothing.
 
-> **After four fixes — `mint`/`efface` (this §6 rank 1), `Tenure` (rank 2), `principals` (rank 3) and
-> the matter-event generator (rank 4) — TEN OF TWELVE TRANSITIONS WORK**: rank 1 closes 4, `Tenure`
-> closes 6 and 9b-ii, `principals` closes 5 and 5b, and the generator closes 10. **None of the four adds
-> an object to the engine.** Add the one paragraph of authoring named in this §6's closing note — the
-> investigative verb — and it is **eleven of twelve**. Transition 7, occupation, is the honest residue:
-> it is genuinely unwritten, and it is small.
+> **After THREE fixes — `mint`/`efface` (this §6 rank 1), `Tenure` (rank 2) and `principals` (rank 3) —
+> ELEVEN OF TWELVE TRANSITIONS WORK**: rank 1 closes 6 by making sites minted and holdable; `Tenure`
+> closes 9b-ii; `principals` closes 5 and 5b; transition 4 is completed by rank 9's one-line production
+> path; and **transition 10 needs nothing, because it already works** (F2, F3). **None of the three adds
+> an object to the engine.** Transition 8 — the Investigator — needs the one paragraph of authoring in
+> this §6's closing note, and transition 7, occupation, is the honest residue: genuinely unwritten, and
+> small.
+>
+> ⚠ *An earlier version credited a FOURTH fix, the matter-event generator, with closing transition 10.
+> **A7 was refuted; transition 10 was already working and this review had mis-scored it.** The count
+> improved because a finding was withdrawn, not because a fix was added.*
 
 > **Jordan added four of these twelve rows AFTER the first pass — acquire a faction, be deposed, and
 > both halves of polity absorption — and NOT ONE required a new fix.** Two were already closed by
@@ -356,9 +361,11 @@ the same reason and by the same mechanism.
   finding against it (this §3.6) is a defence of it.
 - **The sitting and the stasis ladder (§12).** Four rungs, irrevocable public descent, twelve named
   faults with severities at `:1535-1540`, and force-close as the *normal* ending. **This is the
-  best-specified object in the document and it is the standard the rest should be held to.** It is the
-  one place where a mechanism is stated with enough precision that an implementer would not have to
-  invent anything.
+  best-specified object in the document and it is the standard the rest should be held to.** ⚠ *An
+  earlier version added *"an implementer would not have to invent anything"*. **Struck as inconsistent
+  with this review's own §5.2 finding (m9):** §12's `Venue` carries eight parameters that appear once
+  and are never valued, so an implementer would have to invent eight numbers. The **stasis ladder and
+  the fault table** are what earn the praise; the venue tuple beside them does not.
 - **The down-stroke's one-order-many-executors (§9.3).** Scope enumerates **executors, not places**;
   delivery is not assumed; reports are claims. Thirty-five outcomes from one order, and the four seats
   it makes playable — the slow-walker, the over-enforcer, the false reporter, the man ruined for
@@ -382,19 +389,23 @@ found it holding: the findings below cluster on §4.3, §8.4, §10.4 and §14 ro
 
 ### §1.4 Tier counts
 
-| tier | filed | carried | corrected |
+| tier | filed | carried | of those, CORRECTED |
 |---|---|---|---|
-| **1 — fatal** | 12 | **11** (A10 and A12 merged) | 2 — A7's fix re-worded · **A12 misfiled, re-filed against the right object and merged** |
-| **2 — mechanism contradictions** | 6 | 6 | 0 |
-| **3 — uniformity, typing, primitives** | 15 | 15 | 3 — C1's count · C3's scope · C15 **inverted** · *(plus C9 narrowed, counted below)* |
-| **4 — coverage** | table | table | 0 |
-| **total** | **33 filed** | **32 carried** | **6 corrected**, all marked ⚠ in place: A7, A12, C1, C3, C9, C15 |
+| **1 — fatal** | 12 | **11** (A10·A12 merged) | **4** — A12 misfiled and re-filed · A7 **substantially refuted**, demoted to a parameter gap · A8 **substantially refuted**, demoted from #1 · A4 and A5 keep their findings but **their fixes are withdrawn** |
+| **2 — mechanism contradictions** | 6 **+1 new (O1)** | **7** | 1 — B2's fix rewritten to overrule `05:176` explicitly, and its *"the defect is new"* attribution struck |
+| **3 — uniformity, typing, primitives** | 15 | 15 | 4 — C1's count · C3's scope · C15 **inverted** · C9 **narrowed** · C2's *"§0 violation"* struck · C6's `Focus` half struck · C14 demoted from an answer to a proposal *(six edits across four findings)* |
+| **4 — coverage** | table | table | 2 — the Venue count 14 → **8**; matter-event generation re-scored **SHIPPED** |
+| **total** | **34 filed** | **33 carried** | **13 corrections across 12 findings** |
 
-**Nothing was dropped, and nothing was silently rewritten.** One finding (A12) was filed against a
-misreading of the design's ontology; it is recorded as misfiled, re-filed against the object that is
-actually missing, and merged with the finding it duplicates. **Two of the six corrections — A12 and C9 —
-came from Jordan and made the review's central finding sharper rather than weaker**, which is the
-outcome an adversarial relay is for.
+**Two fixes are WITHDRAWN WITH NO REPLACEMENT** — A4's channel storage and A5's needs-as-claims — because
+both broke rules of the subject. **Their findings stand.** A withdrawn fix is recorded as an open
+problem, not quietly downgraded to a suggestion.
+
+**Nothing was dropped and nothing was silently rewritten.** Of the thirteen corrections, **two came from
+Jordan, four came from an independent antagonist pass, and seven from this file's own re-verification.**
+⚠ **The four that mattered most — F1, F2, F3, F4 — all came from the antagonist, and this review's own
+checking missed every one.** That distribution is the most useful number in this table: **a reviewer
+re-verifying its own findings caught the cheap errors and none of the load-bearing ones.**
 
 
 ## §2 · TIER 1 — FATAL
@@ -413,9 +424,9 @@ evidence is separate; they have one fix, at this §6 rank 1.
 > minted only when: an event names them · a telling puts them in someone's ledger · they occupy a role
 > or office · they enter a Knot · they are individuated as decisive in a contest."*
 
-`10_SUPERSEDING.md` carries the **de-individuation half** — `:212`, *"A person re-merges into a cohort
+`10_SUPERSEDING.md` carries the **de-individuation half** — `:208-209`, *"A person re-merges into a cohort
 when they hold no Knot, no office, no live petition, and no other person's ledger names them"*, and P7
-at `:654` — and **one** of the five mint triggers, at `:209`: *"A cohort **individuates** when an event
+at `:654` — and **one** of the five mint triggers, at `:203-204`: *"A cohort **individuates** when an event
 names one of its members."* `grep -ci "birth\|natality"` over the whole file returns **0**. P1 `:648`
 carries *"bodies age and die"* and nothing that adds.
 
@@ -500,7 +511,7 @@ channel, not the cohort**:
 > rather than receiving the cohort's reading** — two brothers minted out of the same hamlet in the same
 > season can hold opposite construals of the same twenty-year-old proclamation."*
 
-**A cohort cannot hold a spread by construction.** §2 `:206`: *"Persons sharing an address, marks and
+**A cohort cannot hold a spread by construction.** §2 `:202-203`: *"Persons sharing an address, marks and
 **stance** are held as a cohort"* — sharing stance is the membership criterion. §2 `:208` makes the
 cohort individuate precisely when *"its internal stance spread exceeds the point where one answer is
 honest."* A cohort is the object that exists only while the spread is negligible; asking it to store the
@@ -790,7 +801,7 @@ design means Duchy-as-faction, and the correct finding lives one level down.
 
 **Two possessions, and neither is material.** Verified by grep across all 2,017 lines: `holds a
 territory` **0** · `territorial` **0** · `faction holds` **0**. The single `faction hold` phrasing is
-`:118`, *"does this faction hold a **person** who can act there"* — which is **membership, not holding**.
+`:118`, *"does this faction hold a person who can act there"* — which is **membership, not holding**.
 
 **Limb 2 — a person's `holdings` is dead state.** `holdings` occurs **twice**, both descriptive rather
 than operative: `:307`, in the cadet-branch derivation (*"a cadet branch is a hearth whose succession
@@ -800,7 +811,7 @@ stakes. **No act reads it, writes it, or moves it.**
 - **`transfer` does not.** §11.2 `:1424-1427` moves *"the SAME `stores` scalar, mouth-seasons"* — food,
   and nothing else.
 - **A dispensation cannot, by definition.** §9.1 `:1121` defines it as *"a change to what a container
-  **permits, costs or requires**"*, and the nine typed terms at `:1123-1125` — `PriceTerm`,
+  permits, costs or requires"*, and the nine typed terms at `:1123-1125` — `PriceTerm`,
   `ProhibitionTerm`, `LevyTerm`, `ExemptionTerm`, `EntryStandardTerm`, `ExcommunicationTerm`,
   `BlockadeTerm`, `TreatyClause`, `OrdenanzaTerm` — contain **no grant, no confiscation, no forfeiture,
   no enfeoffment**. A dispensation changes terms; it does not move things.
@@ -841,9 +852,15 @@ an edge between them.** `confer` and `revoke` are already in `remit.acts` at `:4
 
 **The claim.** The starting position of Jordan's second trajectory does not exist.
 
-**The evidence.** `occupation` and `profession` return **0** occurrences. A person's six fields (`:168-179`)
-carry no role that is not an office, and §4.4's office is *"a post whose holder's decision binds persons
-who never agreed to it"* — which an investigator's is not. And field investigation, the activity itself,
+**The evidence.** `occupation` and `profession` return **0** occurrences, and §4.4's office is *"a post
+whose holder's decision binds persons who never agreed to it"* — which an investigator's is not.
+
+⚠ *An earlier version added *"there is no role a person occupies that is not an office"*. **That is
+false and is struck (m6):** the **establishment** is *"the named persons the office employs"* (`:436`),
+the **judging set** is *"the persons who hear about your act by default"* (`:311`), and the **carrier**
+is a standing role in §8.2 (`:894`). The design has non-office roles. What it lacks is a role that is a
+person's declared **occupation** — a thing you are, that others can read off you and that shapes what
+you are asked to do.* And field investigation, the activity itself,
 is **one sentence**, at `:1715-1717`:
 
 > *"**field investigation is the engine's answer to its own epistemics**, not a subsystem: when the same
@@ -1057,7 +1074,7 @@ stanceweight(c) = clamp(1 + λ·agreement(c), 0.05, 2.0),   λ = obstinacy / 5
 obstinacy. So eviction is a threshold over a social quantity, firing a permanent outcome, with no decider.
 
 **Three licences are checked and none covers it.** §13.2 `:1636-1641` licenses exactly four channels;
-exception 3 is *"the **confidence** of a memory decaying"*, and **eviction is deletion, not decay**.
+exception 3 is *"**The confidence of a memory decaying**"*, and **eviction is deletion, not decay**.
 §10.6 condition 1 `:1370-1373` states the general rule — *"no band edge may ever be defined over"* a
 social quantity — naming standing, regard, grievance, cohesion and commitment. **And §6.3 `:672-678`
 licenses exactly three write classes by phase: calendar (P0), matter (P1), acts (P5) — "There are exactly
@@ -1091,6 +1108,52 @@ to be able to cross has been deleted from the ledger it would have crossed into.
 > else, which is a genuinely different licence from the other three and is why it is safe) or by
 > folding P7 into P1's matter class on the ground that confidence decay is already licensed there. **The
 > document must pick one; today it has an unlicensed phase.**
+
+### §3.7 · O1 — §8.7's CLEARANCE RULE IS A BROADCAST, ON THE ROW §14 IS CLEARED BY THE ABSENCE OF BROADCASTS
+
+**The claim.** One event writes into every person's stance table in the world, with no presence, no
+telling and no ledger gate — and §14 row 3 is marked **Clear** on the explicit ground that the design
+contains nothing of the kind.
+
+**The evidence, and it is a four-way contradiction inside one document.**
+
+§8.7 `:1104-1105`, carrying `05:649-651` as the D-11 fix:
+
+> *"A dispensation satisfying the original proposition **clears every dormant row referencing that
+> proposition, at every holder, everywhere**"* — **a structural fix is a structural fix.**
+
+Against three rules the same document states:
+
+1. **§14 row 3 `:1736`** is marked **Clear** against *"any function taking `[Person]` and one `Event`"*,
+   and its stated reason is that deposits are *"as and when they learn"* — **"a telling each, never a
+   broadcast."** *Every holder, everywhere* is a function taking `[Person]` and one event. **The row is
+   cleared on the absence of the exact thing §8.7 ships.**
+2. **§9.4 `:1189-1191`** rules the identical case the other way, and treats it as important: compliance
+   drops *"for each person **as and when a claim of the death reaches them, and not one moment
+   before**. **A synchronous drop would be a polity-facing quantity computed off true world state**, so
+   persons would react to a death they had not heard of."* A dispensation clearing rows at every holder
+   everywhere **is** a synchronous drop computed off true world state.
+3. **§8.7's own entry rule, eight lines above it at `:1098`.** A suppressed row enters valuation *"the
+   moment a claim satisfying it lands **in the holder's ledger**."* **Entry is ledger-gated and exit is
+   not**, in the same mechanism, in the same section.
+
+**Why it matters to play, and it is not a technicality.** §8.7 is the road to revolt, and the asymmetry
+inverts the section's own best insight. `:1107-1109` makes the political point that a **structural** fix
+clears more rows than killing a man does, *"and nothing asserts that structural fixes are better — it is
+computed."* **Under a broadcast it is not computed; it is guaranteed.** A Duke who signs the right
+dispensation pacifies grievance in hamlets that have never heard of him, including hamlets his criers
+cannot reach — which is exactly the omniscience §9.4 refuses, and it deletes the most interesting case
+in the design: **the reform that worked and that nobody downriver knows about yet.**
+
+**THE FIX, which makes §8.7 obey §9.4 and costs nothing new.** Gate clearance on the same channel as
+entry: **a dormant row clears when a claim of the satisfying dispensation lands in that holder's
+ledger** — by presence and channel, at telling speed, like every other deposit (§9.1 `:1128-1131`). The
+structural-versus-personal asymmetry `:1107-1109` wants **survives intact and gets better**: a
+dispensation still reaches more rows than a killing, because a dispensation is published and travels,
+while a death travels only as fast as the news of it. **The comparison stops being asserted and becomes
+computed, which is what §8.7 says it wants.**
+
+
 
 ---
 
@@ -1163,7 +1226,7 @@ and epistemics is on Jordan's in-scope list.
 **THE FIX.** Enumerate the closed set in §3.1, with each form's collision, entailment and relevance rule
 beside it. `SAID` is one. The document's own worked cases imply several more — a value-at-a-subject form
 (`condition(harbour) = low`), a location form (presence roll-ups), a holding form (`Holding(person,
-office)`), a compliance form (`:1179`, *"Compliance was rendered"*), an obligation form. **Until the set
+office)`), a compliance form (`:1167`, *"Compliance was rendered"*), an obligation form. **Until the set
 is written the layer cannot be built, and §17.1 should not list it as settled.**
 
 ### §4.4 · C4 — `remit.acts` IS A "CLOSED SET OF FIVE" HOLDING SEVEN OPERATIONS
@@ -1186,7 +1249,7 @@ shorter.
 
 ### §4.5 · C5 — COHORTS GET A DIFFERENT VIEW RULE THAN PERSONS, IN THE DOCUMENT THAT FORBIDS EXACTLY THAT
 
-**The evidence.** §2 `:210-211`: *"**One type, not two:** if a cohort were a different type, every
+**The evidence.** §2 `:205`: *"One type, not two: if a cohort were a different type, every
 mechanism would be written for one and not the other and the design would acquire an elite-only politics
 by accident."* P3 `:650`: *"top-K claims by salience per person (§3.3); **K = 3 per cohort**"* — against
 §3.3 `:252`'s `K = 7 + Focus + 2 per Knot consulted − Coherence penalty`.
@@ -1197,33 +1260,39 @@ since a cohort reasoning on three claims and a named person reasoning on nine wi
 systematically in favour of the named.
 
 **THE FIX, and it DELETES A CONSTANT.** Cohorts hold no Knots by construction (a Knot is a person's
-binding, and §2 `:212` makes holding one a de-individuation blocker), so the `+2 per Knot` term is zero;
+binding, and §2 `:209` makes holding one a de-individuation blocker), so the `+2 per Knot` term is zero;
 a cohort's Focus is its distribution's mean; a cohort's Coherence penalty is its distribution's mean.
 **The general formula already yields a small K for a cohort.** Delete `K = 3` from P3 and let §3.3's one
 formula run for both, which is what §2 says the design does.
 
-### §4.6 · C6 — `Focus` AND `Coherence` ARE READ BUT OWNED BY NOBODY
+### §4.6 · C6 — `Coherence` IS READ BUT OWNED BY NOBODY  *(⚠ the `Focus` half is WITHDRAWN)*
 
-**The evidence.** §3.3 `:252` reads both: `K = 7 + Focus + 2 per Knot consulted − Coherence penalty
-(Dissonant 1 … Severed 5)`. §2's six fields (`:168-179`) carry neither. §4.2's ownership table
-(`:334-340`) carries neither. #342 owns Coherence explicitly at `02:750`: **`Coherence | drift + discrete
-writes | the person | mark reads, primaries, tellings, individuation | any cost on Thread use and
-betrayal`**.
+⚠ **FILED AS *"`Focus` AND `Coherence` are read but unowned". THE `Focus` HALF IS FALSE (M5).***
+**`Focus` is a declared attribute.** §5.1 `:501` — *"Attributes run 1–7 (**the nine named in the
+setting**, plus the ruled-but-unnamed tenth)"* — and the roster is on disk at
+`references/descriptor_registry.yaml:53`: `{key: attr.mind.focus, name: Focus}`. It is carried by §2's
+**Capability** field like every other attribute, and §3.3 reading it is ordinary. Struck.
 
-**And §16 `:1871` makes the Coherence-0 ontology a live choice for Jordan** — *"Two incompatible readings
-ship — loss of capacity, versus *a person has become an object*. Three arcs and two named absences turn
-on it"* — **about a quantity the document never declares.** §17.4 `:1938` carries it forward as an open
-finding, still without declaring the field.
+**The evidence, Coherence only.** §3.3 `:252` reads it: `K = 7 + Focus + 2 per Knot consulted −
+Coherence penalty (Dissonant 1 … Severed 5)`. §2's six fields (`:168-179`) do not carry it; §4.2's
+ownership table (`:334-340`) does not carry it; **and unlike Focus it is not an attribute** —
+`descriptor_registry.yaml` has no `attr.*.coherence`, and #342 lists it as its own object with its own
+producer at `02:750`: **`Coherence | drift + discrete writes | the person | mark reads, primaries,
+tellings, individuation | any cost on Thread use and betrayal`**.
 
-**Why it matters.** This is the same class as §2.1–§2.3: a quantity #342 owned, that this document reads
-and does not carry. It is worse than the others because the document escalates a design fork about it to
-Jordan while leaving it undefined, which makes the fork unanswerable — you cannot rule on what
-Coherence-0 means when Coherence is not a field.
+**And §16 `:1871` makes the Coherence-0 ontology a live choice for Jordan** — *"Two incompatible
+readings ship — loss of capacity, versus a person has become an object. Three arcs and two named
+absences turn on it"* — **about a quantity the document never declares.** §17.4 `:1938` carries it
+forward as an open finding, still without declaring the field.
+
+**Why it matters.** Same class as this §2.1–§2.3: a quantity #342 owned, that this document reads and
+does not carry. It is worse than those because **the document escalates a design fork about it to Jordan
+while leaving it undefined** — you cannot rule on what Coherence-0 means when Coherence is not a
+declared field of anything.
 
 **THE FIX.** Add `Coherence` to §2's field table and to §4.2's Person row, with `02:750`'s producer
-(*drift + discrete writes*) and consumers. Add `Focus` the same way, or — if Focus is meant to be an
-attribute rather than a field — say so in §5.1, where attributes are declared. The document must not read
-a quantity it does not own.
+(*drift + discrete writes*) and its consumers. One row, and §16's fork becomes answerable.
+
 
 ### §4.7 · C7 — A DEFINED SELECTOR WAS REPLACED BY AN ADJECTIVE
 
@@ -1275,7 +1344,7 @@ never mentioned again in that section.
 finding was filed as *the design has governance at four scales and a naming convention at three*. **It is
 substantially answered by the architecture: political action above Settlement runs through FACTIONS and
 OFFICES, not through container state.** A faction is a proposition plus a commitment map *"at any
-scale"* (`:71`), an office cluster *"has offices even where it has no container"* (§8.1 `:848`), and
+scale"* (`:71`), an office cluster *"has offices even where it has no container"* (§8.1 `:851-852`), and
 `:116` insists *"Scale is derived and gates nothing."* **The upper rungs owning nothing is not an
 omission; it is the same refusal that makes the whole alignment layer work.** They are address
 aggregation — the thing you roll `presence` and `density` up through — and nothing more.
@@ -1390,16 +1459,23 @@ spends a live ruling (D-2) and a live exploit (D-16) on the relationship between
 
 **Four consequences, and the second is the point.**
 
-1. **D-2 stops being a fork and becomes a parameter.** §16's largest open ruling is currently *"one act
-   per season, or a holder's several?"* Under one allowance it is *"how large is the earmark"* — a
-   number, tunable, with the personnel-game reading at earmark 0 and the decree-game reading at a large
-   earmark, and every intermediate available. **The two games §16 says are materially different become
-   two settings of one dial**, and a Duke's season stops being a category question.
-2. **D-16's cohort exploit prices itself.** §16 `:1866` records it: *"individuate your own cohort and get
-   eleven acts instead of one"*. Under one allowance owned by the entity and sized by weight,
-   **individuating a cohort SPLITS its allowance; it does not mint one.** The exploit is not forbidden by
-   a rule; it does not exist. That is the design's own preferred shape — §8.7 `:1091` refuses a revolt
-   meter for exactly this reason.
+1. ⚠ **D-2 would become a parameter rather than a fork — BUT THIS IS A PROPOSAL FOR JORDAN, NOT AN
+   ANSWER, AND AN EARLIER VERSION OF THIS FILE CLAIMED OTHERWISE (M6).** It argued that this *"answers
+   §16's largest open ruling from architecture rather than escalating it — which is `CLAUDE.md` §0's
+   fifth test."* **That test was already run and came out the other way.** §16 `:1860-1862`: *"Each is a
+   genuine fork where two defensible answers lead to materially different games. **None is a question
+   this document can answer from precedent or architecture, which is the test §0 of `CLAUDE.md` sets
+   before anything is escalated.**"* Overriding a reservation without citing it is the **exact** error
+   D-7 (`:2003`) was raised to correct, one round earlier, on conferral. **The claim is withdrawn**; the
+   restructuring is offered as an option Jordan may take, and the fork stays his.
+2. ⚠ **The cohort-exploit consequence was stated wrongly and is corrected.** It read *"individuating a
+   cohort SPLITS its allowance; it does not mint one — the exploit does not exist."* **That contradicts
+   the subject**: `:628` gives *"every person **and every cohort** commits exactly one act per season"*,
+   so an allowance is per-entity and **not** weight-proportional — which is precisely why D-16's exploit
+   (`:1866`, *"individuate your own cohort and get eleven acts instead of one"*) bites. **Making the
+   allowance weight-proportional would be a CHANGE to `:628`, not a consequence of this primitive.** It
+   is a coherent change and it would price the exploit; it is offered as such, with the line it edits
+   named.
 3. **§4.3's *"exactly two quantities"* becomes one primitive with a tag**, and combined with §3.2's fix —
    `capacity(date)` demoted from a currency to a selection cap — **the design goes from three
    capacity-like objects to one `Allowance` and one cap.**
@@ -1449,7 +1525,7 @@ and §13.4, the strongest material in the suite** · petitions, carriage, standi
 orders and executors §9.3 · obligation (`requisition`) §4.1 · offices §4.4 · conflict and resolution §5
 and §6.4 · clocks §7 · competing beliefs §3.3 and §13.4 · **parliamentary debate §12 — the stasis ladder
 plus twelve named faults with severities is the best-specified object in the document and is the model
-the rest should be held to.**
+the rest should be held to** — *the ladder and the faults, not the `Venue` tuple beside them (this §5.2).*
 
 ### §5.2 Absent, or one line
 
@@ -1464,8 +1540,8 @@ the rest should be held to.**
 | **faction leadership** | ⚠ **NO LEADER AND NO DERIVATION.** `founder`/`leadership`/`spokesman` = 0; both occurrences of `leader` are §4.4's office-pool argument. §2.9 |
 | **field investigation** | ⚠ **ONE SENTENCE**, `:1715-1717`, asserted as *"the engine's answer to its own epistemics, not a subsystem: when the same fact is disputed and it matters, somebody goes and looks, which is an act, by a person, who can be lied to."* **No verb, no cost, no resolution path, no obstacle owner.** The claim is right and the mechanism is absent |
 | **threats and pressures** | **0.** `plague` = 0, `invasion` = 0, `threat` = 0. Off-board polities are §16's last unresolved live choice, and §16 `:1873` states the cost honestly: *"allow an actorless pressure … would be the only exception to §1.1 in the design"* |
-| **matter-event generation** | ⚠ §13.2 `:1640` **licenses** it and §10.6 `:1370-1378` **gates** it; **nothing generates one.** §2.7 |
-| **governance above Settlement** | ⚠ four of seven rungs. §4.9 |
+| **matter-event generation** | ✅ **SHIPPED.** `:1348-1350` — a storm is *"a bad `season_factor` roll"* — confirmed at #342 `13:183-184`. ⚠ *Filed as inert; **refuted** (F3).* What is missing is only that roll's **distribution** (this §2.7) |
+| **governance above Settlement** | ⚠ **a statement gap, not a mechanism gap.** Political action above Settlement runs through factions and offices by design; §4.1 simply never says so (this §4.9) |
 | **`Venue`'s parameters** | ⚠ **17 parameters at `:1571-1574`** — twelve in the tuple, five in the door — and **not one carries a range, a default or a numeric value anywhere in the document.** Two (`enter`, `speak`) get a domain (*"predicates over marks, office, standing and commitment degree"*); one (`admissible_source`) gets two prose illustrations at `:1591-1593`. The remaining fourteen — `admission_floor`, `exchange_budget`, `article_count`, `coupling_depth`, `veto_holders`, `privileged_custody`, `record_custody`, `attendance_cost` and the rest — appear once each, in the tuple, and never again. **In the document meant to be the ideal code shape, its most parameter-heavy object is entirely unvalued** |
 
 ### §5.3 The genre lineage, mapped to seats
@@ -1497,239 +1573,181 @@ strongest form of corroboration available to a review that measured nothing.
 
 ## §6 · THE TEN CHANGES THAT WOULD DO THE MOST, RANKED
 
-Ranked by design bought per unit of change. **Six of the ten are subtractions, and ranks 1–4 are the
-four changes that take Jordan's own long-arc trajectories from FIVE OF TWELVE transitions to TEN OF
-TWELVE** (this §1.2) — which is why they are ranked together, ahead of changes that are individually
-larger. Add the investigative verb from the closing note and it is eleven of twelve.
-
-⚠ **Rank 2 changed shape during this review and did not change position.** `Tenure` was first argued on
-a job that included absorbing `commit` and re-parenting the containment tree; **both were withdrawn on
-Jordan's correction, and it holds rank 2 on a smaller job with a better justification** — it is the only
-proposal that keeps a faction, a territory and the holding between them as three objects instead of two.
-
+⚠ **RE-RANKED after the antagonist pass. Two changes left the top four** — the matter-event generator
+(A7 refuted, now a one-line parameter statement at rank 9) and everything resting on A8 — **and two fixes
+were WITHDRAWN entirely rather than re-ranked**: A4's channel storage (M1) and A5's needs-as-claims (M8),
+both because they broke rules of the subject. **A withdrawn fix is not a lower-ranked fix.** Ranks 1–3
+are what remains of the existence cluster and they are what this review now stands on.
 
 ### Rank 1 · ADD `mint` AND `efface` TO §6.4's `touches` MODES
 
-**The change.** §6.4 `:689` ships three modes: `mode ∈ {read, alter, exclude}`. Add two:
-**`mode ∈ {read, alter, exclude, mint, efface}`.** An act may bring an object into the world or remove
-one from it, under the ordinary machinery — witnessed by presence (§1.4), contested where someone objects
-(§6.4, as repaired by rank 7), resolved in **P5's existing acts class** (§6.3, no new write class), sized
-by §5.3's existing degree bands.
-
-**What it closes with no further mechanism:**
+**The change.** §6.4 `:689` ships three modes: `mode ∈ {read, alter, exclude}`. Add two, so that an act
+may bring an object into the world or take one out, under the ordinary machinery — witnessed by presence
+(§1.4), contested where someone objects (§6.4, as repaired by rank 4), resolved in **P5's existing acts
+class** (§6.3, no new write class), sized by §5.3's existing degree bands.
 
 | instance | closes |
 |---|---|
-| `mint` a **Person** — drawing from #342 `09:539`'s envelope | §2.1, §2.2 · birth, character generation |
-| `mint` a **practice rank** — under `02:186-189`'s two conditions | §2.3 · caused advancement, the RPG seat |
-| `mint` a **Site** | §2.6 · building, the city-builder seat |
-| `mint` a **Container** | §2.6, §4.9 · founding a settlement, the 4X seat |
-| `mint` an **Office** | §2.6 · establishment |
-| `mint` a **Proposition** | §2.8 · **faction founding**, Jordan's collapsing-royal-factions requirement, and §10.1's flagship emergence sentence becoming true |
-| `efface` a **Claim** | the purge limb · the burned register, the silenced teller, the forced recantation |
-| `efface` a **Site** | the razing that §10.3's `exclude` limb leaves unbounded at §15.17 |
-| `efface` a **Proposition** | a faction dissolving rather than merely emptying |
+| `mint` a **Person**, drawing from #342 `09:539`'s envelope | this §2.1, this §2.2 · birth, character generation |
+| `mint` a **practice rank**, under `02:186-189`'s two conditions | this §2.3 · caused advancement, the RPG seat |
+| `mint` / `efface` a **Site** | this §2.6 · building and razing |
+| `mint` / `efface` a **Container** | this §2.6 · founding and razing a settlement — the city-builder and 4X seats |
+| `mint` an **Office** | this §2.6 · establishment |
 
-**Why it is rank 1, and why it is one change rather than eleven.** Every alternative to it is an authored
-subsystem — a birth system, a construction system, an advancement system, a founding system, a censorship
-system — and each would be a top-level special case, which is the scripting drift `CLAUDE.md` §0 forbids
-by name. **Two modes on an existing tuple close eleven gaps, five genre seats and the missing limb of
-three of Jordan's five flows**, bottom-up, as a property of the act primitive. It is also the only change
-in this list that makes the document's own thesis true: today, in a design whose rule is *every active
-decision is made by a character*, **no character can add or remove a single object from the world.**
+> ⚠ **`efface` on a CLAIM IS REMOVED FROM THIS PROPOSAL (M2), and the purge limb is NOT closed by it.**
+> A claim lives in a person's ledger, so effacing one is **one person writing into another person's
+> interior** — which R-2 forbids in as many words at `:379-380`: *"A rung module writes only its own
+> state. … **No module reaches through another.**"* It is also flatly inconsistent with **rank 6** of
+> this very list, which spends its argument insisting that a person's memory must not be deletable by a
+> motivated process. **Two ranks of an earlier version of this section contradicted each other, and this
+> is the correction.**
+>
+> **So the purge limb — Jordan's *"ideas can be disseminated or purged"* — remains OPEN**, and this
+> review has no fix for it that survives the design's own rules. What can be said is that the design
+> ships every *approach* to it — lying (`:238`), distortion in transit (`:1123`), and not telling — and
+> nothing that removes a claim once landed. **Closing it needs a ruling about whether R-2 admits any
+> exception at all, which is a Jordan question, not an architecture one.**
 
-**One consequence to state rather than discover.** `mint` needs a **cost**, or it is unbounded. The
-natural one already exists: an act (§6.1), plus whatever material the thing requires — `stores` for a
-building, a person's presence for a birth, `capacity(date)` for an office conferred at a sitting. Rank 5
-is what makes that cost coherent.
+**Why it is rank 1.** Every alternative is an authored subsystem — a birth system, a construction
+system, an advancement system, a founding system — each a top-level special case, which is the scripting
+drift `CLAUDE.md` §0 forbids by name. **Two modes on an existing tuple close five gaps and four genre
+seats**, bottom-up, as a property of the act primitive. `mint` needs a cost; the natural one exists (an
+act, §6.1, plus whatever material the thing requires).
 
-### Rank 2 · `Tenure` — THE MISSING RELATION, AND THE ONE PROPOSAL THAT KEEPS JORDAN'S DISTINCTION  *(A10 · A12)*
+### Rank 2 · `Tenure` — THE MISSING RELATION OVER SITES AND NODES  *(A10 · A12)*
 
-**The change.** The design has **no relation by which anything holds anything**. It has a post-holding
-edge and a membership edge, and it needs a third that is neither:
+**The change.** The design has no relation by which anything holds **ground**:
 
 ```
-Tenure := (subject, object, since, conferrer, degree?)
+Tenure := (subject, object, since, conferrer)
    subject ∈ Person | Faction
-   object  ∈ Office | Site  | Node
+   object  ∈ Site | Node
 ```
 
-> ⚠ **`commit(person, faction, Δdegree)` is NOT folded into this, and refusing to fold it is the
-> proposal's strongest argument.** Jordan: *"A faction at a territory level may hold a territory, but a
-> territory is **not** a territorial faction."* **Membership is not holding.** The faction is a
-> proposition plus commitments; the territory is a containment node; **the holding is a third object, an
-> edge between them.** Every cheaper repair — a `territory` field on the faction, a `ruler` field on the
-> node — collapses the two objects Jordan just separated. `Tenure` is the only shape on the table that
-> preserves the distinction, and it preserves it by being an edge rather than a field on either end.
+⚠ **Narrowed: `Office` is NOT in the object list, because office tenure ALREADY WORKS.** `Holding :=
+(person, office, since, conferrer)` ships at `:367`, `confer`/`revoke` are in `remit.acts` at `:423`,
+and this file's own §1.2 scores *"lose an office WORKS"*. An earlier version of this rank listed Office
+as something `Tenure` would close; **that was part of the F1 over-claim** and is struck. `Tenure` may
+still be defined so that `Holding` becomes an instance of it — that is a tidiness gain, not a fix.
 
-**Then, with NO new verb — `confer` and `revoke` are already in `remit.acts` at `:423`:**
+> **`commit(person, faction, Δdegree)` is NOT folded in, and refusing to fold it is the proposal's
+> strongest argument.** Jordan: *"A faction at a territory level may hold a territory, but a territory
+> is **not** a territorial faction."* **Membership is not holding.** The faction is a proposition plus
+> commitments, the territory is a containment node, and **the holding is a third object, an edge between
+> them.** Every cheaper repair — a `territory` field on the faction, a `ruler` field on the node —
+> collapses the two objects Jordan just separated.
 
 | subject → object | `confer` | `revoke` | closes |
 |---|---|---|---|
-| **Person → Office** | appointment | dismissal | **shipped, unchanged** (§4.4, §4.5) |
-| **Person → Site** | **enfeoffment** | **confiscation** | **A10** — `holdings` stops being dead state; property moves by an act |
-| **Faction → Node** | **a Duchy holding its Territory; annexation is that tenure changing hands** | **secession** | **A12** — transition 9b-ii |
-| *(Person → Faction)* | — | — | **NOT `Tenure`. It is `commit`, and it stays separate** (§1.3 `:130`) |
+| **Person → Site** | **enfeoffment** | **confiscation** | `holdings` stops being dead state |
+| **Faction → Node** | a Duchy holding its Territory; **annexation is that tenure changing hands** | **secession** | transition 9b-ii |
 
-**It also unifies two of the three edges the document already spells separately** — `Holding :=
-(person, office, since, conferrer)` at `:367` and the hearth's succession pointer at `:302`/`:337`, the
-latter becoming *tenure of a site transmitted on death* rather than a bespoke stake. **§4.2 `:336`
-already files `Holding` and commitment edges in one table cell**, which is the tree signalling that the
-edge shape is general; this takes the signal and declines the over-generalisation.
+**And it makes annexation what it historically was:** a conferral by a named person exercising a remit,
+public and witnessed (§4.4 `:442`), whose subject then complies or does not — through §9.2's shipped
+compliance contest (`:1141`). **No new resolver, no new object, no war layer.** It composes exactly with
+the half the design already gets right: the Kingdom wins the Duchy's **people** by `commit` (transition
+9b-i, shipped) and its **ground** by `Tenure` (9b-ii), **and those two can come apart** — which is every
+disputed succession in the setting.
 
-**And it makes annexation what it historically was.** Not a war subsystem and not border-painting: **a
-conferral performed by a named person exercising a remit, public and witnessed like every act by remit
-(§4.4 `:442`), whose subject then either complies or does not — through §9.2's shipped compliance
-contest** (`contest(container, prize = compliance-here, claimants = {enforcement, resistance})`,
-`:1141`). A Duchy annexed on paper and disobedient in fact is the ordinary output of a mechanism the
-design already ships, and §9.3's thirty-five-executor logic applies to it unchanged. **No new resolver,
-no new object, no war layer.** And it composes exactly with the half the design already gets right: the
-Kingdom wins the Duchy's **people** by `commit` (§1.3's merger, transition 9b-i) and its **ground** by
-`Tenure` (9b-ii), and **those two can come apart** — which is every disputed succession in the setting.
-
-**Why rank 2.** It closes both limbs of the merged A10 · A12 and two of Jordan's twelve transitions; it
-is the only change that gives **power a material referent**, since a faction that holds nothing cannot
-be strong in any sense the world can see; and it is a precondition of rank 1 being cheap — `mint` on a
-Node and `mint` on a Site both need somewhere for *who holds this* to live, and `Tenure` is that place.
-
-⚠ **Its scope was reduced once during this review and the reduction is recorded.** It was first argued
-on `Tenure` also absorbing `commit` and re-parenting the containment tree. **Both are withdrawn**:
-membership is not holding, and re-parenting is moot because the tree is geography. **The primitive
-survived the correction with a smaller job and a better justification**, which is the outcome to prefer.
+**Why rank 2.** It is the only change that gives **power a material referent**: §4.2 `:339` gives a
+faction *"its proposition and its commitment map"* and nothing else, so a faction that has won a realm's
+allegiance owns nothing and can lose nothing but members.
 
 ### Rank 3 · `principals(f, n)` — LEADERSHIP AS A DERIVED QUERY  *(A9)*
 
-**The change.** Add one query to §1.3, alongside `presence(f, n)`, `density(f, n)`, `footprint(f)` and
-§4.5's `sovereign_fraction(root)`:
+**The change.** One query in §1.3, beside `presence(f, n)`, `density(f, n)` and `footprint(f)`:
 
 ```
 principals(f, n) = members of f with an address inside n, each individually `eligible` to act
                    there (07:180-182), ranked by  commitment degree × backing raisable
 ```
 
-Both inputs ship: `commit`'s degree at `:130`, and backing — *"the set of persons who have lent their
-stance"* — at §8.1 `:843`. **Nothing is stored, so §14 row 9 `:1742` stays clear** and §1.3's whole
-derived-scale argument is untouched.
+Both inputs ship (`commit`'s degree at `:130`; backing at §8.1 `:843-844`). **Nothing is stored, so §14
+row 9 `:1742` stays clear.** *"Leader of a faction"* becomes a true sentence — the seat both of Jordan's
+trajectories end in — and because it is computed from a person's own ledger like every other faction
+reading (`:124-128`), **every observer holds a different answer about who leads the Restoration**.
 
-**Why rank 3, and the payoff is larger than the change.** *"Leader of a faction"* becomes a true
-sentence — the seat both of Jordan's trajectories end in. And because it is computed from a person's own
-claim ledger like every other faction reading (§1.3 `:124-128`), **every observer holds a different
-answer about who leads the Restoration**, which is the design's posture applied to the one faction
-property it had left out.
+> **AND DEPOSITION NEEDS NO VERB.** It is the query returning **somebody else**, when members `commit`
+> away (`:130`, *"Degree to zero is departure"*) or a rival's raisable backing overtakes yours. **That is
+> *"power is not static — power is something that happens"* falling out of a query rather than a
+> mechanism**, which is the strongest form the requirement could take.
 
-> **AND DEPOSITION NEEDS NO VERB AT ALL.** It is the query returning **somebody else** — because members
-> `commit` away, or because the backing a rival can raise has overtaken yours. Both are shipped
-> operations by named persons for their own reasons. **That is *"power is not static — power is something
-> that happens"* falling out of a query rather than out of a mechanism**, which is the strongest form
-> the requirement could take.
+### Rank 4 · COMMUTATIVITY ON THE FIELD, NOT THE ACT  *(B1)*
 
-### Rank 4 · THE MATTER-EVENT GENERATOR — DECLARE `season_factor` A DRAW  *(A7)*
+Declare `condition` **additive-alter** and succession pointers **exclusive-alter** on the schema; §6.4's
+rule gains the word *non-commutative* and loses nothing. **Without it §10 does not work at all**: under
+`:689-691` as written, all forty `alter` acts on a harbour conflict pairwise and route to a contest, so
+§10.4's summation never happens and the tragedy-of-the-commons shape §10 exists to produce is
+unreachable. **One word on a field definition instead of a case in the resolver, and §6.4 gets shorter.**
+It is also a precondition of rank 1: `mint` and `efface` need the same question answered.
 
-**The change.** §13.2 `:1640` licenses matter events and §10.6 `:1370-1378` gates them with three
-conditions, and **nothing generates one.** Close it by declaring the term the design already reads:
-**`season_factor(territory)` is a per-territory, per-season DRAW with a published band, resolved in P1,
-and a matter event is an extreme draw on it.**
+### Rank 5 · GATE §8.7's CLEARANCE ON THE LEDGER  *(O1)*
 
-⚠ **Carrying this review's own correction (§0, §2.7): `season_factor` is NOT currently a roll.** `:1404`
-calls it *"the shipped territory multiplier that a blockade, a march or a collapsing Order moves"* — acts
-move it — and the per-season roll is `(3 + d10)/8.5` at `:1396`, which is per-holding. **So the fix must
-declare a draw, not reuse one.**
+**The change.** §8.7 `:1104-1105` clears dormant grievance rows *"at every holder, everywhere"*. Gate it
+on the same channel as entry: **a row clears when a claim of the satisfying dispensation lands in that
+holder's ledger.** One clause, and it removes a broadcast from a document whose §14 row 3 is marked
+**Clear** on the ground that it contains none (`:1736`, *"a telling each, never a broadcast"*), which
+§9.4 `:1189-1191` independently rules against, and which §8.7's own entry rule contradicts eight lines
+above at `:1098`.
 
-**Why it costs nothing structurally.** `season_factor` is already territory-scoped, already impermanent
-by construction (`13:70-71` assigns permanence to `base(H)` and impermanence to it), already inside P1's
-licensed matter class (§6.3 `:675`), and already an operand of `yield` and of nothing else — **so it
-cannot violate D-1's act-only `condition` accumulator, because it never touches `condition`.**
+**Why this high.** It is a **one-clause fix to a four-way contradiction**, and it makes §8.7's own
+argument better rather than merely legal: the structural-versus-personal comparison at `:1107-1109`
+stops being guaranteed and becomes **computed**, which is what that passage says it wants.
 
-**Why rank 4.** It is the only change that repairs Jordan's *"each season the world changes, with or
-without the player"* guarantee, and **it gives the world its first non-subtractive non-act channel**,
-because a draw has an upper half. Every other licensed channel is decay. It also closes §15.19's stated
-narrowing — a site that decays untouched — at the place §10.4 says it must be closed.
+### Rank 6 · EVICTION ON CLOCK QUANTITIES ONLY  *(B6)*
 
-### Rank 5 · ONE `Allowance` PRIMITIVE, AND `capacity(date)` DEMOTED TO A SELECTION CAP  *(C14 + B2)*
+Rank eviction by `confidence_live × recency` only — the two quantities §13.2's exception 3 licenses —
+and state P7's write class in §6.3, which currently licenses three classes by phase (`:672-678`) and
+leaves P7's four operations outside all of them. **A subtraction of a term**, and it saves §3.3
+`:260-263` from being false about its own worked example: under stance-ranked eviction the Templar's
+exonerating claim is the lowest-salience row in his ledger every season, so *"what is attenuated is
+retrieval, not value"* stops being true within a few seasons.
 
-**The change.** Make `seat_items` an earmarked sub-budget of the person's act allowance (§4.14), and
-delete `capacity(date)`'s cost line from `carry` so it is a cap and never a currency (§3.2).
+### Rank 7 · THE THREE ONE-LINE MECHANISM REPAIRS  *(B3, B4, B5)*
 
-**Why rank 5.** It is the **largest subtraction available** after `Tenure`: three capacity-like objects
-become one
-`Allowance(owner, period, size)` and one cap. It **restores §8.4's convener politics**, which is currently
-arithmetically impossible and is the best political argument in the document. It **answers D-2 — the
-design's self-declared largest open ruling — from architecture rather than escalating it**, which is
-`CLAUDE.md` §0's fifth test applied exactly as written. It **prices D-16's cohort exploit out of
-existence** rather than forbidding it. And it makes rank 1's `mint` cost sayable, because there is one
-budget to charge it against.
+Delete §5.2's `if R <= 1: return 0` branch, which is the fast path §14 row 8 marks **Clear** (B3). Add
+`precondition: stores(hearth(giver)) ≥ amount` to `transfer`, which currently mints mouth-seasons from a
+negative larder (B4). Give restoration the mirrored form `Δ = + (1 − condition) × f(degree) × share`, so
+a dead site has a road back and §10.1's restoration faction has an achievable programme (B5). **A
+deletion, a precondition, and one formula that already had a shape waiting for it.**
 
-### Rank 6 · A NEED IS A CLAIM  *(A5)*
+### Rank 8 · `capacity(date)` AS A SELECTION CAP, BY NAMED FIAT  *(B2)*
 
-**The change.** Mint needs at P2 as firsthand claims in the person's own ledger, source
-`firsthand(body)`; delete the category *need* from §4.2's Nobody row and from §2's prose.
+`carry` spends `seat_items` only; `capacity(date)` caps selection and is never spent. ⚠ **This must be
+written as an explicit overruling of `05:176`, with its reason**, because §17.5's D-5 (`:401-404`)
+withdrew exactly this change for being silent, and because §3.4's conflict rule **cannot** decide it —
+doc 05 is the declared subject of both colliding lines, so the rule selects nothing, exactly as it
+failed to on `exposure`. **The contradiction is real and is #342's, not this document's**: without the
+fix, `:396`'s *"carried items may exceed capacity"* is arithmetically impossible and §8.4 — the best
+political argument in the suite — has no subject.
 
-**Why rank 6.** It is the only change that repairs a **structural impossibility** rather than a wrong
-value: today there is no legal path from the design's central motivational input to the function that
-consumes it, and every act in the game runs through that function. It is also a **subtraction** — one
-fewer kind of thing in the design — and it buys hunger as a pleadable ground at a sitting for free. It
-ranks below the five above only because the design has been written *as if* the channel existed, so it
-changes fewer downstream sentences than the two above.
+### Rank 9 · THE THREE ONE-LINE SPECIFICATIONS  *(A7, A8, C6)*
 
-### Rank 7 · COMMUTATIVITY ON THE FIELD, NOT THE ACT  *(B1)*
-
-**The change.** Declare `condition` additive-alter and succession pointers exclusive-alter on the schema;
-§6.4's conflict rule gains the word *non-commutative* and loses nothing else.
-
-**Why rank 7.** §10 — one of the four enlargements, and the one carrying the design's best second-order
-behaviour — **does not work at all** as the two sections are written, and the fix is one word on a field
-definition rather than a case in the resolver. It ranks here rather than higher because it repairs one
-enlargement, where ranks 1–4 repair the substrate. It is also a **precondition of rank 1**: `mint` and
-`efface` need the same commutativity question answered (two people founding the same settlement conflict;
-two people building different houses do not), and answering it on the field answers it for all five modes
-at once.
-
-### Rank 8 · EVICTION ON CLOCK QUANTITIES ONLY, AND P7's WRITE LICENCE STATED  *(B6)*
-
-**The change.** Rank eviction by `confidence_live × recency` only; state P7's write class in §6.3.
-
-**Why rank 8.** It is a **subtraction of a term** that saves the best paragraph in the document from
-being false about its own worked example, and it removes a decider-free channel that runs on a social
-quantity — which §10.6 condition 1 forbids in general and §13.2's four-item list does not license. It
-ranks below the seven above because the damage is silent and slow rather than structural: the design still
-runs, it just quietly converts motivated retrieval into motivated amnesia over a few seasons. **That
-silence is exactly why it must be fixed before anything executes**, because once it does execute nobody
-will see it happening.
-
-### Rank 9 · THE THREE ONE-LINE MECHANISM REPAIRS  *(B3, B4, B5)*
-
-**The changes.** Delete §5.2's `if R <= 1: return 0` branch (B3). Add
-`precondition: stores(hearth(giver)) ≥ amount` to `transfer` (B4). Give restoration the mirrored form
-`Δ = + (1 − condition) × f(degree) × share` (B5).
-
-**Why rank 9.** Three small, independent, high-confidence fixes with no interactions — a **deletion**, a
-one-line addition, and one formula that already had a shape waiting for it. Together they restore the
-Costed Success band at the low end the design says is right, stop `transfer` minting food, and give the
-restoration faction something it can actually achieve. They rank here only because each is local; none
-changes how anything else is written.
+State `season_factor(territory)`'s distribution the way the term beside it is stated at `:1399-1400` — a
+range, a mean, and a named tail — so §10.4's storm and §10.6's band edge have a frequency (A7). State
+that uttering a proposition is part of an ordinary act, so it is witnessed and a second person can
+`commit` (A8). Declare `Coherence` in §2's field table and §4.2's Person row with `02:750`'s producer,
+so §16's Coherence-0 fork becomes answerable (C6). **Three lines, three gaps, no new objects.**
 
 ### Rank 10 · THE TWO TYPING UNIFICATIONS  *(C2, C1)*
 
-**The changes.** `Assertion = (subject, predicate, value, when)`, with `Claim` and `Proposition` as
-extensions (C2). Claimants are always a set of persons with a stake (C1).
+`Assertion = (subject, predicate, value, when)`, with `Claim` and `Proposition` as extensions (C2); and
+claimants are always a set of persons with a stake (C1). ⚠ *C2 is a refactoring proposal, not a §0
+violation — that framing was withdrawn at this §4.2.* Both make the design smaller to learn; neither
+fixes anything that is currently wrong, which is why they rank last.
 
-**Why rank 10.** Both remove a duplicated rule, which is §0 `:21`'s own definition of a defect in this
-document, and both are cheap. C2 additionally makes rank 1 cheaper — `mint` on an Assertion covers both a
-firsthand claim and a founding proposition, so the primitive gets one instance instead of two. They rank
-last because nothing is currently *wrong* because of them; they are the difference between a design that
-will stay coherent under extension and one that will grow branches.
+**Not in the ranking, and each for a stated reason.**
 
-**What is deliberately not in the ranking, because it is AUTHORING rather than a change.** Three items
-are large and are not rankable, because nobody can rank the cost of writing something that does not
-exist yet:
+1. **C14's single `Allowance`** — the largest subtraction available, and **a proposal Jordan must rule,
+   not a change this review may make.** §16 `:1860-1862` records that the document already ran
+   `CLAUDE.md` §0's fifth test on D-2 and reserved it. This §4.14.
+2. **A4's row-4 rule and A5's needs channel** — **both findings stand; both fixes are withdrawn**, and
+   no replacement survived the document's own refusals (this §2.4, this §2.5).
+3. **The purge limb** — open, see rank 1's box.
+4. **Authoring rather than change:** §4.3's closed predicate vocabulary (C3), the investigative verb
+   (this §2.11 — the cheapest large win in the document), and `Venue`'s unvalued parameters (this §5.2).
 
-1. **§4.3's closed predicate vocabulary (C3)** — the largest implementability gap in the document, and
-   the layer every other mechanism reads through. It should be the first thing authored after the ten
-   above are applied, and §17.1 `:1881` should stop listing it as settled until it is.
-2. **The investigative verb (§2.11, A11)** — one paragraph, using only shipped machinery, that turns the
-   design's best layer into its most-wanted seat. **Cheapest large win in the document.**
-3. **`Venue`'s seventeen unvalued parameters (§5.2)** — fourteen of which appear exactly once each, in
-   the tuple, and never again.
+
 
 ---
 
@@ -1745,11 +1763,34 @@ Stated so that nobody cites this file as more than it is.
    **every finding is an argument against text**, and every fix is a proposed edit whose consequences are
    reasoned, not observed. Where a finding says a mechanism cannot work, the honest reading is *the
    document as written does not describe a mechanism that works*, not *a program failed*.
-2. **It read the ontology wrong once, and only a correction from Jordan caught it.** A12 was filed
-   against *Duchy-as-containment-node* when the design means *Duchy-as-faction*, and C9 was filed as a
-   governance gap when the architecture answers it. **Both were structural misreadings of the subject,
-   not slips**, and neither the reviewing pass nor this re-verification caught either — this file's own
-   §0 re-verification found four other problems and missed these two. Weight the rest accordingly.
+2. ⚠ **THE REVIEW OVER-CLAIMED SYSTEMATICALLY, IN ONE DIRECTION — TOWARD ABSOLUTES — AND ITS OWN RELAY
+   CAUGHT IT ONLY WHEN A STRUCTURALLY INDEPENDENT READER WAS POINTED AT IT.** This is the most useful
+   thing this file has to say about itself, and it should be read before any finding in it.
+
+   Six claims were broken, and the shape is the same every time: **an absolute, meeting a
+   counter-example the subject already contained.**
+
+   | the claim | the word that did the damage | what refuted it |
+   |---|---|---|
+   | nothing can be created, removed **or moved between holders** | *not one of them* | `transfer` (`:1425-1427`), `confer`/`revoke` (`:423`), Admission (`:311-313`), tellings (`:1128-1131`) — F1 |
+   | every licensed non-act channel is a subtraction | *every* | `:1603` *"nature yields"*; `(3 + d10)/8.5` reaching 1.53× — F2 |
+   | the matter-event channel is inert | *nothing generates one* | `:1348-1350`, a storm **is** a bad `season_factor` roll — F3 |
+   | a proposition can never come to exist | *never*, *no route at all* | `:1036` *"propositions are free-form"*, produced at four shipped sites — F4 |
+   | the containment tree makes annexation inexpressible | *inexpressible* | a Kingdom is a faction; annexation is `commit` at scale — Jordan |
+   | governance exists at four scales only | *owns nothing* | the upper rungs are address aggregation by design — Jordan |
+
+   **Two of the six were structural misreadings of the ontology, not slips.** Four were rhetorical
+   absolutes that a single line of the subject falsified. **In every case the counter-evidence was
+   already in the document, and in three cases it was already quoted elsewhere in THIS file** — F1's
+   office-tenure limb is scored WORKS in this file's own §1.2; F2's dice term is quoted in its own C11;
+   F4's flagship sentence was truncated in both places this file used it.
+
+   **The mechanism is worth naming because it is general.** An adversarial pass is rewarded for finding
+   defects, and *"X can never happen"* is a more valuable-looking finding than *"X is under-specified"*.
+   **Nothing in the producing pass, and nothing in the producer's own re-verification, applies pressure
+   against that gradient — only a reader with no stake in the findings does.** This file's §0 records
+   that its own re-check caught seven cheap errors and none of the four load-bearing ones. **Treat every
+   remaining absolute in this document as unverified unless it carries the line that would falsify it.**
 3. **It is one reader.** The relay's structural independence is real — this pass never saw the agonist's
    reasoning, only its output — but independence is not plurality. Twenty-eight findings by one reader
    with one set of priors is a sample of one, and the three findings this pass had to correct downward
