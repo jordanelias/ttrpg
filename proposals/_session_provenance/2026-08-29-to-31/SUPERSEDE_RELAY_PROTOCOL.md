@@ -63,3 +63,42 @@ correct artifact rather than an honest verdict about a fixed one.
 
 If the final proposal contains a claim that the antagonist challenged and the document does not record
 as FIX, REBUT or DEMOTE, the loop did not run — it was a single pass with extra steps.
+
+---
+
+## ⚠ AMENDED 2026-08-31, Jordan-directed — ONE SINGLE CORRECT DOCUMENT
+
+> *"ie the final proposal output must be one single correct document"*
+
+**The deliverable superseding PR #342 is ONE document, not a suite.** #342 was seventeen documents;
+its replacement is one. This binds the agonist absolutely and is not a packaging preference.
+
+**Why it is also the correct engineering call, which is worth stating because it makes the constraint
+easier to hold under pressure.** Every contradiction this session spent itself on is a
+**cross-document** contradiction, and could not exist in a single document:
+
+| the defect | its shape |
+|---|---|
+| three spellings of the three signatures | `11:57-59` vs `01:212-216` vs `09:819-821` |
+| two practice ranges | `02:153` **0–5** vs `10:33` **0–7** |
+| two pool formulas | `02:197-200` has a `thread_pool` term; `10:30` has none |
+| two view budgets | `03:325-329` `K = 7 + Focus` vs `09`'s constant **12**, asserted four times |
+| `exposure` in five senses, two of them the same concept implemented incompatibly | `03:574-579` **stores and mutates** it; `07:556` **refuses a stored exposure counter by name** |
+| the dangling Thread pointer | `02:4` and `02:435` defer to *"doc 04 (Thread)"*; doc 04 is *The Hearth and the Community* and **no Thread owner exists** |
+| the ownership rule in two homes | `11:97` and `01:490-491` — amending one leaves the other refusing what the first permits |
+| a worked season contradicting the tick rule | `14:562` *"ten acts"*, seven narrated, against `09:33` *"exactly one act per season"* |
+
+**Eight of the twelve known open defects are of this class.** A single document does not *discipline*
+them away — **it makes them unrepresentable.** One owner per rule, stated once, is §8's "every rule
+lives once" applied to the design surface rather than to the tooling.
+
+**What this costs, stated rather than hidden.** One document will be long, and length is the reason
+#342 was split. The mitigations are structural, not aspirational: a rule appears exactly once and is
+cross-referenced by section number thereafter; every quantity has exactly one definition site; the
+document carries its own index; and anything that would be a second definition is instead a reference.
+**If a section cannot be written without restating a rule defined elsewhere in the document, that is
+the signal the two sections are one section.**
+
+**Consequence for the loop:** the antagonist's standing check becomes *"is any rule stated twice, and
+do the two statements agree?"* — a check that could not be run at all against a seventeen-document
+suite without reading all seventeen, which is why nobody ran it on #342.
