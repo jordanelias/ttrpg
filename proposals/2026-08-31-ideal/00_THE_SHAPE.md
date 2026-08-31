@@ -299,3 +299,83 @@ chain is the enlargement. It is what the idealized work could not do on 2026-08-
 - **No new resolver, no second path, no threshold that fires.**
 - **No stored social quantity.** Not one gauge is added anywhere.
 - **And the low end is untouched**, because testing showed it was already right.
+
+---
+
+## 6. CORRECTIONS from the body-(b) findings review (`01_review_b_findings.md`)
+
+Three of its findings bear directly on §2–§5. **Two strengthen the shape and one adds work I did not
+have.** Recorded here rather than quietly folded in.
+
+### 6.1 ⚠ A count in §1 is not citable as filed — corrected
+
+§1 finding 2 cited *"13 of 18 arcs close at a sitting and survive; 3 close at a counter with nobody
+deciding."* **Lane 1 states that 13-member set twice with different membership** — `01:32-33` includes
+Arc 3's first half and files Arc 16 separately; `01:672-675` includes 16 and excludes Arc 3's half.
+Both sum to 13, **which is why four downstream checks passed it.** And the label is false for at least
+three members: Arc 7's Rally is *unscheduled*, and Arc 9's ending is *"Coherence reaching 0"* — a
+counter reaching a number, on the wrong side of the axis's own vocabulary.
+
+**Corrected, and the correction makes the finding stronger rather than weaker:**
+
+> The cut is not *sitting vs counter*. It is ***a person's decision — dated or not — vs a state trigger
+> with no decider.*** 12 stable members + 3 label-disputed + 2½ lost, **lane-1 scope only.**
+
+**This is better for the watch, not worse.** The watch's claim was never that endings need *sittings*;
+it is that endings need **a decider**. Arc 9 — a person's own accumulated Coherence loss ending their
+story — is safe under the restatement and was miscounted as a loss under the old label.
+
+### 6.2 The watch is not a new class — the design already has decider-free channels, and that is the
+### argument I should have made
+
+I wrote the watch as though it were introducing something the design lacks. **It is not.** Two
+decider-free channels already ship:
+
+- **Matter.** A storm plus a generation of silt closes a channel *"exactly when a famine elsewhere
+  needs it"* — a decider-free, state-plus-weather event forcing a realm-scale crisis.
+- **The calendar.** **Lapse** — *"not an act by anybody — it is the date passing"* — already resolves a
+  matter against whoever needed the affirmative act.
+
+> **So the world's own agency is ALREADY expressible inside the three signatures**, as events over
+> matter and as expiry. **What is genuinely unspellable is a non-person mechanism that produces ACTS**,
+> because acts come only from `choose(Person, View)`. That type error is the design's central
+> deliberate commitment — and it is the only thing the closure limit should ever have claimed.
+
+**The watch belongs to the existing family.** It is lapse's sibling: lapse is *a date arriving with
+nothing done*; a watch is *a condition arriving and putting a date on the calendar.* Neither decides.
+**§2.2 should be read as naming a fourth instance of a shipped pattern, not as adding a class** — which
+is a materially stronger claim and it is the one the evidence supports.
+
+### 6.3 The inversion is the recommended repair — and it needs three things I did not have
+
+The review ruled `:219` **violated as filed** by the scalar-obstacle form, on the design's own
+precedent (*"a fraction of the container's own capacity … sized to the container"*), and named the
+option-set/band shape as **the recommended repair route.** That is §2.4. **But the inversion alone is
+not sufficient**, and these three are now part of it:
+
+1. **A SIZING RULE.** Both repair routes end at the same missing thing: an `alter`'s effect must be a
+   **degree-scaled fraction** of the site's current condition, bounded so no single act at any rung
+   moves more than a stated fraction. **Without it the object fails the precedent whatever shape it
+   takes.** Falsifier: *one person, one season, maximum-degree `alter` — if it can move more than the
+   fraction any verb contributes to a container outcome, it violates the precedent.*
+2. **CROSS-RUNG SEMANTICS**, three sentences, all on R-1: primary state lives at **the finest node the
+   act names**; any coarser read is **compute-on-demand**; **nothing coarser stores one.** Without
+   these, a degraded hearth is invisible inside a pristine settlement and the object is non-zero only
+   at the rung an act happened to name.
+3. **BAND-QUANTIZED EXPOSURE.** The odds preview *"never calls `roll`"*, so a world-condition term
+   readable at declaration is **a free, act-free, witness-free probe of hidden world state — and
+   `choose` has no `World`, so only the player can run it.** A player-only omniscience channel, which
+   deletes exactly the theme the object exists to supply. **The preview shows the band, never the
+   scalar.**
+
+**Point 3 is the one I would have shipped broken.** §2.4 argued the inversion makes degradation legible
+without a gauge — true, and it is precisely that legibility, routed through a free preview, that
+becomes an exploit. **Legible to whom, by what act, at what cost** is the question the inversion has to
+answer, and the answer is: by the band, to anyone, at no cost — and by the scalar, to nobody.
+
+### 6.4 What the review did NOT overturn
+
+The three enlargements stand. The watch, the petition→date retyping and the option-set inversion are
+unchanged in kind; §5's compounding chain is unaffected; and the low end is still right. **The
+corrections are one arithmetic restatement that strengthens the case, one reclassification that
+strengthens it further, and three engineering requirements on the third enlargement.**
