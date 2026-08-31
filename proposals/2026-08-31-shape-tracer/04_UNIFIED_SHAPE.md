@@ -20,18 +20,31 @@
 | | a:NPC | b:ARCS |
 |---|---|---|
 | cases | 27 named NPCs | 50 arcs |
-| result | **22 BLOCKED · 4 NOT-ASSESSED · 1 DEGRADED · 0 PLAYABLE** | **39 BLOCKED · 10 NOT-ASSESSED · 1 PLAYABLE** |
-| top blockers | `P36` budget (5) · `A4` provenance (4) · `P29` custody (3) · `F6` sittings (3) | `A2` endings (10) · `A13` drift (8) · `P34` hidden tally (7) · `P4` convictions (7) |
+| result | **22 BLOCKED · 4 NOT-ASSESSED · 1 DEGRADED · 0 PLAYABLE** | **38 BLOCKED · 11 NOT-ASSESSED · 1 PLAYABLE** |
+| top blockers | `P36` budget (5) · `A4` provenance (4) · `P29` custody (3) · `F6` sittings (3) | `A2` endings (8) · `P34` hidden tally (7) · `P4` convictions (7) · `A5` spirals (5) |
 
-**527 need-rows, 65 probes, 79 acts and 334 class-checked writes.** Case verdicts are advisory;
-probe verdicts are hard. **226 needs did not route and are reported as `UNMAPPED` rather than
-passed**, and 14 cases are `NOT-ASSESSED` rather than graded.
+**527 need-rows, 65 probes, 80 acts and 337 class-checked writes.** The corpus, the probes and
+the ending classification are all committed at `cases/` and `tracer/`, so every number here is
+reproducible by `cd tracer && python3 run_cases.py`. Case verdicts are advisory;
+probe verdicts are hard. **243 needs did not route and are reported as `UNMAPPED` rather than
+passed**, and 15 cases are `NOT-ASSESSED` rather than graded.
 
-**Four instrument defects were found and fixed during the run, every one of which flattered the
-shape**, and the fourth was found by an audit that had never seen my reasoning. They are catalogued
-in `01_TEST_A_NPC.md` §5. The rule they cost me: **when a route is wrong, read what it was catching
-before you cut it** — the mis-catch is usually a capability the probe set does not have. `P34` and
-`P36`, two of the four most consequential findings in this document, arrived that way.
+**Six instrument defects were found and fixed during the run**, three of them by read-only audits
+that never saw my reasoning. They are catalogued in `01_TEST_A_NPC.md` §5. Two rules came out of them:
+
+- **When a route is wrong, read what it was catching before you cut it** — the mis-catch is usually a
+  capability the probe set does not have. `P34` and `P36`, two of the most consequential findings
+  here, arrived that way.
+- **A guard against the failure you already made does not catch the failure you have not.** Five
+  defects flattered the shape and my guard was built for that direction; the sixth **omitted a
+  Partition row the suite explicitly rules**, making a closed seam look open, and nothing caught it.
+
+> ⚠ **AND THE DIRECTION OF ERROR IS ITSELF A FINDING. Every time the measurement got more careful,
+> the shape's bill got smaller** — the ending refusal fell from 40% to 16%, `A13` from 8 arcs to 3,
+> `A2` from 10 to 8, and `A12` from FORBIDDEN to PASS. That is a fact about instruments as much as
+> about this shape: **a crude instrument systematically overstates a strict design's cost**, because
+> a strict design refuses precisely-specified things and a crude instrument matches imprecisely.
+> Read every remaining count here as an upper bound.
 
 ---
 
@@ -73,12 +86,29 @@ because it is the failure mode of every bound of this kind:
 
 **The bound that holds is a closed roster, not a provenance rule.**
 
-> **L3, amended:** a monotone counter may exist **only per `(Person, axis)` where `axis` is drawn
-> from a roster closed by canon** — the Conviction roster, which `02` §5.5 already declares *"canon — a closed roster"*.
-> It counts only events in that person's own ledger, and it is never a Query's substitute.
+> **L3, amended — TWO clauses, and the second is the one that binds:**
+>
+> 1. a monotone counter exists **only per `(Person, axis)` where `axis` is on a closed registry**;
+> 2. **no resolver-side Query may aggregate per-person tallies across holders.** A tally is read
+>    only by the machinery gating **its own holder's** options.
 
-*Unrest* is not a canon axis, so the reconstruction fails by construction rather than by discipline.
-This is what makes it a bound: **you cannot spell the violation.**
+⚠ **Clause 2 replaces a bound that did not bound, and the replacement is the suite's own move.** An
+audit broke the roster-only version in one line: define per-`(Person, Equity)` and `(Person, Honor)`
+counters — both canon axes, both own-ledger, both legal — then `Query`-sum over a cohort. **The
+closed roster restricts which axes carry counters; it never restricted summation over people**, and
+summation is where stored `unrest` comes back. The prose clause *"never a Query's substitute"* is
+discipline, which is exactly what a bound may not rest on.
+
+Clause 2 is a **read-side** rule, and the suite already made this move once: `05` §4 states trigger
+purity as *"the same rule on the READ side."* It is checkable — grep the resolver for a Query that
+crosses holders — where a provenance rule is not.
+
+**And the roster must be a registry, not the Conviction list.** The same audit found the tighter
+version excludes every case the ratchet was admitted for: the Conviction roster is **thirteen moral
+axes**, and `ARC-09`'s coherence, `P34`'s exposure, `P26`'s patience and `P18`'s stages are none of
+them. **The law as first drafted made §3.1's own walkthrough illegal.** A registry — the precedent is
+`MatterKind` — carries them without carrying *unrest*, and clause 2 is what stops the registry from
+being a back door.
 
 ### L4 · Every state change is partitioned by subject, asymmetrically. *(unchanged — and the pressure on it was mis-read)*
 
@@ -96,7 +126,8 @@ suite already ships a licensed decider-free social-adjacent motion nobody had no
 > including to nothing. The crossing emits and is witnessable. It may never write a social row, and
 > it may never produce an outcome.**
 >
-> **And every clock that moves such a quantity was set by a nameable act — so it can be bribed,
+> **And every clock that moves such a quantity — other than the three the world already licenses
+> (matter, bodies, the confidence of a memory) — was set by a nameable act, so it can be bribed,
 > delayed, burned, or killed.**
 
 **The first paragraph is a promotion, not an invention.** `05` row 8 already says a band-edge
@@ -106,6 +137,12 @@ is in fact the single primitive that answers every ending, crisis, ripening and 
 corpora** — band edges, a Record's stages gating acts, a conviction reaching crisis, a practitioner
 crossing zero and ceasing to be an agent, and the arc endings themselves. Stating it once as a law
 is what turns seven special cases into one.
+
+> ⚠ **The carve-out is not a hedge; without it the law is FALSE.** `wear` silts the harbour, ageing
+> wears the body, and a claim's confidence decays — nobody wound any of the three, and you cannot
+> bribe silt. An audit caught the law asserting more than the suite permits. **The three licensed
+> clocks are exhaustive** (`05` §5), so the exemption is closed rather than open-ended, and
+> everything outside it needs an author.
 
 **The second paragraph is the anti-scripting rule stated positively, and it is the reason this
 document exists.** It is what makes *"characters drive the churn"* mechanical rather than
@@ -260,6 +297,26 @@ The budget is a **Query, never a field** (L3), so a wounded duke gets fewer acts
 without anybody storing a number. The list is **ordered**, so what he did first is legible when a
 season's later acts are foreclosed by its earlier ones.
 
+> ⚠ **THIS OVERTURNS FOUR NAMED RULINGS AND MUST SAY SO — §4.1 names its overturn and this section
+> did not.** `07` §4 rules *"ONE ACT PER PERSON… UNIVERSALLY"*; `07` §7 carries an explicit refusal
+> row **"more acts for the powerful"**, which is precisely a budget keyed on office; `06` §8 row 19's
+> N-line is *"cut it and scarcity disappears"*; `14` §2 rests every dilemma on it. And `05` §2.1's
+> wear economy is denominated in person-seasons drawn from the one-act budget, so a ~5× budget
+> rebases it.
+>
+> **The suite's own answer to a King's triage is not one act — it is one act plus establishment
+> throughput plus dispatch**, `1 + |establishment acts|`, with *"the Duke's leverage was never more
+> hours."* That answer is real and `P9`/`P20` pass, which is genuine counter-evidence this test
+> logged itself. **What it does not answer is `P36`: the King himself still never chooses what to
+> leave undone**, because delegating is not triaging — he can dispatch every pressure and decline
+> none. That is the finding, and it stands whether or not the budget is the right fix.
+>
+> **So this is an unpriced reversal presented as a repair, and it is Jordan's call, not mine.** Two
+> readings are open: raise the budget (breaks the refusal row, ~5× the act volume, and the funnel's
+> 190–200 candidates is not scale-free), or keep one act and give **declining** a cost so that
+> triage lives in what he refuses rather than in what he spends. **The second keeps every ruling and
+> is the cheaper experiment**, and it composes with §4.4's gated abstention. The tests do not choose.
+
 > ⚠ **A budget above one voids a fix the suite is currently relying on.** `14` records the
 > petition-spray defect as *"closed — PROVISIONALLY by one act per person."* At ~5 that is void, and
 > **petition spray is open again.** It should be re-answered by cost — a petition consumes budget and
@@ -318,12 +375,17 @@ that another act existed**, which is `P12`'s property preserved at the level of 
 - **MATTER touches persons**, not only places: subsistence drawn from `stores`, condition taken from
   the Sites you stand beside. Bodies are one of L5's three licensed clocks, so this is sanctioned
   world-driving, not a new exception. The suite already promises it and nothing does it.
-- **A dead person's holds read as vacant.** `A12` finds a dead king still holds the crown, because
-  `(Tenure, hold)` is `social: true` and an Event may not write it. **No Partition change is needed:
-  make `holds` derived-valid** — a Tenure whose holder no longer exists reads as vacant, by L3,
-  because *holds* is a Query gated on existence. **Existence is matter; possession is social; a
-  social fact predicated on an existence fact should never be stored truth.** Succession is then
-  people acting on a vacancy, which is L1.
+- ⚠ **A dead person's tenures — RETRACTED, because the suite already rules it and better.** This
+  bullet proposed making `holds` derived-valid, on the strength of `A12` reporting that a dead king
+  still holds the crown. **`A12` was measuring a missing row in my own Partition table.** `02` §5.1
+  rules `(Tenure, until)` `social: false` — *"the Partition's one declared seam"* — and `04`:167
+  makes death's `until` write *"the only Tenure write in the MATTER class."* Death writes `until`,
+  not `hold`, and the seam is bounded not by the column but by a **causation rule**: an actorless row
+  may write `until` only on a `(Person, exists)` change **the same row caused**. A plague that kills
+  the praefect ends his tenure through the death; a storm cannot touch it. `A12` now implements both
+  and passes. **The retracted proposal was also worse:** never writing `until` leaves the dead king's
+  `hold` edge live, so conferring a successor breaks the declared *1 per Office* cardinality, and
+  `entrenchment` — which reads `until` — has nothing to read.
 
 ---
 
@@ -348,10 +410,14 @@ A proposal is judged by what it declines. Each of these was demanded by cases an
 
 ### 6.1 · The ambient-social question — **narrowed to something much smaller, and still Jordan's**
 
-`A13` blocks 8 arcs: a social quantity drifting toward a pole **from the absence of anyone acting**.
-It was escalated as a trilemma. **Three of those framings were wrong and the fourth option is nearly
-free.**
+`A13` blocks **3 arcs** — `ARC-01`, `ARC-04`, `ARC-44` — a social quantity drifting toward a pole
+**from the absence of anyone acting**. It was escalated as a trilemma over *eight* arcs. **Every
+part of that framing was wrong, including the count.**
 
+- **The count was inflated by my own instrument.** The route keyed on the bare word `ambient` and
+  caught four rows about an *ambient world-health* or *environmental* quantity — matter, lawful, and
+  **already served** (`A3` passes: the substrate is a `Site` kind). **I sent a bill for eight arcs
+  and the real number is three.**
 - **It is not an *ending* problem.** §3.3 shows 19 of 50 arcs want *forcing*, which L5 supplies.
   Under **every** option — including amending L4 — the threshold-*endings* do not come back, because
   §5 refuses them separately. So the question buys pressure, not endings.
@@ -359,21 +425,31 @@ free.**
   not FORBIDDEN** — the suite has **no Partition row for `(Person, capability)` at all**, so one
   cannot even ask. **Rule it `social: false`** — a trained sense is a body-fact, and bodies are a
   licensed clock — and the arc dissolves without touching L4. *An unmarked cell is not a law conflict.*
-- **The cheapest lawful option was never on the list.** The suite **already ships** a decider-free
-  social-adjacent drift: **claim-confidence decay and eviction at the ledger cap** — rows 9 and 14,
-  INTERIOR, no decider, and memory is one of the three licensed clocks. `05` says it outright:
-  *"He loses the town **by being forgotten**."* **A culture dying of neglect IS cohort ledgers
-  forgetting it.** Zero new objects, no amendment to any law. The `A13` probe never attempted this
-  route — it only tried writing `stance` at MATTER — so its FORBIDDEN is real and **not exhaustive
-  of the lawful expressions.**
+- **A fourth option was never on the list, and it is cheap but NOT free.** The suite **already
+  ships** a decider-free social-adjacent drift: **claim-confidence decay and eviction at the ledger
+  cap** — rows 9 and 14, INTERIOR, no decider, and memory is one of the three licensed clocks. `05`
+  says it outright: *"He loses the town **by being forgotten**."* The `A13` probe never attempted
+  this route — it only tried writing `stance` at MATTER — so its FORBIDDEN is real and **not
+  exhaustive of the lawful expressions.**
+
+  ⚠ **But it does not reproduce `ARC-01`, and an audit was right to press this.** Decay is INTERIOR
+  and *nothing witnesses it* (`05` §5.1), so there is no emission at the floor and therefore no L5
+  forcing; reading "the cohort's memory of the culture" is an aggregate across holders, which
+  **L3 clause 2 now forbids**; and the mechanism runs backwards where decline is visible, because
+  witnessed neglect *refreshes* claims about the decline. **A crisis of restoration fuelled by people
+  who have forgotten the thing is incoherent.** So option (d) buys *authority sinking by neglect* —
+  which is genuinely what `05` describes — and not *a culture souring toward a crisis*. Those are
+  different phenomena and the earlier draft of this section conflated them.
 
 > **The question that actually reaches Jordan is now one sentence:**
 > **may a social quantity sink by neglect alone — as memory already does — and is a person acting on
 > witnessed loss enough to turn that sinking into a crisis?**
 >
-> If yes, `A13` costs nothing and no law moves. If no, 8 arcs lose their engine and the design says
-> so out loud. **This is a genuine design call between materially different games**, and it is the
-> only one in this document.
+> If yes, most of `A13` costs nothing and no law moves. If no, **three** arcs lose their engine and
+> the design says so out loud. **This is still a genuine design call between materially different
+> games** — but it is now a three-arc call, not an eight-arc one, and the honest recommendation is
+> that at three it may not be worth Jordan's time at all. **That reduction is the single most useful
+> thing the third audit produced.**
 
 ### 6.2 · Specification debts — named because the change list dropped them silently
 
@@ -397,14 +473,32 @@ Per `CLAUDE.md` §0.1 point 3, a result claim carries the test that would show i
 | claim | falsifier |
 |---|---|
 | L5's act-declared terms replace a MATTER-advanced stage with no loss | produce one `A16`/`A18`/`P30` case whose timetable has **no plausible clock-setting person or antecedent act**. The strongest candidate is a battle-born condition, and even there the resolving contest is the antecedent act |
-| L3's roster bound cannot be spelled around | attempt the cohort *harms-witnessed* reconstruction against `(Person, Conviction-axis)`, roster closed by canon. It fails because *unrest* is not a canon axis. If it succeeds, this bound is also wrong |
+| L3 clause 2 binds where clause 1 did not | **the old falsifier here tested the wrong thing** — it argued *"unrest is not a canon axis"*, and the reconstruction never needed an axis called unrest. The real test: grep the resolver for any Query aggregating a per-person tally **across holders**. If one is needed for a case the ratchet was admitted for, clause 2 is too strong; if one is *possible*, it is too weak |
+| L5's clock carve-out is closed, not open-ended | name a clock-driven quantity outside matter, bodies and memory-confidence. `05` §5 asserts the list is exhaustive; if a fourth exists the carve-out becomes a hole |
+| the ending classification is worth citing | `tracer/test_tracer_is_honest.py` asserts it parses, carries a deciding phrase per row, and that its THRESHOLD count **equals the executed `A2` core-blocker count**. If the two ever diverge, the convergence that licenses citing an agent classification is gone |
+| ruled Partition rows are present | `RULED_ROWS` in the same file. This guard exists because its absence let `A12` report a closed seam as open for several hours |
 | the ~5-act budget is a real gap and not a reading | `test_tracer_is_honest.py` asserts by execution that the loop calls `choose` exactly once per person per season. If that ever returns more, `P36` is obsolete |
 | `causes[]` is empty in the specified loop | `A4`, executed. It walks the chain backwards and finds nothing |
 | abstention must be gated | run `A15` against a build with ungated abstention: a fisher's empty season and a King's held doubt produce identical Events |
 | the endings distribution | re-run the classification over the 50-arc corpus **after** namespacing the collided arc numbers (§6.2). Both counts change if the collision is resolved the other way |
 
-**And the standing weakness, stated rather than hidden:** 226 of 527 needs did not route. A separate
-pass read the 95 graded `core` and found roughly a third restate changes already on this page, about
-nine need no engine capability, and one genuine primitive was missing — which is §4.3. **That is the
-honest coverage claim.** At 78 cases keyword routing is at its ceiling; a larger corpus needs the
-lanes to emit a capability tag rather than prose a runner greps.
+**And the standing weaknesses, stated rather than hidden.**
+
+- **243 of 527 needs did not route.** A separate pass read the 95 graded `core` and found roughly a
+  third restate changes already on this page, about nine need no engine capability, and one genuine
+  primitive was missing — which is §4.3. At 78 cases keyword routing is at its ceiling; a larger
+  corpus needs the lanes to emit a capability tag rather than prose a runner greps.
+- **§3.3's 19-of-50 is an agent classification of prose, not an execution** — the weakest evidence in
+  this document, and it carries the summons argument. What makes it usable: it was made blind, every
+  row is committed with its deciding phrase so any call is checkable by hand, and its THRESHOLD count
+  independently reproduces the executed `A2` count. It is not a measurement and is not labelled one.
+- **§3.3's own showcase arc is UNMAPPED.** `ARC-40`'s forcing need — *"act, abdicate, or be
+  replaced"* — has `probe: null`, so **the instrument never tested the case the argument quotes**. An
+  audit walked it under these rules and found the person does remain the author, but only because the
+  aggregate-of-five-unrelated-failures counter **cannot lawfully be built** — no one's own ledger, no
+  registry axis, no act-declared term — and the arc's ending then stops at `judging_set_rule`, which
+  §6.2 already lists as unspecified. **So "dissolves most of the bill" is earned for the
+  procedural-forcing family and unearned for the aggregate family**, which includes both of the
+  quotes in §3.3. `ARC-04` is the case L5 genuinely serves.
+- **§4.4's abstention gate is untested by anything committed** — the tracer synthesizes no abstain
+  Acts, so point 3 and its salience gate are design, not measurement.
