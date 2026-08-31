@@ -225,6 +225,23 @@ than re-derive: `Key.id: str` at `engine/substrate/keys.py:145`; uniqueness enfo
 raises** (`keys.py:384-388`); cycle-freedom by construction for an append-only log (`keys.py:389-392`);
 lookup by id as a first-class operation (`keys.py:363-365`).
 
+> ### ⚠ STANDING NOTE — DO NOT "FIX" IDS INTO POINTERS. THE FIRST GODOT-FLUENT REVIEWER WILL SUGGEST
+> PRECISELY THE EDIT THAT BREAKS THIS.
+>
+> Storing ids and resolving them, rather than holding object references, looks like an avoidable
+> indirection to anyone who knows the engine. **It is load-bearing, for a reason this design did not
+> know it had: Godot has NO CYCLE COLLECTOR.** `RefCounted` is reference-counted only, so **a reference
+> cycle is a permanent leak.**
+>
+> **And this design's reference graph is cyclic by construction and says so** (`03_COMPENDIUM.md`
+> §3.4): `succeed ∘ contain` — Rung → Person → Rung — is **the normal case**, because the heir lives
+> in the hearth. Ties and knots are symmetric. Claims cite claims. Conferral paths may cycle.
+>
+> **Ids break every one of those cycles at the storage layer**, which is why the design survives an
+> engine with no cycle collector. **Anyone proposing to replace them with typed object references is
+> proposing an unbounded leak in the object graph the game is made of.** The ledger, the Tenure set,
+> `Claim.source`, `Ground.support[]` and `touches`/`changes` targets are all id-valued **on purpose.**
+
 ### §2.3 The one edge — `Tenure`
 
 **This is the record that carries every disputable political fact in the design** — who holds what, who
@@ -434,6 +451,24 @@ bounds. **The resolver sums a season's act deltas per field and applies the clam
 delta applied at the event barrier is *strictly before* all of them and needs no commutativity argument
 at all.
 
+> ### ⚠ AND CLAMP ORDER IS NOT THE ONLY ORDER. `condition` AND `stores` ARE FIXED-POINT INTEGERS.
+>
+> **Float addition is not associative**, so a batched sum of the same deltas in a different order can
+> differ by an ulp — which the clamp-once rule does not address, because it is a different defect.
+> **`verbs(site, c) = { v : condition(c) ≥ floor(v) }` makes that ulp OBSERVABLE**: a band gate turns a
+> one-ulp difference into a verb that is present in one ordering and absent in another, and
+> **order-independence is the property whose absence is invisible** (`SUP:611-613`).
+>
+> **This repository has already paid for exactly this defect class.** `CLAUDE.md` §0.1 point 2 records
+> a 1-ulp aggregate error crossing a **damage-degree boundary** while its own identity test passed.
+>
+> **So `condition` and `stores` are FIXED-POINT INTEGERS, not floats.** Integer addition is
+> associative, so **order-independence becomes a fact rather than a claim**, the band gate becomes
+> exact, and the port's parity protocol gets integer-domain thresholds rather than float tolerances.
+> `condition` is an integer over a declared scale — the scale is a parameter and no value is proposed
+> here; `stores` is in whole units of its `MatterKind`. **The `[0,1]` range in every formula in this
+> suite is the scaled reading of that integer, not a float.**
+
 #### `verb` is a name; `changes[]` is the mechanism
 
 > **THE RESOLVER READS `changes[]` AND NEVER BRANCHES ON `verb` — AND IT NEVER BRANCHES ON AN EVENT'S
@@ -487,14 +522,13 @@ A **Query** is a named pure function over state, **never stored, recomputed on d
 formal version of `SUP:340`'s *"Nobody"* row and of R-1's *"compute-on-demand, never push, never
 store"* (`SUP:374-377`), and it is what makes several missing objects disappear rather than be built.
 
-⚠ **The word collides with a shipped quantity family and the collision is recorded rather than
-renamed.** `engine/engine_params/params_tables.yaml` ships sections named *"Derived Values"* and
-*"Derived Scores"*, and `references/glossary.md:75-82` lists their members — Health, Stamina,
-Coherence, Composure, Momentum — which are **stored per-character values**. The word means the
-opposite thing on the two surfaces. **The mandatory qualifier, which must travel with every use: a
-Query is never stored.** `Query` is the available alternative and is recorded in
-`03_COMPENDIUM.md` §7; it is not taken here because the dispositions this document builds on are
-written in this word, and a third name for one category is the failure being avoided.
+⚠ **`Query` REPLACES `Derived`, and the rename is not cosmetic.** An earlier version of this document
+called the category `Derived` and kept it with a qualifier. **`Derived` collides with this repository's
+own vocabulary in the OPPOSITE sense**: `engine/engine_params/params_tables.yaml` ships sections named
+*"Derived Values"* and *"Derived Scores"*, and `references/glossary.md:75-82` lists their members —
+Health, Stamina, Coherence, Composure, Momentum — which are **stored per-character values**, in a
+**flat global namespace** where nothing disambiguates them. **`Query` is the word this tree already
+uses for compute-on-demand, and R-1 is its definition.**
 
 > **THE TABLE HAS A SIDE COLUMN, AND THAT COLUMN IS THE DESIGN'S CENTRAL RULE.** A **resolver-side**
 > query may read true state. A **person-side** query may read only the asking person's own ledger.
@@ -655,8 +689,41 @@ witness : (Person, Event)           -> Claim[]    # per-person; a collection is 
 
 These are the enforcement mechanism and they work by what they omit (`SUP:142-157`). `choose` has no
 `World` — not masked, not read-only, not behind an accessor. `resolve` has no `Person`, so the
-resolver acquires no per-actor special case. `witness` takes the person first and **there is no
-signature accepting a collection of persons and one event.**
+resolver acquires no per-actor special case. `witness` takes the person first, and no signature accepts
+a collection of persons and one event.
+
+> ### ⚠ §3.1a · THE PURITY GUARANTEE DOES NOT SURVIVE THE PORT AS A TYPE-LEVEL GUARANTEE, AND THIS
+> DOCUMENT DOWNGRADES THE CLAIM RATHER THAN REPEATING IT
+>
+> **GDScript has no module system, no visibility modifiers, and no way to scope an identifier out of a
+> function body.** An autoload is a **global identifier reachable from any script**, `RefCounted` and
+> `Resource` included; `class_name` statics and `load()`/`preload()` by string are two further doors.
+> **So omitting `World` from `choose`'s parameter list does not make world access unwritable — it makes
+> it unwritten.** *"Omniscience is not something a reviewer must catch; it is something an author
+> cannot write"* (`SUP:143-147`) is **false on the port target**, and the port's own skeleton is the
+> proof rather than the hypothesis: `godot/skeleton/.../strike_module.gd:38-39,67` and
+> `combat_engine.gd:60` reach `GameState` and `KeyBus` **from inside a resolver module.**
+>
+> **The same applies to `witness`.** *"A consensus broadcast is a type error"* is **false in
+> GDScript** — the collection signature is trivially writable. It is a **convention with a named
+> check**, not a property of the type system.
+>
+> **THE FIX, and it extends the design's own philosophy rather than abandoning it:**
+>
+> 1. **No live world state behind ANY global name.** No autoload, no `class_name` static, and no
+>    `res://` path that resolves to one. The world is a value, passed.
+> 2. **Every resolver-side Query takes an explicit `World` as its FIRST parameter** (§2.5), so calling
+>    one from inside `choose` **fails at the call site for want of an argument.**
+>
+> **Twelve signatures plus one rule.** It takes enforcement-by-omission from **3 signatures to 23**,
+> and it turns §2.5's resolver-side/person-side column from a table a reader must honour into **a
+> call-site impossibility**.
+>
+> **AND THE DOWNGRADE IS STATED PLAINLY, because a false claim of enforcement is worse than none — it
+> stops the next reader from checking.** The guarantee moves from **unwritable** to
+> **unreachable-by-name**, which is *human-checkable on one screen of project settings* rather than
+> compiler-checked. **Say that, and do not restore the stronger wording without a mechanism that earns
+> it.**
 
 > **`Sensation` IS THIS DOCUMENT'S PROPOSAL AGAINST A PROBLEM THE REVIEW LEFT OPEN.**
 
