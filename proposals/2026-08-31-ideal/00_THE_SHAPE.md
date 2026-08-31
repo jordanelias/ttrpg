@@ -809,3 +809,93 @@ already before a body" rule; that would be an engine deciding a person's options
 scarcity moves from *the right to ask* to **the capacity to be heard** — seat items, agenda order,
 convener attention. **That is where the real contest should live**, and it is where the design already
 put it.
+
+---
+
+## 13. A DIRECTIVE DISTRIBUTES — one order, many executors, many outcomes
+
+> *"same thing with directives/orders. if a king says that he wants his settlements to adhere to some
+> policy, then his orders get distributed across all the different governors and praefects and
+> bureaucrats etc who are responsible for all these different settlements"*
+
+**This is §12's mirror, and together they make the two strokes the same shape:**
+
+> **Up-stroke: one want, many addressees. Down-stroke: one order, many executors.**
+> Neither is a channel. Both are **a set of independent relationships between named persons.**
+
+### 13.1 A directive is not an effect — it is a set of local decisions
+
+The King issues one dispensation. **What happens is thirty-five separate things**, because thirty-five
+praefects, governors and stewards each have to *notice it, read it, and decide*. Compliance is
+**per-person, per-place**, and it was already a roll — this simply says the roll happens **once per
+executor**, not once for the realm.
+
+**So the same order produces thirty-five different outcomes**, which is the design's central thesis —
+no omniscience, per-person interpretation — finally applied to the down-stroke instead of only to
+knowledge.
+
+### 13.2 Where no-fallback bites hardest, and best
+
+**Distribution is work, and somebody must do it.** An order travels by being *carried* and by being
+*noticed*. So between the King's act and a praefect's compliance there are **thirty-five chances for
+nothing to happen** — and per §10, nothing happening means **it does not happen.**
+
+The order does not reach Hafenmark because **nobody carried it there.** Not refusal. Not defiance.
+**Neglect, with a name attached to it.**
+
+**And here is the part that makes it play rather than bookkeeping:**
+
+> **The King cannot tell the difference between an order refused and an order never delivered.**
+> He has no omniscience; he has claims in his ledger. To find out which it was, he must **send someone
+> to look** — which is an investigation, by a named person, who may be lied to.
+
+**That is throughline T9 — field investigation as first-class — arriving in the strategic layer by
+itself**, out of the down-stroke rather than out of a detective plot. The realm-scale game becomes
+*finding out what your own government actually did*, which is the true one.
+
+### 13.3 The seat this makes playable
+
+**The bureaucrat becomes a real seat with real agency**, which the coverage exercise found thin
+everywhere:
+
+- The praefect who **slow-walks** — complies at the letter, at the latest date, with the narrowest reading.
+- The governor who **over-enforces** to be seen doing it, and manufactures a grievance the King never wanted.
+- The steward who **reports compliance he did not perform**, because a claim is what travels upward and
+  nobody has come to look.
+- The one who **complies exactly** and is ruined for it, because his neighbours did not.
+
+**None of these needs a new verb.** Each is an ordinary act plus a claim, and each produces a
+divergence the centre cannot see. **The middle of the hierarchy stops being a pipe and becomes the
+place the game happens.**
+
+### 13.4 What it composes with
+
+- **The watch (§2.2).** A directive can carry a reporting date — *"render account at the tithe
+  reckoning"* — which is a condition scheduling a sitting, not a threshold. **Non-compliance surfaces
+  at a date where a person decides what to do about it.**
+- **Multi-petition (§12).** A praefect who will not act is now one of several doors; the aggrieved go
+  around him, **and the going-around is visible to him.**
+- **The transfer act (§7.3).** *"Send grain"* is not an effect — it is somebody moving goods, and it can
+  fail, be skimmed, or arrive somewhere else. Without a transfer act, a distribution order **cannot be
+  disobeyed in the interesting way**: partially.
+- **Coincidence (§11).** Thirty-five independent compliance decisions is exactly the machinery that
+  produces outcomes nobody designed — the province where the policy took, next to the one where it
+  did not, for no reason anyone authored.
+
+### 13.5 Codebase
+
+**Nothing new.** A dispensation already has terms and a scope; compliance is already a roll; claims
+already carry upward. What must be stated:
+
+1. **Scope enumerates executors, not places.** A dispensation in scope *Varfell* resolves against
+   **each office responsible within Varfell**, one compliance decision each.
+2. **Delivery is not assumed.** An executor who never received it does not resolve at all — **distinct
+   from one who received it and refused**, and the two are indistinguishable from above without an act
+   that goes and looks.
+3. **Reports are claims, not state.** *"Compliance was rendered"* is a claim by a named person, with
+   all the ordinary properties of claims — it can be false, and it is what the centre has instead of
+   knowledge.
+
+**That third point is the whole of it:** the King's picture of his realm is **a ledger of claims made
+by people with reasons**, not a dashboard. Which is what this design has always said, applied at last
+to government.
