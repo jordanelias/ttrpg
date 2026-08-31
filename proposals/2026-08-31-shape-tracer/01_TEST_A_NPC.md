@@ -17,24 +17,25 @@
 | | |
 |---|---|
 | cases | **27 named NPCs**, specs written by three lanes **blind to the shape** |
-| verdict | **20 BLOCKED · 7 DEGRADED · 0 PLAYABLE** |
-| probes | 55 executed attempts against the shape — **17 PASS, 1 PARTIAL, 37 gaps** |
-| trace | 68 acts, 98 events, 284 class-checked writes |
-| gap kinds | 22 NO-PRODUCER · 10 UNSPECIFIED · 3 COLLISION · 3 FORBIDDEN |
+| verdict | **19 BLOCKED · 6 NOT-ASSESSED · 2 DEGRADED · 0 PLAYABLE** |
+| probes | 64 executed attempts against the shape — **18 PASS, 1 PARTIAL, 45 gaps** |
+| trace | 79 acts, 116 events, 334 class-checked writes |
+| gap kinds | 28 NO-PRODUCER · 11 UNSPECIFIED · 4 FORBIDDEN · 3 COLLISION |
 
-**A case is BLOCKED when a need its own lane graded `core` maps to a probe that could not execute.**
-Not one of twenty-seven named characters has a season that runs end to end.
+**A case is BLOCKED when a need its own lane graded `core` maps to a probe that could not
+execute.** Not one of twenty-seven named characters has a season that runs end to end.
 
 ⚠ **THE PROBE VERDICTS ARE THE HARD RESULT. THE CASE VERDICTS ARE ADVISORY.** Needs are routed onto
-probes by keyword, and keyword routing is crude: it mis-fired twice in ways I caught (§5) and is
-certainly still mis-firing in ways I did not. **83 needs are reported `UNMAPPED`** rather than
-silently passed. Read a case verdict as "this character's season met a wall", not as an exact count.
-
----
+probes by keyword, and keyword routing is crude: it mis-fired three times in ways I caught (§5) and
+is certainly still mis-firing in ways I did not. **`NOT-ASSESSED` is the instrument admitting it
+did not aim** — a case more than half of whose `core` needs failed to route is reported as untested
+rather than graded, because grading it PLAYABLE would be the instrument flattering the shape by
+failing to point at it. Read a case verdict as *"this character's season met a wall"*, never as an
+exact count.
 
 ## §2 · WHAT SUCCEEDED — and one of these is excellent
 
-Seventeen probes pass, and they are not trivial passes; each is an execution.
+Eighteen probes pass, and they are not trivial passes; each is an execution.
 
 **The three that matter most:**
 
@@ -68,7 +69,8 @@ investigation (`P25`).
 | **P29** | **3** | A `Record` is homed as **Rung matter** — it sits at a *place*, never in a person's hands. *"She was found with it"* is not expressible |
 | **A2** | **3** | A threshold firing with nobody deciding is **FORBIDDEN** — correctly, and it costs |
 | **F6** | **3** | A sitting convenes; `judging_set_rule` is a named Rung field that **no document specifies**, so nothing is decided there |
-| **P4** · **P18** · **P28** · **P30** · **W2** | 2 each | conviction motion · staged institutional judgement · making a durable thing · work spanning seasons · band strobing |
+| **P4** · **P18** · **P26** · **P28** · **P30** | 2 each | conviction motion · staged institutional judgement · accumulated harm crossing a limit · making a durable thing · work spanning seasons |
+| **P31** · **P33** · **P3** · **P19** · **P16** | 1 each | worn by where you stand · two standings at once · covert action · restraint that emits · feeding yourself |
 
 ### 3.1 The four that recur across the whole spectrum
 
@@ -151,11 +153,20 @@ because the tracer gates every finding above.
 | the Partition table carried rows for `Person.capability`/`convictions`/`beliefs` | **rows the suite does not have** (`ADVERSARIAL.md` 14/15/16), turning a real gap into a PASS | rows removed; a test asserts they stay absent |
 | greedy keyword routing | *"degrade his **personal** condition"* → site decay; *"maintenance labor"* → substrate. **Two BLOCKED cases became false PLAYABLE** | specific person-scale patterns now precede generic world ones |
 | the loader dropped truncated lane output | a whole arc lane's cases lost | repair to whole entries, discarding partial edges without inventing content |
+| the bare words **"threshold"** and **"condition"** routed to `W2` (band strobing) and `W1` (site decay) | **16 and 5 core needs** attributed to the wrong mechanism, and several cases graded PLAYABLE off a harbour probe. Found only when the corpus grew from 47 to 78 cases | both regexes narrowed to their real subjects; **two probes added** (`P34`, `P35`) for what the mis-routed needs were actually asking; four router self-tests |
+| a case whose `core` needs mostly failed to route was graded **PLAYABLE** | the instrument flattering the shape **by failing to aim at it** — the same direction as the other four | fourth verdict `NOT-ASSESSED`; a self-test asserts the three-way grading cannot come back |
+
+**Narrowing a bad route is only half a fix.** Cutting `W2`'s regex without adding `P34` would have
+turned sixteen real findings into `UNMAPPED` — silence that reads as absence. The rule this build
+ended on: **when a route is wrong, read what it was catching before you cut it**, because the
+mis-catch is usually a capability the probe set does not have.
 
 **Known remaining weakness, stated rather than hidden:** routing is still keyword-based and still
 imperfect — `NPC-005`'s *"a capability she secretly has"* routes to `A2`, which is not what that need
 is about. **This is why §1 marks case verdicts advisory and probe verdicts hard.** The honest
-instrument reports 83 `UNMAPPED` needs rather than pretending to cover them.
+instrument reports **228 `UNMAPPED` needs of 527** rather than pretending to cover them, and marks
+16 cases `NOT-ASSESSED` rather than passing them. At 78 cases keyword routing is at its ceiling; a
+larger corpus needs the lanes to emit a capability tag, not prose the runner greps.
 
 ---
 
