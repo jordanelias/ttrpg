@@ -1672,22 +1672,50 @@ scope and incompatible values **collide automatically**, and §5.12's option-rem
 forms a faction out of the people whose practice used the verb. **Shipped, and it is the design at its
 best.**
 
-**(b) ⚠ AMBITION HAD NO CARRIER ANYWHERE.** Verified by grep: `ambition` and `goal` occurred **zero
-times** across all 3,780 lines of the v2 suite before this correction.
+**(b) AMBITION. ⚠ AN EARLIER VERSION OF THIS SECTION SAID IT *"HAD NO CARRIER ANYWHERE"*, ON A GREP OF
+THIS SUITE ONLY. THAT CLAIM IS FALSE AGAINST #342 AND IS WITHDRAWN — the same defect class as §12.8's,
+caught here by running the grep the claim needed.**
 
-> **AN AMBITION IS AN UNSATISFIED `commit` TENURE WHOSE OBJECT IS AN `OUGHT` PROPOSITION ABOUT THE
-> HOLDER'S OWN FUTURE** — *"I will hold the praefecture"*, *"my house will hold Grauwald"*. **No new
-> object.**
+**#342 ships an account of ambition and refuses a trait for it, twice, by name:**
+
+> `04:225-227` — *"`need(p, standing)` is the gap between what everyone reads off you and what you
+> hold. **That gap is ambition**, computed, and it is why no ambition trait exists: a trait would be a
+> second copy of this number that could disagree with it."*
 >
-> It inherits everything from primitives that already exist: it is **disputable** (others may hold
-> claims about what you want), **concealable** (`avowal ∈ {avowed, private, covert}`), **betrayable**
-> (degree → 0 is abandonment), **inheritable** (rows pass at reduced magnitude on succession), and —
-> decisively — **it already drives `choose` with no new wiring**, because *commitment — a faction
-> proposition you hold, unsatisfied* is one of the four needs (`SUP:187-190`) and reads **the view**.
+> ```
+> expected_standing(p) = Σ_{m ∈ marks(p)} recognised_weight(m, community's admission rule)
+> need(p, standing)    = clamp(0, 1, (expected_standing(p) − held_standing(p)) / 3)
+> ```
+>
+> `04:778-779` — *"**An ambition, resentment or pride trait.** Ambition is `expected_standing −
+> held_standing`."* — filed under what is **refused**. And `01:494`: *"greed, ambition and the rest are
+> already expressible as stance toward referents plus computed need."*
 
-**So a man's ambition makes him hungry in exactly the way a shortfall does**, and both arrive at
-`choose` through machinery already specified. It is also why ambition is *contestable*: what you want
-is a claim other people hold about you, and they can be wrong about it.
+> **SO THE DRIVE IS SHIPPED, COMPUTED, AND ALREADY IN THIS ARCHITECTURE: it is
+> `Sensation.standing`** (§3.1), one of the two world-reading scalars, and `04:225-227` is its
+> derivation. **Nothing needs adding for a person to WANT more than they have.**
+
+**What genuinely has no carrier is the OTHER half of Jordan's sentence, and the distinction is the
+whole point.** *"Their ambitions within that world are the regions that drive conflict"* — **a
+magnitude cannot be a region of conflict.** `expected_standing − held_standing` is a scalar: it says
+*how badly*, and it cannot say **which particular future you are committed to**, so two men with
+identical standing gaps are mechanically identical and cannot want incompatible things.
+
+> **THE OBJECT OF AN AMBITION IS AN UNSATISFIED `commit` TENURE WHOSE OBJECT IS AN `OUGHT` PROPOSITION
+> ABOUT THE HOLDER'S OWN FUTURE** — *"I will hold the praefecture"*, *"my house will hold Grauwald"*.
+> **No new object, and no trait**, so `04:778`'s refusal is honoured rather than overridden.
+>
+> **The two compose and do not duplicate:** the standing gap is **how hard you push** and is computed
+> from marks nobody stores; the commitment is **what you push toward** and is a proposition other
+> people can hold claims about. **A scalar and a referent are not two copies of one number.**
+
+It inherits everything from primitives that already exist: it is **disputable** (others hold claims
+about what you want, and can be wrong), **concealable** (`avowal ∈ {avowed, private, covert}`),
+**betrayable** (degree → 0 is abandonment), **inheritable** (rows pass at reduced magnitude on
+succession), and — decisively — **it already drives `choose` with no new wiring**, because *commitment
+— a faction proposition you hold, unsatisfied* is one of the four needs (`SUP:187-190`) and reads **the
+view**. **And two ambitions with intersecting scope and incompatible values COLLIDE automatically**,
+which is how they become *regions of conflict* rather than parallel appetites.
 
 ⚠ **THE OPEN BALANCE QUESTION THE RULING CREATES, stated because nothing here can settle it: the ratio
 of `wear` to a restoration act's effect sets the world's entire difficulty curve, and no number in this
@@ -2131,6 +2159,13 @@ Stated so no later document can cite this one as though these were closed.
    nowhere"* (fourteen forms, `03:66-79`) — a reinvented fifth claim source that `03:528` already
    ships, and **an entire invented `investigate` verb standing where six shipped acts, an obstacle
    owner, a derived query and a counter-investigation layer already were.**
+
+   ⚠ **AND THE SAME DEFECT RECURRED DURING THIS CORRECTION PASS, WHICH IS THE USEFUL PART.** §7 F6's
+   first wording said *"`ambition` and `goal` occur zero times"* — **true of this suite and false of
+   #342**, which ships `Ambition is expected_standing − held_standing` (`04:778`) and refuses an
+   ambition trait by name. It was caught by running the grep the claim needed, over the corpus the
+   claim quantified over. **The rule that follows, and it is the only apparatus-free guard available:
+   an absence claim names the exact corpus it was run against, or it is not made.**
 
    > **THE DIAGNOSIS: EVERY AUDIT IN THIS EXERCISE WAS DERIVATIVE-FACING.** Two review rounds, five
    > parallel runners and an identity audit all checked derivative documents **against each other**,
