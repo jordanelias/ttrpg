@@ -1,0 +1,157 @@
+I've now read all assigned material. Compiling the final report.
+
+## LANE A — Factions & Mandate (archives/audit)
+
+### COVERAGE
+files_assigned: 14 | files_opened: 14 | files_read_closely: 14
+skipped: `faction_play_flowchart.mermaid` / `faction_play_stategraph.mermaid` not read as standalone files — both are embedded verbatim in `faction_play_system_flatten.md` §1–2, read there. `2026-06-22-audit-verification/` (README.md + jsonl) opened and read in full, but its actual subject is the threadwork/investigation diagnostics (out of my lane's five subjects) — extracted nothing, noted only that this directory appears mis-scoped to Lane A.
+
+### FINDINGS (ranked)
+
+**F-A-1 — LPS-2e: Legitimacy/Popular-Support are per-settlement; Mandate is a derived, size-weighted, saturating aggregate**
+- SOURCE: `2026-06-09-faction-settlement-attribute-flattening/attribute_flattening.md` §1, L23-25, L112-140; corroborated in `2026-05-30-lps-mandate-ners-audit/lps_mandate_comprehensive_ners_audit.md`
+- CATEGORY: ontology | derivation | faction
+- SUBSTANCE: Jordan ruling 2026-05-30 (`settlement_layer_v30 §1.8`): Legitimacy (L, institutional/slow) and Popular Support (PS, active/fast) are **base stats of a settlement**, 0–7 each — not faction-level. Faction Mandate is derived: per-settlement acceptance `q_s = 0.5·L_s + 0.5·PS_s`; settlement weight `W_s = base(Type) + Prosperity + FacilityTier`; total mass `T = Σ_s W_s·q_s/7`; `Mandate = clamp(round(7·T/(T+K)), 0, 7)` with `K=6` — a saturating, diminishing-returns aggregate ("one province of large developed settlements outranks many tiny ones," but bounded). A mean-reverting feedback pushes Mandate back onto controlled settlements' L/PS at ±1/settlement/season.
+- WHY IT MAY STILL MATTER: This is the single load-bearing ontological move in the whole faction surface — it answers "is a faction's legitimacy a thing it has, or a thing its territory gives it" in favor of the latter, and everything else in this lane (F-A-2 through F-A-6) is either this pattern's generalization or the debt from not finishing it.
+- STATUS IN DOC: "Jordan ruling (2026-05-30, structural/metaphysical layer)" — ratified, not proposed.
+- REDISCOVERED IN: independently treated as settled ground-truth by `faction_stat_architecture_review.md`, `faction_attribute_ners_value_audit.md`, `faction_stat_io_flattening.md`, and `faction_play_comprehensive_analysis.md` — four separately-authored documents all build on it without re-deriving it.
+
+**F-A-2 — Proposed full inversion: every faction stat = aggregate(settlement/territory holdings) ⊕ decaying national-event-modifier ledger**
+- SOURCE: `2026-06-09-faction-stat-architecture-review/faction_stat_architecture_review.md` §3, §3.1, §3.2
+- CATEGORY: ontology | mechanism | derivation
+- SUBSTANCE: Generalizes F-A-1 to the whole six-stat lineup. `faction_stat[s] = AGGREGATE_s(settlement/territory stats) ⊕ Σ national_event_modifier_k` (Keys, decaying so events fade rather than ratcheting). Clean settlement bases exist for **Mandate** (done), **Wealth** (Σ settlement Local Economy = Prosperity×50), **Military** (Σ Garrison Strength = Defense×20+Fort×30, + territory count), **Stability** (f(Σ settlement Order, province Accord)). **Influence and Intel do NOT reduce to a settlement sum** — they are institutional/national (diplomacy, alliances, parliamentary standing; spy networks) and must derive mostly from the national-event ledger over a thin structural base — "forcing a settlement aggregate here would be a fabricated mechanic." The old §14 "capital" gauges (Treasury=Wealth×100, Levies=Military×2, Reputation=Influence×15, Discipline=Stability×10) are diagnosed as **vestigial**, built for a pre-d+σ bare-stat-pool economy that both the resolver and the settlement layer have since obsoleted; their genuine semantics (spendable gold, fielding cap, low-resource penalties) should re-home onto the settlement substrate rather than persist as a parallel scaled economy.
+- WHY IT MAY STILL MATTER: This is a complete, NERS-scored (pass on N/R/S/E) target architecture for faction stats that was never adopted or rejected — only "open on Jordan's DECIDE items." If the videogame is still doing faction stats as free-floating integers, this is the design that says why they shouldn't be, and exactly what to derive from what.
+- STATUS IN DOC: "This is a review, not a ratification"; explicitly lists two open [DECIDE] items (Influence/Intel basis; national-event-modifier decay/stack/cap) reserved for Jordan. Never adopted per the comprehensive analysis (§7, "nothing here is mine to take").
+- REDISCOVERED IN: The per-attribute NERS audit and the I/O flattening (below) independently converge on the same "Influence/Intel are the exception, the rest are settlement-clean" split from different methods (historical-precedent scoring vs. raw input/output site-counting).
+
+**F-A-3 — The attribute-flattening contradiction catalog (C-1..C-5): the inversion was ruled once but never propagated**
+- SOURCE: `attribute_flattening.md` §3 (L72-104), §2
+- CATEGORY: problem-only | derivation
+- SUBSTANCE: **C-1**: `derived_stats §14` still states the *opposite* arrow — "Mandate (base) → Legitimacy = Mandate×20" — flatly contradicting LPS-2e; flagged "STALE — inverted by LPS-2e." **C-2**: despite being declared derived, Mandate is directly written at ≥78 sites across ≥6 canon docs (treaty breach −2, assassination −1, collapse →0, Church absolution ±1, Outlawry −2, etc.) and is *also* read as a live d+σ resolver input (`M = Mandate−2` for Royal Decree, `M = Mandate − target Mandate` for Excommunication) — "a derived aggregate cannot simultaneously be a directly-written, directly-rolled base quantity." **C-3**: Treasury is double-sourced — `Wealth×100` (derived_stats) vs. settlement Local Economy aggregation (settlement_layer) — composition rule never stated. **C-4**: faction stat count is unresolved 6-vs-7 (`factions_personal §8.1` vs `stats_1_7_scale` post-ED-787), and the "7-stat" doc's own header actually lists 6. **C-5**: Prosperity is called a settlement stat in one doc and "a territory-level track, not a faction stat" in another (`strategic_layer P-22`).
+- WHY IT MAY STILL MATTER: This is the concrete evidence-base for F-A-1/F-A-2 — a pure grep-derived flatten (23 authoritative docs, DEF/WRITE/READ classified) that makes the abstract "propagation debt" claim falsifiable and locatable by file:line.
+- STATUS IN DOC: none (audit finding, not itself a ruling); explicitly "does not resolve them."
+- REDISCOVERED IN: `faction_play_comprehensive_analysis.md` §6 (P2-1 through P2-7) finds *additional* residual sites beyond the flatten's own 23-doc scope (e.g. `params/bg/faction_actions.md` L-rolls the flatten's own LPS-2d sweep missed) — independent confirmation the propagation gap is real and larger than first measured.
+
+**F-A-4 — Faction stats sit inside five stacked, partly-incompatible historical layers**
+- SOURCE: `faction_stat_architecture_review.md` §1 (L34-73)
+- CATEGORY: ontology | mechanism
+- SUBSTANCE: (1) current d+σ resolver treats the raw 1–7 int as resolution leverage (`M=stat−difficulty`, no use for a scaled gauge); (2) a pre-d+σ "capital" layer treated the base stat as the *ceiling of a depleting resource* (Wealth→Treasury×100, Military→Levies×2 fielding cap, Influence→Reputation×15, Stability→Discipline×10) — coherent when factions rolled bare stat-pools, now redundant with the settlement economy; (3) LPS-2e already inverted Mandate specifically to a settlement aggregate, the opposite direction from layer (2)'s Mandate→Legitimacy treatment; (4) Domain Echo (scene→faction ripple) still writes a faction stat as a direct scalar delta (Success ±1/Overwhelming ±2, cap ±2/scene) — the literal mechanism instantiating C-2's write-sites; (5) underneath all of this the Key substrate (PP-687) is vector-based (`impact_vector` on 4 Conviction axes) — faction-stat scalar deltas are "a scalar idiom layered on a vector substrate ... coexist but were not designed together."
+- WHY IT MAY STILL MATTER: Explains *why* the contradictions in F-A-3 exist rather than just cataloguing them — each layer was correct when authored and became incoherent only because a later layer (the resolver, the settlement layer, LPS-2e) independently obsoleted it. Useful frame for any future migration: identify which layer a given mechanic actually belongs to before touching it.
+- STATUS IN DOC: analytical framing, not itself ruled.
+- REDISCOVERED IN: single source, though its conclusions are load-bearing for F-A-2/F-A-3.
+
+**F-A-5 — Per-attribute historical+mechanical verdict: all six stats earn their place, but Intel is thin and Stability is an overloaded catch-all**
+- SOURCE: `2026-06-09-faction-stat-architecture-review/faction_attribute_ners_value_audit.md` §0, §5, §6
+- CATEGORY: faction | mechanism | narrative
+- SUBSTANCE: Every stat maps to a load-bearing Renaissance dynamic (Mandate=legitimacy/papal-bulls, Influence=Medici soft power, Wealth=banking, Military=standing armies, Stability=succession/coup-resistance, Intel=Venice's Council of Ten) and none is a clean cut. But **Intel** fails R and S: it is the smallest footprint of any stat (10 reads/5 writes, resolution-only, no settlement basis), was until recently an Influence fallback, and "floats" with almost no interdependencies — verdict is explicitly **KEEP+EXPAND** (build faction-level intel differentiation, counter-intel, information asymmetry as a first-class system) **or FOLD into Influence**, never "keep it thin." **Stability** is the "over-loaded" one: 45 of its 97 output sites are simply "Failure → Stability −1" on *any* domain action of *any* kind — a failed trade and a failed coup cost the same variable, which the audit calls a soft one-variable/one-role violation; the inversion (F-A-2) would fix this for free by routing a failure to its actual locus (a failed trade hits Prosperity→Wealth, not Stability).
+- WHY IT MAY STILL MATTER: A concrete design choice still open (expand Intel's information-asymmetry mechanics vs. quietly fold it) plus a legibility defect (Stability's catch-all sink makes "why did my Stability drop?" answerable only by "almost anything") that a future faction rewrite should not reintroduce.
+- STATUS IN DOC: none — audit verdict, Jordan-vetoable.
+- REDISCOVERED IN: the sigma-engine-audit's F10 finding ("Stability triple-role") examined the *same* symptom and reached a **different** verdict — "NOTED — downgraded in-verdict: not a true conflation, no Lesson-1 violation." This is a genuine disagreement between two audits on the same observation, not a rediscovery — worth flagging rather than treating either as settled.
+
+**F-A-6 — Input/output flattening: migration cost is quantified per stat, and "Church Influence" the 0–100 clock is conflated by name with the 1–7 Influence stat**
+- SOURCE: `2026-06-09-faction-stat-architecture-review/faction_stat_io_flattening.md` §0, §4, §7
+- CATEGORY: derivation | mechanism
+- SUBSTANCE: Per-stat input/output site counts: Mandate 70in/78out (balanced), **Stability 49in/97out — the heaviest single migration**, Wealth 17/35, Influence 52/23 (read-dominant), Military 38/17 (read-dominant, clean settlement basis), Intel 10/5 (lowest volume, cleanest national-derived case). All OUTPUT mechanics reduce to five archetypes (action-degree, event, accounting, domain-echo, cap), each with a defined re-route target under F-A-2 — "the migration is therefore systematic, not ad-hoc." Separately: "Church Influence" (CI, a 0–100 clock) is conflated in naming with the base 1–7 Influence stat throughout canon — most of Influence's apparent write-volume is actually CI-clock writes, so the true base stat is even more read-dominant than raw counts suggest.
+- WHY IT MAY STILL MATTER: Gives a concrete, file-line-cited work-estimate for anyone actually executing F-A-2, and flags a naming collision (two different "Influence" quantities) independent of the derivation question.
+- STATUS IN DOC: none.
+- REDISCOVERED IN: the naming overload is independently flagged in `faction_attribute_ners_value_audit.md` §2 as an Influence S/E defect.
+
+**F-A-7 — A faction's "personality" is a weighted roll-up of its officers' psychology, not an independent agent**
+- SOURCE: `2026-06-09-faction-comprehensive/faction_play_comprehensive_analysis.md` §2.2 (PP-686 v2 behavior model)
+- CATEGORY: ontology | npc | faction
+- SUBSTANCE: Behavior model has four components: **Mission** (authored telos, aligned/contradicted action categories, four shift triggers), **Cascade** (α-weighted blend of effective Conviction vectors down a supervisor graph of NPCs, multi-root allowed, crisis-bypass when the leader's Scars ≥3), **Public Expectation** (role templates over a 13-Conviction taxonomy scored by cosine similarity = "cascade fidelity"), and **L+PS** (per-settlement, per F-A-1). Formula (`faction_play_system_flatten.md` CALC-3): `effective(npc) = α·personal + (1−α)·effective(supervisor)`; `aggregate = normalize(Σ standing×effective)`; `strictness = clamp(0.4+0.5·aggL/7−0.3·aggPS/7)` modulates Ob as a deviation-cost only.
+- WHY IT MAY STILL MATTER: This directly answers the lane's ontology question ("is a faction an agent, a container, or an aggregate of people?") — canonically it is explicitly the third: an emergent aggregate over its constituent NPCs' convictions, cascading down a chain of command, not a free-standing personality.
+- STATUS IN DOC: "CANONICAL, PP-686 v2" per the comprehensive analysis, though flagged elsewhere (P3-8) as having inconsistent status banners across sibling docs.
+- REDISCOVERED IN: single source (companion `faction_play_system_flatten.md` reproduces the same formulas as its CALC-3).
+
+**F-A-8 — Factions are not a fixed roster: GD-3 spawns new factions from ungoverned territory**
+- SOURCE: `faction_play_comprehensive_analysis.md` §2.7; `faction_play_system_flatten.md` §2 (state graph, EmergenceTrack)
+- CATEGORY: mechanism | faction | world-churn
+- SUBSTANCE: 2+ contiguous Uncontrolled territories sustained for 2 seasons trigger an **Insurgency** (territorial, non-parliamentary) that invades like a faction — including against its own former parent — and is promoted at thresholds to a full parliamentary or extra-parliamentary faction, at which point it is GD-1-victory-eligible like any original faction. A separate per-settlement Restoration-specific emergence variant exists (Order=0 ∧ PT≤1 ∧ Vossen Disposition≥+3, capped once per province per 4 seasons).
+- WHY IT MAY STILL MATTER: A genuine emergent-narrative mechanic (a power vacuum can birth a new political entity mid-campaign) rather than a fixed cast of six factions — worth preserving in any redesign.
+- STATUS IN DOC: none noted as contested; the state-graph diagram explicitly notes "Insurgency exit conditions other than promotion are not specified in the canonical read set — intentionally not drawn," i.e. an acknowledged gap.
+- REDISCOVERED IN: single source.
+
+**F-A-9 — Domain Echo: the personal-scale→faction ripple currently teleports a scalar delta straight to a faction integer**
+- SOURCE: `faction_stat_architecture_review.md` §1 Layer 4, §3; `faction_play_system_flatten.md` CALC-11
+- CATEGORY: seam | mechanism
+- SUBSTANCE: A personal scene meeting "Sufficient Scope" emits a Domain Echo: Overwhelming ±2 / Success ±1 / Failure −1 to the target faction's `most_relevant_stat` at scene end, capped ±2/faction/scene, one Echo per faction per scene. Under the proposed inversion (F-A-2) this is reconceived as either a settlement-locus write (the natural, located effect) or a national-event-ledger Key — "the ripple still flows up — but through the substrate, one scale at a time, rather than teleporting to a faction integer."
+- WHY IT MAY STILL MATTER: Names the exact seam between personal-scale play and faction-scale state, and gives an explicit, non-hand-wavy alternative to a direct-write ripple.
+- STATUS IN DOC: "currently a direct stat write... reconception... open on the inversion decision" — unresolved.
+- REDISCOVERED IN: `faction_play_comprehensive_analysis.md` §2.9 independently notes the same seam ("currently writes faction stats directly — the 2026-06-09 review reconceives it as substrate ripple").
+
+**F-A-10 — Faction collapse/Stability death-spiral was found unbounded, then closed with two specific dampers**
+- SOURCE: `faction_play_comprehensive_analysis.md` §2.6, §5 (F3/F6/F7); `faction_play_system_flatten.md` CALC-9/CAP
+- CATEGORY: mechanism | faction
+- SUBSTANCE: A 2026-05-28 NERS verdict found the Accounting Stability Check could spiral a faction to collapse via passive dice decay alone. Fix, ratified 2026-05-30/31: **FSS-LOOP-1** — at Stability≤2 the Accounting Check *cannot itself* reduce Stability further; only an active Trigger (1–5) can. **FSS-LOOP-2** — while Wealth≥1, Military re-musters +1/Accounting up to its pre-collapse value, damping the "Wealth-0 → Military drain → weaker → lose more" cascade. Collapse itself (ED-675) is a six-step deterministic exit: Mandate→0, territories→Uncontrolled (Accord 0), officers→Independent, PC de-affiliated, seat lost, victory closed — with a one-time Survival Exception and a Reconstitution path (Influence vs Ob4, 3 consecutive successful seasons, re-enter at Stability 1/Mandate 1/50% of frozen values).
+- WHY IT MAY STILL MATTER: A concrete worked example of "find the undamped loop, add exactly one damper, keep the rest of the system intact" — reusable as a template for any other feedback loop found in a faction/settlement redesign.
+- STATUS IN DOC: ratified, closed per the comprehensive analysis's disposition table.
+- REDISCOVERED IN: independently re-confirmed bounded/convergent by simulation in `lps_mandate_comprehensive_ners_audit.md` Stage 1 Phase 4 ("Mandate 5 → converges to ~5 in 2 seasons, no oscillation").
+
+**F-A-11 — Succession is two-stage: stochastic "who leads," deterministic "does it fracture"**
+- SOURCE: `faction_play_comprehensive_analysis.md` §2.6 (FSS-1); `faction_play_system_flatten.md` CALC-12, state graph
+- CATEGORY: mechanism | governance | faction
+- SUBSTANCE: Stage 1 resolves *who leads* via the d+σ resolver on claimant strength gap. Stage 2 resolves *whether the faction splits*, deterministically on the numeric gap G: G≥3 stays unified; G=2 is "fractious" (Disposition-gated); G≤1 splits with assets divided 60/40 and only the residual uncertainty left to dice. Historical anchor cited: Carolingian/Diadochi-style partition tracks the actual power balance among claimants rather than roll variance.
+- WHY IT MAY STILL MATTER: A clean, generalizable pattern — separate the *contested* decision (who wins, appropriately stochastic) from the *structural* decision (does the entity hold together, which should be a function of the numbers, not another roll) — directly reusable for any succession/schism mechanic elsewhere (guilds, the Church, NPC organizations).
+- STATUS IN DOC: ratified 2026-05-30 (FSS-1).
+- REDISCOVERED IN: single source.
+
+**F-A-12 — The d+σ resolver fixes two named, numerically-demonstrated defects in bare-stat dice: non-uniform stat value and foreclosure walls — but is a balance-regression risk where two actions were already tuned on the old dice model**
+- SOURCE: `2026-05-30-faction-sigma-engine-audit/faction_sigma_engine_audit.md` §0, §3, §5
+- CATEGORY: mechanism | derivation
+- SUBSTANCE: `P_success = clamp(0.50+0.10·M, 0.05, 0.90)`, `M=stat−difficulty`. Numerically instrumented against bare dice at Ob2: a stat point is worth +13.7pp at the bottom of the range vs +6.6pp at the top on dice (2× non-uniform) vs. a flat +10pp under the resolver. Against Ob4 (Hafenmark's Sovereign Authority Doctrine): a Mandate-1 faction succeeds **0.00%** on dice — the action is *impossible*, not merely hard — vs. the resolver's 5% floor. But **parliamentary_transfer** and **treaty re-bind** were balance-validated at N=1000 *on dice* (Crown 24.7% / Church 28.6% / Hafenmark 24.2% / Varfell 22.5% equilibrium); naively swapping in the resolver's 5% floor raises weak-actor odds off the dice model's ~1% wall and would shift that validated equilibrium — flagged as an open trade-off requiring re-sweep + re-tune, not a free migration.
+- WHY IT MAY STILL MATTER: A reusable methodological distinction — "resolution-correct" and "balance-safe" are different questions, and a fix to one can be a regression on the other. Also directly informs which faction mechanics were left on legacy dice and why (Royal Decree, Excommunication, Private Collection, Guild Leverage were free to migrate; Parliament transfer/treaty re-bind were not).
+- STATUS IN DOC: resolver ratified (ED-874); the two balance-pinned actions explicitly "OPEN TRADE-OFF," not resolved.
+- REDISCOVERED IN: the comprehensive analysis's disposition table (F1/F2/F3 closed via this exact resolver) and its P2-6 finding (Parliamentary Vote best-of-3 was never migrated and is "F9 still breathing").
+
+**F-A-13 — Canon signature actions, BG-params, and sim code define three nearly disjoint faction-unique-action catalogues**
+- SOURCE: `2026-06-22-faction-action-audit/faction_action_audit.md` Executive summary, Pass B "three DISJOINT action sets," "Completeness frontier" §1 (registry-level gap)
+- CATEGORY: problem-only | faction | mechanism
+- SUBSTANCE: Canon §9 names one signature action per faction (Crown=Royal Decree, Church=Excommunication, Hafenmark=Sovereign Authority Doctrine, Varfell=The Private Collection, Guilds=Economic Leverage, Löwenritter=Martial Law). BG-params defines an entirely different catalogue (Piety Spread, Active Inquisition, Royal Charter...). The sim implements a *third* set (Crown Initiative, Council of Solmund, Charter of Liberties, Vaynard's Hall...) — several of which are explicitly labeled "sketched proposals" in their source doc (Part-10 §5, never ratified) yet are live-wired into AI dispatch as if canonical. **Only "Excommunication" appears in all three.** No reconciliation matrix / canonical action registry was ever built.
+- WHY IT MAY STILL MATTER: This is the action-layer twin of F-A-3's stat-layer propagation-debt finding — the same underlying repo failure mode (independent authorship, never cross-mapped) recurring on a different surface. Whatever replaces this sim generation should build one canonical action registry before writing three more divergent lists.
+- STATUS IN DOC: none (audit finding).
+- REDISCOVERED IN: the comprehensive analysis independently diagnoses the identical failure mode on the *stat* surface ("ratified rulings... have not finished propagating across sibling docs, so contradictory canon coexists") — two audits, different surfaces, same root cause.
+
+**F-A-14 — Occupation, treaty formation, and parliamentary motions were the *churn-generating* mechanics, and they were the ones left unimplemented**
+- SOURCE: `faction_action_audit.md` Pass C ("Through-line"), and its Occupation/Parliament/Treaty findings
+- CATEGORY: problem-only | governance | world-churn
+- SUBSTANCE: The last-observed sim implemented only *terminal* states — immediate conquest transfer, treaty expiration/lapse — but not the intermediate branch points: the 3-season Occupation window (resist / treaty-cede / recapture per `faction_layer §2`), the 3-phase Treaty negotiation resolver (positioning/concession/ratification per `faction_layer §3.3`), and any of the 10 canonical Parliamentary motion types (Censure, Embargo, Blockade, Outlawry, Subsidy...). Verbatim: "the sim implements the terminal states... but not the churn-generating intermediate mechanics... exactly the branch points that produce emergent narrative." Parliament additionally had **two divergent vote models** never reconciled — a Mandate-weighted vote per `faction_layer §5` vs. a completely different Persuasion-Track dice contest (`social_contest_v30 §10`, TN7, track 0-10) actually implemented in the sim.
+- WHY IT MAY STILL MATTER: A sharp, still-unsolved problem statement — the mechanics that make governance feel alive (a siege that takes three seasons and can go three ways, a treaty that is actually negotiated, a parliament with ten distinct levers) are exactly the ones every implementation generation skipped in favor of instant state transitions.
+- STATUS IN DOC: none — live finding as of the audit's last read.
+- REDISCOVERED IN: single source, but internally corroborated across three separate findings (Occupation, Treaty, Parliament) converging on the same "terminal vs. intermediate" pattern.
+
+**F-A-15 — Faction stat is a resolver-consumed leverage value, but was originally (and separately) a depleting "capital economy" — the two purposes were never reconciled before LPS-2e forced the question**
+- SOURCE: `faction_stat_architecture_review.md` §2
+- CATEGORY: derivation | mechanism
+- SUBSTANCE: Provenance argument for why layers 2 and 4 (F-A-4) are vestigial rather than wrong-as-built: the ×k "capital" gauges predate the d+σ resolver, from an era when factions rolled bare stat-pools and needed a spendable/erodable currency to feel like more than an integer; the resolver made the raw stat itself the leverage term, leaving the capitals with only a depletion-economy job — a job the settlement layer (once it existed) already does concretely one scale down, which is exactly why Treasury ended up double-sourced (C-3).
+- WHY IT MAY STILL MATTER: A model for diagnosing "zombie mechanics" generally — a subsystem can be internally consistent and still be dead weight once two *independent* later changes (a resolver upgrade, a new substrate layer) each separately remove its reason to exist.
+- STATUS IN DOC: none — analytical.
+- REDISCOVERED IN: single source.
+
+**F-A-16 — Mandate's "few huge > many small" intuition is a pure population-mass model and is value-dependent, not guaranteed**
+- SOURCE: `2026-05-30-lps-mandate-ners-audit/lps_mandate_comprehensive_ners_audit.md` VERDICT, Stage 1 Phase 5
+- CATEGORY: derivation | problem-only
+- SUBSTANCE: The size-weighted Mandate formula (F-A-1) sums total weighted population mass; 12 moderate villages (ΣW≈36) can out-mass and tie/edge 3 large developed settlements (ΣW≈26) at the same Mandate value. This is *correct* if Mandate should track total population however distributed, and a *defect* if a huge capital should carry a super-linear premium beyond its raw mass — Jordan's own stated framing ("huge-population province > many-few-people provinces") is satisfied only when weight contrast exceeds roughly 4:1. Also flags that Settlement Weight (`base(Type)+Prosperity+FacilityTier`) may double-count "development" since Prosperity and FacilityTier likely correlate.
+- WHY IT MAY STILL MATTER: A precise, unresolved calibration question sitting directly under the headline faction stat — worth re-litigating before any Godot port hard-codes the current K=6 / linear-Weight form.
+- STATUS IN DOC: flagged `[INTENT — confirm, P2]`, not resolved; audit's own overall verdict is "NERS-COMPLIANT AS BUILT — no hard mechanical defect," this is explicitly a calibration/intent question, not a bug.
+- REDISCOVERED IN: single source; explicitly *corrects* an earlier session's claim that the size property "passes (6 vs 5)," finding that claim used cherry-picked favorable values.
+
+### DEAD ENDS
+- **`derived_stats §14`'s "Mandate is base, Legitimacy = Mandate×20."** Directly inverted and superseded by the 2026-05-30 LPS-2e ruling; the flatten tags it explicitly "STALE — inverted by LPS-2e." Do not resurrect the Mandate→Legitimacy direction.
+- **The 2026-05-01 flat-average Mandate formula** (`Mandate = round(0.5×Legitimacy + 0.5×Popular_Support)`, `mandate-consumer-audit/00_audit.md` §1) — a faction-level (not per-settlement), non-size-weighted average. Superseded one month later by the size-weighted saturating settlement aggregate (F-A-1). The audit's own 530-line-grep tiering methodology (classify every Mandate read as L-leaning/PS-leaning/derived/unclassified, refactor opportunistically) may still be reusable as a technique even though its object (the flat formula) is dead.
+- **Pre-ED-874 bare-stat dice rolls for Domain Actions.** Numerically shown (F-A-12) to non-uniformly value stats and wall weak actors at ~0% on high-Ob unique actions; superseded by the d+σ resolver for everything except two balance-pinned exceptions.
+- **Pre-ED-876 Trigger-5 "pool≥6" hard gate.** Struck and moved from a gate to a cost-escalator; a stale copy of the old gate text was later found still present in `faction_layer §6.2` (comprehensive analysis P2-1) — a propagation residue, not a live rule.
+- **"Varfell expansion is purely military."** Corrected by ED-880 (2026-05-29): Varfell has a non-military, VTM-free Cultural Reclamation action (Influence vs Ob2, target-territory PT−1); the "military-only" framing persisted stale in at least three sibling files as of the 2026-06-22 action audit.
+- **Crown Initiative / Council of Solmund / Charter of Liberties / Vaynard's Hall as canonical.** These are explicitly labeled "sketched proposals" / "recommended follow-up" in their own source document (Part-10 §5) and were never ratified into `faction_actions.md` or a PP entry — do not treat their sim implementation as evidence of canonicity.
+
+### OPEN QUESTIONS NEVER ANSWERED
+- **Influence and Intel's derivation basis under the proposed inversion** (F-A-2 DECIDE-1): what national/institutional substrate, if any, feeds them, since neither reduces to a settlement sum.
+- **National-event-modifier semantics** (DECIDE-2): decay curve (linear/exponential/half-life), stacking rule, cap — the mechanism that would replace all 78+ direct Mandate writes and the equivalent writes on other stats.
+- **Intel: expand (build information-asymmetry/counter-intel mechanics) or fold into Influence** — explicitly called "the one attribute whose keep-vs-cut turns on a design choice rather than merit."
+- **The CI (Church Influence, 0–100 clock) vs. Influence-stat (1–7) naming overload** — two quantities sharing one name across adjacent systems, never disambiguated.
+- **Per-stat aggregation functions** for Wealth/Military/Stability (weights + saturation constants) — only Mandate's form (K=6) has been chosen and calibrated; the others are named as "needing" a form, not given one.
+- **Mandate's population-mass-vs-super-linear-premium calibration** (F-A-16) — an explicit intent question Jordan stated but the current formula only partially satisfies.
+- **Royal Decree's failure cost** — a three-way live contradiction across sibling docs (Mandate −1 / settlement-Legitimacy write / no penalty at all), never adjudicated.
+- **GD-3's post-LPS legitimacy mapping** — the constitution-tier emergence gate (`canon/02_canon_constraints.md §B`) still speaks pre-LPS faction-level "L" thresholds; mapping it onto per-settlement L/aggregate is called out as needing Jordan ratification specifically because GD-documents are constitution-tier.
+- **Which Parliamentary vote model is canonical** — the Mandate-weighted vote (`faction_layer §5`) vs. the Persuasion-Track social contest actually implemented (`social_contest_v30 §10`) were never reconciled, and none of the 10 canonical motion types (Censure, Embargo, Outlawry, Subsidy, etc.) had a sim home as of the last read.
+- **Whether Occupation's 3-season resist/cede/recapture window is worth reinstating** as a deliberate churn-generator, versus the immediate-transfer simplification every observed implementation defaulted to.
