@@ -113,13 +113,24 @@ with no new architecture. Every later step builds on an artifact an earlier step
 right.** But the two are **not symmetric**, and a plan that treats them as one thing will half-close its
 juncture:
 
-- **`mechanical.accounting` HAS a declared consumer.** Emitting it closes the loop.
-- **`mechanical.season_change` HAS NONE.** It is one of exactly two declared-emitted types with no
-  declared consumer.
+> ⚠ **AN EARLIER DRAFT OF THIS SUBSECTION WAS WRONG ON ALL THREE OF ITS CLAIMS, and it is the
+> instruction for the one step this suite calls the shortest path out of being prose. Parsed from the
+> cooked registry rather than read:**
+>
+> - **`mechanical.season_change` HAS a consumer — a WILDCARD one** (`all subscribing systems`). It has
+>   no *named* module, which is a different and weaker fact than "none".
+> - **Five declared-emitted types have an EMPTY consumer list**, and `season_change` is **not** among
+>   them. Never two. (The "two" was a **runtime** figure from a one-season probe — a different
+>   measurement, silently borrowed.)
+> - **NO type in the registry carries a `terminal` field at all — 0 of 55.** The row does not declare
+>   it non-terminal; **it declares nothing.**
+>
+> **So the contract close is an ADDITION, not a flip, and it is owed to six rows rather than one.** An
+> implementer following the earlier text would have hunted a field that does not exist and closed one
+> type while five others carried the same defect.
 
-> **So step 1 emits both, and then either declares `mechanical.season_change` TERMINAL or gives it a
-> consumer.** The contract row currently declares it non-terminal, so **the honest close is a contract
-> edit, not a code edit** — and saying which is the difference between closing a juncture and appearing to.
+**Step 1 therefore emits both types, and the contract work beside it is: add the missing declaration to
+the rows that lack a named consumer, rather than flip a field nothing has.**
 
 ---
 

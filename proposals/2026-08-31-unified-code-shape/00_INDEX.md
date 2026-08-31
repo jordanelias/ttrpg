@@ -57,7 +57,7 @@ CALENDAR · MATTER · DELIBERATE · RESOLVE · WITNESS · CENSUS
 | **L3** | `05_WORLD_CHURN.md` · `06_EMERGENT_NARRATIVE.md` · `07_THE_PLAYER_AND_THE_PERSON.md` | one step each, elaborated: what happens with nobody acting · how a story arises with nobody authoring · how a person decides and what a player touches |
 | **L4** | `08_FUNCTION_SURFACE.md` · `09_THE_SEAM.md` · `10_GODOT_4_6.md` | every signature and the Query catalogue · how a contest plugs in · the port |
 | **L5** | `11_PARAMS.md` · `12_TESTS.md` · `13_EXECUTION.md` | every constant and its grade · every structural claim and its falsifier · the ordered build |
-| **registers** | `14_NERS.md` · `15_ADJUDICATIONS.md` · `16_PROVENANCE.md` · `TRACE_REGISTER.md` | the audit · every ruling with its falsifier · how this was made · every verified `path:line` |
+| **registers** | `14_NERS.md` · `15_ADJUDICATIONS.md` · `16_PROVENANCE.md` · `TRACE_REGISTER.md` · **`ADVERSARIAL.md`** | the audit · every ruling with its falsifier · how this was made · every verified `path:line` · **and the adversarial pass that found 16 MAJOR defects in the above, 0 fatal** |
 
 > **Read `01`, then `04`, then `13`.** `01` is what the shape believes, `04` is the thing itself, and
 > `13` is the only document whose purpose is to stop being a document. The rest is reference for the
@@ -94,7 +94,7 @@ Each is argued in `15_ADJUDICATIONS.md` with its ground and its falsifier.
   or the port; **everything else is forbidden**, including any validator whose subject is this
   repository's own process.
 - **It claims no measurement.** Every number is quoted from a cited line, or graded **ASSUMPTION** in
-  `11_PARAMS.md`. **Twelve of twenty-five parameter rows are assumption-grade, and the ledger says so.**
+  `11_PARAMS.md`. **Eleven of twenty-five parameter rows are assumption-grade, and the ledger says so.**
 - **It does not treat itself as mechanism.** If a table here and the code disagree, that is a defect in
   one of them, resolved by deciding and then **changing the code.**
 - **It does not settle the engine version by fiat** — and it re-labels the fork, because **nothing here
@@ -127,6 +127,14 @@ them, and `16` §3 says why each is not seeded.
 **The sweep instrument, run against current `main` this pass, reports 162 documents swept, 24 cited, 138
 uncited.** This suite has not read the 138 either — **and the coverage figure is itself a measurement
 that changed what it measured**, which `16` §4 states rather than hides.
+
+> ⚠ **AND THIS SUITE WAS WRONG ABOUT ITSELF IN SIX PLACES, RECORDED AT `15_ADJUDICATIONS.md` §4 RATHER
+> THAN QUIETLY FIXED.** An adversarial pass with execution found **16 MAJOR and 14 MINOR defects, none
+> fatal**. The three that changed a ruling: the flagship `0.671` "arithmetic error" is **a different
+> die, exact for its own model** — a departure this suite had to declare rather than a constant to
+> correct; **`Momentum` was re-added after the source cut it twice as a false N-line**; and *"the ten
+> LOST arcs are one loss"* is **the exact conflation a source lane forbids by name**, overstating the
+> cost of the design's central refusal roughly threefold. **All three are folded in above.**
 
 > **Until `13_EXECUTION.md` step 1 lands, the correct description of this entire suite — every document
 > in it — is that it is prose.** That is not false modesty. It is the standard, and the only reason `13`

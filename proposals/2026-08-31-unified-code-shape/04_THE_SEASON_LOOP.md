@@ -312,8 +312,9 @@ visits every deposit and every eviction.
 | written thing | CALENDAR | MATTER | DELIBERATE | RESOLVE | WITNESS | CENSUS |
 |---|---|---|---|---|---|---|
 | `Date`, `DocketItem` | **yes** | no | no | **yes** (`carry`, `convene`) | no | no |
+| `ConveningCondition` | **yes** (firing, clearing) | no | no | **yes** (`convene` attaches one) | no | no |
 | larders, `stores` | no | **yes** | no | **yes** (`transfer`, `levy`) | no | no |
-| bodies, ageing, death | no | **yes** | no | no (killing is an **act**) | no | no |
+| bodies, ageing, death | no | **yes** (ageing, illness, natural death) | no | **yes** (killing, wounding — **an act**) | no | no |
 | travel legs | no | **yes** | no | **yes** (movement) | no | no |
 | `yield` | no | **yes, only here** | no | no | no | no |
 | envelope weight | no | **yes** | no | no | no | **yes** |

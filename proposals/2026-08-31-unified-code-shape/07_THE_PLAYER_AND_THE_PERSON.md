@@ -319,7 +319,7 @@ character.**
 |---|---|---|
 | **the slate** | 4–9 candidates, cast then ranked, per season | not everything that happened; **about 3% of it** |
 | **the response set** | 3–5 responses per situation, from the resolver's **declared** option set | not a generated menu; a candidate cannot invent a response |
-| **their Beliefs** | **the one record the player AUTHORS directly** — what this character stands for | not a stat, and not a bonus: it grants **Momentum to spend**, which is a choice |
+| **their Beliefs** | **the one record the player AUTHORS directly** — what this character stands for | **not a stat and not a bonus of any kind.** It makes a costly option choosable; it never touches a pool. A per-scene grant was cut here as a false N-line — see `02` §5.5.2 |
 | **the act** | **one**, per season | not a turn's worth of actions |
 | **the view** | at most `K` claims, ranked by salience | not the world; **not a blurred world either** |
 | **inputs** | **published** — which channel carried an item, what a roll's factors were | — |

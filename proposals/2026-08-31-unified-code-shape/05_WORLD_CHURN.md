@@ -291,8 +291,9 @@ that governs every memory.
 **A band edge changes an OPTION SET, never a roll term and never an outcome** — and its crossing is an
 **Event**, witnessable by presence at the site.
 
-> **This is where the thirteen arcs that end at a scheduled sitting survive and the three that end at a
-> counter reaching a number do not.** An arc ending at a sitting survives because the design has
+> **This is where thirteen arcs that end at a scheduled sitting survive and three that end at a counter
+> do not** — *in the one eighteen-arc band where that was measured; another lane reports the threshold
+> refusal costing nothing in its own band.* (`06` §6.1.) An arc ending at a sitting survives because the design has
 > standing dates with **named conveners who can be bought, delayed or killed.** An arc ending at a
 > counter with nobody deciding **loses its ending** — and the loss belongs to the **variable**, not to
 > the threshold.
@@ -349,7 +350,7 @@ ageing, births) seen at different subjects, which is the Partition doing its job
 | a scheduled recovery tick on any social quantity | converts a consequence system into a treadmill | acts, or nothing |
 | a stored `unrest`, `stability`, `mandate` or `pressure` field | dead state that reads as mechanism | a `Query` over stances and claims |
 | an event that schedules a future event | the substrate has no cross-season transport, and a scheduled future is a threshold wearing a costume | a Record with a `ttl`, re-gated each season |
-| an event that grants or revokes an office | offices are social; the Partition forbids it outright | the event depresses `condition`; **a person** then acts on the consequence |
+| an event that grants or revokes an office **as its own act** | offices are social | the event depresses `condition`; **a person** then acts on the consequence. ⚠ **But see the declared seam below — a death DOES end a tenure, and the column alone does not explain why a storm may not** |
 | an event that writes an aggregate | Law 3 | events write primary state only |
 | a global "world state" scalar | it has no site identity, so no verb gate can read it and no one can hold it | per-Site `condition` (§3) |
 | an authored crisis timeline | the world would churn on rails | gates over state, each with a cooldown and a rate bound |

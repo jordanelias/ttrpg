@@ -33,7 +33,7 @@ authoritative.
 | 1 | the target number | the dice owner | **RULED** | **7, always.** The owner **raises** on any other value. A varying difficulty is an obstacle, not a target number |
 | 2 | the face rule | the dice owner | **RULED** | face 1 = **−1**; 2–6 = 0; 7–9 = +1; 10 = +2 |
 | 3 | mean per die | the dice owner | **derived** from the face rule | `0.40` |
-| 4 | **sigma per die** | the dice owner | **derived** from the face rule | **`0.800`** — ⚠ and the corpus quotes `0.671` in a binding table, from a die model **with no botch face**. §5 |
+| 4 | **sigma per die** | the dice owner | **derived** from the face rule | **`0.800`** — and the design line's `0.671` is **exact for a different die**, not an error. §5 |
 | 5 | the degree bands | the dice owner | **RULED** | four, on the **margin**: Overwhelming ≥ 3 · Success ≥ 1 · Partial [0,1) · Failure < 0 |
 | 6 | the obstacle floor | the leverage owner | **RULED** | pinned; an uncontested attempt routes to a **gate**, never to a zero-obstacle roll |
 | 7 | the attribute roster | the descriptor registry | **RULED — count only** | ten ruled; **nine ship and the tenth is unnamed.** §4 |
@@ -65,9 +65,9 @@ authoritative.
 | 24 | age-band boundaries | params | **ASSUMPTION** | — |
 | 25 | channel latency values | params | **ASSUMPTION** | — |
 
-**Of twenty-five rows: nine are already owned, four are ruled and owed a row, and TWELVE are
+**Of twenty-five rows: nine are already owned, five are ruled and owed a row, and ELEVEN are
 assumption-grade.** **That ratio is the honest state of the numbers in this design**, and no document
-in this suite may quote one of the twelve as though it were measured.
+in this suite may quote one of the eleven as though it were measured.
 
 ---
 
@@ -88,19 +88,33 @@ frozen canon capture tables it. **And it does not close the question**, because 
 
 ---
 
-## §5 · THE CONSTANT THAT IS WRONG EVERYWHERE IT IS QUOTED
+## §5 · TWO DICE, NOT ONE DIE WITH AN ERROR IN IT
 
-> **The anti-flat-modifier arithmetic is quoted across the corpus as `X / (0.671 · sqrt(Pool))`.
-> The executing owner has `sigma = 0.800`. The correct figure is `X / (0.800 · sqrt(Pool))`.**
+> ⚠ **AN EARLIER DRAFT OF THIS SECTION CALLED `0.671` AN ARITHMETIC ERROR. IT IS NOT ONE, AND THE FIX
+> IT PRESCRIBED WOULD HAVE CORRUPTED ITS OWN SOURCES.**
 
-**Where it came from:** a die model **with no botch face**, in which face 1 scores 0 rather than −1.
-Every statistic derived from that model is wrong — the mean, the variance and this constant.
+| | design-line die | executing die |
+|---|---|---|
+| face rule | `1–6` = 0 · `7–9` = +1 · `10` = +2 | **`1` = −1** · `2–6` = 0 · `7–9` = +1 · `10` = +2 |
+| `mu` per die | 0.50 | **0.40** (−20%) |
+| variance · `sigma` | 0.45 · **0.670820** | 0.64 · **0.800000** |
+| can a **1D** pool net below zero? | **no** | **yes**, with p = 0.1 |
 
-**What survives:** **the rule, entirely.** A flat shift is worth more to a small pool than a large one
-for **any** sigma above zero, so the refusal of flat modifiers is untouched.
+**Both constants are exact for their own die.** The design line declares its die and derives `0.671`
+from it, in the document that owns the constant; the executing owner declares a botch face and gets
+`0.800`. **Neither is a miscalculation.**
 
-**What does not:** the number, wherever it appears — **including inside a binding forbidden-shapes
-table**, which is the worst place for it, because that table is quoted rather than re-derived.
+**What follows, and it is the part that matters:**
+
+1. **`0.671` is CORRECT wherever the design-line die is in force.** Replacing it with `0.800` while
+   leaving `mu = 0.5` and the pool table beside it **breaks that document**. **`sigma` and `mu` come
+   from one die: change the die, or change nothing.**
+2. **This shape adopts the executing die** — see `15_ADJUDICATIONS.md` **R-18**, where it is recorded
+   as a **departure from the design line with its cost priced**, rather than presented as a corrected
+   constant.
+3. **Every statistic the design line derived from its own die is VOID under that ruling and must be
+   RE-DERIVED, not edited** — including any published underdog or disaster probability.
+4. **The rule against flat modifiers survives untouched**, because it holds for any `sigma > 0`.
 
 > **Found independently by two lanes that could not see each other, which is the strongest signal this
 > process produces.** It is also the cheapest class of defect to propagate and the hardest to notice:

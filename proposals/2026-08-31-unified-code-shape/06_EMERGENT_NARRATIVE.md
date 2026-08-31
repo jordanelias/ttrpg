@@ -228,14 +228,21 @@ capped separately so news cannot crowd out decisions.
 
 ## §6 · WHAT THIS SHAPE CANNOT DO, STATED BEFORE SOMEONE DISCOVERS IT
 
-**The ten LOST arcs are one loss, ten times.**
+> ⚠ **AN EARLIER DRAFT OF THIS SECTION READ *"the ten LOST arcs are one loss, ten times"*, AND THAT IS
+> THE EXACT CONFLATION A SOURCE LANE NAMES AND FORBIDS.** That lane wrote: *"the seven LOST arcs share
+> one blocker, and it is **not thresholds** … the corpus has been conflating them,"* and asked for
+> **two independent findings** instead of one. Overstating a cost is not a safe error: **priced at ten
+> arcs it looks like the largest concession in the design, and that is the argument someone will later
+> use to re-admit thresholds.** They are two findings.
 
-> **The design cannot resolve an arc whose premise is that nobody wants it resolved.**
+### §6.1 · Finding one — the threshold refusal, and what it actually costs
 
-**Every arc that ends at a scheduled sitting survives** — thirteen of them — because a sitting has a
-**named convener** who can be bought, delayed or killed. **Every arc that ends at a counter reaching a
-number with nobody deciding loses its ending** — three of them — and **the loss belongs to the variable,
-not to the threshold.**
+**In the band where it was measured — eighteen arcs — three end at a counter reaching a number with
+nobody deciding, and lose their ending. Thirteen end at a scheduled sitting and survive**, because a
+sitting has a **named convener** who can be bought, delayed or killed. **In another lane's band the
+threshold refusal costs NOTHING.**
+
+> **The loss belongs to the VARIABLE, not to the threshold.**
 
 **The threshold's real job in the old corpus was to be the world's own agency: the one actor that is not
 a person.** Law 1 refuses that, deliberately. What partially substitutes:
@@ -249,7 +256,26 @@ a person.** Law 1 refuses that, deliberately. What partially substitutes:
 **None of the three FORCES a position. They make holding one more expensive.** That is the trade, and it
 is taken with open eyes.
 
-### §6.1 The sharpest unmeasured claim in the whole design
+### §6.2 · Finding two — the LOST arcs, and they are NOT one loss
+
+**Ten arcs were scored LOST across three lanes, and they do not share a blocker.** The source lane that
+holds seven of them says so outright: *"the seven LOST arcs share one blocker, and **it is not
+thresholds**."* Those seven die on **a world-substrate quantity the design did not have (five)**, or on
+**an actor it could not instantiate (two).**
+
+| how many | what they die on | this suite's disposition |
+|---|---|---|
+| **five** | **the world-substrate hole** | **CLOSED** — a Thread seam is a `Site` and its `condition` is the quantity (`05` §3), with zero new objects |
+| **two** | **an off-board actor that cannot be instantiated** | **GATED, deliberately** — an agentive actorless row is blocked until a criterion exists (`05` §4.4) |
+| **one** | a closure-axis loss in the eighteen-arc band | §6.1 |
+| the rest | a third lane's band | not re-adjudicated here |
+
+> **So the honest price of Law 1 is NOT ten arcs.** Five are recovered by a closure this suite makes
+> three documents away; two are held behind a gate it declares; **and conflating all ten into a single
+> threshold loss would overstate the cost of the design's central refusal by roughly a factor of
+> three.**
+
+### §6.3 The sharpest unmeasured claim in the whole design
 
 **Nothing measures whether confrontations arrive at all.** The old corpus guaranteed convergence by
 **authoring** it — a trigger inventory and a season-by-season timeline. This shape guarantees only that
@@ -265,7 +291,7 @@ is taken with open eyes.
 > property of `wear`, the act budget and the date calendar — and it is settled by running campaigns, not
 > by building a checker.**
 
-### §6.2 The uncomfortable calibration result, and the rule it produced
+### §6.4 The uncomfortable calibration result, and the rule it produced
 
 **The two acts that reproduce the corpus's flagship arc are the two acts a play-space audit filed as
 DOMINANCE DEFECTS.** Fix them, and the arc stops being producible.

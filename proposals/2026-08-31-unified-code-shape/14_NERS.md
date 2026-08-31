@@ -55,6 +55,7 @@ S  SMOOTH      integrates well and PROPAGATES AS REQUIRED ACROSS SCALES
 | **Sensation** | the legal path from a need to the decision. Without it **the enforcement mechanism has no channel for its own central input** |
 | **Act** with `changes[]`/`reads[]`/`contests[]` | the conflict graph can see nothing, so conflict becomes a per-verb table |
 | **Date · DocketItem** | **a matter with a clock.** Lapse becomes uncomputable and burial becomes free |
+| **ConveningCondition** | **the threat layer entirely** — a famine coming, arrears compounding, a neighbour's density rising — and **hostage politics**, which is vacancy-by-absence expressed as a condition over presence. *(Added by the adversarial pass: it had no N-line, no owner and no write class anywhere in the suite.)* |
 | **Petition** + backing | *a town's demand* — and the crowd object it replaces |
 | **Venue** (container optional) | **every office cluster becomes politically unaddressable** |
 | **Record** | documents, forgery, and **an idea's standing being destroyable at a venue** |
@@ -68,7 +69,8 @@ S  SMOOTH      integrates well and PROPAGATES AS REQUIRED ACROSS SCALES
 ## §3 · THE FALSE N-LINES — the highest-value finding a NERS pass can produce
 
 > **An object whose claimed lost possibility ACTUALLY SURVIVES THE CUT, because something already ruled
-> in provides it.** Six fired. **Every one was proposed by a competent pass with a plausible argument.**
+> in provides it.** Six fired during the writing. **A SEVENTH FIRED AGAINST THIS SUITE ITSELF** — row 7
+> — which is the outcome this check exists to produce and the one it is least comfortable to record.
 
 | # | cut | its claim | why the possibility survives |
 |---|---|---|---|
@@ -78,6 +80,7 @@ S  SMOOTH      integrates well and PROPAGATES AS REQUIRED ACROSS SCALES
 | 4 | a chartering act creating a faction | *a schism needs a founding act* | **survives** — a faction is a Proposition plus commitments, so founding is `commit` migration |
 | 5 | an `allegiance` edge with a stored gauge | *person-to-faction feeling needs a home* | commitment **degree** plus a **stance row** already carry it |
 | 6 | `forecast_mass` | *depth needs a forecast term* | **it has no producer anywhere in the corpus.** An object with no producer **cannot have an N-line** |
+| **7** | ⚠ **`Momentum` — re-added by THIS SUITE** | *acting on principle needs a reward* | **survives the cut.** Convictions already weight the ranking; stance already gates salience. **The source cut it as a false N-line TWICE, independently, and applied the cut**; this suite re-added it without mentioning the cut existed. Its residue was **a flat pool bonus** — the one shape this suite refuses — and its **per-scene** scope **does not exist at `auto` fidelity**, breaching the suite's own fidelity invariance. **Deleted** |
 
 **The pattern is uniform, and it is the useful part:** a mechanism was named, a **store** was proposed
 for it, and **the store's job was already being done by an object the design had ruled in.**
@@ -109,12 +112,23 @@ declared standard.
 
 ---
 
-## §5 · R — and the honest verdict is that R IS NOT YET SCORABLE
+## §5 · R — a real blocker that this document OVER-SCOPED into an evasion
 
-> **R binds at seats a player can occupy, and NOBODY HAS WRITTEN DOWN WHICH SEATS THOSE ARE.**
+> **R binds at seats a player can occupy.**
 
-**That is not a gap in this audit; it is a question about the game that precedes the audit.** Until it
-is answered per seat, **an R verdict on this shape would be manufactured.**
+⚠ **AND THE CORRECTION IS AGAINST THIS DOCUMENT, ON BOTH HALVES.**
+
+**One — the scope.** *Which seats are playable* is **already answered by this suite's own laws.** The
+player is a Person; `played` is a fidelity flag; a player-only mechanism is refused outright; and under
+the every-rung rule **every seat is occupiable — that is the whole content of `07` §5.** By the five
+tests, test 5 answers it. **What genuinely remains is narrower and content-shaped: WHICH SEATS A
+CAMPAIGN OFFERS AT START.** That is a real question for a person, and it is what `15` §3 should
+escalate.
+
+**Two — and this half is worse.** The table below **banks three favourable R verdicts anyway**, in the
+document that says an R verdict would be manufactured. **That is asymmetric skepticism by name**: an
+unfavourable result withheld for want of a precondition a favourable one is not held to. **The three
+closures are therefore marked PROVISIONAL, under the same rule they were exempted from.**
 
 **What can be said:**
 
@@ -122,8 +136,8 @@ is answered per seat, **an R verdict on this shape would be manufactured.**
 |---|---|
 | **dominance, not scarcity, makes a season thin** — every rich character cites three or more live modes | **measured**, across 55 characters and six lanes |
 | **19 of 55 characters had a rich option set and an unreachable want** — and *a blocked core does not stop an arc running, it stops it TERMINATING* | **measured** |
-| the act economy's dominance defect (petition-spray) | **closed** by one act per person |
-| the floor's two defects — an empty verb set, and inaudibility in both directions | **closed** by two subtractions |
+| the act economy's dominance defect (petition-spray) | **closed — PROVISIONALLY** by one act per person |
+| the floor's two defects — an empty verb set, and inaudibility in both directions | **closed — PROVISIONALLY** by two subtractions |
 | **the shape of gain against the shape of cost, on the new forks** | **NOT RE-RUN.** Decaying gain against compounding cost is dominance, and this suite has not checked its own forks for it |
 | **whether the crown is a playable seat** | **open, and it decides whether a dominated flagship instrument is a defect or a portrait** |
 

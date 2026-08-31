@@ -64,7 +64,7 @@ carrying more weight here than it would have.
 
 | # | overturned | by | effect on the shape |
 |---|---|---|---|
-| 1 | **the anti-flat-modifier constant `0.671`** | **two lanes, independently** | corrected to `0.800` in three documents. **The rule survives; the number was wrong wherever quoted** |
+| 1 | *the constant `0.671` is an arithmetic error* | two lanes — **and both were wrong about the KIND of error** | ⚠ **RETRACTED by the adversarial pass.** It is a **different die**, exact for its own model. Replaced by a declared departure, `15` R-18. **Two lanes finding one model divergence is ONE comparison, not two derivations** |
 | 2 | **the five-band degree ladder as shipped** | two lanes, and **neither trace log had recorded the collision** | `15` R-10; a fifth band is an amendment to one owner |
 | 3 | **"greenfield" and "already executable"** — opposite headlines from one tree | one lane, verified against the decisive docstring | `15` R-2; **neither headline survives whole** |
 | 4 | **the observer-order rule is an unratified PRECONDITION**, not a caveat | one lane | `13` step 0c — **the one blocker no session can code around** |
@@ -106,7 +106,7 @@ names why it is not seeded.
 | finding | lanes | why it is not seeded |
 |---|---|---|
 | **the running campaign resolves with zero people in it** | 3 + execution | reached from the ledger, from the tests, and by running a campaign |
-| **`0.671` vs `0.800`** | 2 | one lane came from a die model, the other from a forbidden-shapes table |
+| ~~`0.671` vs `0.800`~~ | 2 | ⚠ **discounted on this suite's own pessimistic rule.** Both lanes found the same *difference between two models*, which **one** comparison establishes. It was banked as a convergence and it is not one |
 | **the world-substrate hole** | 3 arc lanes | one from a lost arc, one from a **dangling cross-reference**, one from a refusal list that fails to name it |
 | **one act per person** | 3 | one from coverage data, one from fiction, one from the establishment argument |
 | **iterate people, not factions** | 4 routes with **no citation between them** | the strongest result in the corpus |

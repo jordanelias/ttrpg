@@ -15,9 +15,18 @@
 | **Office** | `post`, `remit`, `conferral`, `revocation`, `establishment[]`, `dates[]`, `upkeep` | **who holds it** — that is a `hold` Tenure, owned by the holder |
 | **Site** | `condition`, `drawers[]`, `kind` | anything social |
 | **the log** | itself, append-only | nothing else; it is written by RESOLVE and MATTER and read by everyone |
+| **params** | **every exported constant** — `COND_SCALE`, `wear` per site kind, `OB_MIN`, the band coefficients, `L`, `K`'s terms. Owned by the typed artifact and read by code; **never in prose and never in two files** (`11_PARAMS.md`) | anything that varies per instance |
+| **the holder of a date** | **its `ConveningCondition`s** — a Rung or an Office owns the conditions attached to the dates it holds | — |
 | **Nobody** | **every aggregate**: faction, leaders, presence, density, footprint, norm, scale, reputation, needs, openings, entrenchment, coarse condition, sovereignty | — these are Queries, recomputed, **stored nowhere** |
 
-**Four owners, one log, and Nobody. Every value in the game is in exactly one row.**
+**Six owners, one log, and Nobody. Every value in the game is in exactly one row.**
+
+> ⚠ **The `params` and `ConveningCondition` rows were ADDED by the adversarial pass, and their absence
+> was a real hole rather than an omission of detail.** Twenty-five exported constants had no owner in a
+> table whose own test is *name any value and this says who owns it* — including `wear`, which `05` §2
+> calls the quantity the whole political layer exists to argue about. And `ConveningCondition` is a
+> six-field object with **two mechanisms depending on it** — the threat layer, and hostage politics —
+> that had no owner, no write class and no N-line anywhere in the suite.
 
 ### §1.1 The Faction row is deleted, and the deletion is an amendment because the row existed
 
@@ -51,6 +60,7 @@ directed record otherwise has two homes and **can disagree with itself.**
 | 4 | **a per-issue stance store that already exists in running code** | **two owners today** — a live NPC record carries a stored per-issue opinion with no witness path, and `Person.stance` is the design's home for the same thing. **This is the read/write asymmetry hazard by construction**: the carrier must **absorb** it, not sit beside it |
 | 5 | **`season_factor`'s distribution** | no owner, and it **blocks `yield`** |
 | 6 | **the cohort's construal spread** | the rule is stated (a distribution, never a value); **the representation is not** |
+| ~~7~~ | ~~`ConveningCondition`~~ | **CLOSED by this pass** — owned by its `holder`, the Rung or Office whose date it schedules. It was the seventh gap, found by an adversarial attack on this very table |
 
 ---
 

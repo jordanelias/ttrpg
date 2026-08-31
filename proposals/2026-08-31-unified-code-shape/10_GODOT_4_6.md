@@ -24,9 +24,12 @@ fallback.
 | 5 | **any 4.6-EXCLUSIVE feature** | — | **none is named anywhere in this repository** | — | — |
 
 > ⊕ **THE FORK IS MISLABELLED, AND RE-LABELLING IT IS THE ONE USEFUL THING THIS SECTION DOES**
-> [LANE E A5]. **Nothing in this shape needs 4.6. Two things need ≥ 4.4 and ≥ 4.5.** So the decision in
-> front of anyone is **4.3 versus ≥ 4.5**, and "4.6" survives only as prose — **its one
-> authoritative-looking citation points at a file that does not exist in the working tree.**
+> [LANE E A5; **the floor corrected by the adversarial pass**]. **Nothing in this shape needs 4.6.**
+> One thing wants **≥ 4.4** (typed collections) and one wants **≥ 4.5** (`@abstract`) — **and the
+> second has a fallback that is needed anyway**, since GDScript has no exceptions. So **the honest
+> floor is ≥ 4.4**, and the decision in front of anyone is **4.3 versus ≥ 4.4**, with ≥ 4.5 buying one
+> convenience. "4.6" survives only as prose — **its one authoritative-looking citation points at a
+> file that does not exist in the working tree.**
 >
 > **The evidence is asymmetric and whoever rules should see it that way.** The 4.3 side has a declared
 > project file, a CI pin, and **two executed, reproducible headless runs**. The other side is prose. **A

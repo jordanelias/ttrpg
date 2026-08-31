@@ -151,6 +151,17 @@ and is moved by social outcomes. **It has no evidence input at all.**
 "as believed"; interior-side floats, not "belief-side". **And WITNESS does not touch a Belief** — if
 evidence could move one, investigation becomes moral re-engineering.
 
+⚠ **A MECHANICAL CONSEQUENCE THIS RULING ORIGINALLY CARRIED IS WITHDRAWN.** An earlier form gave a
+Belief a **Momentum** grant for aligned action. **The source cut Momentum as a FALSE N-LINE, twice,
+found independently by two critics, and applied the cut** — on three grounds this shape agrees with:
+its N-line was false (a Conviction is already a stance row and keeps full resolver consequence without
+it); its residue was **a flat pool bonus**, the one shape this suite refuses outright; and it was
+scoped **per scene**, which **does not exist at `auto` fidelity** — making it a pool term available to
+a played person and unavailable to the identical person resolved headless, **a direct breach of this
+suite's own P-A/P-C fidelity invariance** (`07` §2). **Re-adding it was a smuggled departure from a
+recorded, applied cut. It is deleted.** A Belief's consequence is that it makes a costly option
+choosable; Convictions weight the ranking. Nothing is lost.
+
 **Falsifier.** A mechanism in which evidence alone revises a Belief. **CONFIDENCE: HIGH** — Jordan-ruled.
 
 ### R-12 · A Proposition of mood `OUGHT` is an uttered Belief
@@ -230,7 +241,7 @@ shape that can eat that from inside.**
 | 4 | **the five-band degree ladder as shipped** | the live owner implements four (R-10) |
 | 5 | **the collision register is complete** | **five live-code meanings were missed**, including a tactical stance in running code |
 | 6 | *"`mint`/`efface` must be kept for collision-avoidance"* | the ground is vacuous; the one cited occurrence is an English comment (R-7) |
-| 7 | **the anti-flat-modifier constant `0.671`** | the executing owner has **`0.800`** — a die model without a botch face. **Found by two independent lanes** |
+| 7 | ~~*the anti-flat-modifier constant `0.671` is an arithmetic error*~~ — **THIS SUITE'S OWN CLAIM, RETRACTED** | it is a **different die**, not a miscalculation, and `0.671` is exact for it. See **R-18**, which replaces the claim with a declared departure |
 | 8 | *"the fractional-pool rounding defect is live"* | **fixed on 2026-08-21**; two logs are stale on it |
 | 9 | *"a single project setting caused most of the compile errors"* | **the executed baseline four lines below the cited passage says the opposite** — the setting cleared zero broken scripts |
 | 10 | *"belief" as the word for what a person holds true* | **Belief is about morals** (R-11) |
@@ -263,10 +274,12 @@ document · answered by precedent · answered by what makes sense for the archit
 
 ### The four that survive all five
 
-> **1 · WHICH SEATS ARE PLAYABLE.** **R cannot be scored until this is answered per seat**, and it
-> decides whether a dominated flagship instrument is a **defect** or a **portrait**. It is a question
-> about the game, not the engine, and no document can answer it. **This is the highest-value
-> escalation in the suite** because it unblocks an entire axis of the audit.
+> **1 · WHICH SEATS A CAMPAIGN OFFERS AT START.** ⚠ **Re-scoped by the adversarial pass, which was
+> right.** *Which seats are PLAYABLE* is already answered by this suite's own laws — the player is a
+> Person, `played` is a fidelity flag, and under the every-rung rule **every seat is occupiable.** What
+> needs a person is narrower: **which seats a campaign OFFERS**, which decides whether a dominated
+> flagship instrument is a **defect** or a **portrait**. It is a question about the game, not the
+> engine.
 
 > **2 · STATE OWNERSHIP AND THE AUTOLOAD TABLE.** Already reserved in the governing port spec and
 > **now forced**: the purity fix and the shipped singleton pattern are direct opposites.
@@ -283,5 +296,54 @@ document · answered by precedent · answered by what makes sense for the archit
 > authoritative citation **points at a file that does not exist**; the 4.3 side has a declared project
 > file, a CI pin and **two executed headless runs**; and **under a later ruling the compile baseline is
 > void until re-measured.** The cheapest thing that prices it is **one headless run.**
+
+### R-18 · This shape adopts the EXECUTING die, and that is a DEPARTURE from the design line
+
+**Ruling.** The die is `1` = **−1** · `2–6` = 0 · `7–9` = +1 · `10` = +2; `mu = 0.40`, `sigma = 0.800`.
+
+**Ground.** It is the die the engine rolls, and `CLAUDE.md` §0.05 makes the code the formula.
+
+⚠ **AND IT IS A DEPARTURE, NOT A CORRECTION — which an earlier draft of this suite got wrong.** The
+design line **declares a different die** (no botch face, `mu = 0.5`, `sigma ≈ 0.671`) and derives its
+constants correctly from it. **Both models are internally exact.** Presenting the divergence as *"an
+arithmetic error, wrong wherever quoted"* was itself the smuggling this suite's own §0 forbids:
+*where the ideal shape departs, the departure is stated as a departure with its cost priced.*
+
+**The cost, priced:**
+
+| | design-line die | executing die |
+|---|---|---|
+| `mu` per die | 0.50 | **0.40** (−20%) |
+| `sigma` per die | 0.671 | **0.800** (+19%) |
+| **can a 1D pool net BELOW ZERO?** | **no** | **yes**, p = 0.1 |
+
+**The third row is mechanical, not a calibration difference.** The Failure band (`margin < 0`) is
+reachable at small pools under one die and barely under the other, and `OB_MIN` means a differently
+shaped thing in each.
+
+> **Every statistic the design line derived from its own die is VOID under this ruling and must be
+> RE-DERIVED, not edited** — including any published underdog or disaster probability. **A document
+> that keeps the design-line die keeps `0.671`, and is right to.**
+
+**Falsifier.** Wrong if the engine's die changes, or if a ruling adopts the design line's die instead —
+in which case every statistic moves back together, not one constant at a time.
+**CONFIDENCE: HIGH on the die; the retraction of the earlier framing is unconditional.**
+
+---
+
+## §4 · WHAT THIS SUITE GOT WRONG ABOUT ITSELF
+
+**An adversarial pass with execution found 16 MAJOR and 14 MINOR defects and 0 FATAL. The ones that
+changed a ruling are folded in above; these are recorded because a suite that lists only its findings
+about others is not an honest register.**
+
+| # | what this suite claimed | what is true |
+|---|---|---|
+| 1 | `0.671` is an arithmetic error, wrong wherever quoted | **a different die**, exact for its own model — R-18 |
+| 2 | a Belief grants Momentum | **Momentum was cut as a false N-line, twice, and the cut was applied** — R-11 |
+| 3 | the ten LOST arcs are one loss, ten times | **the conflation a source lane names and forbids by name** — `06` §6 |
+| 4 | `mechanical.season_change` has no declared consumer; two such types; the row declares it non-terminal | it has a **wildcard** consumer; **five** types have an empty list; **no type declares `terminal` at all** |
+| 5 | the query catalogue is 25 rows | **26** — caught and fixed by counting, before this pass |
+| 6 | `class_name Container` shadows silently where `Node` fails loudly | **both fail loudly.** The collision is real; the *mechanism* claimed for it was not |
 
 **Twenty-plus candidates reduced to four.**

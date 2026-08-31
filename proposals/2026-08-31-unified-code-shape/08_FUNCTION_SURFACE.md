@@ -221,10 +221,12 @@ degree_from_net(net, ob, ext?)    -> Degree            # FOUR bands, on the MARG
 > existing sites diverge, their reconciliation is suspended, and one of the three is stated as canon.
 > **Adding a fourth convention while three disagree is how a fifth arrives.**
 
-> ⊕ **AND THE CORRECTION THAT PROPAGATES FURTHEST.** The anti-flat-modifier constant is quoted across
-> the corpus as `0.671`, from a die model with **no botch face**. **The executing owner has `0.800`.**
-> The rule is unchanged; **every quotation of the number is wrong**, including in a binding table.
-> [Found independently by two lanes that could not see each other.]
+> ⊕ **AND THE TWO DICE, WHICH ARE NOT ONE DIE WITH AN ERROR IN IT.** The design line declares a die
+> with **no botch face** (`mu = 0.5`, `sigma ≈ 0.671`); the executing owner's die scores face 1 as
+> **−1** (`mu = 0.40`, `sigma = 0.800`). **Both constants are exact for their own die**, so `0.671` is
+> not a mistake to be edited out — it is a different model. **This shape adopts the executing die, and
+> that is a declared departure** (`15_ADJUDICATIONS.md` R-18), which changes `mu`, `sigma`, **and
+> whether a 1D pool can net below zero.**
 
 ---
 

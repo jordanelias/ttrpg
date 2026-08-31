@@ -261,13 +261,20 @@ A refusal without a replacement is an amputation. Each row names what does the j
 | a per-entity branch anywhere in the resolver | scripting drift: the exception becomes the mechanism | the resolver branches on **mode**, never on kind and never on a name |
 | an authored per-person opportunity or quest object | a churning world turns back into content | `opening_set` recomputed from need + capability + the terms they hold a claim of |
 
-> ⊕ **ONE CORRECTION TO THIS TABLE, FOUND BY TWO LANES THAT COULD NOT SEE EACH OTHER** [LANE A C7,
-> LANE B D2]. The anti-flat-modifier row is quoted across the corpus with the constant **0.671**,
-> derived from a die model with **no botch face**. The executing owner has `sigma = 0.800` per die,
-> because face 1 scores **−1**. **The rule is unchanged — the direction holds for any sigma > 0 — and
-> the number is wrong everywhere it is quoted.** Two independent lanes finding the same arithmetic
-> error in a binding table is the strongest signal this process produces, and it is exactly the class
-> of defect that propagates silently because nobody re-derives a constant in a table.
+> ⊕ **ONE NOTE ON THIS ROW'S CONSTANT — AND AN EARLIER DRAFT OF THIS NOTE WAS WRONG ABOUT WHAT KIND OF
+> ERROR IT IS.** The corpus prices flat shifts at `X / (0.671 · sqrt(Pool))`; the executing owner has
+> `sigma = 0.800`. **This is a MODEL DIVERGENCE, not an arithmetic error.** The design line **declares
+> its own die** — no botch face, `mu = 0.5`, `sigma ≈ 0.671` — and derives that constant correctly from
+> it. The executing die has a botch face (face 1 scores **−1**), `mu = 0.40`, `sigma = 0.800`. **Both
+> constants are exact for their own die.**
+>
+> **So `0.671` is not "wrong wherever it is quoted", and editing it to `0.800` while leaving `mu = 0.5`
+> would break the document it is edited in.** `sigma` and `mu` come from one die: **you change the die
+> or you change nothing.** This shape adopts the **executing** die, and `15_ADJUDICATIONS.md` R-18
+> declares that as a departure and prices it.
+>
+> **The rule is untouched either way** — a flat shift is worth more to a small pool than a large one
+> for any `sigma > 0`.
 
 ---
 

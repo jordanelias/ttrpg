@@ -4,11 +4,11 @@
 ## Under `CLAUDE.md` §0.05 this document is **REFERENCE, never mechanism.** No behaviour is correct
 ## because a row here says so. Under §0.2, **almost none of this runs**, and §5 of this document says
 ## exactly which parts do.
-## Layer: **L2 — the granular type layer.** Read `00_INDEX.md` (L0) and `01_LAWS.md` (L1) first.
+## Layer: **L2 — the granular type layer.** Read `00_INDEX.md` (L0) and `01_THROUGHLINE.md` (L1) first.
 
 **Citation key.** A bare repo path resolves at the working tree (`CLAUDE.md` §2) and was opened during
 this pass. `[engine]` marks a claim about published Godot behaviour, not about this repository.
-`[LANE x]` marks a finding contributed by one of the six read-only adjudication lanes of `15_PROVENANCE.md`.
+`[LANE x]` marks a finding contributed by one of the six read-only adjudication lanes of `16_PROVENANCE.md`.
 
 ---
 
@@ -161,10 +161,14 @@ Every one of those is a `Query` (§5.1). This is the row the whole ownership tab
 Rung.kind in { person, hearth, community, settlement, territory, province, duchy, realm }
 ```
 
-**`Rung` is the name.** `Node` and `Container` are both refused, and **the second refusal corrects an
-earlier choice that landed on a worse collision**: [engine] `Container` is a Godot built-in — the
-`Control`-derived base of `VBoxContainer` — so `class_name Container` collides *and shadows a UI type
-silently*, where `Node` would have failed loudly at once.
+**`Rung` is the name.** `Node` and `Container` are both refused: [engine] **both are Godot built-ins**,
+and `class_name Container` is a registration collision exactly as `class_name Node` is.
+
+⚠ **An earlier draft claimed `Container` was the *worse* collision because it would "silently shadow" a
+UI type where `Node` fails loudly. That mechanism is wrong** — the engine refuses a `class_name` that
+collides with a built-in, so **both fail loudly, in the same way.** The refusal stands; the reason
+given for preferring one refusal over the other did not, and a wrong mechanism attached to a right
+conclusion is the kind of thing that survives review by being agreeable.
 
 > ⊕ **AMENDMENT — the ladder carries BOTH `province` AND `duchy`, and `hearth` is the code-side name
 > for Jordan's `family`.** [LANE A, LANE C, independently]
@@ -236,13 +240,20 @@ member(s) actually performing it`. **Neither the holder nor anyone else rolls di
 > A flat shift of size `X` on a pool roll is worth `X / (sigma_per_die · sqrt(Pool))`, which is worth
 > **more to a small pool than a large one** — backwards from every intent anyone has when adding one.
 >
-> ⊕ **CORRECTION, found independently by two lanes that could not see each other** [LANE A C7, LANE B
-> D2]. The constant quoted across the design corpus is `0.671`, derived from a die model with **no
-> botch face**. The executing owner is `engine/autoload/dice_engine.py:175`: `_SIGMA_PER_DIE = 0.800`,
-> because face 1 scores **−1**, not 0. Under `CLAUDE.md` §0.05 the code is the formula.
-> **The correct figure is `X / (0.800 · sqrt(Pool))`.** The *rule* survives unchanged — the direction
-> holds for any sigma > 0 — but the number is wrong wherever it is quoted, including in the binding
-> forbidden-shapes table, and it must be corrected at adoption rather than propagated again.
+> ⊕ **THE CONSTANT, AND WHAT KIND OF DIVERGENCE IT IS — an earlier draft of this paragraph got this
+> wrong and called it an arithmetic error.** The design corpus prices flat shifts against
+> `sigma ≈ 0.671`; the executing owner has `_SIGMA_PER_DIE = 0.800`. **Neither is a miscalculation.**
+> The design line **declares its own die** — `1–6` score nothing, `mu = 0.5`, variance `0.45` — and
+> `0.671` is exact for it. The executing die scores face 1 as **−1**, giving `mu = 0.40`, variance
+> `0.64`, `sigma = 0.800`, exact for that one.
+>
+> **Consequences this shape takes rather than glosses:**
+> **(1)** `0.671` is **correct** in every document using the design-line die, and substituting `0.800`
+> there while leaving `mu = 0.5` makes that document internally inconsistent. **`sigma` and `mu` come
+> from one die.**
+> **(2)** This shape adopts the **executing** die, **which is a departure from the design line** —
+> declared and priced at `15_ADJUDICATIONS.md` R-18, not smuggled in as a corrected constant.
+> **(3)** The *rule* is untouched: a flat shift favours the small pool for any `sigma > 0`.
 
 #### §2.3.1 `establishment` is the office's throughput, and it is people
 
@@ -403,7 +414,7 @@ rungs they sit.
 > change flows through the event channel"* is **false of the executing tree**, and any plan written as
 > though it were true is planning against a repository that does not exist.
 >
-> **This is not a base to refactor and it is not a thing to delete on a Tuesday.** `09_PYTHON_ORACLE.md`
+> **This is not a base to refactor and it is not a thing to delete on a Tuesday.** `13_EXECUTION.md`
 > §4 sequences it as **build-beside, flag-gate, golden-control, cut over** — the repository's own
 > established path — because adopting the ownership table day-one invalidates the entire executing game
 > at once, unattributably, which is precisely what `CLAUDE.md` §0.1 point 4 forbids.
@@ -562,9 +573,27 @@ StateChange := (subject, mode, driver, field?, delta?, spec?)
 > not one change with a disputable subject but **several, each writing a different field**, each
 > answered separately. **The mixed class dissolves because there was never one change to classify.**
 >
+> ⚠ **THE ONE UNCOMFORTABLE ROW, DECLARED RATHER THAN LEFT TO BITE.** A death **ends every tenure the
+> deceased held** — an Event writing `until` — while a `hold` Tenure **is** the office relation, and
+> *an event revoking an office* is exactly what the Partition is supposed to forbid. **Both cannot be
+> true of one column.**
+>
+> **RULED: `(Tenure, until)` is `social: false`.** Otherwise death cannot end a tenure and the entire
+> succession mechanism has no producer.
+>
+> **And what then stops a storm vacating a praefecture is NOT the column — it is the event-row
+> grammar:** an actorless row's effects may write `until` **only on a `(Person, exists)` change the
+> same row also caused.** A storm does not kill the praefect, so it cannot touch his tenure; a plague
+> that does kill him ends it, through the death, as news travels.
+>
+> **This is a RULE, not a column, and it is the Partition's one declared seam.** Naming it is the
+> point: an instance-keyed exemption ("death may, storms may not") would be barred by this section's
+> own falsifier, so the seam is keyed on **causation within the row** instead.
+>
 > **Falsifier.** Wrong if any state change's driver depends on the *instance* rather than on the
 > `(record-kind, field)` pair — or if any single field genuinely needs an Event to write a
-> `social: true` row.
+> `social: true` row. **The `(Tenure, until)` seam is the declared exception and is bounded by the
+> causation rule above; a second such seam means the column is the wrong mechanism.**
 
 **`read` and `exclude` are NOT modes.** They live on the Act: `reads[]` declares what the act consulted
 (so the conflict graph can see it) and `contests[]` declares what it disputes (so the contest router
@@ -720,7 +749,7 @@ frozen_world)` — **which is not a decision function and may therefore take a W
 carries no references, and answers no query.
 
 **Two scalars, not four:** commitment and exposure read the *view* and are computed inside `choose` from
-what the person already holds. **Their formulas are in `05_FUNCTION_SURFACE.md` §4** and they are the
+what the person already holds. **Their formulas are in `07_THE_PLAYER_AND_THE_PERSON.md` §3.1** and they are the
 half of the motive engine that was measured absent — *for a magnate the other two return zero, so 100%
 of a duke's motivation was uncomputed.*
 
@@ -775,16 +804,41 @@ what they will notice.
 #### §5.5.2 `Belief` — a moral commitment, and the one record the PLAYER authors
 
 ```
-Belief := (id, holder, statement, position, underlying_convictions[], revision_pressure, history[])
+Belief := (id, holder, statement, position, underlying_convictions[], history[])
           position in { strong, wavering, revised }
+
+revision_pressure(belief) -- DERIVED AT READ over the holder's recent challenging outcomes.
+                             NOT a stored field. NOT a clock-driven quantity.
 ```
+
+> ⚠ **`revision_pressure` IS DERIVED, AND AN EARLIER DRAFT STORED IT — which was an over-distillation
+> caught by attacking this suite's own cut list.** The `Gauge` type was cut on the ground that *the
+> decay law survives narrowly, in claim confidence and recency*, and `05` §5 then closes the door:
+> **exactly three quantities are clock-driven, and no fourth may be added.**
+>
+> **A stored `revision_pressure` breaks both.** Nothing removes it but the holder's own revision act,
+> so it is **a monotone ratchet that accumulates on every social defeat for a whole campaign** and
+> discharges an arbitrarily large total at once — **precisely the shape `Gauge` existed to bound.** The
+> possibility `Gauge` carried, *a quantity that accumulates and relaxes without an act*, **does not
+> survive its cut** if an object in the shape needs it.
+>
+> **So it is recomputed at read** — which needs no store, no fourth clock and no exception, and is what
+> Law 3 says if anyone asks it. *(The running code ships the ratchet today, incrementing with no
+> decrement anywhere in the module. Adopting it unexamined is how the suite would have inherited it.)*
 
 **It is the one record in this shape a player writes directly**, and that is deliberate: **a player
 authors what their character stands for, and the engine authors everything else.**
 
-- **It is not a stat and grants no bonus.** It grants **Momentum** for aligned action — spendable,
-  capped, per-scene — which is **a choice**, where a bonus is arithmetic. **Acting on principle gives
-  you something to spend, not a better chance at things.**
+- **It is not a stat and grants NO BONUS OF ANY KIND — including a spendable one.**
+  ⚠ **An earlier draft gave it a per-scene Momentum grant, and that is deleted.** The source **cut
+  Momentum as a FALSE N-LINE, twice, found independently by two critics**, and applied the cut, on
+  three grounds this shape agrees with: its N-line was false — **a Conviction is already a stance row
+  and keeps full resolver consequence without it**; its residue was **a flat pool bonus**, the one
+  shape this suite refuses outright; and it was scoped **per scene**, which **does not exist at `auto`
+  fidelity**, making it a term available to a played person and not to the identical person resolved
+  headless — **a direct breach of this suite's own fidelity invariance** (`07` §2).
+  **What a Belief does instead is make a costly option choosable at all**, and Convictions weight the
+  ranking. The possibility survives the cut, which is what makes the cut correct.
 - **It is CHALLENGED, never refuted.** A social success adds **revision pressure**; revision is **its
   own act, taken by the holder.** *Nobody argues you out of your morals in one exchange, and a design
   where they can is one where morals are hit points.*
@@ -810,7 +864,7 @@ separately from all three, what you hold true.*
 | **CALENDAR** | nothing |
 | **MATTER** | nothing — **morals are not metabolism** |
 | **DELIBERATE** | Convictions weight the option ranking; **a Belief is what makes a costly option choosable at all** |
-| **RESOLVE** | Momentum gained for aligned action and spent; a challenging outcome adds **revision pressure**; revision is an act |
+| **RESOLVE** | a challenging outcome adds **revision pressure**; revision is an act. **No Momentum, and no pool term of any kind** |
 | **WITNESS** | **nothing.** Witnessing deposits **claims** |
 | **CENSUS** | nothing |
 
@@ -1149,7 +1203,7 @@ Stated so no later document can cite this one as though these were closed.
 4. **The cohort's construal spread** — where it lives, what produces it, what an individuating member
    draws from. §2.1.1 states the *rule*; the distribution's representation is unspecified.
 5. **`World`'s record.** Every refusal in this shape is written against it. **It is the first thing the
-   typed port declares**, and `08_GODOT_4_6.md` §2 declares it first for exactly that reason.
+   typed port declares**, and `10_GODOT_4_6.md` §2 declares it first for exactly that reason.
 6. **The agentive/non-agentive split on actorless rows.** An off-board polity's pressure is an Event
    source. **No criterion currently stops any actor being reclassified as weather**, and until one
    exists, an agentive actorless row is blocked. This is a real gate, not a caveat.
