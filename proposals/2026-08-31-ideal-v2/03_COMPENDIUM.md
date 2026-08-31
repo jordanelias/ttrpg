@@ -65,15 +65,15 @@ cataloguing coinage is self-refuting**, so this document introduces no term of i
 **One row per object. This is the spine.** *Nameable in `Claim.subject`* is against the **open** referent
 space (`SUP:229-234`); *nameable as a stance referent* is against the **closed** set, which
 `ARCH §2.7` amends from four kinds to three: `Person | Proposition | Place`, where
-`Place = Container | Site`.
+`Place = Rung | Site`.
 
 | object | id | identity tuple | stable / season | owner | minted by | effaced by | claim subject | stance referent |
 |---|---|---|---|---|---|---|---|---|
 | **Person** | `id` NEW | `id` | **yes** — `id` is a substream hash, not a path | itself | individuation, at CENSUS | death at MATTER; `efface` at RESOLVE | **yes** (`SUP:238`) | **yes** |
 | **Cohort** | `id` NEW | `id` | yes | itself | envelope weight ≥ 1 | weight → 0 | yes | yes |
-| **Container** | `id` NEW | `id` | yes | itself | `mint` | `efface` | **yes**, NEW | **yes**, as `Place` NEW |
+| **Rung** | `id` NEW | `id` | yes | itself | `mint` | `efface` | **yes**, NEW | **yes**, as `Place` NEW |
 | **Office** | `id` NEW | `id` | yes | itself | `mint` (establishment) | `efface` | **yes**, NEW | **no** — an office is not a Person, Proposition or Place; you hold an attitude to its holder or its proposition |
-| **Site** | `id` NEW | `id` | yes | its Container | `mint` (building) | `efface` (razing) | **yes**, NEW | **yes**, as `Place` NEW |
+| **Site** | `id` NEW | `id` | yes | its Rung | `mint` (building) | `efface` (razing) | **yes**, NEW | **yes**, as `Place` NEW |
 | **Tenure** | `id` NEW | `id`; secondarily `(subject, object, kind, since)` | yes | **its SUBJECT** (`SUP:337`) | `confer`, `commit`, `admit`, a naming act, co-presence, `form_knot`, kinship | `revoke`, degree→0, re-naming, decay, rupture, discharge — **each sets `until`, none deletes** | **yes**, and this is the thesis-critical one | no |
 | **Act** | `id` NEW | `id` | one tick | its actor | `choose` | — | ⛔ unstated | no |
 | **Touch** | — | position in `Act.touches[]` | one tick | its Act | — | — | no | no |
@@ -82,22 +82,22 @@ space (`SUP:229-234`); *nameable as a stance referent* is against the **closed**
 | **Proposition** | `id` NEW | `id`; structural equality over `(mood, subject, predicate, value, when, scope)` is the **fallback** | yes | the Person who uttered it | **uttered inside an ordinary act** — no constructor | never; it persists as long as anything names it | yes | **yes** |
 | **Case** | `id` NEW | `id` | one sitting | its holder | pleading at a venue | the sitting closing | yes | no |
 | **Ground** | `id` NEW | `id` | one sitting, **unless struck** | its Case | pleading | **`strike` — dead at every venue for everyone** | yes | no |
-| **Venue** | — | `(container, prize, standing_date)` | yes | its Container or Office | authored | — | ⛔ | no |
-| **Date** | `id` NEW | `id` | yes | Container or Office | charter arithmetic; a convening condition; `convene` | passing; the holder effaced | yes | no |
+| **Venue** | — | `(rung, prize, standing_date)` | yes | its Rung or Office | authored | — | ⛔ | no |
+| **Date** | `id` NEW | `id` | yes | Rung or Office | charter arithmetic; a convening condition; `convene` | passing; the holder effaced | yes | no |
 | **DocketItem** | `id` NEW | `id` | one date | its Date | **`carry`**, NEW | the date passing; the matter decided | yes | no |
 | **Petition** | `id` NEW | `id` | across seasons | its petitioner | produced by need exceeding own reach | lapse; supersession; **⚠ at a rootless vacant office, never — S19** | yes | no |
 | **Dispensation** | `id` NEW | `id` | permanent until countermanded | its issuer | `issue` | a countermanding dispensation | yes | no |
-| **Record** | `id` NEW | `id` | yes | its Container, as matter | authored; written by an act | **`efface`** | yes | no |
-| **ConveningCondition** | `id` NEW | `id` | yes | Container or Office | `convene`'s first operation | struck by another act | yes | no |
+| **Record** | `id` NEW | `id` | yes | its Rung, as matter | authored; written by an act | **`efface`** | yes | no |
+| **ConveningCondition** | `id` NEW | `id` | yes | Rung or Office | `convene`'s first operation | struck by another act | yes | no |
 | **Sensation** | **none, deliberately** | — | one `choose` call | **nobody** | `sense`, at DELIBERATE | discarded | **NO, BY DESIGN** | no |
 | **View** | none | value, per person per question | one `choose` call | nobody | `assemble` | discarded | no | no |
 | **World** | — | the whole state | — | — | — | — | no | no |
-| **Envelope** | — | `(container)` — one per Container | yes | its Container, as matter | authored at world-gen | its Container effaced | ⛔ | no |
-| **Stores** | — | `(container, MatterKind)` | yes | its Container, as matter | `yield`, `transfer` | consumption | yes | no |
+| **Envelope** | — | `(rung)` — one per Rung | yes | its Rung, as matter | authored at world-gen | its Rung effaced | ⛔ | no |
+| **Stores** | — | `(rung, MatterKind)` | yes | its Rung, as matter | `yield`, `transfer` | consumption | yes | no |
 | **MatterKind** | `name` | `name` | permanent | world authoring | authored | never | yes | no |
 | **Practice** | `name` | `(person, name)` | yes | its Person | `02:153` | — | yes | no |
 | **Candidate** | none | value | one `choose` call | nobody | `opening_set` | discarded | no | no |
-| **Contest** | none | `(container, prize, tick)` | one tick | — | the conflict rule; `SUP:327`, `SUP:1141` | — | yes | no |
+| **Contest** | none | `(rung, prize, tick)` | one tick | — | the conflict rule; `SUP:327`, `SUP:1141` | — | yes | no |
 
 ### §1.1 Five identity facts worth stating on their own
 
@@ -127,11 +127,11 @@ Every record, every field. **Closed sets are enumerated in full.** `⛔` = state
 
 ```
 Person    := (id, address, marks, capability, stance, ledger, ties)
-Cohort    := (id, container, weight, marks, capability, stance, ledger, ties)
-Container := (id, kind, stake[], judging_set_rule, dates[], matter, envelope)
-Office    := (id, post, container?, remit, conferral, revocation, establishment,
+Cohort    := (id, rung, weight, marks, capability, stance, ledger, ties)
+Rung := (id, kind, stake[], judging_set_rule, dates[], matter, envelope)
+Office    := (id, post, rung?, remit, conferral, revocation, establishment,
               dates[], upkeep)
-Site      := (id, container, kind, condition, drawers[])
+Site      := (id, rung, kind, condition, drawers[])
 ```
 
 | field | type | range | notes |
@@ -143,14 +143,14 @@ Site      := (id, container, kind, condition, drawers[])
 | `Person.ledger` | `[Claim]` | budget `L`, `ABS:641` gives 200 as ASSUMPTION | evicted at WITNESS |
 | `Person.ties` | derived from `tie`/`knot` Tenures | — | same view/edge ruling as `address` |
 | `Cohort.weight` | integer | ≥ 1 | **at weight 1 the record IS a person** — no conversion operation (`02:553-555`) |
-| `Container.kind` | the ladder, §2.7 | 7 rungs, extensible | `SUP:96` |
-| `Container.stake[]` | contested material stakes | — | `SUP:322-325` |
-| `Container.judging_set_rule` | a rule, not a set | — | the set is `judging_set(c)`, §5 |
-| `Container.matter` | ⚠ **must be STRUCTURED, not one untyped field** | — | it is asked to hold five distinct kinds — Sites, `stores`, the envelope, Records, the transmission pointer — and four of the five are addressed **by name** from elsewhere. A field with no declared structure cannot be indexed |
-| `Container.envelope` | `Envelope` | — | matter; **does not act** |
-| `Office.container?` | `Container \| null` | — | **null is the office-cluster case** and S19's home |
-| `Office.remit` | `(acts[], scope_container, binds)` | `acts[]` from the closed five | `SUP:417-424` |
-| `Office.conferral` | names a **Container**, a **parent Office**, **or the office's own judging set** | — | AMENDED, `ARCH §7` F3; the third limb is what closes S19 |
+| `Rung.kind` | the ladder, §2.7 | 7 rungs, extensible | `SUP:96` |
+| `Rung.stake[]` | contested material stakes | — | `SUP:322-325` |
+| `Rung.judging_set_rule` | a rule, not a set | — | the set is `judging_set(c)`, §5 |
+| `Rung.matter` | ⚠ **must be STRUCTURED, not one untyped field** | — | it is asked to hold five distinct kinds — Sites, `stores`, the envelope, Records, the transmission pointer — and four of the five are addressed **by name** from elsewhere. A field with no declared structure cannot be indexed |
+| `Rung.envelope` | `Envelope` | — | matter; **does not act** |
+| `Office.rung?` | `Rung \| null` | — | **null is the office-cluster case** and S19's home |
+| `Office.remit` | `(acts[], scope_rung, binds)` | `acts[]` from the closed five | `SUP:417-424` |
+| `Office.conferral` | names a **Rung**, a **parent Office**, **or the office's own judging set** | — | AMENDED, `ARCH §7` F3; the third limb is what closes S19 |
 | `Office.revocation` | a rule | — | ⚠ the prior brief dropped it; restored |
 | `Office.establishment` | `[Person]` | — | **the office's throughput** under one-act |
 | `Office.upkeep` | `Stores` | — | ⛔ magnitude unstated |
@@ -164,8 +164,8 @@ one quantity seen from two sides (`ARCH §7`, D-2).
 
 ```
 Tenure := (id, subject, object, kind, since, until?, conferrer?, degree?, payload?)
-   subject   ∈ Person | Container | Proposition
-   object    ∈ Person | Container | Office | Site | Proposition
+   subject   ∈ Person | Rung | Proposition
+   object    ∈ Person | Rung | Office | Site | Proposition
    conferrer ∈ Person | Office | null
    kind      ∈ hold | commit | contain | succeed | tie | knot | oblige     -- SEVEN
 ```
@@ -175,10 +175,10 @@ Tenure := (id, subject, object, kind, since, until?, conferrer?, degree?, payloa
 | kind | subject → object | `degree?` | `conferrer?` | `payload?` | **cardinality** |
 |---|---|---|---|---|---|
 | `hold` (office) | Person → Office | — | required | — | **1 per Office object** |
-| `hold` (ground) | Person \| Proposition → Site \| Container | — | required | — | **1 per object** |
+| `hold` (ground) | Person \| Proposition → Site \| Rung | — | required | — | **1 per object** |
 | `commit` | Person → Proposition | **required, 0–5** | — | `avowal` | 1 per (subject, object) |
-| `contain` | Person → Container; Container → Container | — | the admitting person, or null at world-gen | — | **1 per subject** |
-| `succeed` | Container → Person | — | the naming person | — | **1 per Container subject** |
+| `contain` | Person → Rung; Rung → Rung | — | the admitting person, or null at world-gen | — | **1 per subject** |
+| `succeed` | Rung → Person | — | the naming person | — | **1 per Rung subject** |
 | `tie` | Person → Person | — | null | `(familiarity, last_contact, channel_class)` | 1 per unordered pair, **stored at the lower id** |
 | `knot` | Person → Person | — | null | `(depth ∈ {1,2}, strain)` — **one SHARED gauge** | 1 per unordered pair, **stored at the lower id** |
 | `oblige` | Person → Person | — | kinship, admission or oath | — | 1 per (subject, object) |
@@ -226,7 +226,7 @@ source      ∈ firsthand(event_id) | told_by(person, handle) | inferred(claim_i
 Proposition := (id, mood, subject, predicate, value, when, scope)   mood ∈ HOLDS | OUGHT
 Case        := (id, holder, motion, rung, grounds[])
 Ground      := (id, proposition, warrant, support[])                -- claim ids
-Record      := (id, container, kind, forgery_quality, subject_matter)
+Record      := (id, rung, kind, forgery_quality, subject_matter)
                kind ∈ register | charter | deed | roll | letter
 Sensation   := (subsistence, standing)                              -- TWO scalars
 ```
@@ -246,15 +246,15 @@ Sensation   := (subsistence, standing)                              -- TWO scala
 
 ```
 Date               := (id, holder, form, when, capacity, convener_office?, docket[])
-                      holder ∈ Container | Office
+                      holder ∈ Rung | Office
 DocketItem         := (id, date, matter, placed_by, placed_at)
                       matter ∈ Petition | Motion | Report | Conferral | Determination
 Petition           := (id, petitioner, proposition, respondent, backing[])
-                      respondent ∈ Container | Office
+                      respondent ∈ Rung | Office
 ConveningCondition := (id, holder, predicate, date_form, set_by, set_at)
                       date_form = (venue, horizon, convener office)
 Dispensation       := (id, issuer, proposition, scope, terms)
-Venue              := (container, prize, standing_date, judging_set_rule, decision_rule,
+Venue              := (rung, prize, standing_date, judging_set_rule, decision_rule,
                        admission_floor, privileged_custody, exchange_budget, article_count,
                        coupling_depth, veto_holders, record_custody)
 door               := (convener, enter, speak, admissible_source, attendance_cost)
@@ -269,7 +269,7 @@ value.** §8 and §11.
 ```
 Stores     := map[MatterKind -> quantity]                        -- AMENDED, ARCH §7 F2
 MatterKind := (name, perishability, bulk, edible)
-Envelope   := (container, counts_by_age_band[], marks_bundle, capability_distribution)
+Envelope   := (rung, counts_by_age_band[], marks_bundle, capability_distribution)
 ```
 
 **`edible` is what stops silver satisfying hunger, and it is a field, not a resolver case.** ⛔
@@ -284,8 +284,8 @@ Envelope   := (container, counts_by_age_band[], marks_bundle, capability_distrib
 | **write classes** | CALENDAR · MATTER · ACTS · **INTERIOR** | **4** | AMENDED from `SUP:661-678`'s 3 |
 | **loop steps** | CALENDAR · MATTER · DELIBERATE · RESOLVE · WITNESS · CENSUS | **6 steps, 4 barriers** | AMENDED from `SUP:641-654`'s 8 labels |
 | **`Claim.source`** | firsthand · told_by · inferred · firsthand_via_knot · **documented** | **5** | AMENDED from `SUP:243-245`'s 4 |
-| **stance referent kinds** | Person · Proposition · **Place (= Container \| Site)** | **3** | AMENDED from `ABS:188`'s 4; `Faction` and `Proposition` denoted the same thing after `ARCH §2.7`, and `Place` was defined nowhere |
-| **the owner table** | Person · Container · Office · **Nobody** | **4** | AMENDED from `SUP:334-340`'s 5; the Faction row is deleted and re-homed |
+| **stance referent kinds** | Person · Proposition · **Place (= Rung \| Site)** | **3** | AMENDED from `ABS:188`'s 4; `Faction` and `Proposition` denoted the same thing after `ARCH §2.7`, and `Place` was defined nowhere |
+| **the owner table** | Person · Rung · Office · **Nobody** | **4** | AMENDED from `SUP:334-340`'s 5; the Faction row is deleted and re-homed |
 | **`remit.acts`** | issue · determine · confer/revoke · dispatch · convene | 5 | SHIPPED, `SUP:421-424` |
 | **`convene`'s two operations** | setting a date · ordering its items (`compose_agenda`) | 2 | SHIPPED, `SUP:426-431` |
 | **`binds`** | members-by-admission · persons-by-presence | 2 | SHIPPED, `SUP:418` |
@@ -349,17 +349,17 @@ Full walk at `ARCH §9`. **Ten new objects × fourteen rows each.**
 
 | # | referrer.field | → target | declared | on target's destruction |
 |---|---|---|---|---|
-| 1 | `Tenure.subject` | Person \| Container \| Proposition | `ARCH §2.3` | `until = tick`; **the Tenure survives as a historical fact** |
-| 2 | `Tenure.object` | Person \| Container \| Office \| Site \| Proposition | `ARCH §2.3` | as above |
+| 1 | `Tenure.subject` | Person \| Rung \| Proposition | `ARCH §2.3` | `until = tick`; **the Tenure survives as a historical fact** |
+| 2 | `Tenure.object` | Person \| Rung \| Office \| Site \| Proposition | `ARCH §2.3` | as above |
 | 3 | `Tenure.conferrer` | Person \| Office \| **null** | `ARCH §2.3`, `ARCH §7` F1 | as above; **null is legal for `tie`/`knot`** |
 | 4 | `Act.actor` | Person | `ARCH §2.4` | ⛔ an act declared by a person who dies at MATTER of the same season — resolution unstated |
 | 5 | `touch.target` | any object id, or a `spec` | `ARCH §2.4` | **this is the destructor itself** |
-| 6 | `Office.container?` | Container \| **null** | `ARCH §2.1` | null is the cluster case; F3 supplies the clock |
+| 6 | `Office.rung?` | Rung \| **null** | `ARCH §2.1` | null is the cluster case; F3 supplies the clock |
 | 7 | `Office.establishment` | `[Person]` | `ARCH §2.1` | per member; a dead member no longer sources a pool |
-| 8 | `Office.conferral` | a Container, a parent Office, **or the office's own judging set** | `ARCH §7` F3 | **may cycle** — §3.4 |
-| 9 | `Container.matter` | Sites, `stores`, Records, the transmission pointer | `ARCH §2.1` | ⚠ **must be structured to be indexable** |
-| 10 | `Container.envelope` | one Envelope | `ARCH §2.6` | — |
-| 11 | `Container.dates[]` / `Office.dates[]` | Dates, each naming a convener office | `SUP:337-339` | dangles when the office is effaced |
+| 8 | `Office.conferral` | a Rung, a parent Office, **or the office's own judging set** | `ARCH §7` F3 | **may cycle** — §3.4 |
+| 9 | `Rung.matter` | Sites, `stores`, Records, the transmission pointer | `ARCH §2.1` | ⚠ **must be structured to be indexable** |
+| 10 | `Rung.envelope` | one Envelope | `ARCH §2.6` | — |
+| 11 | `Rung.dates[]` / `Office.dates[]` | Dates, each naming a convener office | `SUP:337-339` | dangles when the office is effaced |
 | 12 | `Person.address` | **a VIEW of the `contain` Tenure** | `ARCH §2.1` | derived; no second update path |
 | 13 | `Person.ties` | **a VIEW of the `tie`/`knot` Tenures** | `ARCH §2.1` | derived |
 | 14 | `Person.ledger` | Claims | `ARCH §2.1` | owner-scoped; **cross-person `efface` forbidden** |
@@ -369,12 +369,12 @@ Full walk at `ARCH §9`. **Ten new objects × fourteen rows each.**
 | 18 | `Ground.support[]` | claim ids in the holder's ledger | `SUP:1516` | dangles |
 | 19 | `Date.docket[]` | DocketItems | `ARCH §5.5` | the item dies with the date |
 | 20 | `DocketItem.matter` | Petition \| Motion \| Report \| Conferral \| Determination | `ARCH §5.5` | — |
-| 21 | `Petition.respondent` | Container \| Office | `SUP:840-841` | **a vacant office is a legal respondent** |
+| 21 | `Petition.respondent` | Rung \| Office | `SUP:840-841` | **a vacant office is a legal respondent** |
 | 22 | `Petition.backing[]` | `[Person \| Cohort]` | `SUP:843-845` | per backer |
-| 23 | `Site.container` | Container | `ARCH §2.1` | effacing a Container effaces its Sites |
+| 23 | `Site.rung` | Rung | `ARCH §2.1` | effacing a Rung effaces its Sites |
 | 24 | `Site.drawers[]` | `[Person \| Cohort]` | `ARCH §2.1` | recomputes `share` |
-| 25 | `ConveningCondition.holder` | Container \| Office | `ARCH §5.12` | dies with the holder |
-| 26 | `Dispensation.scope` | `[Container]` | `SUP:1121` | per Container |
+| 25 | `ConveningCondition.holder` | Rung \| Office | `ARCH §5.12` | dies with the holder |
+| 26 | `Dispensation.scope` | `[Rung]` | `SUP:1121` | per Rung |
 | 27 | substream tuple | `(world_seed, tick, subject_id, purpose)` | `ARCH §2.2` | **`subject_id` now resolves — every record carries one** |
 
 ### §3.2 The inverse index — for each object, everything that points at it
@@ -384,7 +384,7 @@ Full walk at `ARCH §9`. **Ten new objects × fourteen rows each.**
 | object | pointed at by |
 |---|---|
 | **Person** | 1, 2, 3, 4, 7, 15, 17 (`told_by`), 21, 22, 24; `succeed` objects; every `tie`/`knot`/`oblige` endpoint |
-| **Container** | 1, 2, 6, 11, 21, 23, 25, 26; every `contain` object; `hold`-of-ground objects |
+| **Rung** | 1, 2, 6, 11, 21, 23, 25, 26; every `contain` object; `hold`-of-ground objects |
 | **Office** | 2, 8, 11 (as convener), 21; every office `hold` |
 | **Site** | 2, 23, 24; `yield`'s `site(H)`; `share(actor, site)` |
 | **Proposition** | 1, 2 (`commit`), 15, 20, 26; `Ground.proposition`; `norm(c, prop)` |
@@ -408,7 +408,7 @@ Full walk at `ARCH §9`. **Ten new objects × fourteen rows each.**
 | effaced | what happens |
 |---|---|
 | **Person** | `until = tick` on every Tenure they held; a conferral Date opens; the `succeed` pointer resolves. **Claims about them survive at existing confidence until their holders learn** (`SUP:1188-1198`) |
-| **Container** | **its `contain` children MUST be re-parented in the same act.** There is no orphaning operation — a person's address is their path to the root, and a bare `revoke` on `contain` leaves them with none |
+| **Rung** | **its `contain` children MUST be re-parented in the same act.** There is no orphaning operation — a person's address is their path to the root, and a bare `revoke` on `contain` leaves them with none |
 | **Office** | `until` on every `hold`; its Dates lapse; petitions filed at it wait |
 | **Site** | `until` on every `hold`; it leaves `drawers`' `share` denominators; `condition(c)` no longer sums over it |
 | **Proposition** | it is **never effaced** — it persists as long as anything names it |
@@ -429,17 +429,17 @@ Full walk at `ARCH §9`. **Ten new objects × fourteen rows each.**
 | orphan | arises when | detected by |
 |---|---|---|
 | Person with no `contain` edge | **cannot arise** — migration and secession are `confer` to a different parent, atomically | the cardinality declaration |
-| Container with no parent | the root | ⚠ **`sovereign_fraction(root)` presumes one root and the design declares no root-uniqueness invariant.** `SUP:475-478` rules that a contested succession undefines *the choice of root, not the function*, so **root-plurality is a political condition callers must handle** |
-| Office with `container = null` | by design — the cluster | F3's conferral-completeness requirement gives it a clock |
+| Rung with no parent | the root | ⚠ **`sovereign_fraction(root)` presumes one root and the design declares no root-uniqueness invariant.** `SUP:475-478` rules that a contested succession undefines *the choice of root, not the function*, so **root-plurality is a political condition callers must handle** |
+| Office with `rung = null` | by design — the cluster | F3's conferral-completeness requirement gives it a clock |
 | Tenure whose endpoint is effaced | any `efface` | `until` is set; the Tenure becomes history |
-| Site whose Container is effaced | Container `efface` | the cascade above |
+| Site whose Rung is effaced | Rung `efface` | the cascade above |
 
 ### §3.4 Cycles
 
 | cycle | reachable | what holds |
 |---|---|---|
-| `contain`: Container → Container → … | **NO, and this is a change.** The cardinality declaration is stated over **`contain` subjects generally**, not over Persons only | `SUP:97-98`: *every person exactly one parent hearth; every hearth exactly one community.* The prior brief scoped single-parent to Persons and thereby licensed a multi-parent Container graph while citing `SUP:94-108` as its authority |
-| `succeed ∘ contain`: Container → Person → Container | **yes, and it is the NORMAL case** — the heir lives in the hearth | **the reference graph is not a DAG; every traversal needs a visited-set.** Unremarked in the prior design |
+| `contain`: Rung → Rung → … | **NO, and this is a change.** The cardinality declaration is stated over **`contain` subjects generally**, not over Persons only | `SUP:97-98`: *every person exactly one parent hearth; every hearth exactly one community.* The prior brief scoped single-parent to Persons and thereby licensed a multi-parent Rung graph while citing `SUP:94-108` as its authority |
+| `succeed ∘ contain`: Rung → Person → Rung | **yes, and it is the NORMAL case** — the heir lives in the hearth | **the reference graph is not a DAG; every traversal needs a visited-set.** Unremarked in the prior design |
 | `tie`/`knot`: Person ↔ Person | yes by construction | the record is **stored once, at the lower id**, so the symmetric relation has one home |
 | `Claim.subject` → Claim → … | yes — *subjects include other claims* | ⚠ **solved in this repo's substrate and not in the design**: `engine/substrate/keys.py:389-392` gets cycle-freedom **by construction** from an append-only log whose citations may name only already-logged ids, enforced at `keys.py:384-388`. **That mechanism is adoptable verbatim for `Claim.source` and for Tenure history** |
 | `inferred(claim_id…)` → Claim → … | yes | as above |
@@ -469,8 +469,8 @@ Columns: printed signature · reads · writes · **write class** · invariant ma
 | `sense` | `(Person, World) -> Sensation` | **§14 row 1 bans a `World` parameter on a DECISION function.** `sense` decides nothing — it returns two floats carrying no references and answering no query |
 | `assemble` | `(Person, Question) -> View` | reads claims only; **assembled, not filtered** |
 | `opening_set` | `(Person, View) -> [Candidate]` | person-side; belief |
-| `verbs` | `(Site, Container) -> Set[Verb]` | **resolver-side**; world truth; never in `choose`'s scope |
-| `contest` | `(Container, Prize, Claimant[]) -> Event[]` | it *is* `resolve`'s conflict route, not a second resolver |
+| `verbs` | `(Site, Rung) -> Set[Verb]` | **resolver-side**; world truth; never in `choose`'s scope |
+| `contest` | `(Rung, Prize, Claimant[]) -> Event[]` | it *is* `resolve`'s conflict route, not a second resolver |
 
 ### §4.2 The loop steps
 
@@ -497,16 +497,16 @@ operations and they are separate acts**: *setting* a standing date, and *orderin
 | `commit` | `(person, proposition, Δdegree)` | the act | degree → 0 **is** departure; no operation needed |
 | `transfer` | `(giver, receiver, amount, kind)` | the act | ⚠ **needs the precondition the design lacks: `stores(hearth(giver), kind) ≥ amount`**, or a negative larder mints matter |
 | `carry` | `(person, petition, date)` | the act | precondition: **standing at the respondent** and a claim that the petition exists. **Mints a DocketItem** |
-| `compose_agenda` | `(convener, container, date)` | the act | input is the petitions he **holds a claim of**; admits the top `capacity(date)`; **an omitted petition is a DROP** |
+| `compose_agenda` | `(convener, rung, date)` | the act | input is the petitions he **holds a claim of**; admits the top `capacity(date)`; **an omitted petition is a DROP** |
 | `requisition` | `(obligor, obligee, act)` | the act | reads an `oblige` edge; **surfaces another person's act as theirs to refuse** |
 | `investigate` | `(actor, question, subject)` | the act | resolves to **an Event the actor witnesses** — never a direct deposit |
-| `admit` / `migrate` | `(person, container)` | the act | **`confer` on `contain` to a different parent, atomically** |
+| `admit` / `migrate` | `(person, rung)` | the act | **`confer` on `contain` to a different parent, atomically** |
 | `form_knot` | `(a, b)` | the act | Disposition +5, TS ≥ 30 both, Bonds ≥ 5, free slot (`02:399`) |
 | `tell` | `(teller, claim, audience-by-presence)` | the act | distortion in transit is free |
 | a `mint`/`efface` act | any verb whose touches carry those modes | the act, plus whatever material the thing requires | founding, building, establishment, razing |
 
 ⚠ **`annex` and `secede` are NOT verbs and are deleted.** Zero occurrences in the prior corpus.
-Annexation is `confer` of a `hold` Tenure over a Container. `secede` additionally collides with
+Annexation is `confer` of a `hold` Tenure over a Rung. `secede` additionally collides with
 `05:594`'s shipped use of *secession* for a duke's **defection**, which is a `commit` moving away.
 
 ⚠ **`spend` is deleted** as an argument of `investigate`. It named an unnamed third capacity quantity.
@@ -535,7 +535,7 @@ Annexation is `confer` of a `hold` Tenure over a Container. `secede` additionall
 | **demotion** | NEW: a rank falls when an attempt at a standard at or below it resolves at **Disaster** AND (witnessed by someone holding it at least as high OR the failure cost something unrecoverable within a season). **No decay clock** | **falsifier: if a rank can fall with no attempt behind it, the clock is back** |
 | **entrenchment** | `min(1, seasons_held/60)` | **read off `since`/`until`**, stored nowhere |
 | **`carry` regard** | `regard_cost = Σ_{judging set} max(0, −stance(j, prop)) × weight(j)`; `regard_gain = Σ_{backers WHO LEARN} stance(b, prop) × weight(b)` | **both limbs are required** — `regard_gain` is what breaks omission's dominance |
-| **grievance deposit** | `m = shortfall_at_raising × weight × amplification(chain)` | **the telling's grammar decides where the grudge lands** — a claim naming an actor deposits on him; one naming only the container deposits on the container |
+| **grievance deposit** | `m = shortfall_at_raising × weight × amplification(chain)` | **the telling's grammar decides where the grudge lands** — a claim naming an actor deposits on him; one naming only the rung deposits on the rung |
 | **bandwidth** | `max(0, 2 − floor(strain/3))` | reads the knot payload's shared gauge |
 | **person minting** | address from the cohort · marks from the cohort **plus its variation** · capability from its distribution **conditioned on the naming event** · stance from its aggregate **plus dispersion** | ⚠ two different conditionings; the prior brief flattened them |
 
@@ -543,32 +543,32 @@ Annexation is `confer` of a `hold` Tenure over a Container. `secede` additionall
 
 ## §5 · THE DERIVED CATALOGUE
 
-**Kept separate from §4 deliberately: a Derived never writes and is never stored, and merging them is how
+**Kept separate from §4 deliberately: a Query never writes and is never stored, and merging them is how
 a query becomes a field.** The **side** column is the design's central rule — a **resolver-side** query
 may read true state; a **person-side** query may read only the asking person's ledger.
 
 | # | name | signature | side | range / units | reads | replaces | gaps |
 |---|---|---|---|---|---|---|---|
 | 1 | `faction` | `Proposition → Set[Tenure]` | resolver | a set | all `commit` Tenures | a stored faction object | needs the object-side inverse index (§3.2) |
-| 2 | `leaders` | `(Proposition, Container, Person) → List[Person]` | **person** | ranked | the observer's own ledger | a faction **leader field** | ⛔ **the comparator.** `REV:772-778` proposes `commitment degree × backing raisable`; **an entire political mechanism rests on it and it is not ruled** |
-| 3 | `presence` | `(Proposition, Container) → count` | resolver | ℕ | member addresses | faction scale | — |
-| 4 | `density` | `(Proposition, Container) → [0,1]` | resolver | fraction of members at the container | member addresses | faction scale | breaches `[0,1]` if `contain` cardinality is violated |
-| 5 | `footprint` | `Proposition → Set[Container]` | resolver | a set | member addresses | faction scale | ⚠ **one argument** — the prior brief gave all three the same two-argument signature |
-| 6 | `sovereign_fraction` | `Container → [0,1]` | resolver | **PARTIAL — total only over the office-rooted subgraph** | the conferral graph | stored control | ⛔ root-uniqueness is a political condition, not an invariant; callers must handle plurality **and** partiality |
-| 7 | `condition` | `Container → [0,1] ∪ ⊥` | resolver | draw-weighted mean of its Sites and children; **⊥ at a Site-less leaf** | Sites, `draw_share` | a stored coarse condition | the base case is NEW — the prior form had none and was not total |
-| 8 | `verbs` | `(Site, Container) → Set[Verb]` | **resolver** | — | `condition`, band floors | — | **world truth; never in `choose`'s scope** |
+| 2 | `leaders` | `(Proposition, Rung, Person) → List[Person]` | **person** | ranked | the observer's own ledger | a faction **leader field** | ⛔ **the comparator.** `REV:772-778` proposes `commitment degree × backing raisable`; **an entire political mechanism rests on it and it is not ruled** |
+| 3 | `presence` | `(Proposition, Rung) → count` | resolver | ℕ | member addresses | faction scale | — |
+| 4 | `density` | `(Proposition, Rung) → [0,1]` | resolver | fraction of members at the rung | member addresses | faction scale | breaches `[0,1]` if `contain` cardinality is violated |
+| 5 | `footprint` | `Proposition → Set[Rung]` | resolver | a set | member addresses | faction scale | ⚠ **one argument** — the prior brief gave all three the same two-argument signature |
+| 6 | `sovereign_fraction` | `Rung → [0,1]` | resolver | **PARTIAL — total only over the office-rooted subgraph** | the conferral graph | stored control | ⛔ root-uniqueness is a political condition, not an invariant; callers must handle plurality **and** partiality |
+| 7 | `condition` | `Rung → [0,1] ∪ ⊥` | resolver | draw-weighted mean of its Sites and children; **⊥ at a Site-less leaf** | Sites, `draw_share` | a stored coarse condition | the base case is NEW — the prior form had none and was not total |
+| 8 | `verbs` | `(Site, Rung) → Set[Verb]` | **resolver** | — | `condition`, band floors | — | **world truth; never in `choose`'s scope** |
 | 9 | `opening_set` | `(Person, View) → [Candidate]` | **person** | — | ledger, stance, capability, Sensation, remits | an authored opportunity | returns **Candidates**, not Acts |
-| 10 | `norm` | `(Container, Proposition) → [−5,+5]` | resolver | member-stance mean **over the judging set** | stances | a stored norm/unrest/reputation | ⚠ *whose* stances was ⛔ in the prior brief; ruled here as the judging set |
+| 10 | `norm` | `(Rung, Proposition) → [−5,+5]` | resolver | member-stance mean **over the judging set** | stances | a stored norm/unrest/reputation | ⚠ *whose* stances was ⛔ in the prior brief; ruled here as the judging set |
 | 11 | `occupation` | `(Person, Person) → Proposition?` | **person** | — | the observer's ledger | a profession field | **null is legal** — a person may have no declared occupation |
 | 12 | `estimated_profile` | `(Person, Proposition) → Profile` | **person** | — | that person's ledger only | reading true state | ⛔ **`Profile` is a type name that exists in no surface** |
-| 13 | `eligible` | `(Person, Verb, Container) → bool` | resolver | — | remit, marks, standing, matter | `SUP:435` | — |
-| 14 | `judging_set` | `Container → Set[Person]` | resolver | — | `judging_set_rule`, addresses | a stored membership list | — |
-| 15 | `draw_share` | `(Site \| Container, Container) → (0,1]` | resolver | **shares sum to 1** | draws | `SUP:1245` | stops summing to 1 under a `contain` violation |
+| 13 | `eligible` | `(Person, Verb, Rung) → bool` | resolver | — | remit, marks, standing, matter | `SUP:435` | — |
+| 14 | `judging_set` | `Rung → Set[Person]` | resolver | — | `judging_set_rule`, addresses | a stored membership list | — |
+| 15 | `draw_share` | `(Site \| Rung, Rung) → (0,1]` | resolver | **shares sum to 1** | draws | `SUP:1245` | stops summing to 1 under a `contain` violation |
 | 16 | `share` | `(Person, Site) → (0,1]` | resolver | actor's draw ÷ site total | draws | `SUP:1264` | — |
 | 17 | `capacity` | `Date → ℕ` | resolver | items the sitting processes | the date's own term | **the second allowance** | ⚠ **never spent — it caps selection**; spending it as well as `seat_items` was the double-count |
 | 18 | `entrenchment` | `(Person, Object) → [0,1]` | resolver | `min(1, seasons_held/60)` | `since`, `until` | a stored tenure counter | needs `until?`, which is why it was added |
 | 19 | `address` | `Person → Path` | resolver | a path to the root | the `contain` chain | a stored field | **becomes a SET, not a value, if cardinality is violated** |
-| 20 | `regard` | `(Person, Container) → scalar` | resolver | member-stance sum | stances | a stored reputation | ⛔ sign convention |
+| 20 | `regard` | `(Person, Rung) → scalar` | resolver | member-stance sum | stances | a stored reputation | ⛔ sign convention |
 
 **Nothing stores an aggregate. Every one of these is a query, and that is why power is not static.**
 
@@ -583,11 +583,11 @@ redesign. **Idem.** = idempotent in meaning; **Idio.** = idiomatic in choosing (
 
 | term | defined at | one-sentence definition | Idem. | Idio. | verdict |
 |---|---|---|---|---|---|
-| **`Container`** | `ARCH §2.1` | a rung of the containment tree | **pass** | **pass** | **ADOPTED.** `SUP:337` already writes *"Container (a rung)"*; `Node` was a third name **and** collides with Godot's scene-tree base class at `godot/scene_tree_architecture.md:16`, the port target |
+| **`Rung`** | `ARCH §2.1` | a rung of the containment tree | **pass** | **pass** | **ADOPTED.** `SUP:337` already writes *"Container (a rung)"*; `Node` was a third name **and** collides with Godot's scene-tree base class at `godot/scene_tree_architecture.md:16`, the port target |
 | **`Tenure`** | `ARCH §2.3` | the one edge record; seven kinds | **fail** — a reader lands right for `hold` and wrong for the other six | **fail** — ordinary usage gives *the holding of an office or of land*; calling a friendship or an address a "Tenure" is not a meaning ordinary usage supplies | **KEPT, with a mandatory qualifier.** The dispositions these documents build on are written in this word; a third name for one object is the failure being avoided. **`Edge` and `Relation` are what the design reaches for when it explains itself** and are the available alternatives. **Qualifier: `Tenure` is the record; `tenure` in prose means the duration of a `hold`** |
 | **`mint`** | `ARCH §2.4` | a `touches` mode that brings an object into existence | **fail** — `SUP:245` already uses it for *minting a root token*, a claim-provenance operation | pass | **KEPT, with a mandatory qualifier and one deletion.** `mint` on a **practice rank** is **WITHDRAWN** (advancement is an `alter`), which removes one of the two live meanings inside the design. **Qualifier: `mint` an OBJECT; `witness` mints a TOKEN.** `create` is the available alternative |
 | **`efface`** | `ARCH §2.4` | the inverse of `mint` | pass, barely | **fail** — plain English `efface` means *rub out*, near-reflexive; it is not the word English supplies for *destroy this object* | **KEPT, with a target restriction stated once.** `destroy` is the available alternative. **Restriction: `efface` may never target a Claim in another person's ledger** |
-| **`Derived`** | `ARCH §2.5` | a named pure function over state, never stored | **fail** — direct repo collision with an **opposite** meaning | pass | **KEPT, with a mandatory qualifier.** ⚠ `engine/engine_params/params_tables.yaml` ships *"Derived Values"* / *"Derived Scores"* and `references/glossary.md:75-82` lists their members — Health, Stamina, Coherence, Composure, Momentum — which are **stored**. **Qualifier: a Derived is NEVER STORED.** `Query` is the available alternative and R-1 is its definition |
+| **`Query`** | `ARCH §2.5` | a named pure function over state, never stored | **fail** — direct repo collision with an **opposite** meaning | pass | **KEPT, with a mandatory qualifier.** ⚠ `engine/engine_params/params_tables.yaml` ships *"Derived Values"* / *"Derived Scores"* and `references/glossary.md:75-82` lists their members — Health, Stamina, Coherence, Composure, Momentum — which are **stored**. **Qualifier: a Query is NEVER STORED.** `Query` is the available alternative and R-1 is its definition |
 | **`Sensation`** | `ARCH §3.1` | the two-scalar record a body reports to `choose` | pass | pass | **KEPT, and BOUND.** Risk: the scalars already have a name — **`needs`** (`SUP:183-190`). **Binding, stated once so the next session cannot derive two objects: `Sensation` is the RECORD; `needs` are what it reports, and only TWO of the four reach it** |
 | **`leaders`** | `ARCH §2.5` | the ranked query that replaces a faction leader field | pass | pass | **ADOPTED** over `principals`, which carries three ordinary readings plus a homophone this design uses heavily (*principle*), and which `systems/factions/_identifier_census.yaml:3371` uses for a **fourth** thing — the parties present in a scene. The row's own gloss said what it meant: *"replaces a faction **leader** field"* |
 | **`oblige`** | `ARCH §5.10` | the seventh Tenure kind: kin obligation | pass | pass | **ADOPTED.** Ordinary English; and the edge it names is `SUP:302-304`'s shipped *obligation edge* |
@@ -603,13 +603,13 @@ redesign. **Idem.** = idempotent in meaning; **Idio.** = idiomatic in choosing (
 | `Envelope` | `ARCH §2.6` | the **inflow reservoir only** — counts by age band, marks bundle, capability distribution. **It is matter and does not act** |
 | `Site` | `ARCH §2.1` | a carrier with an identity, holding `condition` as **primary state** at the node an act names |
 | `DocketItem` | `ARCH §5.5` | the object `carry` mints on a Date, which is what gives a matter a clock |
-| `Record` | `ARCH §5.4` | a register, charter, deed, roll or letter — matter at a Container, `efface`-able, citable by `documented` |
+| `Record` | `ARCH §5.4` | a register, charter, deed, roll or letter — matter at a Rung, `efface`-able, citable by `documented` |
 | `Candidate` | `ARCH §3.2` | what `opening_set` returns: `(verb, target_spec[], believed_obstacle_band)` — **not an Act** |
 | `spec` | `ARCH §2.4` | what a `mint` touch carries in place of a reference: `(type, kind?, parent, initial[], slot)` |
 | `payload` (Tenure) | `ARCH §2.3` | the kind's own record, for the state the eight named fields cannot hold |
 | `INTERIOR` | `LOOP §1.2` | the fourth write class: **one person's own ledger and nothing else** |
 | `CENSUS` | `LOOP §7` | the global pass that settles the population from **one** post-eviction snapshot |
-| `Place` | `ARCH §2.7` | **`Container | Site`** — the stance referent kind that was used everywhere and defined nowhere |
+| `Place` | `ARCH §2.7` | **`Rung | Site`** — the stance referent kind that was used everywhere and defined nowhere |
 
 ---
 
@@ -625,21 +625,21 @@ redesign. **Idem.** = idempotent in meaning; **Idio.** = idiomatic in choosing (
 | **`condition`** | `condition(site) ∈ [0,1]` | **convening condition** | *defeat by named condition* on the stasis ladder | high | **The scalar is always written `condition(site)` or `condition(c)` with an argument. The calendar object is always written in full: `ConveningCondition` / "a convening condition." The stasis usage is "a named condition"** |
 | **`subject`** | `Tenure.subject` | `Claim.subject` | `Proposition.subject`; `subject_id` in the substream; a Key `Target` role at `engine/substrate/keys.py:65` | high — five | **Always qualified by its record: `Tenure.subject`, `Claim.subject`, `Proposition.subject`. Bare `subject` is never used** |
 | **`object`** | `Tenure.object` | `touch.target` | "every object in this architecture" | high | **`touch` names its field `target`, NOT `object`** — that rename is made here precisely to break this collision. `Tenure.object` keeps the word; the generic sense is written "an object" |
-| **`kind`** | `Container.kind` | `Tenure.kind` | mark kind, need kind, stance referent kind, `Record.kind`, `MatterKind` | high — seven | **Always qualified by its record.** Bare `kind` is never used |
+| **`kind`** | `Rung.kind` | `Tenure.kind` | mark kind, need kind, stance referent kind, `Record.kind`, `MatterKind` | high — seven | **Always qualified by its record.** Bare `kind` is never used |
 | **`act`** | the record `Act` | `remit.acts`, the closed five | **a unit of currency** — *costs one of his own acts* | high | **The record is `Act`, capitalised. The allowance is "the act" or "his season's act". `remit.acts` is always written with its field path** |
-| **`matter`** | `Container.matter`, a field | **the MATTER step and write class** | *matter events*; the English verb | medium-high | **The step and class are UPPERCASE. The field is always written `Container.matter`** |
-| **`root`** | `sovereign_fraction(root)` | *root token* (`SUP:245`) | `conferral_path(o) reaches root` | medium | **The graph sense is always "the root Container". The provenance sense is always "root token", never bare `root`** |
+| **`matter`** | `Rung.matter`, a field | **the MATTER step and write class** | *matter events*; the English verb | medium-high | **The step and class are UPPERCASE. The field is always written `Rung.matter`** |
+| **`root`** | `sovereign_fraction(root)` | *root token* (`SUP:245`) | `conferral_path(o) reaches root` | medium | **The graph sense is always "the root Rung". The provenance sense is always "root token", never bare `root`** |
 | **`degree`** | commitment degree 0–5 | **degree-of-success band** | knot `depth` is a third depth-like scalar | medium | **The commitment sense is `Tenure.degree` or "commitment degree". The band sense is always "degree band" or the band's own name** |
-| **`presence`** | the Derived `presence(prop, c)` | *deposits by presence and channel* | `binds = persons-by-presence`; `enforcer_presence` | medium | **The Derived always carries its arguments. The witnessing sense is always "by presence"** |
+| **`presence`** | the Query `presence(prop, c)` | *deposits by presence and channel* | `binds = persons-by-presence`; `enforcer_presence` | medium | **The Query always carries its arguments. The witnessing sense is always "by presence"** |
 | **`View` / `view`** | the **type** passed to `choose` | the **function** `view(person, question)` | — | medium — distinguished only by case | **The function is renamed `assemble(person, question)` in these documents**, which is what `SUP:154` calls the operation anyway (*"`View` is assembled, not filtered"*). The type keeps the word |
 | **`Act` / opening** | a declared Act | a **candidate** returned by `opening_set` | — | medium | **CLOSED. `opening_set` returns `Candidate`, not `Act`** |
-| **`stake`** | `Container.stake[]` | `stake_band` manoeuvre; *escalate the stake* | — | low-medium | **The field always carries its record. The manoeuvre is always "escalate the stake"** |
+| **`stake`** | `Rung.stake[]` | `stake_band` manoeuvre; *escalate the stake* | — | low-medium | **The field always carries its record. The manoeuvre is always "escalate the stake"** |
 | **`address`** | `Person.address` | *a petitioner may **address** many offices* | *addressable*, an identity property | low | **The field always carries its record. The verb is always "file at" or "put to" in these documents** |
 | **`magnitude`** | a die reading, `(3 + d10)/8.5` | `impact_vector: axis → signed magnitude` at `engine/substrate/keys.py:96` | — | low-medium | **The die reading is always "the magnitude reading"** |
 | **`standard`** | *an attempt at a standard above its rank* | `EntryStandardTerm` | — | low, **and A is ⛔** | **The advancement sense is ⛔ and is in §8. The dispensation term always carries its full type name** |
 | **`commit`** | a `Tenure` kind | the operation `commit(+Δ)` | git commit (`CLAUDE.md` §2) | low | **Acceptable — a kind and its constructor sharing a name is fine once declared, and it is declared here** |
-| **`Derived`** | this design's query category | **stored** per-character values in `params_tables.yaml` and `glossary.md:75-82` | — | **high, and it is a REPO collision** | **§6.1's mandatory qualifier: a Derived is NEVER STORED** |
-| **`Node`** | a rung, in the brief these documents replace | **Godot's scene-tree base class**, the port target | — | high | **CLOSED. The object is `Container`** |
+| **`Query`** | this design's query category | **stored** per-character values in `params_tables.yaml` and `glossary.md:75-82` | — | **high, and it is a REPO collision** | **§6.1's mandatory qualifier: a Query is NEVER STORED** |
+| **`Node`** | a rung, in the brief these documents replace | **Godot's scene-tree base class**, the port target | — | high | **CLOSED. The object is `Rung`** |
 
 ---
 
@@ -662,7 +662,7 @@ Every `⛔`, with what would close it. **`RESERVED` rows must not be closed by a
 | G-11 | **`Act.payload`** | anything a verb needs beyond its touches | a type, or its deletion in favour of the `touch` fields | open |
 | G-12 | **`Event`'s record** | `witness`; `firsthand(event_id)` | fields. Known only to carry an `id` and the degree band | open |
 | G-13 | **`World`'s record** | `resolve`'s second argument; the fourteen refusals are written against it | fields | open |
-| G-14 | **`Container.matter`'s structure** | four things are addressed **by name** inside it — Sites, `stores`, Records, the pointer — and an unstructured field cannot be indexed | a typed sub-record per kind | open |
+| G-14 | **`Rung.matter`'s structure** | four things are addressed **by name** inside it — Sites, `stores`, Records, the pointer — and an unstructured field cannot be indexed | a typed sub-record per kind | open |
 | G-15 | **age-band boundaries** in `Envelope` | births, deaths, capability draws | an enumeration | open |
 | G-16 | **channel latency values** | every telling; the news map that vacancy and arson both ride | per-channel-class latencies | open |
 | G-17 | **an act declared by a person who dies at MATTER of the same season** | `Act.actor` | a rule. Neither the prior design nor these documents state one | open |
@@ -690,7 +690,7 @@ Every `⛔`, with what would close it. **`RESERVED` rows must not be closed by a
 |---|---|---|---|---|---|---|---|---|---|---|
 | Person | ✓ | 2.1 | 1,3,4,7,12–15 | 4.1 | 11,19 | 6.2 | subject | G-17 | §2.1, §2.6 | §4, §7 |
 | Cohort | ✓ | 2.1 | 22, 24 | — | — | 6.2 | — | G-06 | §2.6 | §4.3, §7 |
-| Container | ✓ | 2.1 | 1,2,6,9–11,21,23,25,26 | — | 7,10,14 | 6.1 | — | G-14, G-24 | §2.1, §5.8 | §2, §7 |
+| Rung | ✓ | 2.1 | 1,2,6,9–11,21,23,25,26 | — | 7,10,14 | 6.1 | — | G-14, G-24 | §2.1, §5.8 | §2, §7 |
 | Office | ✓ | 2.1 | 2,6,7,8,11 | 4.3 | 6,17 | — | — | G-18, G-19, G-23 | §2.1, §5.10 | §2.2 |
 | Site | ✓ | 2.1 | 2,23,24 | — | 7,8,16 | 6.2 | — | G-21 | §2.1, §9.2 | §5.7 |
 | Tenure | ✓ | 2.2 | 1,2,3 | — | 1,18 | 6.1 | subject, object, kind, degree, hold | — | §2.3, §9.1 | §5.6 |
@@ -720,13 +720,13 @@ Every `⛔`, with what would close it. **`RESERVED` rows must not be closed by a
 | `carry`, `compose_agenda` | 4.3 | 17 | RESOLVE | ACTS |
 | `transfer`, `commit`, `requisition`, `investigate` | 4.3 | — | RESOLVE | ACTS |
 | `confer`, `revoke`, `issue`, `determine`, `dispatch`, `convene` | 4.3 | — | RESOLVE | ACTS |
-| every Derived | — | 1–20 | any | **none — a Derived never writes** |
+| every Query | — | 1–20 | any | **none — a Query never writes** |
 
 ### §9c · By term
 
 `address` §6.2, §7 · `additive`/`exclusive` §2.3, §4.4 · `avowal` §2.2, §6.1 · `Candidate` §6.2 ·
-`capacity` §5, §7 · `CENSUS` §6.2 · `Cohort` §6.2 · `condition` §5, §7 · `Container` §6.1 ·
-`Derived` §6.1, §7 · `documented` §6.1 · `efface` §6.1 · `Envelope` §6.2 · `INTERIOR` §6.2 ·
+`capacity` §5, §7 · `CENSUS` §6.2 · `Cohort` §6.2 · `condition` §5, §7 · `Rung` §6.1 ·
+`Query` §6.1, §7 · `documented` §6.1 · `efface` §6.1 · `Envelope` §6.2 · `INTERIOR` §6.2 ·
 `kind` §7 · `leaders` §6.1 · `matter` §7 · `magnitude` §7 · `mint` §6.1 · `Node` §7 · `object` §7 ·
 `oblige` §6.1 · `payload` §6.2 · `Place` §6.2 · `presence` §7 · `Record` §6.2 · `root` §7 ·
 `Sensation` §6.1 · `Site` §6.2 · `spec` §6.2 · `stake` §7 · `standard` §7, §8 · `subject` §7 ·
@@ -741,7 +741,7 @@ Every `⛔`, with what would close it. **`RESERVED` rows must not be closed by a
 | §2.2 identity | §1, §1.1, §3.1 row 27 |
 | §2.3 Tenure | §1, §2.2, §3.1, §6.1 |
 | §2.4 the act | §2.3, §4.3, §4.4 |
-| §2.5 Derived | §5, §6.1 |
+| §2.5 Query | §5, §6.1 |
 | §2.6 cohort / envelope | §2.6, §6.2 |
 | §2.7 the owner table | §2.7 |
 | §3.1 signatures, Sensation | §2.4, §4.1 |
@@ -838,7 +838,7 @@ design.** Nothing listed here is defined in full in §2 or §6.
 falsifier: **D-2** the act economy (one act per person or cohort, universally) · **F1** conferral basis
 (per office) · **F2** the `stores` denominator (`MatterKind`) · **F3** S19 (a conferral rule may name
 the office's own judging set) · **F4** Coherence-0 (de-individuation by another cause) · **F5**
-off-board polities (a Container with an establishment; the one-actor rule keeps no exception).
+off-board polities (a Rung with an establishment; the one-actor rule keeps no exception).
 
 **Open, not reserved** — thirty rows at §8. The ones that block a compendium row are G-03 (`Profile`
 has no record, so §5 row 12 has no range), G-04 (`leaders`' comparator, so §5 row 2 is a signature with

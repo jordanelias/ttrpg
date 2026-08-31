@@ -76,7 +76,7 @@ this table will resolve half the citations in these three documents to the wrong
 The review's surviving verdict, after its own absolutes were broken four times by an independent
 reader (`REV:1770-1790`): **the design can change the STATE of what exists, and cannot change WHICH
 things exist or WHO HOLDS THEM.** What is confirmed absent in `SUP`, by that review's greps:
-creation and destruction of Site, Container and Office (`REV:610-625`); tenure over sites and nodes
+creation and destruction of Site, Rung and Office (`REV:610-625`); tenure over sites and nodes
 (`REV:779-830`); birth; character generation; caused advancement; a faction's leader.
 
 Measured on Jordan's own long-arc trajectories, **five of twelve transitions work** (`REV:286-304`),
@@ -104,17 +104,17 @@ else.
 
 | demanded | answered at | primitive it rides on |
 |---|---|---|
-| worldly state | §2.1, §5.12 | Container `matter`, Site `condition`, `stores` |
+| worldly state | §2.1, §5.12 | Rung `matter`, Site `condition`, `stores` |
 | clocks | §5.12, `02_THE_SEASON_LOOP.md` §2 | `Date`, and the three admitted clock quantities only |
 | pressures | §5.12 | need exceeding own reach → petition |
 | threats | §5.12 | convening condition — a published band predicate that schedules a date |
 | world churn | §5.12 | MATTER, the `condition` accumulator, matter events, the act stream |
 | character generation | §5.3 | demographic envelope + the five person-generation triggers |
-| event generation | §5.15 | `resolve` emits Events; four decider-free channels and no fifth |
+| event generation | §5.15 | `resolve` emits Events from acts; **the world emits its own, under §2.4's partition** |
 | governance at every scale | §5.8 | address (tree) + remit (office) + commitment (faction) + `hold` |
 | advancement | §5.9 | `alter` up on a bounded field, gated by `02:186-189` |
 | demotion | §5.9 | `alter` down, `revoke`, and `principals` returning someone else |
-| conflict | §3.3 | `contest(container, prize, claimants)` |
+| conflict | §3.3 | `contest(rung, prize, claimants)` |
 | obligation | §5.10 | `oblige` — the seventh `Tenure` kind |
 | offices | §2.1, §5.6 | `Office`, `remit`, `conferral`, `establishment` |
 | occupations | §5.10 | a stance row whose referent is a Proposition |
@@ -128,7 +128,7 @@ else.
 | epistemics | §5.14 | `Claim`, five sources, `view`, `salience` |
 | memory | §5.14 | the ledger; decay; eviction on clock quantities only |
 | truth | §5.14 | no true-profile read; `investigate`; `strike` |
-| built / destroyed | §5.1 | `mint` / `efface` on Site, Container, Office |
+| built / destroyed | §5.1 | `mint` / `efface` on Site, Rung, Office |
 | born / die | §5.2 | envelope weight in MATTER; individuation in CENSUS |
 | disseminated / purged | §5.4 | telling; `strike` at a venue; `efface` a Record |
 | demands up | §5.5 | petition → carriage → docket item → sitting |
@@ -142,13 +142,13 @@ else.
 
 ```
 Person    := (id, weight, marks, capability, stance, ledger, ties)   -- weight defaults to 1
-Container := (id, kind, stake[], judging_set_rule, dates[], matter, envelope)
-Office    := (id, post, container?, remit, conferral, revocation, establishment,
+Rung := (id, kind, stake[], judging_set_rule, dates[], matter, envelope)
+Office    := (id, post, rung?, remit, conferral, revocation, establishment,
               dates[], upkeep)
-Site      := (id, container, kind, condition, drawers[])
+Site      := (id, rung, kind, condition, drawers[])
 ```
 
-**`Container` is the name, and `Node` is refused.** `SUP:337` already calls the object *"Container (a
+**`Rung` is the name, and `Node` is refused.** `SUP:337` already calls the object *"Rung (a
 rung)"* and `ABS:50` carries it forward. `Node` would be a third name for one object — the failure
 `CLAUDE.md` §4 records this repository having paid for once — **and it collides head-on with the port
 target**: `Node` is Godot's scene-tree base class, written `root (Node)` at
@@ -156,10 +156,10 @@ target**: `Node` is Godot's scene-tree base class, written `root (Node)` at
 independent grounds, one word, no cost to using it.
 
 ⚠ **`Site` IS A CARRIER, and the brief that deleted it is reversed.** The deletion made `Site` matter
-held by a Container, keyed the `condition` accumulator to the Container, and derived a coarse
+held by a Rung, keyed the `condition` accumulator to the Rung, and derived a coarse
 `condition(n)` as a draw-weighted mean. **Three limbs fail, and the third is decisive:**
 
-1. `condition` was declared derived, and a Derived is *never stored* (`SUP:1239-1242` forbids a
+1. `condition` was declared derived, and a Query is *never stored* (`SUP:1239-1242` forbids a
    coarser rung storing one) — **but the accumulator reads its own previous value**
    (`SUP:1333-1334`). An accumulator that reads its own previous value is primary state.
 2. The draw-weighted mean `condition(n) = Σ condition(c) × draw_share(c, n)` (`SUP:1245`) has **no
@@ -171,13 +171,13 @@ held by a Container, keyed the `condition` accumulator to the Container, and der
    (`SUP:1264`) both require sites to have identity.
 
 > **THE RULE, stated once. `condition` is PRIMARY STATE on the Site an act names. Coarser reads are
-> derived and stored nowhere. The base case is written: at a Container with no Sites beneath it,
+> derived and stored nowhere. The base case is written: at a Rung with no Sites beneath it,
 > `condition` is undefined and the verb gate does not fire.** That is `SUP:1240-1242`'s three
 > cross-rung rules with the missing base case supplied and the identity kept.
 
-**`Container.envelope`** is the demographic envelope — §2.6. **`Container.matter`** holds `stores`,
-the transmission pointer, and the Records kept there (§5.4). **`Office.container?`** is optional and
-null is the office-cluster case (`SUP:850-853`); §7's F3 resolution is what makes a null-container
+**`Rung.envelope`** is the demographic envelope — §2.6. **`Rung.matter`** holds `stores`,
+the transmission pointer, and the Records kept there (§5.4). **`Office.rung?`** is optional and
+null is the office-cluster case (`SUP:850-853`); §7's F3 resolution is what makes a null-rung
 office still carry a clock.
 
 ⚠ **`Office` keeps `revocation`.** The prior brief silently dropped it from the nine-field form at
@@ -226,8 +226,8 @@ owner, no storage and no index, which meant **the record the politics is made of
 
 ```
 Tenure := (id, subject, object, kind, since, until?, conferrer?, degree?, payload?)
-   subject   ∈ Person | Container | Proposition
-   object    ∈ Person | Container | Office | Site | Proposition
+   subject   ∈ Person | Rung | Proposition
+   object    ∈ Person | Rung | Office | Site | Proposition
    conferrer ∈ Person | Office | null
    kind      ∈ hold | commit | contain | succeed | tie | knot | oblige
 ```
@@ -257,10 +257,10 @@ and `degree?` is retained as a named field because `commit` reads it by name eve
 | kind | subject → object | what it is | created by | destroyed by | **cardinality** |
 |---|---|---|---|---|---|
 | `hold` | Person → Office | office | `confer` | `revoke` | **1 per Office object** |
-| `hold` | Person \| Proposition → Site \| Container | enfeoffment, lordship, **annexation** | `confer` | `revoke` | **1 per object** |
+| `hold` | Person \| Proposition → Site \| Rung | enfeoffment, lordship, **annexation** | `confer` | `revoke` | **1 per object** |
 | `commit` | Person → Proposition | faction membership at a degree | `commit(+Δ)` | degree → 0 | 1 per (subject, object) |
-| `contain` | Person → Container, Container → Container | address; the containment tree | `admit`, `migrate` | **never bare** — see below | **1 per subject** |
-| `succeed` | Container → Person | the hearth's succession pointer | a naming act | re-naming | **1 per Container subject** |
+| `contain` | Person → Rung, Rung → Rung | address; the containment tree | `admit`, `migrate` | **never bare** — see below | **1 per subject** |
+| `succeed` | Rung → Person | the hearth's succession pointer | a naming act | re-naming | **1 per Rung subject** |
 | `tie` | Person → Person | ordinary contact | co-presence | decay | 1 per unordered pair |
 | `knot` | Person → Person | the deep channel | `form_knot` (`02:399`) | rupture | 1 per unordered pair |
 | `oblige` | Person → Person | **kin obligation** | kinship, admission, oath | discharge, death, repudiation | 1 per (subject, object) |
@@ -278,12 +278,12 @@ directed record otherwise has two homes and can disagree with itself. The other 
 through the derived inverse index.
 
 ⚠ **`contain` is never destroyed by a bare `revoke`.** A person's address is *their path to the root*
-(`SUP:98`); revoking their `contain` edge orphans them, and revoking a Container's orphans a whole
+(`SUP:98`); revoking their `contain` edge orphans them, and revoking a Rung's orphans a whole
 subtree. **Migration and secession are `confer` to a DIFFERENT parent**, atomically, in one act. There
 is no operation that leaves a subject unparented.
 
 ⚠ **`annex` and `secede` are NOT verbs and are deleted from the vocabulary.** Zero occurrences in the
-prior design's corpus. **Annexation is a `hold` Tenure over a Container changing hands. The tree does
+prior design's corpus. **Annexation is a `hold` Tenure over a Rung changing hands. The tree does
 not move.** This is Jordan's own ontology — *"the tree is geography, and allegiance lives in
 factions… a hamlet does not move because a King won a war"* (`REV:618-625`) — and the review's rank 1
 says outright that *"Re-parenting is not added and should not be — who holds the ground is `Tenure`,
@@ -298,110 +298,184 @@ records. A duke defects (`commit`); a territory changes hands (`hold`); a hearth
 (`confer` on `contain`). Three operations, three words, no collision.
 
 **What the seven kinds buy, in one line each.** Enfeoffment and confiscation are `confer`/`revoke` on
-`hold` over a Site. Annexation is `confer` on `hold` over a Container. Kin obligation is `oblige`, and
-`requisition` reads it. Deposition is **not an operation at all** — it is `leaders(prop, container)`
+`hold` over a Site. Annexation is `confer` on `hold` over a Rung. Kin obligation is `oblige`, and
+`requisition` reads it. Deposition is **not an operation at all** — it is `leaders(prop, rung)`
 returning somebody else. Membership is not holding: `commit` and `hold` are different kinds and stay
 different kinds, which is Jordan's distinction preserved rather than collapsed.
 
-### §2.4 The one act
+### §2.4 THE PARTITION — one change, three modes, two drivers
+
+⚠ **THIS SECTION IS RESTRUCTURED BY A JORDAN RULING, AND THE RULING REPLACES AN ENUMERATION WITH A
+PREDICATE.** An earlier version made `mint`/`efface` **modes of an Act**, so only a character could
+bring a thing into or out of existence, and it inherited `SUP:1633-1643`'s *"these four, and only these
+four"* decider-free channels. **That enumeration had no membership test**, which is why it was wrong
+three ways at once: matter events were licensed with nothing generating one, `wear` was unwritable, and
+an authored event deck had no home.
+
+> **PARTITION EVERY STATE CHANGE BY ITS SUBJECT.** Verbatim (Jordan):
+>
+> *"Think in terms of state changes. If the state change corresponds to an aspect of human society as
+> limited to the peninsula (polities, institutions, offices, organizations, occupations, religion,
+> settlements, marriage, etc) then it is driven by character choices. If the state change does not
+> correspond to an aspect of human society, like weather or non-peninsular like Altonian Empire or
+> tears in metaphysical substrate, then it is still an event that acts upon the game world."*
+>
+> *"A state change, to my mind, includes the creation of a new state or the deletion of a state."*
+
+| the subject of the change is… | the change is driven by |
+|---|---|
+| **peninsular human society** — polities, institutions, offices, organizations, occupations, religion, settlements, marriage | **a character's choice. Always. No exceptions.** |
+| **anything else** — weather, the non-peninsular, tears in the metaphysical substrate | **an event acting on the world** |
+
+**A partition on the subject is DECIDABLE, so every future case answers itself.** That is the whole of
+its value over a list.
+
+#### The primitive
 
 ```
-Act    := (id, actor, verb, touches[], payload)
-touch  := (target, mode, field?, delta?)
-target := object_id                                   -- read | alter | exclude | efface
-        | spec                                        -- mint only
-spec   := (type, kind?, parent, initial[], slot)
-mode   ∈ read | alter | exclude | mint | efface
+StateChange := (subject, mode, driver, field?, delta?, spec?)
+   mode    ∈ mint | alter | efface
+   driver  ∈ Act | Event
+   subject = the object being changed; IT decides which driver is legal
 ```
 
-**`mint` and `efface` close existence, and they are the review's rank 1** (`REV:1584-1600`). `mint` a
-Site is building; `mint` a Container is founding a settlement; `mint` an Office is establishment;
-`efface` is each one's inverse. **`mint` a Person is individuation of an existing envelope weight**
-(§2.6) — not birth, which is metabolism.
+**One change primitive, three modes, two drivers, and the subject picks the driver. The mode is
+orthogonal to both.** A character may mint a social state; an event may mint a non-social one;
+**neither may reach across.**
 
-⚠ **`mint` a Proposition is REMOVED.** Three runners hit this independently. A proposition is
-**free-form content** (`SUP:1036`) and needs no constructor; the surviving fix is that *uttering a
-proposition is part of an ordinary act*, so it is witnessed and a second person can `commit`
-(`REV:1727-1728`). **Founding a faction is uttering plus `commit`.** No new object.
+| | **`mint`** | **`alter`** | **`efface`** |
+|---|---|---|---|
+| **social subject → a character's choice** | found a settlement · establish an office · found a faction · marry · confer an office · take up an occupation · found a parish | move standing, regard, commitment, grievance · amend a remit · tend a holding | dissolve a guild · abolish an office · strike a village from the roll · annul a marriage · revoke a tenure |
+| **non-social subject → an event** | **a new island · a river changing course · a tear opening in the substrate · a new seam exposed by a landslide** | weather · `wear` · a body ageing · off-peninsular pressure | **a storm destroying a harbour · a seam worked out · a tear closing · a body failing** |
 
-⚠ **`efface` may NOT target a Claim in another person's ledger.** R-2 forbids reaching through a
-person (`SUP:379-380`), and the review's own rank 6 spends its argument insisting a person's memory
-must not be deletable by a motivated process. The purge limb is closed at §5.4 by a different
-mechanism, which is better and is shipped rather than invented.
+> **THE BOTTOM-LEFT CELL IS THE CAPABILITY THE ARCHITECTURE DID NOT HAVE: THE WORLD CAN CREATE AND
+> DESTROY THINGS.** A landslide exposes a seam nobody knew was there, a faction forms around working
+> it, and no character decided the seam should exist.
 
-#### `mint`'s three problems, and their one closure
+#### The two drivers, and the vocabulary that must not collide
 
-A `mint` entry addresses an object that does not exist, so it cannot carry a reference. It carries a
-**spec** instead, and three consequences follow:
+```
+Act   := (id, actor, verb, changes[], reads[], contests[], payload)   -- a character's choice
+Event := (id, kind, subject, changes[], emitted_at)                   -- the world acting on itself
+```
 
-1. **The minted id is computable before resolution.** `id = H(world_seed, tick, actor_id, "mint:" +
-   slot)`. It is therefore **available to the same act's later `touches` entries** — "make a Container
-   of kind Hearth inside C, and let the resulting id be the object of this `contain` edge" — which is
-   the output binding the prior brief had no way to express.
-2. **A `mint` declares `(parent_of(object), alter)` in its own `touches`.** That is what makes
-   `mint` visible to the conflict rule at all: two acts founding a settlement on one spot both `alter`
-   the same parent. It also closes the mint-racing-an-efface pair — effacing the parent and minting a
-   child inside it now share an object.
-3. **Cardinality closes the rest.** Two `mint`s of edges that jointly break a declared cardinality
-   conflict, per §2.3.
+⚠ **`Event` is ONE word doing ONE job, and the near-collision is headed off here.** An `Event` is **a
+witnessable happening**. Some events are *caused by* an Act when it resolves; some *are* the world
+acting on itself. `witness : (Person, Event) → Claim[]` consumes both without distinction, and
+`firsthand(event_id)` names both. **So "driver ∈ Act | Event" reads: the proximate driver of this
+change is either a character's act or the world's own event** — it does not introduce a second type.
 
-⚠ **`mint` on a practice rank is WITHDRAWN, and advancement is an `alter`.** A rank is a bounded scalar
-field of a `Practice` tuple (`02:153`), not an object. Using one word for *bring an object into
-existence* and *raise a scalar* is the non-idempotent meaning `CLAUDE.md` §4 forbids, and it would put
-the same operation under two modes with no rule saying which wins.
+**Both resolve through the same machinery, and both are witnessed per person by presence.** So **an
+event is as disputable as an act, which the epistemic layer requires. Nobody agrees about the weather
+either.**
 
-#### `verb` is a name; `touches[]` is the mechanism
+#### ⚠ `read` and `exclude` are NOT modes, and their re-siting is real work rather than a relabel
 
-> **THE RESOLVER READS `touches[]` AND NEVER BRANCHES ON `verb`.** A verb is a *bundle* of `touches`
-> entries with an eligibility predicate and an obstacle composer. **Adding a verb adds no resolver
-> case.**
+The earlier five-mode set mixed two different things: **what a change does to a subject** (`mint`,
+`alter`, `efface`) and **what an act declares about contention** (`read`, `exclude`). Only the first
+three are state changes. So:
 
-This is the architecture's answer to a real defect: the prior brief asserted that *"none [of the new
-operations] needs a verb that does not already exist in `remit.acts`"* while itself naming at least
-nine verbs outside that closed five. **The assertion is withdrawn.** The correct statement is:
+- **`reads[]`** is a declaration on the Act, not a mode. It carries no delta and changes nothing. It
+  exists so the conflict rule can see that an act *depended on* an object's value — which is what makes
+  a read-write pair visible at all.
+- **`contests[]`** is a claim on contention: *"I am taking this, and no one else may have it this
+  season."* It is what `exclude` meant. **It is not a mode of change** — it is a declaration that
+  routes the act to `contest` if anyone else declares it or alters it.
 
-- **The verb vocabulary is OPEN**, and it is what a person's practice ladder supplies — rank ≥ 3 adds
-  verbs to the option list, rank ≥ 5 adds verbs unattemptable below it (`SUP:504-505`, `02:204-206`).
-  A site's band gate removes verbs from it (`SUP:1313`). An office's remit makes verbs eligible where
-  they otherwise are not.
-- **`remit.acts` is NOT the act vocabulary.** It is the closed set of five acts an **office's remit**
-  makes eligible somewhere they otherwise are not: **issue · determine · confer/revoke · dispatch ·
-  convene** (`SUP:421-424`). It is unchanged and untouched here. `transfer`, `carry`, `commit`,
-  `requisition`, `investigate`, `migrate`, `admit`, `form_knot` and every `mint` are ordinary acts
-  available to any person subject to their preconditions, and always were.
-- **The MODE set is CLOSED at five**, and that is what keeps the open verb vocabulary safe. The
-  resolver's whole behaviour is a function of `(target, mode, field, delta)` — so an open verb list
-  cannot grow the resolver, and §14 row 13's ban on a per-entity branch is strengthened rather than
-  strained.
+**An Event carries `changes[]` and nothing else.** It does not read, because it is not deciding, and it
+does not contest, because it is not an agent (§2.4's conflict rule below).
 
-#### Commutativity, and the conflict rule
+#### `mint`'s spec and output binding, unchanged in substance
 
-> **COMMUTATIVITY IS A PROPERTY OF THE FIELD, DECLARED WHERE THE FIELD IS DECLARED.**
-> `additive` — all writers apply, order-independent: `condition`, `stores`, envelope weights.
-> `exclusive` — contested: a succession pointer, an office's remit, an address.
+```
+spec := (type, kind?, parent, initial[], slot)
+```
+
+The minted id is computable **before resolution** — `id = H(world_seed, tick, subject_id, purpose)` —
+so it is available to the same driver's later changes.
+
+⚠ **AN EVENT HAS NO ACTOR, AND AN EVENT-MINTED OBJECT HAS NO SUBJECT TO KEY FROM. `purpose` CARRIES
+BOTH, AND THIS MUST BE STATED OR EVENT-DRIVEN MINTS ARE NON-DETERMINISTIC.** For a world event the
+substream is `H(world_seed, tick, locus_id, purpose)` where **`locus_id` is the id of the place the
+event acts on** — the Rung or Site — and `purpose` names the event kind and slot,
+`"landslide:seam:0"`. A new island has no parent Site, so its locus is the Rung of the sea region
+it appears in; **if no locus exists the world root is the locus**, and that is the base case the
+earlier version had no need for and this one does.
+
+#### The conflict rule, with its event term
+
+> **TWO ACTS CONFLICT** iff they share a subject and either **contests** it, **or** both `alter` an
+> `exclusive` field, **or** both `mint` states that jointly break a declared cardinality. Conflicts
+> route to `contest(rung, prize, claimants)`. Ties break on `H(act_id, world_seed)` — never on
+> rank, office or list position (`SUP:692-694`).
+>
+> ⚠ **AN EVENT DOES NOT CONFLICT WITH ANYTHING, BECAUSE IT IS NOT AN AGENT.** There is no contest
+> between a storm and a man. **Events resolve FIRST, in their own barrier, and acts resolve against the
+> world the events leave** (`02_THE_SEASON_LOOP.md` §3). A person who spent his season repairing a
+> harbour a storm had already destroyed **finds it destroyed**, exactly as he may attempt a verb the
+> world has already removed (§3.2). That is the same fiction, from the other side.
+
+#### Commutativity, and the one clamp
+
+> **`additive`** — all writers apply, order-independent: `condition`, `stores`, envelope weights.
+> **`exclusive`** — contested: a succession pointer, an office's remit, an address.
 > **The default for an undeclared field is `exclusive`.**
 
-⚠ **`additive` is order-independent ONLY under batching, and the correction is load-bearing.** `clamp`
-does not commute with addition at the bounds: applying `+0.3`, `−0.5`, `+0.3` to a `[0,1]` quantity at
-0.9 gives three different answers in three different orders if each is clamped as it lands. **The
-resolver sums a season's deltas for a field and applies the clamp once.** That is what makes
-`SUP:1333`'s accumulator honest and it is what makes the tragedy-of-the-commons shape reachable at
-all: without it, all forty `alter` acts on a harbour conflict pairwise and route to a contest.
+⚠ **`additive` is order-independent ONLY under batching.** `clamp` does not commute with addition at the
+bounds. **The resolver sums a season's act deltas per field and applies the clamp once.** An event
+delta applied at the event barrier is *strictly before* all of them and needs no commutativity argument
+at all.
 
-> **THE CONFLICT RULE.** Two acts conflict iff they share a target and either mode is
-> `exclude`/`efface`, **or** both `alter` an `exclusive` field, **or** both `mint` edges that jointly
-> break a declared cardinality. Everything else resolves independently. Conflicts route to
-> `contest(container, prize, claimants)`. **Ties break on `H(act_id, world_seed)`** — never on rank,
-> office or list position, because a rank-ordered tiebreak is a hidden power stat (`SUP:692-694`).
+#### `verb` is a name; `changes[]` is the mechanism
 
-The rule quantifies over a **field**; `touch` therefore carries one. The prior brief stated the rule
-over fields and typed `touches` as `(object, mode)`, which made the rule **not computable from the
-declared data**. `field?` is null for `read`, `exclude` and `efface`, which touch the object as a
-whole.
+> **THE RESOLVER READS `changes[]` AND NEVER BRANCHES ON `verb` — AND IT NEVER BRANCHES ON AN EVENT'S
+> `kind` EITHER.** A verb is a bundle of changes with an eligibility predicate and an obstacle
+> composer; an event kind is a bundle of changes with a locus. **Adding either adds no resolver case.**
 
-### §2.5 `Derived` — the query category
+- **The verb vocabulary is OPEN**, and it is what a person's practice ladder supplies — rank ≥ 3 adds
+  verbs, rank ≥ 5 adds verbs unattemptable below it (`SUP:504-505`). A site's band gate removes verbs.
+  An office's remit makes verbs eligible where they otherwise are not.
+- **`remit.acts` is NOT the act vocabulary.** It is the closed five an **office's remit** makes eligible
+  somewhere they otherwise are not: **issue · determine · confer/revoke · dispatch · convene**
+  (`SUP:421-424`). Unchanged and untouched here.
+- **The MODE set is CLOSED at three**, and that is what keeps the open verb and event-kind vocabularies
+  safe: the resolver's whole behaviour is a function of `(subject, mode, field, delta)`.
 
-A **Derived** is a named pure function over state, **never stored, recomputed on demand**. It is the
+#### The worked case that proves the partition does real work
+
+**Can a plague efface a settlement?** The subject test answers it, and the answer is historically exact.
+
+- A plague **kills bodies** — a non-social subject, so an **event** `efface`s persons. **Legal.**
+- A settlement is a **named society aspect**, so *its* deletion is a **character's choice**. **The
+  plague cannot efface it.**
+- So the village empties and **still legally exists** until some office strikes it from the roll — an
+  act, by a named person, at a date, witnessable, contestable and refusable.
+
+> **VILLAGES DO NOT CEASE TO EXIST BECAUSE EVERYONE DIED. SOMEBODY HAS TO STRIKE THEM FROM THE ROLL.**
+
+An enumeration of licensed channels could never have produced that. The same test gives the same answer
+for a dissolved guild, an abandoned parish, and a polity that has lost every subject but has not yet
+been dissolved.
+
+#### ⚠ THE LIMIT, and it is the half of the ruling most easily lost
+
+**An event may sink a ship, silt a harbour, empty a village of bodies, or break the Thread over a
+province. It may NEVER depose a praefect, dissolve a guild, convert a parish, or move standing, regard,
+commitment or grievance.** Those subjects belong to characters.
+
+> **AN EVENT REACHES SOCIETY ONLY THROUGH WHAT PEOPLE CHOOSE TO DO ABOUT IT — WHICH IS THE ENTIRE
+> GAME.**
+
+#### What is still open in the partition
+
+**Where the boundary of "peninsular human society" is drawn for edge subjects.** A plague is biology
+but it empties institutions; a famine is weather times tending; a heresy is religion. **The rule
+decides each by its subject** — event · both · choice — and harder cases will exist. **The rule, not a
+list, is what settles them**, and that is the point of having one.
+
+### §2.5 `Query` — the query category
+
+A **Query** is a named pure function over state, **never stored, recomputed on demand**. It is the
 formal version of `SUP:340`'s *"Nobody"* row and of R-1's *"compute-on-demand, never push, never
 store"* (`SUP:374-377`), and it is what makes several missing objects disappear rather than be built.
 
@@ -410,7 +484,7 @@ renamed.** `engine/engine_params/params_tables.yaml` ships sections named *"Deri
 *"Derived Scores"*, and `references/glossary.md:75-82` lists their members — Health, Stamina,
 Coherence, Composure, Momentum — which are **stored per-character values**. The word means the
 opposite thing on the two surfaces. **The mandatory qualifier, which must travel with every use: a
-Derived is never stored.** `Query` is the available alternative and is recorded in
+Query is never stored.** `Query` is the available alternative and is recorded in
 `03_COMPENDIUM.md` §7; it is not taken here because the dispositions this document builds on are
 written in this word, and a third name for one category is the failure being avoided.
 
@@ -422,32 +496,32 @@ written in this word, and a third name for one category is the failure being avo
 | derived | signature | side | range | replaces |
 |---|---|---|---|---|
 | `faction(prop)` | `Proposition → Set[Tenure]` | resolver | — | a stored faction object |
-| `leaders(prop, c, observer)` | `(Proposition, Container, Person) → List[Person]` | **person** | ranked list | a faction leader field. **Deposition = this returning someone else** |
-| `presence(prop, c)` | `(Proposition, Container) → count` | resolver | ℕ | faction scale |
-| `density(prop, c)` | `(Proposition, Container) → [0,1]` | resolver | fraction of members | faction scale |
-| `footprint(prop)` | `Proposition → Set[Container]` | resolver | — | faction scale |
-| `sovereign_fraction(root)` | `Container → [0,1]` | resolver | partial (§7 F1) | stored control |
-| `condition(c)` | `Container → [0,1] ∪ ⊥` | resolver | draw-weighted mean; ⊥ at a Site-less leaf | a stored coarse condition |
-| `verbs(site, c)` | `(Site, Container) → Set[Verb]` | **resolver** | — | **world truth about what is possible** |
+| `leaders(prop, c, observer)` | `(Proposition, Rung, Person) → List[Person]` | **person** | ranked list | a faction leader field. **Deposition = this returning someone else** |
+| `presence(prop, c)` | `(Proposition, Rung) → count` | resolver | ℕ | faction scale |
+| `density(prop, c)` | `(Proposition, Rung) → [0,1]` | resolver | fraction of members | faction scale |
+| `footprint(prop)` | `Proposition → Set[Rung]` | resolver | — | faction scale |
+| `sovereign_fraction(root)` | `Rung → [0,1]` | resolver | partial (§7 F1) | stored control |
+| `condition(c)` | `Rung → [0,1] ∪ ⊥` | resolver | draw-weighted mean; ⊥ at a Site-less leaf | a stored coarse condition |
+| `verbs(site, c)` | `(Site, Rung) → Set[Verb]` | **resolver** | — | **world truth about what is possible** |
 | `opening_set(person, view)` | `(Person, View) → List[Candidate]` | **person** | — | an authored opportunity |
-| `norm(c, prop)` | `(Container, Proposition) → [−5, +5]` | resolver | member-stance mean over the judging set | a stored norm/unrest/reputation |
+| `norm(c, prop)` | `(Rung, Proposition) → [−5, +5]` | resolver | member-stance mean over the judging set | a stored norm/unrest/reputation |
 | `occupation(p, observer)` | `(Person, Person) → Proposition?` | **person** | — | a profession field |
 | `estimated_profile(p, prop)` | `(Person, Proposition) → Profile` | **person** | — | reading true state |
-| `eligible(p, verb, c)` | `(Person, Verb, Container) → bool` | resolver | — | `SUP:435` |
-| `judging_set(c)` | `Container → Set[Person]` | resolver | — | a stored membership list |
-| `draw_share(x, c)` | `(Site \| Container, Container) → (0,1]` | resolver | shares sum to 1 | `SUP:1245` |
+| `eligible(p, verb, c)` | `(Person, Verb, Rung) → bool` | resolver | — | `SUP:435` |
+| `judging_set(c)` | `Rung → Set[Person]` | resolver | — | a stored membership list |
+| `draw_share(x, c)` | `(Site \| Rung, Rung) → (0,1]` | resolver | shares sum to 1 | `SUP:1245` |
 | `share(actor, site)` | `(Person, Site) → (0,1]` | resolver | `SUP:1264` | — |
 | `capacity(date)` | `Date → ℕ` | resolver | items a sitting processes | the second allowance (§7) |
 | `entrenchment(p, obj)` | `(Person, Object) → [0,1]` | resolver | `min(1, seasons_held/60)` | read off `since`/`until` |
 | `address(p)` | `Person → Path` | resolver | the `contain` chain to the root | — |
-| `regard(p, c)` | `(Person, Container) → scalar` | resolver | member-stance sum | a stored reputation |
+| `regard(p, c)` | `(Person, Rung) → scalar` | resolver | member-stance sum | a stored reputation |
 
 **Nothing stores an aggregate. Every one of these is a query, and that is why power is not static.**
 
 ⚠ **`presence`, `density` and `footprint` are THREE functions and the prior brief gave them one
 signature.** `footprint` takes one argument at `SUP:116`. They are split above.
 
-⚠ **`sovereign_fraction`'s `root` is a distinguished Container the design does not declare an
+⚠ **`sovereign_fraction`'s `root` is a distinguished Rung the design does not declare an
 invariant for.** `SUP:475-478` already rules that a contested succession undefines *the choice of
 ROOT, not the function*, so **callers must handle root-plurality and a unique root is a political
 condition, not an invariant.**
@@ -476,7 +550,7 @@ elite.
 
 ```
 Person   := (id, weight, marks, capability, stance, ledger, ties)     -- ONE tuple. weight >= 1
-Envelope := (container, counts_by_age_band[], marks_bundle, capability_distribution)
+Envelope := (rung, counts_by_age_band[], marks_bundle, capability_distribution)
 ```
 
 > ⚠ **THERE IS ONE TUPLE, NOT TWO, AND AN EARLIER VERSION OF THIS DOCUMENT DECLARED TWO WHILE CLAIMING
@@ -486,7 +560,7 @@ Envelope := (container, counts_by_age_band[], marks_bundle, capability_distribut
 > child record; nothing is converted, because there is nothing to convert between.**
 >
 > **`address` is NOT a field on either.** It is the derived view of the `contain` Tenure (§2.1), and
-> that is what unified the two tuples: the earlier `Cohort` carried a `container` field where `Person`
+> that is what unified the two tuples: the earlier `Cohort` carried a `rung` field where `Person`
 > carried an `address`, which was **two spellings of one edge on two records that are one record.**
 
 `View` for a record at `weight > 1` is `K = 3` (`SUP:650`) — a parameter of the record, not a second
@@ -494,8 +568,8 @@ type.
 
 ⚠ **The ownership claim is this document's, and it is stated as a ruling rather than quoted.**
 `09:533` says *"**the world holds** a demographic envelope per containment node"* — the world, not the
-Container. **This document assigns it to the Container, as `Container.envelope`,** on the ground that
-§4.2's amended Container row already admits matter and only matter (`SUP:355-360`), and *"the world"*
+Rung. **This document assigns it to the Rung, as `Rung.envelope`,** on the ground that
+§4.2's amended Rung row already admits matter and only matter (`SUP:355-360`), and *"the world"*
 names no owner in the five-owner table. The prior brief wrote *"each Node carries"* and added *"as
 matter, not as a social aggregate"*, neither of which `09` says; the quotation is corrected and the
 assignment is owned.
@@ -544,18 +618,18 @@ contents have to be re-homed:
 > | owner | holds |
 > |---|---|
 > | **Person** | id, address, marks, capability, stance, claim ledger, ties; **every `Tenure` whose subject they are**; the Propositions they have uttered. Everything interior |
-> | **Container** | its id, stake(s) · judging set rule · standing dates, each date's `capacity`, and their convening conditions · **and the matter it holds**: `stores`, its Sites, its Records, the transmission pointer, its envelope. **No social aggregate, ever** |
-> | **Office** | its id, post, container, remit, conferral, revocation, establishment, upkeep — **and its own standing dates, each date's `capacity`, and their convening conditions** |
+> | **Rung** | its id, stake(s) · judging set rule · standing dates, each date's `capacity`, and their convening conditions · **and the matter it holds**: `stores`, its Sites, its Records, the transmission pointer, its envelope. **No social aggregate, ever** |
+> | **Office** | its id, post, rung, remit, conferral, revocation, establishment, upkeep — **and its own standing dates, each date's `capacity`, and their convening conditions** |
 > | **Nobody** | aggregates, norms, densities, needs, openings, scale, reputation, **leadership**, **and every row of §2.5** |
 
-⚠ **`subject ∈ Person | Container | Proposition` — and `Faction` as a union member is DEAD.** No kind
+⚠ **`subject ∈ Person | Rung | Proposition` — and `Faction` as a union member is DEAD.** No kind
 uses a Faction subject and Faction is deleted as a carrier. The union member the design actually
-promises is `hold | Proposition → Container` — annexation as a tenure changing hands.
+promises is `hold | Proposition → Rung` — annexation as a tenure changing hands.
 
 ⚠ **The stance referent set still names `Faction` as one of four kinds** (`ABS:188`: `Person |
 Faction | Proposition | Place`). After this deletion, `Faction` and `Proposition` denote the same
 thing. **`Faction` is struck from the referent set; the set is three kinds — `Person | Proposition |
-Place` — and `Place` is defined here, because it is defined nowhere in the corpus: `Place = Container
+Place` — and `Place` is defined here, because it is defined nowhere in the corpus: `Place = Rung
 | Site`.** That is a widening the prior work needed and never performed: without it you cannot hold an
 attitude toward a harbour.
 
@@ -602,7 +676,7 @@ stored**, **carries no references**, and **answers no query**. `choose` still ca
 sees what a body reports. The type now tells the truth the prose already stated.
 
 > **A Sensation is UN-NAMEABLE, THEREFORE UNDISPUTABLE.** No person can hold a claim about another
-> person's hunger. Claims reach the **larder** (matter on a Container) and the **body**, and stop
+> person's hunger. Claims reach the **larder** (matter on a Rung) and the **body**, and stop
 > there. That consequence is written down here rather than discovered later.
 
 **Four attacks that fail.** It is constructible over the frozen post-MATTER world. It re-admits no
@@ -639,7 +713,7 @@ believed_obstacle_band)`; `choose` returns exactly one `Act`, constructed from o
 availability"*. Dropping it silently breaks `SUP:1098-1102`: a suppressed grievance re-arms because its
 enabling condition is *"recomputed at P0 like every other option"*. Restored.
 
-### §3.3 `contest(container, prize, claimants)` — the conflict-routing primitive
+### §3.3 `contest(rung, prize, claimants)` — the conflict-routing primitive
 
 ⚠ **The prior brief deleted it along with the conflict routing, and it is restored.** It is the single
 sibling-competition function (`SUP:327`), the destination of every act conflict (`SUP:691`), and the
@@ -647,8 +721,8 @@ form a published dispensation takes when it lands (`SUP:1141`). It is **not** th
 subsystem; it is the governance-conflict primitive, and it has three shipped call sites.
 
 ```
-contest : (Container, Prize, Claimant[]) -> Event[]
-Prize   ∈ the container's stake | the regard of its members | one of its offices
+contest : (Rung, Prize, Claimant[]) -> Event[]
+Prize   ∈ the rung's stake | the regard of its members | one of its offices
         | compliance-here | any object two acts conflicted over
 ```
 
@@ -729,17 +803,17 @@ new.
 
 ### §5.1 Built and destroyed
 
-`mint` and `efface` on **Site**, **Container** and **Office**, as ordinary `touches` modes: witnessed
+`mint` and `efface` on **Site**, **Rung** and **Office**, as ordinary `touches` modes: witnessed
 by presence, contested where someone objects, resolved in RESOLVE's existing acts class, sized by the
 existing degree bands (`SUP:540-546`).
 
 **Preconditions are material, not authorial.** Founding a settlement requires `stores` of the right
-`MatterKind` (§7 F2), a `hold` Tenure or standing at the parent Container, and an act. Razing is an
+`MatterKind` (§7 F2), a `hold` Tenure or standing at the parent Rung, and an act. Razing is an
 `efface` and is a **contested physical act** against whoever defends it — the `exclude` limb, which
 `SUP:1839-1844` records as **not cleared** against the anti-leverage row and which this document
 inherits rather than repairs (§11).
 
-⚠ **`efface` on a Container, Office, Person or Site widens the uncleared discrete limb of §14 row 11
+⚠ **`efface` on a Rung, Office, Person or Site widens the uncleared discrete limb of §14 row 11
 by four object classes, and the prior brief left that unremarked.** It is remarked here and carried
 open at §11.
 
@@ -747,14 +821,18 @@ open at §11.
 it dangling. The rule: **`efface` sets `until = tick` on every Tenure whose subject or object is the
 effaced id, and effaces nothing else.** A tenure over a razed settlement becomes a historical fact
 that people still argue about, which is correct and is exactly what `until?` was added for. Effacing a
-Container additionally requires its `contain` children to have been re-parented in the same act — there
+Rung additionally requires its `contain` children to have been re-parented in the same act — there
 is no orphaning operation (§2.3).
 
 ### §5.2 Born and die
 
 **Birth and death are metabolism.** MATTER moves envelope weights: `counts_by_age_band` advances,
-births add weight at the youngest band, deaths remove it. This is licensed decider-free exception 1 —
-*larders consume, crops yield, wounds close or fester, bodies age* (`ABS:271-273`, citing `09:55-59`).
+births add weight at the youngest band, deaths remove it. **Under §2.4's partition these are EVENTS:
+biology is not an aspect of human society.** ⚠ **And the partition separates what the old enumeration
+could not — *this body failed* and *this man was murdered* are different changes with different
+drivers.** A body ageing out is an event; a killing is an act, and the subject test says so without
+anyone having to adjudicate. ⚠ **Whose child is legitimate is a CHOICE** — Jordan names marriage by
+name — so the envelope moves by event and legitimation is an act.
 
 **A named person's death is the same event at weight 1**, and it is the one place a Person leaves
 existence without an act. It fires `until = tick` on every Tenure they held — which is a `Tenure`
@@ -767,7 +845,7 @@ death-notice is therefore one of the most powerful acts in the game.
 open the date in the same step, which **MATTER's own write class forbids** — dates are the CALENDAR
 class (§4). The vacancy is a *fact*; the date is an *occasion*; CALENDAR is where facts become
 occasions. So: MATTER sets `until`, and the following CALENDAR reads the vacancy and schedules a
-conferral Date at the horizon its date-holder carries — the Container for a hearth or heritable seat,
+conferral Date at the horizon its date-holder carries — the Rung for a hearth or heritable seat,
 the parent Office for an appointed one (`SUP:1200-1206`). **Nothing observable changes**, because that
 horizon is a future date in any case; what changes is that no step writes outside its class.
 
@@ -786,16 +864,16 @@ inheriting a value. Two brothers minted out of one hamlet in one season can hold
 the same twenty-year-old proclamation.
 
 ⚠ **WHERE THE CHANNEL STORE LIVES IS OPEN, AND THE PRIOR BRIEF'S ANSWER IS WITHDRAWN.** It relocated
-the store to the Container as matter, citing the amended Container row. **Three independent grounds
+the store to the Rung as matter, citing the amended Rung row. **Three independent grounds
 refute that placement:**
 
-1. *"Knowledge lives only in ledgers"* (`SUP:74-75`) — **a Container is no more a ledger than a channel
+1. *"Knowledge lives only in ledgers"* (`SUP:74-75`) — **a Rung is no more a ledger than a channel
    is**, so the relocation made it worse, not better.
-2. The Container row's own test is *"The line is provenance, not location"* (`SUP:355-360`). **Stored
+2. The Rung row's own test is *"The line is provenance, not location"* (`SUP:355-360`). **Stored
    tellings ARE derived from persons and DO go stale against them**, so they fail the row's test.
 3. **The dormancy ruling already decided this exact move** (`SUP:746-748`): *"a banked claim is a
-   claim, and claims live in ledgers; and the alternative is a stored flag on a container, which the
-   amended Container row admits only for matter."* The placement is not merely unlicensed; it is ruled
+   claim, and claims live in ledgers; and the alternative is a stored flag on a rung, which the
+   amended Rung row admits only for matter."* The placement is not merely unlicensed; it is ruled
    against.
 
 §14 row 7 independently forbids a knowledge value stored on the thing known. **The channel store is
@@ -845,14 +923,14 @@ most emphatic closure claim (`03:411-413`, `SUP:243-245`).
 to admit:
 
 ```
-Record := (id, container, kind, forgery_quality, subject_matter)
+Record := (id, rung, kind, forgery_quality, subject_matter)
           kind ∈ register | charter | deed | roll | letter
 ```
 
 **It earns its place twice over in shipped text.** `admissible_source` is a Venue door — *"a venue that
 hears instruments only cannot be reached by forty hamlet witnesses"* (`SUP:1589-1591`) — and *a
 document's forgery quality* is a named resistance pool (`SUP:524`). A register is therefore
-`efface`-able matter at a Container, and **burning the archive drops confidence only for claims that
+`efface`-able matter at a Rung, and **burning the archive drops confidence only for claims that
 actually cited it** — no reach into any ledger, and R-2 is untouched.
 
 ⚠ **AND THE CONFIDENCE DROP IS GATED ON A CLAIM, or arson becomes a §14 row 3 broadcast.** Without the
@@ -875,9 +953,9 @@ Petition → carriage → **docket item** → sitting. The first, second and fou
 
 ```
 Petition   := (id, petitioner, proposition, respondent, backing[])
-              respondent ∈ Container | Office
+              respondent ∈ Rung | Office
 Date       := (id, holder, form, when, capacity, convener_office?, docket[])
-              holder ∈ Container | Office
+              holder ∈ Rung | Office
 DocketItem := (id, date, matter, placed_by, placed_at)
               matter ∈ Petition | Motion | Report | Conferral | Determination
 ```
@@ -890,8 +968,8 @@ DocketItem := (id, date, matter, placed_by, placed_at)
 **Backing is the aggregation, and it is why there is no crowd object:** *a town's demand* is a petition
 with four hundred backers (`SUP:843-845`).
 
-**Standing at an office is standing at the office's Container, or leave from a person who holds it**
-(`SUP:877-883`). For an office on a cluster root, which has no Container, standing is membership in the
+**Standing at an office is standing at the office's Rung, or leave from a person who holds it**
+(`SUP:877-883`). For an office on a cluster root, which has no Rung, standing is membership in the
 office's own judging set or establishment, or leave from a member.
 
 **A petitioner may address many offices** (`SUP:913-937`), and they are independent objects — each
@@ -920,7 +998,7 @@ establishment), `convene` (`SUP:421-424`).
 opening through the same `opening_set(person, view)` any act comes through, now evaluated over changed
 believed terms. **No one authored an opportunity for anybody** (`SUP:1132-1137`).
 
-**A published dispensation does not apply — it lands as a compliance contest**, per relevant Container,
+**A published dispensation does not apply — it lands as a compliance contest**, per relevant Rung,
 through `contest` and no second resolver (`SUP:1139-1147`).
 
 **One order, many executors** (`SUP:1149-1183`): scope enumerates **executors, not places**; delivery
@@ -939,7 +1017,7 @@ down-stroke produce.
 Proposition := (mood, subject, predicate, value, when, scope)   mood ∈ HOLDS | OUGHT
 Case        := (id, holder, motion, rung, grounds[])
 Ground      := (id, proposition, warrant, support[])            support[] are claim ids
-Venue       := (container, prize, standing_date, judging_set_rule, decision_rule,
+Venue       := (rung, prize, standing_date, judging_set_rule, decision_rule,
                 admission_floor, privileged_custody, exchange_budget, article_count,
                 coupling_depth, veto_holders, record_custody)
 door        := (convener, enter, speak, admissible_source, attendance_cost)
@@ -974,10 +1052,10 @@ Three orthogonal structures, and every rung is governed by all three:
 | **containment** — a strict single-parent tree | address, jurisdiction, aggregation, the judging set | every rung, Person → Realm (`SUP:96`) |
 | **office** — a post whose holder's decision binds persons who never agreed to it | remit, dates, establishment, conferral | any rung, **and clusters with no rung at all** |
 | **alignment** — a Proposition plus its `commit` map | allegiance, at any scale, concealable | any scale, no tier field (`SUP:110-133`) |
-| **`hold`** — the fourth thing, new here | **who holds the ground** | any Site or Container |
+| **`hold`** — the fourth thing, new here | **who holds the ground** | any Site or Rung |
 
 ⚠ **The upper rungs owning no state is the architecture working, not a gap.** Political action above
-Settlement runs through **factions and offices**, not through container state. What the prior design
+Settlement runs through **factions and offices**, not through rung state. What the prior design
 lacked was the fourth row: a faction that had won a realm's allegiance **owned nothing, taxed nothing,
 garrisoned nothing and could lose nothing but members**. `hold` gives power a material referent, and it
 is why annexation now has an object to transfer.
@@ -1022,7 +1100,7 @@ an attempt resolving, plus a two-limb disjunction, and no clock:
 |---|---|---|
 | an office | `revoke` on a `hold` Tenure | yes, `SUP:416`, `SUP:423` |
 | your holdings | `revoke` on a `hold` Tenure over a Site | new object, no new verb |
-| a territory | the same, over a Container | new object, no new verb |
+| a territory | the same, over a Rung | new object, no new verb |
 | the leadership of a faction | **`leaders` returning someone else** — no verb exists or is needed | derived |
 | standing | `regard` falling as member stances move | derived |
 | your address | `confer` on `contain` to a lower rung — admission's inverse | shipped |
@@ -1143,7 +1221,7 @@ which copies a verified one. **Four constructors, no fifth, and no path to a fre
 matter, bodies, and the confidence of a memory** (`ABS:280`, citing `09:562-564`) — and no fourth may
 be added. Standing, regard, grievance and commitment move **only when an act causes an event**.
 
-**Dates.** A `Date` is the design's spine. It is owned by a Container or an Office, carries a
+**Dates.** A `Date` is the design's spine. It is owned by a Rung or an Office, carries a
 `capacity`, and is scheduled either unconditionally by charter arithmetic or by a convening condition.
 
 **Threats and pressures ride the convening condition, and the prior brief invoked it at one line and
@@ -1151,7 +1229,7 @@ never defined it.** Its tuple:
 
 ```
 ConveningCondition := (id, holder, predicate, date_form, set_by, set_at)
-   holder    ∈ Container | Office
+   holder    ∈ Rung | Office
    predicate : pure over the holder's OWN readable state — its stake, the norm of its judging
                set on a named proposition, an R-1 compute-on-demand aggregate over its
                descendants, or the calendar.  PUBLISHED AS A BAND, never as a trigger point
@@ -1174,10 +1252,24 @@ guarantees an occasion, not a hearing** (`SUP:791-801`).
 petition's producer (`SUP:842-843`). Pressure is therefore always someone's, and always addressed to
 someone.
 
-**World churn** is four channels and exactly four (`ABS:269-277`): metabolism and nature · matter events
-(a storm, a silted channel, a worked-out seam, and a band-edge closure under §10.6's three conditions)
-· the confidence of a memory decaying · the calendar, **lapse only**. **There is no fifth, and no
-threshold that fires an outcome.**
+⚠ **World churn is NO LONGER AN ENUMERATION OF CHANNELS.** An earlier version of this document carried
+`ABS:269-277`'s *"four, and only these four"* decider-free channels. **§2.4's partition replaces the
+list with a predicate**, and the list was wrong three ways at once — matter events were licensed with
+nothing generating one, `wear` was unwritable, and an authored event deck had no home.
+
+> **THE WORLD CHURNS BECAUSE EVENTS ACT ON IT, AND AN EVENT IS ANY STATE CHANGE WHOSE SUBJECT IS NOT
+> PENINSULAR HUMAN SOCIETY.** Weather · `wear` · a body ageing and failing · a landslide exposing a
+> seam · a storm destroying a harbour · a tear opening in the metaphysical substrate · pressure from
+> off the peninsula. **No licence is needed beyond the partition's second row, and no fifth channel can
+> be smuggled in, because there is no list to extend.**
+
+**The two survivors of the old list that are NOT events, and it matters that they are named:** the
+**confidence of a memory** decaying is interior, in the INTERIOR write class, and belongs to its
+holder; and **lapse** — a date passing with nothing heard — is the calendar class and is *the absence
+of an act*, not a change with a driver. **Neither is an event and neither needs to be.**
+
+**No threshold fires an outcome.** A band edge changes an **option set**, never a roll term and never
+an outcome, and its crossing is an Event witnessable by presence.
 
 ⚠ **THE SLOW FUSES ARE NO LONGER ACT-ONLY. JORDAN RULED F6 AND THE RULING REQUIRES ONE CONSTANT.** An
 earlier version of this document carried `SUP:1352-1356`'s narrowing verbatim — *"a fuse that is
@@ -1202,9 +1294,11 @@ the quantity the whole political layer exists to argue about, and **it belongs i
 parameter table where code reads it** (`CLAUDE.md` §0.05), **one row per site kind**. `03_COMPENDIUM.md`
 §2.6 carries the table's shape; **no values are proposed here, because none has been measured.**
 
-**`wear` sits in decider-free channel 1 — metabolism and nature — and is NOT a fifth channel.** Channel
-1 already carries *"crops yield, wounds close or fester, bodies age"* (`ABS:271-273`). **Entropy belongs
-with metabolism, and this ruling is what makes that channel's name honest.** It is written at MATTER,
+**`wear` IS AN EVENT, under §2.4's partition, and it needs no special case at all.** A harbour silts
+because harbours silt — a non-social subject, so the world drives it. **Tending it is a choice.** Both
+move one quantity, which is precisely Jordan's flux model, and **the partition explains why without
+special-casing either.** *(An earlier version of this document argued `wear` in as a fourth thing
+inside "metabolism and nature". The partition makes that argument unnecessary.)* It is written at MATTER,
 in the matter class, and the accumulator's act deltas stay at RESOLVE in the acts class: **two writers,
 two classes, one clamp, applied once** (§2.4).
 
@@ -1268,7 +1362,7 @@ design has no fact of the matter available to any person**, and that is the poin
 
 `resolve` emits Events; every Event carries an `id` and a degree band; `witness` is the only bridge
 from an Event to a Claim, and it is per-person. Beyond acts, events arise from exactly the four
-decider-free channels of §5.12 and nowhere else. **A band-edge closure is an Event, witnessable by
+events of §5.12, which are anything whose subject is not peninsular human society. **A band-edge closure is an Event, witnessable by
 presence at the site** — it has a place and a season, and everybody else learns by telling
 (`SUP:1378-1381`).
 
@@ -1413,7 +1507,7 @@ is one scalar again.
 It is a defect, and it is caused by an under-specified field rather than by a design choice. Under F1,
 `Office.conferral` must name a basis for **every** office. Make that a **completeness requirement**:
 
-> **A conferral rule names a Container, a parent Office, OR THE OFFICE'S OWN JUDGING SET.** The third
+> **A conferral rule names a Rung, a parent Office, OR THE OFFICE'S OWN JUDGING SET.** The third
 > limb is the one that was missing, and it is how conclaves actually work — **a body with no superior
 > convenes itself.** The cluster's own members hold the date.
 
@@ -1440,22 +1534,37 @@ vacancy-by-absence rule must reach them or the seat is stuck. **Falsifier:** if 
 must ask *"is this still a person?"* and branch on the answer, this is a real ontological fork after
 all.
 
-### F5 · OFF-BOARD POLITIES. **RESOLVES — generate persons, and take no exception.**
+### F5 · OFF-BOARD POLITIES. ⚠ **THE EARLIER ANSWER WAS WRONG AND IS REVERSED.**
 
-An off-board polity is a **Container outside the played region** with an establishment — named persons,
-minted from a demographic envelope exactly like any other, at whatever coarse fidelity is affordable.
-Their acts arrive as ordinary events and their claims travel by ordinary channels, slowly.
+An earlier version of this document resolved F5 as *"generate persons, and take no exception"* — an
+off-board polity as a Rung outside the played region with an establishment of minted persons.
+**Jordan's partition (§2.4) names the Altonian Empire as NON-PENINSULAR, and therefore an EVENT
+SOURCE.** The earlier answer is withdrawn.
 
-> **`SUP:88-92`'s one-actor rule keeps its NO-EXCEPTION status**, which is worth a great deal: the
-> moment one actorless pressure is licensed, every future pressure has a precedent.
+> **AN OFF-BOARD POLITY IS NOT SIMULATED. IT IS A SOURCE OF EVENTS.** Its pressure arrives as events
+> acting on the world — a fleet appears, a levy is demanded, a border is crossed, a subsidy stops —
+> witnessed per person by presence and channel like every other event, and **as disputable as the
+> weather.**
 
-**Why it is cheap now and was not before:** it was expensive when persons had to be authored; under
-the envelope and mint-on-demand, an off-board realm costs one envelope and a handful of records that
-individuate only when someone here hears of them.
+**Three things this buys that person-generation did not:**
 
-**What it costs:** off-board persons are simulated at low fidelity, so their decisions are coarse and a
-player who sails there finds a thinner world than home. **Falsifier:** if off-board pressure must
-respond to on-board events faster than telling-speed, no person-based model can carry it.
+1. **A large DELETION.** No off-map realm needs an envelope, an establishment, a set of individuated
+   persons, or a second fidelity tier. **The suite gets smaller, not bigger.**
+2. **`SUP:88-92`'s one-actor rule is preserved PROPERLY rather than by straining.** The earlier answer
+   preserved it by insisting Altonian decisions were made by minted persons nobody would ever meet.
+   **§1.1 governs PERSONS, and Altonia is not a person.** There is no exception to make, because the
+   rule was never about the weather or about foreign empires.
+3. **It composes with the partition rather than sitting beside it.** Off-peninsular pressure is one
+   row of §2.4's non-social column; it needs no fork of its own and no licence of its own.
+
+**What it costs, stated plainly:** a player who sails to Altonia finds **no simulation at all**, not
+merely a thin one. **If the played region is ever extended to include an off-board polity, that polity
+becomes peninsular by definition and its state changes become characters' choices** — which is the
+partition doing its work, and it is a re-scoping of the map rather than a change to the engine.
+**Falsifier:** if an off-board polity must *respond* to a specific on-board act in a way no event kind
+can express, it is not an event source and must be simulated.
+
+---
 
 ### F6 · IS THE WORLD DYING OR MISUNDERSTOOD? **RULED BY JORDAN — NEITHER. IT IS IN FLUX.**
 
@@ -1558,7 +1667,7 @@ tick on standing · 13 a per-entity branch anywhere in the resolver · 14 an aut
 opportunity or quest object.
 
 **The ELEVEN new objects walked below**, each against all fourteen: **`Tenure`** · **`Site` readmitted as
-an identity** · **`Sensation`** · **`Derived`** · **`mint`/`efface`** · **the docket item** · **the
+an identity** · **`Sensation`** · **`Query`** · **`mint`/`efface`** · **the docket item** · **the
 demographic envelope** · **`Record` as an `efface` target and a `told_by` root-bearer** · **`oblige`** · **`MatterKind`-typed
 `stores`** · **`wear`**, added by Jordan's F6 ruling.
 
@@ -1571,12 +1680,12 @@ demographic envelope** · **`Record` as an `efface` target and a `told_by` root-
 | 3 | **Clear.** Conferral is witnessed per person by presence, like any act. No function takes a person set and one conferral |
 | 4 | **Clear.** A cohort holds `commit` edges as a *subject*, at one degree, which is a property of that record and not a deposit into it |
 | 5 | **Clear.** Nothing pushes a Tenure anywhere. The object-side index is derived on demand and stored nowhere |
-| 6 | **Clear, and this is the row the object had to be engineered against.** A Tenure is a **relation**, not an aggregate: `hold` is one edge, not a control number. `sovereign_fraction` is a query over the edge set and stores nothing. Compare the alternative repairs the design refuses — a `territory` field on a faction, a `ruler` field on a Container — each of which *is* a stored aggregate |
+| 6 | **Clear, and this is the row the object had to be engineered against.** A Tenure is a **relation**, not an aggregate: `hold` is one edge, not a control number. `sovereign_fraction` is a query over the edge set and stores nothing. Compare the alternative repairs the design refuses — a `territory` field on a faction, a `ruler` field on a Rung — each of which *is* a stored aggregate |
 | 7 | **Clear.** Who *knows* about a tenure is claims in ledgers. The Tenure carries no confidence, no visibility, and no reader set |
 | 8 | **Clear.** `confer` and `revoke` run through `resolve` like every act; the conflict rule routes contested ones to the shipped `contest` |
-| 9 | **Clear.** `hold | Proposition → Container` gives a faction an **edge**, not a tier. Nothing about the edge is a level, and no roll takes it as a term |
+| 9 | **Clear.** `hold | Proposition → Rung` gives a faction an **edge**, not a tier. Nothing about the edge is a level, and no roll takes it as a term |
 | 10 | **Clear.** No Tenure enters a roll as an addend. Where holding matters to an attempt it changes **eligibility** and the **pool source** — `eligible(p, verb, c)` and the establishment (`SUP:433-438`) — which is a substitution, not a modifier |
-| 11 | **Clear for `confer`/`revoke`; the fraction question does not arise.** A conferral moves one edge, not a share of a group. ⚠ **The nearest strain is annexation:** a single `confer` of `hold` over a Container changes who holds a whole province at one stroke. It is not a personal effect on a group — it is a change to one edge, and **the group's compliance is a separate per-person contest at every relevant Container** (`SUP:1139-1147`), which is exactly the fractionation the row asks for |
+| 11 | **Clear for `confer`/`revoke`; the fraction question does not arise.** A conferral moves one edge, not a share of a group. ⚠ **The nearest strain is annexation:** a single `confer` of `hold` over a Rung changes who holds a whole province at one stroke. It is not a personal effect on a group — it is a change to one edge, and **the group's compliance is a separate per-person contest at every relevant Rung** (`SUP:1139-1147`), which is exactly the fractionation the row asks for |
 | 12 | **Clear.** No Tenure field moves on a clock. `since` and `until` are stamps, not accumulators, and `entrenchment` is **read off** them rather than ticked into anything |
 | 13 | **Clear.** Seven kinds, each a rule over a type. No kind names an entity, and the resolver branches on `mode`, never on `kind` — cardinality is data on the schema, not a case |
 | 14 | **Clear.** A tenure is not an opportunity. What it changes is `eligible`, which feeds the same `opening_set` every act comes through |
@@ -1590,7 +1699,7 @@ demographic envelope** · **`Record` as an `efface` target and a `told_by` root-
 | 3 | **Clear.** A band-edge closure is an Event witnessed **per person, by presence at the site** (`SUP:1376-1377`) |
 | 4 | ⚠ **NOT CLEARED, and the gap is inherited rather than introduced.** Where a **cohort** witnesses a closure, `SUP:1737`'s rule requires the cohort's claim to store *"the construal spread its members would have produced"*, and it never says where that spread lives, what produces it, or what an individuating member draws from. The review could not close it inside the design's refusals and neither can this document. §11 |
 | 5 | **Clear.** Coarser conditions are computed by the draw-weighted mean and **stored nowhere**; the primary scalar lives at the Site an act names |
-| 6 | **Clear.** `condition` is **matter**, not an aggregate of persons — it exists whether or not anybody believes in it. `SUP:355-360` is the general line and the Container row owns it |
+| 6 | **Clear.** `condition` is **matter**, not an aggregate of persons — it exists whether or not anybody believes in it. `SUP:355-360` is the general line and the Rung row owns it |
 | 7 | **Clear.** A site's condition is a physical fact, not knowledge of one. Who knows the harbour has silted is claims in ledgers, and the scalar is readable by nobody — only the band is published |
 | 8 | **Clear.** A Site resolves nothing. Acts touch it through `alter` and `exclude` |
 | 9 | **Clear.** Untouched. The faction that forms out of a lost verb is an ordinary proposition plus commitments |
@@ -1609,7 +1718,7 @@ demographic envelope** · **`Record` as an `efface` target and a `told_by` root-
 | 3 | **Clear.** It is per-person, computed in the per-person map, and no signature takes a set of persons and one Sensation |
 | 4 | **Clear.** A cohort's subsistence and standing are each a single well-defined scalar over one record at one weight — no distribution is required because no distribution is lost |
 | 5 | **Clear.** Nothing is pushed and nothing is stored; it exists for the duration of one `choose` call |
-| 6 | **Clear.** `standing` is *regard among your siblings-in-container*, computed on demand from member stances at the moment of asking. **The Nobody row keeps `needs`** because nothing holds them |
+| 6 | **Clear.** `standing` is *regard among your siblings-in-rung*, computed on demand from member stances at the moment of asking. **The Nobody row keeps `needs`** because nothing holds them |
 | 7 | **Clear.** It is not knowledge and is not stored on anything |
 | 8 | **Clear.** It resolves nothing and decides nothing; it is an input to `choose` |
 | 9 | **Clear.** Untouched |
@@ -1619,22 +1728,22 @@ demographic envelope** · **`Record` as an `efface` target and a `told_by` root-
 | 13 | **Clear.** Two fields, computed identically for every person and cohort |
 | 14 | **Clear.** It is a motive, not an opportunity. Opportunities come from `opening_set` |
 
-### 9.4 · `Derived` (the query category)
+### 9.4 · `Query` (the query category)
 
 | # | verdict and ground |
 |---|---|
-| 1 | **Clear, and the side column is what makes it so.** A **person-side** Derived may read only the asking person's ledger. A **resolver-side** Derived is never in `choose`'s scope. The prior brief's flat table erased this and typed `principals` as a true-profile read |
-| 2 | **Clear.** No Derived constructs a View; `view(person, question)` is itself person-side and assembles from claims |
-| 3 | **Clear.** No Derived takes a person set and an Event |
-| 4 | **Clear.** No Derived deposits anything anywhere; the category is defined by writing nothing |
+| 1 | **Clear, and the side column is what makes it so.** A **person-side** Query may read only the asking person's ledger. A **resolver-side** Query is never in `choose`'s scope. The prior brief's flat table erased this and typed `principals` as a true-profile read |
+| 2 | **Clear.** No Query constructs a View; `view(person, question)` is itself person-side and assembles from claims |
+| 3 | **Clear.** No Query takes a person set and an Event |
+| 4 | **Clear.** No Query deposits anything anywhere; the category is defined by writing nothing |
 | 5 | **Clear.** The category **is** the answer to this row: compute-on-demand, never push, never store (R-1, `SUP:374-377`) |
 | 6 | **Clear, and it is the row the category exists to satisfy.** `norm`, `density`, `regard` and `presence` are queries precisely so that no field holds them |
 | 7 | **Clear.** `estimated_profile` reads the reader's ledger and writes nothing to the thing known |
-| 8 | **Clear.** A Derived returns a value; it resolves nothing and has no outcome |
+| 8 | **Clear.** A Query returns a value; it resolves nothing and has no outcome |
 | 9 | **Clear.** `presence`, `density` and `footprint` are queries. **No field on any faction-shaped object holds a scale**, because there is no faction-shaped object |
-| 10 | **Clear.** No Derived is added to a pool. Where one reaches an attempt it is as a **resistance pool** composed on demand (`SUP:530-535`) or as a band representative |
+| 10 | **Clear.** No Query is added to a pool. Where one reaches an attempt it is as a **resistance pool** composed on demand (`SUP:530-535`) or as a band representative |
 | 11 | **Clear.** A query has no effect at all |
-| 12 | **Clear.** No Derived is stored, so nothing can be ticked into one |
+| 12 | **Clear.** No Query is stored, so nothing can be ticked into one |
 | 13 | **Clear.** Each is one function over a type |
 | 14 | **Clear.** `opening_set` is the row's own named alternative to an authored opportunity |
 
@@ -1652,7 +1761,7 @@ demographic envelope** · **`Record` as an `efface` target and a `told_by` root-
 | 8 | **Clear.** Both resolve in RESOLVE's existing acts class, through the same resolver, sized by the same degree bands. **No fast path and no auto-resolve** |
 | 9 | **Clear.** Neither mode touches a faction, which has no fields to give |
 | 10 | **Clear.** Neither enters a roll. What varies with degree is the *magnitude of the effect*, per the shipped bands |
-| 11 | ⚠ **`mint` is CLEAR; `efface` is NOT CLEARED and the widening is stated.** `efface` on a Container, Office, Person or Site extends the uncleared discrete limb of this row by four object classes. `SUP:1839-1844` already inherits the shape from #342's willingness table pricing `burn` as a severity; **this document declines to invent a bound for a case the design has decided to allow, and records the widening rather than passing over it.** §11 |
+| 11 | ⚠ **`mint` is CLEAR; `efface` is NOT CLEARED and the widening is stated.** `efface` on a Rung, Office, Person or Site extends the uncleared discrete limb of this row by four object classes. `SUP:1839-1844` already inherits the shape from #342's willingness table pricing `burn` as a severity; **this document declines to invent a bound for a case the design has decided to allow, and records the widening rather than passing over it.** §11 |
 | 12 | **Clear.** Neither is scheduled, and neither touches standing |
 | 13 | **Clear, and it is the argument for the modes over the alternative.** Every alternative is an authored subsystem — a birth system, a construction system, a founding system — each a top-level special case. **Two modes on an existing tuple close five gaps as a property of the act primitive** |
 | 14 | **Clear.** A minted object reaches other people through their own `opening_set`, recomputed at CALENDAR |
@@ -1684,22 +1793,22 @@ demographic envelope** · **`Record` as an `efface` target and a `told_by` root-
 | 2 | **Clear.** It is not a View and never enters one |
 | 3 | **Clear.** It fans nothing out |
 | 4 | ⚠ **The nearest row, and the reason the envelope is NOT the population.** The row forbids a deposit into a cohort carrying a value rather than a distribution. **The envelope is not a cohort and receives no deposits** — it holds counts and distributions, and what it emits is a **draw** (`09:539-540`), which is the row's own licensed shape. It is because the prior brief conflated the two objects that this row would otherwise have been crossed |
-| 5 | **Clear.** It is not pushed to any rung; it is owned by the Container it describes |
-| 6 | ⚠ **This is the hardest row for this object and it clears on `SUP:355-360`'s test.** *"The line is provenance, not location."* An envelope is **counts of bodies by age band** — matter, not derived from persons' beliefs and not stale against them, exactly like the larder the amended Container row already admits. A *norm*, a *density* or an *unrest level* is derived from persons; a body count is not |
+| 5 | **Clear.** It is not pushed to any rung; it is owned by the Rung it describes |
+| 6 | ⚠ **This is the hardest row for this object and it clears on `SUP:355-360`'s test.** *"The line is provenance, not location."* An envelope is **counts of bodies by age band** — matter, not derived from persons' beliefs and not stale against them, exactly like the larder the amended Rung row already admits. A *norm*, a *density* or an *unrest level* is derived from persons; a body count is not |
 | 7 | **Clear.** It stores no knowledge |
 | 8 | **Clear.** It resolves nothing |
 | 9 | **Clear.** It is not on a faction |
 | 10 | **Clear.** No roll reads it |
 | 11 | **Clear.** No person's act moves an envelope. It moves in MATTER, by metabolism |
 | 12 | **Clear on the row's own subject** — the row governs **standing**. Age-band advance is **bodies**, which is licensed clock quantity 2 of the three admitted (`ABS:280`) |
-| 13 | **Clear.** One envelope per Container, one rule |
+| 13 | **Clear.** One envelope per Rung, one rule |
 | 14 | **Clear.** It authors no opportunity; it supplies weight |
 
 ### 9.8 · `Record` — an `efface` target and a `told_by(record, …)` root-bearer
 
 | # | verdict and ground |
 |---|---|
-| 1 | **Clear.** A Record is matter at a Container; reading one is an act, and `choose` sees only the claims that reading produced |
+| 1 | **Clear.** A Record is matter at a Rung; reading one is an act, and `choose` sees only the claims that reading produced |
 | 2 | **Clear.** The claim it produces enters the ledger and is assembled like any other |
 | 3 | ⚠ **THE ROW THIS OBJECT NEARLY CROSSED, and the gate is the fix.** An ungated `efface` of a register would drop confidence for every distant holder in the same tick — a broadcast, six weeks before news of the fire could travel. **The drop fires for a holder only when a claim that the record is gone lands in THAT holder's ledger**, which makes arson's effect map onto the news map exactly as vacancy does (`SUP:1188-1198`) |
 | 4 | **Clear.** A cohort reading a record deposits at cohort fidelity, and an individuating member draws — the same rule as any telling |
@@ -1737,12 +1846,12 @@ demographic envelope** · **`Record` as an `efface` target and a `told_by` root-
 
 | # | verdict and ground |
 |---|---|
-| 1 | **Clear.** `stores` is matter on a Container; `choose` reaches it only through `Sensation.subsistence` and through claims |
+| 1 | **Clear.** `stores` is matter on a Rung; `choose` reaches it only through `Sensation.subsistence` and through claims |
 | 2 | **Clear.** No View is built from it |
 | 3 | **Clear.** A transfer is witnessed by whoever was present and by nobody else (`SUP:1462-1466`) |
 | 4 | **Clear.** A cohort's larder is one quantity at one weight; nothing is deposited into it as a value standing for a distribution |
-| 5 | **Clear.** Each Container owns its own; no coarser rung is handed one |
-| 6 | **Clear.** A larder is *"a physical quantity that exists whether or not anybody believes in it"* (`SUP:357-359`) — the amended Container row's own worked example |
+| 5 | **Clear.** Each Rung owns its own; no coarser rung is handed one |
+| 6 | **Clear.** A larder is *"a physical quantity that exists whether or not anybody believes in it"* (`SUP:357-359`) — the amended Rung row's own worked example |
 | 7 | **Clear.** How full the granary is, is a fact; who believes it is claims |
 | 8 | **Clear.** `transfer` is an ordinary act. **`transfer` moves a quantity of ONE kind and needs no conversion**, so no exchange formula is introduced |
 | 9 | **Clear.** Not on a faction |
@@ -1805,7 +1914,7 @@ a person with no office can act, petition, and receive an opportunity · order i
 | # | departure | from | ground |
 |---|---|---|---|
 | 1 | `Site` is a carrier with an id; `condition` is primary state at the Site an act names | `SUP:1232-1254` (site as matter, `condition(n)` derived at nodes) | node-keying gives two wrong verb sets from one collapsed scalar; a derived accumulator reads its own previous value; the mean has no base case |
-| 2 | `Container` is the object's name; `Node` is refused | the prior brief | `SUP:337` already says *"Container (a rung)"*; `Node` collides with the port target at `godot/scene_tree_architecture.md:16` |
+| 2 | `Rung` is the object's name; `Node` is refused | the prior brief | `SUP:337` already says *"Container (a rung)"*; `Node` collides with the port target at `godot/scene_tree_architecture.md:16` |
 | 3 | The owner table has **four** owners and Nobody; the Faction row is deleted and its contents re-homed | `SUP:334-340`'s five rows | a faction is derivable in full from a Proposition plus its `commit` edges; the deletion is stated as an amendment because the row exists |
 | 4 | `Tenure` is the one edge, with an id, `until?`, seven kinds and declared cardinality; `Holding` is an instance of it | `SUP:367`'s `Holding := (person, office, since, conferrer)` | nothing could hold ground; the record carrying every disputable political fact could not be a `Claim` subject |
 | 5 | `touches` modes are **five** | `SUP:689`'s three | nothing created or destroyed anything; the review's rank 1 |
@@ -1827,10 +1936,10 @@ a person with no office can act, petition, and receive an opportunity · order i
 | 21 | Every record carries an `id`, minted from the determinism substream | nothing declared ids | eight id-shaped things were consumed and none minted; a shared allocator would break the parallelism licence |
 | 22 | Eviction ranks on `confidence_live × recency` only | `SUP:654`'s *"evict lowest salience"* | motivated retrieval otherwise becomes motivated deletion, and `relevance(c, q)` has no `q` at eviction |
 | 23 | Advancement is an `alter` on a bounded field, not a `mint` | the prior brief | a rank is a scalar field, not an object; two meanings for one word |
-| 24 | Annexation is a `hold` Tenure over a Container; `annex`/`secede` are deleted | the prior brief's `confer` on a `contain` edge | the tree is geography and allegiance lives in factions; `secede` additionally collides with `05:594`'s shipped use for defection |
+| 24 | Annexation is a `hold` Tenure over a Rung; `annex`/`secede` are deleted | the prior brief's `confer` on a `contain` edge | the tree is geography and allegiance lives in factions; `secede` additionally collides with `05:594`'s shipped use for defection |
 | 25 | The docket item is a first-class object | nothing — the up-stroke had no dated item | S19 was unstatable without one, and lapse had nothing to be computed against |
 | 26 | The cohort **acts**; the envelope is inflow only | the prior brief's replacement of the cohort | matter does not act; the replacement manufactured elite-only politics by construction |
-| 27 | `Faction` is struck from the stance referent set; `Place = Container | Site` is defined | `ABS:188`'s closed four | `Faction` and `Proposition` denote the same thing after §2.7, and `Place` was defined nowhere |
+| 27 | `Faction` is struck from the stance referent set; `Place = Rung | Site` is defined | `ABS:188`'s closed four | `Faction` and `Proposition` denote the same thing after §2.7, and `Place` was defined nowhere |
 | 28 | Claimants in `contest` are person sets under a proposition | `SUP:327` (factions) vs `SUP:1141` (`{enforcement, resistance}`) | `resolve` has no Person parameter and must not acquire a claimant-type branch |
 
 ---

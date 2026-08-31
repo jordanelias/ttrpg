@@ -13,7 +13,7 @@
 |---|---|---|
 | **1** | **`01_ARCHITECTURE.md`** | **The primitives and the refusals.** Four carriers · one edge with seven kinds · one act with five modes · the query category · the amended owner table · the three signatures · determinism · **all seven reserved forks worked** · the seam the three deferred subsystems attach at · **the fourteen refusal rows walked for every new object** · every departure from the prior design with its ground · what is carried open |
 | **2** | **`02_THE_SEASON_LOOP.md`** | **How a season executes on those primitives.** Six steps, four barriers, four write classes · one detailed section per step with its pseudocode, reads, writes, invariants and refusals · three seasons walked end to end · the write matrix · order independence · what the loop refuses to do |
-| **3** | **`03_COMPENDIUM.md`** | **The cross-referenced register.** Identity · types with every closed set enumerated · the reference map and its inverse index · functions · the Derived catalogue · vocabulary · collisions · gaps · five cross-reference indices · what is inherited and not restated · the substrate precedent |
+| **3** | **`03_COMPENDIUM.md`** | **The cross-referenced register.** Identity · types with every closed set enumerated · the reference map and its inverse index · functions · the Query catalogue · vocabulary · collisions · gaps · five cross-reference indices · what is inherited and not restated · the substrate precedent |
 
 **Read them in that order.** The compendium indexes the other two and comes last.
 
@@ -34,10 +34,10 @@ every transition that fails is a change to what exists, or to who holds it.*
 change?**
 
 ```
-Person · Cohort · Container · Office · Site        -- the carriers
+Person · Cohort · Rung · Office · Site        -- the carriers
 Tenure                                             -- the one edge, seven kinds
 Act(touches[]), mode ∈ read|alter|exclude|mint|efface
-Derived                                            -- never stored, always recomputed
+Query                                            -- never stored, always recomputed
 
 choose  : (Person, View, Sensation) -> Act         -- no World, ever
 resolve : (Act[], World)            -> Event[]     -- no Person
@@ -68,7 +68,7 @@ Six are answered, each with its cost and the line that would falsify it. **One i
 | **F2** is `stores` the denominator | **dissolves** | `Stores := map[MatterKind → quantity]` |
 | **F3** S19, the rootless vacancy | **dissolves** | a conferral rule may name **the office's own judging set** |
 | **F4** the Coherence-0 ontology | **not a fork** | de-individuation by another cause |
-| **F5** off-board polities | **resolves** | a Container with an establishment; the one-actor rule keeps **no exception** |
+| **F5** off-board polities | **resolves** | a Rung with an establishment; the one-actor rule keeps **no exception** |
 | **F6** is the world dying or misunderstood | **STAYS JORDAN'S** | **the code is identical and only the game differs** — which is the signature of a real fork. The other six each changed the code |
 
 ---

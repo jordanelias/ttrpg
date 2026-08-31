@@ -177,7 +177,7 @@ and that is correct behaviour rather than a defect (`SUP:786-789`).
 
 ### §2.2 Convening conditions — what step 3 may and may not read
 
-`ConveningCondition := (id, holder, predicate, date_form, set_by, set_at)`; `holder ∈ Container |
+`ConveningCondition := (id, holder, predicate, date_form, set_by, set_at)`; `holder ∈ Rung |
 Office` (`ARCH §5.12`).
 
 **The predicate may read exactly three things** (`SUP:783-785`): the holder's **own state**; an **R-1
@@ -212,7 +212,7 @@ enabling condition, **recomputed at P0 like every other option**."*
 **Drop step 4 and every suppressed grievance in the world stays suppressed forever**, because nothing
 re-evaluates the enabling condition. The road to revolt closes silently, with no error anywhere.
 
-**What step 4 actually recomputes**: for every Container and Site, the band memberships that gate
+**What step 4 actually recomputes**: for every Rung and Site, the band memberships that gate
 `verbs(site, c)`; for every Date, whether it is live; for every act-proposition in every stance table,
 whether its enabling claim is now held. **It writes no option list** — `opening_set` is a person-side
 query computed fresh in DELIBERATE (`ARCH §3.2`). What it writes is dates and dockets, which is its
@@ -305,7 +305,7 @@ A body at term dies here. This is licensed decider-free channel 1 (`ABS:271-273`
 - ⚠ **it does NOT open the conferral Date. THE NEXT CALENDAR DOES** — dates are the CALENDAR class and
   MATTER may not write one (§1.2). The vacancy is a *fact*; the date is an *occasion*; CALENDAR is
   where facts become occasions. The following CALENDAR schedules it at the horizon its date-holder
-  carries — the Container for a hearth or heritable seat, the parent Office for an appointed one
+  carries — the Rung for a hearth or heritable seat, the parent Office for an appointed one
   (`SUP:1200-1206`). **Nothing observable changes**, because that horizon is a future date anyway;
   what changes is that no step writes outside its class. *An earlier version had MATTER open it, which
   its own write matrix forbade.*
@@ -409,7 +409,7 @@ a shipped four-rung ladder this loop must run and an earlier version of this doc
 *"prejudice as the literal default of an empty ledger"*, and **deposited with its root, so it can be
 refuted by investigation like any other claim**; **(2)** a rumour draw at 0.2 from the place's ambient
 claim; **(3)** what the person believes his neighbours hold — **an inference over claims he actually
-holds about their expressed positions**, at 0.25, never the container's true aggregate; **(4)** if all
+holds about their expressed positions**, at 0.25, never the rung's true aggregate; **(4)** if all
 three are silent, **the option leaves the person's act list.**
 
 > **IGNORANCE NARROWS THE OPTION SET. UNCERTAINTY WIDENS THE OUTCOME DISTRIBUTION. THE ENGINE MUST
@@ -491,7 +491,7 @@ that an unspent act does not bank (`ARCH §7`).
 RESOLVE(acts, world):
   1. graph  <- touch graph over every declared Act
   2. C      <- conflicts(graph)
-  3. route every conflict to contest(container, prize, claimants)
+  3. route every conflict to contest(rung, prize, claimants)
   4. order  <- strata(acts)
   5. for each act in stratum order:
         if refused: emit a refusal Event; continue
@@ -640,7 +640,7 @@ graph.
 > the destroyed thing remain, at their existing confidence, until their holders learn — which is the
 > ordinary epistemics and is the whole point.
 
-**Effacing a Container requires its `contain` children to be re-parented in the same act.** There is no
+**Effacing a Rung requires its `contain` children to be re-parented in the same act.** There is no
 orphaning operation, because a person's address is *their path to the root* and a bare `revoke` on
 `contain` leaves them with none (`ARCH §2.3`).
 
@@ -682,7 +682,7 @@ from the next**. A closure is an Event, witnessable by presence at the site.
 
 A Date fired at CALENDAR. In the same season, at stratum 2:
 
-1. **`compose_agenda(convener, container, date)`** — an act, costing the convener their season. The
+1. **`compose_agenda(convener, rung, date)`** — an act, costing the convener their season. The
    input is **the petitions the convener holds a claim of, not the petitions that exist**
    (`SUP:944-946`). He ranks them by his own valuation — the same `choose` every other act runs through
    — and admits the top `capacity(date)`.
@@ -730,7 +730,7 @@ burying only wins outright where the obstructor controls every venue that could 
 > witness actually work.
 
 **Plus the documentary limb, and it needs NO fifth claim source.** `efface` a **Record** — a register,
-a charter, a deed — which is matter at a Container. Every claim sourced `told_by(that record, …)`
+a charter, a deed — which is matter at a Rung. Every claim sourced `told_by(that record, …)`
 (`03:528`) loses its corroboration, because the token it copied is void. ⚠ **An earlier version of this
 document added a fifth constructor, `documented(record_id)`. It was a reinvention of shipped machinery
 and is withdrawn** (`ARCH §5.4`).
@@ -747,7 +747,7 @@ collide"*, which is false: collision needs *same subject, same predicate form, *
 ### §5.10 Compliance, at RESOLVE
 
 ⚠ **A compliance contest is ENTERED BY AN ACT ON EITHER SIDE, and this document rules it so.**
-`SUP:1139-1147` can be read as an automatic per-Container contest each season. **That reading is refused
+`SUP:1139-1147` can be read as an automatic per-Rung contest each season. **That reading is refused
 on `SUP:1599-1601`: there is no fallback — if no person acts, the thing does not occur.** The ruling:
 
 > **The compliance contest fires at RESOLVE when a person acts on either side** — an enforcement act
@@ -959,8 +959,8 @@ two brothers minted out of one hamlet in one season can hold opposite construals
 twenty-year-old proclamation.
 
 ⚠ **WHERE THE CHANNEL STORE LIVES IS OPEN, AND THE PRIOR BRIEF'S ANSWER IS RULED AGAINST THREE WAYS**
-(`ARCH §5.3`): *"Knowledge lives only in ledgers"* (`SUP:74-75`) and a Container is no more a ledger
-than a channel is; the Container row's own test is *"The line is provenance, not location"*
+(`ARCH §5.3`): *"Knowledge lives only in ledgers"* (`SUP:74-75`) and a Rung is no more a ledger
+than a channel is; the Rung row's own test is *"The line is provenance, not location"*
 (`SUP:355-360`) and stored tellings **are** derived from persons and **do** go stale against them; and
 the dormancy ruling already decided this exact move (`SUP:746-748`). §14 row 7 independently forbids a
 knowledge value stored on the thing known.
@@ -1004,9 +1004,9 @@ walked by hand is a loop nobody can debug.
 
 | step | what happens |
 |---|---|
-| **CALENDAR** | the tithe reckoning fires at Grauwald. The **granary allocation date** at the hamlet also fires — **and its allocating office is vacant.** A convening condition attached three generations ago by a praefect nobody alive met — *"when the container's larder band reaches Hungry, schedule a relief sitting at the territory court"* — evaluates **true** and schedules a date at the court's next horizon. Step 4 recomputes options: the hamlet's `condition`-gated verbs are unchanged; two suppressed grievance rows at the hamlet find their enabling claim still unmet |
+| **CALENDAR** | the tithe reckoning fires at Grauwald. The **granary allocation date** at the hamlet also fires — **and its allocating office is vacant.** A convening condition attached three generations ago by a praefect nobody alive met — *"when the rung's larder band reaches Hungry, schedule a relief sitting at the territory court"* — evaluates **true** and schedules a date at the court's next horizon. Step 4 recomputes options: the hamlet's `condition`-gated verbs are unchanged; two suppressed grievance rows at the hamlet find their enabling claim still unmet |
 | **MATTER** | `yield` rolls `d10 = 2` on the hamlet's two holdings — a bad season, 0.59× base. `stores` goes negative at four hearths. Bodies age; one infant dies; envelope weight moves. **The vacant allocation date allocated nothing. The stock sits in the granary.** Nobody did anything wrong |
-| **DELIBERATE** | at each hearth, `sense` returns `subsistence` above 1.0, which **outweighs stance entirely** (`SUP:1408`). `opening_set` offers the five channels open to a postless person: requisition kin, petition, take an opening, migrate, commit to a rival proposition. The cohort of forty landless labourers, evaluated **once**, chooses `commit` toward a proposition its members already hold grievance toward the container about — **grievance makes commitment cheap** (`SUP:1085-1088`). Three named hearth-heads each choose `petition`; one chooses `carry`, because he is the only man in the hamlet with standing at the court |
+| **DELIBERATE** | at each hearth, `sense` returns `subsistence` above 1.0, which **outweighs stance entirely** (`SUP:1408`). `opening_set` offers the five channels open to a postless person: requisition kin, petition, take an opening, migrate, commit to a rival proposition. The cohort of forty landless labourers, evaluated **once**, chooses `commit` toward a proposition its members already hold grievance toward the rung about — **grievance makes commitment cheap** (`SUP:1085-1088`). Three named hearth-heads each choose `petition`; one chooses `carry`, because he is the only man in the hamlet with standing at the court |
 | **RESOLVE** | stratum 2: nothing is on the court's docket yet, because the carrier's `carry` resolves **this** season and the relief date is next season. Stratum 4: `commit(+Δ)` edges are minted — one from a cohort of weight 40. Stratum 5: three petitions exist as objects; the carrier's `carry` mints a **DocketItem** on the court's relief Date. Events emitted |
 | **WITNESS** | the carriage is witnessed by the eleven people in the market square. It reaches the backers of the petition **as and when the telling arrives**, not now. The `commit` is **covert** and deposits nothing anywhere — concealed alignment deposits no claims, which is why the praefect who will drop this petition next season *"holds no claim that the hamlet can hurt him"* (`SUP:900-904`) |
 | **CENSUS** | the cohort's spread on the referent *the territory court* now exceeds 3 with weight ≥ 2 — **Spread fires** — and the cohort splits at the modal cleavage. One of the children has weight 1 and **is** a person. He is handed his channel's claims and **draws** a construal of the twenty-year-old proclamation that differs from his brother's |
@@ -1020,10 +1020,10 @@ a named man who will be blamed, and a person who did not exist last season and n
 |---|---|
 | **CALENDAR** | a conferral date opens at the parent office, because the Duke of Varfell died at MATTER two seasons ago and the news has now reached the capital |
 | **MATTER** | ordinary. `yield` is average. The march that has been travelling for two seasons advances its last leg and **is now present** at the Varfell territory |
-| **DELIBERATE** | the King, who holds one act like everyone else, chooses `confer` — a `hold` Tenure over the **Varfell Container**, to a Proposition (his own realm-faction). **Annexation.** A rival Duke, who does not yet hold a claim that the King is present, chooses `confer` of the same `hold` to *his* proposition. A hearth-head in a river hamlet chooses an act whose `touches` **mints a Container** of kind Hearth for his second son, plus a `contain` edge putting the son inside it — one act, two touches, the minted id available to the second because it was computed from the substream before resolution |
-| **RESOLVE** | **the conflict rule fires on cardinality**: `hold` over a Container is **1 per object**, and two `mint`s of that edge jointly break it. Routed to `contest(Varfell, hold-of-Varfell, {King's men present, rival's men present})`. The King's side rolls the establishment's pool, not his own — *choosing which of your people performs the act is the whole of a leader's tactical choice* (`SUP:436-438`). He wins at Clean Success. **The containment tree does not move.** Varfell is where it always was; who holds it changed. The hamlet founding is uncontested and resolves at stratum 4 |
+| **DELIBERATE** | the King, who holds one act like everyone else, chooses `confer` — a `hold` Tenure over the **Varfell Rung**, to a Proposition (his own realm-faction). **Annexation.** A rival Duke, who does not yet hold a claim that the King is present, chooses `confer` of the same `hold` to *his* proposition. A hearth-head in a river hamlet chooses an act whose `touches` **mints a Rung** of kind Hearth for his second son, plus a `contain` edge putting the son inside it — one act, two touches, the minted id available to the second because it was computed from the substream before resolution |
+| **RESOLVE** | **the conflict rule fires on cardinality**: `hold` over a Rung is **1 per object**, and two `mint`s of that edge jointly break it. Routed to `contest(Varfell, hold-of-Varfell, {King's men present, rival's men present})`. The King's side rolls the establishment's pool, not his own — *choosing which of your people performs the act is the whole of a leader's tactical choice* (`SUP:436-438`). He wins at Clean Success. **The containment tree does not move.** Varfell is where it always was; who holds it changed. The hamlet founding is uncontested and resolves at stratum 4 |
 | **WITNESS** | the conferral is **public, because every act by remit is public** (`SUP:441-443`) — an office-holder cannot act quietly. It deposits by presence and channel, at channel latency. **The fjord hamlets do not know yet.** The rival's failed attempt is witnessed by whoever was there and by nobody else |
-| **CENSUS** | the second son, who was a cohort member, is **Named** by the founding act and individuates. The new hearth's envelope is initialised from its parent Container's |
+| **CENSUS** | the second son, who was a cohort member, is **Named** by the founding act and individuates. The new hearth's envelope is initialised from its parent Rung's |
 | **next season** | the compliance contest. The Varfell praefects each hold, or do not hold, a claim that they are now the King's. **Thirty-five separate decisions**, and `enforcer_presence` is zero everywhere the march did not go |
 
 **What did not happen:** no war layer, no annexation verb, no re-parenting, no second resolver, and no
@@ -1056,7 +1056,7 @@ What may be written, by which step, and what happens if it is written elsewhere.
 | envelope weight | no | **yes** — births, deaths | no | no | no | **yes** — individuation |
 | `condition(site)` | no | **yes — `wear` ONLY** | no | **yes** — every act delta, and only here | no | no |
 | `Tenure` | no | **yes** — `until` on death | no | **yes** — `confer`, `revoke`, `mint`, `efface` | no | no |
-| Person, Container, Office, Site existence | no | **yes** — death only | no | **yes** — `mint`, `efface` | no | **yes** — individuation |
+| Person, Rung, Office, Site existence | no | **yes** — death only | no | **yes** — `mint`, `efface` | no | **yes** — individuation |
 | `stance` | no | no | no | **yes** — an act's effect | no | no |
 | ledger | no | no | no | no | **yes**, own only | no |
 | a returned `Act` | no | no | **yes**, and nothing else | — | no | no |
