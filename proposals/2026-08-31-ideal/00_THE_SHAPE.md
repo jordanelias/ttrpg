@@ -586,3 +586,91 @@ suspended forever.
 things resolve*. The design's actual problem was never that too little resolves — **it is that
 nothing was at stake in things failing to resolve.** Expiry fixes the real defect; the retyping fixed
 a symptom and cost a principle to do it.
+
+---
+
+## 10. THE SYMMETRY — decision propagates, and so must indecision
+
+> *"With world churn, then, character decisions can impact the world… and indecision from vacancy can
+> impact the petitioners who need something to occur but don't receive it."*
+
+**This is the principle the previous nine sections were circling, and it is worth stating as the
+design's spine rather than as a consequence of it.**
+
+> **A decision changes the world. An absence of decision changes the world too — and the design must
+> carry the second as faithfully as the first.**
+
+The down-stroke already propagates decisions: a dispensation is issued, it travels by being noticed,
+compliance is a roll. **What has never been carried is the other half — the dispensation that is never
+issued, the sitting that is never convened, the office that stands empty while the condition that
+needed it gets worse.**
+
+### 10.1 It costs one rule, and the rule is a refusal
+
+**Indecision propagates for free — provided nothing happens by default.**
+
+> **THERE IS NO FALLBACK. If no person acts, the thing does not occur.** No distribution "just
+> happens", no garrison is "assumed paid", no repair is "presumed made". **The engine has no
+> caretaker**, because there is no GM to be one.
+
+**The split the design already has is the right one and must be held exactly:**
+- **Production is metabolism** — nature yields, larders consume, bodies age. **No act required.**
+- **Distribution is politics** — grain moves because a named person decided it should. **An act, always.**
+
+Hold that line and the famine writes itself: the grain exists, the granary is full, the praefect is
+dead, no one has been conferred, no sitting is convened, no dispensation is issued — **and people
+starve inside a system that is working exactly as written.** Nobody did anything wrong. Nothing is
+authored. Every step is legible to anyone who cares to look.
+
+**The moment anything has a default, indecision becomes invisible** — and the entire register Jordan
+just described stops existing.
+
+### 10.2 What the pieces do together
+
+The four enlargements now compose into one loop that runs in both directions:
+
+```
+a condition worsens  ──►  a WATCH schedules a date        (§2.2 — decides nothing)
+                              │
+              ┌───────────────┴───────────────┐
+       someone convenes                  nobody convenes
+              │                        (vacant office, or a
+              ▼                         convener who buries it)
+     a person DECIDES                          │
+              │                                ▼
+   a dispensation issues            nothing issues — and there is NO FALLBACK
+              │                                │
+              ▼                                ▼
+   the world changes                 the condition worsens · needs rise ·
+                                     PETITIONS EXPIRE by supersession (§9.3) ·
+                                     people bear it
+                                               │
+                                               ▼
+                                     which is itself a condition
+                                     a watch can notice ──► back to the top
+```
+
+**Both branches are live, both are consequential, and neither is authored.** The right-hand branch is
+the one the design could not previously express — and it is, in the fiction, **the more common one.**
+
+### 10.3 What this makes possible that nothing did before
+
+- **The vacancy becomes a weapon.** Preventing a conferral is now a *strategy*: keep the seat empty and
+  the matters that needed it die on their own. **Obstruction by omission**, which is how institutions
+  are actually strangled, and it needs no new verb — only the guarantee that nothing fills the gap.
+- **Neglect becomes attributable.** Because every effect roots in an act, its absence roots in a named
+  person who did not act. **`witness` can see that**, claims can carry it, and an argument can be made
+  of it. *"He let it happen"* becomes a statement with a referent.
+- **The starving petitioner has somewhere to go.** Their need does not vanish when their petition
+  lapses — it rises. They petition again, elsewhere, or they act outside the up-stroke entirely. **The
+  up-stroke failing is what produces everything downstream of the up-stroke failing.**
+- **A functioning institution becomes visible as an achievement**, because a non-functioning one is
+  mechanically distinct rather than merely quieter.
+
+### 10.4 The falsifier for the whole shape
+
+> **Find one beneficial effect in the design that occurs without a named person having acted.** Every
+> such effect is a place where indecision is invisible, and each one is a hole in §10.1.
+
+Production and metabolism are the licensed exceptions and they are nature, not caretaking. **Anything
+else that happens by itself is the GM this design does not have, hiding in the engine.**
