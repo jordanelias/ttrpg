@@ -60,16 +60,36 @@ what was refused, and then somebody acts.
 - **N-line.** Cut it and a faction is a bag of names — nothing to argue against, nothing to schism
   over, no way for two strangers to discover they were already on the same side.
 
-### 1.2 The commitment degree, and what each licenses
+### 1.2 The commitment degree, and what it weighs
 
-| d | name | `w(d)` | licenses — and nothing beyond |
-|---|---|---|---|
-| 0 | none | 0 | — (degree 0 *is* deletion; departure needs no operation) |
-| 1 | sympathy | 0.15 | will not testify against a member; may be told cell-safe claims; stance weight applies at view assembly |
-| 2 | sympathiser | 0.40 | may be asked for material, shelter, carriage at low cost; may `carry` a petition of the faction's proposition |
-| 3 | member | 1.00 | may be **requisitioned** for acts inside their ordinary capability; may `avow` |
-| 4 | sworn | 1.60 | may be requisitioned for acts **against their own container's interest**; refusal is witnessed by every d≥3 member |
-| 5 | constitutive | 2.20 | the proposition holds a Conviction-primary slot; **no offer term enters the refusal check at all**; refusal is a Coherence event |
+| d | name | `w(d)` |
+|---|---|---|
+| 0 | none | 0 |
+| 1 | sympathy | 0.15 |
+| 2 | sympathiser | 0.40 |
+| 3 | member | 1.00 |
+| 4 | sworn | 1.60 |
+| 5 | constitutive | 2.20 |
+
+Degree 0 *is* deletion; departure needs no operation.
+
+**A fourth column has been cut from that table, and this is a retraction rather than a tidy-up.** It
+read *"licenses — and nothing beyond"* and enumerated, degree by degree, what could be asked: cell-safe
+tellings at 1, material and shelter and carriage at 2, requisition at 3, acts against one's own
+container at 4. It was the most concrete thing in this section and it was a **second copy of a rule the
+obstacle formula below already owns**, priced continuously instead of in steps. The two copies can
+disagree, and did: the column forbade requisitioning a degree-2 outright, while the formula clears a
+degree-2 at high regard more easily than a degree-3 at hostile regard. §10.2 had already ignored it —
+Niflhel's capacity at Riverside puts the harbour warden at d=2 inside the existential for an *arrest*,
+which the column licensed only from d=3 up. The substrate's §6 refuses exactly that shape — a second copy that can disagree with the first — so the enumeration goes and the
+obstacle formula is the single owner of what may be asked. Nothing is lost that the formula was not
+already pricing: the sympathiser slipping bread clears as a low-degree low-burden ask, and the same
+sympathiser asked to hide a courier does not.
+
+**Two things in the cut column were genuinely discrete, and they survive here as text.** First, **`avow`
+is gated at d ≥ 3** — below member there is no edge worth publishing, and avowal is an act only a member
+may perform. Second, **at d = 5 no offer term enters the refusal check at all**, which is a structural
+absence rather than a threshold and so cannot be expressed as a price.
 
 Degree 5 is where *"relationship modifiers large enough to dissolve structural conflict"* is refused
 concretely. Nobody buys Odd Uln off his oath — not because the number is large, but because the offer
@@ -93,8 +113,12 @@ game and the one that spends a person's whole position.
 
 - **Loop.** Produced by `commit` acts; carried as edges on persons; consumed by requisition, capacity,
   the roll-ups, and the judging sets that punish or reward discovery.
-- **N-line.** Cut degree and everyone is in or out: no sympathiser slipping bread, no shallow end to
-  recruit informers from, and no way to *hollow* a faction rather than shatter it.
+- **N-line.** *(Corrected with the column above.)* This line read *"cut degree and everyone is in or
+  out: no sympathiser slipping bread"* — but the bread is priced by the obstacle formula, not by the
+  ladder, and survives the cut. What does not survive cutting degree is `w(d)`: presence and density
+  lose their weighting, the obstacle loses its `−2·w(d)` term, and with them goes the shallow end a
+  faction can be recruited from and *hollowed* rather than shattered — refusal costing an edge a degree
+  requires that there be degrees to cost.
 
 ### 1.3 Secrecy is not a property of the secret
 
@@ -354,12 +378,23 @@ What your support set delivers, minus what your post entitles you to. Two alread
 nothing writes it.
 
 When `shadow > 0` and the formal holder `h` attempts an act whose `requires` predicate includes persons
-in `S(p, n)`, `h`'s capacity returns **zero** — not a penalty, an empty existential. Repeat twice and
-`h`'s cheapest remaining act is **legalisation**: a dispensation naming `p`'s function. Nothing
-coercive, shadow becomes licensed standing, `h` keeps the post. Dual legitimacy, not replacement — and
-it is how the Ulns become a house becomes a faction without the object changing type. Nobody promoted
-anything; `shadow` crept above zero and the man with the seal found writing it down cheaper than
-fighting it.
+in `S(p, n)`, `h`'s capacity returns **zero** — not a penalty, an empty existential. Nothing further is
+needed. **Legalisation** — a dispensation naming `p`'s function — is an ordinary act already on `h`'s
+list, and his own `choose` selects it once the empty existentials have made every alternative dearer
+than writing it down. Nothing coercive, shadow becomes licensed standing, `h` keeps the post. Dual
+legitimacy, not replacement — and it is how the Ulns become a house becomes a faction without the object
+changing type. Nobody promoted anything; `shadow` crept above zero and the man with the seal found
+writing it down cheaper than fighting it.
+
+**A trigger rule has been cut here, and the section is plainer for it.** It read *"repeat twice and
+`h`'s cheapest remaining act is legalisation"*, and it was **asserted rather than derived**: nothing
+anywhere in this design counts to two, and no object was named that would hold the count. It was also
+unnecessary. Everything the rule was there to produce — the dual legitimacy, the legalisation, the
+family becoming a house — is produced by capacity and support-set compliance alone, with `h`'s decision
+function doing the selecting, which is the paragraph above. So `shadow` gates nothing. What it uniquely
+contributes is a **legibility readout**: a published band, two already-computed quantities subtracted,
+worth keeping because a player can read a rival's real position off it. It is kept on that basis and no
+other.
 
 ### 5.3 Fragmentation on death — nothing implements it
 
@@ -530,15 +565,15 @@ Four refusals carry mechanism rather than a back-reference, and they are stated 
 satisfiability test contains **no regard term**. Regard decides who carries and who is believed; it
 never decides whether both can win. At d=5 the offer term is absent from the refusal check entirely.
 
-**Parallel rank tracks.** One shared rank space, `standing ∈ 0..7`, plus exactly four auxiliary meters,
-each substituting at exactly one gate:
+**Parallel rank tracks.** One shared rank space, `standing ∈ 0..7`, plus exactly three auxiliary meters,
+each substituting at exactly one gate — and one derived readout that gates nothing:
 
   | meter | range | its *only* gate |
   |---|---|---|
   | commitment degree | 0–5 | the requisition check |
   | regard | −5..+5 | the carry check and the telling-credence check |
   | support-set mass | derived | the unwind check |
-  | shadow | derived | the legalisation check |
+  | shadow | derived | none — a published band, not a gate (§5.2) |
 
 There is no fifth. Guild grades are marks, not a track (§6.1); presence and density are reads.
 
@@ -668,7 +703,12 @@ verb.
 the argument system, §4 for the institutional question this lane answers. Both cannot be 07; I have
 written to my lane assignment rather than renumber another lane's reference.
 
-**4. The degree scale is composition, not divergence.** The spine calls the sympathiser/member
-difference "a number on one edge." §1.2 makes it an ordinal 0–5 with a licence table, because
-requisition must know what may be asked. If the intent is a continuous number, the licence table becomes
-bands over it and nothing else here changes.
+**4. The degree scale is composition, not divergence — and the licence table is now gone.** The spine
+calls the sympathiser/member difference "a number on one edge." §1.2 made it an ordinal 0–5 with a
+licence table, on the reasoning that requisition must know what may be asked. That table has since been
+**cut** (§1.2): requisition knows already, from the obstacle formula, and the enumeration was a second
+copy that could disagree with it. So the conditional that stood here — *"if the intent is a continuous
+number, the licence table becomes bands over it and nothing else here changes"* — is settled rather than
+left open, and settled in the spine's direction. What remains is the ordinal and its weights `w(d)`,
+which the formula and the profiles read as a number, plus two discrete facts kept in text: the `avow`
+gate at d ≥ 3, and the absent offer term at d = 5.

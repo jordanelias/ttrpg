@@ -212,9 +212,14 @@ signature rule enforces is that *agents* cannot see true state; the world seeing
 the world is for. And the reason to make it explicit is exact: a singular signature pushes conflict
 handling into a per-act pre-pass, **which is where a hidden turn order gets born.**
 
-### A-6 · The salience floor — TWO LANES DISAGREED, AND THE RESOLUTION KEEPS BOTH
+### A-6 · The salience floor — TWO LANES DISAGREED, AND THE RESOLUTION KEPT ONE OF THEM
 *Raised by 09 against 03's design. This is the only direct conflict between two lanes in the suite,
 and it is worth the space because both arguments are right about different claims.*
+
+⚠ **RETRACTED IN PART by A-6b below (audit 16 §3.2).** This row's heading read *"AND THE RESOLUTION
+KEEPS BOTH"*, and it does not: the firsthand half was fixed, the testimony half — the case 09 actually
+raised — was left clamped, and the gloss below is unsatisfiable under a finite claim budget. Read A-6b
+before citing anything here.
 
 **03's position.** Motivated reasoning is a multiplicative stance weight clamped to a floor of 0.05.
 A Templar's exonerating claim is retrievable, at roughly twenty times the evidence. Attenuation is on
@@ -230,7 +235,7 @@ be correctable, and a sixty-year-old revelation must move people who do not want
 
 | claim source | rule | why |
 |---|---|---|
-| `firsthand` | **09's floor.** salience ≥ `recency × confidence`. A thing you saw yourself, recently, with high confidence ALWAYS makes your working set. | You may refuse to believe your own eyes — that is obstinacy's job, and obstinacy is the right place for the resistance. You may not fail to *consider* them. |
+| `firsthand` | **09's floor.** salience ≥ `recency × confidence`. *(The gloss that stood here — "a thing you saw yourself, recently, with high confidence ALWAYS makes your working set" — is retracted by A-6b: a floor on salience is a floor on the ranking, not a guarantee of inclusion.)* | You may refuse to believe your own eyes — that is obstinacy's job, and obstinacy is the right place for the resistance. You may not fail to *consider* them. |
 | `told_by`, `inferred` | **03's clamp.** Stance weight applies, floored at 0.05. | This is where motivated reasoning belongs. What you were *told* is exactly what a committed person should be able to not think about. |
 
 The composition is not a compromise; it is the correct division. **Motivated reasoning stays a
@@ -273,6 +278,42 @@ the regard values are a ledger read (only regard you hold a claim about).** The 
 drawn a THREE-WAY distinction from the start — **world / view / another agent's interior** — and the
 third is readable by nobody except through a claim. A-1 as originally written is superseded by this
 row on the standing term only; its split of the other three need terms stands.
+
+### A-6b · A-6 RETRACTED IN PART — the firsthand floor stands but is unimplemented; the testimony half is UNRESOLVED
+*Forced by the audit (16 §3.2). Recorded here rather than left in the audit because THIS register is
+what a later session reads to learn what was decided — and until this row existed it asserted the
+opposite of the finding.*
+
+**The firsthand floor stands as a ruling — but it has not reached the document that owns the formula,
+and this row will not repeat the mistake of saying otherwise.** `salience ≥ recency × confidence` on
+`firsthand` claims is the half of 09's objection the ruling did reach, and nothing below disturbs it.
+It is nonetheless **unimplemented**: doc 03 §4's salience is still the flat product
+`recency × confidence_live × relevance × stanceweight`, with the 0.05 clamp and no `max`, and its own
+prose runs the other way — *"a devastating firsthand contradiction … can still cross, but it takes
+roughly twenty times the evidence"*, and *"it does not enter the top-K."* The only place the floor is
+written as a formula is 09's original challenge, which proposed it. So the accepted half of A-6 is a
+ruling with no owner in the design, and a session implementing salience from doc 03 would build the
+clamp and never see this row. Carrying it into 03 is outstanding work, not a settled fact.
+
+**The testimony half is NOT resolved.** 09's stated need was that *a sixty-year-old revelation must move
+people who do not want to be moved* — and a revelation arrives as `told_by`, which this ruling left
+under 03's stance-weight clamp. The case that motivated the objection is precisely the case the ruling
+did not reach. What it fixed is *walk into the room and see it*, which neither lane was arguing about.
+
+**The gloss is unsatisfiable, and that is not a wording problem.** *"Always makes your working set"*
+cannot hold under a finite claim budget `K` for a person holding more than `K` recent high-confidence
+firsthand claims — which is precisely the investigator this game is about. A floor on **salience** is a
+floor on the ranking; **inclusion is decided by the budget.** So the formula and the gloss diverge
+exactly where the game is most active, and the divergence widens the more the person has seen.
+
+**Held open, not patched — and the likely shape is named so the next session does not re-derive it.**
+The testimony half needs a mechanism, and the one it most likely wants is that a claim's
+**corroboration** lifts it past a hostile stance weight: corroboration is what distinguishes a
+revelation from a rumour, and it is already computable by the hearer without reading anyone's interior
+(B-7's opaque rootprints). Naming the shape is not adopting it. Nothing here rules.
+
+A-6 as originally written is **superseded by this row on the testimony half and on the gloss**; its
+firsthand floor stands unchanged.
 
 ### B-12 · `chain` owns command reach; `transmit` is an INPUT to it, not a parallel mechanism
 *Raised by the correction pass, which declined to invent a resolution — correctly.*
