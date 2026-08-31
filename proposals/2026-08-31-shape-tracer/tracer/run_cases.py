@@ -30,6 +30,31 @@ CASE_DIR = ("/tmp/claude-0/-home-user-ttrpg/"
 
 # need-text -> probe. Ordered; first match wins. Keys are regexes over the lowercased need.
 ROUTES: list[tuple[str, str]] = [
+    # -- SPECIFIC person-scale patterns FIRST. Ordering is load-bearing: an earlier pass put the
+    # -- generic world rules first and mis-routed "degrade his PERSONAL condition" to W1 (site
+    # -- decay) and "maintenance labor" to A3 (substrate), turning two BLOCKED cases into false
+    # -- PLAYABLEs. A greedy keyword is worse than no keyword.
+    (r"(degrade|wear|erode|cost).{0,40}(personal|his|her|their) (condition|health|body)"
+     r"|proximity|exposure to .* damage|standing next to", "P31"),
+    (r"death .* (produce|buy|purchase|different)|sacrific|spending (his|her|their) life"
+     r"|die .* (seal|complete|finish)", "P32"),
+    (r"multi-week|work-in-progress|ongoing work|across (multiple )?seasons.{0,30}(task|labor|work)"
+     r"|recurring, location-bound|standing condition|half-done|interrupted partway", "P30"),
+    (r"persistent object|physical product|outlives the scene|artifact .* independent"
+     r"|evidence object|copied text .* exist", "P28"),
+    (r"possess|found with it|merely holding|holder .* consequence", "P29"),
+    (r"two (independent )?(rank|standing|reputation)|parallel .* track|separate ladder"
+     r"|covert reputation|private reputation", "P33"),
+    (r"reassess.{0,30}(loyal|stage)|in stages|gradual(ly)? .* reassess|does not revert", "P18"),
+    (r"inaction|not acting|persist .* without forcing a decision|deferr|uncertainty is itself", "P19"),
+    (r"diverge from what .* intended|carried out differently|acting in .* name .* diverge", "P20"),
+    (r"more constrained by visibility|publicness|higher status .* cost|visible .* cost more", "P21"),
+    (r"private setting at no cost|confidential counsel|frank .* private|public(ly)? .* would cost", "P22"),
+    (r"cannot be retried|cooldown|un-repeatable|fail(ed)?, cost .* standing", "P23"),
+    (r"revocable by the collective|body that grants it|revoke .* authority it granted", "P24"),
+    (r"silently underperform|undetectable without|divided loyalt.{0,40}(cause|underperf)", "P25"),
+    (r"accumulated .* harm|threshold .* confrontation|patience .* limit", "P26"),
+    (r"investment .* window|alignment .* lock|won by whichever|contested .* allegiance", "P27"),
     (r"no office|without an office|no post|postless|no institutional|holds no", "P1"),
     (r"petition|demand in front|put .* before|bring .* to (a )?(sitting|court|council)", "P2"),
     (r"covert|without .* know(ing)? who|conceal|anonym|unattributed|secret(ly)? act", "P3"),
@@ -71,16 +96,44 @@ def route(need: str):
     return None
 
 
+def _repairs(body: str):
+    """Yield progressively more aggressive repairs of a possibly-truncated lane output.
+
+    A lane's final assistant message can begin mid-entry (the model streamed a long YAML and the
+    captured message is a tail) or end mid-entry. Dropping the file loses real cases, so trim to
+    whole `- id:` entries instead. This never invents content — it only discards partial edges.
+    """
+    yield body
+    starts = [m.start() for m in re.finditer(r"^- id:", body, re.M)]
+    if not starts:
+        return
+    head = body[starts[0]:]
+    yield head                                    # drop a truncated leading entry
+    if len(starts) > 1:
+        # also drop a truncated trailing entry
+        tail_start = starts[-1] - starts[0]
+        yield head[:tail_start]
+
+
 def load_cases() -> list[dict]:
     cases = []
     for path in sorted(glob.glob(os.path.join(CASE_DIR, "*.yaml"))):
         raw = open(path).read()
         m = re.search(r"```(?:ya?ml)?\s*\n(.*?)```", raw, re.S)
         body = m.group(1) if m else raw
-        try:
-            data = yaml.safe_load(body)
-        except Exception as e:
-            print(f"  ! {os.path.basename(path)}: YAML parse failed: {e}")
+        data = None
+        for attempt, text in enumerate(_repairs(body)):
+            try:
+                data = yaml.safe_load(text)
+                if isinstance(data, list) and data:
+                    if attempt:
+                        print(f"  ~ {os.path.basename(path)}: recovered by repair #{attempt} "
+                              f"(a lane's final message was truncated mid-entry)")
+                    break
+            except Exception:
+                data = None
+        if data is None:
+            print(f"  ! {os.path.basename(path)}: unparseable even after repair")
             continue
         if not isinstance(data, list):
             print(f"  ! {os.path.basename(path)}: not a list")

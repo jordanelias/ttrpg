@@ -582,3 +582,463 @@ def p17(w=None):
         "P17 individuation",
         needs="a trigger condition and a specified starting interior for a minted person",
     )
+
+
+# ===========================================================================
+# THIRD WAVE — capabilities the ARC corpus demands
+# ===========================================================================
+
+@probe("A7", "an institution acts as one body")
+def a7(w=None):
+    w = w or _world()
+    w.offices["church"] = Office(id="church", post="The Church", rung="realm",
+                                 establishment=["conf", "card1", "card2"])
+    for m in ("conf", "card1", "card2"):
+        w.persons[m] = Person(id=m)
+    loop = SeasonLoop(w)
+    # Law 1 is mechanical: an Act's actor is a PERSON id. "The Church excommunicates" is not
+    # spellable; only "the Confessor, at a venue, issues" is.
+    loop.run({"conf": lambda p, v, s: Act(actor="conf", verb="issue", target="excommunication")})
+    return ("OK: an institution acts through a named person at a venue; 'the Church acted' is a "
+            "reading of the log, never a row in it")
+
+
+@probe("A8", "a deadline passes with nothing heard, and that is itself the consequence")
+def a8(w=None):
+    w = w or _world()
+    d = Date(id="audience", holder="realm", season=1)
+    w.rungs["realm"].dates.append(d)
+    w.persons["petitioner"] = Person(id="petitioner")
+    loop = SeasonLoop(w)
+    loop.run({})                     # nobody convenes, nobody answers
+    # `05` §5.1: a lapse is CALENDAR class and is the ABSENCE of an act — not a change with a driver.
+    lapsed = d.fired and True
+    if not any(e.family == "lapse" for e in w.log):
+        raise NoProducer(
+            "the lapse: `05` §5.1 calls a date passing unheard 'a real consequence' with "
+            "'nobody's act, nobody to blame' — but nothing EMITS it, so the specific injury of "
+            "being ignored is not witnessable and cannot enter anyone's ledger",
+            "A8 lapse",
+            needs="CALENDAR to emit a lapse Event for a date that fired with no answering act",
+        )
+    return "OK"
+
+
+@probe("A9", "a term ripens and a truce runs out")
+def a9(w=None):
+    w = w or _world()
+    w.records["truce"] = Record(id="truce", rung="realm", kind="truce", ttl=3)
+    loop = SeasonLoop(w)
+    for _ in range(4):
+        loop.run({})
+    r = w.records["truce"]
+    if r.ttl == 3:
+        raise NoProducer(
+            "no step decrements a Record's ttl. `05` rows 11a/11b make a ttl expiry and an "
+            "act-created term's ripening the carriers for cooldowns, remissions and truces — "
+            "and MATTER never touches them",
+            "A9 ttl",
+            needs="a MATTER pass over Records decrementing ttl and emitting expiry",
+        )
+    return "OK"
+
+
+@probe("A10", "a person is removed from play without being killed")
+def a10(w=None):
+    w = w or _world()
+    w.persons["torben"] = Person(id="torben", name="Torben Almqvist")
+    w.tenures["at"] = Tenure(id="at", subject="torben", object="settl", kind="contain", since=0)
+    d = Date(id="succession", holder="realm", season=1,
+             convening_conditions=["heir_present"])
+    w.rungs["realm"].dates.append(d)
+    loop = SeasonLoop(w)
+    loop.run({})
+    # `06` row 3: hostage politics — vacancy-by-absence as a convening condition over presence.
+    raise Unspecified(
+        "vacancy-by-absence: `06` row 3 requires a convening condition to read PRESENCE, so that "
+        "making a man absent substitutes for killing him — `ConveningCondition` is a six-field "
+        "object the adversarial pass found had no owner, and its predicate form is unspecified",
+        "A10 hostage politics",
+        needs="a specified ConveningCondition predicate that can read a person's address",
+    )
+
+
+@probe("A11", "something ripens over many seasons and pays off late")
+def a11(w=None):
+    w = w or _world()
+    w.persons["baralta"] = Person(id="baralta")
+    w.propositions["claim"] = Proposition(id="claim", mood="OUGHT", subject="crown",
+                                          predicate="held_by", value="baralta",
+                                          when=(0, 40), scope="realm", utterer="baralta")
+    loop = SeasonLoop(w)
+    for _ in range(12):
+        loop.run({"baralta": lambda p, v, s: Act(actor="baralta", verb="press_claim",
+                                                 target="claim")})
+    # Twelve seasons of pressing. What accumulated? Claims in others' ledgers -- which DECAY.
+    return ("OK-BUT: the claim persists (a Proposition is immutable) and each pressing is an act, "
+            "but the only accumulator is other people's claims, which decay under the universal "
+            "rule — so a long campaign of pressing is not distinguishable from a recent one "
+            "except by re-reading the log")
+
+
+@probe("A12", "a person is killed, and their tenures end")
+def a12(w=None):
+    w = w or _world()
+    w.persons["almud"] = Person(id="almud")
+    w.offices["crown"] = Office(id="crown", post="King", rung="realm")
+    w.tenures["h"] = Tenure(id="h", subject="almud", object="crown", kind="hold", since=0)
+    w.tenures["c"] = Tenure(id="c", subject="almud", object="settl", kind="contain", since=0)
+    w._step = Step.MATTER
+    # ageing/illness/death is churn row 3, an Event at MATTER.
+    w.write("Tenure", "contain", "almud", None, WriteClass.MATTER, driver="Event")
+    try:
+        # the `hold` on the office is a SOCIAL row -- an Event may not write it.
+        # This is the seam `05` §7 DECLARES and does not close: "a death DOES end a tenure, and
+        # the column alone does not explain why a storm may not". The tracer reaches it by
+        # execution, and shows what it costs: churn row 3's N-line is "succession never fires;
+        # every office is held forever", so the Partition as keyed BLOCKS the very mechanism
+        # row 3 exists to provide.
+        w.write("Tenure", "hold", "almud", None, WriteClass.MATTER, driver="Event")
+    finally:
+        w._step = None
+    return "unreachable"
+
+
+# ===========================================================================
+# FOURTH WAVE — driven by UNMAPPED needs the a:NPC cases actually raised.
+# Each of these was written only AFTER a real case demanded it.
+# ===========================================================================
+
+@probe("P18", "an institution reassesses its loyalty in STAGES that do not revert on their own")
+def p18(w=None):
+    """Raised by NPC-020 (Almud) and NPC-070 (Ehrenwall) independently — the coup mechanism."""
+    w = w or _world()
+    for m in ("ehrenwall", "off1", "off2"):
+        w.persons[m] = Person(id=m, stance=[("crown", 2, 3)])
+    # The shape refuses a stored aggregate, so "the army's loyalty stage" must be a Query over
+    # members' stances. A Query is a pure function of current state.
+    def loyalty_stage(world) -> str:
+        vals = [v for p in ("ehrenwall", "off1", "off2")
+                for (ref, v, _) in world.persons[p].stance if ref == "crown"]
+        m = sum(vals) / len(vals)
+        return "loyal" if m >= 2 else "restless" if m >= 0 else "autonomous" if m >= -2 else "split"
+
+    assert loyalty_stage(w) == "loyal"
+    for p in ("ehrenwall", "off1", "off2"):
+        w.persons[p].stance = [("crown", -1, 3)]
+    assert loyalty_stage(w) == "autonomous"
+    for p in ("ehrenwall", "off1", "off2"):      # one good season restores every stance
+        w.persons[p].stance = [("crown", 2, 3)]
+    if loyalty_stage(w) == "loyal":
+        raise NoProducer(
+            "staged institutional judgement: a stage computed as a Query over current stances "
+            "REVERTS the moment the stances do, so an army that has decided its king is unfit "
+            "un-decides it after one good season. A ratchet needs state that survives its inputs, "
+            "and Law 3 forbids exactly that state",
+            "P18 loyalty stages",
+            needs="either a per-person scar/ratchet the Query reads (see P4), or an explicit "
+                  "exception to Law 3 for monotone institutional judgement",
+        )
+    return "OK"
+
+
+@probe("P19", "not acting is itself a choice, and costs something")
+def p19(w=None):
+    """Raised by NPC-020: 'his uncertainty is itself a decision he does not recognize as one'."""
+    w = w or _world()
+    w.persons["almud"] = Person(id="almud")
+    loop = SeasonLoop(w)
+    for _ in range(3):
+        loop.run({"almud": lambda p, v, s: None})       # three seasons of deciding nothing
+    acted = [e for e in w.log if e.family not in ("band_crossed",)]
+    if not acted:
+        raise NoProducer(
+            "deferral: a person who chooses nothing produces no Act, so no Event, so nothing enters "
+            "anyone's ledger — a ruler's sustained refusal to decide is INVISIBLE to the world and "
+            "indistinguishable from his absence",
+            "P19 inaction",
+            needs="an abstention that emits, so that not-deciding is witnessable and chargeable",
+        )
+    return "OK"
+
+
+@probe("P20", "an order is carried out differently from how it was intended")
+def p20(w=None):
+    """Raised by NPC-020: the king must be able to learn of the divergence only afterwards."""
+    w = w or _world()
+    w.persons["almud"] = Person(id="almud")
+    w.persons["voss"] = Person(id="voss")
+    w.offices["crown"] = Office(id="crown", post="King", rung="realm", establishment=["voss"])
+    loop = SeasonLoop(w)
+    evs = loop.run({
+        "almud": lambda p, v, s: Act(actor="almud", verb="dispatch", target="voss"),
+        # Voss runs his OWN choose and does something adjacent to, but not, what was asked
+        "voss": lambda p, v, s: Act(actor="voss", verb="levy_harshly", target="settl"),
+    })
+    fams = {e.family for e in evs}
+    if "levy_harshly" not in fams:
+        raise NoProducer("the subordinate's divergent act did not resolve", "P20")
+    return ("OK: dispatch names one person who runs their own choose, so the deed done is the "
+            "subordinate's, not the holder's — and the holder learns of it only by witnessing")
+
+
+@probe("P21", "high office is MORE constrained by visibility than a private person")
+def p21(w=None):
+    """Raised by NPC-020, marked core: 'he is MORE constrained by visibility, not less'."""
+    w = w or _world()
+    w.persons["almud"] = Person(id="almud")
+    w.persons["carin"] = Person(id="carin")
+    w.offices["crown"] = Office(id="crown", post="King", rung="realm")
+    w.tenures["h"] = Tenure(id="h", subject="almud", object="crown", kind="hold", since=0)
+    loop = SeasonLoop(w)
+    evs = loop.run({
+        "almud": lambda p, v, s: Act(actor="almud", verb="favour_heretic", target="carin"),
+        "carin": lambda p, v, s: Act(actor="carin", verb="favour_heretic", target="almud"),
+    })
+    king_ev, commoner_ev = evs[0], evs[1]
+    if king_ev.scope == commoner_ev.scope:
+        raise NoProducer(
+            "publicness: the same act by a king and by a copyist produces Events identical in scope "
+            "and witnessability. Nothing in Act, Event or witness() reads the actor's office, so "
+            "office cannot make an act cost more — and `07` §5 asks precisely that it do so",
+            "P21 visibility cost",
+            needs="a witnessability term keyed on the actor's standing/office, not on the act",
+        )
+    return "OK"
+
+
+@probe("P22", "the same words cost differently said in private and in public")
+def p22(w=None):
+    """Raised by NPC-020 and NPC-021: frank counsel must be free; public contradiction must not."""
+    w = w or _world()
+    w.persons["reichard"] = Person(id="reichard")
+    w.persons["almud"] = Person(id="almud")
+    w.persons["bystander"] = Person(id="bystander")
+    loop = SeasonLoop(w)
+    evs = loop.run({"reichard": lambda p, v, s: Act(actor="reichard", verb="contradict",
+                                                    target="almud")})
+    # Every person in the world witnesses every Event in the specified loop.
+    heard = [p for p in w.persons if any(c.source_event == evs[0].id for c in w.persons[p].ledger)]
+    if "bystander" in heard:
+        raise NoProducer(
+            "privacy: WITNESS as specified fans every Event out to every person, so there is no "
+            "private utterance — a councillor's frank advice is heard by the whole realm. `06` §4.2 "
+            "names five witness CHANNELS as the cast gate, but the loop never consults them",
+            "P22 private vs public",
+            needs="witness() to consult presence/channel before depositing, not after",
+        )
+    return "OK"
+
+
+@probe("P23", "a failed attempt costs standing and cannot be retried for some seasons")
+def p23(w=None):
+    """Raised by NPC-050 (Baralta), marked core: the claim must be a real multi-season bet."""
+    w = w or _world()
+    w.persons["baralta"] = Person(id="baralta")
+    loop = SeasonLoop(w)
+    for _ in range(3):
+        loop.run({"baralta": lambda p, v, s: Act(actor="baralta", verb="press_claim",
+                                                 target="crown")})
+    tries = [e for e in w.log if e.family == "press_claim"]
+    if len(tries) == 3:
+        raise NoProducer(
+            f"act cooldown: the claim was pressed {len(tries)} seasons running with no cost and no "
+            "bar. `05` §4.1 gives event ROWS a required cooldown; nothing gives an ACT one, so a "
+            "failed bid for a throne is a free repeatable check rather than a bet",
+            "P23 act cooldown",
+            needs="a per-act-kind cooldown carried by the actor, or a Record with a ttl that gates "
+                  "eligibility (the shape already has the Record; nothing writes it here)",
+        )
+    return "OK"
+
+
+@probe("P24", "a collective body revokes the authority it granted")
+def p24(w=None):
+    """Raised by NPC-052 (Vaynard), core: authority revocable by his own senior subordinates."""
+    w = w or _world()
+    for m in ("vaynard", "jarl1", "jarl2"):
+        w.persons[m] = Person(id=m)
+    w.offices["duke"] = Office(id="duke", post="Duke of Varfell", rung="prov",
+                               conferral="jarl_council", revocation="jarl_council_at_thing")
+    w.tenures["h"] = Tenure(id="h", subject="vaynard", object="duke", kind="hold", since=0)
+    d = Date(id="thing", holder="duke", season=1)
+    w.rungs["prov"].dates.append(d)
+    loop = SeasonLoop(w)
+    loop.run({"jarl1": lambda p, v, s: Act(actor="jarl1", verb="convene", target="thing"),
+              "jarl2": lambda p, v, s: Act(actor="jarl2", verb="move_revocation", target="h")})
+    return ("OK-BUT: the acts resolve and the office declares its revocation basis, but WHETHER THE "
+            "MOTION CARRIES is the unspecified judging-set rule of F6 — so revocation reaches the "
+            "venue and stops there")
+
+
+@probe("P25", "a subordinate silently underperforms, and nobody can tell without investigating")
+def p25(w=None):
+    """Raised by NPC-052: a compromised operative with divided loyalty."""
+    w = w or _world()
+    w.persons["vaynard"] = Person(id="vaynard")
+    w.persons["maret"] = Person(id="maret", stance=[("vaynard", 1, 2), ("rm", 4, 4)])
+    loop = SeasonLoop(w)
+    loop.run({"vaynard": lambda p, v, s: Act(actor="vaynard", verb="dispatch", target="maret"),
+              "maret": lambda p, v, s: Act(actor="maret", verb="scout", target="settl",
+                                           payload={"effort": "half"})})
+    return ("OK: the operative's own choose returns a weaker act; her divided stance is her interior "
+            "and nobody may read it — investigating is the only route, which is the design")
+
+
+@probe("P26", "accumulated visible harm crosses a threshold and forces a confrontation")
+def p26(w=None):
+    """Raised by NPC-001 (Edeyja), core: her patience must have a hard triggered limit."""
+    w = w or _world()
+    w.persons["edeyja"] = Person(id="edeyja")
+    w.persons["offender"] = Person(id="offender")
+    loop = SeasonLoop(w)
+    for _ in range(6):
+        loop.run({"offender": lambda p, v, s: Act(actor="offender", verb="tear_seam",
+                                                  target="seam")})
+    harms = [c for c in w.persons["edeyja"].ledger if "tear_seam" in c.proposition]
+    # she must have WITNESSED them; and claim confidence decays under the universal rule
+    raise NoProducer(
+        f"accumulation vs decay: Edeyja holds {len(harms)} claims of harm, but the only accumulator "
+        "the shape offers is a ledger whose confidence DECAYS and whose rows are EVICTED at a cap. "
+        "A threshold over 'visible harm accumulated' is therefore a race between witnessing and "
+        "forgetting, and the shape has no counter that only goes up",
+        "P26 accumulation",
+        needs="a monotone per-person tally (the archive's scar is exactly this shape), or an "
+              "explicit statement that patience is a Query over undecayed claims and is losable",
+    )
+
+
+@probe("P27", "a contested person's allegiance is won by investment inside a closing window")
+def p27(w=None):
+    """Raised by NPC-031 (Torben), core: alignment won, then permanently locked."""
+    w = w or _world()
+    w.persons["torben"] = Person(id="torben")
+    for inv in ("altonia", "church"):
+        w.persons[inv] = Person(id=inv)
+    loop = SeasonLoop(w)
+    for _ in range(3):
+        loop.run({"altonia": lambda p, v, s: Act(actor="altonia", verb="tutor", target="torben"),
+                  "church": lambda p, v, s: Act(actor="church", verb="tutor", target="torben")})
+    raise Unspecified(
+        "contested formation: investments in a person resolve as Events he witnesses, but nothing "
+        "converts accumulated tutoring into a DURABLE alignment, and nothing closes a window after "
+        "which it LOCKS. `02` §10 item 3 carries the 'plausible past' of a newly made person as "
+        "open; this is the same hole seen from the other end — how a person's interior is FORMED",
+        "P27 formation window",
+        needs="a specified route from repeated acts upon a person to that person's convictions "
+              "(which is P4's missing mechanism again), plus a lock condition",
+    )
+
+
+# ===========================================================================
+# FIFTH WAVE — the low-agency end. Raised by NPC-088/087/086/075/005.
+# ===========================================================================
+
+@probe("P28", "a person MAKES a durable object that outlives the scene")
+def p28(w=None):
+    """Carin Vedel, core: 'a copied text must exist as a persistent object'."""
+    w = w or _world()
+    w.persons["carin"] = Person(id="carin")
+    loop = SeasonLoop(w)
+    loop.run({"carin": lambda p, v, s: Act(actor="carin", verb="copy", target="text.einhir")})
+    made = [r for r in w.records.values() if r.kind == "copy"]
+    if not made:
+        raise NoProducer(
+            "craft: `02` §7.4 has `Record` — the only non-person root-bearer, keepable at a Rung, "
+            "burnable, admissible at a venue — which is exactly the object a copyist makes. But no "
+            "act CREATES one: `resolve` emits Events and nothing mints a Record, so the shape has "
+            "the noun and not the verb",
+            "P28 making a thing",
+            needs="a `create`-mode StateChange whose subject is a Record, produced by an act",
+        )
+    return "OK"
+
+
+@probe("P29", "merely HOLDING a thing is actionable against you")
+def p29(w=None):
+    """Carin Vedel, core: 'possession is a heresy charge', independent of being seen to copy."""
+    w = w or _world()
+    w.records["banned"] = Record(id="banned", rung="settl", kind="copy")
+    w.persons["carin"] = Person(id="carin")
+    # Who HOLDS the banned copy? `03` §1.3 gap 2 homes a Record as Rung matter, so it sits at a
+    # place, not with a person. This is the same hole P10 found from the custody side.
+    raise Collision(
+        "possession: a Record is homed as Rung matter, so it is at a PLACE and never in a person's "
+        "hands — 'she was found with it' is not expressible, and possession-as-offence has no "
+        "subject. P10 found the same hole from the custody side; they are one gap",
+        "P29 possession",
+        needs="a person-to-Record `hold` Tenure, which also closes P10",
+    )
+
+
+@probe("P30", "work spans seasons and can be interrupted partway")
+def p30(w=None):
+    """Carin (a copy takes many weeks) and Uwe (a school is a standing condition, not an act)."""
+    w = w or _world()
+    w.persons["carin"] = Person(id="carin")
+    loop = SeasonLoop(w)
+    loop.run({"carin": lambda p, v, s: Act(actor="carin", verb="copy", target="text",
+                                           payload={"progress": 1, "of": 3})})
+    # `02` §8.1 lists "travel-in-progress" as a thing MATTER ticks. Nothing generalises it.
+    raise NoProducer(
+        "work-in-progress: `02` §8.1 names travel-in-progress as ticking at MATTER, but there is no "
+        "general partial-work record, so every act completes or fails within its season. A craft, a "
+        "school, a survey or a long investigation cannot be half-done and interrupted",
+        "P30 ongoing work",
+        needs="an act that deposits a Record with remaining effort, which MATTER advances",
+    )
+
+
+@probe("P31", "a person is worn down by WHERE THEY ARE, not by what they do")
+def p31(w=None):
+    """Orm, core: 31 years of Warden degradation is environmental — proximity, not operations."""
+    w = w or _world()
+    w.persons["orm"] = Person(id="orm")
+    w.tenures["at"] = Tenure(id="at", subject="orm", object="settl", kind="contain", since=0)
+    w.sites["seam"].condition = 120                       # a badly damaged seam he lives beside
+    loop = SeasonLoop(w)
+    for _ in range(5):
+        loop.run({})                                      # he does nothing at all
+    raise NoProducer(
+        "environmental cost: a person contained at a Rung whose Site is derelict takes NOTHING from "
+        "it. MATTER wears Sites; nothing wears the PEOPLE standing next to them, so a Warden's "
+        "thirty-one years of proximity to substrate damage is free",
+        "P31 proximity harm",
+        needs="a MATTER pass from Site condition onto contained persons — the same shape as "
+              "subsistence (P16), which is also missing",
+    )
+
+
+@probe("P32", "spending your life on an act buys something a surviving act cannot")
+def p32(w=None):
+    """Orm, core: his death while sealing a breach seals it PERMANENTLY, unlike a survived seal."""
+    w = w or _world()
+    w.persons["orm"] = Person(id="orm")
+    loop = SeasonLoop(w)
+    evs = loop.run({"orm": lambda p, v, s: Act(actor="orm", verb="seal_breach", target="seam",
+                                               payload={"stake": "life"})})
+    # An Act has (actor, verb, target, payload). resolve() ignores payload; degrees come from the
+    # ladder, and nothing lets an actor WAGER themselves for a better band.
+    raise NoProducer(
+        "sacrifice: `resolve` reads no stake from an Act, so spending your life on an act cannot buy "
+        "a different outcome than performing it and living. Orm's death-seal and an ordinary seal "
+        "are the same Event",
+        "P32 self-sacrifice",
+        needs="a declared stake on an Act that the resolver may read, priced against the ladder",
+    )
+
+
+@probe("P33", "one person carries two independent standings that move separately")
+def p33(w=None):
+    """Sigrid Torsvald, important: an overt rank and a covert rank that do not imply each other."""
+    w = w or _world()
+    w.persons["sigrid"] = Person(id="sigrid", marks=["officer:lowenritter"])
+    # `07` §3.1: Sensation.standing is ONE scalar — "the gap between what everyone reads off you
+    # and what you hold". A covert reputation is by definition NOT what everyone reads off you.
+    raise NoProducer(
+        "two standings: `Sensation.standing` is a single scalar defined as what EVERYONE reads off "
+        "you, so a reputation held only among people who can never publicly credit you has no "
+        "carrier — and a covert operative's whole economy is that second, unreadable standing",
+        "P33 covert standing",
+        needs="standing as a Query over a NAMED audience, not a global scalar",
+    )

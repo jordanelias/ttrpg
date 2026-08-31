@@ -1,0 +1,1547 @@
+
+=== CASE PROBE-P1 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(carin)   (omits World)
+    ACT  carin :: copy -> seam
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 copy @seam causes=[]
+  [WITNESS]
+    call witness(carin<-E1.0)
+    W    Person.ledger[carin] <- 'copy@seam'  class=INTERIOR driver=Event
+  [CENSUS]
+
+=== CASE PROBE-P2 ===
+-- SEASON 1 --
+  [CALENDAR]
+    ..   date fires sitting.1@realm
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(carin)   (omits World)
+    ACT  carin :: petition -> sitting.1
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 petition @sitting.1 causes=[]
+  [WITNESS]
+    call witness(carin<-E1.0)
+    W    Person.ledger[carin] <- 'petition@sitting.1'  class=INTERIOR driver=Event
+    call witness(peder<-E1.0)
+    W    Person.ledger[peder] <- 'petition@sitting.1'  class=INTERIOR driver=Event
+  [CENSUS]
+    !!   UNSPECIFIED: `carry` — who moves a Petition onto a DocketItem, and what it costs them @P2 petition->docket
+
+=== CASE PROBE-P3 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(sigrid)   (omits World)
+    ACT  sigrid :: sabotage -> harbour
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 sabotage @harbour causes=[]
+  [WITNESS]
+    call witness(sigrid<-E1.0)
+    W    Person.ledger[sigrid] <- 'sabotage@harbour'  class=INTERIOR driver=Event
+    call witness(obs<-E1.0)
+    W    Person.ledger[obs] <- 'sabotage@harbour'  class=INTERIOR driver=Event
+  [CENSUS]
+    !!   NO-PRODUCER: covert action: an Event has no field separating the deed from its doer, so witnessing an act necessarily reveals its actor @P3 covert
+
+=== CASE PROBE-P4 ===
+    !!   UNSPECIFIED: Conviction motion: `02` §5.5 says convictions move 'slowly, by scar and crisis' @Person[saemund].convictions[Faith]
+
+=== CASE PROBE-P5 ===
+    call witness(saemund<-E.forge)
+
+=== CASE PROBE-P6 ===
+    !!   UNSPECIFIED: the ledger cap `L` and the eviction comparator (`confidence_live x recency`) @P6 forgetting
+
+=== CASE PROBE-P7 ===
+    call witness(a<-E.x)
+    call witness(b<-E.x)
+    !!   NO-PRODUCER: construal divergence: `witness` is per-person but nothing in it VARIES by person, so two witnesses of one event necessarily agree @P7 divergence
+
+=== CASE PROBE-P8 ===
+    W    Tenure.contain[father] <- None  class=MATTER driver=Event
+    !!   NO-PRODUCER: feud inheritance: nothing at death writes the deceased's stances into a kinsman's interior, and claim confidence decays — so an enmity is LOST BY BEING FORGOTTEN @P8 inheritance
+
+=== CASE PROBE-P9 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(almud)   (omits World)
+    ACT  almud :: dispatch -> voss
+    call choose(voss)   (omits World)
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 dispatch @voss causes=[]
+  [WITNESS]
+    call witness(almud<-E1.0)
+    W    Person.ledger[almud] <- 'dispatch@voss'  class=INTERIOR driver=Event
+    call witness(voss<-E1.0)
+    W    Person.ledger[voss] <- 'dispatch@voss'  class=INTERIOR driver=Event
+  [CENSUS]
+
+=== CASE PROBE-P10 ===
+    !!   COLLISION: custody: `03` §1.3 homes a Record as Rung matter, so a clerk's CUSTODY of it is not represented — `01` §3.1 names custody as one of four things that make an ordinary person matter, and no field carries it @P10 custody
+
+=== CASE PROBE-P11 ===
+    !!   NO-PRODUCER: conflicting obligation: two `oblige` Tenures may coexist and nothing computes that satisfying one breaches the other; the collision rule is specified for Propositions (`02` §3, intersecting `when`), not for obligations @P11 dual loyalty
+
+=== CASE PROBE-P12 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(stranger)   (omits World)
+    ACT  stranger :: take_seat -> seat.prefect
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 take_seat @seat.prefect causes=[]
+  [WITNESS]
+    call witness(maret<-E1.0)
+    W    Person.ledger[maret] <- 'take_seat@seat.prefect'  class=INTERIOR driver=Event
+    call witness(stranger<-E1.0)
+    W    Person.ledger[stranger] <- 'take_seat@seat.prefect'  class=INTERIOR driver=Event
+  [CENSUS]
+
+=== CASE PROBE-F1 ===
+
+=== CASE PROBE-F2 ===
+    !!   UNSPECIFIED: `leaders()` comparator — `02` §10 item 2 proposes 'commitment degree x backing raisable', unadopted @leaders(rm,realm)
+
+=== CASE PROBE-F3 ===
+    !!   NO-PRODUCER: the ghost polity: every member has decommitted, the Proposition is immutable and never destroyed, and its `hold` Tenure over a settlement has NO PRODUCER TO END IT — revocation names a venue, and no person remains who can appear at one @F3 faction ending
+
+=== CASE PROBE-F4 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(baralta)   (omits World)
+    ACT  baralta :: press_claim -> claim
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 press_claim @claim causes=[]
+  [WITNESS]
+    call witness(baralta<-E1.0)
+    W    Person.ledger[baralta] <- 'press_claim@claim'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 2 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 480  class=MATTER driver=Event
+    EVT  E2.band.harbour band_crossed @harbour causes=[]
+    W    Site.condition[seam] <- 750  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(baralta)   (omits World)
+    ACT  baralta :: press_claim -> claim
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E2.2 press_claim @claim causes=[]
+  [WITNESS]
+    call witness(baralta<-E2.2)
+    W    Person.ledger[baralta] <- 'press_claim@claim'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 3 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 440  class=MATTER driver=Event
+    W    Site.condition[seam] <- 725  class=MATTER driver=Event
+    EVT  E3.band.seam band_crossed @seam causes=[]
+  [DELIBERATE]
+    call choose(baralta)   (omits World)
+    ACT  baralta :: press_claim -> claim
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E3.4 press_claim @claim causes=[]
+  [WITNESS]
+    call witness(baralta<-E3.4)
+    W    Person.ledger[baralta] <- 'press_claim@claim'  class=INTERIOR driver=Event
+  [CENSUS]
+
+=== CASE PROBE-F5 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(almud)   (omits World)
+    ACT  almud :: confer -> gov
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 confer @gov causes=[]
+  [WITNESS]
+    call witness(almud<-E1.0)
+    W    Person.ledger[almud] <- 'confer@gov'  class=INTERIOR driver=Event
+    call witness(hedda<-E1.0)
+    W    Person.ledger[hedda] <- 'confer@gov'  class=INTERIOR driver=Event
+  [CENSUS]
+
+=== CASE PROBE-F6 ===
+-- SEASON 1 --
+  [CALENDAR]
+    ..   date fires sitting.1@realm
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(peder)   (omits World)
+    ACT  peder :: convene -> sitting.1
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 convene @sitting.1 causes=[]
+  [WITNESS]
+    call witness(peder<-E1.0)
+    W    Person.ledger[peder] <- 'convene@sitting.1'  class=INTERIOR driver=Event
+  [CENSUS]
+    !!   UNSPECIFIED: the judging set's decision rule at a sitting — `02` §2.2 names `judging_set_rule` as a Rung field and no document specifies its form or how a motion is carried @F6 sitting decision
+
+=== CASE PROBE-W1 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+-- SEASON 2 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 480  class=MATTER driver=Event
+    EVT  E2.band.harbour band_crossed @harbour causes=[]
+    W    Site.condition[seam] <- 750  class=MATTER driver=Event
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+-- SEASON 3 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 440  class=MATTER driver=Event
+    W    Site.condition[seam] <- 725  class=MATTER driver=Event
+    EVT  E3.band.seam band_crossed @seam causes=[]
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+-- SEASON 4 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 400  class=MATTER driver=Event
+    W    Site.condition[seam] <- 700  class=MATTER driver=Event
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+-- SEASON 5 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 360  class=MATTER driver=Event
+    W    Site.condition[seam] <- 675  class=MATTER driver=Event
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+-- SEASON 6 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 320  class=MATTER driver=Event
+    W    Site.condition[seam] <- 650  class=MATTER driver=Event
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+
+=== CASE PROBE-W2 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 460  class=MATTER driver=Event
+    EVT  E1.band.harbour band_crossed @harbour causes=[]
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(tender)   (omits World)
+    ACT  tender :: restore -> harbour
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.1 restore @harbour causes=[]
+  [WITNESS]
+    call witness(tender<-E1.1)
+    W    Person.ledger[tender] <- 'restore@harbour'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 2 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 460  class=MATTER driver=Event
+    EVT  E2.band.harbour band_crossed @harbour causes=[]
+    W    Site.condition[seam] <- 750  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(tender)   (omits World)
+    ACT  tender :: restore -> harbour
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E2.3 restore @harbour causes=[]
+  [WITNESS]
+    call witness(tender<-E2.3)
+    W    Person.ledger[tender] <- 'restore@harbour'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 3 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 460  class=MATTER driver=Event
+    EVT  E3.band.harbour band_crossed @harbour causes=[]
+    W    Site.condition[seam] <- 725  class=MATTER driver=Event
+    EVT  E3.band.seam band_crossed @seam causes=[]
+  [DELIBERATE]
+    call choose(tender)   (omits World)
+    ACT  tender :: restore -> harbour
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E3.6 restore @harbour causes=[]
+  [WITNESS]
+    call witness(tender<-E3.6)
+    W    Person.ledger[tender] <- 'restore@harbour'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 4 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 460  class=MATTER driver=Event
+    EVT  E4.band.harbour band_crossed @harbour causes=[]
+    W    Site.condition[seam] <- 700  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(tender)   (omits World)
+    ACT  tender :: restore -> harbour
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E4.8 restore @harbour causes=[]
+  [WITNESS]
+    call witness(tender<-E4.8)
+    W    Person.ledger[tender] <- 'restore@harbour'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 5 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 460  class=MATTER driver=Event
+    EVT  E5.band.harbour band_crossed @harbour causes=[]
+    W    Site.condition[seam] <- 675  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(tender)   (omits World)
+    ACT  tender :: restore -> harbour
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E5.10 restore @harbour causes=[]
+  [WITNESS]
+    call witness(tender<-E5.10)
+    W    Person.ledger[tender] <- 'restore@harbour'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 6 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 460  class=MATTER driver=Event
+    EVT  E6.band.harbour band_crossed @harbour causes=[]
+    W    Site.condition[seam] <- 650  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(tender)   (omits World)
+    ACT  tender :: restore -> harbour
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E6.12 restore @harbour causes=[]
+  [WITNESS]
+    call witness(tender<-E6.12)
+    W    Person.ledger[tender] <- 'restore@harbour'  class=INTERIOR driver=Event
+  [CENSUS]
+    !!   NO-PRODUCER: band strobing: 7 crossing events in 6 seasons at the tending equilibrium. A band edge is a single threshold, so recovery costs exactly what decline gave back and the site oscillates across it, spamming witnessed crossings and flickering verbs @W2 hysteresis
+
+=== CASE PROBE-W3 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+
+=== CASE PROBE-W4 ===
+    !!   FORBIDDEN: an agentive actorless row — 'an empire demands a levy' is an actor's decision rendered as weather. `05` §4.4 blocks it until a criterion exists that stops any actor being reclassified as weather @W4 off-board agency
+
+=== CASE PROBE-A1 ===
+-- SEASON 1 --
+  [CALENDAR]
+    ..   date fires sitting.1@realm
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(peder)   (omits World)
+    ACT  peder :: convene -> sitting.1
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 convene @sitting.1 causes=[]
+  [WITNESS]
+    call witness(peder<-E1.0)
+    W    Person.ledger[peder] <- 'convene@sitting.1'  class=INTERIOR driver=Event
+  [CENSUS]
+    !!   UNSPECIFIED: the judging set's decision rule at a sitting — `02` §2.2 names `judging_set_rule` as a Rung field and no document specifies its form or how a motion is carried @F6 sitting decision
+
+=== CASE PROBE-A2 ===
+    !!   FORBIDDEN: an Event writing social row (Office, post) @Office.post
+
+=== CASE PROBE-A3 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+-- SEASON 2 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 480  class=MATTER driver=Event
+    EVT  E2.band.harbour band_crossed @harbour causes=[]
+    W    Site.condition[seam] <- 750  class=MATTER driver=Event
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+-- SEASON 3 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 440  class=MATTER driver=Event
+    W    Site.condition[seam] <- 725  class=MATTER driver=Event
+    EVT  E3.band.seam band_crossed @seam causes=[]
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+-- SEASON 4 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 400  class=MATTER driver=Event
+    W    Site.condition[seam] <- 700  class=MATTER driver=Event
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+
+=== CASE PROBE-A4 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(a)   (omits World)
+    ACT  a :: accuse -> b
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 accuse @b causes=[]
+  [WITNESS]
+    call witness(a<-E1.0)
+    W    Person.ledger[a] <- 'accuse@b'  class=INTERIOR driver=Event
+  [CENSUS]
+    !!   NO-PRODUCER: provenance: `resolve` emits Events with an EMPTY causes[] — nothing in the specified loop populates the causal edge that `06` §1 calls the arc itself @A4 provenance chain
+
+=== CASE PROBE-A5 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(p)   (omits World)
+    ACT  p :: protest -> crown
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 protest @crown causes=[]
+  [WITNESS]
+    call witness(p<-E1.0)
+    W    Person.ledger[p] <- 'protest@crown'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 2 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 480  class=MATTER driver=Event
+    EVT  E2.band.harbour band_crossed @harbour causes=[]
+    W    Site.condition[seam] <- 750  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(p)   (omits World)
+    ACT  p :: protest -> crown
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E2.2 protest @crown causes=[]
+  [WITNESS]
+    call witness(p<-E2.2)
+    W    Person.ledger[p] <- 'protest@crown'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 3 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 440  class=MATTER driver=Event
+    W    Site.condition[seam] <- 725  class=MATTER driver=Event
+    EVT  E3.band.seam band_crossed @seam causes=[]
+  [DELIBERATE]
+    call choose(p)   (omits World)
+    ACT  p :: protest -> crown
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E3.4 protest @crown causes=[]
+  [WITNESS]
+    call witness(p<-E3.4)
+    W    Person.ledger[p] <- 'protest@crown'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 4 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 400  class=MATTER driver=Event
+    W    Site.condition[seam] <- 700  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(p)   (omits World)
+    ACT  p :: protest -> crown
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E4.5 protest @crown causes=[]
+  [WITNESS]
+    call witness(p<-E4.5)
+    W    Person.ledger[p] <- 'protest@crown'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 5 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 360  class=MATTER driver=Event
+    W    Site.condition[seam] <- 675  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(p)   (omits World)
+    ACT  p :: protest -> crown
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E5.6 protest @crown causes=[]
+  [WITNESS]
+    call witness(p<-E5.6)
+    W    Person.ledger[p] <- 'protest@crown'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 6 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 320  class=MATTER driver=Event
+    W    Site.condition[seam] <- 650  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(p)   (omits World)
+    ACT  p :: protest -> crown
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E6.7 protest @crown causes=[]
+  [WITNESS]
+    call witness(p<-E6.7)
+    W    Person.ledger[p] <- 'protest@crown'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 7 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 280  class=MATTER driver=Event
+    W    Site.condition[seam] <- 625  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(p)   (omits World)
+    ACT  p :: protest -> crown
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E7.8 protest @crown causes=[]
+  [WITNESS]
+    call witness(p<-E7.8)
+    W    Person.ledger[p] <- 'protest@crown'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 8 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 240  class=MATTER driver=Event
+    EVT  E8.band.harbour band_crossed @harbour causes=[]
+    W    Site.condition[seam] <- 600  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(p)   (omits World)
+    ACT  p :: protest -> crown
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E8.10 protest @crown causes=[]
+  [WITNESS]
+    call witness(p<-E8.10)
+    W    Person.ledger[p] <- 'protest@crown'  class=INTERIOR driver=Event
+  [CENSUS]
+    !!   NO-PRODUCER: boundedness: grievance rose monotonically to 9 over 8 seasons with nothing damping it. Per-tick emission caps bound a cascade WITHIN a season; nothing bounds a behavioural spiral ACROSS seasons, and no guard or measurement is licensed for it @A5 termination
+
+=== CASE PROBE-A6 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(a)   (omits World)
+    ACT  a :: reconstruct -> forged
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 reconstruct @forged causes=[]
+  [WITNESS]
+    call witness(a<-E1.0)
+    W    Person.ledger[a] <- 'reconstruct@forged'  class=INTERIOR driver=Event
+    call witness(b<-E1.0)
+    W    Person.ledger[b] <- 'reconstruct@forged'  class=INTERIOR driver=Event
+  [CENSUS]
+
+=== CASE PROBE-P13 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(joren)   (omits World)
+    ACT  joren :: travel -> prov
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 travel @prov causes=[]
+  [WITNESS]
+    call witness(joren<-E1.0)
+    W    Person.ledger[joren] <- 'travel@prov'  class=INTERIOR driver=Event
+  [CENSUS]
+
+=== CASE PROBE-P14 ===
+    !!   UNSPECIFIED: (Person, capability) has no row in the Partition schema @Person.capability
+
+=== CASE PROBE-P15 ===
+    !!   COLLISION: marriage: `01` Law 4 names marriage as a governed social change, but no Tenure kind carries it — `tie` is an affective bond that DECAYS, and a dynastic marriage is a durable political instrument that binds two houses and routes succession @P15 marriage
+
+=== CASE PROBE-P16 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+    !!   NO-PRODUCER: subsistence: `02` §8.1 says subsistence happens TO a person at MATTER, but no step consumes stores on their behalf and no rule links a person to a larder — so `need` in `Sensation` has no producer either @P16 subsistence
+
+=== CASE PROBE-P17 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+    !!   UNSPECIFIED: individuation: `05` row 13 requires the world to mint a Person on demand with no decider, and no rule says WHAT TRIGGERS IT or what interior the new person starts with — `02` §10 item 3 carries the 'plausible past' as open and ruled-against in three placements @P17 individuation
+
+=== CASE PROBE-A7 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(conf)   (omits World)
+    ACT  conf :: issue -> excommunication
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 issue @excommunication causes=[]
+  [WITNESS]
+    call witness(conf<-E1.0)
+    W    Person.ledger[conf] <- 'issue@excommunication'  class=INTERIOR driver=Event
+    call witness(card1<-E1.0)
+    W    Person.ledger[card1] <- 'issue@excommunication'  class=INTERIOR driver=Event
+    call witness(card2<-E1.0)
+    W    Person.ledger[card2] <- 'issue@excommunication'  class=INTERIOR driver=Event
+  [CENSUS]
+
+=== CASE PROBE-A8 ===
+-- SEASON 1 --
+  [CALENDAR]
+    ..   date fires audience@realm
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+    !!   NO-PRODUCER: the lapse: `05` §5.1 calls a date passing unheard 'a real consequence' with 'nobody's act, nobody to blame' — but nothing EMITS it, so the specific injury of being ignored is not witnessable and cannot enter anyone's ledger @A8 lapse
+
+=== CASE PROBE-A9 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+-- SEASON 2 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 480  class=MATTER driver=Event
+    EVT  E2.band.harbour band_crossed @harbour causes=[]
+    W    Site.condition[seam] <- 750  class=MATTER driver=Event
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+-- SEASON 3 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 440  class=MATTER driver=Event
+    W    Site.condition[seam] <- 725  class=MATTER driver=Event
+    EVT  E3.band.seam band_crossed @seam causes=[]
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+-- SEASON 4 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 400  class=MATTER driver=Event
+    W    Site.condition[seam] <- 700  class=MATTER driver=Event
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+    !!   NO-PRODUCER: no step decrements a Record's ttl. `05` rows 11a/11b make a ttl expiry and an act-created term's ripening the carriers for cooldowns, remissions and truces — and MATTER never touches them @A9 ttl
+
+=== CASE PROBE-A10 ===
+-- SEASON 1 --
+  [CALENDAR]
+    ..   date fires succession@realm
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+    !!   UNSPECIFIED: vacancy-by-absence: `06` row 3 requires a convening condition to read PRESENCE, so that making a man absent substitutes for killing him — `ConveningCondition` is a six-field object the adversarial pass found had no owner, and its predicate form is unspecified @A10 hostage politics
+
+=== CASE PROBE-A11 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(baralta)   (omits World)
+    ACT  baralta :: press_claim -> claim
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 press_claim @claim causes=[]
+  [WITNESS]
+    call witness(baralta<-E1.0)
+    W    Person.ledger[baralta] <- 'press_claim@claim'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 2 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 480  class=MATTER driver=Event
+    EVT  E2.band.harbour band_crossed @harbour causes=[]
+    W    Site.condition[seam] <- 750  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(baralta)   (omits World)
+    ACT  baralta :: press_claim -> claim
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E2.2 press_claim @claim causes=[]
+  [WITNESS]
+    call witness(baralta<-E2.2)
+    W    Person.ledger[baralta] <- 'press_claim@claim'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 3 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 440  class=MATTER driver=Event
+    W    Site.condition[seam] <- 725  class=MATTER driver=Event
+    EVT  E3.band.seam band_crossed @seam causes=[]
+  [DELIBERATE]
+    call choose(baralta)   (omits World)
+    ACT  baralta :: press_claim -> claim
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E3.4 press_claim @claim causes=[]
+  [WITNESS]
+    call witness(baralta<-E3.4)
+    W    Person.ledger[baralta] <- 'press_claim@claim'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 4 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 400  class=MATTER driver=Event
+    W    Site.condition[seam] <- 700  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(baralta)   (omits World)
+    ACT  baralta :: press_claim -> claim
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E4.5 press_claim @claim causes=[]
+  [WITNESS]
+    call witness(baralta<-E4.5)
+    W    Person.ledger[baralta] <- 'press_claim@claim'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 5 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 360  class=MATTER driver=Event
+    W    Site.condition[seam] <- 675  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(baralta)   (omits World)
+    ACT  baralta :: press_claim -> claim
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E5.6 press_claim @claim causes=[]
+  [WITNESS]
+    call witness(baralta<-E5.6)
+    W    Person.ledger[baralta] <- 'press_claim@claim'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 6 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 320  class=MATTER driver=Event
+    W    Site.condition[seam] <- 650  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(baralta)   (omits World)
+    ACT  baralta :: press_claim -> claim
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E6.7 press_claim @claim causes=[]
+  [WITNESS]
+    call witness(baralta<-E6.7)
+    W    Person.ledger[baralta] <- 'press_claim@claim'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 7 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 280  class=MATTER driver=Event
+    W    Site.condition[seam] <- 625  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(baralta)   (omits World)
+    ACT  baralta :: press_claim -> claim
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E7.8 press_claim @claim causes=[]
+  [WITNESS]
+    call witness(baralta<-E7.8)
+    W    Person.ledger[baralta] <- 'press_claim@claim'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 8 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 240  class=MATTER driver=Event
+    EVT  E8.band.harbour band_crossed @harbour causes=[]
+    W    Site.condition[seam] <- 600  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(baralta)   (omits World)
+    ACT  baralta :: press_claim -> claim
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E8.10 press_claim @claim causes=[]
+  [WITNESS]
+    call witness(baralta<-E8.10)
+    W    Person.ledger[baralta] <- 'press_claim@claim'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 9 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 200  class=MATTER driver=Event
+    W    Site.condition[seam] <- 575  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(baralta)   (omits World)
+    ACT  baralta :: press_claim -> claim
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E9.11 press_claim @claim causes=[]
+  [WITNESS]
+    call witness(baralta<-E9.11)
+    W    Person.ledger[baralta] <- 'press_claim@claim'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 10 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 160  class=MATTER driver=Event
+    W    Site.condition[seam] <- 550  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(baralta)   (omits World)
+    ACT  baralta :: press_claim -> claim
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E10.12 press_claim @claim causes=[]
+  [WITNESS]
+    call witness(baralta<-E10.12)
+    W    Person.ledger[baralta] <- 'press_claim@claim'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 11 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 120  class=MATTER driver=Event
+    W    Site.condition[seam] <- 525  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(baralta)   (omits World)
+    ACT  baralta :: press_claim -> claim
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E11.13 press_claim @claim causes=[]
+  [WITNESS]
+    call witness(baralta<-E11.13)
+    W    Person.ledger[baralta] <- 'press_claim@claim'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 12 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 80  class=MATTER driver=Event
+    W    Site.condition[seam] <- 500  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(baralta)   (omits World)
+    ACT  baralta :: press_claim -> claim
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E12.14 press_claim @claim causes=[]
+  [WITNESS]
+    call witness(baralta<-E12.14)
+    W    Person.ledger[baralta] <- 'press_claim@claim'  class=INTERIOR driver=Event
+  [CENSUS]
+
+=== CASE PROBE-A12 ===
+    W    Tenure.contain[almud] <- None  class=MATTER driver=Event
+    !!   FORBIDDEN: an Event writing social row (Tenure, hold) @Tenure.hold
+
+=== CASE PROBE-P18 ===
+    !!   NO-PRODUCER: staged institutional judgement: a stage computed as a Query over current stances REVERTS the moment the stances do, so an army that has decided its king is unfit un-decides it after one good season. A ratchet needs state that survives its inputs, and Law 3 forbids exactly that state @P18 loyalty stages
+
+=== CASE PROBE-P19 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(almud)   (omits World)
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+-- SEASON 2 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 480  class=MATTER driver=Event
+    EVT  E2.band.harbour band_crossed @harbour causes=[]
+    W    Site.condition[seam] <- 750  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(almud)   (omits World)
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+-- SEASON 3 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 440  class=MATTER driver=Event
+    W    Site.condition[seam] <- 725  class=MATTER driver=Event
+    EVT  E3.band.seam band_crossed @seam causes=[]
+  [DELIBERATE]
+    call choose(almud)   (omits World)
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+    !!   NO-PRODUCER: deferral: a person who chooses nothing produces no Act, so no Event, so nothing enters anyone's ledger — a ruler's sustained refusal to decide is INVISIBLE to the world and indistinguishable from his absence @P19 inaction
+
+=== CASE PROBE-P20 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(almud)   (omits World)
+    ACT  almud :: dispatch -> voss
+    call choose(voss)   (omits World)
+    ACT  voss :: levy_harshly -> settl
+  [RESOLVE]
+    call resolve(2 acts)   (omits Person)
+    EVT  E1.0 dispatch @voss causes=[]
+    EVT  E1.1 levy_harshly @settl causes=[]
+  [WITNESS]
+    call witness(almud<-E1.0)
+    W    Person.ledger[almud] <- 'dispatch@voss'  class=INTERIOR driver=Event
+    call witness(voss<-E1.0)
+    W    Person.ledger[voss] <- 'dispatch@voss'  class=INTERIOR driver=Event
+    call witness(almud<-E1.1)
+    W    Person.ledger[almud] <- 'levy_harshly@settl'  class=INTERIOR driver=Event
+    call witness(voss<-E1.1)
+    W    Person.ledger[voss] <- 'levy_harshly@settl'  class=INTERIOR driver=Event
+  [CENSUS]
+
+=== CASE PROBE-P21 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(almud)   (omits World)
+    ACT  almud :: favour_heretic -> carin
+    call choose(carin)   (omits World)
+    ACT  carin :: favour_heretic -> almud
+  [RESOLVE]
+    call resolve(2 acts)   (omits Person)
+    EVT  E1.0 favour_heretic @carin causes=[]
+    EVT  E1.1 favour_heretic @almud causes=[]
+  [WITNESS]
+    call witness(almud<-E1.0)
+    W    Person.ledger[almud] <- 'favour_heretic@carin'  class=INTERIOR driver=Event
+    call witness(carin<-E1.0)
+    W    Person.ledger[carin] <- 'favour_heretic@carin'  class=INTERIOR driver=Event
+    call witness(almud<-E1.1)
+    W    Person.ledger[almud] <- 'favour_heretic@almud'  class=INTERIOR driver=Event
+    call witness(carin<-E1.1)
+    W    Person.ledger[carin] <- 'favour_heretic@almud'  class=INTERIOR driver=Event
+  [CENSUS]
+    !!   NO-PRODUCER: publicness: the same act by a king and by a copyist produces Events identical in scope and witnessability. Nothing in Act, Event or witness() reads the actor's office, so office cannot make an act cost more — and `07` §5 asks precisely that it do so @P21 visibility cost
+
+=== CASE PROBE-P22 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(reichard)   (omits World)
+    ACT  reichard :: contradict -> almud
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 contradict @almud causes=[]
+  [WITNESS]
+    call witness(reichard<-E1.0)
+    W    Person.ledger[reichard] <- 'contradict@almud'  class=INTERIOR driver=Event
+    call witness(almud<-E1.0)
+    W    Person.ledger[almud] <- 'contradict@almud'  class=INTERIOR driver=Event
+    call witness(bystander<-E1.0)
+    W    Person.ledger[bystander] <- 'contradict@almud'  class=INTERIOR driver=Event
+  [CENSUS]
+    !!   NO-PRODUCER: privacy: WITNESS as specified fans every Event out to every person, so there is no private utterance — a councillor's frank advice is heard by the whole realm. `06` §4.2 names five witness CHANNELS as the cast gate, but the loop never consults them @P22 private vs public
+
+=== CASE PROBE-P23 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(baralta)   (omits World)
+    ACT  baralta :: press_claim -> crown
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 press_claim @crown causes=[]
+  [WITNESS]
+    call witness(baralta<-E1.0)
+    W    Person.ledger[baralta] <- 'press_claim@crown'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 2 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 480  class=MATTER driver=Event
+    EVT  E2.band.harbour band_crossed @harbour causes=[]
+    W    Site.condition[seam] <- 750  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(baralta)   (omits World)
+    ACT  baralta :: press_claim -> crown
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E2.2 press_claim @crown causes=[]
+  [WITNESS]
+    call witness(baralta<-E2.2)
+    W    Person.ledger[baralta] <- 'press_claim@crown'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 3 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 440  class=MATTER driver=Event
+    W    Site.condition[seam] <- 725  class=MATTER driver=Event
+    EVT  E3.band.seam band_crossed @seam causes=[]
+  [DELIBERATE]
+    call choose(baralta)   (omits World)
+    ACT  baralta :: press_claim -> crown
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E3.4 press_claim @crown causes=[]
+  [WITNESS]
+    call witness(baralta<-E3.4)
+    W    Person.ledger[baralta] <- 'press_claim@crown'  class=INTERIOR driver=Event
+  [CENSUS]
+    !!   NO-PRODUCER: act cooldown: the claim was pressed 3 seasons running with no cost and no bar. `05` §4.1 gives event ROWS a required cooldown; nothing gives an ACT one, so a failed bid for a throne is a free repeatable check rather than a bet @P23 act cooldown
+
+=== CASE PROBE-P24 ===
+-- SEASON 1 --
+  [CALENDAR]
+    ..   date fires thing@prov
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(jarl1)   (omits World)
+    ACT  jarl1 :: convene -> thing
+    call choose(jarl2)   (omits World)
+    ACT  jarl2 :: move_revocation -> h
+  [RESOLVE]
+    call resolve(2 acts)   (omits Person)
+    EVT  E1.0 convene @thing causes=[]
+    EVT  E1.1 move_revocation @h causes=[]
+  [WITNESS]
+    call witness(vaynard<-E1.0)
+    W    Person.ledger[vaynard] <- 'convene@thing'  class=INTERIOR driver=Event
+    call witness(jarl1<-E1.0)
+    W    Person.ledger[jarl1] <- 'convene@thing'  class=INTERIOR driver=Event
+    call witness(jarl2<-E1.0)
+    W    Person.ledger[jarl2] <- 'convene@thing'  class=INTERIOR driver=Event
+    call witness(vaynard<-E1.1)
+    W    Person.ledger[vaynard] <- 'move_revocation@h'  class=INTERIOR driver=Event
+    call witness(jarl1<-E1.1)
+    W    Person.ledger[jarl1] <- 'move_revocation@h'  class=INTERIOR driver=Event
+    call witness(jarl2<-E1.1)
+    W    Person.ledger[jarl2] <- 'move_revocation@h'  class=INTERIOR driver=Event
+  [CENSUS]
+
+=== CASE PROBE-P25 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(vaynard)   (omits World)
+    ACT  vaynard :: dispatch -> maret
+    call choose(maret)   (omits World)
+    ACT  maret :: scout -> settl
+  [RESOLVE]
+    call resolve(2 acts)   (omits Person)
+    EVT  E1.0 dispatch @maret causes=[]
+    EVT  E1.1 scout @settl causes=[]
+  [WITNESS]
+    call witness(vaynard<-E1.0)
+    W    Person.ledger[vaynard] <- 'dispatch@maret'  class=INTERIOR driver=Event
+    call witness(maret<-E1.0)
+    W    Person.ledger[maret] <- 'dispatch@maret'  class=INTERIOR driver=Event
+    call witness(vaynard<-E1.1)
+    W    Person.ledger[vaynard] <- 'scout@settl'  class=INTERIOR driver=Event
+    call witness(maret<-E1.1)
+    W    Person.ledger[maret] <- 'scout@settl'  class=INTERIOR driver=Event
+  [CENSUS]
+
+=== CASE PROBE-P26 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(offender)   (omits World)
+    ACT  offender :: tear_seam -> seam
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 tear_seam @seam causes=[]
+  [WITNESS]
+    call witness(edeyja<-E1.0)
+    W    Person.ledger[edeyja] <- 'tear_seam@seam'  class=INTERIOR driver=Event
+    call witness(offender<-E1.0)
+    W    Person.ledger[offender] <- 'tear_seam@seam'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 2 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 480  class=MATTER driver=Event
+    EVT  E2.band.harbour band_crossed @harbour causes=[]
+    W    Site.condition[seam] <- 750  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(offender)   (omits World)
+    ACT  offender :: tear_seam -> seam
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E2.2 tear_seam @seam causes=[]
+  [WITNESS]
+    call witness(edeyja<-E2.2)
+    W    Person.ledger[edeyja] <- 'tear_seam@seam'  class=INTERIOR driver=Event
+    call witness(offender<-E2.2)
+    W    Person.ledger[offender] <- 'tear_seam@seam'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 3 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 440  class=MATTER driver=Event
+    W    Site.condition[seam] <- 725  class=MATTER driver=Event
+    EVT  E3.band.seam band_crossed @seam causes=[]
+  [DELIBERATE]
+    call choose(offender)   (omits World)
+    ACT  offender :: tear_seam -> seam
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E3.4 tear_seam @seam causes=[]
+  [WITNESS]
+    call witness(edeyja<-E3.4)
+    W    Person.ledger[edeyja] <- 'tear_seam@seam'  class=INTERIOR driver=Event
+    call witness(offender<-E3.4)
+    W    Person.ledger[offender] <- 'tear_seam@seam'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 4 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 400  class=MATTER driver=Event
+    W    Site.condition[seam] <- 700  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(offender)   (omits World)
+    ACT  offender :: tear_seam -> seam
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E4.5 tear_seam @seam causes=[]
+  [WITNESS]
+    call witness(edeyja<-E4.5)
+    W    Person.ledger[edeyja] <- 'tear_seam@seam'  class=INTERIOR driver=Event
+    call witness(offender<-E4.5)
+    W    Person.ledger[offender] <- 'tear_seam@seam'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 5 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 360  class=MATTER driver=Event
+    W    Site.condition[seam] <- 675  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(offender)   (omits World)
+    ACT  offender :: tear_seam -> seam
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E5.6 tear_seam @seam causes=[]
+  [WITNESS]
+    call witness(edeyja<-E5.6)
+    W    Person.ledger[edeyja] <- 'tear_seam@seam'  class=INTERIOR driver=Event
+    call witness(offender<-E5.6)
+    W    Person.ledger[offender] <- 'tear_seam@seam'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 6 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 320  class=MATTER driver=Event
+    W    Site.condition[seam] <- 650  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(offender)   (omits World)
+    ACT  offender :: tear_seam -> seam
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E6.7 tear_seam @seam causes=[]
+  [WITNESS]
+    call witness(edeyja<-E6.7)
+    W    Person.ledger[edeyja] <- 'tear_seam@seam'  class=INTERIOR driver=Event
+    call witness(offender<-E6.7)
+    W    Person.ledger[offender] <- 'tear_seam@seam'  class=INTERIOR driver=Event
+  [CENSUS]
+    !!   NO-PRODUCER: accumulation vs decay: Edeyja holds 6 claims of harm, but the only accumulator the shape offers is a ledger whose confidence DECAYS and whose rows are EVICTED at a cap. A threshold over 'visible harm accumulated' is therefore a race between witnessing and forgetting, and the shape has no counter that only goes up @P26 accumulation
+
+=== CASE PROBE-P27 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(altonia)   (omits World)
+    ACT  altonia :: tutor -> torben
+    call choose(church)   (omits World)
+    ACT  church :: tutor -> torben
+  [RESOLVE]
+    call resolve(2 acts)   (omits Person)
+    EVT  E1.0 tutor @torben causes=[]
+    EVT  E1.1 tutor @torben causes=[]
+  [WITNESS]
+    call witness(torben<-E1.0)
+    W    Person.ledger[torben] <- 'tutor@torben'  class=INTERIOR driver=Event
+    call witness(altonia<-E1.0)
+    W    Person.ledger[altonia] <- 'tutor@torben'  class=INTERIOR driver=Event
+    call witness(church<-E1.0)
+    W    Person.ledger[church] <- 'tutor@torben'  class=INTERIOR driver=Event
+    call witness(torben<-E1.1)
+    W    Person.ledger[torben] <- 'tutor@torben'  class=INTERIOR driver=Event
+    call witness(altonia<-E1.1)
+    W    Person.ledger[altonia] <- 'tutor@torben'  class=INTERIOR driver=Event
+    call witness(church<-E1.1)
+    W    Person.ledger[church] <- 'tutor@torben'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 2 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 480  class=MATTER driver=Event
+    EVT  E2.band.harbour band_crossed @harbour causes=[]
+    W    Site.condition[seam] <- 750  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(altonia)   (omits World)
+    ACT  altonia :: tutor -> torben
+    call choose(church)   (omits World)
+    ACT  church :: tutor -> torben
+  [RESOLVE]
+    call resolve(2 acts)   (omits Person)
+    EVT  E2.3 tutor @torben causes=[]
+    EVT  E2.4 tutor @torben causes=[]
+  [WITNESS]
+    call witness(torben<-E2.3)
+    W    Person.ledger[torben] <- 'tutor@torben'  class=INTERIOR driver=Event
+    call witness(altonia<-E2.3)
+    W    Person.ledger[altonia] <- 'tutor@torben'  class=INTERIOR driver=Event
+    call witness(church<-E2.3)
+    W    Person.ledger[church] <- 'tutor@torben'  class=INTERIOR driver=Event
+    call witness(torben<-E2.4)
+    W    Person.ledger[torben] <- 'tutor@torben'  class=INTERIOR driver=Event
+    call witness(altonia<-E2.4)
+    W    Person.ledger[altonia] <- 'tutor@torben'  class=INTERIOR driver=Event
+    call witness(church<-E2.4)
+    W    Person.ledger[church] <- 'tutor@torben'  class=INTERIOR driver=Event
+  [CENSUS]
+-- SEASON 3 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 440  class=MATTER driver=Event
+    W    Site.condition[seam] <- 725  class=MATTER driver=Event
+    EVT  E3.band.seam band_crossed @seam causes=[]
+  [DELIBERATE]
+    call choose(altonia)   (omits World)
+    ACT  altonia :: tutor -> torben
+    call choose(church)   (omits World)
+    ACT  church :: tutor -> torben
+  [RESOLVE]
+    call resolve(2 acts)   (omits Person)
+    EVT  E3.6 tutor @torben causes=[]
+    EVT  E3.7 tutor @torben causes=[]
+  [WITNESS]
+    call witness(torben<-E3.6)
+    W    Person.ledger[torben] <- 'tutor@torben'  class=INTERIOR driver=Event
+    call witness(altonia<-E3.6)
+    W    Person.ledger[altonia] <- 'tutor@torben'  class=INTERIOR driver=Event
+    call witness(church<-E3.6)
+    W    Person.ledger[church] <- 'tutor@torben'  class=INTERIOR driver=Event
+    call witness(torben<-E3.7)
+    W    Person.ledger[torben] <- 'tutor@torben'  class=INTERIOR driver=Event
+    call witness(altonia<-E3.7)
+    W    Person.ledger[altonia] <- 'tutor@torben'  class=INTERIOR driver=Event
+    call witness(church<-E3.7)
+    W    Person.ledger[church] <- 'tutor@torben'  class=INTERIOR driver=Event
+  [CENSUS]
+    !!   UNSPECIFIED: contested formation: investments in a person resolve as Events he witnesses, but nothing converts accumulated tutoring into a DURABLE alignment, and nothing closes a window after which it LOCKS. `02` §10 item 3 carries the 'plausible past' of a newly made person as open; this is the same hole seen from the other end — how a person's interior is FORMED @P27 formation window
+
+=== CASE PROBE-P28 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(carin)   (omits World)
+    ACT  carin :: copy -> text.einhir
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 copy @text.einhir causes=[]
+  [WITNESS]
+    call witness(carin<-E1.0)
+    W    Person.ledger[carin] <- 'copy@text.einhir'  class=INTERIOR driver=Event
+  [CENSUS]
+    !!   NO-PRODUCER: craft: `02` §7.4 has `Record` — the only non-person root-bearer, keepable at a Rung, burnable, admissible at a venue — which is exactly the object a copyist makes. But no act CREATES one: `resolve` emits Events and nothing mints a Record, so the shape has the noun and not the verb @P28 making a thing
+
+=== CASE PROBE-P29 ===
+    !!   COLLISION: possession: a Record is homed as Rung matter, so it is at a PLACE and never in a person's hands — 'she was found with it' is not expressible, and possession-as-offence has no subject. P10 found the same hole from the custody side; they are one gap @P29 possession
+
+=== CASE PROBE-P30 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(carin)   (omits World)
+    ACT  carin :: copy -> text
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 copy @text causes=[]
+  [WITNESS]
+    call witness(carin<-E1.0)
+    W    Person.ledger[carin] <- 'copy@text'  class=INTERIOR driver=Event
+  [CENSUS]
+    !!   NO-PRODUCER: work-in-progress: `02` §8.1 names travel-in-progress as ticking at MATTER, but there is no general partial-work record, so every act completes or fails within its season. A craft, a school, a survey or a long investigation cannot be half-done and interrupted @P30 ongoing work
+
+=== CASE PROBE-P31 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 95  class=MATTER driver=Event
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+-- SEASON 2 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 480  class=MATTER driver=Event
+    EVT  E2.band.harbour band_crossed @harbour causes=[]
+    W    Site.condition[seam] <- 70  class=MATTER driver=Event
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+-- SEASON 3 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 440  class=MATTER driver=Event
+    W    Site.condition[seam] <- 45  class=MATTER driver=Event
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+-- SEASON 4 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 400  class=MATTER driver=Event
+    W    Site.condition[seam] <- 20  class=MATTER driver=Event
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+-- SEASON 5 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 360  class=MATTER driver=Event
+    W    Site.condition[seam] <- -5  class=MATTER driver=Event
+  [DELIBERATE]
+  [RESOLVE]
+    call resolve(0 acts)   (omits Person)
+  [WITNESS]
+  [CENSUS]
+    !!   NO-PRODUCER: environmental cost: a person contained at a Rung whose Site is derelict takes NOTHING from it. MATTER wears Sites; nothing wears the PEOPLE standing next to them, so a Warden's thirty-one years of proximity to substrate damage is free @P31 proximity harm
+
+=== CASE PROBE-P32 ===
+-- SEASON 1 --
+  [CALENDAR]
+  [MATTER]
+    W    Site.condition[harbour] <- 520  class=MATTER driver=Event
+    W    Site.condition[seam] <- 775  class=MATTER driver=Event
+  [DELIBERATE]
+    call choose(orm)   (omits World)
+    ACT  orm :: seal_breach -> seam
+  [RESOLVE]
+    call resolve(1 acts)   (omits Person)
+    EVT  E1.0 seal_breach @seam causes=[]
+  [WITNESS]
+    call witness(orm<-E1.0)
+    W    Person.ledger[orm] <- 'seal_breach@seam'  class=INTERIOR driver=Event
+  [CENSUS]
+    !!   NO-PRODUCER: sacrifice: `resolve` reads no stake from an Act, so spending your life on an act cannot buy a different outcome than performing it and living. Orm's death-seal and an ordinary seal are the same Event @P32 self-sacrifice
+
+=== CASE PROBE-P33 ===
+    !!   NO-PRODUCER: two standings: `Sensation.standing` is a single scalar defined as what EVERYONE reads off you, so a reputation held only among people who can never publicly credit you has no carrier — and a covert operative's whole economy is that second, unreadable standing @P33 covert standing
+
+=== CASE ARC3:EMG-10 ===
+
+=== CASE ARC3:EMG-11 ===
+
+=== CASE NPC1:NPC-088 ===
+
+=== CASE NPC1:NPC-087 ===
+
+=== CASE NPC1:NPC-086 ===
+
+=== CASE NPC1:NPC-075 ===
+
+=== CASE NPC1:NPC-005 ===
+
+=== CASE NPC1:NPC-010 ===
+
+=== CASE NPC1:NPC-012 ===
+
+=== CASE NPC1:NPC-002 ===
+
+=== CASE NPC2:NPC-004 ===
+
+=== CASE NPC2:NPC-033 ===
+
+=== CASE NPC2:NPC-083 ===
+
+=== CASE NPC2:NPC-008 ===
+
+=== CASE NPC2:NPC-038 ===
+
+=== CASE NPC2:NPC-013 ===
+
+=== CASE NPC2:NPC-007 ===
+
+=== CASE NPC2:NPC-071 ===
+
+=== CASE NPC2:NPC-034 ===
+
+=== CASE NPC3:NPC-020 ===
+
+=== CASE NPC3:NPC-021 ===
+
+=== CASE NPC3:NPC-050 ===
+
+=== CASE NPC3:NPC-052 ===
+
+=== CASE NPC3:NPC-070 ===
+
+=== CASE NPC3:NPC-003 ===
+
+=== CASE NPC3:NPC-032 ===
+
+=== CASE NPC3:NPC-031 ===
+
+=== CASE NPC3:NPC-030 ===
+
+=== CASE NPC3:NPC-001 ===
