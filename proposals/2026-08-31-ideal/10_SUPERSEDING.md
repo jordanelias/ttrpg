@@ -31,8 +31,10 @@ and wins over any other document in the review suite, including this one's sourc
 
 - **No rates about play appear in this document.** Both testing corpora — the NPC-season matrix and
   the arc set — are hand-assembled and elite-heavy. The arc tally is an upper bound on a
-  hand-selected set, not a sample of anything. Where a count appears (§17), it is scoped and
-  labelled, and it is never used as a base rate.
+  hand-selected set, not a sample of anything. **Two counts appear in this document — §15.9 and
+  §17.3 — and both are scoped, labelled and lane-1 only.** Neither is used as a base rate, and there
+  are no others. *(An earlier wording of this bullet said counts appear only in §17, which was false
+  inside its own section; C-23.)*
 - **Every R-line in this document is conditional on L-4, the unanswered playable-seat list**, because
   necessity is measured against the seats a player can actually occupy and that list does not exist.
   §8's enlargement is additionally conditional on **D-2, the act economy** (§6.1), which is the
@@ -50,7 +52,7 @@ and wins over any other document in the review suite, including this one's sourc
 | **5** | The resolution surface — one roll, one obstacle, one contest |
 | **6** | The season — seven phases, three write classes |
 | **7** | **The calendar, and CONVENING CONDITIONS** *(enlargement 1)* |
-| **8** | **The up-stroke — petition, office, expiry, multi-petition; and the lapse event** *(enlargement 2)* |
+| **8** | **The up-stroke — petition, office, standing, the agenda, expiry, multi-petition** *(enlargement 2)* |
 | **9** | The down-stroke — dispensation, executors, compliance, reports-as-claims |
 | **10** | **Matter, the commons, and option removal** *(enlargement 3)* |
 | **11** | **The transfer act** *(enlargement 4)* |
@@ -113,7 +115,8 @@ Membership is per-person, may be secret, and is held at a degree.
 **Scale is derived and gates nothing.** Rolling member addresses up the tree yields `presence(f, n)`,
 `density(f, n)` and `footprint(f)` with no declaration anywhere. Capacity to act at a node is not a
 property of size; it is the question *does this faction hold a person who can act there* — which
-routes through persons. No act is unlocked or forbidden by a faction's size and no roll takes it as a
+routes through persons, and is a query over members with an address inside the node, each of whom must
+be individually `eligible` (`07:180-182`). No act is unlocked or forbidden by a faction's size and no roll takes it as a
 term. Scale is not inert, though: §13's revolt comparison reads how many people are actually
 committed at a node against what the coercive apparatus there can hold.
 
@@ -258,9 +261,30 @@ lying; he is not thinking of it.** The floor is 0.05 rather than 0 so that a dev
 contradiction can still cross — motivated reasoning, not a wall. What is attenuated is **retrieval,
 not value**.
 
-⚠ #342 carries two incompatible values for K (`03:325-329`'s `7 + Focus`; `09:63`'s constant 12) and
-five colliding definitions of `exposure`. **This document uses `K = 7 + Focus` and uses `exposure`
-only in the sense of §5.4's pre-roll odds preview.** Both are rulings; §15 records the residue.
+### §3.4 Where #342's documents disagree: the owning document wins on its own object
+
+#342 is seventeen documents and they contradict each other in several places. **This document does not
+resolve those by seniority, by date, or by which is "the spine".** It resolves them by one rule, stated
+once and applied uniformly:
+
+> **THE CONFLICT RULE. Where two of #342's documents disagree about an object, the document whose
+> declared subject is that object wins.** A document asserting a value it does not derive loses to the
+> document that derives it.
+
+*(An earlier version of this document grounded one such ruling on doc 09 being "the spine". That was a
+misread: `00_INDEX.md:28` gives spine status to **doc 01 only**, and it left this document ruling for
+doc 09 in one place and against it in another with no stated principle. C-6.)*
+
+**The four rulings this document makes under that rule, all of them recorded rather than silent (C-16):**
+
+| collision | ruled | on what ground |
+|---|---|---|
+| **`K`** — `03:325-329`'s `K = 7 + Focus` against `09:63`'s constant 12 | **`7 + Focus`** | doc 03's declared subject is view assembly; doc 09 asserts a constant it never derives |
+| **`exposure`** — five senses across the suite, two of them the same concept implemented incompatibly, and one of them refused by name in a neighbouring document | **the pre-roll odds preview only** (§5.4). The stored-counter sense is not used anywhere in this document | doc 10 owns the resolution surface; a stored exposure counter is refused by `07:556` in the document that owns alignment |
+| **practice rank** — `02:153`'s 0–5 against `10:33`'s 0–7 | **0–7**, giving the pool range 1–14 | doc 10's declared subject is *the arithmetic that turns Capability into a die count* (`10:27`); doc 02 owns Capability's composition, not its arithmetic |
+| **the Thread term's placement** — `02:197-200` puts a conditional `+ thread_pool` inside the pool expression; `10:192` makes Thread **a second pool through the same `roll`** | **a second pool through the same `roll`** | same ground; and the alternative puts a second addend inside `Pool`, which §14 row 10 forbids in spirit |
+
+**None of these is retrofitted into the rest of #342**, and §15.11 records that as a limit.
 
 ---
 
@@ -285,7 +309,7 @@ its own**: a norm is the aggregate of member stances, computed on demand.
 *A cell people live in is a community; a cell people belong to while living elsewhere is a faction.*
 The first cannot be secret, because you cannot hide where you sleep. The same test settles institutions:
 the Church is a faction, a parish is a community, and a Dicastery is neither — it is an **office
-cluster** (§4.3).
+cluster** (§4.4).
 
 **Settlement** owns the first contested material stake and the first office. The granary opens for the
 hamlet or for the Row, never both. Office is a post whose holder's decision binds persons who never
@@ -303,10 +327,34 @@ siblings in the tree.
 | owner | holds |
 |---|---|
 | **Person** | address, marks, capability, stance, claim ledger, ties; `Holding` edges and commitment edges. Everything interior |
-| **Container (a rung)** | its stake, its judging set, its standing dates and their convening conditions. **Nothing else** |
-| **Office** | its post, node, remit, conferral and revocation rules, establishment, `seat_items`, upkeep — **and its own standing dates and their convening conditions** |
+| **Container (a rung)** | its stake(s) · its judging set · its standing dates, each date's `capacity` (§4.4), and their convening conditions · **and the matter it holds**: a hearth's `stores`, a site's `condition` (§10.2), and the transmission pointer. **No social aggregate, ever** |
+| **Office** | its post, node, remit, conferral and revocation rules, establishment, `seat_items` (§4.4), upkeep — **and its own standing dates and their convening conditions** |
 | **Faction** | its proposition and its commitment map |
 | **Nobody** | aggregates, norms, densities, needs, openings, scale, reputation |
+
+**Two rows in that table are amendments to #342 and both are stated rather than smuggled.**
+
+**The Office row.** #342's table has four rows (`11:94-99`) and gives offices dates in two places
+anyway: `14:91-92` makes `seat_items` a per-holder capacity consumed by *an office's* standing dates,
+and `14:325` resolves an appointed office's vacancy by *"a conferral standing date at the parent
+office"*. So dates are container-owned **by convention, not by necessity** — which is what lets §8
+reach an office cluster that has no containment node.
+
+**The Container row's matter clause.** `01:490-491` says *"Containers hold stakes, judging sets and
+dates. Persons hold everything else"* — and **the shipped hearth already contradicts it**: `04:29-37`
+declares exactly two stakes (`holdings`, `seat`) and then holds `stores` and `pointer` besides. This
+document does not paper over that; it states the general rule the tree is already following:
+
+> **A container may hold MATTER and DATES. It may never hold a SOCIAL AGGREGATE.**
+>
+> A larder is not derived from persons and does not go stale against them — it is a physical quantity
+> that exists whether or not anybody believes in it, and the design already stores it at `04:32-35`.
+> A norm, a density, a reputation or an unrest level *is* derived from persons, and storing it is the
+> defect `11:214` names. **The line is provenance, not location.**
+
+*(An earlier version of this document added the Office row and did not re-run the same check on its
+own enlargement 3, leaving `condition(site)` as container state the table forbade — and leaving
+`stores` and the pointer unowned in the same table that was quoting them. C-13.)*
 
 **Why the Office row is required, and why it is not a new kind of state.** #342 already gives offices
 dates in two places: `14:91-92` makes `seat_items` a per-holder capacity consumed by *an office's*
@@ -336,7 +384,30 @@ nothing else is a parent of anything. `faction/` sits beside `world/`, never ins
 faction is a node in the containment tree it acquires a level, and the moment it has a level it cannot
 grow across one without an authoring act.
 
-### §4.3 Office, completely
+### §4.3 The two capacity quantities, named once and owned once
+
+**Every price charged anywhere in this document is denominated in one of exactly two quantities, and
+both are shipped.** They are different quantities with different owners and different consumption
+points, and conflating them is how the earlier draft came to charge prices against a unit that no row
+of §4.2 owned (C-3).
+
+| quantity | owner | what it is | consumed |
+|---|---|---|---|
+| **`capacity(date)`** | the **container** (or office) that holds the date | how many items **that sitting hears** — *"a term of the container, and therefore something a dispensation can change"* (`05:184-186`). The Grauwald territory court hears eleven | **at the hearing.** `compose_agenda` admits the top `capacity(date)` items and no more |
+| **`seat_items(office)`** | the **office**, and it is spent by its **holder** | *"how many things he can hear or carry in a sitting … Holding two offices does not double a day"* (`14:91-92`). A praefect holds one seat and carries one thing with it (`05:187`) | **at the filing.** `carry` spends one of the carrier's `seat_items` |
+
+**There is no third quantity.** *"Its charter's sitting capacity"* — which the earlier draft used to cap
+convening conditions — is not a thing; the cap is `seat_items`, because a fired date consumes the
+convener's hours (§7.3 C2).
+
+⚠ **And §17.4's finding is narrower than it read.** The design's missing *"finite, contested, durable
+capacity object"* is **the establishment** — the named persons an office employs, which has no capacity
+object anywhere. The two quantities above are finite, contested and durable, and they are why `drop`
+exists at all.
+
+---
+
+### §4.4 Office, completely
 
 ```
 Office  := (post, node, remit, conferral, revocation, establishment, seat_items, upkeep, dates)
@@ -359,11 +430,39 @@ is collected; the pool is the reeve's, and the reeve has a larder, a stance towa
 the hamlet he is collecting from. **Choosing which of your people performs the act is the whole of a
 leader's tactical choice, and it is a choice between pools, not a purchase of a bonus.**
 
-**Three costs, all in currencies that already exist:** `seat_items` (an office's standing dates consume
-the holder's own hours; holding two offices does not double a day); **publicity** (every act by remit is
+**Three costs, all in currencies that already exist:** `seat_items` (§4.3); **publicity** (every act by remit is
 public, so an office-holder cannot act quietly — which is why a covert edge and a remit are close to
 incompatible); and **upkeep** (the establishment eats; an unpaid establishment does not disperse, it
 becomes a faction and treats plunder as wages — see §11.3).
+
+### §4.5 Conferral is ROOTED IN THE OFFICE — ruled here, not escalated
+
+#342 asserts both answers and resolves neither, and its index files the question as the one thing to
+settle before anything is built. **It is settled here, because it has an architectural answer and
+`CLAUDE.md` §0's fifth test forbids escalating a call that has one.**
+
+> **`confer` is performed BY REMIT. The conferral basis is the conferring OFFICE, and the act is
+> performed by whatever person holds it.**
+
+**Why this is not the answer B-11 forbids.** B-11 forbids an *institution* performing the game's most
+consequential act. Office-rooting does not make an institution act: a **named person** still performs
+`confer`, exercising a remit, exactly as a named person issues a dispensation or determines at a venue.
+What is office-rooted is the **basis** — the authority the act draws on — not the actor. The distinction
+is the same one §4.4 already draws when it puts the *pool* for an act by remit on the establishment
+while the *act* stays the holder's.
+
+**Three things follow, and they are why the alternative fails.** Person-rooted conferral terminates the
+graph at every dead conferrer, so the sovereignty query that every faction's victory condition reads is
+undefined across most of it and **the Crown cannot be played across a succession**. Office-rooted, the
+graph resolves; `sovereign_fraction(root)` is a reachability query, total and terminating even on a
+cyclic graph, and what a contested succession undefines is **the choice of ROOT, not the function** — so
+callers must handle root-plurality, and a unique root is a political condition rather than an invariant.
+And the design's own strongest evidence points the same way: a military order sworn to *the Crown as
+institution, not the bloodline* is a warrant that means nothing if conferral is personal.
+
+*(This was carried as a live choice for Jordan in an earlier version of this document, immediately after
+naming the evidence and the direction it pointed — which is exactly the failure `CLAUDE.md` §0's
+five-test ordering exists to prevent. C-18.)*
 
 ---
 
@@ -375,13 +474,13 @@ Every attempt rolls **N ten-sided dice**. 1–6 scores nothing, 7–9 scores one
 Mean = `Pool ÷ 2`, σ ≈ 0.671 per die.
 
 ```
-Pool(person, practice) = Attribute[relevant](person) + Practice[practice](person)
+Pool(person, practice) = Attribute[relevant](person) + Practice[practice](person)      # 10:30
 ```
 
 Attributes run 1–7 (the nine named in the setting, plus the ruled-but-unnamed tenth, which composes
 identically because this formula never inspects an attribute's name). Practice runs 0–7, where 0 is
 *never trained* — **an untrained attempt is always legal, it is just a small pool.** Realistic pool
-runs 1–14.
+runs 1–14. (`10:33`; and see §3.4 for the practice-range collision this rules.)
 
 **Why a pool and not a target number plus modifier.** A difficulty number must be *decided* by
 somebody, and that somebody is the GM this game does not have. In a pool, both sides are expressed in
@@ -423,9 +522,16 @@ masters — a schism, a retirement, a bribe — and the number changes with no e
 | ≥ +3 | **Overwhelming** |
 
 Costed Success is the deliberate middle band — you meet the obstacle exactly and something is given up
-for it — and it runs 14–28% across the whole realistic range, so it is not a band the system is tuned
-never to reach. Disaster remains reachable at every pool size (Pool 14 vs Obstacle 2 is still 0.08%),
+for it — and **at balanced pools from 4 to 12 it runs 14–28%**, so it is not a band the system is tuned
+never to reach. Disaster remains reachable at every pool size (Pool 14 vs Obstacle 2 is still 0.078%),
 because it falls out of the same binomial as every other row rather than from a hand-authored floor.
+
+⚠ **Scoped, because the unscoped claim is false at the bottom (C-19).** *"Every band is reachable
+across the entire realistic range"* holds for Pool ≥ 3. **At Pool 1–2 the top band is unreachable**:
+Overwhelming needs `successes ≥ Obstacle + 3`, and one die yields at most two successes. That is a
+property of the arithmetic and this document does not repair it — a person attempting something at
+Pool 1 is not owed a triumph band, and where the obstacle is small enough to matter the resolver
+skips the roll entirely (§5.2's `R ≤ 1` floor).
 
 An **opposed contest** is the identical `roll` called twice, with the deterministic obstacle replaced by
 an actual draw because there is now someone on the other side capable of having a good day. It is not a
@@ -435,22 +541,40 @@ pretends to matter.** The one manoeuvre that is never decorative at a large gap 
 *which obstacle you are rolling against*: the fisher does not win the doctrinal argument, he routes it
 — contests jurisdiction, or converts a private grievance into a backed petition (§8).
 
-### §5.4 The pre-roll exposure, and the rule that keeps it safe
+### §5.4 The pre-roll exposure, and what it may publish
 
 Before any die is drawn the resolver publishes the inputs a player would need to compute the odds
-himself: both pool sizes, the obstacle interpretation, nothing else. Computing that table **never calls
-`roll`** — looking at the odds cannot consume the die.
+himself: both pool sizes and the obstacle interpretation (`10:132`). Computing that table **never calls
+`roll`** — *"looking at the odds cannot consume the die"* (`10:180`).
 
-> **THE EXPOSURE RULE (binding, and §10.5 is the case that forced it):** *a quantity that is hidden
-> world state may never be an operand of a roll. Where an obstacle term derives from such a quantity,
-> the term is the **band's representative value**, not the scalar.*
+**That is a channel, and it needs a rule about what may travel down it**, because the preview is free,
+act-free, witness-free, and **asymmetric: `choose` has no `World`, so no NPC can run the same probe.**
+An earlier version of this document stated one rule and called it *self-enforcing*. It is not
+self-enforcing and it did not cover the cases that matter (C-5). The corrected rule is a partition:
 
-This is stronger than *"show the band"* and it is self-enforcing: if the scalar never enters the
-arithmetic, there is nothing for a repeated free preview to invert out of it. Without the rule, a player
-reads any site's hidden condition at zero cost — no act, no witness, no claim — by previewing an odds
-table and subtracting the known terms, **and `choose` has no `World`, so no NPC can run the same probe.**
-That is a player-only omniscience channel into hidden world state, and it deletes precisely the theme
-the hidden state exists to supply.
+| what resists | what the preview publishes | why |
+|---|---|---|
+| **material and publicly inspectable** — a lock's fineness, a wall's sheerness, a cliff's grade | **the scalar** | anyone standing there can look at the wall. Publishing it leaks nothing that presence does not already give |
+| **a resistance composed from persons' private stances** — a judging set's obstacle, an admission committee | **a BAND, never the scalar** | the scalar is an aggregate of private stances, and §1.3 already forbids anyone reading a true profile rolled up from real state. **This is a change to #342, which publishes the composed scalar** |
+| **hidden world state gated behind investigation** — a site's `condition` (§10) | **a band, and the scalar is never an operand of any roll** | so there is nothing finer for a repeated preview to invert out. **This limb is enforced by construction; the other two are publication rules a careless implementer can violate** |
+| **the opponent's pool in an opposed contest** | **published, deliberately** | see the rebuttal below |
+
+**On the opponent's pool: this document holds the shipped behaviour and does not treat it as a leak.**
+`10:132` publishes both pool sizes as a stated policy — *"the honest response is not to hide the
+mismatch behind a menu that pretends to matter — it is to publish it"* — and the alternative is a game
+that dresses a 3-vs-14 roll as a rich tactical scene. A pool is also not hidden in the way a stance is:
+capability is practised in public, and marks are *"ascribed, publicly-read attributes"* (§2). **The
+design chooses legibility here on purpose, and this document does not overturn it.**
+
+**And the showcase example moves accordingly.** §5.2's Masterpiece Examination composes its resistance
+from the sitting masters' stances toward the candidate's marks, so under row 2 the candidate previews
+**a band**, not the exact aggregate of what the masters privately think of his caste. Discovering which
+master is cold is what the knowledge layer is for.
+
+> **THE RESIDUAL, stated rather than hidden (§15.15):** the partition is a rule about publication, and
+> only its third row is structurally enforced. A resistance that is *neither* plainly material *nor*
+> plainly stance-composed — a forged document's quality, a rival's fortification nobody has seen — has
+> no ruled row, and this document does not invent one.
 
 ### §5.5 Determinism
 
@@ -492,8 +616,8 @@ Phases run in order; within a phase everything is simultaneous.
 
 | | phase | what happens |
 |---|---|---|
-| **P0** | **CALENDAR** | advance the date · fire due standing dates into a docket · **evaluate convening conditions and schedule the dates they name (§7)** · **emit the lapse and supersession events of dates that have just passed (§8.4)** · recompute option availability |
-| **P1** | **SETTLE** | **metabolism only**: larders consume against mouths, production resolves, wounds close or fester, bodies age and die, travellers advance a leg, **and matter carries last season's resolved `alter` effects and nature's term (§10.4)**. *No social quantity moves here* |
+| **P0** | **CALENDAR** | advance the date · fire due standing dates into a docket · **evaluate convening conditions and schedule the dates they name (§7)** · recompute option availability |
+| **P1** | **SETTLE** | **metabolism and nature only**: larders consume against mouths, production resolves, wounds close or fester, bodies age and die, travellers advance a leg, **and a site's condition moves by nature's term alone — `season_factor`, which is weather (§10.4)**. *No social quantity moves here, and no act's effect lands here* |
 | **P2** | **NEEDS** | every person and cohort computes needs from its situation. Pure, parallel, never stored |
 | **P3** | **VIEW** | top-K claims by salience per person (§3.3); K = 3 per cohort |
 | **P4** | **CHOOSE** | `choose(person, view) -> act`, everyone, against the frozen P1 snapshot and their own ledger. The player's submission enters here and nowhere else |
@@ -517,14 +641,20 @@ behind it, and P1 moves matter. The correct statement, which this document uses:
 >
 > | class | phase | what may be written | licensed because |
 > |---|---|---|---|
-> | **calendar** | **P0** | dates, dockets, and the events of dates passing | a date is not an outcome; it is an occasion |
-> | **matter** | **P1** | larders, bodies, travel, site condition | metabolism and nature — the world is not a caretaker for having weather |
-> | **acts** | **P5** | everything else | a person did something |
+> | **calendar** | **P0** | dates and dockets | a date is not an outcome; it is an occasion |
+> | **matter** | **P1** | larders, bodies, travel, and a site's condition **under nature's term only** | metabolism and nature — the world is not a caretaker for having weather |
+> | **acts** | **P5** | everything else, **including every condition delta an act caused** | a person did something |
 
 **§7's convening conditions add nothing to this list.** They are evaluated in P0 and write dates, which
 is what P0 already writes. That is the whole of the answer to the objection that scheduling is a second
 writing phase: it is not a new phase and not a new class. If a future object cannot be placed in one of
 these three classes, it does not go in the engine.
+
+⚠ **And the classes bind this document too.** An earlier version put an act's effect on a site into P1
+as a deferred write, which is neither metabolism nor nature and therefore breaks the licence it had
+just stated (C-17). **An `alter`'s effect on a site's condition resolves in P5, like every other effect
+of an act.** P1 carries only what weather does. That also removes a one-season offset the earlier
+version had to explain away.
 
 ### §6.4 Conflict between acts
 
@@ -580,11 +710,14 @@ There are ZERO exact instances.**
 | vacancy-by-absence (§8.6) | **not shipped.** It is a repair direction, future tense — and it is an instance *of this enlargement*, which is not evidence for it |
 
 **THE DORMANCY RULING, made once and not straddled.** `04:35` says a banked claim is *a standing date
-with a watch predicate*; `09:641` says *"There is no flag object; dormancy IS an act-proposition with an
-unmet enabling claim"*, unified under P0's recompute. **`09:641` wins**, because doc 01 and doc 09 are
-the spine (`00_INDEX.md:28`) and because the alternative is a stored flag, which §14 forbids by two rows.
-A banked claim is therefore an act-proposition in a person's stance table with an unmet enabling claim —
-not a second object, and **not an instance of this section.**
+with a watch predicate* held by the hearth; `09:641` says *"There is no flag object; dormancy IS an
+act-proposition with an unmet enabling claim"*, unified under P0's recompute. **`09:641` wins**, on
+§3.4's conflict rule: doc 09's declared subject is what persists and how, and doc 04's own state table
+declares **exactly two stakes** (`04:29-37`) and then names `banked_claims` as a third thing without
+deriving it. Two independent grounds agree: a banked claim is *a claim*, and **claims live in ledgers**
+(§3.1); and the alternative is a stored flag on a container, which §4.2's amended Container row admits
+only for matter. So a banked claim is an act-proposition in a person's stance table with an unmet
+enabling claim — not a second object, and **not an instance of this section.**
 
 > So the convening condition stands on its **N-line and its design argument alone**, in the dock, with
 > no recurrence argument behind it. That is the honest position and it is where this enlargement must
@@ -601,14 +734,18 @@ to a published band predicate. Same field, same owner, same phase.
 denial-of-service on any office, because scheduling mints dates and dates consume the holder's hours
 (`14:91-92`).** So:
 
-- **C1 · PROVENANCE.** Attaching a convening condition is an exercise of **`convene`** (§4.3's remit
+- **C1 · PROVENANCE.** Attaching a convening condition is an exercise of **`convene`** (§4.4's remit
   act), performed *in advance*. Only a person holding an office whose remit includes `convene` at that
-  holder may attach one, and only at that holder. It is an act by remit, so it is public (§4.3) and it
+  holder may attach one, and only at that holder. It is an act by remit, so it is public (§4.4) and it
   is witnessed like any other.
-- **C2 · PRICE.** Attaching consumes one item of the sitting's capacity at the sitting where it is set.
-  A date it later schedules consumes the convener's `seat_items` in the season it fires. A holder may
-  carry no more live conditions than its charter's sitting capacity admits; attaching beyond that
-  requires striking one, which is another act at another sitting.
+- **C2 · PRICE, denominated in §4.3's two quantities and no others.** Attaching costs the setter **one
+  of his own acts for the season**, exactly as `compose_agenda` does (`05:206`) — it is the same remit
+  act. A date it later schedules consumes the convener's **`seat_items`** in the season it fires
+  (`14:91-92`). **The cap on live conditions is `seat_items(office)`**, a holder property: an office may
+  carry no more live conditions than its holder has hours to sit them, and attaching beyond that
+  requires striking one, which is another act. *(An earlier version priced attachment against "the
+  sitting's capacity" and capped it against "the charter's sitting capacity", spending two different
+  quantities as though they were one. C-3.)*
 - **C3 · IT DECIDES NOTHING.** It schedules an occasion. The decision at that occasion is a person's act.
 - **C4 · WHAT THE PREDICATE MAY READ.** Own state, an R-1 compute-on-demand aggregate, or the calendar.
   Never a descendant's stored state; never a social quantity that is not itself a computed norm; never
@@ -632,7 +769,7 @@ deciding which grievances matter with no person in the loop"*), and sitting capa
 not a *hearing*. The earlier work claimed it restored the endings of arcs that terminated at a counter
 with nobody deciding; **the honest claim is that it makes those endings reachable, by a person, at a
 sitting somebody must compose.** Whether the matter is reached is still a convener's choice, and §8.4
-is what prices that choice.
+is where that choice is already priced — by #342, not by this document.
 
 ### §7.5 The N-line, narrowed
 
@@ -644,12 +781,18 @@ Cut convening conditions and:
 2. **Foresight cannot outlive the foreseer.** A person who sees a famine coming can convene now; without
    this object he cannot arrange that the question be *asked* after he is dead, out of office, or
    uninterested — which is what a charter provision is for.
-3. **§8.6's presence-based vacancy has no carrier**, so a living absent holder freezes a seat
-   indefinitely and the setting's entire hostage politics has no mechanical consequence.
+3. **§8.6's presence-based vacancy loses its clean carrier.** ⚠ *Not* that it has none: `14:254-256`
+   ships **revocation in fact** — *"An office whose `exercise` is zero across its whole scope for two
+   standing dates is vacant in the only sense that matters"* — so absence already has a consequence at
+   office rungs. What the convening condition adds is narrower and is the part that matters: `exercise`
+   is **identically zero at a hearth**, which has no remit, while **presence is defined at every rung
+   because every rung has bodies in it**. So the shipped rule reaches the King's council and cannot
+   reach the household, and it is the household where the setting's hostage politics lives. *(An earlier
+   version of this bullet claimed there was no carrier at all, which `14:254-256` refutes. C-15.)*
 
 **What it does NOT buy, and the earlier work said it did:** it does not make obstruction visible on its
-own (§8.4 does that), it does not resolve anything, and it does not supply the three arc endings by
-itself (§7.4).
+own — §8.4 shows that #342 already priced it — it does not resolve anything, and it does not supply the
+three arc endings by itself (§7.4).
 
 **Two attacks that fail, named so the next reader does not re-run them.** *It must read a descendant's
 state, violating R-1* — **fails**: the predicate is scoped to own state or an R-1 compute-on-demand
@@ -677,9 +820,14 @@ object: *a town's demand* is a petition with four hundred backers.
 is held by a person or it is vacant, so B-11's price is paid in full: *you address it to a person, and
 that person can drop it.* And it reaches every **office cluster** — the four Dicasteries, the knightly
 order, every trans-settlement guild — because a cluster is exactly an office set with no owning node,
-and it has offices even where it has no container. **This closes the whole direction of play that was
-structurally shut**, and it needs no new object: an office already exists, is already conferred,
-revocable and vacant-able.
+and it has offices even where it has no container. **It needs no new object:** an office already exists,
+is already conferred, revocable and vacant-able.
+
+⚠ **What it opens is large but not total, and the earlier version of this document overclaimed it.** It
+said the retyping *"closes the whole direction of play that was structurally shut"*. **Withdrawn (C-4).**
+Filing at a cluster office is now legal, and where that office's vacancy resolves at a parent office it
+behaves like any other. **Where it does not, S19 stands and the petition has no clock (§8.5 case 3).**
+The retyping opens the door; it does not guarantee a room behind every one.
 
 *(An earlier version typed the respondent as a standing date. That is withdrawn: a date cannot drop a
 petition, and typing the respondent as a mechanism trades away the design's central commitment — every
@@ -694,18 +842,24 @@ act, at a cost:
 carry(c, P):
   precondition: c holds STANDING at the respondent  (see the rule below)
   precondition: claim(c, "P exists") ∈ ledger(c)
-  cost:  one ITEM of the sitting's finite capacity
+  cost:  one of c's own `seat_items`   (§4.3 — 14:91-92, "how many things he can hear or carry")
   regard_cost(c) = Σ_{j ∈ judging_set} max(0, −stance(j, prop)) × weight(j)
   regard_gain(c) = Σ_{b ∈ backers WHO LEARN c carried} stance(b, prop) × weight(b)
 ```
 
-> **THE STANDING RULE, restated for the office form** — #342's version was derived for the withdrawn
-> date-respondent and was never re-derived. **Standing at an office is standing at the office's node, or
-> leave from a person who holds it.** For an office on a cluster root, which has no node, standing is
-> membership in the office's own judging set or establishment, or leave from a member. This mirrors the
-> argument system's fault F10 (*speaking without standing, and holding no leave from a member*, §12.2),
-> which is the same predicate at the other end of the same process. A venue's `enter` / `speak` columns
-> (§12.4) are the door and are unchanged.
+> **THE STANDING RULE FOR THE OFFICE FORM — a NEW rule, modelled on F10 and not derived from it.**
+> **Standing at an office is standing at the office's node, or leave from a person who holds it.** For an
+> office on a cluster root, which has no node, standing is membership in the office's own judging set or
+> establishment, or leave from a member.
+>
+> ⚠ **F10's predicate is narrower than this and is not being widened here (C-24).** `08:155` reads *"you
+> are not in the judging set **and** hold no leave from a member"* — judging-set membership, not standing
+> at a node. The rule above is modelled on F10's *shape* (a membership test with a leave escape) and
+> extends it to a node, which F10 does not say. It is stated as an addition so that nobody later cites
+> F10 as its authority. #342's own version of this precondition was written for the **withdrawn**
+> date-respondent (§8.1) and was never re-derived, so something had to be written.
+
+A venue's `enter` / `speak` columns (§12.4) are the door and are unchanged.
 
 At the rung above, the carrier chooses: **forward**, **amend** (which the backers may or may not learn
 of), **bundle**, or **drop**. **Dropping is an act by a named person at a named time**, and the reason
@@ -751,66 +905,99 @@ seasons of a famine — a real price, and the enlargement is well-shaped. Under 
 **petition-spray dominates** and the scarcity this section relies on evaporates. **The R-line for this
 enlargement cannot be ruled until D-2 is.**
 
-### §8.4 Lapse and supersession EMIT A WITNESSABLE EVENT — and the dominant option this closes
+### §8.4 Composing the agenda is an ACT, and an omitted petition is a DROP
 
-**The defect, stated first, because the repair is only legible against it.** At the convener's seat,
-silent burial dominated public refusal:
+**This section restates a shipped rule that the earlier version of this document deleted, and withdraws
+a repair that was aimed at a premise the tree refutes (C-1, C-2).**
 
-| | gain | cost |
-|---|---|---|
-| **refuse publicly** | the matter dies | an act → witnessed → a grievance deposits |
-| **say nothing** | the matter dies, faster | **no act, no event, no claim** |
+```
+compose_agenda(v, container, date):                                          # 05:202-208
+  input:   the petitions v HOLDS A CLAIM OF — not the petitions that exist
+  act:     v ranks them by his own valuation — the same choose(person, view) every other act
+           runs through — and admits the top capacity(date)                  # §4.3
+  cost:    ONE OF v'S OWN ACTS FOR THE SEASON                                # 05:206
+  regard:  identical in form to carry's, over the judging set and over THE BACKERS OF EVERY
+           PETITION HE ADMITS OR OMITS, as and when they learn               # 05:207-208
+```
 
-`05:314-316` is explicit that a lapse is *"not an act by anybody — it is the date passing"* and that
-whether the backers learn *"depends entirely on who tells them"*. Identical gain, decaying-to-zero cost.
-That is dominance, and it silently gutted every claim that obstruction becomes visible play. Worse, the
-claim that *`witness` can see neglect* **contradicts the type signature**: `witness` takes events, and
-an omission emits none.
+> **`05:211-216`, verbatim and load-bearing: *"An omitted petition is a DROP, and deposits exactly as
+> one."*** §8.2's grammar applies unchanged — a telling that names the convener lands on him; one naming
+> only the court lands on the praefecture. No new object, no new deposit rule, *"and the grievance from
+> an item that never reached the floor is the same substance as the grievance from one a carrier
+> abandoned, which is right, because to the hamlet they are the same thing."*
 
-> **THE REPAIR, and it is one object.** At **P0**, when a standing date passes:
-> ```
-> for each docketed item not reached      ->  emit  LAPSED(item, holder, date, composer)
-> for each matter decided moot at the date ->  emit  SUPERSEDED(item, holder, date, mover)
-> ```
-> Both are ordinary events. Both are **witnessed by presence at the venue**, per person (§1.4), and by
-> nobody else. Neither is broadcast.
+**So burial is already priced, and the design already says so in the strongest terms available to it:**
+*"a man who can keep an item off the list for four sittings running has more power over Grauwald than
+most of the men who vote on it, and he exercises it by an act that is witnessable, tellable, and
+attributable to him by name"* (`05:218-224`).
 
-**Why this does not violate the signature.** An omission still emits nothing. **A date passing is an
-event**, and the lapse is a property of the date, not of the omission — which is why P0 can emit it and
-why it belongs to the calendar write class (§6.3). And `05:314-316` survives verbatim: the lapse is
-still not an act, and the backers — who were not in the room — still learn only if somebody tells them.
-What changed is that there is now something a witness actually saw.
+**⚠ WHAT THIS DOCUMENT GOT WRONG, AND WHY IT MATTERS MORE THAN THE ERROR.** The gating audit found a
+dominant option at the convener's seat — *refuse publicly and take a deposit, or say nothing at no cost
+at all* — and this document accepted it and engineered a repair: lapse and supersession would emit
+witnessable events, and refusal would be terminal where burial was not. **Every part of that is wrong.**
 
-**Why the dominance is gone, which the emission alone would not achieve.** The two options no longer
-have the same gain:
+- **The premise is false on disk.** Burial is not silence; it is `compose_agenda`, which costs an act
+  and deposits on the omitter by name. The audit reached its finding by reading `05:314-316`'s **lapse**
+  — which genuinely is *"not an act by anybody"* — and generalising it to burial, which is a different
+  operation performed by a different rule three pages earlier.
+- **The repair's own mechanism does not hold either.** *A refusal is terminal* was cited to faults F2 and
+  F5; **`08:147` gives F2 the severity `descend`, which concedes a rung and closes nothing**, and
+  **`08:150` defeats F5 with any new `support[]`** — which a subsistence petitioner has every season by
+  construction, because the deposit reads `shortfall_at_raising` and the famine is deepening.
+- **And the recurrence cost fell on the wrong person.** Re-filing costs the *petitioner* an act — his
+  only act that season. A war of attrition priced against the challenger is not a repair.
 
-> **A refusal is TERMINAL. A burial is NOT.** A refused matter is decided and cannot be re-pleaded at
-> that venue without new grounds (§12.2, faults F2 and F5). A lapsed matter may be re-filed and
-> re-backed. **So refusal costs one deposit and closes the matter; burial costs a deposit each sitting
-> and leaves the matter open**, and each recurrence emits another event naming the person who composed
-> the agenda that did not reach it.
+**The invented emission is therefore deleted, not kept alongside a refuted premise.** A sitting is
+already an event; whoever was present sees which items were reached; and where no sitting happened at
+all, the design's answer is §13.1's, which is that nothing happening is the characteristic outcome and
+manufacturing an event there would be manufacturing visibility the design deliberately withholds.
 
-**Stated limit, in the same breath:** burial remains *cheaper* than refusal, and it remains invisible to
-anyone not in the room. That is intended — obstruction should be cheaper than refusal, or nobody would
-ever obstruct — but it means *"obstruction becomes play"* is true **only where somebody attends**, and
-the design offers no mechanism that puts a witness in a room he did not choose to enter.
+**THE ONE ASYMMETRY THAT SURVIVES, and it is priced rather than asserted.** Refusal and burial do not
+have the same *gain*:
+
+| | the matter | the risk to the convener | the cost |
+|---|---|---|---|
+| **hear it and refuse** | decided | **it may be decided against him** — the venue's `decide_rule` is not always his, and a heard matter can be granted | a deposit, plus an item of `capacity(date)` spent on a matter he did not want |
+| **omit it** | not decided | **none.** Nothing can be granted at a sitting it never reached | a deposit, on the same rule, as and when the backers learn |
+
+**So burial is not free and never was; it is merely SAFE.** That is the correct incentive and the design
+intends it — it is why the convening office is *"worth holding, worth conferring, worth revoking, and
+worth killing for"* (`05:218-224`). What follows for play is §8.3's: **the counter to a burying convener
+is not a mechanism, it is another door**, and burying only wins outright where the obstructor controls
+every venue that could hear the matter.
+
+**And one residual limit stands, unrepaired (§15.3):** the deposit on an omitting convener is contingent
+on the backers **learning**, exactly like every other deposit in the design. Where nobody tells them, the
+burial is unpunished — not because it is unpriced, but because the design's epistemics are the price.
 
 ### §8.5 A petition expires — and the evaluator is a person
 
-**A petition ends in exactly two ways. There is no third, and no world-state oracle.**
+**A petition ends in one of two ways — and at one kind of respondent it does not end at all.**
 
-1. **LAPSE.** The date passed and it was not heard (§8.4). The trigger is a date — container-local and
+1. **LAPSE.** The date passed and it was not heard. The trigger is a date — container-local and
    calendar-readable — and this is the one licensed decider-free resolution in the whole design (§13.2).
 2. **SUPERSESSION, moved and decided at a venue.** Any party, or the convener, may **move that the matter
    is moot**. It is an ordinary motion on the stasis ladder (§12), pleaded from claims the mover actually
-   holds, contestable like any claim, decided by the venue's decide rule, emitting a record row and a
-   `SUPERSEDED` event. It costs an item of the sitting's capacity, so killing a matter is not free.
+   holds, contestable like any claim, decided by the venue's `decide_rule`, and recorded. It is pleaded
+   against the matter's own docketed item and consumes no additional `capacity(date)`; what it costs the
+   mover is **an act**.
+3. ⚠ **AND A THIRD CASE THE EARLIER VERSION OF THIS DOCUMENT DENIED (C-4): AT A ROOTLESS VACANT OFFICE,
+   IT NEVER ENDS.** Both routes above need a date. §8.6 supplies one wherever a vacancy resolves at a
+   parent office or at a container. **Where an office is at the root of its own cluster and its conferral
+   basis names neither, there is no date, so the petition cannot lapse and there is no venue at which to
+   move it moot.** It sits, indefinitely. That is S19, it is not repaired here, and §15.16 and §16 carry
+   it. A document claiming *"there is no third"* while shipping the respondent type that creates it was
+   asserting closure it had not earned.
 
 **This rules the contradiction the earlier work carried.** #342's shape said in one section that a seat
-*filled by other means* supersedes a conferral petition, and in another that **nothing cancels another
-petition, because that would be an engine deciding a person's options.** Both cannot stand. **The second
+*filled by other means* supersedes a conferral petition, and in another that **no petition cancels
+another, because that would be an engine deciding a person's options.** Both cannot stand. **The second
 wins.** A seat filled by other means is not an expiry; it is a **ground** for a motion that the matter is
 moot, which somebody must make, and which the petitioner may contest.
+
+⚠ **The rule is about CANCELLATION BY A STATE OF THE WORLD, not about endings generally (C-21).** Lapse
+is precisely an ending with no person in it, and it stays. The precise claim is: **no petition is ended
+by a fact about the world; it ends by a date passing, or by a person's motion.**
 
 **Why the alternative was unbuildable.** *"The proposition is no longer live"* has **no referent in the
 state model**: famine is not stored, propositions are free-form, and liveness is a semantic judgment.
@@ -871,12 +1058,22 @@ node crosses what the settlement's coercive apparatus there can hold — and the
 names, hearths, and a specific man they blame. A threshold would let the world revolt without anyone
 having decided to.
 
-**Suppression makes it worse.** A suppressed grievance row is flagged dormant with its **magnitude
-preserved, not reduced**, and a recorded re-arm predicate; dormant rows are inherited at reduced
-magnitude on succession, and **re-arm at magnitude** the moment a satisfying claim enters any holder's
-ledger. The accumulator does not reset because nothing resets it. This is not a settlement gauge: there
-is no number on Goldenfurt, only rows in the stance tables of named persons in it, and if those persons
-die without heirs the rows die with them.
+**Suppression makes it worse, and it needs no flag.** ⚠ #342 writes this with a `DORMANT` flag and a
+stored re-arm predicate — and §7.2 has just ruled that **there is no flag object**, so shipping one here
+would relocate the straddle rather than end it (C-7). Restated in the ruled form, with identical
+behaviour:
+
+> A suppressed grievance is **an ordinary stance row at full magnitude whose act-proposition has an
+> unmet enabling claim.** It is present the whole time. It does not enter valuation while the enabling
+> claim is missing — so the suppression genuinely *worked* — and it enters the moment a claim satisfying
+> it lands in the holder's ledger, **at its full magnitude, because nothing ever reduced it.** No flag is
+> set, nothing is stored beyond the row, and the "re-arm predicate" is just the proposition's own
+> enabling condition, recomputed at P0 like every other option (§6.2).
+
+Rows are inherited at reduced magnitude on succession, so the effect is generational with no generational
+mechanism. **Each collision fires lower than the last, and the accumulator does not reset because nothing
+resets it.** This is not a settlement gauge: there is no number on Goldenfurt, only rows in the stance
+tables of named persons in it, and if those persons die without heirs the rows die with them.
 
 ---
 
@@ -884,8 +1081,9 @@ die without heirs the rows die with them.
 
 ### §9.1 The dispensation
 
-`Dispensation(issuer, proposition, scope, terms)` — a change to what a container permits, costs or
-requires. There is no bare *effect* field: every term is typed — `PriceTerm`, `ProhibitionTerm`,
+`Dispensation(issuer, proposition, scope, terms)` (`06:23`) — a change to what a container permits, costs
+or requires. **Issuer** is a person holding office, or two such persons for a treaty; **scope** is a list
+of containment nodes. There is no bare *effect* field: every term is typed — `PriceTerm`, `ProhibitionTerm`,
 `LevyTerm`, `ExemptionTerm`, `EntryStandardTerm`, `ExcommunicationTerm`, `BlockadeTerm`, `TreatyClause`,
 `OrdenanzaTerm`. Cut the typed table and every downward effect degenerates into a modifier on a hidden
 formula nobody in the world could name, and therefore nobody can reason about, evade, or exploit.
@@ -896,14 +1094,15 @@ notice, the market, a Knot. A person with no post receives it because deposit is
 **Distortion in transit is free:** what reaches the hamlet is often not what the Duke signed.
 
 Then nothing further is needed. The person's own need plus capability plus this new claim yields an
-**opening** — computed by the same routine that lists any person's available acts, now evaluated over
-changed terms. A blockade raises the price of salt; the fisher's son with a boat and a smuggler cousin
+**opening** — `opening_set(person)`, *"exactly one routine, and it is the same routine that lists any
+person's available acts at any time, not a new one keyed off Dispensations"* (`06:128-135`), now
+evaluated over changed terms. A blockade raises the price of salt; the fisher's son with a boat and a smuggler cousin
 sees a run worth making, and **no one authored an opportunity for him.**
 
 ### §9.2 A published dispensation does not apply — it lands as a compliance contest
 
 Per relevant node, `contest(container, prize = compliance-here, claimants = {enforcement, resistance})`
-— the same function that resolves sibling rivalry. No second resolver. The roll reads
+— the same function that resolves sibling rivalry (`06:93-96`). No second resolver. The roll reads
 **enforcer_presence** (is a person in the issuer's employ actually stationed or dispatched here — zero if
 the issuer has no one to send), **local judging-set stance** (derived on demand, never stored), and
 **distance**. Failure is never an exception: partial compliance resolved per hearth, quiet evasion, open
@@ -939,9 +1138,12 @@ look; and the one who **complies exactly and is ruined for it**, because his nei
 these needs a new verb. **The middle of the hierarchy stops being a pipe and becomes the place the game
 happens.**
 
-**And a directive may carry a reporting date** — *render account at the tithe reckoning* — which is a
-convening condition (§7) in its plainest form, and which surfaces non-compliance at a date where a person
-decides what to do about it.
+**And a directive may carry a reporting date** — *render account at the tithe reckoning*. ⚠ **That is a
+date the issuing act SETS, not a convening condition** (C-8): it carries no predicate, it is scheduled
+unconditionally by the person who issued the dispensation, and it is an ordinary `convene` performed as a
+term. It is not a fifth instance of §7 — §7.2 says there are **zero** — and it places no item on anyone's
+agenda, which §7.4 forbids. What it does is surface non-compliance **at a date, where a person decides
+what to do about it**, and the deciding is still `compose_agenda` plus a determination.
 
 ### §9.4 Vacancy propagates at telling speed
 
@@ -1017,35 +1219,55 @@ condition that is non-zero only at the rung an act happened to name.**
 **Both repair routes end at the same missing thing, and it is this.**
 
 ```
-Δcondition(site) = − condition(site) × f(degree) × share(actor, site)
+Δcondition(site) = − condition(site) × f(degree) × share(actor, site)     -- resolved in P5 (§6.3)
 
 f(Disaster) = f(Failure) = 0 ·  f(Costed) = 1/16 ·  f(Clean) = 1/8 ·  f(Overwhelming) = 1/4
-share(actor, site) = the actor's own draw from the site ÷ the site's total draw
+share(actor, site) = the actor's own draw from the site ÷ the site's total draw   ∈ (0, 1]
 ```
 
-Three things follow, and they are the clearance argument:
+**What the bound means, stated precisely, because the loose version of it is false (C-10):**
 
-- **The effect is a fraction of the container's own capacity, sized to the container** — which is the
-  design's named anti-leverage precedent, verbatim (`02:211-213`).
-- **No single act at any rung can move more than `1/4 × share`.** One boat among a harbour's forty moves
-  at most a fortieth of a quarter of the harbour's condition in a maximum-degree season.
-- **So a single act never closes an option.** Closure comes from accumulation — many actors, many
-  seasons, crossing a band edge — **which is the tragedy-of-the-commons shape the mechanism exists to
-  produce.** Many rational private acts making everyone's practice worse, including the actor's.
+> **You can never move more of a site than your own share of it, times a degree fraction.** That is the
+> whole claim, and it is exactly `02:211-213`'s *"a fraction of the container's own capacity … sized to
+> the container"*.
 
-**Falsifier, and it is the one to run:** *one person, one season, maximum-degree `alter` — what fraction of
-the site's condition moved? If it exceeds the fraction any verb contributes to a container outcome under
-`02:211-213`, the object violates the precedent.* Under the formula above it cannot, because `share` is
-the same quantity the precedent's "fraction" names.
+Two consequences, and the second is the one an earlier version of this document got wrong:
 
-**Deliberate discrete destruction is a different mode and a different bound.** Burning a granary or
-blocking a channel is `exclude`, not `alter`: it is a contested physical act against whoever defends the
-site, and it is bounded by **material capacity**, exactly as the shipped `forestall` is — one person may
-remove a settlement's entire supply for a season, bounded by `stores(hearth(person))` (`13:141-144`).
-**Material leverage bounded by material capacity** is already the design's rule for physical effects, and
-this enlargement adopts it unchanged for the discrete case rather than inventing a second one.
+- **At a commons with many drawers, single-act closure is impossible.** One boat among a harbour's forty
+  moves at most a fortieth of a quarter of the harbour's condition in a maximum-degree season. **Closure
+  is a collective outcome** — many actors, many seasons, crossing a band edge — which is the
+  tragedy-of-the-commons shape the mechanism exists to produce: many rational private acts making
+  everyone's practice worse, including the actor's.
+- ⚠ **At a site with a single drawer, `share = 1`, and one Overwhelming season moves a quarter of the
+  condition.** The earlier claim *"a single act never closes an option"* is **false there** and is
+  withdrawn. **But this is correct behaviour, not leverage**, and the anti-leverage row says why: it
+  forbids *"a personal effect on a group that is not a fraction of that group"* — and at `share = 1`
+  **there is no group.** A man working out his own hearth's private seam in one hard season is wrecking
+  his own property, and a design that stopped him would be modelling a commons where there is none.
 
-### §10.4 Band gating, the P1 integration, and what `depletion` actually is
+**Falsifier, and it is the one to run:** *one person, one season, maximum-degree `alter` at a site with N
+drawers — what fraction of the site's condition moved, and how does it scale with N?* It must be
+`≤ 1/4 × share`, and it must **fall as N rises**. If it does not fall with N, the object has leverage and
+violates the precedent.
+
+**Deliberate discrete destruction is a different mode, and this document does NOT claim it is cleared.**
+Burning a granary or blocking a channel is `exclude`, not `alter`: a contested physical act against
+whoever defends the site.
+
+⚠ **The `forestall` precedent does not transfer, and citing it was wrong (C-11).** `forestall` is **a
+purchase** — it *"requires … `stores(hearth(person))` sufficient to buy it outright"* and the goods
+survive, in the forestaller's own stores (`13:141-144`). Its bound is the actor's ability to pay, and its
+effect is a transfer of possession. **Arson has no purchase price and destroys the goods.** The two are
+not the same shape and the first does not license the second.
+
+> **So the discrete limb is DEMOTED to a stated limit (§15.17).** One person destroying an undefended
+> shared thing is expressible, is bounded only by the `contest` against whoever defends it, and where
+> nothing defends it there is no bound at all. **This document does not repair that, and it does not
+> introduce it either** — `12`'s willingness table already prices `burn` as a severity level, so the
+> shape ships in #342 and this enlargement inherits it. Naming it is the honest move; inventing a bound
+> for it here would be inventing a rule for a case the design has already decided to allow.
+
+### §10.4 Band gating, and what `depletion` actually is
 
 **Option closure is band-gated:**
 ```
@@ -1054,21 +1276,32 @@ verbs(site, n) = { v : condition(n) ≥ floor(v) }
 Bands are published in full with their inputs and **never with the trigger point that separates one band
 from the next**, which is the discipline the larder already runs on (`13:31-32`).
 
-**The slow fuses run in P1, and there is no authored per-season constant.** #342's two fuses — ore grade
-and siltation — are written to run *"every season"* in **no phase at all**, and `depletion` appears only
-as a subtrahend with no definition anywhere (`13:166-169`, `13:178-181`). This document closes both:
+**#342's two slow fuses — ore grade and siltation — are written to run *"every season"* in no phase at
+all, and `depletion` appears only as a subtrahend with no definition anywhere** (`13:166-169`,
+`13:178-181`). This document closes that, and the earlier version's closure was dimensionally and
+directionally wrong (C-9): it subtracted a delta on `condition ∈ [0,1]` from `base(H)`, a yield quantity,
+and because the delta is already negative, `base −= Σ(negative)` made **working the seam enrich it.**
 
-```
-P1:   base(H) −=  Σ (last season's resolved `alter` effects at H)  +  nature's term
-```
+> **THE CORRECTED FORM. `base(H)` does not move. `condition` is a multiplier on yield.**
+> ```
+> yield(H, season) = base(H) × condition(site(H)) × season_factor(territory)
+>
+> condition(site) +=  Σ (this season's resolved condition deltas at the site)     -- P5, acts
+> condition(site) +=  nature's term, via season_factor                            -- P1, weather
+> ```
+> `alter` deltas are negative; restoration acts are positive; nothing else moves it. Units are consistent
+> because `condition` is dimensionless and never leaves `[0,1]`, and the sign is correct because the
+> deltas are added, not subtracted.
 
-`depletion` **is** the sum of the season's resolved `alter` effects plus nature's term. Nothing else. So
-**the seam runs out because people worked it**, which is the story the mechanism exists to tell, rather
-than because a hidden constant ticks. Siltation is the same line with the sign of the dredging acts:
-accrual is nature's term minus the dredging that was actually performed and funded.
+**So `depletion` is redefined rather than defined:** #342 made it a subtrahend on `base`; here `base` is
+constant and depletion **is** the accumulated condition delta. The seam runs out because people worked it,
+which is the story the mechanism exists to tell.
 
-⚠ Note the one-season offset and do not read it as a defect: P1 precedes P5, so a season's `alter` effects
-land in the following season's settle. That is what *settle* means.
+⚠ **And the "no authored per-season constant" claim comes off (C-9).** There *is* a non-act term — nature's
+— and pretending otherwise was an overclaim. What is true, and is the point worth keeping: **the non-act
+term is weather, it is licensed under §13.2 row 1, and it enters through the shipped `season_factor`
+rather than through a bespoke per-fuse constant.** Siltation is the same line: accrual is `season_factor`
+against the dredging acts that were actually performed and funded.
 
 ### §10.5 Exposure, band-quantized
 
@@ -1139,10 +1372,17 @@ somewhere else — which is what makes a distribution order disobeyable **in the
 partially** (§9.3).
 
 **What it opens:** the wage-labourer, the bribe, the purchase (a pair of transfers, §11.5), the mercenary,
-the corrupt official — and **a material verb for the holdingless, who previously had none.** It is also
-the only enlargement that directly discharges the compliance target's own third structural test — *a
-person with no office can act, petition, and receive an opportunity* (`11:237-238`) — because without it,
-the only thing that can ever reach you is a dispensation from your own hierarchy.
+the corrupt official — **the unsolicited give, the wage and the purchase**, which is exactly the hole the
+review narrowed the claim to.
+
+⚠ **What it does NOT open, and an earlier version of this document claimed it did: a material verb for a
+person who had none.** That was false and it was a repair of a low end this document twice says it does
+not repair (C-14). `13:31-35` gives a person with no office **five** channels — requisition kin, petition,
+take an opening, migrate, commit to a rival proposition — and this document quotes them three paragraphs
+earlier. **The transfer act changes what can reach a postless person, not what he can do.** Its bearing on
+the compliance target's third structural test (*a person with no office can act, petition, and receive an
+opportunity*, `11:237-238`) is on the **third limb only**: without it the only thing that can ever reach
+you is a dispensation from your own hierarchy, so nothing a stranger does can land on you.
 
 ### §11.3 Two attacks that fail, and one claim that comes off
 
@@ -1226,11 +1466,20 @@ it is that, and it was right) · **Jurisdiction** (this chamber may not hear it)
 
 **Resolution is by named fault against a checklist, not by a persuasion threshold**, and every fault is
 computable from case state and ledgers — which is what lets the whole thing run headless with no GM.
-Twelve faults, each with a severity: **F1** self-contradiction · **F2** contradicting the record · **F3**
-silence when pressed · **F4** shifting the ground · **F5** repetition · **F6** the quibble · **F7** rootless
-ground · **F8** conceding and pressing anyway · **F9** deficient pleading · **F10** speaking without
-standing · **F11** incoherent assertion · **F12** inadmissible challenge. Severity is `strike` (the ground
-dies, at every venue, for everyone), `descend`, or `close`.
+Twelve faults (`08:146-157`), each with a severity: **F1** self-contradiction *(close)* · **F2**
+contradicting the record *(descend)* · **F3** silence when pressed *(close)* · **F4** shifting the ground
+*(descend)* · **F5** repetition, *defeated by any new `support[]`* *(strike)* · **F6** the quibble
+*(close)* · **F7** rootless ground *(strike)* · **F8** conceding and pressing anyway *(close)* · **F9**
+deficient pleading *(close)* · **F10** speaking without standing *(strike)* · **F11** incoherent assertion
+*(strike)* · **F12** inadmissible challenge *(descend)*. `strike` kills the ground at every venue for
+everyone; `descend` concedes a rung and **closes nothing**; `close` force-closes the sitting against the
+faulting party.
+
+⚠ **Those two severities are printed here because getting them wrong cost this document a whole invented
+mechanism.** An earlier version built its dominance repair on *"a refused matter cannot be re-pleaded"*,
+citing F2 and F5 — and **`08:147` gives F2 `descend`, which concedes and closes nothing, while `08:150`
+lets any new `support[]` defeat F5**, which a petitioner in a deepening famine has every season by
+construction. See §8.4 (C-1).
 
 **Force-close is the normal ending.** A sitting that runs its full budget without a fault is the unusual
 case. **Most arguments end because somebody was caught doing something that has a name** — and a
@@ -1264,10 +1513,13 @@ Three things this buys:
   the Goldenfurt court. He may not *speak* unless a person with standing carries his petition. **Caste is
   not a locked door; it is a room you may stand in silently** — a far more accurate and far more playable
   shape than a ban, and it is one column.
-- **The convener holds the cheapest real power in the game.** Setting a date and ordering its items is
-  `convene`, and a convener who puts three items ahead of yours has spent nothing and killed your
-  petition. Influence measured in volume of things filtered, held by a person with no binding power at
-  all. §8.4 is what stops that from being free.
+- **The convener holds the cheapest real power in the game — cheap, but not free.** Ordering a sitting's
+  items is `compose_agenda`, and a convener who puts three items ahead of yours has killed your petition
+  without ever deciding it. ⚠ **`14 §5`'s gloss says he *"has spent nothing"*; doc 05 says he spent an act
+  and takes a deposit** (`05:206-208`). **This document rules for doc 05** on §3.4's conflict rule — doc
+  05's declared subject is carriage and the agenda — so the correct statement is: *influence measured in
+  the volume of things filtered, held by a person with no binding power at all, at the price of one act a
+  season and a grievance he cannot see coming.* §8.4 owns this.
 - **`admissible_source` is a door for evidence, not a grade.** A venue that hears instruments only cannot
   be reached by forty hamlet witnesses; the chapter sitting that hears witnessed deed only cannot be
   reached by a document — which is why the Löwenritter is caste-open in fact and not by policy.
@@ -1294,8 +1546,8 @@ principle is a *statement* of the spine, not an addition to it.
 >
 > **A standing date whose allocating office is vacant fires, allocates nothing, and lapses. The stock
 > sits.** It is not redistributed, not held over, not split by default, not allocated by seniority or by
-> any other engine rule. The lapse emits its event (§8.4), and the claimants left unfed carry their
-> mouths-deficit straight into their hearths' own need computation.
+> any other engine rule. The claimants left unfed carry their mouths-deficit straight into their
+> hearths' own need computation, by the ordinary larder line and with no crisis object anywhere.
 
 That is the famine writing itself: the grain exists, the granary is full, the praefect is dead, no one has
 been conferred, no sitting is convened, no dispensation is issued — **and people starve inside a system
@@ -1303,9 +1555,10 @@ that is working exactly as written.** Nobody did anything wrong. Nothing is auth
 
 **What it makes possible:** the **vacancy as a strategy** — keep the seat empty and the matters that
 needed it die on their own (obstruction by omission, which is how institutions are actually strangled, and
-it needs no new verb, only the guarantee that nothing fills the gap). **Neglect becomes attributable**,
-because every effect roots in an act and its absence roots in a named person who did not act — and, since
-§8.4, the lapse leaves an event a witness can hold. **The starving petitioner has somewhere to go**: the
+it needs no new verb, only the guarantee that nothing fills the gap). **Neglect becomes attributable, where the
+neglect took the form of an act.** A convener who omits an item performed `compose_agenda` and deposits
+by name (§8.4); **a seat nobody filled performed nothing and deposits on nobody**, and that asymmetry is
+real and is not repaired here (§15.3). **The starving petitioner has somewhere to go**: the
 need does not vanish when the petition lapses, it rises. **And a functioning institution becomes visible
 as an achievement**, because a non-functioning one is mechanically distinct rather than merely quieter.
 
@@ -1320,7 +1573,7 @@ as an achievement**, because a non-functioning one is mechanically distinct rath
 | 1 | **Metabolism and nature** — larders consume, crops yield, wounds close or fester, bodies age, weather happens | P1 (`09:55-59`) |
 | 2 | **Matter events** — a storm, a silted channel, a worked-out seam; and §10.6's band-edge closure under its three conditions | `13:178-186`; §10.6 |
 | 3 | **The confidence of a memory decaying** — the third admitted clock class | `09:562-564` |
-| 4 | **The calendar — LAPSE ONLY.** A date passing with nothing done resolves a matter against whoever needed the affirmative act | `05:314-316`; §8.4 |
+| 4 | **The calendar — LAPSE ONLY.** A date passing with nothing done resolves a matter against whoever needed the affirmative act | `05:314-316`; §8.5 |
 
 **The fourth is licensed narrowly and deliberately, and the two things it does not cover are the two that
 mattered.** Licensing *the calendar* wholesale would wave through exactly the cases where the caretaker
@@ -1414,16 +1667,16 @@ says why it does not cross.
 |---|---|---|
 | **1** | a `World` parameter on any decision function | **Clear.** No enlargement touches `choose`. A convening condition is evaluated in P0 by the calendar, never inside a decision. §7.1 |
 | **2** | a `view_of(world, person)` that masks rather than assembles | **Clear.** No enlargement constructs a view. The one place a world quantity nearly leaked into a player's hands is the odds preview, closed by the exposure rule. §5.4 |
-| **3** | any function taking `[Person]` and one `Event` | **Clear, and load-bearing.** `LAPSED` and `SUPERSEDED` are witnessed **per person, by presence at the venue**. They are events, not notifications, and there is no signature that would deposit them into the backers. §8.4 |
-| **4** | a deposit into a cohort carrying a VALUE rather than a DISTRIBUTION | **Clear.** No enlargement deposits into a cohort. A cohort at a site that loses a verb loses it from its own option set, which is a set operation, not a value deposit. §10.4 |
-| **5** | a pushed aggregate, or a field one is stored in | **Clear, and this is where the option-removal object had to be engineered rather than asserted.** Coarser conditions are computed on demand by the draw-weighted mean and **stored nowhere**. §10.2 |
-| **6** | a stored aggregate, norm, density, unrest or reputation field | **Clear, and it forced a ruling.** `condition(site)` is *matter*, not an aggregate of persons — the same class as a larder, which the design already stores. And **the dormancy ruling was made against a stored flag**: `09:641` wins, there is no flag object. §7.2 |
+| **3** | any function taking `[Person]` and one `Event` | **Clear.** Nothing in §§7–11 fans an event to a set. A closure at a site (§10.6 condition 3), an omitted petition's deposit (§8.4) and a transfer (§11.2) are all witnessed **per person, by presence**, and the deposit on backers is explicitly *"as and when they learn"* (`05:207-208`) — a telling each, never a broadcast |
+| **4** | a deposit into a cohort carrying a VALUE rather than a DISTRIBUTION | **The row whose own note says it exists because the defect passed every other row, so it is walked on its own terms — UNIFORMITY — and not by set-vs-value (C-12).** The option-set change itself is clean: a verb leaves the *site's* list and each person's `opening_set` is recomputed per person, so nothing is deposited into the cohort at all. **But the WITNESSING is where this row bites, and it needs a rule:** when a closure is witnessed by a cohort, **the cohort's claim stores the construal spread its members would have produced, and an individuating member DRAWS from it and never inherits it.** Whose fault the silting is, and whether it was inevitable, must vary inside the cohort exactly as it would vary between two named persons. §10.6, §3.1 |
+| **5** | a pushed aggregate, or a field one is stored in | **Clear, and this is where the option-removal object had to be engineered rather than asserted.** Coarser conditions are computed on demand by the draw-weighted mean and **stored nowhere**; the primary scalar lives at the finest node an act names and is written only there. §10.2 |
+| **6** | a stored aggregate, norm, density, unrest or reputation field | **Clear, and it forced two rulings and one table amendment.** `condition(site)` is *matter*, not an aggregate of persons — §4.2's amended Container row states the general line (**a container may hold matter and dates; never a social aggregate**) and owns it explicitly, which the four-row table did not. And the flag was ruled out of existence twice: at §7.2 for `banked_claims`, and at §8.7 for suppressed grievance, which #342 stores as a flag and this document does not |
 | **7** | a knowledge value stored on the thing known | **Clear.** A site's condition is a physical fact, not knowledge of one. Who knows a harbour has silted is claims in ledgers, and the band is published while the scalar is readable by nobody. §10.5 |
 | **8** | a second resolver, an auto-resolve formula, a fast path | **Clear.** No enlargement resolves anything. A supersession motion runs through the ordinary argument process; a transfer is an ordinary act; a compliance decision is the shipped `contest`. §8.5, §9.2 |
 | **9** | a `tier`, `level` or `scale` field on a faction | **Clear.** Untouched. The faction that forms out of a lost verb is an ordinary proposition plus commitments, with a derived profile. §10.1 |
 | **10** | a flat additive modifier from a person onto a roll | **Clear.** The option-removal inversion exists *precisely* to avoid this: damage never enters a roll as a term. Where a site's condition must reach an obstacle, it enters as a band representative, which is a substitution of the pool source, not an addend. §5.4, §10.1 |
-| **11** | **a personal effect on a group that is not a fraction of that group** | **This is the row the whole of §10.3 exists for.** `Δ = −condition × f(degree) × share(actor, site)` is a **degree-scaled fraction of the site's own condition, sized by the actor's own share of it** — the design's named precedent verbatim (`02:211-213`). Deliberate discrete destruction is `exclude`, bounded by material capacity, on the shipped `forestall` precedent (`13:141-144`). **Falsifier stated and runnable: §10.3.** |
-| **12** | a scheduled recovery tick on standing | **Clear, and it is why §10.4 has no authored constant.** `depletion` is the sum of resolved acts plus nature's term, so nothing recovers or decays on a schedule. And no convening condition may be written over a social quantity that is not a computed norm. §7.3 C4, §10.6 |
+| **11** | **a personal effect on a group that is not a fraction of that group** | **The `alter` limb is CLEAR and is what the whole of §10.3 exists for.** `Δ = −condition × f(degree) × share(actor, site)` is a degree-scaled fraction of the site's own condition, sized by the actor's own share — `02:211-213` verbatim — and the effect **falls as the number of drawers rises**, which is the property the row is really about. At `share = 1` there is no group, so the row does not apply. **The `exclude` limb is NOT CLEARED and is demoted to §15.17**: the `forestall` precedent does not transfer (it is a purchase, and the goods survive), and this document declines to invent a bound for a case #342 already allows. **Falsifier stated and runnable: §10.3** |
+| **12** | a scheduled recovery tick on standing | **Clear, on the row's own subject.** The row governs **standing** — a social quantity — and no enlargement moves one on a clock: §10's only clock term is `season_factor`, which is weather, and §10.6 condition 1 forbids a band edge over any social quantity. No convening condition may be written over one either (§7.3 C4). *(This document does **not** claim §10.4 has no non-act term; it has one and it is nature's. C-9.)* |
 | **13** | a per-entity branch anywhere in the resolver | **Clear.** Every enlargement is a rule over a type, never over a named entity: any office may be petitioned, any date may carry a condition, any site may lose a verb, any person may transfer. **The one place a branch was tempting was exempting Thread acts from the odds preview; §5.4 refuses that route by name.** |
 | **14** | an authored per-person opportunity or quest object | **Clear, and improved.** A lost verb, a fired date and an arriving transfer all reach a person through the same computed `opening_set` that any dispensation reaches them through. Nothing is authored for anybody. §9.1, §10.1 |
 
@@ -1450,9 +1703,14 @@ were closed.
    ruling. The object stands on its N-line alone.
 2. **A convening condition schedules an occasion, not a hearing** (§7.4). The termination gain is
    materially weaker than the earlier work claimed.
-3. **Obstruction is visible only where somebody attends** (§8.4). Burial remains cheaper than refusal —
-   intentionally — and the design has no mechanism that puts a witness in a room he did not enter.
-4. **Petition expiry has exactly two forms and neither reads the world** (§8.5). The intuitive third form —
+3. **Burial is priced but its price is contingent, and OMISSION IS ASYMMETRIC WITH VACANCY** (§8.4,
+   §13.1). An omitting convener deposits *"as and when they learn"*, so where nobody tells the backers he
+   pays nothing — the design's epistemics are the price, and that is deliberate. **But a seat nobody
+   filled performed no act at all and deposits on nobody**, so *"neglect becomes attributable"* holds for
+   omission and **fails for vacancy**. This document does not repair that: manufacturing an event where
+   nothing happened is manufacturing visibility §13.1 deliberately withholds.
+4. **Petition expiry reads the world in neither of its two forms — and at a rootless vacant office there
+   is a third case in which it never ends at all** (§8.5 case 3, §15.16). The intuitive alternative —
    *the world moved on, so the matter is moot* — is **unbuildable**: liveness has no referent in the state
    model, and an engine evaluating it is either a stored world-condition or an oracle.
 5. **`stores`-as-realm-denominator is unresolved** (§11.4), and the coercion layer's coin-denominated
@@ -1473,10 +1731,12 @@ were closed.
     LOST died on a missing *noun*; not one was scored LOST because a claimed composition failed to compose —
     **and nothing was executed, so a compositional failure was undetectable by construction.** No count of
     units "reproduced or transformed" is evidence that the compositions work.
-11. **Two vocabulary collisions survive inside the design and are ruled rather than fixed** (§3.3): `K` has
-    two incompatible definitions and `exposure` has five senses across #342, two of which are the same
-    concept implemented incompatibly and one of which is refused by name in the document that neighbours it.
-    This document picks one of each and does not retrofit the rest.
+11. **FOUR vocabulary collisions survive inside the design and are ruled rather than fixed** (§3.4): `K`,
+    `exposure` (five senses, two of them the same concept implemented incompatibly and one refused by name
+    in a neighbouring document), the **practice range** (0–5 against 0–7), and the **Thread term's
+    placement** (inside the pool expression against a second pool through the same `roll`). This document
+    picks one of each, records all four, and **retrofits none of them into #342.** *(An earlier version
+    said two, and ruled the other two silently. C-16.)*
 12. **The low end was tested and is right. It is not repaired here, and it must not be "fixed" later**
     (§2). But note that §8.5 and §13.1 **do** touch it — a bottom-rung petition can now die unheard — and
     **no section re-examines the postless season under the enlarged rules.** That work is open.
@@ -1484,6 +1744,27 @@ were closed.
     and the cost of the hostage repricing at the top of the ladder.
 14. **Nothing in this document has executed.** No claim here is licensed by an execution artifact, and under
     `CLAUDE.md` §0.2 none of it is done.
+15. **The pre-roll exposure partition is a publication rule, not a structural guarantee** (§5.4). Only its
+    third row — where the scalar is never an operand — is enforced by construction. And **a resistance that
+    is neither plainly material nor plainly stance-composed has no ruled row**: a forged document's
+    quality, a fortification nobody has seen. This document does not invent one.
+16. **S19 IS NOT REPAIRED, AND IT LIMITS ENLARGEMENT 2** (§8.5 case 3, §8.6). A conferral date opens *"at
+    the horizon the container carries"* (`14:195`); an appointed office's vacancy resolves *"at the parent
+    office"* (`14:325`); **so the horizon is carried by whatever holds the date, which is the substitution
+    this document makes and argues rather than performing silently (C-22).** But an office at the root of
+    its own cluster, whose conferral basis names neither a container nor a parent office, has **no clock**
+    — and a petition filed there can neither lapse nor be moved moot. Review (a) says nobody has ruled
+    whether that is the intended Consecration Crisis or a soft-lock, and this document does not rule it
+    either (§16).
+17. **The DISCRETE limb of option removal is NOT CLEARED against the anti-leverage row** (§10.3, §14 row
+    11). One person destroying an undefended shared thing is bounded only by the `contest` against whoever
+    defends it, and where nothing defends it there is no bound. The `forestall` precedent does not transfer
+    — it is a purchase, and the goods survive. **#342 already allows this shape** (`12`'s willingness table
+    prices `burn` as a severity), so this document inherits the gap rather than introducing it, and
+    declines to invent a bound for a case the design has decided to allow.
+18. **Doc 06 of #342 is not covered by the verified fact base** (`09_citation_ledger.md`'s own coverage
+    note), so §9's citations into it are this document's own direct reads and have not been
+    independently re-verified.
 
 ---
 
@@ -1497,7 +1778,7 @@ anything is escalated.
 |---|---|---|
 | **D-2** | **The act economy.** One act per season, or a holder's several? | **A personnel game** — a Duke picks one thing and chooses which of his people does it — **or a decree game**, where the top of the ladder sweeps. It decides whether a player-Duke experiences the top of the ladder as a promotion or a demotion, and it gates §8.3's and §11.3's economics. `14:91-92`'s `seat_items` is already a fourth per-holder capacity and gives a multi-act reading a live foothold |
 | **§11.4** | **Is `stores` the realm's denominator?** | **Logistics-real force** — you retain only what you can feed where they stand, and the transport network becomes political — **or coin returns by the back door**, since a fungible transferable scalar functions as money whether or not it is called that |
-| **§4.3** | **Is conferral rooted in persons or in offices?** | **Person-rooted**: dead conferrers terminate the graph and the sovereignty query every faction's victory condition reads is undefined across most of it — the Crown cannot be played across a succession. **Office-rooted**: the graph resolves, but an institution performs the game's most consequential act. The design's own evidence points at office-rooted — a military order sworn to *the Crown as institution, not the bloodline* — and the suite asserts both |
+| **§8.5** | **Is a rootless cluster vacancy the Consecration Crisis, or a soft-lock?** (S19) | **Content**: a Church that cannot fill a seat is the design working, and breaking the stall is political work for characters — §8.6's whole position. **A defect**: a petition that can neither lapse nor be mooted is a matter suspended forever, which is the failure §8.5 exists to end. Compose `14:239`'s three-of-four conclave with two seats already vacant and it is one death away. Review (a) states plainly that **nobody has ruled which**, and this document does not rule it either — it is the one place where the two readings lead to a materially different Church |
 | **§10** | **Is the world dying or misunderstood?** | Whether slow material decline is a real trajectory the player must arrest, or a fact everyone reports wrongly. §10 makes both expressible and does not choose |
 | **§2** | **The Coherence-0 ontology.** | Two incompatible readings ship — loss of capacity, versus *a person has become an object*. Three arcs and two named absences turn on it |
 | **—** | **Off-board polities.** | Altonia and Schoenland exert real pressure from off the map. *Generate a person* and *allow an actorless pressure* are different games, and the second would be the only exception to §1.1 in the design |
@@ -1534,11 +1815,22 @@ structural promotion — the standing date becomes the spine — seen from four 
 | a petition's respondent is a standing date | **withdrawn.** A date cannot drop a petition. The respondent is a containment node or an office — always a person or a vacancy, never a mechanism |
 | a seat filled by other means expires a petition | **ruled the other way.** Nothing cancels a petition automatically; a filled seat is a *ground* for a motion, which a person must make and the petitioner may contest |
 | expiry is *the world moving on*, with no actor | **it needed an evaluator and now has one:** a named person moving at a venue, from claims he holds, contestable like any claim |
-| the convener must convene or visibly refuse, and a refusal is witnessed | **false as shipped, and repaired.** Non-convening is lapse, which is silent by design. Lapse and supersession now emit witnessable events at the venue, and refusal is terminal while burial is not |
-| *`witness` can see neglect* | **a type error, and now a mechanism.** An omission emits no event; a date passing does |
+| the convener must convene or visibly refuse, and a refusal is witnessed | **the CLAIM was loose and the DEFECT found against it was false.** #342 already prices burial: `compose_agenda` costs an act (`05:206`) and deposits on the omitter by name (`05:207-208`, `05:211-216`). What is true is narrower: **burial is safe, not free** — omitting risks no grant, hearing does |
+| *`witness` can see neglect* | **half.** It sees an omission, which is an act. **It cannot see a vacancy, which is not** — and that asymmetry stands unrepaired (§15.3) |
+| lapse and supersession must emit witnessable events | **INVENTED AND DELETED.** It was engineered against the refuted dominance premise above, and its own mechanism failed too — F2 is `descend` and closes nothing (`08:147`), F5 falls to any new support (`08:150`), and the recurrence cost landed on the petitioner |
+| the four-row ownership table needed an Office row | **it needed two.** The Container row also had to admit **matter** — `stores`, the pointer, `condition(site)` — which the shipped hearth already holds against `01:490-491`. The general line: a container may hold matter and dates, never a social aggregate |
+| prices denominated in "the sitting's capacity" | **two shipped quantities, named and owned** (§4.3): `capacity(date)`, a container term consumed at the hearing, and `seat_items`, a holder property consumed at the filing. There was never a third |
+| conferral is a live choice for Jordan | **ruled: office-rooted** (§4.5), because it has an architectural answer, and `CLAUDE.md` §0's fifth test forbids escalating one |
+| a petition ends in exactly two ways | **two, plus a case where it does not end**: at an office at the root of its own cluster with no parent office, there is no date, so no lapse and no venue (§8.5 case 3). S19 is not repaired |
+| the petition retyping *"closes the whole direction of play"* | **withdrawn.** It opens the door; S19 means there is not a room behind every one |
 | the watch dissolves the cluster-vacancy deadlock | **retracted.** The deadlock is content, not a bug. A stalled Church is the design working |
 | commons damage is a scalar entering an obstacle | **inverted.** It removes an option, with a sizing rule, cross-rung semantics, an aggregation function, and band-quantized exposure |
-| the slow fuses run every season | **they run in P1, and `depletion` is defined for the first time** — the sum of the season's resolved acts plus nature's term, so the seam runs out because people worked it |
+| the slow fuses run every season | **`condition` is a MULTIPLIER on yield and `base(H)` does not move.** The first attempt at this subtracted a `[0,1]` delta from a yield quantity **and had the sign inverted, so working a seam enriched it**. Acts' deltas resolve in P5; nature's enters P1 through `season_factor` |
+| there is no authored per-season constant in the fuses | **overclaim, withdrawn.** There is a non-act term and it is nature's; what is true is that it enters through the shipped `season_factor` rather than a bespoke per-fuse constant |
+| a single act never closes an option | **false at a single-drawer site**, where `share = 1` and one Overwhelming season moves a quarter. **Correct behaviour, not leverage** — at `share = 1` there is no group for the anti-leverage row to protect |
+| the discrete limb is cleared by the `forestall` precedent | **it is not.** `forestall` is a purchase and the goods survive; arson has no price and destroys them. Demoted to a stated limit (§15.17) |
+| the exposure rule is self-enforcing | **only one of its four rows is.** The rest are publication rules, and the opposed contest's pool stays published on `10:132`'s stated policy |
+| the transfer act gives the holdingless a material verb they did not have | **false, and a low-end repair.** `13:31-35` gives five channels. It changes what can REACH a postless person, not what he can do |
 | the transfer act makes the coercion arithmetic *implementable* | **expressible.** Re-denomination is unwritten work |
 | no-fallback is a spine the earlier documents did not carry | **it restates what phase membership already enforced.** Its one genuinely new ruling is vacant-allocator semantics |
 | the exception list has two members | **four**, and the calendar's membership is narrowed to lapse alone, because supersession and scheduling were repaired at the mechanism instead |
@@ -1550,8 +1842,11 @@ structural promotion — the standing date becomes the spine — seen from four 
 
 Recorded so they do not vanish a second time, which is how a backlog forms:
 
-1. **The establishment / capacity object.** The design has **no finite, contested, durable capacity object
-   at any rung** — it prices remit and forgets establishment. Two independent exercises named the same hole.
+1. **The ESTABLISHMENT capacity object.** The design has no finite, contested, durable capacity object for
+   *the named persons an office employs* — it prices remit and forgets establishment. Two independent
+   exercises named the same hole. ⚠ **Narrowed from the form it was filed in**, which said *"at any
+   rung"*: §4.3's two quantities are finite, contested and durable, so the finding is about establishment
+   specifically and not about capacity generally (C-3).
 2. **The Coherence-0 ontology contradiction** (§16).
 3. **The `burden` term's calibration** — doing more dramatic work than any single coefficient in the suite,
    and untested by either exercise.
@@ -1568,6 +1863,36 @@ exactly one of **FIX** (changed, and what changed), **REBUT** (held, with the li
 challenge), or **DEMOTE** (recorded as a stated limit in §15 or a live choice in §16). **If a claim in this
 document was challenged and does not appear below, the loop did not run.**
 
-| round | challenge | disposition |
-|---|---|---|
-| **1** | *(draft 1 — the pre-relay gating audit's own findings are folded in above and are recorded in §17.3, which is the same operation performed on the earlier work.)* | — |
+**ROUND 1 — 24 challenges (`11_challenges_round1.md`), all dispositioned. 18 FIX · 3 REBUT · 3 DEMOTE.**
+
+| # | challenge | disposition | where |
+|---|---|---|---|
+| **C-1** | the dominance repair does not work — F2 is `descend`, F5 falls to new support, and the recurrence cost falls on the petitioner | **FIX — the repair is DELETED.** Verified `08:147` and `08:150` directly; both halves fail. The invented `LAPSED`/`SUPERSEDED` emission is gone from §6.2, §8.4, §13.1 and §14 row 3 | §8.4 |
+| **C-2** | the dominance DEFECT is itself false — `05:206` costs an act, `05:207-208` deposits on omissions, `05:211-216` says an omitted petition IS a drop | **REBUT the audit's finding, on `05:202-224`, which I read directly.** #342 already prices burial and says so in the strongest terms it has. `05:211-216` is **restored** to the document, the three incompatible cost statements are collapsed to one, and the only surviving asymmetry — burial is **safe**, not free — is stated and priced | §8.4, §12.4 |
+| **C-3** | "sitting capacity" is one quantity split into three and owned by nobody | **FIX.** New §4.3 names the **two** shipped quantities, owns each in §4.2, and fixes their consumption points. Every price in §§7–8 re-denominated; §17.4's finding narrowed to *establishment* | §4.2, §4.3, §7.3, §8.2 |
+| **C-4** | E1 shipped while S19 is unstated, and *"exactly two ways"* is false at a vacant cluster office | **FIX + DEMOTE.** The container→holder substitution is now explicit and argued on `14:325`; *"closes the whole direction of play"* is **withdrawn**; §8.5 gains **case 3, in which the petition never ends**; S19 is recorded as a limit and as a live choice | §8.1, §8.5, §15.16, §16 |
+| **C-5** | the exposure rule is not self-enforcing and §5.4 violates it in its own paragraph | **FIX + REBUT + DEMOTE.** *Self-enforcing* is struck; the rule becomes a four-row partition. **Rebutted on the opponent's pool, citing `10:132`'s stated publish-the-mismatch policy.** Stance-composed resistances now publish a band — a change to #342 — and the Masterpiece example moves with it. The unruled residual is §15.15 | §5.2, §5.4, §15.15 |
+| **C-6** | the dormancy ruling's ground is a misread of `00_INDEX:28`, and K is ruled the other way | **FIX.** The spine ground is dropped. New §3.4 states **one conflict rule** — the owning document wins on its own object — and applies it to all four collisions, so dormancy and K are now ruled consistently | §3.4, §7.2 |
+| **C-7** | §8.7 ships the dormant flag §7.2 just abolished | **FIX.** §8.7 rewritten with no flag: a suppressed grievance is an ordinary stance row at full magnitude whose act-proposition has an unmet enabling claim, recomputed at P0. Identical behaviour | §8.7 |
+| **C-8** | §9.3 reclaims a shipped instance and schedules an item | **FIX.** A reporting date is a date the issuing act **sets**, carries no predicate, is not a fifth instance, and places no item | §9.3 |
+| **C-9** | `depletion` has a units error and a sign error, and *"no authored per-season constant"* is false | **FIX.** `base(H)` no longer moves; `condition` is a dimensionless multiplier on yield; deltas are **added**, so working a seam depletes it. The no-constant claim is **withdrawn** — nature's term exists and enters through `season_factor` | §10.4, §14 row 12 |
+| **C-10** | *"a single act never closes an option"* is false at `share ≈ 1` | **FIX.** Withdrawn and replaced by the bound's real meaning — *you can never move more than your own share* — plus the reason `share = 1` is correct rather than leverage: there is no group. The falsifier now tests scaling with N | §10.3, §14 row 11 |
+| **C-11** | the `forestall` precedent does not transfer — it is a purchase and the goods survive | **DEMOTE.** The precedent is withdrawn; the discrete `exclude` limb is **not cleared** against the anti-leverage row and becomes §15.17, with the note that #342 already allows the shape | §10.3, §14 row 11, §15.17 |
+| **C-12** | §14 row 4 is cleared by gloss, on the row that exists because the defect passed every other row | **FIX.** Row 4 rewalked on **uniformity**: the option change deposits nothing, but a cohort's claim **about a closure** must store the construal spread and an individuating member draws from it | §14 row 4 |
+| **C-13** | the five-row table does not own `stores`, the pointer, or `condition(site)` | **FIX.** The Container row now owns matter and dates explicitly, with the general line stated — *a container may hold matter and dates, never a social aggregate* — and the amendment to `01:490-491` recorded rather than smuggled | §4.2 |
+| **C-14** | *"a material verb for the holdingless"* is refuted three paragraphs earlier and is a low-end repair | **FIX — struck.** Replaced with the accurate N-line (the unsolicited give, the wage, the purchase) and an explicit statement that the transfer changes what can reach a postless person, not what he can do | §11.2 |
+| **C-15** | absence-vacancy does have a carrier — `14:254-256` ships revocation in fact | **FIX.** The *"no carrier"* claim is withdrawn; the surviving claim is narrower and better — `exercise` is identically zero at a hearth, presence is not, and the household is where hostage politics lives | §7.5 |
+| **C-16** | four vocabulary collisions, not two, and two were ruled silently | **FIX.** All four are ruled in §3.4's table with their grounds, and §15.11 records all four | §3.4, §15.11 |
+| **C-17** | P1 now carries act-caused writes, breaking the three-class licence | **FIX.** Act-caused condition deltas resolve in **P5**; P1 carries nature only. Removes the class violation and the one-season offset together | §6.2, §6.3, §10.4 |
+| **C-18** | §16 escalates conferral after naming the evidence and the direction | **FIX.** Ruled **office-rooted** in a new §4.5, with the argument that B-11 is not violated because a named person still performs `confer` by remit; removed from §16 | §4.5, §16 |
+| **C-19** | the Costed band claim is falsified at Pool 1–2 | **FIX.** Scoped to balanced pools 4–12, and the real falsification stated: **Overwhelming is unreachable at Pool 1–2**, which this document does not repair | §5.3 |
+| **C-20** | four sections reproduce docs 06, 07, 08 and 10 with zero citations | **FIX.** Citations added at the load-bearing lines (`06:23`, `06:93-96`, `06:128-135`, `07:180-182`, `08:146-157`, `10:30`, `10:33`), and §15.18 records that **doc 06 is uncovered by the verified fact base** | §1.3, §5.1, §9.1–9.2, §12.2 |
+| **C-21** | *"nothing cancels automatically"* generalises against LAPSE, which is exactly that | **FIX.** Reworded to the precise claim: *no petition is ended by a fact about the world; it ends by a date passing, or by a person's motion* | §8.5 |
+| **C-22** | an unrecorded container→holder substitution, load-bearing on C-4 | **FIX.** Recorded and argued in §15.16 on `14:325`, and cross-referenced from §8.6 | §15.16 |
+| **C-23** | §0's own scoping claim is false in §0 | **FIX.** The bullet now names both count sites (§15.9 and §17.3) and says there are no others | §0 |
+| **C-24** | two citation slips, including an unrecorded widening of a fault's predicate | **FIX.** F10 is quoted accurately from `08:155` (*judging set*, not standing at a node), and the office-standing rule is presented as a **new rule modelled on F10**, not derived from it | §8.2 |
+
+**What round 1 cost, recorded because it is the most useful thing in this table:** the largest single
+change is a **deletion**. A finding that four stages had taken as settled — the convener's dominant option
+— was false against the tree, and this document had built a mechanism on it. **Round 1's best work was
+reading `05:202-224` and taking the mechanism out again.**
