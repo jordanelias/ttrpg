@@ -42,14 +42,16 @@ season(world) -> world':
        wounds close or fester; bodies age; bodies die
        travellers advance one leg
        envelope weights move: births in, deaths out
-       writes: larders, bodies, travel, yield, envelope weights   class: MATTER
+       every Site loses `wear(kind)` of its condition          — ENTROPY
+       writes: larders, bodies, travel, yield, envelope weights,
+               and `condition` BY `wear` ONLY                    class: MATTER
        ── the world is now FROZEN for the map ──
 
      DELIBERATE ──────────── map · per person or cohort · PURE · any order · parallel
        sensation <- sense(person, frozen_world)         # two floats; ARCH §3.1
        view      <- assemble(person, question)          # top-K by salience; SUP:251-255
-       openings  <- opening_set(person, view)           # BELIEF; ARCH §3.2
        act       <- choose(person, view, sensation)     # exactly one Act
+                    -- opening_set(person, view) runs INSIDE choose; ARCH §3.2
        writes: nothing but the returned Act                       class: —
 
   ══ RESOLVE ═══════════════ barrier · global
@@ -243,19 +245,39 @@ MATTER(world):
   2. wounds close or fester; bodies age one season; bodies at term die
   3. travellers advance one leg
   4. envelope: births add weight at the youngest band; deaths remove weight
-  5. the world is frozen
+  5. for each Site: condition <- clamp( condition - wear(kind(site)), 0, 1 )   # ENTROPY
+  6. the world is frozen
 ```
 
 ### §3.1 What may move here, and the one thing that emphatically may not
 
-**No social quantity moves at MATTER. No act's effect lands at MATTER. And a Site's `condition` is not
-written at MATTER at all** (`SUP:648-650`, `SUP:679-684`).
+**No social quantity moves at MATTER, and NO ACT'S EFFECT LANDS AT MATTER** (`SUP:648-650`,
+`SUP:679-684`).
 
-⚠ **That last is a correction the prior design made against itself and it must not be undone.** An
+⚠ **That refusal is a correction the prior design made against itself and it must not be undone.** An
 earlier version of `SUP` put an act's effect on a site into this barrier as a deferred write, *which is
-neither metabolism nor nature* and therefore broke the licence it had just stated. **A Site's
-`condition` is written at RESOLVE and nowhere else** — every delta to it is an act's effect. Weather
-reaches matter where #342 puts it: **inside the `yield` roll**, as `season_factor` and `(3 + d10)/8.5`.
+neither metabolism nor nature* and therefore broke the licence it had just stated. **Every act delta to
+a Site's `condition` is written at RESOLVE and nowhere else.** Weather reaches matter where #342 puts
+it: **inside the `yield` roll**, as `season_factor` and `(3 + d10)/8.5`.
+
+⚠ **BUT `condition` IS WRITTEN HERE BY ONE TERM, AND IT IS NEW: `wear`.** Jordan ruled F6 — *"if the
+world is not tended to by anyone, it will die"* — and an act-only fuse cannot say that: with
+`Σ acts = 0` an untended site **freezes**, it does not decay (`ARCH §7` F6).
+
+```
+condition(site) <- clamp( condition(site) - wear(kind(site)), 0, 1 )      # MATTER, entropy
+condition(site) <- clamp( condition(site) + Σ this season's act deltas, 0, 1 )   # RESOLVE, acts
+```
+
+**`wear` is a per-site-kind constant in `condition`'s own units** — not weather, not a multiplier, not
+a roll — and it sits in **decider-free channel 1, metabolism and nature**, beside *crops yield, wounds
+close or fester, bodies age.* **Entropy belongs with metabolism.** It is an authored per-season
+constant and it belongs in the centralized parameter table, one row per site kind; **no value is
+proposed anywhere in this suite, because none has been measured.**
+
+**The two writers do not conflict and the clamp rule survives.** §5.2's *"sum the deltas and clamp
+once"* quantifies over **concurrent** writers inside RESOLVE. `wear` is applied at MATTER, **strictly
+before** all of them, in an ordered step — so it needs no commutativity argument at all.
 
 ### §3.2 `yield` is a roll, and the roll is load-bearing
 
@@ -280,8 +302,13 @@ Carried open (`ARCH §11`).
 A body at term dies here. This is licensed decider-free channel 1 (`ABS:271-273`). It:
 
 - sets `until = tick` on every `Tenure` the person held, of every kind;
-- opens a conferral Date at the horizon its date-holder carries — the Container for a hearth or
-  heritable seat, the parent Office for an appointed one (`SUP:1200-1206`);
+- ⚠ **it does NOT open the conferral Date. THE NEXT CALENDAR DOES** — dates are the CALENDAR class and
+  MATTER may not write one (§1.2). The vacancy is a *fact*; the date is an *occasion*; CALENDAR is
+  where facts become occasions. The following CALENDAR schedules it at the horizon its date-holder
+  carries — the Container for a hearth or heritable seat, the parent Office for an appointed one
+  (`SUP:1200-1206`). **Nothing observable changes**, because that horizon is a future date anyway;
+  what changes is that no step writes outside its class. *An earlier version had MATTER open it, which
+  its own write matrix forbade.*
 - resolves the hearth's `succeed` pointer, which is *"the only route by which anything changes hands"*
   in the prior design and is decider-free (`REV:833-836`).
 
@@ -327,11 +354,14 @@ crier reaches him, and if the crier's version is distorted his need is computed 
 
 ```
 deliberate(person, frozen_world) -> Act:
-  sensation <- sense(person, frozen_world)
+  sensation <- sense(person, frozen_world)       # two floats. NOT a decision function
   question  <- the question the person is asking this season
   view      <- assemble(person, question)        # at most K claims, by salience
-  openings  <- opening_set(person, view)         # candidates, from BELIEF
   return      choose(person, view, sensation)    # exactly one Act
+                 |
+                 +-- INSIDE choose: openings <- opening_set(person, view)   # BELIEF
+                     and the pick among them.  opening_set takes NO third argument,
+                     which is why choose's signature is (Person, View, Sensation).
 ```
 
 ### §4.1 View assembly
@@ -357,22 +387,48 @@ at high confidence, and its salience is one twentieth of an agreeing claim's. **
 he is not lying; he is not thinking of it.** The floor is 0.05 rather than 0 so a devastating firsthand
 contradiction can still cross. **What is attenuated is retrieval, not value** (`SUP:248-263`).
 
-⚠ **`relevance(c, q)` is never defined anywhere in the corpus, and `q`'s type, origin and lifetime are
-unstated.** `assemble` takes a question; `choose` does not. **Where the season's question comes from is
-open** (`ARCH §11`). The defensible default, stated as a default and not as a ruling: the question is
-the person's highest-ranked unmet need, which makes assembly need-directed and gives `q` a producer.
-**Nothing in the corpus says this and it is not asserted as canon.**
+**`relevance(c, q)` IS DEFINED, in full, at `03:342-344`:**
+
+```
+relevance(c, q) = 1.0  if (subject, predicate) is in q's read-set
+                  0.3  if c's subject is within two graph edges of a read-set referent
+                  0    otherwise
+```
+
+⚠ **An earlier version of this document said it was "never defined anywhere in the corpus", in five
+places across three files. That was false, and the cause is recorded at `ARCH §12.8`.**
+
+**What IS open is `q`'s PRODUCER.** `assemble` takes a question; `choose` does not. The defensible
+default, stated as a default and not as a ruling: the question is the person's highest-ranked unmet
+need, which makes assembly need-directed and gives `q` a producer. **Nothing in the corpus says this
+and it is not asserted as canon.**
+
+**And `03:377-407` supplies what happens when relevance is 0 for everything — the EMPTY VIEW, which is
+a shipped four-rung ladder this loop must run and an earlier version of this document did not carry:**
+**(1)** a marks-based expectation, deposited at 0.35 with source `inferred(MARKED(subject, m))` —
+*"prejudice as the literal default of an empty ledger"*, and **deposited with its root, so it can be
+refuted by investigation like any other claim**; **(2)** a rumour draw at 0.2 from the place's ambient
+claim; **(3)** what the person believes his neighbours hold — **an inference over claims he actually
+holds about their expressed positions**, at 0.25, never the container's true aggregate; **(4)** if all
+three are silent, **the option leaves the person's act list.**
+
+> **IGNORANCE NARROWS THE OPTION SET. UNCERTAINTY WIDENS THE OUTCOME DISTRIBUTION. THE ENGINE MUST
+> NEVER SUBSTITUTE ONE FOR THE OTHER** (`03:405-407`).
+
+**Ties in view assembly break deterministically** — firsthand > told_by > inferred, then more recent,
+then lower claim id — *"because randomness here would make a person's beliefs shimmer between two
+decisions in the same hour"* (`03:369-372`).
 
 ### §4.2 `opening_set` is belief, and it can be wrong
 
-> **`opening_set(person, view)` is computed inside `choose`'s scope, from the person's own ledger,
+> **`opening_set(person, view)` is computed INSIDE `choose`, from the person's own ledger,
 > stance, capability, `Sensation`, and the remits they hold. `verbs(site, c)` — the world's actual verb
 > gate — is READ ONLY BY `resolve`.**
 >
 > **A person may therefore attempt a verb the world has already removed, and discover the harbour
 > silted.**
 
-That is better fiction than a menu that greys out, and `SUP:1218-1221` already argues for it: *"the
+That is better fiction than a menu that greys out, and `SUP:1227-1228` already argues for it: *"the
 people who notice first are the ones whose practice used that verb."* The seam is also what makes the
 silting **legible without a gauge** — you find out by trying, or by being told, and both are ordinary
 epistemics.
@@ -650,7 +706,8 @@ exactly as descending to *r* would. **Descending is irrevocable and public** (`S
 court; he may not *speak* unless a person with standing carries his petition. **Caste is not a locked
 door; it is a room you may stand in silently** (`SUP:1580-1583`). `admissible_source` is a **door for
 evidence, not a grade**: a venue that hears instruments only cannot be reached by forty hamlet
-witnesses — which is where `documented(record_id)` (`ARCH §5.4`) becomes load-bearing.
+witnesses — which is where `research`'s `told_by(record, …)` with a **verified** rootprint
+(`03:528`) becomes load-bearing, and it is why *"archives are the only non-person root-bearers"*.
 
 > **Where the fault check is not decisive and the venue's `decision_rule` requires a contested judgment,
 > that judgment is a `contest`, and a contest subdivides the tick.** That is the seam at `ARCH §8`. The
@@ -672,16 +729,18 @@ burying only wins outright where the obstructor controls every venue that could 
 > a named person, on a named fault — which is exactly how heresy, attainder and the discrediting of a
 > witness actually work.
 
-**Plus the documentary limb.** `efface` a **Record** — a register, a charter, a deed — which is matter
-at a Container. Every claim whose `source` is `documented(that record_id)` loses its corroboration.
+**Plus the documentary limb, and it needs NO fifth claim source.** `efface` a **Record** — a register,
+a charter, a deed — which is matter at a Container. Every claim sourced `told_by(that record, …)`
+(`03:528`) loses its corroboration, because the token it copied is void. ⚠ **An earlier version of this
+document added a fifth constructor, `documented(record_id)`. It was a reinvention of shipped machinery
+and is withdrawn** (`ARCH §5.4`).
 
 ⚠ **AND THE CONFIDENCE DROP IS GATED, or arson is a §14 row 3 broadcast.** **The drop fires for a holder
 only when a claim that the record is gone lands in THAT holder's ledger** — at WITNESS, in whatever
 season the news arrives. **Arson's effect map is the news map**, exactly as a death's is.
 
-⚠ **The prior brief's version of this limb is withdrawn in full.** It had `efface` drop confidence *"for
-everyone whose claim cites it"* when **no claim could cite a record** — the source set is closed at four
-(`SUP:243-245`) and none is documentary — and it claimed *"`SAID` claims already make a recantation
+⚠ **The pre-v2 brief's version of this limb is withdrawn in full.** It had `efface` drop confidence *"for
+everyone whose claim cites it"* with no gate at all, and it claimed *"`SAID` claims already make a recantation
 collide"*, which is false: collision needs *same subject, same predicate form, **same arguments***
 (`SUP:229`), and `SAID(A, ¬C, s12)` differs in arguments from `SAID(A, C, s12)`.
 
@@ -772,14 +831,23 @@ incompatible values. Collision is computed at deposit time, in ONE LEDGER AT A T
 (`SUP:228-229`). There is no world-level consistency check and there is nothing that could perform one.
 
 **The predicate vocabulary is CLOSED; the referent space is OPEN** (`SUP:231-234`), because collision,
-entailment and relevance are all functions of the predicate's *form*. ⚠ **The closed vocabulary's actual
-membership is enumerated nowhere; `SAID(Aldwin, C, season 12)` is its one worked example.** Carried
-open.
+entailment and relevance are all functions of the predicate's *form*. **The membership is enumerated in
+full at `03:66-79` — FOURTEEN forms**, listed at `03_COMPENDIUM.md` §2.7. ⚠ *An earlier version of this
+document said the membership was enumerated nowhere. It was, in the document that owns it.*
 
-**There is no null source, and `witness` is the only operation that mints a root token**
-(`SUP:243-245`). `documented(record_id)` does not break that: a person acquires it by **reading the
-record**, which is an act, which resolves to an Event, which `witness` turns into a token
-(`ARCH §5.4`).
+**One entailment table, no grammar** (`03:104-108`): `LOCATED` at a district entails `LOCATED` at its
+settlement; `ALIGNED` at member entails `ALIGNED` at sympathiser; `HOLDS_STANCE` at *primary* entails
+*held*; **a narrower interval entails nothing about a wider one but is contradicted by a wider
+denial.** And **negation is a VALUE, not a form**, which is why assert and deny land on the same row.
+
+**There is no null source, and `witness` is the only operation that MINTS a root token**
+(`SUP:243-245`, `03:411-413`). **Four constructors and no fifth**, and `03:432-464` proves the closure
+rather than asserting it: `firsthand` mints and requires an event and a witness with vantage;
+`told_by` **copies** tokens and cannot create them — including `told_by(record, …)`, whose rootprint is
+*verified* rather than *asserted*; `inferred` **unions** premises and **refuses the inference if the
+union is empty**; `firsthand_via_knot` **reuses the originating event's id**, so five partners feeling
+one rupture supply one token. **There is no path to an empty ancestry, so repetition cannot become
+corroboration**: a rumour told three times hashes to one synthetic root and the multiplier stays 1.0.
 
 ### §6.3 Decay and eviction
 
@@ -796,8 +864,11 @@ a fourth.
 
 ⚠ **The eviction ranking is therefore a DIFFERENT FUNCTION from the retrieval ranking.** Retrieval's
 `salience` carries `relevance(c, q)` and `stanceweight`; **eviction has no question `q` in scope at
-all**, and `relevance` is undefined everywhere in the corpus. The prior design says only *"evict lowest
-salience"* (`SUP:654`), which is not computable at eviction time.
+all** — and `relevance(c, q)` is *defined* (`03:342-344`) precisely **against a question**, so with no
+`q` it has no value. The prior design says only *"evict lowest salience"* (`SUP:654`), which therefore
+**names a function that cannot be evaluated at the point it is invoked.** That is the defect, and the
+two-term ranking is the repair. ⚠ *An earlier version of this document said `relevance` was undefined
+in the corpus; the true and narrower claim is the one above.*
 
 **This is forgetting, not a data limit** (`SUP:654`).
 
@@ -807,7 +878,7 @@ salience"* (`SUP:654`), which is not computable at eviction time.
 |---|---|
 | deposit into more than one ledger per call | `witness` is per person; the collection form does not exist |
 | deposit a claim with no source | `SUP:243-245` |
-| mint a root token anywhere but here | same; `investigate` therefore resolves to an Event the actor witnesses, rather than depositing directly (`ARCH §5.11`) |
+| mint a root token anywhere but here | same. The six investigative acts do not breach it: `examine`, `surveil` and `Thread-Read` register **facets** `resolve` emitted; `reconstruct` **unions** existing roots and refuses an empty union; `interview` and `research` produce `told_by`, which **copies** (`03:432-464`, `ARCH §5.11`) |
 | reach into another person's ledger | R-2, `SUP:379-380` |
 | write anything but a ledger | wrong class |
 | evict on salience | §6.3 |
@@ -964,9 +1035,9 @@ faction gained a `tier` field.
 |---|---|
 | **CALENDAR** | the chapter sitting fires. Its door reads `admissible_source = witnessed deed only` — **so a document cannot reach it**, which is why the Löwenritter is caste-open in fact and not by policy (`SUP:1589-1591`) |
 | **MATTER** | ordinary |
-| **DELIBERATE** | an investigator's `Sensation.standing` is low and his `commitment` need — read from his **view** — is unmet: he holds a claim that a steward reported compliance that was never rendered, and his own proposition says the steward is lying. `opening_set` offers `investigate`. He chooses it. **It costs his season, like everything else.** The steward, elsewhere, chooses `tell` — a distortion |
+| **DELIBERATE** | an investigator's `Sensation.standing` is low and his `commitment` need — read from his **view** — is unmet: he holds a claim that a steward reported compliance that was never rendered, and his own proposition says the steward is lying. `opening_set` offers the six investigative acts. He chooses **`interview`** — cheap, fast, and it leaks. **It costs his season, like everything else.** The steward, elsewhere, chooses `tell` — a distortion |
 | **RESOLVE** | stratum 2: the chapter's convener spends **his** act on `compose_agenda`, admitting the top `capacity(date)` items **from the petitions he holds a claim of**, and omitting one. That omission **is a drop and deposits as one**. The determination runs: a party pleads a Ground whose `support[]` cites claims he does not hold — **F7, rootless ground, severity `strike`** — and the ground is dead **at every venue for everyone**. That is the purge limb, working. Stratum 3: `investigate` resolves against a `resistance_pool` composed from the concealment of what is hidden, in the same dice-equivalent unit as a lock's fineness. **Costed Success**: something comes back, and something is given up for it |
-| **WITNESS** | `investigate` emitted an **Event the actor was present at**, so `witness` mints `firsthand(event_id)` into his ledger — **not** a direct deposit, which would make `investigate` a second root-token minter beside `witness`. The steward's telling reaches four other ledgers at a distortion. **Two witnesses of one event now disagree**, which is one of the four structural tests and has never been run |
+| **WITNESS** | `interview` yields the target's **`SAID` row** — a `told_by` claim, which **may be a lie** — plus, unconditionally, `INTENDS(the investigator, investigate X)` deposited **in the target's own ledger**, tellable onward (`03:527`). **The target now knows what he is asking.** No root token is minted: `told_by` copies. The steward's telling reaches four other ledgers at a distortion. **Two witnesses of one event now disagree**, which is one of the four structural tests and has never been run |
 | **CENSUS** | the struck party holds no Knot, no office, no live petition — but three ledgers still name him, so he persists. **A person persists exactly as long as somebody remembers them** |
 
 ---
@@ -977,23 +1048,30 @@ What may be written, by which step, and what happens if it is written elsewhere.
 
 | written thing | CALENDAR | MATTER | DELIBERATE | RESOLVE | WITNESS | CENSUS |
 |---|---|---|---|---|---|---|
-| `Date`, `DocketItem` | **yes** | no | no | **yes** — `carry` mints an item, `convene` sets a date | no | no |
+| `Date`, `DocketItem` | **yes**, including every conferral date a vacancy opens | **no** — a death sets `until`; the DATE waits for CALENDAR | no | **yes** — `carry` mints an item, `convene` sets a date | no | no |
 | larders, `stores` | no | **yes** — metabolism | no | **yes** — `transfer`, `levy` | no | no |
 | bodies, ageing, death | no | **yes** | no | no — killing is an act's effect, and that is ACTS class | no | no |
 | travel legs | no | **yes** | no | **yes** — a movement act, stratum 1 | no | no |
 | `yield` | no | **yes**, and only here | no | no | no | no |
 | envelope weight | no | **yes** — births, deaths | no | no | no | **yes** — individuation |
-| `condition(site)` | no | **no, and emphatically** | no | **yes**, and only here | no | no |
+| `condition(site)` | no | **yes — `wear` ONLY** | no | **yes** — every act delta, and only here | no | no |
 | `Tenure` | no | **yes** — `until` on death | no | **yes** — `confer`, `revoke`, `mint`, `efface` | no | no |
 | Person, Container, Office, Site existence | no | **yes** — death only | no | **yes** — `mint`, `efface` | no | **yes** — individuation |
 | `stance` | no | no | no | **yes** — an act's effect | no | no |
 | ledger | no | no | no | no | **yes**, own only | no |
 | a returned `Act` | no | no | **yes**, and nothing else | — | no | no |
 
-**Any cell not marked `yes` is a write-class violation.** The three worked cases where the prior design
-got a cell wrong: `condition` at MATTER (corrected at `SUP:679-684`); individuation inside the
-per-person map (corrected here); and the reckoning operations, which had no class at all (corrected
-here by naming the INTERIOR class).
+**Any cell not marked `yes` is a write-class violation.** Four worked cases where a cell was wrong:
+an **act's effect** on `condition` at MATTER (corrected at `SUP:679-684`, and still forbidden — the
+MATTER cell above is `wear` and nothing else); individuation inside the per-person map (corrected
+here); the reckoning operations, which had no class at all (corrected here by naming the INTERIOR
+class); and **a death opening a conferral Date at MATTER, which this document did in its own first
+version against its own matrix** (corrected at §3.3).
+
+⚠ **`condition` now has TWO writers in one season, and the clamp rule survives it.** §5.2's *"sum the
+deltas and clamp once"* quantifies over **concurrent** writers inside RESOLVE, where order is not
+defined. `wear` is applied at MATTER, **strictly before** any of them, so it needs no commutativity
+argument at all: one ordered subtraction, then one summed-and-clamped batch.
 
 ---
 
@@ -1050,8 +1128,9 @@ not caught by a type.
 **Open, carried rather than answered** — the full list is `ARCH §11`; these are the ones that bite
 *inside the loop*:
 
-1. **Where the season's question `q` comes from**, and what `relevance(c, q)` is. §4.1 names a
-   defensible default and does not assert it.
+1. **Where the season's question `q` comes from.** §4.1 names a defensible default and does not assert
+   it. ⚠ **`relevance(c, q)` is NOT open — it is defined at `03:342-344`.** What has no producer is
+   `q`, and that is what makes `SUP:654`'s *"evict lowest salience"* uncomputable at eviction.
 2. **Where the channel store lives.** §7.3. CENSUS runs without it; the *plausible past* does not.
 3. **`season_factor(territory)`'s distribution.** §3.2. MATTER rolls it every season and nothing states
    its range, mean, shape or tail.
@@ -1064,7 +1143,10 @@ not caught by a type.
    CALENDAR can schedule nothing for it. No floor is specified.
 7. **The `exclude` limb of the anti-leverage row**, now widened by `efface` across four object classes.
    Inherited; no bound is invented.
-8. **The closed predicate vocabulary's membership**, which WITNESS's collision check quantifies over.
+8. ⚠ **STRUCK — the predicate vocabulary IS enumerated**, fourteen forms at `03:66-79`. This row
+   previously called it open. See `ARCH §12.8`.
+9. **The ratio of `wear` to a restoration act's effect** — Jordan's F6 ruling makes it the world's
+   whole difficulty curve, and **no number in this design has been measured.**
 
 **Stated limits:**
 

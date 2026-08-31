@@ -141,7 +141,7 @@ else.
 ### §2.1 The four carriers — things that exist
 
 ```
-Person    := (id, address, marks, capability, stance, ledger, ties)
+Person    := (id, weight, marks, capability, stance, ledger, ties)   -- weight defaults to 1
 Container := (id, kind, stake[], judging_set_rule, dates[], matter, envelope)
 Office    := (id, post, container?, remit, conferral, revocation, establishment,
               dates[], upkeep)
@@ -152,7 +152,7 @@ Site      := (id, container, kind, condition, drawers[])
 rung)"* and `ABS:50` carries it forward. `Node` would be a third name for one object — the failure
 `CLAUDE.md` §4 records this repository having paid for once — **and it collides head-on with the port
 target**: `Node` is Godot's scene-tree base class, written `root (Node)` at
-`godot/scene_tree_architecture.md:15`, and `CLAUDE.md` §6 makes the port the live destination. Two
+`godot/scene_tree_architecture.md:16`, and `CLAUDE.md` §6 makes the port the live destination. Two
 independent grounds, one word, no cost to using it.
 
 ⚠ **`Site` IS A CARRIER, and the brief that deleted it is reversed.** The deletion made `Site` matter
@@ -475,12 +475,22 @@ elite.
 > Individuation draws a Person out of a cohort; **the envelope only supplies new weight.**
 
 ```
-Cohort   := (id, container, weight, marks, capability, stance, ledger, ties)
+Person   := (id, weight, marks, capability, stance, ledger, ties)     -- ONE tuple. weight >= 1
 Envelope := (container, counts_by_age_band[], marks_bundle, capability_distribution)
 ```
 
-A Cohort is a Person record at weight > 1 — **no conversion operation exists** (`02:555`), which is
-what *one type, not two* means mechanically. `View` for a cohort is `K = 3` (`SUP:650`).
+> ⚠ **THERE IS ONE TUPLE, NOT TWO, AND AN EARLIER VERSION OF THIS DOCUMENT DECLARED TWO WHILE CLAIMING
+> NO CONVERSION EXISTS. That contradiction is the anti-elite-politics guarantee, and it may not be left
+> standing.** `02:553-555`: *"When weight reaches 1, the record **is** a person — no conversion
+> operation."* **A cohort is a Person record at `weight > 1`. Individuation is `weight −= n` plus a
+> child record; nothing is converted, because there is nothing to convert between.**
+>
+> **`address` is NOT a field on either.** It is the derived view of the `contain` Tenure (§2.1), and
+> that is what unified the two tuples: the earlier `Cohort` carried a `container` field where `Person`
+> carried an `address`, which was **two spellings of one edge on two records that are one record.**
+
+`View` for a record at `weight > 1` is `K = 3` (`SUP:650`) — a parameter of the record, not a second
+type.
 
 ⚠ **The ownership claim is this document's, and it is stated as a ruling rather than quoted.**
 `09:533` says *"**the world holds** a demographic envelope per containment node"* — the world, not the
@@ -613,7 +623,7 @@ world state**. The resolution is to split the one name into the two functions it
 > **A person may therefore attempt a verb the world has already removed, and discover the harbour
 > silted.**
 
-That is better fiction than a menu that greys out, it needs no new primitive, and `SUP:1218-1221`
+That is better fiction than a menu that greys out, it needs no new primitive, and `SUP:1227-1228`
 already argues for it: *"the people who notice first are the ones whose practice used that verb."*
 It is also `opening_set`'s own promise kept — *"exactly one routine, and it is the same routine that
 lists any person's available acts at any time"* (`SUP:1134-1135`) — because there is now exactly one
@@ -703,8 +713,12 @@ eviction the Templar's exonerating claim is the lowest-salience row in his ledge
 `SUP:262-263`'s *"what is attenuated is retrieval, not value"* stops being true within a few seasons.
 Those two quantities are also the only clock-driven ones the design admits for memory (`ABS:280`,
 citing `09:562-564`). **The eviction ranking is therefore a DIFFERENT function from the retrieval
-ranking** — retrieval's `salience` carries a `relevance(c, q)` term (`SUP:254`) and **`relevance` is
-never defined anywhere in the corpus**, while eviction has no question `q` in scope at all.
+ranking** — retrieval's `salience` carries a `relevance(c, q)` term (`SUP:254`), and **`relevance` is
+defined against a QUESTION**: `1.0` if `(subject, predicate)` is in `q`'s read-set, `0.3` if the
+claim's subject is within two graph edges of a read-set referent, `0` otherwise (`03:342-344`).
+**Eviction has no question `q` in scope at all**, so `salience` is not computable there and
+`SUP:654`'s *"evict lowest salience"* names a function that cannot be evaluated at the point it is
+invoked. That is the defect, and the two-term ranking is the repair.
 
 ---
 
@@ -743,11 +757,19 @@ births add weight at the youngest band, deaths remove it. This is licensed decid
 *larders consume, crops yield, wounds close or fester, bodies age* (`ABS:271-273`, citing `09:55-59`).
 
 **A named person's death is the same event at weight 1**, and it is the one place a Person leaves
-existence without an act. It fires `until = tick` on every Tenure they held, opens a conferral date at
-the horizon its date-holder carries (`SUP:1200-1206`), and — critically — **propagates at telling
-speed, not in the same tick**: every standing dispensation the holder issued keeps its terms and loses
+existence without an act. It fires `until = tick` on every Tenure they held — which is a `Tenure`
+write in the matter class, and the only one — and — critically — **propagates at telling speed, not in
+the same tick**: every standing dispensation the holder issued keeps its terms and loses
 its complier *as and when a claim of the death reaches each person* (`SUP:1188-1198`). A withheld
 death-notice is therefore one of the most powerful acts in the game.
+
+⚠ **THE CONFERRAL DATE IS SCHEDULED AT THE NEXT CALENDAR, NOT AT MATTER.** An earlier version had death
+open the date in the same step, which **MATTER's own write class forbids** — dates are the CALENDAR
+class (§4). The vacancy is a *fact*; the date is an *occasion*; CALENDAR is where facts become
+occasions. So: MATTER sets `until`, and the following CALENDAR reads the vacancy and schedules a
+conferral Date at the horizon its date-holder carries — the Container for a hearth or heritable seat,
+the parent Office for an appointed one (`SUP:1200-1206`). **Nothing observable changes**, because that
+horizon is a future date in any case; what changes is that no step writes outside its class.
 
 ### §5.3 Character generation
 
@@ -805,20 +827,33 @@ design's 2,017 lines; `recant` occurs zero times.
 > a witness actually work. Four of the twelve faults carry `strike`: F5 repetition, F7 rootless
 > ground, F10 speaking without standing, F11 incoherent assertion (`SUP:1536-1540`).
 
-**Plus one deliberate addition, argued rather than assumed: a fifth claim source.**
+⚠ **AND THE DOCUMENTARY LIMB NEEDS NO FIFTH CLAIM SOURCE. AN EARLIER VERSION OF THIS DOCUMENT ADDED
+ONE — `documented(record_id)` — AND IT WAS A REINVENTION OF SHIPPED MACHINERY. IT IS WITHDRAWN.**
+
+`03:528` gives `research(archive, question)` producing **`told_by(record, …)` with VERIFIED
+rootprints**, and states outright that **archives are the only non-person root-bearers.** So the
+closed four-source set already carries records, through `told_by`, with the one property the purge
+needs — a citation edge from a claim to a document. The addition bought nothing and cost the design's
+most emphatic closure claim (`03:411-413`, `SUP:243-245`).
+
+> **THE SOURCE SET IS FOUR AND STAYS FOUR.** `firsthand(event_id)` · `told_by(person | record,
+> handle)` · `inferred(claim_id…)` · `firsthand_via_knot(event_id)`. **A record is a speaker that
+> cannot lie and cannot be interviewed** — its rootprint is *verified* where a person's is *asserted*,
+> which is the entire difference and it is already written.
+
+**A Record is still an object**, because `efface` needs a target and `admissible_source` needs a thing
+to admit:
 
 ```
-Claim.source ∈ firsthand(event_id) | told_by(person, handle) | inferred(claim_id…)
-             | firsthand_via_knot(event_id) | documented(record_id)
-Record       := (id, container, kind, forgery_quality, subject_matter)
-                kind ∈ register | charter | deed | roll | letter
+Record := (id, container, kind, forgery_quality, subject_matter)
+          kind ∈ register | charter | deed | roll | letter
 ```
 
-**The design already needs it twice.** `admissible_source` is a Venue door — *"a venue that hears
-instruments only cannot be reached by forty hamlet witnesses"* (`SUP:1589-1591`) — and *a document's
-forgery quality* is a named resistance pool (`SUP:524`). With `documented`, a register is `efface`-able
-matter at a Container, forgery has a home, and burning the archive drops confidence **only for claims
-that actually cited it** — no reach into any ledger.
+**It earns its place twice over in shipped text.** `admissible_source` is a Venue door — *"a venue that
+hears instruments only cannot be reached by forty hamlet witnesses"* (`SUP:1589-1591`) — and *a
+document's forgery quality* is a named resistance pool (`SUP:524`). A register is therefore
+`efface`-able matter at a Container, and **burning the archive drops confidence only for claims that
+actually cited it** — no reach into any ledger, and R-2 is untouched.
 
 ⚠ **AND THE CONFIDENCE DROP IS GATED ON A CLAIM, or arson becomes a §14 row 3 broadcast.** Without the
 gate, a burned register drops a fjord fisher's confidence in the same tick, six weeks before news of
@@ -826,10 +861,12 @@ the fire could reach him. **The drop fires for a holder when a claim that the re
 THAT holder's ledger** — which makes arson's effect map onto the news map, exactly as vacancy does
 (`SUP:1188-1198`).
 
-⚠ **`witness`'s monopoly on root tokens survives this.** `documented(record_id)` is not a root token: a
-person acquires it by **reading the record**, which is an act, resolved into an Event, and `witness`
-mints the token from that Event. The source constructor records *what was read*, exactly as
-`told_by(person, handle)` records *who spoke*.
+**Forgery is `plant`, and it is shipped** (`03:511`). `plant(actor, instrument, facet, when_asserted)`
+produces a document whose root token was minted by the planting act but which asserts the root of a
+genuine issuing. **Until discovered it is true for every purpose that reads claims**, because there is
+no true-state path in `choose`. Discovery is `reconstruct` succeeding on the forged root; then every
+holder of a claim sourced to it re-runs corroboration with the token void, and **legitimacy flips
+retroactively for exactly the people who learn, at the speed the news travels** — not as a global flag.
 
 ### §5.5 The up-stroke — demands aggregate upward
 
@@ -1039,32 +1076,66 @@ occupies that is not an office"* was struck (`REV:869-874`); what the design lac
 
 ### §5.11 Field investigation
 
-⚠ **The detective seat exists nowhere in the prior design except as one sentence with no verb, no
-cost, no obstacle owner and no resolution path** (`SUP:1715-1718`). It is built here entirely from
-existing parts.
+⚠ **THIS SECTION WAS WRITTEN AGAINST A DOCUMENT NOBODY HAD READ, AND IS REPLACED RATHER THAN PATCHED.**
+An earlier version said the detective seat *"exists nowhere in the prior design except as one sentence
+with no verb, no cost, no obstacle owner and no resolution path"* and invented a single `investigate`
+verb *"built here entirely from existing parts"*. **Field investigation is the declared subject of
+`03_knowledge_telling_investigation.md`, which ships six acts, an obstacle owner, a derived query, a
+counter-investigation layer and a playable-with-no-office section.** `SUP:1715-1718`'s one sentence is
+a *summary* of that document, not the design's whole treatment. The cause is recorded at §12.8.
+
+**The six acts ship at `03:526-531`.** Every one is available to any person — *"the substrate's rule
+that action eligibility never consults office binds here without exception"* (`03:521-522`).
+
+| act | pool | produces | cost / risk |
+|---|---|---|---|
+| **`examine`**(place\|object\|body) | Acuity + practice, vs `retention` | `firsthand` facets still persisting | time; **you are witnessed examining** |
+| **`interview`**(person, question) | Charisma\|Attunement vs their obstinacy and stance | their `SAID` row — a `told_by` claim, **which may be a lie** | **they learn what you are asking**: deposits `INTENDS(you, investigate X)` in their ledger, tellable onward |
+| **`research`**(archive, question) | Focus + literacy practice | **`told_by(record, …)` with VERIFIED rootprints** and old `when` — *"archives are the only non-person root-bearers"* | access is an **admission** gate held by persons with stances |
+| **`surveil`**(person\|place, duration) | Agility\|Focus, opposed by the target's concealment | `firsthand` `LOCATED`/`DID`/`SAID` over the whole interval at good vantage | duration; **exposure accrues to YOU** |
+| **`reconstruct`**(claim-set) | Acuity + Will | `inferred` claims — `CAUSED`, `CONTRADICTED`, `INTENDS(deceive)` — and **root identification**, resolving an opaque token or a synthetic root to a named person | no world risk; **the risk is that a WRONG reconstruction deposits at real confidence and is acted on** |
+| **`Thread-Read`**(person\|place\|object) | Thread Pool `⌊TS/10⌋` + Attunement | `firsthand` **rendering-side** facets | Coherence risk; Knot strain if remote; detectable by other sensitives; **it produces claims most people cannot be told** |
+
+**The obstacle owner exists and it is not a person's whim.** `03:496-504`: *"Setting the threshold →
+the world sets it, as facet retention."*
 
 ```
-investigate(actor, question, subject) -> Event
-   subject ∈ Person | Site | Container | Record | Tenure | Claim
-   cost:            the actor's one act for the season
-   obstacle:        composed per SUP:517-528 — the concealment of what is hidden, as a
-                    resistance pool in the same dice-equivalent unit as a lock's fineness
-   degree:          SUP:540-546 decides how much comes back and at what cost
-   OUTPUT:          an Event the actor WITNESSES
+retention(f) = base(facet_kind) × 2^(−age / halflife(facet_kind)) × (1 − concealment_spend)
 ```
 
-> **`investigate` RESOLVES TO AN EVENT THE ACTOR WITNESSES. It does not deposit claims directly.**
-> Otherwise it becomes a second root-token minter alongside `witness`, whose monopoly `SUP:243-245`
-> declares. The act resolves; an Event is emitted; the actor is present at it by construction;
-> `witness` mints `firsthand(event_id)` into his ledger, exactly as it does for every other act.
+**Nobody adjudicates difficulty. The world already emitted what it emitted, and time is eating it.**
 
-⚠ **`spend` is deleted.** The prior brief gave `investigate` a fourth argument naming an unnamed third
-capacity quantity, next to a live fork about capacity. Under §7 it costs **the season's one act**, like
-everything else.
+**The misleading clue also has an owner.** `plant(actor, place | object, facet, when_asserted)`
+(`03:511`) writes a facet **whose root token is minted by the planting act**, not by the event it
+purports to evidence — so a sufficient `reconstruct` finds that the root of the "evidence" is a
+person's act at a later hour. **The misleading clue now has a liar with a motive**, and `plant` is also
+how a forged instrument is made.
 
-**The person he questions may lie**, which is a first-class object at `SUP:238`. **This is the only way
-the design's central disputable object is ever settled** — *"Settling it requires a named person to go
-and look, and that person can be deceived"* (`SUP:1699-1700`).
+**One derived query, and no score.** `trace(person, claim)` (`03:538`) — the provenance tree that
+person can currently reconstruct from the SAID rows, rootprints and collision records **already in
+their ledger.** It is a view, not a store, and *"it is only as good as what they went and got."*
+
+> **INVESTIGATION'S CURRENCY IS THE `SAID` ROW, WHICH IS WHY IT NEEDS NO SCORE.** Because a telling
+> deposits `SAID(speaker, content, when, place)` **unconditionally, on every outcome** — *"disbelieving
+> a man does not unhear him"* — a diligent interviewer accumulates a graph of who said what to whom.
+> **There is no clue counter, no case object, no investigation skill, and no threshold anyone sets.**
+
+**Each act costs the actor's one act for the season** (§7). ⚠ **`spend` is deleted** — an earlier
+version gave `investigate` a fourth argument naming an unnamed third capacity quantity.
+
+**Playable with no office** (`03:542-548`): `research` is the only gated act, and its gate is an
+admission act at a community held by persons. A hamlet fisher routes around it three ways — interview
+an archivist, use a Knot to someone with access, or steal. **Every gate is a person, so every gate has
+a price and a grievance.**
+
+⚠ **AND THE SEAM RULE STANDS, RESTATED AGAINST THE SHIPPED ACTS.** Four of the six deposit `firsthand`
+or `inferred` claims directly into the actor's own ledger. **That does not create a second root-token
+minter**, because `03:411-413` is explicit that `witness` is the only operation that MINTS: `examine`,
+`surveil` and `Thread-Read` register **facets**, which `resolve` emitted and `witness` turns into
+tokens; `reconstruct` **unions** existing roots and refuses an inference with an empty union;
+`interview` produces a `told_by`, which copies tokens; and `research` produces a `told_by(record, …)`,
+which copies a verified one. **Four constructors, no fifth, and no path to a fresh token outside
+`witness`.**
 
 ### §5.12 Clocks, pressures, threats, world churn
 
@@ -1108,10 +1179,49 @@ someone.
 · the confidence of a memory decaying · the calendar, **lapse only**. **There is no fifth, and no
 threshold that fires an outcome.**
 
-The slow fuses are **act-only**: `condition(site) = clamp(condition + Σ this season's resolved deltas,
-0, 1)`, written at RESOLVE and nowhere else, with `base(H)` constant and weather living in `yield`
-where it belongs (`SUP:1329-1336`). **A site that decays with nobody touching it must be a matter
-event, not a term in the accumulator** — a real narrowing, taken deliberately.
+⚠ **THE SLOW FUSES ARE NO LONGER ACT-ONLY. JORDAN RULED F6 AND THE RULING REQUIRES ONE CONSTANT.** An
+earlier version of this document carried `SUP:1352-1356`'s narrowing verbatim — *"a fuse that is
+act-only cannot model a site that decays with nobody touching it"* — and Jordan has now ruled that cost
+unacceptable, because **untended decay IS the world model** (§7 F6). Under act-only, `Σ acts = 0`
+leaves `condition` exactly where it was, forever: **an untended site does not die, it FREEZES**, and
+*"if the world is not tended to by anyone, it will die"* is unwritable.
+
+> **THE CORRECTED FUSE. One term, dimensionally clean, and weather stays where it was put.**
+> ```
+> condition(site) ← clamp( condition(site) + Σ (this season's resolved deltas) − wear(kind(site)), 0, 1 )
+> ```
+> **`wear` is a per-site-kind constant in the SAME UNITS as `condition`** — a fraction of full
+> condition per season. **It is not weather, not a multiplier, and not a roll.** `season_factor` and
+> `(3 + d10)/8.5` remain exactly where `SUP:1322-1336` put them, inside `yield`. **The units error that
+> section was written to prevent is not reintroduced; only the sign is.**
+
+⚠ **IT IS AN AUTHORED PER-SEASON CONSTANT, AND THAT IS SAID OUT LOUD.** `SUP:1345` congratulates the
+design on having *"no hidden per-season constant anywhere in the fuse"*. This ruling **requires one**.
+The honest position is that it is now *justified rather than hidden*: it is the world's entropy, it is
+the quantity the whole political layer exists to argue about, and **it belongs in the centralized
+parameter table where code reads it** (`CLAUDE.md` §0.05), **one row per site kind**. `03_COMPENDIUM.md`
+§2.6 carries the table's shape; **no values are proposed here, because none has been measured.**
+
+**`wear` sits in decider-free channel 1 — metabolism and nature — and is NOT a fifth channel.** Channel
+1 already carries *"crops yield, wounds close or fester, bodies age"* (`ABS:271-273`). **Entropy belongs
+with metabolism, and this ruling is what makes that channel's name honest.** It is written at MATTER,
+in the matter class, and the accumulator's act deltas stay at RESOLVE in the acts class: **two writers,
+two classes, one clamp, applied once** (§2.4).
+
+**Why this is exactly Jordan's sentence, mechanically:**
+
+| tending | arithmetic | outcome |
+|---|---|---|
+| **nobody** | `Σ acts = 0`; condition falls by `wear` every season | it crosses a band floor, verbs leave, **the world dies and no person did it** |
+| **everyone** | `Σ restoration ≥ wear` | condition holds or climbs — **it thrives** |
+| **some** | the **distribution** of tending decides **which sites** live | **that is the game** |
+
+**And it converts D-2 into the load-bearing scarcity of the whole design.** Under act-only, restoration
+was pure gain and neglect was free. **Under `wear`, maintenance is a permanent tax and neglect has a
+price** — so *"how many person-seasons does this harbour cost to keep open"* becomes a real, computable
+political quantity, and every one of those person-seasons is drawn from the one-act budget of §7. **The
+act economy stops being a bookkeeping fork and becomes the thing factions actually fight over.** The
+two rulings were made independently and converge.
 
 ### §5.13 Conflict
 
@@ -1132,8 +1242,13 @@ build one.
 
 **The predicate vocabulary is CLOSED and the referent space is OPEN** (`SUP:231-234`) — because
 collision, entailment and relevance are all functions of the predicate's *form*, and open forms would
-make each of them authored per form. ⚠ **The closed vocabulary's actual membership is never
-enumerated anywhere; `SAID(…)` is its one worked example.** Carried open at §11.
+make each of them authored per form. **The vocabulary is enumerated in full at `03:66-79` — FOURTEEN
+forms**: `LOCATED` · `DID` · `HOLDS` · `MARKED` · `CONDITION` · `ALIGNED` · `TIED` · `QUANTITY` ·
+`IN_FORCE` · `INTENDS` · `SAID` · `CAUSED` · `CONTRADICTED` · `HOLDS_STANCE`. `03:81` states the count
+and its own correction: *"Fourteen forms, and the count was twelve until this document was audited
+against its own use."* ⚠ **An earlier version of this document called the membership unenumerated with
+`SAID` as its one worked example. That was false, and the cause is recorded at §12.8.** The roster is
+carried in `03_COMPENDIUM.md` §2.7.
 
 **Memory** is the ledger, with `view(person, question) → at most K claims`,
 `K = 7 + Focus + 2 per Knot consulted − Coherence penalty` (`SUP:251-253`), and
@@ -1342,15 +1457,56 @@ individuate only when someone here hears of them.
 player who sails there finds a thinner world than home. **Falsifier:** if off-board pressure must
 respond to on-board events faster than telling-speed, no person-based model can carry it.
 
-### F6 · IS THE WORLD DYING OR MISUNDERSTOOD? **STAYS JORDAN'S.**
+### F6 · IS THE WORLD DYING OR MISUNDERSTOOD? **RULED BY JORDAN — NEITHER. IT IS IN FLUX.**
 
-Whether slow material decline is a real trajectory the player must arrest, or a fact everyone reports
-wrongly. **This one does not dissolve and should not.** It is not a missing primitive — the machinery
-is identical either way. It is a question about **what the game is about**, and the answer changes what
-a twenty-season campaign feels like without changing one line of the architecture.
+⚠ **An earlier version of this document carried F6 as the one fork that stays Jordan's, on the ground
+that the code is identical either way. Jordan has ruled it, and the ruling CHANGES THE CODE.** Verbatim:
 
-> **That is the signature of a real fork: THE CODE IS THE SAME AND THE GAME IS DIFFERENT.** The other
-> six failed that test — every one of them changed the code.
+> *"The world is neither dying nor misunderstood — rather, it is in a state of flux. If the world is
+> not tended to by anyone, it will die. If it is tended to by everyone, it will thrive. What people
+> think is the best way to tend to the world, though, and their ambitions within that world are the
+> regions that drive conflict."*
+
+**This is a THIRD answer, and neither branch offered it.** The fork as filed was *a real trajectory the
+player must arrest* against *a fact everyone reports wrongly*. **Both are fixed**: one fixes the
+world's direction, the other fixes it at zero and puts the variance in the reporting. **Jordan's answer
+makes the direction an OUTPUT — the sum of what people do about it.** That is why the fork survived
+five audits undissolved: the missing option was not a parameter, it was **a sign**.
+
+**Consequence 1 — `wear`.** §5.12 carries it: a per-site-kind constant subtracted from `condition`
+every season, in channel 1, in the parameter table. **Net cost of the ruling: one constant, zero
+objects.**
+
+**Consequence 2 — conflict has two sources, and one had no carrier.**
+
+**(a) Competing tending-doctrines need NO new object.** A doctrine is a Proposition of mood **`OUGHT`**
+scoped to a site or a class of sites — *"the seam must be worked now"* against *"the seam must be
+rested"*. `when` is a mandatory interval (`SUP:223-226`), so two such propositions with intersecting
+scope and incompatible values **collide automatically**, and §5.12's option-removal mechanism already
+forms a faction out of the people whose practice used the verb. **Shipped, and it is the design at its
+best.**
+
+**(b) ⚠ AMBITION HAD NO CARRIER ANYWHERE.** Verified by grep: `ambition` and `goal` occurred **zero
+times** across all 3,780 lines of the v2 suite before this correction.
+
+> **AN AMBITION IS AN UNSATISFIED `commit` TENURE WHOSE OBJECT IS AN `OUGHT` PROPOSITION ABOUT THE
+> HOLDER'S OWN FUTURE** — *"I will hold the praefecture"*, *"my house will hold Grauwald"*. **No new
+> object.**
+>
+> It inherits everything from primitives that already exist: it is **disputable** (others may hold
+> claims about what you want), **concealable** (`avowal ∈ {avowed, private, covert}`), **betrayable**
+> (degree → 0 is abandonment), **inheritable** (rows pass at reduced magnitude on succession), and —
+> decisively — **it already drives `choose` with no new wiring**, because *commitment — a faction
+> proposition you hold, unsatisfied* is one of the four needs (`SUP:187-190`) and reads **the view**.
+
+**So a man's ambition makes him hungry in exactly the way a shortfall does**, and both arrive at
+`choose` through machinery already specified. It is also why ambition is *contestable*: what you want
+is a claim other people hold about you, and they can be wrong about it.
+
+⚠ **THE OPEN BALANCE QUESTION THE RULING CREATES, stated because nothing here can settle it: the ratio
+of `wear` to a restoration act's effect sets the world's entire difficulty curve, and no number in this
+design has been measured.** At `wear` too high the world dies whatever anyone does; too low and
+tending is decoration. **Nothing has been run.** §11.
 
 ---
 
@@ -1375,9 +1531,10 @@ specifies the seam and nothing else.**
    depth.
 4. **It reports upward as Events, and only as Events.** Whatever happens inside a battle reaches the
    season as events people witnessed, and therefore as claims that can be false.
-5. **The three barriers count is not violated by nesting.** A nested instance is an instance, not a
-   fourth class — which is what makes *"four barriers, four write classes, exactly"* survive contact
-   with the deferred subsystems rather than constrain them.
+5. **The FOUR-barrier count is not violated by nesting.** A nested instance is an instance, not a
+   fifth class — which is what makes *"four barriers, four write classes, exactly"* survive contact
+   with the deferred subsystems rather than constrain them. ⚠ *An earlier version of this row said
+   "three barriers" against its own quotation's four — leftover text from the pre-revision loop.*
 
 Nothing else about the three is stated here, and nothing below should be read as a statement about
 them.
@@ -1400,10 +1557,10 @@ roll · 11 a personal effect on a group that is not a fraction of that group · 
 tick on standing · 13 a per-entity branch anywhere in the resolver · 14 an authored per-person
 opportunity or quest object.
 
-**The ten new objects walked below**, each against all fourteen: **`Tenure`** · **`Site` readmitted as
+**The ELEVEN new objects walked below**, each against all fourteen: **`Tenure`** · **`Site` readmitted as
 an identity** · **`Sensation`** · **`Derived`** · **`mint`/`efface`** · **the docket item** · **the
-demographic envelope** · **`Record` + `documented(record_id)`** · **`oblige`** · **`MatterKind`-typed
-`stores`**.
+demographic envelope** · **`Record` as an `efface` target and a `told_by` root-bearer** · **`oblige`** · **`MatterKind`-typed
+`stores`** · **`wear`**, added by Jordan's F6 ruling.
 
 ### 9.1 · `Tenure`
 
@@ -1430,7 +1587,7 @@ demographic envelope** · **`Record` + `documented(record_id)`** · **`oblige`**
 |---|---|
 | 1 | **Clear.** `verbs(site, c)` is **resolver-side by construction** (§3.2) and is the reason the split exists: `choose` sees `opening_set(person, view)`, which reads belief |
 | 2 | **Clear.** A person's belief about a harbour is claims about it. Nothing masks a Site into a View |
-| 3 | **Clear.** A band-edge closure is an Event witnessed **per person, by presence at the site** (`SUP:1380-1381`) |
+| 3 | **Clear.** A band-edge closure is an Event witnessed **per person, by presence at the site** (`SUP:1376-1377`) |
 | 4 | ⚠ **NOT CLEARED, and the gap is inherited rather than introduced.** Where a **cohort** witnesses a closure, `SUP:1737`'s rule requires the cohort's claim to store *"the construal spread its members would have produced"*, and it never says where that spread lives, what produces it, or what an individuating member draws from. The review could not close it inside the design's refusals and neither can this document. §11 |
 | 5 | **Clear.** Coarser conditions are computed by the draw-weighted mean and **stored nowhere**; the primary scalar lives at the Site an act names |
 | 6 | **Clear.** `condition` is **matter**, not an aggregate of persons — it exists whether or not anybody believes in it. `SUP:355-360` is the general line and the Container row owns it |
@@ -1538,7 +1695,7 @@ demographic envelope** · **`Record` + `documented(record_id)`** · **`oblige`**
 | 13 | **Clear.** One envelope per Container, one rule |
 | 14 | **Clear.** It authors no opportunity; it supplies weight |
 
-### 9.8 · `Record` and the `documented(record_id)` claim source
+### 9.8 · `Record` — an `efface` target and a `told_by(record, …)` root-bearer
 
 | # | verdict and ground |
 |---|---|
@@ -1546,7 +1703,7 @@ demographic envelope** · **`Record` + `documented(record_id)`** · **`oblige`**
 | 2 | **Clear.** The claim it produces enters the ledger and is assembled like any other |
 | 3 | ⚠ **THE ROW THIS OBJECT NEARLY CROSSED, and the gate is the fix.** An ungated `efface` of a register would drop confidence for every distant holder in the same tick — a broadcast, six weeks before news of the fire could travel. **The drop fires for a holder only when a claim that the record is gone lands in THAT holder's ledger**, which makes arson's effect map onto the news map exactly as vacancy does (`SUP:1188-1198`) |
 | 4 | **Clear.** A cohort reading a record deposits at cohort fidelity, and an individuating member draws — the same rule as any telling |
-| 5 | **Clear.** Nothing is pushed; the citation edge is the claim's own `source` field |
+| 5 | **Clear.** Nothing is pushed; the citation edge is the claim's own `source` field, which the shipped four-constructor set already carries |
 | 6 | **Clear.** A Record is a physical object with a `forgery_quality`, not an aggregate over persons |
 | 7 | ⚠ **The nearest row, and it clears by direction.** The row forbids a **knowledge value stored on the thing known**. The Record is the thing *cited*, not the thing *known*: it stores no confidence, no reader set and no truth value. **The knowledge stays in the ledgers that cite it**, which is the row's own required placement |
 | 8 | **Clear.** Reading and effacing are ordinary acts through the ordinary resolver |
@@ -1554,7 +1711,7 @@ demographic envelope** · **`Record` + `documented(record_id)`** · **`oblige`**
 | 10 | **Clear.** `forgery_quality` is a **resistance pool**, in the same dice-equivalent unit as a lock's fineness (`SUP:524`) — the obstacle side, never an addend on a person's pool |
 | 11 | **Clear for reading; the `efface` limb inherits 9.5's uncleared discrete case** |
 | 12 | **Clear.** A Record does not recover and is not ticked |
-| 13 | **Clear.** Five kinds, one rule; `admissible_source` is a **door predicate** on a Venue, not a resolver branch |
+| 13 | **Clear.** Five kinds, one rule; `admissible_source` is a **door predicate** on a Venue, not a resolver branch. ⚠ **And no new source constructor is introduced** — `research` produces `told_by(record, …)` (`03:528`), so the resolver gains no case |
 | 14 | **Clear.** A record is not an opportunity, and finding one is `investigate` |
 
 ### 9.9 · `oblige` (the seventh Tenure kind)
@@ -1595,7 +1752,29 @@ demographic envelope** · **`Record` + `documented(record_id)`** · **`oblige`**
 | 13 | **Clear.** A kind is a **type parameter**, not a branch: `transfer` reads `perishability`, `bulk` and `edible` as data. **`edible` is what stops silver satisfying hunger, and it is a field, not a case** |
 | 14 | **Clear.** A full granary is not an opportunity until somebody's `opening_set` finds a use for it |
 
-### 9.11 · The three refusals outside the fourteen rows
+### 9.11 · `wear` — the per-site-kind decay constant (added by Jordan's F6 ruling)
+
+⚠ **This is the one row-12 case in the whole walk that had to be argued rather than glossed, because
+`wear` IS a scheduled tick and row 12 bans one.**
+
+| # | verdict and ground |
+|---|---|
+| 1 | **Clear.** `wear` is applied at MATTER, over the world, before the map. `choose` never sees it; a person learns a harbour is silting the way they learn anything — by being there, or by being told |
+| 2 | **Clear.** It constructs no View. What a person believes about a site's condition is claims, and **the scalar is readable by nobody** — only the band is published |
+| 3 | **Clear.** `wear` emits no Event by itself. **A band-edge CLOSURE is an Event, witnessable per person by presence at the site** (`SUP:1376-1377`) — a telling each, never a broadcast. Decay below a band edge is invisible until somebody looks or somebody's verb fails |
+| 4 | **Clear.** Nothing is deposited into a cohort. A cohort learns of a closure by witnessing it, and stores the construal spread like any other cohort claim |
+| 5 | **Clear.** Nothing is pushed. `wear` is read from the parameter table by the site's own kind and applied to that site's own primary scalar |
+| 6 | **Clear.** `condition` is **matter**, not an aggregate of persons — it exists whether or not anybody believes in it, which is `SUP:355-360`'s own test. `wear` moves matter and touches no social quantity |
+| 7 | **Clear.** No knowledge value is stored on the site. Who knows the seam is failing is claims in ledgers |
+| 8 | **Clear.** `wear` resolves nothing and decides nothing. It is a subtraction inside an accumulator whose clamp is applied once |
+| 9 | **Clear.** It is not on a faction. ⚠ **And note it is what MAKES a faction**: a falling condition is a physical fact that turns *"the seam must be restored"* into a proposition people commit to, with no authoring |
+| 10 | **Clear.** `wear` never enters a roll. Where a site's condition reaches an obstacle it enters as **the band's representative value**, which is a substitution of the pool source, not an addend (`SUP:1356-1360`) |
+| 11 | **Clear, and it is the row `wear` most obviously does NOT cross.** The row forbids *a personal effect on a group that is not a fraction of that group*. **`wear` is not a personal effect at all** — no person performs it, and it is identical for every drawer of the site. The anti-leverage row governs what one actor may do to a shared thing; `wear` is what the world does to it |
+| 12 | ⚠ **THE HARD ROW. Clear, on the row's own subject, and the argument is stated rather than assumed.** The row bans *a scheduled recovery tick on **standing***, and it **fences itself to that subject** — `02:189` reads *"the precedent's refusal of the scheduled recovery tick applied at **person scale**"*. **`wear` moves matter, in the opposite direction, on a thing.** Three grounds, each independently sufficient: **(a)** its subject is a Site's `condition`, which is matter, and the row governs a **social quantity**; **(b)** `SUP:1370-1373` licenses exactly this crossing — *"the quantity crossed is matter or bodies, never a social quantity"* — and lists matter as clock-driven quantity 1 of the three admitted (`ABS:280`); **(c)** it is **decay, not recovery**, so even a subject-blind reading of the row does not reach it. ⚠ **What would cross the row is a `wear`-shaped term on standing, regard, grievance, cohesion or commitment. There is none, and none may be added** |
+| 13 | **Clear.** One constant per **site kind**, read as data. **No branch names a site.** A per-site override would be a per-entity branch and is refused by name |
+| 14 | **Clear, and improved.** A decaying site authors nothing for anybody. It **removes** verbs from `verbs(site, c)`, and the people who notice first are the ones whose practice used that verb (`SUP:1227-1228`) — reaching them through the same computed `opening_set` everything else reaches them through |
+
+### 9.12 · The three refusals outside the fourteen rows
 
 1. **No apparatus.** *"Validators over the design documents, freshness checkers, guards on the guards,
    or any apparatus whose subject is the repository's own process rather than the game"*
@@ -1626,7 +1805,7 @@ a person with no office can act, petition, and receive an opportunity · order i
 | # | departure | from | ground |
 |---|---|---|---|
 | 1 | `Site` is a carrier with an id; `condition` is primary state at the Site an act names | `SUP:1232-1254` (site as matter, `condition(n)` derived at nodes) | node-keying gives two wrong verb sets from one collapsed scalar; a derived accumulator reads its own previous value; the mean has no base case |
-| 2 | `Container` is the object's name; `Node` is refused | the prior brief | `SUP:337` already says *"Container (a rung)"*; `Node` collides with the port target at `godot/scene_tree_architecture.md:15` |
+| 2 | `Container` is the object's name; `Node` is refused | the prior brief | `SUP:337` already says *"Container (a rung)"*; `Node` collides with the port target at `godot/scene_tree_architecture.md:16` |
 | 3 | The owner table has **four** owners and Nobody; the Faction row is deleted and its contents re-homed | `SUP:334-340`'s five rows | a faction is derivable in full from a Proposition plus its `commit` edges; the deletion is stated as an amendment because the row exists |
 | 4 | `Tenure` is the one edge, with an id, `until?`, seven kinds and declared cardinality; `Holding` is an instance of it | `SUP:367`'s `Holding := (person, office, since, conferrer)` | nothing could hold ground; the record carrying every disputable political fact could not be a `Claim` subject |
 | 5 | `touches` modes are **five** | `SUP:689`'s three | nothing created or destroyed anything; the review's rank 1 |
@@ -1660,8 +1839,17 @@ a person with no office can act, petition, and receive an opportunity · order i
 
 Stated so no later document can cite this one as though these were closed.
 
-1. **Is the world dying or misunderstood?** — **Jordan's**, and the only one of the seven forks that
-   stays his. The code is identical either way.
+1. ⚠ **RULED, NOT OPEN — struck.** F6 was carried here as *"Jordan's, and the only one of the seven
+   forks that stays his"*. **Jordan ruled it: the world is in flux, and its trajectory is the sum of
+   what people do about it** (§7 F6). It cost one constant, `wear`.
+1b. **THE BALANCE QUESTION THAT RULING CREATES, and it is now the largest unmeasured number in the
+   design: the ratio of `wear` to a restoration act's effect sets the world's entire difficulty
+   curve.** Too high and the world dies whatever anyone does; too low and tending is decoration.
+   **Nothing has been run.**
+1c. **`leaders`' COMPARATOR.** The ranking function that makes deposition and faction-demotion work is
+   unruled — `REV:772-778` proposes *commitment degree × backing raisable*, and it is a proposal.
+   **Both §5.9's demotion table and the whole of "power is not static" rest on it**, so it is carried
+   here and not only in the compendium's gap register.
 2. **Where the channel store lives.** Ruled against three ways (§5.3). Character generation works
    without it; the *plausible past* property does not.
 3. **§14 row 4's construal-spread rule** — where a cohort's stored spread lives, what produces it, and
@@ -1669,13 +1857,18 @@ Stated so no later document can cite this one as though these were closed.
    not close it inside the design's refusals and neither can this document.
 4. **The `exclude` limb of §14 row 11**, now widened by four object classes through `efface` (§9.5).
    Inherited, not introduced; no bound is invented here.
-5. **The closed predicate vocabulary's actual membership.** One worked example, `SAID(…)`, and no
-   roster.
+5. ⚠ **CLOSED, NOT OPEN — struck.** The predicate vocabulary is enumerated at `03:66-79`, fourteen
+   forms. This row previously claimed there was no roster. See §12.8.
 6. **`season_factor(territory)`'s distribution** — range, mean, shape, and what a bad draw is. Read
    four times, stated nowhere.
 7. **`Venue`'s twelve fields plus a five-field door**, eight of which appear once and carry no value.
-8. **`relevance(c, q)`** — never defined, and `q`'s type, origin and lifetime are unstated.
-9. **`Profile`** — the return type of `estimated_profile`, described in prose and never given a record.
+8. **The question `q`'s PRODUCER** — its type, origin and lifetime. ⚠ **`relevance(c, q)` itself is
+   NOT open: it is defined in full at `03:342-344`.** What is open is where `q` comes from, and that
+   is what makes `SUP:654`'s *"evict lowest salience"* uncomputable at eviction.
+9. ⚠ **`Profile` — NARROWED.** `07_alignment.md:217-231` defines the two profiles and gives the
+   formulas — `presence(f, n) = Σ over members inside n of w(degree)`, `density = presence /
+   weighted_population(n)`, `footprint(f) = { n : presence(f, n) > 0 }`, upward-closed. **What is open
+   is only the record's field list**, not the concept or its arithmetic.
 10. **The empty judging set** — F3's own falsifier: an office whose judging set is empty has no
     self-convening route, and no floor is specified.
 11. **The Coherence-0 officeholder** — F4's own cost: a frozen seat that vacancy-by-absence must reach.
