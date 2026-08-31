@@ -899,3 +899,97 @@ already carry upward. What must be stated:
 **That third point is the whole of it:** the King's picture of his realm is **a ledger of claims made
 by people with reasons**, not a dashboard. Which is what this design has always said, applied at last
 to government.
+
+---
+
+## 14. THE EPISTEMIC PAYOFF — the enlargements are FACT FACTORIES
+
+> *"this all ties into the epistemics/memories/beliefs/opinions and how the same fact can be disputed
+> by different characters"*
+
+**This is what the previous thirteen sections are for, and it reframes all of them.**
+
+> **The knowledge layer was never the problem. It was already right** — claims in ledgers, per-person
+> `witness`, view assembly under a budget, corroboration that fails closed, telling as an act that
+> degrades by type. **What it lacked was enough happening to disagree ABOUT.**
+>
+> **Every enlargement above is a machine for producing contested facts.**
+
+A design where little occurs has a magnificent epistemics engine idling. That was the real defect, and
+"termination" (§1) was one symptom of it.
+
+### 14.1 The purest case: an absence that supports two incompatible truths
+
+**Non-delivery versus refusal (§13.2) is the design's perfect epistemic object.**
+
+The order did not take effect in Hafenmark. **Two claims, both sincere, both consistent with everything
+anyone can see:**
+- *"The praefect defied the King."*
+- *"The order never arrived."*
+
+**Nobody can settle it from where they stand.** The King has a ledger, not a dashboard. The praefect
+knows only his own side. The courier — if there was one — may be dead, lying, or never dispatched.
+**Settling it requires a named person to go and look, and that person can be deceived.**
+
+This is not ambiguity decorating a mechanism. **It is structurally guaranteed by no-fallback**: because
+nothing happens by default, *absence has no signature*, and an absence with no signature is the most
+disputable thing a world can contain.
+
+### 14.2 What each enlargement contributes to the dispute layer
+
+| enlargement | the fact it manufactures | why it is disputable |
+|---|---|---|
+| **The watch** | a matter arrives on a calendar | **whether the condition is really met** is arguable — and the sitting is exactly where competing accounts must be put, which is what the argument system is for |
+| **Distributed directives** | thirty-five local outcomes | **thirty-five local truths**, and the centre holds claims about them, not knowledge. Every report is a person's assertion with a reason behind it |
+| **Multi-petition** | several offices holding the same matter | **competing accounts of who was asked, who answered, and who was ignored** — and each office's version flatters itself |
+| **Option removal** | a verb that used to work and now does not | **attribution of slow damage is inherently contested**: who caused it, was it inevitable, and who profits from which answer |
+| **The transfer act** | goods that moved between strangers | **witnessed by whoever was present, and by nobody else.** A payment is exactly the fact that some know and others deny |
+| **Coincidence** | grain that arrived from nowhere anyone arranged | **the richest of all — see below** |
+
+### 14.3 Coincidence is the most disputable thing in the design
+
+**Unintended rescue (§11) has no single cause, so it has as many explanations as there are interested
+parties**, and every one of them is defensible:
+
+- The Duke says his petition worked.
+- The merchant says he sailed for profit and owes nobody thanks.
+- The Confessor says it is providence, and the Dicastery finds him hard to contradict.
+- The praefect says he arranged it, because nobody can prove he did not.
+- And the person who actually made it happen may never learn that they did.
+
+> **Nobody is lying. There is no fact of the matter about credit** — only a fact about grain. **Credit
+> is entirely constructed out of claims**, which is precisely how it works, and the design produces it
+> for free the moment effects can reach people no one aimed them at.
+
+**That is a whole political register — credit, blame, reputation for competence — arising from the
+absence of a narrator rather than from a reputation stat.**
+
+### 14.4 Two refinements this forces, and I state them as refinements rather than smuggling them in
+
+**1. "The matter is superseded" is itself contestable.** §9.3 wrote expiry as *the world moving on*,
+with no actor — correct for the material trigger (the season turned, the granary emptied). **But whether
+a given petition is moot is a judgment**, and it is a judgment that conveniences somebody. A convener
+who wants an item gone will assert it; the petitioner will deny it. **That is an ordinary argument on
+the existing ladder, with the existing faults**, and it needs nothing new. *Expiry is material; its
+application is arguable.*
+
+**2. A report is a claim, and reports are now the main thing the upper rungs run on (§13.5).** So the
+strategic layer inherits the whole knowledge apparatus: **a King's realm-picture degrades by type, at
+distance, through the number of mouths it passed through** — and a governor who is good at being
+believed outranks one who is good at governing. **That is the game at the top of the ladder**, and it
+follows from reports being claims rather than state.
+
+### 14.5 What this makes of the argument system
+
+**The argument machinery stops being ornamental and becomes the resolution layer for everything above.**
+The stasis ladder, the named faults, the graded proof, the record that closes without force — these
+were built for a design that generated relatively few disputes. **Now every rung generates them
+constantly**, and the sitting is where they are put.
+
+**And field investigation (T9) becomes the engine's answer to its own epistemics**, not a subsystem:
+when the same fact is disputed and it matters, **somebody goes and looks** — which is an act, by a
+person, who can be lied to, whose findings are claims like any other.
+
+> **The loop closes.** Things happen because people act; nothing happens when they do not; both leave
+> traces only in what people saw; what people saw is what they say; what they say is disputed; disputes
+> are settled at sittings by named persons — **who are acting on claims that may be false.**
