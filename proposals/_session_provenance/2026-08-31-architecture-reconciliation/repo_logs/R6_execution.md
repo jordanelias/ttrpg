@@ -293,7 +293,7 @@ lines (`references/ci_checks_registry.yaml:124-495`, ~28 roles documented) and
 | `ci_co_file_checker.py` | co-file pairing (design→canonical_sources etc.) | yes | **blocking** |
 | `ci_editorial_checker.py` | `[EDITORIAL]`/`[PROVISIONAL]` markers | yes | **blocking** |
 | `ci_pp_frozen_check.py` | PP ceiling PP-726 enforced as real, not declared | yes | **blocking** |
-| `ci_naming_check.py` | Solmund-never-Galbados, diff-aware | yes | **blocking** |
+| `ci_naming_check.py` | canonical-name gate (Solmund is the canonical name; the deprecated alternative is the one this gate rejects, and is not spelled here because this gate reads its own repository), diff-aware | yes | **blocking** |
 | `ci_names_consistency.py` | descriptor/proper-noun registries mirror names_index | yes | **blocking** |
 | `export_engine_params.py` | oracle→typed-JSON round-trip (combat_engine_v1) | yes | **blocking** (`--check`) |
 | `export_key_types.py` | registry→typed-JSON (key_types.json) | yes | **blocking** |
