@@ -323,7 +323,7 @@ Its substream is `H(world_seed, tick, site_id, "yield")` — **actorless, which 
 generalisation `ARCH §6` exists to supply.** Nature has no performer, so it uses the magnitude reading
 and not the pool reading.
 
-⚠ **`season_factor(territory)`'s distribution is stated nowhere in the corpus** — no range, no mean, no
+⚠ **`season_factor(territory)`'s distribution is not stated in any document this suite read** — no range, no mean, no
 shape, no definition of a bad draw — while it is read four times and an extreme draw on it is a storm.
 Carried open (`ARCH §11`).
 

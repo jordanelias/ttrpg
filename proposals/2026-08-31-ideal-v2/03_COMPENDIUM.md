@@ -51,8 +51,10 @@ cataloguing coinage is self-refuting**, so this document introduces no term of i
 
 ### §0.3 Conventions used in the tables
 
-- **`⛔`** — the type, range, producer or owner is stated nowhere in any surface. Every `⛔` has a row in
-  §8.
+- **`⛔`** — the type, range, producer or owner is **not stated in any document this suite read.** ⚠
+  **That is a scope, not a corpus fact: 108 of 123 proposal documents over 200 lines are uncited by
+  this suite** (`00_INDEX.md`), so a `⛔` means *we did not find it in what we read*, never *it does not
+  exist*. Every `⛔` has a row in §8.
 - **`RESERVED`** — a fork carried rather than answered. Six of the seven the prior design reserved are
   answered at `ARCH §7`. **All seven are now answered; two were ruled by Jordan.**
 - **NEW** — introduced by `ARCH`/`LOOP`; **SHIPPED** — inherited from `SUP` or #342 unchanged;
@@ -122,7 +124,8 @@ space (`SUP:229-234`); *nameable as a stance referent* is against the **closed**
 
 ## §2 · THE TYPE CATALOGUE
 
-Every record, every field. **Closed sets are enumerated in full.** `⛔` = stated nowhere.
+Every record, every field. **Closed sets are enumerated in full.** `⛔` = **not stated in any document
+this suite read** — see §0.3's scope warning.
 
 ### §2.1 The four carriers
 
@@ -302,7 +305,7 @@ Envelope   := (rung, counts_by_age_band[], marks_bundle, capability_distribution
 ```
 
 **`edible` is what stops silver satisfying hunger, and it is a field, not a resolver case.** ⛔
-`counts_by_age_band`'s band boundaries are stated nowhere.
+`counts_by_age_band`'s band boundaries are not stated in any document this suite read.
 
 ### §2.7 Every closed set, enumerated
 
@@ -665,7 +668,7 @@ redesign. **Idem.** = idempotent in meaning; **Idio.** = idiomatic in choosing (
 | `payload` (Tenure) | `ARCH §2.3` | the kind's own record, for the state the eight named fields cannot hold |
 | `INTERIOR` | `LOOP §1.2` | the fourth write class: **one person's own ledger and nothing else** |
 | `CENSUS` | `LOOP §7` | the global pass that settles the population from **one** post-eviction snapshot |
-| `Place` | `ARCH §2.7` | **`Rung | Site`** — the stance referent kind that was used everywhere and defined nowhere |
+| `Place` | `ARCH §2.7` | **`Rung | Site`** — the stance referent kind that was used everywhere and was not defined in any document this suite read |
 
 ---
 
@@ -934,8 +937,11 @@ Success* section holds a **pre-ruling** ladder. This matters here because `ARCH 
 
 1. **Nothing here has executed**, and this document indexes two other documents that also do not run.
 2. **Every count in §2.7 is a count of what a cited line enumerates**, not a count of anything measured.
-3. **`⛔` means "stated nowhere in any surface this exercise read".** The surfaces read are named at
-   §0.1. A definition that exists only in a #342 document not cited here would be missed.
+3. **`⛔` means "not stated in any document THIS SUITE READ".** The surfaces read are named at §0.1.
+   ⚠ **And that scope is a minority of the corpus: 108 of 123 proposal documents over 200 lines are
+   uncited here** (`00_INDEX.md`). **Four mechanisms this suite called new or missing are already
+   designed in uncited documents.** A `⛔` is a statement about this suite's reading, never about the
+   corpus.
 4. **The repo-collision claims in §6 and §7 rest on greps of `engine/`, `systems/`, `references/` and
    `godot/`**, not of the whole tree.
 5. **This document is REFERENCE, not mechanism.** The test to apply to every row: *if this document were

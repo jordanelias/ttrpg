@@ -5,6 +5,22 @@
 ## `CLAUDE.md` §0.2 applies in full: **done means it runs, and none of this runs.**
 ## Nothing ratifies on merge.
 
+> ## ⚠ THIS SUITE WAS BUILT ON ~12% OF THE CORPUS — READ THIS BEFORE ANY CLAIM IN IT
+>
+> Of **123 proposal documents over 200 lines, 108 are cited nowhere** in this suite or in the two
+> documents it supersedes. **Four mechanisms presented here as new or missing are already designed in
+> uncited documents:**
+>
+> - **the actorless event channel, including Altonian pressure** — `proposals/2026-08-29-greenfield-systems-suite-v2/11_world_events.md` (715 lines), which ships `we.altonian_pressure` and records `external_shock` as *"never defined by anything on disk"*;
+> - **`ambition`'s carrier** — `…-v2/09_ambitions_and_arcs.md` + `_part2` (1,065 lines), with derived-at-read `progress`;
+> - **the act-economy reconciliation** — `proposals/2026-08-30-fixes/02_the_act_economy.md` (426 lines), which is D-2 already worked out;
+> - **slate and salience** — `…-v2/10_the_slate_and_salience.md` + `_part2` (1,152 lines), which is *how anything gets put in front of a decider*.
+>
+> **EVERY "THERE IS NO X" CLAIM IN THIS SUITE IS SCOPED TO THE DOCUMENTS IT READ, AND THAT SCOPE IS A
+> MINORITY OF THE CORPUS.** Two adversarial review rounds, five parallel audit runners and a keys audit
+> all missed this, because **every one of them audited derivative documents against each other.**
+> **Citation count is not coverage.**
+
 ---
 
 ## The three documents
@@ -122,3 +138,24 @@ verb standing where six shipped acts already were. **Every audit was derivative-
 between derivative documents read as corroboration when it was correlated error with one root** — the
 failure this design's own corroboration rule exists to prevent, arriving in the process that produced
 the design. `01_ARCHITECTURE.md` §12.8.
+
+
+---
+
+## THE NAMED NEXT STEP — five documents this suite never read
+
+**Do not treat this suite as complete until these are read.** Line counts are exact; the clause is what
+each owns.
+
+| document | lines | what it owns |
+|---|---|---|
+| `proposals/2026-08-29-greenfield-systems-suite-v2/11_world_events.md` | **715** | the actorless event row, rate bounds, two-way reachability, a registry block, and **`we.altonian_pressure`** — Jordan's own Altonian channel, already mechanised |
+| `…-v2/10_the_slate_and_salience.md` + `_part2` | **1,152** | **how anything gets put in front of a decider** — the direct answer to CALENDAR's agenda question and to §14 row 14 |
+| `…-v2/09_ambitions_and_arcs.md` + `_part2` | **1,065** | ambition as a first-class object with **derived-at-read `progress`**, bands not numbers, and lapse |
+| `proposals/2026-08-30-fixes/02_the_act_economy.md` | **426** | **D-2, already worked out.** This suite's act-economy resolution may be a re-derivation of it |
+| the play-space coverage lanes and gap report | **5,270 across 8** | what the design was measured against |
+
+⚠ **AND THE SWEEP STOPPED AT `proposals/`.** Two load-bearing `systems/` documents are also uncited:
+**`systems/_architecture/governance_ripple_substrate_v1.md`** (559 lines — **the event deck's own
+governing spec**) and **`systems/settlements/governance_play_redesign_v1.md`** (337). **The next gap is
+likelier to come from `systems/` than from `proposals/`.**

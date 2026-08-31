@@ -671,7 +671,7 @@ promises is `hold | Proposition → Rung` — annexation as a tenure changing ha
 ⚠ **The stance referent set still names `Faction` as one of four kinds** (`ABS:188`: `Person |
 Faction | Proposition | Place`). After this deletion, `Faction` and `Proposition` denote the same
 thing. **`Faction` is struck from the referent set; the set is three kinds — `Person | Proposition |
-Place` — and `Place` is defined here, because it is defined nowhere in the corpus: `Place = Rung
+Place` — and `Place` is defined here, because it is **not present in the documents this suite read** (`SUP`, `REV`, `ABS`, `#342` docs 02/03/04/07/09/11, `03_knowledge_telling_investigation.md`): `Place = Rung
 | Site`.** That is a widening the prior work needed and never performed: without it you cannot hold an
 attitude toward a harbour.
 
@@ -1672,50 +1672,27 @@ scope and incompatible values **collide automatically**, and §5.12's option-rem
 forms a faction out of the people whose practice used the verb. **Shipped, and it is the design at its
 best.**
 
-**(b) AMBITION. ⚠ AN EARLIER VERSION OF THIS SECTION SAID IT *"HAD NO CARRIER ANYWHERE"*, ON A GREP OF
-THIS SUITE ONLY. THAT CLAIM IS FALSE AGAINST #342 AND IS WITHDRAWN — the same defect class as §12.8's,
-caught here by running the grep the claim needed.**
+**(b) AMBITION. ⚠ THIS DOCUMENT'S FINDING THAT AMBITION HAS NO CARRIER IS FALSE AND IS STRUCK. IT HAS
+AT LEAST TWO, IN DOCUMENTS THIS SUITE DID NOT READ.**
 
-**#342 ships an account of ambition and refuses a trait for it, twice, by name:**
+1. **`proposals/2026-08-29-greenfield-systems-suite-v2/09_ambitions_and_arcs.md` + `_part2` (1,065
+   lines) ships ambition as a first-class object** with **derived-at-read `progress`** — `progress(P,
+   season) = Σ_i w_i · [ term_i holds at season ]` (`09:196`) — published as **bands, never a
+   forecast**, with lapse so the queue does not become immortal clutter. **That is the carrier.**
+2. **#342 ships the DRIVE and refuses a trait for it, by name.** `04:225-227`: *"`need(p, standing)` is
+   the gap between what everyone reads off you and what you hold. **That gap is ambition**, computed,
+   and it is why no ambition trait exists."* `04:778`: *"**An ambition, resentment or pride trait**"* —
+   filed under what is refused. In this architecture that drive is **`Sensation.standing`** (§3.1).
 
-> `04:225-227` — *"`need(p, standing)` is the gap between what everyone reads off you and what you
-> hold. **That gap is ambition**, computed, and it is why no ambition trait exists: a trait would be a
-> second copy of this number that could disagree with it."*
->
-> ```
-> expected_standing(p) = Σ_{m ∈ marks(p)} recognised_weight(m, community's admission rule)
-> need(p, standing)    = clamp(0, 1, (expected_standing(p) − held_standing(p)) / 3)
-> ```
->
-> `04:778-779` — *"**An ambition, resentment or pride trait.** Ambition is `expected_standing −
-> held_standing`."* — filed under what is **refused**. And `01:494`: *"greed, ambition and the rest are
-> already expressible as stance toward referents plus computed need."*
+**The claim struck, in the terms it was made:** *"`ambition` and `goal` occur zero times"* was **true
+of this suite and false of the corpus**, and it was made without running the grep it quantified over.
+**It is the same defect as §12.8's, one turn later.**
 
-> **SO THE DRIVE IS SHIPPED, COMPUTED, AND ALREADY IN THIS ARCHITECTURE: it is
-> `Sensation.standing`** (§3.1), one of the two world-reading scalars, and `04:225-227` is its
-> derivation. **Nothing needs adding for a person to WANT more than they have.**
-
-**What genuinely has no carrier is the OTHER half of Jordan's sentence, and the distinction is the
-whole point.** *"Their ambitions within that world are the regions that drive conflict"* — **a
-magnitude cannot be a region of conflict.** `expected_standing − held_standing` is a scalar: it says
-*how badly*, and it cannot say **which particular future you are committed to**, so two men with
-identical standing gaps are mechanically identical and cannot want incompatible things.
-
-> **THE OBJECT OF AN AMBITION IS AN UNSATISFIED `commit` TENURE WHOSE OBJECT IS AN `OUGHT` PROPOSITION
-> ABOUT THE HOLDER'S OWN FUTURE** — *"I will hold the praefecture"*, *"my house will hold Grauwald"*.
-> **No new object, and no trait**, so `04:778`'s refusal is honoured rather than overridden.
->
-> **The two compose and do not duplicate:** the standing gap is **how hard you push** and is computed
-> from marks nobody stores; the commitment is **what you push toward** and is a proposition other
-> people can hold claims about. **A scalar and a referent are not two copies of one number.**
-
-It inherits everything from primitives that already exist: it is **disputable** (others hold claims
-about what you want, and can be wrong), **concealable** (`avowal ∈ {avowed, private, covert}`),
-**betrayable** (degree → 0 is abandonment), **inheritable** (rows pass at reduced magnitude on
-succession), and — decisively — **it already drives `choose` with no new wiring**, because *commitment
-— a faction proposition you hold, unsatisfied* is one of the four needs (`SUP:187-190`) and reads **the
-view**. **And two ambitions with intersecting scope and incompatible values COLLIDE automatically**,
-which is how they become *regions of conflict* rather than parallel appetites.
+**What survives, and it is a pointer rather than a mechanism:** Jordan's *"their ambitions within that
+world are the regions that drive conflict"* needs an ambition to have **an object**, not only a
+magnitude — two men with identical standing gaps must be able to want incompatible things. **This suite
+proposes nothing new for that.** `09_ambitions_and_arcs.md` is where it is already worked, and reading
+it is the named next step (`00_INDEX.md`).
 
 ⚠ **THE OPEN BALANCE QUESTION THE RULING CREATES, stated because nothing here can settle it: the ratio
 of `wear` to a restoration act's effect sets the world's entire difficulty curve, and no number in this
@@ -2097,7 +2074,9 @@ Stated so no later document can cite this one as though these were closed.
 5. ⚠ **CLOSED, NOT OPEN — struck.** The predicate vocabulary is enumerated at `03:66-79`, fourteen
    forms. This row previously claimed there was no roster. See §12.8.
 6. **`season_factor(territory)`'s distribution** — range, mean, shape, and what a bad draw is. Read
-   four times, stated nowhere.
+   four times in `SUP`, and its distribution is **not present in the documents this suite read** (`SUP`, `REV`, `ABS`, `#342` docs 02/03/04/07/09/11, `03_knowledge_telling_investigation.md`). ⚠ **`11_world_events.md` (715
+   lines, uncited by this suite) ships rate bounds for the event channel and may already answer
+   this.**
 7. **`Venue`'s twelve fields plus a five-field door**, eight of which appear once and carry no value.
 8. **The question `q`'s PRODUCER** — its type, origin and lifetime. ⚠ **`relevance(c, q)` itself is
    NOT open: it is defined in full at `03:342-344`.** What is open is where `q` comes from, and that
