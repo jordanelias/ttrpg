@@ -764,3 +764,48 @@ mechanism.**
 
 **A design that passes this has no caretaker and still has luck.** That is the target, and it is
 strictly better than what §10 described.
+
+---
+
+## 12. A PETITIONER MAY ADDRESS MORE THAN ONE OFFICE
+
+> *"note that a petitioner can petition more than one office or person"*
+
+**Recorded because it changes four things I had wrong or unstated.** A petition is not exclusive; a
+person with a want may put it to several offices, several persons, at several rungs, in the same
+season or across seasons.
+
+**1. Vacancy stops being lethal, and starts being expensive instead.** §9.2 said a dead praefect means
+food never arrives. True *for that route* — but the petitioner can go to the community, to a rival
+house, to the Dicastery, to anyone. **The correct claim is not "nothing happens" but "you must spend
+more to be heard, and every extra route costs acts and time you may not have."** That is a much better
+failure mode: not a wall, a tax. And it is the honest one, because §10's no-fallback rule says nothing
+about how many doors exist.
+
+**2. Obstruction gets harder, and therefore more interesting.** A convener who buries an item only
+wins if he controls **every** venue that could hear it. **Burying now requires either monopoly or
+coordination** — which is itself political work, visible and contestable. §10.3's "vacancy as a weapon"
+survives but is downgraded from a weapon to a *cost imposed*, unless the obstructor can close the other
+doors too.
+
+**3. Offices come into competition, and standing is the prize.** If two offices can hear the same
+matter, **answering first is worth something** — credit, standing, a claim on the petitioner's future
+loyalty; and refusing something a rival then grants is visible. **That is jurisdictional rivalry
+arising from the petition rule alone**, with no new object, and it is exactly the politics real
+institutions have.
+
+**4. It multiplies both failure and luck.** Three petitions can all expire (§9.3) — **the petitioner
+has spent three acts and has nothing**, which is a worse and truer outcome than one refusal. Or two
+offices both act, and the grain arrives twice: **a surplus nobody intended**, which is §11's
+coincidence produced from the up-stroke rather than from trade.
+
+**Codebase:** nothing new. `Petition(petitioner, proposition, respondent, backing)` with
+`respondent ∈ ContainmentNode | Office` already permits many instances of the same proposition with
+different respondents. What must be stated is only that **they are independent objects** — each carried
+separately, each expiring separately, **and none of them cancels another.** No dedup, no "the matter is
+already before a body" rule; that would be an engine deciding a person's options.
+
+**One consequence worth flagging for the audit:** if petitions are cheap and multiple, the up-stroke's
+scarcity moves from *the right to ask* to **the capacity to be heard** — seat items, agenda order,
+convener attention. **That is where the real contest should live**, and it is where the design already
+put it.
