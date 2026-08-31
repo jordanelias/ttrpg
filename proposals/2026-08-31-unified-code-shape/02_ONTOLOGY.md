@@ -43,7 +43,7 @@ identity-bearing and immutable and is therefore the fifth kind and not a carrier
 ### §2.1 `Person`
 
 ```
-Person := (id, weight, marks[], capability, stance[], ledger, ties_index)
+Person := (id, weight, marks[], capability, stance[], convictions, beliefs[], ledger, ties_index)
 ```
 
 | field | type | domain | owner | notes |
@@ -53,7 +53,9 @@ Person := (id, weight, marks[], capability, stance[], ledger, ties_index)
 | `marks[]` | list of mark rows | heritage · grade · Church standing · office · residence | Person | the stance table's first referent kind |
 | `capability` | map practice -> rank | rank `0..5` | Person | **rank supplies dice; it gates no verb** (§2.1.3) |
 | `stance[]` | list of stance rows | `(referent, valence -5..+5, weight 0..5)` | Person | referent ∈ `Person \| Proposition \| Place` |
-| `ledger` | packed claim rows | cap `L` rows, evicted on `confidence_live × recency` | Person | §5.3 |
+| `convictions` | weights over the closed 13 | 1–3 primary + distributed | Person | **the moral axes.** §5.5.1 |
+| `beliefs[]` | moral commitments | position ∈ strong/wavering/revised | Person | **about MORALS, never veracity.** §5.5.2 |
+| `ledger` | packed claim rows | cap `L` rows, evicted on `confidence_live × recency` | Person | **what they hold TRUE.** §5.3 |
 | `ties_index` | derived | — | **Nobody** | the inverse index over `tie`/`knot` Tenures; **stored nowhere** |
 
 **Three fields that are deliberately absent, each with the mechanism that replaces it:**
@@ -354,6 +356,19 @@ Proposition := (id, mood, subject, predicate, value, when, scope)
 This costs one sentence and closes a real seam: it is why **a faction can be fully derived from a
 Proposition plus its `commit` edges without the Proposition being a fifth owner.**
 
+>  ⊕ **AND THE UNIFICATION THAT MAKES THE POLITICS PERSONAL.** A `Proposition` of mood **`OUGHT`** is
+> **an uttered `Belief`** (§5.5.2). A Belief is the private moral commitment; saying it aloud makes a
+> Proposition, which other people can then `commit` to, argue against, and collide with.
+>
+> **So a faction is somebody's morals, said out loud, that other people signed** — and that is the type,
+> not a metaphor. `Proposition` + `commit` edges **is** the faction (§3.1); the Proposition **is** the
+> uttered Belief; the Belief **is** one person's account of what ought to be. **The whole political layer
+> is grounded in a single person having said what they think is right.**
+>
+> **N-line.** Cut the identification and a faction's proposition is an authored banner rather than
+> somebody's conviction — **nobody can be a hypocrite, and a movement cannot be discredited by what its
+> founder does.**
+
 **`when` being mandatory is what makes collision free.** Two propositions with intersecting scope and
 incompatible values **collide automatically**, computed at deposit time, in one ledger at a time. There
 is no consensus object and no signature that could build one.
@@ -512,9 +527,18 @@ StateChange := (subject, mode, driver, field?, delta?, spec?)
 
 > ⊕ **AND THE MEMBERSHIP TEST IS A STATIC SCHEMA COLUMN, NOT A JUDGMENT.**
 >
-> **`social` is a static boolean on the `(subject-type, field)` pair, declared in the exported schema
-> and read by the resolver.** A change is Act-driven **iff** its row is `social: true`; `Event` drivers
-> may write only rows marked `social: false`.
+> **`social` IS A STATIC BOOLEAN ON THE `(record-kind, field)` PAIR, DECLARED IN THE EXPORTED SCHEMA
+> AND READ BY THE RESOLVER — AND THE RULE IS ASYMMETRIC.**
+>
+> ```
+> social: true   =>  ACT-DRIVEN ONLY.  An Event may never write this row.
+> social: false  =>  EITHER DRIVER.    An Event may write it, and so may an act.
+> ```
+>
+> ⚠ **Stating this as a biconditional is FALSE, and an earlier draft of this section did.** A
+> restoration **act** writes `(Site, condition)` — a `social: false` row — every season it is performed.
+> **`wear` and a tending act land on the same field by design**, and that is the whole flux model.
+> **The row does not say who may act. It says what an EVENT may not touch.**
 >
 > A predicate a programmer must adjudicate per instance is a convention, not a mechanism, and it drifts
 > at the first hard case. As a column the test is decidable **at the call site and at load time**.
@@ -524,8 +548,23 @@ StateChange := (subject, mode, driver, field?, delta?, spec?)
 > in a village and may not destroy the village.** The village empties and still legally exists until an
 > office strikes it from the roll.
 >
+> ⊕ **AND `exists` IS A RESERVED PSEUDO-FIELD, KEYED BY MODE — because a create/destroy row has no
+> `field` at all.** `StateChange.field?` is absent on `create` and `destroy`, so `(Rung, exists)` has
+> **no lookup key** unless one is declared. **Declare it: `mode in {create, destroy}` resolves to the
+> reserved field name `exists` for the subject's record-kind.** Without it the Partition's entire
+> creation-and-destruction half — the half carrying *a plague may not destroy a village* — **has nothing
+> to look up.**
+>
+> ⚠ **THE CONCESSION THE SOURCE MAKES, AND WHY THE KEY IS THE FIELD RATHER THAN THE SUBJECT.** Stated
+> over *subjects*, the Partition concedes a mixed class in its own worked cases — *a plague is biology
+> but it empties institutions; a famine is weather times tending* — and the ruling there reads
+> **event · both · choice**. **"Both" is not a partition.** Keyed on `(record-kind, field)`, a plague is
+> not one change with a disputable subject but **several, each writing a different field**, each
+> answered separately. **The mixed class dissolves because there was never one change to classify.**
+>
 > **Falsifier.** Wrong if any state change's driver depends on the *instance* rather than on the
-> `(subject-type, field)` pair.
+> `(record-kind, field)` pair — or if any single field genuinely needs an Event to write a
+> `social: true` row.
 
 **`read` and `exclude` are NOT modes.** They live on the Act: `reads[]` declares what the act consulted
 (so the conflict graph can see it) and `contests[]` declares what it disputes (so the contest router
@@ -562,11 +601,19 @@ qualifier does not travel into GDScript's flat, global `class_name` namespace.
 | class | takes | may read | examples |
 |---|---|---|---|
 | **resolver-side** | **`World` as the FIRST parameter** | world truth | `leaders`, `presence`, `density`, `footprint`, `verbs(w, site, c)`, `condition` at a rung, `sovereign_fraction`, `filter_share`, `judging_set`, `draw_share` |
-| **person-side** | the asker | **only the asker's own ledger** | `opening_set(person, view)`, `entrenchment`, `norm` as believed, `address`, `trace(person, claim)` |
+| **person-side** | the asker | **the asker's own interior only** — ledger, stance, capability, remits, and the `Sensation` computed this step | `opening_set(person, view)`, `entrenchment`, `norm_as_claimed`, `address`, `trace(person, claim)` |
 
 > **PUTTING `World` FIRST ON EVERY RESOLVER-SIDE QUERY IS THE ENFORCEMENT.** Calling one from inside
-> `choose` then **fails at the call site for want of an argument.** It takes enforcement-by-omission
-> from 3 signatures to 23, and converts a table a reader must remember into a call that does not compile.
+> `choose` then **fails at the call site for want of an argument.**
+>
+> **This suite's own catalogue is 25 rows — 18 resolver-side and 7 person-side**
+> (`08_FUNCTION_SURFACE.md` §2). With the three top-level signatures that is **21 call sites that fail
+> for want of an argument**; the 7 person-side rows are enforced by the opposite omission — they take no
+> world and cannot acquire one.
+>
+> ⚠ **DO NOT QUOTE AN ADDITIVE TOTAL.** A *"23"* circulates in three places over a differently-scoped
+> table of 20 rows, and it is `3 + 20` — **a sum that names nothing.** Adding this suite's 25 to 3 would
+> re-mint the identical error with a new number.
 
 > ⊕ **AND A CACHE RULE, WITHOUT WHICH THE PARALLELISM LICENCE IS A DATA RACE.**
 >
@@ -680,6 +727,98 @@ of a duke's motivation was uncomputed.*
 **A Sensation is un-nameable, therefore undisputable.** No person can hold a claim about another's
 hunger. Claims reach the larder and the body and stop there.
 
+### §5.5 THE MORAL LAYER — `Conviction`, `Belief`, `Duty`, and why none of them is a Claim
+
+> ⚠ **THE COLLISION THIS SECTION EXISTS TO PREVENT, AND IT IS THE MOST DANGEROUS ONE IN THE SUITE.**
+>
+> **A `Belief` in this game is about MORALS. It is NOT about the veracity of information.** [Jordan,
+> this session.] Every earlier draft of this suite used *belief* as the ordinary English word for
+> *what a person holds true* — which is **`Claim`** — and that usage is purged, because it collides
+> head-on with a shipped game object meaning something else entirely.
+>
+> **What a person holds TRUE is a `Claim`. What a person holds RIGHT is the moral layer below.**
+
+```
+Conviction  -- a moral AXIS. Thirteen, canonical, closed, registry-owned.
+Belief      -- a moral COMMITMENT: this person's own statement of what ought to be,
+               backed by Convictions, revisable under SOCIAL pressure and never by evidence.
+Duty        -- an OBLIGATION owed to a faction, a kin group or a culture. Not chosen; borne.
+```
+
+| | `Conviction` | `Belief` | `Duty` | vs. `Claim` |
+|---|---|---|---|---|
+| **what it is** | a moral axis a person weights | a person's own moral statement | an obligation owed | **a proposition held true** |
+| **who authors it** | canon — a closed roster | **the person** (the player, for a player character) | the institution or kin that binds them | the world, via `witness` |
+| **what moves it** | slowly, by scar and crisis | **social pressure**, at RESOLVE | conferral, oath, kinship | **evidence**, at WITNESS |
+| **what refutes it** | **nothing refutes an axis** | **nothing REFUTES it — it is CHALLENGED and may be revised** | discharge, death, repudiation | **a colliding claim** |
+| **write class** | INTERIOR | ACTS | ACTS | **INTERIOR** |
+
+> **THE LINE, STATED ONCE SO IT CANNOT DRIFT: EVIDENCE MOVES CLAIMS. ARGUMENT AND CONSEQUENCE MOVE
+> BELIEFS.** A man shown proof the harbour is silted has a new **claim**. A man shown that his own
+> position cost his neighbours their livelihoods has a **belief under revision pressure**. **The first
+> is discovery; the second is a moral crisis, and no amount of the first produces the second.**
+
+#### §5.5.1 `Conviction` — the axis roster
+
+**Thirteen, closed, canonical:** Faith · Authority · Order · Scholastic · Utility · Equity · Liberty ·
+Precedent · Community · Identity · Warden · Virtue · Honor. **A person carries one to three PRIMARY
+convictions plus distributed weight** — the primaries are what they will pay for; the distribution is
+what they will notice.
+
+> ⊕ **THE ROSTER IS A REGISTRY READ AT LOAD TIME, NEVER A LITERAL — for a reason the tree paid for.**
+> Two modules shipped **rival rosters of nine and eight names, overlapping in three.** The cost was **a
+> silent no-op**: the one live caller passed a name present in one roster and absent from the other, **so
+> the effect never landed while the caller reported that it had.** That is the read/write asymmetry
+> hazard exactly, and it is why the roster resolves through the registry, is exported behind a blocking
+> round-trip, and **raises on a non-member** rather than returning nothing.
+
+#### §5.5.2 `Belief` — a moral commitment, and the one record the PLAYER authors
+
+```
+Belief := (id, holder, statement, position, underlying_convictions[], revision_pressure, history[])
+          position in { strong, wavering, revised }
+```
+
+**It is the one record in this shape a player writes directly**, and that is deliberate: **a player
+authors what their character stands for, and the engine authors everything else.**
+
+- **It is not a stat and grants no bonus.** It grants **Momentum** for aligned action — spendable,
+  capped, per-scene — which is **a choice**, where a bonus is arithmetic. **Acting on principle gives
+  you something to spend, not a better chance at things.**
+- **It is CHALLENGED, never refuted.** A social success adds **revision pressure**; revision is **its
+  own act, taken by the holder.** *Nobody argues you out of your morals in one exchange, and a design
+  where they can is one where morals are hit points.*
+- **It is backed by Convictions**, so revising one is a tremor in the axis beneath it — which is where
+  the setting's coherence machinery already lives.
+
+**N-line.** Cut `Belief` and a character has appetites and obligations and **nothing they would refuse
+an advantage over.** Every dilemma reduces to cost-benefit, because nothing records what this person
+will not do. **The moral fork has no carrier at all.**
+
+#### §5.5.3 `Duty` — the obligation you did not choose
+
+**Borne, not authored** — and its mechanism is already here: an **`oblige` Tenure**, plus the `commit`
+degree that prices a requisition. **`Duty` needs no new record**, and this shape adds none. It is named
+because **leaving it unnamed is how it gets re-invented as a stat**, and because the distinction only
+works with all three terms on the page: *what you hold right, what you weigh, what you owe — and,
+separately from all three, what you hold true.*
+
+#### §5.5.4 Where the moral layer meets the loop
+
+| step | what the moral layer does there |
+|---|---|
+| **CALENDAR** | nothing |
+| **MATTER** | nothing — **morals are not metabolism** |
+| **DELIBERATE** | Convictions weight the option ranking; **a Belief is what makes a costly option choosable at all** |
+| **RESOLVE** | Momentum gained for aligned action and spent; a challenging outcome adds **revision pressure**; revision is an act |
+| **WITNESS** | **nothing.** Witnessing deposits **claims** |
+| **CENSUS** | nothing |
+
+> **The WITNESS row is load-bearing.** If evidence could move a Belief, **investigation becomes moral
+> re-engineering** and the epistemic layer becomes a persuasion system. **They are separate layers, they
+> meet only inside `choose`, and `choose` is where a person decides what to do about the gap between what
+> they hold true and what they hold right.**
+
 ---
 
 ## §6 · IDENTITY
@@ -688,6 +827,12 @@ hunger. Claims reach the larder and the body and stop there.
 > ```
 > id(x) = H(world_seed, tick, subject_id, purpose)
 > ```
+
+> ⚠ **THE EVENT-CREATE CASE HAS NO SUBJECT TO KEY FROM, AND NEEDS STATING.** When an **event** creates
+> something — a landslide exposes a seam — there is no acting subject and the created object does not
+> exist yet, so `subject_id` is undefined on both sides. **Key it from the LOCUS: the id of the Rung or
+> Site the change lands at, plus a `purpose` naming the event row and its slot.** Every event has a
+> place; nothing in this design creates something nowhere.
 
 `purpose` is a short discriminator naming the operation and, for a multi-`create` act, its slot:
 `create:0`, `create:1`, `yield`, `festering`, `ageing`, `attempt:2`. **Its domain is open and its stability
@@ -811,7 +956,7 @@ transit, and what reaches the hamlet is often not what the Duke signed.
 
 **Then nothing further is needed:** the person's own need plus capability plus this new claim yields an
 opening through the same `opening_set(person, view)` any act comes through, now evaluated over changed
-*believed* terms. **No one authored an opportunity for anybody.**
+**claimed** terms. **No one authored an opportunity for anybody.**
 
 **A published dispensation does not apply — it lands as a compliance contest**, per relevant Rung,
 through `contest`, and **scope enumerates EXECUTORS, not places.** Delivery is not assumed, and an
@@ -977,7 +1122,7 @@ actually survives its cut, because something else already provides it.** Six wer
 | # | cut object | its claimed N-line | why the possibility survives the cut |
 |---|---|---|---|
 | 1 | an `information` gauge | *inquiry needs a target* | knowledge stored on the thing known — **two owners, no knower.** The claim ledger plus the per-observer estimated profile already provide it, and only they can be planted or refuted |
-| 2 | `credence.<proposition>` deposits | *belief needs a carrier* | the ghost: the target was cut by its own suite, found by three independent routes. `Claim.confidence` is the carrier |
+| 2 | `credence.<proposition>` deposits | *holding-something-true needs a carrier* | the ghost: the target was cut by its own suite, found by three independent routes. `Claim.confidence` is the carrier |
 | 3 | a `rising` auto-declared project kind | *the only route by which control changes with no post-holder* | **survives its cut** — `Press(f,n) > Hold(n,...)` with suppression scars provides it, with real producers, **and the alternative required a registry table plus an acyclicity check that does not exist** |
 | 4 | `act.charter` generating a faction entity | *a schism needs a founding act* | **survives** — a faction is a proposition plus commitments, so founding is `commit` migration plus recognition-fission; a dispensation moves no edges |
 | 5 | an `allegiance` edge kind with a stored −5..+5 gauge | *person-to-faction feeling needs a home* | commitment **degree** plus a **stance row** already carry it; a second stored carrier is pure E-surplus |
@@ -1011,5 +1156,10 @@ Stated so no later document can cite this one as though these were closed.
 7. **The testimony half of the salience floor.** A firsthand claim gets a floor; testimony stays clamped.
    A sixty-year-old revelation out of the archives **arrives as testimony**, so this bears on the entire
    epistemic column at the top of the ladder.
-8. **Age-band boundaries; channel latency values; `season_factor`'s distribution.** Three numbers with no
+8. ⚠ **`destroy` IS NOT CLEARED against the refusal rows, and this shape inherits the hole rather than
+   closing it.** The unbounded discrete-destruction limb — one act removing an object others depended
+   on, with no fractional-effect bound — was admitted open for arson, and extending `destroy` to a Rung,
+   an Office, a Person or a Site **widens it by four object classes.** `create` is clear; `destroy` is
+   not. **Do not cite this suite as having closed it.**
+9. **Age-band boundaries; channel latency values; `season_factor`'s distribution.** Three numbers with no
    home; the third may already be answered by the world-events rate bounds.

@@ -52,7 +52,11 @@ condition(site) <- clamp( condition(site)
    harbours silt — a non-social subject, so the world drives it. **Tending it is a choice.** Both move
    one quantity, which is exactly the flux model, and the Partition explains why without special-casing
    either.
-4. **It is an authored per-season constant, and this shape says so out loud.** A prior design
+4. **It clears the ban on a scheduled recovery tick, and on the right ground.** That refusal governs
+   **standing** — a social quantity — and `wear` moves **matter**. The clean argument is the write
+   class, not a phase-membership accident: *nothing social moves on a clock, and `condition` is not
+   social.*
+5. **It is an authored per-season constant, and this shape says so out loud.** A prior design
    congratulated itself on having *no hidden per-season constant anywhere in the fuse*. This ruling
    **requires one.** The honest position is that it is **justified rather than hidden**: it is the
    world's entropy, it is the quantity the whole political layer exists to argue about, and **it belongs
@@ -130,6 +134,14 @@ fire without an actor"* is answered by reading the `social` column.
 **What that covers:** weather · `wear` · a body ageing and failing · a landslide exposing a seam · a
 storm destroying a harbour · a tear opening in the substrate · pressure from off the peninsula.
 
+> ⊕ **AND ONE CLAIM ABOUT THE OLD FOUR-CHANNEL LIST IS RETRACTED RATHER THAN REPEATED.** It is often
+> said that the list *licensed matter events with nothing generating one.* **An adversarial pass broke
+> that**: a generator existed — a bad seasonal roll closing the channel for a season. **The true, and
+> more useful, statement is narrower: the licence named no generator in its own section, and the
+> generator that existed sat two hundred lines away, unlinked.** The other two failures stand — `wear`
+> was unwritable, and an authored event deck had no home. *An overstated finding with a true core is
+> worth more corrected than repeated.*
+
 ### §4.1 The event row — one schema, not a second catalogue
 
 An actorless row is **the same row an act uses, with two deltas** — verified field-for-field:
@@ -151,6 +163,23 @@ event_row:
   deposits: { overwhelming, success, partial, failure }   # TOTAL over all four bands
   follow_on: { record, key, ttl }        # a Record with a ttl — NEVER a scheduled future event
 ```
+
+>  ⊕ **TRIGGER PURITY — the rule that keeps the actorless channel from reading society's temperature.**
+>
+> **An event row's trigger predicate may read ONLY `social: false` rows, plus terrain and season. It may
+> never read a social quantity.**
+>
+> **This is not hygiene; it is the defect that was MEASURED in the shipped event deck.** Every one of
+> its cards gated on one composite pressure quantity, **three of whose four summands are social** — so
+> *the deck selected its events by reading society's temperature.* An actorless channel whose triggers
+> read grievance is **not actorless**: it is the world reacting to politics with nobody deciding, which
+> is the authored feeling the whole Partition exists to remove.
+>
+> **The Partition already forbids an event from WRITING a social row. Trigger purity is the same rule on
+> the READ side, and without it the channel launders social state into world behaviour.**
+>
+> **Falsifier.** An event row that cannot be gated without reading a social quantity. **If one exists,
+> it is not a world event — it is a consequence of what people did, and it belongs to an act.**
 
 **The gate is a predicate over state, read at the moment of evaluation, never a roll.** Terrain
 (immutable) and season (world state) narrow eligibility **categorically**; a condition band narrows it
@@ -288,17 +317,28 @@ that governs every memory.
 | 4 | birth (envelope weight) | Event | MATTER | MATTER | population is static; a cohort cannot grow into a claimant |
 | 5 | travel legs advancing | Event | MATTER | MATTER | distance stops costing anything; presence becomes free |
 | 6 | the actorless event channel (§4) | Event | MATTER | MATTER | **nothing ever happens to a place that nobody chose to do to it** — no bad season, no reason a governor's competence is tested by anything but a rival |
-| 7 | off-board pressure (§4.4) | Event | MATTER | MATTER | the peninsula has no outside; the trade, the fleet and the hostage stop meaning anything |
+| 7 | off-board pressure — **NON-AGENTIVE HALF ONLY** (§4.4) | Event | MATTER | MATTER | the peninsula has no outside. ⚠ **The agentive half — a levy demanded, a subsidy stopped — is an actor's decision rendered as weather, and §4.4 BLOCKS it.** This row is not a licence for it |
 | 8 | a band edge crossing | Event | — (it is an emission, not a write) | MATTER or RESOLVE | verb sets never change; a silted harbour is indistinguishable from a working one |
 | 9 | claim confidence decay | interior | INTERIOR | WITNESS | **you cannot lose a settlement by being forgotten**; authority becomes permanent once granted |
 | 10 | a date lapsing unheard | — (absence) | CALENDAR | CALENDAR | **the specific injury of being ignored** disappears; every petition gets an answer |
-| 11 | a Record's `ttl` expiring | Event | MATTER | MATTER | a precedent is eternal; a cooldown cannot end; a remission never runs out |
+| 11a | an **event-created** Record's `ttl` expiring | Event | MATTER | MATTER | a cooldown cannot end; a hazard's residue is eternal |
+| 11b | an **act-created** Record's term maturing | ⚠ **neither** — it is **the creating act's own declared term ripening** | ACTS (at creation) | MATTER | a remission that never runs out, a truce with no expiry. **It is an act ripening, not an event, and calling it an event hides who set the clock** |
 | 12 | de-individuation | Event | MATTER | CENSUS | the person count grows without bound; the compute dial has one direction |
+| 13 | **individuation** — a Person created with no decider, on demand | Event | MATTER | CENSUS | **the world cannot produce the person a situation requires**; the praefect fines a smuggler and there is nobody to be one |
+| 14 | **claim eviction at the ledger cap** | interior | INTERIOR | WITNESS | **forgetting.** Without it a ledger is a perfect archive and nothing is ever lost, misremembered or unavailable when needed |
 
-**Twelve channels, four of which are the same mechanism (`wear`, `yield`, ageing, births) seen at
-different subjects — which is the Partition doing its job.** There is no thirteenth, and there is no
-list to extend: **anything whose subject is non-social is already covered, and anything social needs a
-person.**
+**Fourteen rows, and the count is not the point** — four of them are one mechanism (`wear`, `yield`,
+ageing, births) seen at different subjects, which is the Partition doing its job.
+
+> ⚠ **AND THE EXHAUSTIVENESS CLAIM IS SCOPED RATHER THAN ASSERTED.** An earlier draft of this table
+> ended *"there is no thirteenth"* and was **wrong twice**: it omitted **individuation** (a person
+> created with no decider) and **claim eviction** (a destroy at the ledger cap, with no decider), both
+> of which are decider-free changes this suite ships. **Rows 13 and 14 are those two.**
+>
+> **The honest statement is not a count. It is the predicate:** anything whose subject is **non-social**
+> is already covered, and anything **social** needs a person. **The list cannot be extended, but it can
+> be — and was — under-enumerated**, and a table claiming completeness by counting is exactly the shape
+> that hides the row it missed.
 
 ---
 

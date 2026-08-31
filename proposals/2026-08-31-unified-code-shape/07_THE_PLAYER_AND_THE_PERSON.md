@@ -103,7 +103,7 @@ need(p, COMMITMENT):
 need(p, EXPOSURE):
   for each hazard h that p's OWN ledger names:
     u = clamp(0, 1,  p_hat(h) * loss(h) / worth(p) )
-    p_hat  = p's OWN believed probability that h lands           -- ledger rows only
+    p_hat  = p's OWN estimate that h lands, from CLAIMS ONLY     -- ledger rows only
     loss   = EV(opening_set | claims) - EV(opening_set | claims + h)
     worth  = max( EV(opening_set | claims), subsistence_floor(p) )
 ```
@@ -131,7 +131,7 @@ work hardest.
 > **A Sensation is un-nameable, therefore undisputable.** No person can hold a claim about another's
 > hunger. **Claims reach the larder and the body, and stop there.**
 
-### §3.2 `opening_set` is BELIEF, and that is the whole of discovery
+### §3.2 `opening_set` is CLAIM-DERIVED, and that is the whole of discovery
 
 ```
 opening_set : (Person, View) -> Act[]        # person-side Query: takes no World, ever
@@ -140,7 +140,7 @@ opening_set : (Person, View) -> Act[]        # person-side Query: takes no World
 **A person may attempt what is not in fact available.** The harbour silted last season; nobody told the
 merchant; he declares a shipping act; **it resolves as a discovery.**
 
-> **THE INTERFACE MUST NOT GREY OUT A REMOVED VERB.** `opening_set` is belief and `verbs(w, site, c)` is
+> **THE INTERFACE MUST NOT GREY OUT A REMOVED VERB.** `opening_set` is claim-derived and `verbs(w, site, c)` is
 > truth, and **an interface that greys out the second has handed the player the world's state.** That is
 > omniscience re-entering through the one door the signatures cannot close.
 
@@ -319,6 +319,7 @@ character.**
 |---|---|---|
 | **the slate** | 4–9 candidates, cast then ranked, per season | not everything that happened; **about 3% of it** |
 | **the response set** | 3–5 responses per situation, from the resolver's **declared** option set | not a generated menu; a candidate cannot invent a response |
+| **their Beliefs** | **the one record the player AUTHORS directly** — what this character stands for | not a stat, and not a bonus: it grants **Momentum to spend**, which is a choice |
 | **the act** | **one**, per season | not a turn's worth of actions |
 | **the view** | at most `K` claims, ranked by salience | not the world; **not a blurred world either** |
 | **inputs** | **published** — which channel carried an item, what a roll's factors were | — |
@@ -334,7 +335,7 @@ threshold that would tell them what the world is about to do.
 
 | refused | because |
 |---|---|
-| a player-only mechanism of any kind | there is no player model; a player is a person |
+| a player-only mechanism of any kind | there is no player model; a player is a person. **The one asymmetry is authorship, not capability: a player writes their own Beliefs where an NPC's are generated — and both then run through the same `choose`** |
 | an NPC-only mechanism of any kind | the same rule, in the direction people forget |
 | a fast path, an auto-resolve formula, a summary resolver | fidelity is a camera; two kinds of thing cannot be calibrated to agree |
 | a preview that rolls | it consumes a draw and shifts every downstream draw — **looking at it changed it** |

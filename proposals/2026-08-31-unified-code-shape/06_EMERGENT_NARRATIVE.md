@@ -61,8 +61,12 @@ within that world are the regions that drive conflict* — and **two people with
 must be able to want incompatible things.** A scalar drive cannot do that; two people with the same
 number want the same amount of nothing in particular.
 
+> **And the want is not a new object: a Proposition of mood `OUGHT` IS AN UTTERED BELIEF** (`02` §5.5.2).
+> **What a person is pursuing is what they hold right, said out loud** — which is why it can be argued
+> with, committed to by others, and betrayed by its own author.
+
 ```
-the want      := a Proposition (mood OUGHT), uttered by the person, immutable
+the want      := a Proposition (mood OUGHT) — an uttered Belief, immutable once said
 the pursuit   := INTENDS(person, proposition) claims in that person's own ledger
 the progress  := DERIVED AT READ, never stored:
                      progress(P) = sum over terms i of  w_i * [ term_i holds now ]
@@ -284,7 +288,7 @@ DOMINANCE DEFECTS.** Fix them, and the arc stops being producible.
 | refused | because | what does the job |
 |---|---|---|
 | a narrative engine | a story that is generated is a story someone wrote | the provenance chain, read backwards |
-| an authored per-person opportunity or quest object | **a churning world turns back into content** | `opening_set` recomputed from need + capability + believed terms |
+| an authored per-person opportunity or quest object | **a churning world turns back into content** | `opening_set` recomputed from need + capability + the terms they hold a claim of |
 | an arc object, an arc state machine, an arc registry | an arc is a projection; a projection with a store goes stale | `causes[]` |
 | a stored `progress` gauge or clock on an ambition | dead state that reads as mechanism | derived at read over world terms |
 | a forecast shown to the player | it makes the future the world's property rather than the player's | **bands, never numbers; imminence governs depth, never entry** |
@@ -313,7 +317,7 @@ authoring it, the mechanism that produces it, and what is lost if the mechanism 
 | 7 | **forgery, and retroactive legitimacy collapse** | `plant` mints a root; `reconstruct` flips legitimacy **at telling speed, for exactly who learns** | documents are decoration; investigation has no prize |
 | 8 | **burial is safe but never free** | `compose_agenda` costs an act; an omitted petition **is a drop and deposits as one when its backers learn** | petitions become a queue; filtering stops being a choice |
 | 9 | **power without a post** | a channel, a custody, a gate or a unique root; the establishment acts; standing-by-leave | elite-only politics; **S-DOWN fails by construction** |
-| 10 | **discovering the harbour silted by trying to ship from it** | `opening_set` is belief; `verbs` is truth; the attempt resolves as discovery | omniscience re-enters through the interface |
+| 10 | **discovering the harbour silted by trying to ship from it** | `opening_set` is claim-derived; `verbs` is truth; the attempt resolves as discovery | omniscience re-enters through the interface |
 | 11 | **two sincere witnesses who can never settle it** | per-person `witness`; construal divergence; reports are claims | the epistemic layer idles |
 | 12 | **five repeaters are not five sources** | a Knot deposit **reuses the event id**; corroboration counts **distinct** roots and fails closed | rumour launders into corroboration; verification play dies |
 | 13 | **deposition with no deposition system** | `leaders()` returning somebody else next season | leadership becomes a field; coups need a subsystem |
@@ -321,6 +325,7 @@ authoring it, the mechanism that produces it, and what is lost if the mechanism 
 | 15 | **suppression breeds return at magnitude** | scars ratchet the arming threshold; dormant rows cleared only by terms | suppression is a delete |
 | 16 | **prejudice as a refutable default, not a stored penalty** | empty-ledger defaults + mark legibility in each observer's own table | caste becomes an obstacle modifier |
 | 17 | **the doctrine fight about how to tend the world** | two `OUGHT` Propositions over one site class collide automatically | Jordan's flux ruling has conflict but no carrier for it |
+| 19 | **the hypocrite, and the movement discredited by its founder** | a faction's Proposition is an **uttered Belief**, so the founder's acts are checkable against it by anyone holding both claims | a faction's banner is authored rather than somebody's morals; nobody can fall short of their own stated position |
 | 18 | **a season in which the interesting thing is what you did NOT get to** | one act per person, universally | scarcity disappears; refusal, delay and obstruction stop mattering |
 
 **Eighteen rows, and not one of them is a feature.** Every one is two or three primitives meeting. **That

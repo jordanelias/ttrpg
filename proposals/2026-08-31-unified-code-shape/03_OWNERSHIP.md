@@ -10,7 +10,7 @@
 
 | owner | owns | never owns |
 |---|---|---|
-| **Person** | everything interior — `marks`, `capability`, `stance`, the claim ledger; **every Tenure whose subject they are**; the Propositions they utter | anything about another person; any aggregate |
+| **Person** | everything interior — `marks`, `capability`, `stance`, **`convictions` and `beliefs` (the moral layer)**, the claim ledger (**what they hold true**); **every Tenure whose subject they are**; the Propositions they utter | anything about another person; any aggregate |
 | **Rung** | `matter` (`stores`, the Sites beneath it, the Records kept there, the transmission pointer), `dates[]`, `envelope`, `stake[]`, `judging_set_rule` | **any social aggregate** — no norms, densities, reputation, legitimacy, unrest, cohesion |
 | **Office** | `post`, `remit`, `conferral`, `revocation`, `establishment[]`, `dates[]`, `upkeep` | **who holds it** — that is a `hold` Tenure, owned by the holder |
 | **Site** | `condition`, `drawers[]`, `kind` | anything social |
@@ -160,7 +160,8 @@ not exist.
 | a faction's leader | **Nobody** | `leaders(w, prop, rung)` — **and deposition is this returning somebody else** |
 | a settlement's grain | **the Rung** | `matter.stores[grain]` — primary state |
 | a harbour's condition | **the Site** | primary state, fixed-point |
-| what a person believes | **that Person** | their ledger; **nobody else may read or write it** |
+| what a person holds true | **that Person** | their ledger; **nobody else may read or write it** |
+| what a person holds **right** | **that Person** | their `beliefs` and `convictions` — **a different record from the ledger, moved by argument and consequence, never by evidence** |
 | what a person is committed to | **that Person** | the `commit` Tenures whose subject they are |
 | whether a village exists | **the Rung**, and only an **act** may end it | `(Rung, exists)` is `social: true` |
 | how much authority a governor has | **Nobody** | a Query counting links whose subordinate's ledger **currently asserts** who decides here |

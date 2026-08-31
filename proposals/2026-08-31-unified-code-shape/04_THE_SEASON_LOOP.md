@@ -186,7 +186,7 @@ band, deaths remove it. **The envelope is matter and does not act.**
 | **writes** | **nothing but the returned Act** |
 | **refuses** | the World; another person's interior; any write at all |
 
-**A pure map over persons. Any order. Fully parallel.** `opening_set` is **belief** and can be wrong —
+**A pure map over persons. Any order. Fully parallel.** `opening_set` is **claim-derived** and can be wrong —
 **a person may attempt what is not in fact available**, and discovering that the harbour silted by
 attempting to ship from it is the mechanism by which the world's changes reach a person who was not
 told.

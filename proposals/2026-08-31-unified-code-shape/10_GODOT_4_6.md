@@ -154,7 +154,7 @@ delivers CLAMP-order independence.** It does not deliver **SUMMATION-order indep
 > - **Accumulate, then clamp ONCE**, with `clampi`.
 > - **Band gates compare exactly**, and a coarse mean is compared by **cross-multiplication with no
 >   division**: `a * d >= c * b` rather than `a/b >= c/d`.
-> - **Belief-side floats are explicitly licensed**, because they never enter an order-free accumulator:
+> - **Interior-side floats are explicitly licensed**, because they never enter an order-free accumulator:
 >   `Sensation`'s two scalars, claim confidence, salience. **Consumed inside one call, stored nowhere a
 >   second writer reaches.**
 > - **The boundary rule, stated once so it can be checked:** **no float may enter an order-free
@@ -208,7 +208,7 @@ third field to `Vector2`.**
    construction site, `sense()`, and documented there.
 2. ⚠ **[engine] `Vector2` components are 32-bit floats in a standard build.** A Python-oracle double
    round-tripping through float32 **breaks cross-language threshold parity at the last bits.** Both
-   scalars are belief-side, so no world state is at risk — but **define the sensation domain so that its
+   scalars are interior-side, so no world state is at risk — but **define the sensation domain so that its
    values are float32-exact** (integer basis points below 2^24), and **assert parity in the integer
    domain.** **And `Vector2` must never be reused for a world-state pair.**
 

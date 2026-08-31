@@ -48,7 +48,7 @@ structure:
 | | throughline | where it becomes structural |
 |---|---|---|
 | **T1** | all actions are performed by characters | `resolve` has no faction parameter; a faction has no verbs (`02` §3.1) |
-| **T2** | characters have memories, feelings and beliefs that change | the per-person ledger; `stance` rows; nothing social moves on a clock |
+| **T2** | characters have memories, feelings and commitments that change | **two separate layers, and conflating them is the suite's most dangerous collision:** the claim ledger is **what they hold TRUE**; `convictions` and `beliefs` are **what they hold RIGHT** (`02` §5.5). Evidence moves the first; argument and consequence move the second. Nothing social moves on a clock |
 | **T3** | memories are fallible; multiple perspectives on one event | `witness(Person, Event)` is per-person **and there is no collection signature to call** |
 | **T4** | no one is omniscient | `choose` has no `World` parameter, and every resolver-side Query takes `World` first, so calling one from inside `choose` **fails at the call site** |
 | **T5** | demands aggregate UPWARD and are filtered at a rung | Petition -> `carry` -> DocketItem -> sitting, filtered by a **named person** who pays for the filtering |
@@ -170,12 +170,27 @@ decoration.
 > Creation and destruction included.**
 
 **And the membership test is a static schema column, not a judgment.** `social: bool` on the
-`(record-kind, field)` pair, declared in the exported schema and read by the resolver. **Act-driven iff
-`social: true`; an Event may write only `social: false` rows.**
+`(record-kind, field)` pair, declared in the exported schema and read by the resolver — **and the rule
+is ASYMMETRIC:**
+
+```
+social: true   =>  ACT-DRIVEN ONLY.  An Event may never write this row.
+social: false  =>  EITHER DRIVER.    An Event may write it, and so may an act.
+```
+
+**The row does not say who may act. It says what an EVENT may not touch.** Stated as a biconditional it
+is simply false: a restoration **act** writes `(Site, condition)`, a `social: false` row, every season —
+**`wear` and a tending act land on the same field by design**, and that is the flux model.
 
 **The worked case is the law's own proof:** `(Site, condition)` is `false`, so a plague may move it;
 `(Rung, exists)` is `true`, so **a plague may kill every body in a village and may not destroy the
 village.** The village empties and still legally exists **until an office strikes it from the roll.**
+
+> ⚠ **AND THE COLUMN IS KEYED ON `(record-kind, field)` FOR A REASON.** Stated over *subjects*, the
+> Partition concedes a mixed class — *a plague is biology but it empties institutions* — and **"both"
+> is not a partition.** Keyed on the field, a plague is not one change with a disputable subject but
+> **several, each writing a different field**, and each is answered separately. **The mixed class
+> dissolves because there was never one change to classify.** (`02` §5.1.)
 
 **The half most easily lost, restated:** an event reaches society **only through what people choose to
 do about it.** The plague does not depose the mayor. It kills people, and then people act.
@@ -231,7 +246,7 @@ A refusal without a replacement is an amputation. Each row names what does the j
 
 | refused | because | what does the job |
 |---|---|---|
-| a `World` parameter on any decision function | Law 2 collapses; every belief mechanism becomes decoration | `View` + `Sensation` |
+| a `World` parameter on any decision function | Law 2 collapses; the whole epistemic layer becomes decoration | `View` + `Sensation` |
 | a `view_of(world, person)` that masks rather than assembles | someone eventually masks nothing | `assemble(person, question)` over the ledger |
 | any function taking `[Person]` and one `Event` | consensus broadcast; divergent perspective dies | `witness(person, event)`, called per person |
 | a cohort deposit carrying a **value** rather than a **distribution** | consensus broadcast **laundered through the cohort type** — one sign into hundreds of people, and the type checker sees a single legal write | a construal distribution; an individuating member **draws** |
@@ -244,7 +259,7 @@ A refusal without a replacement is an amputation. Each row names what does the j
 | a personal effect on a group that is not a **fraction** of that group | the only concrete anti-leverage rule the precedent corpus supplies | fractional effects |
 | a scheduled recovery tick on standing | converts a consequence system into a treadmill | nothing social moves except by an act |
 | a per-entity branch anywhere in the resolver | scripting drift: the exception becomes the mechanism | the resolver branches on **mode**, never on kind and never on a name |
-| an authored per-person opportunity or quest object | a churning world turns back into content | `opening_set` recomputed from need + capability + believed terms |
+| an authored per-person opportunity or quest object | a churning world turns back into content | `opening_set` recomputed from need + capability + the terms they hold a claim of |
 
 > ⊕ **ONE CORRECTION TO THIS TABLE, FOUND BY TWO LANES THAT COULD NOT SEE EACH OTHER** [LANE A C7,
 > LANE B D2]. The anti-flat-modifier row is quoted across the corpus with the constant **0.671**,

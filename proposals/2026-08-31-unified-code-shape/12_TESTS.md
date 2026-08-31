@@ -156,7 +156,7 @@ adding one key**; and a fixture containing a **new bare assignment** is asserted
 | **is campaign-unreachable** | **both oracle arms are identical by construction. Running it there is a FAKE control, and saying so is part of the discipline** |
 
 > ⚠ **AND ONE THING THE SUITE DOES NOT CREDIT ITSELF WITH.** The unit suite is a **shipping gate, not a
-> belief gate.** It caught one confounded measurement **only** because the change incidentally broke ten
+> conviction gate.** It caught one confounded measurement **only** because the change incidentally broke ten
 > unrelated tests; **a clean implementation of the same confounded measurement would have been green.**
 >
 > **Equally, targeted-green is not validation.** The tests you write for the thing you built encode

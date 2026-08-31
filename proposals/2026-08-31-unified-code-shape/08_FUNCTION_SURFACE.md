@@ -43,13 +43,14 @@ parameter list rather than by a table a reader must honour.**
 
 | # | signature | returns | notes |
 |---|---|---|---|
-| 1 | `leaders(w, prop, rung)` | Person[] | **deposition is this returning somebody else.** Comparator: *commitment degree x backing raisable* |
+| 1 | `leaders(w, prop, rung)` | Person[] | resolver-side, **for the resolver only.** Comparator: *commitment degree x backing raisable*. **Deposition is this returning somebody else** |
+| 1b | `leaders_as_claimed(person, prop, rung)` | Person[] | ⚠ **person-side, and REQUIRED — see the note below.** What *this observer* takes the leadership to be, from their own ledger |
 | 2 | `presence(w, prop, rung)` | int | barrier-built index; never a scan per call |
 | 3 | `density(w, prop, rung)` | ratio | |
 | 4 | `footprint(w, prop)` | Rung[] | a faction's extent — **derived, never a `scale` field** |
 | 5 | `sovereign_fraction(w, root)` | **(fraction, undetermined_count)** | **a PAIR, because the conferral graph is not total** — §2.3 |
 | 6 | `condition_at(w, rung)` | int \| **undefined** | coarse read; **undefined at a Rung with no Sites**, and the verb gate does not fire |
-| 7 | `verbs(w, site, c)` | Act[] | **truth**, as against `opening_set`'s belief |
+| 7 | `verbs(w, site, c)` | **Verb set** | **world truth**, as against `opening_set`'s claim-derived account |
 | 8 | `judging_set(w, rung, act)` | Person[] | who hears what happened here |
 | 9 | `draw_share(w, site, person)` | ratio | barrier-built denominator |
 | 10 | `share(w, actor, site)` | ratio | |
@@ -62,22 +63,41 @@ parameter list rather than by a table a reader must honour.**
 | 17 | `retention(w, facet)` | ratio | **the obstacle owner for investigation: the world sets it, as facet decay.** Nobody adjudicates difficulty |
 | 18 | `docket_of(w, date)` | DocketItem[] | |
 
-### §2.2 Person-side — takes the asker, and may read **only** the asker's own ledger
+### §2.2 Person-side — takes the asker, and may read the asker's **own interior** and nothing else
 
-**These take no `World` and cannot acquire one.**
+**These take no `World` and cannot acquire one.** *Their read scope is the asker's ledger, stance,
+capability and remits, plus the `Sensation` computed this step* — **not the ledger alone**, which is a
+tidier-sounding claim than the design can make and would leave `opening_set` unable to work.
 
 | # | signature | returns | notes |
 |---|---|---|---|
 | 19 | `assemble(person, question)` | View | **built, not filtered.** At most `K` claims |
-| 20 | `opening_set(person, view)` | Act[] | **belief.** May be wrong, and that is the discovery mechanism |
+| 20 | `opening_set(person, view)` | **Candidate[]** | **claim-derived.** May be wrong — that is the discovery mechanism. **NOT `Act[]`**: typing it as acts makes the option set an authored list rather than a computed one |
 | 21 | `entrenchment(person, holding)` | ratio | read off `since`/`until`, never ticked into anything |
-| 22 | `norm_as_believed(person, referent)` | ratio | **their estimate**, from their own ledger. **Nobody may read the true profile** |
+| 22 | `norm_as_claimed(person, referent)` | ratio | **their estimate**, from their own ledger. **Nobody may read the true profile** |
 | 23 | `address(person)` | Rung[] | the derived view of their one `contain` Tenure |
 | 24 | `trace(person, claim)` | provenance tree | **a view, not a store** — *only as good as what they went and got* |
 | 25 | `need(person, kind)` | (Proposition, urgency)[] | **ranked, never summed** (`07` §3.1) |
 
-> **PUTTING `World` FIRST ON EVERY RESOLVER-SIDE QUERY TAKES ENFORCEMENT-BY-OMISSION FROM 3 SIGNATURES
-> TO 28**, and converts a table a reader must remember into **a call that does not compile.**
+> **THIS CATALOGUE IS 25 ROWS — 18 RESOLVER-SIDE (1–18) AND 7 PERSON-SIDE (19–25).** With the three
+> top-level signatures, **21 call sites fail for want of an argument** if a decision function reaches for
+> world truth; the 7 person-side rows are enforced by the opposite omission — they take no world and
+> cannot acquire one. **It converts a table a reader must remember into a call that does not compile.**
+>
+> ⚠ **DO NOT QUOTE AN ADDITIVE TOTAL.** A figure of *"23"* circulates in three places over a
+> differently-scoped table of 20 rows, and it is `3 + 20` — **a sum that names nothing.** An earlier
+> draft of this line said *"3 to 28"*, which is `3 + 25`: **the identical error, re-minted with a new
+> number.** Name the catalogue and its two sides.
+
+>  ⚠ **AND `leaders` NEEDS ITS PERSON-SIDE TWIN, OR COVERT MEMBERSHIP LEAKS AT THE ONE SEAT IT EXISTS
+> FOR.** A `commit` edge carries an **avowal** of `avowed | private | covert` (`02` §4.2). A
+> resolver-side `leaders` reads the **true** edge set — which is a true-profile read, **and nobody may
+> perform one.** The prior design typed the flat form exactly this way and recorded it as a defect.
+>
+> **So there are two queries, not one.** `leaders(w, ...)` is the world's answer, callable only by
+> `resolve`. **`leaders_as_claimed(person, ...)` is what an observer believes**, computed from their own
+> ledger — and every consumer that is not the resolver takes the second. **Underestimation is the
+> default, a covert cell reads as smaller than it is, and discovering otherwise costs acts.**
 
 ### §2.3 The one signature that changed shape, and why
 
@@ -144,7 +164,7 @@ levy does, and **that is what makes an investigation a decision rather than a fr
 | `Thread-Read` | Thread Pool + Attunement | rendering-side facets | Coherence risk; **it produces claims most people cannot be told** |
 
 > **INVESTIGATION'S CURRENCY IS THE `SAID` ROW, WHICH IS WHY IT NEEDS NO SCORE.** A telling deposits
-> `SAID(speaker, content, when, place)` **unconditionally, on every outcome** — *disbelieving a man does
+> `SAID(speaker, content, when, place)` **unconditionally, on every outcome** — *doubting a man does
 > not unhear him* — so a diligent interviewer accumulates a graph of who said what to whom.
 > **There is no clue counter, no case object, no investigation skill, and no threshold anyone sets.**
 
@@ -212,7 +232,7 @@ degree_from_net(net, ob, ext?)    -> Degree            # FOUR bands, on the MARG
 
 | forbidden signature | why |
 |---|---|
-| `f(World, Person) -> Act` in any form | Law 2; **the whole belief layer becomes decoration** |
+| `f(World, Person) -> Act` in any form | Law 2; **the whole epistemic layer becomes decoration** |
 | `view_of(World, Person) -> View` | someone eventually masks nothing. **`assemble(person, question)`** |
 | `f(Person[], Event)` | consensus broadcast; divergent perspective dies |
 | `deposit(cohort, value)` | **the row that passed every other guard** — a cohort deposit carries a **distribution** |
