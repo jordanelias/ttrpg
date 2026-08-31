@@ -12,6 +12,15 @@
 each step reads, what it writes, in what order, under what invariant, and what it refuses to do. It
 adds no primitive. Where it needs one, it names the section of `01` that defines it.
 
+> ### ⚠ THIS DOCUMENT IS THE `engine_clock` CONTRACT, AND IT HAS NEVER EXISTED
+>
+> `references/module_contracts.yaml:1128-1136` carries `engine_clock` with **`doc: null`** — one of the
+> nine modules with no home design document — and `CLAUDE.md` §6 names `engine_clock` as **the place
+> porting must start**, because it is the temporal spine everything else hangs on. **The six steps
+> below plus the write matrix at §9 are that contract.** Nothing about it executes, so it is not
+> *done* under `CLAUDE.md` §0.2 — but the reason the port has been blocked at this module is that
+> nobody had written what a tick does, and that is what this document is.
+
 **Citation key**, identical to `01_ARCHITECTURE.md` §0.1: `SUP:NNN` is
 `proposals/2026-08-31-ideal/10_SUPERSEDING.md`; `REV:NNN` is the adversarial review of that design,
 document **20** in `proposals/2026-08-31-ideal/`; `ABS:NNN` is `CODE_SHAPE_ABSTRACT.md` in the
@@ -36,15 +45,20 @@ season(world) -> world':
        recompute option availability
        writes: dates, dockets                                    class: CALENDAR
 
-  ══ MATTER ════════════════ barrier · global
-       larders consume against mouths
-       production resolves — `yield` is rolled here
-       wounds close or fester; bodies age; bodies die
-       travellers advance one leg
-       envelope weights move: births in, deaths out
-       every Site loses `wear(kind)` of its condition          — ENTROPY
-       writes: larders, bodies, travel, yield, envelope weights,
-               and `condition` BY `wear` ONLY                    class: MATTER
+  ══ MATTER ════════════════ barrier · global · THE EVENT BARRIER
+       the world acts on itself. Every state change whose SUBJECT is not
+       peninsular human society resolves here, and only here:
+         larders consume against mouths; `yield` is rolled
+         wounds close or fester; bodies age; bodies fail
+         travellers advance one leg
+         envelope weights move: births in, deaths out
+         every Site loses `wear(kind)` of its condition        — ENTROPY
+         world events fire: storms, landslides, tears, off-peninsular pressure
+         event-driven `mint` and `efface` of NON-SOCIAL subjects
+       emits: Events, witnessed at WITNESS like any other
+       writes: matter, bodies, travel, yield, envelope weights,
+               `condition` by `wear`, and the EXISTENCE of non-social
+               subjects                                          class: MATTER
        ── the world is now FROZEN for the map ──
 
      DELIBERATE ──────────── map · per person or cohort · PURE · any order · parallel
@@ -230,9 +244,19 @@ class.
 
 ---
 
-## §3 · MATTER
+## §3 · MATTER — THE EVENT BARRIER
 
-**Barrier. Global. Write class: MATTER — metabolism and nature only.**
+**Barrier. Global. Write class: MATTER.**
+
+> **THIS IS WHERE THE WORLD ACTS ON ITSELF, AND UNDER JORDAN'S PARTITION IT IS THE ONLY PLACE THAT
+> HAPPENS.** Every state change **whose subject is not peninsular human society** resolves here:
+> weather, `yield`, bodies ageing and failing, travel, envelope weight, `wear`, and **world events —
+> including event-driven `mint` and `efface` of non-social subjects** (`ARCH §2.4`).
+>
+> **Events resolve FIRST, and acts resolve against the world they leave.** An event does not contest,
+> because it is not an agent; there is no contest between a storm and a man. A person who spent his
+> season repairing a harbour a storm had already destroyed **finds it destroyed** — the same fiction as
+> attempting a verb the world has already removed (§4.2), from the other side.
 
 ```
 MATTER(world):
@@ -245,8 +269,14 @@ MATTER(world):
   2. wounds close or fester; bodies age one season; bodies at term die
   3. travellers advance one leg
   4. envelope: births add weight at the youngest band; deaths remove weight
-  5. for each Site: condition <- clamp( condition - wear(kind(site)), 0, 1 )   # ENTROPY
-  6. the world is frozen
+  5. for each Site: condition <- clamp( condition - wear(kind(site)), 0, SCALE )  # ENTROPY
+  6. fire this season's world events; apply their changes[]:
+        alter  — weather, pressure from off the peninsula
+        mint   — a landslide exposes a seam · a river changes course · a tear opens
+        efface — a storm destroys a harbour · a seam is worked out · a tear closes
+     NONE of them may touch a social subject (ARCH §2.4's limit)
+  7. emit every Event of steps 1-6, for WITNESS
+  8. the world is frozen
 ```
 
 ### §3.1 What may move here, and the one thing that emphatically may not
@@ -1099,13 +1129,24 @@ not caught by a type.
 
 ## §11 · WHAT THE LOOP REFUSES TO DO
 
-1. **There is no fallback.** *If no person acts, the thing does not occur.* No distribution just
-   happens, no garrison is assumed paid, no repair is presumed made. **The engine has no caretaker,
-   because there is no GM to be one** (`SUP:1599-1603`).
+1. ⚠ **THE NO-FALLBACK RULE IS RESCOPED BY JORDAN'S PARTITION, AND THE RESCOPING MAKES IT TRUE RATHER
+   THAN WEAKER.** `SUP:1599-1601` reads *"if no person acts, the thing does not occur."* **As written
+   that is false — the world has weather.** Correctly scoped by the subject partition (`ARCH §2.4`):
+   > **IF NO PERSON ACTS, NO *SOCIAL* THING OCCURS. Non-social change occurs regardless.**
+   No distribution just happens, no garrison is assumed paid, no repair is presumed made, no office
+   fills itself, no village is struck from the roll by attrition. **The engine has no caretaker,
+   because there is no GM to be one** — and it never had a caretaker for society, which is the half
+   the rule was always about. **Its domain is now named, which is why it is stronger.**
 2. **Production is metabolism; distribution is politics.** Nature yields, larders consume, bodies age —
    no act required. **Grain moves because a named person decided it should** — an act, always.
-3. **Exactly four decider-free channels and no fifth** (`ABS:269-277`): metabolism and nature · matter
-   events · the confidence of a memory decaying · **the calendar, LAPSE ONLY**.
+3. ⚠ **THE FOUR-CHANNEL ENUMERATION IS DELETED AND REPLACED BY THE PARTITION.** `ABS:269-277` licensed
+   *"these four, and only these four"* decider-free channels **with no membership test**, so it could
+   not be checked or extended, and it was wrong three ways: matter events were licensed with nothing
+   generating one, `wear` was unwritable, and an authored event deck had no home. **A state change is
+   driven by a character's choice if its subject is peninsular human society, and by an event
+   otherwise** (`ARCH §2.4`). The two survivors that are **not** events: the **confidence of a memory**
+   decaying is INTERIOR and belongs to its holder, and **lapse** is the absence of an act, not a change
+   with a driver.
 4. **Exactly three clock-driven quantities** (`ABS:280`): matter, bodies, and the confidence of a
    memory. **Standing, regard, grievance, cohesion and commitment move only when an act causes an
    event**, and **no band edge may ever be defined over one of them**.

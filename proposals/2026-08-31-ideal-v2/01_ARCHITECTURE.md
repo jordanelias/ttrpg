@@ -1958,7 +1958,30 @@ demographic envelope** · **`Record` as an `efface` target and a `told_by` root-
 | 13 | **Clear.** One constant per **site kind**, read as data. **No branch names a site.** A per-site override would be a per-entity branch and is refused by name |
 | 14 | **Clear, and improved.** A decaying site authors nothing for anybody. It **removes** verbs from `verbs(site, c)`, and the people who notice first are the ones whose practice used that verb (`SUP:1227-1228`) — reaching them through the same computed `opening_set` everything else reaches them through |
 
-### 9.12 · The three refusals outside the fourteen rows
+### 9.12 · EVENT-DRIVEN `mint` and `efface` — the walk RE-RUN
+
+⚠ **Ten objects above were walked against `mint`/`efface` AS ACT MODES ONLY.** Jordan's partition makes
+them modes of a `StateChange` with **two** drivers, so the event driver has to be walked on its own.
+**Three rows have genuinely different exposure and are argued rather than assumed; the rest inherit.**
+
+| # | verdict and ground |
+|---|---|
+| 1 | **Clear.** An event is resolved at MATTER, over the world, before the map. `choose` never sees an Event object; a person learns a seam was exposed by being there or by being told |
+| 2 | **Clear.** An event constructs no View |
+| 3 | ⚠ **DIFFERENT EXPOSURE, and it clears only because of a rule stated here.** An event is a **world-scale** happening, and the tempting implementation is to deposit its claim into everyone in its scope — **which is exactly the `[Person]`-and-one-`Event` signature this row bans.** It clears because **an Event goes through the SAME WITNESS fan-out as an act's Event, by presence and channel, per person** (§6). **A landslide two valleys away is not in your ledger until somebody tells you**, and the news map for a storm is the news map for a death. **No event may deposit by scope** |
+| 4 | **Clear.** A cohort witnessing an event stores the construal spread its members would have produced, exactly as for an act's event. ⚠ *And it inherits §9.2 row 4's uncleared gap, which is upstream and unrepaired* |
+| 5 | **Clear.** Nothing is pushed; an event writes the subject it names |
+| 6 | **Clear, and this is the partition's own limit doing the work.** An event may not touch a social quantity **at all**, so it cannot create, store or push an aggregate, a norm, a density, an unrest level or a reputation |
+| 7 | **Clear.** An event stores no knowledge value on anything |
+| 8 | **Clear.** Events resolve at their own barrier through one pass, with no roll to fast-path. ⚠ **And they do NOT contest**, so no second resolution route is opened |
+| 9 | **Clear.** An event may not reach a faction at all — a faction is a society aspect |
+| 10 | **Clear.** No event enters a roll as an addend. Where its result reaches an obstacle it does so as a band representative, exactly as an act's would |
+| 11 | **Clear, and BETTER than the act limb.** The row forbids *a personal effect on a group that is not a fraction of that group*. **An event is not a personal effect at all** — no person performs it, and it falls on everyone at its locus identically. ⚠ **This does not repair the act-driven `efface` limb, which stays uncleared (§9.5 row 11)** |
+| 12 | **Clear.** Events move matter and bodies, which are two of the three admitted clock quantities. **An event may not move standing, and the partition forbids it in as many words** |
+| 13 | ⚠ **DIFFERENT EXPOSURE, and it clears by construction rather than by intent.** An authored deck is a list of **event KINDS**, and a kind is a bundle of changes plus a locus. **The resolver branches on neither `verb` nor `kind`** (§2.4) — it applies `changes[]`. **A deck entry naming a specific Rung, Site, Office or Person would be a per-entity branch and is refused**; a deck entry naming a *kind of place* is a rule over a type, which is what the row permits |
+| 14 | ⚠ **THE ROW THAT MUST BE ARGUED, BECAUSE THE DECK IS AUTHORED CONTENT AND THIS ROW BANS AUTHORED CONTENT.** The row forbids *an authored per-person opportunity or quest object*. **The load-bearing words are PER-PERSON and OPPORTUNITY.** A deck entry is authored, and it is authored **for the world, not for anybody** — it names a locus and a change, never a recipient, never a beneficiary, and never a person. **Nobody is selected. Nothing is offered.** What reaches a person is the same computed `opening_set` that a dispensation or a lost verb reaches them through, and it reaches them **only if a claim of the event is in their ledger**. ⚠ **What WOULD cross this row, and is refused by name: a deck entry conditioned on a named person, on the player, or on a person's state — "if the player holds fewer than two offices, fire the vacancy card". A deck that reads a person is a quest system.** The falsifier is legible: **grep every deck entry for a person reference; there must be none** |
+
+### 9.13 · The three refusals outside the fourteen rows
 
 1. **No apparatus.** *"Validators over the design documents, freshness checkers, guards on the guards,
    or any apparatus whose subject is the repository's own process rather than the game"*
