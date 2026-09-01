@@ -414,6 +414,37 @@ def test_a_case_more_than_half_unrouted_on_core_is_not_assessed():
     assert got["verdict"] == "NOT-ASSESSED"
 
 
+def test_playable_requires_that_every_core_row_was_actually_aimed_at():
+    """A case with ANY unmapped `core` row may not be graded PLAYABLE. Five of the twelve
+    PLAYABLE verdicts in the first run rested on one or two routed core rows with other core
+    rows sitting unmapped beside them -- one reached PLAYABLE on a SINGLE distinct probe with
+    three rows unrouted. That is the instrument certifying a season it never aimed at."""
+    got = R.grade({"id": "T", "season_requires": [
+        {"need": "a person with no office must be able to act", "hardness": "core"},
+        {"need": "zzzz qqqq wwww vvvv", "hardness": "core"},
+    ]})
+    assert got["verdict"] == "NOT-ASSESSED", got["verdict"]
+
+
+def test_a_blocker_outranks_an_unaimed_row():
+    """A core row that DID route and DID hit a gap is a fact about the SHAPE; a core row that
+    failed to route is a fact about the AIM. The first outranks the second."""
+    got = R.grade({"id": "T", "season_requires": [
+        {"need": "a faction must be able to hold a pooled faction-wide resource", "hardness": "core"},
+        {"need": "zzzz qqqq wwww vvvv", "hardness": "core"},
+    ]})
+    assert got["verdict"] == "BLOCKED", got["verdict"]
+
+
+def test_no_playable_case_has_an_unmapped_core_row():
+    """The standing invariant over the ACTUAL run, not a synthetic case."""
+    R._VERDICTS.clear()
+    rep = R.main()
+    bad = [c["id"] for k in ("NPC", "ARC") for c in rep[k]
+           if c["verdict"] == "PLAYABLE" and c["core_unmapped"]]
+    assert not bad, f"PLAYABLE cases with unaimed core rows: {bad}"
+
+
 def test_the_corpus_defects_are_reported_not_hidden():
     """Six of the in-chain corpus's seven case files are committed inside a markdown fence
     with a transcript preamble, and one is TRUNCATED AT ITS HEAD. The instrument works around

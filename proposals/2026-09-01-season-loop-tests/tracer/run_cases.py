@@ -303,12 +303,26 @@ def grade(case: dict) -> dict:
     core_blocked = [r for r in core_routed
                     if r["verdict"]["verdict"] in ("GAP", "NOT-REFUSED")]
 
-    # honesty rule 3: a case more than half of whose core rows failed to route is NOT-ASSESSED.
-    if core and len(core_unmapped) * 2 > len(core):
-        verdict = "NOT-ASSESSED"
-    elif core_blocked:
+    # HONESTY RULE 3, TIGHTENED. A case more than half of whose core rows failed to route is
+    # NOT-ASSESSED -- the instrument did not aim at it.
+    #
+    # AND THE STRICTER CLAUSE, ADDED AFTER READING THE FIRST PLAYABLE LIST: **a case with ANY
+    # unmapped `core` row may not be graded PLAYABLE.** Five of the twelve PLAYABLE verdicts in
+    # the first run rested on one or two routed core rows with other core rows sitting
+    # unmapped beside them -- one case reached PLAYABLE on a single distinct probe with three
+    # rows unrouted. That is the instrument certifying a season it never aimed at, which is the
+    # flattering direction and the one nobody notices.
+    #
+    # A blocker still outranks it: if a core row DID route and DID hit a gap, the case is
+    # BLOCKED regardless of what else failed to route, because that is a fact about the shape
+    # rather than about the aim.
+    if core_blocked:
         verdict = "BLOCKED"
+    elif core and len(core_unmapped) * 2 > len(core):
+        verdict = "NOT-ASSESSED"
     elif not core_routed:
+        verdict = "NOT-ASSESSED"
+    elif core_unmapped:
         verdict = "NOT-ASSESSED"
     elif any(r["verdict"]["verdict"] in ("GAP", "NOT-REFUSED") for r in routed):
         verdict = "DEGRADED"
