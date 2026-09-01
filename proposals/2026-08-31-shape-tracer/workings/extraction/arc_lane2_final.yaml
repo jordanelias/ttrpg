@@ -1,0 +1,1078 @@
+- id: ARC-R16
+  name: "The World Without Direction"
+  one_line: "Multiple factions must advance autonomously via their own distinct institutional logic across several unattended seasons, producing a compounded emergent crisis nobody directed."
+  scale: realm
+  season_requires:
+    - need: "the world's other power-holders must be able to act and change state during stretches where no player is present or attending to them"
+      why: "without this, 'the world moves on without you' cannot happen -- the whole arc is players returning to a changed board"
+      hardness: core
+    - need: "each faction's autonomous action must follow a distinct, fixed behavioral tendency rather than a single shared default"
+      why: "the arc's point is that several different logics compound differently; a single generic 'NPC turn' collapses the distinction and the diagnostic puzzle disappears"
+      hardness: core
+    - need: "the consequences of several seasons of unattended autonomous action must accumulate silently and be legible together as a single readable summary when a player finally looks"
+      why: "the beat is discovering the accumulated state at once, not learning about each change as it happens"
+      hardness: core
+    - need: "one faction's autonomous action must be able to change the difficulty or cost of another faction's or the players' future actions"
+      why: "e.g. one faction quietly building economic strength raises the cost of pressuring it later; without cross-effects the drift is cosmetic"
+      hardness: important
+    - need: "there must be a way to attribute an accumulated change back to which actor's ongoing behavior caused it"
+      why: "players must 'identify which tendency created which consequence' to respond correctly; if the causal chain is illegible the required triage is impossible"
+      hardness: core
+    - need: "an actor's approach toward a threshold must be able to reach a point where crossing it unlocks a materially different capability for that actor"
+      why: "'one step from dominance' needs a real threshold with a step-change on the far side, or the phrase has no teeth"
+      hardness: important
+    - need: "the same time window must be able to produce several independently-caused pressures on unrelated fronts that a returning player must choose among"
+      why: "the triage moment (several holders all needing a response) requires multiple pressures maturing in the same window"
+      hardness: important
+  temporal:
+    span_seasons: 2
+    needs_memory_of: "each faction's running tally of its own autonomous progress across the unattended seasons, and which specific autonomous actions produced which specific consequences"
+    needs_deadline: no
+  who_acts:
+    - "the Church (as an institution acting on its own tendency)"
+    - "a self-interested duke's intelligence apparatus"
+    - "the Guilds (acting per-territory, not as a bloc)"
+    - "a revolutionary faction"
+    - "the returning players (triaging afterward)"
+  knowledge:
+    - "players must not know what happened during the unattended seasons until the accounting is read"
+    - "the system must track all factions' independent trajectories simultaneously even though no faction 'knows' the others' moves"
+  ends_when: "players complete a triage response addressing (or accepting) the accumulated consequences; there is no other terminating condition -- it hands off into ordinary play"
+
+- id: ARC-R17
+  name: "The Favour Gate"
+  one_line: "A diffuse, non-unified economic actor must be persuadable only piecemeal, in a specific place, under time pressure from an opposing actor undoing the same work."
+  scale: faction
+  season_requires:
+    - need: "a faction that is not a single decision-maker must have its allegiance/capacity be a per-location quantity rather than one faction-wide value"
+      why: "the guilds' lack of bloc politics is the whole engine of the puzzle -- recruiting them 'in the abstract' must be impossible"
+      hardness: core
+    - need: "building a local quantity toward a use-threshold must be contestable by an opposing actor's action in the same location and window, with a net effect that can be zero or negative"
+      why: "the race condition (an opponent draining what players build) is what makes the multi-season coordination problem real instead of a grind"
+      hardness: core
+    - need: "reaching a threshold quantity in one place must unlock a specific powerful action usable against a chosen target elsewhere"
+      why: "without the gate-then-strike structure, choosing where to invest has no payoff"
+      hardness: core
+    - need: "an opposing actor must be able to detect a pattern of investment and redirect its own effort specifically to counter it there"
+      why: "the 'the Church notices and shifts to intercept' beat requires the opponent to observe and adapt, not act blindly"
+      hardness: important
+    - need: "there must be an alternate, narrower route to a partial version of the same capability, through an individual person rather than the whole diffuse actor"
+      why: "when the direct route stalls, an officer-recruitment fallback keeps the arc from dead-ending"
+      hardness: important
+    - need: "gains and losses to the same quantity in a period must be bounded so no single action fully solves the problem in one go"
+      why: "the cap forces the multi-season timeline; without it a strong roll could finish the arc in one season"
+      hardness: important
+  temporal:
+    span_seasons: 5
+    needs_memory_of: "the running local quantity per territory, including how much was gained and drained each season and by whom"
+    needs_deadline: yes
+  who_acts:
+    - "the players"
+    - "the diffuse economic faction (acting differently per location)"
+    - "the opposing institutional faction running counter-actions"
+    - "an individual officer within the diffuse faction (fallback path)"
+  knowledge:
+    - "the opposing faction must be able to detect that investment is happening in a specific place, in order to counter it there specifically"
+    - "if players disguise their investment, the opponent's detection must plausibly fail"
+  ends_when: "the leverage action is executed (successfully or not) against the chosen target, or the players abandon the approach"
+
+- id: ARC-R18
+  name: "The Tied Vote"
+  one_line: "[STRUCK-MECHANIC: Coup Counter] A formal collective-decision procedure between two evenly matched sides must be able to end in a tie, with background trend-quantities moving against everyone simultaneously and a third party's private tally quietly advancing."
+  scale: realm
+  season_requires:
+    - need: "a multi-round formal vote between two competing coalitions must be able to end with neither side reaching the majority needed to prevail"
+      why: "the entire arc is 'the tie is the point' -- if ties cannot occur mechanically, the arc cannot happen"
+      hardness: core
+    - need: "a tied/failed formal vote must trigger two independent background quantities to move in the same negative direction simultaneously, regardless of what either side wanted"
+      why: "the 'institutional paralysis costs both sides' beat requires the failure itself, not either side's action, to cause the harm"
+      hardness: core
+    - need: "pre-vote persuasion of a third party's allegiance must require advance investment before the vote is called, wasted if a competing actor persuades the same party back"
+      why: "the whipping problem is a coordination race under incomplete information"
+      hardness: important
+    - need: "the side that called the vote must not always have the foreknowledge advantage -- the opposing side may know a vote is coming first"
+      why: "the narrative point that the calling faction knew and players may not have needs asymmetric-knowledge structure"
+      hardness: important
+    - need: "a repeat vote on the same matter must not be immediately available -- some interval must pass, allowing background processes to advance in the gap"
+      why: "prevents brute-forcing a rematch and preserves the cost of failure"
+      hardness: important
+    - need: "a failing outcome must visibly change how a watching third-party actor advances a separate, private running tally toward a future intervention"
+      why: "an observer's silent count incrementing off this vote's failure is how one outcome quietly advances a different consequence track"
+      hardness: important
+  temporal:
+    span_seasons: 2
+    needs_memory_of: "who has already been whipped/persuaded pre-vote and by which side, and the current level of the two background quantities the tie damages"
+    needs_deadline: yes
+  who_acts:
+    - "Crown/Hafenmark (side calling or supporting the vote)"
+    - "the Church (opposing side)"
+    - "third-party factions being whipped for votes"
+    - "an outside observer tracking a private tally toward a future intervention"
+  knowledge:
+    - "the side that did not call the vote may know it is coming before the calling side is ready -- asymmetric foreknowledge is load-bearing"
+    - "the observer's private count is not shared with anyone"
+  ends_when: "the vote resolves (clean win, clean loss, or tie) -- a single formal sitting with a definite convened moment, not an open-ended condition"
+
+- id: ARC-R19
+  name: "The Accounting Sequence"
+  one_line: "A strict, unchangeable phase order for resolving pending effects each period must let timing of an intervention matter more than its content, and personal-scale actions must sometimes reach further than the actor realizes."
+  scale: realm
+  season_requires:
+    - need: "periodic resolution of pending effects must happen in a fixed, non-negotiable phase order, such that an effect resolved in an early phase can prevent a check that would otherwise fire later in the same period, but not vice versa"
+      why: "the arc's whole point is that ordering determines outcome -- 'right order, wrong phase' only exists if phases are strictly sequenced within the period"
+      hardness: core
+    - need: "when an at-risk quantity drops to a specific low value, that value must impose a protective floor on further pressure for a limited grace window, independent of the pressure's true magnitude"
+      why: "the floor's function is decoupling stated difficulty from actual pressure for a bounded time; remove it and the floor means nothing"
+      hardness: core
+    - need: "gains or losses to a single quantity from any number of separate actions in one period must be bounded to a fixed maximum"
+      why: "the cap is what makes stacking actions on one target a real trade-off against protecting another"
+      hardness: core
+    - need: "helping one at-risk holder in a period must be able to consume the same limited capacity that would otherwise have protected a different, simultaneously at-risk holder"
+      why: "the zero-sum triage -- protect one, the other falls unaided -- requires a shared, exhaustible resource across independent targets"
+      hardness: core
+    - need: "an action taken to help one actor must be interpretable by a third, unrelated actor as hostile, generating a fresh pressure against a target the acting player did not intend to provoke"
+      why: "second-order faction reads require an actor to interpret others' actions rather than only react to declared targets"
+      hardness: important
+    - need: "an action taken by a player at a small, personal scale must be able to silently register as also affecting a faction-scale quantity, invisible until the periodic accounting is read"
+      why: "personal play having faction consequences the player couldn't predict requires this dual-registration and delayed visibility"
+      hardness: core
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: "pending effects accumulated from the current period's personal play, to be resolved in the first phase of the next accounting"
+    needs_deadline: no
+  who_acts:
+    - "the players (choosing where to spend limited actions)"
+    - "each pressured faction (whose checks fire automatically in a fixed phase)"
+    - "third-party factions reinterpreting an action as hostile"
+  knowledge:
+    - "players cannot know until the accounting resolves whether a given personal scene generated a faction-scale effect"
+    - "the system must track, invisibly to the player, which personal actions reached faction scope"
+  ends_when: "never, as an ongoing structural mechanism; as a focal arc it concludes at the accounting where two simultaneously-threatened factions' checks resolve and the triage choice takes effect"
+
+- id: ARC-20
+  name: "The Tutoring Demand"
+  one_line: "[STRUCK-MECHANIC: Coup Counter] A rising background pressure must reach a threshold and force a binary demand, whose two response paths open independent decaying-loyalty and accelerating-pressure tracks that eventually converge on a battle a specific commander decides, alone, whether to fight."
+  scale: realm
+  season_requires:
+    - need: "a slowly rising background pressure quantity must, on crossing a threshold, force a formal binary demand on the ruling actor with no third option other than delay at increasing cost"
+      why: "the arc begins because the demand is non-negotiable in substance, even if its timing can be haggled"
+      hardness: core
+    - need: "a person sent away as the compliant response must have a decaying allegiance value that ticks down every period unless someone spends effort maintaining it, with a floor beneath which the decay becomes irreversible"
+      why: "the loyalty clock's slow bleed-out, and the point of no return, is the entire dramatic engine of the compliance branch"
+      hardness: core
+    - need: "a person embedded inside the opposing power must be reachable only through a costly, uncertain action, and must be able to slow but not fully reverse the decaying allegiance above"
+      why: "Elske as 'emergency lever, cannot reverse it alone' requires a bounded mitigation, not a fix"
+      hardness: important
+    - need: "the sent person's allegiance hitting its floor must trigger an irreversible state change that itself forces a specific costly response (military action) rather than further diplomacy"
+      why: "'Altonian puppet' must foreclose the diplomatic branch entirely once triggered"
+      hardness: core
+    - need: "the refusal path's accelerating pressure must feed a trade dependency that an unrelated economic faction notices and can eventually turn against the refusing side out of its own self-interest, not because it was ordered to"
+      why: "the Guilds turning on the Crown 'not because hostile' requires an economic actor with its own read of harm, independent of political sides"
+      hardness: important
+    - need: "the eventual mass-combat event's outcome must depend on whether one specific, independently-judging military leader decides to commit her forces, and that decision must be resolvable in more than one way even under identical battlefield facts"
+      why: "Ehrenwall's private calculation ('a failed invasion is more useful to her than a successful defense') needs a genuine judgment call, not a fixed rule"
+      hardness: core
+  temporal:
+    span_seasons: 8
+    needs_memory_of: "the loyalty clock's current value and history of interventions, and the accumulated background-pressure value across both branches"
+    needs_deadline: yes
+  who_acts:
+    - "the ruling monarch (choosing comply/refuse/delay each period)"
+    - "the sent heir (whose internal allegiance shifts over time)"
+    - "his sibling embedded abroad (deciding whether/how to intervene)"
+    - "the covert intelligence apparatus (maintaining contact at risk of exposure)"
+    - "the opposing empire (deploying forces once thresholds are crossed)"
+    - "an economic faction (deciding when self-interest outweighs loyalty)"
+    - "the military leader (deciding whether to commit forces)"
+  knowledge:
+    - "the sibling abroad does not initially know the sent heir's internal state and must seek concrete evidence before acting"
+    - "the military leader's own threshold/judgment is never shared with anyone else"
+  ends_when: "never as a single event -- Branch A resolves when the sent heir's status locks in (recovered, extracted, or lost) or Branch B resolves when the invasion battle concludes; both branches hand off into further political consequence"
+
+- id: ARC-21
+  name: "The Excommunication"
+  one_line: "A single formal judicial contest between an institution and an individual power-holder must resolve to one of several qualitatively different outcome tiers, each removing or strengthening a suppression effect on a separate rising background pressure."
+  scale: realm
+  season_requires:
+    - need: "a single formal contest must support more than two outcome tiers, each with a categorically different consequence set, not merely a scaled version of the same consequence"
+      why: "Overwhelming, Success, and Failure branch into entirely different political geometries, not different amounts of the same thing"
+      hardness: core
+    - need: "the institution's best possible outcome must remove a suppression effect the target was providing against a background pressure quantity, and immediately spike that quantity"
+      why: "the target's Church-Influence suppression disappearing and the immediate jump is what makes the top outcome campaign-defining"
+      hardness: core
+    - need: "a failed formal challenge against a power-holder must weaken the challenging institution and strengthen the target correspondingly, not simply leave the state unchanged"
+      why: "'the mirror image' -- martyrdom effect -- needs a real institutional cost for overreach, not a no-op"
+      hardness: core
+    - need: "crossing an accumulating threshold on the spiking background quantity must trigger an automatic, self-sustaining escalation procedure that continues running each period without further single decisions"
+      why: "the territorial seizure cascade must run on its own once unlocked, for the 'the accounting machinery does it for them' claim to hold"
+      hardness: core
+    - need: "a target who repels the accusation must be able to leverage held evidence of a separate misconduct by the institution to open a counter-offensive"
+      why: "Baralta's Olafsson evidence turning a failed prosecution into a counter-attack requires this stored-leverage mechanism"
+      hardness: important
+    - need: "reversing a wrongly-decided formal judgment must require its own separate, high-cost formal procedure rather than a simple appeal"
+      why: "the Grand Debate reversal path (five exchanges, asymmetric) keeps the top-tier outcome genuinely hard to undo"
+      hardness: important
+  temporal:
+    span_seasons: 4
+    needs_memory_of: "the file-building progress toward the contest and any evidence accumulated against either side"
+    needs_deadline: no
+  who_acts:
+    - "the institution's chief prosecutor"
+    - "the institution's overall head (torn between doctrine and consequence)"
+    - "the accused power-holder"
+    - "an unaligned reforming actor benefiting from the fallout"
+  knowledge:
+    - "the accused's circumstantial evidence against the institution's own misconduct is not known to the institution"
+  ends_when: "the immediate consequence cascade from the single roll stabilizes (seizure halted or completed, or the institution's own counter-collapse addressed) -- branch-dependent, not a universal endpoint"
+
+- id: ARC-22
+  name: "The Ceiral Ritual"
+  one_line: "An irreversible, prerequisite-gated one-time ritual, reachable only after several independent multi-season preparation tracks converge, must resolve via a graded outcome table that permanently reconfigures a world-level substrate condition differently at each degree."
+  scale: world
+  season_requires:
+    - need: "several independent long-running preparation tracks (a held object, a regional awareness value, a qualified lead individual, assembled qualified participants) must all reach specific thresholds simultaneously before the operation becomes available at all"
+      why: "'getting here took years' -- the gate is a conjunction of unrelated tracks, not a single quest chain"
+      hardness: core
+    - need: "the lead individual attempting the operation must have their own separate loyalty/alignment status materially affect the attempt, complicating what would otherwise be a pure mechanical roll"
+      why: "Maret's contested loyalty to the faction that enabled him changes the stakes of who is performing the ritual, not just how well"
+      hardness: important
+    - need: "the operation must resolve via one roll with at least four discrete outcome degrees, each producing a categorically different persistent world-state"
+      why: "'in no direction is the result moderate' -- the degree table must produce qualitatively different futures, not a pass/fail with magnitude"
+      hardness: core
+    - need: "the worst outcome degree must spawn a persistent hostile presence that must itself be resolved through several different possible methods before the operation can be reattempted, and must remove the prior lead from being able to try again"
+      why: "the failure branch needs its own sub-arc with real alternatives (dissolve, weaken-then-fight, communicate, wait out), not an automatic loss"
+      hardness: core
+    - need: "the best outcome must permanently change what a specific location can be used for, and must cascade into other characters' independently-tracked knowledge/development thresholds becoming newly reachable"
+      why: "Southernmost becoming settleable, and Klapp's independent Thread-sensitivity check being unlocked by the same event, requires cross-track triggering, not a self-contained reward"
+      hardness: important
+    - need: "the failure outcome's substrate damage must interact with a pre-existing local weak point to make future failures of the same type more likely nearby"
+      why: "Sudwald's wound firing threshold events earlier than elsewhere ties this operation's failure into standing, unrelated geography"
+      hardness: flavour
+  temporal:
+    span_seasons: 5
+    needs_memory_of: "the independent progress of each of the five converging prerequisite tracks, and (on Partial/Success) the ticking window before a temporary fix expires"
+    needs_deadline: no
+  who_acts:
+    - "the lead practitioner (undergoing the roll)"
+    - "the assembled supporting participants"
+    - "the faction leader whose personal transformation and political leverage depend on the outcome"
+    - "a scholarly figure whose own independent long-running track intersects with the event's visibility"
+  knowledge:
+    - "whether the lead practitioner's true loyalty conflict is known to those relying on them is itself uncertain going in"
+    - "sufficiently sensitive observers across a wide area perceive that something happened, without being told"
+  ends_when: "never fully -- an Overwhelming result triggers an endgame-level structural change; any other degree leaves the operation re-attemptable, so it 'ends' only when a permanent-tier outcome is reached or the players give up"
+
+- id: ARC-23
+  name: "The General Falls"
+  one_line: "[STRUCK-MECHANIC: Coup Counter] A mass-combat commander's incapacitation must escalate through two stages tied to a single narrow-window rescue action, and her death must silently and permanently delete a separate standing threat that existed only because she personally maintained it."
+  scale: realm
+  season_requires:
+    - need: "a battle must have discrete resolution phases within a turn, with a stabilization action available only in one particular phase and only for a single turn's window"
+      why: "the Medicine roll's one-shot, one-phase availability is what makes the timing itself a stake, not just the roll's success chance"
+      hardness: core
+    - need: "whether any character has invested in a specific, rarely-used skill area chosen at character creation (not in this scene) must gate whether the stabilization attempt can be made at all"
+      why: "'if nobody has invested in Medicine, nobody rolls' ties a long-past character choice to this scene's available options"
+      hardness: core
+    - need: "a commander's incapacitation must impose an immediate structural penalty on the entire force's collective effectiveness and remove a stabilizing floor on morale, not just remove one combatant"
+      why: "'the army watches its general fall' -- the mechanical effect must be army-wide, not personal"
+      hardness: core
+    - need: "failing to stabilize must escalate to a second, worse stage on the following turn, removing command capacity from the whole force rather than only worsening the commander's own state"
+      why: "the two-stage design (halved effectiveness, then zero) is explicitly what the arc is built to demonstrate"
+      hardness: core
+    - need: "a standing threat/threshold that exists only because one specific person personally maintains it must be permanently extinguished -- not paused, not inherited by a successor -- if that person dies"
+      why: "'the counter was hers, not the institution's' -- her death must delete the threat rather than transfer it"
+      hardness: core
+    - need: "an opposing force defeating a leader in combat must be able to choose capture over death, creating a distinct ongoing leverage/hostage state different from either party surviving normally or dying"
+      why: "the capture branch offers a materially different aftermath (leverage) than either recovery or death"
+      hardness: important
+  temporal:
+    span_seasons: 1
+    needs_memory_of: "n/a beyond the battle itself, other than the character-creation-time skill investment that gates the rescue option"
+    needs_deadline: yes
+  who_acts:
+    - "the commander (whose earlier decision to commit forces set up this crisis)"
+    - "any character with the relevant rescue skill (attempting stabilization)"
+    - "the opposing force's leader (choosing to kill or capture on victory)"
+  knowledge:
+    - "nobody besides the commander herself was tracking the private threshold that dies with her -- an epistemic point, not a secret kept from anyone in particular"
+  ends_when: "the battle resolves and its immediate command-state consequence is set (recovered, uncommanded rout, capture, or death) -- a natural single-scene end; the aftermath vacuum is a separate, open-ended consequence"
+
+- id: ARC-24
+  name: "The Faction That Breaks"
+  one_line: "An institution's health quantity hitting zero must trigger a structural fracture into distinct successor entities, with the fracture's exact shape depending on unrelated sub-actors' independent states at the moment of collapse."
+  scale: realm
+  season_requires:
+    - need: "an institution's overall health quantity reaching its floor must trigger a structural fracture into multiple independent successor entities, not merely a power reduction"
+      why: "'the Church does not dissolve, it fractures into competing institutional claims' requires genuine multi-entity splitting, not a single weakened faction"
+      hardness: core
+    - need: "the specific shape of the fracture must depend on the independent internal state of several named sub-actors at the moment of collapse, not on a fixed collapse template"
+      why: "which faction emerges depends entirely on which NPCs are intact when it happens -- collapse outcome must be state-conditional"
+      hardness: core
+    - need: "a protective grace mechanism on the health quantity must be able to be missed if the players are not present to use their one available window"
+      why: "'the floor requires the players to notice... which requires them not to have been elsewhere' ties the safety net to player attention, not automatic recovery"
+      hardness: important
+    - need: "a collapsed institution's role in driving a background world-quantity must simply stop rather than reverse, freezing that quantity at whatever value it held"
+      why: "Church Influence 'freezing' rather than falling is the specific claim that distinguishes collapse from defeat"
+      hardness: core
+    - need: "a frozen-but-still-high background quantity must remain crossable by unrelated later events even though the institution that normally drives it is gone, via its own remnant apparatus"
+      why: "'the Church's corpse is still seizing territory' requires the mechanical trigger to survive its owner's collapse"
+      hardness: important
+    - need: "rebuilding a collapsed institution from scratch must require multiple geographically-distributed actions gated by the same per-period caps as everything else, fixing a minimum recovery time regardless of investment"
+      why: "the stated 4-season minimum reconstruction needs the ordinary seasonal cap to still apply during recovery"
+      hardness: important
+  temporal:
+    span_seasons: 5
+    needs_memory_of: "each sub-faction's independent internal state at the moment of collapse, and the frozen background quantity's value afterward"
+    needs_deadline: no
+  who_acts:
+    - "each sub-faction/named figure within the collapsing institution"
+    - "the players (who may or may not be watching)"
+    - "rival factions moving into the resulting vacuum"
+  knowledge:
+    - "no faction can see the interaction between the institution's collapse and unrelated later events crossing the frozen quantity's threshold"
+  ends_when: "never universally -- political-vacuum branches stabilize, reconstruction branches complete, or the frozen quantity later triggers a further cascade; no single terminal condition covers all branches"
+
+- id: ARC-25
+  name: "The Schoenland Pivot"
+  one_line: "A self-interested neutral third party must autonomously read the players' domestic state from externally-visible signals alone and choose an alignment that changes a separate escalating pressure's rate, entirely outside player control."
+  scale: realm
+  season_requires:
+    - need: "a neutral third-party actor must independently evaluate several unrelated background quantities each period and select a strategic alignment based on that composite read, without a player directly setting the alignment"
+      why: "Schoenland's autonomous 'reading' of the political situation is the whole engine -- a player-controlled ally would not produce the same arc"
+      hardness: core
+    - need: "that actor's read must depend only on externally visible signals, such that private mitigations are invisible to it while public/structural events are highly visible"
+      why: "the mismatch between players' true intentions and the third party's surface-level read is the source of the pivot going 'the other way'"
+      hardness: core
+    - need: "the chosen alignment must change the ongoing rate of a separate, unrelated escalating pressure quantity on one path, and open automatic passive intelligence leakage to a hostile power on the other"
+      why: "the diplomatic path's rate reduction and the hostile path's leak are the two concrete payoffs that make the pivot matter"
+      hardness: core
+    - need: "the intelligence-leakage side effect must run passively and automatically regardless of player awareness, exposing covert operations run through that territory"
+      why: "'this is a passive mechanic that runs regardless of whether anyone is watching' is explicit"
+      hardness: important
+    - need: "locking in the favorable alignment must require meeting several externally-visible qualifying conditions simultaneously, not any single action"
+      why: "the multi-indicator threshold (Mandate, trade continuity, prosperity, no recent escalation) keeps the diplomatic path a genuine achievement, not a single roll"
+      hardness: important
+    - need: "the third party's default disposition must remain profit-seeking/neutral even under alignment, able to pull back into self-interest rather than becoming a committed ally or true enemy"
+      why: "'it profits from sustained tension, not resolution' -- the actor must retain its own agenda even while cooperating"
+      hardness: flavour
+  temporal:
+    span_seasons: 6
+    needs_memory_of: "the running trend of the observed indicators over several past seasons, not just a current snapshot"
+    needs_deadline: no
+  who_acts:
+    - "the neutral third-party actor (autonomous)"
+    - "Crown/players (trying to present a legible stability signal)"
+    - "a hostile external power benefiting from the unfavorable pivot"
+  knowledge:
+    - "the third party's alignment decision depends only on what it can observe; covert operations run through its territory become known to a hostile power without the operator's knowledge"
+  ends_when: "never fully -- this is an ongoing background disposition that can flip again; it settles into a durable state only under sustained conditions on either side"
+
+- id: ARC-26
+  name: "The Duke Awakens"
+  one_line: "A background quantity accumulates invisibly on an NPC from his own routine actions and, on crossing a threshold, triggers a one-time check whose result permanently and irreversibly reforges his capabilities and worldview."
+  scale: person
+  season_requires:
+    - need: "an NPC's own repeated, self-directed institutional actions must silently accumulate a hidden personal quantity that the character himself is unaware of"
+      why: "'he does not know any of this is happening' -- the accumulation must be invisible to its own owner, not merely secret from others"
+      hardness: core
+    - need: "crossing a threshold on that hidden quantity must trigger a one-time check whose two outcomes are qualitatively different: a true capability unlocked, versus a false self-generated belief acted on with full resources"
+      why: "the failure branch must be worse than never having triggered at all -- a wrong-but-actionable conclusion, not simple ignorance"
+      hardness: core
+    - need: "the failure branch must produce behavior that is objectively counter-productive to the character's own interests while looking, to him, like the correct reading of his experience -- and must remain actable-upon with his full institutional resources"
+      why: "he 'will act on the wrong conclusion rather than sitting with uncertainty' -- the false belief must be load-bearing enough to drive real institutional moves"
+      hardness: core
+    - need: "a second character who already possesses the same capability must be able to independently perceive the first character's growth and choose whether to disclose it, driven by a personal conflict-of-interest rather than a scripted trigger"
+      why: "the confidante's silence is motivated (her own exposure risk), not a GM withholding information arbitrarily"
+      hardness: important
+    - need: "the newly-unlocked capability must retroactively change how the character interprets and leverages his existing political relationships and leverage, not simply add a new resource"
+      why: "'his succession demand is no longer a negotiating position built on second-hand knowledge... he is making it as a practitioner' requires the same leverage to mean something categorically different afterward"
+      hardness: important
+    - need: "an institution that would normally react to this kind of capability must be able to open a formal investigation based on partial/indirect evidence before the character himself understands what has happened to him"
+      why: "detection-before-self-awareness is the specific bind that traps the wrong-framework branch"
+      hardness: important
+  temporal:
+    span_seasons: 1
+    needs_memory_of: "the cumulative count of a specific recurring faction action performed across many prior seasons, invisibly building toward the threshold"
+    needs_deadline: no
+  who_acts:
+    - "the NPC undergoing the transformation"
+    - "a second character who already has the capability and chooses silence or disclosure"
+    - "an institution running an independent detection/investigation process"
+    - "a subordinate sent on a mission derived from the (possibly false) new belief"
+  knowledge:
+    - "the awakening character does not know what is happening to himself even after part of it has happened"
+    - "a second character who does know withholds that knowledge for her own reasons"
+    - "the detecting institution knows only indirect signatures, never the underlying cause"
+  ends_when: "never absolutely -- success opens into an ongoing high-level political integration arc; failure opens into an ongoing wrong-framework action arc that ends only when a subordinate's loyalty finally breaks or a formal investigation resolves"
+
+- id: ARC-27
+  name: "The Dissolution"
+  one_line: "A single risky reality-altering operation must resolve via a graded outcome table where even the best result carries an unavoidable exposure side effect, and the worst result produces an immediate, scene-local hostile manifestation whose severity depends on ambient world-health at the moment of the attempt."
+  scale: world
+  season_requires:
+    - need: "a single declared operation must resolve to at least four distinct outcome degrees, each combining differently whether the target is removed, whether a persistent breach forms, whether the actor is incapacitated, and how much a world-health quantity is spent"
+      why: "the arc explicitly claims this is 'the widest-ranging degree table in the game' and treats that width as the point"
+      hardness: core
+    - need: "even the best possible outcome must produce a passive detection/visibility effect for sufficiently sensitive observers physically present, with a political consequence firing regardless of whether the primary goal succeeded"
+      why: "'players achieved their tactical goal and handed [an institution] a political gift' requires success to carry a cost nobody chose"
+      hardness: core
+    - need: "the worst outcome must spawn a hostile entity in the exact physical/social scene where the operation was attempted, with its type determined by what was targeted and at what scale"
+      why: "the entity 'arrives in the same room, the same political context' -- not offscreen or delayed"
+      hardness: core
+    - need: "the ambient world-health quantity's pre-existing band must change what a bad outcome does next -- the same numeric penalty must cross into a qualitatively worse global band if the ambient quantity was already low, or be absorbed if it was high"
+      why: "state-dependent severity is what makes the same failed roll catastrophic in one campaign moment and survivable in another"
+      hardness: core
+    - need: "an intermediate outcome must leave an unstable, still-active anomalous condition that deteriorates into the worst case after a fixed delay unless separately, deliberately addressed"
+      why: "the Partial/Shifting-Object outcome needs its own decay clock distinct from the immediate degrees"
+      hardness: important
+    - need: "removing a physical record via this operation must not remove the corresponding knowledge already held in people's minds"
+      why: "'the Dissolution removed evidence, not memory' is explicit -- destroying a record must not erase what witnesses remember"
+      hardness: important
+  temporal:
+    span_seasons: 1
+    needs_memory_of: "the ambient world-health quantity's current band at the moment of the attempt"
+    needs_deadline: yes
+  who_acts:
+    - "the acting practitioner (choosing to attempt it and the target)"
+    - "allies who must respond if a hostile manifestation fires"
+    - "sensitive observers in the scene, whose mere presence has consequences"
+  knowledge:
+    - "non-sensitive observers experience 'rendering failures' without understanding what happened"
+    - "sensitive observers perceive the event as directionally identifiable but not detailed"
+  ends_when: "the operation resolves in one roll -- a single-scene event; a Partial-outcome sub-arc ends when the unstable condition is mended or deteriorates into the worst case"
+
+- id: ARC-28
+  name: "Vaynard -- The Reckoner Who Saw the Sum"
+  one_line: "A character's internal capability-cost quantity reaching its floor must be a permanent, non-fatal transformation that keeps him playable and his goals intact while categorically changing what he can understand and communicate."
+  scale: person
+  season_requires:
+    - need: "a character's internal capability-cost quantity must be able to reach its floor not as death or incapacitation but as a permanent qualitative transformation that keeps him alive, coherent, and goal-continuous"
+      why: "'the tragedy is not blindness, it is the opposite' -- the mechanism must model expansion, not loss, at this floor value"
+      hardness: core
+    - need: "after crossing that threshold, the character's communication to others must be deliberately down-sampled per-listener -- the same true information rendered differently and incompletely depending on who receives it, controlled by the transformed character himself"
+      why: "'he shapes his communication to what each person can receive' is the central interpersonal mechanic of every scene after the threshold"
+      hardness: core
+    - need: "the transformed character must retain full continuity of prior goals, relationships, and decision framework, so others recognize him as unchanged in identity while being unable to independently verify his now-superior judgments"
+      why: "'he is completely Vaynard... and the content of his understanding has gone somewhere they cannot go' requires recognizable continuity plus unverifiable authority"
+      hardness: core
+    - need: "the transformed character must face a further, independent choice about whether to also alter his physical form, decoupled from the mental-threshold crossing itself"
+      why: "Branch A/B are explicitly independent of whether the threshold was crossed -- the body choice is a separate variable"
+      hardness: important
+    - need: "if the character holds ongoing political leverage, its meaning must be reinterpretable at a deeper level after the threshold without changing its face value to those who negotiated it originally"
+      why: "the succession leverage 'is no longer a negotiating position... he is making it as a practitioner' -- same lever, different meaning underneath"
+      hardness: important
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: "his accumulated political/knowledge leverage state prior to the threshold, which is reinterpreted rather than replaced afterward"
+    needs_deadline: no
+  who_acts:
+    - "the transformed character himself (choosing physical transformation or not, and how to shape each communication)"
+    - "the players (choosing to trust and act on unverifiable advice)"
+    - "his practitioner ally"
+  knowledge:
+    - "nobody but the transformed character can verify his post-threshold assessments; other actors must decide whether to act on faith"
+  ends_when: "never -- this is a durable state that persists for the remainder of the campaign; it has no closing condition of its own"
+
+- id: ARC-29
+  name: "Almud -- The King at the Limit of Order"
+  one_line: "A reigning head of state crossing the same internal transformation threshold as Arc 28 must be able to either continue formally occupying his role at reduced legibility, or voluntarily vacate it, immediately triggering ordinary succession machinery."
+  scale: realm
+  season_requires:
+    - need: "a formal head-of-state role must be able to be voluntarily vacated by its holder as a deliberate act distinct from death, incapacity, or removal, immediately triggering the normal succession process"
+      why: "Branch B's abdication needs a genuine 'step away' action, not a forced removal, so the succession fires cleanly and legitimately"
+      hardness: core
+    - need: "a head of state who remains in his role after crossing the transformation threshold must retain the ability to perform ordinary formal governance acts (signing decrees, attending formal sessions) even while his understanding of them has changed underneath"
+      why: "Branch A requires the office's mechanical functions to keep working even though the holder's inner state has categorically shifted"
+      hardness: core
+    - need: "a watching institutional actor with her own private judgment threshold must be able to treat a single conversation with the transformed head of state as sufficient answer to stand down from an escalating institutional action, without that being a scripted persuasion roll"
+      why: "Ehrenwall standing down 'because she was answered' rather than persuaded requires a qualitative, not mechanical, resolution of her judgment"
+      hardness: important
+    - need: "two independently-transformed characters occupying the same physical space must be able to communicate with each other at full fidelity, distinct from their now-limited communication with everyone else"
+      why: "the Almud/Vaynard corridor scene needs a full-fidelity channel between transformed actors that does not extend to anyone else present"
+      hardness: important
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: "his existing three-belief conflict state prior to the threshold, and (Branch B) the succession/loyalty-clock status at the moment he steps down"
+    needs_deadline: no
+  who_acts:
+    - "the head of state himself (choosing to remain or step down)"
+    - "the institutional military leader deciding whether to escalate against him"
+    - "the players (interacting with him post-threshold)"
+  knowledge:
+    - "non-practitioners perceive him as 'present and absent simultaneously' without understanding why; practitioner characters perceive the full asymmetry immediately"
+  ends_when: "Branch A never ends within this arc (the reign continues); Branch B ends the moment he formally vacates the throne, which is itself the trigger for a separate succession process outside this arc's scope"
+
+- id: ARC-30
+  name: "Lenneth -- What She Finally Understood"
+  one_line: "A long-concealed secret capability crossing the Arc 28/29 transformation threshold must remain undetectable to non-specialist observers even afterward, with discovery gated specifically on one particular relationship rather than general exposure risk."
+  scale: person
+  season_requires:
+    - need: "a long-concealed identity/capability must remain undetectable to non-specialist observers even after a profound internal transformation, requiring concealment to be tracked independently of the internal-state change"
+      why: "she 'remains in the queen's role... the court continues... on the surface' -- concealment must not automatically break just because the underlying state changed"
+      hardness: core
+    - need: "covert funding/support networks the character has been running must continue operating after the threshold, but their guiding logic must shift from strategic calculation to something the operator herself describes as direct perception, without changing their external behavior enough to raise suspicion"
+      why: "'no longer strategic funding -- it is expression' with beneficiaries unaware their own precision has changed requires this exact kind of externally-invisible internal shift"
+      hardness: important
+    - need: "discovery of the transformation by one specific, relationally-close character must produce a fundamentally different scene depending on whether that discoverer has independently crossed the same threshold himself"
+      why: "the Branch A/B fork (Almud pre- vs post-threshold) needs the discovery scene's content to depend on the discoverer's own state, not just on the discovery event itself"
+      hardness: core
+    - need: "a physical object with historical/informational significance must be able to carry a perceivable proximity relationship to a transformed character that is legible only to sufficiently sensitive observers"
+      why: "the archive document's 'configurational proximity' to her is a specific, gated form of legible evidence distinct from ordinary observation"
+      hardness: flavour
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: "the concealment status (discovered or not) and, if discovered, which discoverer and their own threshold state at time of discovery"
+    needs_deadline: no
+  who_acts:
+    - "the transformed character (maintaining concealment, funding networks, and shaping disclosure)"
+    - "the discovering relational partner (if/when discovery occurs)"
+    - "the players (interacting with her before or after discovery)"
+  knowledge:
+    - "non-practitioners cannot perceive the change even in close daily contact; players interacting with her notice something is different only after several exchanges"
+  ends_when: "never as background state; the discovery sub-arc ends at the discovery scene itself; a further political-action sub-arc ends when the act she was building toward is finally taken"
+
+- id: ARC-31
+  name: "The Quaestio of Baralta"
+  one_line: "[STRUCK-MECHANIC: Coup Counter (Loewenritter Autonomy) and Niflhel/covert intelligence network -- both explicitly retired by the source file's own note] A formal high-stakes tribunal between an institution and a challenger must be interruptible mid-proceeding by an unrelated covert faction's violent action, penalizing whoever was mid-turn, with the eventual verdict both shifting a background quantity and silently incrementing a fourth party's private, unshared threshold."
+  scale: realm
+  season_requires:
+    - need: "a formal, multi-exchange debate procedure must be interruptible by an out-of-genre violent event originating from an unrelated third faction, imposing a resource/strain penalty on whoever was mid-exchange when it hit"
+      why: "the arc's premise is that violence intrudes into a procedural contest and costs the wrong side, not a scripted plot beat"
+      hardness: core
+    - need: "the tribunal's win/lose outcome for the challenger must apply a categorically different consequence pair depending on which side wins -- one side's win drops an institutional pressure quantity, the other's win raises it and also silently increments a separate private counter held by an uninvolved fourth party"
+      why: "the escalation into martial law and mass battle depends on this specific branching"
+      hardness: core
+    - need: "a private, unshared threshold maintained by one specific NPC (not by the institution she serves) must be able to trigger an institution-scale event once it reaches its ceiling, based on her own accumulated judgment rather than any single rule anyone else can see"
+      why: "'no faction decided this -- three independent systems produced the crisis' requires an autonomous judgment-holder whose threshold nobody else controls"
+      hardness: core
+    - need: "a covert intelligence-gathering faction operating through a proxy network must be able to attempt a targeted lethal action against a person inside a formal, non-combat social scene, with success or failure both producing distinct downstream consequences for that faction's own standing"
+      why: "ties the political tribunal to a covert faction's opportunism without any player directing it"
+      hardness: important
+    - need: "an institutional actor's positioned military forces must be able to remain ambiguous in intent (defensive vs threatening) until a later decision point forces an interpretation"
+      why: "the aftermath's open question of whether troop positioning means defense or threat needs the ambiguity to precede and outlast the moment of positioning"
+      hardness: flavour
+  temporal:
+    span_seasons: 4
+    needs_memory_of: "the accumulating pattern the watching military leader has silently tallied over the campaign toward her own private threshold"
+    needs_deadline: no
+  who_acts:
+    - "the challenger (formal accuser)"
+    - "the institution's leadership"
+    - "the covert intelligence faction"
+    - "the watching military leader (private judgment)"
+    - "her opposing commander in the eventual battle"
+  knowledge:
+    - "the challenger suspects the covert faction's involvement in the interruption but cannot prove it"
+    - "the watching military leader's threshold value is not shared with anyone"
+  ends_when: "the tribunal resolves and its immediate consequence fires; the arc as a whole has no single end -- it hands off into either de-escalation or a mass battle whose resolution is a separate, unposed question"
+
+- id: ARC-32
+  name: "Vaynard's Confession"
+  one_line: "A faction leader's private, invisible knowledge-accumulation track and a separate institutional surveillance track, built from unrelated events, must be able to reach their thresholds in the same window and converge on the same target -- the leader's ally -- without either side of the convergence knowing about the other."
+  scale: faction
+  season_requires:
+    - need: "a faction leader's private capability track must reach a threshold via ordinary relationship-building actions, and on threshold must trigger a resolvable moment that fires on an ALLY's action performed on the leader's behalf, not on the leader's own action"
+      why: "the operation that triggers his Discovery Event is Maret's, not Vaynard's -- proximity-triggered rather than actor-triggered"
+      hardness: core
+    - need: "an institutional surveillance track targeting a specific individual must accumulate independently from unrelated prior encounters and reach its own threshold in the same window as the leader's private track, without either track's owner aware of the other"
+      why: "the emergent-crisis claim depends on two blind systems colliding, not one system driving the other"
+      hardness: core
+    - need: "a formal collective decision body must be able to intervene to defend or abandon an accused individual via a multi-round contest, with the losing side's consequence being a fully asymmetric tribunal with no defense procedure available"
+      why: "the vote-to-tribunal escalation needs this exact procedural asymmetry to exist as a real option"
+      hardness: important
+    - need: "a second, unrelated NPC's own slow-building threshold, running as background 'processing the archive' activity, must be able to fire its own check in the middle of the tribunal proceeding, adding a third independent thread to the convergence"
+      why: "demonstrates the uncoordinated, emergent nature explicitly claimed by the source"
+      hardness: important
+    - need: "the accused individual's fate on conviction must branch hard, with severity depending on a separate quantity elsewhere in the world (whether it is currently safe for them there), rather than being self-contained to this arc"
+      why: "ties consequence severity to the broader substrate mechanic rather than a fixed conviction penalty"
+      hardness: flavour
+  temporal:
+    span_seasons: 5
+    needs_memory_of: "the leader's accumulated relationship-based threshold progress and the institution's independently accumulated evidence file"
+    needs_deadline: no
+  who_acts:
+    - "the faction leader (unaware of his own transformation)"
+    - "the ally performing the triggering action"
+    - "the surveillance institution's investigator"
+    - "a formal deliberative body"
+    - "a second unrelated NPC whose independent threshold also fires"
+  knowledge:
+    - "the leader does not know his own capability has grown; the ally may know things she withholds; the surveillance institution knows only its own independent evidence, never the leader's private state"
+  ends_when: "the tribunal/vote resolves and the accused's fate is set -- a definite conclusion, though the leader's own trajectory continues open-ended afterward"
+
+- id: ARC-33
+  name: "The Forgetting Road"
+  one_line: "An expedition into a zone that actively strips participants' recall of their own goal must still let them bring back a non-verbal, embodied change, and that change must be automatically detectable by a hostile institution the instant it becomes visible, regardless of any subsequent player action."
+  scale: realm
+  season_requires:
+    - need: "a location must be able to strip a person's explicit recall of their specific goal while inside it, while still letting them retain and act on the underlying intention, such that 'why am I here' becomes unanswerable moment to moment while 'what to do next' remains actionable"
+      why: "this is the location's entire defended premise -- it must target memory-of-purpose specifically, not general capability"
+      hardness: core
+    - need: "knowledge or procedure gained inside such a memory-stripping zone must be able to be carried home in participants' own configuration rather than in an external record, surviving the strip in a form other than explicit recall"
+      why: "'not the text, not the object -- the practitioners themselves... changed' requires embodied rather than declarative knowledge transfer"
+      hardness: core
+    - need: "a successful, player-desired outcome achieved via this zone must trigger an automatic, unavoidable rise in a hostile institution's background pressure quantity purely because the outcome became visible, independent of any subsequent handling"
+      why: "'CI spike is automatic -- no player action can prevent it' bakes the cost into success itself"
+      hardness: core
+    - need: "an institutional surveillance track built from unrelated prior background activity must independently reach its own threshold around the same time and open a formal investigation of the returnees, without coordination with the automatic pressure spike above"
+      why: "two more independently-running systems converging without orchestration, matching the explicit 'three systems collide' framing"
+      hardness: important
+    - need: "a third-party faction offering protection must be able to contest the resulting investigation via a faction-scale action whose success depends on that faction's own independently-tracked standing, not a fixed difficulty set for this arc"
+      why: "gives the sanctuary decision real stakes tied to ongoing faction state rather than a scripted rescue"
+      hardness: important
+    - need: "if sanctuary fails or is declined, the conflict must escalate to a formal mass-combat engagement whose outcome alters the same background pressure quantity again, in either direction"
+      why: "closes the loop back into the pressure quantity, giving the battle narrative stakes beyond territory"
+      hardness: important
+  temporal:
+    span_seasons: 3
+    needs_memory_of: "which participants carry the embodied changed-status afterward, and the sheltering faction's ongoing standing"
+    needs_deadline: yes
+  who_acts:
+    - "the expedition members (choosing to enter and what to do inside)"
+    - "the institutional investigator (running an independent background process)"
+    - "the sheltering faction's leader (deciding whether to protect)"
+    - "that faction's military commander (in the mass-combat branch)"
+  knowledge:
+    - "the expedition's own goal becomes literally unknown to themselves while inside -- an internal epistemic constraint, not secrecy from other actors"
+    - "the institution learns of the returnees' new status automatically via public visibility, not investigation"
+  ends_when: "the post-return cascade resolves -- sanctuary holds and the investigation stalls, or the battle resolves and a long-term substrate-management cycle begins or fails to begin"
+
+- id: ARC-34
+  name: "Ehrenwall's Count"
+  one_line: "[STRUCK-MECHANIC: Coup Counter (Loewenritter Autonomy) -- explicitly retired by the source file's own note; also cites Niflhel] Three structurally independent threshold-crossings from three unrelated systems must each be able to increment the same private, never-decrementing counter, whose ceiling issues a formal ultimatum resolved through the ordinary civic debate mechanism under threat of force."
+  scale: realm
+  season_requires:
+    - need: "a private, monotonically-increasing counter held by a single actor must be incrementable by at least three structurally unrelated trigger conditions, such that none of the three 'knows' about the others"
+      why: "'three conditions, three different seasons, three different systems' independent convergence is the explicit design intent"
+      hardness: core
+    - need: "that counter reaching its ceiling must issue a formal ultimatum to the current head of state (cede a specific authority or face an emergency-powers action) rather than an immediate seizure of power"
+      why: "'the coup is not a violent seizure, it's a formal demand' -- the mechanism must produce ultimatum-and-response, not instant state change"
+      hardness: core
+    - need: "refusal of the ultimatum must trigger an emergency-powers state applying uniformly across a whole territory, imposing extra friction on non-approved actors everywhere in it simultaneously"
+      why: "martial law needs to be a blanket, territory-wide condition, not localized"
+      hardness: important
+    - need: "the emergency-powers state must be revocable through the same formal civic debate mechanism as ordinary politics, whose failure must itself trigger further external escalation rather than simply maintaining the status quo"
+      why: "'negotiation conducted under the barrel of a gun, using the debate mechanics' needs shared procedure with different stakes"
+      hardness: important
+    - need: "whether the counter's holder enforces her position at the resulting confrontation must be resolvable via a mass-combat engagement whose outcome retroactively validates or invalidates the deposed authority's legitimacy"
+      why: "the campaign question is answered by battle outcome, not by decree"
+      hardness: important
+  temporal:
+    span_seasons: 6
+    needs_memory_of: "the running, never-resetting counter value and which of the three trigger conditions have already fired"
+    needs_deadline: no
+  who_acts:
+    - "the counter-holder (autonomous, private judgment, never decrementing)"
+    - "the head of state (refusing or complying with the ultimatum)"
+    - "each faction responding to the emergency-powers state per its own tolerance for covert operation"
+    - "an external power reacting to the outcome"
+  knowledge:
+    - "the counter's current value and its never-decrementing nature are known only to its holder; other actors experience only the eventual ultimatum, not the pattern behind it"
+  ends_when: "the confrontation resolves -- the debate removes the emergency-powers state, or the subsequent battle resolves -- either terminates this arc, though the broader question of what kind of state this is remains open by design"
+
+- id: ARC-35
+  name: "The Klapp Threshold"
+  one_line: "A senior institutional scholar's slow, routine research activity must accumulate a hidden exposure quantity that, on threshold, fires a personal-transformation check whose success the institution's own belief system has no accommodating category for, pausing the institution's automatic background power generation until the internal conflict resolves."
+  scale: faction
+  season_requires:
+    - need: "a senior official's long, routine, in-role activity must be trackable as a slow-accumulating hidden exposure quantity over multiple seasons that eventually crosses a threshold and fires a one-time check, purely as a side effect of doing his normal job"
+      why: "'no player or GM directs him toward it -- he is processing the archive, and the objects are in the archive' -- accumulation must be a background byproduct, not player-initiated"
+      hardness: core
+    - need: "that check's success must produce a genuinely destabilizing personal transformation in a senior official whose institution's belief system treats the transformation as forbidden or unclassifiable, forcing a choice between doctrine and his continued institutional value"
+      why: "'his theology calls it apostasy and his body calls it homecoming' -- the conflict is doctrinal-vs-practical by design"
+      hardness: core
+    - need: "an internal leadership crisis inside an institution, invisible to outside political bodies, must be able to pause that institution's automatic passive background power generation for as long as the crisis is unresolved"
+      why: "'the single most effective brake... other than a successful external challenge' -- the internal-crisis brake must be comparably powerful to the external mechanism"
+      hardness: core
+    - need: "the institution must be able to formally try its own senior official via an asymmetric internal tribunal with no defense procedure, where conviction removes him but restores paused generation, and non-conviction keeps him at the cost of ongoing instability"
+      why: "gives the arc's resolution real stakes on both branches -- removal costs capability, retention costs stability"
+      hardness: important
+    - need: "if retained, the transformed official must be able to become a covert asset feeding capability to an external actor the institution formally opposes, while the institution's internal factional split persists as an ongoing unresolved background condition"
+      why: "the steady-state resolution is explicitly an unresolved standoff, not a clean outcome"
+      hardness: flavour
+  temporal:
+    span_seasons: 4
+    needs_memory_of: "the official's accumulated exposure quantity and, if retained, the ongoing factional balance inside the institution"
+    needs_deadline: no
+  who_acts:
+    - "the senior official himself (undergoing transformation, later choosing fracture vs suppression)"
+    - "the institution's chief investigator (filing internal charges)"
+    - "the institution's presiding leader (torn between doctrine and capability)"
+    - "an external faction quietly benefiting from covert leaks"
+  knowledge:
+    - "the official's transformation is invisible to outside political bodies; internally, leadership must reckon with what its own doctrine cannot categorize"
+  ends_when: "the internal tribunal resolves (conviction or retention) -- a definite conclusion for this arc, though 'can the institution be reformed from within' is explicitly left open as a broader thread"
+
+- id: ARC-36
+  name: "The Tithe That Fed the Enemy"
+  one_line: "An institution's internally-consistent resource-optimization behavior must be able to systematically erode a separate, unmeasured cultural-trust resource in exactly the territories where it is heaviest, forming a structural trap with no equilibrium that no single actor's viewpoint spans."
+  scale: faction
+  season_requires:
+    - need: "an NPC pursuing a fixed optimization objective must be able to keep taking the locally-correct action indefinitely with no internal signal that a completely different, unmeasured value is being destroyed by that same behavior"
+      why: "'the Prudence Cardinal is not wrong about the finances' -- the optimizer must have no visibility into the cost it imposes on an axis it doesn't track"
+      hardness: core
+    - need: "a slow-eroding, per-location cultural/loyalty value must silently accumulate downward from resource extraction, invisible until an opposing movement's presence becomes visible as a lagging indicator"
+      why: "players 'see an RM Presence marker appear' -- the erosion itself is invisible; only a derivative marker surfaces it"
+      hardness: core
+    - need: "an institution's investigative branch, on detecting the derivative marker, must apply a procedure that structurally cannot address the actual root cause because that cause belongs to a different category of problem than the procedure is built to find"
+      why: "'his proceduralist approach has no category for this' is a claim about institutional blindness by design, not incompetence"
+      hardness: core
+    - need: "the investigating branch's standard procedural delay must itself allow the underlying erosion to continue and spread to additional locations during the investigation"
+      why: "'during that season, two more territories tip' ties process latency directly to compounding harm"
+      hardness: important
+    - need: "the eroding value crossing a floor in enough locations simultaneously must trigger a discrete, disruptive event with its own immediate costs, distinct from the slow erosion that caused it"
+      why: "gives the slow-burn track a legible payoff moment (an uprising) rather than pure gradual decline"
+      hardness: important
+    - need: "this arc's terminal event must be able to feed as an input into other independently-running arcs' state without requiring any player action to connect them"
+      why: "explicit cross-arc feed design is central to the batch's claim that the system, not a player, connects these events"
+      hardness: important
+  temporal:
+    span_seasons: 5
+    needs_memory_of: "the running per-location cultural erosion value and how many locations have tipped below floor"
+    needs_deadline: no
+  who_acts:
+    - "the institution's resource-optimizing official"
+    - "the institution's investigative official (constrained by procedure)"
+    - "the opposing cultural movement's organizer (spreading opportunistically)"
+    - "affected communities (whose sentiment is the eroding resource)"
+  knowledge:
+    - "no single actor's information spans both the financial logic and the cultural cost simultaneously; players may perceive only the lagging indicator"
+  ends_when: "never cleanly -- the loop has no equilibrium and resolves only via removing the optimizing official, or by his complete, uncontested success; both are structural end-conditions, not calendar dates"
+
+- id: ARC-37
+  name: "The Heresy in the Warehouse"
+  one_line: "[STRUCK-MECHANIC: Niflhel trade network] A mundane supply chain built by two non-perceiving actors must secretly carry a categorically hazardous good invisible below a rare sensory threshold, and two separate investigators perceiving only one dimension each must be able to converge on the same target without either knowing about the other."
+  scale: faction
+  season_requires:
+    - need: "a legitimate, ordinary supply chain must carry a good whose hazardous property is invisible to everyone below a specific rare perceptual threshold, such that its builders and vendors are neither lying nor negligent"
+      why: "non-culpable participants are load-bearing to the arc's moral shape -- the hazard must be a structural blind spot, not a cover-up"
+      hardness: core
+    - need: "a rare individual who crosses the perceptual threshold and encounters the hidden property incidentally, while doing an unrelated job, must have a personal behavioral reason to avoid reporting it, generating an accumulating cost to herself rather than resolving immediately"
+      why: "the accidental discoverer's self-protective avoidance keeps the two investigation threads separate and adds personal stakes"
+      hardness: important
+    - need: "that accumulating self-protective cost must itself be observable from outside by the discoverer's own chain of command as an unexplained pattern, eventually forcing an internal review independent of the underlying secret"
+      why: "creates a second convergence path (her own side investigating her) distinct from the external legal investigation"
+      hardness: important
+    - need: "a separate investigator working an unrelated case must be able to cross-reference unconnected case files and stumble onto the same supply chain from a different angle, using only legally-visible evidence rather than the hidden property"
+      why: "the second investigator's path must be evidentially independent of the perceptual one"
+      hardness: core
+    - need: "when the legally-visible investigation concludes against the supply chain, it must automatically hand a hostile institution a costless, pre-built justification to open its own separate, harsher investigation"
+      why: "ties one investigation's conclusion mechanically to triggering a second, more damaging one"
+      hardness: important
+    - need: "exposure of the supply chain must be able to propagate damage to at least three separate actors' standing via three distinct causal paths from one triggering event"
+      why: "fan-out from a single exposure event into multiple independent arcs is central to the 'system did it, not a player' claim"
+      hardness: important
+  temporal:
+    span_seasons: 4
+    needs_memory_of: "the accumulating self-protective avoidance cost and the state of the second investigation's file-building"
+    needs_deadline: no
+  who_acts:
+    - "two independent supply-chain operators (neither perceiving the hazard)"
+    - "the rare accidental discoverer (self-protective)"
+    - "her own chain of command (auditing her pattern, not the secret)"
+    - "a second, unrelated investigator (provenance-based)"
+    - "a hostile institution deciding whether to prosecute"
+  knowledge:
+    - "the hazard is literally imperceptible below a threshold -- an epistemic hard floor, not secrecy"
+    - "the discoverer knows and hides it; her chain of command knows only the behavioral pattern; the second investigator knows the mundane crime but not the hidden dimension; only their combination is complete"
+  ends_when: "the exposure event fires (or is suppressed) -- a definite conclusion for the immediate arc, with downstream consequences continuing into other arcs"
+
+- id: ARC-38
+  name: "The Sandcastle Alliance"
+  one_line: "Two unconnected foreign agents must each independently suppress a different externally-visible pressure metric for entirely personal reasons, producing an invisible protective shield that nobody built and nobody controls, fragile to two separate remote trigger conditions neither the players nor the agents can directly manage."
+  scale: realm
+  season_requires:
+    - need: "two agents belonging to rival external powers, with no communication between them, must each independently suppress a different externally-facing pressure metric for personal, non-strategic reasons, such that their combined effect functions as a single coherent shield"
+      why: "'two men who have never met... independently making the same decision for entirely different reasons' cannot be collapsed into one shielding actor"
+      hardness: core
+    - need: "each shielding agent's suppression must be revocable by a distinct trigger condition evaluated by that agent's own distant superior, entirely outside player reach or knowledge"
+      why: "'both triggers are outside Valorian control' -- the fragility must be genuinely inaccessible to direct player intervention"
+      hardness: core
+    - need: "one shield's collapse-trigger must be sensitive to a completely different domestic event that the shielding agent's home institution can detect only via indirect signals, not the domestic event itself"
+      why: "ties one arc's terminal event to remotely revoking a separate shield via inference, not direct visibility"
+      hardness: important
+    - need: "an internal administrator's personal social vulnerability must be exploitable by any actor willing to invest relationship-building effort, and losing the specific external agent occupying that role must degrade the administrator's institutional effectiveness for a fixed recovery period"
+      why: "Crown's function partly resting on which external actor currently occupies a relationship slot is a second-order dependency worth naming explicitly"
+      hardness: flavour
+    - need: "both shields failing within a short window of each other must produce a compound, first-time-in-the-campaign exposure to full external pressure, functioning as a distinct escalation tier rather than a continuation of prior gradual pressure"
+      why: "needs a qualitative before/after threshold from simultaneous shield failure, not a smooth curve"
+      hardness: important
+  temporal:
+    span_seasons: 4
+    needs_memory_of: "which shield conditions have already been crossed and how close each home institution is to its own revocation trigger"
+    needs_deadline: no
+  who_acts:
+    - "two foreign agents (autonomous, personally motivated)"
+    - "their respective distant home institutions (evaluating revocation independently)"
+    - "a Crown administrator whose competence-dependency is exploitable"
+    - "other factions capitalizing on the resulting militarization"
+  knowledge:
+    - "the players do not know the environment is shielded until they lose it; neither shield-holder knows about the other; each home institution evaluates its own agent using indirect signals, not direct observation of the domestic cause"
+  ends_when: "never cleanly -- it resolves into full external pressure returning, which is itself the start of further consequences rather than a closed loop"
+
+- id: ARC-39
+  name: "The Practitioner They Didn't Know They Had"
+  one_line: "A leader's habitual use of a strategic asset must silently accumulate a hidden personal capability invisible even to himself, while a close subordinate who CAN perceive it withholds disclosure for her own compromising reasons, and an unrelated investigator can stumble onto the same growth from a different angle."
+  scale: faction
+  season_requires:
+    - need: "a leader's repeated, intentional use of a specific asset must accumulate a hidden personal quantity in him at a fixed small increment per use, undetectable to him through his own available senses, distinct from the asset's visible strategic function"
+      why: "'he does not know any of this is happening' -- invisibility to the affected party himself, not just outsiders, is the load-bearing epistemic condition"
+      hardness: core
+    - need: "that hidden quantity crossing a threshold must trigger a one-time check whose two outcomes (perceive the truth vs. destabilize without understanding it) leave the leader with qualitatively different capability and self-knowledge"
+      why: "mirrors the general awakening pattern but specifically ties it to accumulation-via-routine-use"
+      hardness: core
+    - need: "a close subordinate who already has the relevant perceptual capability must be able to observe the leader's hidden growth directly, with her choice to disclose or withhold driven by a personal conflict-of-interest rather than a scripted event"
+      why: "her withholding must be motivated, not simply information the GM chooses not to reveal"
+      hardness: important
+    - need: "an unrelated investigator working a structurally separate case must be able to intersect this hidden-growth track by physically tracing an unconnected supply chain to its source, detecting the leader's sensitivity as an incidental byproduct"
+      why: "explicit cross-arc intersection -- the investigator's detection must not require her to be investigating the leader at all"
+      hardness: important
+    - need: "if the leader begins using his emerging, still-unrecognized capability without guidance, a separate internal resource must begin depleting per use with no natural recovery available, eventually degrading his other, unrelated strategic capabilities"
+      why: "ties untrained-use cost to a broader strategic-effectiveness penalty, raising the stakes beyond the personal"
+      hardness: important
+    - need: "an external time-pressure event from a different arc must be able to force the leader into an immediate, non-deferrable choice between accelerating his risky capability-use or abandoning a strategic asset at the worst possible moment"
+      why: "cross-arc time pressure forcing an irreversible decision under a deadline is explicit"
+      hardness: important
+  temporal:
+    span_seasons: 6
+    needs_memory_of: "the leader's accumulated hidden quantity and his depleting untrained-use resource once he begins operating"
+    needs_deadline: yes
+  who_acts:
+    - "the leader (unaware, later choosing under pressure)"
+    - "the perceiving subordinate (withholding for personal reasons)"
+    - "the unrelated investigator (accidental discovery)"
+    - "a trained specialist who could offer guidance if reached in time"
+  knowledge:
+    - "the leader does not know about his own growth; the subordinate knows and hides it; the investigator knows a fragment via accident; no single actor holds the complete picture until the subordinate breaks silence"
+  ends_when: "never cleanly -- resolves into either reaching a trained specialist (an open-ended recovery path) or burning out (a degraded steady state), both continuing into later play"
+
+- id: ARC-40
+  name: "The Weight That Broke the Balance"
+  one_line: "Five structurally independent, individually-stable systems, each the terminal or ongoing state of a separate preceding arc, must be able to converge in the same period purely by coincidence of timing, forcing the head of state into an unavoidable formal choice."
+  scale: realm
+  season_requires:
+    - need: "a wealthy faction's own internal optimization must independently and structurally trend a separate governance-capacity resource toward its floor, producing a persistent, standing condition of being rich but politically powerless"
+      why: "the powerlessness itself must be a structural, standing state the arc exploits, not an event that happens during the arc"
+      hardness: core
+    - need: "when several independent external-pressure collapses occur in temporal proximity, every faction under pressure must be able to simultaneously approach the same wealthy-but-powerless faction for resources, forcing a single-choice allocation among mutually exclusive allies within one period"
+      why: "the arc needs true resource contention, not sequential asks"
+      hardness: core
+    - need: "a single administrator's institutional loyalty must be determined by which faction has invested a specific social-validation behavior toward him over a long period, not by policy alignment, such that his crisis decisions are explainable only by that personal history"
+      why: "his decisions are explicitly not policy-driven; the mechanism must let non-policy personal history determine an institutional actor's crisis behavior"
+      hardness: important
+    - need: "one institutional actor extending protection to a faction under active investigation by a second institution must be interpretable by that second institution as hostile betrayal, permanently damaging a previously-functioning cooperative arrangement"
+      why: "must let one actor's protective act break an unrelated, previously-functioning cooperative arrangement"
+      hardness: important
+    - need: "the near-simultaneous failure of several independent stabilizing mechanisms must be able to force the head of state into an unavoidable formal choice (act, abdicate, or be replaced) via a legitimacy logic that operates independently of any single crisis's specific content"
+      why: "the convergence's terminal consequence must be a structural forcing-function on the top of the hierarchy, not merely a difficult season"
+      hardness: core
+    - need: "the number of precursor crises that have actually fired by a given checkpoint must produce genuinely different, graduated severities of outcome, not a single all-or-nothing trigger"
+      why: "the source explicitly defines degraded partial-convergence outcomes rather than a binary"
+      hardness: important
+  temporal:
+    span_seasons: 3
+    needs_memory_of: "which of the four precursor arcs have fired their terminal event by the checkpoint season"
+    needs_deadline: yes
+  who_acts:
+    - "the wealthy-but-powerless faction's leader (choosing an ally under pressure)"
+    - "the vulnerable administrator (deciding based on personal history)"
+    - "each pressuring faction"
+    - "the second institution reading betrayal into the first's protective act"
+    - "the head of state (facing the forced choice)"
+  knowledge:
+    - "no single actor perceives all five converging systems at once; the administrator's decision logic is invisible to institutions relying on him for policy-consistent behavior"
+  ends_when: "the head of state's forced choice is made (act, abdicate, or be replaced) -- a definite terminating event for this arc, opening into whichever successor political arc that choice implies"
+
+- id: ARC-41
+  name: "The Inquisitor's Unravelling"
+  one_line: "A loyal institutional enforcer must carry a hidden personal capability that activates only once a separate ambient world-quality, degraded by several other unrelated storylines, drops into a specific band in the territories his job routinely sends him to."
+  scale: faction
+  season_requires:
+    - need: "a hidden personal capability in a loyal enforcer must remain completely dormant until an unrelated, ambient environmental quality, degraded by the cumulative effect of several other storylines, drops into a specific band specifically in the territories his job routinely sends him to"
+      why: "a triple-dependency trigger (his hidden trait, an ambient global quality, and his location) must all align, none of which he or anyone controls"
+      hardness: core
+    - need: "the ambient quality's degraded band must specifically escalate its local effects in territories closer to a specific hazard-source, such that identical ambient conditions produce categorically stronger effects the closer a territory is"
+      why: "geographic proximity to a hazard must modulate severity, making which territories he happens to visit matter mechanically"
+      hardness: important
+    - need: "an enforcer's positive, valued professional trait (rigorous documentation) must, without any change in his behavior, become the specific mechanism constructing a damning case against himself once what he is documenting is his own anomalous perception"
+      why: "a trait valuable in one context becomes self-destructive in another without the character choosing to change how he operates"
+      hardness: core
+    - need: "a third party who can independently verify the enforcer's hidden condition must have a real choice between at least three distinct outcomes -- report to his institution, report to him directly, or withhold -- each producing a different consequence chain"
+      why: "the arc explicitly branches into distinct player-chosen disclosure paths with different institutional and personal consequences"
+      hardness: core
+    - need: "withholding disclosure must not freeze the situation -- the enforcer's own unassisted, ongoing documentation must reach the same self-incriminating conclusion independently after a further delay"
+      why: "the withhold-branch must be a delay, not a permanent dead-end"
+      hardness: important
+  temporal:
+    span_seasons: 3
+    needs_memory_of: "the ambient quality's territory-by-territory band history and the enforcer's own accumulating personal case file"
+    needs_deadline: no
+  who_acts:
+    - "the enforcer himself (unknowingly accumulating, later choosing to seek help, suppress, or continue)"
+    - "a sensitive third-party observer (choosing what to do with the discovery)"
+    - "the enforcer's own institution (investigating him if informed)"
+  knowledge:
+    - "the enforcer does not know his own hidden capability; a sensitive observer can diagnose it directly; the enforcer's institution knows nothing until someone tells it"
+  ends_when: "the crisis resolves into defection, suppression, or institutional destruction -- a definite branch-dependent conclusion, feeding forward into other arcs"
+
+- id: ARC-42
+  name: "The Debate That Changed the World"
+  one_line: "A formal, evidence-based collective-decision contest about a suppressed historical truth must be able to produce, as an unintended side effect of merely being held with the right participants present, a small restorative change to an entirely separate substrate-health quantity -- regardless of which side wins."
+  scale: realm
+  season_requires:
+    - need: "a formal, evidence-based decision procedure must support citing a specific, previously-established, verifiable fact as a bonus-granting move, mechanically distinct from generic argument, and that fact must originate from a separate, ongoing long-term research arc"
+      why: "the citable evidence must be the fruit of real, tracked prior investment, not invented for the debate itself"
+      hardness: important
+    - need: "a formal procedural-objection mechanism meant to block structural change must be categorically unable to prevent a debate from happening if it is classified as a social contest rather than a reform action"
+      why: "the procedural blocker's authority must have a genre boundary it cannot cross"
+      hardness: important
+    - need: "a formerly-loyal institutional insider's testimony against his own institution's foundational claim must be treated as higher-credibility evidence specifically because of his institutional pedigree, with a distinct bonus applied against the opposing side"
+      why: "credibility-by-defection is a specific mechanical requirement, not flavor text"
+      hardness: important
+    - need: "the debate's outcome, regardless of which side wins, must be able to trigger a small positive change in a separate, unrelated ambient world-health quantity, conditioned only on whether rare-sensitivity participants are present in the room"
+      why: "the metaphysical effect must be orthogonal to who wins -- an explicit, load-bearing design claim"
+      hardness: core
+    - need: "this debate must be unable to occur meaningfully until several other independent storylines have advanced to specific states, functioning as a convergence node rather than an independently-triggerable event"
+      why: "it cannot fire early -- ordering dependency on other arcs is explicit"
+      hardness: core
+  temporal:
+    span_seasons: 1
+    needs_memory_of: "the state of the cited historical evidence (must already exist from a prior arc) and whether a defected witness is available"
+    needs_deadline: no
+  who_acts:
+    - "a proposer bringing evidence"
+    - "an opposing formal-authority defender"
+    - "a procedural objector (unable to fully block)"
+    - "a possible defected institutional witness"
+    - "any rare-sensitivity participants present"
+  knowledge:
+    - "none of the debaters intend or perceive the metaphysical side effect; even the rare-sensitivity participants may not notice it -- it is entirely a background consequence of the debate's occurrence"
+  ends_when: "the debate resolves (decisive win for either side, or inconclusive) -- a single, definite conclusion, though downstream effects feed multiple other arcs"
+
+- id: ARC-43
+  name: "The Battle That Ate the South"
+  one_line: "A conventional territorial mass-combat engagement, triggered by an unrelated arc's military redeployment leaving a corridor undefended, must escalate into metaphysical catastrophe only if a combatant chooses to use reality-altering ability during the fight, with cost multiplied specifically by the mass-combat context."
+  scale: world
+  season_requires:
+    - need: "a purely conventional mass-combat engagement must be triggerable because a different arc's crisis has redirected the defending force elsewhere, leaving a specific corridor territory undefended as an unintended side effect"
+      why: "'the generals who chose the battlefield did not know they were choosing the world's fate' -- the vacancy must originate from an unrelated arc's decision"
+      hardness: core
+    - need: "any reality-altering ability used specifically within a large-scale, multi-unit engagement must have its underlying cost multiplied by a fixed large factor relative to the same ability used outside mass combat"
+      why: "context (mass battle vs personal scale) must change the cost of an identical action by a multiplier, not merely a flat modifier"
+      hardness: core
+    - need: "the pre-existing local condition of an ambient world-health quantity must determine whether the same tripled cost from one failed high-risk action crosses into a qualitatively worse global band versus being merely absorbed"
+      why: "the same action's consequence severity must be state-dependent on prior, unrelated damage"
+      hardness: core
+    - need: "a territory whose ambient world-health condition is already degraded must independently generate spontaneous hazardous manifestations at a fixed chance per period, without requiring any deliberate reality-altering action"
+      why: "the battlefield's baseline hazard must exist regardless of whether combatants choose to use such abilities at all"
+      hardness: important
+    - need: "a severe outcome at this battle must permanently escalate the ambient hazard condition of multiple adjacent territories by one severity band each"
+      why: "spatial contagion of consequence severity beyond the battle's own location"
+      hardness: important
+    - need: "a remote group whose ongoing function is to actively counteract the ambient world-health quantity's decline must have their own operational capacity degrade as a direct consequence of this battle's outcome, even though absent and non-participating"
+      why: "remote, causally-connected capability loss without direct participation ties the battle to the world's larger substrate-management effort"
+      hardness: important
+  temporal:
+    span_seasons: 1
+    needs_memory_of: "the ambient world-health quantity's precise pre-battle value in this territory and its neighbors"
+    needs_deadline: no
+  who_acts:
+    - "the redeploying military commander (from a different arc)"
+    - "the attacking faction's field commander"
+    - "the defending faction's field commander"
+    - "any practitioner combatant choosing whether to use reality-altering abilities"
+    - "a remote group whose unrelated function is degraded by the outcome"
+  knowledge:
+    - "combatants may not know the ambient quantity's exact value or how close it is to a catastrophic band when deciding to use a risky ability -- a hazard they may be gambling on without full information"
+  ends_when: "the battle resolves and its ambient-quantity consequence locks in at the next accounting -- a definite single-event conclusion, with environmental aftereffects feeding other arcs"
+
+- id: ARC-44
+  name: "The Invisible Majority"
+  one_line: "A slow, per-location cultural-allegiance quantity must be eroded simultaneously by three structurally independent causal mechanisms, none of which any single actor's strategic framework spans, with a designated reform-blocking mechanism unable to trigger because the change arrives through channels its own trigger cannot detect."
+  scale: realm
+  season_requires:
+    - need: "a per-location cultural-allegiance quantity must be capable of eroding from at least three structurally distinct causal sources simultaneously -- economic extraction, a rival power's well-intentioned investment, and the gradual failure of an unrelated ambient suppression mechanism -- with each source alone producing only a small, non-alarming effect"
+      why: "no single actor's strategic lens spans all three; collapsing to one cause defeats the arc's point"
+      hardness: core
+    - need: "a designated institutional mechanism built specifically to block structural political reform must have a trigger condition narrow enough that change arriving through non-political channels never satisfies it"
+      why: "the blocker's blindness must be a structural gap in its own trigger definition, not an oversight it could in principle notice"
+      hardness: core
+    - need: "a faction pursuing a deliberately thin, over-extended presence strategy must end up positioned to benefit from the eroding quantity in every location where it happens to have a presence, without having caused or targeted the erosion there"
+      why: "benefit-without-causation for the faction that appears, on the surface, to be winning"
+      hardness: important
+    - need: "the cumulative erosion crossing a specific count-of-locations threshold must unlock a discrete, named follow-on capability at one specific, symbolically significant location, distinct from ordinary background erosion"
+      why: "gives the slow-burn track a hard payoff rather than an indefinite grind"
+      hardness: important
+    - need: "the erosion crossing threshold specifically at the institution's own most symbolically central location must produce a categorically different consequence (core legitimacy-generation becoming irrelevant, not just weaker) than crossing it anywhere else"
+      why: "location-specific severity for the institution's own seat is distinct from ordinary territories"
+      hardness: important
+  temporal:
+    span_seasons: 16
+    needs_memory_of: "the running per-location cultural-allegiance value across every location, summed periodically"
+    needs_deadline: no
+  who_acts:
+    - "the resource-extracting institutional official (unaware of the cultural cost)"
+    - "a rival power's cultural patron (unaware of the erosive side effect)"
+    - "the thin-spreading organizer (benefiting passively)"
+    - "the reform-blocking official (structurally unable to perceive the threat)"
+  knowledge:
+    - "no faction tracks the aggregate erosion across all locations simultaneously; the crisis becomes visible only when someone deliberately counts all locations at once"
+  ends_when: "never, until the aggregate threshold is crossed (a discrete count-of-locations condition); before that it simply continues eroding, after which it converts into a distinct follow-on arc with its own resolution"
+
+- id: ARC-45
+  name: "The Tutoring Demand That Started a War"
+  one_line: "[STRUCK-MECHANIC: Coup Counter] A long-suppressed formal diplomatic demand must fire the moment its lone suppressing agent's personal motive is removed, arriving exactly when the defending side's response resources are exhausted by two separate unrelated arcs, forcing a zero-sum personal/political choice on a family member and offering no response that avoids worsening some threat."
+  scale: realm
+  season_requires:
+    - need: "a formal, threshold-triggered diplomatic demand must remain permanently suppressed below its trigger value for as long as a single foreign intermediary chooses, for personal reasons, to withhold the signals that would raise the triggering quantity, such that removing that one intermediary's motive is sufficient by itself to unlock the demand"
+      why: "a single point-of-failure suppression mechanism whose remote, unrelated removal directly unlocks the trigger"
+      hardness: core
+    - need: "both formal responses available to the demand must each independently increment a separate background threat-counter, such that no available choice avoids worsening at least one long-term threat track"
+      why: "a genuine zugzwang with no null option is explicit in the source"
+      hardness: core
+    - need: "the demand's arrival must be able to coincide, purely by cross-arc timing, with the defending side's military capacity already depleted by a wholly separate battle, removing the credible-threat option behind one response"
+      why: "cross-arc resource depletion removing an option's credibility, not a scripted weakness"
+      hardness: important
+    - need: "an intelligence compromise generated by an unrelated arc must be able to leak the defending side's still-undecided planned response to the demanding power before it is formally announced, changing the practical consequence of whichever choice is made"
+      why: "advance-knowledge leakage from an unconnected betrayal arc materially changes this arc's outcome space"
+      hardness: important
+    - need: "a family member of the head of state who is also the sponsor of an unrelated, ongoing long-term reform program must be forced into a single, non-repeatable allocation choice between continuing that program and redirecting all her political capital to the personal crisis this demand creates"
+      why: "the arc's emotional core requires an actual zero-sum resource competition between a personal crisis and an unrelated policy program she owns"
+      hardness: important
+  temporal:
+    span_seasons: 2
+    needs_memory_of: "the demanding power's rising pressure trajectory since the suppression collapsed, and whether the intelligence leak already occurred"
+    needs_deadline: yes
+  who_acts:
+    - "the previously-suppressing foreign intermediary (now out of the loop)"
+    - "the head of state (choosing compliance or resistance)"
+    - "the compromised administrator whose leaked information affects the outcome"
+    - "the demanding foreign power (adjusting its posture based on leaked intelligence)"
+    - "the family member choosing between her reform program and her child's crisis"
+  knowledge:
+    - "the demanding power may know the defending side's planned response before it is announced; the defending side does not know its own plan has leaked; the family member chooses under incomplete information about how the depleted military situation will play out"
+  ends_when: "the head of state's chosen response is enacted and its immediate consequence locks in -- a definite conclusion for this arc, feeding forward into further battle/coup consequences"
+
+- id: ARC-META-COLLISION
+  name: "Root/gm_ref arc-numbering collision (16-18)"
+  one_line: "Root series arcs_16_19.md and gm_ref series arcs_10_18.md both use arc numbers 16, 17, and 18 for entirely different stories; any system indexing arcs by bare number will silently merge or discard one of each pair."
+  scale: world
+  season_requires:
+    - need: "the arc-indexing scheme must be able to disambiguate two structurally different arcs that share the same integer identifier, by series/source-file, not by number alone"
+      why: "arcs_16_19.md's Arc 16 ('The World Without Direction') and gm_ref/arcs_10_18.md's Arc 16 ('The Empty Fort') are different stories; treating 'Arc 16' as one canonical index entry silently merges them"
+      hardness: core
+    - need: "the same disambiguation must hold for Arc 17 (root: 'The Favour Gate' vs gm_ref: 'The Sinigaglia Dinner') and Arc 18 (root: 'The Tied Vote' vs gm_ref: 'The Stolen Steward')"
+      why: "the collision is not a single stray duplicate -- it spans three consecutive numbers across the whole gm_ref 10-18 batch"
+      hardness: core
+    - need: "UNCLEAR: which of the two series (root vs gm_ref) is the canonical numbering for 16-18, if either -- no reconciliation or supersession note was found in either file"
+      why: "without a ruling, any tool built to resolve 'Arc 16' by number alone will pick one arbitrarily and silently discard the other"
+      hardness: important
+  temporal:
+    span_seasons: "n/a (apparatus finding, not in-fiction)"
+    needs_memory_of: "n/a"
+    needs_deadline: no
+  who_acts:
+    - "N/A -- this is a corpus/indexing defect, not an in-fiction actor"
+  knowledge:
+    - "downstream tooling that indexes arcs by bare number cannot currently tell these two series apart"
+  ends_when: "n/a -- stands as an open data-hygiene finding until the two series are reconciled or explicitly namespaced"
