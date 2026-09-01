@@ -44,7 +44,11 @@ ROUTES: list[tuple[str, str, str | None]] = [
     ("W3",  r"\b(ambient|background|passive|scheduled|automatic)\b[^.]{0,60}\b(mood|morale|unrest|discontent|loyalty|opinion|attitude|sentiment|trust|reputation|standing|legitimacy)\b", None),
     ("W3",  r"\b(mood|morale|unrest|discontent|loyalty|sentiment)\b[^.]{0,60}\b(drift|decay|erode|worsen|sour|degrade|rise|fall)\b[^.]{0,40}\b(on its own|without|no one|nobody|automatic)", None),
     ("A34", r"\b(decay|erode|lapse|fade|atroph\w+|sink)\b[^.]{0,60}\b(neglect|inattention|disuse|not tend\w*|untended|nobody)\b", None),
-    ("W4",  r"\b(ambient|environmental|material|physical|substrate|land|soil|climate|weather)\b[^.]{0,60}\b(worsen|degrade|decay|deplete|erode|change|shift)\b", None),
+    # ⚠ The in-chain "ambient MATERIAL vs ambient SOCIAL" correction recurring on a new axis.
+    # W4's carrier is a SITE; a row about a PERSON's condition degrading has no carrier in the
+    # design at all, which is what P32 raises. Guarded so person-rows fall through to it.
+    ("W4",  r"\b(ambient|environmental|material|physical|substrate|land|soil|climate|weather)\b[^.]{0,60}\b(worsen|degrade|decay|deplete|erode|change|shift)\w*\b",
+     r"\b(his|her|their|personal|character'?s?|person'?s?|practitioner'?s?)\b[^.]{0,30}\bcondition\b"),
 
     # --- the person ---
     ("P1",  r"\b((no|without|lacking)\s+(\w+\s+){0,2}(office|post|rank|position|standing|title|command|duty|seat)|unranked|postless|ordinary person|low[- ]agency|holds nothing)\b", None),
@@ -77,8 +81,14 @@ ROUTES: list[tuple[str, str, str | None]] = [
     # shape here: the adjectival sense takes an open class of nouns. The guard is now
     # structural -- `standing` followed by ANY noun is adjectival unless the sentence is about
     # a person's regard.
-    ("P14", r"\b(standing|regard|esteem|how .{0,20}(is|are) (seen|regarded|perceived)|public (image|perception)|prestige)\b",
-     r"\bstanding\s+[a-z]+\b(?!\s+(?:with|among|before|in the eyes))|\b(no|without|lacking|nor)\s+(\w+\s+){0,2}standing\b"),
+    # ⚠ FOURTH AND FIFTH RECURRENCE, and rev 3's structural guard was wrong in BOTH directions:
+    # too narrow (it excluded "his standing must fall"), and still too wide (it needed
+    # whitespace + a lowercase letter, so "standing," and "Standing" slipped through). Replaced
+    # with a POSITIVE requirement -- `standing` must sit beside a regard verb or a
+    # with/among/before complement -- which is what the noun sense actually looks like.
+    ("P14", r"\b(esteem|prestige|how .{0,20}(is|are) (seen|regarded|perceived)|public (image|perception))\b", None),
+    ("P14", r"\bstanding\b[^.]{0,30}\b(with|among|before|in the eyes of|at court)\b", None),
+    ("P14", r"\b(his|her|their|the character'?s?|the person'?s?)\s+standing\b[^.]{0,40}\b(rise|fall|improv\w+|declin\w+|suffer|recover|chang\w+|depend)\w*\b", None),
     ("P15", r"\b(private|secret|confidential|in confidence|unobserved|behind closed doors|no one else (hears|knows|sees))\b[^.]{0,60}\b(conversation|meeting|act|deed|word|exchange)\b", None),
     ("P16", r"\b(differ\w*|disagree\w*|diverge\w*|conflict\w*)\b[^.]{0,60}\b(account|version|belief|understanding|perspective|view|memor\w+)s?\b", None),
     ("P17", r"\b(accumulat\w+|build\w* up|mount\w*|grow\w*|creep\w*|trickle)\b[^.]{0,70}\b(risk|suspicion|exposure|attention|scrutiny|heat|pressure|notice)\b", None),
@@ -98,8 +108,16 @@ ROUTES: list[tuple[str, str, str | None]] = [
     # --- factions, offices, petitions ---
     ("F1",  r"\b(faction|cause|movement|party|order|society|network|conspirac\w+|alliance)\b[^.]{0,70}\b(span\w*|across|member\w*|join\w*|adher\w*|shar\w*)\b", None),
     ("F2",  r"\b(dissolv\w+|collaps\w+|abandon\w*|memberless|defunct|die out|leave)\b[^.]{0,70}\b(faction|cause|movement|order|party|group)\b", None),
-    ("F3",  r"\b(the )?(faction|church|crown|state|order|guild|council|institution|body)\b\s+(itself\s+)?(must be able to |can |may )?\b(act|decide|choose|move|take (an )?action)\w*\b", None),
-    ("F4",  r"\b(office|post|position|title|appointment|seat|rank)\b[^.]{0,70}\b(make|render|grant|confer|entitle|permit|authoris|authoriz|eligib)\w*\b", None),
+    # ⚠ The institutional noun must be the GRAMMATICAL SUBJECT of the verb. Every row in this
+    # corpus is phrased "X must be able to Y", so a wide window made the clause nearly free --
+    # and rows about A THIRD PARTY, A PERSON, or an institution HOLDING something were graded
+    # L1-FORBIDDEN. `party`, `house`, `power` and `order` are dropped: all four are ordinary
+    # words for people and things in this corpus.
+    ("F3",  r"\b(the )?(faction|church|crown|state|guild|council|institution|dicastery)\b\s+(itself\s+)?(must be able to\s+)?(act|decide|choose|move|take (an )?action)\w*\b", None),
+    # `make` alone let F4 claim rows about an office making an action HARDER -- the exact
+    # opposite of what F4's PASS asserts (S11.1: "an office adds NO verb and NO modifier").
+    ("F4",  r"\b(office|post|position|title|appointment|seat|rank)\b[^.]{0,70}\b(grant|confer|entitle|permit|authoris|authoriz|eligib)\w*\b", None),
+    ("F4",  r"\bmakes? (an? )?(ordinary )?(action|act)\b[^.]{0,40}\b(available|possible|open)\b", None),
     ("F5",  r"\b(no (fixed )?(seat|place|territory|home)|trans[- ]?(settlement|regional)|dispersed members|scattered members)\b", None),
     ("F5",  r"\b(members?|executors?|officers?)\b[^.]{0,50}\b(everywhere|across the realm|in every|scattered)\b", None),
     ("F6",  r"\b(never (heard|received|learned)|fail\w* to (arrive|reach)|undelivered|did not reach|distort\w*|garbl\w+|misunderstood in transit)\b", None),
@@ -122,7 +140,11 @@ ROUTES: list[tuple[str, str, str | None]] = [
     ("W6",  r"\b(plague|famine|storm|flood|disaster|epidemic|blight|catastrophe|calamity)\b", None),
     ("W7",  r"\b(expire|lapse|ttl|time limit|valid until|run\w* out of time|deadline pass\w*)\b", None),
     ("W8",  r"\b(case|charge|accusation|investigation|inquiry|proceeding|prosecution|trial)\b[^.]{0,70}\b(ripen\w*|advance\w*|proceed\w*|progress\w*|mature\w*|build\w*)\b", None),
-    ("W9",  r"\b(birth|born|death rate|population|demograph\w+|generation|age|ageing|aging)\w*\b", None),
+    # ⚠ FIFTH RECURRENCE OF THE BARE-TOKEN CLASS, and the costliest yet. The trailing `\w*`
+    # applies to the WHOLE alternation, so `age` matched AGENT, AGENTS, AGENCY and AGENDA --
+    # and the arc corpus's only PLAYABLE verdict was rows about "two AGENTS belonging to rival
+    # external powers" collecting W9's births-and-deaths PASS. The stems are now closed.
+    ("W9",  r"\b(births?|born|death rates?|populations?|demograph\w+|generations?|age|aged|ageing|aging)\b", None),
     ("W10", r"\b(unrest|discontent|legitimacy|reputation|morale|cohesion|stability|order)\b[^.]{0,60}\b(level|value|amount|score|rating|degree|stat)\b", None),
     ("W11", r"\b(eat|feed|subsist|draw|consume|provision)\w*\b[^.]{0,60}\b(from|out of|on)\b[^.]{0,40}\b(store|larder|granar\w+|supply|stock|hearth|household)\w*\b", None),
     ("W12", r"\b(populate\w*|world[- ]?gen\w*|seed\w* the world|people who (hold|have) no|ordinary inhabitant|the rest of the population)\b", None),
@@ -154,7 +176,7 @@ ROUTES: list[tuple[str, str, str | None]] = [
     ("A28", r"\b(record|log|history|chronicle)\b[^.]{0,60}\b(consistent|intact|integrity|complete|not (be )?corrupt)\w*\b", None),
     ("A29", r"\b(separate|own|its own|distinct)\b[^.]{0,30}\b(record|log|history|register)\b[^.]{0,40}\b(subsystem|combat|battle|contest)\b", None),
     ("A31", r"\b(how many|number of|count of|exactly)\b[^.]{0,40}\b(action|act|scene|moment|thing)s?\b[^.]{0,40}\b(season|turn)\b", None),
-    ("A32", r"\b(scene|playable moment|dramatic beat|set piece)s?\b[^.]{0,70}\b(per season|budget|count|number|how many|allowance|equal|equival\w+|worth a)\b", None),
+    ("A32", r"\b(scene|playable moment|act)s?\b[^.]{0,60}\b(per season|budget|count|number of|how many|allowance|equals?|equival\w+)\b", None),
     ("A33", r"\b(distort\w*|garbl\w*|chang\w* in (transit|the telling)|whisper|rumou?r spread|version that reaches)\b", None),
     ("A35", r"\b(godot|engine version|4\.\d)\b", None),
 ]
@@ -419,7 +441,8 @@ ROUTES_2: list[tuple[str, str, str | None]] = [
     ("W8",  r"\b(deadline|term|clock|timer|countdown|schedule|due date)\b[^.]{0,60}\b(set|declar\w+|wound|start\w*|run\w*|expir\w*|matur\w*)\b", None),
     ("P30", r"\b(state|status|condition|progress|change|memory)\b[^.]{0,50}\b(track\w*|persist\w*|carried|retained|stored|remembered)\b[^.]{0,45}\b(season|turn|time)s?\b", None),
     ("P1",  r"\b(ordinary|common|humble|lowly|unremarkable|private|non[- ]?institutional|non[- ]faction)\b[^.]{0,30}\b(person|individual|character|inhabitant|subject|actor)\b", None),
-    ("P21", r"\b(cohort|weight|as a group|many people at once|collectively)\b", None),
+    ("P21", r"\b(cohort|as a group|many people at once|collectively|acts? as one)\b", None),
+    ("P21", r"\bweight\b[^.]{0,40}\b(cohort|population|crowd|group|many|number of people)\b", None),
     ("F4",  r"\b(remit|jurisdiction|mandate|writ|competence|authority|purview)\b[^.]{0,60}\b(cover|extend|reach|limit|bound|defin|includ)\w*\b", None),
     ("F15", r"\b(staff|establishment|clerk|retainer|servant|household|deput\w+|secretar\w+|subordinate)s?\b[^.]{0,70}\b(work|perform|execut\w+|carr\w+ out|do the|actually)\b", None),
     ("A27", r"\b(who|which)\b[^.]{0,20}\b(writes|owns|changes|updates|is responsible for)\b", None),
@@ -431,7 +454,13 @@ COMPILED += [(pid, re.compile(rx, re.I), re.compile(neg, re.I) if neg else None)
 
 
 ROUTES_3: list[tuple[str, str, str | None]] = [
-    ("F3",  r"\b(faction|institution|order|guild|church|house|power|polity|party|council)\b[^.]{0,45}\bmust be able to\b[^.]{0,60}\b(choose|decide|fund|ally|spend|act|pursue|adopt|possess|maintain|remain|escalat\w+|behav\w+|respond|hold)\w*\b", None),
+    # ⚠ W8 MUST PRECEDE W13. S13.1 supplies the mechanism for "a case ripens while the accused
+    # does nothing" and calls it the better design: the act DECLARES the stages and their terms,
+    # MATTER matures them, and each maturation is a person's past act ripening. Rev 3 routed
+    # that sentence to W13's fourth-clock refusal, so ARC-04 was BLOCKED on a row THE HEAD
+    # EXPLICITLY ANSWERS -- the instrument measuring against the design.
+    ("W8",  r"\b(procedural|formal|legal|accusatory|disciplinary|case|charge|tribunal)\b[^.]{0,45}\b(stage|step|phase|process|proceeding|timetable)s?\b[^.]{0,70}\b(advance|proceed|progress|matur\w+|ripen\w*|on its own|regardless)\w*\b", None),
+    ("F3",  r"\b(faction|institution|guild|church|polity|dicastery)\b\s+(itself\s+)?must be able to\s+(choose|decide|fund|ally|spend|act|pursue|adopt|escalat\w+|behav\w+|respond)\w*\b", None),
     ("F3",  r"\b(each|every|a) faction'?s?\b[^.]{0,50}\b(autonomous|default|own)\b[^.]{0,40}\b(action|behaviou?r|strategy|tendency|posture)\b", None),
     ("W13", r"\b(fixed|regular|annual|seasonal|periodic|automatic)\b[^.]{0,30}\b(schedule|tick|interval|timetable|cadence)\b", None),
     ("W13", r"\b(background|world[- ]scale|global|ambient)\b[^.]{0,40}\b(stat|track|quantity|counter|meter|level)\b[^.]{0,60}\b(decay|declin\w+|drift|erod\w+|fall|deteriorat\w+)\w*\b", None),
@@ -439,7 +468,7 @@ ROUTES_3: list[tuple[str, str, str | None]] = [
     ("P37", r"\b(fully|entirely|wholly) determined by\b[^.]{0,60}\b(internal state|own state|stat|disposition|score)\b", None),
     ("P38", r"\b(GM|game ?master|referee|adjudicator|arbiter)\b", None),
     ("P38", r"\b(optimal|ideal|correct|right)\b[^.]{0,25}\b(timing )?window\b[^.]{0,60}\b(clos\w+|without .{0,25}signal|no .{0,20}signal)\b", None),
-    ("W8",  r"\b(procedural|formal|legal|accusatory|disciplinary)\b[^.]{0,40}\b(stage|step|phase|process|proceeding)s?\b[^.]{0,60}\b(advance|proceed|progress|on its own|regardless)\w*\b", None),
+
     ("P26", r"\b(persistent|lasting|lingering|not automatically cleared|carried forward|unresolved)\b[^.]{0,50}\b(condition|state|status|effect|damage|penalt\w+|wound)\b", None),
     ("P17", r"\b(accumulat\w+|aggregate|add up|combine)\w*\b[^.]{0,60}\b(named|single|one|a) (condition|state|threshold|total|summary|effect)\b", None),
     ("A34", r"\b(inaction|doing nothing|non[- ]commitment|neglect|absence of|failure to act|not acting|unattended)\b[^.]{0,70}\b(erod\w+|decay|cost|damag\w+|fall|worsen|los\w+)\b", None),
@@ -506,6 +535,11 @@ COMPILED += [(pid, re.compile(rx, re.I), re.compile(neg, re.I) if neg else None)
 
 
 ROUTES_5: list[tuple[str, str, str | None]] = [
+    # L3's two clauses are DIFFERENT RULES and the corpus asks for both. Clause 1 (one person's
+    # own counter) is PERMITTED by the head and routes to P17; clause 2 (a sum across holders)
+    # is refused and routes to P43. Revisions 1-3 sent both to the clause-2 refusal.
+    ("P43", r"\b(across|among|throughout|over)\b[^.]{0,40}\b(all|every|the) (member|holder|person|character|inhabitant|follower)s?\b[^.]{0,60}\b(total|sum|aggregate|combined|average|tally)\w*\b", None),
+    ("P43", r"\b(cohort|faction|population|group)[- ]wide\b[^.]{0,50}\b(tally|total|sum|average|level)\b", None),
     ("P39", r"\b(two|both)\b[^.]{0,45}\b(named |specific )?(person|official|character|actor|leader)s?\b[^.]{0,60}\b(interact|deal|negotiat|correspond|relate|meet)\w*\b[^.]{0,40}\b(repeated\w*|ongoing|over time|directly|each other)\b", None),
     ("P39", r"\b(relationship|rapport|bond|feud|rivalry|friendship|trust)\b[^.]{0,60}\b(between|with)\b[^.]{0,50}\b(change|evolv|develop|persist|carry|deepen|sour)\w*\b", None),
     ("P40", r"\b(conflict\w*|tension|incompatib\w+|competing|divided|torn)\b[^.]{0,70}\b(obligation|dut(y|ies)|loyalt\w+|allegiance|commitment)s?\b", None),
@@ -516,7 +550,9 @@ ROUTES_5: list[tuple[str, str, str | None]] = [
     ("F21", r"\b(individual|personal|own)\b[^.]{0,35}\b(position|vote|stance|dissent|opinion)\b[^.]{0,70}\b(within|inside|on|registered|recorded|distinct)\b[^.]{0,45}\b(body|council|committee|chapter|assembly|board)\b", None),
     ("F21", r"\b(collective|corporate|body'?s?)\b[^.]{0,35}\b(decision|output|ruling|position)\b[^.]{0,60}\b(individual|member|each)\b", None),
     # remaining recurring shapes with an existing probe
-    ("F4",  r"\b(post|office|seat|command|title)\b[^.]{0,60}\b(more than|beyond)\b[^.]{0,40}\b(identity|reference|a record|a name)\b", None),
+    # ⚠ struck. This route was written to match ONE case row's own phrasing ("more than an
+    # identity record"), which is fitting the router to the answer -- S44.4's ruling is
+    # "don't route -- declare". It produced NPC-036's PLAYABLE on a single row.
     ("F13", r"\b(successor|succession|who follows|next holder)\b[^.]{0,60}\b(undetermined|contested|uncertain|open|several claimants)\b", None),
     ("F6",  r"\b(in (the leader'?s?|his|her|their) name)\b[^.]{0,70}\b(diverg\w+|differ|depart|deviat\w+|not what)\b", None),
     ("P6",  r"\b(faith|belief|doubt|conviction|principle)\b[^.]{0,60}\b(challeng\w+|shaken|tested|question\w+|privately)\b", None),

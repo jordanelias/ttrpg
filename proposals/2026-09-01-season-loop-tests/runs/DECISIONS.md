@@ -3,25 +3,25 @@
 Every branch the shape took that could have gone another way, with the alternatives
 it did not take. A decision nobody records is a decision nobody can audit.
 
-**904 decisions taken, 20 distinct.**
+**785 decisions taken, 20 distinct.**
 
-### MATTER's three cross-owner operations  ·  `S31.1`  ·  taken 224x
-- **chose:** serial: event channel, then death cascade; then parallel over Sites and bodies  (224x)
+### MATTER's three cross-owner operations  ·  `S31.1`  ·  taken 194x
+- **chose:** serial: event channel, then death cascade; then parallel over Sites and bodies  (194x)
 - *not taken:* shard the event channel per rung (breaks causes[])
 
-### individuation  ·  `S29`  ·  taken 219x
-- **chose:** demand-driven only; generated nobody  (219x)
+### individuation  ·  `S29`  ·  taken 189x
+- **chose:** demand-driven only; generated nobody  (189x)
 - *not taken:* a clock that generates (forbidden)
 - *not taken:* a world-gen roster (S54 item 18 -- not a clock, not folded in)
 
-### ordering 0 acts  ·  `S27/S32`  ·  taken 187x
-- **chose:** five strata, then a content-derived hash key over one global array  (187x)
+### ordering 0 acts  ·  `S27/S32`  ·  taken 157x
+- **chose:** five strata, then a content-derived hash key over one global array  (157x)
 - *not taken:* completion order
 - *not taken:* per-container sort (voids the fold)
 - *not taken:* rank
 
-### fan-out over 0 events  ·  `S28/S61`  ·  taken 181x
-- **chose:** EVERY event to EVERY person (5) -- the specified behaviour  (180x)
+### fan-out over 0 events  ·  `S28/S61`  ·  taken 151x
+- **chose:** EVERY event to EVERY person (5) -- the specified behaviour  (150x)
 - **chose:** EVERY event to EVERY person (6) -- the specified behaviour  (1x)
 - *not taken:* restrict by presence (the index is built and UNUSED -- no channel predicate exists to exclude anyone; S61 names this as the debt)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
@@ -56,8 +56,8 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - *not taken:* silently drop the verb from the set (then nobody can witness it)
 - *not taken:* write the consequence directly (L5 forbids: a crossing MAY NEVER PRODUCE AN OUTCOME)
 
-### site_harbour crossed the `bulk_shipping` floor  ·  `S12.1/S3-L5`  ·  taken 7x
-- **chose:** EMIT a witnessable Event; write no social row; produce no outcome  (7x)
+### site_harbour crossed the `bulk_shipping` floor  ·  `S12.1/S3-L5`  ·  taken 8x
+- **chose:** EMIT a witnessable Event; write no social row; produce no outcome  (8x)
 - *not taken:* silently drop the verb from the set (then nobody can witness it)
 - *not taken:* write the consequence directly (L5 forbids: a crossing MAY NEVER PRODUCE AN OUTCOME)
 
@@ -94,6 +94,11 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - *not taken:* block until a holder exists
 - *not taken:* defer to next season
 
+### date d_vacant came due  ·  `S24`  ·  taken 1x
+- **chose:** fire-and-lapse  (1x)
+- *not taken:* block until a holder exists
+- *not taken:* defer to next season
+
 ### ordering 9 acts  ·  `S27/S32`  ·  taken 1x
 - **chose:** five strata, then a content-derived hash key over one global array  (1x)
 - *not taken:* completion order
@@ -108,8 +113,3 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - **chose:** refuse; the season is spent  (1x)
 - *not taken:* roll it anyway
 - *not taken:* route to an Ob=0 roll
-
-### site_harbour crossed the `fishing` floor  ·  `S12.1/S3-L5`  ·  taken 1x
-- **chose:** EMIT a witnessable Event; write no social row; produce no outcome  (1x)
-- *not taken:* silently drop the verb from the set (then nobody can witness it)
-- *not taken:* write the consequence directly (L5 forbids: a crossing MAY NEVER PRODUCE AN OUTCOME)

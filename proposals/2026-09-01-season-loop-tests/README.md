@@ -21,7 +21,7 @@ to test*; they supply nothing about whether the shape is right.
 | `tracer/shape.py` | **the instrument.** `ARCHITECTURE.md` implemented faithfully enough to EXECUTE — six steps, four barriers, the write matrix as a store-API parameter, the `Event` record §19 adds, the three-clause aggregation boundary, fixed point, the two topologies |
 | `tracer/probes.py` | the probes. Each is a REAL EXECUTION that either completes or raises a typed `ShapeGap` |
 | `tracer/run_cases.py` | the router and grader. Routes each case's `season_requires` rows onto probes |
-| `tracer/test_tracer_is_honest.py` | **the instrument's own adversarial test.** 44 tests |
+| `tracer/test_tracer_is_honest.py` | **the instrument's own adversarial test.** 61 tests |
 | `tracer/trace_log.py` | the tracing channel — every step, barrier, decision, write, act, event, claim and gap, in order |
 | `cases/` | this session's completion of the case corpus (the in-chain corpus at #351 covers 27 of 46 NPCs and 51 of ~90 arcs) |
 | `runs/` | `results.json` and `TRACE.txt` — the run |
@@ -43,7 +43,7 @@ shape**, which is the direction nobody notices. The three that would have change
   budget. §26.3 is explicit that any such cap is *"an engine deciding a person's options"*, i.e. L1.
 
 All ten are fixed, and **each is pinned by a regression test** so a recurrence is caught by a
-machine rather than by luck. Revision 2 is under attack by a second antagonist as this is written.
+machine rather than by luck. **Four revisions have now been attacked by three independent read-only antagonists and one anti-fabrication auditor, who between them found 10, 16, 16 and 14 defects.** Revisions 1 and 2 flattered the shape; revision 3's errors ran in BOTH directions, which is the more dangerous state because neither a favourable nor an unfavourable reading survives it. Every finding is fixed and pinned.
 
 ### The provenance column, which is the instrument's central honesty claim
 

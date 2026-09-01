@@ -70,9 +70,14 @@ def test_d1_the_partition_is_not_invented():
     """DEFECT 1. Rev 1 declared TWELVE `social:` rows. ARCHITECTURE.md states exactly ONE
     (S15.3) and declares two MISSING (S30.1). Two invented rows were the precise keys the
     in-chain instrument marks DELIBERATELY ABSENT -- adding them turns a real gap into a PASS."""
-    stated = [k for k in S.PARTITION if k[0] != "*matrix*"]
-    assert stated == [("Tenure", "until")], stated
-    for kind, fname in (("Person", "convictions"), ("Person", "beliefs"), ("Person", "scar")):
+    # ⚠ REV 4. This pin ASSERTED THE WRONG NUMBER for three revisions and locked the error in.
+    # The head states TWO rows, not one: S15.3's `(Tenure, until)` seam, and S54 item 21's
+    # `(Person, scar[axis])`, "social: true, written at RESOLVE in the ACTS class by the outcome
+    # that names the person". Omitting the second inverted the sign on a seven-arc finding --
+    # the instrument reported the row itself as the thing that does not exist.
+    stated = sorted(k for k in S.PARTITION if k[0] != "*matrix*")
+    assert stated == [("Person", "scar"), ("Tenure", "until")], stated
+    for kind, fname in (("Person", "convictions"), ("Person", "beliefs")):
         with pytest.raises(Unspecified):
             S.partition_lookup(kind, fname, "stance")
 
@@ -601,6 +606,52 @@ def test_r3_a_working_mechanism_is_not_reported_as_a_blocker():
     assert R.route("the story must be able to be reconstructed from what caused what") == "A2"
     assert R.route("an accumulated change must be attributable back to which actor caused it") == "A2"
     assert R.run_probe("A2")["verdict"] == "PASS"
+
+
+def test_r4_l3_clause_1_is_permitted_and_clause_2_is_refused():
+    """REV 4. The head permits clause 1 in terms: a monotone counter per (Person, axis) is
+    "legal, since every increment is in the holder's own ledger"; clause 2 bars only the
+    CROSS-HOLDER sum. Revisions 1-3 raised clause 2 on single-holder needs and blocked 18
+    cases on it -- THE INSTRUMENT MEASURING AGAINST THE DESIGN, which §0.1 pt 4 rules is no
+    more acceptable than flattering it."""
+    w = _w()
+    with pytest.raises(Unspecified) as e:
+        Query.single_holder_counter(w, "p_low", "suspicion", registry=set())
+    assert "closed" in str(e.value)                      # the registry is the real gap
+    assert Query.single_holder_counter(w, "p_low", "x", registry={"x"}) == 0
+    with pytest.raises(Forbidden):
+        Query.aggregate_guard(w, "cohort_unrest", per_person_tally=True)
+
+
+def test_r4_the_l1_actor_identity_is_checked():
+    """REV 4. `Act.actor` was a bare unchecked id, so `Act("x","the_church","excommunicate")`
+    reached `resolve` intact — which made A6's and F3's "'The Church excommunicates' IS NOT
+    SPELLABLE" false, while both were labelled on the strength of it."""
+    w = _w()
+    def impostor(p, v, s, ask_budget):
+        from shape import Act
+        return [Act("x", "the_church", "excommunicate")] if p.id == "p_low" else []
+    with pytest.raises(Forbidden):
+        P._run(w, impostor)
+
+
+def test_r4_event_ids_are_unique_per_draw_and_reproducible():
+    """REV 4, TWICE. `purpose` minted per KIND gave five Events one id (violating the invariant
+    A28 certifies); a global monotonic counter made ids unique but NOT REPRODUCIBLE, which is
+    the worse bug — it destroys §33's replay contract."""
+    def run():
+        w = _w()
+        def choose(p, v, s, ask_budget):
+            return [P.Act_(w, p, f"m{i}") for i in range(3)] if p.id == "p_low" else []
+        def effect(w, a):
+            return [P.Ev(w, a.actor, "site.worked", "site_harbour", [S.ROOT],
+                         changes=[S.StateChange("site_harbour", "alter", "Act", "condition", len(a.verb))])]
+        P._run(w, choose, effect)
+        return w
+    w1, w2 = run(), run()
+    ids = [e.id for e in w1.log]
+    assert len(ids) == len(set(ids)), "ids must be unique per draw"
+    assert w1.content_hash() == w2.content_hash(), "and identical across runs of the same seed"
 
 
 def test_the_corpus_defects_are_reported_not_hidden():

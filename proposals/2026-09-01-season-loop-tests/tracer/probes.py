@@ -129,7 +129,20 @@ def Act_(w, p, verb, **kw):
 
 
 def Ev(w, subj_seed, kind, subject, causes, changes=None, degree=None):
-    return Event(H(w.world_seed, w.tick, subj_seed, f"ev:{kind}"), kind, subject,
+    """S33: `purpose` MUST BE UNIQUE PER DRAW, NOT PER OPERATION -- "or two draws inside one act
+    collide".
+
+    ⚠ REV 4, TWICE. Rev 3 minted `purpose` per KIND, so A5's five `site.worked` Events from one
+    person in one tick shared ONE ID, violating the very log invariant A28 certifies while A5
+    reported a content hash computed over that malformed log. The first fix used a global
+    monotonic counter -- which made the id depend on HOW MANY EVENTS THE PROCESS HAD EVER MINTED,
+    so two identical seeded runs diverged and A4's determinism probe broke. THAT WOULD HAVE BEEN
+    THE WORSE BUG: an id that is unique but not reproducible destroys S33's replay contract.
+
+    A CONTENT-DERIVED draw was the second attempt and it collides whenever two draws in one tick
+    are alike. The unit S33 names is the DRAW, so the ordinal lives on the World and is reset at
+    the start of every tick: unique within the tick, and identical across runs of the same seed."""
+    return Event(H(w.world_seed, w.tick, subj_seed, f"ev:{kind}:{w.new_draw()}"), kind, subject,
                  changes or [], causes, w.tick, degree)
 
 
@@ -226,8 +239,17 @@ def p6():
 def p7():
     w = tiny_world()
     w.step = Step.RESOLVE
-    w.write("stance", WriteClass.ACTS, lambda: None,
+    scars = {}
+    # ⚠ REV 4. Revisions 1-3 reported this as "there is no Partition row" -- and there IS one.
+    # S54 item 21, verdict FOLD-IN amended: "a `(Person, scar[axis])` row, `social: true`,
+    # written at RESOLVE in the ACTS class by the outcome that names the person". Reporting the
+    # row as absent INVERTED THE SIGN ON A SEVEN-ARC FINDING.
+    w.write("stance", WriteClass.ACTS,
+            lambda: scars.__setitem__("Mercy", scars.get("Mercy", 0) + 1),
             record_kind="Person", fieldname="scar", driver="Act")
+    assert scars == {"Mercy": 1}
+    # The ROW is lawful and the write lands. What the axis needs is L3 clause 1's registry.
+    Query.single_holder_counter(w, "p_mid", "Mercy", registry=set())
     return "UNREACHABLE"
 
 
@@ -369,7 +391,13 @@ def p16():
        tests="a character's risk must be able to build up quietly across seasons without anyone acting")
 def p17():
     w = tiny_world()
-    Query.aggregate_guard(w, "exposure", per_person_tally=True)
+    # ⚠ REV 4. Revisions 1-3 raised L3 CLAUSE 2 here, on a need that NEVER CROSSES A HOLDER.
+    # Clause 1 EXPLICITLY PERMITS a per-(Person, axis) counter -- the head's own note calls it
+    # "legal, since every increment is in the holder's own ledger". This was the corpus's
+    # LARGEST SINGLE BLOCKER (18 cases) and it was the instrument MEASURING AGAINST THE DESIGN,
+    # which S0.1 point 4 rules is no more acceptable than flattering it. What is genuinely
+    # missing is narrower, and it is what now raises: the closed registry.
+    Query.single_holder_counter(w, "p_low", "suspicion", registry=set())
     return "UNREACHABLE"
 
 
@@ -492,7 +520,7 @@ def p25():
        tests="harm suffered over several seasons must be able to close off options")
 def p26():
     w = tiny_world()
-    Query.aggregate_guard(w, "harm_borne", per_person_tally=True)
+    Query.single_holder_counter(w, "p_low", "harm_borne", registry=set())
     return "UNREACHABLE"
 
 
@@ -1228,19 +1256,24 @@ def a5():
 
     (ca, ha), (cb, hb) = run_fold(False), run_fold(True)
 
-    # ARM 2 -- THE CONTROL, AND IT MUST FIRE OR THIS PROBE IS WORTHLESS.
+    # ARM 2 -- THE CONTROL, AND IT MUST FIRE FOR THE RIGHT REASON.
     #
-    # ⚠ REV 3. Rev 2's control computed `0.9 + d/1000.0` over these same deltas, got
-    # 0.902 == 0.902, printed `differing=False` AND ASSERTED IN THE SAME SENTENCE THAT THE
-    # CONTROL HAD FIRED. It had not. S66 artifact 4 is explicit: "A float build must produce a
-    # DIFFERENT hash under a reordered fold, OR THE TEST CANNOT OBSERVE WHAT IT EXCLUDES."
-    # The magnitudes were the bug -- scaling by 1000 put every partial sum in a regime where
-    # the additions happened to be exact.
+    # ⚠ REV 4. Rev 2's control computed `0.9 + d/1000.0`, got 0.902 == 0.902, printed
+    # `differing=False` and asserted in the same sentence that it had fired. Rev 3 "fixed"
+    # that by clamping inside the loop -- which DID make the two orders differ (4.0 vs 3.0)
+    # but FOR THE WRONG REASON: per-step clamping is order-dependent in INTEGERS too, so the
+    # control was measuring the clamp, not the float. Worse, per-step clamping is exactly what
+    # S27.3's SUM-THEN-CLAMP-ONCE forbids, and rev 3's stated rationale ("the magnitudes were
+    # the bug") was false -- `0.9 + 0.003` is not exact in binary either; rev 2's two orders
+    # simply rounded to the same double.
+    #
+    # The control is now an UNCLAMPED SUM, which is what S32 is actually about: "[engine] IEEE
+    # float addition is NOT ASSOCIATIVE". The same five deltas, summed in the two orders, land
+    # on different doubles -- and integer addition of the same five does not.
     def float_sum(order):
-        acc = 0.9
+        acc = 0.0
         for d in order:
-            acc += float(d)
-            acc = max(0.0, min(1000.0, acc))
+            acc += float(d) / 10.0
         return acc
     fa, fb = float_sum(deltas), float_sum(list(reversed(deltas)))
     float_differs = (fa != fb)
@@ -1252,13 +1285,17 @@ def a5():
     assert ca == cb and ha == hb, (ca, cb)
     assert ia == ib
     assert float_differs, (
-        "THE CONTROL DID NOT FIRE. Without a float arm that actually diverges this probe "
-        f"cannot observe the failure it excludes: {fa!r} == {fb!r}")
+        "THE CONTROL DID NOT FIRE. Without a float arm that diverges FOR THE RIGHT REASON -- "
+        "IEEE non-associativity, not a clamp -- this probe cannot observe the failure it "
+        f"excludes: {fa!r} == {fb!r}")
     return (f"PASS, AND THE CONTROL FIRED. Fixed point: condition {ca} == {cb} and the LOG "
             f"CONTENT HASH matches ({ha[:12]}...) under a reversed act order, through the real "
-            f"fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed as IEEE "
-            f"floats in the two orders give {fa!r} vs {fb!r} -- DIFFERENT, so the assertion can "
-            "observe what it excludes. TWO SEPARATE PROPERTIES, and S32 says not to conflate "
+            f"fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED "
+            f"as IEEE floats in the two orders give {fa!r} vs {fb!r} -- DIFFERENT, and the same "
+            f"five summed as integers give {ia} vs {ib} -- IDENTICAL. So the divergence is IEEE "
+            "NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per "
+            "step, which is order-dependent in integers too AND is what S27.3 forbids). TWO "
+            "SEPARATE PROPERTIES, and S32 says not to conflate "
             "them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS "
             "ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be "
             "CANONICALLY ORDERED, not order-independent, and every document would have to change "
@@ -1508,11 +1545,16 @@ def a24():
        tests="a cause that spans several regions must be able to exist with no parent region")
 def a25():
     w = tiny_world()
+    # REV 4: the fixture's only tie was p_low<->p_mid, BOTH inside S's subtree, so the old
+    # assertion could not fail on the property it claimed. A tie that genuinely leaves the
+    # subtree is added here, and the assertion is on the crossing itself.
+    w.tenures.append(Tenure("t_far", "p_low", "p_king", "tie", since=0))
     sub = Query.descendants(w, "S")
     lat = Query.lateral(w, "ties", "tie")
-    crossing = [t for t in lat if (t.subject in sub) != (t.object in sub)] or lat
-    assert "p_king" not in sub and lat
-    return ("PASS: R-1's subtree over `S` excludes the King, and a `tie` reaches outside it. "
+    crossing = [t for t in lat if (t.subject in sub) != (t.object in sub)]
+    assert "p_king" not in sub and crossing, (sub, lat)
+    return (f"PASS: R-1's subtree over `S` is {sorted(sub)} and EXCLUDES the King, while "
+            f"{len(crossing)} `tie` edge(s) cross out of it. "
             "FOLLOWING A TIE, A KNOT, A COMMIT OR A DISTANT HOLD LEAVES THE SUBTREE AND IS NOT AN "
             "R-1 AGGREGATE -- it is a resolver-side Query, World first, therefore unreachable from "
             "`choose`. DO NOT 'FIX' R-1 TO COVER LATERAL EDGES: THE SPLIT IS THE DESIGN")
@@ -1882,7 +1924,7 @@ def a38():
        tests="a conclusion about which actions a place supports must not depend on a number nobody decided")
 def a31c():
     out = []
-    for floor in (600, 800, 950):
+    for floor in (400, 600, 800):
         f = DEFAULT_FIXTURES.sweep("band_floors", {
             "harbour": {"bulk_shipping": floor, "fishing": 100},
             "seam": {"deep_mining": 700, "surface_gleaning": 50},
@@ -1890,14 +1932,23 @@ def a31c():
         w = tiny_world(f)
         site = w.sites["site_harbour"]
         n = 0
-        mine = lambda: [c for c in w.crossings if c[0] == site.id]
+        # ⚠ REV 4: filter on the SWEPT VERB. Rev 3 filtered on the site, so at floor 950 --
+        # above the site's own starting condition, where `bulk_shipping` can never be crossed
+        # -- the loop ran on until the UNRELATED `fishing` floor was crossed at season 81, and
+        # the probe reported "11-81 seasons past the SHIPPING floor". Two different crossings
+        # reported as one range.
+        mine = lambda: [c for c in w.crossings if c[0] == site.id and c[1] == "bulk_shipping"]
+        assert floor <= site.condition, (
+            f"a floor of {floor} is above the site's starting condition {site.condition}, so "
+            "the crossing under test can never occur and the sweep point is meaningless")
         while not mine() and n < 400:
             _run(w); n += 1
         out.append((floor, n))
     seasons = [n for _, n in out]
     assert len(set(seasons)) > 1
     return (f"PASS WITH A FINDING: {out}. 'A harbour silts past the shipping floor in N seasons' "
-            f"ranges {min(seasons)}-{max(seasons)} across a 3-point sweep of A BAND FLOOR NO "
+            f"ranges {min(seasons)}-{max(seasons)} across a 3-point sweep of THE SHIPPING BAND "
+            "FLOOR -- A NUMBER NO "
             "IN-CHAIN DOCUMENT SUPPLIES. S42.2.1 names 'three band edges' as one of the four "
             "constants a prior instrument in the chain invented; rev 2 fixed the other three and "
             "LEFT THE BAND EDGES HARDCODED IN PROBE BODIES AND UNSWEPT, so W1's and P18's pacing "
@@ -1916,12 +1967,48 @@ def a39():
         a = Act_(w, p, "press_claim", contests=["the barn"], payload="S")
         seen["act"] = a.id
         return [a]
+    import shape as _s
+    real, captured = _s.contest, {}
+    def spy(w_, rung, prize, claimants, depth, max_depth, causes, extension=None):
+        captured["causes"] = list(causes)
+        return real(w_, rung, prize, claimants, depth, max_depth, causes, extension)
+    _s.contest = spy
     try:
         _run(w, choose, contest_max_depth=3)
     except Unspecified:
-        return ("PASS-AT-THE-BOUNDARY: the act reached the seam and `contest` refused for want of "
+        # THE FALSIFIER REV 3 LACKED: reverting `causes=[a.id]` to `[ROOT]` left A39 green,
+        # because the probe recorded the act id and never asserted on it.
+        assert captured.get("causes") == [seen["act"]], (captured, seen)
+        return ("PASS, WITH THE ASSERTION REV 3 OMITTED: `contest` was called with "
+                f"causes={captured['causes']}, which IS the id of the act that reached the seam. "
+                "It then refused for want of a MARGIN MODEL (S39.4), which is the honest state. "
+                "What was fixed upstream of that refusal: rev 2 guarded the cause with a "
                 "a MARGIN MODEL (S39.4), which is the honest state. What rev 3 fixed is upstream "
                 "of that refusal: rev 2 passed `causes=[a.id] if any(e.id == a.id for e in w.log)` "
-                "-- and w.log holds EVENTS, never Acts, so the predicate was PERMANENTLY FALSE and "
+                "predicate over w.log, which holds EVENTS and never Acts -- PERMANENTLY FALSE, so "
                 "every contest was called with [ROOT]. S39.2 requires causes[] NAMING THE ACTS")
+    finally:
+        _s.contest = real
     return "UNREACHABLE"
+
+
+@probe("P43", "a cohort-wide tally is summed across its holders", "S22.4", by="construction",
+       tests="a quantity held by many characters individually must be able to be totalled across them")
+def p43():
+    w = tiny_world()
+    # The CLAUSE 2 case, kept distinct from P17's clause 1 case. This one really does cross
+    # holders, and it is the shape the head calls "worse than the field L3 banned, because the
+    # banned field could at least go down".
+    Query.aggregate_guard(w, "cohort_unrest", per_person_tally=True)
+    return "UNREACHABLE"
+
+
+@probe("P42", "the act budget varies by office, condition and distance", "S26.3",
+       by="no-signature",
+       tests="a wounded or distant character must be able to get fewer actions in a season than a healthy one at home")
+def p42():
+    raise Collision(
+        "S26's signature vs S26.3's consequence 1", "S26 / S26.3",
+        needs="a ruling on which side gives way -- the person-side signature, or the variation",
+        law="S26 types `budget : (Person, View) -> int` WITH NO WORLD. S26.3 consequence 1 says it varies by OFFICE, CONDITION and DISTANCE TRAVELLED, and that 'a wounded duke gets fewer acts than a healthy one WITHOUT ANYBODY STORING A NUMBER'. ALL THREE INPUTS ARE RESOLVER-SIDE: office-holding is a `hold` Tenure in the store, `condition` belongs to a Site, and travel legs S22.3 says HAVE NO OWNER AT ALL. A person-side function with no World can read none of them, so the budget is either a constant or the signature is wrong. Revisions 1-3 suppressed this into a docstring that named a probe which did not exist",
+    )

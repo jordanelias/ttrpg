@@ -289,6 +289,14 @@ WRITE_CLASS_OF: dict[tuple[str, Step], WriteClass] = {
 # ---------------------------------------------------------------------------
 PARTITION: dict[tuple[str, str], tuple[bool, str]] = {
     ("Tenure", "until"): (False, "chain S15.3 -- THE PARTITION'S ONE DECLARED SEAM"),
+    # ⚠ REV 4. Revisions 1-3 all asserted the head states EXACTLY ONE row, and rev 3 pinned
+    # that claim in a regression test. IT STATES TWO. S54 item 21, verdict FOLD-IN amended,
+    # landing at S9.3: "Lawful form: a `(Person, scar[axis])` row, `social: true`, written at
+    # RESOLVE in the ACTS class by the outcome that names the person; `axis` on L3's closed
+    # registry". Omitting it INVERTED THE SIGN ON A SEVEN-ARC FINDING -- S54 item 21 says the
+    # missing moral motion "Blocks 7 arcs", and the instrument was reporting the row itself as
+    # the thing that does not exist.
+    ("Person", "scar"): (True, "chain S54 item 21 -- social:true, written at RESOLVE in the ACTS class"),
 }
 
 # ⚠ REV 3. The rev-2 derivation was a TWO-VALUED CLASSIFIER OVER A FIVE-VALUED DOMAIN, and
@@ -335,10 +343,16 @@ PARTITION_ASSUMED: dict[tuple[str, str], tuple[bool, str]] = {
         "ASSUMED: S24 has CALENDAR fire dates with no actor, so the writer is not an act. "
         "The matrix admits Date at CALENDAR and RESOLVE, which determines nothing."),
     ("DocketItem", "matter"): (
-        True,
-        "ASSUMED: S36.1 makes `carry` AN ACT BY A NAMED PERSON, and T5's whole claim is that "
-        "THE FILTER IS A PERSON WHO PAYS. CALENDAR's own docket formation is the awkward "
-        "case and is why this is an assumption rather than a reading."),
+        False,
+        "ASSUMED: S24 says 'Dates come due. DOCKETS FORM.' with no actor, and S30's matrix "
+        "marks DocketItem YES at CALENDAR -- so the design itself has an actorless writer. "
+        "⚠ REV 4 CORRECTION: rev 3 assumed True on the strength of S36.1's `carry` being an "
+        "act, which made CALENDAR's own specified docket formation raise a FORBIDDEN CHARGED "
+        "TO THE DESIGN. That was the instrument manufacturing a refusal and then reporting it "
+        "as the shape's -- the worst available direction. The derivation rule two lines above "
+        "(admitted at a step the world writes -> social:false) gives False, and this row now "
+        "follows it. `carry`'s act-ness is a fact about WHO PUT THE MATTER THERE, not about "
+        "whether the column admits an Event."),
 }
 
 # The matrix names THINGS, not (record-kind, field) pairs. A derivation is valid ONLY where the
@@ -365,6 +379,25 @@ PARTITION_MISSING: dict[tuple[str, str], str] = {
     ("Person", "exists"): "S30.1 -- without it a death write raises under the matrix's own rule",
 }
 
+
+# Where S30's matrix says "no", the refusal belongs to the LAW THE CELL ENFORCES, not to the
+# matrix's bookkeeping rule. These are the cells whose "no" is a named law refusing.
+MATRIX_REFUSAL_LAW: dict[tuple[str, Step], tuple[str, str]] = {
+    ("stance", Step.MATTER): (
+        "S3-L4",
+        "L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY "
+        "NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say"),
+    ("stance", Step.CALENDAR): (
+        "S24", "S24 -- CALENDAR DECIDES NOTHING; it fires occasions"),
+    ("stance", Step.WITNESS): (
+        "S9.3",
+        "S9.3 -- WITNESS NEVER TOUCHES A BELIEF. If evidence can move a conviction the moral "
+        "layer has become a second epistemic layer and T2 is gone"),
+    ("yield", Step.RESOLVE): (
+        "S30", "S30 -- `yield` is written at MATTER ONLY; it is the matrix's one single-cell row"),
+    ("claim_ledger", Step.RESOLVE): (
+        "S20", "S20 -- `witness` is THE ONLY MINTER of a root token, and it runs at WITNESS"),
+}
 
 ASSUMPTIONS_USED: set[tuple[str, str]] = set()
 
@@ -557,9 +590,14 @@ class Act:
     reads: list[str] = field(default_factory=list)
     contests: list[str] = field(default_factory=list)
     payload: Any = None
+    # S27's five strata. 4 == "social", the stratum most acts in this corpus belong to; the
+    # value is declared rather than silent, and A37 exercises the ordering.
     stratum: int = 4
-    obstacle: int = 0
-    pool: int = 0
+    # ⚠ S27.4 refuses an attempt at Ob > 2 x Pool and routes an UNCONTESTED attempt to A GATE,
+    # "never to an Ob = 0 roll". `None` means UNCONTESTED (no obstacle was declared); 0 would
+    # be the Ob=0 roll the section names, which is why it is not the default.
+    obstacle: Optional[int] = None
+    pool: Optional[int] = None
 
 
 # S27: FIVE STRATA. movement / binding decisions / contested physical / uncontested material / social
@@ -705,6 +743,11 @@ class World:
         self._in_parallel_map = False
         self.writes: list[tuple] = []
         self.crossings: list[tuple] = []        # S12.1/L5 -- band-edge crossings, EMISSIONS
+        # S33: "`purpose` must be unique per DRAW, not per operation, or two draws inside one
+        # act collide." A per-TICK ordinal is unique within the tick AND identical across runs
+        # of the same seed -- a global counter would be unique but NOT REPRODUCIBLE, which
+        # destroys the replay contract, and a content hash collides when two draws are alike.
+        self.draw = 0
 
     # -- S30.2: the write class is a PARAMETER of the store API, THE GATE APPLIES THE WRITE,
     # and `record_kind`/`fieldname` are REQUIRED so the L4 limb cannot be silenced by omission.
@@ -721,14 +764,22 @@ class World:
                               law="S30 -- ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION")
         if step not in allowed:
             TRACE.write(thing, wclass.value, sname, False)
-            # REV 3: this raises Unspecified, not Forbidden. S30's rule is ONE doctrinal
-            # condition -- "ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION" -- and rev 2 still
-            # split it, raising Forbidden for a "no" cell and Unspecified for a missing row.
-            # That made the kind histogram a measurement of the transcription rather than of
-            # the design, which is the exact defect retraction 8 claimed to have closed.
-            raise Unspecified(f"'{thing}' written during {sname}", "S30",
-                              needs=f"one of {sorted(s.value for s in allowed)}",
-                              law="S30 -- ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION")
+            # ⚠ REV 4. Rev 3 raised Unspecified here on the argument that S30 and S30.1 are
+            # one doctrinal condition. THEY ARE NOT, and the over-correction reported THREE OF
+            # THE DESIGN'S PROUDEST REFUSALS AS DEBTS: W3 ("the world sours a mood"), A3 ("an
+            # arc ends at a counter"), P19 ("a threshold produces an outcome") all showed as
+            # UNSPECIFIED at S30 -- L4 and L5 tallied as things the design failed to say.
+            #
+            #   a cell marked "no"  = the design REFUSING          -> Forbidden, at ITS law
+            #   a row that is absent = the design NOT SAYING       -> Unspecified, at S30.1
+            #
+            law = MATRIX_REFUSAL_LAW.get((thing, step))
+            if law is not None:
+                raise Forbidden(f"'{thing}' written during {sname}", law[0],
+                                needs=f"one of {sorted(s.value for s in allowed)}", law=law[1])
+            raise Forbidden(f"'{thing}' written during {sname}", "S30",
+                            needs=f"one of {sorted(s.value for s in allowed)}",
+                            law="S30 -- ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION")
         expect = WRITE_CLASS_OF.get((thing, step))
         if expect is not None and expect is not wclass:
             TRACE.write(thing, wclass.value, sname, False)
@@ -772,6 +823,11 @@ class World:
 
     # -- S33/S45.2/S66: THE ARTIFACT IS A CONTENT HASH OVER THE LOG. Rev 1 had none, and it is
     # the one execution artifact the architecture names as its done-condition.
+    def new_draw(self) -> int:
+        """S33's draw ordinal. Reset at the start of every tick by `season()`."""
+        self.draw += 1
+        return self.draw
+
     def content_hash(self) -> str:
         h = hashlib.blake2b(digest_size=16)
         for e in self.log:
@@ -837,12 +893,40 @@ class Query:
         detects, because it inspects the edge set rather than trusting a flag."""
         if per_person_tally:
             raise Forbidden(
-                f"resolver-side Query '{name}' aggregates per-person tallies across holders",
+                f"resolver-side Query '{name}' aggregates per-person tallies ACROSS HOLDERS",
                 "S22.4", law="L3 clause 2 -- THAT IS STORED, MONOTONE, NEVER-DECAYING UNREST IN ALL BUT NAME -- worse than the field L3 banned, because the banned field could at least go down")
         if over_ended_edges:
             raise Forbidden(
                 f"Query '{name}' composes over ENDED edges and is monotone", "S22.4",
                 law="L3 clause 3 -- any Query monotone in the ENDED-edge set is a ratchet and is REFUSED. `count{commit}` over live AND ended rows is monotone; `count{hold: until != null}` is revocations-ever; each is built only from 'structural' edges and each EVADES clause 2")
+
+    @staticmethod
+    def single_holder_counter(w: World, person: str, axis: str, registry: set[str]) -> int:
+        """L3 CLAUSE 1 -- and rev 4 exists because revisions 1-3 refused what this clause
+        EXPLICITLY PERMITS.
+
+        The head, verbatim: *"a monotone counter exists ONLY per `(Person, axis)` where `axis`
+        is on a closed registry"*, and its own note calls such a counter **"legal, since every
+        increment is in the holder's own ledger"**. Clause 2 bars only the CROSS-HOLDER SUM.
+
+        Revisions 1-3 routed every "a character's risk builds up quietly" row to a probe that
+        raised clause 2 -- on a need that never crosses a holder. It was THE LARGEST SINGLE
+        BLOCKER IN THE CORPUS (18 cases), and it was the instrument measuring AGAINST the
+        design, which S0.1 point 4 rules is no more acceptable than flattering it.
+
+        What is genuinely missing is narrower and is what this raises: THE CLOSED REGISTRY."""
+        TRACE.query("single_holder_counter", "resolver")
+        if not registry:
+            raise Unspecified(
+                f"the closed `axis` registry L3 clause 1 requires (asked for '{axis}')",
+                "S22.4",
+                needs="a closed roster of axes, and a write-matrix row admitting the increment",
+                law="L3 clause 1 permits a monotone counter PER (Person, axis) -- 'legal, since every increment is in the holder's own ledger' -- but ONLY where `axis` is ON A CLOSED REGISTRY. No such registry exists in the chain, and no S30 row admits the write. S54 item 6 adds that the axis must not be spelled `exposure` bare, or it collides with the need scalar",
+            )
+        if axis not in registry:
+            raise Forbidden(f"axis '{axis}' is not on the closed registry", "S22.4",
+                            law="L3 clause 1 -- ONLY where `axis` is on a closed registry")
+        return sum(1 for c in w.persons[person].ledger if c.predicate == axis)
 
     @staticmethod
     def commit_count_guard(w: World, edges: list[Tenure], name: str) -> int:
@@ -1094,6 +1178,16 @@ class SeasonDriver:
                     needs="`choose` is bounded by budget(person, view) -- the PERSON chooses what to leave undone",
                     law="S26.3 -- at one act NOBODY EVER CHOOSES WHAT TO LEAVE UNDONE; the budget exists to create triage. An engine that silently discards the tail has made the choice instead of the person, which is L1")
             for i, a in enumerate(produced):
+                # L1 -- THE PERSON IS THE ONLY ACTOR. ⚠ REV 4: `Act.actor` is a bare id and
+                # nothing checked it, so `Act("x", "the_church", "excommunicate")` reached
+                # `resolve` intact -- which means A6's and F3's "'The Church excommunicates' IS
+                # NOT SPELLABLE" was FALSE, and both were labelled by="no-signature" on the
+                # strength of it. It is spellable now only at the cost of this check.
+                if a.actor != p.id:
+                    raise Forbidden(
+                        f"an Act returned by {p.id}'s choose() carries actor '{a.actor}'",
+                        "S3-L1", needs="a named person, and the person deciding is that person",
+                        law="L1 -- NO INSTITUTION ACTS, NO FACTION ACTS, NO THRESHOLD ACTS. An institution acts BY A NAMED PERSON AT A VENUE. Without this check the id is a free string and the law is a convention")
                 TRACE.act(p.id, a.verb, b - i - 1)
                 acts.append(a)
         w._in_parallel_map = False
@@ -1123,7 +1217,7 @@ class SeasonDriver:
             # S27.4: an attempt at Ob > 2 x Pool is REFUSED, and the season is spent. An
             # uncontested attempt routes to a GATE, never to an Ob = 0 roll.
             mult = w.fixtures.get("obstacle_refusal_multiple")
-            if a.obstacle and a.obstacle > mult * max(a.pool, 0):
+            if a.obstacle is not None and a.obstacle > mult * max(a.pool or 0, 0):
                 out.append(Event(H(w.world_seed, w.tick, a.actor, f"refused:{a.id}"),
                                  "attempt.refused", a.actor, [], [ROOT], w.tick))
                 TRACE.decision(f"{a.actor} attempted Ob={a.obstacle} against Pool={a.pool}",
@@ -1265,6 +1359,7 @@ class SeasonDriver:
                actorless: Optional[list[Event]] = None,
                contest_max_depth: Optional[int] = None) -> dict:
         w = self.w
+        w.draw = 0                 # S33: the draw ordinal is per-TICK, so replay is exact
         self.calendar()
         matter_events = self.matter(actorless)
         acts = self.deliberate(choose, question, subsistence)

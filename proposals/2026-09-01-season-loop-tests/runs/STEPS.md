@@ -1,17 +1,16 @@
 # THE STEP SEQUENCE
 
-**1331 step entries · 889 barrier openings · 755 writes through the gate.**
+**1151 step entries · 769 barrier openings · 697 writes through the gate.**
 
 ## Writes, by class and step (S30's matrix, checked PER WRITE SITE)
 
 | write class | step | admitted | count |
 |---|---|---|---|
-| MATTER | MATTER | yes | 451 |
+| MATTER | MATTER | yes | 391 |
 | INTERIOR | WITNESS | yes | 290 |
-| ACTS | RESOLVE | yes | 8 |
+| ACTS | RESOLVE | yes | 9 |
 | MATTER | MATTER | **NO -- refused** | 4 |
-| CALENDAR | CALENDAR | yes | 1 |
-| CALENDAR | CALENDAR | **NO -- refused** | 1 |
+| CALENDAR | CALENDAR | yes | 3 |
 
 ## The loop, as executed
 

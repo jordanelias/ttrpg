@@ -5,7 +5,7 @@ did not aim.** Every row is reproduced verbatim so a reader can judge whether th
 miss is a routing failure (fixable) or a genuine absence of any surface to probe
 (a finding about the shape).
 
-**154 `core` rows and 217 non-core rows did not route.**
+**166 `core` rows and 227 non-core rows did not route.**
 
 ## The vocabulary of the unrouted `core` rows
 
@@ -16,50 +16,50 @@ no execution for.
 | term | count |
 |---|---|
 | action | 43 |
-| specific | 36 |
-| different | 28 |
-| single | 20 |
+| specific | 35 |
+| different | 30 |
+| single | 21 |
+| character | 20 |
 | outcome | 19 |
-| character | 19 |
 | fixed | 19 |
+| actor | 18 |
+| separate | 18 |
+| independently | 18 |
 | quantity | 18 |
-| actor | 17 |
-| separate | 17 |
-| independently | 17 |
+| independent | 17 |
+| where | 17 |
 | value | 17 |
 | resource | 16 |
-| independent | 16 |
-| where | 16 |
+| distinct | 15 |
+| state | 15 |
+| unrelated | 15 |
 | actors | 15 |
-| distinct | 14 |
 | institutions | 14 |
+| hidden | 14 |
 | threshold | 14 |
-| unrelated | 14 |
+| trigger | 14 |
 | shared | 14 |
-| state | 13 |
+| formal | 13 |
+| institution | 13 |
 | capability | 13 |
-| formal | 12 |
-| trigger | 12 |
+| against | 12 |
+| simultaneously | 12 |
 | least | 12 |
+| political | 11 |
 | failure | 11 |
-| simultaneously | 11 |
-| institution | 11 |
+| faction | 11 |
 | actions | 11 |
 | personal | 11 |
-| hidden | 11 |
-| several | 11 |
 | crossing | 11 |
+| party | 10 |
+| choose | 10 |
 | produce | 10 |
 | multiple | 10 |
 | three | 10 |
-| against | 10 |
+| several | 10 |
 | resolution | 10 |
 | effect | 10 |
 | automatic | 10 |
-| scale | 10 |
-| difficulty | 10 |
-| being | 9 |
-| itself | 9 |
 
 ## Every unrouted `core` row, verbatim
 
@@ -67,6 +67,8 @@ no execution for.
 - **[ARC-01]** players must be able to remove one specific named cost-component from a leader's decision calculus as a discrete, resolvable action, after which that leader's prior refusal to act converts into willingness
 - **[ARC-02]** an institution's routine, individually-defensible placement decisions must be able to compound, over years, into an outcome that harms one of its own members, without any single decision-maker choosing that outcome or being positioned to see it coming
 - **[ARC-02]** a spontaneous state-change check on a person must be able to fire without any actor — including that person — initiating it or being aware a check is occurring
+- **[ARC-02]** a third party must be able to choose, as a discrete scene, to disclose a hidden fact about a person's own condition to that person, with the person's subsequent trajectory depending on whether they were told
+- **[ARC-03]** two independent counters (one faction's rising standing, an unrelated coup-threat counter) must be able to accumulate on separate clocks not visibly linked to each other, such that a character optimizing against one can be blindsided by the other
 - **[ARC-03]** firing a reserved resource must be able to produce categorically different outcomes, not just different magnitudes, depending on whether a separate threshold was already crossed at the moment of firing
 - **[ARC-04]** a Non-Player Character must be able to sustain deliberate, ongoing non-commitment toward a subordinate (neither supporting nor suppressing them) as a real strategic stance across multiple seasons, with that stance itself imposing no immediate mechanical cost
 - **[ARC-04]** a subordinate's trust/loyalty in a patron must be able to erode from that patron's inaction alone, on a track with no mechanic to actively increase it — an asymmetric, one-directional gauge
@@ -74,7 +76,11 @@ no execution for.
 - **[ARC-05]** the same tracked world-substrate resource must be able to cross multiple hard thresholds that change what KIND of consequence subsequent failures produce, without changing the underlying failure rate itself
 - **[ARC-06]** a losing party in a formal contest must be able to accept the ruling's stated principle while simultaneously drafting its operative implementation so narrowly that current practice remains unaffected
 - **[ARC-06]** an implementation action following a political win must be able to fail on its own separate probability roll, independent of how decisively the preceding contest was won
+- **[ARC-06]** the faction that won the original contest must be able to choose, after implementation fails, between propping up the original beneficiary of their win via a joint retry, or abandoning that path for an entirely different coalition to get what they actually wanted
 - **[ARC-06]** an institution whose formal position was weakened by losing a contest must be able to end up structurally stronger in practice if all subsequent retry/enforcement attempts fail
+- **[ARC-07]** a military commander must be able to be placed in a position where his own units' mechanical state makes his publicly-stated justification for continued deployment factually true and self-serving at the same time, with no dishonesty required on his part
+- **[ARC-08]** a faction must be able to possess an information/intelligence capability that arises purely as a byproduct of an unrelated core activity, with no dedicated intelligence stat or apparatus modeling it explicitly
+- **[ARC-09]** when a person's hidden state is surfaced to their institution, that institution must be able to face a real choice between protecting the person's remaining capacity (forced retirement) and permitting continued risk (supervised operations)
 - **[ARC-10]** a political actor must be able to construct a proposal worded so precisely that either of an opponent's two possible responses damages the opponent's institutional position -- a genuine forced dilemma
 - **[ARC-10]** a character must be able to choose, mid-contest, to introduce a piece of politically explosive but tangential evidence for an immediate mechanical benefit, at the cost of triggering a much broader, harder-to-control set of consequences affecting every faction
 - **[ARC-10]** a decisive action's degree of success must be able to produce categorically different outcomes -- fully reversing a punishment, merely reducing its severity, or leaving the punishment standing while the accuser gains ground -- rather than a binary success/fail
@@ -83,7 +89,11 @@ no execution for.
 - **[ARC-12]** a hidden hazard embedded within an economic arrangement must be able to accumulate invisibly for multiple seasons, becoming detectable only through an active diagnostic action, with a default 'becomes visible anyway' fallback if nobody ever checks
 - **[ARC-12]** one participant who personally vetted the tainted component must be able to discover the problem ahead of the others and face a genuine choice between voluntary early disclosure (a bounded, known cost) and concealment (an unbounded, larger cost if later discovered by someone else)
 - **[ARC-13]** a previously-neutral institution's inertia must be able to become contestable -- vulnerable to being won by an outside faction -- only once specific, hard-to-reach conditions among OTHER factions are simultaneously true
+- **[ARC-15]** a faction must be able to simultaneously fund or ally with two mutually hostile factions in a way that materially profits it from EACH unit of conflict between them, as a deliberate strategy rather than an accident
 - **[ARC-15]** detecting a hidden financial arrangement must be able to proceed along THREE independently-timed paths that can each succeed or fail on their own schedule without coordinating with each other
+- **[ARC-15]** a party that detects a hidden arrangement must be able to choose to sit on that knowledge indefinitely as leverage rather than immediately exposing it, holding it as a standing advantage against the concealed party for as long as they choose
+- **[ARC-15]** the party that finally exposes a hidden arrangement must be able to choose between a public disclosure (immediate, broad, one-time damage) and a private disclosure (an ongoing, renewable extraction of demands with escalating risk if a second party discovers it during that window)
+- **[ARC-16]** a faction leader must be able to deliberately choose a strategy that is locally suboptimal by every conventional metric because the suboptimal configuration produces a downstream political benefit that the optimal configuration would not
 - **[ARC-16]** an opposing institution's decision to NOT act against a vulnerable target must be able to be a genuine, standing strategic choice, rather than mere neglect, and must be able to persist indefinitely without ever being forced to resolve
 - **[ARC-16]** removing one unit of a spread-out presence must be able to itself generate a persistent legitimacy cost against the remover, in every instance, for as long as the underlying dynamic is active
 - **[ARC-18]** the target's own superior must be able to maintain a hidden, second layer of awareness of the cultivation pattern that is invisible to the cultivating factions and discoverable by an outside party only through a separate, deliberate investigative action
@@ -121,8 +131,9 @@ no execution for.
 - **[ARC-36]** an institution's investigative branch, on detecting the derivative marker, must apply a procedure that structurally cannot address the actual root cause because that cause belongs to a different category of problem than the procedure is built to find
 - **[ARC-37]** a legitimate, ordinary supply chain must carry a good whose hazardous property is invisible to everyone below a specific rare perceptual threshold, such that its builders and vendors are neither lying nor negligent
 - **[ARC-37]** a separate investigator working an unrelated case must be able to cross-reference unconnected case files and stumble onto the same supply chain from a different angle, using only legally-visible evidence rather than the hidden property
+- **[ARC-38]** two agents belonging to rival external powers, with no communication between them, must each independently suppress a different externally-facing pressure metric for personal, non-strategic reasons, such that their combined effect functions as a single coherent shield
+- **[ARC-38]** each shielding agent's suppression must be revocable by a distinct trigger condition evaluated by that agent's own distant superior, entirely outside player reach or knowledge
 - **[ARC-39]** that hidden quantity crossing a threshold must trigger a one-time check whose two outcomes (perceive the truth vs. destabilize without understanding it) leave the leader with qualitatively different capability and self-knowledge
-- **[ARC-41]** a hidden personal capability in a loyal enforcer must remain completely dormant until an unrelated, ambient environmental quality, degraded by the cumulative effect of several other storylines, drops into a specific band specifically in the territories his job routinely sends him to
 - **[ARC-41]** an enforcer's positive, valued professional trait (rigorous documentation) must, without any change in his behavior, become the specific mechanism constructing a damning case against himself once what he is documenting is his own anomalous perception
 - **[ARC-42]** the debate's outcome, regardless of which side wins, must be able to trigger a small positive change in a separate, unrelated ambient world-health quantity, conditioned only on whether rare-sensitivity participants are present in the room
 - **[ARC-42]** this debate must be unable to occur meaningfully until several other independent storylines have advanced to specific states, functioning as a convergence node rather than an independently-triggerable event
@@ -158,6 +169,7 @@ no execution for.
 - **[EMG-C3]** a hidden actor's routine operation must be able to degrade a shared, global resource value each time it is used, as an automatic side effect the actor itself has no visibility into or control over
 - **[EMG-C3]** the degrading shared resource must be able to fall through multiple bands, each unlocking distinct, worsening consequences determined organically from current state rather than from a fixed script
 - **[EMG-C3]** players must be able to choose not to investigate a decaying resource, in which case the decay continues uninterrupted and consequences compound without any forced intervention
+- **[EMG-C4]** the highest political authority must be forced to take a public position on the flashpoint, and that position must trigger a further formal proceeding with a governing-body actor able to challenge the authority's legitimacy
 - **[EMG-C4]** the constitutional-crisis-level proceeding must be resolvable through a structured multi-round contest between two sides where a designated combatant may be substituted mid-contest, and the winner determines whether the suppressed capability becomes formally acknowledged in the public record
 - **[EMG-X5]** an agreement's hidden fragility must remain dormant until a later, unrelated external event of sufficient severity arrives, at which point a judgment call determines whether the fragility manifests
 - **[EMG-X5]** when a fragile agreement fails under stress, its status must be able to become genuinely indeterminate — with the parties to it disagreeing about whether it currently holds or what it means — rather than simply switching to a binary broken or intact state
@@ -222,18 +234,22 @@ no execution for.
 
 - *[ARC-01]* one actor's accumulation of institutional standing must be able to happen through methods that are individually unimpeachable (charity, arbitration, hospitals) with no single action anyone could point to as the trigger for concern
 - *[ARC-01]* a Non-Player Character must be able to accumulate an effect at scale while having zero perceptual capacity to register what that accumulation produces elsewhere
+- *[ARC-02]* an institution must be able to hold a standing response protocol for a condition that nonetheless fails to trigger against one specific member, because nobody is watching for the precondition in that member's particular case
 - *[ARC-02]* one person's individual capability shift (being reassigned or leaving) must be able to reduce an institution's aggregate operational capacity as a downstream, mechanical consequence
 - *[ARC-03]* players must be able to supply the specific target or pretext a holding character is waiting for, as an action distinct from triggering the reserved resource itself
+- *[ARC-03]* an unrelated faction's threat-counter must be able to increment based on the ABSENCE of a rival's action in a season, not on any action taken
 - *[ARC-03]* a character's own ethical commitments must be able to force her to use a reserved resource once a threshold is crossed, independent of and potentially overriding her stated strategic judgment about optimal timing
 - *[ARC-04]* a subordinate under threat must be able to independently build an alternative relationship or network with a faction unconnected to and unanswerable to their patron, without the patron's knowledge or control
 - *[ARC-04]* a formal contest must be able to defeat an accusation for the present while leaving the underlying case file intact and reopenable later
 - *[ARC-04]* a subordinate's private research-progress track must be able to convert, once it crosses a threshold, into a concrete political demand its patron can invoke in a separate, larger political process
+- *[ARC-05]* a faction must be able to hold genuine, actionable knowledge of a systemic problem and sit on the reveal-or-conceal decision for multiple seasons with no external clock forcing a resolution — the decision must be able to simply not resolve
 - *[ARC-05]* an institution's own values framework must be able to explain why THAT faction, and not another, is the one sitting on the relevant knowledge
 - *[ARC-05]* the arc must be able to have genuinely no scripted endpoint — every listed resolution must remain equally reachable depending purely on what players do or fail to do, with no default outcome favored by inaction
 - *[ARC-06]* the actors who won a contest must be able to fail to notice, at the moment of victory, that their win has not actually changed anything operational
 - *[ARC-06]* a failed implementation attempt must be able to impose a standing cost on the actor who attempted it, and make a subsequent retry of the SAME action structurally harder
 - *[ARC-07]* a third faction with no stake in the original crisis must be able to gain standing by mediating it, entirely as a side effect of a crisis it did nothing to cause or prevent
 - *[ARC-08]* one institution must be able to detect a pattern in a rival institution's own internal operational rhythm purely by correlating publicly observable outcomes over time, without infiltrating or spying on anyone directly
+- *[ARC-08]* revealing information about one institution's operational timing must be able to directly shift a THIRD faction's own future action-success probabilities, not merely its politics or reputation
 - *[ARC-08]* publicly exposing information in a legislative setting must be able to force an accused institution into a defensive posture regardless of whether the information itself was damaging in substance
 - *[ARC-09]* an institution's aggregate operational capacity must be able to silently degrade because one specific individual quietly stopped contributing, while the institution's headline stats (its authority, its legitimacy) remain visibly unaffected
 - *[ARC-09]* players must be able to notice an absence -- situations resolving differently than they would with a specific capability present -- rather than being told directly that someone has stopped acting
@@ -294,9 +310,11 @@ no execution for.
 - *[ARC-29]* two independently-transformed characters occupying the same physical space must be able to communicate with each other at full fidelity, distinct from their now-limited communication with everyone else
 - *[ARC-30]* covert funding/support networks the character has been running must continue operating after the threshold, but their guiding logic must shift from strategic calculation to something the operator herself describes as direct perception, without changing their external behavior enough to raise suspicion
 - *[ARC-30]* a physical object with historical/informational significance must be able to carry a perceivable proximity relationship to a transformed character that is legible only to sufficiently sensitive observers
+- *[ARC-31]* a covert intelligence-gathering faction operating through a proxy network must be able to attempt a targeted lethal action against a person inside a formal, non-combat social scene, with success or failure both producing distinct downstream consequences for that faction's own standing
 - *[ARC-31]* an institutional actor's positioned military forces must be able to remain ambiguous in intent (defensive vs threatening) until a later decision point forces an interpretation
 - *[ARC-32]* a formal collective decision body must be able to intervene to defend or abandon an accused individual via a multi-round contest, with the losing side's consequence being a fully asymmetric tribunal with no defense procedure available
 - *[ARC-32]* the accused individual's fate on conviction must branch hard, with severity depending on a separate quantity elsewhere in the world (whether it is currently safe for them there), rather than being self-contained to this arc
+- *[ARC-33]* a third-party faction offering protection must be able to contest the resulting investigation via a faction-scale action whose success depends on that faction's own independently-tracked standing, not a fixed difficulty set for this arc
 - *[ARC-33]* if sanctuary fails or is declined, the conflict must escalate to a formal mass-combat engagement whose outcome alters the same background pressure quantity again, in either direction
 - *[ARC-34]* the emergency-powers state must be revocable through the same formal civic debate mechanism as ordinary politics, whose failure must itself trigger further external escalation rather than simply maintaining the status quo
 - *[ARC-36]* the investigating branch's standard procedural delay must itself allow the underlying erosion to continue and spread to additional locations during the investigation
@@ -305,12 +323,13 @@ no execution for.
 - *[ARC-37]* that accumulating self-protective cost must itself be observable from outside by the discoverer's own chain of command as an unexplained pattern, eventually forcing an internal review independent of the underlying secret
 - *[ARC-37]* when the legally-visible investigation concludes against the supply chain, it must automatically hand a hostile institution a costless, pre-built justification to open its own separate, harsher investigation
 - *[ARC-37]* exposure of the supply chain must be able to propagate damage to at least three separate actors' standing via three distinct causal paths from one triggering event
+- *[ARC-38]* one shield's collapse-trigger must be sensitive to a completely different domestic event that the shielding agent's home institution can detect only via indirect signals, not the domestic event itself
+- *[ARC-38]* an internal administrator's personal social vulnerability must be exploitable by any actor willing to invest relationship-building effort, and losing the specific external agent occupying that role must degrade the administrator's institutional effectiveness for a fixed recovery period
 - *[ARC-38]* both shields failing within a short window of each other must produce a compound, first-time-in-the-campaign exposure to full external pressure, functioning as a distinct escalation tier rather than a continuation of prior gradual pressure
 - *[ARC-39]* an unrelated investigator working a structurally separate case must be able to intersect this hidden-growth track by physically tracing an unconnected supply chain to its source, detecting the leader's sensitivity as an incidental byproduct
 - *[ARC-39]* if the leader begins using his emerging, still-unrecognized capability without guidance, a separate internal resource must begin depleting per use with no natural recovery available, eventually degrading his other, unrelated strategic capabilities
 - *[ARC-40]* a single administrator's institutional loyalty must be determined by which faction has invested a specific social-validation behavior toward him over a long period, not by policy alignment, such that his crisis decisions are explainable only by that personal history
 - *[ARC-40]* the number of precursor crises that have actually fired by a given checkpoint must produce genuinely different, graduated severities of outcome, not a single all-or-nothing trigger
-- *[ARC-41]* the ambient quality's degraded band must specifically escalate its local effects in territories closer to a specific hazard-source, such that identical ambient conditions produce categorically stronger effects the closer a territory is
 - *[ARC-41]* withholding disclosure must not freeze the situation -- the enforcer's own unassisted, ongoing documentation must reach the same self-incriminating conclusion independently after a further delay
 - *[ARC-42]* a formal, evidence-based decision procedure must support citing a specific, previously-established, verifiable fact as a bonus-granting move, mechanically distinct from generic argument, and that fact must originate from a separate, ongoing long-term research arc
 - *[ARC-42]* a formal procedural-objection mechanism meant to block structural change must be categorically unable to prevent a debate from happening if it is classified as a social contest rather than a reform action
@@ -337,6 +356,7 @@ no execution for.
 - *[ARC-53]* an injury penalty must be able to persist across multiple periods without decaying on its own, remaining in effect until the character takes a specific recovery action
 - *[ARC-53]* other factions must be able to observe a faction's rising rate of failed actions and choose to act against that faction's position on the strength of the observed pattern alone
 - *[ARC-54]* a failed attempt at the investigative action must be able to expose the investigating faction's own activity to a third faction's counter-intelligence for a bounded duration, rather than simply doing nothing
+- *[ARC-54]* a third party with their own standing/influence value must be able to become aware that the investigating faction now holds a profile, and that awareness must be able to open a distinct intervention option available only to that third party
 - *[ARC-55]* other factions must be able to structurally rely on a non-player faction's action being available in specific territories as an indirect tool against a third faction, without any of those relying factions having any input into whether that availability persists
 - *[EMG-C1]* once triggered, an actor must be able to restrict which other actors may act openly versus covertly, differentially
 - *[EMG-C1]* the accumulation counter itself must be able to persist even after the crisis is resolved, i.e. some component of the past cannot be reset by resolving the surface state
@@ -346,6 +366,7 @@ no execution for.
 - *[EMG-C2]* an actor's use of a sensitive resource must carry a per-use chance of an unplanned, binary discovery event with divergent consequences on success versus failure, independent of ordinary task resolution
 - *[EMG-C3]* investigating the cause of an unattributed problem must require locating and addressing multiple separate operational nodes belonging to the hidden actor, where addressing only some of them leaves the remainder still causing harm at a reduced rate
 - *[EMG-C3]* the act of repairing the shared resource must itself be able to produce an unplanned side effect governed by chance, independent of whether the repair attempt succeeded
+- *[EMG-C3]* a hostile institution must be able to detect activity connected to the repair effort and respond by advancing its own separate institutional-growth value, opening a second front exactly when the first is resolving
 - *[EMG-C4]* a character's repeated use of a risky capability must inflict a cumulative personal degradation that passes through discrete bands, each imposing worsening mechanical penalties on that character specifically
 - *[EMG-C4]* a sheltering faction's protection of individuals with a suppressed capability must be able to reduce a shared danger value over time, while each use of that protection produces an unplanned side effect
 - *[EMG-C4]* once the political flashpoint activates, the dominant religious institution must gain access to a formal punitive action against known holders of the suppressed capability, carrying both a direct cost to the target and a possible backfire cost to the institution on failure
@@ -372,6 +393,7 @@ no execution for.
 - *[NSC-03]* the metaphysical grounding, once invoked publicly and forced into open testimony, must be able to make specialized operations become active in the same scene, with each such operation carrying its own separate world-state consequence distinct from the political outcome
 - *[NSC-04]* extracting testimony from a source loyal to the opposing actor must require breaking that source's loyalty through a dedicated social effort, not merely locating them
 - *[NSC-04]* a formal accusatory proceeding against an institutional actor must be resolvable to one of at least four distinct, graded outcomes, each with materially different consequences for both accuser and accused, determined by a single contested roll
+- *[NSC-04]* the institution's own senior representative must be able to respond to newly-revealed evidence about a subordinate's wrongdoing according to a fixed personal disposition, producing a predictable but non-scripted internal reaction distinct from the formal tribunal outcome
 - *[NSC-05]* the maintenance action's failure must carry a chance of being separately detected by the holding power, with detection producing its own independent consequence distinct from the maintenance action's own success/failure result
 - *[NSC-05]* the held person's allegiance value crossing specific bands must be able to unlock qualitatively different, increasingly severe consequences rather than a single continuous penalty
 - *[NSC-05]* the held person must independently possess a dormant personal trait that can be triggered into activity by nearby unrelated events, and its activation while under a foreign power's watch must be detectable by that power's own institutional apparatus, producing consequences that override the ordinary allegiance-tracking logic entirely
