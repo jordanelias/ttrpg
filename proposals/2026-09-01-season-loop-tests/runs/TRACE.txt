@@ -1661,49 +1661,49 @@
   1661  probe:W1             DECISION  individuation  @S29  chose="demand-driven only; generated nobody" alternatives=["a clock that generates (forbidden)", "a world-gen roster (S54 item 18 -- not a clock, not folded in)"]
   1662  probe:W1             STEP      leave CENSUS  @S23
   1663  probe:W1             QUERY     verbs  @S17  side="resolver"
-  1664  probe:P2x            STEP      enter CALENDAR  @S23
-  1665  probe:P2x            BARRIER   barrier 1 - CALENDAR  @S23
-  1666  probe:P2x            STEP      leave CALENDAR  @S23
-  1667  probe:P2x            STEP      enter MATTER  @S23
-  1668  probe:P2x            BARRIER   barrier 2 - MATTER  @S23
-  1669  probe:P2x            DECISION  MATTER's three cross-owner operations  @S31.1  chose="serial: event channel, then death cascade; then parallel over Sites and bodies" alternatives=["shard the event channel per rung (breaks causes[])"]
-  1670  probe:P2x            WRITE     condition  @S30  write_class="MATTER" step="MATTER" admitted=true
+  1664  probe:F6             GAP       [UNSPECIFIED] how much a dispensation distorts in transit  @S62  needs="a distortion model, and a ruling on emitter- vs receiver-side refraction" law="T6 says it distorts; NOTHING SPECIFIES BY HOW MUCH (S62). The structural half works -- publishing is a `tell`, delivery is not assumed, and an executor who never received it is DISTINCT from one who received it and refused -- but the distortion itself has no model, and S37.4 records that the chain uses `refraction` TWO WAYS" expected=false
+  1665  probe:P2x            STEP      enter CALENDAR  @S23
+  1666  probe:P2x            BARRIER   barrier 1 - CALENDAR  @S23
+  1667  probe:P2x            STEP      leave CALENDAR  @S23
+  1668  probe:P2x            STEP      enter MATTER  @S23
+  1669  probe:P2x            BARRIER   barrier 2 - MATTER  @S23
+  1670  probe:P2x            DECISION  MATTER's three cross-owner operations  @S31.1  chose="serial: event channel, then death cascade; then parallel over Sites and bodies" alternatives=["shard the event channel per rung (breaks causes[])"]
   1671  probe:P2x            WRITE     condition  @S30  write_class="MATTER" step="MATTER" admitted=true
-  1672  probe:P2x            STEP      leave MATTER  @S23
-  1673  probe:P2x            STEP      enter DELIBERATE  @S23
-  1674  probe:P2x            QUERY     budget  @S17  side="person"
+  1672  probe:P2x            WRITE     condition  @S30  write_class="MATTER" step="MATTER" admitted=true
+  1673  probe:P2x            STEP      leave MATTER  @S23
+  1674  probe:P2x            STEP      enter DELIBERATE  @S23
   1675  probe:P2x            QUERY     budget  @S17  side="person"
   1676  probe:P2x            QUERY     budget  @S17  side="person"
   1677  probe:P2x            QUERY     budget  @S17  side="person"
-  1678  probe:P2x            GAP       [FORBIDDEN] p_king returned 8 acts against a budget of 5  @S26.3  needs="`choose` is bounded by budget(person, view) -- the PERSON chooses what to leave undone" law="S26.3 -- at one act NOBODY EVER CHOOSES WHAT TO LEAVE UNDONE; the budget exists to create triage. An engine that silently discards the tail has made the choice instead of the person, which is L1" expected=false
-  1679  probe:P3             STEP      enter CALENDAR  @S23
-  1680  probe:P3             BARRIER   barrier 1 - CALENDAR  @S23
-  1681  probe:P3             STEP      leave CALENDAR  @S23
-  1682  probe:P3             STEP      enter MATTER  @S23
-  1683  probe:P3             BARRIER   barrier 2 - MATTER  @S23
-  1684  probe:P3             DECISION  MATTER's three cross-owner operations  @S31.1  chose="serial: event channel, then death cascade; then parallel over Sites and bodies" alternatives=["shard the event channel per rung (breaks causes[])"]
-  1685  probe:P3             WRITE     condition  @S30  write_class="MATTER" step="MATTER" admitted=true
+  1678  probe:P2x            QUERY     budget  @S17  side="person"
+  1679  probe:P2x            GAP       [FORBIDDEN] p_king returned 8 acts against a budget of 5  @S26.3  needs="`choose` is bounded by budget(person, view) -- the PERSON chooses what to leave undone" law="S26.3 -- at one act NOBODY EVER CHOOSES WHAT TO LEAVE UNDONE; the budget exists to create triage. An engine that silently discards the tail has made the choice instead of the person, which is L1" expected=false
+  1680  probe:P3             STEP      enter CALENDAR  @S23
+  1681  probe:P3             BARRIER   barrier 1 - CALENDAR  @S23
+  1682  probe:P3             STEP      leave CALENDAR  @S23
+  1683  probe:P3             STEP      enter MATTER  @S23
+  1684  probe:P3             BARRIER   barrier 2 - MATTER  @S23
+  1685  probe:P3             DECISION  MATTER's three cross-owner operations  @S31.1  chose="serial: event channel, then death cascade; then parallel over Sites and bodies" alternatives=["shard the event channel per rung (breaks causes[])"]
   1686  probe:P3             WRITE     condition  @S30  write_class="MATTER" step="MATTER" admitted=true
-  1687  probe:P3             STEP      leave MATTER  @S23
-  1688  probe:P3             STEP      enter DELIBERATE  @S23
-  1689  probe:P3             QUERY     budget  @S17  side="person"
-  1690  probe:P3             GAP       [FORBIDDEN] choose() reached for world state 'persons' through its View  @S3-L2  needs="a person decides from their own claims; world truth enters only via sense()" law="L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE" expected=true
-  1691  probe:P3             QUERY     budget  @S17  side="person"
-  1692  probe:P3             GAP       [FORBIDDEN] choose() reached for world state 'persons' through its View  @S3-L2  needs="a person decides from their own claims; world truth enters only via sense()" law="L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE" expected=true
-  1693  probe:P3             QUERY     budget  @S17  side="person"
-  1694  probe:P3             GAP       [FORBIDDEN] choose() reached for world state 'persons' through its View  @S3-L2  needs="a person decides from their own claims; world truth enters only via sense()" law="L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE" expected=true
-  1695  probe:P3             QUERY     budget  @S17  side="person"
-  1696  probe:P3             GAP       [FORBIDDEN] choose() reached for world state 'persons' through its View  @S3-L2  needs="a person decides from their own claims; world truth enters only via sense()" law="L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE" expected=true
-  1697  probe:P3             QUERY     budget  @S17  side="person"
-  1698  probe:P3             GAP       [FORBIDDEN] choose() reached for world state 'persons' through its View  @S3-L2  needs="a person decides from their own claims; world truth enters only via sense()" law="L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE" expected=true
-  1699  probe:P3             STEP      leave DELIBERATE  @S23
-  1700  probe:P3             STEP      enter RESOLVE  @S23
-  1701  probe:P3             BARRIER   barrier 3 - RESOLVE  @S23
-  1702  probe:P3             DECISION  ordering 0 acts  @S27/S32  chose="five strata, then a content-derived hash key over one global array" alternatives=["completion order", "rank", "per-container sort (voids the fold)"]
-  1703  probe:P3             STEP      leave RESOLVE  @S23
-  1704  probe:P3             STEP      enter WITNESS  @S23
-  1705  probe:P3             BARRIER   barrier 4 - WITNESS  @S23
-  1706  probe:P3             QUERY     presence  @S17  side="resolver"
+  1687  probe:P3             WRITE     condition  @S30  write_class="MATTER" step="MATTER" admitted=true
+  1688  probe:P3             STEP      leave MATTER  @S23
+  1689  probe:P3             STEP      enter DELIBERATE  @S23
+  1690  probe:P3             QUERY     budget  @S17  side="person"
+  1691  probe:P3             GAP       [FORBIDDEN] choose() reached for world state 'persons' through its View  @S3-L2  needs="a person decides from their own claims; world truth enters only via sense()" law="L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE" expected=true
+  1692  probe:P3             QUERY     budget  @S17  side="person"
+  1693  probe:P3             GAP       [FORBIDDEN] choose() reached for world state 'persons' through its View  @S3-L2  needs="a person decides from their own claims; world truth enters only via sense()" law="L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE" expected=true
+  1694  probe:P3             QUERY     budget  @S17  side="person"
+  1695  probe:P3             GAP       [FORBIDDEN] choose() reached for world state 'persons' through its View  @S3-L2  needs="a person decides from their own claims; world truth enters only via sense()" law="L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE" expected=true
+  1696  probe:P3             QUERY     budget  @S17  side="person"
+  1697  probe:P3             GAP       [FORBIDDEN] choose() reached for world state 'persons' through its View  @S3-L2  needs="a person decides from their own claims; world truth enters only via sense()" law="L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE" expected=true
+  1698  probe:P3             QUERY     budget  @S17  side="person"
+  1699  probe:P3             GAP       [FORBIDDEN] choose() reached for world state 'persons' through its View  @S3-L2  needs="a person decides from their own claims; world truth enters only via sense()" law="L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE" expected=true
+  1700  probe:P3             STEP      leave DELIBERATE  @S23
+  1701  probe:P3             STEP      enter RESOLVE  @S23
+  1702  probe:P3             BARRIER   barrier 3 - RESOLVE  @S23
+  1703  probe:P3             DECISION  ordering 0 acts  @S27/S32  chose="five strata, then a content-derived hash key over one global array" alternatives=["completion order", "rank", "per-container sort (voids the fold)"]
+  1704  probe:P3             STEP      leave RESOLVE  @S23
+  1705  probe:P3             STEP      enter WITNESS  @S23
+  1706  probe:P3             BARRIER   barrier 4 - WITNESS  @S23
   1707  probe:P3             QUERY     presence  @S17  side="resolver"
   1708  probe:P3             QUERY     presence  @S17  side="resolver"
   1709  probe:P3             QUERY     presence  @S17  side="resolver"
@@ -1712,20 +1712,20 @@
   1712  probe:P3             QUERY     presence  @S17  side="resolver"
   1713  probe:P3             QUERY     presence  @S17  side="resolver"
   1714  probe:P3             QUERY     presence  @S17  side="resolver"
-  1715  probe:P3             DECISION  fan-out over 0 events -> 0 deposits  @S28  chose="one global pass over the presence index; channel `co_located` only" alternatives=["shard per rung (retired: made the parallelism claim unsound)", "the other four channels ('post_remit', 'witness_key', 'chronicle') have no predicate in chain"]
-  1716  probe:P3             STEP      leave WITNESS  @S23
-  1717  probe:P3             STEP      enter CENSUS  @S23
-  1718  probe:P3             DECISION  individuation  @S29  chose="demand-driven only; generated nobody" alternatives=["a clock that generates (forbidden)", "a world-gen roster (S54 item 18 -- not a clock, not folded in)"]
-  1719  probe:P3             STEP      leave CENSUS  @S23
-  1720  probe:P6             GAP       [UNSPECIFIED] (Person, convictions) is on no Partition row and no matrix row determines it  @S30.1  needs="a `social:` column entry, ruled" law="L4 -- the membership test is a STATIC SCHEMA COLUMN, not a judgement; S42.3 -- configuring an unspecified thing invents it" expected=false
-  1721  probe:P12            QUERY     opening_set  @S17  side="person"
-  1722  probe:P19            WRITE     stance  @S30  write_class="MATTER" step="MATTER" admitted=false
-  1723  probe:P19            GAP       [FORBIDDEN] 'stance' written during MATTER  @S30  needs="one of ['RESOLVE']" law="S30 -- ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION" expected=false
-  1724  probe:P24            WRITE     Tenure  @S30  write_class="MATTER" step="MATTER" admitted=true
+  1715  probe:P3             QUERY     presence  @S17  side="resolver"
+  1716  probe:P3             DECISION  fan-out over 0 events -> 0 deposits  @S28  chose="one global pass over the presence index; channel `co_located` only" alternatives=["shard per rung (retired: made the parallelism claim unsound)", "the other four channels ('post_remit', 'witness_key', 'chronicle') have no predicate in chain"]
+  1717  probe:P3             STEP      leave WITNESS  @S23
+  1718  probe:P3             STEP      enter CENSUS  @S23
+  1719  probe:P3             DECISION  individuation  @S29  chose="demand-driven only; generated nobody" alternatives=["a clock that generates (forbidden)", "a world-gen roster (S54 item 18 -- not a clock, not folded in)"]
+  1720  probe:P3             STEP      leave CENSUS  @S23
+  1721  probe:P6             GAP       [UNSPECIFIED] (Person, convictions) is on no Partition row and no matrix row determines it  @S30.1  needs="a `social:` column entry, ruled" law="L4 -- the membership test is a STATIC SCHEMA COLUMN, not a judgement; S42.3 -- configuring an unspecified thing invents it" expected=false
+  1722  probe:P12            QUERY     opening_set  @S17  side="person"
+  1723  probe:P19            WRITE     stance  @S30  write_class="MATTER" step="MATTER" admitted=false
+  1724  probe:P19            GAP       [FORBIDDEN] 'stance' written during MATTER  @S30  needs="one of ['RESOLVE']" law="S30 -- ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION" expected=false
   1725  probe:P24            WRITE     Tenure  @S30  write_class="MATTER" step="MATTER" admitted=true
-  1726  probe:P25            WRITE     Tenure  @S30  write_class="MATTER" step="MATTER" admitted=false
-  1727  probe:P25            GAP       [FORBIDDEN] an actorless row wrote Tenure.until with no (Person, exists) change of its own  @S15.3  needs="the same row must cause the death it ends a tenure through" law="S15.3 -- a plague that kills the praefect ends his tenure THROUGH THE DEATH; A STORM CANNOT TOUCH IT. A second such seam means the column is the wrong mechanism" expected=false
-  1728  probe:F6             GAP       [UNSPECIFIED] how much a dispensation distorts in transit  @S62  needs="a distortion model, and a ruling on emitter- vs receiver-side refraction" law="T6 says it distorts; NOTHING SPECIFIES BY HOW MUCH (S62). The structural half works -- publishing is a `tell`, delivery is not assumed, and an executor who never received it is DISTINCT from one who received it and refused -- but the distortion itself has no model, and S37.4 records that the chain uses `refraction` TWO WAYS" expected=false
+  1726  probe:P24            WRITE     Tenure  @S30  write_class="MATTER" step="MATTER" admitted=true
+  1727  probe:P25            WRITE     Tenure  @S30  write_class="MATTER" step="MATTER" admitted=false
+  1728  probe:P25            GAP       [FORBIDDEN] an actorless row wrote Tenure.until with no (Person, exists) change of its own  @S15.3  needs="the same row must cause the death it ends a tenure through" law="S15.3 -- a plague that kills the praefect ends his tenure THROUGH THE DEATH; A STORM CANNOT TOUCH IT. A second such seam means the column is the wrong mechanism" expected=false
   1729  probe:F9             STEP      enter CALENDAR  @S23
   1730  probe:F9             BARRIER   barrier 1 - CALENDAR  @S23
   1731  probe:F9             STEP      leave CALENDAR  @S23

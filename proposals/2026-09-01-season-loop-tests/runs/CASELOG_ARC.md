@@ -811,3 +811,231 @@ not the shape.
 | **[core]** crossing below the gating floor must be able to remove the faction's access to the action in that territory immediately and completely, not as a probability penalty, until the value is resto | — | UNMAPPED | — |
 | other factions must be able to structurally rely on a non-player faction's action being available in specific territories as an indirect tool against a third faction, without any of those re | — | UNMAPPED | — |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
+
+## EMG-C1 — The Coup That Wasn't Supposed to Happen  ·  **BLOCKED**
+*realm · 7 rows, 3 core · blockers: P17*
+*ends when:* UNCLEAR: the source names no single terminus — it forks into three branch-endings (a deliberate action succeeding against the imposing faction; continued covert play indefinitely; or a structural pivot into a new campaign axis) without saying which is final, and states the underlying counter never resets regardless of which branch is taken
+
+| need | probe | verdict | § |
+|---|---|---|---|
+| **[core]** a change of state in an unrelated area (e.g. a person's declining trust/allegiance far away) must be able to silently contribute to that same accumulating readiness | `P17` | **FORBIDDEN** | S22.4 |
+| **[core]** crossing the accumulation threshold must trigger a state change that suspends the normal rules of action for everyone in the affected territory at once | `P17` | **FORBIDDEN** | S22.4 |
+| the accumulation counter itself must be able to persist even after the crisis is resolved, i.e. some component of the past cannot be reset by resolving the surface state | `P18` | PASS | S3-L5 |
+| **[core]** an actor's readiness to act must be able to accumulate from several unrelated, independently-tracked conditions, where each condition alone is insufficient but their sum crosses a firing poi | — | UNMAPPED | — |
+| once triggered, an actor must be able to restrict which other actors may act openly versus covertly, differentially | — | UNMAPPED | — |
+| an actor confronted with an imposed extraordinary state must have multiple distinct, mutually exclusive resolution paths, each producing a different downstream campaign shape | — | UNMAPPED | — |
+| the extraordinary state must have both an active removal condition (a deliberate action succeeding against a difficulty tied to the imposing actor's strength) and a passive removal condition | — | UNMAPPED | — |
+
+## EMG-C2 — The Vaynard Revelation Cascade  ·  **NOT-ASSESSED**
+*realm · 7 rows, 3 core · blockers: F16*
+*ends when:* UNCLEAR: the source names a formal vote and a subsequent discovery event as branch points but no single closing condition — outcomes cascade into further conditional branches (a third party's standing eroding, a hostile institution retargeting) rather than terminating
+
+| need | probe | verdict | § |
+|---|---|---|---|
+| **[core]** an actor's private understanding advancing must be able to automatically and invisibly raise a separate, campaign-wide institutional threat value, as a byproduct the player did not choose an | `F16` | **FORBIDDEN** | S3-L3 |
+| whichever side a governing body takes on the formal decision, the outcome must feed back into whether an unrelated suppression effect elsewhere continues to hold, gated by a numeric threshol | `P14` | **UNSPECIFIED** | S18.2 |
+| a private actor's advancing understanding must eventually reach a stage where they act to acquire the underlying capability directly, rather than settling for more explanation, changing thei | `P1` | PASS | S3-L1 |
+| **[core]** repeated interaction between a player and a single non-player actor must be able to advance that actor's private understanding through discrete, ordered stages, where higher stages unlock qu | — | UNMAPPED | — |
+| an actor's repeated use of a specific resource must be detectable by a hostile institution through a trace left in the world, at a rate proportional to how often it is used | — | UNMAPPED | — |
+| **[core]** a hostile institution's investigation of a suspected violation must be escalatable to a formal decision point where a third governing body must choose a side, with different consequences dep | — | UNMAPPED | — |
+| an actor's use of a sensitive resource must carry a per-use chance of an unplanned, binary discovery event with divergent consequences on success versus failure, independent of ordinary task | — | UNMAPPED | — |
+
+## EMG-C3 — The Invisible Drain (Niflhel and the Rising Thread)  ·  **BLOCKED**
+*world · 7 rows, 3 core · blockers: A15*
+*ends when:* UNCLEAR: the source describes an investigation-then-recovery sequence but states no hard stop — the final beat opens a second institutional front rather than closing the arc, and the recovered resource is said to stabilise 'but not recover without active [ongoing] intervention'
+
+| need | probe | verdict | § |
+|---|---|---|---|
+| **[core]** a hidden actor's routine operation must be able to degrade a shared, global resource value each time it is used, as an automatic side effect the actor itself has no visibility into or contro | `P5` | PASS | S19.3 |
+| **[core]** players must be able to choose not to investigate a decaying resource, in which case the decay continues uninterrupted and consequences compound without any forced intervention | `A15` | **UNSPECIFIED** | S40.1 |
+| investigating the cause of an unattributed problem must require locating and addressing multiple separate operational nodes belonging to the hidden actor, where addressing only some of them  | `P5` | PASS | S19.3 |
+| reversing damage to the shared resource must require an actor of sufficient individual capability performing an action whose difficulty scales with how much damage has accumulated | `P26` | **FORBIDDEN** | S22.4 |
+| a hostile institution must be able to detect activity connected to the repair effort and respond by advancing its own separate institutional-growth value, opening a second front exactly when | `F3` | **FORBIDDEN** | S3-L1 |
+| **[core]** the degrading shared resource must be able to fall through multiple bands, each unlocking distinct, worsening consequences determined organically from current state rather than from a fixed  | — | UNMAPPED | — |
+| the act of repairing the shared resource must itself be able to produce an unplanned side effect governed by chance, independent of whether the repair attempt succeeded | — | UNMAPPED | — |
+
+## EMG-C4 — The Axis 9 Resolution (Thread Truth Goes Public)  ·  **BLOCKED**
+*realm · 6 rows, 3 core · blockers: F3*
+*ends when:* the multi-round formal contest resolves with one side winning outright; the source calls this an endgame indicator but explicitly notes the shared danger value's future direction is still undetermined afterward, so the political question closes while the systemic one does not
+
+| need | probe | verdict | § |
+|---|---|---|---|
+| **[core]** the accumulation of several independent conditions (personal degradation reaching a band, a suppressed capability being administered at scale, a private actor's understanding reaching a late | `P1` | PASS | S3-L1 |
+| **[core]** the highest political authority must be forced to take a public position on the flashpoint, and that position must trigger a further formal proceeding with a governing-body actor able to cha | `F3` | **FORBIDDEN** | S3-L1 |
+| **[core]** the constitutional-crisis-level proceeding must be resolvable through a structured multi-round contest between two sides where a designated combatant may be substituted mid-contest, and the  | `P18` | PASS | S3-L5 |
+| a character's repeated use of a risky capability must inflict a cumulative personal degradation that passes through discrete bands, each imposing worsening mechanical penalties on that chara | — | UNMAPPED | — |
+| a sheltering faction's protection of individuals with a suppressed capability must be able to reduce a shared danger value over time, while each use of that protection produces an unplanned  | — | UNMAPPED | — |
+| once the political flashpoint activates, the dominant religious institution must gain access to a formal punitive action against known holders of the suppressed capability, carrying both a d | — | UNMAPPED | — |
+
+## EMG-X5 — The Brittle Peace  ·  **NOT-ASSESSED**
+*faction · 6 rows, 3 core · blockers: none*
+*ends when:* UNCLEAR: the source gives two possible resolutions (a successful mend, or a re-established agreement via contest) but does not state which is final, and explicitly allows the repair's own random outcome to reopen a separate ongoing decay — even a 'successful' resolution can re-trigger
+
+| need | probe | verdict | § |
+|---|---|---|---|
+| **[core]** an agreement's hidden fragility must remain dormant until a later, unrelated external event of sufficient severity arrives, at which point a judgment call determines whether the fragility ma | `P5` | PASS | S19.3 |
+| an indeterminate agreement left unaddressed must degrade further over a short, randomized span into a harder, more costly relational breach that blocks new formal agreements between the same | `P8` | PASS | S3-L1 |
+| **[core]** a deliberate action that succeeds at making an agreement binding must be able to attach an invisible, automatic penalty to all future related actions on that same configuration, without the  | — | UNMAPPED | — |
+| **[core]** when a fragile agreement fails under stress, its status must be able to become genuinely indeterminate — with the parties to it disagreeing about whether it currently holds or what it means  | — | UNMAPPED | — |
+| repairing the relational breach must be achievable through at least two structurally different routes — a direct restorative action and a renewed formal contest to re-establish the original  | — | UNMAPPED | — |
+| a restorative action's outcome must be determined partly by a random roll whose result table includes both cosmetic outcomes and one outcome that reopens an entirely separate, unrelated ongo | — | UNMAPPED | — |
+
+## EMG-X6 — The Tribunal and the Temporal Shimmer  ·  **NOT-ASSESSED**
+*faction · 6 rows, 2 core · blockers: none*
+*ends when:* the formal proceeding concludes when its structured exchange count is exhausted and a verdict is read on both the internal-vote and audience axes; the source is explicit that a procedural win with a lost audience may still be rejected by the institution, so a 'win' is not always a hard close
+
+| need | probe | verdict | § |
+|---|---|---|---|
+| **[core]** a formal proceeding must be able to strip one specific participant of a procedural option available in other formal contests, while granting the initiating side an extra structural advantage | — | UNMAPPED | — |
+| corroboration by an ally within the formal proceeding must be restricted to allies who share a pre-established, specific bond with the accused, usable at most once per exchange and only thro | — | UNMAPPED | — |
+| the formal proceeding's outcome must fork on two independent axes at once — who wins the internal vote and who wins audience sentiment — producing genuinely different consequences depending  | — | UNMAPPED | — |
+| **[core]** an especially decisive evidentiary victory margin within the proceeding must be able to trigger an involuntary side effect that makes a suppressed truth partially perceptible in the room, in | — | UNMAPPED | — |
+| the involuntary side effect's perceptibility must scale continuously with individual witnesses' underlying sensitivity, such that different people in the same room experience nothing, vague  | — | UNMAPPED | — |
+| losing the formal proceeding on points while still winning a late decisive rebuttal must be able to yield a distinct partial-consequence outcome different from either a clean win or a clean  | — | UNMAPPED | — |
+
+## EMG-X7 — The Rendering Debt  ·  **NOT-ASSESSED**
+*person · 7 rows, 3 core · blockers: none*
+*ends when:* UNCLEAR: the source describes the conflict resolving (win or lose) as separate from the practitioner's personal-cost arc, which is left in an unresolved band at the point the source stops narrating — there is no stated condition under which the personal-cost track itself is considered closed
+
+| need | probe | verdict | § |
+|---|---|---|---|
+| **[core]** a leadership or command role within the structured conflict must be able to become incapacitated mid-conflict, forcing the capability-user to choose between two mutually exclusive actions on | `P18` | PASS | S3-L5 |
+| the helper-based recovery path must be blockable by a disagreement in underlying motivation or belief between the helper and the person being helped, independent of either party's raw capabi | `P8` | PASS | S3-L1 |
+| **[core]** repeated use of a powerful capability across successive rounds of a structured conflict must inflict a fixed, cumulative personal cost per use, with no way to use the capability without payi | — | UNMAPPED | — |
+| the cumulative personal cost must cross discrete bands, each imposing a distinct, worsening functional penalty on the user (degraded social/mental capability, increased difficulty on the ver | — | UNMAPPED | — |
+| a randomized narrative-effect table must trigger automatically the moment the user's cumulative cost crosses into the worst bands, independent of and in addition to the normal task-resolutio | — | UNMAPPED | — |
+| recovering from the accumulated personal cost must offer at least three structurally different paths (extended rest, a relational/social action, and help from a second capable individual), e | — | UNMAPPED | — |
+| **[core]** the cumulative personal cost must have an absolute floor state at which the user categorically cannot perform the powerful capability at all — not merely at a penalty — and recovering from t | — | UNMAPPED | — |
+
+## EMG-X8 — The Temporal Window  ·  **NOT-ASSESSED**
+*world · 7 rows, 4 core · blockers: F6*
+*ends when:* the attempt at the powerful capability resolves via a single roll into one of three named outcomes (success, failure, or a lasting partial/oscillating state); even the decisive outcomes explicitly open further consequence chains (a formal institutional proceeding, or a second-attempt requirement) rather than closing the arc outright
+
+| need | probe | verdict | § |
+|---|---|---|---|
+| **[core]** knowledge that the capability has become available must not be universal — different actors must possess it to different degrees (full awareness, partial or garbled awareness, zero awareness | `F6` | **UNSPECIFIED** | S62 |
+| attempting the powerful capability must have a cost that scales directly with how significant or old the target of the capability is, and the cost must apply on both success and failure, at  | `P33` | **UNSPECIFIED** | S26.3 |
+| **[core]** a specific powerful capability must be categorically impossible while a shared world-value sits above a threshold, and must become newly available — for every actor capable of it, simultaneo | — | UNMAPPED | — |
+| **[core]** using the powerful capability must require satisfying several independent, unrelated preconditions simultaneously (a diagnostic step, possession of a specific prior technique, physical prese | — | UNMAPPED | — |
+| reaching the location required by one of the preconditions must itself be lethal or excluding to participants below a specific individual capability threshold, filtering who can even attempt | — | UNMAPPED | — |
+| **[core]** a successful use of the capability must be able to remove or alter a past event while leaving direct memories of the pre-alteration state intact in everyone who experienced it, creating an i | — | UNMAPPED | — |
+| a partial, neither-success-nor-failure outcome of the powerful capability must be able to place its target into a state of ongoing oscillation between two mutually exclusive conditions, with | — | UNMAPPED | — |
+
+## NSC-01 — The Hunting Accident (~218 AG)  ·  **NOT-ASSESSED**
+*realm · 6 rows, 3 core · blockers: P22*
+*ends when:* UNCLEAR: the source describes the investigation's possible outcomes (full evidence, partial evidence, false accusation) and their consequences but does not state when the arc itself is considered concluded — a false accusation and a true reveal both produce ongoing consequences rather than a close
+
+| need | probe | verdict | § |
+|---|---|---|---|
+| **[core]** multiple independent factions must each be able to hold their own separate partial evidence trail about the same past event, where each trail was constructed or interpreted to implicate a di | `P22` | **UNSPECIFIED** | S30.1 |
+| **[core]** a full, correct reconstruction of the past event must require accessing and cross-referencing a minimum number of the independent evidence trails, with no single trail sufficient on its own | — | UNMAPPED | — |
+| **[core]** acting on a partial or incomplete investigation must be able to produce full-strength political consequences against an accused party, identical to the consequences that would apply if the a | — | UNMAPPED | — |
+| a character's long-held, self-limiting belief must be revealed by the true reconstruction to have rested on a false premise, and the reveal itself, not the premise, must be what forces that  | — | UNMAPPED | — |
+| a piece of politically dangerous truth must be shareable selectively — told to some factions and not others — with each faction told gaining a distinct trackable relationship state usable as | — | UNMAPPED | — |
+| a piece of information's public exposure versus suppression must produce measurably different effects on a general public-opinion value, distinct from and in addition to its effects on any i | — | UNMAPPED | — |
+
+## NSC-02 — Almud's Sympathies — The Sovereign Constraint  ·  **NOT-ASSESSED**
+*realm · 6 rows, 1 core · blockers: none*
+*ends when:* the ruling actor takes decisive public action once the identified costs are individually removed or explicitly accepted — the source is explicit this is only one possible resolution ('he may still not act') and treats the action taken as opening further consequences rather than a terminal state
+
+| need | probe | verdict | § |
+|---|---|---|---|
+| a hostile institution's public discrediting, via a sharp drop in a tracked institutional-standing value, must be achievable through an unrelated exposure event, and its occurrence must indep | `P14` | **UNSPECIFIED** | S18.2 |
+| **[core]** a ruling actor's continued inaction on a matter must be attributable to several distinct, simultaneously-held political costs, where the actor acts only once enough of those costs have been  | — | UNMAPPED | — |
+| a rising popular-support value tracked in specific sub-regions must be able to cross a threshold that removes a different cost axis for the ruling actor, distinct from the discrediting path | — | UNMAPPED | — |
+| resolution of an entirely separate, foreign-diplomatic pressure track must be able to remove the ruling actor's third cost axis, via at least two distinct sub-methods | — | UNMAPPED | — |
+| a ruling actor with an otherwise-suppressed private trait must be able to have that trait's growth triggered by proximity to significant unrelated events, culminating in a binary pass/fail d | — | UNMAPPED | — |
+| once all identified costs are removed or accepted, the ruling actor's decisive action must be selectable from at least three qualitatively different mechanisms, each with a different risk an | — | UNMAPPED | — |
+
+## NSC-03 — Baralta and the Solmund Claim  ·  **NOT-ASSESSED**
+*realm · 6 rows, 2 core · blockers: none*
+*ends when:* the formal proceeding resolves via a multi-exchange contest into a success/failure outcome with named institutional-standing deltas — the source itself flags the entire arc as design intent requiring approval and marks the deeper implications as unresolved open questions rather than settled endings
+
+| need | probe | verdict | § |
+|---|---|---|---|
+| the maximal formal response and its resolution must produce outcomes on at least two independent institutional-standing tracks simultaneously, with success and failure producing asymmetric,  | `P14` | **UNSPECIFIED** | S18.2 |
+| the metaphysical grounding, once invoked publicly and forced into open testimony, must be able to make specialized operations become active in the same scene, with each such operation carryi | `A32` | **COLLISION** | S62 |
+| **[core]** a political actor's standard legal-authority claim must be augmentable with an alternative, metaphysical justification that is mechanically and narratively distinct from, and strictly more c | — | UNMAPPED | — |
+| acquiring the specialized knowledge needed for the augmented claim must be reachable through multiple, narratively distinct relationship-based channels, any one of which suffices | — | UNMAPPED | — |
+| **[core]** a claim that a ruling authority's foundational legitimacy narrative is incomplete or misappropriated by a rival institution must be treated by that institution as the single most severe cate | — | UNMAPPED | — |
+| a second, independent political actor who has separately acquired sensitivity to the same specialized domain must be able to have their own private stance folded into the outcome as an addit | — | UNMAPPED | — |
+
+## NSC-04 — Niflhel Exposes the Church  ·  **DEGRADED**
+*faction · 6 rows, 1 core · blockers: none*
+*ends when:* the formal tribunal resolves via a single contested roll into one of four graded outcomes — even the most severe outcome is followed by further conditional consequences rather than a stated close, and the parallel private-crisis track is left explicitly contingent on later choices
+
+| need | probe | verdict | § |
+|---|---|---|---|
+| **[core]** exposing an institutional actor's secret partnership with a criminal organization must require acquiring evidence via at least two independent methods — extracting testimony from a source lo | `P5` | PASS | S19.3 |
+| the institution's own senior representative must be able to respond to newly-revealed evidence about a subordinate's wrongdoing according to a fixed personal disposition, producing a predict | `F3` | **FORBIDDEN** | S3-L1 |
+| exposing one specific hidden operation belonging to the criminal actor must be able to independently trigger consequences on an entirely separate world-decay track that has been silently run | `A3` | **FORBIDDEN** | S30 |
+| a third individual's own private, independently-tracked personal-transformation crisis, unrelated to the accusation, must be able to reach a critical point in the same window as the tribunal | `P32` | **UNSPECIFIED** | S12 |
+| extracting testimony from a source loyal to the opposing actor must require breaking that source's loyalty through a dedicated social effort, not merely locating them | — | UNMAPPED | — |
+| a formal accusatory proceeding against an institutional actor must be resolvable to one of at least four distinct, graded outcomes, each with materially different consequences for both accus | — | UNMAPPED | — |
+
+## NSC-05 — Torben in Altonia — The Loyalty Clock  ·  **NOT-ASSESSED**
+*realm · 6 rows, 3 core · blockers: none*
+*ends when:* UNCLEAR: the source names retrieval (at varying difficulty by allegiance band) and full foreign-alignment as reachable states but never states the arc as formally closed — allegiance at any level continues to feed the separate coup-counter mechanism, and the person's own possible trait activation opens a further, explicitly unresolved editorial question
+
+| need | probe | verdict | § |
+|---|---|---|---|
+| **[core]** forcibly retrieving the held person against the holding power's will must require a qualitatively different, far more escalatory type of action than covert retrieval, immediately spiking a s | `P5` | PASS | S19.3 |
+| **[core]** a person held by a foreign power must have a trackable allegiance value that decays by default absent successful active maintenance, with a bounded, repeatable maintenance action available e | — | UNMAPPED | — |
+| the maintenance action's failure must carry a chance of being separately detected by the holding power, with detection producing its own independent consequence distinct from the maintenance | — | UNMAPPED | — |
+| the held person's allegiance value crossing specific bands must be able to unlock qualitatively different, increasingly severe consequences rather than a single continuous penalty | — | UNMAPPED | — |
+| **[core]** the held person's allegiance crossing one specific band must be able to independently increment a wholly separate faction's private readiness counter for an unrelated drastic institutional a | — | UNMAPPED | — |
+| the held person must independently possess a dormant personal trait that can be triggered into activity by nearby unrelated events, and its activation while under a foreign power's watch mus | — | UNMAPPED | — |
+
+## NSC-06 — Elske — The Royal Fate  ·  **PLAYABLE**
+*realm · 6 rows, 1 core · blockers: none*
+*ends when:* her position resolves into one of three named succession states once the relevant prior branches are known, reached mainly through contested rolls on the independence path; two of the three states explicitly link forward into other arcs, so even a resolved succession state is treated as an input to further, not-yet-closed consequences
+
+| need | probe | verdict | § |
+|---|---|---|---|
+| **[core]** a person's decision to align with an approaching faction must gate on which of that person's several competing internal loyalties is appealed to, with each loyalty requiring a different, spe | `F7` | PASS | S36.1 |
+| the covert-elimination independence path's success must be distinguishable, mechanically, from its later discovery — an outcome that looks clean in the near term must be able to unravel late | `P5` | PASS | S19.3 |
+| this person's eventual formal political position must be determined by a combination of prior branch outcomes rather than by a single dedicated succession mechanism, and must set a distinct, | `F13` | PASS | S24 |
+| once recruited, a person embedded in a rival power's structure must be able to break that embedding through at least three structurally distinct methods, each carrying a different success/fa | — | UNMAPPED | — |
+| institutional acceptance of this person's new formal authority must be conditional and behaviorally tested rather than automatic, with at least one faction's standard being an observed patte | — | UNMAPPED | — |
+| this person independently developing a suppressed sensitivity, if it occurs, must be able to simultaneously activate several separate political-conflict tracks the moment she also holds form | — | UNMAPPED | — |
+
+## NSC-07 — The Southernmost Spiral  ·  **BLOCKED**
+*world · 7 rows, 3 core · blockers: A15*
+*ends when:* the culminating ritual resolves via a single roll into one of four graded outcomes, three of which explicitly change the shared degradation value going forward rather than simply closing the local problem — the worst outcome explicitly feeds into a separately-named terminal-decline scenario, so even the ritual's resolution is an input to a larger, still-open track
+
+| need | probe | verdict | § |
+|---|---|---|---|
+| **[core]** a culminating ritual attempt at the degraded structure must require simultaneously satisfying a compound set of prerequisites — a specific prior-acquired item, a minimum collective preparedn | `A15` | **UNSPECIFIED** | S40.1 |
+| **[core]** the culminating ritual's outcome must resolve to one of at least four graded results, with the worst outcome capable of crossing an unrelated global crisis threshold immediately and spawning | `P18` | PASS | S3-L5 |
+| a degrading structure's integrity must worsen through discrete stages driven by a shared world-value crossing a threshold, and a repeatable local stabilizing action must be able to pause, no | — | UNMAPPED | — |
+| **[core]** sustained neglect of a repeatable stabilizing action across a specific number of consecutive periods must be able to cross an escalation threshold that changes the degrading structure's deca | — | UNMAPPED | — |
+| attempting to address the degrading structure directly must be gated by both a minimum global-resource threshold and a minimum individual-capability floor for the lead participant, such that | — | UNMAPPED | — |
+| individual participants below a specific capability threshold approaching the degraded structure must undergo an automatic, involuntary process determining how much of what they experience t | — | UNMAPPED | — |
+| the culminating ritual's worst outcome must be able to independently and visibly discredit a specific individual's publicly-staked worldview or reputation, in addition to its systemic and co | — | UNMAPPED | — |
+
+## NSC-08 — Ehrenwall's Coup — The Löwenritter Threshold  ·  **PLAYABLE**
+*realm · 6 rows, 3 core · blockers: none*
+*ends when:* the ceiling is reached and, absent player remediation of at least two trigger conditions beforehand, the institutional actor issues a binary ultimatum at the next scheduled evaluation, which the ruling authority then resolves by choosing to yield or refuse — a threshold fires the crisis with nobody deciding, and a person's subsequent choice determines which of two divergent ongoing states follows
+
+| need | probe | verdict | § |
+|---|---|---|---|
+| **[core]** a specific institutional actor must maintain a private, not-directly-visible readiness counter that increments from three independently-defined failure conditions, any one of which can fire  | `W6` | PASS | S31.1 |
+| the private counter reaching its ceiling must force the institutional actor to issue a formal, binary ultimatum to the ruling authority at the next scheduled evaluation point, rather than ac | `P18` | PASS | S3-L5 |
+| **[core]** the ruling authority's two possible responses to the ultimatum must produce structurally different ongoing states — one producing a durable power-sharing arrangement contingent on a separate | `P18` | PASS | S3-L5 |
+| players must be able to defuse the ultimatum before it fires by resolving at least two of the three independent trigger conditions through distinct, condition-specific actions, with a hard r | `P18` | PASS | S3-L5 |
+| one of the specific remediation paths available to defuse the ultimatum must itself require the ruling authority to act against their own established personal principles, incurring an additi | `P18` | PASS | S3-L5 |
+| **[core]** the private readiness counter must be irreversible — once a condition fires and increments it, no subsequent event can decrement it back, even if the underlying condition that caused the inc | — | UNMAPPED | — |
+
+## NSC-09 — Vaynard — From Acquisition to Dangerous Knowledge  ·  **BLOCKED**
+*faction · 7 rows, 2 core · blockers: F16*
+*ends when:* UNCLEAR: the source describes the actor reaching the final named stage and lists a possible further chance-driven escalation without stating any point at which this actor's own arc is considered concluded — the final beat explicitly frames him as newly, not conclusively, dangerous
+
+| need | probe | verdict | § |
+|---|---|---|---|
+| a self-interested actor's private understanding of a specific hidden truth must progress through discrete, ordered stages, reachable via multiple alternative information sources, any single  | `P5` | PASS | S19.3 |
+| **[core]** each stage of the actor's advancing understanding must automatically raise a shared institutional-threat value by an amount specific to that stage, as an inherent side effect of the actor's  | `F16` | **FORBIDDEN** | S3-L3 |
+| the actor's advancing understanding must, at a specific late stage, cause the actor to formally condition their cooperation on a specific external actor providing the actor a distinct resour | `F2` | PASS | S54 item 20 |
+| a specific class of dangerous physical objects known to be connected to the hidden truth must be able to pass from the actor's private possession into circulation among practitioners, and do | `P5` | PASS | S19.3 |
+| independent of the staged progression, the actor's repeated use of the resource granting access to the hidden truth must carry, on each use, its own separate binary-chance event capable of j | `P5` | PASS | S19.3 |
+| **[core]** the actor's advancing understanding must culminate in a stage where the actor's own stated core goal changes in kind, from wanting to understand a domain to wanting to control it, and this g | — | UNMAPPED | — |
+| the actor reaching a sufficiently advanced stage of understanding via the binary-chance event must unlock eligibility for that actor to acquire a specific personal capability normally reserv | — | UNMAPPED | — |
