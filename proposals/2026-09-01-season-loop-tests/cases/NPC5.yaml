@@ -1,0 +1,353 @@
+- id: NPC-073
+  name: Björn Holdar
+  one_line: A senior regional lord holding a named seat on his faction's ruling council, recorded with almost nothing beyond a title and a single weighted disposition.
+  scale: faction
+  season_requires:
+    - need: "A named seat on a faction's ruling council must be able to cast a distinct position on faction-wide policy decisions, separate from the seat-holder's regional/local authority."
+      why: "Without a distinct council-level position, 'Senior Jarl ... [Jarl Council]' reduces to a title with no policy-level agency, and the character contributes nothing a background extra couldn't."
+      hardness: core
+    - need: "A council seat-holder's single recorded disposition (a named conviction with a weight) must be able to bias which policy options he supports or opposes in a way a third party can predict and work with or against."
+      why: "The weighted conviction is his only authored trait beyond his title; without it feeding predictable behavior, the entry is inert data."
+      hardness: important
+    - need: "UNCLEAR: the source names him 'Senior Jarl of the Western Highlands' but records no territory identifier for him, so it is unspecified whether he holds direct governing authority over a mapped territory or only a titular/council-level regional voice."
+      why: "Without resolving this, it's unclear whether removing or opposing him has any territorial consequence at all, or only a council-vote consequence."
+      hardness: important
+    - need: "UNCLEAR: the source records no arc_trajectory, goals, or notes for this character, so what personally drives him, whether he has any authored story beyond attending council business, and whether he persists purely as passive background texture, is unspecified."
+      why: "Without this, it's unclear whether he is meant to ever become more than a vote-bearing name, or whether authoring him further would be inventing rather than extracting."
+      hardness: important
+    - need: "UNCLEAR: a separate faction-governing document states this council has only two named seats, while the registry names at least three distinct seat-holders holding or proposed for seats on it, so the council's true size and whether more than two seats exist is unresolved."
+      why: "Without resolving the count, it's unclear whether this character and a differently-numbered colleague can ever be seated on the council simultaneously."
+      hardness: flavour
+    - need: "A council seat-holder must be able to remain a stable, low-volatility background presence across seasons in which no one takes any action involving him directly, without requiring authored weekly content to justify his continued existence."
+      why: "As a background committee figure with no personal arc, the roster would demand content none of it has if passive persistence were not possible."
+      hardness: important
+    - need: "A seat-holder whose people share a common cultural template must be able to default to that template's behavioral parameters wherever his own personal authored data is silent, rather than every unauthored field requiring bespoke invention."
+      why: "The shared cultural label is the only fallback once his conviction and (absent) arc are exhausted; without a working default most of his decision space is unauthored and unresolvable."
+      hardness: important
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: "the source records nothing that must persist beyond his continued occupancy of the council seat itself; no episodic history is authored for him"
+    needs_deadline: "no"
+  who_acts:
+    - Björn Holdar
+    - Ingrid Stenskald (fellow named council seat-holder)
+    - the wider ruling council he sits on
+  knowledge:
+    - "UNCLEAR: no epistemic content is recorded for this character at all; the source is silent on what he perceives, conceals, or is ignorant of."
+  ends_when: "never specified -- no personal arc or end condition is authored for him"
+
+- id: NPC-074
+  name: Ingrid Stenskald
+  one_line: The council's second named seat-holder, titled as chief keeper of history or oral tradition, recorded with a title and a single weighted disposition and nothing else.
+  scale: faction
+  season_requires:
+    - need: "A council seat tied to a cultural or historical-keeper role must be able to cast a position on faction policy that carries different weight or subject-matter authority than a territorial lord's seat on the same council."
+      why: "Without her seat mattering differently from a fellow councillor's, her distinct title collapses into 'a second, identical vote' and the role differentiation the source implies is lost."
+      hardness: core
+    - need: "A council seat-holder's single recorded disposition (a named conviction with a weight, distinct from a fellow seat-holder's differently-weighted conviction) must be able to bias which policy positions she supports in a way distinguishable from that colleague's behavior."
+      why: "Her conviction differs in both name and target from Björn Holdar's; without both feeding distinguishably different behavior, the two seats are functionally interchangeable despite being authored as different roles."
+      hardness: important
+    - need: "A person whose title marks her as keeper or transmitter of a people's oral history must be able to make that memory available to others -- recount precedent, confirm or deny a claimed lineage or past event -- as an action distinct from ordinary conversation."
+      why: "Without a distinct memory-keeper function, her title is decorative and identical to any other councillor's."
+      hardness: important
+    - need: "UNCLEAR: the source records no arc_trajectory, goals, territory, or notes for this character, so whether she has any personal stake or story beyond attending council business is unspecified."
+      why: "Without this, it's unclear whether she is meant to become more than a vote-bearing name."
+      hardness: important
+    - need: "A council seat-holder must be able to remain a stable background presence across seasons in which she is not directly targeted, without requiring authored weekly content."
+      why: "As background committee infrastructure with no personal arc, the roster would demand content none of it has if passive persistence were not possible."
+      hardness: important
+    - need: "A seat-holder whose people share a common cultural template must be able to default to that template's behavioral parameters wherever her own personal authored data is silent."
+      why: "The shared cultural label is the only fallback once her conviction and (absent) arc are exhausted."
+      hardness: important
+    - need: "UNCLEAR: whether her title is itself a formal council-level office equal in standing to a Senior Jarl's, or an advisory/ceremonial seat without a binding vote, is not stated -- both are simply named as belonging to the same council."
+      why: "Without resolving this, it's unclear whether her position can ever outvote a territorial lord's, or only advise him."
+      hardness: important
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: "whatever precedent or history she is asked to confirm or deny must be able to persist and be recalled consistently across seasons, along with any standing relationship with her fellow council seat-holders"
+    needs_deadline: "no"
+  who_acts:
+    - Ingrid Stenskald
+    - Björn Holdar (fellow named council seat-holder)
+    - the wider ruling council she sits on
+  knowledge:
+    - "UNCLEAR: no epistemic content is recorded for this character; the source does not say what she personally knows, keeps, or is asked to confirm."
+  ends_when: "never specified -- no personal arc or end condition is authored for her"
+
+- id: NPC-080
+  name: Vidar Haldorsen
+  one_line: A covert-order operative with zero of the perceptual sense that would let him detect a category of harm his own completed missions cause, framed explicitly as ignorance rather than malice.
+  scale: person
+  season_requires:
+    - need: "A person must be able to hold a hard floor of zero in a perceptual capacity that governs whether he can detect a specific category of harm his own actions cause, such that he completes tasks with a real ongoing cost he is structurally incapable of noticing, through no fault of will or character."
+      why: "This is the entire premise of the entry, explicitly framed against a 'pre-germ-theory surgeon' comparison -- without a hard, never-fluctuating zero (not merely low odds of noticing), he is just an agent who is sometimes unlucky, and the perceptual-limitation-not-malice point collapses."
+      hardness: core
+    - need: "Two members of the same covert operational role must be able to diverge on whether to complete or abort the same category of mission, where one member's abort decision is driven by information the other is constitutionally unable to perceive at all."
+      why: "Without this divergence being mechanically live and visible in play, 'completes missions [a named colleague] aborts' is narration with no comparison point that demonstrates the perceptual gap actually changes outcomes."
+      hardness: core
+    - need: "A covert order must be able to assign or withhold specific missions based on which of its operatives can or cannot perceive a given risk category, using that as a deliberate selection criterion rather than assigning missions at random."
+      why: "If mission assignment cannot route around a known perceptual gap, the order's practical use of this character specifically for the missions his colleague refuses has no mechanical basis."
+      hardness: important
+    - need: "A doctrine-following operative's recorded conviction toward honor and obedience must be able to keep him completing assigned missions even in a hypothetical where a colleague with different perception would refuse the same order on collateral grounds."
+      why: "Without conviction driving continued compliance, the doctrine-versus-conscience contrast the entry sets up has no behavioral engine and is only asserted, not produced."
+      hardness: important
+    - need: "UNCLEAR: the source's role field names one individual as this character's dramatic foil, while its arc description names a different individual as the one whose aborted missions he specifically completes -- whether these are the same person under two labels, two distinct relationships, or one field is stale, is not resolved."
+      why: "Without resolving this, it's unclear which relationship is actually meant to drive play."
+      hardness: important
+    - need: "A covert-ladder member marked as not-yet-canonical must be able to already carry a specific, load-bearing mechanical role (a named mission-completion foil dynamic) that persists and matters once the character is used in play, rather than that status blocking his use."
+      why: "His development status should not by itself prevent his defining dynamic from functioning when called on."
+      hardness: flavour
+    - need: "A person with a hard-zero perceptual capacity must be able to eventually be shown, by some other party who does have that capacity, evidence of the harm he has been causing, in a way that could plausibly change his future choices once perceived."
+      why: "Without a path from 'cannot see it' to 'can be shown it happened,' the tragic-ignorance framing the entry sets up has no possible resolution and he can never develop past being a pure instrument."
+      hardness: important
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: "which missions his colleague has refused and which he has since completed in her place; any occasion on which someone with the relevant perception has shown him evidence of the harm his missions caused"
+    needs_deadline: "no"
+  who_acts:
+    - Vidar Haldorsen
+    - the named colleague whose aborted missions he completes
+    - the covert order's leadership, which assigns missions
+    - a third party with the relevant perceptual capacity who could eventually reveal the harm to him
+  knowledge:
+    - "Vidar does not know, and by his own zero perceptual floor cannot come to know through his own senses, that his completed missions carry a specific category of collateral harm; only an outside party with the relevant capacity can surface this to him."
+    - "UNCLEAR: whether his colleague or anyone else already knows about his perceptual blindness and is deliberately routing him toward the missions she refuses, or whether the pattern has arisen coincidentally, is unspecified."
+  ends_when: "never specified -- no end condition is authored; the entry gestures at a hidden-capacity-revealed arc without stating what would trigger or resolve it"
+
+- id: NPC-081
+  name: Uta Falkenrath
+  one_line: A council seat-holder representing communal rather than urban interests, named as a specific succession candidate should the current highest office-holder fall, via a distinctly popular rather than elite path.
+  scale: faction
+  season_requires:
+    - need: "A polity's highest office must be able to become vacant through its sitting holder's fall (defeat, death, removal), triggering a competition among multiple named candidates for succession."
+      why: "Without a vacancy-triggered contest, being a named 'succession candidate if [the office-holder] falls' has no event to be a candidate for, and her defining trait is inert."
+      hardness: core
+    - need: "Among the paths available to win a succession contest, one path must be able to run specifically through broad popular support, distinct from and tracked separately from elite or institutional backing."
+      why: "The source specifically marks her succession path as running through popular mandate rather than institutional favor -- collapsing this into one generic 'win the succession' check erases the entire point of casting her as the communal candidate rather than an elite one."
+      hardness: core
+    - need: "A council seat must be able to represent a distinct constituency (rural or communal interests) whose preferences can diverge from and conflict with a different seat's urban or elite constituency, on the same council."
+      why: "Her defining framing is as a communal voice against city power-politics; without a mechanical constituency divide, that framing has nothing to act against."
+      hardness: important
+    - need: "A person occupying a council seat must be able to step into an active dispute between two other named parties and reduce its severity or help broker a resolution, without thereby becoming the ruling authority over either party."
+      why: "Her archetype is specifically a mediator, not a ruler or an interested party -- without a genuine third-party mediation action, the archetype reduces to 'another councillor with an opinion.'"
+      hardness: important
+    - need: "A seat-holder's recorded convictions must be able to bias which side of a commune-versus-city dispute, or which succession candidate, she supports, in a way a third party can anticipate."
+      why: "Without this, her two named dispositions are unused data rather than something that shapes her choices."
+      hardness: important
+    - need: "UNCLEAR: the source names the current office-holder whose fall would trigger the succession she is a candidate for, but no entry for that person appears in this extraction, so what office he holds, what would cause him to fall, and who the other succession candidates are, is unresolved from this data alone."
+      why: "Without this, it's unclear what event actually starts her defining subplot or how contested it would be."
+      hardness: important
+    - need: "UNCLEAR: no territory is recorded for this character despite her title naming her a representative of a specific communal constituency, so which population or locality she actually represents is unspecified."
+      why: "Without this, it's unclear whose interests her mediation and succession candidacy are meant to serve."
+      hardness: important
+    - need: "A seat-holder marked as not-yet-canonical must already carry a specific succession-eligibility flag that persists and matters if the triggering condition is ever authored into play."
+      why: "Her development status should not by itself erase the conditional succession premise that is her main authored content."
+      hardness: flavour
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: "whether the sitting office-holder has fallen, whether a succession contest has opened, any standing support she has accumulated toward the popular-mandate path, and the current state of any commune-versus-city dispute she has mediated"
+    needs_deadline: "no fixed date is stated; a succession contest, once triggered, would plausibly need one, but the source is silent on it"
+  who_acts:
+    - Uta Falkenrath
+    - the sitting office-holder whose fall would trigger succession
+    - other succession candidates (unnamed in the source)
+    - the two disputing parties in any commune-versus-city conflict she mediates
+    - the wider council she sits on
+  knowledge:
+    - "UNCLEAR: whether Uta's succession candidacy is publicly known and declared, or a private ambition not yet visible to rivals, is not stated."
+    - "Any parties she mediates between would need to know she is acting as a neutral broker rather than an interested party for the mediation to function as described; the source does not specify how that neutrality is established or verified."
+  ends_when: "never specified -- an ongoing council seat with a conditional succession subplot that only resolves if and when the triggering vacancy is authored"
+
+- id: NPC-082
+  name: Njal Torberg
+  one_line: A military commander holding a council seat whose loyalty is explicitly tied to a cause rather than to the faction's current leader, creating a named fracture line if that leader's conduct diverges from the cause.
+  scale: faction
+  season_requires:
+    - need: "A subordinate's loyalty must be able to attach to an abstract cause or identity rather than to whichever specific leader currently pursues it, such that the leader's material successes do not automatically preserve that loyalty if his conduct diverges from the cause."
+      why: "This is the entire 'fights for the cause, not the leader' premise -- without loyalty-to-cause tracked separately from loyalty-to-leader, there is no fracture line for the leader's conduct to create."
+      hardness: core
+    - need: "A leader's own conduct -- specifically self-serving choices that visibly diverge from the cause he claims to serve -- must be able to independently degrade a specific subordinate's loyalty, separately from and even while that leader is otherwise winning."
+      why: "Without a channel from the leader's conduct to this subordinate's continued support, the named fracture line is color with no mechanical trigger and can never actually fire."
+      hardness: core
+    - need: "A military commander holding a named council seat must be able to command levies or forces distinct from the council's collective decision-making, so that his personal break with the faction's leader has a material consequence beyond a changed vote."
+      why: "His title implies command of actual force; without a mobilizable command attached to the seat, his eventual defection or continued loyalty changes nothing tangible."
+      hardness: important
+    - need: "A seat-holder's recorded convictions must be able to bias how readily and at what threshold he breaks from a leader whose conduct offends the cause, distinguishing him from a differently-weighted colleague facing the identical leader conduct."
+      why: "Without this, his two named dispositions are unused data rather than something that shapes when he actually breaks."
+      hardness: important
+    - need: "UNCLEAR: the source numbers this as a specific council seat, while two other characters in this extraction hold seats on the apparently same council without a stated number, and a separate faction-governing document states the council has only two named seats -- how many seats the council actually has, and where this numbered seat sits relative to the others, is unresolved."
+      why: "Without this, it's unclear whether all these seat-holders can be seated simultaneously."
+      hardness: flavour
+    - need: "A seat-holder marked as not-yet-canonical must already carry a specific, nameable break condition -- the leader's ego diverging from the cause -- precise enough to be triggered later, rather than a vague personality note."
+      why: "His development status should not by itself erase the specific, actionable premise that is his main authored content."
+      hardness: flavour
+    - need: "UNCLEAR: no territory is recorded for a titled military commander, so whether he commands levies tied to a specific mapped territory or holds an unlanded, peninsula-wide military office is unspecified."
+      why: "Without this, it's unclear what physical force actually follows him if he breaks."
+      hardness: important
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: "how far the leader's conduct has diverged from the cause across seasons, since a single incident is unlikely to be sufficient alone, and whether this character has already broken, remained loyal, or is still watching"
+    needs_deadline: "no"
+  who_acts:
+    - Njal Torberg
+    - the faction's current leader (named in the source, whose ego is the trigger)
+    - the wider council he sits on
+    - the military forces or levies under his command
+  knowledge:
+    - "He must be able to perceive or judge the leader's conduct as either serving or betraying the cause; the source does not specify what evidence or events would count as divergence, or how visible the leader's true motives are to him."
+    - "UNCLEAR: whether the leader is aware that this subordinate's loyalty is conditional and could be lost, or believes the support to be personal and secure, is not stated."
+  ends_when: "never specified -- persists as a standing fracture-line premise until, if ever, a break-or-no-break event is authored"
+
+- id: NPC-084
+  name: Frieda Kessler
+  one_line: A guild leader in named internal opposition to another named guild leader, arguing for a different priority resource than the one her faction's default strategic action actually uses.
+  scale: faction
+  season_requires:
+    - need: "An internal faction leader must be able to hold and publicly argue a position that runs contrary to her own faction's dominant strategic axis -- prioritizing a different tracked resource than the one the faction's standard action uses -- without that opposition being invisible or automatically overridden."
+      why: "'Internal opposition, pushes [resource A] over [resource B]' is meaningless unless there is an actual choice between prioritizing one tracked resource over another that a faction leader could make differently from the incumbent."
+      hardness: core
+    - need: "Two named leaders within the same faction must be able to hold opposing policy positions such that the faction's actual seasonal choices can shift between them depending on which currently holds more internal support, rather than one leader's stance being permanently fixed as the faction's position."
+      why: "Without contestable internal leadership, her opposition is flavor text -- she can never actually change what her faction does."
+      hardness: core
+    - need: "A communal-class advocate must be able to draw support specifically from lower or working membership of her institution, distinct from its leadership tier, giving her a base of support separate from her own formal council rank."
+      why: "Her archetype is a communal advocate for a class, not merely a councillor with a personal opinion; without a distinct base, her advocacy has no leverage against her rival beyond her single vote."
+      hardness: important
+    - need: "A seat-holder's recorded conviction must be able to bias her toward policies favoring collective outcomes over other available framings in a way a third party can anticipate."
+      why: "Without this, her recorded disposition is unused data rather than something that shapes her advocacy."
+      hardness: important
+    - need: "UNCLEAR: the source names a specific rival as the target of her opposition, but no entry for that person appears in this extraction, so whether he is the sitting guild leader, a rival councillor, or a policy position rather than a person, is unresolved from this data alone."
+      why: "Without this, it's unclear what exactly she is contesting for and against."
+      hardness: important
+    - need: "UNCLEAR: no territory is recorded, so whether her guild-council authority is peninsula-wide or tied to a specific settlement's guild chapter is unspecified."
+      why: "Without this, it's unclear how large a constituency her communal advocacy actually covers."
+      hardness: flavour
+    - need: "A seat-holder marked as not-yet-canonical must already carry a specific, actionable policy stance precise enough to generate distinguishable in-play consequences depending on whether she or her rival prevails, rather than a vague personality trait."
+      why: "Her development status should not by itself erase the concrete policy content that is her main authored trait."
+      hardness: flavour
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: "which of the two leaders' policy positions currently governs the faction's action, and how much internal support each currently holds"
+    needs_deadline: "no"
+  who_acts:
+    - Frieda Kessler
+    - the named rival she opposes
+    - the wider guild leadership council
+    - the working guild-class membership she draws support from
+  knowledge:
+    - "UNCLEAR: whether her opposition is openly declared within the council or conducted quietly, and how visible her communal-class support base is to her rival, is not stated."
+  ends_when: "never specified -- an ongoing internal policy contest with no authored resolution condition"
+
+- id: NPC-085
+  name: Nessa Grindvold
+  one_line: A legal advocate who defends guild autonomy against the ruling authority's regulatory action by arguing precedent at a formal court venue.
+  scale: faction
+  season_requires:
+    - need: "A guild's autonomy or privileges must be able to be formally challenged by the ruling authority's regulatory action, with a distinct procedural venue where that challenge can be contested rather than resolved automatically by whichever side has more raw power."
+      why: "Being a 'legal representative at [a] court' who 'defends guild autonomy against regulation' both presuppose a real contested venue -- without one, her entire office has nothing to attend."
+      hardness: core
+    - need: "An advocate must be able to cite established precedent or a prior ruling to strengthen a present argument, with correctly-applicable precedent measurably improving her odds relative to arguing without it."
+      why: "Her recorded conviction and resonant style both point at argument-from-precedent as her core method; without precedent mattering mechanically, her jurist archetype -- someone famous specifically for reconciling and citing law -- is empty flavor."
+      hardness: core
+    - need: "The outcome of a formal contest over guild autonomy must be able to durably change what regulatory actions the ruling authority can or cannot take against that guild afterward, rather than resetting to the same contestable state every time."
+      why: "Without a durable outcome, no case she wins or loses matters -- the same regulation could simply be re-attempted next season regardless of the prior ruling."
+      hardness: important
+    - need: "A seat-holder's recorded convictions must be able to bias which specific arguments or cases she chooses to pursue in a way a third party can anticipate."
+      why: "Without this, her recorded dispositions are unused data rather than something that shapes her advocacy choices."
+      hardness: important
+    - need: "UNCLEAR: no territory is recorded, so whether her advocacy covers a single settlement's guild chapter, one region's guilds, or her entire faction peninsula-wide is unspecified."
+      why: "Without this, it's unclear how much is actually at stake in any single case she argues."
+      hardness: important
+    - need: "UNCLEAR: the source does not specify who judges or presides over the court venue where she argues, nor what standard or authority determines whether her argument succeeds."
+      why: "Without this, it's unclear whether her cases can be won on the merits or are decided by an unaccountable third party."
+      hardness: important
+    - need: "A person marked as not-yet-canonical must already carry a specific adversarial relationship -- her institution against the ruling authority's regulatory reach -- precise enough to generate distinguishable case-by-case outcomes, rather than a vague personality trait."
+      why: "Her development status should not by itself erase the concrete adversarial premise that is her main authored content."
+      hardness: flavour
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: "the outcome and precedent value of every prior case she has argued, since her method depends on citing prior rulings"
+    needs_deadline: "no filing or ruling deadline is stated for any case"
+  who_acts:
+    - Nessa Grindvold
+    - the presiding authority at the court venue (unnamed in the source)
+    - officials of the ruling authority pursuing the regulation she contests
+    - the guild or guilds she represents
+  knowledge:
+    - "UNCLEAR: whether a ruling is public and binding on future attempts, or can be quietly disregarded by the ruling authority afterward, is not specified."
+  ends_when: "never specified -- an ongoing advocacy role with no authored end condition; individual cases presumably end at ruling but the office persists"
+
+- id: NPC-089
+  name: Zoe Palaiologina
+  one_line: A frontier governor of a foreign empire who is the personal decision-point for whether that empire probes, pressures, or invades the peninsula, driven by a sincerely-held imperial conviction rather than cynicism.
+  scale: realm
+  season_requires:
+    - need: "A foreign power's posture toward a neighboring territory must be selectable, on a recurring basis, from at least three qualitatively different graduated options -- a minimal probing action, a more assertive pressure action, and outright invasion -- each carrying different costs and different threshold conditions for the more severe response."
+      why: "Deciding whether the empire 'probes, presses, or invades' is a structured three-way choice, not a binary war-or-peace toggle -- without the middle option being genuinely distinct with its own consequences, the whole escalation ladder collapses to a coin flip."
+      hardness: core
+    - need: "A single named frontier governor must be able to be the actual decision-point for which of those graduated postures her empire takes, such that influencing, replacing, or removing her personally changes which option gets chosen."
+      why: "Without her being the real locus of decision rather than a passive reporter of a decision made elsewhere, she is a titled placeholder and the entire 'foreign threat governed by one person's judgment' premise fails."
+      hardness: core
+    - need: "A frontier governor's recorded conviction toward her own polity's legitimacy and mission -- framed explicitly as sincere rather than cynical -- must be able to bias her escalation choice toward more assertive options than a self-interested equivalent in her seat would choose, in a way a third party could exploit or work around."
+      why: "Her sincerity is presented as a specific, load-bearing character trait, implicitly contrasted against opportunism; without it actually shifting her decisions, it is unused flavor."
+      hardness: important
+    - need: "Actions taken by the neighboring power she is watching must be able to visibly shift which of the three postures currently looks justified to her, so that choices on that side can provoke or de-escalate her rather than her following a fixed script."
+      why: "Without her escalation ladder being responsive to observable conduct, there is no way for the neighboring side's play to affect the external threat level at all."
+      hardness: important
+    - need: "UNCLEAR: the source does not state what territory or frontier zone she governs, nor what resources -- troops, ships, administrative reach -- her office commands, so the material weight behind any of the three postures is unspecified."
+      why: "Without this, it's unclear how large a consequence 'invade' would actually be relative to 'press.'"
+      hardness: important
+    - need: "UNCLEAR: whether her decision is made unilaterally from her frontier post or requires authorization from a more senior authority above her is not stated."
+      why: "Without this, it's unclear whether influencing her alone is sufficient to change the empire's posture, or whether a higher authority could simply override her."
+      hardness: important
+    - need: "A person marked as not-yet-canonical must already carry a fully-formed three-option escalation framework precise enough to drive distinguishable outcomes for the wider external-threat axis, rather than a vague personality note."
+      why: "Her development status should not by itself erase the concrete decision structure that is her main authored content."
+      hardness: flavour
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: "the current posture level and what conduct on the neighboring side has pushed it up or down across past seasons"
+    needs_deadline: "unclear -- an active graduated-threat ladder implies accumulating pressure toward invasion, but the source states no specific date"
+  who_acts:
+    - Zoe Palaiologina
+    - a more senior authority above her, if one exists (unnamed in the source)
+    - the neighboring factions whose conduct she observes
+  knowledge:
+    - "UNCLEAR: whether the neighboring side has any way to observe or estimate her empire's current posture level before it manifests as an action, or whether it is only visible in hindsight once she acts, is not stated."
+  ends_when: "never specified -- an ongoing external-threat governance role with no stated resolution condition"
+
+- id: NPC-090
+  name: Stephanos Doukas
+  one_line: A foreign empire's trade official enforcing a pre-existing treaty at a named interface, in an ongoing paired relationship with a specific named counterparty from the other side.
+  scale: faction
+  season_requires:
+    - need: "A trade relationship between two polities must be able to be governed by a specific pre-existing treaty whose terms constrain what either side's trade officials can unilaterally change, such that violating or renegotiating it is a distinguishable act from ordinary commerce."
+      why: "'Enforces ancient trade treaties' presupposes the treaty is a real constraining document, not decorative history -- without enforceable terms, there is nothing for him to enforce."
+      hardness: core
+    - need: "Two named officials from different polities must be able to interact directly and repeatedly over the same ongoing trade relationship, with each one's individual choices -- strict enforcement versus flexibility -- shifting the relationship's trajectory."
+      why: "Being 'counterparty to' a specific named individual describes a recurring bilateral relationship, not a one-off encounter -- without recurring paired interaction, the counterparty framing is unused."
+      hardness: core
+    - need: "A trade official's recorded conviction toward established precedent and order must be able to bias him toward strict, by-the-letter enforcement of old treaty terms even where a more flexible reading would be more advantageous, in a way his counterparty can anticipate and plan around."
+      why: "Without predictable rigidity, his archetype -- a famously exacting, rule-bound regulator -- reduces to a generic trade contact."
+      hardness: important
+    - need: "The regulated trade interface must be able to generate a specific, resolvable dispute -- a violation, a disputed toll, a smuggling attempt, a request for an exception -- that the two counterparty officials must jointly or adversarially resolve, distinct from the treaty's terms simply applying themselves automatically."
+      why: "Without discrete disputable events, there is no play at the interface -- the treaty just silently governs trade in the background forever."
+      hardness: important
+    - need: "UNCLEAR: no territory is recorded, though his role names a specific interface as his post -- whether that place is itself a mapped territory, a third external polity, or an abstract trade route is not resolved from this entry."
+      why: "Without this, it's unclear where in the world his enforcement actions physically occur."
+      hardness: important
+    - need: "UNCLEAR: the source names a specific counterparty official, but no entry for that person appears in this extraction, so which polity or faction he represents, and what authority he holds, is unresolved from this data alone."
+      why: "Without this, it's unclear who the other half of his defining relationship actually is."
+      hardness: important
+    - need: "A person marked as not-yet-canonical must already carry a specific, load-bearing external relationship -- the treaty and the named counterparty -- precise enough to generate distinguishable trade-dispute outcomes, rather than a vague personality note."
+      why: "His development status should not by itself erase the concrete relational premise that is his main authored content."
+      hardness: flavour
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: "the treaty's standing terms, any accumulated grievances or precedent-setting exceptions from past disputes with his counterparty, and the current state of the trade relationship"
+    needs_deadline: "no"
+  who_acts:
+    - Stephanos Doukas
+    - his named counterparty trade official
+    - the more senior authority he answers to (unnamed in the source)
+  knowledge:
+    - "UNCLEAR: whether either official can privately deviate from strict treaty enforcement without the other or a superior authority learning of it, and how such deviations would be discovered, is not stated."
+  ends_when: "never specified -- an ongoing regulatory-enforcement role with no authored end condition"
