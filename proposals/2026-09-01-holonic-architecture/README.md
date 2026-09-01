@@ -40,11 +40,15 @@ unbounded.
 | `00_ADJUDICATION.md` | the answer: three senses of "holonic" separated, four collisions, which steps a container may run, and the head's own N/E/R admission test run on this proposal |
 | `01_THE_CONTRACT_HIERARCHY.md` | **M2** — a spine of six levels, two axes that are deliberately not levels, and a generated composite. Cites and departs from two in-chain incumbents (#339, #345) |
 | `02_THE_WRAPPER_LAYER.md` | **M1** — one rule, four duties, four nevers. Narrowed by the N-line test to **the emission side only** |
+| `03_DROPPED_IN_CHAIN.md` | **24 things the chain decided and then lost**, ranked, each naming the later section that restates its neighbours without it. Four re-verified by hand; the rest reported at sweep strength and marked |
 
 ## Method
 
-A Fable 5.1 context sweep of #337–#352, then `proposals/2026-09-01-shape-tracer-audit/` read in full
-against the head, then the head's own suite read directly. **This proposal was run against the head's
+A Fable 5.1 context sweep of #337–#352 and a second Fable pass hunting dropped rulings (`03`), then
+`proposals/2026-09-01-shape-tracer-audit/` read in full against the head, then the head's own suite
+read directly. **`03` §1.1 states which of its items were re-verified by hand and which are reported at
+sweep strength** — five of them bear directly on `00`–`02`, and one (`D-20`) is a **counter-case to
+`00` §C4 that is admitted there rather than argued away**. **This proposal was run against the head's
 admission test** (`01_THROUGHLINE.md` §6) rather than exempting itself from it — that test is what
 narrowed `02` from a general wrapper layer to an emission-side one, and the narrowing is recorded in
 `00` §5 rather than presented as the original design.
