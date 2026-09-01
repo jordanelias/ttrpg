@@ -5,7 +5,7 @@ did not aim.** Every row is reproduced verbatim so a reader can judge whether th
 miss is a routing failure (fixable) or a genuine absence of any surface to probe
 (a finding about the shape).
 
-**53 `core` rows and 89 non-core rows did not route.**
+**51 `core` rows and 87 non-core rows did not route.**
 
 ## The vocabulary of the unrouted `core` rows
 
@@ -23,10 +23,9 @@ no execution for.
 | different | 9 |
 | authority | 8 |
 | named | 8 |
-| faction | 7 |
-| distinct | 7 |
 | institutions | 7 |
 | decision | 6 |
+| faction | 6 |
 | leaders | 6 |
 | relationship | 6 |
 | choice | 5 |
@@ -35,6 +34,7 @@ no execution for.
 | institutional | 5 |
 | action | 5 |
 | itself | 5 |
+| distinct | 5 |
 | institution | 5 |
 | loyalty | 5 |
 | private | 5 |
@@ -57,9 +57,9 @@ no execution for.
 | thread | 3 |
 | persons | 3 |
 | every | 3 |
-| activity | 3 |
 | personally | 3 |
 | later | 3 |
+| specifically | 3 |
 
 ## Every unrouted `core` row, verbatim
 
@@ -73,7 +73,6 @@ no execution for.
 - **[NPC-012]** A player who identifies his true motive must be able to offer him something categorically different from a bribe or a threat -- a real, verifiable path to recall -- and have that offer change his behavior, with the engine able to distinguish a genuine offer from a false one via his own judgment.
 - **[NPC-004]** A second person with the right capability must be able to run a targeted check ON Sæmund and learn something about him (his latent Thread Sensitivity) that he cannot detect in himself by any means available to him.
 - **[NPC-083]** Each administrative action must be resolvable by more than one method, where the choice of method hands durable influence over the settlement to a different internal faction, rather than the raw magnitude of the action being the only thing that changes.
-- **[NPC-007]** Two separate economic actors who each independently built one half of the same tainted supply chain must have their exposure risks linked, such that revealing the taint through EITHER one damages BOTH, even though neither caused nor fully understands the connection.
 - **[NPC-071]** A ruler's formal legal advisor must be able to give her frank counsel without that act of advising itself exposing her to personal consequence -- advising truthfully must be a protected kind of exchange, distinct from ordinary conversation.
 - **[NPC-034]** A person embedded in one institution's inner circle must be able to be the single necessary formal conduit through which a SECOND institution's authority -- to which he actually answers -- can legally act inside the first institution's territory; without him, that authority does not exist there procedurally.
 - **[NPC-034]** A person must be able to sit in formal council for one institution while his substantive loyalty and reporting duty run to a different institution's leadership, such that the two institutions could in principle issue him contradictory instructions in the same season.
@@ -105,7 +104,6 @@ no execution for.
 - **[NPC-036]** A person holding a specific named Crown command post must be able to exist as more than an identity record -- the post itself must be able to affect what the Crown can materially do in a season, even in the total absence of an authored personal arc.
 - **[NPC-037]** A named character's faction affiliation, once established in one source document, must be able to be corrected to a different faction entirely in a later authoritative pass, with the corrected affiliation taking full effect on how she participates in play, not leaving her split between two institutional identities.
 - **[NPC-039]** Extended engagement with archived or restricted material must be able to gradually produce a normally-restricted perceptual capacity in a person who did not previously have it, as an emergent condition arising from the activity itself rather than a fixed trait assigned at creation.
-- **[NPC-041]** A faction operating partly underground must be able to have leadership that operates in a visible, public-facing mode distinct from a contrasting non-visible mode, with the visible mode carrying its own distinct exposure profile compared to underground movement activity.
 - **[NPC-041]** Two named individuals must be able to jointly hold the same leadership status for one faction at the same time, with actions or consequences affecting one of them able to be distinct from, or shared with, the other.
 - **[NPC-073]** A named seat on a faction's ruling council must be able to cast a distinct position on faction-wide policy decisions, separate from the seat-holder's regional/local authority.
 - **[NPC-080]** A person must be able to hold a hard floor of zero in a perceptual capacity that governs whether he can detect a specific category of harm his own actions cause, such that he completes tasks with a real ongoing cost he is structurally incapable of noticing, through no fault of will or character.
@@ -137,7 +135,6 @@ no execution for.
 - *[NPC-083]* Named local actors under a governor's authority must be able to want incompatible things from EACH OTHER (not just from her), so that resolving one actor's grievance necessarily worsens another's, independent of any single choice she makes.
 - *[NPC-083]* The settlement's overall pressure must rise on its own when demands go unmet and fall when the governor resolves them, so that an ignored settlement escalates and a well-managed one still keeps generating events rather than going permanently quiet.
 - *[NPC-038]* That superior must be able to act against his own nominal superior's explicit instruction, at a real risk of outright failure (worse than compliance) and a cost attached even to success.
-- *[NPC-038]* This office-holder must be able to remain a purely institutional, non-directly-playable modifier under ordinary conditions, and only become a personally-acting, decision-making NPC once the institution falls below a stability threshold.
 - *[NPC-013]* A player character must be able to intervene directly in this office-holder's tithe-collection pattern in one specific territory, altering the outcome there without requiring institutional authority over the Cardinal himself.
 - *[NPC-007]* A person must be able to hold two distinct organizational offices at once -- a cross-faction liaison seat and a rank within her home institution's own ladder -- each with its own advancement conditions, usable somewhat independently.
 - *[NPC-020]* The leader must be able to formally and publicly recognize another person's deed in a way that changes what that person may subsequently do, and this recognition must be withholdable, not automatic.
@@ -164,7 +161,6 @@ no execution for.
 - *[NPC-032]* Ascending to supreme authority through this path must be able to instantly and permanently redefine what the ruling institution stands for, flipping an ambient, privately-held policy uncertainty into an explicit, declared doctrine, rather than merely changing which person occupies the seat.
 - *[NPC-032]* A minor heir's declared loyalty must be able to transfer wholesale from one guardian to another the moment the first guardian is removed, without requiring the heir's own independent choice in that moment.
 - *[NPC-031]* If multiple outside parties reach the same threshold of investment in the heir at the same point in time, the tie must be broken by an objective, checkable prior fact rather than by arbitrary fiat.
-- *[NPC-031]* The heir must be able to become a formal instrument of an external, rival power's diplomacy specifically when both the external power's own strength has crossed a threshold and the heir's personal relationship with the current regent has soured, rather than either condition alone being sufficient.
 - *[NPC-030]* This person's return to her home polity must be conditioned entirely on an unrelated family member's death via an unpredictable event, and that return must require an active operation into hostile third-party territory rather than a simple diplomatic recall.
 - *[NPC-030]* If this person is eventually returned home and made politically relevant, her formative external upbringing must be able to shape how her political identity subsequently develops, distinct from how a home-raised heir's identity develops.
 - *[NPC-030]* A person's internal epistemic stability must be able to be measurably reduced by the structural condition of divided loyalty and hostage status alone, independent of any specific event happening to her that season.

@@ -16,6 +16,24 @@ checking.* So every probe declares its provenance:
 | `convention` | the shape permits it and only a reader stops it. §27.2 is the design's own example and says so out loud | 1 |
 | `probe-model` | the probe supplies a model the design does not, to reach the question at all | 5 |
 
+## ⚠ THE ENFORCEMENT SPLIT — the single most important number in this ledger
+
+**Of 54 gaps, 27 were raised BY THE SHAPE ITSELF and 27 exist only because THERE IS NO SIGNATURE TO CALL.**
+
+That is close to an even split, and it matters more than any case verdict. A refusal a
+gate enforces and a refusal that exists because nobody wrote the function are different
+guarantees, and §34 is explicit that *overstating this column is the failure mode*.
+
+**Why the distinction bites hardest at the port.** §47 concedes that [engine] GDScript
+has no module system and no visibility modifiers, so the guarantee there is
+*unreachable-by-name*, not *unwritable*. Every refusal in the `no-signature` half is one
+a contributor closes by simply writing the function — no gate fires, no test goes red,
+and the design's own §27.2 admission applies: *enforced by a person noticing*.
+
+**And 7 of 55 PASSes are not by construction
+either** — they are listed individually below and should be discounted accordingly. A
+`probe-model` PASS means the instrument supplied something the design does not.
+
 ## The probes
 
 | probe | verdict | by | § | what it tests |

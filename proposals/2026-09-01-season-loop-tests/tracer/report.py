@@ -135,6 +135,29 @@ def emit(rep: dict, trace_rows: list) -> None:
           f"| `no-signature` | nothing to call. The design supplies no function by which it could be attempted — which *is* the refusal, but **absence is not a guard** | {by['no-signature']} |",
           f"| `convention` | the shape permits it and only a reader stops it. §27.2 is the design's own example and says so out loud | {by['convention']} |",
           f"| `probe-model` | the probe supplies a model the design does not, to reach the question at all | {by['probe-model']} |",
+          "",
+          "## ⚠ THE ENFORCEMENT SPLIT — the single most important number in this ledger",
+          "",
+          f"**Of {sum(1 for v in pv.values() if v['verdict'] != 'PASS')} gaps, "
+          f"{sum(1 for v in pv.values() if v['verdict'] != 'PASS' and v['by'] == 'construction')} "
+          "were raised BY THE SHAPE ITSELF and "
+          f"{sum(1 for v in pv.values() if v['verdict'] != 'PASS' and v['by'] == 'no-signature')} "
+          "exist only because THERE IS NO SIGNATURE TO CALL.**",
+          "",
+          "That is close to an even split, and it matters more than any case verdict. A refusal a",
+          "gate enforces and a refusal that exists because nobody wrote the function are different",
+          "guarantees, and §34 is explicit that *overstating this column is the failure mode*.",
+          "",
+          "**Why the distinction bites hardest at the port.** §47 concedes that [engine] GDScript",
+          "has no module system and no visibility modifiers, so the guarantee there is",
+          "*unreachable-by-name*, not *unwritable*. Every refusal in the `no-signature` half is one",
+          "a contributor closes by simply writing the function — no gate fires, no test goes red,",
+          "and the design's own §27.2 admission applies: *enforced by a person noticing*.",
+          "",
+          f"**And {sum(1 for v in pv.values() if v['verdict'] == 'PASS' and v['by'] != 'construction')} "
+          f"of {sum(1 for v in pv.values() if v['verdict'] == 'PASS')} PASSes are not by construction",
+          "either** — they are listed individually below and should be discounted accordingly. A",
+          "`probe-model` PASS means the instrument supplied something the design does not.",
           "", "## The probes", "",
           "| probe | verdict | by | § | what it tests |", "|---|---|---|---|---|"]
     order = {"GAP": 0, "NOT-REFUSED": 1, "INSTRUMENT-ERROR": 2, "PASS": 3}

@@ -26,7 +26,7 @@ not the shape.
 | **[core]** The engine must represent something about a season of her life beyond identity-only reference data -- some tracked state that a player interaction can actually change -- for at least the sea | — | UNMAPPED | — |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-087 — Uwe Askeland  ·  **PLAYABLE**
+## NPC-087 — Uwe Askeland  ·  **NOT-ASSESSED**
 *person · 8 rows, 4 core · blockers: none*
 *ends when:* never automatically; only via a discovery-driven resolution (protect/report/leverage), or unremarked continuation.
 
@@ -130,7 +130,7 @@ not the shape.
 | A season in which she takes no visible action against her own sympathies must still register as a choice with consequences (an opportunity cost to her faction), not as a null default outcome | — | UNMAPPED | — |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-004 — Sæmund Haelgrund  ·  **PLAYABLE**
+## NPC-004 — Sæmund Haelgrund  ·  **NOT-ASSESSED**
 *person · 9 rows, 3 core · blockers: none*
 *ends when:* never fully -- a single investigation ends when Reconstructed (successfully or not), but Sæmund's personal arc (undiscovered / defected / suppressed-and-degrading) persists indefinitely until the TS-revelation branch fires
 
@@ -201,9 +201,9 @@ not the shape.
 | **[core]** The superior's own hidden compromising connection must be discoverable by an external party through sustained, high-quality effort, and that discovery must remove him from office AND specifi | `P5` | PASS | S19.3 |
 | The institution must be able to choose, in advance of exposure, to sacrifice this office-holder pre-emptively at a smaller but permanent cost, giving it a genuine bet to make under uncertain | `F3` | **FORBIDDEN** | S3-L1 |
 | The office's pattern of dispatching investigators must be able to fall unevenly on one population group even though the stated justification for each individual dispatch is doctrinal rather  | `W9` | PASS | S10.3 |
+| This office-holder must be able to remain a purely institutional, non-directly-playable modifier under ordinary conditions, and only become a personally-acting, decision-making NPC once the  | `W10` | **FORBIDDEN** | S10.1 |
 | Once activated by institutional crisis, this office-holder must be able to direct his branch's investigative machinery inward, at a peer who nominally holds equivalent rank, not only outward | `F12` | PASS | S11 |
 | That superior must be able to act against his own nominal superior's explicit instruction, at a real risk of outright failure (worse than compliance) and a cost attached even to success. | — | UNMAPPED | — |
-| This office-holder must be able to remain a purely institutional, non-directly-playable modifier under ordinary conditions, and only become a personally-acting, decision-making NPC once the  | — | UNMAPPED | — |
 
 ## NPC-013 — Aldric Tormann  ·  **BLOCKED**
 *faction · 7 rows, 2 core · blockers: F16, P26*
@@ -227,13 +227,13 @@ not the shape.
 |---|---|---|---|
 | **[core]** A faction representative must be able to repeatedly grow one faction stat at the direct, automatic expense of a second faction stat every season, as her default behavior rather than a one-ti | `F16` | **FORBIDDEN** | S3-L3 |
 | **[core]** An economic actor's supply chain must be able to carry a hidden property that she has no way to detect given her own perceptual limits, such that she is materially responsible for a conseque | `P5` | PASS | S19.3 |
+| **[core]** Two separate economic actors who each independently built one half of the same tainted supply chain must have their exposure risks linked, such that revealing the taint through EITHER one da | `F18` | PASS | S36.1 |
 | An internal rival within the same faction must be able to campaign, on an ongoing basis, for the opposite priority (collective standing over raw wealth) that this office-holder pursues, gene | `P14` | **UNSPECIFIED** | S18.2 |
 | A formal institutional gate she benefits from (an examination or credentialing process) must be able to carry a procedural, plausibly-deniable bias against a specific population, so that ind | `P5` | PASS | S19.3 |
-| **[core]** Two separate economic actors who each independently built one half of the same tainted supply chain must have their exposure risks linked, such that revealing the taint through EITHER one da | — | UNMAPPED | — |
 | A person must be able to hold two distinct organizational offices at once -- a cross-faction liaison seat and a rank within her home institution's own ladder -- each with its own advancement | — | UNMAPPED | — |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-071 — Torvi Heljason  ·  **DEGRADED**
+## NPC-071 — Torvi Heljason  ·  **NOT-ASSESSED**
 *person · 6 rows, 2 core · blockers: none*
 *ends when:* UNCLEAR -- no arc, trajectory, or end condition is specified anywhere in the source; she is explicitly below the corpus's own stated minimum for individual arc tracking
 
@@ -258,7 +258,7 @@ not the shape.
 | **[core]** This person's confidentiality obligation to the council he sits on must be able to come into direct tension with his reporting obligation to his true master, such that honoring one at some p | — | UNMAPPED | — |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-020 — Almud Almqvist  ·  **NOT-ASSESSED**
+## NPC-020 — Almud Almqvist  ·  **BLOCKED**
 *realm · 11 rows, 5 core · blockers: A15, P23*
 *ends when:* never automatically; his personal arc concludes only via one of several mutually exclusive branch conditions — reform, defensive consolidation, being overthrown by his own army, being consumed by a family tragedy, or his own death, at which point a different named person's case begins in his place
 
@@ -292,7 +292,7 @@ not the shape.
 | A person's capacity for a certain kind of perception must be able to be permanently foreclosed by their institutional belief system, reachable again only through a shock external to ordinary | — | UNMAPPED | — |
 | The leader must be able to shield a subordinate's confidential counsel from any mechanical or reputational penalty even when that counsel directly contradicts his own stated position. | — | UNMAPPED | — |
 
-## NPC-050 — Inge Baralta  ·  **NOT-ASSESSED**
+## NPC-050 — Inge Baralta  ·  **BLOCKED**
 *faction · 8 rows, 3 core · blockers: P14*
 *ends when:* never automatically; her personal arc resolves via unchallenged rule of her own duchy, a forced turn to extralegal action, or being cast out of the religious institution entirely, and separately her pursuit of the throne resolves win, loss, or her death/removal triggering her own duchy's succession
 
@@ -375,11 +375,11 @@ not the shape.
 | The heir's maturation from a dependent status into an independent political actor with his own agenda must be able to be triggered by any of several different kinds of event — elapsed time,  | `W9` | PASS | S10.3 |
 | The heir must be able to be killed by an unpredictable event that terminates his entire ongoing political arc and simultaneously reroutes a separate, compound set of consequences involving o | `P23` | **UNSPECIFIED** | S30.1 |
 | A foreign power with cultural or educational influence over an at-risk heir must be able to leverage that influence as a standing political threat even without ever acting on it, purely thro | `P14` | **UNSPECIFIED** | S18.2 |
+| The heir must be able to become a formal instrument of an external, rival power's diplomacy specifically when both the external power's own strength has crossed a threshold and the heir's pe | `P17` | **FORBIDDEN** | S22.4 |
 | **[core]** A minor political heir must be able to start with no fixed ideological alignment, such that his eventual alignment is determined by which external party successfully builds a relationship wi | — | UNMAPPED | — |
 | If multiple outside parties reach the same threshold of investment in the heir at the same point in time, the tie must be broken by an objective, checkable prior fact rather than by arbitrar | — | UNMAPPED | — |
 | **[core]** Once the heir's alignment locks in, whether through successful investment or through the window simply expiring, it must become permanently unresponsive to further investment or victories fr | — | UNMAPPED | — |
 | **[core]** The heir's relationship to whoever currently rules in his name must be able to range from voluntary total deference through open rivalry to an active, tracked contest for the same seat of po | — | UNMAPPED | — |
-| The heir must be able to become a formal instrument of an external, rival power's diplomacy specifically when both the external power's own strength has crossed a threshold and the heir's pe | — | UNMAPPED | — |
 
 ## NPC-030 — Elske Almqvist  ·  **BLOCKED**
 *realm · 7 rows, 2 core · blockers: P14*
@@ -395,7 +395,7 @@ not the shape.
 | If this person is eventually returned home and made politically relevant, her formative external upbringing must be able to shape how her political identity subsequently develops, distinct f | — | UNMAPPED | — |
 | A person's internal epistemic stability must be able to be measurably reduced by the structural condition of divided loyalty and hostage status alone, independent of any specific event happe | — | UNMAPPED | — |
 
-## NPC-001 — Edeyja  ·  **NOT-ASSESSED**
+## NPC-001 — Edeyja  ·  **BLOCKED**
 *world · 10 rows, 4 core · blockers: P26*
 *ends when:* never automatically — her holdout is indefinite by default; her personal arc concludes locally via a confrontation's resolution, a wager's pass or fail, or her post's actual transition into one of several possible forms of wider political organization
 
@@ -440,7 +440,7 @@ not the shape.
 | A convictions profile assigned by a general inference rule from role-type must still be able to produce behavior distinguishable from another character assigned convictions by the same rule  | — | UNMAPPED | — |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-011 — Alexios Laskaris  ·  **NOT-ASSESSED**
+## NPC-011 — Alexios Laskaris  ·  **BLOCKED**
 *person · 7 rows, 3 core · blockers: P14*
 *ends when:* never stated explicitly; presumably a permanent change in Elske's status, his removal from the Doux title, or a rupture with the Altonian imperial authority over the sandbagging -- the source names no defined terminus.
 
@@ -514,14 +514,14 @@ not the shape.
 | A character's canonical status must be able to remain fully usable in play under a plain verification citation, with no further caveat attached. | — | UNMAPPED | — |
 | *(3 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-041 — Aldric Hann  ·  **NOT-ASSESSED**
-*person · 6 rows, 2 core · blockers: none*
+## NPC-041 — Aldric Hann  ·  **BLOCKED**
+*person · 6 rows, 2 core · blockers: P17*
 *ends when:* never stated; no goal or arc is recorded, so no terminus is named.
 
 | need | probe | verdict | § |
 |---|---|---|---|
+| **[core]** A faction operating partly underground must be able to have leadership that operates in a visible, public-facing mode distinct from a contrasting non-visible mode, with the visible mode carr | `P17` | **FORBIDDEN** | S22.4 |
 | A visible faction leader with no recorded personal convictions or goals must still be able to be the target of, or initiator of, actions at the faction's own institutional scale, distinct fr | `P1` | PASS | S3-L1 |
-| **[core]** A faction operating partly underground must be able to have leadership that operates in a visible, public-facing mode distinct from a contrasting non-visible mode, with the visible mode carr | — | UNMAPPED | — |
 | **[core]** Two named individuals must be able to jointly hold the same leadership status for one faction at the same time, with actions or consequences affecting one of them able to be distinct from, o | — | UNMAPPED | — |
 | Two different named characters who share a first name but belong to entirely different factions and stories must be able to be tracked and referenced without conflation. | — | UNMAPPED | — |
 | A character's canonical status must be able to remain fully usable in play when affirmed through a resolution note rather than a citation to a specific canon source paragraph. | — | UNMAPPED | — |
@@ -563,7 +563,7 @@ not the shape.
 | A seat-holder whose people share a common cultural template must be able to default to that template's behavioral parameters wherever her own personal authored data is silent. | — | UNMAPPED | — |
 | *(2 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-080 — Vidar Haldorsen  ·  **PLAYABLE**
+## NPC-080 — Vidar Haldorsen  ·  **NOT-ASSESSED**
 *person · 7 rows, 2 core · blockers: none*
 *ends when:* never specified -- no end condition is authored; the entry gestures at a hidden-capacity-revealed arc without stating what would trigger or resolve it
 
