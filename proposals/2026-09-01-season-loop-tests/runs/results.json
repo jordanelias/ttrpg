@@ -1409,6 +1409,23 @@
      }
     },
     {
+     "need": "This office-holder must be able to remain a purely institutional, non-directly-playable modifier under ordinary conditions, and only become a personally-acting, decision-making NPC once the institution falls below a stability threshold.",
+     "hardness": "important",
+     "probe": "W10",
+     "verdict": {
+      "id": "W10",
+      "verdict": "GAP",
+      "detail": "Rung.morale assigned -- not a declared field of S10's record",
+      "kind": "FORBIDDEN",
+      "section": "S10.1",
+      "title": "a settlement holds a level of discontent",
+      "needs": "a Query over the containment subtree, owned by Nobody",
+      "law": "L3 -- every aggregate is a function, never a field. S22.1 -- if the aggregate is a function it CANNOT go stale and CANNOT be initialised and then forgotten, because there is nothing to initialise",
+      "by": "construction",
+      "tests": "a place must be able to hold a level of discontent that rises and falls"
+     }
+    },
+    {
      "need": "Once activated by institutional crisis, this office-holder must be able to direct his branch's investigative machinery inward, at a peer who nominally holds equivalent rank, not only outward at external heretics.",
      "hardness": "flavour",
      "probe": "F12",
@@ -1427,11 +1444,6 @@
    "unmapped": [
     {
      "need": "That superior must be able to act against his own nominal superior's explicit instruction, at a real risk of outright failure (worse than compliance) and a cost attached even to success.",
-     "hardness": "important",
-     "probe": null
-    },
-    {
-     "need": "This office-holder must be able to remain a purely institutional, non-directly-playable modifier under ordinary conditions, and only become a personally-acting, decision-making NPC once the institution falls below a stability threshold.",
      "hardness": "important",
      "probe": null
     }
@@ -1557,8 +1569,8 @@
    "verdict": "BLOCKED",
    "rows": 7,
    "core": 3,
-   "core_routed": 2,
-   "core_unmapped": 1,
+   "core_routed": 3,
+   "core_unmapped": 0,
    "core_blocked": 1,
    "blockers": [
     "F16"
@@ -1597,6 +1609,21 @@
      }
     },
     {
+     "need": "Two separate economic actors who each independently built one half of the same tainted supply chain must have their exposure risks linked, such that revealing the taint through EITHER one damages BOTH, even though neither caused nor fully understands the connection.",
+     "hardness": "core",
+     "probe": "F18",
+     "verdict": {
+      "id": "F18",
+      "verdict": "PASS",
+      "detail": "PASS-STRUCTURALLY: a Petition rising from below and a Dispensation enumerating the same executor coexist WITH NO ARBITRATION ANYWHERE IN THE SHAPE. The governor's 5 acts are the only scarcity, so the conflict is REAL and is resolved BY THE PERSON, which is L1. Both objects are the probe's data, not the shape's -- nothing constructs either. See F19",
+      "kind": null,
+      "section": "S36.1",
+      "title": "a place's demands conflict with its superior's orders",
+      "by": "probe-model",
+      "tests": "a place must be able to generate demands of its own that cut against what the authority above ordered"
+     }
+    },
+    {
      "need": "An internal rival within the same faction must be able to campaign, on an ongoing basis, for the opposite priority (collective standing over raw wealth) that this office-holder pursues, generating a live internal fork a player can take a side in.",
      "hardness": "important",
      "probe": "P14",
@@ -1630,11 +1657,6 @@
     }
    ],
    "unmapped": [
-    {
-     "need": "Two separate economic actors who each independently built one half of the same tainted supply chain must have their exposure risks linked, such that revealing the taint through EITHER one damages BOTH, even though neither caused nor fully understands the connection.",
-     "hardness": "core",
-     "probe": null
-    },
     {
      "need": "A person must be able to hold two distinct organizational offices at once -- a cross-faction liaison seat and a rank within her home institution's own ladder -- each with its own advancement conditions, usable somewhat independently.",
      "hardness": "important",
@@ -2532,6 +2554,23 @@
       "by": "construction",
       "tests": "how a character is regarded must be able to differ from how they regard themselves"
      }
+    },
+    {
+     "need": "The heir must be able to become a formal instrument of an external, rival power's diplomacy specifically when both the external power's own strength has crossed a threshold and the heir's personal relationship with the current regent has soured, rather than either condition alone being sufficient.",
+     "hardness": "flavour",
+     "probe": "P17",
+     "verdict": {
+      "id": "P17",
+      "verdict": "GAP",
+      "detail": "resolver-side Query 'exposure' aggregates per-person tallies across holders",
+      "kind": "FORBIDDEN",
+      "section": "S22.4",
+      "title": "hidden exposure accumulates across seasons",
+      "needs": "",
+      "law": "L3 clause 2 -- THAT IS STORED, MONOTONE, NEVER-DECAYING UNREST IN ALL BUT NAME -- worse than the field L3 banned, because the banned field could at least go down",
+      "by": "construction",
+      "tests": "a character's risk must be able to build up quietly across seasons without anyone acting"
+     }
     }
    ],
    "unmapped": [
@@ -2553,11 +2592,6 @@
     {
      "need": "The heir's relationship to whoever currently rules in his name must be able to range from voluntary total deference through open rivalry to an active, tracked contest for the same seat of power, determined by the accumulated quality of their relationship at the moment he matures.",
      "hardness": "core",
-     "probe": null
-    },
-    {
-     "need": "The heir must be able to become a formal instrument of an external, rival power's diplomacy specifically when both the external power's own strength has crossed a threshold and the heir's personal relationship with the current regent has soured, rather than either condition alone being sufficient.",
-     "hardness": "flavour",
      "probe": null
     }
    ],
@@ -3296,14 +3330,33 @@
    "name": "Aldric Hann",
    "scale": "person",
    "source": "NPC4.yaml",
-   "verdict": "NOT-ASSESSED",
+   "verdict": "BLOCKED",
    "rows": 6,
    "core": 2,
-   "core_routed": 0,
-   "core_unmapped": 2,
-   "core_blocked": 0,
-   "blockers": [],
+   "core_routed": 1,
+   "core_unmapped": 1,
+   "core_blocked": 1,
+   "blockers": [
+    "P17"
+   ],
    "routed": [
+    {
+     "need": "A faction operating partly underground must be able to have leadership that operates in a visible, public-facing mode distinct from a contrasting non-visible mode, with the visible mode carrying its own distinct exposure profile compared to underground movement activity.",
+     "hardness": "core",
+     "probe": "P17",
+     "verdict": {
+      "id": "P17",
+      "verdict": "GAP",
+      "detail": "resolver-side Query 'exposure' aggregates per-person tallies across holders",
+      "kind": "FORBIDDEN",
+      "section": "S22.4",
+      "title": "hidden exposure accumulates across seasons",
+      "needs": "",
+      "law": "L3 clause 2 -- THAT IS STORED, MONOTONE, NEVER-DECAYING UNREST IN ALL BUT NAME -- worse than the field L3 banned, because the banned field could at least go down",
+      "by": "construction",
+      "tests": "a character's risk must be able to build up quietly across seasons without anyone acting"
+     }
+    },
     {
      "need": "A visible faction leader with no recorded personal convictions or goals must still be able to be the target of, or initiator of, actions at the faction's own institutional scale, distinct from what an ordinary unranked member of the same faction could do.",
      "hardness": "important",
@@ -3321,11 +3374,6 @@
     }
    ],
    "unmapped": [
-    {
-     "need": "A faction operating partly underground must be able to have leadership that operates in a visible, public-facing mode distinct from a contrasting non-visible mode, with the visible mode carrying its own distinct exposure profile compared to underground movement activity.",
-     "hardness": "core",
-     "probe": null
-    },
     {
      "need": "Two named individuals must be able to jointly hold the same leadership status for one faction at the same time, with actions or consequences affecting one of them able to be distinct from, or shared with, the other.",
      "hardness": "core",
@@ -4884,13 +4932,15 @@
    "name": "The Practitioner Who Stopped",
    "scale": "person",
    "source": "ARC1.yaml",
-   "verdict": "PLAYABLE",
+   "verdict": "BLOCKED",
    "rows": 8,
    "core": 3,
-   "core_routed": 2,
-   "core_unmapped": 1,
-   "core_blocked": 0,
-   "blockers": [],
+   "core_routed": 3,
+   "core_unmapped": 0,
+   "core_blocked": 1,
+   "blockers": [
+    "P17"
+   ],
    "routed": [
     {
      "need": "a person's capacity to act as an independent agent must be able to be lost permanently and irrecoverably once a tracked personal resource crosses zero, converting them into a fully lucid, fully competent being who nonetheless can no longer choose anything",
@@ -4905,6 +4955,40 @@
       "title": "births and deaths move a population",
       "by": "construction",
       "tests": "a place's population must be able to grow and shrink"
+     }
+    },
+    {
+     "need": "a character must be able to conceal an approaching personal threshold from their own institution because no available political framing of that information benefits them",
+     "hardness": "core",
+     "probe": "P17",
+     "verdict": {
+      "id": "P17",
+      "verdict": "GAP",
+      "detail": "resolver-side Query 'exposure' aggregates per-person tallies across holders",
+      "kind": "FORBIDDEN",
+      "section": "S22.4",
+      "title": "hidden exposure accumulates across seasons",
+      "needs": "",
+      "law": "L3 clause 2 -- THAT IS STORED, MONOTONE, NEVER-DECAYING UNREST IN ALL BUT NAME -- worse than the field L3 banned, because the banned field could at least go down",
+      "by": "construction",
+      "tests": "a character's risk must be able to build up quietly across seasons without anyone acting"
+     }
+    },
+    {
+     "need": "a character operating near a personal collapse threshold must be able to ration their engagement, holding the risk at a self-chosen floor across multiple seasons, rather than either fully stopping or continuing at full risk",
+     "hardness": "important",
+     "probe": "P17",
+     "verdict": {
+      "id": "P17",
+      "verdict": "GAP",
+      "detail": "resolver-side Query 'exposure' aggregates per-person tallies across holders",
+      "kind": "FORBIDDEN",
+      "section": "S22.4",
+      "title": "hidden exposure accumulates across seasons",
+      "needs": "",
+      "law": "L3 clause 2 -- THAT IS STORED, MONOTONE, NEVER-DECAYING UNREST IN ALL BUT NAME -- worse than the field L3 banned, because the banned field could at least go down",
+      "by": "construction",
+      "tests": "a character's risk must be able to build up quietly across seasons without anyone acting"
      }
     },
     {
@@ -4925,22 +5009,12 @@
    ],
    "unmapped": [
     {
-     "need": "a character must be able to conceal an approaching personal threshold from their own institution because no available political framing of that information benefits them",
-     "hardness": "core",
-     "probe": null
-    },
-    {
      "need": "an institution's aggregate operational capacity must be able to silently degrade because one specific individual quietly stopped contributing, while the institution's headline stats (its authority, its legitimacy) remain visibly unaffected",
      "hardness": "important",
      "probe": null
     },
     {
      "need": "players must be able to notice an absence -- situations resolving differently than they would with a specific capability present -- rather than being told directly that someone has stopped acting",
-     "hardness": "important",
-     "probe": null
-    },
-    {
-     "need": "a character operating near a personal collapse threshold must be able to ration their engagement, holding the risk at a self-chosen floor across multiple seasons, rather than either fully stopping or continuing at full risk",
      "hardness": "important",
      "probe": null
     },
@@ -5703,13 +5777,28 @@
    "verdict": "BLOCKED",
    "rows": 7,
    "core": 4,
-   "core_routed": 3,
-   "core_unmapped": 1,
+   "core_routed": 4,
+   "core_unmapped": 0,
    "core_blocked": 1,
    "blockers": [
     "P17"
    ],
    "routed": [
+    {
+     "need": "a single administrator's documented psychological vulnerability must be able to be independently exploited by MULTIPLE unrelated factions simultaneously, each establishing its own separate influence channel through the same mechanism without needing to coordinate with each other",
+     "hardness": "core",
+     "probe": "F18",
+     "verdict": {
+      "id": "F18",
+      "verdict": "PASS",
+      "detail": "PASS-STRUCTURALLY: a Petition rising from below and a Dispensation enumerating the same executor coexist WITH NO ARBITRATION ANYWHERE IN THE SHAPE. The governor's 5 acts are the only scarcity, so the conflict is REAL and is resolved BY THE PERSON, which is L1. Both objects are the probe's data, not the shape's -- nothing constructs either. See F19",
+      "kind": null,
+      "section": "S36.1",
+      "title": "a place's demands conflict with its superior's orders",
+      "by": "probe-model",
+      "tests": "a place must be able to generate demands of its own that cut against what the authority above ordered"
+     }
+    },
     {
      "need": "small, individually low-cost influence-purchases against the same target must be able to accumulate into a named aggregate condition that only becomes consequential once a threshold NUMBER of distinct factions is reached, not a magnitude of any one purchase",
      "hardness": "core",
@@ -5789,11 +5878,6 @@
     }
    ],
    "unmapped": [
-    {
-     "need": "a single administrator's documented psychological vulnerability must be able to be independently exploited by MULTIPLE unrelated factions simultaneously, each establishing its own separate influence channel through the same mechanism without needing to coordinate with each other",
-     "hardness": "core",
-     "probe": null
-    },
     {
      "need": "a resolution roll's failure must be able to leave the underlying situation completely unresolved and unchanged, with no forced fallback outcome, so the accumulating dynamic can simply continue",
      "hardness": "important",
@@ -5899,25 +5983,52 @@
    "name": "The Favour Gate",
    "scale": "faction",
    "source": "ARC2.yaml",
-   "verdict": "NOT-ASSESSED",
+   "verdict": "BLOCKED",
    "rows": 6,
    "core": 3,
-   "core_routed": 0,
-   "core_unmapped": 3,
-   "core_blocked": 0,
-   "blockers": [],
-   "routed": [],
-   "unmapped": [
+   "core_routed": 2,
+   "core_unmapped": 1,
+   "core_blocked": 2,
+   "blockers": [
+    "W10"
+   ],
+   "routed": [
     {
      "need": "a faction that is not a single decision-maker must have its allegiance/capacity be a per-location quantity rather than one faction-wide value",
      "hardness": "core",
-     "probe": null
+     "probe": "W10",
+     "verdict": {
+      "id": "W10",
+      "verdict": "GAP",
+      "detail": "Rung.morale assigned -- not a declared field of S10's record",
+      "kind": "FORBIDDEN",
+      "section": "S10.1",
+      "title": "a settlement holds a level of discontent",
+      "needs": "a Query over the containment subtree, owned by Nobody",
+      "law": "L3 -- every aggregate is a function, never a field. S22.1 -- if the aggregate is a function it CANNOT go stale and CANNOT be initialised and then forgotten, because there is nothing to initialise",
+      "by": "construction",
+      "tests": "a place must be able to hold a level of discontent that rises and falls"
+     }
     },
     {
      "need": "building a local quantity toward a use-threshold must be contestable by an opposing actor's action in the same location and window, with a net effect that can be zero or negative",
      "hardness": "core",
-     "probe": null
-    },
+     "probe": "W10",
+     "verdict": {
+      "id": "W10",
+      "verdict": "GAP",
+      "detail": "Rung.morale assigned -- not a declared field of S10's record",
+      "kind": "FORBIDDEN",
+      "section": "S10.1",
+      "title": "a settlement holds a level of discontent",
+      "needs": "a Query over the containment subtree, owned by Nobody",
+      "law": "L3 -- every aggregate is a function, never a field. S22.1 -- if the aggregate is a function it CANNOT go stale and CANNOT be initialised and then forgotten, because there is nothing to initialise",
+      "by": "construction",
+      "tests": "a place must be able to hold a level of discontent that rises and falls"
+     }
+    }
+   ],
+   "unmapped": [
     {
      "need": "reaching a threshold quantity in one place must unlock a specific powerful action usable against a chosen target elsewhere",
      "hardness": "core",
@@ -5995,13 +6106,15 @@
    "name": "The Accounting Sequence",
    "scale": "realm",
    "source": "ARC2.yaml",
-   "verdict": "PLAYABLE",
+   "verdict": "BLOCKED",
    "rows": 6,
    "core": 5,
-   "core_routed": 3,
-   "core_unmapped": 2,
-   "core_blocked": 0,
-   "blockers": [],
+   "core_routed": 4,
+   "core_unmapped": 1,
+   "core_blocked": 1,
+   "blockers": [
+    "F16"
+   ],
    "routed": [
     {
      "need": "periodic resolution of pending effects must happen in a fixed, non-negotiable phase order, such that an effect resolved in an early phase can prevent a check that would otherwise fire later in the same period, but not vice versa",
@@ -6047,6 +6160,23 @@
       "by": "construction",
       "tests": "several live demands on one matter must be able to resolve without cancelling each other"
      }
+    },
+    {
+     "need": "an action taken by a player at a small, personal scale must be able to silently register as also affecting a faction-scale quantity, invisible until the periodic accounting is read",
+     "hardness": "core",
+     "probe": "F16",
+     "verdict": {
+      "id": "F16",
+      "verdict": "GAP",
+      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
+      "kind": "FORBIDDEN",
+      "section": "S3-L3",
+      "title": "a faction-wide resource grows and is spent",
+      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
+      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
+      "by": "no-signature",
+      "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
+     }
     }
    ],
    "unmapped": [
@@ -6059,11 +6189,6 @@
      "need": "an action taken to help one actor must be interpretable by a third, unrelated actor as hostile, generating a fresh pressure against a target the acting player did not intend to provoke",
      "hardness": "important",
      "probe": null
-    },
-    {
-     "need": "an action taken by a player at a small, personal scale must be able to silently register as also affecting a faction-scale quantity, invisible until the periodic accounting is read",
-     "hardness": "core",
-     "probe": null
     }
    ],
    "unclear": 0,
@@ -6074,33 +6199,68 @@
    "name": "The Tutoring Demand",
    "scale": "realm",
    "source": "ARC2.yaml",
-   "verdict": "NOT-ASSESSED",
+   "verdict": "BLOCKED",
    "rows": 6,
    "core": 4,
-   "core_routed": 0,
-   "core_unmapped": 4,
-   "core_blocked": 0,
-   "blockers": [],
-   "routed": [],
-   "unmapped": [
+   "core_routed": 3,
+   "core_unmapped": 1,
+   "core_blocked": 1,
+   "blockers": [
+    "W13"
+   ],
+   "routed": [
     {
      "need": "a slowly rising background pressure quantity must, on crossing a threshold, force a formal binary demand on the ruling actor with no third option other than delay at increasing cost",
      "hardness": "core",
-     "probe": null
+     "probe": "P18",
+     "verdict": {
+      "id": "P18",
+      "verdict": "PASS",
+      "detail": "PASS: the crossing CHANGED WHAT MAY BE CHOSEN (['bulk_shipping', 'fishing'] -> ['fishing']) and produced NO OUTCOME and NO social write. L5 exactly. This is what 19 of 50 arcs in the in-chain survey want: THE COUNTER COMPELS SOMEONE TO ACT, it does not ACT",
+      "kind": null,
+      "section": "S3-L5",
+      "title": "a crossing compels a person to act",
+      "by": "construction",
+      "tests": "a counter reaching an edge must be able to force a named person to answer"
+     }
     },
     {
      "need": "a person sent away as the compliant response must have a decaying allegiance value that ticks down every period unless someone spends effort maintaining it, with a floor beneath which the decay becomes irreversible",
      "hardness": "core",
-     "probe": null
-    },
-    {
-     "need": "a person embedded inside the opposing power must be reachable only through a costly, uncertain action, and must be able to slow but not fully reverse the decaying allegiance above",
-     "hardness": "important",
-     "probe": null
+     "probe": "W13",
+     "verdict": {
+      "id": "W13",
+      "verdict": "GAP",
+      "detail": "a fourth clock-driven quantity",
+      "kind": "FORBIDDEN",
+      "section": "S25.1 / S3-L5",
+      "title": "a background quantity decays on a schedule nobody wound",
+      "needs": "an author -- a nameable act that wound it, so it can be bribed, delayed, burned, or killed",
+      "law": "S25.1 -- THE THREE LICENSED CLOCKS ARE EXHAUSTIVE: ['matter', 'bodies', 'the confidence of a memory']. Nobody wound any of the three and YOU CANNOT BRIBE SILT. EVERYTHING OUTSIDE THIS LIST NEEDS AN AUTHOR (L5's second paragraph). A quantity that advances on its own with no author is A SHADOW ACTOR -- unbuyable, undelayable, unkillable -- exactly the actor L1 forbids, arriving through a side door. S13.1 is the worked case: an act-DECLARED term does the same job lawfully AND gives the arc handles (bribe the clerk who set the term, burn the record that carries it, kill the man who must renew it)",
+      "by": "no-signature",
+      "tests": "a world-scale tracked quantity must be able to decay on a fixed schedule independent of anyone's actions"
+     }
     },
     {
      "need": "the sent person's allegiance hitting its floor must trigger an irreversible state change that itself forces a specific costly response (military action) rather than further diplomacy",
      "hardness": "core",
+     "probe": "P18",
+     "verdict": {
+      "id": "P18",
+      "verdict": "PASS",
+      "detail": "PASS: the crossing CHANGED WHAT MAY BE CHOSEN (['bulk_shipping', 'fishing'] -> ['fishing']) and produced NO OUTCOME and NO social write. L5 exactly. This is what 19 of 50 arcs in the in-chain survey want: THE COUNTER COMPELS SOMEONE TO ACT, it does not ACT",
+      "kind": null,
+      "section": "S3-L5",
+      "title": "a crossing compels a person to act",
+      "by": "construction",
+      "tests": "a counter reaching an edge must be able to force a named person to answer"
+     }
+    }
+   ],
+   "unmapped": [
+    {
+     "need": "a person embedded inside the opposing power must be reachable only through a costly, uncertain action, and must be able to slow but not fully reverse the decaying allegiance above",
+     "hardness": "important",
      "probe": null
     },
     {
@@ -6207,16 +6367,34 @@
    "name": "The Ceiral Ritual",
    "scale": "world",
    "source": "ARC2.yaml",
-   "verdict": "NOT-ASSESSED",
+   "verdict": "BLOCKED",
    "rows": 6,
    "core": 3,
-   "core_routed": 1,
-   "core_unmapped": 2,
-   "core_blocked": 1,
+   "core_routed": 2,
+   "core_unmapped": 1,
+   "core_blocked": 2,
    "blockers": [
-    "P26"
+    "P26",
+    "W10"
    ],
    "routed": [
+    {
+     "need": "several independent long-running preparation tracks (a held object, a regional awareness value, a qualified lead individual, assembled qualified participants) must all reach specific thresholds simultaneously before the operation becomes available at all",
+     "hardness": "core",
+     "probe": "W10",
+     "verdict": {
+      "id": "W10",
+      "verdict": "GAP",
+      "detail": "Rung.morale assigned -- not a declared field of S10's record",
+      "kind": "FORBIDDEN",
+      "section": "S10.1",
+      "title": "a settlement holds a level of discontent",
+      "needs": "a Query over the containment subtree, owned by Nobody",
+      "law": "L3 -- every aggregate is a function, never a field. S22.1 -- if the aggregate is a function it CANNOT go stale and CANNOT be initialised and then forgotten, because there is nothing to initialise",
+      "by": "construction",
+      "tests": "a place must be able to hold a level of discontent that rises and falls"
+     }
+    },
     {
      "need": "the operation must resolve via one roll with at least four discrete outcome degrees, each producing a categorically different persistent world-state",
      "hardness": "core",
@@ -6254,11 +6432,6 @@
    ],
    "unmapped": [
     {
-     "need": "several independent long-running preparation tracks (a held object, a regional awareness value, a qualified lead individual, assembled qualified participants) must all reach specific thresholds simultaneously before the operation becomes available at all",
-     "hardness": "core",
-     "probe": null
-    },
-    {
      "need": "the lead individual attempting the operation must have their own separate loyalty/alignment status materially affect the attempt, complicating what would otherwise be a pure mechanical roll",
      "hardness": "important",
      "probe": null
@@ -6282,13 +6455,15 @@
    "name": "The General Falls",
    "scale": "realm",
    "source": "ARC2.yaml",
-   "verdict": "NOT-ASSESSED",
+   "verdict": "BLOCKED",
    "rows": 6,
    "core": 5,
-   "core_routed": 2,
-   "core_unmapped": 3,
-   "core_blocked": 0,
-   "blockers": [],
+   "core_routed": 3,
+   "core_unmapped": 2,
+   "core_blocked": 1,
+   "blockers": [
+    "W10"
+   ],
    "routed": [
     {
      "need": "whether any character has invested in a specific, rarely-used skill area chosen at character creation (not in this scene) must gate whether the stabilization attempt can be made at all",
@@ -6303,6 +6478,23 @@
       "title": "capability gates no verb",
       "by": "construction",
       "tests": "skill must supply dice and must never make an action unavailable"
+     }
+    },
+    {
+     "need": "a commander's incapacitation must impose an immediate structural penalty on the entire force's collective effectiveness and remove a stabilizing floor on morale, not just remove one combatant",
+     "hardness": "core",
+     "probe": "W10",
+     "verdict": {
+      "id": "W10",
+      "verdict": "GAP",
+      "detail": "Rung.morale assigned -- not a declared field of S10's record",
+      "kind": "FORBIDDEN",
+      "section": "S10.1",
+      "title": "a settlement holds a level of discontent",
+      "needs": "a Query over the containment subtree, owned by Nobody",
+      "law": "L3 -- every aggregate is a function, never a field. S22.1 -- if the aggregate is a function it CANNOT go stale and CANNOT be initialised and then forgotten, because there is nothing to initialise",
+      "by": "construction",
+      "tests": "a place must be able to hold a level of discontent that rises and falls"
      }
     },
     {
@@ -6343,11 +6535,6 @@
      "probe": null
     },
     {
-     "need": "a commander's incapacitation must impose an immediate structural penalty on the entire force's collective effectiveness and remove a stabilizing floor on morale, not just remove one combatant",
-     "hardness": "core",
-     "probe": null
-    },
-    {
      "need": "a standing threat/threshold that exists only because one specific person personally maintains it must be permanently extinguished -- not paused, not inherited by a successor -- if that person dies",
      "hardness": "core",
      "probe": null
@@ -6364,17 +6551,32 @@
    "verdict": "NOT-ASSESSED",
    "rows": 6,
    "core": 3,
-   "core_routed": 0,
-   "core_unmapped": 3,
-   "core_blocked": 0,
-   "blockers": [],
-   "routed": [],
-   "unmapped": [
+   "core_routed": 1,
+   "core_unmapped": 2,
+   "core_blocked": 1,
+   "blockers": [
+    "A3"
+   ],
+   "routed": [
     {
      "need": "an institution's overall health quantity reaching its floor must trigger a structural fracture into multiple independent successor entities, not merely a power reduction",
      "hardness": "core",
-     "probe": null
-    },
+     "probe": "A3",
+     "verdict": {
+      "id": "A3",
+      "verdict": "GAP",
+      "detail": "'stance' written during MATTER",
+      "kind": "FORBIDDEN",
+      "section": "S30",
+      "title": "an arc ends at a counter with nobody deciding",
+      "needs": "one of ['RESOLVE']",
+      "law": "S30 -- ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION",
+      "by": "construction",
+      "tests": "the story must be able to conclude when a tracked quantity reaches a value"
+     }
+    }
+   ],
+   "unmapped": [
     {
      "need": "the specific shape of the fracture must depend on the independent internal state of several named sub-actors at the moment of collapse, not on a fixed collapse template",
      "hardness": "core",
@@ -6787,14 +6989,15 @@
    "name": "The Quaestio of Baralta",
    "scale": "realm",
    "source": "ARC2.yaml",
-   "verdict": "NOT-ASSESSED",
+   "verdict": "BLOCKED",
    "rows": 5,
    "core": 3,
-   "core_routed": 1,
-   "core_unmapped": 2,
-   "core_blocked": 1,
+   "core_routed": 2,
+   "core_unmapped": 1,
+   "core_blocked": 2,
    "blockers": [
-    "F16"
+    "F16",
+    "P17"
    ],
    "routed": [
     {
@@ -6815,6 +7018,23 @@
      }
     },
     {
+     "need": "the tribunal's win/lose outcome for the challenger must apply a categorically different consequence pair depending on which side wins -- one side's win drops an institutional pressure quantity, the other's win raises it and also silently increments a separate private counter held by an uninvolved fourth party",
+     "hardness": "core",
+     "probe": "P17",
+     "verdict": {
+      "id": "P17",
+      "verdict": "GAP",
+      "detail": "resolver-side Query 'exposure' aggregates per-person tallies across holders",
+      "kind": "FORBIDDEN",
+      "section": "S22.4",
+      "title": "hidden exposure accumulates across seasons",
+      "needs": "",
+      "law": "L3 clause 2 -- THAT IS STORED, MONOTONE, NEVER-DECAYING UNREST IN ALL BUT NAME -- worse than the field L3 banned, because the banned field could at least go down",
+      "by": "construction",
+      "tests": "a character's risk must be able to build up quietly across seasons without anyone acting"
+     }
+    },
+    {
      "need": "a covert intelligence-gathering faction operating through a proxy network must be able to attempt a targeted lethal action against a person inside a formal, non-combat social scene, with success or failure both producing distinct downstream consequences for that faction's own standing",
      "hardness": "important",
      "probe": "P5",
@@ -6831,11 +7051,6 @@
     }
    ],
    "unmapped": [
-    {
-     "need": "the tribunal's win/lose outcome for the challenger must apply a categorically different consequence pair depending on which side wins -- one side's win drops an institutional pressure quantity, the other's win raises it and also silently increments a separate private counter held by an uninvolved fourth party",
-     "hardness": "core",
-     "probe": null
-    },
     {
      "need": "a private, unshared threshold maintained by one specific NPC (not by the institution she serves) must be able to trigger an institution-scale event once it reaches its ceiling, based on her own accumulated judgment rather than any single rule anyone else can see",
      "hardness": "core",
@@ -7741,13 +7956,15 @@
    "name": "The Battle That Ate the South",
    "scale": "world",
    "source": "ARC2.yaml",
-   "verdict": "NOT-ASSESSED",
+   "verdict": "BLOCKED",
    "rows": 6,
    "core": 3,
-   "core_routed": 1,
-   "core_unmapped": 2,
-   "core_blocked": 0,
-   "blockers": [],
+   "core_routed": 2,
+   "core_unmapped": 1,
+   "core_blocked": 1,
+   "blockers": [
+    "W10"
+   ],
    "routed": [
     {
      "need": "a purely conventional mass-combat engagement must be triggerable because a different arc's crisis has redirected the defending force elsewhere, leaving a specific corridor territory undefended as an unintended side effect",
@@ -7762,6 +7979,40 @@
       "title": "a crossing compels a person to act",
       "by": "construction",
       "tests": "a counter reaching an edge must be able to force a named person to answer"
+     }
+    },
+    {
+     "need": "the pre-existing local condition of an ambient world-health quantity must determine whether the same tripled cost from one failed high-risk action crosses into a qualitatively worse global band versus being merely absorbed",
+     "hardness": "core",
+     "probe": "W10",
+     "verdict": {
+      "id": "W10",
+      "verdict": "GAP",
+      "detail": "Rung.morale assigned -- not a declared field of S10's record",
+      "kind": "FORBIDDEN",
+      "section": "S10.1",
+      "title": "a settlement holds a level of discontent",
+      "needs": "a Query over the containment subtree, owned by Nobody",
+      "law": "L3 -- every aggregate is a function, never a field. S22.1 -- if the aggregate is a function it CANNOT go stale and CANNOT be initialised and then forgotten, because there is nothing to initialise",
+      "by": "construction",
+      "tests": "a place must be able to hold a level of discontent that rises and falls"
+     }
+    },
+    {
+     "need": "a territory whose ambient world-health condition is already degraded must independently generate spontaneous hazardous manifestations at a fixed chance per period, without requiring any deliberate reality-altering action",
+     "hardness": "important",
+     "probe": "W10",
+     "verdict": {
+      "id": "W10",
+      "verdict": "GAP",
+      "detail": "Rung.morale assigned -- not a declared field of S10's record",
+      "kind": "FORBIDDEN",
+      "section": "S10.1",
+      "title": "a settlement holds a level of discontent",
+      "needs": "a Query over the containment subtree, owned by Nobody",
+      "law": "L3 -- every aggregate is a function, never a field. S22.1 -- if the aggregate is a function it CANNOT go stale and CANNOT be initialised and then forgotten, because there is nothing to initialise",
+      "by": "construction",
+      "tests": "a place must be able to hold a level of discontent that rises and falls"
      }
     },
     {
@@ -7789,16 +8040,6 @@
      "probe": null
     },
     {
-     "need": "the pre-existing local condition of an ambient world-health quantity must determine whether the same tripled cost from one failed high-risk action crosses into a qualitatively worse global band versus being merely absorbed",
-     "hardness": "core",
-     "probe": null
-    },
-    {
-     "need": "a territory whose ambient world-health condition is already degraded must independently generate spontaneous hazardous manifestations at a fixed chance per period, without requiring any deliberate reality-altering action",
-     "hardness": "important",
-     "probe": null
-    },
-    {
      "need": "a severe outcome at this battle must permanently escalate the ambient hazard condition of multiple adjacent territories by one severity band each",
      "hardness": "important",
      "probe": null
@@ -7812,14 +8053,33 @@
    "name": "The Invisible Majority",
    "scale": "realm",
    "source": "ARC2.yaml",
-   "verdict": "PLAYABLE",
+   "verdict": "BLOCKED",
    "rows": 5,
    "core": 2,
-   "core_routed": 1,
-   "core_unmapped": 1,
-   "core_blocked": 0,
-   "blockers": [],
+   "core_routed": 2,
+   "core_unmapped": 0,
+   "core_blocked": 1,
+   "blockers": [
+    "W10"
+   ],
    "routed": [
+    {
+     "need": "a per-location cultural-allegiance quantity must be capable of eroding from at least three structurally distinct causal sources simultaneously -- economic extraction, a rival power's well-intentioned investment, and the gradual failure of an unrelated ambient suppression mechanism -- with each source alone producing only a small, non-alarming effect",
+     "hardness": "core",
+     "probe": "W10",
+     "verdict": {
+      "id": "W10",
+      "verdict": "GAP",
+      "detail": "Rung.morale assigned -- not a declared field of S10's record",
+      "kind": "FORBIDDEN",
+      "section": "S10.1",
+      "title": "a settlement holds a level of discontent",
+      "needs": "a Query over the containment subtree, owned by Nobody",
+      "law": "L3 -- every aggregate is a function, never a field. S22.1 -- if the aggregate is a function it CANNOT go stale and CANNOT be initialised and then forgotten, because there is nothing to initialise",
+      "by": "construction",
+      "tests": "a place must be able to hold a level of discontent that rises and falls"
+     }
+    },
     {
      "need": "a designated institutional mechanism built specifically to block structural political reform must have a trigger condition narrow enough that change arriving through non-political channels never satisfies it",
      "hardness": "core",
@@ -7852,11 +8112,6 @@
     }
    ],
    "unmapped": [
-    {
-     "need": "a per-location cultural-allegiance quantity must be capable of eroding from at least three structurally distinct causal sources simultaneously -- economic extraction, a rival power's well-intentioned investment, and the gradual failure of an unrelated ambient suppression mechanism -- with each source alone producing only a small, non-alarming effect",
-     "hardness": "core",
-     "probe": null
-    },
     {
      "need": "a faction pursuing a deliberately thin, over-extended presence strategy must end up positioned to benefit from the eroding quantity in every location where it happens to have a presence, without having caused or targeted the erosion there",
      "hardness": "important",
@@ -8049,11 +8304,26 @@
    "verdict": "DEGRADED",
    "rows": 6,
    "core": 2,
-   "core_routed": 1,
-   "core_unmapped": 1,
+   "core_routed": 2,
+   "core_unmapped": 0,
    "core_blocked": 0,
    "blockers": [],
    "routed": [
+    {
+     "need": "when multiple independent progress-clocks are scheduled to change state in the same accounting step, a fixed, named order of resolution must be applied \u2014 one category of event fully resolving before the next begins \u2014 rather than resolving them simultaneously or in an undefined order.",
+     "hardness": "core",
+     "probe": "W8",
+     "verdict": {
+      "id": "W8",
+      "verdict": "PASS",
+      "detail": "PASS-STRUCTURALLY: the Inquisitor's `open_case` act DECLARED the stages and their terms; each maturation is A PERSON'S PAST ACT RIPENING, with causes[] pointing at the act that wound the clock. NOT a MATTER-advanced `Record.stage`, which would be a FOURTH clock L5 forbids. But the stages are the PROBE'S -- S30.1 gives Record no Partition row, so the write that would store them raises (P10)",
+      "kind": null,
+      "section": "S13.1",
+      "title": "a case ripens against someone who does nothing",
+      "by": "probe-model",
+      "tests": "a legal or institutional process must be able to advance against a character who is passive"
+     }
+    },
     {
      "need": "a finite, per-location capacity must be able to gate a character's rank advancement, such that reaching the qualifying rank with no capacity available produces a distinct, named provisional state rather than either blocking the advancement outright or granting it for free.",
      "hardness": "core",
@@ -8120,11 +8390,6 @@
     }
    ],
    "unmapped": [
-    {
-     "need": "when multiple independent progress-clocks are scheduled to change state in the same accounting step, a fixed, named order of resolution must be applied \u2014 one category of event fully resolving before the next begins \u2014 rather than resolving them simultaneously or in an undefined order.",
-     "hardness": "core",
-     "probe": null
-    },
     {
      "need": "a unique identifier scheme for individually-resolved design/editorial items must guarantee that two different resolved items never share the same identifier.",
      "hardness": "important",
@@ -8394,7 +8659,25 @@
    "core_unmapped": 3,
    "core_blocked": 0,
    "blockers": [],
-   "routed": [],
+   "routed": [
+    {
+     "need": "an individual character's personal advancement track (a sensitivity/perception stat) must be able to raise their own frequency of, or eligibility for, the actions that carry the ambient-quantity cost, without that advancement itself directly costing the ambient quantity",
+     "hardness": "flavour",
+     "probe": "W13",
+     "verdict": {
+      "id": "W13",
+      "verdict": "GAP",
+      "detail": "a fourth clock-driven quantity",
+      "kind": "FORBIDDEN",
+      "section": "S25.1 / S3-L5",
+      "title": "a background quantity decays on a schedule nobody wound",
+      "needs": "an author -- a nameable act that wound it, so it can be bribed, delayed, burned, or killed",
+      "law": "S25.1 -- THE THREE LICENSED CLOCKS ARE EXHAUSTIVE: ['matter', 'bodies', 'the confidence of a memory']. Nobody wound any of the three and YOU CANNOT BRIBE SILT. EVERYTHING OUTSIDE THIS LIST NEEDS AN AUTHOR (L5's second paragraph). A quantity that advances on its own with no author is A SHADOW ACTOR -- unbuyable, undelayable, unkillable -- exactly the actor L1 forbids, arriving through a side door. S13.1 is the worked case: an act-DECLARED term does the same job lawfully AND gives the arc handles (bribe the clerk who set the term, burn the record that carries it, kill the man who must renew it)",
+      "by": "no-signature",
+      "tests": "a world-scale tracked quantity must be able to decay on a fixed schedule independent of anyone's actions"
+     }
+    }
+   ],
    "unmapped": [
     {
      "need": "an ambient world-quality quantity must be able to decrease automatically over time independent of any action, and must also be able to decrease further as a cost attached to certain actions' partial or failed outcomes",
@@ -8424,11 +8707,6 @@
     {
      "need": "there must be a discrete, repeatable action available to some actor that restores the ambient quantity by a bounded amount per success",
      "hardness": "important",
-     "probe": null
-    },
-    {
-     "need": "an individual character's personal advancement track (a sensitivity/perception stat) must be able to raise their own frequency of, or eligibility for, the actions that carry the ambient-quantity cost, without that advancement itself directly costing the ambient quantity",
-     "hardness": "flavour",
      "probe": null
     }
    ],
@@ -8503,7 +8781,7 @@
    "name": "The Counter That Runs Backward",
    "scale": "faction",
    "source": "ARC4.yaml",
-   "verdict": "PLAYABLE",
+   "verdict": "DEGRADED",
    "rows": 5,
    "core": 2,
    "core_routed": 1,
@@ -8525,6 +8803,40 @@
       "by": "construction",
       "tests": "a character must be able to do something covertly, or be wrongly blamed for what another did"
      }
+    },
+    {
+     "need": "an actor must be able to use the same category of counter-action against a quantity to which their own advancement track is itself a contributing source, effectively offsetting a side-effect of their own progress",
+     "hardness": "important",
+     "probe": "P17",
+     "verdict": {
+      "id": "P17",
+      "verdict": "GAP",
+      "detail": "resolver-side Query 'exposure' aggregates per-person tallies across holders",
+      "kind": "FORBIDDEN",
+      "section": "S22.4",
+      "title": "hidden exposure accumulates across seasons",
+      "needs": "",
+      "law": "L3 clause 2 -- THAT IS STORED, MONOTONE, NEVER-DECAYING UNREST IN ALL BUT NAME -- worse than the field L3 banned, because the banned field could at least go down",
+      "by": "construction",
+      "tests": "a character's risk must be able to build up quietly across seasons without anyone acting"
+     }
+    },
+    {
+     "need": "the same shared, single-per-period contested action slot used elsewhere for counter-acting the target quantity must be available to this faction too, and its use must exclude other factions from counter-acting the same quantity that period",
+     "hardness": "flavour",
+     "probe": "A36",
+     "verdict": {
+      "id": "A36",
+      "verdict": "GAP",
+      "detail": "the person's ORDER ['spend_treasury', 'buy_grain', 'bribe'] vs the fold's order ['bribe', 'buy_grain', 'spend_treasury']",
+      "kind": "COLLISION",
+      "section": "S26.3 / S32",
+      "title": "a person's act order is the order it resolves in",
+      "needs": "a ruling on whether a person's act list resolves in the order they chose",
+      "law": "S26.3 says 'THE LIST IS ORDERED, so what he did first is legible when a season's later acts are foreclosed by its earlier ones'. S32 rest 3 says the act array is CANONICALIZED BY A CONTENT-DERIVED KEY over ONE GLOBAL ARRAY, sorted 'never by completion order'. A PER-PERSON INTENT ORDER AND A GLOBAL CONTENT ORDER ARE DIFFERENT ORDERS, and the chain specifies BOTH. This is what makes F17's authorization race real",
+      "by": "construction",
+      "tests": "what a character does first must be able to close off what they could have done after"
+     }
     }
    ],
    "unmapped": [
@@ -8534,18 +8846,8 @@
      "probe": null
     },
     {
-     "need": "an actor must be able to use the same category of counter-action against a quantity to which their own advancement track is itself a contributing source, effectively offsetting a side-effect of their own progress",
-     "hardness": "important",
-     "probe": null
-    },
-    {
      "need": "the side-effect's existence must be discoverable only through a specific investigative action or through an NPC choosing to disclose it, and must not be visible by default",
      "hardness": "core",
-     "probe": null
-    },
-    {
-     "need": "the same shared, single-per-period contested action slot used elsewhere for counter-acting the target quantity must be available to this faction too, and its use must exclude other factions from counter-acting the same quantity that period",
-     "hardness": "flavour",
      "probe": null
     }
    ],
@@ -9561,6 +9863,23 @@
      }
     },
     {
+     "need": "reaching the location required by one of the preconditions must itself be lethal or excluding to participants below a specific individual capability threshold, filtering who can even attempt the expedition",
+     "hardness": "important",
+     "probe": "P17",
+     "verdict": {
+      "id": "P17",
+      "verdict": "GAP",
+      "detail": "resolver-side Query 'exposure' aggregates per-person tallies across holders",
+      "kind": "FORBIDDEN",
+      "section": "S22.4",
+      "title": "hidden exposure accumulates across seasons",
+      "needs": "",
+      "law": "L3 clause 2 -- THAT IS STORED, MONOTONE, NEVER-DECAYING UNREST IN ALL BUT NAME -- worse than the field L3 banned, because the banned field could at least go down",
+      "by": "construction",
+      "tests": "a character's risk must be able to build up quietly across seasons without anyone acting"
+     }
+    },
+    {
      "need": "attempting the powerful capability must have a cost that scales directly with how significant or old the target of the capability is, and the cost must apply on both success and failure, at different but both severe magnitudes",
      "hardness": "important",
      "probe": "P33",
@@ -9587,11 +9906,6 @@
     {
      "need": "using the powerful capability must require satisfying several independent, unrelated preconditions simultaneously (a diagnostic step, possession of a specific prior technique, physical presence at a specific location), where missing any single one makes the attempt categorically impossible rather than merely harder",
      "hardness": "core",
-     "probe": null
-    },
-    {
-     "need": "reaching the location required by one of the preconditions must itself be lethal or excluding to participants below a specific individual capability threshold, filtering who can even attempt the expedition",
-     "hardness": "important",
      "probe": null
     },
     {
@@ -10681,6 +10995,18 @@
    "by": "no-signature",
    "tests": "a faction must be able to take an action of its own"
   },
+  "W10": {
+   "id": "W10",
+   "verdict": "GAP",
+   "detail": "Rung.morale assigned -- not a declared field of S10's record",
+   "kind": "FORBIDDEN",
+   "section": "S10.1",
+   "title": "a settlement holds a level of discontent",
+   "needs": "a Query over the containment subtree, owned by Nobody",
+   "law": "L3 -- every aggregate is a function, never a field. S22.1 -- if the aggregate is a function it CANNOT go stale and CANNOT be initialised and then forgotten, because there is nothing to initialise",
+   "by": "construction",
+   "tests": "a place must be able to hold a level of discontent that rises and falls"
+  },
   "F12": {
    "id": "F12",
    "verdict": "PASS",
@@ -10702,6 +11028,16 @@
    "law": "L3 clause 2 -- THAT IS STORED, MONOTONE, NEVER-DECAYING UNREST IN ALL BUT NAME -- worse than the field L3 banned, because the banned field could at least go down",
    "by": "construction",
    "tests": "harm suffered over several seasons must be able to close off options"
+  },
+  "F18": {
+   "id": "F18",
+   "verdict": "PASS",
+   "detail": "PASS-STRUCTURALLY: a Petition rising from below and a Dispensation enumerating the same executor coexist WITH NO ARBITRATION ANYWHERE IN THE SHAPE. The governor's 5 acts are the only scarcity, so the conflict is REAL and is resolved BY THE PERSON, which is L1. Both objects are the probe's data, not the shape's -- nothing constructs either. See F19",
+   "kind": null,
+   "section": "S36.1",
+   "title": "a place's demands conflict with its superior's orders",
+   "by": "probe-model",
+   "tests": "a place must be able to generate demands of its own that cut against what the authority above ordered"
   },
   "F7": {
    "id": "F7",
@@ -10827,18 +11163,6 @@
    "by": "no-signature",
    "tests": "a world-scale tracked quantity must be able to decay on a fixed schedule independent of anyone's actions"
   },
-  "W10": {
-   "id": "W10",
-   "verdict": "GAP",
-   "detail": "Rung.morale assigned -- not a declared field of S10's record",
-   "kind": "FORBIDDEN",
-   "section": "S10.1",
-   "title": "a settlement holds a level of discontent",
-   "needs": "a Query over the containment subtree, owned by Nobody",
-   "law": "L3 -- every aggregate is a function, never a field. S22.1 -- if the aggregate is a function it CANNOT go stale and CANNOT be initialised and then forgotten, because there is nothing to initialise",
-   "by": "construction",
-   "tests": "a place must be able to hold a level of discontent that rises and falls"
-  },
   "A1": {
    "id": "A1",
    "verdict": "GAP",
@@ -10913,6 +11237,18 @@
    "by": "construction",
    "tests": "skill must supply dice and must never make an action unavailable"
   },
+  "A3": {
+   "id": "A3",
+   "verdict": "GAP",
+   "detail": "'stance' written during MATTER",
+   "kind": "FORBIDDEN",
+   "section": "S30",
+   "title": "an arc ends at a counter with nobody deciding",
+   "needs": "one of ['RESOLVE']",
+   "law": "S30 -- ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION",
+   "by": "construction",
+   "tests": "the story must be able to conclude when a tracked quantity reaches a value"
+  },
   "P15": {
    "id": "P15",
    "verdict": "GAP",
@@ -10935,17 +11271,17 @@
    "by": "construction",
    "tests": "a body with members everywhere and a seat nowhere must be able to issue instructions"
   },
-  "A3": {
-   "id": "A3",
+  "A36": {
+   "id": "A36",
    "verdict": "GAP",
-   "detail": "'stance' written during MATTER",
-   "kind": "FORBIDDEN",
-   "section": "S30",
-   "title": "an arc ends at a counter with nobody deciding",
-   "needs": "one of ['RESOLVE']",
-   "law": "S30 -- ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION",
+   "detail": "the person's ORDER ['spend_treasury', 'buy_grain', 'bribe'] vs the fold's order ['bribe', 'buy_grain', 'spend_treasury']",
+   "kind": "COLLISION",
+   "section": "S26.3 / S32",
+   "title": "a person's act order is the order it resolves in",
+   "needs": "a ruling on whether a person's act list resolves in the order they chose",
+   "law": "S26.3 says 'THE LIST IS ORDERED, so what he did first is legible when a season's later acts are foreclosed by its earlier ones'. S32 rest 3 says the act array is CANONICALIZED BY A CONTENT-DERIVED KEY over ONE GLOBAL ARRAY, sorted 'never by completion order'. A PER-PERSON INTENT ORDER AND A GLOBAL CONTENT ORDER ARE DIFFERENT ORDERS, and the chain specifies BOTH. This is what makes F17's authorization race real",
    "by": "construction",
-   "tests": "the story must be able to conclude when a tracked quantity reaches a value"
+   "tests": "what a character does first must be able to close off what they could have done after"
   },
   "P7": {
    "id": "P7",
@@ -11136,16 +11472,6 @@
    "law": "S61 -- one of FOUR BLOCKING GAPS DROPPED FROM THE OPEN REGISTER and folded back as `grade: absent`. S11.1 makes the pool `capability of the dispatched establishment member(s) ACTUALLY PERFORMING IT`, so with an empty establishment an office has no pool source at all",
    "by": "no-signature",
    "tests": "a post must be able to employ people whose competence is what actually gets used"
-  },
-  "F18": {
-   "id": "F18",
-   "verdict": "PASS",
-   "detail": "PASS-STRUCTURALLY: a Petition rising from below and a Dispensation enumerating the same executor coexist WITH NO ARBITRATION ANYWHERE IN THE SHAPE. The governor's 5 acts are the only scarcity, so the conflict is REAL and is resolved BY THE PERSON, which is L1. Both objects are the probe's data, not the shape's -- nothing constructs either. See F19",
-   "kind": null,
-   "section": "S36.1",
-   "title": "a place's demands conflict with its superior's orders",
-   "by": "probe-model",
-   "tests": "a place must be able to generate demands of its own that cut against what the authority above ordered"
   },
   "W1x": {
    "id": "W1x",
@@ -11510,18 +11836,6 @@
    "title": "the design needs Godot 4.6",
    "by": "probe-model",
    "tests": "the port must be able to target a decided engine version"
-  },
-  "A36": {
-   "id": "A36",
-   "verdict": "GAP",
-   "detail": "the person's ORDER ['spend_treasury', 'buy_grain', 'bribe'] vs the fold's order ['bribe', 'buy_grain', 'spend_treasury']",
-   "kind": "COLLISION",
-   "section": "S26.3 / S32",
-   "title": "a person's act order is the order it resolves in",
-   "needs": "a ruling on whether a person's act list resolves in the order they chose",
-   "law": "S26.3 says 'THE LIST IS ORDERED, so what he did first is legible when a season's later acts are foreclosed by its earlier ones'. S32 rest 3 says the act array is CANONICALIZED BY A CONTENT-DERIVED KEY over ONE GLOBAL ARRAY, sorted 'never by completion order'. A PER-PERSON INTENT ORDER AND A GLOBAL CONTENT ORDER ARE DIFFERENT ORDERS, and the chain specifies BOTH. This is what makes F17's authorization race real",
-   "by": "construction",
-   "tests": "what a character does first must be able to close off what they could have done after"
   }
  },
  "_gaps": [
@@ -11644,6 +11958,15 @@
   },
   {
    "kind": "FORBIDDEN",
+   "what": "Rung.morale assigned -- not a declared field of S10's record",
+   "where": "S10.1",
+   "needs": "a Query over the containment subtree, owned by Nobody",
+   "law": "L3 -- every aggregate is a function, never a field. S22.1 -- if the aggregate is a function it CANNOT go stale and CANNOT be initialised and then forgotten, because there is nothing to initialise",
+   "case": "probe:W10",
+   "expected": false
+  },
+  {
+   "kind": "FORBIDDEN",
    "what": "resolver-side Query 'harm_borne' aggregates per-person tallies across holders",
    "where": "S22.4",
    "needs": "",
@@ -11716,15 +12039,6 @@
   },
   {
    "kind": "FORBIDDEN",
-   "what": "Rung.morale assigned -- not a declared field of S10's record",
-   "where": "S10.1",
-   "needs": "a Query over the containment subtree, owned by Nobody",
-   "law": "L3 -- every aggregate is a function, never a field. S22.1 -- if the aggregate is a function it CANNOT go stale and CANNOT be initialised and then forgotten, because there is nothing to initialise",
-   "case": "probe:W10",
-   "expected": false
-  },
-  {
-   "kind": "FORBIDDEN",
    "what": "Event thing.happened emitted with causes=[]",
    "where": "S19.4",
    "needs": "causes: [ROOT] for an antecedent-free emission",
@@ -11742,6 +12056,15 @@
    "expected": false
   },
   {
+   "kind": "FORBIDDEN",
+   "what": "'stance' written during MATTER",
+   "where": "S30",
+   "needs": "one of ['RESOLVE']",
+   "law": "S30 -- ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION",
+   "case": "probe:A3",
+   "expected": false
+  },
+  {
    "kind": "UNSPECIFIED",
    "what": "four of the five witness channels have no predicate: ['post_remit', 'witness_key', 'document_key', 'chronicle']",
    "where": "S61",
@@ -11751,12 +12074,12 @@
    "expected": false
   },
   {
-   "kind": "FORBIDDEN",
-   "what": "'stance' written during MATTER",
-   "where": "S30",
-   "needs": "one of ['RESOLVE']",
-   "law": "S30 -- ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION",
-   "case": "probe:A3",
+   "kind": "COLLISION",
+   "what": "the person's ORDER ['spend_treasury', 'buy_grain', 'bribe'] vs the fold's order ['bribe', 'buy_grain', 'spend_treasury']",
+   "where": "S26.3 / S32",
+   "needs": "a ruling on whether a person's act list resolves in the order they chose",
+   "law": "S26.3 says 'THE LIST IS ORDERED, so what he did first is legible when a season's later acts are foreclosed by its earlier ones'. S32 rest 3 says the act array is CANONICALIZED BY A CONTENT-DERIVED KEY over ONE GLOBAL ARRAY, sorted 'never by completion order'. A PER-PERSON INTENT ORDER AND A GLOBAL CONTENT ORDER ARE DIFFERENT ORDERS, and the chain specifies BOTH. This is what makes F17's authorization race real",
+   "case": "probe:A36",
    "expected": false
   },
   {
@@ -12054,15 +12377,6 @@
    "needs": "pick one, write it down beside the code, and expect the choice to be revisited",
    "law": "S37.4 -- R-2 says downward influence is 'EMITTING a refraction' (EMITTER-side); the act vocabulary puts `refract` at the RECEIVING end, beside `comply`, `evade`, `defy`. THE CHAIN HAS NOT RECONCILED THESE and emitter-side and receiver-side distortion ARE DIFFERENT GAMES",
    "case": "probe:A33",
-   "expected": false
-  },
-  {
-   "kind": "COLLISION",
-   "what": "the person's ORDER ['spend_treasury', 'buy_grain', 'bribe'] vs the fold's order ['bribe', 'buy_grain', 'spend_treasury']",
-   "where": "S26.3 / S32",
-   "needs": "a ruling on whether a person's act list resolves in the order they chose",
-   "law": "S26.3 says 'THE LIST IS ORDERED, so what he did first is legible when a season's later acts are foreclosed by its earlier ones'. S32 rest 3 says the act array is CANONICALIZED BY A CONTENT-DERIVED KEY over ONE GLOBAL ARRAY, sorted 'never by completion order'. A PER-PERSON INTENT ORDER AND A GLOBAL CONTENT ORDER ARE DIFFERENT ORDERS, and the chain specifies BOTH. This is what makes F17's authorization race real",
-   "case": "probe:A36",
    "expected": false
   }
  ],

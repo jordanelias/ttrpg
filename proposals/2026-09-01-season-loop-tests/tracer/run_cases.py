@@ -426,6 +426,55 @@ COMPILED += [(pid, re.compile(rx, re.I), re.compile(neg, re.I) if neg else None)
              for pid, rx, neg in ROUTES_3]
 
 
+ROUTES_4: list[tuple[str, str, str | None]] = [
+    # THE TRACKED-QUANTITY FAMILY -- the single largest cluster of unrouted `core` rows in the
+    # arc corpus, and the exact family L3 and L5 legislate. THE ORDER IS THE CRUX. The in-chain
+    # 50-arc run established the distinction they turn on: 19 of 50 arcs want a crossing to
+    # COMPEL A NAMED PERSON TO ACT (lawful under L5) and only 8 want a crossing to PRODUCE AN
+    # OUTCOME with nobody deciding (forbidden). Route the compelling sense FIRST, or the
+    # instrument reports the corpus as far more hostile to the design than it is -- a
+    # measurement error in the shape's DISfavour, which is no more acceptable than one in its
+    # favour (S0.1 point 4: asymmetric skepticism is a bias, not a defence).
+
+    # (a) A CROSSING THAT COMPELS A NAMED PERSON -- lawful. L5 exactly.
+    ("P18", r"\b(quantity|value|track|counter|meter|level|pressure|score|gauge)\b[^.]{0,80}\b(cross\w*|reach\w*|hit\w*|drop\w*|fall\w*|pass\w*)\b[^.]{0,60}\b(forc\w+|compel\w*|oblig\w+|requir\w+|summon\w*|demand\w*)\b[^.]{0,60}\b(person|actor|ruler|officer|leader|holder|character|someone|them|him|her)\b", None),
+    ("P18", r"\b(cross\w*|reach\w*|hit\w*)\b[^.]{0,40}\b(a |the )?(threshold|floor|ceiling|limit|edge)\b[^.]{0,70}\b(forc\w+|compel\w*|demand\w*|requir\w+)\b[^.]{0,50}\b(choice|decision|response|answer|act)\b", None),
+
+    # (b) A CROSSING THAT PRODUCES AN OUTCOME WITH NOBODY DECIDING -- forbidden. L5's refusal.
+    ("A3",  r"\b(quantity|value|track|counter|meter|level|health|allegiance|pressure|score)\b[^.]{0,80}\b(reach\w*|hit\w*|drop\w*|fall\w*|bottom\w*)\b[^.]{0,40}\b(its |a |the )?(floor|zero|minimum|bottom|threshold)\b[^.]{0,70}\b(trigger|caus\w+|produc\w+|impos\w+|result|fractur\w+|collaps\w+)\w*\b", None),
+    ("A3",  r"\b(automatic\w*|irreversible|structural)\b[^.]{0,40}\b(state change|consequence|outcome|effect|penalty|fracture|collapse)\b[^.]{0,70}\b(trigger\w*|when|on|upon)\b[^.]{0,40}\b(threshold|floor|value|quantity|counter)\b", None),
+
+    # (c) A QUANTITY HELD BY A PLACE -- S10.1: a Rung owns NO social aggregate.
+    ("W10", r"\b(per[- ](location|place|region|settlement|territory)|local|regional|site[- ]level)\b[^.]{0,60}\b(quantity|value|track|counter|level|score|awareness|allegiance)\b", None),
+    ("W10", r"\b(institution|settlement|region|place|territory|province|force|army)'?s?\b[^.]{0,50}\b(overall |collective |aggregate )?(health|morale|cohesion|effectiveness|stability|readiness)\b", None),
+
+    # (d) A FACTION-SCALE POOLED QUANTITY -- L3, and S14.2 leaves nowhere to put it.
+    ("F16", r"\b(faction|institution|organisation|organization|order|church|guild)[- ](scale|wide|level)\b[^.]{0,50}\b(quantity|value|stat|resource|pool|score|track|capacity)\b", None),
+    ("F16", r"\b(one|a single|shared|common)\b[^.]{0,30}\bfaction[- ]wide\b[^.]{0,30}\bvalue\b", None),
+
+    # (e) A QUANTITY THAT MOVES ON ITS OWN -- a fourth clock. S25.1's three are exhaustive.
+    ("W13", r"\b(decay\w*|tick\w*|declin\w+|dwindl\w+|drift\w*|erod\w*)\b[^.]{0,50}\b(every|each|per)\b[^.]{0,25}\b(period|season|turn|year|cycle)\b", None),
+    ("W13", r"\b(background|ambient|world)[- ]?(pressure|quantity|track|level|stat)\b[^.]{0,70}\b(ris\w+|mount\w*|grow\w*|advanc\w+|accumulat\w+|mov\w+)\b", None),
+
+    # (f) A PERSONAL TALLY -- L3 clause 2 and clause 3.
+    ("P17", r"\b(personal|individual|per[- ]person|own)\b[^.]{0,40}\b(threshold|tally|count|track|quantity|meter|exposure)\b", None),
+    ("P17", r"\b(silently|invisibly|quietly|unnoticed)\b[^.]{0,60}\b(register|record|accumulat|count|affect)\w*\b", None),
+
+    # (g) LONG-RUNNING PREPARATION TRACKS -- act-declared terms (S13.1), not a MATTER clock.
+    ("W8",  r"\b(long[- ]running|multi[- ]season|ongoing|parallel|independent)\b[^.]{0,40}\b(preparation|progress|project|track|thread|effort)s?\b", None),
+
+    # (h) SCALE COUPLING -- a personal act registering at faction scale.
+    ("A25", r"\b(personal|small|individual|local)\b[^.]{0,30}\bscale\b[^.]{0,70}\b(faction|regional|realm|world)[- ]?(scale|level|wide)\b", None),
+
+    # (i) SIMULTANEITY AND INDEPENDENCE ACROSS ACTORS.
+    ("F18", r"\b(two|three|several|multiple)\b[^.]{0,40}\b(independent|unrelated|separate)\b[^.]{0,40}\b(actor|faction|institution|part(y|ies))\w*\b[^.]{0,60}\b(simultaneous\w*|at (the )?same time|each|both)\b", None),
+    ("A36", r"\b(same|one|single)\b[^.]{0,20}\b(location|place|window|period|season)\b[^.]{0,60}\b(contest\w*|oppos\w+|counter\w*|net effect)\b", None),
+]
+
+COMPILED += [(pid, re.compile(rx, re.I), re.compile(neg, re.I) if neg else None)
+             for pid, rx, neg in ROUTES_4]
+
+
 if __name__ == "__main__":
     rep = main()
     outdir = ROOT / "runs"

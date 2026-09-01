@@ -156,6 +156,52 @@ def emit(rep: dict, trace_rows: list) -> None:
     print(f"wrote DECISIONS.md ({len(reg)} distinct), STEPS.md, "
           f"CASELOG_NPC.md, CASELOG_ARC.md, PROBES.md")
 
+    # -- 5. THE UNMAPPED REGISTER ------------------------------------------
+    # An unrouted row is NOT a pass and NOT a gap. It is the instrument admitting IT DID NOT
+    # AIM. Reporting the rows verbatim, clustered, is more honest than tuning regexes until
+    # the number looks good -- and what the corpus asks for that NO PROBE COVERS is itself a
+    # first-class finding about the shape's surface.
+    for kind in ("NPC", "ARC"):
+        rows = rep.get(kind) or []
+        core = [(c["id"], u["need"]) for c in rows for u in c["unmapped"]
+                if u["hardness"] == "core"]
+        other = [(c["id"], u["need"]) for c in rows for u in c["unmapped"]
+                 if u["hardness"] != "core"]
+        terms = Counter()
+        stop = set("the a an of to and or in be is are must able for that this it its with on as "
+                   "by not no from at into their they them one own such which what when who whom "
+                   "than rather same only other another each any all some more most both either "
+                   "must-be can may will would could should there here also even while whether "
+                   "without within across between over under after before during through".split())
+        for _, n in core:
+            for w in n.lower().replace("-", " ").split():
+                w = "".join(ch for ch in w if ch.isalpha())
+                if len(w) >= 5 and w not in stop:
+                    terms[w] += 1
+        out = [f"# UNMAPPED — {kind}: what the corpus asked for that no probe covers", "",
+               "**An unrouted row is not a pass and not a gap. It is the instrument admitting it",
+               "did not aim.** Every row is reproduced verbatim so a reader can judge whether the",
+               "miss is a routing failure (fixable) or a genuine absence of any surface to probe",
+               "(a finding about the shape).", "",
+               f"**{len(core)} `core` rows and {len(other)} non-core rows did not route.**", "",
+               "## The vocabulary of the unrouted `core` rows", "",
+               "Frequency over terms of five letters or more, stopwords removed. A term that is",
+               "frequent here names a capability the corpus keeps asking for and the probe set has",
+               "no execution for.", "",
+               "| term | count |", "|---|---|"]
+        for w, n in terms.most_common(45):
+            out.append(f"| {w} | {n} |")
+        out += ["", "## Every unrouted `core` row, verbatim", ""]
+        for cid, n in core:
+            out.append(f"- **[{cid}]** {n}")
+        out += ["", "## Every unrouted non-core row, verbatim", ""]
+        for cid, n in other:
+            out.append(f"- *[{cid}]* {n}")
+        (RUNS / f"UNMAPPED_{kind}.md").write_text("\n".join(out))
+
+    print(f"wrote UNMAPPED_NPC.md, UNMAPPED_ARC.md")
+
+
 
 if __name__ == "__main__":
     import run_cases as R
