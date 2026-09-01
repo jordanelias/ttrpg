@@ -50,6 +50,8 @@ readable.
 | **10** | Structural-edge aggregation cannot rebuild a ratchet | ⚠ **NEEDS A THIRD CLAUSE.** Ended Tenures persist as *"historical claim subjects"*, so a count over live **and ended** edges is monotone. §22.4 | B |
 | **11** | R-1/R-2 *"never appear again"* | ⚠ **CORRECTED.** R-1 recurs and does work — CALENDAR's convening predicate may read *"an R-1 compute-on-demand aggregate over its descendants"*. **R-2 does not recur.** The *no owner* claim survives; the sentence did not | A, B, C |
 | **12** | Census item 16 (the twelve argument faults) was dropped | ⛔ **STRUCK.** Declared out of scope by a stated narrowing, not silently lost. A declared scoping is not a drop | D |
+| **13** | **Petition spray is reopened at ~5 and must be re-answered by cost** | ⛔ **RETRACTED — RULED ALLOWABLE.** *"if a character wants to spend their entire season meeting with people to petition, let them."* **No cap, no dedup, no required cost gate**; the budget is the whole of the pricing, and spending it all on petitions **is** the triage the budget exists to create. §26.3 | Jordan, 2026-09-01 |
+| **14** | *(gap — nothing said about inventing values a build needs)* | ➕ **ADDED.** The chain's own audit ranked *"declare the invented constants harness fixtures; run a 3-point sensitivity sweep"* as a remediation and this document did not carry it. **§42.2.1** — inject, grade, sweep, and **a verdict that flips across the sweep is itself a finding** | audit §6 item 9 |
 
 > ### **WHAT SURVIVED, AND IT IS THE THESIS**
 > **The season loop in the head is already holonic. It never uses the word.** R-1, R-2, T5 and T6
@@ -911,9 +913,36 @@ copyist's.**
    fewer acts than a healthy one **without anybody storing a number.**
 2. **The list is ORDERED**, so what he did first is legible when a season's later acts are foreclosed
    by its earlier ones.
-3. ⚠ **Petition spray is reopened.** It was closed *provisionally by one act per person*; at ~5 that
-   closure is void. **Re-answer it by cost** — a petition consumes budget and a refused petition costs
-   standing with the venue — **not by a cap.** §54 item 9.
+3. **Petition spray is ALLOWABLE, and this is RULED** (Jordan, 2026-09-01): *"if a character wants to
+   spend their entire season meeting with people to petition, let them."*
+
+> ### **THE SPRAY QUESTION IS CLOSED, AND CLOSING IT THIS WAY STRENGTHENS §26.3 RATHER THAN WEAKENING IT.**
+>
+> The old closure was *"provisionally, by one act per person"*, and at ~5 that closure is void. **The
+> replacement is not a cost gate and not a cap — it is nothing.** A character who spends all five acts
+> petitioning **has chosen to leave four other things undone**, which is precisely the triage the
+> budget exists to create. **Spray is the mechanism working, not a defect in it.**
+>
+> **Three consequences for an implementer:**
+> - **No dedup, no cap, no per-venue limit, no "already before a body" rule.** Any of them would be
+>   *an engine deciding a person's options*, which is L1.
+> - **No cost clause is required.** A petition consumes budget like any act, and that is the whole of
+>   the pricing. (An earlier revision of this document proposed *"a refused petition costs standing
+>   with the venue"* as a necessary gate. **It is not necessary.** It may still be good design — a
+>   venue that remembers being wasted is expressible through ordinary stance and claims — but it is
+>   now optional colour, not a fix.)
+> - **§54.1's close rule matters MORE, not less.** With spray allowed, several live petitions on one
+>   matter is the normal case, so the rule that closes them must be right: **petitions never close each
+>   other; a matter closes at RESOLVE by scarcity and at CALENDAR by lapse.**
+
+> ⚠ **AND THE RULING CARRIES AN OBSERVATION WORTH RECORDING RATHER THAN FIXING** (Jordan, same):
+> *"this may point towards the lack of actions available so far for characters to perform, which is
+> okay at this point."*
+>
+> **If petitioning five times is an attractive way to spend a season, the act vocabulary is thin.**
+> That is **an accepted state of the design at this stage, not a debt to close here.** §63.1 records
+> it so a later reader does not mistake the silence for an oversight — and so that nobody "fixes" a
+> thin vocabulary by capping the one act that is well specified.
 
 ⚠ **What remains genuinely open is narrower than the ruling:** whether a *scene* equals an *act*. The
 ruling says *"~5 playable scenes… which may mean ~5 actions"*. §62.
@@ -1548,6 +1577,25 @@ wait; it is to make the descent **show** it.
 > measured. A row with no grade does not default to `assumption` — IT FAILS THE EXPORT.** A default
 > grade is how an ungraded surface silently becomes a graded one.
 
+### §42.2.1 Never invent a constant — inject it and sweep it
+
+**Where a value is genuinely undecided, the honest state is `grade: absent` and the honest behaviour
+is to REFUSE, not to pick a plausible number.** The design has paid for the alternative: an instrument
+in the chain hardcoded a condition scale, three band edges, a wear table **with a silent default for
+unregistered kinds**, and a confidence value — against a params document whose own first line reads
+*"This document proposes NO VALUES"* and which rules that the condition scale is *"never a literal in a
+source file."*
+
+> **Where a probe or a build needs a number to run at all:**
+> 1. **Inject it** — never a literal in a body, never a silent default.
+> 2. **Declare it a harness fixture**, `grade: assumption`, with the injection site named.
+> 3. **Run a 3-point sensitivity sweep.**
+> 4. ⚠ **A verdict that FLIPS across the sweep is itself a finding**, and a more important one than
+>    the verdict.
+
+**And a silent default is the specific thing to refuse.** A wear table that returns `20` for an
+unregistered site kind does not fail — it answers, plausibly and wrongly, forever.
+
 ### §42.3 The boundary test — what stays code, what stays prose
 
 A thing enters the descent only if it passes **all three**: *(1) a total function from a small
@@ -1856,7 +1904,7 @@ others are stated over the object it defines.
 | **15** | **`Coherence` is read in three places and owned in none** | **FOLD-IN, amended** | **§22** — Person-interior, written only through seam Events, read person-side only; else an `absent` owner row |
 | **18** | A **person loader that seeds postless persons**, not only leaders and governors | **FOLD-IN, amended** | **§29.** ⚠ **Adopt the SHAPE — a roster read from a registry row at `grade: assumption` — not the number.** The design's own acceptance test needs a person with **zero `hold` Tenures** and is unreachable until one exists. A world-gen roster is not a clock (§29) |
 | **22** | **Jordan's two long-arc trajectories, decomposed into twelve transitions** | **FOLD-IN** | **Part X §61.** ⚠ **The census misquoted the score: the source says FIVE of twelve work today, not eleven.** These are **the only supplied acceptance cases in the whole chain**, and no case runner has ever run one |
-| **9** | **Petition multiplicity** — *"a person may put it to several offices"* | **FOLD-IN, amended** | **§21.** Land the **no-dedup** sentence now — *"no dedup, no 'already before a body' rule — that would be an engine deciding a person's options"* is L1 verbatim. **Hold the cost clause until §26.3's scene/act question settles** |
+| **9** | **Petition multiplicity** — *"a person may put it to several offices"* | **FOLD-IN, unamended** | **§21.** *"No dedup, no 'already before a body' rule — that would be an engine deciding a person's options"* is L1 verbatim. ⚠ **The first revision held a cost clause pending the scene/act question. That hold is LIFTED: spray is ruled allowable (§26.3), so no cost gate is required and none is folded in** |
 | **10** | **Petition supersession** — *"relocation, not decay"* | **FOLD-IN, amended** | **§21.** It needs **no new act**: the mechanism is already `ConveningCondition`. **Nothing cancels a petition automatically** |
 
 ### §54.1 The close rule the set produces
@@ -1945,7 +1993,17 @@ both dissolve — the act budget is **ruled** (§26.3) and the log question is *
 | **May a social quantity sink by neglect alone**, as memory already does, and is a person acting on witnessed loss enough to turn that sinking into a crisis? | **Three arcs.** If yes, most of the cost vanishes and no law moves. If no, three arcs lose their engine and the design says so out loud |
 | **How much does a dispensation distort in transit?** | T6 says it distorts; **nothing specifies by how much** |
 
-## §63 · Two things a reader should carry about the chain itself
+## §63.1 · Accepted states — not debts, and not oversights
+
+**Recorded so a later reader does not mistake silence for an omission, and does not "fix" them.**
+
+| accepted state | ruling / basis |
+|---|---|
+| **The act vocabulary is thin.** If spending five acts petitioning is an attractive season, there is not yet enough for a character to do | **Ruled acceptable at this stage** (Jordan, 2026-09-01): *"this may point towards the lack of actions available so far for characters to perform, **which is okay at this point**."* ⚠ **Do not close this gap by capping petitions** — §26.3 |
+| **Petition spray is allowable** | Ruled. §26.3. **No cap, no dedup, no required cost gate** |
+| **`Record` and `(Person, exists)` have no Partition rows** | Known (§30.1). **Rule the row before adding it** |
+
+## §63.2 · Two things a reader should carry about the chain itself
 
 - **A ruling and a landed edit are different events.** The `opening_set` overturn landed in two files
   and not a third; the act-budget ruling was missed by the head's own §4.2 *and* by the audit that
