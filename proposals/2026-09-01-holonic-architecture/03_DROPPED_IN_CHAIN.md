@@ -1,5 +1,8 @@
 # 03 · WHAT THE CHAIN DROPPED — #337 → #352
 
+## ⚠ CORRECTED 2026-09-01 after four adversarial lanes. The corrections are marked inline; the
+## counts, one quoted figure, one item's disposition and five citations all moved. See §8.
+
 ## Status: **PROPOSED (2026-09-01). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.** Nothing here runs.
 ## Scope: **PR #337 → #352 only** (`00_ADJUDICATION.md` §0).
 
@@ -13,7 +16,9 @@ open, omits it while restating the surrounding material, or promises to carry it
 
 **The test that does the work is the fourth field: name the later file and section that restates the
 surrounding material WITHOUT the thing.** A suspicion that cannot name that is not a finding, and is
-discarded. Twenty-four survived it; sixteen more were checked and rejected (§5).
+discarded. **Twenty-seven items are enumerated below** — the first version of this document totalled them as
+24 and was wrong (§8, correction 1). **One has since been STRUCK** (item 16), leaving 26 standing.
+Sixteen more candidates were checked and rejected (§5).
 
 > **The chain names this failure at its own head.** #351's body: *"the suite reproduces at its own
 > HEAD the failure five lanes documented, that **a ruling and a landed edit are different events**"* —
@@ -53,7 +58,11 @@ Ranked by what they change in `00`–`02`.
 #345 `01` §7 (7) carried as open: *"`Event`'s record beyond id and degree band — resolved in this
 suite by composing Event onto the executing `Key`, but **the field mapping is unwritten**."* #350
 `02` §10 restates that open list — seven of eight items carried or closed — **and omits this one.**
-**The head defines no `Event :=` anywhere.** #351's tracer then invented one, with `causes=[]`, which
+**The head defines no `Event :=` anywhere** — ⚠ **but an earlier in-chain revision does**:
+`Event := (id, kind, subject, changes[], emitted_at)`, five fields. **So this is a DROP, not an
+absence**, which is exactly what this document's own definition says and what its first version
+mis-stated. **And the record it was dropped from still carries no target and no actor**, which is why
+it strengthens the finding rather than weakening it. #351's tracer then invented one, with `causes=[]`, which
 is the `A4` finding.
 
 > **What it changes here:** `00` §C3 says the key system is the head's Event log and gives the
@@ -87,9 +96,13 @@ restates the carriers and the seven Tenure kinds with no rule.**
 > its destruction a fact."* **The Proposition-held `hold` is the exception: nothing destroys it,
 > because its subject cannot die.** The `commit` count still falls, so C4's monotonicity argument
 > survives for aggregation — **but "a faction collapses when people leave" is false while the `hold`
-> edge outlives the faction.** The proposed rule: a Proposition-held `hold` becomes **contestable at
-> the Rung's venue when `presence(w, prop, rung) = 0`**, or `until` is written when the last `commit`
-> reaches zero — declared as a seam, the way `(Tenure, until)` already is.
+> edge outlives the faction.** The proposed rule: **`confer` on an object whose
+> holder-Proposition has zero live `commit` edges becomes ELIGIBLE at the Rung's venue; nothing writes
+> `until` — the successful confer does, via the 1-per-object cardinality.**
+>
+> ⚠ **The first version offered a second option — "`until` is written when the last `commit` reaches
+> zero" — and it is REFUSED**: that is an actorless write on a social edge outside the one declared
+> `(Person, exists)` seam, and a second seam means the column is the wrong mechanism.
 
 ### D-13 · Five of #345's blocking gaps fell out of the head's open register; one came back as new
 
@@ -125,7 +138,7 @@ Sweep strength. Each names its source and the later section that lost it; none r
 | # | dropped | lost where | type | cost |
 |---|---|---|---|---|
 | **1** ✔ | `opening_set -> Act[]` overturned in `08`/`15`, still `Act[]` in `07` | `07` §3.2:137 | contradicted-silently | **one token** |
-| **2** | R-11's ruling sentence still grants Momentum for aligned action; the paragraph beneath and `02` §5.5.2 delete the grant | `15`:144 | contradicted-silently | four words |
+| **2** | R-11's ruling sentence still grants Momentum for aligned action; the paragraph beneath deletes the grant | `15`:144 | ⚠ **re-typed: stale text, not contradicted-silently** — the same section withdraws it loudly | four words |
 | **3** | `coin` enters as a MatterKind example, taking one side of a live fork the source refused to choose | `02` §2.2.2:205 | contradicted-silently | one line |
 | **4** | the drain-topology prerequisite — *"prerequisite work for step 9, not a footnote to it"* | `13` §3/§4, zero "drain" | promised-and-not-carried | one row |
 | **5** | the per-issue stance store the carrier must **absorb**, *"not sit beside"* | `13` §4 step 12 | promised-and-not-carried | one row |
@@ -137,12 +150,12 @@ Sweep strength. Each names its source and the later section that lost it; none r
 | **11** | gating dormant-grievance clearance on the holder's own ledger — *"one clause, and it removes a broadcast"* | `06` §8 r15; `04` CALENDAR | omitted-in-restatement | one clause |
 | **12** | `season_factor`'s *"likely answered by `11_world_events`"* — a read two generations promised; the file has no such thing | `02` §10 (9) | promised-and-not-carried | one line |
 | **15** | `Coherence` — read in two places, owned in none, its fork gone from both escalation registers | `02` §2.1; `03` §1; `15` §3 | omitted twice | two rows + a ruling |
-| **16** | the twelve named faults + stasis ladder, called *"the best-specified object in the document"* | `02` §7.2, §8 | praised-then-never-referenced | citation + row |
+| ~~**16**~~ | ~~the twelve named faults + stasis ladder~~ **⛔ STRUCK.** Not silently lost — **scoped out by a declared narrowing** (*the three deferred subsystems are out of scope except at the seam*). **A declared scoping is not a drop**, and it fails this document's own fourth test | — | — | — |
 | **18** ⚖ | the ratified per-settlement Local Actor counts (~45–50 across 36) behind the person loader | `13` step 3; `04` CENSUS | omitted-in-restatement | one row |
 | **21** | **per-Conviction scarring** — #351's own *"best idea in the archive"* and its own change C2 — absent from #351's change list. P4 blocks **7 arcs** | #351 `04` §4 | promised-and-not-carried (same PR) | row + a step choice |
-| **22** | Jordan's two long-arc trajectories → twelve transitions, *"eleven of twelve work"*, **never became cases** | `12_TESTS`; #351 `cases/` | praised-then-never-referenced | twelve cases |
+| **22** | Jordan's two long-arc trajectories → twelve transitions, ~~*"eleven of twelve work"*~~ **⚠ CORRECTED: the source says *"Recomputed rather than adjusted: FIVE OF TWELVE WORK TODAY"*** — **never became cases** | `12_TESTS`; #351 `cases/` | praised-then-never-referenced | twelve cases |
 | **23** ⚖ | the hook grammar — *"we can script narrative hooks and sequences so long as we don't script entire arcs"* — against the head's threshold refusal | `06` §7; `05` §5.2 | contradicted-silently | paragraph or escalation |
-| **24** ⚖ | the 3/4/5 scene-action model, against *"one act, universally"*; closed as *"reached independently by three routes"*, none of them it | `02` §8.1; `07` §4; `15` §3 | contradicted-silently | **already in flight** |
+| **24** | ~~⚖~~ **⚠ CORRECTED — IT IS RULED, IN CHAIN, AND THIS DOCUMENT MISSED THE FILE.** `2026-08-31-pr350-archive-recovery/02_SCENE_BUDGET_RULING.md` (part of #351): *"**THE ACT BUDGET IS ~5, NOT 1.** Verbatim: 'i expect a character to get ~5 playable scenes per season, which may mean that they get ~5 actions.'"* **#351 §4.2 and #352 §6 both missed it too.** The residue is `15` §3's stale *"three routes"* closure, and the open question is narrower: **does a scene equal an act?** | `15` §3 | stale-closure | one row |
 | **25** ⚖ | `Recall` as the tenth attribute — recorded by precedent, then *"this shape does not name the tenth"* | `02` §2.1.4; `15` §3 | contradicted-silently | verify, then a row |
 | **26** | J-1 (*may a false belief determine an action outright?*) — answered by the architecture, never closed in any register | `15` §3 | answered-silently | one closing row |
 | **27** | the Parliament Total Victory rider fork + its promised oracle run — unmentioned after #338 | nothing after #338 | promised-and-not-carried | one run or one sentence |
@@ -156,13 +169,19 @@ Sweep strength. Each names its source and the later section that lost it; none r
 
 ## §4 · THE PATTERN, AND THE ONE CHEAP THING THAT WOULD STOP IT
 
-**Fourteen of the twenty-four are `omitted-in-restatement` or `promised-and-not-carried`, and every one
-of those was lost at a section that restates its neighbours.** That is the signature: **a document
-rewriting a list loses the row it did not personally re-derive.**
+**Most items are `omitted-in-restatement` or `promised-and-not-carried`, and every one of those was
+lost at a section that restates its neighbours.** That is the signature: **a document rewriting a list
+loses the row it did not personally re-derive.**
 
-> **The chain already knows the mechanism and wrote it down:** *"a ruling delivered alongside another,
-> and satisfied by the tree's current state, is the one that gets silently dropped — nobody decides
-> against it, it simply never becomes a work item because nothing wrote it down."*
+⚠ **The first version put a precise ratio here ("fourteen of twenty-four"). It is withdrawn rather
+than recomputed** — the type column is itself sweep-strength, so a re-derived ratio would be a second
+uncontrolled number on top of a first.
+
+> ⚠ **CORRECTED ATTRIBUTION.** The first version of this section presented a quotation as the chain's
+> own. **It is a splice of two out-of-chain sources** — root `HANDOFF.md` and an `FA` ledger row, both
+> from a 2026-08-27 audit. Under §0's scope rule that is **not the chain**, and the sentence is
+> withdrawn as a citation. **The mechanism it describes is still visible in the census itself**, which
+> is the only evidence this section needs.
 
 **The cheap fix is the one `01_THE_CONTRACT_HIERARCHY.md` §4 already proposes for a different reason:
 every open item becomes a ROW with a `grade:`, not a paragraph.** #350 `02` §10 is a register whose own
@@ -195,8 +214,12 @@ point 5 the disposition is fix in place or drop, and neither is this proposal's 
 
 Neither is a dropped ruling; both are the class of defect that produces one.
 
-- **#338's body says *"IDs allocated: none"* while its diff allocates `ED-IN-0201`.**
-- **#343's body says #342 *"was closed unmerged"*; #342 merged as `57739a2`.**
+⚠ **BOTH ARE UNVERIFIED and are recorded as such.** Neither PR body is on disk in this checkout, so
+the first half of each claim could not be checked. **The second halves do check out**: #342 merged as
+`57739a2`, and `ED-IN-0201` is dated 2026-08-28.
+
+- #338's body reportedly says *"IDs allocated: none"* while its diff allocates `ED-IN-0201`. **UNVERIFIED.**
+- #343's body reportedly says #342 *"was closed unmerged"*; #342 **did** merge as `57739a2`. **UNVERIFIED** on the body.
 
 **A ruling recorded only in a PR body that misstates the tree is a ruling nobody will find by grep** —
 which is the mechanism §4 describes, one layer up.
@@ -217,3 +240,28 @@ which is the mechanism §4 describes, one layer up.
 pass**, with no second lane and no execution. The census's own construction is the thing it warns
 about: **a list re-typed from another document.** §1.1 marks what was checked; everything else is a
 lead with an address, not a measurement.
+
+---
+
+## §8 · THE CORRECTIONS THIS DOCUMENT TOOK
+
+Four read-only adversarial lanes attacked this census. **Their findings are applied above and listed
+here so the correction record stays legible.** Two changed a disposition; one changed a quoted figure;
+the rest are counts and citations.
+
+| # | correction | effect |
+|---|---|---|
+| 1 | **27 items are enumerated, not 24; 23 unverified, not 20** | the headline number was simply wrong — the document counted its own rows incorrectly |
+| 2 | **Item 22's *"eleven of twelve work"* does not exist.** The source says **FIVE of twelve** | a quoted measurement was false; the item survives, the score does not |
+| 3 | **Item 16 STRUCK** — a declared scoping is not a silent drop | 27 enumerated, 26 standing |
+| 4 | **Item 24 is RULED, in chain** — `02_SCENE_BUDGET_RULING.md` is part of #351 and this document missed it | the ⚖ mark was the inverse scope error: an in-chain Jordan ruling treated as pre-#337 |
+| 5 | **Item 2 re-typed** from contradicted-silently to stale-text | the same section withdraws the sentence loudly |
+| 6 | **§4's quotation withdrawn** — it was spliced from two out-of-chain sources | the mechanism claim stands on the census itself |
+| 7 | **§4's "fourteen of twenty-four" withdrawn rather than recomputed** | the type column is sweep-strength; a re-derived ratio would be a second uncontrolled number |
+| 8 | **D-14 sharpened** — an in-chain `Event :=` exists, so this is a drop, not an absence | it *strengthens* the finding: that record carries no target either |
+| 9 | **D-20's second option REFUSED** | an actorless write outside the one declared seam |
+| 10 | **§6's two PR-body claims marked UNVERIFIED** | the bodies are not on disk; reporting them as false would be the failure this document warns about |
+
+**And one finding that survived every lane unchanged:** the four hand-verified items (1, 14, 17, 20)
+reproduce exactly, and **of the twenty-plus items opened by a second reader, none was a strict false
+positive** — no named section carries the thing it is said to have lost.

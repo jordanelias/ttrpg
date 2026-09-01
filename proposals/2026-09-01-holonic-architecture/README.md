@@ -1,71 +1,61 @@
-# The season loop, holonically — built from the #337 → #352 chain
+# The season loop, holonically — the architecture, and the guide to building it in Godot
 
 ## Status: **PROPOSED (2026-09-01). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.** Nothing here runs.
 
-**Scope, and it decides what counts as evidence.** The only sources are the design chain **PR #337 →
-#352**, with **#351's `04_UNIFIED_SHAPE.md` as the head.** No file under `engine/`, no subsystem
-`sim/`, and **no decision ratified before #337** is authority — not as support, not as precedent, not
-as an incumbent to defer to. Where an in-chain document rests a claim on older material, the claim
-travels as **that document's own proposal, at its own strength**. `00` §0 names the one place this cuts
-an argument the chain itself makes, and re-derives the conclusion without it.
+| file | what it is |
+|---|---|
+| **`ARCHITECTURE.md`** | **the proposal.** Ten parts, from the one sentence down to GDScript hazards. Read Parts I–II before writing a line |
+| `03_DROPPED_IN_CHAIN.md` | the evidence appendix — 27 things the chain decided and then lost, four re-verified by hand, with the corrections four adversarial lanes forced |
+
+**`ARCHITECTURE.md` replaces the three documents this directory carried in its first revision**
+(`00_ADJUDICATION`, `01_THE_CONTRACT_HIERARCHY`, `02_THE_WRAPPER_LAYER`). They are not superseded in
+place because the second revision changed the thesis, not the details — see `ARCHITECTURE.md` §0.2,
+which lists every retraction rather than quietly dropping them.
+
+## Scope — the rule that decides what counts as evidence
+
+**The only sources are the design chain PR #337 → #352**, head = #351's `04_UNIFIED_SHAPE.md`. No file
+under `engine/`, no subsystem `sim/`, and **no decision ratified before #337** is authority. Where an
+in-chain document rests a claim on older material, the claim travels as **that document's own
+proposal, at its own strength**.
 
 ## The answer
 
-> **The proposition — self-sustaining containers running slices of the season loop, managed by wrappers
-> and a comprehensive key system — is, in its load-bearing part, WHAT THE HEAD ALREADY SPECIFIES. It
-> never uses the word and never names the object.**
+> **The season loop is already holonic. It never uses the word.** `01_THROUGHLINE.md`'s **R-1** and
+> **R-2** under LAW 3 are the container contract — *a rung reads only its own state, may compute an
+> aggregate over its descendants on demand but never receive or store a pushed one; upward influence
+> is emitting an aggregate, downward influence is emitting a refraction; no module reaches through
+> another* — and **T5**/**T6** already make both directions structural.
 
-`01_THROUGHLINE.md`'s **R-1** and **R-2** under LAW 3 are the container contract — *a rung reads only
-its own state, may compute an aggregate over descendants on demand but never receive or store a pushed
-one; upward influence is emitting an aggregate, downward influence is emitting a refraction; no module
-reaches through another* — and **T5** and **T6** already make both directions structural. One uniform
-container (`Rung`, one type, eight kinds), `contain` as an edge rather than node-parenting, influence
-aggregating up and refracting down. **That is a holonic architecture, complete, under another name.**
+**What is missing is not a wrapper. It is the `Event` record** — the object on which four other
+missing pieces are stated, and which the chain wrote once and then dropped. `ARCHITECTURE.md` §19,
+§54.4.
 
-**Three things are missing, and they are the work:**
+## What the second revision retracts
 
-| | missing | where |
-|---|---|---|
-| **M1** | the word, and **the object that owns R-1/R-2** — they are stated once and nothing enforces them | `02_THE_WRAPPER_LAYER.md` |
-| **M2** | **a descent** — T5's "filtered at a rung" and T6's "distorts in transit" both need to know, per module, what it may receive and emit. No surface answers that | `01_THE_CONTRACT_HIERARCHY.md` |
-| **M3** | **the loop's six steps mapped onto the ladder** — nothing joins them today | `00_ADJUDICATION.md` §4 |
+Four read-only Fable lanes ran against the first revision and their corrections were judged as a set.
+**Three of them killed its central proposal, independently.**
 
-**And M3 is where the proposition is partly wrong: two of the six steps partition per-container
-(MATTER, DELIBERATE), four do not, and no container gets a clock** — because the four global barriers
-are the only within-tick bound the design has, against a termination debt #351 §6.2 reports as
-unbounded.
+- **The wrapper is void.** The head has no targeted module emission to check — `Event` carries no
+  target and no actor, and *"the only transport the suite defines is a chain of `tell` acts."*
+- **Its direction rule contradicted the design.** A dispensation *"travels by being noticed, not down
+  a chain of posts"*; `scope` *"enumerates EXECUTORS, not places"*; venues may be containerless and
+  offices may have no containment node at all.
+- **"Two of six steps partition" was two tests applied to two groups.** The honest frame is
+  per-**owner**, and under it only RESOLVE's ordered fold and WITNESS's fan-out are global bodies.
+- **The act budget is RULED at ~5, in chain** — and the first revision called it Jordan's open call,
+  as did #351 §4.2 and #352 §6. All three missed the same file.
 
-| file | what it is |
-|---|---|
-| `00_ADJUDICATION.md` | the answer: three senses of "holonic" separated, four collisions, which steps a container may run, and the head's own N/E/R admission test run on this proposal |
-| `01_THE_CONTRACT_HIERARCHY.md` | **M2** — a spine of six levels, two axes that are deliberately not levels, and a generated composite. Cites and departs from two in-chain incumbents (#339, #345) |
-| `02_THE_WRAPPER_LAYER.md` | **M1** — one rule, four duties, four nevers. Narrowed by the N-line test to **the emission side only** |
-| `03_DROPPED_IN_CHAIN.md` | **24 things the chain decided and then lost**, ranked, each naming the later section that restates its neighbours without it. Four re-verified by hand; the rest reported at sweep strength and marked |
+Full list, with lanes and evidence: `ARCHITECTURE.md` §0.2.
 
-## Method
+## What it does not do
 
-A Fable 5.1 context sweep of #337–#352 and a second Fable pass hunting dropped rulings (`03`), then
-`proposals/2026-09-01-shape-tracer-audit/` read in full against the head, then the head's own suite
-read directly. **`03` §1.1 states which of its items were re-verified by hand and which are reported at
-sweep strength** — five of them bear directly on `00`–`02`, and one (`D-20`) is a **counter-case to
-`00` §C4 that is admitted there rather than argued away**. **This proposal was run against the head's
-admission test** (`01_THROUGHLINE.md` §6) rather than exempting itself from it — that test is what
-narrowed `02` from a general wrapper layer to an emission-side one, and the narrowing is recorded in
-`00` §5 rather than presented as the original design.
+- **It does not close the termination debt.** Four arcs plus the King are spirals; nothing bounds one
+  across seasons. §40.1 is honest that the clock refusal is an argument for not making it worse.
+- **It does not specify T6's distortion**, or pick a side on emitter- versus receiver-side refraction.
+- **It escalates nothing.** Both candidate escalations dissolved: the budget is ruled, the log question
+  is decided. What remains is unfinished specification, named in Part IX.
+- **Nothing executes.** Part X §66 lists ten artifacts that would change that, and marks the five that
+  cannot be satisfied by writing.
 
-**No repository file outside this directory was modified.** No `## Status:` line was flipped, no ledger
-row appended, **no `ED` allocated** — a gap in a PROPOSED architecture gets no ID; the adoption
-decision gets one (`01_FORWARD_DOCTRINE.md` §2), and the shape-tracer audit set that precedent.
-
-## What this does not do
-
-- **It does not close the termination debt.** #351 §6.2: *"four arcs plus the King are spirals; nothing
-  bounds one."* `00` §4.3 shows the barrier structure is the only bound and that a container clock
-  removes it — **an argument for not making things worse, not a proof.**
-- **It does not specify T6's distortion.** A Dispensation *"distorts in transit"*; how much is
-  unspecified in the chain and is not invented here.
-- **It does not touch the act budget** (#351 §4.2). Nothing here depends on which way it goes.
-- **It escalates nothing.** Both candidate escalations dissolved under the scope rule; what remains is
-  unfinished specification, named in `00` §7.
-- **Nothing here executes**, which is a weaker position than #351's. Each document's last section says
-  what would make it done, and in each case one step cannot be satisfied by writing.
+**No `ED` allocated** — a gap in a PROPOSED architecture gets no ID; the adoption decision gets one.
