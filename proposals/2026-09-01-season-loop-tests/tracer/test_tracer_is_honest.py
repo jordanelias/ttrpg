@@ -654,6 +654,35 @@ def test_r4_event_ids_are_unique_per_draw_and_reproducible():
     assert w1.content_hash() == w2.content_hash(), "and identical across runs of the same seed"
 
 
+def test_r4_no_route_is_decisive_on_a_single_common_word():
+    """THE STRUCTURAL ANSWER TO A CLASS THAT HAS RECURRED FIVE TIMES.
+
+    `ambient` (8 arcs -> 3) · `counter` inside "counter-productive" (10 -> 8) · adjectival
+    `standing` (18 core rows) · `standing condition` escaping the whitelist built for the third ·
+    and `age\\w*` matching AGENT/AGENTS/AGENCY/AGENDA, which produced the arc corpus's ONLY
+    PLAYABLE verdict on rows about "two AGENTS belonging to rival powers".
+
+    Four of the five were caught one at a time, by a reader, AFTER the verdict was published. A
+    whitelist of guarded tokens cannot work -- the fourth recurrence IS that whitelist failing,
+    and the fifth was not on it. This forbids the SHAPE instead: no route may be claimable by one
+    ordinary English word in a neutral carrier."""
+    import route_precision
+    offenders = route_precision.audit()
+    assert not offenders, (
+        "routes decisive on a single common word: " +
+        "; ".join(f"{pid} fires on {w!r}" for pid, w, _ in offenders))
+
+
+def test_r4_every_probe_is_reachable_or_declared_unroutable():
+    """S44.4's in-chain ruling names "ELEVEN UNREACHABLE PROBES and a 46% miss rate" as the
+    symptom of a router reconstructing what the author knew. A probe no route reaches is either
+    a coverage hole or an instrument self-check -- and an UNDECLARED self-check is
+    indistinguishable from the hole."""
+    import route_precision
+    un = route_precision.unreachable()
+    assert not un, f"probes no route reaches and no declaration covers: {un}"
+
+
 def test_the_corpus_defects_are_reported_not_hidden():
     """Six of the in-chain corpus's seven case files are committed inside a markdown fence
     with a transcript preamble, and one is TRUNCATED AT ITS HEAD. The instrument works around

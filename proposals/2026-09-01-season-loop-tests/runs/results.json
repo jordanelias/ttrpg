@@ -7220,6 +7220,23 @@
      }
     },
     {
+     "need": "the cumulative erosion crossing a specific count-of-locations threshold must unlock a discrete, named follow-on capability at one specific, symbolically significant location, distinct from ordinary background erosion",
+     "hardness": "important",
+     "probe": "A23",
+     "verdict": {
+      "id": "A23",
+      "verdict": "GAP",
+      "detail": "aggregate 'revocations_ever' composed over 1 ENDED edge(s)",
+      "kind": "FORBIDDEN",
+      "section": "S22.4",
+      "title": "an aggregate over ended edges is monotone",
+      "needs": "filter to until == null before summing",
+      "law": "L3 clause 3 -- ended Tenures PERSIST as historical claim subjects (S15.2), so a count over live AND ended rows is monotone non-decreasing. That is a ratchet built entirely out of 'structural' edges",
+      "by": "construction",
+      "tests": "a running total of everything that ever happened must be able to be kept"
+     }
+    },
+    {
      "need": "the erosion crossing threshold specifically at the institution's own most symbolically central location must produce a categorically different consequence (core legitimacy-generation becoming irrelevant, not just weaker) than crossing it anywhere else",
      "hardness": "important",
      "probe": "W9",
@@ -7243,11 +7260,6 @@
     },
     {
      "need": "a faction pursuing a deliberately thin, over-extended presence strategy must end up positioned to benefit from the eroding quantity in every location where it happens to have a presence, without having caused or targeted the erosion there",
-     "hardness": "important",
-     "probe": null
-    },
-    {
-     "need": "the cumulative erosion crossing a specific count-of-locations threshold must unlock a discrete, named follow-on capability at one specific, symbolically significant location, distinct from ordinary background erosion",
      "hardness": "important",
      "probe": null
     }
@@ -10490,8 +10502,8 @@
    "verdict": "BLOCKED",
    "rows": 9,
    "core": 3,
-   "core_routed": 2,
-   "core_unmapped": 1,
+   "core_routed": 3,
+   "core_unmapped": 0,
    "core_blocked": 1,
    "blockers": [
     "F16"
@@ -10510,6 +10522,21 @@
       "title": "a vacancy opens the succession occasion",
       "by": "construction",
       "tests": "when a post falls empty the process to fill it must be able to start"
+     }
+    },
+    {
+     "need": "One resolution path must trade an immediate, present-tense benefit for a DEFERRED consequence explicitly recorded as 'seeded' now but whose actual resolution/payoff is left for an unspecified LATER point in the campaign.",
+     "hardness": "core",
+     "probe": "A17",
+     "verdict": {
+      "id": "A17",
+      "verdict": "PASS",
+      "detail": "PASS-BY-CONVENTION ONLY, AND THE DESIGN SAYS SO ITSELF. Surface: ['contest', 'SeasonDriver.resolve']. S27.2 is explicit that this refusal has NEITHER A MECHANISM NOR A CHEAP TEST -- IT IS ENFORCED BY A PERSON NOTICING -- and that it is 'the refusal whose violation is most tempting, most locally reasonable, and most catastrophic'. Recorded as THE DESIGN'S NAMED WEAK POINT, not as a guarantee. Revision 1 of this instrument violated it",
+      "kind": null,
+      "section": "S27.2",
+      "title": "the loop has one resolver",
+      "by": "convention",
+      "tests": "every outcome in the game must go through one place"
      }
     },
     {
@@ -10546,11 +10573,6 @@
     }
    ],
    "unmapped": [
-    {
-     "need": "One resolution path must trade an immediate, present-tense benefit for a DEFERRED consequence explicitly recorded as 'seeded' now but whose actual resolution/payoff is left for an unspecified LATER point in the campaign.",
-     "hardness": "core",
-     "probe": null
-    },
     {
      "need": "The REFUSAL branch of that same choice must impose both an IMMEDIATE unconditional cost and a SEPARATE, CONDITIONAL additional cost that only applies if a different, otherwise-unrelated clock is currently within a specific band at the moment of the choice.",
      "hardness": "important",
@@ -11855,6 +11877,18 @@
    "by": "no-signature",
    "tests": "something said in private must be able to stay private"
   },
+  "A23": {
+   "id": "A23",
+   "verdict": "GAP",
+   "detail": "aggregate 'revocations_ever' composed over 1 ENDED edge(s)",
+   "kind": "FORBIDDEN",
+   "section": "S22.4",
+   "title": "an aggregate over ended edges is monotone",
+   "needs": "filter to until == null before summing",
+   "law": "L3 clause 3 -- ended Tenures PERSIST as historical claim subjects (S15.2), so a count over live AND ended rows is monotone non-decreasing. That is a ratchet built entirely out of 'structural' edges",
+   "by": "construction",
+   "tests": "a running total of everything that ever happened must be able to be kept"
+  },
   "A36": {
    "id": "A36",
    "verdict": "GAP",
@@ -11932,6 +11966,16 @@
    "title": "the fold is order-independent, and the float control actually fires",
    "by": "construction",
    "tests": "the outcome must not depend on the order the engine happened to process things in"
+  },
+  "A17": {
+   "id": "A17",
+   "verdict": "PASS",
+   "detail": "PASS-BY-CONVENTION ONLY, AND THE DESIGN SAYS SO ITSELF. Surface: ['contest', 'SeasonDriver.resolve']. S27.2 is explicit that this refusal has NEITHER A MECHANISM NOR A CHEAP TEST -- IT IS ENFORCED BY A PERSON NOTICING -- and that it is 'the refusal whose violation is most tempting, most locally reasonable, and most catastrophic'. Recorded as THE DESIGN'S NAMED WEAK POINT, not as a guarantee. Revision 1 of this instrument violated it",
+   "kind": null,
+   "section": "S27.2",
+   "title": "the loop has one resolver",
+   "by": "convention",
+   "tests": "every outcome in the game must go through one place"
   },
   "A25": {
    "id": "A25",
@@ -12265,16 +12309,6 @@
    "by": "no-signature",
    "tests": "a region must be able to advance on its own schedule while others wait"
   },
-  "A17": {
-   "id": "A17",
-   "verdict": "PASS",
-   "detail": "PASS-BY-CONVENTION ONLY, AND THE DESIGN SAYS SO ITSELF. Surface: ['contest', 'SeasonDriver.resolve']. S27.2 is explicit that this refusal has NEITHER A MECHANISM NOR A CHEAP TEST -- IT IS ENFORCED BY A PERSON NOTICING -- and that it is 'the refusal whose violation is most tempting, most locally reasonable, and most catastrophic'. Recorded as THE DESIGN'S NAMED WEAK POINT, not as a guarantee. Revision 1 of this instrument violated it",
-   "kind": null,
-   "section": "S27.2",
-   "title": "the loop has one resolver",
-   "by": "convention",
-   "tests": "every outcome in the game must go through one place"
-  },
   "A18": {
    "id": "A18",
    "verdict": "GAP",
@@ -12332,18 +12366,6 @@
    "title": "the loop's steps partition per container",
    "by": "construction",
    "tests": "each region must be able to run its own slice of the loop"
-  },
-  "A23": {
-   "id": "A23",
-   "verdict": "GAP",
-   "detail": "aggregate 'revocations_ever' composed over 1 ENDED edge(s)",
-   "kind": "FORBIDDEN",
-   "section": "S22.4",
-   "title": "an aggregate over ended edges is monotone",
-   "needs": "filter to until == null before summing",
-   "law": "L3 clause 3 -- ended Tenures PERSIST as historical claim subjects (S15.2), so a count over live AND ended rows is monotone non-decreasing. That is a ratchet built entirely out of 'structural' edges",
-   "by": "construction",
-   "tests": "a running total of everything that ever happened must be able to be kept"
   },
   "A24": {
    "id": "A24",
@@ -12753,6 +12775,15 @@
    "expected": false
   },
   {
+   "kind": "FORBIDDEN",
+   "what": "aggregate 'revocations_ever' composed over 1 ENDED edge(s)",
+   "where": "S22.4",
+   "needs": "filter to until == null before summing",
+   "law": "L3 clause 3 -- ended Tenures PERSIST as historical claim subjects (S15.2), so a count over live AND ended rows is monotone non-decreasing. That is a ratchet built entirely out of 'structural' edges",
+   "case": "probe:A23",
+   "expected": false
+  },
+  {
    "kind": "COLLISION",
    "what": "the person's ORDER ['spend_treasury', 'buy_grain', 'bribe'] vs the fold's order ['bribe', 'buy_grain', 'spend_treasury']",
    "where": "S26.3 / S32",
@@ -13020,15 +13051,6 @@
    "needs": "publish as a `tell`, which DISTORTS IN TRANSIT; the person's own opening_set does the rest",
    "law": "S37.3 -- it deletes T3 AND T6 AT ONCE: everyone would receive IDENTICAL, UNDISTORTED terms. 'It travels by being noticed, NOT DOWN A CHAIN OF POSTS.' And SCOPE ENUMERATES EXECUTORS, NOT PLACES, so there is no descendant set to broadcast to in the office-cluster case",
    "case": "probe:A21",
-   "expected": false
-  },
-  {
-   "kind": "FORBIDDEN",
-   "what": "aggregate 'revocations_ever' composed over 1 ENDED edge(s)",
-   "where": "S22.4",
-   "needs": "filter to until == null before summing",
-   "law": "L3 clause 3 -- ended Tenures PERSIST as historical claim subjects (S15.2), so a count over live AND ended rows is monotone non-decreasing. That is a ratchet built entirely out of 'structural' edges",
-   "case": "probe:A23",
    "expected": false
   },
   {

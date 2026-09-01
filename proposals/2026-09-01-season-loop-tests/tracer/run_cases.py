@@ -421,7 +421,9 @@ ROUTES_2: list[tuple[str, str, str | None]] = [
     ("F18", r"\b(conflict|cut against|compet\w+|at odds|tension|contradict|in direct)\w*\b[^.]{0,70}\b(order|instruction|directive|mandate|command|what .{0,25}(ordered|wanted|demanded))\b", None),
     ("F19", r"\b(settlement|place|town|region|province|community|territor\w+|world)\b[^.]{0,60}\b(generat\w+|produc\w+|rais\w+|surfac\w+|throw\w* up|of its own)\b[^.]{0,50}\b(demand|need|dispute|shortfall|ambition|problem|issue|pressure)s?\b", None),
     ("A36", r"\b(first|earlier|prior|before)\b[^.]{0,60}\b(foreclos\w+|close off|rule out|prevent|preclud\w+|constrain)\w*\b[^.]{0,50}\b(later|after|subsequent|remaining)\b", None),
-    ("A36", r"\b(sequenc\w+|order)\b[^.]{0,50}\b(within|inside|during)\b[^.]{0,30}\b(a|the|one|the same)\b[^.]{0,15}\bseason\b", None),
+    # ⚠ `order` is a common noun in this corpus meaning A COMMAND or AN INSTITUTION; this route
+    # is about ACT-ORDERING. Requires the sequencing sense explicitly.
+    ("A36", r"\b(sequenc\w+|the order (in )?which|ordering|resolution order)\b[^.]{0,50}\b(within|inside|during)\b[^.]{0,30}\b(a|the|one|the same)\b[^.]{0,15}\bseason\b", None),
     ("P22", r"\b(evidence|proof|dossier|report|record|document|data|finding|text|copy|letter|writ|file|artefact|artifact)\b[^.]{0,70}\b(persist\w*|exist\w*|outliv\w*|survive|be (found|seized|carried|hidden|given|destroyed|examined|stolen|traded))\w*\b", None),
     ("P5",  r"\b(true|false|fabricat\w+|forg\w+|falsif\w+|invent\w+|planted|misleading)\b[^.]{0,70}\b(unable to distinguish|cannot tell|indistinguishable|without knowing|in advance|which is which)\b", None),
     ("P16", r"\b(corroborat\w+|refut\w+|verif\w+|confirm\w+|cross[- ]check)\w*\b[^.]{0,70}\b(independent\w*|third part\w+|another|separately|own (fieldwork|investigation))\b", None),
@@ -527,7 +529,7 @@ ROUTES_4: list[tuple[str, str, str | None]] = [
 
     # (i) SIMULTANEITY AND INDEPENDENCE ACROSS ACTORS.
     ("F18", r"\b(two|three|several|multiple)\b[^.]{0,40}\b(independent|unrelated|separate)\b[^.]{0,40}\b(actor|faction|institution|part(y|ies))\w*\b[^.]{0,60}\b(simultaneous\w*|at (the )?same time|each|both)\b", None),
-    ("A36", r"\b(same|one|single)\b[^.]{0,20}\b(location|place|window|period|season)\b[^.]{0,60}\b(contest\w*|oppos\w+|counter\w*|net effect)\b", None),
+    ("A36", r"\b(same|one|single)\b[^.]{0,20}\b(location|place|window|period|season)\b[^.]{0,60}\b(contest\w*|oppos\w+|net effect|in (the )?same (order|sequence))\b", None),
 ]
 
 COMPILED += [(pid, re.compile(rx, re.I), re.compile(neg, re.I) if neg else None)
@@ -535,6 +537,14 @@ COMPILED += [(pid, re.compile(rx, re.I), re.compile(neg, re.I) if neg else None)
 
 
 ROUTES_5: list[tuple[str, str, str | None]] = [
+    # Reached by `route_precision.unreachable()`: probes the corpus DOES ask for and that no
+    # route pointed at. S44.4 names this exact symptom in the in-chain router -- "ELEVEN
+    # UNREACHABLE PROBES and a 46% miss rate" -- so it is measured here rather than assumed.
+    ("P42", r"\b(wounded|injured|sick|exhausted|distant|far from|travelling|imprisoned|besieged)\b[^.]{0,70}\b(fewer|less|reduced|limited|constrain\w+)\b[^.]{0,40}\b(action|act|option|capacity)s?\b", None),
+    ("A26", r"\b(circular|cycle|cyclic|loop|mutual\w*|refer\w* (back|to each other))\b[^.]{0,60}\b(reference|dependenc\w+|relationship|structure|chain)s?\b", None),
+    ("A17", r"\b(one|single|the same)\b[^.]{0,30}\b(resolver|resolution (path|point)|place where outcomes)\b", None),
+    ("A13", r"\b(recomput\w+|cache|cached|reus\w+|expensive)\b[^.]{0,60}\b(deriv\w+|calculat\w+|aggregate|value)\b", None),
+    ("A23", r"\b(ever|all[- ]time|cumulative|historical|lifetime)\b[^.]{0,40}\b(total|count|tally|number of)\b", None),
     # L3's two clauses are DIFFERENT RULES and the corpus asks for both. Clause 1 (one person's
     # own counter) is PERMITTED by the head and routes to P17; clause 2 (a sum across holders)
     # is refused and routes to P43. Revisions 1-3 sent both to the clause-2 refusal.
