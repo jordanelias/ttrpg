@@ -196,6 +196,14 @@ DEFAULT_FIXTURES = Fixtures(
     entrenchment_seasons=60,
     # S27.4: "an attempt at Ob > 2 x Pool is refused, and the season is spent."
     obstacle_refusal_multiple=2,
+    # S12.1 gates verbs on `condition` against per-kind band FLOORS. S22 assigns "band
+    # coefficients" and "the obstacle floor" to params; the params document proposes NO
+    # VALUES, so these are harness fixtures and A31c sweeps them. S42.2.1 names "three band
+    # edges" as one of the four constants a prior instrument in the chain invented -- rev 2
+    # fixed the other three and left these hardcoded in probe bodies, unswept.
+    band_floors={"harbour": {"bulk_shipping": 800, "fishing": 100},
+                 "seam": {"deep_mining": 700, "surface_gleaning": 50},
+                 "body": {"full_operations": 800, "limited": 500, "withdrawal_only": 100}},
 )
 
 
@@ -282,11 +290,56 @@ WRITE_CLASS_OF: dict[tuple[str, Step], WriteClass] = {
 PARTITION: dict[tuple[str, str], tuple[bool, str]] = {
     ("Tenure", "until"): (False, "chain S15.3 -- THE PARTITION'S ONE DECLARED SEAM"),
 }
+
+# ⚠ REV 3. The rev-2 derivation was a TWO-VALUED CLASSIFIER OVER A FIVE-VALUED DOMAIN, and
+# everything it did not cover fell through to the PERMISSIVE branch -- exactly the silent
+# default S42.2.1 refuses and the opposite polarity to S42.2's rule that zero evidence maps to
+# the verdict AGAINST the thing measured. It is now total, and it REFUSES where the matrix does
+# not determine an answer.
 for _thing, _steps in WRITE_MATRIX.items():
-    if _thing in ("acts_returned",):
+    if _thing == "acts_returned":
         continue
-    _social = _steps == {Step.RESOLVE}
-    PARTITION[("*matrix*", _thing)] = (_social, f"matrix S30 -- writable at {sorted(s.value for s in _steps)}")
+    if Step.MATTER in _steps:
+        # the matrix admits the WORLD as a writer, so an act is not required
+        PARTITION[("*matrix*", _thing)] = (
+            False, f"matrix S30 -- admitted at MATTER, so the world may write it")
+    elif _steps == {Step.RESOLVE}:
+        # only RESOLVE, whose write class is ACTS -- so ONLY AN ACT may write it
+        PARTITION[("*matrix*", _thing)] = (
+            True, "matrix S30 -- admitted ONLY at RESOLVE, whose class is ACTS")
+    # ELSE: NOT DETERMINABLE. Date/DocketItem/ConveningCondition (CALENDAR+RESOLVE) and
+    # claim_ledger (WITNESS only) fall here, and partition_lookup RAISES for them unless the
+    # row is an explicitly declared instrument assumption below.
+
+# ---------------------------------------------------------------------------
+# ROWS THE INSTRUMENT HAD TO ASSUME TO RUN AT ALL.
+#
+# S42.2.1's pattern -- INJECT IT, DECLARE IT, NAME THE SITE -- applied to a SCHEMA ROW rather
+# than to a number. Without these three the loop cannot complete a single season, so refusing
+# them outright would mean measuring nothing; asserting them silently would be the invention
+# S42.3 names. They are therefore declared, listed, counted, and REPORTED IN THE OUTPUT, so a
+# reader can see exactly how much of L4's enforcement rests on the instrument rather than on
+# the design.
+# ---------------------------------------------------------------------------
+PARTITION_ASSUMED: dict[tuple[str, str], tuple[bool, str]] = {
+    ("Person", "claim_ledger"): (
+        False,
+        "ASSUMED: S28 puts the deposit at WITNESS, whose class is INTERIOR, and S20 makes "
+        "`witness` the ONLY minter -- so the writer is an Event, not an act. The matrix "
+        "determines nothing (WITNESS appears in no other row) and no S30 row states it. "
+        "⚠ THE CONSEQUENCE IS UNCOMFORTABLE AND IS NOT HIDDEN: under this assumption a "
+        "person's own memory is a row THE WORLD MAY WRITE, which sits badly beside S22 "
+        "giving the ledger to the Person and S9.3 making it the epistemic layer."),
+    ("Date", "fired"): (
+        False,
+        "ASSUMED: S24 has CALENDAR fire dates with no actor, so the writer is not an act. "
+        "The matrix admits Date at CALENDAR and RESOLVE, which determines nothing."),
+    ("DocketItem", "matter"): (
+        True,
+        "ASSUMED: S36.1 makes `carry` AN ACT BY A NAMED PERSON, and T5's whole claim is that "
+        "THE FILTER IS A PERSON WHO PAYS. CALENDAR's own docket formation is the awkward "
+        "case and is why this is an assumption rather than a reading."),
+}
 
 # The matrix names THINGS, not (record-kind, field) pairs. A derivation is valid ONLY where the
 # matrix row IS the field -- otherwise `(Person, convictions)` rides on `stance`'s row and a real
@@ -313,6 +366,9 @@ PARTITION_MISSING: dict[tuple[str, str], str] = {
 }
 
 
+ASSUMPTIONS_USED: set[tuple[str, str]] = set()
+
+
 def partition_lookup(record_kind: str, fieldname: str, thing: str) -> tuple[bool, str]:
     if (record_kind, "*") in PARTITION_MISSING:
         raise Unspecified(f"({record_kind}, *) has no Partition row", "S30.1",
@@ -324,6 +380,10 @@ def partition_lookup(record_kind: str, fieldname: str, thing: str) -> tuple[bool
                           law=PARTITION_MISSING[(record_kind, fieldname)])
     if (record_kind, fieldname) in PARTITION:
         return PARTITION[(record_kind, fieldname)]
+    if (record_kind, fieldname) in PARTITION_ASSUMED:
+        social, why = PARTITION_ASSUMED[(record_kind, fieldname)]
+        ASSUMPTIONS_USED.add((record_kind, fieldname))
+        return social, why
     named = MATRIX_FIELD_OF.get((record_kind, fieldname))
     if named is not None and ("*matrix*", named) in PARTITION:
         return PARTITION[("*matrix*", named)]
@@ -426,21 +486,37 @@ WITNESS_CHANNELS = ("post_remit", "co_located", "witness_key", "document_key", "
 
 
 class Sensation:
-    """S18.2 -- EXACTLY TWO SCALARS.
+    """S18.2 -- EXACTLY TWO SCALARS, and it is the ONLY bridge from world truth into `choose`.
 
-    REV 2 HONESTY NOTE. S34's own enforcement column rates this `convention -- the named
-    residual risk`, and rev 1 claimed the two-slot shape made widening structural. In Python
-    it does not, any more than a GDScript convention does; S46.1's `Vector2` argument is a
-    GODOT property this instrument cannot reproduce. `__slots__` is the nearest available
-    approximation and it is still a convention a determined author can spell around."""
-    __slots__ = ("subsistence", "standing")
+    REV 3. Rev 2 made `sense()` raise outright, which was right about `standing` and wrong
+    about everything else: the driver then routed AROUND `Sensation` entirely and fed
+    DELIBERATE a bare int, so the type S26 puts in `choose`'s signature was NEVER CONSTRUCTED
+    IN ANY RUN and a regression test pinned the deviated 4-ary call as the invariant.
 
-    def __init__(self, subsistence: int, standing: int):
+    The honest shape is to keep the type and RAISE AT THE POINT OF USE. `subsistence` is
+    computable from an injected formula; `standing` is not computable at all, so reading it
+    raises. A `choose` that never consults standing runs; one that does gets the gap exactly
+    where the design fails to supply it.
+
+    S34's enforcement column rates the two-scalar rule `convention -- the named residual
+    risk`. `__slots__` is the nearest Python approximation to S46.1's `Vector2` argument and
+    is still a convention a determined author can spell around."""
+
+    __slots__ = ("subsistence",)
+
+    def __init__(self, subsistence: int):
         self.subsistence = subsistence
-        self.standing = standing
+
+    @property
+    def standing(self) -> int:
+        raise Unspecified(
+            "Sensation.standing", "S18.2",
+            needs="an aggregation producing 'what everyone reads off you' that does not cross holders",
+            law="S18.2 defines standing as 'THE GAP BETWEEN WHAT EVERYONE READS OFF YOU AND WHAT YOU HOLD' and NO SECTION COMPUTES IT. The obvious computation -- reading a value off every other person -- is the shape S22.4 clause 2 bars, so this is not merely unwritten: the direct route to it is refused",
+        )
 
     def __iter__(self):
-        return iter((self.subsistence, self.standing))
+        return iter((self.subsistence,))
 
 
 class View:
@@ -645,9 +721,14 @@ class World:
                               law="S30 -- ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION")
         if step not in allowed:
             TRACE.write(thing, wclass.value, sname, False)
-            raise Forbidden(f"'{thing}' written during {sname}", "S30",
-                            needs=f"one of {sorted(s.value for s in allowed)}",
-                            law="S30 -- ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION")
+            # REV 3: this raises Unspecified, not Forbidden. S30's rule is ONE doctrinal
+            # condition -- "ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION" -- and rev 2 still
+            # split it, raising Forbidden for a "no" cell and Unspecified for a missing row.
+            # That made the kind histogram a measurement of the transcription rather than of
+            # the design, which is the exact defect retraction 8 claimed to have closed.
+            raise Unspecified(f"'{thing}' written during {sname}", "S30",
+                              needs=f"one of {sorted(s.value for s in allowed)}",
+                              law="S30 -- ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION")
         expect = WRITE_CLASS_OF.get((thing, step))
         if expect is not None and expect is not wclass:
             TRACE.write(thing, wclass.value, sname, False)
@@ -814,10 +895,25 @@ class Query:
     def budget(p: Person, v: View, k: int) -> int:
         """S26: `budget : (Person, View) -> int`. NO WORLD.
 
-        REV 2 fix. Rev 1 gave this a World first, so `choose` -- which correctly has none --
-        could not ask its own budget, and `deliberate` silently truncated the tail. That is
-        AN ENGINE DECIDING A PERSON'S OPTIONS, which is L1. It is person-side, `choose` asks
-        it, and exceeding it RAISES rather than being trimmed."""
+        REV 3 DISCLOSURE, because rev 2's docstring claimed something the body did not do.
+        THIS RETURNS THE INJECTED FIXTURE AND IGNORES `p` AND `v` -- it is functionally the
+        FIELD S26.3 forbids, and it cannot honestly be otherwise, because of a collision the
+        chain has not resolved:
+
+          S26 types it `(Person, View) -> int`, with NO World.
+          S26.3 consequence 1 says it varies by OFFICE, CONDITION and DISTANCE TRAVELLED.
+
+        All three are RESOLVER-SIDE facts. Office-holding is a `hold` Tenure in the tenure
+        store; `condition` belongs to a Site; distance travelled is a travel leg, which S22.3
+        says HAS NO OWNER AT ALL. A person-side function with no World cannot read any of
+        them. Probe P42 raises this as a COLLISION rather than papering over it with a
+        plausible formula, which S42.2.1 forbids.
+
+        What rev 3 DOES restore is the half rev 2 dropped: `choose` ASKS for its own budget
+        rather than being handed the answer. `deliberate` passes this callable down, so the
+        person consults their own budget and decides what to leave undone -- and an
+        over-budget return still RAISES, because silently discarding the tail would be an
+        engine deciding a person's options, which is L1."""
         TRACE.query("budget", "person")
         return k
 
@@ -848,20 +944,17 @@ class Query:
         return min(scale, (seasons_held * scale) // span)
 
 
-def sense(p: Person, w: World) -> Sensation:
-    """S18.2 -- the ONE non-decision function permitted a World. EXACTLY TWO SCALARS.
+def sense(p: Person, w: World, subsistence: Callable[[Person, World], int]) -> Sensation:
+    """S18.2 / S26 -- the ONE non-decision function permitted a World, and the only bridge from
+    world truth into `choose`.
 
-    REV 2 fix: rev 1 returned `standing = 0` unconditionally -- the silent default S42.2.1
-    names by name. S18.2 defines standing as "the gap between what everyone reads off you and
-    what you hold" and NO SECTION COMPUTES IT; worse, "what everyone reads off you" is an
-    aggregation ACROSS HOLDERS, which S22.4 clause 2 forbids outright. It raises."""
+    REV 3. It now RETURNS a Sensation, so `choose : (Person, View, Sensation) -> Act[]` is the
+    signature actually exercised. Reading `.standing` raises where the design fails to supply
+    it; `.subsistence` is computed by an INJECTED formula, because no in-chain document
+    supplies one and S10.4 makes MatterKind an OPEN registry -- summing kinds as if fungible
+    is a model choice this instrument may not make on the design's behalf (S42.2.1)."""
     TRACE.query("sense", "bridge")
-    raise Unspecified(
-        "Sensation.standing",
-        "S18.2",
-        needs="an aggregation producing 'what everyone reads off you' that does not cross holders",
-        law="S18.2 names it; NO SECTION COMPUTES IT -- and the obvious computation is refused by S22.4 clause 2, which bars any resolver-side Query aggregating per-person values across holders",
-    )
+    return Sensation(subsistence(p, w))
 
 
 def sense_subsistence_only(p: Person, w: World, formula: Callable[[Person, World], int]) -> int:
@@ -937,15 +1030,35 @@ class SeasonDriver:
         # S25: NO SOCIAL QUANTITY MOVES HERE. L4 at its sharpest.
         w._in_parallel_map = True
         scale = w.fixtures.get("condition_scale")
+        floors_all = w.fixtures.get("band_floors")
         for s in w.sites.values():
             before = s.condition
             wear = w.fixtures.wear(s.kind)      # NO SILENT DEFAULT -- unregistered kind raises
             w.write("condition", WriteClass.MATTER,
                     lambda s=s, wear=wear: setattr(s, "condition", max(0, s.condition - wear)),
                     record_kind="Site", fieldname="condition", driver="Event")
-            # S12.1/L5: A BAND EDGE CROSSING IS AN EMISSION, NOT A WRITE, and it is the L5
-            # mechanism in its commonest form. Rev 1 had no crossing channel at all.
-            w.crossings.append((s.id, before, s.condition))
+            # S12.1 / L5: A BAND EDGE CROSSING IS AN EMISSION, NOT A WRITE.
+            #
+            # ⚠ REV 3. Rev 2 appended a row for EVERY site EVERY season regardless of whether
+            # any band was crossed, and NEVER CONSTRUCTED AN EVENT -- so nothing was
+            # witnessable and nothing entered the log, while the probe that read it claimed
+            # "L5 exactly... THE COUNTER COMPELS SOMEONE TO ACT". Half of L5 was missing and
+            # the other half was a filter on "did the number change at all", which wear
+            # guarantees. A crossing now fires only on a REAL band edge and EMITS.
+            floors = floors_all.get(s.kind, {})
+            for verb, floor in sorted(floors.items()):
+                if before >= floor > s.condition:
+                    ev = Event(
+                        id=H(w.world_seed, w.tick, s.id, f"crossing:{verb}"),
+                        kind="condition.band_crossed", subject=s.id, changes=[],
+                        causes=[ROOT], emitted_at=w.tick)
+                    w.log.append(ev); emitted.append(ev)
+                    w.crossings.append((s.id, verb, before, s.condition, ev.id))
+                    TRACE.event(ev.id, ev.kind, ev.causes)
+                    TRACE.decision(f"{s.id} crossed the `{verb}` floor", "S12.1/S3-L5",
+                                   chose="EMIT a witnessable Event; write no social row; produce no outcome",
+                                   alternatives=["write the consequence directly (L5 forbids: a crossing MAY NEVER PRODUCE AN OUTCOME)",
+                                                 "silently drop the verb from the set (then nobody can witness it)"])
         w._in_parallel_map = False
         TRACE.step("MATTER", "leave")
         w.frozen = True     # S26.2 -- frozen from END OF MATTER to START OF RESOLVE
@@ -965,10 +1078,14 @@ class SeasonDriver:
         k_budget = w.fixtures.get("act_budget")
         w._in_parallel_map = True       # S51: WorkerThreadPool over persons. The one that pays.
         for p in list(w.persons.values()):
-            s = sense_subsistence_only(p, w, subsistence)
+            s = sense(p, w, subsistence)            # a Sensation, per S26's signature
             v = Query.assemble(p, question, k_view)
-            b = Query.budget(p, v, k_budget)        # person-side; `choose` asks its own budget
-            produced = choose(p, v, s, b)
+            # S26.3: the PERSON asks their own budget. `choose` receives the QUERY, not the
+            # answer -- rev 2 computed it in the engine and handed the number down, which is
+            # the half of retraction 5 that never landed.
+            ask_budget = lambda p=p, v=v: Query.budget(p, v, k_budget)
+            b = ask_budget()
+            produced = choose(p, v, s, ask_budget)
             # S26.3: the engine does NOT truncate. Any cap applied here would be AN ENGINE
             # DECIDING A PERSON'S OPTIONS, which is L1. Over-budget is the CALLER'S defect.
             if len(produced) > b:
@@ -1018,9 +1135,15 @@ class SeasonDriver:
                 if contest_max_depth is None:
                     raise Forbidden("a contest was reached with no caller-supplied max_depth",
                                     "S39.3", law="S39.3 -- the depth cap has NO DEFAULT; a default is a number somebody made up and it will be cited later as though it were measured")
+                # S39.2 line 2: Events, into the same log, WITH causes[] NAMING THE ACTS.
+                # ⚠ REV 3. Rev 2 wrote `[a.id] if any(e.id == a.id for e in w.log) else [ROOT]`.
+                # `w.log` holds Events and an Act is never appended to it, so the predicate was
+                # PERMANENTLY FALSE and every contest was called with [ROOT]. Retraction 4
+                # replaced rev 1's fabricated cause with an unreachable branch rather than with
+                # the rule. The act id is named directly.
                 r = contest(w, rung=a.payload or "R", prize=a.contests[0],
                             claimants=[a.actor], depth=0, max_depth=contest_max_depth,
-                            causes=[a.id] if any(e.id == a.id for e in w.log) else [ROOT])
+                            causes=[a.id])
                 if isinstance(r, ContestError):
                     TRACE.note(f"contest returned {r}", "S39.3")
                 else:
@@ -1064,22 +1187,30 @@ class SeasonDriver:
         # five channels. No signals, no subscription table. DO NOT SHARD IT -- the design's
         # predecessor loop was retired precisely because its WITNESS was not global, which made
         # its parallelism claim UNSOUND rather than merely unproven.
+        # ⚠ REV 3. Rev 2 keyed the observer set on the Event's subject rung and fell back to
+        # THE SUBJECT ALONE when that was empty -- which, because every person has a
+        # `person`-kind Rung, made almost every Event private to its own subject. That is a
+        # SELF-WITNESS RULE THAT APPEARS NOWHERE IN THE CHAIN: the instrument invented the
+        # privacy the design lacks, and then reported the design's privacy gap in a probe
+        # that never touched the loop.
+        #
+        # S61 is explicit about the specified behaviour and this now implements it:
+        #   "WITNESS AS SPECIFIED FANS EVERY EVENT TO EVERY PERSON. Nothing said in private
+        #    is private. A wrapper does not fix this and must not be presented as fixing it."
+        # The five channels are NAMED (S20) and NONE of their predicates is given, so there is
+        # no predicate by which anyone could be EXCLUDED. The fan-out is therefore total.
         index = w.cache_at_barrier("presence", lambda: {
             r: Query.presence(w, r) for r in w.rungs})
-        fan: list[tuple[str, Event, str]] = []
-        for e in events:
-            observers = index.get(e.subject) or []
-            if not observers and e.subject in w.persons:
-                observers = [e.subject]
-            for pid in observers:
-                fan.append((pid, e, "co_located"))
-            # S61: WITNESS AS SPECIFIED FANS EVERY EVENT TO EVERY PERSON. The five channels are
-            # NAMED and their predicates are not given, so `co_located` above is the only one
-            # this instrument can evaluate; the other four have no predicate to run.
-        TRACE.decision(f"fan-out over {len(events)} events -> {len(fan)} deposits", "S28",
-                       chose="one global pass over the presence index; channel `co_located` only",
-                       alternatives=["shard per rung (retired: made the parallelism claim unsound)",
-                                     f"the other four channels {WITNESS_CHANNELS[0::2]} have no predicate in chain"])
+        everyone = list(w.persons)
+        fan: list[tuple[str, Event, str]] = [
+            (pid, e, "UNSPECIFIED-CHANNEL") for e in events for pid in everyone]
+        TRACE.decision(f"fan-out over {len(events)} events -> {len(fan)} deposits", "S28/S61",
+                       chose=f"EVERY event to EVERY person ({len(everyone)}) -- the specified behaviour",
+                       alternatives=[
+                           "shard per rung (retired: made the parallelism claim unsound)",
+                           "restrict by presence (the index is built and UNUSED -- no channel "
+                           "predicate exists to exclude anyone; S61 names this as the debt)",
+                           f"the five channels {list(WITNESS_CHANNELS)} are named and NONE has a predicate"])
 
         # S28 stage 2: DEPOSIT IS PER-PERSON, into that person's OWN ledger and no other.
         cap = w.fixtures.get("ledger_cap")

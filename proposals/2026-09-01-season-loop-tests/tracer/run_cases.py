@@ -52,10 +52,15 @@ ROUTES: list[tuple[str, str, str | None]] = [
     ("P2",  r"\bchoose what to (leave undone|drop|abandon|forgo|sacrifice)\b|\btriage\b", None),
     ("P3",  r"\b(decide|act|choose|reason)\b[^.]{0,60}\b(from|on)\b[^.]{0,30}\b(what they (believe|know)|their own (belief|knowledge|information)|partial|incomplete|limited) (information|knowledge|view|picture)?\b", None),
     ("P4",  r"\b(false|wrong|mistaken|incorrect|untrue|erroneous)\b[^.]{0,50}\b(belief|conclusion|information|rumou?r|impression|understanding)\b", None),
-    ("P5",  r"\b(covert|secret|clandestine|hidden|anonymous|unattributed|deniable|misattribut\w+|wrongly blam\w+|framed?)\b", None),
+    # ⚠ `hidden` alone matched hidden QUANTITIES and hidden GROWTH -- P17's and P28's
+    # territory -- and handed them P5's PASS, which asserts only that Event has no `actor`.
+    # P5 is about ATTRIBUTION, so an attribution term is now required.
+    ("P5",  r"\b(covert|secret|clandestine|anonymous|unattributed|deniable|misattribut\w+|wrongly blam\w+|framed?)\b[^.]{0,70}\b(act|action|deed|attribut\w+|blame|credit|author|who did|responsib\w+|identity)\b", None),
+    ("P5",  r"\b(who (did|carried out|was behind) it|attribut\w+ to the wrong|blamed for (another|someone else))\b", None),
     ("P6",  r"\b(conviction|moral|value|principle|belief about (right|wrong)|scruple)s?\b[^.]{0,60}\b(chang\w+|shift\w+|move\w+|erode|harden|revis\w+)\b", None),
     ("P7",  r"\b(scar\w*|trauma|lasting (moral|psychological) (damage|harm|cost)|guilt|corrupt\w+ by)\b", None),
-    ("P8",  r"\b(block\w*|thwart\w*|obstruct\w*|frustrat\w*|beat\w* (them )?to|denied by|taken by another|lose out|compet\w+ for)\b", None),
+    ("P8",  r"\b(thwart\w*|obstruct\w*|frustrat\w*|beat\w* (them )?to|denied by|taken by another|lose out)\b", None),
+    ("P8",  r"\bblock\w*\b[^.]{0,60}\b(by another|by someone|a rival|an opponent|another (person|character|actor)|competitor)\b", None),
     ("P9",  r"\b(order|command|instruct|dispatch|direct|assign)\w*\b[^.]{0,60}\b(subordinate|underling|agent|servant|officer|deputy|soldier|follower)\b", None),
     ("P9",  r"\b(refuse|disobey|deviat\w+|ignore|defy)\b[^.]{0,50}\b(order|command|instruction|directive)\b", None),
     ("P10", r"\b(ongoing|multi[- ]?(week|season|month)|repeated|sustained|continuing|in[- ]progress|work[- ]in[- ]progress|over (several|multiple) seasons)\b[^.]{0,60}\b(task|work|labou?r|project|effort|activity)\b", None),
@@ -67,8 +72,13 @@ ROUTES: list[tuple[str, str, str | None]] = [
     # Unguarded, this route claimed 18 core rows and made `standing` the single largest blocker
     # in both test sets -- the same defect class as the in-chain run's bare `ambient` (8 arcs
     # became 3) and bare `counter` (matching inside "counter-productive", 10 became 8).
+    # ⚠ FOURTH RECURRENCE OF THE BARE-TOKEN CLASS. The rev-2 guard was a 15-noun WHITELIST and
+    # "a persistent, STANDING CONDITION" walked straight through it. A whitelist is the wrong
+    # shape here: the adjectival sense takes an open class of nouns. The guard is now
+    # structural -- `standing` followed by ANY noun is adjectival unless the sentence is about
+    # a person's regard.
     ("P14", r"\b(standing|regard|esteem|how .{0,20}(is|are) (seen|regarded|perceived)|public (image|perception)|prestige)\b",
-     r"\bstanding\s+(armed|military|army|naval|institution|force|threat|orientation|order|committee|body|garrison|corps|council|arrangement|policy)\b|\b(no|without|lacking|nor)\s+(\w+\s+){0,2}standing\b"),
+     r"\bstanding\s+[a-z]+\b(?!\s+(?:with|among|before|in the eyes))|\b(no|without|lacking|nor)\s+(\w+\s+){0,2}standing\b"),
     ("P15", r"\b(private|secret|confidential|in confidence|unobserved|behind closed doors|no one else (hears|knows|sees))\b[^.]{0,60}\b(conversation|meeting|act|deed|word|exchange)\b", None),
     ("P16", r"\b(differ\w*|disagree\w*|diverge\w*|conflict\w*)\b[^.]{0,60}\b(account|version|belief|understanding|perspective|view|memor\w+)s?\b", None),
     ("P17", r"\b(accumulat\w+|build\w* up|mount\w*|grow\w*|creep\w*|trickle)\b[^.]{0,70}\b(risk|suspicion|exposure|attention|scrutiny|heat|pressure|notice)\b", None),
@@ -77,7 +87,7 @@ ROUTES: list[tuple[str, str, str | None]] = [
     ("P21", r"\b(crowd|cohort|mass|population|group of people|mob|the many|villagers|townsfolk)\b[^.]{0,60}\b(act|behave|decid\w+|move|respond)\w*\b", None),
     ("P22", r"\b(possess\w+|hold\w*|custody|carry\w*|own\w*)\b[^.]{0,70}\b(object|document|record|text|copy|item|token|writ|letter)\b", None),
     ("P23", r"\b(vanish|disappear|be killed|murder\w*|die|assassinat\w+|simply gone)\b[^.]{0,60}\b(no (institutional|formal|legal) (process|proceeding|trial)|outside every institution|without (a )?trial)\b", None),
-    ("P23", r"\b(kill|murder|assassinat|execut)\w*\b", None),
+    ("P23", r"\b(kill(ed|ing|s)?|murder\w*|assassinat\w+)\b", None),
     ("P24", r"\b(death|dies|dying|killed)\b[^.]{0,70}\b(end|terminat\w+|vacat\w+|release|dissolv\w+)\w*\b[^.]{0,40}\b(post|office|tenure|holding|position|obligation)\b", None),
     ("P26", r"\b(accumulat\w+|repeated|sustained|cumulative|over (several|many) seasons)\b[^.]{0,60}\b(harm|damage|injur\w+|wound|suffering|deprivation|loss)\b", None),
     ("P27", r"\b(underperform\w*|shirk\w*|slack\w*|quietly do(ing)? less|drag\w* (their )?feet|foot[- ]?drag|comply in (letter|form) (but )?not)\b", None),
@@ -90,15 +100,16 @@ ROUTES: list[tuple[str, str, str | None]] = [
     ("F2",  r"\b(dissolv\w+|collaps\w+|abandon\w*|memberless|defunct|die out|leave)\b[^.]{0,70}\b(faction|cause|movement|order|party|group)\b", None),
     ("F3",  r"\b(the )?(faction|church|crown|state|order|guild|council|institution|body)\b\s+(itself\s+)?(must be able to |can |may )?\b(act|decide|choose|move|take (an )?action)\w*\b", None),
     ("F4",  r"\b(office|post|position|title|appointment|seat|rank)\b[^.]{0,70}\b(make|render|grant|confer|entitle|permit|authoris|authoriz|eligib)\w*\b", None),
-    ("F5",  r"\b(no (fixed )?(seat|place|territory|home)|everywhere|trans[- ]?(settlement|regional)|across the realm|dispersed|scattered members)\b", None),
+    ("F5",  r"\b(no (fixed )?(seat|place|territory|home)|trans[- ]?(settlement|regional)|dispersed members|scattered members)\b", None),
+    ("F5",  r"\b(members?|executors?|officers?)\b[^.]{0,50}\b(everywhere|across the realm|in every|scattered)\b", None),
     ("F6",  r"\b(never (heard|received|learned)|fail\w* to (arrive|reach)|undelivered|did not reach|distort\w*|garbl\w+|misunderstood in transit)\b", None),
-    ("F7",  r"\b(petition|appeal|demand|request|grievance|complaint|plea|suit)\w*\b[^.]{0,70}\b(before|to|reach\w*|put\b|rais\w*|bring\w*|carr\w+|heard by)\b", None),
+    ("F7",  r"\b(petition|appeal|demand|request|grievance|complaint|plea|suit)\w*\b[^.]{0,70}\b(before|to|reach\w*|put\b|rais\w*|bring\w*|carr\w+|heard by)\b[^.]{0,60}\b(office|council|court|tribunal|body|assembly|venue|authority|superior|holder|seat|sitting|patron|magistrate|someone who)\b", None),
     ("F7",  r"\b(no power|powerless|without influence|lowly|humble)\b[^.]{0,70}\b(get|bring|put|reach)\b[^.]{0,40}\b(matter|issue|case|concern)\b", None),
     ("F8",  r"\b(sitting|tribunal|council|court|assembly|body|panel|committee|board|hearing)\b[^.]{0,70}\b(decid\w+|rul\w+|determin\w+|judg\w+|adjudicat\w+|vote|find)\b", None),
     ("F9",  r"\b(many|several|multiple|repeated\w*|over and over|spray|whole season)\b[^.]{0,60}\b(petition|appeal|request|approach|meeting)s?\b", None),
     ("F10", r"\b(scarce|scarcity|limited|finite|not enough|shortfall|run out|empt\w+|compet\w+ for the same)\b[^.]{0,70}\b(resource|grain|store|supply|fund|money|capacity|slot|seat)\w*\b", None),
     ("F11", r"\b(true|actual|real|genuine)\b[^.]{0,40}\b(strength|size|membership|extent|reach|power)\b[^.]{0,40}\b(faction|movement|cause|network|order)\b", None),
-    ("F12", r"\b(appoint\w*|confer\w*|invest\w*|promot\w*|revok\w*|depos\w*|dismiss\w*|remov\w*|strip\w*|elevat\w*)\b[^.]{0,60}\b(office|post|position|rank|title|seat|command)\b", None),
+    ("F12", r"\b(appoint\w*|confer\w*|invest(ed|iture|s)?|promot\w*|revok\w*|depos\w*|dismiss\w*|remov\w*|strip\w*|elevat\w*)\b[^.]{0,60}\b(office|post|position|rank|title|seat|command)\b", r"\binvestigat\w+"),
     ("F13", r"\b(vacan\w+|empty (seat|post|office)|succession|fall\w* (empty|vacant)|replace\w* .{0,20}(who died|the dead))\b", None),
     ("F14", r"\b(count|tally|total|measure|track)\w*\b[^.]{0,60}\b(territor\w+|holding|ground|land|province|region)s?\b[^.]{0,40}\b(gain|lose|control|hold)\w*\b", None),
     ("F15", r"\b(staff|establishment|clerk|retainer|servant|household|subordinate|deput\w+|secretar\w+)s?\b[^.]{0,70}\b(work|perform|execut\w+|carr\w+ out|do the)\b", None),
@@ -107,8 +118,8 @@ ROUTES: list[tuple[str, str, str | None]] = [
     ("W1",  r"\b(disrepair|decay|dilapidat\w+|ruin|silt|crumbl\w+|deteriorat\w+|fall\w* apart|wear)\b[^.]{0,70}\b(place|site|harbour|harbor|mine|road|building|structure|land|infrastructure)\b", None),
     ("W1",  r"\b(no longer|can(not|'t) be done|unavailable|closed off|lost)\b[^.]{0,60}\b(there|at (that|the) (place|site|location))\b", None),
     ("W2",  r"\b(world|things|events)\b[^.]{0,60}\b(chang\w+|move\w*|continu\w+|happen\w*|churn\w*|proceed\w*)\b[^.]{0,60}\b(no (player|character|one)|without (a|the) player|unattended|absent|nobody (is )?(there|present|watching))\b", None),
-    ("W5",  r"\b(harvest|yield|crop|produce|output)\b[^.]{0,70}\b(good|bad|vary|var\w+|better|worse|fail|abundant|season)\w*\b", None),
-    ("W6",  r"\b(plague|famine|storm|flood|fire|disaster|epidemic|blight|catastrophe|calamity)\b", None),
+    ("W5",  r"\b(harvest|yield|crop|granary|foodstuff)\b[^.]{0,70}\b(good|bad|vary|var\w+|better|worse|fail|abundant|come in|season)\w*\b", None),
+    ("W6",  r"\b(plague|famine|storm|flood|disaster|epidemic|blight|catastrophe|calamity)\b", None),
     ("W7",  r"\b(expire|lapse|ttl|time limit|valid until|run\w* out of time|deadline pass\w*)\b", None),
     ("W8",  r"\b(case|charge|accusation|investigation|inquiry|proceeding|prosecution|trial)\b[^.]{0,70}\b(ripen\w*|advance\w*|proceed\w*|progress\w*|mature\w*|build\w*)\b", None),
     ("W9",  r"\b(birth|born|death rate|population|demograph\w+|generation|age|ageing|aging)\w*\b", None),
@@ -117,7 +128,10 @@ ROUTES: list[tuple[str, str, str | None]] = [
     ("W12", r"\b(populate\w*|world[- ]?gen\w*|seed\w* the world|people who (hold|have) no|ordinary inhabitant|the rest of the population)\b", None),
 
     # --- the architecture ---
-    ("A1",  r"\b(what caused|caus\w+ chain|provenance|traceab\w+|why (it|this) happened|reconstruct\w* .{0,20}(story|history))\b", None),
+    # ⚠ A1 PROVOKES `causes=[]` to demonstrate the refusal; routing provenance rows to it
+    # graded them BLOCKED, reporting the design's causes[] rule as the thing that BLOCKS
+    # causal reconstruction. A2 is the probe that DEMONSTRATES provenance, and it passes.
+    ("A2",  r"\b(what caused|caus\w+ chain|provenance|traceab\w+|why (it|this) happened|reconstruct\w* .{0,20}(story|history))\b", None),
     ("A2",  r"\b(sequence|chain|thread|series|string) of (related |connected |linked )?(event|happening|incident|episode|moment)s?\b", None),
     ("A2",  r"\b(read back|replay|review|recount|narrat\w+)\b[^.]{0,50}\b(as (one|a single) story|the whole story|what happened)\b", None),
     ("A4",  r"\b(same|identical|reproducib\w+|determinis\w+|repeatab\w+)\b[^.]{0,60}\b(seed|start\w*|initial condition|input|run)\w*\b", None),
@@ -140,7 +154,7 @@ ROUTES: list[tuple[str, str, str | None]] = [
     ("A28", r"\b(record|log|history|chronicle)\b[^.]{0,60}\b(consistent|intact|integrity|complete|not (be )?corrupt)\w*\b", None),
     ("A29", r"\b(separate|own|its own|distinct)\b[^.]{0,30}\b(record|log|history|register)\b[^.]{0,40}\b(subsystem|combat|battle|contest)\b", None),
     ("A31", r"\b(how many|number of|count of|exactly)\b[^.]{0,40}\b(action|act|scene|moment|thing)s?\b[^.]{0,40}\b(season|turn)\b", None),
-    ("A32", r"\b(scene|playable moment|dramatic beat|set piece)s?\b", None),
+    ("A32", r"\b(scene|playable moment|dramatic beat|set piece)s?\b[^.]{0,70}\b(per season|budget|count|number|how many|allowance|equal|equival\w+|worth a)\b", None),
     ("A33", r"\b(distort\w*|garbl\w*|chang\w* in (transit|the telling)|whisper|rumou?r spread|version that reaches)\b", None),
     ("A35", r"\b(godot|engine version|4\.\d)\b", None),
 ]
@@ -390,7 +404,8 @@ ROUTES_2: list[tuple[str, str, str | None]] = [
     ("P5",  r"\b(true|false|fabricat\w+|forg\w+|falsif\w+|invent\w+|planted|misleading)\b[^.]{0,70}\b(unable to distinguish|cannot tell|indistinguishable|without knowing|in advance|which is which)\b", None),
     ("P16", r"\b(corroborat\w+|refut\w+|verif\w+|confirm\w+|cross[- ]check)\w*\b[^.]{0,70}\b(independent\w*|third part\w+|another|separately|own (fieldwork|investigation))\b", None),
     ("P17", r"\b(silent\w*|quiet\w*|undetect\w+|undiscovered|unnoticed|invisibl\w+)\b[^.]{0,70}\b(accumulat\w+|build|grow|mount|increas\w+|compound)\w*\b", None),
-    ("P18", r"\b(ultimatum|deadline|crisis|reckoning|moment of truth|come to a head|forced (moment|choice|decision))\b", None),
+    ("P18", r"\b(ultimatum|reckoning|moment of truth|come to a head|forced (moment|choice|decision))\b", None),
+    ("P18", r"\bcrisis\b[^.]{0,70}\b(forc\w+|compel\w*|demand\w*|requir\w+|must (then )?(choose|decide|answer|act))\b", None),
     ("P26", r"\b(burden|toll|strain|attrition|erosion|grind|damage)\b[^.]{0,70}\b(accumulat\w+|reach\w*|mount\w*|personal\w*|build|cumulative)\w*\b", None),
     ("P2",  r"\b(limited|finite|renewing|per[- ]season|fixed)\b[^.]{0,40}\b(budget|allowance|capacity|menu|number of (action|act))\w*\b", None),
     ("P9",  r"\b(compl(y|ies|ied)|complian\w+|negotiat\w+|defy|defian\w+|obey|disobey)\w*\b[^.]{0,60}\b(order|mandate|directive|instruction|demand|command)s?\b", None),
@@ -398,7 +413,8 @@ ROUTES_2: list[tuple[str, str, str | None]] = [
     ("F7",  r"\b(bring|take|carr\w+|escalat\w+|refer|put)\w*\b[^.]{0,50}\b(to|before|up to|in front of)\b[^.]{0,45}\b(council|tribunal|court|authority|superior|body|office|assembly|patron)\b", None),
     ("F8",  r"\b(ruling|verdict|decision|determination|judgement|judgment|finding)\b[^.]{0,60}\b(binding|formal|issued|handed down|reached|made by)\b", None),
     ("A2",  r"\b(arc|storyline|campaign|plot|narrative|situation)\b[^.]{0,60}\b(unfold|develop|progress|advance|play out|emerge|resolve)\w*\b", None),
-    ("A15", r"\b(compound\w*|cascad\w+|snowball|amplif\w+|reinforc\w+|feed\w* (back|on itself)|spiral)\b", None),
+    ("A15", r"\b(cascad\w+|snowball|amplif\w+|reinforc\w+|feed\w* (back|on itself)|spiral|vicious circle|runaway)\b", None),
+    ("A15", r"\bcompound\w*\b[^.]{0,70}\b(without (bound|limit|end)|indefinitely|each season|no (stopping|terminal|end)|unchecked)\b", None),
     ("A18", r"\b(unrelated|separate|independent|different|other)\b[^.]{0,40}\b(system|subsystem|mechanic|module|part of the (game|engine))s?\b[^.]{0,60}\b(interact|connect|link|affect|reach|couple)\w*\b", None),
     ("W8",  r"\b(deadline|term|clock|timer|countdown|schedule|due date)\b[^.]{0,60}\b(set|declar\w+|wound|start\w*|run\w*|expir\w*|matur\w*)\b", None),
     ("P30", r"\b(state|status|condition|progress|change|memory)\b[^.]{0,50}\b(track\w*|persist\w*|carried|retained|stored|remembered)\b[^.]{0,45}\b(season|turn|time)s?\b", None),
@@ -427,7 +443,7 @@ ROUTES_3: list[tuple[str, str, str | None]] = [
     ("P26", r"\b(persistent|lasting|lingering|not automatically cleared|carried forward|unresolved)\b[^.]{0,50}\b(condition|state|status|effect|damage|penalt\w+|wound)\b", None),
     ("P17", r"\b(accumulat\w+|aggregate|add up|combine)\w*\b[^.]{0,60}\b(named|single|one|a) (condition|state|threshold|total|summary|effect)\b", None),
     ("A34", r"\b(inaction|doing nothing|non[- ]commitment|neglect|absence of|failure to act|not acting|unattended)\b[^.]{0,70}\b(erod\w+|decay|cost|damag\w+|fall|worsen|los\w+)\b", None),
-    ("A1",  r"\b(attribut\w+|trace|credit|blame|identif\w+)\b[^.]{0,60}\b(back to|to which|the cause|who caused|which actor|responsible)\b", None),
+    ("A2",  r"\b(attribut\w+|trace|credit|blame|identif\w+)\b[^.]{0,60}\b(back to|to which|the cause|who caused|which actor|responsible)\b", None),
     ("F12", r"\b(separate|distinct|further|additional|second)\b[^.]{0,35}\b(mechanical )?(action|step|act)\b[^.]{0,60}\b(implement|enact|enforc\w+|carr\w+ out|actually)\b", None),
     ("P16", r"\b(invisible|imperceptible|undetectable|unknown)\b[^.]{0,35}\bto (him|her|them|himself|herself|themselves|the subject)\b[^.]{0,60}\b(perceptib\w+|visible|detectab\w+|apparent)\b", None),
     ("P22", r"\b(each|both|mutual\w*|simultaneous\w*)\b[^.]{0,40}\b(hold|possess|have)\w*\b[^.]{0,40}\b(evidence|leverage|proof|material|information)\b", None),
@@ -487,6 +503,30 @@ ROUTES_4: list[tuple[str, str, str | None]] = [
 
 COMPILED += [(pid, re.compile(rx, re.I), re.compile(neg, re.I) if neg else None)
              for pid, rx, neg in ROUTES_4]
+
+
+ROUTES_5: list[tuple[str, str, str | None]] = [
+    ("P39", r"\b(two|both)\b[^.]{0,45}\b(named |specific )?(person|official|character|actor|leader)s?\b[^.]{0,60}\b(interact|deal|negotiat|correspond|relate|meet)\w*\b[^.]{0,40}\b(repeated\w*|ongoing|over time|directly|each other)\b", None),
+    ("P39", r"\b(relationship|rapport|bond|feud|rivalry|friendship|trust)\b[^.]{0,60}\b(between|with)\b[^.]{0,50}\b(change|evolv|develop|persist|carry|deepen|sour)\w*\b", None),
+    ("P40", r"\b(conflict\w*|tension|incompatib\w+|competing|divided|torn)\b[^.]{0,70}\b(obligation|dut(y|ies)|loyalt\w+|allegiance|commitment)s?\b", None),
+    ("P40", r"\b(obligation|dut(y|ies)|reporting|confidentialit\w+)\b[^.]{0,60}\b(to|toward)\b[^.]{0,40}\b(two|both|a second|another)\b", None),
+    ("P41", r"\b(precedent|prior ruling|established practice|past (ruling|decision)|case law)\b", None),
+    ("P41", r"\b(argument|case|plea|advocacy|debate)\b[^.]{0,60}\b(strengthen\w*|weaken\w*|bolster\w*|undermin\w*|stronger|weaker)\b", None),
+    ("F20", r"\b(treaty|accord|pact|agreement|compact|concordat|charter)\b[^.]{0,70}\b(constrain|bind|govern|limit|oblig|terms)\w*\b", None),
+    ("F21", r"\b(individual|personal|own)\b[^.]{0,35}\b(position|vote|stance|dissent|opinion)\b[^.]{0,70}\b(within|inside|on|registered|recorded|distinct)\b[^.]{0,45}\b(body|council|committee|chapter|assembly|board)\b", None),
+    ("F21", r"\b(collective|corporate|body'?s?)\b[^.]{0,35}\b(decision|output|ruling|position)\b[^.]{0,60}\b(individual|member|each)\b", None),
+    # remaining recurring shapes with an existing probe
+    ("F4",  r"\b(post|office|seat|command|title)\b[^.]{0,60}\b(more than|beyond)\b[^.]{0,40}\b(identity|reference|a record|a name)\b", None),
+    ("F13", r"\b(successor|succession|who follows|next holder)\b[^.]{0,60}\b(undetermined|contested|uncertain|open|several claimants)\b", None),
+    ("F6",  r"\b(in (the leader'?s?|his|her|their) name)\b[^.]{0,70}\b(diverg\w+|differ|depart|deviat\w+|not what)\b", None),
+    ("P6",  r"\b(faith|belief|doubt|conviction|principle)\b[^.]{0,60}\b(challeng\w+|shaken|tested|question\w+|privately)\b", None),
+    ("P17", r"\b(lock\w* in|permanent\w*|irreversib\w+|unrecover\w+|cannot be undone)\b", None),
+    ("P10", r"\b(multi[- ]season|long[- ]term|sustained|positioning)\b[^.]{0,40}\b(campaign|effort|project|build[- ]?up)\b", None),
+    ("P1",  r"\b(recognis\w+|recogniz\w+|regarded|treated|acknowledged) as\b[^.]{0,45}\b(leader|head|figure|authority)\b[^.]{0,60}\b(before|without|no)\b[^.]{0,35}\b(formal|official|institutional)\b", None),
+]
+
+COMPILED += [(pid, re.compile(rx, re.I), re.compile(neg, re.I) if neg else None)
+             for pid, rx, neg in ROUTES_5]
 
 
 if __name__ == "__main__":

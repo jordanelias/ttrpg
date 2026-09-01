@@ -135,8 +135,8 @@ def test_d5_the_budget_is_the_persons_choice_not_an_engine_truncation():
     sig = inspect.signature(Query.budget)
     assert "w" not in sig.parameters and "world" not in sig.parameters
     w = _w()
-    def over(p, v, s, b):
-        return [P.Act_(w, p, f"v{i}") for i in range(b + 2)] if p.id == "p_low" else []
+    def over(p, v, s, ask_budget):
+        return [P.Act_(w, p, f"v{i}") for i in range(ask_budget() + 2)] if p.id == "p_low" else []
     with pytest.raises(Forbidden):
         P._run(w, over)
 
@@ -161,8 +161,9 @@ def test_d6b_wear_has_no_silent_default():
 def test_d7_sense_does_not_return_a_constant_standing():
     """DEFECT 7. Rev 1 returned standing = 0 unconditionally, in the one function S18.2 calls
     the only bridge from world truth into choose()."""
+    w = _w()
     with pytest.raises(Unspecified):
-        S.sense(_w().persons["p_low"], _w())
+        _ = S.sense(w.persons["p_low"], w, P.SUBSIST).standing
 
 
 def test_d8_one_doctrinal_condition_raises_one_kind():
@@ -195,7 +196,7 @@ def test_d9c_max_depth_has_no_default_anywhere():
     assert "caller_supplied_max_depth" not in SHAPE_CODE
     assert inspect.signature(S.contest).parameters["max_depth"].default is inspect.Parameter.empty
     w = _w()
-    def fight(p, v, s, b):
+    def fight(p, v, s, ask_budget):
         return [P.Act_(w, p, "fight", contests=["x"], payload="S")] if p.id == "p_low" else []
     with pytest.raises(Forbidden):
         P._run(w, fight)
@@ -205,7 +206,7 @@ def test_d9d_the_frozen_world_is_read_not_merely_written():
     """S32 rest 1 is the FIRST thing order-independence rests on. Rev 1 set w.frozen and
     nothing ever read it."""
     with pytest.raises(Forbidden):
-        S.SeasonDriver(_w()).deliberate(lambda p, v, s, b: [], "q", P.SUBSIST)
+        S.SeasonDriver(_w()).deliberate(lambda p, v, s, ask_budget: [], "q", P.SUBSIST)
 
 
 def test_d9e_the_rung_guard_is_a_whitelist_not_a_blacklist():
@@ -254,7 +255,11 @@ def test_causes_is_never_empty():
 
 def test_choose_receives_no_world():
     src = inspect.getsource(S.SeasonDriver.deliberate)
-    assert "choose(p, v, s, b)" in src and "choose(w" not in src
+    # REV 3: `choose` receives the budget QUERY, not the answer -- S26.3's "the person chooses
+    # what to leave undone". Pinning the literal 4-ary string was how rev 2 locked in a
+    # deviation as an invariant, so this pins the PROPERTY instead.
+    assert "choose(p, v, s, ask_budget)" in src and "choose(w" not in src
+    assert "sense(p, w, subsistence)" in src, "DELIBERATE must be fed a Sensation, per S26"
 
 
 def test_a_view_raises_on_any_world_collection():
@@ -269,10 +274,18 @@ def test_a_view_is_capped_at_k():
         View("p", ["a", "b", "c"], 2)
 
 
-def test_sensation_is_exactly_two_scalars():
-    assert S.Sensation.__slots__ == ("subsistence", "standing")
+def test_sensation_is_constructed_by_the_loop_and_standing_raises_on_read():
+    """REV 3. Rev 2 made `sense()` raise outright, so `Sensation` was NEVER CONSTRUCTED IN ANY
+    RUN and the driver fed DELIBERATE a bare int -- the type S26 puts in `choose`'s signature
+    was routed around, and a test pinned the deviated call as the invariant. The type is now
+    built every season and `standing` raises AT THE POINT OF USE."""
+    w = _w()
+    sn = S.sense(w.persons["p_low"], w, P.SUBSIST)
+    assert isinstance(sn, S.Sensation) and isinstance(sn.subsistence, int)
+    with pytest.raises(Unspecified):
+        _ = sn.standing
     with pytest.raises(AttributeError):
-        S.Sensation(1, 2).third = 3
+        sn.third = 3
 
 
 def test_a_proposition_cannot_be_edited():
@@ -443,6 +456,151 @@ def test_no_playable_case_has_an_unmapped_core_row():
     bad = [c["id"] for k in ("NPC", "ARC") for c in rep[k]
            if c["verdict"] == "PLAYABLE" and c["core_unmapped"]]
     assert not bad, f"PLAYABLE cases with unaimed core rows: {bad}"
+
+
+def test_r3_the_a5_control_actually_fires():
+    """REV 3, DEFECT C1 — the worst thing the second antagonist found, and it was mine. A5's
+    float control computed `0.9 + d/1000.0`, got 0.902 == 0.902, PRINTED `differing=False`
+    AND ASSERTED IN THE SAME SENTENCE THAT THE CONTROL HAD FIRED. §66 artifact 4: 'A float
+    build must produce a DIFFERENT hash under a reordered fold, OR THE TEST CANNOT OBSERVE
+    WHAT IT EXCLUDES.'"""
+    src = _code_only(inspect.getsource(P.PROBES["A5"]["fn"]))
+    assert "assert float_differs" in src, "the control must be ASSERTED, not merely computed"
+    v = R.run_probe("A5")
+    assert v["verdict"] == "PASS", v
+    assert "DIFFERENT" in v["detail"] and "differing=False" not in v["detail"]
+
+
+def test_r3_the_partition_derivation_is_total_and_refuses_by_default():
+    """REV 3, DEFECT C6. The rev-2 derivation was a TWO-VALUED CLASSIFIER OVER A FIVE-VALUED
+    DOMAIN whose uncovered cases fell through to the PERMISSIVE branch — the silent default
+    §42.2.1 refuses, at the opposite polarity to §42.2's rule that zero evidence maps to the
+    verdict AGAINST the thing measured."""
+    for thing in ("Date", "DocketItem", "ConveningCondition", "claim_ledger"):
+        assert ("*matrix*", thing) not in S.PARTITION, (
+            f"the matrix does not determine {thing}'s social column; it must not be derived")
+    assert S.PARTITION[("*matrix*", "condition")][0] is False
+    assert S.PARTITION[("*matrix*", "stance")][0] is True
+
+
+def test_r3_every_assumed_partition_row_is_declared_and_reported():
+    """The three rows the instrument had to assume to run at all are §42.2.1's inject-declare-
+    name pattern applied to a SCHEMA ROW. They must be enumerable, so the output can say how
+    much of L4's enforcement rests on the instrument rather than on the design."""
+    assert set(S.PARTITION_ASSUMED) == {
+        ("Person", "claim_ledger"), ("Date", "fired"), ("DocketItem", "matter")}
+    for _, why in S.PARTITION_ASSUMED.values():
+        assert why.startswith("ASSUMED:")
+
+
+def test_r3_the_l4_limb_is_actually_exercised():
+    """DEFECT C6, second half. Rev 2's L4 branch NEVER RAN in the whole suite: the three probes
+    that claimed to test it wrote `stance` at MATTER, where the step-matrix check stopped them
+    one line earlier. A social:true row written by an Event at a PERMITTED step must raise."""
+    w = _w()
+    w.step = Step.RESOLVE
+    with pytest.raises(Forbidden) as e:
+        w.write("stance", WriteClass.ACTS, lambda: None,
+                record_kind="Person", fieldname="stance", driver="Event")
+    assert "social:true" in str(e.value)
+
+
+def test_r3_the_l5_crossing_emits_a_witnessable_event():
+    """DEFECT C5. Rev 2 appended a crossing row for EVERY site EVERY season regardless of any
+    band, and never constructed an Event — so nothing was witnessable and nothing entered the
+    log, while the probe claimed 'L5 exactly'. §12.1: 'A band edge crossing is an EMISSION.'"""
+    w = _w()
+    d = S.SeasonDriver(w)
+    site = w.sites["site_harbour"]
+    for _ in range(3):
+        d.season(P.NOCHOOSE, P.NOEFFECT, "q", P.SUBSIST)
+    assert not [c for c in w.crossings if c[0] == site.id], "no band was crossed yet"
+    for _ in range(20):
+        d.season(P.NOCHOOSE, P.NOEFFECT, "q", P.SUBSIST)
+    mine = [c for c in w.crossings if c[0] == site.id]
+    assert mine
+    eid = mine[0][4]
+    ev = next(e for e in w.log if e.id == eid)
+    assert ev.kind == "condition.band_crossed" and not ev.changes and ev.degree is None
+
+
+def test_r3_witness_fans_to_everyone_as_specified():
+    """DEFECT C13. Rev 2 keyed observers on the Event's subject rung and fell back to THE
+    SUBJECT ALONE, which — since every person has a person-kind Rung — made almost every Event
+    private to itself. That is a SELF-WITNESS RULE THAT APPEARS NOWHERE IN THE CHAIN: the
+    instrument supplied the privacy the design lacks, then reported the design's privacy gap
+    in a probe that never touched the loop. §61: 'WITNESS as specified fans every Event to
+    every person.'"""
+    w = _w()
+    d = S.SeasonDriver(w)
+    def choose(p, v, s, ask_budget):
+        return [P.Act_(w, p, "shout")] if p.id == "p_low" else []
+    def effect(w, a):
+        return [P.Ev(w, a.actor, "a.shout", a.actor, [S.ROOT])]
+    r = d.season(choose, effect, "q", P.SUBSIST)
+    assert r["deposits"] >= len(w.persons), (r["deposits"], len(w.persons))
+
+
+def test_r3_choose_asks_its_own_budget():
+    """DEFECT C11. §26.3: the PERSON chooses what to leave undone. Rev 2 computed the budget in
+    the engine and handed the number down — the half of retraction 5 that never landed."""
+    src = _code_only(inspect.getsource(S.SeasonDriver.deliberate))
+    assert "ask_budget" in src
+    asked = []
+    w = _w()
+    def choose(p, v, s, ask_budget):
+        asked.append(ask_budget())
+        return []
+    S.SeasonDriver(w).season(choose, P.NOEFFECT, "q", P.SUBSIST)
+    assert asked and all(n == w.fixtures.get("act_budget") for n in asked)
+
+
+def test_r3_the_dead_code_is_reached():
+    """DEFECT C8. An implemented rule no probe exercises is indistinguishable from an absent
+    one, and reporting it as landed is the flattering direction. Rev 2 declared STRATA and
+    never referenced it, and had an Ob>2xPool branch no probe could reach."""
+    for pid in ("A37", "A38", "A39", "A31c"):
+        assert pid in P.PROBES, pid
+    assert R.run_probe("A37")["verdict"] == "PASS"
+    assert R.run_probe("A38")["verdict"] == "PASS"
+
+
+def test_r3_the_band_floors_are_swept():
+    """DEFECT C14. §42.2.1 names 'three band edges' among the four constants a prior instrument
+    invented. Rev 2 fixed the other three and left these as literals in probe bodies, so every
+    pacing claim was a one-dimensional sweep of a two-parameter model."""
+    assert "band_floors" in S.DEFAULT_FIXTURES._v
+    body = PROBES_CODE.split("def tiny_world", 1)[1]
+    assert "scale * 8 // 10" not in body, "a band edge is still a literal in a probe body"
+
+
+def test_r3_no_bare_token_route_is_decisive():
+    """DEFECT C3 — the class has now recurred FOUR times in this chain: `ambient` (8 arcs -> 3),
+    `counter` inside 'counter-productive' (10 -> 8), adjectival `standing` (18 core rows), and
+    `standing condition` escaping the whitelist built for the third. A whitelist was the wrong
+    shape; these are the specific escapes, pinned."""
+    checks = [
+        ("a persistent, standing condition of being rich but politically powerless", "P14"),
+        ("a compound set of prerequisites must be assembled", "A15"),
+        ("must produce a different and better outcome for the world", "W5"),
+        ("the cause of the sea-route blockage must be discoverable", "P8"),
+        ("an emergency power applying everywhere in the territory", "F5"),
+        ("a hidden personal quantity must accumulate at a fixed increment per use", "P5"),
+        ("which of several competing internal loyalties is appealed to", "F7"),
+        ("independent fieldwork must be able to investigate the claim", "F12"),
+    ]
+    bad = [(txt, got) for txt, banned in checks
+           if (got := R.route(txt)) == banned]
+    assert not bad, f"bare-token routes still decisive: {bad}"
+
+
+def test_r3_a_working_mechanism_is_not_reported_as_a_blocker():
+    """DEFECT C10. A1 provokes `causes=[]` to demonstrate the refusal; routing provenance rows
+    to it graded them BLOCKED — reporting the design's causes[] rule as the thing that blocks
+    causal reconstruction. A2 is the probe that DEMONSTRATES provenance, and it passes."""
+    assert R.route("the story must be able to be reconstructed from what caused what") == "A2"
+    assert R.route("an accumulated change must be attributable back to which actor caused it") == "A2"
+    assert R.run_probe("A2")["verdict"] == "PASS"
 
 
 def test_the_corpus_defects_are_reported_not_hidden():

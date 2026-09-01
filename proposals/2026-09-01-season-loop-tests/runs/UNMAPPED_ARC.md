@@ -5,7 +5,7 @@ did not aim.** Every row is reproduced verbatim so a reader can judge whether th
 miss is a routing failure (fixable) or a genuine absence of any surface to probe
 (a finding about the shape).
 
-**92 `core` rows and 144 non-core rows did not route.**
+**154 `core` rows and 217 non-core rows did not route.**
 
 ## The vocabulary of the unrouted `core` rows
 
@@ -15,77 +15,89 @@ no execution for.
 
 | term | count |
 |---|---|
-| specific | 23 |
-| action | 18 |
-| quantity | 17 |
-| formal | 13 |
-| single | 13 |
-| independent | 11 |
-| actor | 11 |
-| different | 10 |
-| separate | 10 |
-| threshold | 10 |
-| value | 10 |
-| actors | 10 |
-| capability | 10 |
-| independently | 9 |
-| state | 9 |
-| institution | 8 |
-| institutions | 8 |
-| several | 8 |
-| trigger | 8 |
-| outcome | 8 |
-| unrelated | 8 |
-| player | 7 |
-| character | 7 |
-| simultaneously | 7 |
-| available | 7 |
-| internal | 7 |
-| fixed | 7 |
-| world | 7 |
-| characters | 7 |
-| where | 7 |
-| political | 6 |
-| consequences | 6 |
-| faction | 6 |
-| against | 6 |
-| background | 6 |
-| private | 6 |
-| category | 6 |
-| remove | 5 |
-| produce | 5 |
-| categorically | 5 |
-| moment | 5 |
-| itself | 5 |
-| contest | 5 |
-| structurally | 5 |
-| being | 5 |
+| action | 43 |
+| specific | 36 |
+| different | 28 |
+| single | 20 |
+| outcome | 19 |
+| character | 19 |
+| fixed | 19 |
+| quantity | 18 |
+| actor | 17 |
+| separate | 17 |
+| independently | 17 |
+| value | 17 |
+| resource | 16 |
+| independent | 16 |
+| where | 16 |
+| actors | 15 |
+| distinct | 14 |
+| institutions | 14 |
+| threshold | 14 |
+| unrelated | 14 |
+| shared | 14 |
+| state | 13 |
+| capability | 13 |
+| formal | 12 |
+| trigger | 12 |
+| least | 12 |
+| failure | 11 |
+| simultaneously | 11 |
+| institution | 11 |
+| actions | 11 |
+| personal | 11 |
+| hidden | 11 |
+| several | 11 |
+| crossing | 11 |
+| produce | 10 |
+| multiple | 10 |
+| three | 10 |
+| against | 10 |
+| resolution | 10 |
+| effect | 10 |
+| automatic | 10 |
+| scale | 10 |
+| difficulty | 10 |
+| being | 9 |
+| itself | 9 |
 
 ## Every unrouted `core` row, verbatim
 
+- **[ARC-01]** a person's genuinely unresolved private ethical question (not a secret sympathy, not a settled belief) must be able to function as a real, load-bearing reason for a leader's inaction, distinct from and alongside the named external costs of acting
 - **[ARC-01]** players must be able to remove one specific named cost-component from a leader's decision calculus as a discrete, resolvable action, after which that leader's prior refusal to act converts into willingness
+- **[ARC-02]** an institution's routine, individually-defensible placement decisions must be able to compound, over years, into an outcome that harms one of its own members, without any single decision-maker choosing that outcome or being positioned to see it coming
+- **[ARC-02]** a spontaneous state-change check on a person must be able to fire without any actor — including that person — initiating it or being aware a check is occurring
 - **[ARC-03]** firing a reserved resource must be able to produce categorically different outcomes, not just different magnitudes, depending on whether a separate threshold was already crossed at the moment of firing
 - **[ARC-04]** a Non-Player Character must be able to sustain deliberate, ongoing non-commitment toward a subordinate (neither supporting nor suppressing them) as a real strategic stance across multiple seasons, with that stance itself imposing no immediate mechanical cost
 - **[ARC-04]** a subordinate's trust/loyalty in a patron must be able to erode from that patron's inaction alone, on a track with no mechanic to actively increase it — an asymmetric, one-directional gauge
+- **[ARC-04]** a patron facing a subordinate's public accusation must be able to choose among open support, silent abandonment, and covert extraction, with each option foreclosing a different, distinct set of future political options
+- **[ARC-05]** the same tracked world-substrate resource must be able to cross multiple hard thresholds that change what KIND of consequence subsequent failures produce, without changing the underlying failure rate itself
 - **[ARC-06]** a losing party in a formal contest must be able to accept the ruling's stated principle while simultaneously drafting its operative implementation so narrowly that current practice remains unaffected
 - **[ARC-06]** an implementation action following a political win must be able to fail on its own separate probability roll, independent of how decisively the preceding contest was won
 - **[ARC-06]** an institution whose formal position was weakened by losing a contest must be able to end up structurally stronger in practice if all subsequent retry/enforcement attempts fail
 - **[ARC-10]** a political actor must be able to construct a proposal worded so precisely that either of an opponent's two possible responses damages the opponent's institutional position -- a genuine forced dilemma
 - **[ARC-10]** a character must be able to choose, mid-contest, to introduce a piece of politically explosive but tangential evidence for an immediate mechanical benefit, at the cost of triggering a much broader, harder-to-control set of consequences affecting every faction
+- **[ARC-10]** a decisive action's degree of success must be able to produce categorically different outcomes -- fully reversing a punishment, merely reducing its severity, or leaving the punishment standing while the accuser gains ground -- rather than a binary success/fail
+- **[ARC-11]** a subordinate administrator's personal flaw (taking on too much) must be able to produce a DELAYED failure -- competent performance for a fixed span of seasons, then an inevitable, undeviating collapse -- with the delay itself mechanically load-bearing for when other crises are timed to fire
+- **[ARC-12]** three or more factions must be able to independently accept the same economically rational arrangement for entirely separate, individually sound reasons, with none of them individually responsible for or aware of the arrangement's hidden downside
+- **[ARC-12]** a hidden hazard embedded within an economic arrangement must be able to accumulate invisibly for multiple seasons, becoming detectable only through an active diagnostic action, with a default 'becomes visible anyway' fallback if nobody ever checks
 - **[ARC-12]** one participant who personally vetted the tainted component must be able to discover the problem ahead of the others and face a genuine choice between voluntary early disclosure (a bounded, known cost) and concealment (an unbounded, larger cost if later discovered by someone else)
 - **[ARC-13]** a previously-neutral institution's inertia must be able to become contestable -- vulnerable to being won by an outside faction -- only once specific, hard-to-reach conditions among OTHER factions are simultaneously true
+- **[ARC-15]** detecting a hidden financial arrangement must be able to proceed along THREE independently-timed paths that can each succeed or fail on their own schedule without coordinating with each other
+- **[ARC-16]** an opposing institution's decision to NOT act against a vulnerable target must be able to be a genuine, standing strategic choice, rather than mere neglect, and must be able to persist indefinitely without ever being forced to resolve
 - **[ARC-16]** removing one unit of a spread-out presence must be able to itself generate a persistent legitimacy cost against the remover, in every instance, for as long as the underlying dynamic is active
+- **[ARC-18]** the target's own superior must be able to maintain a hidden, second layer of awareness of the cultivation pattern that is invisible to the cultivating factions and discoverable by an outside party only through a separate, deliberate investigative action
 - **[ARC-R16]** the consequences of several seasons of unattended autonomous action must accumulate silently and be legible together as a single readable summary when a player finally looks
 - **[ARC-R17]** reaching a threshold quantity in one place must unlock a specific powerful action usable against a chosen target elsewhere
 - **[ARC-R18]** a multi-round formal vote between two competing coalitions must be able to end with neither side reaching the majority needed to prevail
 - **[ARC-R18]** a tied/failed formal vote must trigger two independent background quantities to move in the same negative direction simultaneously, regardless of what either side wanted
+- **[ARC-R19]** periodic resolution of pending effects must happen in a fixed, non-negotiable phase order, such that an effect resolved in an early phase can prevent a check that would otherwise fire later in the same period, but not vice versa
 - **[ARC-R19]** when an at-risk quantity drops to a specific low value, that value must impose a protective floor on further pressure for a limited grace window, independent of the pressure's true magnitude
 - **[ARC-20]** the eventual mass-combat event's outcome must depend on whether one specific, independently-judging military leader decides to commit her forces, and that decision must be resolvable in more than one way even under identical battlefield facts
 - **[ARC-21]** the institution's best possible outcome must remove a suppression effect the target was providing against a background pressure quantity, and immediately spike that quantity
 - **[ARC-21]** a failed formal challenge against a power-holder must weaken the challenging institution and strengthen the target correspondingly, not simply leave the state unchanged
 - **[ARC-22]** the worst outcome degree must spawn a persistent hostile presence that must itself be resolved through several different possible methods before the operation can be reattempted, and must remove the prior lead from being able to try again
 - **[ARC-23]** a battle must have discrete resolution phases within a turn, with a stabilization action available only in one particular phase and only for a single turn's window
-- **[ARC-23]** a standing threat/threshold that exists only because one specific person personally maintains it must be permanently extinguished -- not paused, not inherited by a successor -- if that person dies
 - **[ARC-24]** the specific shape of the fracture must depend on the independent internal state of several named sub-actors at the moment of collapse, not on a fixed collapse template
 - **[ARC-24]** a collapsed institution's role in driving a background world-quantity must simply stop rather than reverse, freezing that quantity at whatever value it held
 - **[ARC-25]** a neutral third-party actor must independently evaluate several unrelated background quantities each period and select a strategic alignment based on that composite read, without a player directly setting the alignment
@@ -94,11 +106,12 @@ no execution for.
 - **[ARC-26]** the failure branch must produce behavior that is objectively counter-productive to the character's own interests while looking, to him, like the correct reading of his experience -- and must remain actable-upon with his full institutional resources
 - **[ARC-27]** a single declared operation must resolve to at least four distinct outcome degrees, each combining differently whether the target is removed, whether a persistent breach forms, whether the actor is incapacitated, and how much a world-health quantity is spent
 - **[ARC-27]** even the best possible outcome must produce a passive detection/visibility effect for sufficiently sensitive observers physically present, with a political consequence firing regardless of whether the primary goal succeeded
-- **[ARC-28]** a character's internal capability-cost quantity must be able to reach its floor not as death or incapacitation but as a permanent qualitative transformation that keeps him alive, coherent, and goal-continuous
+- **[ARC-27]** the worst outcome must spawn a hostile entity in the exact physical/social scene where the operation was attempted, with its type determined by what was targeted and at what scale
 - **[ARC-28]** after crossing that threshold, the character's communication to others must be deliberately down-sampled per-listener -- the same true information rendered differently and incompletely depending on who receives it, controlled by the transformed character himself
 - **[ARC-28]** the transformed character must retain full continuity of prior goals, relationships, and decision framework, so others recognize him as unchanged in identity while being unable to independently verify his now-superior judgments
 - **[ARC-29]** a head of state who remains in his role after crossing the transformation threshold must retain the ability to perform ordinary formal governance acts (signing decrees, attending formal sessions) even while his understanding of them has changed underneath
 - **[ARC-30]** a long-concealed identity/capability must remain undetectable to non-specialist observers even after a profound internal transformation, requiring concealment to be tracked independently of the internal-state change
+- **[ARC-30]** discovery of the transformation by one specific, relationally-close character must produce a fundamentally different scene depending on whether that discoverer has independently crossed the same threshold himself
 - **[ARC-31]** a private, unshared threshold maintained by one specific NPC (not by the institution she serves) must be able to trigger an institution-scale event once it reaches its ceiling, based on her own accumulated judgment rather than any single rule anyone else can see
 - **[ARC-33]** a location must be able to strip a person's explicit recall of their specific goal while inside it, while still letting them retain and act on the underlying intention, such that 'why am I here' becomes unanswerable moment to moment while 'what to do next' remains actionable
 - **[ARC-33]** a successful, player-desired outcome achieved via this zone must trigger an automatic, unavoidable rise in a hostile institution's background pressure quantity purely because the outcome became visible, independent of any subsequent handling
@@ -107,16 +120,22 @@ no execution for.
 - **[ARC-36]** an NPC pursuing a fixed optimization objective must be able to keep taking the locally-correct action indefinitely with no internal signal that a completely different, unmeasured value is being destroyed by that same behavior
 - **[ARC-36]** an institution's investigative branch, on detecting the derivative marker, must apply a procedure that structurally cannot address the actual root cause because that cause belongs to a different category of problem than the procedure is built to find
 - **[ARC-37]** a legitimate, ordinary supply chain must carry a good whose hazardous property is invisible to everyone below a specific rare perceptual threshold, such that its builders and vendors are neither lying nor negligent
+- **[ARC-37]** a separate investigator working an unrelated case must be able to cross-reference unconnected case files and stumble onto the same supply chain from a different angle, using only legally-visible evidence rather than the hidden property
+- **[ARC-39]** that hidden quantity crossing a threshold must trigger a one-time check whose two outcomes (perceive the truth vs. destabilize without understanding it) leave the leader with qualitatively different capability and self-knowledge
+- **[ARC-41]** a hidden personal capability in a loyal enforcer must remain completely dormant until an unrelated, ambient environmental quality, degraded by the cumulative effect of several other storylines, drops into a specific band specifically in the territories his job routinely sends him to
 - **[ARC-41]** an enforcer's positive, valued professional trait (rigorous documentation) must, without any change in his behavior, become the specific mechanism constructing a damning case against himself once what he is documenting is his own anomalous perception
 - **[ARC-42]** the debate's outcome, regardless of which side wins, must be able to trigger a small positive change in a separate, unrelated ambient world-health quantity, conditioned only on whether rare-sensitivity participants are present in the room
 - **[ARC-42]** this debate must be unable to occur meaningfully until several other independent storylines have advanced to specific states, functioning as a convergence node rather than an independently-triggerable event
 - **[ARC-43]** any reality-altering ability used specifically within a large-scale, multi-unit engagement must have its underlying cost multiplied by a fixed large factor relative to the same ability used outside mass combat
-- **[ARC-45]** a formal, threshold-triggered diplomatic demand must remain permanently suppressed below its trigger value for as long as a single foreign intermediary chooses, for personal reasons, to withhold the signals that would raise the triggering quantity, such that removing that one intermediary's motive is sufficient by itself to unlock the demand
+- **[ARC-44]** a designated institutional mechanism built specifically to block structural political reform must have a trigger condition narrow enough that change arriving through non-political channels never satisfies it
 - **[ARC-45]** both formal responses available to the demand must each independently increment a separate background threat-counter, such that no available choice avoids worsening at least one long-term threat track
 - **[ARC-META-COLLISION]** the arc-indexing scheme must be able to disambiguate two structurally different arcs that share the same integer identifier, by series/source-file, not by number alone
 - **[ARC-META-COLLISION]** the same disambiguation must hold for Arc 17 (root: 'The Favour Gate' vs gm_ref: 'The Sinigaglia Dinner') and Arc 18 (root: 'The Tied Vote' vs gm_ref: 'The Stolen Steward')
 - **[EMG-10]** the game must be able to evaluate "at least three of nine," "all nine," and "none of nine" as distinct, meaningfully different outcomes, each with its own described consequence.
+- **[ARC-46]** an institution's standing quantity must be able to increase automatically every period purely from the passage of time, with no actor choosing to advance it
 - **[ARC-46]** an actor must be able to attempt, once per period, to hold that automatic gain at zero for the period, with the attempt able to fail
+- **[ARC-46]** when the automatically-growing standing quantity crosses a set level, the system must be able to convert that crossing into a per-territory contest between the institution's strength and each territory-holder's own strength, transferring territories the institution wins
+- **[ARC-47]** the counter's current value must be able to stay hidden from the players by default, disclosed only through a deliberate choice by the NPC who holds it
 - **[ARC-48]** an ambient world-quality quantity must be able to decrease automatically over time independent of any action, and must also be able to decrease further as a cost attached to certain actions' partial or failed outcomes
 - **[ARC-48]** that ambient quantity must be organized into contiguous bands such that crossing a band boundary changes the difficulty of a category of actions performed anywhere within an affected territory
 - **[ARC-48]** an increase in a category of action's difficulty must be able to increase that category's failure rate, and failure on that category must be able to further reduce the same ambient quantity that raised the difficulty in the first place
@@ -130,13 +149,17 @@ no execution for.
 - **[ARC-52]** stopping the aggregate quantity's rise must be able to require every faction operating in that context to simultaneously withhold a category of action, such that any single faction continuing to act in the ordinary way keeps the quantity climbing
 - **[ARC-54]** a character's ongoing use of a personal ability must be able to leave passive traces perceivable by unrelated non-player observers scattered across multiple locations, each independently sensing only a vague, unlocated wrongness
 - **[ARC-54]** an institution with a distributed network of observers must be able to aggregate many independent, individually-meaningless reports into a single actionable pattern about one specific individual, with no single report sufficient on its own
+- **[ARC-54]** an actor must be able to spend a specific investigative action, resolved against a fixed difficulty, that on success reveals one hidden fact about a target's affiliation-relevant nature without revealing the target's own underlying quantitative measurements
 - **[ARC-54]** the profile an institution builds about a sensitive individual must be structurally barred from ever taking the form of that individual's own internal quantitative measurements, remaining categorical no matter how successful the institution's investigation is
 - **[ARC-55]** crossing below the gating floor must be able to remove the faction's access to the action in that territory immediately and completely, not as a probability penalty, until the value is restored
 - **[EMG-C1]** an actor's readiness to act must be able to accumulate from several unrelated, independently-tracked conditions, where each condition alone is insufficient but their sum crosses a firing point
 - **[EMG-C2]** repeated interaction between a player and a single non-player actor must be able to advance that actor's private understanding through discrete, ordered stages, where higher stages unlock qualitatively new offers or demands from that actor
 - **[EMG-C2]** a hostile institution's investigation of a suspected violation must be escalatable to a formal decision point where a third governing body must choose a side, with different consequences depending on which side it takes
+- **[EMG-C3]** a hidden actor's routine operation must be able to degrade a shared, global resource value each time it is used, as an automatic side effect the actor itself has no visibility into or control over
 - **[EMG-C3]** the degrading shared resource must be able to fall through multiple bands, each unlocking distinct, worsening consequences determined organically from current state rather than from a fixed script
-- **[EMG-X5]** a deliberate action that succeeds at making an agreement binding must be able to attach an invisible, automatic penalty to all future related actions on that same configuration, without the acting character choosing or being warned of it
+- **[EMG-C3]** players must be able to choose not to investigate a decaying resource, in which case the decay continues uninterrupted and consequences compound without any forced intervention
+- **[EMG-C4]** the constitutional-crisis-level proceeding must be resolvable through a structured multi-round contest between two sides where a designated combatant may be substituted mid-contest, and the winner determines whether the suppressed capability becomes formally acknowledged in the public record
+- **[EMG-X5]** an agreement's hidden fragility must remain dormant until a later, unrelated external event of sufficient severity arrives, at which point a judgment call determines whether the fragility manifests
 - **[EMG-X5]** when a fragile agreement fails under stress, its status must be able to become genuinely indeterminate — with the parties to it disagreeing about whether it currently holds or what it means — rather than simply switching to a binary broken or intact state
 - **[EMG-X6]** a formal proceeding must be able to strip one specific participant of a procedural option available in other formal contests, while granting the initiating side an extra structural advantage, producing a genuinely asymmetric contest
 - **[EMG-X6]** an especially decisive evidentiary victory margin within the proceeding must be able to trigger an involuntary side effect that makes a suppressed truth partially perceptible in the room, independent of and regardless of who wins
@@ -150,14 +173,54 @@ no execution for.
 - **[NSC-02]** a ruling actor's continued inaction on a matter must be attributable to several distinct, simultaneously-held political costs, where the actor acts only once enough of those costs have been individually removed or reduced by separate events
 - **[NSC-03]** a political actor's standard legal-authority claim must be augmentable with an alternative, metaphysical justification that is mechanically and narratively distinct from, and strictly more contested than, the standard version
 - **[NSC-03]** a claim that a ruling authority's foundational legitimacy narrative is incomplete or misappropriated by a rival institution must be treated by that institution as the single most severe category of challenge available, triggering its maximal formal response
+- **[NSC-04]** exposing an institutional actor's secret partnership with a criminal organization must require acquiring evidence via at least two independent methods — extracting testimony from a source loyal to the criminal organization, and separately acquiring documentary records — where partial evidence alone yields only weaker, reversible consequences
 - **[NSC-05]** a person held by a foreign power must have a trackable allegiance value that decays by default absent successful active maintenance, with a bounded, repeatable maintenance action available each period that can only pause, not reverse, the decay
 - **[NSC-05]** the held person's allegiance crossing one specific band must be able to independently increment a wholly separate faction's private readiness counter for an unrelated drastic institutional action, without that faction needing to take any action of its own
+- **[NSC-05]** forcibly retrieving the held person against the holding power's will must require a qualitatively different, far more escalatory type of action than covert retrieval, immediately spiking a separate cross-faction tension value to a level associated with open conflict
 - **[NSC-07]** sustained neglect of a repeatable stabilizing action across a specific number of consecutive periods must be able to cross an escalation threshold that changes the degrading structure's decay from a paused/reversible state to an ongoing, worsening, and self-accelerating one that itself contributes to a larger world-decay track
-- **[NSC-08]** the private readiness counter must be irreversible — once a condition fires and increments it, no subsequent event can decrement it back, even if the underlying condition that caused the increment is later resolved
+- **[NSC-07]** a culminating ritual attempt at the degraded structure must require simultaneously satisfying a compound set of prerequisites — a specific prior-acquired item, a minimum collective preparedness value, a sufficiently capable lead individual, plus multiple sufficiently capable supporting individuals — before it can even be attempted
+- **[NSC-07]** the culminating ritual's outcome must resolve to one of at least four graded results, with the worst outcome capable of crossing an unrelated global crisis threshold immediately and spawning the largest single hostile entity available
+- **[NSC-08]** a specific institutional actor must maintain a private, not-directly-visible readiness counter that increments from three independently-defined failure conditions, any one of which can fire in a given period
 - **[NSC-09]** the actor's advancing understanding must culminate in a stage where the actor's own stated core goal changes in kind, from wanting to understand a domain to wanting to control it, and this goal-change must be described as a forced revision to the actor's previously-stated guiding belief, not a free choice by the actor
+- **[SCN-01]** A character must be able to hold two mutually exclusive action tracks in the same combat round (an ordinary action vs. a specialized channeled action), where committing to one makes the character ineligible for the other, and eligibility for the special track is decided by what the OPPONENT chooses to do that same round, not just the actor's own choice.
+- **[SCN-01]** A single triggering roll for the special action must route to four qualitatively different outcome branches, each altering different downstream resources (a difficulty modifier on a future action, a resource pool, a stress/condition track) rather than a binary pass/fail.
+- **[SCN-01]** Once a special contact/channel state is established, it must persist across multiple rounds and be re-tested by a save whenever the character takes damage during that window, where failure both drops the channel early AND resolves the whole action as a failure.
+- **[SCN-02]** The engine must support several distinct sub-actions within one action category, each with an independent roll but a SHARED currency that all of them modify, positively and negatively, on their own outcome tables.
+- **[SCN-02]** At least one sub-action's outcome table must impose a duration-based recurring penalty to the shared currency going forward (starting a fixed number of seasons later) that keeps applying without further rolls.
+- **[SCN-03]** Reaching incapacitation must be able to immediately and forcibly terminate an unrelated in-progress channeled-action state belonging to a DIFFERENT case, cross-referencing that case's own failure resolution.
+- **[SCN-04]** A single-roll persuasion attempt's difficulty must be dynamically derived from a stored relationship-disposition value between the acting character and their target, rather than a fixed number.
+- **[SCN-04]** A specific sub-action available within the contested exchange must be able to damage a SEPARATE persistent resource belonging to the opposing character specifically when that opponent's own margin that exchange is non-positive, with that resource's depletion feeding a different case's own resolution chain.
+- **[SCN-05]** A character must be able to hold a small fixed COUNT of one resource type at a time, where different ways of engaging an individual instance grant differing amounts of a shared advancement currency, with the largest amount specifically reserved for the instance's own content being shown to have genuinely changed as a result of events, not merely engaged with unchanged.
+- **[SCN-05]** The converted spendable resource must be usable to buy automatic successes on a die roll before that roll is made, at a fixed one-unit-to-one-success rate, as a resource type distinct from ordinary dice pools.
+- **[SCN-05]** A specific sub-action belonging to a DIFFERENT case (a contested social exchange) must be able to drain the spendable resource by a fixed amount whenever the opposing character's own margin in that exchange is non-positive, and the resource reaching zero must trigger an immediate, unconditional consequence (destruction of its parent asset) even mid-scene.
+- **[SCN-06]** The severity tier of a newly-spawned hazard must be determined by reading a shared currency's CURRENT value at the exact moment of spawning, across at least four severity bands, where the top band spawns the hazard simultaneously across multiple adjacent locations rather than the one location of origin.
+- **[SCN-06]** An unresolved instance of the full hazard must impose an automatic, unconditional recurring cost on the shared currency every season it remains unresolved, with no actor choosing this.
+- **[SCN-07]** A per-character resource must start at a fixed ceiling and be reducible from at least three independently-triggered sources: the failure branch of an unrelated roll, an automatic penalty attached to one specific action type regardless of outcome, and a difficulty increase on a DIFFERENT future roll that itself raises that future roll's own chance of causing further reduction.
+- **[SCN-07]** The resource must have NO passive or automatic recovery of any kind — every increase must trace to a deliberate, named action taken by a character.
+- **[SCN-08]** At least three independent numeric clocks must run in parallel, each with a distinct starting value and valid range/direction, with one clock's threshold-crossing changing ANOTHER clock's per-season accrual RATE going forward, not merely triggering a one-time effect.
+- **[SCN-08]** Each clock must independently support at least three ordered bands that each activate or deactivate an entirely different RULE-SET while active, not a single numeric penalty scaling smoothly.
+- **[SCN-09]** A shared currency's lowest band must activate SEVERAL simultaneous, independently-summed automatic per-season drains (at minimum: a per-hazard-instance drain, a per-locked-instance drain, a flat passive drain, and a chance-based new-hazard-spawn check), all computed together at the same seasonal accounting step.
+- **[SCN-09]** One of those structural exit conditions must itself be a COMPOUND action: multiple separate actors pooling their individual capability into one shared attempt, with an explicit rule for what happens when two contributing actors hold conflicting internal states (either refusing to combine, or requiring an extra pre-check roll before combination).
+- **[SCN-09]** A restorative action's WORST outcome branch must apply a large fixed penalty to the shared currency that, when the currency is already at its floor, is explicitly capable of driving the currency past its own floor into a DISTINCT, separately-defined terminal state rather than clamping at the floor.
+- **[SCN-10]** An NPC-type entity's perceptibility must vary continuously across at least five distinct bands depending on the OBSERVING character's own stat value, not a single global visibility flag — the same entity must be renderable as 'nothing' to one observer and 'fully detailed' to another, simultaneously, in the same scene.
+- **[SCN-10]** Once triggered, the terminal sequence must run as a fixed multi-round countdown where each round applies a qualitatively different, escalating effect, and each round must independently offer its own stabilization roll that can arrest the countdown at that round.
+- **[SCN-12]** One resolution path must trade an immediate, present-tense benefit for a DEFERRED consequence explicitly recorded as 'seeded' now but whose actual resolution/payoff is left for an unspecified LATER point in the campaign.
+- **[SCN-13]** All designated participants must roll the SAME gating step SIMULTANEOUSLY, with the ANCHOR's own individual result determining whether the COLLECTIVE structure forms at all, independent of how any helper's own roll came out.
+- **[SCN-13]** Each helper's contribution to the anchor's pool must be computed as a FLOOR-DIVISION of one of the helper's own stats (that stat divided by 2, rounded down) added as bonus dice to the anchor, NOT as the helper's own separate independent dice pool.
+- **[SCN-13]** A participant's own pre-existing personal commitment must be able to conflict with the operation's shared intent at (at minimum) two distinct severities, with different mechanical consequences per severity: a milder conflict silently disabling one property of that participant's dice, and a more severe, directly-opposing conflict requiring an ADDITIONAL pre-check roll whose failure removes the participant before the main roll occurs.
+- **[SCN-14]** A personal-scale action must be declarable and resolvable WITHIN a single unit of mass-scale time, strictly limited to a fixed maximum count per unit (here: one), rather than personal actions being either unavailable during mass-scale resolution or unlimited.
+- **[SCN-14]** The SAME action-category used at the personal scale elsewhere in the system must be usable DURING mass-scale resolution too, but its resolution TIMING must DIVERGE from its declaration timing, with the specific divergence (which later phase it resolves at) determined by WHICH SUB-TYPE was chosen at declaration.
+- **[SCN-15]** Two structurally different resolution modes (a roll-based personal mode and an order-based strategic mode) must be able to target the SAME object with opposing intent, be DECLARED at different points in the same round, and be HELD without resolving until a single common later phase resolves them TOGETHER.
+- **[SCN-15]** In ALL THREE outcome shapes, resource costs to the shared currency must be able to apply to the LOSING or FAILING side even though that side produced no narrative effect, such that the 'both fail' case can produce a pure net loss to the shared currency with no offsetting gain to any party.
+- **[SCN-15]** An individual character must be able to OPT IN to 'leading' an otherwise character-less strategic-mode action via an explicit declaration at a specific phase, and that declaration must determine whether an individual-character-scoped cost applies to that action instance AT ALL — absent the declaration, the action must proceed with NO individual-character cost attached.
+- **[SCN-LOOP-A]** A specific institution's own COUNTER-MECHANISM against the loop's root cause must be able to become UNAVAILABLE to that institution specifically because of a DOWNSTREAM consequence of the very loop that mechanism exists to counter — the loop must be able to disable its own antidote as a late-stage consequence of its own progression.
+- **[SCN-LOOP-B]** A rising metric crossing one threshold must trigger an institution offering a 'mediation' action whose EFFECT is to further increase the SAME metric that triggered it — the institution's own response to the metric's rise must be a net contributor to that same rise, not a mitigation.
+- **[SCN-LOOP-C]** The resource crossing a specific band must impose a difficulty penalty specifically on THE SAME ACTION CATEGORY that spends it (including the specific sub-action that started this chain), creating a loop where the resource's own degradation makes the actions that degrade it further MORE likely to trigger their own worse outcomes.
+- **[SCN-LOOP-D]** A specific group's OWN deliberate, dedicated action must be able to REDUCE the SAME originating metric that opened the access window, and that action's SUCCESS must be the loop's one explicitly-intentional counter-mechanism, distinct from any of the loop's other, automatic steps.
 
 ## Every unrouted non-core row, verbatim
 
+- *[ARC-01]* one actor's accumulation of institutional standing must be able to happen through methods that are individually unimpeachable (charity, arbitration, hospitals) with no single action anyone could point to as the trigger for concern
 - *[ARC-01]* a Non-Player Character must be able to accumulate an effect at scale while having zero perceptual capacity to register what that accumulation produces elsewhere
 - *[ARC-02]* one person's individual capability shift (being reassigned or leaving) must be able to reduce an institution's aggregate operational capacity as a downstream, mechanical consequence
 - *[ARC-03]* players must be able to supply the specific target or pretext a holding character is waiting for, as an action distinct from triggering the reserved resource itself
@@ -168,6 +231,8 @@ no execution for.
 - *[ARC-05]* an institution's own values framework must be able to explain why THAT faction, and not another, is the one sitting on the relevant knowledge
 - *[ARC-05]* the arc must be able to have genuinely no scripted endpoint — every listed resolution must remain equally reachable depending purely on what players do or fail to do, with no default outcome favored by inaction
 - *[ARC-06]* the actors who won a contest must be able to fail to notice, at the moment of victory, that their win has not actually changed anything operational
+- *[ARC-06]* a failed implementation attempt must be able to impose a standing cost on the actor who attempted it, and make a subsequent retry of the SAME action structurally harder
+- *[ARC-07]* a third faction with no stake in the original crisis must be able to gain standing by mediating it, entirely as a side effect of a crisis it did nothing to cause or prevent
 - *[ARC-08]* one institution must be able to detect a pattern in a rival institution's own internal operational rhythm purely by correlating publicly observable outcomes over time, without infiltrating or spying on anyone directly
 - *[ARC-08]* publicly exposing information in a legislative setting must be able to force an accused institution into a defensive posture regardless of whether the information itself was damaging in substance
 - *[ARC-09]* an institution's aggregate operational capacity must be able to silently degrade because one specific individual quietly stopped contributing, while the institution's headline stats (its authority, its legitimacy) remain visibly unaffected
@@ -181,19 +246,23 @@ no execution for.
 - *[ARC-11]* a military commander's personality-driven redeployment must be able to leave a specific, different location exposed as an explicit trade-off, without that commander weighing the trade-off as a deliberate strategic calculation -- it is who he is, not a choice he makes
 - *[ARC-11]* an institutional collapse must be able to open a temporary window during which OTHER factions can bid, using an ordinary resource, for access to powers the collapsed institution used to hold exclusively
 - *[ARC-11]* a targeted social action against one specific compromised administrator must be able to redirect that administrator's institutional capacity toward the acting faction, using a documented personal vulnerability rather than force or negotiation
+- *[ARC-12]* the revelation of a hidden hazard must be able to trigger a simultaneous, uniform penalty across every participating faction at once, rather than harming factions sequentially or requiring separate rolls per faction
 - *[ARC-12]* the same revealed hazard must be able to carry a distinct cultural/identity-based meaning layered on top of its ordinary economic consequences, with both readings mechanically true at the same time
 - *[ARC-12]* a public, documented revelation of the hazard must be able to durably shift an unrelated faction's ongoing political costs elsewhere in the world, as a downstream side effect
+- *[ARC-13]* a reactive procedural objection must be able to fire automatically and identically every time its trigger condition is met, functioning as a standing tax on a category of action rather than a deliberated response
 - *[ARC-13]* a resource-management relationship between two SEPARATE characters (one who buffers a faction's failure rate, one whose eventual breakdown removes that buffer) must be able to delay a payoff and then, upon that second character's break, accelerate it explosively
 - *[ARC-13]* co-opting a previously-neutral institutional actor must be able to unlock a specific, otherwise-unreachable category of reform, but only if the co-opting faction already holds a minimum presence in the relevant territory
+- *[ARC-13]* an event resolving a multi-season accumulation must be able to fire only once per entire campaign, never repeating even if its conditions recur later
+- *[ARC-14]* an offer to resolve a crisis must be able to carry its true cost hidden or deferred from the receiving party at the moment of choice, revealed only afterward
 - *[ARC-14]* a documented personal vulnerability of a specific figure receiving an offer must be able to change the numeric size of that offer's cost if a faction exploits it via a social action
 - *[ARC-14]* an operative's caution trait must be able to automatically veto a planned action based on a condition created by an ENTIRELY SEPARATE, earlier arc's unresolved consequence
 - *[ARC-15]* a subordinate who detects sensitive information, under a trait that predisposes him to act unilaterally, must be able to act on it alone rather than reporting to his own faction's leadership, thereby destroying that leadership's own separate, still-pending advantage
 - *[ARC-15]* an unrelated NPC's decades-old, since-revealed-mistaken assumption must be able to remain the causal source of that NPC's present-day detection capability, unaffected by learning the assumption was false
 - *[ARC-16]* capturing a movement's charismatic leader must be able to trigger consequences that scale with how much of her prior presence survives the capture, rather than a flat, fixed consequence
-- *[ARC-16]* an investigator's thoroughness trait must be able to simultaneously serve an institution's stated goal (building a solid case) and undermine it (giving the target's allies a rescue window)
 - *[ARC-17]* detecting a subordinate's pattern of behavioral hesitation must be able to require repeated, unprompted checks over MULTIPLE seasons rather than a single roll, so that success is a matter of persistence and probability, not certainty on any one attempt
 - *[ARC-17]* damaging evidence held against one party must be able to carry a SECONDARY payload relevant to a separate, larger mystery, activated only under specific conditions -- this cross-arc linkage was itself struck when the referenced backstory was retracted, and its mechanical effect no longer has a live trigger condition
 - *[ARC-17]* a case-handler assigned to investigate released evidence must be able to introduce a procedural delay that specifically benefits the ORIGINAL holder of that evidence in destroying it, even while nominally investigating on behalf of the institution that wants it exposed
+- *[ARC-18]* a superior's hidden monitoring of an ongoing cultivation must be able to convert into concrete future advantage -- a stored bonus usable against a specific cultivating faction -- at a later review moment, rather than being pure narrative flavor
 - *[ARC-18]* a resolution roll's failure must be able to leave the underlying situation completely unresolved and unchanged, with no forced fallback outcome, so the accumulating dynamic can simply continue
 - *[ARC-R16]* one faction's autonomous action must be able to change the difficulty or cost of another faction's or the players' future actions
 - *[ARC-R16]* an actor's approach toward a threshold must be able to reach a point where crossing it unlocks a materially different capability for that actor
@@ -214,7 +283,7 @@ no execution for.
 - *[ARC-24]* a protective grace mechanism on the health quantity must be able to be missed if the players are not present to use their one available window
 - *[ARC-24]* a frozen-but-still-high background quantity must remain crossable by unrelated later events even though the institution that normally drives it is gone, via its own remnant apparatus
 - *[ARC-24]* rebuilding a collapsed institution from scratch must require multiple geographically-distributed actions gated by the same per-period caps as everything else, fixing a minimum recovery time regardless of investment
-- *[ARC-25]* locking in the favorable alignment must require meeting several externally-visible qualifying conditions simultaneously, not any single action
+- *[ARC-25]* the intelligence-leakage side effect must run passively and automatically regardless of player awareness, exposing covert operations run through that territory
 - *[ARC-25]* the third party's default disposition must remain profit-seeking/neutral even under alignment, able to pull back into self-interest rather than becoming a committed ally or true enemy
 - *[ARC-26]* the newly-unlocked capability must retroactively change how the character interprets and leverages his existing political relationships and leverage, not simply add a new resource
 - *[ARC-26]* an institution that would normally react to this kind of capability must be able to open a formal investigation based on partial/indirect evidence before the character himself understands what has happened to him
@@ -223,6 +292,7 @@ no execution for.
 - *[ARC-28]* the transformed character must face a further, independent choice about whether to also alter his physical form, decoupled from the mental-threshold crossing itself
 - *[ARC-28]* if the character holds ongoing political leverage, its meaning must be reinterpretable at a deeper level after the threshold without changing its face value to those who negotiated it originally
 - *[ARC-29]* two independently-transformed characters occupying the same physical space must be able to communicate with each other at full fidelity, distinct from their now-limited communication with everyone else
+- *[ARC-30]* covert funding/support networks the character has been running must continue operating after the threshold, but their guiding logic must shift from strategic calculation to something the operator herself describes as direct perception, without changing their external behavior enough to raise suspicion
 - *[ARC-30]* a physical object with historical/informational significance must be able to carry a perceivable proximity relationship to a transformed character that is legible only to sufficiently sensitive observers
 - *[ARC-31]* an institutional actor's positioned military forces must be able to remain ambiguous in intent (defensive vs threatening) until a later decision point forces an interpretation
 - *[ARC-32]* a formal collective decision body must be able to intervene to defend or abandon an accused individual via a multi-round contest, with the losing side's consequence being a fully asymmetric tribunal with no defense procedure available
@@ -232,17 +302,22 @@ no execution for.
 - *[ARC-36]* the investigating branch's standard procedural delay must itself allow the underlying erosion to continue and spread to additional locations during the investigation
 - *[ARC-36]* the eroding value crossing a floor in enough locations simultaneously must trigger a discrete, disruptive event with its own immediate costs, distinct from the slow erosion that caused it
 - *[ARC-36]* this arc's terminal event must be able to feed as an input into other independently-running arcs' state without requiring any player action to connect them
+- *[ARC-37]* that accumulating self-protective cost must itself be observable from outside by the discoverer's own chain of command as an unexplained pattern, eventually forcing an internal review independent of the underlying secret
 - *[ARC-37]* when the legally-visible investigation concludes against the supply chain, it must automatically hand a hostile institution a costless, pre-built justification to open its own separate, harsher investigation
+- *[ARC-37]* exposure of the supply chain must be able to propagate damage to at least three separate actors' standing via three distinct causal paths from one triggering event
+- *[ARC-38]* both shields failing within a short window of each other must produce a compound, first-time-in-the-campaign exposure to full external pressure, functioning as a distinct escalation tier rather than a continuation of prior gradual pressure
+- *[ARC-39]* an unrelated investigator working a structurally separate case must be able to intersect this hidden-growth track by physically tracing an unconnected supply chain to its source, detecting the leader's sensitivity as an incidental byproduct
 - *[ARC-39]* if the leader begins using his emerging, still-unrecognized capability without guidance, a separate internal resource must begin depleting per use with no natural recovery available, eventually degrading his other, unrelated strategic capabilities
-- *[ARC-40]* one institutional actor extending protection to a faction under active investigation by a second institution must be interpretable by that second institution as hostile betrayal, permanently damaging a previously-functioning cooperative arrangement
+- *[ARC-40]* a single administrator's institutional loyalty must be determined by which faction has invested a specific social-validation behavior toward him over a long period, not by policy alignment, such that his crisis decisions are explainable only by that personal history
 - *[ARC-40]* the number of precursor crises that have actually fired by a given checkpoint must produce genuinely different, graduated severities of outcome, not a single all-or-nothing trigger
 - *[ARC-41]* the ambient quality's degraded band must specifically escalate its local effects in territories closer to a specific hazard-source, such that identical ambient conditions produce categorically stronger effects the closer a territory is
 - *[ARC-41]* withholding disclosure must not freeze the situation -- the enforcer's own unassisted, ongoing documentation must reach the same self-incriminating conclusion independently after a further delay
 - *[ARC-42]* a formal, evidence-based decision procedure must support citing a specific, previously-established, verifiable fact as a bonus-granting move, mechanically distinct from generic argument, and that fact must originate from a separate, ongoing long-term research arc
+- *[ARC-42]* a formal procedural-objection mechanism meant to block structural change must be categorically unable to prevent a debate from happening if it is classified as a social contest rather than a reform action
 - *[ARC-42]* a formerly-loyal institutional insider's testimony against his own institution's foundational claim must be treated as higher-credibility evidence specifically because of his institutional pedigree, with a distinct bonus applied against the opposing side
-- *[ARC-43]* a severe outcome at this battle must permanently escalate the ambient hazard condition of multiple adjacent territories by one severity band each
 - *[ARC-44]* a faction pursuing a deliberately thin, over-extended presence strategy must end up positioned to benefit from the eroding quantity in every location where it happens to have a presence, without having caused or targeted the erosion there
 - *[ARC-44]* the cumulative erosion crossing a specific count-of-locations threshold must unlock a discrete, named follow-on capability at one specific, symbolically significant location, distinct from ordinary background erosion
+- *[ARC-45]* an intelligence compromise generated by an unrelated arc must be able to leak the defending side's still-undecided planned response to the demanding power before it is formally announced, changing the practical consequence of whichever choice is made
 - *[EMG-10]* a specific evaluation moment (a season, a triggering event, or a continuous check) at which the nine conditions are read together must exist.
 - *[EMG-10]* the ritual-outcome condition must specify which of that ritual's several named success grades counts as satisfying the endgame checklist, since the same ritual is elsewhere given multiple distinct success grades with different effects.
 - *[EMG-11]* a unique identifier scheme for individually-resolved design/editorial items must guarantee that two different resolved items never share the same identifier.
@@ -250,6 +325,8 @@ no execution for.
 - *[ARC-46]* an actor other than the one who has been performing the counter-action must be able to step in and perform the same counter-action in a later period
 - *[ARC-46]* the rising institutional quantity must be observable to players as a trackable number across several periods, rather than only becoming visible at the moment it crosses the final threshold
 - *[ARC-46]* only one faction may perform this particular contested counter-action in a given period, so two factions both wanting to act on the same clock in the same period must be mutually exclusive
+- *[ARC-47]* a third trigger must be able to fire from the controlling faction losing control of two or more territories within a single period without having taken a specific category of responsive action that period
+- *[ARC-47]* when the counter reaches its ceiling, the holding institution must be able to impose a standing procedural constraint across all of the affected faction's held territory, requiring an extra check before a category of actions can proceed
 - *[ARC-48]* non-practitioner characters must be able to perceive an ambient wrongness effect tied to nearby operation history, gated by their own personal sensitivity value rather than by a single global broadcast threshold
 - *[ARC-48]* crossing a further, lower band of the ambient quantity must be able to spawn discrete new hazard instances in the world at a stochastic rate, located by reference to a territory's other stats
 - *[ARC-48]* there must be a discrete, repeatable action available to some actor that restores the ambient quantity by a bounded amount per success
@@ -262,14 +339,17 @@ no execution for.
 - *[ARC-54]* a failed attempt at the investigative action must be able to expose the investigating faction's own activity to a third faction's counter-intelligence for a bounded duration, rather than simply doing nothing
 - *[ARC-55]* other factions must be able to structurally rely on a non-player faction's action being available in specific territories as an indirect tool against a third faction, without any of those relying factions having any input into whether that availability persists
 - *[EMG-C1]* once triggered, an actor must be able to restrict which other actors may act openly versus covertly, differentially
+- *[EMG-C1]* the accumulation counter itself must be able to persist even after the crisis is resolved, i.e. some component of the past cannot be reset by resolving the surface state
 - *[EMG-C1]* an actor confronted with an imposed extraordinary state must have multiple distinct, mutually exclusive resolution paths, each producing a different downstream campaign shape
 - *[EMG-C1]* the extraordinary state must have both an active removal condition (a deliberate action succeeding against a difficulty tied to the imposing actor's strength) and a passive removal condition (an unrelated tracked value crossing back below its threshold)
 - *[EMG-C2]* an actor's repeated use of a specific resource must be detectable by a hostile institution through a trace left in the world, at a rate proportional to how often it is used
 - *[EMG-C2]* an actor's use of a sensitive resource must carry a per-use chance of an unplanned, binary discovery event with divergent consequences on success versus failure, independent of ordinary task resolution
+- *[EMG-C3]* investigating the cause of an unattributed problem must require locating and addressing multiple separate operational nodes belonging to the hidden actor, where addressing only some of them leaves the remainder still causing harm at a reduced rate
 - *[EMG-C3]* the act of repairing the shared resource must itself be able to produce an unplanned side effect governed by chance, independent of whether the repair attempt succeeded
 - *[EMG-C4]* a character's repeated use of a risky capability must inflict a cumulative personal degradation that passes through discrete bands, each imposing worsening mechanical penalties on that character specifically
 - *[EMG-C4]* a sheltering faction's protection of individuals with a suppressed capability must be able to reduce a shared danger value over time, while each use of that protection produces an unplanned side effect
 - *[EMG-C4]* once the political flashpoint activates, the dominant religious institution must gain access to a formal punitive action against known holders of the suppressed capability, carrying both a direct cost to the target and a possible backfire cost to the institution on failure
+- *[EMG-X5]* an indeterminate agreement left unaddressed must degrade further over a short, randomized span into a harder, more costly relational breach that blocks new formal agreements between the same parties until specifically repaired
 - *[EMG-X5]* repairing the relational breach must be achievable through at least two structurally different routes — a direct restorative action and a renewed formal contest to re-establish the original agreement — each with different odds and different side effects
 - *[EMG-X5]* a restorative action's outcome must be determined partly by a random roll whose result table includes both cosmetic outcomes and one outcome that reopens an entirely separate, unrelated ongoing threat
 - *[EMG-X6]* corroboration by an ally within the formal proceeding must be restricted to allies who share a pre-established, specific bond with the accused, usable at most once per exchange and only through one designated channel
@@ -283,22 +363,77 @@ no execution for.
 - *[NSC-01]* a character's long-held, self-limiting belief must be revealed by the true reconstruction to have rested on a false premise, and the reveal itself, not the premise, must be what forces that character to revise the belief
 - *[NSC-01]* a piece of politically dangerous truth must be shareable selectively — told to some factions and not others — with each faction told gaining a distinct trackable relationship state usable as leverage later
 - *[NSC-01]* a piece of information's public exposure versus suppression must produce measurably different effects on a general public-opinion value, distinct from and in addition to its effects on any individual faction
+- *[NSC-02]* a hostile institution's public discrediting, via a sharp drop in a tracked institutional-standing value, must be achievable through an unrelated exposure event, and its occurrence must independently make the ruling actor's action cheaper on one specific cost axis without touching the others
 - *[NSC-02]* a rising popular-support value tracked in specific sub-regions must be able to cross a threshold that removes a different cost axis for the ruling actor, distinct from the discrediting path
 - *[NSC-02]* resolution of an entirely separate, foreign-diplomatic pressure track must be able to remove the ruling actor's third cost axis, via at least two distinct sub-methods
-- *[NSC-02]* a ruling actor with an otherwise-suppressed private trait must be able to have that trait's growth triggered by proximity to significant unrelated events, culminating in a binary pass/fail discovery moment with a permanent, irreversible effect on that actor's own certainty/belief state
 - *[NSC-02]* once all identified costs are removed or accepted, the ruling actor's decisive action must be selectable from at least three qualitatively different mechanisms, each with a different risk and consequence shape
 - *[NSC-03]* acquiring the specialized knowledge needed for the augmented claim must be reachable through multiple, narratively distinct relationship-based channels, any one of which suffices
 - *[NSC-03]* a second, independent political actor who has separately acquired sensitivity to the same specialized domain must be able to have their own private stance folded into the outcome as an additional simultaneous political axis, without being a direct party to the original claim
+- *[NSC-03]* the metaphysical grounding, once invoked publicly and forced into open testimony, must be able to make specialized operations become active in the same scene, with each such operation carrying its own separate world-state consequence distinct from the political outcome
 - *[NSC-04]* extracting testimony from a source loyal to the opposing actor must require breaking that source's loyalty through a dedicated social effort, not merely locating them
 - *[NSC-04]* a formal accusatory proceeding against an institutional actor must be resolvable to one of at least four distinct, graded outcomes, each with materially different consequences for both accuser and accused, determined by a single contested roll
 - *[NSC-05]* the maintenance action's failure must carry a chance of being separately detected by the holding power, with detection producing its own independent consequence distinct from the maintenance action's own success/failure result
 - *[NSC-05]* the held person's allegiance value crossing specific bands must be able to unlock qualitatively different, increasingly severe consequences rather than a single continuous penalty
 - *[NSC-05]* the held person must independently possess a dormant personal trait that can be triggered into activity by nearby unrelated events, and its activation while under a foreign power's watch must be detectable by that power's own institutional apparatus, producing consequences that override the ordinary allegiance-tracking logic entirely
 - *[NSC-06]* once recruited, a person embedded in a rival power's structure must be able to break that embedding through at least three structurally distinct methods, each carrying a different success/failure consequence shape and a different chance of the true method being discovered
+- *[NSC-06]* the covert-elimination independence path's success must be distinguishable, mechanically, from its later discovery — an outcome that looks clean in the near term must be able to unravel later with much more severe consequences and a lasting leverage relationship granted to whichever actor performed it
 - *[NSC-06]* institutional acceptance of this person's new formal authority must be conditional and behaviorally tested rather than automatic, with at least one faction's standard being an observed pattern of behavior sustained over a period rather than a formal credential
 - *[NSC-06]* this person independently developing a suppressed sensitivity, if it occurs, must be able to simultaneously activate several separate political-conflict tracks the moment she also holds formal authority, distinct from what the same development would trigger in a person without authority
 - *[NSC-07]* a degrading structure's integrity must worsen through discrete stages driven by a shared world-value crossing a threshold, and a repeatable local stabilizing action must be able to pause, not reverse, that degradation for one period at a time, requiring renewed action each period to keep pausing it
 - *[NSC-07]* attempting to address the degrading structure directly must be gated by both a minimum global-resource threshold and a minimum individual-capability floor for the lead participant, such that the attempt is categorically unavailable below either gate regardless of other resources committed
 - *[NSC-07]* individual participants below a specific capability threshold approaching the degraded structure must undergo an automatic, involuntary process determining how much of what they experience they are able to retain afterward, ranging from full retention to none, independent of their success at any other task
 - *[NSC-07]* the culminating ritual's worst outcome must be able to independently and visibly discredit a specific individual's publicly-staked worldview or reputation, in addition to its systemic and combat consequences
+- *[NSC-09]* a self-interested actor's private understanding of a specific hidden truth must progress through discrete, ordered stages, reachable via multiple alternative information sources, any single one of which suffices to advance a stage
 - *[NSC-09]* the actor reaching a sufficiently advanced stage of understanding via the binary-chance event must unlock eligibility for that actor to acquire a specific personal capability normally reserved for a different category of character, converting a previously purely-political actor into a mechanically different kind of actor entirely
+- *[SCN-01]* The special action must be able to require a preparatory step resolvable either the round before or earlier the same round, before its main roll executes.
+- *[SCN-01]* Reaching a distinct incapacitation threshold while the channel is active must immediately terminate the channel (independent of the per-hit save above) and force the action to its failure outcome.
+- *[SCN-01]* A per-round action penalty accrued from ongoing damage during the channel must persist and stack for the remainder of that channel's duration.
+- *[SCN-02]* Every use of this action category, regardless of sub-type or outcome, must trigger a separate, unconditional set of consequences that fire every time — and those consequences must differ in KIND depending on a different axis/scale property of the action (no effect at one value of that property, a full extra roll at another).
+- *[SCN-02]* Failing that aggregate window-level roll must reduce a DIFFERENT persistent per-character resource (distinct from the shared currency), feeding that resource's own separate degradation case.
+- *[SCN-03]* A single hit's damage must be cappable in how many milestone-crossings it can cause in one hit, discarding excess beyond that cap rather than letting one hit jump multiple states at once.
+- *[SCN-03]* The milestone counter must impose an escalating, CUMULATIVE action-effectiveness penalty per crossing, not a flat one-time penalty.
+- *[SCN-03]* The wound-count value at which a character becomes incapacitated must vary by a stat/attribute the character possesses, not be one global number.
+- *[SCN-03]* At least two distinct recovery actions must exist with different time costs and different degrees of restoration (a fast partial recovery vs. a slow full recovery), both available as player choices.
+- *[SCN-03]* A second, independent resource must deplete per qualifying action taken (not passively per round) and, on reaching zero, force a specific restricted mode on its owner while granting the opponent a bonus, recoverable either by a dedicated recovery action or by the forced zero-state itself resetting it.
+- *[SCN-04]* A roll made only in the first exchange of a social scene must be able to grant a persisting bonus that carries forward into later exchanges of the same scene, with the bonus's size/duration set by that first roll's own outcome degree.
+- *[SCN-04]* A multi-exchange contested social action must have its total exchange count set in advance by a chosen stakes tier, determined before the first exchange resolves.
+- *[SCN-04]* Losing an exchange must accrue a stress resource at two different rates depending on the margin of the loss, not a flat per-loss cost.
+- *[SCN-04]* An extreme, one-sided total-loss outcome for the whole contested exchange must impose a season-long difficulty penalty specifically scoped to future social interactions against the SAME opposing faction, not a general penalty.
+- *[SCN-05]* Completing an instance of the resource must be able to convert it into a mechanically different, spendable resource at a reduced starting value, where the conversion itself, not an additional currency payout, is the reward.
+- *[SCN-05]* Losing the parent asset (the resource hitting zero) must trigger a distinct follow-up resolution whose success creates a new instance of the spendable resource at a value derived from the old one minus a fixed amount, thematically continuous with what was lost, while failure destroys the possibility of a replacement for that slot entirely.
+- *[SCN-05]* A SEPARATE numeric resource, bounded to a small fixed range, must accumulate from at least two distinct trigger conditions, be spendable on the same pre-roll basis as the converted resource, and reset unconditionally to its floor at a SESSION boundary rather than a season boundary or any in-fiction event.
+- *[SCN-06]* A lesser precursor stage of the hazard must be resolvable away via a dedicated action, gated by a minimum resource-level requirement on the acting character, before it is allowed to escalate into the full hazard.
+- *[SCN-06]* The difficulty of the dedicated resolution action against a given hazard instance must increase in discrete steps tied to how many consecutive seasons that specific instance has remained unresolved, distinct from the hazard's original severity tier.
+- *[SCN-06]* The resolution action's own outcome table must have BOTH of its two success-tier branches still cost the shared currency in some form, such that a 'successful' resolution is not guaranteed to be a net positive for every tracked resource.
+- *[SCN-06]* One specific success-tier branch of the resolution action must impose a localized, season-long increased difficulty on future attempts to spawn or resolve the same hazard type in the same location.
+- *[SCN-06]* A hazard instance's mere existence must feed a SEPARATE public-facing metric, but only conditionally — gated on whether the shared currency is currently below a named threshold at the time, not unconditionally on the hazard's existence alone.
+- *[SCN-07]* At least two of the lowest bands must each trigger a ONE-TIME random-outcome check specifically on the transition INTO that band, distinct from that band's ongoing penalties.
+- *[SCN-07]* Recovery must be restricted to exactly two paths: full abstention from the specific triggering action-type across an entire season, and a paired two-character scene gated behind its own roll, which itself costs a resource belonging to the SECOND character.
+- *[SCN-07]* The resource must be hard-capped at its starting ceiling and categorically unpurchasable by the general advancement currency that buys other character improvements.
+- *[SCN-08]* A single clock must have at least two ordered threshold levels, where crossing the second (more extreme) threshold REPLACES the rate-effect from the first threshold rather than stacking additively with it.
+- *[SCN-08]* Multiple distinct, named institutions must each hold their OWN bespoke recurring action whose mechanical effect is to move one or more of the shared clocks, i.e. the clocks must be modifiable from many different actor-specific action definitions, not just from automatic threshold-driven sources.
+- *[SCN-09]* The single restorative action's own success probability at this band's difficulty must be representable as an explicit RANGE varying with pool size, and the system must be able to state/compute that even the best-case typical seasonal outcome with active restoration is still net-negative for the currency.
+- *[SCN-10]* This entity type must be able to perform an enhanced version of its base passive effect at a PER-SCENE recurring cost to one of its own resources, distinct from any action-based cost.
+- *[SCN-10]* This entity type must be able to perform the same outward-facing action category as ordinary characters while being EXEMPT from a prerequisite step ordinary characters must pass through first, because it structurally already satisfies the state that step exists to establish.
+- *[SCN-10]* The countdown's final round must produce an UNCONDITIONAL terminal outcome with no stabilization roll offered, that ALSO spawns, as a side effect, the SAME hazard-event type used by an entirely different scenario chain.
+- *[SCN-10]* A specific targeted hostile action-subtype, when targeting this entity-type specifically, must bypass its normal roll-based outcome table entirely and auto-produce the worst-case consequence unconditionally, because the target structurally lacks a property that action's normal resolution depends on.
+- *[SCN-10]* The entity's controlling actor must be able to voluntarily choose to end the entity's existence through a distinct action that SKIPS the difficulty penalties the involuntary terminal sequence normally imposes.
+- *[SCN-11]* A higher band must activate an internal multi-part structure within the opposing side (multiple named internal sub-factions) that can each apply pressure independently against different targets, with a named counter-requirement (unity on the receiving side) needed to resist them as a bloc.
+- *[SCN-11]* A still-higher band must remove an internal MODERATING presence on the opposing side, described as that side's primary internal brake, as an automatic consequence of the clock's own value crossing that band.
+- *[SCN-11]* That compound-prerequisite decisive scene, if won, must both FREEZE the clock's further movement AND unlock access to an entirely separate resolution mechanism not otherwise available.
+- *[SCN-12]* The REFUSAL branch of that same choice must impose both an IMMEDIATE unconditional cost and a SEPARATE, CONDITIONAL additional cost that only applies if a different, otherwise-unrelated clock is currently within a specific band at the moment of the choice.
+- *[SCN-12]* At least one contender-path's outcome must be able to retroactively trigger an entirely SEPARATE scenario chain as a direct consequence, plus independently increase a specific evidentiary/credibility-tracking resource, both from the same single triggering event.
+- *[SCN-12]* A formal multi-exchange contested resolution must be able to have its EFFECTIVE DIFFICULTY reduced by a THIRD PARTY's support, invoked via a specific named appeal-category, distinct from either principal party's own roll.
+- *[SCN-12]* Individual NAMED characters must be able to carry a bespoke, individually-authored CONDITIONAL BONUS to a specific roll, activating only once a SHARED, GLOBAL world-state value crosses a specific low band.
+- *[SCN-12]* A repeatable, once-per-season action restricted to exactly one specific actor/role must have a success/failure branch where failure costs that actor's OWN resource, and must independently accumulate an escalating difficulty tax on its OWN future uses purely from consecutive-season repetition, decoupled from whether prior uses succeeded or failed.
+- *[SCN-13]* If the anchor's roll fails, participants who individually succeeded on the SAME roll must still receive THEIR OWN individual outcome and consequences as if they had acted alone, rather than losing their result entirely.
+- *[SCN-13]* The system must support a single reusable comparison — whether the current collective pool falls below half of what the anchor could achieve alone — applying identically at TWO DIFFERENT MOMENTS in the operation's lifecycle (initial helper join/failure, and a later mid-operation contact drop), both triggering the same difficulty penalty when true.
+- *[SCN-13]* A SEPARATE variant of the collective-contribution structure must exist specifically for the highest-difficulty class of resolution actions, carrying its OWN difficulty ceiling that is higher than the standard structure's but explicitly caps out even against what would otherwise be additively-stacked collective bonuses.
+- *[SCN-14]* A mass-scale outcome (winning a qualifying engagement) must feed the SAME shared world-health currency used by the personal-scale action chains elsewhere in the system, as one of that currency's NAMED gain sources, alongside a scale-specific extra cost/tax applied when the same currency-spending action-category is used inside a mass-scale context.
+- *[SCN-15]* The resource changes to the shared currency arising from BOTH resolution modes in the same accounting step must be summed together and then capped by a single SEASONAL ceiling applied to the NET total after all sources for that season, not a per-event cap.
+- *[SCN-15]* A specific type of ongoing/recurring negative effect must be able to be REGISTERED against a specific spatial unit at one resolution phase while its actual per-period APPLICATION does not begin until a SEPARATE, later accounting step.
+- *[SCN-LOOP-A]* Rising factional instability arising from the above chain must be able to cause a SEPARATE institution's own routine seasonal actions to 'misfire' purely as a side effect of instability, without any single roll dedicated to causing the misfire.
+- *[SCN-LOOP-B]* A separate clock reaching a sufficiently high value must remove an internal MODERATING presence within a fourth, otherwise-external institution, where that moderating presence's disappearance is described as removing the 'primary brake' — an institution's OWN internal composition must be representable as containing a counter-pressure sub-faction whose continued existence depends on an external clock staying below a threshold.
+- *[SCN-LOOP-C]* A specific costly sub-action's use must GUARANTEE a fixed loss to an individual resource as a direct, certain cost, distinct from the SAME resource's other loss sources which are roll-gated.
+- *[SCN-LOOP-D]* A character becoming newly eligible for the gated action must be trackable per-character (a durable 'was this character below or above the threshold when it opened' or equivalent), not merely as a global on/off switch, since the text specifies 'previously dormant' characters specifically becoming able to act.
+- *[SCN-LOOP-D]* The newly-eligible characters' USE of the unlocked action must be OBSERVABLE by an external institution as a distinct triggering event, feeding a rise in that institution's own suspicion/credibility metric, separate from and in addition to any other trigger of that same metric.

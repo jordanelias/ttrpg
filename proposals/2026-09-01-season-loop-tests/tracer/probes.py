@@ -90,7 +90,7 @@ def SUBSIST(p: Person, w: World) -> int:
     return min(scale, sum(w.rungs[home].stores.values()) * scale // max(1, p.weight))
 
 
-def NOCHOOSE(p, v, s, b):
+def NOCHOOSE(p, v, s, ask_budget):
     return []
 
 
@@ -114,7 +114,7 @@ def _run(w: World, choose=NOCHOOSE, effect=NOEFFECT, n: int = 1, **kw):
        tests="a person with no office, post, command, faction rank or standing must be able to act at all")
 def p1():
     w = tiny_world()
-    def choose(p, v, s, b):
+    def choose(p, v, s, ask_budget):
         return [] if p.id != "p_low" else [Act_(w, p, "speak")]
     def effect(w, a):
         return [Ev(w, a.actor, "speech.made", a.actor, [ROOT])]
@@ -139,9 +139,10 @@ def Ev(w, subj_seed, kind, subject, causes, changes=None, degree=None):
 def p2():
     w = tiny_world()
     left_undone = []
-    def choose(p, v, s, b):
+    def choose(p, v, s, ask_budget):
         if p.id != "p_king":
             return []
+        b = ask_budget()          # THE PERSON asks their own budget (S26.3)
         wants = [f"v{i}" for i in range(9)]
         left_undone.extend(wants[b:])           # THE PERSON triages, not the engine
         return [Act_(w, p, vb) for vb in wants[:b]]
@@ -158,7 +159,8 @@ def p2():
        tests="an engine may quietly drop actions a character wanted beyond their budget")
 def p2x():
     w = tiny_world()
-    def choose(p, v, s, b):
+    def choose(p, v, s, ask_budget):
+        b = ask_budget()
         return [Act_(w, p, f"v{i}") for i in range(b + 3)] if p.id == "p_king" else []
     _run(w, choose)
     return "UNREACHABLE"
@@ -169,7 +171,7 @@ def p2x():
 def p3():
     w = tiny_world()
     caught = {}
-    def choose(p, v, s, b):
+    def choose(p, v, s, ask_budget):
         with expect_refusal():
             try:
                 _ = v.persons
@@ -234,7 +236,7 @@ def p7():
 def p8():
     w = tiny_world()
     seat = {"holder": None}
-    def choose(p, v, s, b):
+    def choose(p, v, s, ask_budget):
         return [Act_(w, p, "take_seat")] if p.id in ("p_other", "p_mid") else []
     def effect(w, a):
         if a.verb == "take_seat" and seat["holder"] is None:
@@ -253,7 +255,7 @@ def p8():
 def p9():
     w = tiny_world()
     log = []
-    def choose(p, v, s, b):
+    def choose(p, v, s, ask_budget):
         if p.id == "p_high":
             return [Act_(w, p, "dispatch", payload="p_mid")]
         if p.id == "p_mid":
@@ -282,7 +284,7 @@ def p10():
     return "UNREACHABLE"
 
 
-@probe("P11", "capability gates no verb", "S9.2", by="construction",
+@probe("P11", "capability gates no verb", "S9.2", by="probe-model",
        tests="skill must supply dice and must never make an action unavailable")
 def p11():
     w = tiny_world()
@@ -309,7 +311,7 @@ def p12():
             "there is nothing from which to compute a set. A typed authored list is still authored")
 
 
-@probe("P13", "a person acts on a need with no stored need field", "S18.2", by="construction",
+@probe("P13", "a person acts on a need with no stored need field", "S18.2", by="probe-model",
        tests="a character's needs must drive their choices")
 def p13():
     w = tiny_world()
@@ -326,7 +328,14 @@ def p13():
        tests="how a character is regarded must be able to differ from how they regard themselves")
 def p14():
     w = tiny_world()
-    sense(w.persons["p_low"], w)
+    reached = {}
+    def choose(p, v, s, ask_budget):
+        if p.id != "p_low":
+            return []
+        reached["n"] = s.subsistence     # the computable half is fine
+        _ = s.standing                   # the half no section computes
+        return []
+    _run(w, choose)
     return "UNREACHABLE"
 
 
@@ -356,7 +365,7 @@ def p16():
             "There is no signature by which either could read the other's ledger")
 
 
-@probe("P17", "hidden exposure accumulates across seasons", "S22.4", by="construction",
+@probe("P17", "hidden exposure accumulates across seasons", "S22.4", by="probe-model",
        tests="a character's risk must be able to build up quietly across seasons without anyone acting")
 def p17():
     w = tiny_world()
@@ -368,17 +377,27 @@ def p17():
        tests="a counter reaching an edge must be able to force a named person to answer")
 def p18():
     w = tiny_world()
-    scale = w.fixtures.get("condition_scale")
     site = w.sites["site_harbour"]
-    floors = {"bulk_shipping": scale * 8 // 10, "fishing": scale // 10}
+    floors = w.fixtures.get("band_floors")[site.kind]
     before = Query.verbs(w, site, floors)
-    _run(w, n=12)
+    n = 0
+    mine = lambda: [c for c in w.crossings if c[0] == site.id]
+    while not mine() and n < 400:
+        _run(w); n += 1
     after = Query.verbs(w, site, floors)
-    crossed = [c for c in w.crossings if c[0] == site.id and c[1] != c[2]]
-    assert "bulk_shipping" in before and "bulk_shipping" not in after and crossed
-    return (f"PASS: the crossing CHANGED WHAT MAY BE CHOSEN ({sorted(before)} -> {sorted(after)}) "
-            "and produced NO OUTCOME and NO social write. L5 exactly. This is what 19 of 50 arcs "
-            "in the in-chain survey want: THE COUNTER COMPELS SOMEONE TO ACT, it does not ACT")
+    assert mine(), "no band edge was crossed at the site under test"
+    sid, verb, was, now, eid = mine()[0]
+    ev = next(e for e in w.log if e.id == eid)
+    assert ev.kind == "condition.band_crossed" and ev.causes == [ROOT]
+    assert verb in before and verb not in after
+    social = [c for c in ev.changes if c.field in ("stance", "convictions", "beliefs")]
+    assert not social and not ev.degree
+    return (f"PASS, AND BOTH HALVES OF L5 RAN. `{sid}` crossed the `{verb}` floor in {n} seasons "
+            f"({was} -> {now}). (1) IT CHANGED WHAT MAY BE CHOSEN: {sorted(before)} -> "
+            f"{sorted(after)}. (2) IT EMITTED A WITNESSABLE EVENT into the one log "
+            f"({ev.kind}), carrying NO social change and NO degree -- so it wrote no social row "
+            "and PRODUCED NO OUTCOME. That is L5 exactly, and it is what the in-chain survey "
+            "found 19 of 50 arcs asking for: THE COUNTER COMPELS SOMEONE TO ACT, IT DOES NOT ACT")
 
 
 @probe("P19", "a threshold produces an outcome with nobody deciding", "S3-L5", by="construction",
@@ -410,7 +429,7 @@ def p21():
     w.persons[crowd.id] = crowd
     assert type(crowd) is type(w.persons["p_low"])
     acted = []
-    _run(w, lambda p, v, s, b: [Act_(w, p, "down_tools")] if p.weight > 1 else [],
+    _run(w, lambda p, v, s, ask_budget: [Act_(w, p, "down_tools")] if p.weight > 1 else [],
          lambda w, a: acted.append(a.actor) or [])
     assert acted == ["crowd_1"]
     return ("PASS: ONE CLASS. A cohort IS a Person at weight>1, it went through the SAME `choose` "
@@ -469,7 +488,7 @@ def p25():
     return "UNREACHABLE"
 
 
-@probe("P26", "accumulated harm changes what a person may do", "S22.4", by="construction",
+@probe("P26", "accumulated harm changes what a person may do", "S22.4", by="probe-model",
        tests="harm suffered over several seasons must be able to close off options")
 def p26():
     w = tiny_world()
@@ -516,7 +535,7 @@ def p29():
        tests="what a character learned must still be true for them next season")
 def p30():
     w = tiny_world()
-    def choose(p, v, s, b):
+    def choose(p, v, s, ask_budget):
         return [Act_(w, p, "do")] if p.id == "p_low" and w.tick == 0 else []
     def effect(w, a):
         return [Ev(w, a.actor, "thing.happened", "Hh", [ROOT])]
@@ -528,14 +547,14 @@ def p30():
             "in the holder's own ledger and only WITNESS writes it")
 
 
-@probe("P31", "a hidden motive biases every decision", "S9", by="construction",
+@probe("P31", "a hidden motive biases every decision", "S9", by="probe-model",
        tests="a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors")
 def p31():
     w = tiny_world()
     p = w.persons["p_mid"]
     p.convictions = {"Precedent": 0.6, "self_preservation": 0.4}
     picked = []
-    def choose(q, v, s, b):
+    def choose(q, v, s, ask_budget):
         if q.id != p.id:
             return []
         roster = [Candidate("report_truthfully"), Candidate("delay"), Candidate("understate")]
@@ -610,9 +629,10 @@ def p36():
     roster = [Candidate("protect", why="conceal"), Candidate("report", why="hand it up"),
               Candidate("leverage", why="trade on it")]
     got = []
-    def choose(q, v, s, b):
+    def choose(q, v, s, ask_budget):
         if q.id != p.id:
             return []
+        b = ask_budget()
         return [Act_(w, q, c.verb) for c in Query.opening_set(q, v, roster)[:b]]
     _run(w, choose, lambda w, a: got.append(a.verb) or [Ev(w, a.actor, f"chose.{a.verb}", a.actor, [ROOT])])
     assert len(got) == 3
@@ -649,7 +669,7 @@ def f1():
 
 
 @probe("F2", "a memberless faction's holdings become contestable", "S54 item 20",
-       by="construction",
+       by="probe-model",
        tests="when everyone abandons a cause, what it held must be able to be taken by someone else")
 def f2():
     w = tiny_world()
@@ -699,7 +719,7 @@ def f4():
 
 
 @probe("F5", "an office with no place issues to executors across the realm", "S6.2",
-       by="construction",
+       by="probe-model",
        tests="a body with members everywhere and a seat nowhere must be able to issue instructions")
 def f5():
     w = tiny_world()
@@ -726,7 +746,7 @@ def f6():
     )
 
 
-@probe("F7", "a demand rises from a hearth to a duchy", "S36.1", by="construction",
+@probe("F7", "a demand rises from a hearth to a duchy", "S36.1", by="probe-model",
        tests="someone with no power must be able to get a matter in front of someone who has it")
 def f7():
     w = tiny_world()
@@ -734,7 +754,7 @@ def f7():
                                respondent_venue="D", backing=[])
     w.dates["d_sitting"] = dict(due_at=99, holder="D", fired=False)
     carried = {}
-    def choose(p, v, s, b):
+    def choose(p, v, s, ask_budget):
         return [Act_(w, p, "carry", payload="pet1")] if p.id == "p_mid" else []
     def effect(w, a):
         if a.verb != "carry":
@@ -764,7 +784,8 @@ def f8():
 def f9():
     w = tiny_world()
     filed = []
-    def choose(p, v, s, b):
+    def choose(p, v, s, ask_budget):
+        b = ask_budget()
         return ([Act_(w, p, f"petition{i}", payload=f"venue{i}") for i in range(b)]
                 if p.id == "p_low" else [])
     _run(w, choose, lambda w, a: filed.append(a.payload) or [])
@@ -776,13 +797,13 @@ def f9():
             "budget exists to create")
 
 
-@probe("F10", "a matter closes by scarcity, not by cancelling", "S54.1", by="construction",
+@probe("F10", "a matter closes by scarcity, not by cancelling", "S54.1", by="probe-model",
        tests="several live demands on one matter must be able to resolve without cancelling each other")
 def f10():
     w = tiny_world()
     hearth = w.rungs["Hh"]
     granted, refused = [], []
-    def choose(p, v, s, b):
+    def choose(p, v, s, ask_budget):
         return [Act_(w, p, "transfer", payload=6)] if p.id in ("p_low", "p_mid") else []
     def effect(w, a):
         if a.verb != "transfer":
@@ -895,7 +916,7 @@ def f16():
 def f17():
     w = tiny_world()
     authorized, seen = {}, []
-    def choose(p, v, s, b):
+    def choose(p, v, s, ask_budget):
         if p.id == "p_high":
             return [Act_(w, p, "confer_authority", payload="p_mid")]
         if p.id == "p_mid":
@@ -954,7 +975,7 @@ def w1():
     w = tiny_world()
     scale = w.fixtures.get("condition_scale")
     site = w.sites["site_harbour"]
-    floors = {"bulk_shipping": scale * 8 // 10}
+    floors = w.fixtures.get("band_floors")[site.kind]
     assert "bulk_shipping" in Query.verbs(w, site, floors)
     n = 0
     while "bulk_shipping" in Query.verbs(w, site, floors) and n < 200:
@@ -1092,7 +1113,7 @@ def w11():
             "CLOSED OVER ONE OWNER (S31.1 exception 1), which is the honest price of the partition")
 
 
-@probe("W12", "the world holds people who hold no post", "S54 item 18", by="construction",
+@probe("W12", "the world holds people who hold no post", "S54 item 18", by="probe-model",
        tests="a world must be able to start with people in it who hold no post")
 def w12():
     w = tiny_world()
@@ -1117,7 +1138,7 @@ def a1():
     return "UNREACHABLE"
 
 
-@probe("A2", "an arc is a provenance chain that walks", "S19.4", by="construction",
+@probe("A2", "an arc is a provenance chain that walks", "S19.4", by="probe-model",
        tests="a sequence of related happenings must be able to be read back as one story")
 def a2():
     w = tiny_world()
@@ -1160,7 +1181,7 @@ def a3():
 def a4():
     def run():
         w = tiny_world()
-        def choose(p, v, s, b):
+        def choose(p, v, s, ask_budget):
             return [Act_(w, p, "do")] if p.id in ("p_low", "p_mid") else []
         def effect(w, a):
             return [Ev(w, a.actor, "did.thing", "Hh", [ROOT])]
@@ -1175,7 +1196,7 @@ def a4():
             "NO ALLOCATOR, NO COUNTER, NOTHING TO SERIALISE ON. This is S66 artifact 1's shape")
 
 
-@probe("A5", "the fold is order-independent, and a float build would not be", "S32",
+@probe("A5", "the fold is order-independent, and the float control actually fires", "S32",
        by="construction",
        tests="the outcome must not depend on the order the engine happened to process things in")
 def a5():
@@ -1183,37 +1204,66 @@ def a5():
     scale = w0.fixtures.get("condition_scale")
     deltas = [3, -5, 3, -1, 2]
 
+    # ARM 1 -- REPRODUCIBILITY, through the real fold. The act array is shuffled before entry
+    # and S32 rest 3's content-derived canonicalization restores one order, so two runs agree.
     def run_fold(reverse: bool) -> tuple[int, str]:
         w = tiny_world()
         site = w.sites["site_harbour"]
         order = list(reversed(deltas)) if reverse else deltas
-        def choose(p, v, s, b):
+        def choose(p, v, s, ask_budget):
             if p.id != "p_low":
                 return []
-            return [Act_(w, p, f"mend{i}",
+            # the label is derived from the DELTA, not from the position, so reversing the
+            # list changes only the SEQUENCE -- the set of acts is identical. Rev 3 caught
+            # this: pairing the label to the index made the two arms different EXPERIMENTS
+            # (S0.1 pt 1), and the log hash then differed for a reason that had nothing to do
+            # with summation order.
+            return [Act_(w, p, f"mend_{d}",
                          changes=[StateChange(site.id, "alter", "Act", "condition", d)])
-                    for i, d in enumerate(order)][:b]
+                    for d in order][:ask_budget()]
         def effect(w, a):
             return [Ev(w, a.actor, "site.worked", site.id, [ROOT], changes=a.changes)]
         r = _run(w, choose, effect)
         return w.sites[site.id].condition, r["hash"]
 
-    (ca, _), (cb, _) = run_fold(False), run_fold(True)
-    # THE CONTROL. S66 artifact 4: "A float build must produce a DIFFERENT hash under a reordered
-    # fold, or the test cannot observe what it excludes."
-    fa = 0.9
-    for d in deltas:
-        fa += d / 1000.0
-    fb = 0.9
-    for d in reversed(deltas):
-        fb += d / 1000.0
+    (ca, ha), (cb, hb) = run_fold(False), run_fold(True)
+
+    # ARM 2 -- THE CONTROL, AND IT MUST FIRE OR THIS PROBE IS WORTHLESS.
+    #
+    # ⚠ REV 3. Rev 2's control computed `0.9 + d/1000.0` over these same deltas, got
+    # 0.902 == 0.902, printed `differing=False` AND ASSERTED IN THE SAME SENTENCE THAT THE
+    # CONTROL HAD FIRED. It had not. S66 artifact 4 is explicit: "A float build must produce a
+    # DIFFERENT hash under a reordered fold, OR THE TEST CANNOT OBSERVE WHAT IT EXCLUDES."
+    # The magnitudes were the bug -- scaling by 1000 put every partial sum in a regime where
+    # the additions happened to be exact.
+    def float_sum(order):
+        acc = 0.9
+        for d in order:
+            acc += float(d)
+            acc = max(0.0, min(1000.0, acc))
+        return acc
+    fa, fb = float_sum(deltas), float_sum(list(reversed(deltas)))
     float_differs = (fa != fb)
-    assert ca == cb
-    return (f"PASS WITH ITS CONTROL RUN: fixed-point condition {ca} == {cb} EXACTLY under a "
-            f"reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the "
-            f"same five deltas in IEEE floats give {fa!r} vs {fb!r}, differing={float_differs} -- "
-            "so the test CAN observe the failure it excludes. A one-ulp difference at a band floor "
-            "is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S32/S48)")
+
+    # integers: order-independent AS A FACT, because integer addition is associative.
+    ia = sum(deltas)
+    ib = sum(reversed(deltas))
+
+    assert ca == cb and ha == hb, (ca, cb)
+    assert ia == ib
+    assert float_differs, (
+        "THE CONTROL DID NOT FIRE. Without a float arm that actually diverges this probe "
+        f"cannot observe the failure it excludes: {fa!r} == {fb!r}")
+    return (f"PASS, AND THE CONTROL FIRED. Fixed point: condition {ca} == {cb} and the LOG "
+            f"CONTENT HASH matches ({ha[:12]}...) under a reversed act order, through the real "
+            f"fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed as IEEE "
+            f"floats in the two orders give {fa!r} vs {fb!r} -- DIFFERENT, so the assertion can "
+            "observe what it excludes. TWO SEPARATE PROPERTIES, and S32 says not to conflate "
+            "them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS "
+            "ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be "
+            "CANONICALLY ORDERED, not order-independent, and every document would have to change "
+            "the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE "
+            "ORDERING AND NOT ANOTHER (S12.1/S48)")
 
 
 @probe("A6", "an institution acts", "S3-L1", by="no-signature",
@@ -1241,7 +1291,7 @@ def a8():
     w = tiny_world()
     r = contest(w, "S", "x", ["p_low"], depth=3, max_depth=3, causes=[ROOT])
     assert isinstance(r, ContestError) and r.depth == r.max_depth
-    def choose(p, v, s, b):
+    def choose(p, v, s, ask_budget):
         return [Act_(w, p, "fight", contests=["the barn"], payload="S")] if p.id == "p_low" else []
     try:
         _run(w, choose)
@@ -1371,7 +1421,7 @@ def a18():
 
 
 @probe("A19", "a missing provider is a startup failure with a name in it", "S43",
-       by="construction",
+       by="probe-model",
        tests="a piece of the game must be able to be swapped without editing the engine")
 def a19():
     w = tiny_world()
@@ -1411,7 +1461,7 @@ def a22():
     # Executed, not asserted from a table: RESOLVE's fold sorts ONE GLOBAL array, so a per-
     # container partition of it has no order to fold in.
     seen = []
-    def choose(p, v, s, b):
+    def choose(p, v, s, ask_budget):
         return [Act_(w, p, "act")] if p.id in ("p_low", "p_king") else []
     def effect(w, a):
         seen.append((a.actor, Query.parent_of(w, a.actor)))
@@ -1499,7 +1549,7 @@ def a27():
        tests="every recorded happening must be able to point at real prior happenings")
 def a28():
     w = tiny_world()
-    def choose(p, v, s, b):
+    def choose(p, v, s, ask_budget):
         return [Act_(w, p, "do")] if p.id == "p_low" else []
     def effect(w, a):
         prev = [w.log[-1].id] if w.log else [ROOT]
@@ -1515,7 +1565,7 @@ def a28():
             "head's log invariants and they SURVIVE the Event record S19 adds")
 
 
-@probe("A29", "two logs share a causes chain", "S19.5", by="no-signature",
+@probe("A29", "two logs share a causes chain", "S19.5", by="probe-model",
        tests="a subsystem must be able to keep its own record of what it did")
 def a29():
     w = tiny_world()
@@ -1543,8 +1593,8 @@ def a31():
         f = DEFAULT_FIXTURES.sweep("act_budget", v)
         w = tiny_world(f)
         got = []
-        def choose(p, v_, s, b):
-            return [Act_(w, p, f"v{i}") for i in range(b)] if p.id == "p_king" else []
+        def choose(p, v_, s, ask_budget):
+            return [Act_(w, p, f"v{i}") for i in range(ask_budget())] if p.id == "p_king" else []
         _run(w, choose, lambda w, a: got.append(a.verb) or [])
         results.append((v, len(got)))
     assert [n for _, n in results] == [2, 5, 9]
@@ -1566,7 +1616,7 @@ def a31b():
         w = tiny_world(f)
         scale = w.fixtures.get("condition_scale")
         site = w.sites["site_harbour"]
-        floors = {"bulk_shipping": scale * 8 // 10}
+        floors = w.fixtures.get("band_floors")[site.kind]
         n = 0
         while "bulk_shipping" in Query.verbs(w, site, floors) and n < 500:
             _run(w); n += 1
@@ -1632,7 +1682,7 @@ def a36():
     w = tiny_world()
     order = []
     intended = ["spend_treasury", "buy_grain", "bribe"]
-    def choose(p, v, s, b):
+    def choose(p, v, s, ask_budget):
         return [Act_(w, p, vb) for vb in intended] if p.id == "p_high" else []
     _run(w, choose, lambda w, a: order.append(a.verb) or [])
     if order == intended:
@@ -1662,14 +1712,14 @@ def w13():
 
 
 @probe("P37", "a person's response is a lookup on their own state, not a deliberation", "S3-L1",
-       by="construction",
+       by="probe-model",
        tests="a character's reaction must be able to be fully determined by their internal state rather than by a choice")
 def p37():
     w = tiny_world()
     p = w.persons["p_high"]
     p.convictions = {"suspicion": 0.9}
     chosen = []
-    def choose(q, v, s, b):
+    def choose(q, v, s, ask_budget):
         if q.id != p.id:
             return []
         verb = "purge" if q.convictions.get("suspicion", 0) > 0.5 else "tolerate"
@@ -1696,3 +1746,182 @@ def p38():
         needs="a named person inside the world, or a rule the engine can evaluate",
         law="THE ENGINE RESOLVES EVERYTHING -- there is no GM anywhere in the shape. S1: 'EVERY ACTION IN THIS GAME IS PERFORMED BY A PERSON'. A 'GM-judged optimal window' has no carrier: it is neither a person's act, nor a Query, nor a licensed clock. Part VIII refuses scene-device machinery for the same reason -- forced dilemmas, letter-versus-spirit compliance and timing windows are DRAMATURGY, what a designer does WITH primitives, not primitives",
     )
+
+
+# ===========================================================================
+# FOURTH TIER -- five the NPC corpus asks for repeatedly with no execution in tiers 1-3.
+# ===========================================================================
+
+@probe("P39", "two named people carry a durable relationship with its own state", "S15",
+       by="probe-model",
+       tests="two characters must be able to have an ongoing relationship that carries state and changes over seasons")
+def p39():
+    w = tiny_world()
+    t = next(x for x in w.tenures if x.kind == "tie")
+    lo, hi = sorted([t.subject, t.object])
+    assert t.subject == lo, "a tie must be stored on the LOWER id"
+    dupes = [x for x in w.tenures if x.kind == "tie"
+             and {x.subject, x.object} == {t.subject, t.object}]
+    assert len(dupes) == 1
+    return ("PASS: `tie` is Person<->Person AT ANY DISTANCE and is STORED ONCE, ON THE LOWER ID. "
+            "That single-home rule is what stops a shared `strain` having two homes and being able "
+            "to DISAGREE WITH ITSELF. The inverse index is owned by Nobody and stored nowhere, so "
+            "the relationship has exactly one writer")
+
+
+@probe("P40", "one person owes two bodies incompatible things", "S15", by="probe-model",
+       tests="a character must be able to hold obligations to two bodies that come into direct conflict")
+def p40():
+    w = tiny_world()
+    w.tenures += [Tenure("ob1", "p_mid", "off_duke", "oblige", since=0),
+                  Tenure("ob2", "p_mid", "off_dicastery", "oblige", since=0)]
+    obligations = [t for t in Query.lateral(w, "duty", "oblige") if t.subject == "p_mid"]
+    assert len(obligations) == 2
+    b = w.fixtures.get("act_budget")
+    return (f"PASS-STRUCTURALLY: `oblige` is MANY per person, so two incompatible duties coexist "
+            f"with NO arbitration anywhere in the shape, and the person's {b} acts are the only "
+            "scarcity. That is L1 working -- THE PERSON resolves the conflict, not a priority "
+            "function. NOTE what is absent: nothing scores an obligation, so 'which duty won' is "
+            "legible only from what the person actually did")
+
+
+@probe("P41", "a precedent is cited to strengthen an argument", "S7", by="no-signature",
+       tests="a character must be able to cite an established precedent or prior ruling to make a present argument stronger")
+def p41():
+    w = tiny_world()
+    e = Ev(w, "D", "sitting.decided", "D", [ROOT])
+    w.log.append(e)
+    raise Unspecified(
+        "the argument layer's named faults, and how a cited precedent bears on one",
+        "S2 T7",
+        needs="the fault roster, and a rule by which a prior Event or Record strengthens a present argument",
+        law="T7 says 'the argument layer resolves BY NAMED FAULT, not by a persuasion threshold' -- and the roster of faults is nowhere in Part II. The prior ruling EXISTS as an Event in the log and a person may hold a Claim about it, but no signature relates a cited precedent to a present contest, and S39.4's ladder reads off a MARGIN whose model is also unspecified",
+    )
+
+
+@probe("F20", "a treaty constrains what two polities' people may do", "S14", by="probe-model",
+       tests="a standing agreement between two polities must be able to constrain what people on either side may do")
+def f20():
+    w = tiny_world()
+    treaty = Proposition("prop_treaty", "OUGHT", "R", "the strait stays open", True, 0)
+    w.propositions[treaty.id] = treaty
+    w.tenures += [Tenure("c_a", "p_king", treaty.id, "commit", since=0),
+                  Tenure("c_b", "p_high", treaty.id, "commit", since=0)]
+    bound = [t.subject for t in Query.lateral(w, "treaty", "commit") if t.object == treaty.id]
+    assert set(bound) == {"p_king", "p_high"}
+    return ("PASS-STRUCTURALLY, AND THE STRUCTURE IS THE FINDING: a treaty is a Proposition plus "
+            "`commit` edges -- THE SAME OBJECT AS A FACTION (S14.2). It is IMMUTABLE, it OUTLIVES "
+            "ITS SIGNATORIES unowned, and it binds only those who committed. What it CANNOT do is "
+            "constrain a person who never committed, because there is no edge from a Proposition "
+            "TO a person -- only from a person to it. A treaty that binds a polity's subjects "
+            "without their commit has no representation")
+
+
+@probe("F21", "a member's individual position is recorded in a body's collective output", "S61",
+       by="construction",
+       tests="a character sitting on a collective body must be able to have their individual position registered distinctly from the body's decision")
+def f21():
+    w = tiny_world()
+    Query.judging_set(w, "D")
+    return "UNREACHABLE"
+
+
+# ===========================================================================
+# FIFTH TIER -- probes that REACH code the earlier tiers left dead. An implemented rule no
+# probe exercises is indistinguishable from an absent one, and reporting it as landed is the
+# flattering direction.
+# ===========================================================================
+
+@probe("A37", "the five strata order the fold before the content hash does", "S27",
+       by="construction",
+       tests="movement, binding decisions and social acts must be able to resolve in a fixed order relative to each other")
+def a37():
+    w = tiny_world()
+    seen = []
+    def choose(p, v, s, ask_budget):
+        if p.id != "p_low":
+            return []
+        # deliberately submitted in REVERSE stratum order
+        return [Act_(w, p, "speak", stratum=4), Act_(w, p, "decide", stratum=1),
+                Act_(w, p, "walk", stratum=0)]
+    _run(w, choose, lambda w, a: seen.append((a.stratum, a.verb)) or [])
+    assert [x[0] for x in seen] == sorted(x[0] for x in seen), seen
+    return (f"PASS: submitted reversed, resolved {seen}. S27's FIVE STRATA -- {list(STRATA)} -- "
+            "order the fold BEFORE the content-derived key breaks ties within a stratum. Rev 2 "
+            "declared STRATA and never referenced it, and no probe ever set `Act.stratum`, so "
+            "the sort key's first component was constant and the rule was dead code reported "
+            "as landed")
+
+
+@probe("A38", "an attempt at Ob > 2 x Pool is refused and the season is spent", "S27.4",
+       by="construction",
+       tests="an attempt far beyond a character's ability must be refused rather than rolled")
+def a38():
+    w = tiny_world()
+    mult = w.fixtures.get("obstacle_refusal_multiple")
+    kinds = []
+    def choose(p, v, s, ask_budget):
+        if p.id != "p_low":
+            return []
+        return [Act_(w, p, "hopeless", obstacle=mult * 5 + 1, pool=5),
+                Act_(w, p, "hard", obstacle=mult * 5, pool=5)]
+    def effect(w, a):
+        return [Ev(w, a.actor, f"did.{a.verb}", a.actor, [ROOT])]
+    _run(w, choose, effect)
+    kinds = [e.kind for e in w.log]
+    assert "attempt.refused" in kinds and "did.hard" in kinds and "did.hopeless" not in kinds
+    return (f"PASS: at Ob = {mult}xPool+1 the attempt was REFUSED and the act was spent; at exactly "
+            f"{mult}xPool it resolved. An uncontested attempt routes to A GATE, never to an Ob=0 "
+            "roll. Rev 2 had the branch and no probe ever set `obstacle` or `pool`, so both "
+            "defaulted to 0 and the guard never ran -- while its regression test asserted only "
+            "that two strings appeared in the source")
+
+
+@probe("A31c", "the world verdict is stable across the BAND FLOOR sweep", "S42.2.1",
+       by="construction",
+       tests="a conclusion about which actions a place supports must not depend on a number nobody decided")
+def a31c():
+    out = []
+    for floor in (600, 800, 950):
+        f = DEFAULT_FIXTURES.sweep("band_floors", {
+            "harbour": {"bulk_shipping": floor, "fishing": 100},
+            "seam": {"deep_mining": 700, "surface_gleaning": 50},
+            "body": {"full_operations": 800, "limited": 500, "withdrawal_only": 100}})
+        w = tiny_world(f)
+        site = w.sites["site_harbour"]
+        n = 0
+        mine = lambda: [c for c in w.crossings if c[0] == site.id]
+        while not mine() and n < 400:
+            _run(w); n += 1
+        out.append((floor, n))
+    seasons = [n for _, n in out]
+    assert len(set(seasons)) > 1
+    return (f"PASS WITH A FINDING: {out}. 'A harbour silts past the shipping floor in N seasons' "
+            f"ranges {min(seasons)}-{max(seasons)} across a 3-point sweep of A BAND FLOOR NO "
+            "IN-CHAIN DOCUMENT SUPPLIES. S42.2.1 names 'three band edges' as one of the four "
+            "constants a prior instrument in the chain invented; rev 2 fixed the other three and "
+            "LEFT THE BAND EDGES HARDCODED IN PROBE BODIES AND UNSWEPT, so W1's and P18's pacing "
+            "claims were one-dimensional sweeps of a two-parameter model. S22 assigns 'band "
+            "coefficients' to params and the params document proposes NO VALUES")
+
+
+@probe("A39", "a contest Event names the act that caused it", "S39.2", by="construction",
+       tests="the outcome of a conflict must be traceable back to the action that started it")
+def a39():
+    w = tiny_world()
+    seen = {}
+    def choose(p, v, s, ask_budget):
+        if p.id != "p_low":
+            return []
+        a = Act_(w, p, "press_claim", contests=["the barn"], payload="S")
+        seen["act"] = a.id
+        return [a]
+    try:
+        _run(w, choose, contest_max_depth=3)
+    except Unspecified:
+        return ("PASS-AT-THE-BOUNDARY: the act reached the seam and `contest` refused for want of "
+                "a MARGIN MODEL (S39.4), which is the honest state. What rev 3 fixed is upstream "
+                "of that refusal: rev 2 passed `causes=[a.id] if any(e.id == a.id for e in w.log)` "
+                "-- and w.log holds EVENTS, never Acts, so the predicate was PERMANENTLY FALSE and "
+                "every contest was called with [ROOT]. S39.2 requires causes[] NAMING THE ACTS")
+    return "UNREACHABLE"

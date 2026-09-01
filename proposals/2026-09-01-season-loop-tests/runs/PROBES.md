@@ -1,6 +1,6 @@
 # THE PROBE LEDGER
 
-**109 probes.** Each is a real execution against `shape.py` that either
+**118 probes.** Each is a real execution against `shape.py` that either
 completes or raises a typed gap.
 
 ## How each verdict was reached
@@ -11,14 +11,14 @@ checking.* So every probe declares its provenance:
 
 | `by=` | means | count |
 |---|---|---|
-| `construction` | **the shape itself raised** — a gate, a law or a type stopped it. This is evidence | 75 |
+| `construction` | **the shape itself raised** — a gate, a law or a type stopped it. This is evidence | 67 |
 | `no-signature` | nothing to call. The design supplies no function by which it could be attempted — which *is* the refusal, but **absence is not a guard** | 28 |
 | `convention` | the shape permits it and only a reader stops it. §27.2 is the design's own example and says so out loud | 1 |
-| `probe-model` | the probe supplies a model the design does not, to reach the question at all | 5 |
+| `probe-model` | the probe supplies a model the design does not, to reach the question at all | 22 |
 
 ## ⚠ THE ENFORCEMENT SPLIT — the single most important number in this ledger
 
-**Of 54 gaps, 27 were raised BY THE SHAPE ITSELF and 27 exist only because THERE IS NO SIGNATURE TO CALL.**
+**Of 57 gaps, 26 were raised BY THE SHAPE ITSELF and 27 exist only because THERE IS NO SIGNATURE TO CALL.**
 
 That is close to an even split, and it matters more than any case verdict. A refusal a
 gate enforces and a refusal that exists because nobody wrote the function are different
@@ -30,7 +30,7 @@ has no module system and no visibility modifiers, so the guarantee there is
 a contributor closes by simply writing the function — no gate fires, no test goes red,
 and the design's own §27.2 admission applies: *enforced by a person noticing*.
 
-**And 7 of 55 PASSes are not by construction
+**And 20 of 61 PASSes are not by construction
 either** — they are listed individually below and should be discounted accordingly. A
 `probe-model` PASS means the instrument supplied something the design does not.
 
@@ -45,13 +45,13 @@ either** — they are listed individually below and should be discounted accordi
 | `A15` | **UNSPECIFIED** | no-signature | S40.1 | a self-feeding situation must be able to stop |
 | `A16` | **FORBIDDEN** | no-signature | S40.3 | a region must be able to advance on its own schedule while others wait |
 | `A18` | **UNSPECIFIED** | no-signature | S41 | a developer must be able to work one module without reading the world |
-| `A19` | **NO-PRODUCER** | construction | S43 | a piece of the game must be able to be swapped without editing the engine |
+| `A19` | **NO-PRODUCER** | probe-model | S43 | a piece of the game must be able to be swapped without editing the engine |
 | `A20` | **FORBIDDEN** | no-signature | S44.1 | influence passing between scales must be able to be checked for direction |
 | `A21` | **FORBIDDEN** | no-signature | S37.3 | an order from above must be able to reach everyone it applies to |
 | `A23` | **FORBIDDEN** | construction | S22.4 | a running total of everything that ever happened must be able to be kept |
 | `A27` | **UNOWNED** | no-signature | S22.3 | every value in the game must be able to name who writes it |
-| `A29` | **FORBIDDEN** | no-signature | S19.5 | a subsystem must be able to keep its own record of what it did |
-| `A3` | **FORBIDDEN** | construction | S30 | the story must be able to conclude when a tracked quantity reaches a value |
+| `A29` | **FORBIDDEN** | probe-model | S19.5 | a subsystem must be able to keep its own record of what it did |
+| `A3` | **UNSPECIFIED** | construction | S30 | the story must be able to conclude when a tracked quantity reaches a value |
 | `A30` | **UNGRADED** | construction | S42.2.1 | a piece of the design with no evidence behind it must be able to be used anyway |
 | `A32` | **COLLISION** | no-signature | S62 | the number of playable moments a character gets must be able to be counted |
 | `A33` | **COLLISION** | no-signature | S37.4 | an instruction must be able to be distorted somewhere between issuer and executor |
@@ -61,41 +61,44 @@ either** — they are listed individually below and should be discounted accordi
 | `A7` | **UNSPECIFIED** | construction | S39.4 | a fight, a hearing and an argument must be able to be the same machinery |
 | `A9` | **FORBIDDEN** | no-signature | S4 | one place must be able to see what is happening in another |
 | `F11` | **FORBIDDEN** | no-signature | S38 | a character must be able to know how strong their own faction is |
+| `F13` | **FORBIDDEN** | construction | S3-L4 | when a post falls empty the process to fill it must be able to start |
 | `F14` | **FORBIDDEN** | construction | S22.4 | a faction's territory must be countable as it gains and loses ground |
 | `F15` | **UNSPECIFIED** | no-signature | S54 item 13 / S61 | a post must be able to employ people whose competence is what actually gets used |
 | `F16` | **FORBIDDEN** | no-signature | S3-L3 | a faction must be able to hold a pooled resource that its members' actions raise and lower |
 | `F19` | **NO-PRODUCER** | no-signature | S36.1 | a settlement's needs must be able to surface as demands without a named petitioner |
+| `F21` | **UNSPECIFIED** | construction | S61 | a character sitting on a collective body must be able to have their individual position registered distinctly from the body's deci |
 | `F3` | **FORBIDDEN** | no-signature | S3-L1 | a faction must be able to take an action of its own |
 | `F6` | **UNSPECIFIED** | no-signature | S62 | an order from above must be able to fail to arrive, distinctly from being refused |
 | `F8` | **UNSPECIFIED** | construction | S61 | the body a matter reaches must be able to decide it |
 | `P10` | **UNSPECIFIED** | construction | S30.1 | a character must be able to perform a repeated, multi-season task the engine tracks as ongoing |
 | `P14` | **UNSPECIFIED** | construction | S18.2 | how a character is regarded must be able to differ from how they regard themselves |
 | `P15` | **UNSPECIFIED** | no-signature | S61 | something said in private must be able to stay private |
-| `P17` | **FORBIDDEN** | construction | S22.4 | a character's risk must be able to build up quietly across seasons without anyone acting |
-| `P19` | **FORBIDDEN** | construction | S30 | the story must be able to end when a counter reaches a value, with no person choosing |
+| `P17` | **FORBIDDEN** | probe-model | S22.4 | a character's risk must be able to build up quietly across seasons without anyone acting |
+| `P19` | **UNSPECIFIED** | construction | S30 | the story must be able to end when a counter reaches a value, with no person choosing |
 | `P20` | **UNSPECIFIED** | construction | S30.1 | a person who was previously part of a crowd must be able to become a named individual |
 | `P22` | **UNSPECIFIED** | construction | S30.1 | possession of an object must be able to make someone else's action unavailable or costlier |
 | `P23` | **UNSPECIFIED** | construction | S30.1 | a character must be able to simply vanish or be killed, with no institutional process |
 | `P25` | **FORBIDDEN** | construction | S15.3 | the world must be able to end a person's position without anyone acting |
-| `P26` | **FORBIDDEN** | construction | S22.4 | harm suffered over several seasons must be able to close off options |
+| `P26` | **FORBIDDEN** | probe-model | S22.4 | harm suffered over several seasons must be able to close off options |
 | `P29` | **UNOWNED** | no-signature | S22.3 | a character must be able to move from one place to another and be somewhere else next season |
 | `P2x` | **FORBIDDEN** | construction | S26.3 | an engine may quietly drop actions a character wanted beyond their budget |
 | `P32` | **UNSPECIFIED** | no-signature | S12 | a character's own condition must be able to degrade across a season so that their available actions narrow predictably |
 | `P33` | **UNSPECIFIED** | no-signature | S26.3 | performing a larger or riskier version of an action must be able to cost the actor more |
 | `P35` | **UNSPECIFIED** | no-signature | S18.2 | a character must be able to have a standing among people who can never publicly acknowledge them, separate from their public stand |
 | `P38` | **NO-PRODUCER** | no-signature | S1 | an optimal window, a judgement call or an adjudication must be able to be made by a referee |
+| `P41` | **UNSPECIFIED** | no-signature | S2 T7 | a character must be able to cite an established precedent or prior ruling to make a present argument stronger |
 | `P6` | **UNSPECIFIED** | construction | S30.1 | a character's moral commitments must be able to change, through argument and consequence |
 | `P7` | **UNSPECIFIED** | construction | S30.1 | a character must carry lasting moral damage from what they were made to do |
 | `W10` | **FORBIDDEN** | construction | S10.1 | a place must be able to hold a level of discontent that rises and falls |
 | `W13` | **FORBIDDEN** | no-signature | S25.1 / S3-L5 | a world-scale tracked quantity must be able to decay on a fixed schedule independent of anyone's actions |
 | `W1x` | **UNGRADED** | construction | S42.2.1 | the world must be able to wear down a kind of place nobody wrote a rule for |
-| `W3` | **FORBIDDEN** | construction | S30 | a bad season must be able to make people angrier without anyone acting |
+| `W3` | **UNSPECIFIED** | construction | S30 | a bad season must be able to make people angrier without anyone acting |
 | `W5` | **UNOWNED** | no-signature | S22.3 | the harvest must be able to come in, better or worse from season to season |
 | `W7` | **UNSPECIFIED** | construction | S30.1 | a document must be able to lapse after a time |
 | `A10` | PASS | construction | S4 | a place must be able to know something summed over everything inside it |
 | `A13` | PASS | construction | S4 | a repeated derivation must be able to be computed once per step |
 | `A17` | PASS | convention | S27.2 | every outcome in the game must go through one place |
-| `A2` | PASS | construction | S19.4 | a sequence of related happenings must be able to be read back as one story |
+| `A2` | PASS | probe-model | S19.4 | a sequence of related happenings must be able to be read back as one story |
 | `A22` | PASS | construction | S31 | each region must be able to run its own slice of the loop |
 | `A24` | PASS | construction | S35 | a mechanism written for the powerful must be able to work for a whole population |
 | `A25` | PASS | construction | S6.2 | a cause that spans several regions must be able to exist with no parent region |
@@ -103,25 +106,29 @@ either** — they are listed individually below and should be discounted accordi
 | `A28` | PASS | construction | S19.1 | every recorded happening must be able to point at real prior happenings |
 | `A31` | PASS | construction | S42.2.1 | a conclusion drawn from the engine must not depend on a number nobody decided |
 | `A31b` | PASS | construction | S42.2.1 | a conclusion about how fast the world decays must not depend on a number nobody decided |
+| `A31c` | PASS | construction | S42.2.1 | a conclusion about which actions a place supports must not depend on a number nobody decided |
 | `A35` | PASS | probe-model | S52 | the port must be able to target a decided engine version |
+| `A37` | PASS | construction | S27 | movement, binding decisions and social acts must be able to resolve in a fixed order relative to each other |
+| `A38` | PASS | construction | S27.4 | an attempt far beyond a character's ability must be refused rather than rolled |
+| `A39` | PASS | construction | S39.2 | the outcome of a conflict must be traceable back to the action that started it |
 | `A4` | PASS | construction | S33 | the same starting conditions must be able to produce the same history |
 | `A5` | PASS | construction | S32 | the outcome must not depend on the order the engine happened to process things in |
 | `A8` | PASS | construction | S39.3 | a conflict must be able to open a conflict inside itself |
 | `F1` | PASS | construction | S14.2 | a group of people must be able to share a cause that spans places and outlives its founder |
-| `F10` | PASS | construction | S54.1 | several live demands on one matter must be able to resolve without cancelling each other |
+| `F10` | PASS | probe-model | S54.1 | several live demands on one matter must be able to resolve without cancelling each other |
 | `F12` | PASS | construction | S11 | a post must be able to be given and taken away by named people at named occasions |
-| `F13` | PASS | construction | S24 | when a post falls empty the process to fill it must be able to start |
 | `F17` | PASS | construction | S27.1 | a superior's approval must be able to be a formal precondition without which subordinates cannot act |
 | `F18` | PASS | probe-model | S36.1 | a place must be able to generate demands of its own that cut against what the authority above ordered |
-| `F2` | PASS | construction | S54 item 20 | when everyone abandons a cause, what it held must be able to be taken by someone else |
+| `F2` | PASS | probe-model | S54 item 20 | when everyone abandons a cause, what it held must be able to be taken by someone else |
+| `F20` | PASS | probe-model | S14 | a standing agreement between two polities must be able to constrain what people on either side may do |
 | `F4` | PASS | construction | S11.1 | holding a post must be able to make an action available that is not available otherwise |
-| `F5` | PASS | construction | S6.2 | a body with members everywhere and a seat nowhere must be able to issue instructions |
-| `F7` | PASS | construction | S36.1 | someone with no power must be able to get a matter in front of someone who has it |
+| `F5` | PASS | probe-model | S6.2 | a body with members everywhere and a seat nowhere must be able to issue instructions |
+| `F7` | PASS | probe-model | S36.1 | someone with no power must be able to get a matter in front of someone who has it |
 | `F9` | PASS | construction | S26.3 | a character must be able to spend a whole season putting the same matter to many people |
 | `P1` | PASS | construction | S3-L1 | a person with no office, post, command, faction rank or standing must be able to act at all |
-| `P11` | PASS | construction | S9.2 | skill must supply dice and must never make an action unavailable |
+| `P11` | PASS | probe-model | S9.2 | skill must supply dice and must never make an action unavailable |
 | `P12` | PASS | probe-model | S17 | the set of things a character may do must be computed, not an authored list |
-| `P13` | PASS | construction | S18.2 | a character's needs must drive their choices |
+| `P13` | PASS | probe-model | S18.2 | a character's needs must drive their choices |
 | `P16` | PASS | construction | S20 | how a character is seen must be able to differ between people who know different things |
 | `P18` | PASS | construction | S3-L5 | a counter reaching an edge must be able to force a named person to answer |
 | `P2` | PASS | construction | S26.3 | a character must be able to take several distinct actions in one season and choose what to leave undone |
@@ -131,17 +138,19 @@ either** — they are listed individually below and should be discounted accordi
 | `P28` | PASS | no-signature | S20 | no character may read another's memory directly |
 | `P3` | PASS | construction | S3-L2 | a character must decide from what they believe, which may be wrong, and never from world truth |
 | `P30` | PASS | construction | S20 | what a character learned must still be true for them next season |
-| `P31` | PASS | construction | S9 | a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by the |
+| `P31` | PASS | probe-model | S9 | a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by the |
 | `P34` | PASS | construction | S20 | an office-holder must be able to be the only living person who knows a thing, so that removing them destroys it |
 | `P36` | PASS | probe-model | S17 | a discovery must be able to be acted on in several distinct ways, each leading somewhere different |
-| `P37` | PASS | construction | S3-L1 | a character's reaction must be able to be fully determined by their internal state rather than by a choice |
+| `P37` | PASS | probe-model | S3-L1 | a character's reaction must be able to be fully determined by their internal state rather than by a choice |
+| `P39` | PASS | probe-model | S15 | two characters must be able to have an ongoing relationship that carries state and changes over seasons |
 | `P4` | PASS | construction | S3-L2 | a character must be able to believe something false and act on it as if true |
+| `P40` | PASS | probe-model | S15 | a character must be able to hold obligations to two bodies that come into direct conflict |
 | `P5` | PASS | construction | S19.3 | a character must be able to do something covertly, or be wrongly blamed for what another did |
 | `P8` | PASS | construction | S3-L1 | one character must be able to be blocked by another without either knowing about the other |
 | `P9` | PASS | construction | S11.1 | a superior must be able to direct a subordinate, and the subordinate must be able to refuse or deviate |
 | `W1` | PASS | construction | S12.1 | a place must be able to fall into disrepair until things can no longer be done there |
 | `W11` | PASS | construction | S31.1 | a character must be able to eat from the stores of the place they live in |
-| `W12` | PASS | construction | S54 item 18 | a world must be able to start with people in it who hold no post |
+| `W12` | PASS | probe-model | S54 item 18 | a world must be able to start with people in it who hold no post |
 | `W2` | PASS | construction | S3-L4 | the world must be able to change while no character is doing anything |
 | `W4` | PASS | construction | S25 | an environmental or material condition must be able to worsen on its own |
 | `W6` | PASS | construction | S31.1 | a disaster must be able to strike many places at once and be one thing that happened |
@@ -191,7 +200,7 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** one validated parent over authored registries, generated, gated by a blocking round-trip
 **law:** S41 -- T5 needs to know PER MODULE what it may RECEIVE; T6 needs to know what it may EMIT; R-2's 'no module reaches through another' is the same requirement as a prohibition. NO SURFACE IN THE CHAIN ANSWERS IT FOR ANY MODULE, which means R-1 AND R-2 ARE TODAY UNENFORCEABLE IN PRINCIPLE, not merely unenforced
 
-### `A19` — a missing provider is a startup failure with a name in it  ·  **NO-PRODUCER**  ·  `S43`  ·  by `construction`
+### `A19` — a missing provider is a startup failure with a name in it  ·  **NO-PRODUCER**  ·  `S43`  ·  by `probe-model`
 **what:** role(s) ['witness_channels'] have no provider in the manifest
 
 **needs:** a registry row naming a role and its provider
@@ -221,13 +230,13 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** an ownership row each
 **law:** S22.3 -- named rather than glossed: season_factor's distribution (BLOCKS yield); the cohort's construal spread (rule stated, representation not); the object-side Tenure index (Nobody, by rule -- a barrier-built cache); travel legs (in the write matrix AND the churn ledger AND no ownership row)
 
-### `A29` — two logs share a causes chain  ·  **FORBIDDEN**  ·  `S19.5`  ·  by `no-signature`
+### `A29` — two logs share a causes chain  ·  **FORBIDDEN**  ·  `S19.5`  ·  by `probe-model`
 **what:** an Event in log A naming an Event in log B as its cause
 
 **needs:** ONE LOG
 **law:** S19.5 -- World has exactly 1 log. Two logs CANNOT share a causes[] chain, so T3's multiple perspectives on one event AND arcs-as-provenance-chains BOTH break at the seam. The seam returns contest Events INTO THE SAME LOG. The non-circular grounds: WITNESS is ONE GLOBAL PASS, and the design's predecessor loop was RETIRED because its WITNESS was not global
 
-### `A3` — an arc ends at a counter with nobody deciding  ·  **FORBIDDEN**  ·  `S30`  ·  by `construction`
+### `A3` — an arc ends at a counter with nobody deciding  ·  **UNSPECIFIED**  ·  `S30`  ·  by `construction`
 **what:** 'stance' written during MATTER
 
 **needs:** one of ['RESOLVE']
@@ -287,6 +296,12 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** `leaders_as_claimed` / `norm_as_claimed` -- what they CLAIM about it
 **law:** S38 -- every lateral traversal is RESOLVER-SIDE (['descendants', 'lateral', 'presence', 'r1_aggregate', 'hold_force']), World FIRST, and `choose` has no World, so the call fails at the call site for want of an argument. The person-side surface is ['assemble', 'opening_set', 'budget', 'entrenchment']. THIS IS NOT A LIMITATION TO WORK AROUND: it is why a person CANNOT know their faction's true strength, only what they claim about it
 
+### `F13` — a vacancy opens the succession occasion  ·  **FORBIDDEN**  ·  `S3-L4`  ·  by `construction`
+**what:** (DocketItem, matter) is social:true and was written by Event
+
+**needs:** a named person's act
+**law:** L4 -- social:true means ONLY AN ACT may write it. The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD. [row provenance: ASSUMED: S36.1 makes `carry` AN ACT BY A NAMED PERSON, and T5's whole claim is that THE FILTER IS A PERSON WHO PAYS. CALENDAR's own docket formation is the awkward case and is why this is an assumption rather than a reading.]
+
 ### `F14` — a faction's holdings-ever are counted  ·  **FORBIDDEN**  ·  `S22.4`  ·  by `construction`
 **what:** aggregate 'held_ever' composed over 1 ENDED edge(s)
 
@@ -310,6 +325,12 @@ either** — they are listed individually below and should be discounted accordi
 
 **needs:** a named person who wants it, and a named person who carries it
 **law:** S36.1 -- 'a want -> Petition(petitioner, ...)'. EVERY ARROW IS A PERSON'S ACT OR A CALENDAR FACT: no automatic promotion, no queue drain, no priority function -- and therefore NO PRODUCER for a placeless want. A Rung owns `matter`, `dates`, `envelope`, `stake` -- arrangements, not wants
+
+### `F21` — a member's individual position is recorded in a body's collective output  ·  **UNSPECIFIED**  ·  `S61`  ·  by `construction`
+**what:** judging_set_rule
+
+**needs:** who decides at a sitting
+**law:** S61 -- NOTHING IS DECIDED AT A SITTING. T5's 'filtered at a rung' runs straight through it, and S10.2's 'arrangements, not choices' cannot be confirmed until it is
 
 ### `F3` — a faction acts  ·  **FORBIDDEN**  ·  `S3-L1`  ·  by `no-signature`
 **what:** a faction taking an action of its own
@@ -339,7 +360,7 @@ either** — they are listed individually below and should be discounted accordi
 **what:** Sensation.standing
 
 **needs:** an aggregation producing 'what everyone reads off you' that does not cross holders
-**law:** S18.2 names it; NO SECTION COMPUTES IT -- and the obvious computation is refused by S22.4 clause 2, which bars any resolver-side Query aggregating per-person values across holders
+**law:** S18.2 defines standing as 'THE GAP BETWEEN WHAT EVERYONE READS OFF YOU AND WHAT YOU HOLD' and NO SECTION COMPUTES IT. The obvious computation -- reading a value off every other person -- is the shape S22.4 clause 2 bars, so this is not merely unwritten: the direct route to it is refused
 
 ### `P15` — a person's private act stays private  ·  **UNSPECIFIED**  ·  `S61`  ·  by `no-signature`
 **what:** four of the five witness channels have no predicate: ['post_remit', 'witness_key', 'document_key', 'chronicle']
@@ -347,12 +368,12 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** a channel predicate that can EXCLUDE a person
 **law:** S61 -- WITNESS AS SPECIFIED FANS EVERY EVENT TO EVERY PERSON. Nothing said in private is private. A WRAPPER DOES NOT FIX THIS AND MUST NOT BE PRESENTED AS FIXING IT
 
-### `P17` — hidden exposure accumulates across seasons  ·  **FORBIDDEN**  ·  `S22.4`  ·  by `construction`
+### `P17` — hidden exposure accumulates across seasons  ·  **FORBIDDEN**  ·  `S22.4`  ·  by `probe-model`
 **what:** resolver-side Query 'exposure' aggregates per-person tallies across holders
 
 **law:** L3 clause 2 -- THAT IS STORED, MONOTONE, NEVER-DECAYING UNREST IN ALL BUT NAME -- worse than the field L3 banned, because the banned field could at least go down
 
-### `P19` — a threshold produces an outcome with nobody deciding  ·  **FORBIDDEN**  ·  `S30`  ·  by `construction`
+### `P19` — a threshold produces an outcome with nobody deciding  ·  **UNSPECIFIED**  ·  `S30`  ·  by `construction`
 **what:** 'stance' written during MATTER
 
 **needs:** one of ['RESOLVE']
@@ -382,7 +403,7 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** the same row must cause the death it ends a tenure through
 **law:** S15.3 -- a plague that kills the praefect ends his tenure THROUGH THE DEATH; A STORM CANNOT TOUCH IT. A second such seam means the column is the wrong mechanism
 
-### `P26` — accumulated harm changes what a person may do  ·  **FORBIDDEN**  ·  `S22.4`  ·  by `construction`
+### `P26` — accumulated harm changes what a person may do  ·  **FORBIDDEN**  ·  `S22.4`  ·  by `probe-model`
 **what:** resolver-side Query 'harm_borne' aggregates per-person tallies across holders
 
 **law:** L3 clause 2 -- THAT IS STORED, MONOTONE, NEVER-DECAYING UNREST IN ALL BUT NAME -- worse than the field L3 banned, because the banned field could at least go down
@@ -423,6 +444,12 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** a named person inside the world, or a rule the engine can evaluate
 **law:** THE ENGINE RESOLVES EVERYTHING -- there is no GM anywhere in the shape. S1: 'EVERY ACTION IN THIS GAME IS PERFORMED BY A PERSON'. A 'GM-judged optimal window' has no carrier: it is neither a person's act, nor a Query, nor a licensed clock. Part VIII refuses scene-device machinery for the same reason -- forced dilemmas, letter-versus-spirit compliance and timing windows are DRAMATURGY, what a designer does WITH primitives, not primitives
 
+### `P41` — a precedent is cited to strengthen an argument  ·  **UNSPECIFIED**  ·  `S2 T7`  ·  by `no-signature`
+**what:** the argument layer's named faults, and how a cited precedent bears on one
+
+**needs:** the fault roster, and a rule by which a prior Event or Record strengthens a present argument
+**law:** T7 says 'the argument layer resolves BY NAMED FAULT, not by a persuasion threshold' -- and the roster of faults is nowhere in Part II. The prior ruling EXISTS as an Event in the log and a person may hold a Claim about it, but no signature relates a cited precedent to a present contest, and S39.4's ladder reads off a MARGIN whose model is also unspecified
+
 ### `P6` — a conviction moves at RESOLVE  ·  **UNSPECIFIED**  ·  `S30.1`  ·  by `construction`
 **what:** (Person, convictions) is on no Partition row and no matrix row determines it
 
@@ -453,7 +480,7 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** a per-kind wear row; S22 assigns `wear per site kind` to params
 **law:** S42.2.1 -- 'a wear table that returns 20 for an unregistered site kind does not fail -- it answers, plausibly and wrongly, forever'
 
-### `W3` — the world sours a mood  ·  **FORBIDDEN**  ·  `S30`  ·  by `construction`
+### `W3` — the world sours a mood  ·  **UNSPECIFIED**  ·  `S30`  ·  by `construction`
 **what:** 'stance' written during MATTER
 
 **needs:** one of ['RESOLVE']
