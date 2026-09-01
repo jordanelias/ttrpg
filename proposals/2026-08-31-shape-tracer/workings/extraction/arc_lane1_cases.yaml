@@ -1,0 +1,738 @@
+- id: ARC-01
+  name: "The Unworked Clause"
+  one_line: "Two rulers' independently-rational refusals to act compound, through a background cultural-drift track neither is watching, into a forced crisis nobody chose."
+  scale: realm
+  season_requires:
+    - need: "a background/ambient quantity tied to a population's cultural situation must be able to drift toward a pole purely from the absence of any faction's action in its territories, with no faction action driving the drift"
+      why: "this passive drift is the actual mechanism that turns two actors' separate restraint into a shared crisis; without it, Almud's and Himlensendt's inaction is just inaction, not a ticking structure"
+      hardness: core
+    - need: "a person's genuinely unresolved private ethical question (not a secret sympathy, not a settled belief) must be able to function as a real, load-bearing reason for a leader's inaction, distinct from and alongside the named external costs of acting"
+      why: "Almud's restraint is 'the governance of a man who has not yet decided what he believes' — if the engine can only represent settled beliefs or pure cost-benefit, this arc's actual engine disappears"
+      hardness: core
+    - need: "one actor's accumulation of institutional standing must be able to happen through methods that are individually unimpeachable (charity, arbitration, hospitals) with no single action anyone could point to as the trigger for concern"
+      why: "Himlensendt's Church Influence rise must never look like overreach in any single instance, or the Crown would have an obvious lever to respond to and the slow-boil quality collapses"
+      hardness: important
+    - need: "a Non-Player Character must be able to accumulate an effect at scale while having zero perceptual capacity to register what that accumulation produces elsewhere"
+      why: "Himlensendt's TS 0 means his growth is genuinely unconscious, not merely undisclosed — this is what the narrative analysis calls the arc's second irreplaceable engine"
+      hardness: important
+    - need: "players must be able to remove one specific named cost-component from a leader's decision calculus as a discrete, resolvable action, after which that leader's prior refusal to act converts into willingness"
+      why: "this is the only lever the arc gives players to resolve the crisis via Almud's own action rather than letting the passive track hit bottom"
+      hardness: core
+    - need: "when a background track bottoms out in a territory, the system must be able to force a previously-open, never-stated question into a concrete binary position, with the forcing coming from the track itself rather than from any actor choosing to force it"
+      why: "the arc explicitly resolves 'not because someone decided to end it' but because a threshold is crossed — this shape must be representable"
+      hardness: core
+    - need: "UNCLEAR: what mechanically happens once the background track's floor triggers 'Restoration Movement Emergence' is not specified — the source calls this 'latent faction mechanics, pending design'"
+      why: "without this, Resolution B (restraint maintained) has no defined content beyond 'a crisis'"
+      hardness: important
+  temporal:
+    span_seasons: 5
+    needs_memory_of: "the accumulated cost-components of the leader's restraint (which are real and specific, not narrative color); the current value of Church Influence; the current value and drift direction of the background cultural track, since it moves even in seasons where nothing else happens"
+    needs_deadline: no
+  who_acts:
+    - "King Almud (Crown) — whether to act, once a threshold forces the question; his private ethical doubt is his own to resolve or not"
+    - "Confessor Himlensendt (Church) — does not decide to create the crisis; his accumulation is passive/unconscious"
+    - "players — may choose to remove one specific cost from Almud's calculus"
+    - "UNCLEAR: nobody is named as deciding when the background cultural track itself resolves — it is explicitly passive drift"
+  knowledge:
+    - "players must be able to notice the crisis only gradually, by observing two actors' parallel caution over multiple seasons, not by being told directly"
+    - "Almud's private ethical doubt is not publicly stated by him at any point ('privately, never publicly') — the source does not specify what happens if it becomes known"
+    - "Himlensendt does not know / cannot perceive what his own accumulation is producing in the background track"
+  ends_when: "when either the background cultural track bottoms out in a Crown territory (forcing an Emergence crisis with unspecified content) or players remove one named cost-component of the Sovereign Constraint, enabling Almud to act at a lower difficulty — a threshold crossing forces the choice; it is not scheduled, and neither actor's own restraint contains a mechanism to end it unassisted."
+
+- id: ARC-02
+  name: "The Unseeing Eye"
+  one_line: "A Church scholar's ordinary, individually-defensible institutional placement causes him to spontaneously develop a sensitivity the institution has no way to see coming or notice once it starts."
+  scale: person
+  season_requires:
+    - need: "an institution's routine, individually-defensible placement decisions must be able to compound, over years, into an outcome that harms one of its own members, without any single decision-maker choosing that outcome or being positioned to see it coming"
+      why: "'nobody assigned' him to this — if the engine requires an assigning actor for consequences to occur, the arc's institutional-blindness premise collapses"
+      hardness: core
+    - need: "a character must be able to change in a way that is invisible to himself but perceptible to a third party with a specific trained sense, creating a gap between what an observer can see about a person and what that person knows about himself"
+      why: "'the players will likely understand what is happening before Klapp does' — this asymmetry is the arc's central dramatic engine and its ethical question"
+      hardness: core
+    - need: "a slow-accumulating exposure quantity tied to routine, unremarkable activity must be able to build up over multiple seasons purely from someone doing their normal job, with no single operation classifiable as 'the risky one'"
+      why: "without this, the transformation has no mechanism and becomes arbitrary GM fiat rather than something players could, in principle, have flagged early"
+      hardness: core
+    - need: "a spontaneous state-change check on a person must be able to fire without any actor — including that person — initiating it or being aware a check is occurring"
+      why: "explicit in the source: the growth check is 'spontaneous — no actor triggers this'"
+      hardness: core
+    - need: "an institution must be able to hold a standing response protocol for a condition that nonetheless fails to trigger against one specific member, because nobody is watching for the precondition in that member's particular case"
+      why: "produces 'the Church suppression protocol he is not told exists' — the institution's blindness must be structural, not a plot convenience"
+      hardness: important
+    - need: "a third party must be able to choose, as a discrete scene, to disclose a hidden fact about a person's own condition to that person, with the person's subsequent trajectory depending on whether they were told"
+      why: "'do you tell him? and if you do, what do you tell him first?' — this choice is named as the arc's central engine"
+      hardness: core
+    - need: "UNCLEAR: which of several divergent personal trajectories a character takes when NOT given the information is not governed by a named mechanism — the source says it 'fires according to Klapp's Belief structure,' resolved by GM judgment from prior scene evidence, not by a defined roll or deciding actor"
+      why: "without this, the un-told branch of the arc has no engine-legible resolution procedure"
+      hardness: important
+    - need: "one person's individual capability shift (being reassigned or leaving) must be able to reduce an institution's aggregate operational capacity as a downstream, mechanical consequence"
+      why: "ties the personal-scale arc to faction-scale stakes ('Church Reach -1')"
+      hardness: important
+  temporal:
+    span_seasons: 4
+    needs_memory_of: "the character's accumulated contact-hours/exposure across seasons; whether he has been told; his sensitivity value once it advances; the fact that no one in the institution has flagged him, which must persist as a state until something changes it"
+    needs_deadline: no
+  who_acts:
+    - "Cardinal Klapp — his eventual trajectory, if given information to choose with"
+    - "players — whether and when to disclose what they perceive about him"
+    - "UNCLEAR: nobody in-world is named as deciding Klapp's trajectory if players do not tell him — it 'fires' via GM judgment, not a named actor's choice"
+  knowledge:
+    - "players must be able to know (via passive perception) something about a person's internal state that the person himself does not know"
+    - "the character does not know his own sensitivity is rising — he attributes the sensation to instinct, not to contact with anything"
+    - "the institution does not know a member is developing this condition; nothing in it is watching for the precondition"
+  ends_when: "when the growth check succeeds and the resulting trajectory (three divergent outcomes) resolves — either through a player's disclosure prompting the character's own informed choice, or, absent disclosure, through an unnamed GM-judgment resolution of the character's belief structure; the triggering check's firing season is itself stochastic (as early as the first sustained exposure, as late as several seasons on), so there is no scheduled or counter-driven end."
+
+- id: ARC-03
+  name: "The Hammer's Reserve"
+  one_line: "A leader holds a single decisive, non-repeatable resource in reserve for the perfect moment, while two separate accumulating threats she isn't tracking together close the window she's waiting for."
+  scale: faction
+  season_requires:
+    - need: "a single named decisive resource (usable once per arc) must be able to be held in reserve across multiple seasons purely by its holder's own judgment that using it later beats using it now"
+      why: "this holdable reserve is the entire premise — a 'hammer' that can only be swung once needs a mechanic for consciously not swinging it"
+      hardness: core
+    - need: "two independent counters (one faction's rising standing, an unrelated coup-threat counter) must be able to accumulate on separate clocks not visibly linked to each other, such that a character optimizing against one can be blindsided by the other"
+      why: "'what she is not calculating is what accumulates while she waits' — the tragedy requires two clocks that don't share a display"
+      hardness: core
+    - need: "a reserved resource's effectiveness must be able to have a real, GM-judged optimal timing window that can close without any explicit in-fiction signal announcing that it has closed"
+      why: "'she will discover that the optimal deployment window closed two seasons before she chose it' — this retroactive-discovery structure is the point"
+      hardness: core
+    - need: "players must be able to supply the specific target or pretext a holding character is waiting for, as an action distinct from triggering the reserved resource itself"
+      why: "gives players a causal lever over the timeline without letting them use the resource for her"
+      hardness: important
+    - need: "an unrelated faction's threat-counter must be able to increment based on the ABSENCE of a rival's action in a season, not on any action taken"
+      why: "the Coup Counter check is explicitly 'did Crown reduce [influence] this season? If not, Counter +1' — an absence-triggered increment is a distinct shape from an action-triggered one"
+      hardness: important
+    - need: "a character's own ethical commitments must be able to force her to use a reserved resource once a threshold is crossed, independent of and potentially overriding her stated strategic judgment about optimal timing"
+      why: "'the Counter approaches [threshold] and her own Beliefs will not let her hold' — an internal forcing function separate from external pressure"
+      hardness: important
+    - need: "firing a reserved resource must be able to produce categorically different outcomes, not just different magnitudes, depending on whether a separate threshold was already crossed at the moment of firing"
+      why: "firing before vs after the rival counter's threshold produces qualitatively different worlds ('cannot be uncrossed'), not just a bigger or smaller number"
+      hardness: core
+  temporal:
+    span_seasons: 6
+    needs_memory_of: "the current value of the rival threat-counter and whether it has already been tripped; whether a separate threshold has already been crossed (a fact that persists even if the underlying stat later falls back below it)"
+    needs_deadline: no
+  who_acts:
+    - "Duchess Baralta — whether and when to fire the reserved resource; her private judgment of 'the moment' is not externally legible"
+    - "Ehrenwall (rival faction) — counts, but its counting is blind to Baralta's own reasoning"
+    - "players — may supply the pretext she is waiting for"
+  knowledge:
+    - "the holder must be able to privately judge 'has the moment arrived' without any system telling her so"
+    - "players must be able to perceive her holding pattern only by watching her behavior across sessions, not via any status readout"
+    - "the rival counter-holder must be able to know only whether the Crown acted, not know the holder's private reserve calculus"
+  ends_when: "when the reserved resource is finally used — triggered by one of three non-exclusive paths: players hand the holder a nameable pretext (a choice), an unrelated event trips the rival counter forcing her hand (nobody decides), or the counter's approach to its own threshold overrides her patience via her own Beliefs (a forced self-decision). It never ends on a calendar date, and the 'correct' timing window can close before any of the three paths fires."
+
+- id: ARC-04
+  name: "Vaynard's Wager"
+  one_line: "A leader's deliberate strategic non-commitment toward a subordinate collides with a formal accusation process that advances on its own procedural timetable regardless of his inaction."
+  scale: faction
+  season_requires:
+    - need: "a Non-Player Character must be able to sustain deliberate, ongoing non-commitment toward a subordinate (neither supporting nor suppressing them) as a real strategic stance across multiple seasons, with that stance itself imposing no immediate mechanical cost"
+      why: "this is the entire premise — 'strategic ambiguity' as a viable, individually-rational non-greedy choice, not merely indecision"
+      hardness: core
+    - need: "a subordinate's trust/loyalty in a patron must be able to erode from that patron's inaction alone, on a track with no mechanic to actively increase it — an asymmetric, one-directional gauge"
+      why: "explicitly named: 'Maret's loyalty... has no mechanic to increase it' — this asymmetry is the design gap the whole arc depends on"
+      hardness: core
+    - need: "a formal accusatory process against a person must be able to advance through fixed procedural stages on its own timetable, regardless of whether the accused's patron takes any action"
+      why: "the Inquisitor stages proceed whether or not Vaynard acts — this is what eventually forces his hand"
+      hardness: core
+    - need: "a subordinate under threat must be able to independently build an alternative relationship or network with a faction unconnected to and unanswerable to their patron, without the patron's knowledge or control"
+      why: "Maret's quiet contacts with an outside faction are an independent hedge the patron cannot see forming"
+      hardness: important
+    - need: "a formal contest must be able to defeat an accusation for the present while leaving the underlying case file intact and reopenable later"
+      why: "a won Grand Debate doesn't erase the Inquisitor's file — 'can reopen' — so victory is temporary, not final"
+      hardness: important
+    - need: "a patron facing a subordinate's public accusation must be able to choose among open support, silent abandonment, and covert extraction, with each option foreclosing a different, distinct set of future political options"
+      why: "this three-way forced choice is the arc's climax and the payoff of the deferred non-commitment"
+      hardness: core
+    - need: "a covert extraction attempt must be able to fail in a detectable, attributable way, producing consequences distinct from simply losing the subordinate outright"
+      why: "on failure, a 'deniability event' opens and the accusation process accelerates — failure has its own downstream shape"
+      hardness: important
+    - need: "a subordinate's private research-progress track must be able to convert, once it crosses a threshold, into a concrete political demand its patron can invoke in a separate, larger political process"
+      why: "the research track reaching its threshold formalizes succession leverage that becomes urgent in a different arc's crisis"
+      hardness: important
+    - need: "UNCLEAR: the specific research content a subordinate pursues is a placeholder pending an authorial naming decision — its narrative substance, not just its label, is unresolved"
+      why: "downstream cases referencing what was 'found' or 'reconstructed' have no settled content to point to"
+      hardness: flavour
+  temporal:
+    span_seasons: 5
+    needs_memory_of: "the subordinate's loyalty value and its downward drift; the accusation process's current stage; the patron's own research-progress track value; which outside factions the subordinate has separately contacted"
+    needs_deadline: no
+  who_acts:
+    - "Duke Vaynard — the forced choice among defend/abandon/extract, when it finally arrives"
+    - "Maret Uln — whether to continue the research, and (via a contest) whether he prevails against the Inquisitors"
+    - "the Inquisitors/Church — advance procedurally regardless of Vaynard's inaction"
+    - "players — can affect the contest's odds or attempt extraction"
+  knowledge:
+    - "the accusing institution must be able to build its case incrementally without either the patron or the subordinate controlling what it learns at each stage"
+    - "the subordinate must be able to know exactly what the patron's silence means, even though the patron never states it"
+  ends_when: "when the patron is forced to choose publicly among defend/abandon/extract, after the subordinate loses a formal contest against the accusing institution — a forcing event produced by the accusation process's own procedural stages advancing on schedule, not by the patron's continued deferral; the arc cannot end merely by the patron continuing to withhold a decision."
+
+- id: ARC-05
+  name: "The Quiet Fracture"
+  one_line: "A well-intentioned institution's individually-successful actions are, in aggregate, quietly destroying the substrate they're meant to help — and nothing in the system announces this on its own."
+  scale: world
+  season_requires:
+    - need: "a slow, per-action cost on a shared world-substrate resource must be able to accumulate invisibly across many individually-successful-looking actions performed by a well-intentioned actor, such that the actor's own success record contains no signal of the harm being caused"
+      why: "'the world is not breaking — that is the problem'; the theme requires the harm to be undetectable from the actor's own vantage point"
+      hardness: core
+    - need: "a background world-scale stat must be able to decay on a fixed schedule (an annual tick) independent of any faction's actions in that period"
+      why: "the baseline decay is what makes the crisis existential rather than avoidable by simply not acting"
+      hardness: core
+    - need: "a faction must be able to hold genuine, actionable knowledge of a systemic problem and sit on the reveal-or-conceal decision for multiple seasons with no external clock forcing a resolution — the decision must be able to simply not resolve"
+      why: "'that calculation has been running for two seasons. It has not yet produced an output' — an explicit case of nobody deciding, which the world must be able to sustain"
+      hardness: important
+    - need: "the same tracked world-substrate resource must be able to cross multiple hard thresholds that change what KIND of consequence subsequent failures produce, without changing the underlying failure rate itself"
+      why: "the same operation becomes categorically more dangerous purely because a shared resource crossed a line, not because anyone is doing anything differently"
+      hardness: core
+    - need: "players must be able to force a stalled, private inter-faction calculation into a public formal contest, converting an indefinitely-stalled decision into a resolved one"
+      why: "this is the only lever the arc gives players to end what is otherwise explicitly an open, unresolvable spiral"
+      hardness: core
+    - need: "an institution's own values framework must be able to explain why THAT faction, and not another, is the one sitting on the relevant knowledge"
+      why: "the faction's future-weighting ethical framework is why it, specifically, is running this calculation"
+      hardness: flavour
+    - need: "the arc must be able to have genuinely no scripted endpoint — every listed resolution must remain equally reachable depending purely on what players do or fail to do, with no default outcome favored by inaction"
+      why: "explicitly 'an open spiral -- no natural close without player action'"
+      hardness: important
+  temporal:
+    span_seasons: "ongoing"
+    needs_memory_of: "the current substrate value including fractional decrements from partial-success side effects, since it degrades before any single failure looks catastrophic; the count/history of the causing institution's operations; whether the faction holding the knowledge has revealed it"
+    needs_deadline: no
+  who_acts:
+    - "no single actor drives this arc -- described in the source's own analysis as 'a system arc more than a character arc'"
+    - "the acting institution (performs the harmful-but-successful actions without perceiving the harm)"
+    - "a knowledgeable faction -- holds a stalled reveal-or-conceal decision that the source names as unresolved"
+    - "players -- the only actor who can force a resolution"
+  knowledge:
+    - "the acting institution does not know (or does not perceive) that its own successes are the drain -- this must be a genuine perceptual blind spot, not withheld information"
+    - "one faction knows the trajectory via analysis while the public and the acting institution do not"
+    - "players can learn the trajectory only through that faction's choice to reveal it, or by directly investigating"
+    - "UNCLEAR: nothing in the source names what, if anything, resolves the knowledgeable faction's own two-season-stalled reveal/hold decision absent player intervention"
+  ends_when: "never, absent player action -- the arc is explicitly an open spiral: the substrate keeps decaying every year-end and the causal institution's actions keep compounding the drain regardless of anyone's awareness. Only a player-forced public contest, converting the stalled private calculation into a resolved one, creates a closing point."
+
+- id: ARC-06
+  name: "The Debate That Won the Wrong Thing"
+  one_line: "A faction wins a formal political contest decisively, then discovers that winning the contest and actually changing anything are two separate mechanical events -- and the second one can fail."
+  scale: faction
+  season_requires:
+    - need: "a formal contest with a trackable winner must be able to produce a political ruling that is entirely separate from, and requires a SEPARATE mechanical action to actually enforce"
+      why: "'the gap between a won [contest] and a successful [enforcement] action is the arc' -- stated directly as the mechanism"
+      hardness: core
+    - need: "a losing party in a formal contest must be able to accept the ruling's stated principle while simultaneously drafting its operative implementation so narrowly that current practice remains unaffected"
+      why: "'he had conceded the principle and retained the practice' -- a defensible, deliberate concealment-through-compliance move"
+      hardness: core
+    - need: "the actors who won a contest must be able to fail to notice, at the moment of victory, that their win has not actually changed anything operational"
+      why: "'the orators who had won did not immediately recognise what they had lost'"
+      hardness: important
+    - need: "an implementation action following a political win must be able to fail on its own separate probability roll, independent of how decisively the preceding contest was won"
+      why: "victory in the debate and success in the follow-up roll must be genuinely uncorrelated events"
+      hardness: core
+    - need: "a failed implementation attempt must be able to impose a standing cost on the actor who attempted it, and make a subsequent retry of the SAME action structurally harder"
+      why: "a stability cost plus a rising difficulty on retry produces the trap that the winning faction now has to solve"
+      hardness: important
+    - need: "the faction that won the original contest must be able to choose, after implementation fails, between propping up the original beneficiary of their win via a joint retry, or abandoning that path for an entirely different coalition to get what they actually wanted"
+      why: "'Hafenmark won the debate and created a Crown weakness they now have to decide whether to exploit or repair' -- this is a genuine dilemma, not a false choice"
+      hardness: core
+    - need: "an institution whose formal position was weakened by losing a contest must be able to end up structurally stronger in practice if all subsequent retry/enforcement attempts fail"
+      why: "the Church's arbitration system becomes 'functionally permanent' and its influence growth accelerates precisely because the Crown's enforcement failed"
+      hardness: core
+    - need: "UNCLEAR: the exact wording of an ambiguous concession is explicitly left open pending an authorial decision, not specified by any mechanic"
+      why: "the concession's specific language is what creates the implementation gap, but its actual text is undetermined"
+      hardness: flavour
+  temporal:
+    span_seasons: 4
+    needs_memory_of: "the final value of the contest's tracked outcome and which side it favored; whether the enforcement attempt has already failed once (raising its difficulty for a retry); the specific concession language, since it may matter to a later dispute"
+    needs_deadline: no
+  who_acts:
+    - "Hafenmark's orators -- call the contest, and later choose whether to support a retry or pivot to a different coalition"
+    - "the Crown -- attempts the separate implementation action"
+    - "the Church's representative -- chooses the concession's wording at the moment of accepting the ruling"
+  knowledge:
+    - "the chamber/public must be able to witness the debate's outcome and the stated ruling without immediately perceiving that its operative language changes nothing -- that must be discoverable only later, 'reading the formal record'"
+    - "the conceding party must be able to know precisely how to concede in a way its opponent doesn't immediately catch"
+  ends_when: "when the faction that won the contest chooses whether to support a retry of the separate implementation action after its first attempt fails -- or, without further choice, immediately if that implementation attempt succeeds on the first try. In neither case does the contest's own outcome resolve the arc; the enforcement roll (dice-resolved, not scheduled) is what actually decides whether the win means anything."
+
+- id: ARC-07
+  name: "The Army That Stayed"
+  one_line: "A rare, nobody-chose-it probability failure during a battle leaves an army mechanically unable to stand down, turning a declared victory into a slow-building occupation crisis."
+  scale: faction
+  season_requires:
+    - need: "a rare-but-nonzero outcome from an ordinary combat sub-procedure (two independent checks both failing) must be able to produce consequences that persist for multiple seasons after the battle itself is formally resolved"
+      why: "the entire crisis originates from a single-digit-percent dice outcome that no actor chose -- this low-probability-high-consequence shape is the arc's signature move"
+      hardness: core
+    - need: "a failed sub-check during combat must be able to leave a persistent condition on a unit that is not automatically cleared by the battle formally ending or by a declared victory"
+      why: "the condition 'carries into' the post-battle period and 'was not fully resolved at battle end' -- persistence across the phase boundary is required"
+      hardness: core
+    - need: "a military commander must be able to be placed in a position where his own units' mechanical state makes his publicly-stated justification for continued deployment factually true and self-serving at the same time, with no dishonesty required on his part"
+      why: "'he is not fabricating the threat... he is trapped by his own units' state' -- the commander's sincerity and his self-interest must be able to coincide without contradiction"
+      hardness: core
+    - need: "a persistent unresolved military condition must be able to remain invisible to outside political authorities until someone specifically investigates it"
+      why: "the garrison commander 'cannot get a meeting' -- the condition is not automatically visible to the Crown"
+      hardness: important
+    - need: "resolving the persistent condition must require a distinct, nameable procedural action that nobody has an incentive to initiate, because initiating it exposes the underlying problem"
+      why: "the fix (a formal restoration process) is not undertaken precisely because starting it means admitting the problem exists"
+      hardness: core
+    - need: "an unresolved military condition must be able to convert, if left unaddressed for enough seasons, into a standing economic or political drain that changes it from a temporary military problem into a structural political one"
+      why: "grain purchasing and a supply depot mark the transition from 'a military situation' to 'a faction problem'"
+      hardness: important
+    - need: "a third faction with no stake in the original crisis must be able to gain standing by mediating it, entirely as a side effect of a crisis it did nothing to cause or prevent"
+      why: "an uninvolved institution's influence rises in the territory purely from playing mediator"
+      hardness: flavour
+  temporal:
+    span_seasons: 4
+    needs_memory_of: "which specific unit(s) carry the unresolved condition; how long it has persisted, since duration determines whether it has escalated into a standing supply/economic drain; whether the Crown has yet investigated"
+    needs_deadline: no
+  who_acts:
+    - "the Battle Leader -- mechanically locked into continued presence by his own units' state; not a free ongoing choice"
+    - "the Crown -- chooses whether to investigate"
+    - "players -- may assist a restoration action once the condition is discovered, or request formal mediation"
+    - "a mediating third faction -- chooses to intervene, profiting regardless of outcome"
+  knowledge:
+    - "the commander must be able to know the true mechanical cause while having every incentive not to disclose it"
+    - "the Crown and players must NOT automatically know the cause -- surfacing it requires a specific investigative action"
+    - "once surfaced, the condition becomes something the Crown and players can act on directly"
+  ends_when: "when the persisting unit condition is formally resolved -- either by a successful restoration action (once the condition is discovered and someone attempts it) or by Church-mediated withdrawal terms; absent either, the arc does not end, it converts from a military problem into a permanent, unresolved political one. The triggering crisis itself began from a low-probability dice outcome no actor chose, and the commander cannot end it unilaterally without first admitting a fact his own continued presence has been concealing."
+
+- id: ARC-08
+  name: "What the Guilds Know"
+  one_line: "A faction with trade networks but no formal intelligence apparatus accumulates real intelligence as an unintended byproduct, and must decide who to sell it to."
+  scale: faction
+  season_requires:
+    - need: "a faction must be able to possess an information/intelligence capability that arises purely as a byproduct of an unrelated core activity, with no dedicated intelligence stat or apparatus modeling it explicitly"
+      why: "'the Guilds do not have an Intel stat... this is not an oversight... it reflects institutional structure' -- the capability must be able to exist without a dedicated mechanism representing it"
+      hardness: core
+    - need: "one institution must be able to detect a pattern in a rival institution's own internal operational rhythm purely by correlating publicly observable outcomes over time, without infiltrating or spying on anyone directly"
+      why: "the detected pattern (which seasons a rival can/cannot counter-act) comes from aggregate correlation, not from a spy"
+      hardness: important
+    - need: "the faction holding valuable accumulated information must be able to face a genuine three-way choice -- sell to one rival, sell to a different rival, or expose it publicly -- where each option produces a distinct and different downstream political consequence"
+      why: "'the arc is not about whether [it] can get the ledger. It is about what [it] will trade it for' -- the choice itself, not detection, is the point"
+      hardness: core
+    - need: "revealing information about one institution's operational timing must be able to directly shift a THIRD faction's own future action-success probabilities, not merely its politics or reputation"
+      why: "buying intel about a rival's suppression timing measurably changes success odds for the faction that acquires it"
+      hardness: important
+    - need: "publicly exposing information in a legislative setting must be able to force an accused institution into a defensive posture regardless of whether the information itself was damaging in substance"
+      why: "public exposure forces institutional response independent of the information's actual content"
+      hardness: important
+    - need: "a faction's decision to conceal information in exchange for concessions must be able to leave a THIRD faction permanently uninformed, with no passive mechanism that eventually surfaces the arrangement to them"
+      why: "'Crown unaware' is a stated stable end-state of one branch, not a temporary condition"
+      hardness: important
+    - need: "UNCLEAR: the exact terms a faction trades accumulated information for are not fixed by any formula -- the source treats them as negotiated narrative content (tax exemptions, arbitration exclusions) rather than a mechanical exchange rate"
+      why: "downstream tracking of what was actually traded has no canonical procedure to follow"
+      hardness: flavour
+  temporal:
+    span_seasons: 4
+    needs_memory_of: "the accumulated correlational 'ledger' itself as a persistent asset; which faction(s) have approached the information-holder and with what offer; whether an arrangement, once struck, is ongoing or a one-time exchange"
+    needs_deadline: no
+  who_acts:
+    - "the information-holding faction -- the central three-way choice (sell to rival A, sell to rival B, or expose publicly)"
+    - "the faction that first opens contact -- initiates the negotiation, largely as a near-automatic move given its detection capability"
+    - "the excluded faction -- has no say and may remain permanently uninformed depending on the choice made"
+  knowledge:
+    - "the detecting faction must be able to come to know a rival possesses valuable data before any negotiation can start"
+    - "the excluded faction must be able to NOT know about an arrangement made without it, unless the information-holder chooses the public-exposure branch"
+    - "the public must be able to not know the ledger's content unless the public-exposure branch is chosen"
+  ends_when: "when the information-holding faction chooses how to dispose of its accumulated intelligence -- sell it to one rival, sell it to another, or expose it publicly -- a single named choice point reached only after an initiating faction has opened contact; there is no threshold or clock forcing this choice beyond that opening move."
+
+- id: ARC-09
+  name: "The Practitioner Who Stopped"
+  one_line: "A practitioner rations her own use of a personal resource that has an irreversible zero-point, silently degrading her faction's capability while she races to finish research before she runs out of self."
+  scale: person
+  season_requires:
+    - need: "a person's capacity to act as an independent agent must be able to be lost permanently and irrecoverably once a tracked personal resource crosses zero, converting them into a fully lucid, fully competent being who nonetheless can no longer choose anything"
+      why: "this cliff with explicitly no recovery path is the entire tension -- 'the arc exists because the rule has no exit'"
+      hardness: core
+    - need: "a character must be able to conceal an approaching personal threshold from their own institution because no available political framing of that information benefits them"
+      why: "she 'has not told Varfell's leadership because there is no political frame in which that information helps her'"
+      hardness: core
+    - need: "an institution's aggregate operational capacity must be able to silently degrade because one specific individual quietly stopped contributing, while the institution's headline stats (its authority, its legitimacy) remain visibly unaffected"
+      why: "'Varfell's Mandate score holds... but their capacity to respond... quietly degrades' -- the degradation must be able to hide behind unrelated stable numbers"
+      hardness: important
+    - need: "players must be able to notice an absence -- situations resolving differently than they would with a specific capability present -- rather than being told directly that someone has stopped acting"
+      why: "the investigative, absence-noticing structure is explicitly the intended play experience"
+      hardness: important
+    - need: "a character operating near a personal collapse threshold must be able to ration their engagement, holding the risk at a self-chosen floor across multiple seasons, rather than either fully stopping or continuing at full risk"
+      why: "she holds the resource 'at a floor', a deliberate middle path between two extremes"
+      hardness: important
+    - need: "the specific content of a person's private, unfinished research must be able to remain genuinely undetermined by the engine until an authorial or in-play decision fills it in"
+      why: "explicitly left as design space rather than fixed content"
+      hardness: flavour
+    - need: "when a person's hidden state is surfaced to their institution, that institution must be able to face a real choice between protecting the person's remaining capacity (forced retirement) and permitting continued risk (supervised operations)"
+      why: "a genuine named institutional decision point once the secret is out"
+      hardness: core
+    - need: "assisting someone's continued high-risk activity must itself be able to carry the same terminal risk to the same tracked resource, so that 'helping' is not automatically a safe action"
+      why: "assisting the research still risks Coherence loss on failure -- help is not free"
+      hardness: important
+  temporal:
+    span_seasons: 5
+    needs_memory_of: "the practitioner's current personal-resource value; how much has already been rationed or spent; whatever partial findings the private research has produced; whether the institution's leadership has been told"
+    needs_deadline: no
+  who_acts:
+    - "the practitioner -- chooses to ration operations, chooses whether to disclose if found, chooses whether to keep risking herself for the research"
+    - "players -- choose whether to investigate the absence, and if she is found, whether to assist or report her"
+    - "the faction's leadership -- if surfaced, chooses forced retirement vs supervised continuation"
+  knowledge:
+    - "players must NOT automatically know why the capability disappeared -- discovering it requires a specific investigative action"
+    - "the faction's leadership must NOT know her state unless surfaced by players' choice"
+    - "the practitioner alone knows both the threshold and her remaining margin against it"
+  ends_when: "when the practitioner's tracked personal resource reaches its irreversible zero-point -- an automatic, unrecoverable transition that nobody decides and that has no exit mechanic -- OR when her private research is completed and released, whichever happens first; the zero-point path requires no actor's choice at all, while the research-completion path depends on player discovery and her own continuing choice to risk herself."
+
+- id: ARC-10
+  name: "The Penitent Duke"
+  one_line: "A leader deliberately provokes her own public punishment as a political weapon, wagering that the humiliation will convert into leverage at a later, scheduled confrontation."
+  scale: realm
+  season_requires:
+    - need: "a political actor must be able to construct a proposal worded so precisely that either of an opponent's two possible responses damages the opponent's institutional position -- a genuine forced dilemma"
+      why: "'phrased so precisely that [the opponent] must either accept it... or reject it... either way [the proposer] wins the argument'"
+      hardness: core
+    - need: "a targeted institutional response against a specific person must be able to be assigned to a case-handler whose personal trait mechanically adds delay time to the case, independent of the case's actual merits"
+      why: "a proceduralist assignee predictably slows the process regardless of how strong the case is"
+      hardness: important
+    - need: "a public penance or humiliation ritual must be able to accrue value over its duration, such that when the penitent later reverses the situation, the accumulated public sympathy becomes a usable mechanical bonus in a separate, later contest"
+      why: "the walk-of-shame produces a real, bankable bonus at the reversal, not just narrative color"
+      hardness: important
+    - need: "a character must be able to choose, mid-contest, to introduce a piece of politically explosive but tangential evidence for an immediate mechanical benefit, at the cost of triggering a much broader, harder-to-control set of consequences affecting every faction"
+      why: "introducing the old backstory file grants a bonus but places suspicion markers on all major factions and degrades future investigation odds universally"
+      hardness: core
+    - need: "an initiating political motion must be able to fail outright and simply delay the arc rather than end it, with no cap on how many times it can be retried"
+      why: "a failed motion means the arc 'stalls -- retry next season', not a dead end"
+      hardness: important
+    - need: "a decisive action's degree of success must be able to produce categorically different outcomes -- fully reversing a punishment, merely reducing its severity, or leaving the punishment standing while the accuser gains ground -- rather than a binary success/fail"
+      why: "four distinct outcome tiers each carry a qualitatively different political result"
+      hardness: core
+    - need: "removing or co-opting one specific supporting character must be able to change the difficulty of a LATER, otherwise-unrelated action within the same arc"
+      why: "losing the motion's sponsor makes the later doctrine-firing action harder, even though the two actions are nominally separate"
+      hardness: flavour
+  temporal:
+    span_seasons: 5
+    needs_memory_of: "whether the targeted leader is currently under active institutional punishment; accumulated public-sympathy duration from the penance; whether the tangential-evidence gambit has been used and what universal suspicion resulted"
+    needs_deadline: yes
+  who_acts:
+    - "the motion's sponsor -- a named choice to introduce the proposal"
+    - "the targeted institution's authority -- must choose to accept or reject the proposal's framing, a trap either way"
+    - "the assigned case-handler -- a trait-driven near-automatic delay, not really a deliberated choice"
+    - "the penitent leader -- chooses whether to introduce the explosive tangential evidence during the reversal contest"
+  knowledge:
+    - "the public/chamber must be able to witness the penance visibly for the sympathy bonus to accrue -- it is a public performance, not a private one"
+    - "introducing the tangential evidence publicly changes what ALL factions are suspected of, not just the intended target"
+  ends_when: "when the decisive reversal action resolves during a scheduled confrontation whose trigger condition (active institutional punishment) must first be met via an earlier roll; the reversal's dice outcome determines whether the punishment is fully reversed, partly reversed, or stands -- but if the initiating motion fails outright first, the arc does not end, it stalls and can be retried with no stated limit."
+
+- id: ARC-11
+  name: "Three Crowns in a Season"
+  one_line: "A ruling institution's collapse cascades through several independently-acting subordinates whose personal flaws each shape a different piece of the unfolding crisis, with no single event closing it."
+  scale: realm
+  season_requires:
+    - need: "a ruler facing existential institutional collapse must be able to make one explicit, named strategic choice among a small enumerated set (hold / strike / orderly transition) whose consequences differ categorically, at the exact moment a stability stat bottoms out"
+      why: "this single named choice is the one genuinely deliberate decision point in an otherwise cascading, trait-driven crisis"
+      hardness: core
+    - need: "a subordinate administrator's personal flaw (taking on too much) must be able to produce a DELAYED failure -- competent performance for a fixed span of seasons, then an inevitable, undeviating collapse -- with the delay itself mechanically load-bearing for when other crises are timed to fire"
+      why: "other consequences are timed off WHEN he breaks, not off the initial triggering event -- the delay itself must be trackable"
+      hardness: core
+    - need: "a military commander's personality-driven redeployment must be able to leave a specific, different location exposed as an explicit trade-off, without that commander weighing the trade-off as a deliberate strategic calculation -- it is who he is, not a choice he makes"
+      why: "his fixation, not his judgment, determines the exposed location"
+      hardness: important
+    - need: "an intermediary reporting to an external power must be able to choose, each season, between an accurate report (locally damaging, builds external trust) and an optimistic one (protects a domestic relationship, damages external standing), with the choice gated on a third party's loyalty value the intermediary is protecting"
+      why: "this recurring, stat-gated choice is a distinct decision-shape from a one-time strategic call"
+      hardness: core
+    - need: "an institutional collapse must be able to open a temporary window during which OTHER factions can bid, using an ordinary resource, for access to powers the collapsed institution used to hold exclusively"
+      why: "a vacuum-period bidding mechanic lets outside factions opportunistically absorb collapsed authority"
+      hardness: important
+    - need: "a targeted social action against one specific compromised administrator must be able to redirect that administrator's institutional capacity toward the acting faction, using a documented personal vulnerability rather than force or negotiation"
+      why: "a flattery-based discount lets any faction siphon administrative capacity from the same overloaded figure"
+      hardness: important
+    - need: "UNCLEAR: which named heir actually succeeds after a total collapse depends on a tracked loyalty value whose exact resolution mechanic is not fully specified in the source"
+      why: "flagged directly as a design gap -- the succession outcome has no fully defined procedure"
+      hardness: important
+  temporal:
+    span_seasons: 4
+    needs_memory_of: "the stability stat's exact value at each accounting step; whether the overloaded administrator has already broken (a state that persists once true); which faction(s) currently hold vacuum-period bidding access; the loyalty value gating the intermediary's future reports"
+    needs_deadline: yes
+  who_acts:
+    - "the ruler -- the one explicit strategic choice (hold/strike/transition), made once, at the crisis threshold"
+    - "the overloaded administrator -- does not choose to break; it is a mechanical inevitability of his trait after a fixed span"
+    - "the military commander -- redeploys per his fixation, not really deliberated"
+    - "the foreign intermediary -- chooses each season between an accurate and an optimistic report"
+    - "UNCLEAR: no single actor or threshold is named as closing the cascade once it begins"
+  knowledge:
+    - "the foreign power must be able to receive the intermediary's chosen report content without independently knowing which version was sent -- they trust the report as delivered"
+    - "other factions must be able to detect the overloaded administrator's degradation as a legible signal even though he himself may not disclose it"
+  ends_when: "UNCLEAR -- the source names no closing condition. The arc is a 1-season trigger cascading through a minimum multi-season sequence of branching crises (an administrator's collapse, a military redeployment, a succession contest, loyalty-gated diplomatic reporting); the closest candidate is 'a new governance configuration stabilizes,' but no threshold or actor-choice is ever named as the event that ends the cascade rather than merely advancing it."
+
+- id: ARC-12
+  name: "The Chained Ships"
+  one_line: "Three factions independently accept the same economically rational arrangement, none aware it is quietly contaminating a shared substrate through a specific participant's own hidden cargo."
+  scale: realm
+  season_requires:
+    - need: "three or more factions must be able to independently accept the same economically rational arrangement for entirely separate, individually sound reasons, with none of them individually responsible for or aware of the arrangement's hidden downside"
+      why: "'multiple independent rational decisions producing a collective catastrophe nobody designed' -- the defining shape of the arc"
+      hardness: core
+    - need: "a hidden hazard embedded within an economic arrangement must be able to accumulate invisibly for multiple seasons, becoming detectable only through an active diagnostic action, with a default 'becomes visible anyway' fallback if nobody ever checks"
+      why: "the contamination is both discoverable early (active investigation) and inevitable eventually (a stated season-count fallback) -- both paths must exist"
+      hardness: core
+    - need: "one participant who personally vetted the tainted component must be able to discover the problem ahead of the others and face a genuine choice between voluntary early disclosure (a bounded, known cost) and concealment (an unbounded, larger cost if later discovered by someone else)"
+      why: "this personal dilemma is explicitly named as a 'genuine dilemma', distinct from the systemic-catastrophe layer"
+      hardness: core
+    - need: "the revelation of a hidden hazard must be able to trigger a simultaneous, uniform penalty across every participating faction at once, rather than harming factions sequentially or requiring separate rolls per faction"
+      why: "'simultaneous collapse' -- every faction takes the hit in the same beat"
+      hardness: important
+    - need: "the same revealed hazard must be able to carry a distinct cultural/identity-based meaning layered on top of its ordinary economic consequences, with both readings mechanically true at the same time"
+      why: "the goods being contaminated southern-heritage artefacts, not generic cargo, is load-bearing on the theme, not decorative"
+      hardness: important
+    - need: "a public, documented revelation of the hazard must be able to durably shift an unrelated faction's ongoing political costs elsewhere in the world, as a downstream side effect"
+      why: "one leader's cost for supporting a marginalized movement drops permanently once the revelation is public"
+      hardness: important
+    - need: "a specific investigator's thoroughness trait must be able to simultaneously fully expose the causal chain of a scandal AND, through the time that thoroughness takes, hand the implicated parties a window to destroy or hide evidence before the exposure completes"
+      why: "a single trait produces both full exposure and a cover-up window as two faces of the same delay"
+      hardness: flavour
+  temporal:
+    span_seasons: 6
+    needs_memory_of: "how many seasons the arrangement has been active (determines whether the default-visibility fallback has triggered); whether the contamination has been actively diagnosed; the personally-vetting participant's own choice once she discovers it, and how long she has held it privately"
+    needs_deadline: no
+  who_acts:
+    - "the proposing broker -- near-automatic acceptance from each endorsing faction given their individual incentives"
+    - "the personally-vetting participant -- the genuine disclose/conceal dilemma, if she discovers first"
+    - "an investigating institution's thorough case-handler -- exposes the chain fully but also opens a cover-up window"
+    - "players -- can proactively investigate/diagnose"
+  knowledge:
+    - "none of the endorsing factions know the goods are tainted at the time they endorse the arrangement"
+    - "the personally-vetting participant may come to know first, ahead of everyone else, creating an asymmetric information window"
+    - "the public does not know the cultural-heritage dimension of the goods until the revelation specifically documents it -- the economic hit and the cultural-validation reading arrive together but are epistemically distinct facts"
+  ends_when: "when the hidden contamination is revealed -- either by a successful diagnostic action in the affected territories, or, absent any investigation, by default once enough seasons have passed and the effects simply become visible. Revelation is a trigger, not a choice, and automatically cascades into a uniform penalty for every participating faction with no further decision required; the only real named choice belongs to whichever participant personally discovers the contamination first."
+
+- id: ARC-13
+  name: "Wait Until It Sings"
+  one_line: "A faction's default, unremarkable defensive posture becomes the winning strategy purely because every more active faction burns itself down while it does nothing extraordinary."
+  scale: realm
+  season_requires:
+    - need: "a faction's default, low-effort defensive behavior must be able to remain unchanged and un-escalated for many consecutive seasons while OTHER factions actively spend themselves down, such that patience alone becomes the winning strategy without that faction ever taking an aggressive action"
+      why: "the entire premise: 'the boring bureaucrat wins because everyone else spent their resources'"
+      hardness: core
+    - need: "a reactive procedural objection must be able to fire automatically and identically every time its trigger condition is met, functioning as a standing tax on a category of action rather than a deliberated response"
+      why: "the objection 'fires every time the trigger is met' -- a rule, not a decision"
+      hardness: important
+    - need: "a previously-neutral institution's inertia must be able to become contestable -- vulnerable to being won by an outside faction -- only once specific, hard-to-reach conditions among OTHER factions are simultaneously true"
+      why: "the neutral actor is only 'contestable' once multiple other factions have independently weakened themselves and instability is high -- a compound, multi-faction gating condition"
+      hardness: core
+    - need: "a resource-management relationship between two SEPARATE characters (one who buffers a faction's failure rate, one whose eventual breakdown removes that buffer) must be able to delay a payoff and then, upon that second character's break, accelerate it explosively"
+      why: "the payoff's timing has a discontinuity tied to a completely different arc's character state, not a smooth curve"
+      hardness: important
+    - need: "co-opting a previously-neutral institutional actor must be able to unlock a specific, otherwise-unreachable category of reform, but only if the co-opting faction already holds a minimum presence in the relevant territory"
+      why: "the caste-question reform option is gated on a precondition unrelated to the co-opting roll itself"
+      hardness: important
+    - need: "an event resolving a multi-season accumulation must be able to fire only once per entire campaign, never repeating even if its conditions recur later"
+      why: "explicitly a once-per-campaign event, not a repeatable one"
+      hardness: flavour
+    - need: "UNCLEAR: no design document exists for the neutral institution this arc's central actor represents -- the arc runs on an individual character's behavioral profile standing in for a fuller institutional decision-process"
+      why: "flagged directly as a gap: the full institutional AI this character is meant to embody was never authored"
+      hardness: important
+  temporal:
+    span_seasons: 6
+    needs_memory_of: "how many seasons of passive recovery/reform-blocking have accumulated; each other faction's current weakened state; whether the buffering character (from a different arc) has already broken -- this arc explicitly depends on state carried from elsewhere"
+    needs_deadline: no
+  who_acts:
+    - "the neutral faction's leader -- his blocking behavior fires automatically per trigger, not really deliberated"
+    - "the other faction leaders -- choose to spend themselves down on offensive actions, inadvertently setting up the neutral faction's eventual win"
+    - "a stability-seeking actor -- may attempt to co-opt the neutral faction once it becomes contestable"
+    - "the co-opting faction -- chooses what reform to pursue once co-option succeeds"
+  knowledge:
+    - "players and factions must be able to fail to notice the accumulation in real time -- the design intent is that this arc is discovered retroactively, not tracked live"
+    - "nothing requires anyone to know the payoff moment is coming until it actually fires"
+  ends_when: "when a once-per-campaign trigger fires at a year-end checkpoint -- becoming live only once other factions have both weakened themselves sufficiently and instability is high while the neutral institution remains intact, OR once a separate arc's buffering character has independently broken; once live, any faction may attempt a roll to co-opt the neutral actor, and it is that roll's outcome, not a scheduled date, that resolves the arc. Absent the gating conditions, nothing forces resolution and the arc can simply continue accumulating indefinitely."
+
+- id: ARC-14
+  name: "The Purple Shroud"
+  one_line: "An urban crisis erupts at the intersection of two independent thresholds, and every available way to restore order also forces a separate, unavoidable reckoning with a marginalized population's grievance."
+  scale: realm
+  season_requires:
+    - need: "a public-order crisis must be able to require every resolution path to also force a SEPARATE, orthogonal political consequence bundled into it, such that there is no way to resolve the immediate crisis without also taking a position on a deeper structural question"
+      why: "'players cannot resolve the political crisis without taking a position on the social crisis' -- this is the arc's core, stated design intent"
+      hardness: core
+    - need: "an offer to resolve a crisis must be able to carry its true cost hidden or deferred from the receiving party at the moment of choice, revealed only afterward"
+      why: "the offer's price is physically concealed ('on the back') until accepted"
+      hardness: important
+    - need: "a decision-maker's response to an identical offer must be able to be entirely determined by a single threshold stat with no free agency involved, when that decision-maker is not player-controlled"
+      why: "the ruler's accept/reject response is a fixed lookup on his own stability value, not an improvised choice -- the engine needs a formula-driven NPC decision here, not just a free one"
+      hardness: core
+    - need: "a documented personal vulnerability of a specific figure receiving an offer must be able to change the numeric size of that offer's cost if a faction exploits it via a social action"
+      why: "flattering the ruler's steward can worsen the deal's terms by one point"
+      hardness: flavour
+    - need: "an operative's caution trait must be able to automatically veto a planned action based on a condition created by an ENTIRELY SEPARATE, earlier arc's unresolved consequence"
+      why: "an explicit cross-arc dependency: this arc's covert-ops abort is gated on a different arc's contamination state"
+      hardness: important
+    - need: "a marginalized population's spontaneous show of solidarity during an unrelated crisis must be able to convert a single-axis crisis into a two-axis crisis that cannot be resolved along only one axis"
+      why: "the riot becomes 'not a simple Crown-vs-Church binary' the moment a third population's grievance joins it"
+      hardness: core
+    - need: "a faction attempting to document a crisis in real time must be able to permanently preserve testimony from a marginalized group as a persistent record with continuing effect, distinct from and outlasting the crisis itself"
+      why: "an investigation during the riot creates a permanent record that persists after the crisis resolves"
+      hardness: important
+  temporal:
+    span_seasons: 3
+    needs_memory_of: "whether a separate arc's contamination is active in the territory (gates the caution-trait veto); the instability value at the moment of trigger; which resolution mechanism was chosen and its resulting persistent consequence, since a grievance marker from military suppression persists for several seasons afterward"
+    needs_deadline: yes
+  who_acts:
+    - "the ruler (or the Crown player) -- accepts/rejects the crisis-ending offer, deterministically if NPC-controlled"
+    - "a movement leader -- may choose to attempt direct engagement during the crisis, a genuine gamble"
+    - "an operative -- automatically aborts a covert action if a cross-arc condition is met, not really a choice"
+    - "an investigator -- chooses to document testimony, creating a lasting record"
+  knowledge:
+    - "the receiving party does not see the true cost of the crisis-ending offer until after it is accepted"
+    - "a documenting investigator's action creates a persistent, discoverable record of testimony that did not exist before and can be referenced later"
+  ends_when: "when the crisis is resolved by one of four named mechanisms -- direct intervention at a fixed cost, military suppression, mediated negotiation (which adds a season's delay), or a negotiated resolution scaled to the crisis's severity -- each of which forces a further, orthogonal social-consequence sub-resolution so that no path is consequence-free. If an NPC rather than a player controls the deciding faction, that 'choice' is a deterministic stat-lookup, not a free decision."
+
+- id: ARC-15
+  name: "The Banker's War"
+  one_line: "A faction deliberately funds both sides of an ongoing conflict for profit, while three independent, uncoordinated detection efforts race to notice -- and whoever notices first must decide when, and how, to use it."
+  scale: faction
+  season_requires:
+    - need: "a faction must be able to simultaneously fund or ally with two mutually hostile factions in a way that materially profits it from EACH unit of conflict between them, as a deliberate strategy rather than an accident"
+      why: "explicitly a designed deception, distinct from the arc's emergent detection layer"
+      hardness: core
+    - need: "detecting a hidden financial arrangement must be able to proceed along THREE independently-timed paths that can each succeed or fail on their own schedule without coordinating with each other"
+      why: "a rival's roll, a slow pattern-recognition check, and a stability-driven institutional check all run in parallel, unsynchronized"
+      hardness: core
+    - need: "the concealing faction must be able to actively counter one specific detection path by feeding it curated or false information, as a discrete defensive action with a real chance to fully nullify that path's success"
+      why: "a targeted counter-play move can specifically blind one investigator without affecting the others"
+      hardness: important
+    - need: "a party that detects a hidden arrangement must be able to choose to sit on that knowledge indefinitely as leverage rather than immediately exposing it, holding it as a standing advantage against the concealed party for as long as they choose"
+      why: "one detector explicitly holds the knowledge silently for multiple seasons as leverage rather than acting on it"
+      hardness: core
+    - need: "a subordinate who detects sensitive information, under a trait that predisposes him to act unilaterally, must be able to act on it alone rather than reporting to his own faction's leadership, thereby destroying that leadership's own separate, still-pending advantage"
+      why: "one detector's overperforming trait causes him to burn a superior's own quietly-held intelligence asset by acting solo"
+      hardness: important
+    - need: "the party that finally exposes a hidden arrangement must be able to choose between a public disclosure (immediate, broad, one-time damage) and a private disclosure (an ongoing, renewable extraction of demands with escalating risk if a second party discovers it during that window)"
+      why: "PUBLIC vs PRIVATE is a genuine, differently-shaped choice with different long-term consequences"
+      hardness: core
+    - need: "an unrelated NPC's decades-old, since-revealed-mistaken assumption must be able to remain the causal source of that NPC's present-day detection capability, unaffected by learning the assumption was false"
+      why: "this arc's own detection mechanism was explicitly built on a struck backstory element (a false 27-year assumption); the capability's origin story is now retracted but the capability itself is retained"
+      hardness: important
+  temporal:
+    span_seasons: 6
+    needs_memory_of: "how many consecutive seasons the dual-funding token has been present; whether one party has already accumulated silently-held detection knowledge and for how long; which detection paths have already failed or been actively nullified"
+    needs_deadline: no
+  who_acts:
+    - "the funding faction -- deliberately initiates and sustains the dual-funding scheme"
+    - "each independent detector -- pursues its own detection path on its own timetable"
+    - "the funding faction's counter-play actor -- chooses to actively blind one specific detector"
+    - "whichever detector holds confirmed knowledge -- chooses the timing and mode (public/private) of exposure"
+  knowledge:
+    - "the true dual-funding arrangement must be able to remain hidden from casual observation, discoverable only via a specific investigative action per path"
+    - "one detector's own detection can be actively blinded without that detector knowing he has been blinded"
+    - "the earliest-informed party may know before anyone else and choose not to act, leaving other factions ignorant of a fact already known to someone"
+  ends_when: "when a party holding confirmed knowledge of the dual-funding scheme chooses to expose it, publicly or as private blackmail -- a genuine named choice belonging to whichever detection path succeeded and is acted on. Detection itself is dice-resolved and can be actively nullified; once someone holds confirmed knowledge, the arc's end is that holder's deliberate choice of timing and disclosure mode, not an automatic trigger."
+
+- id: ARC-16
+  name: "The Empty Fort"
+  one_line: "A movement leader deliberately spreads a limited resource thin rather than consolidating it, because losing pieces of it generates more legitimacy damage to her opponent than holding it together would."
+  scale: faction
+  season_requires:
+    - need: "a faction leader must be able to deliberately choose a strategy that is locally suboptimal by every conventional metric because the suboptimal configuration produces a downstream political benefit that the optimal configuration would not"
+      why: "spreading thin instead of consolidating is explicitly named as strategically suboptimal yet is the character's actual defense"
+      hardness: core
+    - need: "an opposing institution's decision to NOT act against a vulnerable target must be able to be a genuine, standing strategic choice, rather than mere neglect, and must be able to persist indefinitely without ever being forced to resolve"
+      why: "'the Church could end this. The Church has not acted' -- someone continuously chooses inaction, and the engine must let that choice simply persist"
+      hardness: core
+    - need: "removing one unit of a spread-out presence must be able to itself generate a persistent legitimacy cost against the remover, in every instance, for as long as the underlying dynamic is active"
+      why: "every successful removal costs the remover standing -- the vulnerability IS the defense, mechanically, every time"
+      hardness: core
+    - need: "a specific piece of caste-legitimizing evidence must be able to require a personal perceptual threshold to perceive at all, and that very threshold must be able to be suppressed by the same system the evidence would dissolve, producing a self-sustaining feedback loop"
+      why: "the evidence that would end the caste system requires a sensitivity the caste system itself suppresses the development of"
+      hardness: core
+    - need: "capturing a movement's charismatic leader must be able to trigger consequences that scale with how much of her prior presence survives the capture, rather than a flat, fixed consequence"
+      why: "the martyrdom fallout is proportional to surviving presence markers, not a single fixed penalty"
+      hardness: important
+    - need: "an investigator's thoroughness trait must be able to simultaneously serve an institution's stated goal (building a solid case) and undermine it (giving the target's allies a rescue window)"
+      why: "the same trait cuts both ways at once, without contradiction"
+      hardness: flavour
+  temporal:
+    span_seasons: "ongoing"
+    needs_memory_of: "how many territories currently carry the spread-thin presence and at what level; whether the opposing institution has initiated action against it within the last two seasons; accumulated pressure against the leader's specific location"
+    needs_deadline: no
+  who_acts:
+    - "the movement leader -- deliberately chooses to spread thin rather than consolidate"
+    - "the opposing institution -- continuously chooses not to act, an ongoing standing decision rather than neglect"
+    - "an investigator -- if deployed, his thoroughness both builds the case and gives the target's allies time"
+    - "any faction -- may attempt a rescue if the leader is captured"
+  knowledge:
+    - "the caste-dissolving evidence must be able to remain imperceptible to anyone below a specific perceptual threshold, meaning most of the population structurally cannot access it directly"
+    - "the opposing institution must be able to know exactly why it hasn't acted, even though that reasoning is never stated publicly"
+  ends_when: "never, by design -- this is explicitly a persistent background arc that runs for as long as the movement remains active, not a closing structure. The nearest thing to a climax is the leader's capture if the opposing institution's pursuit reaches a sufficient threshold in her location, but even that produces a scaled fallout and a rescue window rather than a resolution -- the underlying spread-thin-as-defense dynamic persists regardless of that beat's outcome."
+
+- id: ARC-17
+  name: "The Sinigaglia Dinner"
+  one_line: "A leader's slow-built intelligence apparatus finally detects a subordinate's pattern of disloyalty, and his response is dictated by his own internal state rather than by free choice -- while the subordinate's fate hinges on a dice check neither party fully controls."
+  scale: faction
+  season_requires:
+    - need: "detecting a subordinate's pattern of behavioral hesitation must be able to require repeated, unprompted checks over MULTIPLE seasons rather than a single roll, so that success is a matter of persistence and probability, not certainty on any one attempt"
+      why: "detection is explicitly a recurring, cumulative process, not a single test"
+      hardness: important
+    - need: "a superior's response to detecting a subordinate's disloyalty must be able to be fully determined by the superior's own current internal state via a fixed lookup, removing free choice from that decision point when the superior is not directly player-controlled"
+      why: "the leader's confront/tolerate/eliminate response is dictated by his stability value, not an improvised judgment call"
+      hardness: core
+    - need: "two parties in an adversarial relationship must be able to each hold damaging evidence against the other simultaneously, such that neither can act against the other without also being destroyed themselves"
+      why: "a genuine mutual-deterrence structure, not merely two separate threats pointed in one direction"
+      hardness: core
+    - need: "a subordinate under coercive tolerance must be able to face a RECURRING risk each season of involuntarily failing to comply, regardless of their own intentions, so that even a subordinate who intends to comply can still defect through no decision of their own"
+      why: "compliance is gated on a repeating check that can simply fail, independent of the subordinate's stated intent"
+      hardness: core
+    - need: "damaging evidence held against one party must be able to carry a SECONDARY payload relevant to a separate, larger mystery, activated only under specific conditions -- this cross-arc linkage was itself struck when the referenced backstory was retracted, and its mechanical effect no longer has a live trigger condition"
+      why: "the arc's design explicitly built a bridge to another arc's now-defunct mystery; that bridge's content is now inert even though the surrounding mechanism (an insurance file with a secondary payload) remains structurally intact"
+      hardness: important
+    - need: "a defecting subordinate must be able to carry unreleased leverage with them into a new affiliation, handing that new faction a one-time strategic option they did not previously have"
+      why: "a defection transfers a live piece of leverage to whichever faction receives the defector"
+      hardness: important
+    - need: "a case-handler assigned to investigate released evidence must be able to introduce a procedural delay that specifically benefits the ORIGINAL holder of that evidence in destroying it, even while nominally investigating on behalf of the institution that wants it exposed"
+      why: "the same investigative assignment both threatens and protects the accused, depending on timing"
+      hardness: flavour
+  temporal:
+    span_seasons: 5
+    needs_memory_of: "the count of the subordinate's hesitated operations across the year (gates the year-end detection check); whether the insurance file has been created and/or activated; the superior's stability value at the moment detection succeeds, since it determines his response"
+    needs_deadline: no
+  who_acts:
+    - "the superior -- detects via a check, but his subsequent response is threshold-determined rather than freely chosen"
+    - "the subordinate -- subject to a recurring compliance check that can fail independent of his intent; whether he holds an insurance file at all"
+    - "players -- can potentially intervene, though the source does not specify how"
+  knowledge:
+    - "the superior must be able to not know the subordinate's hesitation pattern until his own detection check succeeds -- it is not automatically visible"
+    - "each party must be able to know the other holds destructive leverage, and both must know the other knows, for the mutual-deterrence structure to actually deter anything"
+    - "the struck secondary-payload material no longer has any live epistemic function -- the file's content, if opened now, points to nothing beyond a mundane cover story"
+  ends_when: "when the subordinate's fate resolves definitively -- through sustained compliance (an ongoing check that could still fail in a later season), a failed compliance check triggering outright defection, or, if the superior chooses confrontation/elimination, the subordinate's removal triggering automatic release of the mutually-destructive evidence. The superior's initial response is not fully free -- it is determined by a threshold lookup on his own internal state -- so the actual deciding force at that step is a stat, not a deliberation."
+
+- id: ARC-18
+  name: "The Stolen Steward"
+  one_line: "An indispensable administrator's one documented weakness is independently exploited by multiple factions at once, while his own superior secretly tracks the pattern of who is buying access and why."
+  scale: realm
+  season_requires:
+    - need: "a single administrator's documented psychological vulnerability must be able to be independently exploited by MULTIPLE unrelated factions simultaneously, each establishing its own separate influence channel through the same mechanism without needing to coordinate with each other"
+      why: "the vulnerability is a shared, reusable exploit -- the entire premise of the cultivation pattern"
+      hardness: core
+    - need: "small, individually low-cost influence-purchases against the same target must be able to accumulate into a named aggregate condition that only becomes consequential once a threshold NUMBER of distinct factions is reached, not a magnitude of any one purchase"
+      why: "the review trigger fires on 'how many factions', not on how much any one faction has spent"
+      hardness: core
+    - need: "the target's own superior must be able to maintain a hidden, second layer of awareness of the cultivation pattern that is invisible to the cultivating factions and discoverable by an outside party only through a separate, deliberate investigative action"
+      why: "the three-layer intelligence structure (visible cultivation / hidden monitoring / discoverable-by-players monitoring) is explicit and load-bearing"
+      hardness: core
+    - need: "a superior's hidden monitoring of an ongoing cultivation must be able to convert into concrete future advantage -- a stored bonus usable against a specific cultivating faction -- at a later review moment, rather than being pure narrative flavor"
+      why: "the hidden tokens Almud accumulates are explicitly convertible into a mechanical bonus later"
+      hardness: important
+    - need: "the same channel that lets outside factions purchase influence over an administrator must be able to also passively transmit practices FROM the outside cultivator INTO the administrator's own institution, producing an unintended structural benefit that a THIRD, uninvolved population then reacts negatively to"
+      why: "a side-channel cultural transfer, with its own unrelated political fallout, riding on the same mechanism as the influence-buying"
+      hardness: important
+    - need: "a superior's culminating decision about a compromised-but-valuable subordinate must be able to resolve into three qualitatively different dispositions -- retain-and-chasten, remove entirely, or relocate to a different and consequential post -- each with different downstream effects reaching into OTHER, separate arcs"
+      why: "one of the three dispositions explicitly seeds the precondition for a completely different arc's crisis"
+      hardness: core
+    - need: "a resolution roll's failure must be able to leave the underlying situation completely unresolved and unchanged, with no forced fallback outcome, so the accumulating dynamic can simply continue"
+      why: "a failed review roll produces no consequence at all -- the cultivation just continues"
+      hardness: important
+  temporal:
+    span_seasons: 6
+    needs_memory_of: "how many distinct factions currently hold an active influence channel on the administrator, and for how many consecutive seasons (a 2-consecutive-season threshold gates the review); the superior's accumulated hidden monitoring tokens from watching the pattern"
+    needs_deadline: no
+  who_acts:
+    - "each cultivating faction -- chooses to approach the administrator with a flattery-based social action, repeatable and independent of other factions' choices"
+    - "the administrator -- largely passive; he does not choose to be flattered, he simply is the mechanism and the vulnerability"
+    - "the superior -- the culminating three-way disposition choice, and the ongoing choice to keep monitoring rather than intervene early"
+    - "players -- may investigate the ruling authority directly to discover the hidden second layer of monitoring"
+  knowledge:
+    - "the cultivating factions must be able to remain unaware that the administrator's superior is watching, unless players specifically uncover it through investigation"
+    - "once the surveillance is known, factions can deliberately feed false priorities through the administrator -- knowledge of the surveillance itself becomes a strategic tool"
+    - "the administrator himself is never shown to know he is a monitored asset -- an information asymmetry between him and his own superior persists throughout"
+  ends_when: "when the superior's year-end review roll succeeds -- its difficulty set by the number of factions currently holding an active influence channel -- and he chooses among three named dispositions for the administrator; on a failed roll, the review produces no resolution at all and the cultivation dynamic simply continues into further seasons with existing channels intact."
