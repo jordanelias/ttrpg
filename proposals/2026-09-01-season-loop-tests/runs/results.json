@@ -8133,6 +8133,834 @@
    ],
    "unclear": 0,
    "ends_when": "each of the ten questions is marked resolved by this document, except one (a pending mechanical spec for rank dismissal) and one (a cross-reference dependency on a separate stress test) which are explicitly left open pending future work \u2014 so the case as a whole does not fully end here."
+  },
+  {
+   "id": "ARC-46",
+   "name": "The Quiet Seizure",
+   "scale": "faction",
+   "source": "ARC4.yaml",
+   "verdict": "BLOCKED",
+   "rows": 8,
+   "core": 4,
+   "core_routed": 3,
+   "core_unmapped": 1,
+   "core_blocked": 3,
+   "blockers": [
+    "F16",
+    "P14"
+   ],
+   "routed": [
+    {
+     "need": "an institution's standing quantity must be able to increase automatically every period purely from the passage of time, with no actor choosing to advance it",
+     "hardness": "core",
+     "probe": "P14",
+     "verdict": {
+      "id": "P14",
+      "verdict": "GAP",
+      "detail": "Sensation.standing",
+      "kind": "UNSPECIFIED",
+      "section": "S18.2",
+      "title": "standing is computed",
+      "needs": "an aggregation producing 'what everyone reads off you' that does not cross holders",
+      "law": "S18.2 names it; NO SECTION COMPUTES IT -- and the obvious computation is refused by S22.4 clause 2, which bars any resolver-side Query aggregating per-person values across holders",
+      "by": "construction",
+      "tests": "how a character is regarded must be able to differ from how they regard themselves"
+     }
+    },
+    {
+     "need": "failing that counter-action must be able to cost the acting faction a separate, depletable resource, distinct from the quantity being contested",
+     "hardness": "core",
+     "probe": "F16",
+     "verdict": {
+      "id": "F16",
+      "verdict": "GAP",
+      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
+      "kind": "FORBIDDEN",
+      "section": "S3-L3",
+      "title": "a faction-wide resource grows and is spent",
+      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
+      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
+      "by": "no-signature",
+      "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
+     }
+    },
+    {
+     "need": "when the automatically-growing standing quantity crosses a set level, the system must be able to convert that crossing into a per-territory contest between the institution's strength and each territory-holder's own strength, transferring territories the institution wins",
+     "hardness": "core",
+     "probe": "P14",
+     "verdict": {
+      "id": "P14",
+      "verdict": "GAP",
+      "detail": "Sensation.standing",
+      "kind": "UNSPECIFIED",
+      "section": "S18.2",
+      "title": "standing is computed",
+      "needs": "an aggregation producing 'what everyone reads off you' that does not cross holders",
+      "law": "S18.2 names it; NO SECTION COMPUTES IT -- and the obvious computation is refused by S22.4 clause 2, which bars any resolver-side Query aggregating per-person values across holders",
+      "by": "construction",
+      "tests": "how a character is regarded must be able to differ from how they regard themselves"
+     }
+    }
+   ],
+   "unmapped": [
+    {
+     "need": "an actor must be able to attempt, once per period, to hold that automatic gain at zero for the period, with the attempt able to fail",
+     "hardness": "core",
+     "probe": null
+    },
+    {
+     "need": "that separate resource must be able to fall low enough that continuing the counter-action becomes unaffordable, causing the faction to stop attempting it without any actor formally deciding to give up",
+     "hardness": "important",
+     "probe": null
+    },
+    {
+     "need": "an actor other than the one who has been performing the counter-action must be able to step in and perform the same counter-action in a later period",
+     "hardness": "important",
+     "probe": null
+    },
+    {
+     "need": "the rising institutional quantity must be observable to players as a trackable number across several periods, rather than only becoming visible at the moment it crosses the final threshold",
+     "hardness": "important",
+     "probe": null
+    },
+    {
+     "need": "only one faction may perform this particular contested counter-action in a given period, so two factions both wanting to act on the same clock in the same period must be mutually exclusive",
+     "hardness": "flavour",
+     "probe": null
+    }
+   ],
+   "unclear": 0,
+   "ends_when": "when the standing quantity reaches its threshold in a territory, triggering an automatic territorial transfer \u2014 a threshold crossing with nobody deciding \u2014 unless a third-party actor's successful counter-action arrests the climb first, which is itself a roll-resolved outcome; the source names no other terminal condition."
+  },
+  {
+   "id": "ARC-47",
+   "name": "The Counter She Keeps",
+   "scale": "faction",
+   "source": "ARC4.yaml",
+   "verdict": "BLOCKED",
+   "rows": 8,
+   "core": 3,
+   "core_routed": 3,
+   "core_unmapped": 0,
+   "core_blocked": 1,
+   "blockers": [
+    "A3"
+   ],
+   "routed": [
+    {
+     "need": "a hidden counter, invisible to players by default, must be able to accumulate from three unrelated conditions triggering independently, in any order, across different subsystems (an institutional-standing clock, an individual's loyalty value, and a territorial-control rule)",
+     "hardness": "core",
+     "probe": "P5",
+     "verdict": {
+      "id": "P5",
+      "verdict": "PASS",
+      "detail": "PASS: Event carries NO actor and NO target. Attribution is a per-witness Claim, so covert action and false attribution stay expressible -- and adding a target field to make routing easier is its twin and is refused (S19.3)",
+      "kind": null,
+      "section": "S19.3",
+      "title": "attribution is a per-witness claim, not a field",
+      "by": "construction",
+      "tests": "a character must be able to do something covertly, or be wrongly blamed for what another did"
+     }
+    },
+    {
+     "need": "each of the counter's triggering conditions must be able to fire exactly once and add a fixed amount, with no way for the counter to decrease once incremented",
+     "hardness": "core",
+     "probe": "A3",
+     "verdict": {
+      "id": "A3",
+      "verdict": "GAP",
+      "detail": "'stance' written during MATTER",
+      "kind": "FORBIDDEN",
+      "section": "S30",
+      "title": "an arc ends at a counter with nobody deciding",
+      "needs": "one of ['RESOLVE']",
+      "law": "S30 -- ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION",
+      "by": "construction",
+      "tests": "the story must be able to conclude when a tracked quantity reaches a value"
+     }
+    },
+    {
+     "need": "the counter's current value must be able to stay hidden from the players by default, disclosed only through a deliberate choice by the NPC who holds it",
+     "hardness": "core",
+     "probe": "P5",
+     "verdict": {
+      "id": "P5",
+      "verdict": "PASS",
+      "detail": "PASS: Event carries NO actor and NO target. Attribution is a per-witness Claim, so covert action and false attribution stay expressible -- and adding a target field to make routing easier is its twin and is refused (S19.3)",
+      "kind": null,
+      "section": "S19.3",
+      "title": "attribution is a per-witness claim, not a field",
+      "by": "construction",
+      "tests": "a character must be able to do something covertly, or be wrongly blamed for what another did"
+     }
+    },
+    {
+     "need": "one of the counter's triggers must be able to fire from an institution's own automatically-advancing standing quantity crossing a level while the controlling faction took no counteracting action that period",
+     "hardness": "important",
+     "probe": "P14",
+     "verdict": {
+      "id": "P14",
+      "verdict": "GAP",
+      "detail": "Sensation.standing",
+      "kind": "UNSPECIFIED",
+      "section": "S18.2",
+      "title": "standing is computed",
+      "needs": "an aggregation producing 'what everyone reads off you' that does not cross holders",
+      "law": "S18.2 names it; NO SECTION COMPUTES IT -- and the obvious computation is refused by S22.4 clause 2, which bars any resolver-side Query aggregating per-person values across holders",
+      "by": "construction",
+      "tests": "how a character is regarded must be able to differ from how they regard themselves"
+     }
+    },
+    {
+     "need": "a second trigger must be able to fire from a named individual's personal loyalty value falling to or below a set level",
+     "hardness": "important",
+     "probe": "P20",
+     "verdict": {
+      "id": "P20",
+      "verdict": "GAP",
+      "detail": "(Person, exists) has no Partition row",
+      "kind": "UNSPECIFIED",
+      "section": "S30.1",
+      "title": "a person is individuated on demand",
+      "needs": "rule the row before adding it; the reverse order invents the thing the rule prevents",
+      "law": "S30.1 -- without it a death write raises under the matrix's own rule",
+      "by": "construction",
+      "tests": "a person who was previously part of a crowd must be able to become a named individual"
+     }
+    },
+    {
+     "need": "a third trigger must be able to fire from the controlling faction losing control of two or more territories within a single period without having taken a specific category of responsive action that period",
+     "hardness": "important",
+     "probe": "W6",
+     "verdict": {
+      "id": "W6",
+      "verdict": "PASS",
+      "detail": "PASS: ONE Event spanning many rungs, with ONE id, emitted SERIALLY before the parallel section. Sharding it per rung would BREAK causes[], because ONE CAUSE IS ONE ID (S31.1 exception 3). It reached 1 ledger(s) through WITNESS",
+      "kind": null,
+      "section": "S31.1",
+      "title": "a plague spans many rungs as one event",
+      "by": "construction",
+      "tests": "a disaster must be able to strike many places at once and be one thing that happened"
+     }
+    },
+    {
+     "need": "when the counter reaches its ceiling, the holding institution must be able to impose a standing procedural constraint across all of the affected faction's held territory, requiring an extra check before a category of actions can proceed",
+     "hardness": "important",
+     "probe": "P14",
+     "verdict": {
+      "id": "P14",
+      "verdict": "GAP",
+      "detail": "Sensation.standing",
+      "kind": "UNSPECIFIED",
+      "section": "S18.2",
+      "title": "standing is computed",
+      "needs": "an aggregation producing 'what everyone reads off you' that does not cross holders",
+      "law": "S18.2 names it; NO SECTION COMPUTES IT -- and the obvious computation is refused by S22.4 clause 2, which bars any resolver-side Query aggregating per-person values across holders",
+      "by": "construction",
+      "tests": "how a character is regarded must be able to differ from how they regard themselves"
+     }
+    },
+    {
+     "need": "if players learn the counter's current value before it reaches ceiling, they must be able to take separate actions addressing each still-open triggering condition to prevent the counter from advancing further",
+     "hardness": "important",
+     "probe": "A3",
+     "verdict": {
+      "id": "A3",
+      "verdict": "GAP",
+      "detail": "'stance' written during MATTER",
+      "kind": "FORBIDDEN",
+      "section": "S30",
+      "title": "an arc ends at a counter with nobody deciding",
+      "needs": "one of ['RESOLVE']",
+      "law": "S30 -- ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION",
+      "by": "construction",
+      "tests": "the story must be able to conclude when a tracked quantity reaches a value"
+     }
+    }
+   ],
+   "unmapped": [],
+   "unclear": 0,
+   "ends_when": "when the counter reaches its ceiling and fires at the next accounting, imposing the lockdown \u2014 a threshold crossing with nobody deciding to trigger it \u2014 unless players, having learned the counter's value, resolve the remaining open trigger(s) first; the source names no other terminal condition."
+  },
+  {
+   "id": "ARC-48",
+   "name": "The Practitioner Economy",
+   "scale": "world",
+   "source": "ARC4.yaml",
+   "verdict": "NOT-ASSESSED",
+   "rows": 7,
+   "core": 3,
+   "core_routed": 0,
+   "core_unmapped": 3,
+   "core_blocked": 0,
+   "blockers": [],
+   "routed": [],
+   "unmapped": [
+    {
+     "need": "an ambient world-quality quantity must be able to decrease automatically over time independent of any action, and must also be able to decrease further as a cost attached to certain actions' partial or failed outcomes",
+     "hardness": "core",
+     "probe": null
+    },
+    {
+     "need": "that ambient quantity must be organized into contiguous bands such that crossing a band boundary changes the difficulty of a category of actions performed anywhere within an affected territory",
+     "hardness": "core",
+     "probe": null
+    },
+    {
+     "need": "an increase in a category of action's difficulty must be able to increase that category's failure rate, and failure on that category must be able to further reduce the same ambient quantity that raised the difficulty in the first place",
+     "hardness": "core",
+     "probe": null
+    },
+    {
+     "need": "non-practitioner characters must be able to perceive an ambient wrongness effect tied to nearby operation history, gated by their own personal sensitivity value rather than by a single global broadcast threshold",
+     "hardness": "important",
+     "probe": null
+    },
+    {
+     "need": "crossing a further, lower band of the ambient quantity must be able to spawn discrete new hazard instances in the world at a stochastic rate, located by reference to a territory's other stats",
+     "hardness": "important",
+     "probe": null
+    },
+    {
+     "need": "there must be a discrete, repeatable action available to some actor that restores the ambient quantity by a bounded amount per success",
+     "hardness": "important",
+     "probe": null
+    },
+    {
+     "need": "an individual character's personal advancement track (a sensitivity/perception stat) must be able to raise their own frequency of, or eligibility for, the actions that carry the ambient-quantity cost, without that advancement itself directly costing the ambient quantity",
+     "hardness": "flavour",
+     "probe": null
+    }
+   ],
+   "unclear": 0,
+   "ends_when": "UNCLEAR: the source names no terminal condition. It describes an ongoing compounding loop and, once a lower band is crossed, an 'intervention needed' branch (restoration action, restricted operations) as available \u2014 not a defined end state or a point at which the arc is considered resolved."
+  },
+  {
+   "id": "ARC-49",
+   "name": "The Mediator's Debt",
+   "scale": "faction",
+   "source": "ARC4.yaml",
+   "verdict": "BLOCKED",
+   "rows": 5,
+   "core": 2,
+   "core_routed": 1,
+   "core_unmapped": 1,
+   "core_blocked": 1,
+   "blockers": [
+    "F16"
+   ],
+   "routed": [
+    {
+     "need": "a faction's separate systemic ability (unrelated to the contested action itself) must be able to be gated on that same faction's own stability resource staying above a floor, and that gate must be able to fail closed automatically the moment the resource drops below the floor",
+     "hardness": "core",
+     "probe": "F16",
+     "verdict": {
+      "id": "F16",
+      "verdict": "GAP",
+      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
+      "kind": "FORBIDDEN",
+      "section": "S3-L3",
+      "title": "a faction-wide resource grows and is spent",
+      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
+      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
+      "by": "no-signature",
+      "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
+     }
+    },
+    {
+     "need": "only one faction may perform this shared, contested action per period, so two factions independently motivated to act on the same target must be forced to choose or compete for the single slot",
+     "hardness": "important",
+     "probe": "P8",
+     "verdict": {
+      "id": "P8",
+      "verdict": "PASS",
+      "detail": "PASS: p_mid took the seat by the ordered fold. NO `obstruct` VERB, no knowledge of the loser in the winner's decision, NO BRANCH IN THE RESOLVER. Obstruction is not implemented -- IT FALLS OUT",
+      "kind": null,
+      "section": "S3-L1",
+      "title": "an ambition is blocked with no obstruct verb",
+      "by": "construction",
+      "tests": "one character must be able to be blocked by another without either knowing about the other"
+     }
+    }
+   ],
+   "unmapped": [
+    {
+     "need": "an actor's institutional/ethical alignment must be able to grant a fixed difficulty reduction on a specific recurring action, layered on top of that action's baseline difficulty formula, such that two different factions attempting the identical action can face different effective difficulties",
+     "hardness": "core",
+     "probe": null
+    },
+    {
+     "need": "the same collapse event (an actor's stability dropping below its own gate's floor) must be able to simultaneously reopen an unrelated automatically-advancing institutional quantity to unchecked growth and remove a separate legitimacy-granting effect, producing two independent crises from one trigger",
+     "hardness": "important",
+     "probe": null
+    }
+   ],
+   "unclear": 1,
+   "ends_when": "UNCLEAR: the source names no terminal condition. It describes an equilibrium (both rival factions dependent on the reliable faction's continued stability) and a failure case (the gate closes if that stability drops below its floor, reopening the unchecked institutional quantity) but does not state what, if anything, resolves the situation from there."
+  },
+  {
+   "id": "ARC-50",
+   "name": "The Counter That Runs Backward",
+   "scale": "faction",
+   "source": "ARC4.yaml",
+   "verdict": "PLAYABLE",
+   "rows": 5,
+   "core": 2,
+   "core_routed": 1,
+   "core_unmapped": 1,
+   "core_blocked": 0,
+   "blockers": [],
+   "routed": [
+    {
+     "need": "a faction's personal advancement/independence track must be able to carry a hidden side-effect that adds to a rival institution's separate advancing quantity, at a rate that itself increases as the track's own level increases",
+     "hardness": "core",
+     "probe": "P5",
+     "verdict": {
+      "id": "P5",
+      "verdict": "PASS",
+      "detail": "PASS: Event carries NO actor and NO target. Attribution is a per-witness Claim, so covert action and false attribution stay expressible -- and adding a target field to make routing easier is its twin and is refused (S19.3)",
+      "kind": null,
+      "section": "S19.3",
+      "title": "attribution is a per-witness claim, not a field",
+      "by": "construction",
+      "tests": "a character must be able to do something covertly, or be wrongly blamed for what another did"
+     }
+    }
+   ],
+   "unmapped": [
+    {
+     "need": "that side-effect's contribution must be able to combine additively with the target quantity's other simultaneous sources of increase (an ongoing passive gain and an occasional faction-driven surge), while the occasional surge must be able to replace, rather than stack additively with, the passive gain for that period",
+     "hardness": "important",
+     "probe": null
+    },
+    {
+     "need": "an actor must be able to use the same category of counter-action against a quantity to which their own advancement track is itself a contributing source, effectively offsetting a side-effect of their own progress",
+     "hardness": "important",
+     "probe": null
+    },
+    {
+     "need": "the side-effect's existence must be discoverable only through a specific investigative action or through an NPC choosing to disclose it, and must not be visible by default",
+     "hardness": "core",
+     "probe": null
+    },
+    {
+     "need": "the same shared, single-per-period contested action slot used elsewhere for counter-acting the target quantity must be available to this faction too, and its use must exclude other factions from counter-acting the same quantity that period",
+     "hardness": "flavour",
+     "probe": null
+    }
+   ],
+   "unclear": 0,
+   "ends_when": "once discovery occurs, through the faction's own choice among the three named options (halt the track, continue it and accept the accelerated crisis, or counter-act its own contribution) \u2014 a person choosing; if discovery never occurs, the source gives no separate terminus and the side-effect simply continues feeding the rival quantity's own threshold elsewhere."
+  },
+  {
+   "id": "ARC-51",
+   "name": "The Weight of Sight",
+   "scale": "person",
+   "source": "ARC4.yaml",
+   "verdict": "NOT-ASSESSED",
+   "rows": 6,
+   "core": 4,
+   "core_routed": 0,
+   "core_unmapped": 4,
+   "core_blocked": 0,
+   "blockers": [],
+   "routed": [
+    {
+     "need": "advancing the capability-to-act stat must be able to require a specific, scarce resource category that competes directly against other advancement priorities a player might spend on instead",
+     "hardness": "important",
+     "probe": "P7",
+     "verdict": {
+      "id": "P7",
+      "verdict": "GAP",
+      "detail": "(Person, scar) is on no Partition row and no matrix row determines it",
+      "kind": "UNSPECIFIED",
+      "section": "S30.1",
+      "title": "a per-conviction scar",
+      "needs": "a `social:` column entry, ruled",
+      "law": "L4 -- the membership test is a STATIC SCHEMA COLUMN, not a judgement; S42.3 -- configuring an unspecified thing invents it",
+      "by": "construction",
+      "tests": "a character must carry lasting moral damage from what they were made to do"
+     }
+    }
+   ],
+   "unmapped": [
+    {
+     "need": "a character must be able to repeatedly advance a perception-scale stat through a specific low-commitment interaction mode that costs nothing on a separate fragility-tracking stat, even though other interaction modes on that same fragility stat do cost something",
+     "hardness": "core",
+     "probe": null
+    },
+    {
+     "need": "the perception-scale stat must be able to cross multiple bands as it rises, each band unlocking a categorically richer read of an in-progress operation's type and location, with a late band exceeding what the character's separate capability-to-act stat currently lets them do about it",
+     "hardness": "core",
+     "probe": null
+    },
+    {
+     "need": "a character's capability-to-act stat, separate from the perception stat, must be able to remain at its lowest tier indefinitely, with no operation-count or session-count pressure that forces it to rise on its own",
+     "hardness": "core",
+     "probe": null
+    },
+    {
+     "need": "a scenario must be able to arise where a specific action is required at a tier only one character (the high-perception one) is positioned to attempt, and that character's low capability-to-act tier must be able to make them fully unable to attempt it, not merely penalized",
+     "hardness": "core",
+     "probe": null
+    },
+    {
+     "need": "a character's fragility stat reaching its lowest value via a route other than the free interaction mode must be able to interact with the character's current perception-stat tier to select between at least two categorically different outcome branches",
+     "hardness": "important",
+     "probe": null
+    }
+   ],
+   "unclear": 0,
+   "ends_when": "UNCLEAR: the source names the forcing event (an action tier only the high-perception character can attempt) and names capability-stat advancement as 'the resolution gate,' but does not state a terminal mechanism \u2014 whether reaching the next capability tier is itself sufficient to resolve the moment, or a further roll is also required, is unstated."
+  },
+  {
+   "id": "ARC-52",
+   "name": "Parliament as Weather",
+   "scale": "realm",
+   "source": "ARC4.yaml",
+   "verdict": "NOT-ASSESSED",
+   "rows": 6,
+   "core": 3,
+   "core_routed": 1,
+   "core_unmapped": 2,
+   "core_blocked": 0,
+   "blockers": [],
+   "routed": [
+    {
+     "need": "a quantity must be able to accumulate from the combined, unrelated normal actions of every faction operating in a shared context, with no single faction's action alone identifiable as the cause and with no faction's intent to move it factoring into whether it moves",
+     "hardness": "core",
+     "probe": "F1",
+     "verdict": {
+      "id": "F1",
+      "verdict": "PASS",
+      "detail": "PASS: membership is `commit`, spanning a hearth-dweller and the King WITH NO PARENT RUNG -- the LATERAL topology, resolver-side, not an R-1 aggregate. The Proposition is structurally immutable, so the persistent part cannot be edited",
+      "kind": null,
+      "section": "S14.2",
+      "title": "a faction is a proposition plus its commit edges",
+      "by": "construction",
+      "tests": "a group of people must be able to share a cause that spans places and outlives its founder"
+     }
+    },
+    {
+     "need": "this aggregate quantity's ceiling-triggered elimination must be able to compound with an unrelated hidden counter elsewhere reaching its own ceiling in the same period, producing two independently-tracked consequences firing at once",
+     "hardness": "flavour",
+     "probe": "A3",
+     "verdict": {
+      "id": "A3",
+      "verdict": "GAP",
+      "detail": "'stance' written during MATTER",
+      "kind": "FORBIDDEN",
+      "section": "S30",
+      "title": "an arc ends at a counter with nobody deciding",
+      "needs": "one of ['RESOLVE']",
+      "law": "S30 -- ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION",
+      "by": "construction",
+      "tests": "the story must be able to conclude when a tracked quantity reaches a value"
+     }
+    }
+   ],
+   "unmapped": [
+    {
+     "need": "when that aggregate quantity reaches its ceiling, the system must be able to resolve automatically into a fixed consequence (elimination of one faction from play) without requiring any actor to declare or trigger the resolution",
+     "hardness": "core",
+     "probe": null
+    },
+    {
+     "need": "stopping the aggregate quantity's rise must be able to require every faction operating in that context to simultaneously withhold a category of action, such that any single faction continuing to act in the ordinary way keeps the quantity climbing",
+     "hardness": "core",
+     "probe": null
+    },
+    {
+     "need": "withholding a category of action for a period must be able to carry no separate decay or stat-loss consequence beyond the simple absence of that action's normal effects",
+     "hardness": "important",
+     "probe": null
+    }
+   ],
+   "unclear": 1,
+   "ends_when": "when the aggregate quantity reaches its ceiling, auto-resolving into the fixed elimination consequence \u2014 a threshold firing with nobody deciding \u2014 unless every contributing faction simultaneously withholds the relevant action category long enough to halt the climb, a multi-actor coordination choice; the source does not state what happens if that coordination succeeds only partway."
+  },
+  {
+   "id": "ARC-53",
+   "name": "The Wound Economy",
+   "scale": "person",
+   "source": "ARC4.yaml",
+   "verdict": "BLOCKED",
+   "rows": 6,
+   "core": 4,
+   "core_routed": 4,
+   "core_unmapped": 0,
+   "core_blocked": 4,
+   "blockers": [
+    "F16",
+    "P26"
+   ],
+   "routed": [
+    {
+     "need": "damage taken by an individual character in a personal-scale contest must be able to persist as a penalty on that same character's base roll when they later act at a larger, faction scale, without a separate faction-scale rule re-deriving the penalty independently",
+     "hardness": "core",
+     "probe": "P26",
+     "verdict": {
+      "id": "P26",
+      "verdict": "GAP",
+      "detail": "resolver-side Query 'harm_borne' aggregates per-person tallies across holders",
+      "kind": "FORBIDDEN",
+      "section": "S22.4",
+      "title": "accumulated harm changes what a person may do",
+      "needs": "",
+      "law": "L3 clause 2 -- THAT IS STORED, MONOTONE, NEVER-DECAYING UNREST IN ALL BUT NAME -- worse than the field L3 banned, because the banned field could at least go down",
+      "by": "construction",
+      "tests": "harm suffered over several seasons must be able to close off options"
+     }
+    },
+    {
+     "need": "when a character holding a leadership role acts at faction scale, their personal roll (including any accumulated penalties) must be able to combine with a separate bonus contributed by the faction's own stat, rather than the faction stat alone determining the outcome",
+     "hardness": "core",
+     "probe": "F16",
+     "verdict": {
+      "id": "F16",
+      "verdict": "GAP",
+      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
+      "kind": "FORBIDDEN",
+      "section": "S3-L3",
+      "title": "a faction-wide resource grows and is spent",
+      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
+      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
+      "by": "no-signature",
+      "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
+     }
+    },
+    {
+     "need": "a failed faction-scale action must be able to cost the faction a separate stability resource, and repeated failures must be able to drive that resource toward a level that triggers an existential risk check for the entire faction",
+     "hardness": "core",
+     "probe": "F16",
+     "verdict": {
+      "id": "F16",
+      "verdict": "GAP",
+      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
+      "kind": "FORBIDDEN",
+      "section": "S3-L3",
+      "title": "a faction-wide resource grows and is spent",
+      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
+      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
+      "by": "no-signature",
+      "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
+     }
+    },
+    {
+     "need": "there must be a discrete recovery action, distinct from any regular faction action, that removes or reduces the accumulated wound penalty when a player chooses to spend a scene on it",
+     "hardness": "core",
+     "probe": "P26",
+     "verdict": {
+      "id": "P26",
+      "verdict": "GAP",
+      "detail": "resolver-side Query 'harm_borne' aggregates per-person tallies across holders",
+      "kind": "FORBIDDEN",
+      "section": "S22.4",
+      "title": "accumulated harm changes what a person may do",
+      "needs": "",
+      "law": "L3 clause 2 -- THAT IS STORED, MONOTONE, NEVER-DECAYING UNREST IN ALL BUT NAME -- worse than the field L3 banned, because the banned field could at least go down",
+      "by": "construction",
+      "tests": "harm suffered over several seasons must be able to close off options"
+     }
+    }
+   ],
+   "unmapped": [
+    {
+     "need": "an injury penalty must be able to persist across multiple periods without decaying on its own, remaining in effect until the character takes a specific recovery action",
+     "hardness": "important",
+     "probe": null
+    },
+    {
+     "need": "other factions must be able to observe a faction's rising rate of failed actions and choose to act against that faction's position on the strength of the observed pattern alone",
+     "hardness": "flavour",
+     "probe": null
+    }
+   ],
+   "unclear": 0,
+   "ends_when": "the source frames noticing the propagation, not resolving it, as 'the crisis' \u2014 resolution runs through players recognising the link and spending a recovery scene (a person choosing), while the unaddressed default path drives repeated faction-action failures toward a stability-resource threshold that triggers an existential risk check for the faction (a threshold firing); the source does not state which of the two it treats as the arc's actual ending."
+  },
+  {
+   "id": "ARC-54",
+   "name": "What The Unaffiliated Know",
+   "scale": "faction",
+   "source": "ARC4.yaml",
+   "verdict": "NOT-ASSESSED",
+   "rows": 7,
+   "core": 4,
+   "core_routed": 1,
+   "core_unmapped": 3,
+   "core_blocked": 0,
+   "blockers": [],
+   "routed": [
+    {
+     "need": "an actor must be able to spend a specific investigative action, resolved against a fixed difficulty, that on success reveals one hidden fact about a target's affiliation-relevant nature without revealing the target's own underlying quantitative measurements",
+     "hardness": "core",
+     "probe": "P5",
+     "verdict": {
+      "id": "P5",
+      "verdict": "PASS",
+      "detail": "PASS: Event carries NO actor and NO target. Attribution is a per-witness Claim, so covert action and false attribution stay expressible -- and adding a target field to make routing easier is its twin and is refused (S19.3)",
+      "kind": null,
+      "section": "S19.3",
+      "title": "attribution is a per-witness claim, not a field",
+      "by": "construction",
+      "tests": "a character must be able to do something covertly, or be wrongly blamed for what another did"
+     }
+    },
+    {
+     "need": "a faction's profile of a target, once built, must be able to shape that faction's subsequent choices toward the target (offers, refusals, timing) without the target or their allies being told the profile exists",
+     "hardness": "important",
+     "probe": "P31",
+     "verdict": {
+      "id": "P31",
+      "verdict": "PASS",
+      "detail": "PASS: chose report_truthfully. `convictions` is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with no branch in the resolver and nothing stored about the bias. Nobody -- including the holder and his superiors -- has a signature that reads it out",
+      "kind": null,
+      "section": "S9",
+      "title": "a hidden motive biases every decision",
+      "by": "construction",
+      "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
+     }
+    },
+    {
+     "need": "a third party with their own standing/influence value must be able to become aware that the investigating faction now holds a profile, and that awareness must be able to open a distinct intervention option available only to that third party",
+     "hardness": "flavour",
+     "probe": "P14",
+     "verdict": {
+      "id": "P14",
+      "verdict": "GAP",
+      "detail": "Sensation.standing",
+      "kind": "UNSPECIFIED",
+      "section": "S18.2",
+      "title": "standing is computed",
+      "needs": "an aggregation producing 'what everyone reads off you' that does not cross holders",
+      "law": "S18.2 names it; NO SECTION COMPUTES IT -- and the obvious computation is refused by S22.4 clause 2, which bars any resolver-side Query aggregating per-person values across holders",
+      "by": "construction",
+      "tests": "how a character is regarded must be able to differ from how they regard themselves"
+     }
+    }
+   ],
+   "unmapped": [
+    {
+     "need": "a character's ongoing use of a personal ability must be able to leave passive traces perceivable by unrelated non-player observers scattered across multiple locations, each independently sensing only a vague, unlocated wrongness",
+     "hardness": "core",
+     "probe": null
+    },
+    {
+     "need": "an institution with a distributed network of observers must be able to aggregate many independent, individually-meaningless reports into a single actionable pattern about one specific individual, with no single report sufficient on its own",
+     "hardness": "core",
+     "probe": null
+    },
+    {
+     "need": "the profile an institution builds about a sensitive individual must be structurally barred from ever taking the form of that individual's own internal quantitative measurements, remaining categorical no matter how successful the institution's investigation is",
+     "hardness": "core",
+     "probe": null
+    },
+    {
+     "need": "a failed attempt at the investigative action must be able to expose the investigating faction's own activity to a third faction's counter-intelligence for a bounded duration, rather than simply doing nothing",
+     "hardness": "flavour",
+     "probe": null
+    }
+   ],
+   "unclear": 0,
+   "ends_when": "the source states resolution 'depends on whether the party engages [the investigating faction] before [it] acts on' the profile \u2014 a condition resting on player choice of timing, not a scheduled or counter-driven trigger; the source does not specify what mechanically closes the case once that engagement occurs."
+  },
+  {
+   "id": "ARC-55",
+   "name": "The Withdrawal",
+   "scale": "faction",
+   "source": "ARC4.yaml",
+   "verdict": "BLOCKED",
+   "rows": 7,
+   "core": 3,
+   "core_routed": 2,
+   "core_unmapped": 1,
+   "core_blocked": 2,
+   "blockers": [
+    "P14"
+   ],
+   "routed": [
+    {
+     "need": "a non-player faction's ability to use one of its unique actions against a target must be able to be gated on a local, territory-specific standing value being at or above a fixed floor, checked independently per territory",
+     "hardness": "core",
+     "probe": "P14",
+     "verdict": {
+      "id": "P14",
+      "verdict": "GAP",
+      "detail": "Sensation.standing",
+      "kind": "UNSPECIFIED",
+      "section": "S18.2",
+      "title": "standing is computed",
+      "needs": "an aggregation producing 'what everyone reads off you' that does not cross holders",
+      "law": "S18.2 names it; NO SECTION COMPUTES IT -- and the obvious computation is refused by S22.4 clause 2, which bars any resolver-side Query aggregating per-person values across holders",
+      "by": "construction",
+      "tests": "how a character is regarded must be able to differ from how they regard themselves"
+     }
+    },
+    {
+     "need": "that gating standing value must be able to move in only one documented direction (down), and only from one documented trigger (the gated action's own failure), with no other named source of movement in either direction",
+     "hardness": "core",
+     "probe": "P14",
+     "verdict": {
+      "id": "P14",
+      "verdict": "GAP",
+      "detail": "Sensation.standing",
+      "kind": "UNSPECIFIED",
+      "section": "S18.2",
+      "title": "standing is computed",
+      "needs": "an aggregation producing 'what everyone reads off you' that does not cross holders",
+      "law": "S18.2 names it; NO SECTION COMPUTES IT -- and the obvious computation is refused by S22.4 clause 2, which bars any resolver-side Query aggregating per-person values across holders",
+      "by": "construction",
+      "tests": "how a character is regarded must be able to differ from how they regard themselves"
+     }
+    },
+    {
+     "need": "a faction losing eligibility for an action in a territory must be able to carry no consequence beyond the simple absence of that action, with no separate decay or penalty applied for the reduced ability to act",
+     "hardness": "flavour",
+     "probe": "A34",
+     "verdict": {
+      "id": "A34",
+      "verdict": "GAP",
+      "detail": "a scheduled social recovery or decay",
+      "kind": "FORBIDDEN",
+      "section": "S34",
+      "title": "a social quantity sinks by neglect alone",
+      "needs": "a ruling -- S62 lists this as a LIVE DESIGN CHOICE affecting three arcs",
+      "law": "S34 -- 'no scheduled social recovery' is STRUCTURAL BY PHASE MEMBERSHIP: of ['CALENDAR', 'MATTER', 'DELIBERATE', 'RESOLVE', 'WITNESS', 'CENSUS'], MATTER moves no social quantity (L4), DELIBERATE writes nothing, RESOLVE needs an act, WITNESS writes only ledgers, CENSUS is demand-driven. THERE IS NO STEP IN WHICH A RESTORING TIMER COULD RUN, so a design that wanted one HAS NOWHERE TO PUT IT",
+      "by": "no-signature",
+      "tests": "a relationship or a standing must be able to decay from nobody tending it"
+     }
+    },
+    {
+     "need": "a rival faction must be able to expand into influence formerly checked by the now-ineligible faction's absence, as an automatic consequence of that faction no longer acting there, without the rival needing to specifically target the newly-open territory because of the withdrawal",
+     "hardness": "flavour",
+     "probe": "W1",
+     "verdict": {
+      "id": "W1",
+      "verdict": "PASS",
+      "detail": "PASS: wear at MATTER dropped condition below the floor in 11 seasons and the verb LEFT THE SET. The COUNT is a function of the injected `wear_per_season` fixture and moves with it -- the STRUCTURAL claim (a verb leaves) does not",
+      "kind": null,
+      "section": "S12.1",
+      "title": "a site decays until a verb leaves its set",
+      "by": "construction",
+      "tests": "a place must be able to fall into disrepair until things can no longer be done there"
+     }
+    }
+   ],
+   "unmapped": [
+    {
+     "need": "crossing below the gating floor must be able to remove the faction's access to the action in that territory immediately and completely, not as a probability penalty, until the value is restored",
+     "hardness": "core",
+     "probe": null
+    },
+    {
+     "need": "other factions must be able to structurally rely on a non-player faction's action being available in specific territories as an indirect tool against a third faction, without any of those relying factions having any input into whether that availability persists",
+     "hardness": "important",
+     "probe": null
+    }
+   ],
+   "unclear": 1,
+   "ends_when": "UNCLEAR: the source names no terminal condition. It ends its own account at an acknowledged, unresolved design gap \u2014 whether any player-accessible action exists to restore the gating standing value \u2014 so whether or how the case ever concludes is unspecified rather than merely undecided within the fiction."
   }
  ],
  "_probes": {
@@ -8758,6 +9586,40 @@
    "by": "construction",
    "tests": "the story must be able to conclude when a tracked quantity reaches a value"
   },
+  "P7": {
+   "id": "P7",
+   "verdict": "GAP",
+   "detail": "(Person, scar) is on no Partition row and no matrix row determines it",
+   "kind": "UNSPECIFIED",
+   "section": "S30.1",
+   "title": "a per-conviction scar",
+   "needs": "a `social:` column entry, ruled",
+   "law": "L4 -- the membership test is a STATIC SCHEMA COLUMN, not a judgement; S42.3 -- configuring an unspecified thing invents it",
+   "by": "construction",
+   "tests": "a character must carry lasting moral damage from what they were made to do"
+  },
+  "A34": {
+   "id": "A34",
+   "verdict": "GAP",
+   "detail": "a scheduled social recovery or decay",
+   "kind": "FORBIDDEN",
+   "section": "S34",
+   "title": "a social quantity sinks by neglect alone",
+   "needs": "a ruling -- S62 lists this as a LIVE DESIGN CHOICE affecting three arcs",
+   "law": "S34 -- 'no scheduled social recovery' is STRUCTURAL BY PHASE MEMBERSHIP: of ['CALENDAR', 'MATTER', 'DELIBERATE', 'RESOLVE', 'WITNESS', 'CENSUS'], MATTER moves no social quantity (L4), DELIBERATE writes nothing, RESOLVE needs an act, WITNESS writes only ledgers, CENSUS is demand-driven. THERE IS NO STEP IN WHICH A RESTORING TIMER COULD RUN, so a design that wanted one HAS NOWHERE TO PUT IT",
+   "by": "no-signature",
+   "tests": "a relationship or a standing must be able to decay from nobody tending it"
+  },
+  "W1": {
+   "id": "W1",
+   "verdict": "PASS",
+   "detail": "PASS: wear at MATTER dropped condition below the floor in 11 seasons and the verb LEFT THE SET. The COUNT is a function of the injected `wear_per_season` fixture and moves with it -- the STRUCTURAL claim (a verb leaves) does not",
+   "kind": null,
+   "section": "S12.1",
+   "title": "a site decays until a verb leaves its set",
+   "by": "construction",
+   "tests": "a place must be able to fall into disrepair until things can no longer be done there"
+  },
   "P2x": {
    "id": "P2x",
    "verdict": "GAP",
@@ -8791,18 +9653,6 @@
    "law": "L4 -- the membership test is a STATIC SCHEMA COLUMN, not a judgement; S42.3 -- configuring an unspecified thing invents it",
    "by": "construction",
    "tests": "a character's moral commitments must be able to change, through argument and consequence"
-  },
-  "P7": {
-   "id": "P7",
-   "verdict": "GAP",
-   "detail": "(Person, scar) is on no Partition row and no matrix row determines it",
-   "kind": "UNSPECIFIED",
-   "section": "S30.1",
-   "title": "a per-conviction scar",
-   "needs": "a `social:` column entry, ruled",
-   "law": "L4 -- the membership test is a STATIC SCHEMA COLUMN, not a judgement; S42.3 -- configuring an unspecified thing invents it",
-   "by": "construction",
-   "tests": "a character must carry lasting moral damage from what they were made to do"
   },
   "P12": {
    "id": "P12",
@@ -8923,7 +9773,7 @@
    "title": "an establishment does the office's work",
    "needs": "how many people an office employs, and how they are chosen",
    "law": "S61 -- one of FOUR BLOCKING GAPS DROPPED FROM THE OPEN REGISTER and folded back as `grade: absent`. S11.1 makes the pool `capability of the dispatched establishment member(s) ACTUALLY PERFORMING IT`, so with an empty establishment an office has no pool source at all",
-   "by": "construction",
+   "by": "no-signature",
    "tests": "a post must be able to employ people whose competence is what actually gets used"
   },
   "F18": {
@@ -8935,16 +9785,6 @@
    "title": "a place's demands conflict with its superior's orders",
    "by": "probe-model",
    "tests": "a place must be able to generate demands of its own that cut against what the authority above ordered"
-  },
-  "W1": {
-   "id": "W1",
-   "verdict": "PASS",
-   "detail": "PASS: wear at MATTER dropped condition below the floor in 11 seasons and the verb LEFT THE SET. The COUNT is a function of the injected `wear_per_season` fixture and moves with it -- the STRUCTURAL claim (a verb leaves) does not",
-   "kind": null,
-   "section": "S12.1",
-   "title": "a site decays until a verb leaves its set",
-   "by": "construction",
-   "tests": "a place must be able to fall into disrepair until things can no longer be done there"
   },
   "W1x": {
    "id": "W1x",
@@ -9165,7 +10005,7 @@
    "title": "a wrapper checks what crosses a rung boundary",
    "needs": "nothing -- THE RULE WAS STATED OVER A FIELD THAT DOES NOT EXIST",
    "law": "S44.1 -- THERE IS NOTHING TO CHECK. Event's fields are ['causes', 'changes', 'degree', 'emitted_at', 'id', 'kind', 'subject']: no target, no actor. 'The only transport the suite defines IS a chain of `tell` acts; there is no non-act news transport anywhere in the shape.' Observers are computed at WITNESS from presence; THE EMITTER DECLARES NO RECIPIENT. Three independent lanes killed this, and the fix that suggests itself -- add a target field -- is the twin of the attribution field the design DELIBERATELY REMOVED",
-   "by": "construction",
+   "by": "no-signature",
    "tests": "influence passing between scales must be able to be checked for direction"
   },
   "A21": {
@@ -9299,18 +10139,6 @@
    "law": "S37.4 -- R-2 says downward influence is 'EMITTING a refraction' (EMITTER-side); the act vocabulary puts `refract` at the RECEIVING end, beside `comply`, `evade`, `defy`. THE CHAIN HAS NOT RECONCILED THESE and emitter-side and receiver-side distortion ARE DIFFERENT GAMES",
    "by": "no-signature",
    "tests": "an instruction must be able to be distorted somewhere between issuer and executor"
-  },
-  "A34": {
-   "id": "A34",
-   "verdict": "GAP",
-   "detail": "a scheduled social recovery or decay",
-   "kind": "FORBIDDEN",
-   "section": "S34",
-   "title": "a social quantity sinks by neglect alone",
-   "needs": "a ruling -- S62 lists this as a LIVE DESIGN CHOICE affecting three arcs",
-   "law": "S34 -- 'no scheduled social recovery' is STRUCTURAL BY PHASE MEMBERSHIP: of ['CALENDAR', 'MATTER', 'DELIBERATE', 'RESOLVE', 'WITNESS', 'CENSUS'], MATTER moves no social quantity (L4), DELIBERATE writes nothing, RESOLVE needs an act, WITNESS writes only ledgers, CENSUS is demand-driven. THERE IS NO STEP IN WHICH A RESTORING TIMER COULD RUN, so a design that wanted one HAS NOWHERE TO PUT IT",
-   "by": "no-signature",
-   "tests": "a relationship or a standing must be able to decay from nobody tending it"
   },
   "A35": {
    "id": "A35",
@@ -9571,6 +10399,24 @@
    "expected": false
   },
   {
+   "kind": "UNSPECIFIED",
+   "what": "(Person, scar) is on no Partition row and no matrix row determines it",
+   "where": "S30.1",
+   "needs": "a `social:` column entry, ruled",
+   "law": "L4 -- the membership test is a STATIC SCHEMA COLUMN, not a judgement; S42.3 -- configuring an unspecified thing invents it",
+   "case": "probe:P7",
+   "expected": false
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "a scheduled social recovery or decay",
+   "where": "S34",
+   "needs": "a ruling -- S62 lists this as a LIVE DESIGN CHOICE affecting three arcs",
+   "law": "S34 -- 'no scheduled social recovery' is STRUCTURAL BY PHASE MEMBERSHIP: of ['CALENDAR', 'MATTER', 'DELIBERATE', 'RESOLVE', 'WITNESS', 'CENSUS'], MATTER moves no social quantity (L4), DELIBERATE writes nothing, RESOLVE needs an act, WITNESS writes only ledgers, CENSUS is demand-driven. THERE IS NO STEP IN WHICH A RESTORING TIMER COULD RUN, so a design that wanted one HAS NOWHERE TO PUT IT",
+   "case": "probe:A34",
+   "expected": false
+  },
+  {
    "kind": "FORBIDDEN",
    "what": "p_king returned 8 acts against a budget of 5",
    "where": "S26.3",
@@ -9631,15 +10477,6 @@
    "needs": "a `social:` column entry, ruled",
    "law": "L4 -- the membership test is a STATIC SCHEMA COLUMN, not a judgement; S42.3 -- configuring an unspecified thing invents it",
    "case": "probe:P6",
-   "expected": false
-  },
-  {
-   "kind": "UNSPECIFIED",
-   "what": "(Person, scar) is on no Partition row and no matrix row determines it",
-   "where": "S30.1",
-   "needs": "a `social:` column entry, ruled",
-   "law": "L4 -- the membership test is a STATIC SCHEMA COLUMN, not a judgement; S42.3 -- configuring an unspecified thing invents it",
-   "case": "probe:P7",
    "expected": false
   },
   {
@@ -9856,15 +10693,6 @@
    "needs": "pick one, write it down beside the code, and expect the choice to be revisited",
    "law": "S37.4 -- R-2 says downward influence is 'EMITTING a refraction' (EMITTER-side); the act vocabulary puts `refract` at the RECEIVING end, beside `comply`, `evade`, `defy`. THE CHAIN HAS NOT RECONCILED THESE and emitter-side and receiver-side distortion ARE DIFFERENT GAMES",
    "case": "probe:A33",
-   "expected": false
-  },
-  {
-   "kind": "FORBIDDEN",
-   "what": "a scheduled social recovery or decay",
-   "where": "S34",
-   "needs": "a ruling -- S62 lists this as a LIVE DESIGN CHOICE affecting three arcs",
-   "law": "S34 -- 'no scheduled social recovery' is STRUCTURAL BY PHASE MEMBERSHIP: of ['CALENDAR', 'MATTER', 'DELIBERATE', 'RESOLVE', 'WITNESS', 'CENSUS'], MATTER moves no social quantity (L4), DELIBERATE writes nothing, RESOLVE needs an act, WITNESS writes only ledgers, CENSUS is demand-driven. THERE IS NO STEP IN WHICH A RESTORING TIMER COULD RUN, so a design that wanted one HAS NOWHERE TO PUT IT",
-   "case": "probe:A34",
    "expected": false
   },
   {

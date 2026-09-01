@@ -1,0 +1,367 @@
+- id: ARC-46
+  name: "The Quiet Seizure"
+  one_line: "An institution's advancement clock ticks up purely from the passage of time while the only actor contesting it exhausts a separate stability resource trying to hold the line, until the institution is positioned to seize territory nobody actively fought for."
+  scale: faction
+  season_requires:
+    - need: "an institution's standing quantity must be able to increase automatically every period purely from the passage of time, with no actor choosing to advance it"
+      why: "this passive gain is what lets one side 'win by institutional momentum alone' — without it the rival's repeated failures are just failures, not a race against an unattended clock"
+      hardness: core
+    - need: "an actor must be able to attempt, once per period, to hold that automatic gain at zero for the period, with the attempt able to fail"
+      why: "the repeated contesting attempts and their failures are what generate the compounding crisis; without a real, failable per-period counter-action there is no engine to the arc"
+      hardness: core
+    - need: "failing that counter-action must be able to cost the acting faction a separate, depletable resource, distinct from the quantity being contested"
+      why: "a stability-like resource falling on each failed attempt is the mechanism that eventually forces the acting faction to stop trying — without a cost on failure it could keep attempting forever with no consequence"
+      hardness: core
+    - need: "that separate resource must be able to fall low enough that continuing the counter-action becomes unaffordable, causing the faction to stop attempting it without any actor formally deciding to give up"
+      why: "the faction 'stops' at the resource's low point as a forced consequence of the mechanic, not a choice — the crisis specifically doesn't come from anyone choosing to quit"
+      hardness: important
+    - need: "when the automatically-growing standing quantity crosses a set level, the system must be able to convert that crossing into a per-territory contest between the institution's strength and each territory-holder's own strength, transferring territories the institution wins"
+      why: "the threshold-triggered territorial contest is the arc's actual payoff — without it the passive gain never becomes a stake anyone has to care about"
+      hardness: core
+    - need: "an actor other than the one who has been performing the counter-action must be able to step in and perform the same counter-action in a later period"
+      why: "the arc's stated escape valve is a third party taking over the contest once the original actor can't afford to — if the counter-action is bound to one specific actor this resolution path doesn't exist"
+      hardness: important
+    - need: "the rising institutional quantity must be observable to players as a trackable number across several periods, rather than only becoming visible at the moment it crosses the final threshold"
+      why: "the arc is explicitly detectable across a band of values before the crisis point — without visibility the arc can't be noticed early enough for anyone to respond"
+      hardness: important
+    - need: "only one faction may perform this particular contested counter-action in a given period, so two factions both wanting to act on the same clock in the same period must be mutually exclusive"
+      why: "a cross-arc note establishes this action is a shared, single slot per season — relevant to whether the original actor and a substitute can both act in the same period"
+      hardness: flavour
+  temporal:
+    span_seasons: "4-6"
+    needs_memory_of: "the institution's current standing value; the acting faction's current stability resource; which faction, if any, is currently performing the counter-action each period"
+    needs_deadline: no
+  who_acts:
+    - "the acting faction's leadership — whether and how long to keep attempting the counter-action"
+    - "the growing institution — takes no deliberate action; its gain is passive"
+    - "a third-party faction — may choose to substitute in as the counter-actor once the original can no longer afford to"
+  knowledge:
+    - "players must be able to observe the growing quantity's value gradually over multiple periods, not learn of the crisis only at the threshold"
+    - "the growing institution does not need to know or intend that its advancement is winning by default — nothing in the source requires it to be tracking the rival's stability at all"
+  ends_when: "when the standing quantity reaches its threshold in a territory, triggering an automatic territorial transfer — a threshold crossing with nobody deciding — unless a third-party actor's successful counter-action arrests the climb first, which is itself a roll-resolved outcome; the source names no other terminal condition."
+
+- id: ARC-47
+  name: "The Counter She Keeps"
+  one_line: "A private counter accumulates from three unrelated conditions firing independently across different subsystems, invisible to the players, until it reaches its ceiling and imposes a standing procedural lockdown nobody saw coming."
+  scale: faction
+  season_requires:
+    - need: "a hidden counter, invisible to players by default, must be able to accumulate from three unrelated conditions triggering independently, in any order, across different subsystems (an institutional-standing clock, an individual's loyalty value, and a territorial-control rule)"
+      why: "the counter's power comes from converging silently out of unrelated tracks nobody is watching together — collapsing it to one visible trigger destroys the arc"
+      hardness: core
+    - need: "each of the counter's triggering conditions must be able to fire exactly once and add a fixed amount, with no way for the counter to decrease once incremented"
+      why: "the counter is explicitly stated to never decrement — a counter that could be walked back turns an accumulating deadline into a reversible threat, which is a different story"
+      hardness: core
+    - need: "the counter's current value must be able to stay hidden from the players by default, disclosed only through a deliberate choice by the NPC who holds it"
+      why: "the arc's tension depends on the players not knowing the count is at 2 — if the value were visible by default there would be no gap between what the NPC knows and what the players know"
+      hardness: core
+    - need: "one of the counter's triggers must be able to fire from an institution's own automatically-advancing standing quantity crossing a level while the controlling faction took no counteracting action that period"
+      why: "this trigger reuses the same passive-advance mechanic that drives Arc 46 — the counter has to be able to read that another subsystem's state crossed a level with no relevant action taken against it"
+      hardness: important
+    - need: "a second trigger must be able to fire from a named individual's personal loyalty value falling to or below a set level"
+      why: "this trigger keys off an NPC's personal allegiance track independently of anything the acting faction does directly to cause it"
+      hardness: important
+    - need: "a third trigger must be able to fire from the controlling faction losing control of two or more territories within a single period without having taken a specific category of responsive action that period"
+      why: "this is the trigger the narrative uses to close the sequence — territorial loss plus absence of a military response, evaluated together in one period"
+      hardness: important
+    - need: "when the counter reaches its ceiling, the holding institution must be able to impose a standing procedural constraint across all of the affected faction's held territory, requiring an extra check before a category of actions can proceed"
+      why: "the imposed lockdown is what makes the counter matter mechanically once it fires, not just narratively"
+      hardness: important
+    - need: "if players learn the counter's current value before it reaches ceiling, they must be able to take separate actions addressing each still-open triggering condition to prevent the counter from advancing further"
+      why: "the stated resolution path is disclosure followed by players independently working each of the three open levers"
+      hardness: important
+  temporal:
+    span_seasons: "4-10"
+    needs_memory_of: "the hidden counter's current value; which of the three triggering conditions have already fired; the named individual's current loyalty value"
+    needs_deadline: no
+  who_acts:
+    - "the NPC holding the counter — does not decide to create the crisis; discloses (or doesn't) at her own choice"
+    - "the acting faction's leadership — whether to address each open trigger, once aware"
+    - "players — may learn the counter's value and act on the remaining open trigger(s)"
+  knowledge:
+    - "the NPC holding the counter knows its exact value at all times; players know nothing about it unless she chooses to disclose"
+    - "each of the three triggering subsystems (institutional clock, loyalty track, territorial-loss rule) operates without any awareness that it is also feeding the hidden counter"
+  ends_when: "when the counter reaches its ceiling and fires at the next accounting, imposing the lockdown — a threshold crossing with nobody deciding to trigger it — unless players, having learned the counter's value, resolve the remaining open trigger(s) first; the source names no other terminal condition."
+
+- id: ARC-48
+  name: "The Practitioner Economy"
+  one_line: "A world-quality resource decays both from routine use and from a passive baseline drain, and once it crosses a band boundary the resulting difficulty penalty causes more failures, which drain the resource further — a closed loop nobody designed and no single actor is driving."
+  scale: world
+  season_requires:
+    - need: "an ambient world-quality quantity must be able to decrease automatically over time independent of any action, and must also be able to decrease further as a cost attached to certain actions' partial or failed outcomes"
+      why: "both a baseline drain and per-action costs on partial/failed outcomes are needed for the compounding math the arc describes"
+      hardness: core
+    - need: "that ambient quantity must be organized into contiguous bands such that crossing a band boundary changes the difficulty of a category of actions performed anywhere within an affected territory"
+      why: "the band crossing that raises operation difficulty in affected territories is the mechanism that turns simple decay into a feedback loop — without banded thresholds with attached effects there is no compounding"
+      hardness: core
+    - need: "an increase in a category of action's difficulty must be able to increase that category's failure rate, and failure on that category must be able to further reduce the same ambient quantity that raised the difficulty in the first place"
+      why: "this closed loop (more difficulty leads to more failure leads to more resource cost leads to more difficulty) is explicitly the arc's engine — three independently-written rules producing compounding feedback with no single decision causing it"
+      hardness: core
+    - need: "non-practitioner characters must be able to perceive an ambient wrongness effect tied to nearby operation history, gated by their own personal sensitivity value rather than by a single global broadcast threshold"
+      why: "perception has to be individually-scoped per observer's own sensitivity, not a world-wide announcement, or the ambient-dread quality of the arc collapses into a single flagged event"
+      hardness: important
+    - need: "crossing a further, lower band of the ambient quantity must be able to spawn discrete new hazard instances in the world at a stochastic rate, located by reference to a territory's other stats"
+      why: "hazard instances opening in the territory with the worst other-stat value at a random per-season chance shows the lower bands must generate concrete, located consequences, not just abstract penalties"
+      hardness: important
+    - need: "there must be a discrete, repeatable action available to some actor that restores the ambient quantity by a bounded amount per success"
+      why: "a restoration action is the only named counter-pressure against the compounding decay — without one the loop is unrecoverable, which the source does not claim it is"
+      hardness: important
+    - need: "an individual character's personal advancement track (a sensitivity/perception stat) must be able to raise their own frequency of, or eligibility for, the actions that carry the ambient-quantity cost, without that advancement itself directly costing the ambient quantity"
+      why: "the arc's stated incentive structure requires personal advancement and world-cost to be two separate, only indirectly-linked systems, so pursuing one legitimately worsens the other"
+      hardness: flavour
+  temporal:
+    span_seasons: "6-10"
+    needs_memory_of: "the ambient quantity's current value and which band it currently occupies; the location and count of any spawned hazard instances already in the world"
+    needs_deadline: no
+  who_acts:
+    - "the practitioner — chooses whether and how much to operate, without intending to degrade the ambient quantity"
+    - "players broadly — may choose to restrict operations or pursue the restoration action once the trend is noticed"
+    - "non-practitioners — perceive the effects but take no action within this arc's described mechanism"
+  knowledge:
+    - "non-practitioners sense the wrongness only vaguely at low sensitivity and cannot locate its source; higher sensitivity yields more specific perception"
+    - "the practitioner is described as 'not doing anything wrong' — the source does not state whether the practitioner is aware of the world-scale quantity's current value at all"
+  ends_when: "UNCLEAR: the source names no terminal condition. It describes an ongoing compounding loop and, once a lower band is crossed, an 'intervention needed' branch (restoration action, restricted operations) as available — not a defined end state or a point at which the arc is considered resolved."
+
+- id: ARC-49
+  name: "The Mediator's Debt"
+  one_line: "An institutional-alignment modifier makes one faction's attempts at a shared contested action reliably succeed where another's don't, and both rival factions come to structurally depend on that faction's own unrelated stability without either having designed the dependency."
+  scale: faction
+  season_requires:
+    - need: "an actor's institutional/ethical alignment must be able to grant a fixed difficulty reduction on a specific recurring action, layered on top of that action's baseline difficulty formula, such that two different factions attempting the identical action can face different effective difficulties"
+      why: "one faction's difficulty discount from alignment is what makes its attempts reliable where a rival's aren't — without a modifier that stacks on the base formula there is no structural advantage to create"
+      hardness: core
+    - need: "a faction's separate systemic ability (unrelated to the contested action itself) must be able to be gated on that same faction's own stability resource staying above a floor, and that gate must be able to fail closed automatically the moment the resource drops below the floor"
+      why: "the stability-gated ability is what converts a merely-reliable actor into unintended leverage other factions must now defend, and its ability to fail closed on its own is what produces the collapse case the arc is building toward"
+      hardness: core
+    - need: "only one faction may perform this shared, contested action per period, so two factions independently motivated to act on the same target must be forced to choose or compete for the single slot"
+      why: "a cross-arc note establishes this action is a shared, single slot per season, relevant to whether the reliable actor and another faction pursuing the same clock can both act in the same period"
+      hardness: important
+    - need: "UNCLEAR: whether the specific reason for one faction's superior reliability at the shared action (an alignment-based modifier) is knowable in-fiction to the other factions, or whether only the outcome (differential success) is observable to them, is not stated"
+      why: "without this, it's unclear whether the rivals' deference to the reliable faction is an informed strategic choice or a pattern-matched response to results they can't explain"
+      hardness: important
+    - need: "the same collapse event (an actor's stability dropping below its own gate's floor) must be able to simultaneously reopen an unrelated automatically-advancing institutional quantity to unchecked growth and remove a separate legitimacy-granting effect, producing two independent crises from one trigger"
+      why: "both rival factions are stated to face crisis simultaneously once the gate closes — the collapse has to fan out to two unrelated systems at once, not just one"
+      hardness: important
+  temporal:
+    span_seasons: "4-7"
+    needs_memory_of: "which faction is currently performing the shared contested action each period; the reliable faction's current stability value; whether its gated ability is currently open or closed"
+    needs_deadline: no
+  who_acts:
+    - "the reliable faction's leadership — chooses to attempt the shared action for its own unrelated reasons"
+    - "the rival factions — choose whether to defer their own attempts at the shared action and how to protect the reliable faction's stability"
+    - "players — may act to shore up or exploit the reliable faction's stability"
+  knowledge:
+    - "UNCLEAR: whether other factions come to know the mechanical source of the reliability differential, or only observe its results, is not specified by the source"
+  ends_when: "UNCLEAR: the source names no terminal condition. It describes an equilibrium (both rival factions dependent on the reliable faction's continued stability) and a failure case (the gate closes if that stability drops below its floor, reopening the unchecked institutional quantity) but does not state what, if anything, resolves the situation from there."
+
+- id: ARC-50
+  name: "The Counter That Runs Backward"
+  one_line: "A faction's own legitimate independence-building track secretly feeds a rival institution's separate advancement clock at a rate that grows with the track's own level, so the faction's ordinary progress accelerates the very crisis it's trying to escape."
+  scale: faction
+  season_requires:
+    - need: "a faction's personal advancement/independence track must be able to carry a hidden side-effect that adds to a rival institution's separate advancing quantity, at a rate that itself increases as the track's own level increases"
+      why: "an advancement track contributing an increasing amount to a rival clock is the arc's entire mechanism — a faction's legitimate, self-interested progress literally accelerates the institution it's trying to become independent from"
+      hardness: core
+    - need: "that side-effect's contribution must be able to combine additively with the target quantity's other simultaneous sources of increase (an ongoing passive gain and an occasional faction-driven surge), while the occasional surge must be able to replace, rather than stack additively with, the passive gain for that period"
+      why: "a stacking-order correction is explicitly called out as load-bearing — an engine that always stacks the surge on top of the passive gain overstates the crisis, one that never lets a surge replace passive understates it"
+      hardness: important
+    - need: "an actor must be able to use the same category of counter-action against a quantity to which their own advancement track is itself a contributing source, effectively offsetting a side-effect of their own progress"
+      why: "using the standard counter-action to offset one's own contribution is offered as a resolution path — the counter-action can't be restricted only to contributions the acting faction didn't itself cause"
+      hardness: important
+    - need: "the side-effect's existence must be discoverable only through a specific investigative action or through an NPC choosing to disclose it, and must not be visible by default"
+      why: "discovery is stated to require a dedicated investigative action or NPC disclosure — the arc depends on the interaction being invisible until someone specifically looks or is told"
+      hardness: core
+    - need: "the same shared, single-per-period contested action slot used elsewhere for counter-acting the target quantity must be available to this faction too, and its use must exclude other factions from counter-acting the same quantity that period"
+      why: "reuses the single-slot exclusivity established elsewhere — this faction counter-acting its own contribution competes for the same slot another faction might want to use"
+      hardness: flavour
+  temporal:
+    span_seasons: "5-12"
+    needs_memory_of: "the faction's current advancement-track level; the running composition of the target quantity's accumulated increases, well enough to distinguish how much came from the side-effect; whether the investigative discovery has occurred yet"
+    needs_deadline: no
+  who_acts:
+    - "the advancing faction's leadership — chooses to pursue the track; once aware, chooses whether to halt it, continue it, or counter-act its own contribution"
+    - "players — may trigger the discovery through the dedicated investigative action"
+  knowledge:
+    - "the advancing faction does not initially know its own track contributes to the rival institution's advancement — this becomes knowable only via the investigative action or an NPC's disclosure"
+  ends_when: "once discovery occurs, through the faction's own choice among the three named options (halt the track, continue it and accept the accelerated crisis, or counter-act its own contribution) — a person choosing; if discovery never occurs, the source gives no separate terminus and the side-effect simply continues feeding the rival quantity's own threshold elsewhere."
+
+- id: ARC-51
+  name: "The Weight of Sight"
+  one_line: "A character can grow a perception stat indefinitely through an interaction mode that costs nothing on their fragility stat, opening a widening gap between what they can perceive and what their stagnant capability stat lets them do about it."
+  scale: person
+  season_requires:
+    - need: "a character must be able to repeatedly advance a perception-scale stat through a specific low-commitment interaction mode that costs nothing on a separate fragility-tracking stat, even though other interaction modes on that same fragility stat do cost something"
+      why: "a zero-cost growth path on the fragility stat is the load-bearing asymmetry — if every interaction mode cost the fragility stat, there would be no free, uncapped growth path and the arc's premise (perception grows, nothing degrades) disappears"
+      hardness: core
+    - need: "the perception-scale stat must be able to cross multiple bands as it rises, each band unlocking a categorically richer read of an in-progress operation's type and location, with a late band exceeding what the character's separate capability-to-act stat currently lets them do about it"
+      why: "the escalating tiers of perceptual resolution — general direction, then operation type and target, then full configuration — are what produce the 'sees everything, can do nothing' gap the arc is about"
+      hardness: core
+    - need: "a character's capability-to-act stat, separate from the perception stat, must be able to remain at its lowest tier indefinitely, with no operation-count or session-count pressure that forces it to rise on its own"
+      why: "the source states explicitly that the system provides no internal pressure to advance this stat — only external forcing events can — so the capability stat has to be able to sit permanently low with no passive-advancement rule dragging it up"
+      hardness: core
+    - need: "advancing the capability-to-act stat must be able to require a specific, scarce resource category that competes directly against other advancement priorities a player might spend on instead"
+      why: "a scarce, competing resource cost is what makes staying at low capability a real, costly-to-escape state rather than a one-time fix"
+      hardness: important
+    - need: "a scenario must be able to arise where a specific action is required at a tier only one character (the high-perception one) is positioned to attempt, and that character's low capability-to-act tier must be able to make them fully unable to attempt it, not merely penalized"
+      why: "the named crisis requires an action tier only the high-perception character can attempt, and their low capability must hard-block the attempt entirely — a soft penalty instead of a hard gate would not produce the described crisis"
+      hardness: core
+    - need: "a character's fragility stat reaching its lowest value via a route other than the free interaction mode must be able to interact with the character's current perception-stat tier to select between at least two categorically different outcome branches"
+      why: "the source names a high-perception-tier branch producing a different fragility-collapse outcome (a forced alternate state) than the default — perception tier has to be able to gate which collapse outcome applies"
+      hardness: important
+  temporal:
+    span_seasons: "10-20"
+    needs_memory_of: "the character's current perception-stat value and band; their current capability-to-act tier; whether a forcing event requiring the blocked action has occurred yet"
+    needs_deadline: no
+  who_acts:
+    - "the practitioner — chooses whether and how to invest in raising their capability-to-act tier, once forced to"
+    - "the campaign/external circumstance — introduces the forcing event; the source treats this as outside any named character's choice"
+  knowledge:
+    - "the character presumably knows what they themselves perceive as their perception stat rises; the source does not address whether other characters become aware of the growing gap between what this character sees and can do"
+  ends_when: "UNCLEAR: the source names the forcing event (an action tier only the high-perception character can attempt) and names capability-stat advancement as 'the resolution gate,' but does not state a terminal mechanism — whether reaching the next capability tier is itself sufficient to resolve the moment, or a further roll is also required, is unstated."
+
+- id: ARC-52
+  name: "Parliament as Weather"
+  one_line: "A shared institutional-standing quantity accumulates purely from every faction's unrelated, individually legitimate normal actions and auto-resolves into a fixed elimination once it reaches ceiling — no faction is targeting it, and stopping it requires every faction to simultaneously withhold ordinary play."
+  scale: realm
+  season_requires:
+    - need: "a quantity must be able to accumulate from the combined, unrelated normal actions of every faction operating in a shared context, with no single faction's action alone identifiable as the cause and with no faction's intent to move it factoring into whether it moves"
+      why: "no faction is attacking this quantity, all are pursuing normal goals — the arc depends on the quantity being a genuine emergent aggregate of unrelated legitimate play, not any one faction's lever"
+      hardness: core
+    - need: "when that aggregate quantity reaches its ceiling, the system must be able to resolve automatically into a fixed consequence (elimination of one faction from play) without requiring any actor to declare or trigger the resolution"
+      why: "the quantity is stated to 'auto-resolve' at its ceiling — the threshold has to fire on its own, distinguishing it from a threshold that merely enables another actor's choice"
+      hardness: core
+    - need: "stopping the aggregate quantity's rise must be able to require every faction operating in that context to simultaneously withhold a category of action, such that any single faction continuing to act in the ordinary way keeps the quantity climbing"
+      why: "the stated resolution path is a coordination problem — every faction must forgo planned actions at once — if one faction's restraint alone could halt it, the coordination-problem shape the arc names collapses"
+      hardness: core
+    - need: "withholding a category of action for a period must be able to carry no separate decay or stat-loss consequence beyond the simple absence of that action's normal effects"
+      why: "the source explicitly rules out an inactivity-penalty mechanic here — the coordination problem has to be costed as pure opportunity cost, not compounded by a separate punishment for restraint"
+      hardness: important
+    - need: "UNCLEAR: the specific amount each category of faction action contributes to the aggregate quantity is not given anywhere in the source, only that unspecified positive amounts are added per relevant action"
+      why: "without per-action amounts, the pacing to the ceiling can only be estimated narratively, not actually computed by the engine as authored"
+      hardness: important
+    - need: "this aggregate quantity's ceiling-triggered elimination must be able to compound with an unrelated hidden counter elsewhere reaching its own ceiling in the same period, producing two independently-tracked consequences firing at once"
+      why: "a related faction's own hidden-counter coup condition is noted as possibly firing in the same accounting pass — the engine must let two independently-tracked thresholds both be checked and both resolve together"
+      hardness: flavour
+  temporal:
+    span_seasons: "6-10"
+    needs_memory_of: "the aggregate quantity's running total; which factions, if any, are aware of it and coordinating to withhold action"
+    needs_deadline: no
+  who_acts:
+    - "every faction operating in the shared context — each contributes unintentionally through its own normal actions"
+    - "players (across factions) — may coordinate to simultaneously withhold the relevant action category, if aware"
+  knowledge:
+    - "the aggregate quantity is visible on a shared board, but the source notes it is easy to lose track of under session pressure — visibility exists without being foregrounded"
+  ends_when: "when the aggregate quantity reaches its ceiling, auto-resolving into the fixed elimination consequence — a threshold firing with nobody deciding — unless every contributing faction simultaneously withholds the relevant action category long enough to halt the climb, a multi-actor coordination choice; the source does not state what happens if that coordination succeeds only partway."
+
+- id: ARC-53
+  name: "The Wound Economy"
+  one_line: "An injury a character takes in a personal-scale contest persists as a penalty on the same base roll they use for faction-scale actions, so an unhealed wound quietly degrades an entire faction's action success rate until someone spends a scene to notice and fix it."
+  scale: person
+  season_requires:
+    - need: "damage taken by an individual character in a personal-scale contest must be able to persist as a penalty on that same character's base roll when they later act at a larger, faction scale, without a separate faction-scale rule re-deriving the penalty independently"
+      why: "the whole arc is the claim that a personal-scale event becomes a faction-scale consequence via the same base roll — if personal injuries and faction-scale rolls used unrelated pools, this propagation would not exist"
+      hardness: core
+    - need: "when a character holding a leadership role acts at faction scale, their personal roll (including any accumulated penalties) must be able to combine with a separate bonus contributed by the faction's own stat, rather than the faction stat alone determining the outcome"
+      why: "the confirmed formula is personal roll plus a faction-stat bonus, not the faction stat alone — this is what lets a personal wound degrade the base while the faction's own bonus stays untouched, making the wound's effect visible rather than absorbed"
+      hardness: core
+    - need: "an injury penalty must be able to persist across multiple periods without decaying on its own, remaining in effect until the character takes a specific recovery action"
+      why: "the wound is stated to persist into a later period with no natural healing described — the penalty has to be sticky, not something that quietly resolves between sessions"
+      hardness: important
+    - need: "a failed faction-scale action must be able to cost the faction a separate stability resource, and repeated failures must be able to drive that resource toward a level that triggers an existential risk check for the entire faction"
+      why: "the wound-driven failure spiral is explicitly stated to threaten the faction's existence, not just its immediate action — a chain from personal injury to faction-existential risk is the arc's actual stakes"
+      hardness: core
+    - need: "other factions must be able to observe a faction's rising rate of failed actions and choose to act against that faction's position on the strength of the observed pattern alone"
+      why: "rival factions observing the failure rate and contesting positions ties the wound-driven spiral to opportunistic responses, not just internal consequences"
+      hardness: flavour
+    - need: "there must be a discrete recovery action, distinct from any regular faction action, that removes or reduces the accumulated wound penalty when a player chooses to spend a scene on it"
+      why: "the stated off-ramp is a dedicated recovery scene — without an explicit recovery action, the penalty has no player-facing way to be lifted"
+      hardness: core
+  temporal:
+    span_seasons: "2-4"
+    needs_memory_of: "the character's current wound count/penalty; whether a recovery action has been taken; the faction's current stability resource"
+    needs_deadline: no
+  who_acts:
+    - "the wounded leader — may or may not seek recovery"
+    - "players — choose whether to recognise the propagation and spend a recovery scene"
+    - "rival factions — may choose to contest the weakened faction's positions"
+  knowledge:
+    - "players are stated not to always register that a personal-combat penalty propagates into faction-scale accounting — the propagation is mechanically real regardless of whether it is noticed"
+  ends_when: "the source frames noticing the propagation, not resolving it, as 'the crisis' — resolution runs through players recognising the link and spending a recovery scene (a person choosing), while the unaddressed default path drives repeated faction-action failures toward a stability-resource threshold that triggers an existential risk check for the faction (a threshold firing); the source does not state which of the two it treats as the arc's actual ending."
+
+- id: ARC-54
+  name: "What The Unaffiliated Know"
+  one_line: "A practitioner's ordinary use of their ability leaves passive, unlocatable traces that many unrelated observers each sense faintly; a rival faction cross-references those scattered, individually-meaningless reports into an actionable but permanently imprecise profile the practitioner never knows exists."
+  scale: faction
+  season_requires:
+    - need: "a character's ongoing use of a personal ability must be able to leave passive traces perceivable by unrelated non-player observers scattered across multiple locations, each independently sensing only a vague, unlocated wrongness"
+      why: "faint, unlocated perception sensed independently by many different agents across territories is what seeds the cross-referencing the arc depends on"
+      hardness: core
+    - need: "an institution with a distributed network of observers must be able to aggregate many independent, individually-meaningless reports into a single actionable pattern about one specific individual, with no single report sufficient on its own"
+      why: "individually the reports mean nothing; cross-referenced they produce a pattern — the arc's engine is explicitly the aggregation step, not any one sighting"
+      hardness: core
+    - need: "an actor must be able to spend a specific investigative action, resolved against a fixed difficulty, that on success reveals one hidden fact about a target's affiliation-relevant nature without revealing the target's own underlying quantitative measurements"
+      why: "the confirmed investigative action reveals one hidden attribute categorically, not numerically — this is the actual mechanism the arc rebuilds around once a hypothesised alternative was ruled out"
+      hardness: core
+    - need: "the profile an institution builds about a sensitive individual must be structurally barred from ever taking the form of that individual's own internal quantitative measurements, remaining categorical no matter how successful the institution's investigation is"
+      why: "the epistemological barrier is stated to be metaphysical, not institutional — this imprecision has to be a hard ceiling on what any investigative success can produce, not just a matter of the investigator not trying hard enough"
+      hardness: core
+    - need: "a faction's profile of a target, once built, must be able to shape that faction's subsequent choices toward the target (offers, refusals, timing) without the target or their allies being told the profile exists"
+      why: "the profiling faction is stated to shape subsequent interactions using the profile while the target's side does not know it exists — this asymmetric-information payoff is what the arc plays out at faction scale"
+      hardness: important
+    - need: "a failed attempt at the investigative action must be able to expose the investigating faction's own activity to a third faction's counter-intelligence for a bounded duration, rather than simply doing nothing"
+      why: "failure is stated to detect the investigator's own signature and grant a rival faction a bonus against them for a set duration — the action needs a real cost on failure to make deploying it a genuine risk"
+      hardness: flavour
+    - need: "a third party with their own standing/influence value must be able to become aware that the investigating faction now holds a profile, and that awareness must be able to open a distinct intervention option available only to that third party"
+      why: "a named third-party NPC's awareness of the investigating faction's awareness, gated by her own influence value, introduces a second layer of asymmetric knowledge on top of the first"
+      hardness: flavour
+  temporal:
+    span_seasons: "5-7"
+    needs_memory_of: "accumulated passive-detection reports across territories and periods; whether the investigative action has been deployed and its outcome; whether the third-party NPC has become aware"
+    needs_deadline: no
+  who_acts:
+    - "the practitioner — chooses to operate, indirectly generating traces, without targeting anyone"
+    - "the investigating faction's leadership — chooses whether and when to deploy the investigative action"
+    - "the aware third-party NPC — may choose to intercept"
+    - "players — may or may not engage with the investigating faction before it acts on the profile"
+  knowledge:
+    - "the investigating faction comes to know something categorical but imprecise about the practitioner; the practitioner does not know they are being profiled"
+    - "the third-party NPC may separately come to know that the investigating faction holds a profile, a second layer on top of the first asymmetry"
+  ends_when: "the source states resolution 'depends on whether the party engages [the investigating faction] before [it] acts on' the profile — a condition resting on player choice of timing, not a scheduled or counter-driven trigger; the source does not specify what mechanically closes the case once that engagement occurs."
+
+- id: ARC-55
+  name: "The Withdrawal"
+  one_line: "A non-player faction's eligibility to use one of its actions in a given territory is gated on a local standing value that only ever moves downward, and only from that same action's own failure — so its ordinary, unremarkable activity eventually locks itself out of a tool other factions had come to rely on, with no confirmed way back in."
+  scale: faction
+  season_requires:
+    - need: "a non-player faction's ability to use one of its unique actions against a target must be able to be gated on a local, territory-specific standing value being at or above a fixed floor, checked independently per territory"
+      why: "the gate applies per-territory, so the faction can be eligible in some territories and ineligible in others simultaneously — a global gate would flatten this distinction the arc depends on"
+      hardness: core
+    - need: "that gating standing value must be able to move in only one documented direction (down), and only from one documented trigger (the gated action's own failure), with no other named source of movement in either direction"
+      why: "the arc's central irony is that the faction's own repeated ordinary use of the action is the sole thing degrading its eligibility for that same action — a value with other, unnamed movement sources would dilute this"
+      hardness: core
+    - need: "crossing below the gating floor must be able to remove the faction's access to the action in that territory immediately and completely, not as a probability penalty, until the value is restored"
+      why: "the threshold is stated as strictly binary — one point of drift closes the action outright; a soft penalty instead of a hard cutoff would remove the arc's central irony of a permanent-feeling closure from one point of drift"
+      hardness: core
+    - need: "UNCLEAR: no mechanism is specified anywhere in the source by which a player, or any actor outside the gated faction itself, can raise the gating standing value back up once it has dropped, and the only named path to raise it (the faction succeeding at the very action it is now ineligible to attempt) is circular"
+      why: "without this, the central bind — a faction losing a tool it relied on with no way in to fix it — is either a hidden solution the source doesn't name, or a deliberately unsolvable state, and the source does not say which"
+      hardness: core
+    - need: "other factions must be able to structurally rely on a non-player faction's action being available in specific territories as an indirect tool against a third faction, without any of those relying factions having any input into whether that availability persists"
+      why: "the faction relying on the gated action's availability had no input into the gated faction's failure rate — the dependency has to be one-directional and outside the relying faction's control"
+      hardness: important
+    - need: "a faction losing eligibility for an action in a territory must be able to carry no consequence beyond the simple absence of that action, with no separate decay or penalty applied for the reduced ability to act"
+      why: "the source explicitly rules out an inactivity-decay mechanic here — the withdrawal's cost has to be pure absence, not compounded by an additional penalty"
+      hardness: flavour
+    - need: "a rival faction must be able to expand into influence formerly checked by the now-ineligible faction's absence, as an automatic consequence of that faction no longer acting there, without the rival needing to specifically target the newly-open territory because of the withdrawal"
+      why: "a rival faction's ordinary economic expansion into the formerly-buffered territories shows the withdrawal has to create opportunity for an unrelated faction's normal operations, not just remove a threat"
+      hardness: flavour
+  temporal:
+    span_seasons: "3-6"
+    needs_memory_of: "the per-territory gating standing value for the non-player faction; whether it has crossed below the eligibility floor in each territory"
+    needs_deadline: no
+  who_acts:
+    - "the gated non-player faction — attempts its action for its own reasons, not deliberately withdrawing"
+    - "the relying faction — discovers the loss of a tool it depended on"
+    - "a rival faction — opportunistically expands into the gap"
+    - "players — may attempt to find a restoration path, per the source, with none confirmed to exist"
+  knowledge:
+    - "the gated faction's declining eligibility is not publicly announced; the relying faction is stated to discover it reactively, by trying to invoke the tool and finding it unavailable, rather than by tracking the standing value proactively"
+  ends_when: "UNCLEAR: the source names no terminal condition. It ends its own account at an acknowledged, unresolved design gap — whether any player-accessible action exists to restore the gating standing value — so whether or how the case ever concludes is unspecified rather than merely undecided within the fiction."
