@@ -505,15 +505,13 @@
    "name": "Dalla Virke",
    "scale": "person",
    "source": "NPC1.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "NOT-ASSESSED",
    "rows": 8,
    "core": 4,
    "core_routed": 2,
    "core_unmapped": 2,
-   "core_blocked": 1,
-   "blockers": [
-    "F16"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "A non-faction, non-institutional actor must be able to hold and trade a resource (information, trust, access) that no faction's own action economy owns or produces -- a market that exists outside every faction's resource pools.",
@@ -521,14 +519,12 @@
      "probe": "F16",
      "verdict": {
       "id": "F16",
-      "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
+      "verdict": "PASS",
+      "detail": "PASS: a duchy-level pool of coin was raised and spent BY ACTS at RESOLVE, in the ACTS class, landing at 25. S10's `Rung.matter.stores` is the carrier and S11's office stake pays upkeep from it. THE DISTINCTION L3 DRAWS IS MATERIAL VS SOCIAL, NOT INDIVIDUAL VS POOLED -- a treasury is matter and is lawful; unrest, legitimacy and reputation are not, and F16b refuses those",
+      "kind": null,
+      "section": "S10",
+      "title": "a faction-wide MATERIAL pool grows and is spent",
+      "by": "construction",
       "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
      }
     },
@@ -1306,9 +1302,8 @@
    "core": 2,
    "core_routed": 2,
    "core_unmapped": 0,
-   "core_blocked": 2,
+   "core_blocked": 1,
    "blockers": [
-    "F16",
     "P26"
    ],
    "routed": [
@@ -1318,14 +1313,12 @@
      "probe": "F16",
      "verdict": {
       "id": "F16",
-      "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
+      "verdict": "PASS",
+      "detail": "PASS: a duchy-level pool of coin was raised and spent BY ACTS at RESOLVE, in the ACTS class, landing at 25. S10's `Rung.matter.stores` is the carrier and S11's office stake pays upkeep from it. THE DISTINCTION L3 DRAWS IS MATERIAL VS SOCIAL, NOT INDIVIDUAL VS POOLED -- a treasury is matter and is lawful; unrest, legitimacy and reputation are not, and F16b refuses those",
+      "kind": null,
+      "section": "S10",
+      "title": "a faction-wide MATERIAL pool grows and is spent",
+      "by": "construction",
       "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
      }
     },
@@ -1409,15 +1402,13 @@
    "name": "Annika Feldhaus",
    "scale": "faction",
    "source": "NPC2.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "NOT-ASSESSED",
    "rows": 7,
    "core": 3,
    "core_routed": 2,
    "core_unmapped": 1,
-   "core_blocked": 1,
-   "blockers": [
-    "F16"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "A faction representative must be able to repeatedly grow one faction stat at the direct, automatic expense of a second faction stat every season, as her default behavior rather than a one-time choice offered to the player.",
@@ -1425,14 +1416,12 @@
      "probe": "F16",
      "verdict": {
       "id": "F16",
-      "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
+      "verdict": "PASS",
+      "detail": "PASS: a duchy-level pool of coin was raised and spent BY ACTS at RESOLVE, in the ACTS class, landing at 25. S10's `Rung.matter.stores` is the carrier and S11's office stake pays upkeep from it. THE DISTINCTION L3 DRAWS IS MATERIAL VS SOCIAL, NOT INDIVIDUAL VS POOLED -- a treasury is matter and is lawful; unrest, legitimacy and reputation are not, and F16b refuses those",
+      "kind": null,
+      "section": "S10",
+      "title": "a faction-wide MATERIAL pool grows and is spent",
+      "by": "construction",
       "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
      }
     },
@@ -2229,14 +2218,12 @@
      "probe": "F16",
      "verdict": {
       "id": "F16",
-      "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
+      "verdict": "PASS",
+      "detail": "PASS: a duchy-level pool of coin was raised and spent BY ACTS at RESOLVE, in the ACTS class, landing at 25. S10's `Rung.matter.stores` is the carrier and S11's office stake pays upkeep from it. THE DISTINCTION L3 DRAWS IS MATERIAL VS SOCIAL, NOT INDIVIDUAL VS POOLED -- a treasury is matter and is lawful; unrest, legitimacy and reputation are not, and F16b refuses those",
+      "kind": null,
+      "section": "S10",
+      "title": "a faction-wide MATERIAL pool grows and is spent",
+      "by": "construction",
       "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
      }
     }
@@ -2873,15 +2860,13 @@
    "name": "Annalie Reichard",
    "scale": "person",
    "source": "NPC4.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "NOT-ASSESSED",
    "rows": 6,
    "core": 2,
    "core_routed": 1,
    "core_unmapped": 1,
-   "core_blocked": 1,
-   "blockers": [
-    "F16"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "A person holding the Crown's treasury-oversight post must be able to affect, or be affected by, the Crown's material resources at a faction level, distinct from a generic administrative post with no resource footprint.",
@@ -2889,14 +2874,12 @@
      "probe": "F16",
      "verdict": {
       "id": "F16",
-      "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
+      "verdict": "PASS",
+      "detail": "PASS: a duchy-level pool of coin was raised and spent BY ACTS at RESOLVE, in the ACTS class, landing at 25. S10's `Rung.matter.stores` is the carrier and S11's office stake pays upkeep from it. THE DISTINCTION L3 DRAWS IS MATERIAL VS SOCIAL, NOT INDIVIDUAL VS POOLED -- a treasury is matter and is lawful; unrest, legitimacy and reputation are not, and F16b refuses those",
+      "kind": null,
+      "section": "S10",
+      "title": "a faction-wide MATERIAL pool grows and is spent",
+      "by": "construction",
       "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
      }
     }
@@ -5370,7 +5353,7 @@
    "core_unmapped": 2,
    "core_blocked": 1,
    "blockers": [
-    "F16"
+    "F16b"
    ],
    "routed": [
     {
@@ -5406,18 +5389,18 @@
     {
      "need": "an action taken by a player at a small, personal scale must be able to silently register as also affecting a faction-scale quantity, invisible until the periodic accounting is read",
      "hardness": "core",
-     "probe": "F16",
+     "probe": "F16b",
      "verdict": {
-      "id": "F16",
+      "id": "F16b",
       "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
+      "detail": "Rung.legitimacy assigned -- not a declared field of S10's record",
       "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
-      "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
+      "section": "S10.1",
+      "title": "a faction-wide SOCIAL quantity is pooled and stored",
+      "needs": "a Query over the containment subtree, owned by Nobody",
+      "law": "L3 -- every aggregate is a function, never a field. S22.1 -- if the aggregate is a function it CANNOT go stale and CANNOT be initialised and then forgotten, because there is nothing to initialise",
+      "by": "construction",
+      "tests": "a faction must be able to hold a pooled level of loyalty, unrest or legitimacy"
      }
     }
    ],
@@ -6236,9 +6219,8 @@
    "core": 3,
    "core_routed": 2,
    "core_unmapped": 1,
-   "core_blocked": 2,
+   "core_blocked": 1,
    "blockers": [
-    "F16",
     "P17"
    ],
    "routed": [
@@ -6248,14 +6230,12 @@
      "probe": "F16",
      "verdict": {
       "id": "F16",
-      "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
+      "verdict": "PASS",
+      "detail": "PASS: a duchy-level pool of coin was raised and spent BY ACTS at RESOLVE, in the ACTS class, landing at 25. S10's `Rung.matter.stores` is the carrier and S11's office stake pays upkeep from it. THE DISTINCTION L3 DRAWS IS MATERIAL VS SOCIAL, NOT INDIVIDUAL VS POOLED -- a treasury is matter and is lawful; unrest, legitimacy and reputation are not, and F16b refuses those",
+      "kind": null,
+      "section": "S10",
+      "title": "a faction-wide MATERIAL pool grows and is spent",
+      "by": "construction",
       "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
      }
     },
@@ -6302,15 +6282,13 @@
    "name": "Vaynard's Confession",
    "scale": "faction",
    "source": "ARC2.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "DEGRADED",
    "rows": 5,
    "core": 2,
    "core_routed": 2,
    "core_unmapped": 0,
-   "core_blocked": 2,
-   "blockers": [
-    "F16"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "a faction leader's private capability track must reach a threshold via ordinary relationship-building actions, and on threshold must trigger a resolvable moment that fires on an ALLY's action performed on the leader's behalf, not on the leader's own action",
@@ -6318,14 +6296,12 @@
      "probe": "F16",
      "verdict": {
       "id": "F16",
-      "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
+      "verdict": "PASS",
+      "detail": "PASS: a duchy-level pool of coin was raised and spent BY ACTS at RESOLVE, in the ACTS class, landing at 25. S10's `Rung.matter.stores` is the carrier and S11's office stake pays upkeep from it. THE DISTINCTION L3 DRAWS IS MATERIAL VS SOCIAL, NOT INDIVIDUAL VS POOLED -- a treasury is matter and is lawful; unrest, legitimacy and reputation are not, and F16b refuses those",
+      "kind": null,
+      "section": "S10",
+      "title": "a faction-wide MATERIAL pool grows and is spent",
+      "by": "construction",
       "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
      }
     },
@@ -6335,14 +6311,12 @@
      "probe": "F16",
      "verdict": {
       "id": "F16",
-      "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
+      "verdict": "PASS",
+      "detail": "PASS: a duchy-level pool of coin was raised and spent BY ACTS at RESOLVE, in the ACTS class, landing at 25. S10's `Rung.matter.stores` is the carrier and S11's office stake pays upkeep from it. THE DISTINCTION L3 DRAWS IS MATERIAL VS SOCIAL, NOT INDIVIDUAL VS POOLED -- a treasury is matter and is lawful; unrest, legitimacy and reputation are not, and F16b refuses those",
+      "kind": null,
+      "section": "S10",
+      "title": "a faction-wide MATERIAL pool grows and is spent",
+      "by": "construction",
       "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
      }
     },
@@ -6417,14 +6391,12 @@
      "probe": "F16",
      "verdict": {
       "id": "F16",
-      "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
+      "verdict": "PASS",
+      "detail": "PASS: a duchy-level pool of coin was raised and spent BY ACTS at RESOLVE, in the ACTS class, landing at 25. S10's `Rung.matter.stores` is the carrier and S11's office stake pays upkeep from it. THE DISTINCTION L3 DRAWS IS MATERIAL VS SOCIAL, NOT INDIVIDUAL VS POOLED -- a treasury is matter and is lawful; unrest, legitimacy and reputation are not, and F16b refuses those",
+      "kind": null,
+      "section": "S10",
+      "title": "a faction-wide MATERIAL pool grows and is spent",
+      "by": "construction",
       "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
      }
     }
@@ -7551,15 +7523,13 @@
    "name": "The Quiet Seizure",
    "scale": "faction",
    "source": "ARC4.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "NOT-ASSESSED",
    "rows": 8,
    "core": 4,
    "core_routed": 1,
    "core_unmapped": 3,
-   "core_blocked": 1,
-   "blockers": [
-    "F16"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "failing that counter-action must be able to cost the acting faction a separate, depletable resource, distinct from the quantity being contested",
@@ -7567,14 +7537,12 @@
      "probe": "F16",
      "verdict": {
       "id": "F16",
-      "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
+      "verdict": "PASS",
+      "detail": "PASS: a duchy-level pool of coin was raised and spent BY ACTS at RESOLVE, in the ACTS class, landing at 25. S10's `Rung.matter.stores` is the carrier and S11's office stake pays upkeep from it. THE DISTINCTION L3 DRAWS IS MATERIAL VS SOCIAL, NOT INDIVIDUAL VS POOLED -- a treasury is matter and is lawful; unrest, legitimacy and reputation are not, and F16b refuses those",
+      "kind": null,
+      "section": "S10",
+      "title": "a faction-wide MATERIAL pool grows and is spent",
+      "by": "construction",
       "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
      }
     }
@@ -7809,15 +7777,13 @@
    "name": "The Mediator's Debt",
    "scale": "faction",
    "source": "ARC4.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "NOT-ASSESSED",
    "rows": 5,
    "core": 2,
    "core_routed": 1,
    "core_unmapped": 1,
-   "core_blocked": 1,
-   "blockers": [
-    "F16"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "a faction's separate systemic ability (unrelated to the contested action itself) must be able to be gated on that same faction's own stability resource staying above a floor, and that gate must be able to fail closed automatically the moment the resource drops below the floor",
@@ -7825,14 +7791,12 @@
      "probe": "F16",
      "verdict": {
       "id": "F16",
-      "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
+      "verdict": "PASS",
+      "detail": "PASS: a duchy-level pool of coin was raised and spent BY ACTS at RESOLVE, in the ACTS class, landing at 25. S10's `Rung.matter.stores` is the carrier and S11's office stake pays upkeep from it. THE DISTINCTION L3 DRAWS IS MATERIAL VS SOCIAL, NOT INDIVIDUAL VS POOLED -- a treasury is matter and is lawful; unrest, legitimacy and reputation are not, and F16b refuses those",
+      "kind": null,
+      "section": "S10",
+      "title": "a faction-wide MATERIAL pool grows and is spent",
+      "by": "construction",
       "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
      }
     },
@@ -7872,15 +7836,13 @@
    "name": "The Counter That Runs Backward",
    "scale": "faction",
    "source": "ARC4.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "NOT-ASSESSED",
    "rows": 5,
    "core": 2,
    "core_routed": 1,
    "core_unmapped": 1,
-   "core_blocked": 1,
-   "blockers": [
-    "F16"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "a faction's personal advancement/independence track must be able to carry a hidden side-effect that adds to a rival institution's separate advancing quantity, at a rate that itself increases as the track's own level increases",
@@ -7888,14 +7850,12 @@
      "probe": "F16",
      "verdict": {
       "id": "F16",
-      "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
+      "verdict": "PASS",
+      "detail": "PASS: a duchy-level pool of coin was raised and spent BY ACTS at RESOLVE, in the ACTS class, landing at 25. S10's `Rung.matter.stores` is the carrier and S11's office stake pays upkeep from it. THE DISTINCTION L3 DRAWS IS MATERIAL VS SOCIAL, NOT INDIVIDUAL VS POOLED -- a treasury is matter and is lawful; unrest, legitimacy and reputation are not, and F16b refuses those",
+      "kind": null,
+      "section": "S10",
+      "title": "a faction-wide MATERIAL pool grows and is spent",
+      "by": "construction",
       "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
      }
     },
@@ -8086,9 +8046,8 @@
    "core": 4,
    "core_routed": 4,
    "core_unmapped": 0,
-   "core_blocked": 4,
+   "core_blocked": 2,
    "blockers": [
-    "F16",
     "P26"
    ],
    "routed": [
@@ -8115,14 +8074,12 @@
      "probe": "F16",
      "verdict": {
       "id": "F16",
-      "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
+      "verdict": "PASS",
+      "detail": "PASS: a duchy-level pool of coin was raised and spent BY ACTS at RESOLVE, in the ACTS class, landing at 25. S10's `Rung.matter.stores` is the carrier and S11's office stake pays upkeep from it. THE DISTINCTION L3 DRAWS IS MATERIAL VS SOCIAL, NOT INDIVIDUAL VS POOLED -- a treasury is matter and is lawful; unrest, legitimacy and reputation are not, and F16b refuses those",
+      "kind": null,
+      "section": "S10",
+      "title": "a faction-wide MATERIAL pool grows and is spent",
+      "by": "construction",
       "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
      }
     },
@@ -8132,14 +8089,12 @@
      "probe": "F16",
      "verdict": {
       "id": "F16",
-      "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
+      "verdict": "PASS",
+      "detail": "PASS: a duchy-level pool of coin was raised and spent BY ACTS at RESOLVE, in the ACTS class, landing at 25. S10's `Rung.matter.stores` is the carrier and S11's office stake pays upkeep from it. THE DISTINCTION L3 DRAWS IS MATERIAL VS SOCIAL, NOT INDIVIDUAL VS POOLED -- a treasury is matter and is lawful; unrest, legitimacy and reputation are not, and F16b refuses those",
+      "kind": null,
+      "section": "S10",
+      "title": "a faction-wide MATERIAL pool grows and is spent",
+      "by": "construction",
       "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
      }
     },
@@ -8423,33 +8378,14 @@
    "name": "The Vaynard Revelation Cascade",
    "scale": "realm",
    "source": "ARC5.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "NOT-ASSESSED",
    "rows": 7,
    "core": 3,
-   "core_routed": 1,
-   "core_unmapped": 2,
-   "core_blocked": 1,
-   "blockers": [
-    "F16"
-   ],
+   "core_routed": 0,
+   "core_unmapped": 3,
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
-    {
-     "need": "an actor's private understanding advancing must be able to automatically and invisibly raise a separate, campaign-wide institutional threat value, as a byproduct the player did not choose and may not notice",
-     "hardness": "core",
-     "probe": "F16",
-     "verdict": {
-      "id": "F16",
-      "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
-      "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
-     }
-    },
     {
      "need": "whichever side a governing body takes on the formal decision, the outcome must feed back into whether an unrelated suppression effect elsewhere continues to hold, gated by a numeric threshold on a third party's standing",
      "hardness": "important",
@@ -8486,6 +8422,11 @@
    "unmapped": [
     {
      "need": "repeated interaction between a player and a single non-player actor must be able to advance that actor's private understanding through discrete, ordered stages, where higher stages unlock qualitatively new offers or demands from that actor",
+     "hardness": "core",
+     "probe": null
+    },
+    {
+     "need": "an actor's private understanding advancing must be able to automatically and invisibly raise a separate, campaign-wide institutional threat value, as a byproduct the player did not choose and may not notice",
      "hardness": "core",
      "probe": null
     },
@@ -9446,33 +9387,14 @@
    "name": "Vaynard \u2014 From Acquisition to Dangerous Knowledge",
    "scale": "faction",
    "source": "ARC5.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "NOT-ASSESSED",
    "rows": 7,
    "core": 2,
-   "core_routed": 1,
-   "core_unmapped": 1,
-   "core_blocked": 1,
-   "blockers": [
-    "F16"
-   ],
+   "core_routed": 0,
+   "core_unmapped": 2,
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
-    {
-     "need": "each stage of the actor's advancing understanding must automatically raise a shared institutional-threat value by an amount specific to that stage, as an inherent side effect of the actor's understanding growing, not of any deliberate hostile action by the actor",
-     "hardness": "core",
-     "probe": "F16",
-     "verdict": {
-      "id": "F16",
-      "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
-      "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
-     }
-    },
     {
      "need": "the actor's advancing understanding must, at a specific late stage, cause the actor to formally condition their cooperation on a specific external actor providing the actor a distinct resource, where refusal to provide it must leave the party needing an alternate route to whatever depended on the actor's cooperation",
      "hardness": "important",
@@ -9527,6 +9449,11 @@
     {
      "need": "a self-interested actor's private understanding of a specific hidden truth must progress through discrete, ordered stages, reachable via multiple alternative information sources, any single one of which suffices to advance a stage",
      "hardness": "important",
+     "probe": null
+    },
+    {
+     "need": "each stage of the actor's advancing understanding must automatically raise a shared institutional-threat value by an amount specific to that stage, as an inherent side effect of the actor's understanding growing, not of any deliberate hostile action by the actor",
+     "hardness": "core",
      "probe": null
     },
     {
@@ -9775,9 +9702,8 @@
    "core": 4,
    "core_routed": 2,
    "core_unmapped": 2,
-   "core_blocked": 2,
+   "core_blocked": 1,
    "blockers": [
-    "F16",
     "P33"
    ],
    "routed": [
@@ -9804,14 +9730,12 @@
      "probe": "F16",
      "verdict": {
       "id": "F16",
-      "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
+      "verdict": "PASS",
+      "detail": "PASS: a duchy-level pool of coin was raised and spent BY ACTS at RESOLVE, in the ACTS class, landing at 25. S10's `Rung.matter.stores` is the carrier and S11's office stake pays upkeep from it. THE DISTINCTION L3 DRAWS IS MATERIAL VS SOCIAL, NOT INDIVIDUAL VS POOLED -- a treasury is matter and is lawful; unrest, legitimacy and reputation are not, and F16b refuses those",
+      "kind": null,
+      "section": "S10",
+      "title": "a faction-wide MATERIAL pool grows and is spent",
+      "by": "construction",
       "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
      }
     }
@@ -9945,7 +9869,7 @@
    "core_blocked": 2,
    "blockers": [
     "A27",
-    "F16"
+    "P17"
    ],
    "routed": [
     {
@@ -9968,18 +9892,18 @@
     {
      "need": "The system must be able to sum multiple independent per-season drain sources on the same shared currency into one combined seasonal total, and compare that total against the best available restoration action's typical output, as a first-class computable relationship, to determine whether the currency is on a terminal, unrecoverable trajectory.",
      "hardness": "core",
-     "probe": "F16",
+     "probe": "P17",
      "verdict": {
-      "id": "F16",
+      "id": "P17",
       "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
-      "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
+      "detail": "the closed `axis` registry L3 clause 1 requires (asked for 'suspicion')",
+      "kind": "UNSPECIFIED",
+      "section": "S22.4",
+      "title": "hidden exposure accumulates across seasons",
+      "needs": "a closed roster of axes, and a write-matrix row admitting the increment",
+      "law": "L3 clause 1 permits a monotone counter PER (Person, axis) -- 'legal, since every increment is in the holder's own ledger' -- but ONLY where `axis` is ON A CLOSED REGISTRY. No such registry exists in the chain, and no S30 row admits the write. S54 item 6 adds that the axis must not be spelled `exposure` bare, or it collides with the need scalar",
+      "by": "probe-model",
+      "tests": "a character's risk must be able to build up quietly across seasons without anyone acting"
      }
     }
    ],
@@ -10232,14 +10156,12 @@
      "probe": "F16",
      "verdict": {
       "id": "F16",
-      "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
+      "verdict": "PASS",
+      "detail": "PASS: a duchy-level pool of coin was raised and spent BY ACTS at RESOLVE, in the ACTS class, landing at 25. S10's `Rung.matter.stores` is the carrier and S11's office stake pays upkeep from it. THE DISTINCTION L3 DRAWS IS MATERIAL VS SOCIAL, NOT INDIVIDUAL VS POOLED -- a treasury is matter and is lawful; unrest, legitimacy and reputation are not, and F16b refuses those",
+      "kind": null,
+      "section": "S10",
+      "title": "a faction-wide MATERIAL pool grows and is spent",
+      "by": "construction",
       "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
      }
     },
@@ -10399,9 +10321,8 @@
    "core": 3,
    "core_routed": 3,
    "core_unmapped": 0,
-   "core_blocked": 3,
+   "core_blocked": 2,
    "blockers": [
-    "F16",
     "P17"
    ],
    "routed": [
@@ -10462,14 +10383,12 @@
      "probe": "F16",
      "verdict": {
       "id": "F16",
-      "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
+      "verdict": "PASS",
+      "detail": "PASS: a duchy-level pool of coin was raised and spent BY ACTS at RESOLVE, in the ACTS class, landing at 25. S10's `Rung.matter.stores` is the carrier and S11's office stake pays upkeep from it. THE DISTINCTION L3 DRAWS IS MATERIAL VS SOCIAL, NOT INDIVIDUAL VS POOLED -- a treasury is matter and is lawful; unrest, legitimacy and reputation are not, and F16b refuses those",
+      "kind": null,
+      "section": "S10",
+      "title": "a faction-wide MATERIAL pool grows and is spent",
+      "by": "construction",
       "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
      }
     }
@@ -10499,15 +10418,13 @@
    "name": "A succession crisis branches into distinct resolution paths",
    "scale": "faction",
    "source": "ARC6.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "PLAYABLE",
    "rows": 9,
    "core": 3,
    "core_routed": 3,
    "core_unmapped": 0,
-   "core_blocked": 1,
-   "blockers": [
-    "F16"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "A single succession decision must present multiple, mutually exclusive named resolution paths (at minimum four: accept an external demand, install one of several named heirs, resolve via a formal contested vote, or a coup), each with its own independent consequence chain rather than a single unified roll.",
@@ -10560,14 +10477,12 @@
      "probe": "F16",
      "verdict": {
       "id": "F16",
-      "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
+      "verdict": "PASS",
+      "detail": "PASS: a duchy-level pool of coin was raised and spent BY ACTS at RESOLVE, in the ACTS class, landing at 25. S10's `Rung.matter.stores` is the carrier and S11's office stake pays upkeep from it. THE DISTINCTION L3 DRAWS IS MATERIAL VS SOCIAL, NOT INDIVIDUAL VS POOLED -- a treasury is matter and is lawful; unrest, legitimacy and reputation are not, and F16b refuses those",
+      "kind": null,
+      "section": "S10",
+      "title": "a faction-wide MATERIAL pool grows and is spent",
+      "by": "construction",
       "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
      }
     }
@@ -10948,15 +10863,13 @@
    "name": "One institution's rise removes the counter-pressure against it",
    "scale": "realm",
    "source": "ARC6.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "NOT-ASSESSED",
    "rows": 7,
    "core": 2,
    "core_routed": 1,
    "core_unmapped": 1,
-   "core_blocked": 1,
-   "blockers": [
-    "F16"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "The loop's own START condition must be gated on a DIFFERENT clock's state as a prerequisite \u2014 this metric's threshold-crossing effect must only be active while a SEPARATE clock is below its own separate threshold, meaning the loop can be interrupted or never begin purely by that second clock's value, without any action targeting the metric itself.",
@@ -10981,14 +10894,12 @@
      "probe": "F16",
      "verdict": {
       "id": "F16",
-      "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
+      "verdict": "PASS",
+      "detail": "PASS: a duchy-level pool of coin was raised and spent BY ACTS at RESOLVE, in the ACTS class, landing at 25. S10's `Rung.matter.stores` is the carrier and S11's office stake pays upkeep from it. THE DISTINCTION L3 DRAWS IS MATERIAL VS SOCIAL, NOT INDIVIDUAL VS POOLED -- a treasury is matter and is lawful; unrest, legitimacy and reputation are not, and F16b refuses those",
+      "kind": null,
+      "section": "S10",
+      "title": "a faction-wide MATERIAL pool grows and is spent",
+      "by": "construction",
       "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
      }
     },
@@ -10998,14 +10909,12 @@
      "probe": "F16",
      "verdict": {
       "id": "F16",
-      "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
+      "verdict": "PASS",
+      "detail": "PASS: a duchy-level pool of coin was raised and spent BY ACTS at RESOLVE, in the ACTS class, landing at 25. S10's `Rung.matter.stores` is the carrier and S11's office stake pays upkeep from it. THE DISTINCTION L3 DRAWS IS MATERIAL VS SOCIAL, NOT INDIVIDUAL VS POOLED -- a treasury is matter and is lawful; unrest, legitimacy and reputation are not, and F16b refuses those",
+      "kind": null,
+      "section": "S10",
+      "title": "a faction-wide MATERIAL pool grows and is spent",
+      "by": "construction",
       "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
      }
     },
@@ -11131,15 +11040,13 @@
    "name": "A destabilizing world-state opens a window that its own consequences can close",
    "scale": "realm",
    "source": "ARC6.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "NOT-ASSESSED",
    "rows": 7,
    "core": 4,
    "core_routed": 3,
    "core_unmapped": 1,
-   "core_blocked": 2,
-   "blockers": [
-    "F16"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "A shared world-condition metric's own RISE (framed elsewhere as destabilizing/negative) must be able to be the SAME event that OPENS a capability gate, making a previously-unavailable action type newly available to characters who could not use it below the threshold \u2014 the same metric must carry both a negative framing in other consequences and a positive-unlock framing in this one, simultaneously.",
@@ -11162,14 +11069,12 @@
      "probe": "F16",
      "verdict": {
       "id": "F16",
-      "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
+      "verdict": "PASS",
+      "detail": "PASS: a duchy-level pool of coin was raised and spent BY ACTS at RESOLVE, in the ACTS class, landing at 25. S10's `Rung.matter.stores` is the carrier and S11's office stake pays upkeep from it. THE DISTINCTION L3 DRAWS IS MATERIAL VS SOCIAL, NOT INDIVIDUAL VS POOLED -- a treasury is matter and is lawful; unrest, legitimacy and reputation are not, and F16b refuses those",
+      "kind": null,
+      "section": "S10",
+      "title": "a faction-wide MATERIAL pool grows and is spent",
+      "by": "construction",
       "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
      }
     },
@@ -11179,14 +11084,12 @@
      "probe": "F16",
      "verdict": {
       "id": "F16",
-      "verdict": "GAP",
-      "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-      "kind": "FORBIDDEN",
-      "section": "S3-L3",
-      "title": "a faction-wide resource grows and is spent",
-      "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-      "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-      "by": "no-signature",
+      "verdict": "PASS",
+      "detail": "PASS: a duchy-level pool of coin was raised and spent BY ACTS at RESOLVE, in the ACTS class, landing at 25. S10's `Rung.matter.stores` is the carrier and S11's office stake pays upkeep from it. THE DISTINCTION L3 DRAWS IS MATERIAL VS SOCIAL, NOT INDIVIDUAL VS POOLED -- a treasury is matter and is lawful; unrest, legitimacy and reputation are not, and F16b refuses those",
+      "kind": null,
+      "section": "S10",
+      "title": "a faction-wide MATERIAL pool grows and is spent",
+      "by": "construction",
       "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
      }
     }
@@ -11345,14 +11248,12 @@
   },
   "F16": {
    "id": "F16",
-   "verdict": "GAP",
-   "detail": "a faction stat -- a pooled, stored, faction-wide quantity",
-   "kind": "FORBIDDEN",
-   "section": "S3-L3",
-   "title": "a faction-wide resource grows and is spent",
-   "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-   "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-   "by": "no-signature",
+   "verdict": "PASS",
+   "detail": "PASS: a duchy-level pool of coin was raised and spent BY ACTS at RESOLVE, in the ACTS class, landing at 25. S10's `Rung.matter.stores` is the carrier and S11's office stake pays upkeep from it. THE DISTINCTION L3 DRAWS IS MATERIAL VS SOCIAL, NOT INDIVIDUAL VS POOLED -- a treasury is matter and is lawful; unrest, legitimacy and reputation are not, and F16b refuses those",
+   "kind": null,
+   "section": "S10",
+   "title": "a faction-wide MATERIAL pool grows and is spent",
+   "by": "construction",
    "tests": "a faction must be able to hold a pooled resource that its members' actions raise and lower"
   },
   "P5": {
@@ -11830,6 +11731,18 @@
    "title": "a matter closes by scarcity, not by cancelling",
    "by": "probe-model",
    "tests": "several live demands on one matter must be able to resolve without cancelling each other"
+  },
+  "F16b": {
+   "id": "F16b",
+   "verdict": "GAP",
+   "detail": "Rung.legitimacy assigned -- not a declared field of S10's record",
+   "kind": "FORBIDDEN",
+   "section": "S10.1",
+   "title": "a faction-wide SOCIAL quantity is pooled and stored",
+   "needs": "a Query over the containment subtree, owned by Nobody",
+   "law": "L3 -- every aggregate is a function, never a field. S22.1 -- if the aggregate is a function it CANNOT go stale and CANNOT be initialised and then forgotten, because there is nothing to initialise",
+   "by": "construction",
+   "tests": "a faction must be able to hold a pooled level of loyalty, unrest or legitimacy"
   },
   "F8": {
    "id": "F8",
@@ -12577,15 +12490,6 @@
    "expected": false
   },
   {
-   "kind": "FORBIDDEN",
-   "what": "a faction stat -- a pooled, stored, faction-wide quantity",
-   "where": "S3-L3",
-   "needs": "a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-   "law": "L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-   "case": "probe:F16",
-   "expected": false
-  },
-  {
    "kind": "UNSPECIFIED",
    "what": "Sensation.standing",
    "where": "S18.2",
@@ -12745,6 +12649,15 @@
    "needs": "an author -- a nameable act that wound it, so it can be bribed, delayed, burned, or killed",
    "law": "S25.1 -- THE THREE LICENSED CLOCKS ARE EXHAUSTIVE: ['matter', 'bodies', 'the confidence of a memory']. Nobody wound any of the three and YOU CANNOT BRIBE SILT. EVERYTHING OUTSIDE THIS LIST NEEDS AN AUTHOR (L5's second paragraph). A quantity that advances on its own with no author is A SHADOW ACTOR -- unbuyable, undelayable, unkillable -- exactly the actor L1 forbids, arriving through a side door. S13.1 is the worked case: an act-DECLARED term does the same job lawfully AND gives the arc handles (bribe the clerk who set the term, burn the record that carries it, kill the man who must renew it)",
    "case": "probe:W13",
+   "expected": false
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "Rung.legitimacy assigned -- not a declared field of S10's record",
+   "where": "S10.1",
+   "needs": "a Query over the containment subtree, owned by Nobody",
+   "law": "L3 -- every aggregate is a function, never a field. S22.1 -- if the aggregate is a function it CANNOT go stale and CANNOT be initialised and then forgotten, because there is nothing to initialise",
+   "case": "probe:F16b",
    "expected": false
   },
   {
@@ -13121,7 +13034,7 @@
   "STEP": 2297,
   "BARRIER": 769,
   "DECISION": 785,
-  "WRITE": 697,
+  "WRITE": 699,
   "QUERY": 3718,
   "ACT": 81,
   "EVENT": 58,
@@ -13133,6 +13046,7 @@
   "ARC2.yaml: committed inside a markdown fence with transcript preamble",
   "ARC3.yaml: TRUNCATED AT HEAD -- 37 lines of a record above the first `- id:`; its identity is unrecoverable from the file",
   "ARC3.yaml: committed inside a markdown fence with transcript preamble",
+  "ARC3.yaml: recovered 0 row(s) from the truncated head; 37 line(s) above the first parseable `- need:` are UNRECOVERABLE",
   "NPC1.yaml: committed inside a markdown fence with transcript preamble",
   "NPC2.yaml: committed inside a markdown fence with transcript preamble",
   "NPC3.yaml: committed inside a markdown fence with transcript preamble"

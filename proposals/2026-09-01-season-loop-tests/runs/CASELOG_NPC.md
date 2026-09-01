@@ -86,13 +86,13 @@ not the shape.
 | If her covert status is exposed publicly, the consequence must convert what she gained secretly into an explicit, larger public loss, rather than simply erasing the secret gain. | — | UNMAPPED | — |
 | Her overt institutional rank and her covert rank must be able to move independently -- advancement or disgrace in one must not automatically imply the same in the other. | — | UNMAPPED | — |
 
-## NPC-010 — Dalla Virke  ·  **BLOCKED**
-*person · 8 rows, 4 core · blockers: F16*
+## NPC-010 — Dalla Virke  ·  **NOT-ASSESSED**
+*person · 8 rows, 4 core · blockers: none*
 *ends when:* never explicitly named; presumably her exposure or recall event, or indefinite continuation.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** A non-faction, non-institutional actor must be able to hold and trade a resource (information, trust, access) that no faction's own action economy owns or produces -- a market that exists ou | `F16` | **FORBIDDEN** | S3-L3 |
+| **[core]** A non-faction, non-institutional actor must be able to hold and trade a resource (information, trust, access) that no faction's own action economy owns or produces -- a market that exists ou | `F16` | PASS | S10 |
 | **[core]** Information she sells must be able to be true, false, or fabricated, with the buyer unable to distinguish which in advance, and her incentive to fabricate must rise specifically when honest  | `P5` | PASS | S19.3 |
 | A revelation that damages her standing with one party (a partner learning she shields certain clients from her own family's operations) must be able to threaten her position with a different | `P14` | **UNSPECIFIED** | S18.2 |
 | Her removal (replacement by someone with no local relationships) must be able to collapse benefits that other, unrelated actors were quietly relying on, in the same season, as a single casca | `A15` | **UNSPECIFIED** | S40.1 |
@@ -206,12 +206,12 @@ not the shape.
 | Once activated by institutional crisis, this office-holder must be able to direct his branch's investigative machinery inward, at a peer who nominally holds equivalent rank, not only outward | — | UNMAPPED | — |
 
 ## NPC-013 — Aldric Tormann  ·  **BLOCKED**
-*faction · 7 rows, 2 core · blockers: F16, P26*
+*faction · 7 rows, 2 core · blockers: P26*
 *ends when:* never automatically -- only a fired Parish Revolt or a PC-driven resolution closes a given territory's version of the problem; his own tenure has no end condition tied to this behavior
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** An office-holder must be able to take a repeatable seasonal action that reliably improves one faction-wide resource, with the improvement scaling by how many subordinate territories the offi | `F16` | **FORBIDDEN** | S3-L3 |
+| **[core]** An office-holder must be able to take a repeatable seasonal action that reliably improves one faction-wide resource, with the improvement scaling by how many subordinate territories the offi | `F16` | PASS | S10 |
 | **[core]** That same action must automatically and simultaneously degrade a slower-moving political resource in each affected territory, tracked separately per territory, with the accumulated damage co | `P26` | **UNSPECIFIED** | S22.4 |
 | The political erosion this office-holder causes in a territory must be able to make that territory's population measurably more receptive to a rival, unaligned political movement, as an emer | `P21` | PASS | S9.1 |
 | The resource this office-holder generates must be spendable, elsewhere in the same institution, in a way that is thematically opposed to the harm his generation of it causes, without the sys | `W9` | PASS | S10.3 |
@@ -219,13 +219,13 @@ not the shape.
 | A player character must be able to intervene directly in this office-holder's tithe-collection pattern in one specific territory, altering the outcome there without requiring institutional a | — | UNMAPPED | — |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-007 — Annika Feldhaus  ·  **BLOCKED**
-*faction · 7 rows, 3 core · blockers: F16*
+## NPC-007 — Annika Feldhaus  ·  **NOT-ASSESSED**
+*faction · 7 rows, 3 core · blockers: none*
 *ends when:* not specified to conclude -- resolves only through the (also open-ended) supply-chain revelation or recall arcs tied to Virke, or a direct exposure of Feldhaus's own half
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** A faction representative must be able to repeatedly grow one faction stat at the direct, automatic expense of a second faction stat every season, as her default behavior rather than a one-ti | `F16` | **FORBIDDEN** | S3-L3 |
+| **[core]** A faction representative must be able to repeatedly grow one faction stat at the direct, automatic expense of a second faction stat every season, as her default behavior rather than a one-ti | `F16` | PASS | S10 |
 | **[core]** Two separate economic actors who each independently built one half of the same tainted supply chain must have their exposure risks linked, such that revealing the taint through EITHER one da | `F18` | PASS | S36.1 |
 | A formal institutional gate she benefits from (an examination or credentialing process) must be able to carry a procedural, plausibly-deniable bias against a specific population, so that ind | `W9` | PASS | S10.3 |
 | **[core]** An economic actor's supply chain must be able to carry a hidden property that she has no way to detect given her own perceptual limits, such that she is materially responsible for a conseque | — | UNMAPPED | — |
@@ -360,7 +360,7 @@ not the shape.
 | **[core]** A person's capability in a specialized domain must be able to have a hard ceiling reachable through sustained legitimate effort, past which continued investment produces no further progress, | `P10` | **UNSPECIFIED** | S30.1 |
 | **[core]** An external, unpredictable event unrelated to this person's own choices must be able to instantly convert her from an influence-only actor into the sole holder of supreme authority, with eve | `P34` | PASS | S20 |
 | Ascending to supreme authority through this path must be able to instantly and permanently redefine what the ruling institution stands for, flipping an ambient, privately-held policy uncerta | `P17` | **UNSPECIFIED** | S22.4 |
-| A previously unified protective institution must be able to fracture into an internal decision point purely as a consequence of who now holds supreme authority, with no change to its own for | `F16` | **FORBIDDEN** | S3-L3 |
+| A previously unified protective institution must be able to fracture into an internal decision point purely as a consequence of who now holds supreme authority, with no change to its own for | `F16` | PASS | S10 |
 | **[core]** A person with a genuine political programme and real institutional standing must be able to have no independent action economy of her own, so that everything she wants to achieve routes enti | — | UNMAPPED | — |
 | Sustained private argument and demonstrated intellectual soundness from this person must be able to fail to move the decision-maker specifically because his blocking state is uncertainty rat | — | UNMAPPED | — |
 | The same unpredictable event, resolved differently, must instead be able to remove this person from play entirely, with the consequence of her death routing almost entirely through a differe | — | UNMAPPED | — |
@@ -477,13 +477,13 @@ not the shape.
 | A character's canonical status must be able to remain fully usable in play while a pending citation reference is still unresolved elsewhere. | — | UNMAPPED | — |
 | *(3 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-037 — Annalie Reichard  ·  **BLOCKED**
-*person · 6 rows, 2 core · blockers: F16*
+## NPC-037 — Annalie Reichard  ·  **NOT-ASSESSED**
+*person · 6 rows, 2 core · blockers: none*
 *ends when:* never stated; no goal or arc is recorded, so no terminus is named.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** A person holding the Crown's treasury-oversight post must be able to affect, or be affected by, the Crown's material resources at a faction level, distinct from a generic administrative post | `F16` | **FORBIDDEN** | S3-L3 |
+| **[core]** A person holding the Crown's treasury-oversight post must be able to affect, or be affected by, the Crown's material resources at a faction level, distinct from a generic administrative post | `F16` | PASS | S10 |
 | **[core]** A named character's faction affiliation, once established in one source document, must be able to be corrected to a different faction entirely in a later authoritative pass, with the correct | — | UNMAPPED | — |
 | A conviction profile's ambiguous middle source value must be able to be resolved as a distinct manner-of-expression axis rather than folded into, or discarded from, her weighted conviction l | — | UNMAPPED | — |
 | A character's canonical status must be able to remain fully usable in play while a pending citation reference is still unresolved elsewhere. | — | UNMAPPED | — |

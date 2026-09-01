@@ -448,7 +448,7 @@ def test_a_blocker_outranks_an_unaimed_row():
     """A core row that DID route and DID hit a gap is a fact about the SHAPE; a core row that
     failed to route is a fact about the AIM. The first outranks the second."""
     got = R.grade({"id": "T", "season_requires": [
-        {"need": "a faction must be able to hold a pooled faction-wide resource", "hardness": "core"},
+        {"need": "a settlement unrest level must be able to rise and fall", "hardness": "core"},
         {"need": "zzzz qqqq wwww vvvv", "hardness": "core"},
     ]})
     assert got["verdict"] == "BLOCKED", got["verdict"]

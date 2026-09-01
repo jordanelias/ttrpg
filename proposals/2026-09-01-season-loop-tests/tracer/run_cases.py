@@ -271,12 +271,29 @@ def _tolerant_yaml(text: str, fname: str):
         notes.append(
             f"{fname}: TRUNCATED AT HEAD -- {first} lines of a record above the first `- id:`; "
             "its identity is unrecoverable from the file")
-        try:
-            rows = yaml.safe_load("season_requires:\n" + "\n".join(
-                ln[2:] if ln.startswith("  ") else ln for ln in lines[:first]))
-            rows = (rows or {}).get("season_requires") or []
-        except yaml.YAMLError:
-            rows = []
+        # ⚠ REV 5. The reconstruction below FAILED SILENTLY for four revisions -- the fragment
+        # begins mid block-scalar, `yaml` raised, the except branch returned [], and TWO `core`
+        # ROWS WERE LOST while this function's docstring said "NOT DROPPED" and the regression
+        # test asserted only that a NOTE existed. The recovery now starts at the fragment's
+        # first parseable `- need:` and REPORTS how many rows it could not reach.
+        rows, lost = [], 0
+        head_lines = lines[:first]
+        start = next((i for i, ln in enumerate(head_lines)
+                      if ln.lstrip().startswith("- need:")), None)
+        if start is None:
+            lost = len(head_lines)
+        else:
+            lost = start
+            try:
+                indent = len(head_lines[start]) - len(head_lines[start].lstrip())
+                body = "\n".join(ln[indent:] if len(ln) > indent else ln
+                                  for ln in head_lines[start:])
+                rows = yaml.safe_load(body) or []
+                rows = [r for r in rows if isinstance(r, dict) and "need" in r]
+            except yaml.YAMLError:
+                rows, lost = [], len(head_lines)
+        notes.append(f"{fname}: recovered {len(rows)} row(s) from the truncated head; "
+                     f"{lost} line(s) above the first parseable `- need:` are UNRECOVERABLE")
         if rows:
             cases = [dict(id=f"{fname.split('.')[0]}-ORPHAN",
                           name="[IDENTITY LOST] headless fragment recovered from a truncated file",
@@ -416,7 +433,8 @@ ROUTES_2: list[tuple[str, str, str | None]] = [
     ("P36", r"\b(branch|fork|split|diverge)\w*\b[^.]{0,50}\b(two|three|four|several|multiple)\b[^.]{0,20}\bways?\b", None),
     ("P36", r"\b(protect|report|leverage|expose|shield)\b[^.]{0,40}\b(him|her|them|the discovery|the finding)\b", None),
     ("F16", r"\b(faction|institution\w*|organis\w+|organiz\w+|order|guild|church|crown)\b[^.]{0,60}\b(stat|resource|pool|treasury|coffers|capital|points?|\bAP\b|score|track)\b", None),
-    ("F16", r"\b(grow|raise|increase|spend|deplete|drain|expend|improve)\w*\b[^.]{0,60}\b(faction[- ]wide|institutional|organisational|organizational|shared|pooled)\b", None),
+    ("F16", r"\b(grow|raise|increase|spend|deplete|drain|expend|improve)\w*\b[^.]{0,60}\b(faction[- ]wide|institutional|shared|pooled)\b[^.]{0,40}\b(resource|stores?|treasury|supplies|material|capacity)\b", None),
+    ("F16b", r"\b(grow|raise|increase|erode|drain)\w*\b[^.]{0,60}\b(faction[- ]wide|institutional|shared|pooled)\b[^.]{0,40}\b(loyalty|unrest|legitimacy|morale|standing|cohesion)\b", None),
     ("F17", r"\b(approval|authoris\w+|authoriz\w+|sponsorship|sanction|permission|sign[- ]?off|warrant|conduit)\b[^.]{0,70}\b(precondition|prerequisite|required|necessary|formal|before (they|he|she|it) (can|may))\b", None),
     ("F18", r"\b(conflict|cut against|compet\w+|at odds|tension|contradict|in direct)\w*\b[^.]{0,70}\b(order|instruction|directive|mandate|command|what .{0,25}(ordered|wanted|demanded))\b", None),
     ("F19", r"\b(settlement|place|town|region|province|community|territor\w+|world)\b[^.]{0,60}\b(generat\w+|produc\w+|rais\w+|surfac\w+|throw\w* up|of its own)\b[^.]{0,50}\b(demand|need|dispute|shortfall|ambition|problem|issue|pressure)s?\b", None),
@@ -510,7 +528,8 @@ ROUTES_4: list[tuple[str, str, str | None]] = [
     ("W10", r"\b(institution|settlement|region|place|territory|province|force|army)'?s?\b[^.]{0,50}\b(overall |collective |aggregate )?(health|morale|cohesion|effectiveness|stability|readiness)\b", None),
 
     # (d) A FACTION-SCALE POOLED QUANTITY -- L3, and S14.2 leaves nowhere to put it.
-    ("F16", r"\b(faction|institution|organisation|organization|order|church|guild)[- ](scale|wide|level)\b[^.]{0,50}\b(quantity|value|stat|resource|pool|score|track|capacity)\b", None),
+    ("F16", r"\b(faction|institution|organisation|organization|order|church|guild)[- ](scale|wide|level)\b[^.]{0,50}\b(resource|pool|stores?|treasury|capacity|material)\b", None),
+    ("F16b", r"\b(faction|institution|organisation|organization|order|church|guild)[- ](scale|wide|level)\b[^.]{0,50}\b(stat|score|track|quantity|value)\b", None),
     ("F16", r"\b(one|a single|shared|common)\b[^.]{0,30}\bfaction[- ]wide\b[^.]{0,30}\bvalue\b", None),
 
     # (e) A QUANTITY THAT MOVES ON ITS OWN -- a fourth clock. S25.1's three are exhaustive.

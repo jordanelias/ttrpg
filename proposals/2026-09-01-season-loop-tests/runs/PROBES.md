@@ -1,6 +1,6 @@
 # THE PROBE LEDGER
 
-**120 probes.** Each is a real execution against `shape.py` that either
+**121 probes.** Each is a real execution against `shape.py` that either
 completes or raises a typed gap.
 
 ## How each verdict was reached
@@ -11,14 +11,14 @@ checking.* So every probe declares its provenance:
 
 | `by=` | means | count |
 |---|---|---|
-| `construction` | **the shape itself raised** — a gate, a law or a type stopped it. This is evidence | 68 |
-| `no-signature` | nothing to call. The design supplies no function by which it could be attempted — which *is* the refusal, but **absence is not a guard** | 29 |
+| `construction` | **the shape itself raised** — a gate, a law or a type stopped it. This is evidence | 70 |
+| `no-signature` | nothing to call. The design supplies no function by which it could be attempted — which *is* the refusal, but **absence is not a guard** | 28 |
 | `convention` | the shape permits it and only a reader stops it. §27.2 is the design's own example and says so out loud | 1 |
 | `probe-model` | the probe supplies a model the design does not, to reach the question at all | 22 |
 
 ## ⚠ THE ENFORCEMENT SPLIT — the single most important number in this ledger
 
-**Of 58 gaps, 26 were raised BY THE SHAPE ITSELF and 28 exist only because THERE IS NO SIGNATURE TO CALL.**
+**Of 58 gaps, 27 were raised BY THE SHAPE ITSELF and 27 exist only because THERE IS NO SIGNATURE TO CALL.**
 
 That is close to an even split, and it matters more than any case verdict. A refusal a
 gate enforces and a refusal that exists because nobody wrote the function are different
@@ -30,7 +30,7 @@ has no module system and no visibility modifiers, so the guarantee there is
 a contributor closes by simply writing the function — no gate fires, no test goes red,
 and the design's own §27.2 admission applies: *enforced by a person noticing*.
 
-**And 20 of 62 PASSes are not by construction
+**And 20 of 63 PASSes are not by construction
 either** — they are listed individually below and should be discounted accordingly. A
 `probe-model` PASS means the instrument supplied something the design does not.
 
@@ -63,7 +63,7 @@ either** — they are listed individually below and should be discounted accordi
 | `F11` | **FORBIDDEN** | no-signature | S38 | a character must be able to know how strong their own faction is |
 | `F14` | **FORBIDDEN** | construction | S22.4 | a faction's territory must be countable as it gains and loses ground |
 | `F15` | **UNSPECIFIED** | no-signature | S54 item 13 / S61 | a post must be able to employ people whose competence is what actually gets used |
-| `F16` | **FORBIDDEN** | no-signature | S3-L3 | a faction must be able to hold a pooled resource that its members' actions raise and lower |
+| `F16b` | **FORBIDDEN** | construction | S10.1 | a faction must be able to hold a pooled level of loyalty, unrest or legitimacy |
 | `F19` | **NO-PRODUCER** | no-signature | S36.1 | a settlement's needs must be able to surface as demands without a named petitioner |
 | `F21` | **UNSPECIFIED** | construction | S61 | a character sitting on a collective body must be able to have their individual position registered distinctly from the body's deci |
 | `F3` | **FORBIDDEN** | no-signature | S3-L1 | a faction must be able to take an action of its own |
@@ -119,6 +119,7 @@ either** — they are listed individually below and should be discounted accordi
 | `F10` | PASS | probe-model | S54.1 | several live demands on one matter must be able to resolve without cancelling each other |
 | `F12` | PASS | construction | S11 | a post must be able to be given and taken away by named people at named occasions |
 | `F13` | PASS | construction | S24 | when a post falls empty the process to fill it must be able to start |
+| `F16` | PASS | construction | S10 | a faction must be able to hold a pooled resource that its members' actions raise and lower |
 | `F17` | PASS | construction | S27.1 | a superior's approval must be able to be a formal precondition without which subordinates cannot act |
 | `F18` | PASS | probe-model | S36.1 | a place must be able to generate demands of its own that cut against what the authority above ordered |
 | `F2` | PASS | probe-model | S54 item 20 | when everyone abandons a cause, what it held must be able to be taken by someone else |
@@ -310,11 +311,11 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** how many people an office employs, and how they are chosen
 **law:** S61 -- one of FOUR BLOCKING GAPS DROPPED FROM THE OPEN REGISTER and folded back as `grade: absent`. S11.1 makes the pool `capability of the dispatched establishment member(s) ACTUALLY PERFORMING IT`, so with an empty establishment an office has no pool source at all
 
-### `F16` — a faction-wide resource grows and is spent  ·  **FORBIDDEN**  ·  `S3-L3`  ·  by `no-signature`
-**what:** a faction stat -- a pooled, stored, faction-wide quantity
+### `F16b` — a faction-wide SOCIAL quantity is pooled and stored  ·  **FORBIDDEN**  ·  `S10.1`  ·  by `construction`
+**what:** Rung.legitimacy assigned -- not a declared field of S10's record
 
-**needs:** a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger
-**law:** L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields ['id', 'mood', 'predicate', 'scope', 'subject', 'value', 'when'] -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3
+**needs:** a Query over the containment subtree, owned by Nobody
+**law:** L3 -- every aggregate is a function, never a field. S22.1 -- if the aggregate is a function it CANNOT go stale and CANNOT be initialised and then forgotten, because there is nothing to initialise
 
 ### `F19` — a place produces a demand with nobody petitioning  ·  **NO-PRODUCER**  ·  `S36.1`  ·  by `no-signature`
 **what:** a demand originating from a place rather than a person

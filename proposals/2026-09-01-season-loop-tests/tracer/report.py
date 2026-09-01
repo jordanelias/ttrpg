@@ -222,7 +222,25 @@ def emit(rep: dict, trace_rows: list) -> None:
             out.append(f"- *[{cid}]* {n}")
         (RUNS / f"UNMAPPED_{kind}.md").write_text("\n".join(out))
 
-    print(f"wrote UNMAPPED_NPC.md, UNMAPPED_ARC.md")
+    # THE DISCLOSURE S320 PROMISED AND REV 4 NEVER DELIVERED.
+    import shape as _s
+    used = sorted(_s.ASSUMPTIONS_USED)
+    out = ["# THE INSTRUMENT'S OWN ASSUMPTIONS — what it had to supply to run at all", "",
+           "**§42.2.1's inject-declare-name pattern, applied to SCHEMA ROWS rather than to",
+           "numbers.** Without these the loop cannot complete one season, so refusing them would",
+           "mean measuring nothing; asserting them silently would be the invention §42.3 names.",
+           "", f"**{len(used)} of {len(_s.PARTITION_ASSUMED)} declared assumptions were actually",
+           "exercised by this run.**", "", "| row | social | why | exercised |", "|---|---|---|---|"]
+    for k, (social, why) in sorted(_s.PARTITION_ASSUMED.items()):
+        out.append(f"| `({k[0]}, {k[1]})` | {social} | {why} | {'yes' if k in used else 'no'} |")
+    out += ["", "## Harness fixtures — every number this instrument used", "",
+            "| fixture | value | in chain? |", "|---|---|---|"]
+    inchain = {"entrenchment_seasons": "yes — §15.2",
+               "obstacle_refusal_multiple": "yes — §27.4"}
+    for k, v in _s.DEFAULT_FIXTURES._v.items():
+        out.append(f"| `{k}` | `{v}` | {inchain.get(k, 'no — a harness fixture')} |")
+    (RUNS / "ASSUMPTIONS.md").write_text("\n".join(out))
+    print(f"wrote UNMAPPED_NPC.md, UNMAPPED_ARC.md, ASSUMPTIONS.md ({len(used)} exercised)")
 
 
 

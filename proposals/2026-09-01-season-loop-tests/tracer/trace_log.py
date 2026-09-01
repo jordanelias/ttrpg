@@ -49,10 +49,12 @@ class Trace:
     def barrier(self, n: int, name: str) -> None:
         self._row("BARRIER", f"barrier {n} - {name}", "S23")
 
-    def decision(self, what: str, where: str, chose: str, alternatives: list[str]) -> None:
+    def decision(self, what: str, where: str, chose: str, alternatives: list[str],
+                 not_implemented: list[str] | None = None) -> None:
         """A branch the shape took that could have gone another way. This is the row the
         tracing agent exists for: a decision nobody records is a decision nobody can audit."""
-        self._row("DECISION", what, where, chose=chose, alternatives=alternatives)
+        self._row("DECISION", what, where, chose=chose, alternatives=alternatives,
+                  not_implemented=not_implemented or [])
 
     def write(self, thing: str, wclass: str, step: str, admitted: bool, where: str = "S30") -> None:
         self._row("WRITE", thing, where, write_class=wclass, step=step, admitted=admitted)

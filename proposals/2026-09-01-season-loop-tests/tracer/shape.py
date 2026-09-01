@@ -399,6 +399,10 @@ MATRIX_REFUSAL_LAW: dict[tuple[str, Step], tuple[str, str]] = {
         "S20", "S20 -- `witness` is THE ONLY MINTER of a root token, and it runs at WITNESS"),
 }
 
+# ⚠ REV 5. This set was WRITTEN AND NEVER READ for two revisions, while S320's comment promised
+# the assumed rows were "REPORTED IN THE OUTPUT, so a reader can see exactly how much of L4's
+# enforcement rests on the instrument". Under this file's own fidelity rule 6 that was a false
+# claim of a disclosure mechanism. `report.py` now reads it.
 ASSUMPTIONS_USED: set[tuple[str, str]] = set()
 
 
@@ -1104,9 +1108,16 @@ class SeasonDriver:
         # section, because both CROSS OWNERS (S31.1). S31.1 exception 3: an actorless event is
         # ONE Event spanning many rungs -- sharding it per rung BREAKS causes[], because ONE
         # CAUSE IS ONE ID.
-        TRACE.decision("MATTER's three cross-owner operations", "S31.1",
-                       chose="serial: event channel, then death cascade; then parallel over Sites and bodies",
-                       alternatives=["shard the event channel per rung (breaks causes[])"])
+        # ⚠ REV 5. This row previously read "serial: event channel, then death cascade; then
+        # parallel over Sites and bodies" and was recorded 194 times -- describing TWO BRANCHES
+        # THAT DO NOT EXIST IN THIS CODE. A decision register whose most frequent row names code
+        # never written is worse than no register: it is the "every decision made" claim made
+        # false at its highest-volume site.
+        TRACE.decision("MATTER's cross-owner operations", "S31.1",
+                       chose="serial: the actorless event channel; then parallel over Sites",
+                       alternatives=["shard the event channel per rung (breaks causes[]: one cause is one id)"],
+                       not_implemented=["the death cascade (S31.1 exception 2)",
+                                        "bodies, larders, yield, travel (S25's other rows)"])
         for e in (actorless or []):
             w.log.append(e); emitted.append(e)
             TRACE.event(e.id, e.kind, e.causes)

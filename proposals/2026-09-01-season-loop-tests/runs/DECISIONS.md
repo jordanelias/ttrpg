@@ -5,9 +5,9 @@ it did not take. A decision nobody records is a decision nobody can audit.
 
 **785 decisions taken, 20 distinct.**
 
-### MATTER's three cross-owner operations  ·  `S31.1`  ·  taken 194x
-- **chose:** serial: event channel, then death cascade; then parallel over Sites and bodies  (194x)
-- *not taken:* shard the event channel per rung (breaks causes[])
+### MATTER's cross-owner operations  ·  `S31.1`  ·  taken 194x
+- **chose:** serial: the actorless event channel; then parallel over Sites  (194x)
+- *not taken:* shard the event channel per rung (breaks causes[]: one cause is one id)
 
 ### individuation  ·  `S29`  ·  taken 189x
 - **chose:** demand-driven only; generated nobody  (189x)

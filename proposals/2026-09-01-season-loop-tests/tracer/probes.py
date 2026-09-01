@@ -926,17 +926,42 @@ def f15():
     )
 
 
-@probe("F16", "a faction-wide resource grows and is spent", "S3-L3", by="no-signature",
+@probe("F16", "a faction-wide MATERIAL pool grows and is spent", "S10", by="construction",
        tests="a faction must be able to hold a pooled resource that its members' actions raise and lower")
 def f16():
     w = tiny_world()
-    prop = Proposition("prop_f", "OUGHT", "realm", "a cause", True, 0)
-    fields = sorted(Proposition.__dataclass_fields__)
-    raise Forbidden(
-        "a faction stat -- a pooled, stored, faction-wide quantity", "S3-L3",
-        needs="a Query over live commit edges, recomputed; or the thing tracked belongs in a person's ledger",
-        law=f"L3 -- a stored `unrest` is a lie that outlives its reasons. A faction IS a Proposition plus its commit edges (S14.2), and Proposition is FROZEN with fields {fields} -- there is nowhere to put it. A Rung refuses it too (S10.1). AND the obvious workaround is closed: summing per-member tallies is S22.4 clause 2, counting ever-held edges is clause 3",
-    )
+    # ⚠ REV 5. Revisions 1-4 refused this WHOLESALE as "a pooled, stored, faction-wide quantity"
+    # under L3 -- and it was the second-largest blocker in the corpus (~19 core rows). IT IS
+    # LAWFUL. S10 gives EVERY Rung `matter.stores : map MatterKind -> int`, and S11 gives an
+    # Office a stake out of which it pays upkeep. A TREASURY IS MATTER. What L3 refuses is a
+    # pooled SOCIAL quantity -- unrest, legitimacy, reputation, morale.
+    #
+    # No antagonist caught this in four passes. It is the clearest instance of the instrument
+    # measuring AGAINST the design, which S0.1 point 4 rules is no more acceptable than flattery.
+    rung = w.rungs["D"]
+    w.step = Step.RESOLVE
+    w.write("stores", WriteClass.ACTS,
+            lambda: rung.stores.__setitem__("coin", rung.stores.get("coin", 0) + 40),
+            record_kind="Rung", fieldname="stores", driver="Act")
+    w.write("stores", WriteClass.ACTS,
+            lambda: rung.stores.__setitem__("coin", rung.stores["coin"] - 15),
+            record_kind="Rung", fieldname="stores", driver="Act")
+    assert rung.stores["coin"] == 25
+    off = w.offices["off_duke"]
+    return (f"PASS: a duchy-level pool of coin was raised and spent BY ACTS at RESOLVE, in the "
+            f"ACTS class, landing at {rung.stores['coin']}. S10's `Rung.matter.stores` is the "
+            "carrier and S11's office stake pays upkeep from it. THE DISTINCTION L3 DRAWS IS "
+            "MATERIAL VS SOCIAL, NOT INDIVIDUAL VS POOLED -- a treasury is matter and is lawful; "
+            "unrest, legitimacy and reputation are not, and F16b refuses those")
+
+
+@probe("F16b", "a faction-wide SOCIAL quantity is pooled and stored", "S3-L3",
+       by="construction",
+       tests="a faction must be able to hold a pooled level of loyalty, unrest or legitimacy")
+def f16b():
+    w = tiny_world()
+    w.rungs["D"].legitimacy = 5
+    return "UNREACHABLE"
 
 
 @probe("F17", "an authorization precedes the act it authorises", "S27.1", by="construction",
