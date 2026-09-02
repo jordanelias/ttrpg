@@ -694,7 +694,7 @@ row (§1.4). Until every one is `ruled`, `measured` or `assumption`-with-a-defau
 | **H-24** | `(Person, exists)` | SCHEMA_ROW | the design | **ruled** — Part D, bounded by §15.3 | Part D | every death |
 | **H-25** | a termination bound per self-feeding loop | RULING | — | **absent** | none. ⚠ **three of four in-chain feedback loops name no off-switch and the fourth's is self-defeating** | ~4 |
 | **H-27** | travel-leg ownership | SCHEMA_ROW | **Person, as the Tenure's subject** | **ruled** — §D4, by precedent | §15.1 | 1 |
-| **H-28** | `budget`'s placement | RULING — **answered by precedent** | resolver-side, barrier-computed | **ruled** — §F3 | `sense()` | every "wounded duke" |
+| **H-28** | `budget`'s placement | RULING — **answered by the type** | **PERSON-side** *(corrected by W1's adversarial pass)* | **ruled** — #353 `:877` | `budget : (Person, View) -> int` PERSON-SIDE, reading own `hold` Tenures, own body band, own travel legs; per Jordan's 2026-09-02 ruling it returns SCENE actions, not acts | every "wounded duke" |
 | **H-29** | `standing`'s formula | FORMULA | Person | **assumption** | §F4's agreement over own `told_by` claims | 2 |
 | **H-30** | person-order vs global canonical order | RULING — **answered by architecture** | the resolver | **assumption** | composite key `(stratum, actor-hash, intra-person position)` — honours both | 2 |
 | **H-31** | the degree ladder's margin model | FORMULA | params (the one ladder) | **absent** | none. ⚠ **every contest is blocked** | every contest |

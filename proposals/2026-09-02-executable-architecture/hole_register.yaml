@@ -209,7 +209,7 @@ rows:
     site:      "registry: the axis roster"
     sweep:     ["the closed 13 alone", "13 + suspicion + harm_borne (the default)", "corpus-asked only"]
     unblocks:  "**~28**"
-    cite:      "PLAN §3.2. SCHEMA_ROW-shaped by V2's own kinds, so the row is injectable and only the roster is open. ⚠ THE AXIS MUST NEVER BE SPELLED `exposure` BARE -- #353 :1897 names \"The Exposure collision -- three senses of one word, including a need scalar and a per-person tally\". Verified by hand 2026-09-02."
+    cite:      "PLAN §3.2. SCHEMA_ROW-shaped by V2's own kinds, so the row is injectable and only the roster is open. ⚠ THE AXIS MUST NEVER BE SPELLED `exposure` BARE -- #353 :1897 names \"The Exposure collision -- three senses of one word, including a need scalar and a per-person tally\". Verified by hand 2026-09-02. ⚠ JORDAN, 2026-09-02, VERBATIM: 'please note that convictions roster and axes etc may be modified in future.' THIS ROW THEREFORE STAYS `assumption` AND MUST NOT BE CLOSED `ruled` -- not on this chain's reading and not on the tree's. It also fixes the ARCHITECTURE: the roster is a REGISTRY ROW READ AT RUNTIME, never a constant in a body, so changing it is a data edit and not a code change. CORROBORATION, RECORDED PER PLAN §2.6 AND NOT DEPENDED ON: the tree carries a live owner for the SHAPE -- `systems/_architecture/key_substrate_v30.md` §2.5, 'each Conviction projects onto the 4 axes via a 13-entry x 4-column matrix', with `npc.armature_position[axis] = sum over c of npc.personal_convictions[c] x CONVICTION_AXIS_MATRIX[c][axis]`, and `engine/substrate/keys.py:59` names the four as `AXES = (hierarchical, sacred, instrumental, traditional)`. That is a 13x4 PROJECTION MATRIX, which is the shape §F2's `alignment(c.verb, axis)` needs and which PLAN §1.4 hole 7 says appears nowhere in the chain -- it appears in the TREE. The shape corroborates; the CONTENT is explicitly open by the ruling above."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **assumption** for the row (Part D) · **absent** for the roster"
   - id:        H-21
     tier:      1
@@ -264,12 +264,12 @@ rows:
     hole:      "a termination bound per self-feeding loop"
     kind:      "RULING"
     owner:     "—"
-    grade:     "measured"
-    default:   "none to inject -- it is an ARGUMENT, and the obligation is an execution (W11)"
-    site:      "engine: a seeded N-season run of a spiral case in which the feeding acts cease"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
     sweep:     []
     unblocks:  "~4"
-    cite:      "PLAN §3.1, test 5 (architecture, with a `measured` obligation). #353 :184-186 VERBATIM: \"every clock that moves such a quantity -- other than the three the world already licenses (matter, bodies, the confidence of a memory) -- was set by a nameable act, so it can be bribed, delayed, burned, or killed.\" Every cross-season feed is a budgeted act by a person; a spiral nobody feeds stops. GRADE IS `measured`, NOT `ruled`: the argument is sound and UNEXECUTED, and W11 is what discharges it. Verified by hand 2026-09-02."
+    cite:      "PLAN §3.1 CLOSED THIS `measured` AND IT IS OVERTURNED. V2 §G2 defines `measured` as \"an execution artifact establishes it ... the command is on the row\". There is no artifact and no command -- the closure's own words were \"the argument is sound and UNEXECUTED\". Under §42.2's polarity rule zero evidence maps to the verdict AGAINST. And #353 CONSIDERED THE ARGUMENT AND DECLINED IT: §40.1 `:1424-1428` VERBATIM: \"no termination proof. the head lists as an open debt ... a termination argument per self-feeding loop. four arcs plus the king are spirals; nothing bounds one ... that debt is cross-season and no within-tick argument touches it in either direction\" L5's second paragraph `:184-186` -- the closure's entire basis -- is 1,240 lines EARLIER in the same document. The source had it in hand and still recorded no termination proof. W11 is what would move this to `measured`."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent** | V2's default cell: none. ⚠ **three of four in-chain feedback loops name no off-switch and the fourth's is self-defeating**"
   - id:        H-26
     tier:      0
@@ -298,14 +298,14 @@ rows:
   - id:        H-28
     tier:      1
     hole:      "`budget`'s placement"
-    kind:      "RULING — **answered by precedent**"
-    owner:     "resolver-side, barrier-computed"
-    grade:     "assumption"
-    default:   "`budget : (Person, View) -> int` PERSON-SIDE, reading own `hold` Tenures, own body band, own travel legs -- the SMALLER amendment; and per Jordan's 2026-09-02 ruling it returns SCENE actions, not acts"
-    site:      "person.budget"
-    sweep:     ["person-side (the default)", "resolver-side barrier-computed (V2 §F3)", "constant 5"]
+    kind:      "RULING — **answered by the type**"
+    owner:     "**PERSON-side** *(corrected by W1's adversarial pass)*"
+    grade:     "ruled"
+    default:   "`budget : (Person, View) -> int` PERSON-SIDE, reading own `hold` Tenures, own body band, own travel legs; per Jordan's 2026-09-02 ruling it returns SCENE actions, not acts"
+    site:      ""
+    sweep:     []
     unblocks:  "every \"wounded duke\""
-    cite:      "PLAN §3.3. RE-GRADED DOWN from V2's `ruled`. V2 §F3 makes `budget` a SECOND non-decision function taking a World, and #353 :634 VERBATIM says `sense()` is \"the one non-decision function permitted a `World`\" -- both cannot hold, and V2 §0.3 does not list the amendment. The smaller amendment is available: #353 :546 gives a Person every Tenure it is subject of, and :605 lists `entrenchment(p, ...)` among the PERSON-SIDE queries that read the asker's own interior. So §18.2's \"the ONE\" survives. Verified by hand 2026-09-02."
+    cite:      "PLAN §3.3 re-graded this to `assumption` and THE ADVERSARIAL PASS OVERTURNED THE DIRECTION: the row is RULED, on a line neither the plan nor the re-grade cited. #353 `:877` VERBATIM: \"budget : (Person, View) -> int -- a QUERY, never a field\". NO `World` IN THE TYPE, so resolver-side is excluded BY THE SIGNATURE (§26.1). And `:912-913` VERBATIM: \"`budget` is a Query, never a field -- office, condition, distance travelled. A wounded duke gets fewer acts than a healthy one WITHOUT ANYBODY STORING A NUMBER\", which excludes a constant. Two of the three sweep points the re-grade authored were options THE SPECIFICATION FORBIDS, so a verdict flipping across that sweep would have been reported as a finding about a game #353 ruled out. V2 §F3 is the defective side and PLAN §3.3 already says so; `:634`'s \"the ONE non-decision function permitted a World\" survives."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **ruled** — §F3"
   - id:        H-29
     tier:      1
@@ -337,11 +337,11 @@ rows:
     kind:      "FORMULA"
     owner:     "params (the one ladder)"
     grade:     "assumption"
-    default:   "four bands read off `margin = successes - obstacle`; the BAND EDGES are the swept triple"
+    default:   "four bands read off a MARGIN. ⚠ THE MARGIN'S DEFINITION IS THE INJECTED PART AND IS SWEPT -- #353 uses the word ONCE, at :1400, and never defines it"
     site:      "contest.degree_from_margin"
-    sweep:     ["edges (1,3,5)", "edges (2,4,6)", "edges (1,2,4)"]
+    sweep:     ["margin = net - ob (the form the tree's ruled owner uses -- see cite)", "margin = successes - obstacle", "margin = pool - obstacle", "margin = degree count"]
     unblocks:  "every contest"
-    cite:      "PLAN §3.2. Shape ruled by #353 :1400-1401 VERBATIM: \"There is one degree ladder for every scale of the game -- four bands read off the margin, never off the obstacle's size. A duel, a debate, a siege and an examination all use it.\" Only the EDGES are open, so this is inject-declare-sweep, not a refusal. Verified by hand 2026-09-02."
+    cite:      "PLAN §3.2. Shape ruled by #353 :1400-1401 VERBATIM: \"There is one degree ladder for every scale of the game -- four bands read off the margin, never off the obstacle's size. A duel, a debate, a siege and an examination all use it.\" ⚠ THE SWEEP WAS ON THE WRONG AXIS AND IS CORRECTED. It swept three band-edge triples that ALL SHARED an invented margin definition, so no sweep point could reveal it wrong -- and `margin` occurs exactly ONCE in #353's 2,067 lines and `successes` occurs ZERO times. The formula was the invented part and it is what is swept now. Band edges are a NUMBER hole downstream of this one. ⚠ CORROBORATION, RECORDED PER PLAN §2.6 AND NOT DEPENDED ON: the tree carries a LIVE owner for this exact question -- `engine/autoload/dice_engine.py::degree_from_net`, whose docstring reads \"THE degree ladder. Single owner for every scale of the game (Jordan ruling, 2026-08-14)\" and computes `margin = net - ob` over four bands. IT AGREES WITH #353 :1400-1401 ON THE SHAPE -- one ladder, four bands, read off the margin -- and its FORM was absent from this row's first sweep, which is why the arm was added. The in-chain grade is unchanged and the plan rests on none of it; W16 is where the scope question belongs."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent** | V2's default cell: none. ⚠ **every contest is blocked**"
   - id:        H-32
     tier:      1
@@ -361,11 +361,11 @@ rows:
     kind:      "FORMULA ×5"
     owner:     "the presence index (Nobody)"
     grade:     "assumption"
-    default:   "co_located = presence at the subject's rung at the barrier; post_remit = holders of an office whose `scope_rung` contains it; witness_key = persons named in `changes[]`; document_key = holders of a Record whose subject matter names the subject; chronicle = holders of a chronicle Record, else nobody"
+    default:   "TOTAL FAN-OUT -- #353's specified behaviour, and PLAN §6.2's stated default for artifact 2"
     site:      "witness.fan_out"
-    sweep:     ["total (the CONTROL -- #353's specified behaviour)", "presence-only", "all five predicates"]
+    sweep:     ["total (the default AND the control -- #353's specified behaviour)", "presence-only", "all five predicates"]
     unblocks:  "1"
-    cite:      "PLAN §3.2. Derivable from the presence index (#353 :1004 -- \"compute its observer set from the presence index and the five channels\") and `hold` Tenures. ⚠ TOTAL FAN-OUT MUST STAY IN THE SWEEP: it is #353's specified behaviour and therefore the CONTROL any predicate is measured against (W6's guardrail). Verified by hand 2026-09-02."
+    cite:      "PLAN §3.2. Shape derivable from the presence index (#353 :1004 -- \"compute its observer set from the presence index and the five channels\") and `hold` Tenures. ⚠ THE DEFAULT WAS THE FIVE PREDICATES AND IS CORRECTED TO TOTAL FAN-OUT: PLAN §6.2 states \"the `H-33` default at this milestone is TOTAL FAN-OUT... `sweep: [total, presence, five]`\", and §3.2 disagreed with it. G1 makes the instrument inject THE REGISTER'S default, so the five-predicate value would have given artifact 2's minimum work-item set W6's content -- a presence index and office-scope predicates -- without anyone deciding that. The five predicates stay as a SWEEP ARM, which is what §6.2 asks for."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent** | V2's default cell: none. ⚠ **fan-out is total; nothing said in private is private**"
   - id:        H-34
     tier:      1
@@ -397,11 +397,11 @@ rows:
     kind:      "RULING + FORMULA"
     owner:     "the design; params"
     grade:     "ruled"
-    default:   "RECEIVER-side. Distortion at each WITNESS deposit, plus the deliberate `refract` act"
+    default:   "RECEIVER-SIDE. ⚠ AN EMISSION IS NEVER DISTORTED (Jordan, 2026-09-02): what refracts is the PREMISES AND RATIONALE, minted per receiver as a Claim. The MAGNITUDE is a separate hole and stays open"
     site:      ""
     sweep:     []
     unblocks:  "2"
-    cite:      "PLAN §3.4, test 5 (architecture). #353 :668 VERBATIM: \"Attribution is a per-witness `Claim`, not a field on the Event\"; :719 VERBATIM: the Dispensation is \"nine typed terms, no bare effect field\"; :1286-1288: \"Publishing is a `tell`, so it distorts in transit.\" THERE IS NO EMITTER-SIDE OBJECT TO DISTORT -- emitter-side would need a second, MUTABLE Dispensation, which §37.1 forbids. ⚠ HELD BACK FOR OBJECTION in the PR body per CLAUDE.md §2; magnitude stays a separate `assumption`. Verified by hand 2026-09-02."
+    cite:      "✅ RULED BY JORDAN, 2026-09-02, on the escalation this row raised, in two statements. FIRST, VERBATIM: 'Receiver side distortion, if I understand without much context, makes more sense as people's actions are objectively the case but the meaning of those actions are subject to interpretation - signified vs signifier.' THEN, SHARPENED AND VERBATIM: 'emissions are never distorted as that implies the veracity of an action actively being performed is disjunct in actuality from its performance. instead, only the premises and rationale are distorted, which again points towards receiver side.' THE SECOND STATEMENT IS THE STRONGER ONE AND IT CLOSES THE EMITTER-SIDE READING RATHER THAN OUTWEIGHING IT: an Event is what HAPPENED, so distorting an emission would make an action's veracity disjunct from its performance -- the world lying about what occurred. What distorts is the interpretive layer. This is #353's architecture exactly: the Event carries what happened and carries NO actor and NO target (:666-670), and 'attribution is a per-witness Claim, not a field on the Event' (:668). The act is the signifier and is objective; the premises and rationale are the signified and are minted per receiver. IT ALSO DISSOLVES §37.4's COLLISION instead of picking a side -- R-2's 'emitting a refraction' cannot mean a distorted Event, so it is MODULE-level downward influence, and `refract` the act is person-level: two different things, not two answers. MECHANICAL CONSEQUENCE, RECORDED: a `refract` writes a CLAIM about a Dispensation's terms; it never writes the `dispensation.issued` Event. THIRD, THE PLAINEST FORM AND THE ONE A LATER SESSION WILL CARRY, VERBATIM: 'we can't control how others perceive and interpret our words or actions.' FOURTH, THE GENERAL FORM, VERBATIM: 'which in turn means that our understanding of all other words and actions is subjective and singular.' ⚠ THE FOURTH STATEMENT REACHES BEYOND THIS ROW and is recorded here because this is where it was ruled: it is not a fact about dispensations, it is a fact about EVERY claim. #353 already builds it -- `witness` is the only minter and mints PER PERSON, and `(Person, claim_ledger)` is INTERIOR. Two other rows inherit it. H-39, the construal spread: if understanding is SINGULAR per person, a cohort's spread is the spread ACROSS its members, not a distribution inside one -- which settles the representation the row was about. H-33, the witness channels: fan-out decides WHO forms an understanding, and each forms their own, so a channel predicate can never be a shared-interpretation mechanism. ⚠ HOW THIS ROW GOT HERE MATTERS AND IS NOT SMOOTHED OVER. PLAN §3.4 closed it receiver-side AS A SESSION JUDGEMENT and offered it for objection; an adversarial pass OVERTURNED that closure on #353 §37.4 :1310-1316, twenty-two lines below the passage the closure cited and never read, which says the chain 'has not reconciled these' and 'this document does not pick one', and on §62 :1986-1994, which lists this question BESIDE scene-vs-act as a live design choice. The row was correctly `absent` and correctly Jordan's; it is `ruled` now because JORDAN RULED IT, not because a session closed it. ⚠ THE COST I RAISED IS ANSWERED BY THE SHARPENING: a SHARED misreading is a shared RATIONALE, which propagates through a shared teller or a shared document (the `document_key` channel, H-33) and needs no distorted emission to carry it."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent**"
   - id:        H-37
     tier:      1
@@ -409,23 +409,23 @@ rows:
     kind:      "SCHEMA_ROW"
     owner:     "the design"
     grade:     "ruled"
-    default:   "none -- out of the season loop's scope, so nothing is injected here"
+    default:   "none -- DEFERRED to the social-contest subsystem, so nothing is injected in the season loop"
     site:      ""
     sweep:     []
     unblocks:  "2"
-    cite:      "PLAN §3.1, test 2 (irrelevant). #353 :1931-1933 VERBATIM: \"The twelve named argument faults and the stasis ladder ... were scoped out by a declared narrowing (the three deferred subsystems are out of scope except at the seam). A declared scoping is not a drop.\" P41's needs route to the deferred subsystem, not to a season-loop row. Verified by hand 2026-09-02."
+    cite:      "PLAN §3.1 called this test 2 (IRRELEVANT) AND THE LABEL IS CORRECTED to a declared DEFERRAL -- CLAUDE.md §0 test 2 is \"its subject was retired, evacuated or never built\", and a narrowing to a deferred subsystem reachable at the seam (#353 :1403-1409) is none of those. #353 :1931-1933 VERBATIM: \"The twelve named argument faults and the stasis ladder ... were scoped out by a declared narrowing (the three deferred subsystems are out of scope except at the seam). A declared scoping is not a drop.\" THE BEHAVIOUR IS UNCHANGED and it is H-23's exactly: nothing is injected and the row's cases are REFUSAL-BLOCKED, NOT FREED. PLAN §2.4 and §5.4 still credit them as freed; that is the same asymmetry §2.2 indicts, and it is corrected in PLAN §3.5's table."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent**"
   - id:        H-38
     tier:      1
     hole:      "does a person carry a banded scalar?"
     kind:      "RULING"
     owner:     "Person, or refused"
-    grade:     "ruled"
-    default:   "YES -- a person carries a banded scalar, on `Site.condition`'s model"
-    site:      ""
-    sweep:     []
+    grade:     "assumption"
+    default:   "YES -- a person carries a body scalar, written at MATTER and at RESOLVE. THE BANDING AND THE VERB-GATE ARE THE INJECTED PART, on `Site.condition`'s model"
+    site:      "person.body_band"
+    sweep:     ["banded + gates verbs (Site.condition's model)", "banded, gates nothing (a modifier only)", "unbanded scalar -- no gate"]
     unblocks:  "2"
-    cite:      "PLAN §3.1, test 4 (precedent). #353 :447 VERBATIM: \"An accumulator that reads its own previous value **is** primary state\"; :453 §12.1's heading VERBATIM: \"`condition` gates verbs, and that is how damage removes an option\"; bodies are already written at MATTER (:854). V2 PRESUPPOSES the answer twice in its own text -- Part D's `(Person, body)` row and §F3's `condition_penalty(p's body band)`. NOT Jordan's. Verified by hand 2026-09-02."
+    cite:      "PLAN §3.1 CLOSED THIS `ruled` BY PRECEDENT AND IT IS SOFTENED. What #353 SUPPORTS is a per-person body scalar: `:854` writes bodies at MATTER and `:1037` has killing and WOUNDING as acts. What it does NOT support is the banding or the gate. `:324` VERBATIM: \"Person := (id, weight, marks[], capability, stance[], convictions, beliefs[], ledger, ties_index)\" -- NINE FIELDS, NONE A BANDED SCALAR; and §9.2 `:345-347`: \"`capability` supplies dice and GATES NOTHING... The only class-shaped gate in the design is Thread Sensitivity.\" The precedent was imported wholesale from `Site.condition`, a DIFFERENT CARRIER. V2's own presupposition is not evidence: V2 grades the hole `absent` in Part VII and assumes YES in Part D, and an internal contradiction is not a citation -- that is the self-seeding failure PLAN §1.3 indicts in its own verb-roster check. Shape injectable, instance swept."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent**"
   - id:        H-39
     tier:      1
@@ -437,7 +437,7 @@ rows:
     site:      "cohort.construal_spread"
     sweep:     ["per-person scalar (the default)", "one scalar per cohort", "no representation -- refuse"]
     unblocks:  "—"
-    cite:      "PLAN §3.2. A representation choice with one obvious shape; nothing in chain rules it, and nothing in chain forbids the obvious one. Verified by hand 2026-09-02."
+    cite:      "PLAN §3.2. A representation choice with one obvious shape; nothing in chain rules it, and nothing in chain forbids the obvious one. ⚠ SETTLED IN SHAPE BY JORDAN'S 2026-09-02 RULING ON H-36 -- 'our understanding of all other words and actions is subjective and SINGULAR'. A person holds ONE understanding, not a distribution, so a cohort's construal spread is the spread ACROSS its members and the per-person scalar is the right representation. The sweep keeps the alternatives because the ruling settles the shape and not the instance. Verified by hand 2026-09-02."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent**"
   - id:        H-40
     tier:      0
@@ -521,7 +521,7 @@ rows:
     site:      ""
     sweep:     []
     unblocks:  "unmeasured"
-    cite:      ""
+    cite:      " ⚠ JORDAN, 2026-09-02, VERBATIM: 'please note that convictions roster and axes etc may be modified in future.' THIS ROW THEREFORE STAYS `assumption` AND MUST NOT BE CLOSED `ruled` -- not on this chain's reading and not on the tree's. It also fixes the ARCHITECTURE: the roster is a REGISTRY ROW READ AT RUNTIME, never a constant in a body, so changing it is a data edit and not a code change. CORROBORATION, RECORDED PER PLAN §2.6 AND NOT DEPENDED ON: the tree carries a live owner for the SHAPE -- `systems/_architecture/key_substrate_v30.md` §2.5, 'each Conviction projects onto the 4 axes via a 13-entry x 4-column matrix', with `npc.armature_position[axis] = sum over c of npc.personal_convictions[c] x CONVICTION_AXIS_MATRIX[c][axis]`, and `engine/substrate/keys.py:59` names the four as `AXES = (hierarchical, sacred, instrumental, traditional)`. That is a 13x4 PROJECTION MATRIX, which is the shape §F2's `alignment(c.verb, axis)` needs and which PLAN §1.4 hole 7 says appears nowhere in the chain -- it appears in the TREE. The shape corroborates; the CONTENT is explicitly open by the ruling above."
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-47
     tier:      1

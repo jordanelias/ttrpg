@@ -1163,8 +1163,9 @@ def test_w1_the_citation_gate_tells_a_fabrication_from_a_wrong_line_number():
         "a real quote at the wrong line was not distinguished from a fabrication")
 
     row["cite"] = "#353 :9999 -- see there"
-    assert any("2067 lines" in b or "has" in b for b in REG.verify_citations(reg)), (
-        "a line number past the end of the file passed")
+    bad = REG.verify_citations(reg)
+    assert any("lines" in b and "9999" in b for b in bad), (
+        f"a line number past the end of the file passed: {bad}")
 
     row["cite"] = kept
     assert not REG.verify_citations(reg), "the restored citation stopped resolving"
@@ -1182,28 +1183,32 @@ def test_w1_a_register_whose_citations_carry_no_line_reference_fails():
         "citations with no line references reported as resolving")
 
 
-def test_w1_the_ladder_closed_the_rows_it_said_it_would():
-    """§3.1-§3.4 name the rows the five tests close or re-grade. This asserts the ROWS MOVED and
-    that each carries what its new grade requires -- not that the register is clean, which it is
-    not: `H-02` stays `absent` until W3, and the 22 rows W0 added were never put through the
-    ladder at all."""
+def test_w1_every_row_the_ladder_visited_carries_its_reasoning():
+    """§3.1-§3.4 name fourteen rows. This asserts the PROPERTY that survives a re-grade -- each
+    was visited and carries the reasoning -- not the grades themselves.
+
+    ⚠ THE FIRST DRAFT PINNED THE GRADES, and an adversarial pass called it: a pin on
+    `H-36 == "ruled"` breaks the moment the objection that commit OFFERED is accepted, which is
+    the mechanism working, not a regression. It broke twice within the hour -- once when the pass
+    overturned four closures, once when Jordan ruled H-36 -- and both times it failed for the
+    RIGHT reason, which is the definition of a test that should not exist in that form. The
+    grade-shaped properties are already asserted generically by `rule_R2` (an `assumption` has a
+    site and three distinct sweep points) and `verify_citations` (every citation resolves)."""
     reg = {r["id"]: r for r in REG.load()["rows"]}
-    for rid in ("H-23", "H-37", "H-38", "H-36", "H-60"):
-        assert reg[rid]["grade"] == "ruled", f"{rid} was to close as ruled, is {reg[rid]['grade']}"
-        assert reg[rid]["cite"].strip(), f"{rid} closed with no citation"
-    assert reg["H-25"]["grade"] == "measured", (
-        "H-25 is an ARGUMENT that is sound and UNEXECUTED -- `measured`, not `ruled`; W11 "
-        "discharges it")
-    for rid in ("H-20", "H-26", "H-27", "H-28", "H-31", "H-32", "H-33", "H-39"):
+    LADDER = ("H-20", "H-23", "H-25", "H-26", "H-27", "H-28", "H-31",
+              "H-32", "H-33", "H-36", "H-37", "H-38", "H-39", "H-60")
+    for rid in LADDER:
         r = reg[rid]
-        assert r["grade"] == "assumption", f"{rid} was to re-grade to assumption, is {r['grade']}"
-        assert r["site"].strip(), f"{rid} is an assumption with no injection site"
-        assert len({str(x) for x in r["sweep"]}) >= 3, f"{rid} carries fewer than 3 distinct sweep points"
+        assert r["cite"].strip(), f"{rid} was visited by the ladder and carries no reasoning"
+        assert "PLAN" in r["cite"] or "RULED BY JORDAN" in r["cite"], (
+            f"{rid}'s cite does not say which ladder step or ruling put it there: {r['cite'][:80]}")
     assert reg["H-26"]["tier"] == 0, "H-26 was to move to Tier 0 (`yield` is the only matter source)"
-    # H-33's sweep MUST retain total fan-out: it is #353's specified behaviour and therefore the
-    # control any predicate is measured against (W6's guardrail).
-    assert any("total" in str(x) for x in reg["H-33"]["sweep"]), (
-        "H-33's sweep dropped total fan-out, which is the control")
+    # H-33's sweep MUST retain total fan-out as an ARM -- it is #353's specified behaviour and
+    # therefore the control any predicate is measured against (W6's guardrail). Asserted on the
+    # arm, not on a substring: `"total fan-out removed"` contains "total".
+    arms = [str(x).split("(")[0].strip().lower() for x in reg["H-33"]["sweep"]]
+    assert any(a.startswith("total") for a in arms), (
+        f"H-33's sweep dropped total fan-out, which is the control: {reg['H-33']['sweep']}")
 
 
 # ===========================================================================

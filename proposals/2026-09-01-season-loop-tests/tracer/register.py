@@ -314,6 +314,22 @@ def counts(reg: dict) -> dict:
 
 
 SOURCE_353 = PROPOSALS / "2026-09-01-holonic-architecture" / "ARCHITECTURE.md"
+REPO = PROPOSALS.parent
+# A `cite:` may quote MORE THAN #353. The first version of this gate checked every quote against
+# #353 alone and reported ten legitimate quotations of V2, PLAN.md, CLAUDE.md and a live engine
+# module as FABRICATED -- the same false-positive class as comparing typography instead of prose,
+# one level up. A quote must now be found in AT LEAST ONE source the cite NAMES, and a cite that
+# names no resolvable source verifies nothing.
+CITE_SOURCES = {
+    "#353": SOURCE_353,
+    "ARCHITECTURE_V2": ARCHITECTURE_V2,
+    "V2": ARCHITECTURE_V2,
+    "PLAN.md": ARCH_DIR / "PLAN.md",
+    "PLAN §": ARCH_DIR / "PLAN.md",
+    "CLAUDE.md": REPO / "CLAUDE.md",
+}
+# Any repo-relative path the cite mentions, e.g. `engine/autoload/dice_engine.py`.
+PATH_RE = re.compile(r"\b((?:[\w.-]+/)+[\w.-]+\.(?:py|md|ya?ml|json))\b")
 LINEREF_RE = re.compile(r":(\d{2,4})(?:-(\d{2,4}))?\b")
 # A quoted span long enough to be a claim rather than a term. `cite:` is free text, so this
 # finds the quotes an author actually wrote rather than requiring a format.
@@ -330,8 +346,12 @@ def _cite_norm(text: str) -> str:
     text = re.sub(r"^\s*>+\s*", "", text)               # blockquote markers
     text = re.sub(r"^\s*[-*+]\s+", "", text)            # list markers
     text = text.replace("\u2014", "-").replace("\u2013", "-")   # em / en dash
+    text = re.sub(r"[\u201c\u201d\u2018\u2019'\"]", "'", text)     # every quote mark, one form
     text = re.sub(r"-{2,}", "-", text)                  # `--` typed for an em dash
-    return re.sub(r"\s+", " ", text).strip()
+    # CASE-FOLDED. A citer who SHOUTS the clause that matters has not changed the claim, and the
+    # first version of this gate reported five hand-verified quotes as FABRICATED for exactly
+    # that -- the same class of false positive as comparing typography instead of prose.
+    return re.sub(r"\s+", " ", text).strip().lower()
 
 
 def _contains(hay: str, needle: str) -> bool:
@@ -367,6 +387,21 @@ def verify_citations(reg: dict) -> list:
     src = SOURCE_353.read_text().splitlines()
     flat = [_cite_norm(ln) for ln in src]
     bad, checked = [], 0
+
+    def sources_named(cite: str) -> dict:
+        """Every source this cite names and this checker can open. `#353` is implied by a bare
+        `:NNN`, because that is the convention every row in this register uses."""
+        found = {}
+        for token, path in CITE_SOURCES.items():
+            if token in cite and path.exists():
+                found[token] = path
+        for rel in PATH_RE.findall(cite):
+            f = REPO / rel
+            if f.exists():
+                found[rel] = f
+        if LINEREF_RE.search(cite) and SOURCE_353.exists():
+            found.setdefault("#353", SOURCE_353)
+        return found
     for r in reg["rows"]:
         cite = str(r.get("cite") or "")
         if not cite.strip():
@@ -376,21 +411,36 @@ def verify_citations(reg: dict) -> list:
             checked += 1
             if b > len(src):
                 bad.append(f"{r['id']}: cites :{a}-{b} and #353 has {len(src)} lines")
-        for quote in QUOTE_RE.findall(cite):
-            if not refs:
+        named = sources_named(cite)
+        quotes = QUOTE_RE.findall(cite)
+        if quotes and not named:
+            bad.append(f"{r['id']}: quotes something and names no source this checker can open")
+        for quote in quotes:
+            if not named:
                 continue
             checked += 1
             needle = _cite_norm(quote).rstrip(".")
-            window = set()
-            for a, b in refs:
-                window |= set(range(max(1, a - 6), min(len(src), b + 6) + 1))
-            hay = " ".join(flat[i - 1] for i in sorted(window))
-            if not _contains(hay, needle):
-                # Not found where cited. Is it anywhere at all? The two are different defects:
-                # a wrong line number, versus a quote the source does not contain.
-                whole = " ".join(flat)
-                where = "NOWHERE IN #353 -- FABRICATED" if not _contains(whole, needle) else \
-                        "elsewhere in #353 -- the LINE NUMBER is wrong"
+            # In #353, a quote with a line ref must be AT the lines cited -- that is the whole
+            # point of a line reference. In any other named source, presence is what is checked;
+            # those cites carry section names rather than line numbers.
+            hit_where, hit_any = False, False
+            for token, path in named.items():
+                body = [_cite_norm(l) for l in path.read_text().splitlines()]
+                whole = " ".join(body)
+                if _contains(whole, needle):
+                    hit_any = True
+                    if token != "#353" or not refs:
+                        hit_where = True
+                    else:
+                        window = set()
+                        for a, b in refs:
+                            window |= set(range(max(1, a - 6), min(len(body), b + 6) + 1))
+                        if _contains(" ".join(body[i - 1] for i in sorted(window)), needle):
+                            hit_where = True
+            if not hit_where:
+                where = ("in NONE of the sources it names (%s) -- FABRICATED"
+                         % ", ".join(sorted(named))) if not hit_any else \
+                        "present but NOT at the lines cited -- the LINE NUMBER is wrong"
                 bad.append(f"{r['id']}: quoted text is {where}: {quote[:70]!r}")
     if not checked:
         return ["no citation carried a line reference or a quote -- nothing was verified, which "
