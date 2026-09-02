@@ -5,7 +5,7 @@ did not aim.** Every row is reproduced verbatim so a reader can judge whether th
 miss is a routing failure (fixable) or a genuine absence of any surface to probe
 (a finding about the shape).
 
-**116 `core` rows and 167 non-core rows did not route.**
+**90 `core` rows and 167 non-core rows did not route.**
 
 ## The vocabulary of the unrouted `core` rows
 
@@ -15,80 +15,54 @@ no execution for.
 
 | term | count |
 |---|---|
-| different | 23 |
-| faction | 22 |
-| distinct | 21 |
-| person | 20 |
+| person | 19 |
+| faction | 18 |
+| different | 17 |
+| distinct | 16 |
 | named | 16 |
-| leader | 15 |
-| personal | 15 |
-| action | 15 |
-| specific | 15 |
 | authority | 15 |
-| office | 14 |
-| season | 14 |
-| institutional | 14 |
-| factions | 13 |
-| single | 12 |
-| standing | 11 |
+| action | 14 |
+| leader | 14 |
+| specific | 14 |
+| office | 11 |
 | leaders | 11 |
-| holding | 10 |
-| institution | 10 |
-| institutions | 10 |
-| every | 9 |
-| itself | 8 |
-| ordinary | 8 |
-| decision | 8 |
-| choice | 8 |
-| threshold | 8 |
-| loyalty | 8 |
-| resource | 8 |
+| season | 10 |
+| institutional | 10 |
+| standing | 10 |
+| institution | 9 |
+| institutions | 9 |
+| holding | 9 |
+| factions | 9 |
 | holder | 8 |
 | territory | 8 |
+| personal | 8 |
 | relationship | 8 |
-| whose | 7 |
-| persons | 7 |
-| consequence | 7 |
-| specifically | 7 |
-| actions | 7 |
-| against | 7 |
+| choice | 7 |
+| threshold | 7 |
+| itself | 7 |
+| single | 7 |
 | formal | 7 |
 | council | 7 |
+| loyalty | 7 |
 | position | 7 |
-| evidence | 6 |
-| independent | 6 |
-| political | 6 |
-| change | 6 |
-| cause | 6 |
+| cannot | 6 |
+| hidden | 6 |
+| toward | 6 |
+| every | 6 |
+| tracked | 6 |
+| consequence | 6 |
+| persons | 6 |
+| decision | 6 |
+| foreign | 6 |
+| perceptual | 5 |
+| whose | 5 |
+| cause | 5 |
+| capability | 5 |
+| against | 5 |
+| actions | 5 |
 
 ## Every unrouted `core` row, verbatim
 
-- **[NPC-087]** A person with no office must be able to run a recurring, location-bound activity whose ongoing existence -- not any single completed task -- is itself the thing at stake.
-- **[NPC-087]** The material he teaches must be classified as suppressed cultural/political knowledge, retainable by ordinary non-sensitive minds, rather than Thread-substrate knowledge subject to the setting's epistemological barrier.
-- **[NPC-087]** His discovery must be able to branch three ways for whoever finds him -- protect him, report him, or leverage the discovery -- with materially different consequences down each path, not just a binary helped/not-helped outcome.
-- **[NPC-087]** He must be reachable by a scene opportunity despite holding no faction Standing, no assigned Duty, and no Disposition floor with any faction leader.
-- **[NPC-086]** A technical specialist's field data must be able to exist as a persistent evidence object with its own scope and quality, independent of any single Contest roll -- something that can be examined, copied, corroborated, or suppressed as an artifact.
-- **[NPC-086]** Presenting his evidence to a political audience must be able to change what that audience believes about the cause of the sea-route blockage, and that changed belief must persist and spread to third parties who never saw the data themselves.
-- **[NPC-086]** Corroborating or refuting his claim must be possible for a third party through independent fieldwork, not only by taking his word for it.
-- **[NPC-075]** A person's decision to continue an exhausting, unrewarded maintenance labor (repairing breaches in the world's substrate) must be represented as a real season-to-season choice, including the possibility that he stops, burns out, or dies at it.
-- **[NPC-075]** A practitioner's ongoing exposure to the substrate damage he repairs must be able to degrade his personal condition cumulatively across many seasons, distinct from the cost of any single act of repair.
-- **[NPC-075]** His death, if it occurs while performing a repair, must be able to produce a different and better outcome for the world than the same repair performed by someone who lives.
-- **[NPC-075]** The cumulative consequence of every other faction's warfare and Thread-disruptive activity anywhere on the peninsula must be able to reach him personally as an accumulating burden, without him ever having interacted with those factions.
-- **[NPC-005]** An act she performs must be able to leave no attributable trace back to her, her order, or her Crown when it succeeds cleanly -- full deniability as an achievable outcome, not merely a stated intention.
-- **[NPC-005]** An act that goes partially wrong must be able to generate a persistent, accumulating institutional risk that is distinct from, and outlives, the scene in which it happened, and that risk must be able to cross a threshold that forces consequences later, in a different season, for a different reason.
-- **[NPC-005]** Her private reputation among people who can never publicly credit her (fellow operatives, informants, a patron) must be trackable and consequential, on a track separate from any reputation she could have in ordinary faction life.
-- **[NPC-005]** A perception or capability she secretly has (Thread Sensitivity) must be able to be true and mechanically active while remaining completely unknown to the institution she serves, with that institution's own rules treating mere discovery of the secret as automatically disqualifying, regardless of her competence or loyalty.
-- **[NPC-005]** Her perception of the consequences of a mission must be able to diverge from her colleagues' and superiors' assessment of that same mission -- the identical event scored as a clean win institutionally and as a partial disaster by her personal standard.
-- **[NPC-010]** A non-faction, non-institutional actor must be able to hold and trade a resource (information, trust, access) that no faction's own action economy owns or produces -- a market that exists outside every faction's resource pools.
-- **[NPC-010]** Information she sells must be able to be true, false, or fabricated, with the buyer unable to distinguish which in advance, and her incentive to fabricate must rise specifically when honest demand for information falls.
-- **[NPC-010]** She must be discoverable, killable, buyable, or turnable by an outside actor as four textually distinct outcomes with different consequences for her network, not variations on one generic 'remove her' resolution.
-- **[NPC-010]** Her personal judgment about a specific past transaction (vetting goods as safe and legitimate) must be able to be wrong in a way that is discoverable later and attributable specifically to her, not to an abstract 'the network' or 'the market.'
-- **[NPC-012]** A single office-holder's personal, unstated motive must be able to measurably bias every decision he makes in that office, in one consistent direction, without him or his superiors recognizing the pattern.
-- **[NPC-012]** His employer's institutional evaluation of him must be able to stay positive -- he is 'too valuable to recall' -- specifically because of the state of the world he is unconsciously prolonging, a closed loop between his output and his own continued posting.
-- **[NPC-012]** A player who identifies his true motive must be able to offer him something categorically different from a bribe or a threat -- a real, verifiable path to recall -- and have that offer change his behavior, with the engine able to distinguish a genuine offer from a false one via his own judgment.
-- **[NPC-002]** Performing a Thread operation as part of ordinary intelligence work must cost the practitioner a persistent personal resource whose cost scales with the scale and type of operation performed, distinct from whether the operation succeeded.
-- **[NPC-002]** As her personal condition degrades across a season, the range of actions available to her must narrow in a fixed, predictable order -- from full freedom down to forced withdrawal and crisis -- and that narrowing must override her institutional orders when the two conflict.
-- **[NPC-002]** Her personal sympathy for a population she is ordered to act against must produce a measurable, repeatable delay or softening in her actions against that population, distinct from a single one-time refusal.
 - **[NPC-004]** A completed investigation must be able to produce a plausible-but-wrong conclusion that its holder cannot distinguish from a correct one, and the holder must be able to act on it as true until later evidence or events contradict it.
 - **[NPC-004]** A person must be able to possess a perceptual capacity he does not know he has, whose outputs he misattributes to a mundane cause (professional instinct), such that his real competence has a hidden, unacknowledged source.
 - **[NPC-004]** A second person with the right capability must be able to run a targeted check ON Sæmund and learn something about him (his latent Thread Sensitivity) that he cannot detect in himself by any means available to him.

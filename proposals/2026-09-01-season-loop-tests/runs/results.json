@@ -286,27 +286,131 @@
    "name": "Uwe Askeland",
    "scale": "person",
    "source": "NPC1.yaml",
-   "verdict": "NOT-ASSESSED",
+   "verdict": "BLOCKED",
    "rows": 8,
    "core": 4,
-   "core_routed": 0,
-   "core_unmapped": 4,
-   "core_blocked": 0,
-   "blockers": [],
-   "routed": [],
-   "unmapped": [
+   "core_routed": 4,
+   "core_unmapped": 0,
+   "core_blocked": 1,
+   "blockers": [
+    "H-85"
+   ],
+   "routed": [
     {
      "need": "A person with no office must be able to run a recurring, location-bound activity whose ongoing existence -- not any single completed task -- is itself the thing at stake.",
      "hardness": "core",
      "probe": null,
-     "exercises": []
+     "exercises": [
+      "work",
+      "H-04"
+     ],
+     "resolved": [
+      {
+       "ok": true,
+       "kind": "verb",
+       "detail": "'work' executes"
+      },
+      {
+       "ok": true,
+       "kind": "hole",
+       "detail": "H-04: assumption",
+       "grade": "assumption"
+      }
+     ],
+     "verdict": {
+      "verdict": "PASS",
+      "detail": "'work' executes \u00b7 H-04: assumption",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "A person with no office must be able to run a recurring, loc",
+      "tests": "A person with no office must be able to run a recurring, location-bound activity whose ongoing existence -- not any single completed task -- is itself the thing at stake."
+     }
     },
     {
      "need": "The material he teaches must be classified as suppressed cultural/political knowledge, retainable by ordinary non-sensitive minds, rather than Thread-substrate knowledge subject to the setting's epistemological barrier.",
      "hardness": "core",
      "probe": null,
-     "exercises": []
+     "exercises": [
+      "H-85"
+     ],
+     "resolved": [
+      {
+       "ok": false,
+       "kind": "hole",
+       "detail": "H-85: absent",
+       "grade": "absent"
+      }
+     ],
+     "verdict": {
+      "verdict": "GAP",
+      "detail": "H-85: absent",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "The material he teaches must be classified as suppressed cul",
+      "tests": "The material he teaches must be classified as suppressed cultural/political knowledge, retainable by ordinary non-sensitive minds, rather than Thread-substrate knowledge subject to the setting's epistemological barrier."
+     }
     },
+    {
+     "need": "His discovery must be able to branch three ways for whoever finds him -- protect him, report him, or leverage the discovery -- with materially different consequences down each path, not just a binary helped/not-helped outcome.",
+     "hardness": "core",
+     "probe": "P36",
+     "exercises": [
+      "probe:P36"
+     ],
+     "resolved": [
+      {
+       "ok": true,
+       "kind": "probe",
+       "detail": "P36: PASS",
+       "probe": "P36",
+       "verdict": "PASS"
+      }
+     ],
+     "verdict": {
+      "verdict": "PASS",
+      "detail": "P36: PASS",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "His discovery must be able to branch three ways for whoever ",
+      "tests": "His discovery must be able to branch three ways for whoever finds him -- protect him, report him, or leverage the discovery -- with materially different consequences down each path, not just a binary helped/not-helped outcome."
+     }
+    },
+    {
+     "need": "He must be reachable by a scene opportunity despite holding no faction Standing, no assigned Duty, and no Disposition floor with any faction leader.",
+     "hardness": "core",
+     "probe": null,
+     "exercises": [
+      "speak",
+      "H-04"
+     ],
+     "resolved": [
+      {
+       "ok": true,
+       "kind": "verb",
+       "detail": "'speak' executes"
+      },
+      {
+       "ok": true,
+       "kind": "hole",
+       "detail": "H-04: assumption",
+       "grade": "assumption"
+      }
+     ],
+     "verdict": {
+      "verdict": "PASS",
+      "detail": "'speak' executes \u00b7 H-04: assumption",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "He must be reachable by a scene opportunity despite holding ",
+      "tests": "He must be reachable by a scene opportunity despite holding no faction Standing, no assigned Duty, and no Disposition floor with any faction leader."
+     }
+    }
+   ],
+   "unmapped": [
     {
      "need": "The cumulative effect of many small private teaching sessions must be able to aggregate into a settlement- or territory-scale outcome without Askeland himself possessing the faction-level resources that the only named aggregation mechanism for this kind of cultural effect requires.",
      "hardness": "important",
@@ -314,20 +418,8 @@
      "exercises": []
     },
     {
-     "need": "His discovery must be able to branch three ways for whoever finds him -- protect him, report him, or leverage the discovery -- with materially different consequences down each path, not just a binary helped/not-helped outcome.",
-     "hardness": "core",
-     "probe": null,
-     "exercises": []
-    },
-    {
      "need": "A student's exposure (being caught attending, or found to have been taught) must be trackable as a consequence for the student, separate from any consequence for Askeland.",
      "hardness": "important",
-     "probe": null,
-     "exercises": []
-    },
-    {
-     "need": "He must be reachable by a scene opportunity despite holding no faction Standing, no assigned Duty, and no Disposition floor with any faction leader.",
-     "hardness": "core",
      "probe": null,
      "exercises": []
     },
@@ -346,27 +438,112 @@
    "name": "Joren Bergvall",
    "scale": "person",
    "source": "NPC1.yaml",
-   "verdict": "NOT-ASSESSED",
+   "verdict": "BLOCKED",
    "rows": 7,
    "core": 3,
-   "core_routed": 0,
-   "core_unmapped": 3,
-   "core_blocked": 0,
-   "blockers": [],
-   "routed": [],
-   "unmapped": [
+   "core_routed": 3,
+   "core_unmapped": 0,
+   "core_blocked": 2,
+   "blockers": [
+    "H-84",
+    "the six investigation acts"
+   ],
+   "routed": [
     {
      "need": "A technical specialist's field data must be able to exist as a persistent evidence object with its own scope and quality, independent of any single Contest roll -- something that can be examined, copied, corroborated, or suppressed as an artifact.",
      "hardness": "core",
      "probe": null,
-     "exercises": []
+     "exercises": [
+      "create_record",
+      "H-22"
+     ],
+     "resolved": [
+      {
+       "ok": true,
+       "kind": "verb",
+       "detail": "'create_record' executes"
+      },
+      {
+       "ok": true,
+       "kind": "hole",
+       "detail": "H-22: ruled",
+       "grade": "ruled"
+      }
+     ],
+     "verdict": {
+      "verdict": "PASS",
+      "detail": "'create_record' executes \u00b7 H-22: ruled",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "A technical specialist's field data must be able to exist as",
+      "tests": "A technical specialist's field data must be able to exist as a persistent evidence object with its own scope and quality, independent of any single Contest roll -- something that can be examined, copied, corroborated, or suppressed as an artifact."
+     }
     },
     {
      "need": "Presenting his evidence to a political audience must be able to change what that audience believes about the cause of the sea-route blockage, and that changed belief must persist and spread to third parties who never saw the data themselves.",
      "hardness": "core",
      "probe": null,
-     "exercises": []
+     "exercises": [
+      "tell",
+      "H-79",
+      "H-84"
+     ],
+     "resolved": [
+      {
+       "ok": true,
+       "kind": "verb",
+       "detail": "'tell' executes"
+      },
+      {
+       "ok": true,
+       "kind": "hole",
+       "detail": "H-79: assumption",
+       "grade": "assumption"
+      },
+      {
+       "ok": false,
+       "kind": "hole",
+       "detail": "H-84: absent",
+       "grade": "absent"
+      }
+     ],
+     "verdict": {
+      "verdict": "GAP",
+      "detail": "'tell' executes \u00b7 H-79: assumption \u00b7 H-84: absent",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "Presenting his evidence to a political audience must be able",
+      "tests": "Presenting his evidence to a political audience must be able to change what that audience believes about the cause of the sea-route blockage, and that changed belief must persist and spread to third parties who never saw the data themselves."
+     }
     },
+    {
+     "need": "Corroborating or refuting his claim must be possible for a third party through independent fieldwork, not only by taking his word for it.",
+     "hardness": "core",
+     "probe": null,
+     "exercises": [
+      "the six investigation acts"
+     ],
+     "resolved": [
+      {
+       "ok": false,
+       "kind": "verb",
+       "detail": "'the six investigation acts' is on the table and the fold cannot execute it: needs a `requires:` predicate"
+      }
+     ],
+     "verdict": {
+      "verdict": "GAP",
+      "detail": "'the six investigation acts' is on the table and the fold cannot execute it: needs a `requires:` predicate",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "Corroborating or refuting his claim must be possible for a t",
+      "tests": "Corroborating or refuting his claim must be possible for a third party through independent fieldwork, not only by taking his word for it."
+     }
+    }
+   ],
+   "unmapped": [
     {
      "need": "A Guild employee below faction-leadership rank must be reachable by a scene opportunity through his technical output becoming relevant to a player, not only through his faction leadership's own political business.",
      "hardness": "important",
@@ -384,12 +561,6 @@
      "hardness": "important",
      "probe": null,
      "exercises": []
-    },
-    {
-     "need": "Corroborating or refuting his claim must be possible for a third party through independent fieldwork, not only by taking his word for it.",
-     "hardness": "core",
-     "probe": null,
-     "exercises": []
     }
    ],
    "unclear": 1,
@@ -400,42 +571,134 @@
    "name": "Orm",
    "scale": "person",
    "source": "NPC1.yaml",
-   "verdict": "NOT-ASSESSED",
+   "verdict": "BLOCKED",
    "rows": 8,
    "core": 4,
-   "core_routed": 0,
-   "core_unmapped": 4,
-   "core_blocked": 0,
-   "blockers": [],
-   "routed": [],
-   "unmapped": [
+   "core_routed": 4,
+   "core_unmapped": 0,
+   "core_blocked": 1,
+   "blockers": [
+    "H-25"
+   ],
+   "routed": [
     {
      "need": "A person's decision to continue an exhausting, unrewarded maintenance labor (repairing breaches in the world's substrate) must be represented as a real season-to-season choice, including the possibility that he stops, burns out, or dies at it.",
      "hardness": "core",
      "probe": null,
-     "exercises": []
+     "exercises": [
+      "work",
+      "H-04"
+     ],
+     "resolved": [
+      {
+       "ok": true,
+       "kind": "verb",
+       "detail": "'work' executes"
+      },
+      {
+       "ok": true,
+       "kind": "hole",
+       "detail": "H-04: assumption",
+       "grade": "assumption"
+      }
+     ],
+     "verdict": {
+      "verdict": "PASS",
+      "detail": "'work' executes \u00b7 H-04: assumption",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "A person's decision to continue an exhausting, unrewarded ma",
+      "tests": "A person's decision to continue an exhausting, unrewarded maintenance labor (repairing breaches in the world's substrate) must be represented as a real season-to-season choice, including the possibility that he stops, burns out, or dies at it."
+     }
     },
     {
      "need": "A practitioner's ongoing exposure to the substrate damage he repairs must be able to degrade his personal condition cumulatively across many seasons, distinct from the cost of any single act of repair.",
      "hardness": "core",
      "probe": null,
-     "exercises": []
+     "exercises": [
+      "H-38",
+      "H-25"
+     ],
+     "resolved": [
+      {
+       "ok": true,
+       "kind": "hole",
+       "detail": "H-38: assumption",
+       "grade": "assumption"
+      },
+      {
+       "ok": false,
+       "kind": "hole",
+       "detail": "H-25: absent",
+       "grade": "absent"
+      }
+     ],
+     "verdict": {
+      "verdict": "GAP",
+      "detail": "H-38: assumption \u00b7 H-25: absent",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "A practitioner's ongoing exposure to the substrate damage he",
+      "tests": "A practitioner's ongoing exposure to the substrate damage he repairs must be able to degrade his personal condition cumulatively across many seasons, distinct from the cost of any single act of repair."
+     }
     },
     {
      "need": "His death, if it occurs while performing a repair, must be able to produce a different and better outcome for the world than the same repair performed by someone who lives.",
      "hardness": "core",
      "probe": null,
-     "exercises": []
-    },
-    {
-     "need": "A subordinate rank within a tiny, non-political, non-recruiting institution must be trackable as a real position with real relationships (a senior to answer to, peers to lose) even though the institution has no faction stats, no Domain Actions, and no seat at any political table.",
-     "hardness": "important",
-     "probe": null,
-     "exercises": []
+     "exercises": [
+      "H-31"
+     ],
+     "resolved": [
+      {
+       "ok": true,
+       "kind": "hole",
+       "detail": "H-31: assumption",
+       "grade": "assumption"
+      }
+     ],
+     "verdict": {
+      "verdict": "PASS",
+      "detail": "H-31: assumption",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "His death, if it occurs while performing a repair, must be a",
+      "tests": "His death, if it occurs while performing a repair, must be able to produce a different and better outcome for the world than the same repair performed by someone who lives."
+     }
     },
     {
      "need": "The cumulative consequence of every other faction's warfare and Thread-disruptive activity anywhere on the peninsula must be able to reach him personally as an accumulating burden, without him ever having interacted with those factions.",
      "hardness": "core",
+     "probe": null,
+     "exercises": [
+      "H-20"
+     ],
+     "resolved": [
+      {
+       "ok": true,
+       "kind": "hole",
+       "detail": "H-20: assumption",
+       "grade": "assumption"
+      }
+     ],
+     "verdict": {
+      "verdict": "PASS",
+      "detail": "H-20: assumption",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "The cumulative consequence of every other faction's warfare ",
+      "tests": "The cumulative consequence of every other faction's warfare and Thread-disruptive activity anywhere on the peninsula must be able to reach him personally as an accumulating burden, without him ever having interacted with those factions."
+     }
+    }
+   ],
+   "unmapped": [
+    {
+     "need": "A subordinate rank within a tiny, non-political, non-recruiting institution must be trackable as a real position with real relationships (a senior to answer to, peers to lose) even though the institution has no faction stats, no Domain Actions, and no seat at any political table.",
+     "hardness": "important",
      "probe": null,
      "exercises": []
     },
@@ -460,48 +723,156 @@
    "name": "Sigrid Torsvald",
    "scale": "person",
    "source": "NPC1.yaml",
-   "verdict": "NOT-ASSESSED",
+   "verdict": "BLOCKED",
    "rows": 9,
    "core": 5,
-   "core_routed": 0,
-   "core_unmapped": 5,
-   "core_blocked": 0,
-   "blockers": [],
-   "routed": [],
-   "unmapped": [
+   "core_routed": 5,
+   "core_unmapped": 0,
+   "core_blocked": 2,
+   "blockers": [
+    "probe:P35",
+    "probe:P37"
+   ],
+   "routed": [
     {
      "need": "An act she performs must be able to leave no attributable trace back to her, her order, or her Crown when it succeeds cleanly -- full deniability as an achievable outcome, not merely a stated intention.",
      "hardness": "core",
      "probe": null,
-     "exercises": []
+     "exercises": [
+      "H-33"
+     ],
+     "resolved": [
+      {
+       "ok": true,
+       "kind": "hole",
+       "detail": "H-33: assumption",
+       "grade": "assumption"
+      }
+     ],
+     "verdict": {
+      "verdict": "PASS",
+      "detail": "H-33: assumption",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "An act she performs must be able to leave no attributable tr",
+      "tests": "An act she performs must be able to leave no attributable trace back to her, her order, or her Crown when it succeeds cleanly -- full deniability as an achievable outcome, not merely a stated intention."
+     }
     },
     {
      "need": "An act that goes partially wrong must be able to generate a persistent, accumulating institutional risk that is distinct from, and outlives, the scene in which it happened, and that risk must be able to cross a threshold that forces consequences later, in a different season, for a different reason.",
      "hardness": "core",
      "probe": null,
-     "exercises": []
+     "exercises": [
+      "H-20"
+     ],
+     "resolved": [
+      {
+       "ok": true,
+       "kind": "hole",
+       "detail": "H-20: assumption",
+       "grade": "assumption"
+      }
+     ],
+     "verdict": {
+      "verdict": "PASS",
+      "detail": "H-20: assumption",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "An act that goes partially wrong must be able to generate a ",
+      "tests": "An act that goes partially wrong must be able to generate a persistent, accumulating institutional risk that is distinct from, and outlives, the scene in which it happened, and that risk must be able to cross a threshold that forces consequences later, in a different season, for a different reason."
+     }
     },
     {
      "need": "Her private reputation among people who can never publicly credit her (fellow operatives, informants, a patron) must be trackable and consequential, on a track separate from any reputation she could have in ordinary faction life.",
      "hardness": "core",
-     "probe": null,
-     "exercises": []
+     "probe": "P35",
+     "exercises": [
+      "probe:P35"
+     ],
+     "resolved": [
+      {
+       "ok": false,
+       "kind": "probe",
+       "detail": "P35: GAP",
+       "probe": "P35",
+       "verdict": "GAP"
+      }
+     ],
+     "verdict": {
+      "verdict": "GAP",
+      "detail": "P35: GAP",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "Her private reputation among people who can never publicly c",
+      "tests": "Her private reputation among people who can never publicly credit her (fellow operatives, informants, a patron) must be trackable and consequential, on a track separate from any reputation she could have in ordinary faction life."
+     }
     },
     {
      "need": "A perception or capability she secretly has (Thread Sensitivity) must be able to be true and mechanically active while remaining completely unknown to the institution she serves, with that institution's own rules treating mere discovery of the secret as automatically disqualifying, regardless of her competence or loyalty.",
      "hardness": "core",
      "probe": null,
-     "exercises": []
-    },
-    {
-     "need": "A refusal to accept a mission must be able to cost her standing even when her reasons (avoiding harm only she can perceive) are sound -- the institution's cost model cannot be sensitive to whether her private judgment was actually correct.",
-     "hardness": "important",
-     "probe": null,
-     "exercises": []
+     "exercises": [
+      "H-33"
+     ],
+     "resolved": [
+      {
+       "ok": true,
+       "kind": "hole",
+       "detail": "H-33: assumption",
+       "grade": "assumption"
+      }
+     ],
+     "verdict": {
+      "verdict": "PASS",
+      "detail": "H-33: assumption",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "A perception or capability she secretly has (Thread Sensitiv",
+      "tests": "A perception or capability she secretly has (Thread Sensitivity) must be able to be true and mechanically active while remaining completely unknown to the institution she serves, with that institution's own rules treating mere discovery of the secret as automatically disqualifying, regardless of her competence or loyalty."
+     }
     },
     {
      "need": "Her perception of the consequences of a mission must be able to diverge from her colleagues' and superiors' assessment of that same mission -- the identical event scored as a clean win institutionally and as a partial disaster by her personal standard.",
      "hardness": "core",
+     "probe": "P37",
+     "exercises": [
+      "H-79",
+      "probe:P37"
+     ],
+     "resolved": [
+      {
+       "ok": true,
+       "kind": "hole",
+       "detail": "H-79: assumption",
+       "grade": "assumption"
+      },
+      {
+       "ok": false,
+       "kind": "probe",
+       "detail": "P37: GAP",
+       "probe": "P37",
+       "verdict": "GAP"
+      }
+     ],
+     "verdict": {
+      "verdict": "GAP",
+      "detail": "H-79: assumption \u00b7 P37: GAP",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "Her perception of the consequences of a mission must be able",
+      "tests": "Her perception of the consequences of a mission must be able to diverge from her colleagues' and superiors' assessment of that same mission -- the identical event scored as a clean win institutionally and as a partial disaster by her personal standard."
+     }
+    }
+   ],
+   "unmapped": [
+    {
+     "need": "A refusal to accept a mission must be able to cost her standing even when her reasons (avoiding harm only she can perceive) are sound -- the institution's cost model cannot be sensitive to whether her private judgment was actually correct.",
+     "hardness": "important",
      "probe": null,
      "exercises": []
     },
@@ -532,39 +903,145 @@
    "name": "Dalla Virke",
    "scale": "person",
    "source": "NPC1.yaml",
-   "verdict": "NOT-ASSESSED",
+   "verdict": "BLOCKED",
    "rows": 8,
    "core": 4,
-   "core_routed": 0,
-   "core_unmapped": 4,
-   "core_blocked": 0,
-   "blockers": [],
-   "routed": [],
-   "unmapped": [
+   "core_routed": 4,
+   "core_unmapped": 0,
+   "core_blocked": 2,
+   "blockers": [
+    "H-84"
+   ],
+   "routed": [
     {
      "need": "A non-faction, non-institutional actor must be able to hold and trade a resource (information, trust, access) that no faction's own action economy owns or produces -- a market that exists outside every faction's resource pools.",
      "hardness": "core",
      "probe": null,
-     "exercises": []
+     "exercises": [
+      "transfer",
+      "H-84"
+     ],
+     "resolved": [
+      {
+       "ok": true,
+       "kind": "verb",
+       "detail": "'transfer' executes"
+      },
+      {
+       "ok": false,
+       "kind": "hole",
+       "detail": "H-84: absent",
+       "grade": "absent"
+      }
+     ],
+     "verdict": {
+      "verdict": "GAP",
+      "detail": "'transfer' executes \u00b7 H-84: absent",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "A non-faction, non-institutional actor must be able to hold ",
+      "tests": "A non-faction, non-institutional actor must be able to hold and trade a resource (information, trust, access) that no faction's own action economy owns or produces -- a market that exists outside every faction's resource pools."
+     }
     },
     {
      "need": "Information she sells must be able to be true, false, or fabricated, with the buyer unable to distinguish which in advance, and her incentive to fabricate must rise specifically when honest demand for information falls.",
      "hardness": "core",
-     "probe": null,
-     "exercises": []
+     "probe": "P31",
+     "exercises": [
+      "H-79",
+      "probe:P31"
+     ],
+     "resolved": [
+      {
+       "ok": true,
+       "kind": "hole",
+       "detail": "H-79: assumption",
+       "grade": "assumption"
+      },
+      {
+       "ok": true,
+       "kind": "probe",
+       "detail": "P31: PASS",
+       "probe": "P31",
+       "verdict": "PASS"
+      }
+     ],
+     "verdict": {
+      "verdict": "PASS",
+      "detail": "H-79: assumption \u00b7 P31: PASS",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "Information she sells must be able to be true, false, or fab",
+      "tests": "Information she sells must be able to be true, false, or fabricated, with the buyer unable to distinguish which in advance, and her incentive to fabricate must rise specifically when honest demand for information falls."
+     }
     },
     {
      "need": "She must be discoverable, killable, buyable, or turnable by an outside actor as four textually distinct outcomes with different consequences for her network, not variations on one generic 'remove her' resolution.",
      "hardness": "core",
      "probe": null,
-     "exercises": []
+     "exercises": [
+      "kill / wound",
+      "H-84"
+     ],
+     "resolved": [
+      {
+       "ok": true,
+       "kind": "verb",
+       "detail": "'kill / wound' executes"
+      },
+      {
+       "ok": false,
+       "kind": "hole",
+       "detail": "H-84: absent",
+       "grade": "absent"
+      }
+     ],
+     "verdict": {
+      "verdict": "GAP",
+      "detail": "'kill / wound' executes \u00b7 H-84: absent",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "She must be discoverable, killable, buyable, or turnable by ",
+      "tests": "She must be discoverable, killable, buyable, or turnable by an outside actor as four textually distinct outcomes with different consequences for her network, not variations on one generic 'remove her' resolution."
+     }
     },
     {
      "need": "Her personal judgment about a specific past transaction (vetting goods as safe and legitimate) must be able to be wrong in a way that is discoverable later and attributable specifically to her, not to an abstract 'the network' or 'the market.'",
      "hardness": "core",
      "probe": null,
-     "exercises": []
-    },
+     "exercises": [
+      "H-22",
+      "H-79"
+     ],
+     "resolved": [
+      {
+       "ok": true,
+       "kind": "hole",
+       "detail": "H-22: ruled",
+       "grade": "ruled"
+      },
+      {
+       "ok": true,
+       "kind": "hole",
+       "detail": "H-79: assumption",
+       "grade": "assumption"
+      }
+     ],
+     "verdict": {
+      "verdict": "PASS",
+      "detail": "H-22: ruled \u00b7 H-79: assumption",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "Her personal judgment about a specific past transaction (vet",
+      "tests": "Her personal judgment about a specific past transaction (vetting goods as safe and legitimate) must be able to be wrong in a way that is discoverable later and attributable specifically to her, not to an abstract 'the network' or 'the market.'"
+     }
+    }
+   ],
+   "unmapped": [
     {
      "need": "A revelation that damages her standing with one party (a partner learning she shields certain clients from her own family's operations) must be able to threaten her position with a different party (her family) whose interests and knowledge are entirely separate.",
      "hardness": "important",
@@ -592,33 +1069,100 @@
    "name": "Rikard Solberg",
    "scale": "person",
    "source": "NPC1.yaml",
-   "verdict": "NOT-ASSESSED",
+   "verdict": "BLOCKED",
    "rows": 7,
    "core": 3,
-   "core_routed": 0,
-   "core_unmapped": 3,
-   "core_blocked": 0,
-   "blockers": [],
-   "routed": [],
-   "unmapped": [
+   "core_routed": 3,
+   "core_unmapped": 0,
+   "core_blocked": 1,
+   "blockers": [
+    "petition"
+   ],
+   "routed": [
     {
      "need": "A single office-holder's personal, unstated motive must be able to measurably bias every decision he makes in that office, in one consistent direction, without him or his superiors recognizing the pattern.",
      "hardness": "core",
-     "probe": null,
-     "exercises": []
+     "probe": "P31",
+     "exercises": [
+      "probe:P31"
+     ],
+     "resolved": [
+      {
+       "ok": true,
+       "kind": "probe",
+       "detail": "P31: PASS",
+       "probe": "P31",
+       "verdict": "PASS"
+      }
+     ],
+     "verdict": {
+      "verdict": "PASS",
+      "detail": "P31: PASS",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "A single office-holder's personal, unstated motive must be a",
+      "tests": "A single office-holder's personal, unstated motive must be able to measurably bias every decision he makes in that office, in one consistent direction, without him or his superiors recognizing the pattern."
+     }
     },
     {
      "need": "His employer's institutional evaluation of him must be able to stay positive -- he is 'too valuable to recall' -- specifically because of the state of the world he is unconsciously prolonging, a closed loop between his output and his own continued posting.",
      "hardness": "core",
      "probe": null,
-     "exercises": []
+     "exercises": [
+      "H-20"
+     ],
+     "resolved": [
+      {
+       "ok": true,
+       "kind": "hole",
+       "detail": "H-20: assumption",
+       "grade": "assumption"
+      }
+     ],
+     "verdict": {
+      "verdict": "PASS",
+      "detail": "H-20: assumption",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "His employer's institutional evaluation of him must be able ",
+      "tests": "His employer's institutional evaluation of him must be able to stay positive -- he is 'too valuable to recall' -- specifically because of the state of the world he is unconsciously prolonging, a closed loop between his output and his own continued posting."
+     }
     },
     {
      "need": "A player who identifies his true motive must be able to offer him something categorically different from a bribe or a threat -- a real, verifiable path to recall -- and have that offer change his behavior, with the engine able to distinguish a genuine offer from a false one via his own judgment.",
      "hardness": "core",
      "probe": null,
-     "exercises": []
-    },
+     "exercises": [
+      "petition",
+      "H-04"
+     ],
+     "resolved": [
+      {
+       "ok": false,
+       "kind": "verb",
+       "detail": "'petition' is on the table and the fold cannot execute it: needs an effect"
+      },
+      {
+       "ok": true,
+       "kind": "hole",
+       "detail": "H-04: assumption",
+       "grade": "assumption"
+      }
+     ],
+     "verdict": {
+      "verdict": "GAP",
+      "detail": "'petition' is on the table and the fold cannot execute it: needs an effect \u00b7 H-04: assumption",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "A player who identifies his true motive must be able to offe",
+      "tests": "A player who identifies his true motive must be able to offer him something categorically different from a bribe or a threat -- a real, verifiable path to recall -- and have that offer change his behavior, with the engine able to distinguish a genuine offer from a false one via his own judgment."
+     }
+    }
+   ],
+   "unmapped": [
     {
      "need": "His own faction's strategic decision-making must be able to independently recall or replace him based on faction-scale conditions, entirely apart from any player action.",
      "hardness": "important",
@@ -652,33 +1196,116 @@
    "name": "Maret Uln",
    "scale": "person",
    "source": "NPC1.yaml",
-   "verdict": "NOT-ASSESSED",
+   "verdict": "BLOCKED",
    "rows": 8,
    "core": 3,
-   "core_routed": 0,
-   "core_unmapped": 3,
-   "core_blocked": 0,
-   "blockers": [],
-   "routed": [],
-   "unmapped": [
+   "core_routed": 3,
+   "core_unmapped": 0,
+   "core_blocked": 1,
+   "blockers": [
+    "H-25"
+   ],
+   "routed": [
     {
      "need": "Performing a Thread operation as part of ordinary intelligence work must cost the practitioner a persistent personal resource whose cost scales with the scale and type of operation performed, distinct from whether the operation succeeded.",
      "hardness": "core",
      "probe": null,
-     "exercises": []
+     "exercises": [
+      "H-38",
+      "H-25"
+     ],
+     "resolved": [
+      {
+       "ok": true,
+       "kind": "hole",
+       "detail": "H-38: assumption",
+       "grade": "assumption"
+      },
+      {
+       "ok": false,
+       "kind": "hole",
+       "detail": "H-25: absent",
+       "grade": "absent"
+      }
+     ],
+     "verdict": {
+      "verdict": "GAP",
+      "detail": "H-38: assumption \u00b7 H-25: absent",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "Performing a Thread operation as part of ordinary intelligen",
+      "tests": "Performing a Thread operation as part of ordinary intelligence work must cost the practitioner a persistent personal resource whose cost scales with the scale and type of operation performed, distinct from whether the operation succeeded."
+     }
     },
     {
      "need": "As her personal condition degrades across a season, the range of actions available to her must narrow in a fixed, predictable order -- from full freedom down to forced withdrawal and crisis -- and that narrowing must override her institutional orders when the two conflict.",
      "hardness": "core",
-     "probe": null,
-     "exercises": []
+     "probe": "P32",
+     "exercises": [
+      "probe:P32",
+      "H-38"
+     ],
+     "resolved": [
+      {
+       "ok": true,
+       "kind": "probe",
+       "detail": "P32: PASS",
+       "probe": "P32",
+       "verdict": "PASS"
+      },
+      {
+       "ok": true,
+       "kind": "hole",
+       "detail": "H-38: assumption",
+       "grade": "assumption"
+      }
+     ],
+     "verdict": {
+      "verdict": "PASS",
+      "detail": "P32: PASS \u00b7 H-38: assumption",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "As her personal condition degrades across a season, the rang",
+      "tests": "As her personal condition degrades across a season, the range of actions available to her must narrow in a fixed, predictable order -- from full freedom down to forced withdrawal and crisis -- and that narrowing must override her institutional orders when the two conflict."
+     }
     },
     {
      "need": "Her personal sympathy for a population she is ordered to act against must produce a measurable, repeatable delay or softening in her actions against that population, distinct from a single one-time refusal.",
      "hardness": "core",
-     "probe": null,
-     "exercises": []
-    },
+     "probe": "P31",
+     "exercises": [
+      "probe:P31",
+      "H-31"
+     ],
+     "resolved": [
+      {
+       "ok": true,
+       "kind": "probe",
+       "detail": "P31: PASS",
+       "probe": "P31",
+       "verdict": "PASS"
+      },
+      {
+       "ok": true,
+       "kind": "hole",
+       "detail": "H-31: assumption",
+       "grade": "assumption"
+      }
+     ],
+     "verdict": {
+      "verdict": "PASS",
+      "detail": "P31: PASS \u00b7 H-31: assumption",
+      "kind": null,
+      "section": "",
+      "by": "declared",
+      "title": "Her personal sympathy for a population she is ordered to act",
+      "tests": "Her personal sympathy for a population she is ordered to act against must produce a measurable, repeatable delay or softening in her actions against that population, distinct from a single one-time refusal."
+     }
+    }
+   ],
+   "unmapped": [
     {
      "need": "A designated successor to a faction leader must exist as a real, trackable status -- with defined behavioral constraints relative to the current leader -- well before succession ever actually happens, not only as a rule that activates once on the leader's death.",
      "hardness": "important",

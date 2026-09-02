@@ -963,6 +963,22 @@ rows:
     unblocks:  "every case where one person's work reaches another — the whole of NPC-088's arc_trajectory"
     cite:      "FOUND BY THE `W9` ADVERSARIAL PASS, AS THE REASON `H-79` DID NOT DELIVER WHAT IT CLAIMED. Part E's `transfer` moves `(Rung, stores)` — MATTER, not Records — and `destroy_record` is gated `hold:<record> | presence`, both unevaluable person-side. So a Record is created by its maker, held by its maker, and reachable by nobody: the bailiff forms zero questions in every season of artifact 2 and ONLY CARIN EVER ACTS. `PLAN.md` §6.3's chain requires a claim deposited in another person's ledger, then that person's Q2 question, then their act, and links 3 through 5 are unreachable for this reason and not because of anything `W9` built. ⚠ GRADED `absent`, NOT `assumption`, AND DELIBERATELY: #353 names the six investigation acts (`verb_table.yaml`, `requires: per act`, no predicate) as how a thing is FOUND, and #353 `:499` gives \"burn the Record that carries it\" as what a finder does — so the design plainly intends discovery to exist and states no mechanism. Inventing a `give_record` verb here would be adding a row to Part E to make a milestone pass, which §8.1's first rule forbids in terms: do not weaken the design to make cases pass."
     source:    "W9 — found by the adversarial pass"
+  # -------------------------------------------------------------------------
+  # W10 — found by AUTHORING an `exercises:`, which is the mechanism working: a row that rests
+  # on nothing is visible the moment somebody has to say what it rests on.
+  # -------------------------------------------------------------------------
+  - id:        H-85
+    tier:      0
+    hole:      "THREAD SENSITIVITY — #353 §9.2 calls it \"the only class-shaped gate in the design\" and specifies NO carrier, NO roster of what it gates, and NO predicate. There is also no taxonomy of KINDS OF KNOWLEDGE for it to gate over"
+    kind:      "SCHEMA_ROW ×2"
+    owner:     "unassigned — §9.2 names the gate and gives it no home"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "every case that turns on what a person can KNOW or PERCEIVE rather than on what they may do"
+    cite:      "FOUND BY AUTHORING `W10`'s DECLARED ROUTING, WHICH IS THE MECHANISM WORKING AS INTENDED: a row that rests on nothing becomes visible the moment somebody has to write down what it rests on. NPC-087 row 1, in `proposals/2026-08-31-shape-tracer/cases/NPC1.yaml`, requires its material to be \"classified as suppressed cultural/political knowledge, retainable by ordinary non-sensitive minds, rather than Thread-substrate knowledge\", and NOTHING IN THE CHAIN SUPPLIES SUCH A CLASSIFICATION. The regex router sent that row to UNMAPPED and the case to NOT-ASSESSED, which reported it as an aiming failure; declared routing reports it as what it is. ⚠ #353 §9.2 VERBATIM: \"The only class-shaped gate in the design is Thread Sensitivity. If you find yourself writing `if capability < N: return []` inside an option set, you are re-implementing a gate the design deleted on purpose.\" So the design admits ONE class gate, warns against re-implementing the gate it deleted, and never says what the surviving one is over, who carries it, or what it gates -- a second `H-20`, on the epistemic side rather than the moral one. ⚠ MY FIRST ATTEMPT AT THIS ROW DECLARED `H-05` (the world-generation roster) AND WAS WRONG: H-05 is about persons with zero `hold`, and the mis-citation made NPC-087 read PLAYABLE. It survived about four minutes, because a declaration can be checked against the row it names and a regex could not."
+    source:    "W10 — found by authoring"
 
 # ---------------------------------------------------------------------------
 # THE DISCHARGE MAP -- guardrail G8.

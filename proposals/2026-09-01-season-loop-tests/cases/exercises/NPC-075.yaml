@@ -1,0 +1,53 @@
+# NPC-075 — `exercises:` for `W10`'s declared routing.
+#
+# ⚠ AUTHORED BY READING EACH ROW, NOT BY MATCHING IT. `PLAN.md` `W10` retired the regex
+# router precisely so a binding could be argued with; every `from:` below names what the
+# row rests on and why, and a reader who disagrees can say which row is wrong. Nothing here
+# was generated from the router's output — laundering its verdicts into declarations would
+# keep every one of its errors and make them look ratified.
+case: NPC-075
+name: Orm
+source: 'the case''s own `season_requires` + #353 and the hole register, cited per row'
+authored_after_first_run: true
+rows:
+- need_sha: 836e8de1391e
+  hardness: core
+  need: A person's decision to continue an exhausting, unrewarded maintenance labor (repairing breaches
+    in the world's substrate) must be represented as a real season-to-season choice, including the possibility
+    that he stops, burns out, or dies at it.
+  exercises:
+  - work
+  - H-04
+  from: A real season-to-season CHOICE, including the possibility of stopping, is `work` being in his
+    option set and his choosing it or not. `H-04` is the producer of the question that puts it there;
+    without a question he forms no candidates and the choice does not exist to be made.
+- need_sha: 95c76b58f0e4
+  hardness: core
+  need: A practitioner's ongoing exposure to the substrate damage he repairs must be able to degrade his
+    personal condition cumulatively across many seasons, distinct from the cost of any single act of repair.
+  exercises:
+  - H-38
+  - H-25
+  from: 'Cumulative degradation of his own condition across many seasons, distinct from any single act''s
+    cost, is a banded scalar on Person accumulating -- `H-38`, closed YES. What it needs beyond the carrier
+    is a bound on the accumulation, and `H-25` (a termination bound per self-feeding loop) is `absent`:
+    nothing in the design stops it.'
+- need_sha: 0427efc7168c
+  hardness: core
+  need: His death, if it occurs while performing a repair, must be able to produce a different and better
+    outcome for the world than the same repair performed by someone who lives.
+  exercises:
+  - H-31
+  from: 'An outcome that differs BECAUSE the actor died is an outcome conditioned on a degree, and the
+    degree ladder''s margin model is `H-31`. #353 gives four bands read off the margin and no margin model,
+    so the ladder cannot distinguish ''repaired and died'' from ''repaired and lived''.'
+- need_sha: 107166ee9333
+  hardness: core
+  need: The cumulative consequence of every other faction's warfare and Thread-disruptive activity anywhere
+    on the peninsula must be able to reach him personally as an accumulating burden, without him ever
+    having interacted with those factions.
+  exercises:
+  - H-20
+  from: '''The cumulative consequence of every other faction''s activity reaching him personally as an
+    accumulating burden'' is a per-`(Person, axis)` counter -- L3 clause 1 exactly. `H-20` is that registry
+    and the row admitting the increment, and it is the corpus''s largest non-refusal blocker.'

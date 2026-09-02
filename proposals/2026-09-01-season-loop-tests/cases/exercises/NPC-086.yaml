@@ -1,0 +1,44 @@
+# NPC-086 — `exercises:` for `W10`'s declared routing.
+#
+# ⚠ AUTHORED BY READING EACH ROW, NOT BY MATCHING IT. `PLAN.md` `W10` retired the regex
+# router precisely so a binding could be argued with; every `from:` below names what the
+# row rests on and why, and a reader who disagrees can say which row is wrong. Nothing here
+# was generated from the router's output — laundering its verdicts into declarations would
+# keep every one of its errors and make them look ratified.
+case: NPC-086
+name: Joren Bergvall
+source: 'the case''s own `season_requires` + #353 and the hole register, cited per row'
+authored_after_first_run: true
+rows:
+- need_sha: e51cecedc324
+  hardness: core
+  need: A technical specialist's field data must be able to exist as a persistent evidence object with
+    its own scope and quality, independent of any single Contest roll -- something that can be examined,
+    copied, corroborated, or suppressed as an artifact.
+  exercises:
+  - create_record
+  - H-22
+  from: A persistent evidence object with its own scope and quality, examinable independently of any roll,
+    is a `Record`. `H-22` is `ruled` and carries `forgery_quality` and `subject_matter`, which is where
+    scope and quality live; `create_record` is the act that makes one.
+- need_sha: 7a5d7be123ee
+  hardness: core
+  need: Presenting his evidence to a political audience must be able to change what that audience believes
+    about the cause of the sea-route blockage, and that changed belief must persist and spread to third
+    parties who never saw the data themselves.
+  exercises:
+  - tell
+  - H-79
+  - H-84
+  from: 'Changing what an audience BELIEVES, persistently and spreading to third parties, is a claim deposited
+    in their ledgers -- `tell` is the verb and `H-79` decides what such a deposit is ABOUT. It is blocked
+    by `H-84`: he cannot put the evidence in anyone else''s hands, so the audience has only his word,
+    which is the thing this row says must not be the only route.'
+- need_sha: ce801d93e2ca
+  hardness: core
+  need: Corroborating or refuting his claim must be possible for a third party through independent fieldwork,
+    not only by taking his word for it.
+  exercises:
+  - the six investigation acts
+  from: 'Corroboration by INDEPENDENT fieldwork is precisely the six investigation acts. Part E carries
+    them with `requires: per act` and supplies no predicate for any, so the fold cannot execute them.'

@@ -1,0 +1,42 @@
+# NPC-012 — `exercises:` for `W10`'s declared routing.
+#
+# ⚠ AUTHORED BY READING EACH ROW, NOT BY MATCHING IT. Every `from:` names what the row
+# rests on and why, so a reader who disagrees can say which row is wrong — which is the
+# whole reason `PLAN.md` `W10` retired the regex router. Nothing here was generated from
+# the router's output.
+case: NPC-012
+name: Rikard Solberg
+source: 'the case''s own `season_requires` + #353 and the hole register, cited per row'
+authored_after_first_run: true
+rows:
+- need_sha: d42ea0c1c1ae
+  hardness: core
+  need: A single office-holder's personal, unstated motive must be able to measurably bias every decision
+    he makes in that office, in one consistent direction, without him or his superiors recognizing the
+    pattern.
+  exercises:
+  - probe:P31
+  from: A personal, unstated motive biasing every decision in one consistent direction, unrecognised by
+    him or his superiors, is `P31` verbatim -- convictions read PERSON-SIDE ONLY, skewing the pick with
+    nothing stored about the bias.
+- need_sha: 919ab38b5d30
+  hardness: core
+  need: His employer's institutional evaluation of him must be able to stay positive -- he is 'too valuable
+    to recall' -- specifically because of the state of the world he is unconsciously prolonging, a closed
+    loop between his output and his own continued posting.
+  exercises:
+  - H-20
+  from: An institutional evaluation that stays positive BECAUSE of a world-state he is prolonging is an
+    aggregate over that world reaching a judgement about a person. L3 makes every aggregate a function;
+    the per-person counter that would carry it is `H-20`.
+- need_sha: 640a78d18813
+  hardness: core
+  need: A player who identifies his true motive must be able to offer him something categorically different
+    from a bribe or a threat -- a real, verifiable path to recall -- and have that offer change his behavior,
+    with the engine able to distinguish a genuine offer from a false one via his own judgment.
+  exercises:
+  - petition
+  - H-04
+  from: An offer that is categorically not a bribe or a threat -- a verifiable path to recall -- is a
+    `petition` to the office that could recall him, formed because a question reached him. `H-04` is the
+    producer.

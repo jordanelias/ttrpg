@@ -1,0 +1,52 @@
+# NPC-087 — `exercises:` for `W10`'s declared routing.
+#
+# ⚠ AUTHORED BY READING EACH ROW, NOT BY MATCHING IT. Every `from:` names what the row
+# rests on and why, so a reader who disagrees can say which row is wrong — which is the
+# whole reason `PLAN.md` `W10` retired the regex router. Nothing here was generated from
+# the router's output.
+case: NPC-087
+name: Uwe Askeland
+source: 'the case''s own `season_requires` + #353 and the hole register, cited per row'
+authored_after_first_run: true
+rows:
+- need_sha: f718400c3dd6
+  hardness: core
+  need: A person with no office must be able to run a recurring, location-bound activity whose ongoing
+    existence -- not any single completed task -- is itself the thing at stake.
+  exercises:
+  - work
+  - H-04
+  from: A recurring, location-bound activity whose ONGOING EXISTENCE is the stake is `work` at a Site,
+    chosen again each season. `H-04` produces the question that puts it in his option set; without one
+    he forms no candidates and the activity has no season-to-season existence to be at stake.
+- need_sha: 57d7fd794ea7
+  hardness: core
+  need: The material he teaches must be classified as suppressed cultural/political knowledge, retainable
+    by ordinary non-sensitive minds, rather than Thread-substrate knowledge subject to the setting's epistemological
+    barrier.
+  exercises:
+  - H-85
+  from: '''Classified as suppressed cultural/political knowledge, retainable by ordinary non-sensitive
+    minds, rather than Thread-substrate knowledge'' asks for a taxonomy of KINDS OF KNOWLEDGE and for
+    the gate that separates them. #353 §9.2 names Thread Sensitivity as ''the only class-shaped gate in
+    the design'' and supplies neither. `H-85`. ⚠ THIS ROW FIRST DECLARED `H-05` AND THAT WAS WRONG --
+    H-05 is the world-generation roster, about persons with zero `hold` -- and the mis-citation made this
+    case read PLAYABLE.'
+- need_sha: 97e99857bdae
+  hardness: core
+  need: His discovery must be able to branch three ways for whoever finds him -- protect him, report him,
+    or leverage the discovery -- with materially different consequences down each path, not just a binary
+    helped/not-helped outcome.
+  exercises:
+  - probe:P36
+  from: Three materially different consequences down three paths, through one resolver and with no branching-outcome
+    machinery, is exactly `P36`.
+- need_sha: 5ec0acdb83e5
+  hardness: core
+  need: He must be reachable by a scene opportunity despite holding no faction Standing, no assigned Duty,
+    and no Disposition floor with any faction leader.
+  exercises:
+  - speak
+  - H-04
+  from: 'Reachable despite no Standing, no Duty and no Disposition floor: a person with no office still
+    forms candidates (L1), and Q4 `need` is the source that reaches him. `H-04` is that producer.'

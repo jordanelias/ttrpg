@@ -26,104 +26,104 @@ not the shape.
 | A single scene of investigation, discovery, or protection involving her must be able to permanently change a persistent fact about her (protected / exposed / arrested / dead) that carries fo | `None` | **GAP** |  |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-087 — Uwe Askeland  ·  **NOT-ASSESSED**
-*person · 8 rows, 4 core · blockers: none*
+## NPC-087 — Uwe Askeland  ·  **BLOCKED**
+*person · 8 rows, 4 core · blockers: H-85*
 *ends when:* never automatically; only via a discovery-driven resolution (protect/report/leverage), or unremarked continuation.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** A person with no office must be able to run a recurring, location-bound activity whose ongoing existence -- not any single completed task -- is itself the thing at stake. | — | UNMAPPED | — |
-| **[core]** The material he teaches must be classified as suppressed cultural/political knowledge, retainable by ordinary non-sensitive minds, rather than Thread-substrate knowledge subject to the setti | — | UNMAPPED | — |
+| **[core]** A person with no office must be able to run a recurring, location-bound activity whose ongoing existence -- not any single completed task -- is itself the thing at stake. | `None` | PASS |  |
+| **[core]** The material he teaches must be classified as suppressed cultural/political knowledge, retainable by ordinary non-sensitive minds, rather than Thread-substrate knowledge subject to the setti | `None` | **GAP** |  |
+| **[core]** His discovery must be able to branch three ways for whoever finds him -- protect him, report him, or leverage the discovery -- with materially different consequences down each path, not just | `P36` | PASS |  |
+| **[core]** He must be reachable by a scene opportunity despite holding no faction Standing, no assigned Duty, and no Disposition floor with any faction leader. | `None` | PASS |  |
 | The cumulative effect of many small private teaching sessions must be able to aggregate into a settlement- or territory-scale outcome without Askeland himself possessing the faction-level re | — | UNMAPPED | — |
-| **[core]** His discovery must be able to branch three ways for whoever finds him -- protect him, report him, or leverage the discovery -- with materially different consequences down each path, not just | — | UNMAPPED | — |
 | A student's exposure (being caught attending, or found to have been taught) must be trackable as a consequence for the student, separate from any consequence for Askeland. | — | UNMAPPED | — |
-| **[core]** He must be reachable by a scene opportunity despite holding no faction Standing, no assigned Duty, and no Disposition floor with any faction leader. | — | UNMAPPED | — |
 | His activity must be able to persist across seasons completely unwitnessed, and be discoverable later exactly as it would have been discovered earlier -- not silently resolved off-screen the | — | UNMAPPED | — |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-086 — Joren Bergvall  ·  **NOT-ASSESSED**
-*person · 7 rows, 3 core · blockers: none*
+## NPC-086 — Joren Bergvall  ·  **BLOCKED**
+*person · 7 rows, 3 core · blockers: H-84, the six investigation acts*
 *ends when:* never explicitly stated; presumably when the conspiracy narrative is durably dispelled or the data is destroyed or discredited.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** A technical specialist's field data must be able to exist as a persistent evidence object with its own scope and quality, independent of any single Contest roll -- something that can be exam | — | UNMAPPED | — |
-| **[core]** Presenting his evidence to a political audience must be able to change what that audience believes about the cause of the sea-route blockage, and that changed belief must persist and spread  | — | UNMAPPED | — |
+| **[core]** A technical specialist's field data must be able to exist as a persistent evidence object with its own scope and quality, independent of any single Contest roll -- something that can be exam | `None` | PASS |  |
+| **[core]** Presenting his evidence to a political audience must be able to change what that audience believes about the cause of the sea-route blockage, and that changed belief must persist and spread  | `None` | **GAP** |  |
+| **[core]** Corroborating or refuting his claim must be possible for a third party through independent fieldwork, not only by taking his word for it. | `None` | **GAP** |  |
 | A Guild employee below faction-leadership rank must be reachable by a scene opportunity through his technical output becoming relevant to a player, not only through his faction leadership's  | — | UNMAPPED | — |
 | His findings must be able to be suppressed, altered, or bought before reaching a political audience, by an actor with an interest in the conspiracy narrative persisting. | — | UNMAPPED | — |
 | His personal risk for holding or publishing this data must be trackable as politically motivated, distinct from the Church-heresy detection machinery that governs most other exposure risk in | — | UNMAPPED | — |
-| **[core]** Corroborating or refuting his claim must be possible for a third party through independent fieldwork, not only by taking his word for it. | — | UNMAPPED | — |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-075 — Orm  ·  **NOT-ASSESSED**
-*person · 8 rows, 4 core · blockers: none*
+## NPC-075 — Orm  ·  **BLOCKED**
+*person · 8 rows, 4 core · blockers: H-25*
 *ends when:* his death (possibly a deliberate death-in-service act), the outpost's fall, or -- per the sourcing gap above -- an undefined further state.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** A person's decision to continue an exhausting, unrewarded maintenance labor (repairing breaches in the world's substrate) must be represented as a real season-to-season choice, including the | — | UNMAPPED | — |
-| **[core]** A practitioner's ongoing exposure to the substrate damage he repairs must be able to degrade his personal condition cumulatively across many seasons, distinct from the cost of any single act | — | UNMAPPED | — |
-| **[core]** His death, if it occurs while performing a repair, must be able to produce a different and better outcome for the world than the same repair performed by someone who lives. | — | UNMAPPED | — |
+| **[core]** A person's decision to continue an exhausting, unrewarded maintenance labor (repairing breaches in the world's substrate) must be represented as a real season-to-season choice, including the | `None` | PASS |  |
+| **[core]** A practitioner's ongoing exposure to the substrate damage he repairs must be able to degrade his personal condition cumulatively across many seasons, distinct from the cost of any single act | `None` | **GAP** |  |
+| **[core]** His death, if it occurs while performing a repair, must be able to produce a different and better outcome for the world than the same repair performed by someone who lives. | `None` | PASS |  |
+| **[core]** The cumulative consequence of every other faction's warfare and Thread-disruptive activity anywhere on the peninsula must be able to reach him personally as an accumulating burden, without h | `None` | PASS |  |
 | A subordinate rank within a tiny, non-political, non-recruiting institution must be trackable as a real position with real relationships (a senior to answer to, peers to lose) even though th | — | UNMAPPED | — |
-| **[core]** The cumulative consequence of every other faction's warfare and Thread-disruptive activity anywhere on the peninsula must be able to reach him personally as an accumulating burden, without h | — | UNMAPPED | — |
 | His decades of specific field experience with a defined category of threat must make him mechanically superior at that category of action compared to someone without the experience, not mere | — | UNMAPPED | — |
 | A player who reaches him must be able to have access gated by demonstrated Thread competence rather than by faction standing, reputation, or wealth -- none of which his institution recognize | — | UNMAPPED | — |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-005 — Sigrid Torsvald  ·  **NOT-ASSESSED**
-*person · 9 rows, 5 core · blockers: none*
+## NPC-005 — Sigrid Torsvald  ·  **BLOCKED**
+*person · 9 rows, 5 core · blockers: probe:P35, probe:P37*
 *ends when:* never explicitly stated; presumably her exposure and its institutional fallout, her death, or a resolution of the archive-connection arc -- none of which the source specifies as a defined final mechanical state.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** An act she performs must be able to leave no attributable trace back to her, her order, or her Crown when it succeeds cleanly -- full deniability as an achievable outcome, not merely a state | — | UNMAPPED | — |
-| **[core]** An act that goes partially wrong must be able to generate a persistent, accumulating institutional risk that is distinct from, and outlives, the scene in which it happened, and that risk mus | — | UNMAPPED | — |
-| **[core]** Her private reputation among people who can never publicly credit her (fellow operatives, informants, a patron) must be trackable and consequential, on a track separate from any reputation s | — | UNMAPPED | — |
-| **[core]** A perception or capability she secretly has (Thread Sensitivity) must be able to be true and mechanically active while remaining completely unknown to the institution she serves, with that i | — | UNMAPPED | — |
+| **[core]** An act she performs must be able to leave no attributable trace back to her, her order, or her Crown when it succeeds cleanly -- full deniability as an achievable outcome, not merely a state | `None` | PASS |  |
+| **[core]** An act that goes partially wrong must be able to generate a persistent, accumulating institutional risk that is distinct from, and outlives, the scene in which it happened, and that risk mus | `None` | PASS |  |
+| **[core]** Her private reputation among people who can never publicly credit her (fellow operatives, informants, a patron) must be trackable and consequential, on a track separate from any reputation s | `P35` | **GAP** |  |
+| **[core]** A perception or capability she secretly has (Thread Sensitivity) must be able to be true and mechanically active while remaining completely unknown to the institution she serves, with that i | `None` | PASS |  |
+| **[core]** Her perception of the consequences of a mission must be able to diverge from her colleagues' and superiors' assessment of that same mission -- the identical event scored as a clean win insti | `P37` | **GAP** |  |
 | A refusal to accept a mission must be able to cost her standing even when her reasons (avoiding harm only she can perceive) are sound -- the institution's cost model cannot be sensitive to w | — | UNMAPPED | — |
-| **[core]** Her perception of the consequences of a mission must be able to diverge from her colleagues' and superiors' assessment of that same mission -- the identical event scored as a clean win insti | — | UNMAPPED | — |
 | A prior personal relationship formed years earlier (guarding an archive for someone she has since stayed connected to) must be able to resurface and pull her into a scene later, creating a g | — | UNMAPPED | — |
 | If her covert status is exposed publicly, the consequence must convert what she gained secretly into an explicit, larger public loss, rather than simply erasing the secret gain. | — | UNMAPPED | — |
 | Her overt institutional rank and her covert rank must be able to move independently -- advancement or disgrace in one must not automatically imply the same in the other. | — | UNMAPPED | — |
 
-## NPC-010 — Dalla Virke  ·  **NOT-ASSESSED**
-*person · 8 rows, 4 core · blockers: none*
+## NPC-010 — Dalla Virke  ·  **BLOCKED**
+*person · 8 rows, 4 core · blockers: H-84*
 *ends when:* never explicitly named; presumably her exposure or recall event, or indefinite continuation.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** A non-faction, non-institutional actor must be able to hold and trade a resource (information, trust, access) that no faction's own action economy owns or produces -- a market that exists ou | — | UNMAPPED | — |
-| **[core]** Information she sells must be able to be true, false, or fabricated, with the buyer unable to distinguish which in advance, and her incentive to fabricate must rise specifically when honest  | — | UNMAPPED | — |
-| **[core]** She must be discoverable, killable, buyable, or turnable by an outside actor as four textually distinct outcomes with different consequences for her network, not variations on one generic 'r | — | UNMAPPED | — |
-| **[core]** Her personal judgment about a specific past transaction (vetting goods as safe and legitimate) must be able to be wrong in a way that is discoverable later and attributable specifically to h | — | UNMAPPED | — |
+| **[core]** A non-faction, non-institutional actor must be able to hold and trade a resource (information, trust, access) that no faction's own action economy owns or produces -- a market that exists ou | `None` | **GAP** |  |
+| **[core]** Information she sells must be able to be true, false, or fabricated, with the buyer unable to distinguish which in advance, and her incentive to fabricate must rise specifically when honest  | `P31` | PASS |  |
+| **[core]** She must be discoverable, killable, buyable, or turnable by an outside actor as four textually distinct outcomes with different consequences for her network, not variations on one generic 'r | `None` | **GAP** |  |
+| **[core]** Her personal judgment about a specific past transaction (vetting goods as safe and legitimate) must be able to be wrong in a way that is discoverable later and attributable specifically to h | `None` | PASS |  |
 | A revelation that damages her standing with one party (a partner learning she shields certain clients from her own family's operations) must be able to threaten her position with a different | — | UNMAPPED | — |
 | Her removal (replacement by someone with no local relationships) must be able to collapse benefits that other, unrelated actors were quietly relying on, in the same season, as a single casca | — | UNMAPPED | — |
 | Trading in goods whose true dangerous nature is unknown even to the seller must be able to produce consequences later, when the nature becomes known, that attach retroactively to the origina | — | UNMAPPED | — |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-012 — Rikard Solberg  ·  **NOT-ASSESSED**
-*person · 7 rows, 3 core · blockers: none*
+## NPC-012 — Rikard Solberg  ·  **BLOCKED**
+*person · 7 rows, 3 core · blockers: petition*
 *ends when:* his recall, by his own nation or via a player-brokered genuine stability treaty, or indefinite continuation of the status quo.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** A single office-holder's personal, unstated motive must be able to measurably bias every decision he makes in that office, in one consistent direction, without him or his superiors recognizi | — | UNMAPPED | — |
-| **[core]** His employer's institutional evaluation of him must be able to stay positive -- he is 'too valuable to recall' -- specifically because of the state of the world he is unconsciously prolongin | — | UNMAPPED | — |
-| **[core]** A player who identifies his true motive must be able to offer him something categorically different from a bribe or a threat -- a real, verifiable path to recall -- and have that offer chang | — | UNMAPPED | — |
+| **[core]** A single office-holder's personal, unstated motive must be able to measurably bias every decision he makes in that office, in one consistent direction, without him or his superiors recognizi | `P31` | PASS |  |
+| **[core]** His employer's institutional evaluation of him must be able to stay positive -- he is 'too valuable to recall' -- specifically because of the state of the world he is unconsciously prolongin | `None` | PASS |  |
+| **[core]** A player who identifies his true motive must be able to offer him something categorically different from a bribe or a threat -- a real, verifiable path to recall -- and have that offer chang | `None` | **GAP** |  |
 | His own faction's strategic decision-making must be able to independently recall or replace him based on faction-scale conditions, entirely apart from any player action. | — | UNMAPPED | — |
 | If he is replaced, his successor's behavior must differ measurably from his (more aggressive arms flows, sharper intelligence, harsher trade terms) as a direct consequence of removing his sp | — | UNMAPPED | — |
 | His private, non-work relationships (his children, growing up without him) must be able to exist as a motivating fact even though they are physically absent from every scene he could appear  | — | UNMAPPED | — |
 | His institutional loyalty and the effect of his actions must be able to diverge permanently without him ever consciously betraying or defecting from his employer. | — | UNMAPPED | — |
 
-## NPC-002 — Maret Uln  ·  **NOT-ASSESSED**
-*person · 8 rows, 3 core · blockers: none*
+## NPC-002 — Maret Uln  ·  **BLOCKED**
+*person · 8 rows, 3 core · blockers: H-25*
 *ends when:* never explicitly named as a terminus; presumably resolved only when she defects, successfully compartmentalizes, or her patron falls and she inherits.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** Performing a Thread operation as part of ordinary intelligence work must cost the practitioner a persistent personal resource whose cost scales with the scale and type of operation performed | — | UNMAPPED | — |
-| **[core]** As her personal condition degrades across a season, the range of actions available to her must narrow in a fixed, predictable order -- from full freedom down to forced withdrawal and crisis  | — | UNMAPPED | — |
-| **[core]** Her personal sympathy for a population she is ordered to act against must produce a measurable, repeatable delay or softening in her actions against that population, distinct from a single o | — | UNMAPPED | — |
+| **[core]** Performing a Thread operation as part of ordinary intelligence work must cost the practitioner a persistent personal resource whose cost scales with the scale and type of operation performed | `None` | **GAP** |  |
+| **[core]** As her personal condition degrades across a season, the range of actions available to her must narrow in a fixed, predictable order -- from full freedom down to forced withdrawal and crisis  | `P32` | PASS |  |
+| **[core]** Her personal sympathy for a population she is ordered to act against must produce a measurable, repeatable delay or softening in her actions against that population, distinct from a single o | `P31` | PASS |  |
 | A designated successor to a faction leader must exist as a real, trackable status -- with defined behavioral constraints relative to the current leader -- well before succession ever actuall | — | UNMAPPED | — |
 | If her patron is eliminated and she inherits leadership, a faction-level clock tied specifically to her predecessor's personal project must be able to reset to zero rather than simply transf | — | UNMAPPED | — |
 | Her intelligence-gathering must be able to produce results that are qualitatively richer than ordinary reconnaissance -- direct experiential perception of substrate-level damage, not reporte | — | UNMAPPED | — |
