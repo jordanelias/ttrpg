@@ -2702,22 +2702,47 @@ def requires_predicate(verb: str):
 
 @requires_predicate("confer")
 def _req_confer(w: "World", a: "Act") -> bool:
-    """Part E: **1-per-object** -- no live `hold` on the object. The cardinality rule stated
-    structurally, so the fold can read it."""
+    """Part E, IN FULL: *"the office's **conferral basis**, and 1-per-object: no live `hold` on the
+    object, **or** the holder-Proposition has zero live `commit` (§54 it. 20)"*.
+
+    ⚠ THE FIRST VERSION IMPLEMENTED HALF OF ONE OF TWO CLAUSES -- it dropped the conferral-basis
+    conjunct entirely and the `or` disjunct with it, while its docstring claimed *"the cardinality
+    rule stated structurally"*. Dropping a disjunct is an OVER-REFUSAL: an office whose
+    holder-Proposition has no live commit was refused where Part E admits it. `G4` weighs that
+    equally with an invention, and the docstring made it invisible. Found by the governance-slice
+    adversarial pass."""
     d = (a.payload or {}) if isinstance(a.payload, dict) else {}
     obj = d.get("office")
     if not obj or obj not in w.offices:
         return False
-    return not any(t.kind == "hold" and t.object == obj and t.live for t in w.tenures)
+    if not (w.offices[obj].conferral or "").strip():
+        return False                       # no conferral basis: the office cannot be conferred
+    if not any(t.kind == "hold" and t.object == obj and t.live for t in w.tenures):
+        return True                        # 1-per-object satisfied
+    # THE `or` DISJUNCT: a held office is still conferrable when the holder-Proposition carries
+    # no live `commit`. §54 item 20.
+    holder = next((t.subject for t in w.tenures
+                   if t.kind == "hold" and t.object == obj and t.live), None)
+    return holder is not None and not any(
+        t.kind == "commit" and t.subject == holder and t.live for t in w.tenures)
 
 
 @requires_predicate("revoke")
 def _req_revoke(w: "World", a: "Act") -> bool:
-    """Part E: *a live `hold` exists*. The exact complement of `confer`'s, which is why the two
-    are the cleanest pair to make executable first."""
+    """Part E: *"the office's **revocation basis**, and a live `hold` exists"*.
+
+    ⚠ THE FIRST VERSION DROPPED THE OFFICE CLAUSE AND WAS AN OVER-ADMISSION -- it scanned for any
+    live `hold` on the payload's object with no check that the object IS AN OFFICE, and §13 makes
+    possession of a Record a `hold` Tenure. So a holder of `remit:revoke` could revoke a person's
+    possession of a book, and `_eff_revoke` would close it. Asymmetric with `confer`, which did
+    check. Found by the governance-slice adversarial pass."""
     d = (a.payload or {}) if isinstance(a.payload, dict) else {}
     obj = d.get("office")
-    return bool(obj) and any(t.kind == "hold" and t.object == obj and t.live for t in w.tenures)
+    if not obj or obj not in w.offices:
+        return False
+    if not (w.offices[obj].revocation or "").strip():
+        return False
+    return any(t.kind == "hold" and t.object == obj and t.live for t in w.tenures)
 
 
 @requires_predicate("dispatch")
@@ -2729,11 +2754,17 @@ def _req_dispatch(w: "World", a: "Act") -> bool:
 
 @requires_predicate("convene")
 def _req_convene(w: "World", a: "Act") -> bool:
-    """Part E: *the venue's `container` resolves, or is NONE* (§6.2). A venue that names a rung
-    which does not exist is unmet; a venue of NONE is met, which is §6.2's carve-out."""
+    """Part E: *the venue's **container** resolves, or is NONE* (§6.2).
+
+    ⚠ THE FIRST VERSION TESTED THE WRONG THING -- `venue in w.rungs` asks whether the venue IS a
+    rung, not whether its CONTAINER resolves, so a top rung (which has no container) passed. And
+    `Query.parent_of` already existed, so re-deriving a weaker test here was §8-adjacent. Found by
+    the governance-slice adversarial pass."""
     d = (a.payload or {}) if isinstance(a.payload, dict) else {}
     venue = d.get("venue")
-    return venue is None or venue in w.rungs
+    if venue is None:
+        return True                        # §6.2's carve-out
+    return venue in w.rungs and Query.parent_of(w, venue) is not None
 
 
 @requires_predicate("transfer")
@@ -2884,15 +2915,18 @@ def _eff_confer(w: "World", a: "Act") -> list:
     obj, to = d.get("office"), d.get("to") or a.actor
     if not obj or obj not in w.offices:
         return []
-    touched = []
+    closed = []
     for t in w.tenures:
         if t.kind == "hold" and t.object == obj and t.live:
             t.until = w.tick
-            touched.append(t.id)
+            closed.append(t.id)
     nt = Tenure(H(w.world_seed, w.tick, to, f"hold:{obj}"), to, obj, "hold", w.tick)
     w.add_tenure(nt)
-    touched.append(nt.id)
-    return touched
+    # ⚠ PER-KIND. Conferring onto an UNHELD office closes nothing, and returning a flat list made
+    # the fold publish `tenure.closed` anyway -- a state change that did not happen, which is the
+    # fabricated-`person.died` class committed inside the fix for it. The mapping's empty entry is
+    # dropped by `_apply_write`.
+    return {"tenure.opened": [nt.id], "tenure.closed": closed}
 
 
 @effect_for("revoke")
@@ -3488,6 +3522,9 @@ class SeasonDriver:
 
         # Each `writes:` through the gate. The gate is the only writer; the fold never assigns.
         changed: list = []
+        # Which of `emits:` the effect actually earned. Empty means "all of them", which is the
+        # contract every effect returning a plain list keeps.
+        earned: set = set()
         if row.writes:
             eff = EFFECTS.get(a.verb)
             if eff is None:
@@ -3510,7 +3547,8 @@ class SeasonDriver:
                 kind, _, fld = pair.partition(".")
                 # The effect runs ONCE, on the first pair: a verb writing three cells is ONE
                 # operation, and running it per pair minted three Tenures for one `move`.
-                made = self._apply_write(w, a, kind, fld, eff if n == 0 else None)
+                made = self._apply_write(w, a, kind, fld, eff if n == 0 else None,
+                                         earned=earned)
                 changed.extend(c for c in made if c not in changed)
             # ⚠ AN EFFECT THAT TOUCHED NOTHING DID NOT DO THE THING, AND MUST NOT EMIT THE
             # SUCCESS. `kill / wound`'s effect returns early when its payload names no subject --
@@ -3541,9 +3579,15 @@ class SeasonDriver:
         # reading is wrong: `w.log` holds Events, an Act is never appended to it, so that
         # predicate is PERMANENTLY FALSE and reading it strictly produces `[ROOT]` forever.
         # §39.2 line 2 says `causes[]` NAMES THE ACTS. Found by running `headless.py`.
-        return ev(row.emits, [a.id], list(a.changes) + changed)
+        # ⚠ ONLY THE KINDS THE EFFECT EARNED. An effect that returns a plain list earns all of
+        # them, unchanged; one returning a mapping earns exactly the keys it filled. `confer`
+        # declares `tenure.opened` AND `tenure.closed`, and conferring onto an unheld office
+        # closes nothing -- publishing the second is a state change that did not happen.
+        kinds = tuple(k for k in row.emits if k in earned) if earned else row.emits
+        return ev(kinds, [a.id], list(a.changes) + changed)
 
-    def _apply_write(self, w: "World", a: Act, kind: str, fld: str, eff=None) -> list:
+    def _apply_write(self, w: "World", a: Act, kind: str, fld: str, eff=None,
+                     earned: Optional[set] = None) -> list:
         """The fold's write. It carries no per-verb behaviour -- the effect of a write is the
         matrix row's business, and what a verb writes is the verb table's.
 
@@ -3556,10 +3600,23 @@ class SeasonDriver:
         empty through four revisions."""
         mrow = matrix_row(kind, fld)
         touched: list = []
+        earned = earned if earned is not None else set()
 
         def apply():
             got = eff(w, a) if eff is not None else None
-            if got:
+            # ⚠ AN EFFECT MAY EARN SOME OF ITS DECLARED KINDS AND NOT OTHERS. A list means *all*
+            # of them (the original contract, unchanged); a MAPPING `{kind: [ids]}` names which.
+            # Without this the fold emitted EVERY kind in `emits:` the moment anything changed --
+            # so `confer` onto an unheld office published `tenure.closed` with nothing closed.
+            # That is the fabricated-`person.died` class committed INSIDE the fix for it, and the
+            # existing guard cannot see it because it is all-or-nothing per act. Found by the
+            # governance-slice adversarial pass.
+            if isinstance(got, dict):
+                for k, ids in got.items():
+                    if ids:
+                        earned.add(k)
+                        touched.extend(ids)
+            elif got:
                 touched.extend(got)
 
         w.write(fld, mrow.write_class(Step.RESOLVE), apply,
@@ -3887,6 +3944,17 @@ def contest(w: World, rung: str, prize: Any, claimants: list[str],
     # undifferentiated hole. That turns "the degree ladder's margin model is absent" -- which reads
     # as a missing design -- into "this act belongs to `personal_combat`, whose resolver is
     # `d_sigma`, and nothing connects them", which is a wiring statement somebody can act on.
+    if depth >= max_depth:
+        TRACE.decision("contest depth cap reached", "S39.3",
+                       chose="typed error result returned to the caller",
+                       alternatives=["recurse (a CRASH in GDScript, not a catchable error)"])
+        return ContestError("max_depth reached", depth, max_depth)
+    # ⚠ THE DISPATCH RUNS **AFTER** THE DEPTH CHECK, AND IT DID NOT. Raising here first made
+    # `ContestError("max_depth reached")` UNREACHABLE for every prize the roster claims — so
+    # `H-87`'s registered cap was a number no branch could read and its three-point sweep was a
+    # set of arms identical by construction. Found by the governance-slice adversarial pass.
+    # ⚠ AND THE FIX IS A MOVE, NOT A SECOND CHECK. My first attempt added a duplicate cap test
+    # twelve lines above this one — §8 broken in the act of fixing an ordering bug.
     _sub = contest_subsystem(prize)
     if _sub is not None:
         raise Unspecified(
@@ -3897,11 +3965,6 @@ def contest(w: World, rung: str, prize: Any, claimants: list[str],
                 "are declared in references/module_contracts.yaml WITH resolvers, so the seam's "
                 "job is to DISPATCH; inventing a degree ladder here would be a second resolver, "
                 "which S27.2 names as its highest-value refusal")
-    if depth >= max_depth:
-        TRACE.decision("contest depth cap reached", "S39.3",
-                       chose="typed error result returned to the caller",
-                       alternatives=["recurse (a CRASH in GDScript, not a catchable error)"])
-        return ContestError("max_depth reached", depth, max_depth)
     raise Unspecified(
         "the degree ladder's margin model",
         "S39.4",

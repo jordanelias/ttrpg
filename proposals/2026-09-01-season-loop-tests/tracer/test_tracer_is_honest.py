@@ -1424,11 +1424,18 @@ def test_w2_every_write_call_site_names_a_pair_on_the_matrix():
     # verb against the matrix AT LOAD, which covers verbs no probe exercises, where this walk
     # covers only sites someone wrote. The exemption is declared, and the test asserts the
     # load-time check is really there rather than taking the comment's word for it.
-    FOLD_SITE = "_apply_write"
-    fold_lines = {n for n, ln in enumerate((HERE / "shape.py").read_text().splitlines(), 1)
-                  if FOLD_SITE in ln}
+    # ⚠ LEXICAL CONTAINMENT, NOT LINE PROXIMITY. This exempted a dynamic write site within 25
+    # LINES of any line mentioning `_apply_write` — a distance heuristic, and adding eight lines
+    # to that function's body pushed its own `w.write` call outside its own exemption. The
+    # property is *"this call is inside `_apply_write`"*, and the AST answers it exactly. `G3`:
+    # assert the property, never the proxy. Found while reconciling the governance-slice pass.
+    import ast as _ast
+    _tree = _ast.parse((HERE / "shape.py").read_text())
+    fold_span = next(((n.lineno, n.end_lineno) for n in _ast.walk(_tree)
+                      if isinstance(n, _ast.FunctionDef) and n.name == "_apply_write"), None)
+    assert fold_span, "`_apply_write` is gone; the fold's declared exemption names nothing"
     unexplained = [d for d in dynamic
-                   if not any(abs(int(d.split(":")[1]) - fl) < 25 for fl in fold_lines)]
+                   if not (fold_span[0] <= int(d.split(":")[1]) <= fold_span[1])]
     assert not unexplained, (
         "write call sites whose (record_kind, fieldname) are not literals and are not the fold: "
         f"{unexplained}")
@@ -2931,8 +2938,16 @@ def test_governance_scale_is_a_rung_kind_and_is_crossed_with_the_stratum():
         by_scale.setdefault(r.scale, set()).add(r.stratum)
     assert any(len(v) > 1 for v in by_stratum.values()), (
         f"every stratum sits at exactly one scale — then `scale` adds nothing: {by_stratum}")
-    assert any(len(v) > 1 for v in by_scale.values()), (
-        f"every scale carries exactly one stratum — then the two are the same axis: {by_scale}")
+    # ⚠ THE DEFAULT BUCKET IS EXCLUDED, AND WITHOUT THAT THIS CANNOT FAIL. Delete every `scale:`
+    # line from `verb_table.yaml` and all 32 rows fall to the `"person"` default — `by_scale`
+    # becomes `{"person": {all five strata}}` and `any(len(v) > 1)` PASSES, satisfied entirely by
+    # the unauthored bucket. The property is about AUTHORED scales. Found by the governance-slice
+    # adversarial pass.
+    authored = {k: v for k, v in by_scale.items() if k != "person"}
+    assert authored, "no verb carries an authored scale; the column is entirely default"
+    assert any(len(v) > 1 for v in authored.values()), (
+        f"every AUTHORED scale carries exactly one stratum — then the two are the same axis "
+        f"under another name: {authored}")
     print(f"\n  scales in use: { {k: sorted(v) for k, v in sorted(by_scale.items())} }")
 
 
@@ -2948,6 +2963,14 @@ def test_the_governance_slice_executes_and_a_binding_decision_reaches_a_rung():
     d = S.SeasonDriver(w)
     duke = "p_high"
     assert any(t.subject == duke and t.object == "off_duke" and t.live for t in w.tenures)
+    # ⚠ A HARNESS FIXTURE, AND A REAL GAP IT EXPOSES. Part E requires *"the office's CONFERRAL
+    # basis"*, and NEITHER fixture office carries one — `conferral` is `None` on both — so the
+    # clause refuses every conferral in `tiny_world`. That is the predicate working: before the
+    # governance-slice pass dropped the conjunct, the clause was unenforced and this fixture's
+    # incompleteness was invisible. The basis is supplied HERE rather than in `probes.py`, so no
+    # other probe's world changes, and it is a fixture string rather than a design claim — Part E
+    # says an office must HAVE a basis, not what any particular basis is.
+    w.offices["off_dicastery"].conferral = "the duke's remit (harness fixture)"
 
     made = []
 
@@ -2988,6 +3011,44 @@ def test_the_governance_slice_executes_and_a_binding_decision_reaches_a_rung():
           f"{len(S.resolvable_verbs())} of {len(S.VERB_TABLE)} verbs now execute")
 
 
+def test_no_person_can_choose_a_governance_verb_and_h71_is_why():
+    """⚠ THE HALF THE SLICE DOES NOT BUILD, PINNED SO IT CANNOT BE ASSUMED AWAY.
+
+    The four governance verbs execute when the fold is HANDED an Act. **No person can ever form
+    one.** `person_side_eligible` declines every `remit:` alternative unconditionally — that is
+    `H-71`, which the register already carried as `absent` and **tier 0**, with its `unblocks:`
+    already reading *"9 of 32 verbs cannot be formed person-side — 8 remit-ONLY"*. All four
+    governance verbs carry `remit:` as their ONLY eligibility, so `Query.opening_set` never offers
+    them, in any world — including one where the actor genuinely holds the office whose remit
+    names the act.
+
+    So `resolvable_verbs()` moving 8 → 12 CANNOT AFFECT ANY RUN, and the claim *"the governance
+    verbs now run"* is true of `resolve` and false of any person deliberating. This test is that
+    sentence made mechanical: it goes red the day `H-71` closes, which is exactly when the claim
+    becomes true. Found by the governance-slice adversarial pass."""
+    w = P.tiny_world()
+    duke = w.persons["p_high"]
+    assert any(t.subject == "p_high" and t.object == "off_duke" and t.live for t in w.tenures)
+    assert "confer" in w.offices["off_duke"].remit_acts
+    # ⚠ SEVEN OF THE EIGHT, NOT ALL EIGHT. `succeed` is eligible by `own` and IS offerable — it
+    # is the one governance verb a person can choose, and it is not in this slice (it has no
+    # predicate and no effect). Scoping to the remit-only rows is what makes the assertion about
+    # `H-71` rather than about `binding_decision`.
+    gov = [v for v, r in S.VERB_TABLE.items()
+           if r.stratum == "binding_decision"
+           and all(alt.startswith("remit:") for alt in r.eligibility)]
+    assert len(gov) >= 7, f"only {len(gov)} remit-only governance verbs; the roster has moved"
+    offered = [v for v in gov if S.person_side_eligible(duke, S.VERB_TABLE[v])]
+    assert not offered, (
+        f"a person can now choose {offered} — `H-71` has closed, and the governance slice's claim "
+        "that its verbs 'run' is finally true of a deliberating person rather than only of the "
+        "fold. Re-read the slice's note and this test's docstring together before deleting either")
+    # AND THE FOUR ARE IN THE FOLD'S SET, which is the half that DOES work — the two facts
+    # together are the honest statement of where the slice stands.
+    assert {"confer", "revoke", "dispatch", "convene"} <= S.resolvable_verbs(), (
+        "the fold can no longer execute the governance verbs; the slice has regressed")
+
+
 def test_a_binding_decision_lights_the_two_witness_channels_that_needed_one():
     """`W6`'s adversarial pass found `post_remit` and `chronicle` firing ZERO times, and traced it
     to the same cause: both need a `binding_decision`, and none was executable. This is the other
@@ -2995,10 +3056,27 @@ def test_a_binding_decision_lights_the_two_witness_channels_that_needed_one():
 
     `chronicle` is an event-kind filter (it does not read `pid`) and `post_remit` needs the witness
     to hold an office whose remit covers the emitting verb, so the two admit different people."""
+    # ⚠ THE EVENT COMES FROM A RUN, NOT FROM A CONSTRUCTOR. The first version built an
+    # `S.Event(...)` by hand and called the predicates directly — and since neither predicate
+    # consults `REQUIRES_PREDICATES`, `EFFECTS` or `resolvable_verbs()`, **it would have passed
+    # unchanged on the tree before the governance slice existed**. It could not observe the change
+    # it was offered as evidence for (§0.1 pt 2). The act is folded here, and the Event the fold
+    # emitted is what the channels are asked about.
     w = P.tiny_world()
     duke = "p_high"
-    e = S.Event(S.H(w.world_seed, w.tick, duke, "probe:gov"), "tenure.closed", "off_duke", [],
-                ["a1"], w.tick)
+    # `confer`, not `revoke`: `off_duke`'s remit is `['issue','determine','confer','dispatch',
+    # 'convene']` and carries no `revoke`, so a revoke by the duke is correctly INELIGIBLE — the
+    # same trap the slice test fell into. The conferral basis is a harness fixture; Part E requires
+    # an office to HAVE one and neither fixture office does.
+    w.offices["off_dicastery"].conferral = "the duke's remit (harness fixture)"
+    d = S.SeasonDriver(w)
+    d.matter([])
+    out = d.resolve([S.Act(id="g_conf", actor=duke, verb="confer",
+                           payload={"office": "off_dicastery", "to": "p_mid"})],
+                    contest_max_depth=w.fixtures.get("contest_max_depth"))
+    e = next((x for x in out if x.kind == "tenure.opened"), None)
+    assert e is not None, (
+        f"the fold emitted {[x.kind for x in out]} — no `tenure.closed` to test the channels with")
     everyone = list(w.persons)
     assert any(S.CHANNEL_PREDICATES["chronicle"](w, e, pid) for pid in everyone), (
         "`chronicle` does not fire on a binding decision's emission — then it can never fire at "

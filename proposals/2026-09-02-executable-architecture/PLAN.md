@@ -771,6 +771,60 @@ and nothing else** — asserted, not printed, which is **G3**.
 
 **Size S–M.** Depends on **W2**. Parallel with **W3**.
 
+> ### ⚠ THE GOVERNANCE SLICE'S ADVERSARIAL PASS — it overturned the headline, and found a
+> ### fabrication committed inside the fix for a fabrication
+>
+> **1. "The governance verbs now RUN" is true of the FOLD and false of any person.**
+> `person_side_eligible` declines every `remit:` alternative unconditionally — that is **`H-71`,
+> already registered `absent` and TIER 0**, with its `unblocks:` already reading *"9 of 32 verbs
+> cannot be formed person-side — 8 remit-ONLY"*. All four slice verbs are remit-only, so
+> `Query.opening_set` never offers them **in any world**, including one where the actor genuinely
+> holds the office whose remit names the act. **`resolvable_verbs()` moving 8 → 12 cannot affect
+> any run.** I built the RESOLVE half of a mechanism whose DELIBERATE half is an open tier-0 hole,
+> and said it runs. `test_no_person_can_choose_a_governance_verb_and_h71_is_why` pins it and goes
+> red the day `H-71` closes.
+>
+> **2. `confer` published a FABRICATED `tenure.closed`.** `_fold` emitted every kind in `emits:`
+> once anything changed, and `confer` declares both `tenure.opened` and `tenure.closed` — so
+> conferring onto an unheld office announced a closure that never happened. **That is the
+> fabricated-`person.died` class, committed inside the fix for it**, and the existing guard could
+> not see it because it is all-or-nothing per act. An effect may now return `{kind: [ids]}` and
+> the fold emits only what was earned.
+>
+> **3. The `scale:` column reaches NO resolver** — validated at load and read by nothing else.
+> **Third instance of this defect in one session**, after `stratum` (`H-83`) and `contests:`; this
+> session diagnosed both and then shipped a third. Registered as **`H-89`**, `absent`, with the
+> candidate readers named and none chosen, because choosing is a design decision.
+>
+> **4. Three predicates were wrong.** `_req_confer` dropped a conjunct *and* an `or` disjunct — an
+> **over-refusal**, `G4`; `_req_revoke` omitted the office check and could revoke a person's
+> possession of a **book**, since §13 makes possession a `hold` — an **over-admission**;
+> `_req_convene` tested that the venue *is* a rung rather than that its **container resolves**,
+> and `Query.parent_of` already existed. All three now implement Part E's full text.
+>
+> **5. `H-87`'s cap was unreachable.** `contest_subsystem` ran BEFORE the depth check, so
+> `ContestError("max_depth reached")` could not fire for any rostered prize — the registered
+> number had no consumer and its sweep was three arms identical by construction. The dispatch
+> moved below the check. ⚠ My first attempt added a SECOND cap test twelve lines above the
+> existing one — §8 broken in the act of fixing an ordering bug.
+>
+> **6. `person.died` 4 → 0 was not caused by this change.** `W9`'s *"an effect that touched
+> nothing"* guard already drove it to 0 and predates the seam work; and the seam is never reached
+> anyway, because `kill / wound` left the chooser's set. Two sufficient causes, the earlier one
+> already fired — the commit banked a delta it did not produce, and the `4` shipped with no
+> command (`G11`, again).
+>
+> **7. `PROBE FLIPS 0` was not reassurance.** None of the new code is on an exercised path: the
+> governance verbs cannot be chosen (1), `kill / wound` cannot be chosen, and the only probes
+> reaching `contest()` use an unrostered prize. Arms identical by construction, reported as a
+> control — §0.1 pt 4.
+>
+> **Two tests could not fail** and were rebuilt: the channel test used a hand-built Event and
+> **would have passed on the pre-session tree**; and the "genuinely crossed" assertion was
+> satisfied entirely by the unauthored `person` default bucket. A third guard, `W2`'s write-site
+> walk, exempted the fold by **line proximity** and broke when the fold grew eight lines — it
+> exempts by AST containment now.
+
 > ### LANDED 2026-09-02 — and the gate found six silent MATTER writes on its first run
 >
 > **`shape.World.write` is the emitter.** `H-12` is RULED that way (*"MATTER emits an Event per
