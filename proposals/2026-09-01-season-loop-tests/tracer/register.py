@@ -39,6 +39,12 @@ THE RULES, each with the failure that earned it:
   G8  DISCHARGED     every Part B defect id appears in a row or in the discharge map, never both.
                      Earned by: `D16` was the ONLY one of 26 defects with no Part VII row and no
                      Part D-G discharge, and was claimed discharged anyway.
+  G12 CITE AGREES    a row's `cite:` may not argue for a grade the row does not carry.
+                     Earned by: `H-46`'s cite was written from neighbouring `H-20`'s and kept its
+                     conclusion -- *"THIS ROW THEREFORE STAYS `assumption`"* -- on a row graded
+                     `absent`. So it satisfied `G6` on an argument for a DIFFERENT refusal, and a
+                     `tier: 0` row's grade feeds both artifact 0's verdict and, through
+                     `resolve()`, the case verdicts. [`W10` adversarial pass]
 
 ⚠ `--check` EXITS 1 TODAY, ON G6, AND THAT IS THE MEASUREMENT RATHER THAN A BUG. `W0`'s stated
 proof in `PLAN.md` is *"exits 0"*, and it cannot: the plan's own §1.5 finds that no row carries
@@ -248,6 +254,31 @@ def rule_G6(reg: dict) -> list:
             if r.get("grade") == "absent" and not str(r.get("cite") or "").strip()]
 
 
+def rule_G12(reg: dict) -> list:
+    """A row's `cite:` may not argue for a grade the row does not carry.
+
+    ⚠ THIS IS A REAL DEFECT CLASS AND IT SHIPPED. `H-46`'s cite was written from `H-20`'s -- they
+    are neighbouring questions about the same roster -- and carried `H-20`'s conclusion verbatim:
+    *"THIS ROW THEREFORE STAYS `assumption`"*, on a row graded `absent`. So `H-46` satisfied `G6`
+    (*"a refusal nobody argued for is not a refusal"*) on an argument for a DIFFERENT REFUSAL, and
+    `G6`'s whole purpose leaked. It matters beyond bookkeeping: `H-46` is `tier: 0`, so it sits
+    inside `tier0_absent` and artifact 0's verdict, and `resolve()` turns a row's grade into a case
+    verdict -- a wrong grade with a plausible-looking cite is exactly how a wrong verdict survives
+    review. `CLAUDE.md` §0.1 pt 5: the defective artifact is load-bearing on the game-facing
+    verdict, so the pattern earns a guard. Found by `W10`'s adversarial pass."""
+    import re as _re
+    bad = []
+    for r in reg["rows"]:
+        cite = str(r.get("cite") or "")
+        for g in ("ruled", "assumption", "absent", "measured"):
+            if r.get("grade") == g:
+                continue
+            if _re.search(r"STAYS\s+`?%s`?" % g, cite, _re.I):
+                bad.append(f"{r['id']}: graded `{r.get('grade')}` and its `cite:` argues it "
+                           f"STAYS `{g}` -- one of the two is wrong")
+    return bad
+
+
 def rule_G8(reg: dict) -> list:
     """Every Part B defect binds to a register row or to a named section, EXPLICITLY. The first
     draft inferred the binding by scanning row text for a defect id, which is a keyword search --
@@ -287,7 +318,7 @@ def rule_G8(reg: dict) -> list:
 
 
 RULES = {"R0": rule_R0, "R1": rule_R1, "R2": rule_R2,
-         "R3": rule_R3, "G6": rule_G6, "G8": rule_G8}
+         "R3": rule_R3, "G6": rule_G6, "G8": rule_G8, "G12": rule_G12}
 
 
 def check(reg: dict, only: list | None = None) -> dict:

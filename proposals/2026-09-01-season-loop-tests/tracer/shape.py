@@ -353,11 +353,60 @@ class MatrixRow:
         return STEP_CLASS[step]
 
 
+
+# ---------------------------------------------------------------------------
+# ONE YAML READER FOR EVERY DATA FILE THIS INSTRUMENT OWNS, AND IT REFUSES A DUPLICATE KEY.
+#
+# ⚠ `yaml.safe_load` SILENTLY KEEPS THE LAST OF TWO IDENTICAL KEYS. `verb_table.yaml` declared
+# `writes_note` TWICE on `issue` and twice on `petition` -- once with Part E's transcribed cell
+# (*"a Dispensation is not a state write -- §37.3"*, *"a Petition is created, not written"*) and
+# once with the `W3` audit's correction of it. The transcription was discarded at load, in the one
+# file whose whole purpose is to be a faithful capture of Part E, and nothing said so. Both cells
+# are merged in the data now; this is the guard that fails on recurrence.
+#
+# ⚠ SEVERITY, STATED ACCURATELY: `writes_note` is not a field of `VerbRow`, so nothing in the fold
+# read either cell -- THAT instance lost transcribed text in a capture whose purpose is fidelity to
+# Part E, and changed no behaviour. What earns the guard under `CLAUDE.md` §0.1 pt 5 is the same
+# class at the ROW level, which DID change behaviour: two `(Office, exists)` rows where the loader
+# took the last, so gate behaviour depended on file order. That fix guarded rows only.
+#
+# The same defect class already cost this instrument once at the ROW level -- two `(Office, exists)`
+# rows where the loader took the last, so gate behaviour depended on file order -- and that fix
+# guarded rows only. This guards every mapping in every file.
+# ---------------------------------------------------------------------------
+
+def load_yaml(text: str):
+    """The instrument's only YAML entry point. Raises on a duplicate mapping key.
+
+    Built per call rather than at module scope because this file imports `yaml` inside the
+    functions that need it, and a class body cannot wait for that."""
+    import yaml as _y
+
+    class _NoDuplicateKeys(_y.SafeLoader):
+        pass
+
+    def _no_dup(loader, node, deep=False):
+        seen, out = set(), {}
+        for k, v in node.value:
+            key = loader.construct_object(k, deep=deep)
+            if key in seen:
+                raise ValueError(
+                    f"duplicate key {key!r} at line {k.start_mark.line + 1} -- `safe_load` would "
+                    f"silently keep the last, which is how two `writes_note` cells became one")
+            seen.add(key)
+            out[key] = loader.construct_object(v, deep=deep)
+        return out
+
+    _NoDuplicateKeys.add_constructor(
+        _y.resolver.BaseResolver.DEFAULT_MAPPING_TAG, _no_dup)
+    return _y.load(text, _NoDuplicateKeys)
+
+
 def _load_write_matrix() -> dict:
     import yaml as _yaml
     if not WRITE_MATRIX_YAML.exists():
         raise SystemExit(f"write_matrix.yaml not found at {WRITE_MATRIX_YAML}")
-    doc = _yaml.safe_load(WRITE_MATRIX_YAML.read_text())
+    doc = load_yaml(WRITE_MATRIX_YAML.read_text())
     out = {}
     for r in doc["rows"]:
         steps = frozenset(Step[_STEP_OF[s]] for s in r["steps"])
@@ -446,7 +495,7 @@ def _load_rosters() -> tuple:
     import yaml as _y
     if not ROSTERS_YAML.exists():
         raise SystemExit(f"rosters.yaml not found at {ROSTERS_YAML}")
-    doc = _y.safe_load(ROSTERS_YAML.read_text()) or {}
+    doc = load_yaml(ROSTERS_YAML.read_text()) or {}
     return (doc.get("rosters") or {}), (doc.get("tables") or {})
 
 
@@ -560,7 +609,7 @@ def _load_verb_table() -> dict:
     import yaml as _y
     if not VERB_TABLE_YAML.exists():
         raise SystemExit(f"verb_table.yaml not found at {VERB_TABLE_YAML}")
-    doc = _y.safe_load(VERB_TABLE_YAML.read_text())
+    doc = load_yaml(VERB_TABLE_YAML.read_text())
     out = {}
     for r in doc["verbs"]:
         name = r["verb"]

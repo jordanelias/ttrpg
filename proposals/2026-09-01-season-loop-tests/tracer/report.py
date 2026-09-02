@@ -23,10 +23,12 @@ from __future__ import annotations
 
 import json
 import sys
-from collections import Counter, defaultdict
+from collections import Counter
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
+
+import exercises as EX          # noqa: E402 -- needs the path insert above
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
@@ -106,6 +108,9 @@ def emit(rep: dict, trace_rows: list) -> None:
                "gapping — a finding about the **shape** |",
                "| `UNMAPPED` | **nobody authored an `exercises:` for this row.** A fact about "
                "AUTHORING, which is fixable — never a pass |",
+               "| `INSTRUMENT-ERROR` | a declared token **names nothing** — a typo in the "
+               "overlay, not a finding about the design. It is kept out of `blockers` and its "
+               "case is not graded |",
                "| `SOURCE-UNCLEAR` | the CASE SOURCE fails to say something; the source failing, "
                "not the shape |", ""]
         for c in rows:
@@ -115,21 +120,29 @@ def emit(rep: dict, trace_rows: list) -> None:
             if c.get("ends_when"):
                 out.append(f"*ends when:* {c['ends_when']}")
             out.append("")
-            out.append("| need | probe | verdict | § |")
+            # ⚠ THE `exercises:` COLUMN IS THE POINT OF `W10` AND IT WAS NOT RENDERED. This table
+            # had a `probe` column filled from `r['probe']`, which is `None` for every declared row
+            # that does not name `probe:PID` — so eight of nine declared rows printed `None`, and
+            # the DECLARATION a reader is supposed to argue with appeared nowhere in the artifact.
+            # An authored binding nobody can see is no better than a regex nobody can see.
+            # Found by the `W10` adversarial pass.
+            out.append("| need | rests on | verdict | why |")
             out.append("|---|---|---|---|")
             for r in c["routed"]:
                 v = r["verdict"]
                 mark = "PASS" if v["verdict"] == "PASS" else f"**{v.get('kind') or v['verdict']}**"
-                need = r["need"].replace("|", "\\|")[:190]
+                need = EX.need_display(r["need"], 190)
+                decl = " · ".join(f"`{t}`" for t in (r.get("exercises") or [])) or "—"
+                why = EX.need_display(v.get("detail") or v.get("section") or "", 160)
                 out.append(f"| {'**[core]** ' if r['hardness']=='core' else ''}{need} "
-                           f"| `{r['probe']}` | {mark} | {v['section']} |")
+                           f"| {decl} | {mark} | {why} |")
             for r in c["unmapped"]:
-                need = r["need"].replace("|", "\\|")[:190]
+                need = EX.need_display(r["need"], 190)
                 out.append(f"| {'**[core]** ' if r['hardness']=='core' else ''}{need} "
-                           f"| — | UNMAPPED | — |")
+                           f"| — | UNMAPPED | nobody has authored an `exercises:` for this row |")
             if c.get("unclear"):
                 out.append(f"| *({c['unclear']} row(s) marked `UNCLEAR:` by the case source)* "
-                           "| — | SOURCE-UNCLEAR | — |")
+                           "| — | SOURCE-UNCLEAR | the source says it does not know |")
             out.append("")
         (RUNS / f"CASELOG_{kind}.md").write_text("\n".join(out))
 
@@ -218,11 +231,12 @@ def emit(rep: dict, trace_rows: list) -> None:
                    "than rather same only other another each any all some more most both either "
                    "must-be can may will would could should there here also even while whether "
                    "without within across between over under after before during through".split())
+        # ⚠ TOKENISATION HAS ONE OWNER, `exercises.need_terms`, and it is the only router-shaped
+        # operation left in this codebase. It was inline here, which meant the taint check could
+        # only pass by scoping itself away from this file — and a filename roster is the same
+        # defect as a word roster (`G2`). Naming it keeps the dependency checkable.
         for _, n in core:
-            for w in n.lower().replace("-", " ").split():
-                w = "".join(ch for ch in w if ch.isalpha())
-                if len(w) >= 5 and w not in stop:
-                    terms[w] += 1
+            terms.update(EX.need_terms(n, stop=stop))
         out = [f"# UNMAPPED — {kind}: the rows nobody has authored an `exercises:` for", "",
                "**An undeclared row is not a pass and not a gap. It is the instrument admitting it",
                "did not aim.** Under `W10` there is no regex to blame: a row lands here because no",

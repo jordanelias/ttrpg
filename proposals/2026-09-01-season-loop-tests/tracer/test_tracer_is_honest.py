@@ -2608,37 +2608,22 @@ def test_w9_the_sweeps_the_register_declares_are_executed():
 # A roster of forbidden names is the same defect as a roster of routed words, one level up.
 # `PLAN.md` `G2`: forbid the shape, never enumerate the words.
 
-_TAINT_SANITIZER = "need_sha"
+# The three declared sanitizers, read off `exercises.py` rather than retyped: `need_sha` BINDS a
+# need to its declaration, `need_display` RENDERS one into an artifact cell, `need_terms`
+# TOKENISES one for a printed table nothing reads back. Everything else done with a need's text
+# is the router.
+_SANITIZERS = ("need_sha", "need_display", "need_terms")
 
-
-def _is_taint_source(node) -> bool:
-    """Where a raw need text enters an expression: the name `need`, `x["need"]`, `x.get("need")`."""
-    import ast as ast_
-    if isinstance(node, ast_.Name) and node.id == "need":
-        return True
-    if isinstance(node, ast_.Subscript) and isinstance(node.slice, ast_.Constant) \
-            and node.slice.value == "need":
-        return True
-    if isinstance(node, ast_.Call) and isinstance(node.func, ast_.Attribute) \
-            and node.func.attr == "get" and node.args \
-            and isinstance(node.args[0], ast_.Constant) and node.args[0].value == "need":
-        return True
-    return False
-
-
-def _carries_need(node) -> bool:
-    """Does this subtree carry raw need text? The walk STOPS at `need_sha(...)`, which is the
-    sanitizer: a sha is a binding key, not prose, and deciding on one is the whole design."""
-    import ast as ast_
-    stack = [node]
-    while stack:
-        n = stack.pop()
-        if isinstance(n, ast_.Call) and _callee_name(n).endswith(_TAINT_SANITIZER):
-            continue                      # sanitized -- the sha, not the prose
-        if _is_taint_source(n):
-            return True
-        stack.extend(ast_.iter_child_nodes(n))
-    return False
+# Taint does not flow through an operation whose RESULT CANNOT BE A STRING. `len(core)` embeds a
+# tainted name and yields an `int`; propagating through it tainted `report.py`'s entire output list
+# and reported three offences in `"\n".join(out)` — rendering, not routing, and `G4` weighs an
+# over-refusal equally with an invention.
+#
+# ⚠ THIS IS A STATEMENT ABOUT RETURN TYPES, NOT A ROSTER OF BLESSED FUNCTIONS, and the difference
+# is the whole reason it is allowed to exist in a file that deletes routers for being rosters. A
+# name belongs here only if it PROVABLY cannot return a `str`. `sorted`, `max` and `min` do not
+# qualify — they return their inputs.
+_NON_TEXT_BUILTINS = ("len", "sum", "abs", "round", "bool", "int", "float")
 
 
 def _callee_name(call) -> str:
@@ -2651,75 +2636,274 @@ def _callee_name(call) -> str:
     return ""
 
 
+def _is_extraction(node) -> bool:
+    """Where a need's TEXT enters an expression from a corpus row: `x["need"]`, `x.get("need")`.
+
+    ⚠ NOT `Name("need")`. Keying on the identifier was the defect that made the first version a
+    NAME TEST WEARING A DATAFLOW TEST'S CLOTHES: rename one variable and the retired router came
+    back verbatim past all five plants. The extraction is the KEY, which the corpus owns and a
+    rename cannot touch."""
+    import ast as ast_
+    if isinstance(node, ast_.Subscript) and isinstance(node.slice, ast_.Constant) \
+            and node.slice.value == "need":
+        return True
+    if isinstance(node, ast_.Call) and isinstance(node.func, ast_.Attribute) \
+            and node.func.attr == "get" and node.args \
+            and isinstance(node.args[0], ast_.Constant) and node.args[0].value == "need":
+        return True
+    return False
+
+
+def _summarise(tree) -> dict:
+    """`id(node) -> (names, has_extraction)` for every subtree, computed ONCE, bottom-up, with the
+    summary stopping at a declared sanitizer.
+
+    ⚠ THIS EXISTS FOR SPEED AND THE SPEED IS LOAD-BEARING. Re-walking each subtree inside the
+    taint fixpoint is quadratic, and on `shape.py` (3,193 lines) the first version of this dataflow
+    did not finish in two minutes. A guard nobody can afford to run is a guard that gets deleted."""
+    import ast as ast_
+    out: dict = {}
+
+    def visit(n):
+        for c in ast_.iter_child_nodes(n):
+            visit(c)
+        if isinstance(n, ast_.Call) and (_callee_name(n) in _SANITIZERS
+                                         or _callee_name(n) in _NON_TEXT_BUILTINS):
+            out[id(n)] = (frozenset(), False)   # a sha, a cell, or a number — never prose
+            return
+        names, ex = set(), _is_extraction(n)
+        if isinstance(n, ast_.Name):
+            names.add(n.id)
+        for c in ast_.iter_child_nodes(n):
+            cn, ce = out[id(c)]
+            names |= cn
+            ex = ex or ce
+        out[id(n)] = (frozenset(names), ex)
+
+    visit(tree)
+    return out
+
+
+def _carries_need(node, tainted: set, summary: dict) -> bool:
+    """Does this subtree carry raw need text? A sha is a binding key and an escaped cell is an
+    artifact — neither is prose — so the three declared sanitizers stop it."""
+    names, ex = summary[id(node)]
+    return ex or bool(names & tainted)
+
+
+def _scopes(tree) -> list:
+    """`(name, nodes, params)` per LEXICAL SCOPE: the module with every function body removed, and
+    each function or lambda body on its own.
+
+    ⚠ TAINT IS A PROPERTY OF A NAME IN A SCOPE, and computing it module-wide is an over-refusal
+    (`G4` weighs one equally with an invention). Pooling every name in the file let
+    `need_display`'s local `out = need.replace(...)` taint the unrelated `out` in `load()` and
+    `coverage()`, and the guard reported twenty offences in correct code. A guard that fires on
+    lawful code pushes the fix toward deleting it."""
+    import ast as ast_
+    fn_t = (ast_.FunctionDef, ast_.AsyncFunctionDef, ast_.Lambda)
+
+    def own(root):
+        out, stack = [], [root]
+        while stack:
+            n = stack.pop()
+            for c in ast_.iter_child_nodes(n):
+                if isinstance(c, fn_t):
+                    continue          # its own scope; visited separately
+                out.append(c)
+                stack.append(c)
+        return out
+
+    scopes = [("<module>", own(tree), [])]
+    for f in ast_.walk(tree):
+        if not isinstance(f, fn_t):
+            continue
+        # THE SANITIZERS' OWN BODIES ARE THE LAWFUL OPERATIONS, and scanning them reports the
+        # binding itself as the router.
+        if getattr(f, "name", None) in _SANITIZERS:
+            continue
+        a = f.args
+        params = [x.arg for x in list(a.posonlyargs) + list(a.args) + list(a.kwonlyargs)]
+        scopes.append((getattr(f, "name", "<lambda>"), own(f), params))
+    return scopes
+
+
+def _tainted_names(nodes, params, summary) -> set:
+    """Every NAME in ONE SCOPE that can hold need text, to a fixpoint — through assignment,
+    walrus, `for` targets, comprehension targets and `with ... as`.
+
+    ⚠ THIS IS THE HALF THE FIRST VERSION DID NOT HAVE, and without it the check was a NAME TEST
+    WEARING A DATAFLOW TEST'S CLOTHES. `text = r["need"]` laundered the taint in one statement, so
+    the retired router came back verbatim with ONE IDENTIFIER RENAMED, past all five of its
+    plants. Taint is seeded from the EXTRACTION KEY, which the corpus owns and a rename cannot
+    reach."""
+    import ast as ast_
+    # ⚠ A PARAMETER NAMED `need` IS A SEED; A LOCAL NAMED `need` IS NOT. Seeding the bare name in
+    # every scope was an over-refusal: `report.py`'s `need = EX.need_display(...)` holds a
+    # SANITIZED cell, and treating it as prose reported eighteen offences in correct rendering
+    # code. A local gets its taint from its assignment, which is the accurate rule; a parameter
+    # has no assignment to read, so it is seeded by name.
+    tainted = {p for p in params if p == "need"}
+    # Only assignment-shaped nodes can move taint. Collect them once instead of re-filtering the
+    # whole scope on every pass of the fixpoint.
+    moves = []
+    for n in nodes:
+        targets, val = [], None
+        if isinstance(n, ast_.Assign):
+            targets, val = n.targets, n.value
+        elif isinstance(n, ast_.AnnAssign) and n.value is not None:
+            targets, val = [n.target], n.value
+        elif isinstance(n, ast_.NamedExpr):
+            targets, val = [n.target], n.value
+        elif isinstance(n, (ast_.For, ast_.AsyncFor)):
+            targets, val = [n.target], n.iter
+        elif isinstance(n, ast_.comprehension):
+            targets, val = [n.target], n.iter
+        elif isinstance(n, ast_.withitem) and n.optional_vars is not None:
+            targets, val = [n.optional_vars], n.context_expr
+        if val is None:
+            continue
+        bound = {sub.id for tg in targets for sub in ast_.walk(tg) if isinstance(sub, ast_.Name)}
+        if bound:
+            moves.append((bound, val))
+    changed = True
+    while changed:
+        changed = False
+        for bound, val in moves:
+            if not _carries_need(val, tainted, summary):
+                continue
+            fresh = bound - tainted
+            if fresh:
+                tainted |= fresh
+                changed = True
+    return tainted
+
+
+def _is_unclear_marker(node) -> bool:
+    """The ONE carve-out: the `UNCLEAR:` marker, which the CASE SOURCE writes ABOUT ITSELF — the
+    source saying it does not know — and which is not a claim about what the row needs.
+
+    ⚠ STRUCTURAL, NOT A SUBSTRING OF THE SOURCE TEXT. The first version skipped any node whose
+    `get_source_segment` contained the word, so for a multi-line call a COMMENT INSIDE THE
+    PARENTHESES exempted it — a general escape hatch rather than a carve-out. The pattern must now
+    be a STRING LITERAL passed to the call."""
+    import ast as ast_
+    if not isinstance(node, ast_.Call):
+        return False
+    return any(isinstance(a, ast_.Constant) and isinstance(a.value, str) and "UNCLEAR" in a.value
+               for a in node.args)
+
+
 def _need_taint_offenders(src: str) -> list:
     """Every expression that turns a case's need TEXT into a value something else consumes.
 
-    Two shapes are offences:
+    Three shapes are offences:
       * a CALL that carries need text and whose RESULT IS USED. A call whose result is discarded
-        (a bare expression statement -- `bad.append(...)`, a log line) stores; a call whose result
-        feeds something else DECIDES. That distinction is derived from the syntax rather than from
-        a list of blessed function names, which is the point.
-      * a COMPARISON against need text -- `if "threat" in need` is a router with no call in it at
-        all, and a name-based guard cannot see it.
+        (a bare expression statement) stores; a call whose result feeds something else DECIDES.
+      * a COMPARISON carrying need text — `if "threat" in need` is a router with no call in it.
+      * an ATTRIBUTE on need text used as a VALUE — `max(ROUTES, key=need.count)` hides a router
+        inside an exempt builtin, and a bound method is not a Call node.
 
-    Three things are lawful and nothing else is: `need_sha` (the binding), a builtin (`dict`,
-    `str` -- storage and display; a builtin cannot itself route, and any router nested inside one
-    is a Call in its own right and is checked separately), and the `UNCLEAR:` marker, which is the
-    CASE SOURCE declaring about ITSELF that it does not know. The last is the only carve-out and
-    it is not a routing decision: it reads a marker the corpus author wrote, not the meaning of
-    the need."""
+    Lawful: the three declared sanitizers, a bare builtin callee (storage and display; a router
+    nested inside one is a Call in its own right and is checked separately), and the `UNCLEAR`
+    marker."""
     import ast as ast_
     import builtins as _b
     tree = ast_.parse(src)
-    # every Call whose value is discarded -- the storage lane
     discarded = {id(n.value) for n in ast_.walk(tree)
                  if isinstance(n, ast_.Expr) and isinstance(n.value, ast_.Call)}
+    # An Attribute that IS a call's `func` is covered by the Call rule; flagging it again fires on
+    # `out.append(...)`, which is storage. The Attribute rule exists for a bound method used as a
+    # VALUE — `max(ROUTES, key=need.count)` — which is never a call's func.
+    call_funcs = {id(n.func) for n in ast_.walk(tree) if isinstance(n, ast_.Call)}
     offenders = []
-    for fn in ast_.walk(tree):
-        if isinstance(fn, ast_.FunctionDef) and fn.name == _TAINT_SANITIZER:
-            continue                      # the sanitizer's own body IS the lawful use
-        if not isinstance(fn, (ast_.FunctionDef, ast_.AsyncFunctionDef)):
-            continue
-        for node in ast_.walk(fn):
-            seg = ast_.get_source_segment(src, node) or ""
-            if _is_taint_source(node):
-                continue          # the EXTRACTION of the need from its row -- not a decision
+    # ⚠ EVERY SCOPE, INCLUDING THE MODULE'S OWN. The first version descended only into
+    # `FunctionDef` bodies, so a module-level comprehension or `route = lambda need:
+    # PATTERNS.match(need)` was never visited — and the router this replaced was module-level
+    # `ROUTES`/`COMPILED`.
+    summary = _summarise(tree)
+    for _scope, nodes, params in _scopes(tree):
+        tainted = _tainted_names(nodes, params, summary)
+        for node in nodes:
+            if _is_extraction(node):
+                continue          # the EXTRACTION of the need from its row — not a decision
+            # ⚠ `get_source_segment` IS COMPUTED ONLY FOR AN OFFENDER. It re-splits the whole file
+            # on every call, so calling it per node made the scan quadratic in file size: 2.3s on
+            # a 237-line module and a two-minute timeout on `probes.py`.
+            hit = False
             if isinstance(node, ast_.Call):
-                name = _callee_name(node)
-                if name.endswith(_TAINT_SANITIZER) or (name and hasattr(_b, name)):
-                    continue
-                if "UNCLEAR" in seg:
-                    continue
-                if id(node) in discarded:
-                    continue
-                if _carries_need(node):
-                    offenders.append((fn.name, node.lineno, seg[:80]))
+                hit = not (_callee_name(node) in _SANITIZERS or _is_unclear_marker(node)
+                           or (isinstance(node.func, ast_.Name) and hasattr(_b, node.func.id))
+                           or id(node) in discarded) and _carries_need(node, tainted, summary)
             elif isinstance(node, ast_.Compare):
-                if "UNCLEAR" in seg:
-                    continue
-                if _carries_need(node):
-                    offenders.append((fn.name, node.lineno, seg[:80]))
-    return offenders
+                hit = _carries_need(node, tainted, summary)
+            elif isinstance(node, ast_.Attribute) and id(node) not in call_funcs:
+                hit = _carries_need(node.value, tainted, summary)
+            if hit:
+                offenders.append((node.lineno,
+                                  (ast_.get_source_segment(src, node) or "")[:80]))
+    return sorted(set(offenders))
+
+
+def _pipeline_sources() -> list:
+    """Every module that can move a verdict — which is every module here except the guards.
+
+    ⚠ DERIVED, NOT LISTED. The first version scanned a two-name tuple, `("run_cases.py",
+    "exercises.py")`, which left `report.py` — the SOLE EMITTER of every artifact — unscanned,
+    and `report.py` had two inline need operations at the time. `test_jordan_no_definition_is_
+    hardcoded_in_a_body` already settled this shape four hundred lines above: a filename roster is
+    a router and `G2` forbids it. The `test_` prefix is pytest's own discovery rule, not one of
+    mine."""
+    return sorted(f for f in HERE.glob("*.py") if not f.name.startswith("test_"))
 
 
 def test_w10_no_verdict_turns_on_the_text_of_a_need():
     r"""THE ROUTER CANNOT COME BACK BY ACCRETION, because the SHAPE is forbidden rather than its
-    vocabulary policed -- and now the shape is forbidden across whole modules rather than inside
-    one function with a hardcoded receiver name.
+    vocabulary policed.
 
     `PLAN.md` §7.4 is why it is worth a guard at all: the bare-token class recurred SIX times, and
     the whitelist built for the fourth did not catch the fifth (`age\w*` matching AGENT, AGENCY,
     AGENDA). A roster of words is a specification nobody ratified."""
-    for f in ("run_cases.py", "exercises.py"):
-        bad = _need_taint_offenders((HERE / f).read_text())
+    scanned, bound_here = 0, 0
+    for f in _pipeline_sources():
+        src = f.read_text()
+        scanned += 1
+        bad = _need_taint_offenders(src)
         assert not bad, (
-            f"{f}: a need's TEXT reaches a decision:\n  "
-            + "\n  ".join(f"{n}:{ln}  {sg}" for n, ln, sg in bad))
+            f"{f.name}: a need's TEXT reaches a decision:\n  "
+            + "\n  ".join(f"{ln}  {sg}" for ln, sg in bad))
+        bound_here += _sanitizer_calls_on_need(src)
+    # ⚠ AND THE SCAN MUST BE ABLE TO SAY IT SCANNED SOMETHING. Without this the guard is green on
+    # a corpus it never reached: rename the extraction key, or point `_pipeline_sources` at an
+    # empty directory, and `not []` is trivially true. §0.1 pt 2 — the same reason the AST write
+    # sweep asserts `assert pairs` and the gate walk asserts it found a gate.
+    assert scanned >= 3, f"the taint scan visited only {scanned} module(s)"
+    assert bound_here, (
+        "no declared sanitizer is ever applied to an extracted need in the whole pipeline — "
+        "either routing has moved somewhere this scan cannot see, or the extraction key changed "
+        "and every taint source above is silently matching nothing")
+
+
+def _sanitizer_calls_on_need(src: str) -> int:
+    """How many times a declared sanitizer is applied to need text. The liveness half of the
+    guard above: a positive count proves the taint sources match the real code."""
+    import ast as ast_
+    tree = ast_.parse(src)
+    n = 0
+    summary = _summarise(tree)
+    for _scope, nodes, params in _scopes(tree):
+        tainted = _tainted_names(nodes, params, summary)
+        for node in nodes:
+            if isinstance(node, ast_.Call) and _callee_name(node) in _SANITIZERS:
+                if any(_carries_need(a, tainted, summary) for a in node.args):
+                    n += 1
+    return n
 
 
 def test_the_taint_check_catches_the_router_it_replaced():
-    """§0.1 pt 2: an assertion must be able to observe the failure it excludes. Each plant is a
-    real evasion the retired guard permitted; all five must be caught."""
+    """§0.1 pt 2. Each plant is a real evasion a previous version of this guard permitted; the
+    first five defeated the version that shipped with `W10`, and the last four defeated the
+    version that replaced it and were found by that stage's adversarial pass."""
     plants = {
         "the router as it actually was -- a precompiled pattern, no `re.` receiver":
             "COMPILED = []\ndef route(need):\n    for pid, rx in COMPILED:\n"
@@ -2736,6 +2920,18 @@ def test_the_taint_check_catches_the_router_it_replaced():
         "a method on the need itself":
             "def grade(r):\n    need = r['need']\n"
             "    return 'P22' if need.lower().startswith('an institution') else None\n",
+        # --- the four the `W10` adversarial pass found in the version above ---
+        "TAINT LAUNDERING: the retired router verbatim with ONE IDENTIFIER RENAMED":
+            "COMPILED = []\ndef grade(case):\n    for r in case['season_requires']:\n"
+            "        text = r['need']\n        for pid, rx in COMPILED:\n"
+            "            if rx.search(text):\n                return pid\n",
+        "MODULE SCOPE: a lambda router that is inside no function at all":
+            "route = lambda need: PATTERNS.match(need)\n",
+        "THE `UNCLEAR` ESCAPE HATCH: the word in a comment inside the call's own parentheses":
+            "def grade(r):\n    need = r['need']\n    return _aim(\n        # UNCLEAR\n"
+            "        need)\n",
+        "A BOUND METHOD HANDED TO AN EXEMPT BUILTIN":
+            "def grade(r):\n    need = r['need']\n    return max(ROUTES, key=need.count)\n",
     }
     for why, src in plants.items():
         assert _need_taint_offenders(src), f"the taint check does not catch: {why}"
@@ -2747,6 +2943,7 @@ def test_the_taint_check_catches_the_router_it_replaced():
         "    if re.match(r'\\s*UNCLEAR\\b', need, re.I):\n        return None\n"
         "    entry = dict(need=need, title=need[:60])\n"
         "    log.append(str(need))\n"
+        "    cell = EX.need_display(need, 190)\n"
         "    return OVERLAY.get(EX.need_sha(need), {})\n")
     assert not _need_taint_offenders(lawful), _need_taint_offenders(lawful)
 
@@ -2766,6 +2963,57 @@ def test_w10_the_deciding_path_is_the_authored_overlay():
     assert not (HERE / "route_precision.py").exists(), (
         "route_precision.py survives -- a guard for a thing that no longer exists is the "
         "apparatus §0.3 is about, and `PLAN.md` W10 retires it with the router")
+
+
+def test_g12_a_cite_may_not_argue_for_a_grade_the_row_does_not_carry():
+    """`H-46`'s cite was written from neighbouring `H-20`'s and kept its conclusion — *"THIS ROW
+    THEREFORE STAYS `assumption`"* — on a row graded `absent`. It therefore satisfied `G6` (*a
+    refusal nobody argued for is not a refusal*) on an argument for a DIFFERENT refusal.
+
+    Not bookkeeping: `H-46` is `tier: 0`, so its grade is inside artifact 0's verdict, and
+    `resolve()` turns a grade into a case verdict. Found by the `W10` adversarial pass."""
+    import register as REG
+    reg = REG.load()
+    assert not REG.rule_G12(reg), REG.rule_G12(reg)
+    # ⚠ AND IT CAN FIRE. A rule asserted only against a clean register is a rule nobody has seen
+    # work — §0.1 pt 2, and the reason three guards in this file were rewritten this session.
+    planted = dict(reg, rows=[dict(r) for r in reg["rows"]])
+    victim = next(r for r in planted["rows"] if r.get("grade") == "absent")
+    victim["cite"] = "PLAN §3.2. THIS ROW THEREFORE STAYS `assumption` and must not be closed."
+    hits = REG.rule_G12(planted)
+    assert hits and victim["id"] in hits[0], hits
+
+
+def test_a_duplicate_yaml_key_is_refused_rather_than_silently_resolved():
+    """`yaml.safe_load` keeps the LAST of two identical keys. `verb_table.yaml` declared
+    `writes_note` twice on `issue` and twice on `petition` — once with Part E's transcribed cell
+    and once with the `W3` audit's correction — so the transcription was discarded at load, in the
+    one file whose whole purpose is to be a faithful capture of Part E.
+
+    The same class already cost this instrument once at the ROW level (two `(Office, exists)` rows,
+    gate behaviour depending on file order); that fix guarded rows only. `shape.load_yaml` guards
+    every mapping in every file this instrument reads. Found by the `W10` adversarial pass."""
+    # NOTE ON SEVERITY, because the first version of this docstring overstated it: `writes_note`
+    # has no reader, so THAT instance lost transcribed text and not behaviour. See below.
+    import pytest as _pt
+    with _pt.raises(ValueError, match="duplicate key"):
+        S.load_yaml("verbs:\n  - verb: x\n    note: a\n    note: b\n")
+    # ⚠ AND THE SCOPE OF THAT PARTICULAR LOSS, STATED ACCURATELY RATHER THAN AT ITS MOST ALARMING:
+    # `writes_note` is NOT a field of `VerbRow`, so nothing in the fold ever read either cell. What
+    # was lost was TRANSCRIBED TEXT IN THE CAPTURE — bad in the file whose purpose is fidelity to
+    # Part E, and not a behaviour change. The guard is still worth its existence, because the same
+    # class DID change behaviour once at the row level (two `(Office, exists)` rows, gate behaviour
+    # depending on file order). Asserted on the FILE, which is where the defect was.
+    vt = S.load_yaml(S.VERB_TABLE_YAML.read_text())
+    rows = {r["verb"]: r for r in (vt["verbs"] if isinstance(vt, dict) else vt)}
+    for verb, cell in (("issue", "a Dispensation is not a state write"),
+                       ("petition", "a Petition is created, not written")):
+        note = rows[verb].get("writes_note") or ""
+        assert cell in note, f"{verb}: Part E's transcribed cell is missing from `writes_note`"
+        assert "W3, ON THE W2 AUDIT" in note, f"{verb}: the audit correction was lost instead"
+    # every data file the instrument owns loads under the strict reader
+    for f in (S.WRITE_MATRIX_YAML, S.ROSTERS_YAML, S.VERB_TABLE_YAML):
+        S.load_yaml(f.read_text())
 
 
 def test_w10_every_declared_token_resolves_and_every_binding_is_live():

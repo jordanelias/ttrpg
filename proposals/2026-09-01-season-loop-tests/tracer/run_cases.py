@@ -251,10 +251,22 @@ def grade(case: dict) -> dict:
         # ⚠ THREE OUTCOMES. A row every one of whose declarations RESTS ON AN INJECTED DEFAULT
         # is not a pass: `ASSUMED` carries into the case verdict as DEGRADED, never PLAYABLE.
         # Publishing those as PASS is what put seven false passes in the caselog.
+        # ⚠ AN UNBOUND TOKEN IS AN AUTHORING ERROR, NOT A DESIGN FINDING, AND CONFLATING THEM
+        # PUBLISHED THE SECOND WEARING THE FIRST'S CLOTHES. `resolve()` distinguishes them --
+        # `bound=False` means the token NAMES NOTHING (`create_recrod`, `H-8`, a probe id with a
+        # typo) -- and `grade` read only `ok`, so a mistyped token graded GAP, made its case
+        # BLOCKED, and landed in `blockers` beside real holes. `report.py`'s own legend asserts the
+        # opposite in the artifact: *"`GAP` | a declared token named a real thing"*. Nothing
+        # enforced that sentence. It does now: an unbound token is INSTRUMENT-ERROR, it is
+        # excluded from `blockers`, and its case cannot be graded at all.
+        # Found by the `W10` adversarial pass.
+        _unbound = [t for t, x in zip(tokens, parts) if not x.get("bound")]
         _ok = all(x["ok"] for x in parts)
         _assumed = any(x.get("assumed") for x in parts)
+        entry["unbound"] = _unbound
         entry["verdict"] = dict(
-            verdict="PASS" if _ok and not _assumed else "ASSUMED" if _ok else "GAP",
+            verdict="INSTRUMENT-ERROR" if _unbound
+                    else "PASS" if _ok and not _assumed else "ASSUMED" if _ok else "GAP",
             detail=" · ".join(x["detail"] for x in parts),
             kind=None, section="", by="declared",
             title=need[:60], tests=need)
@@ -267,6 +279,9 @@ def grade(case: dict) -> dict:
     core_routed = [r for r in routed if r["hardness"] == "core"]
     core_blocked = [r for r in core_routed
                     if r["verdict"]["verdict"] in ("GAP", "NOT-REFUSED")]
+    # A row whose declaration names nothing is a fact about the OVERLAY. It outranks every other
+    # verdict because until it is fixed nothing the row says can be believed.
+    broken = [r for r in routed if r["verdict"]["verdict"] == "INSTRUMENT-ERROR"]
 
     # HONESTY RULE 3: **a case with ANY unmapped `core` row may not be graded PLAYABLE.**
     #
@@ -288,7 +303,9 @@ def grade(case: dict) -> dict:
     # A blocker still outranks it: if a core row DID route and DID hit a gap, the case is
     # BLOCKED regardless of what else failed to route, because that is a fact about the shape
     # rather than about the aim.
-    if core_blocked:
+    if broken:
+        verdict = "INSTRUMENT-ERROR"
+    elif core_blocked:
         verdict = "BLOCKED"
     elif not core_routed:
         # THE ZERO-CORE AND ZERO-DECLARED CASE. This is the only branch the strict clause below
@@ -317,7 +334,8 @@ def grade(case: dict) -> dict:
         # THAT is the point of `W10`: `H-84` is a better answer than "P22 gapped".
         blockers=sorted({t for r in core_blocked
                          for t, x in zip(r.get("exercises") or [], r.get("resolved") or [])
-                         if not x["ok"]}),
+                         if not x["ok"] and x.get("bound")}),
+        unbound=sorted({t for r in broken for t in r.get("unbound") or ()}),
         routed=routed, unmapped=unmapped, unclear=len(unclear),
         ends_when=case.get("ends_when", ""),
     )

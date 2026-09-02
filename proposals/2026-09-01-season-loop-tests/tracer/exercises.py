@@ -28,7 +28,19 @@ WHAT A TOKEN MAY BE, and what each resolves to:
                   dependency on an injected default; `ruled`/`measured` are satisfied.
     probe:PID     a probe. Runs it and takes its verdict. This is the ONLY token that reaches a
                   probe, and it is authored per row rather than matched.
-    <kind>        an Event kind (`record.created`). Satisfied when the kind appears in a run.
+    <kind>        an Event kind (`record.created`). Satisfied when SOME `emits:` COLUMN OF PART D
+                  OR PART E DECLARES IT -- a static table lookup, NOT a run.
+
+⚠ THE KIND TOKEN IS THE WEAKEST OF THE FOUR AND ITS OLD DESCRIPTION OVERSTATED IT. This line read
+*"satisfied when the kind appears in a run"*, which is what a reader of `CASELOG_*.md` would take
+a PASS on such a row to mean. It never was: `resolve` computes membership in the union of
+`emits:`/`emits_on_refusal:` over the verb table and the write matrix, so `term.matured` passes
+because some Part D row LISTS that kind, not because anything matured. The gap was on the side
+that flatters the shape, which is the direction §42.2's polarity rule is about. **`W4` is the item
+that closes it** -- it makes every MATTER write emit its declared kind, at which point a run-level
+check has something to observe; today 25 of the 40 declared kinds are emitted by nothing (measured:
+`python headless.py --case NPC-088 --seasons 2 --seed 0` against `shape.MATRIX`). The `detail`
+string and the caselog now say "declared" rather than "emitted" so no reader has to know this.
 
 BINDING IS BY THE NEED TEXT, NOT BY POSITION. Each entry carries `need_sha`, the first 12 hex of
 the sha256 of the whitespace-normalised need. If a case row is reworded the binding FAILS LOUDLY
@@ -53,6 +65,46 @@ def need_sha(need: str) -> str:
     """The binding key: the whitespace-normalised need, sha256, first 12 hex. Normalised because
     the corpus wraps mid-sentence and a re-wrap is not a re-wording."""
     return hashlib.sha256(re.sub(r"\s+", " ", need).strip().encode()).hexdigest()[:12]
+
+
+# ---------------------------------------------------------------------------
+# THE THREE THINGS THAT MAY BE DONE WITH A NEED'S TEXT, AND THERE ARE NO OTHERS.
+#
+# ⚠ THIS SECTION EXISTS BECAUSE THE GUARD NEEDED A BOUNDARY TO BE TOTAL AGAINST. `W10`'s claim is
+# that NO VERDICT TURNS ON A NEED'S PROSE. A guard for that has to scan every module that can move
+# a verdict -- including `report.py`, which is the sole emitter -- and `report.py` legitimately
+# escapes a need for a markdown cell and tokenises one for a printed frequency table. With those
+# operations written inline, the guard could only be made to pass by scoping it away from the file,
+# and a filename roster is the same defect as a word roster (`G2`).
+#
+# So the operations get ONE OWNER each, named, here, next to the binding. `CLAUDE.md` §8: never
+# re-implement a rule; build on the single-owner primitive. A reader auditing "what can this
+# codebase do with a case's prose?" reads three functions instead of grepping for `.lower()`.
+# ---------------------------------------------------------------------------
+
+def need_display(need: str, width: int | None = None) -> str:
+    """RENDER a need into a markdown table cell. Escapes the column separator and truncates.
+
+    Deciding nothing is the whole point: this is the only way a need's text may reach an
+    artifact, and it is a declared sanitizer so the taint check can tell rendering from routing."""
+    out = need.replace("|", "\\|")
+    return out[:width] if width else out
+
+
+def need_terms(need: str, *, stop: set[str], min_len: int = 5) -> list[str]:
+    """TOKENISE a need for the printed vocabulary table in `UNMAPPED_*.md`.
+
+    ⚠ THIS IS THE ONE ROUTER-SHAPED OPERATION LEFT IN THE CODEBASE, AND IT IS SAFE ONLY BECAUSE
+    ITS OUTPUT IS PRINTED AND NEVER READ BACK. It is given one owner, and named, precisely so that
+    stays checkable: if a verdict ever starts depending on this function's output, the dependency
+    is a call to a function whose docstring says it must not have one. `report.py` says the same
+    thing to the reader of the artifact."""
+    out = []
+    for w in need.lower().replace("-", " ").split():
+        w = "".join(ch for ch in w if ch.isalpha())
+        if len(w) >= min_len and w not in stop:
+            out.append(w)
+    return out
 
 
 def load() -> dict:
@@ -252,8 +304,11 @@ def resolve(token: str, *, probes, verb_table, resolvable, register, matrix) -> 
         # than a finding about the design. Every other shape can name something real and still
         # fail (`absent`, an unexecutable verb, a gapping probe), and conflating the two is what
         # let the binding guard check three of four branches.
+        # ⚠ "declared", NOT "emitted". This is a STATIC TABLE LOOKUP and the word `emitted` told
+        # every reader of the caselog it was a run. See the module docstring: `W4` is what turns
+        # this into a claim about a run.
         return dict(ok=token in emitted, bound=token in emitted, kind=what,
-                    detail=f"{token}: {'emitted' if token in emitted else 'on no emits: column'}")
+                    detail=f"{token}: {'declared in an emits: column (static, not a run)' if token in emitted else 'on no emits: column'}")
     if token not in verb_table:
         return dict(ok=False, bound=False, kind="verb",
                     detail=f"{token!r} is on no verb-table row")

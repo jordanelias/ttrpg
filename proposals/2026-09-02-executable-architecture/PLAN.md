@@ -160,12 +160,29 @@ committed tree:
 The regenerated artifacts are committed with this plan. **The verdict distribution now agrees across
 both emitters for all 143 cases: 76 BLOCKED · 60 NOT-ASSESSED · 4 DEGRADED · 3 PLAYABLE.**
 
+> ### ⚠ ROUTER-ERA · NOT REPRODUCIBLE UNDER `W10` · NEITHER WITHDRAWN NOR CONFIRMED
+> Every count in this section was computed from a `results.json` produced by the **regex router**,
+> which `W10` deleted. Routing is now an authored `exercises:` declaration, so the corpus verdicts
+> are **6 BLOCKED · 2 DEGRADED · 135 NOT-ASSESSED** — and 135 of those mean *nobody has authored a
+> declaration yet*, which is a fact about authoring, not about the design. The ARC lane has **0 of
+> 611 rows declared**, so its column is **unmeasured**, not measured as zero (§42.2's polarity
+> rule; §0.1 pt 4 in both directions). Re-measuring is `W13`'s lane.
+> Commands: `cd proposals/2026-09-01-season-loop-tests/tracer && python exercises.py` · `python run_cases.py`.
+
+> *(The agreement-across-emitters claim — `W15`'s subject — is unaffected: it is about there being
+> ONE WRITER, not about the numbers that writer emits.)*
+
 > **This is not a typo class. It is the `CLAUDE.md` §8 invariant — *every rule lives once* — applied
 > to artifacts rather than rules: EVERY ARTIFACT HAS ONE WRITER.** Work item **W15**.
 
 ## §2.2 · Three published counts were wrong. Corrected here.
 
-| claim | published | measured | where |
+⚠ **The `measured` column below is ROUTER-ERA** (see the mark above §2.4; commands there). The
+*finding* — that `V2` published counts nothing reproduced — is unaffected and is why the register
+exists; the specific replacement figures are not current. Both columns are kept: neither is the
+answer, and the section's point is that they differed.
+
+| claim | published | measured (router-era) | where |
 |---|---|---|---|
 | cases NOT-ASSESSED | **50** | **60** (NPC 20 · ARC 40) | `V2` §H1, `V2` §I1 table, `01_NPC_VS_ARC.md` §5 |
 | probe executions | **120** | **121** | `V2` §0.1, `README.md` ×2, `HANDOFF_IN.md` |
@@ -192,17 +209,52 @@ describes the run ships with the command that produces it.**
 
 ## §2.3 · The core-row routing rate, stated exactly
 
-| | cases | rows | `core` rows | routed | **unrouted** |
+**⚠ SUPERSEDED BY `W10`, WHICH IS THE ITEM THIS SECTION EXISTS TO ARGUE FOR.** The `routed` column
+measured what a regex matched. That router is deleted, so the table below is history — kept because
+it is the evidence the item was worth doing, not because a reader can check it.
+
+| | cases | rows | `core` rows | routed *(regex, retired)* | **unrouted** |
 |---|---:|---:|---:|---:|---:|
 | NPC | 46 | 346 | 122 | 59 | **63** |
 | ARC | 97 | 626 | 300 | 133 | **167** |
 | **total** | **143** | **972** | **422** | **192** | **230 (54.5%)** |
 
-**All 60 NOT-ASSESSED cases have zero core blockers.** Nothing about them is refused and nothing
-about them is missing; the router simply did not aim. Declared routing (**W2**) makes every one of
-the 60 assessable — which is not the same as runnable, and this document does not conflate them.
+**THE LIVE TABLE, and the denominator is authored coverage rather than pattern coverage**
+(`cd proposals/2026-09-01-season-loop-tests/tracer && python exercises.py`, `python run_cases.py`):
+
+| | cases | rows | `UNCLEAR:` | declarable | **declared** | `core` | **core declared** |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| NPC | 46 | 346 | 54 | 292 | **35** | 122 | **32** |
+| ARC | 97 | 626 | 15 | 611 | **0** | 300 | **0** |
+| **total** | **143** | **972** | **69** | **903** | **35** | **422** | **32** |
+
+The two tables are **not comparable and must not be subtracted from one another** — the first
+counts what a pattern matched, the second what a human wrote — and that non-comparability is
+exactly `W10`'s claim: an undeclared row is now VISIBLY unauthored rather than silently unmatched.
+Every count the router published was a **floor**.
+
+~~**All 60 NOT-ASSESSED cases have zero core blockers.**~~ Router-era. There are **135**
+NOT-ASSESSED cases now, and the reason is authoring, not aim. Declared routing makes each one
+assessable *once somebody authors it* — which is not the same as runnable, and this document does
+not conflate them.
 
 ## §2.4 · THE MEASURED UNBLOCK YIELD — the number this plan is sequenced on
+
+> ### ⚠ ROUTER-ERA · NOT REPRODUCIBLE UNDER `W10` · NEITHER WITHDRAWN NOR CONFIRMED
+> Every count in this section was computed from a `results.json` produced by the **regex router**,
+> which `W10` deleted. Routing is now an authored `exercises:` declaration, so the corpus verdicts
+> are **6 BLOCKED · 2 DEGRADED · 135 NOT-ASSESSED** — and 135 of those mean *nobody has authored a
+> declaration yet*, which is a fact about authoring, not about the design. The ARC lane has **0 of
+> 611 rows declared**, so its column is **unmeasured**, not measured as zero (§42.2's polarity
+> rule; §0.1 pt 4 in both directions). Re-measuring is `W13`'s lane.
+> Commands: `cd proposals/2026-09-01-season-loop-tests/tracer && python exercises.py` · `python run_cases.py`.
+
+> ⚠ **AND THIS IS THE LOAD-BEARING ONE, by the section's own title.** The set cover below is
+> computed over probe ids in a `blockers` field that no longer contains any, so it cannot be
+> re-derived today at all. **The sequencing it justified is not being re-litigated on that basis**
+> — the ordering also follows from the dependency graph in Part 4, which is independent of these
+> counts — but no reader should take the yield figures as current, and `W13`'s authoring lane is
+> what makes them checkable again.
 
 A case is **freed** when *every one* of its blockers is a hole that closed. Set cover over the 76
 blocked cases, using `01_NPC_VS_ARC.md` §2.1's probe→hole mapping:
@@ -813,9 +865,15 @@ with them** — a guard for a thing that no longer exists is the apparatus this 
 **NOT-ASSESSED then means *"nobody authored an `exercises:`"*** — a fact about authoring, which is
 fixable — instead of *"the regex missed"*, which is not.
 
-**The measured size of the job: 230 of 422 `core` rows (54.5%) never routed**, and **all 60
+~~**The measured size of the job: 230 of 422 `core` rows (54.5%) never routed**, and **all 60
 NOT-ASSESSED cases have zero core blockers**, so every one of the 60 becomes assessable. It is
-**~973 rows** across both case directories.
+**~973 rows** across both case directories.~~
+
+⚠ **STRUCK — router-era, and this item is the thing that made it so.** `W10`'s own DO section
+described the job in the vocabulary of the router it deletes. The measurement that replaces it is
+authored coverage, which is the honest denominator: **NPC 35 of 292 rows (32 of 122 core); ARC 0 of
+611 (0 of 300 core)**, plus 69 `UNCLEAR:` rows that are the source's own admission and are not
+anybody's to author. `cd proposals/2026-09-01-season-loop-tests/tracer && python exercises.py`.
 
 **Discharges.** §H1 and **the entire bare-token class** — structurally, by deleting the router,
 rather than by enumerating another word.
@@ -850,13 +908,34 @@ declared verbs executed**; **no PLAYABLE verdict rests on a row with an empty `e
 > | 2 | `token == "term.matured"` — a **one-element kind list in a Python body**, added in the commit that deleted the router for that exact habit | The seventh recurrence of the bare-token class. Replaced by a union over `shape.MATRIX`'s and the verb table's `emits:` columns, so it moves when the data moves |
 > | 3 | the token-resolution guard matched **three of `resolve`'s four failure strings** | A token naming a nonexistent Event kind was unguarded. Now asserted on a `bound` flag — *does this token name anything* — which is deliberately not `ok`, since a token can name a real thing that is `absent`. `G3` |
 > | 4 | `unbound()` **skips a `case:` id it does not recognise**, and is called once per lane | A file naming a case in neither lane passed both checks with every row bound to nothing. `orphan_cases()` closes it |
-> | 5 | the anti-router guard had **three evasions** — scoped to a function named `grade`, fired only on a receiver named `re`, and blacklisted three names — and **would not have caught the router it replaced** (`COMPILED` held precompiled patterns, so there was no `re.` receiver) | Replaced by a taint check: a need's TEXT may only be hashed by `need_sha` or stored, across whole modules. Five plants prove it catches what the old one missed, including a substring test with no call in it |
+> | 5 | the anti-router guard had **three evasions** — scoped to a function named `grade`, fired only on a receiver named `re`, and blacklisted three names | Replaced by a taint check: a need's TEXT may only be hashed, rendered or tokenised by a declared sanitizer, across whole modules and every scope. ⚠ **The claim "it would not have caught the router it replaced" was HALF WRONG and is corrected here.** Its *AST half* would not have — `COMPILED` held precompiled patterns, so there was no `re.` receiver, and `route()` is not `grade`. Its *blacklist half* would have, by name, and only by name: a rename defeats it. Settled by `git show 5a1d388:proposals/2026-09-01-season-loop-tests/tracer/test_tracer_is_honest.py`, which is the command `G11` asked for and the first version of this row did not give |
 > | 6 | two grading guards were **satisfiable by deleting the rule they named**, and one of the rules was **inert** (`more than half unrouted` — its own predicate proved the strict clause below returned the same verdict) | The rule is deleted; the guards now build the discriminating input, with a control that reaches PLAYABLE so the assertion can observe its own failure. §0.1 pt 2 |
 >
-> **Not fixed, and named instead:** every count in §3.5, `W13`'s arc partition and
-> `01_NPC_VS_ARC.md` was computed over router-era probe ids and **is not reproducible under
-> `W10`**. Each now says so where it stands. The finding is neither withdrawn nor confirmed —
-> re-measuring it *is* `W13`'s authoring lane.
+> **Not fixed, and named instead:** every router-era count is marked where it stands rather than
+> deleted — §2.1, §2.2, §2.3, §2.4, §3.5, this item's own DO section, `W13`'s arc partition and
+> `01_NPC_VS_ARC.md`. **Eight surfaces, not the three the first version of this note claimed.**
+> The finding is neither withdrawn nor confirmed; re-measuring it *is* `W13`'s authoring lane.
+>
+> ### THE SECOND PASS, on the reconciliation above — seven more, and it overturned one of my fixes
+>
+> | | what was wrong | why it mattered |
+> |---|---|---|
+> | 1 | **the taint check was a name test wearing a dataflow test's clothes.** `text = r["need"]` laundered the taint in one statement, so the retired router came back **verbatim with one identifier renamed**, past all five of its plants | It also skipped module scope (where `ROUTES`/`COMPILED` actually lived), let the word `UNCLEAR` **in a comment inside a call's parentheses** exempt it, and could not see a bound method handed to an exempt builtin. Rewritten as real dataflow — assignment, walrus, `for`, comprehension and `with` targets, to a fixpoint, per lexical scope — with four more plants |
+> | 2 | it scanned a **two-name filename tuple**, leaving `report.py` — the SOLE EMITTER — unscanned, and `report.py` had two inline need operations | A filename roster is a word roster one level up (`G2`), and `test_jordan_no_definition_is_hardcoded_in_a_body` had settled that shape 400 lines above. The file set is now globbed; rendering and tokenisation got **declared sanitizers** (`need_display`, `need_terms`) so the scan could be total instead of scoped away |
+> | 3 | it **could not observe that it had scanned anything** | `not []` is true of an empty corpus. It now counts sanitizer applications and fails if the pipeline contains none — rename the extraction key and the guard goes red instead of quietly green |
+> | 4 | `grade` **never read `bound`**, the flag fix 3 of the first pass added | A mistyped token (`create_recrod`) resolved `ok=False` → graded `GAP` → made its case **BLOCKED** and landed in `blockers` beside real holes, while `report.py`'s legend told the reader *"`GAP` — a declared token named a real thing"*. An unbound token is `INSTRUMENT-ERROR` now, kept out of `blockers` |
+> | 5 | **the caselog never rendered the declaration.** The table had a `probe` column, `None` on eight of nine declared rows | W10's claim is that a wrong binding is *"an authoring error somebody can argue with"*. A binding no reader can see is no better than a regex no reader can see |
+> | 6 | the kind token's stated semantics were **false in the flattering direction** — *"satisfied when the kind appears in a run"* for what is a **static table lookup** | `term.matured` published PASS because a Part D row *lists* the kind. Corrected in the docstring, the `detail` string and the caselog. **`W4` is the item that makes it a run** — today 25 of 40 declared kinds are emitted by nothing |
+> | 7 | **`H-46`'s `cite` argued for a grade the row does not carry** — `H-20`'s conclusion, pasted | It satisfied `G6` (*a refusal nobody argued for is not a refusal*) on an argument for a DIFFERENT refusal, on a `tier: 0` row. The grade was right and the citation wrong; new register rule **`G12`** fails on recurrence |
+>
+> **And two the pass reported as observations, both real:** `verb_table.yaml` declared
+> `writes_note` **twice** on `issue` and on `petition`, so `yaml.safe_load` silently discarded
+> Part E's transcribed cell in the file whose whole purpose is fidelity to Part E. Both cells are
+> merged, and `shape.load_yaml` is now the instrument's only YAML entry point and **refuses a
+> duplicate key**. ⚠ Severity stated accurately: `writes_note` has no reader, so *that* instance
+> lost transcribed text and not behaviour — what earns the guard is the same class at the ROW
+> level, which did change behaviour (two `(Office, exists)` rows, gate behaviour depending on file
+> order). `report.py`'s unused `defaultdict` import is gone.
 
 ---
 
