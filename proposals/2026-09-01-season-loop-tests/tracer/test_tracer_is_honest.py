@@ -1751,7 +1751,13 @@ def test_w5_q_has_a_producer_across_all_four_sources():
             w.dates["d_t"] = dict(due_at=0, holder=p.id, fired=False)
             w.docket.append({"date": "d_t", "matter": "m_t"})
         elif src == "claim_landed":
-            p.ledger.append(S.Claim("c_t", p.id, p.id, "office", "duke", w.tick,
+            # ⚠ THE PREVIOUS SEASON'S DEPOSIT. §F1 Q2 is a claim landing AT WITNESS, which runs at
+            # the END of a season, so DELIBERATE reads it one tick later. The first version
+            # planted at `w.tick` and passed against a producer that tested the same tick — both
+            # sides shared the off-by-one, so the test could not observe it. `headless.py` could:
+            # every ledger filled and no question ever formed.
+            w.tick = 1
+            p.ledger.append(S.Claim("c_t", p.id, p.id, "office", "duke", 0,
                                     "told_by", 100, "own"))
         elif src == "band_crossed":
             w.crossings.append((p.id, "subsistence", 0))
@@ -2218,3 +2224,188 @@ def test_w17_the_packing_rule_and_the_extended_cost_are_both_live():
     assert len(set(spend.values())) == 3, (
         f"the extended-scene cost does not change what a season spends: {spend}. The row declares "
         "a three-point sweep and would pass R2 while being unexecutable.")
+
+
+# ===========================================================================
+# W9 — ARTIFACT 2. `PLAN.md` §6.3's six checks, ALL OF THEM EXECUTIONS.
+#
+# > THE TESTED VERSION RAN ZERO CASES END TO END. ONE IS AN INFINITE IMPROVEMENT OVER ZERO, AND
+# > IT IS THE ONLY NUMBER THAT WOULD PROVE ANY OF THIS.
+# ===========================================================================
+
+def test_w9_check1_the_run_is_reproducible():
+    """§6.3 check 1: *`headless.py --case NPC-088 --seasons 2 --seed 0` prints a content hash. Run
+    twice: byte-identical.*"""
+    import headless as HL
+    a, b = HL.run(seasons=2, seed=0), HL.run(seasons=2, seed=0)
+    assert a["hash"] == b["hash"], f"two runs of one seed diverged: {a['hash']} vs {b['hash']}"
+    assert a["acts"] and a["events"], f"the season did nothing: {a['acts']} acts, {a['events']} events"
+    # A DIFFERENT SEED MUST DIVERGE, or "reproducible" is indistinguishable from "constant".
+    assert HL.run(seasons=2, seed=7)["hash"] != a["hash"], (
+        "seed 7 produced seed 0's hash — the run is not seeded, it is fixed, and check 1 would "
+        "pass on a stub")
+
+
+def test_w9_check2_a_causal_chain_walks_from_her_act():
+    """§6.3 check 2, *the one that cannot be faked*: **a chain of at least four Events walks from
+    her act, with no `[ROOT]` after the seed.**
+
+    #353 §19.4 on why this is the check: *"the design rests its narrative layer, audit trail and
+    arc model on this edge — 'the arc itself' — and the measured state is that the specified loop
+    emits `causes=[]`, so the substrate of the entire emergent-narrative claim is declared and
+    never populated."* `[ROOT]` everywhere is `[]` wearing a marker."""
+    import headless as HL
+    w = HL.run(seasons=4, seed=0)["world"]
+    by_id = {e.id: e for e in w.log}
+
+    def depth(e, seen=()):
+        if e.id in seen:
+            return 0
+        return 1 + max([depth(by_id[c], seen + (e.id,)) for c in e.causes if c in by_id] or [0])
+
+    best = max(w.log, key=depth)
+    d = depth(best)
+    chain, cur = [], best
+    while cur:
+        chain.append(cur)
+        cur = next((by_id[c] for c in cur.causes if c in by_id), None)
+    print("\n  W9 check 2 — the longest causal chain:")
+    for e in reversed(chain):
+        print(f"    t{e.emitted_at} {e.kind:16} {e.subject[:26]:26} causes={[c[:8] for c in e.causes]}")
+    assert d >= 4, f"the longest chain is {d} Events; §6.3 check 2 requires at least 4"
+    late_root = [e for e in w.log if e.causes == ["ROOT"] and e.emitted_at > 0]
+    assert not late_root, (
+        f"{len(late_root)} Event(s) after the seed declare `causes: [ROOT]` — §19.4 reserves that "
+        f"for an Event with NO antecedent: {[e.kind for e in late_root][:5]}")
+    assert all(e.causes for e in w.log), "an Event carries an empty causes[] (§19.4)"
+    # and the chain must START at one of HER acts, not at a clock.
+    origin = chain[-1]
+    assert origin.subject == HL.CARIN or any(c.subject == HL.CARIN for c in origin.changes) \
+        or origin.kind == "record.created", f"the chain's origin is {origin.kind} on {origin.subject}"
+
+
+def test_w9_check3_every_fixture_read_resolves_to_a_register_site():
+    """§6.3 check 3: *the fixture-read log names only sites present on `hole_register.yaml`.*
+    **Zero fills off the register** — `V2` §G's central claim, made falsifiable (`G1`).
+
+    A fixture the run READS whose name appears in no row's `site:` is a number the instrument
+    supplied and nobody declared."""
+    import headless as HL
+    # ⚠ THIS RUN'S READS, NOT THE PROCESS'S. `DEFAULT_FIXTURES` is a module-level singleton and
+    # `reads` accumulates on it, so every earlier test in the session contributes — the first
+    # version passed alone and failed in the suite, reporting other tests' fixtures as artifact
+    # 2's fills. Snapshot and diff.
+    before = dict(S.DEFAULT_FIXTURES.reads)
+    w = HL.run(seasons=2, seed=0)["world"]
+    read = sorted(k for k, n in w.fixtures.reads.items() if n > before.get(k, 0))
+    assert read, "the run read no fixtures at all — this check cannot observe anything"
+    sites = " ".join(str(r.get("site") or "") for r in REG.load()["rows"])
+    missing = [n for n in read if n not in sites]
+    print(f"\n  W9 check 3 — {len(read)} fixtures read, {len(missing)} off the register")
+    for n in read:
+        print(f"    {'OFF-REGISTER' if n in missing else 'on-register '}  {n}"
+              f"  (x{w.fixtures.reads[n] - before.get(n, 0)})")
+    assert not missing, (
+        f"{len(missing)} fixture(s) the run reads name no `site:` on any register row: {missing}. "
+        "Each is a number the instrument supplied and no row declared, which is `G1`.")
+
+
+def test_w9_check4_no_effect_lambda_and_no_roster():
+    """§6.3 check 4: *`resolve` was called with no `effect` lambda, and `opening_set` with no
+    roster.* Asserted over the SIGNATURES, so a caller cannot smuggle either back in."""
+    assert "roster" not in inspect.signature(S.Query.opening_set).parameters
+    assert "effect" not in inspect.signature(S.SeasonDriver.resolve).parameters
+    assert "effect" not in inspect.signature(S.SeasonDriver._fold).parameters
+    src = _code_only((HERE / "headless.py").read_text())
+    assert "effect" not in src and "roster" not in src, (
+        "headless.py mentions an effect or a roster — artifact 2 must not author either")
+    # and the run genuinely goes through the table.
+    import headless as HL
+    assert HL.run(seasons=1, seed=0)["acts"] > 0
+
+
+def test_w9_check4b_she_returned_at_most_budget_scenes():
+    """§6.3 check 4b *(added by Jordan's 2026-09-02 ruling)*: **Carin returned at most `budget`
+    SCENES**, and each scene's interaction count was checked against the **swept** bound rather
+    than a constant.
+
+    The season completing is itself the assertion — `deliberate` raises on either violation — so
+    this re-runs it at a TIGHTENED bound and requires the refusal, which is what makes the
+    passing run evidence rather than an absence."""
+    import headless as HL
+    w = HL.build_world(0)
+    b = w.fixtures.get("scene_budget")
+    cap = w.fixtures.get("interactions_per_scene")
+    assert HL.run(seasons=1, seed=0)["acts"] <= b * cap, "more interactions than budget x bound"
+    # THE FALSIFIER: at a bound of 1 the same run must refuse, or the check is unobservable.
+    w2 = HL.build_world(0)
+    w2.fixtures = w2.fixtures.sweep("interactions_per_scene", 1)
+    w2.fixtures = w2.fixtures.sweep("scene_packing_rule", "greedy")
+    mint = lambda pid, verb, subj: S.H(w2.world_seed, w2.tick, pid, f"act:{verb}:{subj}")
+    n = sum(len(sc.acts) for sc in S.pack_scenes(
+        w2.persons[HL.CARIN], [S.Candidate("speak", "x")] * 9, b, w2.fixtures, mint))
+    assert n <= b, f"packing at a bound of 1 produced {n} interactions against a budget of {b}"
+
+
+def test_w9_check6_the_float_control_still_fires():
+    """§6.3 check 6: *the A5-style float control still fires.* `W11` may follow, but the float arm
+    must not have been removed to make the run clean."""
+    R._VERDICTS.pop("A5", None)
+    v = R.run_probe("A5")
+    assert v["verdict"] == "PASS", f"A5 is {v['verdict']}: {v.get('detail')}"
+    assert "float" in str(v.get("detail", "")).lower(), (
+        f"A5 passed without exercising its float arm: {v.get('detail')}")
+
+
+def test_w9_check5_every_declared_exercises_verb_runs_or_is_recorded_not_assessed():
+    """§6.3 check 5 — *the one that stops the author moving the goalposts after seeing the run.*
+
+    Each of Carin's rows declares an `exercises:`. For every declared VERB, either its `emits:`
+    kind appears in the log with `causes[]` walking back to one of her acts, or the row is
+    reported NOT-ASSESSED WITH ITS REASON — never re-pointed at a verb that happens to fire.
+
+    ⚠ THE BEFORE-THE-RUN GUARANTEE IS NOT CLAIMED AND THE FILE SAYS SO. It was authored after
+    artifact 2 first ran; what replaces the ordering is that every row derives from a source
+    OUTSIDE the run (#353 §13.1 and the case's own text) and cites the line. This test asserts
+    that substitute is real — a row whose `from:` is missing fails."""
+    import yaml as _y
+    import headless as HL
+    spec = _y.safe_load((HERE.parent / "cases" / "exercises" / "NPC-088.yaml").read_text())
+    assert spec["authored_after_first_run"] is True, (
+        "the provenance declaration was removed — check 5's substitute for the ordering guarantee "
+        "is that the file DECLARES it was written late and cites an outside source for each row")
+    rows = spec["rows"]
+    assert len(rows) >= 6 and all(r.get("from", "").strip() for r in rows), (
+        "a row carries no `from:` — an exercises row with no outside derivation is the author's "
+        "own model, which is what this check exists to exclude")
+
+    w = HL.run(seasons=4, seed=0)["world"]
+    kinds = {e.kind for e in w.log}
+    hers = {e.id for e in w.log if e.subject == HL.CARIN}
+    by_id = {e.id: e for e in w.log}
+
+    def walks_back(e, seen=()):
+        if e.id in hers:
+            return True
+        return any(walks_back(by_id[c], seen + (e.id,))
+                   for c in e.causes if c in by_id and c not in seen)
+
+    ran, unassessed = [], []
+    for r in rows:
+        for token in r["exercises"]:
+            row = S.VERB_TABLE.get(token)
+            if row is None:
+                continue                      # an H-id or a kind, checked below
+            hit = [k for k in row.emits if k in kinds]
+            (ran if hit else unassessed).append((token, hit))
+    print(f"\n  W9 check 5 — declared verbs that RAN: {sorted({t for t, _ in ran})}")
+    print(f"                 NOT-ASSESSED: {sorted({t for t, _ in unassessed})}")
+    assert ran, "not one declared verb produced its `emits:` kind — the exercises describe a "\
+                "season that did not happen"
+    # Every kind that DID fire must walk back to one of her acts, or the log is disconnected.
+    for _tok, hits in ran:
+        for k in hits:
+            e = next(x for x in w.log if x.kind == k)
+            assert walks_back(e), f"{k} does not walk back to an act of Carin's"
+    # And the honest half: what did NOT run is reported, not repointed.
+    assert len(ran) + len(unassessed) >= 5, (ran, unassessed)

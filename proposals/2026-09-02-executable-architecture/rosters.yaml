@@ -207,6 +207,27 @@ rosters:
       a scene are the ones sharing a subject. `H-78` is the row.
     values: [greedy, one_per_scene, by_subject]
 
+  claim_subject_rules:
+    source: "#353 §20 — `Claim := (id, holder, subject, predicate, value, ...)`, and NOTHING says what `subject` is for a WITNESS deposit"
+    open: true
+    note: >-
+      ⚠ FOUND BY RUNNING ARTIFACT 2, AND ITS CONSEQUENCE IS THE WHOLE NARRATIVE SUBSTRATE.
+      WITNESS deposited every claim with `subject = event.subject`, which the fold sets to the
+      ACTOR. So every claim in the world is "I hold that <actor> did <kind>", and §F1's Q2 —
+      *"a claim landing in the holder's ledger whose subject is that person, SOMETHING THEY HOLD,
+      or a Proposition they have committed to"* — can never fire on its second clause, because no
+      claim's subject is ever an object. Measured on NPC-088: the bailiff held 23 claims about
+      Carin across three seasons and formed ZERO questions. Nothing propagates, nobody but the
+      actor ever has a reason to act, and no arc walks past one link.
+      `actor` is the incumbent, kept as the sweep's control. `per_change` mints one claim per
+      `StateChange` with the CHANGED THING as its subject, which is what makes "something they
+      hold" reachable and what #353 §13.1's own narration needs — a copy that can be found,
+      carried, hidden or destroyed. `both` keeps the actor claim and adds the per-change ones.
+      ⚠ THIS ADDS NO FIELD TO `Event`. `PLAN.md` §8.1 forbids adding a `target` or `actor` field
+      to Event, and this needs neither: `changes[]` already names what was written, so the
+      subject is READ off the Event the design already has. `H-79` is the row.
+    values: [actor, per_change, both]
+
 # ===========================================================================
 # TABLES — a MAPPING, where a roster is a SET. `table()` reads these; `roster()` raises on them
 # and vice versa, so the two shapes cannot be confused at a call site.

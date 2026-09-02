@@ -254,6 +254,13 @@ DEFAULT_FIXTURES = Fixtures(
     interactions_per_scene=3,          # `H-76`, swept 1 / 3 / unbounded
     extended_scene_cost=2,             # `H-77`, swept 1 / 2 / 3
     scene_packing_rule="greedy",       # `H-78`, swept greedy / one_per_scene / by_subject
+    claim_subject_rule="both",         # `H-79`, swept actor / per_change / both
+    # `H-80`. #353 §13.1 says the ACT declares a Record's stages and their terms. §F1's Candidate
+    # is `(verb, subject, why)` and carries no operands, so NO COMPUTED ACT CAN DECLARE ANY --
+    # `(Record, stages)` is a Part D row unreachable from the person's own decision. These are
+    # the instrument's declared stand-in, swept, and the row says plainly that they are.
+    record_stages_default=3,
+    record_stage_term=1,
     budget_office_bonus=1,
     budget_leg_penalty=1,
 )
@@ -516,6 +523,7 @@ PERSON_PREDICATES = roster("person_predicates")
 VIEW_BUILDER_RULES = roster("view_builder_rules")
 QUESTION_AGGREGATION = roster("question_aggregation", ordered=True)
 SCENE_PACKING_RULES = roster("scene_packing_rules")
+CLAIM_SUBJECT_RULES = roster("claim_subject_rules")
 
 # ===========================================================================
 # PART E, LOADED FROM DATA -- W3. THE RESOLVER'S BODY.
@@ -1904,8 +1912,14 @@ def questions_for(w: World, p: Person) -> list[Question]:
 
     # Q2 -- a claim landing in p's OWN ledger whose subject is p, something p holds, or a
     # Proposition p has committed to. `since_tick` is the season boundary: "landing" is new.
+    # ⚠ THE PREVIOUS SEASON'S WITNESS, NOT THIS ONE'S. §F1 Q2 is "a claim LANDING in the
+    # holder's ledger AT WITNESS", and WITNESS runs at the END of a season: the deposit is
+    # stamped `when = t` and DELIBERATE reads it at `t + 1`. Testing `c.when == w.tick` therefore
+    # matched nothing, ever — Q2 was dead for every person in every season, which is half of why
+    # nothing propagated. Found by running `headless.py` and reading the ledgers.
+    landed = w.tick - 1
     for c in p.ledger:
-        if c.when == w.tick and (c.subject == p.id or c.subject in mine):
+        if c.when == landed and (c.subject == p.id or c.subject in mine):
             out.append(Question(f"q:claim:{c.id}", "claim_landed", (c.subject,), c.id))
 
     # Q3 -- a Sensation band change: `subsistence` crossing a floor since last season. The
@@ -2049,6 +2063,29 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint) ->
     else:
         chunks = [ranked[i:i + width] for i in range(0, len(ranked), width)]
     return take(chunks)
+
+
+def claim_subjects(e: "Event", rule: str) -> list:
+    """`H-79`: what the claims deposited from one Event are ABOUT.
+
+    `actor` is the incumbent — one claim, subject = the Event's own subject. `per_change` mints
+    one per `StateChange`, subject = THE THING CHANGED, which is what makes §F1's Q2 clause
+    "something they hold" reachable at all. `both` is the union.
+
+    Order is deterministic and de-duplicated, because a person holding two identical claims about
+    one Event would double-count in every eviction comparison."""
+    if rule not in CLAIM_SUBJECT_RULES:
+        raise Unspecified(
+            f"claim-subject rule {rule!r} is not in the roster", "H-79",
+            needs=f"one of {sorted(CLAIM_SUBJECT_RULES)}",
+            law="#353 §20 types `Claim.subject` and never says what a WITNESS deposit's subject "
+                "is; a rule outside the roster is a fourth answer nobody declared")
+    out = [] if rule == "per_change" else [e.subject]
+    if rule in ("per_change", "both"):
+        for c in e.changes:
+            if c.subject and c.subject not in out:
+                out.append(c.subject)
+    return out or [e.subject]
 
 
 def as_scenes(produced: list, actor: str, w: "World") -> list:
@@ -2233,6 +2270,24 @@ def _req_transfer(w: "World", a: "Act") -> bool:
     return bool(rung and (rung.stores or {}).get(kind, 0) >= amount)
 
 
+@requires_predicate("tell")
+def _req_tell(w: "World", a: "Act") -> bool:
+    """§E3: *"the teller holds a claim on the subject"*.
+
+    ⚠ IT READS THE TELLER'S OWN LEDGER, NOT THE WORLD'S TRUTH, and that is the whole of T3. A
+    person may tell what they wrongly believe -- the precondition is that they HOLD a claim, not
+    that the claim is true -- so a liar and a mistaken witness both pass it and the distortion
+    lands at the receiver's WITNESS deposit. Jordan, 2026-09-02: *"we can't control how others
+    perceive and interpret our words or actions"*, and `H-36` closed receiver-side for the same
+    reason. A predicate that checked the world here would put the refusal on the wrong side."""
+    d = a.payload if isinstance(a.payload, dict) else {}
+    subj = d.get("subject")
+    teller = w.persons.get(a.actor)
+    if teller is None or subj is None:
+        return False
+    return any(c.subject == subj for c in teller.ledger)
+
+
 @requires_predicate("move")
 def _req_move(w: "World", a: "Act") -> bool:
     """§E3: *a `contain` path exists*. #353 §15 types `contain : Rung -> Rung` with ONE parent, so
@@ -2360,6 +2415,90 @@ def _eff_work(w: "World", a: "Act") -> None:
     return None
 
 
+@effect_for("create_record")
+def _eff_create_record(w: "World", a: "Act") -> None:
+    """§E3: `create_record` writes `(Record, exists)` and `(Record, stages)`. `H-63` is why the
+    VALUES are here and not in the table.
+
+    ⚠ THE STAGES COME FROM THE ACT, NOT FROM A DEFAULT. #353 `:1043` (§54 item 14) makes the
+    stage list ACT-DECLARED -- "the act DECLARES the stages and their terms" -- so an act that
+    names none creates a record with none, and the instrument does not invent a ladder. That is
+    what makes Carin's season the case `PLAN.md` §6.1 chose: a Record with act-declared stages is
+    the largest ruled row in the corpus and nothing about it needs a default."""
+    d = a.payload if isinstance(a.payload, dict) else {}
+    rid = d.get("record") or f"rec:{a.id}"
+    stages = list(d.get("stages") or [])
+    if not stages:
+        # `H-80`, DECLARED AND SWEPT. The act SHOULD declare these (#353 §13.1) and a computed
+        # act cannot: §F1's Candidate is `(verb, subject, why)` with no operand channel. Refusing
+        # instead would make `(Record, stages)` -- a Part D row -- unreachable from any person's
+        # decision, so the honest form is §G's declare-default-sweep rather than either an
+        # invention or a blocker. Each stage is `(due_tick, label, the act that wound the clock)`.
+        n = w.fixtures.get("record_stages_default")
+        term = w.fixtures.get("record_stage_term")
+        stages = [(w.tick + (i + 1) * term, f"stage{i + 1}", a.id) for i in range(n)]
+    w.records[rid] = Record(rid, d.get("rung") or a.actor, d.get("kind") or "text",
+                            subject_matter=d.get("subject_matter"), stages=stages)
+    # S13: possession is a `hold` Tenure owned by the holder, never a field on the Record. The
+    # maker holds what they made until they part with it.
+    w.add_tenure(Tenure(H(w.world_seed, w.tick, a.actor, f"hold:{rid}"),
+                        a.actor, rid, "hold", since=w.tick))
+    return [rid]
+
+
+@effect_for("destroy_record")
+def _eff_destroy_record(w: "World", a: "Act") -> None:
+    """§E3: writes `(Record, exists)`. The Record goes, and every `hold` on it ends -- S15.3's
+    rule that a tenure dies THROUGH the death of what it is over, never beside it."""
+    d = a.payload if isinstance(a.payload, dict) else {}
+    rid = d.get("record")
+    if rid is None or rid not in w.records:
+        return None
+    del w.records[rid]
+    for t in w.tenures:
+        if t.object == rid and t.live:
+            t.until = w.tick
+    return [rid]
+
+
+@effect_for("kill / wound")
+def _eff_kill(w: "World", a: "Act") -> None:
+    """§E3: writes `(Person, body)`, `(Person, exists)` and `(Tenure, until)`.
+
+    ⚠ THE TENURE ENDS THROUGH THE DEATH, which is §15.3's rule and the reason this is ONE effect
+    rather than three writes a caller sequences: "a plague that kills the praefect ends his
+    tenure THROUGH THE DEATH; A STORM CANNOT TOUCH IT." A wound that does not kill writes only
+    the band, so the same verb covers both -- which is why the table's row is `kill / wound`."""
+    d = a.payload if isinstance(a.payload, dict) else {}
+    who = d.get("subject")
+    p = w.persons.get(who)
+    if p is None:
+        return None
+    p.body = max(0, p.body - int(d.get("harm", p.body)))
+    if p.body > 0:
+        return None
+    for t in list(p.tenures) + list(w._unowned):
+        if (t.subject == who or t.object == who) and t.live:
+            t.until = w.tick
+    del w.persons[who]
+    return [who]
+
+
+@effect_for("utter")
+def _eff_utter(w: "World", a: "Act") -> None:
+    """§E3: writes `(Proposition, exists)`. §14: a Proposition is IDENTITY-BEARING AND IMMUTABLE,
+    fixed at utterance and never destroyed -- `Proposition` is a frozen dataclass, so that is
+    structural here rather than asserted."""
+    d = a.payload if isinstance(a.payload, dict) else {}
+    pid = d.get("proposition") or f"prop:{a.id}"
+    if pid in w.propositions:
+        return None                       # immutable: an utterance never overwrites one
+    w.propositions[pid] = Proposition(pid, d.get("mood") or "OUGHT",
+                                      d.get("subject") or a.actor,
+                                      d.get("predicate") or "", d.get("value"), w.tick)
+    return [pid]
+
+
 @effect_for("transfer")
 def _eff_transfer(w: "World", a: "Act") -> None:
     """§54 item 7's mirror: the giver's store goes DOWN and the receiver's goes UP.
@@ -2439,6 +2578,43 @@ class SeasonDriver:
         for e in (actorless or []):
             w.log.append(e); emitted.append(e)
             TRACE.event(e.id, e.kind, e.causes)
+
+        # -- TERM MATURATION (#353 `:491-492`) ------------------------------
+        # "MATTER matures terms; each maturation is A PERSON'S PAST ACT RIPENING, with `causes[]`
+        # pointing at the act that wound the clock." This is the second link of `PLAN.md` §6.3's
+        # chain and the only mechanism in the design by which one season's act reaches into a
+        # later one WITHOUT anybody acting again.
+        #
+        # ⚠ AND IT STOPS IF THE MAKER IS GONE, which #353 gives as the reason the lawful version
+        # beats the clock-driven one: "a half-made copy now correctly STOPS if the copyist is
+        # jailed, which the MATTER-driven version gets wrong: A COPY THAT FINISHES ITSELF." The
+        # check is on the winder still existing, not on a clock.
+        for rid in sorted(w.records):
+            rec = w.records[rid]
+            for n, st in enumerate(list(rec.stages)):
+                if not (isinstance(st, tuple) and len(st) >= 3):
+                    continue
+                due, label, wound_by = st[0], st[1], st[2]
+                if due != w.tick:
+                    continue
+                holder = next((t.subject for t in w.tenures
+                               if t.object == rid and t.kind == "hold" and t.live), None)
+                if holder is None or holder not in w.persons:
+                    TRACE.note(f"{rid} stage {label!r} did not mature: its winder is gone "
+                               "(#353 :496 -- a half-made copy STOPS rather than finishing itself)")
+                    continue
+                # `causes[]` names the EVENT that created the record where there is one, so the
+                # chain WALKS; #353 says "the act that wound the clock" and the act's own
+                # emission already names that act, so pointing at the emission preserves the
+                # provenance and adds a link rather than restating one.
+                prior = next((e.id for e in reversed(w.log)
+                              if any(c.subject == rid for c in e.changes)), wound_by)
+                ev = Event(H(w.world_seed, w.tick, rid, f"matured:{label}"),
+                           "term.matured", rid,
+                           [StateChange(rid, "set", "MATTER", "stages", label)],
+                           [prior], w.tick)
+                w.log.append(ev); emitted.append(ev)
+                TRACE.event(ev.id, ev.kind, ev.causes)
 
         # S25: NO SOCIAL QUANTITY MOVES HERE. L4 at its sharpest.
         w._in_parallel_map = True
@@ -2661,7 +2837,7 @@ class SeasonDriver:
         if not self._eligible(w, a, row):
             TRACE.decision(f"{a.actor} is not eligible for {a.verb}", "E4",
                            chose="emit the refusal", alternatives=["raise", "silently drop"])
-            return ev(row.emits_on_refusal or ("act.ineligible",), [ROOT])
+            return ev(row.emits_on_refusal or ("act.ineligible",), [a.id])
 
         # `requires`, AGAINST THE WORLD THE PREDECESSORS LEFT -- which is the whole of §27.1.
         if row.requires.strip() not in NO_PRECONDITION:
@@ -2678,9 +2854,10 @@ class SeasonDriver:
                 TRACE.decision(f"{a.verb} by {a.actor}: precondition unmet", "E2/S27.1",
                                chose="emit the refusal -- scarcity falls out of the fold",
                                alternatives=["raise (no Event, no witness, no arc)"])
-                return ev(row.emits_on_refusal or ("act.refused",), [ROOT])
+                return ev(row.emits_on_refusal or ("act.refused",), [a.id])
 
         # Each `writes:` through the gate. The gate is the only writer; the fold never assigns.
+        changed: list = []
         if row.writes:
             eff = EFFECTS.get(a.verb)
             if eff is None:
@@ -2701,18 +2878,51 @@ class SeasonDriver:
             # gate APPLIES the write".
             for n, pair in enumerate(row.writes):
                 kind, _, fld = pair.partition(".")
-                self._apply_write(w, a, kind, fld, eff if n == 0 else None)
+                # The effect runs ONCE, on the first pair: a verb writing three cells is ONE
+                # operation, and running it per pair minted three Tenures for one `move`.
+                made = self._apply_write(w, a, kind, fld, eff if n == 0 else None)
+                changed.extend(c for c in made if c not in changed)
         # The act's proposed changes ride on the success Events -- §27.3's accumulator sums
         # them across the fold and clamps ONCE, which is order-independent as a fact.
-        return ev(row.emits, [ROOT], a.changes)
+        # ⚠ `[a.id]`, NOT `[ROOT]`, AND THIS WAS THE SUBSTRATE OF THE WHOLE NARRATIVE CLAIM.
+        # §19.4: "an Event with NO ANTECEDENT declares `causes: [ROOT]`" — a campaign seed, a
+        # clock's first emission. AN EVENT EMITTED BY AN ACT HAS AN ANTECEDENT: the act. Emitting
+        # `[ROOT]` here made every Event in every season antecedent-free, so NO ARC WALKED
+        # ANYWHERE — and #353 §19.4 says of exactly this: "the design rests its narrative layer,
+        # audit trail and arc model on this edge -- 'the arc itself' -- and the measured state is
+        # that the specified loop emits `causes=[]`, so the substrate of the entire
+        # emergent-narrative claim is declared and never populated." `[ROOT]` is `[]` wearing a
+        # marker.
+        #
+        # THE RULE IS ALREADY IN THIS FILE, ONE SEAM OVER. `resolve`'s contest branch passes
+        # `causes=[a.id]` and its comment records why the "the id must already be in the log"
+        # reading is wrong: `w.log` holds Events, an Act is never appended to it, so that
+        # predicate is PERMANENTLY FALSE and reading it strictly produces `[ROOT]` forever.
+        # §39.2 line 2 says `causes[]` NAMES THE ACTS. Found by running `headless.py`.
+        return ev(row.emits, [a.id], list(a.changes) + changed)
 
-    def _apply_write(self, w: "World", a: Act, kind: str, fld: str, eff=None) -> None:
+    def _apply_write(self, w: "World", a: Act, kind: str, fld: str, eff=None) -> list:
         """The fold's write. It carries no per-verb behaviour -- the effect of a write is the
-        matrix row's business, and what a verb writes is the verb table's."""
+        matrix row's business, and what a verb writes is the verb table's.
+
+        ⚠ IT NOW RETURNS THE `StateChange`s THE WRITE MADE, and that is what lets an Event say
+        WHAT IT CHANGED. Before, an Event's `changes[]` was whatever the CALLER had put on the
+        Act -- so a computed act, which is every act after `W5`, emitted an Event changing
+        nothing. The fold knows what it wrote; an effect returns the ids it touched. Without this
+        `H-79`'s `per_change` rule has nothing to read and §F1's Q2 clause "a claim whose subject
+        is something they hold" stays unreachable, which is how the narrative substrate stayed
+        empty through four revisions."""
         mrow = matrix_row(kind, fld)
-        w.write(fld, mrow.write_class(Step.RESOLVE),
-                (lambda: eff(w, a)) if eff is not None else (lambda: None),
+        touched: list = []
+
+        def apply():
+            got = eff(w, a) if eff is not None else None
+            if got:
+                touched.extend(got)
+
+        w.write(fld, mrow.write_class(Step.RESOLVE), apply,
                 record_kind=kind, fieldname=fld, driver="Act")
+        return [StateChange(t, "set", "Act", fld) for t in touched]
 
     def resolve(self, acts: list[Act],
                 contest_max_depth: Optional[int] = None) -> list[Event]:
@@ -2828,6 +3038,7 @@ class SeasonDriver:
         # S28 stage 2: DEPOSIT IS PER-PERSON, into that person's OWN ledger and no other.
         cap = w.fixtures.get("ledger_cap")
         conf = w.fixtures.get("confidence_default")
+        claim_rule = w.fixtures.get("claim_subject_rule")
         deposits = 0
         w._in_parallel_map = True
         for pid, e, channel in fan:
@@ -2838,13 +3049,21 @@ class SeasonDriver:
             # with `if False`. This is the rule, on.
             via_knot = any(t.kind == "knot" and t.live and pid in (t.subject, t.object)
                            for t in w.tenures)
-            cid = e.id if via_knot else H(w.world_seed, w.tick, pid, f"claim:{e.id}")
             src = "firsthand_via_knot" if via_knot else "firsthand"
-            c = Claim(cid, pid, e.subject, e.kind, True, w.tick, src, conf, "own")
-            w.write("claim_ledger", WriteClass.INTERIOR, lambda p=p, c=c: p.ledger.append(c),
-                    record_kind="Person", fieldname="claim_ledger", driver="Event")
-            TRACE.claim(pid, e.id, src)
-            deposits += 1
+            # `H-79`: WHAT A DEPOSIT IS ABOUT. #353 §20 types `Claim.subject` and never says what
+            # it is for a WITNESS deposit; the instrument used `e.subject`, the ACTOR, which made
+            # §F1's Q2 clause "a claim whose subject is SOMETHING THEY HOLD" unreachable and left
+            # the narrative substrate empty. `changes[]` already names what an act touched, so
+            # this reads the Event the design has rather than adding a field to it (§8.1).
+            for n, subj in enumerate(claim_subjects(e, claim_rule)):
+                cid = (e.id if via_knot and n == 0
+                       else H(w.world_seed, w.tick, pid, f"claim:{e.id}:{n}"))
+                c = Claim(cid, pid, subj, e.kind, True, w.tick, src, conf, "own")
+                w.write("claim_ledger", WriteClass.INTERIOR,
+                        lambda p=p, c=c: p.ledger.append(c),
+                        record_kind="Person", fieldname="claim_ledger", driver="Event")
+                TRACE.claim(pid, e.id, src)
+                deposits += 1
             if len(p.ledger) > cap:
                 # S20/S34: EVICTION RANKS ON `confidence_live x recency` ONLY, NEVER SALIENCE.
                 # Rev 1 sorted lexicographically on (confidence, when), which is a different

@@ -163,7 +163,7 @@
      "verdict": {
       "id": "P36",
       "verdict": "PASS",
-      "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 4 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['move', 'speak', 'transfer', 'work'] -- 4 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+      "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 9 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['create_record', 'kill / wound', 'move', 'speak', 'tell', 'transfer', 'utter'] -- 7 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
       "kind": null,
       "section": "S17",
       "title": "a choice branches three ways",
@@ -917,7 +917,7 @@
      "verdict": {
       "id": "P36",
       "verdict": "PASS",
-      "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 4 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['move', 'speak', 'transfer', 'work'] -- 4 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+      "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 9 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['create_record', 'kill / wound', 'move', 'speak', 'tell', 'transfer', 'utter'] -- 7 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
       "kind": null,
       "section": "S17",
       "title": "a choice branches three ways",
@@ -2340,7 +2340,7 @@
      "verdict": {
       "id": "P36",
       "verdict": "PASS",
-      "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 4 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['move', 'speak', 'transfer', 'work'] -- 4 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+      "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 9 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['create_record', 'kill / wound', 'move', 'speak', 'tell', 'transfer', 'utter'] -- 7 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
       "kind": null,
       "section": "S17",
       "title": "a choice branches three ways",
@@ -4251,7 +4251,7 @@
      "verdict": {
       "id": "P36",
       "verdict": "PASS",
-      "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 4 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['move', 'speak', 'transfer', 'work'] -- 4 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+      "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 9 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['create_record', 'kill / wound', 'move', 'speak', 'tell', 'transfer', 'utter'] -- 7 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
       "kind": null,
       "section": "S17",
       "title": "a choice branches three ways",
@@ -4959,7 +4959,7 @@
      "verdict": {
       "id": "P36",
       "verdict": "PASS",
-      "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 4 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['move', 'speak', 'transfer', 'work'] -- 4 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+      "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 9 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['create_record', 'kill / wound', 'move', 'speak', 'tell', 'transfer', 'utter'] -- 7 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
       "kind": null,
       "section": "S17",
       "title": "a choice branches three ways",
@@ -6766,7 +6766,7 @@
      "verdict": {
       "id": "P36",
       "verdict": "PASS",
-      "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 4 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['move', 'speak', 'transfer', 'work'] -- 4 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+      "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 9 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['create_record', 'kill / wound', 'move', 'speak', 'tell', 'transfer', 'utter'] -- 7 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
       "kind": null,
       "section": "S17",
       "title": "a choice branches three ways",
@@ -6940,7 +6940,7 @@
      "verdict": {
       "id": "P36",
       "verdict": "PASS",
-      "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 4 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['move', 'speak', 'transfer', 'work'] -- 4 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+      "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 9 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['create_record', 'kill / wound', 'move', 'speak', 'tell', 'transfer', 'utter'] -- 7 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
       "kind": null,
       "section": "S17",
       "title": "a choice branches three ways",
@@ -10195,7 +10195,7 @@
      "verdict": {
       "id": "A5",
       "verdict": "PASS",
-      "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (b963be88d075...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+      "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (186f6993fd98...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
       "kind": null,
       "section": "S32",
       "title": "the fold is order-independent, and the float control actually fires",
@@ -11094,7 +11094,7 @@
   "P36": {
    "id": "P36",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 4 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['move', 'speak', 'transfer', 'work'] -- 4 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 9 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['create_record', 'kill / wound', 'move', 'speak', 'tell', 'transfer', 'utter'] -- 7 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
    "kind": null,
    "section": "S17",
    "title": "a choice branches three ways",
@@ -11806,7 +11806,7 @@
   "A5": {
    "id": "A5",
    "verdict": "PASS",
-   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (b963be88d075...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (186f6993fd98...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
    "kind": null,
    "section": "S32",
    "title": "the fold is order-independent, and the float control actually fires",
@@ -12998,12 +12998,12 @@
  "_trace_counts": {
   "STEP": 2095,
   "BARRIER": 710,
-  "DECISION": 716,
-  "WRITE": 682,
+  "DECISION": 717,
+  "WRITE": 762,
   "QUERY": 4306,
-  "ACT": 69,
-  "EVENT": 55,
-  "CLAIM": 276,
+  "ACT": 72,
+  "EVENT": 58,
+  "CLAIM": 351,
   "GAP": 67,
   "NOTE": 96
  },

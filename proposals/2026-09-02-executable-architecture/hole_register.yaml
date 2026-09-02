@@ -122,10 +122,10 @@ rows:
     owner:     "params"
     grade:     "assumption"
     default:   "`1000`"
-    site:      ""
-    sweep:     []
+    site:      "Fixtures condition_scale — the fixed-point scale every band reads (Site.condition, Person.body, standing)"
+    sweep:     [100, 1000, 10000]
     unblocks:  "any Site"
-    cite:      ""
+    cite:      "NAMED BY `W9` CHECK 3, WHICH IS WHY IT HAS A SITE AT ALL. #353 §48 makes condition an int on an EXPORTED scale and §22 assigns the scale to `params`; the in-chain params document proposes NO VALUES, so it is a fixture. The row existed with an EMPTY `site:` since `W0` — declared and unlocatable, which `R2` reported and nobody had spent. Artifact 2 reads it 60+ times a season (every band comparison, `standing_of`, `body_band_penalty`), so it was the largest single fill off the register in the run. The sweep is by ORDER OF MAGNITUDE because that is what a fixed-point scale can vary by; the verdicts are expected to be invariant under it, and a verdict that MOVES would mean a band edge is being read as an absolute rather than as a fraction of the scale."
     source:    "ARCHITECTURE_V2.md §VII.1, transcribed verbatim | V2's grade cell: **assumption**"
   - id:        H-07
     tier:      0
@@ -134,10 +134,10 @@ rows:
     owner:     "params"
     grade:     "assumption"
     default:   "per-kind table; §42.2.1 names the silent default as the prior sin"
-    site:      ""
-    sweep:     []
+    site:      "Fixtures wear_per_season, read through Fixtures.wear() — which RAISES on an unregistered site kind rather than answering"
+    sweep:     ["per-kind table, raise on an unregistered kind (the default)", "one rate for every kind", "no wear at all"]
     unblocks:  "any Site"
-    cite:      ""
+    cite:      "NAMED BY `W9` CHECK 3. #353 §22 assigns `wear per site kind` to params and NO in-chain table exists, so every kind the instrument touches is declared in `DEFAULT_FIXTURES` and an unregistered one RAISES — which is §42.2.1's own worked example: \"a wear table that returns 20 for an unregistered site kind does not fail -- it answers, plausibly and wrongly, forever\". The refusal is the mechanism and `A30`/`W1x` are its falsifiers; the row carried an empty `site:` regardless, so artifact 2 was reading a declared number from an unlocatable row."
     source:    "ARCHITECTURE_V2.md §VII.1, transcribed verbatim | V2's grade cell: **assumption**"
   - id:        H-08
     tier:      0
@@ -158,10 +158,10 @@ rows:
     owner:     "params"
     grade:     "assumption"
     default:   "`200` · `12` · `100`"
-    site:      ""
-    sweep:     []
+    site:      "Fixtures ledger_cap (L) · view_k (K) · confidence_default — three params read at WITNESS and at every View build"
+    sweep:     [50, 200, 800]
     unblocks:  "WITNESS, DELIBERATE"
-    cite:      ""
+    cite:      "NAMED BY `W9` CHECK 3. #353 §20 caps the ledger at `L` and §18 the View at `K`, and gives NO VALUE for either; `Claim.confidence` is typed and never defaulted. All three are params-owned and in-chain valueless, which is exactly a fixture — and the row carried an EMPTY `site:` from `W0` until artifact 2 read all three. ⚠ THE SWEEP IS ON `L` BECAUSE THAT IS THE ONE WITH A KNOWN INTERACTION: `H-55` records that per-write MATTER emissions under `H-33`'s total fan-out flood every ledger, so the cap decides WHAT SURVIVES a season and the eviction comparator (`confidence x recency`, §34) decides which. `K` is `H-53`'s subject — which K, not how many — and is swept there."
     source:    "ARCHITECTURE_V2.md §VII.1, transcribed verbatim | V2's grade cell: **assumption**"
   - id:        H-10
     tier:      0
@@ -170,10 +170,10 @@ rows:
     owner:     "params"
     grade:     "assumption"
     default:   "`5`; **swept 2·5·9 — the count verdict flips, which is the finding**"
-    site:      ""
+    site:      "Fixtures scene_budget — the integer `budget` starts from, before the person's own modifiers (H-70)"
     sweep:     [2, 5, 9]
     unblocks:  "DELIBERATE"
-    cite:      ""
+    cite:      "NAMED BY `W9` CHECK 3. The band `~5` is RULED (#353 §26.3) and Jordan ruled the UNIT on 2026-09-02 — 5 SCENES per character per season — so the integer is not open in the way the empty `site:` implied; what stays open is that a band is not an integer, and `A31` sweeps it because every count verdict moves with the integer chosen. The sweep `2 / 5 / 9` is V2's own, recovered from its `default` cell by `W0`'s transcription."
     source:    "ARCHITECTURE_V2.md §VII.1, transcribed verbatim | V2's grade cell: **assumption**"
   - id:        H-11
     tier:      0
@@ -614,7 +614,7 @@ rows:
     owner:     "Person (person-side)"
     grade:     "assumption"
     default:   "`need` half DISCHARGED as Q4 of `questions_for`; aggregation defaults to `first` — the first question in `question_sources` order, which is the incumbent behaviour declared"
-    site:      "shape.aggregate_questions, called by deliberate; rules from rosters.yaml question_aggregation"
+    site:      "Fixtures question_aggregation_rule -> shape.aggregate_questions, called by deliberate; rules from rosters.yaml question_aggregation"
     sweep:     ["first", "all", "one_per_source"]
     unblocks:  "every NPC season — it decides which question a budget-bounded person answers"
     cite:      "TWO HOLES IN ONE ROW, AND `W5` DISCHARGES THEM DIFFERENTLY. (1) THE DROPPED `need` SOURCE is closed by construction: it is Q4 of `questions_for`, and this row states its own rationale — \"an NPC with a standing ambition and a quiet season forms no candidates at all\" — which is the sentence `PLAN.md` `W5` gives for adding it. (2) QUESTION AGGREGATION was being FILLED OFF THE REGISTER. `deliberate` read `qs[0] if qs else None`: an `absent` hole answered inside a subscript, with no row, no marker and no alternative, which is `G1`. It was decisive rather than cosmetic, because `question_sources` is ORDERED — taking the first silently ruled that A DATE ALWAYS BEATS A NEED, an unruled priority rule deciding what every NPC does first. FOUND BY THE `W5` ADVERSARIAL PASS, which read the subscript rather than the summary. `first` is now that behaviour declared and kept as the sweep control; `all` lets the budget triage, which is what §26.3 says triage is for."
@@ -886,6 +886,47 @@ rows:
     unblocks:  "what a scene IS, for every NPC season"
     cite:      "FOUND BY THE `W17` ADVERSARIAL PASS, AND IT IS `H-53`'S DEFECT ONE LEVEL UP. `hole_register.yaml`'s own `H-53` row states the shape: 'H-09 supplies K = 12 and NOT WHICH K; the instrument takes the last k, which is an invention'. Here `H-76` supplies HOW MANY interactions a scene admits and nothing supplied WHICH, and `make_chooser` answered it in a comment - 'the default policy fills scenes greedily in score order' - with no row, no alternative and no sweep, which is `G1`. THE CONSEQUENCE WAS VISIBLE IN THE COMMITTED ARTIFACT: `TRACE.txt` put `create_record`, `forge` and `kill / wound` inside one 'scene opportunity pursued', a grouping nobody chose. `by_subject` is the reading `systems/_architecture/player_agency_v30.md` §6.3's own words suggest, since 'one scene opportunity pursued' is an opportunity to do something ABOUT something; `one_per_scene` is the pre-ruling accounting and the honest floor. ⚠ THE PACKING RULE ALSO CHANGES HOW MANY INTERACTIONS A SEASON PRODUCES — under `greedy` a person with 5 scenes returns up to 5 x 3 = 15 — and no probe verdict observes that, so `_trace_counts.ACT` is the counter that moves and it is now reported with the sweep."
     source:    "W17 — found by the adversarial pass"
+  # -------------------------------------------------------------------------
+  # W9 — ARTIFACT 2. Both rows were found by RUNNING Carin's season, not by reading, and both
+  # are why nothing propagated: the first left every claim about an actor, the second leaves a
+  # computed act unable to declare what it operates on.
+  # -------------------------------------------------------------------------
+  - id:        H-79
+    tier:      0
+    hole:      "what a WITNESS deposit's `Claim.subject` IS. #353 §20 types the field and never says"
+    kind:      "SCHEMA_ROW"
+    owner:     "WITNESS (the only minter of a root token, §20)"
+    grade:     "assumption"
+    default:   "`both` — one claim about the Event's own subject, plus one per `StateChange` with the CHANGED THING as its subject"
+    site:      "Fixtures claim_subject_rule; shape.claim_subjects, called by SeasonDriver.witness"
+    sweep:     ["actor", "per_change", "both"]
+    unblocks:  "every Q2 question, therefore every act any person takes in response to another"
+    cite:      "FOUND BY RUNNING ARTIFACT 2. WITNESS deposited every claim with `subject = event.subject`, and the fold sets an Event's subject to the ACTOR — so every claim in the world reads 'I hold that <actor> did <kind>' and `ARCHITECTURE_V2.md` §F1's Q2, \"A claim landing in the holder's ledger... whose subject is that person, something they hold, or a Proposition they have committed to\", CANNOT FIRE ON ITS SECOND CLAUSE, because no claim's subject is ever an object. MEASURED on NPC-088 before the fix: the bailiff held 23 claims across three seasons and formed ZERO questions; the whole world formed one, and it was Carin's own Q4. Nothing propagated and no arc walked past one link. ⚠ NO FIELD WAS ADDED TO `Event`: `PLAN.md` §8.1 forbids a `target` or `actor` field and this needs neither — `changes[]` already names what an act wrote, so the subject is READ off the Event the design already has. ⚠ A SECOND DEFECT HAD TO BE FIXED BEFORE THIS ROW COULD DO ANYTHING: the fold emitted `changes[]` from the CALLER'S Act, and every act after `W5` is computed and carries none, so `per_change` had nothing to read. Effects now report the ids they touched and `_apply_write` builds the `StateChange`s. Reproduce with `python headless.py --case NPC-088 --seasons 3 --seed 0`."
+    source:    "W9 — found by execution"
+  - id:        H-80
+    tier:      0
+    hole:      "a computed act cannot declare its OPERANDS. §F1's Candidate is `(verb, subject, why)`; #353 §13.1 says the act declares a Record's stages and their terms"
+    kind:      "SCHEMA_ROW"
+    owner:     "Part F (the Candidate) — the operand channel that does not exist"
+    grade:     "assumption"
+    default:   "3 stages at a term of 1 season each, wound by the creating act — the instrument's declared stand-in for operands the person cannot supply"
+    site:      "Fixtures record_stages_default / record_stage_term; shape._eff_create_record"
+    unblocks:  "`(Record, stages)`, term maturation, and with it the only mechanism by which one season's act reaches a later one"
+    sweep:     [0, 3, 6]
+    cite:      "FOUND BY RUNNING ARTIFACT 2. #353 `:491-492`: \"MATTER matures terms; each maturation is a person's past act ripening, with `causes[]` pointing at the act that wound the clock\", and `:477` gives the stages as \"the creating act's own term ripening\". So the ACT declares them — and §F1's Candidate carries a verb, a subject and a why, with NO operand channel, so no act a person actually computes can declare anything. `(Record, stages)` is a Part D row unreachable from the person's own decision, which is a hole in Part F rather than in Part D. ⚠ THE DEFAULT IS AN INVENTION AND THE ROW IS WHAT MAKES IT LAWFUL — §G's declare · default · sweep. Refusing instead would have been §42.2.1's letter and would have made the milestone unreachable for a reason that is about Part F's shape, not about Carin. AT THE `0` SWEEP POINT NOTHING MATURES and the causal chain collapses to one link, which is the control: it shows the chain rests on this default. ⚠ THE MATURATION STOPS IF THE WINDER IS GONE, which is #353 `:496`'s own argument for the lawful version over the clock-driven one — \"a half-made copy now correctly stops if the copyist is jailed, which the MATTER-driven version gets wrong: a copy that finishes itself\"."
+    source:    "W9 — found by execution"
+  - id:        H-81
+    tier:      1
+    hole:      "the obstacle-refusal multiple — #353 §27.4's `Ob > 2 x Pool` gate, read as a fixture with no row"
+    kind:      "FORMULA"
+    owner:     "the resolver (§27.4)"
+    grade:     "ruled"
+    default:   "2 — #353 §27.4 verbatim: an attempt at Ob > 2 x Pool is refused, and the season is spent"
+    site:      "Fixtures obstacle_refusal_multiple, read by the RESOLVE gate"
+    sweep:     []
+    unblocks:  "nothing — it is ruled; the row exists so the number is locatable"
+    cite:      "FOUND BY `W9` CHECK 3, AND IT IS THE ONE FIXTURE IN THE RUN THAT HAD NO ROW OF ANY KIND. Unlike the other seven it is not open: #353 §27.4 states the multiple, so this row is `ruled` and carries no sweep — sweeping a value the specification gives would be reporting a finding about a game #353 ruled out, which is the defect `H-28`'s cite records the re-grade making. THE POINT OF THE ROW IS LOCATABILITY, not openness: `V2` §G's claim is that every number the instrument reads resolves to a `site:`, and a ruled number with no row breaks that claim exactly as an invented one does. Check 3 cannot tell the two apart, and should not have to."
+    source:    "W9 — found by execution"
 
 # ---------------------------------------------------------------------------
 # THE DISCHARGE MAP -- guardrail G8.

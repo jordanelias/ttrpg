@@ -1,0 +1,81 @@
+# NPC-088 · CARIN VEDEL — the `exercises:` for artifact 2. `PLAN.md` §6.3 check 5 and W9's
+# guardrail: *"the case's `exercises:` are written before the run and not edited after it."*
+#
+# ⚠ THE PROVENANCE DISCIPLINE, STATED BEFORE THE ROWS, BECAUSE IT IS THE WHOLE VALUE OF THE CHECK.
+# The guardrail exists so an author cannot move the goalposts after seeing a result: `PLAN.md`
+# §6.3 says check 5 "is the one that stops the author moving the goalposts after the run", and
+# names the session this plan follows as having failed at exactly that seam — "it graded cases
+# against probes it had written, and the probes were the model."
+#
+# **This file was authored AFTER artifact 2 first ran, and saying so is the point.** The
+# before-the-run guarantee is therefore NOT claimed for this session. What replaces it is a
+# stronger and checkable substitute: **every row below is derived from a SOURCE OUTSIDE THE RUN**
+# — #353's own §13.1, which narrates Carin's season as the worked lawful case, and the case
+# corpus's own `season_requires` text — and each row cites the line it comes from. A reader can
+# check the derivation without trusting the author. Nothing below was read off `TRACE.txt`.
+#
+# `PLAN.md` §6.1 chose her precisely because "#353 §13.1 already narrates her season as the worked
+# lawful case", so the specification is the independent source the guardrail wants.
+#
+# NOT EDITED AFTER THE CHECK RAN. Where a row's declared verb does not appear in the log, the row
+# is recorded NOT-ASSESSED with its reason rather than re-pointed at a verb that does — which is
+# §6.3 check 5's other half and the half an author is most tempted to skip.
+
+case: NPC-088
+name: Carin Vedel
+source: "#353 §13.1 (`:477`, `:485-500`) + the case's own `season_requires`"
+authored_after_first_run: true          # declared, not hidden — see the note above
+
+rows:
+  - need: "A person holding no office, post, or command must be able to perform a repeated, multi-week task (copying a text) that the engine tracks as ongoing work-in-progress with a start and an end"
+    hardness: core
+    exercises: [create_record, "H-80"]
+    from: >-
+      #353 `:477` — "act-declared terms | stages whose maturation is THE CREATING ACT'S OWN TERM
+      RIPENING". A multi-week task with a start and an end IS a Record with act-declared stages;
+      the start is `record.created` and the ends are its `term.matured` emissions.
+
+  - need: "The physical product of her labor (a copied text) must be able to exist as a persistent object that can be found, carried, hidden, given away, or destroyed independently of her."
+    hardness: core
+    exercises: [create_record, destroy_record]
+    from: >-
+      #353 `:499` — "burn the Record that carries it" — gives destruction as the act on such an
+      object. Persistence independent of her is `(Record, exists)` surviving the season, which
+      §13's live-carrier reading supplies.
+
+  - need: "Simply possessing the product of her labor must be able to trigger consequences for whoever holds it, independent of whether the act of copying was ever observed."
+    hardness: core
+    exercises: ["H-79", "hold:<record>"]
+    from: >-
+      Possession is a `hold` Tenure owned by the holder (§13, §15.1), and a consequence for the
+      HOLDER requires a claim whose subject is the thing held — which is `H-79` exactly. Before
+      `H-79` no claim's subject was ever an object, so this row had nothing to attach to.
+
+  - need: "A person with no faction rank, no assigned Duty, and no tracked Standing must still be able to generate a scene opportunity that brings a player into contact with her."
+    hardness: core
+    exercises: [speak, "H-04"]
+    from: >-
+      A person with no office still forms candidates, and the source of her question is Q4 `need`
+      — a live `commit` to an OUGHT Proposition (`PLAN.md` `W5`, #353 `:509`, `:605`, `:1297`).
+      Without Q4 she forms none at all, which is the case's own point about her having no rank.
+
+  - need: "Her season must be able to end through means that require no institutional process at all -- being found and killed, or simply vanishing."
+    hardness: non-core
+    exercises: ["kill / wound"]
+    from: >-
+      #353 `:499` — "kill the man who must renew it". `(Person, exists)` as an ending, with every
+      Tenure ending THROUGH the death (§15.3) rather than beside it.
+
+  - need: "A person with no political voice must be able to become personally significant -- worth a scene, worth a decision -- purely through the discovered effect of her private labor."
+    hardness: core
+    exercises: ["H-79", "the six investigation acts"]
+    from: >-
+      "Discovered" is the operative word: it needs a verb by which someone else FINDS the record.
+      Part E carries "the six investigation acts" with `requires: per act` and no predicate.
+
+  - need: "The engine must represent something about a season of her life beyond identity-only reference data -- some tracked state that a player interaction can actually change."
+    hardness: core
+    exercises: [create_record, "term.matured"]
+    from: >-
+      Tracked state that changes across a season, without her acting again, is term maturation —
+      #353 `:491` — and it is the only such mechanism in the design.
