@@ -861,6 +861,18 @@ this chain has required, and it is additive.**
 4. Re-state #353 §26.3's prose in scenes. **The spray argument survives the noun change unaltered** —
    five scenes each spent petitioning is exactly the triage the budget exists to create.
 
+   > ⚠ **LANDED 2026-09-02 AS A REFUSAL TO EDIT #353, AND THE REASON IS THE POINT.** The W17
+   > adversarial pass found this clause undelivered: `:896`, `:912-913` and `:922-923` still count
+   > **acts**. They stay that way. **#353 is the specification under test**, `register.py
+   > --verify-citations` pins ~40 register quotations to its line numbers, and an instrument that
+   > edits its own subject to agree with a later ruling destroys the only fixed point the whole
+   > chain measures against. The re-statement belongs in the surfaces that *derive* from it, and
+   > that is where it landed: `Scene`'s docstring, `Query.budget`, `deliberate`'s refusal law,
+   > `H-10`/`H-28`/`H-35`/`H-76`/`H-77`/`H-78`, `ARCHITECTURE_V2.md` §F3, and the
+   > `act_budget` → `scene_budget` rename across 16 sites. **#353 `:1990` still lists "Does a scene
+   > equal an act?" as open and that is correct of #353** — the ruling is Jordan's, dated after it,
+   > and `A32` is where the instrument records that it is now settled.
+
 **Does NOT change.** Parts D and E. The verb table's ~28 rows are the interactions; a level is added
 above them. **This is the cheapest shape the ruling could have taken, and it is worth saying so.**
 

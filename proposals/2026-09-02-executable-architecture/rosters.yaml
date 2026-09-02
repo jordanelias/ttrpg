@@ -190,6 +190,23 @@ rosters:
     ordered: true
     values: [first, all, one_per_source]
 
+  scene_packing_rules:
+    source: "`W17` — which interactions share one scene. `player_agency_v30.md` §6.3 says a scene HOLDS 1–3 and never says WHICH"
+    open: true
+    note: >-
+      ⚠ THIS IS `H-53`'S DEFECT ONE LEVEL UP, AND IT WAS FOUND THE SAME WAY — by an adversarial
+      pass reading the body rather than the summary. `H-76` registers HOW MANY interactions a
+      scene admits; nothing registered WHICH ones share one, and `make_chooser` answered it in a
+      comment: *"the default policy fills scenes greedily in score order"*. H-53's own row says
+      the shape of that error out loud: *"H-09 supplies `K = 12` and NOT WHICH K; the instrument
+      takes the last k, WHICH IS AN INVENTION."*
+      `greedy` is that invention DECLARED and kept as the sweep's control, not argued for.
+      `one_per_scene` is the pre-ruling accounting — one interaction per scene action — and is
+      the honest floor. `by_subject` is the reading `player_agency_v30.md` §6.3's own words
+      suggest: *"one scene opportunity pursued"* is about SOMETHING, so the interactions sharing
+      a scene are the ones sharing a subject. `H-78` is the row.
+    values: [greedy, one_per_scene, by_subject]
+
 # ===========================================================================
 # TABLES — a MAPPING, where a roster is a SET. `table()` reads these; `roster()` raises on them
 # and vice versa, so the two shapes cannot be confused at a call site.

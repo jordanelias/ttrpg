@@ -26,14 +26,14 @@ not the shape.
 | **[core]** The engine must represent something about a season of her life beyond identity-only reference data -- some tracked state that a player interaction can actually change -- for at least the sea | — | UNMAPPED | — |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-087 — Uwe Askeland  ·  **BLOCKED**
-*person · 8 rows, 4 core · blockers: P36*
+## NPC-087 — Uwe Askeland  ·  **NOT-ASSESSED**
+*person · 8 rows, 4 core · blockers: none*
 *ends when:* never automatically; only via a discovery-driven resolution (protect/report/leverage), or unremarked continuation.
 
 | need | probe | verdict | § |
 |---|---|---|---|
 | **[core]** A person with no office must be able to run a recurring, location-bound activity whose ongoing existence -- not any single completed task -- is itself the thing at stake. | `P1` | PASS | S3-L1 |
-| **[core]** His discovery must be able to branch three ways for whoever finds him -- protect him, report him, or leverage the discovery -- with materially different consequences down each path, not just | `P36` | **UNSPECIFIED** | E2/E3 |
+| **[core]** His discovery must be able to branch three ways for whoever finds him -- protect him, report him, or leverage the discovery -- with materially different consequences down each path, not just | `P36` | PASS | S17 |
 | **[core]** He must be reachable by a scene opportunity despite holding no faction Standing, no assigned Duty, and no Disposition floor with any faction leader. | `P1` | PASS | S3-L1 |
 | His activity must be able to persist across seasons completely unwitnessed, and be discoverable later exactly as it would have been discovered earlier -- not silently resolved off-screen the | `P30` | **UNSPECIFIED** | S27/E2 |
 | **[core]** The material he teaches must be classified as suppressed cultural/political knowledge, retainable by ordinary non-sensitive minds, rather than Thread-substrate knowledge subject to the setti | — | UNMAPPED | — |
@@ -146,7 +146,7 @@ not the shape.
 | A subordinate investigator's authority to pursue a sufficiently important target must be gated on a named superior's authorization, distinct from the subordinate's own competence or rank. | — | UNMAPPED | — |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-033 — Kolbrun Thale  ·  **DEGRADED**
+## NPC-033 — Kolbrun Thale  ·  **PLAYABLE**
 *faction · 8 rows, 2 core · blockers: none*
 *ends when:* never specified -- she is a persistent office with no authored personal arc or end condition in the sources
 
@@ -154,7 +154,7 @@ not the shape.
 |---|---|---|---|
 | **[core]** An office must be able to be the sole official channel between an institution and an entire class of informal, deniable actors, such that removing that one office-holder severs the instituti | `F12` | PASS | S11 |
 | **[core]** A spymaster must be able to surface a hidden actor operating in a territory through sustained investigative effort against active concealment, at a cost that scales with how hard the conceal | `P10` | PASS | S13 |
-| On surfacing a hidden actor, the office-holder must be able to choose among structurally different dispositions of the discovery -- expose it, remove it, absorb it into her own network, or s | `P36` | **UNSPECIFIED** | E2/E3 |
+| On surfacing a hidden actor, the office-holder must be able to choose among structurally different dispositions of the discovery -- expose it, remove it, absorb it into her own network, or s | `P36` | PASS | S17 |
 | A formal advisor holding a position of institutional trust must be bound to secrecy about what her principal reveals to her in that capacity, as an obligation distinct from ordinary Disposit | — | UNMAPPED | — |
 | A person's private, undisclosed heritage or sympathy must be able to bias which of her discoveries she reports faithfully and which she quietly softens or withholds, without the player or he | — | UNMAPPED | — |
 | Two office-holders within the same institution whose remits abut (covert reach vs. doctrinal suspicion) must be able to carry a standing mutual wariness seeded by a specific past friction, c | — | UNMAPPED | — |
@@ -387,7 +387,7 @@ not the shape.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| An intermediary supposed to serve the foreign power's interests against this person must be able to instead act to protect her, silently deviating from his mandate, and that deviation must b | `P36` | **UNSPECIFIED** | E2/E3 |
+| An intermediary supposed to serve the foreign power's interests against this person must be able to instead act to protect her, silently deviating from his mandate, and that deviation must b | `P36` | PASS | S17 |
 | A person's internal epistemic stability must be able to be measurably reduced by the structural condition of divided loyalty and hostage status alone, independent of any specific event happe | `P40` | PASS | S15 |
 | **[core]** A person with no independent action economy, off the primary board entirely, must still be able to make another character's every relevant decision legible as being driven by concern for her | — | UNMAPPED | — |
 | **[core]** A hostile foreign power must be able to hold a standing coercive threat over the home polity purely through possession of a person, without ever needing to act on the threat, and that threat | — | UNMAPPED | — |

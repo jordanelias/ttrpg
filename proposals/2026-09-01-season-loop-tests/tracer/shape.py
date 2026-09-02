@@ -253,6 +253,7 @@ DEFAULT_FIXTURES = Fixtures(
     # under `CLAUDE.md` §0.05, REFERENCE rather than mechanism. `None` means unbounded.
     interactions_per_scene=3,          # `H-76`, swept 1 / 3 / unbounded
     extended_scene_cost=2,             # `H-77`, swept 1 / 2 / 3
+    scene_packing_rule="greedy",       # `H-78`, swept greedy / one_per_scene / by_subject
     budget_office_bonus=1,
     budget_leg_penalty=1,
 )
@@ -514,6 +515,7 @@ QUESTION_SOURCES = roster("question_sources", ordered=True)
 PERSON_PREDICATES = roster("person_predicates")
 VIEW_BUILDER_RULES = roster("view_builder_rules")
 QUESTION_AGGREGATION = roster("question_aggregation", ordered=True)
+SCENE_PACKING_RULES = roster("scene_packing_rules")
 
 # ===========================================================================
 # PART E, LOADED FROM DATA -- W3. THE RESOLVER'S BODY.
@@ -993,8 +995,15 @@ class Scene:
     acts: list = field(default_factory=list)
     extended: bool = False
 
+    # roster-exempt: MECHANISM. `PLAIN_COST` is the DEFINITION OF THE UNIT -- one ordinary scene
+    # is one scene action -- not a tunable value. `H-77` tunes what an EXTENDED scene costs
+    # relative to it, and a "cost" whose base was itself variable would make the budget's units
+    # undefined. Named rather than inlined because §42.2.1's rule is that no bare literal sits in
+    # a body, and because naming it is what makes the distinction from `extended_cost` visible.
+    PLAIN_COST = 1
+
     def cost(self, extended_cost: int) -> int:
-        return extended_cost if self.extended else 1
+        return extended_cost if self.extended else self.PLAIN_COST
 
 
 @dataclass
@@ -1634,7 +1643,15 @@ def resolvable_verbs() -> frozenset:
     probe can report both numbers instead of hardcoding either."""
     out = set()
     for v, row in VERB_TABLE.items():
-        if (row.requires or "").strip() in NO_PRECONDITION or v in REQUIRES_PREDICATES:
+        # ⚠ BOTH GATES, NOT JUST THE PRECONDITION. The first version checked `requires:` alone and
+        # called `create_record` resolvable -- it has no precondition and no EFFECT, so the fold
+        # admits it and then raises `Unspecified` on "Part E does not say WHAT VALUE". A caller
+        # narrowing to "what the fold can execute" got a set the fold could not execute, and the
+        # gap only surfaced when `W17`'s packing started attempting more verbs per season. Found
+        # by running the corpus, not by reading it.
+        gated = (row.requires or "").strip() in NO_PRECONDITION or v in REQUIRES_PREDICATES
+        effected = not row.writes or v in EFFECTS
+        if gated and effected:
             out.add(v)
     return frozenset(out)
 
@@ -1765,17 +1782,7 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
         # to `interactions_per_scene` of the ranked candidates. The default policy fills scenes
         # greedily in score order -- a person spends a scene on their best option and whatever
         # else it can carry, which is what "1-3 mechanical interactions" describes.
-        n_scenes = ask_budget()
-        per = fx.get("interactions_per_scene")
-        width = len(ranked) if per is None else per
-        scenes, i = [], 0
-        while len(scenes) < n_scenes and i < len(ranked):
-            chunk = ranked[i:i + width]
-            scenes.append(Scene(
-                mint(p.id, "scene", str(len(scenes))), p.id,
-                [Act(mint(p.id, c.verb, c.subject or ""), p.id, c.verb) for c in chunk]))
-            i += width
-        return scenes
+        return pack_scenes(p, ranked, ask_budget(), fx, mint)
     return choose
 
 
@@ -1975,6 +1982,73 @@ def standing_of(p: Person, fx: "Fixtures") -> int:
     own = [c for c in p.ledger if c.subject == p.id and c.source == "firsthand"]
     _agree, dis, paired = agreement(told, own)
     return scale if paired == 0 else (dis * scale) // paired
+
+
+def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint) -> list:
+    """`H-78`: WHICH interactions share one scene. `H-76` says how many; this says which.
+
+    ⚠ THIS WAS A COMMENT IN `make_chooser` UNTIL THE `W17` ADVERSARIAL PASS READ IT -- "the
+    default policy fills scenes greedily in score order", with no row, no alternative and no
+    sweep. That is `H-53`'s defect one level up, and `H-53`'s own row names the shape: the
+    instrument answering a WHICH question the specification left open, inside a slice.
+
+    `greedy` is that behaviour declared and kept as the control. `one_per_scene` is the pre-ruling
+    accounting. `by_subject` groups the interactions that share a subject, which is what
+    `player_agency_v30.md` §6.3's "one scene opportunity pursued" describes -- an opportunity is
+    an opportunity to do something ABOUT something."""
+    rule = fx.get("scene_packing_rule")
+    if rule not in SCENE_PACKING_RULES:
+        raise Unspecified(
+            f"scene-packing rule {rule!r} is not in the roster", "H-78",
+            needs=f"one of {sorted(SCENE_PACKING_RULES)}",
+            law="H-78 -- nothing in the chain says WHICH interactions share a scene, so a rule "
+                "outside the roster is a fourth answer nobody declared")
+    per = fx.get("interactions_per_scene")
+    width = 1 if rule == "one_per_scene" else (len(ranked) if per is None else per)
+
+    def scene(n: int, chunk: list) -> "Scene":
+        return Scene(mint(p.id, "scene", str(n)), p.id,
+                     [Act(mint(p.id, c.verb, c.subject or ""), p.id, c.verb) for c in chunk],
+                     # `H-77`: a scene carrying more than one interaction is the EXTENDED one.
+                     # This is what `extended` MEANS, and until W17's adversarial pass nothing
+                     # ever set it -- so `Scene.cost` returned 1 unconditionally, H-77's sweep
+                     # could not move any verdict, and the row passed R2 while being
+                     # unexecutable. That is the laundering R2 exists to stop, in the row that
+                     # was added the same day the rule was written.
+                     extended=len(chunk) > 1)
+
+    # ⚠ THE BOUND IS THE COST, NOT THE SCENE COUNT, and getting that wrong made the DEFAULT
+    # chooser overspend by construction: once `extended` was actually set, five greedy scenes
+    # cost ten against a budget of five and every season using `make_chooser` refused itself.
+    # Found by running the corpus after `H-77` stopped being inert -- the row and the packer are
+    # the same mechanism seen from two sides, and fixing one without the other is what broke it.
+    ext = fx.get("extended_scene_cost")
+
+    def take(chunks) -> list:
+        out, left = [], n_scenes
+        for chunk in chunks:
+            if left <= 0:
+                break
+            # An extension the person cannot afford is taken as a PLAIN scene rather than
+            # skipped: they still pursue the opportunity, with less in it. Skipping would be the
+            # engine deciding what they leave undone, which is L1.
+            if len(chunk) > 1 and ext > left:
+                chunk = chunk[:1]
+            cost = ext if len(chunk) > 1 else 1
+            out.append(scene(len(out), chunk))
+            left -= cost
+        return out
+
+    if rule == "by_subject":
+        seen: dict = {}
+        for c in ranked:
+            seen.setdefault(c.subject or "", []).append(c)
+        chunks = [seen[subj][start:start + width]
+                  for subj in sorted(seen)
+                  for start in range(0, len(seen[subj]), width)]
+    else:
+        chunks = [ranked[i:i + width] for i in range(0, len(ranked), width)]
+    return take(chunks)
 
 
 def as_scenes(produced: list, actor: str, w: "World") -> list:
@@ -2467,12 +2541,31 @@ class SeasonDriver:
             if cap is not None:
                 for sc in scenes:
                     if len(sc.acts) > cap:
-                        raise Forbidden(
+                        # ⚠ `Ungraded`, NOT `Forbidden`. `Forbidden`'s own docstring is "a law
+                        # forbids what the case requires", and this bound is a SWEPT HARNESS
+                        # DEFAULT that Jordan explicitly did not rule. Filing it as `Forbidden`
+                        # put a fixture's refusal in the column `PROBES.md` reports as "raised BY
+                        # THE SHAPE ITSELF", i.e. charged a harness choice to the design. This
+                        # file already uses `Ungraded` for exactly that polarity on numbers.
+                        raise Ungraded(
                             f"scene {sc.id} carries {len(sc.acts)} interactions against a bound "
-                            f"of {cap}", "H-76",
+                            f"of {cap}", "S26.3",
                             needs="a scene carries 1-3 verb applications; the bound is swept, not constant",
                             law="`H-76`, `assumption`. `player_agency_v30.md` §6.3 -- 'A scene contains 1-3 mechanical interactions' -- which is CANONICAL but pre-#337, so under CLAUDE.md §0.05 it is REFERENCE and this is a swept default, not a rule of the design. Jordan ruled the UNIT and the NUMBER of scenes; he did not rule this")
-            produced = [a for sc in scenes for a in sc.acts]
+            # ⚠ THE TRACE IS PER-SCENE, AND THE UNITS MUST NOT BE MIXED. It read
+            # `TRACE.act(p.id, a.verb, b - i - 1)` where `b` is a SCENE budget and `i` enumerated
+            # the FLATTENED interactions, so a lawful season published `budget_left=-10` — the
+            # artifact stating that the engine had just accepted an overspend it did not. That is
+            # the same defect the `act_budget` -> `scene_budget` rename was made to prevent, one
+            # field along: a name is where the next reader learns what a number counts, and so is
+            # a unit. `scene_left` is scenes; `interaction` is the position inside the scene.
+            produced = []
+            left = b
+            for sc in scenes:
+                left -= sc.cost(w.fixtures.get("extended_scene_cost"))
+                for n, a in enumerate(sc.acts):
+                    TRACE.scene_act(p.id, a.verb, left, n + 1, len(sc.acts))
+                    produced.append(a)
             for i, a in enumerate(produced):
                 # L1 -- THE PERSON IS THE ONLY ACTOR. ⚠ REV 4: `Act.actor` is a bare id and
                 # nothing checked it, so `Act("x", "the_church", "excommunicate")` reached
@@ -2484,7 +2577,6 @@ class SeasonDriver:
                         f"an Act returned by {p.id}'s choose() carries actor '{a.actor}'",
                         "S3-L1", needs="a named person, and the person deciding is that person",
                         law="L1 -- NO INSTITUTION ACTS, NO FACTION ACTS, NO THRESHOLD ACTS. An institution acts BY A NAMED PERSON AT A VENUE. Without this check the id is a free string and the law is a convention")
-                TRACE.act(p.id, a.verb, b - i - 1)
                 acts.append(a)
         w._in_parallel_map = False
         TRACE.step("DELIBERATE", "leave")

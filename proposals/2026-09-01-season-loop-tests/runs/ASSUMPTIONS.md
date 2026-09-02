@@ -26,5 +26,6 @@ exercised by this run.**
 | `question_aggregation_rule` | `first` | no — a harness fixture |
 | `interactions_per_scene` | `3` | no — a harness fixture |
 | `extended_scene_cost` | `2` | no — a harness fixture |
+| `scene_packing_rule` | `greedy` | no — a harness fixture |
 | `budget_office_bonus` | `1` | no — a harness fixture |
 | `budget_leg_penalty` | `1` | no — a harness fixture |

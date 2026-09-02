@@ -2096,9 +2096,11 @@ def test_w17_the_budget_bounds_scenes_and_the_interaction_bound_is_separate():
     # ---- over budget ON SCENES ----
     with pytest.raises(S.Forbidden) as over:
         S.SeasonDriver(_w()).season(scenes(b + 1, 1), None, P.SUBSIST)
-    assert "scene" in str(over.value).lower(), (
-        f"the over-budget refusal does not mention scenes: {over.value}. It counted acts before "
-        "the ruling and the noun is the whole of the change.")
+    # THE PROPERTY, not the message (G3). `ShapeGap` stores `where`, so the two refusals are
+    # distinguishable by their LAW rather than by a word in their prose — and a body that still
+    # counted acts would print the word "scenes" just as happily.
+    assert over.value.where == "S26.3", over.value.where
+    assert "scene" in str(over.value).lower(), f"the message lost its unit: {over.value}"
 
     # ---- and the SAME NUMBER of interactions, packed into a lawful number of scenes, PASSES ----
     S.SeasonDriver(_w()).season(scenes(b, cap), None, P.SUBSIST)      # must not raise
@@ -2108,9 +2110,12 @@ def test_w17_the_budget_bounds_scenes_and_the_interaction_bound_is_separate():
         "not being shown")
 
     # ---- too many interactions IN ONE scene: a DIFFERENT refusal, with a different law ----
-    with pytest.raises(S.Forbidden) as many:
+    with pytest.raises(S.Ungraded) as many:
         S.SeasonDriver(_w()).season(scenes(1, cap + 1), None, P.SUBSIST)
-    assert "interactions" in str(many.value) and "H-76" in str(many.value), many.value
+    assert isinstance(many.value, S.Ungraded) and not isinstance(over.value, S.Ungraded), (
+        f"the two refusals are the same KIND ({type(over.value).__name__} / "
+        f"{type(many.value).__name__}); a swept harness bound is `Ungraded` and a law is not")
+    assert "interactions" in str(many.value), many.value
     assert str(over.value) != str(many.value), "the two refusals are indistinguishable"
 
 
@@ -2129,8 +2134,10 @@ def test_w17_the_interaction_bound_flips_across_its_sweep_and_the_flip_is_printe
         try:
             S.SeasonDriver(w).season(choose, None, P.SUBSIST)
             return "ACCEPTED"
-        except S.Forbidden as e:
+        except S.Ungraded as e:
             return "REFUSED" if "interactions" in str(e) else f"REFUSED-OTHER: {e}"
+        except S.ShapeGap as e:
+            return f"REFUSED-OTHER: {type(e).__name__}: {e}"
 
     got = {pt: run_at(None if pt == "unbounded" else pt) for pt in (1, 3, "unbounded")}
     print("\n  H-76 sweep — one scene carrying 4 interactions:")
@@ -2146,3 +2153,68 @@ def test_w17_the_interaction_bound_flips_across_its_sweep_and_the_flip_is_printe
         "is not a control and 'no movement' would prove nothing.")
     assert got[1] == "REFUSED", got
     assert flipped, "the sweep does not move the verdict — H-76 would be declared and inert"
+
+
+def test_w17_the_packing_rule_and_the_extended_cost_are_both_live():
+    """`H-78` and `H-77`, and both existed as declared-but-dead before the W17 adversarial pass.
+
+    ⚠ `H-77` WAS INERT AND PASSED `R2` ANYWAY. Nothing anywhere set `Scene.extended`, so
+    `Scene.cost()` returned 1 at every sweep point and the row's declared `1 · 2 · 3` could not
+    move any verdict — a row satisfying the injectable rule by being WRITTEN, which is exactly the
+    laundering `R2` exists to stop. A scene carrying more than one interaction is now the extended
+    one, which is what the word means.
+
+    ⚠ `H-78` WAS A COMMENT. `make_chooser` packed scenes greedily in score order with no row, and
+    that decides how many interactions a season produces at all — `greedy` gives a five-scene
+    person up to fifteen, `one_per_scene` gives five. No probe VERDICT observes that, which is why
+    the "zero probe flips" control could not see it; the counter that moves is the act count, and
+    this asserts it."""
+    w = _w()
+    fx = w.fixtures
+    p = next(iter(w.persons.values()))
+    pr = S.Proposition("pr_pk", "OUGHT", "rec_writ", "x", True, 0)
+    w.propositions[pr.id] = pr
+    w.add_tenure(S.Tenure("t_pk", p.id, pr.id, "commit", since=0))
+    # ⚠ A MULTI-REFERENT QUESTION, DELIBERATELY. With ONE referent every candidate shares a
+    # subject, so `by_subject` is a no-op and is indistinguishable from `greedy` — correctly, but
+    # then the sweep cannot tell the two arms apart and would report a real rule as inert. The
+    # produced Q4 question carries one referent, so this builds a wider one.
+    assert len(S.questions_for(w, p)[0].referents) == 1, "the fixture changed; re-check the setup"
+    q = S.Question("q_pack", "need", ("rec_writ", "S", "p_low"))
+    v = S.View(p.id, [], fx.get("view_k"), q)
+    mint = lambda a, b, c: f"{a}:{b}:{c}"
+
+    # ---- H-78: the rule changes how many interactions a season produces. ----
+    counts, shapes, grouping = {}, {}, {}
+    for rule in sorted(S.SCENE_PACKING_RULES):
+        f2 = fx.sweep("scene_packing_rule", rule)
+        scenes = S.make_chooser(f2, mint)(p, v, S.Sensation(0), lambda: 5)
+        counts[rule] = sum(len(sc.acts) for sc in scenes)
+        shapes[rule] = [len(sc.acts) for sc in scenes]
+        # ⚠ THE GROUPING, NOT THE SHAPE. `by_subject` and `greedy` produce the same SHAPE
+        # whenever every scene fills to the bound — only WHICH interactions share a scene
+        # differs, which is the whole of what H-78 decides. Comparing `[3,3,3]` to `[3,3,3]`
+        # would report two different rules as one arm.
+        grouping[rule] = tuple(tuple(a.verb for a in sc.acts) for sc in scenes)
+    print(f"\n  H-78 packing sweep (budget 5): shapes={shapes}")
+    print(f"    greedy      groups: {grouping['greedy']}")
+    print(f"    by_subject  groups: {grouping['by_subject']}")
+    assert counts["one_per_scene"] < counts["greedy"], (
+        f"packing does not change the interaction count: {counts} — H-78 would be declared and "
+        "inert, and the 'zero probe flips' control cannot observe it either")
+    assert len(set(grouping.values())) == 3, (
+        f"two of H-78's three rules group interactions identically, so one is not an arm: "
+        f"{ {r: g for r, g in grouping.items()} }")
+
+    # ---- H-77: `extended` is set, so the cost sweep can move the budget. ----
+    f_greedy = fx.sweep("scene_packing_rule", "greedy")
+    scenes = S.make_chooser(f_greedy, mint)(p, v, S.Sensation(0), lambda: 5)
+    multi = [sc for sc in scenes if len(sc.acts) > 1]
+    assert multi, f"no scene carries more than one interaction: {shapes} — `extended` can never " \
+                  "be True and H-77's sweep is inert whatever the row says"
+    assert all(sc.extended for sc in multi), "a multi-interaction scene is not marked extended"
+    spend = {c: sum(sc.cost(c) for sc in scenes) for c in (1, 2, 3)}
+    print(f"  H-77 cost sweep — total spend at extended_scene_cost 1/2/3: {spend}")
+    assert len(set(spend.values())) == 3, (
+        f"the extended-scene cost does not change what a season spends: {spend}. The row declares "
+        "a three-point sweep and would pass R2 while being unexecutable.")

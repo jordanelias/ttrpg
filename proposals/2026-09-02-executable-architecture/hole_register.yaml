@@ -874,6 +874,18 @@ rows:
     unblocks:  "the triage S26.3 says the budget exists to create"
     cite:      "⚠ NOT RULED. `PLAN.md` §3.4: \"whether an extended scene costs 2 | **`assumption`, default 2** | same source, same grading\" — the source being `player_agency_v30.md` §6.3, pre-#337 and therefore reference. ⚠ THE SWEEP IS WIDENED FROM PLAN'S `1 · 2` TO `1 · 2 · 3`, AND THE REASON IS STATED RATHER THAN LEFT TO BE FOUND: rule `R2` requires three points, PLAN specifies two, and two of anything cannot separate a control from a trend. `1` IS THE CONTROL — at it an extended scene costs the same as an ordinary one, so `extended` is inert and any verdict that does not move between `1` and `2` is a verdict this cost was never deciding. `3` is the harsher reading. A cost of `0` was considered and rejected: free extension makes the budget unbounded in interactions, which is degenerate rather than informative."
     source:    "W17 — Jordan's 2026-09-02 ruling creates it"
+  - id:        H-78
+    tier:      1
+    hole:      "WHICH interactions share one scene. `H-76` registers how many a scene admits; nothing registered how they are grouped"
+    kind:      "FORMULA"
+    owner:     "the scene container (W17)"
+    grade:     "assumption"
+    default:   "`greedy` — fill each scene to the bound in score order; the INCUMBENT, kept as the sweep's control and not argued for"
+    site:      "shape.make_chooser via shape.pack_scenes; rules from rosters.yaml scene_packing_rules"
+    sweep:     ["greedy", "one_per_scene", "by_subject"]
+    unblocks:  "what a scene IS, for every NPC season"
+    cite:      "FOUND BY THE `W17` ADVERSARIAL PASS, AND IT IS `H-53`'S DEFECT ONE LEVEL UP. `hole_register.yaml`'s own `H-53` row states the shape: 'H-09 supplies K = 12 and NOT WHICH K; the instrument takes the last k, which is an invention'. Here `H-76` supplies HOW MANY interactions a scene admits and nothing supplied WHICH, and `make_chooser` answered it in a comment - 'the default policy fills scenes greedily in score order' - with no row, no alternative and no sweep, which is `G1`. THE CONSEQUENCE WAS VISIBLE IN THE COMMITTED ARTIFACT: `TRACE.txt` put `create_record`, `forge` and `kill / wound` inside one 'scene opportunity pursued', a grouping nobody chose. `by_subject` is the reading `systems/_architecture/player_agency_v30.md` §6.3's own words suggest, since 'one scene opportunity pursued' is an opportunity to do something ABOUT something; `one_per_scene` is the pre-ruling accounting and the honest floor. ⚠ THE PACKING RULE ALSO CHANGES HOW MANY INTERACTIONS A SEASON PRODUCES — under `greedy` a person with 5 scenes returns up to 5 x 3 = 15 — and no probe verdict observes that, so `_trace_counts.ACT` is the counter that moves and it is now reported with the sweep."
+    source:    "W17 — found by the adversarial pass"
 
 # ---------------------------------------------------------------------------
 # THE DISCHARGE MAP -- guardrail G8.

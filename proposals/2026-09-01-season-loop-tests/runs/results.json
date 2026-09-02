@@ -133,15 +133,13 @@
    "name": "Uwe Askeland",
    "scale": "person",
    "source": "NPC1.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "NOT-ASSESSED",
    "rows": 8,
    "core": 4,
    "core_routed": 3,
    "core_unmapped": 1,
-   "core_blocked": 1,
-   "blockers": [
-    "P36"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "A person with no office must be able to run a recurring, location-bound activity whose ongoing existence -- not any single completed task -- is itself the thing at stake.",
@@ -164,13 +162,11 @@
      "probe": "P36",
      "verdict": {
       "id": "P36",
-      "verdict": "GAP",
-      "detail": "'create_record' writes ['Record.exists', 'Record.stages'] and Part E does not say WHAT VALUE",
-      "kind": "UNSPECIFIED",
-      "section": "E2/E3",
+      "verdict": "PASS",
+      "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 4 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['move', 'speak', 'transfer', 'work'] -- 4 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+      "kind": null,
+      "section": "S17",
       "title": "a choice branches three ways",
-      "needs": "an entry in EFFECTS, or a `writes:` column that carries the value",
-      "law": "\u00a7E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and \u00a727.1's scarcity stops happening. Register row H-63",
       "by": "construction",
       "tests": "a discovery must be able to be acted on in several distinct ways, each leading somewhere different"
      }
@@ -876,7 +872,7 @@
    "name": "Kolbrun Thale",
    "scale": "faction",
    "source": "NPC2.yaml",
-   "verdict": "DEGRADED",
+   "verdict": "PLAYABLE",
    "rows": 8,
    "core": 2,
    "core_routed": 2,
@@ -920,13 +916,11 @@
      "probe": "P36",
      "verdict": {
       "id": "P36",
-      "verdict": "GAP",
-      "detail": "'create_record' writes ['Record.exists', 'Record.stages'] and Part E does not say WHAT VALUE",
-      "kind": "UNSPECIFIED",
-      "section": "E2/E3",
+      "verdict": "PASS",
+      "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 4 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['move', 'speak', 'transfer', 'work'] -- 4 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+      "kind": null,
+      "section": "S17",
       "title": "a choice branches three ways",
-      "needs": "an entry in EFFECTS, or a `writes:` column that carries the value",
-      "law": "\u00a7E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and \u00a727.1's scarcity stops happening. Register row H-63",
       "by": "construction",
       "tests": "a discovery must be able to be acted on in several distinct ways, each leading somewhere different"
      }
@@ -2345,13 +2339,11 @@
      "probe": "P36",
      "verdict": {
       "id": "P36",
-      "verdict": "GAP",
-      "detail": "'create_record' writes ['Record.exists', 'Record.stages'] and Part E does not say WHAT VALUE",
-      "kind": "UNSPECIFIED",
-      "section": "E2/E3",
+      "verdict": "PASS",
+      "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 4 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['move', 'speak', 'transfer', 'work'] -- 4 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+      "kind": null,
+      "section": "S17",
       "title": "a choice branches three ways",
-      "needs": "an entry in EFFECTS, or a `writes:` column that carries the value",
-      "law": "\u00a7E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and \u00a727.1's scarcity stops happening. Register row H-63",
       "by": "construction",
       "tests": "a discovery must be able to be acted on in several distinct ways, each leading somewhere different"
      }
@@ -4244,15 +4236,13 @@
    "name": "What the Guilds Know",
    "scale": "faction",
    "source": "ARC1.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "NOT-ASSESSED",
    "rows": 7,
    "core": 2,
    "core_routed": 1,
    "core_unmapped": 1,
-   "core_blocked": 1,
-   "blockers": [
-    "P36"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "the faction holding valuable accumulated information must be able to face a genuine three-way choice -- sell to one rival, sell to a different rival, or expose it publicly -- where each option produces a distinct and different downstream political consequence",
@@ -4260,13 +4250,11 @@
      "probe": "P36",
      "verdict": {
       "id": "P36",
-      "verdict": "GAP",
-      "detail": "'create_record' writes ['Record.exists', 'Record.stages'] and Part E does not say WHAT VALUE",
-      "kind": "UNSPECIFIED",
-      "section": "E2/E3",
+      "verdict": "PASS",
+      "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 4 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['move', 'speak', 'transfer', 'work'] -- 4 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+      "kind": null,
+      "section": "S17",
       "title": "a choice branches three ways",
-      "needs": "an entry in EFFECTS, or a `writes:` column that carries the value",
-      "law": "\u00a7E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and \u00a727.1's scarcity stops happening. Register row H-63",
       "by": "construction",
       "tests": "a discovery must be able to be acted on in several distinct ways, each leading somewhere different"
      }
@@ -4970,13 +4958,11 @@
      "probe": "P36",
      "verdict": {
       "id": "P36",
-      "verdict": "GAP",
-      "detail": "'create_record' writes ['Record.exists', 'Record.stages'] and Part E does not say WHAT VALUE",
-      "kind": "UNSPECIFIED",
-      "section": "E2/E3",
+      "verdict": "PASS",
+      "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 4 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['move', 'speak', 'transfer', 'work'] -- 4 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+      "kind": null,
+      "section": "S17",
       "title": "a choice branches three ways",
-      "needs": "an entry in EFFECTS, or a `writes:` column that carries the value",
-      "law": "\u00a7E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and \u00a727.1's scarcity stops happening. Register row H-63",
       "by": "construction",
       "tests": "a discovery must be able to be acted on in several distinct ways, each leading somewhere different"
      }
@@ -6779,13 +6765,11 @@
      "probe": "P36",
      "verdict": {
       "id": "P36",
-      "verdict": "GAP",
-      "detail": "'create_record' writes ['Record.exists', 'Record.stages'] and Part E does not say WHAT VALUE",
-      "kind": "UNSPECIFIED",
-      "section": "E2/E3",
+      "verdict": "PASS",
+      "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 4 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['move', 'speak', 'transfer', 'work'] -- 4 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+      "kind": null,
+      "section": "S17",
       "title": "a choice branches three ways",
-      "needs": "an entry in EFFECTS, or a `writes:` column that carries the value",
-      "law": "\u00a7E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and \u00a727.1's scarcity stops happening. Register row H-63",
       "by": "construction",
       "tests": "a discovery must be able to be acted on in several distinct ways, each leading somewhere different"
      }
@@ -6911,15 +6895,13 @@
    "name": "The Inquisitor's Unravelling",
    "scale": "faction",
    "source": "ARC2.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "NOT-ASSESSED",
    "rows": 5,
    "core": 3,
    "core_routed": 2,
    "core_unmapped": 1,
-   "core_blocked": 1,
-   "blockers": [
-    "P36"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "a hidden personal capability in a loyal enforcer must remain completely dormant until an unrelated, ambient environmental quality, degraded by the cumulative effect of several other storylines, drops into a specific band specifically in the territories his job routinely sends him to",
@@ -6957,13 +6939,11 @@
      "probe": "P36",
      "verdict": {
       "id": "P36",
-      "verdict": "GAP",
-      "detail": "'create_record' writes ['Record.exists', 'Record.stages'] and Part E does not say WHAT VALUE",
-      "kind": "UNSPECIFIED",
-      "section": "E2/E3",
+      "verdict": "PASS",
+      "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 4 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['move', 'speak', 'transfer', 'work'] -- 4 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+      "kind": null,
+      "section": "S17",
       "title": "a choice branches three ways",
-      "needs": "an entry in EFFECTS, or a `writes:` column that carries the value",
-      "law": "\u00a7E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and \u00a727.1's scarcity stops happening. Register row H-63",
       "by": "construction",
       "tests": "a discovery must be able to be acted on in several distinct ways, each leading somewhere different"
      }
@@ -11113,13 +11093,11 @@
   },
   "P36": {
    "id": "P36",
-   "verdict": "GAP",
-   "detail": "'create_record' writes ['Record.exists', 'Record.stages'] and Part E does not say WHAT VALUE",
-   "kind": "UNSPECIFIED",
-   "section": "E2/E3",
+   "verdict": "PASS",
+   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 4 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['move', 'speak', 'transfer', 'work'] -- 4 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+   "kind": null,
+   "section": "S17",
    "title": "a choice branches three ways",
-   "needs": "an entry in EFFECTS, or a `writes:` column that carries the value",
-   "law": "\u00a7E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and \u00a727.1's scarcity stops happening. Register row H-63",
    "by": "construction",
    "tests": "a discovery must be able to be acted on in several distinct ways, each leading somewhere different"
   },
@@ -11870,10 +11848,10 @@
   "P2y": {
    "id": "P2y",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION: 15 interactions across 5 scenes, at 3 per scene, and the season accepted it. \u26a0 THIS EXACT RETURN WAS REFUSED BEFORE JORDAN'S 2026-09-02 RULING, with the message 'returned 8 acts against a budget of 5'. The budgeted unit is the SCENE; #353's verbs are what happens INSIDE one. `P2x` still refuses one scene too many, so the bound did not weaken -- it moved to the level the ruling put it at. The per-scene bound is `H-76` and is SWEPT, not a constant: this probe reads it rather than spelling 3",
+   "detail": "PASS BY CONSTRUCTION: 15 interactions across 5 scenes, at 3 per scene, and the season accepted it. \u26a0 A RETURN OF THIS SHAPE WAS REFUSED BEFORE JORDAN'S 2026-09-02 RULING, because the bound counted ACTS -- `PLAN.md` \u00a73.4 gives the worked example as 'returned 8 acts against a budget of 5'. The numbers here are this fixture's, not that example's. The budgeted unit is the SCENE; #353's verbs are what happens INSIDE one. `P2x` still refuses one scene too many, so the bound did not weaken -- it moved to the level the ruling put it at. The per-scene bound is `H-76` and is SWEPT, not a constant: this probe reads it rather than spelling 3",
    "kind": null,
    "section": "S26.3",
-   "title": "eight interactions across five scenes is over budget",
+   "title": "several interactions inside one budgeted scene are lawful",
    "by": "construction",
    "tests": "a character must be able to do several things inside one scene without spending a second scene action"
   },
@@ -12319,14 +12297,12 @@
   },
   "A32": {
    "id": "A32",
-   "verdict": "GAP",
-   "detail": "does a scene equal an act?",
-   "kind": "COLLISION",
+   "verdict": "PASS",
+   "detail": "PASS BY CONSTRUCTION: 5 scenes carrying 15 interactions, costing 5 at an extended cost of 2. \u26a0 REVISIONS 1-4 RAISED A `Collision` HERE -- 'THE BUDGET IS SETTLED AT ~5; THE IDENTITY IS NOT' -- and that was true when written. JORDAN RULED IT 2026-09-02: '5 scenes for a character to play per season'. The budgeted unit is the SCENE and #353's verbs are what happens INSIDE one, so the two readings the collision named are no longer both open. What the ruling did NOT settle is `H-76` (how many interactions a scene admits), `H-77` (what an extended one costs) and `H-78` (which interactions share one) -- three swept rows, because a ruling on the unit is not a ruling on its contents",
+   "kind": null,
    "section": "S62",
    "title": "the scene/act identity is settled",
-   "needs": "a ruling on the IDENTITY, not on the number",
-   "law": "S62 -- the ruling says '~5 playable scenes... WHICH MAY MEAN ~5 actions'. THE BUDGET IS SETTLED AT ~5; THE IDENTITY IS NOT. A5 scenes-as-5-acts and 5 scenes-containing-many-acts are different games, and A31 shows every count verdict moves with the integer chosen",
-   "by": "no-signature",
+   "by": "construction",
    "tests": "the number of playable moments a character gets must be able to be counted"
   },
   "A33": {
@@ -12422,15 +12398,6 @@
    "needs": "a closed roster of axes, and a write-matrix row admitting the increment",
    "law": "L3 clause 1 permits a monotone counter PER (Person, axis) -- 'legal, since every increment is in the holder's own ledger' -- but ONLY where `axis` is ON A CLOSED REGISTRY. No such registry exists in the chain, and no S30 row admits the write. S54 item 6 adds that the axis must not be spelled `exposure` bare, or it collides with the need scalar",
    "case": "probe:P17",
-   "expected": false
-  },
-  {
-   "kind": "UNSPECIFIED",
-   "what": "'create_record' writes ['Record.exists', 'Record.stages'] and Part E does not say WHAT VALUE",
-   "where": "E2/E3",
-   "needs": "an entry in EFFECTS, or a `writes:` column that carries the value",
-   "law": "\u00a7E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and \u00a727.1's scarcity stops happening. Register row H-63",
-   "case": "probe:P36",
    "expected": false
   },
   {
@@ -13002,15 +12969,6 @@
   },
   {
    "kind": "COLLISION",
-   "what": "does a scene equal an act?",
-   "where": "S62",
-   "needs": "a ruling on the IDENTITY, not on the number",
-   "law": "S62 -- the ruling says '~5 playable scenes... WHICH MAY MEAN ~5 actions'. THE BUDGET IS SETTLED AT ~5; THE IDENTITY IS NOT. A5 scenes-as-5-acts and 5 scenes-containing-many-acts are different games, and A31 shows every count verdict moves with the integer chosen",
-   "case": "probe:A32",
-   "expected": false
-  },
-  {
-   "kind": "COLLISION",
    "what": "emitter-side vs receiver-side refraction",
    "where": "S37.4",
    "needs": "pick one, write it down beside the code, and expect the choice to be revisited",
@@ -13038,15 +12996,15 @@
   }
  ],
  "_trace_counts": {
-  "STEP": 2090,
-  "BARRIER": 709,
-  "DECISION": 713,
-  "WRITE": 658,
-  "QUERY": 4297,
-  "ACT": 76,
-  "EVENT": 51,
-  "CLAIM": 256,
-  "GAP": 69,
+  "STEP": 2095,
+  "BARRIER": 710,
+  "DECISION": 716,
+  "WRITE": 682,
+  "QUERY": 4306,
+  "ACT": 69,
+  "EVENT": 55,
+  "CLAIM": 276,
+  "GAP": 67,
   "NOTE": 96
  },
  "_corpus_defects": [

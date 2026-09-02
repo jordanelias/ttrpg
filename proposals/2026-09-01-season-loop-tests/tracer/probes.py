@@ -219,7 +219,7 @@ def p2x():
     return "UNREACHABLE"
 
 
-@probe("P2y", "eight interactions across five scenes is over budget", "S26.3",
+@probe("P2y", "several interactions inside one budgeted scene are lawful", "S26.3",
        by="construction",
        tests="a character must be able to do several things inside one scene without spending a second scene action")
 def p2y():
@@ -239,9 +239,11 @@ def p2y():
     n = len([a for a in d.resolved if a.actor == "p_king"])
     assert n == counted["b"] * cap, (n, counted, cap)
     return (f"PASS BY CONSTRUCTION: {n} interactions across {counted['b']} scenes, at "
-            f"{cap} per scene, and the season accepted it. ⚠ THIS EXACT RETURN WAS REFUSED "
-            "BEFORE JORDAN'S 2026-09-02 RULING, with the message 'returned 8 acts against a "
-            "budget of 5'. The budgeted unit is the SCENE; #353's verbs are what happens INSIDE "
+            f"{cap} per scene, and the season accepted it. ⚠ A RETURN OF THIS SHAPE WAS REFUSED "
+            "BEFORE JORDAN'S 2026-09-02 RULING, because the bound counted ACTS -- `PLAN.md` "
+            "§3.4 gives the worked example as 'returned 8 acts against a budget of 5'. The "
+            "numbers here are this fixture's, not that example's. The budgeted unit is the "
+            "SCENE; #353's verbs are what happens INSIDE "
             "one. `P2x` still refuses one scene too many, so the bound did not weaken -- it moved "
             "to the level the ruling put it at. The per-scene bound is `H-76` and is SWEPT, not "
             "a constant: this probe reads it rather than spelling 3")
@@ -1833,9 +1835,13 @@ def a31():
     return (f"PASS WITH A FINDING, AND THE FINDING MATTERS MORE THAN THE VERDICT: 3-point sweep "
             f"{results}. The count tracks the fixture EXACTLY, so any verdict phrased as 'a "
             "character can do N things in a season' FLIPS ACROSS THE SWEEP. S42.2.1 says a verdict "
-            "that flips across the sweep IS ITSELF A FINDING. `~5` is a RULED BAND and no in-chain "
-            "source turns the band into the integer the engine runs on -- that is S62's open "
-            "scene/act question wearing different clothes")
+            "that flips across the sweep IS ITSELF A FINDING. `~5` is a RULED BAND and no "
+            "in-chain source turns the band into the integer the engine runs on. ⚠ THE SECOND "
+            "HALF OF THIS SENTENCE WAS STRUCK BY `W17`: it read 'that is S62's open scene/act "
+            "question wearing different clothes', and S62's question is RULED -- Jordan, "
+            "2026-09-02, the unit is the scene and the number is 5. The band-to-integer gap "
+            "survives the ruling; the identity question does not, and A32 is where that is "
+            "shown")
 
 
 @probe("A31b", "the world verdict is stable across the wear sweep", "S42.2.1", by="construction",
@@ -1863,14 +1869,28 @@ def a31b():
             "exact prior sin -- so an unregistered kind raises here rather than answering 20")
 
 
-@probe("A32", "the scene/act identity is settled", "S62", by="no-signature",
+@probe("A32", "the scene/act identity is settled", "S62", by="construction",
        tests="the number of playable moments a character gets must be able to be counted")
 def a32():
-    raise Collision(
-        "does a scene equal an act?", "S62",
-        needs="a ruling on the IDENTITY, not on the number",
-        law="S62 -- the ruling says '~5 playable scenes... WHICH MAY MEAN ~5 actions'. THE BUDGET IS SETTLED AT ~5; THE IDENTITY IS NOT. A5 scenes-as-5-acts and 5 scenes-containing-many-acts are different games, and A31 shows every count verdict moves with the integer chosen",
-    )
+    w = tiny_world()
+    fx, b = w.fixtures, w.fixtures.get("scene_budget")
+    cap = fx.get("interactions_per_scene")
+    # THE IDENTITY IS RULED, AND THE TEST OF THAT IS THAT THE TWO READINGS NOW DIFFER OBSERVABLY.
+    # If a scene WERE an act, `b` scenes could carry only `b` interactions; they carry `b x cap`.
+    p = w.persons["p_king"]
+    scenes = [Scene(f"a32s{i}", p.id, [Act_(w, p, "speak", key=f"{i}.{j}") for j in range(cap)])
+              for i in range(b)]
+    spent = sum(sc.cost(fx.get("extended_scene_cost")) for sc in scenes)
+    assert len(scenes) == b and sum(len(sc.acts) for sc in scenes) == b * cap
+    return (f"PASS BY CONSTRUCTION: {b} scenes carrying {b * cap} interactions, costing {spent} "
+            f"at an extended cost of {fx.get('extended_scene_cost')}. ⚠ REVISIONS 1-4 RAISED A "
+            "`Collision` HERE -- 'THE BUDGET IS SETTLED AT ~5; THE IDENTITY IS NOT' -- and that "
+            "was true when written. JORDAN RULED IT 2026-09-02: '5 scenes for a character to play "
+            "per season'. The budgeted unit is the SCENE and #353's verbs are what happens INSIDE "
+            "one, so the two readings the collision named are no longer both open. What the "
+            "ruling did NOT settle is `H-76` (how many interactions a scene admits), `H-77` (what "
+            "an extended one costs) and `H-78` (which interactions share one) -- three swept "
+            "rows, because a ruling on the unit is not a ruling on its contents")
 
 
 @probe("A33", "refraction has a side", "S37.4", by="no-signature",

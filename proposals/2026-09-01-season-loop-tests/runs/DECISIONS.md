@@ -3,14 +3,14 @@
 Every branch the shape took that could have gone another way, with the alternatives
 it did not take. A decision nobody records is a decision nobody can audit.
 
-**713 decisions taken, 23 distinct.**
+**716 decisions taken, 25 distinct.**
 
 ### MATTER's cross-owner operations  ·  `S31.1`  ·  taken 182x
 - **chose:** serial: the actorless event channel; then parallel over Sites  (182x)
 - *not taken:* shard the event channel per rung (breaks causes[]: one cause is one id)
 
-### individuation  ·  `S29`  ·  taken 164x
-- **chose:** demand-driven only; generated nobody  (164x)
+### individuation  ·  `S29`  ·  taken 165x
+- **chose:** demand-driven only; generated nobody  (165x)
 - *not taken:* a clock that generates (forbidden)
 - *not taken:* a world-gen roster (S54 item 18 -- not a clock, not folded in)
 
@@ -83,11 +83,21 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
 - *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'] are named and NONE has a predicate
 
-### ordering 11 acts  ·  `S27/S32`  ·  taken 1x
+### ordering 4 acts  ·  `S27/S32`  ·  taken 1x
 - **chose:** five strata, then a content-derived hash key over one global array  (1x)
 - *not taken:* completion order
 - *not taken:* per-container sort (voids the fold)
 - *not taken:* rank
+
+### transfer by p_mid: precondition unmet  ·  `E2/S27.1`  ·  taken 1x
+- **chose:** emit the refusal -- scarcity falls out of the fold  (1x)
+- *not taken:* raise (no Event, no witness, no arc)
+
+### fan-out over 4 events  ·  `S28/S61`  ·  taken 1x
+- **chose:** EVERY event to EVERY person (5) -- the specified behaviour  (1x)
+- *not taken:* restrict by presence (the index is built and UNUSED -- no channel predicate exists to exclude anyone; S61 names this as the debt)
+- *not taken:* shard per rung (retired: made the parallelism claim unsound)
+- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'] are named and NONE has a predicate
 
 ### date d_conf came due  ·  `S24`  ·  taken 1x
 - **chose:** fire-as-sitting  (1x)

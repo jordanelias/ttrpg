@@ -11,16 +11,16 @@ checking.* So every probe declares its provenance:
 
 | `by=` | means | count |
 |---|---|---|
-| `construction` | **the shape itself raised** — a gate, a law or a type stopped it. This is evidence | 77 |
-| `no-signature` | nothing to call. The design supplies no function by which it could be attempted — which *is* the refusal, but **absence is not a guard** | 26 |
+| `construction` | **the shape itself raised** — a gate, a law or a type stopped it. This is evidence | 78 |
+| `no-signature` | nothing to call. The design supplies no function by which it could be attempted — which *is* the refusal, but **absence is not a guard** | 25 |
 | `convention` | the shape permits it and only a reader stops it. §27.2 is the design's own example and says so out loud | 1 |
 | `probe-model` | the probe supplies a model the design does not, to reach the question at all | 18 |
 
 ## ⚠ THE ENFORCEMENT SPLIT — the single most important number in this ledger
 
-**Of 62 PROBES that did not pass, 31 were raised BY THE SHAPE ITSELF and 25 exist only because THERE IS NO SIGNATURE TO CALL.**
+**Of 60 PROBES that did not pass, 30 were raised BY THE SHAPE ITSELF and 24 exist only because THERE IS NO SIGNATURE TO CALL.**
 
-> ⚠ **THIS COUNTS PROBES, NOT GAP EVENTS, and the two numbers differ.** `results.json`'s `_trace_counts.GAP` is 69 — every gap RAISED during the run, including several inside one probe and several the corpus cases hit. This line counts probes whose VERDICT is not PASS: 62 of 122. Both are honest counts of different populations, and `G10` forbids reporting either without its basis — which this file did until the `W5` adversarial pass read both.
+> ⚠ **THIS COUNTS PROBES, NOT GAP EVENTS, and the two numbers differ.** `results.json`'s `_trace_counts.GAP` is 67 — every gap RAISED during the run, including several inside one probe and several the corpus cases hit. This line counts probes whose VERDICT is not PASS: 60 of 122. Both are honest counts of different populations, and `G10` forbids reporting either without its basis — which this file did until the `W5` adversarial pass read both.
 
 That is close to an even split, and it matters more than any case verdict. A refusal a
 gate enforces and a refusal that exists because nobody wrote the function are different
@@ -32,7 +32,7 @@ has no module system and no visibility modifiers, so the guarantee there is
 a contributor closes by simply writing the function — no gate fires, no test goes red,
 and the design's own §27.2 admission applies: *enforced by a person noticing*.
 
-**And 14 of 60 PASSes are not by construction
+**And 14 of 62 PASSes are not by construction
 either** — they are listed individually below and should be discounted accordingly. A
 `probe-model` PASS means the instrument supplied something the design does not.
 
@@ -58,7 +58,6 @@ either** — they are listed individually below and should be discounted accordi
 | `A3` | **FORBIDDEN** | construction | S3-L4 | the story must be able to conclude when a tracked quantity reaches a value |
 | `A30` | **UNGRADED** | construction | S42.2.1 | a piece of the design with no evidence behind it must be able to be used anyway |
 | `A31` | **UNSPECIFIED** | construction | S27/E2 | a conclusion drawn from the engine must not depend on a number nobody decided |
-| `A32` | **COLLISION** | no-signature | S62 | the number of playable moments a character gets must be able to be counted |
 | `A33` | **COLLISION** | no-signature | S37.4 | an instruction must be able to be distorted somewhere between issuer and executor |
 | `A34` | **FORBIDDEN** | no-signature | S34 | a relationship or a standing must be able to decay from nobody tending it |
 | `A36` | **UNSPECIFIED** | construction | S27/E2 | what a character does first must be able to close off what they could have done after |
@@ -89,7 +88,6 @@ either** — they are listed individually below and should be discounted accordi
 | `P30` | **UNSPECIFIED** | construction | S27/E2 | what a character learned must still be true for them next season |
 | `P33` | **UNSPECIFIED** | no-signature | S26.3 | performing a larger or riskier version of an action must be able to cost the actor more |
 | `P35` | **UNSPECIFIED** | no-signature | S18.2 | a character must be able to have a standing among people who can never publicly acknowledge them, separate from their public stand |
-| `P36` | **UNSPECIFIED** | construction | E2/E3 | a discovery must be able to be acted on in several distinct ways, each leading somewhere different |
 | `P37` | **UNSPECIFIED** | probe-model | S27/E2 | a character's reaction must be able to be fully determined by their internal state rather than by a choice |
 | `P38` | **NO-PRODUCER** | no-signature | S1 | an optimal window, a judgement call or an adjudication must be able to be made by a referee |
 | `P41` | **UNSPECIFIED** | no-signature | S2 T7 | a character must be able to cite an established precedent or prior ruling to make a present argument stronger |
@@ -111,6 +109,7 @@ either** — they are listed individually below and should be discounted accordi
 | `A26` | PASS | construction | S38.1 | the engine must be able to walk its own references without looping forever |
 | `A31b` | PASS | construction | S42.2.1 | a conclusion about how fast the world decays must not depend on a number nobody decided |
 | `A31c` | PASS | construction | S42.2.1 | a conclusion about which actions a place supports must not depend on a number nobody decided |
+| `A32` | PASS | construction | S62 | the number of playable moments a character gets must be able to be counted |
 | `A35` | PASS | probe-model | S52 | the port must be able to target a decided engine version |
 | `A37` | PASS | construction | S27 | movement, binding decisions and social acts must be able to resolve in a fixed order relative to each other |
 | `A38` | PASS | construction | S27.4 | an attempt far beyond a character's ability must be refused rather than rolled |
@@ -147,6 +146,7 @@ either** — they are listed individually below and should be discounted accordi
 | `P31` | PASS | construction | S9 | a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by the |
 | `P32` | PASS | construction | S12 | a character's own condition must be able to degrade across a season so that their available actions narrow predictably |
 | `P34` | PASS | construction | S20 | an office-holder must be able to be the only living person who knows a thing, so that removing them destroys it |
+| `P36` | PASS | construction | S17 | a discovery must be able to be acted on in several distinct ways, each leading somewhere different |
 | `P39` | PASS | probe-model | S15 | two characters must be able to have an ongoing relationship that carries state and changes over seasons |
 | `P4` | PASS | construction | S3-L2 | a character must be able to believe something false and act on it as if true |
 | `P40` | PASS | probe-model | S15 | a character must be able to hold obligations to two bodies that come into direct conflict |
@@ -271,12 +271,6 @@ either** — they are listed individually below and should be discounted accordi
 
 **needs:** NOTHING FROM THE DESIGN -- #353 does not name 'v0' as a verb. This is the CALLER'S invention and the gap is the caller's
 **law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
-
-### `A32` — the scene/act identity is settled  ·  **COLLISION**  ·  `S62`  ·  by `no-signature`
-**what:** does a scene equal an act?
-
-**needs:** a ruling on the IDENTITY, not on the number
-**law:** S62 -- the ruling says '~5 playable scenes... WHICH MAY MEAN ~5 actions'. THE BUDGET IS SETTLED AT ~5; THE IDENTITY IS NOT. A5 scenes-as-5-acts and 5 scenes-containing-many-acts are different games, and A31 shows every count verdict moves with the integer chosen
 
 ### `A33` — refraction has a side  ·  **COLLISION**  ·  `S37.4`  ·  by `no-signature`
 **what:** emitter-side vs receiver-side refraction
@@ -457,12 +451,6 @@ either** — they are listed individually below and should be discounted accordi
 
 **needs:** a second standing scalar, or an owner for an audience-scoped one
 **law:** S18.2 -- Sensation is EXACTLY TWO FLOATS and S46.1 makes widening it structural in Godot ('nobody can add a third field to Vector2'). A second, audience-scoped standing has NO CARRIER and S22 gives NO OWNER for one -- and the first standing does not compute either (see P14)
-
-### `P36` — a choice branches three ways  ·  **UNSPECIFIED**  ·  `E2/E3`  ·  by `construction`
-**what:** 'create_record' writes ['Record.exists', 'Record.stages'] and Part E does not say WHAT VALUE
-
-**needs:** an entry in EFFECTS, or a `writes:` column that carries the value
-**law:** §E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and §27.1's scarcity stops happening. Register row H-63
 
 ### `P37` — a person's response is a lookup on their own state, not a deliberation  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `probe-model`
 **what:** verb 'purge' is on no row of the verb table
