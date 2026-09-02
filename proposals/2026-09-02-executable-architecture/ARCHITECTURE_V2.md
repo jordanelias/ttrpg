@@ -156,6 +156,39 @@ revision 1, once in revision 2. Every other correction left the loop running.
 > **The set of things an instrument is FORCED to invent is the specification's execution gap,
 > located precisely.** It cannot be found by reading. It was found by trying to run.
 
+## §A2b · The two pathways are not one question — `01_NPC_VS_ARC.md`
+
+**Measured, and it decides how this document's own claims should be read:**
+
+> **0% of the NPC set's core blocks are design refusals. 33% of the arc set's are.**
+
+The NPC pathway is blocked **entirely by holes** — all 25 core blocks are things this document now
+carries a row for. The arc pathway is **a third refusals**: 22 core blocks are things the
+specification declines on purpose, from arcs authored against a stat-track model with faction
+meters, world tracks and a GM.
+
+**The scale mix is the cause.** NPC cases are person-scale (21) and faction-scale (18); arc cases are
+**realm-scale (43)**, and every refusal the design makes bites at aggregate scale.
+
+> **CONSEQUENCE FOR THIS DOCUMENT: Parts D–G and the register are aimed at the NPC pathway and
+> should largely clear it. THE ARC PATHWAY NEEDS A SECOND, DIFFERENT PIECE OF WORK THAT NO
+> SPECIFICATION CHANGE DELIVERS** — an authoring pass re-expressing ~22 arcs against §36.3's
+> petition chain and §37's dispensation-as-`tell`, where the *"a counter compels a named person"*
+> shape already lives. **The two must not be averaged again**: a single headline over 143 cases
+> hides that one set is blocked by SILENCE and the other by PRINCIPLE.
+
+## §A2c · Two defects in the evidence base itself, which any re-run will hit
+
+**Recorded because they are not this document's to fix and a second instrument will meet them:**
+
+1. **Six of the seven in-chain case files are committed inside a markdown fence** with an
+   agent-transcript preamble, and do not load with `yaml.safe_load`.
+2. **`ARC3.yaml` is truncated at its head** — its first record's `- id:` was lost, orphaning a third
+   emergent case. Recovery is partial and reports how many lines are unrecoverable.
+
+**The committed corpus is the chain's evidence and an instrument must not edit evidence.** Strip at
+load time, and say so in the output.
+
 ## §A3 · The three terms the diagnosis missed
 
 **Term 1 — THE SIGN RUNS BOTH WAYS, and this was the costliest single error of the session.**

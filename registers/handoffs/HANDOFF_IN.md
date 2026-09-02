@@ -3886,3 +3886,45 @@ ever testing whether they support what they are cited for.
 **Verification at close.** Green on the head: full `pytest tests/valoria`, `valoria_local --staged`,
 `compliance_check` (0 errors), `currency_consistency_check`, `validate_ed_citations` (0 violations).
 CI all-green on #338; counts are on the run, not copied here.
+
+
+---
+
+## 2026-09-02 · The season loop was TESTED BY EXECUTION, and a successor architecture exists
+
+**Landed in #354 (merged). Everything is PROPOSED and HELD BACK IN FULL — nothing ratified on merge**,
+and both directories say so in their `## Status:` lines. Recorded here because `CURRENT.md` maps what
+is LIVE and none of this is; a session orienting from §1 would otherwise never find it.
+
+### What exists now
+
+| where | what |
+|---|---|
+| `proposals/2026-09-02-executable-architecture/ARCHITECTURE_V2.md` | **the successor to #353.** Parts I–VI of #353 inherited whole; what changes is the write matrix keyed on `(kind, field)`, a **verb table** giving the resolver a body, `q`/`choose`/`budget`/`standing`, the delegation doctrine, and a **register of 39 holes** replacing §61–§62's prose |
+| `…/01_NPC_VS_ARC.md` | the two pathways fail for categorically different reasons — **0% vs 33% refusals** |
+| `proposals/2026-09-01-season-loop-tests/` | the instrument, 46 NPC + 97 arc cases, run output, 63 honesty tests, the 56-finding ledger, and `evidence/` |
+
+### The three things worth carrying into the next session
+
+1. **The set of things an instrument is FORCED to invent is the specification's execution gap,
+   located precisely.** It cannot be found by reading. 16 forced · 24 avoidable · 29 not inventions.
+2. **Measuring AGAINST the design is as damaging as flattering it and much harder to see.** The worst
+   single error survived all four adversarial passes: a faction treasury refused under L3, when §10
+   gives every Rung `matter.stores`. It cost ten arcs and it looked like rigour.
+3. **The arc corpus nearly doubled** — the in-chain run covered 51 of ~97. Across the corpora it
+   never touched, **three of four cross-scenario feedback loops name no off-switch**, corroborating
+   §40.1's termination debt from the corpus side.
+
+### Next actions
+
+- **`H-20` is the highest-value row in the register** — L3 clause 1's closed axis registry plus the
+  `(Person, axis_count)` write row. ~28 cases, and it is a HOLE, not a refusal: the head *permits*
+  the counter. Cheapest large gain available.
+- **Artifact 2 is the bar: ONE NPC season running end to end.** The tested version ran zero.
+- **~22 arcs need an AUTHORING pass**, not a specification change — re-expressed against §36.3's
+  petition chain and §37's dispensation-as-`tell`.
+- **Three questions are Jordan's** and are deliberately undecided: does a scene equal an act
+  (`H-35`); is refraction emitter- or receiver-side (`H-36`); does a person carry a banded scalar
+  (`H-38`). Each is two defensible options leading to materially different games.
+
+**No ED allocated.** A gap in a PROPOSED architecture gets no id; the adoption decision gets one.

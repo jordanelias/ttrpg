@@ -2,6 +2,23 @@
 
 ## Status: **PROPOSED (2026-09-01). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.** Nothing here runs.
 
+> ### ⚠ **A SUCCESSOR EXISTS: `proposals/2026-09-02-executable-architecture/ARCHITECTURE_V2.md`**
+> **This document was TESTED BY EXECUTION and the result was that no case ran end to end.** An
+> instrument implementing it was built, run against **46 NPCs and 97 arcs**, and attacked by four
+> independent read-only passes producing 56 findings.
+>
+> **Parts I–VI here are RIGHT and the successor inherits them whole**, including every Part VIII
+> refusal — 41 of 62 probe PASSes were raised by a gate, a type or a law in this shape itself.
+> **What the successor changes is what this document declines to say**: L4's `social:` column is
+> keyed on *things* rather than `(kind, field)` and cannot be applied; the ~25 verbs named across
+> nine sections have no declared writes, so a resolver has no body; and §61–§62's prose lists become
+> a register of **39 holes with owners, grades and defaults**.
+>
+> **Read this document first — it is still where the architecture is argued.** Read the successor
+> for what an implementation needs that this does not supply. The evidence for both is at
+> `proposals/2026-09-01-season-loop-tests/`.
+
+
 | file | what it is |
 |---|---|
 | **`ARCHITECTURE.md`** | **the proposal.** Ten parts, from the one sentence down to GDScript hazards. Read Parts I–II before writing a line |
