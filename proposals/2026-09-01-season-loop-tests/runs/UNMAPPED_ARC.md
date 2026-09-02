@@ -5,7 +5,7 @@ did not aim.** Every row is reproduced verbatim so a reader can judge whether th
 miss is a routing failure (fixable) or a genuine absence of any surface to probe
 (a finding about the shape).
 
-**165 `core` rows and 226 non-core rows did not route.**
+**167 `core` rows and 226 non-core rows did not route.**
 
 ## The vocabulary of the unrouted `core` rows
 
@@ -15,49 +15,49 @@ no execution for.
 
 | term | count |
 |---|---|
-| action | 43 |
-| specific | 35 |
+| action | 44 |
+| specific | 36 |
 | different | 30 |
 | single | 21 |
 | character | 20 |
 | outcome | 19 |
+| actor | 19 |
+| separate | 19 |
 | fixed | 19 |
-| actor | 18 |
-| separate | 18 |
+| value | 19 |
 | independently | 18 |
 | quantity | 18 |
+| actors | 18 |
 | independent | 17 |
 | where | 17 |
-| value | 17 |
 | resource | 16 |
 | distinct | 15 |
 | state | 15 |
 | unrelated | 15 |
-| actors | 15 |
+| shared | 15 |
 | institutions | 14 |
 | hidden | 14 |
 | threshold | 14 |
 | trigger | 14 |
-| shared | 14 |
 | formal | 13 |
 | institution | 13 |
 | capability | 13 |
 | against | 12 |
 | simultaneously | 12 |
 | least | 12 |
+| choose | 11 |
 | political | 11 |
 | failure | 11 |
 | faction | 11 |
 | actions | 11 |
 | personal | 11 |
+| effect | 11 |
 | crossing | 11 |
 | party | 10 |
-| choose | 10 |
 | produce | 10 |
 | multiple | 10 |
 | three | 10 |
 | several | 10 |
-| effect | 10 |
 | automatic | 10 |
 | scale | 10 |
 
@@ -165,6 +165,7 @@ no execution for.
 - **[ARC-55]** crossing below the gating floor must be able to remove the faction's access to the action in that territory immediately and completely, not as a probability penalty, until the value is restored
 - **[EMG-C1]** an actor's readiness to act must be able to accumulate from several unrelated, independently-tracked conditions, where each condition alone is insufficient but their sum crosses a firing point
 - **[EMG-C2]** repeated interaction between a player and a single non-player actor must be able to advance that actor's private understanding through discrete, ordered stages, where higher stages unlock qualitatively new offers or demands from that actor
+- **[EMG-C2]** an actor's private understanding advancing must be able to automatically and invisibly raise a separate, campaign-wide institutional threat value, as a byproduct the player did not choose and may not notice
 - **[EMG-C2]** a hostile institution's investigation of a suspected violation must be escalatable to a formal decision point where a third governing body must choose a side, with different consequences depending on which side it takes
 - **[EMG-C3]** a hidden actor's routine operation must be able to degrade a shared, global resource value each time it is used, as an automatic side effect the actor itself has no visibility into or control over
 - **[EMG-C3]** the degrading shared resource must be able to fall through multiple bands, each unlocking distinct, worsening consequences determined organically from current state rather than from a fixed script
@@ -193,6 +194,7 @@ no execution for.
 - **[NSC-07]** a culminating ritual attempt at the degraded structure must require simultaneously satisfying a compound set of prerequisites — a specific prior-acquired item, a minimum collective preparedness value, a sufficiently capable lead individual, plus multiple sufficiently capable supporting individuals — before it can even be attempted
 - **[NSC-07]** the culminating ritual's outcome must resolve to one of at least four graded results, with the worst outcome capable of crossing an unrelated global crisis threshold immediately and spawning the largest single hostile entity available
 - **[NSC-08]** a specific institutional actor must maintain a private, not-directly-visible readiness counter that increments from three independently-defined failure conditions, any one of which can fire in a given period
+- **[NSC-09]** each stage of the actor's advancing understanding must automatically raise a shared institutional-threat value by an amount specific to that stage, as an inherent side effect of the actor's understanding growing, not of any deliberate hostile action by the actor
 - **[NSC-09]** the actor's advancing understanding must culminate in a stage where the actor's own stated core goal changes in kind, from wanting to understand a domain to wanting to control it, and this goal-change must be described as a forced revision to the actor's previously-stated guiding belief, not a free choice by the actor
 - **[SCN-01]** A character must be able to hold two mutually exclusive action tracks in the same combat round (an ordinary action vs. a specialized channeled action), where committing to one makes the character ineligible for the other, and eligibility for the special track is decided by what the OPPONENT chooses to do that same round, not just the actor's own choice.
 - **[SCN-01]** A single triggering roll for the special action must route to four qualitatively different outcome branches, each altering different downstream resources (a difficulty modifier on a future action, a resource pool, a stress/condition track) rather than a binary pass/fail.

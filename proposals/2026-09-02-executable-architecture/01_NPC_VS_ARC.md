@@ -40,6 +40,30 @@ something on purpose (L1, L3, L5, §25.1, §29) rather than failing to say somet
 |---|---|---|
 | core blocks | 25 | 66 |
 | **of which design REFUSALS** | **0 (0%)** | **22 (33%)** |
+
+> ### ⚠ CORRECTED 2026-09-02 — **`0%` IS WRONG, AND THE `core blocks` ROW DOES NOT REPRODUCE.**
+> An independent adjudication of this document (see `PLAN.md` §1 and §3.5) established two things.
+>
+> **(a) `P33` — *"an act costs more when it is bigger"* — is a RULING, not a hole.** #353 `:927-930`:
+> *"**No cost clause is required. A petition consumes budget like any act, and that is the whole of
+> the pricing.**"* `F19` — *"a place produces a demand with nobody petitioning"* — is likewise
+> substantively an L1/T5 refusal, filed here under §36.1. Reclassifying them:
+>
+> | | published | `P33` a refusal | `P33` + `F19` |
+> |---|---|---|---|
+> | NPC blocked cases touching a refusal | **0** | **2** | **3** |
+> | NPC blocked **only** by refusals | **0** | **1** (NPC-089) | **2** (NPC-083, NPC-089) |
+> | ARC touching a refusal | 22 | **25** | **25** |
+> | ARC blocked **only** by refusals | — | **17** | **17** |
+>
+> **(b) Three different totals are in circulation for one quantity.** Summing `core_blocked` over
+> `results.json` gives **26 · 71**; the row above says 25 · 66; the probe table's own rows sum to
+> 22 · 63. None shipped with a command. See `PLAN.md` guardrail **G11**.
+>
+> **The qualitative conclusion survives and is sharper — 21 of 23 blocked NPC cases contain no
+> refusal at all — but a claim of exactly zero should have had a control, and §0.1 point 4 says so
+> in both directions.** Two further omissions: `P6` and `P20` block NPC cases (NPC-021, NPC-035) and
+> appear in neither column.
 | verdicts | 23 BLOCKED · 20 NOT-ASSESSED · 2 PLAYABLE · 1 DEGRADED | 53 BLOCKED · 40 NOT-ASSESSED · 3 DEGRADED · 1 PLAYABLE |
 | scale mix | person 21 · faction 18 · realm 5 · settlement 1 · world 1 | **realm 43** · faction 29 · person 16 · world 9 |
 
@@ -47,9 +71,14 @@ something on purpose (L1, L3, L5, §25.1, §29) rather than failing to say somet
 
 ## §2 · What each result means
 
-### §2.1 The NPC pathway is blocked ENTIRELY by holes
+### §2.1 The NPC pathway is blocked almost entirely by holes
 
-**Not one of the 25 core blocks is a refusal.** Every one is something `ARCHITECTURE_V2.md`'s
+⚠ **This section's heading read *"ENTIRELY"* and its first sentence read *"Not one of the 25 core
+blocks is a refusal"*. Both are corrected above: with `P33` and `F19` reclassified, 2–3 of 26 are
+refusals. The measured statement that survives is the one that matters — 21 of 23 blocked NPC cases
+contain no refusal at all.**
+
+**Almost none of the core blocks is a refusal.** Every one is something `ARCHITECTURE_V2.md`'s
 register now carries a row for:
 
 | blocker | the hole | register |
@@ -134,7 +163,7 @@ to ACT. At 97 arcs the residue is 22.
   both auditors ruled bankable.
 - **The REFUSED classification is the orchestrator's**, applied to probe ids by which law each
   cites. It is checkable: each probe names its section.
-- **50 of 143 cases are NOT-ASSESSED** and contribute no blockers, so both columns understate.
+- **60 of 143 cases are NOT-ASSESSED** and contribute no blockers, so both columns understate.
   There is no reason to expect the understatement to be uneven between them, but it is not measured.
 - **The 33%/0% split is robust to the router's known defects** in one direction: every routing fix
   this session made moved cases *out* of refusal blockers and into holes. **If the router still

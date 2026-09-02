@@ -28,7 +28,7 @@ the 97-arc corpus are subjects in exactly that sense.
 ## §0.2 · What this document INHERITS UNCHANGED, and why that matters
 
 > **Parts I–VI of #353 are RIGHT and are inherited whole.** This is not deference. It is the
-> session's measured result: 120 probe executions produced **62 PASSes**, of which **41 were raised
+> session's measured result: 121 probe executions produced **63 PASSes**, of which **43 were raised
 > by a gate, a type or a law in the shape itself**, and an independent citation audit at ~40 sites
 > across two adversaries found **every quotation verbatim and every section saying what was claimed**,
 > with one wrong section number between them.
@@ -155,6 +155,39 @@ revision 1, once in revision 2. Every other correction left the loop running.
 > **THE PRODUCTIVE READING, AND IT IS WHY THIS DOCUMENT EXISTS:**
 > **The set of things an instrument is FORCED to invent is the specification's execution gap,
 > located precisely.** It cannot be found by reading. It was found by trying to run.
+
+## §A2b · The two pathways are not one question — `01_NPC_VS_ARC.md`
+
+**Measured, and it decides how this document's own claims should be read:**
+
+> **0% of the NPC set's core blocks are design refusals. 33% of the arc set's are.**
+
+The NPC pathway is blocked **entirely by holes** — all 25 core blocks are things this document now
+carries a row for. The arc pathway is **a third refusals**: 22 core blocks are things the
+specification declines on purpose, from arcs authored against a stat-track model with faction
+meters, world tracks and a GM.
+
+**The scale mix is the cause.** NPC cases are person-scale (21) and faction-scale (18); arc cases are
+**realm-scale (43)**, and every refusal the design makes bites at aggregate scale.
+
+> **CONSEQUENCE FOR THIS DOCUMENT: Parts D–G and the register are aimed at the NPC pathway and
+> should largely clear it. THE ARC PATHWAY NEEDS A SECOND, DIFFERENT PIECE OF WORK THAT NO
+> SPECIFICATION CHANGE DELIVERS** — an authoring pass re-expressing ~22 arcs against §36.3's
+> petition chain and §37's dispensation-as-`tell`, where the *"a counter compels a named person"*
+> shape already lives. **The two must not be averaged again**: a single headline over 143 cases
+> hides that one set is blocked by SILENCE and the other by PRINCIPLE.
+
+## §A2c · Two defects in the evidence base itself, which any re-run will hit
+
+**Recorded because they are not this document's to fix and a second instrument will meet them:**
+
+1. **Six of the seven in-chain case files are committed inside a markdown fence** with an
+   agent-transcript preamble, and do not load with `yaml.safe_load`.
+2. **`ARC3.yaml` is truncated at its head** — its first record's `- id:` was lost, orphaning a third
+   emergent case. Recovery is partial and reports how many lines are unrecoverable.
+
+**The committed corpus is the chain's evidence and an instrument must not edit evidence.** Strip at
+load time, and say so in the output.
 
 ## §A3 · The three terms the diagnosis missed
 
@@ -637,7 +670,7 @@ lists of open items. **They are rows now.**
 | **H-07** | wear per site kind — **NO silent default; an unregistered kind RAISES** | NUMBER ×kinds | params | **assumption** | per-kind table; §42.2.1 names the silent default as the prior sin | any Site |
 | **H-08** | band floors per site kind per verb | NUMBER ×kinds | params | **assumption** | per-kind table | L5, §12.1 |
 | **H-09** | ledger cap `L` · View `K` · claim confidence | NUMBER ×3 | params | **assumption** | `200` · `12` · `100` | WITNESS, DELIBERATE |
-| **H-10** | the act budget as an **integer** of the ruled band `~5` | NUMBER | params | **assumption** | `5`; **swept 2·5·9 — the count verdict flips, which is the finding** | DELIBERATE |
+| **H-10** | the **SCENE** budget as an **integer** of the ruled band `~5` *(⚠ **the unit was ruled 2026-09-02**: scenes, not acts — H-35)* | NUMBER | params | **assumption** | `5`; **swept 2·5·9 — the count verdict flips, which is the finding** | DELIBERATE |
 | **H-11** | the subsistence formula over an **open** `MatterKind` registry | FORMULA | Rung (matter) + params | **assumption** | draw from the containing rung's stores, scaled by weight | `Sensation` |
 | **H-12** | MATTER emits an Event per write so crossings have an antecedent | PRODUCER | the log | **ruled** — §D22 | Part D's `emits:` column | every crossing |
 
@@ -660,7 +693,7 @@ lists of open items. **They are rows now.**
 | **H-32** | `judging_set_rule` | RULING | Rung | **absent** | none. ⚠ **nothing is decided at a sitting** | 2 |
 | **H-33** | the five witness channel predicates | FORMULA ×5 | the presence index (Nobody) | **absent** | none. ⚠ **fan-out is total; nothing said in private is private** | 1 |
 | **H-34** | establishment size per office kind | NUMBER | params | **assumption** | a per-kind number | 1 |
-| **H-35** | **does a scene equal an act?** | RULING | **Jordan** | **absent** | none — survives all five tests | 1 |
+| **H-35** | **does a scene equal an act?** | RULING | **Jordan** | ✅ **RULED 2026-09-02** — *"5 scenes for a character to play per season"* | **the SCENE is the budgeted unit; the number is 5; every character has it.** Interactions-per-scene (1–3) and extended-scene cost (2) become **`assumption` rows**, cited to `player_agency_v30.md` §6.3 and swept. See `PLAN.md` §3.4 and **W17** | 1 |
 | **H-36** | refraction: emitter- or receiver-side, and by how much | RULING + FORMULA | the design; params | **absent** | none | 2 |
 | **H-37** | the argument layer's named-fault roster | SCHEMA_ROW | the design | **absent** | none | 2 |
 | **H-38** | does a person carry a banded scalar? | RULING | Person, or refused | **absent** | none | 2 |
@@ -681,7 +714,9 @@ lists of open items. **They are rows now.**
 > and filled them silently. **Twelve refusals a reader can count is worth more than an unknown
 > number an instrument fills.**
 
-**Three of the twelve are genuine escalations** — H-35 (scene=act), H-36 (refraction's side), H-38
+⚠ **CORRECTED 2026-09-02 — ZERO of the twelve are live escalations.** `H-35` was **ruled by Jordan** (above); `H-36` closes receiver-side on architecture and `H-38` on precedent — see `PLAN.md` §3.1–§3.4, which runs `CLAUDE.md` §0's five tests over all twelve and closes or downgrades eleven **in chain**. The sentence below is the pre-adjudication claim, kept so the correction is legible.
+
+~~**Three of the twelve are genuine escalations**~~ — H-35 (scene=act), H-36 (refraction's side), H-38
 (a person's banded scalar): each is two defensible options leading to materially different games.
 **The other nine are authoring work**, not decisions: someone must write a margin model, a judging
 rule, five channel predicates, a fault roster, a distribution, a termination argument, a cost model.
@@ -699,7 +734,7 @@ only the design will be measured by an instrument that repeats them.
 > eleven unreachable probes and a 46% miss rate. **The ruling is: don't route — declare.**"*
 
 **The ruling governs key-type routing inside the engine. It describes the harness exactly.** Five
-recurrences of the bare-token class; 50 of 143 cases NOT-ASSESSED; both surviving PLAYABLEs
+recurrences of the bare-token class; 60 of 143 cases NOT-ASSESSED; both surviving PLAYABLEs
 artifacts. **Every `season_requires` row carries the verb or contract it exercises, authored with
 the row.** NOT-ASSESSED then means *"nobody said what this needs"* — a fact about authoring, which
 is fixable — instead of *"the regex missed"*, which is not.
@@ -738,7 +773,7 @@ is fixable — instead of *"the regex missed"*, which is not.
 | **H-20** — the axis registry + row | the corpus's largest non-refusal blocker | **~28** |
 | **H-21** — material vs social | an over-refusal that cost ten arcs | **~19** |
 | **H-22** — the five Record rows | every Record write stops being an unmarked cell | **~13** |
-| **§H1** — declared routing | 50 NOT-ASSESSED become a fact about authoring | **~50 assessable** |
+| **§H1** — declared routing | 60 NOT-ASSESSED become a fact about authoring | **60 assessable** |
 
 **And what it does not buy, stated so the claim is falsifiable:** ~22 core blocks remain — a Rung
 storing a social aggregate, a threshold producing an outcome, a fourth clock, a faction acting, a

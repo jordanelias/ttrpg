@@ -305,15 +305,15 @@ not the shape.
 | a repeat vote on the same matter must not be immediately available -- some interval must pass, allowing background processes to advance in the gap | — | UNMAPPED | — |
 | a failing outcome must visibly change how a watching third-party actor advances a separate, private running tally toward a future intervention | — | UNMAPPED | — |
 
-## ARC-R19 — The Accounting Sequence  ·  **NOT-ASSESSED**
-*realm · 6 rows, 5 core · blockers: none*
+## ARC-R19 — The Accounting Sequence  ·  **BLOCKED**
+*realm · 6 rows, 5 core · blockers: F16b*
 *ends when:* never, as an ongoing structural mechanism; as a focal arc it concludes at the accounting where two simultaneously-threatened factions' checks resolve and the triage choice takes effect
 
 | need | probe | verdict | § |
 |---|---|---|---|
 | **[core]** gains or losses to a single quantity from any number of separate actions in one period must be bounded to a fixed maximum | `A31` | PASS | S42.2.1 |
 | **[core]** helping one at-risk holder in a period must be able to consume the same limited capacity that would otherwise have protected a different, simultaneously at-risk holder | `F10` | PASS | S54.1 |
-| **[core]** an action taken by a player at a small, personal scale must be able to silently register as also affecting a faction-scale quantity, invisible until the periodic accounting is read | `F16` | PASS | S10 |
+| **[core]** an action taken by a player at a small, personal scale must be able to silently register as also affecting a faction-scale quantity, invisible until the periodic accounting is read | `F16b` | **FORBIDDEN** | S10.1 |
 | **[core]** periodic resolution of pending effects must happen in a fixed, non-negotiable phase order, such that an effect resolved in an early phase can prevent a check that would otherwise fire later  | — | UNMAPPED | — |
 | **[core]** when an at-risk quantity drops to a specific low value, that value must impose a protective floor on further pressure for a limited grace window, independent of the pressure's true magnitude | — | UNMAPPED | — |
 | an action taken to help one actor must be interpretable by a third, unrelated actor as hostile, generating a fresh pressure against a target the acting player did not intend to provoke | — | UNMAPPED | — |
@@ -832,10 +832,10 @@ not the shape.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** an actor's private understanding advancing must be able to automatically and invisibly raise a separate, campaign-wide institutional threat value, as a byproduct the player did not choose an | `F16` | PASS | S10 |
 | whichever side a governing body takes on the formal decision, the outcome must feed back into whether an unrelated suppression effect elsewhere continues to hold, gated by a numeric threshol | `A15` | **UNSPECIFIED** | S40.1 |
 | a private actor's advancing understanding must eventually reach a stage where they act to acquire the underlying capability directly, rather than settling for more explanation, changing thei | `P1` | PASS | S3-L1 |
 | **[core]** repeated interaction between a player and a single non-player actor must be able to advance that actor's private understanding through discrete, ordered stages, where higher stages unlock qu | — | UNMAPPED | — |
+| **[core]** an actor's private understanding advancing must be able to automatically and invisibly raise a separate, campaign-wide institutional threat value, as a byproduct the player did not choose an | — | UNMAPPED | — |
 | an actor's repeated use of a specific resource must be detectable by a hostile institution through a trace left in the world, at a rate proportional to how often it is used | — | UNMAPPED | — |
 | **[core]** a hostile institution's investigation of a suspected violation must be escalatable to a formal decision point where a third governing body must choose a side, with different consequences dep | — | UNMAPPED | — |
 | an actor's use of a sensitive resource must carry a per-use chance of an unplanned, binary discovery event with divergent consequences on success versus failure, independent of ordinary task | — | UNMAPPED | — |
@@ -1032,11 +1032,11 @@ not the shape.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** each stage of the actor's advancing understanding must automatically raise a shared institutional-threat value by an amount specific to that stage, as an inherent side effect of the actor's  | `F16` | PASS | S10 |
 | the actor's advancing understanding must, at a specific late stage, cause the actor to formally condition their cooperation on a specific external actor providing the actor a distinct resour | `F2` | PASS | S54 item 20 |
 | a specific class of dangerous physical objects known to be connected to the hidden truth must be able to pass from the actor's private possession into circulation among practitioners, and do | `P17` | **UNSPECIFIED** | S22.4 |
 | independent of the staged progression, the actor's repeated use of the resource granting access to the hidden truth must carry, on each use, its own separate binary-chance event capable of j | `P17` | **UNSPECIFIED** | S22.4 |
 | a self-interested actor's private understanding of a specific hidden truth must progress through discrete, ordered stages, reachable via multiple alternative information sources, any single  | — | UNMAPPED | — |
+| **[core]** each stage of the actor's advancing understanding must automatically raise a shared institutional-threat value by an amount specific to that stage, as an inherent side effect of the actor's  | — | UNMAPPED | — |
 | **[core]** the actor's advancing understanding must culminate in a stage where the actor's own stated core goal changes in kind, from wanting to understand a domain to wanting to control it, and this g | — | UNMAPPED | — |
 | the actor reaching a sufficiently advanced stage of understanding via the binary-chance event must unlock eligibility for that actor to acquire a specific personal capability normally reserv | — | UNMAPPED | — |
 
@@ -1113,13 +1113,13 @@ not the shape.
 | A SEPARATE numeric resource, bounded to a small fixed range, must accumulate from at least two distinct trigger conditions, be spendable on the same pre-roll basis as the converted resource, | — | UNMAPPED | — |
 
 ## SCN-06 — A hazard-event forms and drains the world  ·  **BLOCKED**
-*realm · 9 rows, 4 core · blockers: A27*
+*realm · 9 rows, 4 core · blockers: A27, P17*
 *ends when:* mixed — a roll resolves an individual hazard instance's resolution attempt, but its escalation and per-season drain are threshold-fires with nobody deciding.
 
 | need | probe | verdict | § |
 |---|---|---|---|
 | **[core]** At least four different failure conditions belonging to OTHER, unrelated action-resolution chains must all be able to converge on spawning the same category of persistent hazard-event, i.e.  | `A27` | **UNOWNED** | S22.3 |
-| **[core]** The system must be able to sum multiple independent per-season drain sources on the same shared currency into one combined seasonal total, and compare that total against the best available r | `F16` | PASS | S10 |
+| **[core]** The system must be able to sum multiple independent per-season drain sources on the same shared currency into one combined seasonal total, and compare that total against the best available r | `P17` | **UNSPECIFIED** | S22.4 |
 | **[core]** The severity tier of a newly-spawned hazard must be determined by reading a shared currency's CURRENT value at the exact moment of spawning, across at least four severity bands, where the to | — | UNMAPPED | — |
 | A lesser precursor stage of the hazard must be resolvable away via a dedicated action, gated by a minimum resource-level requirement on the acting character, before it is allowed to escalate | — | UNMAPPED | — |
 | **[core]** An unresolved instance of the full hazard must impose an automatic, unconditional recurring cost on the shared currency every season it remains unresolved, with no actor choosing this. | — | UNMAPPED | — |

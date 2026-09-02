@@ -3886,3 +3886,125 @@ ever testing whether they support what they are cited for.
 **Verification at close.** Green on the head: full `pytest tests/valoria`, `valoria_local --staged`,
 `compliance_check` (0 errors), `currency_consistency_check`, `validate_ed_citations` (0 violations).
 CI all-green on #338; counts are on the run, not copied here.
+
+
+---
+
+## 2026-09-02 · The season loop was TESTED BY EXECUTION, and a successor architecture exists
+
+**Landed in #354 (merged). Everything is PROPOSED and HELD BACK IN FULL — nothing ratified on merge**,
+and both directories say so in their `## Status:` lines. Recorded here because `CURRENT.md` maps what
+is LIVE and none of this is; a session orienting from §1 would otherwise never find it.
+
+### What exists now
+
+| where | what |
+|---|---|
+| `proposals/2026-09-02-executable-architecture/ARCHITECTURE_V2.md` | **the successor to #353.** Parts I–VI of #353 inherited whole; what changes is the write matrix keyed on `(kind, field)`, a **verb table** giving the resolver a body, `q`/`choose`/`budget`/`standing`, the delegation doctrine, and a **register of 39 holes** replacing §61–§62's prose |
+| `…/01_NPC_VS_ARC.md` | the two pathways fail for categorically different reasons — **0% vs 33% refusals** |
+| `proposals/2026-09-01-season-loop-tests/` | the instrument, 46 NPC + 97 arc cases, run output, 63 honesty tests, the 56-finding ledger, and `evidence/` |
+
+### The three things worth carrying into the next session
+
+1. **The set of things an instrument is FORCED to invent is the specification's execution gap,
+   located precisely.** It cannot be found by reading. 16 forced · 24 avoidable · 29 not inventions.
+2. **Measuring AGAINST the design is as damaging as flattering it and much harder to see.** The worst
+   single error survived all four adversarial passes: a faction treasury refused under L3, when §10
+   gives every Rung `matter.stores`. It cost ten arcs and it looked like rigour.
+3. **The arc corpus nearly doubled** — the in-chain run covered 51 of ~97. Across the corpora it
+   never touched, **three of four cross-scenario feedback loops name no off-switch**, corroborating
+   §40.1's termination debt from the corpus side.
+
+### Next actions
+
+- **`H-20` is the highest-value row in the register** — L3 clause 1's closed axis registry plus the
+  `(Person, axis_count)` write row. ~28 cases, and it is a HOLE, not a refusal: the head *permits*
+  the counter. Cheapest large gain available.
+- **Artifact 2 is the bar: ONE NPC season running end to end.** The tested version ran zero.
+- **~22 arcs need an AUTHORING pass**, not a specification change — re-expressed against §36.3's
+  petition chain and §37's dispensation-as-`tell`.
+- **Three questions are Jordan's** and are deliberately undecided: does a scene equal an act
+  (`H-35`); is refraction emitter- or receiver-side (`H-36`); does a person carry a banded scalar
+  (`H-38`). Each is two defensible options leading to materially different games.
+
+**No ED allocated.** A gap in a PROPOSED architecture gets no id; the adoption decision gets one.
+
+---
+
+## 2026-09-02 (second entry) — PR #354 ADJUDICATED, AND THE IMPROVEMENT PLAN
+
+`proposals/2026-09-02-executable-architecture/PLAN.md` — **PROPOSED, HELD BACK IN FULL.** A
+structurally-independent read-only critic on the top tier adjudicated `ARCHITECTURE_V2.md` against
+#353's full text and the instrument's source, produced no files, and stated its own null results.
+Its return plus direct measurement is the plan.
+
+### What changed in the entry above, and it is most of it
+
+| the entry above says | measured / adjudicated |
+|---|---|
+| *"Three questions are Jordan's — `H-35`, `H-36`, `H-38`"* | **ONE.** `H-38` closes on precedent (`Site.condition`, #353 `:442-462`) and is **already presupposed by `V2`'s own Part D row and §F3**. `H-36` closes **receiver-side** (every witness mints its own claim; the Dispensation is immutable with no bare effect field) and is **held back in the PR body for objection**. Only `H-35` survives all five tests — **and it blocks nothing** |
+| *"`H-20` … ~28 cases"* | **21 of 76 blocked cases** by set cover — still the largest single row, and the figure now has a command |
+| *"0% vs 33% refusals"* | **`0%` is wrong.** `P33` is a §26.3 RULING (*"a petition consumes budget like any act, and that is the whole of the pricing"*), so NPC refusals are 2–3 of 26. `01_NPC_VS_ARC.md` §1 now carries a marked correction |
+| the 39-hole register | **32 rows are present, the counts do not reproduce, and NINETEEN holes have no row** — among them `(Claim, confidence)` (a licensed clock with no Part D row), `utter` (no verb creates a Proposition, so `commit`/`petition`/`issue` cannot fire), the nine Dispensation terms, the six investigation acts, the 13 conviction axes, and `A18`'s contract descent (which is why **R-1 and R-2 are unenforceable in principle**) |
+
+### The finding that reorganises the work
+
+**The register is not an object.** `V2` §0.3 claims it is *"rows, not prose"*; **not one of its 32
+rows carries the `site:`, `sweep:` or `cite:` fields its own §G4 defines**, and by §0.05's test it is
+prose. That is why it could not report nineteen missing entries or eleven answerable refusals.
+**`W0` — materialise it as `hole_register.yaml` behind a blocking `register.py --check` — is the
+first work item and everything waits on it.**
+
+### Next actions
+
+1. **`W0` + `W15`** — the register as data; one writer per artifact. Both S, both depend on nothing.
+2. **Critical path: `W0 → W1 → W2 → W3 → W5 → W9`**, ending at **artifact 2 — one NPC season, end to
+   end, on NPC-088 Carin Vedel** (#353 §13.1 already narrates her season; she needs no sitting, no
+   contest and no dispensation, so her season tests the loop rather than the defaults).
+3. **`W10` — declared routing.** 230 of 422 core rows never routed; all 60 NOT-ASSESSED cases have
+   **zero** core blockers. Start it after `W3`, beside the path, never in front of it.
+4. **`W13` — the arc lane, now an exact list**: 14 refusal-only arcs to re-author, 8 mixed that need
+   a hole closed **first**. Both lists are in `PLAN.md` §W13 with the command that produced them.
+5. **Ask Jordan `H-35` only.** Do not send `H-36` or `H-38`.
+
+### Two artifacts banked this session
+
+- **The 143-case run REPRODUCES** — `report.py` returns `results.json` and `TRACE.txt` byte-identical;
+  63/63 honesty tests pass. First execution artifact in the chain under §0.2.
+- **The committed markdown was stale by one fix** (two entrypoints wrote overlapping outputs), so
+  four ARC cases were wrong in a merged PR. Regenerated and committed; the fix is `W15`.
+
+**No ED allocated.** A gap in a PROPOSED architecture gets no id; the adoption decision gets one.
+
+---
+
+## 2026-09-02 (third entry) — **H-35 RULED BY JORDAN. THE ESCALATION QUEUE IS EMPTY.**
+
+**Verbatim:** *"5 scenes for a character to play per season"* — answering the one escalation
+`PLAN.md` §3.4 raised. This is **reading 2** of the three the in-chain ruling doc
+(`proposals/2026-08-31-pr350-archive-recovery/02_SCENE_BUDGET_RULING.md`) flagged.
+
+| | |
+|---|---|
+| **the unit** | **the SCENE**, not the act. `budget` bounds scenes; #353's ~28 verbs are what happens *inside* one |
+| **the number** | **5** |
+| **who** | **"a character"** — the neutral word. With #353's L1 and §26 (everyone runs `choose`), this **closes the reading-3 hazard** the ruling doc named as the one to watch: the archive gave named NPCs no budget and made their scenes cost *the player's*, which is the player-only mechanism §07 §1 forbids. **Rejected, toward the shape's symmetry.** |
+
+**Two `assumption` rows the ruling CREATES** — Jordan ruled the unit and the number and did **not**
+rule these, so they are injected, declared and swept, never hardcoded: **interactions per scene
+(default 1–3)** and **extended-scene cost (default 2)**, both cited to `player_agency_v30.md` §6.3,
+which is `## Status: CANONICAL` but pre-#337 and therefore **reference under §0.05**.
+
+**What it costs — named, because the escalation named it and Jordan accepted it.** A new work item
+**`W17`, the scene container**, now sits **on the critical path**:
+`W0 → W1 → W2 → W3 → W5 → W17 → W9`. **Parts D and E are unchanged** — a level is added above the
+verb table, which is the cheapest shape this ruling could take. ⚠ **Probe `P2x` must be
+re-expressed**: it fails on *"8 acts against a budget of 5"*, which under the ruling is **lawful**;
+the propositions to test are *more scenes than budget* and *more interactions than the swept bound*.
+
+### Next actions — unchanged except for the insertion
+
+1. `W15` + `W0` (both S, depend on nothing), then the path above to **artifact 2 — one NPC season on
+   NPC-088, end to end**.
+2. `W10` declared routing, beside the path. `W13` the arc lane (14 refusal-only, 8 mixed).
+3. **Nothing is waiting on a ruling.** `H-36` remains held back for objection only.

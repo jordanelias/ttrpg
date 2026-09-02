@@ -1,0 +1,175 @@
+import yaml
+
+cases = []
+
+def N(need, why, hardness):
+    return {"need": need, "why": why, "hardness": hardness}
+
+# ---------------- SCN-01 ----------------
+cases.append({
+  "id": "SCN-01",
+  "name": "A specialized practitioner enters combat",
+  "one_line": "A character with a special resource-fueled action type tries to use it inside an ordinary combat round, and the two action tracks compete for the same slot.",
+  "scale": "person",
+  "season_requires": [
+    N("A character must be able to hold two mutually exclusive action tracks in the same combat round (an ordinary action vs. a specialized channeled action), where committing to one makes the character ineligible for the other, and eligibility for the special track is decided by what the OPPONENT chooses to do that same round, not just the actor's own choice.",
+      "Without opponent-conditioned eligibility, the tactical tension of 'declare the special action and hope you aren't attacked first' disappears.", "core"),
+    N("The special action must be able to require a preparatory step resolvable either the round before or earlier the same round, before its main roll executes.",
+      "Losing the two-stage setup collapses a deliberate, telegraphed action into an instant one, changing its risk profile.", "important"),
+    N("A single triggering roll for the special action must route to four qualitatively different outcome branches, each altering different downstream resources (a difficulty modifier on a future action, a resource pool, a stress/condition track) rather than a binary pass/fail.",
+      "Collapsing the four degrees to pass/fail removes the graded consequences the scenario depends on.", "core"),
+    N("Once a special contact/channel state is established, it must persist across multiple rounds and be re-tested by a save whenever the character takes damage during that window, where failure both drops the channel early AND resolves the whole action as a failure.",
+      "Without an ongoing vulnerability check, the channeled action would be immune to interruption by battle damage, removing its central risk.", "core"),
+    N("Reaching a distinct incapacitation threshold while the channel is active must immediately terminate the channel (independent of the per-hit save above) and force the action to its failure outcome.",
+      "Without this, an incapacitated character could still complete the special action, which the source treats as impossible.", "important"),
+    N("A per-round action penalty accrued from ongoing damage during the channel must persist and stack for the remainder of that channel's duration.",
+      "A non-stacking or resetting penalty would let a character shrug off cumulative harm mid-channel.", "important"),
+    N("The special action must be able to leave the character with a lasting future difficulty penalty (lasting a season) on specifically one of its outcome branches, distinct from its other branches.",
+      "If every branch had the same aftermath, the best-outcome branch would carry no special long-term reward relative to a plain success.", "flavour")
+  ],
+  "temporal": {
+    "span_seasons": 1,
+    "needs_memory_of": "whether the opponent has already declared an attack this round (for the eligibility gate), and any lasting difficulty penalty an earlier overwhelming/partial result imposed on 'the next operation.'",
+    "needs_deadline": "no"
+  },
+  "who_acts": ["the practitioner", "the opponent (their own declared action determines the practitioner's eligibility)", "GM/system (delivers the preparatory diagnosis, resolves the roll and the per-hit save)"],
+  "knowledge": ["the opponent's own action choice for the round must be resolved/knowable before the eligibility gate is checked", "the preparatory step reveals hidden information about the target to the acting character"],
+  "ends_when": "a roll resolves it (the triggering roll), though several outcome branches leave persistent effects (a condition, a dice penalty, a future difficulty modifier) that outlive the roll itself."
+})
+
+# ---------------- SCN-02 ----------------
+cases.append({
+  "id": "SCN-02",
+  "name": "A resource-costly action's full consequence chain",
+  "one_line": "One action category has four distinct sub-types sharing a single currency, unconditional side effects on every use, and a window-level aggregate check that sums every sub-action's own difficulty.",
+  "scale": "person",
+  "season_requires": [
+    N("The engine must support several distinct sub-actions within one action category, each with an independent roll but a SHARED currency that all of them modify, positively and negatively, on their own outcome tables.",
+      "If the sub-actions didn't share one currency, the described trade-offs between different approaches to the same problem would not exist.", "core"),
+    N("At least one sub-action's outcome table must impose a duration-based recurring penalty to the shared currency going forward (starting a fixed number of seasons later) that keeps applying without further rolls.",
+      "Without an ongoing, self-triggering drain, a 'forced' resolution couldn't have the described lasting structural cost distinct from its immediate one.", "core"),
+    N("The shared currency crossing two different low thresholds on a single failed sub-action must be able to spawn two qualitatively different persistent hazard states, a lesser one below the first threshold and a more severe one (triggering a separate case-chain) below the second, lower threshold.",
+      "A single fixed 'failure spawns a hazard' rule can't express the described severity gradient tied to how low the currency already was.", "core"),
+    N("Every use of this action category, regardless of sub-type or outcome, must trigger a separate, unconditional set of consequences that fire every time — and those consequences must differ in KIND depending on a different axis/scale property of the action (no effect at one value of that property, a full extra roll at another).",
+      "Losing the always-fires layer removes a consequence axis the scenario treats as independent of roll outcome entirely.", "important"),
+    N("At least one of the unconditional per-use consequences must be explicitly RANDOM and UNTRACEABLE, producing an effect the system does not record as attributable back to the triggering action.",
+      "The scenario is explicit that this consequence 'cannot be predicted or traced' — losing that untraceability changes it into an ordinary tracked effect.", "important"),
+    N("A single aggregate roll must fire once per multi-action contact WINDOW rather than once per sub-action, with its difficulty equal to the sum of every individual sub-action's own difficulty performed inside that window.",
+      "Without a window-scoped, summed-difficulty check, using many small actions in one window would carry no cumulative risk distinct from using one big one.", "core"),
+    N("Failing that aggregate window-level roll must reduce a DIFFERENT persistent per-character resource (distinct from the shared currency), feeding that resource's own separate degradation case.",
+      "If the window-level check only touched the same currency as the sub-actions, it would be redundant rather than a genuinely separate cost.", "important")
+  ],
+  "temporal": {
+    "span_seasons": 1,
+    "needs_memory_of": "the running sum of every individual sub-action's difficulty incurred so far in the current contact window (for the aggregate roll), and any duration-based drift flags a prior sub-action outcome set going forward.",
+    "needs_deadline": "no fixed deadline, though a drift effect set by one outcome branch is itself season-scoped and ongoing"
+  },
+  "who_acts": ["the acting character (chooses sub-action and target)", "GM/system (resolves the always-fire side effects, including the untraceable random one, and the aggregate window check)"],
+  "knowledge": ["not primarily epistemic; the system must know the shared currency's current value at roll time to know which threshold(s) a failure crosses"],
+  "ends_when": "a roll resolves each individual sub-action; the aggregate window-level check is also resolved by a roll, but its trigger condition (the summed difficulty) is a threshold comparison nobody decides."
+})
+
+# ---------------- SCN-03 ----------------
+cases.append({
+  "id": "SCN-03",
+  "name": "The combat wound chain",
+  "one_line": "Damage is tracked by two parallel mechanisms at once (a depleting pool and a milestone counter), and crossing the milestone forces incapacitation, recovery choices, and can sever an unrelated in-progress action.",
+  "scale": "person",
+  "season_requires": [
+    N("Damage must be trackable via discrete milestone crossings of an accumulating value, in addition to (not instead of) a simple depleting pool — two independent tracking mechanisms must run off the same damage number simultaneously, with the milestone counter's effects independent of whether the pool has reset.",
+      "Collapsing to a single pool loses the described property that the pool resetting (e.g. via a quick rest) does not undo accumulated wound-count effects.", "core"),
+    N("A single hit's damage must be cappable in how many milestone-crossings it can cause in one hit, discarding excess beyond that cap rather than letting one hit jump multiple states at once.",
+      "Without a per-hit cap, one large hit could skip straight to incapacitation regardless of the character's toughness, which the source explicitly forbids.", "important"),
+    N("The milestone counter must impose an escalating, CUMULATIVE action-effectiveness penalty per crossing, not a flat one-time penalty.",
+      "A flat penalty would make the fifth wound as survivable as the first, contradicting the described cumulative drain.", "important"),
+    N("The wound-count value at which a character becomes incapacitated must vary by a stat/attribute the character possesses, not be one global number.",
+      "A single global incapacitation threshold erases the described differentiation between tougher and frailer characters.", "important"),
+    N("Reaching incapacitation must be able to immediately and forcibly terminate an unrelated in-progress channeled-action state belonging to a DIFFERENT case, cross-referencing that case's own failure resolution.",
+      "Without this cross-case interrupt, a practitioner mid-channel could be incapacitated in body while somehow still completing a Thread operation, which the source rules out.", "core"),
+    N("At least two distinct recovery actions must exist with different time costs and different degrees of restoration (a fast partial recovery vs. a slow full recovery), both available as player choices.",
+      "A single uniform recovery option removes the described trade-off between recovering quickly and recovering fully.", "important"),
+    N("A second, independent resource must deplete per qualifying action taken (not passively per round) and, on reaching zero, force a specific restricted mode on its owner while granting the opponent a bonus, recoverable either by a dedicated recovery action or by the forced zero-state itself resetting it.",
+      "Without a second action-gated resource, sustained aggressive action would carry no separate fatigue cost distinct from taking damage.", "important")
+  ],
+  "temporal": {
+    "span_seasons": "n/a",
+    "needs_memory_of": "the current wound count, and which recovery state (none / quick-rested / full-rested) the character currently occupies.",
+    "needs_deadline": "no"
+  },
+  "who_acts": ["the attacker (deals damage)", "the defender (accumulates wounds, chooses a recovery option)", "GM/system (resolves incapacitation and any forced state changes)"],
+  "knowledge": ["not primarily epistemic"],
+  "ends_when": "threshold-fires — the milestone crossings and the incapacitation check are pure counter comparisons that nobody decides."
+})
+
+# ---------------- SCN-04 ----------------
+cases.append({
+  "id": "SCN-04",
+  "name": "A social conflict escalates into a faction-level consequence",
+  "one_line": "A multi-exchange contested social action, gated by a relationship value, automatically echoes into faction-scale state on every roll regardless of the participants' intent.",
+  "scale": "faction",
+  "season_requires": [
+    N("A roll made only in the first exchange of a social scene must be able to grant a persisting bonus that carries forward into later exchanges of the same scene, with the bonus's size/duration set by that first roll's own outcome degree.",
+      "Without carry-forward, an early information-gathering action would have no mechanical payoff beyond its own moment.", "important"),
+    N("A single-roll persuasion attempt's difficulty must be dynamically derived from a stored relationship-disposition value between the acting character and their target, rather than a fixed number.",
+      "A static difficulty would erase the described gradient from an easy ask of a friendly target to a near-impossible ask of a hostile one.", "core"),
+    N("A multi-exchange contested social action must have its total exchange count set in advance by a chosen stakes tier, determined before the first exchange resolves.",
+      "Without a pre-committed exchange count, the scene couldn't distinguish a quick disagreement from a formal, drawn-out confrontation.", "important"),
+    N("Losing an exchange must accrue a stress resource at two different rates depending on the margin of the loss, not a flat per-loss cost.",
+      "A flat cost per loss would erase the described extra punishment for being decisively beaten in a single exchange.", "important"),
+    N("A specific sub-action available within the contested exchange must be able to damage a SEPARATE persistent resource belonging to the opposing character specifically when that opponent's own margin that exchange is non-positive, with that resource's depletion feeding a different case's own resolution chain.",
+      "Without this cross-resource damage, the named 'attack' sub-action would be mechanically identical to an ordinary exchange, losing its distinct target and consequence.", "core"),
+    N("The stress resource reaching zero must impose a recurring, stacking penalty to further rolls of the same category, while also offering the affected character a voluntary action that clears all such penalties at the cost of converting the scene to a different, more personal scene-type that cannot resume the contested exchange.",
+      "Without the escape valve, a character who hits zero stress would have no way to end their own mounting penalty short of the scene simply ending.", "core"),
+    N("An extreme, one-sided total-loss outcome for the whole contested exchange must impose a season-long difficulty penalty specifically scoped to future social interactions against the SAME opposing faction, not a general penalty.",
+      "A general penalty instead of a faction-scoped one would misrepresent a personal humiliation as damaging the character's standing with everyone.", "important"),
+    N("Any personal-scale roll made in a social scene must be able to automatically also apply a change to a faction-scale resource, sized by reading a stat belonging to the target faction, with the total of such automatic changes to any one faction's stat capped over a season regardless of how many personal-scale rolls trigger it.",
+      "Without the automatic echo and its seasonal cap, either faction-scale state would never move from personal play, or a single busy season of dialogue could swing a faction stat without limit.", "core")
+  ],
+  "temporal": {
+    "span_seasons": "n/a",
+    "needs_memory_of": "the relationship-disposition value per character-pair; the running total of this season's automatic changes to each faction's stat, for the seasonal cap.",
+    "needs_deadline": "no"
+  },
+  "who_acts": ["the acting character", "the target/opponent character", "GM/system (triggers the automatic faction-scale echo and administers the disposition and faction-stat values)"],
+  "knowledge": ["what the acting character learns about the target's emotional state is genuinely gated by the outcome of the optional first-round information roll"],
+  "ends_when": "mixed — a roll resolves the persuasion/appeal action and each exchange; a threshold-fires when accumulated stress hits zero; a person chooses when a character opts to unmask; the automatic faction-scale echo is threshold-fires with nobody deciding."
+})
+
+# ---------------- SCN-05 ----------------
+cases.append({
+  "id": "SCN-05",
+  "name": "A character's convictions convert into a spendable resource",
+  "one_line": "A fixed-count personal-conviction resource earns advancement currency at different rates, can convert into a spendable pre-roll resource, and can be destroyed by a cross-referenced social attack.",
+  "scale": "person",
+  "season_requires": [
+    N("A character must be able to hold a small fixed COUNT of one resource type at a time, where different ways of engaging an individual instance grant differing amounts of a shared advancement currency, with the largest amount specifically reserved for the instance's own content being shown to have genuinely changed as a result of events, not merely engaged with unchanged.",
+      "Without a graded reward, revising a conviction in response to play would carry no more mechanical weight than simply acting on it once, losing the incentive the scenario relies on.", "core"),
+    N("Two instances of that resource, held by different characters, must be able to enter a mutually-exclusive 'in tension' relationship such that neither character can earn the advancement currency for their instance until a dedicated scene forces one of the two to choose.",
+      "Without an enforced tension state, two characters' conflicting convictions could both be freely pursued for reward simultaneously with no dramatic cost.", "important"),
+    N("Completing an instance of the resource must be able to convert it into a mechanically different, spendable resource at a reduced starting value, where the conversion itself, not an additional currency payout, is the reward.",
+      "Without a distinct conversion mechanic, completion would be indistinguishable from any other engagement that simply grants currency.", "important"),
+    N("The converted spendable resource must be usable to buy automatic successes on a die roll before that roll is made, at a fixed one-unit-to-one-success rate, as a resource type distinct from ordinary dice pools.",
+      "Without pre-roll spendable successes, the converted resource would have no mechanical use once created.", "core"),
+    N("A specific sub-action belonging to a DIFFERENT case (a contested social exchange) must be able to drain the spendable resource by a fixed amount whenever the opposing character's own margin in that exchange is non-positive, and the resource reaching zero must trigger an immediate, unconditional consequence (destruction of its parent asset) even mid-scene.",
+      "Without this cross-case drain, the social 'attack' sub-action described in the other scenario would have nothing of this kind to target.", "core"),
+    N("Losing the parent asset (the resource hitting zero) must trigger a distinct follow-up resolution whose success creates a new instance of the spendable resource at a value derived from the old one minus a fixed amount, thematically continuous with what was lost, while failure destroys the possibility of a replacement for that slot entirely.",
+      "Without a follow-up recovery attempt, losing the resource would be an unconditional, un-mitigatable loss with no player agency in the aftermath.", "important"),
+    N("A SEPARATE numeric resource, bounded to a small fixed range, must accumulate from at least two distinct trigger conditions, be spendable on the same pre-roll basis as the converted resource, and reset unconditionally to its floor at a SESSION boundary rather than a season boundary or any in-fiction event.",
+      "A season-scoped or narratively-triggered reset instead of a session-scoped one would misrepresent this resource's explicitly out-of-fiction, meta nature.", "important"),
+    N("The primary advancement currency must be spendable to increase a character's stat at a cost that scales with the stat's own current value, with at least one such purchase capped by a DIFFERENT stat's current value acting as a ceiling.",
+      "A flat purchase cost, or no cross-stat ceiling, would erase the described diminishing-returns and cross-stat-gated advancement curve.", "important")
+  ],
+  "temporal": {
+    "span_seasons": "ongoing",
+    "needs_memory_of": "the three currently-held resource instances and their state (pursued/challenged/revised/in-tension/completed); the spendable resource's current value; the session-scoped resource's value.",
+    "needs_deadline": "no fixed deadline is named"
+  },
+  "who_acts": ["the character (chooses which instance to pursue, whether to convert, whether to purchase stat increases)", "GM (adjudicates whether pursuit/challenge/revision occurred, and runs the tension-forcing and follow-up loss scenes)", "the opposing character in the cross-referenced debate (their margin determines the drain)"],
+  "knowledge": ["not primarily epistemic"],
+  "ends_when": "mixed — a person chooses to convert or purchase; a roll resolves the follow-up scene after loss; the session-scoped resource's reset is threshold-fires with nobody deciding."
+})
+
+with open("/tmp/claude-0/-home-user-ttrpg/e2c0050d-067c-5d41-a0c2-ee97ae491748/scratchpad/part1.json", "w") as f:
+    import json
+    json.dump(cases, f)
+print(len(cases), "cases in part 1")
