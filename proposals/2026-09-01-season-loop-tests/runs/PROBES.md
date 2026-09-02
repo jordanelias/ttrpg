@@ -92,7 +92,7 @@ either** — they are listed individually below and should be discounted accordi
 | `P43` | **FORBIDDEN** | construction | S22.4 | a quantity held by many characters individually must be able to be totalled across them |
 | `P7` | **UNSPECIFIED** | construction | S22.4 | a character must carry lasting moral damage from what they were made to do |
 | `P8` | **UNSPECIFIED** | construction | S27/E2 | one character must be able to be blocked by another without either knowing about the other |
-| `P9` | **UNSPECIFIED** | construction | E2 | a superior must be able to direct a subordinate, and the subordinate must be able to refuse or deviate |
+| `P9` | **UNSPECIFIED** | construction | S27/E2 | a superior must be able to direct a subordinate, and the subordinate must be able to refuse or deviate |
 | `W10` | **FORBIDDEN** | construction | S10.1 | a place must be able to hold a level of discontent that rises and falls |
 | `W13` | **FORBIDDEN** | no-signature | S25.1 / S3-L5 | a world-scale tracked quantity must be able to decay on a fixed schedule independent of anyone's actions |
 | `W1x` | **UNGRADED** | construction | S42.2.1 | the world must be able to wear down a kind of place nobody wrote a rule for |
@@ -475,11 +475,11 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** NOTHING FROM THE DESIGN -- #353 does not name 'take_seat' as a verb. This is the CALLER'S invention and the gap is the caller's
 **law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
 
-### `P9` — an order is the subordinate's own choice  ·  **UNSPECIFIED**  ·  `E2`  ·  by `construction`
-**what:** 'dispatch' has a precondition the fold cannot evaluate: 'the named person exists'
+### `P9` — an order is the subordinate's own choice  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
+**what:** verb 'refuse' is on no row of the verb table
 
-**needs:** a predicate in REQUIRES_PREDICATES, or a `requires:` the table states structurally rather than in prose
-**law:** §E2 -- `requires` is checked IN THE FOLD. Stated as prose it is the same defect `resolve` had, one column along: a rule the code cannot read
+**needs:** a row in verb_table.yaml, ruled before it is added
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids
 
 ### `W10` — a settlement holds a level of discontent  ·  **FORBIDDEN**  ·  `S10.1`  ·  by `construction`
 **what:** Rung.morale assigned -- not a declared field of S10's record

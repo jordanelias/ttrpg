@@ -630,6 +630,23 @@ class VerbRow:
     emits: tuple
     emits_on_refusal: tuple
     grade: str
+    # ⚠ THE SCALE THE ACT REACHES — a `rung_kinds` member (Jordan, 2026-09-02: *"we also need
+    # stratum that concern governance and management re different scales of factions/governing
+    # bodies"*). It is a SEPARATE AXIS from `stratum`, crossed with it: the stratum says what KIND
+    # of act this is and orders resolution; the scale says WHOSE BODY it reaches. Five strata x
+    # eight scales covers the governance surface without multiplying strata.
+    #
+    # ⚠ AND THE SCALE LADDER ALREADY EXISTED — `rung_kinds`: person, hearth, community,
+    # settlement, territory, province, duchy, realm. Minting a second roster for it would be §8
+    # broken on the exact axis this column is about.
+    #
+    # ⚠ A FACTION IS NOT ONE OF THEM, AND THAT IS A RULING RATHER THAN AN OMISSION.
+    # `ARCHITECTURE_V2.md:93` lists *"a **faction acting** as an actor"* in its REFUSAL table, at
+    # `L1`, with three corpus cases that wanted it; `H-21` completes it — *"a faction's treasury is
+    # matter at the rung or office that holds it"*. So a faction never acts: a PERSON HOLDING AN
+    # OFFICE acts, and the scale is the rung that office reaches. Governance at faction scale is
+    # `binding_decision x <rung>`, not a faction verb.
+    scale: str = "person"
     # ⚠ PART E'S `contests:` COLUMN, WHICH WAS TRANSCRIBED INTO A NOTE AND LOST.
     # `ARCHITECTURE_V2.md:394` declares it — *"`contests: <prize> | none` — if set, ROUTES TO THE
     # SEAM AT RESOLVE (§39)"* — and `:434` sets it on `kill / wound` (*"`contests: the body` → the
@@ -656,6 +673,7 @@ def _load_verb_table() -> dict:
         row = VerbRow(name, r["stratum"], tuple(r["eligibility"]), r["requires"],
                       tuple(r["writes"]), tuple(r["emits"]),
                       tuple(r["emits_on_refusal"]), r["grade"],
+                      str(r.get("scale") or "person").strip(),
                       str(r.get("contests") or "").strip())
         # EVERY `writes:` MUST BE A PART D ROW. Checked AT LOAD, not at the first act that uses
         # it: a verb naming an unmarked cell is a defect in the table, and finding it when some
@@ -680,6 +698,12 @@ def _load_verb_table() -> dict:
                     f"verb_table.yaml: {name!r} has eligibility kind {k!r}, which is not one of "
                     f"{ELIGIBILITY_KINDS}. §E4 admits exactly four and a fifth would be a new "
                     "way to make a verb unavailable -- which is a design change, not a table edit.")
+        # The scale must be a rung kind, and `rung_kinds` owns which. An unrostered scale RAISES
+        # rather than defaulting to `person`: a governance verb quietly filed at person scale is
+        # the silent-wrong-answer shape this file refuses everywhere else.
+        if row.scale not in RUNG_KINDS:
+            raise SystemExit(f"verb_table.yaml: {name!r} has scale {row.scale!r}, which is not a "
+                             f"`rung_kinds` member: {sorted(RUNG_KINDS)}")
         # The stratum must be one of the five, and the roster owns which five.
         if row.stratum not in STRATA:
             raise SystemExit(f"verb_table.yaml: {name!r} has stratum {row.stratum!r}, which is "
@@ -2663,6 +2687,55 @@ def requires_predicate(verb: str):
     return deco
 
 
+# ---------------------------------------------------------------------------
+# THE GOVERNANCE SLICE. Jordan, 2026-09-02, asked for governance and management across scales of
+# governing bodies. The verbs for it ALREADY EXIST -- all eight `binding_decision` rows -- and not
+# one of them executed, because each states its precondition in PROSE. So `post_remit` and
+# `chronicle`, two of `W6`'s five witness channels, could never fire: both need a binding decision
+# and no binding decision could happen.
+#
+# ⚠ A FACTION DOES NOT ACT. `ARCHITECTURE_V2.md:93` puts *"a faction acting as an actor"* in its
+# REFUSAL table at `L1`, with three corpus cases that wanted it, and `H-21` completes it -- *"a
+# faction's treasury is matter at the rung or office that holds it"*. Governance at a scale above
+# the person is A PERSON HOLDING AN OFFICE acting at a rung, which is what these four do.
+# ---------------------------------------------------------------------------
+
+@requires_predicate("confer")
+def _req_confer(w: "World", a: "Act") -> bool:
+    """Part E: **1-per-object** -- no live `hold` on the object. The cardinality rule stated
+    structurally, so the fold can read it."""
+    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
+    obj = d.get("office")
+    if not obj or obj not in w.offices:
+        return False
+    return not any(t.kind == "hold" and t.object == obj and t.live for t in w.tenures)
+
+
+@requires_predicate("revoke")
+def _req_revoke(w: "World", a: "Act") -> bool:
+    """Part E: *a live `hold` exists*. The exact complement of `confer`'s, which is why the two
+    are the cleanest pair to make executable first."""
+    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
+    obj = d.get("office")
+    return bool(obj) and any(t.kind == "hold" and t.object == obj and t.live for t in w.tenures)
+
+
+@requires_predicate("dispatch")
+def _req_dispatch(w: "World", a: "Act") -> bool:
+    """Part E: *the named person exists*."""
+    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
+    return d.get("subject") in w.persons
+
+
+@requires_predicate("convene")
+def _req_convene(w: "World", a: "Act") -> bool:
+    """Part E: *the venue's `container` resolves, or is NONE* (§6.2). A venue that names a rung
+    which does not exist is unmet; a venue of NONE is met, which is §6.2's carve-out."""
+    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
+    venue = d.get("venue")
+    return venue is None or venue in w.rungs
+
+
 @requires_predicate("transfer")
 def _req_transfer(w: "World", a: "Act") -> bool:
     """#353 §54 item 7: `stores(hearth(giver), kind) >= amount`. THIS IS THE SCARCITY PREDICATE --
@@ -2792,6 +2865,68 @@ def effect_for(verb: str):
         EFFECTS[verb] = fn
         return fn
     return deco
+
+
+# --- THE GOVERNANCE SLICE'S EFFECTS. `dispatch` needs none: Part E gives it `writes: []`, so an
+# order is an EMISSION and nothing else, which is `L1` in one row -- a dispatch does not move a
+# person, it tells one, and whether they go is their own act next season.
+
+@effect_for("confer")
+def _eff_confer(w: "World", a: "Act") -> list:
+    """Seats an office: a new `hold` Tenure opens, and any prior holder's closes.
+
+    ⚠ AN EFFECT MUTATES AND RETURNS THE IDS IT TOUCHED; IT DOES NOT CALL `w.write`. The fold
+    calls it INSIDE the gate's `apply()`, once, for all of the row's `writes:` — so a nested
+    `w.write` is a write inside a write, and returning `None` tells the fold nothing was touched,
+    which makes it emit the REFUSAL. My first version did both, and the fold correctly refused an
+    act whose state change had in fact happened. `_apply_write`'s docstring states the contract."""
+    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
+    obj, to = d.get("office"), d.get("to") or a.actor
+    if not obj or obj not in w.offices:
+        return []
+    touched = []
+    for t in w.tenures:
+        if t.kind == "hold" and t.object == obj and t.live:
+            t.until = w.tick
+            touched.append(t.id)
+    nt = Tenure(H(w.world_seed, w.tick, to, f"hold:{obj}"), to, obj, "hold", w.tick)
+    w.add_tenure(nt)
+    touched.append(nt.id)
+    return touched
+
+
+@effect_for("revoke")
+def _eff_revoke(w: "World", a: "Act") -> list:
+    """Unseats an office: the live `hold` closes. The mirror of `confer`, which is why the two are
+    the pair that proves the slice — one opens what the other closes, on the same row."""
+    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
+    obj = d.get("office")
+    touched = []
+    for t in w.tenures:
+        if t.kind == "hold" and t.object == obj and t.live:
+            t.until = w.tick
+            touched.append(t.id)
+    return touched
+
+
+@effect_for("convene")
+def _eff_convene(w: "World", a: "Act") -> list:
+    """Schedules a sitting: a Date comes due, with a ConveningCondition attached — Part E's two
+    writes, both done by this one effect because the fold calls it once for the row.
+
+    ⚠ A DATE IS A DICT HERE, not a class: `w.dates` is read as `d.get("due_at")` / `d.get("fired")`
+    at CALENDAR. The first version built a `Date(...)` that does not exist.
+
+    ⚠ WHAT THE SITTING THEN DECIDES IS `H-32` AND IS NOT HERE. `convene` puts a date on the
+    calendar and stops, which is `L5`: a clock may not produce an outcome. `W7` is the item that
+    makes the sitting decide."""
+    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
+    when = int(d.get("when", w.tick + 1))
+    did = H(w.world_seed, w.tick, a.actor, f"convene:{d.get('venue') or '-'}")
+    date = w.dates.setdefault(did, {"id": did, "venue": d.get("venue")})
+    date["due_at"] = when
+    date["convening_attached"] = True
+    return [did]
 
 
 @effect_for("move")

@@ -2900,6 +2900,115 @@ def test_w6_every_named_channel_has_a_predicate_and_they_are_data():
     assert len(h33["sweep"]) >= 3 and h33["site"], h33
 
 
+# ===========================================================================
+# THE GOVERNANCE SLICE — Jordan, 2026-09-02: strata that concern governance and management across
+# scales of factions/governing bodies. The `scale:` axis, crossed with the five strata.
+# ===========================================================================
+
+def test_governance_scale_is_a_rung_kind_and_is_crossed_with_the_stratum():
+    """`scale:` is a SEPARATE AXIS from `stratum`, not more strata. The stratum says what KIND of
+    act this is and orders resolution; the scale says WHOSE BODY it reaches.
+
+    ⚠ THE LADDER ALREADY EXISTED — `rung_kinds`, person through realm — so this reads that roster
+    rather than minting a second one, which on this exact axis would be §8 broken.
+
+    ⚠ AND A FACTION IS NOT A SCALE, WHICH IS A RULING AND NOT AN OMISSION.
+    `ARCHITECTURE_V2.md:93` lists *"a faction acting as an actor"* in its REFUSAL table at `L1`,
+    with three corpus cases that wanted it, and `H-21` completes it: *"a faction's treasury is
+    matter at the rung or office that holds it."* Governance above the person is a PERSON HOLDING
+    AN OFFICE acting at a rung."""
+    scales = {r.scale for r in S.VERB_TABLE.values()}
+    assert scales <= set(S.RUNG_KINDS), (
+        f"a verb's scale is not a rung kind: {sorted(scales - set(S.RUNG_KINDS))}")
+    assert "faction" not in S.RUNG_KINDS, (
+        "`faction` has become a rung kind. `ARCHITECTURE_V2.md:93` REFUSES a faction acting as an "
+        "actor at `L1`; if that has been overturned, this test is the wrong place to find out")
+    # THE AXES ARE GENUINELY CROSSED: one stratum spans several scales, and one scale spans
+    # several strata. Either alone would mean `scale` is just `stratum` under another name.
+    by_stratum, by_scale = {}, {}
+    for v, r in S.VERB_TABLE.items():
+        by_stratum.setdefault(r.stratum, set()).add(r.scale)
+        by_scale.setdefault(r.scale, set()).add(r.stratum)
+    assert any(len(v) > 1 for v in by_stratum.values()), (
+        f"every stratum sits at exactly one scale — then `scale` adds nothing: {by_stratum}")
+    assert any(len(v) > 1 for v in by_scale.values()), (
+        f"every scale carries exactly one stratum — then the two are the same axis: {by_scale}")
+    print(f"\n  scales in use: { {k: sorted(v) for k, v in sorted(by_scale.items())} }")
+
+
+def test_the_governance_slice_executes_and_a_binding_decision_reaches_a_rung():
+    """§0.2 — the slice is done when it RUNS. Four `binding_decision` verbs execute here, at
+    settlement and territory scale, performed by the one person holding an office.
+
+    ⚠ NOT ONE OF THE EIGHT GOVERNANCE VERBS EXECUTED BEFORE THIS. Each states its precondition in
+    PROSE, so `resolvable_verbs()` excluded every one — which is also why `post_remit` and
+    `chronicle`, two of `W6`'s five witness channels, could never fire: both need a binding
+    decision, and no binding decision could happen."""
+    w = P.tiny_world()
+    d = S.SeasonDriver(w)
+    duke = "p_high"
+    assert any(t.subject == duke and t.object == "off_duke" and t.live for t in w.tenures)
+
+    made = []
+
+    def choose(p, v, s, ask_budget):
+        if p.id != duke or made:
+            return []
+        # ⚠ `confer` ON `off_dicastery`, NOT `revoke` ON `off_duke`. The duke's remit is
+        # `['issue','determine','confer','dispatch','convene']` — it does NOT carry `revoke`, so
+        # a revoke by him is correctly INELIGIBLE, and using it here would have tested the
+        # eligibility gate while claiming to test the slice. `off_dicastery` is unheld, which is
+        # exactly what `confer`'s 1-per-object precondition requires.
+        acts = [
+            S.Act(id="g_confer", actor=duke, verb="confer",
+                  payload={"office": "off_dicastery", "to": "p_mid"}),
+            S.Act(id="g_convene", actor=duke, verb="convene",
+                  payload={"venue": "S", "when": w.tick + 1}),
+            S.Act(id="g_dispatch", actor=duke, verb="dispatch",
+                  payload={"subject": "p_low"}),
+        ]
+        made.extend(acts)
+        return acts
+
+    d.matter([])
+    out = d.resolve(made or choose(w.persons[duke], None, None, None),
+                    contest_max_depth=w.fixtures.get("contest_max_depth"))
+    kinds = {e.kind for e in out}
+    assert "tenure.opened" in kinds, (
+        f"`confer` seated nobody: {sorted(kinds)}")
+    assert any(t.subject == "p_mid" and t.object == "off_dicastery" and t.live
+               for t in w.tenures), "the conferral emitted but seated no live tenure"
+    assert "date.scheduled" in kinds, f"`convene` scheduled no sitting: {sorted(kinds)}"
+    assert "order.given" in kinds, f"`dispatch` gave no order: {sorted(kinds)}"
+    # AND THE SCALE IS CARRIED, not merely declared: each of these reaches a rung above the person.
+    for v in ("confer", "convene"):
+        assert S.VERB_TABLE[v].scale == "settlement", S.VERB_TABLE[v].scale
+    assert S.VERB_TABLE["dispatch"].scale == "territory"
+    print(f"\n  governance slice — emitted {sorted(kinds)}; "
+          f"{len(S.resolvable_verbs())} of {len(S.VERB_TABLE)} verbs now execute")
+
+
+def test_a_binding_decision_lights_the_two_witness_channels_that_needed_one():
+    """`W6`'s adversarial pass found `post_remit` and `chronicle` firing ZERO times, and traced it
+    to the same cause: both need a `binding_decision`, and none was executable. This is the other
+    half of that finding — with governance running, the channels are reachable.
+
+    `chronicle` is an event-kind filter (it does not read `pid`) and `post_remit` needs the witness
+    to hold an office whose remit covers the emitting verb, so the two admit different people."""
+    w = P.tiny_world()
+    duke = "p_high"
+    e = S.Event(S.H(w.world_seed, w.tick, duke, "probe:gov"), "tenure.closed", "off_duke", [],
+                ["a1"], w.tick)
+    everyone = list(w.persons)
+    assert any(S.CHANNEL_PREDICATES["chronicle"](w, e, pid) for pid in everyone), (
+        "`chronicle` does not fire on a binding decision's emission — then it can never fire at "
+        "all, and `all_five` is permanently a measurement of fewer channels than it names")
+    remit = [pid for pid in everyone if S.CHANNEL_PREDICATES["post_remit"](w, e, pid)]
+    assert remit == [duke], (
+        f"`post_remit` admits {remit}; it should admit exactly the holder of an office whose "
+        "remit covers the verb that emitted this kind")
+
+
 def test_w9_h80s_zero_control_is_executed_not_merely_described():
     """`H-80`'s cite says *"AT THE `0` SWEEP POINT NOTHING MATURES and the causal chain collapses
     to one link, which is the control"*. It said it in a YAML string and no test ran it.

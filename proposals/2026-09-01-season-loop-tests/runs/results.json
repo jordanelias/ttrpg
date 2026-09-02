@@ -9197,12 +9197,12 @@
   "P9": {
    "id": "P9",
    "verdict": "GAP",
-   "detail": "'dispatch' has a precondition the fold cannot evaluate: 'the named person exists'",
+   "detail": "verb 'refuse' is on no row of the verb table",
    "kind": "UNSPECIFIED",
-   "section": "E2",
+   "section": "S27/E2",
    "title": "an order is the subordinate's own choice",
-   "needs": "a predicate in REQUIRES_PREDICATES, or a `requires:` the table states structurally rather than in prose",
-   "law": "\u00a7E2 -- `requires` is checked IN THE FOLD. Stated as prose it is the same defect `resolve` had, one column along: a rule the code cannot read",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
    "by": "construction",
    "tests": "a superior must be able to direct a subordinate, and the subordinate must be able to refuse or deviate"
   },
@@ -9485,7 +9485,7 @@
   "P36": {
    "id": "P36",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 8 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['create_record', 'move', 'speak', 'tell', 'transfer', 'utter', 'work'] -- 7 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 12 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['create_record', 'move', 'speak', 'tell', 'transfer', 'utter', 'work'] -- 7 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
    "kind": null,
    "section": "S17",
    "title": "a choice branches three ways",
@@ -10507,10 +10507,10 @@
   },
   {
    "kind": "UNSPECIFIED",
-   "what": "'dispatch' has a precondition the fold cannot evaluate: 'the named person exists'",
-   "where": "E2",
-   "needs": "a predicate in REQUIRES_PREDICATES, or a `requires:` the table states structurally rather than in prose",
-   "law": "\u00a7E2 -- `requires` is checked IN THE FOLD. Stated as prose it is the same defect `resolve` had, one column along: a rule the code cannot read",
+   "what": "verb 'refuse' is on no row of the verb table",
+   "where": "S27/E2",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
    "case": "probe:P9",
    "expected": false
   },
@@ -11013,7 +11013,7 @@
  "_trace_counts": {
   "STEP": 1920,
   "BARRIER": 651,
-  "DECISION": 657,
+  "DECISION": 658,
   "WRITE": 11931,
   "EVENT": 9067,
   "QUERY": 3956,
