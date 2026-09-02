@@ -68,6 +68,26 @@ from trace_log import TRACE
 # GAP SIGNALS
 # ===========================================================================
 
+class InstrumentDefect(Exception):
+    """THE INSTRUMENT WAS CALLED WRONG. Deliberately NOT a `ShapeGap`.
+
+    ⚠ THIS EXISTS BECAUSE THE DISTINCTION WAS LOST ONCE AND COST THREE FALSE FINDINGS. `W5` moved
+    the Tenure store onto its subject; three probes still wrote `w.tenures += [...]`; the
+    read-only view refused them; `run_cases` catches EVERY `ShapeGap` and files it as a GAP --
+    so `F1`, `F20` and `P40` flipped PASS -> GAP and the gap count rose 73 -> 76. Every one of
+    those was A BUG IN THE PROBE, reported as a hole in the design.
+
+    That is the worst failure this instrument can have. Its entire output is the claim *"here is
+    what #353 does not specify"*, and a call-site bug that lands in that column corrupts the
+    measurement in the direction that flatters it -- more holes found. `CLAUDE.md` §0.1 point 4:
+    a number without a control is not a measurement, in EITHER direction.
+
+    So: a refusal that means *"the design forbids this"* is a `Forbidden` and is a finding. A
+    refusal that means *"you called me wrong"* is this, and is an INSTRUMENT-ERROR -- a bucket
+    `run_cases` already had. The separation is by CLASS, so no probe can absorb one as the other,
+    and `test_w5_no_gap_is_an_instrument_defect` is the falsifier."""
+
+
 class ShapeGap(Exception):
     kind = "GAP"
 
@@ -210,6 +230,15 @@ DEFAULT_FIXTURES = Fixtures(
     band_floors={"harbour": {"bulk_shipping": 800, "fishing": 100},
                  "seam": {"deep_mining": 700, "surface_gleaning": 50},
                  "body": {"full_operations": 800, "limited": 500, "withdrawal_only": 100}},
+    # W5 / `H-28`. §F3's `budget` has three modifier terms and #353 gives a value for NONE of
+    # them -- `:912-913` says only that "a wounded duke gets fewer acts than a healthy one".
+    # So the DIRECTION is ruled and the MAGNITUDE is not, which is exactly a fixture. Injection
+    # site: here. Row: `H-70`, swept. ⚠ The BAND TABLE they read is NOT invented -- `band_floors`
+    # above already carries a `"body"` row, so `condition_penalty(p's body band)` counts bands
+    # against the table the site gate already uses. `H-38` closed with "`Site.condition` is the
+    # model"; this is that closure spent rather than restated.
+    budget_office_bonus=1,
+    budget_leg_penalty=1,
 )
 
 
@@ -389,14 +418,15 @@ def assume_partition_row(record_kind: str, fieldname: str, social: bool, why: st
 ROSTERS_YAML = (_HERE.parent.parent / "2026-09-02-executable-architecture" / "rosters.yaml")
 
 
-def _load_rosters() -> dict:
+def _load_rosters() -> tuple:
     import yaml as _y
     if not ROSTERS_YAML.exists():
         raise SystemExit(f"rosters.yaml not found at {ROSTERS_YAML}")
-    return (_y.safe_load(ROSTERS_YAML.read_text()) or {}).get("rosters") or {}
+    doc = _y.safe_load(ROSTERS_YAML.read_text()) or {}
+    return (doc.get("rosters") or {}), (doc.get("tables") or {})
 
 
-_ROSTERS = _load_rosters()
+_ROSTERS, _TABLES = _load_rosters()
 
 
 def roster(name: str, ordered: bool = False):
@@ -410,8 +440,51 @@ def roster(name: str, ordered: bool = False):
             needs="add the roster to the data file; do not inline it here",
             law="Jordan 2026-09-02 -- definitions are not hardcoded. An absent roster REFUSES; "
                 "returning an empty set would make every membership test silently false")
+    if "values" not in r:
+        raise Unspecified(
+            f"{name!r} is not a roster -- it has no `values:`", "rosters.yaml",
+            needs="read a MAPPING with table(), a SET with roster()",
+            law="rosters.yaml -- a roster is a SET and a table is a MAPPING. Reading one with the "
+                "other's function raises, so the two shapes cannot be confused at a call site")
     vals = r["values"]
+    # A roster may FORBID a member by name. `conviction_axes` forbids `exposure` bare, because
+    # #353 `:1897` names it as three senses of one word; a data edit that added it would
+    # otherwise reintroduce the collision silently, which is the whole failure mode this file
+    # exists to prevent. The check is on the DATA, so it survives every route into the roster.
+    for bad in (r.get("forbidden") or []):
+        if bad in vals:
+            raise Forbidden(
+                f"roster {name!r} carries the forbidden member {bad!r}", "rosters.yaml",
+                needs=f"spell the sense meant; {bad!r} is named as a collision, not a value",
+                law=f"rosters.yaml -- {name}'s `forbidden:` list. A roster may bar a member by "
+                    "name, and the bar is DATA so no code path can route around it")
     return tuple(vals) if (ordered or r.get("ordered")) else frozenset(vals)
+
+
+def table(name: str) -> dict:
+    """A MAPPING from `rosters.yaml`'s `tables:`, returned as `{outer: {inner: float}}`.
+
+    Sparse: a pair the data does not list reads as `default_cell`, which is NOT the same claim as
+    an all-zero table -- `alignment` may be sparse and may not be uniformly zero, and the two are
+    checked separately below."""
+    t = _TABLES.get(name)
+    if t is None:
+        if name in _ROSTERS:
+            raise Unspecified(
+                f"{name!r} is a roster, not a table", "rosters.yaml",
+                needs="read a SET with roster(), a MAPPING with table()",
+                law="rosters.yaml -- a roster is a SET and a table is a MAPPING")
+        raise Unspecified(
+            f"table {name!r} is not in rosters.yaml", "rosters.yaml",
+            needs="add the table to the data file; do not inline it here",
+            law="Jordan 2026-09-02 -- definitions are not hardcoded. An absent table REFUSES")
+    return {outer: dict(inner) for outer, inner in (t.get("cells") or {}).items()}
+
+
+def table_meta(name: str) -> dict:
+    """The table's own declarations -- `default_cell`, `row`, `keys`. Read rather than assumed, so
+    a data edit that changes the sparse default cannot leave a stale constant in a body."""
+    return {k: v for k, v in (_TABLES.get(name) or {}).items() if k != "cells"}
 
 
 TENURE_KINDS = roster("tenure_kinds")
@@ -420,6 +493,10 @@ REMIT_ACTS = roster("remit_acts")
 WITNESS_CHANNELS = roster("witness_channels", ordered=True)
 CLAIM_SOURCES = roster("claim_sources")
 STRATA = roster("strata", ordered=True)
+CONVICTION_AXES = roster("conviction_axes")
+QUESTION_SOURCES = roster("question_sources", ordered=True)
+PERSON_PREDICATES = roster("person_predicates")
+VIEW_BUILDER_RULES = roster("view_builder_rules")
 
 # ===========================================================================
 # PART E, LOADED FROM DATA -- W3. THE RESOLVER'S BODY.
@@ -500,6 +577,71 @@ VERB_TABLE: dict = {}          # filled after STRATA loads, at the bottom of the
 
 
 VERB_TABLE = _load_verb_table()
+
+
+def _load_alignment() -> dict:
+    """§F2's `alignment(c.verb, axis)`, from `rosters.yaml`, with THREE load-time checks.
+
+    Each check exists because the corresponding failure would be SILENT. A cell naming a verb the
+    table no longer carries is dead weight nothing reports; an axis outside the roster makes
+    `conviction[axis]` unreachable; and an all-zero matrix -- PLAN §W5's named guardrail -- "would
+    pass every test while meaning nothing", which is the dead-carrier defect #353 `:739-744`
+    describes. All three raise HERE rather than producing a plausible score later."""
+    cells = table("alignment")
+    verbs = set(VERB_TABLE)
+    for axis, row in cells.items():
+        if axis not in CONVICTION_AXES:
+            raise Forbidden(
+                f"alignment names axis {axis!r}, which is not in the conviction_axes roster",
+                "rosters.yaml",
+                needs="add the axis to conviction_axes, or drop the row",
+                law="§F2 -- `conviction[axis] * alignment(verb, axis)` sums over the ROSTER. A "
+                    "cell on an unrostered axis is never read and never reported")
+        unknown = sorted(set(row) - verbs)
+        if unknown:
+            raise Forbidden(
+                f"alignment[{axis}] names {len(unknown)} verb(s) no verb table row carries: {unknown}",
+                "rosters.yaml",
+                needs="spell the verb exactly as verb_table.yaml spells it, or drop the cell",
+                law="§E2 -- the verb table is the roster of verbs. A cell keyed on a verb that "
+                    "does not exist is a weight on an option nobody can ever form")
+    if not any(v for row in cells.values() for v in row.values()):
+        raise Forbidden(
+            "the alignment table is all zeroes", "rosters.yaml",
+            needs="a default with at least one non-zero weight",
+            law="PLAN §W5 -- 'a zero matrix makes convictions inert, which is the dead-carrier "
+                "defect #353 `:739-744` names, and it would pass every test while meaning nothing'")
+    return cells
+
+
+ALIGNMENT = _load_alignment()
+ALIGNMENT_DEFAULT_CELL = float(table_meta("alignment").get("default_cell", 0.0))
+
+
+def matrix_rows_without_a_field() -> dict:
+    """Every matrix row whose `(kind, field)` names no field of that kind's model.
+
+    ⚠ THE W2 ADVERSARIAL PASS NAMED THIS GAP: *"nothing checks that a matrix row's `fieldname` is
+    a real field of its `record_kind` — which is exactly how `(Record, held_by)` survived four
+    revisions."* It reports rather than raising, because a row can legitimately outrun the model:
+    Part D is the SPECIFICATION and this file is one implementation of it, so a row naming a field
+    the instrument has not built yet is a TODO for the instrument, not a defect in Part D.
+
+    Kinds the instrument models as DICTS rather than classes — `Date`, `DocketItem`, `Petition`,
+    `Dispensation`, `ConveningCondition` — cannot be checked at all and are reported separately,
+    so the number is never mistaken for a clean bill."""
+    import dataclasses as _dc
+    out = {"absent": [], "unmodelled": []}
+    for (kind, fld) in sorted(MATRIX):
+        cls = globals().get(kind)
+        if cls is None or not _dc.is_dataclass(cls):
+            out["unmodelled"].append((kind, fld))
+            continue
+        if fld == "exists":
+            continue                     # existence is the collection's membership, not a field
+        if fld not in {f.name for f in _dc.fields(cls)}:
+            out["absent"].append((kind, fld))
+    return out
 
 
 def rows_without_a_producer() -> dict:
@@ -795,6 +937,24 @@ class Person:
     convictions: dict = field(default_factory=dict)
     beliefs: list[tuple] = field(default_factory=list)
     ledger: list[Claim] = field(default_factory=list)
+    # W5. Part D carries `(Person, body)` and `(Person, travel_leg)` and this class had NEITHER,
+    # so both rows named a field that did not exist — the `(Record, held_by)` defect, at scale
+    # (see `matrix_rows_without_a_field`). `budget` reads both, person-side, which is PLAN §3.3's
+    # smaller amendment: a Person owns every Tenure whose subject they are, so office-holding,
+    # body and travel are all the person's own state and `sense()` keeps §18.2's "the ONE".
+    body: int = 1000
+    travel_leg: list[str] = field(default_factory=list)
+    # ⚠ W5 MOVED THE TENURE STORE HERE, and `Tenure`'s OWN DOCSTRING already said this: "S15 --
+    # THE ONE EDGE. Owned by its SUBJECT (S15.1)." The class asserted the ownership and the
+    # storage contradicted it -- every Tenure lived in one flat `World.tenures` list. That was
+    # survivable until `budget : (Person, View) -> int` had to read "own `hold` Tenures" WITH NO
+    # WORLD (#353 `:877`, `:912-913`; `H-28`). With a flat world list that signature is
+    # UNSATISFIABLE, which is why V2 §F3 gave `budget` a `World` and became a SECOND non-decision
+    # function taking one -- breaking `:634`'s "the ONE non-decision function permitted a World".
+    # PLAN §3.3 takes the smaller amendment instead: #353 `:730` gives Person "every Tenure whose
+    # subject they are", so the store was in the wrong place all along and no signature had to
+    # change. `World.tenures` is now a READ-ONLY VIEW over these; see `_TenureView`.
+    tenures: list = field(default_factory=list)
 
     def __post_init__(self) -> None:
         if self.weight < 1:
@@ -907,6 +1067,39 @@ class Rung:
 # S45.1 -- DECLARE `World` FIRST
 # ===========================================================================
 
+
+class _TenureView(list):
+    """`World.tenures` -- a READ-ONLY concatenation over the owners (S15.1).
+
+    ⚠ IT RAISES ON EVERY MUTATOR, and that is the whole reason it is a class rather than a plain
+    `list(...)`. `CLAUDE.md` §0.1 point 1 names this exact hazard: *"when a getter starts computing
+    from a new source while setters still write the old one, EVERY WRITER SILENTLY BECOMES A
+    NO-OP."* Moving the store onto `Person` did precisely that to nine `w.add_tenure(...)`
+    sites. Returning a plain list would have let all nine keep running, keep appending to a
+    throwaway, and keep passing -- the Tenure would simply never exist. Every one of them now
+    fails at the call, and the fix is `w.add_tenure(t)`, which routes by subject."""
+
+    # roster-exempt: MECHANISM. These are PYTHON'S mutator method names, not a game definition
+    # — rosters.yaml's own test is "would changing this change the GAME, or change how the code
+    # works?", and editing this list changes only which call raises. It is also not a set anyone
+    # may edit: it is fixed by the language. The guard flagging it is the guard working; a
+    # declared exemption is the answer, and a name-based whitelist would not be (G2).
+    _MUTATORS = ("append", "extend", "insert", "remove", "pop", "clear", "sort", "reverse",
+                 "__setitem__", "__delitem__", "__iadd__", "__imul__")
+
+    def _refuse(self, *_a, **_k):
+        # `InstrumentDefect`, NOT `Forbidden`: this is a call-site bug, not a law of the design,
+        # and filing it as a GAP is what put three false holes in the count. See the class.
+        raise InstrumentDefect(
+            "w.tenures is a READ-ONLY VIEW over the subjects that own the Tenures (S15.1). "
+            "Use w.add_tenure(t) -- it routes by subject to the owner. Mutating the "
+            "concatenation would write to a temporary and silently lose the Tenure.")
+
+
+for _n in _TenureView._MUTATORS:
+    setattr(_TenureView, _n, _TenureView._refuse)
+
+
 class World:
     def __init__(self, world_seed: int, fixtures: Fixtures = DEFAULT_FIXTURES):
         self.world_seed = world_seed
@@ -918,10 +1111,13 @@ class World:
         self.sites: dict[str, Site] = {}
         self.records: dict[str, Record] = {}
         self.propositions: dict[str, Proposition] = {}
-        self.tenures: list[Tenure] = []
+        # S15.1 -- the store is the SUBJECT'S. `_unowned` holds only the Tenures whose subject
+        # is not a person (`contain : Rung -> Rung` is the bulk of them). See the `tenures` view.
+        self._unowned: list[Tenure] = []
         self.log: list[Event] = []
         self.dates: dict[str, dict] = {}
         self.docket: list[dict] = []
+
         self.petitions: dict[str, dict] = {}
         self.dispensations: dict[str, dict] = {}
         self.manifest: dict[str, str] = {}      # S43 -- role -> provider, resolved AT BOOT
@@ -939,6 +1135,38 @@ class World:
 
     # -- S30.2: the write class is a PARAMETER of the store API, THE GATE APPLIES THE WRITE,
     # and `record_kind`/`fieldname` are REQUIRED so the L4 limb cannot be silenced by omission.
+    # -- THE TENURE STORE, ROUTED BY SUBJECT (S15.1) -----------------------
+    @property
+    def tenures(self) -> "_TenureView":
+        """Every live-or-dead Tenure, owner-first. Read-only -- see `_TenureView`."""
+        self._rehome()
+        out: list[Tenure] = []
+        for pid in sorted(self.persons):
+            out.extend(self.persons[pid].tenures)
+        out.extend(self._unowned)
+        return _TenureView(out)
+
+    def add_tenure(self, t: Tenure) -> Tenure:
+        """The ONE writer. Routes to `t.subject`'s own list, or to `_unowned` when the subject is
+        not a person (`contain : Rung -> Rung` is most of those)."""
+        (self.persons[t.subject].tenures if t.subject in self.persons else self._unowned).append(t)
+        return t
+
+    def _rehome(self) -> None:
+        """A Tenure added BEFORE its subject existed landed in `_unowned`; move it now.
+
+        Without this, ordering decides ownership: a fixture that appends the Tenure and then
+        creates the Person leaves `p.tenures` empty while `w.tenures` still shows it -- so
+        `budget` would read zero offices for a duke the world agrees is a duke. That is a
+        read/write asymmetry of exactly the shape §0.1 point 1 describes, and it would be
+        invisible because both surfaces are individually correct."""
+        if not self._unowned:
+            return
+        keep = []
+        for t in self._unowned:
+            (self.persons[t.subject].tenures if t.subject in self.persons else keep).append(t)
+        self._unowned = keep
+
     def write(self, thing: str, wclass: WriteClass, apply: Callable[[], Any],
               record_kind: str, fieldname: str, driver: str,
               caused_person_exists: Optional[str] = None) -> Any:
@@ -1181,32 +1409,51 @@ class Query:
 
     # ---- person-side: takes the ASKER; own interior only ----------------
     @staticmethod
-    def budget(p: Person, v: View, k: int) -> int:
-        """S26: `budget : (Person, View) -> int`. NO WORLD.
+    def budget(p: Person, v: View, k: int, fx: "Fixtures") -> int:
+        """S26 / `H-28`: `budget : (Person, View) -> int`, PERSON-SIDE, NO WORLD. Returns SCENE
+        ACTIONS, per Jordan's 2026-09-02 ruling.
 
-        REV 3 DISCLOSURE, because rev 2's docstring claimed something the body did not do.
-        THIS RETURNS THE INJECTED FIXTURE AND IGNORES `p` AND `v` -- it is functionally the
-        FIELD S26.3 forbids, and it cannot honestly be otherwise, because of a collision the
-        chain has not resolved:
+        ⚠ REV 4 IS THE FIRST VERSION THAT READS ITS OWN ARGUMENTS. Rev 3's docstring disclosed,
+        honestly, that it "RETURNS THE INJECTED FIXTURE AND IGNORES `p` AND `v`" -- functionally
+        the FIELD S26.3 forbids. The reason it gave was a collision it called unresolved: S26
+        types it with no `World`, S26.3 says it varies by office, condition and distance, and all
+        three looked resolver-side.
 
-          S26 types it `(Person, View) -> int`, with NO World.
-          S26.3 consequence 1 says it varies by OFFICE, CONDITION and DISTANCE TRAVELLED.
+        **They were never resolver-side; the STORE was in the wrong place.** #353 `:730` gives
+        Person "every Tenure whose subject they are", so office-holding is the person's own state;
+        `(Person, body)` and `(Person, travel_leg)` are Part D rows on Person. W5 moved the tenure
+        store onto its subject (see `_TenureView`) and added the two fields, and the collision
+        dissolved with no signature change. That is PLAN §3.3's SMALLER AMENDMENT, and taking it
+        is what lets `:634`'s "the ONE non-decision function permitted a `World`" stay true --
+        V2 §F3 took the larger one and made `budget` a second such function.
 
-        All three are RESOLVER-SIDE facts. Office-holding is a `hold` Tenure in the tenure
-        store; `condition` belongs to a Site; distance travelled is a travel leg, which S22.3
-        says HAS NO OWNER AT ALL. A person-side function with no World cannot read any of
-        them. Probe P42 raises this as a COLLISION rather than papering over it with a
-        plausible formula, which S42.2.1 forbids.
+            budget = base + office_bonus x (own live `hold` Tenures)
+                          - condition_penalty(own body band)
+                          - distance_penalty(own travel legs)
 
-        What rev 3 DOES restore is the half rev 2 dropped: `choose` ASKS for its own budget
-        rather than being handed the answer. `deliberate` passes this callable down, so the
-        person consults their own budget and decides what to leave undone -- and an
-        over-budget return still RAISES, because silently discarding the tail would be an
-        engine deciding a person's options, which is L1."""
+        `condition_penalty` COUNTS BANDS on the `band_floors["body"]` table the site gate already
+        uses -- `H-38` closed with "`Site.condition` is the model", so this spends that closure
+        rather than inventing a second band scheme. Floor of 1: a wounded duke gets fewer scenes,
+        and a dying one still gets one, because a budget of 0 would delete the person from the
+        season silently rather than narrowing them (S26.3's triage is the point).
+
+        `k` remains the injected base so the sweep site is unchanged. The two modifier magnitudes
+        are fixtures (`H-70`); the DIRECTIONS are #353 `:912-913` and are not open.
+
+        ⚠ `fx` IS NOT A WORLD, and the distinction is the one L2 actually draws. A `World` is other
+        people's state -- persons, rungs, sites, the tenure store -- and reading it person-side is
+        what L2 forbids. `Fixtures` is the PARAMS REGISTRY: flat numbers, no entity, identical for
+        every person in the season, and #353 §22 assigns them to `params` precisely so they are
+        not world state. `k` was already one of them, handed in by the driver; `fx` generalises
+        that rather than widening it. The AST proof below tests for a `World` ANNOTATION, so it
+        would catch a real regression here and correctly passes this."""
         TRACE.query("budget", "person")
-        return k
+        offices = sum(1 for t in p.tenures if t.kind == "hold" and t.live)
+        b = k + offices * fx.get("budget_office_bonus")
+        b -= body_band_penalty(p, fx)
+        b -= len(p.travel_leg) * fx.get("budget_leg_penalty")
+        return max(1, b)
 
-    @staticmethod
     def opening_set(p: Person, v: View, roster: list[Candidate]) -> list[Candidate]:
         """S17 -- returns Candidate[], NOT Act[].
 
@@ -1231,6 +1478,21 @@ class Query:
     def entrenchment(p: Person, seasons_held: int, scale: int, span: int) -> int:
         TRACE.query("entrenchment", "person")
         return min(scale, (seasons_held * scale) // span)
+
+
+def body_band_penalty(p: Person, fx: "Fixtures") -> int:
+    """How many bands `p`'s body has fallen below the top, on `band_floors["body"]`.
+
+    PERSON-SIDE: it reads `p.body` and a params table, never a World. `H-38` closed with *"the
+    answer is YES -- `Site.condition` is the model"*, and this is that closure SPENT: the same
+    floors table, the same "a band is a floor you are at or above" reading, one kind lower. A
+    second band scheme would have been the invention `H-38` was closed to avoid.
+
+    Returns 0 at full operations and rises by one per band crossed, so the order is FIXED and
+    the narrowing is monotone -- which is the property `P32` names."""
+    floors = fx.get("band_floors")["body"]
+    # Descending, so "the top band" is unambiguous and the count is the number of floors passed.
+    return sum(1 for f in sorted(floors.values(), reverse=True) if p.body < f)
 
 
 def sense(p: Person, w: World, subsistence: Callable[[Person, World], int]) -> Sensation:
@@ -1426,7 +1688,7 @@ def _eff_move(w: "World", a: "Act") -> None:
         if t.subject == a.actor and t.kind == "contain" and t.until is None:
             t.until = w.tick
     if dest:
-        w.tenures.append(Tenure(H(w.world_seed, w.tick, a.actor, f"leg:{a.id}"),
+        w.add_tenure(Tenure(H(w.world_seed, w.tick, a.actor, f"leg:{a.id}"),
                                 a.actor, dest, "contain", since=w.tick))
 
 
@@ -1575,7 +1837,7 @@ class SeasonDriver:
             # S26.3: the PERSON asks their own budget. `choose` receives the QUERY, not the
             # answer -- rev 2 computed it in the engine and handed the number down, which is
             # the half of retraction 5 that never landed.
-            ask_budget = lambda p=p, v=v: Query.budget(p, v, k_budget)
+            ask_budget = lambda p=p, v=v: Query.budget(p, v, k_budget, w.fixtures)
             b = ask_budget()
             produced = choose(p, v, s, ask_budget)
             # S26.3: the engine does NOT truncate. Any cap applied here would be AN ENGINE

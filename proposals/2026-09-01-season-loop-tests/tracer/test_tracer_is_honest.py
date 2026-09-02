@@ -13,6 +13,7 @@ Run: python3 -m pytest test_tracer_is_honest.py -q
 from __future__ import annotations
 
 import inspect
+import json
 import re
 import sys
 from pathlib import Path
@@ -324,7 +325,7 @@ def test_r1_aggregates_over_live_edges_only():
     f = lambda r: w.rungs[r].stores.get("grain", 0) if r in w.rungs else 0
     base = Query.r1_aggregate(w, "S", f)
     w.rungs["Ghost"] = Rung("Ghost", "hearth", stores={"grain": 500})
-    w.tenures.append(Tenure("t_end", "Ghost", "S", "contain", since=0, until=0))
+    w.add_tenure(Tenure("t_end", "Ghost", "S", "contain", since=0, until=0))
     assert Query.r1_aggregate(w, "S", f) == base
 
 
@@ -350,7 +351,7 @@ def test_witness_writes_no_belief_and_no_conviction():
 
 def test_hold_cardinality_is_one_per_object():
     w = _w()
-    w.tenures.append(Tenure("t_dup", "p_mid", "off_duke", "hold", since=0))
+    w.add_tenure(Tenure("t_dup", "p_mid", "off_duke", "hold", since=0))
     with pytest.raises(Forbidden):
         Query.hold_force(w, "off_duke")
 
@@ -617,7 +618,53 @@ def test_r3_choose_asks_its_own_budget():
         asked.append(ask_budget())
         return []
     S.SeasonDriver(w).season(choose, "q", P.SUBSIST)
-    assert asked and all(n == w.fixtures.get("act_budget") for n in asked)
+    assert asked, "no person was asked for a budget at all"
+    # ⚠ W5 REPOINTED THIS ASSERTION, AND THE OLD ONE WAS THE DEFECT. It read
+    # `all(n == w.fixtures.get("act_budget") for n in asked)` — i.e. it PINNED A FLAT BUDGET,
+    # which is the field S26.3 forbids, as an invariant. `budget` reading its own arguments is
+    # what broke it, and a test that goes red when the specification is finally met was testing
+    # the implementation. C11's claim is that the person is ASKED; that is what stays.
+    base = w.fixtures.get("act_budget")
+    assert all(n >= 1 for n in asked), "a budget of 0 deletes a person from the season silently"
+    assert any(n != base for n in asked), (
+        f"every budget came back at the flat base {base} ({asked}) — `budget` is ignoring `p` "
+        "again, which is #353 :912-913's 'a wounded duke gets fewer acts than a healthy one' "
+        "unmet. This assertion is the falsifier for W5's person-side budget.")
+
+
+def test_w5_budget_moves_with_the_persons_own_state_in_the_ruled_directions():
+    """`H-28` / §F3. #353 `:912-913` rules the DIRECTION of all three modifier terms and no
+    magnitude, so this tests directions and never a number.
+
+    Three separate one-variable comparisons against the same person, because a single world with
+    three differing people cannot tell you WHICH term moved the total — that is §0.1 point 4's
+    control, applied to a formula rather than to a measurement."""
+    w = _w()
+    fx = w.fixtures
+    p = next(iter(w.persons.values()))
+    v = S.View(p.id, [], fx.get("view_k"))
+    k = fx.get("act_budget")
+    base = S.Query.budget(p, v, k, fx)
+
+    # office: a live `hold` Tenure the person OWNS. Routed through add_tenure, so the store is
+    # the person's own — which is the whole reason budget can read it with no World.
+    w.add_tenure(S.Tenure("t_b1", p.id, "off_x", "hold", since=0))
+    assert S.Query.budget(p, v, k, fx) > base, "holding an office did not raise the budget"
+    p.tenures = [t for t in p.tenures if t.id != "t_b1"]
+
+    # body: falling a band. `band_floors["body"]` is the table the SITE gate already uses.
+    floors = sorted(fx.get("band_floors")["body"].values(), reverse=True)
+    p.body, was = floors[0] - 1, p.body
+    assert S.Query.budget(p, v, k, fx) < base, "falling a body band did not lower the budget"
+    lower = S.Query.budget(p, v, k, fx)
+    p.body = floors[-1] - 1
+    assert S.Query.budget(p, v, k, fx) < lower, "the narrowing is not monotone across bands"
+    assert S.Query.budget(p, v, k, fx) >= 1, "a dying person must still get one scene, not zero"
+    p.body = was
+
+    # travel: a leg spent this season.
+    p.travel_leg = ["leg_a"]
+    assert S.Query.budget(p, v, k, fx) < base, "a travel leg did not lower the budget"
 
 
 def test_r3_the_dead_code_is_reached():
@@ -1370,7 +1417,11 @@ def test_w2_the_class_column_is_derived_and_cross_checked():
 # ===========================================================================
 
 # Declared roster exemptions may shrink, never grow without an argument made here.
-EXEMPT_CEILING = 12
+# 12 -> 13, W5: `_TenureView._MUTATORS` in `shape.py`. The argument, since the ceiling demands one:
+# it is a list of PYTHON'S OWN mutator method names, fixed by the language and editable by nobody,
+# so it fails rosters.yaml's test in the direction that exempts — changing it changes how the code
+# works, never what the game is. It is the first exemption this guard has earned on its own author.
+EXEMPT_CEILING = 13
 
 
 def test_jordan_no_definition_is_hardcoded_in_a_body():
@@ -1562,3 +1613,50 @@ def test_w3_the_write_class_check_still_refuses_a_wrong_class():
     # And the right class is admitted, so the refusal above is about the CLASS and not the row.
     w.write("stores", WriteClass.ACTS, lambda: None,
             record_kind="Rung", fieldname="stores", driver="Act")
+
+
+def test_w5_no_gap_is_an_instrument_defect():
+    """No probe's GAP may be caused by the instrument being called wrong (`InstrumentDefect`).
+
+    ⚠ THE DEFECT THIS PINS IS THE WORST ONE THIS TOOL CAN HAVE. Its whole output is the claim
+    "here is what #353 does not specify". `W5` moved the Tenure store onto its subject, three
+    probes kept writing `w.tenures += [...]`, and because `run_cases` files every `ShapeGap` as a
+    GAP, three PROBE BUGS were reported as holes in the design — the gap count went 73 → 76 in
+    the direction that flatters the instrument. §0.1 point 4: a number without a control is not a
+    measurement, in EITHER direction.
+
+    §0.1 point 2 — an assertion must be able to OBSERVE the failure it excludes — so the test
+    plants the failure first and checks the plant was seen, rather than trusting a clean run."""
+    RC = R
+
+    # ---- the plant. A probe body that calls the instrument wrong must NOT read as a GAP. ----
+    spec = dict(title="planted", section="S15.1", by="probe-model", tests="the plant")
+    def called_wrong():
+        w = _w()
+        w.tenures.append(S.Tenure("t_plant", "p_mid", "off_x", "hold", since=0))
+    planted = RC._verdict_for("PLANT", spec, called_wrong) if hasattr(RC, "_verdict_for") else None
+    if planted is None:                       # the runner's entry point is private; do it directly
+        try:
+            called_wrong()
+            planted = {"verdict": "PASS"}
+        except S.ShapeGap as g:
+            planted = {"verdict": "GAP", "kind": g.kind}
+        except Exception as e:                                            # noqa: BLE001
+            planted = {"verdict": "INSTRUMENT-ERROR", "detail": f"{type(e).__name__}: {e}"}
+    assert planted["verdict"] == "INSTRUMENT-ERROR", (
+        f"a call-site bug graded {planted['verdict']!r}, not INSTRUMENT-ERROR. If it grades GAP "
+        "the instrument is counting its own bugs as holes in #353, which is the defect this test "
+        "exists for — check `InstrumentDefect` is not a `ShapeGap`.")
+
+    # ---- and the real corpus is clean of them. ----
+    assert not issubclass(S.InstrumentDefect, S.ShapeGap), (
+        "InstrumentDefect became a ShapeGap — every call-site bug is now reportable as a design "
+        "hole again, and the plant above would stop catching it.")
+    runs = HERE.parent / "runs"
+    results = json.loads((runs / "results.json").read_text())
+    errs = sorted(k for k, v in results["_probes"].items()
+                  if v.get("verdict") == "INSTRUMENT-ERROR")
+    assert not errs, (
+        f"{len(errs)} probe(s) fail with an instrument defect rather than running: {errs}. "
+        "These are bugs in the probe or in shape.py, not findings about #353, and they must be "
+        "fixed rather than published.")

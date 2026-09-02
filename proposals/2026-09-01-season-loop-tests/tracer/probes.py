@@ -73,7 +73,7 @@ def tiny_world(fixtures: Fixtures = DEFAULT_FIXTURES) -> World:
     n = [0]
     def edge(sub, obj, kind, **kw):
         n[0] += 1
-        w.tenures.append(Tenure(f"t{n[0]}", sub, obj, kind, since=0, **kw))
+        w.add_tenure(Tenure(f"t{n[0]}", sub, obj, kind, since=0, **kw))
     edge("D", "R", "contain"); edge("S", "D", "contain"); edge("Hh", "S", "contain")
     for pid in ("p_low", "p_mid", "p_other"):
         edge(pid, "Hh", "contain")
@@ -506,7 +506,7 @@ def p22():
     w.records["rec_writ"] = Record("rec_writ", "S", "writ")
     w.step = Step.RESOLVE
     w.write("Tenure", WriteClass.ACTS,
-            lambda: w.tenures.append(Tenure("t_hold", "p_low", "rec_writ", "hold", since=0)),
+            lambda: w.add_tenure(Tenure("t_hold", "p_low", "rec_writ", "hold", since=0)),
             # W2: this declared `(Record, held_by)`, which is not a Record field and is on no
             # Part D row. H-22 rules it: "the `hold` Tenure is the HOLDER'S". A hold is a
             # RELATIONSHIP, and modelling it as a field on one of its ends is the ride-on defect
@@ -739,8 +739,8 @@ def f1():
     w = tiny_world()
     prop = Proposition("prop_1", "OUGHT", "realm", "the wardens should hold", True, 0)
     w.propositions[prop.id] = prop
-    w.tenures += [Tenure("tc1", "p_low", prop.id, "commit", since=0),
-                  Tenure("tc2", "p_king", prop.id, "commit", since=0)]
+    w.add_tenure(Tenure("tc1", "p_low", prop.id, "commit", since=0))
+    w.add_tenure(Tenure("tc2", "p_king", prop.id, "commit", since=0))
     edges = [t for t in Query.lateral(w, "faction", "commit") if t.object == prop.id]
     n = Query.commit_count_guard(w, edges, "membership")
     try:
@@ -762,14 +762,14 @@ def f2():
     w = tiny_world()
     prop = Proposition("prop_dead", "OUGHT", "realm", "a dead cause", True, 0)
     w.propositions[prop.id] = prop
-    w.tenures.append(Tenure("th_dead", prop.id, "S", "hold", since=0))
+    w.add_tenure(Tenure("th_dead", prop.id, "S", "hold", since=0))
     assert not [t for t in Query.lateral(w, "faction", "commit") if t.object == prop.id]
     w.step = Step.RESOLVE
     old = Query.hold_force(w, "S")
     w.write("Tenure", WriteClass.ACTS, lambda: setattr(old, "until", w.tick),
             record_kind="Tenure", fieldname="until", driver="Act")
     w.write("Tenure", WriteClass.ACTS,
-            lambda: w.tenures.append(Tenure("th_new", "p_high", "S", "hold", since=w.tick)),
+            lambda: w.add_tenure(Tenure("th_new", "p_high", "S", "hold", since=w.tick)),
             record_kind="Tenure", fieldname="since", driver="Act")
     assert Query.hold_force(w, "S").subject == "p_high"
     return ("PASS: `confer` on an object whose holder-Proposition has ZERO live commit edges was "
@@ -921,7 +921,7 @@ def f12():
     w.write("Tenure", WriteClass.ACTS, lambda: setattr(t, "until", w.tick),
             record_kind="Tenure", fieldname="until", driver="Act")
     w.write("Tenure", WriteClass.ACTS,
-            lambda: w.tenures.append(Tenure("t_new", "p_mid", "off_duke", "hold", since=w.tick)),
+            lambda: w.add_tenure(Tenure("t_new", "p_mid", "off_duke", "hold", since=w.tick)),
             record_kind="Tenure", fieldname="since", driver="Act")
     assert not t.live and Query.hold_force(w, "off_duke").subject == "p_mid"
     ent = Query.entrenchment(w.persons["p_mid"], 30, w.fixtures.get("condition_scale"),
@@ -951,8 +951,8 @@ def f14():
     w = tiny_world()
     prop = Proposition("prop_c", "OUGHT", "realm", "a cause", True, 0)
     w.propositions[prop.id] = prop
-    w.tenures += [Tenure("e1", "p_low", prop.id, "commit", since=0),
-                  Tenure("e2", "p_mid", prop.id, "commit", since=0, until=1)]
+    w.add_tenure(Tenure("e1", "p_low", prop.id, "commit", since=0))
+    w.add_tenure(Tenure("e2", "p_mid", prop.id, "commit", since=0, until=1))
     Query.commit_count_guard(w, [t for t in w.tenures if t.kind == "commit"], "held_ever")
     return "UNREACHABLE"
 
@@ -1431,7 +1431,7 @@ def a10():
     w = tiny_world()
     total = Query.r1_aggregate(w, "S", lambda rid: w.rungs[rid].stores.get("grain", 0)
                                if rid in w.rungs else 0)
-    w.tenures.append(Tenure("t_dead", "Gone", "S", "contain", since=0, until=0))
+    w.add_tenure(Tenure("t_dead", "Gone", "S", "contain", since=0, until=0))
     w.rungs["Gone"] = Rung("Gone", "hearth", stores={"grain": 999})
     after = Query.r1_aggregate(w, "S", lambda rid: w.rungs[rid].stores.get("grain", 0)
                                if rid in w.rungs else 0)
@@ -1617,7 +1617,7 @@ def a25():
     # REV 4: the fixture's only tie was p_low<->p_mid, BOTH inside S's subtree, so the old
     # assertion could not fail on the property it claimed. A tie that genuinely leaves the
     # subtree is added here, and the assertion is on the crossing itself.
-    w.tenures.append(Tenure("t_far", "p_low", "p_king", "tie", since=0))
+    w.add_tenure(Tenure("t_far", "p_low", "p_king", "tie", since=0))
     sub = Query.descendants(w, "S")
     lat = Query.lateral(w, "ties", "tie")
     crossing = [t for t in lat if (t.subject in sub) != (t.object in sub)]
@@ -1633,7 +1633,7 @@ def a25():
        tests="the engine must be able to walk its own references without looping forever")
 def a26():
     w = tiny_world()
-    w.tenures.append(Tenure("t_cyc", "R", "Hh", "contain", since=0))
+    w.add_tenure(Tenure("t_cyc", "R", "Hh", "contain", since=0))
     got = Query.descendants(w, "S")
     assert isinstance(got, list)
     return (f"PASS: a deliberate cycle (R contained by Hh) returned {len(got)} descendants and did "
@@ -1881,8 +1881,8 @@ def p39():
        tests="a character must be able to hold obligations to two bodies that come into direct conflict")
 def p40():
     w = tiny_world()
-    w.tenures += [Tenure("ob1", "p_mid", "off_duke", "oblige", since=0),
-                  Tenure("ob2", "p_mid", "off_dicastery", "oblige", since=0)]
+    w.add_tenure(Tenure("ob1", "p_mid", "off_duke", "oblige", since=0))
+    w.add_tenure(Tenure("ob2", "p_mid", "off_dicastery", "oblige", since=0))
     obligations = [t for t in Query.lateral(w, "duty", "oblige") if t.subject == "p_mid"]
     assert len(obligations) == 2
     b = w.fixtures.get("act_budget")
@@ -1913,8 +1913,8 @@ def f20():
     w = tiny_world()
     treaty = Proposition("prop_treaty", "OUGHT", "R", "the strait stays open", True, 0)
     w.propositions[treaty.id] = treaty
-    w.tenures += [Tenure("c_a", "p_king", treaty.id, "commit", since=0),
-                  Tenure("c_b", "p_high", treaty.id, "commit", since=0)]
+    w.add_tenure(Tenure("c_a", "p_king", treaty.id, "commit", since=0))
+    w.add_tenure(Tenure("c_b", "p_high", treaty.id, "commit", since=0))
     bound = [t.subject for t in Query.lateral(w, "treaty", "commit") if t.object == treaty.id]
     assert set(bound) == {"p_king", "p_high"}
     return ("PASS-STRUCTURALLY, AND THE STRUCTURE IS THE FINDING: a treaty is a Proposition plus "

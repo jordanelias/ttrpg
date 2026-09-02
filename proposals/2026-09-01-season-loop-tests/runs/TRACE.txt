@@ -111,7 +111,7 @@
    111  probe:P30            BARRIER   barrier 3 - RESOLVE  @S23
    112  probe:P30            DECISION  ordering 1 acts  @S27/S32  chose="five strata, then a content-derived hash key over one global array" alternatives=["completion order", "rank", "per-container sort (voids the fold)"] not_implemented=[]
    113  probe:P30            GAP       [UNSPECIFIED] verb 'do' is on no row of the verb table  @S27/E2  needs="a row in verb_table.yaml, ruled before it is added" law="\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids" expected=false
-   114  probe:P32            GAP       [UNSPECIFIED] a banded scalar on Person  @S12  needs="the S12.1 verb gate is defined ONLY over a Site's `condition`" law="S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are ['beliefs', 'capability', 'convictions', 'id', 'ledger', 'marks', 'name', 'stance', 'weight'] -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third" expected=false
+   114  probe:P32            GAP       [UNSPECIFIED] a banded scalar on Person  @S12  needs="the S12.1 verb gate is defined ONLY over a Site's `condition`" law="S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are ['beliefs', 'body', 'capability', 'convictions', 'id', 'ledger', 'marks', 'name', 'stance', 'tenures', 'travel_leg', 'weight'] -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third" expected=false
    115  probe:F2             QUERY     lateral:faction  @S17  side="resolver"
    116  probe:F2             WRITE     Tenure  @S30  write_class="ACTS" step="RESOLVE" admitted=true
    117  probe:F2             WRITE     Tenure  @S30  write_class="ACTS" step="RESOLVE" admitted=true
@@ -838,7 +838,7 @@
    838  probe:F17            ACT       p_mid :: raid  @S26  budget_left=4
    839  probe:F17            QUERY     sense  @S17  side="bridge"
    840  probe:F17            QUERY     budget  @S17  side="person"
-   841  probe:F17            ACT       p_high :: confer_authority  @S26  budget_left=4
+   841  probe:F17            ACT       p_high :: confer_authority  @S26  budget_left=5
    842  probe:F17            QUERY     sense  @S17  side="bridge"
    843  probe:F17            QUERY     budget  @S17  side="person"
    844  probe:F17            QUERY     sense  @S17  side="bridge"
@@ -878,7 +878,7 @@
    878  probe:P9             ACT       p_mid :: refuse  @S26  budget_left=4
    879  probe:P9             QUERY     sense  @S17  side="bridge"
    880  probe:P9             QUERY     budget  @S17  side="person"
-   881  probe:P9             ACT       p_high :: dispatch  @S26  budget_left=4
+   881  probe:P9             ACT       p_high :: dispatch  @S26  budget_left=5
    882  probe:P9             QUERY     sense  @S17  side="bridge"
    883  probe:P9             QUERY     budget  @S17  side="person"
    884  probe:P9             QUERY     sense  @S17  side="bridge"
@@ -948,7 +948,7 @@
    948  probe:P37            QUERY     budget  @S17  side="person"
    949  probe:P37            QUERY     sense  @S17  side="bridge"
    950  probe:P37            QUERY     budget  @S17  side="person"
-   951  probe:P37            ACT       p_high :: purge  @S26  budget_left=4
+   951  probe:P37            ACT       p_high :: purge  @S26  budget_left=5
    952  probe:P37            QUERY     sense  @S17  side="bridge"
    953  probe:P37            QUERY     budget  @S17  side="person"
    954  probe:P37            QUERY     sense  @S17  side="bridge"
@@ -1118,9 +1118,9 @@
   1118  probe:A36            QUERY     budget  @S17  side="person"
   1119  probe:A36            QUERY     sense  @S17  side="bridge"
   1120  probe:A36            QUERY     budget  @S17  side="person"
-  1121  probe:A36            ACT       p_high :: spend_treasury  @S26  budget_left=4
-  1122  probe:A36            ACT       p_high :: buy_grain  @S26  budget_left=3
-  1123  probe:A36            ACT       p_high :: bribe  @S26  budget_left=2
+  1121  probe:A36            ACT       p_high :: spend_treasury  @S26  budget_left=5
+  1122  probe:A36            ACT       p_high :: buy_grain  @S26  budget_left=4
+  1123  probe:A36            ACT       p_high :: bribe  @S26  budget_left=3
   1124  probe:A36            QUERY     sense  @S17  side="bridge"
   1125  probe:A36            QUERY     budget  @S17  side="person"
   1126  probe:A36            QUERY     sense  @S17  side="bridge"

@@ -459,7 +459,7 @@ either** — they are listed individually below and should be discounted accordi
 **what:** a banded scalar on Person
 
 **needs:** the S12.1 verb gate is defined ONLY over a Site's `condition`
-**law:** S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are ['beliefs', 'capability', 'convictions', 'id', 'ledger', 'marks', 'name', 'stance', 'weight'] -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third
+**law:** S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are ['beliefs', 'body', 'capability', 'convictions', 'id', 'ledger', 'marks', 'name', 'stance', 'tenures', 'travel_leg', 'weight'] -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third
 
 ### `P33` — an act costs more when it is bigger  ·  **UNSPECIFIED**  ·  `S26.3`  ·  by `no-signature`
 **what:** act cost beyond budget consumption

@@ -324,7 +324,7 @@
       "section": "S12",
       "title": "a person's own condition narrows their options in a fixed order",
       "needs": "the S12.1 verb gate is defined ONLY over a Site's `condition`",
-      "law": "S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are ['beliefs', 'capability', 'convictions', 'id', 'ledger', 'marks', 'name', 'stance', 'weight'] -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third",
+      "law": "S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are ['beliefs', 'body', 'capability', 'convictions', 'id', 'ledger', 'marks', 'name', 'stance', 'tenures', 'travel_leg', 'weight'] -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third",
       "by": "no-signature",
       "tests": "a character's own condition must be able to degrade across a season so that their available actions narrow predictably"
      }
@@ -719,7 +719,7 @@
       "section": "S12",
       "title": "a person's own condition narrows their options in a fixed order",
       "needs": "the S12.1 verb gate is defined ONLY over a Site's `condition`",
-      "law": "S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are ['beliefs', 'capability', 'convictions', 'id', 'ledger', 'marks', 'name', 'stance', 'weight'] -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third",
+      "law": "S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are ['beliefs', 'body', 'capability', 'convictions', 'id', 'ledger', 'marks', 'name', 'stance', 'tenures', 'travel_leg', 'weight'] -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third",
       "by": "no-signature",
       "tests": "a character's own condition must be able to degrade across a season so that their available actions narrow predictably"
      }
@@ -7285,7 +7285,7 @@
       "section": "S12",
       "title": "a person's own condition narrows their options in a fixed order",
       "needs": "the S12.1 verb gate is defined ONLY over a Site's `condition`",
-      "law": "S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are ['beliefs', 'capability', 'convictions', 'id', 'ledger', 'marks', 'name', 'stance', 'weight'] -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third",
+      "law": "S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are ['beliefs', 'body', 'capability', 'convictions', 'id', 'ledger', 'marks', 'name', 'stance', 'tenures', 'travel_leg', 'weight'] -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third",
       "by": "no-signature",
       "tests": "a character's own condition must be able to degrade across a season so that their available actions narrow predictably"
      }
@@ -9070,7 +9070,7 @@
       "section": "S12",
       "title": "a person's own condition narrows their options in a fixed order",
       "needs": "the S12.1 verb gate is defined ONLY over a Site's `condition`",
-      "law": "S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are ['beliefs', 'capability', 'convictions', 'id', 'ledger', 'marks', 'name', 'stance', 'weight'] -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third",
+      "law": "S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are ['beliefs', 'body', 'capability', 'convictions', 'id', 'ledger', 'marks', 'name', 'stance', 'tenures', 'travel_leg', 'weight'] -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third",
       "by": "no-signature",
       "tests": "a character's own condition must be able to degrade across a season so that their available actions narrow predictably"
      }
@@ -11188,7 +11188,7 @@
    "section": "S12",
    "title": "a person's own condition narrows their options in a fixed order",
    "needs": "the S12.1 verb gate is defined ONLY over a Site's `condition`",
-   "law": "S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are ['beliefs', 'capability', 'convictions', 'id', 'ledger', 'marks', 'name', 'stance', 'weight'] -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third",
+   "law": "S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are ['beliefs', 'body', 'capability', 'convictions', 'id', 'ledger', 'marks', 'name', 'stance', 'tenures', 'travel_leg', 'weight'] -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third",
    "by": "no-signature",
    "tests": "a character's own condition must be able to degrade across a season so that their available actions narrow predictably"
   },
@@ -12480,7 +12480,7 @@
    "what": "a banded scalar on Person",
    "where": "S12",
    "needs": "the S12.1 verb gate is defined ONLY over a Site's `condition`",
-   "law": "S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are ['beliefs', 'capability', 'convictions', 'id', 'ledger', 'marks', 'name', 'stance', 'weight'] -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third",
+   "law": "S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are ['beliefs', 'body', 'capability', 'convictions', 'id', 'ledger', 'marks', 'name', 'stance', 'tenures', 'travel_leg', 'weight'] -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third",
    "case": "probe:P32",
    "expected": false
   },
