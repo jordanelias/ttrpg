@@ -88,6 +88,20 @@ rows:
     social:  "true"
     by:      "W2/H-41 -- establishing an office"
     emits:   "`office.established`"
+  - kind:    "Office"
+    field:   "establishment"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "DR-2. ⚠ RETIRED BY W2 for having no producing verb, RETURNED BY W3 WITH `establish`, which is the discipline the retirement rule encodes: a row exists because a producer produces it. Its SIZE per office kind is H-34 and stays `assumption`"
+    emits:   "`establishment.changed`"
+  - kind:    "Office"
+    field:   "remit"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "DR-2 -- `establish` is an act. ⚠ RETIRED BY W2, RETURNED BY W3 WITH its producer. V2 named `establish` in THIS ROW while giving it no verb row, which is how the row came to look dead"
+    emits:   "`remit.changed`"
   - kind:    "Person"
     field:   "axis_count"
     steps:   [RES]
@@ -304,13 +318,12 @@ rows:
 # Each carried an `emits:` kind that NO PART E VERB PRODUCES and no MATTER site
 # writes (§7.2's per-item guardrail: such a row is red). Verified against Part E's
 # `writes` column, not assumed.
-# ⚠ TWO OF THEM COME BACK AT W3, WITH THEIR PRODUCER. `establish` is a verb #353 names
+# ⚠ TWO CAME BACK AT W3, WITH THEIR PRODUCER, and a third row -- `(Office, exists)` -- came
+# with them. `establish` is a verb #353 names
 # and Part E omits; V2 names it in its own `(Office, remit)` row. W3 adds the verb, and
 # the row returns in the same commit -- which is the whole discipline the rule encodes:
 # a row exists because a producer produces it.
 retired:
-  - "Office.establishment" # returns at W3 with `establish`
-  - "Office.remit" # returns at W3 with `establish`
   - "Person.capability"
   - "Person.marks"
   - "Rung.stake"

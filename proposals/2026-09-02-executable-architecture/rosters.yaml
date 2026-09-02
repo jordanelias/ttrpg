@@ -79,3 +79,17 @@ rosters:
       it belongs in data rather than in a body.
     ordered: true
     values: [movement, binding_decision, contested_physical, uncontested_material, social]
+
+  eligibility_kinds:
+    source: "#353 §9.2 / ARCHITECTURE_V2.md §E4 — the four ways a verb can be made available"
+    open: true
+    note: >-
+      ⚠ `capability` IS NOT AND MUST NEVER BE A MEMBER. #353 §9.2: "`capability` supplies dice and
+      GATES NOTHING… The only class-shaped gate in the design is Thread Sensitivity." An office
+      makes an ORDINARY verb eligible; no verb exists only for office-holders. Adding a fifth kind
+      is a DESIGN CHANGE — a new way to make a verb unavailable to someone — and not a table edit,
+      so it needs a ruling before it needs an entry.
+      This roster was itself a literal in `shape.py` for about ten minutes, and the guard Jordan's
+      ruling earned caught it. Recorded because a guard that has never fired on its author is one
+      nobody has tested.
+    values: [own, remit, hold, presence]

@@ -313,7 +313,18 @@ def _load_write_matrix() -> dict:
                     f"the step->class derivation gives {sorted(got)}. One is wrong; fix the row "
                     "or fix STEP_CLASS -- do not let them disagree.")
         emits = tuple(e.strip(" `") for e in r["emits"].split("·") if e.strip(" `—"))
-        out[(r["kind"], r["field"])] = MatrixRow(
+        key = (r["kind"], r["field"])
+        if key in out:
+            # A DUPLICATE ROW SILENTLY OVERWROTE ITS TWIN and the only symptom was two counts
+            # disagreeing -- 41 rows in the file, 40 in the map. Which of the two survives is
+            # dict-insertion order, so the gate's behaviour would depend on where in the file
+            # someone happened to add a row. That is precisely the class of defect this register
+            # exists to end.
+            raise SystemExit(
+                f"write_matrix.yaml: ({r['kind']}, {r['field']}) appears more than once. "
+                "One row per (kind, field) -- a duplicate makes the gate's behaviour depend on "
+                "file order.")
+        out[key] = MatrixRow(
             r["kind"], r["field"], steps, social, r["by"], emits)
     return out
 
@@ -381,6 +392,86 @@ REMIT_ACTS = roster("remit_acts")
 WITNESS_CHANNELS = roster("witness_channels", ordered=True)
 CLAIM_SOURCES = roster("claim_sources")
 STRATA = roster("strata", ordered=True)
+
+# ===========================================================================
+# PART E, LOADED FROM DATA -- W3. THE RESOLVER'S BODY.
+#
+# #353 types `resolve : (Act[], World) -> Event[]` and never says what any verb DOES. That is
+# defect `D20`, and it is why the tested instrument could only GRADE cases: with no table, every
+# act needed a hand-written `effect` lambda, and A LAMBDA PER ACT IS A SECOND RESOLVER -- the
+# thing §27.2 forbids, arriving as a parameter rather than as a function.
+#
+# `verb_table.yaml` is the body. One `resolve` reads it.
+# ===========================================================================
+
+VERB_TABLE_YAML = (_HERE.parent.parent / "2026-09-02-executable-architecture" / "verb_table.yaml")
+
+ELIGIBILITY_KINDS = roster("eligibility_kinds")
+
+
+@dataclass(frozen=True)
+class VerbRow:
+    verb: str
+    stratum: str
+    eligibility: tuple        # a DISJUNCTION -- `transfer` is eligible by `own` OR `hold:<store>`
+    requires: str
+    writes: tuple          # ("Kind.field", ...) -- each MUST be a Part D row
+    emits: tuple
+    emits_on_refusal: tuple
+    grade: str
+
+    def eligibility_kinds(self) -> tuple:
+        return tuple(a.split(":")[0].strip() for a in self.eligibility)
+
+
+def _load_verb_table() -> dict:
+    import yaml as _y
+    if not VERB_TABLE_YAML.exists():
+        raise SystemExit(f"verb_table.yaml not found at {VERB_TABLE_YAML}")
+    doc = _y.safe_load(VERB_TABLE_YAML.read_text())
+    out = {}
+    for r in doc["verbs"]:
+        name = r["verb"]
+        if name in out:
+            raise SystemExit(f"verb_table.yaml: {name!r} appears more than once")
+        row = VerbRow(name, r["stratum"], tuple(r["eligibility"]), r["requires"],
+                      tuple(r["writes"]), tuple(r["emits"]),
+                      tuple(r["emits_on_refusal"]), r["grade"])
+        # EVERY `writes:` MUST BE A PART D ROW. Checked AT LOAD, not at the first act that uses
+        # it: a verb naming an unmarked cell is a defect in the table, and finding it when some
+        # case happens to exercise that verb makes it look like a defect in the case.
+        for w in row.writes:
+            kind, _, fld = w.partition(".")
+            if (kind, fld) not in MATRIX:
+                raise SystemExit(
+                    f"verb_table.yaml: {name!r} writes ({kind}, {fld}), which is on no row of "
+                    "write_matrix.yaml. §30: ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION. Rule "
+                    "the Part D row first, then add the verb.")
+        # §E4: eligibility is one of four kinds and NEVER `capability` -- asserted OVER THE TABLE,
+        # not over the prose, which is §7.2's per-item rule for W3.
+        for k in row.eligibility_kinds():
+            if k == "capability":
+                raise SystemExit(
+                    f"verb_table.yaml: {name!r} is gated on `capability`. #353 §9.2 -- "
+                    "'capability supplies dice and GATES NOTHING'. No verb exists only for "
+                    "office-holders.")
+            if k not in ELIGIBILITY_KINDS:
+                raise SystemExit(
+                    f"verb_table.yaml: {name!r} has eligibility kind {k!r}, which is not one of "
+                    f"{ELIGIBILITY_KINDS}. §E4 admits exactly four and a fifth would be a new "
+                    "way to make a verb unavailable -- which is a design change, not a table edit.")
+        # The stratum must be one of the five, and the roster owns which five.
+        if row.stratum not in STRATA:
+            raise SystemExit(f"verb_table.yaml: {name!r} has stratum {row.stratum!r}, which is "
+                             f"not one of rosters.yaml's {list(STRATA)}")
+        out[name] = row
+    return out
+
+
+VERB_TABLE: dict = {}          # filled after STRATA loads, at the bottom of the roster block
+
+
+VERB_TABLE = _load_verb_table()
 
 
 
