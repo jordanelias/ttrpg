@@ -19,6 +19,14 @@
 # the code asks for that is not here RAISES rather than defaulting, which is §42.2's polarity
 # rule applied to definitions — an absent roster is a refusal, never an empty set.
 #
+# SCOPE AND SHAPE — BOTH RULED BY JORDAN, 2026-09-02, when this file asked.
+#   * "only this proposal chain is in scope" — so `engine/substrate/keys.py`'s `AXES`, `ROLES`,
+#     `SCALES` and `PERMANENCE_VALUES` are NOT governed by this ruling and are NOT to be moved.
+#     The live engine is outside the chain (PR #337 -> now) and stays that way. A later session
+#     reading the ruling as tree-wide would be widening it; it was asked and answered narrow.
+#   * "one file rosters i think" — ONE FILE, not one per subsystem. If it grows past legibility
+#     that is a reason to ask again, not a reason to split it unilaterally.
+#
 # ⚠ EVERY ROSTER HERE IS OPEN BY THE SAME RULING. None of them is closed by being written down.
 # The `source:` field says where the current membership comes from; it is provenance, NOT
 # ratification, and a roster with `open: true` must never be cited as settling a register row.
