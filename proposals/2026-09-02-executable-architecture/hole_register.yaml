@@ -1066,7 +1066,7 @@ rows:
     default:   ""
     site:      ""
     sweep:     []
-    unblocks:  "unmeasured -- no verb creates a holding, so no run reaches either consumer today"
+    unblocks:  "unmeasured, and NOT zero: a `hold` whose object is a RUNG already exists in the probe corpus at probes.py:978 and :985 (probe F2 holds the settlement `S`), so the object class pre-dates `in_holdings` and any world that both holds a rung and asks for a budget already miscounts. No verb MINTS a holding, which is why nothing has surfaced it"
     cite:      "FOUND BY THE GOVERNANCE-CANON ADVERSARIAL PASS, and the honest attribution matters: THIS IS PRE-EXISTING AND WAS WIDENED, NOT INTRODUCED. `_eff_create_record` already mints a `hold` over a Record, so `Query.budget` already counted a possessed book as an office; `in_holdings` adds a second non-office object class to a relation two readers already misread. The narrow §8 claim made for `in_holdings` -- *no new tenure kind, `tenure_kinds` does not move* -- is TRUE and was the wrong thing to check: what needed checking was the READERS, and a sweep of all sixteen `t.kind == 'hold'` sites in shape.py found two that treat every hold as an office. Clean: `_ch_post_remit` guards with `w.offices.get`; `Query.hold_force` is per-object; the bare-`hold` eligibility branches are unreachable because every `hold:` in the verb table carries a placeholder argument and declines (H-75). `absent` rather than a default: whether a landholding should confer scene actions is a design question, and the fix belongs with whatever builds holdings as a general relation (H-90)."
     source:    "governance-canon adversarial pass"
 

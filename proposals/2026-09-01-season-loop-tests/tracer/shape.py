@@ -2763,8 +2763,21 @@ def in_holdings(w: "World", actor: str, rung: Optional[str]) -> bool:
     duke whose duchy he does not hold — which is the same ruling as *"they do not necessarily
     have all territories/provinces/duchies in their holdings"*, made mechanical.
 
-    ⚠ NO NEW TENURE KIND. `hold` is already polymorphic — an office, a Record (§13), a store —
-    so a landholding is a `hold` whose object is a rung, and `tenure_kinds` does not move (§8)."""
+    ⚠ NO NEW TENURE KIND, AND NOT EVEN A NEW OBJECT CLASS. `hold` is already polymorphic over an
+    office and over a Record (§13) — and a `hold` WHOSE OBJECT IS A RUNG ALREADY EXISTED in the
+    corpus before this function did: probe `F2` writes one at `probes.py:978` and `:985`, holding
+    the settlement `S`. So this names a shape the tree was already using rather than adding one,
+    and `tenure_kinds` does not move (§8).
+
+    ⚠ THE ORIGINAL WORDING ALSO CITED *"a store"* AS AN EXISTING INSTANCE, AND THAT WAS
+    UNSUPPORTED — no `hold` Tenure over a store is constructed anywhere in the instrument.
+    Corrected rather than kept, because the sentence's whole job is to say what the tree already
+    does. Found by the governance-canon adversarial pass.
+
+    ⚠ AND THE NARROW CLAIM WAS THE WRONG THING TO CHECK. *`tenure_kinds` does not move* is true
+    and proves nothing about the READERS: `Query.budget` counts every live `hold` as an office, so
+    a landholding buys scene actions, and `_ch_document_key` makes a landholder a witness of every
+    Event whose subject is their rung. Both pre-date this function; registered as `H-92`."""
     if rung is None or rung not in w.rungs:
         return False
     return any(t.kind == "hold" and t.subject == actor and t.object == rung and t.live
