@@ -185,6 +185,13 @@ tables:
     source: "ARCHITECTURE_V2.md §F2 — `score(c) = Σ_axis conviction[axis] · alignment(c.verb, axis)`"
     row: H-66
     default_cell: 0.0
+    # §G's third term. ORDER IS SEMANTIC: `declared` is the default and the first arm, and every
+    # point is built from it rather than from the previous one. `uniform` is THE CONTROL — every
+    # (verb, axis) pair equal, so convictions cannot discriminate at all and a verdict that does
+    # not move between `declared` and `uniform` is a verdict this table was never deciding.
+    # `sign_only` keeps the directions and discards the magnitudes, which is the separation worth
+    # having when the magnitudes are declared invented and the directions are argued.
+    sweep: [declared, uniform, sign_only]
     keys: [conviction_axes, verb_table]
     note: >-
       ⚠ THESE WEIGHTS ARE INVENTED, AND THE ROW IS WHAT MAKES THAT LAWFUL. PLAN `W5`: the table is

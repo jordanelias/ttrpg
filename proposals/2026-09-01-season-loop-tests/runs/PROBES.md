@@ -11,14 +11,14 @@ checking.* So every probe declares its provenance:
 
 | `by=` | means | count |
 |---|---|---|
-| `construction` | **the shape itself raised** — a gate, a law or a type stopped it. This is evidence | 70 |
+| `construction` | **the shape itself raised** — a gate, a law or a type stopped it. This is evidence | 74 |
 | `no-signature` | nothing to call. The design supplies no function by which it could be attempted — which *is* the refusal, but **absence is not a guard** | 28 |
 | `convention` | the shape permits it and only a reader stops it. §27.2 is the design's own example and says so out loud | 1 |
-| `probe-model` | the probe supplies a model the design does not, to reach the question at all | 22 |
+| `probe-model` | the probe supplies a model the design does not, to reach the question at all | 18 |
 
 ## ⚠ THE ENFORCEMENT SPLIT — the single most important number in this ledger
 
-**Of 66 gaps, 31 were raised BY THE SHAPE ITSELF and 27 exist only because THERE IS NO SIGNATURE TO CALL.**
+**Of 64 gaps, 31 were raised BY THE SHAPE ITSELF and 27 exist only because THERE IS NO SIGNATURE TO CALL.**
 
 That is close to an even split, and it matters more than any case verdict. A refusal a
 gate enforces and a refusal that exists because nobody wrote the function are different
@@ -30,7 +30,7 @@ has no module system and no visibility modifiers, so the guarantee there is
 a contributor closes by simply writing the function — no gate fires, no test goes red,
 and the design's own §27.2 admission applies: *enforced by a person noticing*.
 
-**And 16 of 55 PASSes are not by construction
+**And 14 of 57 PASSes are not by construction
 either** — they are listed individually below and should be discounted accordingly. A
 `probe-model` PASS means the instrument supplied something the design does not.
 
@@ -76,7 +76,6 @@ either** — they are listed individually below and should be discounted accordi
 | `F7` | **UNSPECIFIED** | probe-model | E2 | someone with no power must be able to get a matter in front of someone who has it |
 | `F8` | **UNSPECIFIED** | construction | S61 | the body a matter reaches must be able to decide it |
 | `F9` | **UNSPECIFIED** | construction | S27/E2 | a character must be able to spend a whole season putting the same matter to many people |
-| `P14` | **UNSPECIFIED** | construction | S18.2 | how a character is regarded must be able to differ from how they regard themselves |
 | `P15` | **UNSPECIFIED** | no-signature | S61 | something said in private must be able to stay private |
 | `P17` | **UNSPECIFIED** | probe-model | S22.4 | a character's risk must be able to build up quietly across seasons without anyone acting |
 | `P19` | **FORBIDDEN** | construction | S3-L4 | the story must be able to end when a counter reaches a value, with no person choosing |
@@ -86,11 +85,10 @@ either** — they are listed individually below and should be discounted accordi
 | `P29` | **UNOWNED** | no-signature | S22.3 | a character must be able to move from one place to another and be somewhere else next season |
 | `P2x` | **FORBIDDEN** | construction | S26.3 | an engine may quietly drop actions a character wanted beyond their budget |
 | `P30` | **UNSPECIFIED** | construction | S27/E2 | what a character learned must still be true for them next season |
-| `P31` | **UNSPECIFIED** | probe-model | S27/E2 | a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by the |
 | `P32` | **UNSPECIFIED** | no-signature | S12 | a character's own condition must be able to degrade across a season so that their available actions narrow predictably |
 | `P33` | **UNSPECIFIED** | no-signature | S26.3 | performing a larger or riskier version of an action must be able to cost the actor more |
 | `P35` | **UNSPECIFIED** | no-signature | S18.2 | a character must be able to have a standing among people who can never publicly acknowledge them, separate from their public stand |
-| `P36` | **UNSPECIFIED** | probe-model | S27/E2 | a discovery must be able to be acted on in several distinct ways, each leading somewhere different |
+| `P36` | **UNSPECIFIED** | construction | E2/E3 | a discovery must be able to be acted on in several distinct ways, each leading somewhere different |
 | `P37` | **UNSPECIFIED** | probe-model | S27/E2 | a character's reaction must be able to be fully determined by their internal state rather than by a choice |
 | `P38` | **NO-PRODUCER** | no-signature | S1 | an optimal window, a judgement call or an adjudication must be able to be made by a referee |
 | `P41` | **UNSPECIFIED** | no-signature | S2 T7 | a character must be able to cite an established precedent or prior ruling to make a present argument stronger |
@@ -131,9 +129,10 @@ either** — they are listed individually below and should be discounted accordi
 | `F5` | PASS | probe-model | S6.2 | a body with members everywhere and a seat nowhere must be able to issue instructions |
 | `P1` | PASS | construction | S3-L1 | a person with no office, post, command, faction rank or standing must be able to act at all |
 | `P10` | PASS | construction | S13 | a character must be able to perform a repeated, multi-season task the engine tracks as ongoing |
-| `P11` | PASS | probe-model | S9.2 | skill must supply dice and must never make an action unavailable |
-| `P12` | PASS | probe-model | S17 | the set of things a character may do must be computed, not an authored list |
+| `P11` | PASS | construction | S9.2 | skill must supply dice and must never make an action unavailable |
+| `P12` | PASS | construction | S17 | the set of things a character may do must be computed, not an authored list |
 | `P13` | PASS | probe-model | S18.2 | a character's needs must drive their choices |
+| `P14` | PASS | construction | S18.2 | how a character is regarded must be able to differ from how they regard themselves |
 | `P16` | PASS | construction | S20 | how a character is seen must be able to differ between people who know different things |
 | `P18` | PASS | construction | S3-L5 | a counter reaching an edge must be able to force a named person to answer |
 | `P20` | PASS | construction | S29 | a person who was previously part of a crowd must be able to become a named individual |
@@ -144,6 +143,7 @@ either** — they are listed individually below and should be discounted accordi
 | `P27` | PASS | construction | S20 | a character must be able to quietly do less than ordered, discoverable only by investigation |
 | `P28` | PASS | no-signature | S20 | no character may read another's memory directly |
 | `P3` | PASS | construction | S3-L2 | a character must decide from what they believe, which may be wrong, and never from world truth |
+| `P31` | PASS | construction | S9 | a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by the |
 | `P34` | PASS | construction | S20 | an office-holder must be able to be the only living person who knows a thing, so that removing them destroys it |
 | `P39` | PASS | probe-model | S15 | two characters must be able to have an ongoing relationship that carries state and changes over seasons |
 | `P4` | PASS | construction | S3-L2 | a character must be able to believe something false and act on it as if true |
@@ -389,12 +389,6 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** NOTHING FROM THE DESIGN -- #353 does not name 'petition2' as a verb. This is the CALLER'S invention and the gap is the caller's
 **law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
 
-### `P14` — standing is computed  ·  **UNSPECIFIED**  ·  `S18.2`  ·  by `construction`
-**what:** Sensation.standing
-
-**needs:** an aggregation producing 'what everyone reads off you' that does not cross holders
-**law:** S18.2 defines standing as 'THE GAP BETWEEN WHAT EVERYONE READS OFF YOU AND WHAT YOU HOLD' and NO SECTION COMPUTES IT. The obvious computation -- reading a value off every other person -- is the shape S22.4 clause 2 bars, so this is not merely unwritten: the direct route to it is refused
-
 ### `P15` — a person's private act stays private  ·  **UNSPECIFIED**  ·  `S61`  ·  by `no-signature`
 **what:** four of the five witness channels have no predicate: ['post_remit', 'witness_key', 'document_key', 'chronicle']
 
@@ -449,12 +443,6 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** a row in verb_table.yaml, ruled before it is added
 **law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids
 
-### `P31` — a hidden motive biases every decision  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `probe-model`
-**what:** verb 'report_truthfully' is on no row of the verb table
-
-**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'report_truthfully' as a verb. This is the CALLER'S invention and the gap is the caller's
-**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
-
 ### `P32` — a person's own condition narrows their options in a fixed order  ·  **UNSPECIFIED**  ·  `S12`  ·  by `no-signature`
 **what:** a banded scalar on Person
 
@@ -473,11 +461,11 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** a second standing scalar, or an owner for an audience-scoped one
 **law:** S18.2 -- Sensation is EXACTLY TWO FLOATS and S46.1 makes widening it structural in Godot ('nobody can add a third field to Vector2'). A second, audience-scoped standing has NO CARRIER and S22 gives NO OWNER for one -- and the first standing does not compute either (see P14)
 
-### `P36` — a choice branches three ways  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `probe-model`
-**what:** verb 'leverage' is on no row of the verb table
+### `P36` — a choice branches three ways  ·  **UNSPECIFIED**  ·  `E2/E3`  ·  by `construction`
+**what:** 'create_record' writes ['Record.exists', 'Record.stages'] and Part E does not say WHAT VALUE
 
-**needs:** a row in verb_table.yaml, ruled before it is added
-**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids
+**needs:** an entry in EFFECTS, or a `writes:` column that carries the value
+**law:** §E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and §27.1's scarcity stops happening. Register row H-63
 
 ### `P37` — a person's response is a lookup on their own state, not a deliberation  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `probe-model`
 **what:** verb 'purge' is on no row of the verb table

@@ -117,7 +117,7 @@ not the shape.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** the faction holding valuable accumulated information must be able to face a genuine three-way choice -- sell to one rival, sell to a different rival, or expose it publicly -- where each opti | `P36` | **UNSPECIFIED** | S27/E2 |
+| **[core]** the faction holding valuable accumulated information must be able to face a genuine three-way choice -- sell to one rival, sell to a different rival, or expose it publicly -- where each opti | `P36` | **UNSPECIFIED** | E2/E3 |
 | a faction's decision to conceal information in exchange for concessions must be able to leave a THIRD faction permanently uninformed, with no passive mechanism that eventually surfaces the a | `F2` | PASS | S54 item 20 |
 | **[core]** a faction must be able to possess an information/intelligence capability that arises purely as a byproduct of an unrelated core activity, with no dedicated intelligence stat or apparatus mod | — | UNMAPPED | — |
 | one institution must be able to detect a pattern in a rival institution's own internal operational rhythm purely by correlating publicly observable outcomes over time, without infiltrating o | — | UNMAPPED | — |
@@ -155,13 +155,13 @@ not the shape.
 | removing or co-opting one specific supporting character must be able to change the difficulty of a LATER, otherwise-unrelated action within the same arc | — | UNMAPPED | — |
 
 ## ARC-11 — Three Crowns in a Season  ·  **BLOCKED**
-*realm · 7 rows, 3 core · blockers: P14, W10*
+*realm · 7 rows, 3 core · blockers: W10*
 *ends when:* UNCLEAR -- the source names no closing condition. The arc is a 1-season trigger cascading through a minimum multi-season sequence of branching crises (an administrator's collapse, a military redeployment, a succession contest, loyalty-gated diplomatic reporting); the closest candidate is 'a new governance configuration stabilizes,' but no threshold or actor-choice is ever named as the event that ends the cascade rather than merely advancing it.
 
 | need | probe | verdict | § |
 |---|---|---|---|
 | **[core]** a ruler facing existential institutional collapse must be able to make one explicit, named strategic choice among a small enumerated set (hold / strike / orderly transition) whose consequenc | `W10` | **FORBIDDEN** | S10.1 |
-| **[core]** an intermediary reporting to an external power must be able to choose, each season, between an accurate report (locally damaging, builds external trust) and an optimistic one (protects a dom | `P14` | **UNSPECIFIED** | S18.2 |
+| **[core]** an intermediary reporting to an external power must be able to choose, each season, between an accurate report (locally damaging, builds external trust) and an optimistic one (protects a dom | `P14` | PASS | S18.2 |
 | **[core]** a subordinate administrator's personal flaw (taking on too much) must be able to produce a DELAYED failure -- competent performance for a fixed span of seasons, then an inevitable, undeviati | — | UNMAPPED | — |
 | a military commander's personality-driven redeployment must be able to leave a specific, different location exposed as an explicit trade-off, without that commander weighing the trade-off as | — | UNMAPPED | — |
 | an institutional collapse must be able to open a temporary window during which OTHER factions can bid, using an ordinary resource, for access to powers the collapsed institution used to hold | — | UNMAPPED | — |
@@ -246,7 +246,7 @@ not the shape.
 | **[core]** a superior's response to detecting a subordinate's disloyalty must be able to be fully determined by the superior's own current internal state via a fixed lookup, removing free choice from t | `P37` | **UNSPECIFIED** | S27/E2 |
 | **[core]** two parties in an adversarial relationship must be able to each hold damaging evidence against the other simultaneously, such that neither can act against the other without also being destro | `P22` | PASS | S13 |
 | **[core]** a subordinate under coercive tolerance must be able to face a RECURRING risk each season of involuntarily failing to comply, regardless of their own intentions, so that even a subordinate wh | `P18` | PASS | S3-L5 |
-| a defecting subordinate must be able to carry unreleased leverage with them into a new affiliation, handing that new faction a one-time strategic option they did not previously have | `P36` | **UNSPECIFIED** | S27/E2 |
+| a defecting subordinate must be able to carry unreleased leverage with them into a new affiliation, handing that new faction a one-time strategic option they did not previously have | `P36` | **UNSPECIFIED** | E2/E3 |
 | detecting a subordinate's pattern of behavioral hesitation must be able to require repeated, unprompted checks over MULTIPLE seasons rather than a single roll, so that success is a matter of | — | UNMAPPED | — |
 | damaging evidence held against one party must be able to carry a SECONDARY payload relevant to a separate, larger mystery, activated only under specific conditions -- this cross-arc linkage  | — | UNMAPPED | — |
 | a case-handler assigned to investigate released evidence must be able to introduce a procedural delay that specifically benefits the ORIGINAL holder of that evidence in destroying it, even w | — | UNMAPPED | — |
@@ -404,7 +404,7 @@ not the shape.
 |---|---|---|---|
 | **[core]** an NPC's own repeated, self-directed institutional actions must silently accumulate a hidden personal quantity that the character himself is unaware of | `P17` | **UNSPECIFIED** | S22.4 |
 | **[core]** crossing a threshold on that hidden quantity must trigger a one-time check whose two outcomes are qualitatively different: a true capability unlocked, versus a false self-generated belief ac | `P4` | PASS | S3-L2 |
-| a second character who already possesses the same capability must be able to independently perceive the first character's growth and choose whether to disclose it, driven by a personal confl | `P31` | **UNSPECIFIED** | S27/E2 |
+| a second character who already possesses the same capability must be able to independently perceive the first character's growth and choose whether to disclose it, driven by a personal confl | `P31` | PASS | S9 |
 | **[core]** the failure branch must produce behavior that is objectively counter-productive to the character's own interests while looking, to him, like the correct reading of his experience -- and must | — | UNMAPPED | — |
 | the newly-unlocked capability must retroactively change how the character interprets and leverages his existing political relationships and leverage, not simply add a new resource | — | UNMAPPED | — |
 | an institution that would normally react to this kind of capability must be able to open a formal investigation based on partial/indirect evidence before the character himself understands wh | — | UNMAPPED | — |
@@ -536,7 +536,7 @@ not the shape.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| a rare individual who crosses the perceptual threshold and encounters the hidden property incidentally, while doing an unrelated job, must have a personal behavioral reason to avoid reportin | `P31` | **UNSPECIFIED** | S27/E2 |
+| a rare individual who crosses the perceptual threshold and encounters the hidden property incidentally, while doing an unrelated job, must have a personal behavioral reason to avoid reportin | `P31` | PASS | S9 |
 | **[core]** a legitimate, ordinary supply chain must carry a good whose hazardous property is invisible to everyone below a specific rare perceptual threshold, such that its builders and vendors are nei | — | UNMAPPED | — |
 | that accumulating self-protective cost must itself be observable from outside by the discoverer's own chain of command as an unexplained pattern, eventually forcing an internal review indepe | — | UNMAPPED | — |
 | **[core]** a separate investigator working an unrelated case must be able to cross-reference unconnected case files and stumble onto the same supply chain from a different angle, using only legally-vis | — | UNMAPPED | — |
@@ -562,8 +562,8 @@ not the shape.
 | need | probe | verdict | § |
 |---|---|---|---|
 | **[core]** a leader's repeated, intentional use of a specific asset must accumulate a hidden personal quantity in him at a fixed small increment per use, undetectable to him through his own available s | `P17` | **UNSPECIFIED** | S22.4 |
-| a close subordinate who already has the relevant perceptual capability must be able to observe the leader's hidden growth directly, with her choice to disclose or withhold driven by a person | `P31` | **UNSPECIFIED** | S27/E2 |
-| an external time-pressure event from a different arc must be able to force the leader into an immediate, non-deferrable choice between accelerating his risky capability-use or abandoning a s | `P36` | **UNSPECIFIED** | S27/E2 |
+| a close subordinate who already has the relevant perceptual capability must be able to observe the leader's hidden growth directly, with her choice to disclose or withhold driven by a person | `P31` | PASS | S9 |
+| an external time-pressure event from a different arc must be able to force the leader into an immediate, non-deferrable choice between accelerating his risky capability-use or abandoning a s | `P36` | **UNSPECIFIED** | E2/E3 |
 | **[core]** that hidden quantity crossing a threshold must trigger a one-time check whose two outcomes (perceive the truth vs. destabilize without understanding it) leave the leader with qualitatively d | — | UNMAPPED | — |
 | an unrelated investigator working a structurally separate case must be able to intersect this hidden-growth track by physically tracing an unconnected supply chain to its source, detecting t | — | UNMAPPED | — |
 | if the leader begins using his emerging, still-unrecognized capability without guidance, a separate internal resource must begin depleting per use with no natural recovery available, eventua | — | UNMAPPED | — |
@@ -589,7 +589,7 @@ not the shape.
 |---|---|---|---|
 | **[core]** a hidden personal capability in a loyal enforcer must remain completely dormant until an unrelated, ambient environmental quality, degraded by the cumulative effect of several other storylin | `W4` | PASS | S25 |
 | the ambient quality's degraded band must specifically escalate its local effects in territories closer to a specific hazard-source, such that identical ambient conditions produce categorical | `W4` | PASS | S25 |
-| **[core]** a third party who can independently verify the enforcer's hidden condition must have a real choice between at least three distinct outcomes -- report to his institution, report to him direct | `P36` | **UNSPECIFIED** | S27/E2 |
+| **[core]** a third party who can independently verify the enforcer's hidden condition must have a real choice between at least three distinct outcomes -- report to his institution, report to him direct | `P36` | **UNSPECIFIED** | E2/E3 |
 | **[core]** an enforcer's positive, valued professional trait (rigorous documentation) must, without any change in his behavior, become the specific mechanism constructing a damning case against himself | — | UNMAPPED | — |
 | withholding disclosure must not freeze the situation -- the enforcer's own unassisted, ongoing documentation must reach the same self-incriminating conclusion independently after a further d | — | UNMAPPED | — |
 
@@ -790,7 +790,7 @@ not the shape.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| a faction's profile of a target, once built, must be able to shape that faction's subsequent choices toward the target (offers, refusals, timing) without the target or their allies being tol | `P31` | **UNSPECIFIED** | S27/E2 |
+| a faction's profile of a target, once built, must be able to shape that faction's subsequent choices toward the target (offers, refusals, timing) without the target or their allies being tol | `P31` | PASS | S9 |
 | **[core]** a character's ongoing use of a personal ability must be able to leave passive traces perceivable by unrelated non-player observers scattered across multiple locations, each independently sen | — | UNMAPPED | — |
 | **[core]** an institution with a distributed network of observers must be able to aggregate many independent, individually-meaningless reports into a single actionable pattern about one specific indivi | — | UNMAPPED | — |
 | **[core]** an actor must be able to spend a specific investigative action, resolved against a fixed difficulty, that on success reveals one hidden fact about a target's affiliation-relevant nature with | — | UNMAPPED | — |
@@ -953,7 +953,7 @@ not the shape.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| the maximal formal response and its resolution must produce outcomes on at least two independent institutional-standing tracks simultaneously, with success and failure producing asymmetric,  | `P14` | **UNSPECIFIED** | S18.2 |
+| the maximal formal response and its resolution must produce outcomes on at least two independent institutional-standing tracks simultaneously, with success and failure producing asymmetric,  | `P14` | PASS | S18.2 |
 | **[core]** a political actor's standard legal-authority claim must be augmentable with an alternative, metaphysical justification that is mechanically and narratively distinct from, and strictly more c | — | UNMAPPED | — |
 | acquiring the specialized knowledge needed for the augmented claim must be reachable through multiple, narratively distinct relationship-based channels, any one of which suffices | — | UNMAPPED | — |
 | **[core]** a claim that a ruling authority's foundational legitimacy narrative is incomplete or misappropriated by a rival institution must be treated by that institution as the single most severe cate | — | UNMAPPED | — |

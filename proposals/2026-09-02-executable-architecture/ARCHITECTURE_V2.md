@@ -465,15 +465,26 @@ authored roster — the exact property §17 chose `Candidate[]` to protect.
 
 ## §F1 · `q` and the Candidate derivation — **D2**
 
-> **A question is produced by exactly three sources, and by nothing else:**
+> **A question is produced by exactly four sources, and by nothing else:**
 >
 > **Q1 · A Date coming due** whose DocketItem names a matter, for every person in its judging set.
 > **Q2 · A claim landing in the holder's ledger** at WITNESS whose subject is that person, something
 > they hold, or a Proposition they have committed to.
 > **Q3 · A Sensation band change** — `subsistence` crossing a floor since last season.
 >
-> **All three are already produced by the loop.** Q1 is CALENDAR's own output; Q2 is WITNESS's
-> deposit; Q3 is the person-side reading of D22's emission. **No new step, no new carrier, no clock.**
+> **Q4 · A live `commit` to an OUGHT Proposition** — a STANDING question, regenerated every
+> season until the commitment ends (#353 `:509`, `:605`, `:1297`).
+>
+> **All four are already produced by the loop.** Q1 is CALENDAR's own output; Q2 is WITNESS's
+> deposit; Q3 is the person-side reading of D22's emission; Q4 is a Tenure the person already
+> owns. **No new step, no new carrier, no clock.**
+
+> ⚠ **AMENDED BY `W5`, WHICH FOUND THIS SECTION WRONG BY ONE.** It said *"exactly three sources,
+> and by nothing else"*. `PLAN.md` `W5`: **without Q4 an NPC with a standing ambition and a quiet
+> season forms no candidates at all**, which is most of the NPC corpus — a person with a goal and
+> an empty inbox would simply not act. The roster now lives in `rosters.yaml` as
+> `question_sources`, because a closed set that turned out to be missing a member is the strongest
+> argument there is for keeping closed sets in data rather than in a sentence.
 
 ```
 opening_set(p, view, q) -> Candidate[]
@@ -547,14 +558,34 @@ clause 2 governs **resolver-side Queries**, and `sense()` is explicitly not one.
 Which points straight at the answer:
 
 ```
-standing(p) = agreement( claims in p's OWN ledger
-                         where subject == p and source == told_by
-                       , p's own convictions )
+standing(p) = gap( claims in p's OWN ledger where subject == p and source == told_by
+                 , claims in p's OWN ledger where subject == p and source == firsthand )
+        paired by `predicate`, on the `person_predicates` roster
 ```
 
 **What people have TOLD you they read off you, against what you hold.** §18.2's own words —
 *"the gap between what everyone reads off you and what you hold"* — with *everyone* correctly read
 as **everyone who told you**, which is the only version a person can have.
+
+> ⚠ **AMENDED BY `W5`. THE SECOND ARGUMENT WAS `p's own convictions` AND THAT IS THE COLLISION
+> #353 NAMES AS THE DESIGN'S WORST.** §9.3 is a table whose whole purpose is to keep the two
+> layers apart — the claim ledger holds what is **TRUE**, convictions hold what is **RIGHT**,
+> evidence moves the first and argument moves the second — and it ends *"WITNESS NEVER TOUCHES A
+> BELIEF… This is the single most dangerous collision in the design."* A formula scoring
+> agreement between them makes evidence bear on the moral layer, which is the collision itself.
+> `PLAN.md` `W5` states it plainly: **H-29's default is not injectable as written.**
+>
+> **The correction stays inside this section's own argument.** Read *"what you hold"* as what you
+> hold **TRUE** — your own firsthand claims about yourself — and both sides are the epistemic
+> layer. The collision is gone and **all three properties below survive unchanged**: computable
+> person-side, wrong-able (a liar moves your standing, which is T3), and no cross-holder read, so
+> §20 is untouched. §F4's correction of the session ledger also stands and is used: the bar is
+> **§20**, not §22.4 clause 2, which governs resolver-side Queries.
+>
+> **No paired predicate returns the MAXIMUM gap, not zero.** Zero would mean *"nobody has told
+> you anything about yourself, therefore everyone agrees with you"* — §42.2's polarity rule run
+> backwards. ⚠ **Recorded and not resolved:** §18.2 calls it a **gap**, while the word *standing*
+> ordinarily suggests the opposite polarity. It is computed as §18.2 words it.
 
 **Three properties it buys, and they are the reason to prefer it to deleting the scalar:**
 it is computable **person-side**, it is **wrong-able** (a liar moves your standing, which is T3), and
@@ -672,7 +703,7 @@ row (§1.4). Until every one is `ruled`, `measured` or `assumption`-with-a-defau
 | **H-01** | the `social:` value for every `(kind, field)` in Part II | SCHEMA_ROW ×33 | the design (a static column) | **ruled** — Part D | Part D's table | **all 143** |
 | **H-02** | what each verb writes, requires and emits | PRODUCER | the resolver; writes owned per §22 | **ruled** for 24 rows, **absent** for 2, **assumption** for 3 — Part E | Part E's table | **all 143** |
 | **H-03** | the NPC decision policy | FORMULA | Person (person-side only) | **assumption** | §F2's scoring function | **all NPC** |
-| **H-04** | `q`'s producer and the Candidate derivation | PRODUCER | the date-holder (Q1) · Person (Q2, Q3) | **assumption** | §F1's three sources | **all NPC** |
+| **H-04** | `q`'s producer and the Candidate derivation | PRODUCER | the date-holder (Q1) · Person (Q2, Q3, Q4) | **assumption** | §F1's three sources PLUS **Q4 `need`** — a live `commit` to an OUGHT Proposition, standing every season | **all NPC** |
 | **H-05** | the world-generation roster — persons with zero `hold` | SCHEMA_ROW | params (a registry row) | **assumption** | a roster read from a registry row; **not a clock** (§29) | any run |
 | **H-06** | the condition scale | NUMBER | params | **assumption** | `1000` | any Site |
 | **H-07** | wear per site kind — **NO silent default; an unregistered kind RAISES** | NUMBER ×kinds | params | **assumption** | per-kind table; §42.2.1 names the silent default as the prior sin | any Site |
@@ -695,7 +726,7 @@ row (§1.4). Until every one is `ruled`, `measured` or `assumption`-with-a-defau
 | **H-25** | a termination bound per self-feeding loop | RULING | — | **absent** | none. ⚠ **three of four in-chain feedback loops name no off-switch and the fourth's is self-defeating** | ~4 |
 | **H-27** | travel-leg ownership | SCHEMA_ROW | **Person, as the Tenure's subject** | **ruled** — §D4, by precedent | §15.1 | 1 |
 | **H-28** | `budget`'s placement | RULING — **answered by the type** | **PERSON-side** *(corrected by W1's adversarial pass)* | **ruled** — #353 `:877` | `budget : (Person, View) -> int` PERSON-SIDE, reading own `hold` Tenures, own body band, own travel legs; per Jordan's 2026-09-02 ruling it returns SCENE actions, not acts | every "wounded duke" |
-| **H-29** | `standing`'s formula | FORMULA | Person | **assumption** | §F4's agreement over own `told_by` claims | 2 |
+| **H-29** | `standing`'s formula | FORMULA | Person | **assumption** | the gap between `told_by` claims about p and p's OWN `firsthand` claims about p, paired by predicate on the `person_predicates` roster; maximum gap when nothing is paired | 2 |
 | **H-30** | person-order vs global canonical order | RULING — **answered by architecture** | the resolver | **assumption** | composite key `(stratum, actor-hash, intra-person position)` — honours both | 2 |
 | **H-31** | the degree ladder's margin model | FORMULA | params (the one ladder) | **absent** | none. ⚠ **every contest is blocked** | every contest |
 | **H-32** | `judging_set_rule` | RULING | Rung | **absent** | none. ⚠ **nothing is decided at a sitting** | 2 |

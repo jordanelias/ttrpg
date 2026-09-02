@@ -3,10 +3,10 @@
 Every branch the shape took that could have gone another way, with the alternatives
 it did not take. A decision nobody records is a decision nobody can audit.
 
-**712 decisions taken, 20 distinct.**
+**709 decisions taken, 20 distinct.**
 
-### MATTER's cross-owner operations  ·  `S31.1`  ·  taken 183x
-- **chose:** serial: the actorless event channel; then parallel over Sites  (183x)
+### MATTER's cross-owner operations  ·  `S31.1`  ·  taken 181x
+- **chose:** serial: the actorless event channel; then parallel over Sites  (181x)
 - *not taken:* shard the event channel per rung (breaks causes[]: one cause is one id)
 
 ### individuation  ·  `S29`  ·  taken 163x
@@ -33,8 +33,8 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
 - *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'] are named and NONE has a predicate
 
-### ordering 1 acts  ·  `S27/S32`  ·  taken 9x
-- **chose:** five strata, then a content-derived hash key over one global array  (9x)
+### ordering 1 acts  ·  `S27/S32`  ·  taken 8x
+- **chose:** five strata, then a content-derived hash key over one global array  (8x)
 - *not taken:* completion order
 - *not taken:* per-container sort (voids the fold)
 - *not taken:* rank
@@ -55,14 +55,8 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - *not taken:* per-container sort (voids the fold)
 - *not taken:* rank
 
-### ordering 5 acts  ·  `S27/S32`  ·  taken 4x
-- **chose:** five strata, then a content-derived hash key over one global array  (4x)
-- *not taken:* completion order
-- *not taken:* per-container sort (voids the fold)
-- *not taken:* rank
-
-### ordering 3 acts  ·  `S27/S32`  ·  taken 3x
-- **chose:** five strata, then a content-derived hash key over one global array  (3x)
+### ordering 5 acts  ·  `S27/S32`  ·  taken 5x
+- **chose:** five strata, then a content-derived hash key over one global array  (5x)
 - *not taken:* completion order
 - *not taken:* per-container sort (voids the fold)
 - *not taken:* rank
@@ -72,6 +66,12 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - *not taken:* restrict by presence (the index is built and UNUSED -- no channel predicate exists to exclude anyone; S61 names this as the debt)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
 - *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'] are named and NONE has a predicate
+
+### ordering 3 acts  ·  `S27/S32`  ·  taken 2x
+- **chose:** five strata, then a content-derived hash key over one global array  (2x)
+- *not taken:* completion order
+- *not taken:* per-container sort (voids the fold)
+- *not taken:* rank
 
 ### clamping site_harbour.condition  ·  `S27.3`  ·  taken 2x
 - **chose:** sum [2, 4, -5, -1, 3] = 3, then clamp ONCE  (2x)

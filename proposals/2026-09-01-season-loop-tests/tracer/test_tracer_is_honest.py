@@ -12,6 +12,7 @@ Run: python3 -m pytest test_tracer_is_honest.py -q
 
 from __future__ import annotations
 
+import dataclasses
 import inspect
 import json
 import re
@@ -182,10 +183,25 @@ def test_d6b_wear_has_no_silent_default():
 
 def test_d7_sense_does_not_return_a_constant_standing():
     """DEFECT 7. Rev 1 returned standing = 0 unconditionally, in the one function S18.2 calls
-    the only bridge from world truth into choose()."""
+    the only bridge from world truth into `choose()`.
+
+    ⚠ W5 REPOINTED THIS AT D7'S ACTUAL CLAIM. It had become `pytest.raises(Unspecified)` — which
+    pins standing as HAVING NO FORMULA, not as being non-constant — so it went red the moment
+    `H-29` supplied one. D7 is about a CONSTANT, and testing that directly is strictly stronger:
+    a raise and a hardcoded 0 are both constants, and only one of them was ever the defect."""
     w = _w()
-    with pytest.raises(Unspecified):
-        _ = S.sense(w.persons["p_low"], w, P.SUBSIST).standing
+    p = w.persons["p_low"]
+    seen = {S.sense(p, w, P.SUBSIST).standing}
+    p.ledger.append(S.Claim("c_a", p.id, p.id, "grade", "warden", 0, "firsthand", 100, "own"))
+    p.ledger.append(S.Claim("c_b", p.id, p.id, "grade", "warden", 0, "told_by", 100, "own"))
+    seen.add(S.sense(p, w, P.SUBSIST).standing)
+    assert len(seen) > 1, (
+        f"standing returned {seen.pop()} for two materially different ledgers — it is a constant, "
+        "which is D7 exactly, whether the constant is 0 or a raise")
+    # and it is still the ONE bridge: `sense` computes it, nobody stores it.
+    assert not any(f.name == "standing" for f in dataclasses.fields(S.Person)), (
+        "`standing` became a field on Person — S18.2 makes it a computed scalar of Sensation, and "
+        "a stored one is the aggregate-as-field shape §22.1 complains about")
 
 
 def test_d8_one_doctrinal_condition_raises_one_kind():
@@ -231,7 +247,7 @@ def test_d9d_the_frozen_world_is_read_not_merely_written():
     """S32 rest 1 is the FIRST thing order-independence rests on. Rev 1 set w.frozen and
     nothing ever read it."""
     with pytest.raises(Forbidden):
-        S.SeasonDriver(_w()).deliberate(lambda p, v, s, ask_budget: [], "q", P.SUBSIST)
+        S.SeasonDriver(_w()).deliberate(lambda p, v, s, ask_budget: [], None, P.SUBSIST)
 
 
 def test_d9e_the_rung_guard_is_a_whitelist_not_a_blacklist():
@@ -307,8 +323,12 @@ def test_sensation_is_constructed_by_the_loop_and_standing_raises_on_read():
     w = _w()
     sn = S.sense(w.persons["p_low"], w, P.SUBSIST)
     assert isinstance(sn, S.Sensation) and isinstance(sn.subsistence, int)
+    # BOTH scalars now (`H-29`). §18.2 says EXACTLY TWO, and the loop builds both.
+    assert isinstance(sn.standing, int) and len(tuple(sn)) == 2, tuple(sn)
+    # The refusal survives where it is still true: a Sensation built with ONE scalar is half a
+    # Sensation, and reading the missing half must refuse rather than answer 0.
     with pytest.raises(Unspecified):
-        _ = sn.standing
+        _ = S.Sensation(5).standing
     with pytest.raises(AttributeError):
         sn.third = 3
 
@@ -579,10 +599,10 @@ def test_r3_the_l5_crossing_emits_a_witnessable_event():
     d = S.SeasonDriver(w)
     site = w.sites["site_harbour"]
     for _ in range(3):
-        d.season(P.NOCHOOSE, "q", P.SUBSIST)
+        d.season(P.NOCHOOSE, None, P.SUBSIST)
     assert not [c for c in w.crossings if c[0] == site.id], "no band was crossed yet"
     for _ in range(20):
-        d.season(P.NOCHOOSE, "q", P.SUBSIST)
+        d.season(P.NOCHOOSE, None, P.SUBSIST)
     mine = [c for c in w.crossings if c[0] == site.id]
     assert mine
     eid = mine[0][4]
@@ -603,7 +623,7 @@ def test_r3_witness_fans_to_everyone_as_specified():
         return [P.Act_(w, p, "speak")] if p.id == "p_low" else []
     def effect(w, a):
         return [P.Ev(w, a.actor, "a.shout", a.actor, [S.ROOT])]
-    r = d.season(choose, "q", P.SUBSIST)
+    r = d.season(choose, None, P.SUBSIST)
     assert r["deposits"] >= len(w.persons), (r["deposits"], len(w.persons))
 
 
@@ -617,7 +637,7 @@ def test_r3_choose_asks_its_own_budget():
     def choose(p, v, s, ask_budget):
         asked.append(ask_budget())
         return []
-    S.SeasonDriver(w).season(choose, "q", P.SUBSIST)
+    S.SeasonDriver(w).season(choose, None, P.SUBSIST)
     assert asked, "no person was asked for a budget at all"
     # ⚠ W5 REPOINTED THIS ASSERTION, AND THE OLD ONE WAS THE DEFECT. It read
     # `all(n == w.fixtures.get("act_budget") for n in asked)` — i.e. it PINNED A FLAT BUDGET,
@@ -1145,9 +1165,25 @@ def test_w0_the_counts_are_computed_and_every_row_is_accounted_for():
     tally to itself is not that, and an assertion that cannot observe the failure it excludes is
     §0.1 point 2's named failure."""
     c = REG.counts(REG.load())
-    assert c["rows"] == c["transcribed"] + c["added_by_plan"], (
-        f"{c['rows']} rows but {c['transcribed']} + {c['added_by_plan']} accounted for -- a row "
-        "whose `source:` claims neither provenance has appeared")
+    # ⚠ W5 REPLACED A TWO-BUCKET ASSERTION THAT STOPPED BEING A PARTITION. It read
+    # `rows == transcribed + added_by_plan`, which was true while every row came from V2 or from
+    # PLAN §1.4 and became false the moment `W5` added rows found by EXECUTION. Two hardcoded
+    # predicates cannot partition a set that grows a third member, so the buckets are derived
+    # from the data and the partition is asserted over all of them — the same defect one level
+    # up from the one this test's docstring already describes.
+    assert sum(c["by_source"].values()) == c["rows"], (
+        f"{c['rows']} rows but the source buckets sum to {sum(c['by_source'].values())}: "
+        f"{c['by_source']}")
+    assert "unattributed" not in c["by_source"], (
+        f"a row carries no `source:` at all: {c['by_source']}")
+    assert len(c["by_source"]) >= 3, (
+        f"only {len(c['by_source'])} source(s) — this test cannot observe a bucket falling out "
+        f"of the total if there is effectively one bucket: {c['by_source']}")
+    # and the planted failure, so the partition assertion is known to be able to fail.
+    planted = REG.load()
+    planted["rows"][0] = dict(planted["rows"][0], source="")
+    assert "unattributed" in REG.counts(planted)["by_source"], (
+        "a row with an empty `source:` was silently folded into a real bucket")
     assert c["tier0"] + c["tier1"] == c["rows"], "a row sits in neither tier"
     # The grade tally must cover every row -- which is a real claim, because `rule_R1` admits only
     # four grades and a row could carry none. Planted, so the assertion is known to be able to
@@ -1421,7 +1457,9 @@ def test_w2_the_class_column_is_derived_and_cross_checked():
 # it is a list of PYTHON'S OWN mutator method names, fixed by the language and editable by nobody,
 # so it fails rosters.yaml's test in the direction that exempts — changing it changes how the code
 # works, never what the game is. It is the first exemption this guard has earned on its own author.
-EXEMPT_CEILING = 13
+# 13 -> 14, W5: `View.__slots__`, for the same reason — a language construct naming the class's
+# own attributes, which crossed the three-element threshold when the View gained `question`.
+EXEMPT_CEILING = 14
 
 
 def test_jordan_no_definition_is_hardcoded_in_a_body():
@@ -1660,3 +1698,186 @@ def test_w5_no_gap_is_an_instrument_defect():
         f"{len(errs)} probe(s) fail with an instrument defect rather than running: {errs}. "
         "These are bugs in the probe or in shape.py, not findings about #353, and they must be "
         "fixed rather than published.")
+
+
+# ===========================================================================
+# W5 — PART F. The four proofs PLAN.md names, plus the two defects found building it.
+# ===========================================================================
+
+def test_w5_opening_set_has_no_roster_and_is_computed_from_the_table():
+    """PLAN `W5`'s first proof, and `D2` entire: `Query.opening_set` has NO `roster` parameter.
+
+    Tests the PROPERTY as well as the name (G3) — a parameter renamed `options` would satisfy the
+    name test and be the same defect — by checking the set MOVES with the verb table."""
+    params = list(inspect.signature(S.Query.opening_set).parameters)
+    assert "roster" not in params, f"the roster survived: {params}"
+    assert params == ["p", "v", "q"], f"§F1 types it `opening_set(p, view, q)`; got {params}"
+
+    w = P.tiny_world()
+    p = w.persons["p_mid"]
+    q = S.Question("q:t", "need", ("rec_writ", "S"))
+    v = S.View(p.id, [], w.fixtures.get("view_k"), q)
+    got = S.Query.opening_set(p, v, q)
+    assert got, "the computed set is empty — nothing is derivable and the roster is only absent"
+    assert all(c.verb in S.VERB_TABLE for c in got)
+
+    # THE PROPERTY: it is derived from the table, so removing a table row removes its candidates.
+    victim = sorted({c.verb for c in got})[0]
+    saved = S.VERB_TABLE.pop(victim)
+    try:
+        after = {c.verb for c in S.Query.opening_set(p, v, q)}
+    finally:
+        S.VERB_TABLE[victim] = saved
+    assert victim not in after, (
+        f"{victim!r} survived being removed from the verb table — the set is not computed from it")
+
+
+def test_w5_q_has_a_producer_across_all_four_sources():
+    """PLAN `W5` / `H-04` / §61. Each of the four sources produces a question ON ITS OWN, tested
+    one at a time so a source that never fires cannot hide behind one that does — §0.1 point 2.
+
+    ⚠ V2 §F1 SAYS "EXACTLY THREE SOURCES, AND BY NOTHING ELSE". Q4 is the fourth and PLAN `W5`
+    is why: without it "an NPC with a standing ambition and a quiet season forms no candidates at
+    all", which is most of the NPC corpus."""
+    seen = {}
+    for src in S.QUESTION_SOURCES:
+        w = P.tiny_world()
+        p = w.persons["p_mid"]
+        if src == "date_due":
+            w.dates["d_t"] = dict(due_at=0, holder=p.id, fired=False)
+            w.docket.append({"date": "d_t", "matter": "m_t"})
+        elif src == "claim_landed":
+            p.ledger.append(S.Claim("c_t", p.id, p.id, "office", "duke", w.tick,
+                                    "told_by", 100, "own"))
+        elif src == "band_crossed":
+            w.crossings.append((p.id, "subsistence", 0))
+        elif src == "need":
+            pr = S.Proposition("pr_t", "OUGHT", "rec_writ", "it should stand", True, 0)
+            w.propositions[pr.id] = pr
+            w.add_tenure(S.Tenure("t_t", p.id, pr.id, "commit", since=0))
+        else:
+            pytest.fail(f"the roster grew a source this test does not exercise: {src!r}")
+        qs = S.questions_for(w, p)
+        seen[src] = [q.source for q in qs]
+        assert src in seen[src], f"source {src!r} produced no question: {seen}"
+    assert len(seen) == 4, seen
+
+
+def test_w5_f2s_third_term_cannot_change_any_decision():
+    """A DEFECT IN §F2, FOUND BY BUILDING IT, and reported rather than smoothed away.
+
+    §F2 scores `Σ_axis conviction·alignment(c.verb, axis) + stance_toward(c.subject) +
+    urgency(sensation.subsistence)`. The third term HAS NO `c` IN IT, so it is added identically
+    to every candidate and cannot move a ranking `choose` then slices. It is inert BY
+    CONSTRUCTION — the dead-carrier shape #353 `:739-744` names, arriving in a scoring function
+    instead of in a field.
+
+    This asserts the inertness rather than describing it, so if a later revision makes urgency
+    candidate-dependent the test goes red and the finding is retired by evidence."""
+    w = P.tiny_world()
+    p = w.persons["p_mid"]
+    pr = S.Proposition("pr_u", "OUGHT", "rec_writ", "x", True, 0)
+    w.propositions[pr.id] = pr
+    w.add_tenure(S.Tenure("t_u", p.id, pr.id, "commit", since=0))
+    q = S.questions_for(w, p)[0]
+    v = S.View(p.id, [], w.fixtures.get("view_k"), q)
+    ch = S.make_chooser(w.fixtures, lambda a, b, c: f"{a}:{b}:{c}")
+    picks = {s: [a.verb for a in ch(p, v, S.Sensation(s), lambda: 3)]
+             for s in (0, 500, 1000, 10 ** 6)}
+    distinct = {tuple(x) for x in picks.values()}
+    assert len(distinct) == 1, (
+        f"urgency moved the decision: {picks}. If that is now true the third term is no longer "
+        "inert and this finding about §F2 should be retired — but check it is candidate-DEPENDENT "
+        "and not merely numeric noise before doing so.")
+    assert S.urgency(1000, w.fixtures) != S.urgency(0, w.fixtures), (
+        "urgency returns a constant, which would make this test vacuous — it must actually vary "
+        "with subsistence for the inertness claim to be about §F2 rather than about a stub")
+
+
+def test_w5_sense_is_still_the_only_world_taking_non_decision_function():
+    """PLAN `W5`'s fourth proof — *"asserted by AST over every person-side function's signature",
+    never by reading the docstring*.
+
+    #353 `:634`: `sense()` is "the ONE non-decision function permitted a `World`". V2 §F3 broke it
+    by giving `budget` a World; PLAN §3.3's smaller amendment is what this checks held."""
+    import ast as ast_
+    tree = ast_.parse((HERE / "shape.py").read_text())
+    # Person-side = every function whose FIRST parameter is annotated `Person`. Derived from the
+    # signatures rather than from a name list, so a new person-side function is covered the day
+    # it is written (G2 — forbid the shape, never enumerate the words).
+    offenders = []
+    for node in ast_.walk(tree):
+        if not isinstance(node, (ast_.FunctionDef, ast_.AsyncFunctionDef)):
+            continue
+        args = [a for a in node.args.args if a.arg not in ("self", "cls")]
+        if not args or getattr(args[0].annotation, "id", None) != "Person":
+            continue
+        takes_world = [a.arg for a in args
+                       if getattr(a.annotation, "id", None) == "World"
+                       or getattr(getattr(a.annotation, "value", None), "value", None) == "World"]
+        if takes_world and node.name != "sense":
+            offenders.append((node.name, node.lineno, takes_world))
+    assert not offenders, (
+        "a person-side function takes a World, and #353 :634 permits exactly one:\n  "
+        + "\n  ".join(f"{n} at shape.py:{ln} takes {w}" for n, ln, w in offenders))
+    # And the control: the AST walk must actually be finding person-side functions, or it proves
+    # nothing by finding no offenders among zero candidates (§0.1 point 2).
+    found = [n.name for n in ast_.walk(tree)
+             if isinstance(n, ast_.FunctionDef)
+             and [a for a in n.args.args if a.arg not in ("self", "cls")]
+             and getattr([a for a in n.args.args if a.arg not in ("self", "cls")][0].annotation,
+                         "id", None) == "Person"]
+    assert len(found) >= 5, f"the AST walk found only {found} — it is not seeing person-side code"
+    assert "budget" in found and "opening_set" in found, found
+
+
+def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_printed():
+    """PLAN `W5`'s third proof: *"the `alignment` table swept at three points with every flipped
+    verdict printed"*. `H-66` is the row; `rosters.yaml` holds the default.
+
+    ⚠ THE WEIGHTS ARE INVENTED AND THE ROW IS WHAT MAKES THAT LAWFUL — §G's declare · default ·
+    sweep. This is the sweep half, and its output is a measurement whichever way it comes out:
+    a flip says a verdict rests on a number nobody derived; no flip says the table is not
+    deciding that verdict, which is equally worth knowing and is the null result §0.1 point 4
+    asks for in the unflattering direction too."""
+    affected = ["P31", "P36", "P11", "P12"]
+    table = {}
+    saved = S.ALIGNMENT
+
+    def fresh(pid):
+        # ⚠ `run_probe` MEMOISES IN `_VERDICTS`, so calling it in a loop returns the FIRST run's
+        # answer for every later point and a sweep silently measures one arm three times. The
+        # first version of this test did exactly that and printed "0 of 4 move" from three
+        # identical reads. Evicting the entry is what makes the sweep a sweep.
+        R._VERDICTS.pop(pid, None)
+        return R.run_probe(pid)["verdict"]
+
+    try:
+        for point in S.ALIGNMENT_SWEEP:
+            S.ALIGNMENT = S.alignment_at(point)
+            table[point] = {pid: fresh(pid) for pid in affected}
+    finally:
+        S.ALIGNMENT = saved
+        for pid in affected:
+            fresh(pid)                           # restore the committed verdicts
+
+    base = table["declared"]
+    flips = {pid: {pt: table[pt][pid] for pt in S.ALIGNMENT_SWEEP}
+             for pid in affected
+             if len({table[pt][pid] for pt in S.ALIGNMENT_SWEEP}) > 1}
+    print(f"\n  H-66 alignment sweep over {S.ALIGNMENT_SWEEP}:")
+    for pid in affected:
+        row = " · ".join(f"{pt}={table[pt][pid]}" for pt in S.ALIGNMENT_SWEEP)
+        print(f"    {pid}: {row}{'   <-- FLIPPED' if pid in flips else ''}")
+    print(f"  {len(flips)} of {len(affected)} verdicts move across the sweep."
+          + ("  No verdict rests on an invented magnitude." if not flips else
+             f"  These rest on H-66's default: {sorted(flips)}"))
+
+    # The sweep must be able to OBSERVE a flip, or reporting "no flips" proves nothing (§0.1 pt 2).
+    # P31 asserts that inverting a conviction changes the pick; under `uniform` the alignment
+    # cannot discriminate, so P31 MUST break there. If it does not, the control is not a control.
+    assert table["uniform"]["P31"] != "PASS", (
+        "P31 passed under the UNIFORM control, where alignment cannot discriminate between verbs "
+        "at all. Either P31 is not actually reading the table, or the control is not uniform — "
+        "and either way this sweep cannot observe the failure it exists to exclude.")
+    assert base["P31"] == "PASS", f"P31 does not pass at the declared default: {base}"

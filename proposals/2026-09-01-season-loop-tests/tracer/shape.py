@@ -615,6 +615,9 @@ def _load_alignment() -> dict:
 
 
 ALIGNMENT = _load_alignment()
+# The immutable baseline. `ALIGNMENT` is REBOUND by a sweep; this is not, so every sweep point is
+# built from the declared table rather than from the previous point (see `alignment_at`).
+ALIGNMENT_DECLARED = {ax: dict(row) for ax, row in ALIGNMENT.items()}
 ALIGNMENT_DEFAULT_CELL = float(table_meta("alignment").get("default_cell", 0.0))
 
 
@@ -857,35 +860,60 @@ class Sensation:
     risk`. `__slots__` is the nearest Python approximation to S46.1's `Vector2` argument and
     is still a convention a determined author can spell around."""
 
-    __slots__ = ("subsistence",)
+    # roster-exempt: MECHANISM -- `__slots__` is a Python language construct naming this
+    # class's own attributes, as on `View`.
+    __slots__ = ("subsistence", "_standing")
 
-    def __init__(self, subsistence: int):
+    def __init__(self, subsistence: int, standing: Optional[int] = None):
         self.subsistence = subsistence
+        self._standing = standing
 
     @property
     def standing(self) -> int:
-        raise Unspecified(
-            "Sensation.standing", "S18.2",
-            needs="an aggregation producing 'what everyone reads off you' that does not cross holders",
-            law="S18.2 defines standing as 'THE GAP BETWEEN WHAT EVERYONE READS OFF YOU AND WHAT YOU HOLD' and NO SECTION COMPUTES IT. The obvious computation -- reading a value off every other person -- is the shape S22.4 clause 2 bars, so this is not merely unwritten: the direct route to it is refused",
-        )
+        """S18.2's second scalar. COMPUTED as of `W5`; see `standing_of`.
+
+        Rev 3 raised `Unspecified` here and its reason was half right. It said the direct route --
+        reading a value off every other person -- is barred by S22.4 clause 2. V2 §F4 corrected
+        that: clause 2 governs RESOLVER-SIDE Queries and `sense()` is explicitly not one, so the
+        real bar is §20, "Claims live in the holder's own ledger... Nobody else may read or write
+        it." Same conclusion, right law, and it points at the answer rather than at a wall."""
+        if self._standing is None:
+            raise Unspecified(
+                "Sensation.standing", "S18.2",
+                needs="construct the Sensation through `sense()`, which computes both scalars",
+                law="S18.2 -- Sensation is EXACTLY TWO SCALARS. A Sensation built with only "
+                    "`subsistence` is half a Sensation, and reading the missing half must refuse "
+                    "rather than answer 0 -- §42.2's polarity rule applied to a constructor")
+        return self._standing
 
     def __iter__(self):
-        return iter((self.subsistence,))
+        return iter((self.subsistence, self._standing))
 
 
 class View:
     """S18.1 -- a View holds IDS, NEVER REFERENCES. L2 is enforced BY CONSTRUCTION: any attempt
     to reach a world collection through a View raises. S18: AT MOST K ids, BUILT NOT FILTERED."""
 
-    __slots__ = ("holder", "claim_ids")
+    # roster-exempt: MECHANISM. `__slots__` is a PYTHON LANGUAGE CONSTRUCT — it names this
+    # class's own attributes and the interpreter reads it, so changing it changes how the code
+    # works, never what the game is. It crossed the guard's three-element threshold only when W5
+    # added `question`, which is the guard behaving correctly on a shape it cannot distinguish.
+    __slots__ = ("holder", "claim_ids", "question")
 
-    def __init__(self, holder: str, claim_ids: list[str], k: int):
+    def __init__(self, holder: str, claim_ids: list[str], k: int, question: Any = None):
         if len(claim_ids) > k:
             raise Forbidden(f"View built with {len(claim_ids)} ids against cap K={k}", "S18",
                             law="S18 -- at most K claim ids from the holder's OWN ledger")
         object.__setattr__(self, "holder", holder)
         object.__setattr__(self, "claim_ids", list(claim_ids))
+        # ⚠ W5: THE VIEW CARRIES ITS QUESTION, and this is a defect found in §F2 rather than a
+        # convenience. §F2 types `choose(p, view, sensation, ask_budget)` -- FOUR parameters --
+        # and its body then reads `candidates = opening_set(p, view, q)`, where `q` IS FREE: the
+        # pseudocode uses a variable its own signature does not bind. Widening `choose` to five
+        # would break the signature §26 states, so the binding goes where §F1 already put it --
+        # `assemble(person, question) -> View` builds the View FROM the question, so the View is
+        # the thing that knows which question it was built for. No signature changes.
+        object.__setattr__(self, "question", question)
 
     def __getattr__(self, name: str) -> Any:
         raise Forbidden(
@@ -893,6 +921,28 @@ class View:
             needs="a person decides from their own claims; world truth enters only via sense()",
             law="L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE",
         )
+
+
+@dataclass(frozen=True)
+class Question:
+    """§F1's `q` -- the thing a person is deliberating ABOUT, and the input `opening_set` derives
+    its subjects from. `H-04` / §61's `NoProducer` is closed by `questions_for()` below.
+
+    `source` is one of `question_sources` in `rosters.yaml`. `referents` are the ids the question
+    is ABOUT -- §F1 clause 3: "subject in referents(q)". `about` is the originating object's id,
+    kept so a Candidate can say WHY it exists without the resolver re-deriving it."""
+    id: str
+    source: str
+    referents: tuple
+    about: str = ""
+
+    def __post_init__(self) -> None:
+        if self.source not in QUESTION_SOURCES:
+            raise Forbidden(
+                f"question source {self.source!r} is not in the question_sources roster",
+                "§F1", needs="add it to rosters.yaml, or use one of the four",
+                law="§F1 -- a question is produced by these sources and by nothing else. V2 said "
+                    "THREE and was wrong by one; the roster is where a fifth would be argued for")
 
 
 @dataclass
@@ -1454,30 +1504,398 @@ class Query:
         b -= len(p.travel_leg) * fx.get("budget_leg_penalty")
         return max(1, b)
 
-    def opening_set(p: Person, v: View, roster: list[Candidate]) -> list[Candidate]:
-        """S17 -- returns Candidate[], NOT Act[].
+    def opening_set(p: Person, v: View, q: Question) -> list[Candidate]:
+        """§F1 -- COMPUTED FROM THE VERB TABLE. No `roster` parameter: that is `D2` entire.
 
-        REV 2 HONESTY NOTE. The TYPE is faithful; the PROPERTY S17 chose the type to protect --
-        "an option set that is COMPUTED rather than an AUTHORED LIST" -- is not, because
-        `roster` is the caller's authored list. S61 records why it cannot be: `assemble(person,
-        question)` has no producer for `q`, so DELIBERATE HAS NO DECLARED ENTRY POINT and there
-        is nothing from which to compute a set. The roster is the instrument standing in for a
-        producer that does not exist, and it is marked so rather than banked."""
+        ⚠ WHAT CHANGED, AND WHY IT COULD NOT CHANGE BEFORE. Rev 2 took `roster: list[Candidate]`
+        and returned it, and said so: "the PROPERTY S17 chose the type to protect -- an option set
+        that is COMPUTED rather than an AUTHORED LIST -- is not [faithful], because `roster` is the
+        caller's authored list." Its reason was real: §61 gave `q` no producer, so there was
+        nothing to compute a set FROM. `questions_for()` is that producer, so the roster's excuse
+        is gone and with it the roster.
+
+            { Candidate(verb, subject, why) :
+                verb    in the verb table                            -- clause 1
+              , eligibility(verb, p) holds                           -- clause 2
+              , subject in referents(q)                              -- clause 3
+              , requires(verb) not KNOWN-FALSE from p's OWN claims }  -- clause 4
+
+        ⚠ CLAUSE 4 IS THE EPISTEMIC DESIGN AND IS NOT "requires holds". §F1: the person filters on
+        WHAT THEY BELIEVE, "so a person who *wrongly* believes the granary full still forms the
+        Candidate, acts, and gets `transfer.refused` from the fold. That is T3 and L2 working; a
+        filter on world truth would be `choose` reading the world." Jordan, 2026-09-02: *"our
+        understanding of all other words and actions is subjective and singular."* So the test is
+        KNOWN-FALSE — a claim the person holds that contradicts the requirement — and NOT
+        "unproven". Absence of a belief is not a belief in the negative.
+
+        ⚠ ONE OF §F1'S FOUR ELIGIBILITY KINDS CANNOT BE EVALUATED HERE, and it declines rather
+        than admitting. See `person_side_eligible`: `remit:` needs the OFFICE's remit, and #353
+        §11.1 is explicit that "who holds an office is NOT a field on the office -- it is a `hold`
+        Tenure, owned by the holder", which gives the person the TENURE and leaves the REMIT with
+        the office. That is a genuine collision in §F1 and it is registered (`H-71`), not filled.
+        It is not the `budget` case: there the data was the person's and merely stored in the
+        wrong place, and no such relocation is available for a remit two holders share."""
         TRACE.query("opening_set", "person")
-        return list(roster)
+        out: list[Candidate] = []
+        for verb, row in sorted(VERB_TABLE.items()):
+            if not person_side_eligible(p, row):
+                continue
+            for subject in q.referents:
+                if belief_contradicts(p, row, subject):
+                    continue
+                out.append(Candidate(verb, subject, why=q.source))
+        return out
 
     @staticmethod
     def assemble(p: Person, question: Any, k: int) -> View:
-        if question is None:
-            raise NoProducer("the question `q` that assemble() takes", "S61",
-                             needs="a producer for q",
-                             law="S61 -- `assemble(person, question)` and `view(person, question)` are UNSATISFIABLE; DELIBERATE HAS NO DECLARED ENTRY POINT")
-        return View(p.id, [c.id for c in p.ledger][-k:], k)
+        # ⚠ W5 REMOVED A `NoProducer` HERE, AND THE REMOVAL IS THE DISCHARGE OF §61, NOT A
+        # SOFTENING OF IT. It read: "`assemble(person, question)` and `view(person, question)`
+        # are UNSATISFIABLE; DELIBERATE HAS NO DECLARED ENTRY POINT." That was TRUE while nothing
+        # produced `q`. `questions_for()` produces it from four sources, so `question is None` no
+        # longer means "the design has no producer" -- it means THIS PERSON HAS NO QUESTION THIS
+        # SEASON, which is an ordinary state (a quiet season, nothing due, no standing commit) and
+        # not a hole. Such a person forms no candidates and does nothing, which is correct.
+        # A WRONG TYPE STILL RAISES, below: silently accepting one would let a caller's leftover
+        # string sit where a Question belongs and read as "no question", which is how a discharged
+        # hole comes back as a silent no-op.
+        if question is not None and not isinstance(question, Question):
+            # `InstrumentDefect`, not `Forbidden`: a caller passing the wrong TYPE is a bug in the
+            # caller, not a hole in #353, and filing it as a GAP would put it in the column that
+            # measures the design. Same lesson as `_TenureView`.
+            raise InstrumentDefect(
+                f"assemble() was given a {type(question).__name__}, not a Question. Pass a "
+                "Question from questions_for(), or None for a person with no question this "
+                "season. §F1's `q` has a producer now (`H-04`); accepting any object here would "
+                "make a stale injected fixture indistinguishable from an absent question.")
+        return View(p.id, [c.id for c in p.ledger][-k:], k, question)
 
     @staticmethod
     def entrenchment(p: Person, seasons_held: int, scale: int, span: int) -> int:
         TRACE.query("entrenchment", "person")
         return min(scale, (seasons_held * scale) // span)
+
+
+def resolvable_verbs() -> frozenset:
+    """The verbs the fold can actually carry through RESOLVE: no precondition, or a precondition
+    some `REQUIRES_PREDICATES` entry evaluates.
+
+    COMPUTED, NEVER LISTED. A caller narrowing an option set to these is not authoring a roster --
+    it is asking the fold what it can execute, and the answer moves when `verb_table.yaml` or the
+    predicate registry moves. W3 measured 12 of 32; this is that measurement as a function, so a
+    probe can report both numbers instead of hardcoding either."""
+    out = set()
+    for v, row in VERB_TABLE.items():
+        if (row.requires or "").strip() in NO_PRECONDITION or v in REQUIRES_PREDICATES:
+            out.add(v)
+    return frozenset(out)
+
+
+# From `rosters.yaml`, not a literal: the three points ARE a definition -- each names a claim
+# the sweep compares -- so Jordan's no-hardcoding ruling reaches them. The guard caught this
+# as a literal tuple and was right to; it is one of the few hits that was not mechanism.
+ALIGNMENT_SWEEP = tuple(table_meta("alignment")["sweep"])
+
+
+def alignment_at(point: str) -> dict:
+    """`H-66`'s three sweep points. `rosters.yaml` declares the SET; this is the transform.
+
+    ⚠ `uniform` IS THE CONTROL, and naming it so is the point. Every cell equal makes
+    `SIGMA_axis conviction[axis] * alignment(verb, axis)` the same for every candidate, so
+    convictions cannot discriminate at all -- a verdict that does NOT move between `declared` and
+    `uniform` is a verdict the table was never deciding. §0.1 point 4: a number without a control
+    is not a measurement, in EITHER direction.
+
+    `sign_only` discards the magnitudes and keeps the signs, which separates "the table's
+    DIRECTIONS are load-bearing" from "its INVENTED NUMBERS are". Since the numbers are declared
+    invented, that separation is the one worth having."""
+    if point not in ALIGNMENT_SWEEP:
+        raise Unspecified(
+            f"{point!r} is not an alignment sweep point", "H-66",
+            needs=f"one of {list(ALIGNMENT_SWEEP)}",
+            law="§G -- declare it, default it, sweep it. A fourth point is a fourth claim")
+    # ⚠ EVERY POINT IS BUILT FROM `ALIGNMENT_DECLARED`, NEVER FROM `ALIGNMENT`. A sweep works by
+    # rebinding `ALIGNMENT`, so a transform reading the live global transforms whatever the last
+    # point left: `alignment_at("sign_only")` after `uniform` returned sign(1.0) == 1.0 — i.e.
+    # uniform again — and the sweep reported two arms as one. The baseline is captured at import
+    # and never rebound, which is what makes the three points independent.
+    if point == "declared":
+        return {ax: dict(row) for ax, row in ALIGNMENT_DECLARED.items()}
+    if point == "uniform":
+        # ⚠ EVERY (verb, axis) PAIR, NOT EVERY LISTED CELL, and the difference is the whole
+        # control. The first version returned `{v: 1.0 for v in row}`, which left UNLISTED pairs
+        # falling through `align()` to `default_cell = 0.0` — so a verb absent from an axis still
+        # scored differently from one present on it, convictions could still discriminate, and
+        # `P31` passed under the "control". The test's own observability check caught it: a
+        # control that the probe survives is not a control (§0.1 point 2).
+        return {ax: {v: 1.0 for v in VERB_TABLE} for ax in CONVICTION_AXES}
+    return {ax: {v: (1.0 if w > 0 else -1.0 if w < 0 else 0.0) for v, w in row.items()}
+            for ax, row in ALIGNMENT_DECLARED.items()}
+
+
+def align(verb: str, axis: str) -> float:
+    """§F2's `alignment(c.verb, axis)`. Sparse: an unlisted pair reads the table's own declared
+    `default_cell`, never a literal here."""
+    return float(ALIGNMENT.get(axis, {}).get(verb, ALIGNMENT_DEFAULT_CELL))
+
+
+def stance_toward(p: Person, referent: str) -> float:
+    """§F2's second term, from `p`'s OWN stance rows. #353 `:333`: `(referent, valence -5..+5,
+    weight 0..5)`. Valence times weight, summed over the rows naming this referent -- weight is
+    what `:333` supplies it for, and dropping it would make a 5-weight conviction and a 0-weight
+    one count alike."""
+    total = 0.0
+    for row in p.stance:
+        if len(row) >= 3 and row[0] == referent:
+            total += float(row[1]) * float(row[2])
+    return total
+
+
+def urgency(subsistence: int, fx: "Fixtures") -> float:
+    """§F2's third term. NO IN-CHAIN FORMULA -- `H-73`, `assumption`, swept.
+
+    ⚠ AND IT CANNOT CHANGE ANY DECISION, WHICH IS A DEFECT IN §F2 RATHER THAN IN THIS FUNCTION.
+    §F2's score is
+
+        score(c) = SIGMA_axis conviction[axis] * alignment(c.verb, axis)
+                 + stance_toward(c.subject)
+                 + urgency(sensation.subsistence)
+
+    and the third term HAS NO `c` IN IT. It is added identically to every candidate, so it cannot
+    move the ranking, cannot change which candidates survive `ask_budget()`, and cannot change the
+    order they are returned in. `choose` returns "the top ask_budget() candidates, ORDERED by
+    score", so a term constant across candidates is INERT BY CONSTRUCTION -- it is the dead-carrier
+    shape #353 `:739-744` names, arriving in the scoring function instead of in a field.
+
+    Kept and computed anyway, faithfully, because deleting it would hide the finding: the sweep
+    (`H-73`) reports that NO verdict moves across three urgency scales, and that null result IS
+    the measurement. `test_w5_f2_third_term_is_inert` is the falsifier."""
+    return float(subsistence) / float(fx.get("condition_scale"))
+
+
+def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
+                 verbs: Optional[frozenset] = None) -> Callable[..., list[Act]]:
+    """§F2's decision policy as a FACTORY, so `choose(p, view, sensation, ask_budget)` keeps the
+    FOUR-parameter signature §26 states while still reaching its params.
+
+    `H-03` is the row: "grade: assumption. THE SHAPE IS RULED (§3 L1, §9, §26); only the weighting
+    is open", so §G's discipline applies to the weights and not to this structure.
+
+    Four properties, and each is checked by a test rather than asserted here:
+      1. EVERY INPUT IS PERSON-SIDE -- `convictions`, `stance`, the View, the two Sensation
+         scalars. No World, no resolver-side Query. L2 by parameter list.
+      2. It CONSUMES `convictions` and `stance`, which #353 declares as fields and no formula in
+         the chain reads -- a carrier nothing consumes is dead state (§22.1's own complaint).
+      3. THE PERSON TRIAGES. `ask_budget()` is asked, not imposed; the engine never truncates.
+      4. A lookup on one's own interior is indistinguishable from a deliberation at this
+         boundary, and the design does not claim otherwise (§F2 property 4).
+
+    ⚠ `mint` IS HERE BECAUSE §F2 TYPES `choose -> Act[]` AND GIVES THE PERSON NO WAY TO MINT ONE.
+    An `Act` needs an id, and §33 derives every id from the world seed and the tick -- "unique per
+    DRAW, not per operation" -- so a person-side function cannot produce one. That is a real gap
+    between §F1's `-> Candidate[]` and §F2's `-> Act[]` and it is registered (`H-74`), not filled:
+    the barrier passes a minter closed over the seed and tick, which are the CLOCK, not anybody's
+    interior. Same shape as `fx`, and the AST proof still sees no `World`."""
+    def choose(p: Person, v: View, s: Sensation, ask_budget) -> list[Act]:
+        q = getattr(v, "question", None)
+        if q is None:
+            return []
+        cands = Query.opening_set(p, v, q)
+        if verbs is not None:
+            cands = [c for c in cands if c.verb in verbs]
+        u = urgency(s.subsistence, fx)
+        def score(c: Candidate) -> float:
+            return (sum(float(p.convictions.get(ax, 0.0)) * align(c.verb, ax)
+                        for ax in CONVICTION_AXES)
+                    + stance_toward(p, c.subject or "")
+                    + u)
+        # Deterministic: score DESC, then verb then subject, so a tie cannot depend on dict order.
+        ranked = sorted(cands, key=lambda c: (-score(c), c.verb, c.subject or ""))
+        # §26.3: the PERSON triages. The slice is the person's own choice of what to leave
+        # undone, taken against a budget they ASKED for -- not an engine truncating a tail.
+        return [Act(mint(p.id, c.verb, c.subject or ""), p.id, c.verb)
+                for c in ranked[:ask_budget()]]
+    return choose
+
+
+def person_side_eligible(p: Person, row: "VerbRow") -> bool:
+    """§F1 clause 2, PERSON-SIDE. `own | remit | hold | presence`, NEVER `capability`.
+
+    A DISJUNCTION: `transfer` is eligible by `own` OR `hold:<store>`, so one alternative admitting
+    is enough and one alternative declining decides nothing.
+
+    ⚠ TWO OF THE FOUR KINDS DECLINE HERE, EACH NAMING ITS HOLE, and neither admits on an
+    unevaluable predicate -- that would be a silent fill off the register (`G1`) at the opposite
+    polarity to §42.2, which sends zero evidence to the verdict AGAINST the thing measured. The
+    resolver's `_eligible` still evaluates both, because it HAS a `World`; this is the person's
+    reading, and the gap between the two readings is the finding.
+
+      * `remit:<act>` -- `H-71`, NEW. Needs the OFFICE's `remit_acts`. #353 §11.1: "who holds an
+        office is NOT a field on the office -- it is a `hold` Tenure, owned by the holder", so
+        the person owns the tenure and the office owns the remit. Unlike `budget`'s collision
+        there is no relocation available: two holders of one office share one remit, so it is not
+        the person's state to move. §F1 asserts this clause is person-side and does not say how.
+      * `presence:<rung>` -- `H-33`, the presence index, which does not exist. Same treatment the
+        resolver already gives it; this is precedent, not a new refusal."""
+    for alt in row.eligibility:
+        kind, _, arg = alt.partition(":")
+        kind, arg = kind.strip(), arg.strip().strip("<>")
+        if kind not in ELIGIBILITY_KINDS:
+            raise Forbidden(
+                f"eligibility kind {kind!r} is not in the eligibility_kinds roster", "§E4",
+                needs="one of the four; `capability` GATES NOTHING (#353 §9.2)",
+                law="#353 §9.2 -- 'capability supplies dice and GATES NOTHING'. A fifth kind is a "
+                    "new way to make a verb unavailable and needs a ruling, not a table edit")
+        if kind == "own":
+            return True
+        if kind == "hold":
+            if any(t.kind == "hold" and t.live for t in p.tenures):
+                return True
+        # `remit` and `presence` decline: see the docstring. TRACE records the decline so the
+        # count is measurable rather than inferred from a verb's absence.
+        elif kind == "remit":
+            TRACE.note(f"`remit:{arg}` is unevaluable person-side (H-71, the office's remit is "
+                       f"not the holder's state); {row.verb!r} declines rather than admitting")
+        elif kind == "presence":
+            TRACE.note(f"`presence:` eligibility is unevaluable person-side (H-33, the presence "
+                       f"index); {row.verb!r} declines rather than admitting")
+    return False
+
+
+def belief_contradicts(p: Person, row: "VerbRow", subject: str) -> bool:
+    """§F1 clause 4 -- is `requires(verb)` KNOWN-FALSE from `p`'s OWN claims?
+
+    ⚠ THE ASYMMETRY IS THE WHOLE POINT AND MUST NOT BE SOFTENED TO "requires holds". This returns
+    True only when the person HOLDS A CLAIM THAT CONTRADICTS the requirement. Having no belief
+    either way is NOT a contradiction, so the Candidate forms, the person acts on a false premise,
+    and the fold refuses them -- which is §F1's "a person who *wrongly* believes the granary full
+    still forms the Candidate ... That is T3 and L2 working."
+
+    Jordan, 2026-09-02: *"we can't control how others perceive and interpret our words or
+    actions"* and *"our understanding of all other words and actions is subjective and singular."*
+    A filter on world truth would be `choose` reading the world; this reads one person's ledger.
+
+    The contradiction test is a claim about THIS subject whose value is falsy for the predicate
+    the verb's `requires:` names. `H-72` registers the mapping from a `requires:` note to a
+    predicate: the verb table states requirements as PROSE, so which predicate a requirement is
+    about is not mechanically derivable, and inventing that mapping is what §42.2.1 forbids."""
+    req = (row.requires or "").strip()
+    if req in NO_PRECONDITION:
+        return False
+    for c in p.ledger:
+        if c.subject == subject and c.predicate in PERSON_PREDICATES and c.value is False:
+            return True
+    return False
+
+
+def questions_for(w: World, p: Person) -> list[Question]:
+    """§F1's `q` producer -- FOUR sources, resolver-side, at the DELIBERATE barrier.
+
+    ⚠ THIS CLOSES `H-04` AND §61's `NoProducer`, which between them blocked every NPC case: with
+    no producer for `q`, `assemble(person, question)` was UNSATISFIABLE and DELIBERATE had no
+    declared entry point, so `opening_set` had nothing to compute a set FROM. That is why the
+    instrument needed an authored `roster` -- `D2`.
+
+    ⚠ V2 §F1 SAYS "EXACTLY THREE SOURCES, AND BY NOTHING ELSE" AND IS WRONG BY ONE. PLAN `W5`
+    adds **Q4 `need`** (#353 `:509`, `:605`, `:1297`): a live `commit` to an OUGHT Proposition
+    generates a standing question every season. Without it "an NPC with a standing ambition and a
+    quiet season forms no candidates at all", which is most of the NPC corpus -- a person with a
+    goal and no inbox would simply not act. The sources are `rosters.yaml`'s `question_sources`,
+    IN ORDER, because a budget-bounded person answers the earlier ones first.
+
+    Resolver-side by construction: it takes a `World`. §F1 says all four are "already produced by
+    the loop" -- no new step, no new carrier, no clock -- and that is what this reads."""
+    TRACE.query("questions_for", "resolver")
+    out: list[Question] = []
+    mine = {t.object for t in p.tenures if t.live}
+
+    # Q1 -- a Date coming due whose DocketItem names a matter, for every person in its judging set.
+    for did, d in sorted(w.dates.items()):
+        if d.get("due_at", 1 << 30) <= w.tick and not d.get("fired"):
+            if d.get("holder") in (p.id, None) or d.get("holder") in mine:
+                items = [it for it in w.docket if it.get("date") == did]
+                refs = tuple(sorted({str(it.get("matter")) for it in items if it.get("matter")}))
+                out.append(Question(f"q:date:{did}", "date_due", refs or (did,), did))
+
+    # Q2 -- a claim landing in p's OWN ledger whose subject is p, something p holds, or a
+    # Proposition p has committed to. `since_tick` is the season boundary: "landing" is new.
+    for c in p.ledger:
+        if c.when == w.tick and (c.subject == p.id or c.subject in mine):
+            out.append(Question(f"q:claim:{c.id}", "claim_landed", (c.subject,), c.id))
+
+    # Q3 -- a Sensation band change: `subsistence` crossing a floor since last season. The
+    # crossing is D22's emission, read person-side; the loop records them on `w.crossings`.
+    for who, what, *_rest in w.crossings:
+        if who == p.id:
+            out.append(Question(f"q:band:{what}", "band_crossed", (what,), what))
+
+    # Q4 -- `need`. A live `commit` Tenure whose object is an OUGHT Proposition is a STANDING
+    # question: it recurs every season until the commitment ends, which is what makes an NPC with
+    # an ambition act in a quiet season.
+    for t in p.tenures:
+        if t.kind == "commit" and t.live:
+            prop = w.propositions.get(t.object)
+            if prop is not None and str(prop.mood).upper() == "OUGHT":
+                out.append(Question(f"q:need:{t.object}", "need",
+                                    (prop.subject,), t.object))
+
+    order = {src: i for i, src in enumerate(QUESTION_SOURCES)}
+    out.sort(key=lambda q: (order[q.source], q.id))
+    return out
+
+
+def agreement(told: list[Claim], own: list[Claim]) -> tuple:
+    """§F4's `agreement`, DEFINED -- and defined over TWO CLAIM SETS, not over claims and
+    convictions. Returns `(agreements, disagreements, paired_predicates)`.
+
+    ⚠ V2 §F4 IS WRONG IN A WAY #353 NAMES AS ITS WORST FAILURE MODE. It writes
+    `agreement(claims in p's own ledger where subject == p and source == told_by, p's own
+    convictions)` -- the claim ledger against the convictions. #353 §9.3 is a table whose whole
+    purpose is to keep those apart: the ledger holds what is **TRUE**, convictions hold what is
+    **RIGHT**, evidence moves the first and argument moves the second, and *"WITNESS NEVER TOUCHES
+    A BELIEF... This is the single most dangerous collision in the design."* A formula that scores
+    agreement between them makes evidence bear on the moral layer, which is the collision itself.
+    PLAN `W5` says as much: *"H-29's default is not injectable as written."*
+
+    THE CORRECTION IS SMALL AND STAYS INSIDE §F4'S OWN ARGUMENT. §18.2 says standing is "the gap
+    between what everyone reads off you and what you hold", and §F4 reads "what you hold" as
+    convictions. Read it instead as WHAT YOU HOLD TRUE -- your own firsthand claims about yourself
+    -- and both sides are the epistemic layer, the collision is gone, and all three properties §F4
+    wanted survive: computable person-side, WRONG-ABLE (a liar moves your standing, which is T3),
+    and no cross-holder read, so §20 is untouched.
+
+    Claims are paired BY PREDICATE, on the `person_predicates` roster -- PLAN `W5`'s "defined
+    predicate vocabulary". Without one, "pairing by predicate" is pairing on a free string."""
+    own_by = {c.predicate: c for c in own if c.predicate in PERSON_PREDICATES}
+    agree = dis = 0
+    for c in told:
+        if c.predicate not in own_by:
+            continue                    # nothing of your own to compare it against
+        (agree, dis) = (agree + 1, dis) if c.value == own_by[c.predicate].value else (agree, dis + 1)
+    return agree, dis, agree + dis
+
+
+def standing_of(p: Person, fx: "Fixtures") -> int:
+    """S18.2's second scalar, PERSON-SIDE, as a fixed-point int on `condition_scale` (S48).
+
+        standing(p) = gap( told_by claims about p , p's own firsthand claims about p )
+
+    0 means everyone reads you exactly as you read yourself; `condition_scale` is total mismatch.
+    §18.2 calls it "the GAP", so it is computed as a gap and not silently inverted into a
+    reputation score -- ⚠ the WORD "standing" ordinarily suggests the opposite polarity, and that
+    tension is recorded rather than resolved, because resolving it would be picking a meaning the
+    design did not state.
+
+    ⚠ NO PAIRED PREDICATE RETURNS THE MAXIMUM GAP, NOT ZERO, and that is `H-29`'s swept default.
+    Zero would mean "nobody has told you anything about yourself, therefore everyone agrees with
+    you", which is §42.2's polarity rule run backwards -- zero evidence maps to the verdict
+    AGAINST the thing measured, and the flattering reading is the one that rule exists to refuse.
+    Raising instead would restore the blocker §F4 warns about: standing blocked 9 cases for a
+    value nothing could produce."""
+    scale = fx.get("condition_scale")
+    told = [c for c in p.ledger if c.subject == p.id and c.source == "told_by"]
+    own = [c for c in p.ledger if c.subject == p.id and c.source == "firsthand"]
+    _agree, dis, paired = agreement(told, own)
+    return scale if paired == 0 else (dis * scale) // paired
 
 
 def body_band_penalty(p: Person, fx: "Fixtures") -> int:
@@ -1505,14 +1923,19 @@ def sense(p: Person, w: World, subsistence: Callable[[Person, World], int]) -> S
     supplies one and S10.4 makes MatterKind an OPEN registry -- summing kinds as if fungible
     is a model choice this instrument may not make on the design's behalf (S42.2.1)."""
     TRACE.query("sense", "bridge")
-    return Sensation(subsistence(p, w))
+    # BOTH scalars, as of W5. Rev 3 built a Sensation with one and let `.standing` raise; §18.2
+    # says EXACTLY TWO, and `standing_of` computes the second person-side (`H-29`).
+    return Sensation(subsistence(p, w), standing_of(p, w.fixtures))
 
 
-def sense_subsistence_only(p: Person, w: World, formula: Callable[[Person, World], int]) -> int:
-    """The subsistence half, with the formula INJECTED rather than invented (S42.2.1). No
-    in-chain document supplies one, and S10.4 makes MatterKind an OPEN registry, so summing
-    kinds as if fungible is a model choice this instrument may not make on the design's behalf."""
-    return formula(p, w)
+# ⚠ `sense_subsistence_only(p, w, formula)` STOOD HERE AND W5 DELETED IT, on the evidence of its
+# own proof. It was a SECOND non-decision function taking a `World` -- exactly what #353 `:634`
+# permits only `sense()` to be -- and it had ZERO CALLERS anywhere in the tree. It survived
+# because nothing checked SIGNATURES: the file's dead-code guard looks for switched-off rules
+# (`if False`), not for unused functions, and every claim about "the ONE" was made in prose.
+# `test_w5_sense_is_still_the_only_world_taking_non_decision_function` walks the AST for any
+# person-side function annotated with a `World` and found this on its first run. Recovered at
+# `git log -S sense_subsistence_only` if the injected-formula helper is ever wanted again.
 
 
 # ===========================================================================
@@ -1833,7 +2256,13 @@ class SeasonDriver:
         w._in_parallel_map = True       # S51: WorkerThreadPool over persons. The one that pays.
         for p in list(w.persons.values()):
             s = sense(p, w, subsistence)            # a Sensation, per S26's signature
-            v = Query.assemble(p, question, k_view)
+            # §F1 / `H-04`. `q` HAS A PRODUCER NOW. Rev 3 took the question as an injected
+            # parameter because §61 recorded that DELIBERATE HAD NO DECLARED ENTRY POINT; the
+            # four sources are computed here, at the barrier, from the loop's own output.
+            # An explicit `question` still overrides, so a probe can name the q it is testing.
+            qs = questions_for(w, p)
+            q_p = question if question is not None else (qs[0] if qs else None)
+            v = Query.assemble(p, q_p, k_view)
             # S26.3: the PERSON asks their own budget. `choose` receives the QUERY, not the
             # answer -- rev 2 computed it in the engine and handed the number down, which is
             # the half of retraction 5 that never landed.

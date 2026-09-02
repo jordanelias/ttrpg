@@ -31,7 +31,8 @@ from typing import Any, Callable, Optional
 from shape import (
     CLAIM_SOURCES, Candidate, Claim, Collision, ContestError, DEFAULT_FIXTURES, Event,
     Fixtures, Forbidden, H, NoProducer, Office, Person, VERB_TABLE,
-    Proposition, Query, Record, ROOT, RUNG_KINDS, Rung, STRATA, SeasonDriver, ShapeGap,
+    Proposition, Query, Question, Record, ROOT, RUNG_KINDS, Rung, STRATA, SeasonDriver,
+    ShapeGap, questions_for, make_chooser, Sensation, resolvable_verbs, standing_of,
     Site, StateChange, Step, Tenure, Ungraded, Unowned, Unspecified, View, World,
     WITNESS_CHANNELS, WriteClass, contest, expect_refusal, sense,
 )
@@ -103,7 +104,7 @@ def _run_d(w: World, choose=NOCHOOSE, n: int = 1, **kw):
     RESOLVE. `driver.resolved` is an observation surface and decides nothing."""
     d = SeasonDriver(w)
     for _ in range(n):
-        d.season(choose, question="q", subsistence=SUBSIST, **kw)
+        d.season(choose, question=None, subsistence=SUBSIST, **kw)
     return d
 
 
@@ -113,7 +114,7 @@ def _run(w: World, choose=NOCHOOSE, n: int = 1, **kw):
     d = SeasonDriver(w)
     out = None
     for _ in range(n):
-        out = d.season(choose, question="q", subsistence=SUBSIST, **kw)
+        out = d.season(choose, question=None, subsistence=SUBSIST, **kw)
     return out
 
 
@@ -144,6 +145,26 @@ def Act_(w, p, verb, key: str = "", **kw):
     not the SET."""
     from shape import Act
     return Act(H(w.world_seed, w.tick, p.id, f"act:{verb}:{key}"), p.id, verb, **kw)
+
+
+# The stand-in Question for probes that are testing the VIEW rather than the question -- P4
+# (two people, two views), P16, P27, P28. They need a Question-shaped `q` and do not care which,
+# and `assemble` refuses a bare string now (`H-04`: a stale injected fixture must not be
+# indistinguishable from an absent question). Named so a reader sees it is deliberate.
+_Q = Question("q:view-probe", "need", ())
+
+
+def chooser(w, only=None, verbs=None):
+    """§F2's default policy, built the way the barrier builds it. `only` narrows to one person so
+    a probe can watch a single decision; `verbs` narrows the option set to the ones under test.
+
+    ⚠ IT DOES NOT TAKE A ROSTER, and it cannot: `opening_set` computes from the verb table now.
+    A probe that wants a verb in the set must put the verb in `verb_table.yaml`."""
+    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    inner = make_chooser(w.fixtures, mint, verbs=verbs)
+    def choose(p, v, s, ask_budget):
+        return inner(p, v, s, ask_budget) if (only is None or p.id == only) else []
+    return choose
 
 
 def Ev(w, subj_seed, kind, subject, causes, changes=None, degree=None):
@@ -224,7 +245,7 @@ def p4():
     k = w.fixtures.get("view_k")
     p.ledger += [Claim("c1", p.id, "p_high", "is_loyal", True, 0, "firsthand", 100, "own"),
                  Claim("c2", p.id, "p_high", "is_loyal", False, 0, "told_by", 100, "own")]
-    v = Query.assemble(p, "q", k)
+    v = Query.assemble(p, _Q, k)
     assert set(v.claim_ids) == {"c1", "c2"}
     return ("PASS: the View carries both, holding IDS not references, and nothing person-side "
             "can tell them apart. A false conclusion is indistinguishable from a true one TO THE "
@@ -333,31 +354,52 @@ def p10():
             "the term; the world advances it")
 
 
-@probe("P11", "capability gates no verb", "S9.2", by="probe-model",
+@probe("P11", "capability gates no verb", "S9.2", by="construction",
        tests="skill must supply dice and must never make an action unavailable")
 def p11():
     w = tiny_world()
     p = w.persons["p_low"]
-    p.capability = {"copying": 0}
-    roster = [Candidate("copy"), Candidate("petition"), Candidate("kill")]
-    got = Query.opening_set(p, View(p.id, [], w.fixtures.get("view_k")), roster)
-    assert len(got) == len(roster)
-    return ("PASS: rank 0 removed no candidate. `rank` supplies dice and GATES NO VERB; the only "
-            "class-shaped gate in the design is Thread Sensitivity")
+    q = Question("q:p11", "need", ("rec_writ",))
+    v = View(p.id, [], w.fixtures.get("view_k"), q)
+    before = {c.verb for c in Query.opening_set(p, v, q)}
+    # `capability` at zero, and at zero for EVERY key the person has -- rev 2 set one key and
+    # could not have observed a gate on a different one (§0.1 point 2).
+    p.capability = {k: 0 for k in (list(p.capability) or ["copying"])}
+    after = {c.verb for c in Query.opening_set(p, v, q)}
+    assert before == after and before, (
+        f"rank 0 changed the option set: {sorted(before ^ after)}")
+    return (f"PASS BY CONSTRUCTION, and it is a stronger pass than rev 2's: the option set is now "
+            f"COMPUTED from the verb table, so this observes that zeroing capability removes none "
+            f"of the {len(before)} verbs it computes. Rev 2 compared a caller's authored roster "
+            f"with itself, which no capability gate could have changed either. `capability` "
+            f"appears in no clause of §F1 and the eligibility roster FORBIDS it as a fifth kind")
 
 
-@probe("P12", "opening_set returns Candidate[], not Act[]", "S17", by="probe-model",
+@probe("P12", "opening_set returns Candidate[], not Act[]", "S17", by="construction",
        tests="the set of things a character may do must be computed, not an authored list")
 def p12():
     from shape import Act
+    import inspect as _i
     w = tiny_world()
     p = w.persons["p_low"]
-    got = Query.opening_set(p, View(p.id, [], w.fixtures.get("view_k")), [Candidate("speak")])
+    q = Question("q:p12", "need", ("rec_writ", "S"))
+    v = View(p.id, [], w.fixtures.get("view_k"), q)
+    got = Query.opening_set(p, v, q)
     assert all(isinstance(c, Candidate) for c in got) and not any(isinstance(c, Act) for c in got)
-    return ("PARTIAL: the TYPE is right -- Candidate[], per the overturn (S54 item 1; #350's `07` "
-            "still carries -> Act[]). THE PROPERTY THE TYPE WAS CHOSEN TO PROTECT IS NOT: the "
-            "roster is the caller's AUTHORED LIST, because S61's missing producer for `q` means "
-            "there is nothing from which to compute a set. A typed authored list is still authored")
+    # THE PROPERTY, not the type: no parameter of `opening_set` may be an authored option list.
+    params = list(_i.signature(Query.opening_set).parameters)
+    assert "roster" not in params, f"`opening_set` still takes a roster: {params}"
+    # and it must be derived from the TABLE -- every verb it returns is a table row, and the set
+    # MOVES when the table's eligibility does, which an authored list cannot do.
+    assert got and all(c.verb in VERB_TABLE for c in got)
+    q2 = Question("q:p12b", "need", ("rec_writ",))
+    assert len(Query.opening_set(p, View(p.id, [], w.fixtures.get("view_k"), q2), q2)) < len(got), (
+        "the option set did not shrink with the question's referents -- it is not computed from q")
+    return (f"PASS BY CONSTRUCTION. `opening_set{tuple(params)}` -- THE ROSTER PARAMETER IS GONE, "
+            f"which is `D2` entire. Rev 2 was PARTIAL and said why: the type was right and the "
+            f"property the type protects was not, because S61 left `q` with no producer so there "
+            f"was nothing to compute from. `questions_for()` is that producer. {len(got)} "
+            f"candidates over {len(set(c.verb for c in got))} verbs, every one a verb-table row")
 
 
 @probe("P13", "a person acts on a need with no stored need field", "S18.2", by="probe-model",
@@ -377,15 +419,27 @@ def p13():
        tests="how a character is regarded must be able to differ from how they regard themselves")
 def p14():
     w = tiny_world()
-    reached = {}
-    def choose(p, v, s, ask_budget):
-        if p.id != "p_low":
-            return []
-        reached["n"] = s.subsistence     # the computable half is fine
-        _ = s.standing                   # the half no section computes
-        return []
-    _run(w, choose)
-    return "UNREACHABLE"
+    p = w.persons["p_low"]
+    fx = w.fixtures
+    scale = fx.get("condition_scale")
+    # Told nothing about himself: the MAXIMUM gap, not zero. §42.2's polarity rule -- zero
+    # evidence maps to the verdict AGAINST, and "nobody has told you anything, therefore everyone
+    # agrees with you" is that rule run backwards.
+    silent = standing_of(p, fx)
+    p.ledger.append(Claim("c_own", p.id, p.id, "grade", "warden", 0, "firsthand", 100, "own"))
+    p.ledger.append(Claim("c_told", p.id, p.id, "grade", "warden", 0, "told_by", 100, "own"))
+    agreed = standing_of(p, fx)
+    p.ledger[-1] = Claim("c_told", p.id, p.id, "grade", "churl", 0, "told_by", 100, "own")
+    at_odds = standing_of(p, fx)
+    assert silent == scale and agreed == 0 and at_odds == scale, (silent, agreed, at_odds)
+    return (f"PASS BY CONSTRUCTION: {silent} told nothing · {agreed} when what he is told matches "
+            f"what he holds · {at_odds} when it does not. ⚠ REV 3 RETURNED 'UNREACHABLE' HERE -- "
+            "the probe existed to prove `standing` had no formula at all. It has one now (`H-29`) "
+            "and it is NOT V2 §F4's: §F4 compares the claim ledger with the CONVICTIONS, i.e. the "
+            "TRUE layer against the RIGHT layer, which #353 §9.3 calls 'the single most dangerous "
+            "collision in the design'. Read §18.2's 'what you hold' as what you hold TRUE and "
+            "both sides are epistemic, the collision is gone, and it is still wrong-able -- a "
+            "liar moves your standing, which is T3")
 
 
 @probe("P15", "a person's private act stays private", "S61", by="no-signature",
@@ -409,7 +463,7 @@ def p16():
     a, b = w.persons["p_low"], w.persons["p_mid"]
     a.ledger.append(Claim("ca", a.id, "p_high", "is_traitor", True, 0, "told_by", 100, "own"))
     b.ledger.append(Claim("cb", b.id, "p_high", "is_traitor", False, 0, "firsthand", 100, "own"))
-    assert Query.assemble(a, "q", k).claim_ids != Query.assemble(b, "q", k).claim_ids
+    assert Query.assemble(a, _Q, k).claim_ids != Query.assemble(b, _Q, k).claim_ids
     return ("PASS: legitimacy is PER-KNOWER and flips at TELLING speed, not at a global write. "
             "There is no signature by which either could read the other's ledger")
 
@@ -593,7 +647,7 @@ def p27():
     a.ledger.append(Claim("c_ord", a.id, b.id, "complied", True, 0, "told_by", 100, "own"))
     b.ledger.append(Claim("c_tru", b.id, b.id, "complied", False, 0, "firsthand", 100, "own"))
     k = w.fixtures.get("view_k")
-    assert Query.assemble(a, "q", k).claim_ids == ["c_ord"]
+    assert Query.assemble(a, _Q, k).claim_ids == ["c_ord"]
     return ("PASS: the superior's ledger says complied, the subordinate's says not, and neither "
             "can read the other's. Only investigation closes the gap")
 
@@ -603,7 +657,7 @@ def p27():
 def p28():
     w = tiny_world()
     p = w.persons["p_low"]
-    v = Query.assemble(p, "q", w.fixtures.get("view_k"))
+    v = Query.assemble(p, _Q, w.fixtures.get("view_k"))
     assert v.holder == p.id
     person_side = [n for n in dir(Query) if not n.startswith("_")]
     return ("PASS-BY-ABSENCE: `assemble` takes THE ASKER and builds from the asker's own ledger. "
@@ -634,27 +688,32 @@ def p30():
             "in the holder's own ledger and only WITNESS writes it")
 
 
-@probe("P31", "a hidden motive biases every decision", "S9", by="probe-model",
+@probe("P31", "a hidden motive biases every decision", "S9", by="construction",
        tests="a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors")
 def p31():
     w = tiny_world()
     p = w.persons["p_mid"]
-    p.convictions = {"Precedent": 0.6, "self_preservation": 0.4}
-    picked = []
-    def choose(q, v, s, ask_budget):
-        if q.id != p.id:
-            return []
-        roster = [Candidate("report_truthfully"), Candidate("delay"), Candidate("understate")]
-        opts = Query.opening_set(q, v, roster)
-        best = max(opts, key=lambda c: q.convictions.get("Precedent", 0)
-                   if c.verb == "report_truthfully" else q.convictions.get("self_preservation", 0))
-        picked.append(best.verb)
-        return [Act_(w, q, best.verb)]
-    _run(w, choose)
-    assert picked
-    return (f"PASS: chose {picked[0]}. `convictions` is Person-interior, read PERSON-SIDE ONLY, and "
-            "it skewed the pick with no branch in the resolver and nothing stored about the bias. "
-            "Nobody -- including the holder and his superiors -- has a signature that reads it out")
+    q = Question("q:p31", "need", ("rec_writ",))
+    v = View(p.id, [], w.fixtures.get("view_k"), q)
+    ask = lambda: 1
+
+    # The SAME person, the SAME question, the SAME option set -- one variable, the motive.
+    # `create_record` and `destroy_record` sit at opposite signs on `Precedent` in the alignment
+    # table, so a conviction on that axis has somewhere to move the ranking TO. Rev 2 could not
+    # test this: it scored an authored roster of three verbs the table does not carry.
+    inner = make_chooser(w.fixtures, lambda a, b, c: f"{a}:{b}:{c}")
+    p.convictions = {"Precedent": 0.9}
+    principled = inner(p, v, Sensation(0), ask)[0].verb
+    p.convictions = {"Precedent": -0.9}
+    inverted = inner(p, v, Sensation(0), ask)[0].verb
+    assert principled != inverted, (
+        f"flipping the sign of the only conviction changed nothing: both chose {principled!r}. "
+        "`convictions` is a dead carrier -- the exact defect #353 :739-744 names")
+    return (f"PASS BY CONSTRUCTION: {principled!r} at Precedent +0.9, {inverted!r} at -0.9. The "
+            "motive is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with NO "
+            "branch in the resolver and nothing stored about the bias -- nobody, the holder and "
+            "his superiors included, has a signature that reads it out. ⚠ THE MAGNITUDES ARE "
+            "`H-66`'s declared default and are swept; the SIGN structure is what this observes")
 
 
 @probe("P32", "a person's own condition narrows their options in a fixed order", "S12",
@@ -708,25 +767,41 @@ def p35():
     )
 
 
-@probe("P36", "a choice branches three ways", "S17", by="probe-model",
+@probe("P36", "a choice branches three ways", "S17", by="construction",
        tests="a discovery must be able to be acted on in several distinct ways, each leading somewhere different")
 def p36():
     w = tiny_world()
     p = w.persons["p_mid"]
-    roster = [Candidate("protect", why="conceal"), Candidate("report", why="hand it up"),
-              Candidate("leverage", why="trade on it")]
-    got = []
-    def choose(q, v, s, ask_budget):
-        if q.id != p.id:
-            return []
-        b = ask_budget()
-        return [Act_(w, q, c.verb) for c in Query.opening_set(q, v, roster)[:b]]
-    got.extend(a.verb for a in _run_d(w, choose).resolved)
-    assert len(got) == 3
-    return (f"PASS-WITH-A-DISCLOSURE: {got} -- three Candidates through the SAME resolver, no "
-            "branching-outcome machinery (Part VIII refuses it as an authoring convention over "
-            "Record). THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to "
-            "compute from")
+    # THE PROBE SUPPLIES THE QUESTION SOURCE, not the option list. `tiny_world` has no dates, no
+    # propositions and no claims, so `questions_for` correctly produces nothing for anybody -- a
+    # world with no calendar and no commitments generates no deliberation, which is right. Q4
+    # `need` is the source PLAN W5 adds and the one most of the NPC corpus runs on: a live
+    # `commit` to an OUGHT Proposition is a standing question every season.
+    prop = Proposition("prop_p36", "OUGHT", "rec_writ", "the writ should stand", True, 0)
+    w.propositions[prop.id] = prop
+    w.add_tenure(Tenure("t_p36", p.id, prop.id, "commit", since=0))
+    # ⚠ NARROWED TO WHAT THE FOLD CAN EXECUTE, AND THE NARROWING IS COMPUTED, NOT AUTHORED.
+    # `resolvable_verbs()` asks the fold which verbs it can carry through RESOLVE; the answer is
+    # 12 of 32, because 20 carry a `requires:` no predicate evaluates (W3). Without it the person
+    # forms the full computed set, picks one of the twenty, and the SEASON HALTS -- which is a
+    # true finding about the specification and a different one from what this probe tests.
+    offered = len(Query.opening_set(p, View(p.id, [], w.fixtures.get("view_k"),
+                                           Question("q:p36", "need", ("rec_writ",))),
+                                    Question("q:p36", "need", ("rec_writ",))))
+    d = _run_d(w, chooser(w, only=p.id, verbs=resolvable_verbs()))
+    got = [a.verb for a in d.resolved if a.actor == p.id]
+    assert len(set(got)) >= 3, f"only {len(set(got))} distinct options were open: {got}"
+    return (f"PASS BY CONSTRUCTION, WITH A MEASUREMENT: {offered} candidates were OFFERED from "
+            f"the computed option set and only {len(resolvable_verbs())} of {len(VERB_TABLE)} "
+            f"verbs can be RESOLVED at all, so this ran over the resolvable ones. "
+            f"{sorted(set(got))} -- {len(set(got))} distinct verbs through "
+            "the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an "
+            "authoring convention over Record). ⚠ REV 2 WAS A PASS-WITH-A-DISCLOSURE and the "
+            "disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves "
+            "`opening_set` nothing to compute from.' The roster is gone -- these come from the "
+            "verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, "
+            "`report`, `leverage`) are on NO table row, so the branching it demonstrated was "
+            "branching among inventions")
 
 
 # ===========================================================================

@@ -165,13 +165,13 @@
      "verdict": {
       "id": "P36",
       "verdict": "GAP",
-      "detail": "verb 'leverage' is on no row of the verb table",
+      "detail": "'create_record' writes ['Record.exists', 'Record.stages'] and Part E does not say WHAT VALUE",
       "kind": "UNSPECIFIED",
-      "section": "S27/E2",
+      "section": "E2/E3",
       "title": "a choice branches three ways",
-      "needs": "a row in verb_table.yaml, ruled before it is added",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
-      "by": "probe-model",
+      "needs": "an entry in EFFECTS, or a `writes:` column that carries the value",
+      "law": "\u00a7E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and \u00a727.1's scarcity stops happening. Register row H-63",
+      "by": "construction",
       "tests": "a discovery must be able to be acted on in several distinct ways, each leading somewhere different"
      }
     },
@@ -545,13 +545,11 @@
      "probe": "P14",
      "verdict": {
       "id": "P14",
-      "verdict": "GAP",
-      "detail": "Sensation.standing",
-      "kind": "UNSPECIFIED",
+      "verdict": "PASS",
+      "detail": "PASS BY CONSTRUCTION: 1000 told nothing \u00b7 0 when what he is told matches what he holds \u00b7 1000 when it does not. \u26a0 REV 3 RETURNED 'UNREACHABLE' HERE -- the probe existed to prove `standing` had no formula at all. It has one now (`H-29`) and it is NOT V2 \u00a7F4's: \u00a7F4 compares the claim ledger with the CONVICTIONS, i.e. the TRUE layer against the RIGHT layer, which #353 \u00a79.3 calls 'the single most dangerous collision in the design'. Read \u00a718.2's 'what you hold' as what you hold TRUE and both sides are epistemic, the collision is gone, and it is still wrong-able -- a liar moves your standing, which is T3",
+      "kind": null,
       "section": "S18.2",
       "title": "standing is computed",
-      "needs": "an aggregation producing 'what everyone reads off you' that does not cross holders",
-      "law": "S18.2 defines standing as 'THE GAP BETWEEN WHAT EVERYONE READS OFF YOU AND WHAT YOU HOLD' and NO SECTION COMPUTES IT. The obvious computation -- reading a value off every other person -- is the shape S22.4 clause 2 bars, so this is not merely unwritten: the direct route to it is refused",
       "by": "construction",
       "tests": "how a character is regarded must be able to differ from how they regard themselves"
      }
@@ -599,15 +597,13 @@
    "name": "Rikard Solberg",
    "scale": "person",
    "source": "NPC1.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "NOT-ASSESSED",
    "rows": 7,
    "core": 3,
    "core_routed": 1,
    "core_unmapped": 2,
-   "core_blocked": 1,
-   "blockers": [
-    "P31"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "A single office-holder's personal, unstated motive must be able to measurably bias every decision he makes in that office, in one consistent direction, without him or his superiors recognizing the pattern.",
@@ -615,14 +611,12 @@
      "probe": "P31",
      "verdict": {
       "id": "P31",
-      "verdict": "GAP",
-      "detail": "verb 'report_truthfully' is on no row of the verb table",
-      "kind": "UNSPECIFIED",
-      "section": "S27/E2",
+      "verdict": "PASS",
+      "detail": "PASS BY CONSTRUCTION: 'create_record' at Precedent +0.9, 'evade / defy' at -0.9. The motive is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with NO branch in the resolver and nothing stored about the bias -- nobody, the holder and his superiors included, has a signature that reads it out. \u26a0 THE MAGNITUDES ARE `H-66`'s declared default and are swept; the SIGN structure is what this observes",
+      "kind": null,
+      "section": "S9",
       "title": "a hidden motive biases every decision",
-      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'report_truthfully' as a verb. This is the CALLER'S invention and the gap is the caller's",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
-      "by": "probe-model",
+      "by": "construction",
       "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
      }
     },
@@ -934,13 +928,13 @@
      "verdict": {
       "id": "P36",
       "verdict": "GAP",
-      "detail": "verb 'leverage' is on no row of the verb table",
+      "detail": "'create_record' writes ['Record.exists', 'Record.stages'] and Part E does not say WHAT VALUE",
       "kind": "UNSPECIFIED",
-      "section": "S27/E2",
+      "section": "E2/E3",
       "title": "a choice branches three ways",
-      "needs": "a row in verb_table.yaml, ruled before it is added",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
-      "by": "probe-model",
+      "needs": "an entry in EFFECTS, or a `writes:` column that carries the value",
+      "law": "\u00a7E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and \u00a727.1's scarcity stops happening. Register row H-63",
+      "by": "construction",
       "tests": "a discovery must be able to be acted on in several distinct ways, each leading somewhere different"
      }
     }
@@ -2359,13 +2353,13 @@
      "verdict": {
       "id": "P36",
       "verdict": "GAP",
-      "detail": "verb 'leverage' is on no row of the verb table",
+      "detail": "'create_record' writes ['Record.exists', 'Record.stages'] and Part E does not say WHAT VALUE",
       "kind": "UNSPECIFIED",
-      "section": "S27/E2",
+      "section": "E2/E3",
       "title": "a choice branches three ways",
-      "needs": "a row in verb_table.yaml, ruled before it is added",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
-      "by": "probe-model",
+      "needs": "an entry in EFFECTS, or a `writes:` column that carries the value",
+      "law": "\u00a7E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and \u00a727.1's scarcity stops happening. Register row H-63",
+      "by": "construction",
       "tests": "a discovery must be able to be acted on in several distinct ways, each leading somewhere different"
      }
     },
@@ -2542,10 +2536,9 @@
    "core": 3,
    "core_routed": 3,
    "core_unmapped": 0,
-   "core_blocked": 2,
+   "core_blocked": 1,
    "blockers": [
-    "F21",
-    "P31"
+    "F21"
    ],
    "routed": [
     {
@@ -2571,14 +2564,12 @@
      "probe": "P31",
      "verdict": {
       "id": "P31",
-      "verdict": "GAP",
-      "detail": "verb 'report_truthfully' is on no row of the verb table",
-      "kind": "UNSPECIFIED",
-      "section": "S27/E2",
+      "verdict": "PASS",
+      "detail": "PASS BY CONSTRUCTION: 'create_record' at Precedent +0.9, 'evade / defy' at -0.9. The motive is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with NO branch in the resolver and nothing stored about the bias -- nobody, the holder and his superiors included, has a signature that reads it out. \u26a0 THE MAGNITUDES ARE `H-66`'s declared default and are swept; the SIGN structure is what this observes",
+      "kind": null,
+      "section": "S9",
       "title": "a hidden motive biases every decision",
-      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'report_truthfully' as a verb. This is the CALLER'S invention and the gap is the caller's",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
-      "by": "probe-model",
+      "by": "construction",
       "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
      }
     },
@@ -3554,14 +3545,12 @@
      "probe": "P31",
      "verdict": {
       "id": "P31",
-      "verdict": "GAP",
-      "detail": "verb 'report_truthfully' is on no row of the verb table",
-      "kind": "UNSPECIFIED",
-      "section": "S27/E2",
+      "verdict": "PASS",
+      "detail": "PASS BY CONSTRUCTION: 'create_record' at Precedent +0.9, 'evade / defy' at -0.9. The motive is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with NO branch in the resolver and nothing stored about the bias -- nobody, the holder and his superiors included, has a signature that reads it out. \u26a0 THE MAGNITUDES ARE `H-66`'s declared default and are swept; the SIGN structure is what this observes",
+      "kind": null,
+      "section": "S9",
       "title": "a hidden motive biases every decision",
-      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'report_truthfully' as a verb. This is the CALLER'S invention and the gap is the caller's",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
-      "by": "probe-model",
+      "by": "construction",
       "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
      }
     }
@@ -4279,13 +4268,13 @@
      "verdict": {
       "id": "P36",
       "verdict": "GAP",
-      "detail": "verb 'leverage' is on no row of the verb table",
+      "detail": "'create_record' writes ['Record.exists', 'Record.stages'] and Part E does not say WHAT VALUE",
       "kind": "UNSPECIFIED",
-      "section": "S27/E2",
+      "section": "E2/E3",
       "title": "a choice branches three ways",
-      "needs": "a row in verb_table.yaml, ruled before it is added",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
-      "by": "probe-model",
+      "needs": "an entry in EFFECTS, or a `writes:` column that carries the value",
+      "law": "\u00a7E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and \u00a727.1's scarcity stops happening. Register row H-63",
+      "by": "construction",
       "tests": "a discovery must be able to be acted on in several distinct ways, each leading somewhere different"
      }
     },
@@ -4491,9 +4480,8 @@
    "core": 3,
    "core_routed": 2,
    "core_unmapped": 1,
-   "core_blocked": 2,
+   "core_blocked": 1,
    "blockers": [
-    "P14",
     "W10"
    ],
    "routed": [
@@ -4520,13 +4508,11 @@
      "probe": "P14",
      "verdict": {
       "id": "P14",
-      "verdict": "GAP",
-      "detail": "Sensation.standing",
-      "kind": "UNSPECIFIED",
+      "verdict": "PASS",
+      "detail": "PASS BY CONSTRUCTION: 1000 told nothing \u00b7 0 when what he is told matches what he holds \u00b7 1000 when it does not. \u26a0 REV 3 RETURNED 'UNREACHABLE' HERE -- the probe existed to prove `standing` had no formula at all. It has one now (`H-29`) and it is NOT V2 \u00a7F4's: \u00a7F4 compares the claim ledger with the CONVICTIONS, i.e. the TRUE layer against the RIGHT layer, which #353 \u00a79.3 calls 'the single most dangerous collision in the design'. Read \u00a718.2's 'what you hold' as what you hold TRUE and both sides are epistemic, the collision is gone, and it is still wrong-able -- a liar moves your standing, which is T3",
+      "kind": null,
       "section": "S18.2",
       "title": "standing is computed",
-      "needs": "an aggregation producing 'what everyone reads off you' that does not cross holders",
-      "law": "S18.2 defines standing as 'THE GAP BETWEEN WHAT EVERYONE READS OFF YOU AND WHAT YOU HOLD' and NO SECTION COMPUTES IT. The obvious computation -- reading a value off every other person -- is the shape S22.4 clause 2 bars, so this is not merely unwritten: the direct route to it is refused",
       "by": "construction",
       "tests": "how a character is regarded must be able to differ from how they regard themselves"
      }
@@ -4992,13 +4978,13 @@
      "verdict": {
       "id": "P36",
       "verdict": "GAP",
-      "detail": "verb 'leverage' is on no row of the verb table",
+      "detail": "'create_record' writes ['Record.exists', 'Record.stages'] and Part E does not say WHAT VALUE",
       "kind": "UNSPECIFIED",
-      "section": "S27/E2",
+      "section": "E2/E3",
       "title": "a choice branches three ways",
-      "needs": "a row in verb_table.yaml, ruled before it is added",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
-      "by": "probe-model",
+      "needs": "an entry in EFFECTS, or a `writes:` column that carries the value",
+      "law": "\u00a7E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and \u00a727.1's scarcity stops happening. Register row H-63",
+      "by": "construction",
       "tests": "a discovery must be able to be acted on in several distinct ways, each leading somewhere different"
      }
     }
@@ -5697,11 +5683,11 @@
      "verdict": {
       "id": "P11",
       "verdict": "PASS",
-      "detail": "PASS: rank 0 removed no candidate. `rank` supplies dice and GATES NO VERB; the only class-shaped gate in the design is Thread Sensitivity",
+      "detail": "PASS BY CONSTRUCTION, and it is a stronger pass than rev 2's: the option set is now COMPUTED from the verb table, so this observes that zeroing capability removes none of the 22 verbs it computes. Rev 2 compared a caller's authored roster with itself, which no capability gate could have changed either. `capability` appears in no clause of \u00a7F1 and the eligibility roster FORBIDS it as a fifth kind",
       "kind": null,
       "section": "S9.2",
       "title": "capability gates no verb",
-      "by": "probe-model",
+      "by": "construction",
       "tests": "skill must supply dice and must never make an action unavailable"
      }
     },
@@ -5957,14 +5943,12 @@
      "probe": "P31",
      "verdict": {
       "id": "P31",
-      "verdict": "GAP",
-      "detail": "verb 'report_truthfully' is on no row of the verb table",
-      "kind": "UNSPECIFIED",
-      "section": "S27/E2",
+      "verdict": "PASS",
+      "detail": "PASS BY CONSTRUCTION: 'create_record' at Precedent +0.9, 'evade / defy' at -0.9. The motive is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with NO branch in the resolver and nothing stored about the bias -- nobody, the holder and his superiors included, has a signature that reads it out. \u26a0 THE MAGNITUDES ARE `H-66`'s declared default and are swept; the SIGN structure is what this observes",
+      "kind": null,
+      "section": "S9",
       "title": "a hidden motive biases every decision",
-      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'report_truthfully' as a verb. This is the CALLER'S invention and the gap is the caller's",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
-      "by": "probe-model",
+      "by": "construction",
       "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
      }
     }
@@ -6666,14 +6650,12 @@
      "probe": "P31",
      "verdict": {
       "id": "P31",
-      "verdict": "GAP",
-      "detail": "verb 'report_truthfully' is on no row of the verb table",
-      "kind": "UNSPECIFIED",
-      "section": "S27/E2",
+      "verdict": "PASS",
+      "detail": "PASS BY CONSTRUCTION: 'create_record' at Precedent +0.9, 'evade / defy' at -0.9. The motive is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with NO branch in the resolver and nothing stored about the bias -- nobody, the holder and his superiors included, has a signature that reads it out. \u26a0 THE MAGNITUDES ARE `H-66`'s declared default and are swept; the SIGN structure is what this observes",
+      "kind": null,
+      "section": "S9",
       "title": "a hidden motive biases every decision",
-      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'report_truthfully' as a verb. This is the CALLER'S invention and the gap is the caller's",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
-      "by": "probe-model",
+      "by": "construction",
       "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
      }
     }
@@ -6789,14 +6771,12 @@
      "probe": "P31",
      "verdict": {
       "id": "P31",
-      "verdict": "GAP",
-      "detail": "verb 'report_truthfully' is on no row of the verb table",
-      "kind": "UNSPECIFIED",
-      "section": "S27/E2",
+      "verdict": "PASS",
+      "detail": "PASS BY CONSTRUCTION: 'create_record' at Precedent +0.9, 'evade / defy' at -0.9. The motive is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with NO branch in the resolver and nothing stored about the bias -- nobody, the holder and his superiors included, has a signature that reads it out. \u26a0 THE MAGNITUDES ARE `H-66`'s declared default and are swept; the SIGN structure is what this observes",
+      "kind": null,
+      "section": "S9",
       "title": "a hidden motive biases every decision",
-      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'report_truthfully' as a verb. This is the CALLER'S invention and the gap is the caller's",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
-      "by": "probe-model",
+      "by": "construction",
       "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
      }
     },
@@ -6807,13 +6787,13 @@
      "verdict": {
       "id": "P36",
       "verdict": "GAP",
-      "detail": "verb 'leverage' is on no row of the verb table",
+      "detail": "'create_record' writes ['Record.exists', 'Record.stages'] and Part E does not say WHAT VALUE",
       "kind": "UNSPECIFIED",
-      "section": "S27/E2",
+      "section": "E2/E3",
       "title": "a choice branches three ways",
-      "needs": "a row in verb_table.yaml, ruled before it is added",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
-      "by": "probe-model",
+      "needs": "an entry in EFFECTS, or a `writes:` column that carries the value",
+      "law": "\u00a7E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and \u00a727.1's scarcity stops happening. Register row H-63",
+      "by": "construction",
       "tests": "a discovery must be able to be acted on in several distinct ways, each leading somewhere different"
      }
     }
@@ -6985,13 +6965,13 @@
      "verdict": {
       "id": "P36",
       "verdict": "GAP",
-      "detail": "verb 'leverage' is on no row of the verb table",
+      "detail": "'create_record' writes ['Record.exists', 'Record.stages'] and Part E does not say WHAT VALUE",
       "kind": "UNSPECIFIED",
-      "section": "S27/E2",
+      "section": "E2/E3",
       "title": "a choice branches three ways",
-      "needs": "a row in verb_table.yaml, ruled before it is added",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
-      "by": "probe-model",
+      "needs": "an entry in EFFECTS, or a `writes:` column that carries the value",
+      "law": "\u00a7E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and \u00a727.1's scarcity stops happening. Register row H-63",
+      "by": "construction",
       "tests": "a discovery must be able to be acted on in several distinct ways, each leading somewhere different"
      }
     }
@@ -8148,14 +8128,12 @@
      "probe": "P31",
      "verdict": {
       "id": "P31",
-      "verdict": "GAP",
-      "detail": "verb 'report_truthfully' is on no row of the verb table",
-      "kind": "UNSPECIFIED",
-      "section": "S27/E2",
+      "verdict": "PASS",
+      "detail": "PASS BY CONSTRUCTION: 'create_record' at Precedent +0.9, 'evade / defy' at -0.9. The motive is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with NO branch in the resolver and nothing stored about the bias -- nobody, the holder and his superiors included, has a signature that reads it out. \u26a0 THE MAGNITUDES ARE `H-66`'s declared default and are swept; the SIGN structure is what this observes",
+      "kind": null,
+      "section": "S9",
       "title": "a hidden motive biases every decision",
-      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'report_truthfully' as a verb. This is the CALLER'S invention and the gap is the caller's",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
-      "by": "probe-model",
+      "by": "construction",
       "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
      }
     }
@@ -8986,13 +8964,11 @@
      "probe": "P14",
      "verdict": {
       "id": "P14",
-      "verdict": "GAP",
-      "detail": "Sensation.standing",
-      "kind": "UNSPECIFIED",
+      "verdict": "PASS",
+      "detail": "PASS BY CONSTRUCTION: 1000 told nothing \u00b7 0 when what he is told matches what he holds \u00b7 1000 when it does not. \u26a0 REV 3 RETURNED 'UNREACHABLE' HERE -- the probe existed to prove `standing` had no formula at all. It has one now (`H-29`) and it is NOT V2 \u00a7F4's: \u00a7F4 compares the claim ledger with the CONVICTIONS, i.e. the TRUE layer against the RIGHT layer, which #353 \u00a79.3 calls 'the single most dangerous collision in the design'. Read \u00a718.2's 'what you hold' as what you hold TRUE and both sides are epistemic, the collision is gone, and it is still wrong-able -- a liar moves your standing, which is T3",
+      "kind": null,
       "section": "S18.2",
       "title": "standing is computed",
-      "needs": "an aggregation producing 'what everyone reads off you' that does not cross holders",
-      "law": "S18.2 defines standing as 'THE GAP BETWEEN WHAT EVERYONE READS OFF YOU AND WHAT YOU HOLD' and NO SECTION COMPUTES IT. The obvious computation -- reading a value off every other person -- is the shape S22.4 clause 2 bars, so this is not merely unwritten: the direct route to it is refused",
       "by": "construction",
       "tests": "how a character is regarded must be able to differ from how they regard themselves"
      }
@@ -11043,11 +11019,11 @@
      "verdict": {
       "id": "P11",
       "verdict": "PASS",
-      "detail": "PASS: rank 0 removed no candidate. `rank` supplies dice and GATES NO VERB; the only class-shaped gate in the design is Thread Sensitivity",
+      "detail": "PASS BY CONSTRUCTION, and it is a stronger pass than rev 2's: the option set is now COMPUTED from the verb table, so this observes that zeroing capability removes none of the 22 verbs it computes. Rev 2 compared a caller's authored roster with itself, which no capability gate could have changed either. `capability` appears in no clause of \u00a7F1 and the eligibility roster FORBIDS it as a fifth kind",
       "kind": null,
       "section": "S9.2",
       "title": "capability gates no verb",
-      "by": "probe-model",
+      "by": "construction",
       "tests": "skill must supply dice and must never make an action unavailable"
      }
     },
@@ -11149,13 +11125,13 @@
   "P36": {
    "id": "P36",
    "verdict": "GAP",
-   "detail": "verb 'leverage' is on no row of the verb table",
+   "detail": "'create_record' writes ['Record.exists', 'Record.stages'] and Part E does not say WHAT VALUE",
    "kind": "UNSPECIFIED",
-   "section": "S27/E2",
+   "section": "E2/E3",
    "title": "a choice branches three ways",
-   "needs": "a row in verb_table.yaml, ruled before it is added",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
-   "by": "probe-model",
+   "needs": "an entry in EFFECTS, or a `writes:` column that carries the value",
+   "law": "\u00a7E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and \u00a727.1's scarcity stops happening. Register row H-63",
+   "by": "construction",
    "tests": "a discovery must be able to be acted on in several distinct ways, each leading somewhere different"
   },
   "P30": {
@@ -11256,13 +11232,11 @@
   },
   "P14": {
    "id": "P14",
-   "verdict": "GAP",
-   "detail": "Sensation.standing",
-   "kind": "UNSPECIFIED",
+   "verdict": "PASS",
+   "detail": "PASS BY CONSTRUCTION: 1000 told nothing \u00b7 0 when what he is told matches what he holds \u00b7 1000 when it does not. \u26a0 REV 3 RETURNED 'UNREACHABLE' HERE -- the probe existed to prove `standing` had no formula at all. It has one now (`H-29`) and it is NOT V2 \u00a7F4's: \u00a7F4 compares the claim ledger with the CONVICTIONS, i.e. the TRUE layer against the RIGHT layer, which #353 \u00a79.3 calls 'the single most dangerous collision in the design'. Read \u00a718.2's 'what you hold' as what you hold TRUE and both sides are epistemic, the collision is gone, and it is still wrong-able -- a liar moves your standing, which is T3",
+   "kind": null,
    "section": "S18.2",
    "title": "standing is computed",
-   "needs": "an aggregation producing 'what everyone reads off you' that does not cross holders",
-   "law": "S18.2 defines standing as 'THE GAP BETWEEN WHAT EVERYONE READS OFF YOU AND WHAT YOU HOLD' and NO SECTION COMPUTES IT. The obvious computation -- reading a value off every other person -- is the shape S22.4 clause 2 bars, so this is not merely unwritten: the direct route to it is refused",
    "by": "construction",
    "tests": "how a character is regarded must be able to differ from how they regard themselves"
   },
@@ -11280,14 +11254,12 @@
   },
   "P31": {
    "id": "P31",
-   "verdict": "GAP",
-   "detail": "verb 'report_truthfully' is on no row of the verb table",
-   "kind": "UNSPECIFIED",
-   "section": "S27/E2",
+   "verdict": "PASS",
+   "detail": "PASS BY CONSTRUCTION: 'create_record' at Precedent +0.9, 'evade / defy' at -0.9. The motive is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with NO branch in the resolver and nothing stored about the bias -- nobody, the holder and his superiors included, has a signature that reads it out. \u26a0 THE MAGNITUDES ARE `H-66`'s declared default and are swept; the SIGN structure is what this observes",
+   "kind": null,
+   "section": "S9",
    "title": "a hidden motive biases every decision",
-   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'report_truthfully' as a verb. This is the CALLER'S invention and the gap is the caller's",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
-   "by": "probe-model",
+   "by": "construction",
    "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
   },
   "P33": {
@@ -11755,11 +11727,11 @@
   "P11": {
    "id": "P11",
    "verdict": "PASS",
-   "detail": "PASS: rank 0 removed no candidate. `rank` supplies dice and GATES NO VERB; the only class-shaped gate in the design is Thread Sensitivity",
+   "detail": "PASS BY CONSTRUCTION, and it is a stronger pass than rev 2's: the option set is now COMPUTED from the verb table, so this observes that zeroing capability removes none of the 22 verbs it computes. Rev 2 compared a caller's authored roster with itself, which no capability gate could have changed either. `capability` appears in no clause of \u00a7F1 and the eligibility roster FORBIDS it as a fifth kind",
    "kind": null,
    "section": "S9.2",
    "title": "capability gates no verb",
-   "by": "probe-model",
+   "by": "construction",
    "tests": "skill must supply dice and must never make an action unavailable"
   },
   "A3": {
@@ -11921,11 +11893,11 @@
   "P12": {
    "id": "P12",
    "verdict": "PASS",
-   "detail": "PARTIAL: the TYPE is right -- Candidate[], per the overturn (S54 item 1; #350's `07` still carries -> Act[]). THE PROPERTY THE TYPE WAS CHOSEN TO PROTECT IS NOT: the roster is the caller's AUTHORED LIST, because S61's missing producer for `q` means there is nothing from which to compute a set. A typed authored list is still authored",
+   "detail": "PASS BY CONSTRUCTION. `opening_set('p', 'v', 'q')` -- THE ROSTER PARAMETER IS GONE, which is `D2` entire. Rev 2 was PARTIAL and said why: the type was right and the property the type protects was not, because S61 left `q` with no producer so there was nothing to compute from. `questions_for()` is that producer. 44 candidates over 22 verbs, every one a verb-table row",
    "kind": null,
    "section": "S17",
    "title": "opening_set returns Candidate[], not Act[]",
-   "by": "probe-model",
+   "by": "construction",
    "tests": "the set of things a character may do must be computed, not an authored list"
   },
   "P13": {
@@ -12459,10 +12431,10 @@
   },
   {
    "kind": "UNSPECIFIED",
-   "what": "verb 'leverage' is on no row of the verb table",
-   "where": "S27/E2",
-   "needs": "a row in verb_table.yaml, ruled before it is added",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+   "what": "'create_record' writes ['Record.exists', 'Record.stages'] and Part E does not say WHAT VALUE",
+   "where": "E2/E3",
+   "needs": "an entry in EFFECTS, or a `writes:` column that carries the value",
+   "law": "\u00a7E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and \u00a727.1's scarcity stops happening. Register row H-63",
    "case": "probe:P36",
    "expected": false
   },
@@ -12495,29 +12467,11 @@
   },
   {
    "kind": "UNSPECIFIED",
-   "what": "Sensation.standing",
-   "where": "S18.2",
-   "needs": "an aggregation producing 'what everyone reads off you' that does not cross holders",
-   "law": "S18.2 defines standing as 'THE GAP BETWEEN WHAT EVERYONE READS OFF YOU AND WHAT YOU HOLD' and NO SECTION COMPUTES IT. The obvious computation -- reading a value off every other person -- is the shape S22.4 clause 2 bars, so this is not merely unwritten: the direct route to it is refused",
-   "case": "probe:P14",
-   "expected": false
-  },
-  {
-   "kind": "UNSPECIFIED",
    "what": "a termination argument per self-feeding loop",
    "where": "S40.1",
    "needs": "a CROSS-SEASON bound",
    "law": "S40.1 -- FOUR ARCS PLUS THE KING ARE SPIRALS; NOTHING BOUNDS ONE. That debt is CROSS-SEASON and no within-tick argument touches it in either direction. `max_depth` bounds nesting WITHIN a tick and says nothing across ticks",
    "case": "probe:A15",
-   "expected": false
-  },
-  {
-   "kind": "UNSPECIFIED",
-   "what": "verb 'report_truthfully' is on no row of the verb table",
-   "where": "S27/E2",
-   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'report_truthfully' as a verb. This is the CALLER'S invention and the gap is the caller's",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
-   "case": "probe:P31",
    "expected": false
   },
   {
@@ -13107,15 +13061,16 @@
   }
  ],
  "_trace_counts": {
-  "STEP": 2090,
-  "BARRIER": 710,
-  "DECISION": 712,
-  "WRITE": 585,
-  "QUERY": 3372,
-  "ACT": 54,
+  "STEP": 2078,
+  "BARRIER": 705,
+  "DECISION": 709,
+  "WRITE": 581,
+  "QUERY": 4264,
+  "ACT": 55,
   "EVENT": 36,
   "CLAIM": 181,
-  "GAP": 73
+  "GAP": 71,
+  "NOTE": 88
  },
  "_corpus_defects": [
   "ARC1.yaml: committed inside a markdown fence with transcript preamble",

@@ -293,6 +293,17 @@ def check(reg: dict, only: list | None = None) -> dict:
 # THE COUNTS -- computed, never typed. `G11`.
 # ---------------------------------------------------------------------------
 
+def _source_bucket(source: str) -> str:
+    """A row's attribution: the text before the first em-dash, normalised. `source:` is prose
+    after that point and must not decide which bucket a row falls in."""
+    head = source.split("\u2014")[0].split("|")[0].strip()
+    if TRANSCRIBED in source and head.startswith("ARCHITECTURE_V2.md"):
+        return TRANSCRIBED
+    if head.startswith("PLAN.md"):
+        return "PLAN.md §1.4"
+    return head or "unattributed"
+
+
 def counts(reg: dict) -> dict:
     rows = reg["rows"]
     by_grade = Counter(r.get("grade") for r in rows)
@@ -305,6 +316,17 @@ def counts(reg: dict) -> dict:
                                if r.get("tier") == 0 and r.get("grade") == "absent"),
         "transcribed": sum(1 for r in rows if TRANSCRIBED in str(r.get("source"))),
         "added_by_plan": sum(1 for r in rows if "PLAN.md" in str(r.get("source"))),
+        # ⚠ THE TWO BUCKETS ABOVE STOPPED PARTITIONING THE REGISTER THE MOMENT `W5` ADDED ROWS
+        # FROM A THIRD SOURCE, and the header line went on printing "32 + 27" over 64 rows --
+        # an arithmetic claim nobody would have re-added. `by_source` is derived from the data
+        # rather than from two hardcoded predicates, and `--check` asserts it sums to `rows`, so
+        # a fourth source cannot silently fall out of the total again.
+        # Bucketed on the ATTRIBUTION PREFIX -- the text before the first em-dash -- not on a
+        # substring of the whole cell. The first version matched "PLAN.md" anywhere and put
+        # `H-66` (source: "W5 - ... a hole PLAN.md §1.4 named") in the PLAN bucket, so a row's
+        # own prose could change its attribution.
+        "by_source": dict(sorted(Counter(
+            _source_bucket(str(r.get("source", ""))) for r in rows).items())),
         # The register's own header states how many rows carry an empty `cite:`. A number a
         # document states and its named command cannot produce is G11's defect in miniature, and
         # it was in the file that forbids it nine lines above.
@@ -527,9 +549,10 @@ def main(argv=None) -> int:
 
     if a.counts or a.check:
         c = counts(reg)
-        print(f"REGISTER: {c['rows']} rows "
-              f"({c['transcribed']} transcribed from ARCHITECTURE_V2.md Part VII, "
-              f"{c['added_by_plan']} added by PLAN.md §1.4)")
+        parts = " · ".join(f"{n} {k}" for k, n in c["by_source"].items())
+        print(f"REGISTER: {c['rows']} rows ({parts})")
+        assert sum(c["by_source"].values()) == c["rows"], (
+            f"the source buckets sum to {sum(c['by_source'].values())} over {c['rows']} rows")
         print("  by grade: " + " · ".join(f"{k} {v}" for k, v in c["by_grade"].items()))
         print(f"  tier 0: {c['tier0']}   tier 1: {c['tier1']}")
         print(f"  `absent` rows with no `cite:` (G6's floor): {c['absent_uncited']}")

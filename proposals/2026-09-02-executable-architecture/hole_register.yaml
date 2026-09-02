@@ -86,22 +86,22 @@ rows:
     owner:     "Person (person-side only)"
     grade:     "assumption"
     default:   "§F2's scoring function"
-    site:      ""
-    sweep:     []
+    site:      "shape.make_chooser — §F2's scoring policy, built by the barrier"
+    sweep:     ["top-k by score (the default)", "argmax — one act however large the budget", "satisficing — the first candidate scoring above zero"]
     unblocks:  "**all NPC**"
-    cite:      ""
+    cite:      "DISCHARGED BY `W5`. V2 §F2: \"grade: assumption. **The shape is ruled** (§3 L1, §9, §26); only the weighting is open\", so §G's discipline binds the WEIGHTS (`H-66`) and not the structure. `make_chooser` implements all four of §F2's named properties and each is tested rather than asserted: every input person-side (AST, `test_w5_sense_is_still_the_only_world_taking_non_decision_function`); `convictions` and `stance` actually CONSUMED, which #353 declares as fields and no formula in the chain reads (`P31`); the person triages against a budget it ASKS for and the engine never truncates (`test_r3_choose_asks_its_own_budget`); and §F2 property 4's blur — a lookup on one's own interior is indistinguishable from a deliberation at this boundary — inherited rather than resolved (`P37`). ⚠ TWO DEFECTS IN §F2 FOUND WHILE BUILDING IT ARE THEIR OWN ROWS: `H-73` (the third scoring term cannot change any decision) and `H-74` (`choose` is typed to return `Act[]` with no way to mint one, and its body reads a free `q`)."
     source:    "ARCHITECTURE_V2.md §VII.1, transcribed verbatim | V2's grade cell: **assumption**"
   - id:        H-04
     tier:      0
     hole:      "`q`'s producer and the Candidate derivation"
     kind:      "PRODUCER"
-    owner:     "the date-holder (Q1) · Person (Q2, Q3)"
+    owner:     "the date-holder (Q1) · Person (Q2, Q3, Q4)"
     grade:     "assumption"
-    default:   "§F1's three sources"
-    site:      ""
-    sweep:     []
+    default:   "§F1's three sources PLUS **Q4 `need`** — a live `commit` to an OUGHT Proposition, standing every season"
+    site:      "shape.questions_for, called at the DELIBERATE barrier"
+    sweep:     ["four sources (the default)", "V2 §F1's three — Q4 removed", "Q4 alone"]
     unblocks:  "**all NPC**"
-    cite:      ""
+    cite:      "DISCHARGED BY `W5`, AND V2 §F1 IS WRONG BY ONE. It said \"exactly three sources, and by nothing else\" until `W5` amended it; V2 §F1 now says four and carries the amendment note, which is why the superseded wording still resolves. `PLAN.md` `W5` adds the fourth and says why: \"Without Q4 an NPC with a standing ambition and a quiet season forms no candidates at all\", which is most of the NPC corpus (#353 `:509`, `:605`, `:1297`). A closed set that turned out to be missing a member is the strongest argument there is for keeping closed sets in data, and `question_sources` is now a roster. This also closes §61's `NoProducer` — #353 `:1978`, \"`assemble(person, question)` and `view(person, question)` are unsatisfiable - DELIBERATE has no declared entry point\" was TRUE while nothing produced `q`, and `question is None` now means THIS PERSON HAS NO QUESTION THIS SEASON, which is an ordinary state. Falsifier: `test_w5_q_has_a_producer_across_all_four_sources`, which exercises each source ALONE so one that never fires cannot hide behind one that does."
     source:    "ARCHITECTURE_V2.md §VII.1, transcribed verbatim | V2's grade cell: **assumption**"
   - id:        H-05
     tier:      0
@@ -302,7 +302,7 @@ rows:
     owner:     "**PERSON-side** *(corrected by W1's adversarial pass)*"
     grade:     "ruled"
     default:   "`budget : (Person, View) -> int` PERSON-SIDE, reading own `hold` Tenures, own body band, own travel legs; per Jordan's 2026-09-02 ruling it returns SCENE actions, not acts"
-    site:      ""
+    site:      "shape.Query.budget — (Person, View, base, params), no World"
     sweep:     []
     unblocks:  "every \"wounded duke\""
     cite:      "PLAN §3.3 re-graded this to `assumption` and THE ADVERSARIAL PASS OVERTURNED THE DIRECTION: the row is RULED, on a line neither the plan nor the re-grade cited. #353 `:877` VERBATIM: \"budget : (Person, View) -> int -- a QUERY, never a field\". NO `World` IN THE TYPE, so resolver-side is excluded BY THE SIGNATURE (§26.1). And `:912-913` VERBATIM: \"`budget` is a Query, never a field -- office, condition, distance travelled. A wounded duke gets fewer acts than a healthy one WITHOUT ANYBODY STORING A NUMBER\", which excludes a constant. Two of the three sweep points the re-grade authored were options THE SPECIFICATION FORBIDS, so a verdict flipping across that sweep would have been reported as a finding about a game #353 ruled out. V2 §F3 is the defective side and PLAN §3.3 already says so; `:634`'s \"the ONE non-decision function permitted a World\" survives."
@@ -313,11 +313,11 @@ rows:
     kind:      "FORMULA"
     owner:     "Person"
     grade:     "assumption"
-    default:   "§F4's agreement over own `told_by` claims"
-    site:      ""
-    sweep:     []
+    default:   "the gap between `told_by` claims about p and p's OWN `firsthand` claims about p, paired by predicate on the `person_predicates` roster; maximum gap when nothing is paired"
+    site:      "shape.standing_of / shape.agreement, called by sense()"
+    sweep:     ["maximum gap on no evidence (the default)", "zero gap on no evidence", "refuse on no evidence"]
     unblocks:  "2"
-    cite:      ""
+    cite:      "DISCHARGED BY `W5`, AND V2 §F4'S OWN DEFAULT WAS NOT INJECTABLE. §F4 writes `agreement(claims ... where source == told_by, p's own convictions)` — the claim ledger against the CONVICTIONS — and #353 §9.3 exists to keep those apart: the ledger holds what is TRUE, convictions hold what is RIGHT, and \"WITNESS NEVER TOUCHES A BELIEF... This is the single most dangerous collision in the design.\" `PLAN.md` `W5` says so directly: \"H-29's default is not injectable as written\". THE CORRECTION STAYS INSIDE §F4'S OWN ARGUMENT: §18.2's \"the gap between what everyone reads off you and what you hold\" reads 'what you hold' as what you hold TRUE — own firsthand claims — so both sides are the epistemic layer, the collision is gone, and all three properties §F4 wanted survive (person-side, wrong-able, no cross-holder read, so §20 is untouched). §F4's correction of the session ledger also stands and is used: the bar is §20, not §22.4 clause 2, which governs resolver-side Queries. ⚠ THE NO-EVIDENCE DEFAULT IS THE UNFLATTERING ONE BY §42.2's POLARITY RULE — 'nobody has told you anything about yourself, therefore everyone agrees with you' is that rule run backwards. ⚠ RECORDED, NOT RESOLVED: §18.2 calls it a GAP and the WORD 'standing' ordinarily suggests the opposite polarity; it is computed as §18.2 words it. Falsifier: `P14`, which now passes by construction where it returned UNREACHABLE."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **assumption**"
   - id:        H-30
     tier:      1
@@ -754,6 +754,84 @@ rows:
     unblocks:  "unmeasured"
     cite:      "FOUND BY EXECUTION IN W3, and it is the twin of H-63: that column names the CELL and not the VALUE, this one states the PRECONDITION and not in a form the fold can evaluate. Three predicates exist so far — `transfer` (#353 §54 item 7, `stores(hearth(giver), kind) >= amount`, which is what §27.1's scarcity rests on), `move` (§E3's 'a `contain` path exists', over #353 §15's one-parent ladder) and `work` (§12.1's `condition >= floor(verb)`, floors from Fixtures which RAISE on an unregistered kind). ⚠ `work`'s FIRST VERSION CHECKED `condition >= 0`, which is every possible condition — a predicate that cannot fail is a `return True` with a docstring, and §0.1 point 2 names that as an assertion unable to observe what it excludes. Corrected before it was committed. MEASURED: 26 of the 32 verbs carry a prose precondition and 3 have a predicate, reproducible with `python -c \"import sys;sys.path.insert(0,'proposals/2026-09-01-season-loop-tests/tracer');import shape as S;print(sum(1 for r in S.VERB_TABLE.values() if r.requires.strip() not in S.NO_PRECONDITION), len(S.REQUIRES_PREDICATES))\"`. The other 23 REFUSE, which is the honest state and is what keeps the count visible."
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+  # -------------------------------------------------------------------------
+  # W5 — PART F. Six rows: two are the defaults §G's discipline requires for holes the plan
+  # already named (H-66, H-70), and FOUR WERE FOUND BY BUILDING §F AND EXECUTING IT (H-71..H-74).
+  # All four are defects in `ARCHITECTURE_V2.md` Part F itself, not in #353, and none of them is
+  # visible by reading: each appeared the moment a function had to be written and run.
+  # -------------------------------------------------------------------------
+  - id:        H-66
+    tier:      0
+    hole:      "§F2's `alignment(c.verb, axis)` — the verb × axis weights `choose` scores with"
+    kind:      "FORMULA"
+    owner:     "the design (a static table); Person holds the convictions it multiplies"
+    grade:     "assumption"
+    default:   "the sparse table in `rosters.yaml: tables.alignment`, 27 cells over 4 axes, sparse default 0.0"
+    site:      "rosters.yaml tables.alignment, read by shape.align()"
+    sweep:     ["declared", "uniform", "sign_only"]
+    unblocks:  "every NPC decision"
+    cite:      "`PLAN.md` `W5`: the table is \"registered as its own `assumption` row\" and \"the table is a row before it is a formula\". THE WEIGHTS ARE INVENTED AND THIS ROW IS WHAT MAKES THAT LAWFUL — §G is declare · default · sweep and all three are discharged. ⚠ IT MUST NOT BE A ZERO MATRIX (PLAN §W5: \"a zero matrix makes convictions inert, which is the dead-carrier defect #353 `:739-744` names, and it would pass every test while meaning nothing\"); `_load_alignment` raises if every listed cell is zero, mutation-verified. MEASURED: the sweep moves 1 of 4 verdicts, and it moves it AT THE CONTROL ONLY — `P31` passes at `declared` AND at `sign_only` and fails at `uniform`, so its result rests on the DIRECTIONS and not on the invented magnitudes. Reproducible with `python -m pytest test_tracer_is_honest.py -k alignment_table_is_swept -s`. ⚠ `uniform` had to be fixed once: it first set only the LISTED cells to 1.0, leaving unlisted pairs at 0.0, so it was not uniform and `P31` survived the control."
+    source:    "W5 — §G's default for a hole PLAN.md §1.4 named (hole 7) and left ungraded"
+  - id:        H-70
+    tier:      1
+    hole:      "the three modifier MAGNITUDES in §F3's `budget` — office bonus, condition penalty, distance penalty"
+    kind:      "FORMULA"
+    owner:     "Person (person-side only)"
+    grade:     "assumption"
+    default:   "office_bonus 1 per live `hold` Tenure · condition_penalty = bands fallen on `band_floors`, `body` row · distance_penalty 1 per travel leg · floor of 1"
+    site:      "Fixtures budget_office_bonus / budget_leg_penalty; band table is Fixtures band_floors"
+    sweep:     [0, 1, 2]
+    unblocks:  "every \"wounded duke\""
+    cite:      "`H-28` rules the PLACEMENT (person-side) and #353 `:912-913` rules the DIRECTION of all three terms — \"a wounded duke gets fewer acts than a healthy one WITHOUT ANYBODY STORING A NUMBER\" — and NO in-chain line gives a magnitude. Direction ruled, magnitude open, is exactly a fixture. ⚠ THE BAND TABLE IS NOT INVENTED: `band_floors`, `body` row, already existed for the site gate, so this spends `H-38`'s closure in `PLAN.md` (\"`Site.condition` is the model\") rather than adding a second band scheme. THE FLOOR OF 1 IS A CHOICE AND IS STATED: a budget of 0 deletes a person from the season silently instead of narrowing them, and S26.3's whole point is triage. Falsifier: `test_w5_budget_moves_with_the_persons_own_state_in_the_ruled_directions`, three one-variable comparisons against the same person."
+    source:    "W5 — §G's default for the magnitudes H-28 left open"
+  - id:        H-71
+    tier:      0
+    hole:      "§F1 clause 2 says eligibility is evaluated PERSON-SIDE, and `remit:<act>` CANNOT BE. The person owns the `hold` Tenure; the OFFICE owns the remit"
+    kind:      "COLLISION"
+    owner:     "unassigned — §F1 asserts the clause is person-side and does not say how"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "every office act formed by a person — 10 of 32 verbs"
+    cite:      "FOUND BY BUILDING `ARCHITECTURE_V2.md` §F1. #353 §11.1 VERBATIM: \"Who holds an office is NOT a field on the office. It is a `hold` Tenure, owned by the holder.\" So the person has the TENURE and the office has the REMIT, and a function with no `World` cannot read the second. ⚠ THIS IS NOT THE `budget` CASE AND THE DIFFERENCE IS WHY IT ESCALATES RATHER THAN CLOSING: there the data was the person's own and merely stored in the wrong place, so PLAN §3.3's relocation fixed it with no signature change. A remit is shared by every holder of one office, so there is nothing to relocate. `person_side_eligible` DECLINES on `remit:` rather than admitting — admitting on an unevaluable predicate is a silent fill off the register (`G1`) at the opposite polarity to §42.2 — and the resolver's `_eligible`, which HAS a World, still admits, so a duke can still confer. THE GAP BETWEEN THE TWO READINGS IS THE FINDING. Three options a ruling would pick between: the conferral stamps the remit onto the `hold` Tenure's `payload` (duplicates it); the person holds a CLAIM about their own remit (fits Jordan's 2026-09-02 ruling, verbatim: 'our understanding of all other words and actions is subjective and singular', and makes a person able to be WRONG about their own authority); or §F1's clause is wrong and eligibility is resolver-side."
+    source:    "W5 — found by execution"
+  - id:        H-72
+    tier:      1
+    hole:      "§F1 clause 4 needs a map from a verb's prose `requires:` to the PREDICATE a person's claim would contradict"
+    kind:      "SCHEMA_ROW"
+    owner:     "the resolver (Part E's `requires:` column) + Person (the claim)"
+    grade:     "assumption"
+    default:   "a claim about the subject whose `predicate` is in the `person_predicates` roster and whose `value` is False"
+    site:      "shape.belief_contradicts"
+    sweep:     ["value is False (the default)", "value contradicts the requirement's own term", "no belief filter — every eligible verb forms"]
+    unblocks:  "the epistemic half of every NPC decision"
+    cite:      "`ARCHITECTURE_V2.md` §F1 clause 4 is \"requires(verb) not KNOWN-false FROM p's OWN CLAIMS\", and §F1 is emphatic that it MUST NOT be softened to \"requires holds\" — \"a person who *wrongly* believes the granary full still forms the Candidate, acts, and gets `transfer.refused` from the fold. That is T3 and L2 working.\" The ASYMMETRY is implemented: no belief either way is NOT a contradiction. What is missing is which PREDICATE a given prose requirement is about — `H-65` already records that the `requires:` column is prose the fold cannot read, and this is the same defect one layer further out. Inventing the map is what §42.2.1 forbids, so the default filters on the `person_predicates` roster and says so."
+    source:    "W5 — found by execution"
+  - id:        H-73
+    tier:      1
+    hole:      "§F2's third scoring term, `urgency(sensation.subsistence)`, HAS NO `c` IN IT and therefore cannot change any decision"
+    kind:      "FORMULA"
+    owner:     "Person (person-side only)"
+    grade:     "assumption"
+    default:   "subsistence / condition_scale — computed faithfully, and INERT, which is the finding"
+    site:      "shape.urgency"
+    sweep:     [0, 500, 1000]
+    unblocks:  "nothing — that is the point"
+    cite:      "FOUND BY BUILDING `ARCHITECTURE_V2.md` §F2. Its score is `Σ_axis conviction[axis] · alignment(c.verb, axis) + stance_toward(c.subject) + urgency(sensation.subsistence)`, and the third term is the only one with no `c`. `choose` returns \"the top ask_budget() candidates, ORDERED by score\", so a term added identically to every candidate cannot move the ranking, cannot change which survive the budget, and cannot change their order. It is INERT BY CONSTRUCTION — the dead-carrier shape #353 `:739-744` names, arriving in a scoring function instead of in a field. Kept and computed anyway, because deleting it would hide the finding. MEASURED: no decision moves across subsistence 0 / 500 / 1000 / 10⁶, and the null result IS the measurement (§0.1 point 4, in the unflattering direction). Falsifier: `test_w5_f2s_third_term_cannot_change_any_decision`, which also asserts `urgency` actually VARIES so the claim is about §F2 and not about a stub."
+    source:    "W5 — found by execution"
+  - id:        H-74
+    tier:      1
+    hole:      "§F2 types `choose -> Act[]` and gives the person no way to MINT an Act id; §F2's body also reads a free `q` its own four-parameter signature does not bind"
+    kind:      "COLLISION"
+    owner:     "the barrier (both halves)"
+    grade:     "assumption"
+    default:   "the barrier passes a minter closed over the world seed and tick; the View carries its own question"
+    site:      "shape.make_chooser (mint) and shape.View.question"
+    sweep:     ["barrier supplies both (the default)", "choose takes q as a fifth parameter", "choose returns Candidate[] and the barrier mints"]
+    unblocks:  "every NPC act"
+    cite:      "TWO DEFECTS IN `ARCHITECTURE_V2.md` §F2, both found by writing it. (1) §F1 returns `Candidate[]` and §F2 returns `Act[]`, and an `Act` needs an id that #353 §33 derives from the world seed and the tick — \"unique per DRAW, not per operation\" — which a person-side function cannot produce. (2) §F2's own pseudocode is `choose(p, view, sensation, ask_budget)` and its first line is `candidates = opening_set(p, view, q)`: `q` IS FREE. The default binds it where §F1 already put it — `assemble(person, question) -> View` builds the View FROM the question — so `choose` keeps the four parameters §26 states. The seed and tick are the CLOCK, not any person's interior, so neither half re-admits a `World`; `test_w5_sense_is_still_the_only_world_taking_non_decision_function` walks the AST and confirms it."
+    source:    "W5 — found by execution"
 
 # ---------------------------------------------------------------------------
 # THE DISCHARGE MAP -- guardrail G8.
