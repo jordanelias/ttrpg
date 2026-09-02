@@ -83,15 +83,15 @@ corpus in the direction that flattered it.
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | the source says it does not know |
 
 ## NPC-005 — Sigrid Torsvald  ·  **BLOCKED**
-*person · 9 rows, 5 core · blockers: probe:P15, probe:P35*
+*person · 9 rows, 5 core · blockers: probe:P35*
 *ends when:* never explicitly stated; presumably her exposure and its institutional fallout, her death, or a resolution of the archive-connection arc -- none of which the source specifies as a defined final mechanical state.
 
 | need | rests on | verdict | why |
 |---|---|---|---|
-| **[core]** An act she performs must be able to leave no attributable trace back to her, her order, or her Crown when it succeeds cleanly -- full deniability as an achievable outcome, not merely a state | `probe:P15` · `H-33` | **GAP** | P15: GAP · H-33: assumption -- rests on an injected default |
+| **[core]** An act she performs must be able to leave no attributable trace back to her, her order, or her Crown when it succeeds cleanly -- full deniability as an achievable outcome, not merely a state | `probe:P15` · `H-33` | **ASSUMED** | P15: PASS · H-33: assumption -- rests on an injected default |
 | **[core]** An act that goes partially wrong must be able to generate a persistent, accumulating institutional risk that is distinct from, and outlives, the scene in which it happened, and that risk mus | `H-20` | **ASSUMED** | H-20: assumption -- rests on an injected default |
 | **[core]** Her private reputation among people who can never publicly credit her (fellow operatives, informants, a patron) must be trackable and consequential, on a track separate from any reputation s | `probe:P35` | **GAP** | P35: GAP |
-| **[core]** A perception or capability she secretly has (Thread Sensitivity) must be able to be true and mechanically active while remaining completely unknown to the institution she serves, with that i | `probe:P15` · `H-33` | **GAP** | P15: GAP · H-33: assumption -- rests on an injected default |
+| **[core]** A perception or capability she secretly has (Thread Sensitivity) must be able to be true and mechanically active while remaining completely unknown to the institution she serves, with that i | `probe:P15` · `H-33` | **ASSUMED** | P15: PASS · H-33: assumption -- rests on an injected default |
 | **[core]** Her perception of the consequences of a mission must be able to diverge from her colleagues' and superiors' assessment of that same mission -- the identical event scored as a clean win insti | `H-79` | **ASSUMED** | H-79: assumption -- rests on an injected default |
 | A refusal to accept a mission must be able to cost her standing even when her reasons (avoiding harm only she can perceive) are sound -- the institution's cost model cannot be sensitive to w | — | UNMAPPED | nobody has authored an `exercises:` for this row |
 | A prior personal relationship formed years earlier (guarding an archive for someone she has since stayed connected to) must be able to resurface and pull her into a scene later, creating a g | — | UNMAPPED | nobody has authored an `exercises:` for this row |

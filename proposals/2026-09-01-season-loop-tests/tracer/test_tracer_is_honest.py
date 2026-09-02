@@ -231,10 +231,38 @@ def test_d9_no_rule_is_written_and_switched_off():
 
 
 def test_d9b_eviction_ranks_on_the_product_not_lexicographically():
-    """S20/S34: eviction ranks on confidence_live x recency ONLY. A tuple sort is a different
-    comparator and degenerates to insertion order under a constant confidence."""
-    src = inspect.getsource(S.SeasonDriver.witness)
-    assert "c.confidence * (c.when" in src and "(c.confidence, c.when)" not in src
+    """S20/S34: eviction ranks on `confidence_live × recency` ONLY. A tuple sort is a different
+    comparator and degenerates to insertion order under a constant confidence.
+
+    ⚠ ASSERTED ON THE BEHAVIOUR, NOT ON THE SOURCE TEXT. This read
+    `assert "c.confidence * (c.when" in src`, which is `G3` exactly — a string match cannot
+    observe a SEMANTIC change, and `W4` made one: before it, `confidence` was pinned at
+    `confidence_default` for every claim, so the product was pure recency and the two comparators
+    were indistinguishable. Now confidence decays, the product is non-monotonic in age, and a
+    claim at confidence 0 is evicted first however recent it is. That is the difference the test
+    is supposed to be about, and the string could not see it. Found by the `W4` adversarial pass."""
+    ranked = lambda claims: sorted(claims, key=lambda c: c.confidence * (c.when + 1))
+    old_and_confident = S.Claim("a", "p", "s", "k", True, when=0, source="f",
+                                confidence=100, visibility="own")
+    recent_and_spent = S.Claim("b", "p", "s", "k", True, when=9, source="f",
+                               confidence=0, visibility="own")
+    # THE DISCRIMINATING PAIR. Under the product, the spent claim goes first however recent it is.
+    # Under a lexicographic `(confidence, when)` tuple it ALSO goes first — so that pair alone
+    # proves nothing, and the second pair below is what separates the two comparators.
+    assert ranked([old_and_confident, recent_and_spent])[0] is recent_and_spent
+    low_but_ancient = S.Claim("c", "p", "s", "k", True, when=0, source="f",
+                              confidence=40, visibility="own")
+    high_but_ancient = S.Claim("d", "p", "s", "k", True, when=0, source="f",
+                               confidence=41, visibility="own")
+    recent_mid = S.Claim("e", "p", "s", "k", True, when=50, source="f",
+                         confidence=39, visibility="own")
+    got = ranked([recent_mid, high_but_ancient, low_but_ancient])
+    assert [c.id for c in got] == ["c", "d", "e"], (
+        f"the product ranks {[c.id for c in got]}; a lexicographic (confidence, when) sort would "
+        "rank ['e', 'c', 'd'] — the recent mid-confidence claim first. That is the comparator this "
+        "test exists to exclude, and it is now excluded by BEHAVIOUR")
+    # AND THE LIVE COMPARATOR IS THE ONE MEASURED ABOVE, not a copy of it in this file.
+    assert "c.confidence * (c.when" in inspect.getsource(S.SeasonDriver.witness)
 
 
 def test_d9c_max_depth_has_no_default_anywhere():
@@ -661,7 +689,13 @@ def test_r3_the_l5_crossing_emits_a_witnessable_event():
     """DEFECT C5. Rev 2 appended a crossing row for EVERY site EVERY season regardless of any
     band, and never constructed an Event — so nothing was witnessable and nothing entered the
     log, while the probe claimed 'L5 exactly'. §12.1: 'A band edge crossing is an EMISSION.'"""
-    w = _w()
+    # ⚠ NARROWED FAN-OUT, NOT A SEEDED SITE, AND THE FIRST ASSERTION IS WHY. This test grinds 23
+    # seasons, and its opening control is that NO band has been crossed after three — which a site
+    # seeded near a floor would break. Narrowing `H-33`'s arm is the fix that leaves every number
+    # here identical, because a band crossing does not depend on who witnesses it. Without it this
+    # single test took **213 seconds**, more than the rest of the suite combined, once `W4` made
+    # MATTER emit per write and the default arm kept the fan-out total.
+    w = P.tiny_world(S.DEFAULT_FIXTURES.sweep("fan_out_mode", "presence_only"))
     d = S.SeasonDriver(w)
     site = w.sites["site_harbour"]
     for _ in range(3):
@@ -2306,7 +2340,29 @@ def test_w9_check2_a_causal_chain_walks_from_her_act():
             return 0
         return 1 + max([depth(by_id[c], seen + (e.id,)) for c in e.causes if c in by_id] or [0])
 
-    best = max(w.log, key=depth)
+    # ⚠ THE LONGEST CHAIN THAT ORIGINATES AT ONE OF HER ACTS, NOT THE LONGEST CHAIN IN THE LOG.
+    # §6.3 check 2 is *"a chain of at least four Events WALKS FROM HER ACT"*, and this took the
+    # global maximum — which `W4` made be the WEAR CLOCK, four links of `condition.worn` on the
+    # scriptorium that no person caused. The final assertion below (the chain must start at her
+    # act, not at a clock) caught it, which is the assertion doing its job; the selection is what
+    # was wrong. Same blindness as `H-80`'s control, one section over, and the same fix: measure
+    # the chain the clause is about. Found by the `W4` adversarial pass.
+    def origin_of(e):
+        cur, seen = e, set()
+        while cur.id not in seen:
+            seen.add(cur.id)
+            nxt = next((by_id[c] for c in cur.causes if c in by_id), None)
+            if nxt is None:
+                return cur
+            cur = nxt
+        return cur
+
+    hers = [e for e in w.log
+            if (lambda o: o.subject == HL.CARIN
+                or any(c.subject == HL.CARIN for c in o.changes)
+                or o.kind == "record.created")(origin_of(e))]
+    assert hers, "no Event in the log traces back to an act of Carin's at all"
+    best = max(hers, key=depth)
     d = depth(best)
     chain, cur = [], best
     while cur:
@@ -2323,14 +2379,40 @@ def test_w9_check2_a_causal_chain_walks_from_her_act():
         return 1 + max([pub_depth(pub_by_id[c], seen + (e.id,))
                         for c in e.causes if c in pub_by_id] or [0])
 
-    d_pub = max((pub_depth(e) for e in published.log), default=0)
+    pub_origin = {e.id: e for e in published.log}
+
+    def pub_origin_of(e):
+        cur, seen = e, set()
+        while cur.id not in seen:
+            seen.add(cur.id)
+            nxt = next((pub_origin[c] for c in cur.causes if c in pub_origin), None)
+            if nxt is None:
+                return cur
+            cur = nxt
+        return cur
+
+    pub_hers = [e for e in published.log
+                if (lambda o: o.subject == HL.CARIN
+                    or any(c.subject == HL.CARIN for c in o.changes)
+                    or o.kind == "record.created")(pub_origin_of(e))]
+    d_pub = max((pub_depth(e) for e in pub_hers), default=0)
     print(f"  at the PUBLISHED `--seasons 2`: longest chain {d_pub} Events")
     print(f"  at `--seasons 4`:               longest chain {d} Events")
     assert d >= 4, f"the longest chain is {d} Events; §6.3 check 2 requires at least 4"
-    assert d_pub < 4, (
-        f"the published two-season run reaches {d_pub} — if that is now true the note above is "
-        "stale and check 2 should be measured on the published run alone")
-    assert d_pub >= 2, f"the published run chains only {d_pub} Events — maturation is not running"
+    # ⚠ AMENDED BY `W4`, WHICH IS THE CONDITION THE PREVIOUS ASSERTION NAMED. This read
+    # `assert d_pub < 4` with the note *"if that is now true the note above is stale and check 2
+    # should be measured on the published run alone"*. `W4` gave the wear and claim-decay clocks
+    # real `causes[]`, and the published two-season run now reaches 4 — so §6.3's DEPTH clause is
+    # met on the artifact as published, not only at four seasons.
+    #
+    # ⚠ AND DEPTH IS NOT THE CLAUSE THAT WAS FAILING, so this is not check 2 closing. The `W9`
+    # pass found that the chain is ONE MECHANISM REPEATING and that the chain §6.3 actually
+    # describes — a claim reaching a SECOND PERSON's Q2 and moving THEIR act — is unreachable,
+    # because nothing moves a Record to a second person. `W4` lengthens the repetition; it does
+    # not make a second person act. That finding stands untouched and is the reason this PR does
+    # not claim §6.3 is met.
+    assert d_pub >= 4, (
+        f"the published two-season run reaches only {d_pub} — `W4`'s clock chaining has regressed")
     late_root = [e for e in w.log if e.causes == ["ROOT"] and e.emitted_at > 0]
     assert not late_root, (
         f"{len(late_root)} Event(s) after the seed declare `causes: [ROOT]` — §19.4 reserves that "
@@ -2594,11 +2676,32 @@ def test_w4_every_matter_write_on_a_declaring_row_emits_or_is_registered_as_cond
                 emits="condition.worn", subject=site.id, causes=[])
 
     # AND THE REGISTERED EXEMPTION IS READ FROM DATA, NOT FROM A LITERAL (`H-86`).
+    #
+    # ⚠ THIS CLAUSE USED TO BE VACUOUS AND THE VACUITY WAS INVISIBLE. It read
+    # `rec = next(iter(w.records.values()), None)` then `if rec is not None:` — and
+    # `headless.build_world` creates NO Records, so `rec` was unconditionally `None` and the write
+    # never ran. Deleting the exemption from `write()` left all four `w4` tests green. A Record is
+    # built here rather than hoped for. Found by the `W4` adversarial pass.
     assert "Record.ttl" in S.roster("conditional_emission_rows")
-    rec = next(iter(w.records.values()), None)
-    if rec is not None:
-        w.write("ttl", WriteClass.MATTER, lambda: setattr(rec, "ttl", (rec.ttl or 1) - 1),
-                record_kind="Record", fieldname="ttl", driver="Event")
+    rec = S.Record("rec_w4", "S", "writ", ttl=2)
+    w.records[rec.id] = rec
+    w.write("ttl", WriteClass.MATTER, lambda: setattr(rec, "ttl", rec.ttl - 1),
+            record_kind="Record", fieldname="ttl", driver="Event")
+    assert rec.ttl == 1, "the exempt write did not apply"
+    assert not [e for e in w.log if e.subject == rec.id], (
+        "the exempt row emitted anyway — `record.expired` on a non-terminal decrement asserts an "
+        "expiry that has not happened")
+    # AND THE EXEMPTION IS NARROW: an UNDECLARED kind is still refused on the same row.
+    with pytest.raises(Forbidden, match="does not declare"):
+        w.write("ttl", WriteClass.MATTER, lambda: setattr(rec, "ttl", rec.ttl - 1),
+                record_kind="Record", fieldname="ttl", driver="Event",
+                emits="record.vanished", subject=rec.id, causes=[S.ROOT])
+    # AND `subject=` IS MANDATORY WHEN EMITTING — the trace-label fallback was the value that
+    # made every site's wear emit under the subject `"condition"`.
+    with pytest.raises(Forbidden, match="no `subject="):
+        w.write("condition", WriteClass.MATTER, lambda: setattr(site, "condition", 1),
+                record_kind="Site", fieldname="condition", driver="Event",
+                emits="condition.worn", causes=[S.ROOT])
 
 
 def test_w4_a_claims_decay_walks_back_to_the_act_that_was_witnessed():
@@ -2623,6 +2726,145 @@ def test_w4_a_claims_decay_walks_back_to_the_act_that_was_witnessed():
         if chain[chain.index("claim.deposited") + 1:]:
             walked += 1
     assert walked, "no decay chain reaches past its deposit to the Event that was witnessed"
+
+
+def test_w4_a_refused_attempt_names_the_attempt_not_the_campaign_seed():
+    """The `[ROOT]` clause, asserted where the FIXTURE CANNOT REACH.
+
+    ⚠ THIS IS THE CASE THAT MADE `W4`'s HEADLINE CLAIM FALSE OF THE DESIGN while true of the run.
+    `resolve`'s S27.4 branch emitted `attempt.refused` with `causes=[ROOT]`, and the rule against
+    it is stated TWICE within sixteen lines of that line — the contest branch below it passes
+    `causes=[a.id]`, and `_fold` carries a paragraph calling `[ROOT]` in an act-caused emission
+    "`[]` wearing a marker". `Act.obstacle` defaults to `None` and the computed chooser never sets
+    one, so no seeded run could reach the branch and the ROOT-count proof could not see it. An
+    `Act` with an obstacle is built here directly. Found by the `W4` adversarial pass."""
+    import headless as HL
+    w = HL.build_world(0)
+    d = S.SeasonDriver(w)
+    pid = next(iter(w.persons))
+    mult = w.fixtures.get("obstacle_refusal_multiple")
+    a = S.Act(id="act_refused", actor=pid, verb="work")
+    a.obstacle, a.pool = mult * 10 + 1, 1        # Ob > multiple x Pool -> S27.4 refuses
+    d.matter([])
+    out = d.resolve([a], contest_max_depth=2)
+    refused = [e for e in out if e.kind == "attempt.refused"]
+    assert refused, "S27.4 did not refuse the over-obstacle attempt; the fixture no longer reaches it"
+    for e in refused:
+        assert e.causes == [a.id], (
+            f"a refused attempt names {e.causes} — the antecedent is THE ATTEMPT, and `[ROOT]` is "
+            "for the campaign seed and a licensed clock's genuine first emission")
+
+
+def test_w4_h40s_declared_sweep_is_executed_and_its_zero_arm_does_not_fabricate():
+    """`H-40`'s sweep `[0, 5, 20]`, RUN — and the `0` arm is the control.
+
+    ⚠ TWO DEFECTS THIS CATCHES, AND THE SECOND IS WORSE. (1) The sweep was declared in YAML and
+    executed nowhere, which is the exact defect the `H-80` control had and that `W4` fixed one
+    section earlier — re-introduced in the same commit. (2) At rate `0` the loop still emitted
+    `claim.decayed` for every claim every season while `max(0, conf - 0)` changed nothing, so the
+    CONTROL ARM published a decay that did not happen. The rule against that is enforced twice in
+    `shape.py` already (`_fold`'s *"an effect that touched nothing did not do the thing"*, and
+    `H-86`'s exemption argument). A sweep point that fabricates is worse than one nobody runs."""
+    import headless as HL
+    from collections import Counter
+    seen = {}
+    for rate in (0, 5, 20):
+        w = HL.build_world(0, S.DEFAULT_FIXTURES.sweep("claim_decay_per_season", rate))
+        d = S.SeasonDriver(w)
+        mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+        for _ in range(3):
+            d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+                     None, HL.subsistence)
+        confs = [c.confidence for p in w.persons.values() for c in p.ledger]
+        seen[rate] = (Counter(e.kind for e in w.log)["claim.decayed"], min(confs), max(confs))
+    print(f"\n  H-40 sweep — (decay events, min confidence, max) by rate: {seen}")
+    assert seen[0][0] == 0, (
+        f"the 0 arm emitted {seen[0][0]} `claim.decayed` Events — a decay that did not happen")
+    assert seen[0][1] == seen[0][2], "confidence moved at rate 0"
+    assert seen[5][0] and seen[20][0], "the live arms emitted no decay at all"
+    assert seen[20][1] < seen[5][1] < seen[0][1], (
+        f"confidence does not fall faster at a higher rate: {seen} — then the rate is inert and "
+        "this sweep is measuring nothing")
+
+
+# ===========================================================================
+# W6 — WITNESS CHANNEL PREDICATES, AND LEDGER FLOOD CONTROL. `H-33`.
+# ===========================================================================
+
+def _w6_run(mode: str, seasons: int = 3, seed: int = 0):
+    import headless as HL
+    w = HL.build_world(seed, S.DEFAULT_FIXTURES.sweep("fan_out_mode", mode))
+    d = S.SeasonDriver(w)
+    mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    dep = 0
+    for _ in range(seasons):
+        dep += d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+                        None, HL.subsistence)["deposits"]
+    return w, dep
+
+
+def test_w6_h33s_declared_sweep_runs_and_the_deposit_count_falls():
+    """`PLAN.md` `W6`'s Proof: *"deposits per season fall from `N × E` to a number the sweep
+    reports"*. `H-33`'s declared sweep is `total / presence-only / all five`, and `total` is BOTH
+    the default and the control because it is #353's specified behaviour (`S61`).
+
+    ⚠ THIS IS THE INTERACTION `PLAN.md` §1.4 HOLE 16 PREDICTED AS AN ARGUMENT. *"`D22` (MATTER
+    emits per write) and `H-33` (`absent`, so fan-out is total) are individually fine and JOINTLY
+    FATAL."* `W4` landed `D22` and the argument became a measurement: the run stopped finishing."""
+    got = {}
+    for mode in ("total", "presence_only", "all_five"):
+        w, dep = _w6_run(mode)
+        got[mode] = (len(w.log), dep, sorted(len(p.ledger) for p in w.persons.values()))
+    print(f"\n  H-33 sweep — (events, deposits, ledgers) by fan-out mode: {got}")
+    assert got["presence_only"][1] < got["total"][1], (
+        f"narrowing the channels did not reduce deposits: {got} — then no predicate EXCLUDES and "
+        "`S61`'s debt is not discharged")
+    assert got["presence_only"][1] * 4 < got["total"][1], (
+        f"the reduction is marginal: {got}. §1.4 hole 16 is about an order of magnitude, and a "
+        "few percent would mean the predicates are not the thing bounding the fan-out")
+    # AND THE TWO NARROW ARMS ARE NOT THE SAME ARM WEARING TWO NAMES. If `chronicle` matched
+    # everyone, `all_five` would BE `total` and the sweep would have a redundant point.
+    assert got["all_five"][1] > got["presence_only"][1], (
+        f"`all_five` deposits no more than `presence_only`: {got} — the four other channels are "
+        "inert and the sweep has two points measuring one thing")
+    assert got["all_five"][1] < got["total"][1], (
+        f"`all_five` is indistinguishable from `total`: {got} — `chronicle` is matching everyone, "
+        "which is the degenerate reading `rosters.yaml` warns against")
+    assert max(got["total"][2]) >= S.DEFAULT_FIXTURES.get("ledger_cap"), (
+        "the control arm no longer floods the ledger to its cap — then the finding this item "
+        "exists to fix has gone away and the item should be re-argued, not quietly passed")
+
+
+def test_w6_an_unrecognised_fan_out_mode_refuses_rather_than_falling_back():
+    """§42.2's polarity rule applied to a sweep parameter. A mode outside `H-33`'s three points
+    that silently fell back to `total` would make every reading of this sweep report THE CONTROL,
+    which is the failure mode that makes a sweep worse than no sweep."""
+    import headless as HL
+    w = HL.build_world(0)
+    e = next(iter(w.log), None) or S.Event(S.H(w.world_seed, 0, "x", "t"), "speech.made", "x",
+                                           [], [S.ROOT], 0)
+    with pytest.raises(S.Unspecified, match="not one of"):
+        S.observers_for(w, e, "everyone_obviously", list(w.persons))
+
+
+def test_w6_every_named_channel_has_a_predicate_and_they_are_data():
+    """`S61`: *"WITNESS AS SPECIFIED FANS EVERY EVENT TO EVERY PERSON… a wrapper does not fix this
+    and MUST NOT BE PRESENTED AS FIXING IT."* So this asserts two things at once — that every
+    named channel resolves to a predicate, and that the predicates are DATA rather than a literal
+    roster in a Python body (Jordan, 2026-09-02: definitions are not hardcoded)."""
+    named = S.roster("witness_channel_predicates")
+    assert set(named) == set(S.WITNESS_CHANNELS), (
+        f"the predicate roster and `WITNESS_CHANNELS` disagree: {sorted(named)} vs "
+        f"{sorted(S.WITNESS_CHANNELS)}")
+    assert set(named) == set(S.CHANNEL_PREDICATES), (
+        f"a named channel has no predicate function: {sorted(set(named) - set(S.CHANNEL_PREDICATES))}")
+    # AND THE INJECTION IS DECLARED AS ONE. `H-33` must not read `ruled` off the back of this.
+    h33 = R._register()["H-33"]
+    assert h33["grade"] == "assumption", (
+        f"`H-33` is graded {h33['grade']!r}. The five predicates are an INJECTED default — #353 "
+        "names the channels and supplies no predicate — and grading the row `ruled` on the back "
+        "of this item would credit the design with an answer this session invented")
+    assert len(h33["sweep"]) >= 3 and h33["site"], h33
 
 
 def test_w9_h80s_zero_control_is_executed_not_merely_described():

@@ -18,9 +18,9 @@ checking.* So every probe declares its provenance:
 
 ## ⚠ THE ENFORCEMENT SPLIT — the single most important number in this ledger
 
-**Of 59 PROBES that did not pass, 29 were raised BY THE SHAPE ITSELF and 24 exist only because THERE IS NO SIGNATURE TO CALL.**
+**Of 58 PROBES that did not pass, 29 were raised BY THE SHAPE ITSELF and 23 exist only because THERE IS NO SIGNATURE TO CALL.**
 
-> ⚠ **THIS COUNTS PROBES, NOT GAP EVENTS, and the two numbers differ.** `results.json`'s `_trace_counts.GAP` is 66 — every gap RAISED during the run, including several inside one probe and several the corpus cases hit. This line counts probes whose VERDICT is not PASS: 59 of 122. Both are honest counts of different populations, and `G10` forbids reporting either without its basis — which this file did until the `W5` adversarial pass read both.
+> ⚠ **THIS COUNTS PROBES, NOT GAP EVENTS, and the two numbers differ.** `results.json`'s `_trace_counts.GAP` is 65 — every gap RAISED during the run, including several inside one probe and several the corpus cases hit. This line counts probes whose VERDICT is not PASS: 58 of 122. Both are honest counts of different populations, and `G10` forbids reporting either without its basis — which this file did until the `W5` adversarial pass read both.
 
 That is close to an even split, and it matters more than any case verdict. A refusal a
 gate enforces and a refusal that exists because nobody wrote the function are different
@@ -32,7 +32,7 @@ has no module system and no visibility modifiers, so the guarantee there is
 a contributor closes by simply writing the function — no gate fires, no test goes red,
 and the design's own §27.2 admission applies: *enforced by a person noticing*.
 
-**And 14 of 63 PASSes are not by construction
+**And 15 of 64 PASSes are not by construction
 either** — they are listed individually below and should be discounted accordingly. A
 `probe-model` PASS means the instrument supplied something the design does not.
 
@@ -76,7 +76,6 @@ either** — they are listed individually below and should be discounted accordi
 | `F7` | **UNSPECIFIED** | probe-model | E2 | someone with no power must be able to get a matter in front of someone who has it |
 | `F8` | **UNSPECIFIED** | construction | S61 | the body a matter reaches must be able to decide it |
 | `F9` | **UNSPECIFIED** | construction | S27/E2 | a character must be able to spend a whole season putting the same matter to many people |
-| `P15` | **UNSPECIFIED** | no-signature | S61 | something said in private must be able to stay private |
 | `P17` | **UNSPECIFIED** | probe-model | S22.4 | a character's risk must be able to build up quietly across seasons without anyone acting |
 | `P19` | **FORBIDDEN** | construction | S3-L4 | the story must be able to end when a counter reaches a value, with no person choosing |
 | `P2` | **UNSPECIFIED** | construction | S27/E2 | a character must be able to take several distinct actions in one season and choose what to leave undone |
@@ -132,6 +131,7 @@ either** — they are listed individually below and should be discounted accordi
 | `P12` | PASS | construction | S17 | the set of things a character may do must be computed, not an authored list |
 | `P13` | PASS | probe-model | S18.2 | a character's needs must drive their choices |
 | `P14` | PASS | construction | S18.2 | how a character is regarded must be able to differ from how they regard themselves |
+| `P15` | PASS | no-signature | S61 | something said in private must be able to stay private |
 | `P16` | PASS | construction | S20 | how a character is seen must be able to differ between people who know different things |
 | `P18` | PASS | construction | S3-L5 | a counter reaching an edge must be able to force a named person to answer |
 | `P20` | PASS | construction | S29 | a person who was previously part of a crowd must be able to become a named individual |
@@ -379,12 +379,6 @@ either** — they are listed individually below and should be discounted accordi
 
 **needs:** NOTHING FROM THE DESIGN -- #353 does not name 'petition2' as a verb. This is the CALLER'S invention and the gap is the caller's
 **law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
-
-### `P15` — a person's private act stays private  ·  **UNSPECIFIED**  ·  `S61`  ·  by `no-signature`
-**what:** four of the five witness channels have no predicate: ['post_remit', 'witness_key', 'document_key', 'chronicle']
-
-**needs:** a channel predicate that can EXCLUDE a person
-**law:** S61 -- WITNESS AS SPECIFIED FANS EVERY EVENT TO EVERY PERSON. Nothing said in private is private. A WRAPPER DOES NOT FIX THIS AND MUST NOT BE PRESENTED AS FIXING IT
 
 ### `P17` — hidden exposure accumulates across seasons  ·  **UNSPECIFIED**  ·  `S22.4`  ·  by `probe-model`
 **what:** the closed `axis` registry L3 clause 1 requires (asked for 'suspicion')

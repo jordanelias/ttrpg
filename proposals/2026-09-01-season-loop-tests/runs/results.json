@@ -776,9 +776,8 @@
    "core": 5,
    "core_routed": 5,
    "core_unmapped": 0,
-   "core_blocked": 3,
+   "core_blocked": 1,
    "blockers": [
-    "probe:P15",
     "probe:P35"
    ],
    "unbound": [],
@@ -793,12 +792,12 @@
      ],
      "resolved": [
       {
-       "ok": false,
+       "ok": true,
        "bound": true,
        "kind": "probe",
-       "detail": "P15: GAP",
+       "detail": "P15: PASS",
        "probe": "P15",
-       "verdict": "GAP"
+       "verdict": "PASS"
       },
       {
        "ok": true,
@@ -811,8 +810,8 @@
      ],
      "unbound": [],
      "verdict": {
-      "verdict": "GAP",
-      "detail": "P15: GAP \u00b7 H-33: assumption -- rests on an injected default",
+      "verdict": "ASSUMED",
+      "detail": "P15: PASS \u00b7 H-33: assumption -- rests on an injected default",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -886,12 +885,12 @@
      ],
      "resolved": [
       {
-       "ok": false,
+       "ok": true,
        "bound": true,
        "kind": "probe",
-       "detail": "P15: GAP",
+       "detail": "P15: PASS",
        "probe": "P15",
-       "verdict": "GAP"
+       "verdict": "PASS"
       },
       {
        "ok": true,
@@ -904,8 +903,8 @@
      ],
      "unbound": [],
      "verdict": {
-      "verdict": "GAP",
-      "detail": "P15: GAP \u00b7 H-33: assumption -- rests on an injected default",
+      "verdict": "ASSUMED",
+      "detail": "P15: PASS \u00b7 H-33: assumption -- rests on an injected default",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -9089,7 +9088,7 @@
   "P1": {
    "id": "P1",
    "verdict": "PASS",
-   "detail": "PASS: a postless person produced an Act that reached RESOLVE and emitted an Event",
+   "detail": "PASS: a postless person produced an Act that reached RESOLVE and emitted an Event (speech.made), whose `causes[]` names the act. The season emitted 3 Events in total -- the rest are the world's licensed clocks (`W4`), and none of them is hers",
    "kind": null,
    "section": "S3-L1",
    "title": "a person holding no office acts",
@@ -9258,13 +9257,11 @@
   },
   "P15": {
    "id": "P15",
-   "verdict": "GAP",
-   "detail": "four of the five witness channels have no predicate: ['post_remit', 'witness_key', 'document_key', 'chronicle']",
-   "kind": "UNSPECIFIED",
+   "verdict": "PASS",
+   "detail": "PASS, BY CONSTRUCTION: all five channels ['chronicle', 'co_located', 'document_key', 'post_remit', 'witness_key'] carry a predicate, and one of them EXCLUDES -- the same Event reaches 5 person(s) under `total` (S61's specified behaviour, and `H-33`'s control) and 0 under `presence_only`. \u26a0 THE DESIGN STILL SUPPLIES NO PREDICATE: these are an INJECTED default, `H-33` stays `assumption`, and `total` remains the default because it is what #353 specifies. What is closed is that an exclusion is now EXPRESSIBLE and swept, not that #353 said how",
+   "kind": null,
    "section": "S61",
    "title": "a person's private act stays private",
-   "needs": "a channel predicate that can EXCLUDE a person",
-   "law": "S61 -- WITNESS AS SPECIFIED FANS EVERY EVENT TO EVERY PERSON. Nothing said in private is private. A WRAPPER DOES NOT FIX THIS AND MUST NOT BE PRESENTED AS FIXING IT",
    "by": "no-signature",
    "tests": "something said in private must be able to stay private"
   },
@@ -9293,7 +9290,7 @@
   "P18": {
    "id": "P18",
    "verdict": "PASS",
-   "detail": "PASS, AND BOTH HALVES OF L5 RAN. `site_harbour` crossed the `bulk_shipping` floor in 11 seasons (800 -> 790). (1) IT CHANGED WHAT MAY BE CHOSEN: ['bulk_shipping', 'fishing'] -> ['fishing']. (2) IT EMITTED A WITNESSABLE EVENT into the one log (condition.band_crossed) whose `causes[]` NAMES THE WEAR THAT CROSSED THE FLOOR (`W4`/`H-12`), carrying NO social change and NO degree -- so it wrote no social row and PRODUCED NO OUTCOME. That is L5 exactly, and it is what the in-chain survey found 19 of 50 arcs asking for: THE COUNTER COMPELS SOMEONE TO ACT, IT DOES NOT ACT",
+   "detail": "PASS, AND BOTH HALVES OF L5 RAN. `site_harbour` crossed the `bulk_shipping` floor in 2 seasons (800 -> 790). (1) IT CHANGED WHAT MAY BE CHOSEN: ['bulk_shipping', 'fishing'] -> ['fishing']. (2) IT EMITTED A WITNESSABLE EVENT into the one log (condition.band_crossed) whose `causes[]` NAMES THE WEAR THAT CROSSED THE FLOOR (`W4`/`H-12`), carrying NO social change and NO degree -- so it wrote no social row and PRODUCED NO OUTCOME. That is L5 exactly, and it is what the in-chain survey found 19 of 50 arcs asking for: THE COUNTER COMPELS SOMEONE TO ACT, IT DOES NOT ACT",
    "kind": null,
    "section": "S3-L5",
    "title": "a crossing compels a person to act",
@@ -9719,7 +9716,7 @@
   "W1": {
    "id": "W1",
    "verdict": "PASS",
-   "detail": "PASS: wear at MATTER dropped condition below the floor in 11 seasons and the verb LEFT THE SET. The COUNT is a function of the injected `wear_per_season` fixture and moves with it -- the STRUCTURAL claim (a verb leaves) does not",
+   "detail": "PASS: wear at MATTER dropped condition below the floor in 2 seasons and the verb LEFT THE SET. The COUNT is a function of the injected `wear_per_season` fixture and moves with it -- the STRUCTURAL claim (a verb leaves) does not",
    "kind": null,
    "section": "S12.1",
    "title": "a site decays until a verb leaves its set",
@@ -9785,7 +9782,7 @@
   "W6": {
    "id": "W6",
    "verdict": "PASS",
-   "detail": "PASS: ONE Event spanning many rungs, with ONE id, emitted SERIALLY before the parallel section. Sharding it per rung would BREAK causes[], because ONE CAUSE IS ONE ID (S31.1 exception 3). It reached 5 ledger(s) through WITNESS",
+   "detail": "PASS: ONE Event spanning many rungs, with ONE id, emitted SERIALLY before the parallel section. Sharding it per rung would BREAK causes[], because ONE CAUSE IS ONE ID (S31.1 exception 3). It reached 15 ledger(s) through WITNESS",
    "kind": null,
    "section": "S31.1",
    "title": "a plague spans many rungs as one event",
@@ -9903,7 +9900,7 @@
   "A5": {
    "id": "A5",
    "verdict": "PASS",
-   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (4cf982a3bbd4...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (e8b4b8dcf61e...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
    "kind": null,
    "section": "S32",
    "title": "the fold is order-independent, and the float control actually fires",
@@ -10163,7 +10160,7 @@
   "A28": {
    "id": "A28",
    "verdict": "PASS",
-   "detail": "PASS over 62 events from a real run: id uniqueness, a NON-DECREASING season index, a stable content hash, and referential integrity on causes[] against log UNION resolved -- 4 causes name an ACT and 56 name an EVENT, zero dangle. \u26a0 THE UNION IS `H-82` AND IT IS A READING, NOT A GIVEN: #353 `:658` and `:1377` cannot both hold as written, and this probe asserts the reading `W9` took rather than leaving it in a code comment",
+   "detail": "PASS over 4662 events from a real run: id uniqueness, a NON-DECREASING season index, a stable content hash, and referential integrity on causes[] against log UNION resolved -- 4 causes name an ACT and 4656 name an EVENT, zero dangle. \u26a0 THE UNION IS `H-82` AND IT IS A READING, NOT A GIVEN: #353 `:658` and `:1377` cannot both hold as written, and this probe asserts the reading `W9` took rather than leaving it in a code comment",
    "kind": null,
    "section": "S19.1",
    "title": "the log's invariants hold",
@@ -10514,15 +10511,6 @@
    "needs": "a predicate in REQUIRES_PREDICATES, or a `requires:` the table states structurally rather than in prose",
    "law": "\u00a7E2 -- `requires` is checked IN THE FOLD. Stated as prose it is the same defect `resolve` had, one column along: a rule the code cannot read",
    "case": "probe:P9",
-   "expected": false
-  },
-  {
-   "kind": "UNSPECIFIED",
-   "what": "four of the five witness channels have no predicate: ['post_remit', 'witness_key', 'document_key', 'chronicle']",
-   "where": "S61",
-   "needs": "a channel predicate that can EXCLUDE a person",
-   "law": "S61 -- WITNESS AS SPECIFIED FANS EVERY EVENT TO EVERY PERSON. Nothing said in private is private. A WRAPPER DOES NOT FIX THIS AND MUST NOT BE PRESENTED AS FIXING IT",
-   "case": "probe:P15",
    "expected": false
   },
   {
@@ -11022,15 +11010,15 @@
   }
  ],
  "_trace_counts": {
-  "STEP": 2136,
-  "BARRIER": 723,
-  "DECISION": 732,
-  "WRITE": 1183,
-  "EVENT": 1204,
-  "QUERY": 4387,
+  "STEP": 1920,
+  "BARRIER": 651,
+  "DECISION": 658,
+  "WRITE": 11928,
+  "EVENT": 9062,
+  "QUERY": 5316,
   "ACT": 75,
-  "CLAIM": 376,
-  "GAP": 66,
+  "CLAIM": 4715,
+  "GAP": 65,
   "NOTE": 96
  },
  "_corpus_defects": [

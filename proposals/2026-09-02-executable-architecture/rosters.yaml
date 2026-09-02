@@ -228,6 +228,31 @@ rosters:
       subject is READ off the Event the design already has. `H-79` is the row.
     values: [actor, per_change, both]
 
+  witness_channel_predicates:
+    source: "#353 §20 names the five witness channels and gives NONE of them a predicate. `S61`: *\"WITNESS AS SPECIFIED FANS EVERY EVENT TO EVERY PERSON. Nothing said in private is private.\"*"
+    cite: "H-33"
+    note: >-
+      ⚠ THESE PREDICATES ARE AN INJECTED DEFAULT, NOT SOMETHING #353 STATES. `H-33` is graded
+      `assumption` for exactly that reason, its declared sweep is `total / presence-only / all
+      five`, and `total` is BOTH the default and the control because it is the specified behaviour.
+      Every predicate below is computed from WORLD STATE and never from a recipient the emitter
+      declared -- §19.3 is explicit that an Event carries NO TARGET, *"observers are computed at
+      WITNESS from presence; the emitter declares no recipient"*, so a channel that needed the
+      emitter to name someone would be a different design and not a fill of this hole.
+      ⚠ `chronicle` IS DELIBERATELY NOT `everyone`. A public channel that matched every person
+      would make the `all_five` union identical to `total`, and the sweep would have two points
+      that are the same arm wearing different names -- an arrangement that cannot measure
+      anything. It is the MATTER-OF-RECORD channel: what a binding decision emits is public,
+      because a binding decision is the design's own category for an act whose effect is
+      institutional rather than private.
+    values: ["chronicle", "co_located", "document_key", "post_remit", "witness_key"]
+    predicates:
+      co_located:    "the person shares a live `contain` Tenure with the Event's place -- the presence index S28 already builds and the fan-out never read"
+      document_key:  "the person holds a live `hold` Tenure over the Event's subject (a Record, a store)"
+      witness_key:   "the person IS the Event's subject, or shares a live `knot` Tenure with it -- S28's knot deposit, which already reuses the Event id"
+      post_remit:    "the person holds a live office Tenure whose remit covers the verb that emitted this kind"
+      chronicle:     "the kind is emitted by a `binding_decision` verb -- a matter of record, and public because the decision is institutional"
+
   conditional_emission_rows:
     source: "`W4`. Part D's `emits:` column does not distinguish a kind emitted ON EVERY WRITE from one emitted only WHEN A CONDITION HOLDS, and the two are different things."
     note: >-

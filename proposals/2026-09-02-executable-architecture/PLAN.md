@@ -882,6 +882,50 @@ being a queryable object rather than a table a human reads a page at a time.
 
 **Size M.** Depends on **W2** and **W4**. Parallel with **W5**.
 
+> ### LANDED 2026-09-02 — and §1.4 hole 16 stopped being an argument
+>
+> **The five channels have predicates**, injected and declared in
+> `rosters.yaml: witness_channel_predicates`, each computed from WORLD STATE — §19.3 removes
+> `target` from the Event and says why: *"observers are computed at WITNESS from presence; the
+> emitter declares no recipient."* `shape.observers_for` is the reader, and the presence index
+> this barrier has always built was **unused until now**.
+>
+> | mode | events (3 seasons) | deposits | ledgers |
+> |---|---:|---:|---|
+> | `total` — **#353's specified behaviour, and the control** | 896 | **678** | 200 · 200 · 200 *(at the `L` cap)* |
+> | `presence_only` | 161 | **68** | 34 · 34 · 0 |
+> | `all_five` | 165 | **71** | 37 · 34 · 0 |
+>
+> ```
+> cd proposals/2026-09-01-season-loop-tests/tracer
+> python -m pytest test_tracer_is_honest.py -q -k w6      # 3 passed
+> ```
+>
+> **`P15` flips to PASS BY CONSTRUCTION**, which is `W6`'s first Proof clause — the same Event
+> reaches five persons under `total` and fewer under `presence_only`, so a channel predicate now
+> **excludes**, which is what `S61` says a wrapper cannot do. **Deposits fall from `N × E` to a
+> number the sweep reports** — the second clause — by a factor of ten.
+>
+> ⚠ **THE DEFAULT STAYS `total`, AND THAT IS NOT AN OVERSIGHT.** `H-33` remains `assumption`:
+> #353 names the five channels and supplies **no predicate for any of them**, so these are an
+> injected default and grading the row `ruled` on the back of this item would credit the design
+> with an answer this session invented. `total` is the default because it is what #353 specifies,
+> and it is therefore also the control arm. A guard asserts the grade has not drifted.
+>
+> ⚠ **`chronicle` IS DELIBERATELY NOT `everyone`.** A public channel matching every person would
+> make `all_five` identical to `total`, and the sweep would carry two points that are one arm
+> wearing two names. It is the matter-of-record channel: what a `binding_decision` verb emits is
+> public, because that is the design's own category for an act whose effect is institutional.
+> A guard asserts `all_five` sits strictly between the other two.
+>
+> **WHY THIS BECAME URGENT RATHER THAN OPTIONAL, WHICH IS THE ITEM'S OWN CLAIM.** §1.4 hole 16
+> says `D22` and `H-33` are *"individually fine and jointly fatal"* and that **no row in `V2`
+> carries the interaction**. `W4` landed `D22`, and the argument became a measurement within the
+> hour: events per run **207 → 896 → 3389** over two, three and four seasons, every ledger pinned
+> at the `L = 200` cap, and **the test suite stopped finishing**. The cleanest example in the
+> corpus of a defect that appears only when two rows are read together — and it appeared by
+> running, not by reading.
+
 ---
 
 ## **W7 — THE SITTING DECIDES, AND THE CONTEST RETURNS A DEGREE.**

@@ -246,6 +246,11 @@ DEFAULT_FIXTURES = Fixtures(
     # fixture rather than a literal so `Fixtures.claim_decay` can REFUSE when it is unregistered
     # — `wear`'s precedent, and S42.2.1's rule.
     claim_decay_per_season=5,
+    # `W6` / `H-33`. WHICH WITNESS CHANNELS ARE LIVE. `total` is the DEFAULT AND THE CONTROL --
+    # it is #353's specified behaviour (S61: *"WITNESS AS SPECIFIED FANS EVERY EVENT TO EVERY
+    # PERSON"*), so the sweep's control arm is the design as written rather than a baseline
+    # somebody invented. The three points are `H-33`'s own declared sweep.
+    fan_out_mode="total",
     # S15.2: entrenchment(h,H) = min(1, seasons_held / 60). The 60 IS in-chain; it is a fixture
     # only so no literal sits in a body.
     entrenchment_seasons=60,
@@ -1355,6 +1360,26 @@ class World:
             (self.persons[t.subject].tenures if t.subject in self.persons else keep).append(t)
         self._unowned = keep
 
+    def _refuse_undeclared_kind(self, thing, wclass, sname, record_kind, fieldname,
+                                emits, declared) -> None:
+        """A kind no Part D row declares is a FABRICATED kind, and the `emits:` column is the only
+        thing that may name one.
+
+        ⚠ ONE RULE, ONE MESSAGE. This lived twice — once on the must-name-a-kind path and once on
+        the exempt path — and the two copies said *"which Part D does not declare for it"* and
+        *"undeclared"*, so a test matching one passed and the other did not. §8 broken inside a
+        single function, which is the smallest scale this repo has yet found it at. Found by the
+        `W4` adversarial pass."""
+        if emits is None or emits in declared:
+            return
+        TRACE.write(thing, wclass.value, sname, False)
+        raise Forbidden(
+            f"({record_kind}, {fieldname}) tried to emit {emits!r}, which Part D does not "
+            f"declare for it: {list(declared)}", "D22",
+            needs=f"one of {list(declared)}",
+            law="a kind no row declares is a FABRICATED kind, and the `emits:` column is the "
+                "only thing that may name one")
+
     def write(self, thing: str, wclass: WriteClass, apply: Callable[[], Any],
               record_kind: str, fieldname: str, driver: str,
               caused_person_exists: Optional[str] = None,
@@ -1462,19 +1487,11 @@ class World:
                     law="`H-12`, RULED: MATTER emits an Event PER WRITE so crossings have an "
                         "antecedent, and the kind is Part D's `emits:` column. A MATTER write "
                         "that emits nothing is the silent write `D22` names")
-            if emits not in declared:
-                TRACE.write(thing, wclass.value, sname, False)
-                raise Forbidden(
-                    f"({record_kind}, {fieldname}) tried to emit {emits!r}, which Part D does not "
-                    f"declare for it: {list(declared)}", "D22",
-                    needs=f"one of {list(declared)}",
-                    law="a kind no row declares is a FABRICATED kind, and the `emits:` column is "
-                        "the only thing that may name one")
-        elif emits is not None and emits not in declared:
-            TRACE.write(thing, wclass.value, sname, False)
-            raise Forbidden(
-                f"({record_kind}, {fieldname}) tried to emit {emits!r}, undeclared", "D22",
-                needs=f"one of {list(declared)}", law="see above")
+            self._refuse_undeclared_kind(thing, wclass, sname, record_kind, fieldname,
+                                         emits, declared)
+        else:
+            self._refuse_undeclared_kind(thing, wclass, sname, record_kind, fieldname,
+                                         emits, declared)
 
         before = apply()
         TRACE.write(thing, wclass.value, sname, True)
@@ -1486,7 +1503,19 @@ class World:
             # emitted under the subject `"condition"` — and `last_emission_of` therefore never
             # matched, so season 1's wear re-rooted at `[ROOT]` and the clock did not chain. That
             # is exactly the failure `W4`'s ROOT-count proof exists to catch, and it caught it.
-            subj = subject or thing
+            if subject is None:
+                raise Forbidden(
+                    f"({record_kind}, {fieldname}) emits {emits!r} with no `subject=`", "S33",
+                    needs="subject=<the record id>",
+                    law="THE SUBJECT IS THE RECORD, NOT THE TRACE LABEL. The fallback was "
+                        "`subject or thing`, and `thing` is a human label for the trace line -- "
+                        "which is exactly the value that made every site's wear emit under the "
+                        "subject `\"condition\"`, so `last_emission_of` never matched and the clock "
+                        "re-rooted every season. Leaving the fallback in place meant emission was "
+                        "inherited by existing while the half that makes a clock CHAIN still had "
+                        "to be remembered -- and a one-shot emission with a forgotten `subject=` "
+                        "is silent. Found by the `W4` adversarial pass")
+            subj = subject
             ev = Event(
                 id=H(self.world_seed, self.tick, subj, f"emit:{emits}"),
                 kind=emits, subject=subj,
@@ -1504,7 +1533,14 @@ class World:
             # for one rule. The Event constructor raises before this line is reached.
             self.log.append(ev)
             TRACE.event(ev.id, ev.kind, ev.causes)
-            self._emitted_by_write.append(ev)
+            # ⚠ BUFFERED ONLY AT MATTER, AND THE SCOPE IS THE POINT. `matter()` drains this to
+            # decide what WITNESS fans out. A WITNESS-step emission (`claim.deposited`) left in
+            # the buffer survives into the NEXT season's MATTER and is fanned there, which closes
+            # a loop: a deposit emits, the emission is witnessed, that deposit emits. Measured
+            # before this guard: `claim.deposited` reached 249 in a two-season run and was
+            # accelerating. The buffer is MATTER's, so only MATTER fills it.
+            if step is Step.MATTER:
+                self._emitted_by_write.append(ev)
         return before
 
     # -- S4: a Query MAY be cached. Built AT a barrier, read-only until the next, DISCARDED there.
@@ -2262,6 +2298,115 @@ def claim_subjects(e: "Event", rule: str) -> list:
     return out or [e.subject]
 
 
+# ---------------------------------------------------------------------------
+# `W6` -- THE FIVE WITNESS CHANNEL PREDICATES. `H-33`.
+#
+# ⚠ WHY THIS IS AN INJECTION AND NOT A READING. #353 §20 NAMES the five channels and gives none
+# of them a predicate; `S61` states the consequence in terms -- *"WITNESS AS SPECIFIED FANS EVERY
+# EVENT TO EVERY PERSON. Nothing said in private is private. A wrapper does not fix this and must
+# not be presented as fixing it."* `H-33` is graded `assumption` for that reason and its sweep is
+# `total / presence-only / all five`. `total` is the default AND the control, because the control
+# has to be the design as written.
+#
+# ⚠ AND EVERY PREDICATE IS COMPUTED FROM WORLD STATE. §19.3 removes `target` from the Event and
+# says why: *"observers are computed at WITNESS from presence; THE EMITTER DECLARES NO
+# RECIPIENT."* A channel that needed the emitter to name someone would be a different design.
+#
+# ⚠ WHY THIS BECAME URGENT RATHER THAN OPTIONAL. `PLAN.md` §1.4 hole 16: `D22` (MATTER emits per
+# write) and `H-33` (fan-out total) are *"individually fine and JOINTLY FATAL"*, and `W4` made
+# that real -- events per run went 207 -> 896 -> 3389 over two, three and four seasons, ledgers
+# pinned at the `L = 200` cap, and the test suite stopped finishing. The plan predicted it as an
+# argument; it arrived as a measurement.
+# ---------------------------------------------------------------------------
+
+def _event_place(w: "World", e: "Event") -> Optional[str]:
+    """The rung an Event happened at, derived from its subject. A person's place is the rung that
+    contains them; a site's is the rung it sits in; a rung's is itself."""
+    if e.subject in w.rungs:
+        return e.subject
+    if e.subject in w.sites:
+        return getattr(w.sites[e.subject], "rung", None)
+    for t in w.tenures:
+        if t.kind == "contain" and t.subject == e.subject and t.live:
+            return t.object
+    return None
+
+
+def _ch_co_located(w, e, pid) -> bool:
+    place = _event_place(w, e)
+    return place is not None and pid in Query.presence(w, place)
+
+
+def _ch_document_key(w, e, pid) -> bool:
+    return any(t.kind == "hold" and t.subject == pid and t.object == e.subject and t.live
+               for t in w.tenures)
+
+
+def _ch_witness_key(w, e, pid) -> bool:
+    if pid == e.subject:
+        return True
+    return any(t.kind == "knot" and t.live and pid in (t.subject, t.object)
+               and e.subject in (t.subject, t.object) for t in w.tenures)
+
+
+def _ch_post_remit(w, e, pid) -> bool:
+    verbs = [v for v, r in VERB_TABLE.items() if e.kind in (r.emits or ())]
+    remits = {x.split(":", 1)[1] for v in verbs for x in (VERB_TABLE[v].eligibility or ())
+              if x.startswith("remit:")}
+    if not remits:
+        return False
+    return any(t.kind in ("hold", "commit") and t.subject == pid and t.live
+               and (t.object in remits or getattr(t, "remit", None) in remits)
+               for t in w.tenures)
+
+
+def _ch_chronicle(w, e, pid) -> bool:
+    return any(r.stratum == "binding_decision" for v, r in VERB_TABLE.items()
+               if e.kind in (r.emits or ()))
+
+
+# ⚠ BUILT FROM THE ROSTER, NOT TYPED HERE. The first version was a dict literal mapping five
+# channel names to five functions -- A ROSTER OF NAMES IN A PYTHON BODY, which is exactly what
+# Jordan ruled against on 2026-09-02 (*"I do not want definitions etc to be hardcoded"*) and what
+# `test_jordan_no_definition_is_hardcoded_in_a_body` exists to catch. It caught it. The names live
+# once, in `rosters.yaml`; the functions are looked up by a derived name, so adding a channel is a
+# data edit plus a function, and a channel with no function RAISES at import rather than silently
+# never matching.
+CHANNEL_PREDICATES = {}
+for _c in sorted(roster("witness_channel_predicates")):
+    _fn = globals().get(f"_ch_{_c}")
+    if _fn is None:
+        raise Unspecified(
+            f"channel {_c!r} is in the roster and has no `_ch_{_c}` predicate", "H-33",
+            needs=f"define `_ch_{_c}(w, e, pid)`",
+            law="a named channel with no predicate is the S61 debt wearing a roster entry -- an "
+                "absent predicate must REFUSE, never quietly match nobody")
+    CHANNEL_PREDICATES[_c] = _fn
+del _c, _fn
+
+
+def observers_for(w: "World", e: "Event", mode: str, everyone: list) -> list:
+    """Who witnesses this Event, under the fan-out mode `H-33` declares.
+
+    `total` is the specified behaviour and the sweep's control. The other two arms are the hole's
+    own sweep points. A mode outside the three REFUSES -- an unrecognised mode silently falling
+    back to `total` would make every measurement of this sweep read the control."""
+    if mode == "total":
+        return list(everyone)
+    if mode == "presence_only":
+        live = ("co_located",)
+    elif mode == "all_five":
+        live = tuple(roster("witness_channel_predicates"))
+    else:
+        raise Unspecified(
+            f"fan-out mode {mode!r} is not one of H-33's declared sweep points", "H-33",
+            needs="total | presence_only | all_five",
+            law="H-33's sweep is `total / presence-only / all five`. A mode outside it that fell "
+                "back to `total` would make every reading of this sweep report the control")
+    return [pid for pid in everyone
+            if any(CHANNEL_PREDICATES[c](w, e, pid) for c in live if c in CHANNEL_PREDICATES)]
+
+
 def as_scenes(produced: list, actor: str, w: "World") -> list:
     """Normalise what `choose` returned into Scenes. `W17`.
 
@@ -2827,8 +2972,20 @@ class SeasonDriver:
                     TRACE.note(f"{c.id} has no deposit Event to chain its decay to; skipped "
                                "rather than rooted at the campaign seed")
                     continue
+                # ⚠ AN EFFECT THAT TOUCHED NOTHING DID NOT DO THE THING, AND MUST NOT EMIT THE
+                # SUCCESS. That rule is already enforced twice in this file -- `_fold` applies it
+                # to a verb whose effect wrote nothing, and `rosters.yaml`'s
+                # `conditional_emission_rows` uses the same argument to exempt `(Record, ttl)`.
+                # It was violated here, at `H-40`'s OWN DECLARED `0` SWEEP POINT: at
+                # `claim_decay_per_season = 0` every claim still emitted `claim.decayed` every
+                # season while `max(0, c.confidence - 0)` changed nothing, so the control arm of
+                # the sweep published a decay that did not happen. A sweep point that fabricates
+                # is worse than one that is unexecuted. Found by the `W4` adversarial pass.
+                after = max(0, c.confidence - decay)
+                if after == c.confidence:
+                    continue
                 w.write("confidence", WriteClass.MATTER,
-                        lambda c=c: setattr(c, "confidence", max(0, c.confidence - decay)),
+                        lambda c=c, after=after: setattr(c, "confidence", after),
                         record_kind="Claim", fieldname="confidence", driver="Event",
                         emits="claim.decayed", subject=c.id, causes=[prior])
 
@@ -2846,13 +3003,17 @@ class SeasonDriver:
             # rather than printed (`G3`). Handing every emission the root instead is what made the
             # `W9` artifact's entire log unwalkable.
             prior_wear = w.last_emission_of("condition.worn", s.id)
-            w._emitted_by_write.clear()
+            _mark = len(w._emitted_by_write)
             w.write("condition", WriteClass.MATTER,
                     lambda s=s, wear=wear: setattr(s, "condition", max(0, s.condition - wear)),
                     record_kind="Site", fieldname="condition", driver="Event",
                     emits="condition.worn", subject=s.id,
                     causes=[prior_wear] if prior_wear else [ROOT])
-            worn_ev = w._emitted_by_write[-1] if w._emitted_by_write else None
+            # ⚠ THE TAIL SINCE THIS WRITE, NOT THE WHOLE BUFFER. The first version CLEARED the
+            # buffer before each site so `[-1]` would be this site's wear — which also threw away
+            # every earlier emission of the barrier, and the barrier's emissions are what MATTER
+            # must return so they can be witnessed. Marking the position keeps both.
+            worn_ev = w._emitted_by_write[_mark] if len(w._emitted_by_write) > _mark else None
             # S12.1 / L5: A BAND EDGE CROSSING IS AN EMISSION, NOT A WRITE.
             #
             # ⚠ REV 3. Rev 2 appended a row for EVERY site EVERY season regardless of whether
@@ -2880,6 +3041,21 @@ class SeasonDriver:
                                    alternatives=["write the consequence directly (L5 forbids: a crossing MAY NEVER PRODUCE AN OUTCOME)",
                                                  "silently drop the verb from the set (then nobody can witness it)"])
         w._in_parallel_map = False
+        # ⚠ THE EMISSIONS `write()` MADE ARE PART OF WHAT MATTER PRODUCED, AND LEAVING THEM OUT
+        # MADE THEM UNWITNESSABLE. `emitted` is built by hand from explicit `append`s; `W4` moved
+        # emission into `write()`, which appends to `w.log` and to this buffer but not to the list
+        # `season()` hands to WITNESS. The measurable consequence: `condition.worn` and
+        # `claim.decayed` were the ONLY kinds in the log that reached NO ledger — about a hundred
+        # events a season that existed and that nobody could witness, in a design whose §61
+        # fan-out is TOTAL. Found by measuring W6's starting state, not by reading.
+        #
+        # ⚠ AND `claim.deposited` IS DELIBERATELY NOT HERE. It is emitted during WITNESS, about a
+        # person's own interior ledger. Fanning it would mean everyone learns what everyone else
+        # remembers, AND it would close a loop — a deposit emits, the emission is witnessed, that
+        # deposit emits — growing without bound. MATTER's barrier ends here; WITNESS's own
+        # emissions are not MATTER's output.
+        emitted.extend(w._emitted_by_write)
+        w._emitted_by_write.clear()
         TRACE.step("MATTER", "leave")
         w.frozen = True     # S26.2 -- frozen from END OF MATTER to START OF RESOLVE
         return emitted
@@ -3198,8 +3374,17 @@ class SeasonDriver:
             # uncontested attempt routes to a GATE, never to an Ob = 0 roll.
             mult = w.fixtures.get("obstacle_refusal_multiple")
             if a.obstacle is not None and a.obstacle > mult * max(a.pool or 0, 0):
+                # ⚠ `[a.id]`, NOT `[ROOT]`. A REFUSED ATTEMPT HAS AN ANTECEDENT — THE ATTEMPT.
+                # This read `[ROOT]`, and the rule against it is stated TWICE in this file within
+                # sixteen lines: the contest branch below passes `causes=[a.id]`, and `_fold`
+                # carries a paragraph saying `[ROOT]` in an act-caused emission is "`[]` wearing a
+                # marker". The rule was written on both sides of this line and violated between
+                # them. It made `W4`'s headline claim — *"`[ROOT]` only for the seed and a licensed
+                # clock's genuine first emission"* — FALSE OF THE DESIGN while true of the fixture,
+                # because `Act.obstacle` defaults to `None` and the computed chooser never sets
+                # one, so no test could reach it. Found by the `W4` adversarial pass.
                 out.append(Event(H(w.world_seed, w.tick, a.actor, f"refused:{a.id}"),
-                                 "attempt.refused", a.actor, [], [ROOT], w.tick))
+                                 "attempt.refused", a.actor, [], [a.id], w.tick))
                 TRACE.decision(f"{a.actor} attempted Ob={a.obstacle} against Pool={a.pool}",
                                "S27.4", chose="refuse; the season is spent",
                                alternatives=["roll it anyway", "route to an Ob=0 roll"])
@@ -3276,15 +3461,20 @@ class SeasonDriver:
         index = w.cache_at_barrier("presence", lambda: {
             r: Query.presence(w, r) for r in w.rungs})
         everyone = list(w.persons)
+        # `W6` / `H-33`. THE CHANNELS HAVE PREDICATES NOW, and the mode says which are live.
+        # `total` is the specified behaviour and the sweep's control; the presence index this
+        # barrier has always built was UNUSED until this line.
+        mode = w.fixtures.get("fan_out_mode")
         fan: list[tuple[str, Event, str]] = [
-            (pid, e, "UNSPECIFIED-CHANNEL") for e in events for pid in everyone]
+            (pid, e, mode) for e in events for pid in observers_for(w, e, mode, everyone)]
         TRACE.decision(f"fan-out over {len(events)} events -> {len(fan)} deposits", "S28/S61",
-                       chose=f"EVERY event to EVERY person ({len(everyone)}) -- the specified behaviour",
+                       chose=f"mode={mode} over {len(everyone)} persons "
+                             f"({'the specified behaviour' if mode == 'total' else 'a swept arm of H-33'})",
                        alternatives=[
                            "shard per rung (retired: made the parallelism claim unsound)",
-                           "restrict by presence (the index is built and UNUSED -- no channel "
-                           "predicate exists to exclude anyone; S61 names this as the debt)",
-                           f"the five channels {list(WITNESS_CHANNELS)} are named and NONE has a predicate"])
+                           "total (S61's specified behaviour, and H-33's control arm)",
+                           f"the five channels {list(WITNESS_CHANNELS)}, each with the predicate "
+                           "`rosters.yaml: witness_channel_predicates` injects"])
 
         # S28 stage 2: DEPOSIT IS PER-PERSON, into that person's OWN ledger and no other.
         cap = w.fixtures.get("ledger_cap")
@@ -3323,12 +3513,29 @@ class SeasonDriver:
                         emits="claim.deposited", subject=c.id, causes=[e.id])
                 TRACE.claim(pid, e.id, src)
                 deposits += 1
-            if len(p.ledger) > cap:
+            # ⚠ `while`, NOT `if`. THE CAP WAS NOT A CAP. One deposit can mint SEVERAL claims --
+            # `claim_subjects` returns one per `StateChange` under the `per_change` rule -- and a
+            # single `if` pops exactly one, so the ledger settled at 203 against `L = 200`. A cap
+            # that is exceeded by however many subjects the last Event carried is not the bound
+            # `H-09` declares, and every eviction measurement reads off it.
+            while len(p.ledger) > cap:
                 # S20/S34: EVICTION RANKS ON `confidence_live x recency` ONLY, NEVER SALIENCE.
                 # Rev 1 sorted lexicographically on (confidence, when), which is a different
                 # comparator and degenerated to insertion order under a constant confidence.
+                # ⚠ THROUGH THE GATE. This sorted and popped `p.ledger` DIRECTLY — no `write()`
+                # call, on the row `W4` had just made an emitting row. #353 `:1061-1064` is
+                # explicit: *"either the gate applies the write, or direct assignment is made
+                # impossible"*, and eviction was the second half of that sentence going
+                # unenforced. The gate requires an emission only at MATTER, so an INTERIOR
+                # eviction passes without one — which is correct here and is also a finding worth
+                # naming rather than papering over: **a claim leaving a ledger is a real state
+                # change that Part D gives no kind, so nobody can witness a forgetting.** That is
+                # `(Person, claim_ledger)`'s version of `H-86` and is recorded on that row.
+                # Found by the `W4` adversarial pass.
                 p.ledger.sort(key=lambda c: c.confidence * (c.when + 1))
-                p.ledger.pop(0)
+                w.write("claim_ledger", WriteClass.INTERIOR,
+                        lambda p=p: p.ledger.pop(0),
+                        record_kind="Person", fieldname="claim_ledger", driver="Event")
         w._in_parallel_map = False
         # S9.3/S28: WITNESS NEVER TOUCHES A BELIEF. Nothing above writes `beliefs` or
         # `convictions` -- and under rev 2's Partition both are MISSING rows, so an attempt would

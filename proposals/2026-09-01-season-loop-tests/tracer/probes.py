@@ -36,7 +36,8 @@ from shape import (
     Proposition, Query, Question, Record, ROOT, RUNG_KINDS, Rung, STRATA, SeasonDriver,
     ShapeGap, questions_for, make_chooser, Scene, Sensation, resolvable_verbs, standing_of, body_band_penalty,
     Site, StateChange, Step, Tenure, Ungraded, Unowned, Unspecified, View, World,
-    WITNESS_CHANNELS, WriteClass, contest, expect_refusal, sense,
+    CHANNEL_PREDICATES, WITNESS_CHANNELS, WriteClass, contest, expect_refusal,
+    observers_for, sense,
 )
 from trace_log import TRACE
 
@@ -128,11 +129,28 @@ def _run(w: World, choose=NOCHOOSE, n: int = 1, **kw):
        tests="a person with no office, post, command, faction rank or standing must be able to act at all")
 def p1():
     w = tiny_world()
+    made = []
     def choose(p, v, s, ask_budget):
-        return [] if p.id != "p_low" else [Act_(w, p, "speak")]
+        if p.id != "p_low":
+            return []
+        a = Act_(w, p, "speak")
+        made.append(a)
+        return [a]
     r = _run(w, choose)
-    assert r["events"] == 1, r
-    return "PASS: a postless person produced an Act that reached RESOLVE and emitted an Event"
+    # ⚠ HER ACT'S EVENT, NOT THE SEASON'S EVENT COUNT. This asserted `r["events"] == 1`, which was
+    # the same number while an act was the only thing that emitted. `W4` made MATTER emit per write
+    # -- wear and claim decay are Events now -- so the total is 3 and the assertion failed on a
+    # season in which the probe's own claim held perfectly. The claim is *"a postless person
+    # produced an Act that reached RESOLVE and emitted an Event"*, and that is about HER act; a
+    # count of everything was only ever a proxy for it. Now it names the antecedent, which is
+    # stronger than the number it replaces and cannot be moved by anything the world does.
+    assert made, "the chooser was never asked"
+    mine = [e for e in w.log if made[0].id in e.causes]
+    assert len(mine) == 1, (f"{len(mine)} Event(s) name her act as their cause", r)
+    return (f"PASS: a postless person produced an Act that reached RESOLVE and emitted an Event "
+            f"({mine[0].kind}), whose `causes[]` names the act. The season emitted "
+            f"{r['events']} Events in total -- the rest are the world's licensed clocks (`W4`), "
+            f"and none of them is hers")
 
 
 def Act_(w, p, verb, key: str = "", **kw):
@@ -482,14 +500,35 @@ def p14():
 @probe("P15", "a person's private act stays private", "S61", by="no-signature",
        tests="something said in private must be able to stay private")
 def p15():
+    # ⚠ `W6`. THIS RAISED `Unspecified` BECAUSE FOUR OF THE FIVE CHANNELS HAD NO PREDICATE, and
+    # `S61` is the law it cited: *"WITNESS AS SPECIFIED FANS EVERY EVENT TO EVERY PERSON. Nothing
+    # said in private is private. A WRAPPER DOES NOT FIX THIS AND MUST NOT BE PRESENTED AS FIXING
+    # IT."* The five now have predicates -- injected, declared in `rosters.yaml`, swept by `H-33`
+    # -- so the probe EXECUTES the exclusion rather than reporting its absence. What it must not
+    # do is claim the design supplies them: it does not, `H-33` stays `assumption`, and `total`
+    # remains the default because that is the specified behaviour.
     w = tiny_world()
-    unspecified = [c for c in WITNESS_CHANNELS if c != "co_located"]
-    raise Unspecified(
-        f"four of the five witness channels have no predicate: {unspecified}",
-        "S61",
-        needs="a channel predicate that can EXCLUDE a person",
-        law="S61 -- WITNESS AS SPECIFIED FANS EVERY EVENT TO EVERY PERSON. Nothing said in private is private. A WRAPPER DOES NOT FIX THIS AND MUST NOT BE PRESENTED AS FIXING IT",
-    )
+    e = Event(H(w.world_seed, w.tick, "p_high", "probe:p15"), "speech.made", "p_high", [],
+              [ROOT], w.tick)
+    everyone = list(w.persons)
+    total = observers_for(w, e, "total", everyone)
+    narrow = observers_for(w, e, "presence_only", everyone)
+    five = observers_for(w, e, "all_five", everyone)
+    assert set(total) == set(everyone), "the control arm is not the specified behaviour"
+    assert len(narrow) < len(total), (
+        "no channel predicate EXCLUDES anyone -- which is the thing S61 says a wrapper cannot fix")
+    assert set(narrow) <= set(five) <= set(total), (
+        "the arms are not nested; a wider channel set must not exclude someone a narrower one "
+        "included")
+    unspecified = [c for c in WITNESS_CHANNELS if c not in CHANNEL_PREDICATES]
+    assert not unspecified, f"channels still without a predicate: {unspecified}"
+    return (f"PASS, BY CONSTRUCTION: all five channels {sorted(CHANNEL_PREDICATES)} carry a "
+            f"predicate, and one of them EXCLUDES -- the same Event reaches {len(total)} person(s) "
+            f"under `total` (S61's specified behaviour, and `H-33`'s control) and {len(narrow)} "
+            f"under `presence_only`. ⚠ THE DESIGN STILL SUPPLIES NO PREDICATE: these are an "
+            f"INJECTED default, `H-33` stays `assumption`, and `total` remains the default because "
+            f"it is what #353 specifies. What is closed is that an exclusion is now EXPRESSIBLE "
+            f"and swept, not that #353 said how")
 
 
 @probe("P16", "regard moves per-knower", "S20", by="construction",
@@ -525,6 +564,7 @@ def p18():
     w = tiny_world()
     site = w.sites["site_harbour"]
     floors = w.fixtures.get("band_floors")[site.kind]
+    _seed_near_floor(w, site)      # a harness fixture; see the helper for why. The loop stays.
     before = Query.verbs(w, site, floors)
     n = 0
     mine = lambda: [c for c in w.crossings if c[0] == site.id]
@@ -1204,6 +1244,26 @@ def f19():
 # W-SERIES -- THE WORLD. T8's churn, the three licensed clocks.
 # ===========================================================================
 
+def _seed_near_floor(w, site) -> None:
+    """Put a site one season's wear above its highest band floor.
+
+    ⚠ WHY THIS EXISTS, AND WHY IT IS A FIXTURE AND NOT A FUDGE. Two probes (`P18`, `W1`) prove a
+    structural claim by GRINDING THE WORLD until a floor is crossed — twenty-odd seasons at the
+    injected wear rate. That was cheap while a season emitted a handful of Events. After `W4` made
+    MATTER emit per write, and with `W6`'s default arm keeping the fan-out total (because that is
+    what #353 specifies), the two of them cost 71 SECONDS between them and were the slowest things
+    in the suite by two orders of magnitude.
+    Neither probe's claim depends on HOW the site reached the floor — `W1`'s own return text says
+    so: *"the COUNT is a function of the injected `wear_per_season` fixture and moves with it —
+    the STRUCTURAL claim (a verb leaves) does not."* Both keep their loop, so a crossing that stops
+    firing is still reported rather than passing vacuously. One owner, because this is the second
+    site and a third would be a pattern (§8)."""
+    floors = w.fixtures.get("band_floors")[site.kind]
+    highest = max(floors.values())
+    if site.condition > highest:
+        site.condition = highest + w.fixtures.wear(site.kind)
+
+
 @probe("W1", "a site decays until a verb leaves its set", "S12.1", by="construction",
        tests="a place must be able to fall into disrepair until things can no longer be done there")
 def w1():
@@ -1212,6 +1272,7 @@ def w1():
     site = w.sites["site_harbour"]
     floors = w.fixtures.get("band_floors")[site.kind]
     assert "bulk_shipping" in Query.verbs(w, site, floors)
+    _seed_near_floor(w, site)      # a harness fixture; see the helper for why. The loop stays.
     n = 0
     while "bulk_shipping" in Query.verbs(w, site, floors) and n < 200:
         _run(w); n += 1
@@ -1898,6 +1959,15 @@ def a31b():
     for rate in (5, 10, 25):
         f = DEFAULT_FIXTURES.sweep("wear_per_season",
                                    {"harbour": rate, "seam": rate, "body": rate})
+        # ⚠ NOT `_seed_near_floor` HERE, AND THE DIFFERENCE MATTERS. `P18` and `W1` prove a
+        # STRUCTURAL claim and their season count is incidental, so seeding is free. THIS PROBE'S
+        # MEASUREMENT IS THE COUNT — it sweeps the wear rate and reports how many seasons each
+        # takes — so seeding would destroy the thing being measured.
+        # What is safe is narrowing the WITNESS fan-out: wear is a MATTER write on a Site and does
+        # not depend on who witnesses it, so `H-33`'s `presence_only` arm leaves every number in
+        # `out` identical while making each of the ~150 seasons cheap. Without it this probe took
+        # longer than the entire rest of the suite once `W4` landed.
+        f = f.sweep("fan_out_mode", "presence_only")
         w = tiny_world(f)
         scale = w.fixtures.get("condition_scale")
         site = w.sites["site_harbour"]
@@ -2195,6 +2265,10 @@ def a31c():
             "harbour": {"bulk_shipping": floor, "fishing": 100},
             "seam": {"deep_mining": 700, "surface_gleaning": 50},
             "body": {"full_operations": 800, "limited": 500, "withdrawal_only": 100}})
+        # As `A31b`: the season COUNT is this probe's measurement, so it may not be seeded — but
+        # a band crossing does not depend on who witnesses it, so `H-33`'s `presence_only` arm
+        # leaves every number identical and makes the ~80 seasons per point affordable.
+        f = f.sweep("fan_out_mode", "presence_only")
         w = tiny_world(f)
         site = w.sites["site_harbour"]
         n = 0
