@@ -4151,3 +4151,56 @@ def test_w10_no_playable_verdict_rests_on_an_undeclared_row():
     print(f"\n  W10 — {authored} rows declared, {undeclared} awaiting an author. "
           "NOT-ASSESSED now means the second, which is a fact about authoring.")
     assert authored, "no row is declared at all — the overlay is not being read"
+
+
+def test_the_corpus_runs_and_three_worlds_produce_one_behaviour():
+    """JORDAN, 2026-09-02: *"shouldn't we consider running all NPCs and all arcs in our test runs?
+    a larger surface introduces more complexity, but given our goals, what solves one may solve
+    another while providing more pushback as to whether something is the RIGHT solve."*
+
+    This is that pushback, pinned. `corpus_run.py` builds a world at each case's declared `scale`
+    and folds real seasons through it — EXECUTION, where `run_cases.py` does GRADING.
+
+    ⚠ THE CONTROLLED CLAIM IS ABOUT WORLDS, NOT CASES. `build_at` uses `scale` and the seed and
+    nothing else, because `scale` is the corpus's only structured field, so 143 cases collapse to
+    three distinct worlds. "86 cases agree" would be a confound; "three worlds six rungs apart
+    agree" is the measurement (`H-96`).
+
+    This test goes RED the day the ladder starts mattering, the day a fourth world becomes
+    reachable, or the day an eighth verb fires — each of which is progress, and each of which
+    must re-derive the numbers rather than reuse them."""
+    import corpus_run as C
+    import run_cases as R
+    rows = [C.run_case(c) for lane in ("NPC", "ARC") for c in R.load_cases(lane)]
+    assert not [r for r in rows if r["status"] == "ERROR"], (
+        f"the corpus runner errored on {[(r['id'], r['why']) for r in rows if r['status']=='ERROR'][:3]}"
+        " — an instrument defect, not a finding about the design")
+    ran = [r for r in rows if r["status"] == "RAN"]
+    unrep = [r for r in rows if r["status"] == "UNREPRESENTABLE"]
+    assert ran and unrep, "the corpus produced no split at all; the runner is not running"
+
+    # `H-95` — the two scale vocabularies. An unrepresentable scale must REFUSE, not be mapped.
+    assert {r["scale"] for r in unrep} <= {"faction", "world"}, (
+        f"a scale other than faction/world is unrepresentable: "
+        f"{sorted({r['scale'] for r in unrep})} — either `rung_kinds` moved or the corpus did")
+    assert not ({r["scale"] for r in ran} & {"faction", "world"}), (
+        "a faction- or world-scale case RAN — something is silently mapping an unrepresentable "
+        "scale onto a rung, which manufactures a pass for 40% of the corpus (H-95)")
+
+    # `H-96` — three worlds, one behaviour.
+    worlds = {r["scale"] for r in ran}
+    sigs = {tuple(r["verbs"]) for r in ran}
+    assert len(worlds) >= 3, f"fewer than three distinct worlds reachable: {worlds}"
+    assert len(sigs) == 1, (
+        f"the worlds no longer agree — {len(sigs)} distinct verb sets across {len(worlds)} worlds. "
+        "That is PROGRESS and `H-96` must be re-measured rather than left standing")
+
+    # The three-way split of the verb table, which is where the loss actually is.
+    ever = {v for r in ran for v in r["verbs"]}
+    foldable = set(S.resolvable_verbs())
+    assert ever < foldable < set(S.VERB_TABLE), (
+        "the strict nesting broke: every chosen verb must be foldable and every foldable verb must "
+        "be in the table")
+    assert foldable - ever >= {"confer", "convene", "dispatch", "revoke"}, (
+        f"a governance verb is now chosen somewhere in the corpus ({sorted(foldable - ever)}) — "
+        "`H-71` has moved and both it and `H-96` need re-deriving")

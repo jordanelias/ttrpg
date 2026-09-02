@@ -1096,6 +1096,32 @@ rows:
     cite:      "FOUND BY `W8`, BY EXECUTION, AND ONLY BECAUSE `W8` MADE SITE CONDITION ECONOMICALLY LOAD-BEARING. Ten seasons of `tiny_world` under the computed chooser emit 47,213 clock events against 253 acts, and the seven verbs that fire do so EXACTLY 36 TIMES EACH -- a flat spread across five people with different convictions, which is the signature of a chooser offering one of every available verb rather than pursuing anything. The cause is one measurement: `payload` is None and `changes` is empty on every minted Act. ⚠ `work` IS THE WORKED CASE and it is the rule this file states twice: §27.3 defers a delta to the fold's accumulator and clamps once, `_eff_work` reports the site so the deferral does not read as a no-op -- and with no delta declared, NOTHING IS ACCUMULATED, so `site.worked` is an emitted success for a repair that did not happen. Site condition is a one-way ratchet in every run: wear falls it every season and the only two verbs that can raise it are `work` (minted bare) and `restore` (whose precondition the fold cannot evaluate at all). ⚠ THIS IS NOT A CHOOSER BUG TO PATCH: §F2 genuinely does not say where operands come from, and inventing a rule here would be a second resolver (S27.2). `absent` with no default, because every option -- the act declares them, the verb table declares them, the world supplies them at fold time -- is a different game."
     source:    "W8 -- found by execution"
 
+  - id:        H-95
+    tier:      0
+    hole:      "THE CORPUS AND THE ARCHITECTURE USE TWO SCALE VOCABULARIES AND NOTHING RECONCILES THEM. Every one of the 143 cases declares a `scale:`; `rung_kinds` has eight members and `faction` and `world` are not among them, so 57 cases (40%) — 47 `faction`, 10 `world` — name a scale the containment ladder cannot carry"
+    kind:      "COLLISION"
+    owner:     "the corpus (the `scale:` field) and S10 (`rung_kinds`)"
+    grade:     "absent"
+    default:   ""
+    site:      ""
+    sweep:     []
+    unblocks:  "57 of 143 corpus cases, which cannot be instantiated as worlds at all"
+    cite:      "FOUND BY RUNNING THE WHOLE CORPUS (corpus_run.py), at Jordan's direction 2026-09-02: *shouldn't we consider running all NPCs and all arcs in our test runs?* ⚠ A FACTION IS NOT UNMODELLED, AND THAT IS THE SHARP PART. It is the LATERAL GRAPH — `commit` Tenures to a Proposition, read by `Query.lateral` — so the 47 faction-scale characters are representable in principle. But `Query.lateral`'s own docstring says it is *S6.2/S38 -- THE LATERAL GRAPH. Not governed by R-1/R-2. Resolver-side, World first, therefore UNREACHABLE FROM choose() BY CONSTRUCTION*, and probe `F11` raises `Forbidden` on *reading faction strength from inside choose()*. So for 47 cases the character's OWN SCALE OF ACTION is one their deliberation cannot see — the same shape as `H-71`, one noun along, and now measured across the corpus rather than asserted in a probe. `world` has no model at all. ⚠ NOT RESOLVED BY MAPPING: folding `faction` onto `settlement` would manufacture a pass for the largest single block of the corpus, so `corpus_run` REFUSES an unrepresentable scale by name and the count is the finding (§42.2's polarity rule). `absent` with no default, because choosing between *give factions a rung*, *make the lateral graph person-visible* and *re-scale the corpus* is a design call."
+    source:    "corpus run, Jordan-directed 2026-09-02"
+
+  - id:        H-96
+    tier:      0
+    hole:      "THE RUNG LADDER DECIDES NOTHING ABOUT BEHAVIOUR. Three worlds spanning six rungs — person, settlement, realm — produce ONE verb set and exactly 42 acts each. Whatever else the containment ladder is doing, it is not changing what anybody does"
+    kind:      "COLLISION"
+    owner:     "the resolver, and the H-89 `scale:` column that reaches none of it"
+    grade:     "measured"
+    default:   ""
+    site:      "corpus_run.py — DISTINCT WORLDS 3, DISTINCT VERB SETS 1, acts per case [42]"
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      "FOUND BY RUNNING THE WHOLE CORPUS. Command: `python corpus_run.py`. ⚠ THE CASE COUNT IS NOT THE WORLD COUNT AND THE FIRST DRAFT OF THIS ROW SAID `86 WORLDS AGREE`, WHICH WAS A CONFOUND: `build_at` derives a world from `scale` and the seed and nothing else, because `scale` is the only STRUCTURED field the corpus carries — `temporal`, `who_acts`, `knowledge` and `ends_when` are free English with 143 distinct values out of 143 — so cases at one scale get the SAME world. 143 cases collapse to THREE worlds. The controlled claim is the narrow one: three genuinely different worlds, six rungs apart, identical behaviour. ⚠ AND THE 32 VERBS SPLIT THREE WAYS: 20 have no predicate or effect at all, 5 the fold CAN execute but nobody ever CHOOSES — confer, convene, dispatch, revoke, destroy_record — and 7 actually happen. The middle five are `H-71` measured at corpus scale rather than asserted in one test: four of them are the governance verbs, and no person can form one in any world. ⚠ WHAT THIS SAYS ABOUT THE MILESTONE: `headless` reports *verbs the fold can execute: 12 of 32*, which reads as progress. The corpus says SEVEN ever happen, in every world, identically. Jordan's argument for running the whole surface is the reason the second number exists."
+    source:    "corpus run, Jordan-directed 2026-09-02"
+
 # ---------------------------------------------------------------------------
 # THE DISCHARGE MAP -- guardrail G8.
 # "Every defect gets a register row, or is discharged with a named section."
