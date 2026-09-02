@@ -32,7 +32,7 @@ from shape import (
     CLAIM_SOURCES, Candidate, Claim, Collision, ContestError, DEFAULT_FIXTURES, Event,
     Fixtures, Forbidden, H, NoProducer, Office, Person, VERB_TABLE,
     Proposition, Query, Question, Record, ROOT, RUNG_KINDS, Rung, STRATA, SeasonDriver,
-    ShapeGap, questions_for, make_chooser, Sensation, resolvable_verbs, standing_of,
+    ShapeGap, questions_for, make_chooser, Sensation, resolvable_verbs, standing_of, body_band_penalty,
     Site, StateChange, Step, Tenure, Ungraded, Unowned, Unspecified, View, World,
     WITNESS_CHANNELS, WriteClass, contest, expect_refusal, sense,
 )
@@ -717,17 +717,34 @@ def p31():
 
 
 @probe("P32", "a person's own condition narrows their options in a fixed order", "S12",
-       by="no-signature",
+       by="construction",
        tests="a character's own condition must be able to degrade across a season so that their available actions narrow predictably")
 def p32():
     w = tiny_world()
-    person_fields = {f for f in Person.__dataclass_fields__}
-    raise Unspecified(
-        "a banded scalar on Person",
-        "S12",
-        needs="the S12.1 verb gate is defined ONLY over a Site's `condition`",
-        law=f"S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are {sorted(person_fields)} -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third",
-    )
+    p = w.persons["p_mid"]
+    fx, k = w.fixtures, w.fixtures.get("act_budget")
+    v = View(p.id, [], fx.get("view_k"))
+    floors = sorted(fx.get("band_floors")["body"].values(), reverse=True)
+    # Walk DOWN the bands, one at a time, and record what the person may still do.
+    seq = []
+    for band in [floors[0] + 1] + [f - 1 for f in floors]:
+        p.body = band
+        seq.append((band, body_band_penalty(p, fx), Query.budget(p, v, k, fx)))
+    penalties = [n for _b, n, _q in seq]
+    budgets = [q for _b, _n, q in seq]
+    assert penalties == sorted(penalties), f"the narrowing is not ordered: {seq}"
+    assert budgets == sorted(budgets, reverse=True), f"the budget is not monotone: {seq}"
+    assert len(set(penalties)) == len(floors) + 1, f"a band is not distinguished: {seq}"
+    assert budgets[-1] >= 1, "a dying person is deleted from the season rather than narrowed"
+    return (f"PASS BY CONSTRUCTION: {seq} as (body, bands fallen, scenes). ⚠ REVISIONS 1-4 RAISED "
+            "`Unspecified` HERE on the grounds that 'Person's declared fields ... none is a banded "
+            "scalar'. THAT WAS TRUE WHEN WRITTEN AND `H-38` CLOSED IT -- 'the answer is YES; "
+            "`Site.condition` is the model' -- and `W5` spent the closure: `(Person, body)` is a "
+            "Part D row, `body_band_penalty` bands it on THE SAME `band_floors` table the site "
+            "gate uses, and the order is fixed because a band is a floor you are at or above. No "
+            "second band scheme was invented, which is what `H-38` was closed to avoid. ⚠ THE OLD "
+            "LAW TEXT WAS SELF-CONTRADICTING IN THE PUBLISHED ARTIFACT: it computed Person's "
+            "field list, PRINTED `body` in it, and then asserted none was a banded scalar")
 
 
 @probe("P33", "an act costs more when it is bigger", "S26.3", by="no-signature",
@@ -2154,11 +2171,32 @@ def p43():
 
 
 @probe("P42", "the act budget varies by office, condition and distance", "S26.3",
-       by="no-signature",
+       by="construction",
        tests="a wounded or distant character must be able to get fewer actions in a season than a healthy one at home")
 def p42():
-    raise Collision(
-        "S26's signature vs S26.3's consequence 1", "S26 / S26.3",
-        needs="a ruling on which side gives way -- the person-side signature, or the variation",
-        law="S26 types `budget : (Person, View) -> int` WITH NO WORLD. S26.3 consequence 1 says it varies by OFFICE, CONDITION and DISTANCE TRAVELLED, and that 'a wounded duke gets fewer acts than a healthy one WITHOUT ANYBODY STORING A NUMBER'. ALL THREE INPUTS ARE RESOLVER-SIDE: office-holding is a `hold` Tenure in the store, `condition` belongs to a Site, and travel legs S22.3 says HAVE NO OWNER AT ALL. A person-side function with no World can read none of them, so the budget is either a constant or the signature is wrong. Revisions 1-3 suppressed this into a docstring that named a probe which did not exist",
-    )
+    w = tiny_world()
+    p = w.persons["p_mid"]
+    fx, k = w.fixtures, w.fixtures.get("act_budget")
+    v = View(p.id, [], fx.get("view_k"))
+    base = Query.budget(p, v, k, fx)
+    w.add_tenure(Tenure("t_p42", p.id, "off_x", "hold", since=0))
+    with_office = Query.budget(p, v, k, fx)
+    p.tenures = [t for t in p.tenures if t.id != "t_p42"]
+    floors = sorted(fx.get("band_floors")["body"].values(), reverse=True)
+    p.body = floors[-1] - 1
+    wounded = Query.budget(p, v, k, fx)
+    p.body = 1000
+    p.travel_leg = ["a", "b"]
+    travelled = Query.budget(p, v, k, fx)
+    assert with_office > base > wounded and base > travelled, (
+        base, with_office, wounded, travelled)
+    return (f"PASS BY CONSTRUCTION: {base} at rest · {with_office} holding an office · {wounded} "
+            f"wounded to the bottom band · {travelled} after two travel legs. ⚠ REVISIONS 1-4 "
+            "RAISED A `Collision` HERE, and it was real at the time: S26 types `budget : (Person, "
+            "View) -> int` with NO World while S26.3 says it varies by office, condition and "
+            "distance, and all three LOOKED resolver-side. The resolution was not a ruling on "
+            "which side gives way -- it is that THE STORE WAS IN THE WRONG PLACE. #353 `:730` "
+            "gives Person 'every Tenure whose subject they are', so `W5` moved the tenure store "
+            "onto its subject and both halves became true at once with no signature changed. "
+            "That is PLAN §3.3's smaller amendment; V2 §F3 took the larger one and made `budget` "
+            "a second World-taking function, which `:634` forbids")

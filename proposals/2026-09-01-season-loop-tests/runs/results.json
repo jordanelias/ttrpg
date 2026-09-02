@@ -302,15 +302,13 @@
    "name": "Orm",
    "scale": "person",
    "source": "NPC1.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "NOT-ASSESSED",
    "rows": 8,
    "core": 4,
    "core_routed": 1,
    "core_unmapped": 3,
-   "core_blocked": 1,
-   "blockers": [
-    "P32"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "A practitioner's ongoing exposure to the substrate damage he repairs must be able to degrade his personal condition cumulatively across many seasons, distinct from the cost of any single act of repair.",
@@ -318,14 +316,12 @@
      "probe": "P32",
      "verdict": {
       "id": "P32",
-      "verdict": "GAP",
-      "detail": "a banded scalar on Person",
-      "kind": "UNSPECIFIED",
+      "verdict": "PASS",
+      "detail": "PASS BY CONSTRUCTION: [(801, 0, 5), (799, 1, 4), (499, 2, 3), (99, 3, 2)] as (body, bands fallen, scenes). \u26a0 REVISIONS 1-4 RAISED `Unspecified` HERE on the grounds that 'Person's declared fields ... none is a banded scalar'. THAT WAS TRUE WHEN WRITTEN AND `H-38` CLOSED IT -- 'the answer is YES; `Site.condition` is the model' -- and `W5` spent the closure: `(Person, body)` is a Part D row, `body_band_penalty` bands it on THE SAME `band_floors` table the site gate uses, and the order is fixed because a band is a floor you are at or above. No second band scheme was invented, which is what `H-38` was closed to avoid. \u26a0 THE OLD LAW TEXT WAS SELF-CONTRADICTING IN THE PUBLISHED ARTIFACT: it computed Person's field list, PRINTED `body` in it, and then asserted none was a banded scalar",
+      "kind": null,
       "section": "S12",
       "title": "a person's own condition narrows their options in a fixed order",
-      "needs": "the S12.1 verb gate is defined ONLY over a Site's `condition`",
-      "law": "S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are ['beliefs', 'body', 'capability', 'convictions', 'id', 'ledger', 'marks', 'name', 'stance', 'tenures', 'travel_leg', 'weight'] -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third",
-      "by": "no-signature",
+      "by": "construction",
       "tests": "a character's own condition must be able to degrade across a season so that their available actions narrow predictably"
      }
     },
@@ -678,9 +674,8 @@
    "core": 3,
    "core_routed": 3,
    "core_unmapped": 0,
-   "core_blocked": 2,
+   "core_blocked": 1,
    "blockers": [
-    "P32",
     "P33"
    ],
    "routed": [
@@ -707,14 +702,12 @@
      "probe": "P32",
      "verdict": {
       "id": "P32",
-      "verdict": "GAP",
-      "detail": "a banded scalar on Person",
-      "kind": "UNSPECIFIED",
+      "verdict": "PASS",
+      "detail": "PASS BY CONSTRUCTION: [(801, 0, 5), (799, 1, 4), (499, 2, 3), (99, 3, 2)] as (body, bands fallen, scenes). \u26a0 REVISIONS 1-4 RAISED `Unspecified` HERE on the grounds that 'Person's declared fields ... none is a banded scalar'. THAT WAS TRUE WHEN WRITTEN AND `H-38` CLOSED IT -- 'the answer is YES; `Site.condition` is the model' -- and `W5` spent the closure: `(Person, body)` is a Part D row, `body_band_penalty` bands it on THE SAME `band_floors` table the site gate uses, and the order is fixed because a band is a floor you are at or above. No second band scheme was invented, which is what `H-38` was closed to avoid. \u26a0 THE OLD LAW TEXT WAS SELF-CONTRADICTING IN THE PUBLISHED ARTIFACT: it computed Person's field list, PRINTED `body` in it, and then asserted none was a banded scalar",
+      "kind": null,
       "section": "S12",
       "title": "a person's own condition narrows their options in a fixed order",
-      "needs": "the S12.1 verb gate is defined ONLY over a Site's `condition`",
-      "law": "S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are ['beliefs', 'body', 'capability', 'convictions', 'id', 'ledger', 'marks', 'name', 'stance', 'tenures', 'travel_leg', 'weight'] -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third",
-      "by": "no-signature",
+      "by": "construction",
       "tests": "a character's own condition must be able to degrade across a season so that their available actions narrow predictably"
      }
     },
@@ -7259,14 +7252,12 @@
      "probe": "P32",
      "verdict": {
       "id": "P32",
-      "verdict": "GAP",
-      "detail": "a banded scalar on Person",
-      "kind": "UNSPECIFIED",
+      "verdict": "PASS",
+      "detail": "PASS BY CONSTRUCTION: [(801, 0, 5), (799, 1, 4), (499, 2, 3), (99, 3, 2)] as (body, bands fallen, scenes). \u26a0 REVISIONS 1-4 RAISED `Unspecified` HERE on the grounds that 'Person's declared fields ... none is a banded scalar'. THAT WAS TRUE WHEN WRITTEN AND `H-38` CLOSED IT -- 'the answer is YES; `Site.condition` is the model' -- and `W5` spent the closure: `(Person, body)` is a Part D row, `body_band_penalty` bands it on THE SAME `band_floors` table the site gate uses, and the order is fixed because a band is a floor you are at or above. No second band scheme was invented, which is what `H-38` was closed to avoid. \u26a0 THE OLD LAW TEXT WAS SELF-CONTRADICTING IN THE PUBLISHED ARTIFACT: it computed Person's field list, PRINTED `body` in it, and then asserted none was a banded scalar",
+      "kind": null,
       "section": "S12",
       "title": "a person's own condition narrows their options in a fixed order",
-      "needs": "the S12.1 verb gate is defined ONLY over a Site's `condition`",
-      "law": "S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are ['beliefs', 'body', 'capability', 'convictions', 'id', 'ledger', 'marks', 'name', 'stance', 'tenures', 'travel_leg', 'weight'] -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third",
-      "by": "no-signature",
+      "by": "construction",
       "tests": "a character's own condition must be able to degrade across a season so that their available actions narrow predictably"
      }
     },
@@ -9040,14 +9031,12 @@
      "probe": "P32",
      "verdict": {
       "id": "P32",
-      "verdict": "GAP",
-      "detail": "a banded scalar on Person",
-      "kind": "UNSPECIFIED",
+      "verdict": "PASS",
+      "detail": "PASS BY CONSTRUCTION: [(801, 0, 5), (799, 1, 4), (499, 2, 3), (99, 3, 2)] as (body, bands fallen, scenes). \u26a0 REVISIONS 1-4 RAISED `Unspecified` HERE on the grounds that 'Person's declared fields ... none is a banded scalar'. THAT WAS TRUE WHEN WRITTEN AND `H-38` CLOSED IT -- 'the answer is YES; `Site.condition` is the model' -- and `W5` spent the closure: `(Person, body)` is a Part D row, `body_band_penalty` bands it on THE SAME `band_floors` table the site gate uses, and the order is fixed because a band is a floor you are at or above. No second band scheme was invented, which is what `H-38` was closed to avoid. \u26a0 THE OLD LAW TEXT WAS SELF-CONTRADICTING IN THE PUBLISHED ARTIFACT: it computed Person's field list, PRINTED `body` in it, and then asserted none was a banded scalar",
+      "kind": null,
       "section": "S12",
       "title": "a person's own condition narrows their options in a fixed order",
-      "needs": "the S12.1 verb gate is defined ONLY over a Site's `condition`",
-      "law": "S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are ['beliefs', 'body', 'capability', 'convictions', 'id', 'ledger', 'marks', 'name', 'stance', 'tenures', 'travel_leg', 'weight'] -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third",
-      "by": "no-signature",
+      "by": "construction",
       "tests": "a character's own condition must be able to degrade across a season so that their available actions narrow predictably"
      }
     }
@@ -11158,14 +11147,12 @@
   },
   "P32": {
    "id": "P32",
-   "verdict": "GAP",
-   "detail": "a banded scalar on Person",
-   "kind": "UNSPECIFIED",
+   "verdict": "PASS",
+   "detail": "PASS BY CONSTRUCTION: [(801, 0, 5), (799, 1, 4), (499, 2, 3), (99, 3, 2)] as (body, bands fallen, scenes). \u26a0 REVISIONS 1-4 RAISED `Unspecified` HERE on the grounds that 'Person's declared fields ... none is a banded scalar'. THAT WAS TRUE WHEN WRITTEN AND `H-38` CLOSED IT -- 'the answer is YES; `Site.condition` is the model' -- and `W5` spent the closure: `(Person, body)` is a Part D row, `body_band_penalty` bands it on THE SAME `band_floors` table the site gate uses, and the order is fixed because a band is a floor you are at or above. No second band scheme was invented, which is what `H-38` was closed to avoid. \u26a0 THE OLD LAW TEXT WAS SELF-CONTRADICTING IN THE PUBLISHED ARTIFACT: it computed Person's field list, PRINTED `body` in it, and then asserted none was a banded scalar",
+   "kind": null,
    "section": "S12",
    "title": "a person's own condition narrows their options in a fixed order",
-   "needs": "the S12.1 verb gate is defined ONLY over a Site's `condition`",
-   "law": "S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are ['beliefs', 'body', 'capability', 'convictions', 'id', 'ledger', 'marks', 'name', 'stance', 'tenures', 'travel_leg', 'weight'] -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third",
-   "by": "no-signature",
+   "by": "construction",
    "tests": "a character's own condition must be able to degrade across a season so that their available actions narrow predictably"
   },
   "F2": {
@@ -12408,14 +12395,12 @@
   },
   "P42": {
    "id": "P42",
-   "verdict": "GAP",
-   "detail": "S26's signature vs S26.3's consequence 1",
-   "kind": "COLLISION",
-   "section": "S26 / S26.3",
+   "verdict": "PASS",
+   "detail": "PASS BY CONSTRUCTION: 5 at rest \u00b7 6 holding an office \u00b7 2 wounded to the bottom band \u00b7 3 after two travel legs. \u26a0 REVISIONS 1-4 RAISED A `Collision` HERE, and it was real at the time: S26 types `budget : (Person, View) -> int` with NO World while S26.3 says it varies by office, condition and distance, and all three LOOKED resolver-side. The resolution was not a ruling on which side gives way -- it is that THE STORE WAS IN THE WRONG PLACE. #353 `:730` gives Person 'every Tenure whose subject they are', so `W5` moved the tenure store onto its subject and both halves became true at once with no signature changed. That is PLAN \u00a73.3's smaller amendment; V2 \u00a7F3 took the larger one and made `budget` a second World-taking function, which `:634` forbids",
+   "kind": null,
+   "section": "S26.3",
    "title": "the act budget varies by office, condition and distance",
-   "needs": "a ruling on which side gives way -- the person-side signature, or the variation",
-   "law": "S26 types `budget : (Person, View) -> int` WITH NO WORLD. S26.3 consequence 1 says it varies by OFFICE, CONDITION and DISTANCE TRAVELLED, and that 'a wounded duke gets fewer acts than a healthy one WITHOUT ANYBODY STORING A NUMBER'. ALL THREE INPUTS ARE RESOLVER-SIDE: office-holding is a `hold` Tenure in the store, `condition` belongs to a Site, and travel legs S22.3 says HAVE NO OWNER AT ALL. A person-side function with no World can read none of them, so the budget is either a constant or the signature is wrong. Revisions 1-3 suppressed this into a docstring that named a probe which did not exist",
-   "by": "no-signature",
+   "by": "construction",
    "tests": "a wounded or distant character must be able to get fewer actions in a season than a healthy one at home"
   }
  },
@@ -12445,15 +12430,6 @@
    "needs": "a row in verb_table.yaml, ruled before it is added",
    "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
    "case": "probe:P30",
-   "expected": false
-  },
-  {
-   "kind": "UNSPECIFIED",
-   "what": "a banded scalar on Person",
-   "where": "S12",
-   "needs": "the S12.1 verb gate is defined ONLY over a Site's `condition`",
-   "law": "S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are ['beliefs', 'body', 'capability', 'convictions', 'id', 'ledger', 'marks', 'name', 'stance', 'tenures', 'travel_leg', 'weight'] -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third",
-   "case": "probe:P32",
    "expected": false
   },
   {
@@ -13049,15 +13025,6 @@
    "law": "L3 clause 2 -- THAT IS STORED, MONOTONE, NEVER-DECAYING UNREST IN ALL BUT NAME -- worse than the field L3 banned, because the banned field could at least go down",
    "case": "probe:P43",
    "expected": false
-  },
-  {
-   "kind": "COLLISION",
-   "what": "S26's signature vs S26.3's consequence 1",
-   "where": "S26 / S26.3",
-   "needs": "a ruling on which side gives way -- the person-side signature, or the variation",
-   "law": "S26 types `budget : (Person, View) -> int` WITH NO WORLD. S26.3 consequence 1 says it varies by OFFICE, CONDITION and DISTANCE TRAVELLED, and that 'a wounded duke gets fewer acts than a healthy one WITHOUT ANYBODY STORING A NUMBER'. ALL THREE INPUTS ARE RESOLVER-SIDE: office-holding is a `hold` Tenure in the store, `condition` belongs to a Site, and travel legs S22.3 says HAVE NO OWNER AT ALL. A person-side function with no World can read none of them, so the budget is either a constant or the signature is wrong. Revisions 1-3 suppressed this into a docstring that named a probe which did not exist",
-   "case": "probe:P42",
-   "expected": false
   }
  ],
  "_trace_counts": {
@@ -13065,12 +13032,12 @@
   "BARRIER": 705,
   "DECISION": 709,
   "WRITE": 581,
-  "QUERY": 4264,
+  "QUERY": 4272,
   "ACT": 55,
   "EVENT": 36,
   "CLAIM": 181,
-  "GAP": 71,
-  "NOTE": 88
+  "GAP": 69,
+  "NOTE": 96
  },
  "_corpus_defects": [
   "ARC1.yaml: committed inside a markdown fence with transcript preamble",

@@ -11,14 +11,16 @@ checking.* So every probe declares its provenance:
 
 | `by=` | means | count |
 |---|---|---|
-| `construction` | **the shape itself raised** — a gate, a law or a type stopped it. This is evidence | 74 |
-| `no-signature` | nothing to call. The design supplies no function by which it could be attempted — which *is* the refusal, but **absence is not a guard** | 28 |
+| `construction` | **the shape itself raised** — a gate, a law or a type stopped it. This is evidence | 76 |
+| `no-signature` | nothing to call. The design supplies no function by which it could be attempted — which *is* the refusal, but **absence is not a guard** | 26 |
 | `convention` | the shape permits it and only a reader stops it. §27.2 is the design's own example and says so out loud | 1 |
 | `probe-model` | the probe supplies a model the design does not, to reach the question at all | 18 |
 
 ## ⚠ THE ENFORCEMENT SPLIT — the single most important number in this ledger
 
-**Of 64 gaps, 31 were raised BY THE SHAPE ITSELF and 27 exist only because THERE IS NO SIGNATURE TO CALL.**
+**Of 62 PROBES that did not pass, 31 were raised BY THE SHAPE ITSELF and 25 exist only because THERE IS NO SIGNATURE TO CALL.**
+
+> ⚠ **THIS COUNTS PROBES, NOT GAP EVENTS, and the two numbers differ.** `results.json`'s `_trace_counts.GAP` is 69 — every gap RAISED during the run, including several inside one probe and several the corpus cases hit. This line counts probes whose VERDICT is not PASS: 62 of 121. Both are honest counts of different populations, and `G10` forbids reporting either without its basis — which this file did until the `W5` adversarial pass read both.
 
 That is close to an even split, and it matters more than any case verdict. A refusal a
 gate enforces and a refusal that exists because nobody wrote the function are different
@@ -30,7 +32,7 @@ has no module system and no visibility modifiers, so the guarantee there is
 a contributor closes by simply writing the function — no gate fires, no test goes red,
 and the design's own §27.2 admission applies: *enforced by a person noticing*.
 
-**And 14 of 57 PASSes are not by construction
+**And 14 of 59 PASSes are not by construction
 either** — they are listed individually below and should be discounted accordingly. A
 `probe-model` PASS means the instrument supplied something the design does not.
 
@@ -85,14 +87,12 @@ either** — they are listed individually below and should be discounted accordi
 | `P29` | **UNOWNED** | no-signature | S22.3 | a character must be able to move from one place to another and be somewhere else next season |
 | `P2x` | **FORBIDDEN** | construction | S26.3 | an engine may quietly drop actions a character wanted beyond their budget |
 | `P30` | **UNSPECIFIED** | construction | S27/E2 | what a character learned must still be true for them next season |
-| `P32` | **UNSPECIFIED** | no-signature | S12 | a character's own condition must be able to degrade across a season so that their available actions narrow predictably |
 | `P33` | **UNSPECIFIED** | no-signature | S26.3 | performing a larger or riskier version of an action must be able to cost the actor more |
 | `P35` | **UNSPECIFIED** | no-signature | S18.2 | a character must be able to have a standing among people who can never publicly acknowledge them, separate from their public stand |
 | `P36` | **UNSPECIFIED** | construction | E2/E3 | a discovery must be able to be acted on in several distinct ways, each leading somewhere different |
 | `P37` | **UNSPECIFIED** | probe-model | S27/E2 | a character's reaction must be able to be fully determined by their internal state rather than by a choice |
 | `P38` | **NO-PRODUCER** | no-signature | S1 | an optimal window, a judgement call or an adjudication must be able to be made by a referee |
 | `P41` | **UNSPECIFIED** | no-signature | S2 T7 | a character must be able to cite an established precedent or prior ruling to make a present argument stronger |
-| `P42` | **COLLISION** | no-signature | S26 / S26.3 | a wounded or distant character must be able to get fewer actions in a season than a healthy one at home |
 | `P43` | **FORBIDDEN** | construction | S22.4 | a quantity held by many characters individually must be able to be totalled across them |
 | `P7` | **UNSPECIFIED** | construction | S22.4 | a character must carry lasting moral damage from what they were made to do |
 | `P8` | **UNSPECIFIED** | construction | S27/E2 | one character must be able to be blocked by another without either knowing about the other |
@@ -144,10 +144,12 @@ either** — they are listed individually below and should be discounted accordi
 | `P28` | PASS | no-signature | S20 | no character may read another's memory directly |
 | `P3` | PASS | construction | S3-L2 | a character must decide from what they believe, which may be wrong, and never from world truth |
 | `P31` | PASS | construction | S9 | a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by the |
+| `P32` | PASS | construction | S12 | a character's own condition must be able to degrade across a season so that their available actions narrow predictably |
 | `P34` | PASS | construction | S20 | an office-holder must be able to be the only living person who knows a thing, so that removing them destroys it |
 | `P39` | PASS | probe-model | S15 | two characters must be able to have an ongoing relationship that carries state and changes over seasons |
 | `P4` | PASS | construction | S3-L2 | a character must be able to believe something false and act on it as if true |
 | `P40` | PASS | probe-model | S15 | a character must be able to hold obligations to two bodies that come into direct conflict |
+| `P42` | PASS | construction | S26.3 | a wounded or distant character must be able to get fewer actions in a season than a healthy one at home |
 | `P5` | PASS | construction | S19.3 | a character must be able to do something covertly, or be wrongly blamed for what another did |
 | `P6` | PASS | construction | S9.3 | a character's moral commitments must be able to change, through argument and consequence |
 | `W1` | PASS | construction | S12.1 | a place must be able to fall into disrepair until things can no longer be done there |
@@ -443,12 +445,6 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** a row in verb_table.yaml, ruled before it is added
 **law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids
 
-### `P32` — a person's own condition narrows their options in a fixed order  ·  **UNSPECIFIED**  ·  `S12`  ·  by `no-signature`
-**what:** a banded scalar on Person
-
-**needs:** the S12.1 verb gate is defined ONLY over a Site's `condition`
-**law:** S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are ['beliefs', 'body', 'capability', 'convictions', 'id', 'ledger', 'marks', 'name', 'stance', 'tenures', 'travel_leg', 'weight'] -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third
-
 ### `P33` — an act costs more when it is bigger  ·  **UNSPECIFIED**  ·  `S26.3`  ·  by `no-signature`
 **what:** act cost beyond budget consumption
 
@@ -484,12 +480,6 @@ either** — they are listed individually below and should be discounted accordi
 
 **needs:** the fault roster, and a rule by which a prior Event or Record strengthens a present argument
 **law:** T7 says 'the argument layer resolves BY NAMED FAULT, not by a persuasion threshold' -- and the roster of faults is nowhere in Part II. The prior ruling EXISTS as an Event in the log and a person may hold a Claim about it, but no signature relates a cited precedent to a present contest, and S39.4's ladder reads off a MARGIN whose model is also unspecified
-
-### `P42` — the act budget varies by office, condition and distance  ·  **COLLISION**  ·  `S26 / S26.3`  ·  by `no-signature`
-**what:** S26's signature vs S26.3's consequence 1
-
-**needs:** a ruling on which side gives way -- the person-side signature, or the variation
-**law:** S26 types `budget : (Person, View) -> int` WITH NO WORLD. S26.3 consequence 1 says it varies by OFFICE, CONDITION and DISTANCE TRAVELLED, and that 'a wounded duke gets fewer acts than a healthy one WITHOUT ANYBODY STORING A NUMBER'. ALL THREE INPUTS ARE RESOLVER-SIDE: office-holding is a `hold` Tenure in the store, `condition` belongs to a Site, and travel legs S22.3 says HAVE NO OWNER AT ALL. A person-side function with no World can read none of them, so the budget is either a constant or the signature is wrong. Revisions 1-3 suppressed this into a docstring that named a probe which did not exist
 
 ### `P43` — a cohort-wide tally is summed across its holders  ·  **FORBIDDEN**  ·  `S22.4`  ·  by `construction`
 **what:** resolver-side Query 'cohort_unrest' aggregates per-person tallies ACROSS HOLDERS

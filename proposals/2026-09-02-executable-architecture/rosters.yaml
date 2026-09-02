@@ -169,10 +169,26 @@ rosters:
     note: >-
       ⚠ "BUILT, NOT FILTERED" SAYS WHAT A VIEW IS NOT AND NEVER SAYS WHICH K. PLAN `W5` names the
       gap: "`K = 12` says nothing about **which** K, and the instrument takes the last k". Each
-      value here is one rule for choosing WHICH ids; `H-69` is the row, `recent` is its default,
+      value here is one rule for choosing WHICH ids; `H-53` is the row, `recent` is its default,
       and all three are swept. `recent` is the instrument's incumbent and is kept as the default so
       the sweep has an honest control — not because it is argued for.
     values: [recent, highest_confidence, question_relevant]
+
+  question_aggregation:
+    source: "PLAN.md §1.4 hole 15 / `H-54` — \"nothing says how many questions a person forms per season\""
+    open: true
+    note: >-
+      ⚠ THE INSTRUMENT ANSWERED THIS SILENTLY FOR FOUR REVISIONS. `deliberate` took `qs[0]` — the
+      first question in `question_sources` order — with no row, no marker and no alternative, so
+      an `absent` hole was being FILLED inside a subscript. That is `G1`, and it was decisive
+      rather than cosmetic: `question_sources` is ORDERED, so `qs[0]` silently meant *a Date
+      always beats a need*, an unruled priority rule that decides what every NPC does first.
+      `first` is that same behaviour DECLARED, kept as the default because it is the incumbent
+      and a sweep needs an honest control — not because it is argued for.
+      `all` gives the person every question and lets the budget triage them, which is what §26.3's
+      triage is FOR; `one_per_source` is the middle reading. `H-54` is the row.
+    ordered: true
+    values: [first, all, one_per_source]
 
 # ===========================================================================
 # TABLES — a MAPPING, where a roster is a SET. `table()` reads these; `roster()` raises on them

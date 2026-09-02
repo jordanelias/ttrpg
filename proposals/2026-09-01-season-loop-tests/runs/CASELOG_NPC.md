@@ -55,13 +55,13 @@ not the shape.
 | His personal risk for holding or publishing this data must be trackable as politically motivated, distinct from the Church-heresy detection machinery that governs most other exposure risk in | — | UNMAPPED | — |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-075 — Orm  ·  **BLOCKED**
-*person · 8 rows, 4 core · blockers: P32*
+## NPC-075 — Orm  ·  **NOT-ASSESSED**
+*person · 8 rows, 4 core · blockers: none*
 *ends when:* his death (possibly a deliberate death-in-service act), the outpost's fall, or -- per the sourcing gap above -- an undefined further state.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** A practitioner's ongoing exposure to the substrate damage he repairs must be able to degrade his personal condition cumulatively across many seasons, distinct from the cost of any single act | `P32` | **UNSPECIFIED** | S12 |
+| **[core]** A practitioner's ongoing exposure to the substrate damage he repairs must be able to degrade his personal condition cumulatively across many seasons, distinct from the cost of any single act | `P32` | PASS | S12 |
 | A subordinate rank within a tiny, non-political, non-recruiting institution must be trackable as a real position with real relationships (a senior to answer to, peers to lose) even though th | `P1` | PASS | S3-L1 |
 | **[core]** A person's decision to continue an exhausting, unrewarded maintenance labor (repairing breaches in the world's substrate) must be represented as a real season-to-season choice, including the | — | UNMAPPED | — |
 | **[core]** His death, if it occurs while performing a repair, must be able to produce a different and better outcome for the world than the same repair performed by someone who lives. | — | UNMAPPED | — |
@@ -116,13 +116,13 @@ not the shape.
 | His private, non-work relationships (his children, growing up without him) must be able to exist as a motivating fact even though they are physically absent from every scene he could appear  | — | UNMAPPED | — |
 
 ## NPC-002 — Maret Uln  ·  **BLOCKED**
-*person · 8 rows, 3 core · blockers: P32, P33*
+*person · 8 rows, 3 core · blockers: P33*
 *ends when:* never explicitly named as a terminus; presumably resolved only when she defects, successfully compartmentalizes, or her patron falls and she inherits.
 
 | need | probe | verdict | § |
 |---|---|---|---|
 | **[core]** Performing a Thread operation as part of ordinary intelligence work must cost the practitioner a persistent personal resource whose cost scales with the scale and type of operation performed | `P33` | **UNSPECIFIED** | S26.3 |
-| **[core]** As her personal condition degrades across a season, the range of actions available to her must narrow in a fixed, predictable order -- from full freedom down to forced withdrawal and crisis  | `P32` | **UNSPECIFIED** | S12 |
+| **[core]** As her personal condition degrades across a season, the range of actions available to her must narrow in a fixed, predictable order -- from full freedom down to forced withdrawal and crisis  | `P32` | PASS | S12 |
 | **[core]** Her personal sympathy for a population she is ordered to act against must produce a measurable, repeatable delay or softening in her actions against that population, distinct from a single o | `P21` | PASS | S9.1 |
 | A designated successor to a faction leader must exist as a real, trackable status -- with defined behavioral constraints relative to the current leader -- well before succession ever actuall | `F13` | PASS | S24 |
 | Her intelligence-gathering must be able to produce results that are qualitatively richer than ordinary reconnaissance -- direct experiential perception of substrate-level damage, not reporte | `W9` | PASS | S10.3 |

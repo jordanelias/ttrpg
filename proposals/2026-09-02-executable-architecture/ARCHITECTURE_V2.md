@@ -539,15 +539,32 @@ hold.** `CLAUDE.md` §0's five tests resolve it at step 4, **precedent**, withou
 > world, computed **at the DELIBERATE barrier**, handed to `choose` as an integer.
 
 ```
-budget(w, p) -> int          -- computed AT THE BARRIER, like sense()
+budget(p, view) -> int       -- PERSON-SIDE. No World. §26's signature UNCHANGED.
   = base                                    -- params; the ruled ~5
-  + office_bonus(hold Tenures p is subject of)
+  + office_bonus(p's OWN hold Tenures)
   − condition_penalty(p's body band)
-  − distance_penalty(p's travel legs this season)      -- now owned, §D4
+  − distance_penalty(p's OWN travel legs this season)   -- owned by the traveller, §D4
 ```
 
 **`choose` still receives no World** — it receives the integer, by asking. The person still triages.
-**§26's signature changes; §26.3's consequence 1 becomes true for the first time.**
+**§26's signature is unchanged; §26.3's consequence 1 becomes true for the first time.**
+
+> ⚠ **AMENDED BY `W5`. THIS SECTION HAD IT BACKWARDS, AND `H-28`'S OWN ROW ALREADY SAID SO.** It
+> typed `budget(w, p)` — *"computed AT THE BARRIER, like `sense()`"* — and concluded *"§26's
+> signature changes"*. That makes `budget` a **second** non-decision function taking a `World`,
+> and #353 `:634` calls `sense()` *"the **ONE** non-decision function permitted a `World`"*. The
+> precedent this section reaches for is the thing its conclusion breaks.
+>
+> **The premise was wrong, not the signature.** This section argues all three inputs are
+> resolver-side. They are not — the STORE was in the wrong place. #353 `:730` gives Person
+> *"every Tenure whose subject they are"*, so office-holding is the person's own `hold`; §D4 gives
+> travel legs to the traveller; `(Person, body)` is the person's own Part D row. Move the Tenure
+> store onto its subject and all three are person-side with **no signature changed**.
+>
+> That is `PLAN.md` §3.3's **smaller amendment**: *"`budget : (Person, View) → int` stands
+> unchanged, reading own `hold`, own body band, own travel legs — and §18.2's *the ONE*
+> survives."* `H-28` is graded **ruled**, PERSON-side, on #353 `:877` and `:912-913`, and names
+> this section as the defective side.
 
 ## §F4 · `standing` — one formula, and the law #353 cites is the wrong one — **D3**
 
@@ -725,7 +742,7 @@ row (§1.4). Until every one is `ruled`, `measured` or `assumption`-with-a-defau
 | **H-24** | `(Person, exists)` | SCHEMA_ROW | the design | **ruled** — Part D, bounded by §15.3 | Part D | every death |
 | **H-25** | a termination bound per self-feeding loop | RULING | — | **absent** | none. ⚠ **three of four in-chain feedback loops name no off-switch and the fourth's is self-defeating** | ~4 |
 | **H-27** | travel-leg ownership | SCHEMA_ROW | **Person, as the Tenure's subject** | **ruled** — §D4, by precedent | §15.1 | 1 |
-| **H-28** | `budget`'s placement | RULING — **answered by the type** | **PERSON-side** *(corrected by W1's adversarial pass)* | **ruled** — #353 `:877` | `budget : (Person, View) -> int` PERSON-SIDE, reading own `hold` Tenures, own body band, own travel legs; per Jordan's 2026-09-02 ruling it returns SCENE actions, not acts | every "wounded duke" |
+| **H-28** | `budget`'s placement | RULING — **answered by the type** | **PERSON-side** *(corrected by W1's adversarial pass)* | **ruled** — #353 `:877` | `budget : (Person, View) -> int` PERSON-SIDE, reading own `hold` Tenures, own body band, own travel legs. ⚠ THE UNIT IS THE SCENE BY JORDAN'S 2026-09-02 RULING AND THE INSTRUMENT STILL COUNTS ACTS — `W17` owns the container; this row must not be read as claiming it, and said so only after the `W5` adversarial pass caught it asserting a behaviour its own `site:` does not have | every "wounded duke" |
 | **H-29** | `standing`'s formula | FORMULA | Person | **assumption** | the gap between `told_by` claims about p and p's OWN `firsthand` claims about p, paired by predicate on the `person_predicates` roster; maximum gap when nothing is paired | 2 |
 | **H-30** | person-order vs global canonical order | RULING — **answered by architecture** | the resolver | **assumption** | composite key `(stratum, actor-hash, intra-person position)` — honours both | 2 |
 | **H-31** | the degree ladder's margin model | FORMULA | params (the one ladder) | **absent** | none. ⚠ **every contest is blocked** | every contest |

@@ -1665,22 +1665,26 @@ def test_w5_no_gap_is_an_instrument_defect():
 
     §0.1 point 2 — an assertion must be able to OBSERVE the failure it excludes — so the test
     plants the failure first and checks the plant was seen, rather than trusting a clean run."""
-    RC = R
-
-    # ---- the plant. A probe body that calls the instrument wrong must NOT read as a GAP. ----
-    spec = dict(title="planted", section="S15.1", by="probe-model", tests="the plant")
+    # ---- the plant, ROUTED THROUGH THE REAL CLASSIFIER. ----
+    # ⚠ THE FIRST VERSION NEVER TOUCHED IT. It read `RC._verdict_for(...) if hasattr(RC,
+    # "_verdict_for") else None` — and `run_cases` has no `_verdict_for`, so the branch was dead
+    # and the "plant" was graded by this test's own inline copy of `run_probe`'s try/except. A
+    # falsifier that re-implements the thing it is falsifying tests nothing about it. The probe
+    # is registered in `P.PROBES` and run by `R.run_probe`, which is the code that decides
+    # whether a call-site bug lands in the GAP column.
     def called_wrong():
         w = _w()
         w.tenures.append(S.Tenure("t_plant", "p_mid", "off_x", "hold", since=0))
-    planted = RC._verdict_for("PLANT", spec, called_wrong) if hasattr(RC, "_verdict_for") else None
-    if planted is None:                       # the runner's entry point is private; do it directly
-        try:
-            called_wrong()
-            planted = {"verdict": "PASS"}
-        except S.ShapeGap as g:
-            planted = {"verdict": "GAP", "kind": g.kind}
-        except Exception as e:                                            # noqa: BLE001
-            planted = {"verdict": "INSTRUMENT-ERROR", "detail": f"{type(e).__name__}: {e}"}
+
+    P.PROBES["PLANT"] = dict(id="PLANT", title="planted", section="S15.1", by="probe-model",
+                             tests="a call-site bug must not grade as a design hole",
+                             fn=called_wrong)
+    try:
+        R._VERDICTS.pop("PLANT", None)
+        planted = R.run_probe("PLANT")
+    finally:
+        P.PROBES.pop("PLANT", None)
+        R._VERDICTS.pop("PLANT", None)
     assert planted["verdict"] == "INSTRUMENT-ERROR", (
         f"a call-site bug graded {planted['verdict']!r}, not INSTRUMENT-ERROR. If it grades GAP "
         "the instrument is counting its own bugs as holes in #353, which is the defect this test "
@@ -1802,7 +1806,31 @@ def test_w5_sense_is_still_the_only_world_taking_non_decision_function():
     by giving `budget` a World; PLAN §3.3's smaller amendment is what this checks held."""
     import ast as ast_
     tree = ast_.parse((HERE / "shape.py").read_text())
-    # Person-side = every function whose FIRST parameter is annotated `Person`. Derived from the
+
+    def named(ann) -> str:
+        """The type an annotation NAMES, however it is spelled.
+
+        ⚠ THE FIRST VERSION READ ONLY `ann.id` AND `ann.value.value`, AND WAS THEREFORE BLIND TO
+        A STRING ANNOTATION — `def f(p: Person, w: "World")` — WHICH IS THE SPELLING `shape.py`
+        ITSELF PREFERS: it writes `"World"` in nine signatures, because the class is defined
+        below its first use. So W5's fourth proof could not observe the regression it excludes,
+        in the file's own dominant style. §0.1 point 2 exactly, in a test written to enforce it.
+        Normalising here covers `World`, `"World"`, `Optional["World"]` and `w: World = None`."""
+        if ann is None:
+            return ""
+        if isinstance(ann, ast_.Name):
+            return ann.id
+        if isinstance(ann, ast_.Constant) and isinstance(ann.value, str):
+            return ann.value.strip().strip('"\'')
+        if isinstance(ann, ast_.Subscript):          # Optional[...], list[...]
+            return named(ann.slice)
+        if isinstance(ann, ast_.Tuple) and ann.elts:  # Optional["World"] unparses to a tuple
+            return named(ann.elts[0])
+        if isinstance(ann, ast_.Attribute):
+            return ann.attr
+        return ""
+
+    # Person-side = every function whose FIRST parameter names `Person`. Derived from the
     # signatures rather than from a name list, so a new person-side function is covered the day
     # it is written (G2 — forbid the shape, never enumerate the words).
     offenders = []
@@ -1810,11 +1838,9 @@ def test_w5_sense_is_still_the_only_world_taking_non_decision_function():
         if not isinstance(node, (ast_.FunctionDef, ast_.AsyncFunctionDef)):
             continue
         args = [a for a in node.args.args if a.arg not in ("self", "cls")]
-        if not args or getattr(args[0].annotation, "id", None) != "Person":
+        if not args or named(args[0].annotation) != "Person":
             continue
-        takes_world = [a.arg for a in args
-                       if getattr(a.annotation, "id", None) == "World"
-                       or getattr(getattr(a.annotation, "value", None), "value", None) == "World"]
+        takes_world = [a.arg for a in args if named(a.annotation) == "World"]
         if takes_world and node.name != "sense":
             offenders.append((node.name, node.lineno, takes_world))
     assert not offenders, (
@@ -1825,10 +1851,18 @@ def test_w5_sense_is_still_the_only_world_taking_non_decision_function():
     found = [n.name for n in ast_.walk(tree)
              if isinstance(n, ast_.FunctionDef)
              and [a for a in n.args.args if a.arg not in ("self", "cls")]
-             and getattr([a for a in n.args.args if a.arg not in ("self", "cls")][0].annotation,
-                         "id", None) == "Person"]
+             and named([a for a in n.args.args if a.arg not in ("self", "cls")][0].annotation)
+             == "Person"]
     assert len(found) >= 5, f"the AST walk found only {found} — it is not seeing person-side code"
     assert "budget" in found and "opening_set" in found, found
+    # AND THE PLANT: the detector must SEE a string-annotated World, which is the spelling that
+    # defeated its first version. Without this the fix is unverified and the guard could regress
+    # to the blind form while still passing.
+    probe = ast_.parse('def planted(p: Person, w: "World") -> int: pass').body[0]
+    pargs = [a for a in probe.args.args]
+    assert named(pargs[0].annotation) == "Person" and named(pargs[1].annotation) == "World", (
+        "the detector cannot see a string annotation — `shape.py` writes `\"World\"` in nine "
+        "signatures, so this guard would miss a real regression in the file's own style")
 
 
 def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_printed():
@@ -1881,3 +1915,152 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
         "at all. Either P31 is not actually reading the table, or the control is not uniform — "
         "and either way this sweep cannot observe the failure it exists to exclude.")
     assert base["P31"] == "PASS", f"P31 does not pass at the declared default: {base}"
+    # ⚠ THE `sign_only` ARM IS ASSERTED, NOT MERELY PRINTED. It was printed and discarded, while
+    # the conclusion drawn FROM it — "the result rests on the directions, not on the invented
+    # magnitudes" — was published. A printed arm is not a checked one (G3).
+    assert table["sign_only"]["P31"] == "PASS", (
+        f"P31 fails when the magnitudes are collapsed to their signs ({table['sign_only']}). The "
+        "published claim that its result rests on the DIRECTIONS is then false, and the invented "
+        "weights are load-bearing after all — which is a finding, not a failure to hide.")
+
+    # ⚠ AND THE CONFOUND THE ARM ALONE CANNOT EXCLUDE. Under `sign_only` several verbs tie, and
+    # `choose` breaks ties by verb name (`sorted(..., key=(-score, verb, subject))`). So "P31
+    # passes at sign_only" is consistent with "the alphabetical tiebreak happens to agree with
+    # the declared ordering" — a defect in the control's SETUP, which is the class §0.1 was
+    # written for. This checks the property the arm was standing in for: the chosen verb is on
+    # the SAME SIDE OF ZERO as the conviction, which a name-ordered tie cannot fake.
+    w = P.tiny_world()
+    p = w.persons["p_mid"]
+    q = S.Question("q:sgn", "need", ("rec_writ",))
+    v = S.View(p.id, [], w.fixtures.get("view_k"), q)
+    saved2 = S.ALIGNMENT
+    try:
+        S.ALIGNMENT = S.alignment_at("sign_only")
+        ch = S.make_chooser(w.fixtures, lambda a, b, c: "x")
+        for sign in (0.9, -0.9):
+            p.convictions = {"Precedent": sign}
+            picked = ch(p, v, S.Sensation(0), lambda: 1)[0].verb
+            cell = S.align(picked, "Precedent")
+            assert cell * sign >= 0, (
+                f"at Precedent={sign} the person chose {picked!r}, whose Precedent alignment is "
+                f"{cell} — the pick is on the WRONG side of zero, so the sweep's agreement with "
+                "the declared arm is a tiebreak coincidence and not the directions working")
+            assert cell != 0, (
+                f"at Precedent={sign} the person chose {picked!r}, which the table does not "
+                "score at all — the pick was decided entirely by the name tiebreak")
+    finally:
+        S.ALIGNMENT = saved2
+        for pid in affected:
+            fresh(pid)
+
+
+def test_w5_a_tenure_added_before_its_subject_still_reaches_its_owner():
+    """`_rehome`'s stated purpose, tested on the path that actually matters.
+
+    ⚠ THE GUARD DID NOT COVER THE FUNCTIONS ITS OWN DOCSTRING NAMED. It ran only from the
+    `w.tenures` getter, while `budget`, `person_side_eligible` and `questions_for` all read
+    `p.tenures` DIRECTLY and `deliberate` never touches the aggregate — so a Tenure added before
+    its subject existed was invisible to exactly the three readers the docstring listed, unless
+    some unrelated code happened to read `w.tenures` first. It passed only because the fixture
+    creates persons before tenures. This plants the reverse order, which is §0.1 point 2."""
+    w = S.World(7)
+    w.add_tenure(S.Tenure("t_early", "p_late", "off_x", "hold", since=0))   # subject first…
+    assert w._unowned, "the plant did not land in _unowned — the ordering is not being tested"
+    w.persons["p_late"] = S.Person("p_late", "Late")                     # …person second
+    p = w.persons["p_late"]
+    assert not p.tenures, "the fixture is not reproducing the defect; nothing to rehome"
+    fx = w.fixtures
+    base = S.Query.budget(S.Person("p_ctl", "Ctl"), S.View("p_ctl", [], 12),
+                          fx.get("act_budget"), fx)
+    w._rehome()
+    assert [t.id for t in p.tenures] == ["t_early"], (
+        "the Tenure never reached its owner — `budget` would read zero offices for a person the "
+        "world agrees holds one")
+    assert S.Query.budget(p, S.View(p.id, [], 12), fx.get("act_budget"), fx) > base, (
+        "rehoming did not change what `budget` reads, so the office is still invisible to it")
+    # and the barrier does it, so no caller has to remember.
+    src = _code_only(inspect.getsource(S.SeasonDriver.deliberate))
+    assert "_rehome" in src, (
+        "DELIBERATE does not rehome — every person-side reader is back to depending on whether "
+        "something else read `w.tenures` first")
+
+
+def test_w5_the_reporting_guards_are_actually_called():
+    """`matrix_rows_without_a_field` and `rows_without_a_producer` REPORT rather than raise — and
+    a reporter with no caller reports to nobody.
+
+    ⚠ BOTH HAD ZERO CALLERS. `shape.py`'s `Person` comment credits the first with finding that
+    `(Person, body)` and `(Person, travel_leg)` named fields the class did not have, and a
+    tree-wide grep for either name returned only the `def` and that comment. `CLAUDE.md` §0.1
+    point 2 in its plainest form: an assertion nothing runs cannot observe anything. The
+    file-level dead-code guard could not see it either — `test_d9_no_rule_is_written_and_switched
+    _off` asserts `"if False" not in source`, a STRING where `G3` wants a property, and an
+    uncalled function is a switched-off rule that string cannot see.
+
+    This is the caller. It asserts the SHAPE of each report and prints the current numbers, so a
+    row naming a field that does not exist stays visible instead of being rediscovered."""
+    absent_field = S.matrix_rows_without_a_field()
+    assert set(absent_field) == {"absent", "unmodelled"}, absent_field
+    no_producer = S.rows_without_a_producer()
+    assert isinstance(no_producer, dict)
+    print(f"\n  matrix rows naming a field their kind does not have: {len(absent_field['absent'])}")
+    for pair in absent_field["absent"]:
+        print(f"    {pair}")
+    print(f"  rows on dict-modelled kinds (uncheckable): {len(absent_field['unmodelled'])}")
+    print(f"  `social: true` rows no verb writes: {len(no_producer)}")
+
+    # The two W5 fields are the falsifier: they WERE in `absent` and the fix removed them, so if
+    # either regresses out of `Person` this list grows and the assertion below names it.
+    fields = {f.name for f in dataclasses.fields(S.Person)}
+    assert {"body", "travel_leg", "tenures"} <= fields, sorted(fields)
+    assert ("Person", "body") not in absent_field["absent"], (
+        "`(Person, body)` is back in the absent list — the field it names has gone again")
+
+
+def test_w5_every_new_assumption_rows_sweep_is_actually_executed():
+    """`R2` checks that an `assumption` row DECLARES three sweep points. Nothing checks that any
+    of them was ever RUN — so two thirds of §G's declare · default · sweep is satisfiable by
+    editing YAML, which is the laundering this register exists to stop.
+
+    This runs the sweeps W5's own rows declare and asserts each arm actually differs, so a row
+    cannot claim a sweep whose points are the same experiment three times."""
+    rows = {r["id"]: r for r in REG.load()["rows"]}
+
+    # H-66 — the alignment table. Its three points must produce three DIFFERENT tables.
+    def canon(tbl):
+        # A CANONICAL VALUE, not a generator. The first version built a genexp inside `repr()`,
+        # so all three arms hashed to the same "<generator object ...>" string and the assertion
+        # compared three identical placeholders — it would have reported any table as a
+        # non-arm. Caught by the test failing rather than passing, which is the direction to be
+        # grateful for.
+        return tuple(sorted((ax, tuple(sorted(row.items()))) for ax, row in tbl.items()))
+
+    tables = {pt: canon(S.alignment_at(pt)) for pt in S.ALIGNMENT_SWEEP}
+    assert len(set(tables.values())) == 3, (
+        f"two of H-66's three sweep points produce the same table — an arm that is not an arm: "
+        f"{ {pt: (t == tables[S.ALIGNMENT_SWEEP[0]]) for pt, t in tables.items()} }")
+
+    # H-53 — the View-builder rule. Each rule must be able to select a DIFFERENT set of ids, or
+    # `recent` is not a control, it is the only rule.
+    p = S.Person("p_v", "V")
+    for n in range(6):
+        p.ledger.append(S.Claim(f"c{n}", p.id, f"s{n % 3}", "grade", n, n, "firsthand", n, "own"))
+    q = S.Question("q_v", "need", ("s0",))
+    got = {rule: tuple(S.view_ids(p, q, 3, rule)) for rule in sorted(S.VIEW_BUILDER_RULES)}
+    assert len(set(got.values())) >= 2, (
+        f"every view-builder rule returned the same ids: {got} — H-53's sweep cannot move a "
+        "verdict, so declaring it proves nothing")
+    assert set(rows["H-53"]["sweep"]) == set(S.VIEW_BUILDER_RULES), (
+        f"H-53's declared sweep and the roster have drifted: {rows['H-53']['sweep']} vs "
+        f"{sorted(S.VIEW_BUILDER_RULES)}")
+
+    # H-70 — the budget floor. The row declares a floor of 1; exercise the case that REACHES it,
+    # which the direction test does not (it stops at 2).
+    w = _w()
+    pp = next(iter(w.persons.values()))
+    fx = w.fixtures
+    pp.body = 0
+    pp.travel_leg = ["a"] * 20
+    assert S.Query.budget(pp, S.View(pp.id, [], 12), fx.get("act_budget"), fx) == 1, (
+        "the floor of 1 never fires — `max(1, b)` is unreachable, so H-70's stated floor is "
+        "declared and untested")

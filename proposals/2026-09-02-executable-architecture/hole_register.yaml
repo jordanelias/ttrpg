@@ -301,7 +301,7 @@ rows:
     kind:      "RULING — **answered by the type**"
     owner:     "**PERSON-side** *(corrected by W1's adversarial pass)*"
     grade:     "ruled"
-    default:   "`budget : (Person, View) -> int` PERSON-SIDE, reading own `hold` Tenures, own body band, own travel legs; per Jordan's 2026-09-02 ruling it returns SCENE actions, not acts"
+    default:   "`budget : (Person, View) -> int` PERSON-SIDE, reading own `hold` Tenures, own body band, own travel legs. ⚠ THE UNIT IS THE SCENE BY JORDAN'S 2026-09-02 RULING AND THE INSTRUMENT STILL COUNTS ACTS — `W17` owns the container; this row must not be read as claiming it, and said so only after the `W5` adversarial pass caught it asserting a behaviour its own `site:` does not have"
     site:      "shape.Query.budget — (Person, View, base, params), no World"
     sweep:     []
     unblocks:  "every \"wounded duke\""
@@ -600,24 +600,24 @@ rows:
     hole:      "the View-building rule. #353: 'at most K ids ... BUILT, not filtered'. H-09 supplies `K = 12` and NOT WHICH K; the instrument takes the last k, which is an invention"
     kind:      "FORMULA"
     owner:     "the barrier that builds the View"
-    grade:     "absent"
-    default:   "none"
-    site:      ""
-    sweep:     []
-    unblocks:  "unmeasured"
-    cite:      ""
+    grade:     "assumption"
+    default:   "`recent` — the last k claims of the holder's own ledger; the INCUMBENT, kept as the default so the sweep has an honest control and NOT because it is argued for"
+    site:      "shape.view_ids, called by Query.assemble; rules from rosters.yaml view_builder_rules"
+    sweep:     ["recent", "highest_confidence", "question_relevant"]
+    unblocks:  "every View, so every decision that reads one"
+    cite:      "DISCHARGED BY `W5` AS A ROW, NOT AS AN ANSWER. #353 `:623` says a View is \"at most K claim ids from the holder's OWN ledger -- built, not filtered\", which says what a View is NOT; `H-09` supplies `K = 12` and nothing anywhere says WHICH twelve of a 200-claim ledger a person brings to a question. Every revision before `W5` took the last k SILENTLY, inside `assemble`, with no row and no marker -- an invention of exactly the kind §42.2.1 forbids, hidden in a slice. `recent` is now that same behaviour DECLARED, defaulted and swept, and it is the control rather than the argued answer. ⚠ THE SWEEP IS THE POINT: `question_relevant` is the rule §F1 clause 3 implies (a person brings what the question is ABOUT) and `recent` is the rule the instrument had; if a verdict moves between them, the chain has been resting on a slice nobody chose."
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-54
     tier:      0
     hole:      "question aggregation, and the DROPPED `need` source. Nothing says how many questions a person forms per season; and #353 `:605`/`:1297` make `need` an OPENING source that F1 omits, so an NPC with a standing ambition and a quiet season forms no candidates at all"
     kind:      "PRODUCER ×2"
     owner:     "Person (person-side)"
-    grade:     "absent"
-    default:   "none"
-    site:      ""
-    sweep:     []
-    unblocks:  "unmeasured"
-    cite:      ""
+    grade:     "assumption"
+    default:   "`need` half DISCHARGED as Q4 of `questions_for`; aggregation defaults to `first` — the first question in `question_sources` order, which is the incumbent behaviour declared"
+    site:      "shape.aggregate_questions, called by deliberate; rules from rosters.yaml question_aggregation"
+    sweep:     ["first", "all", "one_per_source"]
+    unblocks:  "every NPC season — it decides which question a budget-bounded person answers"
+    cite:      "TWO HOLES IN ONE ROW, AND `W5` DISCHARGES THEM DIFFERENTLY. (1) THE DROPPED `need` SOURCE is closed by construction: it is Q4 of `questions_for`, and this row states its own rationale — \"an NPC with a standing ambition and a quiet season forms no candidates at all\" — which is the sentence `PLAN.md` `W5` gives for adding it. (2) QUESTION AGGREGATION was being FILLED OFF THE REGISTER. `deliberate` read `qs[0] if qs else None`: an `absent` hole answered inside a subscript, with no row, no marker and no alternative, which is `G1`. It was decisive rather than cosmetic, because `question_sources` is ORDERED — taking the first silently ruled that A DATE ALWAYS BEATS A NEED, an unruled priority rule deciding what every NPC does first. FOUND BY THE `W5` ADVERSARIAL PASS, which read the subscript rather than the summary. `first` is now that behaviour declared and kept as the sweep control; `all` lets the budget triage, which is what §26.3 says triage is for."
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-55
     tier:      1
@@ -793,8 +793,8 @@ rows:
     default:   "none"
     site:      ""
     sweep:     []
-    unblocks:  "every office act formed by a person — 10 of 32 verbs"
-    cite:      "FOUND BY BUILDING `ARCHITECTURE_V2.md` §F1. #353 §11.1 VERBATIM: \"Who holds an office is NOT a field on the office. It is a `hold` Tenure, owned by the holder.\" So the person has the TENURE and the office has the REMIT, and a function with no `World` cannot read the second. ⚠ THIS IS NOT THE `budget` CASE AND THE DIFFERENCE IS WHY IT ESCALATES RATHER THAN CLOSING: there the data was the person's own and merely stored in the wrong place, so PLAN §3.3's relocation fixed it with no signature change. A remit is shared by every holder of one office, so there is nothing to relocate. `person_side_eligible` DECLINES on `remit:` rather than admitting — admitting on an unevaluable predicate is a silent fill off the register (`G1`) at the opposite polarity to §42.2 — and the resolver's `_eligible`, which HAS a World, still admits, so a duke can still confer. THE GAP BETWEEN THE TWO READINGS IS THE FINDING. Three options a ruling would pick between: the conferral stamps the remit onto the `hold` Tenure's `payload` (duplicates it); the person holds a CLAIM about their own remit (fits Jordan's 2026-09-02 ruling, verbatim: 'our understanding of all other words and actions is subjective and singular', and makes a person able to be WRONG about their own authority); or §F1's clause is wrong and eligibility is resolver-side."
+    unblocks:  "9 of 32 verbs cannot be formed person-side — 8 remit-ONLY, plus `levy` whose other alternative is also unevaluable"
+    cite:      "FOUND BY BUILDING `ARCHITECTURE_V2.md` §F1. #353 §11.1 VERBATIM: \"Who holds an office is NOT a field on the office. It is a `hold` Tenure, owned by the holder.\" So the person has the TENURE and the office has the REMIT, and a function with no `World` cannot read the second. ⚠ THIS IS NOT THE `budget` CASE AND THE DIFFERENCE IS WHY IT ESCALATES RATHER THAN CLOSING: there the data was the person's own and merely stored in the wrong place, so PLAN §3.3's relocation fixed it with no signature change. A remit is shared by every holder of one office, so there is nothing to relocate. `person_side_eligible` DECLINES on `remit:` rather than admitting — admitting on an unevaluable predicate is a silent fill off the register (`G1`) at the opposite polarity to §42.2 — and the resolver's `_eligible`, which HAS a World, still admits, so a duke can still confer. THE GAP BETWEEN THE TWO READINGS IS THE FINDING. Three options a ruling would pick between: the conferral stamps the remit onto the `hold` Tenure's `payload` (duplicates it); the person holds a CLAIM about their own remit (fits Jordan's 2026-09-02 ruling, verbatim: 'our understanding of all other words and actions is subjective and singular', and makes a person able to be WRONG about their own authority); or §F1's clause is wrong and eligibility is resolver-side. ⚠ MEASURED, WITH ITS COMMAND (`G11`), BECAUSE THE FIRST VERSION OF THIS ROW SAID '10 of 32' WITH NO BASIS AND THE `W5` ADVERSARIAL PASS COUNTED IT. EIGHT verbs are remit-ONLY — confer, convene, determine, dispatch, establish, issue, open_case, revoke — and `levy` is `remit:issue | presence:<rung>`, whose other alternative is `H-33` and equally unevaluable, so NINE cannot be formed person-side. `destroy_record` is NOT among them: it is `hold:<record> | presence`, so it is blocked by `H-75` and `H-33`, not by this row. Reproducible with `python -c \"import yaml; d=yaml.safe_load(open('proposals/2026-09-02-executable-architecture/verb_table.yaml')); print([v['verb'] for v in d['verbs'] if all(e.split(':')[0].strip()=='remit' for e in v['eligibility'])])\"`."
     source:    "W5 — found by execution"
   - id:        H-72
     tier:      1
@@ -832,6 +832,18 @@ rows:
     unblocks:  "every NPC act"
     cite:      "TWO DEFECTS IN `ARCHITECTURE_V2.md` §F2, both found by writing it. (1) §F1 returns `Candidate[]` and §F2 returns `Act[]`, and an `Act` needs an id that #353 §33 derives from the world seed and the tick — \"unique per DRAW, not per operation\" — which a person-side function cannot produce. (2) §F2's own pseudocode is `choose(p, view, sensation, ask_budget)` and its first line is `candidates = opening_set(p, view, q)`: `q` IS FREE. The default binds it where §F1 already put it — `assemble(person, question) -> View` builds the View FROM the question — so `choose` keeps the four parameters §26 states. The seed and tick are the CLOCK, not any person's interior, so neither half re-admits a `World`; `test_w5_sense_is_still_the_only_world_taking_non_decision_function` walks the AST and confirms it."
     source:    "W5 — found by execution"
+  - id:        H-75
+    tier:      1
+    hole:      "§E4's `hold:<object>` argument is a PLACEHOLDER naming a KIND (`<store>`, `<record>`), and nothing binds it to WHICH object the act is about"
+    kind:      "SCHEMA_ROW"
+    owner:     "Part E (the eligibility column) + the act's payload"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "`transfer` and `destroy_record` — 2 of 32 verbs, and every future `hold:<...>` row"
+    cite:      "FOUND BY THE `W5` ADVERSARIAL PASS. Both eligibility readers PARSED the argument AND THREW IT AWAY — `person_side_eligible` and the resolver's `_eligible` each did `arg.strip(\"<>\")` and then tested only `any(t.kind == 'hold' and t.live ...)`, so `transfer`'s `hold:<store>` and `destroy_record`'s `hold:<record>` admitted ANYONE HOLDING ANY OBJECT. That is an OVER-ADMISSION, and `PLAN.md` guardrail `G4` makes it a defect of EQUAL WEIGHT to an over-refusal — the direction that flatters an instrument is the one to check hardest. Both sites now compare the argument, and DECLINE on a `<...>` placeholder rather than guessing which store an act meant: a placeholder names a kind, and matching it to a Tenure's `object` would require a binding from the act to its target that Part E does not supply. ⚠ THE FIX WAS APPLIED TO BOTH READERS TOGETHER, deliberately: leaving the resolver over-admitting while the person-side reader refuses would make the two readings disagree about the same rule, which is worse than either error alone."
+    source:    "W5 — found by the adversarial pass"
 
 # ---------------------------------------------------------------------------
 # THE DISCHARGE MAP -- guardrail G8.

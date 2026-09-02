@@ -237,6 +237,8 @@ DEFAULT_FIXTURES = Fixtures(
     # above already carries a `"body"` row, so `condition_penalty(p's body band)` counts bands
     # against the table the site gate already uses. `H-38` closed with "`Site.condition` is the
     # model"; this is that closure spent rather than restated.
+    # `H-54`, swept. The rule was `qs[0]` in a subscript; see `aggregate_questions`.
+    question_aggregation_rule="first",
     budget_office_bonus=1,
     budget_leg_penalty=1,
 )
@@ -497,6 +499,7 @@ CONVICTION_AXES = roster("conviction_axes")
 QUESTION_SOURCES = roster("question_sources", ordered=True)
 PERSON_PREDICATES = roster("person_predicates")
 VIEW_BUILDER_RULES = roster("view_builder_rules")
+QUESTION_AGGREGATION = roster("question_aggregation", ordered=True)
 
 # ===========================================================================
 # PART E, LOADED FROM DATA -- W3. THE RESOLVER'S BODY.
@@ -992,7 +995,11 @@ class Person:
     # (see `matrix_rows_without_a_field`). `budget` reads both, person-side, which is PLAN §3.3's
     # smaller amendment: a Person owns every Tenure whose subject they are, so office-holding,
     # body and travel are all the person's own state and `sense()` keeps §18.2's "the ONE".
-    body: int = 1000
+    # `condition_scale`, not a literal 1000: a person at full body is at the top of the same
+    # fixed-point scale `Site.condition` uses, which is what `H-38` closing on "`Site.condition`
+    # is the model" MEANS. A bare 1000 here would be a second, silent copy of that scale — the
+    # defect `G1` names — and it would drift the moment the fixture moved.
+    body: int = field(default_factory=lambda: DEFAULT_FIXTURES.get("condition_scale"))
     travel_leg: list[str] = field(default_factory=list)
     # ⚠ W5 MOVED THE TENURE STORE HERE, and `Tenure`'s OWN DOCSTRING already said this: "S15 --
     # THE ONE EDGE. Owned by its SUBJECT (S15.1)." The class asserted the ownership and the
@@ -1504,6 +1511,7 @@ class Query:
         b -= len(p.travel_leg) * fx.get("budget_leg_penalty")
         return max(1, b)
 
+    @staticmethod
     def opening_set(p: Person, v: View, q: Question) -> list[Candidate]:
         """§F1 -- COMPUTED FROM THE VERB TABLE. No `roster` parameter: that is `D2` entire.
 
@@ -1547,7 +1555,7 @@ class Query:
         return out
 
     @staticmethod
-    def assemble(p: Person, question: Any, k: int) -> View:
+    def assemble(p: Person, question: Any, k: int, rule: str = "recent") -> View:
         # ⚠ W5 REMOVED A `NoProducer` HERE, AND THE REMOVAL IS THE DISCHARGE OF §61, NOT A
         # SOFTENING OF IT. It read: "`assemble(person, question)` and `view(person, question)`
         # are UNSATISFIABLE; DELIBERATE HAS NO DECLARED ENTRY POINT." That was TRUE while nothing
@@ -1567,7 +1575,7 @@ class Query:
                 "Question from questions_for(), or None for a person with no question this "
                 "season. §F1's `q` has a producer now (`H-04`); accepting any object here would "
                 "make a stale injected fixture indistinguishable from an absent question.")
-        return View(p.id, [c.id for c in p.ledger][-k:], k, question)
+        return View(p.id, view_ids(p, question, k, rule), k, question)
 
     @staticmethod
     def entrenchment(p: Person, seasons_held: int, scale: int, span: int) -> int:
@@ -1737,8 +1745,12 @@ def person_side_eligible(p: Person, row: "VerbRow") -> bool:
       * `presence:<rung>` -- `H-33`, the presence index, which does not exist. Same treatment the
         resolver already gives it; this is precedent, not a new refusal."""
     for alt in row.eligibility:
-        kind, _, arg = alt.partition(":")
-        kind, arg = kind.strip(), arg.strip().strip("<>")
+        kind, _, raw = alt.partition(":")
+        kind, raw = kind.strip(), raw.strip()
+        # A `<...>` argument is a PLACEHOLDER naming a KIND of object (`hold:<store>`), not an id.
+        # Keeping the distinction is what lets the `hold` branch below refuse to guess.
+        placeholder = raw.startswith("<") and raw.endswith(">")
+        arg = raw.strip("<>")
         if kind not in ELIGIBILITY_KINDS:
             raise Forbidden(
                 f"eligibility kind {kind!r} is not in the eligibility_kinds roster", "§E4",
@@ -1748,8 +1760,21 @@ def person_side_eligible(p: Person, row: "VerbRow") -> bool:
         if kind == "own":
             return True
         if kind == "hold":
-            if any(t.kind == "hold" and t.live for t in p.tenures):
-                return True
+            # ⚠ THE ARGUMENT IS COMPARED. It was parsed and thrown away, so `transfer`'s
+            # `hold:<store>` and `destroy_record`'s `hold:<record>` admitted anyone holding ANY
+            # office -- an OVER-admission, which `G4` makes a defect of equal weight to an
+            # over-refusal. `<store>`/`<record>` are PLACEHOLDERS naming a kind of object, not
+            # ids, so a placeholder cannot be matched against a Tenure's `object` and this
+            # DECLINES rather than guessing which store the act meant: that binding is `H-75`.
+            if not raw:                       # bare `hold` -- holding anything admits
+                if any(t.kind == "hold" and t.live for t in p.tenures):
+                    return True
+            elif not placeholder:             # a literal object id
+                if any(t.kind == "hold" and t.live and t.object == arg for t in p.tenures):
+                    return True
+            else:
+                TRACE.note(f"`hold:<{arg}>` names an object KIND, not an id (H-75); "
+                           f"{row.verb!r} declines rather than admitting on any held object")
         # `remit` and `presence` decline: see the docstring. TRACE records the decline so the
         # count is measurable rather than inferred from a verb's absence.
         elif kind == "remit":
@@ -1896,6 +1921,67 @@ def standing_of(p: Person, fx: "Fixtures") -> int:
     own = [c for c in p.ledger if c.subject == p.id and c.source == "firsthand"]
     _agree, dis, paired = agreement(told, own)
     return scale if paired == 0 else (dis * scale) // paired
+
+
+def aggregate_questions(qs: list, rule: str):
+    """`H-54`: how many of a person's questions reach `assemble` in one season.
+
+    #353 says NOTHING about this and the instrument answered it silently as `qs[0]` for four
+    revisions. `first` preserves that answer as a declared, swept default; `all` and
+    `one_per_source` are the alternatives the sweep compares it against. Returns ONE question,
+    because `assemble(person, question)` takes one -- the rules differ in WHICH, and in how many
+    are folded into it, which is exactly what is open."""
+    if rule not in QUESTION_AGGREGATION:
+        raise Unspecified(
+            f"question-aggregation rule {rule!r} is not in the roster", "H-54",
+            needs=f"one of {list(QUESTION_AGGREGATION)}",
+            law="H-54 -- nothing in #353 says how many questions a person forms per season, so a "
+                "rule outside the roster is a fourth answer nobody declared")
+    if not qs:
+        return None
+    if rule == "first":
+        return qs[0]
+    if rule == "one_per_source":
+        seen, keep = set(), []
+        for q in qs:
+            if q.source not in seen:
+                seen.add(q.source); keep.append(q)
+        qs = keep
+    # `all` and `one_per_source` widen the REFERENTS rather than the question count, because
+    # `assemble` takes one question. The person brings everything they are being asked about.
+    refs = tuple(sorted({r for q in qs for r in q.referents}))
+    return Question(f"q:agg:{rule}:{qs[0].id}", qs[0].source, refs, qs[0].about)
+
+
+def view_ids(p: Person, q: Any, k: int, rule: str) -> list:
+    """§18's "at most K claim ids from the holder's OWN ledger -- BUILT, not filtered". `H-53`.
+
+    ⚠ #353 SUPPLIES K AND NEVER SUPPLIES WHICH K, and "built, not filtered" says what a View is
+    NOT. `H-09` gives `K = 12`; nothing in the chain says which twelve of a 200-claim ledger a
+    person brings to a question, and taking the last k -- which every revision before `W5` did
+    silently -- is an invention. The rules are `rosters.yaml: view_builder_rules`, `recent` is the
+    default because it is the incumbent and a sweep needs an honest control, NOT because it is
+    argued for.
+
+    PERSON-SIDE: it reads `p.ledger` and the question's own referents. No World."""
+    if rule not in VIEW_BUILDER_RULES:
+        raise Unspecified(
+            f"view-builder rule {rule!r} is not in the view_builder_rules roster", "H-53",
+            needs=f"one of {sorted(VIEW_BUILDER_RULES)}",
+            law="§18 -- 'at most K ids ... BUILT, not filtered'. WHICH K is `H-53` and is open; "
+                "a rule not on the roster is a fourth answer nobody declared")
+    if rule == "highest_confidence":
+        ranked = sorted(p.ledger, key=lambda c: (-c.confidence, c.id))
+        return [c.id for c in ranked[:k]]
+    if rule == "question_relevant":
+        refs = set(getattr(q, "referents", ()) or ())
+        near = [c for c in p.ledger if c.subject in refs]
+        rest = [c for c in p.ledger if c.subject not in refs]
+        # Relevant first, then the incumbent order for the remainder -- a person brings what the
+        # question is about AND whatever else is freshest, rather than only the former.
+        return [c.id for c in near[-k:]] + [c.id for c in rest[-(k - min(len(near), k)):]] \
+            if k > len(near) else [c.id for c in near[-k:]]
+    return [c.id for c in p.ledger][-k:]
 
 
 def body_band_penalty(p: Person, fx: "Fixtures") -> int:
@@ -2250,9 +2336,18 @@ class SeasonDriver:
                             law="S26.2 -- the world is FROZEN from the end of MATTER to the start of RESOLVE. THIS IS WHAT MAKES THE MAP SAFE TO PARALLELISE")
         w.step = Step.DELIBERATE
         TRACE.step("DELIBERATE", "enter")
+        # ⚠ CALLED HERE, NOT ONLY FROM THE `tenures` GETTER. `_rehome` exists so that a Tenure
+        # added before its subject Person existed still reaches its owner, and its own docstring
+        # names `budget` as what would otherwise read zero offices for a duke. But `budget`,
+        # `person_side_eligible` and `questions_for` all read `p.tenures` DIRECTLY and this step
+        # never touches `w.tenures`, so the guard did not cover the three functions it named --
+        # it worked only if unrelated code happened to read the aggregate first. One call, at the
+        # barrier, before any person-side read.
+        w._rehome()
         acts: list[Act] = []
         k_view = w.fixtures.get("view_k")
         k_budget = w.fixtures.get("act_budget")
+        q_rule = w.fixtures.get("question_aggregation_rule")
         w._in_parallel_map = True       # S51: WorkerThreadPool over persons. The one that pays.
         for p in list(w.persons.values()):
             s = sense(p, w, subsistence)            # a Sensation, per S26's signature
@@ -2261,7 +2356,12 @@ class SeasonDriver:
             # four sources are computed here, at the barrier, from the loop's own output.
             # An explicit `question` still overrides, so a probe can name the q it is testing.
             qs = questions_for(w, p)
-            q_p = question if question is not None else (qs[0] if qs else None)
+            # `H-54`, DECLARED. This was `qs[0] if qs else None` — an `absent` hole filled inside
+            # a subscript, with no row and no alternative (`G1`). `question_sources` is ORDERED,
+            # so taking the first silently ruled that A DATE ALWAYS BEATS A NEED, which decides
+            # what every NPC does first. The rule is data now; `first` is the incumbent kept as
+            # the sweep's control.
+            q_p = question if question is not None else aggregate_questions(qs, q_rule)
             v = Query.assemble(p, q_p, k_view)
             # S26.3: the PERSON asks their own budget. `choose` receives the QUERY, not the
             # answer -- rev 2 computed it in the engine and handed the number down, which is
@@ -2299,8 +2399,10 @@ class SeasonDriver:
         NEVER `capability`, which the table loader already refuses. The kinds are a DISJUNCTION:
         `transfer` is eligible by `own` OR `hold:<store>`."""
         for alt in row.eligibility:
-            kind, _, arg = alt.partition(":")
-            kind, arg = kind.strip(), arg.strip().strip("<>")
+            kind, _, raw = alt.partition(":")
+            kind, raw = kind.strip(), raw.strip()
+            placeholder = raw.startswith("<") and raw.endswith(">")
+            arg = raw.strip("<>")
             if kind == "own":
                 return True                       # every person may attempt their own acts
             if kind == "remit":
@@ -2310,9 +2412,22 @@ class SeasonDriver:
                         if off and arg in off.remit_acts:
                             return True
             elif kind == "hold":
-                if any(t.subject == a.actor and t.kind == "hold" and t.until is None
-                       for t in w.tenures):
-                    return True
+                # ⚠ THE ARGUMENT IS COMPARED, as it is person-side. It was parsed and discarded
+                # here too, so `hold:<store>` admitted anyone holding ANY object -- an
+                # over-admission, and `G4` makes that a defect of equal weight to an
+                # over-refusal. A `<...>` argument is a KIND, not an id, so it cannot be matched
+                # and this declines rather than guessing which store the act meant (`H-75`).
+                mine = [t for t in w.tenures
+                        if t.subject == a.actor and t.kind == "hold" and t.until is None]
+                if not raw:
+                    if mine:
+                        return True
+                elif not placeholder:
+                    if any(t.object == arg for t in mine):
+                        return True
+                else:
+                    TRACE.note(f"`hold:<{arg}>` names an object KIND, not an id (H-75); "
+                               f"{row.verb!r} declines rather than admitting on any held object")
             elif kind == "presence":
                 # ⚠ NOT `return True`. The presence index is `H-33` and does not exist, so this
                 # predicate cannot be evaluated — and admitting on an unevaluable predicate is a

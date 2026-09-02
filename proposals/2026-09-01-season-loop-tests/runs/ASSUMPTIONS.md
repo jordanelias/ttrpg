@@ -23,5 +23,6 @@ exercised by this run.**
 | `entrenchment_seasons` | `60` | yes — §15.2 |
 | `obstacle_refusal_multiple` | `2` | yes — §27.4 |
 | `band_floors` | `{'harbour': {'bulk_shipping': 800, 'fishing': 100}, 'seam': {'deep_mining': 700, 'surface_gleaning': 50}, 'body': {'full_operations': 800, 'limited': 500, 'withdrawal_only': 100}}` | no — a harness fixture |
+| `question_aggregation_rule` | `first` | no — a harness fixture |
 | `budget_office_bonus` | `1` | no — a harness fixture |
 | `budget_leg_penalty` | `1` | no — a harness fixture |
