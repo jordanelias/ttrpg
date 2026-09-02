@@ -316,11 +316,33 @@ rosters:
       govern any of their holdings in their stead"* — a governor for a duchy (which is how regency
       and puppet rulers arise), a council for a province, mayoral elections for a settlement. NOT
       BUILT: this roster is the ladder only, and delegation is registered as open.
-      ⚠ AND THE REVOCATION RULE, which is an ELIGIBILITY MODEL and not a remit: *"a Duke can
-      revoke office from any individual in that office so long as that office is for a holding
-      under their purview."* So authority over a governance act is RANK + CONTAINMENT — does the
-      actor's domain contain the holding the office governs — and not `remit:<act>` on that office.
-    ordered: true
+      ⚠ AND THE REVOCATION RULE, WHICH IS TWO RULES AND NOT ONE. This note said only *"authority
+      over a governance act is RANK + CONTAINMENT … and not `remit:<act>`"*, full stop, while the
+      mechanism ran a two-rule branch — so the data file's prose and the code it feeds disagreed,
+      which is precisely the §0.05 failure of treating a note as if it were the mechanism. Both
+      rules, as Jordan stated them:
+        · an ORDINARY office — *"a Duke can revoke office from any individual in that office so
+          long as that office is for a holding under their purview"* — purview alone;
+        · a TITLE — *"King/Queen cannot revoke title of Duke/Duchess if they do not have duchy is
+          in their holdings. King/Queen can revoke title of Duke/Duchess if the duchy is one of
+          their holdings."* — purview AND holdings AND strictly higher rank.
+      ⚠ AND `remit:<act>` IS NOT SETTLED. Jordan's *"so long as"* makes purview SUFFICIENT while
+      Part E keeps `remit:revoke` NECESSARY; the code applies both, which is an over-refusal
+      against the ruling. Registered as `H-91` rather than fixed by editing a transcribed column.
+    # ⚠ MEMBERSHIP LIVES ONCE, IN `domains:`, AND THAT IS A CORRECTION. The first version carried
+    # a `values:` list repeating all eleven names beside the mapping -- the exact shape
+    # `witness_channel_predicates` twelve rows above forbids in terms (*"a definition lived twice
+    # in one file and a test had to guard that the two copies agreed -- guarding a duplicate is
+    # the shape §8 asks you not to create"*), written by the same session that wrote that note.
+    # The guard was ASYMMETRIC too: the totality test read `values`, so a name added to `domains`
+    # alone was invisible to the test and LIVE IN THE MECHANISM -- add `Steward: duchy` and an
+    # office posted `Steward` silently became a title, flipping its revocation from the purview
+    # rule to the holdings rule with 133 tests green. Found by the governance-canon pass.
+    #
+    # ⚠ `ordered: true` IS ALSO GONE. It had no consumer, and its order ran OPPOSITE to
+    # `rung_kinds` -- King-first descending against person-first ascending -- so two ladders sat
+    # in one file pointing in different directions and the unread one was a §4 idempotence trap
+    # for whoever read it next. Rank is the rung ordinal; there is no second ordering.
     # ⚠ TOTAL OVER `rung_kinds` — Jordan, 2026-09-02: *"realm = king/queen, duchy = duke/duchess,
     # province = count/countess, territory = lord, settlement = mayor, community = community
     # leader, hearth = family head, person = own autonomous individual."* EVERY rung has a
@@ -347,8 +369,6 @@ rosters:
       "Community Leader": "community"
       "Family Head":     "hearth"
       Individual:        "person"
-    values: ["King", "Queen", "Duke", "Duchess", "Count", "Countess", "Lord",
-             "Mayor", "Community Leader", "Family Head", "Individual"]
 
   conditional_emission_rows:
     source: "`W4`. Part D's `emits:` column does not distinguish a kind emitted ON EVERY WRITE from one emitted only WHEN A CONDITION HOLDS, and the two are different things."

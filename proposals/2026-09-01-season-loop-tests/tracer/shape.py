@@ -564,6 +564,37 @@ def roster(name: str, ordered: bool = False):
     return tuple(vals) if (ordered or r.get("ordered")) else frozenset(vals)
 
 
+def roster_map(name: str, key: str) -> dict:
+    """A MAPPING that lives inside a roster row -- `titles.domains`, `contest_subsystems.prizes`.
+
+    ⚠ THIS EXISTS BECAUSE TWO CALL SITES HAD ALREADY WRITTEN IT AS `_ROSTERS.get(x) or {}`, WHICH
+    SILENTLY DEFAULTS. `rosters.yaml`'s own header states the polarity: *"a name the code asks for
+    that is not here RAISES rather than defaulting, which is §42.2's polarity rule applied to
+    definitions -- an absent roster is a refusal, never an empty set."* The bare-dict reads broke
+    exactly that rule, and the consequence was not cosmetic: delete the `titles` key and
+    `title_domain` returns `None` for every post, `target_is_title` becomes universally false, and
+    `_req_revoke` SILENTLY REVERTS TO PURVIEW-FOR-EVERYTHING -- the reading Jordan's fourth
+    message exists to forbid. A guard that fails open into the ruled-against behaviour.
+
+    One owner, so a third mapping inherits the refusal by existing (§8). Found by the
+    governance-canon adversarial pass."""
+    r = _ROSTERS.get(name)
+    if r is None:
+        raise Unspecified(
+            f"roster {name!r} is not in rosters.yaml", "rosters.yaml",
+            needs="add the roster to the data file; do not inline it here",
+            law="Jordan 2026-09-02 -- definitions are not hardcoded. An absent roster REFUSES; "
+                "returning an empty mapping would make every lookup silently answer `None`")
+    m = r.get(key)
+    if not isinstance(m, dict):
+        raise Unspecified(
+            f"roster {name!r} has no mapping `{key}:`", "rosters.yaml",
+            needs=f"give {name!r} a `{key}:` mapping, or read it with roster()/table()",
+            law="rosters.yaml -- the mapping is the DEFINITION. An absent one cannot be "
+                "substituted by an empty dict without inverting the answer it gives")
+    return dict(m)
+
+
 def table(name: str) -> dict:
     """A MAPPING from `rosters.yaml`'s `tables:`, returned as `{outer: {inner: float}}`.
 
@@ -603,6 +634,11 @@ VIEW_BUILDER_RULES = roster("view_builder_rules")
 QUESTION_AGGREGATION = roster("question_aggregation", ordered=True)
 SCENE_PACKING_RULES = roster("scene_packing_rules")
 CLAIM_SUBJECT_RULES = roster("claim_subject_rules")
+# ⚠ BOUND AT IMPORT LIKE THE OTHERS, AND THAT IS THE POINT. `titles` was the ONE roster read
+# lazily through a bare `_ROSTERS.get(...) or {}`, so it alone got no existence refusal -- and
+# because `_req_revoke` fails OPEN into purview-for-everything when the mapping is empty, the one
+# unbound roster was the one whose absence silently restores a ruled-against behaviour.
+TITLE_DOMAINS = roster_map("titles", "domains")
 
 # ===========================================================================
 # PART E, LOADED FROM DATA -- W3. THE RESOLVER'S BODY.
@@ -2703,7 +2739,7 @@ def requires_predicate(verb: str):
 def title_domain(post: Optional[str]) -> Optional[str]:
     """The rung kind a title governs, from `rosters.yaml: titles`. `None` for a post that is not
     a title — a Dicastery is an office, not a rank."""
-    return (_ROSTERS.get("titles") or {}).get("domains", {}).get(str(post or ""))
+    return TITLE_DOMAINS.get(str(post or ""))
 
 
 def title_rank(post: Optional[str]) -> int:
@@ -2750,21 +2786,50 @@ def under_purview(w: "World", actor: str, holding: Optional[str]) -> bool:
     neither of the other two."""
     if holding is None:
         return False
-    seat = next((w.offices[t.object].rung for t in w.tenures
-                 if t.subject == actor and t.kind == "hold" and t.live
-                 and t.object in w.offices
-                 and title_domain(w.offices[t.object].post) is not None), None)
-    if seat is None:
-        return False
-    # containment walks UP from the holding: a duchy's province is under the duke, a duchy's
-    # neighbour is not.
-    seen, cur = set(), holding
-    while cur is not None and cur not in seen:
-        if cur == seat:
-            return True
-        seen.add(cur)
-        cur = Query.parent_of(w, cur)
+    # ⚠ EVERY SEAT, NOT THE FIRST. This read `next((... for t in w.tenures ...), None)` and took
+    # whichever title-hold appeared first in an INSERTION-ORDERED list, which was wrong twice
+    # over. `Office.rung` is Optional (the office-cluster case, S6.2), and the generator YIELDED
+    # `None` as a value -- so a title office with a null rung ended the scan and returned False,
+    # and a Duke who was also made a King LOST PURVIEW OVER HIS OWN DUCHY. And a person holding
+    # two titles got whichever the tenure list happened to hold first: a Count of P who is also
+    # Duke of D was refused purview over D, or over P, depending on insertion order.
+    #
+    # It is a DISJUNCTION over the seats: authority over a holding is authority from ANY title the
+    # actor holds. Taking the highest-ranked seat instead would be the same bug wearing a better
+    # argument -- a Duke of D who is also Count of an unrelated P would lose P. Found by the
+    # governance-canon adversarial pass.
+    for seat in [rung for _, rung in titles_held(w, actor) if rung is not None]:
+        # containment walks UP from the holding: a duchy's province is under the duke, a duchy's
+        # neighbour is not.
+        seen, cur = set(), holding
+        while cur is not None and cur not in seen:
+            if cur == seat:
+                return True
+            seen.add(cur)
+            cur = Query.parent_of(w, cur)
     return False
+
+
+def titles_held(w: "World", actor: str) -> list:
+    """Every TITLE this person holds, as `(post, rung)`. THE SINGLE OWNER of the question *what
+    does this person govern* -- `under_purview` reads it for containment and `highest_title_rank`
+    for rank, so the two cannot drift into different answers about the same person (§8)."""
+    out = []
+    for t in w.tenures:
+        if t.kind == "hold" and t.subject == actor and t.live and t.object in w.offices:
+            o = w.offices[t.object]
+            if title_domain(o.post) is not None:
+                out.append((o.post, o.rung))
+    return out
+
+
+def highest_title_rank(w: "World", actor: str) -> int:
+    """The best rank this person holds, or `-1` for someone holding no title at all.
+
+    ⚠ THIS IS WHAT MAKES `title_rank` LOAD-BEARING. Until the governance-canon pass, `title_rank`
+    had no caller outside its own test: the ladder was asserted and then decided nothing, which is
+    §0.05's reference-wearing-mechanism's clothes. It decides a revocation now."""
+    return max((title_rank(post) for post, _ in titles_held(w, actor)), default=-1)
 
 
 @requires_predicate("confer")
@@ -2826,19 +2891,40 @@ def _req_revoke(w: "World", a: "Act") -> bool:
     # every revocation, so a king could strip any duke in his realm. That is exactly the reading
     # the ruling exists to forbid.
     target_is_title = title_domain(w.offices[obj].post) is not None
+    domain = w.offices[obj].rung
     if target_is_title:
-        if not in_holdings(w, a.actor, w.offices[obj].rung):
+        # ⚠ A CONJUNCTION, AND THE FIRST VERSION WAS A SINGLE TERM. It tested `in_holdings`
+        # ALONE, which makes holdings SUFFICIENT — so a Dicastery clerk who happened to hold a
+        # duchy could unmake its Duke, and a Duke holding the realm could unmake the King. That is
+        # the MIRROR of the defect it was written to fix: the version before it conflated governing
+        # authority with holdings in one direction, and this conflated them in the other. Jordan's
+        # message states a NECESSARY condition on someone who already has the authority —
+        # *"King/Queen CANNOT revoke title of Duke/Duchess IF they do not have duchy is in their
+        # holdings"* — and message 1 separates the two concepts on purpose. Both terms,
+        # therefore, plus rank: the whole point of *"they do not necessarily have sovereign power"*
+        # is that holding the land is not the same as outranking the person who governs it. Found
+        # by the governance-canon adversarial pass.
+        if not under_purview(w, a.actor, domain):
+            return False                       # governing authority over the domain
+        if not in_holdings(w, a.actor, domain):
+            return False                       # AND the domain is one of the actor's holdings
+        if highest_title_rank(w, a.actor) <= title_rank(w.offices[obj].post):
+            # AND strictly higher rank — which also forbids revoking YOUR OWN title, an
+            # equal-rank case nothing else in the branch excluded, and which a Duke who holds his
+            # own duchy (the ordinary case) otherwise satisfied.
             return False
-    elif not under_purview(w, a.actor, w.offices[obj].rung):
+    elif not under_purview(w, a.actor, domain):
         return False
     #
-    # ⚠ THIS IS A DIFFERENT ELIGIBILITY MODEL FROM THE ONE PART E STATES, and the difference is
-    # registered (`H-90`) rather than resolved here. Part E gives `revoke` the eligibility
-    # `remit:revoke`; Jordan's rule is about purview, which is a property of the ACTOR's title and
-    # the containment tree, not of the target office's remit column. Applied here as a NARROWING
-    # of the precondition — which is compatible with both readings and is what the ruling says —
-    # rather than by editing the transcribed `eligibility:` column, which is not this item's to
-    # rewrite.
+    # ⚠ THIS IS A DIFFERENT ELIGIBILITY MODEL FROM THE ONE PART E STATES, AND CALLING IT A
+    # COMPATIBLE NARROWING WAS WRONG — that is what this comment said, and it is false of
+    # Jordan's text. *"a Duke can revoke office from any individual in that office SO LONG AS that
+    # office is for a holding under their purview"* states a SUFFICIENT condition, so keeping Part
+    # E's `remit:revoke` as a necessary one on top means a Duke whose office lacks the `revoke`
+    # remit cannot revoke a governor inside his own duchy — an OVER-REFUSAL, which `G4` weighs
+    # equally with an invention. It is a narrowing relative to PART E, never relative to the
+    # ruling. The transcribed `eligibility:` column is not this item's to rewrite, so the conflict
+    # is REGISTERED (`H-91`) and named here rather than resolved by a quiet table edit.
     return any(t.kind == "hold" and t.object == obj and t.live for t in w.tenures)
 
 
@@ -3978,8 +4064,7 @@ def contest_subsystem(prize: Any) -> Optional[dict]:
     SUBSYSTEM is a module the contracts file already declares with a doc and a resolver. Returns
     `None` for a prize no roster row claims -- which is a real answer, not a failure, and leaves
     the generic refusal below it intact."""
-    row = _ROSTERS.get("contest_subsystems") or {}
-    name = (row.get("prizes") or {}).get(str(prize))
+    name = roster_map("contest_subsystems", "prizes").get(str(prize))
     if name is None:
         return None
     import yaml as _y

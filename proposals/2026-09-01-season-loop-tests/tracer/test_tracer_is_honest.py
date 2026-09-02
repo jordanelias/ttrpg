@@ -3011,6 +3011,26 @@ def test_the_governance_slice_executes_and_a_binding_decision_reaches_a_rung():
           f"{len(S.resolvable_verbs())} of {len(S.VERB_TABLE)} verbs now execute")
 
 
+def _seat(w, person, office_id, post, rung, remit=("issue", "revoke"), first=False):
+    """Seat `person` on a new office. ONE OWNER for the fixture, because every governance test
+    needs one and the governance-canon pass found the suite had built exactly TWO offices in the
+    entire instrument — so the worlds it asserted about were not the worlds the ruling is about.
+
+    `first=True` inserts the tenure at the head of `w.tenures`, which is how the insertion-order
+    dependence in the old `under_purview` is made observable rather than argued about."""
+    w.offices[office_id] = S.Office(office_id, post, rung, list(remit))
+    ten = S.Tenure(f"t_{office_id}_{person}", person, office_id, "hold", 0)
+    w.add_tenure(ten)
+    if first:
+        # ⚠ THROUGH THE OWNER, NOT THROUGH `w.tenures`, WHICH IS A READ-ONLY VIEW (S15.1, `W5`).
+        # The first draft of this helper mutated the view and raised `InstrumentDefect` — the
+        # guard `W5` built for exactly this doing its job on the person who built it.
+        own = w.persons[person].tenures
+        own.remove(ten)
+        own.insert(0, ten)
+    return office_id
+
+
 def test_the_title_ladder_is_total_over_the_rungs_and_rank_is_the_rung_ordinal():
     """`H-90`. Jordan, 2026-09-02: *"realm = king/queen, duchy = duke/duchess, province =
     count/countess, territory = lord, settlement = mayor, community = community leader, hearth =
@@ -3022,21 +3042,35 @@ def test_the_title_ladder_is_total_over_the_rungs_and_rank_is_the_rung_ordinal()
 
     ⚠ AND THE LADDER IS TOTAL, which is the load-bearing half: every rung kind has a title, down
     to a person governing themselves. That bottom rung is why Part E's `own` eligibility is not a
-    special kind of permission — it is this ladder at scale `person`."""
-    titles = S.roster("titles", ordered=True)
-    domains = {t: S.title_domain(t) for t in titles}
-    assert all(domains.values()), (
+    special kind of permission — it is this ladder at scale `person`.
+
+    ⚠ MEMBERSHIP IS READ FROM `domains:`, WHICH IS NOW ITS ONLY HOME. This read a separate
+    `values:` list while the MECHANISM read `domains:`, so the guard was asymmetric: a name in
+    `values` but not `domains` went red, and a name in `domains` but not `values` was invisible
+    here and live in `_req_revoke`. Adding `Steward: duchy` made an office posted `Steward` a
+    title, flipping its revocation rule, with the whole suite green. Found by the governance-canon
+    pass; `values:` is deleted and this reads the mapping the code reads."""
+    domains = dict(S.TITLE_DOMAINS)
+    assert domains and all(domains.values()), (
         f"a title governs no rung: {[t for t, d in domains.items() if not d]}")
     assert set(domains.values()) == set(S.RUNG_KINDS), (
         f"the ladder is not total — rungs with no title: "
         f"{sorted(set(S.RUNG_KINDS) - set(domains.values()))}")
     # rank IS the rung ordinal, in both directions
-    for t, dom in domains.items():
-        assert S.title_rank(t) == list(S.RUNG_KINDS).index(dom), (t, dom)
+    for ttl, dom in domains.items():
+        assert S.title_rank(ttl) == list(S.RUNG_KINDS).index(dom), (ttl, dom)
     assert S.title_rank("King") > S.title_rank("Duke") > S.title_rank("Count") \
         > S.title_rank("Lord") > S.title_rank("Mayor") > S.title_rank("Individual")
     assert S.title_domain("Dicastery") is None and S.title_rank("Dicastery") == -1, (
         "a non-title post reads as a rank; then an ordinary office confers governing authority")
+    # ⚠ AND THE MAPPING MUST REFUSE WHEN ABSENT, NOT DEFAULT. `title_domain` read
+    # `_ROSTERS.get("titles") or {}`, so deleting the roster returned `None` for every post and
+    # `_req_revoke` fell back to purview-for-everything — a guard failing OPEN into the exact
+    # behaviour Jordan's fourth message forbids. `roster_map` is the single owner of the refusal.
+    with pytest.raises(S.Unspecified):
+        S.roster_map("titles_that_do_not_exist", "domains")
+    with pytest.raises(S.Unspecified):
+        S.roster_map("titles", "a_key_that_is_not_there")
 
 
 def test_purview_is_containment_and_stops_at_the_holders_own_domain():
@@ -3044,12 +3078,16 @@ def test_purview_is_containment_and_stops_at_the_holders_own_domain():
     that office is for a holding **under their purview**."*
 
     So authority over a governance act is RANK + CONTAINMENT — a property of the ACTOR's title and
-    the containment tree — and NOT `remit:<act>`, which is a property of the target office. The
-    two models differ and the difference is `H-90`'s subject.
+    the containment tree — and NOT `remit:<act>`, which is a property of the target office.
 
     ⚠ AND PURVIEW IS DIRECTIONAL. A duke's purview reaches DOWN into the duchy and stops; the
-    realm above him is not his. A test that only checked "the duke can reach the settlement" would
-    pass on a predicate that returned `True` for everything."""
+    realm above him is not his.
+
+    ⚠ THE RANK HALF WAS UNOBSERVED AND THIS IS WHERE IT IS OBSERVED. Deleting the title check from
+    `under_purview` left all three governance tests green, because no test ever gave an actor a
+    NON-TITLE office and asked for its purview — the operative rule as tested was containment
+    alone, and `title_rank` had no caller outside its own assertion. The Dicastery case below is
+    the discriminating one: mutate the title conjunct away and it goes red."""
     w = P.tiny_world()
     duke = "p_high"          # holds `off_duke`, whose `rung` is the duchy `D`
     assert w.offices["off_duke"].post == "Duke" and w.offices["off_duke"].rung == "D"
@@ -3062,12 +3100,46 @@ def test_purview_is_containment_and_stops_at_the_holders_own_domain():
         "on the king's domain")
     assert not S.under_purview(w, "p_low", "S"), (
         "a person holding no title has purview; then governing authority is not a title at all")
-    # AND IT IS GOVERNING AUTHORITY, NOT SOVEREIGNTY OR OWNERSHIP — `H-90` rules those three
-    # apart and the tree models only the first. If a `sovereign` or `holdings` relation ever
-    # appears, this predicate must not silently start answering for it.
-    assert not hasattr(w, "sovereign") and not hasattr(w, "holdings"), (
-        "the World has grown a sovereignty or holdings relation; `under_purview` answers the "
-        "GOVERNING AUTHORITY question only, and `H-90` rules the three apart")
+
+    # ⚠ THE RANK CONJUNCT, MADE OBSERVABLE. An ORDINARY office is not a title, so seating someone
+    # on one at the duchy confers no purview over anything inside it. Without this case the title
+    # check in `under_purview` is decorative and the suite cannot tell.
+    _seat(w, "p_mid", "off_clerk", "Dicastery", "D")
+    assert S.title_domain("Dicastery") is None, "the fixture stopped being a non-title"
+    assert not S.under_purview(w, "p_mid", "S"), (
+        "an ORDINARY office at the duchy confers purview over the settlement inside it — then "
+        "rank is not part of the rule and any office-holder governs everything beneath them")
+
+    # ⚠ TWO TITLES, AND THE OLD CODE TOOK WHICHEVER CAME FIRST IN AN INSERTION-ORDERED LIST.
+    # `Office.rung` is Optional (the office-cluster case), the old generator yielded that `None`
+    # as a value and stopped, so a Duke who was ALSO made a King lost purview over his own duchy.
+    w2 = P.tiny_world()
+    _seat(w2, "p_high", "off_king_cluster", "King", None, first=True)
+    for inside in ("D", "S", "Hh"):
+        assert S.under_purview(w2, "p_high", inside), (
+            f"the duke lost purview over {inside} by ALSO being made a King with a null rung — "
+            "the seat lookup is order-dependent and stops on the first title it meets")
+    # and a second, non-null title must ADD purview rather than replace it
+    w3 = P.tiny_world()
+    w3.rungs["P2"] = S.Rung("P2", "province")
+    w3.add_tenure(S.Tenure("t_p2", "P2", "R", "contain", 0))
+    _seat(w3, "p_high", "off_count", "Count", "P2", first=True)
+    assert S.under_purview(w3, "p_high", "P2") and S.under_purview(w3, "p_high", "S"), (
+        "holding a county elsewhere cost the duke his duchy (or the reverse) — purview is a "
+        "DISJUNCTION over every title held, not a lookup of one seat")
+
+    # ⚠ GOVERNING AUTHORITY, SOVEREIGNTY AND OWNERSHIP ARE THREE THINGS, AND THIS ASSERTION USED
+    # TO CHECK THE WRONG ONE. It read `not hasattr(w, "sovereign") and not hasattr(w, "holdings")`
+    # — a test on ATTRIBUTE NAMES, which passed because the holdings relation was added as a
+    # Tenure rather than as a field. Term-matching where the concept was meant, which is this
+    # repository's signature error. The concept check: purview and holdings must be able to
+    # DISAGREE, and here they do — the duke governs the settlement and owns none of it.
+    assert S.under_purview(w, duke, "S") and not S.in_holdings(w, duke, "S"), (
+        "governing authority and holdings answer alike here, so the two are one relation wearing "
+        "two names and `H-90`'s distinction is not modelled")
+    assert not hasattr(w, "sovereign"), (
+        "the World has grown a sovereignty relation; `H-90` records sovereign power as RULED and "
+        "NOT BUILT, and a silent one would make that row false")
 
 
 def test_revoking_a_title_needs_holdings_and_revoking_an_office_needs_purview():
@@ -3080,18 +3152,26 @@ def test_revoking_a_title_needs_holdings_and_revoking_an_office_needs_purview():
         is in their holdings. King/Queen **can** revoke title of Duke/Duchess if the duchy is one
         of their holdings."*
 
-    ⚠ THE NEGATIVE CASE IS THE WHOLE POINT. A king has governing authority over the entire realm,
-    so a purview-only rule would let him strip any duke in it — and the ruling exists to forbid
-    exactly that reading. The first version of `_req_revoke` applied purview to every revocation
-    and was wrong in precisely that direction; only the positive half would have caught it, which
-    is why both halves are asserted here."""
+    ⚠ THE NEGATIVE CASE IS THE WHOLE POINT, AND THE FIRST VERSION OF IT WAS VACUOUS. It asserted
+    that a king could not revoke a duke's title without holding the duchy — in a world where
+    `p_king` held NO OFFICE AT ALL, so he had no governing authority either and every rule refuses
+    him. Mutating `_req_revoke` back to purview-for-everything left the assertion green: it could
+    not observe the failure it excluded (§0.1 pt 2). The hazard Jordan's fourth message names — a
+    King with realm-wide authority who does not hold the duchy — was constructed nowhere in the
+    suite. It is constructed here, and the discriminator is asserted directly: purview says YES
+    while the predicate says NO. Found by the governance-canon adversarial pass."""
     w = P.tiny_world()
     w.offices["off_duke"].revocation = "the crown's writ (harness fixture)"
     king, duke_office = "p_king", "off_duke"
+    _seat(w, king, "off_king", "King", "R")
     assert S.title_domain(w.offices[duke_office].post) is not None, "the target is not a title"
     act = S.Act(id="k1", actor=king, verb="revoke", payload={"office": duke_office})
 
-    # THE NEGATIVE: governing authority is not enough for a title.
+    # THE DISCRIMINATOR: he HAS the governing authority, and it is not enough.
+    assert S.under_purview(w, king, "D") and S.highest_title_rank(w, king) > S.title_rank("Duke"), (
+        "the king has no authority over the duchy in this world, so the negative below is vacuous "
+        "— it would pass under the purview-only rule this ruling forbids")
+    assert not S.in_holdings(w, king, "D")
     assert not S.REQUIRES_PREDICATES["revoke"](w, act), (
         "the king can revoke the duke's TITLE without holding the duchy — purview is standing in "
         "for holdings, which is the reading this ruling forbids")
@@ -3100,6 +3180,43 @@ def test_revoking_a_title_needs_holdings_and_revoking_an_office_needs_purview():
     assert S.in_holdings(w, king, "D") and not S.in_holdings(w, king, "S")
     assert S.REQUIRES_PREDICATES["revoke"](w, act), (
         "the duchy is in the king's holdings and he still cannot revoke the title")
+
+    # ⚠ AND HOLDINGS ALONE MUST NOT BE ENOUGH EITHER — the mirror defect. The first conjunction
+    # tested `in_holdings` and nothing else, so a clerk who happened to hold a duchy could unmake
+    # its Duke. Governing authority and holdings are separate terms and BOTH are required.
+    #
+    # ⚠ THE DISCRIMINATING WORLD IS A FOREIGN KING, and the first version of this case was not it.
+    # It used a Dicastery clerk, who has rank -1, so the RANK term refused him and dropping the
+    # purview term changed nothing — the mutation ran green. A king of ANOTHER realm has the rank
+    # and holds the duchy outright, and still has no governing authority over it: his seat is
+    # `R2`, and walking up from `D` reaches `R` and stops. That is Jordan's separation of the
+    # three concepts in one world, and it is what makes the purview term load-bearing.
+    w4 = P.tiny_world()
+    w4.offices["off_duke"].revocation = "the crown's writ (harness fixture)"
+    w4.rungs["R2"] = S.Rung("R2", "realm")
+    _seat(w4, "p_mid", "off_foreign_king", "King", "R2")
+    w4.add_tenure(S.Tenure("t_foreign_land", "p_mid", "D", "hold", 0))
+    assert S.in_holdings(w4, "p_mid", "D"), "the fixture does not hold the duchy; the case is moot"
+    assert S.highest_title_rank(w4, "p_mid") > S.title_rank("Duke"), (
+        "the foreign king does not outrank the duke, so RANK would refuse him and the purview "
+        "term would again decide nothing — the same defect this case exists to close")
+    assert not S.under_purview(w4, "p_mid", "D"), "the foreign king governs the duchy after all"
+    assert not S.REQUIRES_PREDICATES["revoke"](
+        w4, S.Act(id="c1", actor="p_mid", verb="revoke", payload={"office": "off_duke"})), (
+        "a foreign king unmade a Duke by owning his duchy — holdings is standing in for governing "
+        "authority, which is the same conflation in the opposite direction")
+
+    # ⚠ AND NOBODY REVOKES THEIR OWN TITLE. A duke who holds his own duchy — the ordinary case,
+    # and the one Jordan's *"do not necessarily have all … in their holdings"* presupposes is
+    # common — satisfies purview and holdings on himself. Rank is what excludes it: strictly
+    # higher, never equal.
+    w5 = P.tiny_world()
+    w5.offices["off_duke"].revocation = "the crown's writ (harness fixture)"
+    w5.add_tenure(S.Tenure("t_selfland", "p_high", "D", "hold", 0))
+    assert S.under_purview(w5, "p_high", "D") and S.in_holdings(w5, "p_high", "D")
+    assert not S.REQUIRES_PREDICATES["revoke"](
+        w5, S.Act(id="s1", actor="p_high", verb="revoke", payload={"office": "off_duke"})), (
+        "the duke revoked his own title; equal rank is not excluded and the ladder decides nothing")
 
     # AND AN ORDINARY OFFICE TAKES THE OTHER RULE: purview, no holding required.
     w2 = P.tiny_world()
@@ -3113,6 +3230,82 @@ def test_revoking_a_title_needs_holdings_and_revoking_an_office_needs_purview():
                   payload={"office": "off_dicastery"})), (
         "the duke cannot revoke an ordinary office in his own duchy — the holdings rule has "
         "leaked onto offices, where the ruling asks only for purview")
+
+
+def test_the_revocation_branch_executes_in_the_fold_and_not_only_as_a_predicate():
+    """§0.2 — DONE MEANS IT RUNS. Every other assertion about `_req_revoke` calls the predicate
+    DIRECTLY out of `REQUIRES_PREDICATES`, which is a claim about a function, not about a
+    behaviour. The governance-canon pass established that in every world the suite builds, and in
+    `headless.build_world` (which creates no offices at all), `_eligible` refuses `revoke` before
+    the branch is ever reached — `off_duke`'s remit does not carry `revoke`. So the branch had
+    never executed inside the resolver in any test or any run.
+
+    This drives the fold. The office is given the `revoke` remit so Part E's `remit:revoke`
+    eligibility is satisfied, and the act is resolved rather than asked about.
+
+    ⚠ THE REMIT REQUIREMENT IS ITSELF `H-91`. Jordan's rule makes purview SUFFICIENT; Part E keeps
+    `remit:revoke` necessary. This test satisfies both so the branch can be observed at all, and
+    the conflict between them is registered rather than settled here."""
+    w = P.tiny_world()
+    w.offices["off_dicastery"].revocation = "the duke's writ (harness fixture)"
+    w.offices["off_dicastery"].rung = "S"
+    w.add_tenure(S.Tenure("t_dic", "p_mid", "off_dicastery", "hold", 0))
+    w.offices["off_duke"].remit_acts = list(w.offices["off_duke"].remit_acts) + ["revoke"]
+    act = S.Act(id="f1", actor="p_high", verb="revoke", payload={"office": "off_dicastery"})
+    before = [t.id for t in w.tenures if t.kind == "hold" and t.object == "off_dicastery" and t.live]
+    assert before, "the fixture office is unheld; the fold would have nothing to close"
+    w.step = S.Step.RESOLVE
+    events = S.SeasonDriver(w).resolve([act])
+    kinds = [e.kind for e in events]
+    assert "attempt.refused" not in kinds, (
+        f"the fold refused a revocation whose preconditions all hold: {kinds}")
+    assert "tenure.closed" in kinds, (
+        f"the fold accepted the act and closed no tenure — the branch is reachable but inert: "
+        f"{kinds}")
+    assert not [t for t in w.tenures
+                if t.kind == "hold" and t.object == "off_dicastery" and t.live], (
+        "the tenure survived a revocation the fold accepted")
+
+
+
+def test_the_corpus_cannot_reach_the_governance_branch_and_h71_is_not_the_reason():
+    """§0.1 pt 4 — A NUMBER WITHOUT A CONTROL IS NOT A MEASUREMENT, IN EITHER DIRECTION, and
+    `PROBE FLIPS 0` on the governance work is a TAUTOLOGY rather than a control.
+
+    The governance commit published that zero as evidence with the reason *"a rule no corpus row
+    reaches moves no verdict, and `H-71` is why it reaches none."* The zero is honest; **the
+    reason is wrong**, and a wrong causal story is worse than none because it would survive the
+    thing it blames being fixed. `H-71` governs `person_side_eligible`, which sits in `choose`.
+    The probe corpus does not go through `choose` at all.
+
+    The two ACTUAL reasons, asserted here so the claim is checkable rather than argued:
+
+      1. **No probe mints a governance Act.** `F12`, the only probe about revocation, writes
+         Tenure rows directly and never constructs `Act(verb="revoke")`.
+      2. **`headless.build_world` creates no offices**, so the milestone run cannot reach a
+         governance predicate whatever eligibility says.
+
+    Either one alone makes the zero inevitable. This test goes red when a probe or the headless
+    world starts reaching the branch — at which point `PROBE FLIPS 0` starts meaning something and
+    the published sentence must be re-derived rather than reused. Found by the governance-canon
+    adversarial pass."""
+    import inspect
+    gov = ("confer", "revoke", "dispatch", "convene")
+    probe_src = inspect.getsource(P)
+    minted = [v for v in gov if f'verb="{v}"' in probe_src or f"verb='{v}'" in probe_src]
+    assert not minted, (
+        f"a probe now mints {minted} — `PROBE FLIPS 0` may finally be a control rather than a "
+        "tautology, and the reason published for it must be re-derived")
+    # ⚠ UNCONDITIONAL, AND THE FIRST DRAFT WAS NOT. It read
+    # `hw = HL.build_world(HL.load_case(...)) if hasattr(HL, "load_case") else None` and then
+    # guarded on `hw is not None` — `load_case` does not exist, so the second half of the reason
+    # was never asserted at all. §0.1 pt 2, inside the test written to enforce §0.1 pt 4, caught
+    # by checking whether the branch ran rather than by reading it.
+    import headless as HL
+    hw = HL.build_world(seed=0)
+    assert not hw.offices, (
+        "the milestone world has offices now; the governance branch may be reachable in a run "
+        "and the tautology above has become a measurement")
 
 
 def test_no_person_can_choose_a_governance_verb_and_h71_is_why():
