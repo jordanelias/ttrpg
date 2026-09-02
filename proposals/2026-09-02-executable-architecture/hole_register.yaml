@@ -900,8 +900,8 @@ rows:
     default:   "`both` — one claim about the Event's own subject, plus one per `StateChange` with the CHANGED THING as its subject"
     site:      "Fixtures claim_subject_rule; shape.claim_subjects, called by SeasonDriver.witness"
     sweep:     ["actor", "per_change", "both"]
-    unblocks:  "every Q2 question, therefore every act any person takes in response to another"
-    cite:      "FOUND BY RUNNING ARTIFACT 2. WITNESS deposited every claim with `subject = event.subject`, and the fold sets an Event's subject to the ACTOR — so every claim in the world reads 'I hold that <actor> did <kind>' and `ARCHITECTURE_V2.md` §F1's Q2, \"A claim landing in the holder's ledger... whose subject is that person, something they hold, or a Proposition they have committed to\", CANNOT FIRE ON ITS SECOND CLAUSE, because no claim's subject is ever an object. MEASURED on NPC-088 before the fix: the bailiff held 23 claims across three seasons and formed ZERO questions; the whole world formed one, and it was Carin's own Q4. Nothing propagated and no arc walked past one link. ⚠ NO FIELD WAS ADDED TO `Event`: `PLAN.md` §8.1 forbids a `target` or `actor` field and this needs neither — `changes[]` already names what an act wrote, so the subject is READ off the Event the design already has. ⚠ A SECOND DEFECT HAD TO BE FIXED BEFORE THIS ROW COULD DO ANYTHING: the fold emitted `changes[]` from the CALLER'S Act, and every act after `W5` is computed and carries none, so `per_change` had nothing to read. Effects now report the ids they touched and `_apply_write` builds the `StateChange`s. Reproduce with `python headless.py --case NPC-088 --seasons 3 --seed 0`."
+    unblocks:  "a Q2 question about an OBJECT rather than an actor. ⚠ NOT \"every act any person takes in response to another\" — that was this row's first wording and it is overstated; see the cite"
+    cite:      "FOUND BY RUNNING ARTIFACT 2. WITNESS deposited every claim with `subject = event.subject`, and the fold sets an Event's subject to the ACTOR — so every claim in the world reads 'I hold that <actor> did <kind>' and `ARCHITECTURE_V2.md` §F1's Q2, \"A claim landing in the holder's ledger... whose subject is that person, something they hold, or a Proposition they have committed to\", CANNOT FIRE ON ITS SECOND CLAUSE, because no claim's subject is ever an object. MEASURED on NPC-088 before the fix: the bailiff held 23 claims across three seasons and formed ZERO questions; the whole world formed one, and it was Carin's own Q4. Nothing propagated and no arc walked past one link. ⚠ NO FIELD WAS ADDED TO `Event`: `PLAN.md` §8.1 forbids a `target` or `actor` field and this needs neither — `changes[]` already names what an act wrote, so the subject is READ off the Event the design already has. ⚠ A SECOND DEFECT HAD TO BE FIXED BEFORE THIS ROW COULD DO ANYTHING: the fold emitted `changes[]` from the CALLER'S Act, and every act after `W5` is computed and carries none, so `per_change` had nothing to read. Effects now report the ids they touched and `_apply_write` builds the `StateChange`s. Reproduce with `python headless.py --case NPC-088 --seasons 3 --seed 0`. ⚠ THIS ROW OVERSTATED ITSELF AND THE `W9` ADVERSARIAL PASS CAUGHT IT. Its `unblocks:` read 'every Q2 question, therefore every act any person takes in response to another'. MEASURED AFTER THE FIX: the bailiff still forms ZERO questions, because the per-change subject is the RECORD and the only person holding it is its maker. What this row actually unblocked is Carin's Q2 on her OWN record — and even that would have fired under the incumbent `actor` rule, since every claim's subject was already her. The row is still right that no claim could be about an object; it was wrong about what follows. THE REMAINING BLOCKER IS SEPARATE AND IS `H-84`: nothing in the resolvable vocabulary moves a Record to another person, so no second person ever holds one. Reproduce with `python -m pytest test_tracer_is_honest.py -k sweeps_the_register -s`, which prints distinct claim subjects per rule."
     source:    "W9 — found by execution"
   - id:        H-80
     tier:      0
@@ -927,6 +927,42 @@ rows:
     unblocks:  "nothing — it is ruled; the row exists so the number is locatable"
     cite:      "FOUND BY `W9` CHECK 3, AND IT IS THE ONE FIXTURE IN THE RUN THAT HAD NO ROW OF ANY KIND. Unlike the other seven it is not open: #353 §27.4 states the multiple, so this row is `ruled` and carries no sweep — sweeping a value the specification gives would be reporting a finding about a game #353 ruled out, which is the defect `H-28`'s cite records the re-grade making. THE POINT OF THE ROW IS LOCATABILITY, not openness: `V2` §G's claim is that every number the instrument reads resolves to a `site:`, and a ruled number with no row breaks that claim exactly as an invented one does. Check 3 cannot tell the two apart, and should not have to."
     source:    "W9 — found by execution"
+  - id:        H-82
+    tier:      0
+    hole:      "#353 CONTRADICTS ITSELF ON `causes[]`. `:658` says the ids are \"already in the log, or [ROOT]\"; `:1377` says the Events carry \"causes[] NAMING THE ACTS\". An Act is never in the log, so both cannot hold as written"
+    kind:      "COLLISION"
+    owner:     "§19 (the Event record) and §39.2 (the seam), which disagree"
+    grade:     "assumption"
+    default:   "a cause resolves to AN EVENT OR THE ACT THAT PRODUCED IT — referential integrity against `log UNION resolved`"
+    site:      "shape._fold's ev() call and SeasonDriver.resolve's contest branch; asserted by probe A28"
+    sweep:     ["log union resolved (the default)", "log only — every act emission is [ROOT]", "acts only — no event ever names another"]
+    unblocks:  "every arc: it decides whether the narrative substrate is populated at all"
+    cite:      "FOUND BY THE `W9` ADVERSARIAL PASS, WHICH IS THE SECOND TIME THIS SESSION DECIDED IT AND THE FIRST TIME IT WAS WRITTEN DOWN. `W9` changed the fold from `[ROOT]` to `[a.id]` and argued it IN A CODE COMMENT — a decisive interpretive fill on a contradiction in the specification, with no row, while rows were minted the same day for the claim subject, the stage default and the obstacle multiple. ⚠ THE SECOND SWEEP POINT IS NOT HYPOTHETICAL: it is what the instrument did for four revisions, and #353 §19.4 describes the result in its own words — \"the design rests its narrative layer, audit trail and arc model on this edge -- 'the arc itself' -- and the measured state is that the specified loop emits `causes=[]`, so the substrate of the entire emergent-narrative claim is declared and never populated.\" `[ROOT]` everywhere is `[]` wearing a marker. ⚠ AND THE FIX WAS COSMETIC WITH RESPECT TO WHAT `W9` MEASURED: a log walker drops an unresolvable `[a.id]` exactly as it drops `[ROOT]`, so `W9`'s four-Event chain is produced entirely by term maturation (`H-80`) and NOT by this change. Both facts belong on this row. Falsifier: probe `A28`, which asserts the union reading over a real four-season run and which was SHORT-CIRCUITED from `W3` until now — it used the verb `do`, which is on no table row, so it published a routing gap instead of ever checking the invariant."
+    source:    "W9 — found by the adversarial pass"
+  - id:        H-83
+    tier:      1
+    hole:      "the verb table's `stratum` column reached no resolver. `VerbRow.stratum` is a NAME, `Act.stratum` is an INT with a default, and nothing mapped one onto the other"
+    kind:      "SCHEMA_ROW"
+    owner:     "the resolver (§27's five strata)"
+    grade:     "ruled"
+    default:   "`shape.stratum_of` — the act's own stratum when it names one, else its verb-table row's, by index into the `strata` roster"
+    site:      "shape.stratum_of, read by SeasonDriver.resolve's sort key"
+    sweep:     []
+    unblocks:  "§27's ordered fold — which acts see which world"
+    cite:      "FOUND BY THE `W9` ADVERSARIAL PASS. `W3` loaded and VALIDATED a `stratum` per verb against the roster and no resolver ever read it: `Act.stratum` defaults to 4 (`social`), so EVERY COMPUTED ACT RESOLVED AT 4 whatever its verb, and §27's five-strata ordering was inert for the whole of artifact 2. `rosters.yaml`'s own note on that roster says 'ORDER IS SEMANTIC HERE, not alphabetical: the fold resolves in this sequence, so editing the order changes which acts see which world' - describing a column nothing read. Graded `ruled` and not `assumption` because #353 §27 gives the strata AND their order; there is nothing open here and never was, which is why it had no row: it was not a hole anyone had, it was a wire nobody ran. A dead carrier in the resolver's own ordering is the shape #353 `:739-744` names, and this one sat one layer beneath every verdict the instrument has published."
+    source:    "W9 — found by the adversarial pass"
+  - id:        H-84
+    tier:      0
+    hole:      "no verb in the resolvable vocabulary moves a Record to another person, so no second person ever holds one and §F1's Q2 never fires for anybody but the maker"
+    kind:      "PRODUCER"
+    owner:     "Part E — the verb that would do it"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "every case where one person's work reaches another — the whole of NPC-088's arc_trajectory"
+    cite:      "FOUND BY THE `W9` ADVERSARIAL PASS, AS THE REASON `H-79` DID NOT DELIVER WHAT IT CLAIMED. Part E's `transfer` moves `(Rung, stores)` — MATTER, not Records — and `destroy_record` is gated `hold:<record> | presence`, both unevaluable person-side. So a Record is created by its maker, held by its maker, and reachable by nobody: the bailiff forms zero questions in every season of artifact 2 and ONLY CARIN EVER ACTS. `PLAN.md` §6.3's chain requires a claim deposited in another person's ledger, then that person's Q2 question, then their act, and links 3 through 5 are unreachable for this reason and not because of anything `W9` built. ⚠ GRADED `absent`, NOT `assumption`, AND DELIBERATELY: #353 names the six investigation acts (`verb_table.yaml`, `requires: per act`, no predicate) as how a thing is FOUND, and #353 `:499` gives \"burn the Record that carries it\" as what a finder does — so the design plainly intends discovery to exist and states no mechanism. Inventing a `give_record` verb here would be adding a row to Part E to make a milestone pass, which §8.1's first rule forbids in terms: do not weaken the design to make cases pass."
+    source:    "W9 — found by the adversarial pass"
 
 # ---------------------------------------------------------------------------
 # THE DISCHARGE MAP -- guardrail G8.

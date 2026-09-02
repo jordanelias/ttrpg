@@ -46,15 +46,22 @@ CASE = "NPC-088"
 CARIN, BAILIFF, WARDEN = "p_carin", "p_bailiff", "p_warden"
 
 
-def build_world(seed: int = 0) -> S.World:
-    """Carin's world. Fixtures are `DEFAULT_FIXTURES`, unmodified, so check 3's claim -- that every
-    number read resolves to a register `site:` -- is about the registered defaults and not about a
-    set tuned for this run."""
-    w = S.World(seed)
+def build_world(seed: int = 0, fixtures: "S.Fixtures" = None) -> S.World:
+    """Carin's world. Fixtures default to `DEFAULT_FIXTURES`, unmodified, so check 3's claim --
+    that every number read resolves to a register `site:` -- is about the registered defaults and
+    not about a set tuned for this run.
+
+    ⚠ `fixtures` IS A PARAMETER BECAUSE THE FIRST VERSION BUILT THE WORLD FROM `DEFAULT_FIXTURES`
+    AND THEN RAN IT ON WHATEVER WAS SWEPT. The site's starting `condition` came from the unswept
+    default while the band floors and the wear came from the swept one, so a `condition_scale`
+    sweep silently compared a site at 1000 against floors scaled to 10000 -- a confounded arm,
+    which duly reported a "finding" that was the confound. Found while writing the sweep itself;
+    §0.1 point 1 is the general form of it."""
+    w = S.World(seed, fixtures or S.DEFAULT_FIXTURES)
     w.rungs["hearth_ostvik"] = S.Rung("hearth_ostvik", "hearth")
     w.rungs["ostvik"] = S.Rung("ostvik", "settlement")
     w.sites["scriptorium"] = S.Site("scriptorium", "hearth_ostvik", "body",
-                                    condition=S.DEFAULT_FIXTURES.get("condition_scale"))
+                                    condition=w.fixtures.get("condition_scale"))
 
     for pid, name in ((CARIN, "Carin Vedel"), (BAILIFF, "Uwe the bailiff"),
                       (WARDEN, "the warden")):
@@ -75,6 +82,13 @@ def build_world(seed: int = 0) -> S.World:
 
     # Convictions read PERSON-SIDE ONLY, scored against `rosters.yaml`'s alignment table. These
     # are hers; nothing else in the loop reads them.
+    # ⚠ THESE ARE WORLD DATA, NOT A DEFINITION, and the distinction is the one `rosters.yaml`
+    # states: a roster or a table is a definition the GAME resolves from; a person's conviction
+    # weight is a fact about that person, like their name. It is nonetheless load-bearing on the
+    # result and saying so is owed — `Precedent: 0.9` against the alignment table's
+    # `Precedent -> create_record: 0.9` is what puts `create_record` first in her ranking every
+    # season, and therefore what starts the causal chain check 2 measures. A different Carin
+    # produces a different season, which is the point of her having convictions at all.
     w.persons[CARIN].convictions = {"Precedent": 0.9, "self_preservation": 0.3}
     w.persons[BAILIFF].convictions = {"suspicion": 0.8, "Precedent": 0.4}
     w.persons[WARDEN].convictions = {"Precedent": 0.6}

@@ -569,7 +569,7 @@ not the shape.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| A doctrine-following operative's recorded conviction toward honor and obedience must be able to keep him completing assigned missions even in a hypothetical where a colleague with different  | `P9` | **UNSPECIFIED** | S27/E2 |
+| A doctrine-following operative's recorded conviction toward honor and obedience must be able to keep him completing assigned missions even in a hypothetical where a colleague with different  | `P9` | **UNSPECIFIED** | E2 |
 | **[core]** A person must be able to hold a hard floor of zero in a perceptual capacity that governs whether he can detect a specific category of harm his own actions cause, such that he completes tasks | — | UNMAPPED | — |
 | **[core]** Two members of the same covert operational role must be able to diverge on whether to complete or abort the same category of mission, where one member's abort decision is driven by informati | — | UNMAPPED | — |
 | A covert order must be able to assign or withhold specific missions based on which of its operatives can or cannot perceive a given risk category, using that as a deliberate selection criter | — | UNMAPPED | — |

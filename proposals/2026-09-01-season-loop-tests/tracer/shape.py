@@ -1641,6 +1641,20 @@ class Query:
         return min(scale, (seasons_held * scale) // span)
 
 
+def stratum_of(a: "Act") -> int:
+    """An Act's resolution stratum: its verb table row's, by index into the `strata` roster.
+
+    `Act.stratum` is an int with a default, and a caller that sets it explicitly is taken at its
+    word -- `A37` exercises the ordering that way. Everything else reads the table, which is
+    where §27 actually puts the answer."""
+    if a.stratum != Act.__dataclass_fields__["stratum"].default:
+        return a.stratum
+    row = VERB_TABLE.get(a.verb)
+    if row is None or row.stratum not in STRATA:
+        return a.stratum
+    return STRATA.index(row.stratum)
+
+
 def resolvable_verbs() -> frozenset:
     """The verbs the fold can actually carry through RESOLVE: no precondition, or a precondition
     some `REQUIRES_PREDICATES` entry evaluates.
@@ -2404,6 +2418,7 @@ def _eff_move(w: "World", a: "Act") -> None:
     if dest:
         w.add_tenure(Tenure(H(w.world_seed, w.tick, a.actor, f"leg:{a.id}"),
                                 a.actor, dest, "contain", since=w.tick))
+    return [a.actor]
 
 
 @effect_for("work")
@@ -2411,8 +2426,14 @@ def _eff_work(w: "World", a: "Act") -> None:
     """`work` alters `(Site, condition)` by the act's declared delta. The DELTA IS NOT APPLIED
     HERE -- §27.3 sums every delta across the fold and clamps ONCE, so applying it per act would
     make the clamp arrival-order dependent, which §32 forbids. The write goes through the gate so
-    the class and Partition are checked; the value lands in the accumulator."""
-    return None
+    the class and Partition are checked; the value lands in the accumulator.
+
+    ⚠ IT REPORTS THE SITE ANYWAY. The fold now refuses an act whose effect touched nothing, and
+    `work`'s DELTA is deferred while its SUBJECT is not: the act is about that site, and saying
+    so is what keeps the deferral from reading as a no-op."""
+    d = a.payload if isinstance(a.payload, dict) else {}
+    site = d.get("site") or next((x for x in sorted(w.sites)), None)
+    return [site] if site else []
 
 
 @effect_for("create_record")
@@ -2518,6 +2539,9 @@ def _eff_transfer(w: "World", a: "Act") -> None:
     if dst is not None:
         dst.stores = dict(dst.stores or {})
         dst.stores[kind] = dst.stores.get(kind, 0) + amount
+    # BOTH SIDES, because §E3 says `transfer` writes `(Rung, stores)` twice -- one per side -- and
+    # a one-sided report would make the Event name half of what it did.
+    return [r.id for r in (src, dst) if r is not None]
 
 
 class SeasonDriver:
@@ -2882,6 +2906,18 @@ class SeasonDriver:
                 # operation, and running it per pair minted three Tenures for one `move`.
                 made = self._apply_write(w, a, kind, fld, eff if n == 0 else None)
                 changed.extend(c for c in made if c not in changed)
+            # ⚠ AN EFFECT THAT TOUCHED NOTHING DID NOT DO THE THING, AND MUST NOT EMIT THE
+            # SUCCESS. `kill / wound`'s effect returns early when its payload names no subject --
+            # which is every computed act, since §F1's Candidate carries no operands (`H-80`) --
+            # and the fold then emitted `person.died` ANYWAY. Artifact 2 published four fabricated
+            # deaths across a four-season run, into every ledger, and `person.died` is one of the
+            # three endings §6.3's own chain check accepts. Found by the `W9` adversarial pass.
+            if eff is not None and not changed:
+                TRACE.decision(f"{a.verb} wrote nothing", "E3",
+                               chose="emit the refusal, not the success",
+                               alternatives=["emit `emits:` anyway (publishes an event for a "
+                                             "state change that did not happen)"])
+                return ev(row.emits_on_refusal or ("act.refused",), [a.id])
         # The act's proposed changes ride on the success Events -- §27.3's accumulator sums
         # them across the fold and clamps ONCE, which is order-independent as a fact.
         # ⚠ `[a.id]`, NOT `[ROOT]`, AND THIS WAS THE SUBSTRATE OF THE WHOLE NARRATIVE CLAIM.
@@ -2934,7 +2970,15 @@ class SeasonDriver:
 
         # S27: FIVE STRATA, then S32 rest 3's CONTENT-DERIVED canonicalization WITHIN each.
         # This sorts ONE GLOBAL ARRAY, which is exactly why RESOLVE DOES NOT PARTITION (S31).
-        ordered = sorted(acts, key=lambda a: (a.stratum,
+        # ⚠ THE STRATUM COMES FROM THE VERB TABLE, NOT FROM THE ACT'S DEFAULT. `VerbRow.stratum`
+        # is a NAME (`social`, `movement`) validated against the roster at load; `Act.stratum` is
+        # an INT defaulting to 4, and NOTHING MAPPED ONE ONTO THE OTHER -- so every computed act
+        # resolved at 4 whatever its verb, and §27's five-strata ordering was INERT. `rosters.yaml`
+        # says of that roster "ORDER IS SEMANTIC HERE... editing the order changes which acts see
+        # which world", which described a column no resolver read. Found by the `W9` adversarial
+        # pass. An act that names its own stratum still wins, so a caller can still test the
+        # ordering directly (`A37`).
+        ordered = sorted(acts, key=lambda a: (stratum_of(a),
                                               H(w.world_seed, w.tick, a.actor, f"order:{a.verb}:{a.id}")))
         TRACE.decision(f"ordering {len(acts)} acts", "S27/S32",
                        chose="five strata, then a content-derived hash key over one global array",

@@ -3182,12 +3182,12 @@
      "verdict": {
       "id": "P9",
       "verdict": "GAP",
-      "detail": "verb 'refuse' is on no row of the verb table",
+      "detail": "'dispatch' has a precondition the fold cannot evaluate: 'the named person exists'",
       "kind": "UNSPECIFIED",
-      "section": "S27/E2",
+      "section": "E2",
       "title": "an order is the subordinate's own choice",
-      "needs": "a row in verb_table.yaml, ruled before it is added",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+      "needs": "a predicate in REQUIRES_PREDICATES, or a `requires:` the table states structurally rather than in prose",
+      "law": "\u00a7E2 -- `requires` is checked IN THE FOLD. Stated as prose it is the same defect `resolve` had, one column along: a rule the code cannot read",
       "by": "construction",
       "tests": "a superior must be able to direct a subordinate, and the subordinate must be able to refuse or deviate"
      }
@@ -10195,7 +10195,7 @@
      "verdict": {
       "id": "A5",
       "verdict": "PASS",
-      "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (186f6993fd98...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+      "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (a5ab4ccfed65...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
       "kind": null,
       "section": "S32",
       "title": "the fold is order-independent, and the float control actually fires",
@@ -11548,12 +11548,12 @@
   "P9": {
    "id": "P9",
    "verdict": "GAP",
-   "detail": "verb 'refuse' is on no row of the verb table",
+   "detail": "'dispatch' has a precondition the fold cannot evaluate: 'the named person exists'",
    "kind": "UNSPECIFIED",
-   "section": "S27/E2",
+   "section": "E2",
    "title": "an order is the subordinate's own choice",
-   "needs": "a row in verb_table.yaml, ruled before it is added",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+   "needs": "a predicate in REQUIRES_PREDICATES, or a `requires:` the table states structurally rather than in prose",
+   "law": "\u00a7E2 -- `requires` is checked IN THE FOLD. Stated as prose it is the same defect `resolve` had, one column along: a rule the code cannot read",
    "by": "construction",
    "tests": "a superior must be able to direct a subordinate, and the subordinate must be able to refuse or deviate"
   },
@@ -11806,7 +11806,7 @@
   "A5": {
    "id": "A5",
    "verdict": "PASS",
-   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (186f6993fd98...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (a5ab4ccfed65...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
    "kind": null,
    "section": "S32",
    "title": "the fold is order-independent, and the float control actually fires",
@@ -12251,13 +12251,11 @@
   },
   "A28": {
    "id": "A28",
-   "verdict": "GAP",
-   "detail": "verb 'do' is on no row of the verb table",
-   "kind": "UNSPECIFIED",
-   "section": "S27/E2",
+   "verdict": "PASS",
+   "detail": "PASS over 4 events from a real run: id uniqueness, a NON-DECREASING season index, a stable content hash, and referential integrity on causes[] against log UNION resolved -- 4 causes name an ACT and 0 name an EVENT, zero dangle. \u26a0 THE UNION IS `H-82` AND IT IS A READING, NOT A GIVEN: #353 `:658` and `:1377` cannot both hold as written, and this probe asserts the reading `W9` took rather than leaving it in a code comment",
+   "kind": null,
+   "section": "S19.1",
    "title": "the log's invariants hold",
-   "needs": "a row in verb_table.yaml, ruled before it is added",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
    "by": "construction",
    "tests": "every recorded happening must be able to point at real prior happenings"
   },
@@ -12555,10 +12553,10 @@
   },
   {
    "kind": "UNSPECIFIED",
-   "what": "verb 'refuse' is on no row of the verb table",
-   "where": "S27/E2",
-   "needs": "a row in verb_table.yaml, ruled before it is added",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+   "what": "'dispatch' has a precondition the fold cannot evaluate: 'the named person exists'",
+   "where": "E2",
+   "needs": "a predicate in REQUIRES_PREDICATES, or a `requires:` the table states structurally rather than in prose",
+   "law": "\u00a7E2 -- `requires` is checked IN THE FOLD. Stated as prose it is the same defect `resolve` had, one column along: a rule the code cannot read",
    "case": "probe:P9",
    "expected": false
   },
@@ -12941,15 +12939,6 @@
    "expected": false
   },
   {
-   "kind": "UNSPECIFIED",
-   "what": "verb 'do' is on no row of the verb table",
-   "where": "S27/E2",
-   "needs": "a row in verb_table.yaml, ruled before it is added",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
-   "case": "probe:A28",
-   "expected": false
-  },
-  {
    "kind": "FORBIDDEN",
    "what": "an Event in log A naming an Event in log B as its cause",
    "where": "S19.5",
@@ -12996,15 +12985,15 @@
   }
  ],
  "_trace_counts": {
-  "STEP": 2095,
-  "BARRIER": 710,
-  "DECISION": 717,
-  "WRITE": 762,
-  "QUERY": 4306,
-  "ACT": 72,
-  "EVENT": 58,
-  "CLAIM": 351,
-  "GAP": 67,
+  "STEP": 2136,
+  "BARRIER": 723,
+  "DECISION": 732,
+  "WRITE": 793,
+  "QUERY": 4387,
+  "ACT": 75,
+  "EVENT": 62,
+  "CLAIM": 376,
+  "GAP": 66,
   "NOTE": 96
  },
  "_corpus_defects": [

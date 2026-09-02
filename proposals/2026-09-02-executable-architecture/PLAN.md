@@ -1077,6 +1077,45 @@ That is **honest** (it is #353's specified behaviour), it makes the log walk, an
 
 ---
 
+### ⚠ **LANDED 2026-09-02 — ARTIFACT 2 RUNS, AND THE BAR IS NOT MET AS THIS SECTION WRITES IT.**
+
+Both halves are true and neither may be dropped. `python headless.py --case NPC-088 --seasons 2
+--seed 0` completes, reproducibly, with a computed option set and no `effect` lambda. **The number
+this plan is subordinate to went from zero to one.** What follows is what the adversarial pass
+established about the six checks, recorded here because §7.3 binds this document to `G5`.
+
+| check | state |
+|---|---|
+| **1** reproducible | **MET.** Byte-identical across runs; a different seed diverges |
+| **2** a chain of ≥4 Events | **MET AT FOUR SEASONS, NOT AT THE PUBLISHED TWO** — and by ONE mechanism repeating, not by the chain this section describes |
+| **3** zero fills off the register | **MET**, and getting there gave `site:` to four rows that had carried an empty one since `W0` |
+| **4** no `effect`, no roster | **MET**, asserted over signatures |
+| **4b** ≤ `budget` scenes, swept bound | **MET** |
+| **5** `exercises:` before the run | **NOT MET AS WRITTEN.** Authored after; the file declares it and substitutes a cited outside source per row |
+| **6** the float control fires | **MET** |
+
+**Three things this section asks for that the run does not do, and none is a defect in the run:**
+
+1. **The chain in §6.3 check 2 requires links this design has no verb for.** *"a claim deposited in
+   another person's ledger → that person's Q2 question → their act"* is unreachable: nothing in the
+   resolvable vocabulary moves a Record to a second person, so only its maker ever holds one and
+   **only Carin ever acts**. That is `H-84`, graded `absent` — inventing a `give_record` verb to
+   close it would be §8.1's first forbidden move.
+2. **Checks 1 and 2 cannot both hold at `--seasons 2`.** The only chaining edge is term
+   maturation, one stage per season, so the chain reaches `1 + seasons − 1`: depth 2 at two
+   seasons, depth 4 at four. Both are measured and printed.
+3. **The chain's length is `1 + record_stages_default`**, a number this session invented (`H-80`).
+   Its `0` control is now executed rather than described: depth 1 · 4 · 7 at 0 · 3 · 6.
+
+**What the milestone does establish, and it is not small:** the loop runs a season end to end from
+a computed `q`, a computed option set and a table-driven fold; and running it found **eight defects
+no amount of reading had found** — `causes=[ROOT]` everywhere (`H-82`), a dead Q2 (`H-04`), claims
+that could only be about actors (`H-79`), Events carrying no `changes[]`, a `person.died` emitted
+when nobody died, the verb table's `stratum` column reaching no resolver (`H-83`), `A28`
+short-circuited since `W3` on the one invariant it exists to check, and `H-84` above.
+
+---
+
 # PART 7 · THE GUARDRAILS
 
 **A guardrail here is a rule with (a) the specific failure that earned it and (b) a check that fails

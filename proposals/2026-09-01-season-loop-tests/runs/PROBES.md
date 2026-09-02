@@ -18,9 +18,9 @@ checking.* So every probe declares its provenance:
 
 ## ⚠ THE ENFORCEMENT SPLIT — the single most important number in this ledger
 
-**Of 60 PROBES that did not pass, 30 were raised BY THE SHAPE ITSELF and 24 exist only because THERE IS NO SIGNATURE TO CALL.**
+**Of 59 PROBES that did not pass, 29 were raised BY THE SHAPE ITSELF and 24 exist only because THERE IS NO SIGNATURE TO CALL.**
 
-> ⚠ **THIS COUNTS PROBES, NOT GAP EVENTS, and the two numbers differ.** `results.json`'s `_trace_counts.GAP` is 67 — every gap RAISED during the run, including several inside one probe and several the corpus cases hit. This line counts probes whose VERDICT is not PASS: 60 of 122. Both are honest counts of different populations, and `G10` forbids reporting either without its basis — which this file did until the `W5` adversarial pass read both.
+> ⚠ **THIS COUNTS PROBES, NOT GAP EVENTS, and the two numbers differ.** `results.json`'s `_trace_counts.GAP` is 66 — every gap RAISED during the run, including several inside one probe and several the corpus cases hit. This line counts probes whose VERDICT is not PASS: 59 of 122. Both are honest counts of different populations, and `G10` forbids reporting either without its basis — which this file did until the `W5` adversarial pass read both.
 
 That is close to an even split, and it matters more than any case verdict. A refusal a
 gate enforces and a refusal that exists because nobody wrote the function are different
@@ -32,7 +32,7 @@ has no module system and no visibility modifiers, so the guarantee there is
 a contributor closes by simply writing the function — no gate fires, no test goes red,
 and the design's own §27.2 admission applies: *enforced by a person noticing*.
 
-**And 14 of 62 PASSes are not by construction
+**And 14 of 63 PASSes are not by construction
 either** — they are listed individually below and should be discounted accordingly. A
 `probe-model` PASS means the instrument supplied something the design does not.
 
@@ -53,7 +53,6 @@ either** — they are listed individually below and should be discounted accordi
 | `A22` | **UNSPECIFIED** | construction | S27/E2 | each region must be able to run its own slice of the loop |
 | `A23` | **FORBIDDEN** | construction | S22.4 | a running total of everything that ever happened must be able to be kept |
 | `A27` | **UNOWNED** | no-signature | S22.3 | every value in the game must be able to name who writes it |
-| `A28` | **UNSPECIFIED** | construction | S27/E2 | every recorded happening must be able to point at real prior happenings |
 | `A29` | **FORBIDDEN** | probe-model | S19.5 | a subsystem must be able to keep its own record of what it did |
 | `A3` | **FORBIDDEN** | construction | S3-L4 | the story must be able to conclude when a tracked quantity reaches a value |
 | `A30` | **UNGRADED** | construction | S42.2.1 | a piece of the design with no evidence behind it must be able to be used anyway |
@@ -94,7 +93,7 @@ either** — they are listed individually below and should be discounted accordi
 | `P43` | **FORBIDDEN** | construction | S22.4 | a quantity held by many characters individually must be able to be totalled across them |
 | `P7` | **UNSPECIFIED** | construction | S22.4 | a character must carry lasting moral damage from what they were made to do |
 | `P8` | **UNSPECIFIED** | construction | S27/E2 | one character must be able to be blocked by another without either knowing about the other |
-| `P9` | **UNSPECIFIED** | construction | S27/E2 | a superior must be able to direct a subordinate, and the subordinate must be able to refuse or deviate |
+| `P9` | **UNSPECIFIED** | construction | E2 | a superior must be able to direct a subordinate, and the subordinate must be able to refuse or deviate |
 | `W10` | **FORBIDDEN** | construction | S10.1 | a place must be able to hold a level of discontent that rises and falls |
 | `W13` | **FORBIDDEN** | no-signature | S25.1 / S3-L5 | a world-scale tracked quantity must be able to decay on a fixed schedule independent of anyone's actions |
 | `W1x` | **UNGRADED** | construction | S42.2.1 | the world must be able to wear down a kind of place nobody wrote a rule for |
@@ -107,6 +106,7 @@ either** — they are listed individually below and should be discounted accordi
 | `A24` | PASS | construction | S35 | a mechanism written for the powerful must be able to work for a whole population |
 | `A25` | PASS | construction | S6.2 | a cause that spans several regions must be able to exist with no parent region |
 | `A26` | PASS | construction | S38.1 | the engine must be able to walk its own references without looping forever |
+| `A28` | PASS | construction | S19.1 | every recorded happening must be able to point at real prior happenings |
 | `A31b` | PASS | construction | S42.2.1 | a conclusion about how fast the world decays must not depend on a number nobody decided |
 | `A31c` | PASS | construction | S42.2.1 | a conclusion about which actions a place supports must not depend on a number nobody decided |
 | `A32` | PASS | construction | S62 | the number of playable moments a character gets must be able to be counted |
@@ -241,12 +241,6 @@ either** — they are listed individually below and should be discounted accordi
 
 **needs:** an ownership row each
 **law:** S22.3 -- named rather than glossed: season_factor's distribution (BLOCKS yield); the cohort's construal spread (rule stated, representation not); the object-side Tenure index (Nobody, by rule -- a barrier-built cache); travel legs (in the write matrix AND the churn ledger AND no ownership row)
-
-### `A28` — the log's invariants hold  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
-**what:** verb 'do' is on no row of the verb table
-
-**needs:** a row in verb_table.yaml, ruled before it is added
-**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids
 
 ### `A29` — two logs share a causes chain  ·  **FORBIDDEN**  ·  `S19.5`  ·  by `probe-model`
 **what:** an Event in log A naming an Event in log B as its cause
@@ -487,11 +481,11 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** NOTHING FROM THE DESIGN -- #353 does not name 'take_seat' as a verb. This is the CALLER'S invention and the gap is the caller's
 **law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
 
-### `P9` — an order is the subordinate's own choice  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
-**what:** verb 'refuse' is on no row of the verb table
+### `P9` — an order is the subordinate's own choice  ·  **UNSPECIFIED**  ·  `E2`  ·  by `construction`
+**what:** 'dispatch' has a precondition the fold cannot evaluate: 'the named person exists'
 
-**needs:** a row in verb_table.yaml, ruled before it is added
-**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids
+**needs:** a predicate in REQUIRES_PREDICATES, or a `requires:` the table states structurally rather than in prose
+**law:** §E2 -- `requires` is checked IN THE FOLD. Stated as prose it is the same defect `resolve` had, one column along: a rule the code cannot read
 
 ### `W10` — a settlement holds a level of discontent  ·  **FORBIDDEN**  ·  `S10.1`  ·  by `construction`
 **what:** Rung.morale assigned -- not a declared field of S10's record

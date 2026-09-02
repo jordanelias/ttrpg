@@ -1484,7 +1484,15 @@ def test_jordan_no_definition_is_hardcoded_in_a_body():
     # signal. They are checked for the defect that DOES matter there — a roster DUPLICATED from
     # the data file, which is how a definition comes back after being moved.
     MODEL = "shape.py"
-    CORPUS = ("probes.py", "report.py", "run_cases.py")
+    # ⚠ THE CORPUS IS DISCOVERED, NOT LISTED, AND THE DIFFERENCE IS THIS TEST'S OWN LESSON. Its
+    # docstring names the original defect as "IT READ `shape.py` ALONE while `probes.py`,
+    # `report.py` and `run_cases.py` went unscanned" — and the fix was a hardcoded four-name
+    # tuple, so `headless.py` and `delta.py`, added by `W9`, were unscanned BY CONSTRUCTION. A
+    # filename roster is a router and `G2` forbids the shape: forbid it, never enumerate it.
+    # Every module in the instrument directory except this file is the corpus.
+    CORPUS = tuple(sorted(f.name for f in HERE.glob("*.py")
+                          if f.name not in (MODEL, "test_tracer_is_honest.py")))
+    assert {"probes.py", "report.py", "run_cases.py", "headless.py"} <= set(CORPUS), CORPUS
     FILES = (MODEL,) + CORPUS
     known = {frozenset(r["values"]) for r in S._ROSTERS.values()}
     offenders, exempted = [], []
@@ -2255,6 +2263,14 @@ def test_w9_check2_a_causal_chain_walks_from_her_act():
     emits `causes=[]`, so the substrate of the entire emergent-narrative claim is declared and
     never populated."* `[ROOT]` everywhere is `[]` wearing a marker."""
     import headless as HL
+    # ⚠ §6.3'S OWN TWO CLAUSES CANNOT BOTH HOLD, AND THE ARITHMETIC IS STATED RATHER THAN THE
+    # LONGER RUN QUIETLY SUBSTITUTED. Check 1 fixes the run at `--seasons 2`; check 2 demands a
+    # chain of at least four Events. The only edge that chains is term maturation, one stage per
+    # season (`H-80`: 3 stages at a term of 1), so the chain reaches depth `1 + seasons - 1`:
+    # depth 2 at the published two seasons and depth 4 at four. The `W9` adversarial pass caught
+    # the first version running check 2 at four seasons while the artifact published two, with
+    # nothing saying so. Both are measured here and the shortfall is printed, not hidden.
+    published = HL.run(seasons=2, seed=0)["world"]
     w = HL.run(seasons=4, seed=0)["world"]
     by_id = {e.id: e for e in w.log}
 
@@ -2272,7 +2288,22 @@ def test_w9_check2_a_causal_chain_walks_from_her_act():
     print("\n  W9 check 2 — the longest causal chain:")
     for e in reversed(chain):
         print(f"    t{e.emitted_at} {e.kind:16} {e.subject[:26]:26} causes={[c[:8] for c in e.causes]}")
+    pub_by_id = {e.id: e for e in published.log}
+
+    def pub_depth(e, seen=()):
+        if e.id in seen:
+            return 0
+        return 1 + max([pub_depth(pub_by_id[c], seen + (e.id,))
+                        for c in e.causes if c in pub_by_id] or [0])
+
+    d_pub = max((pub_depth(e) for e in published.log), default=0)
+    print(f"  at the PUBLISHED `--seasons 2`: longest chain {d_pub} Events")
+    print(f"  at `--seasons 4`:               longest chain {d} Events")
     assert d >= 4, f"the longest chain is {d} Events; §6.3 check 2 requires at least 4"
+    assert d_pub < 4, (
+        f"the published two-season run reaches {d_pub} — if that is now true the note above is "
+        "stale and check 2 should be measured on the published run alone")
+    assert d_pub >= 2, f"the published run chains only {d_pub} Events — maturation is not running"
     late_root = [e for e in w.log if e.causes == ["ROOT"] and e.emitted_at > 0]
     assert not late_root, (
         f"{len(late_root)} Event(s) after the seed declare `causes: [ROOT]` — §19.4 reserves that "
@@ -2338,13 +2369,20 @@ def test_w9_check4b_she_returned_at_most_budget_scenes():
     cap = w.fixtures.get("interactions_per_scene")
     assert HL.run(seasons=1, seed=0)["acts"] <= b * cap, "more interactions than budget x bound"
     # THE FALSIFIER: at a bound of 1 the same run must refuse, or the check is unobservable.
-    w2 = HL.build_world(0)
-    w2.fixtures = w2.fixtures.sweep("interactions_per_scene", 1)
-    w2.fixtures = w2.fixtures.sweep("scene_packing_rule", "greedy")
-    mint = lambda pid, verb, subj: S.H(w2.world_seed, w2.tick, pid, f"act:{verb}:{subj}")
-    n = sum(len(sc.acts) for sc in S.pack_scenes(
-        w2.persons[HL.CARIN], [S.Candidate("speak", "x")] * 9, b, w2.fixtures, mint))
-    assert n <= b, f"packing at a bound of 1 produced {n} interactions against a budget of {b}"
+    # ⚠ THE FALSIFIER ASSERTS A REFUSAL, NOT AN INEQUALITY. The first version set the bound to 1
+    # and asserted `n <= b` over `pack_scenes` — which cannot fail for any input, because at a
+    # width of 1 the packer returns at most `n_scenes` scenes by construction. It observed
+    # nothing. `deliberate` is where the two bounds are enforced, so the falsifier plants a
+    # violation there and requires the raise.
+    w2 = HL.build_world(0, S.DEFAULT_FIXTURES.sweep("interactions_per_scene", 1))
+
+    def over(p, v, s, ask_budget):
+        return ([S.Scene("s0", p.id, [P.Act_(w2, p, "speak", key=str(j)) for j in range(2)])]
+                if p.id == HL.CARIN else [])
+
+    with pytest.raises(S.Ungraded) as caught:
+        S.SeasonDriver(w2).season(over, None, HL.subsistence)
+    assert "interactions" in str(caught.value), caught.value
 
 
 def test_w9_check6_the_float_control_still_fires():
@@ -2381,25 +2419,52 @@ def test_w9_check5_every_declared_exercises_verb_runs_or_is_recorded_not_assesse
 
     w = HL.run(seasons=4, seed=0)["world"]
     kinds = {e.kind for e in w.log}
-    hers = {e.id for e in w.log if e.subject == HL.CARIN}
     by_id = {e.id: e for e in w.log}
+    # ⚠ THE ACTS, NOT THE EVENTS. The first version tested `e.id in {events whose subject is
+    # Carin}` and returned True at step zero for every act-Event of hers — because the fold sets
+    # EVERY act-Event's subject to its actor. It never traversed one `causes[]` edge, so the
+    # clause "with `causes[]` walking back to her act" was never executed. Walking to an ACT id
+    # is the thing the plan asks for and is now what this tests.
+    hers = {c for e in w.log for c in e.causes
+            if c not in by_id and c != "ROOT" and e.subject == HL.CARIN}
 
     def walks_back(e, seen=()):
-        if e.id in hers:
+        if any(c in hers for c in e.causes):
             return True
         return any(walks_back(by_id[c], seen + (e.id,))
                    for c in e.causes if c in by_id and c not in seen)
 
-    ran, unassessed = [], []
+    ran, unassessed, non_verb = [], [], []
     for r in rows:
         for token in r["exercises"]:
             row = S.VERB_TABLE.get(token)
             if row is None:
-                continue                      # an H-id or a kind, checked below
+                # ⚠ THIS BRANCH SAID `continue  # checked below` AND NOTHING BELOW CHECKED THEM,
+                # so every row whose `exercises:` names only an H-id or an Event kind vanished
+                # from BOTH columns — including row 3, "possessing the product must trigger
+                # consequences for whoever holds it", which is the row `H-79` was created to
+                # unblock and which the corpus still scores as an unmapped core row. A check that
+                # silently drops the case it exists for is worse than one that fails.
+                if token in kinds:
+                    ran.append((token, [token]))
+                elif token in {x["id"] for x in REG.load()["rows"]}:
+                    non_verb.append(token)     # a hole id: reported, never counted as ran
+                else:
+                    unassessed.append((token, []))
+                continue
             hit = [k for k in row.emits if k in kinds]
             (ran if hit else unassessed).append((token, hit))
-    print(f"\n  W9 check 5 — declared verbs that RAN: {sorted({t for t, _ in ran})}")
-    print(f"                 NOT-ASSESSED: {sorted({t for t, _ in unassessed})}")
+    print(f"\n  W9 check 5 — declared tokens that RAN: {sorted({t for t, _ in ran})}")
+    print(f"                  NOT-ASSESSED: {sorted({t for t, _ in unassessed})}")
+    print(f"                  register rows cited (not executable): {sorted(set(non_verb))}")
+    # EVERY ROW IS ACCOUNTED FOR IN ONE OF THE THREE COLUMNS. This is the assertion the dropped
+    # branch made impossible, and it is check 5's actual claim.
+    seen = {t for t, _ in ran} | {t for t, _ in unassessed} | set(non_verb)
+    for r in rows:
+        assert set(r["exercises"]) <= seen, (
+            f"row {r['need'][:60]!r} declares {sorted(set(r['exercises']) - seen)}, which appears "
+            "in no column — it is neither exercised nor recorded NOT-ASSESSED")
+    assert non_verb, "no row cites a register hole — the H-id branch is unexercised"
     assert ran, "not one declared verb produced its `emits:` kind — the exercises describe a "\
                 "season that did not happen"
     # Every kind that DID fire must walk back to one of her acts, or the log is disconnected.
@@ -2409,3 +2474,94 @@ def test_w9_check5_every_declared_exercises_verb_runs_or_is_recorded_not_assesse
             assert walks_back(e), f"{k} does not walk back to an act of Carin's"
     # And the honest half: what did NOT run is reported, not repointed.
     assert len(ran) + len(unassessed) >= 5, (ran, unassessed)
+
+
+def test_w9_h80s_zero_control_is_executed_not_merely_described():
+    """`H-80`'s cite says *"AT THE `0` SWEEP POINT NOTHING MATURES and the causal chain collapses
+    to one link, which is the control"*. It said it in a YAML string and no test ran it.
+
+    ⚠ THIS IS THE CONTROL FOR W9's HEADLINE RESULT. Chain depth is `1 + record_stages_default`
+    when the run is long enough, so check 2's `>= 4` is met at the declared 3 with ZERO MARGIN and
+    fails at 2. The four-Event chain rests on a number this session invented, and that is a fact
+    about the milestone, not a reason to hide the sweep."""
+    import headless as HL
+    depths = {}
+    for n in (0, 3, 6):
+        w = HL.build_world(0, S.DEFAULT_FIXTURES.sweep("record_stages_default", n))
+        d = S.SeasonDriver(w)
+        mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+        for _ in range(7):
+            d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+                     None, HL.subsistence)
+        by_id = {e.id: e for e in w.log}
+
+        def depth(e, seen=()):
+            if e.id in seen:
+                return 0
+            return 1 + max([depth(by_id[c], seen + (e.id,)) for c in e.causes if c in by_id] or [0])
+
+        depths[n] = max((depth(e) for e in w.log), default=0)
+    print(f"\n  H-80 sweep — longest causal chain by record_stages_default: {depths}")
+    assert depths[0] == 1, (
+        f"at the 0 control the chain is {depths[0]}, not 1 — something OTHER than maturation is "
+        "chaining, which would be a finding worth more than this control")
+    assert depths[3] > depths[0] and depths[6] > depths[3], (
+        f"the chain does not grow with the stage count: {depths} — then check 2's result does not "
+        "rest on H-80 and this control is measuring nothing")
+    assert depths[3] >= 4, depths
+
+
+def test_w9_the_sweeps_the_register_declares_are_executed():
+    """§G is declare · default · sweep, and `R2` checks only the first two. This runs the points
+    `W9`'s own rows declare, because the previous pass added five sweeps and executed none — in
+    the same session whose `test_w5_every_new_assumption_rows_sweep_is_actually_executed` names
+    that exact laundering."""
+    import headless as HL
+    moved = {}
+
+    # H-79 — the claim subject. `per_change` must change WHAT a ledger holds.
+    subjects = {}
+    for rule in sorted(S.CLAIM_SUBJECT_RULES):
+        w = HL.build_world(0, S.DEFAULT_FIXTURES.sweep("claim_subject_rule", rule))
+        d = S.SeasonDriver(w)
+        mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+        for _ in range(2):
+            d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+                     None, HL.subsistence)
+        subjects[rule] = len({c.subject for c in w.persons[HL.BAILIFF].ledger})
+    moved["H-79 distinct claim subjects in the bailiff's ledger"] = subjects
+    assert subjects["actor"] < subjects["per_change"], subjects
+
+    # H-06 — the condition scale. Verdicts must be INVARIANT under an order of magnitude, because
+    # every band is a fraction of the scale; a move would mean a band edge is read as an absolute.
+    hashes = {}
+    for scale in (100, 1000, 10000):
+        fx = S.DEFAULT_FIXTURES.sweep("condition_scale", scale)
+        fx = fx.sweep("band_floors", {k: {kk: vv * scale // 1000 for kk, vv in v.items()}
+                                      for k, v in fx.get("band_floors").items()})
+        fx = fx.sweep("wear_per_season", {k: max(1, v * scale // 1000)
+                                          for k, v in fx.get("wear_per_season").items()})
+        # BUILT FROM THE SWEPT FIXTURES, so the site's starting condition is on the same scale as
+        # the floors it is compared against. Passing them to `build_world` is the fix; the first
+        # version swept after building and compared a 1000-condition site to 10000-scale floors.
+        w = HL.build_world(0, fx)
+        # ⚠ EVERY CONDITION-UNIT FIXTURE SCALES TOGETHER, OR THE ARM IS CONFOUNDED. The first
+        # version scaled the floors and left `wear_per_season` at 10 — so a site wore 10% of the
+        # scale per season at 100 and 0.1% at 10000, and the sweep reported an event-count move
+        # that was the confound, not a band edge read as an absolute. §0.1 point 1: the hazard is
+        # changing a getter's source while a co-varying quantity still writes the old one.
+        for p in w.persons.values():
+            p.body = scale
+        d = S.SeasonDriver(w)
+        mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+        for _ in range(2):
+            d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+                     None, HL.subsistence)
+        hashes[scale] = len(w.log)
+    moved["H-06 events by condition_scale"] = hashes
+    assert len(set(hashes.values())) == 1, (
+        f"the event count moves with the condition scale: {hashes}. A band edge is being read as "
+        "an absolute rather than as a fraction of the scale, which is what this sweep is for.")
+
+    for k, v in moved.items():
+        print(f"\n  {k}: {v}")

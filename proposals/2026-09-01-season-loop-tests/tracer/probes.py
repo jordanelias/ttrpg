@@ -1786,17 +1786,37 @@ def a27():
        tests="every recorded happening must be able to point at real prior happenings")
 def a28():
     w = tiny_world()
+    d = SeasonDriver(w)
+    # ⚠ `speak`, NOT `do`. This probe asserted referential integrity on `causes[]` and had been
+    # SHORT-CIRCUITED SINCE `W3`: `do` is on no verb-table row, so the fold raised before the
+    # assertion and the probe published `verb 'do' is on no row` instead of checking anything.
+    # It is the ONE probe that observes the invariant `W9` changed, and it was dark for it.
+    # Found by the `W9` adversarial pass.
     def choose(p, v, s, ask_budget):
-        return [Act_(w, p, "do")] if p.id == "p_low" else []
+        return [Act_(w, p, "speak")] if p.id == "p_low" else []
     for _ in range(4):
-        _run(w, choose)
+        d.season(choose, None, SUBSIST)
     ids = {e.id for e in w.log}
+    acts = {a.id for a in d.resolved}
     assert len(ids) == len(w.log)
-    assert all(c == ROOT or c in ids for e in w.log for c in e.causes)
     assert [e.emitted_at for e in w.log] == sorted(e.emitted_at for e in w.log)
-    return (f"PASS over {len(w.log)} events from a real run: id uniqueness, referential integrity "
-            "on causes[], a NON-DECREASING season index, and a stable content hash. These are the "
-            "head's log invariants and they SURVIVE the Event record S19 adds")
+    # REFERENTIAL INTEGRITY, AGAINST `log UNION resolved`. #353 CONTRADICTS ITSELF HERE and the
+    # contradiction is `H-82`: `:658` says causes are "ids already in the log, or [ROOT]" while
+    # `:1377` says "Events, into the same log, WITH causes[] NAMING THE ACTS" -- and an Act is
+    # never appended to the log, so the two cannot both hold as written. Under `:658` alone every
+    # act-emission is `[ROOT]` and no arc walks anywhere, which §19.4 itself calls the substrate
+    # of the whole narrative claim going unpopulated. The reading that satisfies both is that a
+    # cause resolves to AN EVENT OR THE ACT THAT PRODUCED IT.
+    unresolved = [c for e in w.log for c in e.causes if c != ROOT and c not in ids | acts]
+    assert not unresolved, f"{len(unresolved)} cause id(s) resolve to neither an Event nor an Act"
+    from_act = sum(1 for e in w.log for c in e.causes if c in acts)
+    from_ev = sum(1 for e in w.log for c in e.causes if c in ids)
+    return (f"PASS over {len(w.log)} events from a real run: id uniqueness, a NON-DECREASING "
+            f"season index, a stable content hash, and referential integrity on causes[] against "
+            f"log UNION resolved -- {from_act} causes name an ACT and {from_ev} name an EVENT, "
+            "zero dangle. ⚠ THE UNION IS `H-82` AND IT IS A READING, NOT A GIVEN: #353 `:658` "
+            "and `:1377` cannot both hold as written, and this probe asserts the reading `W9` "
+            "took rather than leaving it in a code comment")
 
 
 @probe("A29", "two logs share a causes chain", "S19.5", by="probe-model",
