@@ -147,11 +147,33 @@ def run_case(case: dict, seed: int = 0) -> dict:
     except (S.ShapeGap, S.Unspecified, S.Forbidden, S.NoProducer) as e:
         return dict(id=cid, scale=scale, status="DESIGN-GAP", executed=[], refused=[],
                     seasons=n, why=f"{type(e).__name__}: {e}")
-    # EXECUTION, from Part E's own columns: a verb succeeded when one of its `emits:` kinds is in
-    # the log, and was refused when one of its `emits_on_refusal:` kinds is.
-    kinds = {e.kind for e in w.log}
-    ok = sorted(v for v, r in S.VERB_TABLE.items() if kinds & set(r.emits or ()))
-    no = sorted(v for v, r in S.VERB_TABLE.items() if kinds & set(r.emits_on_refusal or ()))
+    # EXECUTION, ATTRIBUTED TO THE ACT — not to any verb that shares an emission kind.
+    #
+    # ⚠ THE KIND ALONE IS NOT AN ATTRIBUTION, AND READING IT AS ONE PUT A FALSE POSITIVE IN THE
+    # PUBLISHED SET. `forge` and `create_record` BOTH emit `record.created` (and `confer` and
+    # `revoke` both emit `tenure.closed`), so a scan over `{e.kind for e in w.log}` credited
+    # `forge` with every record `create_record` made — while `forge` has no predicate and no
+    # effect and cannot execute at all. Caught by cross-checking the executed set against the
+    # predicate/effect tables: a verb the fold cannot execute appeared among the verbs that did.
+    #
+    # The fold derives every emission's id as `H(seed, tick, actor, f"{kind}:{act.id}")`
+    # (`shape.py`, `_fold.ev`), so attribution is EXACT and reuses the design's own id scheme
+    # rather than adding a second rule for the same question (§8). The act id is unique, so a
+    # match at any tick is a genuine match for that act.
+    ids = {e.id for e in w.log}
+    ok_v, no_v = set(), set()
+    for a in getattr(d, "resolved", []):
+        row = S.VERB_TABLE.get(a.verb)
+        if row is None:
+            continue
+        for t in range(n + 1):
+            for k in (row.emits or ()):
+                if S.H(w.world_seed, t, a.actor, f"{k}:{a.id}") in ids:
+                    ok_v.add(a.verb)
+            for k in (row.emits_on_refusal or ()):
+                if S.H(w.world_seed, t, a.actor, f"{k}:{a.id}") in ids:
+                    no_v.add(a.verb)
+    ok, no = sorted(ok_v), sorted(no_v)
     return dict(id=cid, scale=scale, status="RAN" if ok else "NO-EXECUTION",
                 executed=ok, refused=no, seasons=n, why="")
 

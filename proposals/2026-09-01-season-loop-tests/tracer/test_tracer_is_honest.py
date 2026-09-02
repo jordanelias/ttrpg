@@ -4214,7 +4214,18 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `tell` and `transfer` were among its "seven that execute" and both are always REFUSED.
     ever = {v for r in live for v in r["executed"]}
     refused_only = {v for r in live for v in r["refused"]} - ever
-    assert ever == {"create_record", "forge", "move", "speak", "tell", "utter", "work"}, (
+    foldable_all = set(S.resolvable_verbs())
+    # ⚠ THE CROSS-CHECK THAT CAUGHT A FALSE POSITIVE IN THIS VERY MEASUREMENT, kept as a guard.
+    # `corpus_run` first attributed an execution by EMISSION KIND, and `forge` and `create_record`
+    # both emit `record.created` (as `confer` and `revoke` both emit `tenure.closed`) — so `forge`
+    # was credited with every record `create_record` made, while having no predicate and no effect
+    # and being unable to execute at all. A verb that EXECUTED must be a verb the fold CAN execute;
+    # anything else is the instrument crediting the design with work it did not do, which is the
+    # mis-attribution `G4` forbids. Attribution is now exact, via the fold's own id derivation.
+    assert ever <= foldable_all, (
+        f"{sorted(ever - foldable_all)} executed while the fold cannot execute them — the "
+        "attribution has gone back to matching on emission kind, which two pairs of verbs share")
+    assert ever == {"create_record", "move", "speak", "tell", "utter", "work"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
     assert refused_only == {"transfer"}, (
@@ -4245,10 +4256,9 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
         f"the divergent group is no longer the five one-season cases: "
         f"{sorted({r['seasons'] for r in small})}, n={len(small)}. The explanation on `H-96` "
         "(a claim lands at WITNESS, so a one-season life has none to tell) no longer holds")
-    foldable = set(S.resolvable_verbs())
-    assert foldable - ever - refused_only == {"confer", "convene", "dispatch", "revoke",
+    assert foldable_all - ever - refused_only == {"confer", "convene", "dispatch", "revoke",
                                               "destroy_record"}, (
-        f"the never-attempted set moved to {sorted(foldable - ever - refused_only)}. Four of the "
+        f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Four of the "
         "five are the governance verbs and `H-71` is why; any movement means `H-71` has moved")
 
 
