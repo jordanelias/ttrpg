@@ -139,7 +139,7 @@ def main() -> int:
     ap.add_argument("--log", action="store_true", help="print the Event log with its causes[]")
     a = ap.parse_args()
     if a.case != CASE:
-        raise SystemExit(f"this artifact is {CASE}; `PLAN.md` §6.1 names the second case as "
+        raise SystemExit(f"this artifact is {CASE}; `PLAN.md` §6.5 (was §6.1 before the 2026-09-02 rewrite) names the second case as "
                          "NPC-033 if she fails for a reason about her own rows")
     r = run(a.seasons, a.seed)
     print(f"{a.case} · {a.seasons} season(s) · seed {a.seed}")
