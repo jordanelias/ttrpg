@@ -268,6 +268,19 @@ rosters:
       written — but the three subsystems it should be calling ARE BUILT, each with a doc, a sim
       module and a declared resolver (`d_sigma` for personal combat, `dice_pool` for the other
       two). So the seam was not missing a ladder; it was failing to dispatch.
+      ⚠ JORDAN, 2026-09-02, VERBATIM: *"we aren't using the .md or anything for those systems.
+      those are super outdated. you are allowed to refer to the currently existing python work for
+      those systems (and only those systems) in repository."* So the LIVE artifact for each is its
+      Python, not its `*_v30.md`: `systems/combat/combat_engine_v1/`,
+      `systems/mass_battle/sim/`, `systems/social_contest/sim/contest/`. `contest_subsystem` reads
+      `sim_module:` and never `doc:` for that reason — printing the markdown path would aim a
+      reader at a file its owner calls superseded. `references/module_contracts.yaml` still carries
+      the stale `doc:` for `mass_battle` and `social_contest`; correcting it is outside this
+      proposal chain and is NOT done here.
+      ⚠ AND WIRING THEM IS NOT WANTED YET. Jordan, same exchange: *"we don't NEED to worry about
+      them at this point in time."* The seam names the subsystem and refuses; that is the whole of
+      the intended behaviour for now, and the third sweep point records what calling them would be
+      without inviting anybody to do it.
       This roster maps a PRIZE to the subsystem that owns it. The prize is what Part E's column
       carries; the subsystem is what `module_contracts.yaml` already names, so neither half is
       invented here. ⚠ WIRING THE ACTUAL ENGINES IS OUT OF THIS CHAIN'S SCOPE (Jordan ruled only

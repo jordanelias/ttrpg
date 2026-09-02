@@ -3834,8 +3834,20 @@ def contest_subsystem(prize: Any) -> Optional[dict]:
         return dict(module=name, resolver="unknown", doc="module_contracts.yaml not found")
     for m in (_y.safe_load(contracts.read_text()) or {}).get("modules") or []:
         if m.get("module") == name:
-            return dict(module=name, resolver=m.get("resolver") or "undeclared",
-                        doc=m.get("doc") or "no doc")
+            # ⚠ THE PYTHON, NOT THE MARKDOWN. Jordan, 2026-09-02: *"we aren't using the .md or
+            # anything for those systems. those are super outdated."* The contracts file carries
+            # both a `doc:` (markdown) and a `sim_module:` (the live Python) for these three, and
+            # the first version of this refusal printed the `doc:` — so it pointed a reader at a
+            # file its owner calls superseded, which is the stale-pointer defect this chain keeps
+            # finding in other people's work. `sim_module` first, and where the contract has none
+            # the tree is asked directly rather than falling back to the markdown.
+            where = m.get("sim_module") or ""
+            if not where:
+                guess = _HERE.parent.parent.parent / "systems" / name / "sim"
+                where = (f"systems/{name}/sim/" if guess.is_dir()
+                         else f"(no `sim_module:` in module_contracts.yaml; "
+                              f"`doc:` is {m.get('doc')!r} and is out of date)")
+            return dict(module=name, resolver=m.get("resolver") or "undeclared", doc=where)
     raise Unspecified(
         f"`contest_subsystems` maps {prize!r} to {name!r}, which is in no module contract", "S39",
         needs="a module named in references/module_contracts.yaml",

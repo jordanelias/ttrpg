@@ -890,16 +890,57 @@ being a queryable object rather than a table a human reads a page at a time.
 > emitter declares no recipient."* `shape.observers_for` is the reader, and the presence index
 > this barrier has always built was **unused until now**.
 >
-> | mode | events (3 seasons) | deposits | ledgers |
+> | mode | events (3 seasons) | deposits | ledgers (sorted, as the instrument prints them) |
 > |---|---:|---:|---|
-> | `total` — **#353's specified behaviour, and the control** | 896 | **678** | 200 · 200 · 200 *(at the `L` cap)* |
-> | `presence_only` | 161 | **68** | 34 · 34 · 0 |
-> | `all_five` | 165 | **71** | 37 · 34 · 0 |
+> | `total` — **#353's specified behaviour, and the control** | 896 | **678** | `[200, 200, 200]` *(at the `L` cap)* |
+> | `presence_only` | 161 | **68** | `[0, 34, 34]` |
+> | `all_five` | 165 | **71** | `[0, 34, 37]` |
+>
+> *(The triples are quoted as the instrument sorts them. The first version of this table retyped
+> them in a third order, and `hole_register.yaml` in a fourth — same multisets, three spellings,
+> none of them a copy. `delta.py`'s own instruction is quote, don't retype.)*
 >
 > ```
 > cd proposals/2026-09-01-season-loop-tests/tracer
 > python -m pytest test_tracer_is_honest.py -q -k w6      # 3 passed
 > ```
+>
+> ### ⚠ AMENDED BY `W6`'s ADVERSARIAL PASS — three corrections to the note above
+>
+> **1. `P15`'s flip was false when first published.** It passed on a channel BROKEN CLOSED, not
+> on a predicate that excludes: `_event_place` tested `e.subject in w.rungs` first, and every
+> person has a same-id `person`-kind Rung, so presence answered *"who is contained IN p_high"* —
+> nobody. `presence_only` excluded the speaker and everyone in the room, and `P15`'s only
+> assertion (`narrow < total`) could not tell that from an exclusion. It now asserts BOTH
+> directions. **This was a repeat** of a conflation `witness` had already retracted once.
+>
+> **2. `all_five` is a measurement of THREE channels, not five.** `_ch_post_remit` compared an
+> office id against remit ACT NAMES and could not return `True` in any world (the correct lookup
+> already lived once in `_eligible` — §8, one function apart). `_ch_chronicle` does not read `pid`
+> at all and fired zero times, because **no `binding_decision` verb was executable** — so the
+> published justification for its design was wrong even where its number was right. Both are
+> fixed, and the governance slice is what makes them reachable; before it, two of the five
+> channels could never admit anybody.
+>
+> **3. §1.4 hole 16 is `H-55`, and it was `absent` with every field empty** while this note claimed
+> the item discharges it. It closes **`measured`**, not `ruled`: a row carries the interaction now
+> and the arms are quantified, but the DEFAULT is still `total`, so `W6` makes the flood
+> **boundable and measured, not bounded**.
+>
+> ### ⚠ THE THIRD PROOF CLAUSE IS NOT DISCHARGED, AND IS NOT REACHABLE AS THE ITEM IS SHAPED
+>
+> `W6`'s Proof has three clauses. The two below are met. The third — *"a `tell` reaches **only the
+> told**"* — is not, and the reason is structural rather than unfinished work: **§19.3 removes
+> `target` from the Event on purpose** (*"observers are computed at WITNESS from presence; THE
+> EMITTER DECLARES NO RECIPIENT"*), and §F1's Candidate carries no operand channel (`H-80`), so
+> nothing in the world records who was told. `tell` emits `news.told` with the TELLER as subject;
+> under the three arms it reaches everyone, everyone in the teller's rung, or that plus the
+> teller's `knot` partners. None is *"only the told"*.
+>
+> And `observers_for` applies **one mode to every event kind**, so there is no arm in which
+> `news.told` uses a narrower channel set than `condition.worn`. Satisfying the clause needs a
+> PER-KIND channel policy — a different shape from the one this item built. Recorded as
+> undischarged under §42.2's polarity rule rather than left silent.
 >
 > **`P15` flips to PASS BY CONSTRUCTION**, which is `W6`'s first Proof clause — the same Event
 > reaches five persons under `total` and fewer under `presence_only`, so a channel predicate now
