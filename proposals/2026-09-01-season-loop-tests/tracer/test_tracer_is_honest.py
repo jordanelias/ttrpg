@@ -890,11 +890,78 @@ def test_w0_the_register_transcription_still_matches_architecture_v2():
 def test_w0_every_part_b_defect_binds_to_a_row_or_a_section():
     """Guardrail G8. `D16` was the ONLY one of Part B's 26 defects with no Part VII row and no
     Part D-G discharge, and was claimed discharged anyway -- because the binding was prose. It is
-    a map now, and the map is checked against Part B's ids as the document defines them."""
+    a map now, and the map is checked against Part B's ids as the document defines them.
+
+    ⚠ The first draft of this test asserted only that the map is currently clean. It planted
+    nothing, so the checker's REFUSAL was untested, and the section branch -- which today has zero
+    live instances -- could accept anything at all."""
     reg = REG.load()
     assert REG.part_b_defects(), "Part B parsed to zero defect ids -- the check cannot run"
-    bad = REG.rule_G8(reg)
-    assert not bad, "G8: " + "; ".join(bad)
+    assert not REG.rule_G8(reg), "G8: " + "; ".join(REG.rule_G8(reg))
+
+    # A defect with no entry at all.
+    dropped = REG.load()
+    dropped["discharges"].pop("D16")
+    assert any("D16" in b for b in REG.rule_G8(dropped)), "a dropped defect passed G8"
+
+    # A row: target naming a row that does not exist.
+    ghost = REG.load()
+    ghost["discharges"]["D16"] = "row:H-999"
+    assert any("H-999" in b for b in REG.rule_G8(ghost)), "a discharge to a ghost row passed G8"
+
+    # THE SECTION BRANCH, which is the one that can reproduce D16's own failure. `§D9` does not
+    # exist -- Part D ends at §D5 -- and the first draft accepted it silently.
+    fake = REG.load()
+    fake["discharges"]["D16"] = "§D9"
+    assert any("D16" in b for b in REG.rule_G8(fake)), (
+        "a discharge to a NON-EXISTENT section passed G8 -- D16 'claimed discharged anyway', again")
+    real = REG.load()
+    real["discharges"]["D16"] = "ARCHITECTURE_V2.md §VII.2 -- the seam"
+    assert not [b for b in REG.rule_G8(real) if "D16" in b], (
+        "a discharge to a section that DOES exist was rejected")
+
+
+def test_w0_a_fabricated_row_cannot_wear_v2s_provenance():
+    """The round trip walks BOTH directions. The first draft walked V2 -> register only, so a row
+    invented here carrying `source: '...transcribed verbatim'` was undetectable: `--verify-
+    transcription` said clean, `R0` said ok, and the counts still balanced. A hole V2 never
+    carried would then be in the register wearing V2's provenance, and every instrument the plan
+    builds on this file would inject from it."""
+    reg = REG.load()
+    reg["rows"].append(dict(REG.load()["rows"][0], id="H-13",
+                            source="ARCHITECTURE_V2.md §VII.1, " + REG.TRANSCRIBED))
+    bad = REG.verify_transcription(reg)
+    assert any("H-13" in b and "fabricated" in b for b in bad), (
+        "a fabricated row claiming V2's provenance passed the transcription check")
+
+
+def test_w0_a_transcription_that_extracts_nothing_is_a_failure_not_a_pass():
+    """§42.2's polarity rule, applied to this module. If Part VII's headings or row format change
+    -- which `PLAN.md` §0.3 row 14 says is the PLAN -- the extractor returns nothing, and the first
+    draft then reported `TRANSCRIPTION: clean` having compared zero rows, leaving every later
+    register edit unpinned while the suite stayed green. `rule_G8` already applied this polarity
+    to Part B; omitting it here was the asymmetry."""
+    import unittest.mock as mock
+    with mock.patch.object(REG, "v2_rows", lambda: {}):
+        bad = REG.verify_transcription(REG.load())
+    assert bad and "ZERO rows" in bad[0], "an empty extraction reported clean"
+
+
+def test_w0_the_default_field_is_pinned_through_its_one_declared_normalisation():
+    """`default` is the field an instrument injects FROM and the field R3 reads, and the first
+    draft left it unpinned while the docstring named only `grade` as excluded. It is pinned now
+    THROUGH `normalised_default`, which is the one editorial rule applied to it -- and that rule is
+    load-bearing on a published number: transcribed literally, five `absent` rows would each fire
+    R3 and R3 would read 7 rather than 2."""
+    assert REG.normalised_default("none. ⚠ every contest is blocked") == "none"
+    assert REG.normalised_default("none — §63.1 may accept it instead") == "none"
+    assert REG.normalised_default("Part E's table") == "Part E's table", (
+        "the normalisation swallowed a real default")
+    drifted = REG.load()
+    target = next(r for r in drifted["rows"] if r["id"] == "H-31")
+    target["default"] = "four bands off the margin"
+    assert any("H-31.default" in b for b in REG.verify_transcription(drifted)), (
+        "a silently edited default passed the transcription check")
 
 
 def test_w0_the_checker_fails_on_an_ungraded_row():
@@ -956,18 +1023,51 @@ def test_w0_the_row_shape_cannot_grow_quietly():
     assert REG.rule_R0(reg), "an undeclared key passed R0"
 
 
-def test_w0_the_counts_are_computed_and_artifact_0_is_reported_honestly():
+def test_w0_the_counts_are_computed_and_every_row_is_accounted_for():
     """G11: every number describing the register ships with the command that produces it, and the
     command is `python register.py --counts`. V2's hand-typed '39 holes / 13 assumption' over 32
-    rows is why. Artifact 0 -- *Part VII has no `absent` row in Tier 0* -- is UNMET, and this
-    asserts that the instrument SAYS so rather than that it is met."""
+    rows is why.
+
+    ⚠ The first draft of this test asserted `sum(by_grade.values()) == rows` and claimed it
+    reproduced V2's defect. IT CANNOT FAIL: `by_grade` is a `Counter` over exactly one value per
+    row, so it sums to `len(rows)` for every possible register, including one where every grade is
+    `None`. V2's defect was a HAND-TYPED tally diverging from computed rows; comparing a computed
+    tally to itself is not that, and an assertion that cannot observe the failure it excludes is
+    §0.1 point 2's named failure."""
     c = REG.counts(REG.load())
     assert c["rows"] == c["transcribed"] + c["added_by_plan"], (
-        f"{c['rows']} rows but {c['transcribed']} + {c['added_by_plan']} accounted for")
-    assert c["tier0"] + c["tier1"] == c["rows"]
-    assert sum(c["by_grade"].values()) == c["rows"], (
-        "the grade tally does not sum to the row count -- V2's exact defect, in the data")
-    assert c["tier0_absent"], (
-        "artifact 0 now reports MET. If that is real, W1/W3 closed the last Tier 0 `absent` row "
-        "and this test should be inverted -- but check first that the rows were closed rather "
-        "than deleted.")
+        f"{c['rows']} rows but {c['transcribed']} + {c['added_by_plan']} accounted for -- a row "
+        "whose `source:` claims neither provenance has appeared")
+    assert c["tier0"] + c["tier1"] == c["rows"], "a row sits in neither tier"
+    # The grade tally must cover every row -- which is a real claim, because `rule_R1` admits only
+    # four grades and a row could carry none. Planted, so the assertion is known to be able to
+    # fail.
+    graded = REG.load()
+    assert sum(c["by_grade"].get(g, 0) for g in REG.GRADES) == c["rows"]
+    graded["rows"][0]["grade"] = "unmeasured"
+    broken = REG.counts(graded)
+    assert sum(broken["by_grade"].get(g, 0) for g in REG.GRADES) != broken["rows"], (
+        "a row graded outside the closed set still counted toward the tally")
+
+
+def test_w0_artifact_0_is_computed_from_the_rows_rather_than_asserted():
+    """Artifact 0 is *Part VII has no `absent` row in Tier 0*. This pins the COMPUTATION, not the
+    answer.
+
+    ⚠ The first draft asserted `c["tier0_absent"]` -- i.e. it pinned the register in its DEFECTIVE
+    state, and would have gone red the moment `W1`/`W3` succeeded, which is their stated Proof.
+    That is the same category error as a string test, with the sign reversed: it bound the state of
+    the data instead of the behaviour of the checker. What is worth pinning is that the instrument
+    DERIVES the verdict from the rows, so that closing a row moves it and deleting a row does
+    not go unnoticed."""
+    reg = REG.load()
+    reported = set(REG.counts(reg)["tier0_absent"])
+    truth = {r["id"] for r in reg["rows"] if r["tier"] == 0 and r["grade"] == "absent"}
+    assert reported == truth, f"reported {sorted(reported)}, rows say {sorted(truth)}"
+    # Close every one of them and artifact 0 must flip to MET -- so a future W1/W3 run turns this
+    # green rather than red, and a DELETED row is caught by the transcription test instead.
+    for r in reg["rows"]:
+        if r["tier"] == 0 and r["grade"] == "absent":
+            r["grade"], r["cite"] = "ruled", "planted"
+    assert not REG.counts(reg)["tier0_absent"], (
+        "artifact 0 still reports UNMET after every Tier 0 `absent` row was closed")

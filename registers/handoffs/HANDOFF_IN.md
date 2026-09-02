@@ -3900,7 +3900,7 @@ is LIVE and none of this is; a session orienting from §1 would otherwise never 
 
 | where | what |
 |---|---|
-| `proposals/2026-09-02-executable-architecture/ARCHITECTURE_V2.md` | **the successor to #353.** Parts I–VI of #353 inherited whole; what changes is the write matrix keyed on `(kind, field)`, a **verb table** giving the resolver a body, `q`/`choose`/`budget`/`standing`, the delegation doctrine, and a **register of 39 holes** replacing §61–§62's prose |
+| `proposals/2026-09-02-executable-architecture/ARCHITECTURE_V2.md` | **the successor to #353.** Parts I–VI of #353 inherited whole; what changes is the write matrix keyed on `(kind, field)`, a **verb table** giving the resolver a body, `q`/`choose`/`budget`/`standing`, the delegation doctrine, and a **register of holes** replacing §61–§62's prose. ⚠ *The "39" this row carried was wrong; `W0` made the register data and the count is computed — `register.py --counts`* |
 | `…/01_NPC_VS_ARC.md` | the two pathways fail for categorically different reasons — **0% vs 33% refusals** |
 | `proposals/2026-09-01-season-loop-tests/` | the instrument, 46 NPC + 97 arc cases, run output, 63 honesty tests, the 56-finding ledger, and `evidence/` |
 

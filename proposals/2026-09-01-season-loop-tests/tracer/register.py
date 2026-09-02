@@ -79,6 +79,34 @@ SWEEP_POINTS = 3
 # spelled EIGHTEEN Part B ids with a leading `§` -- `W0` corrected those. The lookbehind is what
 # keeps the surviving legitimate `§D1`-`§D5` section references out of the defect scan.
 DEFECT_RE = re.compile(r"(?<!§)\bD([1-9]\d?)\b")
+# A section reference in a discharge-map value: `§D4`, `§G4`, `§VII.2`, `Part E`.
+SECTION_RE = re.compile(r"§[A-Z]*[0-9IVX]+(?:\.[0-9]+)?|Part [A-Z]+")
+# The marker a row carries when it claims to have come from V2's tables. `verify_transcription`
+# walks BOTH directions on it, so a fabricated row cannot wear this string and go unnoticed.
+TRANSCRIBED = "transcribed verbatim"
+
+
+def normalised_default(cell: str) -> str:
+    """V2 writes an `absent` row's default as "none" FOLLOWED BY COMMENTARY -- "none. ⚠ every
+    contest is blocked", "none — §63.1 may accept it instead". The field means *the value an
+    instrument may inject*, and a warning is not a value, so it normalises to `none`. THIS IS THE
+    ONE NORMALISATION APPLIED TO `default`, it is declared here rather than in prose, and
+    `verify_transcription` pins the field THROUGH it -- so any other edit to a default is drift.
+
+    ⚠ It is load-bearing on a published number: transcribed literally, H-23/H-25/H-31/H-32/H-33
+    would each fire R3, and R3 would read 7 rather than 2."""
+    cell = cell.strip()
+    return "none" if re.match(r"^none\b", cell, re.I) else cell
+
+
+def section_exists(sec: str) -> bool:
+    """Does `ARCHITECTURE_V2.md` actually carry this section? A discharge naming a section that
+    does not exist is the D16 failure with a new spelling."""
+    src = ARCHITECTURE_V2.read_text()
+    if sec.startswith("Part "):
+        # V2 writes them `# PART E ...`; the map may say `Part E`.
+        return bool(re.search(r"^# " + re.escape(sec) + r"\b", src, re.M | re.I))
+    return bool(re.search(r"^#+ " + re.escape(sec) + r"\b", src, re.M))
 
 
 def load(path: Path = REGISTER) -> dict:
@@ -116,8 +144,11 @@ def v2_rows() -> dict:
 
 
 def grade_of(cell: str) -> str:
+    """The strictest grade NAMED in a cell. Word-bounded, because a substring scan is a router
+    and this module's own G8 docstring indicts one: `unmeasured` contains `measured`, `not ruled`
+    contains `ruled`. No V2 cell trips it today, which makes it latent rather than safe."""
     for g in GRADE_STRICTNESS:
-        if re.search(g, cell, re.I):
+        if re.search(r"\b" + g + r"\b", cell, re.I):
             return g
     return ""
 
@@ -174,9 +205,18 @@ def rule_R2(reg: dict) -> list:
             continue
         if not str(r.get("site") or "").strip():
             bad.append(f"{r['id']}: assumption with no `site:` -- where does the default enter?")
-        if len(r.get("sweep") or []) < SWEEP_POINTS:
-            bad.append(f"{r['id']}: assumption swept at {len(r.get('sweep') or [])} points, "
+        sweep = r.get("sweep")
+        if not isinstance(sweep, list):
+            # `sweep: "TBD"` is three characters and passed a bare length test.
+            bad.append(f"{r['id']}: sweep is {type(sweep).__name__}, not a list")
+        elif len(sweep) < SWEEP_POINTS:
+            bad.append(f"{r['id']}: assumption swept at {len(sweep)} points, "
                        f"needs {SWEEP_POINTS}")
+        elif len({str(x) for x in sweep}) < SWEEP_POINTS:
+            # A sweep is three points a verdict can differ ACROSS. [2, 2, 2] is one point,
+            # written three times, and it would report "no verdict flipped" truthfully and
+            # meaninglessly -- the dead-carrier shape §W5's guardrail names for `alignment`.
+            bad.append(f"{r['id']}: sweep {sweep} has fewer than {SWEEP_POINTS} DISTINCT points")
     return bad
 
 
@@ -210,10 +250,22 @@ def rule_G8(reg: dict) -> list:
         if not target:
             bad.append(f"{d}: Part B defines it and the discharge map has no entry")
             continue
-        if str(target).startswith("row:"):
-            row = str(target)[4:]
+        target = str(target)
+        if target.startswith("row:"):
+            row = target[4:]
             if row not in ids:
                 bad.append(f"{d}: discharged to {row}, which is not a row in this register")
+        else:
+            # THE SECTION BRANCH MUST RESOLVE, or G8 reproduces the exact failure it was built to
+            # stop. `D16: "§D9"` -- a section Part D does not have -- passed the first draft, and
+            # D16 was once again "claimed discharged anyway".
+            unresolved = [sec for sec in SECTION_RE.findall(target)
+                          if not section_exists(sec)]
+            if not SECTION_RE.search(target):
+                bad.append(f"{d}: discharged to {target!r}, which names no section and no row")
+            elif unresolved:
+                bad.append(f"{d}: discharged to section(s) {unresolved} that do not exist in "
+                           "ARCHITECTURE_V2.md -- the D16 failure, exactly")
     for d in sorted(set(mapped) - defects, key=lambda x: int(x[1:]) if x[1:].isdigit() else 0):
         bad.append(f"{d}: in the discharge map and Part B does not define it")
     return bad
@@ -241,8 +293,13 @@ def counts(reg: dict) -> dict:
         "tier1": sum(1 for r in rows if r.get("tier") == 1),
         "tier0_absent": sorted(r["id"] for r in rows
                                if r.get("tier") == 0 and r.get("grade") == "absent"),
-        "transcribed": sum(1 for r in rows if "transcribed verbatim" in str(r.get("source"))),
+        "transcribed": sum(1 for r in rows if TRANSCRIBED in str(r.get("source"))),
         "added_by_plan": sum(1 for r in rows if "PLAN.md" in str(r.get("source"))),
+        # The register's own header states how many rows carry an empty `cite:`. A number a
+        # document states and its named command cannot produce is G11's defect in miniature, and
+        # it was in the file that forbids it nine lines above.
+        "absent_uncited": sum(1 for r in rows if r.get("grade") == "absent"
+                              and not str(r.get("cite") or "").strip()),
     }
 
 
@@ -251,7 +308,21 @@ def verify_transcription(reg: dict) -> list:
     `unblocks` -- NOT `grade`, which `W1` deliberately changes as it runs the ladder. Drift in
     EITHER direction fails: a row edited here silently, or a table edited there silently."""
     v2, bad = v2_rows(), []
+    if not v2:
+        # ZERO EXTRACTED IS A FAILURE, NOT A PASS. Part VII's headings or row format changing --
+        # which PLAN.md §0.3 row 14 says is the plan -- would otherwise make this print "clean"
+        # having compared nothing, and every later register edit would be unpinned. `rule_G8`
+        # already applies this polarity to Part B; omitting it here was the asymmetry.
+        return ["ARCHITECTURE_V2.md Part VII parsed to ZERO rows -- the transcription cannot be "
+                "verified, which is a FAILURE and not a pass (§42.2's polarity rule)"]
     reg_by_id = {r["id"]: r for r in reg["rows"]}
+    # REGISTER -> V2, the direction the first draft did not walk. Without it a fabricated row
+    # carrying `source: "...transcribed verbatim"` is undetectable: it would wear V2's provenance
+    # and every instrument built on this file would inject from it.
+    for r in reg["rows"]:
+        if TRANSCRIBED in str(r.get("source")) and r["id"] not in v2:
+            bad.append(f"{r['id']}: claims `{TRANSCRIBED}` and ARCHITECTURE_V2.md Part VII has "
+                       "no such row -- a fabricated row wearing V2's provenance")
     for rid, src in sorted(v2.items()):
         r = reg_by_id.get(rid)
         if r is None:
@@ -260,6 +331,14 @@ def verify_transcription(reg: dict) -> list:
         for f in ("hole", "kind", "owner", "unblocks"):
             if str(r.get(f)) != src[f]:
                 bad.append(f"{rid}.{f}: register has {r.get(f)!r}, V2 has {src[f]!r}")
+        # `default` IS PINNED, through its one declared normalisation. It was unpinned in the
+        # first draft while the docstring named only `grade` as excluded -- and `default` is the
+        # field an instrument injects FROM and the field R3 reads, so an unpinned `default` is
+        # the most consequential silent edit this file could carry.
+        if str(r.get("default")) != normalised_default(src["default"]):
+            bad.append(f"{rid}.default: register has {r.get('default')!r}, V2 has "
+                       f"{src['default']!r} (normalises to "
+                       f"{normalised_default(src['default'])!r})")
         if r.get("tier") != src["tier"]:
             bad.append(f"{rid}.tier: register has {r.get('tier')}, V2 has {src['tier']}")
         if r.get("grade") and grade_of(src["grade_cell"]) != r["grade"]:
@@ -289,6 +368,7 @@ def main(argv=None) -> int:
               f"{c['added_by_plan']} added by PLAN.md §1.4)")
         print("  by grade: " + " · ".join(f"{k} {v}" for k, v in c["by_grade"].items()))
         print(f"  tier 0: {c['tier0']}   tier 1: {c['tier1']}")
+        print(f"  `absent` rows with no `cite:` (G6's floor): {c['absent_uncited']}")
         print(f"  ARTIFACT 0 -- 'Part VII has no `absent` row in Tier 0': "
               + ("MET" if not c["tier0_absent"]
                  else "UNMET, on " + ", ".join(c["tier0_absent"])))
@@ -300,6 +380,17 @@ def main(argv=None) -> int:
             print(("  note: " if b.startswith("NOTE ") else "  DRIFT: ") + b.removeprefix("NOTE "))
         print(f"TRANSCRIPTION: {'clean' if not hard else str(len(hard)) + ' drifted'}")
         rc |= 1 if hard else 0
+
+    if a.check and not a.rule:
+        # THE TRANSCRIPTION IS PART OF THE CHECK. It was a separate branch, so the plan's proof
+        # command (`--check`) never validated that the register still says what V2 says --
+        # leaving the one guard on fidelity reachable only by a flag nobody was told to pass.
+        # Skipped when `--rule` selects a subset, so a rule can still be run in isolation.
+        drift = [b for b in verify_transcription(reg) if not b.startswith("NOTE ")]
+        print("TRANSCRIPTION: " + ("clean" if not drift else f"{len(drift)} drifted"))
+        for b in drift:
+            print("    " + b)
+        rc |= 1 if drift else 0
 
     if a.check:
         only = [s.strip() for s in a.rule.split(",") if s.strip()] or None

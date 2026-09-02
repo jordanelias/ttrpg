@@ -657,7 +657,9 @@ lists of open items. **They are rows now.**
 
 ## §VII.1 · TIER 0 — required before ANY season completes
 
-**Ten holes. Until every one is `ruled`, `measured` or `assumption`-with-a-default, no case runs.**
+**~~Ten holes.~~ TWELVE here, and TWENTY in the register — `W0` carried eight more that had no
+row (§1.4). Until every one is `ruled`, `measured` or `assumption`-with-a-default, no case runs.**
+`python proposals/2026-09-01-season-loop-tests/tracer/register.py --counts` is what says so.
 
 | id | hole | kind | owner | grade | default | unblocks |
 |---|---|---|---|---|---|---|
@@ -701,13 +703,34 @@ lists of open items. **They are rows now.**
 
 ## §VII.3 · What the register says about itself
 
+> ### ⚠ **EVERY COUNT BELOW IS WRONG, AND THIS TABLE IS THE SOURCE THE REST OF THE CHAIN COPIED. Corrected 2026-09-02 by `W0`.**
+>
+> **They are kept, struck, so the correction is legible and so a reader meeting one of the copies
+> can resolve it.** `W0` made the register data, and the counts are now computed rather than typed:
+>
+> ```
+> python proposals/2026-09-01-season-loop-tests/tracer/register.py --counts
+> ```
+>
+> | | this table said | computed, over the same 32 rows | computed, over the register as it now stands |
+> |---|---:|---:|---:|
+> | holes total | ~~39~~ | **32** | **54** — the 22 holes `PLAN.md` §1.4 found with **no row at all** are carried now |
+> | `ruled` | ~~8~~ | **8** ✅ the one that reproduced | **8** |
+> | `assumption` | ~~13~~ | **12** | **12** |
+> | `absent` | ~~12~~ | **12** ✅ | **34** |
+> | mixed grade | ~~1 (H-20)~~ | **2 — `H-02` and `H-20`** | — the register records the **strictest** grade present, per §42.2's polarity rule |
+>
+> **The tally summed to 34 over 32 rows**, which is the defect in one line: a hand-typed count of a
+> markdown table cannot be checked against the table. And **§VII.1's header below says *"Ten holes"*
+> over twelve rows** — same class, same cause.
+
 | | count |
 |---|---|
-| holes total | **39** |
-| `ruled` — decided here or in chain | **8** |
-| `assumption` — default supplied, sweep required | **13** |
-| **`absent` — REFUSE; §42.2.1 in full force** | **12** |
-| mixed grade | 1 (H-20) |
+| holes total | ~~**39**~~ — see above |
+| `ruled` — decided here or in chain | ~~**8**~~ |
+| `assumption` — default supplied, sweep required | ~~**13**~~ |
+| **`absent` — REFUSE; §42.2.1 in full force** | ~~**12**~~ |
+| mixed grade | ~~1 (H-20)~~ |
 
 > **TWELVE `absent` HOLES IS THE HONEST STATE, AND IT IS A BETTER STATE THAN #353's.** #353 had the
 > same holes and did not enumerate them, so an implementer met them one at a time, at the keyboard,
@@ -799,14 +822,6 @@ already give the *"a counter compels a named person"* shape that **19 of 50 arcs
 | # | artifact | proves | satisfiable by writing? |
 |---|---|---|---|
 | **0** | **Part VII has no `absent` row in Tier 0** | a season can complete without inventing | yes — and it is the only one that can |
-
-> ⚠ **ARTIFACT 0 IS UNMET, AND THIS DOCUMENT DID NOT SAY SO — corrected 2026-09-02 by `W0`.**
-> It is unmet on this document's **own `H-02`**, which is Tier 0 and carries `absent` for two of
-> its rows, and — once the twenty-two holes `PLAN.md` §1.4 found with no row at all are carried —
-> on eight more. The register is data now, so the claim is no longer a sentence to be trusted:
-> `python proposals/2026-09-01-season-loop-tests/tracer/register.py --counts` computes it and
-> **names every Tier 0 row that keeps it unmet.** `W1` and `W3` are the items that close them.
-
 | 1 | `Event :=` mapped onto the log, `source_actor` absent, `causes: [ROOT]` for antecedent-free | §19, #353 §54.4 — **still the first thing to do** | no |
 | 2 | **One NPC's season runs end to end from Parts D+E+F, emitting a log whose `causes[]` chain walks** | the three that matter | ⚠ **no** |
 | 3 | The same for one arc | | ⚠ **no** |
@@ -815,6 +830,14 @@ already give the *"a counter compels a named person"* shape that **19 of 50 arcs
 | 6 | An instrument run with **zero fills off the register** | §G's central claim | ⚠ **no** |
 | 7 | The 46 NPCs and 97 arcs re-run with **declared** routing; NOT-ASSESSED explained per case | §H1 | ⚠ **no** |
 | 8 | **The twelve Jordan trajectory transitions as executable cases** | #353 §66 artifact 10 — **the only supplied acceptance set in the chain, and a runner has still never run it** | ⚠ **no** |
+
+> ⚠ **ARTIFACT 0 IS UNMET, AND THIS DOCUMENT DID NOT SAY SO — corrected 2026-09-02 by `W0`.**
+> It is unmet on this document's **own `H-02`**, which is Tier 0 and carries `absent` for two of
+> its rows, and — once the twenty-two holes `PLAN.md` §1.4 found with no row at all are carried —
+> on several more. **The count is deliberately not written here**: it moves with every re-grade and
+> every re-tier, and a number in prose would be stale by the next work item. The register is data now, so the claim is no longer a sentence to be trusted:
+> `python proposals/2026-09-01-season-loop-tests/tracer/register.py --counts` computes it and
+> **names every Tier 0 row that keeps it unmet.** `W1` and `W3` are the items that close them.
 
 > ### **ARTIFACT 2 IS THE BAR. THE TESTED VERSION RAN ZERO CASES END TO END.**
 > **One is an infinite improvement over zero**, and it is the only number in this document that

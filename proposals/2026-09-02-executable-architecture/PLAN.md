@@ -514,6 +514,14 @@ planting a `default:` on an `absent` row makes it exit 1.
 > | `R3` an `absent` carries no `default:` | **2 — `H-02` and `H-20`** | `W3`, `W1` |
 > | `G6` an `absent` carries a `cite:` | **34 violations** | `W1` |
 >
+> **One tier assignment was overturned by the adversarial pass and is corrected here.** `H-55`
+> (`D22` × `H-33` — per-write MATTER emissions under total fan-out flooding every ledger) was
+> placed in **Tier 0** and belongs in **Tier 1**: §VII.1's bar is *"required before ANY season
+> completes"*, and **a flooded ledger completes the season** — eviction churn is a fidelity defect,
+> not a completion blocker. It was also internally inconsistent, since `H-33` — the unfilled
+> predicates that CAUSE the total fan-out — is Tier 1, and an interaction row cannot block harder
+> than its own component.
+
 > **`R3`'s two are a finding, not noise.** `V2` grades `H-02` and `H-20` partly `absent` **and
 > supplies each a default**. A part-absent hole with one `default:` field is **not representable in
 > §G4's shape**, and §42.2.1 forbids the combination it expresses. The fix is to split the hole, not
@@ -524,12 +532,28 @@ planting a `default:` on an `absent` row makes it exit 1.
 > drift **in either direction**, so the register and the prose cannot part company silently.
 >
 > **Also discharged from the list above:** the `§D20`–`§D26` citation form — **eighteen** citations,
-> not the four this item names. Part D has only `§D1`–`§D5`, so **every** `§D<n>` above 5 was a Part
-> B defect id wearing a section's clothes, and `§D6`/`§D7`/`§D8`/`§D11`/`§D18` were wrong on exactly
-> the same ground as the four. Fixing only the range named would have left five known-wrong
-> citations standing, which this item's own note calls *"the worst of both"*. And **`V2` §I2's
-> artifact 0 is now marked UNMET**, which it is — on `H-02` and, once the missing rows are carried,
-> on eight more. `register.py --counts` names them, so it can no longer be a sentence.
+> not the four this item names, **and on two grounds rather than one.** Part D has only
+> `§D1`–`§D5` (verified: the headings are at `ARCHITECTURE_V2.md` `:277`, `:289`, `:305`, `:350`,
+> `:360`).
+>
+> - **Thirteen are above `§D5`** — `§D6`, `§D7`, `§D8`, `§D11`, `§D18`, `§D20`, `§D21`, `§D22`,
+>   `§D26` — so **no section of that name exists** and each is a Part B defect id wearing a
+>   section's clothes. Fixing only the four this item names would have left five wrong on
+>   identical grounds, which the note above calls *"the worst of both"*.
+> - **Five are `§D1`–`§D5`, and they rest on a different ground that must be stated rather than
+>   folded into the first:** they are the *`where`* column of §0.3's defect table (`:68`–`:72`),
+>   which is a **defect-id column** — its rows 13 and 14 hold `**§G**` and `**Part VII**`, so the
+>   column mixes both namespaces and normalising the twelve defect rows to ids is an **editorial**
+>   call, not a consequence of the range rule. ⚠ **Two of those five were defensible as section
+>   references** — row 1's verdict restates §D1's argument and row 4's restates §D4's heading —
+>   and are changed anyway, for column consistency. A reader applying only the range rule could
+>   not reproduce those five edits, which is why the ground is written out here.
+>
+> **No `§D1`–`§D5` outside that column was touched**; each surviving one is a genuine section
+> reference (`:152`, `:333`, `:350`, `:535`, `:602`, `:688`). And **`V2` §I2's artifact 0 is now
+> marked UNMET**, which it is — on `H-02` and several more. `register.py --counts` **names** them,
+> so it can no longer be a sentence; the count is not restated here because it moves with every
+> re-grade and every re-tier.
 
 **Size S.** Depends on nothing.
 

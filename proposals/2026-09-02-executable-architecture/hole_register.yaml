@@ -19,10 +19,14 @@
 #              A transcription that cannot be re-derived is an assertion, and this register
 #              exists because an assertion was mistaken for data.
 #
-# PROVENANCE OF THE 32 TRANSCRIBED ROWS. Extracted mechanically from the markdown tables of
-# `ARCHITECTURE_V2.md` §VII.1 and §VII.2 -- not retyped. `python register.py --verify-transcription`
-# re-extracts them and fails if `hole`, `kind`, `owner`, `unblocks` or `tier` has drifted from V2
-# IN EITHER DIRECTION. Two normalisations, both recorded per row in `source:`:
+# PROVENANCE OF THE 32 TRANSCRIBED ROWS. Extracted from the markdown tables of
+# `ARCHITECTURE_V2.md` §VII.1 and §VII.2 by a parser rather than by hand. ⚠ **"Mechanical" is the
+# wrong word for SEVEN of the 32**, and the exception is stated here rather than left to be found:
+# two rows carry a JUDGED grade and five a normalised default (below). The other 25 are verbatim.
+# `python register.py --verify-transcription` re-extracts all 32 and fails if `hole`, `kind`,
+# `owner`, `unblocks`, `tier` or `default` has drifted from V2 IN EITHER DIRECTION -- `default`
+# through its one declared normalisation, and `grade` deliberately NOT pinned, because W1 re-grades
+# by design and its re-grades are reported as notes. Two normalisations, both per row in `source:`:
 #   * H-10's `sweep: [2, 5, 9]`, which V2 supplies inside its `default` CELL ("swept 2·5·9")
 #     rather than in a sweep field. Recovering it is extraction, not invention.
 #   * an `absent` row whose default reads "none" FOLLOWED BY COMMENTARY ("none. ⚠ every contest
@@ -38,7 +42,9 @@
 # expresses. Do not "fix" it by deleting the default -- fix it by splitting the hole, which is
 # W3's work for H-02 and W1's for H-20.
 #
-# WHY 34 ROWS CARRY AN EMPTY `cite:`. That is the measurement, not an omission. Rule G6 requires
+# WHY SO MANY ROWS CARRY AN EMPTY `cite:` -- `register.py --counts` prints the figure, and this
+# comment does not, because stating one here is the defect the last paragraph forbids. It is the
+# measurement, not an omission. Rule G6 requires
 # `CLAUDE.md` §0's five tests to have been RUN before a row is graded `absent`, with the result in
 # `cite:`. `PLAN.md` §2.6's finding is that NOBODY EVER RAN THAT LADDER. So the rows stand as V2
 # left them, `register.py --check` FAILS on G6, and it names every row. W1 is the item that runs
@@ -448,7 +454,7 @@ rows:
   - id:        H-41
     tier:      1
     hole:      "`(Rung, exists)`, `(Office, exists)`, `(Site, exists)` -- founding a hearth, establishing an office, building a site. Part D's existence rows cover ONLY `Person` and `Record`"
-    kind:      "SCHEMA_ROW x3"
+    kind:      "SCHEMA_ROW ×3"
     owner:     "Rung / Office / Site"
     grade:     "absent"
     default:   "none"
@@ -484,7 +490,7 @@ rows:
   - id:        H-44
     tier:      1
     hole:      "the NINE Dispensation term types. `comply` / `evade` / `defy` write 'per the term's own row' -- rows that do not exist, and the nine types are enumerated nowhere in the chain"
-    kind:      "SCHEMA_ROW x9"
+    kind:      "SCHEMA_ROW ×9"
     owner:     "the design (a static registry)"
     grade:     "absent"
     default:   "none"
@@ -496,7 +502,7 @@ rows:
   - id:        H-45
     tier:      1
     hole:      "the SIX investigation acts. T9 makes them first-class; they are unnamed, and V2 grades them `assumption` with `requires: per act` -- so there is nothing to inject"
-    kind:      "PRODUCER x6"
+    kind:      "PRODUCER ×6"
     owner:     "the resolver (Part E)"
     grade:     "absent"
     default:   "none"
@@ -604,7 +610,7 @@ rows:
   - id:        H-54
     tier:      0
     hole:      "question aggregation, and the DROPPED `need` source. Nothing says how many questions a person forms per season; and #353 `:605`/`:1297` make `need` an OPENING source that F1 omits, so an NPC with a standing ambition and a quiet season forms no candidates at all"
-    kind:      "PRODUCER"
+    kind:      "PRODUCER ×2"
     owner:     "Person (person-side)"
     grade:     "absent"
     default:   "none"
@@ -614,7 +620,7 @@ rows:
     cite:      ""
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-55
-    tier:      0
+    tier:      1
     hole:      "`D22` x `H-33`: per-write MATTER emissions under TOTAL fan-out flood every ledger every season and churn the `L=200` eviction. Two rows that are individually fine and JOINTLY break the log. No row carries the interaction"
     kind:      "RULING"
     owner:     "the log; the presence index"
@@ -675,7 +681,7 @@ rows:
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-60
     tier:      1
-    hole:      "player/NPC budget symmetry -- ALREADY ANSWERED by #353 `:876` (everyone runs `choose`) and RECORDED NOWHERE AS CLOSED. W1 closes it; it is `absent` here only because W0 transcribes the state V2 left"
+    hole:      "player/NPC budget symmetry -- ALREADY ANSWERED by #353 `:876` (everyone runs `choose`) and RECORDED NOWHERE AS CLOSED"
     kind:      "RULING"
     owner:     "Person"
     grade:     "absent"
@@ -684,7 +690,7 @@ rows:
     sweep:     []
     unblocks:  "unmeasured"
     cite:      ""
-    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row | `absent` here ONLY because W0 transcribes the state V2 left; W1 closes it"
   - id:        H-61
     tier:      1
     hole:      "`A18` -- the CONTRACT DESCENT (41). The strings 'contract descent' and 'S41' appear nowhere in V2. T5 needs to know PER MODULE what it may RECEIVE and T6 what it may EMIT; no surface in the chain answers it for any module, WHICH MAKES R-1 AND R-2 UNENFORCEABLE IN PRINCIPLE while V2 0.2 inherits them unchanged"

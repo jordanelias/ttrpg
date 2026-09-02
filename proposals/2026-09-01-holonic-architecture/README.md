@@ -12,7 +12,9 @@
 > **What the successor changes is what this document declines to say**: L4's `social:` column is
 > keyed on *things* rather than `(kind, field)` and cannot be applied; the ~25 verbs named across
 > nine sections have no declared writes, so a resolver has no body; and §61–§62's prose lists become
-> a register of **39 holes with owners, grades and defaults**.
+> a register of ~~**39 holes**~~ holes with owners, grades and defaults — **the count was wrong and
+> is computed now**, `ARCHITECTURE_V2.md` §VII.3 carries the correction:
+> `python ../2026-09-01-season-loop-tests/tracer/register.py --counts`.
 >
 > **Read this document first — it is still where the architecture is argued.** Read the successor
 > for what an implementation needs that this does not supply. The evidence for both is at
