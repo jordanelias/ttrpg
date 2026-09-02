@@ -640,11 +640,11 @@ def test_r3_choose_asks_its_own_budget():
     S.SeasonDriver(w).season(choose, None, P.SUBSIST)
     assert asked, "no person was asked for a budget at all"
     # ⚠ W5 REPOINTED THIS ASSERTION, AND THE OLD ONE WAS THE DEFECT. It read
-    # `all(n == w.fixtures.get("act_budget") for n in asked)` — i.e. it PINNED A FLAT BUDGET,
+    # `all(n == w.fixtures.get("scene_budget") for n in asked)` — i.e. it PINNED A FLAT BUDGET,
     # which is the field S26.3 forbids, as an invariant. `budget` reading its own arguments is
     # what broke it, and a test that goes red when the specification is finally met was testing
     # the implementation. C11's claim is that the person is ASKED; that is what stays.
-    base = w.fixtures.get("act_budget")
+    base = w.fixtures.get("scene_budget")
     assert all(n >= 1 for n in asked), "a budget of 0 deletes a person from the season silently"
     assert any(n != base for n in asked), (
         f"every budget came back at the flat base {base} ({asked}) — `budget` is ignoring `p` "
@@ -663,7 +663,7 @@ def test_w5_budget_moves_with_the_persons_own_state_in_the_ruled_directions():
     fx = w.fixtures
     p = next(iter(w.persons.values()))
     v = S.View(p.id, [], fx.get("view_k"))
-    k = fx.get("act_budget")
+    k = fx.get("scene_budget")
     base = S.Query.budget(p, v, k, fx)
 
     # office: a live `hold` Tenure the person OWNS. Routed through add_tenure, so the store is
@@ -1786,7 +1786,8 @@ def test_w5_f2s_third_term_cannot_change_any_decision():
     q = S.questions_for(w, p)[0]
     v = S.View(p.id, [], w.fixtures.get("view_k"), q)
     ch = S.make_chooser(w.fixtures, lambda a, b, c: f"{a}:{b}:{c}")
-    picks = {s: [a.verb for a in ch(p, v, S.Sensation(s), lambda: 3)]
+    # `W17`: scenes, so flatten to the interactions inside them.
+    picks = {s: [a.verb for sc in ch(p, v, S.Sensation(s), lambda: 3) for a in sc.acts]
              for s in (0, 500, 1000, 10 ** 6)}
     distinct = {tuple(x) for x in picks.values()}
     assert len(distinct) == 1, (
@@ -1939,7 +1940,7 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
         ch = S.make_chooser(w.fixtures, lambda a, b, c: "x")
         for sign in (0.9, -0.9):
             p.convictions = {"Precedent": sign}
-            picked = ch(p, v, S.Sensation(0), lambda: 1)[0].verb
+            picked = ch(p, v, S.Sensation(0), lambda: 1)[0].acts[0].verb
             cell = S.align(picked, "Precedent")
             assert cell * sign >= 0, (
                 f"at Precedent={sign} the person chose {picked!r}, whose Precedent alignment is "
@@ -1971,12 +1972,12 @@ def test_w5_a_tenure_added_before_its_subject_still_reaches_its_owner():
     assert not p.tenures, "the fixture is not reproducing the defect; nothing to rehome"
     fx = w.fixtures
     base = S.Query.budget(S.Person("p_ctl", "Ctl"), S.View("p_ctl", [], 12),
-                          fx.get("act_budget"), fx)
+                          fx.get("scene_budget"), fx)
     w._rehome()
     assert [t.id for t in p.tenures] == ["t_early"], (
         "the Tenure never reached its owner — `budget` would read zero offices for a person the "
         "world agrees holds one")
-    assert S.Query.budget(p, S.View(p.id, [], 12), fx.get("act_budget"), fx) > base, (
+    assert S.Query.budget(p, S.View(p.id, [], 12), fx.get("scene_budget"), fx) > base, (
         "rehoming did not change what `budget` reads, so the office is still invisible to it")
     # and the barrier does it, so no caller has to remember.
     src = _code_only(inspect.getsource(S.SeasonDriver.deliberate))
@@ -2061,6 +2062,87 @@ def test_w5_every_new_assumption_rows_sweep_is_actually_executed():
     fx = w.fixtures
     pp.body = 0
     pp.travel_leg = ["a"] * 20
-    assert S.Query.budget(pp, S.View(pp.id, [], 12), fx.get("act_budget"), fx) == 1, (
+    assert S.Query.budget(pp, S.View(pp.id, [], 12), fx.get("scene_budget"), fx) == 1, (
         "the floor of 1 never fires — `max(1, b)` is unreachable, so H-70's stated floor is "
         "declared and untested")
+
+
+# ===========================================================================
+# W17 — THE SCENE CONTAINER. Jordan's 2026-09-02 ruling: the budgeted unit is the SCENE.
+# ===========================================================================
+
+def test_w17_the_budget_bounds_scenes_and_the_interaction_bound_is_separate():
+    """`PLAN.md` `W17`'s Proof, first two clauses: a person with `budget = 5` returning 6 scenes
+    raises, and a scene carrying too many interactions raises SEPARATELY.
+
+    ⚠ THE SEPARATION IS THE RULING. Before it, `deliberate` refused *"p_king returned 8 acts
+    against a budget of 5"* — and under the ruling that return is LAWFUL, because eight
+    interactions can sit inside five scenes. Folding the two checks into one would make the
+    distinction Jordan drew unobservable, which is why they are two `Forbidden`s with two laws."""
+    w = _w()
+    fx = w.fixtures
+    b = fx.get("scene_budget")
+    cap = fx.get("interactions_per_scene")
+
+    def scenes(n, per):
+        def choose(p, v, s, ask_budget):
+            if p.id != "p_king":
+                return []
+            return [S.Scene(f"s{i}", p.id,
+                            [P.Act_(w, p, "speak", key=f"{i}.{j}") for j in range(per)])
+                    for i in range(n)]
+        return choose
+
+    # ---- over budget ON SCENES ----
+    with pytest.raises(S.Forbidden) as over:
+        S.SeasonDriver(_w()).season(scenes(b + 1, 1), None, P.SUBSIST)
+    assert "scene" in str(over.value).lower(), (
+        f"the over-budget refusal does not mention scenes: {over.value}. It counted acts before "
+        "the ruling and the noun is the whole of the change.")
+
+    # ---- and the SAME NUMBER of interactions, packed into a lawful number of scenes, PASSES ----
+    S.SeasonDriver(_w()).season(scenes(b, cap), None, P.SUBSIST)      # must not raise
+    assert b * cap > b + 1, (
+        f"the fixture cannot demonstrate the ruling: {b} scenes x {cap} interactions is not more "
+        f"than the {b + 1} acts the first arm refused, so 'more interactions, fewer scenes' is "
+        "not being shown")
+
+    # ---- too many interactions IN ONE scene: a DIFFERENT refusal, with a different law ----
+    with pytest.raises(S.Forbidden) as many:
+        S.SeasonDriver(_w()).season(scenes(1, cap + 1), None, P.SUBSIST)
+    assert "interactions" in str(many.value) and "H-76" in str(many.value), many.value
+    assert str(over.value) != str(many.value), "the two refusals are indistinguishable"
+
+
+def test_w17_the_interaction_bound_flips_across_its_sweep_and_the_flip_is_printed():
+    """`PLAN.md` `W17`'s Proof, third clause: *a scene carrying 4 interactions raises at the swept
+    bound of 3 and PASSES at the swept bound of `unbounded`, with the flip reported.*
+
+    `unbounded` is `H-76`'s control: at it the per-scene check does not run at all, so a verdict
+    that does not move between `3` and `unbounded` is a verdict this bound was never deciding."""
+    def run_at(bound):
+        w = _w()
+        w.fixtures = w.fixtures.sweep("interactions_per_scene", bound)
+        def choose(p, v, s, ask_budget):
+            return ([S.Scene("s0", p.id, [P.Act_(w, p, "speak", key=str(j)) for j in range(4)])]
+                    if p.id == "p_king" else [])
+        try:
+            S.SeasonDriver(w).season(choose, None, P.SUBSIST)
+            return "ACCEPTED"
+        except S.Forbidden as e:
+            return "REFUSED" if "interactions" in str(e) else f"REFUSED-OTHER: {e}"
+
+    got = {pt: run_at(None if pt == "unbounded" else pt) for pt in (1, 3, "unbounded")}
+    print("\n  H-76 sweep — one scene carrying 4 interactions:")
+    for pt, verdict in got.items():
+        print(f"    interactions_per_scene={pt!r:11} -> {verdict}")
+    flipped = len(set(got.values())) > 1
+    print(f"  {'FLIPPED' if flipped else 'no movement'} across the sweep."
+          + ("  The verdict rests on H-76's default." if flipped else
+             "  H-76 is not deciding this verdict."))
+    assert got[3] == "REFUSED", f"the declared default did not refuse 4 interactions: {got}"
+    assert got["unbounded"] == "ACCEPTED", (
+        f"the control still refused: {got}. `unbounded` must switch the check OFF entirely, or it "
+        "is not a control and 'no movement' would prove nothing.")
+    assert got[1] == "REFUSED", got
+    assert flipped, "the sweep does not move the verdict — H-76 would be declared and inert"

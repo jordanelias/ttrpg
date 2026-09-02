@@ -32,7 +32,7 @@ from shape import (
     CLAIM_SOURCES, Candidate, Claim, Collision, ContestError, DEFAULT_FIXTURES, Event,
     Fixtures, Forbidden, H, NoProducer, Office, Person, VERB_TABLE,
     Proposition, Query, Question, Record, ROOT, RUNG_KINDS, Rung, STRATA, SeasonDriver,
-    ShapeGap, questions_for, make_chooser, Sensation, resolvable_verbs, standing_of, body_band_penalty,
+    ShapeGap, questions_for, make_chooser, Scene, Sensation, resolvable_verbs, standing_of, body_band_penalty,
     Site, StateChange, Step, Tenure, Ungraded, Unowned, Unspecified, View, World,
     WITNESS_CHANNELS, WriteClass, contest, expect_refusal, sense,
 )
@@ -185,7 +185,7 @@ def Ev(w, subj_seed, kind, subject, causes, changes=None, degree=None):
                  changes or [], causes, w.tick, degree)
 
 
-@probe("P2", "the act budget is ~5 and the PERSON chooses what to leave undone", "S26.3",
+@probe("P2", "the scene budget is ~5 and the PERSON chooses what to leave undone", "S26.3",
        by="construction",
        tests="a character must be able to take several distinct actions in one season and choose what to leave undone")
 def p2():
@@ -200,22 +200,51 @@ def p2():
         return [Act_(w, p, vb) for vb in wants[:b]]
     got = []
     got.extend(a.verb for a in _run_d(w, choose).resolved)
-    b = w.fixtures.get("act_budget")
+    b = w.fixtures.get("scene_budget")
     assert len(got) == b and len(left_undone) == 9 - b
     return (f"PASS: budget {b}; the person left {left_undone} undone. The engine does NOT truncate "
             "-- an over-budget return RAISES, because silently discarding the tail would be an "
             "engine deciding a person's options, which is L1")
 
 
-@probe("P2x", "the engine truncates an over-budget act list", "S26.3", by="construction",
+@probe("P2x", "the engine truncates an over-budget SCENE list", "S26.3", by="construction",
        tests="an engine may quietly drop actions a character wanted beyond their budget")
 def p2x():
     w = tiny_world()
     def choose(p, v, s, ask_budget):
         b = ask_budget()
-        return [Act_(w, p, f"v{i}") for i in range(b + 3)] if p.id == "p_king" else []
+        return [Scene(f"sc{i}", p.id, [Act_(w, p, "speak", key=str(i))])
+                for i in range(b + 1)] if p.id == "p_king" else []
     _run(w, choose)
     return "UNREACHABLE"
+
+
+@probe("P2y", "eight interactions across five scenes is over budget", "S26.3",
+       by="construction",
+       tests="a character must be able to do several things inside one scene without spending a second scene action")
+def p2y():
+    w = tiny_world()
+    cap = w.fixtures.get("interactions_per_scene")
+    counted = {}
+    def choose(p, v, s, ask_budget):
+        if p.id != "p_king":
+            return []
+        b = counted["b"] = ask_budget()
+        # b scenes, each carrying the full swept bound of interactions. Under the ruling this is
+        # LAWFUL; before it, the same return was refused as "8 acts against a budget of 5".
+        return [Scene(f"s{i}", p.id,
+                      [Act_(w, p, "speak", key=f"{i}.{j}") for j in range(cap)])
+                for i in range(b)]
+    d = _run_d(w, choose)
+    n = len([a for a in d.resolved if a.actor == "p_king"])
+    assert n == counted["b"] * cap, (n, counted, cap)
+    return (f"PASS BY CONSTRUCTION: {n} interactions across {counted['b']} scenes, at "
+            f"{cap} per scene, and the season accepted it. ⚠ THIS EXACT RETURN WAS REFUSED "
+            "BEFORE JORDAN'S 2026-09-02 RULING, with the message 'returned 8 acts against a "
+            "budget of 5'. The budgeted unit is the SCENE; #353's verbs are what happens INSIDE "
+            "one. `P2x` still refuses one scene too many, so the bound did not weaken -- it moved "
+            "to the level the ruling put it at. The per-scene bound is `H-76` and is SWEPT, not "
+            "a constant: this probe reads it rather than spelling 3")
 
 
 @probe("P3", "choose() cannot see the world", "S3-L2", by="construction",
@@ -703,9 +732,12 @@ def p31():
     # test this: it scored an authored roster of three verbs the table does not carry.
     inner = make_chooser(w.fixtures, lambda a, b, c: f"{a}:{b}:{c}")
     p.convictions = {"Precedent": 0.9}
-    principled = inner(p, v, Sensation(0), ask)[0].verb
+    # `W17`: `choose` returns SCENES now, so the pick is the first interaction of
+    # the first scene. The default policy fills scenes in score order, so that is
+    # still the highest-scoring candidate.
+    principled = inner(p, v, Sensation(0), ask)[0].acts[0].verb
     p.convictions = {"Precedent": -0.9}
-    inverted = inner(p, v, Sensation(0), ask)[0].verb
+    inverted = inner(p, v, Sensation(0), ask)[0].acts[0].verb
     assert principled != inverted, (
         f"flipping the sign of the only conviction changed nothing: both chose {principled!r}. "
         "`convictions` is a dead carrier -- the exact defect #353 :739-744 names")
@@ -722,7 +754,7 @@ def p31():
 def p32():
     w = tiny_world()
     p = w.persons["p_mid"]
-    fx, k = w.fixtures, w.fixtures.get("act_budget")
+    fx, k = w.fixtures, w.fixtures.get("scene_budget")
     v = View(p.id, [], fx.get("view_k"))
     floors = sorted(fx.get("band_floors")["body"].values(), reverse=True)
     # Walk DOWN the bands, one at a time, and record what the person may still do.
@@ -960,7 +992,7 @@ def f9():
         return ([Act_(w, p, f"petition{i}", payload=f"venue{i}") for i in range(b)]
                 if p.id == "p_low" else [])
     filed.extend(a.payload for a in _run_d(w, choose).resolved)
-    b = w.fixtures.get("act_budget")
+    b = w.fixtures.get("scene_budget")
     assert len(filed) == b == len(set(filed))
     return (f"PASS: {b} petitions to {b} different venues on one matter. NO DEDUP, NO CAP, NO "
             "PER-VENUE LIMIT, NO 'already before a body' RULE, NO COST GATE -- ruled allowable, and "
@@ -1126,7 +1158,7 @@ def f18():
                                     proposition="mend the seam", respondent_venue="S", backing=[])
     w.dispensations["disp_order"] = dict(id="disp_order", issuer="off_duke",
                                          proposition="levy the grain", scope=["p_high"], terms=[])
-    b = w.fixtures.get("act_budget")
+    b = w.fixtures.get("scene_budget")
     return (f"PASS-STRUCTURALLY: a Petition rising from below and a Dispensation enumerating the "
             f"same executor coexist WITH NO ARBITRATION ANYWHERE IN THE SHAPE. The governor's {b} "
             "acts are the only scarcity, so the conflict is REAL and is resolved BY THE PERSON, "
@@ -1790,7 +1822,7 @@ def a30():
 def a31():
     results = []
     for v in (2, 5, 9):
-        f = DEFAULT_FIXTURES.sweep("act_budget", v)
+        f = DEFAULT_FIXTURES.sweep("scene_budget", v)
         w = tiny_world(f)
         got = []
         def choose(p, v_, s, ask_budget):
@@ -1977,7 +2009,7 @@ def p40():
     w.add_tenure(Tenure("ob2", "p_mid", "off_dicastery", "oblige", since=0))
     obligations = [t for t in Query.lateral(w, "duty", "oblige") if t.subject == "p_mid"]
     assert len(obligations) == 2
-    b = w.fixtures.get("act_budget")
+    b = w.fixtures.get("scene_budget")
     return (f"PASS-STRUCTURALLY: `oblige` is MANY per person, so two incompatible duties coexist "
             f"with NO arbitration anywhere in the shape, and the person's {b} acts are the only "
             "scarcity. That is L1 working -- THE PERSON resolves the conflict, not a priority "
@@ -2170,13 +2202,13 @@ def p43():
     return "UNREACHABLE"
 
 
-@probe("P42", "the act budget varies by office, condition and distance", "S26.3",
+@probe("P42", "the scene budget varies by office, condition and distance", "S26.3",
        by="construction",
        tests="a wounded or distant character must be able to get fewer actions in a season than a healthy one at home")
 def p42():
     w = tiny_world()
     p = w.persons["p_mid"]
-    fx, k = w.fixtures, w.fixtures.get("act_budget")
+    fx, k = w.fixtures, w.fixtures.get("scene_budget")
     v = View(p.id, [], fx.get("view_k"))
     base = Query.budget(p, v, k, fx)
     w.add_tenure(Tenure("t_p42", p.id, "off_x", "hold", since=0))

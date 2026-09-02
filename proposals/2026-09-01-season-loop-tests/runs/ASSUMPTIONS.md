@@ -15,7 +15,7 @@ exercised by this run.**
 | fixture | value | in chain? |
 |---|---|---|
 | `condition_scale` | `1000` | no — a harness fixture |
-| `act_budget` | `5` | no — a harness fixture |
+| `scene_budget` | `5` | no — a harness fixture |
 | `ledger_cap` | `200` | no — a harness fixture |
 | `view_k` | `12` | no — a harness fixture |
 | `wear_per_season` | `{'harbour': 10, 'seam': 10, 'body': 10}` | no — a harness fixture |
@@ -24,5 +24,7 @@ exercised by this run.**
 | `obstacle_refusal_multiple` | `2` | yes — §27.4 |
 | `band_floors` | `{'harbour': {'bulk_shipping': 800, 'fishing': 100}, 'seam': {'deep_mining': 700, 'surface_gleaning': 50}, 'body': {'full_operations': 800, 'limited': 500, 'withdrawal_only': 100}}` | no — a harness fixture |
 | `question_aggregation_rule` | `first` | no — a harness fixture |
+| `interactions_per_scene` | `3` | no — a harness fixture |
+| `extended_scene_cost` | `2` | no — a harness fixture |
 | `budget_office_bonus` | `1` | no — a harness fixture |
 | `budget_leg_penalty` | `1` | no — a harness fixture |

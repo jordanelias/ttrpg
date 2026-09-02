@@ -983,7 +983,7 @@
       "detail": "verb 'v4' is on no row of the verb table",
       "kind": "UNSPECIFIED",
       "section": "S27/E2",
-      "title": "the act budget is ~5 and the PERSON chooses what to leave undone",
+      "title": "the scene budget is ~5 and the PERSON chooses what to leave undone",
       "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'v4' as a verb. This is the CALLER'S invention and the gap is the caller's",
       "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
       "by": "construction",
@@ -11347,7 +11347,7 @@
    "detail": "verb 'v4' is on no row of the verb table",
    "kind": "UNSPECIFIED",
    "section": "S27/E2",
-   "title": "the act budget is ~5 and the PERSON chooses what to leave undone",
+   "title": "the scene budget is ~5 and the PERSON chooses what to leave undone",
    "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'v4' as a verb. This is the CALLER'S invention and the gap is the caller's",
    "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "by": "construction",
@@ -11858,14 +11858,24 @@
   "P2x": {
    "id": "P2x",
    "verdict": "GAP",
-   "detail": "p_king returned 8 acts against a budget of 5",
+   "detail": "p_king returned 6 scenes costing 6 against a budget of 5 scene actions",
    "kind": "FORBIDDEN",
    "section": "S26.3",
-   "title": "the engine truncates an over-budget act list",
+   "title": "the engine truncates an over-budget SCENE list",
    "needs": "`choose` is bounded by budget(person, view) -- the PERSON chooses what to leave undone",
-   "law": "S26.3 -- at one act NOBODY EVER CHOOSES WHAT TO LEAVE UNDONE; the budget exists to create triage. An engine that silently discards the tail has made the choice instead of the person, which is L1",
+   "law": "S26.3, re-stated in scenes per Jordan's 2026-09-02 ruling -- at one scene NOBODY EVER CHOOSES WHAT TO LEAVE UNDONE; the budget exists to create triage. An engine that silently discards the tail has made the choice instead of the person, which is L1. \u26a0 THE UNIT MATTERS: eight INTERACTIONS across five scenes is LAWFUL and was refused before the ruling",
    "by": "construction",
    "tests": "an engine may quietly drop actions a character wanted beyond their budget"
+  },
+  "P2y": {
+   "id": "P2y",
+   "verdict": "PASS",
+   "detail": "PASS BY CONSTRUCTION: 15 interactions across 5 scenes, at 3 per scene, and the season accepted it. \u26a0 THIS EXACT RETURN WAS REFUSED BEFORE JORDAN'S 2026-09-02 RULING, with the message 'returned 8 acts against a budget of 5'. The budgeted unit is the SCENE; #353's verbs are what happens INSIDE one. `P2x` still refuses one scene too many, so the bound did not weaken -- it moved to the level the ruling put it at. The per-scene bound is `H-76` and is SWEPT, not a constant: this probe reads it rather than spelling 3",
+   "kind": null,
+   "section": "S26.3",
+   "title": "eight interactions across five scenes is over budget",
+   "by": "construction",
+   "tests": "a character must be able to do several things inside one scene without spending a second scene action"
   },
   "P3": {
    "id": "P3",
@@ -12399,7 +12409,7 @@
    "detail": "PASS BY CONSTRUCTION: 5 at rest \u00b7 6 holding an office \u00b7 2 wounded to the bottom band \u00b7 3 after two travel legs. \u26a0 REVISIONS 1-4 RAISED A `Collision` HERE, and it was real at the time: S26 types `budget : (Person, View) -> int` with NO World while S26.3 says it varies by office, condition and distance, and all three LOOKED resolver-side. The resolution was not a ruling on which side gives way -- it is that THE STORE WAS IN THE WRONG PLACE. #353 `:730` gives Person 'every Tenure whose subject they are', so `W5` moved the tenure store onto its subject and both halves became true at once with no signature changed. That is PLAN \u00a73.3's smaller amendment; V2 \u00a7F3 took the larger one and made `budget` a second World-taking function, which `:634` forbids",
    "kind": null,
    "section": "S26.3",
-   "title": "the act budget varies by office, condition and distance",
+   "title": "the scene budget varies by office, condition and distance",
    "by": "construction",
    "tests": "a wounded or distant character must be able to get fewer actions in a season than a healthy one at home"
   }
@@ -12704,10 +12714,10 @@
   },
   {
    "kind": "FORBIDDEN",
-   "what": "p_king returned 8 acts against a budget of 5",
+   "what": "p_king returned 6 scenes costing 6 against a budget of 5 scene actions",
    "where": "S26.3",
    "needs": "`choose` is bounded by budget(person, view) -- the PERSON chooses what to leave undone",
-   "law": "S26.3 -- at one act NOBODY EVER CHOOSES WHAT TO LEAVE UNDONE; the budget exists to create triage. An engine that silently discards the tail has made the choice instead of the person, which is L1",
+   "law": "S26.3, re-stated in scenes per Jordan's 2026-09-02 ruling -- at one scene NOBODY EVER CHOOSES WHAT TO LEAVE UNDONE; the budget exists to create triage. An engine that silently discards the tail has made the choice instead of the person, which is L1. \u26a0 THE UNIT MATTERS: eight INTERACTIONS across five scenes is LAWFUL and was refused before the ruling",
    "case": "probe:P2x",
    "expected": false
   },
@@ -13028,14 +13038,14 @@
   }
  ],
  "_trace_counts": {
-  "STEP": 2078,
-  "BARRIER": 705,
-  "DECISION": 709,
-  "WRITE": 581,
-  "QUERY": 4272,
-  "ACT": 55,
-  "EVENT": 36,
-  "CLAIM": 181,
+  "STEP": 2090,
+  "BARRIER": 709,
+  "DECISION": 713,
+  "WRITE": 658,
+  "QUERY": 4297,
+  "ACT": 76,
+  "EVENT": 51,
+  "CLAIM": 256,
   "GAP": 69,
   "NOTE": 96
  },

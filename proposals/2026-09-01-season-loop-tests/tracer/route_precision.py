@@ -82,6 +82,9 @@ DELIBERATELY_UNROUTED = {
     "P19":  "provokes L5's outcome refusal; A3 is the routed one",
     "P25":  "provokes S15.3's causation rule; P24 is the routed one",
     "P2x":  "provokes the engine-truncation refusal; P2 is the routed one",
+    "P2y":  "W17's positive half -- that several interactions inside one budgeted scene are "
+            "LAWFUL after Jordan's 2026-09-02 ruling. No case row asks for it because the corpus "
+            "predates the ruling; P2x is its refusing twin and P2 is the routed one",
     "W1x":  "provokes S42.2.1's no-silent-default rule on the wear table",
 }
 

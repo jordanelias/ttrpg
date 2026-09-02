@@ -200,9 +200,16 @@ DEFAULT_FIXTURES = Fixtures(
     # S48: condition is an int on an EXPORTED scale. S22 assigns the scale to `params`, and the
     # in-chain params document "proposes NO VALUES", so this is a fixture. Injection site: here.
     condition_scale=1000,
-    # S26.3: the budget is RULED at "~5". A band is not an integer; this is the integer the
-    # instrument runs on, and A31 sweeps it because the verdict moves with it.
-    act_budget=5,
+    # RULED TWICE. #353 §26.3 puts the budget at "~5"; Jordan ruled 2026-09-02 that the UNIT is
+    # the SCENE and the number is 5 -- *"5 scenes for a character to play per season"*. A band is
+    # not an integer; this is the integer the instrument runs on, and A31 sweeps it because the
+    # verdict moves with it.
+    # ⚠ `W17` RENAMED THIS FROM `act_budget`. #353 §26.3's prose counts ACTS throughout and the
+    # ruling re-states it in scenes: "a wounded duke gets fewer SCENES than a healthy one". The
+    # spray argument survives the noun change unaltered -- five scenes each spent petitioning is
+    # exactly the triage the budget exists to create -- but the key must not keep saying `act`,
+    # because a name is where the next reader learns what the number counts.
+    scene_budget=5,
     # S20: the ledger cap L. Params-owned; no in-chain value.
     ledger_cap=200,
     # S18: "at most K claim ids from the holder's OWN ledger -- BUILT, NOT FILTERED".
@@ -239,6 +246,13 @@ DEFAULT_FIXTURES = Fixtures(
     # model"; this is that closure spent rather than restated.
     # `H-54`, swept. The rule was `qs[0]` in a subscript; see `aggregate_questions`.
     question_aggregation_rule="first",
+    # `W17` / Jordan 2026-09-02. The unit is the scene and the number is 5; NEITHER of these two
+    # was ruled, so both are fixtures with register rows and a sweep. Source for both defaults:
+    # `player_agency_v30.md` §6.3 -- "One scene action = one scene opportunity pursued. A scene
+    # contains 1-3 mechanical interactions" -- which is `## Status: CANONICAL` but pre-#337 and,
+    # under `CLAUDE.md` §0.05, REFERENCE rather than mechanism. `None` means unbounded.
+    interactions_per_scene=3,          # `H-76`, swept 1 / 3 / unbounded
+    extended_scene_cost=2,             # `H-77`, swept 1 / 2 / 3
     budget_office_bonus=1,
     budget_leg_penalty=1,
 )
@@ -954,6 +968,33 @@ class Candidate:
     verb: str
     subject: Optional[str] = None
     why: str = ""
+
+
+@dataclass
+class Scene:
+    """THE BUDGETED UNIT. Ruled by Jordan, 2026-09-02: *"5 scenes for a character to play per
+    season"*.
+
+    ⚠ IT IS A LEVEL ABOVE THE VERB TABLE AND CHANGES NOTHING BENEATH IT. Parts D and E stand
+    unaltered: the table's rows are the INTERACTIONS, and a Scene carries 1-3 of them. `PLAN.md`
+    `W17` says so and it is worth restating -- this is the cheapest shape the ruling could have
+    taken, and nothing about the write matrix or the resolver moves.
+
+    #353 §26.3's prose counts ACTS throughout. Re-stated in scenes, its argument is unaltered:
+    "a wounded duke gets fewer SCENES than a healthy one", and five scenes each spent petitioning
+    is exactly the triage the budget exists to create. The noun changes; the spray argument does
+    not.
+
+    `extended` costs more than one scene action (`H-77`, swept). Both that cost and the
+    interactions bound are FIXTURES and register rows -- Jordan ruled the UNIT and the NUMBER and
+    ruled neither of these."""
+    id: str
+    actor: str
+    acts: list = field(default_factory=list)
+    extended: bool = False
+
+    def cost(self, extended_cost: int) -> int:
+        return extended_cost if self.extended else 1
 
 
 @dataclass
@@ -1720,8 +1761,21 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
         ranked = sorted(cands, key=lambda c: (-score(c), c.verb, c.subject or ""))
         # §26.3: the PERSON triages. The slice is the person's own choice of what to leave
         # undone, taken against a budget they ASKED for -- not an engine truncating a tail.
-        return [Act(mint(p.id, c.verb, c.subject or ""), p.id, c.verb)
-                for c in ranked[:ask_budget()]]
+        # `W17`: the budgeted unit is the SCENE, so the slice is over scenes and each carries up
+        # to `interactions_per_scene` of the ranked candidates. The default policy fills scenes
+        # greedily in score order -- a person spends a scene on their best option and whatever
+        # else it can carry, which is what "1-3 mechanical interactions" describes.
+        n_scenes = ask_budget()
+        per = fx.get("interactions_per_scene")
+        width = len(ranked) if per is None else per
+        scenes, i = [], 0
+        while len(scenes) < n_scenes and i < len(ranked):
+            chunk = ranked[i:i + width]
+            scenes.append(Scene(
+                mint(p.id, "scene", str(len(scenes))), p.id,
+                [Act(mint(p.id, c.verb, c.subject or ""), p.id, c.verb) for c in chunk]))
+            i += width
+        return scenes
     return choose
 
 
@@ -1921,6 +1975,28 @@ def standing_of(p: Person, fx: "Fixtures") -> int:
     own = [c for c in p.ledger if c.subject == p.id and c.source == "firsthand"]
     _agree, dis, paired = agreement(told, own)
     return scale if paired == 0 else (dis * scale) // paired
+
+
+def as_scenes(produced: list, actor: str, w: "World") -> list:
+    """Normalise what `choose` returned into Scenes. `W17`.
+
+    ⚠ A BARE `Act` IS ONE SCENE CARRYING ONE INTERACTION, and that equivalence is what makes the
+    scene container ADDITIVE rather than a rewrite: every caller written before the 2026-09-02
+    ruling keeps its exact meaning, because one act per scene IS the pre-ruling accounting. A
+    caller that wants the ruling's new freedom -- several interactions inside one budgeted scene
+    -- returns Scenes instead. Mixing the two in one list is allowed and means what it looks
+    like."""
+    out = []
+    for item in produced:
+        if isinstance(item, Scene):
+            out.append(item)
+        elif isinstance(item, Act):
+            out.append(Scene(H(w.world_seed, w.tick, actor, f"scene:{item.id}"), actor, [item]))
+        else:
+            raise InstrumentDefect(
+                f"choose() returned a {type(item).__name__}; it must return Act or Scene "
+                "objects. A bare Act is treated as a one-interaction scene (W17).")
+    return out
 
 
 def aggregate_questions(qs: list, rule: str):
@@ -2346,7 +2422,7 @@ class SeasonDriver:
         w._rehome()
         acts: list[Act] = []
         k_view = w.fixtures.get("view_k")
-        k_budget = w.fixtures.get("act_budget")
+        k_budget = w.fixtures.get("scene_budget")
         q_rule = w.fixtures.get("question_aggregation_rule")
         w._in_parallel_map = True       # S51: WorkerThreadPool over persons. The one that pays.
         for p in list(w.persons.values()):
@@ -2369,13 +2445,34 @@ class SeasonDriver:
             ask_budget = lambda p=p, v=v: Query.budget(p, v, k_budget, w.fixtures)
             b = ask_budget()
             produced = choose(p, v, s, ask_budget)
+            # `W17`. THE BUDGETED UNIT IS THE SCENE (Jordan, 2026-09-02), so the bound below
+            # counts scenes and the interaction bound is a SEPARATE check. A bare `Act` is one
+            # scene carrying one interaction -- which is exactly the pre-ruling semantics, so
+            # every caller that returns Acts keeps its meaning and the change is additive.
+            scenes = as_scenes(produced, p.id, w)
+            spent = sum(sc.cost(w.fixtures.get("extended_scene_cost")) for sc in scenes)
             # S26.3: the engine does NOT truncate. Any cap applied here would be AN ENGINE
             # DECIDING A PERSON'S OPTIONS, which is L1. Over-budget is the CALLER'S defect.
-            if len(produced) > b:
+            if spent > b:
                 raise Forbidden(
-                    f"{p.id} returned {len(produced)} acts against a budget of {b}", "S26.3",
+                    f"{p.id} returned {len(scenes)} scenes costing {spent} against a budget of "
+                    f"{b} scene actions", "S26.3",
                     needs="`choose` is bounded by budget(person, view) -- the PERSON chooses what to leave undone",
-                    law="S26.3 -- at one act NOBODY EVER CHOOSES WHAT TO LEAVE UNDONE; the budget exists to create triage. An engine that silently discards the tail has made the choice instead of the person, which is L1")
+                    law="S26.3, re-stated in scenes per Jordan's 2026-09-02 ruling -- at one scene NOBODY EVER CHOOSES WHAT TO LEAVE UNDONE; the budget exists to create triage. An engine that silently discards the tail has made the choice instead of the person, which is L1. ⚠ THE UNIT MATTERS: eight INTERACTIONS across five scenes is LAWFUL and was refused before the ruling")
+            # ⚠ A SEPARATE FAILURE, DELIBERATELY. `PLAN.md` `W17` item 3: the two propositions are
+            # "a person returned more SCENES than `budget` allows" and "a scene carried more
+            # interactions than the swept bound". Folding them into one check would make the
+            # ruling's whole distinction unobservable.
+            cap = w.fixtures.get("interactions_per_scene")
+            if cap is not None:
+                for sc in scenes:
+                    if len(sc.acts) > cap:
+                        raise Forbidden(
+                            f"scene {sc.id} carries {len(sc.acts)} interactions against a bound "
+                            f"of {cap}", "H-76",
+                            needs="a scene carries 1-3 verb applications; the bound is swept, not constant",
+                            law="`H-76`, `assumption`. `player_agency_v30.md` §6.3 -- 'A scene contains 1-3 mechanical interactions' -- which is CANONICAL but pre-#337, so under CLAUDE.md §0.05 it is REFERENCE and this is a swept default, not a rule of the design. Jordan ruled the UNIT and the NUMBER of scenes; he did not rule this")
+            produced = [a for sc in scenes for a in sc.acts]
             for i, a in enumerate(produced):
                 # L1 -- THE PERSON IS THE ONLY ACTOR. ⚠ REV 4: `Act.actor` is a bare id and
                 # nothing checked it, so `Act("x", "the_church", "excommunicate")` reached

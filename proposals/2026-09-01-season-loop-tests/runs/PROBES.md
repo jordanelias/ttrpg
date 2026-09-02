@@ -1,6 +1,6 @@
 # THE PROBE LEDGER
 
-**121 probes.** Each is a real execution against `shape.py` that either
+**122 probes.** Each is a real execution against `shape.py` that either
 completes or raises a typed gap.
 
 ## How each verdict was reached
@@ -11,7 +11,7 @@ checking.* So every probe declares its provenance:
 
 | `by=` | means | count |
 |---|---|---|
-| `construction` | **the shape itself raised** — a gate, a law or a type stopped it. This is evidence | 76 |
+| `construction` | **the shape itself raised** — a gate, a law or a type stopped it. This is evidence | 77 |
 | `no-signature` | nothing to call. The design supplies no function by which it could be attempted — which *is* the refusal, but **absence is not a guard** | 26 |
 | `convention` | the shape permits it and only a reader stops it. §27.2 is the design's own example and says so out loud | 1 |
 | `probe-model` | the probe supplies a model the design does not, to reach the question at all | 18 |
@@ -20,7 +20,7 @@ checking.* So every probe declares its provenance:
 
 **Of 62 PROBES that did not pass, 31 were raised BY THE SHAPE ITSELF and 25 exist only because THERE IS NO SIGNATURE TO CALL.**
 
-> ⚠ **THIS COUNTS PROBES, NOT GAP EVENTS, and the two numbers differ.** `results.json`'s `_trace_counts.GAP` is 69 — every gap RAISED during the run, including several inside one probe and several the corpus cases hit. This line counts probes whose VERDICT is not PASS: 62 of 121. Both are honest counts of different populations, and `G10` forbids reporting either without its basis — which this file did until the `W5` adversarial pass read both.
+> ⚠ **THIS COUNTS PROBES, NOT GAP EVENTS, and the two numbers differ.** `results.json`'s `_trace_counts.GAP` is 69 — every gap RAISED during the run, including several inside one probe and several the corpus cases hit. This line counts probes whose VERDICT is not PASS: 62 of 122. Both are honest counts of different populations, and `G10` forbids reporting either without its basis — which this file did until the `W5` adversarial pass read both.
 
 That is close to an even split, and it matters more than any case verdict. A refusal a
 gate enforces and a refusal that exists because nobody wrote the function are different
@@ -32,7 +32,7 @@ has no module system and no visibility modifiers, so the guarantee there is
 a contributor closes by simply writing the function — no gate fires, no test goes red,
 and the design's own §27.2 admission applies: *enforced by a person noticing*.
 
-**And 14 of 59 PASSes are not by construction
+**And 14 of 60 PASSes are not by construction
 either** — they are listed individually below and should be discounted accordingly. A
 `probe-model` PASS means the instrument supplied something the design does not.
 
@@ -142,6 +142,7 @@ either** — they are listed individually below and should be discounted accordi
 | `P24` | PASS | construction | S15.3 | when a character dies everything they held must end, including things held elsewhere |
 | `P27` | PASS | construction | S20 | a character must be able to quietly do less than ordered, discoverable only by investigation |
 | `P28` | PASS | no-signature | S20 | no character may read another's memory directly |
+| `P2y` | PASS | construction | S26.3 | a character must be able to do several things inside one scene without spending a second scene action |
 | `P3` | PASS | construction | S3-L2 | a character must decide from what they believe, which may be wrong, and never from world truth |
 | `P31` | PASS | construction | S9 | a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by the |
 | `P32` | PASS | construction | S12 | a character's own condition must be able to degrade across a season so that their available actions narrow predictably |
@@ -409,7 +410,7 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** one of ['RESOLVE']
 **law:** L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say
 
-### `P2` — the act budget is ~5 and the PERSON chooses what to leave undone  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
+### `P2` — the scene budget is ~5 and the PERSON chooses what to leave undone  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
 **what:** verb 'v4' is on no row of the verb table
 
 **needs:** NOTHING FROM THE DESIGN -- #353 does not name 'v4' as a verb. This is the CALLER'S invention and the gap is the caller's
@@ -433,11 +434,11 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** an ownership row
 **law:** S22.3/S31.1 -- travel legs are IN THE WRITE MATRIX and IN THE CHURN LEDGER and IN NO OWNERSHIP ROW. And they move a person BETWEEN rungs, which is a fourth cross-owner operation MATTER's own list of three does not name
 
-### `P2x` — the engine truncates an over-budget act list  ·  **FORBIDDEN**  ·  `S26.3`  ·  by `construction`
-**what:** p_king returned 8 acts against a budget of 5
+### `P2x` — the engine truncates an over-budget SCENE list  ·  **FORBIDDEN**  ·  `S26.3`  ·  by `construction`
+**what:** p_king returned 6 scenes costing 6 against a budget of 5 scene actions
 
 **needs:** `choose` is bounded by budget(person, view) -- the PERSON chooses what to leave undone
-**law:** S26.3 -- at one act NOBODY EVER CHOOSES WHAT TO LEAVE UNDONE; the budget exists to create triage. An engine that silently discards the tail has made the choice instead of the person, which is L1
+**law:** S26.3, re-stated in scenes per Jordan's 2026-09-02 ruling -- at one scene NOBODY EVER CHOOSES WHAT TO LEAVE UNDONE; the budget exists to create triage. An engine that silently discards the tail has made the choice instead of the person, which is L1. ⚠ THE UNIT MATTERS: eight INTERACTIONS across five scenes is LAWFUL and was refused before the ruling
 
 ### `P30` — a claim survives the season  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
 **what:** verb 'do' is on no row of the verb table
