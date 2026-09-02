@@ -4153,54 +4153,70 @@ def test_w10_no_playable_verdict_rests_on_an_undeclared_row():
     assert authored, "no row is declared at all — the overlay is not being read"
 
 
-def test_the_corpus_runs_and_three_worlds_produce_one_behaviour():
+def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     """JORDAN, 2026-09-02: *"shouldn't we consider running all NPCs and all arcs in our test runs?
     a larger surface introduces more complexity, but given our goals, what solves one may solve
     another while providing more pushback as to whether something is the RIGHT solve."*
 
-    This is that pushback, pinned. `corpus_run.py` builds a world at each case's declared `scale`
-    and folds real seasons through it — EXECUTION, where `run_cases.py` does GRADING.
+    `corpus_run.py` executes every case; `run_cases.py` grades them. Two different questions.
 
-    ⚠ THE CONTROLLED CLAIM IS ABOUT WORLDS, NOT CASES. `build_at` uses `scale` and the seed and
-    nothing else, because `scale` is the corpus's only structured field, so 143 cases collapse to
-    three distinct worlds. "86 cases agree" would be a confound; "three worlds six rungs apart
-    agree" is the measurement (`H-96`).
+    ⚠ REV 2. THE FIRST VERSION OF THIS TEST NAMED THREE FALSIFIERS AND IMPLEMENTED ONE. It claimed
+    to go red *"the day a fourth world becomes reachable"* while asserting `len(worlds) >= 3`,
+    which a fourth world passes; and *"the day an eighth verb fires"* while asserting a nesting
+    that holds for any count and a governance subset that survives `destroy_record` firing. §0.1
+    pt 3 — name the falsifier or you have not attacked the result — so the counts are asserted
+    EXACTLY here, and every one of them goes red on movement in either direction.
 
-    This test goes RED the day the ladder starts mattering, the day a fourth world becomes
-    reachable, or the day an eighth verb fires — each of which is progress, and each of which
-    must re-derive the numbers rather than reuse them."""
+    ⚠ AND IT PINNED THE WRONG CLAIM. Rev 1 asserted *one verb set across three worlds* as evidence
+    the rung ladder decides nothing. Its adversarial pass showed that was entailed: `View.__slots__`
+    closes the rung channel by TYPE (L2), and the fixture made all three worlds identical
+    person-side. The worlds now genuinely differ — per-case convictions, season counts 1..6,
+    forced deadlines — and the executed set is STILL one, for the reason this test now pins:
+    §F2's scoring separates 2..7 of 22 candidates and the rest tie (`H-96`)."""
     import corpus_run as C
     import run_cases as R
     rows = [C.run_case(c) for lane in ("NPC", "ARC") for c in R.load_cases(lane)]
-    assert not [r for r in rows if r["status"] == "ERROR"], (
-        f"the corpus runner errored on {[(r['id'], r['why']) for r in rows if r['status']=='ERROR'][:3]}"
-        " — an instrument defect, not a finding about the design")
-    ran = [r for r in rows if r["status"] == "RAN"]
+    bad = [r for r in rows if r["status"] == "INSTRUMENT-DEFECT"]
+    assert not bad, (f"the corpus runner has a call-site bug on {[(r['id'], r['why']) for r in bad][:3]}"
+                     " — an instrument defect, which is NOT a finding about the design")
+    live = [r for r in rows if r["status"] in ("RAN", "NO-EXECUTION")]
     unrep = [r for r in rows if r["status"] == "UNREPRESENTABLE"]
-    assert ran and unrep, "the corpus produced no split at all; the runner is not running"
 
-    # `H-95` — the two scale vocabularies. An unrepresentable scale must REFUSE, not be mapped.
-    assert {r["scale"] for r in unrep} <= {"faction", "world"}, (
-        f"a scale other than faction/world is unrepresentable: "
-        f"{sorted({r['scale'] for r in unrep})} — either `rung_kinds` moved or the corpus did")
-    assert not ({r["scale"] for r in ran} & {"faction", "world"}), (
-        "a faction- or world-scale case RAN — something is silently mapping an unrepresentable "
-        "scale onto a rung, which manufactures a pass for 40% of the corpus (H-95)")
+    # `H-95` — the two scale vocabularies, asserted EXACTLY. `faction` is refused by RULING
+    # (ARCHITECTURE_V2.md:93, H-21); `world` is unruled. A change to either count is a change to
+    # the corpus or to `rung_kinds` and must re-derive the row rather than reuse it.
+    from collections import Counter
+    census = Counter(r["scale"] for r in unrep)
+    assert dict(census) == {"faction": 47, "world": 10}, (
+        f"the unrepresentable census moved: {dict(census)} (was faction 47, world 10). Either the "
+        "corpus was re-scaled or `rung_kinds` grew — `H-95` must be re-derived, not reused")
+    assert len(live) == 86 and len(rows) == 143, (
+        f"the corpus size moved: {len(live)} runnable of {len(rows)}; `H-95`'s 40% is stale")
 
-    # `H-96` — three worlds, one behaviour.
-    worlds = {r["scale"] for r in ran}
-    sigs = {tuple(r["verbs"]) for r in ran}
-    assert len(worlds) >= 3, f"fewer than three distinct worlds reachable: {worlds}"
-    assert len(sigs) == 1, (
-        f"the worlds no longer agree — {len(sigs)} distinct verb sets across {len(worlds)} worlds. "
-        "That is PROGRESS and `H-96` must be re-measured rather than left standing")
+    # ⚠ THE EXECUTION MEASURE IS PART E's OWN COLUMNS, NOT `driver.resolved`. `resolved.append(a)`
+    # is the FIRST statement of `_fold`, before eligibility and before the requires predicate, so
+    # it counts acts that REACHED the fold. Rev 1 read it and published attempts as executions —
+    # `tell` and `transfer` were among its "seven that execute" and both are always REFUSED.
+    ever = {v for r in live for v in r["executed"]}
+    refused_only = {v for r in live for v in r["refused"]} - ever
+    assert ever == {"create_record", "forge", "move", "speak", "utter", "work"}, (
+        f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
+        "must be re-measured. It is SIX; rev 1 published seven by counting attempts")
+    assert refused_only == {"tell", "transfer"}, (
+        f"the always-refused set moved to {sorted(refused_only)}; `H-94` names why these two fail "
+        "(an act carries no operands), so a change here means `H-94` has moved")
 
-    # The three-way split of the verb table, which is where the loss actually is.
-    ever = {v for r in ran for v in r["verbs"]}
+    # `H-96` — the ranking cannot discriminate, which is WHY one executed set survives worlds that
+    # genuinely differ. This is the load-bearing assertion; the identical set alone proves nothing.
+    assert len({r["seasons"] for r in live}) > 1, (
+        "every case ran for the same number of seasons — `temporal.span_seasons` is not being "
+        "read, and the worlds are identical again for the reason rev 1 was overturned")
+    assert len({tuple(r["executed"]) for r in live}) == 1, (
+        "the worlds no longer agree — that is PROGRESS, and `H-96` must be re-derived")
     foldable = set(S.resolvable_verbs())
-    assert ever < foldable < set(S.VERB_TABLE), (
-        "the strict nesting broke: every chosen verb must be foldable and every foldable verb must "
-        "be in the table")
-    assert foldable - ever >= {"confer", "convene", "dispatch", "revoke"}, (
-        f"a governance verb is now chosen somewhere in the corpus ({sorted(foldable - ever)}) — "
-        "`H-71` has moved and both it and `H-96` need re-deriving")
+    assert foldable - ever - refused_only == {"confer", "convene", "dispatch", "revoke",
+                                              "destroy_record"}, (
+        f"the never-attempted set moved to {sorted(foldable - ever - refused_only)}. Four of the "
+        "five are the governance verbs and `H-71` is why; any movement means `H-71` has moved")
+
+

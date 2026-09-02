@@ -1,122 +1,211 @@
-"""EVERY CASE, EXECUTED — not graded.
+"""EVERY CASE, EXECUTED — not graded, and not merely attempted.
 
 `run_cases.py` GRADES the corpus: it reads each case's prose `need` rows, looks up the authored
-declaration that says which verb / hole / probe answers each one, and reports PLAYABLE / DEGRADED /
+declaration naming which verb / hole / probe answers each one, and reports PLAYABLE / DEGRADED /
 BLOCKED / NOT-ASSESSED. That is a judgement about whether the engine COULD support a character.
 
-This RUNS them. For every case it builds a world at the case's own declared `scale`, folds seasons
-through the real resolver, and reports which verbs actually EXECUTED. Two different questions, and
-until now only the first had an instrument.
+This RUNS them. Jordan asked for it, 2026-09-02: *"shouldn't we consider running all NPCs and all
+arcs in our test runs? a larger surface introduces more complexity, but given our goals, what
+solves one may solve another while providing more pushback as to whether something is the RIGHT
+solve."* It is `CLAUDE.md` §0.1's *"targeted-green is not validation"* at corpus scale.
 
-⚠ JORDAN ASKED FOR THIS, 2026-09-02, AND THE ARGUMENT IS HIS: *"a larger surface introduces more
-complexity, but given our goals, what solves one may solve another while providing more pushback as
-to whether something is the RIGHT solve."* It is `CLAUDE.md` §0.1's "targeted-green is not
-validation" applied at corpus scale — the milestone runs ONE hand-built world for ONE case, and a
-world built to make a case pass encodes this session's model of that case, not the engine.
+⚠ REV 2. THE FIRST VERSION MEASURED A QUANTITY ITS OWN FIXTURE HAD ALREADY FIXED, and its
+adversarial pass overturned the headline. Three defects, all of them the same shape — an instrument
+that could only return the answer it returned:
 
-⚠ THE CASE COUNT IS NOT THE WORLD COUNT, AND REPORTING IT AS ONE WOULD BE A CONFOUND. `build_at`
-derives a world from the case's `scale` AND NOTHING ELSE, because `scale` is the only structured
-field the corpus carries — `temporal`, `who_acts`, `knowledge` and `ends_when` are free English,
-143 distinct values out of 143. So two cases at the same scale get the SAME world, and 143 cases
-collapse to THREE distinct worlds. "86 executed cases agree" is therefore worth nothing; "three
-worlds spanning six rungs of the ladder agree" is the measurement, and this module prints the
-second. §0.1 point 4 — a number without a control is not a measurement, in either direction.
+  1. **IT COUNTED ATTEMPTS AND CALLED THEM EXECUTIONS.** It read `driver.resolved`, and
+     `self.resolved.append(a)` is the FIRST statement of `_fold` — before `_eligible`, before the
+     `requires` predicate, before the wrote-nothing refusal. `shape.py` says so in terms: *"record
+     which acts REACHED RESOLVE"*. Every "verb that executed" was a verb that was tried. Execution
+     is now read from the EVENT LOG through Part E's own `emits:` / `emits_on_refusal:` columns,
+     which is the design's own statement of what success looks like.
+  2. **EVERY WORLD WAS THE SAME WORLD PERSON-SIDE.** It hung persons, the Proposition, the
+     convictions and the sites all on `chain[0]`, so `scale` varied only the count of rungs ABOVE
+     the actors — and `View.__slots__` is `(holder, claim_ids, question)` with `__getattr__`
+     raising, so L2 closes the only channel by which a rung could reach a verb choice. *"One verb
+     set across three worlds"* was therefore entailed by a ruled refusal plus an identical fixture,
+     before anything ran. That is not a finding about the ladder.
+  3. **A PERSON IS ALSO A RUNG AND THIS FIXTURE FORGOT IT.** `tiny_world` gives every person a
+     `person`-kind Rung under the same id; `build_at` did not, so `_req_move`'s `w.rungs.get(
+     a.actor)` was `None` and `move` was refused in every world in the corpus — while being
+     reported as one of the seven verbs that "executed".
 
-⚠ AN UNREPRESENTABLE SCALE REFUSES; IT IS NOT MAPPED TO THE NEAREST RUNG. 57 of 143 cases declare
-`scale: faction` or `scale: world`, and neither is in `rung_kinds`. Quietly folding `faction` onto
-`settlement` would manufacture a pass for the largest single block of the corpus. §42.2's polarity
-rule sends zero evidence to the verdict AGAINST the thing measured, so those cases come back
-UNREPRESENTABLE with the scale named, and that count is the finding.
+⚠ AND `scale` IS NOT THE CORPUS'S ONLY STRUCTURED FIELD, WHICH IS WHAT MADE REV 1's CEILING
+ARGUMENT WRONG IN THE REVERSE DIRECTION. `temporal` is a mapping with declared sub-keys and **57 of
+143 cases carry an integer `temporal.span_seasons`** (1..16), which rev 1 ignored while hardcoding
+2. And `cases/ENDINGS_CLASSIFIED.yaml` already classifies endings into DECIDER/ROLL/THRESHOLD/
+NEVER/UNCLEAR with a boolean `forced_by_threshold`. Both are read here. So the number of distinct
+worlds is a property of what the BUILDER reads, never a ceiling the corpus imposes.
+
+⚠ AN UNREPRESENTABLE SCALE STILL REFUSES rather than being folded onto the nearest rung: §42.2's
+polarity rule sends zero evidence to the verdict AGAINST the thing measured, and mapping `faction`
+onto `settlement` would manufacture a pass for the largest single block of the corpus.
 """
 from __future__ import annotations
 import sys
 from collections import Counter
+from pathlib import Path
 
 import shape as S
 import run_cases as R
 import probes as P
 
+# `CLAUDE.md` §0.1 pt 5 / `G1`: declared here with its reason, not a bare literal in a body.
+MAX_SEASONS = 6          # the corpus asks for up to 16; the flood (`W6`) makes that unaffordable
+DEFAULT_SEASONS = 2      # for the 86 cases whose `span_seasons` is prose ("ongoing")
 
-def build_at(scale: str, seed: int = 0) -> S.World:
-    """A world whose deepest rung is `scale`, with the whole containment chain above it.
+_ENDINGS = Path(__file__).resolve().parents[2] / "2026-08-31-shape-tracer" / "cases" / "ENDINGS_CLASSIFIED.yaml"
 
-    ⚠ THE CHAIN IS `rung_kinds`, NOT A HAND-PICKED SHAPE. `RUNG_KINDS` is ordered person -> realm
-    and the containment tree is that order, so a case at `settlement` gets settlement inside
-    territory inside province inside duchy inside realm — the tree the architecture says exists,
-    rather than the two rungs the milestone fixture happens to carry."""
+
+def endings() -> dict:
+    """`cases/ENDINGS_CLASSIFIED.yaml`, keyed by case id. Its own header calls the 19 of 50 rows
+    carrying `forced_by_threshold` *"load-bearing on the whole proposal"*, and rev 1 did not read
+    it — so a deadline that the corpus says forces the ending reached no world."""
+    if not _ENDINGS.exists():
+        return {}
+    d = S.load_yaml(_ENDINGS.read_text())
+    rows = d.get("cases") if isinstance(d, dict) else d
+    return {r["id"]: r for r in (rows or []) if isinstance(r, dict) and r.get("id")}
+
+
+ENDINGS = endings()
+
+
+def seasons_for(case: dict) -> int:
+    """The case's own `temporal.span_seasons` where it is an integer, clamped to `MAX_SEASONS`."""
+    t = case.get("temporal")
+    n = t.get("span_seasons") if isinstance(t, dict) else None
+    return min(int(n), MAX_SEASONS) if isinstance(n, int) and n > 0 else DEFAULT_SEASONS
+
+
+def build_at(case: dict, seed: int = 0) -> S.World:
+    """A world for THIS case: the containment chain down to its `scale`, three people who are
+    themselves `person` rungs, a site per producing kind, a motive, and — where the corpus says the
+    ending is forced by a threshold — a Date coming due, which is `questions_for`'s Q1.
+
+    ⚠ THE CONVICTIONS ARE SEEDED FROM THE CASE ID, over the `conviction_axes` ROSTER. Rev 1 wrote
+    three axis names and the weight `0.9` as literals, which is a fill off the register (`G1`) and,
+    worse, was the ENTIRE ranking function — `stance` is empty in these worlds and §F2's `urgency`
+    term has no `c` in it, so the conviction axis alone orders every candidate. Identical
+    convictions therefore forced identical rankings in every world. Seeding from the id makes them
+    differ per case, reproducibly, and takes the axis names from the roster rather than a body."""
+    scale = str(case.get("scale"))
     w = S.World(seed, S.DEFAULT_FIXTURES)
-    order = list(S.RUNG_KINDS)                       # person .. realm
+    order = list(S.RUNG_KINDS)
     chain = order[order.index(scale):] if scale in order else []
     ids = {k: f"r_{k}" for k in chain}
     for k in chain:
         w.rungs[ids[k]] = S.Rung(ids[k], k)
     for lower, upper in zip(chain, chain[1:]):
         w.add_tenure(S.Tenure(f"t_{lower}_in_{upper}", ids[lower], ids[upper], "contain", 0))
-    # One site per producing kind, on the deepest rung, so the matter economy has a source (`W8`).
-    for n, kind in enumerate(sorted(S.SITE_YIELD)):
+    for kind in sorted(S.SITE_YIELD):
         if S.SITE_YIELD[kind]:
             w.sites[f"s_{kind}"] = S.Site(f"s_{kind}", ids[chain[0]], kind,
                                           condition=w.fixtures.get("condition_scale"))
+    axes = sorted(S.CONVICTION_AXES)
     for n, pid in enumerate(("p_a", "p_b", "p_c")):
         w.persons[pid] = S.Person(pid, pid)
+        # ⚠ A PERSON IS THE BOTTOM RUNG OF THE LADDER, and `tiny_world` models it that way. Without
+        # this, `_req_move`'s `w.rungs.get(a.actor)` is None and `move` is refused everywhere.
+        w.rungs[pid] = S.Rung(pid, "person")
         w.add_tenure(S.Tenure(f"t_{pid}_in", pid, ids[chain[0]], "contain", 0))
-    # A motive. Without one nothing forms a candidate at all — `headless.build_world` records why:
-    # Q4 (a `commit` to an OUGHT) is the only question source a quiet season can answer.
+        pick = int(S.H(seed, 0, str(case.get("id")), f"axis:{pid}"), 16) % len(axes)
+        w.persons[pid].convictions = {axes[pick]: 0.9}
     prop = S.Proposition("prop_x", "OUGHT", ids[chain[0]], "a standing ambition", True, 0)
     w.propositions[prop.id] = prop
     for pid in ("p_a", "p_b", "p_c"):
         w.add_tenure(S.Tenure(f"t_{pid}_commits", pid, prop.id, "commit", 0))
-    for pid, ax in (("p_a", "Precedent"), ("p_b", "suspicion"), ("p_c", "self_preservation")):
-        w.persons[pid].convictions = {ax: 0.9}
+    if (ENDINGS.get(str(case.get("id"))) or {}).get("forced_by_threshold"):
+        # Q1: a Date coming due, with a DocketItem naming a matter. The corpus says this case's
+        # ending is forced by a threshold; a world with no deadline cannot represent that at all.
+        w.dates["d_forced"] = {"id": "d_forced", "venue": ids[chain[0]], "due_at": 1,
+                               "holder": None, "fired": False}
+        w.docket.append({"date": "d_forced", "matter": prop.id})
     return w
 
 
-def run_case(case: dict, seasons: int = 2, seed: int = 0) -> dict:
-    scale = str(case.get("scale"))
+def run_case(case: dict, seed: int = 0) -> dict:
+    scale, cid = str(case.get("scale")), case["id"]
     if scale not in set(S.RUNG_KINDS):
-        return dict(id=case["id"], scale=scale, status="UNREPRESENTABLE", verbs=[], acts=0,
-                    why=f"`scale: {scale}` is not a rung kind; rung_kinds is {list(S.RUNG_KINDS)}")
-    w = build_at(scale, seed)
+        return dict(id=cid, scale=scale, status="UNREPRESENTABLE", executed=[], refused=[],
+                    seasons=0, why=f"`scale: {scale}` is not a rung kind")
+    n = seasons_for(case)
+    w = build_at(case, seed)
     d = S.SeasonDriver(w)
     mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs())
     try:
-        for _ in range(seasons):
+        for _ in range(n):
             d.season(ch, question=None, subsistence=P.SUBSIST)
-    except Exception as e:                            # an INSTRUMENT defect, reported as one
-        return dict(id=case["id"], scale=scale, status="ERROR", verbs=[], acts=0,
-                    why=f"{type(e).__name__}: {e}")
-    acted = sorted({a.verb for a in getattr(d, "resolved", [])})
-    return dict(id=case["id"], scale=scale, status="RAN" if acted else "NO-ACT",
-                verbs=acted, acts=len(getattr(d, "resolved", [])), why="")
+    except S.InstrumentDefect as e:
+        # ⚠ THE TWO BUCKETS ARE SHAPE'S OWN, NOT A SECOND TAXONOMY (§8). `shape.py` states why the
+        # split matters: a call-site bug landing in the design column *"corrupts the measurement in
+        # the direction that flatters it"*. Rev 1 merged them and labelled the merged bucket
+        # "an INSTRUMENT defect", which mis-attributes every design gap the fold can raise.
+        return dict(id=cid, scale=scale, status="INSTRUMENT-DEFECT", executed=[], refused=[],
+                    seasons=n, why=f"{type(e).__name__}: {e}")
+    except (S.ShapeGap, S.Unspecified, S.Forbidden, S.NoProducer) as e:
+        return dict(id=cid, scale=scale, status="DESIGN-GAP", executed=[], refused=[],
+                    seasons=n, why=f"{type(e).__name__}: {e}")
+    # EXECUTION, from Part E's own columns: a verb succeeded when one of its `emits:` kinds is in
+    # the log, and was refused when one of its `emits_on_refusal:` kinds is.
+    kinds = {e.kind for e in w.log}
+    ok = sorted(v for v, r in S.VERB_TABLE.items() if kinds & set(r.emits or ()))
+    no = sorted(v for v, r in S.VERB_TABLE.items() if kinds & set(r.emits_on_refusal or ()))
+    return dict(id=cid, scale=scale, status="RAN" if ok else "NO-EXECUTION",
+                executed=ok, refused=no, seasons=n, why="")
 
 
-def main(seasons: int = 2, seed: int = 0) -> int:
-    rows, by_status = [], Counter()
+def main(seed: int = 0) -> int:
+    rows = []
     for lane in ("NPC", "ARC"):
         for c in R.load_cases(lane):
-            r = run_case(c, seasons, seed); r["lane"] = lane
-            rows.append(r); by_status[r["status"]] += 1
-    print(f"CORPUS RUN — {len(rows)} cases, {seasons} seasons, seed {seed}")
-    for k, v in sorted(by_status.items()):
-        print(f"  {k:16} {v}")
+            r = run_case(c, seed); r["lane"] = lane; rows.append(r)
+    by = Counter(r["status"] for r in rows)
+    print(f"CORPUS RUN — {len(rows)} cases, seed {seed}, seasons from `temporal.span_seasons`")
+    for k, v in sorted(by.items()):
+        print(f"  {k:18} {v}")
     un = Counter(r["scale"] for r in rows if r["status"] == "UNREPRESENTABLE")
     if un:
         print(f"  unrepresentable scales: {dict(un)}")
-    ran = [r for r in rows if r["status"] == "RAN"]
-    worlds = sorted({r["scale"] for r in ran})
-    sigs = {tuple(r["verbs"]) for r in ran}
-    print(f"\n  DISTINCT WORLDS   {len(worlds)}  {worlds}   <- the real N; cases at one scale are identical")
-    print(f"  DISTINCT VERB SETS {len(sigs)} across those worlds")
-    print(f"  acts per case      {sorted({r['acts'] for r in ran})}")
-    ever = sorted({v for r in ran for v in r["verbs"]})
-    never = sorted(set(S.VERB_TABLE) - set(ever))
-    print(f"\nVERBS THAT EXECUTED ANYWHERE : {len(ever)} of {len(S.VERB_TABLE)} — {ever}")
-    print(f"VERBS THAT NEVER EXECUTED    : {len(never)} — {never}")
+    # ⚠ THE DISCRIMINATION MEASUREMENT, which is what explains a single executed set across many
+    # different worlds. §F2 ranks candidates by `Σ conviction[axis] · alignment(verb, axis)`, and
+    # `alignment` is SPARSE with `default_cell: 0.0` — so a person's convictions separate only the
+    # handful of (verb, axis) pairs the table actually carries. Every other candidate scores
+    # identically and `sorted(..., key=(-score, c.verb, c.subject))` breaks the tie ALPHABETICALLY
+    # BY VERB NAME. Reported rather than inferred, because "the worlds agree" is worthless without
+    # saying WHY they agree (`H-97`).
+    sep = []
+    for c in R.load_cases("NPC") + R.load_cases("ARC"):
+        if str(c.get("scale")) not in set(S.RUNG_KINDS):
+            continue
+        w2 = build_at(c, seed); w2.step = S.Step.DELIBERATE
+        pr = w2.persons["p_a"]
+        qs = S.questions_for(w2, pr)
+        vw = S.Query.assemble(pr, qs[0] if qs else None, w2.fixtures.get("view_k"))
+        cd = S.Query.opening_set(pr, vw, qs[0]) if qs else []
+        nz = sum(1 for x in cd if any(float(pr.convictions.get(a, 0.0)) * S.align(x.verb, a)
+                                      for a in S.CONVICTION_AXES))
+        sep.append((nz, len(cd)))
+    if sep:
+        tot = sep[0][1]
+        print(f"\n  RANKING DISCRIMINATION   {min(n for n, _ in sep)}..{max(n for n, _ in sep)} of "
+              f"{tot} candidates carry a nonzero conviction score; the rest TIE and are ordered "
+              f"alphabetically by verb name")
+    live = [r for r in rows if r["status"] in ("RAN", "NO-EXECUTION")]
+    sigs = {tuple(r["executed"]) for r in live}
+    print(f"\n  DISTINCT WORLDS RUN      {len(live)} (scales {sorted({r['scale'] for r in live})}, "
+          f"season counts {sorted({r['seasons'] for r in live})})")
+    print(f"  DISTINCT EXECUTED SETS   {len(sigs)}")
+    ever = sorted({v for r in live for v in r["executed"]})
+    tried = sorted({v for r in live for v in r["refused"]})
     foldable = set(S.resolvable_verbs())
-    print(f"\nWHERE THE 32 GO: {len(set(S.VERB_TABLE) - foldable)} have no predicate/effect at all · "
-          f"{len(foldable - set(ever))} the fold CAN execute but nobody ever CHOOSES "
-          f"({sorted(foldable - set(ever))}) · {len(ever)} actually happen")
+    print(f"\nVERBS THAT EXECUTED : {len(ever)} of {len(S.VERB_TABLE)} — {ever}")
+    print(f"VERBS ONLY REFUSED  : {len(set(tried) - set(ever))} — {sorted(set(tried) - set(ever))}")
+    print(f"\nWHERE THE {len(S.VERB_TABLE)} GO: {len(set(S.VERB_TABLE) - foldable)} have no "
+          f"predicate/effect · {len(foldable - set(ever) - set(tried))} foldable but never even "
+          f"attempted ({sorted(foldable - set(ever) - set(tried))}) · "
+          f"{len(set(tried) - set(ever))} attempted and always refused · {len(ever)} executed")
     return 0
 
 
