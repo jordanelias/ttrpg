@@ -26,16 +26,16 @@ not the shape.
 | **[core]** The engine must represent something about a season of her life beyond identity-only reference data -- some tracked state that a player interaction can actually change -- for at least the sea | — | UNMAPPED | — |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-087 — Uwe Askeland  ·  **NOT-ASSESSED**
-*person · 8 rows, 4 core · blockers: none*
+## NPC-087 — Uwe Askeland  ·  **BLOCKED**
+*person · 8 rows, 4 core · blockers: P36*
 *ends when:* never automatically; only via a discovery-driven resolution (protect/report/leverage), or unremarked continuation.
 
 | need | probe | verdict | § |
 |---|---|---|---|
 | **[core]** A person with no office must be able to run a recurring, location-bound activity whose ongoing existence -- not any single completed task -- is itself the thing at stake. | `P1` | PASS | S3-L1 |
-| **[core]** His discovery must be able to branch three ways for whoever finds him -- protect him, report him, or leverage the discovery -- with materially different consequences down each path, not just | `P36` | PASS | S17 |
+| **[core]** His discovery must be able to branch three ways for whoever finds him -- protect him, report him, or leverage the discovery -- with materially different consequences down each path, not just | `P36` | **UNSPECIFIED** | S27/E2 |
 | **[core]** He must be reachable by a scene opportunity despite holding no faction Standing, no assigned Duty, and no Disposition floor with any faction leader. | `P1` | PASS | S3-L1 |
-| His activity must be able to persist across seasons completely unwitnessed, and be discoverable later exactly as it would have been discovered earlier -- not silently resolved off-screen the | `P30` | PASS | S20 |
+| His activity must be able to persist across seasons completely unwitnessed, and be discoverable later exactly as it would have been discovered earlier -- not silently resolved off-screen the | `P30` | **UNSPECIFIED** | S27/E2 |
 | **[core]** The material he teaches must be classified as suppressed cultural/political knowledge, retainable by ordinary non-sensitive minds, rather than Thread-substrate knowledge subject to the setti | — | UNMAPPED | — |
 | The cumulative effect of many small private teaching sessions must be able to aggregate into a settlement- or territory-scale outcome without Askeland himself possessing the faction-level re | — | UNMAPPED | — |
 | A student's exposure (being caught attending, or found to have been taught) must be trackable as a consequence for the student, separate from any consequence for Askeland. | — | UNMAPPED | — |
@@ -101,13 +101,13 @@ not the shape.
 | Trading in goods whose true dangerous nature is unknown even to the seller must be able to produce consequences later, when the nature becomes known, that attach retroactively to the origina | — | UNMAPPED | — |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-012 — Rikard Solberg  ·  **NOT-ASSESSED**
-*person · 7 rows, 3 core · blockers: none*
+## NPC-012 — Rikard Solberg  ·  **BLOCKED**
+*person · 7 rows, 3 core · blockers: P31*
 *ends when:* his recall, by his own nation or via a player-brokered genuine stability treaty, or indefinite continuation of the status quo.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** A single office-holder's personal, unstated motive must be able to measurably bias every decision he makes in that office, in one consistent direction, without him or his superiors recognizi | `P31` | PASS | S9 |
+| **[core]** A single office-holder's personal, unstated motive must be able to measurably bias every decision he makes in that office, in one consistent direction, without him or his superiors recognizi | `P31` | **UNSPECIFIED** | S27/E2 |
 | His institutional loyalty and the effect of his actions must be able to diverge permanently without him ever consciously betraying or defecting from his employer. | `P17` | **UNSPECIFIED** | S22.4 |
 | **[core]** His employer's institutional evaluation of him must be able to stay positive -- he is 'too valuable to recall' -- specifically because of the state of the world he is unconsciously prolongin | — | UNMAPPED | — |
 | **[core]** A player who identifies his true motive must be able to offer him something categorically different from a bribe or a threat -- a real, verifiable path to recall -- and have that offer chang | — | UNMAPPED | — |
@@ -146,7 +146,7 @@ not the shape.
 | A subordinate investigator's authority to pursue a sufficiently important target must be gated on a named superior's authorization, distinct from the subordinate's own competence or rank. | — | UNMAPPED | — |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-033 — Kolbrun Thale  ·  **PLAYABLE**
+## NPC-033 — Kolbrun Thale  ·  **DEGRADED**
 *faction · 8 rows, 2 core · blockers: none*
 *ends when:* never specified -- she is a persistent office with no authored personal arc or end condition in the sources
 
@@ -154,7 +154,7 @@ not the shape.
 |---|---|---|---|
 | **[core]** An office must be able to be the sole official channel between an institution and an entire class of informal, deniable actors, such that removing that one office-holder severs the instituti | `F12` | PASS | S11 |
 | **[core]** A spymaster must be able to surface a hidden actor operating in a territory through sustained investigative effort against active concealment, at a cost that scales with how hard the conceal | `P10` | PASS | S13 |
-| On surfacing a hidden actor, the office-holder must be able to choose among structurally different dispositions of the discovery -- expose it, remove it, absorb it into her own network, or s | `P36` | PASS | S17 |
+| On surfacing a hidden actor, the office-holder must be able to choose among structurally different dispositions of the discovery -- expose it, remove it, absorb it into her own network, or s | `P36` | **UNSPECIFIED** | S27/E2 |
 | A formal advisor holding a position of institutional trust must be bound to secrecy about what her principal reveals to her in that capacity, as an obligation distinct from ordinary Disposit | — | UNMAPPED | — |
 | A person's private, undisclosed heritage or sympathy must be able to bias which of her discoveries she reports faithfully and which she quietly softens or withholds, without the player or he | — | UNMAPPED | — |
 | Two office-holders within the same institution whose remits abut (covert reach vs. doctrinal suspicion) must be able to carry a standing mutual wariness seeded by a specific past friction, c | — | UNMAPPED | — |
@@ -162,12 +162,12 @@ not the shape.
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
 ## NPC-083 — Hedda Kronvald  ·  **BLOCKED**
-*settlement · 8 rows, 4 core · blockers: F19*
+*settlement · 8 rows, 4 core · blockers: F19, P2*
 *ends when:* not specified to conclude on its own -- the governorship ends only on removal, death, or promotion; the churn is designed to continue indefinitely otherwise
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** A governor must be able to spend a limited, renewing per-season budget across a menu of distinct administrative actions such that doing everything the settlement needs in one season is struc | `P2` | PASS | S26.3 |
+| **[core]** A governor must be able to spend a limited, renewing per-season budget across a menu of distinct administrative actions such that doing everything the settlement needs in one season is struc | `P2` | **UNSPECIFIED** | S27/E2 |
 | **[core]** The governor's controlling authority must be able to issue a mandatory seasonal order she can comply with, negotiate down, or defy -- each option costing something different to the authority | `P18` | PASS | S3-L5 |
 | **[core]** The settlement itself must be able to generate demands (a dispute, a shortfall, an ambition) independent of and often in direct conflict with what the controlling authority ordered, such tha | `F19` | **NO-PRODUCER** | S36.1 |
 | A governor's past rulings must be able to persist as durable marks on the settlement (a standing precedent, a grudge, an owed favor, a reputation) that bias future events, and a successor mu | `P41` | **UNSPECIFIED** | S2 T7 |
@@ -176,28 +176,28 @@ not the shape.
 | Named local actors under a governor's authority must be able to want incompatible things from EACH OTHER (not just from her), so that resolving one actor's grievance necessarily worsens anot | — | UNMAPPED | — |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-008 — Peder Almstedt  ·  **NOT-ASSESSED**
-*faction · 8 rows, 3 core · blockers: none*
+## NPC-008 — Peder Almstedt  ·  **BLOCKED**
+*faction · 8 rows, 3 core · blockers: P8*
 *ends when:* never on its own -- the mechanism persists at the institutional level past his personal removal; only the Ministry's own dissolution would end it
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** A person seeking institutional change must be able to overcome this obstruction only through one of a small, named set of costly alternatives -- winning him over directly, or removing him fr | `P8` | PASS | S3-L1 |
+| **[core]** A person seeking institutional change must be able to overcome this obstruction only through one of a small, named set of costly alternatives -- winning him over directly, or removing him fr | `P8` | **UNSPECIFIED** | S27/E2 |
 | **[core]** An office-holder must be able to hold institutional memory -- exact knowledge of an original founding agreement's terms -- that no other living actor holds, such that a proposal to alter tho | `P34` | PASS | S20 |
-| Removing the office-holder must erase the passive stabilizing benefit for a bounded period afterward, rather than the benefit persisting unaffected or the obstruction vanishing the instant i | `P8` | PASS | S3-L1 |
-| The office, not the individual, must be the thing that actually persists -- Almstedt's specific removal should interrupt but not permanently end the obstruction/benefit mechanic, since the M | `P8` | PASS | S3-L1 |
+| Removing the office-holder must erase the passive stabilizing benefit for a bounded period afterward, rather than the benefit persisting unaffected or the obstruction vanishing the instant i | `P8` | **UNSPECIFIED** | S27/E2 |
+| The office, not the individual, must be the thing that actually persists -- Almstedt's specific removal should interrupt but not permanently end the obstruction/benefit mechanic, since the M | `P8` | **UNSPECIFIED** | S27/E2 |
 | **[core]** A bureaucratic office-holder must be able to make any action that changes how the governing body itself functions strictly harder to accomplish, purely by holding the office, without an expl | — | UNMAPPED | — |
 | The same office-holder must simultaneously make one specific class of routine, stabilizing action easier or faster to accomplish, as the compensating flip side of the reform tax. | — | UNMAPPED | — |
 | That sole-custody knowledge must be reusable to block multiple different actors' otherwise-unrelated reform proposals for the same underlying reason (each alters the terms he alone remembers | — | UNMAPPED | — |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-038 — Arnlod Olafsson  ·  **DEGRADED**
-*faction · 7 rows, 2 core · blockers: none*
+## NPC-038 — Arnlod Olafsson  ·  **BLOCKED**
+*faction · 7 rows, 2 core · blockers: F17*
 *ends when:* his tenure ends on exposure-removal, pre-emptive removal, or a Grand Inquisitor succession event; otherwise never
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** An institution's investigative-and-punitive branch must have a single named superior whose sponsorship, approval, or authorization is a formal precondition for that branch's members to act a | `F17` | PASS | S27.1 |
+| **[core]** An institution's investigative-and-punitive branch must have a single named superior whose sponsorship, approval, or authorization is a formal precondition for that branch's members to act a | `F17` | **UNSPECIFIED** | S27/E2 |
 | **[core]** The superior's own hidden compromising connection must be discoverable by an external party through sustained, high-quality effort, and that discovery must remove him from office AND specifi | `P10` | PASS | S13 |
 | The institution must be able to choose, in advance of exposure, to sacrifice this office-holder pre-emptively at a smaller but permanent cost, giving it a genuine bet to make under uncertain | `F3` | **FORBIDDEN** | S3-L1 |
 | The office's pattern of dispatching investigators must be able to fall unevenly on one population group even though the stated justification for each individual dispatch is doctrinal rather  | `W9` | PASS | S10.3 |
@@ -387,7 +387,7 @@ not the shape.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| An intermediary supposed to serve the foreign power's interests against this person must be able to instead act to protect her, silently deviating from his mandate, and that deviation must b | `P36` | PASS | S17 |
+| An intermediary supposed to serve the foreign power's interests against this person must be able to instead act to protect her, silently deviating from his mandate, and that deviation must b | `P36` | **UNSPECIFIED** | S27/E2 |
 | A person's internal epistemic stability must be able to be measurably reduced by the structural condition of divided loyalty and hostage status alone, independent of any specific event happe | `P40` | PASS | S15 |
 | **[core]** A person with no independent action economy, off the primary board entirely, must still be able to make another character's every relevant decision legible as being driven by concern for her | — | UNMAPPED | — |
 | **[core]** A hostile foreign power must be able to hold a standing coercive threat over the home polity purely through possession of a person, without ever needing to act on the threat, and that threat | — | UNMAPPED | — |
@@ -413,13 +413,13 @@ not the shape.
 | A party who anticipates this confrontation must be able to preempt it by offering her a specific, falsifiable, time-bound commitment instead, with her willingness to accept scaling by how co | — | UNMAPPED | — |
 
 ## NPC-006 — Halvar Brandt  ·  **BLOCKED**
-*person · 8 rows, 3 core · blockers: F21*
+*person · 8 rows, 3 core · blockers: F21, P31*
 *ends when:* never automatically -- presumably by Ehrenwall's fall and the resulting succession, or by his death or removal from the Lions' Table; the source names no other terminus.
 
 | need | probe | verdict | § |
 |---|---|---|---|
 | **[core]** A person holding a seat on a faction's collective decision-making body must be able to have his individual position registered within that body's collective output, not merely exist as an un | `F21` | **UNSPECIFIED** | S61 |
-| **[core]** A standing external-threat orientation attached to one specific rival power must be able to persistently bias how this person's own actions and judgments are evaluated across a season, not o | `P31` | PASS | S9 |
+| **[core]** A standing external-threat orientation attached to one specific rival power must be able to persistently bias how this person's own actions and judgments are evaluated across a season, not o | `P31` | **UNSPECIFIED** | S27/E2 |
 | **[core]** Removing this person from his seat must be able to produce a downstream faction-level consequence distinct from simply deleting a name from a roster. | `F12` | PASS | S11 |
 | A named holding or stronghold must be able to fall as a discrete, trackable event, and that event must be able to trigger a defined change in who occupies a specific post. | — | UNMAPPED | — |
 | His faction's standing military posture must be able to be affected, gradually and cumulatively, by actions he personally takes across a season, distinct from any single decisive engagement. | — | UNMAPPED | — |
@@ -569,7 +569,7 @@ not the shape.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| A doctrine-following operative's recorded conviction toward honor and obedience must be able to keep him completing assigned missions even in a hypothetical where a colleague with different  | `P9` | PASS | S11.1 |
+| A doctrine-following operative's recorded conviction toward honor and obedience must be able to keep him completing assigned missions even in a hypothetical where a colleague with different  | `P9` | **UNSPECIFIED** | S27/E2 |
 | **[core]** A person must be able to hold a hard floor of zero in a perceptual capacity that governs whether he can detect a specific category of harm his own actions cause, such that he completes tasks | — | UNMAPPED | — |
 | **[core]** Two members of the same covert operational role must be able to diverge on whether to complete or abort the same category of mission, where one member's abort decision is driven by informati | — | UNMAPPED | — |
 | A covert order must be able to assign or withhold specific missions based on which of its operatives can or cannot perceive a given risk category, using that as a deliberate selection criter | — | UNMAPPED | — |
@@ -637,7 +637,7 @@ not the shape.
 | need | probe | verdict | § |
 |---|---|---|---|
 | **[core]** A foreign power's posture toward a neighboring territory must be selectable, on a recurring basis, from at least three qualitatively different graduated options -- a minimal probing action,  | `P33` | **UNSPECIFIED** | S26.3 |
-| A frontier governor's recorded conviction toward her own polity's legitimacy and mission -- framed explicitly as sincere rather than cynical -- must be able to bias her escalation choice tow | `P31` | PASS | S9 |
+| A frontier governor's recorded conviction toward her own polity's legitimacy and mission -- framed explicitly as sincere rather than cynical -- must be able to bias her escalation choice tow | `P31` | **UNSPECIFIED** | S27/E2 |
 | **[core]** A single named frontier governor must be able to be the actual decision-point for which of those graduated postures her empire takes, such that influencing, replacing, or removing her person | — | UNMAPPED | — |
 | Actions taken by the neighboring power she is watching must be able to visibly shift which of the three postures currently looks justified to her, so that choices on that side can provoke or | — | UNMAPPED | — |
 | A person marked as not-yet-canonical must already carry a fully-formed three-option escalation framework precise enough to drive distinguishable outcomes for the wider external-threat axis,  | — | UNMAPPED | — |

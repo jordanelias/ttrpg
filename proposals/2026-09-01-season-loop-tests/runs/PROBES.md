@@ -18,7 +18,7 @@ checking.* So every probe declares its provenance:
 
 ## ⚠ THE ENFORCEMENT SPLIT — the single most important number in this ledger
 
-**Of 52 gaps, 21 were raised BY THE SHAPE ITSELF and 27 exist only because THERE IS NO SIGNATURE TO CALL.**
+**Of 66 gaps, 31 were raised BY THE SHAPE ITSELF and 27 exist only because THERE IS NO SIGNATURE TO CALL.**
 
 That is close to an even split, and it matters more than any case verdict. A refusal a
 gate enforces and a refusal that exists because nobody wrote the function are different
@@ -30,7 +30,7 @@ has no module system and no visibility modifiers, so the guarantee there is
 a contributor closes by simply writing the function — no gate fires, no test goes red,
 and the design's own §27.2 admission applies: *enforced by a person noticing*.
 
-**And 20 of 69 PASSes are not by construction
+**And 16 of 55 PASSes are not by construction
 either** — they are listed individually below and should be discounted accordingly. A
 `probe-model` PASS means the instrument supplied something the design does not.
 
@@ -48,15 +48,19 @@ either** — they are listed individually below and should be discounted accordi
 | `A19` | **NO-PRODUCER** | probe-model | S43 | a piece of the game must be able to be swapped without editing the engine |
 | `A20` | **FORBIDDEN** | no-signature | S44.1 | influence passing between scales must be able to be checked for direction |
 | `A21` | **FORBIDDEN** | no-signature | S37.3 | an order from above must be able to reach everyone it applies to |
+| `A22` | **UNSPECIFIED** | construction | S27/E2 | each region must be able to run its own slice of the loop |
 | `A23` | **FORBIDDEN** | construction | S22.4 | a running total of everything that ever happened must be able to be kept |
 | `A27` | **UNOWNED** | no-signature | S22.3 | every value in the game must be able to name who writes it |
+| `A28` | **UNSPECIFIED** | construction | S27/E2 | every recorded happening must be able to point at real prior happenings |
 | `A29` | **FORBIDDEN** | probe-model | S19.5 | a subsystem must be able to keep its own record of what it did |
 | `A3` | **FORBIDDEN** | construction | S3-L4 | the story must be able to conclude when a tracked quantity reaches a value |
 | `A30` | **UNGRADED** | construction | S42.2.1 | a piece of the design with no evidence behind it must be able to be used anyway |
+| `A31` | **UNSPECIFIED** | construction | S27/E2 | a conclusion drawn from the engine must not depend on a number nobody decided |
 | `A32` | **COLLISION** | no-signature | S62 | the number of playable moments a character gets must be able to be counted |
 | `A33` | **COLLISION** | no-signature | S37.4 | an instruction must be able to be distorted somewhere between issuer and executor |
 | `A34` | **FORBIDDEN** | no-signature | S34 | a relationship or a standing must be able to decay from nobody tending it |
-| `A36` | **COLLISION** | construction | S26.3 / S32 | what a character does first must be able to close off what they could have done after |
+| `A36` | **UNSPECIFIED** | construction | S27/E2 | what a character does first must be able to close off what they could have done after |
+| `A4` | **UNSPECIFIED** | construction | S27/E2 | the same starting conditions must be able to produce the same history |
 | `A6` | **FORBIDDEN** | no-signature | S3-L1 | an institution must be able to take an action |
 | `A7` | **UNSPECIFIED** | construction | S39.4 | a fight, a hearing and an argument must be able to be the same machinery |
 | `A9` | **FORBIDDEN** | no-signature | S4 | one place must be able to see what is happening in another |
@@ -64,27 +68,37 @@ either** — they are listed individually below and should be discounted accordi
 | `F14` | **FORBIDDEN** | construction | S22.4 | a faction's territory must be countable as it gains and loses ground |
 | `F15` | **UNSPECIFIED** | no-signature | S54 item 13 / S61 | a post must be able to employ people whose competence is what actually gets used |
 | `F16b` | **FORBIDDEN** | construction | S10.1 | a faction must be able to hold a pooled level of loyalty, unrest or legitimacy |
+| `F17` | **UNSPECIFIED** | construction | S27/E2 | a superior's approval must be able to be a formal precondition without which subordinates cannot act |
 | `F19` | **NO-PRODUCER** | no-signature | S36.1 | a settlement's needs must be able to surface as demands without a named petitioner |
 | `F21` | **UNSPECIFIED** | construction | S61 | a character sitting on a collective body must be able to have their individual position registered distinctly from the body's deci |
 | `F3` | **FORBIDDEN** | no-signature | S3-L1 | a faction must be able to take an action of its own |
 | `F6` | **UNSPECIFIED** | no-signature | S62 | an order from above must be able to fail to arrive, distinctly from being refused |
+| `F7` | **UNSPECIFIED** | probe-model | E2 | someone with no power must be able to get a matter in front of someone who has it |
 | `F8` | **UNSPECIFIED** | construction | S61 | the body a matter reaches must be able to decide it |
+| `F9` | **UNSPECIFIED** | construction | S27/E2 | a character must be able to spend a whole season putting the same matter to many people |
 | `P14` | **UNSPECIFIED** | construction | S18.2 | how a character is regarded must be able to differ from how they regard themselves |
 | `P15` | **UNSPECIFIED** | no-signature | S61 | something said in private must be able to stay private |
 | `P17` | **UNSPECIFIED** | probe-model | S22.4 | a character's risk must be able to build up quietly across seasons without anyone acting |
 | `P19` | **FORBIDDEN** | construction | S3-L4 | the story must be able to end when a counter reaches a value, with no person choosing |
+| `P2` | **UNSPECIFIED** | construction | S27/E2 | a character must be able to take several distinct actions in one season and choose what to leave undone |
 | `P25` | **FORBIDDEN** | construction | S15.3 | the world must be able to end a person's position without anyone acting |
 | `P26` | **UNSPECIFIED** | probe-model | S22.4 | harm suffered over several seasons must be able to close off options |
 | `P29` | **UNOWNED** | no-signature | S22.3 | a character must be able to move from one place to another and be somewhere else next season |
 | `P2x` | **FORBIDDEN** | construction | S26.3 | an engine may quietly drop actions a character wanted beyond their budget |
+| `P30` | **UNSPECIFIED** | construction | S27/E2 | what a character learned must still be true for them next season |
+| `P31` | **UNSPECIFIED** | probe-model | S27/E2 | a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by the |
 | `P32` | **UNSPECIFIED** | no-signature | S12 | a character's own condition must be able to degrade across a season so that their available actions narrow predictably |
 | `P33` | **UNSPECIFIED** | no-signature | S26.3 | performing a larger or riskier version of an action must be able to cost the actor more |
 | `P35` | **UNSPECIFIED** | no-signature | S18.2 | a character must be able to have a standing among people who can never publicly acknowledge them, separate from their public stand |
+| `P36` | **UNSPECIFIED** | probe-model | S27/E2 | a discovery must be able to be acted on in several distinct ways, each leading somewhere different |
+| `P37` | **UNSPECIFIED** | probe-model | S27/E2 | a character's reaction must be able to be fully determined by their internal state rather than by a choice |
 | `P38` | **NO-PRODUCER** | no-signature | S1 | an optimal window, a judgement call or an adjudication must be able to be made by a referee |
 | `P41` | **UNSPECIFIED** | no-signature | S2 T7 | a character must be able to cite an established precedent or prior ruling to make a present argument stronger |
 | `P42` | **COLLISION** | no-signature | S26 / S26.3 | a wounded or distant character must be able to get fewer actions in a season than a healthy one at home |
 | `P43` | **FORBIDDEN** | construction | S22.4 | a quantity held by many characters individually must be able to be totalled across them |
 | `P7` | **UNSPECIFIED** | construction | S22.4 | a character must carry lasting moral damage from what they were made to do |
+| `P8` | **UNSPECIFIED** | construction | S27/E2 | one character must be able to be blocked by another without either knowing about the other |
+| `P9` | **UNSPECIFIED** | construction | S27/E2 | a superior must be able to direct a subordinate, and the subordinate must be able to refuse or deviate |
 | `W10` | **FORBIDDEN** | construction | S10.1 | a place must be able to hold a level of discontent that rises and falls |
 | `W13` | **FORBIDDEN** | no-signature | S25.1 / S3-L5 | a world-scale tracked quantity must be able to decay on a fixed schedule independent of anyone's actions |
 | `W1x` | **UNGRADED** | construction | S42.2.1 | the world must be able to wear down a kind of place nobody wrote a rule for |
@@ -94,19 +108,15 @@ either** — they are listed individually below and should be discounted accordi
 | `A13` | PASS | construction | S4 | a repeated derivation must be able to be computed once per step |
 | `A17` | PASS | convention | S27.2 | every outcome in the game must go through one place |
 | `A2` | PASS | probe-model | S19.4 | a sequence of related happenings must be able to be read back as one story |
-| `A22` | PASS | construction | S31 | each region must be able to run its own slice of the loop |
 | `A24` | PASS | construction | S35 | a mechanism written for the powerful must be able to work for a whole population |
 | `A25` | PASS | construction | S6.2 | a cause that spans several regions must be able to exist with no parent region |
 | `A26` | PASS | construction | S38.1 | the engine must be able to walk its own references without looping forever |
-| `A28` | PASS | construction | S19.1 | every recorded happening must be able to point at real prior happenings |
-| `A31` | PASS | construction | S42.2.1 | a conclusion drawn from the engine must not depend on a number nobody decided |
 | `A31b` | PASS | construction | S42.2.1 | a conclusion about how fast the world decays must not depend on a number nobody decided |
 | `A31c` | PASS | construction | S42.2.1 | a conclusion about which actions a place supports must not depend on a number nobody decided |
 | `A35` | PASS | probe-model | S52 | the port must be able to target a decided engine version |
 | `A37` | PASS | construction | S27 | movement, binding decisions and social acts must be able to resolve in a fixed order relative to each other |
 | `A38` | PASS | construction | S27.4 | an attempt far beyond a character's ability must be refused rather than rolled |
 | `A39` | PASS | construction | S39.2 | the outcome of a conflict must be traceable back to the action that started it |
-| `A4` | PASS | construction | S33 | the same starting conditions must be able to produce the same history |
 | `A5` | PASS | construction | S32 | the outcome must not depend on the order the engine happened to process things in |
 | `A8` | PASS | construction | S39.3 | a conflict must be able to open a conflict inside itself |
 | `F1` | PASS | construction | S14.2 | a group of people must be able to share a cause that spans places and outlives its founder |
@@ -114,14 +124,11 @@ either** — they are listed individually below and should be discounted accordi
 | `F12` | PASS | construction | S11 | a post must be able to be given and taken away by named people at named occasions |
 | `F13` | PASS | construction | S24 | when a post falls empty the process to fill it must be able to start |
 | `F16` | PASS | construction | S10 | a faction must be able to hold a pooled resource that its members' actions raise and lower |
-| `F17` | PASS | construction | S27.1 | a superior's approval must be able to be a formal precondition without which subordinates cannot act |
 | `F18` | PASS | probe-model | S36.1 | a place must be able to generate demands of its own that cut against what the authority above ordered |
 | `F2` | PASS | probe-model | S54 item 20 | when everyone abandons a cause, what it held must be able to be taken by someone else |
 | `F20` | PASS | probe-model | S14 | a standing agreement between two polities must be able to constrain what people on either side may do |
 | `F4` | PASS | construction | S11.1 | holding a post must be able to make an action available that is not available otherwise |
 | `F5` | PASS | probe-model | S6.2 | a body with members everywhere and a seat nowhere must be able to issue instructions |
-| `F7` | PASS | probe-model | S36.1 | someone with no power must be able to get a matter in front of someone who has it |
-| `F9` | PASS | construction | S26.3 | a character must be able to spend a whole season putting the same matter to many people |
 | `P1` | PASS | construction | S3-L1 | a person with no office, post, command, faction rank or standing must be able to act at all |
 | `P10` | PASS | construction | S13 | a character must be able to perform a repeated, multi-season task the engine tracks as ongoing |
 | `P11` | PASS | probe-model | S9.2 | skill must supply dice and must never make an action unavailable |
@@ -129,7 +136,6 @@ either** — they are listed individually below and should be discounted accordi
 | `P13` | PASS | probe-model | S18.2 | a character's needs must drive their choices |
 | `P16` | PASS | construction | S20 | how a character is seen must be able to differ between people who know different things |
 | `P18` | PASS | construction | S3-L5 | a counter reaching an edge must be able to force a named person to answer |
-| `P2` | PASS | construction | S26.3 | a character must be able to take several distinct actions in one season and choose what to leave undone |
 | `P20` | PASS | construction | S29 | a person who was previously part of a crowd must be able to become a named individual |
 | `P21` | PASS | construction | S9.1 | a crowd must be able to act, and a person must be able to step out of one, with no conversion |
 | `P22` | PASS | construction | S13 | possession of an object must be able to make someone else's action unavailable or costlier |
@@ -138,18 +144,12 @@ either** — they are listed individually below and should be discounted accordi
 | `P27` | PASS | construction | S20 | a character must be able to quietly do less than ordered, discoverable only by investigation |
 | `P28` | PASS | no-signature | S20 | no character may read another's memory directly |
 | `P3` | PASS | construction | S3-L2 | a character must decide from what they believe, which may be wrong, and never from world truth |
-| `P30` | PASS | construction | S20 | what a character learned must still be true for them next season |
-| `P31` | PASS | probe-model | S9 | a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by the |
 | `P34` | PASS | construction | S20 | an office-holder must be able to be the only living person who knows a thing, so that removing them destroys it |
-| `P36` | PASS | probe-model | S17 | a discovery must be able to be acted on in several distinct ways, each leading somewhere different |
-| `P37` | PASS | probe-model | S3-L1 | a character's reaction must be able to be fully determined by their internal state rather than by a choice |
 | `P39` | PASS | probe-model | S15 | two characters must be able to have an ongoing relationship that carries state and changes over seasons |
 | `P4` | PASS | construction | S3-L2 | a character must be able to believe something false and act on it as if true |
 | `P40` | PASS | probe-model | S15 | a character must be able to hold obligations to two bodies that come into direct conflict |
 | `P5` | PASS | construction | S19.3 | a character must be able to do something covertly, or be wrongly blamed for what another did |
 | `P6` | PASS | construction | S9.3 | a character's moral commitments must be able to change, through argument and consequence |
-| `P8` | PASS | construction | S3-L1 | one character must be able to be blocked by another without either knowing about the other |
-| `P9` | PASS | construction | S11.1 | a superior must be able to direct a subordinate, and the subordinate must be able to refuse or deviate |
 | `W1` | PASS | construction | S12.1 | a place must be able to fall into disrepair until things can no longer be done there |
 | `W11` | PASS | construction | S31.1 | a character must be able to eat from the stores of the place they live in |
 | `W12` | PASS | probe-model | S54 item 18 | a world must be able to start with people in it who hold no post |
@@ -221,6 +221,12 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** publish as a `tell`, which DISTORTS IN TRANSIT; the person's own opening_set does the rest
 **law:** S37.3 -- it deletes T3 AND T6 AT ONCE: everyone would receive IDENTICAL, UNDISTORTED terms. 'It travels by being noticed, NOT DOWN A CHAIN OF POSTS.' And SCOPE ENUMERATES EXECUTORS, NOT PLACES, so there is no descendant set to broadcast to in the office-cluster case
 
+### `A22` — the loop's steps partition per container  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
+**what:** verb 'act' is on no row of the verb table
+
+**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'act' as a verb. This is the CALLER'S invention and the gap is the caller's
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
+
 ### `A23` — an aggregate over ended edges is monotone  ·  **FORBIDDEN**  ·  `S22.4`  ·  by `construction`
 **what:** aggregate 'revocations_ever' composed over 1 ENDED edge(s)
 
@@ -232,6 +238,12 @@ either** — they are listed individually below and should be discounted accordi
 
 **needs:** an ownership row each
 **law:** S22.3 -- named rather than glossed: season_factor's distribution (BLOCKS yield); the cohort's construal spread (rule stated, representation not); the object-side Tenure index (Nobody, by rule -- a barrier-built cache); travel legs (in the write matrix AND the churn ledger AND no ownership row)
+
+### `A28` — the log's invariants hold  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
+**what:** verb 'do' is on no row of the verb table
+
+**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'do' as a verb. This is the CALLER'S invention and the gap is the caller's
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
 
 ### `A29` — two logs share a causes chain  ·  **FORBIDDEN**  ·  `S19.5`  ·  by `probe-model`
 **what:** an Event in log A naming an Event in log B as its cause
@@ -251,6 +263,12 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** inject it, grade it assumption, name the injection site, sweep it
 **law:** S42.2.1 -- a silent default does not fail; it answers, plausibly and wrongly, forever
 
+### `A31` — a verdict is stable across a fixture sweep  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
+**what:** verb 'v0' is on no row of the verb table
+
+**needs:** a row in verb_table.yaml, ruled before it is added
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids
+
 ### `A32` — the scene/act identity is settled  ·  **COLLISION**  ·  `S62`  ·  by `no-signature`
 **what:** does a scene equal an act?
 
@@ -269,11 +287,17 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** a ruling -- S62 lists this as a LIVE DESIGN CHOICE affecting three arcs
 **law:** S34 -- 'no scheduled social recovery' is STRUCTURAL BY PHASE MEMBERSHIP: of ['CALENDAR', 'MATTER', 'DELIBERATE', 'RESOLVE', 'WITNESS', 'CENSUS'], MATTER moves no social quantity (L4), DELIBERATE writes nothing, RESOLVE needs an act, WITNESS writes only ledgers, CENSUS is demand-driven. THERE IS NO STEP IN WHICH A RESTORING TIMER COULD RUN, so a design that wanted one HAS NOWHERE TO PUT IT
 
-### `A36` — a person's act order is the order it resolves in  ·  **COLLISION**  ·  `S26.3 / S32`  ·  by `construction`
-**what:** the person's ORDER ['spend_treasury', 'buy_grain', 'bribe'] vs the fold's order ['bribe', 'buy_grain', 'spend_treasury']
+### `A36` — a person's act order is the order it resolves in  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
+**what:** verb 'buy_grain' is on no row of the verb table
 
-**needs:** a ruling on whether a person's act list resolves in the order they chose
-**law:** S26.3 says 'THE LIST IS ORDERED, so what he did first is legible when a season's later acts are foreclosed by its earlier ones'. S32 rest 3 says the act array is CANONICALIZED BY A CONTENT-DERIVED KEY over ONE GLOBAL ARRAY, sorted 'never by completion order'. A PER-PERSON INTENT ORDER AND A GLOBAL CONTENT ORDER ARE DIFFERENT ORDERS, and the chain specifies BOTH. This is what makes F17's authorization race real
+**needs:** a row in verb_table.yaml, ruled before it is added
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids
+
+### `A4` — two runs of the same seed produce the same log AND the same hash  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
+**what:** verb 'do' is on no row of the verb table
+
+**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'do' as a verb. This is the CALLER'S invention and the gap is the caller's
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
 
 ### `A6` — an institution acts  ·  **FORBIDDEN**  ·  `S3-L1`  ·  by `no-signature`
 **what:** 'The Church excommunicates'
@@ -317,6 +341,12 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** a Query over the containment subtree, owned by Nobody
 **law:** L3 -- every aggregate is a function, never a field. S22.1 -- if the aggregate is a function it CANNOT go stale and CANNOT be initialised and then forgotten, because there is nothing to initialise
 
+### `F17` — an authorization precedes the act it authorises  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
+**what:** verb 'raid' is on no row of the verb table
+
+**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'raid' as a verb. This is the CALLER'S invention and the gap is the caller's
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
+
 ### `F19` — a place produces a demand with nobody petitioning  ·  **NO-PRODUCER**  ·  `S36.1`  ·  by `no-signature`
 **what:** a demand originating from a place rather than a person
 
@@ -341,11 +371,23 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** a distortion model, and a ruling on emitter- vs receiver-side refraction
 **law:** T6 says it distorts; NOTHING SPECIFIES BY HOW MUCH (S62). The structural half works -- publishing is a `tell`, delivery is not assumed, and an executor who never received it is DISTINCT from one who received it and refused -- but the distortion itself has no model, and S37.4 records that the chain uses `refraction` TWO WAYS
 
+### `F7` — a demand rises from a hearth to a duchy  ·  **UNSPECIFIED**  ·  `E2`  ·  by `probe-model`
+**what:** 'carry' has a precondition the fold cannot evaluate: 'a Petition exists; costs budget like any act'
+
+**needs:** a predicate in REQUIRES_PREDICATES, or a `requires:` the table states structurally rather than in prose
+**law:** §E2 -- `requires` is checked IN THE FOLD. Stated as prose it is the same defect `resolve` had, one column along: a rule the code cannot read
+
 ### `F8` — the sitting decides  ·  **UNSPECIFIED**  ·  `S61`  ·  by `construction`
 **what:** judging_set_rule
 
 **needs:** who decides at a sitting
 **law:** S61 -- NOTHING IS DECIDED AT A SITTING. T5's 'filtered at a rung' runs straight through it, and S10.2's 'arrangements, not choices' cannot be confirmed until it is
+
+### `F9` — petition spray  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
+**what:** verb 'petition2' is on no row of the verb table
+
+**needs:** a row in verb_table.yaml, ruled before it is added
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids
 
 ### `P14` — standing is computed  ·  **UNSPECIFIED**  ·  `S18.2`  ·  by `construction`
 **what:** Sensation.standing
@@ -371,6 +413,12 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** one of ['RESOLVE']
 **law:** L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say
 
+### `P2` — the act budget is ~5 and the PERSON chooses what to leave undone  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
+**what:** verb 'v4' is on no row of the verb table
+
+**needs:** a row in verb_table.yaml, ruled before it is added
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids
+
 ### `P25` — a storm ends a tenure  ·  **FORBIDDEN**  ·  `S15.3`  ·  by `construction`
 **what:** an actorless row wrote Tenure.until with no (Person, exists) change of its own
 
@@ -395,6 +443,18 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** `choose` is bounded by budget(person, view) -- the PERSON chooses what to leave undone
 **law:** S26.3 -- at one act NOBODY EVER CHOOSES WHAT TO LEAVE UNDONE; the budget exists to create triage. An engine that silently discards the tail has made the choice instead of the person, which is L1
 
+### `P30` — a claim survives the season  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
+**what:** verb 'do' is on no row of the verb table
+
+**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'do' as a verb. This is the CALLER'S invention and the gap is the caller's
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
+
+### `P31` — a hidden motive biases every decision  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `probe-model`
+**what:** verb 'report_truthfully' is on no row of the verb table
+
+**needs:** a row in verb_table.yaml, ruled before it is added
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids
+
 ### `P32` — a person's own condition narrows their options in a fixed order  ·  **UNSPECIFIED**  ·  `S12`  ·  by `no-signature`
 **what:** a banded scalar on Person
 
@@ -412,6 +472,18 @@ either** — they are listed individually below and should be discounted accordi
 
 **needs:** a second standing scalar, or an owner for an audience-scoped one
 **law:** S18.2 -- Sensation is EXACTLY TWO FLOATS and S46.1 makes widening it structural in Godot ('nobody can add a third field to Vector2'). A second, audience-scoped standing has NO CARRIER and S22 gives NO OWNER for one -- and the first standing does not compute either (see P14)
+
+### `P36` — a choice branches three ways  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `probe-model`
+**what:** verb 'leverage' is on no row of the verb table
+
+**needs:** a row in verb_table.yaml, ruled before it is added
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids
+
+### `P37` — a person's response is a lookup on their own state, not a deliberation  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `probe-model`
+**what:** verb 'purge' is on no row of the verb table
+
+**needs:** a row in verb_table.yaml, ruled before it is added
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids
 
 ### `P38` — an outcome is judged by a referee  ·  **NO-PRODUCER**  ·  `S1`  ·  by `no-signature`
 **what:** a GM, referee or adjudicator
@@ -441,6 +513,18 @@ either** — they are listed individually below and should be discounted accordi
 
 **needs:** a closed roster of axes, and a write-matrix row admitting the increment
 **law:** L3 clause 1 permits a monotone counter PER (Person, axis) -- 'legal, since every increment is in the holder's own ledger' -- but ONLY where `axis` is ON A CLOSED REGISTRY. No such registry exists in the chain, and no S30 row admits the write. S54 item 6 adds that the axis must not be spelled `exposure` bare, or it collides with the need scalar
+
+### `P8` — an ambition is blocked with no obstruct verb  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
+**what:** verb 'take_seat' is on no row of the verb table
+
+**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'take_seat' as a verb. This is the CALLER'S invention and the gap is the caller's
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
+
+### `P9` — an order is the subordinate's own choice  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
+**what:** verb 'refuse' is on no row of the verb table
+
+**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'refuse' as a verb. This is the CALLER'S invention and the gap is the caller's
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
 
 ### `W10` — a settlement holds a level of discontent  ·  **FORBIDDEN**  ·  `S10.1`  ·  by `construction`
 **what:** Rung.morale assigned -- not a declared field of S10's record

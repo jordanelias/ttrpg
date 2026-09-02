@@ -98,15 +98,22 @@ def NOCHOOSE(p, v, s, ask_budget):
     return []
 
 
-def NOEFFECT(w, a):
-    return []
+def _run_d(w: World, choose=NOCHOOSE, n: int = 1, **kw):
+    """As `_run`, but returns the DRIVER — for probes that need to observe which acts reached
+    RESOLVE. `driver.resolved` is an observation surface and decides nothing."""
+    d = SeasonDriver(w)
+    for _ in range(n):
+        d.season(choose, question="q", subsistence=SUBSIST, **kw)
+    return d
 
 
-def _run(w: World, choose=NOCHOOSE, effect=NOEFFECT, n: int = 1, **kw):
+def _run(w: World, choose=NOCHOOSE, n: int = 1, **kw):
+    """W3: `effect` is gone. The season folds every act through `verb_table.yaml`, so a probe no
+    longer supplies its own resolver -- which is what made each of them a second one."""
     d = SeasonDriver(w)
     out = None
     for _ in range(n):
-        out = d.season(choose, effect, question="q", subsistence=SUBSIST, **kw)
+        out = d.season(choose, question="q", subsistence=SUBSIST, **kw)
     return out
 
 
@@ -120,16 +127,23 @@ def p1():
     w = tiny_world()
     def choose(p, v, s, ask_budget):
         return [] if p.id != "p_low" else [Act_(w, p, "speak")]
-    def effect(w, a):
-        return [Ev(w, a.actor, "speech.made", a.actor, [ROOT])]
-    r = _run(w, choose, effect)
+    r = _run(w, choose)
     assert r["events"] == 1, r
     return "PASS: a postless person produced an Act that reached RESOLVE and emitted an Event"
 
 
-def Act_(w, p, verb, **kw):
+def Act_(w, p, verb, key: str = "", **kw):
+    """`key` DISCRIMINATES two acts of the same verb by the same person in the same tick.
+
+    ⚠ W3 needed this. The id was derived from `f"act:{verb}"` alone, which was unique only while
+    probes INVENTED A VERB PER ACT — A5 used `mend_{delta}`, so the delta was in the verb name.
+    Once the fold refused invented verbs and A5 moved to the table's `work`, all five acts
+    collided on ONE id, the canonical sort key became identical for all five, and the ordering
+    went arbitrary. The discriminator restores the property A5's own comment states: the id is
+    derived from the DELTA, not from the position, so reversing the list changes the SEQUENCE and
+    not the SET."""
     from shape import Act
-    return Act(H(w.world_seed, w.tick, p.id, f"act:{verb}"), p.id, verb, **kw)
+    return Act(H(w.world_seed, w.tick, p.id, f"act:{verb}:{key}"), p.id, verb, **kw)
 
 
 def Ev(w, subj_seed, kind, subject, causes, changes=None, degree=None):
@@ -164,7 +178,7 @@ def p2():
         left_undone.extend(wants[b:])           # THE PERSON triages, not the engine
         return [Act_(w, p, vb) for vb in wants[:b]]
     got = []
-    _run(w, choose, lambda w, a: got.append(a.verb) or [])
+    got.extend(a.verb for a in _run_d(w, choose).resolved)
     b = w.fixtures.get("act_budget")
     assert len(got) == b and len(left_undone) == 9 - b
     return (f"PASS: budget {b}; the person left {left_undone} undone. The engine does NOT truncate "
@@ -271,12 +285,7 @@ def p8():
     seat = {"holder": None}
     def choose(p, v, s, ask_budget):
         return [Act_(w, p, "take_seat")] if p.id in ("p_other", "p_mid") else []
-    def effect(w, a):
-        if a.verb == "take_seat" and seat["holder"] is None:
-            seat["holder"] = a.actor
-            return [Ev(w, a.actor, "seat.taken", a.actor, [ROOT])]
-        return []
-    _run(w, choose, effect)
+    _run(w, choose)
     assert seat["holder"] is not None
     return (f"PASS: {seat['holder']} took the seat by the ordered fold. NO `obstruct` VERB, no "
             "knowledge of the loser in the winner's decision, NO BRANCH IN THE RESOLVER. "
@@ -295,10 +304,7 @@ def p9():
             log.append("ran-own-choose")
             return [Act_(w, p, "refuse")]
         return []
-    def effect(w, a):
-        log.append(a.verb)
-        return [Ev(w, a.actor, f"act.{a.verb}", a.actor, [ROOT])]
-    _run(w, choose, effect)
+    _run(w, choose)
     assert "refuse" in log and "ran-own-choose" in log
     return ("PASS: `dispatch` names ONE PERSON; that person runs their OWN `choose` and refused. "
             "The King's reach really is other people's decisions, mechanically. NOTE the refusal "
@@ -480,10 +486,14 @@ def p21():
     crowd = Person("crowd_1", "the quarry hands", weight=40)
     w.persons[crowd.id] = crowd
     assert type(crowd) is type(w.persons["p_low"])
-    acted = []
-    _run(w, lambda p, v, s, ask_budget: [Act_(w, p, "down_tools")] if p.weight > 1 else [],
-         lambda w, a: acted.append(a.actor) or [])
-    assert acted == ["crowd_1"]
+    # W3: `down_tools` is not a verb the table carries, so the fold refuses it -- correctly.
+    # What this probe is ABOUT is that a cohort goes through the same `choose` and the same
+    # resolver as anyone else, which is observable on `driver.resolved` without a resolver of
+    # its own.
+    d = _run_d(w, lambda p, v, s, ask_budget:
+               [Act_(w, p, "speak")] if p.weight > 1 else [])
+    acted = [a.actor for a in d.resolved]
+    assert acted == ["crowd_1"], acted
     return ("PASS: ONE CLASS. A cohort IS a Person at weight>1, it went through the SAME `choose` "
             "and the SAME resolver, and there is no conversion operation because THERE IS NO "
             "SECOND TYPE TO CONVERT TO")
@@ -616,9 +626,7 @@ def p30():
     w = tiny_world()
     def choose(p, v, s, ask_budget):
         return [Act_(w, p, "do")] if p.id == "p_low" and w.tick == 0 else []
-    def effect(w, a):
-        return [Ev(w, a.actor, "thing.happened", "Hh", [ROOT])]
-    _run(w, choose, effect)
+    _run(w, choose)
     n1 = sum(len(p.ledger) for p in w.persons.values())
     _run(w)
     assert sum(len(p.ledger) for p in w.persons.values()) == n1 and n1 > 0
@@ -713,7 +721,7 @@ def p36():
             return []
         b = ask_budget()
         return [Act_(w, q, c.verb) for c in Query.opening_set(q, v, roster)[:b]]
-    _run(w, choose, lambda w, a: got.append(a.verb) or [Ev(w, a.actor, f"chose.{a.verb}", a.actor, [ROOT])])
+    got.extend(a.verb for a in _run_d(w, choose).resolved)
     assert len(got) == 3
     return (f"PASS-WITH-A-DISCLOSURE: {got} -- three Candidates through the SAME resolver, no "
             "branching-outcome machinery (Part VIII refuses it as an authoring convention over "
@@ -835,15 +843,7 @@ def f7():
     carried = {}
     def choose(p, v, s, ask_budget):
         return [Act_(w, p, "carry", payload="pet1")] if p.id == "p_mid" else []
-    def effect(w, a):
-        if a.verb != "carry":
-            return []
-        carried["by"] = a.actor
-        w.write("DocketItem", WriteClass.ACTS,
-                lambda: w.docket.append({"date": "d_sitting", "matter": a.payload}),
-                record_kind="DocketItem", fieldname="matter", driver="Act")
-        return [Ev(w, a.actor, "petition.carried", a.payload, [ROOT])]
-    _run(w, choose, effect)
+    _run(w, choose)
     assert carried.get("by") == "p_mid" and w.docket
     return ("PASS: Petition -> `carry` (AN ACT, BY A NAMED PERSON, COSTING BUDGET) -> DocketItem on "
             "a Date. NO automatic promotion, NO queue drain, NO priority function. THE FILTER IS A "
@@ -867,7 +867,7 @@ def f9():
         b = ask_budget()
         return ([Act_(w, p, f"petition{i}", payload=f"venue{i}") for i in range(b)]
                 if p.id == "p_low" else [])
-    _run(w, choose, lambda w, a: filed.append(a.payload) or [])
+    filed.extend(a.payload for a in _run_d(w, choose).resolved)
     b = w.fixtures.get("act_budget")
     assert len(filed) == b == len(set(filed))
     return (f"PASS: {b} petitions to {b} different venues on one matter. NO DEDUP, NO CAP, NO "
@@ -881,26 +881,19 @@ def f9():
 def f10():
     w = tiny_world()
     hearth = w.rungs["Hh"]
-    granted, refused = [], []
+    hearth.stores = {"grain": 6}          # ONE claimant's worth, so the second must be refused
     def choose(p, v, s, ask_budget):
-        return [Act_(w, p, "transfer", payload=6)] if p.id in ("p_low", "p_mid") else []
-    def effect(w, a):
-        if a.verb != "transfer":
-            return []
-        # S54 item 7: transfer's PRECONDITION `stores(hearth(giver), kind) >= amount`. Without
-        # it the ordered fold's own scarcity claim is FALSE, since a transfer could MINT FROM A
-        # NEGATIVE LARDER -- and S54.1's close rule depends on this landing.
-        if hearth.stores.get("grain", 0) < a.payload:
-            refused.append(a.actor)
-            return [Ev(w, a.actor, "transfer.refused", a.actor, [ROOT])]
-        w.write("stores", WriteClass.ACTS,
-                lambda: hearth.stores.__setitem__("grain", hearth.stores["grain"] - a.payload),
-                record_kind="Rung", fieldname="stores", driver="Act")
-        granted.append(a.actor)
-        return [Ev(w, a.actor, "transfer.made", a.actor, [ROOT])]
-    _run(w, choose, effect)
-    assert len(granted) == 1 and len(refused) == 1 and hearth.stores["grain"] >= 0
-    return (f"PASS: granted={granted}, refused={refused}, larder={hearth.stores['grain']} (never "
+        # W3: the payload is the transfer's OPERANDS. `transfer`'s precondition -- §54 item 7's
+        # `stores(hearth(giver), kind) >= amount` -- is evaluated BY THE FOLD from these, not by
+        # a lambda this probe supplies. That is the difference the item is for.
+        return ([Act_(w, p, "transfer", payload={"from": "Hh", "kind": "grain", "amount": 6})]
+                if p.id in ("p_low", "p_mid") else [])
+    _run(w, choose)
+    granted = [e for e in w.log if e.kind == "transfer.made"]
+    refused = [e for e in w.log if e.kind == "transfer.refused"]
+    assert len(granted) == 1 and len(refused) == 1 and hearth.stores["grain"] >= 0, (
+        f"granted={[e.kind for e in granted]} refused={[e.kind for e in refused]}")
+    return (f"PASS: granted={len(granted)}, refused={len(refused)}, larder={hearth.stores['grain']} (never "
             "negative). THE SECOND CLAIMANT ON AN EMPTIED LARDER GOT A DIFFERENT EVENT. Petitions "
             "never closed each other; the matter closed AT RESOLVE BY SCARCITY. S54 item 7's "
             "precondition is what makes this true rather than minting")
@@ -1026,17 +1019,7 @@ def f17():
         if p.id == "p_mid":
             return [Act_(w, p, "raid")]
         return []
-    def effect(w, a):
-        if a.verb == "confer_authority":
-            authorized[a.payload] = True
-            seen.append("authorised")
-            return [Ev(w, a.actor, "authority.conferred", a.payload, [ROOT])]
-        if a.verb == "raid":
-            k = "raid.done" if authorized.get(a.actor) else "act.unauthorised"
-            seen.append(k)
-            return [Ev(w, a.actor, k, a.actor, [ROOT])]
-        return []
-    _run(w, choose, effect)
+    _run(w, choose)
     return (f"PASS-CONDITIONALLY, AND THE CONDITION IS THE FINDING: sequence={seen}. Both acts "
             "landed in ONE season and THE FOLD'S CONTENT-DERIVED ORDER -- not intent, not rank, "
             "not the superior's seniority -- decided whether the raid counted as authorised. "
@@ -1291,11 +1274,9 @@ def a4():
         w = tiny_world()
         def choose(p, v, s, ask_budget):
             return [Act_(w, p, "do")] if p.id in ("p_low", "p_mid") else []
-        def effect(w, a):
-            return [Ev(w, a.actor, "did.thing", "Hh", [ROOT])]
         r = None
         for _ in range(3):
-            r = _run(w, choose, effect)
+            r = _run(w, choose)
         return r["hash"], [(e.id, e.kind, tuple(e.causes)) for e in w.log]
     (h1, l1), (h2, l2) = run(), run()
     assert h1 == h2 and l1 == l2 and l1
@@ -1326,12 +1307,14 @@ def a5():
             # this: pairing the label to the index made the two arms different EXPERIMENTS
             # (S0.1 pt 1), and the log hash then differed for a reason that had nothing to do
             # with summation order.
-            return [Act_(w, p, f"mend_{d}",
+            # W3: `mend_{d}` was an INVENTED VERB and the fold refuses it — correctly, since a
+            # verb the table does not carry has no semantics. `work` is the table verb that
+            # writes `(Site, condition)`; the delta still rides on `changes`, which is what the
+            # control is about, and the label no longer has to encode it.
+            return [Act_(w, p, "work", key=str(d),
                          changes=[StateChange(site.id, "alter", "Act", "condition", d)])
                     for d in order][:ask_budget()]
-        def effect(w, a):
-            return [Ev(w, a.actor, "site.worked", site.id, [ROOT], changes=a.changes)]
-        r = _run(w, choose, effect)
+        r = _run(w, choose)
         return w.sites[site.id].condition, r["hash"]
 
     (ca, ha), (cb, hb) = run_fold(False), run_fold(True)
@@ -1580,10 +1563,7 @@ def a22():
     seen = []
     def choose(p, v, s, ask_budget):
         return [Act_(w, p, "act")] if p.id in ("p_low", "p_king") else []
-    def effect(w, a):
-        seen.append((a.actor, Query.parent_of(w, a.actor)))
-        return []
-    _run(w, choose, effect)
+    _run(w, choose)
     rungs = {r for _, r in seen}
     assert len(rungs) > 1
     return (f"PASS, PARTIALLY, AND THE HONEST FRAME IS PER-OWNER. One RESOLVE fold consumed acts "
@@ -1673,11 +1653,8 @@ def a28():
     w = tiny_world()
     def choose(p, v, s, ask_budget):
         return [Act_(w, p, "do")] if p.id == "p_low" else []
-    def effect(w, a):
-        prev = [w.log[-1].id] if w.log else [ROOT]
-        return [Ev(w, a.actor, "did.thing", "Hh", prev)]
     for _ in range(4):
-        _run(w, choose, effect)
+        _run(w, choose)
     ids = {e.id for e in w.log}
     assert len(ids) == len(w.log)
     assert all(c == ROOT or c in ids for e in w.log for c in e.causes)
@@ -1717,7 +1694,7 @@ def a31():
         got = []
         def choose(p, v_, s, ask_budget):
             return [Act_(w, p, f"v{i}") for i in range(ask_budget())] if p.id == "p_king" else []
-        _run(w, choose, lambda w, a: got.append(a.verb) or [])
+        got.extend(a.verb for a in _run_d(w, choose).resolved)
         results.append((v, len(got)))
     assert [n for _, n in results] == [2, 5, 9]
     return (f"PASS WITH A FINDING, AND THE FINDING MATTERS MORE THAN THE VERDICT: 3-point sweep "
@@ -1806,7 +1783,7 @@ def a36():
     intended = ["spend_treasury", "buy_grain", "bribe"]
     def choose(p, v, s, ask_budget):
         return [Act_(w, p, vb) for vb in intended] if p.id == "p_high" else []
-    _run(w, choose, lambda w, a: order.append(a.verb) or [])
+    order.extend(a.verb for a in _run_d(w, choose).resolved)
     if order == intended:
         return ("PASS-BY-COINCIDENCE: the content-derived order happened to match the person's. "
                 "That is a hash accident, not a guarantee -- see the law below")
@@ -1964,9 +1941,14 @@ def a37():
         if p.id != "p_low":
             return []
         # deliberately submitted in REVERSE stratum order
-        return [Act_(w, p, "speak", stratum=4), Act_(w, p, "decide", stratum=1),
-                Act_(w, p, "walk", stratum=0)]
-    _run(w, choose, lambda w, a: seen.append((a.stratum, a.verb)) or [])
+        # W3: `decide` was an invented verb and the fold refuses it. What this probe tests is
+        # that ACTS sort by `Act.stratum`, which the probe sets EXPLICITLY — so the verb's own
+        # stratum is not the subject, and one table verb at three declared strata tests the
+        # property more cleanly than three verbs did.
+        return [Act_(w, p, "speak", key="s4", stratum=4),
+                Act_(w, p, "speak", key="s1", stratum=1),
+                Act_(w, p, "speak", key="s0", stratum=0)]
+    seen.extend((a.stratum, a.verb) for a in _run_d(w, choose).resolved)
     assert [x[0] for x in seen] == sorted(x[0] for x in seen), seen
     return (f"PASS: submitted reversed, resolved {seen}. S27's FIVE STRATA -- {list(STRATA)} -- "
             "order the fold BEFORE the content-derived key breaks ties within a stratum. Rev 2 "
@@ -1985,13 +1967,17 @@ def a38():
     def choose(p, v, s, ask_budget):
         if p.id != "p_low":
             return []
-        return [Act_(w, p, "hopeless", obstacle=mult * 5 + 1, pool=5),
-                Act_(w, p, "hard", obstacle=mult * 5, pool=5)]
-    def effect(w, a):
-        return [Ev(w, a.actor, f"did.{a.verb}", a.actor, [ROOT])]
-    _run(w, choose, effect)
+        # W3: `hopeless`/`hard` were invented verbs. This probe's subject is §27.4's Ob > 2xPool
+        # gate, which `resolve` applies BEFORE the fold, so the verb is incidental — one table
+        # verb with two keys tests it and invents nothing.
+        return [Act_(w, p, "speak", key="hopeless", obstacle=mult * 5 + 1, pool=5),
+                Act_(w, p, "speak", key="hard", obstacle=mult * 5, pool=5)]
+    _run(w, choose)
     kinds = [e.kind for e in w.log]
-    assert "attempt.refused" in kinds and "did.hard" in kinds and "did.hopeless" not in kinds
+    # W3: the old `effect` lambda emitted `did.{verb}`; the fold emits the TABLE's `emits`, so
+    # the surviving act produces `speech.made`. The property is unchanged: ONE refusal, ONE
+    # resolution, and the refused act never reached the fold.
+    assert kinds.count("attempt.refused") == 1 and kinds.count("speech.made") == 1, kinds
     return (f"PASS: at Ob = {mult}xPool+1 the attempt was REFUSED and the act was spent; at exactly "
             f"{mult}xPool it resolved. An uncontested attempt routes to A GATE, never to an Ob=0 "
             "roll. Rev 2 had the branch and no probe ever set `obstacle` or `pool`, so both "

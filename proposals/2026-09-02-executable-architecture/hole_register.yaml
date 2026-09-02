@@ -717,6 +717,31 @@ rows:
     cite:      "FOUND BY W2's ADVERSARIAL PASS, and it is the finding that corrected the RULE rather than a row. §7.2 says an `emits:` kind with no producing verb is a RED ROW, and W2 retired six on that reading. Applied uniformly the same rule condemns `(Person, convictions)` -- which #353 §9.3 MANDATES -- so a producerless row is one of two different things: a HOLE (the verb is missing) or DEAD (nothing produces it). W2's six were dead; these five are holes. `rows_without_a_producer()` reports them and a human decides, because the rule cannot tell them apart and deleting on sight is what the first reading would have done. ⚠ RELATED BUT NOT THE SAME AS H-37: that row defers the twelve named argument FAULTS to the social-contest subsystem, and this is the absence of any verb at all that moves an interior field in the season loop."
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
 
+  - id:        H-63
+    tier:      0
+    hole:      "PART E's `writes:` COLUMN NAMES THE CELL AND NEVER THE VALUE. `transfer` writes `(Rung, stores)`; §E3 does not say by how much, or that the giver's store goes DOWN. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice"
+    kind:      "FORMULA ×per verb"
+    owner:     "the resolver (Part E)"
+    grade:     "assumption"
+    default:   "one effect per verb, registered in `EFFECTS` and OWNED BY THE RESOLVER — not supplied by the caller, which is the distinction §27.2 draws"
+    site:      "resolver.EFFECTS"
+    sweep:     ["effect owned by the resolver (the default)", "effect declared in the verb table's own column", "no effect — writes are cell-only"]
+    unblocks:  "unmeasured"
+    cite:      "FOUND BY EXECUTION IN W3, not by reading: the fold checked `transfer`'s precondition, emitted, and changed nothing, so TWO claimants on a six-unit larder both succeeded and §27.1's scarcity did not happen. #353 states the PRECONDITION (§54 item 7, `stores(hearth(giver), kind) >= amount`) and its only consistent effect is that the act SPENDS the quantity — a precondition on something never spent would never bind twice. ⚠ THE DISTINCTION FROM THE `effect` LAMBDA W3 REMOVED IS THE WHOLE POINT: a CALLER-supplied effect is a second resolver, and every probe had its own; a VERB-KEYED effect registered once is the resolver's body. A verb with a `writes:` and no effect REFUSES rather than silently writing nothing."
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+  - id:        H-64
+    tier:      1
+    hole:      "THE PROBE CORPUS INVENTED EIGHT VERBS — `take_seat`, `press_claim`, `raid`, `confer_authority`, `fight`, `refuse`, `do`, `act` — and passed on semantics it supplied itself. This is not a hole in the design; it is a defect in the instrument, and it is recorded here because it was INDISTINGUISHABLE from a design hole until the verb table existed"
+    kind:      "PRODUCER ×8"
+    owner:     "the instrument (the probe corpus)"
+    grade:     "measured"
+    default:   "none — the verbs are the caller's and the probes are re-authored onto table verbs"
+    site:      "probes: each probe's `Act_` verb"
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      "MEASURED BY EXECUTION, W3: removing the `effect` lambda moved FOURTEEN probes from PASS to GAP and raised `_gaps` 59 -> 73. Every one of those passes rested on semantics the probe supplied, because a caller-supplied resolver may say anything. Checked against #353 rather than assumed: `take_seat`, `press_claim`, `raid` and `confer_authority` appear ZERO times in its 2,067 lines and the other four appear only as ordinary English, never as verb names — so none is a Part E omission of the kind `utter`/`establish`/`exchange`/`succeed` were, and all eight are the instrument's. `INVENTED_VERBS` in `shape.py` carries the list so the fold attributes the gap to the CALLER rather than to the design, and the set SHRINKS as probes are re-authored. ⚠ THE HEADLINE NUMBERS GOT WORSE AND THAT IS THE POINT: what the instrument could invent is exactly what it stopped being able to invent."
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+
 # ---------------------------------------------------------------------------
 # THE DISCHARGE MAP -- guardrail G8.
 # "Every defect gets a register row, or is discharged with a named section."

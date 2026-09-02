@@ -133,13 +133,15 @@
    "name": "Uwe Askeland",
    "scale": "person",
    "source": "NPC1.yaml",
-   "verdict": "NOT-ASSESSED",
+   "verdict": "BLOCKED",
    "rows": 8,
    "core": 4,
    "core_routed": 3,
    "core_unmapped": 1,
-   "core_blocked": 0,
-   "blockers": [],
+   "core_blocked": 1,
+   "blockers": [
+    "P36"
+   ],
    "routed": [
     {
      "need": "A person with no office must be able to run a recurring, location-bound activity whose ongoing existence -- not any single completed task -- is itself the thing at stake.",
@@ -162,11 +164,13 @@
      "probe": "P36",
      "verdict": {
       "id": "P36",
-      "verdict": "PASS",
-      "detail": "PASS-WITH-A-DISCLOSURE: ['leverage', 'protect', 'report'] -- three Candidates through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from",
-      "kind": null,
-      "section": "S17",
+      "verdict": "GAP",
+      "detail": "verb 'leverage' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "a choice branches three ways",
+      "needs": "a row in verb_table.yaml, ruled before it is added",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
       "by": "probe-model",
       "tests": "a discovery must be able to be acted on in several distinct ways, each leading somewhere different"
      }
@@ -192,11 +196,13 @@
      "probe": "P30",
      "verdict": {
       "id": "P30",
-      "verdict": "PASS",
-      "detail": "PASS: 5 claims persisted into the next season, uncleared by any step. Claims live in the holder's own ledger and only WITNESS writes it",
-      "kind": null,
-      "section": "S20",
+      "verdict": "GAP",
+      "detail": "verb 'do' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "a claim survives the season",
+      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'do' as a verb. This is the CALLER'S invention and the gap is the caller's",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
       "by": "construction",
       "tests": "what a character learned must still be true for them next season"
      }
@@ -593,13 +599,15 @@
    "name": "Rikard Solberg",
    "scale": "person",
    "source": "NPC1.yaml",
-   "verdict": "NOT-ASSESSED",
+   "verdict": "BLOCKED",
    "rows": 7,
    "core": 3,
    "core_routed": 1,
    "core_unmapped": 2,
-   "core_blocked": 0,
-   "blockers": [],
+   "core_blocked": 1,
+   "blockers": [
+    "P31"
+   ],
    "routed": [
     {
      "need": "A single office-holder's personal, unstated motive must be able to measurably bias every decision he makes in that office, in one consistent direction, without him or his superiors recognizing the pattern.",
@@ -607,11 +615,13 @@
      "probe": "P31",
      "verdict": {
       "id": "P31",
-      "verdict": "PASS",
-      "detail": "PASS: chose report_truthfully. `convictions` is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with no branch in the resolver and nothing stored about the bias. Nobody -- including the holder and his superiors -- has a signature that reads it out",
-      "kind": null,
-      "section": "S9",
+      "verdict": "GAP",
+      "detail": "verb 'report_truthfully' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "a hidden motive biases every decision",
+      "needs": "a row in verb_table.yaml, ruled before it is added",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
       "by": "probe-model",
       "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
      }
@@ -879,7 +889,7 @@
    "name": "Kolbrun Thale",
    "scale": "faction",
    "source": "NPC2.yaml",
-   "verdict": "PLAYABLE",
+   "verdict": "DEGRADED",
    "rows": 8,
    "core": 2,
    "core_routed": 2,
@@ -923,11 +933,13 @@
      "probe": "P36",
      "verdict": {
       "id": "P36",
-      "verdict": "PASS",
-      "detail": "PASS-WITH-A-DISCLOSURE: ['leverage', 'protect', 'report'] -- three Candidates through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from",
-      "kind": null,
-      "section": "S17",
+      "verdict": "GAP",
+      "detail": "verb 'leverage' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "a choice branches three ways",
+      "needs": "a row in verb_table.yaml, ruled before it is added",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
       "by": "probe-model",
       "tests": "a discovery must be able to be acted on in several distinct ways, each leading somewhere different"
      }
@@ -968,9 +980,10 @@
    "core": 4,
    "core_routed": 3,
    "core_unmapped": 1,
-   "core_blocked": 1,
+   "core_blocked": 2,
    "blockers": [
-    "F19"
+    "F19",
+    "P2"
    ],
    "routed": [
     {
@@ -979,11 +992,13 @@
      "probe": "P2",
      "verdict": {
       "id": "P2",
-      "verdict": "PASS",
-      "detail": "PASS: budget 5; the person left ['v5', 'v6', 'v7', 'v8'] undone. The engine does NOT truncate -- an over-budget return RAISES, because silently discarding the tail would be an engine deciding a person's options, which is L1",
-      "kind": null,
-      "section": "S26.3",
+      "verdict": "GAP",
+      "detail": "verb 'v4' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "the act budget is ~5 and the PERSON chooses what to leave undone",
+      "needs": "a row in verb_table.yaml, ruled before it is added",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
       "by": "construction",
       "tests": "a character must be able to take several distinct actions in one season and choose what to leave undone"
      }
@@ -1075,13 +1090,15 @@
    "name": "Peder Almstedt",
    "scale": "faction",
    "source": "NPC2.yaml",
-   "verdict": "NOT-ASSESSED",
+   "verdict": "BLOCKED",
    "rows": 8,
    "core": 3,
    "core_routed": 2,
    "core_unmapped": 1,
-   "core_blocked": 0,
-   "blockers": [],
+   "core_blocked": 1,
+   "blockers": [
+    "P8"
+   ],
    "routed": [
     {
      "need": "A person seeking institutional change must be able to overcome this obstruction only through one of a small, named set of costly alternatives -- winning him over directly, or removing him from office entirely -- with no free third route around it.",
@@ -1089,11 +1106,13 @@
      "probe": "P8",
      "verdict": {
       "id": "P8",
-      "verdict": "PASS",
-      "detail": "PASS: p_mid took the seat by the ordered fold. NO `obstruct` VERB, no knowledge of the loser in the winner's decision, NO BRANCH IN THE RESOLVER. Obstruction is not implemented -- IT FALLS OUT",
-      "kind": null,
-      "section": "S3-L1",
+      "verdict": "GAP",
+      "detail": "verb 'take_seat' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "an ambition is blocked with no obstruct verb",
+      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'take_seat' as a verb. This is the CALLER'S invention and the gap is the caller's",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
       "by": "construction",
       "tests": "one character must be able to be blocked by another without either knowing about the other"
      }
@@ -1119,11 +1138,13 @@
      "probe": "P8",
      "verdict": {
       "id": "P8",
-      "verdict": "PASS",
-      "detail": "PASS: p_mid took the seat by the ordered fold. NO `obstruct` VERB, no knowledge of the loser in the winner's decision, NO BRANCH IN THE RESOLVER. Obstruction is not implemented -- IT FALLS OUT",
-      "kind": null,
-      "section": "S3-L1",
+      "verdict": "GAP",
+      "detail": "verb 'take_seat' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "an ambition is blocked with no obstruct verb",
+      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'take_seat' as a verb. This is the CALLER'S invention and the gap is the caller's",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
       "by": "construction",
       "tests": "one character must be able to be blocked by another without either knowing about the other"
      }
@@ -1134,11 +1155,13 @@
      "probe": "P8",
      "verdict": {
       "id": "P8",
-      "verdict": "PASS",
-      "detail": "PASS: p_mid took the seat by the ordered fold. NO `obstruct` VERB, no knowledge of the loser in the winner's decision, NO BRANCH IN THE RESOLVER. Obstruction is not implemented -- IT FALLS OUT",
-      "kind": null,
-      "section": "S3-L1",
+      "verdict": "GAP",
+      "detail": "verb 'take_seat' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "an ambition is blocked with no obstruct verb",
+      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'take_seat' as a verb. This is the CALLER'S invention and the gap is the caller's",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
       "by": "construction",
       "tests": "one character must be able to be blocked by another without either knowing about the other"
      }
@@ -1169,13 +1192,15 @@
    "name": "Arnlod Olafsson",
    "scale": "faction",
    "source": "NPC2.yaml",
-   "verdict": "DEGRADED",
+   "verdict": "BLOCKED",
    "rows": 7,
    "core": 2,
    "core_routed": 2,
    "core_unmapped": 0,
-   "core_blocked": 0,
-   "blockers": [],
+   "core_blocked": 1,
+   "blockers": [
+    "F17"
+   ],
    "routed": [
     {
      "need": "An institution's investigative-and-punitive branch must have a single named superior whose sponsorship, approval, or authorization is a formal precondition for that branch's members to act above a defined severity or target-importance threshold.",
@@ -1183,11 +1208,13 @@
      "probe": "F17",
      "verdict": {
       "id": "F17",
-      "verdict": "PASS",
-      "detail": "PASS-CONDITIONALLY, AND THE CONDITION IS THE FINDING: sequence=['authorised', 'raid.done']. Both acts landed in ONE season and THE FOLD'S CONTENT-DERIVED ORDER -- not intent, not rank, not the superior's seniority -- decided whether the raid counted as authorised. There is no within-season sequencing a person can rely on. See A14 and A36",
-      "kind": null,
-      "section": "S27.1",
+      "verdict": "GAP",
+      "detail": "verb 'raid' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "an authorization precedes the act it authorises",
+      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'raid' as a verb. This is the CALLER'S invention and the gap is the caller's",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
       "by": "construction",
       "tests": "a superior's approval must be able to be a formal precondition without which subordinates cannot act"
      }
@@ -2331,11 +2358,13 @@
      "probe": "P36",
      "verdict": {
       "id": "P36",
-      "verdict": "PASS",
-      "detail": "PASS-WITH-A-DISCLOSURE: ['leverage', 'protect', 'report'] -- three Candidates through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from",
-      "kind": null,
-      "section": "S17",
+      "verdict": "GAP",
+      "detail": "verb 'leverage' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "a choice branches three ways",
+      "needs": "a row in verb_table.yaml, ruled before it is added",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
       "by": "probe-model",
       "tests": "a discovery must be able to be acted on in several distinct ways, each leading somewhere different"
      }
@@ -2513,9 +2542,10 @@
    "core": 3,
    "core_routed": 3,
    "core_unmapped": 0,
-   "core_blocked": 1,
+   "core_blocked": 2,
    "blockers": [
-    "F21"
+    "F21",
+    "P31"
    ],
    "routed": [
     {
@@ -2541,11 +2571,13 @@
      "probe": "P31",
      "verdict": {
       "id": "P31",
-      "verdict": "PASS",
-      "detail": "PASS: chose report_truthfully. `convictions` is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with no branch in the resolver and nothing stored about the bias. Nobody -- including the holder and his superiors -- has a signature that reads it out",
-      "kind": null,
-      "section": "S9",
+      "verdict": "GAP",
+      "detail": "verb 'report_truthfully' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "a hidden motive biases every decision",
+      "needs": "a row in verb_table.yaml, ruled before it is added",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
       "by": "probe-model",
       "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
      }
@@ -3173,11 +3205,13 @@
      "probe": "P9",
      "verdict": {
       "id": "P9",
-      "verdict": "PASS",
-      "detail": "PASS: `dispatch` names ONE PERSON; that person runs their OWN `choose` and refused. The King's reach really is other people's decisions, mechanically. NOTE the refusal and the order landed in the SAME season with no ordering between them -- see A14/A36",
-      "kind": null,
-      "section": "S11.1",
+      "verdict": "GAP",
+      "detail": "verb 'refuse' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "an order is the subordinate's own choice",
+      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'refuse' as a verb. This is the CALLER'S invention and the gap is the caller's",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
       "by": "construction",
       "tests": "a superior must be able to direct a subordinate, and the subordinate must be able to refuse or deviate"
      }
@@ -3520,11 +3554,13 @@
      "probe": "P31",
      "verdict": {
       "id": "P31",
-      "verdict": "PASS",
-      "detail": "PASS: chose report_truthfully. `convictions` is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with no branch in the resolver and nothing stored about the bias. Nobody -- including the holder and his superiors -- has a signature that reads it out",
-      "kind": null,
-      "section": "S9",
+      "verdict": "GAP",
+      "detail": "verb 'report_truthfully' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "a hidden motive biases every decision",
+      "needs": "a row in verb_table.yaml, ruled before it is added",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
       "by": "probe-model",
       "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
      }
@@ -4226,13 +4262,15 @@
    "name": "What the Guilds Know",
    "scale": "faction",
    "source": "ARC1.yaml",
-   "verdict": "NOT-ASSESSED",
+   "verdict": "BLOCKED",
    "rows": 7,
    "core": 2,
    "core_routed": 1,
    "core_unmapped": 1,
-   "core_blocked": 0,
-   "blockers": [],
+   "core_blocked": 1,
+   "blockers": [
+    "P36"
+   ],
    "routed": [
     {
      "need": "the faction holding valuable accumulated information must be able to face a genuine three-way choice -- sell to one rival, sell to a different rival, or expose it publicly -- where each option produces a distinct and different downstream political consequence",
@@ -4240,11 +4278,13 @@
      "probe": "P36",
      "verdict": {
       "id": "P36",
-      "verdict": "PASS",
-      "detail": "PASS-WITH-A-DISCLOSURE: ['leverage', 'protect', 'report'] -- three Candidates through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from",
-      "kind": null,
-      "section": "S17",
+      "verdict": "GAP",
+      "detail": "verb 'leverage' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "a choice branches three ways",
+      "needs": "a row in verb_table.yaml, ruled before it is added",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
       "by": "probe-model",
       "tests": "a discovery must be able to be acted on in several distinct ways, each leading somewhere different"
      }
@@ -4649,13 +4689,15 @@
    "name": "The Purple Shroud",
    "scale": "realm",
    "source": "ARC1.yaml",
-   "verdict": "DEGRADED",
+   "verdict": "BLOCKED",
    "rows": 7,
    "core": 3,
    "core_routed": 3,
    "core_unmapped": 0,
-   "core_blocked": 0,
-   "blockers": [],
+   "core_blocked": 1,
+   "blockers": [
+    "P37"
+   ],
    "routed": [
     {
      "need": "a public-order crisis must be able to require every resolution path to also force a SEPARATE, orthogonal political consequence bundled into it, such that there is no way to resolve the immediate crisis without also taking a position on a deeper structural question",
@@ -4678,11 +4720,13 @@
      "probe": "P37",
      "verdict": {
       "id": "P37",
-      "verdict": "PASS",
-      "detail": "PASS, AND IT IS AN UNCOMFORTABLE PASS -- report it as a finding, not a win. A threshold LOOKUP on a person's own interior is INDISTINGUISHABLE at the engine boundary from a DELIBERATION: both are a `choose` returning an Act, and L1 is satisfied because a named person is still the author. The design cannot detect the difference and does not claim to. The in-chain arc survey found a source that calls one act BOTH 'chooses' AND 'determined by a threshold lookup on his own internal state... a stat, not a deliberation'. THE SHAPE INHERITS THE CORPUS'S BLUR RATHER THAN RESOLVING IT -- which is a real answer to 8 of the 50 THRESHOLD arcs, and a hollow one, because nothing distinguishes a rich deliberation from a stat lookup",
-      "kind": null,
-      "section": "S3-L1",
+      "verdict": "GAP",
+      "detail": "verb 'purge' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "a person's response is a lookup on their own state, not a deliberation",
+      "needs": "a row in verb_table.yaml, ruled before it is added",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
       "by": "probe-model",
       "tests": "a character's reaction must be able to be fully determined by their internal state rather than by a choice"
      }
@@ -4884,13 +4928,15 @@
    "name": "The Sinigaglia Dinner",
    "scale": "faction",
    "source": "ARC1.yaml",
-   "verdict": "PLAYABLE",
+   "verdict": "BLOCKED",
    "rows": 7,
    "core": 3,
    "core_routed": 3,
    "core_unmapped": 0,
-   "core_blocked": 0,
-   "blockers": [],
+   "core_blocked": 1,
+   "blockers": [
+    "P37"
+   ],
    "routed": [
     {
      "need": "a superior's response to detecting a subordinate's disloyalty must be able to be fully determined by the superior's own current internal state via a fixed lookup, removing free choice from that decision point when the superior is not directly player-controlled",
@@ -4898,11 +4944,13 @@
      "probe": "P37",
      "verdict": {
       "id": "P37",
-      "verdict": "PASS",
-      "detail": "PASS, AND IT IS AN UNCOMFORTABLE PASS -- report it as a finding, not a win. A threshold LOOKUP on a person's own interior is INDISTINGUISHABLE at the engine boundary from a DELIBERATION: both are a `choose` returning an Act, and L1 is satisfied because a named person is still the author. The design cannot detect the difference and does not claim to. The in-chain arc survey found a source that calls one act BOTH 'chooses' AND 'determined by a threshold lookup on his own internal state... a stat, not a deliberation'. THE SHAPE INHERITS THE CORPUS'S BLUR RATHER THAN RESOLVING IT -- which is a real answer to 8 of the 50 THRESHOLD arcs, and a hollow one, because nothing distinguishes a rich deliberation from a stat lookup",
-      "kind": null,
-      "section": "S3-L1",
+      "verdict": "GAP",
+      "detail": "verb 'purge' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "a person's response is a lookup on their own state, not a deliberation",
+      "needs": "a row in verb_table.yaml, ruled before it is added",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
       "by": "probe-model",
       "tests": "a character's reaction must be able to be fully determined by their internal state rather than by a choice"
      }
@@ -4943,11 +4991,13 @@
      "probe": "P36",
      "verdict": {
       "id": "P36",
-      "verdict": "PASS",
-      "detail": "PASS-WITH-A-DISCLOSURE: ['leverage', 'protect', 'report'] -- three Candidates through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from",
-      "kind": null,
-      "section": "S17",
+      "verdict": "GAP",
+      "detail": "verb 'leverage' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "a choice branches three ways",
+      "needs": "a row in verb_table.yaml, ruled before it is added",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
       "by": "probe-model",
       "tests": "a discovery must be able to be acted on in several distinct ways, each leading somewhere different"
      }
@@ -5292,8 +5342,9 @@
    "core": 5,
    "core_routed": 3,
    "core_unmapped": 2,
-   "core_blocked": 1,
+   "core_blocked": 2,
    "blockers": [
+    "A31",
     "F16b"
    ],
    "routed": [
@@ -5303,11 +5354,13 @@
      "probe": "A31",
      "verdict": {
       "id": "A31",
-      "verdict": "PASS",
-      "detail": "PASS WITH A FINDING, AND THE FINDING MATTERS MORE THAN THE VERDICT: 3-point sweep [(2, 2), (5, 5), (9, 9)]. The count tracks the fixture EXACTLY, so any verdict phrased as 'a character can do N things in a season' FLIPS ACROSS THE SWEEP. S42.2.1 says a verdict that flips across the sweep IS ITSELF A FINDING. `~5` is a RULED BAND and no in-chain source turns the band into the integer the engine runs on -- that is S62's open scene/act question wearing different clothes",
-      "kind": null,
-      "section": "S42.2.1",
+      "verdict": "GAP",
+      "detail": "verb 'v0' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "a verdict is stable across a fixture sweep",
+      "needs": "a row in verb_table.yaml, ruled before it is added",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
       "by": "construction",
       "tests": "a conclusion drawn from the engine must not depend on a number nobody decided"
      }
@@ -5319,7 +5372,7 @@
      "verdict": {
       "id": "F10",
       "verdict": "PASS",
-      "detail": "PASS: granted=['p_mid'], refused=['p_low'], larder=2 (never negative). THE SECOND CLAIMANT ON AN EMPTIED LARDER GOT A DIFFERENT EVENT. Petitions never closed each other; the matter closed AT RESOLVE BY SCARCITY. S54 item 7's precondition is what makes this true rather than minting",
+      "detail": "PASS: granted=1, refused=1, larder=0 (never negative). THE SECOND CLAIMANT ON AN EMPTIED LARDER GOT A DIFFERENT EVENT. Petitions never closed each other; the matter closed AT RESOLVE BY SCARCITY. S54 item 7's precondition is what makes this true rather than minting",
       "kind": null,
       "section": "S54.1",
       "title": "a matter closes by scarcity, not by cancelling",
@@ -5904,11 +5957,13 @@
      "probe": "P31",
      "verdict": {
       "id": "P31",
-      "verdict": "PASS",
-      "detail": "PASS: chose report_truthfully. `convictions` is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with no branch in the resolver and nothing stored about the bias. Nobody -- including the holder and his superiors -- has a signature that reads it out",
-      "kind": null,
-      "section": "S9",
+      "verdict": "GAP",
+      "detail": "verb 'report_truthfully' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "a hidden motive biases every decision",
+      "needs": "a row in verb_table.yaml, ruled before it is added",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
       "by": "probe-model",
       "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
      }
@@ -6611,11 +6666,13 @@
      "probe": "P31",
      "verdict": {
       "id": "P31",
-      "verdict": "PASS",
-      "detail": "PASS: chose report_truthfully. `convictions` is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with no branch in the resolver and nothing stored about the bias. Nobody -- including the holder and his superiors -- has a signature that reads it out",
-      "kind": null,
-      "section": "S9",
+      "verdict": "GAP",
+      "detail": "verb 'report_truthfully' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "a hidden motive biases every decision",
+      "needs": "a row in verb_table.yaml, ruled before it is added",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
       "by": "probe-model",
       "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
      }
@@ -6732,11 +6789,13 @@
      "probe": "P31",
      "verdict": {
       "id": "P31",
-      "verdict": "PASS",
-      "detail": "PASS: chose report_truthfully. `convictions` is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with no branch in the resolver and nothing stored about the bias. Nobody -- including the holder and his superiors -- has a signature that reads it out",
-      "kind": null,
-      "section": "S9",
+      "verdict": "GAP",
+      "detail": "verb 'report_truthfully' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "a hidden motive biases every decision",
+      "needs": "a row in verb_table.yaml, ruled before it is added",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
       "by": "probe-model",
       "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
      }
@@ -6747,11 +6806,13 @@
      "probe": "P36",
      "verdict": {
       "id": "P36",
-      "verdict": "PASS",
-      "detail": "PASS-WITH-A-DISCLOSURE: ['leverage', 'protect', 'report'] -- three Candidates through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from",
-      "kind": null,
-      "section": "S17",
+      "verdict": "GAP",
+      "detail": "verb 'leverage' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "a choice branches three ways",
+      "needs": "a row in verb_table.yaml, ruled before it is added",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
       "by": "probe-model",
       "tests": "a discovery must be able to be acted on in several distinct ways, each leading somewhere different"
      }
@@ -6877,13 +6938,15 @@
    "name": "The Inquisitor's Unravelling",
    "scale": "faction",
    "source": "ARC2.yaml",
-   "verdict": "NOT-ASSESSED",
+   "verdict": "BLOCKED",
    "rows": 5,
    "core": 3,
    "core_routed": 2,
    "core_unmapped": 1,
-   "core_blocked": 0,
-   "blockers": [],
+   "core_blocked": 1,
+   "blockers": [
+    "P36"
+   ],
    "routed": [
     {
      "need": "a hidden personal capability in a loyal enforcer must remain completely dormant until an unrelated, ambient environmental quality, degraded by the cumulative effect of several other storylines, drops into a specific band specifically in the territories his job routinely sends him to",
@@ -6921,11 +6984,13 @@
      "probe": "P36",
      "verdict": {
       "id": "P36",
-      "verdict": "PASS",
-      "detail": "PASS-WITH-A-DISCLOSURE: ['leverage', 'protect', 'report'] -- three Candidates through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from",
-      "kind": null,
-      "section": "S17",
+      "verdict": "GAP",
+      "detail": "verb 'leverage' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "a choice branches three ways",
+      "needs": "a row in verb_table.yaml, ruled before it is added",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
       "by": "probe-model",
       "tests": "a discovery must be able to be acted on in several distinct ways, each leading somewhere different"
      }
@@ -7387,7 +7452,7 @@
      "verdict": {
       "id": "F10",
       "verdict": "PASS",
-      "detail": "PASS: granted=['p_mid'], refused=['p_low'], larder=2 (never negative). THE SECOND CLAIMANT ON AN EMPTIED LARDER GOT A DIFFERENT EVENT. Petitions never closed each other; the matter closed AT RESOLVE BY SCARCITY. S54 item 7's precondition is what makes this true rather than minting",
+      "detail": "PASS: granted=1, refused=1, larder=0 (never negative). THE SECOND CLAIMANT ON AN EMPTIED LARDER GOT A DIFFERENT EVENT. Petitions never closed each other; the matter closed AT RESOLVE BY SCARCITY. S54 item 7's precondition is what makes this true rather than minting",
       "kind": null,
       "section": "S54.1",
       "title": "a matter closes by scarcity, not by cancelling",
@@ -7816,12 +7881,12 @@
      "verdict": {
       "id": "A36",
       "verdict": "GAP",
-      "detail": "the person's ORDER ['spend_treasury', 'buy_grain', 'bribe'] vs the fold's order ['bribe', 'buy_grain', 'spend_treasury']",
-      "kind": "COLLISION",
-      "section": "S26.3 / S32",
+      "detail": "verb 'buy_grain' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "a person's act order is the order it resolves in",
-      "needs": "a ruling on whether a person's act list resolves in the order they chose",
-      "law": "S26.3 says 'THE LIST IS ORDERED, so what he did first is legible when a season's later acts are foreclosed by its earlier ones'. S32 rest 3 says the act array is CANONICALIZED BY A CONTENT-DERIVED KEY over ONE GLOBAL ARRAY, sorted 'never by completion order'. A PER-PERSON INTENT ORDER AND A GLOBAL CONTENT ORDER ARE DIFFERENT ORDERS, and the chain specifies BOTH. This is what makes F17's authorization race real",
+      "needs": "a row in verb_table.yaml, ruled before it is added",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
       "by": "construction",
       "tests": "what a character does first must be able to close off what they could have done after"
      }
@@ -8083,11 +8148,13 @@
      "probe": "P31",
      "verdict": {
       "id": "P31",
-      "verdict": "PASS",
-      "detail": "PASS: chose report_truthfully. `convictions` is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with no branch in the resolver and nothing stored about the bias. Nobody -- including the holder and his superiors -- has a signature that reads it out",
-      "kind": null,
-      "section": "S9",
+      "verdict": "GAP",
+      "detail": "verb 'report_truthfully' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "a hidden motive biases every decision",
+      "needs": "a row in verb_table.yaml, ruled before it is added",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
       "by": "probe-model",
       "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
      }
@@ -10183,7 +10250,7 @@
      "verdict": {
       "id": "A5",
       "verdict": "PASS",
-      "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 892 == 892 and the LOG CONTENT HASH matches (77e68a06332d...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.19999999999999998 vs 0.2 -- DIFFERENT, and the same five summed as integers give 2 vs 2 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+      "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 892 == 892 and the LOG CONTENT HASH matches (5337707cc504...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.19999999999999998 vs 0.2 -- DIFFERENT, and the same five summed as integers give 2 vs 2 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
       "kind": null,
       "section": "S32",
       "title": "the fold is order-independent, and the float control actually fires",
@@ -10476,11 +10543,13 @@
      "probe": "A31",
      "verdict": {
       "id": "A31",
-      "verdict": "PASS",
-      "detail": "PASS WITH A FINDING, AND THE FINDING MATTERS MORE THAN THE VERDICT: 3-point sweep [(2, 2), (5, 5), (9, 9)]. The count tracks the fixture EXACTLY, so any verdict phrased as 'a character can do N things in a season' FLIPS ACROSS THE SWEEP. S42.2.1 says a verdict that flips across the sweep IS ITSELF A FINDING. `~5` is a RULED BAND and no in-chain source turns the band into the integer the engine runs on -- that is S62's open scene/act question wearing different clothes",
-      "kind": null,
-      "section": "S42.2.1",
+      "verdict": "GAP",
+      "detail": "verb 'v0' is on no row of the verb table",
+      "kind": "UNSPECIFIED",
+      "section": "S27/E2",
       "title": "a verdict is stable across a fixture sweep",
+      "needs": "a row in verb_table.yaml, ruled before it is added",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
       "by": "construction",
       "tests": "a conclusion drawn from the engine must not depend on a number nobody decided"
      }
@@ -11079,21 +11148,25 @@
   },
   "P36": {
    "id": "P36",
-   "verdict": "PASS",
-   "detail": "PASS-WITH-A-DISCLOSURE: ['leverage', 'protect', 'report'] -- three Candidates through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from",
-   "kind": null,
-   "section": "S17",
+   "verdict": "GAP",
+   "detail": "verb 'leverage' is on no row of the verb table",
+   "kind": "UNSPECIFIED",
+   "section": "S27/E2",
    "title": "a choice branches three ways",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
    "by": "probe-model",
    "tests": "a discovery must be able to be acted on in several distinct ways, each leading somewhere different"
   },
   "P30": {
    "id": "P30",
-   "verdict": "PASS",
-   "detail": "PASS: 5 claims persisted into the next season, uncleared by any step. Claims live in the holder's own ledger and only WITNESS writes it",
-   "kind": null,
-   "section": "S20",
+   "verdict": "GAP",
+   "detail": "verb 'do' is on no row of the verb table",
+   "kind": "UNSPECIFIED",
+   "section": "S27/E2",
    "title": "a claim survives the season",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'do' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "by": "construction",
    "tests": "what a character learned must still be true for them next season"
   },
@@ -11207,11 +11280,13 @@
   },
   "P31": {
    "id": "P31",
-   "verdict": "PASS",
-   "detail": "PASS: chose report_truthfully. `convictions` is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with no branch in the resolver and nothing stored about the bias. Nobody -- including the holder and his superiors -- has a signature that reads it out",
-   "kind": null,
-   "section": "S9",
+   "verdict": "GAP",
+   "detail": "verb 'report_truthfully' is on no row of the verb table",
+   "kind": "UNSPECIFIED",
+   "section": "S27/E2",
    "title": "a hidden motive biases every decision",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
    "by": "probe-model",
    "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
   },
@@ -11309,11 +11384,13 @@
   },
   "P2": {
    "id": "P2",
-   "verdict": "PASS",
-   "detail": "PASS: budget 5; the person left ['v5', 'v6', 'v7', 'v8'] undone. The engine does NOT truncate -- an over-budget return RAISES, because silently discarding the tail would be an engine deciding a person's options, which is L1",
-   "kind": null,
-   "section": "S26.3",
+   "verdict": "GAP",
+   "detail": "verb 'v4' is on no row of the verb table",
+   "kind": "UNSPECIFIED",
+   "section": "S27/E2",
    "title": "the act budget is ~5 and the PERSON chooses what to leave undone",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
    "by": "construction",
    "tests": "a character must be able to take several distinct actions in one season and choose what to leave undone"
   },
@@ -11353,11 +11430,13 @@
   },
   "P8": {
    "id": "P8",
-   "verdict": "PASS",
-   "detail": "PASS: p_mid took the seat by the ordered fold. NO `obstruct` VERB, no knowledge of the loser in the winner's decision, NO BRANCH IN THE RESOLVER. Obstruction is not implemented -- IT FALLS OUT",
-   "kind": null,
-   "section": "S3-L1",
+   "verdict": "GAP",
+   "detail": "verb 'take_seat' is on no row of the verb table",
+   "kind": "UNSPECIFIED",
+   "section": "S27/E2",
    "title": "an ambition is blocked with no obstruct verb",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'take_seat' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "by": "construction",
    "tests": "one character must be able to be blocked by another without either knowing about the other"
   },
@@ -11373,11 +11452,13 @@
   },
   "F17": {
    "id": "F17",
-   "verdict": "PASS",
-   "detail": "PASS-CONDITIONALLY, AND THE CONDITION IS THE FINDING: sequence=['authorised', 'raid.done']. Both acts landed in ONE season and THE FOLD'S CONTENT-DERIVED ORDER -- not intent, not rank, not the superior's seniority -- decided whether the raid counted as authorised. There is no within-season sequencing a person can rely on. See A14 and A36",
-   "kind": null,
-   "section": "S27.1",
+   "verdict": "GAP",
+   "detail": "verb 'raid' is on no row of the verb table",
+   "kind": "UNSPECIFIED",
+   "section": "S27/E2",
    "title": "an authorization precedes the act it authorises",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'raid' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "by": "construction",
    "tests": "a superior's approval must be able to be a formal precondition without which subordinates cannot act"
   },
@@ -11529,11 +11610,13 @@
   },
   "P9": {
    "id": "P9",
-   "verdict": "PASS",
-   "detail": "PASS: `dispatch` names ONE PERSON; that person runs their OWN `choose` and refused. The King's reach really is other people's decisions, mechanically. NOTE the refusal and the order landed in the SAME season with no ordering between them -- see A14/A36",
-   "kind": null,
-   "section": "S11.1",
+   "verdict": "GAP",
+   "detail": "verb 'refuse' is on no row of the verb table",
+   "kind": "UNSPECIFIED",
+   "section": "S27/E2",
    "title": "an order is the subordinate's own choice",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'refuse' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "by": "construction",
    "tests": "a superior must be able to direct a subordinate, and the subordinate must be able to refuse or deviate"
   },
@@ -11603,11 +11686,13 @@
   },
   "P37": {
    "id": "P37",
-   "verdict": "PASS",
-   "detail": "PASS, AND IT IS AN UNCOMFORTABLE PASS -- report it as a finding, not a win. A threshold LOOKUP on a person's own interior is INDISTINGUISHABLE at the engine boundary from a DELIBERATION: both are a `choose` returning an Act, and L1 is satisfied because a named person is still the author. The design cannot detect the difference and does not claim to. The in-chain arc survey found a source that calls one act BOTH 'chooses' AND 'determined by a threshold lookup on his own internal state... a stat, not a deliberation'. THE SHAPE INHERITS THE CORPUS'S BLUR RATHER THAN RESOLVING IT -- which is a real answer to 8 of the 50 THRESHOLD arcs, and a hollow one, because nothing distinguishes a rich deliberation from a stat lookup",
-   "kind": null,
-   "section": "S3-L1",
+   "verdict": "GAP",
+   "detail": "verb 'purge' is on no row of the verb table",
+   "kind": "UNSPECIFIED",
+   "section": "S27/E2",
    "title": "a person's response is a lookup on their own state, not a deliberation",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
    "by": "probe-model",
    "tests": "a character's reaction must be able to be fully determined by their internal state rather than by a choice"
   },
@@ -11623,18 +11708,20 @@
   },
   "A31": {
    "id": "A31",
-   "verdict": "PASS",
-   "detail": "PASS WITH A FINDING, AND THE FINDING MATTERS MORE THAN THE VERDICT: 3-point sweep [(2, 2), (5, 5), (9, 9)]. The count tracks the fixture EXACTLY, so any verdict phrased as 'a character can do N things in a season' FLIPS ACROSS THE SWEEP. S42.2.1 says a verdict that flips across the sweep IS ITSELF A FINDING. `~5` is a RULED BAND and no in-chain source turns the band into the integer the engine runs on -- that is S62's open scene/act question wearing different clothes",
-   "kind": null,
-   "section": "S42.2.1",
+   "verdict": "GAP",
+   "detail": "verb 'v0' is on no row of the verb table",
+   "kind": "UNSPECIFIED",
+   "section": "S27/E2",
    "title": "a verdict is stable across a fixture sweep",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
    "by": "construction",
    "tests": "a conclusion drawn from the engine must not depend on a number nobody decided"
   },
   "F10": {
    "id": "F10",
    "verdict": "PASS",
-   "detail": "PASS: granted=['p_mid'], refused=['p_low'], larder=2 (never negative). THE SECOND CLAIMANT ON AN EMPTIED LARDER GOT A DIFFERENT EVENT. Petitions never closed each other; the matter closed AT RESOLVE BY SCARCITY. S54 item 7's precondition is what makes this true rather than minting",
+   "detail": "PASS: granted=1, refused=1, larder=0 (never negative). THE SECOND CLAIMANT ON AN EMPTIED LARDER GOT A DIFFERENT EVENT. Petitions never closed each other; the matter closed AT RESOLVE BY SCARCITY. S54 item 7's precondition is what makes this true rather than minting",
    "kind": null,
    "section": "S54.1",
    "title": "a matter closes by scarcity, not by cancelling",
@@ -11714,12 +11801,12 @@
   "A36": {
    "id": "A36",
    "verdict": "GAP",
-   "detail": "the person's ORDER ['spend_treasury', 'buy_grain', 'bribe'] vs the fold's order ['bribe', 'buy_grain', 'spend_treasury']",
-   "kind": "COLLISION",
-   "section": "S26.3 / S32",
+   "detail": "verb 'buy_grain' is on no row of the verb table",
+   "kind": "UNSPECIFIED",
+   "section": "S27/E2",
    "title": "a person's act order is the order it resolves in",
-   "needs": "a ruling on whether a person's act list resolves in the order they chose",
-   "law": "S26.3 says 'THE LIST IS ORDERED, so what he did first is legible when a season's later acts are foreclosed by its earlier ones'. S32 rest 3 says the act array is CANONICALIZED BY A CONTENT-DERIVED KEY over ONE GLOBAL ARRAY, sorted 'never by completion order'. A PER-PERSON INTENT ORDER AND A GLOBAL CONTENT ORDER ARE DIFFERENT ORDERS, and the chain specifies BOTH. This is what makes F17's authorization race real",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
    "by": "construction",
    "tests": "what a character does first must be able to close off what they could have done after"
   },
@@ -11782,7 +11869,7 @@
   "A5": {
    "id": "A5",
    "verdict": "PASS",
-   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 892 == 892 and the LOG CONTENT HASH matches (77e68a06332d...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.19999999999999998 vs 0.2 -- DIFFERENT, and the same five summed as integers give 2 vs 2 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 892 == 892 and the LOG CONTENT HASH matches (5337707cc504...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.19999999999999998 vs 0.2 -- DIFFERENT, and the same five summed as integers give 2 vs 2 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
    "kind": null,
    "section": "S32",
    "title": "the fold is order-independent, and the float control actually fires",
@@ -11907,21 +11994,25 @@
   },
   "F7": {
    "id": "F7",
-   "verdict": "PASS",
-   "detail": "PASS: Petition -> `carry` (AN ACT, BY A NAMED PERSON, COSTING BUDGET) -> DocketItem on a Date. NO automatic promotion, NO queue drain, NO priority function. THE FILTER IS A PERSON AND THE PERSON PAYS -- which is why T5 produces politics rather than a work queue",
-   "kind": null,
-   "section": "S36.1",
+   "verdict": "GAP",
+   "detail": "'carry' has a precondition the fold cannot evaluate: 'a Petition exists; costs budget like any act'",
+   "kind": "UNSPECIFIED",
+   "section": "E2",
    "title": "a demand rises from a hearth to a duchy",
+   "needs": "a predicate in REQUIRES_PREDICATES, or a `requires:` the table states structurally rather than in prose",
+   "law": "\u00a7E2 -- `requires` is checked IN THE FOLD. Stated as prose it is the same defect `resolve` had, one column along: a rule the code cannot read",
    "by": "probe-model",
    "tests": "someone with no power must be able to get a matter in front of someone who has it"
   },
   "F9": {
    "id": "F9",
-   "verdict": "PASS",
-   "detail": "PASS: 5 petitions to 5 different venues on one matter. NO DEDUP, NO CAP, NO PER-VENUE LIMIT, NO 'already before a body' RULE, NO COST GATE -- ruled allowable, and the budget IS the whole of the pricing. Spending all five here IS the triage the budget exists to create",
-   "kind": null,
-   "section": "S26.3",
+   "verdict": "GAP",
+   "detail": "verb 'petition2' is on no row of the verb table",
+   "kind": "UNSPECIFIED",
+   "section": "S27/E2",
    "title": "petition spray",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
    "by": "construction",
    "tests": "a character must be able to spend a whole season putting the same matter to many people"
   },
@@ -12029,11 +12120,13 @@
   },
   "A4": {
    "id": "A4",
-   "verdict": "PASS",
-   "detail": "PASS: 6 events, BIT-IDENTICAL across two runs, and the CONTENT HASH OVER THE LOG matches (3836577360a68aa6...). Ids come from H(world_seed, tick, subject, purpose) -- NO ALLOCATOR, NO COUNTER, NOTHING TO SERIALISE ON. This is S66 artifact 1's shape",
-   "kind": null,
-   "section": "S33",
+   "verdict": "GAP",
+   "detail": "verb 'do' is on no row of the verb table",
+   "kind": "UNSPECIFIED",
+   "section": "S27/E2",
    "title": "two runs of the same seed produce the same log AND the same hash",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'do' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "by": "construction",
    "tests": "the same starting conditions must be able to produce the same history"
   },
@@ -12179,11 +12272,13 @@
   },
   "A22": {
    "id": "A22",
-   "verdict": "PASS",
-   "detail": "PASS, PARTIALLY, AND THE HONEST FRAME IS PER-OWNER. One RESOLVE fold consumed acts from 2 different containing rungs ['Hh', 'R'] in ONE global order. Every step's BODY partitions by its write's owner EXCEPT TWO -- RESOLVE'S ORDERED FOLD (which needs ONE order) and WITNESS'S FAN-OUT (one pass over the presence index). EVERY STEP'S BOUNDARY IS GLOBAL. 'Two of six steps partition' was two different tests applied to two groups and is retracted",
-   "kind": null,
-   "section": "S31",
+   "verdict": "GAP",
+   "detail": "verb 'act' is on no row of the verb table",
+   "kind": "UNSPECIFIED",
+   "section": "S27/E2",
    "title": "the loop's steps partition per container",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'act' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "by": "construction",
    "tests": "each region must be able to run its own slice of the loop"
   },
@@ -12209,11 +12304,13 @@
   },
   "A28": {
    "id": "A28",
-   "verdict": "PASS",
-   "detail": "PASS over 4 events from a real run: id uniqueness, referential integrity on causes[], a NON-DECREASING season index, and a stable content hash. These are the head's log invariants and they SURVIVE the Event record S19 adds",
-   "kind": null,
-   "section": "S19.1",
+   "verdict": "GAP",
+   "detail": "verb 'do' is on no row of the verb table",
+   "kind": "UNSPECIFIED",
+   "section": "S27/E2",
    "title": "the log's invariants hold",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'do' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "by": "construction",
    "tests": "every recorded happening must be able to point at real prior happenings"
   },
@@ -12288,7 +12385,7 @@
   "A37": {
    "id": "A37",
    "verdict": "PASS",
-   "detail": "PASS: submitted reversed, resolved [(0, 'walk'), (1, 'decide'), (4, 'speak')]. S27's FIVE STRATA -- ['movement', 'binding_decision', 'contested_physical', 'uncontested_material', 'social'] -- order the fold BEFORE the content-derived key breaks ties within a stratum. Rev 2 declared STRATA and never referenced it, and no probe ever set `Act.stratum`, so the sort key's first component was constant and the rule was dead code reported as landed",
+   "detail": "PASS: submitted reversed, resolved [(0, 'speak'), (1, 'speak'), (4, 'speak')]. S27's FIVE STRATA -- ['movement', 'binding_decision', 'contested_physical', 'uncontested_material', 'social'] -- order the fold BEFORE the content-derived key breaks ties within a stratum. Rev 2 declared STRATA and never referenced it, and no probe ever set `Act.stratum`, so the sort key's first component was constant and the rule was dead code reported as landed",
    "kind": null,
    "section": "S27",
    "title": "the five strata order the fold before the content hash does",
@@ -12318,7 +12415,7 @@
   "A39": {
    "id": "A39",
    "verdict": "PASS",
-   "detail": "PASS, WITH THE ASSERTION REV 3 OMITTED: `contest` was called with causes=['6d93e1eac27a3266'], which IS the id of the act that reached the seam. It then refused for want of a MARGIN MODEL (S39.4), which is the honest state. What was fixed upstream of that refusal: rev 2 guarded the cause with a a MARGIN MODEL (S39.4), which is the honest state. What rev 3 fixed is upstream of that refusal: rev 2 passed `causes=[a.id] if any(e.id == a.id for e in w.log)` predicate over w.log, which holds EVENTS and never Acts -- PERMANENTLY FALSE, so every contest was called with [ROOT]. S39.2 requires causes[] NAMING THE ACTS",
+   "detail": "PASS, WITH THE ASSERTION REV 3 OMITTED: `contest` was called with causes=['fbee8ff9506237d3'], which IS the id of the act that reached the seam. It then refused for want of a MARGIN MODEL (S39.4), which is the honest state. What was fixed upstream of that refusal: rev 2 guarded the cause with a a MARGIN MODEL (S39.4), which is the honest state. What rev 3 fixed is upstream of that refusal: rev 2 passed `causes=[a.id] if any(e.id == a.id for e in w.log)` predicate over w.log, which holds EVENTS and never Acts -- PERMANENTLY FALSE, so every contest was called with [ROOT]. S39.2 requires causes[] NAMING THE ACTS",
    "kind": null,
    "section": "S39.2",
    "title": "a contest Event names the act that caused it",
@@ -12362,6 +12459,24 @@
   },
   {
    "kind": "UNSPECIFIED",
+   "what": "verb 'leverage' is on no row of the verb table",
+   "where": "S27/E2",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+   "case": "probe:P36",
+   "expected": false
+  },
+  {
+   "kind": "UNSPECIFIED",
+   "what": "verb 'do' is on no row of the verb table",
+   "where": "S27/E2",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'do' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
+   "case": "probe:P30",
+   "expected": false
+  },
+  {
+   "kind": "UNSPECIFIED",
    "what": "a banded scalar on Person",
    "where": "S12",
    "needs": "the S12.1 verb gate is defined ONLY over a Site's `condition`",
@@ -12398,11 +12513,29 @@
   },
   {
    "kind": "UNSPECIFIED",
+   "what": "verb 'report_truthfully' is on no row of the verb table",
+   "where": "S27/E2",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+   "case": "probe:P31",
+   "expected": false
+  },
+  {
+   "kind": "UNSPECIFIED",
    "what": "act cost beyond budget consumption",
    "where": "S26.3",
    "needs": "a cost model; the budget is a FLAT COUNT of acts",
    "law": "S26.3 -- 'a petition consumes budget LIKE ANY ACT, AND THAT IS THE WHOLE OF THE PRICING'. There is no per-act cost scalar anywhere in Part II, so a cheap act and a ruinous one cost a character the same",
    "case": "probe:P33",
+   "expected": false
+  },
+  {
+   "kind": "UNSPECIFIED",
+   "what": "verb 'v4' is on no row of the verb table",
+   "where": "S27/E2",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+   "case": "probe:P2",
    "expected": false
   },
   {
@@ -12421,6 +12554,24 @@
    "needs": "the fault roster, and a rule by which a prior Event or Record strengthens a present argument",
    "law": "T7 says 'the argument layer resolves BY NAMED FAULT, not by a persuasion threshold' -- and the roster of faults is nowhere in Part II. The prior ruling EXISTS as an Event in the log and a person may hold a Claim about it, but no signature relates a cited precedent to a present contest, and S39.4's ladder reads off a MARGIN whose model is also unspecified",
    "case": "probe:P41",
+   "expected": false
+  },
+  {
+   "kind": "UNSPECIFIED",
+   "what": "verb 'take_seat' is on no row of the verb table",
+   "where": "S27/E2",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'take_seat' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
+   "case": "probe:P8",
+   "expected": false
+  },
+  {
+   "kind": "UNSPECIFIED",
+   "what": "verb 'raid' is on no row of the verb table",
+   "where": "S27/E2",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'raid' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
+   "case": "probe:F17",
    "expected": false
   },
   {
@@ -12496,6 +12647,15 @@
    "expected": false
   },
   {
+   "kind": "UNSPECIFIED",
+   "what": "verb 'refuse' is on no row of the verb table",
+   "where": "S27/E2",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'refuse' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
+   "case": "probe:P9",
+   "expected": false
+  },
+  {
    "kind": "NO-PRODUCER",
    "what": "a GM, referee or adjudicator",
    "where": "S1",
@@ -12511,6 +12671,24 @@
    "needs": "an author -- a nameable act that wound it, so it can be bribed, delayed, burned, or killed",
    "law": "S25.1 -- THE THREE LICENSED CLOCKS ARE EXHAUSTIVE: ['matter', 'bodies', 'the confidence of a memory']. Nobody wound any of the three and YOU CANNOT BRIBE SILT. EVERYTHING OUTSIDE THIS LIST NEEDS AN AUTHOR (L5's second paragraph). A quantity that advances on its own with no author is A SHADOW ACTOR -- unbuyable, undelayable, unkillable -- exactly the actor L1 forbids, arriving through a side door. S13.1 is the worked case: an act-DECLARED term does the same job lawfully AND gives the arc handles (bribe the clerk who set the term, burn the record that carries it, kill the man who must renew it)",
    "case": "probe:W13",
+   "expected": false
+  },
+  {
+   "kind": "UNSPECIFIED",
+   "what": "verb 'purge' is on no row of the verb table",
+   "where": "S27/E2",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+   "case": "probe:P37",
+   "expected": false
+  },
+  {
+   "kind": "UNSPECIFIED",
+   "what": "verb 'v0' is on no row of the verb table",
+   "where": "S27/E2",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+   "case": "probe:A31",
    "expected": false
   },
   {
@@ -12559,11 +12737,11 @@
    "expected": false
   },
   {
-   "kind": "COLLISION",
-   "what": "the person's ORDER ['spend_treasury', 'buy_grain', 'bribe'] vs the fold's order ['bribe', 'buy_grain', 'spend_treasury']",
-   "where": "S26.3 / S32",
-   "needs": "a ruling on whether a person's act list resolves in the order they chose",
-   "law": "S26.3 says 'THE LIST IS ORDERED, so what he did first is legible when a season's later acts are foreclosed by its earlier ones'. S32 rest 3 says the act array is CANONICALIZED BY A CONTENT-DERIVED KEY over ONE GLOBAL ARRAY, sorted 'never by completion order'. A PER-PERSON INTENT ORDER AND A GLOBAL CONTENT ORDER ARE DIFFERENT ORDERS, and the chain specifies BOTH. This is what makes F17's authorization race real",
+   "kind": "UNSPECIFIED",
+   "what": "verb 'buy_grain' is on no row of the verb table",
+   "where": "S27/E2",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
    "case": "probe:A36",
    "expected": false
   },
@@ -12667,6 +12845,24 @@
    "expected": false
   },
   {
+   "kind": "UNSPECIFIED",
+   "what": "'carry' has a precondition the fold cannot evaluate: 'a Petition exists; costs budget like any act'",
+   "where": "E2",
+   "needs": "a predicate in REQUIRES_PREDICATES, or a `requires:` the table states structurally rather than in prose",
+   "law": "\u00a7E2 -- `requires` is checked IN THE FOLD. Stated as prose it is the same defect `resolve` had, one column along: a rule the code cannot read",
+   "case": "probe:F7",
+   "expected": false
+  },
+  {
+   "kind": "UNSPECIFIED",
+   "what": "verb 'petition2' is on no row of the verb table",
+   "where": "S27/E2",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+   "case": "probe:F9",
+   "expected": false
+  },
+  {
    "kind": "FORBIDDEN",
    "what": "reading faction strength from inside choose()",
    "where": "S38",
@@ -12718,6 +12914,15 @@
    "needs": "causes: [ROOT] for an antecedent-free emission",
    "law": "S19.4 -- causes[] is REQUIRED AND NON-EMPTY; [ROOT] makes the empty list unrepresentable rather than merely discouraged",
    "case": "probe:A1",
+   "expected": false
+  },
+  {
+   "kind": "UNSPECIFIED",
+   "what": "verb 'do' is on no row of the verb table",
+   "where": "S27/E2",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'do' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
+   "case": "probe:A4",
    "expected": false
   },
   {
@@ -12820,6 +13025,24 @@
    "expected": false
   },
   {
+   "kind": "UNSPECIFIED",
+   "what": "verb 'act' is on no row of the verb table",
+   "where": "S27/E2",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'act' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
+   "case": "probe:A22",
+   "expected": false
+  },
+  {
+   "kind": "UNSPECIFIED",
+   "what": "verb 'do' is on no row of the verb table",
+   "where": "S27/E2",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'do' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
+   "case": "probe:A28",
+   "expected": false
+  },
+  {
    "kind": "FORBIDDEN",
    "what": "an Event in log A naming an Event in log B as its cause",
    "where": "S19.5",
@@ -12884,15 +13107,15 @@
   }
  ],
  "_trace_counts": {
-  "STEP": 2297,
-  "BARRIER": 769,
-  "DECISION": 785,
-  "WRITE": 706,
-  "QUERY": 3718,
-  "ACT": 81,
-  "EVENT": 58,
-  "CLAIM": 290,
-  "GAP": 59
+  "STEP": 2090,
+  "BARRIER": 710,
+  "DECISION": 712,
+  "WRITE": 584,
+  "QUERY": 3372,
+  "ACT": 54,
+  "EVENT": 36,
+  "CLAIM": 181,
+  "GAP": 73
  },
  "_corpus_defects": [
   "ARC1.yaml: committed inside a markdown fence with transcript preamble",

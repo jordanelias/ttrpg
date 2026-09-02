@@ -1269,12 +1269,159 @@ class ContestError:
         return f"ContestError({self.reason!r}, depth={self.depth}, max_depth={self.max_depth})"
 
 
+
+# ===========================================================================
+# THE FOLD -- W3. ONE `resolve`, READING `verb_table.yaml`.
+#
+# What was here: `resolve(acts, effect, ...)`, where `effect` was a CALLER-SUPPLIED LAMBDA that
+# inspected `a.verb` and returned Events. Every probe wrote its own. That is defect `D20` and it
+# is §27.2's "no second resolver" arriving as a PARAMETER rather than as a function -- a resolver
+# per caller, each free to disagree with the others about what a verb does.
+#
+# THE FOLD, per §E2: eligibility -> `requires` AGAINST THE WORLD THE PREDECESSORS LEFT -> each
+# `writes:` through `write()` -> `emits` or `emits_on_refusal`.
+# ===========================================================================
+
+class Ineligible(ShapeGap):
+    """The actor is not eligible for this verb. Not a gap in the design -- a fact about the actor
+    -- so it EMITS rather than raising, per §E2's 'failure emits, never raises'."""
+    kind = "INELIGIBLE"
+
+
+# A `requires:` predicate. The table states preconditions in PROSE, which the fold cannot read --
+# the same defect `resolve` had, one column along. A verb with a prose precondition and no
+# predicate here REFUSES, naming what is missing, rather than silently succeeding.
+REQUIRES_PREDICATES: dict = {}
+
+
+def requires_predicate(verb: str):
+    def deco(fn):
+        REQUIRES_PREDICATES[verb] = fn
+        return fn
+    return deco
+
+
+@requires_predicate("transfer")
+def _req_transfer(w: "World", a: "Act") -> bool:
+    """#353 §54 item 7: `stores(hearth(giver), kind) >= amount`. THIS IS THE SCARCITY PREDICATE --
+    §27.1's whole argument rests on it: the second claimant on an emptied granary gets a DIFFERENT
+    Event, and it falls out of the fold because each act sees the world its predecessors left."""
+    give = (a.payload or {}) if isinstance(a.payload, dict) else {}
+    rung = w.rungs.get(give.get("from", ""))
+    kind, amount = give.get("kind", "grain"), give.get("amount", 1)
+    return bool(rung and (rung.stores or {}).get(kind, 0) >= amount)
+
+
+@requires_predicate("move")
+def _req_move(w: "World", a: "Act") -> bool:
+    """§E3: *a `contain` path exists*. #353 §15 types `contain : Rung -> Rung` with ONE parent, so
+    a path exists when the mover's own rung is on the containment ladder. The DESTINATION is the
+    act's payload where it names one; where it does not, the ladder's existence is what the fold
+    can check without inventing a route."""
+    here = w.rungs.get(a.actor)
+    if here is None:
+        return False
+    return any(t.subject == a.actor or t.subject == here.id
+               for t in w.tenures if t.kind == "contain") or here.kind == "person"
+
+
+@requires_predicate("work")
+def _req_work(w: "World", a: "Act") -> bool:
+    """§12.1: `condition >= floor(verb)`. The floors are `H-08` and come from Fixtures, swept."""
+    for ch in a.changes:
+        site = w.sites.get(ch.subject)
+        if site is not None:
+            return site.condition >= 0        # the per-verb floor is H-08; presence of the site
+    return True                               # is what this fold can check without inventing one
+
+
+# Verbs the probe corpus uses that #353 does not name AS A VERB — checked, not assumed: the
+# strings `take_seat`, `press_claim`, `raid` and `confer_authority` appear ZERO times in its 2,067
+# lines, and `fight`/`refuse`/`do`/`act` appear only as ordinary English. They are the caller's
+# inventions and the fold says so, rather than charging them to the design. Register row H-64.
+INVENTED_VERBS = frozenset(  # roster-exempt: not a game definition — the OPPOSITE, a list of
+                             # things the game does not define, kept so the fold can attribute a
+                             # gap correctly. It SHRINKS as probes are re-authored.
+    ["take_seat", "press_claim", "raid", "confer_authority", "fight", "refuse", "do", "act"])
+
+NO_PRECONDITION = ("—", "-", "")
+
+
+# ---------------------------------------------------------------------------
+# THE EFFECTS. One per verb, OWNED BY THE RESOLVER.
+#
+# ⚠ PART E's `writes:` COLUMN NAMES THE CELL AND NEVER THE VALUE. `transfer` writes
+# `(Rung, stores)` -- it does not say BY HOW MUCH, or that the giver's store goes DOWN. Without
+# that the fold checks a precondition, emits, and changes nothing, so `transfer` twice from a
+# one-unit larder succeeds twice: the scarcity §27.1 rests on never happens.
+#
+# THE DISTINCTION FROM THE `effect` PARAMETER W3 REMOVED IS THE WHOLE POINT, and it is §27.2's.
+# A CALLER-supplied lambda is a second resolver: every caller may disagree about what a verb does,
+# and each probe did. A VERB-KEYED effect registered here is the resolver's BODY -- one
+# implementation, the same for every caller, and a verb with a `writes:` and no effect REFUSES
+# rather than silently writing nothing.
+#
+# This gap is register row H-63.
+# ---------------------------------------------------------------------------
+EFFECTS: dict = {}
+
+
+def effect_for(verb: str):
+    def deco(fn):
+        EFFECTS[verb] = fn
+        return fn
+    return deco
+
+
+@effect_for("move")
+def _eff_move(w: "World", a: "Act") -> None:
+    """§D4 / #353 §15.1: travel is a TENURE ALTER, owned by the traveller as the Tenure's subject.
+    The old leg closes and a new one opens; the destination rides on the payload where the act
+    names one. ⚠ This is `H-63`: Part E's `writes:` names the three cells and never the values, so
+    what a `move` DOES is stated here rather than in the table — one implementation owned by the
+    resolver, which is the distinction §27.2 draws against a caller-supplied lambda."""
+    dest = (a.payload or {}).get("to") if isinstance(a.payload, dict) else None
+    for t in w.tenures:
+        if t.subject == a.actor and t.kind == "contain" and t.until is None:
+            t.until = w.tick
+    if dest:
+        w.tenures.append(Tenure(H(w.world_seed, w.tick, a.actor, f"leg:{a.id}"),
+                                a.actor, dest, "contain", since=w.tick))
+
+
+@effect_for("work")
+def _eff_work(w: "World", a: "Act") -> None:
+    """`work` alters `(Site, condition)` by the act's declared delta. The DELTA IS NOT APPLIED
+    HERE -- §27.3 sums every delta across the fold and clamps ONCE, so applying it per act would
+    make the clamp arrival-order dependent, which §32 forbids. The write goes through the gate so
+    the class and Partition are checked; the value lands in the accumulator."""
+    return None
+
+
+@effect_for("transfer")
+def _eff_transfer(w: "World", a: "Act") -> None:
+    """§54 item 7's mirror: the giver's store goes DOWN by the amount. #353 states the
+    PRECONDITION (`stores(...) >= amount`) and this is its only consistent effect -- a
+    precondition on a quantity that the act never spends would never bind twice."""
+    give = (a.payload or {}) if isinstance(a.payload, dict) else {}
+    rung = w.rungs.get(give.get("from", ""))
+    kind, amount = give.get("kind", "grain"), give.get("amount", 1)
+    if rung is not None:
+        rung.stores = dict(rung.stores or {})
+        rung.stores[kind] = rung.stores.get(kind, 0) - amount
+
+
 class SeasonDriver:
     """S23. Six steps, four barriers. DELIBERATE is a MAP, not a barrier; CENSUS SHARES
     WITNESS'S JOIN. S40.3/S44.3: NO CONTAINER GETS A CLOCK -- there is exactly one `season()`."""
 
     def __init__(self, w: World):
         self.w = w
+        # OBSERVATION ONLY, and the distinction matters. Six probes used the removed `effect` hook
+        # to record which acts reached RESOLVE and in what order. That is a thing to WATCH, not a
+        # thing to DECIDE, and giving it back as a resolver parameter is how the second resolver
+        # returns. This list is appended by the fold and read by nobody inside it.
+        self.resolved: list[Act] = []
 
     # -- CALENDAR -- barrier 1 -- DECIDES NOTHING (S24) ----------------------
     def calendar(self) -> None:
@@ -1407,7 +1554,105 @@ class SeasonDriver:
         return acts
 
     # -- RESOLVE -- barrier 3 -- the ONLY writing step for acts (S27) -------
-    def resolve(self, acts: list[Act], effect: Callable[[World, Act], list[Event]],
+    def _eligible(self, w: "World", a: Act, row: "VerbRow") -> bool:
+        """§E4: eligibility admits `own`, `remit:<act>`, `hold:<object>`, `presence:<rung>` -- and
+        NEVER `capability`, which the table loader already refuses. The kinds are a DISJUNCTION:
+        `transfer` is eligible by `own` OR `hold:<store>`."""
+        for alt in row.eligibility:
+            kind, _, arg = alt.partition(":")
+            kind, arg = kind.strip(), arg.strip().strip("<>")
+            if kind == "own":
+                return True                       # every person may attempt their own acts
+            if kind == "remit":
+                for t in w.tenures:
+                    if t.subject == a.actor and t.kind == "hold" and t.until is None:
+                        off = w.offices.get(t.object)
+                        if off and arg in off.remit_acts:
+                            return True
+            elif kind == "hold":
+                if any(t.subject == a.actor and t.kind == "hold" and t.until is None
+                       for t in w.tenures):
+                    return True
+            elif kind == "presence":
+                return True                       # the presence index is H-33; not resolvable here
+        return False
+
+    def _fold(self, w: "World", a: Act) -> list[Event]:
+        """ONE act through the table. This is what `effect` used to be, and the difference is
+        that it is the SAME code for every act and every caller."""
+        self.resolved.append(a)      # observation only -- decides nothing, see `resolved`
+        row = VERB_TABLE.get(a.verb)
+        if row is None:
+            # WHOSE GAP IS IT? Two different facts wear the same shape, and reporting them
+            # alike is the mis-attribution G4 forbids: a verb #353 NAMES and Part E omits is a
+            # HOLE IN THE SPECIFICATION (`utter`, `establish`, `exchange`, `succeed` were four,
+            # and W3 filled them); a verb nobody names is THE CALLER'S INVENTION. The instrument
+            # must not charge its own inventions to the design.
+            named = a.verb in INVENTED_VERBS
+            raise Unspecified(
+                f"verb {a.verb!r} is on no row of the verb table", "S27/E2",
+                needs=("a row in verb_table.yaml, ruled before it is added" if not named else
+                       f"NOTHING FROM THE DESIGN -- #353 does not name {a.verb!r} as a verb. "
+                       "This is the CALLER'S invention and the gap is the caller's"),
+                law="§E2 -- the resolver's body IS the table. A verb the table does not carry has "
+                    "no semantics, and inventing them at the call site is the second resolver "
+                    "§27.2 forbids" + ("" if not named else
+                    ". ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)"))
+
+        def ev(kinds, causes, changes=None):
+            return [Event(H(w.world_seed, w.tick, a.actor, f"{k}:{a.id}"),
+                          k, a.actor, list(changes or []), list(causes), w.tick)
+                    for k in kinds]
+
+        if not self._eligible(w, a, row):
+            TRACE.decision(f"{a.actor} is not eligible for {a.verb}", "E4",
+                           chose="emit the refusal", alternatives=["raise", "silently drop"])
+            return ev(row.emits_on_refusal or ("act.ineligible",), [ROOT])
+
+        # `requires`, AGAINST THE WORLD THE PREDECESSORS LEFT -- which is the whole of §27.1.
+        if row.requires.strip() not in NO_PRECONDITION:
+            pred = REQUIRES_PREDICATES.get(a.verb)
+            if pred is None:
+                raise Unspecified(
+                    f"{a.verb!r} has a precondition the fold cannot evaluate: {row.requires!r}",
+                    "E2",
+                    needs="a predicate in REQUIRES_PREDICATES, or a `requires:` the table states "
+                          "structurally rather than in prose",
+                    law="§E2 -- `requires` is checked IN THE FOLD. Stated as prose it is the same "
+                        "defect `resolve` had, one column along: a rule the code cannot read")
+            if not pred(w, a):
+                TRACE.decision(f"{a.verb} by {a.actor}: precondition unmet", "E2/S27.1",
+                               chose="emit the refusal -- scarcity falls out of the fold",
+                               alternatives=["raise (no Event, no witness, no arc)"])
+                return ev(row.emits_on_refusal or ("act.refused",), [ROOT])
+
+        # Each `writes:` through the gate. The gate is the only writer; the fold never assigns.
+        if row.writes:
+            eff = EFFECTS.get(a.verb)
+            if eff is None:
+                raise Unspecified(
+                    f"{a.verb!r} writes {list(row.writes)} and Part E does not say WHAT VALUE",
+                    "E2/E3",
+                    needs="an entry in EFFECTS, or a `writes:` column that carries the value",
+                    law="§E3's `writes:` names the CELL and never the VALUE. A fold that writes "
+                        "the cell without the value changes nothing, so a precondition on a "
+                        "quantity the act never spends cannot bind twice -- and §27.1's scarcity "
+                        "stops happening. Register row H-63")
+            for pair in row.writes:
+                kind, _, fld = pair.partition(".")
+                self._apply_write(w, a, kind, fld, eff)
+        # The act's proposed changes ride on the success Events -- §27.3's accumulator sums
+        # them across the fold and clamps ONCE, which is order-independent as a fact.
+        return ev(row.emits, [ROOT], a.changes)
+
+    def _apply_write(self, w: "World", a: Act, kind: str, fld: str, eff) -> None:
+        """The fold's write. It carries no per-verb behaviour -- the effect of a write is the
+        matrix row's business, and what a verb writes is the verb table's."""
+        mrow = matrix_row(kind, fld)
+        w.write(fld, mrow.write_class(Step.RESOLVE), lambda: eff(w, a),
+                record_kind=kind, fieldname=fld, driver="Act")
+
+    def resolve(self, acts: list[Act],
                 contest_max_depth: Optional[int] = None) -> list[Event]:
         w = self.w
         w.step = Step.RESOLVE
@@ -1457,7 +1702,7 @@ class SeasonDriver:
                 continue
             # S27.1: CONTENTION IS AN ORDERED FOLD. Each act sees the world its predecessors
             # left. SEQUENCE, NOT SIMULTANEITY -- and NO ACT NEEDS TO KNOW ANOTHER EXISTED.
-            produced = effect(w, a)
+            produced = self._fold(w, a)
             for ch in (c for e in produced for c in e.changes):
                 if ch.field and isinstance(ch.delta, int):
                     pending.setdefault(f"{ch.subject}|{ch.field}", []).append(ch.delta)
@@ -1567,7 +1812,7 @@ class SeasonDriver:
         TRACE.step("CENSUS", "leave")
 
     # -- one season --------------------------------------------------------
-    def season(self, choose, effect, question, subsistence,
+    def season(self, choose, question, subsistence,
                actorless: Optional[list[Event]] = None,
                contest_max_depth: Optional[int] = None) -> dict:
         w = self.w
@@ -1575,7 +1820,7 @@ class SeasonDriver:
         self.calendar()
         matter_events = self.matter(actorless)
         acts = self.deliberate(choose, question, subsistence)
-        events = self.resolve(acts, effect, contest_max_depth)
+        events = self.resolve(acts, contest_max_depth)
         for e in events:
             w.log.append(e)                  # S19.5 -- ONE LOG, NOT TWO
             TRACE.event(e.id, e.kind, e.causes)

@@ -111,13 +111,13 @@ not the shape.
 | **[core]** a military commander must be able to be placed in a position where his own units' mechanical state makes his publicly-stated justification for continued deployment factually true and self-se | — | UNMAPPED | — |
 | a third faction with no stake in the original crisis must be able to gain standing by mediating it, entirely as a side effect of a crisis it did nothing to cause or prevent | — | UNMAPPED | — |
 
-## ARC-08 — What the Guilds Know  ·  **NOT-ASSESSED**
-*faction · 7 rows, 2 core · blockers: none*
+## ARC-08 — What the Guilds Know  ·  **BLOCKED**
+*faction · 7 rows, 2 core · blockers: P36*
 *ends when:* when the information-holding faction chooses how to dispose of its accumulated intelligence -- sell it to one rival, sell it to another, or expose it publicly -- a single named choice point reached only after an initiating faction has opened contact; there is no threshold or clock forcing this choice beyond that opening move.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** the faction holding valuable accumulated information must be able to face a genuine three-way choice -- sell to one rival, sell to a different rival, or expose it publicly -- where each opti | `P36` | PASS | S17 |
+| **[core]** the faction holding valuable accumulated information must be able to face a genuine three-way choice -- sell to one rival, sell to a different rival, or expose it publicly -- where each opti | `P36` | **UNSPECIFIED** | S27/E2 |
 | a faction's decision to conceal information in exchange for concessions must be able to leave a THIRD faction permanently uninformed, with no passive mechanism that eventually surfaces the a | `F2` | PASS | S54 item 20 |
 | **[core]** a faction must be able to possess an information/intelligence capability that arises purely as a byproduct of an unrelated core activity, with no dedicated intelligence stat or apparatus mod | — | UNMAPPED | — |
 | one institution must be able to detect a pattern in a rival institution's own internal operational rhythm purely by correlating publicly observable outcomes over time, without infiltrating o | — | UNMAPPED | — |
@@ -196,14 +196,14 @@ not the shape.
 | an event resolving a multi-season accumulation must be able to fire only once per entire campaign, never repeating even if its conditions recur later | — | UNMAPPED | — |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## ARC-14 — The Purple Shroud  ·  **DEGRADED**
-*realm · 7 rows, 3 core · blockers: none*
+## ARC-14 — The Purple Shroud  ·  **BLOCKED**
+*realm · 7 rows, 3 core · blockers: P37*
 *ends when:* when the crisis is resolved by one of four named mechanisms -- direct intervention at a fixed cost, military suppression, mediated negotiation (which adds a season's delay), or a negotiated resolution scaled to the crisis's severity -- each of which forces a further, orthogonal social-consequence sub-resolution so that no path is consequence-free. If an NPC rather than a player controls the deciding faction, that 'choice' is a deterministic stat-lookup, not a free decision.
 
 | need | probe | verdict | § |
 |---|---|---|---|
 | **[core]** a public-order crisis must be able to require every resolution path to also force a SEPARATE, orthogonal political consequence bundled into it, such that there is no way to resolve the immed | `P18` | PASS | S3-L5 |
-| **[core]** a decision-maker's response to an identical offer must be able to be entirely determined by a single threshold stat with no free agency involved, when that decision-maker is not player-contr | `P37` | PASS | S3-L1 |
+| **[core]** a decision-maker's response to an identical offer must be able to be entirely determined by a single threshold stat with no free agency involved, when that decision-maker is not player-contr | `P37` | **UNSPECIFIED** | S27/E2 |
 | **[core]** a marginalized population's spontaneous show of solidarity during an unrelated crisis must be able to convert a single-axis crisis into a two-axis crisis that cannot be resolved along only o | `W9` | PASS | S10.3 |
 | a faction attempting to document a crisis in real time must be able to permanently preserve testimony from a marginalized group as a persistent record with continuing effect, distinct from a | `P26` | **UNSPECIFIED** | S22.4 |
 | an offer to resolve a crisis must be able to carry its true cost hidden or deferred from the receiving party at the moment of choice, revealed only afterward | — | UNMAPPED | — |
@@ -237,16 +237,16 @@ not the shape.
 | **[core]** removing one unit of a spread-out presence must be able to itself generate a persistent legitimacy cost against the remover, in every instance, for as long as the underlying dynamic is activ | — | UNMAPPED | — |
 | capturing a movement's charismatic leader must be able to trigger consequences that scale with how much of her prior presence survives the capture, rather than a flat, fixed consequence | — | UNMAPPED | — |
 
-## ARC-17 — The Sinigaglia Dinner  ·  **PLAYABLE**
-*faction · 7 rows, 3 core · blockers: none*
+## ARC-17 — The Sinigaglia Dinner  ·  **BLOCKED**
+*faction · 7 rows, 3 core · blockers: P37*
 *ends when:* when the subordinate's fate resolves definitively -- through sustained compliance (an ongoing check that could still fail in a later season), a failed compliance check triggering outright defection, or, if the superior chooses confrontation/elimination, the subordinate's removal triggering automatic release of the mutually-destructive evidence. The superior's initial response is not fully free -- it is determined by a threshold lookup on his own internal state -- so the actual deciding force at that step is a stat, not a deliberation.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** a superior's response to detecting a subordinate's disloyalty must be able to be fully determined by the superior's own current internal state via a fixed lookup, removing free choice from t | `P37` | PASS | S3-L1 |
+| **[core]** a superior's response to detecting a subordinate's disloyalty must be able to be fully determined by the superior's own current internal state via a fixed lookup, removing free choice from t | `P37` | **UNSPECIFIED** | S27/E2 |
 | **[core]** two parties in an adversarial relationship must be able to each hold damaging evidence against the other simultaneously, such that neither can act against the other without also being destro | `P22` | PASS | S13 |
 | **[core]** a subordinate under coercive tolerance must be able to face a RECURRING risk each season of involuntarily failing to comply, regardless of their own intentions, so that even a subordinate wh | `P18` | PASS | S3-L5 |
-| a defecting subordinate must be able to carry unreleased leverage with them into a new affiliation, handing that new faction a one-time strategic option they did not previously have | `P36` | PASS | S17 |
+| a defecting subordinate must be able to carry unreleased leverage with them into a new affiliation, handing that new faction a one-time strategic option they did not previously have | `P36` | **UNSPECIFIED** | S27/E2 |
 | detecting a subordinate's pattern of behavioral hesitation must be able to require repeated, unprompted checks over MULTIPLE seasons rather than a single roll, so that success is a matter of | — | UNMAPPED | — |
 | damaging evidence held against one party must be able to carry a SECONDARY payload relevant to a separate, larger mystery, activated only under specific conditions -- this cross-arc linkage  | — | UNMAPPED | — |
 | a case-handler assigned to investigate released evidence must be able to introduce a procedural delay that specifically benefits the ORIGINAL holder of that evidence in destroying it, even w | — | UNMAPPED | — |
@@ -306,12 +306,12 @@ not the shape.
 | a failing outcome must visibly change how a watching third-party actor advances a separate, private running tally toward a future intervention | — | UNMAPPED | — |
 
 ## ARC-R19 — The Accounting Sequence  ·  **BLOCKED**
-*realm · 6 rows, 5 core · blockers: F16b*
+*realm · 6 rows, 5 core · blockers: A31, F16b*
 *ends when:* never, as an ongoing structural mechanism; as a focal arc it concludes at the accounting where two simultaneously-threatened factions' checks resolve and the triage choice takes effect
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** gains or losses to a single quantity from any number of separate actions in one period must be bounded to a fixed maximum | `A31` | PASS | S42.2.1 |
+| **[core]** gains or losses to a single quantity from any number of separate actions in one period must be bounded to a fixed maximum | `A31` | **UNSPECIFIED** | S27/E2 |
 | **[core]** helping one at-risk holder in a period must be able to consume the same limited capacity that would otherwise have protected a different, simultaneously at-risk holder | `F10` | PASS | S54.1 |
 | **[core]** an action taken by a player at a small, personal scale must be able to silently register as also affecting a faction-scale quantity, invisible until the periodic accounting is read | `F16b` | **FORBIDDEN** | S10.1 |
 | **[core]** periodic resolution of pending effects must happen in a fixed, non-negotiable phase order, such that an effect resolved in an early phase can prevent a check that would otherwise fire later  | — | UNMAPPED | — |
@@ -404,7 +404,7 @@ not the shape.
 |---|---|---|---|
 | **[core]** an NPC's own repeated, self-directed institutional actions must silently accumulate a hidden personal quantity that the character himself is unaware of | `P17` | **UNSPECIFIED** | S22.4 |
 | **[core]** crossing a threshold on that hidden quantity must trigger a one-time check whose two outcomes are qualitatively different: a true capability unlocked, versus a false self-generated belief ac | `P4` | PASS | S3-L2 |
-| a second character who already possesses the same capability must be able to independently perceive the first character's growth and choose whether to disclose it, driven by a personal confl | `P31` | PASS | S9 |
+| a second character who already possesses the same capability must be able to independently perceive the first character's growth and choose whether to disclose it, driven by a personal confl | `P31` | **UNSPECIFIED** | S27/E2 |
 | **[core]** the failure branch must produce behavior that is objectively counter-productive to the character's own interests while looking, to him, like the correct reading of his experience -- and must | — | UNMAPPED | — |
 | the newly-unlocked capability must retroactively change how the character interprets and leverages his existing political relationships and leverage, not simply add a new resource | — | UNMAPPED | — |
 | an institution that would normally react to this kind of capability must be able to open a formal investigation based on partial/indirect evidence before the character himself understands wh | — | UNMAPPED | — |
@@ -536,7 +536,7 @@ not the shape.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| a rare individual who crosses the perceptual threshold and encounters the hidden property incidentally, while doing an unrelated job, must have a personal behavioral reason to avoid reportin | `P31` | PASS | S9 |
+| a rare individual who crosses the perceptual threshold and encounters the hidden property incidentally, while doing an unrelated job, must have a personal behavioral reason to avoid reportin | `P31` | **UNSPECIFIED** | S27/E2 |
 | **[core]** a legitimate, ordinary supply chain must carry a good whose hazardous property is invisible to everyone below a specific rare perceptual threshold, such that its builders and vendors are nei | — | UNMAPPED | — |
 | that accumulating self-protective cost must itself be observable from outside by the discoverer's own chain of command as an unexplained pattern, eventually forcing an internal review indepe | — | UNMAPPED | — |
 | **[core]** a separate investigator working an unrelated case must be able to cross-reference unconnected case files and stumble onto the same supply chain from a different angle, using only legally-vis | — | UNMAPPED | — |
@@ -562,8 +562,8 @@ not the shape.
 | need | probe | verdict | § |
 |---|---|---|---|
 | **[core]** a leader's repeated, intentional use of a specific asset must accumulate a hidden personal quantity in him at a fixed small increment per use, undetectable to him through his own available s | `P17` | **UNSPECIFIED** | S22.4 |
-| a close subordinate who already has the relevant perceptual capability must be able to observe the leader's hidden growth directly, with her choice to disclose or withhold driven by a person | `P31` | PASS | S9 |
-| an external time-pressure event from a different arc must be able to force the leader into an immediate, non-deferrable choice between accelerating his risky capability-use or abandoning a s | `P36` | PASS | S17 |
+| a close subordinate who already has the relevant perceptual capability must be able to observe the leader's hidden growth directly, with her choice to disclose or withhold driven by a person | `P31` | **UNSPECIFIED** | S27/E2 |
+| an external time-pressure event from a different arc must be able to force the leader into an immediate, non-deferrable choice between accelerating his risky capability-use or abandoning a s | `P36` | **UNSPECIFIED** | S27/E2 |
 | **[core]** that hidden quantity crossing a threshold must trigger a one-time check whose two outcomes (perceive the truth vs. destabilize without understanding it) leave the leader with qualitatively d | — | UNMAPPED | — |
 | an unrelated investigator working a structurally separate case must be able to intersect this hidden-growth track by physically tracing an unconnected supply chain to its source, detecting t | — | UNMAPPED | — |
 | if the leader begins using his emerging, still-unrecognized capability without guidance, a separate internal resource must begin depleting per use with no natural recovery available, eventua | — | UNMAPPED | — |
@@ -581,15 +581,15 @@ not the shape.
 | a single administrator's institutional loyalty must be determined by which faction has invested a specific social-validation behavior toward him over a long period, not by policy alignment,  | — | UNMAPPED | — |
 | the number of precursor crises that have actually fired by a given checkpoint must produce genuinely different, graduated severities of outcome, not a single all-or-nothing trigger | — | UNMAPPED | — |
 
-## ARC-41 — The Inquisitor's Unravelling  ·  **NOT-ASSESSED**
-*faction · 5 rows, 3 core · blockers: none*
+## ARC-41 — The Inquisitor's Unravelling  ·  **BLOCKED**
+*faction · 5 rows, 3 core · blockers: P36*
 *ends when:* the crisis resolves into defection, suppression, or institutional destruction -- a definite branch-dependent conclusion, feeding forward into other arcs
 
 | need | probe | verdict | § |
 |---|---|---|---|
 | **[core]** a hidden personal capability in a loyal enforcer must remain completely dormant until an unrelated, ambient environmental quality, degraded by the cumulative effect of several other storylin | `W4` | PASS | S25 |
 | the ambient quality's degraded band must specifically escalate its local effects in territories closer to a specific hazard-source, such that identical ambient conditions produce categorical | `W4` | PASS | S25 |
-| **[core]** a third party who can independently verify the enforcer's hidden condition must have a real choice between at least three distinct outcomes -- report to his institution, report to him direct | `P36` | PASS | S17 |
+| **[core]** a third party who can independently verify the enforcer's hidden condition must have a real choice between at least three distinct outcomes -- report to his institution, report to him direct | `P36` | **UNSPECIFIED** | S27/E2 |
 | **[core]** an enforcer's positive, valued professional trait (rigorous documentation) must, without any change in his behavior, become the specific mechanism constructing a damning case against himself | — | UNMAPPED | — |
 | withholding disclosure must not freeze the situation -- the enforcer's own unassisted, ongoing documentation must reach the same self-incriminating conclusion independently after a further d | — | UNMAPPED | — |
 
@@ -741,7 +741,7 @@ not the shape.
 |---|---|---|---|
 | **[core]** a faction's personal advancement/independence track must be able to carry a hidden side-effect that adds to a rival institution's separate advancing quantity, at a rate that itself increases | `F16` | PASS | S10 |
 | an actor must be able to use the same category of counter-action against a quantity to which their own advancement track is itself a contributing source, effectively offsetting a side-effect | `P17` | **UNSPECIFIED** | S22.4 |
-| the same shared, single-per-period contested action slot used elsewhere for counter-acting the target quantity must be available to this faction too, and its use must exclude other factions  | `A36` | **COLLISION** | S26.3 / S32 |
+| the same shared, single-per-period contested action slot used elsewhere for counter-acting the target quantity must be available to this faction too, and its use must exclude other factions  | `A36` | **UNSPECIFIED** | S27/E2 |
 | that side-effect's contribution must be able to combine additively with the target quantity's other simultaneous sources of increase (an ongoing passive gain and an occasional faction-driven | — | UNMAPPED | — |
 | **[core]** the side-effect's existence must be discoverable only through a specific investigative action or through an NPC choosing to disclose it, and must not be visible by default | — | UNMAPPED | — |
 
@@ -790,7 +790,7 @@ not the shape.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| a faction's profile of a target, once built, must be able to shape that faction's subsequent choices toward the target (offers, refusals, timing) without the target or their allies being tol | `P31` | PASS | S9 |
+| a faction's profile of a target, once built, must be able to shape that faction's subsequent choices toward the target (offers, refusals, timing) without the target or their allies being tol | `P31` | **UNSPECIFIED** | S27/E2 |
 | **[core]** a character's ongoing use of a personal ability must be able to leave passive traces perceivable by unrelated non-player observers scattered across multiple locations, each independently sen | — | UNMAPPED | — |
 | **[core]** an institution with a distributed network of observers must be able to aggregate many independent, individually-meaningless reports into a single actionable pattern about one specific indivi | — | UNMAPPED | — |
 | **[core]** an actor must be able to spend a specific investigative action, resolved against a fixed difficulty, that on success reveals one hidden fact about a target's affiliation-relevant nature with | — | UNMAPPED | — |
@@ -1224,7 +1224,7 @@ not the shape.
 | need | probe | verdict | § |
 |---|---|---|---|
 | **[core]** Multiple independent actors must be able to jointly target the same single operation, with exactly ONE of them programmatically DESIGNATED as the operation's anchor via an explicit selection | `P38` | **NO-PRODUCER** | S1 |
-| Any of the consequences that ordinarily fire once per solo operation must be able to SCALE their magnitude or count with the NUMBER of participants involved in a collective attempt, rather t | `A31` | PASS | S42.2.1 |
+| Any of the consequences that ordinarily fire once per solo operation must be able to SCALE their magnitude or count with the NUMBER of participants involved in a collective attempt, rather t | `A31` | **UNSPECIFIED** | S27/E2 |
 | **[core]** All designated participants must roll the SAME gating step SIMULTANEOUSLY, with the ANCHOR's own individual result determining whether the COLLECTIVE structure forms at all, independent of h | — | UNMAPPED | — |
 | If the anchor's roll fails, participants who individually succeeded on the SAME roll must still receive THEIR OWN individual outcome and consequences as if they had acted alone, rather than  | — | UNMAPPED | — |
 | **[core]** Each helper's contribution to the anchor's pool must be computed as a FLOOR-DIVISION of one of the helper's own stats (that stat divided by 2, rounded down) added as bonus dice to the anchor | — | UNMAPPED | — |

@@ -81,7 +81,7 @@ verbs:
     eligibility: ["remit:confer + the office's conferral basis"]
     requires:    "1-per-object: no live hold on the object, or the holder-Proposition has zero live commit (§54 it. 20)"
     writes:      ["Tenure.until", "Tenure.since"]
-    emits:       ["tenure.opened, tenure.closed"]
+    emits:       ["tenure.opened", "tenure.closed"]
     emits_on_refusal: ["confer.refused"]
     grade:       "ruled"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
@@ -339,7 +339,7 @@ verbs:
     requires:    "stores(hearth(giver), kind) >= amount (§54 it. 7)"
     writes:      ["Rung.stores"]
     emits:       ["transfer.made"]
-    emits_on_refusal: ["transfer.refused — §27.1's scarcity"]
+    emits_on_refusal: ["transfer.refused"]
     grade:       "ruled"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "utter"
