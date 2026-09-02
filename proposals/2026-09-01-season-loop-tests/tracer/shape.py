@@ -189,6 +189,10 @@ DEFAULT_FIXTURES = Fixtures(
     view_k=12,
     # S22 assigns `wear per site kind` to params. NO in-chain table exists, so every kind the
     # instrument touches is declared here and an unregistered kind RAISES (see Fixtures.wear).
+    # roster-exempt: Fixtures keys. `Fixtures` IS the registry for numbers and raises on an
+    # unregistered kind, so the kinds are already declared data; splitting them into
+    # rosters.yaml would put one declaration in two files. ⚠ `site_kinds` belongs in
+    # rosters.yaml when W8 builds H-07's per-kind table, and not before.
     wear_per_season={"harbour": 10, "seam": 10, "body": 10},
     # S20: Claim.confidence. Rev 1 hardcoded 1, which degenerated the eviction comparator.
     confidence_default=100,
@@ -202,6 +206,7 @@ DEFAULT_FIXTURES = Fixtures(
     # VALUES, so these are harness fixtures and A31c sweeps them. S42.2.1 names "three band
     # edges" as one of the four constants a prior instrument in the chain invented -- rev 2
     # fixed the other three and left these hardcoded in probe bodies, unswept.
+    # roster-exempt: Fixtures keys, as `wear_per_season` above. These are H-08 and are swept.
     band_floors={"harbour": {"bulk_shipping": 800, "fishing": 100},
                  "seam": {"deep_mining": 700, "surface_gleaning": 50},
                  "body": {"full_operations": 800, "limited": 500, "withdrawal_only": 100}},
@@ -231,6 +236,10 @@ class WriteClass(enum.Enum):
 # THE STEP -> WRITE CLASS MAP, and it is the single owner of that relation. CENSUS writes in the
 # MATTER class (§30's reconciliation is a world write), DELIBERATE in ACTS -- it returns an act
 # array and writes nothing else.
+# roster-exempt: MECHANISM, and the distinction is the one rosters.yaml states. The STEP NAMES
+# are `Step`'s own members — the six-step loop is the engine's shape, not the game's vocabulary —
+# and this maps each to its write class, which is a RELATION the code owns. Moving it would invite
+# someone to edit how the engine works while believing they were editing the game.
 _STEP_CLASS = {
     "CALENDAR": WriteClass.CALENDAR,
     "MATTER": WriteClass.MATTER,
@@ -272,6 +281,8 @@ WRITE_MATRIX_YAML = (_HERE.parent.parent / "2026-09-02-executable-architecture"
 # own string and the loader CHECKS it against this map rather than trusting either alone.
 STEP_CLASS: dict = {Step[k]: v for k, v in _STEP_CLASS.items()}
 
+# roster-exempt: MECHANISM. The abbreviations `write_matrix.yaml`'s `steps:` column uses, mapped
+# to `Step`'s names. This is the FILE FORMAT, not a definition the game resolves from.
 _STEP_OF = {"CAL": "CALENDAR", "MAT": "MATTER", "DEL": "DELIBERATE",
             "RES": "RESOLVE", "WIT": "WITNESS", "CEN": "CENSUS"}
 
@@ -297,6 +308,8 @@ def _load_write_matrix() -> dict:
     out = {}
     for r in doc["rows"]:
         steps = frozenset(Step[_STEP_OF[s]] for s in r["steps"])
+        # roster-exempt: MECHANISM. This parses §G4's three `social:` values into Python; it
+        # is the file format, not a definition the game resolves from.
         social = {"true": True, "false": False, "n/a": None}[r["social"].strip()]
         # THE CROSS-CHECK. `class:` is V2's prose; the derivation is this file's. If they
         # disagree, one of them is wrong and neither may be trusted silently.
@@ -345,6 +358,21 @@ MATRIX_RETIRED: dict = {
 # instrument assumptions only because the old two-clause derivation could not reach them, and
 # S D2's DR-3 states all three. `report.py` still reads it, and it now reports zero.
 PARTITION_ASSUMED: dict[tuple[str, str], tuple[bool, str]] = {}
+
+
+def assume_partition_row(record_kind: str, fieldname: str, social: bool, why: str) -> None:
+    """THE CHANNEL, kept live so its emptiness means something.
+
+    ⚠ W2 emptied `PARTITION_ASSUMED` and reported "ZERO exercised assumptions" as its proof. An
+    adversarial pass observed that the dict had become a LITERAL NO CODE PATH COULD POPULATE, so
+    the claim was satisfiable BY DELETION and `ASSUMPTIONS.md` read "0 of 0" rather than "0 of 3".
+    That is §0.1 point 2 in its purest form: an assertion that cannot observe the failure it
+    excludes. This function is the path, so zero is now a measurement rather than an absence.
+
+    An instrument that must assume a schema row calls this. It should never need to — §D2's DR-3
+    states the three rows that used to be assumed — and if it ever does, `report.py` says so."""
+    PARTITION_ASSUMED[(record_kind, fieldname)] = (social, why)
+    ASSUMPTIONS_USED.add((record_kind, fieldname))
 
 # ===========================================================================
 # THE ROSTERS, LOADED FROM DATA.
@@ -474,6 +502,31 @@ VERB_TABLE: dict = {}          # filled after STRATA loads, at the bottom of the
 VERB_TABLE = _load_verb_table()
 
 
+def rows_without_a_producer() -> dict:
+    """Every `social: true` row that no verb writes — §7.2's rule for W2, as a REPORT.
+
+    ⚠ IT IS A FLAG AND NOT A DELETE INSTRUCTION, and the W2 audit is why. W2 retired six rows on
+    this rule; applied literally the same rule condemns `(Person, convictions)`, which #353 §9.3
+    REQUIRES ("moved by argument and consequence"). So a producerless row is one of two different
+    things and the report cannot tell them apart:
+
+      * A HOLE — the verb is missing. `(Person, convictions)` has no verb because Part E carries
+        no argument verb, which is a gap in Part E, not a reason to delete a row #353 mandates.
+      * DEAD — nothing in the design produces it. That was the six.
+
+    Distinguishing them is a judgement, so this reports and a human decides. What it MUST NOT do
+    is what the first reading of the rule did: delete on sight. `emits:` was parsed and never read
+    by anything until this function, so the column the retirement rested on was inert data."""
+    produced = {w for v in VERB_TABLE.values() for w in v.writes}
+    out = {}
+    for (kind, fld), row in MATRIX.items():
+        if row.social is not True:
+            continue                      # the world may write it; a verb is not required
+        if f"{kind}.{fld}" not in produced:
+            out[(kind, fld)] = row.emits
+    return out
+
+
 
 
 # Where S30's matrix says "no", the refusal belongs to the LAW THE CELL ENFORCES, not to the
@@ -494,6 +547,31 @@ MATRIX_REFUSAL_LAW: dict[tuple[tuple[str, str], Step], tuple[str, str]] = {
     (("Person", "claim_ledger"), Step.RESOLVE): (
         "S20", "S20 -- `witness` is THE ONLY MINTER of a root token, and it runs at WITNESS"),
 }
+
+# ⚠ W2 AUDIT. Rekeying the table on `(kind, field)` NARROWED IT FOUR-FOLD without anyone noticing.
+# Under the old thing-keying, every field written with `thing="stance"` INHERITED stance's laws --
+# so `(Person, convictions)`, `(Person, beliefs)`, `(Person, scar)` and `(Person, axis_count)` got
+# L4/§25 and §9.3 for free, and after the rekey they fell through to the generic "ANY UNMARKED
+# CELL" branch. Four of the design's proudest refusals began logging as bookkeeping, which is
+# exactly what REV 4's comment in `write()` exists to prevent.
+#
+# THE FIX IS NOT TO RESTORE THE RIDE-ON -- that inheritance WAS defect D1, and getting the law by
+# riding on a neighbour's row is how `(Person, convictions)` became a PASS in the first place.
+# Each row states its own law, which is what keying on the pair is for.
+# roster-exempt: MECHANISM. The four rows that lost their law to the rekey, listed so each gets
+# its own entry. Which rows these are is derivable from the matrix (`social: true`, Person);
+# the list is a loop over a fix, not a definition.
+for _pk_field in ("convictions", "beliefs", "scar", "axis_count"):
+    MATRIX_REFUSAL_LAW[(("Person", _pk_field), Step.MATTER)] = (
+        "S3-L4",
+        "L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY "
+        "NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say")
+    MATRIX_REFUSAL_LAW[(("Person", _pk_field), Step.CALENDAR)] = (
+        "S24", "S24 -- CALENDAR DECIDES NOTHING; it fires occasions")
+    MATRIX_REFUSAL_LAW[(("Person", _pk_field), Step.WITNESS)] = (
+        "S9.3",
+        "S9.3 -- WITNESS NEVER TOUCHES A BELIEF. If evidence can move a conviction the moral "
+        "layer has become a second epistemic layer and T2 is gone")
 
 # ⚠ REV 5. This set was WRITTEN AND NEVER READ for two revisions, while S320's comment promised
 # the assumed rows were "REPORTED IN THE OUTPUT, so a reader can see exactly how much of L4's
@@ -774,6 +852,16 @@ class Office:
     dates: list[str] = field(default_factory=list)
     upkeep: Any = None
 
+    def __post_init__(self):
+        # The remit is a fixture choice; its MEMBERS are not. A typo here would mint a remit act
+        # and every `remit:<that act>` eligibility would silently never match -- a verb quietly
+        # unavailable to everyone, which is the worst shape a failure can take.
+        bad = [a for a in self.remit_acts if a not in REMIT_ACTS]
+        if bad:
+            raise Unowned(f"office {self.id!r} claims remit acts not on the roster: {bad}",
+                          "S11", needs="an act from rosters.yaml: remit_acts",
+                          law="#353 §11 -- the remit acts are a CLOSED set")
+
 
 
 
@@ -784,6 +872,8 @@ class Rung:
     WHITELIST over S10's declared field set -- a concept check rather than a term check.
     Any attribute not in S10's record raises, whatever it is called."""
 
+    # roster-exempt: MECHANISM. These are the FIELD NAMES of this dataclass, checked so an
+    # undeclared attribute raises. They are the code's own shape, not the game's vocabulary.
     _DECLARED = {"id", "kind", "stores", "sites", "records", "dates", "stake",
                  "envelope", "transmission", "judging_set_rule"}
 
@@ -895,6 +985,19 @@ class World:
                 f"({record_kind}, {fieldname}) is social:true and was written by {driver}", "S3-L4",
                 needs="a named person's act",
                 law=f"L4 -- social:true means ONLY AN ACT may write it. The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD. [row provenance: {prov}]")
+        # W2 AUDIT: `(Person, coherence)` is written ONLY through seam Events (#353 :1904), and
+        # the seam is RESOLVE via `contest` (:98). The row said so IN A COMMENT, which constrains
+        # nothing -- this file's own fidelity rule 6: a false claim of enforcement is worse than
+        # none. Bounded here, on `(Tenure, until)`'s precedent one block below.
+        if (record_kind, fieldname) == ("Person", "coherence") and driver != "Seam":
+            TRACE.write(thing, wclass.value, sname, False)
+            raise Forbidden(
+                f"(Person, coherence) written by {driver}", "S54 item 15",
+                needs="driver='Seam' -- a contest Event at RESOLVE",
+                law="#353 :1904 -- Coherence is 'written only through SEAM Events', and :98 puts "
+                    "the seam at RESOLVE via `contest`. Any other writer makes it a FOURTH "
+                    "licensed clock, and §25.1 says the three are exhaustive")
+
         # S15.3 -- THE SEAM IS BOUNDED BY A CAUSATION RULE, NOT BY THE COLUMN. An actorless row
         # may write Tenure.until ONLY on a (Person, exists) change THE SAME ROW ALSO CAUSED.
         if (record_kind, fieldname) == ("Tenure", "until") and driver != "Act":

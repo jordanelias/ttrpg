@@ -704,6 +704,19 @@ rows:
     cite:      ""
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
 
+  - id:        H-62
+    tier:      0
+    hole:      "NO PART E VERB WRITES ANY `Person` INTERIOR FIELD. `(Person, convictions)`, `(Person, beliefs)`, `(Person, scar)`, `(Person, axis_count)` and `(Person, stance)` are all `social: true` -- only an act may write them -- and the verb table carries no act that does. #353 §9.3 requires convictions to move BY ARGUMENT AND CONSEQUENCE, so the rows are mandated and the producers are missing"
+    kind:      "PRODUCER ×5"
+    owner:     "the resolver (Part E)"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      "FOUND BY W2's ADVERSARIAL PASS, and it is the finding that corrected the RULE rather than a row. §7.2 says an `emits:` kind with no producing verb is a RED ROW, and W2 retired six on that reading. Applied uniformly the same rule condemns `(Person, convictions)` -- which #353 §9.3 MANDATES -- so a producerless row is one of two different things: a HOLE (the verb is missing) or DEAD (nothing produces it). W2's six were dead; these five are holes. `rows_without_a_producer()` reports them and a human decides, because the rule cannot tell them apart and deleting on sight is what the first reading would have done. ⚠ RELATED BUT NOT THE SAME AS H-37: that row defers the twelve named argument FAULTS to the social-contest subsystem, and this is the absence of any verb at all that moves an interior field in the season loop."
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+
 # ---------------------------------------------------------------------------
 # THE DISCHARGE MAP -- guardrail G8.
 # "Every defect gets a register row, or is discharged with a named section."

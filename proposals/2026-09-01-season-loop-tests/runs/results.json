@@ -5,15 +5,13 @@
    "name": "Carin Vedel",
    "scale": "person",
    "source": "NPC1.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "NOT-ASSESSED",
    "rows": 10,
    "core": 6,
    "core_routed": 3,
    "core_unmapped": 3,
-   "core_blocked": 1,
-   "blockers": [
-    "P22"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "A person holding no office, post, or command must be able to perform a repeated, multi-week task (copying a text) that the engine tracks as ongoing work-in-progress with a start and an end, not only as a single instantaneous action.",
@@ -36,13 +34,11 @@
      "probe": "P22",
      "verdict": {
       "id": "P22",
-      "verdict": "GAP",
-      "detail": "a `hold` is recorded, and NO STEP MAKES IT GATE ANOTHER PERSON'S ACT",
-      "kind": "NO-PRODUCER",
-      "section": "S13/E2",
+      "verdict": "PASS",
+      "detail": "PASS: the `hold` is recorded as `(Tenure, since)` -- Part D's row, the holder's own Tenure per H-22 -- and Part E gates `destroy_record` on `eligibility: hold:<record>` (\u00a7E3, \u00a7E4). \u26a0 THE FOLD THAT EVALUATES IT IS W3's REMAINING HALF: this asserts the TABLE carries the gate, not that a resolver has run it",
+      "kind": null,
+      "section": "S13",
       "title": "a held object gates another's act",
-      "needs": "Part E's verb table, where `eligibility: hold:<record>` is evaluated (W3)",
-      "law": "Part D admits the write; the GATING is the resolver's, and the resolver has no body until the verb table is data",
       "by": "construction",
       "tests": "possession of an object must be able to make someone else's action unavailable or costlier"
      }
@@ -231,15 +227,13 @@
    "name": "Joren Bergvall",
    "scale": "person",
    "source": "NPC1.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "NOT-ASSESSED",
    "rows": 7,
    "core": 3,
    "core_routed": 2,
    "core_unmapped": 1,
-   "core_blocked": 1,
-   "blockers": [
-    "P22"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "A technical specialist's field data must be able to exist as a persistent evidence object with its own scope and quality, independent of any single Contest roll -- something that can be examined, copied, corroborated, or suppressed as an artifact.",
@@ -247,13 +241,11 @@
      "probe": "P22",
      "verdict": {
       "id": "P22",
-      "verdict": "GAP",
-      "detail": "a `hold` is recorded, and NO STEP MAKES IT GATE ANOTHER PERSON'S ACT",
-      "kind": "NO-PRODUCER",
-      "section": "S13/E2",
+      "verdict": "PASS",
+      "detail": "PASS: the `hold` is recorded as `(Tenure, since)` -- Part D's row, the holder's own Tenure per H-22 -- and Part E gates `destroy_record` on `eligibility: hold:<record>` (\u00a7E3, \u00a7E4). \u26a0 THE FOLD THAT EVALUATES IT IS W3's REMAINING HALF: this asserts the TABLE carries the gate, not that a resolver has run it",
+      "kind": null,
+      "section": "S13",
       "title": "a held object gates another's act",
-      "needs": "Part E's verb table, where `eligibility: hold:<record>` is evaluated (W3)",
-      "law": "Part D admits the write; the GATING is the resolver's, and the resolver has no body until the verb table is data",
       "by": "construction",
       "tests": "possession of an object must be able to make someone else's action unavailable or costlier"
      }
@@ -3967,10 +3959,9 @@
    "core": 4,
    "core_routed": 3,
    "core_unmapped": 1,
-   "core_blocked": 3,
+   "core_blocked": 2,
    "blockers": [
     "A7",
-    "P22",
     "W13"
    ],
    "routed": [
@@ -3980,13 +3971,11 @@
      "probe": "P22",
      "verdict": {
       "id": "P22",
-      "verdict": "GAP",
-      "detail": "a `hold` is recorded, and NO STEP MAKES IT GATE ANOTHER PERSON'S ACT",
-      "kind": "NO-PRODUCER",
-      "section": "S13/E2",
+      "verdict": "PASS",
+      "detail": "PASS: the `hold` is recorded as `(Tenure, since)` -- Part D's row, the holder's own Tenure per H-22 -- and Part E gates `destroy_record` on `eligibility: hold:<record>` (\u00a7E3, \u00a7E4). \u26a0 THE FOLD THAT EVALUATES IT IS W3's REMAINING HALF: this asserts the TABLE carries the gate, not that a resolver has run it",
+      "kind": null,
+      "section": "S13",
       "title": "a held object gates another's act",
-      "needs": "Part E's verb table, where `eligibility: hold:<record>` is evaluated (W3)",
-      "law": "Part D admits the write; the GATING is the resolver's, and the resolver has no body until the verb table is data",
       "by": "construction",
       "tests": "possession of an object must be able to make someone else's action unavailable or costlier"
      }
@@ -4895,15 +4884,13 @@
    "name": "The Sinigaglia Dinner",
    "scale": "faction",
    "source": "ARC1.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "PLAYABLE",
    "rows": 7,
    "core": 3,
    "core_routed": 3,
    "core_unmapped": 0,
-   "core_blocked": 1,
-   "blockers": [
-    "P22"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "a superior's response to detecting a subordinate's disloyalty must be able to be fully determined by the superior's own current internal state via a fixed lookup, removing free choice from that decision point when the superior is not directly player-controlled",
@@ -4926,13 +4913,11 @@
      "probe": "P22",
      "verdict": {
       "id": "P22",
-      "verdict": "GAP",
-      "detail": "a `hold` is recorded, and NO STEP MAKES IT GATE ANOTHER PERSON'S ACT",
-      "kind": "NO-PRODUCER",
-      "section": "S13/E2",
+      "verdict": "PASS",
+      "detail": "PASS: the `hold` is recorded as `(Tenure, since)` -- Part D's row, the holder's own Tenure per H-22 -- and Part E gates `destroy_record` on `eligibility: hold:<record>` (\u00a7E3, \u00a7E4). \u26a0 THE FOLD THAT EVALUATES IT IS W3's REMAINING HALF: this asserts the TABLE carries the gate, not that a resolver has run it",
+      "kind": null,
+      "section": "S13",
       "title": "a held object gates another's act",
-      "needs": "Part E's verb table, where `eligibility: hold:<record>` is evaluated (W3)",
-      "law": "Part D admits the write; the GATING is the resolver's, and the resolver has no body until the verb table is data",
       "by": "construction",
       "tests": "possession of an object must be able to make someone else's action unavailable or costlier"
      }
@@ -6314,15 +6299,13 @@
    "name": "The Forgetting Road",
    "scale": "realm",
    "source": "ARC2.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "NOT-ASSESSED",
    "rows": 6,
    "core": 3,
    "core_routed": 1,
    "core_unmapped": 2,
-   "core_blocked": 1,
-   "blockers": [
-    "P22"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "knowledge or procedure gained inside such a memory-stripping zone must be able to be carried home in participants' own configuration rather than in an external record, surviving the strip in a form other than explicit recall",
@@ -6330,13 +6313,11 @@
      "probe": "P22",
      "verdict": {
       "id": "P22",
-      "verdict": "GAP",
-      "detail": "a `hold` is recorded, and NO STEP MAKES IT GATE ANOTHER PERSON'S ACT",
-      "kind": "NO-PRODUCER",
-      "section": "S13/E2",
+      "verdict": "PASS",
+      "detail": "PASS: the `hold` is recorded as `(Tenure, since)` -- Part D's row, the holder's own Tenure per H-22 -- and Part E gates `destroy_record` on `eligibility: hold:<record>` (\u00a7E3, \u00a7E4). \u26a0 THE FOLD THAT EVALUATES IT IS W3's REMAINING HALF: this asserts the TABLE carries the gate, not that a resolver has run it",
+      "kind": null,
+      "section": "S13",
       "title": "a held object gates another's act",
-      "needs": "Part E's verb table, where `eligibility: hold:<record>` is evaluated (W3)",
-      "law": "Part D admits the write; the GATING is the resolver's, and the resolver has no body until the verb table is data",
       "by": "construction",
       "tests": "possession of an object must be able to make someone else's action unavailable or costlier"
      }
@@ -8804,15 +8785,13 @@
    "name": "The Hunting Accident (~218 AG)",
    "scale": "realm",
    "source": "ARC5.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "NOT-ASSESSED",
    "rows": 6,
    "core": 3,
    "core_routed": 1,
    "core_unmapped": 2,
-   "core_blocked": 1,
-   "blockers": [
-    "P22"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "multiple independent factions must each be able to hold their own separate partial evidence trail about the same past event, where each trail was constructed or interpreted to implicate a different rival faction",
@@ -8820,13 +8799,11 @@
      "probe": "P22",
      "verdict": {
       "id": "P22",
-      "verdict": "GAP",
-      "detail": "a `hold` is recorded, and NO STEP MAKES IT GATE ANOTHER PERSON'S ACT",
-      "kind": "NO-PRODUCER",
-      "section": "S13/E2",
+      "verdict": "PASS",
+      "detail": "PASS: the `hold` is recorded as `(Tenure, since)` -- Part D's row, the holder's own Tenure per H-22 -- and Part E gates `destroy_record` on `eligibility: hold:<record>` (\u00a7E3, \u00a7E4). \u26a0 THE FOLD THAT EVALUATES IT IS W3's REMAINING HALF: this asserts the TABLE carries the gate, not that a resolver has run it",
+      "kind": null,
+      "section": "S13",
       "title": "a held object gates another's act",
-      "needs": "Part E's verb table, where `eligibility: hold:<record>` is evaluated (W3)",
-      "law": "Part D admits the write; the GATING is the resolver's, and the resolver has no body until the verb table is data",
       "by": "construction",
       "tests": "possession of an object must be able to make someone else's action unavailable or costlier"
      }
@@ -9110,15 +9087,13 @@
    "name": "Elske \u2014 The Royal Fate",
    "scale": "realm",
    "source": "ARC5.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "PLAYABLE",
    "rows": 6,
    "core": 1,
    "core_routed": 1,
    "core_unmapped": 0,
-   "core_blocked": 1,
-   "blockers": [
-    "P22"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "a person's decision to align with an approaching faction must gate on which of that person's several competing internal loyalties is appealed to, with each loyalty requiring a different, specific category of evidence to be found persuasive, and combining loyalties for a weaker one requiring supplementary evidence from a stronger one",
@@ -9126,13 +9101,11 @@
      "probe": "P22",
      "verdict": {
       "id": "P22",
-      "verdict": "GAP",
-      "detail": "a `hold` is recorded, and NO STEP MAKES IT GATE ANOTHER PERSON'S ACT",
-      "kind": "NO-PRODUCER",
-      "section": "S13/E2",
+      "verdict": "PASS",
+      "detail": "PASS: the `hold` is recorded as `(Tenure, since)` -- Part D's row, the holder's own Tenure per H-22 -- and Part E gates `destroy_record` on `eligibility: hold:<record>` (\u00a7E3, \u00a7E4). \u26a0 THE FOLD THAT EVALUATES IT IS W3's REMAINING HALF: this asserts the TABLE carries the gate, not that a resolver has run it",
+      "kind": null,
+      "section": "S13",
       "title": "a held object gates another's act",
-      "needs": "Part E's verb table, where `eligibility: hold:<record>` is evaluated (W3)",
-      "law": "Part D admits the write; the GATING is the resolver's, and the resolver has no body until the verb table is data",
       "by": "construction",
       "tests": "possession of an object must be able to make someone else's action unavailable or costlier"
      }
@@ -11074,13 +11047,11 @@
   },
   "P22": {
    "id": "P22",
-   "verdict": "GAP",
-   "detail": "a `hold` is recorded, and NO STEP MAKES IT GATE ANOTHER PERSON'S ACT",
-   "kind": "NO-PRODUCER",
-   "section": "S13/E2",
+   "verdict": "PASS",
+   "detail": "PASS: the `hold` is recorded as `(Tenure, since)` -- Part D's row, the holder's own Tenure per H-22 -- and Part E gates `destroy_record` on `eligibility: hold:<record>` (\u00a7E3, \u00a7E4). \u26a0 THE FOLD THAT EVALUATES IT IS W3's REMAINING HALF: this asserts the TABLE carries the gate, not that a resolver has run it",
+   "kind": null,
+   "section": "S13",
    "title": "a held object gates another's act",
-   "needs": "Part E's verb table, where `eligibility: hold:<record>` is evaluated (W3)",
-   "law": "Part D admits the write; the GATING is the resolver's, and the resolver has no body until the verb table is data",
    "by": "construction",
    "tests": "possession of an object must be able to make someone else's action unavailable or costlier"
   },
@@ -12381,15 +12352,6 @@
  },
  "_gaps": [
   {
-   "kind": "NO-PRODUCER",
-   "what": "a `hold` is recorded, and NO STEP MAKES IT GATE ANOTHER PERSON'S ACT",
-   "where": "S13/E2",
-   "needs": "Part E's verb table, where `eligibility: hold:<record>` is evaluated (W3)",
-   "law": "Part D admits the write; the GATING is the resolver's, and the resolver has no body until the verb table is data",
-   "case": "probe:P22",
-   "expected": false
-  },
-  {
    "kind": "UNSPECIFIED",
    "what": "the closed `axis` registry L3 clause 1 requires (asked for 'suspicion')",
    "where": "S22.4",
@@ -12930,7 +12892,7 @@
   "ACT": 81,
   "EVENT": 58,
   "CLAIM": 290,
-  "GAP": 60
+  "GAP": 59
  },
  "_corpus_defects": [
   "ARC1.yaml: committed inside a markdown fence with transcript preamble",

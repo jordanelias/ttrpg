@@ -542,12 +542,20 @@ def test_r3_the_instrument_assumes_no_partition_row_at_all():
     assert "PARTITION_ASSUMED" in inspect.getsource(report.emit), (
         "report.py stopped reading the disclosure hook, so a future assumption would go "
         "unreported -- which is exactly the false-disclosure defect rev 5 fixed")
-    # And it must still be able to REPORT one, or the emptiness proves nothing about the channel.
-    S.PARTITION_ASSUMED[("Person", "planted")] = (True, "planted by a test")
+    # AND THERE MUST BE A CODE PATH THAT POPULATES IT. The first draft planted a key directly into
+    # the dict, which proves only that a dict is mutable -- an adversarial pass pointed out that no
+    # path in `shape.py` could populate the channel at all, so "zero assumed rows" was satisfiable
+    # BY DELETION. `assume_partition_row` is the path; this exercises it and checks the DISCLOSURE
+    # side too, since a channel nothing reports through is the same defect one level along.
     try:
-        assert S.PARTITION_ASSUMED, "the hook cannot hold a row"
+        S.assume_partition_row("Person", "planted", True, "planted by a test")
+        assert ("Person", "planted") in S.PARTITION_ASSUMED, "the channel did not record the row"
+        assert ("Person", "planted") in S.ASSUMPTIONS_USED, (
+            "the row was declared and not marked EXERCISED -- `report.py` counts the intersection, "
+            "so it would report an assumption nobody used")
     finally:
-        S.PARTITION_ASSUMED.pop(("Person", "planted"))
+        S.PARTITION_ASSUMED.pop(("Person", "planted"), None)
+        S.ASSUMPTIONS_USED.discard(("Person", "planted"))
 
 
 def test_r3_the_l4_limb_is_actually_exercised():
@@ -1329,36 +1337,98 @@ def test_w2_the_class_column_is_derived_and_cross_checked():
 # the recurrence — not on the six that were moved, which is history.
 # ===========================================================================
 
-def test_jordan_no_definition_is_hardcoded_in_a_body():
-    """Walk the tree for a module-level literal collection of strings — a roster, a taxonomy, a
-    kind list. Every one must come from `rosters.yaml` instead.
+# Declared roster exemptions may shrink, never grow without an argument made here.
+EXEMPT_CEILING = 12
 
-    ⚠ The check is on the SHAPE, not on a list of forbidden names (`G2`: *forbid the shape, never
-    enumerate the words* — a whitelist built for the fourth recurrence did not catch the fifth).
-    Two kinds of module-level constant are exempt and each says why in the exemption itself, not
-    in a name list."""
+
+def test_jordan_no_definition_is_hardcoded_in_a_body():
+    """Walk the tree for a literal collection of strings — a roster, a taxonomy, a kind list.
+    Every one must come from `rosters.yaml`.
+
+    ⚠ THE FIRST DRAFT WAS EVADABLE BY EVERY ROUTE AN ADVERSARIAL PASS TRIED, and the list is worth
+    keeping because each was a real hole: `frozenset([...])`, `set(...)`, `tuple(...)` and
+    `"a b c".split()` are `Call` nodes and it only looked at `Tuple|List|Set`; a dict literal
+    evaded it; anything not at module scope — function-local, class attribute, inside an `if` —
+    evaded it because it walked `tree.body` rather than the whole tree; and IT READ `shape.py`
+    ALONE while `probes.py`, `report.py` and `run_cases.py` went unscanned.
+
+    Its docstring invoked `G2` — *forbid the shape, never enumerate the words* — while enumerating
+    a syntactic shape, which is a router over AST node types, and routers miss. This version walks
+    every node of every module and looks at the VALUE: a collection of three or more string
+    constants, however it is spelled."""
     import ast as ast_
-    src = (HERE / "shape.py").read_text()
-    tree = ast_.parse(src)
-    offenders = []
-    for node in tree.body:
-        if not isinstance(node, (ast_.Assign, ast_.AnnAssign)):
-            continue
-        tgt = node.targets[0] if isinstance(node, ast_.Assign) else node.target
-        if not isinstance(tgt, ast_.Name) or not tgt.id.isupper():
-            continue
-        v = node.value
-        if not isinstance(v, (ast_.Tuple, ast_.List, ast_.Set)) or not v.elts:
-            continue
-        if not all(isinstance(e, ast_.Constant) and isinstance(e.value, str) for e in v.elts):
-            continue        # not a roster of names
-        if len(v.elts) < 3:
-            continue        # a pair is a relation, not a taxonomy
-        offenders.append((tgt.id, node.lineno, [e.value for e in v.elts]))
+    # `shape.py` IS THE MODEL — where a game definition would live, and where Jordan's ruling
+    # bites. The other three are the test corpus and the reporter: a fixture in a probe is test
+    # data, not a definition the game resolves from, so flagging every one of them would bury the
+    # signal. They are checked for the defect that DOES matter there — a roster DUPLICATED from
+    # the data file, which is how a definition comes back after being moved.
+    MODEL = "shape.py"
+    CORPUS = ("probes.py", "report.py", "run_cases.py")
+    FILES = (MODEL,) + CORPUS
+    known = {frozenset(r["values"]) for r in S._ROSTERS.values()}
+    offenders, exempted = [], []
+    for fname in FILES:
+        tree = ast_.parse((HERE / fname).read_text())
+        for node in ast_.walk(tree):
+            elts = None
+            if isinstance(node, (ast_.Tuple, ast_.List, ast_.Set)):
+                elts = node.elts
+            elif isinstance(node, ast_.Call) and isinstance(node.func, ast_.Name) \
+                    and node.func.id in ("frozenset", "set", "tuple", "list") and node.args:
+                a = node.args[0]
+                elts = a.elts if isinstance(a, (ast_.Tuple, ast_.List, ast_.Set)) else None
+            elif (isinstance(node, ast_.Call) and isinstance(node.func, ast_.Attribute)
+                  and node.func.attr == "split"
+                  and isinstance(node.func.value, ast_.Constant)
+                  and isinstance(node.func.value.value, str)):
+                # `"a b c".split()` — a roster spelled as one string. Synthesise the constants so
+                # the value test below sees the same thing it would see in a tuple.
+                parts = node.func.value.value.split()
+                elts = [ast_.Constant(value=x) for x in parts]
+            elif isinstance(node, ast_.Dict) and node.keys:
+                elts = [k for k in node.keys if k is not None]
+            if not elts or len(elts) < 3:
+                continue
+            if not all(isinstance(e, ast_.Constant) and isinstance(e.value, str) for e in elts):
+                continue
+            vals = [e.value for e in elts]
+            # A collection of IDENTIFIERS is a roster. A collection of SENTENCES is prose — an
+            # error message, a docstring table, a list of alternatives for a TRACE decision — and
+            # those are not definitions the game resolves from. The split is on the values, not on
+            # a name list, so it cannot be spelled around.
+            if not all(v and len(v) < 40 and " " not in v.strip() for v in vals):
+                continue
+            # AN EXEMPTION IS DECLARED AT THE SITE, WITH A REASON, on the line or the one above:
+            #     # roster-exempt: <why this is mechanism and not a definition>
+            # NOT a whitelist of names — G2 — because a name list is a router and this one would
+            # need to grow every time a variable is renamed. The reason is visible where the
+            # decision is made, and the COUNT IS PINNED below so exemptions cannot creep.
+            src_lines = (HERE / fname).read_text().splitlines()
+            # Look back far enough for a multi-line reason. A one-line window would force the
+            # reason to be short, and a short reason is the one nobody can evaluate.
+            ctx = " ".join(src_lines[max(0, node.lineno - 9):node.lineno])
+            if "roster-exempt:" in ctx:
+                exempted.append((fname, node.lineno))
+                continue
+            if fname != MODEL:
+                # In the corpus, only a DUPLICATE of a roster that is already data is a defect:
+                # the same closed set written out again, which is the definition coming back.
+                if frozenset(vals) not in known:
+                    continue
+                offenders.append((fname, node.lineno, vals[:6]))
+                continue
+            offenders.append((fname, node.lineno, vals[:6]))
+    # The ratchet. Exemptions are declared, counted, and may SHRINK but never grow without a
+    # deliberate edit here — which is the point at which someone has to justify the growth.
+    assert len(exempted) <= EXEMPT_CEILING, (
+        f"{len(exempted)} roster-exempt sites, ceiling is {EXEMPT_CEILING}. An exemption is a "
+        "definition someone decided the game does not resolve from; growing the count needs an "
+        "argument, not a bump.")
     assert not offenders, (
-        "module-level rosters written as literals — Jordan 2026-09-02, definitions are not "
-        "hardcoded. Move each to `rosters.yaml` and read it with `roster()`:\n  "
-        + "\n  ".join(f"{n} at shape.py:{ln} ({len(v)} entries)" for n, ln, v in offenders))
+        "literal rosters — Jordan 2026-09-02, definitions are not hardcoded. In `shape.py`, move "
+        "it to `rosters.yaml` and read it with `roster()`; in the corpus, a hit is a roster "
+        "DUPLICATED from the data file and must read it instead:\n  "
+        + "\n  ".join(f"{f}:{ln} {v}" for f, ln, v in offenders))
 
 
 def test_jordan_every_roster_comes_from_the_data_file_and_an_absent_one_refuses():

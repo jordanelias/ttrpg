@@ -69,12 +69,12 @@ not the shape.
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
 ## ARC-05 — The Quiet Fracture  ·  **BLOCKED**
-*world · 7 rows, 4 core · blockers: A7, P22, W13*
+*world · 7 rows, 4 core · blockers: A7, W13*
 *ends when:* never, absent player action -- the arc is explicitly an open spiral: the substrate keeps decaying every year-end and the causal institution's actions keep compounding the drain regardless of anyone's awareness. Only a player-forced public contest, converting the stalled private calculation into a resolved one, creates a closing point.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** a slow, per-action cost on a shared world-substrate resource must be able to accumulate invisibly across many individually-successful-looking actions performed by a well-intentioned actor, s | `P22` | **NO-PRODUCER** | S13/E2 |
+| **[core]** a slow, per-action cost on a shared world-substrate resource must be able to accumulate invisibly across many individually-successful-looking actions performed by a well-intentioned actor, s | `P22` | PASS | S13 |
 | **[core]** a background world-scale stat must be able to decay on a fixed schedule (an annual tick) independent of any faction's actions in that period | `W13` | **FORBIDDEN** | S25.1 / S3-L5 |
 | **[core]** players must be able to force a stalled, private inter-faction calculation into a public formal contest, converting an indefinitely-stalled decision into a resolved one | `A7` | **UNSPECIFIED** | S39.4 |
 | a faction must be able to hold genuine, actionable knowledge of a systemic problem and sit on the reveal-or-conceal decision for multiple seasons with no external clock forcing a resolution  | — | UNMAPPED | — |
@@ -237,14 +237,14 @@ not the shape.
 | **[core]** removing one unit of a spread-out presence must be able to itself generate a persistent legitimacy cost against the remover, in every instance, for as long as the underlying dynamic is activ | — | UNMAPPED | — |
 | capturing a movement's charismatic leader must be able to trigger consequences that scale with how much of her prior presence survives the capture, rather than a flat, fixed consequence | — | UNMAPPED | — |
 
-## ARC-17 — The Sinigaglia Dinner  ·  **BLOCKED**
-*faction · 7 rows, 3 core · blockers: P22*
+## ARC-17 — The Sinigaglia Dinner  ·  **PLAYABLE**
+*faction · 7 rows, 3 core · blockers: none*
 *ends when:* when the subordinate's fate resolves definitively -- through sustained compliance (an ongoing check that could still fail in a later season), a failed compliance check triggering outright defection, or, if the superior chooses confrontation/elimination, the subordinate's removal triggering automatic release of the mutually-destructive evidence. The superior's initial response is not fully free -- it is determined by a threshold lookup on his own internal state -- so the actual deciding force at that step is a stat, not a deliberation.
 
 | need | probe | verdict | § |
 |---|---|---|---|
 | **[core]** a superior's response to detecting a subordinate's disloyalty must be able to be fully determined by the superior's own current internal state via a fixed lookup, removing free choice from t | `P37` | PASS | S3-L1 |
-| **[core]** two parties in an adversarial relationship must be able to each hold damaging evidence against the other simultaneously, such that neither can act against the other without also being destro | `P22` | **NO-PRODUCER** | S13/E2 |
+| **[core]** two parties in an adversarial relationship must be able to each hold damaging evidence against the other simultaneously, such that neither can act against the other without also being destro | `P22` | PASS | S13 |
 | **[core]** a subordinate under coercive tolerance must be able to face a RECURRING risk each season of involuntarily failing to comply, regardless of their own intentions, so that even a subordinate wh | `P18` | PASS | S3-L5 |
 | a defecting subordinate must be able to carry unreleased leverage with them into a new affiliation, handing that new faction a one-time strategic option they did not previously have | `P36` | PASS | S17 |
 | detecting a subordinate's pattern of behavioral hesitation must be able to require repeated, unprompted checks over MULTIPLE seasons rather than a single roll, so that success is a matter of | — | UNMAPPED | — |
@@ -480,13 +480,13 @@ not the shape.
 | a formal collective decision body must be able to intervene to defend or abandon an accused individual via a multi-round contest, with the losing side's consequence being a fully asymmetric  | — | UNMAPPED | — |
 | the accused individual's fate on conviction must branch hard, with severity depending on a separate quantity elsewhere in the world (whether it is currently safe for them there), rather than | — | UNMAPPED | — |
 
-## ARC-33 — The Forgetting Road  ·  **BLOCKED**
-*realm · 6 rows, 3 core · blockers: P22*
+## ARC-33 — The Forgetting Road  ·  **NOT-ASSESSED**
+*realm · 6 rows, 3 core · blockers: none*
 *ends when:* the post-return cascade resolves -- sanctuary holds and the investigation stalls, or the battle resolves and a long-term substrate-management cycle begins or fails to begin
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** knowledge or procedure gained inside such a memory-stripping zone must be able to be carried home in participants' own configuration rather than in an external record, surviving the strip in | `P22` | **NO-PRODUCER** | S13/E2 |
+| **[core]** knowledge or procedure gained inside such a memory-stripping zone must be able to be carried home in participants' own configuration rather than in an external record, surviving the strip in | `P22` | PASS | S13 |
 | an institutional surveillance track built from unrelated prior background activity must independently reach its own threshold around the same time and open a formal investigation of the retu | `F16` | PASS | S10 |
 | **[core]** a location must be able to strip a person's explicit recall of their specific goal while inside it, while still letting them retain and act on the underlying intention, such that 'why am I h | — | UNMAPPED | — |
 | **[core]** a successful, player-desired outcome achieved via this zone must trigger an automatic, unavoidable rise in a hostile institution's background pressure quantity purely because the outcome bec | — | UNMAPPED | — |
@@ -921,13 +921,13 @@ not the shape.
 | **[core]** a successful use of the capability must be able to remove or alter a past event while leaving direct memories of the pre-alteration state intact in everyone who experienced it, creating an i | — | UNMAPPED | — |
 | a partial, neither-success-nor-failure outcome of the powerful capability must be able to place its target into a state of ongoing oscillation between two mutually exclusive conditions, with | — | UNMAPPED | — |
 
-## NSC-01 — The Hunting Accident (~218 AG)  ·  **BLOCKED**
-*realm · 6 rows, 3 core · blockers: P22*
+## NSC-01 — The Hunting Accident (~218 AG)  ·  **NOT-ASSESSED**
+*realm · 6 rows, 3 core · blockers: none*
 *ends when:* UNCLEAR: the source describes the investigation's possible outcomes (full evidence, partial evidence, false accusation) and their consequences but does not state when the arc itself is considered concluded — a false accusation and a true reveal both produce ongoing consequences rather than a close
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** multiple independent factions must each be able to hold their own separate partial evidence trail about the same past event, where each trail was constructed or interpreted to implicate a di | `P22` | **NO-PRODUCER** | S13/E2 |
+| **[core]** multiple independent factions must each be able to hold their own separate partial evidence trail about the same past event, where each trail was constructed or interpreted to implicate a di | `P22` | PASS | S13 |
 | **[core]** a full, correct reconstruction of the past event must require accessing and cross-referencing a minimum number of the independent evidence trails, with no single trail sufficient on its own | — | UNMAPPED | — |
 | **[core]** acting on a partial or incomplete investigation must be able to produce full-strength political consequences against an accused party, identical to the consequences that would apply if the a | — | UNMAPPED | — |
 | a character's long-held, self-limiting belief must be revealed by the true reconstruction to have rested on a false premise, and the reveal itself, not the premise, must be what forces that  | — | UNMAPPED | — |
@@ -986,13 +986,13 @@ not the shape.
 | **[core]** forcibly retrieving the held person against the holding power's will must require a qualitatively different, far more escalatory type of action than covert retrieval, immediately spiking a s | — | UNMAPPED | — |
 | the held person must independently possess a dormant personal trait that can be triggered into activity by nearby unrelated events, and its activation while under a foreign power's watch mus | — | UNMAPPED | — |
 
-## NSC-06 — Elske — The Royal Fate  ·  **BLOCKED**
-*realm · 6 rows, 1 core · blockers: P22*
+## NSC-06 — Elske — The Royal Fate  ·  **PLAYABLE**
+*realm · 6 rows, 1 core · blockers: none*
 *ends when:* her position resolves into one of three named succession states once the relevant prior branches are known, reached mainly through contested rolls on the independence path; two of the three states explicitly link forward into other arcs, so even a resolved succession state is treated as an input to further, not-yet-closed consequences
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** a person's decision to align with an approaching faction must gate on which of that person's several competing internal loyalties is appealed to, with each loyalty requiring a different, spe | `P22` | **NO-PRODUCER** | S13/E2 |
+| **[core]** a person's decision to align with an approaching faction must gate on which of that person's several competing internal loyalties is appealed to, with each loyalty requiring a different, spe | `P22` | PASS | S13 |
 | this person's eventual formal political position must be determined by a combination of prior branch outcomes rather than by a single dedicated succession mechanism, and must set a distinct, | `F13` | PASS | S24 |
 | once recruited, a person embedded in a rival power's structure must be able to break that embedding through at least three structurally distinct methods, each carrying a different success/fa | — | UNMAPPED | — |
 | the covert-elimination independence path's success must be distinguishable, mechanically, from its later discovery — an outcome that looks clean in the near term must be able to unravel late | — | UNMAPPED | — |

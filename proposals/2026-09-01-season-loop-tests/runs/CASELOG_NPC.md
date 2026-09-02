@@ -9,14 +9,14 @@ over prose, and keyword routing is crude).
 `UNCLEAR` = the CASE SOURCE fails to say something; that is the source failing,
 not the shape.
 
-## NPC-088 — Carin Vedel  ·  **BLOCKED**
-*person · 10 rows, 6 core · blockers: P22*
+## NPC-088 — Carin Vedel  ·  **NOT-ASSESSED**
+*person · 10 rows, 6 core · blockers: none*
 *ends when:* never automatically -- only by discovery, arrest, or death, or by a player-driven resolution; the source names no natural conclusion.
 
 | need | probe | verdict | § |
 |---|---|---|---|
 | **[core]** A person holding no office, post, or command must be able to perform a repeated, multi-week task (copying a text) that the engine tracks as ongoing work-in-progress with a start and an end,  | `P1` | PASS | S3-L1 |
-| **[core]** The physical product of her labor (a copied text) must be able to exist as a persistent object that can be found, carried, hidden, given away, or destroyed independently of her. | `P22` | **NO-PRODUCER** | S13/E2 |
+| **[core]** The physical product of her labor (a copied text) must be able to exist as a persistent object that can be found, carried, hidden, given away, or destroyed independently of her. | `P22` | PASS | S13 |
 | Her work must be able to accumulate institutional attention gradually across multiple undiscovered seasons, not only through a single detected incident. | `P17` | **UNSPECIFIED** | S22.4 |
 | **[core]** A person with no faction rank, no assigned Duty, and no tracked Standing must still be able to generate a scene opportunity that brings a player into contact with her. | `P1` | PASS | S3-L1 |
 | Her season must be able to end through means that require no institutional process at all -- being found and killed, or simply vanishing -- not only through an arrest, trial, or faction-tree | `P23` | PASS | S16 |
@@ -41,13 +41,13 @@ not the shape.
 | A student's exposure (being caught attending, or found to have been taught) must be trackable as a consequence for the student, separate from any consequence for Askeland. | — | UNMAPPED | — |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-086 — Joren Bergvall  ·  **BLOCKED**
-*person · 7 rows, 3 core · blockers: P22*
+## NPC-086 — Joren Bergvall  ·  **NOT-ASSESSED**
+*person · 7 rows, 3 core · blockers: none*
 *ends when:* never explicitly stated; presumably when the conspiracy narrative is durably dispelled or the data is destroyed or discredited.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** A technical specialist's field data must be able to exist as a persistent evidence object with its own scope and quality, independent of any single Contest roll -- something that can be exam | `P22` | **NO-PRODUCER** | S13/E2 |
+| **[core]** A technical specialist's field data must be able to exist as a persistent evidence object with its own scope and quality, independent of any single Contest roll -- something that can be exam | `P22` | PASS | S13 |
 | **[core]** Corroborating or refuting his claim must be possible for a third party through independent fieldwork, not only by taking his word for it. | `P16` | PASS | S20 |
 | **[core]** Presenting his evidence to a political audience must be able to change what that audience believes about the cause of the sea-route blockage, and that changed belief must persist and spread  | — | UNMAPPED | — |
 | A Guild employee below faction-leadership rank must be reachable by a scene opportunity through his technical output becoming relevant to a player, not only through his faction leadership's  | — | UNMAPPED | — |

@@ -30,7 +30,7 @@ from typing import Any, Callable, Optional
 
 from shape import (
     CLAIM_SOURCES, Candidate, Claim, Collision, ContestError, DEFAULT_FIXTURES, Event,
-    Fixtures, Forbidden, H, NoProducer, Office, Person,
+    Fixtures, Forbidden, H, NoProducer, Office, Person, VERB_TABLE,
     Proposition, Query, Record, ROOT, RUNG_KINDS, Rung, STRATA, SeasonDriver, ShapeGap,
     Site, StateChange, Step, Tenure, Ungraded, Unowned, Unspecified, View, World,
     WITNESS_CHANNELS, WriteClass, contest, expect_refusal, sense,
@@ -57,12 +57,16 @@ def tiny_world(fixtures: Fixtures = DEFAULT_FIXTURES) -> World:
     for rid, kind, stores in (("R", "realm", None), ("D", "duchy", None),
                               ("S", "settlement", {"grain": 40}), ("Hh", "hearth", {"grain": 8})):
         w.rungs[rid] = Rung(rid, kind, stores=stores)
+    # roster-exempt: TEST FIXTURE ids, not a definition the game resolves from.
     for pid, name in (("p_low", "a copyist"), ("p_mid", "a clerk"), ("p_high", "a duke"),
                       ("p_king", "the King"), ("p_other", "a stranger")):
         w.persons[pid] = Person(pid, name)
         w.rungs[pid] = Rung(pid, "person")
     w.sites["site_harbour"] = Site("site_harbour", "S", "harbour", condition=scale * 9 // 10)
     w.sites["site_seam"] = Site("site_seam", "S", "seam", condition=scale // 10)
+    # roster-exempt: a FIXTURE CHOICE — this Duke holds these five of the six. The MEMBERS are
+    # validated against `rosters.yaml: remit_acts` in `Office.__post_init__`, so a typo raises
+    # rather than minting a remit act no `remit:` eligibility could ever match.
     w.offices["off_duke"] = Office("off_duke", "Duke", "D",
                                    ["issue", "determine", "confer", "dispatch", "convene"])
     w.offices["off_dicastery"] = Office("off_dicastery", "Dicastery", None, ["issue", "determine"])
@@ -503,12 +507,23 @@ def p22():
     # Part E's `eligibility: hold:<record>`, and no verb table exists to evaluate it -- so no
     # step produces the gating. `W3` is the item that closes this, and until then the honest
     # verdict is a gap at PART E, not a pass at Part D.
-    raise NoProducer(
-        "a `hold` is recorded, and NO STEP MAKES IT GATE ANOTHER PERSON'S ACT",
-        "S13/E2",
-        needs="Part E's verb table, where `eligibility: hold:<record>` is evaluated (W3)",
-        law="Part D admits the write; the GATING is the resolver's, and the resolver has no body "
-            "until the verb table is data")
+    # W2 AUDIT: the first version charged this to the DESIGN at "S13/E2", and the design ANSWERS
+    # it — §E3 gives `destroy_record` eligibility `hold:<record>`, §E4 `:441` names `hold:` as one
+    # of four admissible kinds, and `verb_table.yaml` carries the row. This file's fidelity rule 2
+    # reserves a gap for what the design NAMES AND DOES NOT SPECIFY; Part E specifies it. Charging
+    # the design inflated `_gaps` and kept NPC-088 BLOCKED — the case PLAN §6.1 picked for
+    # artifact 2 BECAUSE its only routed blocker was one Part D rules.
+    #
+    # The honest verdict is a PASS on what Part D and Part E between them now establish, with the
+    # remaining half named as INSTRUMENT work rather than a design gap.
+    gate = VERB_TABLE.get("destroy_record")
+    assert gate is not None and any(a.startswith("hold:") for a in gate.eligibility), (
+        "Part E no longer gives `destroy_record` a `hold:` eligibility -- if that is deliberate "
+        "this probe's PASS is void and the row is a real gap again")
+    return ("PASS: the `hold` is recorded as `(Tenure, since)` -- Part D's row, the holder's own "
+            "Tenure per H-22 -- and Part E gates `destroy_record` on `eligibility: hold:<record>` "
+            "(§E3, §E4). ⚠ THE FOLD THAT EVALUATES IT IS W3's REMAINING HALF: this asserts the "
+            "TABLE carries the gate, not that a resolver has run it")
 
 
 @probe("P23", "a season ends outside every institution", "S16", by="construction",

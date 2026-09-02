@@ -176,11 +176,12 @@ verbs:
     stratum:     "binding_decision"
     eligibility: ["remit:issue"]
     requires:    "scope enumerates executors, not places (§37.1)"
-    writes:      []
+    writes:      ["Dispensation.exists"]
     emits:       ["dispensation.issued"]
     emits_on_refusal: ["issue.refused"]
     grade:       "ruled"
     writes_note: "— (a Dispensation is not a state write — §37.3)"
+    writes_note: "⚠ W3, ON THE W2 AUDIT: as `petition`. Part E's '(a Dispensation is not a state write)' is the bypass §1.4 hole 4 names, not a licence for one."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "kill / wound"
     stratum:     "contested_physical"
@@ -233,11 +234,12 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     requires:    "— no dedup, no cap, no per-venue limit (§26.3)"
-    writes:      []
+    writes:      ["Petition.exists"]
     emits:       ["petition.filed"]
     emits_on_refusal: []
     grade:       "ruled"
     writes_note: "— (a Petition is created, not written)"
+    writes_note: "⚠ W3, ON THE W2 AUDIT: Part E says a Petition is 'created, not written', and PLAN §1.4 hole 4 says THAT IS THE DEFECT — #353 :1061-1064, 'Either the gate applies the write, or direct assignment is made impossible.' With `writes: []` the creation row W2 added was INERT and creation still bypassed the gate."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "refract"
     stratum:     "social"

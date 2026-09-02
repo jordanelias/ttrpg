@@ -18,7 +18,7 @@ checking.* So every probe declares its provenance:
 
 ## ⚠ THE ENFORCEMENT SPLIT — the single most important number in this ledger
 
-**Of 53 gaps, 22 were raised BY THE SHAPE ITSELF and 27 exist only because THERE IS NO SIGNATURE TO CALL.**
+**Of 52 gaps, 21 were raised BY THE SHAPE ITSELF and 27 exist only because THERE IS NO SIGNATURE TO CALL.**
 
 That is close to an even split, and it matters more than any case verdict. A refusal a
 gate enforces and a refusal that exists because nobody wrote the function are different
@@ -30,7 +30,7 @@ has no module system and no visibility modifiers, so the guarantee there is
 a contributor closes by simply writing the function — no gate fires, no test goes red,
 and the design's own §27.2 admission applies: *enforced by a person noticing*.
 
-**And 20 of 68 PASSes are not by construction
+**And 20 of 69 PASSes are not by construction
 either** — they are listed individually below and should be discounted accordingly. A
 `probe-model` PASS means the instrument supplied something the design does not.
 
@@ -73,7 +73,6 @@ either** — they are listed individually below and should be discounted accordi
 | `P15` | **UNSPECIFIED** | no-signature | S61 | something said in private must be able to stay private |
 | `P17` | **UNSPECIFIED** | probe-model | S22.4 | a character's risk must be able to build up quietly across seasons without anyone acting |
 | `P19` | **FORBIDDEN** | construction | S3-L4 | the story must be able to end when a counter reaches a value, with no person choosing |
-| `P22` | **NO-PRODUCER** | construction | S13/E2 | possession of an object must be able to make someone else's action unavailable or costlier |
 | `P25` | **FORBIDDEN** | construction | S15.3 | the world must be able to end a person's position without anyone acting |
 | `P26` | **UNSPECIFIED** | probe-model | S22.4 | harm suffered over several seasons must be able to close off options |
 | `P29` | **UNOWNED** | no-signature | S22.3 | a character must be able to move from one place to another and be somewhere else next season |
@@ -133,6 +132,7 @@ either** — they are listed individually below and should be discounted accordi
 | `P2` | PASS | construction | S26.3 | a character must be able to take several distinct actions in one season and choose what to leave undone |
 | `P20` | PASS | construction | S29 | a person who was previously part of a crowd must be able to become a named individual |
 | `P21` | PASS | construction | S9.1 | a crowd must be able to act, and a person must be able to step out of one, with no conversion |
+| `P22` | PASS | construction | S13 | possession of an object must be able to make someone else's action unavailable or costlier |
 | `P23` | PASS | construction | S16 | a character must be able to simply vanish or be killed, with no institutional process |
 | `P24` | PASS | construction | S15.3 | when a character dies everything they held must end, including things held elsewhere |
 | `P27` | PASS | construction | S20 | a character must be able to quietly do less than ordered, discoverable only by investigation |
@@ -370,12 +370,6 @@ either** — they are listed individually below and should be discounted accordi
 
 **needs:** one of ['RESOLVE']
 **law:** L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say
-
-### `P22` — a held object gates another's act  ·  **NO-PRODUCER**  ·  `S13/E2`  ·  by `construction`
-**what:** a `hold` is recorded, and NO STEP MAKES IT GATE ANOTHER PERSON'S ACT
-
-**needs:** Part E's verb table, where `eligibility: hold:<record>` is evaluated (W3)
-**law:** Part D admits the write; the GATING is the resolver's, and the resolver has no body until the verb table is data
 
 ### `P25` — a storm ends a tenure  ·  **FORBIDDEN**  ·  `S15.3`  ·  by `construction`
 **what:** an actorless row wrote Tenure.until with no (Person, exists) change of its own

@@ -132,10 +132,10 @@ rows:
     emits:   "`claim.deposited`"
   - kind:    "Person"
     field:   "coherence"
-    steps:   [MAT]
-    class:   "MATTER"
+    steps:   [RES]
+    class:   "ACTS"
     social:  "false"
-    by:      "W2/H-47 -- VIA THE SEAM ONLY (PLAN §W2). Not written by any verb; the seam is its only writer"
+    by:      "W2/H-47, CORRECTED BY W2's ADVERSARIAL PASS -- IT WAS WRONG IN BOTH DIRECTIONS. It admitted MAT only, and #353 :98 puts the seam at RESOLVE via `contest`, so the ONE writer #353 licenses (:1904, 'written only through seam Events') would have RAISED -- an over-refusal, G4. And admitting MAT with `social: false` made THE WORLD a writer of coherence, which is a FOURTH LICENSED CLOCK against §25.1 :862-866, 'the three licensed clocks are exhaustive -- matter, bodies, and the confidence of a memory'. Now RES, `social: false` so a seam Event may write it, and the seam bound is ENFORCED IN `write()` on `(Tenure, until)`'s precedent rather than asserted in this cell -- a comment is not a constraint"
     emits:   "`coherence.changed`"
   - kind:    "Person"
     field:   "convictions"
@@ -177,7 +177,7 @@ rows:
     steps:   [CEN]
     class:   "MATTER"
     social:  "false"
-    by:      "W2/H-49 -- a §54 fold-in with no Part D row. H-11's subsistence default reads it ('scaled by weight'), so every season touches it"
+    by:      "W2/H-49. ⚠ PROVENANCE CORRECTED by the adversarial pass: this said \"a §54 fold-in\" and #353 §54's adjudicated items :1893-1908 do NOT include `weight`. The FIELD is real -- `Person :=` at :324 carries it -- and that is the ground the row stands on. H-11's subsistence default reads it ('scaled by weight'), so every season touches it"
     emits:   "`weight.changed`"
   - kind:    "Petition"
     field:   "exists"
@@ -296,7 +296,7 @@ rows:
     steps:   [RES]
     class:   "ACTS"
     social:  "true"
-    by:      "W2/H-50 -- a §54 fold-in with no Part D row, which left P39's 'a relationship carries state' WITH NO WRITER"
+    by:      "W2/H-50. ⚠ PROVENANCE CORRECTED by the adversarial pass: this said \"a §54 fold-in\" and #353 §54's items :1893-1908 do NOT include `payload`. The field is real (:532) and the defect is real -- it left P39's 'a relationship carries state' WITH NO WRITER"
     emits:   "`tenure.payload_set`"
   - kind:    "Tenure"
     field:   "since"
