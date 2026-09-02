@@ -3011,6 +3011,110 @@ def test_the_governance_slice_executes_and_a_binding_decision_reaches_a_rung():
           f"{len(S.resolvable_verbs())} of {len(S.VERB_TABLE)} verbs now execute")
 
 
+def test_the_title_ladder_is_total_over_the_rungs_and_rank_is_the_rung_ordinal():
+    """`H-90`. Jordan, 2026-09-02: *"realm = king/queen, duchy = duke/duchess, province =
+    count/countess, territory = lord, settlement = mayor, community = community leader, hearth =
+    family head, person = own autonomous individual."*
+
+    ⚠ RANK IS THE ORDINAL IN `rung_kinds`, NOT A SECOND SCALE. The ladder the tree already had is
+    the ladder, so a title names the rung kind it governs and the ordering falls out; minting a
+    separate rank number would be the `scale`-vs-`stratum` mistake one axis along.
+
+    ⚠ AND THE LADDER IS TOTAL, which is the load-bearing half: every rung kind has a title, down
+    to a person governing themselves. That bottom rung is why Part E's `own` eligibility is not a
+    special kind of permission — it is this ladder at scale `person`."""
+    titles = S.roster("titles", ordered=True)
+    domains = {t: S.title_domain(t) for t in titles}
+    assert all(domains.values()), (
+        f"a title governs no rung: {[t for t, d in domains.items() if not d]}")
+    assert set(domains.values()) == set(S.RUNG_KINDS), (
+        f"the ladder is not total — rungs with no title: "
+        f"{sorted(set(S.RUNG_KINDS) - set(domains.values()))}")
+    # rank IS the rung ordinal, in both directions
+    for t, dom in domains.items():
+        assert S.title_rank(t) == list(S.RUNG_KINDS).index(dom), (t, dom)
+    assert S.title_rank("King") > S.title_rank("Duke") > S.title_rank("Count") \
+        > S.title_rank("Lord") > S.title_rank("Mayor") > S.title_rank("Individual")
+    assert S.title_domain("Dicastery") is None and S.title_rank("Dicastery") == -1, (
+        "a non-title post reads as a rank; then an ordinary office confers governing authority")
+
+
+def test_purview_is_containment_and_stops_at_the_holders_own_domain():
+    """`H-90`. Jordan: *"a Duke can revoke office from any individual in that office so long as
+    that office is for a holding **under their purview**."*
+
+    So authority over a governance act is RANK + CONTAINMENT — a property of the ACTOR's title and
+    the containment tree — and NOT `remit:<act>`, which is a property of the target office. The
+    two models differ and the difference is `H-90`'s subject.
+
+    ⚠ AND PURVIEW IS DIRECTIONAL. A duke's purview reaches DOWN into the duchy and stops; the
+    realm above him is not his. A test that only checked "the duke can reach the settlement" would
+    pass on a predicate that returned `True` for everything."""
+    w = P.tiny_world()
+    duke = "p_high"          # holds `off_duke`, whose `rung` is the duchy `D`
+    assert w.offices["off_duke"].post == "Duke" and w.offices["off_duke"].rung == "D"
+    assert w.rungs["D"].kind == "duchy" and w.rungs["R"].kind == "realm"
+    for inside in ("D", "S", "Hh"):
+        assert S.under_purview(w, duke, inside), (
+            f"{inside} ({w.rungs[inside].kind}) is inside the duchy and is not under the duke")
+    assert not S.under_purview(w, duke, "R"), (
+        "the REALM is under the duke's purview — purview is reaching upward, so a duke could act "
+        "on the king's domain")
+    assert not S.under_purview(w, "p_low", "S"), (
+        "a person holding no title has purview; then governing authority is not a title at all")
+    # AND IT IS GOVERNING AUTHORITY, NOT SOVEREIGNTY OR OWNERSHIP — `H-90` rules those three
+    # apart and the tree models only the first. If a `sovereign` or `holdings` relation ever
+    # appears, this predicate must not silently start answering for it.
+    assert not hasattr(w, "sovereign") and not hasattr(w, "holdings"), (
+        "the World has grown a sovereignty or holdings relation; `under_purview` answers the "
+        "GOVERNING AUTHORITY question only, and `H-90` rules the three apart")
+
+
+def test_revoking_a_title_needs_holdings_and_revoking_an_office_needs_purview():
+    """`H-90`. The two rules are different and which applies turns on whether the target is a
+    TITLE. Jordan, 2026-09-02:
+
+      · ordinary office — *"a Duke can revoke office from any individual in that office so long as
+        that office is for a holding **under their purview**"*;
+      · a title — *"King/Queen **cannot** revoke title of Duke/Duchess if they do not have duchy
+        is in their holdings. King/Queen **can** revoke title of Duke/Duchess if the duchy is one
+        of their holdings."*
+
+    ⚠ THE NEGATIVE CASE IS THE WHOLE POINT. A king has governing authority over the entire realm,
+    so a purview-only rule would let him strip any duke in it — and the ruling exists to forbid
+    exactly that reading. The first version of `_req_revoke` applied purview to every revocation
+    and was wrong in precisely that direction; only the positive half would have caught it, which
+    is why both halves are asserted here."""
+    w = P.tiny_world()
+    w.offices["off_duke"].revocation = "the crown's writ (harness fixture)"
+    king, duke_office = "p_king", "off_duke"
+    assert S.title_domain(w.offices[duke_office].post) is not None, "the target is not a title"
+    act = S.Act(id="k1", actor=king, verb="revoke", payload={"office": duke_office})
+
+    # THE NEGATIVE: governing authority is not enough for a title.
+    assert not S.REQUIRES_PREDICATES["revoke"](w, act), (
+        "the king can revoke the duke's TITLE without holding the duchy — purview is standing in "
+        "for holdings, which is the reading this ruling forbids")
+    # THE POSITIVE: the same act, once the duchy is in his holdings.
+    w.add_tenure(S.Tenure("t_land", king, "D", "hold", 0))
+    assert S.in_holdings(w, king, "D") and not S.in_holdings(w, king, "S")
+    assert S.REQUIRES_PREDICATES["revoke"](w, act), (
+        "the duchy is in the king's holdings and he still cannot revoke the title")
+
+    # AND AN ORDINARY OFFICE TAKES THE OTHER RULE: purview, no holding required.
+    w2 = P.tiny_world()
+    w2.offices["off_dicastery"].revocation = "the duke's writ (harness fixture)"
+    w2.offices["off_dicastery"].rung = "S"          # a settlement inside the duchy
+    w2.add_tenure(S.Tenure("t_dic", "p_mid", "off_dicastery", "hold", 0))
+    assert S.title_domain(w2.offices["off_dicastery"].post) is None, "the target IS a title"
+    assert not S.in_holdings(w2, "p_high", "S"), "the duke holds the settlement; the test is moot"
+    assert S.REQUIRES_PREDICATES["revoke"](
+        w2, S.Act(id="d1", actor="p_high", verb="revoke",
+                  payload={"office": "off_dicastery"})), (
+        "the duke cannot revoke an ordinary office in his own duchy — the holdings rule has "
+        "leaked onto offices, where the ruling asks only for purview")
+
+
 def test_no_person_can_choose_a_governance_verb_and_h71_is_why():
     """⚠ THE HALF THE SLICE DOES NOT BUILD, PINNED SO IT CANNOT BE ASSUMED AWAY.
 

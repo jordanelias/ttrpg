@@ -294,6 +294,62 @@ rosters:
       "a proposition":  "social_contest"
     values: []
 
+  titles:
+    source: "JORDAN, 2026-09-02, VERBATIM. None of this was in the architecture: `ARCHITECTURE_V2.md` contains no `sovereign`, no `Parliament`, and no title ladder."
+    cite: "H-90"
+    note: >-
+      ⚠ THREE THINGS THAT ARE NOT THE SAME, AND THE TREE MODELLED NONE OF THEM.
+      *"While a King/Queen may have governing authority over the country, they do not necessarily
+      have sovereign power of all territories/provinces/duchies nor do they necessarily have all
+      territories/provinces/duchies in their holdings."*
+        · GOVERNING AUTHORITY — what a title gives you over a domain. The ladder below.
+        · SOVEREIGN POWER — *"uncontested and absolute"*, and deliberately NOT monopolised:
+          *"the politics of this game are set up such that there is a Parliament, so there is no
+          monopoly of power in the ruler."*
+        · HOLDINGS — what you actually own. Disjoint from what you govern.
+      ⚠ AND THE LADDER IS `rung_kinds`, WHICH ALREADY EXISTS. Each title's `domain` is the rung
+      kind it governs, so rank IS the ordinal position in that roster and needs no second scale.
+      A `Lord` is the exception worth reading twice: territories *"that have not been assembled
+      into a province"*, so a Lord may govern SEVERAL territories while a Count governs ONE
+      province — rank is not headcount.
+      ⚠ DELEGATION. *"All of Kings, Dukes, Counts and Lords can assign others of lesser rank to
+      govern any of their holdings in their stead"* — a governor for a duchy (which is how regency
+      and puppet rulers arise), a council for a province, mayoral elections for a settlement. NOT
+      BUILT: this roster is the ladder only, and delegation is registered as open.
+      ⚠ AND THE REVOCATION RULE, which is an ELIGIBILITY MODEL and not a remit: *"a Duke can
+      revoke office from any individual in that office so long as that office is for a holding
+      under their purview."* So authority over a governance act is RANK + CONTAINMENT — does the
+      actor's domain contain the holding the office governs — and not `remit:<act>` on that office.
+    ordered: true
+    # ⚠ TOTAL OVER `rung_kinds` — Jordan, 2026-09-02: *"realm = king/queen, duchy = duke/duchess,
+    # province = count/countess, territory = lord, settlement = mayor, community = community
+    # leader, hearth = family head, person = own autonomous individual."* EVERY rung has a
+    # governing title, and the ladder bottoms out at a person governing themselves.
+    #
+    # ⚠ AND THAT BOTTOM RUNG IS WHY `own` ELIGIBILITY IS NOT A SPECIAL CASE. Part E's `own` is the
+    # person-scale rung of THIS ladder, not a separate kind of permission: *"person = own
+    # autonomous individual"*. A verb eligible by `own` is a governance act at scale `person`,
+    # performed by the only title-holder of that domain. Recorded as an observation, not acted on
+    # — collapsing `own` into the ladder would change `_eligible`, which is not this item's to do.
+    #
+    # ⚠ A LORD IS THE ONE ASYMMETRY: territories *"that have not been assembled into a province"*,
+    # so a Lord may govern SEVERAL territories where a Count governs ONE province. Rank is the
+    # ordinal in `rung_kinds`, never a headcount.
+    domains:
+      King:              "realm"
+      Queen:             "realm"
+      Duke:              "duchy"
+      Duchess:           "duchy"
+      Count:             "province"
+      Countess:          "province"
+      Lord:              "territory"
+      Mayor:             "settlement"
+      "Community Leader": "community"
+      "Family Head":     "hearth"
+      Individual:        "person"
+    values: ["King", "Queen", "Duke", "Duchess", "Count", "Countess", "Lord",
+             "Mayor", "Community Leader", "Family Head", "Individual"]
+
   conditional_emission_rows:
     source: "`W4`. Part D's `emits:` column does not distinguish a kind emitted ON EVERY WRITE from one emitted only WHEN A CONDITION HOLDS, and the two are different things."
     note: >-

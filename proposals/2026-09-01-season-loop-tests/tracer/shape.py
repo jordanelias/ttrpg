@@ -2700,6 +2700,73 @@ def requires_predicate(verb: str):
 # the person is A PERSON HOLDING AN OFFICE acting at a rung, which is what these four do.
 # ---------------------------------------------------------------------------
 
+def title_domain(post: Optional[str]) -> Optional[str]:
+    """The rung kind a title governs, from `rosters.yaml: titles`. `None` for a post that is not
+    a title — a Dicastery is an office, not a rank."""
+    return (_ROSTERS.get("titles") or {}).get("domains", {}).get(str(post or ""))
+
+
+def title_rank(post: Optional[str]) -> int:
+    """A title's rank as its domain's ordinal in `rung_kinds`. Higher governs wider.
+
+    ⚠ RANK IS NOT A SECOND LADDER. `rung_kinds` is already ordered person → realm, and each title
+    names the rung kind it governs, so the ordering falls out of a roster that exists rather than
+    from a number somebody assigns. `-1` for a non-title."""
+    dom = title_domain(post)
+    return -1 if dom is None else (list(RUNG_KINDS).index(dom)
+                                              if dom in RUNG_KINDS else -1)
+
+
+def in_holdings(w: "World", actor: str, rung: Optional[str]) -> bool:
+    """Is this rung one of the actor's HOLDINGS? A `hold` Tenure whose object is a RUNG.
+
+    ⚠ HOLDINGS ARE NOT GOVERNING AUTHORITY, AND JORDAN RULED THE DIFFERENCE OPERATIONAL:
+    *"King/Queen cannot revoke title of Duke/Duchess if they do not have duchy is in their
+    holdings. King/Queen can revoke title of Duke/Duchess if the duchy is one of their
+    holdings."* So a king with governing authority over the whole realm still cannot unmake a
+    duke whose duchy he does not hold — which is the same ruling as *"they do not necessarily
+    have all territories/provinces/duchies in their holdings"*, made mechanical.
+
+    ⚠ NO NEW TENURE KIND. `hold` is already polymorphic — an office, a Record (§13), a store —
+    so a landholding is a `hold` whose object is a rung, and `tenure_kinds` does not move (§8)."""
+    if rung is None or rung not in w.rungs:
+        return False
+    return any(t.kind == "hold" and t.subject == actor and t.object == rung and t.live
+               for t in w.tenures)
+
+
+def under_purview(w: "World", actor: str, holding: Optional[str]) -> bool:
+    """Is `holding` under the governing authority of a title `actor` holds?
+
+    ⚠ JORDAN, 2026-09-02: *"a Duke can revoke office from any individual in that office so long as
+    that office is for a holding under their purview."* So authority over a governance act is
+    **RANK + CONTAINMENT** — the actor holds a title whose domain contains the holding — and NOT
+    `remit:<act>` on the particular office. That is a different eligibility model from the one
+    Part E states, and the difference is registered rather than resolved here (`H-90`).
+
+    ⚠ GOVERNING AUTHORITY, NOT SOVEREIGNTY AND NOT OWNERSHIP. Jordan, same ruling: a King *"may
+    have governing authority over the country"* yet hold neither sovereign power over it nor all
+    of it in their holdings. This function answers the FIRST question only; the tree models
+    neither of the other two."""
+    if holding is None:
+        return False
+    seat = next((w.offices[t.object].rung for t in w.tenures
+                 if t.subject == actor and t.kind == "hold" and t.live
+                 and t.object in w.offices
+                 and title_domain(w.offices[t.object].post) is not None), None)
+    if seat is None:
+        return False
+    # containment walks UP from the holding: a duchy's province is under the duke, a duchy's
+    # neighbour is not.
+    seen, cur = set(), holding
+    while cur is not None and cur not in seen:
+        if cur == seat:
+            return True
+        seen.add(cur)
+        cur = Query.parent_of(w, cur)
+    return False
+
+
 @requires_predicate("confer")
 def _req_confer(w: "World", a: "Act") -> bool:
     """Part E, IN FULL: *"the office's **conferral basis**, and 1-per-object: no live `hold` on the
@@ -2742,6 +2809,36 @@ def _req_revoke(w: "World", a: "Act") -> bool:
         return False
     if not (w.offices[obj].revocation or "").strip():
         return False
+    # ⚠ TWO RULES, AND WHICH ONE APPLIES TURNS ON WHETHER THE TARGET IS A TITLE.
+    #
+    # An ORDINARY office — a governor, a council seat — is revocable by GOVERNING AUTHORITY.
+    # Jordan, 2026-09-02: *"a Duke can revoke office from any individual in that office so long as
+    # that office is for a holding UNDER THEIR PURVIEW."* Rank plus containment.
+    #
+    # A TITLE is revocable only from HOLDINGS. Jordan, same exchange: *"King/Queen cannot revoke
+    # title of Duke/Duchess if they do not have duchy is in their holdings. King/Queen can revoke
+    # title of Duke/Duchess if the duchy is one of their holdings."* So a king with governing
+    # authority over the entire realm STILL CANNOT unmake a duke whose duchy he does not hold.
+    # This is the distinction he drew at the start — governing authority, sovereign power and
+    # holdings are three different things — arriving as a branch rather than as prose.
+    #
+    # ⚠ AND PURVIEW ALONE WOULD HAVE BEEN WRONG HERE. The first version applied `under_purview` to
+    # every revocation, so a king could strip any duke in his realm. That is exactly the reading
+    # the ruling exists to forbid.
+    target_is_title = title_domain(w.offices[obj].post) is not None
+    if target_is_title:
+        if not in_holdings(w, a.actor, w.offices[obj].rung):
+            return False
+    elif not under_purview(w, a.actor, w.offices[obj].rung):
+        return False
+    #
+    # ⚠ THIS IS A DIFFERENT ELIGIBILITY MODEL FROM THE ONE PART E STATES, and the difference is
+    # registered (`H-90`) rather than resolved here. Part E gives `revoke` the eligibility
+    # `remit:revoke`; Jordan's rule is about purview, which is a property of the ACTOR's title and
+    # the containment tree, not of the target office's remit column. Applied here as a NARROWING
+    # of the precondition — which is compatible with both readings and is what the ruling says —
+    # rather than by editing the transcribed `eligibility:` column, which is not this item's to
+    # rewrite.
     return any(t.kind == "hold" and t.object == obj and t.live for t in w.tenures)
 
 
