@@ -1,13 +1,24 @@
 # TEST B — every unique arc — the per-case log
 
-For each case: every `season_requires` row, the probe it routed onto, the verdict,
-and the section of `ARCHITECTURE.md` that governs it. **Probe verdicts are HARD**
-(each is an execution); **case verdicts are ADVISORY** (routing is keyword-based
-over prose, and keyword routing is crude).
+For each case: every `season_requires` row, what it DECLARES it rests on, the
+verdict, and the governing section. **Probe verdicts are HARD**
+(each is an execution).
 
-`UNMAPPED` = no probe matched; the row is reported, never passed.
-`UNCLEAR` = the CASE SOURCE fails to say something; that is the source failing,
-not the shape.
+⚠ **ROUTING IS DECLARED, NOT MATCHED (`W10`).** The regex router is deleted. A row
+reaches a verdict only through an authored `exercises:` list in
+`cases/exercises/*.yaml`, bound to the row by the sha of its own need text — so a
+row that reaches the wrong answer is an authoring error somebody can argue with,
+not a pattern that fired on a common word. And every count the router published
+was a **floor**: an unmatched row fell silently to UNMAPPED, understating the
+corpus in the direction that flattered it.
+
+| verdict | means |
+|---|---|
+| `PASS` | every token the row declares resolved and is satisfied |
+| `ASSUMED` | resolved, but at least one rests on an **injected default nobody ratified**. Never a pass; it carries the case to DEGRADED |
+| `GAP` | a declared token named a real thing that is `absent`, unexecutable or gapping — a finding about the **shape** |
+| `UNMAPPED` | **nobody authored an `exercises:` for this row.** A fact about AUTHORING, which is fixable — never a pass |
+| `SOURCE-UNCLEAR` | the CASE SOURCE fails to say something; the source failing, not the shape |
 
 ## ARC-01 — The Unworked Clause  ·  **NOT-ASSESSED**
 *realm · 7 rows, 4 core · blockers: none*

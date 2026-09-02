@@ -16,10 +16,13 @@ rows:
     from whether the operation succeeded.
   exercises:
   - H-38
-  - H-25
+  - probe:P33
   from: 'A persistent personal resource whose cost SCALES with the scale and type of operation: `H-38`
-    supplies the banded scalar on Person, and the scaling is the missing half -- there is no per-act cost
-    model (`P33`), and `H-25` is the absent bound on the accumulation.'
+    supplies the banded scalar on Person, and the scaling is the missing half -- there is NO per-act cost
+    model. ⚠ THE `W10` ADVERSARIAL PASS CAUGHT THE MIS-ATTRIBUTION: this row published `H-25` (a termination
+    bound per self-feeding loop) as its blocker while this very sentence named `P33`. `P33` is the probe
+    for act cost beyond budget consumption and it gaps; `H-25` is about loops, which this row is not about.
+    Naming the right blocker is the whole point of declared routing.'
 - need_sha: 504cde51f5df
   hardness: core
   need: As her personal condition degrades across a season, the range of actions available to her must

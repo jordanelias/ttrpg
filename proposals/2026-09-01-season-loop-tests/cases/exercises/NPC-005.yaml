@@ -15,11 +15,15 @@ rows:
   need: An act she performs must be able to leave no attributable trace back to her, her order, or her
     Crown when it succeeds cleanly -- full deniability as an achievable outcome, not merely a stated intention.
   exercises:
+  - probe:P15
   - H-33
   from: 'Full deniability requires that an act NOT reach everyone, and #353 S61 is explicit: ''WITNESS
     AS SPECIFIED FANS EVERY EVENT TO EVERY PERSON. Nothing said in private is private.'' The five channels
     are named and none has a predicate -- `H-33` -- so there is no mechanism by which anyone could be
-    excluded.'
+    excluded. ⚠ THE `W10` ADVERSARIAL PASS FOUND THIS ROW MIS-AIMED: it quoted P15''s law verbatim and
+    then declared only `H-33`, which is an `assumption` and so published a PASS. `P15` is the probe carrying
+    that identical law and it GAPS -- ''four of the five witness channels have no predicate''. Declaring
+    the probe is what makes the row report what its own rationale says.'
 - need_sha: 29b4607b54f2
   hardness: core
   need: An act that goes partially wrong must be able to generate a persistent, accumulating institutional
@@ -47,11 +51,15 @@ rows:
     rules treating mere discovery of the secret as automatically disqualifying, regardless of her competence
     or loyalty.
   exercises:
+  - probe:P15
   - H-33
   from: 'A capability true and mechanically active while unknown to her institution is fine on the capability
     side -- S9.2 says capability GATES NOTHING and supplies dice -- and impossible on the knowledge side
     for the same reason as row 0: total fan-out means the institution witnesses everything. `H-33` is
-    the gap.'
+    the gap. ⚠ THE `W10` ADVERSARIAL PASS FOUND THIS ROW MIS-AIMED: it quoted P15''s law verbatim and
+    then declared only `H-33`, which is an `assumption` and so published a PASS. `P15` is the probe carrying
+    that identical law and it GAPS -- ''four of the five witness channels have no predicate''. Declaring
+    the probe is what makes the row report what its own rationale says.'
 - need_sha: 483a1d0f6ba0
   hardness: core
   need: Her perception of the consequences of a mission must be able to diverge from her colleagues' and
@@ -59,7 +67,9 @@ rows:
     and as a partial disaster by her personal standard.
   exercises:
   - H-79
-  - probe:P37
   from: 'The identical event scored differently by her and by her superiors is T3 working: every witness
-    mints its OWN claim. `H-79` decides what those claims are about, and `P37` is where a person''s response
-    is shown to be a lookup on their own interior.'
+    mints its OWN claim, and `H-79` decides what those claims are about. ⚠ THIS ROW ALSO DECLARED `probe:P37`
+    AND THAT WAS WRONG: P37 tests whether a character''s REACTION can be fully determined by internal
+    state rather than by a choice, which is a different proposition from two people SCORING one event
+    differently. Caught by the `W10` adversarial pass; a plausible-sounding association is exactly what
+    declared routing exists to expose.'

@@ -20,8 +20,10 @@ shape had refused. Every probe now declares HOW its verdict was reached:
                         at all. The verdict is about the design; the model is the instrument's,
                         and is named so a reader can discount it.
 
-A probe's verdict is HARD (it is an execution). A case's verdict is ADVISORY (routing is
-keyword-based over prose). Every source cited is in the PR #337 -> now chain.
+A probe's verdict is HARD (it is an execution). A case's verdict is ADVISORY -- but no longer
+because routing is crude: since `W10` a case row reaches a probe ONLY through an authored
+`exercises:` declaration, so a wrong answer is an authoring error somebody can argue with rather
+than a regex firing on a common word. Every source cited is in the PR #337 -> now chain.
 """
 
 from __future__ import annotations

@@ -84,6 +84,11 @@ SECTION_RE = re.compile(r"§[A-Z]*[0-9IVX]+(?:\.[0-9]+)?|Part [A-Z]+")
 # The marker a row carries when it claims to have come from V2's tables. `verify_transcription`
 # walks BOTH directions on it, so a fabricated row cannot wear this string and go unnoticed.
 TRANSCRIBED = "transcribed verbatim"
+# THE HOLE-ID SHAPE, WITH ONE OWNER. `exercises.py` re-derived it as `H-\\d+` and the two
+# disagreed at `H-100`: one classified it as a hole, the other refused it as malformed. CLAUDE.md
+# §8 -- never re-implement a rule. Widened to 2-3 digits here because the register passed 99 rows
+# during `W10` and the old shape would have started refusing ids the moment it did.
+REG_ID_RE = r"H-\d{2,3}"
 
 
 def normalised_default(cell: str) -> str:
@@ -138,7 +143,7 @@ def v2_rows() -> dict:
         if on and ln.startswith("| **H-"):
             c = [x.strip() for x in ln.strip().strip("|").split("|")]
             rid = c[0].replace("*", "").strip()
-            if not re.fullmatch(r"H-\d{2}", rid):
+            if not re.fullmatch(REG_ID_RE, rid):
                 # The id CELL must carry the id and nothing else. A marker put there -- an
                 # arrow, a footnote -- silently becomes part of the id, and both directions of
                 # the round trip then fire with a confusing "fabricated row" verdict rather

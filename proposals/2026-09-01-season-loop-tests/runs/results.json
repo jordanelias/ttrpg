@@ -26,19 +26,22 @@
      "resolved": [
       {
        "ok": true,
+       "bound": true,
        "kind": "verb",
        "detail": "'create_record' executes"
       },
       {
        "ok": true,
+       "assumed": true,
+       "bound": true,
        "kind": "hole",
-       "detail": "H-80: assumption",
-       "grade": "assumption"
+       "grade": "assumption",
+       "detail": "H-80: assumption -- rests on an injected default"
       }
      ],
      "verdict": {
-      "verdict": "PASS",
-      "detail": "'create_record' executes \u00b7 H-80: assumption",
+      "verdict": "ASSUMED",
+      "detail": "'create_record' executes \u00b7 H-80: assumption -- rests on an injected default",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -57,11 +60,13 @@
      "resolved": [
       {
        "ok": true,
+       "bound": true,
        "kind": "verb",
        "detail": "'create_record' executes"
       },
       {
        "ok": true,
+       "bound": true,
        "kind": "verb",
        "detail": "'destroy_record' executes"
       }
@@ -87,12 +92,15 @@
      "resolved": [
       {
        "ok": true,
+       "assumed": true,
+       "bound": true,
        "kind": "hole",
-       "detail": "H-79: assumption",
-       "grade": "assumption"
+       "grade": "assumption",
+       "detail": "H-79: assumption -- rests on an injected default"
       },
       {
        "ok": false,
+       "bound": true,
        "kind": "hole",
        "detail": "H-84: absent",
        "grade": "absent"
@@ -100,7 +108,7 @@
      ],
      "verdict": {
       "verdict": "GAP",
-      "detail": "H-79: assumption \u00b7 H-84: absent",
+      "detail": "H-79: assumption -- rests on an injected default \u00b7 H-84: absent",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -118,6 +126,7 @@
      "resolved": [
       {
        "ok": false,
+       "bound": true,
        "kind": "probe",
        "detail": "P17: GAP",
        "probe": "P17",
@@ -145,19 +154,22 @@
      "resolved": [
       {
        "ok": true,
+       "bound": true,
        "kind": "verb",
        "detail": "'speak' executes"
       },
       {
        "ok": true,
+       "assumed": true,
+       "bound": true,
        "kind": "hole",
-       "detail": "H-04: assumption",
-       "grade": "assumption"
+       "grade": "assumption",
+       "detail": "H-04: assumption -- rests on an injected default"
       }
      ],
      "verdict": {
-      "verdict": "PASS",
-      "detail": "'speak' executes \u00b7 H-04: assumption",
+      "verdict": "ASSUMED",
+      "detail": "'speak' executes \u00b7 H-04: assumption -- rests on an injected default",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -176,12 +188,15 @@
      "resolved": [
       {
        "ok": true,
+       "assumed": true,
+       "bound": true,
        "kind": "hole",
-       "detail": "H-79: assumption",
-       "grade": "assumption"
+       "grade": "assumption",
+       "detail": "H-79: assumption -- rests on an injected default"
       },
       {
        "ok": false,
+       "bound": true,
        "kind": "hole",
        "detail": "H-84: absent",
        "grade": "absent"
@@ -189,7 +204,7 @@
      ],
      "verdict": {
       "verdict": "GAP",
-      "detail": "H-79: assumption \u00b7 H-84: absent",
+      "detail": "H-79: assumption -- rests on an injected default \u00b7 H-84: absent",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -207,6 +222,7 @@
      "resolved": [
       {
        "ok": true,
+       "bound": true,
        "kind": "verb",
        "detail": "'kill / wound' executes"
       }
@@ -232,18 +248,20 @@
      "resolved": [
       {
        "ok": true,
+       "bound": true,
        "kind": "verb",
        "detail": "'create_record' executes"
       },
       {
        "ok": true,
+       "bound": true,
        "kind": "kind",
-       "detail": "term.matured: not in any emits:"
+       "detail": "term.matured: emitted"
       }
      ],
      "verdict": {
       "verdict": "PASS",
-      "detail": "'create_record' executes \u00b7 term.matured: not in any emits:",
+      "detail": "'create_record' executes \u00b7 term.matured: emitted",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -261,6 +279,7 @@
      "resolved": [
       {
        "ok": false,
+       "bound": true,
        "kind": "hole",
        "detail": "H-84: absent",
        "grade": "absent"
@@ -286,15 +305,13 @@
    "name": "Uwe Askeland",
    "scale": "person",
    "source": "NPC1.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "DEGRADED",
    "rows": 8,
    "core": 4,
    "core_routed": 4,
    "core_unmapped": 0,
-   "core_blocked": 1,
-   "blockers": [
-    "H-85"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "A person with no office must be able to run a recurring, location-bound activity whose ongoing existence -- not any single completed task -- is itself the thing at stake.",
@@ -307,19 +324,22 @@
      "resolved": [
       {
        "ok": true,
+       "bound": true,
        "kind": "verb",
        "detail": "'work' executes"
       },
       {
        "ok": true,
+       "assumed": true,
+       "bound": true,
        "kind": "hole",
-       "detail": "H-04: assumption",
-       "grade": "assumption"
+       "grade": "assumption",
+       "detail": "H-04: assumption -- rests on an injected default"
       }
      ],
      "verdict": {
-      "verdict": "PASS",
-      "detail": "'work' executes \u00b7 H-04: assumption",
+      "verdict": "ASSUMED",
+      "detail": "'work' executes \u00b7 H-04: assumption -- rests on an injected default",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -336,15 +356,17 @@
      ],
      "resolved": [
       {
-       "ok": false,
+       "ok": true,
+       "assumed": true,
+       "bound": true,
        "kind": "hole",
-       "detail": "H-85: absent",
-       "grade": "absent"
+       "grade": "assumption",
+       "detail": "H-85: assumption -- rests on an injected default"
       }
      ],
      "verdict": {
-      "verdict": "GAP",
-      "detail": "H-85: absent",
+      "verdict": "ASSUMED",
+      "detail": "H-85: assumption -- rests on an injected default",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -362,6 +384,7 @@
      "resolved": [
       {
        "ok": true,
+       "bound": true,
        "kind": "probe",
        "detail": "P36: PASS",
        "probe": "P36",
@@ -389,19 +412,22 @@
      "resolved": [
       {
        "ok": true,
+       "bound": true,
        "kind": "verb",
        "detail": "'speak' executes"
       },
       {
        "ok": true,
+       "assumed": true,
+       "bound": true,
        "kind": "hole",
-       "detail": "H-04: assumption",
-       "grade": "assumption"
+       "grade": "assumption",
+       "detail": "H-04: assumption -- rests on an injected default"
       }
      ],
      "verdict": {
-      "verdict": "PASS",
-      "detail": "'speak' executes \u00b7 H-04: assumption",
+      "verdict": "ASSUMED",
+      "detail": "'speak' executes \u00b7 H-04: assumption -- rests on an injected default",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -443,9 +469,8 @@
    "core": 3,
    "core_routed": 3,
    "core_unmapped": 0,
-   "core_blocked": 2,
+   "core_blocked": 1,
    "blockers": [
-    "H-84",
     "the six investigation acts"
    ],
    "routed": [
@@ -460,11 +485,13 @@
      "resolved": [
       {
        "ok": true,
+       "bound": true,
        "kind": "verb",
        "detail": "'create_record' executes"
       },
       {
        "ok": true,
+       "bound": true,
        "kind": "hole",
        "detail": "H-22: ruled",
        "grade": "ruled"
@@ -486,31 +513,27 @@
      "probe": null,
      "exercises": [
       "tell",
-      "H-79",
-      "H-84"
+      "H-79"
      ],
      "resolved": [
       {
        "ok": true,
+       "bound": true,
        "kind": "verb",
        "detail": "'tell' executes"
       },
       {
        "ok": true,
+       "assumed": true,
+       "bound": true,
        "kind": "hole",
-       "detail": "H-79: assumption",
-       "grade": "assumption"
-      },
-      {
-       "ok": false,
-       "kind": "hole",
-       "detail": "H-84: absent",
-       "grade": "absent"
+       "grade": "assumption",
+       "detail": "H-79: assumption -- rests on an injected default"
       }
      ],
      "verdict": {
-      "verdict": "GAP",
-      "detail": "'tell' executes \u00b7 H-79: assumption \u00b7 H-84: absent",
+      "verdict": "ASSUMED",
+      "detail": "'tell' executes \u00b7 H-79: assumption -- rests on an injected default",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -528,6 +551,7 @@
      "resolved": [
       {
        "ok": false,
+       "bound": true,
        "kind": "verb",
        "detail": "'the six investigation acts' is on the table and the fold cannot execute it: needs a `requires:` predicate"
       }
@@ -571,15 +595,13 @@
    "name": "Orm",
    "scale": "person",
    "source": "NPC1.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "DEGRADED",
    "rows": 8,
    "core": 4,
    "core_routed": 4,
    "core_unmapped": 0,
-   "core_blocked": 1,
-   "blockers": [
-    "H-25"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "A person's decision to continue an exhausting, unrewarded maintenance labor (repairing breaches in the world's substrate) must be represented as a real season-to-season choice, including the possibility that he stops, burns out, or dies at it.",
@@ -592,19 +614,22 @@
      "resolved": [
       {
        "ok": true,
+       "bound": true,
        "kind": "verb",
        "detail": "'work' executes"
       },
       {
        "ok": true,
+       "assumed": true,
+       "bound": true,
        "kind": "hole",
-       "detail": "H-04: assumption",
-       "grade": "assumption"
+       "grade": "assumption",
+       "detail": "H-04: assumption -- rests on an injected default"
       }
      ],
      "verdict": {
-      "verdict": "PASS",
-      "detail": "'work' executes \u00b7 H-04: assumption",
+      "verdict": "ASSUMED",
+      "detail": "'work' executes \u00b7 H-04: assumption -- rests on an injected default",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -617,26 +642,21 @@
      "hardness": "core",
      "probe": null,
      "exercises": [
-      "H-38",
-      "H-25"
+      "H-38"
      ],
      "resolved": [
       {
        "ok": true,
+       "assumed": true,
+       "bound": true,
        "kind": "hole",
-       "detail": "H-38: assumption",
-       "grade": "assumption"
-      },
-      {
-       "ok": false,
-       "kind": "hole",
-       "detail": "H-25: absent",
-       "grade": "absent"
+       "grade": "assumption",
+       "detail": "H-38: assumption -- rests on an injected default"
       }
      ],
      "verdict": {
-      "verdict": "GAP",
-      "detail": "H-38: assumption \u00b7 H-25: absent",
+      "verdict": "ASSUMED",
+      "detail": "H-38: assumption -- rests on an injected default",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -654,14 +674,16 @@
      "resolved": [
       {
        "ok": true,
+       "assumed": true,
+       "bound": true,
        "kind": "hole",
-       "detail": "H-31: assumption",
-       "grade": "assumption"
+       "grade": "assumption",
+       "detail": "H-31: assumption -- rests on an injected default"
       }
      ],
      "verdict": {
-      "verdict": "PASS",
-      "detail": "H-31: assumption",
+      "verdict": "ASSUMED",
+      "detail": "H-31: assumption -- rests on an injected default",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -679,14 +701,16 @@
      "resolved": [
       {
        "ok": true,
+       "assumed": true,
+       "bound": true,
        "kind": "hole",
-       "detail": "H-20: assumption",
-       "grade": "assumption"
+       "grade": "assumption",
+       "detail": "H-20: assumption -- rests on an injected default"
       }
      ],
      "verdict": {
-      "verdict": "PASS",
-      "detail": "H-20: assumption",
+      "verdict": "ASSUMED",
+      "detail": "H-20: assumption -- rests on an injected default",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -728,30 +752,41 @@
    "core": 5,
    "core_routed": 5,
    "core_unmapped": 0,
-   "core_blocked": 2,
+   "core_blocked": 3,
    "blockers": [
-    "probe:P35",
-    "probe:P37"
+    "probe:P15",
+    "probe:P35"
    ],
    "routed": [
     {
      "need": "An act she performs must be able to leave no attributable trace back to her, her order, or her Crown when it succeeds cleanly -- full deniability as an achievable outcome, not merely a stated intention.",
      "hardness": "core",
-     "probe": null,
+     "probe": "P15",
      "exercises": [
+      "probe:P15",
       "H-33"
      ],
      "resolved": [
       {
+       "ok": false,
+       "bound": true,
+       "kind": "probe",
+       "detail": "P15: GAP",
+       "probe": "P15",
+       "verdict": "GAP"
+      },
+      {
        "ok": true,
+       "assumed": true,
+       "bound": true,
        "kind": "hole",
-       "detail": "H-33: assumption",
-       "grade": "assumption"
+       "grade": "assumption",
+       "detail": "H-33: assumption -- rests on an injected default"
       }
      ],
      "verdict": {
-      "verdict": "PASS",
-      "detail": "H-33: assumption",
+      "verdict": "GAP",
+      "detail": "P15: GAP \u00b7 H-33: assumption -- rests on an injected default",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -769,14 +804,16 @@
      "resolved": [
       {
        "ok": true,
+       "assumed": true,
+       "bound": true,
        "kind": "hole",
-       "detail": "H-20: assumption",
-       "grade": "assumption"
+       "grade": "assumption",
+       "detail": "H-20: assumption -- rests on an injected default"
       }
      ],
      "verdict": {
-      "verdict": "PASS",
-      "detail": "H-20: assumption",
+      "verdict": "ASSUMED",
+      "detail": "H-20: assumption -- rests on an injected default",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -794,6 +831,7 @@
      "resolved": [
       {
        "ok": false,
+       "bound": true,
        "kind": "probe",
        "detail": "P35: GAP",
        "probe": "P35",
@@ -813,21 +851,32 @@
     {
      "need": "A perception or capability she secretly has (Thread Sensitivity) must be able to be true and mechanically active while remaining completely unknown to the institution she serves, with that institution's own rules treating mere discovery of the secret as automatically disqualifying, regardless of her competence or loyalty.",
      "hardness": "core",
-     "probe": null,
+     "probe": "P15",
      "exercises": [
+      "probe:P15",
       "H-33"
      ],
      "resolved": [
       {
+       "ok": false,
+       "bound": true,
+       "kind": "probe",
+       "detail": "P15: GAP",
+       "probe": "P15",
+       "verdict": "GAP"
+      },
+      {
        "ok": true,
+       "assumed": true,
+       "bound": true,
        "kind": "hole",
-       "detail": "H-33: assumption",
-       "grade": "assumption"
+       "grade": "assumption",
+       "detail": "H-33: assumption -- rests on an injected default"
       }
      ],
      "verdict": {
-      "verdict": "PASS",
-      "detail": "H-33: assumption",
+      "verdict": "GAP",
+      "detail": "P15: GAP \u00b7 H-33: assumption -- rests on an injected default",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -838,29 +887,23 @@
     {
      "need": "Her perception of the consequences of a mission must be able to diverge from her colleagues' and superiors' assessment of that same mission -- the identical event scored as a clean win institutionally and as a partial disaster by her personal standard.",
      "hardness": "core",
-     "probe": "P37",
+     "probe": null,
      "exercises": [
-      "H-79",
-      "probe:P37"
+      "H-79"
      ],
      "resolved": [
       {
        "ok": true,
+       "assumed": true,
+       "bound": true,
        "kind": "hole",
-       "detail": "H-79: assumption",
-       "grade": "assumption"
-      },
-      {
-       "ok": false,
-       "kind": "probe",
-       "detail": "P37: GAP",
-       "probe": "P37",
-       "verdict": "GAP"
+       "grade": "assumption",
+       "detail": "H-79: assumption -- rests on an injected default"
       }
      ],
      "verdict": {
-      "verdict": "GAP",
-      "detail": "H-79: assumption \u00b7 P37: GAP",
+      "verdict": "ASSUMED",
+      "detail": "H-79: assumption -- rests on an injected default",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -910,7 +953,8 @@
    "core_unmapped": 0,
    "core_blocked": 2,
    "blockers": [
-    "H-84"
+    "H-84",
+    "the six investigation acts"
    ],
    "routed": [
     {
@@ -924,11 +968,13 @@
      "resolved": [
       {
        "ok": true,
+       "bound": true,
        "kind": "verb",
        "detail": "'transfer' executes"
       },
       {
        "ok": false,
+       "bound": true,
        "kind": "hole",
        "detail": "H-84: absent",
        "grade": "absent"
@@ -955,12 +1001,15 @@
      "resolved": [
       {
        "ok": true,
+       "assumed": true,
+       "bound": true,
        "kind": "hole",
-       "detail": "H-79: assumption",
-       "grade": "assumption"
+       "grade": "assumption",
+       "detail": "H-79: assumption -- rests on an injected default"
       },
       {
        "ok": true,
+       "bound": true,
        "kind": "probe",
        "detail": "P31: PASS",
        "probe": "P31",
@@ -968,8 +1017,8 @@
       }
      ],
      "verdict": {
-      "verdict": "PASS",
-      "detail": "H-79: assumption \u00b7 P31: PASS",
+      "verdict": "ASSUMED",
+      "detail": "H-79: assumption -- rests on an injected default \u00b7 P31: PASS",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -983,24 +1032,32 @@
      "probe": null,
      "exercises": [
       "kill / wound",
-      "H-84"
+      "the six investigation acts",
+      "tell"
      ],
      "resolved": [
       {
        "ok": true,
+       "bound": true,
        "kind": "verb",
        "detail": "'kill / wound' executes"
       },
       {
        "ok": false,
-       "kind": "hole",
-       "detail": "H-84: absent",
-       "grade": "absent"
+       "bound": true,
+       "kind": "verb",
+       "detail": "'the six investigation acts' is on the table and the fold cannot execute it: needs a `requires:` predicate"
+      },
+      {
+       "ok": true,
+       "bound": true,
+       "kind": "verb",
+       "detail": "'tell' executes"
       }
      ],
      "verdict": {
       "verdict": "GAP",
-      "detail": "'kill / wound' executes \u00b7 H-84: absent",
+      "detail": "'kill / wound' executes \u00b7 'the six investigation acts' is on the table and the fold cannot execute it: needs a `requires:` predicate \u00b7 'tell' executes",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -1019,20 +1076,23 @@
      "resolved": [
       {
        "ok": true,
+       "bound": true,
        "kind": "hole",
        "detail": "H-22: ruled",
        "grade": "ruled"
       },
       {
        "ok": true,
+       "assumed": true,
+       "bound": true,
        "kind": "hole",
-       "detail": "H-79: assumption",
-       "grade": "assumption"
+       "grade": "assumption",
+       "detail": "H-79: assumption -- rests on an injected default"
       }
      ],
      "verdict": {
-      "verdict": "PASS",
-      "detail": "H-22: ruled \u00b7 H-79: assumption",
+      "verdict": "ASSUMED",
+      "detail": "H-22: ruled \u00b7 H-79: assumption -- rests on an injected default",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -1089,6 +1149,7 @@
      "resolved": [
       {
        "ok": true,
+       "bound": true,
        "kind": "probe",
        "detail": "P31: PASS",
        "probe": "P31",
@@ -1115,14 +1176,16 @@
      "resolved": [
       {
        "ok": true,
+       "assumed": true,
+       "bound": true,
        "kind": "hole",
-       "detail": "H-20: assumption",
-       "grade": "assumption"
+       "grade": "assumption",
+       "detail": "H-20: assumption -- rests on an injected default"
       }
      ],
      "verdict": {
-      "verdict": "PASS",
-      "detail": "H-20: assumption",
+      "verdict": "ASSUMED",
+      "detail": "H-20: assumption -- rests on an injected default",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -1141,19 +1204,22 @@
      "resolved": [
       {
        "ok": false,
+       "bound": true,
        "kind": "verb",
        "detail": "'petition' is on the table and the fold cannot execute it: needs an effect"
       },
       {
        "ok": true,
+       "assumed": true,
+       "bound": true,
        "kind": "hole",
-       "detail": "H-04: assumption",
-       "grade": "assumption"
+       "grade": "assumption",
+       "detail": "H-04: assumption -- rests on an injected default"
       }
      ],
      "verdict": {
       "verdict": "GAP",
-      "detail": "'petition' is on the table and the fold cannot execute it: needs an effect \u00b7 H-04: assumption",
+      "detail": "'petition' is on the table and the fold cannot execute it: needs an effect \u00b7 H-04: assumption -- rests on an injected default",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -1203,34 +1269,38 @@
    "core_unmapped": 0,
    "core_blocked": 1,
    "blockers": [
-    "H-25"
+    "probe:P33"
    ],
    "routed": [
     {
      "need": "Performing a Thread operation as part of ordinary intelligence work must cost the practitioner a persistent personal resource whose cost scales with the scale and type of operation performed, distinct from whether the operation succeeded.",
      "hardness": "core",
-     "probe": null,
+     "probe": "P33",
      "exercises": [
       "H-38",
-      "H-25"
+      "probe:P33"
      ],
      "resolved": [
       {
        "ok": true,
+       "assumed": true,
+       "bound": true,
        "kind": "hole",
-       "detail": "H-38: assumption",
-       "grade": "assumption"
+       "grade": "assumption",
+       "detail": "H-38: assumption -- rests on an injected default"
       },
       {
        "ok": false,
-       "kind": "hole",
-       "detail": "H-25: absent",
-       "grade": "absent"
+       "bound": true,
+       "kind": "probe",
+       "detail": "P33: GAP",
+       "probe": "P33",
+       "verdict": "GAP"
       }
      ],
      "verdict": {
       "verdict": "GAP",
-      "detail": "H-38: assumption \u00b7 H-25: absent",
+      "detail": "H-38: assumption -- rests on an injected default \u00b7 P33: GAP",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -1249,6 +1319,7 @@
      "resolved": [
       {
        "ok": true,
+       "bound": true,
        "kind": "probe",
        "detail": "P32: PASS",
        "probe": "P32",
@@ -1256,14 +1327,16 @@
       },
       {
        "ok": true,
+       "assumed": true,
+       "bound": true,
        "kind": "hole",
-       "detail": "H-38: assumption",
-       "grade": "assumption"
+       "grade": "assumption",
+       "detail": "H-38: assumption -- rests on an injected default"
       }
      ],
      "verdict": {
-      "verdict": "PASS",
-      "detail": "P32: PASS \u00b7 H-38: assumption",
+      "verdict": "ASSUMED",
+      "detail": "P32: PASS \u00b7 H-38: assumption -- rests on an injected default",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -1282,6 +1355,7 @@
      "resolved": [
       {
        "ok": true,
+       "bound": true,
        "kind": "probe",
        "detail": "P31: PASS",
        "probe": "P31",
@@ -1289,14 +1363,16 @@
       },
       {
        "ok": true,
+       "assumed": true,
+       "bound": true,
        "kind": "hole",
-       "detail": "H-31: assumption",
-       "grade": "assumption"
+       "grade": "assumption",
+       "detail": "H-31: assumption -- rests on an injected default"
       }
      ],
      "verdict": {
-      "verdict": "PASS",
-      "detail": "P31: PASS \u00b7 H-31: assumption",
+      "verdict": "ASSUMED",
+      "detail": "P31: PASS \u00b7 H-31: assumption -- rests on an injected default",
       "kind": null,
       "section": "",
       "by": "declared",

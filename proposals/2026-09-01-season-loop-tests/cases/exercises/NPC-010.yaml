@@ -39,9 +39,13 @@ rows:
     her' resolution.
   exercises:
   - kill / wound
-  - H-84
-  from: Four textually distinct outcomes -- discoverable, killable, buyable, turnable. `kill / wound`
-    supplies one. The other three all require an outside actor to REACH her holdings, which `H-84` blocks.
+  - the six investigation acts
+  - tell
+  from: 'Four TEXTUALLY DISTINCT outcomes, one token each rather than one blanket blocker: `kill / wound`
+    is killable; DISCOVERABLE is the six investigation acts, which Part E carries with `requires: per
+    act` and no predicate; buyable and turnable are social and reach her through `tell`. ⚠ THIS ROW FIRST
+    DECLARED `H-84` FOR ALL FOUR, which the `W10` adversarial pass called out: neither buyable nor turnable
+    requires moving a Record, so `H-84` was doing work the need does not ask of it.'
 - need_sha: b28ff8075d81
   hardness: core
   need: Her personal judgment about a specific past transaction (vetting goods as safe and legitimate)

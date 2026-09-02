@@ -1,17 +1,19 @@
-# UNMAPPED — ARC: what the corpus asked for that no probe covers
+# UNMAPPED — ARC: the rows nobody has authored an `exercises:` for
 
-**An unrouted row is not a pass and not a gap. It is the instrument admitting it
-did not aim.** Every row is reproduced verbatim so a reader can judge whether the
-miss is a routing failure (fixable) or a genuine absence of any surface to probe
-(a finding about the shape).
+**An undeclared row is not a pass and not a gap. It is the instrument admitting it
+did not aim.** Under `W10` there is no regex to blame: a row lands here because no
+`cases/exercises/*.yaml` declares what it rests on. That is a fact about AUTHORING
+— fixable by writing one — rather than a pattern having missed, which was not.
+Every row is reproduced verbatim so the backlog can be worked from this file.
 
-**300 `core` rows and 311 non-core rows did not route.**
+**300 `core` rows and 311 non-core rows are undeclared.**
 
-## The vocabulary of the unrouted `core` rows
+## The vocabulary of the undeclared `core` rows
 
-Frequency over terms of five letters or more, stopwords removed. A term that is
-frequent here names a capability the corpus keeps asking for and the probe set has
-no execution for.
+Frequency over terms of five letters or more, stopwords removed. ⚠ **This is a
+reading aid for whoever authors the next overlay, and nothing computes a verdict
+from it** — a frequency table over prose is exactly the object `W10` deleted, and
+it is safe here only because it is printed and never read back.
 
 | term | count |
 |---|---|
@@ -61,7 +63,7 @@ no execution for.
 | characters | 19 |
 | political | 18 |
 
-## Every unrouted `core` row, verbatim
+## Every undeclared `core` row, verbatim
 
 - **[ARC-01]** a background/ambient quantity tied to a population's cultural situation must be able to drift toward a pole purely from the absence of any faction's action in its territories, with no faction action driving the drift
 - **[ARC-01]** a person's genuinely unresolved private ethical question (not a secret sympathy, not a settled belief) must be able to function as a real, load-bearing reason for a leader's inaction, distinct from and alongside the named external costs of acting
@@ -364,7 +366,7 @@ no execution for.
 - **[SCN-LOOP-D]** That SAME specific group's own separate institutional-standing resource must be able to be DRIVEN DOWN by the very factional instability that this loop's own automatic steps generate, creating a path by which the loop damages the standing of the one actor positioned to stop it.
 - **[SCN-LOOP-D]** That group's institutional-standing resource crossing its OWN floor must strip the group's access to its one counter-action specifically, at the same time as (or as a consequence of) the instability that the loop's own progression produced — the disabling condition and the loop's own automatic progression must share a common cause.
 
-## Every unrouted non-core row, verbatim
+## Every undeclared non-core row, verbatim
 
 - *[ARC-01]* one actor's accumulation of institutional standing must be able to happen through methods that are individually unimpeachable (charity, arbitration, hospitals) with no single action anyone could point to as the trigger for concern
 - *[ARC-01]* a Non-Player Character must be able to accumulate an effect at scale while having zero perceptual capacity to register what that accumulation produces elsewhere

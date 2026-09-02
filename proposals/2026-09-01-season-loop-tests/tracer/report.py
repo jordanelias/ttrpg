@@ -88,13 +88,26 @@ def emit(rep: dict, trace_rows: list) -> None:
                         ("ARC", "TEST B — every unique arc")):
         rows = rep.get(kind) or []
         out = [f"# {title} — the per-case log", "",
-               "For each case: every `season_requires` row, the probe it routed onto, the verdict,",
-               "and the section of `ARCHITECTURE.md` that governs it. **Probe verdicts are HARD**",
-               "(each is an execution); **case verdicts are ADVISORY** (routing is keyword-based",
-               "over prose, and keyword routing is crude).", "",
-               "`UNMAPPED` = no probe matched; the row is reported, never passed.",
-               "`UNCLEAR` = the CASE SOURCE fails to say something; that is the source failing,",
-               "not the shape.", ""]
+               "For each case: every `season_requires` row, what it DECLARES it rests on, the",
+               "verdict, and the governing section. **Probe verdicts are HARD**",
+               "(each is an execution).", "",
+               "⚠ **ROUTING IS DECLARED, NOT MATCHED (`W10`).** The regex router is deleted. A row",
+               "reaches a verdict only through an authored `exercises:` list in",
+               "`cases/exercises/*.yaml`, bound to the row by the sha of its own need text — so a",
+               "row that reaches the wrong answer is an authoring error somebody can argue with,",
+               "not a pattern that fired on a common word. And every count the router published",
+               "was a **floor**: an unmatched row fell silently to UNMAPPED, understating the",
+               "corpus in the direction that flattered it.", "",
+               "| verdict | means |", "|---|---|",
+               "| `PASS` | every token the row declares resolved and is satisfied |",
+               "| `ASSUMED` | resolved, but at least one rests on an **injected default nobody "
+               "ratified**. Never a pass; it carries the case to DEGRADED |",
+               "| `GAP` | a declared token named a real thing that is `absent`, unexecutable or "
+               "gapping — a finding about the **shape** |",
+               "| `UNMAPPED` | **nobody authored an `exercises:` for this row.** A fact about "
+               "AUTHORING, which is fixable — never a pass |",
+               "| `SOURCE-UNCLEAR` | the CASE SOURCE fails to say something; the source failing, "
+               "not the shape |", ""]
         for c in rows:
             out.append(f"## {c['id']} — {c.get('name','')}  ·  **{c['verdict']}**")
             out.append(f"*{c.get('scale','')} · {c['rows']} rows, {c['core']} core · "
@@ -189,10 +202,10 @@ def emit(rep: dict, trace_rows: list) -> None:
           f"CASELOG_NPC.md, CASELOG_ARC.md, PROBES.md")
 
     # -- 5. THE UNMAPPED REGISTER ------------------------------------------
-    # An unrouted row is NOT a pass and NOT a gap. It is the instrument admitting IT DID NOT
-    # AIM. Reporting the rows verbatim, clustered, is more honest than tuning regexes until
-    # the number looks good -- and what the corpus asks for that NO PROBE COVERS is itself a
-    # first-class finding about the shape's surface.
+    # An undeclared row is NOT a pass and NOT a gap. It is the instrument admitting IT DID NOT
+    # AIM. Under `W10` that admission is precise: NOBODY AUTHORED AN `exercises:` FOR THIS ROW.
+    # Reporting the rows verbatim, clustered, is what makes the authoring backlog readable --
+    # and what the corpus keeps asking for is itself a first-class finding about the surface.
     for kind in ("NPC", "ARC"):
         rows = rep.get(kind) or []
         core = [(c["id"], u["need"]) for c in rows for u in c["unmapped"]
@@ -210,23 +223,25 @@ def emit(rep: dict, trace_rows: list) -> None:
                 w = "".join(ch for ch in w if ch.isalpha())
                 if len(w) >= 5 and w not in stop:
                     terms[w] += 1
-        out = [f"# UNMAPPED — {kind}: what the corpus asked for that no probe covers", "",
-               "**An unrouted row is not a pass and not a gap. It is the instrument admitting it",
-               "did not aim.** Every row is reproduced verbatim so a reader can judge whether the",
-               "miss is a routing failure (fixable) or a genuine absence of any surface to probe",
-               "(a finding about the shape).", "",
-               f"**{len(core)} `core` rows and {len(other)} non-core rows did not route.**", "",
-               "## The vocabulary of the unrouted `core` rows", "",
-               "Frequency over terms of five letters or more, stopwords removed. A term that is",
-               "frequent here names a capability the corpus keeps asking for and the probe set has",
-               "no execution for.", "",
+        out = [f"# UNMAPPED — {kind}: the rows nobody has authored an `exercises:` for", "",
+               "**An undeclared row is not a pass and not a gap. It is the instrument admitting it",
+               "did not aim.** Under `W10` there is no regex to blame: a row lands here because no",
+               "`cases/exercises/*.yaml` declares what it rests on. That is a fact about AUTHORING",
+               "— fixable by writing one — rather than a pattern having missed, which was not.",
+               "Every row is reproduced verbatim so the backlog can be worked from this file.", "",
+               f"**{len(core)} `core` rows and {len(other)} non-core rows are undeclared.**", "",
+               "## The vocabulary of the undeclared `core` rows", "",
+               "Frequency over terms of five letters or more, stopwords removed. ⚠ **This is a",
+               "reading aid for whoever authors the next overlay, and nothing computes a verdict",
+               "from it** — a frequency table over prose is exactly the object `W10` deleted, and",
+               "it is safe here only because it is printed and never read back.", "",
                "| term | count |", "|---|---|"]
         for w, n in terms.most_common(45):
             out.append(f"| {w} | {n} |")
-        out += ["", "## Every unrouted `core` row, verbatim", ""]
+        out += ["", "## Every undeclared `core` row, verbatim", ""]
         for cid, n in core:
             out.append(f"- **[{cid}]** {n}")
-        out += ["", "## Every unrouted non-core row, verbatim", ""]
+        out += ["", "## Every undeclared non-core row, verbatim", ""]
         for cid, n in other:
             out.append(f"- *[{cid}]* {n}")
         (RUNS / f"UNMAPPED_{kind}.md").write_text("\n".join(out))

@@ -1,17 +1,19 @@
-# UNMAPPED — NPC: what the corpus asked for that no probe covers
+# UNMAPPED — NPC: the rows nobody has authored an `exercises:` for
 
-**An unrouted row is not a pass and not a gap. It is the instrument admitting it
-did not aim.** Every row is reproduced verbatim so a reader can judge whether the
-miss is a routing failure (fixable) or a genuine absence of any surface to probe
-(a finding about the shape).
+**An undeclared row is not a pass and not a gap. It is the instrument admitting it
+did not aim.** Under `W10` there is no regex to blame: a row lands here because no
+`cases/exercises/*.yaml` declares what it rests on. That is a fact about AUTHORING
+— fixable by writing one — rather than a pattern having missed, which was not.
+Every row is reproduced verbatim so the backlog can be worked from this file.
 
-**90 `core` rows and 167 non-core rows did not route.**
+**90 `core` rows and 167 non-core rows are undeclared.**
 
-## The vocabulary of the unrouted `core` rows
+## The vocabulary of the undeclared `core` rows
 
-Frequency over terms of five letters or more, stopwords removed. A term that is
-frequent here names a capability the corpus keeps asking for and the probe set has
-no execution for.
+Frequency over terms of five letters or more, stopwords removed. ⚠ **This is a
+reading aid for whoever authors the next overlay, and nothing computes a verdict
+from it** — a frequency table over prose is exactly the object `W10` deleted, and
+it is safe here only because it is printed and never read back.
 
 | term | count |
 |---|---|
@@ -61,7 +63,7 @@ no execution for.
 | against | 5 |
 | actions | 5 |
 
-## Every unrouted `core` row, verbatim
+## Every undeclared `core` row, verbatim
 
 - **[NPC-004]** A completed investigation must be able to produce a plausible-but-wrong conclusion that its holder cannot distinguish from a correct one, and the holder must be able to act on it as true until later evidence or events contradict it.
 - **[NPC-004]** A person must be able to possess a perceptual capacity he does not know he has, whose outputs he misattributes to a mundane cause (professional instinct), such that his real competence has a hidden, unacknowledged source.
@@ -154,7 +156,7 @@ no execution for.
 - **[NPC-090]** A trade relationship between two polities must be able to be governed by a specific pre-existing treaty whose terms constrain what either side's trade officials can unilaterally change, such that violating or renegotiating it is a distinguishable act from ordinary commerce.
 - **[NPC-090]** Two named officials from different polities must be able to interact directly and repeatedly over the same ongoing trade relationship, with each one's individual choices -- strict enforcement versus flexibility -- shifting the relationship's trajectory.
 
-## Every unrouted non-core row, verbatim
+## Every undeclared non-core row, verbatim
 
 - *[NPC-087]* The cumulative effect of many small private teaching sessions must be able to aggregate into a settlement- or territory-scale outcome without Askeland himself possessing the faction-level resources that the only named aggregation mechanism for this kind of cultural effect requires.
 - *[NPC-087]* A student's exposure (being caught attending, or found to have been taught) must be trackable as a consequence for the student, separate from any consequence for Askeland.

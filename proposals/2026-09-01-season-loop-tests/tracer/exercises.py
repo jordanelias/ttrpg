@@ -43,6 +43,8 @@ from pathlib import Path
 
 import yaml
 
+from register import REG_ID_RE as REG_ID
+
 HERE = Path(__file__).resolve().parent
 OVERLAY = HERE.parent / "cases" / "exercises"
 
@@ -71,6 +73,15 @@ def load() -> dict:
                                  "first overlay")
             if sha in bucket:
                 raise SystemExit(f"{f.name}: duplicate binding for {sha} in {cid}")
+            # ⚠ THE HUMAN-READABLE `need:` MUST AGREE WITH THE KEY IT SITS BESIDE. `load()` read
+            # only `need_sha`, so the text a reviewer judges the declaration BY was bound to
+            # nothing — the residue of the very paraphrase defect the sha was added to fix. A
+            # reviewer reading a stale `need:` would be checking the declaration against the
+            # wrong row.
+            if row.get("need") and need_sha(row["need"]) != sha:
+                raise SystemExit(
+                    f"{f.name}: {cid}'s `need:` text hashes to {need_sha(row['need'])}, not the "
+                    f"{sha} it is filed under -- the readable text and the binding disagree")
             bucket[sha] = row
     return out
 
@@ -89,6 +100,19 @@ def unbound(overlay: dict, cases: list) -> list:
             if sha not in live:
                 bad.append((cid, sha, str(row.get("need", ""))[:60]))
     return bad
+
+
+def orphan_cases(overlay: dict, cases: list) -> list:
+    """Overlay files whose `case:` id matches NO case in the corpus at all.
+
+    ⚠ `unbound` CANNOT SEE THESE, BY CONSTRUCTION. It is called once per lane, and an id from
+    the other lane is legitimately absent from the lane being checked -- so it `continue`s past
+    an id it does not recognise. A file naming a case that exists in NEITHER lane therefore
+    passed BOTH checks: every row bound to nothing, silently, which is the exact defect
+    `need_sha` was added to end one level down. Pass both lanes' cases here and the excuse is
+    gone. Found by the `W10` adversarial pass."""
+    known = {c["id"] for c in cases}
+    return sorted(cid for cid in overlay if cid not in known)
 
 
 def coverage(overlay: dict, cases: list) -> dict:
@@ -113,13 +137,18 @@ def coverage(overlay: dict, cases: list) -> dict:
 if __name__ == "__main__":
     import run_cases as R
     ov = load()
+    every = []
     for kind in ("NPC", "ARC"):
         cs = R.load_cases(kind)
+        every += cs
         c = coverage(ov, cs)
         print(f"{kind}: {c['authored']}/{c['rows']} rows authored "
               f"({c['core_authored']}/{c['core']} core)")
         for cid, sha, need in unbound(ov, cs):
             print(f"  ⚠ UNBOUND {cid} {sha}: {need!r} matches no live row")
+    for cid in orphan_cases(ov, every):
+        print(f"  ⚠ ORPHAN FILE: `case: {cid}` exists in neither lane -- every row of that file "
+              f"is bound to nothing")
 
 
 # ---------------------------------------------------------------------------
@@ -132,9 +161,6 @@ if __name__ == "__main__":
 # here, because there is no list of words.
 # ---------------------------------------------------------------------------
 
-TOKEN_KINDS = ("probe", "verb", "hole", "kind")
-
-
 def classify(token: str) -> str:
     """Which of the four shapes a token is. Derived from the token, never from a roster of
     names: `probe:` is prefixed, a hole id matches `H-NN`, an Event kind carries a dot, and
@@ -142,15 +168,27 @@ def classify(token: str) -> str:
     assuming."""
     if token.startswith("probe:"):
         return "probe"
-    if re.fullmatch(r"H-\d+", token):
+    # The id shape has ONE owner: `register.py`, which validates it. Re-deriving it here
+    # made `H-100` classify as a hole and fail validation — CLAUDE.md §8, "never
+    # re-implement a rule", one module apart.
+    if re.fullmatch(REG_ID, token):
         return "hole"
     if "." in token:
         return "kind"
     return "verb"
 
 
-def resolve(token: str, *, probes, verb_table, resolvable, register) -> dict:
-    """One token -> `{ok, kind, detail}`. `ok=False` is a GAP for the row that declares it.
+def resolve(token: str, *, probes, verb_table, resolvable, register, matrix) -> dict:
+    """One token -> `{ok, bound, kind, detail}`. `ok=False` is a GAP for the row that declares it.
+
+    ⚠ `bound` AND `ok` ARE DIFFERENT QUESTIONS, and the binding guard needs the first.
+    `bound=False` means THE TOKEN NAMES NOTHING -- no such probe, no such register row, no such
+    verb -- which is an AUTHORING error: somebody typed an id that does not exist, and no verdict
+    computed from it means anything. `ok=False` with `bound=True` is the opposite and is the
+    instrument working: the token named a real thing and that thing is `absent`, unexecutable, or
+    gapping. The guard used to tell them apart by MATCHING THREE OF THIS FUNCTION'S FOUR failure
+    strings, so a token naming a nonexistent Event kind was unguarded and a reworded message would
+    have silently disarmed the rest. `PLAN.md` `G3`: assert the PROPERTY, never the string.
 
     A HOLE token is the interesting case and the reason `exercises:` admits one at all: a row
     whose need rests on an `absent` register row is BLOCKED BY THE REGISTER, and saying so
@@ -161,24 +199,64 @@ def resolve(token: str, *, probes, verb_table, resolvable, register) -> dict:
     if what == "probe":
         pid = token.split(":", 1)[1]
         if pid not in probes:
-            return dict(ok=False, kind=what, detail=f"no probe {pid!r} exists")
+            return dict(ok=False, bound=False, kind=what, detail=f"no probe {pid!r} exists")
         v = probes[pid]
-        return dict(ok=v["verdict"] == "PASS", kind=what,
+        return dict(ok=v["verdict"] == "PASS", bound=True, kind=what,
                     detail=f"{pid}: {v['verdict']}", probe=pid, verdict=v["verdict"])
     if what == "hole":
         row = register.get(token)
         if row is None:
-            return dict(ok=False, kind=what, detail=f"no register row {token}")
+            return dict(ok=False, bound=False, kind=what, detail=f"no register row {token}")
         g = row.get("grade")
-        return dict(ok=g not in ("absent",), kind=what, detail=f"{token}: {g}", grade=g)
+        # ⚠ AN `assumption` IS NOT A PASS, AND TREATING IT AS ONE PUBLISHED SEVEN FALSE PASSES.
+        # The first version was `ok = g not in ("absent",)`, so a row resting on an INJECTED
+        # DEFAULT read as satisfied. The worked case: NPC-005's "full deniability as an
+        # achievable outcome" declared `H-33`, whose default is TOTAL FAN-OUT -- the exact
+        # NEGATION of the need -- and the caselog printed PASS while the row's own `from:` said
+        # "there is no mechanism by which anyone could be excluded". `PLAN.md` `G1`: a fill off
+        # the register is a red test, and an assumption rendered as a pass is that fill wearing a
+        # verdict. §42.2's polarity rule says the same thing about evidence: an injected default
+        # is not evidence the design does the thing.
+        #
+        # THREE STATES, NOT TWO. `absent` blocks; `assumption` is ASSUMED -- the row runs, on
+        # something nobody ratified, and the case is DEGRADED rather than PLAYABLE; `ruled` and
+        # `measured` pass. Found by the `W10` adversarial pass.
+        if g == "absent":
+            return dict(ok=False, bound=True, kind=what, detail=f"{token}: absent", grade=g)
+        if g == "assumption":
+            return dict(ok=True, assumed=True, bound=True, kind=what, grade=g,
+                        detail=f"{token}: assumption -- rests on an injected default")
+        return dict(ok=True, bound=True, kind=what, detail=f"{token}: {g}", grade=g)
     if what == "kind":
+        # ⚠ THE UNION OVER BOTH TABLES, NOT A HARDCODED WORD. This read
+        # `token in emitted or token == "term.matured"` -- A ONE-ELEMENT KIND LIST IN A PYTHON
+        # BODY, added by hand, in the commit that DELETED the regex router for exactly that
+        # habit and quoted the ruling against it in its own docstring. `PLAN.md` §8.2: "Do not
+        # add another word to a router's roster." Jordan, 2026-09-02: "a kind list ... written as
+        # a literal in a Python body is a defect, whatever else is true of it."
+        #
+        # And the primitive was already loaded. Part D's `emits:` column carries every MATTER
+        # emission -- `term.matured`, `record.expired`, `condition.band_crossed`, `claim.decayed`
+        # and thirty more -- so composing on `MATRIX` covers all of them and moves when the data
+        # moves. The hand-added word covered one and would have produced a spurious blocker on
+        # any of the rest. Found by the `W10` adversarial pass.
+        #
+        # AND THE DETAIL NOW AGREES WITH THE VERDICT. The old one computed `ok` with the special
+        # case and the message without it, so `results.json` published
+        # "term.matured: not in any emits:" beside a PASS -- the exact shape `G3` forbids.
         emitted = {k for r in verb_table.values() for k in (r.emits or ())}
         emitted |= {k for r in verb_table.values() for k in (r.emits_on_refusal or ())}
-        # MATTER's own emissions are not in the verb table; the register carries them as rows.
-        return dict(ok=token in emitted or token == "term.matured", kind=what,
-                    detail=f"{token}: {'emitted' if token in emitted else 'not in any emits:'}")
+        emitted |= {k for r in matrix.values() for k in (r.emits or ())}
+        # `bound` and `ok` COINCIDE HERE AND NOWHERE ELSE, deliberately: a kind that appears in
+        # no `emits:` column names nothing at all, so its failure is an AUTHORING error rather
+        # than a finding about the design. Every other shape can name something real and still
+        # fail (`absent`, an unexecutable verb, a gapping probe), and conflating the two is what
+        # let the binding guard check three of four branches.
+        return dict(ok=token in emitted, bound=token in emitted, kind=what,
+                    detail=f"{token}: {'emitted' if token in emitted else 'on no emits: column'}")
     if token not in verb_table:
-        return dict(ok=False, kind="verb", detail=f"{token!r} is on no verb-table row")
+        return dict(ok=False, bound=False, kind="verb",
+                    detail=f"{token!r} is on no verb-table row")
     if token not in resolvable:
         row = verb_table[token]
         missing = []
@@ -186,7 +264,7 @@ def resolve(token: str, *, probes, verb_table, resolvable, register) -> dict:
             missing.append("a `requires:` predicate")
         if row.writes:
             missing.append("an effect")
-        return dict(ok=False, kind="verb",
+        return dict(ok=False, bound=True, kind="verb",
                     detail=f"{token!r} is on the table and the fold cannot execute it: needs "
                            + " and ".join(missing or ["an unknown half"]))
-    return dict(ok=True, kind="verb", detail=f"{token!r} executes")
+    return dict(ok=True, bound=True, kind="verb", detail=f"{token!r} executes")

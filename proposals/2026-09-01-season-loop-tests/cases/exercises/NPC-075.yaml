@@ -27,11 +27,13 @@ rows:
     personal condition cumulatively across many seasons, distinct from the cost of any single act of repair.
   exercises:
   - H-38
-  - H-25
   from: 'Cumulative degradation of his own condition across many seasons, distinct from any single act''s
-    cost, is a banded scalar on Person accumulating -- `H-38`, closed YES. What it needs beyond the carrier
-    is a bound on the accumulation, and `H-25` (a termination bound per self-feeding loop) is `absent`:
-    nothing in the design stops it.'
+    cost, is a banded scalar on Person accumulating -- `H-38`, whose default is YES. ⚠ THIS ROW ALSO DECLARED
+    `H-25` AND THAT WAS AN OVER-REFUSAL, caught by the `W10` adversarial pass. `H-25` is a termination
+    bound per SELF-FEEDING LOOP, and nothing in this need makes degradation increase exposure -- it is
+    an accumulation, not a loop. `H-25` alone decided BLOCKED for this case. `PLAN.md` `G4`: an over-refusal
+    is a defect of EQUAL WEIGHT to an invention, and the direction a correction moves a verdict is not
+    the test of it.'
 - need_sha: 0427efc7168c
   hardness: core
   need: His death, if it occurs while performing a repair, must be able to produce a different and better

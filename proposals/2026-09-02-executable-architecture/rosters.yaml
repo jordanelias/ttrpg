@@ -228,6 +228,20 @@ rosters:
       subject is READ off the Event the design already has. `H-79` is the row.
     values: [actor, per_change, both]
 
+  knowledge_kinds:
+    source: "`H-85`; NPC-087's own `season_requires` supplies the two values"
+    open: true
+    note: >-
+      ⚠ THE GATE IS NOT HERE AND THAT IS THE POINT. #353 §9.2 says *"The only class-shaped gate in
+      the design is Thread Sensitivity"* and supplies no carrier, no predicate and no taxonomy for
+      it to gate OVER. This roster is the taxonomy half — the half `rosters.yaml` is the ruled
+      home for — and `H-85` records that the gate half stays open.
+      The two values are NPC-087's own: material "retainable by ordinary non-sensitive minds"
+      against "Thread-substrate knowledge subject to the setting's epistemological barrier". A
+      third kind, or a per-subject scheme, is `H-85`'s sweep, not an edit anyone should make here
+      without moving the row.
+    values: [mundane, thread_substrate]
+
 # ===========================================================================
 # TABLES — a MAPPING, where a roster is a SET. `table()` reads these; `roster()` raises on them
 # and vice versa, so the two shapes cannot be confused at a call site.

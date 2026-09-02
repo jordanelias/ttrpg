@@ -428,6 +428,36 @@ R={'W10','A3','W13','P38','F3','F16b','P33'};\
 print([ (s, sum(1 for c in d[s] if c.get('blockers') and set(c['blockers'])<=R)) for s in ('NPC','ARC')])"
 ```
 
+> ### ⚠ THAT COMMAND RETURNS `[('NPC', 0), ('ARC', 0)]` AS OF `W10`, AND EVERY FIGURE IN THE TABLE
+> ### ABOVE IS ROUTER-ERA. Amended 2026-09-02 by `W10`'s adversarial pass.
+>
+> **What broke it, and it is not a bug.** The table was computed from a `results.json` whose
+> `blockers` were **probe ids**, because under the regex router a probe was the only thing a case
+> row could reach. `W10` deleted that router; `blockers` now names the **declared token that
+> failed** — a hole id, a verb, or `probe:PID` — so a set membership test against bare probe ids
+> matches nothing. `W10`'s own note says naming `H-84` is a better answer than "P22 gapped", and
+> this is the price of that: the old query no longer has a subject.
+>
+> **And the old numbers were a FLOOR, not a total.** A row matching no pattern fell silently to
+> UNMAPPED, so every count derived from routing understated the corpus **in the direction that
+> flattered it**. That applies to the "published" column and to both "measured" columns alike.
+>
+> **Status of the finding: NOT REFUTED, NOT REPRODUCIBLE — awaiting re-measurement.** `§0.1`
+> point 4 governs, and it cuts both ways: a router-era number is not evidence, and its absence is
+> not evidence against. Do not cite the `0` / `2` / `3` cells as current, and do not delete them
+> either — they are what a re-measurement has to beat.
+>
+> **What re-measures it.** Declared coverage, which is `W13`'s lane and is thin:
+> ```
+> cd proposals/2026-09-01-season-loop-tests/tracer && python exercises.py
+> #   NPC: 35/292 rows authored (32/122 core)
+> #   ARC:  0/611 rows authored ( 0/300 core)
+> ```
+> The ARC lane has **no declared row at all**, so *every* arc figure in this section is currently
+> unmeasured rather than measured-as-zero — §42.2's polarity rule, applied to this instrument.
+> The re-measurement is meaningful once `W13` authors the arc overlay, and its command is the one
+> above with `R` rewritten over declared tokens rather than probe ids.
+
 > **The qualitative conclusion survives and is sharper; the number `0%` is wrong.** The NPC pathway
 > is *overwhelmingly* blocked by holes — 21 of 23 blocked cases have no refusal in them — and the arc
 > pathway is *nearly half* refusal-touching. **A claim of exactly zero is the kind of number that
@@ -795,6 +825,39 @@ declared verbs executed**; **no PLAYABLE verdict rests on a row with an empty `e
 
 **Size L.** Depends on **W3** for the vocabulary. A parallel lane thereafter.
 
+> ### LANDED 2026-09-02 — the mechanism, and what its adversarial pass changed
+>
+> **The mechanism is done and the authoring is not.** `ROUTES`..`ROUTES_5`, `COMPILED` and
+> `route()` are deleted; `route_precision.py` is deleted; `exercises.py` is the only path from a
+> case row to a verdict, binding each declaration to its row by `need_sha` — the first 12 hex of
+> the sha256 of the whitespace-normalised need — so a reworded row orphans its annotation loudly.
+> Authoring stands at **35 of 292 NPC rows (32 of 122 core); 0 of 611 ARC rows**:
+> ```
+> cd proposals/2026-09-01-season-loop-tests/tracer && python exercises.py
+> ```
+>
+> **⚠ CORRECTION TO THIS LANE'S OWN COMMIT MESSAGE.** `5a1d388` published *"`run_cases.py`
+> 633 → 319 lines"*. **319 does not reproduce; the file was 366 at that commit and is 376 now.**
+> The `633` is right. `git show 5a1d388:proposals/2026-09-01-season-loop-tests/tracer/run_cases.py
+> | wc -l` is the check, and `G11` — every number ships with its command — is the rule that would
+> have caught it before it was published. Recorded here rather than by rewriting a pushed commit.
+>
+> **Six defects the adversarial pass found in the landed mechanism, all fixed:**
+>
+> | | what was wrong | why it mattered |
+> |---|---|---|
+> | 1 | `resolve` graded an `assumption` register row as **PASS** | 15 rows published PASS while their own `from:` said the injected default was the *negation* of the need. Now three states — `absent` blocks, `assumption` is `ASSUMED` and carries the case to **DEGRADED**, `ruled`/`measured` pass |
+> | 2 | `token == "term.matured"` — a **one-element kind list in a Python body**, added in the commit that deleted the router for that exact habit | The seventh recurrence of the bare-token class. Replaced by a union over `shape.MATRIX`'s and the verb table's `emits:` columns, so it moves when the data moves |
+> | 3 | the token-resolution guard matched **three of `resolve`'s four failure strings** | A token naming a nonexistent Event kind was unguarded. Now asserted on a `bound` flag — *does this token name anything* — which is deliberately not `ok`, since a token can name a real thing that is `absent`. `G3` |
+> | 4 | `unbound()` **skips a `case:` id it does not recognise**, and is called once per lane | A file naming a case in neither lane passed both checks with every row bound to nothing. `orphan_cases()` closes it |
+> | 5 | the anti-router guard had **three evasions** — scoped to a function named `grade`, fired only on a receiver named `re`, and blacklisted three names — and **would not have caught the router it replaced** (`COMPILED` held precompiled patterns, so there was no `re.` receiver) | Replaced by a taint check: a need's TEXT may only be hashed by `need_sha` or stored, across whole modules. Five plants prove it catches what the old one missed, including a substring test with no call in it |
+> | 6 | two grading guards were **satisfiable by deleting the rule they named**, and one of the rules was **inert** (`more than half unrouted` — its own predicate proved the strict clause below returned the same verdict) | The rule is deleted; the guards now build the discriminating input, with a control that reaches PLAYABLE so the assertion can observe its own failure. §0.1 pt 2 |
+>
+> **Not fixed, and named instead:** every count in §3.5, `W13`'s arc partition and
+> `01_NPC_VS_ARC.md` was computed over router-era probe ids and **is not reproducible under
+> `W10`**. Each now says so where it stands. The finding is neither withdrawn nor confirmed —
+> re-measuring it *is* `W13`'s authoring lane.
+
 ---
 
 ## **W11 — THE DETERMINISM ARTIFACTS.** *(artifact 4; #353 §66 items 4–5)*
@@ -824,8 +887,14 @@ twelve is a bug.
 
 ## **W13 — THE ARC RE-AUTHORING LANE.** *Not a specification change. Do not confuse the two.*
 
-**The exact list, computed rather than estimated** (`results.json` blockers; reproduction command in
-§3.5):
+**The list, computed rather than estimated — FROM A ROUTER-ERA `results.json`, and no longer
+re-derivable** (reproduction command and its failure in §3.5). ⚠ Amended 2026-09-02 by `W10`'s
+adversarial pass: the arc lane has **0 of 611 rows declared**, so nothing in the current
+`results.json` produces this partition, and the token set it was computed over (`A3`, `W13`,
+`P38`, `F3`, `F16b`) no longer appears in any `blockers` field. Treat the two rows below as the
+**work list they were authored as** — which is all `W13` ever needed them for — and not as a
+measurement anyone can check today. Re-deriving it is part of this lane: an arc gets its
+`exercises:` before its re-authoring is judged.
 
 | | arcs |
 |---|---|

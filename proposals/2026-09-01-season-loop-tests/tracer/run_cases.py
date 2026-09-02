@@ -242,13 +242,19 @@ def grade(case: dict) -> dict:
             unmapped.append(entry)              # NOBODY AUTHORED ONE -- a fact about authoring
             continue
         parts = [EX.resolve(t, probes=_probe_view(), verb_table=S.VERB_TABLE,
-                            resolvable=S.resolvable_verbs(), register=_register())
+                            resolvable=S.resolvable_verbs(), register=_register(),
+                            matrix=S.MATRIX)
                  for t in tokens]
         entry["resolved"] = parts
         # The row's verdict is the WORST of its declarations. A row resting on four things is
         # blocked if any one of them is missing, which is what "rests on" means.
+        # ⚠ THREE OUTCOMES. A row every one of whose declarations RESTS ON AN INJECTED DEFAULT
+        # is not a pass: `ASSUMED` carries into the case verdict as DEGRADED, never PLAYABLE.
+        # Publishing those as PASS is what put seven false passes in the caselog.
+        _ok = all(x["ok"] for x in parts)
+        _assumed = any(x.get("assumed") for x in parts)
         entry["verdict"] = dict(
-            verdict="PASS" if all(x["ok"] for x in parts) else "GAP",
+            verdict="PASS" if _ok and not _assumed else "ASSUMED" if _ok else "GAP",
             detail=" · ".join(x["detail"] for x in parts),
             kind=None, section="", by="declared",
             title=need[:60], tests=need)
@@ -262,11 +268,18 @@ def grade(case: dict) -> dict:
     core_blocked = [r for r in core_routed
                     if r["verdict"]["verdict"] in ("GAP", "NOT-REFUSED")]
 
-    # HONESTY RULE 3, TIGHTENED. A case more than half of whose core rows failed to route is
-    # NOT-ASSESSED -- the instrument did not aim at it.
+    # HONESTY RULE 3: **a case with ANY unmapped `core` row may not be graded PLAYABLE.**
     #
-    # AND THE STRICTER CLAUSE, ADDED AFTER READING THE FIRST PLAYABLE LIST: **a case with ANY
-    # unmapped `core` row may not be graded PLAYABLE.** Five of the twelve PLAYABLE verdicts in
+    # ⚠ THE `more than half` CLAUSE THAT STOOD HERE IS DELETED, AS INERT. It read
+    # `elif core and len(core_unmapped) * 2 > len(core): NOT-ASSESSED`, and it could never be the
+    # deciding branch: its own predicate proves `core_unmapped` is non-empty, so the strict clause
+    # two lines down returns the SAME verdict on every input that reaches it. It was meaningful
+    # before the strict clause was added and has been dead ever since. Its guard
+    # (`test_a_case_more_than_half_unrouted_on_core_is_not_assessed`) passed by deleting the rule
+    # it named -- which is `CLAUDE.md` §0.1 pt 2 exactly: an assertion that cannot observe the
+    # failure it excludes. Found by the `W10` adversarial pass.
+    #
+    # The strict clause was added after reading the first PLAYABLE list. Five of the twelve PLAYABLE verdicts in
     # the first run rested on one or two routed core rows with other core rows sitting
     # unmapped beside them -- one case reached PLAYABLE on a single distinct probe with three
     # rows unrouted. That is the instrument certifying a season it never aimed at, which is the
@@ -277,13 +290,18 @@ def grade(case: dict) -> dict:
     # rather than about the aim.
     if core_blocked:
         verdict = "BLOCKED"
-    elif core and len(core_unmapped) * 2 > len(core):
-        verdict = "NOT-ASSESSED"
     elif not core_routed:
+        # THE ZERO-CORE AND ZERO-DECLARED CASE. This is the only branch the strict clause below
+        # cannot reach: a case with NO core rows at all has an empty `core_unmapped`, so nothing
+        # else would stop it reaching PLAYABLE on its non-core rows alone.
         verdict = "NOT-ASSESSED"
     elif core_unmapped:
         verdict = "NOT-ASSESSED"
-    elif any(r["verdict"]["verdict"] in ("GAP", "NOT-REFUSED") for r in routed):
+    # ⚠ `ASSUMED` LANDS HERE, WITH GAP. A row resting on an injected default nobody ratified is
+    # a real dependency, and a case built entirely on such rows is DEGRADED — playable only if
+    # the defaults happen to be right. Grading it PLAYABLE is the flattering direction, and it is
+    # what seven rows did until the `W10` adversarial pass read the `detail` strings.
+    elif any(r["verdict"]["verdict"] in ("GAP", "NOT-REFUSED", "ASSUMED") for r in routed):
         verdict = "DEGRADED"
     else:
         verdict = "PLAYABLE"
@@ -350,9 +368,19 @@ if __name__ == "__main__":
                 blockers[b] = blockers.get(b, 0) + 1
         print("   top core blockers: " + " · ".join(
             f"{k}({v})" for k, v in sorted(blockers.items(), key=lambda kv: -kv[1])[:10]))
+        # ⚠ `routed` IS COUNTED, NOT SUBTRACTED. This line read `{rr-um} routed`, which folded
+        # the `UNCLEAR:` rows into the routed count -- and under `W10` that is not a rounding
+        # error: it published "15 routed" for the ARC lane, whose authored coverage is ZERO. All
+        # fifteen were rows whose own SOURCE says it does not know. An unclear row is neither
+        # routed nor unmapped; it is a third thing, and the flattering direction is to let it hide
+        # inside the first. Found by the `W10` adversarial pass; `G11` is the rule it breaks.
         rr = sum(r["rows"] for r in rows)
         um = sum(len(r["unmapped"]) for r in rows)
-        print(f"   {rr} season_requires rows, {rr-um} routed, {um} UNMAPPED")
+        ro = sum(len(r["routed"]) for r in rows)
+        uc = sum(r["unclear"] for r in rows)
+        print(f"   {rr} season_requires rows = {ro} declared · {um} UNDECLARED · "
+              f"{uc} UNCLEAR (the source's own admission)")
+        assert ro + um + uc == rr, (ro, um, uc, rr)
     pv = rep["_probes"]
     tal: dict[str, int] = {}
     for v in pv.values():
