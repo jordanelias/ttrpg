@@ -380,8 +380,12 @@ def p10():
     # declared. Two rows, two classes, two drivers -- which is the whole of "the engine tracks it
     # as ongoing" at the write gate.
     w.step = Step.MATTER
+    # `W4`: a MATTER write on a row Part D gives an `emits:` must name one. `[ROOT]` is said
+    # EXPLICITLY because this synthetic world has no antecedent -- which is the carve-out, and
+    # saying it rather than defaulting to it is the point.
     w.write("carrier_exists", WriteClass.MATTER, lambda: setattr(r, "matured", True),
-            record_kind="Record", fieldname="matured", driver="Event")
+            record_kind="Record", fieldname="matured", driver="Event",
+            emits="term.matured", subject=r.id, causes=[ROOT])
     return ("PASS: `(Record, stages)` is ACT-DECLARED at RESOLVE and `(Record, matured)` is "
             "matured by an Event at MATTER -- Part D's two rows (D7, §13.1). The act declares "
             "the term; the world advances it")
@@ -530,14 +534,27 @@ def p18():
     assert mine(), "no band edge was crossed at the site under test"
     sid, verb, was, now, eid = mine()[0]
     ev = next(e for e in w.log if e.id == eid)
-    assert ev.kind == "condition.band_crossed" and ev.causes == [ROOT]
+    # ⚠ `W4`. THIS ASSERTED `ev.causes == [ROOT]` — IT PINNED THE DEFECT. `H-12` is RULED that
+    # MATTER emits an Event per write *"so crossings have an antecedent"*, and the crossing was
+    # rooted at the campaign seed, so the one Event in the barrier that exists to be walked back
+    # from walked nowhere. The antecedent is now the WEAR that crossed the floor, and this checks
+    # it resolves — a stronger claim than the one it replaces, and the one `H-12` actually makes.
+    assert ev.kind == "condition.band_crossed"
+    assert len(ev.causes) == 1 and ev.causes[0] != ROOT, (
+        f"the crossing's antecedent is {ev.causes} -- H-12 rules that MATTER emits per write SO "
+        "CROSSINGS HAVE AN ANTECEDENT")
+    antecedent = next((e for e in w.log if e.id == ev.causes[0]), None)
+    assert antecedent is not None and antecedent.kind == "condition.worn" \
+        and antecedent.subject == site.id, (
+        f"the crossing names {ev.causes[0]!r}, which is not a `condition.worn` for {site.id}")
     assert verb in before and verb not in after
     social = [c for c in ev.changes if c.field in ("stance", "convictions", "beliefs")]
     assert not social and not ev.degree
     return (f"PASS, AND BOTH HALVES OF L5 RAN. `{sid}` crossed the `{verb}` floor in {n} seasons "
             f"({was} -> {now}). (1) IT CHANGED WHAT MAY BE CHOSEN: {sorted(before)} -> "
             f"{sorted(after)}. (2) IT EMITTED A WITNESSABLE EVENT into the one log "
-            f"({ev.kind}), carrying NO social change and NO degree -- so it wrote no social row "
+            f"({ev.kind}) whose `causes[]` NAMES THE WEAR THAT CROSSED THE FLOOR "
+            f"(`W4`/`H-12`), carrying NO social change and NO degree -- so it wrote no social row "
             "and PRODUCED NO OUTCOME. That is L5 exactly, and it is what the in-chain survey "
             "found 19 of 50 arcs asking for: THE COUNTER COMPELS SOMEONE TO ACT, IT DOES NOT ACT")
 
@@ -559,7 +576,8 @@ def p20():
     w.step = Step.CENSUS
     w.write("carrier_exists", WriteClass.MATTER,
             lambda: w.persons.__setitem__("p_new", Person("p_new", "someone")),
-            record_kind="Person", fieldname="exists", driver="Event")
+            record_kind="Person", fieldname="exists", driver="Event",
+            emits="person.individuated", subject="p_new", causes=[ROOT])   # `W4`
     # W2: raised until Part D carried `(Person, exists)` -- defect D8, and without the row a
     # death or an individuation was an unmarked cell under the matrix's own rule.
     return ("PASS: `(Person, exists)` is written at CENSUS in the MATTER class by an Event -- "
@@ -629,7 +647,8 @@ def p23():
     w = tiny_world()
     w.step = Step.MATTER
     w.write("carrier_exists", WriteClass.MATTER, lambda: w.persons.pop("p_low", None),
-            record_kind="Person", fieldname="exists", driver="Event")
+            record_kind="Person", fieldname="exists", driver="Event",
+            emits="person.died", subject="p_low", causes=[ROOT])           # `W4`
     # W2: as P20. The row Part D adds is what lets a season end with no institution involved.
     return ("PASS: `(Person, exists)` is written at MATTER in the MATTER class by an Event -- "
             "Part D's row (DR-1, D8). No institutional process is consulted")
@@ -645,7 +664,8 @@ def p24():
     for t in held:
         w.write("Tenure", WriteClass.MATTER, lambda t=t: setattr(t, "until", w.tick),
                 record_kind="Tenure", fieldname="until", driver="Event",
-                caused_person_exists="p_high")
+                caused_person_exists="p_high",
+                emits="tenure.closed", subject=t.object, causes=[ROOT])     # `W4`
     assert all(not t.live for t in held)
     return ("PASS: `(Tenure, until)` is social:false -- THE PARTITION'S ONE DECLARED SEAM, and the "
             "only Partition row ARCHITECTURE.md states -- and death's `until` write is the only "
@@ -1271,6 +1291,10 @@ def w7():
     rec = Record("rec_ttl", "S", "writ", ttl=2)
     w.records[rec.id] = rec
     w.step = Step.MATTER
+    # `W4` / `H-86`: `(Record, ttl)` declares ONLY `record.expired`, which fires at zero -- so a
+    # non-terminal decrement of §13's licensed clock has no declared kind and the row is exempt
+    # from the must-name-a-kind rule by `rosters.yaml: conditional_emission_rows`. Emitting the
+    # terminal kind here would assert an expiry that has not happened.
     w.write("carrier_exists", WriteClass.MATTER, lambda: setattr(rec, "ttl", rec.ttl - 1),
             record_kind="Record", fieldname="ttl", driver="Event")
     # W2: raised until Part D carried the five `Record` rows -- defect D7, under which EVERY
@@ -1306,7 +1330,8 @@ def w9():
     r.envelope = [100, 200, 150, 60]
     w.step = Step.MATTER
     w.write("envelope", WriteClass.MATTER, lambda: r.envelope.__setitem__(0, r.envelope[0] + 5),
-            record_kind="Rung", fieldname="envelope", driver="Event")
+            record_kind="Rung", fieldname="envelope", driver="Event",
+            emits="envelope.changed", subject=r.id, causes=[ROOT])          # `W4`
     assert r.envelope[0] == 105
     return ("PASS: BIRTH IS ENVELOPE WEIGHT, NOT A `create`. The envelope has no ledger, no stance "
             "and no act -- conflating them PRODUCES A DESIGN IN WHICH DEMOGRAPHY CAN CHOOSE")

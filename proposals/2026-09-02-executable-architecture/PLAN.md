@@ -771,6 +771,67 @@ and nothing else** — asserted, not printed, which is **G3**.
 
 **Size S–M.** Depends on **W2**. Parallel with **W3**.
 
+> ### LANDED 2026-09-02 — and the gate found six silent MATTER writes on its first run
+>
+> **`shape.World.write` is the emitter.** `H-12` is RULED that way (*"MATTER emits an Event per
+> write so crossings have an antecedent"*, default *"Part D's `emits:` column"*), and `W4` executes
+> the ruling rather than making one. A MATTER write on a row Part D gives an `emits:` must name one
+> of the declared kinds; a kind the row does not declare is refused. That pairing is **`D22` made
+> mechanical in both directions** — a silent write and a fabricated kind are the two ways the
+> column can be wrong. Emission lives in `write()` rather than at each call site because it keys on
+> `(record_kind, fieldname)`, the same key the write class and the social partition already use, so
+> **a new MATTER write inherits its emission by existing rather than by remembering** (§8).
+>
+> | proof clause | result |
+> |---|---|
+> | a crossing's `causes[]` walks to the wear that crossed the floor | **yes** — `condition.band_crossed → condition.worn → … → ROOT`, asserted in `test_w4_a_band_crossing_walks_back_to_the_wear_that_caused_it` |
+> | `[ROOT]` only for the seed and a clock's genuine first emission | **one `[ROOT]` at 1, 2, 3 and 4 seasons**, always `condition.worn` at season 0, always one per site — asserted, not printed (`G3`) |
+> | `(Claim, confidence)` decays at MATTER and emits | **yes** — the third licensed clock (#353 `:864`) runs; a decay walks back through its deposit to the act that was witnessed |
+>
+> ```
+> cd proposals/2026-09-01-season-loop-tests/tracer
+> python -m pytest test_tracer_is_honest.py -q -k w4       # 4 passed
+> python delta.py                                          # PROBE FLIPS 0
+> ```
+> **Events per 2-season run: 18 → 108. Distinct kinds emitted: 9 → 12. `TRACE.EVENT` 62 → 1204.**
+>
+> **THREE DEFECTS THE PROOF CLAUSES CAUGHT WHILE `W4` WAS BEING BUILT**, which is the argument for
+> asserting them rather than printing them:
+> 1. `write()` used the **TRACE LABEL** as the Event subject, so every site's wear emitted under
+>    the subject `"condition"`, `last_emission_of` never matched, and the clock **re-rooted every
+>    season**. The ROOT count caught it on the first run.
+> 2. A claim's first decay rooted at the seed, because **the deposit that created it emitted
+>    nothing** — Part D declares `claim.deposited` on `(Person, claim_ledger)` and nothing ever
+>    emitted it. 63 spurious roots in a 3-season run. A claim is not a clock; it is a thing a
+>    witness deposited, and the deposit has an Event.
+> 3. `P18` **asserted `ev.causes == [ROOT]`** — a probe pinning the defect `H-12` rules against. It
+>    now checks the antecedent resolves to a `condition.worn` for the same site in the same season,
+>    which is the claim `H-12` actually makes.
+>
+> **SIX SILENT MATTER WRITES, found by turning the gate on:** `(Record, matured)`, `(Person,
+> exists)` twice, `(Tenure, until)`, `(Record, ttl)` and `(Rung, envelope)` — every one on a row
+> whose `emits:` Part D declares. **Five are fixed. The sixth is a finding and is registered as
+> `H-86`:** `(Record, ttl)` declares only `record.expired`, and the row is decremented every
+> season, so emitting it per write would **assert an expiry that has not happened** — the
+> fabrication `G1` forbids — while refusing the write would stop §13's licensed clock. Part D's
+> column does not distinguish a per-write kind from a conditional one. The exempt rows are data
+> (`rosters.yaml: conditional_emission_rows`), the ambiguity is registered rather than decided, and
+> its third sweep point (split the column into `emits_per_write:` and `emits_when:`) is the real
+> fix and belongs to whoever ratifies Part D.
+>
+> **Register.** `H-12` gains its `site:` and its execution note — `unblocks:` is left verbatim,
+> because the transcription gate is right that an execution note is not a transcription. **`H-40`
+> closes in two halves by §0's tests**: the SCHEMA_ROW half is **superseded** (`W2` gave Part D the
+> `(Claim, confidence)` row), and the FORMULA half is answered by **precedent** — `Site.condition`
+> wear is the other licensed MATTER clock and #353 gives *it* no rate either, so it is a registered
+> fixture that refuses when unregistered. `absent` → `assumption`, `site: Fixtures.claim_decay`,
+> sweep `[0, 5, 20]`. **`G6` 17 → 16.** Grading it `ruled` would credit an invented number to #353;
+> leaving it `absent` would deny a mechanism that now runs.
+>
+> **One defect of my own, caught by an existing guard:** the first version re-implemented S19.4's
+> empty-`causes[]` refusal inside `write()`, one constructor away from `Event.__post_init__`, which
+> already does it. Two messages for one rule is §8 exactly. Deleted.
+
 ---
 
 ## **W5 — PART F: THE PERSON'S DECISION.**

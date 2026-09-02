@@ -9293,7 +9293,7 @@
   "P18": {
    "id": "P18",
    "verdict": "PASS",
-   "detail": "PASS, AND BOTH HALVES OF L5 RAN. `site_harbour` crossed the `bulk_shipping` floor in 11 seasons (800 -> 790). (1) IT CHANGED WHAT MAY BE CHOSEN: ['bulk_shipping', 'fishing'] -> ['fishing']. (2) IT EMITTED A WITNESSABLE EVENT into the one log (condition.band_crossed), carrying NO social change and NO degree -- so it wrote no social row and PRODUCED NO OUTCOME. That is L5 exactly, and it is what the in-chain survey found 19 of 50 arcs asking for: THE COUNTER COMPELS SOMEONE TO ACT, IT DOES NOT ACT",
+   "detail": "PASS, AND BOTH HALVES OF L5 RAN. `site_harbour` crossed the `bulk_shipping` floor in 11 seasons (800 -> 790). (1) IT CHANGED WHAT MAY BE CHOSEN: ['bulk_shipping', 'fishing'] -> ['fishing']. (2) IT EMITTED A WITNESSABLE EVENT into the one log (condition.band_crossed) whose `causes[]` NAMES THE WEAR THAT CROSSED THE FLOOR (`W4`/`H-12`), carrying NO social change and NO degree -- so it wrote no social row and PRODUCED NO OUTCOME. That is L5 exactly, and it is what the in-chain survey found 19 of 50 arcs asking for: THE COUNTER COMPELS SOMEONE TO ACT, IT DOES NOT ACT",
    "kind": null,
    "section": "S3-L5",
    "title": "a crossing compels a person to act",
@@ -9903,7 +9903,7 @@
   "A5": {
    "id": "A5",
    "verdict": "PASS",
-   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (a5ab4ccfed65...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (4cf982a3bbd4...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
    "kind": null,
    "section": "S32",
    "title": "the fold is order-independent, and the float control actually fires",
@@ -10163,7 +10163,7 @@
   "A28": {
    "id": "A28",
    "verdict": "PASS",
-   "detail": "PASS over 4 events from a real run: id uniqueness, a NON-DECREASING season index, a stable content hash, and referential integrity on causes[] against log UNION resolved -- 4 causes name an ACT and 0 name an EVENT, zero dangle. \u26a0 THE UNION IS `H-82` AND IT IS A READING, NOT A GIVEN: #353 `:658` and `:1377` cannot both hold as written, and this probe asserts the reading `W9` took rather than leaving it in a code comment",
+   "detail": "PASS over 62 events from a real run: id uniqueness, a NON-DECREASING season index, a stable content hash, and referential integrity on causes[] against log UNION resolved -- 4 causes name an ACT and 56 name an EVENT, zero dangle. \u26a0 THE UNION IS `H-82` AND IT IS A READING, NOT A GIVEN: #353 `:658` and `:1377` cannot both hold as written, and this probe asserts the reading `W9` took rather than leaving it in a code comment",
    "kind": null,
    "section": "S19.1",
    "title": "the log's invariants hold",
@@ -11025,10 +11025,10 @@
   "STEP": 2136,
   "BARRIER": 723,
   "DECISION": 732,
-  "WRITE": 793,
+  "WRITE": 1183,
+  "EVENT": 1204,
   "QUERY": 4387,
   "ACT": 75,
-  "EVENT": 62,
   "CLAIM": 376,
   "GAP": 66,
   "NOTE": 96

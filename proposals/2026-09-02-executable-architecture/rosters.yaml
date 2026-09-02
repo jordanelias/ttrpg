@@ -228,6 +228,24 @@ rosters:
       subject is READ off the Event the design already has. `H-79` is the row.
     values: [actor, per_change, both]
 
+  conditional_emission_rows:
+    source: "`W4`. Part D's `emits:` column does not distinguish a kind emitted ON EVERY WRITE from one emitted only WHEN A CONDITION HOLDS, and the two are different things."
+    note: >-
+      ⚠ THIS ROSTER EXISTS BECAUSE PART D'S COLUMN IS AMBIGUOUS, AND THE AMBIGUITY IS REGISTERED AS
+      `H-86` RATHER THAN DECIDED HERE. `W4` makes a MATTER write on a row that declares an `emits:`
+      kind name one -- that is `D22`, and `H-12` is RULED that way. But `(Record, ttl)` declares
+      only `record.expired`, and the row is DECREMENTED EVERY SEASON: emitting `record.expired` on
+      every decrement would publish an expiry that has not happened, which is worse than the silent
+      write the gate exists to stop. `(Site, condition)` shows the other shape -- `condition.worn`
+      per write PLUS `condition.band_crossed` on a condition -- so the column carries both kinds of
+      kind with nothing to tell them apart. Listing the rows whose declared emissions are ALL
+      conditional is the smallest thing that is true; deciding the column's schema is a Part D
+      change and belongs to whoever ratifies `H-86`.
+    why:
+      "Record.ttl": "`record.expired` fires at zero; every other decrement of §13's licensed clock is a tick with no declared kind, and emitting the terminal one would assert an expiry that has not happened"
+    cite: "H-86"
+    values: ["Record.ttl"]
+
   knowledge_kinds:
     source: "`H-85`; NPC-087's own `season_requires` supplies the two values"
     open: true

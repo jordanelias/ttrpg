@@ -190,6 +190,23 @@ class Fixtures:
             )
         return table[site_kind]
 
+    def claim_decay(self) -> int:
+        """`W4` / `H-40`. Confidence lost per season by a claim nobody refreshed — the THIRD
+        licensed clock (#353 `:864`).
+
+        ⚠ ON `wear`'s PRECEDENT, DELIBERATELY, INCLUDING THE REFUSAL. #353 licenses the clock and
+        gives NO RATE, so this is an INJECTED DEFAULT with a site and a sweep (`H-40`, re-graded
+        `assumption`), not a value the design states. It is registered rather than literal for the
+        same reason `wear` is: *"a wear table that returns 20 for an unregistered site kind does
+        not fail — it answers, plausibly and wrongly, forever."*"""
+        table = self._v
+        if "claim_decay_per_season" not in table:
+            raise Ungraded(
+                "claim confidence decay is not registered", "S42.2.1",
+                needs="a `claim_decay_per_season` fixture row",
+                law="S42.2.1 -- an unregistered rate must REFUSE, never answer plausibly")
+        return table["claim_decay_per_season"]
+
     def sweep(self, name: str, value: Any) -> "Fixtures":
         f = Fixtures(**self._v)
         f._v[name] = value
@@ -223,6 +240,12 @@ DEFAULT_FIXTURES = Fixtures(
     wear_per_season={"harbour": 10, "seam": 10, "body": 10},
     # S20: Claim.confidence. Rev 1 hardcoded 1, which degenerated the eviction comparator.
     confidence_default=100,
+    # `W4` / `H-40`, THE THIRD LICENSED CLOCK (#353 `:864`). #353 licenses confidence decay at
+    # MATTER and gives NO RATE, so this is an INJECTED DEFAULT with a `site:` and a three-point
+    # sweep on the register, exactly as `H-09` treats the confidence default beside it. It is a
+    # fixture rather than a literal so `Fixtures.claim_decay` can REFUSE when it is unregistered
+    # — `wear`'s precedent, and S42.2.1's rule.
+    claim_decay_per_season=5,
     # S15.2: entrenchment(h,H) = min(1, seasons_held / 60). The 60 IS in-chain; it is a fixture
     # only so no literal sits in a body.
     entrenchment_seasons=60,
@@ -368,11 +391,8 @@ class MatrixRow:
 # read either cell -- THAT instance lost transcribed text in a capture whose purpose is fidelity to
 # Part E, and changed no behaviour. What earns the guard under `CLAUDE.md` §0.1 pt 5 is the same
 # class at the ROW level, which DID change behaviour: two `(Office, exists)` rows where the loader
-# took the last, so gate behaviour depended on file order. That fix guarded rows only.
-#
-# The same defect class already cost this instrument once at the ROW level -- two `(Office, exists)`
-# rows where the loader took the last, so gate behaviour depended on file order -- and that fix
-# guarded rows only. This guards every mapping in every file.
+# took the last, so gate behaviour depended on file order. That fix guarded rows only; this guards
+# every mapping in every file.
 # ---------------------------------------------------------------------------
 
 def load_yaml(text: str):
@@ -1290,6 +1310,10 @@ class World:
         self._barrier_cache: dict = {}
         self._in_parallel_map = False
         self.writes: list[tuple] = []
+        # `W4`. The Events `write()` emitted during the current barrier, so a caller that needs an
+        # ANTECEDENT can name the emission its own write just produced -- which is how a band
+        # crossing's `causes[]` reaches the wear that crossed the floor.
+        self._emitted_by_write: list[Event] = []
         self.crossings: list[tuple] = []        # S12.1/L5 -- band-edge crossings, EMISSIONS
         # S33: "`purpose` must be unique per DRAW, not per operation, or two draws inside one
         # act collide." A per-TICK ordinal is unique within the tick AND identical across runs
@@ -1333,7 +1357,24 @@ class World:
 
     def write(self, thing: str, wclass: WriteClass, apply: Callable[[], Any],
               record_kind: str, fieldname: str, driver: str,
-              caused_person_exists: Optional[str] = None) -> Any:
+              caused_person_exists: Optional[str] = None,
+              emits: Optional[str] = None,
+              causes: Optional[list[str]] = None,
+              subject: Optional[str] = None) -> Any:
+        """`W4`. THE GATE IS ALSO THE EMITTER, because `H-12` is `ruled` that way: *"MATTER emits
+        an Event per write so crossings have an antecedent"*, default *"Part D's `emits:` column"*.
+
+        A MATTER write on a row that declares an `emits:` kind MUST name one, and naming one the
+        row does not declare is refused. That pairing is `D22` made mechanical: a MATTER write with
+        a declared emission that emits nothing is the SILENT WRITE the design forbids, and an
+        emission the matrix never declared is a fabricated kind. Both directions matter — §42.2's
+        polarity rule is that absence maps to the verdict against the thing measured, so the
+        absence of an emission has to be a refusal rather than a quiet success.
+
+        Emission lives HERE rather than at each call site because §8's invariant is that every rule
+        lives once: keyed on `(record_kind, fieldname)`, which is the same key the write class and
+        the social partition are already read from, so a new MATTER write inherits its emission by
+        existing rather than by remembering."""
         step = self.step
         sname = step.value if step else "-"
         # W2: THE GATE IS KEYED ON `(kind, field)`, which is how S30's own rule is stated. It was
@@ -1401,9 +1442,69 @@ class World:
                     law="S15.3 -- a plague that kills the praefect ends his tenure THROUGH THE DEATH; A STORM CANNOT TOUCH IT. A second such seam means the column is the wrong mechanism")
         # S30.2: "AND THE GATE MUST APPLY THE WRITE." A gate that validates, logs and returns
         # true while the mutation happens beside it is worse than no gate.
+        # -- W4: THE EMISSION, GATED ON THE SAME ROW AS THE WRITE ------------------------
+        declared = tuple(row.emits or ())
+        # `H-86`. A row whose declared emissions are ALL CONDITIONAL is exempt from the
+        # must-name-a-kind rule -- `(Record, ttl)` declares only `record.expired`, and emitting
+        # that on a non-terminal decrement asserts an expiry that has not happened. The exempt
+        # rows are DATA (`rosters.yaml: conditional_emission_rows`), never a literal here, and the
+        # ambiguity in Part D's column that makes the roster necessary is registered rather than
+        # decided. The exemption is narrow: an UNDECLARED kind is still refused below.
+        conditional = roster("conditional_emission_rows")
+        if (wclass is WriteClass.MATTER and declared
+                and f"{record_kind}.{fieldname}" not in conditional):
+            if emits is None:
+                TRACE.write(thing, wclass.value, sname, False)
+                raise Forbidden(
+                    f"({record_kind}, {fieldname}) written at MATTER and emitted nothing, while "
+                    f"Part D declares {list(declared)}", "D22",
+                    needs="emits=<one of the row's declared kinds>",
+                    law="`H-12`, RULED: MATTER emits an Event PER WRITE so crossings have an "
+                        "antecedent, and the kind is Part D's `emits:` column. A MATTER write "
+                        "that emits nothing is the silent write `D22` names")
+            if emits not in declared:
+                TRACE.write(thing, wclass.value, sname, False)
+                raise Forbidden(
+                    f"({record_kind}, {fieldname}) tried to emit {emits!r}, which Part D does not "
+                    f"declare for it: {list(declared)}", "D22",
+                    needs=f"one of {list(declared)}",
+                    law="a kind no row declares is a FABRICATED kind, and the `emits:` column is "
+                        "the only thing that may name one")
+        elif emits is not None and emits not in declared:
+            TRACE.write(thing, wclass.value, sname, False)
+            raise Forbidden(
+                f"({record_kind}, {fieldname}) tried to emit {emits!r}, undeclared", "D22",
+                needs=f"one of {list(declared)}", law="see above")
+
         before = apply()
         TRACE.write(thing, wclass.value, sname, True)
         self.writes.append((thing, wclass.value, sname, record_kind, fieldname, driver))
+        if emits is not None:
+            # ⚠ THE SUBJECT IS THE RECORD, NOT THE TRACE LABEL. `thing` is a human label for the
+            # trace line (`"condition"`); the Event's subject has to be the RECORD ID or nothing
+            # can find the emission again. The first version used `thing`, so every site's wear
+            # emitted under the subject `"condition"` — and `last_emission_of` therefore never
+            # matched, so season 1's wear re-rooted at `[ROOT]` and the clock did not chain. That
+            # is exactly the failure `W4`'s ROOT-count proof exists to catch, and it caught it.
+            subj = subject or thing
+            ev = Event(
+                id=H(self.world_seed, self.tick, subj, f"emit:{emits}"),
+                kind=emits, subject=subj,
+                changes=[StateChange(subj, "set", wclass.value, fieldname, None)],
+                # ⚠ `causes` IS REQUIRED IN SUBSTANCE AND THE DEFAULT IS NOT `[ROOT]`. Handing an
+                # un-caused emission the root is how every Event in the `W9` artifact came to
+                # carry `causes=[ROOT]` — #353 §19.4 calls that field "the substrate of the entire
+                # emergent-narrative claim", and a default root populates it with nothing. A
+                # caller with no antecedent must say so by passing `[ROOT]` itself.
+                causes=list(causes if causes is not None else []),
+                emitted_at=self.tick)
+            # ⚠ NO EMPTY-`causes[]` CHECK HERE. `Event.__post_init__` already refuses one at
+            # S19.4, and re-implementing it would be `CLAUDE.md` §8's violation one constructor
+            # apart — the first version of this block did exactly that and shipped two messages
+            # for one rule. The Event constructor raises before this line is reached.
+            self.log.append(ev)
+            TRACE.event(ev.id, ev.kind, ev.causes)
+            self._emitted_by_write.append(ev)
         return before
 
     # -- S4: a Query MAY be cached. Built AT a barrier, read-only until the next, DISCARDED there.
@@ -1414,6 +1515,16 @@ class World:
         if key not in self._barrier_cache:
             self._barrier_cache[key] = build()
         return self._barrier_cache[key]
+
+    def last_emission_of(self, kind: str, subject: str) -> Optional[str]:
+        """The id of the most recent Event of `kind` about `subject`, or None.
+
+        `W4`'s chaining primitive: a licensed clock's next tick names its previous one, so
+        `[ROOT]` stops appearing after the clock's genuine first emission."""
+        for e in reversed(self.log):
+            if e.kind == kind and e.subject == subject:
+                return e.id
+        return None
 
     def discard_caches(self) -> None:
         self._barrier_cache.clear()
@@ -2689,6 +2800,38 @@ class SeasonDriver:
                 w.log.append(ev); emitted.append(ev)
                 TRACE.event(ev.id, ev.kind, ev.causes)
 
+        # -- CLAIM CONFIDENCE DECAY (`W4` / `H-40`) --------------------------
+        # THE THIRD LICENSED CLOCK (#353 `:864`), and until now the only one of the three with no
+        # implementation at all — Part D had no `Claim` row, so Part D was not total for a clock
+        # #353 licenses. `W2` added the row; this is the other half.
+        #
+        # ⚠ L4 IS NOT VIOLATED AND THE REASON IS WORTH STATING: a Claim's confidence is
+        # `social:false` in Part D, so the world may move it. What the world may NOT do is decide
+        # anything with it — the decay emits and stops, exactly as a band crossing does.
+        #
+        # THE ANTECEDENT IS THE CLAIM'S OWN PREVIOUS DECAY, chaining to `[ROOT]` on the first one,
+        # for the same reason wear does: a licensed clock's genuine first emission is the only
+        # place `[ROOT]` belongs.
+        decay = w.fixtures.claim_decay()
+        for pid in sorted(w.persons):
+            p_ = w.persons[pid]
+            for c in list(p_.ledger):
+                if c.confidence <= 0:
+                    continue
+                # The claim's own previous decay, else the deposit that created it. NEVER
+                # `[ROOT]`: a claim is not a clock, it is a thing a witness deposited, and the
+                # deposit has an Event. `[ROOT]` here would say the campaign seed caused it.
+                prior = (w.last_emission_of("claim.decayed", c.id)
+                         or w.last_emission_of("claim.deposited", c.id))
+                if prior is None:
+                    TRACE.note(f"{c.id} has no deposit Event to chain its decay to; skipped "
+                               "rather than rooted at the campaign seed")
+                    continue
+                w.write("confidence", WriteClass.MATTER,
+                        lambda c=c: setattr(c, "confidence", max(0, c.confidence - decay)),
+                        record_kind="Claim", fieldname="confidence", driver="Event",
+                        emits="claim.decayed", subject=c.id, causes=[prior])
+
         # S25: NO SOCIAL QUANTITY MOVES HERE. L4 at its sharpest.
         w._in_parallel_map = True
         scale = w.fixtures.get("condition_scale")
@@ -2696,9 +2839,20 @@ class SeasonDriver:
         for s in w.sites.values():
             before = s.condition
             wear = w.fixtures.wear(s.kind)      # NO SILENT DEFAULT -- unregistered kind raises
+            # `W4`. WEAR IS A LICENSED CLOCK, AND A CLOCK CHAINS TO ITSELF. `[ROOT]` is for the
+            # campaign seed and a licensed clock's GENUINE FIRST emission (#353 `:682-685`); every
+            # later tick of the same clock names the tick before it. So the number of `[ROOT]`
+            # causes stops growing after season 1, which is `W4`'s stated proof and is asserted
+            # rather than printed (`G3`). Handing every emission the root instead is what made the
+            # `W9` artifact's entire log unwalkable.
+            prior_wear = w.last_emission_of("condition.worn", s.id)
+            w._emitted_by_write.clear()
             w.write("condition", WriteClass.MATTER,
                     lambda s=s, wear=wear: setattr(s, "condition", max(0, s.condition - wear)),
-                    record_kind="Site", fieldname="condition", driver="Event")
+                    record_kind="Site", fieldname="condition", driver="Event",
+                    emits="condition.worn", subject=s.id,
+                    causes=[prior_wear] if prior_wear else [ROOT])
+            worn_ev = w._emitted_by_write[-1] if w._emitted_by_write else None
             # S12.1 / L5: A BAND EDGE CROSSING IS AN EMISSION, NOT A WRITE.
             #
             # ⚠ REV 3. Rev 2 appended a row for EVERY site EVERY season regardless of whether
@@ -2710,10 +2864,14 @@ class SeasonDriver:
             floors = floors_all.get(s.kind, {})
             for verb, floor in sorted(floors.items()):
                 if before >= floor > s.condition:
+                    # `W4`. THE CROSSING'S ANTECEDENT IS THE WEAR THAT CROSSED THE FLOOR, which is
+                    # `H-12`'s whole purpose -- *"MATTER emits an Event per write SO CROSSINGS HAVE
+                    # AN ANTECEDENT"*. It read `causes=[ROOT]`, so the one Event in this barrier
+                    # that exists to be walked back from was rooted at the seed and walked nowhere.
                     ev = Event(
                         id=H(w.world_seed, w.tick, s.id, f"crossing:{verb}"),
                         kind="condition.band_crossed", subject=s.id, changes=[],
-                        causes=[ROOT], emitted_at=w.tick)
+                        causes=[worn_ev.id] if worn_ev else [ROOT], emitted_at=w.tick)
                     w.log.append(ev); emitted.append(ev)
                     w.crossings.append((s.id, verb, before, s.condition, ev.id))
                     TRACE.event(ev.id, ev.kind, ev.causes)
@@ -3152,9 +3310,17 @@ class SeasonDriver:
                 cid = (e.id if via_knot and n == 0
                        else H(w.world_seed, w.tick, pid, f"claim:{e.id}:{n}"))
                 c = Claim(cid, pid, subj, e.kind, True, w.tick, src, conf, "own")
+                # `W4`. THE DEPOSIT EMITS, AND THAT IS WHAT GIVES A DECAY AN ANTECEDENT.
+                # Part D declares `claim.deposited` on this row and NOTHING EMITTED IT, so a
+                # claim entered the world uncaused — and every later `claim.decayed` would have
+                # had to root at `[ROOT]`, which put 63 spurious roots in a 3-season run and made
+                # `W4`'s own ROOT-count proof unsatisfiable. Chained to the witnessed Event, the
+                # walk is `decayed -> ... -> deposited -> the act that was witnessed`, which is
+                # what #353 §19.4 means by the substrate of the emergent-narrative claim.
                 w.write("claim_ledger", WriteClass.INTERIOR,
                         lambda p=p, c=c: p.ledger.append(c),
-                        record_kind="Person", fieldname="claim_ledger", driver="Event")
+                        record_kind="Person", fieldname="claim_ledger", driver="Event",
+                        emits="claim.deposited", subject=c.id, causes=[e.id])
                 TRACE.claim(pid, e.id, src)
                 deposits += 1
             if len(p.ledger) > cap:

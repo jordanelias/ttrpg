@@ -194,10 +194,10 @@ rows:
     owner:     "the log"
     grade:     "ruled"
     default:   "Part D's `emits:` column"
-    site:      ""
+    site:      "shape.World.write -- the gate is the emitter; the kind is Part D's `emits:` column, read per write"
     sweep:     []
     unblocks:  "every crossing"
-    cite:      ""
+    cite:      "EXECUTED BY W4, and the execution is the artifact rather than this sentence. `shape.World.write` is the emitter: a MATTER write on a row Part D gives an `emits:` must name one of the declared kinds, and a kind the row does not declare is refused -- which is D22 made mechanical in both directions. A band crossing now names the `condition.worn` Event that crossed the floor, so the one Event in the barrier that exists to be walked back from walks. `[ROOT]` is confined to a licensed clock's genuine first emission: ONE root across a 4-season run, at season 0. Falsifiers: test_w4_a_band_crossing_walks_back_to_the_wear_that_caused_it and test_w4_root_belongs_only_to_the_seed_and_a_clocks_genuine_first_emission. ⚠ The gate found SIX silent MATTER writes the moment it was turned on; five are fixed and the sixth is H-86. This row stays RULED -- W4 executes a ruling, it does not make one -- and `unblocks:` is left verbatim as V2 wrote it, because the transcription gate is right that an execution note is not a transcription."
     source:    "ARCHITECTURE_V2.md §VII.1, transcribed verbatim | V2's grade cell: **ruled** — D22"
   - id:        H-20
     tier:      1
@@ -444,12 +444,12 @@ rows:
     hole:      "`(Claim, confidence)` decay at MATTER -- the THIRD licensed clock (#353 `:864`). Part D has no `Claim` row at all, and `(Person, claim_ledger)` is WITNESS-only, so Part D is not total for a clock #353 licenses"
     kind:      "SCHEMA_ROW + FORMULA"
     owner:     "Claim; the log"
-    grade:     "absent"
-    default:   "none"
-    site:      ""
-    sweep:     []
-    unblocks:  "unmeasured"
-    cite:      ""
+    grade:     "assumption"
+    default:   "`claim_decay_per_season = 5`, confidence lost per season by a claim nobody refreshed"
+    site:      "Fixtures.claim_decay -- read at MATTER for every claim in every ledger; RAISES when unregistered, on `wear`'s precedent"
+    sweep:     [0, 5, 20]
+    unblocks:  "the third licensed clock, and every arc that walks back through a claim"
+    cite:      "CLOSED IN TWO HALVES BY W2 AND W4, by CLAUDE.md 0's five tests. The SCHEMA_ROW half is SUPERSEDED: W2 gave Part D a `(Claim, confidence)` row, MATTER-only, emitting `claim.decayed`, so the row this hole says is missing exists. The FORMULA half is answered by PRECEDENT (test 4): `Site.condition` wear is the other licensed MATTER clock and #353 gives IT no rate either -- it is a registered per-kind fixture that RAISES when unregistered (S42.2.1: `a wear table that returns 20 for an unregistered site kind does not fail, it answers plausibly and wrongly forever`). `H-09` treats `Claim.confidence`'s DEFAULT the same way, one field over. So this takes the same shape: an INJECTED DEFAULT with a site and a three-point sweep, not a `ruled` value the design states. Grading it `ruled` would credit an invented number to #353; leaving it `absent` after building the clock would deny a mechanism that now runs. W4 executes it and the run is the artifact."
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-41
     tier:      1
@@ -980,6 +980,18 @@ rows:
     cite:      "FOUND BY AUTHORING `W10`'s DECLARED ROUTING, WHICH IS THE MECHANISM WORKING AS INTENDED: a row that rests on nothing becomes visible the moment somebody has to write down what it rests on. NPC-087 row 1, in `proposals/2026-08-31-shape-tracer/cases/NPC1.yaml`, requires its material to be \"classified as suppressed cultural/political knowledge, retainable by ordinary non-sensitive minds, rather than Thread-substrate knowledge\", and NOTHING IN THE CHAIN SUPPLIES SUCH A CLASSIFICATION. The regex router sent that row to UNMAPPED and the case to NOT-ASSESSED, which reported it as an aiming failure; declared routing reports it as what it is. ⚠ #353 §9.2 VERBATIM: \"The only class-shaped gate in the design is Thread Sensitivity. If you find yourself writing `if capability < N: return []` inside an option set, you are re-implementing a gate the design deleted on purpose.\" So the design admits ONE class gate, warns against re-implementing the gate it deleted, and never says what the surviving one is over, who carries it, or what it gates -- a second `H-20`, on the epistemic side rather than the moral one. ⚠ MY FIRST ATTEMPT AT THIS ROW DECLARED `H-05` (the world-generation roster) AND WAS WRONG: H-05 is about persons with zero `hold`, and the mis-citation made NPC-087 read PLAYABLE. It survived about four minutes, because a declaration can be checked against the row it names and a regex could not. ⚠ RE-GRADED `absent` -> `assumption` BY THE `W10` ADVERSARIAL PASS, WHICH RAN §0's FIVE TESTS THIS ROW DID NOT. Tests 1-3 do fail: nothing supersedes it, the gate is live, and `Thread Sensitivity` occurs ONCE in all of #353. But TEST 4 ANSWERS IT, and this row's own cite named the precedent while grading against it: `H-20` is an unenumerated roster the design also calls closed, and it is `assumption` with a stand-in default and its enumeration split into its own row (`H-46`). Calling this one `absent` while calling that one `assumption` is two gradings of one shape. TEST 5 ANSWERS IT TOO: `rosters.yaml` is the ruled home for 'a roster, a taxonomy ... a kind list', and NPC-087's own need supplies the two values -- 'suppressed cultural/political knowledge, retainable by ordinary non-sensitive minds' against 'Thread-substrate knowledge'. ⚠ THIS WAS VERDICT-DECIDING: `H-85` was NPC-087's SOLE blocker and its other three core rows pass, so the grade alone decided BLOCKED. `PLAN.md` `G4` requires a critic to attempt the opposite reading for every new refusal, and the opposite reading won. ⚠ WHAT STAYS OPEN AND IS NOT PAPERED OVER: the KINDS are injectable; the GATE is not. #353 §9.2 names Thread Sensitivity as the design's one class-shaped gate and supplies no carrier and no predicate, so `site:` covers the roster half only."
     source:    "W10 — found by authoring"
 
+  - id:        H-86
+    tier:      1
+    hole:      "Part D's `emits:` column does not distinguish a kind emitted ON EVERY WRITE from one emitted only WHEN A CONDITION HOLDS. `(Site, condition)` carries both (`condition.worn` per write, `condition.band_crossed` on a crossing); `(Record, ttl)` carries only the conditional one while the row is decremented every season, so W4's per-write rule would publish an expiry that has not happened"
+    kind:      "SCHEMA_COLUMN"
+    owner:     "the design (Part D's column schema)"
+    grade:     "assumption"
+    default:   "the rows whose declared emissions are ALL conditional are listed in rosters.yaml conditional_emission_rows, and write() exempts them from the must-name-a-kind rule while still refusing an undeclared kind"
+    site:      "rosters.yaml conditional_emission_rows -- read by shape.World.write at every MATTER write"
+    sweep:     ["exempt the listed rows (the default)", "require a kind on every MATTER write and let (Record, ttl) emit record.expired on every decrement", "require a kind and split Part D's column into emits_per_write and emits_when"]
+    unblocks:  "W4's per-write emission rule on every Part D row"
+    cite:      "FOUND BY W4, BY THE GATE FIRING. Six probes flipped PASS -> GAP the moment write() began requiring a declared emission, and five were genuine silent MATTER writes that are now fixed. The sixth, (Record, ttl), is not fixable that way: emitting record.expired on a non-terminal decrement asserts an expiry that has not happened, which is the fabrication G1 forbids, and refusing the write would stop 13's licensed clock. So the column is ambiguous rather than the write being wrong. The third sweep point is the real fix and it is a Part D schema change, which is not W4's to make -- CLAUDE.md 0.05: the design document is reference, and the column belongs to whoever ratifies it. Registered rather than decided."
+    source:    "W4"
 # ---------------------------------------------------------------------------
 # THE DISCHARGE MAP -- guardrail G8.
 # "Every defect gets a register row, or is discharged with a named section."

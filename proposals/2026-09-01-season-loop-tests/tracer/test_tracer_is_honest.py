@@ -131,9 +131,14 @@ def test_d3b_the_gate_applies_the_write():
     w.step = Step.MATTER
     site = w.sites["site_harbour"]
     before = site.condition
+    # `W4`: a MATTER write on a row that declares an `emits:` kind must name one and must carry
+    # an antecedent. `[ROOT]` is said EXPLICITLY here because this synthetic write is the first
+    # emission in its world — which is exactly the carve-out, and saying it is the point.
     w.write("condition", WriteClass.MATTER, lambda: setattr(site, "condition", before - 7),
-            record_kind="Site", fieldname="condition", driver="Event")
+            record_kind="Site", fieldname="condition", driver="Event",
+            emits="condition.worn", subject=site.id, causes=[S.ROOT])
     assert site.condition == before - 7
+    assert w.log[-1].kind == "condition.worn" and w.log[-1].subject == site.id
 
 
 def test_d4_contest_is_not_a_second_resolver():
@@ -385,10 +390,12 @@ def test_the_partition_seam_is_bounded_by_causation_not_by_the_column():
     t = next(x for x in w.tenures if x.kind == "hold")
     with pytest.raises(Forbidden):
         w.write("Tenure", WriteClass.MATTER, lambda: setattr(t, "until", 0),
-                record_kind="Tenure", fieldname="until", driver="Event")
+                record_kind="Tenure", fieldname="until", driver="Event",
+                emits="tenure.closed", subject=t.object, causes=[S.ROOT])
     w.write("Tenure", WriteClass.MATTER, lambda: setattr(t, "until", 0),
             record_kind="Tenure", fieldname="until", driver="Event",
-            caused_person_exists="p_high")
+            caused_person_exists="p_high",
+            emits="tenure.closed", subject=t.object, causes=[S.ROOT])
     assert not t.live
 
 
@@ -2496,6 +2503,128 @@ def test_w9_check5_every_declared_exercises_verb_runs_or_is_recorded_not_assesse
     assert len(ran) + len(unassessed) >= 5, (ran, unassessed)
 
 
+# ===========================================================================
+# W4 — MATTER EMITS PER WRITE, WITH CAUSES. `H-12` is RULED that way; these are its proof.
+# ===========================================================================
+
+def _w4_run(seasons: int, seed: int = 0, condition: int | None = None):
+    import headless as HL
+    w = HL.build_world(seed)
+    if condition is not None:
+        list(w.sites.values())[0].condition = condition
+    d = S.SeasonDriver(w)
+    mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    for _ in range(seasons):
+        d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+                 None, HL.subsistence)
+    return w
+
+
+def test_w4_a_band_crossing_walks_back_to_the_wear_that_caused_it():
+    """`PLAN.md` `W4`'s first Proof clause. `H-12` is RULED *"MATTER emits an Event per write SO
+    CROSSINGS HAVE AN ANTECEDENT"*, and the crossing carried `causes=[ROOT]` — so the one Event in
+    the barrier that exists to be walked back from was rooted at the campaign seed and walked
+    nowhere. `P18` ASSERTED THAT, which is a probe pinning a defect.
+
+    The site is seeded one season above a floor rather than run for twenty: wear is 10/season from
+    990 and the first floor is 800, so a natural crossing needs 20 seasons. The seeding is a test
+    fixture, not a design value — nothing about the crossing's mechanism depends on how the site
+    got near the floor."""
+    w = _w4_run(2, condition=805)
+    by_id = {e.id: e for e in w.log}
+    crossings = [e for e in w.log if e.kind == "condition.band_crossed"]
+    assert crossings, "no band edge was crossed — the fixture no longer reaches a floor"
+    for c in crossings:
+        assert len(c.causes) == 1 and c.causes[0] != S.ROOT, (c.kind, c.causes)
+        ante = by_id.get(c.causes[0])
+        assert ante is not None and ante.kind == "condition.worn", (
+            f"a crossing's antecedent is {ante.kind if ante else None!r}, not the wear")
+        assert ante.subject == c.subject and ante.emitted_at == c.emitted_at, (
+            "the crossing names a wear Event about a different site or a different season")
+
+
+def test_w4_root_belongs_only_to_the_seed_and_a_clocks_genuine_first_emission():
+    """`PLAN.md` `W4`'s second Proof clause, ASSERTED AND NOT PRINTED (`G3`): *"the count of
+    `[ROOT]` after season 1 equals the number of declared roots and nothing else"*.
+
+    ⚠ THIS IS THE CLAUSE THAT CAUGHT TWO REAL DEFECTS while `W4` was being built, which is why it
+    is worth more than a count. (1) `write()` used the TRACE LABEL as the Event subject, so every
+    site's wear emitted under the subject `"condition"`, `last_emission_of` never matched, and the
+    clock re-rooted every season. (2) a claim's first decay rooted at the seed, because the deposit
+    that created the claim emitted nothing — 63 spurious roots in a 3-season run. A claim is not a
+    clock; it is a thing a witness deposited, and the deposit has an Event."""
+    for seasons in (1, 2, 3, 4):
+        w = _w4_run(seasons)
+        rooted = [e for e in w.log if list(e.causes) == [S.ROOT]]
+        kinds = sorted({e.kind for e in rooted})
+        assert kinds == ["condition.worn"], (
+            f"{seasons} season(s): {kinds} carry [ROOT]. Only a licensed clock's GENUINE FIRST "
+            f"emission may, and wear is the only clock this world runs")
+        assert all(e.emitted_at == 0 for e in rooted), (
+            f"{seasons} season(s): a [ROOT] appears after season 0 — the clock is not chaining to "
+            "its own previous tick")
+        assert len(rooted) == len(w.sites), (
+            f"{seasons} season(s): {len(rooted)} roots for {len(w.sites)} site(s)")
+
+
+def test_w4_every_matter_write_on_a_declaring_row_emits_or_is_registered_as_conditional():
+    """The gate itself, both directions. A MATTER write on a row Part D gives an `emits:` must name
+    one of the declared kinds; a kind the row does not declare is refused.
+
+    ⚠ THE GATE FOUND SIX SILENT MATTER WRITES THE MOMENT IT WAS TURNED ON — `(Record, matured)`,
+    `(Person, exists)` twice, `(Tenure, until)`, `(Record, ttl)` and `(Rung, envelope)`, every one
+    on a row whose `emits:` Part D declares. Five were fixed; the sixth is `H-86`."""
+    import headless as HL
+    w = HL.build_world(0)
+    w.step = S.Step.MATTER
+    site = list(w.sites.values())[0]
+
+    with pytest.raises(Forbidden, match="emitted nothing"):
+        w.write("condition", WriteClass.MATTER, lambda: setattr(site, "condition", 1),
+                record_kind="Site", fieldname="condition", driver="Event")
+    with pytest.raises(Forbidden, match="does not declare"):
+        w.write("condition", WriteClass.MATTER, lambda: setattr(site, "condition", 1),
+                record_kind="Site", fieldname="condition", driver="Event",
+                emits="site.exploded", subject=site.id, causes=[S.ROOT])
+    # S19.4's own guard, in `Event.__post_init__` — NOT a second copy in `write()`. The first
+    # version of `W4` re-implemented it there, which is §8's rule broken one constructor apart.
+    with pytest.raises(Forbidden, match="causes="):
+        w.write("condition", WriteClass.MATTER, lambda: setattr(site, "condition", 1),
+                record_kind="Site", fieldname="condition", driver="Event",
+                emits="condition.worn", subject=site.id, causes=[])
+
+    # AND THE REGISTERED EXEMPTION IS READ FROM DATA, NOT FROM A LITERAL (`H-86`).
+    assert "Record.ttl" in S.roster("conditional_emission_rows")
+    rec = next(iter(w.records.values()), None)
+    if rec is not None:
+        w.write("ttl", WriteClass.MATTER, lambda: setattr(rec, "ttl", (rec.ttl or 1) - 1),
+                record_kind="Record", fieldname="ttl", driver="Event")
+
+
+def test_w4_a_claims_decay_walks_back_to_the_act_that_was_witnessed():
+    """The third clock. `(Claim, confidence)` decays at MATTER and emits `claim.decayed`, chained
+    to the claim's own previous decay and ultimately to the `claim.deposited` Event — which is
+    chained to the Event that was witnessed. #353 §19.4 calls `causes[]` the substrate of the
+    entire emergent-narrative claim; before `W4` a claim entered the world uncaused."""
+    w = _w4_run(3)
+    by_id = {e.id: e for e in w.log}
+    decays = [e for e in w.log if e.kind == "claim.decayed"]
+    assert decays, "no claim decayed — the third licensed clock is not running"
+    walked = 0
+    for d in decays:
+        chain, cur = [], d
+        while cur.causes and cur.causes[0] in by_id:
+            cur = by_id[cur.causes[0]]
+            chain.append(cur.kind)
+            if len(chain) > 40:
+                break
+        assert "claim.deposited" in chain, (
+            f"a decay's chain is {chain} — it never reaches the deposit that created the claim")
+        if chain[chain.index("claim.deposited") + 1:]:
+            walked += 1
+    assert walked, "no decay chain reaches past its deposit to the Event that was witnessed"
+
+
 def test_w9_h80s_zero_control_is_executed_not_merely_described():
     """`H-80`'s cite says *"AT THE `0` SWEEP POINT NOTHING MATURES and the causal chain collapses
     to one link, which is the control"*. It said it in a YAML string and no test ran it.
@@ -2505,7 +2634,7 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     fails at 2. The four-Event chain rests on a number this session invented, and that is a fact
     about the milestone, not a reason to hide the sweep."""
     import headless as HL
-    depths = {}
+    depths, matured = {}, {}
     for n in (0, 3, 6):
         w = HL.build_world(0, S.DEFAULT_FIXTURES.sweep("record_stages_default", n))
         d = S.SeasonDriver(w)
@@ -2520,11 +2649,20 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
                 return 0
             return 1 + max([depth(by_id[c], seen + (e.id,)) for c in e.causes if c in by_id] or [0])
 
-        depths[n] = max((depth(e) for e in w.log), default=0)
-    print(f"\n  H-80 sweep — longest causal chain by record_stages_default: {depths}")
-    assert depths[0] == 1, (
-        f"at the 0 control the chain is {depths[0]}, not 1 — something OTHER than maturation is "
-        "chaining, which would be a finding worth more than this control")
+        # ⚠ MEASURED OVER THE MATURATION CHAIN, NOT OVER THE WHOLE LOG. `W4` gave the wear and
+        # claim-decay clocks real `causes[]`, so the global maximum is now dominated by them and
+        # reads a flat 8 at EVERY sweep point — the control went BLIND to the thing it sweeps.
+        # `H-80`'s cite is *"at the 0 sweep point NOTHING MATURES"*, and that clause is directly
+        # checkable and survives `W4` intact; the *"collapses to one link"* clause was about a log
+        # in which maturation was the only chain, and it is superseded rather than wrong.
+        mats = [e for e in w.log if e.kind == "term.matured"]
+        matured[n] = len(mats)
+        depths[n] = max((depth(e) for e in mats), default=0)
+    print(f"\n  H-80 sweep — maturations {matured}, longest maturation chain {depths}")
+    assert matured[0] == 0 and depths[0] == 0, (
+        f"at the 0 control {matured[0]} term.matured Events exist — `H-80`'s cite says "
+        "NOTHING MATURES there, and if something does, that is a finding worth more than "
+        "this control")
     assert depths[3] > depths[0] and depths[6] > depths[3], (
         f"the chain does not grow with the stage count: {depths} — then check 2's result does not "
         "rest on H-80 and this control is measuring nothing")
