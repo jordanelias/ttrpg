@@ -16,7 +16,6 @@ records what went wrong without them, and re-tightened here:
 
 from __future__ import annotations
 
-import json
 import re
 import sys
 from pathlib import Path
@@ -595,11 +594,16 @@ COMPILED += [(pid, re.compile(rx, re.I), re.compile(neg, re.I) if neg else None)
 
 
 if __name__ == "__main__":
+    # W15 -- ONE WRITER PER ARTIFACT. This entrypoint used to write `results.json` and
+    # `TRACE.txt` itself, and `report.py` wrote them too from its own `main()` call. Two
+    # writers over one artifact set meant whichever ran last won, and the committed markdown
+    # went stale by one fix: FOUR ARC CASES WERE WRONG IN A MERGED PR because the caselogs
+    # came from one run and `results.json` from another. `report.py` is now the SOLE emitter.
+    # This entrypoint still RUNS the corpus -- it is the fastest way to see the tallies -- and
+    # it writes nothing. The refusal is enforced by execution, not by this comment:
+    # `test_w15_the_run_cases_entrypoint_writes_nothing` runs this file as a script and hashes
+    # `runs/` before and after.
     rep = main()
-    outdir = ROOT / "runs"
-    outdir.mkdir(exist_ok=True)
-    (outdir / "results.json").write_text(json.dumps(rep, indent=1, default=str))
-    (outdir / "TRACE.txt").write_text(TRACE.dump_text())
     for kind in ("NPC", "ARC"):
         rows = rep[kind]
         tally: dict[str, int] = {}
@@ -624,3 +628,6 @@ if __name__ == "__main__":
     print(f"\n=== PROBES: {len(pv)} ===")
     print("   " + " · ".join(f"{v} {k}" for k, v in sorted(tal.items())))
     print(f"\n=== TRACE: {TRACE.counts()}")
+    print("\nWrote nothing under proposals/2026-09-01-season-loop-tests/. `report.py` is the\n"
+          "sole emitter of runs/ (W15, guardrail G7). To regenerate the artifacts:\n"
+          "    python report.py")
