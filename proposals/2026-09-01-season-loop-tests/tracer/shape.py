@@ -335,6 +335,55 @@ MATRIX_RETIRED: dict = {
 # S D2's DR-3 states all three. `report.py` still reads it, and it now reports zero.
 PARTITION_ASSUMED: dict[tuple[str, str], tuple[bool, str]] = {}
 
+# ===========================================================================
+# THE ROSTERS, LOADED FROM DATA.
+#
+# ⚠ RULED BY JORDAN, 2026-09-02: *"I do not want definitions etc to be hardcoded"* … *"these must
+# be easy to modify"* … *"that goes for all"*. Six rosters — 35 definitions — were literals in
+# this file. They are `rosters.yaml` now, and changing one is a data edit.
+#
+# `roster()` RAISES on a name the file does not carry. That is §42.2's polarity rule applied to
+# definitions: an absent roster is a REFUSAL, never an empty set, because an empty set silently
+# makes every membership test false and every closed-set guard vacuous.
+# ===========================================================================
+
+ROSTERS_YAML = (_HERE.parent.parent / "2026-09-02-executable-architecture" / "rosters.yaml")
+
+
+def _load_rosters() -> dict:
+    import yaml as _y
+    if not ROSTERS_YAML.exists():
+        raise SystemExit(f"rosters.yaml not found at {ROSTERS_YAML}")
+    return (_y.safe_load(ROSTERS_YAML.read_text()) or {}).get("rosters") or {}
+
+
+_ROSTERS = _load_rosters()
+
+
+def roster(name: str, ordered: bool = False):
+    """A closed set, from `rosters.yaml`. `ordered=True` returns a tuple because the order is
+    semantic (the strata resolve in sequence); otherwise a frozenset, so a caller cannot depend
+    on an order the data does not promise."""
+    r = _ROSTERS.get(name)
+    if r is None:
+        raise Unspecified(
+            f"roster {name!r} is not in rosters.yaml", "rosters.yaml",
+            needs="add the roster to the data file; do not inline it here",
+            law="Jordan 2026-09-02 -- definitions are not hardcoded. An absent roster REFUSES; "
+                "returning an empty set would make every membership test silently false")
+    vals = r["values"]
+    return tuple(vals) if (ordered or r.get("ordered")) else frozenset(vals)
+
+
+TENURE_KINDS = roster("tenure_kinds")
+RUNG_KINDS = roster("rung_kinds", ordered=True)
+REMIT_ACTS = roster("remit_acts")
+WITNESS_CHANNELS = roster("witness_channels", ordered=True)
+CLAIM_SOURCES = roster("claim_sources")
+STRATA = roster("strata", ordered=True)
+
+
+
 
 # Where S30's matrix says "no", the refusal belongs to the LAW THE CELL ENFORCES, not to the
 # matrix's bookkeeping rule. These are the cells whose "no" is a named law refusing.
@@ -429,7 +478,6 @@ class Tenure:
         return self.until is None
 
 
-TENURE_KINDS = {"hold", "contain", "commit", "oblige", "succeed", "tie", "knot"}
 
 
 @dataclass
@@ -479,8 +527,6 @@ class Claim:
     visibility: str
 
 
-CLAIM_SOURCES = {"firsthand", "told_by", "inferred", "firsthand_via_knot"}
-WITNESS_CHANNELS = ("post_remit", "co_located", "witness_key", "document_key", "chronicle")
 
 
 class Sensation:
@@ -566,7 +612,6 @@ class Act:
 
 
 # S27: FIVE STRATA. movement / binding decisions / contested physical / uncontested material / social
-STRATA = ("movement", "binding_decision", "contested_physical", "uncontested_material", "social")
 
 
 @dataclass
@@ -639,9 +684,6 @@ class Office:
     upkeep: Any = None
 
 
-REMIT_ACTS = {"issue", "determine", "confer", "revoke", "dispatch", "convene"}
-RUNG_KINDS = ["person", "hearth", "community", "settlement",
-              "territory", "province", "duchy", "realm"]
 
 
 class Rung:

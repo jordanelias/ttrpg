@@ -1314,3 +1314,85 @@ def test_w2_the_class_column_is_derived_and_cross_checked():
     for (kind, fname), row in S.MATRIX.items():
         for st in row.steps:
             assert row.write_class(st) is S.STEP_CLASS[st], f"({kind}, {fname}) at {st}"
+
+
+# ===========================================================================
+# JORDAN'S 2026-09-02 RULING — DEFINITIONS ARE NOT HARDCODED
+#
+# Verbatim, across four messages: *"please note that convictions roster and axes etc may be
+# modified in future"* … *"that goes for all"* … *"these must be easy to modify"* … *"I do not
+# want definitions etc to be hardcoded."*
+#
+# THIS IS A GUARD ON THE GAME, NOT ON THE APPARATUS, which is what licenses it under `CLAUDE.md`
+# §0.1 point 5 as amended: the artifact it protects is the set of definitions the loop RESOLVES
+# FROM, so a defect here changes what the game does. It fails on a NEW hardcoded roster, which is
+# the recurrence — not on the six that were moved, which is history.
+# ===========================================================================
+
+def test_jordan_no_definition_is_hardcoded_in_a_body():
+    """Walk the tree for a module-level literal collection of strings — a roster, a taxonomy, a
+    kind list. Every one must come from `rosters.yaml` instead.
+
+    ⚠ The check is on the SHAPE, not on a list of forbidden names (`G2`: *forbid the shape, never
+    enumerate the words* — a whitelist built for the fourth recurrence did not catch the fifth).
+    Two kinds of module-level constant are exempt and each says why in the exemption itself, not
+    in a name list."""
+    import ast as ast_
+    src = (HERE / "shape.py").read_text()
+    tree = ast_.parse(src)
+    offenders = []
+    for node in tree.body:
+        if not isinstance(node, (ast_.Assign, ast_.AnnAssign)):
+            continue
+        tgt = node.targets[0] if isinstance(node, ast_.Assign) else node.target
+        if not isinstance(tgt, ast_.Name) or not tgt.id.isupper():
+            continue
+        v = node.value
+        if not isinstance(v, (ast_.Tuple, ast_.List, ast_.Set)) or not v.elts:
+            continue
+        if not all(isinstance(e, ast_.Constant) and isinstance(e.value, str) for e in v.elts):
+            continue        # not a roster of names
+        if len(v.elts) < 3:
+            continue        # a pair is a relation, not a taxonomy
+        offenders.append((tgt.id, node.lineno, [e.value for e in v.elts]))
+    assert not offenders, (
+        "module-level rosters written as literals — Jordan 2026-09-02, definitions are not "
+        "hardcoded. Move each to `rosters.yaml` and read it with `roster()`:\n  "
+        + "\n  ".join(f"{n} at shape.py:{ln} ({len(v)} entries)" for n, ln, v in offenders))
+
+
+def test_jordan_every_roster_comes_from_the_data_file_and_an_absent_one_refuses():
+    """The six that moved must actually be READ, not merely copied — and a roster the file does
+    not carry must RAISE. An empty set would make every membership test silently false and every
+    closed-set guard vacuous, which is §42.2's polarity rule inverted."""
+    for name, value in (("tenure_kinds", S.TENURE_KINDS), ("rung_kinds", S.RUNG_KINDS),
+                        ("remit_acts", S.REMIT_ACTS), ("witness_channels", S.WITNESS_CHANNELS),
+                        ("claim_sources", S.CLAIM_SOURCES), ("strata", S.STRATA)):
+        assert set(value) == set(S._ROSTERS[name]["values"]), f"{name} diverged from the data"
+        assert value, f"{name} loaded empty"
+    with pytest.raises(Unspecified):
+        S.roster("a_roster_nobody_declared")
+    # Order is semantic for the strata — the fold resolves in sequence — so it must be a tuple
+    # and must match the file's order, not a set's arbitrary one.
+    assert isinstance(S.STRATA, tuple) and list(S.STRATA) == S._ROSTERS["strata"]["values"]
+
+
+def test_jordan_a_roster_edit_is_a_data_edit_and_nothing_else():
+    """The point of the ruling, made falsifiable: changing a roster must not require touching
+    code. This edits the loaded data and asserts the change reaches the accessor the loop uses.
+
+    ⚠ WHAT IT DOES NOT CLAIM, because a mutation showed the first draft overclaimed it. The six
+    module constants (`S.STRATA` and friends) are bound ONCE AT IMPORT, so editing the YAML does
+    not change them in a running process — you edit the file and start again, which is ordinary
+    and is not what the ruling is about. The ruling is about WHERE THE DEFINITION LIVES. A test
+    that failed on an import-time binding would be guarding a non-defect, and `CLAUDE.md` §0.1
+    point 5 says a guard must earn its existence."""
+    before = set(S.roster("tenure_kinds"))
+    S._ROSTERS["tenure_kinds"]["values"].append("_planted_kind")
+    try:
+        assert "_planted_kind" in S.roster("tenure_kinds"), (
+            "a roster edit did not reach the accessor — something cached or copied the values, "
+            "which reintroduces the hardcoding one level down")
+    finally:
+        S._ROSTERS["tenure_kinds"]["values"].remove("_planted_kind")
+    assert set(S.roster("tenure_kinds")) == before

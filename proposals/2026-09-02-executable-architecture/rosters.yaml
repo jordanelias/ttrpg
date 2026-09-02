@@ -1,0 +1,73 @@
+# THE ROSTERS — every closed set the loop reads, as DATA.
+#
+# ⚠ RULED BY JORDAN, 2026-09-02, and this file exists because of it. Verbatim, across four
+# messages: *"please note that convictions roster and axes etc may be modified in future"* …
+# *"that goes for all"* … *"these must be easy to modify"* … *"I do not want definitions etc to
+# be hardcoded."*
+#
+# THE RULE, STATED SO A LATER SESSION CANNOT SOFTEN IT: a DEFINITION — a roster, a taxonomy, an
+# axis set, a kind list, a closed set of any sort — is read at runtime from here. Changing one is
+# a DATA EDIT, never a code change, and it touches no other system. A definition written as a
+# literal in a Python body is a defect, whatever else is true of it.
+#
+# WHAT THIS IS NOT. It is not a place for NUMBERS — those are `Fixtures`, which already raise on
+# an unregistered key. It is not a place for MECHANISM — the step→write-class map is a relation
+# the code owns, not a definition someone may edit. The test is: *would changing this change the
+# GAME, or change how the code works?* A roster changes the game. `STEP_CLASS` changes the code.
+#
+# HOW TO CHANGE ONE. Edit the list. Nothing else. `shape.py` reads this file at import; a name
+# the code asks for that is not here RAISES rather than defaulting, which is §42.2's polarity
+# rule applied to definitions — an absent roster is a refusal, never an empty set.
+#
+# ⚠ EVERY ROSTER HERE IS OPEN BY THE SAME RULING. None of them is closed by being written down.
+# The `source:` field says where the current membership comes from; it is provenance, NOT
+# ratification, and a roster with `open: true` must never be cited as settling a register row.
+
+rosters:
+
+  tenure_kinds:
+    source: "#353 §15 `:537-544` — the seven Tenure kinds and their cardinalities"
+    open: true
+    values: [hold, contain, commit, oblige, succeed, tie, knot]
+
+  rung_kinds:
+    source: "#353 §10 — the containment ladder. `contain : Rung → Rung`, one parent"
+    open: true
+    values: [person, hearth, community, settlement, territory, province, duchy, realm]
+
+  remit_acts:
+    source: "#353 §11 — the CLOSED five remit acts, plus `convene`"
+    open: true
+    note: >-
+      ⚠ H-52 turns on this roster. `ARCHITECTURE_V2.md` gates `open_case` on `remit:determine`,
+      and #353's closed remit acts do not include opening a case — so V2 invented an eligibility.
+      The row stays open; adding a value here would close it by hardcoding, which is the move the
+      ruling above forbids.
+    values: [issue, determine, confer, revoke, dispatch, convene]
+
+  witness_channels:
+    source: "#353 §28 `:1004` — the five channels the fan-out computes an observer set from"
+    open: true
+    note: >-
+      The channels are named; their PREDICATES are `H-33` and are graded `assumption` with total
+      fan-out as the default and the control. Naming a channel is not specifying it.
+    values: [post_remit, co_located, witness_key, document_key, chronicle]
+
+  claim_sources:
+    source: "#353 §20 — how a Claim came to be held"
+    open: true
+    note: >-
+      ⚠ Jordan, 2026-09-02: *"our understanding of all other words and actions is subjective and
+      singular."* Every value here is a way ONE person came to hold ONE claim. A source that
+      described a shared or aggregated understanding would contradict the ruling, not extend it.
+    values: [firsthand, told_by, inferred, firsthand_via_knot]
+
+  strata:
+    source: "#353 §27 — the five strata, in canonical resolution order"
+    open: true
+    note: >-
+      ⚠ ORDER IS SEMANTIC HERE, not alphabetical: the fold resolves in this sequence, so editing
+      the order changes which acts see which world. That is a game change, which is precisely why
+      it belongs in data rather than in a body.
+    ordered: true
+    values: [movement, binding_decision, contested_physical, uncontested_material, social]
