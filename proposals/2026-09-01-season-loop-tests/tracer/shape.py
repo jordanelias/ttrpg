@@ -58,6 +58,7 @@ import contextlib
 import enum
 import hashlib
 from dataclasses import dataclass, field, fields as dc_fields
+from pathlib import Path
 from typing import Any, Callable, Optional
 
 from trace_log import TRACE
@@ -227,175 +228,130 @@ class WriteClass(enum.Enum):
     INTERIOR = "INTERIOR"
 
 
-# S30's matrix, transcribed cell by cell. ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION.
-WRITE_MATRIX: dict[str, set[Step]] = {
-    "Date":               {Step.CALENDAR, Step.RESOLVE},
-    "DocketItem":         {Step.CALENDAR, Step.RESOLVE},
-    "ConveningCondition": {Step.CALENDAR, Step.RESOLVE},
-    "stores":             {Step.MATTER, Step.RESOLVE},
-    "body":               {Step.MATTER, Step.RESOLVE},
-    "travel_leg":         {Step.MATTER, Step.RESOLVE},
-    "yield":              {Step.MATTER},
-    "envelope":           {Step.MATTER, Step.CENSUS},
-    "condition":          {Step.MATTER, Step.RESOLVE},
-    "Tenure":             {Step.MATTER, Step.RESOLVE},
-    "carrier_exists":     {Step.MATTER, Step.RESOLVE, Step.CENSUS},
-    "stance":             {Step.RESOLVE},
-    "claim_ledger":       {Step.WITNESS},
-    "acts_returned":      {Step.DELIBERATE},
+# THE STEP -> WRITE CLASS MAP, and it is the single owner of that relation. CENSUS writes in the
+# MATTER class (§30's reconciliation is a world write), DELIBERATE in ACTS -- it returns an act
+# array and writes nothing else.
+_STEP_CLASS = {
+    "CALENDAR": WriteClass.CALENDAR,
+    "MATTER": WriteClass.MATTER,
+    "DELIBERATE": WriteClass.ACTS,
+    "RESOLVE": WriteClass.ACTS,
+    "WITNESS": WriteClass.INTERIOR,
+    "CENSUS": WriteClass.MATTER,
 }
 
-WRITE_CLASS_OF: dict[tuple[str, Step], WriteClass] = {
-    ("Date", Step.CALENDAR): WriteClass.CALENDAR,
-    ("Date", Step.RESOLVE): WriteClass.ACTS,
-    ("DocketItem", Step.CALENDAR): WriteClass.CALENDAR,
-    ("DocketItem", Step.RESOLVE): WriteClass.ACTS,
-    ("ConveningCondition", Step.CALENDAR): WriteClass.CALENDAR,
-    ("ConveningCondition", Step.RESOLVE): WriteClass.ACTS,
-    ("stores", Step.MATTER): WriteClass.MATTER,
-    ("stores", Step.RESOLVE): WriteClass.ACTS,
-    ("body", Step.MATTER): WriteClass.MATTER,
-    ("body", Step.RESOLVE): WriteClass.ACTS,
-    ("travel_leg", Step.MATTER): WriteClass.MATTER,
-    ("travel_leg", Step.RESOLVE): WriteClass.ACTS,
-    ("yield", Step.MATTER): WriteClass.MATTER,
-    ("envelope", Step.MATTER): WriteClass.MATTER,
-    ("envelope", Step.CENSUS): WriteClass.MATTER,
-    ("condition", Step.MATTER): WriteClass.MATTER,
-    ("condition", Step.RESOLVE): WriteClass.ACTS,
-    ("Tenure", Step.MATTER): WriteClass.MATTER,
-    ("Tenure", Step.RESOLVE): WriteClass.ACTS,
-    ("carrier_exists", Step.MATTER): WriteClass.MATTER,
-    ("carrier_exists", Step.RESOLVE): WriteClass.ACTS,
-    ("carrier_exists", Step.CENSUS): WriteClass.MATTER,
-    ("stance", Step.RESOLVE): WriteClass.ACTS,
-    ("claim_ledger", Step.WITNESS): WriteClass.INTERIOR,
-    ("acts_returned", Step.DELIBERATE): WriteClass.ACTS,
-}
 
-# ---------------------------------------------------------------------------
-# THE PARTITION (L4). REV 2: every row carries its PROVENANCE, and there are only two
-# admissible provenances. Nothing here is transcribed from intuition.
+# ===========================================================================
+# PART D, LOADED FROM DATA -- W2.
 #
-#   "chain"   -- ARCHITECTURE.md states the row. There is exactly ONE (S15.3).
-#   "matrix"  -- S30's matrix DETERMINES it by construction: a thing the matrix admits at
-#                MATTER is one the world may write, hence social:false; a thing the matrix
-#                admits ONLY at RESOLVE (where the write class is ACTS) is act-only, hence
-#                social:true. This derives the row rather than inventing it.
+# WHAT WAS HERE, AND WHY IT WENT. Six hand-maintained structures -- `WRITE_MATRIX`,
+# `WRITE_CLASS_OF`, `PARTITION`, `PARTITION_ASSUMED`, `MATRIX_FIELD_OF` and `PARTITION_MISSING`
+# -- plus a derivation loop that reconstructed the Partition from the matrix at import time.
+# Every one of them was keyed on a THING (`stance`, `condition`, `Tenure`) because #353 §30's
+# matrix is, and that keying IS defect `D1`: `(Person, convictions)` rode on `stance`'s row, so a
+# real gap silently became a PASS. `MATRIX_FIELD_OF` existed only to paper over the mismatch, and
+# it was a hand-written map of which fields were allowed to ride on which rows -- i.e. the defect,
+# written down.
 #
-# EVERYTHING ELSE IS MISSING and raises. In particular `(Person, convictions)` and
-# `(Person, beliefs)` are NOT in S30's matrix and are NOT stated, so they are MISSING --
-# restoring a gap rev 1 had turned into a PASS.
-# ---------------------------------------------------------------------------
-PARTITION: dict[tuple[str, str], tuple[bool, str]] = {
-    ("Tenure", "until"): (False, "chain S15.3 -- THE PARTITION'S ONE DECLARED SEAM"),
-    # ⚠ REV 4. Revisions 1-3 all asserted the head states EXACTLY ONE row, and rev 3 pinned
-    # that claim in a regression test. IT STATES TWO. S54 item 21, verdict FOLD-IN amended,
-    # landing at S9.3: "Lawful form: a `(Person, scar[axis])` row, `social: true`, written at
-    # RESOLVE in the ACTS class by the outcome that names the person; `axis` on L3's closed
-    # registry". Omitting it INVERTED THE SIGN ON A SEVEN-ARC FINDING -- S54 item 21 says the
-    # missing moral motion "Blocks 7 arcs", and the instrument was reporting the row itself as
-    # the thing that does not exist.
-    ("Person", "scar"): (True, "chain S54 item 21 -- social:true, written at RESOLVE in the ACTS class"),
-}
-
-# ⚠ REV 3. The rev-2 derivation was a TWO-VALUED CLASSIFIER OVER A FIVE-VALUED DOMAIN, and
-# everything it did not cover fell through to the PERMISSIVE branch -- exactly the silent
-# default S42.2.1 refuses and the opposite polarity to S42.2's rule that zero evidence maps to
-# the verdict AGAINST the thing measured. It is now total, and it REFUSES where the matrix does
-# not determine an answer.
-for _thing, _steps in WRITE_MATRIX.items():
-    if _thing == "acts_returned":
-        continue
-    if Step.MATTER in _steps:
-        # the matrix admits the WORLD as a writer, so an act is not required
-        PARTITION[("*matrix*", _thing)] = (
-            False, f"matrix S30 -- admitted at MATTER, so the world may write it")
-    elif _steps == {Step.RESOLVE}:
-        # only RESOLVE, whose write class is ACTS -- so ONLY AN ACT may write it
-        PARTITION[("*matrix*", _thing)] = (
-            True, "matrix S30 -- admitted ONLY at RESOLVE, whose class is ACTS")
-    # ELSE: NOT DETERMINABLE. Date/DocketItem/ConveningCondition (CALENDAR+RESOLVE) and
-    # claim_ledger (WITNESS only) fall here, and partition_lookup RAISES for them unless the
-    # row is an explicitly declared instrument assumption below.
-
-# ---------------------------------------------------------------------------
-# ROWS THE INSTRUMENT HAD TO ASSUME TO RUN AT ALL.
+# `write_matrix.yaml` is keyed on `(kind, field)`, which is how §30's own rule is stated. The
+# rule -- ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION -- is applicable now rather than
+# aspirational, and there is nothing left to ride on.
 #
-# S42.2.1's pattern -- INJECT IT, DECLARE IT, NAME THE SITE -- applied to a SCHEMA ROW rather
-# than to a number. Without these three the loop cannot complete a single season, so refusing
-# them outright would mean measuring nothing; asserting them silently would be the invention
-# S42.3 names. They are therefore declared, listed, counted, and REPORTED IN THE OUTPUT, so a
-# reader can see exactly how much of L4's enforcement rests on the instrument rather than on
-# the design.
-# ---------------------------------------------------------------------------
-PARTITION_ASSUMED: dict[tuple[str, str], tuple[bool, str]] = {
-    ("Person", "claim_ledger"): (
-        False,
-        "ASSUMED: S28 puts the deposit at WITNESS, whose class is INTERIOR, and S20 makes "
-        "`witness` the ONLY minter -- so the writer is an Event, not an act. The matrix "
-        "determines nothing (WITNESS appears in no other row) and no S30 row states it. "
-        "⚠ THE CONSEQUENCE IS UNCOMFORTABLE AND IS NOT HIDDEN: under this assumption a "
-        "person's own memory is a row THE WORLD MAY WRITE, which sits badly beside S22 "
-        "giving the ledger to the Person and S9.3 making it the epistemic layer."),
-    ("Date", "fired"): (
-        False,
-        "ASSUMED: S24 has CALENDAR fire dates with no actor, so the writer is not an act. "
-        "The matrix admits Date at CALENDAR and RESOLVE, which determines nothing."),
-    ("DocketItem", "matter"): (
-        False,
-        "ASSUMED: S24 says 'Dates come due. DOCKETS FORM.' with no actor, and S30's matrix "
-        "marks DocketItem YES at CALENDAR -- so the design itself has an actorless writer. "
-        "⚠ REV 4 CORRECTION: rev 3 assumed True on the strength of S36.1's `carry` being an "
-        "act, which made CALENDAR's own specified docket formation raise a FORBIDDEN CHARGED "
-        "TO THE DESIGN. That was the instrument manufacturing a refusal and then reporting it "
-        "as the shape's -- the worst available direction. The derivation rule two lines above "
-        "(admitted at a step the world writes -> social:false) gives False, and this row now "
-        "follows it. `carry`'s act-ness is a fact about WHO PUT THE MATTER THERE, not about "
-        "whether the column admits an Event."),
+# THE THREE `PARTITION_ASSUMED` ROWS ARE GONE AS ASSUMPTIONS. `(Person, claim_ledger)`,
+# `(Date, fired)` and `(DocketItem, matter)` were instrument assumptions because the old
+# two-clause derivation could not reach them. §D2's `DR-3` states them, so they are rows with a
+# provenance now and `ASSUMPTIONS.md` regenerates with ZERO assumed Partition rows -- which is
+# W2's own proof, and it is a REDUCTION in what the instrument supplies, not an addition.
+# ===========================================================================
+
+_HERE = Path(__file__).resolve().parent
+WRITE_MATRIX_YAML = (_HERE.parent.parent / "2026-09-02-executable-architecture"
+                     / "write_matrix.yaml")
+
+# A step determines its write class exactly. ONE OWNER: the YAML's `class:` column carries V2's
+# own string and the loader CHECKS it against this map rather than trusting either alone.
+STEP_CLASS: dict = {Step[k]: v for k, v in _STEP_CLASS.items()}
+
+_STEP_OF = {"CAL": "CALENDAR", "MAT": "MATTER", "DEL": "DELIBERATE",
+            "RES": "RESOLVE", "WIT": "WITNESS", "CEN": "CENSUS"}
+
+
+@dataclass(frozen=True)
+class MatrixRow:
+    kind: str
+    field: str
+    steps: frozenset
+    social: Optional[bool]      # None == `n/a`
+    by: str
+    emits: tuple
+
+    def write_class(self, step: "Step") -> "WriteClass":
+        return STEP_CLASS[step]
+
+
+def _load_write_matrix() -> dict:
+    import yaml as _yaml
+    if not WRITE_MATRIX_YAML.exists():
+        raise SystemExit(f"write_matrix.yaml not found at {WRITE_MATRIX_YAML}")
+    doc = _yaml.safe_load(WRITE_MATRIX_YAML.read_text())
+    out = {}
+    for r in doc["rows"]:
+        steps = frozenset(Step[_STEP_OF[s]] for s in r["steps"])
+        social = {"true": True, "false": False, "n/a": None}[r["social"].strip()]
+        # THE CROSS-CHECK. `class:` is V2's prose; the derivation is this file's. If they
+        # disagree, one of them is wrong and neither may be trusted silently.
+        derived = "/".join(sorted({STEP_CLASS[st].value for st in steps},
+                                  key=lambda v: [s.value for s in Step].index(v)
+                                  if v in [s.value for s in Step] else 99))
+        stated = r["class"].strip()
+        if steps and stated != "—":
+            want = set(stated.split("/"))
+            got = {STEP_CLASS[st].value for st in steps}
+            if want != got:
+                raise SystemExit(
+                    f"write_matrix.yaml ({r['kind']}, {r['field']}): `class:` says {stated!r} and "
+                    f"the step->class derivation gives {sorted(got)}. One is wrong; fix the row "
+                    "or fix STEP_CLASS -- do not let them disagree.")
+        emits = tuple(e.strip(" `") for e in r["emits"].split("·") if e.strip(" `—"))
+        out[(r["kind"], r["field"])] = MatrixRow(
+            r["kind"], r["field"], steps, social, r["by"], emits)
+    return out
+
+
+# Filled at the bottom of this block, once Step/WriteClass exist.
+MATRIX: dict[tuple[str, str], MatrixRow] = _load_write_matrix()
+
+# Rows W2 RETIRED, kept so a write to one gets its own diagnosis rather than the generic
+# "no row" -- a retired row and a row that never existed are different facts about the design.
+import yaml as _yaml_boot
+MATRIX_RETIRED: dict = {
+    tuple(x.split(".", 1)): "retired by W2 -- its `emits:` kind is produced by no Part E verb "
+                            "and written at no MATTER site"
+    for x in (_yaml_boot.safe_load(WRITE_MATRIX_YAML.read_text()).get("retired") or [])
 }
 
-# The matrix names THINGS, not (record-kind, field) pairs. A derivation is valid ONLY where the
-# matrix row IS the field -- otherwise `(Person, convictions)` rides on `stance`'s row and a real
-# gap silently becomes a PASS, which is the invented-row defect in a different guise.
-MATRIX_FIELD_OF: dict[tuple[str, str], str] = {
-    ("Rung", "stores"): "stores",
-    ("Rung", "envelope"): "envelope",
-    ("Rung", "yield"): "yield",
-    ("Site", "condition"): "condition",
-    ("Person", "body"): "body",
-    ("Person", "stance"): "stance",
-    ("Person", "claim_ledger"): "claim_ledger",
-    ("Person", "travel_leg"): "travel_leg",
-    ("Tenure", "since"): "Tenure",
-    ("Tenure", "until"): "Tenure",
-    ("Date", "fired"): "Date",
-    ("DocketItem", "matter"): "DocketItem",
-    ("ConveningCondition", "attached"): "ConveningCondition",
-}
-
-PARTITION_MISSING: dict[tuple[str, str], str] = {
-    ("Record", "*"): "S30.1 -- the design has NONE, so every Record write is an unmarked cell",
-    ("Person", "exists"): "S30.1 -- without it a death write raises under the matrix's own rule",
-}
+# S320's disclosure hook. W2 empties it BY CONSTRUCTION -- the three rows it used to carry were
+# instrument assumptions only because the old two-clause derivation could not reach them, and
+# S D2's DR-3 states all three. `report.py` still reads it, and it now reports zero.
+PARTITION_ASSUMED: dict[tuple[str, str], tuple[bool, str]] = {}
 
 
 # Where S30's matrix says "no", the refusal belongs to the LAW THE CELL ENFORCES, not to the
 # matrix's bookkeeping rule. These are the cells whose "no" is a named law refusing.
-MATRIX_REFUSAL_LAW: dict[tuple[str, Step], tuple[str, str]] = {
-    ("stance", Step.MATTER): (
+MATRIX_REFUSAL_LAW: dict[tuple[tuple[str, str], Step], tuple[str, str]] = {
+    (("Person", "stance"), Step.MATTER): (
         "S3-L4",
         "L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY "
         "NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say"),
-    ("stance", Step.CALENDAR): (
+    (("Person", "stance"), Step.CALENDAR): (
         "S24", "S24 -- CALENDAR DECIDES NOTHING; it fires occasions"),
-    ("stance", Step.WITNESS): (
+    (("Person", "stance"), Step.WITNESS): (
         "S9.3",
         "S9.3 -- WITNESS NEVER TOUCHES A BELIEF. If evidence can move a conviction the moral "
         "layer has become a second epistemic layer and T2 is gone"),
-    ("yield", Step.RESOLVE): (
+    (("Rung", "yield"), Step.RESOLVE): (
         "S30", "S30 -- `yield` is written at MATTER ONLY; it is the matrix's one single-cell row"),
-    ("claim_ledger", Step.RESOLVE): (
+    (("Person", "claim_ledger"), Step.RESOLVE): (
         "S20", "S20 -- `witness` is THE ONLY MINTER of a root token, and it runs at WITNESS"),
 }
 
@@ -406,30 +362,35 @@ MATRIX_REFUSAL_LAW: dict[tuple[str, Step], tuple[str, str]] = {
 ASSUMPTIONS_USED: set[tuple[str, str]] = set()
 
 
-def partition_lookup(record_kind: str, fieldname: str, thing: str) -> tuple[bool, str]:
-    if (record_kind, "*") in PARTITION_MISSING:
-        raise Unspecified(f"({record_kind}, *) has no Partition row", "S30.1",
-                          needs="rule the row before adding it",
-                          law=PARTITION_MISSING[(record_kind, "*")])
-    if (record_kind, fieldname) in PARTITION_MISSING:
-        raise Unspecified(f"({record_kind}, {fieldname}) has no Partition row", "S30.1",
-                          needs="rule the row before adding it; the reverse order invents the thing the rule prevents",
-                          law=PARTITION_MISSING[(record_kind, fieldname)])
-    if (record_kind, fieldname) in PARTITION:
-        return PARTITION[(record_kind, fieldname)]
-    if (record_kind, fieldname) in PARTITION_ASSUMED:
-        social, why = PARTITION_ASSUMED[(record_kind, fieldname)]
-        ASSUMPTIONS_USED.add((record_kind, fieldname))
-        return social, why
-    named = MATRIX_FIELD_OF.get((record_kind, fieldname))
-    if named is not None and ("*matrix*", named) in PARTITION:
-        return PARTITION[("*matrix*", named)]
+def matrix_row(record_kind: str, fieldname: str) -> MatrixRow:
+    """THE ONE LOOKUP. Six structures and a derivation loop collapsed into this, because they
+    were six answers to one question that #353 §30 asks once: is `(kind, field)` on the table?"""
+    row = MATRIX.get((record_kind, fieldname))
+    if row is not None:
+        return row
+    if (record_kind, fieldname) in MATRIX_RETIRED:
+        raise Unspecified(
+            f"({record_kind}, {fieldname}) was RETIRED from the write matrix", "S30.1",
+            needs="a Part E verb that produces its `emits:` kind, added in the same commit as "
+                  "the row",
+            law=MATRIX_RETIRED[(record_kind, fieldname)])
     raise Unspecified(
-        f"({record_kind}, {fieldname}) is on no Partition row and no matrix row determines it",
-        "S30.1",
-        needs="a `social:` column entry, ruled",
-        law="L4 -- the membership test is a STATIC SCHEMA COLUMN, not a judgement; S42.3 -- configuring an unspecified thing invents it",
-    )
+        f"({record_kind}, {fieldname}) is on no row of the write matrix", "S30.1",
+        needs="rule the row first, then add it; the reverse order invents the thing the rule prevents",
+        law="S30 -- ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION. L4's membership test is a "
+            "STATIC SCHEMA COLUMN, not a judgement; S42.3 -- configuring an unspecified thing "
+            "invents it")
+
+
+def partition_lookup(record_kind: str, fieldname: str, thing: str = "") -> tuple[bool, str]:
+    """L4's `social:` for a pair. Kept as a name because probes call it; it is a thin read of
+    `matrix_row` now, and `thing` is ignored -- IT IS THE PARAMETER THAT CARRIED THE DEFECT."""
+    row = matrix_row(record_kind, fieldname)
+    if row.social is None:
+        raise Unspecified(
+            f"({record_kind}, {fieldname}) is `social: n/a` -- the row admits no write of this "
+            "kind", "S30.1", needs="a `social:` column entry, ruled", law=row.by)
+    return row.social, row.by
 
 
 # ===========================================================================
@@ -760,12 +721,15 @@ class World:
               caused_person_exists: Optional[str] = None) -> Any:
         step = self.step
         sname = step.value if step else "-"
-        allowed = WRITE_MATRIX.get(thing)
-        if allowed is None:
+        # W2: THE GATE IS KEYED ON `(kind, field)`, which is how S30's own rule is stated. It was
+        # keyed on `thing`, and that is defect D1 in one line: `(Person, convictions)` rode on
+        # `stance`'s row, so a real gap became a PASS. `thing` survives as a TRACE label only.
+        try:
+            row = matrix_row(record_kind, fieldname)
+        except Unspecified:
             TRACE.write(thing, wclass.value, sname, False)
-            raise Unspecified(f"'{thing}' has no row in the write matrix", "S30",
-                              needs="rule the row first, then add it",
-                              law="S30 -- ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION")
+            raise
+        allowed = row.steps
         if step not in allowed:
             TRACE.write(thing, wclass.value, sname, False)
             # ⚠ REV 4. Rev 3 raised Unspecified here on the argument that S30 and S30.1 are
@@ -777,20 +741,21 @@ class World:
             #   a cell marked "no"  = the design REFUSING          -> Forbidden, at ITS law
             #   a row that is absent = the design NOT SAYING       -> Unspecified, at S30.1
             #
-            law = MATRIX_REFUSAL_LAW.get((thing, step))
+            law = MATRIX_REFUSAL_LAW.get(((record_kind, fieldname), step))
             if law is not None:
-                raise Forbidden(f"'{thing}' written during {sname}", law[0],
+                raise Forbidden(f"({record_kind}, {fieldname}) written during {sname}", law[0],
                                 needs=f"one of {sorted(s.value for s in allowed)}", law=law[1])
-            raise Forbidden(f"'{thing}' written during {sname}", "S30",
+            raise Forbidden(f"({record_kind}, {fieldname}) written during {sname}", "S30",
                             needs=f"one of {sorted(s.value for s in allowed)}",
                             law="S30 -- ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION")
-        expect = WRITE_CLASS_OF.get((thing, step))
-        if expect is not None and expect is not wclass:
+        expect = row.write_class(step)
+        if expect is not wclass:
             TRACE.write(thing, wclass.value, sname, False)
             raise Forbidden(
-                f"'{thing}' written in class {wclass.value} at {sname}; matrix says {expect.value}",
+                f"({record_kind}, {fieldname}) written in class {wclass.value} at {sname}; "
+                f"the matrix says {expect.value}",
                 "S30.2", law="S30.2 -- the write class is a PARAMETER of the store API, checked PER WRITE SITE")
-        social, prov = partition_lookup(record_kind, fieldname, thing)
+        social, prov = partition_lookup(record_kind, fieldname)
         if social and driver != "Act":
             TRACE.write(thing, wclass.value, sname, False)
             raise Forbidden(

@@ -16,10 +16,10 @@ not the shape.
 | need | probe | verdict | § |
 |---|---|---|---|
 | **[core]** A person holding no office, post, or command must be able to perform a repeated, multi-week task (copying a text) that the engine tracks as ongoing work-in-progress with a start and an end,  | `P1` | PASS | S3-L1 |
-| **[core]** The physical product of her labor (a copied text) must be able to exist as a persistent object that can be found, carried, hidden, given away, or destroyed independently of her. | `P22` | **UNSPECIFIED** | S30.1 |
+| **[core]** The physical product of her labor (a copied text) must be able to exist as a persistent object that can be found, carried, hidden, given away, or destroyed independently of her. | `P22` | **NO-PRODUCER** | S13/E2 |
 | Her work must be able to accumulate institutional attention gradually across multiple undiscovered seasons, not only through a single detected incident. | `P17` | **UNSPECIFIED** | S22.4 |
 | **[core]** A person with no faction rank, no assigned Duty, and no tracked Standing must still be able to generate a scene opportunity that brings a player into contact with her. | `P1` | PASS | S3-L1 |
-| Her season must be able to end through means that require no institutional process at all -- being found and killed, or simply vanishing -- not only through an arrest, trial, or faction-tree | `P23` | **UNSPECIFIED** | S30.1 |
+| Her season must be able to end through means that require no institutional process at all -- being found and killed, or simply vanishing -- not only through an arrest, trial, or faction-tree | `P23` | PASS | S16 |
 | A single scene of investigation, discovery, or protection involving her must be able to permanently change a persistent fact about her (protected / exposed / arrested / dead) that carries fo | `P17` | **UNSPECIFIED** | S22.4 |
 | **[core]** Simply possessing the product of her labor must be able to trigger consequences for whoever holds it, independent of whether the act of copying was ever observed. | — | UNMAPPED | — |
 | **[core]** A person with no political voice must be able to become personally significant -- worth a scene, worth a decision -- purely through the discovered effect of her private labor, without her ev | — | UNMAPPED | — |
@@ -47,7 +47,7 @@ not the shape.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** A technical specialist's field data must be able to exist as a persistent evidence object with its own scope and quality, independent of any single Contest roll -- something that can be exam | `P22` | **UNSPECIFIED** | S30.1 |
+| **[core]** A technical specialist's field data must be able to exist as a persistent evidence object with its own scope and quality, independent of any single Contest roll -- something that can be exam | `P22` | **NO-PRODUCER** | S13/E2 |
 | **[core]** Corroborating or refuting his claim must be possible for a third party through independent fieldwork, not only by taking his word for it. | `P16` | PASS | S20 |
 | **[core]** Presenting his evidence to a political audience must be able to change what that audience believes about the cause of the sea-route blockage, and that changed belief must persist and spread  | — | UNMAPPED | — |
 | A Guild employee below faction-leadership rank must be reachable by a scene opportunity through his technical output becoming relevant to a player, not only through his faction leadership's  | — | UNMAPPED | — |
@@ -139,21 +139,21 @@ not the shape.
 | **[core]** A completed investigation must be able to produce a plausible-but-wrong conclusion that its holder cannot distinguish from a correct one, and the holder must be able to act on it as true unt | `P4` | PASS | S3-L2 |
 | An institution must be able to make one of its investigators' authority to act vary by whose territory he is standing in -- full authority in home ground, conditional on another office-holde | `F4` | PASS | S11.1 |
 | A third party must be able to spend a resource to plant false evidence into an investigation already in progress, degrading a conclusion that would otherwise have resolved correctly. | `W8` | PASS | S13.1 |
-| A party trying to stay hidden from an investigation must be able to spend ongoing effort, scene by scene, to raise the investigator's difficulty, with that difficulty lapsing the moment they | `P10` | **UNSPECIFIED** | S30.1 |
+| A party trying to stay hidden from an investigation must be able to spend ongoing effort, scene by scene, to raise the investigator's difficulty, with that difficulty lapsing the moment they | `P10` | PASS | S13 |
 | **[core]** A person must be able to possess a perceptual capacity he does not know he has, whose outputs he misattributes to a mundane cause (professional instinct), such that his real competence has a | — | UNMAPPED | — |
 | **[core]** A second person with the right capability must be able to run a targeted check ON Sæmund and learn something about him (his latent Thread Sensitivity) that he cannot detect in himself by any | — | UNMAPPED | — |
 | Revealing this investigator's hidden nature must be able to remove him from his institution's service in a way that measurably degrades that institution's future capability in the same domai | — | UNMAPPED | — |
 | A subordinate investigator's authority to pursue a sufficiently important target must be gated on a named superior's authorization, distinct from the subordinate's own competence or rank. | — | UNMAPPED | — |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-033 — Kolbrun Thale  ·  **BLOCKED**
-*faction · 8 rows, 2 core · blockers: P10*
+## NPC-033 — Kolbrun Thale  ·  **PLAYABLE**
+*faction · 8 rows, 2 core · blockers: none*
 *ends when:* never specified -- she is a persistent office with no authored personal arc or end condition in the sources
 
 | need | probe | verdict | § |
 |---|---|---|---|
 | **[core]** An office must be able to be the sole official channel between an institution and an entire class of informal, deniable actors, such that removing that one office-holder severs the instituti | `F12` | PASS | S11 |
-| **[core]** A spymaster must be able to surface a hidden actor operating in a territory through sustained investigative effort against active concealment, at a cost that scales with how hard the conceal | `P10` | **UNSPECIFIED** | S30.1 |
+| **[core]** A spymaster must be able to surface a hidden actor operating in a territory through sustained investigative effort against active concealment, at a cost that scales with how hard the conceal | `P10` | PASS | S13 |
 | On surfacing a hidden actor, the office-holder must be able to choose among structurally different dispositions of the discovery -- expose it, remove it, absorb it into her own network, or s | `P36` | PASS | S17 |
 | A formal advisor holding a position of institutional trust must be bound to secrecy about what her principal reveals to her in that capacity, as an obligation distinct from ordinary Disposit | — | UNMAPPED | — |
 | A person's private, undisclosed heritage or sympathy must be able to bias which of her discoveries she reports faithfully and which she quietly softens or withholds, without the player or he | — | UNMAPPED | — |
@@ -191,14 +191,14 @@ not the shape.
 | That sole-custody knowledge must be reusable to block multiple different actors' otherwise-unrelated reform proposals for the same underlying reason (each alters the terms he alone remembers | — | UNMAPPED | — |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-038 — Arnlod Olafsson  ·  **BLOCKED**
-*faction · 7 rows, 2 core · blockers: P10*
+## NPC-038 — Arnlod Olafsson  ·  **DEGRADED**
+*faction · 7 rows, 2 core · blockers: none*
 *ends when:* his tenure ends on exposure-removal, pre-emptive removal, or a Grand Inquisitor succession event; otherwise never
 
 | need | probe | verdict | § |
 |---|---|---|---|
 | **[core]** An institution's investigative-and-punitive branch must have a single named superior whose sponsorship, approval, or authorization is a formal precondition for that branch's members to act a | `F17` | PASS | S27.1 |
-| **[core]** The superior's own hidden compromising connection must be discoverable by an external party through sustained, high-quality effort, and that discovery must remove him from office AND specifi | `P10` | **UNSPECIFIED** | S30.1 |
+| **[core]** The superior's own hidden compromising connection must be discoverable by an external party through sustained, high-quality effort, and that discovery must remove him from office AND specifi | `P10` | PASS | S13 |
 | The institution must be able to choose, in advance of exposure, to sacrifice this office-holder pre-emptively at a smaller but permanent cost, giving it a genuine bet to make under uncertain | `F3` | **FORBIDDEN** | S3-L1 |
 | The office's pattern of dispatching investigators must be able to fall unevenly on one population group even though the stated justification for each individual dispatch is doctrinal rather  | `W9` | PASS | S10.3 |
 | This office-holder must be able to remain a purely institutional, non-directly-playable modifier under ordinary conditions, and only become a personally-acting, decision-making NPC once the  | `W10` | **FORBIDDEN** | S10.1 |
@@ -265,7 +265,7 @@ not the shape.
 | need | probe | verdict | § |
 |---|---|---|---|
 | **[core]** Actions taken in the leader's name by subordinates must be able to diverge from what he intended, through incompetence, institutional habit, or the subordinate's own judgment, and the leader | `F6` | **UNSPECIFIED** | S62 |
-| A third party's multi-season campaign to eventually replace the leader must be able to proceed in parallel to his reign without the leader having any action that ends it outright, only ones  | `P10` | **UNSPECIFIED** | S30.1 |
+| A third party's multi-season campaign to eventually replace the leader must be able to proceed in parallel to his reign without the leader having any action that ends it outright, only ones  | `P10` | PASS | S13 |
 | A future succession must be able to remain genuinely unsettled for the leader's whole reign, contested among parties with different bases of claim, none of which the leader can fully foreclo | `F13` | PASS | S24 |
 | **[core]** A single leader must be able to face several independent, ongoing pressure sources in one season and only be able to substantively address a subset of them, with the unaddressed ones compoun | — | UNMAPPED | — |
 | **[core]** A leader's own long-held private doubt about a policy he enforces must be able to persist for many seasons without forcing a decision, and that persistence must itself count as a consequenti | — | UNMAPPED | — |
@@ -276,13 +276,13 @@ not the shape.
 | A crisis inside the leader's own family (an heir's death, a spouse's death, an heir's capture) must be able to fire unpredictably and reconfigure what the leader does for many subsequent sea | — | UNMAPPED | — |
 | The leader's own perceptual or sensory state must be able to change through no action of his own, altering what he privately understands while his public role stays unchanged until he choose | — | UNMAPPED | — |
 
-## NPC-021 — Arne Himlensendt  ·  **BLOCKED**
-*faction · 9 rows, 2 core · blockers: P6*
+## NPC-021 — Arne Himlensendt  ·  **NOT-ASSESSED**
+*faction · 9 rows, 2 core · blockers: none*
 *ends when:* never automatically; his personal arc resolves via unchallenged doctrinal dominance, a private crisis of faith, or public confrontation and schism, and the institution's leadership itself ends only on his death, incapacity, or forced doctrinal crisis triggering a successor process
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** A leader whose personal faith is intact must be able to have that faith privately challenged by presented facts, with a real chance his private conviction cracks while he continues performin | `P6` | **UNSPECIFIED** | S30.1 |
+| **[core]** A leader whose personal faith is intact must be able to have that faith privately challenged by presented facts, with a real chance his private conviction cracks while he continues performin | `P6` | PASS | S9.3 |
 | A rival secular territory must be able to categorically deny this leader's coercive authority over its own residents, forcing him to negotiate or act covertly rather than command. | `P18` | PASS | S3-L5 |
 | A person's capacity for a certain kind of perception must be able to be permanently foreclosed by their institutional belief system, reachable again only through a shock external to ordinary | `P17` | **UNSPECIFIED** | S22.4 |
 | A religious institution's supreme leader must be able to publicly rule on doctrine in a way that materially shifts political-military measures elsewhere on the board. | — | UNMAPPED | — |
@@ -292,13 +292,13 @@ not the shape.
 | The same enforcement apparatus must be able to treat a follower differently purely based on which territory that follower is standing in when investigated. | — | UNMAPPED | — |
 | The leader must be able to shield a subordinate's confidential counsel from any mechanical or reputational penalty even when that counsel directly contradicts his own stated position. | — | UNMAPPED | — |
 
-## NPC-050 — Inge Baralta  ·  **BLOCKED**
-*faction · 8 rows, 3 core · blockers: P10*
+## NPC-050 — Inge Baralta  ·  **NOT-ASSESSED**
+*faction · 8 rows, 3 core · blockers: none*
 *ends when:* never automatically; her personal arc resolves via unchallenged rule of her own duchy, a forced turn to extralegal action, or being cast out of the religious institution entirely, and separately her pursuit of the throne resolves win, loss, or her death/removal triggering her own duchy's succession
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** A leader must be able to build a multi-season positioning campaign toward a higher seat that only becomes attemptable once specific external conditions — the target seat's weakness AND a gen | `P10` | **UNSPECIFIED** | S30.1 |
+| **[core]** A leader must be able to build a multi-season positioning campaign toward a higher seat that only becomes attemptable once specific external conditions — the target seat's weakness AND a gen | `P10` | PASS | S13 |
 | Taking the higher seat must be able to threaten the fracture of the claimant's home institution, contingent on a separate instability measure that keeps accumulating whether or not she is pa | `P17` | **UNSPECIFIED** | S22.4 |
 | A leader who governs entirely through legalistic, precedent-bound methods must be able to become willing to act outside those methods once a specific named institutional failure occurs, and  | `P41` | **UNSPECIFIED** | S2 T7 |
 | A theological or ideological innovation a leader personally originates must be able to spread its effects across the population she governs on a timescale much longer than the campaign, so i | `W9` | PASS | S10.3 |
@@ -342,7 +342,7 @@ not the shape.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| If the leader is captured, killed, or discredited before the movement has achieved any formal institutional status, the movement's continuity must be able to remain genuinely ambiguous — a s | `P23` | **UNSPECIFIED** | S30.1 |
+| If the leader is captured, killed, or discredited before the movement has achieved any formal institutional status, the movement's continuity must be able to remain genuinely ambiguous — a s | `P23` | PASS | S16 |
 | Even after the movement gains a formal seat, it must remain permanently excluded from a category of formal political action available to every incumbent institution, marking it as structural | `P17` | **UNSPECIFIED** | S22.4 |
 | A local population must be able to unilaterally shift its own governance to this movement's control the moment its existing governance completely collapses, without the movement's central le | `F2` | PASS | S54 item 20 |
 | **[core]** A person recognized as a movement's leader must be able to exert real influence and be targeted by opponents before any formal institutional seat or organizational structure exists for the m | — | UNMAPPED | — |
@@ -351,13 +351,13 @@ not the shape.
 | The movement's own base must be able to hold a genuine internal disagreement about whether to accept patronage from an established power or reject that power's legitimacy outright, without t | — | UNMAPPED | — |
 | An unincorporated movement must be able to acquire institutional standing incrementally — informal presence, then a single held settlement, then several, then a formal seat — with each thres | — | UNMAPPED | — |
 
-## NPC-032 — Lenneth Almqvist  ·  **BLOCKED**
-*realm · 8 rows, 3 core · blockers: P10*
+## NPC-032 — Lenneth Almqvist  ·  **NOT-ASSESSED**
+*realm · 8 rows, 3 core · blockers: none*
 *ends when:* never automatically while she remains queen consort; if she is elevated to sole ruler her case continues indefinitely as a new ongoing reign, and if she is instead the one killed her case ends immediately and permanently
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** A person's capability in a specialized domain must be able to have a hard ceiling reachable through sustained legitimate effort, past which continued investment produces no further progress, | `P10` | **UNSPECIFIED** | S30.1 |
+| **[core]** A person's capability in a specialized domain must be able to have a hard ceiling reachable through sustained legitimate effort, past which continued investment produces no further progress, | `P10` | PASS | S13 |
 | **[core]** An external, unpredictable event unrelated to this person's own choices must be able to instantly convert her from an influence-only actor into the sole holder of supreme authority, with eve | `P34` | PASS | S20 |
 | Ascending to supreme authority through this path must be able to instantly and permanently redefine what the ruling institution stands for, flipping an ambient, privately-held policy uncerta | `P17` | **UNSPECIFIED** | S22.4 |
 | A previously unified protective institution must be able to fracture into an internal decision point purely as a consequence of who now holds supreme authority, with no change to its own for | `F16` | PASS | S10 |
@@ -373,7 +373,7 @@ not the shape.
 | need | probe | verdict | § |
 |---|---|---|---|
 | **[core]** Once the heir's alignment locks in, whether through successful investment or through the window simply expiring, it must become permanently unresponsive to further investment or victories fr | `P17` | **UNSPECIFIED** | S22.4 |
-| The heir must be able to be killed by an unpredictable event that terminates his entire ongoing political arc and simultaneously reroutes a separate, compound set of consequences involving o | `P23` | **UNSPECIFIED** | S30.1 |
+| The heir must be able to be killed by an unpredictable event that terminates his entire ongoing political arc and simultaneously reroutes a separate, compound set of consequences involving o | `P23` | PASS | S16 |
 | The heir must be able to become a formal instrument of an external, rival power's diplomacy specifically when both the external power's own strength has crossed a threshold and the heir's pe | `P17` | **UNSPECIFIED** | S22.4 |
 | **[core]** A minor political heir must be able to start with no fixed ideological alignment, such that his eventual alignment is determined by which external party successfully builds a relationship wi | — | UNMAPPED | — |
 | If multiple outside parties reach the same threshold of investment in the heir at the same point in time, the tie must be broken by an objective, checkable prior fact rather than by arbitrar | — | UNMAPPED | — |
@@ -453,16 +453,16 @@ not the shape.
 | A character's conviction profile must be able to carry a distinct flavor of virtue-as-governance -- moral cultivation of the realm as the point of holding power -- that reads differently in  | — | UNMAPPED | — |
 | *(2 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-035 — Theodor Kreutz  ·  **BLOCKED**
-*person · 7 rows, 2 core · blockers: P20*
+## NPC-035 — Theodor Kreutz  ·  **PLAYABLE**
+*person · 7 rows, 2 core · blockers: none*
 *ends when:* never stated explicitly; presumably his death, removal, or replacement -- which would itself trigger the named escalation -- or a resolution or dissolution of the Löwenritter liaison relationship; the source names no other terminus.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** A person holding a formal military post must be able to have his loyalty specifically bound to one named individual rather than to the institution he nominally serves, such that a change in  | `P20` | **UNSPECIFIED** | S30.1 |
-| **[core]** A single named individual's removal from a specific post must be able to trigger a distinct, tracked escalation in how autonomous a separate faction behaves toward the Crown, measurably movi | `P20` | **UNSPECIFIED** | S30.1 |
-| A single named individual must be able to simultaneously hold a formal post inside one faction and a formal liaison relationship to a second, distinct faction, such that events affecting him | `P20` | **UNSPECIFIED** | S30.1 |
-| A person with no recorded personal goal and no recorded personal history must still be able to become the direct object of a scene -- being threatened, suborned, or killed -- since the case' | `P23` | **UNSPECIFIED** | S30.1 |
+| **[core]** A person holding a formal military post must be able to have his loyalty specifically bound to one named individual rather than to the institution he nominally serves, such that a change in  | `P20` | PASS | S29 |
+| **[core]** A single named individual's removal from a specific post must be able to trigger a distinct, tracked escalation in how autonomous a separate faction behaves toward the Crown, measurably movi | `P20` | PASS | S29 |
+| A single named individual must be able to simultaneously hold a formal post inside one faction and a formal liaison relationship to a second, distinct faction, such that events affecting him | `P20` | PASS | S29 |
+| A person with no recorded personal goal and no recorded personal history must still be able to become the direct object of a scene -- being threatened, suborned, or killed -- since the case' | `P23` | PASS | S16 |
 | A character's canonical status must be able to remain fully usable in play even while a specific citation reference tied to his verification is still pending resolution elsewhere. | — | UNMAPPED | — |
 | *(2 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
@@ -489,13 +489,13 @@ not the shape.
 | A character's canonical status must be able to remain fully usable in play while a pending citation reference is still unresolved elsewhere. | — | UNMAPPED | — |
 | *(2 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | — |
 
-## NPC-039 — Magnus Klapp  ·  **BLOCKED**
-*person · 7 rows, 3 core · blockers: P10*
+## NPC-039 — Magnus Klapp  ·  **NOT-ASSESSED**
+*person · 7 rows, 3 core · blockers: none*
 *ends when:* never stated explicitly; presumably resolved by the candidacy's outcome, discovery or concealment of his condition, or his death or removal -- the source names no defined terminus.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** A scholar developing this restricted perceptual capacity through his own sanctioned work must be able to face a genuine choice between continuing the work, concealing the condition from his  | `P10` | **UNSPECIFIED** | S30.1 |
+| **[core]** A scholar developing this restricted perceptual capacity through his own sanctioned work must be able to face a genuine choice between continuing the work, concealing the condition from his  | `P10` | PASS | S13 |
 | **[core]** A Church figure must be able to be one of several standing candidates for a specific high ecclesiastical seat, trackable as a status distinct from either already holding that seat or having  | — | UNMAPPED | — |
 | **[core]** Extended engagement with archived or restricted material must be able to gradually produce a normally-restricted perceptual capacity in a person who did not previously have it, as an emergen | — | UNMAPPED | — |
 | A different registry entry's identifier used elsewhere in the corpus to reference this surname must be resolvable, for game purposes, to this single character rather than to a second, distin | — | UNMAPPED | — |

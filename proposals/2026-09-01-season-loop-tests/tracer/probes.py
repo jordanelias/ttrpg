@@ -30,7 +30,7 @@ from typing import Any, Callable, Optional
 
 from shape import (
     CLAIM_SOURCES, Candidate, Claim, Collision, ContestError, DEFAULT_FIXTURES, Event,
-    Fixtures, Forbidden, H, NoProducer, Office, PARTITION, PARTITION_MISSING, Person,
+    Fixtures, Forbidden, H, NoProducer, Office, Person,
     Proposition, Query, Record, ROOT, RUNG_KINDS, Rung, STRATA, SeasonDriver, ShapeGap,
     Site, StateChange, Step, Tenure, Ungraded, Unowned, Unspecified, View, World,
     WITNESS_CHANNELS, WriteClass, contest, expect_refusal, sense,
@@ -231,7 +231,14 @@ def p6():
     w.step = Step.RESOLVE
     w.write("stance", WriteClass.ACTS, lambda: None,
             record_kind="Person", fieldname="convictions", driver="Act")
-    return "UNREACHABLE"
+    # W2: this RAISED until Part D was loaded as data. `(Person, convictions)` had no row of its
+    # own and the old gate was keyed on a THING, so the only way to write it was to ride on
+    # `stance`'s row -- which is defect D1, and the instrument correctly refused rather than let
+    # it. V2 §D3 gives it its own row: RESOLVE only, ACTS, `social: true`, DR-2 and §9.3
+    # ("moved by argument and consequence, never by evidence"). The refusal was the ABSENCE of a
+    # row, and the row now exists.
+    return ("PASS: `(Person, convictions)` is written at RESOLVE in the ACTS class by an act -- "
+            "its OWN Part D row (DR-2, §9.3), not `stance`'s")
 
 
 @probe("P7", "a per-conviction scar", "S54 item 21", by="construction",
@@ -302,8 +309,18 @@ def p10():
     w.records[r.id] = r
     w.step = Step.RESOLVE
     w.write("carrier_exists", WriteClass.ACTS, lambda: w.records.__setitem__(r.id, r),
-            record_kind="Record", fieldname="stage", driver="Act")
-    return "UNREACHABLE"
+            record_kind="Record", fieldname="stages", driver="Act")
+    # W2: raised until Part D carried the `Record` rows (defect D7). It now lands -- and the
+    # probe shows BOTH halves of what it claims, because declaring the stages is only the first.
+    # §13.1: terms are ACT-DECLARED, never MATTER-advanced; MATTER then MATURES a term the act
+    # declared. Two rows, two classes, two drivers -- which is the whole of "the engine tracks it
+    # as ongoing" at the write gate.
+    w.step = Step.MATTER
+    w.write("carrier_exists", WriteClass.MATTER, lambda: setattr(r, "matured", True),
+            record_kind="Record", fieldname="matured", driver="Event")
+    return ("PASS: `(Record, stages)` is ACT-DECLARED at RESOLVE and `(Record, matured)` is "
+            "matured by an Event at MATTER -- Part D's two rows (D7, §13.1). The act declares "
+            "the term; the world advances it")
 
 
 @probe("P11", "capability gates no verb", "S9.2", by="probe-model",
@@ -446,7 +463,10 @@ def p20():
     w.write("carrier_exists", WriteClass.MATTER,
             lambda: w.persons.__setitem__("p_new", Person("p_new", "someone")),
             record_kind="Person", fieldname="exists", driver="Event")
-    return "UNREACHABLE"
+    # W2: raised until Part D carried `(Person, exists)` -- defect D8, and without the row a
+    # death or an individuation was an unmarked cell under the matrix's own rule.
+    return ("PASS: `(Person, exists)` is written at CENSUS in the MATTER class by an Event -- "
+            "Part D's row (DR-1, D8), bounded by §15.3's causation rule")
 
 
 @probe("P21", "a cohort and a named person are one type", "S9.1", by="construction",
@@ -473,8 +493,22 @@ def p22():
     w.step = Step.RESOLVE
     w.write("Tenure", WriteClass.ACTS,
             lambda: w.tenures.append(Tenure("t_hold", "p_low", "rec_writ", "hold", since=0)),
-            record_kind="Record", fieldname="held_by", driver="Act")
-    return "UNREACHABLE"
+            # W2: this declared `(Record, held_by)`, which is not a Record field and is on no
+            # Part D row. H-22 rules it: "the `hold` Tenure is the HOLDER'S". A hold is a
+            # RELATIONSHIP, and modelling it as a field on one of its ends is the ride-on defect
+            # pointing the other way. The pair is `(Tenure, since)`, which the table carries.
+            record_kind="Tenure", fieldname="since", driver="Act")
+    # W2: THE BLOCKER MOVED, IT DID NOT CLOSE, and this probe must not report a pass for the
+    # half that landed. Recording the hold is lawful now. Whether a hold GATES ANOTHER'S ACT is
+    # Part E's `eligibility: hold:<record>`, and no verb table exists to evaluate it -- so no
+    # step produces the gating. `W3` is the item that closes this, and until then the honest
+    # verdict is a gap at PART E, not a pass at Part D.
+    raise NoProducer(
+        "a `hold` is recorded, and NO STEP MAKES IT GATE ANOTHER PERSON'S ACT",
+        "S13/E2",
+        needs="Part E's verb table, where `eligibility: hold:<record>` is evaluated (W3)",
+        law="Part D admits the write; the GATING is the resolver's, and the resolver has no body "
+            "until the verb table is data")
 
 
 @probe("P23", "a season ends outside every institution", "S16", by="construction",
@@ -484,7 +518,9 @@ def p23():
     w.step = Step.MATTER
     w.write("carrier_exists", WriteClass.MATTER, lambda: w.persons.pop("p_low", None),
             record_kind="Person", fieldname="exists", driver="Event")
-    return "UNREACHABLE"
+    # W2: as P20. The row Part D adds is what lets a season end with no institution involved.
+    return ("PASS: `(Person, exists)` is written at MATTER in the MATTER class by an Event -- "
+            "Part D's row (DR-1, D8). No institutional process is consulted")
 
 
 @probe("P24", "death ends every tenure the dead held", "S15.3", by="construction",
@@ -1111,7 +1147,11 @@ def w7():
     w.step = Step.MATTER
     w.write("carrier_exists", WriteClass.MATTER, lambda: setattr(rec, "ttl", rec.ttl - 1),
             record_kind="Record", fieldname="ttl", driver="Event")
-    return "UNREACHABLE"
+    # W2: raised until Part D carried the five `Record` rows -- defect D7, under which EVERY
+    # Record write was an unmarked cell. `(Record, ttl)` is MATTER-only, `social: false`,
+    # "§13's licensed clock".
+    return ("PASS: `(Record, ttl)` is decremented at MATTER by an Event -- Part D's row (D7, "
+            "§13's licensed clock)")
 
 
 @probe("W8", "a case ripens against someone who does nothing", "S13.1", by="probe-model",

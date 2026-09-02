@@ -76,11 +76,21 @@ def test_d1_the_partition_is_not_invented():
     # `(Person, scar[axis])`, "social: true, written at RESOLVE in the ACTS class by the outcome
     # that names the person". Omitting the second inverted the sign on a seven-arc finding --
     # the instrument reported the row itself as the thing that does not exist.
-    stated = sorted(k for k in S.PARTITION if k[0] != "*matrix*")
-    assert stated == [("Person", "scar"), ("Tenure", "until")], stated
+    # ⚠ W2 REPLACED THIS PIN, and G3 gives the replacement in as many words: *"the Partition pin
+    # becomes 'every non-derived row carries a chain citation'"*. There is no derivation left --
+    # Part D is loaded from `write_matrix.yaml`, every row is STATED, and every row carries a
+    # `by:`. Pinning the old two-row list would now pin the absence of the ~30 rows Part D adds.
+    #
+    # `(Person, convictions)` and `(Person, beliefs)` NO LONGER RAISE, and that is Part D closing
+    # the gap rather than the instrument flattering it: V2 §D3 gives each its own row -- RESOLVE
+    # only, ACTS, `social: true`, DR-2 and §9.3. What must still raise is a field with NO row,
+    # and it must not be able to ride on a neighbour's.
+    assert S.MATRIX, "the write matrix loaded empty -- nothing was checked"
+    for (kind, fname), row in S.MATRIX.items():
+        assert row.by.strip(), f"({kind}, {fname}) carries no provenance"
     for kind, fname in (("Person", "convictions"), ("Person", "beliefs")):
-        with pytest.raises(Unspecified):
-            S.partition_lookup(kind, fname, "stance")
+        social, by = S.partition_lookup(kind, fname)
+        assert social is True and by.strip(), f"({kind}, {fname}) has a row but no usable grade"
 
 
 def test_d1b_a_field_cannot_ride_on_another_fields_matrix_row():
@@ -88,9 +98,14 @@ def test_d1b_a_field_cannot_ride_on_another_fields_matrix_row():
     derivation on `thing` lets `(Person, convictions)` ride on `stance`'s row."""
     w = _w()
     w.step = Step.RESOLVE
-    with pytest.raises(Unspecified):
+    # W2: `convictions` has its own row now, so the ride-on has to be probed with a field Part D
+    # genuinely does not carry. `(Person, mood)` is W2's own planted example, and the `thing`
+    # argument is the parameter that CARRIED the defect -- passing `stance` for it must not help.
+    with pytest.raises(Unspecified) as e:
         w.write("stance", WriteClass.ACTS, lambda: None,
-                record_kind="Person", fieldname="convictions", driver="Act")
+                record_kind="Person", fieldname="mood", driver="Act")
+    assert "Person" in str(e.value) and "mood" in str(e.value), (
+        "the refusal did not NAME the pair, so a reader cannot tell which cell is unmarked")
 
 
 def test_d2_witness_does_not_lie_about_its_driver():
@@ -177,11 +192,14 @@ def test_d8_one_doctrinal_condition_raises_one_kind():
     Forbidden and Unspecified, making the kind histogram a measurement of the transcription."""
     w = _w()
     w.step = Step.RESOLVE
+    # W2: `thing` no longer keys the gate, so a bogus `thing` with a REAL pair is now lawful --
+    # correctly, because `(Rung, stores)` is on the table and `thing` is a trace label. The
+    # unmarked cell has to be a real unmarked cell.
     with pytest.raises(Unspecified):
-        w.write("a_thing_with_no_row", WriteClass.ACTS, lambda: None,
-                record_kind="Rung", fieldname="stores", driver="Act")
+        w.write("stores", WriteClass.ACTS, lambda: None,
+                record_kind="Rung", fieldname="no_such_field", driver="Act")
     with pytest.raises(Unspecified):
-        S.partition_lookup("Record", "anything", "condition")
+        S.partition_lookup("Record", "anything")
 
 
 def test_d9_no_rule_is_written_and_switched_off():
@@ -477,26 +495,59 @@ def test_r3_the_a5_control_actually_fires():
     assert "DIFFERENT" in v["detail"] and "differing=False" not in v["detail"]
 
 
-def test_r3_the_partition_derivation_is_total_and_refuses_by_default():
-    """REV 3, DEFECT C6. The rev-2 derivation was a TWO-VALUED CLASSIFIER OVER A FIVE-VALUED
-    DOMAIN whose uncovered cases fell through to the PERMISSIVE branch — the silent default
-    §42.2.1 refuses, at the opposite polarity to §42.2's rule that zero evidence maps to the
-    verdict AGAINST the thing measured."""
-    for thing in ("Date", "DocketItem", "ConveningCondition", "claim_ledger"):
-        assert ("*matrix*", thing) not in S.PARTITION, (
-            f"the matrix does not determine {thing}'s social column; it must not be derived")
-    assert S.PARTITION[("*matrix*", "condition")][0] is False
-    assert S.PARTITION[("*matrix*", "stance")][0] is True
+def test_r3_the_partition_is_stated_and_refuses_by_default():
+    """REV 3, DEFECT C6, RE-EXPRESSED BY W2. The rev-2 derivation was a TWO-VALUED CLASSIFIER
+    OVER A FIVE-VALUED DOMAIN whose uncovered cases fell through to the PERMISSIVE branch -- the
+    silent default §42.2.1 refuses, at the opposite polarity to §42.2's rule that zero evidence
+    maps to the verdict AGAINST the thing measured.
+
+    ⚠ **THERE IS NO DERIVATION LEFT TO BE PARTIAL.** W2 loads Part D from `write_matrix.yaml`,
+    where every row STATES its `social:` and carries a `by:` provenance, so the four cells the old
+    classifier could not reach -- `Date`, `DocketItem`, `ConveningCondition`, `claim_ledger` -- are
+    stated rows under §D2's `DR-3` rather than instrument assumptions. The defect this test was
+    written for cannot recur in the same form; what CAN recur is the polarity, so that is what it
+    now pins: an unstated cell REFUSES, and it refuses for every kind, not just the ones someone
+    remembered."""
+    for kind, fname in (("Date", "fired"), ("DocketItem", "matter"),
+                        ("ConveningCondition", "attached"), ("Person", "claim_ledger")):
+        social, by = S.partition_lookup(kind, fname)
+        assert social is False, f"({kind}, {fname}) should be social:false under DR-3"
+        assert "DR-3" in by, (
+            f"({kind}, {fname}) is one of the four the old classifier could not reach; its row "
+            f"must carry DR-3's provenance, not {by!r}")
+    assert S.partition_lookup("Site", "condition")[0] is False
+    assert S.partition_lookup("Person", "stance")[0] is True
+    # THE POLARITY, which is the part that must never invert: an unstated cell refuses, for every
+    # kind on the table and for a kind that is not.
+    for kind in sorted({k for k, _ in S.MATRIX} | {"NoSuchKind"}):
+        with pytest.raises(Unspecified):
+            S.partition_lookup(kind, "a_field_nobody_ruled")
 
 
-def test_r3_every_assumed_partition_row_is_declared_and_reported():
-    """The three rows the instrument had to assume to run at all are §42.2.1's inject-declare-
-    name pattern applied to a SCHEMA ROW. They must be enumerable, so the output can say how
-    much of L4's enforcement rests on the instrument rather than on the design."""
-    assert set(S.PARTITION_ASSUMED) == {
-        ("Person", "claim_ledger"), ("Date", "fired"), ("DocketItem", "matter")}
-    for _, why in S.PARTITION_ASSUMED.values():
-        assert why.startswith("ASSUMED:")
+def test_r3_the_instrument_assumes_no_partition_row_at_all():
+    """The three rows the instrument HAD to assume to run at all were §42.2.1's inject-declare-
+    name pattern applied to a SCHEMA ROW, and they were declared, counted and reported.
+
+    ⚠ **W2 EMPTIES THE SET, AND THAT IS ITS OWN STATED PROOF.** `(Person, claim_ledger)`,
+    `(Date, fired)` and `(DocketItem, matter)` were assumptions only because the old two-clause
+    derivation could not reach them; §D2's `DR-3` states all three. This is a REDUCTION in what
+    the instrument supplies rather than an addition -- the direction that matters, since every
+    assumed row was a piece of L4's enforcement resting on the instrument instead of the design.
+
+    The disclosure hook stays and must keep reporting: an empty set that nothing reads would be
+    the same false-disclosure defect in a quieter form."""
+    assert S.PARTITION_ASSUMED == {}, (
+        f"W2's proof is ZERO assumed Partition rows; found {sorted(S.PARTITION_ASSUMED)}")
+    import report
+    assert "PARTITION_ASSUMED" in inspect.getsource(report.emit), (
+        "report.py stopped reading the disclosure hook, so a future assumption would go "
+        "unreported -- which is exactly the false-disclosure defect rev 5 fixed")
+    # And it must still be able to REPORT one, or the emptiness proves nothing about the channel.
+    S.PARTITION_ASSUMED[("Person", "planted")] = (True, "planted by a test")
+    try:
+        assert S.PARTITION_ASSUMED, "the hook cannot hold a row"
+    finally:
+        S.PARTITION_ASSUMED.pop(("Person", "planted"))
 
 
 def test_r3_the_l4_limb_is_actually_exercised():
@@ -1153,3 +1204,108 @@ def test_w1_the_ladder_closed_the_rows_it_said_it_would():
     # control any predicate is measured against (W6's guardrail).
     assert any("total" in str(x) for x in reg["H-33"]["sweep"]), (
         "H-33's sweep dropped total fan-out, which is the control")
+
+
+# ===========================================================================
+# W2 -- PART D AS DATA, AND `write()` READS IT
+#
+# THE DEFECT: #353 §30's matrix names THINGS -- `stance`, `condition`, `Tenure` -- and L4's rule is
+# stated over `(kind, field)`. Keying the gate on the thing meant `(Person, convictions)` rode on
+# `stance`'s row, so a real gap silently became a PASS. `MATRIX_FIELD_OF` existed only to say which
+# fields were ALLOWED to ride on which rows: the defect, written down as a table.
+#
+# W2's stated Proof is an AST WALK, and the reason is `G3` in one line: *a test asserts the
+# PROPERTY, never the string.* Grepping `shape.py` for `record_kind="..."` finds the sites someone
+# spelled that way; walking the tree finds every site there is, and reports the ones it cannot
+# resolve rather than skipping them.
+# ===========================================================================
+
+def _write_call_sites(*paths):
+    """Every store-API `write(...)` call, from the syntax tree. Returns literal `(kind, field)`
+    pairs and, separately, the sites whose arguments are not literals -- because a site the walk
+    CANNOT resolve is a hole in the check and must be reported, not dropped."""
+    import ast as ast_
+    pairs, dynamic = {}, []
+    for path in paths:
+        tree = ast_.parse((HERE / path).read_text())
+        for node in ast_.walk(tree):
+            if not (isinstance(node, ast_.Call) and isinstance(node.func, ast_.Attribute)
+                    and node.func.attr == "write"):
+                continue
+            recv = node.func.value
+            if isinstance(recv, ast_.Name) and recv.id == "TRACE":
+                continue                      # the trace channel, not the store API
+            kw = {k.arg: k.value for k in node.keywords if k.arg}
+            def lit(name, pos):
+                v = kw.get(name)
+                if v is None and len(node.args) > pos:
+                    v = node.args[pos]
+                return v.value if isinstance(v, ast_.Constant) and isinstance(v.value, str) else None
+            rk, fn = lit("record_kind", 3), lit("fieldname", 4)
+            if rk and fn:
+                pairs.setdefault((rk, fn), []).append(f"{path}:{node.lineno}")
+            else:
+                dynamic.append(f"{path}:{node.lineno}")
+    return pairs, dynamic
+
+
+def test_w2_every_write_call_site_names_a_pair_on_the_matrix():
+    """W2's Proof. Walk the tree, do not grep the string.
+
+    ⚠ Sites whose `record_kind`/`fieldname` are not literals are reported as a HOLE IN THIS CHECK
+    rather than skipped: a walk that silently ignores what it cannot read is a walk that reports
+    `clean` over an unknown number of unchecked writes."""
+    pairs, dynamic = _write_call_sites("shape.py", "probes.py")
+    assert pairs, "the AST walk found no write call sites at all -- the walk is broken"
+    assert not dynamic, (
+        "write call sites whose (record_kind, fieldname) are not literals -- this check cannot "
+        f"see them: {dynamic}")
+    off = {p: where for p, where in pairs.items()
+           if p not in S.MATRIX and p not in S.MATRIX_RETIRED}
+    assert not off, (
+        "write call sites naming a `(kind, field)` on no row of write_matrix.yaml:\n  "
+        + "\n  ".join(f"{k}: {v}" for k, v in sorted(off.items()))
+        + "\nEither the row is missing from Part D, or the site is writing a field the design "
+          "does not have. Rule the row first, then add it -- the reverse order invents the thing "
+          "the rule prevents.")
+
+
+def test_w2_a_planted_write_to_an_unruled_field_raises_and_names_the_pair():
+    """`(Person, mood)` is W2's own planted example. The refusal must NAME the pair: a reader who
+    cannot tell WHICH cell is unmarked cannot rule the row, and §42.2.1's whole point is that the
+    honest behaviour is to refuse rather than to pick a plausible value."""
+    w = _w()
+    w.step = Step.RESOLVE
+    with pytest.raises(Unspecified) as e:
+        w.write("stance", WriteClass.ACTS, lambda: None,
+                record_kind="Person", fieldname="mood", driver="Act")
+    msg = str(e.value)
+    assert "Person" in msg and "mood" in msg, f"the refusal did not name the pair: {msg}"
+    assert "stance" not in msg, (
+        "the refusal named the `thing` argument -- that is the parameter that carried defect D1 "
+        "and it must not be able to stand in for the pair")
+
+
+def test_w2_the_retired_rows_get_their_own_diagnosis():
+    """A row that was RETIRED and a row that never existed are different facts about the design,
+    and a reader deciding whether to add one needs to know which they are looking at. Two of the
+    six come back at W3 WITH `establish`, their producer."""
+    assert S.MATRIX_RETIRED, "nothing is recorded as retired -- the distinction is gone"
+    for kind, fname in S.MATRIX_RETIRED:
+        assert (kind, fname) not in S.MATRIX, f"({kind}, {fname}) is both retired and live"
+        with pytest.raises(Unspecified) as e:
+            S.partition_lookup(kind, fname)
+        assert "RETIRED" in str(e.value), (
+            f"({kind}, {fname}) is retired and its refusal does not say so")
+
+
+def test_w2_the_class_column_is_derived_and_cross_checked():
+    """`class:` is V2's prose and `STEP_CLASS` is this file's derivation. The loader raises if they
+    disagree, so neither can drift into being trusted alone. CENSUS writes in the MATTER class --
+    §30's reconciliation is a world write, not an act."""
+    assert S.STEP_CLASS[Step.CENSUS] is WriteClass.MATTER
+    assert S.STEP_CLASS[Step.WITNESS] is WriteClass.INTERIOR
+    assert S.STEP_CLASS[Step.RESOLVE] is WriteClass.ACTS
+    for (kind, fname), row in S.MATRIX.items():
+        for st in row.steps:
+            assert row.write_class(st) is S.STEP_CLASS[st], f"({kind}, {fname}) at {st}"

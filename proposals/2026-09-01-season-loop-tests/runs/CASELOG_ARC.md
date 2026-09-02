@@ -74,7 +74,7 @@ not the shape.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** a slow, per-action cost on a shared world-substrate resource must be able to accumulate invisibly across many individually-successful-looking actions performed by a well-intentioned actor, s | `P22` | **UNSPECIFIED** | S30.1 |
+| **[core]** a slow, per-action cost on a shared world-substrate resource must be able to accumulate invisibly across many individually-successful-looking actions performed by a well-intentioned actor, s | `P22` | **NO-PRODUCER** | S13/E2 |
 | **[core]** a background world-scale stat must be able to decay on a fixed schedule (an annual tick) independent of any faction's actions in that period | `W13` | **FORBIDDEN** | S25.1 / S3-L5 |
 | **[core]** players must be able to force a stalled, private inter-faction calculation into a public formal contest, converting an indefinitely-stalled decision into a resolved one | `A7` | **UNSPECIFIED** | S39.4 |
 | a faction must be able to hold genuine, actionable knowledge of a systemic problem and sit on the reveal-or-conceal decision for multiple seasons with no external clock forcing a resolution  | — | UNMAPPED | — |
@@ -244,7 +244,7 @@ not the shape.
 | need | probe | verdict | § |
 |---|---|---|---|
 | **[core]** a superior's response to detecting a subordinate's disloyalty must be able to be fully determined by the superior's own current internal state via a fixed lookup, removing free choice from t | `P37` | PASS | S3-L1 |
-| **[core]** two parties in an adversarial relationship must be able to each hold damaging evidence against the other simultaneously, such that neither can act against the other without also being destro | `P22` | **UNSPECIFIED** | S30.1 |
+| **[core]** two parties in an adversarial relationship must be able to each hold damaging evidence against the other simultaneously, such that neither can act against the other without also being destro | `P22` | **NO-PRODUCER** | S13/E2 |
 | **[core]** a subordinate under coercive tolerance must be able to face a RECURRING risk each season of involuntarily failing to comply, regardless of their own intentions, so that even a subordinate wh | `P18` | PASS | S3-L5 |
 | a defecting subordinate must be able to carry unreleased leverage with them into a new affiliation, handing that new faction a one-time strategic option they did not previously have | `P36` | PASS | S17 |
 | detecting a subordinate's pattern of behavioral hesitation must be able to require repeated, unprompted checks over MULTIPLE seasons rather than a single roll, so that success is a matter of | — | UNMAPPED | — |
@@ -486,7 +486,7 @@ not the shape.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** knowledge or procedure gained inside such a memory-stripping zone must be able to be carried home in participants' own configuration rather than in an external record, surviving the strip in | `P22` | **UNSPECIFIED** | S30.1 |
+| **[core]** knowledge or procedure gained inside such a memory-stripping zone must be able to be carried home in participants' own configuration rather than in an external record, surviving the strip in | `P22` | **NO-PRODUCER** | S13/E2 |
 | an institutional surveillance track built from unrelated prior background activity must independently reach its own threshold around the same time and open a formal investigation of the retu | `F16` | PASS | S10 |
 | **[core]** a location must be able to strip a person's explicit recall of their specific goal while inside it, while still letting them retain and act on the underlying intention, such that 'why am I h | — | UNMAPPED | — |
 | **[core]** a successful, player-desired outcome achieved via this zone must trigger an automatic, unavoidable rise in a hostile institution's background pressure quantity purely because the outcome bec | — | UNMAPPED | — |
@@ -672,7 +672,7 @@ not the shape.
 |---|---|---|---|
 | **[core]** when multiple independent progress-clocks are scheduled to change state in the same accounting step, a fixed, named order of resolution must be applied — one category of event fully resolvin | `W8` | PASS | S13.1 |
 | **[core]** a finite, per-location capacity must be able to gate a character's rank advancement, such that reaching the qualifying rank with no capacity available produces a distinct, named provisional  | `F10` | PASS | S54.1 |
-| the game must be able to track a large but bounded set of named individual characters at different levels of tracked detail, and move a character between those levels automatically based on  | `P20` | **UNSPECIFIED** | S30.1 |
+| the game must be able to track a large but bounded set of named individual characters at different levels of tracked detail, and move a character between those levels automatically based on  | `P20` | PASS | S29 |
 | a sub-track's operating cost must be able to scale with a separate, already-existing clock's value without requiring a brand-new clock to be introduced for that sub-track specifically. | `P33` | **UNSPECIFIED** | S26.3 |
 | a rank ladder must be able to be deliberately left without ranks at its top end, by design, for a thematic reason rather than an unfinished-spec reason, and the game must represent "no rank  | `P1` | PASS | S3-L1 |
 | a unique identifier scheme for individually-resolved design/editorial items must guarantee that two different resolved items never share the same identifier. | — | UNMAPPED | — |
@@ -701,7 +701,7 @@ not the shape.
 | **[core]** a hidden counter, invisible to players by default, must be able to accumulate from three unrelated conditions triggering independently, in any order, across different subsystems (an institut | `F1` | PASS | S14.2 |
 | **[core]** each of the counter's triggering conditions must be able to fire exactly once and add a fixed amount, with no way for the counter to decrease once incremented | `A3` | **FORBIDDEN** | S3-L4 |
 | one of the counter's triggers must be able to fire from an institution's own automatically-advancing standing quantity crossing a level while the controlling faction took no counteracting ac | `P17` | **UNSPECIFIED** | S22.4 |
-| a second trigger must be able to fire from a named individual's personal loyalty value falling to or below a set level | `P20` | **UNSPECIFIED** | S30.1 |
+| a second trigger must be able to fire from a named individual's personal loyalty value falling to or below a set level | `P20` | PASS | S29 |
 | if players learn the counter's current value before it reaches ceiling, they must be able to take separate actions addressing each still-open triggering condition to prevent the counter from | `A3` | **FORBIDDEN** | S3-L4 |
 | **[core]** the counter's current value must be able to stay hidden from the players by default, disclosed only through a deliberate choice by the NPC who holds it | — | UNMAPPED | — |
 | a third trigger must be able to fire from the controlling faction losing control of two or more territories within a single period without having taken a specific category of responsive acti | — | UNMAPPED | — |
@@ -927,7 +927,7 @@ not the shape.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** multiple independent factions must each be able to hold their own separate partial evidence trail about the same past event, where each trail was constructed or interpreted to implicate a di | `P22` | **UNSPECIFIED** | S30.1 |
+| **[core]** multiple independent factions must each be able to hold their own separate partial evidence trail about the same past event, where each trail was constructed or interpreted to implicate a di | `P22` | **NO-PRODUCER** | S13/E2 |
 | **[core]** a full, correct reconstruction of the past event must require accessing and cross-referencing a minimum number of the independent evidence trails, with no single trail sufficient on its own | — | UNMAPPED | — |
 | **[core]** acting on a partial or incomplete investigation must be able to produce full-strength political consequences against an accused party, identical to the consequences that would apply if the a | — | UNMAPPED | — |
 | a character's long-held, self-limiting belief must be revealed by the true reconstruction to have rested on a false premise, and the reveal itself, not the premise, must be what forces that  | — | UNMAPPED | — |
@@ -992,7 +992,7 @@ not the shape.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** a person's decision to align with an approaching faction must gate on which of that person's several competing internal loyalties is appealed to, with each loyalty requiring a different, spe | `P22` | **UNSPECIFIED** | S30.1 |
+| **[core]** a person's decision to align with an approaching faction must gate on which of that person's several competing internal loyalties is appealed to, with each loyalty requiring a different, spe | `P22` | **NO-PRODUCER** | S13/E2 |
 | this person's eventual formal political position must be determined by a combination of prior branch outcomes rather than by a single dedicated succession mechanism, and must set a distinct, | `F13` | PASS | S24 |
 | once recruited, a person embedded in a rival power's structure must be able to break that embedding through at least three structurally distinct methods, each carrying a different success/fa | — | UNMAPPED | — |
 | the covert-elimination independence path's success must be distinguishable, mechanically, from its later discovery — an outcome that looks clean in the near term must be able to unravel late | — | UNMAPPED | — |
@@ -1171,13 +1171,13 @@ not the shape.
 | **[core]** One of those structural exit conditions must itself be a COMPOUND action: multiple separate actors pooling their individual capability into one shared attempt, with an explicit rule for what | — | UNMAPPED | — |
 | **[core]** A restorative action's WORST outcome branch must apply a large fixed penalty to the shared currency that, when the currency is already at its floor, is explicitly capable of driving the curr | — | UNMAPPED | — |
 
-## SCN-10 — An entity whose existence is itself a sustained action  ·  **BLOCKED**
-*person · 9 rows, 4 core · blockers: P10*
+## SCN-10 — An entity whose existence is itself a sustained action  ·  **NOT-ASSESSED**
+*person · 9 rows, 4 core · blockers: none*
 *ends when:* mixed — a person chooses (voluntary cessation) for one path; a roll resolves it if a stabilization attempt in rounds 1-2 succeeds; a threshold-fires (no roll offered) for the unconditional round-3 terminus.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| **[core]** Taking a wound must cost this entity type a DIFFERENT resource entirely (additional required ongoing effort) rather than the standard dice-pool penalty every other character type takes — the | `P10` | **UNSPECIFIED** | S30.1 |
+| **[core]** Taking a wound must cost this entity type a DIFFERENT resource entirely (additional required ongoing effort) rather than the standard dice-pool penalty every other character type takes — the | `P10` | PASS | S13 |
 | **[core]** A single terminal-sequence trigger must fire from EITHER of two independent conditions (a resource reaching its cap, OR a separate counter reaching a threshold derived from dividing a differ | `A5` | PASS | S32 |
 | **[core]** An NPC-type entity's perceptibility must vary continuously across at least five distinct bands depending on the OBSERVING character's own stat value, not a single global visibility flag — th | — | UNMAPPED | — |
 | This entity type must be able to perform an enhanced version of its base passive effect at a PER-SCENE recurring cost to one of its own resources, distinct from any action-based cost. | — | UNMAPPED | — |
@@ -1238,7 +1238,7 @@ not the shape.
 
 | need | probe | verdict | § |
 |---|---|---|---|
-| A named individual NPC becoming the target of a personal-scale action during mass combat must change that NPC's own tracked STATUS at the mass scale, distinct from any personal-scale state c | `P20` | **UNSPECIFIED** | S30.1 |
+| A named individual NPC becoming the target of a personal-scale action during mass combat must change that NPC's own tracked STATUS at the mass scale, distinct from any personal-scale state c | `P20` | PASS | S29 |
 | **[core]** An actor holding a mass-scale command role, upon choosing a personal-scale action, must have their mass-scale command capability for that SAME time-unit SUSPENDED — an explicit mutual exclus | `P21` | PASS | S9.1 |
 | **[core]** That same action-category's resource-cost FORMULA must be swappable based on scale-context: multiplied by a fixed factor AND separately capped at a flat per-use ceiling specifically when inv | `P33` | **UNSPECIFIED** | S26.3 |
 | A social-scale contest resolved BEFORE a mass-scale round's own declaration phase must be able to modify the STARTING mechanical state of that upcoming mass-scale round. | `A7` | **UNSPECIFIED** | S39.4 |

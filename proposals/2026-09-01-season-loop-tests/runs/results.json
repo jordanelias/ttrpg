@@ -37,12 +37,12 @@
      "verdict": {
       "id": "P22",
       "verdict": "GAP",
-      "detail": "(Record, *) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "detail": "a `hold` is recorded, and NO STEP MAKES IT GATE ANOTHER PERSON'S ACT",
+      "kind": "NO-PRODUCER",
+      "section": "S13/E2",
       "title": "a held object gates another's act",
-      "needs": "rule the row before adding it",
-      "law": "S30.1 -- the design has NONE, so every Record write is an unmarked cell",
+      "needs": "Part E's verb table, where `eligibility: hold:<record>` is evaluated (W3)",
+      "law": "Part D admits the write; the GATING is the resolver's, and the resolver has no body until the verb table is data",
       "by": "construction",
       "tests": "possession of an object must be able to make someone else's action unavailable or costlier"
      }
@@ -85,13 +85,11 @@
      "probe": "P23",
      "verdict": {
       "id": "P23",
-      "verdict": "GAP",
-      "detail": "(Person, exists) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "verdict": "PASS",
+      "detail": "PASS: `(Person, exists)` is written at MATTER in the MATTER class by an Event -- Part D's row (DR-1, D8). No institutional process is consulted",
+      "kind": null,
+      "section": "S16",
       "title": "a season ends outside every institution",
-      "needs": "rule the row before adding it; the reverse order invents the thing the rule prevents",
-      "law": "S30.1 -- without it a death write raises under the matrix's own rule",
       "by": "construction",
       "tests": "a character must be able to simply vanish or be killed, with no institutional process"
      }
@@ -250,12 +248,12 @@
      "verdict": {
       "id": "P22",
       "verdict": "GAP",
-      "detail": "(Record, *) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "detail": "a `hold` is recorded, and NO STEP MAKES IT GATE ANOTHER PERSON'S ACT",
+      "kind": "NO-PRODUCER",
+      "section": "S13/E2",
       "title": "a held object gates another's act",
-      "needs": "rule the row before adding it",
-      "law": "S30.1 -- the design has NONE, so every Record write is an unmarked cell",
+      "needs": "Part E's verb table, where `eligibility: hold:<record>` is evaluated (W3)",
+      "law": "Part D admits the write; the GATING is the resolver's, and the resolver has no body until the verb table is data",
       "by": "construction",
       "tests": "possession of an object must be able to make someone else's action unavailable or costlier"
      }
@@ -849,13 +847,11 @@
      "probe": "P10",
      "verdict": {
       "id": "P10",
-      "verdict": "GAP",
-      "detail": "(Record, *) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "verdict": "PASS",
+      "detail": "PASS: `(Record, stages)` is ACT-DECLARED at RESOLVE and `(Record, matured)` is matured by an Event at MATTER -- Part D's two rows (D7, \u00a713.1). The act declares the term; the world advances it",
+      "kind": null,
+      "section": "S13",
       "title": "a person tracks multi-season work in progress",
-      "needs": "rule the row before adding it",
-      "law": "S30.1 -- the design has NONE, so every Record write is an unmarked cell",
       "by": "construction",
       "tests": "a character must be able to perform a repeated, multi-season task the engine tracks as ongoing"
      }
@@ -891,15 +887,13 @@
    "name": "Kolbrun Thale",
    "scale": "faction",
    "source": "NPC2.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "PLAYABLE",
    "rows": 8,
    "core": 2,
    "core_routed": 2,
    "core_unmapped": 0,
-   "core_blocked": 1,
-   "blockers": [
-    "P10"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "An office must be able to be the sole official channel between an institution and an entire class of informal, deniable actors, such that removing that one office-holder severs the institution's access rather than merely weakening it.",
@@ -922,13 +916,11 @@
      "probe": "P10",
      "verdict": {
       "id": "P10",
-      "verdict": "GAP",
-      "detail": "(Record, *) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "verdict": "PASS",
+      "detail": "PASS: `(Record, stages)` is ACT-DECLARED at RESOLVE and `(Record, matured)` is matured by an Event at MATTER -- Part D's two rows (D7, \u00a713.1). The act declares the term; the world advances it",
+      "kind": null,
+      "section": "S13",
       "title": "a person tracks multi-season work in progress",
-      "needs": "rule the row before adding it",
-      "law": "S30.1 -- the design has NONE, so every Record write is an unmarked cell",
       "by": "construction",
       "tests": "a character must be able to perform a repeated, multi-season task the engine tracks as ongoing"
      }
@@ -1185,15 +1177,13 @@
    "name": "Arnlod Olafsson",
    "scale": "faction",
    "source": "NPC2.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "DEGRADED",
    "rows": 7,
    "core": 2,
    "core_routed": 2,
    "core_unmapped": 0,
-   "core_blocked": 1,
-   "blockers": [
-    "P10"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "An institution's investigative-and-punitive branch must have a single named superior whose sponsorship, approval, or authorization is a formal precondition for that branch's members to act above a defined severity or target-importance threshold.",
@@ -1216,13 +1206,11 @@
      "probe": "P10",
      "verdict": {
       "id": "P10",
-      "verdict": "GAP",
-      "detail": "(Record, *) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "verdict": "PASS",
+      "detail": "PASS: `(Record, stages)` is ACT-DECLARED at RESOLVE and `(Record, matured)` is matured by an Event at MATTER -- Part D's two rows (D7, \u00a713.1). The act declares the term; the world advances it",
+      "kind": null,
+      "section": "S13",
       "title": "a person tracks multi-season work in progress",
-      "needs": "rule the row before adding it",
-      "law": "S30.1 -- the design has NONE, so every Record write is an unmarked cell",
       "by": "construction",
       "tests": "a character must be able to perform a repeated, multi-season task the engine tracks as ongoing"
      }
@@ -1559,7 +1547,7 @@
      "verdict": {
       "id": "W3",
       "verdict": "GAP",
-      "detail": "'stance' written during MATTER",
+      "detail": "(Person, stance) written during MATTER",
       "kind": "FORBIDDEN",
       "section": "S3-L4",
       "title": "the world sours a mood",
@@ -1633,13 +1621,11 @@
      "probe": "P10",
      "verdict": {
       "id": "P10",
-      "verdict": "GAP",
-      "detail": "(Record, *) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "verdict": "PASS",
+      "detail": "PASS: `(Record, stages)` is ACT-DECLARED at RESOLVE and `(Record, matured)` is matured by an Event at MATTER -- Part D's two rows (D7, \u00a713.1). The act declares the term; the world advances it",
+      "kind": null,
+      "section": "S13",
       "title": "a person tracks multi-season work in progress",
-      "needs": "rule the row before adding it",
-      "law": "S30.1 -- the design has NONE, so every Record write is an unmarked cell",
       "by": "construction",
       "tests": "a character must be able to perform a repeated, multi-season task the engine tracks as ongoing"
      }
@@ -1710,15 +1696,13 @@
    "name": "Arne Himlensendt",
    "scale": "faction",
    "source": "NPC3.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "NOT-ASSESSED",
    "rows": 9,
    "core": 2,
    "core_routed": 1,
    "core_unmapped": 1,
-   "core_blocked": 1,
-   "blockers": [
-    "P6"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "A leader whose personal faith is intact must be able to have that faith privately challenged by presented facts, with a real chance his private conviction cracks while he continues performing his public role unchanged.",
@@ -1726,13 +1710,11 @@
      "probe": "P6",
      "verdict": {
       "id": "P6",
-      "verdict": "GAP",
-      "detail": "(Person, convictions) is on no Partition row and no matrix row determines it",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "verdict": "PASS",
+      "detail": "PASS: `(Person, convictions)` is written at RESOLVE in the ACTS class by an act -- its OWN Part D row (DR-2, \u00a79.3), not `stance`'s",
+      "kind": null,
+      "section": "S9.3",
       "title": "a conviction moves at RESOLVE",
-      "needs": "a `social:` column entry, ruled",
-      "law": "L4 -- the membership test is a STATIC SCHEMA COLUMN, not a judgement; S42.3 -- configuring an unspecified thing invents it",
       "by": "construction",
       "tests": "a character's moral commitments must be able to change, through argument and consequence"
      }
@@ -1810,15 +1792,13 @@
    "name": "Inge Baralta",
    "scale": "faction",
    "source": "NPC3.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "NOT-ASSESSED",
    "rows": 8,
    "core": 3,
    "core_routed": 1,
    "core_unmapped": 2,
-   "core_blocked": 1,
-   "blockers": [
-    "P10"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "A leader must be able to build a multi-season positioning campaign toward a higher seat that only becomes attemptable once specific external conditions \u2014 the target seat's weakness AND a general instability threshold \u2014 are simultaneously true, so years of preparation can sit inert waiting on someone else's failure.",
@@ -1826,13 +1806,11 @@
      "probe": "P10",
      "verdict": {
       "id": "P10",
-      "verdict": "GAP",
-      "detail": "(Record, *) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "verdict": "PASS",
+      "detail": "PASS: `(Record, stages)` is ACT-DECLARED at RESOLVE and `(Record, matured)` is matured by an Event at MATTER -- Part D's two rows (D7, \u00a713.1). The act declares the term; the world advances it",
+      "kind": null,
+      "section": "S13",
       "title": "a person tracks multi-season work in progress",
-      "needs": "rule the row before adding it",
-      "law": "S30.1 -- the design has NONE, so every Record write is an unmarked cell",
       "by": "construction",
       "tests": "a character must be able to perform a repeated, multi-season task the engine tracks as ongoing"
      }
@@ -2074,13 +2052,11 @@
      "probe": "P23",
      "verdict": {
       "id": "P23",
-      "verdict": "GAP",
-      "detail": "(Person, exists) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "verdict": "PASS",
+      "detail": "PASS: `(Person, exists)` is written at MATTER in the MATTER class by an Event -- Part D's row (DR-1, D8). No institutional process is consulted",
+      "kind": null,
+      "section": "S16",
       "title": "a season ends outside every institution",
-      "needs": "rule the row before adding it; the reverse order invents the thing the rule prevents",
-      "law": "S30.1 -- without it a death write raises under the matrix's own rule",
       "by": "construction",
       "tests": "a character must be able to simply vanish or be killed, with no institutional process"
      }
@@ -2153,15 +2129,13 @@
    "name": "Lenneth Almqvist",
    "scale": "realm",
    "source": "NPC3.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "NOT-ASSESSED",
    "rows": 8,
    "core": 3,
    "core_routed": 2,
    "core_unmapped": 1,
-   "core_blocked": 1,
-   "blockers": [
-    "P10"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "A person's capability in a specialized domain must be able to have a hard ceiling reachable through sustained legitimate effort, past which continued investment produces no further progress, with a categorically higher tier of that capability closed to her except through a wholly different pathway.",
@@ -2169,13 +2143,11 @@
      "probe": "P10",
      "verdict": {
       "id": "P10",
-      "verdict": "GAP",
-      "detail": "(Record, *) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "verdict": "PASS",
+      "detail": "PASS: `(Record, stages)` is ACT-DECLARED at RESOLVE and `(Record, matured)` is matured by an Event at MATTER -- Part D's two rows (D7, \u00a713.1). The act declares the term; the world advances it",
+      "kind": null,
+      "section": "S13",
       "title": "a person tracks multi-season work in progress",
-      "needs": "rule the row before adding it",
-      "law": "S30.1 -- the design has NONE, so every Record write is an unmarked cell",
       "by": "construction",
       "tests": "a character must be able to perform a repeated, multi-season task the engine tracks as ongoing"
      }
@@ -2291,13 +2263,11 @@
      "probe": "P23",
      "verdict": {
       "id": "P23",
-      "verdict": "GAP",
-      "detail": "(Person, exists) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "verdict": "PASS",
+      "detail": "PASS: `(Person, exists)` is written at MATTER in the MATTER class by an Event -- Part D's row (DR-1, D8). No institutional process is consulted",
+      "kind": null,
+      "section": "S16",
       "title": "a season ends outside every institution",
-      "needs": "rule the row before adding it; the reverse order invents the thing the rule prevents",
-      "law": "S30.1 -- without it a death write raises under the matrix's own rule",
       "by": "construction",
       "tests": "a character must be able to simply vanish or be killed, with no institutional process"
      }
@@ -2733,15 +2703,13 @@
    "name": "Theodor Kreutz",
    "scale": "person",
    "source": "NPC4.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "PLAYABLE",
    "rows": 7,
    "core": 2,
    "core_routed": 2,
    "core_unmapped": 0,
-   "core_blocked": 2,
-   "blockers": [
-    "P20"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "A person holding a formal military post must be able to have his loyalty specifically bound to one named individual rather than to the institution he nominally serves, such that a change in who holds that individual's position could, in principle, put his allegiance in question.",
@@ -2749,13 +2717,11 @@
      "probe": "P20",
      "verdict": {
       "id": "P20",
-      "verdict": "GAP",
-      "detail": "(Person, exists) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "verdict": "PASS",
+      "detail": "PASS: `(Person, exists)` is written at CENSUS in the MATTER class by an Event -- Part D's row (DR-1, D8), bounded by \u00a715.3's causation rule",
+      "kind": null,
+      "section": "S29",
       "title": "a person is individuated on demand",
-      "needs": "rule the row before adding it; the reverse order invents the thing the rule prevents",
-      "law": "S30.1 -- without it a death write raises under the matrix's own rule",
       "by": "construction",
       "tests": "a person who was previously part of a crowd must be able to become a named individual"
      }
@@ -2766,13 +2732,11 @@
      "probe": "P20",
      "verdict": {
       "id": "P20",
-      "verdict": "GAP",
-      "detail": "(Person, exists) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "verdict": "PASS",
+      "detail": "PASS: `(Person, exists)` is written at CENSUS in the MATTER class by an Event -- Part D's row (DR-1, D8), bounded by \u00a715.3's causation rule",
+      "kind": null,
+      "section": "S29",
       "title": "a person is individuated on demand",
-      "needs": "rule the row before adding it; the reverse order invents the thing the rule prevents",
-      "law": "S30.1 -- without it a death write raises under the matrix's own rule",
       "by": "construction",
       "tests": "a person who was previously part of a crowd must be able to become a named individual"
      }
@@ -2783,13 +2747,11 @@
      "probe": "P20",
      "verdict": {
       "id": "P20",
-      "verdict": "GAP",
-      "detail": "(Person, exists) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "verdict": "PASS",
+      "detail": "PASS: `(Person, exists)` is written at CENSUS in the MATTER class by an Event -- Part D's row (DR-1, D8), bounded by \u00a715.3's causation rule",
+      "kind": null,
+      "section": "S29",
       "title": "a person is individuated on demand",
-      "needs": "rule the row before adding it; the reverse order invents the thing the rule prevents",
-      "law": "S30.1 -- without it a death write raises under the matrix's own rule",
       "by": "construction",
       "tests": "a person who was previously part of a crowd must be able to become a named individual"
      }
@@ -2800,13 +2762,11 @@
      "probe": "P23",
      "verdict": {
       "id": "P23",
-      "verdict": "GAP",
-      "detail": "(Person, exists) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "verdict": "PASS",
+      "detail": "PASS: `(Person, exists)` is written at MATTER in the MATTER class by an Event -- Part D's row (DR-1, D8). No institutional process is consulted",
+      "kind": null,
+      "section": "S16",
       "title": "a season ends outside every institution",
-      "needs": "rule the row before adding it; the reverse order invents the thing the rule prevents",
-      "law": "S30.1 -- without it a death write raises under the matrix's own rule",
       "by": "construction",
       "tests": "a character must be able to simply vanish or be killed, with no institutional process"
      }
@@ -2909,15 +2869,13 @@
    "name": "Magnus Klapp",
    "scale": "person",
    "source": "NPC4.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "NOT-ASSESSED",
    "rows": 7,
    "core": 3,
    "core_routed": 1,
    "core_unmapped": 2,
-   "core_blocked": 1,
-   "blockers": [
-    "P10"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "A scholar developing this restricted perceptual capacity through his own sanctioned work must be able to face a genuine choice between continuing the work, concealing the condition from his own institution, or disclosing it and accepting whatever consequence that carries, with the choice actually mattering rather than being cosmetic.",
@@ -2925,13 +2883,11 @@
      "probe": "P10",
      "verdict": {
       "id": "P10",
-      "verdict": "GAP",
-      "detail": "(Record, *) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "verdict": "PASS",
+      "detail": "PASS: `(Record, stages)` is ACT-DECLARED at RESOLVE and `(Record, matured)` is matured by an Event at MATTER -- Part D's two rows (D7, \u00a713.1). The act declares the term; the world advances it",
+      "kind": null,
+      "section": "S13",
       "title": "a person tracks multi-season work in progress",
-      "needs": "rule the row before adding it",
-      "law": "S30.1 -- the design has NONE, so every Record write is an unmarked cell",
       "by": "construction",
       "tests": "a character must be able to perform a repeated, multi-season task the engine tracks as ongoing"
      }
@@ -4025,12 +3981,12 @@
      "verdict": {
       "id": "P22",
       "verdict": "GAP",
-      "detail": "(Record, *) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "detail": "a `hold` is recorded, and NO STEP MAKES IT GATE ANOTHER PERSON'S ACT",
+      "kind": "NO-PRODUCER",
+      "section": "S13/E2",
       "title": "a held object gates another's act",
-      "needs": "rule the row before adding it",
-      "law": "S30.1 -- the design has NONE, so every Record write is an unmarked cell",
+      "needs": "Part E's verb table, where `eligibility: hold:<record>` is evaluated (W3)",
+      "law": "Part D admits the write; the GATING is the resolver's, and the resolver has no body until the verb table is data",
       "by": "construction",
       "tests": "possession of an object must be able to make someone else's action unavailable or costlier"
      }
@@ -4971,12 +4927,12 @@
      "verdict": {
       "id": "P22",
       "verdict": "GAP",
-      "detail": "(Record, *) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "detail": "a `hold` is recorded, and NO STEP MAKES IT GATE ANOTHER PERSON'S ACT",
+      "kind": "NO-PRODUCER",
+      "section": "S13/E2",
       "title": "a held object gates another's act",
-      "needs": "rule the row before adding it",
-      "law": "S30.1 -- the design has NONE, so every Record write is an unmarked cell",
+      "needs": "Part E's verb table, where `eligibility: hold:<record>` is evaluated (W3)",
+      "law": "Part D admits the write; the GATING is the resolver's, and the resolver has no body until the verb table is data",
       "by": "construction",
       "tests": "possession of an object must be able to make someone else's action unavailable or costlier"
      }
@@ -5808,7 +5764,7 @@
      "verdict": {
       "id": "A3",
       "verdict": "GAP",
-      "detail": "'stance' written during MATTER",
+      "detail": "(Person, stance) written during MATTER",
       "kind": "FORBIDDEN",
       "section": "S3-L4",
       "title": "an arc ends at a counter with nobody deciding",
@@ -6375,12 +6331,12 @@
      "verdict": {
       "id": "P22",
       "verdict": "GAP",
-      "detail": "(Record, *) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "detail": "a `hold` is recorded, and NO STEP MAKES IT GATE ANOTHER PERSON'S ACT",
+      "kind": "NO-PRODUCER",
+      "section": "S13/E2",
       "title": "a held object gates another's act",
-      "needs": "rule the row before adding it",
-      "law": "S30.1 -- the design has NONE, so every Record write is an unmarked cell",
+      "needs": "Part E's verb table, where `eligibility: hold:<record>` is evaluated (W3)",
+      "law": "Part D admits the write; the GATING is the resolver's, and the resolver has no body until the verb table is data",
       "by": "construction",
       "tests": "possession of an object must be able to make someone else's action unavailable or costlier"
      }
@@ -7384,7 +7340,7 @@
      "verdict": {
       "id": "A3",
       "verdict": "GAP",
-      "detail": "'stance' written during MATTER",
+      "detail": "(Person, stance) written during MATTER",
       "kind": "FORBIDDEN",
       "section": "S3-L4",
       "title": "an arc ends at a counter with nobody deciding",
@@ -7464,13 +7420,11 @@
      "probe": "P20",
      "verdict": {
       "id": "P20",
-      "verdict": "GAP",
-      "detail": "(Person, exists) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "verdict": "PASS",
+      "detail": "PASS: `(Person, exists)` is written at CENSUS in the MATTER class by an Event -- Part D's row (DR-1, D8), bounded by \u00a715.3's causation rule",
+      "kind": null,
+      "section": "S29",
       "title": "a person is individuated on demand",
-      "needs": "rule the row before adding it; the reverse order invents the thing the rule prevents",
-      "law": "S30.1 -- without it a death write raises under the matrix's own rule",
       "by": "construction",
       "tests": "a person who was previously part of a crowd must be able to become a named individual"
      }
@@ -7624,7 +7578,7 @@
      "verdict": {
       "id": "A3",
       "verdict": "GAP",
-      "detail": "'stance' written during MATTER",
+      "detail": "(Person, stance) written during MATTER",
       "kind": "FORBIDDEN",
       "section": "S3-L4",
       "title": "an arc ends at a counter with nobody deciding",
@@ -7657,13 +7611,11 @@
      "probe": "P20",
      "verdict": {
       "id": "P20",
-      "verdict": "GAP",
-      "detail": "(Person, exists) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "verdict": "PASS",
+      "detail": "PASS: `(Person, exists)` is written at CENSUS in the MATTER class by an Event -- Part D's row (DR-1, D8), bounded by \u00a715.3's causation rule",
+      "kind": null,
+      "section": "S29",
       "title": "a person is individuated on demand",
-      "needs": "rule the row before adding it; the reverse order invents the thing the rule prevents",
-      "law": "S30.1 -- without it a death write raises under the matrix's own rule",
       "by": "construction",
       "tests": "a person who was previously part of a crowd must be able to become a named individual"
      }
@@ -7675,7 +7627,7 @@
      "verdict": {
       "id": "A3",
       "verdict": "GAP",
-      "detail": "'stance' written during MATTER",
+      "detail": "(Person, stance) written during MATTER",
       "kind": "FORBIDDEN",
       "section": "S3-L4",
       "title": "an arc ends at a counter with nobody deciding",
@@ -8005,7 +7957,7 @@
      "verdict": {
       "id": "A3",
       "verdict": "GAP",
-      "detail": "'stance' written during MATTER",
+      "detail": "(Person, stance) written during MATTER",
       "kind": "FORBIDDEN",
       "section": "S3-L4",
       "title": "an arc ends at a counter with nobody deciding",
@@ -8869,12 +8821,12 @@
      "verdict": {
       "id": "P22",
       "verdict": "GAP",
-      "detail": "(Record, *) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "detail": "a `hold` is recorded, and NO STEP MAKES IT GATE ANOTHER PERSON'S ACT",
+      "kind": "NO-PRODUCER",
+      "section": "S13/E2",
       "title": "a held object gates another's act",
-      "needs": "rule the row before adding it",
-      "law": "S30.1 -- the design has NONE, so every Record write is an unmarked cell",
+      "needs": "Part E's verb table, where `eligibility: hold:<record>` is evaluated (W3)",
+      "law": "Part D admits the write; the GATING is the resolver's, and the resolver has no body until the verb table is data",
       "by": "construction",
       "tests": "possession of an object must be able to make someone else's action unavailable or costlier"
      }
@@ -9052,7 +9004,7 @@
      "verdict": {
       "id": "A3",
       "verdict": "GAP",
-      "detail": "'stance' written during MATTER",
+      "detail": "(Person, stance) written during MATTER",
       "kind": "FORBIDDEN",
       "section": "S3-L4",
       "title": "an arc ends at a counter with nobody deciding",
@@ -9175,12 +9127,12 @@
      "verdict": {
       "id": "P22",
       "verdict": "GAP",
-      "detail": "(Record, *) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "detail": "a `hold` is recorded, and NO STEP MAKES IT GATE ANOTHER PERSON'S ACT",
+      "kind": "NO-PRODUCER",
+      "section": "S13/E2",
       "title": "a held object gates another's act",
-      "needs": "rule the row before adding it",
-      "law": "S30.1 -- the design has NONE, so every Record write is an unmarked cell",
+      "needs": "Part E's verb table, where `eligibility: hold:<record>` is evaluated (W3)",
+      "law": "Part D admits the write; the GATING is the resolver's, and the resolver has no body until the verb table is data",
       "by": "construction",
       "tests": "possession of an object must be able to make someone else's action unavailable or costlier"
      }
@@ -9558,7 +9510,7 @@
      "verdict": {
       "id": "A3",
       "verdict": "GAP",
-      "detail": "'stance' written during MATTER",
+      "detail": "(Person, stance) written during MATTER",
       "kind": "FORBIDDEN",
       "section": "S3-L4",
       "title": "an arc ends at a counter with nobody deciding",
@@ -10228,15 +10180,13 @@
    "name": "An entity whose existence is itself a sustained action",
    "scale": "person",
    "source": "ARC6.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "NOT-ASSESSED",
    "rows": 9,
    "core": 4,
    "core_routed": 2,
    "core_unmapped": 2,
-   "core_blocked": 1,
-   "blockers": [
-    "P10"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "routed": [
     {
      "need": "Taking a wound must cost this entity type a DIFFERENT resource entirely (additional required ongoing effort) rather than the standard dice-pool penalty every other character type takes \u2014 the wound-cost resolution path itself must be swappable per character-type.",
@@ -10244,13 +10194,11 @@
      "probe": "P10",
      "verdict": {
       "id": "P10",
-      "verdict": "GAP",
-      "detail": "(Record, *) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "verdict": "PASS",
+      "detail": "PASS: `(Record, stages)` is ACT-DECLARED at RESOLVE and `(Record, matured)` is matured by an Event at MATTER -- Part D's two rows (D7, \u00a713.1). The act declares the term; the world advances it",
+      "kind": null,
+      "section": "S13",
       "title": "a person tracks multi-season work in progress",
-      "needs": "rule the row before adding it",
-      "law": "S30.1 -- the design has NONE, so every Record write is an unmarked cell",
       "by": "construction",
       "tests": "a character must be able to perform a repeated, multi-season task the engine tracks as ongoing"
      }
@@ -10350,7 +10298,7 @@
      "verdict": {
       "id": "W3",
       "verdict": "GAP",
-      "detail": "'stance' written during MATTER",
+      "detail": "(Person, stance) written during MATTER",
       "kind": "FORBIDDEN",
       "section": "S3-L4",
       "title": "the world sours a mood",
@@ -10621,13 +10569,11 @@
      "probe": "P20",
      "verdict": {
       "id": "P20",
-      "verdict": "GAP",
-      "detail": "(Person, exists) has no Partition row",
-      "kind": "UNSPECIFIED",
-      "section": "S30.1",
+      "verdict": "PASS",
+      "detail": "PASS: `(Person, exists)` is written at CENSUS in the MATTER class by an Event -- Part D's row (DR-1, D8), bounded by \u00a715.3's causation rule",
+      "kind": null,
+      "section": "S29",
       "title": "a person is individuated on demand",
-      "needs": "rule the row before adding it; the reverse order invents the thing the rule prevents",
-      "law": "S30.1 -- without it a death write raises under the matrix's own rule",
       "by": "construction",
       "tests": "a person who was previously part of a crowd must be able to become a named individual"
      }
@@ -10925,7 +10871,7 @@
      "verdict": {
       "id": "A3",
       "verdict": "GAP",
-      "detail": "'stance' written during MATTER",
+      "detail": "(Person, stance) written during MATTER",
       "kind": "FORBIDDEN",
       "section": "S3-L4",
       "title": "an arc ends at a counter with nobody deciding",
@@ -11129,12 +11075,12 @@
   "P22": {
    "id": "P22",
    "verdict": "GAP",
-   "detail": "(Record, *) has no Partition row",
-   "kind": "UNSPECIFIED",
-   "section": "S30.1",
+   "detail": "a `hold` is recorded, and NO STEP MAKES IT GATE ANOTHER PERSON'S ACT",
+   "kind": "NO-PRODUCER",
+   "section": "S13/E2",
    "title": "a held object gates another's act",
-   "needs": "rule the row before adding it",
-   "law": "S30.1 -- the design has NONE, so every Record write is an unmarked cell",
+   "needs": "Part E's verb table, where `eligibility: hold:<record>` is evaluated (W3)",
+   "law": "Part D admits the write; the GATING is the resolver's, and the resolver has no body until the verb table is data",
    "by": "construction",
    "tests": "possession of an object must be able to make someone else's action unavailable or costlier"
   },
@@ -11152,13 +11098,11 @@
   },
   "P23": {
    "id": "P23",
-   "verdict": "GAP",
-   "detail": "(Person, exists) has no Partition row",
-   "kind": "UNSPECIFIED",
-   "section": "S30.1",
+   "verdict": "PASS",
+   "detail": "PASS: `(Person, exists)` is written at MATTER in the MATTER class by an Event -- Part D's row (DR-1, D8). No institutional process is consulted",
+   "kind": null,
+   "section": "S16",
    "title": "a season ends outside every institution",
-   "needs": "rule the row before adding it; the reverse order invents the thing the rule prevents",
-   "law": "S30.1 -- without it a death write raises under the matrix's own rule",
    "by": "construction",
    "tests": "a character must be able to simply vanish or be killed, with no institutional process"
   },
@@ -11374,13 +11318,11 @@
   },
   "P10": {
    "id": "P10",
-   "verdict": "GAP",
-   "detail": "(Record, *) has no Partition row",
-   "kind": "UNSPECIFIED",
-   "section": "S30.1",
+   "verdict": "PASS",
+   "detail": "PASS: `(Record, stages)` is ACT-DECLARED at RESOLVE and `(Record, matured)` is matured by an Event at MATTER -- Part D's two rows (D7, \u00a713.1). The act declares the term; the world advances it",
+   "kind": null,
+   "section": "S13",
    "title": "a person tracks multi-season work in progress",
-   "needs": "rule the row before adding it",
-   "law": "S30.1 -- the design has NONE, so every Record write is an unmarked cell",
    "by": "construction",
    "tests": "a character must be able to perform a repeated, multi-season task the engine tracks as ongoing"
   },
@@ -11517,7 +11459,7 @@
   "W3": {
    "id": "W3",
    "verdict": "GAP",
-   "detail": "'stance' written during MATTER",
+   "detail": "(Person, stance) written during MATTER",
    "kind": "FORBIDDEN",
    "section": "S3-L4",
    "title": "the world sours a mood",
@@ -11540,13 +11482,11 @@
   },
   "P6": {
    "id": "P6",
-   "verdict": "GAP",
-   "detail": "(Person, convictions) is on no Partition row and no matrix row determines it",
-   "kind": "UNSPECIFIED",
-   "section": "S30.1",
+   "verdict": "PASS",
+   "detail": "PASS: `(Person, convictions)` is written at RESOLVE in the ACTS class by an act -- its OWN Part D row (DR-2, \u00a79.3), not `stance`'s",
+   "kind": null,
+   "section": "S9.3",
    "title": "a conviction moves at RESOLVE",
-   "needs": "a `social:` column entry, ruled",
-   "law": "L4 -- the membership test is a STATIC SCHEMA COLUMN, not a judgement; S42.3 -- configuring an unspecified thing invents it",
    "by": "construction",
    "tests": "a character's moral commitments must be able to change, through argument and consequence"
   },
@@ -11608,13 +11548,11 @@
   },
   "P20": {
    "id": "P20",
-   "verdict": "GAP",
-   "detail": "(Person, exists) has no Partition row",
-   "kind": "UNSPECIFIED",
-   "section": "S30.1",
+   "verdict": "PASS",
+   "detail": "PASS: `(Person, exists)` is written at CENSUS in the MATTER class by an Event -- Part D's row (DR-1, D8), bounded by \u00a715.3's causation rule",
+   "kind": null,
+   "section": "S29",
    "title": "a person is individuated on demand",
-   "needs": "rule the row before adding it; the reverse order invents the thing the rule prevents",
-   "law": "S30.1 -- without it a death write raises under the matrix's own rule",
    "by": "construction",
    "tests": "a person who was previously part of a crowd must be able to become a named individual"
   },
@@ -11769,7 +11707,7 @@
   "A3": {
    "id": "A3",
    "verdict": "GAP",
-   "detail": "'stance' written during MATTER",
+   "detail": "(Person, stance) written during MATTER",
    "kind": "FORBIDDEN",
    "section": "S3-L4",
    "title": "an arc ends at a counter with nobody deciding",
@@ -11945,7 +11883,7 @@
   "P19": {
    "id": "P19",
    "verdict": "GAP",
-   "detail": "'stance' written during MATTER",
+   "detail": "(Person, stance) written during MATTER",
    "kind": "FORBIDDEN",
    "section": "S3-L4",
    "title": "a threshold produces an outcome with nobody deciding",
@@ -12078,13 +12016,11 @@
   },
   "W7": {
    "id": "W7",
-   "verdict": "GAP",
-   "detail": "(Record, *) has no Partition row",
-   "kind": "UNSPECIFIED",
-   "section": "S30.1",
+   "verdict": "PASS",
+   "detail": "PASS: `(Record, ttl)` is decremented at MATTER by an Event -- Part D's row (D7, \u00a713's licensed clock)",
+   "kind": null,
+   "section": "S13",
    "title": "a record expires",
-   "needs": "rule the row before adding it",
-   "law": "S30.1 -- the design has NONE, so every Record write is an unmarked cell",
    "by": "construction",
    "tests": "a document must be able to lapse after a time"
   },
@@ -12445,11 +12381,11 @@
  },
  "_gaps": [
   {
-   "kind": "UNSPECIFIED",
-   "what": "(Record, *) has no Partition row",
-   "where": "S30.1",
-   "needs": "rule the row before adding it",
-   "law": "S30.1 -- the design has NONE, so every Record write is an unmarked cell",
+   "kind": "NO-PRODUCER",
+   "what": "a `hold` is recorded, and NO STEP MAKES IT GATE ANOTHER PERSON'S ACT",
+   "where": "S13/E2",
+   "needs": "Part E's verb table, where `eligibility: hold:<record>` is evaluated (W3)",
+   "law": "Part D admits the write; the GATING is the resolver's, and the resolver has no body until the verb table is data",
    "case": "probe:P22",
    "expected": false
   },
@@ -12460,15 +12396,6 @@
    "needs": "a closed roster of axes, and a write-matrix row admitting the increment",
    "law": "L3 clause 1 permits a monotone counter PER (Person, axis) -- 'legal, since every increment is in the holder's own ledger' -- but ONLY where `axis` is ON A CLOSED REGISTRY. No such registry exists in the chain, and no S30 row admits the write. S54 item 6 adds that the axis must not be spelled `exposure` bare, or it collides with the need scalar",
    "case": "probe:P17",
-   "expected": false
-  },
-  {
-   "kind": "UNSPECIFIED",
-   "what": "(Person, exists) has no Partition row",
-   "where": "S30.1",
-   "needs": "rule the row before adding it; the reverse order invents the thing the rule prevents",
-   "law": "S30.1 -- without it a death write raises under the matrix's own rule",
-   "case": "probe:P23",
    "expected": false
   },
   {
@@ -12514,15 +12441,6 @@
    "needs": "a cost model; the budget is a FLAT COUNT of acts",
    "law": "S26.3 -- 'a petition consumes budget LIKE ANY ACT, AND THAT IS THE WHOLE OF THE PRICING'. There is no per-act cost scalar anywhere in Part II, so a cheap act and a ruinous one cost a character the same",
    "case": "probe:P33",
-   "expected": false
-  },
-  {
-   "kind": "UNSPECIFIED",
-   "what": "(Record, *) has no Partition row",
-   "where": "S30.1",
-   "needs": "rule the row before adding it",
-   "law": "S30.1 -- the design has NONE, so every Record write is an unmarked cell",
-   "case": "probe:P10",
    "expected": false
   },
   {
@@ -12572,7 +12490,7 @@
   },
   {
    "kind": "FORBIDDEN",
-   "what": "'stance' written during MATTER",
+   "what": "(Person, stance) written during MATTER",
    "where": "S3-L4",
    "needs": "one of ['RESOLVE']",
    "law": "L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say",
@@ -12586,15 +12504,6 @@
    "needs": "a distortion model, and a ruling on emitter- vs receiver-side refraction",
    "law": "T6 says it distorts; NOTHING SPECIFIES BY HOW MUCH (S62). The structural half works -- publishing is a `tell`, delivery is not assumed, and an executor who never received it is DISTINCT from one who received it and refused -- but the distortion itself has no model, and S37.4 records that the chain uses `refraction` TWO WAYS",
    "case": "probe:F6",
-   "expected": false
-  },
-  {
-   "kind": "UNSPECIFIED",
-   "what": "(Person, convictions) is on no Partition row and no matrix row determines it",
-   "where": "S30.1",
-   "needs": "a `social:` column entry, ruled",
-   "law": "L4 -- the membership test is a STATIC SCHEMA COLUMN, not a judgement; S42.3 -- configuring an unspecified thing invents it",
-   "case": "probe:P6",
    "expected": false
   },
   {
@@ -12622,15 +12531,6 @@
    "needs": "an ownership row",
    "law": "S22.3/S31.1 -- travel legs are IN THE WRITE MATRIX and IN THE CHURN LEDGER and IN NO OWNERSHIP ROW. And they move a person BETWEEN rungs, which is a fourth cross-owner operation MATTER's own list of three does not name",
    "case": "probe:P29",
-   "expected": false
-  },
-  {
-   "kind": "UNSPECIFIED",
-   "what": "(Person, exists) has no Partition row",
-   "where": "S30.1",
-   "needs": "rule the row before adding it; the reverse order invents the thing the rule prevents",
-   "law": "S30.1 -- without it a death write raises under the matrix's own rule",
-   "case": "probe:P20",
    "expected": false
   },
   {
@@ -12671,7 +12571,7 @@
   },
   {
    "kind": "FORBIDDEN",
-   "what": "'stance' written during MATTER",
+   "what": "(Person, stance) written during MATTER",
    "where": "S3-L4",
    "needs": "one of ['RESOLVE']",
    "law": "L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say",
@@ -12788,7 +12688,7 @@
   },
   {
    "kind": "FORBIDDEN",
-   "what": "'stance' written during MATTER",
+   "what": "(Person, stance) written during MATTER",
    "where": "S3-L4",
    "needs": "one of ['RESOLVE']",
    "law": "L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say",
@@ -12847,15 +12747,6 @@
    "needs": "an owner for the distribution",
    "law": "S22.3 -- THIS BLOCKS `yield`. `yield` is written ONLY at MATTER (S30, the one single-cell row in the whole matrix) and there is nothing to write, because the distribution that would drive it has no owner",
    "case": "probe:W5",
-   "expected": false
-  },
-  {
-   "kind": "UNSPECIFIED",
-   "what": "(Record, *) has no Partition row",
-   "where": "S30.1",
-   "needs": "rule the row before adding it",
-   "law": "S30.1 -- the design has NONE, so every Record write is an unmarked cell",
-   "case": "probe:W7",
    "expected": false
   },
   {
@@ -13034,12 +12925,12 @@
   "STEP": 2297,
   "BARRIER": 769,
   "DECISION": 785,
-  "WRITE": 699,
+  "WRITE": 706,
   "QUERY": 3718,
   "ACT": 81,
   "EVENT": 58,
   "CLAIM": 290,
-  "GAP": 65
+  "GAP": 60
  },
  "_corpus_defects": [
   "ARC1.yaml: committed inside a markdown fence with transcript preamble",

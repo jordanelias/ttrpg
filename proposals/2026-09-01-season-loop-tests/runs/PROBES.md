@@ -18,7 +18,7 @@ checking.* So every probe declares its provenance:
 
 ## ⚠ THE ENFORCEMENT SPLIT — the single most important number in this ledger
 
-**Of 58 gaps, 27 were raised BY THE SHAPE ITSELF and 27 exist only because THERE IS NO SIGNATURE TO CALL.**
+**Of 53 gaps, 22 were raised BY THE SHAPE ITSELF and 27 exist only because THERE IS NO SIGNATURE TO CALL.**
 
 That is close to an even split, and it matters more than any case verdict. A refusal a
 gate enforces and a refusal that exists because nobody wrote the function are different
@@ -30,7 +30,7 @@ has no module system and no visibility modifiers, so the guarantee there is
 a contributor closes by simply writing the function — no gate fires, no test goes red,
 and the design's own §27.2 admission applies: *enforced by a person noticing*.
 
-**And 20 of 63 PASSes are not by construction
+**And 20 of 68 PASSes are not by construction
 either** — they are listed individually below and should be discounted accordingly. A
 `probe-model` PASS means the instrument supplied something the design does not.
 
@@ -69,14 +69,11 @@ either** — they are listed individually below and should be discounted accordi
 | `F3` | **FORBIDDEN** | no-signature | S3-L1 | a faction must be able to take an action of its own |
 | `F6` | **UNSPECIFIED** | no-signature | S62 | an order from above must be able to fail to arrive, distinctly from being refused |
 | `F8` | **UNSPECIFIED** | construction | S61 | the body a matter reaches must be able to decide it |
-| `P10` | **UNSPECIFIED** | construction | S30.1 | a character must be able to perform a repeated, multi-season task the engine tracks as ongoing |
 | `P14` | **UNSPECIFIED** | construction | S18.2 | how a character is regarded must be able to differ from how they regard themselves |
 | `P15` | **UNSPECIFIED** | no-signature | S61 | something said in private must be able to stay private |
 | `P17` | **UNSPECIFIED** | probe-model | S22.4 | a character's risk must be able to build up quietly across seasons without anyone acting |
 | `P19` | **FORBIDDEN** | construction | S3-L4 | the story must be able to end when a counter reaches a value, with no person choosing |
-| `P20` | **UNSPECIFIED** | construction | S30.1 | a person who was previously part of a crowd must be able to become a named individual |
-| `P22` | **UNSPECIFIED** | construction | S30.1 | possession of an object must be able to make someone else's action unavailable or costlier |
-| `P23` | **UNSPECIFIED** | construction | S30.1 | a character must be able to simply vanish or be killed, with no institutional process |
+| `P22` | **NO-PRODUCER** | construction | S13/E2 | possession of an object must be able to make someone else's action unavailable or costlier |
 | `P25` | **FORBIDDEN** | construction | S15.3 | the world must be able to end a person's position without anyone acting |
 | `P26` | **UNSPECIFIED** | probe-model | S22.4 | harm suffered over several seasons must be able to close off options |
 | `P29` | **UNOWNED** | no-signature | S22.3 | a character must be able to move from one place to another and be somewhere else next season |
@@ -88,14 +85,12 @@ either** — they are listed individually below and should be discounted accordi
 | `P41` | **UNSPECIFIED** | no-signature | S2 T7 | a character must be able to cite an established precedent or prior ruling to make a present argument stronger |
 | `P42` | **COLLISION** | no-signature | S26 / S26.3 | a wounded or distant character must be able to get fewer actions in a season than a healthy one at home |
 | `P43` | **FORBIDDEN** | construction | S22.4 | a quantity held by many characters individually must be able to be totalled across them |
-| `P6` | **UNSPECIFIED** | construction | S30.1 | a character's moral commitments must be able to change, through argument and consequence |
 | `P7` | **UNSPECIFIED** | construction | S22.4 | a character must carry lasting moral damage from what they were made to do |
 | `W10` | **FORBIDDEN** | construction | S10.1 | a place must be able to hold a level of discontent that rises and falls |
 | `W13` | **FORBIDDEN** | no-signature | S25.1 / S3-L5 | a world-scale tracked quantity must be able to decay on a fixed schedule independent of anyone's actions |
 | `W1x` | **UNGRADED** | construction | S42.2.1 | the world must be able to wear down a kind of place nobody wrote a rule for |
 | `W3` | **FORBIDDEN** | construction | S3-L4 | a bad season must be able to make people angrier without anyone acting |
 | `W5` | **UNOWNED** | no-signature | S22.3 | the harvest must be able to come in, better or worse from season to season |
-| `W7` | **UNSPECIFIED** | construction | S30.1 | a document must be able to lapse after a time |
 | `A10` | PASS | construction | S4 | a place must be able to know something summed over everything inside it |
 | `A13` | PASS | construction | S4 | a repeated derivation must be able to be computed once per step |
 | `A17` | PASS | convention | S27.2 | every outcome in the game must go through one place |
@@ -129,13 +124,16 @@ either** — they are listed individually below and should be discounted accordi
 | `F7` | PASS | probe-model | S36.1 | someone with no power must be able to get a matter in front of someone who has it |
 | `F9` | PASS | construction | S26.3 | a character must be able to spend a whole season putting the same matter to many people |
 | `P1` | PASS | construction | S3-L1 | a person with no office, post, command, faction rank or standing must be able to act at all |
+| `P10` | PASS | construction | S13 | a character must be able to perform a repeated, multi-season task the engine tracks as ongoing |
 | `P11` | PASS | probe-model | S9.2 | skill must supply dice and must never make an action unavailable |
 | `P12` | PASS | probe-model | S17 | the set of things a character may do must be computed, not an authored list |
 | `P13` | PASS | probe-model | S18.2 | a character's needs must drive their choices |
 | `P16` | PASS | construction | S20 | how a character is seen must be able to differ between people who know different things |
 | `P18` | PASS | construction | S3-L5 | a counter reaching an edge must be able to force a named person to answer |
 | `P2` | PASS | construction | S26.3 | a character must be able to take several distinct actions in one season and choose what to leave undone |
+| `P20` | PASS | construction | S29 | a person who was previously part of a crowd must be able to become a named individual |
 | `P21` | PASS | construction | S9.1 | a crowd must be able to act, and a person must be able to step out of one, with no conversion |
+| `P23` | PASS | construction | S16 | a character must be able to simply vanish or be killed, with no institutional process |
 | `P24` | PASS | construction | S15.3 | when a character dies everything they held must end, including things held elsewhere |
 | `P27` | PASS | construction | S20 | a character must be able to quietly do less than ordered, discoverable only by investigation |
 | `P28` | PASS | no-signature | S20 | no character may read another's memory directly |
@@ -149,6 +147,7 @@ either** — they are listed individually below and should be discounted accordi
 | `P4` | PASS | construction | S3-L2 | a character must be able to believe something false and act on it as if true |
 | `P40` | PASS | probe-model | S15 | a character must be able to hold obligations to two bodies that come into direct conflict |
 | `P5` | PASS | construction | S19.3 | a character must be able to do something covertly, or be wrongly blamed for what another did |
+| `P6` | PASS | construction | S9.3 | a character's moral commitments must be able to change, through argument and consequence |
 | `P8` | PASS | construction | S3-L1 | one character must be able to be blocked by another without either knowing about the other |
 | `P9` | PASS | construction | S11.1 | a superior must be able to direct a subordinate, and the subordinate must be able to refuse or deviate |
 | `W1` | PASS | construction | S12.1 | a place must be able to fall into disrepair until things can no longer be done there |
@@ -157,6 +156,7 @@ either** — they are listed individually below and should be discounted accordi
 | `W2` | PASS | construction | S3-L4 | the world must be able to change while no character is doing anything |
 | `W4` | PASS | construction | S25 | an environmental or material condition must be able to worsen on its own |
 | `W6` | PASS | construction | S31.1 | a disaster must be able to strike many places at once and be one thing that happened |
+| `W7` | PASS | construction | S13 | a document must be able to lapse after a time |
 | `W8` | PASS | probe-model | S13.1 | a legal or institutional process must be able to advance against a character who is passive |
 | `W9` | PASS | construction | S10.3 | a place's population must be able to grow and shrink |
 
@@ -240,7 +240,7 @@ either** — they are listed individually below and should be discounted accordi
 **law:** S19.5 -- World has exactly 1 log. Two logs CANNOT share a causes[] chain, so T3's multiple perspectives on one event AND arcs-as-provenance-chains BOTH break at the seam. The seam returns contest Events INTO THE SAME LOG. The non-circular grounds: WITNESS is ONE GLOBAL PASS, and the design's predecessor loop was RETIRED because its WITNESS was not global
 
 ### `A3` — an arc ends at a counter with nobody deciding  ·  **FORBIDDEN**  ·  `S3-L4`  ·  by `construction`
-**what:** 'stance' written during MATTER
+**what:** (Person, stance) written during MATTER
 
 **needs:** one of ['RESOLVE']
 **law:** L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say
@@ -347,12 +347,6 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** who decides at a sitting
 **law:** S61 -- NOTHING IS DECIDED AT A SITTING. T5's 'filtered at a rung' runs straight through it, and S10.2's 'arrangements, not choices' cannot be confirmed until it is
 
-### `P10` — a person tracks multi-season work in progress  ·  **UNSPECIFIED**  ·  `S30.1`  ·  by `construction`
-**what:** (Record, *) has no Partition row
-
-**needs:** rule the row before adding it
-**law:** S30.1 -- the design has NONE, so every Record write is an unmarked cell
-
 ### `P14` — standing is computed  ·  **UNSPECIFIED**  ·  `S18.2`  ·  by `construction`
 **what:** Sensation.standing
 
@@ -372,28 +366,16 @@ either** — they are listed individually below and should be discounted accordi
 **law:** L3 clause 1 permits a monotone counter PER (Person, axis) -- 'legal, since every increment is in the holder's own ledger' -- but ONLY where `axis` is ON A CLOSED REGISTRY. No such registry exists in the chain, and no S30 row admits the write. S54 item 6 adds that the axis must not be spelled `exposure` bare, or it collides with the need scalar
 
 ### `P19` — a threshold produces an outcome with nobody deciding  ·  **FORBIDDEN**  ·  `S3-L4`  ·  by `construction`
-**what:** 'stance' written during MATTER
+**what:** (Person, stance) written during MATTER
 
 **needs:** one of ['RESOLVE']
 **law:** L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say
 
-### `P20` — a person is individuated on demand  ·  **UNSPECIFIED**  ·  `S30.1`  ·  by `construction`
-**what:** (Person, exists) has no Partition row
+### `P22` — a held object gates another's act  ·  **NO-PRODUCER**  ·  `S13/E2`  ·  by `construction`
+**what:** a `hold` is recorded, and NO STEP MAKES IT GATE ANOTHER PERSON'S ACT
 
-**needs:** rule the row before adding it; the reverse order invents the thing the rule prevents
-**law:** S30.1 -- without it a death write raises under the matrix's own rule
-
-### `P22` — a held object gates another's act  ·  **UNSPECIFIED**  ·  `S30.1`  ·  by `construction`
-**what:** (Record, *) has no Partition row
-
-**needs:** rule the row before adding it
-**law:** S30.1 -- the design has NONE, so every Record write is an unmarked cell
-
-### `P23` — a season ends outside every institution  ·  **UNSPECIFIED**  ·  `S30.1`  ·  by `construction`
-**what:** (Person, exists) has no Partition row
-
-**needs:** rule the row before adding it; the reverse order invents the thing the rule prevents
-**law:** S30.1 -- without it a death write raises under the matrix's own rule
+**needs:** Part E's verb table, where `eligibility: hold:<record>` is evaluated (W3)
+**law:** Part D admits the write; the GATING is the resolver's, and the resolver has no body until the verb table is data
 
 ### `P25` — a storm ends a tenure  ·  **FORBIDDEN**  ·  `S15.3`  ·  by `construction`
 **what:** an actorless row wrote Tenure.until with no (Person, exists) change of its own
@@ -460,12 +442,6 @@ either** — they are listed individually below and should be discounted accordi
 
 **law:** L3 clause 2 -- THAT IS STORED, MONOTONE, NEVER-DECAYING UNREST IN ALL BUT NAME -- worse than the field L3 banned, because the banned field could at least go down
 
-### `P6` — a conviction moves at RESOLVE  ·  **UNSPECIFIED**  ·  `S30.1`  ·  by `construction`
-**what:** (Person, convictions) is on no Partition row and no matrix row determines it
-
-**needs:** a `social:` column entry, ruled
-**law:** L4 -- the membership test is a STATIC SCHEMA COLUMN, not a judgement; S42.3 -- configuring an unspecified thing invents it
-
 ### `P7` — a per-conviction scar  ·  **UNSPECIFIED**  ·  `S22.4`  ·  by `construction`
 **what:** the closed `axis` registry L3 clause 1 requires (asked for 'Mercy')
 
@@ -491,7 +467,7 @@ either** — they are listed individually below and should be discounted accordi
 **law:** S42.2.1 -- 'a wear table that returns 20 for an unregistered site kind does not fail -- it answers, plausibly and wrongly, forever'
 
 ### `W3` — the world sours a mood  ·  **FORBIDDEN**  ·  `S3-L4`  ·  by `construction`
-**what:** 'stance' written during MATTER
+**what:** (Person, stance) written during MATTER
 
 **needs:** one of ['RESOLVE']
 **law:** L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say
@@ -501,9 +477,3 @@ either** — they are listed individually below and should be discounted accordi
 
 **needs:** an owner for the distribution
 **law:** S22.3 -- THIS BLOCKS `yield`. `yield` is written ONLY at MATTER (S30, the one single-cell row in the whole matrix) and there is nothing to write, because the distribution that would drive it has no owner
-
-### `W7` — a record expires  ·  **UNSPECIFIED**  ·  `S30.1`  ·  by `construction`
-**what:** (Record, *) has no Partition row
-
-**needs:** rule the row before adding it
-**law:** S30.1 -- the design has NONE, so every Record write is an unmarked cell
