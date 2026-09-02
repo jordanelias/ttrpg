@@ -1,0 +1,665 @@
+- id: NPC-006
+  name: Halvar Brandt
+  one_line: A Löwenritter officer seated on his order's collective governing table, fixated on an external
+    rival power, whose succession is pre-wired to the fall of a place the registry never actually assigns
+    him.
+  scale: person
+  season_requires:
+  - need: A person holding a seat on a faction's collective decision-making body must be able to have
+      his individual position registered within that body's collective output, not merely exist as an
+      unaffiliated title.
+    why: '"Officer (Lions'' Table)" is his entire named institutional identity; without a way for a council
+      seat to matter to what the body decides, the role is a label with nothing underneath.'
+    hardness: core
+  - need: A standing external-threat orientation attached to one specific rival power must be able to
+      persistently bias how this person's own actions and judgments are evaluated across a season, not
+      only appear once as a flavor description.
+    why: arc_trajectory states he "evaluates every action against Altonian metric" -- this is presented
+      as his defining behavioral pattern, not an incidental trait.
+    hardness: core
+  - need: A named holding or stronghold must be able to fall as a discrete, trackable event, and that
+      event must be able to trigger a defined change in who occupies a specific post.
+    why: arc_trajectory explicitly ties a succession event to Ehrenwall's fall; without a trackable fall-state
+      for a place and a resulting role-transfer, the stated succession clause has nothing to attach to.
+    hardness: important
+  - need: 'UNCLEAR: the registry never assigns Halvar Brandt a territory (territory: null) despite his
+      arc_trajectory naming a specific place, Ehrenwall, whose fall triggers his succession -- the source
+      does not say whether he holds, garrisons, or is merely associated with Ehrenwall.'
+    why: Without knowing his relationship to that place, it is unclear whether its fall is something
+      his own choices can affect, or a pure external trigger that happens to him -- a materially different
+      kind of stake.
+    hardness: important
+  - need: His faction's standing military posture must be able to be affected, gradually and cumulatively,
+      by actions he personally takes across a season, distinct from any single decisive engagement.
+    why: his goal "Strengthen peninsular defenses" is named as a standing goal rather than a one-time
+      objective; if only single discrete engagements are trackable, a slow defensive build-up has nothing
+      to register against.
+    hardness: important
+  - need: 'UNCLEAR: no stat block exists for him at all, only an unresolved annotation that he has high
+      personal combat stats -- the source gives no number, band, or comparison point.'
+    why: If a scene ever puts him in personal jeopardy (for instance, at Ehrenwall's fall), there is no
+      mechanically specified capability to resolve that contest against.
+    hardness: important
+  - need: Removing this person from his seat must be able to produce a downstream faction-level consequence
+      distinct from simply deleting a name from a roster.
+    why: implied strongly by the Ehrenwall-succession clause -- his seat is not decorative; his presence
+      or absence has to matter to what the Löwenritter is.
+    hardness: core
+  - need: The correspondence between a character's name and the place they are from must be able to be
+      surfaced as in-world color, without requiring any mechanical effect.
+    why: the source explicitly flags his birthplace-surname correspondence as "confirmed intentional,"
+      signaling narrative texture is wanted, but nothing suggests it should carry mechanical weight.
+    hardness: flavour
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: whether Ehrenwall has fallen and any succession triggered; his accumulated standing
+      at the Lions' Table; the cumulative state of peninsular defenses he has contributed to.
+    needs_deadline: 'no'
+  who_acts:
+  - Halvar Brandt
+  - the Löwenritter Lions' Table, collectively, insofar as it acts as a body
+  - whoever holds or contests Ehrenwall
+  - the player
+  knowledge:
+  - whether Löwenritter leadership is aware of the Ehrenwall succession contingency in advance
+  - whether Altonia is aware of how central it is to his personal threat-evaluation
+  - whether the player has learned of the succession clause at all
+  ends_when: never automatically -- presumably by Ehrenwall's fall and the resulting succession, or by
+    his death or removal from the Lions' Table; the source names no other terminus.
+
+- id: NPC-009
+  name: Gerik Strand
+  one_line: A Crown minister who personally absorbs nearly every important administrative task, made vulnerable
+    by an exploitable weakness for flattery.
+  scale: person
+  season_requires:
+  - need: A person holding a formal administrative post must be able to personally perform, and be credited
+      with performing, an unusually large volume of tasks nominally belonging to other roles around him,
+      trackable as a standing condition rather than a one-time act.
+    why: arc_trajectory frames him as an "OVERPERFORMER" who "runs every important task" -- a structural
+      pattern of role-hoarding is his defining institutional trait, not an isolated event.
+    hardness: core
+  - need: A specific, named personal weakness must be able to make a targeted category of social interaction
+      against him measurably easier for whoever exploits it, distinct from ordinary difficulty for the
+      same interaction against someone without that weakness.
+    why: arc_trajectory specifies an exact mechanical bonus for social approaches that acknowledge his
+      competence -- without a way to apply a targeted modifier tied to a specific named vulnerability,
+      this defining exploit has no mechanical existence.
+    hardness: core
+  - need: A goal of personal indispensability must be able to be advanced or undermined by whether tasks
+      continue to require him specifically, as distinct from whether the institution he serves succeeds
+      as a whole.
+    why: his goal "Maintain personal indispensability" is stated separately from "Efficient Crown administration"
+      -- the two can diverge (efficient administration might mean delegating away from him), and the
+      engine needs to represent that tension rather than collapsing it into one score.
+    hardness: important
+  - need: His concentration of tasks in himself must be able to create a single point of failure -- his
+      removal, incapacitation, or death must be able to produce a disproportionate institutional disruption
+      relative to an ordinary official's removal.
+    why: implied directly by "runs every important task" -- if his absence has the same generic effect
+      as any other minister's absence, the overperformer trait is decorative rather than consequential.
+    hardness: important
+  - need: 'UNCLEAR: the source gives no stat block, age, birthplace, or origin for him at all despite
+      specifying a precise numeric social-interaction modifier for his flattery weakness -- it is unclear
+      what baseline competence or resistance value that modifier is supposed to offset against.'
+    why: A targeted penalty is only meaningful relative to some baseline difficulty or resistance; without
+      any stat data for him, the specific numeric modifier the source does supply cannot actually be
+      resolved against anything.
+    hardness: important
+  - need: A convictions profile assigned by a general inference rule from role-type must still be able
+      to produce behavior distinguishable from another character assigned convictions by the same rule
+      for a similar role.
+    why: his cultural label and conviction weights were both inferred by a stated migration rule from
+      role and flaw description rather than authored individually; the source does not itself raise this
+      as a stake, but flattening interchangeable court officials is worth being able to avoid.
+    hardness: flavour
+  - need: His institutional goal must be able to accumulate or erode gradually across a season through
+      many small actions, not resolve only through a single decisive event.
+    why: his goal "Efficient Crown administration" is named as a standing goal without any single triggering condition
+      in the source, implying ongoing administrative performance rather than a one-shot success or failure.
+    hardness: important
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: the cumulative degree of task-concentration in him; whether his flattery weakness
+      has been exploited before and by whom; his standing on personal indispensability versus actual
+      Crown administrative efficiency.
+    needs_deadline: 'no'
+  who_acts:
+  - Gerik Strand
+  - the Crown, as the institution whose administration he runs
+  - anyone attempting a flattery-based social approach against him
+  - the player
+  knowledge:
+  - whether other Crown officials or the Crown itself recognize how concentrated administrative power
+    has become in him specifically
+  - whether an approaching party knows about his flattery vulnerability
+  - whether the player has learned of it
+  ends_when: never stated explicitly; presumably his removal, death, or a resolution of the overperformer/indispensability
+    tension -- the source names no defined terminus.
+
+- id: NPC-011
+  name: Alexios Laskaris
+  one_line: An Altonian prince who periodically visits Crown lands under royal welcome, whose entire priority
+    flips on a threshold read of a different named character's tracked loyalty.
+  scale: person
+  season_requires:
+  - need: A foreign noble holding a governing title in another realm's territory must be able to periodically
+      enter Crown territory as a recognized, non-hostile visitor with distinct standing from an ordinary
+      foreign national, and must be able to leave again, repeatedly, across multiple seasons.
+    why: he is specified as a "Periodic visitor" with "royal welcome" -- a one-time or permanent-presence
+      model would misrepresent the recurring, bounded nature of his presence in Crown lands.
+    hardness: core
+  - need: This person's entire behavioral mode must be able to flip to a different, specified priority
+      the moment a different, specific named character's tracked relationship value crosses a stated
+      threshold, and that flip must be able to reverse if the threshold condition later becomes untrue.
+    why: arc_trajectory states explicitly "Flips if Elske Loyalty <= 2" -- his defining behavioral hinge
+      is a read on another character's tracked state, not something internal to him; without cross-character
+      state legibility of this kind, this specified condition cannot exist.
+    hardness: core
+  - need: A foreign noble's personal goal must be able to be pursued using resources and authority belonging
+      to his own polity, while physically present inside another polity's territory, without collapsing
+      into either full local authority or full foreign authority.
+    why: he is explicitly protective of Elske while remaining Altonian nobility visiting Crown territory
+      -- his protective actions have to be legible as a foreign actor's intervention, not simply as if
+      he were a Crown official.
+    hardness: core
+  - need: A vassal or subordinate power's holder must be able to receive directives from a nominal imperial
+      superior and be able to deliberately delay, dilute, or fail to execute them, without immediate open
+      rebellion being the only available response.
+    why: his named goal is explicitly "Sandbag imperial directives" -- this requires a graduated, non-binary
+      space between full compliance and open revolt against the Altonian imperial authority above him.
+    hardness: important
+  - need: 'UNCLEAR: he holds the title Doux, a governing rank normally tied to a specific province, and
+      his birthplace is given as Altonia generally, yet no territory is assigned to him in the record
+      (territory: null) -- the source does not say what province, if any, he actually governs.'
+    why: A "province stability" goal cannot be resolved against a specific place if no place is on record
+      as his to stabilize; whether his provincial base sits inside Altonia or is itself contested changes
+      what protecting Elske and sandbagging directives would look like in practice.
+    hardness: important
+  - need: 'UNCLEAR: his cultural profile is explicitly flagged in the source as a placeholder because
+      no Altonian cultural template exists yet -- meaning his conviction weights and behavioral defaults
+      rest on an acknowledged-incomplete foundation.'
+    why: If the Altonian template is later defined and differs materially from the placeholder, his season-level
+      behavior could change under him without any in-fiction event causing it.
+    hardness: important
+  - need: A character's conviction profile must be able to carry a distinct flavor of virtue-as-governance
+      -- moral cultivation of the realm as the point of holding power -- that reads differently in play
+      from a simple honorable-ruler template.
+    why: the source deliberately ties his primary conviction to a specific real-world governance tradition
+      ("Byzantine philosopher-ruler," "Manuel II Palaiologos archetype") rather than a generic trait;
+      losing that texture would not break a mechanic but would flatten a deliberately chosen characterization.
+    hardness: flavour
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: Elske's current tracked loyalty value, to know whether his protective mode has flipped;
+      the current state of his relationship with the Altonian imperial authority; whether his provincial
+      base, if any, is stable.
+    needs_deadline: 'no'
+  who_acts:
+  - Alexios Laskaris
+  - Elske, whose tracked loyalty state drives his flip (her own agency is a separate case)
+  - the Altonian imperial authority above him
+  - the Crown court that grants him royal welcome
+  - the player
+  knowledge:
+  - whether the Altonian imperial authority is aware of the degree to which he is sandbagging its directives
+  - whether Elske or the Crown court are aware his protective priority is conditioned on her loyalty specifically
+  - whether the player has learned of the loyalty-triggered flip at all
+  ends_when: never stated explicitly; presumably a permanent change in Elske's status, his removal from
+    the Doux title, or a rupture with the Altonian imperial authority over the sandbagging -- the source
+    names no defined terminus.
+
+- id: NPC-035
+  name: Theodor Kreutz
+  one_line: A Royal Guard Captain personally loyal to the monarch rather than the Crown as an institution,
+    simultaneously liaising to a second faction whose autonomy escalates if he is removed.
+  scale: person
+  season_requires:
+  - need: A person holding a formal military post must be able to have his loyalty specifically bound
+      to one named individual rather than to the institution he nominally serves, such that a change
+      in who holds that individual's position could, in principle, put his allegiance in question.
+    why: arc_trajectory states his allegiance is "Pre-designated ... to Almud personally" -- a person-bound
+      loyalty is mechanically different from an institution-bound one, and the case requires that distinction
+      be representable.
+    hardness: core
+  - need: A single named individual's removal from a specific post must be able to trigger a distinct,
+      tracked escalation in how autonomous a separate faction behaves toward the Crown, measurably moving
+      that relationship toward rupture.
+    why: arc_trajectory states his removal "triggers Löwenritter Autonomy escalation toward Split" --
+      an explicit, named cross-faction consequence hinging on one person's institutional status, not
+      a generic loss-of-personnel effect.
+    hardness: core
+  - need: A single named individual must be able to simultaneously hold a formal post inside one faction
+      and a formal liaison relationship to a second, distinct faction, such that events affecting him
+      are legible to both factions' separate tracked states at once.
+    why: his faction field lists both "Crown (Inner Circle)" and "Löwenritter Liaison" as part of his
+      identity; a data model that can only assign one faction at a time cannot represent him as given.
+    hardness: important
+  - need: 'UNCLEAR: his migration source records "Order / Authority MS / Truth 4," but his captured record
+      has Order and Authority both as weighted convictions (0.35, 0.25) with no separate style field
+      and no Truth value anywhere -- a directly comparable entry in this same batch (NPC-037''s Lord
+      Treasurer) instead moves its middle-listed value into a distinct style categorization when unpacking
+      the identical three-part shorthand, and also drops its trailing Truth value, so it is unclear whether
+      Kreutz''s Authority was migrated into the wrong slot, or whether Reichard''s was.'
+    why: the two entries resolve the same three-part source shorthand two different ways with no explanation
+      for the difference, and in both cases a Truth value named in the source vanishes entirely -- if
+      either resolution is wrong, his or her behavioral weighting is running on a miscategorized value.
+    hardness: important
+  - need: 'UNCLEAR: no goals are recorded for him at all, despite his role carrying two of the most consequential
+      named stakes in this section of the registry -- personal loyalty to a monarch, and a cross-faction
+      schism trigger -- with the source giving no indication of what he is actively trying to accomplish,
+      only what happens to others if he is removed.'
+    why: without any stated goal, it is unclear whether he is a purely reactive piece that things happen
+      around, or has his own agenda that could put him in conflict with Almud or the Löwenritter -- the
+      difference materially changes what kind of case this is.
+    hardness: important
+  - need: A person with no recorded personal goal and no recorded personal history must still be able
+      to become the direct object of a scene -- being threatened, suborned, or killed -- since the case's
+      entire stated stake depends on something happening to him, not on anything he initiates.
+    why: the source gives him no agenda of his own, so his removal has to be reachable as something other
+      people or events do to him; a goal-less liaison risks being mechanically invisible if scene generation
+      depends on a character's own agenda to surface them.
+    hardness: important
+  - need: A character's canonical status must be able to remain fully usable in play even while a specific
+      citation reference tied to his verification is still pending resolution elsewhere.
+    why: his status is marked canonical but flagged with a pending naming citation ("ED-634 naming pending")
+      -- a bookkeeping caveat on the source record, not a stated in-fiction stake.
+    hardness: flavour
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: whether Theodor Kreutz still holds his post; whether Almud is still the person he
+      is bound to; the accumulated state of Löwenritter Autonomy escalation if his removal has already
+      occurred.
+    needs_deadline: 'no'
+  who_acts:
+  - Theodor Kreutz
+  - Almud, the monarch he is personally bound to
+  - the Löwenritter faction, whose autonomy posture reacts to his status
+  - the player
+  knowledge:
+  - whether the Löwenritter are aware, in real time, of any threat to Theodor Kreutz's position
+  - whether Almud is aware his personal guard captain's removal carries this faction-level consequence
+  - whether the player has learned of the Split-escalation trigger at all
+  ends_when: never stated explicitly; presumably his death, removal, or replacement -- which would itself
+    trigger the named escalation -- or a resolution or dissolution of the Löwenritter liaison relationship;
+    the source names no other terminus.
+
+- id: NPC-036
+  name: Wilhelm Voss
+  one_line: A titled Crown Marshal with no recorded goal, arc, or personal history at all -- the thinnest
+    entry in the Crown Inner Circle cohort.
+  scale: person
+  season_requires:
+  - need: 'UNCLEAR: no goal is recorded for the Royal Marshal at all, in a role whose title implies command
+      of Crown military or enforcement matters.'
+    why: without a stated goal, there is nothing to test whether his season-level activity as Royal Marshal
+      can be represented at all beyond being a name attached to a title.
+    hardness: important
+  - need: 'UNCLEAR: no arc_trajectory is recorded for him at all -- no behavioral hook, no relationship
+      to any other named character, no defined consequence tied to his post -- unlike the adjacent Royal
+      Guard Captain entry (NPC-035), which explicitly ties removal from that post to a faction-level
+      escalation.'
+    why: the complete absence of any behavioral or consequential hook makes it unclear whether he is
+      meant to function as a name-only reference or is expected to carry independent weight as a case;
+      the source does not say.
+    hardness: important
+  - need: 'UNCLEAR: his migration source records "Order / Authority MS / Truth 4," the identical shorthand
+      used for NPC-035, but his captured record likewise keeps Authority as a second weighted conviction
+      with no style field and no Truth value anywhere -- whether Authority belongs there or should instead
+      be a separate style categorization, as the analogous NPC-037 entry treats its own middle term,
+      is not resolved either way.'
+    why: the same unresolved migration question recurs identically across the Crown Inner Circle cohort
+      -- Kreutz, Voss, and, differently, Reichard -- which raises it from an isolated data quirk to a
+      pattern that likely affects how this whole cohort's convictions actually resolve in play.
+    hardness: important
+  - need: A person holding a specific named Crown command post must be able to exist as more than an
+      identity record -- the post itself must be able to affect what the Crown can materially do in a
+      season, even in the total absence of an authored personal arc.
+    why: the title "Royal Marshal" implies institutional command function; if a titled command post with
+      no personal arc has no mechanical footprint distinct from an ordinary name-only reference, the
+      title itself is meaningless data.
+    hardness: core
+  - need: A Crown Inner Circle member's neutral starting disposition toward others must be able to produce
+      measurably different default social outcomes than a peer who starts from a guarded baseline.
+    why: the source deliberately assigns him a different starting value (0.00) than his cohort, which
+      elsewhere in this batch starts at -0.10; if that difference cannot manifest in play, the distinction
+      recorded in the data is inert.
+    hardness: important
+  - need: A character's canonical status must be able to remain fully usable in play while a pending citation
+      reference is still unresolved elsewhere.
+    why: he carries the same pending-citation caveat as NPC-035 -- bookkeeping on the source record, not
+      a stated in-fiction stake.
+    hardness: flavour
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: 'UNCLEAR -- the source records no behavioral state, relationship, or trigger for
+      him to remember across seasons; only his continued occupancy of the post would need to persist.'
+    needs_deadline: 'no'
+  who_acts:
+  - Wilhelm Voss
+  - the Crown, as the institution whose post he holds
+  - the player
+  knowledge:
+  - 'UNCLEAR -- the source specifies no knowledge-dependent relationship or secret for him'
+  ends_when: never stated; the source specifies no arc, goal, or consequence, so no terminus is named
+    at all.
+
+- id: NPC-037
+  name: Annalie Reichard
+  one_line: The Crown's Lord Treasurer, whose institutional identity was corrected from an earlier, now-struck
+    identity as a Church Cardinal, and whose migrated convictions do not match her own cited source.
+  scale: person
+  season_requires:
+  - need: A named character's faction affiliation, once established in one source document, must be able
+      to be corrected to a different faction entirely in a later authoritative pass, with the corrected
+      affiliation taking full effect on how she participates in play, not leaving her split between two
+      institutional identities.
+    why: the source explicitly records this correction -- a note reading "was listed as Church/Cardinal
+      -- actually Crown Lord Treasurer" alongside "Cardinal Reichard STRUCK" -- a data model that could
+      not cleanly
+      retire a struck prior identity in favor of a new one would leave her ambiguous between two factions.
+    hardness: core
+  - need: A person holding the Crown's treasury-oversight post must be able to affect, or be affected
+      by, the Crown's material resources at a faction level, distinct from a generic administrative post
+      with no resource footprint.
+    why: the title "Lord Treasurer" specifically names financial stewardship; if the post carries no representable
+      effect on Crown resources, the title is decorative.
+    hardness: core
+  - need: A conviction profile's ambiguous middle source value must be able to be resolved as a distinct
+      manner-of-expression axis rather than folded into, or discarded from, her weighted conviction list.
+    why: her migration_notes explicitly distinguish "Evidence is Resonant Style" from her weighted Precedent
+      conviction -- the source is doing real work to keep two different kinds of trait from collapsing
+      into one, and that distinction needs somewhere to live.
+    hardness: important
+  - need: 'UNCLEAR: her migration source records "Precedent / Evidence MS / Truth 5" and explicitly states
+      "Evidence is Resonant Style," but her captured record has no resonant style field at all, and instead
+      carries Authority as a second weighted conviction -- a value that appears nowhere in her cited
+      migration source -- while Truth 5 is dropped entirely with no disposition stated.'
+    why: her entry is the one case in this cohort where the source explicitly says what should happen
+      to the ambiguous middle value, yet the field that value should have landed in does not exist in
+      her record, and a conviction with no basis in her own cited source appears in its place -- if the
+      engine reads her captured convictions literally, it runs on data her own migration notes do not
+      actually support.
+    hardness: important
+  - need: 'UNCLEAR: no goals or arc_trajectory are recorded for her at all, leaving no stated stake, agenda,
+      or consequence tied to her holding the treasury post.'
+    why: without any personal goal or arc, it is unclear what she is actively pursuing or what happens
+      if she is removed -- unlike NPC-035's Royal Guard Captain, whose removal has an explicit named
+      consequence, nothing analogous is stated for the Lord Treasurer despite the post's apparent importance.
+    hardness: important
+  - need: A character's canonical status must be able to remain fully usable in play while a pending citation
+      reference is still unresolved elsewhere.
+    why: she carries the same pending-citation caveat as the rest of this Crown Inner Circle cohort --
+      bookkeeping, not a stated in-fiction stake.
+    hardness: flavour
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: her corrected faction identity, which must persist and not silently revert; the current
+      state of Crown treasury resources she stewards, if tracked; whether the prior struck identity has
+      any lingering reference anywhere that could resurface.
+    needs_deadline: 'no'
+  who_acts:
+  - Annalie Reichard
+  - the Crown, as the institution whose treasury she manages
+  - the player
+  knowledge:
+  - whether other characters or documents in play still refer to her by the struck prior identity
+  - whether the Crown's own institutional memory has fully absorbed the correction
+  ends_when: never stated; no goal or arc is recorded, so no terminus is named.
+
+- id: NPC-039
+  name: Magnus Klapp
+  one_line: A Church cardinal candidate whose sanctioned archive work is described as producing an emergent,
+    normally-restricted perceptual capacity he must choose to conceal or disclose.
+  scale: person
+  season_requires:
+  - need: A Church figure must be able to be one of several standing candidates for a specific high ecclesiastical
+      seat, trackable as a status distinct from either already holding that seat or having no claim to
+      it at all.
+    why: his role is explicitly "Cardinal (Temperance candidate)" rather than simply "Cardinal" -- the
+      candidacy itself, not yet a settled office-holding, is the given status, and the engine needs an
+      intermediate state for that.
+    hardness: core
+  - need: Extended engagement with archived or restricted material must be able to gradually produce a
+      normally-restricted perceptual capacity in a person who did not previously have it, as an emergent
+      condition arising from the activity itself rather than a fixed trait assigned at creation.
+    why: arc_trajectory names "TS exposure via archive work" as his defining dilemma, and the registry's
+      own inline comment on his blank sensitivity field flags this as "latent/emerging" -- his central
+      conflict does not exist unless ordinary scholarly work can itself originate this condition.
+    hardness: core
+  - need: A scholar developing this restricted perceptual capacity through his own sanctioned work must
+      be able to face a genuine choice between continuing the work, concealing the condition from his
+      own institution, or disclosing it and accepting whatever consequence that carries, with the choice
+      actually mattering rather than being cosmetic.
+    why: the label "Scholar's Dilemma" implies a real forced choice is the point of his case; without
+      a representable trade-off between concealment and disclosure, the dilemma has nothing to bite on.
+    hardness: core
+  - need: A different registry entry's identifier used elsewhere in the corpus to reference this surname
+      must be resolvable, for game purposes, to this single character rather than to a second, distinct
+      person sharing the surname.
+    why: the source explicitly flags this as a disambiguation the registry itself had to make -- other
+      "Klapp" arc references "refer to this character's surname, not a separate NPC" -- any process that
+      generates or resolves scenes from those references needs to land on him, not fork a phantom duplicate.
+    hardness: important
+  - need: 'UNCLEAR: no goal is recorded for him, despite his being a candidate for a specific contested
+      Church seat and the subject of a named "dilemma" -- the source does not say what he is actually
+      trying to achieve: winning the candidacy, protecting his research, concealing his condition, or
+      something else entirely.'
+    why: without a stated goal, it is unclear which of several plausible personal stakes should drive
+      his season-level behavior, which materially changes what playing his case looks like.
+    hardness: important
+  - need: A cardinal candidacy for one virtue-seat must be able to coexist, as a distinct data point,
+      alongside at least one other named candidate for a different virtue-seat, without the two candidacies
+      being conflated or requiring identical mechanical treatment.
+    why: he and NPC-040 are recorded back-to-back as candidates for two different named virtues within
+      the same source section -- the case needs multiple simultaneous, distinct ecclesiastical candidacies
+      kept straight rather than treated as one undifferentiated status.
+    hardness: important
+  - need: A character's canonical status must be able to remain fully usable in play under a plain verification
+      citation, with no further caveat attached.
+    why: his verification format differs from the Crown Inner Circle cohort's pending-citation caveat
+      -- source bookkeeping, no stated in-fiction stake.
+    hardness: flavour
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: his accumulated exposure toward developing the restricted perceptual condition; whether
+      it has been discovered by his superiors or concealed successfully once emerged; the current state
+      of his candidacy.
+    needs_deadline: 'no'
+  who_acts:
+  - Magnus Klapp
+  - his Church superiors, who would react to either his candidacy or a discovered condition
+  - the player
+  knowledge:
+  - whether the Church knows he is developing this condition (currently presumably no, since it is described
+    as latent)
+  - whether other candidates or Church leadership are aware of his archive work specifically
+  - whether the player has learned of either the candidacy or the dilemma
+  ends_when: never stated explicitly; presumably resolved by the candidacy's outcome, discovery or concealment
+    of his condition, or his death or removal -- the source names no defined terminus.
+
+- id: NPC-040
+  name: Osten Jarnstal
+  one_line: A Church cardinal candidate for a martially-flavored virtue-seat whose captured convictions
+    contradict the "Templar arm" characterization his own source gives him.
+  scale: person
+  season_requires:
+  - need: A Church figure must be able to be a standing candidate for a specific named virtue-seat, distinct
+      from actually holding that seat.
+    why: his role is explicitly "Cardinal (Fortitude candidate)" -- the same structural requirement as
+      NPC-039's candidacy, applied to a different named seat.
+    hardness: core
+  - need: A characterization tying one ecclesiastical role to a military-religious code must be able to
+      combine martial and religious convictions in one person's behavioral profile, such that he responds
+      differently from a purely scholarly candidate to force, combat, or martial stakes.
+    why: migration_notes explicitly describe the Fortitude cardinal archetype as a "Templar arm" with
+      a military-religious code, in direct contrast to the Temperance candidate's "canonical scholar"
+      framing -- the two candidacies are meant to read as differently flavored, and that distinction
+      needs a mechanical hook.
+    hardness: important
+  - need: 'UNCLEAR: his migration source describes his inferred convictions as "Honor (military-religious
+      code) + Faith + Authority," but the convictions actually captured in his profile are Faith (0.50)
+      and Order (0.30) -- neither Honor nor Authority appears, and Order is present despite not being
+      named in the notes. The source does not explain this mismatch.'
+    why: if the prose description is the intended profile, his captured data may simply be wrong, meaning
+      his actual in-play behavior would not match the "Templar arm" characterization the source itself
+      gives for why this candidacy exists.
+    hardness: important
+  - need: 'UNCLEAR: no goal or arc_trajectory is recorded for him at all -- unlike his fellow candidate
+      NPC-039, who at least has a named dilemma even without a goal, he has neither.'
+    why: without any stated goal or arc, there is nothing beyond the bare candidacy to test whether a
+      season involving him is representable at all; he is the thinner of the two paired cardinal candidates.
+    hardness: important
+  - need: 'UNCLEAR: whether the source intends any direct interaction -- rivalry, alliance, or simple
+      independence -- between the Fortitude and Temperance candidacies, or whether their consecutive
+      placement in the document is coincidental.'
+    why: if the candidacies are meant to interact, for instance only one being able to win, that is a
+      materially different case than if they are entirely independent tracks; the source's placement
+      suggests a relationship but never states one.
+    hardness: important
+  - need: A character's canonical status must be able to remain fully usable in play under a plain verification
+      citation, with no further caveat attached.
+    why: matches NPC-039's citation format -- source bookkeeping, not a stated in-fiction stake.
+    hardness: flavour
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: the current state of the Fortitude candidacy; UNCLEAR whether anything else about
+      him needs to persist, given the total absence of goal or arc data.
+    needs_deadline: 'no'
+  who_acts:
+  - Osten Jarnstal
+  - his Church superiors
+  - the player
+  knowledge:
+  - 'UNCLEAR -- the source specifies no knowledge-dependent relationship, secret, or awareness state for
+    him'
+  ends_when: never stated; presumably the Fortitude candidacy's resolution, but the source names no defined
+    terminus.
+
+- id: NPC-041
+  name: Aldric Hann
+  one_line: Restoration Movement leadership specifically qualified as "visible," co-holding the role alongside
+    a second named leader, with every substantive trait field left blank.
+  scale: person
+  season_requires:
+  - need: A faction operating partly underground must be able to have leadership that operates in a visible,
+      public-facing mode distinct from a contrasting non-visible mode, with the visible mode carrying
+      its own distinct exposure profile compared to underground movement activity.
+    why: his role is explicitly qualified as "RM Visible Leadership," a distinction that only means something
+      if there is a different, less-visible way to lead the same movement that this entry is being contrasted
+      against.
+    hardness: core
+  - need: Two named individuals must be able to jointly hold the same leadership status for one faction
+      at the same time, with actions or consequences affecting one of them able to be distinct from,
+      or shared with, the other.
+    why: he is recorded as leading "alongside Yrsa Vossen" -- a genuine co-leadership arrangement, not
+      a single leader with a deputy, requires two people occupying the same top-level role simultaneously.
+    hardness: core
+  - need: Two different named characters who share a first name but belong to entirely different factions
+      and stories must be able to be tracked and referenced without conflation.
+    why: this entry's notes field exists solely to resolve this potential confusion with a distinct character
+      (NPC-013, a Church Cardinal of the same first name) -- if scene generation or reference resolution
+      could still conflate the two, the disambiguation the source went out of its way to record would
+      not actually hold.
+    hardness: important
+  - need: 'UNCLEAR: every substantive trait field for him is empty -- convictions, goals, and arc_trajectory
+      are all null -- the source records only that he exists, his faction, his role, and how to tell
+      him apart from a different character with the same first name.'
+    why: this is one of the thinnest entries in the batch; without any of that data, it is unclear whether
+      he is meant to be played as a real case this season or exists purely as a named placeholder that
+      scene authors would need to invent content for from nothing.
+    hardness: important
+  - need: A visible faction leader with no recorded personal convictions or goals must still be able to
+      be the target of, or initiator of, actions at the faction's own institutional scale, distinct from
+      what an ordinary unranked member of the same faction could do.
+    why: the title implies elevated standing and visibility even though no personal content backs it,
+      so the engine needs to represent that the title alone confers some capability beyond an ordinary
+      member's, independent of any authored personal arc.
+    hardness: important
+  - need: A character's canonical status must be able to remain fully usable in play when affirmed through
+      a resolution note rather than a citation to a specific canon source paragraph.
+    why: his provenance format differs from most other entries in this batch, which cite a specific source
+      section -- bookkeeping, not a stated in-fiction stake.
+    hardness: flavour
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: 'UNCLEAR -- no tracked personal state is specified for him at all; presumably only
+      his continued status as visible RM leadership, and its relationship to Yrsa Vossen''s parallel
+      status, would need to persist.'
+    needs_deadline: 'no'
+  who_acts:
+  - Aldric Hann
+  - Yrsa Vossen, his co-leader
+  - the player
+  knowledge:
+  - 'UNCLEAR -- the source specifies no secret, awareness gap, or knowledge-dependent relationship for
+    him, beyond the out-of-fiction disambiguation from NPC-013, which is a source-bookkeeping fact rather
+    than an in-world knowledge state'
+  ends_when: never stated; no goal or arc is recorded, so no terminus is named.
+
+- id: NPC-072
+  name: Olaf Geirson
+  one_line: Hafenmark's sole-represented Inner Council military commander, carrying two undocumented schema
+    fields and a single, unusually heavy conviction, with no other trait data recorded at all.
+  scale: person
+  season_requires:
+  - need: 'UNCLEAR: this entry carries two fields ("certainty: 4" and "resonant_style: Consequence")
+      that do not appear anywhere in the registry schema''s declared optional field list, and no other
+      entry in this extraction batch uses either field -- the source does not define what "certainty"
+      measures or what values "resonant_style" can take.'
+    why: without knowing what these values mean or how they are meant to be read, it is unclear whether
+      they are load-bearing behavioral data for him specifically or an artifact of a different, undocumented
+      data source that has not been reconciled with the registry's own schema.
+    hardness: important
+  - need: A person's conviction profile must be able to consist of a single, very heavily weighted value
+      with no secondary conviction at all, rather than the two-value pattern seen on every other named
+      figure in this extraction.
+    why: every other character in this batch has at least two weighted convictions; a lone high-weight
+      conviction is a distinctly different shape of data, and if behavioral resolution assumes a minimum
+      of two weighted convictions per person, this entry as given may not resolve cleanly.
+    hardness: important
+  - need: A named military commander sitting on a faction's inner governing council must be able to exercise
+      command authority that materially affects that faction's military capability or action, distinct
+      from an ordinary council seat with no command function.
+    why: the title "Military Commander" combined with "(Inner Council)" membership names both a governing-body seat
+      and a specific command portfolio; without some representable effect on Hafenmark's military capacity,
+      the title carries no mechanical content.
+    hardness: core
+  - need: 'UNCLEAR: absolutely no personal goal, arc_trajectory, age, birthplace, territory, or stats
+      are recorded for him at all -- every field beyond bare identity, faction, role, certainty, resonant
+      style, and a single conviction is simply absent, not even present as a null placeholder the way
+      other thin entries in this batch (for instance NPC-041 or NPC-036) explicitly mark their gaps.'
+    why: this is the thinnest entry in the entire batch; it is unclear whether the source considers him
+      fully specified as a deliberately minimal procedural figure, or simply incomplete, and there is
+      no goal or arc for a season involving him to be built around at all.
+    hardness: important
+  - need: 'UNCLEAR: Hafenmark is named in this batch only through this single entry -- no other data
+      here establishes what Hafenmark is, how its inner governing council operates, or how it relates
+      to the Crown, Löwenritter, Church, Altonia, or Restoration Movement factions that dominate the
+      rest of the roster, so it is unclear whether Hafenmark is a fully realized faction elsewhere in
+      the corpus or whether this is the extent of its representation available here.'
+    why: if Hafenmark has no other established institutional context, it is unclear what scale of consequence
+      his actions as its military commander could actually reach -- a faction that exists as one name-and-role
+      pair has no stated relationships to react through.
+    hardness: important
+  - need: A faction's distinct cultural label must be able to color a character's behavior even with no
+      other personal data to draw on.
+    why: his cultural label is distinct from every other label in this batch and, unlike Altonia's flagged
+      placeholder, carries no gap comment -- suggesting Hafenmark's own procedural culture is already
+      defined and worth preserving as texture, though not stated as consequential by the source.
+    hardness: flavour
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: 'UNCLEAR -- no tracked personal state is specified for him at all beyond bare identity
+      and a single conviction; presumably only his continued status as Hafenmark''s Military Commander
+      would need to persist.'
+    needs_deadline: 'no'
+  who_acts:
+  - Olaf Geirson
+  - the Hafenmark Inner Council, as the body he sits on
+  - the player
+  knowledge:
+  - 'UNCLEAR -- the source specifies no secret, awareness gap, or knowledge-dependent relationship for
+    him at all'
+  ends_when: never stated; no goal, arc, or consequence is recorded, so no terminus is named at all --
+    the thinnest ends_when in the batch.

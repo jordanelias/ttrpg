@@ -1,0 +1,1709 @@
+- id: SCN-01
+  name: A specialized practitioner enters combat
+  one_line: >-
+    A character with a special resource-fueled action type tries to use it inside an ordinary combat round,
+    and the two action tracks compete for the same slot.
+  scale: person
+  season_requires:
+  - need: >-
+      A character must be able to hold two mutually exclusive action tracks in the same combat round (an
+      ordinary action vs. a specialized channeled action), where committing to one makes the character
+      ineligible for the other, and eligibility for the special track is decided by what the OPPONENT
+      chooses to do that same round, not just the actor's own choice.
+    why: >-
+      Without opponent-conditioned eligibility, the tactical tension of 'declare the special action and
+      hope you aren't attacked first' disappears.
+    hardness: core
+  - need: >-
+      The special action must be able to require a preparatory step resolvable either the round before
+      or earlier the same round, before its main roll executes.
+    why: >-
+      Losing the two-stage setup collapses a deliberate, telegraphed action into an instant one, changing
+      its risk profile.
+    hardness: important
+  - need: >-
+      A single triggering roll for the special action must route to four qualitatively different outcome
+      branches, each altering different downstream resources (a difficulty modifier on a future action,
+      a resource pool, a stress/condition track) rather than a binary pass/fail.
+    why: >-
+      Collapsing the four degrees to pass/fail removes the graded consequences the scenario depends on.
+    hardness: core
+  - need: >-
+      Once a special contact/channel state is established, it must persist across multiple rounds and
+      be re-tested by a save whenever the character takes damage during that window, where failure both
+      drops the channel early AND resolves the whole action as a failure.
+    why: >-
+      Without an ongoing vulnerability check, the channeled action would be immune to interruption by
+      battle damage, removing its central risk.
+    hardness: core
+  - need: >-
+      Reaching a distinct incapacitation threshold while the channel is active must immediately terminate
+      the channel (independent of the per-hit save above) and force the action to its failure outcome.
+    why: >-
+      Without this, an incapacitated character could still complete the special action, which the source
+      treats as impossible.
+    hardness: important
+  - need: >-
+      A per-round action penalty accrued from ongoing damage during the channel must persist and stack
+      for the remainder of that channel's duration.
+    why: >-
+      A non-stacking or resetting penalty would let a character shrug off cumulative harm mid-channel.
+    hardness: important
+  - need: >-
+      The special action must be able to leave the character with a lasting future difficulty penalty
+      (lasting a season) on specifically one of its outcome branches, distinct from its other branches.
+    why: >-
+      If every branch had the same aftermath, the best-outcome branch would carry no special long-term
+      reward relative to a plain success.
+    hardness: flavour
+  temporal:
+    span_seasons: 1
+    needs_memory_of: >-
+      whether the opponent has already declared an attack this round (for the eligibility gate), and any
+      lasting difficulty penalty an earlier overwhelming/partial result imposed on 'the next operation.'
+    needs_deadline: 'no'
+  who_acts:
+  - the practitioner
+  - >-
+    the opponent (their own declared action determines the practitioner's eligibility)
+  - >-
+    GM/system (delivers the preparatory diagnosis, resolves the roll and the per-hit save)
+  knowledge:
+  - >-
+    the opponent's own action choice for the round must be resolved/knowable before the eligibility gate
+    is checked
+  - >-
+    the preparatory step reveals hidden information about the target to the acting character
+  ends_when: >-
+    a roll resolves it (the triggering roll), though several outcome branches leave persistent effects
+    (a condition, a dice penalty, a future difficulty modifier) that outlive the roll itself.
+- id: SCN-02
+  name: A resource-costly action's full consequence chain
+  one_line: >-
+    One action category has four distinct sub-types sharing a single currency, unconditional side effects
+    on every use, and a window-level aggregate check that sums every sub-action's own difficulty.
+  scale: person
+  season_requires:
+  - need: >-
+      The engine must support several distinct sub-actions within one action category, each with an independent
+      roll but a SHARED currency that all of them modify, positively and negatively, on their own outcome
+      tables.
+    why: >-
+      If the sub-actions didn't share one currency, the described trade-offs between different approaches
+      to the same problem would not exist.
+    hardness: core
+  - need: >-
+      At least one sub-action's outcome table must impose a duration-based recurring penalty to the shared
+      currency going forward (starting a fixed number of seasons later) that keeps applying without further
+      rolls.
+    why: >-
+      Without an ongoing, self-triggering drain, a 'forced' resolution couldn't have the described lasting
+      structural cost distinct from its immediate one.
+    hardness: core
+  - need: >-
+      The shared currency crossing two different low thresholds on a single failed sub-action must be
+      able to spawn two qualitatively different persistent hazard states, a lesser one below the first
+      threshold and a more severe one (triggering a separate case-chain) below the second, lower threshold.
+    why: >-
+      A single fixed 'failure spawns a hazard' rule can't express the described severity gradient tied
+      to how low the currency already was.
+    hardness: core
+  - need: >-
+      Every use of this action category, regardless of sub-type or outcome, must trigger a separate, unconditional
+      set of consequences that fire every time — and those consequences must differ in KIND depending
+      on a different axis/scale property of the action (no effect at one value of that property, a full
+      extra roll at another).
+    why: >-
+      Losing the always-fires layer removes a consequence axis the scenario treats as independent of roll
+      outcome entirely.
+    hardness: important
+  - need: >-
+      At least one of the unconditional per-use consequences must be explicitly RANDOM and UNTRACEABLE,
+      producing an effect the system does not record as attributable back to the triggering action.
+    why: >-
+      The scenario is explicit that this consequence 'cannot be predicted or traced' — losing that untraceability
+      changes it into an ordinary tracked effect.
+    hardness: important
+  - need: >-
+      A single aggregate roll must fire once per multi-action contact WINDOW rather than once per sub-action,
+      with its difficulty equal to the sum of every individual sub-action's own difficulty performed inside
+      that window.
+    why: >-
+      Without a window-scoped, summed-difficulty check, using many small actions in one window would carry
+      no cumulative risk distinct from using one big one.
+    hardness: core
+  - need: >-
+      Failing that aggregate window-level roll must reduce a DIFFERENT persistent per-character resource
+      (distinct from the shared currency), feeding that resource's own separate degradation case.
+    why: >-
+      If the window-level check only touched the same currency as the sub-actions, it would be redundant
+      rather than a genuinely separate cost.
+    hardness: important
+  temporal:
+    span_seasons: 1
+    needs_memory_of: >-
+      the running sum of every individual sub-action's difficulty incurred so far in the current contact
+      window (for the aggregate roll), and any duration-based drift flags a prior sub-action outcome set
+      going forward.
+    needs_deadline: >-
+      no fixed deadline, though a drift effect set by one outcome branch is itself season-scoped and ongoing
+  who_acts:
+  - the acting character (chooses sub-action and target)
+  - >-
+    GM/system (resolves the always-fire side effects, including the untraceable random one, and the aggregate
+    window check)
+  knowledge:
+  - >-
+    not primarily epistemic; the system must know the shared currency's current value at roll time to
+    know which threshold(s) a failure crosses
+  ends_when: >-
+    a roll resolves each individual sub-action; the aggregate window-level check is also resolved by a
+    roll, but its trigger condition (the summed difficulty) is a threshold comparison nobody decides.
+- id: SCN-03
+  name: The combat wound chain
+  one_line: >-
+    Damage is tracked by two parallel mechanisms at once (a depleting pool and a milestone counter), and
+    crossing the milestone forces incapacitation, recovery choices, and can sever an unrelated in-progress
+    action.
+  scale: person
+  season_requires:
+  - need: >-
+      Damage must be trackable via discrete milestone crossings of an accumulating value, in addition
+      to (not instead of) a simple depleting pool — two independent tracking mechanisms must run off the
+      same damage number simultaneously, with the milestone counter's effects independent of whether the
+      pool has reset.
+    why: >-
+      Collapsing to a single pool loses the described property that the pool resetting (e.g. via a quick
+      rest) does not undo accumulated wound-count effects.
+    hardness: core
+  - need: >-
+      A single hit's damage must be cappable in how many milestone-crossings it can cause in one hit,
+      discarding excess beyond that cap rather than letting one hit jump multiple states at once.
+    why: >-
+      Without a per-hit cap, one large hit could skip straight to incapacitation regardless of the character's
+      toughness, which the source explicitly forbids.
+    hardness: important
+  - need: >-
+      The milestone counter must impose an escalating, CUMULATIVE action-effectiveness penalty per crossing,
+      not a flat one-time penalty.
+    why: >-
+      A flat penalty would make the fifth wound as survivable as the first, contradicting the described
+      cumulative drain.
+    hardness: important
+  - need: >-
+      The wound-count value at which a character becomes incapacitated must vary by a stat/attribute the
+      character possesses, not be one global number.
+    why: >-
+      A single global incapacitation threshold erases the described differentiation between tougher and
+      frailer characters.
+    hardness: important
+  - need: >-
+      Reaching incapacitation must be able to immediately and forcibly terminate an unrelated in-progress
+      channeled-action state belonging to a DIFFERENT case, cross-referencing that case's own failure
+      resolution.
+    why: >-
+      Without this cross-case interrupt, a practitioner mid-channel could be incapacitated in body while
+      somehow still completing a Thread operation, which the source rules out.
+    hardness: core
+  - need: >-
+      At least two distinct recovery actions must exist with different time costs and different degrees
+      of restoration (a fast partial recovery vs. a slow full recovery), both available as player choices.
+    why: >-
+      A single uniform recovery option removes the described trade-off between recovering quickly and
+      recovering fully.
+    hardness: important
+  - need: >-
+      A second, independent resource must deplete per qualifying action taken (not passively per round)
+      and, on reaching zero, force a specific restricted mode on its owner while granting the opponent
+      a bonus, recoverable either by a dedicated recovery action or by the forced zero-state itself resetting
+      it.
+    why: >-
+      Without a second action-gated resource, sustained aggressive action would carry no separate fatigue
+      cost distinct from taking damage.
+    hardness: important
+  temporal:
+    span_seasons: n/a
+    needs_memory_of: >-
+      the current wound count, and which recovery state (none / quick-rested / full-rested) the character
+      currently occupies.
+    needs_deadline: 'no'
+  who_acts:
+  - the attacker (deals damage)
+  - the defender (accumulates wounds, chooses a recovery option)
+  - GM/system (resolves incapacitation and any forced state changes)
+  knowledge:
+  - not primarily epistemic
+  ends_when: >-
+    threshold-fires — the milestone crossings and the incapacitation check are pure counter comparisons
+    that nobody decides.
+- id: SCN-04
+  name: A social conflict escalates into a faction-level consequence
+  one_line: >-
+    A multi-exchange contested social action, gated by a relationship value, automatically echoes into
+    faction-scale state on every roll regardless of the participants' intent.
+  scale: faction
+  season_requires:
+  - need: >-
+      A roll made only in the first exchange of a social scene must be able to grant a persisting bonus
+      that carries forward into later exchanges of the same scene, with the bonus's size/duration set
+      by that first roll's own outcome degree.
+    why: >-
+      Without carry-forward, an early information-gathering action would have no mechanical payoff beyond
+      its own moment.
+    hardness: important
+  - need: >-
+      A single-roll persuasion attempt's difficulty must be dynamically derived from a stored relationship-disposition
+      value between the acting character and their target, rather than a fixed number.
+    why: >-
+      A static difficulty would erase the described gradient from an easy ask of a friendly target to
+      a near-impossible ask of a hostile one.
+    hardness: core
+  - need: >-
+      A multi-exchange contested social action must have its total exchange count set in advance by a
+      chosen stakes tier, determined before the first exchange resolves.
+    why: >-
+      Without a pre-committed exchange count, the scene couldn't distinguish a quick disagreement from
+      a formal, drawn-out confrontation.
+    hardness: important
+  - need: >-
+      Losing an exchange must accrue a stress resource at two different rates depending on the margin
+      of the loss, not a flat per-loss cost.
+    why: >-
+      A flat cost per loss would erase the described extra punishment for being decisively beaten in a
+      single exchange.
+    hardness: important
+  - need: >-
+      A specific sub-action available within the contested exchange must be able to damage a SEPARATE
+      persistent resource belonging to the opposing character specifically when that opponent's own margin
+      that exchange is non-positive, with that resource's depletion feeding a different case's own resolution
+      chain.
+    why: >-
+      Without this cross-resource damage, the named 'attack' sub-action would be mechanically identical
+      to an ordinary exchange, losing its distinct target and consequence.
+    hardness: core
+  - need: >-
+      The stress resource reaching zero must impose a recurring, stacking penalty to further rolls of
+      the same category, while also offering the affected character a voluntary action that clears all
+      such penalties at the cost of converting the scene to a different, more personal scene-type that
+      cannot resume the contested exchange.
+    why: >-
+      Without the escape valve, a character who hits zero stress would have no way to end their own mounting
+      penalty short of the scene simply ending.
+    hardness: core
+  - need: >-
+      An extreme, one-sided total-loss outcome for the whole contested exchange must impose a season-long
+      difficulty penalty specifically scoped to future social interactions against the SAME opposing faction,
+      not a general penalty.
+    why: >-
+      A general penalty instead of a faction-scoped one would misrepresent a personal humiliation as damaging
+      the character's standing with everyone.
+    hardness: important
+  - need: >-
+      Any personal-scale roll made in a social scene must be able to automatically also apply a change
+      to a faction-scale resource, sized by reading a stat belonging to the target faction, with the total
+      of such automatic changes to any one faction's stat capped over a season regardless of how many
+      personal-scale rolls trigger it.
+    why: >-
+      Without the automatic echo and its seasonal cap, either faction-scale state would never move from
+      personal play, or a single busy season of dialogue could swing a faction stat without limit.
+    hardness: core
+  temporal:
+    span_seasons: n/a
+    needs_memory_of: >-
+      the relationship-disposition value per character-pair; the running total of this season's automatic
+      changes to each faction's stat, for the seasonal cap.
+    needs_deadline: 'no'
+  who_acts:
+  - the acting character
+  - the target/opponent character
+  - >-
+    GM/system (triggers the automatic faction-scale echo and administers the disposition and faction-stat
+    values)
+  knowledge:
+  - >-
+    what the acting character learns about the target's emotional state is genuinely gated by the outcome
+    of the optional first-round information roll
+  ends_when: >-
+    mixed — a roll resolves the persuasion/appeal action and each exchange; a threshold-fires when accumulated
+    stress hits zero; a person chooses when a character opts to unmask; the automatic faction-scale echo
+    is threshold-fires with nobody deciding.
+- id: SCN-05
+  name: A character's convictions convert into a spendable resource
+  one_line: >-
+    A fixed-count personal-conviction resource earns advancement currency at different rates, can convert
+    into a spendable pre-roll resource, and can be destroyed by a cross-referenced social attack.
+  scale: person
+  season_requires:
+  - need: >-
+      A character must be able to hold a small fixed COUNT of one resource type at a time, where different
+      ways of engaging an individual instance grant differing amounts of a shared advancement currency,
+      with the largest amount specifically reserved for the instance's own content being shown to have
+      genuinely changed as a result of events, not merely engaged with unchanged.
+    why: >-
+      Without a graded reward, revising a conviction in response to play would carry no more mechanical
+      weight than simply acting on it once, losing the incentive the scenario relies on.
+    hardness: core
+  - need: >-
+      Two instances of that resource, held by different characters, must be able to enter a mutually-exclusive
+      'in tension' relationship such that neither character can earn the advancement currency for their
+      instance until a dedicated scene forces one of the two to choose.
+    why: >-
+      Without an enforced tension state, two characters' conflicting convictions could both be freely
+      pursued for reward simultaneously with no dramatic cost.
+    hardness: important
+  - need: >-
+      Completing an instance of the resource must be able to convert it into a mechanically different,
+      spendable resource at a reduced starting value, where the conversion itself, not an additional currency
+      payout, is the reward.
+    why: >-
+      Without a distinct conversion mechanic, completion would be indistinguishable from any other engagement
+      that simply grants currency.
+    hardness: important
+  - need: >-
+      The converted spendable resource must be usable to buy automatic successes on a die roll before
+      that roll is made, at a fixed one-unit-to-one-success rate, as a resource type distinct from ordinary
+      dice pools.
+    why: >-
+      Without pre-roll spendable successes, the converted resource would have no mechanical use once created.
+    hardness: core
+  - need: >-
+      A specific sub-action belonging to a DIFFERENT case (a contested social exchange) must be able to
+      drain the spendable resource by a fixed amount whenever the opposing character's own margin in that
+      exchange is non-positive, and the resource reaching zero must trigger an immediate, unconditional
+      consequence (destruction of its parent asset) even mid-scene.
+    why: >-
+      Without this cross-case drain, the social 'attack' sub-action described in the other scenario would
+      have nothing of this kind to target.
+    hardness: core
+  - need: >-
+      Losing the parent asset (the resource hitting zero) must trigger a distinct follow-up resolution
+      whose success creates a new instance of the spendable resource at a value derived from the old one
+      minus a fixed amount, thematically continuous with what was lost, while failure destroys the possibility
+      of a replacement for that slot entirely.
+    why: >-
+      Without a follow-up recovery attempt, losing the resource would be an unconditional, un-mitigatable
+      loss with no player agency in the aftermath.
+    hardness: important
+  - need: >-
+      A SEPARATE numeric resource, bounded to a small fixed range, must accumulate from at least two distinct
+      trigger conditions, be spendable on the same pre-roll basis as the converted resource, and reset
+      unconditionally to its floor at a SESSION boundary rather than a season boundary or any in-fiction
+      event.
+    why: >-
+      A season-scoped or narratively-triggered reset instead of a session-scoped one would misrepresent
+      this resource's explicitly out-of-fiction, meta nature.
+    hardness: important
+  - need: >-
+      The primary advancement currency must be spendable to increase a character's stat at a cost that
+      scales with the stat's own current value, with at least one such purchase capped by a DIFFERENT
+      stat's current value acting as a ceiling.
+    why: >-
+      A flat purchase cost, or no cross-stat ceiling, would erase the described diminishing-returns and
+      cross-stat-gated advancement curve.
+    hardness: important
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: >-
+      the three currently-held resource instances and their state (pursued/challenged/revised/in-tension/completed);
+      the spendable resource's current value; the session-scoped resource's value.
+    needs_deadline: no fixed deadline is named
+  who_acts:
+  - >-
+    the character (chooses which instance to pursue, whether to convert, whether to purchase stat increases)
+  - >-
+    GM (adjudicates whether pursuit/challenge/revision occurred, and runs the tension-forcing and follow-up
+    loss scenes)
+  - >-
+    the opposing character in the cross-referenced debate (their margin determines the drain)
+  knowledge:
+  - not primarily epistemic
+  ends_when: >-
+    mixed — a person chooses to convert or purchase; a roll resolves the follow-up scene after loss; the
+    session-scoped resource's reset is threshold-fires with nobody deciding.
+- id: SCN-06
+  name: A hazard-event forms and drains the world
+  one_line: >-
+    Multiple unrelated failure conditions converge on spawning the same hazard type, whose severity reads
+    off a shared currency's value at the moment of spawning and which then drains that currency automatically
+    every season it goes unresolved.
+  scale: realm
+  season_requires:
+  - need: >-
+      At least four different failure conditions belonging to OTHER, unrelated action-resolution chains
+      must all be able to converge on spawning the same category of persistent hazard-event, i.e. the
+      hazard-spawning logic cannot be owned by only one of those chains.
+    why: >-
+      If only one action's failure could spawn this hazard, the described convergence from several unrelated
+      action types onto one shared hazard state could not happen.
+    hardness: core
+  - need: >-
+      The severity tier of a newly-spawned hazard must be determined by reading a shared currency's CURRENT
+      value at the exact moment of spawning, across at least four severity bands, where the top band spawns
+      the hazard simultaneously across multiple adjacent locations rather than the one location of origin.
+    why: >-
+      A fixed severity independent of the currency's value would erase the described worst-case where
+      a single failure can seed an entire region at once.
+    hardness: core
+  - need: >-
+      A lesser precursor stage of the hazard must be resolvable away via a dedicated action, gated by
+      a minimum resource-level requirement on the acting character, before it is allowed to escalate into
+      the full hazard.
+    why: >-
+      Without a precursor stage and its own closing window, every hazard-triggering failure would jump
+      straight to the full, harder-to-resolve state.
+    hardness: important
+  - need: >-
+      An unresolved instance of the full hazard must impose an automatic, unconditional recurring cost
+      on the shared currency every season it remains unresolved, with no actor choosing this.
+    why: >-
+      Without automatic ongoing drain, leaving a hazard unresolved would carry no escalating cost, removing
+      the pressure to address it.
+    hardness: core
+  - need: >-
+      The difficulty of the dedicated resolution action against a given hazard instance must increase
+      in discrete steps tied to how many consecutive seasons that specific instance has remained unresolved,
+      distinct from the hazard's original severity tier.
+    why: >-
+      Without escalating difficulty over time, an old, neglected hazard would be no harder to fix than
+      a freshly-formed one.
+    hardness: important
+  - need: >-
+      The resolution action's own outcome table must have BOTH of its two success-tier branches still
+      cost the shared currency in some form, such that a 'successful' resolution is not guaranteed to
+      be a net positive for every tracked resource.
+    why: >-
+      Without a cost attached even to success, resolving a hazard would be a pure win with no trade-off,
+      contradicting the described net loss on the lesser success branch.
+    hardness: important
+  - need: >-
+      One specific success-tier branch of the resolution action must impose a localized, season-long increased
+      difficulty on future attempts to spawn or resolve the same hazard type in the same location.
+    why: >-
+      Without this aftereffect, an overwhelming resolution would leave no trace distinguishing it from
+      an ordinary success.
+    hardness: flavour
+  - need: >-
+      A hazard instance's mere existence must feed a SEPARATE public-facing metric, but only conditionally
+      — gated on whether the shared currency is currently below a named threshold at the time, not unconditionally
+      on the hazard's existence alone.
+    why: >-
+      An unconditional feed would make the hazard always visible to the same degree regardless of the
+      wider world's state, losing the described context-dependent framing.
+    hardness: important
+  - need: >-
+      The system must be able to sum multiple independent per-season drain sources on the same shared
+      currency into one combined seasonal total, and compare that total against the best available restoration
+      action's typical output, as a first-class computable relationship, to determine whether the currency
+      is on a terminal, unrecoverable trajectory.
+    why: >-
+      Without a computable combined-drain-vs-restoration comparison, 'this cannot be recovered from at
+      this rate' would be an unverifiable narrative claim rather than a checkable game state.
+    hardness: core
+  temporal:
+    span_seasons: ongoing until resolved
+    needs_memory_of: >-
+      which hazard instances exist, their severity tier, how many consecutive unresolved seasons each
+      has accrued, and the shared currency's value at each accounting step.
+    needs_deadline: >-
+      no fixed date, but functionally yes — unresolved instances get objectively harder to fix the longer
+      they persist
+  who_acts:
+  - >-
+    the practitioner/group attempting resolution (chooses whether and how to attempt it)
+  - nobody decides the spawning or the per-season drain — both automatic
+  knowledge:
+  - >-
+    not primarily epistemic; whether outside observers 'read' the hazard a particular way is gated on
+    the shared currency's threshold state, a form of externally-visible framing rather than hidden information
+    changing hands
+  ends_when: >-
+    mixed — a roll resolves an individual hazard instance's resolution attempt, but its escalation and
+    per-season drain are threshold-fires with nobody deciding.
+- id: SCN-07
+  name: An individual practitioner's stability degrades in bands
+  one_line: >-
+    A personal resource with no passive recovery degrades from several sources into ordered bands with
+    qualitatively different penalties, terminating at a bottom band that converts the character away from
+    player control if unresolved.
+  scale: person
+  season_requires:
+  - need: >-
+      A per-character resource must start at a fixed ceiling and be reducible from at least three independently-triggered
+      sources: the failure branch of an unrelated roll, an automatic penalty attached to one specific
+      action type regardless of outcome, and a difficulty increase on a DIFFERENT future roll that itself
+      raises that future roll's own chance of causing further reduction.
+    why: >-
+      Without the third source, the described feedback loop where degrading the resource makes further
+      degradation more likely could not exist.
+    hardness: core
+  - need: >-
+      The resource must have NO passive or automatic recovery of any kind — every increase must trace
+      to a deliberate, named action taken by a character.
+    why: >-
+      Passive recovery would undercut the described irreversibility that drives the rest of the chain's
+      tension.
+    hardness: core
+  - need: >-
+      The resource's current value must be divisible into at least five ordered bands where the mechanical
+      consequences differ in KIND between bands, including at least one band whose penalty is expressed
+      as an accruing stress cost to a DIFFERENT character's relationship-resource on a fixed time interval.
+    why: >-
+      Uniform scaling instead of kind-differentiated bands would erase the described qualitative shifts
+      (narrative flicker vs. dissociation vs. belief co-authorship) between bands.
+    hardness: core
+  - need: >-
+      At least two of the lowest bands must each trigger a ONE-TIME random-outcome check specifically
+      on the transition INTO that band, distinct from that band's ongoing penalties.
+    why: >-
+      Without a one-time transition check, entering and remaining in a band would be mechanically identical
+      to merely passing through it.
+    hardness: important
+  - need: >-
+      The lowest defined value (0) must be a distinct terminal state requiring deliberate narrative resolution
+      by the acting player, with an explicit default consequence (the character's ownership status changing)
+      if unresolved by a fixed cutoff (the end of the current season).
+    why: >-
+      Without a hard default consequence, hitting the floor would have no forcing function and could be
+      left unresolved indefinitely.
+    hardness: core
+  - need: >-
+      Recovery must be restricted to exactly two paths: full abstention from the specific triggering action-type
+      across an entire season, and a paired two-character scene gated behind its own roll, which itself
+      costs a resource belonging to the SECOND character.
+    why: >-
+      If helping someone recover cost the helper nothing, the described relational stake in another character's
+      degradation would be missing.
+    hardness: important
+  - need: >-
+      The resource must be hard-capped at its starting ceiling and categorically unpurchasable by the
+      general advancement currency that buys other character improvements.
+    why: >-
+      If the resource could be bought up like a stat, its described status as an unrecoverable-by-normal-means
+      resource would be false.
+    hardness: important
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: >-
+      the resource's current value; which band the character currently occupies, to detect a new transition
+      into a band vs. remaining in one; whether the current season has had zero uses of the triggering
+      action type.
+    needs_deadline: >-
+      yes — the bottom-band default consequence fires specifically at season end if unresolved
+  who_acts:
+  - >-
+    the practitioner (chooses whether to use the triggering action, whether to attempt narrative resolution
+    at the bottom band, whether to abstain for recovery)
+  - >-
+    a bonded second character (chooses to spend the paired recovery scene, at their own cost)
+  - >-
+    GM/system (fires the automatic degradation sources and the band-transition checks)
+  knowledge:
+  - >-
+    not primarily epistemic; other characters may perceive the degrading character differently as bands
+    worsen, but this is not gated on hidden information changing hands
+  ends_when: >-
+    UNCLEAR — the resource itself has no terminal 'ends' as such; each individual descent to the bottom
+    band ends either by a person choosing a narrative resolution, or absent one, by a threshold-fires
+    default (ownership-status conversion) at season end.
+- id: SCN-08
+  name: Three world clocks cross-feed each other
+  one_line: >-
+    Three parallel numeric clocks each rate-modify one another across tiered thresholds, compound when
+    several are past threshold at once, and trigger a named campaign phase when all three pass their midpoints
+    together.
+  scale: realm
+  season_requires:
+  - need: >-
+      At least three independent numeric clocks must run in parallel, each with a distinct starting value
+      and valid range/direction, with one clock's threshold-crossing changing ANOTHER clock's per-season
+      accrual RATE going forward, not merely triggering a one-time effect.
+    why: >-
+      A one-time-only cross-clock effect instead of a rate change would erase the described compounding
+      acceleration once a threshold is crossed.
+    hardness: core
+  - need: >-
+      A single clock must have at least two ordered threshold levels, where crossing the second (more
+      extreme) threshold REPLACES the rate-effect from the first threshold rather than stacking additively
+      with it.
+    why: >-
+      Additive stacking instead of replacement would produce a different, faster-runaway numeric outcome
+      than the source's explicit 'total, replaces the +1' rule.
+    hardness: important
+  - need: >-
+      A clock crossing a threshold must introduce an ongoing per-season CHANCE of spawning a hazard instance
+      belonging to an entirely different case-chain, at a location selected by querying which specific
+      location currently holds the WORST value of a third, otherwise-unrelated tracked per-location stat.
+    why: >-
+      Without cross-referencing the worst-off location on an unrelated stat, hazard placement would have
+      to be random or fixed rather than targeting the world's weakest point as described.
+    hardness: core
+  - need: >-
+      When two specific clocks are BOTH simultaneously past their own named thresholds at once, the system
+      must support a distinct COMPOUND effect (both accelerating to a maximum rate) that is not simply
+      the sum of their two individual threshold effects.
+    why: >-
+      A merely additive combination instead of an explicit compound-to-maximum rule would understate the
+      described 'fast path to dual campaign events.'
+    hardness: important
+  - need: >-
+      When ALL of a fixed set of clocks are simultaneously past a shared reference point (their midpoints)
+      at once, this combined condition must trigger a discrete, named CAMPAIGN-WIDE PHASE CHANGE distinct
+      from any single clock's own threshold effects.
+    why: >-
+      Without a distinct combined-condition trigger, there would be no way to represent the endgame phase
+      as something more than 'all three clocks happen to be high.'
+    hardness: core
+  - need: >-
+      Each clock must independently support at least three ordered bands that each activate or deactivate
+      an entirely different RULE-SET while active, not a single numeric penalty scaling smoothly.
+    why: >-
+      Smooth scaling instead of qualitatively different rule-sets per band would erase the described mix
+      of pure random-hazard risk, flat difficulty tax, and new recurring institutional checks appearing
+      at different bands.
+    hardness: core
+  - need: >-
+      Multiple distinct, named institutions must each hold their OWN bespoke recurring action whose mechanical
+      effect is to move one or more of the shared clocks, i.e. the clocks must be modifiable from many
+      different actor-specific action definitions, not just from automatic threshold-driven sources.
+    why: >-
+      Without actor-specific clock-moving actions, players/factions would have no deliberate lever on
+      the clocks at all, only passive automatic drift.
+    hardness: important
+  - need: >-
+      At least one faction-specific clock-moving action must be SELF-UNDERMINING: its own use moves a
+      shared clock in the faction's favor, while a SEPARATE tracked value belonging to that same faction,
+      on crossing its own threshold at its zero/minimum, strips the faction's access to that very action
+      going forward.
+    why: >-
+      Without this self-undermining property, the described irony of a faction losing access to its own
+      best lever exactly when needed could not be represented.
+    hardness: important
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: >-
+      the current value of all three clocks; the current band/threshold state per clock, to detect transitions;
+      per-faction tracked values gating faction-specific actions.
+    needs_deadline: no fixed date
+  who_acts:
+  - >-
+    named factions/institutions (each choosing whether to use their own clock-moving action each season)
+  - >-
+    nobody decides the automatic threshold-crossing rate changes and random hazard rolls
+  knowledge:
+  - not primarily epistemic
+  ends_when: >-
+    threshold-fires — all the clock-rate changes and the endgame-phase trigger are pure comparisons nobody
+    decides, though individual faction actions that move the clocks are person-chooses.
+- id: SCN-09
+  name: The terminal decline of the world-health currency
+  one_line: >-
+    Once the shared currency enters its lowest band, several automatic drains stack faster than the best
+    restoration action can offset, and escaping requires four structural conditions to hold at once —
+    one of which is internally in tension with the drains that got the currency here.
+  scale: realm
+  season_requires:
+  - need: >-
+      A shared currency's lowest band must activate SEVERAL simultaneous, independently-summed automatic
+      per-season drains (at minimum: a per-hazard-instance drain, a per-locked-instance drain, a flat
+      passive drain, and a chance-based new-hazard-spawn check), all computed together at the same seasonal
+      accounting step.
+    why: >-
+      Summing only one drain source instead of several would understate the described 'combined −6 to
+      −10+/season' compounding decline.
+    hardness: core
+  - need: >-
+      A SEPARATE per-season institutional check, independent of the currency's own drains, must run in
+      the same band, with an ordinary failure reducing an institutional resource and — specifically once
+      that resource reaches its own floor — a distinct, more severe failure consequence (a structural
+      split of the institution).
+    why: >-
+      Without a second, escalating failure tier at the institutional resource's floor, faction fracture
+      would have no distinct trigger from ordinary Mandate loss.
+    hardness: important
+  - need: >-
+      The single restorative action's own success probability at this band's difficulty must be representable
+      as an explicit RANGE varying with pool size, and the system must be able to state/compute that even
+      the best-case typical seasonal outcome with active restoration is still net-negative for the currency.
+    why: >-
+      Without a computable net-negative comparison, the described hopelessness of the terminal band would
+      be unverifiable narrative color rather than a checkable game fact.
+    hardness: important
+  - need: >-
+      Exiting this band's terminal spiral must require satisfying MULTIPLE (here: four) named structural
+      conditions simultaneously — the system must support AND-gating a scenario resolution behind a checklist
+      of conditions belonging to different subsystems, not any single roll or threshold.
+    why: >-
+      A single-roll or single-threshold exit instead of an AND-gated checklist would trivialize what the
+      source frames as a structural, multi-part escape.
+    hardness: core
+  - need: >-
+      One of those structural exit conditions must itself be a COMPOUND action: multiple separate actors
+      pooling their individual capability into one shared attempt, with an explicit rule for what happens
+      when two contributing actors hold conflicting internal states (either refusing to combine, or requiring
+      an extra pre-check roll before combination).
+    why: >-
+      Without the conflict-resolution rule, the required cooperative mending attempt could not represent
+      characters whose own beliefs actively clash while trying to cooperate.
+    hardness: core
+  - need: >-
+      A restorative action's WORST outcome branch must apply a large fixed penalty to the shared currency
+      that, when the currency is already at its floor, is explicitly capable of driving the currency past
+      its own floor into a DISTINCT, separately-defined terminal state rather than clamping at the floor.
+    why: >-
+      Clamping at the floor instead of overshooting into a terminal state would remove the described possibility
+      of a failed last-ditch attempt itself causing the ending.
+    hardness: core
+  - need: >-
+      That terminal state must be representable as categorically different from an ordinary win/loss for
+      any single actor or faction — an ending that is neither a faction victory nor a faction defeat,
+      but a transformation of the shared setting/state itself.
+    why: >-
+      Forcing the terminal state into a normal win/loss frame would misrepresent the source's explicit
+      'no faction wins... the world does not end, it becomes unintelligible.'
+    hardness: important
+  temporal:
+    span_seasons: ongoing, potentially ending the campaign
+    needs_memory_of: >-
+      all active hazard/lock instances feeding the drains; the current institutional resource value; the
+      current currency value, to know if at floor.
+    needs_deadline: no fixed date, though the compounding drains make time itself an adversary
+  who_acts:
+  - cooperating practitioners (choose to attempt the compound restorative action)
+  - an institution's own automatic seasonal check (nobody decides)
+  - nobody decides the summed automatic drains
+  knowledge:
+  - not primarily epistemic
+  ends_when: >-
+    mixed — the four structural exit conditions being met is a combination of person-chooses (attempting
+    the compound action) and a roll resolving it; failing to exit ends in the currency crossing its floor
+    via a failed restorative attempt, which is a roll whose framing is a threshold-fires outcome (the
+    resulting terminal state, not the roll itself, is what nobody decides).
+- id: SCN-10
+  name: An entity whose existence is itself a sustained action
+  one_line: >-
+    An NPC-type whose perceptibility varies continuously by observer stat, who pays a different resource
+    for wounds than ordinary characters, and whose destabilization runs a fixed escalating countdown with
+    its own hazard side effect.
+  scale: person
+  season_requires:
+  - need: >-
+      An NPC-type entity's perceptibility must vary continuously across at least five distinct bands depending
+      on the OBSERVING character's own stat value, not a single global visibility flag — the same entity
+      must be renderable as 'nothing' to one observer and 'fully detailed' to another, simultaneously,
+      in the same scene.
+    why: >-
+      A single shared visibility state instead of per-observer perception would erase the described gradient
+      where a low-stat bystander and a high-stat practitioner experience the same entity completely differently.
+    hardness: core
+  - need: >-
+      This entity type must be able to perform an enhanced version of its base passive effect at a PER-SCENE
+      recurring cost to one of its own resources, distinct from any action-based cost.
+    why: >-
+      Without a scene-scoped ongoing cost, the entity's 'work' of sustaining an enhanced presence would
+      be free.
+    hardness: important
+  - need: >-
+      This entity type must be able to perform the same outward-facing action category as ordinary characters
+      while being EXEMPT from a prerequisite step ordinary characters must pass through first, because
+      it structurally already satisfies the state that step exists to establish.
+    why: >-
+      Requiring the normal prerequisite would contradict the entity's described always-already-actualized
+      nature.
+    hardness: important
+  - need: >-
+      Taking a wound must cost this entity type a DIFFERENT resource entirely (additional required ongoing
+      effort) rather than the standard dice-pool penalty every other character type takes — the wound-cost
+      resolution path itself must be swappable per character-type.
+    why: >-
+      A single universal wound-consequence would be unable to represent this entity's wounds as a drain
+      on its ongoing sustaining effort rather than on combat effectiveness.
+    hardness: core
+  - need: >-
+      A single terminal-sequence trigger must fire from EITHER of two independent conditions (a resource
+      reaching its cap, OR a separate counter reaching a threshold derived from dividing a different stat
+      by two) — an OR-gate between two conditions of entirely different shape.
+    why: >-
+      An AND-gate, or only one trigger path, would misrepresent the described 'either of these independently'
+      rule.
+    hardness: core
+  - need: >-
+      Once triggered, the terminal sequence must run as a fixed multi-round countdown where each round
+      applies a qualitatively different, escalating effect, and each round must independently offer its
+      own stabilization roll that can arrest the countdown at that round.
+    why: >-
+      A single all-at-once terminal roll instead of a multi-round countdown with independent stabilization
+      attempts would remove the described tension of a slow, resistible unraveling.
+    hardness: core
+  - need: >-
+      The countdown's final round must produce an UNCONDITIONAL terminal outcome with no stabilization
+      roll offered, that ALSO spawns, as a side effect, the SAME hazard-event type used by an entirely
+      different scenario chain.
+    why: >-
+      Without the cross-case hazard spawn, the entity's final unraveling would be isolated from the rest
+      of the world's hazard economy, contradicting the described consequence.
+    hardness: important
+  - need: >-
+      A specific targeted hostile action-subtype, when targeting this entity-type specifically, must bypass
+      its normal roll-based outcome table entirely and auto-produce the worst-case consequence unconditionally,
+      because the target structurally lacks a property that action's normal resolution depends on.
+    why: >-
+      Without the auto-produced bypass, this entity would be treated identically to an ordinary target
+      for that action, contradicting its described lack of an accumulated past.
+    hardness: important
+  - need: >-
+      The entity's controlling actor must be able to voluntarily choose to end the entity's existence
+      through a distinct action that SKIPS the difficulty penalties the involuntary terminal sequence
+      normally imposes.
+    why: >-
+      Without a cheaper deliberate-ending path, there would be no mechanical difference between choosing
+      to end the entity and being forced to, contradicting the described 'Choice.'
+    hardness: important
+  temporal:
+    span_seasons: >-
+      n/a within a scene for the countdown; the entity's overall existence spans indefinite seasons
+    needs_memory_of: >-
+      the entity's current resource value and wound count, for the OR-gated trigger; which round of the
+      countdown is active, if triggered.
+    needs_deadline: >-
+      yes, once triggered — the countdown resolves within 3 rounds regardless of intervention
+  who_acts:
+  - >-
+    the entity itself (chooses to render beyond-ceiling, to act outward, to attempt stabilization each
+    round, or to voluntarily end itself)
+  - >-
+    an opposing character (chooses the targeted hostile action that bypasses the roll)
+  - observers (their own stat determines what they perceive, not a choice)
+  knowledge:
+  - >-
+    perceptibility is fundamentally epistemic — different observers hold different true perceptions of
+    the same entity simultaneously, gated purely by the observer's own stat, with no single ground truth
+    visible to all
+  ends_when: >-
+    mixed — a person chooses (voluntary cessation) for one path; a roll resolves it if a stabilization
+    attempt in rounds 1-2 succeeds; a threshold-fires (no roll offered) for the unconditional round-3
+    terminus.
+- id: SCN-11
+  name: An external pressure clock accrues from many sources toward invasion
+  one_line: >-
+    One clock fed by at least five independent trigger sources escalates through named bands with distinct
+    one-time and ongoing effects, cappable only via three structurally different decrease paths.
+  scale: realm
+  season_requires:
+  - need: >-
+      A single clock must accrue from at least five independent, structurally different trigger sources
+      simultaneously in the same season: a per-observed-event trigger, a fixed jump tied to a DIFFERENT
+      case's own delay condition exceeding a count, and multiple separate cross-clock feeds keyed to two
+      other clocks' own threshold states.
+    why: >-
+      Fewer independent sources would understate the described convergence of unrelated systems all pushing
+      the same clock at once.
+    hardness: core
+  - need: >-
+      Crossing INTO a specific band of the clock must fire a ONE-TIME, uniquely-named demand event distinct
+      from that band's ongoing ambient effects, which creates a standing obligation with its own resolution
+      cost feeding back into TWO SEPARATE clocks at once when left unresolved.
+    why: >-
+      Without a distinct one-time entry event, the demand's own escalating feedback into two other clocks
+      would be indistinguishable from the band's regular ambient effects.
+    hardness: important
+  - need: >-
+      A higher band must activate an internal multi-part structure within the opposing side (multiple
+      named internal sub-factions) that can each apply pressure independently against different targets,
+      with a named counter-requirement (unity on the receiving side) needed to resist them as a bloc.
+    why: >-
+      Without the multi-actor pressure and its unity counter-requirement, the described vulnerability
+      of a divided response could not be represented.
+    hardness: important
+  - need: >-
+      A still-higher band must remove an internal MODERATING presence on the opposing side, described
+      as that side's primary internal brake, as an automatic consequence of the clock's own value crossing
+      that band.
+    why: >-
+      Without automatic removal of the internal moderate, the clock's approach to its cap would lack the
+      described acceleration once the last restraint disappears.
+    hardness: important
+  - need: >-
+      The clock's maximum value must trigger an unconditional, irreversible campaign-defining event with
+      no roll or further condition once reached.
+    why: >-
+      A conditional or roll-gated cap event instead of an unconditional one would contradict the described
+      inevitability of reaching the maximum.
+    hardness: core
+  - need: >-
+      At least three structurally different decrease paths must exist for the same clock: one that only
+      pauses its drift for a fixed single-season duration without reducing its value, one that permanently
+      reduces its value at a fixed rate while removing a moderating structure's political cover as a side
+      cost, and one that is a single decisive scene gated behind a compound prerequisite combining a faction-dominance
+      condition, a minimum value on one institutional resource, and a minimum value on the shared world-health
+      currency, all three at once.
+    why: >-
+      A single generic decrease path instead of three structurally distinct ones would erase the described
+      trade-offs between a temporary pause, a costly permanent reduction, and a hard-to-reach decisive
+      resolution.
+    hardness: core
+  - need: >-
+      That compound-prerequisite decisive scene, if won, must both FREEZE the clock's further movement
+      AND unlock access to an entirely separate resolution mechanism not otherwise available.
+    why: >-
+      Without unlocking a distinct resolution mechanism, winning the decisive scene would only pause the
+      clock rather than opening the described peace-treaty path.
+    hardness: important
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: >-
+      the clock's current value and band; whether the one-time demand event has already fired; the delay-count
+      for the cross-referenced succession case.
+    needs_deadline: >-
+      yes for the one-time demand event's own obligation window; the clock's cap is an unconditional endpoint
+      with no fixed date but is reachable
+  who_acts:
+  - the observing opposing agents (trigger the per-event feed)
+  - >-
+    the receiving institution (chooses how to respond to the demand, and whether to pursue a decrease
+    path)
+  - the opposing side's internal sub-factions (choose whether to apply pressure)
+  - >-
+    nobody decides the automatic cross-clock feeds or the band-crossing removal of the moderating presence
+  knowledge:
+  - >-
+    the per-event trigger requires the triggering action to be OBSERVED by the opposing agents specifically
+    — a genuine visibility gate distinct from the action simply occurring
+  ends_when: >-
+    mixed — the clock's cap is threshold-fires and unconditional; the decisive peace-scene path is a roll
+    conditional on the compound prerequisite; the pause and permanent-reduction paths are both person-chooses.
+- id: SCN-12
+  name: A succession crisis branches into distinct resolution paths
+  one_line: >-
+    A single succession decision offers several structurally different resolution paths, one of which
+    trades an immediate outcome for a deferred, unresolved-timing complication, and a coup path cross-referencing
+    a different case's own fracture condition.
+  scale: faction
+  season_requires:
+  - need: >-
+      A single succession decision must present multiple, mutually exclusive named resolution paths (at
+      minimum four: accept an external demand, install one of several named heirs, resolve via a formal
+      contested vote, or a coup), each with its own independent consequence chain rather than a single
+      unified roll.
+    why: >-
+      A single roll instead of several structurally distinct paths would erase the described branching
+      where each path has qualitatively different downstream consequences.
+    hardness: core
+  - need: >-
+      One resolution path must trade an immediate, present-tense benefit for a DEFERRED consequence explicitly
+      recorded as 'seeded' now but whose actual resolution/payoff is left for an unspecified LATER point
+      in the campaign.
+    why: >-
+      Without a genuine deferred-consequence mechanic, 'a future complication seeded' could not be distinguished
+      from an ordinary immediate effect.
+    hardness: core
+  - need: >-
+      The REFUSAL branch of that same choice must impose both an IMMEDIATE unconditional cost and a SEPARATE,
+      CONDITIONAL additional cost that only applies if a different, otherwise-unrelated clock is currently
+      within a specific band at the moment of the choice.
+    why: >-
+      Without the conditional additional cost, refusing would carry the same fixed price regardless of
+      the wider world's state, contradicting the described cross-clock contingency.
+    hardness: important
+  - need: >-
+      At least one contender-path's outcome must be able to retroactively trigger an entirely SEPARATE
+      scenario chain as a direct consequence, plus independently increase a specific evidentiary/credibility-tracking
+      resource, both from the same single triggering event.
+    why: >-
+      Without the dual trigger, a heir's Thread-sensitivity being revealed would only feed one downstream
+      system instead of the described two.
+    hardness: important
+  - need: >-
+      Individual NAMED characters must be able to carry succession-relevant state/flags that this rule
+      chain references but does not itself fully resolve, deferring their resolution to a separate, character-specific
+      record.
+    why: >-
+      Without deferrable, per-NPC-authored resolution paths, the document's own explicit cross-reference
+      to a separate character record would have nothing to point at.
+    hardness: important
+  - need: >-
+      A formal multi-exchange contested resolution must be able to have its EFFECTIVE DIFFICULTY reduced
+      by a THIRD PARTY's support, invoked via a specific named appeal-category, distinct from either principal
+      party's own roll.
+    why: >-
+      Without third-party difficulty modification, an ally's support for one succession claimant would
+      have no mechanical effect on the outcome.
+    hardness: important
+  - need: >-
+      A coup-availability condition must be gated behind a DIFFERENT institution's own internal resource
+      crossing its zero/floor value, cross-referencing the SAME structural-fracture condition used elsewhere
+      in a wholly different case, rather than the coup having its own independent trigger logic.
+    why: >-
+      A coup path with its own independent trigger instead of reusing the cross-case fracture condition
+      would duplicate logic the source explicitly reuses.
+    hardness: core
+  - need: >-
+      Individual NAMED characters must be able to carry a bespoke, individually-authored CONDITIONAL BONUS
+      to a specific roll, activating only once a SHARED, GLOBAL world-state value crosses a specific low
+      band.
+    why: >-
+      Without per-character custom rules keyed to global clock state, the described coup-trigger NPCs
+      whose odds improve specifically as the world destabilizes could not be represented.
+    hardness: important
+  - need: >-
+      A repeatable, once-per-season action restricted to exactly one specific actor/role must have a success/failure
+      branch where failure costs that actor's OWN resource, and must independently accumulate an escalating
+      difficulty tax on its OWN future uses purely from consecutive-season repetition, decoupled from
+      whether prior uses succeeded or failed.
+    why: >-
+      Without a repetition-triggered (not outcome-triggered) tax, the described 'decree fatigue' penalty
+      for repeated use regardless of success could not be distinguished from an ordinary failure penalty.
+    hardness: important
+  temporal:
+    span_seasons: ongoing, resolves over multiple seasons depending on path chosen
+    needs_memory_of: >-
+      which succession path, if any, has been committed to; the deferred-complication flag from the accept-demand
+      path, with no resolution timer named; the consecutive-use count for the unique institutional action.
+    needs_deadline: >-
+      UNCLEAR for most paths — no explicit deadline is stated for when succession must resolve, only that
+      a delay itself (exceeding two campaign arcs) is a tracked trigger feeding a different clock.
+  who_acts:
+  - the Crown/succession-holder (chooses accept/refuse)
+  - >-
+    each named contender (their own path's events occur, some via roll, some via authored NPC-specific
+    content)
+  - a third-party supporter (chooses to lend an appeal)
+  - a coup-attempting faction (chooses to act, if eligible)
+  - >-
+    the unique institutional actor (chooses whether to use their once-per-season action)
+  knowledge:
+  - >-
+    not primarily epistemic, though a contender's Thread-sensitivity becoming known is explicitly a knowledge-state
+    change feeding a credibility/evidence resource
+  ends_when: >-
+    mixed across paths — person-chooses for the accept/refuse fork and the coup attempt; a roll resolves
+    it for the contested vote and the unique institutional action; the deferred-complication branch's
+    own resolution timing is UNCLEAR — the source names no point at which it comes due.
+- id: SCN-13
+  name: Multiple practitioners act as one on a shared operation
+  one_line: >-
+    A group of practitioners designates one anchor whose own roll gates the whole collective attempt,
+    with helper contributions computed by floor-division and conflicting personal commitments handled
+    at two severities.
+  scale: person
+  season_requires:
+  - need: >-
+      Multiple independent actors must be able to jointly target the same single operation, with exactly
+      ONE of them programmatically DESIGNATED as the operation's anchor via an explicit selection rule
+      (highest value of a specific stat among those present), rather than by manual/GM choice.
+    why: >-
+      Without a rule-based designation, who leads a collective attempt would be an arbitrary GM call rather
+      than a consistent, queryable game fact.
+    hardness: core
+  - need: >-
+      All designated participants must roll the SAME gating step SIMULTANEOUSLY, with the ANCHOR's own
+      individual result determining whether the COLLECTIVE structure forms at all, independent of how
+      any helper's own roll came out.
+    why: >-
+      If any participant's success could substitute for the anchor's, the described asymmetric importance
+      of the anchor role would be lost.
+    hardness: core
+  - need: >-
+      If the anchor's roll fails, participants who individually succeeded on the SAME roll must still
+      receive THEIR OWN individual outcome and consequences as if they had acted alone, rather than losing
+      their result entirely.
+    why: >-
+      Without preserving individual results on anchor failure, a successful helper would be punished purely
+      for the anchor's bad luck.
+    hardness: important
+  - need: >-
+      Each helper's contribution to the anchor's pool must be computed as a FLOOR-DIVISION of one of the
+      helper's own stats (that stat divided by 2, rounded down) added as bonus dice to the anchor, NOT
+      as the helper's own separate independent dice pool.
+    why: >-
+      A separate pool per helper instead of a floor-division bonus to the anchor's own pool would produce
+      a mathematically different, and much larger, collective result than the source specifies.
+    hardness: core
+  - need: >-
+      A participant's own pre-existing personal commitment must be able to conflict with the operation's
+      shared intent at (at minimum) two distinct severities, with different mechanical consequences per
+      severity: a milder conflict silently disabling one property of that participant's dice, and a more
+      severe, directly-opposing conflict requiring an ADDITIONAL pre-check roll whose failure removes
+      the participant before the main roll occurs.
+    why: >-
+      A single conflict severity instead of two would erase the described distinction between a merely
+      awkward alignment and a genuinely incompatible one.
+    hardness: core
+  - need: >-
+      The system must support a single reusable comparison — whether the current collective pool falls
+      below half of what the anchor could achieve alone — applying identically at TWO DIFFERENT MOMENTS
+      in the operation's lifecycle (initial helper join/failure, and a later mid-operation contact drop),
+      both triggering the same difficulty penalty when true.
+    why: >-
+      Implementing this as two separate ad hoc checks instead of one reusable comparison risks the two
+      moments silently diverging in behavior.
+    hardness: important
+  - need: >-
+      Any of the consequences that ordinarily fire once per solo operation must be able to SCALE their
+      magnitude or count with the NUMBER of participants involved in a collective attempt, rather than
+      firing identically regardless of party size.
+    why: >-
+      Fixed, party-size-independent consequences would understate the described proportionally greater
+      effects of many configurations interacting at once.
+    hardness: important
+  - need: >-
+      A SEPARATE variant of the collective-contribution structure must exist specifically for the highest-difficulty
+      class of resolution actions, carrying its OWN difficulty ceiling that is higher than the standard
+      structure's but explicitly caps out even against what would otherwise be additively-stacked collective
+      bonuses.
+    why: >-
+      Without a hard ceiling that overrides additive stacking, a large enough group could trivialize the
+      hardest resolution actions, contradicting the explicit cap.
+    hardness: important
+  temporal:
+    span_seasons: n/a — resolves within a single scene/contact window
+    needs_memory_of: >-
+      which participant is designated anchor; each participant's own commitment-conflict state; the running
+      collective pool size, for the half-of-solo comparison.
+    needs_deadline: 'no'
+  who_acts:
+  - each participating practitioner (chooses to join, and individually rolls)
+  - the anchor specifically (their roll gates the whole attempt)
+  - >-
+    GM/system (performs the anchor designation, the pool math, and the scaling of consequences)
+  knowledge:
+  - >-
+    not primarily epistemic — the shared diagnosis step is explicitly described as all participants receiving
+    the same description, i.e. no participant-specific information asymmetry within the collective attempt
+    itself
+  ends_when: >-
+    a roll resolves it (the shared gating roll, and any subsequent pre-check rolls) — the anchor designation
+    and pool math are computation, not choices, though joining the collective attempt at all is a person-chooses
+    step per participant.
+- id: SCN-14
+  name: A personal action interleaves with a mass-scale battle
+  one_line: >-
+    A personal-scale action can be declared once per battle-turn inside a mass-scale resolution structure,
+    with commanders forced to trade command capability for it, and the same underlying action's cost and
+    timing scale differently at mass scale.
+  scale: faction
+  season_requires:
+  - need: >-
+      A personal-scale action must be declarable and resolvable WITHIN a single unit of mass-scale time,
+      strictly limited to a fixed maximum count per unit (here: one), rather than personal actions being
+      either unavailable during mass-scale resolution or unlimited.
+    why: >-
+      Unlimited personal actions during mass combat would let a single character dominate a battle turn
+      by turn; zero personal actions would erase the described zoom-in moments entirely.
+    hardness: core
+  - need: >-
+      A named individual NPC becoming the target of a personal-scale action during mass combat must change
+      that NPC's own tracked STATUS at the mass scale, distinct from any personal-scale state change to
+      that NPC.
+    why: >-
+      Without a mass-scale status change, the personal duel would have no visible effect on the surrounding
+      mass battle's own bookkeeping.
+    hardness: important
+  - need: >-
+      An actor holding a mass-scale command role, upon choosing a personal-scale action, must have their
+      mass-scale command capability for that SAME time-unit SUSPENDED — an explicit mutual exclusion between
+      acting at the personal scale and exercising command at the mass scale in the same turn for the same
+      actor.
+    why: >-
+      Without the suspension, a commander could act personally with no opportunity cost to their army,
+      removing the described trade-off.
+    hardness: core
+  - need: >-
+      The SAME action-category used at the personal scale elsewhere in the system must be usable DURING
+      mass-scale resolution too, but its resolution TIMING must DIVERGE from its declaration timing, with
+      the specific divergence (which later phase it resolves at) determined by WHICH SUB-TYPE was chosen
+      at declaration.
+    why: >-
+      Without sub-type-dependent phase divergence, offensive and support uses of the same action would
+      resolve identically, contradicting the described different phase assignments.
+    hardness: core
+  - need: >-
+      That same action-category's resource-cost FORMULA must be swappable based on scale-context: multiplied
+      by a fixed factor AND separately capped at a flat per-use ceiling specifically when invoked during
+      mass-scale resolution, distinct from its ordinary personal-scale cost.
+    why: >-
+      A single fixed cost formula regardless of context would misprice the action relative to the described
+      mass-scale multiplier-and-cap rule.
+    hardness: core
+  - need: >-
+      A social-scale contest resolved BEFORE a mass-scale round's own declaration phase must be able to
+      modify the STARTING mechanical state of that upcoming mass-scale round.
+    why: >-
+      Without cross-scale sequencing into starting state, a pre-battle appeal could not be represented
+      as altering the battle it precedes.
+    hardness: important
+  - need: >-
+      A mass-scale outcome (winning a qualifying engagement) must feed the SAME shared world-health currency
+      used by the personal-scale action chains elsewhere in the system, as one of that currency's NAMED
+      gain sources, alongside a scale-specific extra cost/tax applied when the same currency-spending
+      action-category is used inside a mass-scale context.
+    why: >-
+      Without a shared-currency feed from mass-scale outcomes, the described convergence of personal and
+      strategic play onto one common resource would not exist.
+    hardness: important
+  - need: >-
+      The spatial resolution model during mass-scale combat must support a coarser zone-based movement
+      abstraction, with a distinct cost rule for crossing between zones, separate from the personal-scale
+      movement rules used outside mass combat.
+    why: >-
+      A single unified movement system regardless of scale would be unable to represent the described
+      zone-based mass-combat spatial model distinct from ordinary personal-scale movement.
+    hardness: flavour
+  temporal:
+    span_seasons: n/a — resolves within a single mass-combat encounter
+    needs_memory_of: >-
+      which named NPCs are currently contested; which commanders have suspended command this turn; each
+      declared operation's sub-type, for the phase-divergence.
+    needs_deadline: no — scoped to the encounter
+  who_acts:
+  - the personal-scale-acting combatant
+  - the commanding actor (choosing personal action vs. retaining command)
+  - practitioners declaring Thread operations during mass combat
+  - >-
+    GM/system (resolves the phase-divergence and cost multiplication automatically once sub-type is declared)
+  knowledge:
+  - not primarily epistemic
+  ends_when: >-
+    a person chooses it — each personal-scale action and command-suspension is a voluntary declaration;
+    the phase-divergence and cost scaling are threshold/computation, not choices in themselves.
+- id: SCN-15
+  name: Two resolution modes collide over the same target
+  one_line: >-
+    A roll-based personal-scale attempt and an order-based strategic-scale attempt targeting the same
+    object with opposing intent are held and resolved together, with resource costs applying independent
+    of who wins.
+  scale: faction
+  season_requires:
+  - need: >-
+      Two structurally different resolution modes (a roll-based personal mode and an order-based strategic
+      mode) must be able to target the SAME object with opposing intent, be DECLARED at different points
+      in the same round, and be HELD without resolving until a single common later phase resolves them
+      TOGETHER.
+    why: >-
+      Resolving each mode independently as it's declared instead of holding both for joint resolution
+      would prevent the two from ever actually competing over the same outcome.
+    hardness: core
+  - need: >-
+      The combined resolution of both modes' attempts must support THREE distinct outcome shapes: a margin-based
+      comparison when both succeed, a straightforward win for whichever single side succeeded when only
+      one does, and a 'neither effect happens' outcome when both fail — with the comparison rule needing
+      to be a first-class computable relationship (net successes), not a GM call.
+    why: >-
+      Leaving the comparison to GM judgment instead of a computable margin rule would make the outcome
+      of colliding orders unpredictable and unauditable.
+    hardness: core
+  - need: >-
+      In ALL THREE outcome shapes, resource costs to the shared currency must be able to apply to the
+      LOSING or FAILING side even though that side produced no narrative effect, such that the 'both fail'
+      case can produce a pure net loss to the shared currency with no offsetting gain to any party.
+    why: >-
+      Coupling cost strictly to success would erase the described possibility of a mutual failure that
+      still costs the world something, with nobody gaining.
+    hardness: core
+  - need: >-
+      The resource changes to the shared currency arising from BOTH resolution modes in the same accounting
+      step must be summed together and then capped by a single SEASONAL ceiling applied to the NET total
+      after all sources for that season, not a per-event cap.
+    why: >-
+      A per-event cap instead of a seasonal net cap would allow unlimited currency swings within a single
+      season as long as each individual event stayed under the cap.
+    hardness: important
+  - need: >-
+      An individual character must be able to OPT IN to 'leading' an otherwise character-less strategic-mode
+      action via an explicit declaration at a specific phase, and that declaration must determine whether
+      an individual-character-scoped cost applies to that action instance AT ALL — absent the declaration,
+      the action must proceed with NO individual-character cost attached.
+    why: >-
+      Without the opt-in default-free path, every strategic-mode order would either always or never carry
+      a personal cost, losing the described player choice to personally lead (and personally pay for)
+      a strategic action.
+    hardness: core
+  - need: >-
+      A specific type of ongoing/recurring negative effect must be able to be REGISTERED against a specific
+      spatial unit at one resolution phase while its actual per-period APPLICATION does not begin until
+      a SEPARATE, later accounting step.
+    why: >-
+      Collapsing registration and activation into one atomic event would remove the described one-step
+      delay before a newly-registered drift effect actually starts draining.
+    hardness: important
+  temporal:
+    span_seasons: >-
+      n/a — resolves within a single round's shared phase, though downstream drift effects persist across
+      seasons
+    needs_memory_of: >-
+      both modes' held, not-yet-resolved declarations until the shared phase; the running seasonal net
+      total for the currency, for the cap; whether a leading character declared for a given strategic
+      order.
+    needs_deadline: no — scoped to the round's shared resolution phase
+  who_acts:
+  - the personal-scale-acting character (declares their roll-based attempt)
+  - >-
+    the strategic-mode order's controller (declares the order, and optionally an individual leading character)
+  - >-
+    GM/system (resolves the shared phase, applies the seasonal cap, and registers the delayed recurring
+    effect)
+  knowledge:
+  - not primarily epistemic
+  ends_when: >-
+    a roll resolves it (the shared comparison phase) — the seasonal cap and the delayed-effect registration
+    are threshold/computation rather than choices.
+- id: SCN-LOOP-A
+  name: The self-worsening spiral toward world-currency collapse
+  one_line: >-
+    A practitioner's own voluntary ambition starts a reinforcing loop where harder operations cause more
+    failures which cause more difficulty, eventually disabling the one institution positioned to counter
+    it.
+  scale: realm
+  season_requires:
+  - need: >-
+      The loop's root trigger (a practitioner's own choice to attempt larger-scale operations) must be
+      a purely voluntary, repeatable choice with no built-in limiter — the system must not require any
+      external gate before a practitioner can choose progressively larger-scale operations that spend
+      the shared currency.
+    why: >-
+      An externally-gated trigger instead of an unrestricted voluntary one would prevent the loop from
+      being freely re-enterable purely by player ambition, as the source frames it.
+    hardness: core
+  - need: >-
+      Once the shared currency crosses a specific threshold, the resulting global difficulty increase
+      must feed BACK into the SAME roll type that spends the currency, such that operations attempted
+      after the threshold crossing are measurably more likely to produce the outcome (failure/partial)
+      that costs MORE of the currency — a genuine reinforcing, not merely additive, feedback loop within
+      the same resource.
+    why: >-
+      An additive-only relationship instead of a true feedback loop would not produce the described self-accelerating
+      spiral distinct from ordinary bad luck.
+    hardness: core
+  - need: >-
+      The hazard-spawning consequence of failed operations must be able to, several steps later, raise
+      a public-facing suspicion/credibility metric belonging to a THIRD, otherwise-unrelated tracked axis
+      — the loop must cross from a personal/practitioner-scale resource into a wholly separate faction-scale
+      clock through an intermediate hazard event, not directly.
+    why: >-
+      A direct link instead of a hazard-mediated one would misrepresent how the described chain actually
+      propagates through an intervening observable event.
+    hardness: important
+  - need: >-
+      Rising factional instability arising from the above chain must be able to cause a SEPARATE institution's
+      own routine seasonal actions to 'misfire' purely as a side effect of instability, without any single
+      roll dedicated to causing the misfire.
+    why: >-
+      Without an instability-to-misfire link, factional unrest would have no mechanical bite on institutions'
+      own unrelated seasonal actions.
+    hardness: important
+  - need: >-
+      A specific institution's own COUNTER-MECHANISM against the loop's root cause must be able to become
+      UNAVAILABLE to that institution specifically because of a DOWNSTREAM consequence of the very loop
+      that mechanism exists to counter — the loop must be able to disable its own antidote as a late-stage
+      consequence of its own progression.
+    why: >-
+      Without this self-disabling property, the loop's stated self-defeating character — the same institution
+      that could stop it loses the ability to as the loop worsens — could not be represented.
+    hardness: core
+  - need: >-
+      UNCLEAR: the loop description names no deliberate off-switch of its own — every step is described
+      as either automatic or a worsening feedback, with the sole stated exit routed entirely through a
+      DIFFERENT case's own structural-exit checklist, one of whose required conditions (stop large-scale
+      operations) is in apparent tension with another required condition of that same checklist (a large-scale
+      COLLECTIVE operation must still succeed to mend gaps) — the source does not resolve whether 'large-scale
+      ambition' and 'large-scale collective mending' are the same action-category for eligibility purposes.
+    why: >-
+      If the two conditions are the same action-category, the terminal case's own stated exit path may
+      be internally unsatisfiable once this loop has progressed far enough to trigger it, and nothing
+      in the source resolves this.
+    hardness: important
+  temporal:
+    span_seasons: ongoing, multi-season, described as the most common campaign-ending pattern
+    needs_memory_of: >-
+      the shared currency value and its threshold state; the credibility metric; the external-pressure
+      clock; the specific institution's own standing resource, to know if its counter-action is currently
+      gated.
+    needs_deadline: >-
+      no fixed date, but functionally yes since the shared currency's terminal floor is a hard stop
+  who_acts:
+  - >-
+    the practitioner (chooses to attempt large/ambitious operations — the loop's only voluntary step)
+  - the specific institution (would choose to attempt its counter-action, if able)
+  - >-
+    nobody decides any of the threshold crossings, the hazard-to-metric propagation, the instability-to-misfire
+    step, or the standing-resource-to-lockout step — all automatic
+  knowledge:
+  - >-
+    the loop's propagation from a hazard event to the credibility metric implicitly requires the hazard
+    to be observable/attributable by outside parties, so at least one step depends on the hazard being
+    visible to whichever party's credibility metric it feeds
+  ends_when: >-
+    UNCLEAR — the source names no terminating condition for the loop itself; it only names where the loop
+    LEADS (a separate case's own terminal state), and that case's own exit path is, per the need above,
+    of unclear simultaneous satisfiability once the loop has progressed far enough to trigger it.
+- id: SCN-LOOP-B
+  name: One institution's rise removes the counter-pressure against it
+  one_line: >-
+    A rising suspicion metric triggers an institutional response that further raises the same metric,
+    while punishing a rival institution strips the very counter-options that could push back, ending only
+    in an unconditional invasion.
+  scale: realm
+  season_requires:
+  - need: >-
+      The loop's own START condition must be gated on a DIFFERENT clock's state as a prerequisite — this
+      metric's threshold-crossing effect must only be active while a SEPARATE clock is below its own separate
+      threshold, meaning the loop can be interrupted or never begin purely by that second clock's value,
+      without any action targeting the metric itself.
+    why: >-
+      Without the cross-clock start-gate, the loop's onset would be independent of the world-health state
+      the source ties it to.
+    hardness: important
+  - need: >-
+      A rising metric crossing one threshold must trigger an institution offering a 'mediation' action
+      whose EFFECT is to further increase the SAME metric that triggered it — the institution's own response
+      to the metric's rise must be a net contributor to that same rise, not a mitigation.
+    why: >-
+      If the offered mediation reduced the metric instead of raising it further, the loop's described
+      self-reinforcing character would not exist.
+    hardness: core
+  - need: >-
+      One institution's resource crossing a threshold must unlock a PUNITIVE capability specifically targeting
+      members of a SEPARATE, rival institution, and the punitive action's effect on those targeted members
+      must reduce the rival institution's OWN separate resource.
+    why: >-
+      Without the cross-institution punitive mechanic, one institution's rise could not mechanically diminish
+      a rival's standing.
+    hardness: important
+  - need: >-
+      A rival institution's resource, once reduced by the above, must REMOVE a class of counter-actions
+      that would otherwise have been available against the ORIGINAL rising metric — damage to one institution's
+      standing must shrink the total space of actions ANY actor could use to push back on an unrelated
+      tracked value, not just actions belonging to the damaged institution.
+    why: >-
+      Without this removal of counter-options, the loop's described self-worsening property (the rival's
+      weakening removes 'anti-CI options' generally) would collapse into a merely local effect on the
+      rival alone.
+    hardness: core
+  - need: >-
+      The same metric crossing a SECOND, higher threshold must simultaneously trigger a further rate increase
+      on a THIRD clock and start a distinct, separately-tracked preparation/documentation process attributable
+      to one named external actor, both firing off the same single threshold-crossing event.
+    why: >-
+      A single effect instead of two simultaneous ones from the same crossing would understate the described
+      compounding of consequences at the higher threshold.
+    hardness: important
+  - need: >-
+      A separate clock reaching a sufficiently high value must remove an internal MODERATING presence
+      within a fourth, otherwise-external institution, where that moderating presence's disappearance
+      is described as removing the 'primary brake' — an institution's OWN internal composition must be
+      representable as containing a counter-pressure sub-faction whose continued existence depends on
+      an external clock staying below a threshold.
+    why: >-
+      Without a representable internal moderating sub-faction, the described collapse of the external
+      institution's own internal restraint could not occur.
+    hardness: important
+  - need: >-
+      UNCLEAR: the loop's own chain, as described end to end, names no point at which any of its four
+      moving parts (the original metric, the second clock, either institution's own resource) reverses
+      or is reversible from within the loop's own steps — every named consequence pushes in the same direction,
+      and the loop terminates only in an unconditional invasion event at the third clock's cap, not in
+      a resolution.
+    why: >-
+      If nothing within the loop's own described steps can reverse it, and generic decrease paths for
+      the driving clock are named only elsewhere for a different scenario and never invoked by this loop's
+      own text, it is unclear whether this specific chain, once started, can be interrupted at all.
+    hardness: important
+  temporal:
+    span_seasons: ongoing, multi-season
+    needs_memory_of: >-
+      the credibility metric's value; the world-health clock's value, as start-gate; the external-pressure
+      clock; both institutions' resource values; whether the moderating sub-faction is currently intact.
+    needs_deadline: >-
+      no fixed date, but the terminal invasion event is an unconditional cap-triggered event once the
+      external-pressure clock reaches its maximum
+  who_acts:
+  - >-
+    the mediating institution (chooses to offer mediation, though framed as near-automatic once the threshold
+    is crossed)
+  - the punitive institution (chooses to act on excommunication threats)
+  - the named external individual/institution (chooses to begin documentation)
+  - nobody decides any of the threshold crossings themselves
+  knowledge:
+  - not primarily epistemic within the loop's own text
+  ends_when: >-
+    UNCLEAR — the source names no reversal or exit condition anywhere within the loop's own description;
+    it concludes only in an unconditional cap-triggered invasion event (a threshold-fires outcome), and
+    the closest thing to a counter-mechanism (generic decrease paths for the driving clock, named elsewhere
+    in the document for a different scenario) is never referenced by this loop's own text, so whether
+    it can interrupt this specific chain once already in progress is itself unclear.
+- id: SCN-LOOP-C
+  name: A practitioner's degrading stability erodes the relationship that could save it
+  one_line: >-
+    One resource's own degradation makes the actions that degrade it more likely to fail further, while
+    spreading strain to a bonded second character whose own strain removes one of the resource's two recovery
+    paths.
+  scale: person
+  season_requires:
+  - need: >-
+      A specific costly sub-action's use must GUARANTEE a fixed loss to an individual resource as a direct,
+      certain cost, distinct from the SAME resource's other loss sources which are roll-gated.
+    why: >-
+      A roll-gated-only loss instead of a guaranteed one would remove the described certainty of this
+      specific sub-action's toll, distinguishing it from the resource's other, chancier loss sources.
+    hardness: important
+  - need: >-
+      The resource crossing a specific band must impose a difficulty penalty specifically on THE SAME
+      ACTION CATEGORY that spends it (including the specific sub-action that started this chain), creating
+      a loop where the resource's own degradation makes the actions that degrade it further MORE likely
+      to trigger their own worse outcomes.
+    why: >-
+      Without the self-targeting difficulty penalty, there would be no mechanical loop at all — merely
+      a resource dropping over time from unrelated causes.
+    hardness: core
+  - need: >-
+      The resource's degradation must be able to propagate OUT of the acting character entirely, imposing
+      an accruing strain cost on a bonded SECOND character's own separate relational resource, on a fixed
+      recurring interval, purely as a consequence of the first character's resource band.
+    why: >-
+      Without cross-character propagation, the loop would remain entirely self-contained to one character
+      and could not threaten the bonded relationship the source describes as being eroded.
+    hardness: core
+  - need: >-
+      That second character's relational resource, once sufficiently strained, must REMOVE the first character's
+      access to one of their own resource's named recovery paths (the one depending on that bonded relationship
+      being intact) — damage to a RELATIONSHIP resource must be able to gate access to an otherwise-unrelated
+      PERSONAL resource's own recovery mechanic.
+    why: >-
+      Without this cross-resource gating, the bonded relationship's own strain would have no mechanical
+      bearing on the degrading character's ability to recover, contradicting the described 'no Anchoring
+      Scenes possible if Knots broken.'
+    hardness: core
+  - need: >-
+      UNCLEAR: the loop's own narration states 'No Coherence recovery path' once the relational-support
+      recovery path is gone, but the underlying resource (established elsewhere) names a SECOND, independent
+      recovery path (full-season abstention from the triggering action) that nothing in this loop's own
+      chain explicitly removes or blocks — the source does not resolve whether that second path remains
+      genuinely available once the loop has progressed this far.
+    why: >-
+      If the abstention path genuinely remains available, the loop's own stated conclusion ('no recovery
+      path') is an overstatement the source itself does not reconcile with the resource's own separately-defined
+      two-path recovery rule.
+    hardness: important
+  - need: >-
+      Reaching the resource's absolute floor must trigger a distinct, campaign-level consequence changing
+      the character's ownership/control status, firing as the ENDPOINT the entire cascading loop was building
+      toward.
+    why: >-
+      Without a defined terminal consequence at the floor, the cascade would have no concrete endpoint
+      distinguishing it from an indefinitely worsening but never-concluding decline.
+    hardness: core
+  temporal:
+    span_seasons: ongoing, can complete within or across seasons
+    needs_memory_of: >-
+      the practitioner's resource value and current band; the bonded second character's own relational-strain
+      value; whether the paired-scene recovery path is currently accessible.
+    needs_deadline: >-
+      no fixed date; the floor-triggered ownership-status change is itself the terminal event, not seasonal
+  who_acts:
+  - the practitioner (chooses to use the costly sub-action, the initiating step)
+  - >-
+    nobody decides any subsequent step in the chain (the retention roll failing, the band crossing, the
+    relational strain accruing, the recovery-path removal, or the floor-triggered conversion) — all automatic
+    once the first choice is made
+  knowledge:
+  - not primarily epistemic
+  ends_when: >-
+    UNCLEAR — the loop's own chain names the terminal state it produces (an ownership-status conversion)
+    but names no point at which the cascade itself can be interrupted or reversed from within its own
+    steps; per the need above, whether the resource's OTHER, independently-established recovery path remains
+    usable partway through this specific cascade is left unresolved by the source.
+- id: SCN-LOOP-D
+  name: A destabilizing world-state opens a window that its own consequences can close
+  one_line: >-
+    A rising world-condition metric that is harmful elsewhere is also what unlocks new practitioner access,
+    and the one group positioned to close the window deliberately can lose that ability to the instability
+    the window itself generates.
+  scale: realm
+  season_requires:
+  - need: >-
+      A shared world-condition metric's own RISE (framed elsewhere as destabilizing/negative) must be
+      able to be the SAME event that OPENS a capability gate, making a previously-unavailable action type
+      newly available to characters who could not use it below the threshold — the same metric must carry
+      both a negative framing in other consequences and a positive-unlock framing in this one, simultaneously.
+    why: >-
+      If the metric could only ever be framed as harmful, the described double-edged nature of the window
+      — bad for stability, good for access — could not be represented as arising from the SAME value.
+    hardness: core
+  - need: >-
+      A character becoming newly eligible for the gated action must be trackable per-character (a durable
+      'was this character below or above the threshold when it opened' or equivalent), not merely as a
+      global on/off switch, since the text specifies 'previously dormant' characters specifically becoming
+      able to act.
+    why: >-
+      A purely global switch instead of per-character eligibility tracking would be unable to distinguish
+      characters who were already capable from those newly unlocked by this specific event.
+    hardness: important
+  - need: >-
+      The newly-eligible characters' USE of the unlocked action must be OBSERVABLE by an external institution
+      as a distinct triggering event, feeding a rise in that institution's own suspicion/credibility metric,
+      separate from and in addition to any other trigger of that same metric.
+    why: >-
+      Without observability as a distinct trigger, the newly-visible practitioners could not feed the
+      described rise in outside suspicion.
+    hardness: important
+  - need: >-
+      A specific group's OWN deliberate, dedicated action must be able to REDUCE the SAME originating
+      metric that opened the access window, and that action's SUCCESS must be the loop's one explicitly-intentional
+      counter-mechanism, distinct from any of the loop's other, automatic steps.
+    why: >-
+      Without a named deliberate counter-action, the loop would have no player-controllable off-switch
+      at all, contradicting the source's explicit framing of this as the loop's stated counter.
+    hardness: core
+  - need: >-
+      That SAME specific group's own separate institutional-standing resource must be able to be DRIVEN
+      DOWN by the very factional instability that this loop's own automatic steps generate, creating a
+      path by which the loop damages the standing of the one actor positioned to stop it.
+    why: >-
+      Without this causal path, the loop's self-undermining property — its own progression harming its
+      own cure — could not exist.
+    hardness: core
+  - need: >-
+      That group's institutional-standing resource crossing its OWN floor must strip the group's access
+      to its one counter-action specifically, at the same time as (or as a consequence of) the instability
+      that the loop's own progression produced — the disabling condition and the loop's own automatic
+      progression must share a common cause.
+    why: >-
+      Without a shared cause linking the standing collapse to the loop's own progression, the disabling
+      of the counter-action would read as coincidental rather than as the loop actively defeating its
+      own antidote.
+    hardness: core
+  - need: >-
+      UNCLEAR: the source states the access window 'closes precisely when it's needed most' but does not
+      specify the actual closing MECHANISM — whether the originating metric falls back below the access
+      threshold automatically (and by what rule, since no decay/reduction source for that metric is named
+      elsewhere in this specific chain), or whether 'closing' refers only to the counter-group's action
+      becoming unavailable while ordinary-character eligibility remains open.
+    why: >-
+      The two readings imply different game states (everyone loses access vs. only the counter-group loses
+      its cure while others can still act), and the source does not say which is meant.
+    hardness: important
+  temporal:
+    span_seasons: ongoing
+    needs_memory_of: >-
+      the originating metric's value, to know if access is open; per-character eligibility state; the
+      specific group's institutional-standing value, to know if its counter-action is currently available.
+    needs_deadline: >-
+      no fixed date, but functionally yes — the window is explicitly stated as capable of closing on its
+      own
+  who_acts:
+  - newly-eligible characters (choose whether to act, now that access is open)
+  - >-
+    the specific group's leadership (chooses whether to attempt the counter-action, when able)
+  - >-
+    nobody decides the metric's own rise, the observability-driven credibility increase, the factional-instability
+    propagation, or the standing-resource threshold strip — all four automatic
+  knowledge:
+  - >-
+    the newly-unlocked action's use must be perceivable by the external institution as a condition of
+    the credibility-rise step — a genuine epistemic gate, the institution must be able to perceive that
+    the previously-dormant capability is now being exercised
+  ends_when: >-
+    the specific group succeeds at its counter-action before its own standing collapses, reversing the
+    metric and holding the window open — or its standing collapses first (a threshold firing, nobody deciding),
+    closing the counter-path and leaving the underlying destabilization to continue via the loop's other,
+    automatic effects — or, per the UNCLEAR need above, it is not fully specified whether 'the window
+    closing' additionally means ordinary access reversing on its own.

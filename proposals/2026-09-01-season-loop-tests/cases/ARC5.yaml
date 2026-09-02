@@ -1,0 +1,675 @@
+- id: EMG-C1
+  name: "The Coup That Wasn't Supposed to Happen"
+  one_line: "Players who focus attention on one threat can be blindsided when a separate, unwatched institutional tripwire accumulates from three unrelated slow conditions and fires all at once, seizing control from everyone including the ruler."
+  scale: realm
+  season_requires:
+    - need: "an actor's readiness to act must be able to accumulate from several unrelated, independently-tracked conditions, where each condition alone is insufficient but their sum crosses a firing point"
+      why: "the counter has three independent triggers; a single trigger reduces this to a simple threshold and removes the 'attention was elsewhere' logic that makes the crisis feel earned"
+      hardness: core
+    - need: "a change of state in an unrelated area (e.g. a person's declining trust/allegiance far away) must be able to silently contribute to that same accumulating readiness"
+      why: "a distant loyalty drop feeding the same counter is how disparate storylines converge into one crisis; if only local/military events count, the surprise convergence disappears"
+      hardness: core
+    - need: "crossing the accumulation threshold must trigger a state change that suspends the normal rules of action for everyone in the affected territory at once"
+      why: "the blanket effect (all non-military actions blocked or require a secondary check) is what makes the crisis feel total rather than local"
+      hardness: core
+    - need: "once triggered, an actor must be able to restrict which other actors may act openly versus covertly, differentially"
+      why: "restricting only two actors to open action reshapes the entire faction landscape's mode of play, not just adds one obstacle"
+      hardness: important
+    - need: "the accumulation counter itself must be able to persist even after the crisis is resolved, i.e. some component of the past cannot be reset by resolving the surface state"
+      why: "the counter never resets — the ending explicitly denies the players a clean slate; without persistent-but-invisible history the ending has no teeth"
+      hardness: important
+    - need: "an actor confronted with an imposed extraordinary state must have multiple distinct, mutually exclusive resolution paths, each producing a different downstream campaign shape"
+      why: "a three-way branch (remove it, work within it, align with the imposing actor) is what makes the outcome player-authored rather than fixed"
+      hardness: important
+    - need: "the extraordinary state must have both an active removal condition (a deliberate action succeeding against a difficulty tied to the imposing actor's strength) and a passive removal condition (an unrelated tracked value crossing back below its threshold)"
+      why: "two independent ways out changes the shape of how players engage; collapsing to one removes strategic choice"
+      hardness: flavour
+  temporal:
+    span_seasons: 6
+    needs_memory_of: "which of the three trigger conditions have already fired, and how long each has stood unaddressed, even while players are not paying attention to them"
+    needs_deadline: no
+  who_acts:
+    - "the players"
+    - "the Crown / ruler"
+    - "a hostile religious institution (advancing its own metric in the background)"
+    - "an autonomous military institution (tracking and eventually acting on the counter)"
+    - "a court figure whose loyalty is separately tracked"
+  knowledge:
+    - "players need not know all three trigger conditions are accumulating"
+    - "the system must track all three conditions regardless of what players attend to"
+    - "the imposing military faction knows the state of its own counter; the players generally do not until it fires"
+  ends_when: "UNCLEAR: the source names no single terminus — it forks into three branch-endings (a deliberate action succeeding against the imposing faction; continued covert play indefinitely; or a structural pivot into a new campaign axis) without saying which is final, and states the underlying counter never resets regardless of which branch is taken"
+
+- id: EMG-C2
+  name: "The Vaynard Revelation Cascade"
+  one_line: "A player's sustained relationship with a self-interested actor must be able to raise that actor's private understanding through discrete stages, each of which silently advances a public institutional threat as an unintended side effect of the help given."
+  scale: realm
+  season_requires:
+    - need: "repeated interaction between a player and a single non-player actor must be able to advance that actor's private understanding through discrete, ordered stages, where higher stages unlock qualitatively new offers or demands from that actor"
+      why: "the ordered stages change what the actor can ask for and reveal; without staged advancement the escalation collapses into one flat interaction"
+      hardness: core
+    - need: "an actor's private understanding advancing must be able to automatically and invisibly raise a separate, campaign-wide institutional threat value, as a byproduct the player did not choose and may not notice"
+      why: "helping the actor is simultaneously feeding an unrelated institutional threat clock; if the two tracks are not coupled, the 'no player intends this' beat disappears"
+      hardness: core
+    - need: "an actor's repeated use of a specific resource must be detectable by a hostile institution through a trace left in the world, at a rate proportional to how often it is used"
+      why: "a detectable signature from repeated use is what turns private assistance into public jeopardy"
+      hardness: important
+    - need: "a hostile institution's investigation of a suspected violation must be escalatable to a formal decision point where a third governing body must choose a side, with different consequences depending on which side it takes"
+      why: "the forced formal vote is the arc's crisis point; without a consequential decision point the tension has nowhere to resolve"
+      hardness: core
+    - need: "whichever side a governing body takes on the formal decision, the outcome must feed back into whether an unrelated suppression effect elsewhere continues to hold, gated by a numeric threshold on a third party's standing"
+      why: "a suppression effect contingent on a third party's standing is what lets one decision cascade into a second, distant consequence"
+      hardness: important
+    - need: "a private actor's advancing understanding must eventually reach a stage where they act to acquire the underlying capability directly, rather than settling for more explanation, changing their goal from knowledge to power"
+      why: "the shift from wanting knowledge to wanting capability is a qualitative change in the actor's own aims, not just another number going up; collapsing it removes the escalation's endpoint"
+      hardness: important
+    - need: "an actor's use of a sensitive resource must carry a per-use chance of an unplanned, binary discovery event with divergent consequences on success versus failure, independent of ordinary task resolution"
+      why: "a per-use discovery risk gives each use of the resource its own stakes, distinct from the deliberate plot beats"
+      hardness: important
+  temporal:
+    span_seasons: 5
+    needs_memory_of: "the actor's cumulative private-understanding stage and the cumulative institutional threat value it has silently generated, across every prior season of contact"
+    needs_deadline: no
+  who_acts:
+    - "the player character sustaining the relationship"
+    - "the private actor whose understanding advances"
+    - "a hostile institution's intelligence arm"
+    - "the governing body deciding the formal vote"
+    - "a suppressing third party whose standing gates a separate outcome"
+  knowledge:
+    - "the player need not realize their assistance is raising the institutional threat"
+    - "the hostile institution must be able to detect the trace independent of the player's knowledge"
+    - "the private actor's understanding is private until either a formal investigation or a discovery event makes it public"
+  ends_when: "UNCLEAR: the source names a formal vote and a subsequent discovery event as branch points but no single closing condition — outcomes cascade into further conditional branches (a third party's standing eroding, a hostile institution retargeting) rather than terminating"
+
+- id: EMG-C3
+  name: "The Invisible Drain (Niflhel and the Rising Thread)"
+  one_line: "A hidden actor's routine, self-interested operations must be able to silently damage a shared world-resource as an unintended side effect nobody — including the actor itself — is tracking, requiring investigation to even locate the cause."
+  scale: world
+  season_requires:
+    - need: "a hidden actor's routine operation must be able to degrade a shared, global resource value each time it is used, as an automatic side effect the actor itself has no visibility into or control over"
+      why: "the hidden actor does not know it is causing the decline; the actor's own ignorance is what makes this structurally emergent rather than a plotted scheme"
+      hardness: core
+    - need: "the degrading shared resource must be able to fall through multiple bands, each unlocking distinct, worsening consequences determined organically from current state rather than from a fixed script"
+      why: "threshold cascades are how the drain becomes an existential timer rather than flavour text"
+      hardness: core
+    - need: "players must be able to choose not to investigate a decaying resource, in which case the decay continues uninterrupted and consequences compound without any forced intervention"
+      why: "the arc explicitly forks on 'no investigation'; the world must be able to get worse with zero player engagement for the emergent-neglect beat to exist"
+      hardness: core
+    - need: "investigating the cause of an unattributed problem must require locating and addressing multiple separate operational nodes belonging to the hidden actor, where addressing only some of them leaves the remainder still causing harm at a reduced rate"
+      why: "partial success producing partial, not binary, results is what makes the investigation a real campaign arc rather than one roll"
+      hardness: important
+    - need: "reversing damage to the shared resource must require an actor of sufficient individual capability performing an action whose difficulty scales with how much damage has accumulated"
+      why: "tying recovery cost directly to accumulated damage makes early intervention strictly better than late intervention"
+      hardness: important
+    - need: "the act of repairing the shared resource must itself be able to produce an unplanned side effect governed by chance, independent of whether the repair attempt succeeded"
+      why: "repair is not risk-free — even successful recovery can have consequences"
+      hardness: important
+    - need: "a hostile institution must be able to detect activity connected to the repair effort and respond by advancing its own separate institutional-growth value, opening a second front exactly when the first is resolving"
+      why: "closing one problem opening another is the arc's final twist; without detection coupling to institutional advance, recovery has a clean, single ending"
+      hardness: important
+  temporal:
+    span_seasons: 9
+    needs_memory_of: "the running level of the degrading shared resource and how many of the hidden actor's operational nodes have been located or controlled to date"
+    needs_deadline: no
+  who_acts:
+    - "the players (investigating and recovering)"
+    - "the hidden actor (acting on its own agenda, unaware of the side effect)"
+    - "a hostile institution (advancing on its own separate trigger)"
+    - "a capable individual performing the recovery action"
+  knowledge:
+    - "nobody, including the hidden actor, initially knows the causal link between its routine operations and the shared resource's decline"
+    - "players must actively investigate to surface the link"
+    - "the hostile institution learns of the underlying activity only once recovery operations make it detectable"
+  ends_when: "UNCLEAR: the source describes an investigation-then-recovery sequence but states no hard stop — the final beat opens a second institutional front rather than closing the arc, and the recovered resource is said to stabilise 'but not recover without active [ongoing] intervention'"
+
+- id: EMG-C4
+  name: "The Axis 9 Resolution (Thread Truth Goes Public)"
+  one_line: "Several independent slow-building pressures — a personal cost accruing from repeated risky action, a suppressed capability being administered by a sheltering faction, and a private actor's rising understanding — must be able to converge on a single public political flashpoint that forces the highest authority to take an irreversible public stance."
+  scale: realm
+  season_requires:
+    - need: "a character's repeated use of a risky capability must inflict a cumulative personal degradation that passes through discrete bands, each imposing worsening mechanical penalties on that character specifically"
+      why: "a named-band decay curve is what makes sustained risky action carry an escalating personal cost distinct from any single roll's outcome"
+      hardness: important
+    - need: "a sheltering faction's protection of individuals with a suppressed capability must be able to reduce a shared danger value over time, while each use of that protection produces an unplanned side effect"
+      why: "tying the 'safe harbor' option to its own risk prevents a costless fix to the shared danger"
+      hardness: important
+    - need: "the accumulation of several independent conditions (personal degradation reaching a band, a suppressed capability being administered at scale, a private actor's understanding reaching a late stage) must be able to jointly activate a single named political flashpoint that no one condition alone would trigger"
+      why: "'no single action triggers it' is the arc's stated thesis; collapse to one trigger and the multi-system convergence claim is false"
+      hardness: core
+    - need: "once the political flashpoint activates, the dominant religious institution must gain access to a formal punitive action against known holders of the suppressed capability, carrying both a direct cost to the target and a possible backfire cost to the institution on failure"
+      why: "a punitive action with a backfire risk is what keeps this a real contest rather than a one-sided crackdown"
+      hardness: important
+    - need: "the highest political authority must be forced to take a public position on the flashpoint, and that position must trigger a further formal proceeding with a governing-body actor able to challenge the authority's legitimacy"
+      why: "escalation from individual crisis to constitutional crisis is what moves the story from personal-scale to realm-scale"
+      hardness: core
+    - need: "the constitutional-crisis-level proceeding must be resolvable through a structured multi-round contest between two sides where a designated combatant may be substituted mid-contest, and the winner determines whether the suppressed capability becomes formally acknowledged in the public record"
+      why: "substitution is the mechanism through which players can personally decide the campaign's central question; without it, player agency at this pivotal moment is absent"
+      hardness: core
+  temporal:
+    span_seasons: 10
+    needs_memory_of: "each affected character's cumulative personal-degradation level; the running shared danger value; the private actor's advancing understanding stage — all tracked from the first season onward"
+    needs_deadline: no
+  who_acts:
+    - "practitioner player characters (accruing personal cost)"
+    - "the sheltering faction (administering protection)"
+    - "the religious institution (responding)"
+    - "the highest political authority (forced to take a position)"
+    - "a constitutional/legal actor (invoking the challenge)"
+    - "the players (in the multi-round contest, via substitution)"
+  knowledge:
+    - "non-practitioners gradually gain partial awareness of the suppressed capability's effects even without full comprehension"
+    - "the religious institution must be able to detect enough activity to justify formal action"
+    - "the outcome of the multi-round contest determines whether the suppressed knowledge enters the public record for everyone"
+  ends_when: "the multi-round formal contest resolves with one side winning outright; the source calls this an endgame indicator but explicitly notes the shared danger value's future direction is still undetermined afterward, so the political question closes while the systemic one does not"
+
+- id: EMG-X5
+  name: "The Brittle Peace"
+  one_line: "A deliberate, successful action to lock in a fragile agreement must be able to create an invisible structural cost that only manifests later, when an unrelated external shock arrives and the agreement's true fragility is finally tested."
+  scale: faction
+  season_requires:
+    - need: "a deliberate action that succeeds at making an agreement binding must be able to attach an invisible, automatic penalty to all future related actions on that same configuration, without the acting character choosing or being warned of it"
+      why: "the hidden penalty attaches automatically on success and is invisible at the time; the arc's point is that success itself creates the hidden liability"
+      hardness: core
+    - need: "an agreement's hidden fragility must remain dormant until a later, unrelated external event of sufficient severity arrives, at which point a judgment call determines whether the fragility manifests"
+      why: "manifestation is contingent on an external stressor plus a discretionary call, not a fixed timer"
+      hardness: core
+    - need: "when a fragile agreement fails under stress, its status must be able to become genuinely indeterminate — with the parties to it disagreeing about whether it currently holds or what it means — rather than simply switching to a binary broken or intact state"
+      why: "the oscillating exists-or-doesn't state is a distinct, more severe failure mode than ordinary breach; collapsing it to broken/intact removes the arc's central weirdness"
+      hardness: core
+    - need: "an indeterminate agreement left unaddressed must degrade further over a short, randomized span into a harder, more costly relational breach that blocks new formal agreements between the same parties until specifically repaired"
+      why: "an escalating clock is what forces player urgency; without it players can ignore the problem indefinitely at no cost"
+      hardness: important
+    - need: "repairing the relational breach must be achievable through at least two structurally different routes — a direct restorative action and a renewed formal contest to re-establish the original agreement — each with different odds and different side effects"
+      why: "a fork between two repair routes gives players a real choice with distinct risk profiles rather than one fixed fix"
+      hardness: important
+    - need: "a restorative action's outcome must be determined partly by a random roll whose result table includes both cosmetic outcomes and one outcome that reopens an entirely separate, unrelated ongoing threat"
+      why: "tying a random repair result back to an unrelated world-decay track is load-bearing for how arcs interlock"
+      hardness: important
+  temporal:
+    span_seasons: 6
+    needs_memory_of: "which specific configuration was over-actualised and therefore carries the hidden penalty; whether it has since degraded to an indeterminate or broken state"
+    needs_deadline: no
+  who_acts:
+    - "the practitioner who performed the original binding action"
+    - "an opposing institutional faction pressing the agreement"
+    - "the players (choosing the repair route)"
+    - "a second practitioner performing the restorative action, if that route is chosen"
+    - "a hidden third-party actor whose interests are affected by the repair's random outcome"
+  knowledge:
+    - "the acting practitioner does not know at the time of success that the hidden penalty has attached"
+    - "the parties to an indeterminate agreement genuinely disagree about its current state"
+    - "the hidden third-party actor's detection of the repair's byproduct is separate from anyone else's knowledge"
+  ends_when: "UNCLEAR: the source gives two possible resolutions (a successful mend, or a re-established agreement via contest) but does not state which is final, and explicitly allows the repair's own random outcome to reopen a separate ongoing decay — even a 'successful' resolution can re-trigger"
+
+- id: EMG-X6
+  name: "The Tribunal and the Temporal Shimmer"
+  one_line: "A formal accusatory proceeding must be able to be structurally asymmetric — denying the accused a normal defensive option available in ordinary contests — while the accusing side's own strongest evidentiary move can involuntarily produce the very forbidden proof the proceeding exists to suppress."
+  scale: faction
+  season_requires:
+    - need: "a formal proceeding must be able to strip one specific participant of a procedural option available in other formal contests, while granting the initiating side an extra structural advantage, producing a genuinely asymmetric contest"
+      why: "denying one side a normal option plus granting the other an evidentiary bonus is the entire structural conceit; a symmetric proceeding removes the premise that institutional process is itself weaponized"
+      hardness: core
+    - need: "corroboration by an ally within the formal proceeding must be restricted to allies who share a pre-established, specific bond with the accused, usable at most once per exchange and only through one designated channel"
+      why: "restricting who can corroborate, and how often, keeps the asymmetry real instead of letting outside support flatten it"
+      hardness: important
+    - need: "the formal proceeding's outcome must fork on two independent axes at once — who wins the internal vote and who wins audience sentiment — producing genuinely different consequences depending on which axis, or both, the accused wins"
+      why: "distinct outcomes for procedural-win versus popular-win are necessary for a real distinction between institutional and popular legitimacy"
+      hardness: important
+    - need: "an especially decisive evidentiary victory margin within the proceeding must be able to trigger an involuntary side effect that makes a suppressed truth partially perceptible in the room, independent of and regardless of who wins"
+      why: "the institution's own strongest move producing the visibility it tries to prevent is the arc's thesis"
+      hardness: core
+    - need: "the involuntary side effect's perceptibility must scale continuously with individual witnesses' underlying sensitivity, such that different people in the same room experience nothing, vague unease, or full comprehension of the same event"
+      why: "tiered perception lets the same event mean different things to different witnesses simultaneously, which institutional deniability depends on"
+      hardness: important
+    - need: "losing the formal proceeding on points while still winning a late decisive rebuttal must be able to yield a distinct partial-consequence outcome different from either a clean win or a clean loss"
+      why: "near-losses have their own consequence shape, not just a binary pass/fail"
+      hardness: flavour
+  temporal:
+    span_seasons: 1
+    needs_memory_of: "which witnesses, by sensitivity level, were present and what they perceived; the accused's and institution's respective standing values going into and coming out of the proceeding"
+    needs_deadline: no
+  who_acts:
+    - "the accusing institutional representative"
+    - "the accused"
+    - "corroborating allies bound to the accused"
+    - "the audience/officials (whose sentiment is tracked separately from the formal verdict)"
+    - "sensitive bystanders whose perception varies by capability"
+  knowledge:
+    - "witnesses' knowledge of the involuntary side effect is stratified by individual sensitivity, from none to full perception"
+    - "non-sensitive officials perceive nothing, preserving institutional deniability even when sensitive witnesses do perceive it"
+    - "a witness whose perception contradicts the official record must reconcile that contradiction individually"
+  ends_when: "the formal proceeding concludes when its structured exchange count is exhausted and a verdict is read on both the internal-vote and audience axes; the source is explicit that a procedural win with a lost audience may still be rejected by the institution, so a 'win' is not always a hard close"
+
+- id: EMG-X7
+  name: "The Rendering Debt"
+  one_line: "Sustained use of a powerful capability across an extended structured conflict must impose a deterministic, cumulative personal cost on the user with no in-conflict way to avoid it, forcing an explicit trade-off between continuing to use the capability and addressing an emerging secondary crisis."
+  scale: person
+  season_requires:
+    - need: "repeated use of a powerful capability across successive rounds of a structured conflict must inflict a fixed, cumulative personal cost per use, with no way to use the capability without paying it"
+      why: "the cost must be deterministic and cumulative — no individual choice avoids it; an avoidable cost turns this into a risk-management puzzle instead of a stated 'mechanical price of winning'"
+      hardness: core
+    - need: "the cumulative personal cost must cross discrete bands, each imposing a distinct, worsening functional penalty on the user (degraded social/mental capability, increased difficulty on the very capability being used)"
+      why: "a band structure makes continued use progressively more dangerous rather than flatly costly"
+      hardness: important
+    - need: "a leadership or command role within the structured conflict must be able to become incapacitated mid-conflict, forcing the capability-user to choose between two mutually exclusive actions on the same turn — continuing to use the capability, or stabilizing the incapacitated leader — with no way to do both"
+      why: "a forced, exclusive choice on the same turn is the arc's central dilemma; removing the exclusivity removes the dilemma"
+      hardness: core
+    - need: "a randomized narrative-effect table must trigger automatically the moment the user's cumulative cost crosses into the worst bands, independent of and in addition to the normal task-resolution outcome"
+      why: "escalating personal cost needs a narrative texture beyond raw numbers for 'no one is sure they're the same person' to land"
+      hardness: flavour
+    - need: "recovering from the accumulated personal cost must offer at least three structurally different paths (extended rest, a relational/social action, and help from a second capable individual), each gated by different requirements and each only partially reliable"
+      why: "three distinct recovery branches turns 'how do we recover' into a real choice with tradeoffs rather than a forced wait"
+      hardness: important
+    - need: "the helper-based recovery path must be blockable by a disagreement in underlying motivation or belief between the helper and the person being helped, independent of either party's raw capability"
+      why: "interpersonal alignment must be a real gate for recovery, not a purely mechanical roll, for an ontological conflict between helpers to make recovery genuinely impossible"
+      hardness: important
+    - need: "the cumulative personal cost must have an absolute floor state at which the user categorically cannot perform the powerful capability at all — not merely at a penalty — and recovering from that floor must require outside intervention that does not need the user's consent or cooperation"
+      why: "a hard, qualitatively different endpoint (cannot operate at all, cannot even consent to help) is distinct from every prior band"
+      hardness: core
+  temporal:
+    span_seasons: 5
+    needs_memory_of: "the practitioner's running cumulative personal cost total across every turn of the conflict and every subsequent season, since it does not reset between engagements"
+    needs_deadline: no
+  who_acts:
+    - "the practitioner using the powerful capability every turn"
+    - "the incapacitated leader/commander (whose state forces the tradeoff)"
+    - "a second capable individual performing helper-based recovery"
+    - "the faction fielding the practitioner (whose war need creates pressure to keep using the capability despite cost)"
+  knowledge:
+    - "the helper must know/hold a compatible motivation regarding the operation for recovery to succeed"
+    - "the practitioner's own degrading state is visible to observers in-fiction via narrative effects"
+  ends_when: "UNCLEAR: the source describes the conflict resolving (win or lose) as separate from the practitioner's personal-cost arc, which is left in an unresolved band at the point the source stops narrating — there is no stated condition under which the personal-cost track itself is considered closed"
+
+- id: EMG-X8
+  name: "The Temporal Window"
+  one_line: "A shared world-condition crossing below a threshold must be able to newly unlock an extremely powerful, previously-impossible capability for every actor who happens to know the threshold exists, forcing a multi-faction race to be first to use it for incompatible ends."
+  scale: world
+  season_requires:
+    - need: "a specific powerful capability must be categorically impossible while a shared world-value sits above a threshold, and must become newly available — for every actor capable of it, simultaneously — the moment that value crosses below the threshold"
+      why: "a hard gate that flips for everyone at once, not per-actor, turns a private capability into a shared race the instant the world state changes"
+      hardness: core
+    - need: "knowledge that the capability has become available must not be universal — different actors must possess it to different degrees (full awareness, partial or garbled awareness, zero awareness), determined by each actor's own history and nature rather than by the world-state change itself"
+      why: "an uneven awareness split is what creates the race's asymmetry and the tension around who tells whom"
+      hardness: core
+    - need: "using the powerful capability must require satisfying several independent, unrelated preconditions simultaneously (a diagnostic step, possession of a specific prior technique, physical presence at a specific location), where missing any single one makes the attempt categorically impossible rather than merely harder"
+      why: "a hard gate ('cannot be attempted — not harder — impossible') changes the arc from 'must complete a prerequisite quest' to 'should probably prepare more', which is a structurally different story"
+      hardness: core
+    - need: "reaching the location required by one of the preconditions must itself be lethal or excluding to participants below a specific individual capability threshold, filtering who can even attempt the expedition"
+      why: "the expedition can't be solved by fielding more troops — it structurally requires a specific kind of participant"
+      hardness: important
+    - need: "attempting the powerful capability must have a cost that scales directly with how significant or old the target of the capability is, and the cost must apply on both success and failure, at different but both severe magnitudes"
+      why: "ambition must be tied to risk in both directions — success is not free and failure is not merely 'nothing happens'"
+      hardness: important
+    - need: "a successful use of the capability must be able to remove or alter a past event while leaving direct memories of the pre-alteration state intact in everyone who experienced it, creating an internal contradiction between the altered physical world and persistent memory that must be individually resolved"
+      why: "persistent contradictory memory is the arc's central weirdness and distinguishes this from an ordinary retcon; without it the capability is just 'erase an event'"
+      hardness: core
+    - need: "a partial, neither-success-nor-failure outcome of the powerful capability must be able to place its target into a state of ongoing oscillation between two mutually exclusive conditions, with downstream institutional effects that themselves become intermittent rather than settled"
+      why: "an oscillating third outcome distinct from clean success/failure produces a political crisis without any political act by any faction"
+      hardness: important
+  temporal:
+    span_seasons: 9
+    needs_memory_of: "the declining shared world-value's running level and which specific actors currently possess full, partial, or zero awareness that the threshold capability has unlocked"
+    needs_deadline: no
+  who_acts:
+    - "multiple factions with differing knowledge and goals (a self-interested successor-claimant, a sheltering political movement, a suppressing religious institution, the highest political authority)"
+    - "the practitioner(s) attempting the capability"
+    - "the expedition force required to satisfy the location precondition"
+  knowledge:
+    - "awareness of the newly-unlocked capability is unevenly distributed and must be trackable per-faction"
+    - "some actors must be capable of learning it from others only through a deliberate disclosure scene"
+    - "the religious institution is stipulated to have zero starting awareness, creating a structural information asymmetry over who moves first"
+  ends_when: "the attempt at the powerful capability resolves via a single roll into one of three named outcomes (success, failure, or a lasting partial/oscillating state); even the decisive outcomes explicitly open further consequence chains (a formal institutional proceeding, or a second-attempt requirement) rather than closing the arc outright"
+
+- id: NSC-01
+  name: "The Hunting Accident (~218 AG)"
+  one_line: "[STRUCK] An old, unsolved death investigation must be reconstructable only by cross-referencing multiple independently-biased evidence sources, where every single source alone yields a confident wrong answer and only exhaustive synthesis reveals that the political narratives built atop it were never true."
+  scale: realm
+  season_requires:
+    - need: "multiple independent factions must each be able to hold their own separate partial evidence trail about the same past event, where each trail was constructed or interpreted to implicate a different rival faction"
+      why: "self-serving bias per source is what makes single-source investigation actively misleading rather than merely incomplete"
+      hardness: core
+    - need: "a full, correct reconstruction of the past event must require accessing and cross-referencing a minimum number of the independent evidence trails, with no single trail sufficient on its own"
+      why: "requiring most of the trails, with no single trail leading to the truth, is what makes the 'everyone is wrong' structure work; any-one-trail-suffices removes it"
+      hardness: core
+    - need: "acting on a partial or incomplete investigation must be able to produce full-strength political consequences against an accused party, identical to the consequences that would apply if the accusation were actually true"
+      why: "the system must not distinguish a true accusation from a false-but-believed one when applying consequences, or the moral cost of hasty action disappears"
+      hardness: core
+    - need: "a character's long-held, self-limiting belief must be revealed by the true reconstruction to have rested on a false premise, and the reveal itself, not the premise, must be what forces that character to revise the belief"
+      why: "the revision is content-specific to the investigation's outcome, not a generic 'belief was wrong' trigger"
+      hardness: important
+    - need: "a piece of politically dangerous truth must be shareable selectively — told to some factions and not others — with each faction told gaining a distinct trackable relationship state usable as leverage later"
+      why: "selective disclosure must be a distinct, valuable, trackable action rather than a binary reveal/don't-reveal choice"
+      hardness: important
+    - need: "a piece of information's public exposure versus suppression must produce measurably different effects on a general public-opinion value, distinct from and in addition to its effects on any individual faction"
+      why: "the information needs population-wide legibility effects beyond faction-level politics"
+      hardness: flavour
+  temporal:
+    span_seasons: 2
+    needs_memory_of: "which specific evidence trails, of the several available, have been accessed, and which factions, if any, have been selectively told the truth and thus hold the resulting leverage condition"
+    needs_deadline: no
+  who_acts:
+    - "the players (investigating and choosing what to disclose)"
+    - "each of the evidence-holding factions (whose records reflect their own bias)"
+    - "the ruler whose belief is tested by the outcome"
+    - "every faction with a stake in the old narrative"
+  knowledge:
+    - "each faction's own records are internally sincere but collectively contradictory"
+    - "players' depth of investigation directly determines what they believe is true"
+    - "selective disclosure creates asymmetric knowledge among factions that becomes a tracked, exploitable state"
+  ends_when: "UNCLEAR: the source describes the investigation's possible outcomes (full evidence, partial evidence, false accusation) and their consequences but does not state when the arc itself is considered concluded — a false accusation and a true reveal both produce ongoing consequences rather than a close"
+
+- id: NSC-02
+  name: "Almud's Sympathies — The Sovereign Constraint"
+  one_line: "A ruler's public inaction must be explainable as a deliberate calculation balancing several simultaneous political costs, such that removing any one cost by a different, unrelated event partially loosens — but does not by itself release — the constraint on their action."
+  scale: realm
+  season_requires:
+    - need: "a ruling actor's continued inaction on a matter must be attributable to several distinct, simultaneously-held political costs, where the actor acts only once enough of those costs have been individually removed or reduced by separate events"
+      why: "several separable costs, not one unified cost, is what makes this a structural, multi-front calculation rather than a simple threshold problem"
+      hardness: core
+    - need: "a hostile institution's public discrediting, via a sharp drop in a tracked institutional-standing value, must be achievable through an unrelated exposure event, and its occurrence must independently make the ruling actor's action cheaper on one specific cost axis without touching the others"
+      why: "one cost axis being reducible without touching the others shows the costs are genuinely separable, not one meta-cost any win reduces"
+      hardness: important
+    - need: "a rising popular-support value tracked in specific sub-regions must be able to cross a threshold that removes a different cost axis for the ruling actor, distinct from the discrediting path"
+      why: "a second, structurally distinct route to a partial release matters for how many different campaign threads can feed into this one constraint"
+      hardness: important
+    - need: "resolution of an entirely separate, foreign-diplomatic pressure track must be able to remove the ruling actor's third cost axis, via at least two distinct sub-methods"
+      why: "even a single cost axis having multiple independent removal routes is what lets several unrelated campaign threads all eventually loosen the same constraint"
+      hardness: important
+    - need: "a ruling actor with an otherwise-suppressed private trait must be able to have that trait's growth triggered by proximity to significant unrelated events, culminating in a binary pass/fail discovery moment with a permanent, irreversible effect on that actor's own certainty/belief state"
+      why: "a wholly separate personal-transformation track intersecting the political-constraint arc, with its own irreversible trigger, is distinct from the political cost-removal logic"
+      hardness: important
+    - need: "once all identified costs are removed or accepted, the ruling actor's decisive action must be selectable from at least three qualitatively different mechanisms, each with a different risk and consequence shape"
+      why: "the eventual payoff scene needs real branching rather than one canned outcome"
+      hardness: flavour
+  temporal:
+    span_seasons: "ongoing"
+    needs_memory_of: "which of the three cost axes have already been reduced or removed by prior events, and the ruling actor's current private-trait development level, if any progress has been made toward the discovery threshold"
+    needs_deadline: no
+  who_acts:
+    - "the ruling actor"
+    - "a hostile religious institution (whose standing can be discredited)"
+    - "a popular movement (whose regional support can shift the calculus)"
+    - "a rival political figure (who can absorb institutional cost on the ruler's behalf)"
+    - "a foreign power (whose pressure is a removable cost)"
+    - "the players"
+  knowledge:
+    - "the ruling actor's private sympathy is known to the reader/players from the outset but must remain politically inert until the structural costs are addressed"
+    - "the ruler's own possible private-trait development is explicitly unresolved by the source, and downstream consequences of that discovery are left as an open design question"
+  ends_when: "the ruling actor takes decisive public action once the identified costs are individually removed or explicitly accepted — the source is explicit this is only one possible resolution ('he may still not act') and treats the action taken as opening further consequences rather than a terminal state"
+
+- id: NSC-03
+  name: "Baralta and the Solmund Claim"
+  one_line: "A regional ruler must be able to ground a constitutional-authority claim in a specific, contestable metaphysical assertion instead of ordinary law, provided she can first acquire that specialized knowledge through one of several distinct information-relationships, triggering a maximal-stakes formal challenge from the institution whose own authority the claim undercuts."
+  scale: realm
+  season_requires:
+    - need: "a political actor's standard legal-authority claim must be augmentable with an alternative, metaphysical justification that is mechanically and narratively distinct from, and strictly more contested than, the standard version"
+      why: "two separate invocation paths of different stakes is the core distinction that makes this a special, higher-stakes escalation rather than routine politics"
+      hardness: core
+    - need: "acquiring the specialized knowledge needed for the augmented claim must be reachable through multiple, narratively distinct relationship-based channels, any one of which suffices"
+      why: "several independent acquisition paths lets the knowledge-gate be satisfiable by whichever ongoing relationship the campaign has actually developed"
+      hardness: important
+    - need: "a claim that a ruling authority's foundational legitimacy narrative is incomplete or misappropriated by a rival institution must be treated by that institution as the single most severe category of challenge available, triggering its maximal formal response"
+      why: "this must rank above ordinary doctrinal disputes for the claim to be politically explosive rather than routine friction"
+      hardness: core
+    - need: "the maximal formal response and its resolution must produce outcomes on at least two independent institutional-standing tracks simultaneously, with success and failure producing asymmetric, non-mirrored magnitudes on each track"
+      why: "lopsided stakes rather than a simple zero-sum swing is what makes the confrontation genuinely dangerous to invoke"
+      hardness: important
+    - need: "a second, independent political actor who has separately acquired sensitivity to the same specialized domain must be able to have their own private stance folded into the outcome as an additional simultaneous political axis, without being a direct party to the original claim"
+      why: "the claim's resolution is meant to entangle with other characters' independently-tracked states, not resolve in isolation"
+      hardness: flavour
+    - need: "the metaphysical grounding, once invoked publicly and forced into open testimony, must be able to make specialized operations become active in the same scene, with each such operation carrying its own separate world-state consequence distinct from the political outcome"
+      why: "the political contest must tie back into the shared systemic-cost mechanism used elsewhere, rather than being purely rhetorical"
+      hardness: important
+  temporal:
+    span_seasons: 2
+    needs_memory_of: "which specific acquisition channel, if any, has been used to give the claimant the needed specialized knowledge, and whether the second independent actor's own sensitivity or stance has developed enough to be relevant"
+    needs_deadline: no
+  who_acts:
+    - "the regional ruler making the claim"
+    - "the institution whose founding narrative is challenged"
+    - "a private actor who might supply the knowledge"
+    - "an archive-holder who must deliberately choose to disclose"
+    - "a second political actor with independent stakes"
+  knowledge:
+    - "the claimant must first come to possess specialized knowledge she does not start with, via a deliberate act by another party"
+    - "the challenged institution's response depends on whether and how publicly the claim is made"
+    - "the source flags the difficulty and effects of the augmented claim as explicitly undetermined"
+  ends_when: "the formal proceeding resolves via a multi-exchange contest into a success/failure outcome with named institutional-standing deltas — the source itself flags the entire arc as design intent requiring approval and marks the deeper implications as unresolved open questions rather than settled endings"
+
+- id: NSC-04
+  name: "Niflhel Exposes the Church"
+  one_line: "Uncovering an institution's compromising secret partnership with a criminal actor must require acquiring corroborating evidence from multiple independent, individually-insufficient sources, escalatable to a formal public tribunal whose graded outcomes range from full institutional removal to backfire, while a third, self-interested actor's private crisis can independently strip away the institution's capacity to respond regardless of the tribunal's outcome."
+  scale: faction
+  season_requires:
+    - need: "exposing an institutional actor's secret partnership with a criminal organization must require acquiring evidence via at least two independent methods — extracting testimony from a source loyal to the criminal organization, and separately acquiring documentary records — where partial evidence alone yields only weaker, reversible consequences"
+      why: "a real evidentiary bar, requiring both testimony and documents for full exposure, is what makes this a genuine investigation rather than a single roll unlocking everything"
+      hardness: core
+    - need: "extracting testimony from a source loyal to the opposing actor must require breaking that source's loyalty through a dedicated social effort, not merely locating them"
+      why: "loyalty must be its own obstacle, separate from an intelligence-gathering check"
+      hardness: important
+    - need: "a formal accusatory proceeding against an institutional actor must be resolvable to one of at least four distinct, graded outcomes, each with materially different consequences for both accuser and accused, determined by a single contested roll"
+      why: "a graded outcome ladder lets one contested action carry proportional, not binary, stakes"
+      hardness: important
+    - need: "the institution's own senior representative must be able to respond to newly-revealed evidence about a subordinate's wrongdoing according to a fixed personal disposition, producing a predictable but non-scripted internal reaction distinct from the formal tribunal outcome"
+      why: "individual disposition must generate consequences independently of, and in addition to, the tribunal's mechanical result"
+      hardness: flavour
+    - need: "exposing one specific hidden operation belonging to the criminal actor must be able to independently trigger consequences on an entirely separate world-decay track that has been silently running in the background, unrelated to the political consequences of the exposure itself"
+      why: "evidence-gathering must have side-channel systemic payoffs, tying this arc's exposure into a wholly different systemic mechanism"
+      hardness: important
+    - need: "a third individual's own private, independently-tracked personal-transformation crisis, unrelated to the accusation, must be able to reach a critical point in the same window as the tribunal, and its coincidence must be able to independently degrade the institution's capacity to respond, on top of whatever the tribunal itself produces"
+      why: "two unrelated tracks converging, not one plotted double-blow, is explicitly the arc's structure"
+      hardness: important
+  temporal:
+    span_seasons: 3
+    needs_memory_of: "which specific evidence sources (testimony, documents, archive access) have been secured, since the tribunal's available outcomes depend on cumulative evidence gathered; and the independent progress of the third individual's private crisis track"
+    needs_deadline: no
+  who_acts:
+    - "the players (gathering evidence)"
+    - "the accusing political actor (presenting to the tribunal)"
+    - "the institution's senior representative (reacting per fixed disposition)"
+    - "the compromised subordinate"
+    - "the criminal organization's loyal operative (whose loyalty must be broken)"
+    - "a third individual undergoing an independent private crisis"
+  knowledge:
+    - "the institution's senior representative does not initially know of the subordinate's arrangement and only learns it through the same evidence chain the players build"
+    - "the criminal organization's operative holds testimony that must be actively extracted rather than volunteered"
+    - "the third individual's private crisis develops independently and is not necessarily known to any other actor until it converges"
+  ends_when: "the formal tribunal resolves via a single contested roll into one of four graded outcomes — even the most severe outcome is followed by further conditional consequences rather than a stated close, and the parallel private-crisis track is left explicitly contingent on later choices"
+
+- id: NSC-05
+  name: "Torben in Altonia — The Loyalty Clock"
+  one_line: "A hostage/ward relationship held by a foreign power must decay along a visible, trackable allegiance value that the home faction can actively intervene to slow but not fully stop without risk, where the ward's allegiance falling past specific bands independently arms a separate domestic coup-readiness counter."
+  scale: realm
+  season_requires:
+    - need: "a person held by a foreign power must have a trackable allegiance value that decays by default absent successful active maintenance, with a bounded, repeatable maintenance action available each period that can only pause, not reverse, the decay"
+      why: "an active-intervention-required structure, not passive drift, is what makes maintaining the relationship an ongoing cost rather than a set-and-forget state"
+      hardness: core
+    - need: "the maintenance action's failure must carry a chance of being separately detected by the holding power, with detection producing its own independent consequence distinct from the maintenance action's own success/failure result"
+      why: "a second, independent risk layered on top of the primary action's outcome"
+      hardness: flavour
+    - need: "the held person's allegiance value crossing specific bands must be able to unlock qualitatively different, increasingly severe consequences rather than a single continuous penalty"
+      why: "a band structure with distinct effects at each level makes the decay legible as an escalating story, not just a shrinking number"
+      hardness: important
+    - need: "the held person's allegiance crossing one specific band must be able to independently increment a wholly separate faction's private readiness counter for an unrelated drastic institutional action, without that faction needing to take any action of its own"
+      why: "this arc's outcome must be able to feed directly into a separate coup-counter mechanism as one of its named triggers"
+      hardness: core
+    - need: "forcibly retrieving the held person against the holding power's will must require a qualitatively different, far more escalatory type of action than covert retrieval, immediately spiking a separate cross-faction tension value to a level associated with open conflict"
+      why: "retrieval-by-force must not just be 'harder' — it must change the entire strategic situation"
+      hardness: core
+    - need: "the held person must independently possess a dormant personal trait that can be triggered into activity by nearby unrelated events, and its activation while under a foreign power's watch must be detectable by that power's own institutional apparatus, producing consequences that override the ordinary allegiance-tracking logic entirely"
+      why: "a second, independent state must be able to supersede the primary tracked mechanism rather than merely modifying it"
+      hardness: important
+  temporal:
+    span_seasons: "ongoing"
+    needs_memory_of: "the held person's cumulative allegiance value and how many consecutive seasons of successful or failed maintenance preceded the current season"
+    needs_deadline: no
+  who_acts:
+    - "the home faction's intelligence apparatus (attempting covert maintenance)"
+    - "the holding foreign power (whose detection is a separate risk)"
+    - "the held person themselves (whose own personal trait may independently develop)"
+    - "a separate domestic faction whose institutional trust is silently keyed to this outcome"
+    - "a related family member whose own arc activates on certain allegiance bands"
+  knowledge:
+    - "the home faction does not automatically know whether its covert maintenance was detected"
+    - "the held person's possible personal-trait development is not visible to the tracking system until a discovery event fires"
+    - "a separate faction's coup-readiness counter increments silently regardless of whether the players are watching it"
+  ends_when: "UNCLEAR: the source names retrieval (at varying difficulty by allegiance band) and full foreign-alignment as reachable states but never states the arc as formally closed — allegiance at any level continues to feed the separate coup-counter mechanism, and the person's own possible trait activation opens a further, explicitly unresolved editorial question"
+
+- id: NSC-06
+  name: "Elske — The Royal Fate"
+  one_line: "A politically valuable individual embedded within a rival power, torn between competing personal loyalties, must be recruitable only by supplying category-specific evidence matched to which of her competing loyalties is being appealed to, after which she can pursue one of several structurally distinct independence paths each with a different risk of exposure and a different institutional reception."
+  scale: realm
+  season_requires:
+    - need: "a person's decision to align with an approaching faction must gate on which of that person's several competing internal loyalties is appealed to, with each loyalty requiring a different, specific category of evidence to be found persuasive, and combining loyalties for a weaker one requiring supplementary evidence from a stronger one"
+      why: "content-specific evidence requirements per loyalty, not a flat persuasion roll, is what makes recruitment depend on what players actually know about her rather than a generic social check"
+      hardness: core
+    - need: "once recruited, a person embedded in a rival power's structure must be able to break that embedding through at least three structurally distinct methods, each carrying a different success/failure consequence shape and a different chance of the true method being discovered"
+      why: "distinct risk profiles for each route give this a genuine choice rather than one canned extraction"
+      hardness: important
+    - need: "the covert-elimination independence path's success must be distinguishable, mechanically, from its later discovery — an outcome that looks clean in the near term must be able to unravel later with much more severe consequences and a lasting leverage relationship granted to whichever actor performed it"
+      why: "success and eventual-discovery must be separately tracked so the second can retroactively cost far more than the first gained"
+      hardness: important
+    - need: "this person's eventual formal political position must be determined by a combination of prior branch outcomes rather than by a single dedicated succession mechanism, and must set a distinct, contested starting value for her formal authority reflecting how contested her path there was"
+      why: "cross-referencing prior arcs' outcomes into one composite succession result ties multiple campaign threads into a single output"
+      hardness: important
+    - need: "institutional acceptance of this person's new formal authority must be conditional and behaviorally tested rather than automatic, with at least one faction's standard being an observed pattern of behavior sustained over a period rather than a formal credential"
+      why: "a durable observed-behavior gate is a distinct kind of test from the roll-based gates elsewhere in this arc"
+      hardness: flavour
+    - need: "this person independently developing a suppressed sensitivity, if it occurs, must be able to simultaneously activate several separate political-conflict tracks the moment she also holds formal authority, distinct from what the same development would trigger in a person without authority"
+      why: "the same personal-transformation event must have categorically larger consequences depending on the character's concurrent political position"
+      hardness: important
+  temporal:
+    span_seasons: 3
+    needs_memory_of: "which category of evidence has been shown to her and thus which loyalty, if any, has been engaged; which independence path, if any, was attempted and whether a covert method's true nature has since been discovered; whether she has since developed the suppressed sensitivity"
+    needs_deadline: no
+  who_acts:
+    - "the approaching faction/players (choosing which loyalty to appeal to, with what evidence)"
+    - "the person herself (whose receptiveness depends on evidence supplied)"
+    - "the rival power's representative (whose surveillance/response varies by path)"
+    - "a formal governing body (needed for the legal-dissolution path)"
+    - "a separate institutional faction (whose acceptance is behaviorally tested)"
+  knowledge:
+    - "which loyalty she is receptive to is not known in advance and must be discovered by which evidence lands"
+    - "the rival power's awareness of a covert method's true nature is explicitly delayed and separately probabilistic"
+    - "a separate faction's eventual acceptance depends on it directly observing her sustained behavior, not merely being told of her intentions"
+  ends_when: "her position resolves into one of three named succession states once the relevant prior branches are known, reached mainly through contested rolls on the independence path; two of the three states explicitly link forward into other arcs, so even a resolved succession state is treated as an input to further, not-yet-closed consequences"
+
+- id: NSC-07
+  name: "The Southernmost Spiral"
+  one_line: "A degrading location's structural integrity must fall through discrete bands over unattended time unless specific, repeatable stabilizing action is taken each period, eventually requiring an expedition gated by both a global resource threshold and individual capability floors, culminating in a single ritual attempt whose graded outcomes range from permanent fix to catastrophic, self-reinforcing failure."
+  scale: world
+  season_requires:
+    - need: "a degrading structure's integrity must worsen through discrete stages driven by a shared world-value crossing a threshold, and a repeatable local stabilizing action must be able to pause, not reverse, that degradation for one period at a time, requiring renewed action each period to keep pausing it"
+      why: "maintenance as an ongoing cost, not a one-time fix, is what forces sustained player attention across many seasons"
+      hardness: important
+    - need: "sustained neglect of a repeatable stabilizing action across a specific number of consecutive periods must be able to cross an escalation threshold that changes the degrading structure's decay from a paused/reversible state to an ongoing, worsening, and self-accelerating one that itself contributes to a larger world-decay track"
+      why: "escalating irreversibility purely from inaction, feeding a separate systemic decline, is the load-bearing mechanism connecting a local problem to the campaign's largest crisis"
+      hardness: core
+    - need: "attempting to address the degrading structure directly must be gated by both a minimum global-resource threshold and a minimum individual-capability floor for the lead participant, such that the attempt is categorically unavailable below either gate regardless of other resources committed"
+      why: "a dual, non-substitutable gate makes this an achievement-locked expedition rather than an ordinary mission solvable with more troops or gold"
+      hardness: important
+    - need: "individual participants below a specific capability threshold approaching the degraded structure must undergo an automatic, involuntary process determining how much of what they experience they are able to retain afterward, ranging from full retention to none, independent of their success at any other task"
+      why: "a distinct, automatic epistemic-cost layer specific to this location, separate from ordinary task resolution"
+      hardness: important
+    - need: "a culminating ritual attempt at the degraded structure must require simultaneously satisfying a compound set of prerequisites — a specific prior-acquired item, a minimum collective preparedness value, a sufficiently capable lead individual, plus multiple sufficiently capable supporting individuals — before it can even be attempted"
+      why: "a multi-part compound gate on the highest-stakes action in the arc raises the cost of a wrong attempt and makes prior seasons' preparation meaningful"
+      hardness: core
+    - need: "the culminating ritual's outcome must resolve to one of at least four graded results, with the worst outcome capable of crossing an unrelated global crisis threshold immediately and spawning the largest single hostile entity available"
+      why: "the worst outcome must tie one local ritual's failure directly into the campaign's largest-scale crisis mechanism"
+      hardness: core
+    - need: "the culminating ritual's worst outcome must be able to independently and visibly discredit a specific individual's publicly-staked worldview or reputation, in addition to its systemic and combat consequences"
+      why: "systemic events must have individually-scoped political fallout tying back to specific characters elsewhere in the setting"
+      hardness: flavour
+  temporal:
+    span_seasons: 6
+    needs_memory_of: "the running degradation level of the structure and how many consecutive periods of successful or failed stabilizing action preceded the current one; whether the escalation threshold has already been crossed"
+    needs_deadline: no
+  who_acts:
+    - "the players/expedition force"
+    - "a capable lead practitioner (required for the approach, and at a higher floor to lead the culminating ritual)"
+    - "accompanying capable participants (a minimum capability floor for at least two of them)"
+    - "non-capable escort/support (subject to the involuntary retention process)"
+    - "a separately-tracked character whose public reputation is collaterally staked on the outcome"
+  knowledge:
+    - "participants below the capability threshold are mechanically prevented from retaining what they experience, creating built-in epistemic gaps within the same expedition party"
+    - "the degree of understanding achieved on-site depends on individual capability level, not on choice"
+  ends_when: "the culminating ritual resolves via a single roll into one of four graded outcomes, three of which explicitly change the shared degradation value going forward rather than simply closing the local problem — the worst outcome explicitly feeds into a separately-named terminal-decline scenario, so even the ritual's resolution is an input to a larger, still-open track"
+
+- id: NSC-08
+  name: "Ehrenwall's Coup — The Löwenritter Threshold"
+  one_line: "A private, hidden readiness counter for a military institution's ultimatum must accumulate irreversibly from three independently-tracked failure conditions, and once it reaches its ceiling the ruling authority must face a forced binary choice between ceding a specific domain of formal power or triggering a blanket emergency state — while players retain a narrow, closing window to defuse at least two of the three conditions before the threshold is reached."
+  scale: realm
+  season_requires:
+    - need: "a specific institutional actor must maintain a private, not-directly-visible readiness counter that increments from three independently-defined failure conditions, any one of which can fire in a given period"
+      why: "three genuinely independent triggers, each checkable on its own terms, is what makes the counter emergent rather than scripted"
+      hardness: core
+    - need: "the private readiness counter must be irreversible — once a condition fires and increments it, no subsequent event can decrement it back, even if the underlying condition that caused the increment is later resolved"
+      why: "a decrementable counter would let players simply fix any one trigger repeatedly to stay safe, removing the accumulating-pressure logic entirely"
+      hardness: core
+    - need: "the private counter reaching its ceiling must force the institutional actor to issue a formal, binary ultimatum to the ruling authority at the next scheduled evaluation point, rather than acting unilaterally at the moment the ceiling is crossed"
+      why: "tying the ultimatum's timing to a periodic evaluation gives players a bounded but real window between the ceiling being crossed and the ultimatum landing"
+      hardness: important
+    - need: "the ruling authority's two possible responses to the ultimatum must produce structurally different ongoing states — one producing a durable power-sharing arrangement contingent on a separate tracked value's future trajectory, the other producing a blanket suspension of normal action for every other actor in the affected territory until a specific removal condition is met"
+      why: "the two branches must diverge meaningfully, since this fork is the payoff of the entire counter mechanism"
+      hardness: core
+    - need: "players must be able to defuse the ultimatum before it fires by resolving at least two of the three independent trigger conditions through distinct, condition-specific actions, with a hard requirement that this occur before the next scheduled evaluation point once the ceiling is reached"
+      why: "an explicit escape valve is needed, or the counter is a pure inevitability rather than a threat players can actually race against"
+      hardness: important
+    - need: "one of the specific remediation paths available to defuse the ultimatum must itself require the ruling authority to act against their own established personal principles, incurring an additional, separate risk of failure distinct from the remediation's primary success check"
+      why: "even a successful remediation path can carry character-consistency friction as its own risk layer"
+      hardness: flavour
+  temporal:
+    span_seasons: "ongoing"
+    needs_memory_of: "the current value of the private readiness counter and which of the three specific trigger conditions have already fired, since the counter never decrements"
+    needs_deadline: yes
+  who_acts:
+    - "the military institution's leadership (silently tracking the counter and issuing the ultimatum)"
+    - "the ruling authority (choosing to yield or refuse)"
+    - "the players (attempting to defuse triggered conditions before the deadline)"
+    - "a separate political actor whose objection is itself a possible complication if the authority yields"
+  knowledge:
+    - "the readiness counter is private — players do not automatically know its current value and must infer it from which trigger conditions they know have occurred"
+    - "the institutional actor tracks all three conditions regardless of what the players are attending to"
+  ends_when: "the ceiling is reached and, absent player remediation of at least two trigger conditions beforehand, the institutional actor issues a binary ultimatum at the next scheduled evaluation, which the ruling authority then resolves by choosing to yield or refuse — a threshold fires the crisis with nobody deciding, and a person's subsequent choice determines which of two divergent ongoing states follows"
+
+- id: NSC-09
+  name: "Vaynard — From Acquisition to Dangerous Knowledge"
+  one_line: "A self-interested actor's private understanding of forbidden knowledge must progress through discrete, ordered stages via multiple alternative information sources, with each stage both raising a shared institutional-threat value and reshaping the actor's own stated goals, while a separate binary chance-event can independently accelerate the actor past several stages at once and permanently alter that actor's core worldview."
+  scale: faction
+  season_requires:
+    - need: "a self-interested actor's private understanding of a specific hidden truth must progress through discrete, ordered stages, reachable via multiple alternative information sources, any single one of which suffices to advance a stage"
+      why: "several independent sources for stage advancement means it's reachable through whichever relationship the campaign has actually developed, not gated to one specific interaction"
+      hardness: important
+    - need: "each stage of the actor's advancing understanding must automatically raise a shared institutional-threat value by an amount specific to that stage, as an inherent side effect of the actor's understanding growing, not of any deliberate hostile action by the actor"
+      why: "a fixed, increasing side-cost per stage, independent of what the actor does with the knowledge, is core to why this is emergent rather than scripted"
+      hardness: core
+    - need: "the actor's advancing understanding must, at a specific late stage, cause the actor to formally condition their cooperation on a specific external actor providing the actor a distinct resource, where refusal to provide it must leave the party needing an alternate route to whatever depended on the actor's cooperation"
+      why: "a forced fork on refusal is what makes the actor's escalating knowledge a real strategic bottleneck, not flavour"
+      hardness: important
+    - need: "a specific class of dangerous physical objects known to be connected to the hidden truth must be able to pass from the actor's private possession into circulation among practitioners, and doing so must be able to simultaneously trigger unrelated sensitivity-growth events in multiple other characters and independently risk exposing a separate, unrelated institutional destabilization already in progress"
+      why: "one object class must be load-bearing across several separate tracks at once for the offer to carry campaign-wide stakes, not just local ones"
+      hardness: important
+    - need: "the actor's advancing understanding must culminate in a stage where the actor's own stated core goal changes in kind, from wanting to understand a domain to wanting to control it, and this goal-change must be described as a forced revision to the actor's previously-stated guiding belief, not a free choice by the actor"
+      why: "a forced belief revision, not a chosen one, is what makes the final stage the arc's true escalation point rather than just 'he knows more now'"
+      hardness: core
+    - need: "independent of the staged progression, the actor's repeated use of the resource granting access to the hidden truth must carry, on each use, its own separate binary-chance event capable of jumping the actor's stage forward by more than one increment at once and permanently altering a personal certainty/belief value, regardless of which stage the actor was previously at"
+      why: "a chance-based shortcut layered on top of, and independent from, the deliberate staged progression gives every single use of the resource its own escalation risk"
+      hardness: important
+    - need: "the actor reaching a sufficiently advanced stage of understanding via the binary-chance event must unlock eligibility for that actor to acquire a specific personal capability normally reserved for a different category of character, converting a previously purely-political actor into a mechanically different kind of actor entirely"
+      why: "the chance event must be able to convert a political actor into a categorically different kind of actor, a distinct, falsifiable capability the system must support"
+      hardness: important
+  temporal:
+    span_seasons: "ongoing"
+    needs_memory_of: "the actor's current understanding stage and cumulative institutional-threat contribution from that progression; whether the binary-chance discovery event has fired on any prior use of the sensitive resource"
+    needs_deadline: no
+  who_acts:
+    - "the self-interested actor (whose understanding advances and whose goals shift)"
+    - "the player(s) supplying information via a sustained relationship"
+    - "an archive-holder who must broker access"
+    - "an institution's intelligence apparatus (an alternate information source)"
+    - "the players (deciding whether to grant the actor's late-stage demand)"
+  knowledge:
+    - "the actor's private understanding is not visible to other faction NPCs by default and only becomes politically consequential when the actor acts on it"
+    - "the actor's own goal-shift at the final stage is described as something the actor discovers about himself, not something told to him"
+  ends_when: "UNCLEAR: the source describes the actor reaching the final named stage and lists a possible further chance-driven escalation without stating any point at which this actor's own arc is considered concluded — the final beat explicitly frames him as newly, not conclusively, dangerous"
