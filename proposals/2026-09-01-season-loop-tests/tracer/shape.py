@@ -4350,6 +4350,28 @@ def contest(w: World, rung: str, prize: Any, claimants: list[str],
     # twelve lines above this one — §8 broken in the act of fixing an ordering bug.
     _sub = contest_subsystem(prize)
     if _sub is not None:
+        # ⚠ THE SEAM CALLS NOW. Jordan, 2026-09-02: *"kill / wound points towards a seam that
+        # should be calling in the personal combat system."* This block used to resolve the
+        # subsystem by name and then REFUSE — a pointer, not a call — on a scope note that ruling
+        # overrides. `combat_seam` is the IN-side, built on `engine/cross_scale/combat_bridge.py`'s
+        # precedent rather than a new pattern.
+        if _sub["module"] == "personal_combat":
+            import combat_seam
+            out = combat_seam.resolve(w, claimants, causes, prize)
+            if out.get("status") == "RESOLVED":
+                TRACE.decision(f"contest for {prize!r} dispatched", "S39",
+                               chose=f"called {out['module']} (resolver {out['resolver']})",
+                               alternatives=["invent a degree ladder in the seam (S27.2: the "
+                                             "second resolver)"])
+                return out
+            # A gap in the CALL is named as a gap in the call, never as a missing design.
+            raise Unspecified(
+                f"a contest for {prize!r} routes to `{out['module']}` and the call did not "
+                f"complete: {out.get('why')}", "S39",
+                needs=out.get("status"),
+                law="the seam DISPATCHES (Jordan 2026-09-02). A party the seam cannot derive is "
+                    "a gap in the derivation, not a hole in the subsystem, and `combat_bridge` "
+                    "sets the rule: return the gap, never fabricate a side")
         raise Unspecified(
             f"a contest for {prize!r} belongs to the `{_sub['module']}` subsystem "
             f"(resolver: {_sub['resolver']}), and nothing connects the seam to it", "S39",
@@ -4357,7 +4379,8 @@ def contest(w: World, rung: str, prize: Any, claimants: list[str],
             law="Jordan 2026-09-02 -- a contest is a call for a different subsystem. The three "
                 "are declared in references/module_contracts.yaml WITH resolvers, so the seam's "
                 "job is to DISPATCH; inventing a degree ladder here would be a second resolver, "
-                "which S27.2 names as its highest-value refusal")
+                "which S27.2 names as its highest-value refusal. `personal_combat` is CALLED "
+                "above; mass_battle and social_contest still resolve to a name only")
     raise Unspecified(
         "the degree ladder's margin model",
         "S39.4",

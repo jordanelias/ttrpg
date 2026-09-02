@@ -4262,3 +4262,86 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
         "five are the governance verbs and `H-71` is why; any movement means `H-71` has moved")
 
 
+
+
+def test_the_seam_calls_personal_combat_rather_than_naming_it():
+    """JORDAN, 2026-09-02: *"kill / wound points towards a seam that should be calling in the
+    personal combat system."*
+
+    Before this, `contest()` resolved the subsystem by name and then REFUSED — a pointer, not a
+    call — on a scope note that ruling overrides. The seam calls now, and these are the properties
+    that make the call honest rather than merely present."""
+    import combat_seam as C
+    w = P.tiny_world(); w.step = S.Step.RESOLVE
+    if C.engine() is None:                     # a NAMED gap, never a silent skip
+        assert C.load_error(), "the engine is unavailable and the seam reports no reason"
+        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+
+    out = S.contest(w, "S", "the body", ["p_low", "p_mid"], 0, 2, ["act1"])
+    assert out["status"] == "RESOLVED" and out["module"] == "personal_combat", out
+    assert out["resolver"] == "d_sigma", (
+        "the seam is not using the resolver `module_contracts.yaml` declares for this prize")
+
+    # ⚠ DETERMINISM, WHICH IS THE WHOLE REASON THE SEED IS DERIVED FROM THE WORLD'S CLOCK.
+    # `wrapper.fight`'s own note says to pass `random.Random(seed)`; an unseeded call would make
+    # every campaign unreproducible, which `W11` and `test_w9_check1` both rest on.
+    again = S.contest(w, "S", "the body", ["p_low", "p_mid"], 0, 2, ["act1"])
+    assert again["result"] == out["result"] and again["seed"] == out["seed"], (
+        "the same contest in the same world gave a different answer — the seam is not seeded "
+        "from the world clock and the instrument is no longer reproducible")
+
+    # ⚠ THE SEAM MINTS NO DEGREE, AND THAT IS `H-98`. `contest()`'s contract reads a band off a
+    # MARGIN; the engine returns a WINNER (+1/-1/0). Mapping one onto the other is the second
+    # resolver §27.2 forbids, so the outcome is returned as the engine gave it.
+    assert "degree" not in out and "band" not in out, (
+        f"the seam has started reporting a degree ({ {k: out[k] for k in out if k in ('degree','band')} }) "
+        "— it has become the second resolver, which is S27.2's highest-value refusal")
+    assert out["result"] in (-1, 0, 1), out["result"]
+
+    # ⚠ `0` IS A RULED OUTCOME. Jordan, 2026-06-02, in the engine: "an undecided fight is a
+    # legitimate outcome." A seam that retried it into a decision would overwrite that ruling.
+    assert out["unresolved"] == (out["result"] == 0)
+
+    # A party it cannot derive is a GAP, never a fabricated side (`combat_bridge`'s rule).
+    gap = C.resolve(w, ["p_low"], ["a"], "the body")
+    assert gap["status"] == "PARTY-GAP" and "two parties" in gap["why"], gap
+
+
+def test_the_combat_seam_derives_one_field_and_it_decides_something():
+    """`H-97`. A tracer `Person` carries nothing combat-shaped except `body`, so the seam derives
+    EXACTLY ONE `Combatant` field from it and leaves every other at the class's own default —
+    `engine/cross_scale/combat_bridge.py`'s discipline, followed rather than reinvented.
+
+    ⚠ AND IT INVENTS NO NUMBER. `body_band_penalty` already owns the body → bands reading (it is
+    `H-38`'s closure spent), so the magnitude comes from `band_floors["body"]`, which is
+    registered. The injected part is WHICH field the penalty lands on, and that is what `H-97`
+    grades.
+
+    ⚠ THE SECOND ASSERTION IS THE ONE THAT MATTERS. A derivation that reaches the engine and
+    changes no outcome would be decoration — the `uniform` arm of its own sweep. Condition has to
+    move the result, or the seam is passing a constant."""
+    import combat_seam as C
+    w = P.tiny_world()
+    if C.engine() is None:
+        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+    scale = w.fixtures.get("condition_scale")
+    ends = {}
+    for body in (scale, 700, 400, 50):
+        w.persons["p_low"].body = body
+        ends[body] = C.derive_party(w.persons["p_low"], w.fixtures, "x").end
+    assert ends[scale] > ends[700] > ends[400] > ends[50] >= 1, (
+        f"the derived `end` is not monotone in body condition: {ends}. A dying fighter must not "
+        "be as durable as a healthy one, and the floor of 1 is why a dying one still fights")
+
+    def wins(body_a: int) -> int:
+        w.persons["p_low"].body = body_a
+        w.persons["p_mid"].body = scale
+        n = 0
+        for t in range(40):
+            w.tick = t
+            n += C.resolve(w, ["p_low", "p_mid"], ["a"], "the body")["winner"] == "p_low"
+        return n
+    healthy, dying = wins(scale), wins(50)
+    assert healthy > dying, (
+        f"condition does not reach the engine: healthy won {healthy}/40 and dying {dying}/40. "
+        "The derived field is decoration, and the seam is handing the subsystem a constant")
