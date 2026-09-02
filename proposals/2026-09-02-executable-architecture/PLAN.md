@@ -1385,13 +1385,30 @@ execution** (`§0.2`), and every yield is a measured count with its command, or 
 ## The instrument, and the board — first, because nothing after them is measurable
 
 ### **`W18` — THE RUN DEFINITION, AS AN INSTRUMENT.**
-**Do.** `corpus_run.py` computes §6.1's `R1`–`R5` and §6.2's `A1`–`A3` per case and prints one table
-per lane, plus per-verb execution and cross-person edge counts. Reads `ENDINGS_CLASSIFIED.yaml`.
-Refuses a prose span on an arc rather than defaulting one.
+**Do.** `corpus_run.py` computes, per case, **every check that is computable today** — `R1`, `R3`,
+`R4`, `R5` and `A1` — and prints one table per lane plus per-verb execution and cross-person edge
+counts. Reads `ENDINGS_CLASSIFIED.yaml`. Refuses a prose span on an arc rather than defaulting one.
+
+⚠ **A CHECK IT CANNOT COMPUTE REPORTS `NOT-COMPUTABLE` AND NAMES THE ITEM THAT CLOSES IT — it does
+NOT score.** `R2` needs authored `exercises:` rows (8 of 143 cases have any) and a real cast
+(`W27`); `A2`'s DECIDER and ROLL predicates need binding decisions (`W26`) and contest results
+(`W23`) that do not exist yet; `A3` needs the case's own cast (`W27`). **An instrument that silently
+scores an uncomputable check is the defect this chain has found in its own work five times** — a
+number that cannot fail is not a measurement (§0.1 pt 2), and it flatters in the direction of
+progress every time.
+
+⚠ **THIS ITEM AND `W30` OVERLAPPED IN THE FIRST DRAFT OF THIS PART, AND THE OVERLAP IS RECORDED
+RATHER THAN QUIETLY REMOVED.** `W18` was written as computing `A1`–`A3` while `W30` was written as
+implementing `A2`, which is impossible for `W18` to have done: `A2`'s labels depend on mechanisms
+`W23` and `W26` build. Caught on re-reading before any code was written. The split is now: **`W18`
+builds the frame and reports the gaps; `W30` fills `A2` when its dependencies land.**
+
 **Depends.** Nothing. **Size.** M.
-**Proof.** It prints `NPC RUNS 0` and `ARC ENDS 0` **today** — the control is that the instrument
-can say zero — and a planted world carrying one hand-built cross-person edge flips exactly one case
-to `RUNS`.
+**Proof.** It prints `NPC RUNS 0` and `ARC ENDS 0` **today** — *the control is that the instrument
+can say zero*, against a corpus where 86 cases already "RAN" under the loose reading it replaces —
+**and** it prints a non-empty `NOT-COMPUTABLE` list naming `W23`/`W26`/`W27`. A planted world
+carrying one hand-built cross-person edge flips exactly one case to `RUNS`, which is the falsifier
+for `R3`.
 **Yield.** 0 cases, and every number after it.
 
 ### **`W19` — BOARD, REGISTER AND STALE-TEXT HYGIENE.**
@@ -1525,7 +1542,8 @@ ARC-44 runs its full 16 seasons unclamped; suite wall time reported before and a
 **Yield.** 3 clamped arcs, and every cast larger than three.
 
 ### **`W30` — ENDINGS ARE EVALUATED.**
-**Do.** §6.2's five ending predicates in `corpus_run`, plus `WAITS-ON-PLAYER` and `REFUSED-BY-L5`.
+**Do.** §6.2's five `A2` ending predicates in `corpus_run` — the checks `W18` reports as
+`NOT-COMPUTABLE` — plus `WAITS-ON-PLAYER` and `REFUSED-BY-L5`. `A3` lands with `W27`'s cast.
 **Depends.** `W18`, `W23`, `W26`. **Size.** M.
 **Proof.** ARC `ENDS > 0` with a per-label breakdown; and a `NEVER` arc whose content hash stops
 moving is reported as a **fixed point**, not as `ENDS`.
