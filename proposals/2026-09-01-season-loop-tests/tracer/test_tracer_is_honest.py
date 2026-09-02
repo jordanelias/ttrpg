@@ -3308,6 +3308,147 @@ def test_the_corpus_cannot_reach_the_governance_branch_and_h71_is_not_the_reason
         "and the tautology above has become a measurement")
 
 
+def _ten_seasons(w, seasons=10):
+    """Run a world under the COMPUTED chooser and return per-season stores plus the acts minted.
+    One owner, because three `W8` tests need the same run and a second copy would let them drift
+    into describing different worlds."""
+    d = S.SeasonDriver(w)
+    mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs())
+    minted = []
+    def spy(p, v, sc, ask):
+        out = ch(p, v, sc, ask)
+        for x in out:
+            minted.extend(getattr(x, "acts", []) or [])
+        return out
+    hist = []
+    for _ in range(seasons):
+        d.season(spy, question=None, subsistence=P.SUBSIST)
+        hist.append({r: dict(w.rungs[r].stores) for r in w.rungs})
+    return hist, minted
+
+
+def test_w8_matter_draws_before_it_produces_which_is_353s_stated_order():
+    """#353 §25 VERBATIM: *"Events resolve FIRST, then bodies, larders, yield, travel, wear."*
+
+    The order is SUBSTANTIVE, not cosmetic: drawing before producing means a season's subsistence
+    comes out of LAST season's larder, so a rung CAN run short. Produce first and nothing ever
+    does — every larder is topped up before anyone eats, and the starving world `W8`'s proof
+    clause exists to catch becomes unreachable by construction.
+
+    Asserted on the EMITTED ORDER rather than on the source, because the source is what a reader
+    checks and the log is what ran."""
+    w = P.tiny_world()
+    d = S.SeasonDriver(w)
+    w.step = S.Step.MATTER
+    evs = d.matter([])
+    order = [(e.kind, e.subject) for e in evs if e.kind in ("stores.changed", "yield.taken")]
+    assert order, f"MATTER emitted no economy events at all: {[e.kind for e in evs]}"
+    # `S` both draws (one person present) and produces (it owns both sites), so it is the one
+    # rung where the order is observable at all.
+    s_evs = [k for k, subj in order if subj == "S"]
+    assert s_evs[:1] == ["stores.changed"], (
+        f"`S` produced before it drew, or did not draw: {s_evs}. #353 §25 puts larders before "
+        "yield, and reversing it means no rung can ever run short")
+    assert "yield.taken" in s_evs, f"`S` owns two sites and produced nothing: {s_evs}"
+
+
+def test_w8_a_worn_site_produces_less_and_a_dead_one_produces_nothing():
+    """`H-93`'s scaling clause, which is the half that is NOT invented. Production is the base
+    times `condition / condition_scale` times `season_factor`, so wear reaches the economy without
+    a second wear concept being invented to make it do so.
+
+    ⚠ THE CONTROL IS THE DEAD SITE. A test that only checked "a worn site yields less" would pass
+    on any monotone function of condition including one that never reaches zero; a site AT zero
+    must produce nothing at all, which is the clause that pins the shape."""
+    def produced(cond):
+        w = P.tiny_world()
+        for st in w.sites.values():
+            st.condition = cond
+        d = S.SeasonDriver(w); w.step = S.Step.MATTER
+        d.matter([])
+        return sum(getattr(w.rungs["S"], "yield").values())
+    full = produced(w0 := S.DEFAULT_FIXTURES.get("condition_scale"))
+    half = produced(w0 // 2)
+    dead = produced(0)
+    assert full > half > 0, f"a worn site did not produce less: full={full} half={half}"
+    assert dead == 0, f"a site at zero condition still produced {dead}"
+
+
+def test_w8_the_none_arm_is_a_real_control_and_the_loader_refuses_it_as_a_default():
+    """`H-93`'s `none` sweep arm. With every cell zero the economy has NO SOURCE, so every larder
+    that anybody eats from falls monotonically — and `W8`'s proof clause must fail. A sweep whose
+    control arm cannot break the claim is not a control (§0.1 pt 4).
+
+    ⚠ AND THE CONTROL MUST NOT BE SHIPPABLE AS THE DEFAULT, which is why `_load_matter_tables`
+    refuses an all-empty table: an economy with no source would otherwise pass every structural
+    test in this file while meaning nothing, which is the dead-carrier defect one noun along."""
+    w = P.tiny_world()
+    d = S.SeasonDriver(w); w.step = S.Step.MATTER
+    saved = dict(S.SITE_YIELD)
+    try:
+        for k in S.SITE_YIELD:
+            S.SITE_YIELD[k] = {}
+        d.matter([])
+        assert not getattr(w.rungs["S"], "yield"), (
+            "the `none` arm still produced; then the control cannot break the claim")
+    finally:
+        S.SITE_YIELD.clear(); S.SITE_YIELD.update(saved)
+    assert sum(len(v) for v in S.SITE_YIELD.values()), "the restore lost the declared table"
+
+
+def test_w8_the_proof_clause_is_not_met_and_h94_is_why():
+    """⚠ `PLAN.md` `W8`'s PROOF IS **NOT MET**, AND THIS TEST RECORDS THAT RATHER THAN TUNING
+    NUMBERS UNTIL IT IS. The clause asks for *"a 10-season seeded run in which stores neither
+    monotonically deplete nor overflow — the control that catches a starving world"*. Measured on
+    `tiny_world` under the computed chooser: the hearth's grain goes 2, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    (three people, no site, so it eats and cannot produce) while the settlement's goes 74 → 374,
+    monotonically up. Both failure modes at once, in one world.
+
+    THE CAUSE IS NOT THE ECONOMY'S NUMBERS. It is `H-94`: the computed chooser mints Acts with
+    `payload: None` and `changes: []` — **0 of 56 over three seasons carry either** — so the two
+    verbs that could move matter between the rungs cannot. `transfer` is refused on a precondition
+    it has no operands to satisfy, and `work` emits `site.worked` while accumulating no delta, so
+    site condition is a one-way ratchet and every producer eventually dies. A steady state needs a
+    verb that MOVES something, and no minted act carries what to move.
+
+    This test goes red when `H-94` closes, which is exactly when the proof clause becomes
+    reachable and must be re-run rather than re-read."""
+    hist, minted = _ten_seasons(P.tiny_world())
+    hearth = [h["Hh"].get("grain", 0) for h in hist]
+    settle = [h["S"].get("grain", 0) for h in hist]
+    assert hearth == sorted(hearth, reverse=True) and hearth[-1] == 0, (
+        f"the hearth no longer starves: {hearth}. `W8`'s proof clause may now be reachable — "
+        "re-run it as a measurement instead of citing this test")
+    assert settle == sorted(settle) and settle[-1] > settle[0], (
+        f"the settlement no longer overflows: {settle}")
+    assert minted, "the chooser minted nothing; this test cannot observe H-94"
+    assert not [a for a in minted if a.payload or a.changes], (
+        f"{len([a for a in minted if a.payload or a.changes])} of {len(minted)} minted acts now "
+        "carry operands — `H-94` has closed, and `W8`'s proof clause is owed a fresh measurement")
+
+
+def test_w8_work_emits_a_success_while_repairing_nothing(): 
+    """`H-94`'s worked case, and the sharpest single statement of it.
+
+    §27.3 defers `work`'s delta to the fold's accumulator and clamps once — correct, and the
+    reason `_eff_work` reports the site anyway is so the deferral does not read as a no-op. With
+    NO DELTA DECLARED nothing is accumulated, so `site.worked` is an emitted success for a repair
+    that did not happen. That is the rule this file states twice elsewhere (`_fold` refuses an
+    effect that touched nothing; `conditional_emission_rows` exempts `(Record, ttl)` on the same
+    argument) failing at the one place the fold cannot see it, because the effect DID report a
+    subject."""
+    w = P.tiny_world()
+    site = w.sites["site_seam"]
+    before = site.condition
+    d = S.SeasonDriver(w); w.step = S.Step.RESOLVE
+    evs = d.resolve([S.Act(id="wk", actor="p_low", verb="work", payload={"site": site.id})])
+    assert [e.kind for e in evs] == ["site.worked"], [e.kind for e in evs]
+    assert site.condition == before, (
+        f"`work` moved condition {before} -> {site.condition} from an act declaring no delta; "
+        "`H-94` has closed and this test is the record of a defect that no longer exists")
+
+
 def test_no_person_can_choose_a_governance_verb_and_h71_is_why():
     """⚠ THE HALF THE SLICE DOES NOT BUILD, PINNED SO IT CANNOT BE ASSUMED AWAY.
 

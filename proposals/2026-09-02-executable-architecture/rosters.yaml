@@ -407,7 +407,121 @@ rosters:
 # and vice versa, so the two shapes cannot be confused at a call site.
 # ===========================================================================
 
+  site_kinds:
+    source: "#353 §12 — `Site.kind`. `W8`."
+    row: H-07
+    note: >-
+      ⚠ THE SET IS EXTENSIBLE AND THE LOOKUP STILL REFUSES, and those are different properties.
+      Adding a kind means adding a row here; asking about a kind that has no row RAISES, because
+      §42.2.1's worked example is exactly this table: *"a wear table that returns 20 for an
+      unregistered site kind does not fail — it answers, plausibly and wrongly, forever."*
+      ⚠ THESE THREE ARE THE INSTRUMENT'S, NOT #353's. #353 names no site kinds; harbour, seam and
+      body are the kinds the probes exercise. That is why the row is `H-07` at `assumption` and
+      not a transcription.
+    values: [harbour, seam, body]
+
+  matter_kinds:
+    source: "#353 §10.4 VERBATIM: *It is a type parameter, not an enumeration. Grain, salt, timber, ore and coin are rows in a registry, not members of a closed set in a source file.*"
+    row: H-11
+    note: >-
+      ⚠ OPEN MEANS ADDABLE, NOT UNCHECKED — and this file is the registry §10.4 asks for. #353
+      forbids *a closed set in a source file*; it does not license a lookup that answers for a
+      kind nobody registered. Both halves hold here: add a kind by adding a row, and a draw
+      against an unregistered kind raises.
+      ⚠ THE FIVE ARE #353's OWN EXAMPLES and nothing more. It names them as illustrations of what
+      a row looks like, so starting the registry with exactly them is the least-invented content
+      available — but it is still a choice, which is what `H-11` grades.
+    values: [grain, salt, timber, ore, coin]
+
+  wear_per_season:
+    source: "#353 §22 assigns `wear per site kind` to params; no in-chain table exists. `H-07`."
+    row: H-07
+    note: >-
+      ⚠ MOVED OUT OF THE INSTRUMENT BODY BY `W8`, WHICH IS WHAT PLAN `W8` ASKS FOR: *per-kind wear
+      and floors as registry rows rather than `DEFAULT_FIXTURES` literals*. `DEFAULT_FIXTURES`
+      READS this mapping, so the declaration still lives once — the objection recorded in
+      `shape.py` when these were literals (*"splitting them into rosters.yaml would put one
+      declaration in two files"*) is answered by the fixture reading the data rather than
+      restating it.
+    rates:
+      harbour: 10
+      seam:    10
+      body:    10
+
+  subsistence_weight:
+    source: "`H-11` — *the subsistence formula over an OPEN MatterKind registry*. ARCHITECTURE_V2.md's default: *draw from the containing rung's stores, scaled by weight*."
+    row: H-11
+    note: >-
+      ⚠ THE WEIGHTS ARE INVENTED AND THE ROW IS WHAT MAKES THAT LAWFUL. #353 states the SHAPE — a
+      draw from the containing rung's stores, scaled per kind — and supplies no numbers, so this
+      is an injected default with a `site:` and a sweep, exactly as `wear_per_season` beside it.
+      ⚠ A KIND WITH NO WEIGHT IS NOT A KIND WITH WEIGHT ZERO. A missing row RAISES rather than
+      drawing nothing, for `wear`'s reason: a silent zero is a person who eats nothing and never
+      starves, which is a plausible wrong answer that no test would ever surface.
+      ⚠ ONLY `grain` AND `salt` CARRY A WEIGHT, and that is deliberate rather than an omission:
+      timber, ore and coin are stored and not eaten. They are registered in `matter_kinds` and
+      absent here, so a draw against them raises — which is the refusal above doing its job on
+      the very first kind somebody adds to a larder by mistake.
+    weights:
+      grain: 2
+      salt:  1
+
 tables:
+
+  site_yield:
+    source: "`W8` / `H-93`. #353 §25 lists `yield` as written at MATTER and *blocked on `season_factor`'s distribution* (§22.3); it never says what a place produces."
+    row: H-93
+    default_cell: 0
+    sweep: [declared, uniform, none]
+    keys: [site_kinds, matter_kinds]
+    note: >-
+      ⚠ WHAT A HARBOUR PRODUCES IS INVENTED. #353 supplies the BARRIER, the ORDER and the BLOCKER
+      and no quantities at all, so this table is an injected default with a row and a sweep — the
+      same standing as `alignment` and `band_floors`, and stated here rather than left to look
+      derived.
+      ⚠ WHAT IS *NOT* INVENTED IS THE SCALING. Production is the base scaled by the site's
+      `condition / condition_scale` and then by `season_factor`. Condition is the model (`H-38`
+      closed with *"`Site.condition` is the model"*), `condition_scale` is an existing registered
+      fixture, and `season_factor` is #353's own named blocker — so a WORN PLACE PRODUCES LESS
+      without a second wear concept being invented to make it do so. That is why yield is keyed
+      on the SITE and not on the rung: the rung has no quantity that could fall.
+      ⚠ `none` IS THE CONTROL ARM, not a third opinion: with every cell zero the economy has no
+      source, every store depletes monotonically, and `W8`'s own proof clause must fail. A sweep
+      whose control arm cannot break the claim is not a control.
+    cells:
+      harbour:
+        grain: 40
+        salt:  30
+      seam:
+        ore:    50
+        timber: 10
+      body: {}
+
+  band_floors:
+    source: "#353 §12.1 / L5 — the band edges a crossing fires on. `H-08`."
+    row: H-08
+    default_cell: 0
+    sweep: [declared, halved, doubled]
+    keys: [site_kinds]
+    note: >-
+      ⚠ MOVED OUT OF THE INSTRUMENT BODY BY `W8` for `wear_per_season`'s reason. The verb keys are
+      SITE-USE verbs (what the site is good for at that condition), NOT verb-table rows, so unlike
+      `alignment` this table is not validated against `verb_table.yaml` — a check that would fail
+      on every cell. The outer key IS validated against `site_kinds`.
+      ⚠ THE FLOORS ARE INVENTED. #353 states that a band edge crossing emits and may produce no
+      outcome; it supplies no edges. `H-08` is the row, and until `W8` it was an `assumption` with
+      no `site:` and no sweep at all — one of `PLAN.md` §1.5's unowned residue, now owned.
+    cells:
+      harbour:
+        bulk_shipping:   800
+        fishing:         100
+      seam:
+        deep_mining:     700
+        surface_gleaning: 50
+      body:
+        full_operations: 800
+        limited:         500
+        withdrawal_only: 100
 
   alignment:
     source: "ARCHITECTURE_V2.md §F2 — `score(c) = Σ_axis conviction[axis] · alignment(c.verb, axis)`"

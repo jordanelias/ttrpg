@@ -37,8 +37,7 @@ from shape import (
     ShapeGap, questions_for, make_chooser, Scene, Sensation, resolvable_verbs, standing_of, body_band_penalty,
     Site, StateChange, Step, Tenure, Ungraded, Unowned, Unspecified, View, World,
     CHANNEL_PREDICATES, WITNESS_CHANNELS, WriteClass, contest, expect_refusal,
-    observers_for, sense,
-)
+    observers_for, sense, roster, table, SUBSISTENCE_WEIGHTS)
 from trace_log import TRACE
 
 PROBES: dict[str, dict] = {}
@@ -1094,7 +1093,18 @@ def f9():
 def f10():
     w = tiny_world()
     hearth = w.rungs["Hh"]
-    hearth.stores = {"grain": 6}          # ONE claimant's worth, so the second must be refused
+    # ⚠ ONE CLAIMANT'S WORTH **AT RESOLVE**, WHICH IS NOT THE SAME AS ONE CLAIMANT'S WORTH AT THE
+    # TOP OF THE SEASON. `W8` gave MATTER a subsistence draw, and MATTER runs BEFORE RESOLVE
+    # (#353 §25's order), so the flat `6` this line used to carry was down to 2 by the time the
+    # transfers were folded and BOTH were refused — the probe stopped measuring scarcity closing a
+    # matter and started measuring an empty larder. The seed is computed from the same registry
+    # the draw reads, so the fixture tracks the economy instead of restating a number.
+    _eaters = len(Query.presence(w, "Hh"))
+    _drawn = SUBSISTENCE_WEIGHTS.get("grain", 0) * _eaters
+    assert not [s_ for s_ in w.sites.values() if s_.rung == "Hh"], (
+        "the hearth has acquired a site and now PRODUCES grain; this seed assumes the draw is the "
+        "only MATTER effect on its larder, and the probe would silently measure the wrong scarcity")
+    hearth.stores = {"grain": 6 + _drawn}
     def choose(p, v, s, ask_budget):
         # W3: the payload is the transfer's OPERANDS. `transfer`'s precondition -- §54 item 7's
         # `stores(hearth(giver), kind) >= amount` -- is evaluated BY THE FOLD from these, not by
@@ -1992,8 +2002,12 @@ def a31():
 def a31b():
     out = []
     for rate in (5, 10, 25):
+        # ⚠ THE KINDS COME FROM THE ROSTER, NOT FROM THREE LITERALS. `W8` moved `wear_per_season`
+        # into `rosters.yaml`, which made `site_kinds` a definition — and the definition guard
+        # immediately caught this line and the `band_floors` sweep below hardcoding it. A sweep
+        # that names its own kinds silently stops sweeping the kind somebody adds tomorrow.
         f = DEFAULT_FIXTURES.sweep("wear_per_season",
-                                   {"harbour": rate, "seam": rate, "body": rate})
+                                   {k: rate for k in roster("site_kinds")})
         # ⚠ NOT `_seed_near_floor` HERE, AND THE DIFFERENCE MATTERS. `P18` and `W1` prove a
         # STRUCTURAL claim and their season count is incidental, so seeding is free. THIS PROBE'S
         # MEASUREMENT IS THE COUNT — it sweeps the wear rate and reports how many seasons each
@@ -2298,10 +2312,11 @@ def a38():
 def a31c():
     out = []
     for floor in (400, 600, 800):
-        f = DEFAULT_FIXTURES.sweep("band_floors", {
-            "harbour": {"bulk_shipping": floor, "fishing": 100},
-            "seam": {"deep_mining": 700, "surface_gleaning": 50},
-            "body": {"full_operations": 800, "limited": 500, "withdrawal_only": 100}})
+        # As above: the arm varies ONE cell and inherits the rest of the declared table, so a
+        # new site kind or a re-declared floor reaches this sweep without an edit here.
+        _floors = {k: dict(v) for k, v in table("band_floors").items()}
+        _floors["harbour"]["bulk_shipping"] = floor
+        f = DEFAULT_FIXTURES.sweep("band_floors", _floors)
         # As `A31b`: the season COUNT is this probe's measurement, so it may not be seeded.
         # ⚠ THE INVARIANCE IS A PROPERTY OF `NOCHOOSE`, NOT OF BAND CROSSINGS, and the difference
         # is what a later reader would get wrong. This probe drives the world with no chooser, so

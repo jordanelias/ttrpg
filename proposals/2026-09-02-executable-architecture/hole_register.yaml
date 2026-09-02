@@ -134,7 +134,7 @@ rows:
     owner:     "params"
     grade:     "assumption"
     default:   "per-kind table; §42.2.1 names the silent default as the prior sin"
-    site:      "Fixtures wear_per_season, read through Fixtures.wear() — which RAISES on an unregistered site kind rather than answering"
+    site:      "rosters.yaml `wear_per_season.rates` (`W8` moved it out of the instrument body), read through Fixtures.wear() -- which RAISES on an unregistered site kind rather than answering"
     sweep:     ["per-kind table, raise on an unregistered kind (the default)", "one rate for every kind", "no wear at all"]
     unblocks:  "any Site"
     cite:      "NAMED BY `W9` CHECK 3. #353 §22 assigns `wear per site kind` to params and NO in-chain table exists, so every kind the instrument touches is declared in `DEFAULT_FIXTURES` and an unregistered one RAISES — which is §42.2.1's own worked example: \"a wear table that returns 20 for an unregistered site kind does not fail -- it answers, plausibly and wrongly, forever\". The refusal is the mechanism and `A30`/`W1x` are its falsifiers; the row carried an empty `site:` regardless, so artifact 2 was reading a declared number from an unlocatable row."
@@ -146,10 +146,10 @@ rows:
     owner:     "params"
     grade:     "assumption"
     default:   "per-kind table"
-    site:      ""
-    sweep:     []
+    site:      "rosters.yaml `tables.band_floors`, read by DEFAULT_FIXTURES and by SeasonDriver.matter's crossing loop"
+    sweep:     ['declared (the default)', 'halved', 'doubled']
     unblocks:  "L5, §12.1"
-    cite:      ""
+    cite:      "`W8` GAVE THIS ROW A SITE AND A SWEEP; it had NEITHER and was one of PLAN.md §1.5's unowned residue -- an `assumption` grade with nothing to sweep, which is R2's violation and was counted in the standing 10. The floors are INVENTED: #353 §12.1 states that a band edge crossing EMITS and may produce no outcome, and supplies no edges. Moved out of the instrument body into `rosters.yaml` with `wear_per_season` beside it, per PLAN `W8`: *per-kind wear and floors as registry rows rather than DEFAULT_FIXTURES literals in the instrument body.*"
     source:    "ARCHITECTURE_V2.md §VII.1, transcribed verbatim | V2's grade cell: **assumption**"
   - id:        H-09
     tier:      0
@@ -182,10 +182,10 @@ rows:
     owner:     "Rung (matter) + params"
     grade:     "assumption"
     default:   "draw from the containing rung's stores, scaled by weight"
-    site:      ""
-    sweep:     []
+    site:      "matter.subsistence -- rosters.yaml `subsistence_weight.weights`, read by DEFAULT_FIXTURES and drawn by SeasonDriver.matter's larder step"
+    sweep:     ['weighted per kind (the default)', 'one unit of every registered kind', 'no draw at all -- the CONTROL: with no subsistence nothing is consumed and every larder is monotone']
     unblocks:  "`Sensation`"
-    cite:      ""
+    cite:      "`W8`. ARCHITECTURE_V2.md gives the SHAPE -- *draw from the containing rung's stores, scaled by weight* -- and no weights, so this is an injected default with a registry row. ⚠ WHAT #353 ACTUALLY CONSTRAINS is the registry's openness, §10.4 VERBATIM: *It is a type parameter, not an enumeration. Grain, salt, timber, ore and coin are rows in a registry, not members of a closed set in a source file.* Open means ADDABLE, not unchecked: a kind with no weight RAISES rather than drawing nothing, because a silent zero is a person who eats nothing and never starves -- a plausible wrong answer no test would surface, which is §42.2.1's wear-table sin one noun along. Only `grain` and `salt` carry a weight; timber, ore and coin are registered and unweighted ON PURPOSE, so a draw against them refuses."
     source:    "ARCHITECTURE_V2.md §VII.1, transcribed verbatim | V2's grade cell: **assumption**"
   - id:        H-12
     tier:      0
@@ -278,7 +278,7 @@ rows:
     owner:     "params"
     grade:     "assumption"
     default:   "constant `1`, swept"
-    site:      "matter.season_factor"
+    site:      "matter.season_factor -- DEFAULT_FIXTURES `season_factor`, read by SeasonDriver.matter's yield step"
     sweep:     [0.5, 1, 2]
     unblocks:  "1"
     cite:      "PLAN §3.2, AND IT MOVES TO TIER 0. NUMBER/FORMULA-shaped, so a default is injectable. Tier 0 because `yield` is the matter economy's ONLY source -- #353 :856 VERBATIM: \"`yield` | **only here.** Blocked on `season_factor`'s distribution (§22.3)\" -- and H-11 draws subsistence from stores, so EVERY MULTI-SEASON RUN STARVES without it. ⚠ PLAN §3.2 cites :855 for that line; it is at :856. Verified by hand 2026-09-02."
@@ -1069,6 +1069,32 @@ rows:
     unblocks:  "unmeasured, and NOT zero: a `hold` whose object is a RUNG already exists in the probe corpus at probes.py:978 and :985 (probe F2 holds the settlement `S`), so the object class pre-dates `in_holdings` and any world that both holds a rung and asks for a budget already miscounts. No verb MINTS a holding, which is why nothing has surfaced it"
     cite:      "FOUND BY THE GOVERNANCE-CANON ADVERSARIAL PASS, and the honest attribution matters: THIS IS PRE-EXISTING AND WAS WIDENED, NOT INTRODUCED. `_eff_create_record` already mints a `hold` over a Record, so `Query.budget` already counted a possessed book as an office; `in_holdings` adds a second non-office object class to a relation two readers already misread. The narrow §8 claim made for `in_holdings` -- *no new tenure kind, `tenure_kinds` does not move* -- is TRUE and was the wrong thing to check: what needed checking was the READERS, and a sweep of all sixteen `t.kind == 'hold'` sites in shape.py found two that treat every hold as an office. Clean: `_ch_post_remit` guards with `w.offices.get`; `Query.hold_force` is per-object; the bare-`hold` eligibility branches are unreachable because every `hold:` in the verb table carries a placeholder argument and declines (H-75). `absent` rather than a default: whether a landholding should confer scene actions is a design question, and the fix belongs with whatever builds holdings as a general relation (H-90)."
     source:    "governance-canon adversarial pass"
+
+  - id:        H-93
+    tier:      1
+    hole:      "WHAT A PLACE PRODUCES. #353 §25 lists `yield` as written at MATTER and *only here*, and §22.3 names `season_factor`'s distribution as the blocker — but nothing anywhere says what a harbour or a seam yields, or of which matter kind. `season_factor` scales a base the design never states"
+    kind:      "NUMBER ×kinds"
+    owner:     "params"
+    grade:     "assumption"
+    default:   "rosters.yaml `tables.site_yield` — a per-(site kind, matter kind) base, scaled by the site's `condition / condition_scale` and then by `season_factor`"
+    site:      "rosters.yaml `tables.site_yield`, read by SeasonDriver.matter's yield step"
+    sweep:     ['declared (the default)', 'uniform — every producing pair equal, so a site kind cannot discriminate', 'none — every cell zero: THE CONTROL, no source, every store monotone']
+    unblocks:  "`yield`, and with it the matter economy: `H-26` unblocks the SCALING and this is the thing scaled"
+    cite:      "`W8`. ⚠ THE QUANTITIES ARE INVENTED AND THE ROW IS WHAT MAKES THAT LAWFUL; what is NOT invented is the SCALING. Production is the base times the site's `condition / condition_scale` times `season_factor`. Condition is the model (`H-38` closed with *`Site.condition` is the model*), `condition_scale` is an existing registered fixture, and `season_factor` is #353's own named blocker — so A WORN PLACE PRODUCES LESS without a second wear concept being invented to make it do so, which is why yield is keyed on the SITE and not on the rung: the rung has no quantity that could fall. ⚠ THE `none` ARM IS A REAL CONTROL: with every cell zero the economy has no source and `W8`'s own proof clause (stores neither deplete monotonically nor overflow) MUST fail. A sweep whose control cannot break the claim is not a control, and the loader refuses an all-empty table so the control cannot ship as the default."
+    source:    "W8"
+
+  - id:        H-94
+    tier:      0
+    hole:      "THE PERSON'S DECISION PRODUCES A VERB NAME AND NOTHING ELSE. `make_chooser` mints Acts with `payload: None` and `changes: []` — 0 of 56 over three seasons carry either — so every verb whose effect needs operands either NO-OPS WHILE EMITTING ITS SUCCESS (`work` fires `site.worked` and moves no condition) or is refused on a precondition it cannot satisfy (`transfer` refused 36 times in 10 seasons). §F2 types `choose : ... -> Act[]` and says what RANKS a candidate; nothing says where the OPERANDS come from"
+    kind:      "COLLISION"
+    owner:     "Part F (the person's decision) and Part E (the verb's requires/writes)"
+    grade:     "absent"
+    default:   ""
+    site:      ""
+    sweep:     []
+    unblocks:  "every verb with operands -- measured at 7 of 7 verbs the computed chooser can currently reach, all of them minted bare"
+    cite:      "FOUND BY `W8`, BY EXECUTION, AND ONLY BECAUSE `W8` MADE SITE CONDITION ECONOMICALLY LOAD-BEARING. Ten seasons of `tiny_world` under the computed chooser emit 47,213 clock events against 253 acts, and the seven verbs that fire do so EXACTLY 36 TIMES EACH -- a flat spread across five people with different convictions, which is the signature of a chooser offering one of every available verb rather than pursuing anything. The cause is one measurement: `payload` is None and `changes` is empty on every minted Act. ⚠ `work` IS THE WORKED CASE and it is the rule this file states twice: §27.3 defers a delta to the fold's accumulator and clamps once, `_eff_work` reports the site so the deferral does not read as a no-op -- and with no delta declared, NOTHING IS ACCUMULATED, so `site.worked` is an emitted success for a repair that did not happen. Site condition is a one-way ratchet in every run: wear falls it every season and the only two verbs that can raise it are `work` (minted bare) and `restore` (whose precondition the fold cannot evaluate at all). ⚠ THIS IS NOT A CHOOSER BUG TO PATCH: §F2 genuinely does not say where operands come from, and inventing a rule here would be a second resolver (S27.2). `absent` with no default, because every option -- the act declares them, the verb table declares them, the world supplies them at fold time -- is a different game."
+    source:    "W8 -- found by execution"
 
 # ---------------------------------------------------------------------------
 # THE DISCHARGE MAP -- guardrail G8.

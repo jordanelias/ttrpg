@@ -213,90 +213,11 @@ class Fixtures:
         return f
 
 
-DEFAULT_FIXTURES = Fixtures(
-    # S48: condition is an int on an EXPORTED scale. S22 assigns the scale to `params`, and the
-    # in-chain params document "proposes NO VALUES", so this is a fixture. Injection site: here.
-    condition_scale=1000,
-    # RULED TWICE. #353 §26.3 puts the budget at "~5"; Jordan ruled 2026-09-02 that the UNIT is
-    # the SCENE and the number is 5 -- *"5 scenes for a character to play per season"*. A band is
-    # not an integer; this is the integer the instrument runs on, and A31 sweeps it because the
-    # verdict moves with it.
-    # ⚠ `W17` RENAMED THIS FROM `act_budget`. #353 §26.3's prose counts ACTS throughout and the
-    # ruling re-states it in scenes: "a wounded duke gets fewer SCENES than a healthy one". The
-    # spray argument survives the noun change unaltered -- five scenes each spent petitioning is
-    # exactly the triage the budget exists to create -- but the key must not keep saying `act`,
-    # because a name is where the next reader learns what the number counts.
-    scene_budget=5,
-    # S20: the ledger cap L. Params-owned; no in-chain value.
-    ledger_cap=200,
-    # S18: "at most K claim ids from the holder's OWN ledger -- BUILT, NOT FILTERED".
-    view_k=12,
-    # S22 assigns `wear per site kind` to params. NO in-chain table exists, so every kind the
-    # instrument touches is declared here and an unregistered kind RAISES (see Fixtures.wear).
-    # roster-exempt: Fixtures keys. `Fixtures` IS the registry for numbers and raises on an
-    # unregistered kind, so the kinds are already declared data; splitting them into
-    # rosters.yaml would put one declaration in two files. ⚠ `site_kinds` belongs in
-    # rosters.yaml when W8 builds H-07's per-kind table, and not before.
-    wear_per_season={"harbour": 10, "seam": 10, "body": 10},
-    # S20: Claim.confidence. Rev 1 hardcoded 1, which degenerated the eviction comparator.
-    confidence_default=100,
-    # `W4` / `H-40`, THE THIRD LICENSED CLOCK (#353 `:864`). #353 licenses confidence decay at
-    # MATTER and gives NO RATE, so this is an INJECTED DEFAULT with a `site:` and a three-point
-    # sweep on the register, exactly as `H-09` treats the confidence default beside it. It is a
-    # fixture rather than a literal so `Fixtures.claim_decay` can REFUSE when it is unregistered
-    # — `wear`'s precedent, and S42.2.1's rule.
-    claim_decay_per_season=5,
-    # `W6` / `H-33`. WHICH WITNESS CHANNELS ARE LIVE. `total` is the DEFAULT AND THE CONTROL --
-    # it is #353's specified behaviour (S61: *"WITNESS AS SPECIFIED FANS EVERY EVENT TO EVERY
-    # PERSON"*), so the sweep's control arm is the design as written rather than a baseline
-    # somebody invented. The three points are `H-33`'s own declared sweep.
-    fan_out_mode="total",
-    # `H-87`. S39.3 REFUSES a default for the contest depth cap -- *"a default is a number
-    # somebody made up and it will be cited later as though it were measured"* -- so `contest()`
-    # takes it from the CALLER. This is the caller's number, injected and swept, and it lives here
-    # rather than in a body so that it is one.
-    contest_max_depth=2,
-    # S15.2: entrenchment(h,H) = min(1, seasons_held / 60). The 60 IS in-chain; it is a fixture
-    # only so no literal sits in a body.
-    entrenchment_seasons=60,
-    # S27.4: "an attempt at Ob > 2 x Pool is refused, and the season is spent."
-    obstacle_refusal_multiple=2,
-    # S12.1 gates verbs on `condition` against per-kind band FLOORS. S22 assigns "band
-    # coefficients" and "the obstacle floor" to params; the params document proposes NO
-    # VALUES, so these are harness fixtures and A31c sweeps them. S42.2.1 names "three band
-    # edges" as one of the four constants a prior instrument in the chain invented -- rev 2
-    # fixed the other three and left these hardcoded in probe bodies, unswept.
-    # roster-exempt: Fixtures keys, as `wear_per_season` above. These are H-08 and are swept.
-    band_floors={"harbour": {"bulk_shipping": 800, "fishing": 100},
-                 "seam": {"deep_mining": 700, "surface_gleaning": 50},
-                 "body": {"full_operations": 800, "limited": 500, "withdrawal_only": 100}},
-    # W5 / `H-28`. §F3's `budget` has three modifier terms and #353 gives a value for NONE of
-    # them -- `:912-913` says only that "a wounded duke gets fewer acts than a healthy one".
-    # So the DIRECTION is ruled and the MAGNITUDE is not, which is exactly a fixture. Injection
-    # site: here. Row: `H-70`, swept. ⚠ The BAND TABLE they read is NOT invented -- `band_floors`
-    # above already carries a `"body"` row, so `condition_penalty(p's body band)` counts bands
-    # against the table the site gate already uses. `H-38` closed with "`Site.condition` is the
-    # model"; this is that closure spent rather than restated.
-    # `H-54`, swept. The rule was `qs[0]` in a subscript; see `aggregate_questions`.
-    question_aggregation_rule="first",
-    # `W17` / Jordan 2026-09-02. The unit is the scene and the number is 5; NEITHER of these two
-    # was ruled, so both are fixtures with register rows and a sweep. Source for both defaults:
-    # `player_agency_v30.md` §6.3 -- "One scene action = one scene opportunity pursued. A scene
-    # contains 1-3 mechanical interactions" -- which is `## Status: CANONICAL` but pre-#337 and,
-    # under `CLAUDE.md` §0.05, REFERENCE rather than mechanism. `None` means unbounded.
-    interactions_per_scene=3,          # `H-76`, swept 1 / 3 / unbounded
-    extended_scene_cost=2,             # `H-77`, swept 1 / 2 / 3
-    scene_packing_rule="greedy",       # `H-78`, swept greedy / one_per_scene / by_subject
-    claim_subject_rule="both",         # `H-79`, swept actor / per_change / both
-    # `H-80`. #353 §13.1 says the ACT declares a Record's stages and their terms. §F1's Candidate
-    # is `(verb, subject, why)` and carries no operands, so NO COMPUTED ACT CAN DECLARE ANY --
-    # `(Record, stages)` is a Part D row unreachable from the person's own decision. These are
-    # the instrument's declared stand-in, swept, and the row says plainly that they are.
-    record_stages_default=3,
-    record_stage_term=1,
-    budget_office_bonus=1,
-    budget_leg_penalty=1,
-)
+# ⚠ `DEFAULT_FIXTURES` USED TO BE DEFINED HERE, AND `W8` MOVED IT BELOW THE ROSTER READERS.
+# Three of its values are now READ FROM `rosters.yaml` rather than written as literals, and a
+# reader that runs before `roster()` / `table()` / `roster_map()` exist cannot read anything.
+# The move is mechanical: nothing between here and there referenced it except lazily.
+
 
 
 # ===========================================================================
@@ -790,6 +711,166 @@ def _load_alignment() -> dict:
 
 
 ALIGNMENT = _load_alignment()
+
+
+def _load_matter_tables() -> tuple:
+    """`W8`. The matter economy's three tables, from `rosters.yaml`, with load-time checks.
+
+    ⚠ THESE WERE LITERALS IN `DEFAULT_FIXTURES` AND PLAN `W8` ASKS FOR THEM AS REGISTRY ROWS. The
+    comment that stood beside them objected, reasonably, that *"splitting them into rosters.yaml
+    would put one declaration in two files"* — and the answer is that the fixture READS the data
+    rather than restating it, so there is still exactly one declaration and it is the data.
+
+    ⚠ THE CHECKS ARE THE POINT, not the relocation. A wear or weight table whose keys drift from
+    the roster is §42.2.1's worked sin arriving through a data edit instead of through a literal:
+    an unregistered kind that ANSWERS. Both directions are checked — a rate for a kind no roster
+    carries, and a site kind with no rate."""
+    kinds = set(roster("site_kinds"))
+    rates = roster_map("wear_per_season", "rates")
+    floors = table("band_floors")
+    weights = roster_map("subsistence_weight", "weights")
+    for name, got in (("wear_per_season", set(rates)), ("band_floors", set(floors))):
+        if got - kinds:
+            raise Forbidden(
+                f"{name} names site kind(s) no roster carries: {sorted(got - kinds)}",
+                "rosters.yaml",
+                needs="add the kind to `site_kinds`, or drop the row",
+                law="S42.2.1 -- an unregistered kind must RAISE, and a table keyed past its own "
+                    "roster is that same silent answer arriving through the data file")
+        if kinds - got:
+            raise Ungraded(
+                f"{name} has no row for site kind(s): {sorted(kinds - got)}", "rosters.yaml",
+                needs=f"a {name} row per site kind",
+                law="S42.2.1 -- 'a wear table that returns 20 for an unregistered site kind does "
+                    "not fail -- it answers, plausibly and wrongly, forever'")
+    yields = table("site_yield")
+    if set(yields) - kinds:
+        raise Forbidden(
+            f"site_yield names site kind(s) no roster carries: {sorted(set(yields) - kinds)}",
+            "rosters.yaml", needs="add the kind to `site_kinds`, or drop the row",
+            law="S42.2.1 -- a table keyed past its own roster answers for a kind nobody declared")
+    mk = set(roster("matter_kinds"))
+    for sk, produced in yields.items():
+        if set(produced) - mk:
+            raise Forbidden(
+                f"site_yield[{sk}] produces matter kind(s) no registry row carries: "
+                f"{sorted(set(produced) - mk)}", "rosters.yaml",
+                needs="add the kind to `matter_kinds`, or drop the cell",
+                law="#353 §10.4 -- MatterKind is a REGISTRY. Open means addable, not unchecked")
+    if not any(produced for produced in yields.values()):
+        raise Ungraded(
+            "site_yield is empty for every site kind", "rosters.yaml",
+            needs="at least one producing kind, or delete the economy",
+            law="PLAN W8 -- `yield` is the matter economy's ONLY source; an all-empty table is "
+                "the `none` CONTROL ARM, and shipping the control as the default would make "
+                "every store deplete monotonically while the proof clause claims otherwise")
+    unknown = set(weights) - mk
+    if unknown:
+        raise Forbidden(
+            f"subsistence_weight names matter kind(s) no registry row carries: {sorted(unknown)}",
+            "rosters.yaml",
+            needs="add the kind to `matter_kinds`, or drop the weight",
+            law="#353 §10.4 -- MatterKind is a REGISTRY. Open means addable, not unchecked")
+    return rates, floors, weights, yields
+
+
+WEAR_RATES, BAND_FLOORS, SUBSISTENCE_WEIGHTS, SITE_YIELD = _load_matter_tables()
+
+
+DEFAULT_FIXTURES = Fixtures(
+    # S48: condition is an int on an EXPORTED scale. S22 assigns the scale to `params`, and the
+    # in-chain params document "proposes NO VALUES", so this is a fixture. Injection site: here.
+    condition_scale=1000,
+    # RULED TWICE. #353 §26.3 puts the budget at "~5"; Jordan ruled 2026-09-02 that the UNIT is
+    # the SCENE and the number is 5 -- *"5 scenes for a character to play per season"*. A band is
+    # not an integer; this is the integer the instrument runs on, and A31 sweeps it because the
+    # verdict moves with it.
+    # ⚠ `W17` RENAMED THIS FROM `act_budget`. #353 §26.3's prose counts ACTS throughout and the
+    # ruling re-states it in scenes: "a wounded duke gets fewer SCENES than a healthy one". The
+    # spray argument survives the noun change unaltered -- five scenes each spent petitioning is
+    # exactly the triage the budget exists to create -- but the key must not keep saying `act`,
+    # because a name is where the next reader learns what the number counts.
+    scene_budget=5,
+    # S20: the ledger cap L. Params-owned; no in-chain value.
+    ledger_cap=200,
+    # S18: "at most K claim ids from the holder's OWN ledger -- BUILT, NOT FILTERED".
+    view_k=12,
+    # S22 assigns `wear per site kind` to params. NO in-chain table exists, so every kind the
+    # instrument touches is declared here and an unregistered kind RAISES (see Fixtures.wear).
+    # roster-exempt: Fixtures keys. `Fixtures` IS the registry for numbers and raises on an
+    # unregistered kind, so the kinds are already declared data; splitting them into
+    # rosters.yaml would put one declaration in two files. ⚠ `site_kinds` belongs in
+    # rosters.yaml when W8 builds H-07's per-kind table, and not before.
+    # ⚠ `W8` MOVED THE TABLE TO `rosters.yaml` AND THIS READS IT. The literal that stood here
+    # carried an objection to splitting it out ("one declaration in two files"); the fixture
+    # reading the data answers it, because the declaration is now in exactly one place and this
+    # is not a copy of it. `Fixtures.wear` still refuses an unregistered kind.
+    wear_per_season=WEAR_RATES,
+    # S20: Claim.confidence. Rev 1 hardcoded 1, which degenerated the eviction comparator.
+    confidence_default=100,
+    # `W4` / `H-40`, THE THIRD LICENSED CLOCK (#353 `:864`). #353 licenses confidence decay at
+    # MATTER and gives NO RATE, so this is an INJECTED DEFAULT with a `site:` and a three-point
+    # sweep on the register, exactly as `H-09` treats the confidence default beside it. It is a
+    # fixture rather than a literal so `Fixtures.claim_decay` can REFUSE when it is unregistered
+    # — `wear`'s precedent, and S42.2.1's rule.
+    claim_decay_per_season=5,
+    # `W6` / `H-33`. WHICH WITNESS CHANNELS ARE LIVE. `total` is the DEFAULT AND THE CONTROL --
+    # it is #353's specified behaviour (S61: *"WITNESS AS SPECIFIED FANS EVERY EVENT TO EVERY
+    # PERSON"*), so the sweep's control arm is the design as written rather than a baseline
+    # somebody invented. The three points are `H-33`'s own declared sweep.
+    fan_out_mode="total",
+    # `H-87`. S39.3 REFUSES a default for the contest depth cap -- *"a default is a number
+    # somebody made up and it will be cited later as though it were measured"* -- so `contest()`
+    # takes it from the CALLER. This is the caller's number, injected and swept, and it lives here
+    # rather than in a body so that it is one.
+    contest_max_depth=2,
+    # S15.2: entrenchment(h,H) = min(1, seasons_held / 60). The 60 IS in-chain; it is a fixture
+    # only so no literal sits in a body.
+    entrenchment_seasons=60,
+    # S27.4: "an attempt at Ob > 2 x Pool is refused, and the season is spent."
+    obstacle_refusal_multiple=2,
+    # S12.1 gates verbs on `condition` against per-kind band FLOORS. S22 assigns "band
+    # coefficients" and "the obstacle floor" to params; the params document proposes NO
+    # VALUES, so these are harness fixtures and A31c sweeps them. S42.2.1 names "three band
+    # edges" as one of the four constants a prior instrument in the chain invented -- rev 2
+    # fixed the other three and left these hardcoded in probe bodies, unswept.
+    # roster-exempt: Fixtures keys, as `wear_per_season` above. These are H-08 and are swept.
+    band_floors=BAND_FLOORS,          # `W8` -- `rosters.yaml: tables.band_floors`, `H-08`
+    # ⚠ `W8` / `H-26`. #353 §22.3 names *"`season_factor`'s distribution"* as a value with NO
+    # OWNER, and §25 says `yield` is *"blocked on"* it -- so the SHAPE ruled is a DISTRIBUTION and
+    # what is injected here is a degenerate one. The sweep is on its value, which is the only axis
+    # a constant has; a real distribution is a different hole and is not invented here.
+    season_factor=1.0,                # `H-26`, swept 0.5 / 1 / 2
+    # ⚠ `W8` / `H-11`. #353 §10.4 makes `MatterKind` open and V2 gives the draw's SHAPE -- *from
+    # the containing rung's stores, scaled by weight* -- and no weights. Registry row, not literal.
+    subsistence_weight=SUBSISTENCE_WEIGHTS,
+    # W5 / `H-28`. §F3's `budget` has three modifier terms and #353 gives a value for NONE of
+    # them -- `:912-913` says only that "a wounded duke gets fewer acts than a healthy one".
+    # So the DIRECTION is ruled and the MAGNITUDE is not, which is exactly a fixture. Injection
+    # site: here. Row: `H-70`, swept. ⚠ The BAND TABLE they read is NOT invented -- `band_floors`
+    # above already carries a `"body"` row, so `condition_penalty(p's body band)` counts bands
+    # against the table the site gate already uses. `H-38` closed with "`Site.condition` is the
+    # model"; this is that closure spent rather than restated.
+    # `H-54`, swept. The rule was `qs[0]` in a subscript; see `aggregate_questions`.
+    question_aggregation_rule="first",
+    # `W17` / Jordan 2026-09-02. The unit is the scene and the number is 5; NEITHER of these two
+    # was ruled, so both are fixtures with register rows and a sweep. Source for both defaults:
+    # `player_agency_v30.md` §6.3 -- "One scene action = one scene opportunity pursued. A scene
+    # contains 1-3 mechanical interactions" -- which is `## Status: CANONICAL` but pre-#337 and,
+    # under `CLAUDE.md` §0.05, REFERENCE rather than mechanism. `None` means unbounded.
+    interactions_per_scene=3,          # `H-76`, swept 1 / 3 / unbounded
+    extended_scene_cost=2,             # `H-77`, swept 1 / 2 / 3
+    scene_packing_rule="greedy",       # `H-78`, swept greedy / one_per_scene / by_subject
+    claim_subject_rule="both",         # `H-79`, swept actor / per_change / both
+    # `H-80`. #353 §13.1 says the ACT declares a Record's stages and their terms. §F1's Candidate
+    # is `(verb, subject, why)` and carries no operands, so NO COMPUTED ACT CAN DECLARE ANY --
+    # `(Record, stages)` is a Part D row unreachable from the person's own decision. These are
+    # the instrument's declared stand-in, swept, and the row says plainly that they are.
+    record_stages_default=3,
+    record_stage_term=1,
+    budget_office_bonus=1,
+    budget_leg_penalty=1,
+)
 # The immutable baseline. `ALIGNMENT` is REBOUND by a sweep; this is not, so every sweep point is
 # built from the declared table rather than from the previous point (see `alignment_at`).
 ALIGNMENT_DECLARED = {ax: dict(row) for ax, row in ALIGNMENT.items()}
@@ -807,17 +888,27 @@ def matrix_rows_without_a_field() -> dict:
 
     Kinds the instrument models as DICTS rather than classes — `Date`, `DocketItem`, `Petition`,
     `Dispensation`, `ConveningCondition` — cannot be checked at all and are reported separately,
-    so the number is never mistaken for a clean bill."""
+    so the number is never mistaken for a clean bill.
+
+    ⚠ `Rung` WAS IN THAT SECOND BUCKET AND DOES NOT BELONG THERE. The test was `is_dataclass`, and
+    `Rung` is a plain class with an explicit `_DECLARED` field set — the whitelist S10 gives it, so
+    that an undeclared attribute raises. Five rows, `(Rung, yield)` among them, were reported as
+    *uncheckable* while the class carries the exact declaration needed to check them; and
+    `(Rung, yield)` is the row `W8` exists to build, so the one instrument that could have said
+    *the field does not exist yet* was excusing itself from the answer. A declared field set is a
+    field set whatever shape it is stored in. Found while opening `W8`."""
     import dataclasses as _dc
     out = {"absent": [], "unmodelled": []}
     for (kind, fld) in sorted(MATRIX):
         cls = globals().get(kind)
-        if cls is None or not _dc.is_dataclass(cls):
+        declared = (set(getattr(cls, "_DECLARED", ()) or ()) or
+                    ({f.name for f in _dc.fields(cls)} if _dc.is_dataclass(cls) else set()))
+        if cls is None or not declared:
             out["unmodelled"].append((kind, fld))
             continue
         if fld == "exists":
             continue                     # existence is the collection's membership, not a field
-        if fld not in {f.name for f in _dc.fields(cls)}:
+        if fld not in declared:
             out["absent"].append((kind, fld))
     return out
 
@@ -1297,16 +1388,24 @@ class Rung:
 
     # roster-exempt: MECHANISM. These are the FIELD NAMES of this dataclass, checked so an
     # undeclared attribute raises. They are the code's own shape, not the game's vocabulary.
+    # ⚠ `yield` IS PART D's FIELD NAME AND IT IS A PYTHON KEYWORD, so it is reached with
+    # `getattr`/`setattr` rather than dotted access. Renaming it here would break the
+    # `(record_kind, fieldname)` key the write gate, the write class and the emission all share
+    # (§8) — the key is the same string Part D uses, and Part D says `yield`. `W8` added it: the
+    # row existed in the matrix from the start and named a field the class did not have, which
+    # `matrix_rows_without_a_field` now reports because it reads `_DECLARED` (see that function).
     _DECLARED = {"id", "kind", "stores", "sites", "records", "dates", "stake",
-                 "envelope", "transmission", "judging_set_rule"}
+                 "envelope", "transmission", "judging_set_rule", "yield"}
 
     def __init__(self, id: str, kind: str, **kw: Any):
         if kind not in RUNG_KINDS:
             raise Forbidden(f"Rung.kind '{kind}'", "S10", law=f"S10 -- eight kinds: {RUNG_KINDS}")
         object.__setattr__(self, "id", id)
         object.__setattr__(self, "kind", kind)
+        # `yield` is #353 §25's *"only here"* row: what this rung PRODUCED this season, per
+        # matter kind. Empty for a rung that produces nothing, which is most of them.
         for f_, d in (("stores", dict), ("sites", list), ("records", list),
-                      ("dates", list), ("stake", list), ("envelope", list)):
+                      ("dates", list), ("stake", list), ("envelope", list), ("yield", dict)):
             object.__setattr__(self, f_, kw.pop(f_, None) or d())
         object.__setattr__(self, "transmission", kw.pop("transmission", None))
         # S10.2 caveat: `judging_set_rule` is UNSPECIFIED (S61). It is carried as a field so the
@@ -1590,8 +1689,22 @@ class World:
                         "to be remembered -- and a one-shot emission with a forgotten `subject=` "
                         "is silent. Found by the `W4` adversarial pass")
             subj = subject
+            # ⚠ THE DRAW ORDINAL IS PART OF THE ID, AND IT WAS NOT. Without it the id is
+            # `(seed, tick, subject, kind)`, so TWO EMISSIONS OF ONE KIND ON ONE SUBJECT IN ONE
+            # TICK GET THE SAME ID — and `W8` produces exactly that: MATTER's larder draw and its
+            # yield credit both write `(Rung, stores)` and both emit `stores.changed` for the same
+            # rung in the same season. The `W4` adversarial pass named this months of work ago in
+            # the abstract (*"the emission id carries no draw ordinal; `new_draw()` has zero
+            # callers"*) and nothing could reach it until there were two same-kind writes; the
+            # uniqueness guard caught it the moment there were. S33's ordinal is the mechanism the
+            # design already carries, reset per tick by `season()`, so ids stay reproducible: the
+            # write order is deterministic (every loop here is sorted) and the counter follows it.
             ev = Event(
-                id=H(self.world_seed, self.tick, subj, f"emit:{emits}"),
+                # ⚠ IN `purpose`, NOT AS A FIFTH ARGUMENT. `H`'s own docstring states the
+                # contract — *"`purpose` must be unique per DRAW, not per operation"* — so the
+                # ordinal belongs inside the string the design already reserves for it, and
+                # widening `H`'s signature would have been a second way to say the same thing.
+                id=H(self.world_seed, self.tick, subj, f"emit:{emits}#{self.new_draw()}"),
                 kind=emits, subject=subj,
                 changes=[StateChange(subj, "set", wclass.value, fieldname, None)],
                 # ⚠ `causes` IS REQUIRED IN SUBSTANCE AND THE DEFAULT IS NOT `[ROOT]`. Handing an
@@ -3438,6 +3551,78 @@ class SeasonDriver:
                         lambda c=c, after=after: setattr(c, "confidence", after),
                         record_kind="Claim", fieldname="confidence", driver="Event",
                         emits="claim.decayed", subject=c.id, causes=[prior])
+
+        # -- LARDERS, THEN YIELD (`W8`) -------------------------------------
+        # #353 §25 fixes the ORDER and this code follows it rather than choosing one: *"Events
+        # resolve FIRST, then bodies, larders, yield, travel, wear."* So a season's subsistence is
+        # drawn against LAST season's stores and production replenishes afterwards, which is a
+        # substantive difference — the reverse order would let a rung eat what it had not yet
+        # produced, and no rung could ever run short. `test_w8_...order...` asserts it.
+        #
+        # ⚠ BODIES AND TRAVEL ARE STILL NOT BUILT. Naming them here would suggest otherwise; the
+        # `not_implemented` list in this barrier's decision row is where they are recorded.
+        weights = w.fixtures.get("subsistence_weight")
+        factor = w.fixtures.get("season_factor")
+        scale_ = w.fixtures.get("condition_scale")
+        for rid in sorted(w.rungs):
+            r = w.rungs[rid]
+            eaters = Query.presence(w, rid)
+            if eaters and weights:
+                # `H-11`: *draw from the containing rung's stores, scaled by weight.* A kind with
+                # no weight RAISES rather than drawing nothing (see `rosters.yaml`), so the loop
+                # is over the WEIGHTS, which is the registry, not over whatever the larder holds.
+                draw = {k: wt * len(eaters) for k, wt in weights.items()}
+                have = dict(r.stores or {})
+                after = {k: max(0, have.get(k, 0) - amt) for k, amt in draw.items()}
+                short = {k: amt - (have.get(k, 0) - after[k]) for k, amt in draw.items()
+                         if amt > have.get(k, 0)}
+                if short:
+                    # ⚠ A SHORTFALL EMITS NOTHING AND DECIDES NOTHING, on L5's rule: a threshold
+                    # crossing *"MAY NEVER PRODUCE AN OUTCOME"*. Inventing starvation here would
+                    # be the outcome L5 forbids, and it would be a social consequence written at
+                    # MATTER, which is L4. It is recorded so a run can be read.
+                    TRACE.note(f"{rid} could not meet subsistence for {len(eaters)} by {short} "
+                               "-- recorded, not acted on (L5: a crossing produces no outcome)")
+                if any(after[k] != have.get(k, 0) for k in after):
+                    prior = w.last_emission_of("stores.changed", rid)
+                    w.write("stores", WriteClass.MATTER,
+                            lambda r=r, after=after: r.stores.update(after),
+                            record_kind="Rung", fieldname="stores", driver="Event",
+                            emits="stores.changed", subject=rid,
+                            causes=[prior] if prior else [ROOT])
+            # `yield` — #353 §25's *"only here"* row. The base is the SITE's, scaled by its
+            # condition and then by `season_factor`, so a worn place produces less without a
+            # second wear concept (`H-93`, and `rosters.yaml: site_yield` for why).
+            produced: dict = {}
+            # ⚠ THE SITE'S OWN `rung`, NOT THE RUNG'S `sites` LIST. The first version read
+            # `r.sites`, and that list is a BACK-REFERENCE NOTHING MAINTAINS — it is empty for
+            # every rung in the corpus, so the whole yield step was INERT and would have shipped
+            # as an unreachable barrier stage. `Site.rung` is the maintained side (S12), and
+            # reading the side that is actually written is the difference between a step that
+            # runs and a step that merely exists (§0.2). Caught by `F10` failing for a different
+            # reason and then looking at the fixture.
+            for site in sorted(w.sites.values(), key=lambda x: x.id):
+                if site.rung != rid:
+                    continue
+                for k, base in (SITE_YIELD.get(site.kind) or {}).items():
+                    produced[k] = produced.get(k, 0) + int(
+                        base * (max(0, site.condition) / scale_) * factor)
+            produced = {k: v for k, v in produced.items() if v}
+            if not produced:
+                continue
+            prior_y = w.last_emission_of("yield.taken", rid)
+            w.write("yield", WriteClass.MATTER,
+                    lambda r=r, produced=produced: object.__setattr__(r, "yield", dict(produced)),
+                    record_kind="Rung", fieldname="yield", driver="Event",
+                    emits="yield.taken", subject=rid,
+                    causes=[prior_y] if prior_y else [ROOT])
+            prior_s = w.last_emission_of("stores.changed", rid)
+            credited = {k: (r.stores or {}).get(k, 0) + v for k, v in produced.items()}
+            w.write("stores", WriteClass.MATTER,
+                    lambda r=r, credited=credited: r.stores.update(credited),
+                    record_kind="Rung", fieldname="stores", driver="Event",
+                    emits="stores.changed", subject=rid,
+                    causes=[prior_s] if prior_s else [ROOT])
 
         # S25: NO SOCIAL QUANTITY MOVES HERE. L4 at its sharpest.
         w._in_parallel_map = True
