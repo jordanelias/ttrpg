@@ -65,18 +65,18 @@ running it, not by reading it.
 
 | # | #353 says | verdict | where |
 |---|---|---|---|
-| **1** | L4's `social:` is *"a static schema column"*, and the document states **two** rows | ⛔ **INSUFFICIENT.** Two rows and two declared-missing cannot type ~30 fields. The matrix names **things**, not fields, so `(Person, convictions)` rides on `stance`'s row | **§D1** |
-| **2** | §61: `q` has no producer | ⚠ **SHARPENED.** Not execution-defeating — a literal runs — but **NPC-loop-defeating**: every option set is authored, which is the property `Candidate[]` was chosen to protect | **§D2** |
-| **3** | §18.2: `Sensation` is *exactly two scalars*; `standing` is the gap between what everyone reads off you and what you hold | ⚠ **AMENDED, AND THE LAW WAS WRONG.** The bar is **§20** (*"Nobody else may read or write it"*), not §22.4 clause 2 — `sense()` is not a resolver-side Query | **§D3** |
-| **4** | §26: `budget : (Person, View) -> int`, no World; §26.3: it varies by office, condition, distance | ⛔ **COLLISION, answerable by precedent.** All three inputs are resolver-side; travel legs have no owner | **§D4** |
-| **5** | §26.3 *"the list is ORDERED"* vs §32 *"canonicalized… never by completion order"* | ⛔ **TWO ORDERS FOR ONE ARRAY** | **§D5** |
-| **6** | L3 clause 1: a counter per `(Person, axis)` on a closed registry | ⚠ **THE REGISTRY DOES NOT EXIST**, no matrix row admits the increment, and `exposure` collides with the need scalar | **§D6** |
-| **7** | §13: `Record` is a live carrier; §30.1: it has no Partition row | ⛔ **EVERY RECORD WRITE IS AN UNMARKED CELL** | **§D7** |
-| **8** | §30.1: `(Person, exists)` has no row | ⛔ **DEATH RAISES UNDER THE MATRIX'S OWN RULE** | **§D8** |
-| **9** | §27: `resolve : (Act[], World) -> Event[]` | ⛔ **THE RESOLVER HAS NO BODY.** What each verb *does* is prose scattered across §11, §36, §37, §54 | **§D20** |
-| **10** | §26: `choose` is the person's function | ⛔ **NO DECISION POLICY EXISTS.** `convictions`, `beliefs` and `stance` are consumed by nothing | **§D21** |
-| **11** | §12.1: a band crossing *"is an EMISSION"*; §19.4: `causes[]` non-empty | ⛔ **MATTER'S WRITES EMIT NOTHING**, so every crossing is a causal orphan | **§D22** |
-| **12** | §10 gives every Rung `matter.stores`; L3 refuses stored aggregates | ⚠ **AMBIGUOUS, AND IT COST TEN ARCS.** A treasury is **matter**; what L3 refuses is a pooled **social** quantity | **§D26** |
+| **1** | L4's `social:` is *"a static schema column"*, and the document states **two** rows | ⛔ **INSUFFICIENT.** Two rows and two declared-missing cannot type ~30 fields. The matrix names **things**, not fields, so `(Person, convictions)` rides on `stance`'s row | **D1** |
+| **2** | §61: `q` has no producer | ⚠ **SHARPENED.** Not execution-defeating — a literal runs — but **NPC-loop-defeating**: every option set is authored, which is the property `Candidate[]` was chosen to protect | **D2** |
+| **3** | §18.2: `Sensation` is *exactly two scalars*; `standing` is the gap between what everyone reads off you and what you hold | ⚠ **AMENDED, AND THE LAW WAS WRONG.** The bar is **§20** (*"Nobody else may read or write it"*), not §22.4 clause 2 — `sense()` is not a resolver-side Query | **D3** |
+| **4** | §26: `budget : (Person, View) -> int`, no World; §26.3: it varies by office, condition, distance | ⛔ **COLLISION, answerable by precedent.** All three inputs are resolver-side; travel legs have no owner | **D4** |
+| **5** | §26.3 *"the list is ORDERED"* vs §32 *"canonicalized… never by completion order"* | ⛔ **TWO ORDERS FOR ONE ARRAY** | **D5** |
+| **6** | L3 clause 1: a counter per `(Person, axis)` on a closed registry | ⚠ **THE REGISTRY DOES NOT EXIST**, no matrix row admits the increment, and `exposure` collides with the need scalar | **D6** |
+| **7** | §13: `Record` is a live carrier; §30.1: it has no Partition row | ⛔ **EVERY RECORD WRITE IS AN UNMARKED CELL** | **D7** |
+| **8** | §30.1: `(Person, exists)` has no row | ⛔ **DEATH RAISES UNDER THE MATRIX'S OWN RULE** | **D8** |
+| **9** | §27: `resolve : (Act[], World) -> Event[]` | ⛔ **THE RESOLVER HAS NO BODY.** What each verb *does* is prose scattered across §11, §36, §37, §54 | **D20** |
+| **10** | §26: `choose` is the person's function | ⛔ **NO DECISION POLICY EXISTS.** `convictions`, `beliefs` and `stance` are consumed by nothing | **D21** |
+| **11** | §12.1: a band crossing *"is an EMISSION"*; §19.4: `causes[]` non-empty | ⛔ **MATTER'S WRITES EMIT NOTHING**, so every crossing is a causal orphan | **D22** |
+| **12** | §10 gives every Rung `matter.stores`; L3 refuses stored aggregates | ⚠ **AMBIGUOUS, AND IT COST TEN ARCS.** A treasury is **matter**; what L3 refuses is a pooled **social** quantity | **D26** |
 | **13** | §42.2.1: *"the honest behaviour is to REFUSE, not to pick a plausible number"* | ⚠ **NARROWED TO ITS HONEST DOMAIN.** Kept for `absent`; replaced by inject-declare-sweep for `assumption`. **§G is the whole argument** | **§G** |
 | **14** | §61–§62: two prose tables of open questions | ⛔ **REPLACED BY THE HOLE REGISTER.** #353 §63.2 makes this argument itself: *"prose registers are re-typed; rows are inherited"* | **Part VII** |
 
@@ -326,7 +326,7 @@ Event has an antecedent to cite and `causes[]` stops being `[ROOT]` for everythi
 | `(Person, convictions)` ⊕ | · | · | · | **y** | · | · | ACTS | **true** | DR-2; §9.3 — moved by **argument and consequence**, never by evidence | `conviction.moved` |
 | `(Person, beliefs)` ⊕ | · | · | · | **y** | · | · | ACTS | **true** | DR-2; §9.3 | `belief.revised` |
 | `(Person, scar[axis])` | · | · | · | **y** | · | · | ACTS | **true** | **stated in chain** — §54 item 21 | `scar.taken` |
-| `(Person, axis_count[axis])` ⊕ | · | · | · | **y** | · | · | ACTS | **true** | **D6**. L3 clause 1's counter. `axis` on §D6's registry | `axis.incremented` |
+| `(Person, axis_count[axis])` ⊕ | · | · | · | **y** | · | · | ACTS | **true** | **D6**. L3 clause 1's counter. `axis` on D6's registry | `axis.incremented` |
 | `(Person, claim_ledger)` | · | · | · | · | **y** | · | INTERIOR | **false** | DR-3 · §20 makes `witness` the only minter, and it is not an act | `claim.deposited` |
 | `(Person, capability)` ⊕ | · | · | · | **y** | · | · | ACTS | **true** | DR-2 | `capability.advanced` |
 | `(Person, marks)` ⊕ | · | · | · | **y** | · | · | ACTS | **true** | DR-2 | `mark.changed` |
@@ -411,7 +411,7 @@ claimant on an emptied granary gets a DIFFERENT Event"* — only works if a fail
 | `revoke` | 1 | `remit:revoke` + the office's `revocation` basis | a live `hold` exists | `(Tenure, until)` | `tenure.closed` | `revoke.refused` | ruled §11 |
 | `dispatch` | 1 | `remit:dispatch` | the named person exists | — *(§11.1: it names a person; **their own `choose` decides**)* | `order.given` | `dispatch.refused` | ruled §11.1 |
 | `issue` | 1 | `remit:issue` | `scope` enumerates **executors**, not places (§37.1) | — *(a Dispensation is not a state write — §37.3)* | `dispensation.issued` | `issue.refused` | ruled §37 |
-| `determine` | 1 | `remit:determine` | a fired Date with a DocketItem; **`judging_set` — §D11, `absent`** | `(Tenure, degree)` | `matter.determined` | `determine.refused` | **absent** |
+| `determine` | 1 | `remit:determine` | a fired Date with a DocketItem; **`judging_set` — D11, `absent`** | `(Tenure, degree)` | `matter.determined` | `determine.refused` | **absent** |
 | `carry` | 4 | own | a Petition exists; **costs budget like any act** | `(DocketItem, matter)` | `petition.carried` | `carry.refused` | ruled §36.1 |
 | `petition` | 4 | own | — **no dedup, no cap, no per-venue limit** (§26.3) | — *(a Petition is created, not written)* | `petition.filed` | — | ruled §26.3 |
 | `tell` | 4 | own | the teller holds a claim on the subject | — *(deposits at WITNESS, not here)* | `news.told` | — | ruled §37.1 |
@@ -429,7 +429,7 @@ claimant on an emptied granary gets a DIFFERENT Event"* — only works if a fail
 | `tie` / `knot` | 4 | own | **stored once, on the lower id** (§15.1) | `(Tenure, since)` | `bond.formed` | — | ruled §15.1 |
 | `comply` | 4 | own | a claim of the dispensation's terms is in the actor's **own** ledger | per the term's own row | `compliance.given` | — | ruled §37 |
 | `evade` / `defy` | 4 | own | as `comply` | per the term's own row | `compliance.withheld` | — | ruled §37 |
-| `refract` | 4 | own | as `comply` — ⚠ **emitter- or receiver-side is `absent`, §D18** | — | `terms.distorted` | — | **absent** |
+| `refract` | 4 | own | as `comply` — ⚠ **emitter- or receiver-side is `absent`, D18** | — | `terms.distorted` | — | **absent** |
 | **the six investigation acts** | 2 | own — **eligibility NEVER consults office** (T9) | per act | — *(they produce claims at WITNESS)* | `finding.made` | `finding.none` | assumption |
 | `kill` / `wound` | 2 | own | `contests: the body` → **the seam** (§39) | `(Person, body)`, `(Person, exists)`, `(Tenure, until)` | `person.died` | — | ruled §30 |
 | `speak` | 4 | own | — | — | `speech.made` | — | assumption |
@@ -473,7 +473,7 @@ authored roster — the exact property §17 chose `Candidate[]` to protect.
 > **Q3 · A Sensation band change** — `subsistence` crossing a floor since last season.
 >
 > **All three are already produced by the loop.** Q1 is CALENDAR's own output; Q2 is WITNESS's
-> deposit; Q3 is the person-side reading of §D22's emission. **No new step, no new carrier, no clock.**
+> deposit; Q3 is the person-side reading of D22's emission. **No new step, no new carrier, no clock.**
 
 ```
 opening_set(p, view, q) -> Candidate[]
@@ -672,14 +672,14 @@ lists of open items. **They are rows now.**
 | **H-09** | ledger cap `L` · View `K` · claim confidence | NUMBER ×3 | params | **assumption** | `200` · `12` · `100` | WITNESS, DELIBERATE |
 | **H-10** | the **SCENE** budget as an **integer** of the ruled band `~5` *(⚠ **the unit was ruled 2026-09-02**: scenes, not acts — H-35)* | NUMBER | params | **assumption** | `5`; **swept 2·5·9 — the count verdict flips, which is the finding** | DELIBERATE |
 | **H-11** | the subsistence formula over an **open** `MatterKind` registry | FORMULA | Rung (matter) + params | **assumption** | draw from the containing rung's stores, scaled by weight | `Sensation` |
-| **H-12** | MATTER emits an Event per write so crossings have an antecedent | PRODUCER | the log | **ruled** — §D22 | Part D's `emits:` column | every crossing |
+| **H-12** | MATTER emits an Event per write so crossings have an antecedent | PRODUCER | the log | **ruled** — D22 | Part D's `emits:` column | every crossing |
 
 ## §VII.2 · TIER 1 — what the corpus then hits, ranked by core blocks
 
 | id | hole | kind | owner | grade | default | unblocks |
 |---|---|---|---|---|---|---|
 | **H-20** | L3 clause 1's **closed axis registry**, and the row admitting the increment | RULING (roster) + SCHEMA_ROW | the design owns the registry; **Person owns the counter** | **assumption** for the row (Part D) · **absent** for the roster | the row is `(Person, axis_count[axis])`; ⚠ the axis must **not** be spelled `exposure` bare — §54 item 6's collision with the need scalar | **~28** |
-| **H-21** | material vs social pooling | RULING — **answered by design document** | Rung / Office (matter) | **ruled** — §D26 | *"a faction's treasury is matter at the rung or office that holds it; L3 refuses pooled **social** quantities"* | **~19** |
+| **H-21** | material vs social pooling | RULING — **answered by design document** | Rung / Office (matter) | **ruled** — D26 | *"a faction's treasury is matter at the rung or office that holds it; L3 refuses pooled **social** quantities"* | **~19** |
 | **H-22** | `Record` rows: `exists`, `ttl`, `stages`, `matured`, `forgery_quality` | SCHEMA_ROW ×5 | Record; the `hold` Tenure is the holder's | **ruled** — Part D | Part D | **~13** |
 | **H-23** | act cost beyond budget consumption | RULING → FORMULA | params | **absent** | none — §63.1 may accept it instead | ~7 |
 | **H-24** | `(Person, exists)` | SCHEMA_ROW | the design | **ruled** — Part D, bounded by §15.3 | Part D | every death |
@@ -799,6 +799,14 @@ already give the *"a counter compels a named person"* shape that **19 of 50 arcs
 | # | artifact | proves | satisfiable by writing? |
 |---|---|---|---|
 | **0** | **Part VII has no `absent` row in Tier 0** | a season can complete without inventing | yes — and it is the only one that can |
+
+> ⚠ **ARTIFACT 0 IS UNMET, AND THIS DOCUMENT DID NOT SAY SO — corrected 2026-09-02 by `W0`.**
+> It is unmet on this document's **own `H-02`**, which is Tier 0 and carries `absent` for two of
+> its rows, and — once the twenty-two holes `PLAN.md` §1.4 found with no row at all are carried —
+> on eight more. The register is data now, so the claim is no longer a sentence to be trusted:
+> `python proposals/2026-09-01-season-loop-tests/tracer/register.py --counts` computes it and
+> **names every Tier 0 row that keeps it unmet.** `W1` and `W3` are the items that close them.
+
 | 1 | `Event :=` mapped onto the log, `source_actor` absent, `causes: [ROOT]` for antecedent-free | §19, #353 §54.4 — **still the first thing to do** | no |
 | 2 | **One NPC's season runs end to end from Parts D+E+F, emitting a log whose `causes[]` chain walks** | the three that matter | ⚠ **no** |
 | 3 | The same for one arc | | ⚠ **no** |

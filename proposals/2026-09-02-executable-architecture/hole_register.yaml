@@ -1,0 +1,743 @@
+# THE HOLE REGISTER -- AS DATA.
+#
+# W0 of `proposals/2026-09-02-executable-architecture/PLAN.md`. Everything in that plan waits on
+# this file, for one reason: `ARCHITECTURE_V2.md` §0.3 row 13 claims Part VII is "rows, not
+# prose", and IT WAS A MARKDOWN TABLE THAT NOTHING READ. Not one of its 32 rows carried the
+# `site:`, `sweep:` or `cite:` fields its own §G4 defines; its self-reported counts did not
+# reproduce from its own rows; and it could not report that TWENTY-TWO holes had no row at all.
+# By `CLAUDE.md` §0.05's test -- would the game behave differently if this were deleted? -- it
+# was reference. This file is the object. `tracer/register.py` is the only thing that reads it,
+# and `register.py --check` is what makes a wrong row FAIL rather than merely read oddly.
+#
+# THE ROW SHAPE is `ARCHITECTURE_V2.md` §G4's TEN FIELDS VERBATIM --
+#   id . hole . kind . owner . grade . default . site . sweep . unblocks . cite
+# -- plus exactly TWO, declared here so nobody grows the shape quietly later (rule R0 fails on
+# any row carrying a key outside this list, and on any row missing one):
+#   tier    -- V2's own §VII.1 / §VII.2 split. Artifact 0 ("Part VII has no `absent` row in
+#              Tier 0") IS STATED IN TERMS OF IT and cannot be checked without it.
+#   source  -- where the row came from, and V2's cells verbatim where this file normalised them.
+#              A transcription that cannot be re-derived is an assertion, and this register
+#              exists because an assertion was mistaken for data.
+#
+# PROVENANCE OF THE 32 TRANSCRIBED ROWS. Extracted mechanically from the markdown tables of
+# `ARCHITECTURE_V2.md` §VII.1 and §VII.2 -- not retyped. `python register.py --verify-transcription`
+# re-extracts them and fails if `hole`, `kind`, `owner`, `unblocks` or `tier` has drifted from V2
+# IN EITHER DIRECTION. Two normalisations, both recorded per row in `source:`:
+#   * H-10's `sweep: [2, 5, 9]`, which V2 supplies inside its `default` CELL ("swept 2·5·9")
+#     rather than in a sweep field. Recovering it is extraction, not invention.
+#   * an `absent` row whose default reads "none" FOLLOWED BY COMMENTARY ("none. ⚠ every contest
+#     is blocked") is normalised to `none`. The field means *the value an instrument may inject*,
+#     and a warning is not a value.
+#
+# GRADE, WHERE V2 GIVES MORE THAN ONE. Two rows -- H-02 and H-20 -- carry split grades. The
+# register records THE STRICTEST GRADE PRESENT, because §42.2's polarity rule sends zero evidence
+# to the verdict AGAINST the thing measured: a hole that is `absent` in part must refuse in part,
+# and refusing is the only question a grade answers. ⚠ BOTH THEN FAIL RULE R3, because V2 supplies
+# each of them a default. THAT IS A TRUE FINDING AND NOT NOISE: a part-absent, part-ruled hole with
+# one `default:` field is NOT REPRESENTABLE in §G4's shape, and §42.2.1 forbids the combination it
+# expresses. Do not "fix" it by deleting the default -- fix it by splitting the hole, which is
+# W3's work for H-02 and W1's for H-20.
+#
+# WHY 34 ROWS CARRY AN EMPTY `cite:`. That is the measurement, not an omission. Rule G6 requires
+# `CLAUDE.md` §0's five tests to have been RUN before a row is graded `absent`, with the result in
+# `cite:`. `PLAN.md` §2.6's finding is that NOBODY EVER RAN THAT LADDER. So the rows stand as V2
+# left them, `register.py --check` FAILS on G6, and it names every row. W1 is the item that runs
+# the ladder. A `cite:` backfilled here with "V2 says so" would launder a transcription into a
+# closure, which is the exact move this register exists to stop.
+#
+# COUNTS ARE NEVER WRITTEN HERE. `python register.py --counts` computes them. G11: a number with
+# no adjacent command is a defect, and V2's hand-typed "39 holes · 13 assumption" is why.
+
+rows:
+  - id:        H-01
+    tier:      0
+    hole:      "the `social:` value for every `(kind, field)` in Part II"
+    kind:      "SCHEMA_ROW ×33"
+    owner:     "the design (a static column)"
+    grade:     "ruled"
+    default:   "Part D's table"
+    site:      ""
+    sweep:     []
+    unblocks:  "**all 143**"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.1, transcribed verbatim | V2's grade cell: **ruled** — Part D"
+  - id:        H-02
+    tier:      0
+    hole:      "what each verb writes, requires and emits"
+    kind:      "PRODUCER"
+    owner:     "the resolver; writes owned per §22"
+    grade:     "absent"
+    default:   "Part E's table"
+    site:      ""
+    sweep:     []
+    unblocks:  "**all 143**"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.1, transcribed verbatim | V2's grade cell: **ruled** for 24 rows, **absent** for 2, **assumption** for 3 — Part E"
+  - id:        H-03
+    tier:      0
+    hole:      "the NPC decision policy"
+    kind:      "FORMULA"
+    owner:     "Person (person-side only)"
+    grade:     "assumption"
+    default:   "§F2's scoring function"
+    site:      ""
+    sweep:     []
+    unblocks:  "**all NPC**"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.1, transcribed verbatim | V2's grade cell: **assumption**"
+  - id:        H-04
+    tier:      0
+    hole:      "`q`'s producer and the Candidate derivation"
+    kind:      "PRODUCER"
+    owner:     "the date-holder (Q1) · Person (Q2, Q3)"
+    grade:     "assumption"
+    default:   "§F1's three sources"
+    site:      ""
+    sweep:     []
+    unblocks:  "**all NPC**"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.1, transcribed verbatim | V2's grade cell: **assumption**"
+  - id:        H-05
+    tier:      0
+    hole:      "the world-generation roster — persons with zero `hold`"
+    kind:      "SCHEMA_ROW"
+    owner:     "params (a registry row)"
+    grade:     "assumption"
+    default:   "a roster read from a registry row; **not a clock** (§29)"
+    site:      ""
+    sweep:     []
+    unblocks:  "any run"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.1, transcribed verbatim | V2's grade cell: **assumption**"
+  - id:        H-06
+    tier:      0
+    hole:      "the condition scale"
+    kind:      "NUMBER"
+    owner:     "params"
+    grade:     "assumption"
+    default:   "`1000`"
+    site:      ""
+    sweep:     []
+    unblocks:  "any Site"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.1, transcribed verbatim | V2's grade cell: **assumption**"
+  - id:        H-07
+    tier:      0
+    hole:      "wear per site kind — **NO silent default; an unregistered kind RAISES**"
+    kind:      "NUMBER ×kinds"
+    owner:     "params"
+    grade:     "assumption"
+    default:   "per-kind table; §42.2.1 names the silent default as the prior sin"
+    site:      ""
+    sweep:     []
+    unblocks:  "any Site"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.1, transcribed verbatim | V2's grade cell: **assumption**"
+  - id:        H-08
+    tier:      0
+    hole:      "band floors per site kind per verb"
+    kind:      "NUMBER ×kinds"
+    owner:     "params"
+    grade:     "assumption"
+    default:   "per-kind table"
+    site:      ""
+    sweep:     []
+    unblocks:  "L5, §12.1"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.1, transcribed verbatim | V2's grade cell: **assumption**"
+  - id:        H-09
+    tier:      0
+    hole:      "ledger cap `L` · View `K` · claim confidence"
+    kind:      "NUMBER ×3"
+    owner:     "params"
+    grade:     "assumption"
+    default:   "`200` · `12` · `100`"
+    site:      ""
+    sweep:     []
+    unblocks:  "WITNESS, DELIBERATE"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.1, transcribed verbatim | V2's grade cell: **assumption**"
+  - id:        H-10
+    tier:      0
+    hole:      "the **SCENE** budget as an **integer** of the ruled band `~5` *(⚠ **the unit was ruled 2026-09-02**: scenes, not acts — H-35)*"
+    kind:      "NUMBER"
+    owner:     "params"
+    grade:     "assumption"
+    default:   "`5`; **swept 2·5·9 — the count verdict flips, which is the finding**"
+    site:      ""
+    sweep:     [2, 5, 9]
+    unblocks:  "DELIBERATE"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.1, transcribed verbatim | V2's grade cell: **assumption**"
+  - id:        H-11
+    tier:      0
+    hole:      "the subsistence formula over an **open** `MatterKind` registry"
+    kind:      "FORMULA"
+    owner:     "Rung (matter) + params"
+    grade:     "assumption"
+    default:   "draw from the containing rung's stores, scaled by weight"
+    site:      ""
+    sweep:     []
+    unblocks:  "`Sensation`"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.1, transcribed verbatim | V2's grade cell: **assumption**"
+  - id:        H-12
+    tier:      0
+    hole:      "MATTER emits an Event per write so crossings have an antecedent"
+    kind:      "PRODUCER"
+    owner:     "the log"
+    grade:     "ruled"
+    default:   "Part D's `emits:` column"
+    site:      ""
+    sweep:     []
+    unblocks:  "every crossing"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.1, transcribed verbatim | V2's grade cell: **ruled** — D22"
+  - id:        H-20
+    tier:      1
+    hole:      "L3 clause 1's **closed axis registry**, and the row admitting the increment"
+    kind:      "RULING (roster) + SCHEMA_ROW"
+    owner:     "the design owns the registry; **Person owns the counter**"
+    grade:     "absent"
+    default:   "the row is `(Person, axis_count[axis])`; ⚠ the axis must **not** be spelled `exposure` bare — §54 item 6's collision with the need scalar"
+    site:      ""
+    sweep:     []
+    unblocks:  "**~28**"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **assumption** for the row (Part D) · **absent** for the roster"
+  - id:        H-21
+    tier:      1
+    hole:      "material vs social pooling"
+    kind:      "RULING — **answered by design document**"
+    owner:     "Rung / Office (matter)"
+    grade:     "ruled"
+    default:   "*\"a faction's treasury is matter at the rung or office that holds it; L3 refuses pooled **social** quantities\"*"
+    site:      ""
+    sweep:     []
+    unblocks:  "**~19**"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **ruled** — D26"
+  - id:        H-22
+    tier:      1
+    hole:      "`Record` rows: `exists`, `ttl`, `stages`, `matured`, `forgery_quality`"
+    kind:      "SCHEMA_ROW ×5"
+    owner:     "Record; the `hold` Tenure is the holder's"
+    grade:     "ruled"
+    default:   "Part D"
+    site:      ""
+    sweep:     []
+    unblocks:  "**~13**"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **ruled** — Part D"
+  - id:        H-23
+    tier:      1
+    hole:      "act cost beyond budget consumption"
+    kind:      "RULING → FORMULA"
+    owner:     "params"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "~7"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent** | V2's default cell: none — §63.1 may accept it instead"
+  - id:        H-24
+    tier:      1
+    hole:      "`(Person, exists)`"
+    kind:      "SCHEMA_ROW"
+    owner:     "the design"
+    grade:     "ruled"
+    default:   "Part D"
+    site:      ""
+    sweep:     []
+    unblocks:  "every death"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **ruled** — Part D, bounded by §15.3"
+  - id:        H-25
+    tier:      1
+    hole:      "a termination bound per self-feeding loop"
+    kind:      "RULING"
+    owner:     "—"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "~4"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent** | V2's default cell: none. ⚠ **three of four in-chain feedback loops name no off-switch and the fourth's is self-defeating**"
+  - id:        H-26
+    tier:      1
+    hole:      "`season_factor`'s distribution — **blocks `yield`**"
+    kind:      "SCHEMA_ROW"
+    owner:     "params"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "1"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent**"
+  - id:        H-27
+    tier:      1
+    hole:      "travel-leg ownership"
+    kind:      "SCHEMA_ROW"
+    owner:     "**Person, as the Tenure's subject**"
+    grade:     "ruled"
+    default:   "§15.1"
+    site:      ""
+    sweep:     []
+    unblocks:  "1"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **ruled** — §D4, by precedent"
+  - id:        H-28
+    tier:      1
+    hole:      "`budget`'s placement"
+    kind:      "RULING — **answered by precedent**"
+    owner:     "resolver-side, barrier-computed"
+    grade:     "ruled"
+    default:   "`sense()`"
+    site:      ""
+    sweep:     []
+    unblocks:  "every \"wounded duke\""
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **ruled** — §F3"
+  - id:        H-29
+    tier:      1
+    hole:      "`standing`'s formula"
+    kind:      "FORMULA"
+    owner:     "Person"
+    grade:     "assumption"
+    default:   "§F4's agreement over own `told_by` claims"
+    site:      ""
+    sweep:     []
+    unblocks:  "2"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **assumption**"
+  - id:        H-30
+    tier:      1
+    hole:      "person-order vs global canonical order"
+    kind:      "RULING — **answered by architecture**"
+    owner:     "the resolver"
+    grade:     "assumption"
+    default:   "composite key `(stratum, actor-hash, intra-person position)` — honours both"
+    site:      ""
+    sweep:     []
+    unblocks:  "2"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **assumption**"
+  - id:        H-31
+    tier:      1
+    hole:      "the degree ladder's margin model"
+    kind:      "FORMULA"
+    owner:     "params (the one ladder)"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "every contest"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent** | V2's default cell: none. ⚠ **every contest is blocked**"
+  - id:        H-32
+    tier:      1
+    hole:      "`judging_set_rule`"
+    kind:      "RULING"
+    owner:     "Rung"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "2"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent** | V2's default cell: none. ⚠ **nothing is decided at a sitting**"
+  - id:        H-33
+    tier:      1
+    hole:      "the five witness channel predicates"
+    kind:      "FORMULA ×5"
+    owner:     "the presence index (Nobody)"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "1"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent** | V2's default cell: none. ⚠ **fan-out is total; nothing said in private is private**"
+  - id:        H-34
+    tier:      1
+    hole:      "establishment size per office kind"
+    kind:      "NUMBER"
+    owner:     "params"
+    grade:     "assumption"
+    default:   "a per-kind number"
+    site:      ""
+    sweep:     []
+    unblocks:  "1"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **assumption**"
+  - id:        H-35
+    tier:      1
+    hole:      "**does a scene equal an act?**"
+    kind:      "RULING"
+    owner:     "**Jordan**"
+    grade:     "ruled"
+    default:   "**the SCENE is the budgeted unit; the number is 5; every character has it.** Interactions-per-scene (1–3) and extended-scene cost (2) become **`assumption` rows**, cited to `player_agency_v30.md` §6.3 and swept. See `PLAN.md` §3.4 and **W17**"
+    site:      ""
+    sweep:     []
+    unblocks:  "1"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: ✅ **RULED 2026-09-02** — *\"5 scenes for a character to play per season\"*"
+  - id:        H-36
+    tier:      1
+    hole:      "refraction: emitter- or receiver-side, and by how much"
+    kind:      "RULING + FORMULA"
+    owner:     "the design; params"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "2"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent**"
+  - id:        H-37
+    tier:      1
+    hole:      "the argument layer's named-fault roster"
+    kind:      "SCHEMA_ROW"
+    owner:     "the design"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "2"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent**"
+  - id:        H-38
+    tier:      1
+    hole:      "does a person carry a banded scalar?"
+    kind:      "RULING"
+    owner:     "Person, or refused"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "2"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent**"
+  - id:        H-39
+    tier:      1
+    hole:      "the cohort's construal spread — the rule is stated, the representation is not"
+    kind:      "SCHEMA_ROW"
+    owner:     "Person"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "—"
+    cite:      ""
+    source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent**"
+  - id:        H-40
+    tier:      0
+    hole:      "`(Claim, confidence)` decay at MATTER -- the THIRD licensed clock (#353 `:864`). Part D has no `Claim` row at all, and `(Person, claim_ledger)` is WITNESS-only, so Part D is not total for a clock #353 licenses"
+    kind:      "SCHEMA_ROW + FORMULA"
+    owner:     "Claim; the log"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      ""
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+  - id:        H-41
+    tier:      1
+    hole:      "`(Rung, exists)`, `(Office, exists)`, `(Site, exists)` -- founding a hearth, establishing an office, building a site. Part D's existence rows cover ONLY `Person` and `Record`"
+    kind:      "SCHEMA_ROW x3"
+    owner:     "Rung / Office / Site"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      ""
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+  - id:        H-42
+    tier:      0
+    hole:      "`utter` -- Proposition creation. `commit`, `petition` and `issue` all `require` a Proposition to exist and NO VERB CREATES ONE, so the season cannot start"
+    kind:      "PRODUCER"
+    owner:     "the resolver (Part E)"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      ""
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+  - id:        H-43
+    tier:      0
+    hole:      "Petition, Dispensation and Proposition are 'created, not written' and so BYPASS `write()`. #353 `:1061-1064`: 'Either the gate applies the write, or direct assignment is made impossible.' An object created beside the gate is the unmarked-cell defect wearing a different hat"
+    kind:      "PRODUCER"
+    owner:     "the write gate (Part D)"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      ""
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+  - id:        H-44
+    tier:      1
+    hole:      "the NINE Dispensation term types. `comply` / `evade` / `defy` write 'per the term's own row' -- rows that do not exist, and the nine types are enumerated nowhere in the chain"
+    kind:      "SCHEMA_ROW x9"
+    owner:     "the design (a static registry)"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      ""
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+  - id:        H-45
+    tier:      1
+    hole:      "the SIX investigation acts. T9 makes them first-class; they are unnamed, and V2 grades them `assumption` with `requires: per act` -- so there is nothing to inject"
+    kind:      "PRODUCER x6"
+    owner:     "the resolver (Part E)"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      ""
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+  - id:        H-46
+    tier:      0
+    hole:      "the 13 conviction axes. F2's `alignment(c.verb, axis)` is a verb x axis table WITH NO ROWS, so H-03's default is not injectable. The 'closed 13' appears nowhere in the chain"
+    kind:      "SCHEMA_ROW"
+    owner:     "the design (a static registry); Person holds the counter"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      ""
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+  - id:        H-47
+    tier:      1
+    hole:      "`Coherence` -- a 54 fold-in with no Part D row"
+    kind:      "SCHEMA_ROW"
+    owner:     "unassigned"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      ""
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+  - id:        H-48
+    tier:      1
+    hole:      "the `disclosure:` column -- a 54 fold-in with no Part D row"
+    kind:      "SCHEMA_ROW"
+    owner:     "the resolver (Part E)"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      ""
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+  - id:        H-49
+    tier:      0
+    hole:      "`(Person, weight)` -- a 54 fold-in with no Part D row. H-11's subsistence default reads it ('scaled by weight'), so every season touches it"
+    kind:      "SCHEMA_ROW"
+    owner:     "Person"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      ""
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+  - id:        H-50
+    tier:      1
+    hole:      "`(Tenure, payload)` -- a 54 fold-in with no Part D row, which means P39's 'a relationship carries state' HAS NO WRITER"
+    kind:      "SCHEMA_ROW"
+    owner:     "Tenure"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      ""
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+  - id:        H-51
+    tier:      1
+    hole:      "what DEMANDS an individuation. H-05 covers world-generation only; NPC-035 blocks on `P20`, and ruling that the row exists says nothing about what asks for it"
+    kind:      "PRODUCER"
+    owner:     "unassigned"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      ""
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+  - id:        H-52
+    tier:      1
+    hole:      "`open_case`'s eligibility. V2 gates it on `remit:determine` and #353's CLOSED five remit acts do not include it. V2 invented an eligibility, and the alternative (`own`) is a different game"
+    kind:      "RULING"
+    owner:     "the design; the resolver (Part E)"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      ""
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+  - id:        H-53
+    tier:      0
+    hole:      "the View-building rule. #353: 'at most K ids ... BUILT, not filtered'. H-09 supplies `K = 12` and NOT WHICH K; the instrument takes the last k, which is an invention"
+    kind:      "FORMULA"
+    owner:     "the barrier that builds the View"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      ""
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+  - id:        H-54
+    tier:      0
+    hole:      "question aggregation, and the DROPPED `need` source. Nothing says how many questions a person forms per season; and #353 `:605`/`:1297` make `need` an OPENING source that F1 omits, so an NPC with a standing ambition and a quiet season forms no candidates at all"
+    kind:      "PRODUCER"
+    owner:     "Person (person-side)"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      ""
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+  - id:        H-55
+    tier:      0
+    hole:      "`D22` x `H-33`: per-write MATTER emissions under TOTAL fan-out flood every ledger every season and churn the `L=200` eviction. Two rows that are individually fine and JOINTLY break the log. No row carries the interaction"
+    kind:      "RULING"
+    owner:     "the log; the presence index"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      ""
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+  - id:        H-56
+    tier:      1
+    hole:      "62/54 carry-over: 'no reaction inside a season' (34.1) vs the seam's nested DELIBERATE (40.2) -- defect `D16`, a COLLISION between two in-chain sentences, and the only one of 26 defects with no Part VII row while being claimed discharged"
+    kind:      "RULING"
+    owner:     "the seam"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      ""
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+  - id:        H-57
+    tier:      1
+    hole:      "62/54 carry-over: may a social quantity SINK BY NEGLECT?"
+    kind:      "RULING"
+    owner:     "unassigned"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      ""
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+  - id:        H-58
+    tier:      1
+    hole:      "62/54 carry-over: the EXCHANGE form (#353 `:1899`)"
+    kind:      "SCHEMA_ROW"
+    owner:     "the resolver (Part E)"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      ""
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+  - id:        H-59
+    tier:      1
+    hole:      "62/54 carry-over: GRIEVANCE CLEARANCE"
+    kind:      "RULING"
+    owner:     "unassigned"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      ""
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+  - id:        H-60
+    tier:      1
+    hole:      "player/NPC budget symmetry -- ALREADY ANSWERED by #353 `:876` (everyone runs `choose`) and RECORDED NOWHERE AS CLOSED. W1 closes it; it is `absent` here only because W0 transcribes the state V2 left"
+    kind:      "RULING"
+    owner:     "Person"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      ""
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+  - id:        H-61
+    tier:      1
+    hole:      "`A18` -- the CONTRACT DESCENT (41). The strings 'contract descent' and 'S41' appear nowhere in V2. T5 needs to know PER MODULE what it may RECEIVE and T6 what it may EMIT; no surface in the chain answers it for any module, WHICH MAKES R-1 AND R-2 UNENFORCEABLE IN PRINCIPLE while V2 0.2 inherits them unchanged"
+    kind:      "SCHEMA_ROW"
+    owner:     "the design (a per-module contract)"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "unmeasured"
+    cite:      ""
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+
+# ---------------------------------------------------------------------------
+# THE DISCHARGE MAP -- guardrail G8.
+# "Every defect gets a register row, or is discharged with a named section."
+# THE FAILURE THAT EARNED IT: `D16` was the ONLY one of Part B's 26 defects with no Part VII row
+# AND no Part D-G discharge, and it was claimed discharged anyway. Nothing could report that,
+# because the binding between Part B's enumeration and the register was PROSE.
+#
+# A value is either `row:H-NN` -- and rule G8 fails if that row does not exist -- or a section
+# reference. The binding is EXPLICIT rather than inferred from whether a defect id happens to
+# appear in a row's text: an inferred binding is a keyword search, and a keyword search is a
+# router, and PLAN.md §7.4 is the sixth recurrence of what routers do.
+#
+# G8 fails on: a Part B defect with no entry; an entry naming a row that does not exist; an entry
+# for an id Part B does not define. Part B's ids are re-read from the document, never pinned here.
+# ---------------------------------------------------------------------------
+
+discharges:
+  D1:   "row:H-01"
+  D2:   "row:H-04"
+  D3:   "row:H-29"
+  D4:   "row:H-28"
+  D5:   "row:H-30"
+  D6:   "row:H-20"
+  D7:   "row:H-22"
+  D8:   "row:H-24"
+  D9:   "row:H-26"
+  D10:  "row:H-27"
+  D11:  "row:H-32"
+  D12:  "row:H-34"
+  D13:  "row:H-31"
+  D14:  "row:H-33"
+  D15:  "row:H-25"
+  D16:  "row:H-56"
+  D17:  "row:H-35"
+  D18:  "row:H-36"
+  D19:  "row:H-23"
+  D20:  "row:H-02"
+  D21:  "row:H-03"
+  D22:  "row:H-12"
+  D23:  "row:H-05"
+  D24:  "row:H-37"
+  D25:  "row:H-38"
+  D26:  "row:H-21"

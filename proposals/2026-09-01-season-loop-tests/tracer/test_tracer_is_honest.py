@@ -860,3 +860,114 @@ def test_w15_every_case_record_in_the_caselog_equals_results_json():
     # The corpus size is 143 today. Reproduce:
     #   python -c "import json;d=json.load(open('../runs/results.json'));print(len(d['NPC'])+len(d['ARC']))"
     assert expected > 0, "results.json carries no cases at all"
+
+
+# ===========================================================================
+# W0 -- THE HOLE REGISTER AS DATA
+#
+# THE FAILURE THAT EARNED THESE: `ARCHITECTURE_V2.md` §0.3 row 13 claims Part VII is "rows, not
+# prose". It was a markdown table nothing read. Its counts did not reproduce from its own rows
+# (39 claimed over 32 present; "Ten holes" over 12; grades summing to 34), not one row carried
+# the `site:`/`sweep:`/`cite:` fields its own §G4 defines, and it could not report that
+# twenty-two holes had no row at all. `hole_register.yaml` is the object; `register.py` reads it.
+#
+# WHAT THESE TESTS DO NOT DO: they do not assert the register is CLEAN. `--check` exits 1 today,
+# on R2, R3 and G6, and that is the measurement -- W1 is the item that drives it down. They
+# assert the CHECKER WORKS, which is the part a later session could break without noticing.
+# ===========================================================================
+
+import register as REG
+
+
+def test_w0_the_register_transcription_still_matches_architecture_v2():
+    """The 32 transcribed rows must still say what V2's Part VII tables say. Drift in EITHER
+    direction is a defect: a row edited here silently, or a table edited there silently. Grade is
+    deliberately NOT pinned -- W1 re-grades by design, and the re-grades are reported as notes."""
+    drift = [b for b in REG.verify_transcription(REG.load()) if not b.startswith("NOTE ")]
+    assert not drift, "register and ARCHITECTURE_V2.md Part VII have diverged:\n  " + "\n  ".join(drift)
+
+
+def test_w0_every_part_b_defect_binds_to_a_row_or_a_section():
+    """Guardrail G8. `D16` was the ONLY one of Part B's 26 defects with no Part VII row and no
+    Part D-G discharge, and was claimed discharged anyway -- because the binding was prose. It is
+    a map now, and the map is checked against Part B's ids as the document defines them."""
+    reg = REG.load()
+    assert REG.part_b_defects(), "Part B parsed to zero defect ids -- the check cannot run"
+    bad = REG.rule_G8(reg)
+    assert not bad, "G8: " + "; ".join(bad)
+
+
+def test_w0_the_checker_fails_on_an_ungraded_row():
+    """§42.2's polarity rule: *a row with no grade FAILS THE EXPORT*. Planted, not asserted about
+    the source -- the property is that the checker REFUSES, not that a `grade` key is present."""
+    reg = REG.load()
+    reg["rows"][0]["grade"] = ""
+    assert REG.rule_R1(reg), "an ungraded row passed R1"
+
+
+def test_w0_the_checker_fails_on_a_default_for_an_absent_hole():
+    """§42.2.1 in one line -- *the honest behaviour is to REFUSE, not to pick a plausible number*
+    -- made mechanical. This is the rule that stops the register becoming a place to park
+    plausible values under a refusal's name."""
+    reg = REG.load()
+    target = next(r for r in reg["rows"] if r["grade"] == "absent" and r["default"] == "none")
+    before = len(REG.rule_R3(reg))
+    target["default"] = "a plausible number"
+    after = REG.rule_R3(reg)
+    assert len(after) == before + 1 and any(target["id"] in b for b in after), (
+        f"planting a default on absent row {target['id']} did not fail R3")
+
+
+def test_w0_the_checker_fails_on_an_assumption_with_no_site_or_sweep():
+    """§G's inject-declare-sweep doctrine is worthless if a default can be declared without
+    saying WHERE it enters or WHAT ELSE was tried. H-10 is the one row V2 supplies a sweep for,
+    so it is the one that can be broken in both directions."""
+    reg = REG.load()
+    h10 = next(r for r in reg["rows"] if r["id"] == "H-10")
+    h10["site"], h10["sweep"] = "choose.budget", [2, 5, 9]
+    assert not [b for b in REG.rule_R2(reg) if "H-10" in b], "a complete assumption row failed R2"
+    h10["sweep"] = [5]
+    assert [b for b in REG.rule_R2(reg) if "H-10" in b], "a one-point sweep passed R2"
+    h10["sweep"], h10["site"] = [2, 5, 9], ""
+    assert [b for b in REG.rule_R2(reg) if "H-10" in b], "an assumption with no site passed R2"
+
+
+def test_w0_the_checker_fails_on_an_absent_row_with_no_cite():
+    """Guardrail G6. `PLAN.md` §2.6: nobody ever ran `CLAUDE.md` §0's five tests over the twelve
+    refusals, and run in chain eleven of twelve close or downgrade. A refusal nobody argued for
+    is not a refusal, it is an omission wearing one."""
+    reg = REG.load()
+    target = next(r for r in reg["rows"] if r["grade"] == "absent")
+    target["cite"] = "PLAN.md §3.1 -- test 4, precedent: #353 :927-930"
+    assert not [b for b in REG.rule_G6(reg) if b.startswith(target["id"] + ":")], (
+        "a cited absent row still failed G6")
+    target["cite"] = "   "
+    assert [b for b in REG.rule_G6(reg) if b.startswith(target["id"] + ":")], (
+        "a whitespace-only cite passed G6")
+
+
+def test_w0_the_row_shape_cannot_grow_quietly():
+    """Rule R0. §G4 defines ten fields; this register declares two more in its header and no
+    others. A shape nobody checks is a shape that grows, and the growth is always one useful
+    field at a time."""
+    reg = REG.load()
+    assert not REG.rule_R0(reg), "R0: " + "; ".join(REG.rule_R0(reg))
+    reg["rows"][0]["notes"] = "a useful extra field"
+    assert REG.rule_R0(reg), "an undeclared key passed R0"
+
+
+def test_w0_the_counts_are_computed_and_artifact_0_is_reported_honestly():
+    """G11: every number describing the register ships with the command that produces it, and the
+    command is `python register.py --counts`. V2's hand-typed '39 holes / 13 assumption' over 32
+    rows is why. Artifact 0 -- *Part VII has no `absent` row in Tier 0* -- is UNMET, and this
+    asserts that the instrument SAYS so rather than that it is met."""
+    c = REG.counts(REG.load())
+    assert c["rows"] == c["transcribed"] + c["added_by_plan"], (
+        f"{c['rows']} rows but {c['transcribed']} + {c['added_by_plan']} accounted for")
+    assert c["tier0"] + c["tier1"] == c["rows"]
+    assert sum(c["by_grade"].values()) == c["rows"], (
+        "the grade tally does not sum to the row count -- V2's exact defect, in the data")
+    assert c["tier0_absent"], (
+        "artifact 0 now reports MET. If that is real, W1/W3 closed the last Tier 0 `absent` row "
+        "and this test should be inverted -- but check first that the rows were closed rather "
+        "than deleted.")

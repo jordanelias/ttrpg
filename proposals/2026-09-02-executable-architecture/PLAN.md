@@ -494,6 +494,43 @@ row**. By §0.05's own test — *would the game behave differently if this docum
 counts can never again be a hand-typed sentence); planting a row with no `grade` makes it exit 1;
 planting a `default:` on an `absent` row makes it exit 1.
 
+> ### ✅ **`W0` LANDED 2026-09-02 — and its Proof's first clause is WRONG. Recorded loudly rather than quietly satisfied.**
+>
+> `hole_register.yaml` carries **54 rows** — the 32 transcribed mechanically from `V2` §VII, the
+> 18 holes of §1.4 with its four §62/§54 carry-overs expanded to four rows, and `A18`.
+> `tracer/register.py` reads it and nothing else does.
+>
+> **`--check` exits 1, and it must.** *"Exits 0"* was written before anyone transcribed the rows,
+> and it contradicts **this document's own §1.5**: if not one of the 32 rows carries `site:`,
+> `sweep:` or `cite:`, then a register that transcribes them faithfully **cannot** pass the rules
+> that read those fields. Writing 0 would have required backfilling citations nobody derived —
+> laundering a transcription into a closure, which is the move the register exists to stop. So the
+> honest proof is a **measurement**, and it is stronger than the assertion it replaces:
+>
+> | rule | today | closed by |
+> |---|---|---|
+> | `R0` shape · `R1` graded · `G8` discharged | **ok** — `--check --rule R0,R1,G8` exits 0 | — |
+> | `R2` an `assumption` carries `site:` + 3 `sweep:` points | **23 violations** | `W1` |
+> | `R3` an `absent` carries no `default:` | **2 — `H-02` and `H-20`** | `W3`, `W1` |
+> | `G6` an `absent` carries a `cite:` | **34 violations** | `W1` |
+>
+> **`R3`'s two are a finding, not noise.** `V2` grades `H-02` and `H-20` partly `absent` **and
+> supplies each a default**. A part-absent hole with one `default:` field is **not representable in
+> §G4's shape**, and §42.2.1 forbids the combination it expresses. The fix is to split the hole, not
+> to delete the default.
+>
+> **Both plants fire**, and a third was added: an ungraded row fails `R1`; a `default:` on an
+> `absent` row fails `R3`; and `--verify-transcription` re-extracts `V2`'s tables and fails on
+> drift **in either direction**, so the register and the prose cannot part company silently.
+>
+> **Also discharged from the list above:** the `§D20`–`§D26` citation form — **eighteen** citations,
+> not the four this item names. Part D has only `§D1`–`§D5`, so **every** `§D<n>` above 5 was a Part
+> B defect id wearing a section's clothes, and `§D6`/`§D7`/`§D8`/`§D11`/`§D18` were wrong on exactly
+> the same ground as the four. Fixing only the range named would have left five known-wrong
+> citations standing, which this item's own note calls *"the worst of both"*. And **`V2` §I2's
+> artifact 0 is now marked UNMET**, which it is — on `H-02` and, once the missing rows are carried,
+> on eight more. `register.py --counts` names them, so it can no longer be a sentence.
+
 **Size S.** Depends on nothing.
 
 ---

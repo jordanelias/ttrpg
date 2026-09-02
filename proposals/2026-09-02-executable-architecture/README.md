@@ -6,6 +6,7 @@
 |---|---|
 | **`PLAN.md`** | **the improvement plan — read this first if you are about to do work.** What to build, in what order, what may not be invented while building it, and the one question for Jordan. It also **adjudicates `ARCHITECTURE_V2.md` and corrects it in three places** |
 | **`ARCHITECTURE_V2.md`** | **the proposal.** Read Part A before the tables, or they look like bureaucracy |
+| **`hole_register.yaml`** | **Part VII, as data** (`W0`, landed). 54 rows in §G4's shape. `python ../2026-09-01-season-loop-tests/tracer/register.py --counts` computes what Part VII's prose used to assert; `--check` fails on a row that breaks §42.2/§42.2.1 |
 | `../2026-09-01-season-loop-tests/` | the executed session it rests on — instrument, 143 cases, run output |
 | `../2026-09-01-season-loop-tests/session/00_FINDINGS_LEDGER.md` | the 56 findings, transcribed |
 
@@ -46,8 +47,10 @@ architecture; they are in what the architecture declines to say.
   `standing` formula that needs no cross-holder read.
 - **Part G** — **the delegation doctrine.** §42.2.1's *"refuse, don't pick"* survives for
   `absent`-grade holes and is extended to inject-declare-**sweep** for holes whose shape is ruled.
-- **Part VII** — **the hole register**, replacing §61–§62's prose: **39 holes, 8 ruled, 13
-  assumption-with-a-default, 12 absent.**
+- **Part VII** — **the hole register**, replacing §61–§62's prose. ⚠ **Its self-reported counts
+  — "39 holes, 8 ruled, 13 assumption, 12 absent" — DO NOT REPRODUCE, and this line no longer
+  states any.** `W0` made the register data; the counts are computed:
+  `python ../2026-09-01-season-loop-tests/tracer/register.py --counts`.
 
 ## The two things a reader should carry
 
@@ -73,8 +76,11 @@ architecture; they are in what the architecture declines to say.
 - **Eleven of `ARCHITECTURE_V2.md`'s twelve `absent` holes close or downgrade *in chain*** once
   `CLAUDE.md` §0's five tests are actually run over them. **One genuine escalation survives** —
   does a scene equal an act? — **and it blocks nothing.**
-- **Nineteen holes have no row at all.** The register could not report this because **it is a
-  markdown table nothing reads**, whose own counts do not reproduce from its own rows.
+- **Nineteen holes have no row at all.** The register could not report this because **it was a
+  markdown table nothing reads**, whose own counts did not reproduce from its own rows. **`W0`
+  landed 2026-09-02: it is `hole_register.yaml` now, 54 rows, and `register.py --check` is what
+  makes a wrong row fail.** The nineteen became **twenty-two** once §1.4's four §62/§54
+  carry-overs were carried as separate rows, which is what the plan told `W0` to do.
 - **The critical path is six items** — `W0 → W1 → W2 → W3 → W5 → W9` — ending at **one NPC season
   running end to end**. Everything else runs beside it.
 - **Three of this chain's own rulings are overturned in `PLAN.md` §1.3**, including a "verified
