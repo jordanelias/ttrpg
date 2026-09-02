@@ -1,0 +1,47 @@
+# NPC-002 — `exercises:` for `W10`'s declared routing.
+#
+# ⚠ AUTHORED BY READING EACH ROW, NOT BY MATCHING IT. Every `from:` names what the row
+# rests on and why, so a reader who disagrees can say which row is wrong — which is the
+# whole reason `PLAN.md` `W10` retired the regex router. Nothing here was generated from
+# the router's output.
+case: NPC-002
+name: Maret Uln
+source: 'the case''s own `season_requires` + #353 and the hole register, cited per row'
+authored_after_first_run: true
+rows:
+- need_sha: 1d792bf5f784
+  hardness: core
+  need: Performing a Thread operation as part of ordinary intelligence work must cost the practitioner
+    a persistent personal resource whose cost scales with the scale and type of operation performed, distinct
+    from whether the operation succeeded.
+  exercises:
+  - H-38
+  - probe:P33
+  from: 'A persistent personal resource whose cost SCALES with the scale and type of operation: `H-38`
+    supplies the banded scalar on Person, and the scaling is the missing half -- there is NO per-act cost
+    model. ⚠ THE `W10` ADVERSARIAL PASS CAUGHT THE MIS-ATTRIBUTION: this row published `H-25` (a termination
+    bound per self-feeding loop) as its blocker while this very sentence named `P33`. `P33` is the probe
+    for act cost beyond budget consumption and it gaps; `H-25` is about loops, which this row is not about.
+    Naming the right blocker is the whole point of declared routing.'
+- need_sha: 504cde51f5df
+  hardness: core
+  need: As her personal condition degrades across a season, the range of actions available to her must
+    narrow in a fixed, predictable order -- from full freedom down to forced withdrawal and crisis --
+    and that narrowing must override her institutional orders when the two conflict.
+  exercises:
+  - probe:P32
+  - H-38
+  from: '''The range of actions available narrows in a fixed, predictable order as her condition degrades''
+    is `P32` exactly, and `P32` now passes by construction: `body_band_penalty` counts bands on the same
+    `band_floors` table the site gate uses, so the order is fixed. `H-38` is the carrier it spends.'
+- need_sha: f6eb3047cecc
+  hardness: core
+  need: Her personal sympathy for a population she is ordered to act against must produce a measurable,
+    repeatable delay or softening in her actions against that population, distinct from a single one-time
+    refusal.
+  exercises:
+  - probe:P31
+  - H-31
+  from: A measurable, repeatable softening distinct from a single roll is her convictions biasing the
+    pick (`P31`) plus a degree ladder that could register 'softened' as a different outcome -- `H-31`,
+    the margin model, which is `assumption`.

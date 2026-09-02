@@ -21,10 +21,11 @@ to test*; they supply nothing about whether the shape is right.
 | `tracer/shape.py` | **the instrument.** `ARCHITECTURE.md` implemented faithfully enough to EXECUTE — six steps, four barriers, the write matrix as a store-API parameter, the `Event` record §19 adds, the three-clause aggregation boundary, fixed point, the two topologies |
 | `tracer/probes.py` | the probes. Each is a REAL EXECUTION that either completes or raises a typed `ShapeGap` |
 | `tracer/run_cases.py` | the router and grader. Routes each case's `season_requires` rows onto probes |
-| `tracer/test_tracer_is_honest.py` | **the instrument's own adversarial test.** 63 tests |
+| `tracer/report.py` | **the sole emitter of `runs/`** (W15, guardrail G7). `run_cases.py` runs the corpus and writes nothing; every artifact below comes from here |
+| `tracer/test_tracer_is_honest.py` | **the instrument's own adversarial test.** Count it rather than trusting this cell: `python -m pytest tracer/test_tracer_is_honest.py -q` |
 | `tracer/trace_log.py` | the tracing channel — every step, barrier, decision, write, act, event, claim and gap, in order |
 | `cases/` | this session's completion of the case corpus (the in-chain corpus at #351 covers 27 of 46 NPCs and 51 of ~90 arcs) |
-| `runs/` | `results.json` and `TRACE.txt` — the run |
+| `runs/` | the run: `results.json`, `TRACE.txt`, and the eight markdown artifacts — `DECISIONS.md`, `STEPS.md`, `CASELOG_NPC.md`, `CASELOG_ARC.md`, `PROBES.md`, `UNMAPPED_NPC.md`, `UNMAPPED_ARC.md`, `ASSUMPTIONS.md` |
 
 ## The instrument's own honesty
 

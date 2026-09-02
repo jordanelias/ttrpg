@@ -1,0 +1,58 @@
+# NPC-010 — `exercises:` for `W10`'s declared routing.
+#
+# ⚠ AUTHORED BY READING EACH ROW, NOT BY MATCHING IT. Every `from:` names what the row
+# rests on and why, so a reader who disagrees can say which row is wrong — which is the
+# whole reason `PLAN.md` `W10` retired the regex router. Nothing here was generated from
+# the router's output.
+case: NPC-010
+name: Dalla Virke
+source: 'the case''s own `season_requires` + #353 and the hole register, cited per row'
+authored_after_first_run: true
+rows:
+- need_sha: 97198a57061b
+  hardness: core
+  need: A non-faction, non-institutional actor must be able to hold and trade a resource (information,
+    trust, access) that no faction's own action economy owns or produces -- a market that exists outside
+    every faction's resource pools.
+  exercises:
+  - transfer
+  - H-84
+  from: Holding and trading a resource no faction's economy owns needs a tradeable thing and a verb that
+    moves it. `transfer` moves `(Rung, stores)` -- MATTER -- and information is not matter; `H-84` is
+    that nothing moves a Record (which is what information would be) to another person at all.
+- need_sha: 265d3faf4743
+  hardness: core
+  need: Information she sells must be able to be true, false, or fabricated, with the buyer unable to
+    distinguish which in advance, and her incentive to fabricate must rise specifically when honest demand
+    for information falls.
+  exercises:
+  - H-79
+  - probe:P31
+  from: 'Information that can be true, false or fabricated with the buyer unable to tell is the epistemic
+    layer working: every witness mints its own claim, and a claim may be wrong. `H-79` decides what a
+    deposit is about; `P31` is where a hidden motive (her incentive to fabricate) biases a decision nobody
+    can read out.'
+- need_sha: c3792e3413c5
+  hardness: core
+  need: She must be discoverable, killable, buyable, or turnable by an outside actor as four textually
+    distinct outcomes with different consequences for her network, not variations on one generic 'remove
+    her' resolution.
+  exercises:
+  - kill / wound
+  - the six investigation acts
+  - tell
+  from: 'Four TEXTUALLY DISTINCT outcomes, one token each rather than one blanket blocker: `kill / wound`
+    is killable; DISCOVERABLE is the six investigation acts, which Part E carries with `requires: per
+    act` and no predicate; buyable and turnable are social and reach her through `tell`. ⚠ THIS ROW FIRST
+    DECLARED `H-84` FOR ALL FOUR, which the `W10` adversarial pass called out: neither buyable nor turnable
+    requires moving a Record, so `H-84` was doing work the need does not ask of it.'
+- need_sha: b28ff8075d81
+  hardness: core
+  need: Her personal judgment about a specific past transaction (vetting goods as safe and legitimate)
+    must be able to be wrong in a way that is discoverable later and attributable specifically to her,
+    not to an abstract 'the network' or 'the market.'
+  exercises:
+  - H-22
+  - H-79
+  from: A past judgment discoverable later and attributable specifically to her is a Record of the transaction
+    (`H-22`, `ruled`) plus a claim about it whose subject is the goods rather than the actor -- `H-79`.

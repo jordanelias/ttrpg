@@ -1,0 +1,587 @@
+# THE ROSTERS — every closed set the loop reads, as DATA.
+#
+# ⚠ RULED BY JORDAN, 2026-09-02, and this file exists because of it. Verbatim, across four
+# messages: *"please note that convictions roster and axes etc may be modified in future"* …
+# *"that goes for all"* … *"these must be easy to modify"* … *"I do not want definitions etc to
+# be hardcoded."*
+#
+# THE RULE, STATED SO A LATER SESSION CANNOT SOFTEN IT: a DEFINITION — a roster, a taxonomy, an
+# axis set, a kind list, a closed set of any sort — is read at runtime from here. Changing one is
+# a DATA EDIT, never a code change, and it touches no other system. A definition written as a
+# literal in a Python body is a defect, whatever else is true of it.
+#
+# WHAT THIS IS NOT. It is not a place for MECHANISM — the step→write-class map is a relation the
+# code owns, not a definition someone may edit. The test is: *would changing this change the GAME,
+# or change how the code works?* A roster changes the game. `STEP_CLASS` changes the code.
+#
+# ⚠ THE "NO NUMBERS" CLAUSE, NARROWED BY `W5` — and narrowed rather than deleted, because the
+# distinction it was reaching for is real. It read *"it is not a place for NUMBERS — those are
+# `Fixtures`"*, which is right about a free-standing tuning scalar and WRONG about a weight that
+# is part of a definition. `alignment` below is a verb × axis matrix: its cells are numbers, but
+# the matrix IS the definition, it is keyed on a roster in this file, and it is precisely the
+# thing Jordan named (*"convictions roster and axes etc"*). Pushing it into `Fixtures` would put
+# it back in a Python literal, which is the outcome the ruling forbids.
+#
+#   > **The test, stated so it is idempotent:** a number that is a PROPERTY OF A ROSTER MEMBER
+#   > travels with the roster and lives here. A number that stands free of any roster — `K = 12`,
+#   > a budget base, a ledger cap — is a `Fixture`. `alignment[axis][verb]` has no meaning apart
+#   > from `conviction_axes` and the verb table; `view_k` has meaning on its own.
+#
+# TABLES ARE A SECOND TOP-LEVEL KEY, not a roster with a strange shape. A roster is a SET and
+# `roster()` returns a frozenset; a table is a MAPPING and `table()` returns a dict. Reading one
+# with the other's function raises, so the two shapes cannot be confused at the call site.
+#
+# HOW TO CHANGE ONE. Edit the list. Nothing else. `shape.py` reads this file at import; a name
+# the code asks for that is not here RAISES rather than defaulting, which is §42.2's polarity
+# rule applied to definitions — an absent roster is a refusal, never an empty set.
+#
+# SCOPE AND SHAPE — BOTH RULED BY JORDAN, 2026-09-02, when this file asked.
+#   * "only this proposal chain is in scope" — so `engine/substrate/keys.py`'s `AXES`, `ROLES`,
+#     `SCALES` and `PERMANENCE_VALUES` are NOT governed by this ruling and are NOT to be moved.
+#     The live engine is outside the chain (PR #337 -> now) and stays that way. A later session
+#     reading the ruling as tree-wide would be widening it; it was asked and answered narrow.
+#   * "one file rosters i think" — ONE FILE, not one per subsystem. If it grows past legibility
+#     that is a reason to ask again, not a reason to split it unilaterally.
+#
+# ⚠ EVERY ROSTER HERE IS OPEN BY THE SAME RULING. None of them is closed by being written down.
+# The `source:` field says where the current membership comes from; it is provenance, NOT
+# ratification, and a roster with `open: true` must never be cited as settling a register row.
+
+rosters:
+
+  tenure_kinds:
+    source: "#353 §15 `:537-544` — the seven Tenure kinds and their cardinalities"
+    open: true
+    values: [hold, contain, commit, oblige, succeed, tie, knot]
+
+  rung_kinds:
+    source: "#353 §10 — the containment ladder. `contain : Rung → Rung`, one parent"
+    open: true
+    values: [person, hearth, community, settlement, territory, province, duchy, realm]
+
+  remit_acts:
+    source: "#353 §11 — the CLOSED five remit acts, plus `convene`"
+    open: true
+    note: >-
+      ⚠ H-52 turns on this roster. `ARCHITECTURE_V2.md` gates `open_case` on `remit:determine`,
+      and #353's closed remit acts do not include opening a case — so V2 invented an eligibility.
+      The row stays open; adding a value here would close it by hardcoding, which is the move the
+      ruling above forbids.
+    values: [issue, determine, confer, revoke, dispatch, convene]
+
+  witness_channels:
+    source: "#353 §28 `:1004` — the five channels the fan-out computes an observer set from"
+    open: true
+    note: >-
+      The channels are named; their PREDICATES are `H-33` and are graded `assumption` with total
+      fan-out as the default and the control. Naming a channel is not specifying it.
+    values: [post_remit, co_located, witness_key, document_key, chronicle]
+
+  claim_sources:
+    source: "#353 §20 — how a Claim came to be held"
+    open: true
+    note: >-
+      ⚠ Jordan, 2026-09-02: *"our understanding of all other words and actions is subjective and
+      singular."* Every value here is a way ONE person came to hold ONE claim. A source that
+      described a shared or aggregated understanding would contradict the ruling, not extend it.
+    values: [firsthand, told_by, inferred, firsthand_via_knot]
+
+  strata:
+    source: "#353 §27 — the five strata, in canonical resolution order"
+    open: true
+    note: >-
+      ⚠ ORDER IS SEMANTIC HERE, not alphabetical: the fold resolves in this sequence, so editing
+      the order changes which acts see which world. That is a game change, which is precisely why
+      it belongs in data rather than in a body.
+    ordered: true
+    values: [movement, binding_decision, contested_physical, uncontested_material, social]
+
+  eligibility_kinds:
+    source: "#353 §9.2 / ARCHITECTURE_V2.md §E4 — the four ways a verb can be made available"
+    open: true
+    note: >-
+      ⚠ `capability` IS NOT AND MUST NEVER BE A MEMBER. #353 §9.2: "`capability` supplies dice and
+      GATES NOTHING… The only class-shaped gate in the design is Thread Sensitivity." An office
+      makes an ORDINARY verb eligible; no verb exists only for office-holders. Adding a fifth kind
+      is a DESIGN CHANGE — a new way to make a verb unavailable to someone — and not a table edit,
+      so it needs a ruling before it needs an entry.
+      This roster was itself a literal in `shape.py` for about ten minutes, and the guard Jordan's
+      ruling earned caught it. Recorded because a guard that has never fired on its author is one
+      nobody has tested.
+    values: [own, remit, hold, presence]
+
+  conviction_axes:
+    source: "#353 §14 `:334` — \"`convictions` | weights over the closed 13 | 1–3 primary + distributed | the moral axes\""
+    open: true
+    forbidden: [exposure]
+    incomplete:
+      have: 4
+      target: 13
+      blocked_by: H-46
+    note: >-
+      ⚠ FOUR OF THIRTEEN, AND SAYING SO IS THE POINT. #353 says "the closed 13" and NEVER
+      ENUMERATES THEM. `H-46` (PLAN §1.4 hole 7) is graded `absent` for exactly that reason and
+      Jordan's 2026-09-02 ruling says it must STAY open. So this roster is NOT the closed 13 and
+      must never be cited as it: it carries the four axes THE CHAIN ITSELF NAMES — `Precedent` and
+      `self_preservation` from probe `P31`, `suspicion` from `P37`, `harm_borne` from PLAN §3.2 —
+      and `incomplete:` above says so in data, so a reader who never opens this note still gets it.
+      Naming four is not enumerating thirteen, and `alignment` below covers only these four.
+      ⚠ `exposure` IS FORBIDDEN AS A BARE AXIS NAME and the loader RAISES on it — #353 `:1897`
+      names "The Exposure collision — three senses of one word, including a need scalar and a
+      per-person tally". Spell the sense you mean.
+      ⚠ THE TREE DISTINGUISHES WHAT V2 CONFLATES, recorded and not acted on. `H-46`'s cite carries
+      it in full: `key_substrate_v30.md` §2.5 has THIRTEEN convictions projecting onto FOUR axes
+      through a 13×4 matrix, so "the closed 13" are CONVICTIONS and the axes are four. V2 §F2's
+      formula — `Σ_axis conviction[axis] · alignment(c.verb, axis)` — indexes convictions BY axis,
+      i.e. treats them as ONE index set. Jordan ruled 2026-09-02 that only this proposal chain is
+      in scope, so this file follows V2's one-index-set formula and the tree's distinction stays an
+      observation on `H-46`. It is the likeliest thing to change when `H-46` closes.
+    values: [Precedent, self_preservation, suspicion, harm_borne]
+
+  question_sources:
+    source: "ARCHITECTURE_V2.md §F1 (Q1–Q3) · PLAN.md `W5` (Q4 `need`)"
+    open: true
+    ordered: true
+    note: >-
+      ⚠ V2 §F1 SAYS "EXACTLY THREE SOURCES, AND BY NOTHING ELSE" AND IS WRONG, which is why this
+      is a roster rather than a sentence. PLAN `W5`: "**Without Q4 an NPC with a standing ambition
+      and a quiet season forms no candidates at all**, which is most of the NPC corpus" (#353
+      `:509`, `:605`, `:1297`). A closed set that turned out to be missing a member is the
+      strongest possible argument for keeping closed sets in data.
+      ORDER IS SEMANTIC: `q`s are produced in this order and a person's questions arrive in it, so
+      editing the order changes which question a budget-bounded person answers first.
+    values: [date_due, claim_landed, band_crossed, need]
+
+  person_predicates:
+    source: "#353 §14 `:331` — `marks[]` … \"heritage · grade · Church standing · office · residence\""
+    open: true
+    note: >-
+      THE PREDICATE VOCABULARY `standing` NEEDS (PLAN `W5`). A Claim carries `(subject, predicate,
+      value)`; `standing` pairs claims ABOUT ME by predicate, so without a vocabulary "pairs by
+      predicate" is pairing on a free string. #353 `:331` supplies one: these are the five things
+      `marks[]` records about a person, which is the corpus's own list of what is readable off
+      someone. Open, because a claim may assert something `marks[]` does not record.
+    values: [heritage, grade, church_standing, office, residence]
+
+  view_builder_rules:
+    source: "#353 §18 `:623` — \"at most K claim ids from the holder's OWN ledger -- built, not filtered\""
+    open: true
+    note: >-
+      ⚠ "BUILT, NOT FILTERED" SAYS WHAT A VIEW IS NOT AND NEVER SAYS WHICH K. PLAN `W5` names the
+      gap: "`K = 12` says nothing about **which** K, and the instrument takes the last k". Each
+      value here is one rule for choosing WHICH ids; `H-53` is the row, `recent` is its default,
+      and all three are swept. `recent` is the instrument's incumbent and is kept as the default so
+      the sweep has an honest control — not because it is argued for.
+    values: [recent, highest_confidence, question_relevant]
+
+  question_aggregation:
+    source: "PLAN.md §1.4 hole 15 / `H-54` — \"nothing says how many questions a person forms per season\""
+    open: true
+    note: >-
+      ⚠ THE INSTRUMENT ANSWERED THIS SILENTLY FOR FOUR REVISIONS. `deliberate` took `qs[0]` — the
+      first question in `question_sources` order — with no row, no marker and no alternative, so
+      an `absent` hole was being FILLED inside a subscript. That is `G1`, and it was decisive
+      rather than cosmetic: `question_sources` is ORDERED, so `qs[0]` silently meant *a Date
+      always beats a need*, an unruled priority rule that decides what every NPC does first.
+      `first` is that same behaviour DECLARED, kept as the default because it is the incumbent
+      and a sweep needs an honest control — not because it is argued for.
+      `all` gives the person every question and lets the budget triage them, which is what §26.3's
+      triage is FOR; `one_per_source` is the middle reading. `H-54` is the row.
+    ordered: true
+    values: [first, all, one_per_source]
+
+  scene_packing_rules:
+    source: "`W17` — which interactions share one scene. `player_agency_v30.md` §6.3 says a scene HOLDS 1–3 and never says WHICH"
+    open: true
+    note: >-
+      ⚠ THIS IS `H-53`'S DEFECT ONE LEVEL UP, AND IT WAS FOUND THE SAME WAY — by an adversarial
+      pass reading the body rather than the summary. `H-76` registers HOW MANY interactions a
+      scene admits; nothing registered WHICH ones share one, and `make_chooser` answered it in a
+      comment: *"the default policy fills scenes greedily in score order"*. H-53's own row says
+      the shape of that error out loud: *"H-09 supplies `K = 12` and NOT WHICH K; the instrument
+      takes the last k, WHICH IS AN INVENTION."*
+      `greedy` is that invention DECLARED and kept as the sweep's control, not argued for.
+      `one_per_scene` is the pre-ruling accounting — one interaction per scene action — and is
+      the honest floor. `by_subject` is the reading `player_agency_v30.md` §6.3's own words
+      suggest: *"one scene opportunity pursued"* is about SOMETHING, so the interactions sharing
+      a scene are the ones sharing a subject. `H-78` is the row.
+    values: [greedy, one_per_scene, by_subject]
+
+  claim_subject_rules:
+    source: "#353 §20 — `Claim := (id, holder, subject, predicate, value, ...)`, and NOTHING says what `subject` is for a WITNESS deposit"
+    open: true
+    note: >-
+      ⚠ FOUND BY RUNNING ARTIFACT 2, AND ITS CONSEQUENCE IS THE WHOLE NARRATIVE SUBSTRATE.
+      WITNESS deposited every claim with `subject = event.subject`, which the fold sets to the
+      ACTOR. So every claim in the world is "I hold that <actor> did <kind>", and §F1's Q2 —
+      *"a claim landing in the holder's ledger whose subject is that person, SOMETHING THEY HOLD,
+      or a Proposition they have committed to"* — can never fire on its second clause, because no
+      claim's subject is ever an object. Measured on NPC-088: the bailiff held 23 claims about
+      Carin across three seasons and formed ZERO questions. Nothing propagates, nobody but the
+      actor ever has a reason to act, and no arc walks past one link.
+      `actor` is the incumbent, kept as the sweep's control. `per_change` mints one claim per
+      `StateChange` with the CHANGED THING as its subject, which is what makes "something they
+      hold" reachable and what #353 §13.1's own narration needs — a copy that can be found,
+      carried, hidden or destroyed. `both` keeps the actor claim and adds the per-change ones.
+      ⚠ THIS ADDS NO FIELD TO `Event`. `PLAN.md` §8.1 forbids adding a `target` or `actor` field
+      to Event, and this needs neither: `changes[]` already names what was written, so the
+      subject is READ off the Event the design already has. `H-79` is the row.
+    values: [actor, per_change, both]
+
+  witness_channel_predicates:
+    source: "#353 §20 names the five witness channels and gives NONE of them a predicate. `S61`: *\"WITNESS AS SPECIFIED FANS EVERY EVENT TO EVERY PERSON. Nothing said in private is private.\"*"
+    cite: "H-33"
+    note: >-
+      ⚠ THESE PREDICATES ARE AN INJECTED DEFAULT, NOT SOMETHING #353 STATES. `H-33` is graded
+      `assumption` for exactly that reason, its declared sweep is `total / presence-only / all
+      five`, and `total` is BOTH the default and the control because it is the specified behaviour.
+      Every predicate below is computed from WORLD STATE and never from a recipient the emitter
+      declared -- §19.3 is explicit that an Event carries NO TARGET, *"observers are computed at
+      WITNESS from presence; the emitter declares no recipient"*, so a channel that needed the
+      emitter to name someone would be a different design and not a fill of this hole.
+      ⚠ `chronicle` IS DELIBERATELY NOT `everyone`. A public channel that matched every person
+      would make the `all_five` union identical to `total`, and the sweep would have two points
+      that are the same arm wearing different names -- an arrangement that cannot measure
+      anything. It is the MATTER-OF-RECORD channel: what a binding decision emits is public,
+      because a binding decision is the design's own category for an act whose effect is
+      institutional rather than private.
+    # ⚠ THE NAMES ARE NOT REPEATED HERE. `witness_channels` above is the one place the five are
+    # named; this row carries only what each one MEANS, and `shape.py` reads the names from there
+    # and the meanings from here. The first version listed all five again in a `values:` key, so a
+    # definition lived twice in one file and a test had to guard that the two copies agreed —
+    # guarding a duplicate is the shape §8 asks you not to create. Found by the `W6` adversarial
+    # pass.
+    predicates:
+      co_located:    "the person shares a live `contain` Tenure with the Event's place -- the presence index S28 already builds and the fan-out never read"
+      document_key:  "the person holds a live `hold` Tenure over the Event's subject (a Record, a store)"
+      witness_key:   "the person IS the Event's subject, or shares a live `knot` Tenure with it -- S28's knot deposit, which already reuses the Event id"
+      post_remit:    "the person holds a live office Tenure whose remit covers the verb that emitted this kind"
+      chronicle:     "the kind is emitted by a `binding_decision` verb -- a matter of record, and public because the decision is institutional"
+
+  contest_subsystems:
+    source: "`references/module_contracts.yaml` names `personal_combat`, `mass_battle` and `social_contest` as modules with real docs and real resolvers. `ARCHITECTURE_V2.md:394` declares `contests: <prize>` — *if set, routes to the seam at RESOLVE (§39)*."
+    cite: "H-88"
+    note: >-
+      ⚠ A CONTEST IS A DISPATCH, NOT A GENERIC ROLL. Jordan, 2026-09-02: *"a contest seems like it
+      can be a call for a different subsystem like personal combat, mass battle or social
+      contest."* The seam was ONE function raising `Unspecified` on a degree ladder nobody had
+      written — but the three subsystems it should be calling ARE BUILT, each with a doc, a sim
+      module and a declared resolver (`d_sigma` for personal combat, `dice_pool` for the other
+      two). So the seam was not missing a ladder; it was failing to dispatch.
+      ⚠ JORDAN, 2026-09-02, VERBATIM: *"we aren't using the .md or anything for those systems.
+      those are super outdated. you are allowed to refer to the currently existing python work for
+      those systems (and only those systems) in repository."* So the LIVE artifact for each is its
+      Python, not its `*_v30.md`: `systems/combat/combat_engine_v1/`,
+      `systems/mass_battle/sim/`, `systems/social_contest/sim/contest/`. `contest_subsystem` reads
+      `sim_module:` and never `doc:` for that reason — printing the markdown path would aim a
+      reader at a file its owner calls superseded. `references/module_contracts.yaml` still carries
+      the stale `doc:` for `mass_battle` and `social_contest`; correcting it is outside this
+      proposal chain and is NOT done here.
+      ⚠ AND WIRING THEM IS NOT WANTED YET. Jordan, same exchange: *"we don't NEED to worry about
+      them at this point in time."* The seam names the subsystem and refuses; that is the whole of
+      the intended behaviour for now, and the third sweep point records what calling them would be
+      without inviting anybody to do it.
+      This roster maps a PRIZE to the subsystem that owns it. The prize is what Part E's column
+      carries; the subsystem is what `module_contracts.yaml` already names, so neither half is
+      invented here. ⚠ WIRING THE ACTUAL ENGINES IS OUT OF THIS CHAIN'S SCOPE (Jordan ruled only
+      this proposal chain is in scope), so the seam names the subsystem and its resolver and
+      REFUSES — which is a far more useful refusal than a generic one, and makes the remaining
+      work visible per subsystem rather than as one undifferentiated hole.
+    prizes:
+      "the body":       "personal_combat"
+      "a field":        "mass_battle"
+      "a standing":     "social_contest"
+      "a proposition":  "social_contest"
+    values: []
+
+  titles:
+    source: "JORDAN, 2026-09-02, VERBATIM. None of this was in the architecture: `ARCHITECTURE_V2.md` contains no `sovereign`, no `Parliament`, and no title ladder."
+    cite: "H-90"
+    note: >-
+      ⚠ THREE THINGS THAT ARE NOT THE SAME, AND THE TREE MODELLED NONE OF THEM.
+      *"While a King/Queen may have governing authority over the country, they do not necessarily
+      have sovereign power of all territories/provinces/duchies nor do they necessarily have all
+      territories/provinces/duchies in their holdings."*
+        · GOVERNING AUTHORITY — what a title gives you over a domain. The ladder below.
+        · SOVEREIGN POWER — *"uncontested and absolute"*, and deliberately NOT monopolised:
+          *"the politics of this game are set up such that there is a Parliament, so there is no
+          monopoly of power in the ruler."*
+        · HOLDINGS — what you actually own. Disjoint from what you govern.
+      ⚠ AND THE LADDER IS `rung_kinds`, WHICH ALREADY EXISTS. Each title's `domain` is the rung
+      kind it governs, so rank IS the ordinal position in that roster and needs no second scale.
+      A `Lord` is the exception worth reading twice: territories *"that have not been assembled
+      into a province"*, so a Lord may govern SEVERAL territories while a Count governs ONE
+      province — rank is not headcount.
+      ⚠ DELEGATION. *"All of Kings, Dukes, Counts and Lords can assign others of lesser rank to
+      govern any of their holdings in their stead"* — a governor for a duchy (which is how regency
+      and puppet rulers arise), a council for a province, mayoral elections for a settlement. NOT
+      BUILT: this roster is the ladder only, and delegation is registered as open.
+      ⚠ AND THE REVOCATION RULE, WHICH IS TWO RULES AND NOT ONE. This note said only *"authority
+      over a governance act is RANK + CONTAINMENT … and not `remit:<act>`"*, full stop, while the
+      mechanism ran a two-rule branch — so the data file's prose and the code it feeds disagreed,
+      which is precisely the §0.05 failure of treating a note as if it were the mechanism. Both
+      rules, as Jordan stated them:
+        · an ORDINARY office — *"a Duke can revoke office from any individual in that office so
+          long as that office is for a holding under their purview"* — purview alone;
+        · a TITLE — *"King/Queen cannot revoke title of Duke/Duchess if they do not have duchy is
+          in their holdings. King/Queen can revoke title of Duke/Duchess if the duchy is one of
+          their holdings."* — purview AND holdings AND strictly higher rank.
+      ⚠ AND `remit:<act>` IS NOT SETTLED. Jordan's *"so long as"* makes purview SUFFICIENT while
+      Part E keeps `remit:revoke` NECESSARY; the code applies both, which is an over-refusal
+      against the ruling. Registered as `H-91` rather than fixed by editing a transcribed column.
+    # ⚠ MEMBERSHIP LIVES ONCE, IN `domains:`, AND THAT IS A CORRECTION. The first version carried
+    # a `values:` list repeating all eleven names beside the mapping -- the exact shape
+    # `witness_channel_predicates` twelve rows above forbids in terms (*"a definition lived twice
+    # in one file and a test had to guard that the two copies agreed -- guarding a duplicate is
+    # the shape §8 asks you not to create"*), written by the same session that wrote that note.
+    # The guard was ASYMMETRIC too: the totality test read `values`, so a name added to `domains`
+    # alone was invisible to the test and LIVE IN THE MECHANISM -- add `Steward: duchy` and an
+    # office posted `Steward` silently became a title, flipping its revocation from the purview
+    # rule to the holdings rule with 133 tests green. Found by the governance-canon pass.
+    #
+    # ⚠ `ordered: true` IS ALSO GONE. It had no consumer, and its order ran OPPOSITE to
+    # `rung_kinds` -- King-first descending against person-first ascending -- so two ladders sat
+    # in one file pointing in different directions and the unread one was a §4 idempotence trap
+    # for whoever read it next. Rank is the rung ordinal; there is no second ordering.
+    # ⚠ TOTAL OVER `rung_kinds` — Jordan, 2026-09-02: *"realm = king/queen, duchy = duke/duchess,
+    # province = count/countess, territory = lord, settlement = mayor, community = community
+    # leader, hearth = family head, person = own autonomous individual."* EVERY rung has a
+    # governing title, and the ladder bottoms out at a person governing themselves.
+    #
+    # ⚠ AND THAT BOTTOM RUNG IS WHY `own` ELIGIBILITY IS NOT A SPECIAL CASE. Part E's `own` is the
+    # person-scale rung of THIS ladder, not a separate kind of permission: *"person = own
+    # autonomous individual"*. A verb eligible by `own` is a governance act at scale `person`,
+    # performed by the only title-holder of that domain. Recorded as an observation, not acted on
+    # — collapsing `own` into the ladder would change `_eligible`, which is not this item's to do.
+    #
+    # ⚠ A LORD IS THE ONE ASYMMETRY: territories *"that have not been assembled into a province"*,
+    # so a Lord may govern SEVERAL territories where a Count governs ONE province. Rank is the
+    # ordinal in `rung_kinds`, never a headcount.
+    domains:
+      King:              "realm"
+      Queen:             "realm"
+      Duke:              "duchy"
+      Duchess:           "duchy"
+      Count:             "province"
+      Countess:          "province"
+      Lord:              "territory"
+      Mayor:             "settlement"
+      "Community Leader": "community"
+      "Family Head":     "hearth"
+      Individual:        "person"
+
+  conditional_emission_rows:
+    source: "`W4`. Part D's `emits:` column does not distinguish a kind emitted ON EVERY WRITE from one emitted only WHEN A CONDITION HOLDS, and the two are different things."
+    note: >-
+      ⚠ THIS ROSTER EXISTS BECAUSE PART D'S COLUMN IS AMBIGUOUS, AND THE AMBIGUITY IS REGISTERED AS
+      `H-86` RATHER THAN DECIDED HERE. `W4` makes a MATTER write on a row that declares an `emits:`
+      kind name one -- that is `D22`, and `H-12` is RULED that way. But `(Record, ttl)` declares
+      only `record.expired`, and the row is DECREMENTED EVERY SEASON: emitting `record.expired` on
+      every decrement would publish an expiry that has not happened, which is worse than the silent
+      write the gate exists to stop. `(Site, condition)` shows the other shape -- `condition.worn`
+      per write PLUS `condition.band_crossed` on a condition -- so the column carries both kinds of
+      kind with nothing to tell them apart. Listing the rows whose declared emissions are ALL
+      conditional is the smallest thing that is true; deciding the column's schema is a Part D
+      change and belongs to whoever ratifies `H-86`.
+    why:
+      "Record.ttl": "`record.expired` fires at zero; every other decrement of §13's licensed clock is a tick with no declared kind, and emitting the terminal one would assert an expiry that has not happened"
+    cite: "H-86"
+    values: ["Record.ttl"]
+
+  knowledge_kinds:
+    source: "`H-85`; NPC-087's own `season_requires` supplies the two values"
+    open: true
+    note: >-
+      ⚠ THE GATE IS NOT HERE AND THAT IS THE POINT. #353 §9.2 says *"The only class-shaped gate in
+      the design is Thread Sensitivity"* and supplies no carrier, no predicate and no taxonomy for
+      it to gate OVER. This roster is the taxonomy half — the half `rosters.yaml` is the ruled
+      home for — and `H-85` records that the gate half stays open.
+      The two values are NPC-087's own: material "retainable by ordinary non-sensitive minds"
+      against "Thread-substrate knowledge subject to the setting's epistemological barrier". A
+      third kind, or a per-subject scheme, is `H-85`'s sweep, not an edit anyone should make here
+      without moving the row.
+    values: [mundane, thread_substrate]
+
+# ===========================================================================
+# TABLES — a MAPPING, where a roster is a SET. `table()` reads these; `roster()` raises on them
+# and vice versa, so the two shapes cannot be confused at a call site.
+# ===========================================================================
+
+  site_kinds:
+    source: "#353 §12 — `Site.kind`. `W8`."
+    row: H-07
+    note: >-
+      ⚠ THE SET IS EXTENSIBLE AND THE LOOKUP STILL REFUSES, and those are different properties.
+      Adding a kind means adding a row here; asking about a kind that has no row RAISES, because
+      §42.2.1's worked example is exactly this table: *"a wear table that returns 20 for an
+      unregistered site kind does not fail — it answers, plausibly and wrongly, forever."*
+      ⚠ THESE THREE ARE THE INSTRUMENT'S, NOT #353's. #353 names no site kinds; harbour, seam and
+      body are the kinds the probes exercise. That is why the row is `H-07` at `assumption` and
+      not a transcription.
+    values: [harbour, seam, body]
+
+  matter_kinds:
+    source: "#353 §10.4 VERBATIM: *It is a type parameter, not an enumeration. Grain, salt, timber, ore and coin are rows in a registry, not members of a closed set in a source file.*"
+    row: H-11
+    note: >-
+      ⚠ OPEN MEANS ADDABLE, NOT UNCHECKED — and this file is the registry §10.4 asks for. #353
+      forbids *a closed set in a source file*; it does not license a lookup that answers for a
+      kind nobody registered. Both halves hold here: add a kind by adding a row, and a draw
+      against an unregistered kind raises.
+      ⚠ THE FIVE ARE #353's OWN EXAMPLES and nothing more. It names them as illustrations of what
+      a row looks like, so starting the registry with exactly them is the least-invented content
+      available — but it is still a choice, which is what `H-11` grades.
+    values: [grain, salt, timber, ore, coin]
+
+  wear_per_season:
+    source: "#353 §22 assigns `wear per site kind` to params; no in-chain table exists. `H-07`."
+    row: H-07
+    note: >-
+      ⚠ MOVED OUT OF THE INSTRUMENT BODY BY `W8`, WHICH IS WHAT PLAN `W8` ASKS FOR: *per-kind wear
+      and floors as registry rows rather than `DEFAULT_FIXTURES` literals*. `DEFAULT_FIXTURES`
+      READS this mapping, so the declaration still lives once — the objection recorded in
+      `shape.py` when these were literals (*"splitting them into rosters.yaml would put one
+      declaration in two files"*) is answered by the fixture reading the data rather than
+      restating it.
+    rates:
+      harbour: 10
+      seam:    10
+      body:    10
+
+  subsistence_weight:
+    source: "`H-11` — *the subsistence formula over an OPEN MatterKind registry*. ARCHITECTURE_V2.md's default: *draw from the containing rung's stores, scaled by weight*."
+    row: H-11
+    note: >-
+      ⚠ THE WEIGHTS ARE INVENTED AND THE ROW IS WHAT MAKES THAT LAWFUL. #353 states the SHAPE — a
+      draw from the containing rung's stores, scaled per kind — and supplies no numbers, so this
+      is an injected default with a `site:` and a sweep, exactly as `wear_per_season` beside it.
+      ⚠ A KIND WITH NO WEIGHT IS NOT A KIND WITH WEIGHT ZERO. A missing row RAISES rather than
+      drawing nothing, for `wear`'s reason: a silent zero is a person who eats nothing and never
+      starves, which is a plausible wrong answer that no test would ever surface.
+      ⚠ ONLY `grain` AND `salt` CARRY A WEIGHT, and that is deliberate rather than an omission:
+      timber, ore and coin are stored and not eaten. They are registered in `matter_kinds` and
+      absent here, so a draw against them raises — which is the refusal above doing its job on
+      the very first kind somebody adds to a larder by mistake.
+    weights:
+      grain: 2
+      salt:  1
+
+tables:
+
+  site_yield:
+    source: "`W8` / `H-93`. #353 §25 lists `yield` as written at MATTER and *blocked on `season_factor`'s distribution* (§22.3); it never says what a place produces."
+    row: H-93
+    default_cell: 0
+    sweep: [declared, uniform, none]
+    keys: [site_kinds, matter_kinds]
+    note: >-
+      ⚠ WHAT A HARBOUR PRODUCES IS INVENTED. #353 supplies the BARRIER, the ORDER and the BLOCKER
+      and no quantities at all, so this table is an injected default with a row and a sweep — the
+      same standing as `alignment` and `band_floors`, and stated here rather than left to look
+      derived.
+      ⚠ WHAT IS *NOT* INVENTED IS THE SCALING. Production is the base scaled by the site's
+      `condition / condition_scale` and then by `season_factor`. Condition is the model (`H-38`
+      closed with *"`Site.condition` is the model"*), `condition_scale` is an existing registered
+      fixture, and `season_factor` is #353's own named blocker — so a WORN PLACE PRODUCES LESS
+      without a second wear concept being invented to make it do so. That is why yield is keyed
+      on the SITE and not on the rung: the rung has no quantity that could fall.
+      ⚠ `none` IS THE CONTROL ARM, not a third opinion: with every cell zero the economy has no
+      source, every store depletes monotonically, and `W8`'s own proof clause must fail. A sweep
+      whose control arm cannot break the claim is not a control.
+    cells:
+      harbour:
+        grain: 40
+        salt:  30
+      seam:
+        ore:    50
+        timber: 10
+      body: {}
+
+  band_floors:
+    source: "#353 §12.1 / L5 — the band edges a crossing fires on. `H-08`."
+    row: H-08
+    default_cell: 0
+    sweep: [declared, halved, doubled]
+    keys: [site_kinds]
+    note: >-
+      ⚠ MOVED OUT OF THE INSTRUMENT BODY BY `W8` for `wear_per_season`'s reason. The verb keys are
+      SITE-USE verbs (what the site is good for at that condition), NOT verb-table rows, so unlike
+      `alignment` this table is not validated against `verb_table.yaml` — a check that would fail
+      on every cell. The outer key IS validated against `site_kinds`.
+      ⚠ THE FLOORS ARE INVENTED. #353 states that a band edge crossing emits and may produce no
+      outcome; it supplies no edges. `H-08` is the row, and until `W8` it was an `assumption` with
+      no `site:` and no sweep at all — one of `PLAN.md` §1.5's unowned residue, now owned.
+    cells:
+      harbour:
+        bulk_shipping:   800
+        fishing:         100
+      seam:
+        deep_mining:     700
+        surface_gleaning: 50
+      body:
+        full_operations: 800
+        limited:         500
+        withdrawal_only: 100
+
+  alignment:
+    source: "ARCHITECTURE_V2.md §F2 — `score(c) = Σ_axis conviction[axis] · alignment(c.verb, axis)`"
+    row: H-66
+    default_cell: 0.0
+    # §G's third term. ORDER IS SEMANTIC: `declared` is the default and the first arm, and every
+    # point is built from it rather than from the previous one. `uniform` is THE CONTROL — every
+    # (verb, axis) pair equal, so convictions cannot discriminate at all and a verdict that does
+    # not move between `declared` and `uniform` is a verdict this table was never deciding.
+    # `sign_only` keeps the directions and discards the magnitudes, which is the separation worth
+    # having when the magnitudes are declared invented and the directions are argued.
+    sweep: [declared, uniform, sign_only]
+    keys: [conviction_axes, verb_table]
+    note: >-
+      ⚠ THESE WEIGHTS ARE INVENTED, AND THE ROW IS WHAT MAKES THAT LAWFUL. PLAN `W5`: the table is
+      "**registered as its own `assumption` row** … the closed 13 axes are enumerated nowhere, so
+      **the table is a row before it is a formula**." §G's discipline is DECLARE · DEFAULT · SWEEP,
+      and all three are discharged — `H-66` is the declaration, this is the default, and
+      `sweep: [declared, uniform, sign_only]` is the sweep. What is NOT claimed is that any cell
+      below is derived from a source. Each carries a one-line reason; a reason is not a citation.
+      ⚠ IT MUST NOT BE A ZERO MATRIX and `--check` enforces it. PLAN §W5's guardrail: "a zero
+      matrix makes convictions inert, which is the dead-carrier defect #353 `:739-744` names, and
+      it would pass every test while meaning nothing". `default_cell: 0.0` is the SPARSE default
+      for an unlisted pair, which is a different thing from an all-zero table: the loader raises if
+      every listed cell is also zero.
+      ⚠ `uniform` IS THE CONTROL, not a third opinion. Every cell equal makes `Σ_axis conviction ·
+      alignment` constant across verbs, so convictions cannot discriminate at all. A verdict that
+      does NOT move between `declared` and `uniform` is a verdict the table was never deciding.
+      VERB KEYS ARE VERB-TABLE KEYS, spelled exactly as `verb_table.yaml` spells them (`evade /
+      defy`, `kill / wound`). The loader raises on a key naming no verb, so a rename over there
+      cannot leave a silently dead cell over here.
+    cells:
+      Precedent:
+        determine:       1.0    # the licensed judgement made by the holder licensed to make it
+        create_record:   0.9    # the record IS the precedent; making one is the procedural act
+        open_case:       0.8
+        issue:           0.7
+        destroy_record: -1.0    # unmaking the record is the anti-procedural act, exactly inverse
+        evade / defy:   -0.9
+        refract:        -0.8    # H-36 receiver-side: a deliberate re-telling, i.e. distortion
+        repudiate:      -0.6
+      self_preservation:
+        commit:         -1.0    # a `commit` is a standing obligation; it is the least safe act
+        utter:          -0.9    # uttering a Proposition binds the utterer to it
+        speak:          -0.4
+        petition:       -0.3
+        comply:          0.6
+        move:            0.3    # leaving is the cheapest safety there is
+        evade / defy:    0.8
+      suspicion:
+        open_case:       0.9    # P37's shape: suspicion above a threshold reaches for the case
+        revoke:          0.8
+        destroy_record:  0.3
+        tell:           -0.5
+        tie / knot:     -0.7    # binding yourself to someone you distrust
+        confer:         -0.8
+      harm_borne:
+        kill / wound:    0.9
+        repudiate:       0.8
+        petition:        0.6    # the redress route, and the one a low-standing person still has
+        open_case:       0.5
+        carry:          -0.4
+        comply:         -0.9

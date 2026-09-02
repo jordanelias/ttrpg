@@ -1,0 +1,388 @@
+# PART E, AS DATA — THE VERB TABLE, WHICH IS THE RESOLVER'S BODY.
+#
+# W3 of `proposals/2026-09-02-executable-architecture/PLAN.md`, and PLAN §5.1 calls it "the item
+# that turns grading into running". #353 gives `resolve : (Act[], World) -> Event[]` and NEVER SAYS
+# WHAT ANY VERB DOES — the semantics are prose scattered across §11, §36, §37 and §54. That is
+# defect `D20`, and it is why the tested instrument could only GRADE cases and never RUN them: with
+# no table, every act needed a hand-written `effect` lambda, and a lambda per act IS a second
+# resolver.
+#
+# ONE `resolve` READS THIS TABLE. The fold is: eligibility → `requires` evaluated AGAINST THE WORLD
+# THE PREDECESSORS LEFT → each `writes:` through `write()` → `emits` or `emits_on_refusal`.
+#
+# `emits_on_refusal` IS THE SCARCITY CHANNEL AND IT IS LOAD-BEARING (§27.1, §E2). "The second
+# claimant on an emptied granary gets a DIFFERENT Event." A verb that RAISES on a failed
+# precondition produces no Event, no witness and no arc — so scarcity stops being something the
+# world does and becomes something the engine forbids.
+#
+# `writes:` ENTRIES MUST BE ROWS OF `write_matrix.yaml`. Anything else is an unmarked cell under
+# §30's own rule. The loader checks it; a verb naming a pair Part D does not carry raises at load
+# rather than at the first act that uses it.
+#
+# ELIGIBILITY IS ONE OF FOUR KINDS — `own`, `remit:<act>`, `hold:<object>`, `presence:<rung>` — AND
+# NEVER `capability`. #353 §9.2: "`capability` supplies dice and GATES NOTHING." An office makes an
+# ORDINARY verb eligible; no verb exists only for office-holders, and none carries a modifier.
+#
+# WHAT W3 CHANGED, each with the reason:
+#   * FOUR VERBS ADDED that #353 names and Part E omits — `utter`, `establish`, `exchange`,
+#     `succeed`. Without `utter` NO PROPOSITION EXISTS and `commit`/`petition`/`issue` cannot fire,
+#     so the season cannot start.
+#   * SIX REFUSAL EVENTS ADDED. W3 names `tell`; applying W3's own rule rather than its list finds
+#     the same defect in `commit`, `repudiate`, `comply`, `evade`/`defy` and `refract` — each had a
+#     `requires` and no refusal channel. The eight verbs still without one genuinely have no
+#     precondition.
+#   * `restore`'s EFFECT FORMULA moved out of its `requires` column. A precondition is a question
+#     the fold asks of the world; an effect is what the write does.
+#   * `open_case`'s eligibility graded `assumption` with `own` swept — #353's five remit acts are
+#     CLOSED and opening a case is not among them, so V2 invented one.
+#   * `create_record` and `destroy_record` regraded from `D7` — a Part B DEFECT ID sitting in the
+#     grade column — to `ruled`, which W2 earned by landing Part D's five `Record` rows.
+#
+# PROVENANCE. The 28 carried rows are extracted mechanically from §E3's markdown table. ⚠ The first
+# extraction SILENTLY DROPPED FOUR of them — `transfer`, `work`, `restore`, `destroy_record` —
+# because their cells contain an ESCAPED pipe (`own \| hold:<store>`) and a naive split produced
+# nine columns, which a `len == 8` filter then discarded without a word. The extractor asserts that
+# nothing is skipped now. A filter that drops what it cannot parse reports clean over an unknown
+# number of missing rows.
+
+verbs:
+  - verb:        "carry"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "a Petition exists; costs budget like any act"
+    writes:      ["DocketItem.matter"]
+    emits:       ["petition.carried"]
+    emits_on_refusal: ["carry.refused"]
+    grade:       "ruled"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "commit"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "the Proposition exists (immutable, §14)"
+    writes:      ["Tenure.since"]
+    emits:       ["commitment.made"]
+    emits_on_refusal: ["commitment.refused"]
+    grade:       "ruled"
+    refusal_note: "W3: added. §E2 -- 'failure emits, never raises'. This verb has a `requires` and had no refusal channel, so a failed precondition produced no Event, no witness and no arc. Refusal condition: the Proposition does not exist (§14 -- it is immutable and must be uttered first)"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "comply"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "a claim of the dispensation's terms is in the actor's own ledger"
+    writes:      []
+    emits:       ["compliance.given"]
+    emits_on_refusal: ["compliance.impossible"]
+    grade:       "ruled"
+    writes_note: "per the term's own row"
+    refusal_note: "W3: added. §E2 -- 'failure emits, never raises'. This verb has a `requires` and had no refusal channel, so a failed precondition produced no Event, no witness and no arc. Refusal condition: no claim of the dispensation's terms is in the actor's own ledger"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "confer"
+    scale:   "settlement"
+    scale_note: "conferral seats an office, and an office sits at a rung"
+    stratum:     "binding_decision"
+    eligibility: ["remit:confer"]
+    requires:    "the office's conferral basis, and 1-per-object: no live hold on the object, or the holder-Proposition has zero live commit (§54 it. 20)"
+    writes:      ["Tenure.until", "Tenure.since"]
+    emits:       ["tenure.opened", "tenure.closed"]
+    emits_on_refusal: ["confer.refused"]
+    grade:       "ruled"
+    eligibility_note: "⚠ W3 AUDIT: §E3's eligibility cell carried a PRECONDITION as well as the remit act — `remit:confer + ...`. The fold split on the first `:` and tested the whole tail against the remit roster, so it NEVER MATCHED and a holder of the remit was silently refused. The act is the eligibility; the basis is a `requires`."
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "convene"
+    scale:   "settlement"
+    scale_note: "a convening gathers a venue's rung, not a person -- ARCHITECTURE_V2 :`the venue's container resolves`"
+    stratum:     "binding_decision"
+    eligibility: ["remit:convene"]
+    requires:    "the venue's container resolves, or is NONE (§6.2)"
+    writes:      ["Date.due_at", "ConveningCondition.attached"]
+    emits:       ["date.scheduled"]
+    emits_on_refusal: ["convene.refused"]
+    grade:       "ruled"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "create_record"
+    stratum:     "uncontested_material"
+    eligibility: ["own"]
+    requires:    "—"
+    writes:      ["Record.exists", "Record.stages"]
+    emits:       ["record.created"]
+    emits_on_refusal: []
+    grade:       "ruled"
+    grade_note:  "V2 §E3 put `D7` in the grade column -- a Part B defect id, not one of §G4's four grades. W2 landed Part D's five `Record` rows, which IS D7's discharge, so the verb is `ruled` on that table."
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "destroy_record"
+    stratum:     "uncontested_material"
+    eligibility: ["hold:<record>", "presence"]
+    requires:    "—"
+    writes:      ["Record.exists"]
+    emits:       ["record.destroyed"]
+    emits_on_refusal: ["destroy.refused"]
+    grade:       "ruled"
+    grade_note:  "V2 §E3 put `D7` in the grade column -- a Part B defect id, not one of §G4's four grades. W2 landed Part D's five `Record` rows, which IS D7's discharge, so the verb is `ruled` on that table."
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "determine"
+    scale:   "settlement"
+    scale_note: "a sitting decides at the venue's rung"
+    stratum:     "binding_decision"
+    eligibility: ["remit:determine"]
+    requires:    "a fired Date with a DocketItem; judging_set — D11, absent"
+    writes:      ["Tenure.degree"]
+    emits:       ["matter.determined"]
+    emits_on_refusal: ["determine.refused"]
+    grade:       "absent"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "dispatch"
+    scale:   "territory"
+    scale_note: "a dispatch sends a person across rungs; its reach is the territory, not the sender"
+    stratum:     "binding_decision"
+    eligibility: ["remit:dispatch"]
+    requires:    "the named person exists"
+    writes:      []
+    emits:       ["order.given"]
+    emits_on_refusal: ["dispatch.refused"]
+    grade:       "ruled"
+    writes_note: "— (§11.1: it names a person; their own choose decides)"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "establish"
+    scale:   "settlement"
+    scale_note: "founding an office is an act on the rung that will hold it"
+    stratum:     "binding_decision"
+    eligibility: ["remit:confer"]
+    requires:    "the establishing office's conferral basis, and a rung to establish it at"
+    writes:      ["Office.exists", "Office.remit", "Office.establishment"]
+    emits:       ["office.established"]
+    emits_on_refusal: ["establish.refused"]
+    grade:       "assumption"
+    source:      "W3 -- #353 names it and Part E omits it, and V2 NAMES IT IN ITS OWN `(Office, remit)` ROW ('`establish` is an act') while giving it no verb row. Its three Part D rows were RETIRED BY W2 for having no producing verb; they return in the same commit as this row, which is the discipline: a row exists because a producer produces it. Eligibility is `assumption` -- #353 does not say which remit establishes an office. Register rows H-41, H-34."
+  - verb:        "evade / defy"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "as comply"
+    writes:      []
+    emits:       ["compliance.withheld"]
+    emits_on_refusal: ["compliance.impossible"]
+    grade:       "ruled"
+    writes_note: "per the term's own row"
+    refusal_note: "W3: added. §E2 -- 'failure emits, never raises'. This verb has a `requires` and had no refusal channel, so a failed precondition produced no Event, no witness and no arc. Refusal condition: as `comply`"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "exchange"
+    scale:   "settlement"
+    scale_note: "as `levy` -- it writes `Rung.stores`"
+    stratum:     "uncontested_material"
+    eligibility: ["own"]
+    requires:    "both sides' stores cover their side of the exchange"
+    writes:      ["Rung.stores"]
+    emits:       ["exchange.made"]
+    emits_on_refusal: ["exchange.refused"]
+    grade:       "assumption"
+    writes_note: "`(Rung, stores)` x2, one per side -- as `transfer`"
+    source:      "W3 -- #353 `:1899` names it and Part E omits it. Modelled on `transfer`, whose scarcity property (§27.1) it must share: the second party on an emptied larder gets a DIFFERENT Event, not a raise."
+  - verb:        "forge"
+    stratum:     "uncontested_material"
+    eligibility: ["own"]
+    requires:    "—"
+    writes:      ["Record.exists", "Record.forgery_quality"]
+    emits:       ["record.created"]
+    emits_on_refusal: []
+    grade:       "assumption"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "issue"
+    scale:   "province"
+    scale_note: "a Dispensation's `scope` enumerates executors -- §37.1 -- so its reach is the domain the issuer governs"
+    stratum:     "binding_decision"
+    eligibility: ["remit:issue"]
+    requires:    "scope enumerates executors, not places (§37.1)"
+    writes:      ["Dispensation.exists"]
+    emits:       ["dispensation.issued"]
+    emits_on_refusal: ["issue.refused"]
+    grade:       "ruled"
+    writes_note: "— (a Dispensation is not a state write — §37.3)  ||  ⚠ W3, ON THE W2 AUDIT: as `petition`. Part E's '(a Dispensation is not a state write)' is the bypass §1.4 hole 4 names, not a licence for one."
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "kill / wound"
+    stratum:     "contested_physical"
+    eligibility: ["own"]
+    requires:    "—"
+    contests: "the body"
+    requires_note: "⚠ `contests:` IS A REAL FIELD NOW, NOT A NOTE. ARCHITECTURE_V2.md:394 declares the column -- `contests: <prize> | none`, *if set, routes to the seam at RESOLVE (§39)* -- and :434 sets it on this row. The transcription put it here, where nothing reads it, so the fold executed a kill as a DIRECT WRITE. Jordan, 2026-09-02: *that would trigger the personal combat scene. you can't just kill or wound.* The design already said so."
+    writes:      ["Person.body", "Person.exists", "Tenure.until"]
+    emits:       ["person.died"]
+    emits_on_refusal: []
+    grade:       "ruled"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "levy"
+    scale:   "settlement"
+    scale_note: "a levy moves a Rung's stores -- the rung IS the subject"
+    stratum:     "uncontested_material"
+    eligibility: ["remit:issue", "presence:<rung>"]
+    requires:    "stores(...) >= amount"
+    writes:      ["Rung.stores"]
+    emits:       ["levy.taken"]
+    emits_on_refusal: ["levy.refused"]
+    grade:       "assumption"
+    eligibility_note: "⚠ W3 AUDIT: §E3's eligibility cell carried a PRECONDITION as well as the remit act — `remit:levy + ...`. The fold split on the first `:` and tested the whole tail against the remit roster, so it NEVER MATCHED and a holder of the remit was silently refused. The act is the eligibility; the basis is a `requires`."
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "move"
+    stratum:     "movement"
+    eligibility: ["own"]
+    requires:    "a contain path exists"
+    writes:      ["Person.travel_leg", "Tenure.until", "Tenure.since"]
+    emits:       ["travel.moved"]
+    emits_on_refusal: ["travel.blocked"]
+    grade:       "assumption"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "oblige"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "—"
+    writes:      ["Tenure.since"]
+    emits:       ["duty.taken"]
+    emits_on_refusal: []
+    grade:       "ruled"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "open_case"
+    stratum:     "social"
+    eligibility: ["remit:determine"]
+    requires:    "the act DECLARES the stages and their terms (§13.1)"
+    writes:      ["Record.exists", "Record.stages"]
+    emits:       ["case.opened"]
+    emits_on_refusal: ["case.refused"]
+    grade:       "assumption"
+    eligibility_note: "W3: graded `assumption`, NOT `ruled`. #353's five remit acts are CLOSED -- issue, determine, confer, revoke, dispatch -- and opening a case is not among them, so V2 invented this eligibility. `own` is a different game (anyone may open a case), which is why it is swept rather than chosen. The roster is `rosters.yaml: remit_acts`."
+    eligibility_sweep: ["remit:determine (V2's value)", "own", "hold:<the matter's record>"]
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "petition"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "—"
+    requires_note: "— no dedup, no cap, no per-venue limit (§26.3)"
+    writes:      ["Petition.exists"]
+    emits:       ["petition.filed"]
+    emits_on_refusal: []
+    grade:       "ruled"
+    writes_note: "— (a Petition is created, not written)  ||  ⚠ W3, ON THE W2 AUDIT: Part E says a Petition is 'created, not written', and PLAN §1.4 hole 4 says THAT IS THE DEFECT — #353 :1061-1064, 'Either the gate applies the write, or direct assignment is made impossible.' With `writes: []` the creation row W2 added was INERT and creation still bypassed the gate."
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "refract"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "as comply — ⚠ emitter- or receiver-side is absent, D18"
+    writes:      []
+    emits:       ["terms.distorted"]
+    emits_on_refusal: ["refraction.impossible"]
+    grade:       "absent"
+    writes_note: "—"
+    refusal_note: "W3: added. §E2 -- 'failure emits, never raises'. This verb has a `requires` and had no refusal channel, so a failed precondition produced no Event, no witness and no arc. Refusal condition: as `comply`"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "repudiate"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "a live commit exists"
+    writes:      ["Tenure.until"]
+    emits:       ["commitment.ended"]
+    emits_on_refusal: ["repudiation.refused"]
+    grade:       "ruled"
+    refusal_note: "W3: added. §E2 -- 'failure emits, never raises'. This verb has a `requires` and had no refusal channel, so a failed precondition produced no Event, no witness and no arc. Refusal condition: no live `commit` exists to end"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "restore"
+    stratum:     "uncontested_material"
+    eligibility: ["own", "presence:<site>"]
+    requires:    "the site exists and the actor is present at it"
+    writes:      ["Site.condition"]
+    emits:       ["site.restored"]
+    emits_on_refusal: ["restore.refused"]
+    grade:       "ruled"
+    effect:      "Δ = +(1 − condition) × f(degree) × share (§54 it. 7's mirror)"
+    effect_note: "W3: this formula was in the `requires` column. A precondition is a question the fold asks of the world; an effect is what the write does. Conflating them is how a resolver grows a second body."
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "revoke"
+    scale:   "settlement"
+    scale_note: "as `confer` -- it unseats the same office"
+    stratum:     "binding_decision"
+    eligibility: ["remit:revoke"]
+    requires:    "the office's revocation basis, and a live hold exists"
+    writes:      ["Tenure.until"]
+    emits:       ["tenure.closed"]
+    emits_on_refusal: ["revoke.refused"]
+    grade:       "ruled"
+    eligibility_note: "⚠ W3 AUDIT: §E3's eligibility cell carried a PRECONDITION as well as the remit act — `remit:revoke + ...`. The fold split on the first `:` and tested the whole tail against the remit roster, so it NEVER MATCHED and a holder of the remit was silently refused. The act is the eligibility; the basis is a `requires`."
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "speak"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "—"
+    writes:      []
+    emits:       ["speech.made"]
+    emits_on_refusal: []
+    grade:       "assumption"
+    writes_note: "—"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "succeed"
+    scale:   "person"
+    scale_note: "succession is one person taking another's tenure; the office's rung does not change"
+    stratum:     "binding_decision"
+    eligibility: ["own"]
+    requires:    "the actor holds the office or estate whose heir is being designated"
+    writes:      ["Tenure.since"]
+    emits:       ["heir.designated"]
+    emits_on_refusal: ["succession.refused"]
+    grade:       "assumption"
+    writes_note: "a `succeed` Tenure -- the kind is in `rosters.yaml`"
+    source:      "W3 -- heir designation. #353 `:371`, `:542` name `succeed` as a Tenure kind and `transmission` as the mechanism, and Part E carries no verb that CREATES one. Without it F13's contested-succession cases have no producer."
+  - verb:        "tell"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "the teller holds a claim on the subject"
+    writes:      []
+    emits:       ["news.told"]
+    emits_on_refusal: ["news.untold"]
+    grade:       "ruled"
+    writes_note: "— (deposits at WITNESS, not here)"
+    refusal_note: "W3: added. §E2 -- 'failure emits, never raises'. This verb has a `requires` and had no refusal channel, so a failed precondition produced no Event, no witness and no arc. Refusal condition: the teller holds no claim on the subject"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "the six investigation acts"
+    stratum:     "contested_physical"
+    eligibility: ["own"]
+    requires:    "per act"
+    writes:      []
+    emits:       ["finding.made"]
+    emits_on_refusal: ["finding.none"]
+    grade:       "assumption"
+    writes_note: "— (they produce claims at WITNESS)"
+    eligibility_note: "eligibility NEVER consults office (T9)"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "tie / knot"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "—"
+    requires_note: "stored once, on the lower id (§15.1)"
+    writes:      ["Tenure.since"]
+    emits:       ["bond.formed"]
+    emits_on_refusal: []
+    grade:       "ruled"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "transfer"
+    stratum:     "uncontested_material"
+    eligibility: ["own", "hold:<store>"]
+    requires:    "stores(hearth(giver), kind) >= amount (§54 it. 7)"
+    writes:      ["Rung.stores", "Rung.stores"]
+    emits:       ["transfer.made"]
+    emits_on_refusal: ["transfer.refused"]
+    grade:       "ruled"
+    writes_note: "×2, ONE PER SIDE (§E3 `:418`). ⚠ W3 AUDIT: this was collapsed to ×1 and the effect only DECREMENTED the giver, so six grain left the world and arrived nowhere — in an economy where `yield` is the only source (#353 `:856`)."
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "utter"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "—"
+    writes:      ["Proposition.exists"]
+    emits:       ["proposition.uttered"]
+    emits_on_refusal: []
+    grade:       "assumption"
+    source:      "W3 -- #353 names it and Part E omits it. WITHOUT IT NO PROPOSITION EXISTS, and `commit`, `petition` and `issue` all `require` one, so the season cannot start. Register row H-42. §14 makes a Proposition IMMUTABLE, so this row admits its CREATION and nothing else -- there is no verb that alters one."
+  - verb:        "work"
+    stratum:     "uncontested_material"
+    eligibility: ["own", "presence:<site>"]
+    requires:    "condition >= floor(verb) (§12.1)"
+    writes:      ["Site.condition"]
+    emits:       ["site.worked"]
+    emits_on_refusal: ["work.unavailable"]
+    grade:       "ruled"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"

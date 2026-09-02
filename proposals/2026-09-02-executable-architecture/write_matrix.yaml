@@ -1,0 +1,330 @@
+# PART D, AS DATA -- the write matrix keyed on `(kind, field)`.
+#
+# W2 of `proposals/2026-09-02-executable-architecture/PLAN.md`. `ARCHITECTURE_V2.md` §D3 is the
+# source and this file is the object: `tracer/shape.py`'s `write()` gate reads it, and six
+# hand-maintained Python structures -- `WRITE_MATRIX`, `WRITE_CLASS_OF`, `PARTITION`,
+# `PARTITION_ASSUMED`, `MATRIX_FIELD_OF`, `PARTITION_MISSING` -- are replaced by a loader.
+#
+# WHY THE RE-KEYING IS THE WHOLE POINT (defect `D1`). #353 §30's matrix names THINGS -- `stance`,
+# `condition`, `Tenure` -- not `(kind, field)` pairs, so `(Person, convictions)` RODE ON `stance`'s
+# row and a real gap silently became a PASS. Two rows and two declared-missing cannot type ~30
+# fields. Keyed this way, the rule §30 already states -- ANY UNMARKED CELL IS A WRITE-CLASS
+# VIOLATION -- becomes applicable rather than aspirational.
+#
+# THE `class` COLUMN IS DERIVED, NOT STORED TWICE. A step determines its write class exactly:
+# CAL->CALENDAR, MAT->MATTER, RES->ACTS, WIT->INTERIOR, CEN->MATTER, DEL->ACTS. The `class:` field
+# carries V2's own string so the derivation can be CHECKED against the prose it came from; the
+# loader asserts they agree and raises if they do not. One owner, one cross-check.
+#
+# `social:` IS A STATIC SCHEMA COLUMN (L4) and takes `true`, `false` or `n/a` -- never a
+# per-step value. `(Date, due_at)` was the one row that broke this, and W2 struck its CAL cell
+# rather than keep a column that varies by step.
+#
+# ONE NOTATION NORMALISATION, declared rather than left to be discovered. V2 writes two keys with
+# a subscript -- `(Person, scar[axis])` and `(Person, axis_count[axis])`. The `[axis]` says ONE ROW
+# PER AXIS; it is not part of the field name, and the row is the same row for every axis. The key
+# here is `scar` / `axis_count`, and the keying is carried in `by:`. The roster of axes is its own
+# hole (`H-20`, and its enumeration is `H-46`), which is where it belongs.
+#
+# PROVENANCE. The 28 rows carried over are extracted mechanically from §D3's markdown table;
+# `python tracer/register.py --verify-write-matrix` re-extracts and fails on drift. The 10 rows
+# W2 ADDS each name the §1.4 hole they carry and the `hole_register.yaml` row that grades it, so
+# no row here is a value nobody can trace.
+
+rows:
+  - kind:    "Act[]"
+    field:   "returned"
+    steps:   [DEL]
+    class:   "ACTS"
+    social:  "n/a"
+    by:      "DELIBERATE writes nothing else"
+    emits:   "—"
+  - kind:    "Claim"
+    field:   "confidence"
+    steps:   [MAT]
+    class:   "MATTER"
+    social:  "false"
+    by:      "W2/H-40 -- the THIRD licensed clock (#353 :864). Part D carried NO `Claim` row, so Part D was not total for a clock #353 licenses -- V2's own falsifier at §I1 row 1"
+    emits:   "`claim.decayed`"
+  - kind:    "ConveningCondition"
+    field:   "attached"
+    steps:   [CAL, RES]
+    class:   "CALENDAR/ACTS"
+    social:  "false"
+    by:      "DR-3"
+    emits:   "`condition.attached`"
+  - kind:    "Date"
+    field:   "due_at"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "W2 -- CAL struck. `due_at` is written ONLY by `convene`, which is an act (Part E), and V2 marked the row `true at RES` on a column L4 calls a STATIC SCHEMA COLUMN. A per-step `social:` is not a static column"
+    emits:   "`date.scheduled`"
+  - kind:    "Date"
+    field:   "fired"
+    steps:   [CAL, RES]
+    class:   "CALENDAR/ACTS"
+    social:  "false"
+    by:      "DR-3 · §24 has no actor"
+    emits:   "`date.fired`"
+  - kind:    "Dispensation"
+    field:   "exists"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "W2/H-43 -- as `(Petition, exists)`"
+    emits:   "`dispensation.issued`"
+  - kind:    "DocketItem"
+    field:   "matter"
+    steps:   [CAL, RES]
+    class:   "CALENDAR/ACTS"
+    social:  "false"
+    by:      "DR-3 · §24 *\"dockets form\"*, no actor"
+    emits:   "`docket.formed`"
+  - kind:    "Office"
+    field:   "exists"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "W2/H-41 -- establishing an office"
+    emits:   "`office.established`"
+  - kind:    "Office"
+    field:   "establishment"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "DR-2. ⚠ RETIRED BY W2 for having no producing verb, RETURNED BY W3 WITH `establish`, which is the discipline the retirement rule encodes: a row exists because a producer produces it. Its SIZE per office kind is H-34 and stays `assumption`"
+    emits:   "`establishment.changed`"
+  - kind:    "Office"
+    field:   "remit"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "DR-2 -- `establish` is an act. ⚠ RETIRED BY W2, RETURNED BY W3 WITH its producer. V2 named `establish` in THIS ROW while giving it no verb row, which is how the row came to look dead"
+    emits:   "`remit.changed`"
+  - kind:    "Person"
+    field:   "axis_count"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "ONE ROW PER AXIS (V2 writes it `axis_count[axis]`). D6. L3 clause 1's counter. `axis` on D6's registry"
+    emits:   "`axis.incremented`"
+  - kind:    "Person"
+    field:   "beliefs"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "DR-2; §9.3"
+    emits:   "`belief.revised`"
+  - kind:    "Person"
+    field:   "body"
+    steps:   [MAT, RES]
+    class:   "MATTER/ACTS"
+    social:  "false"
+    by:      "DR-1"
+    emits:   "`body.changed` · `person.died`"
+  - kind:    "Person"
+    field:   "claim_ledger"
+    steps:   [WIT]
+    class:   "INTERIOR"
+    social:  "false"
+    by:      "DR-3 · §20 makes `witness` the only minter, and it is not an act"
+    emits:   "`claim.deposited`"
+  - kind:    "Person"
+    field:   "coherence"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "false"
+    by:      "W2/H-47, CORRECTED BY W2's ADVERSARIAL PASS -- IT WAS WRONG IN BOTH DIRECTIONS. It admitted MAT only, and #353 :98 puts the seam at RESOLVE via `contest`, so the ONE writer #353 licenses (:1904, 'written only through seam Events') would have RAISED -- an over-refusal, G4. And admitting MAT with `social: false` made THE WORLD a writer of coherence, which is a FOURTH LICENSED CLOCK against §25.1 :862-866, 'the three licensed clocks are exhaustive -- matter, bodies, and the confidence of a memory'. Now RES, `social: false` so a seam Event may write it, and the seam bound is ENFORCED IN `write()` on `(Tenure, until)`'s precedent rather than asserted in this cell -- a comment is not a constraint"
+    emits:   "`coherence.changed`"
+  - kind:    "Person"
+    field:   "convictions"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "DR-2; §9.3 — moved by argument and consequence, never by evidence"
+    emits:   "`conviction.moved`"
+  - kind:    "Person"
+    field:   "exists"
+    steps:   [MAT, RES, CEN]
+    class:   "MATTER/ACTS"
+    social:  "false"
+    by:      "DR-1, D8; bounded by §15.3's causation rule"
+    emits:   "`person.died` · `person.individuated`"
+  - kind:    "Person"
+    field:   "scar"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "ONE ROW PER AXIS (V2 writes it `scar[axis]`). stated in chain — §54 item 21"
+    emits:   "`scar.taken`"
+  - kind:    "Person"
+    field:   "stance"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "DR-2"
+    emits:   "`stance.moved`"
+  - kind:    "Person"
+    field:   "travel_leg"
+    steps:   [MAT, RES]
+    class:   "MATTER/ACTS"
+    social:  "false"
+    by:      "DR-1, D10 — see §D4"
+    emits:   "`travel.moved`"
+  - kind:    "Person"
+    field:   "weight"
+    steps:   [CEN]
+    class:   "MATTER"
+    social:  "false"
+    by:      "W2/H-49. ⚠ PROVENANCE CORRECTED by the adversarial pass: this said \"a §54 fold-in\" and #353 §54's adjudicated items :1893-1908 do NOT include `weight`. The FIELD is real -- `Person :=` at :324 carries it -- and that is the ground the row stands on. H-11's subsistence default reads it ('scaled by weight'), so every season touches it"
+    emits:   "`weight.changed`"
+  - kind:    "Petition"
+    field:   "exists"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "W2/H-43 -- Part E says a Petition is 'created, not written', which puts creation BESIDE the gate. #353 :1061-1064: 'Either the gate applies the write, or direct assignment is made impossible.' An object created beside the gate is the unmarked-cell defect in a new hat"
+    emits:   "`petition.filed`"
+  - kind:    "Proposition"
+    field:   "*"
+    steps:   []
+    class:   "—"
+    social:  "n/a"
+    by:      "§14 — IMMUTABLE. There is no write"
+    emits:   "—"
+  - kind:    "Proposition"
+    field:   "exists"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "W2/H-42 + H-43 -- `utter` creates it. NOTE the row below: a Proposition is IMMUTABLE (§14), so this row admits its CREATION and nothing else. `commit`, `petition` and `issue` all require a Proposition to exist and no verb made one, so the season could not start"
+    emits:   "`proposition.uttered`"
+  - kind:    "Record"
+    field:   "exists"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "D7 — `create` by an act (§13)"
+    emits:   "`record.created` · `record.destroyed`"
+  - kind:    "Record"
+    field:   "forgery_quality"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "DR-2"
+    emits:   "`record.forged`"
+  - kind:    "Record"
+    field:   "matured"
+    steps:   [MAT]
+    class:   "MATTER"
+    social:  "false"
+    by:      "D7 — MATTER matures a term the act declared; `causes[]` names that act"
+    emits:   "`term.matured`"
+  - kind:    "Record"
+    field:   "stages"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "D7 — §13.1: terms are act-declared, never MATTER-advanced"
+    emits:   "`record.staged`"
+  - kind:    "Record"
+    field:   "ttl"
+    steps:   [MAT]
+    class:   "MATTER"
+    social:  "false"
+    by:      "D7 — §13's licensed clock"
+    emits:   "`record.expired`"
+  - kind:    "Rung"
+    field:   "dates"
+    steps:   [CAL, RES]
+    class:   "CALENDAR/ACTS"
+    social:  "false"
+    by:      "DR-3"
+    emits:   "`date.scheduled`"
+  - kind:    "Rung"
+    field:   "envelope"
+    steps:   [MAT, CEN]
+    class:   "MATTER"
+    social:  "false"
+    by:      "DR-1"
+    emits:   "`envelope.changed`"
+  - kind:    "Rung"
+    field:   "exists"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "W2/H-41 -- founding a hearth. Part D's existence rows covered only `Person` and `Record`"
+    emits:   "`rung.founded`"
+  - kind:    "Rung"
+    field:   "stores"
+    steps:   [MAT, RES]
+    class:   "MATTER/ACTS"
+    social:  "false"
+    by:      "DR-1"
+    emits:   "`stores.changed`"
+  - kind:    "Rung"
+    field:   "yield"
+    steps:   [MAT]
+    class:   "MATTER"
+    social:  "false"
+    by:      "DR-1"
+    emits:   "`yield.taken`"
+  - kind:    "Site"
+    field:   "condition"
+    steps:   [MAT, RES]
+    class:   "MATTER/ACTS"
+    social:  "false"
+    by:      "DR-1"
+    emits:   "`condition.worn` · `condition.band_crossed`"
+  - kind:    "Site"
+    field:   "exists"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "W2/H-41 -- building a site"
+    emits:   "`site.built`"
+  - kind:    "Tenure"
+    field:   "degree"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "DR-2"
+    emits:   "`tenure.graded`"
+  - kind:    "Tenure"
+    field:   "payload"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "W2/H-50. ⚠ PROVENANCE CORRECTED by the adversarial pass: this said \"a §54 fold-in\" and #353 §54's items :1893-1908 do NOT include `payload`. The field is real (:532) and the defect is real -- it left P39's 'a relationship carries state' WITH NO WRITER"
+    emits:   "`tenure.payload_set`"
+  - kind:    "Tenure"
+    field:   "since"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "DR-2 — `confer`, `commit`, `oblige`, `tie`"
+    emits:   "`tenure.opened`"
+  - kind:    "Tenure"
+    field:   "until"
+    steps:   [MAT, RES]
+    class:   "MATTER/ACTS"
+    social:  "false"
+    by:      "stated in chain — §15.3, the one declared seam, bounded by causation"
+    emits:   "`tenure.closed`"
+
+# ---------------------------------------------------------------------------
+# RETIRED BY W2 -- kept as a list, not as rows, so a reader knows they went and why.
+# Each carried an `emits:` kind that NO PART E VERB PRODUCES and no MATTER site
+# writes (§7.2's per-item guardrail: such a row is red). Verified against Part E's
+# `writes` column, not assumed.
+# ⚠ TWO CAME BACK AT W3, WITH THEIR PRODUCER, and a third row -- `(Office, exists)` -- came
+# with them. `establish` is a verb #353 names
+# and Part E omits; V2 names it in its own `(Office, remit)` row. W3 adds the verb, and
+# the row returns in the same commit -- which is the whole discipline the rule encodes:
+# a row exists because a producer produces it.
+retired:
+  - "Person.capability"
+  - "Person.marks"
+  - "Rung.stake"
+  - "Site.drawers"

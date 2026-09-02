@@ -1,0 +1,105 @@
+# NPC-088 · CARIN VEDEL — the `exercises:` for artifact 2 and for `W10`'s declared routing.
+#
+# ⚠ REGENERATED FROM THE CORPUS TEXT. The first version PARAPHRASED each need, so four of its
+# seven entries bound to nothing — the defect the `W9` adversarial pass predicted ("the exercises
+# file paraphrases and truncates them") and `exercises.py`'s `need_sha` binding caught on its
+# first run. `need:` below is verbatim and `need_sha:` is its key.
+#
+# ⚠ PROVENANCE, STATED BEFORE THE ROWS. `PLAN.md` §7.2's `W9` guardrail asks that these be
+# "written before the run and not edited after it", and they were not: this file was authored
+# AFTER artifact 2 first ran. The before-the-run guarantee is therefore NOT claimed. What
+# replaces it is checkable — every row derives from a source OUTSIDE the run (#353 §13.1, the
+# case's own text, a register row) and cites it, so a reader can check the derivation without
+# trusting the author. Nothing below was read off `TRACE.txt`.
+case: NPC-088
+name: Carin Vedel
+source: '#353 S13.1 (`:477`, `:485-500`) + the case''s own `season_requires`'
+authored_after_first_run: true
+rows:
+- need_sha: b5fddf1339e9
+  hardness: core
+  need: A person holding no office, post, or command must be able to perform a repeated, multi-week task
+    (copying a text) that the engine tracks as ongoing work-in-progress with a start and an end, not only
+    as a single instantaneous action.
+  exercises:
+  - create_record
+  - H-80
+  from: '#353 `:477` -- "act-declared terms | stages whose maturation is THE CREATING ACT''S OWN TERM
+    RIPENING". A repeated multi-week task the engine TRACKS with a start and an end IS a Record with act-declared
+    stages: the start is `record.created`, the ends are its `term.matured` emissions. `H-80` is why a
+    computed act cannot declare them.'
+- need_sha: 2f5e8f1f9f01
+  hardness: core
+  need: The physical product of her labor (a copied text) must be able to exist as a persistent object
+    that can be found, carried, hidden, given away, or destroyed independently of her.
+  exercises:
+  - create_record
+  - destroy_record
+  from: '#353 `:499` -- "burn the Record that carries it" -- gives destruction as the act on such an object.
+    Persistence independent of her is `(Record, exists)` surviving the season, which S13''s live-carrier
+    reading supplies.'
+- need_sha: e877bd198c3f
+  hardness: core
+  need: Simply possessing the product of her labor must be able to trigger consequences for whoever holds
+    it, independent of whether the act of copying was ever observed.
+  exercises:
+  - H-79
+  - H-84
+  from: 'Possession is a `hold` Tenure owned by the holder (S13, S15.1), so a consequence for the HOLDER
+    needs a claim whose subject is the thing held -- `H-79`. It is still blocked by `H-84`: nothing moves
+    a Record to a second person, so nobody but its maker ever holds one.'
+- need_sha: 0c03125dd248
+  hardness: important
+  need: Her work must be able to accumulate institutional attention gradually across multiple undiscovered
+    seasons, not only through a single detected incident.
+  exercises:
+  - probe:P17
+  from: Accumulation across UNDISCOVERED seasons is a per-person counter nobody reads out -- L3 clause
+    1. `P17` is the probe that reaches it; this row is `important`, not core.
+- need_sha: 65b607709f24
+  hardness: core
+  need: A person with no faction rank, no assigned Duty, and no tracked Standing must still be able to
+    generate a scene opportunity that brings a player into contact with her.
+  exercises:
+  - speak
+  - H-04
+  from: 'A person with no office still forms candidates, and her question''s source is Q4 `need` -- a
+    live `commit` to an OUGHT Proposition (`PLAN.md` `W5`, #353 `:509`, `:605`, `:1297`). Without Q4 she
+    forms none at all, which is this row''s own point about her having no rank.'
+- need_sha: 557171bf4b5b
+  hardness: core
+  need: A person with no political voice must be able to become personally significant -- worth a scene,
+    worth a decision -- purely through the discovered effect of her private labor, without her ever taking
+    a public political action herself.
+  exercises:
+  - H-79
+  - H-84
+  from: '"Discovered" is the operative word: it needs a verb by which someone else FINDS the record and
+    then holds an opinion about her. `H-84` is that gap and `H-79` is the deposit that would carry it.'
+- need_sha: f8c1b0b59d73
+  hardness: important
+  need: Her season must be able to end through means that require no institutional process at all -- being
+    found and killed, or simply vanishing -- not only through an arrest, trial, or faction-tree escalation.
+  exercises:
+  - kill / wound
+  from: '#353 `:499` -- "kill the man who must renew it". `(Person, exists)` as an ending, with every
+    Tenure ending THROUGH the death (S15.3) rather than beside it.'
+- need_sha: 65ec2ab80cd9
+  hardness: core
+  need: The engine must represent something about a season of her life beyond identity-only reference
+    data -- some tracked state that a player interaction can actually change -- for at least the season
+    in which she is engaged.
+  exercises:
+  - create_record
+  - term.matured
+  from: 'Tracked state that changes across a season without her acting again is term maturation -- #353
+    `:491` -- and it is the only such mechanism in the design.'
+- need_sha: 623a5c8bccd9
+  hardness: important
+  need: A single scene of investigation, discovery, or protection involving her must be able to permanently
+    change a persistent fact about her (protected / exposed / arrested / dead) that carries forward into
+    subsequent seasons.
+  exercises:
+  - H-84
+  from: A single scene PERMANENTLY changing a persistent fact about her requires someone else to reach
+    her at all, which `H-84` blocks.

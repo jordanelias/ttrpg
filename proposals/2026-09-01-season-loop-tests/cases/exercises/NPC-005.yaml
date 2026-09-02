@@ -1,0 +1,75 @@
+# NPC-005 — `exercises:` for `W10`'s declared routing.
+#
+# ⚠ AUTHORED BY READING EACH ROW, NOT BY MATCHING IT. `PLAN.md` `W10` retired the regex
+# router precisely so a binding could be argued with; every `from:` below names what the
+# row rests on and why, and a reader who disagrees can say which row is wrong. Nothing here
+# was generated from the router's output — laundering its verdicts into declarations would
+# keep every one of its errors and make them look ratified.
+case: NPC-005
+name: Sigrid Torsvald
+source: 'the case''s own `season_requires` + #353 and the hole register, cited per row'
+authored_after_first_run: true
+rows:
+- need_sha: 9a9cea9eafec
+  hardness: core
+  need: An act she performs must be able to leave no attributable trace back to her, her order, or her
+    Crown when it succeeds cleanly -- full deniability as an achievable outcome, not merely a stated intention.
+  exercises:
+  - probe:P15
+  - H-33
+  from: 'Full deniability requires that an act NOT reach everyone, and #353 S61 is explicit: ''WITNESS
+    AS SPECIFIED FANS EVERY EVENT TO EVERY PERSON. Nothing said in private is private.'' The five channels
+    are named and none has a predicate -- `H-33` -- so there is no mechanism by which anyone could be
+    excluded. ⚠ THE `W10` ADVERSARIAL PASS FOUND THIS ROW MIS-AIMED: it quoted P15''s law verbatim and
+    then declared only `H-33`, which is an `assumption` and so published a PASS. `P15` is the probe carrying
+    that identical law and it GAPS -- ''four of the five witness channels have no predicate''. Declaring
+    the probe is what makes the row report what its own rationale says.'
+- need_sha: 29b4607b54f2
+  hardness: core
+  need: An act that goes partially wrong must be able to generate a persistent, accumulating institutional
+    risk that is distinct from, and outlives, the scene in which it happened, and that risk must be able
+    to cross a threshold that forces consequences later, in a different season, for a different reason.
+  exercises:
+  - H-20
+  from: A persistent, accumulating institutional risk that outlives its scene is an accumulating quantity
+    attached to an institution. L4 refuses a social quantity at a Rung; the lawful form is a per-person
+    counter, which is `H-20`.
+- need_sha: e014eb54520e
+  hardness: core
+  need: Her private reputation among people who can never publicly credit her (fellow operatives, informants,
+    a patron) must be trackable and consequential, on a track separate from any reputation she could have
+    in ordinary faction life.
+  exercises:
+  - probe:P35
+  from: 'A reputation track among people who can never publicly credit her, SEPARATE from a public one,
+    is a second audience-scoped standing. `P35` is the probe that reaches it: S18.2''s Sensation is EXACTLY
+    TWO floats and S22 gives no owner for a third.'
+- need_sha: dba09c789789
+  hardness: core
+  need: A perception or capability she secretly has (Thread Sensitivity) must be able to be true and mechanically
+    active while remaining completely unknown to the institution she serves, with that institution's own
+    rules treating mere discovery of the secret as automatically disqualifying, regardless of her competence
+    or loyalty.
+  exercises:
+  - probe:P15
+  - H-33
+  from: 'A capability true and mechanically active while unknown to her institution is fine on the capability
+    side -- S9.2 says capability GATES NOTHING and supplies dice -- and impossible on the knowledge side
+    for the same reason as row 0: total fan-out means the institution witnesses everything. `H-33` is
+    the gap. ⚠ THE `W10` ADVERSARIAL PASS FOUND THIS ROW MIS-AIMED: it quoted P15''s law verbatim and
+    then declared only `H-33`, which is an `assumption` and so published a PASS. `P15` is the probe carrying
+    that identical law and it GAPS -- ''four of the five witness channels have no predicate''. Declaring
+    the probe is what makes the row report what its own rationale says.'
+- need_sha: 483a1d0f6ba0
+  hardness: core
+  need: Her perception of the consequences of a mission must be able to diverge from her colleagues' and
+    superiors' assessment of that same mission -- the identical event scored as a clean win institutionally
+    and as a partial disaster by her personal standard.
+  exercises:
+  - H-79
+  from: 'The identical event scored differently by her and by her superiors is T3 working: every witness
+    mints its OWN claim, and `H-79` decides what those claims are about. ⚠ THIS ROW ALSO DECLARED `probe:P37`
+    AND THAT WAS WRONG: P37 tests whether a character''s REACTION can be fully determined by internal
+    state rather than by a choice, which is a different proposition from two people SCORING one event
+    differently. Caught by the `W10` adversarial pass; a plausible-sounding association is exactly what
+    declared routing exists to expose.'

@@ -160,12 +160,29 @@ committed tree:
 The regenerated artifacts are committed with this plan. **The verdict distribution now agrees across
 both emitters for all 143 cases: 76 BLOCKED · 60 NOT-ASSESSED · 4 DEGRADED · 3 PLAYABLE.**
 
+> ### ⚠ ROUTER-ERA · NOT REPRODUCIBLE UNDER `W10` · NEITHER WITHDRAWN NOR CONFIRMED
+> Every count in this section was computed from a `results.json` produced by the **regex router**,
+> which `W10` deleted. Routing is now an authored `exercises:` declaration, so the corpus verdicts
+> are **6 BLOCKED · 2 DEGRADED · 135 NOT-ASSESSED** — and 135 of those mean *nobody has authored a
+> declaration yet*, which is a fact about authoring, not about the design. The ARC lane has **0 of
+> 611 rows declared**, so its column is **unmeasured**, not measured as zero (§42.2's polarity
+> rule; §0.1 pt 4 in both directions). Re-measuring is `W13`'s lane.
+> Commands: `cd proposals/2026-09-01-season-loop-tests/tracer && python exercises.py` · `python run_cases.py`.
+
+> *(The agreement-across-emitters claim — `W15`'s subject — is unaffected: it is about there being
+> ONE WRITER, not about the numbers that writer emits.)*
+
 > **This is not a typo class. It is the `CLAUDE.md` §8 invariant — *every rule lives once* — applied
 > to artifacts rather than rules: EVERY ARTIFACT HAS ONE WRITER.** Work item **W15**.
 
 ## §2.2 · Three published counts were wrong. Corrected here.
 
-| claim | published | measured | where |
+⚠ **The `measured` column below is ROUTER-ERA** (see the mark above §2.4; commands there). The
+*finding* — that `V2` published counts nothing reproduced — is unaffected and is why the register
+exists; the specific replacement figures are not current. Both columns are kept: neither is the
+answer, and the section's point is that they differed.
+
+| claim | published | measured (router-era) | where |
 |---|---|---|---|
 | cases NOT-ASSESSED | **50** | **60** (NPC 20 · ARC 40) | `V2` §H1, `V2` §I1 table, `01_NPC_VS_ARC.md` §5 |
 | probe executions | **120** | **121** | `V2` §0.1, `README.md` ×2, `HANDOFF_IN.md` |
@@ -192,17 +209,52 @@ describes the run ships with the command that produces it.**
 
 ## §2.3 · The core-row routing rate, stated exactly
 
-| | cases | rows | `core` rows | routed | **unrouted** |
+**⚠ SUPERSEDED BY `W10`, WHICH IS THE ITEM THIS SECTION EXISTS TO ARGUE FOR.** The `routed` column
+measured what a regex matched. That router is deleted, so the table below is history — kept because
+it is the evidence the item was worth doing, not because a reader can check it.
+
+| | cases | rows | `core` rows | routed *(regex, retired)* | **unrouted** |
 |---|---:|---:|---:|---:|---:|
 | NPC | 46 | 346 | 122 | 59 | **63** |
 | ARC | 97 | 626 | 300 | 133 | **167** |
 | **total** | **143** | **972** | **422** | **192** | **230 (54.5%)** |
 
-**All 60 NOT-ASSESSED cases have zero core blockers.** Nothing about them is refused and nothing
-about them is missing; the router simply did not aim. Declared routing (**W2**) makes every one of
-the 60 assessable — which is not the same as runnable, and this document does not conflate them.
+**THE LIVE TABLE, and the denominator is authored coverage rather than pattern coverage**
+(`cd proposals/2026-09-01-season-loop-tests/tracer && python exercises.py`, `python run_cases.py`):
+
+| | cases | rows | `UNCLEAR:` | declarable | **declared** | `core` | **core declared** |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| NPC | 46 | 346 | 54 | 292 | **35** | 122 | **32** |
+| ARC | 97 | 626 | 15 | 611 | **0** | 300 | **0** |
+| **total** | **143** | **972** | **69** | **903** | **35** | **422** | **32** |
+
+The two tables are **not comparable and must not be subtracted from one another** — the first
+counts what a pattern matched, the second what a human wrote — and that non-comparability is
+exactly `W10`'s claim: an undeclared row is now VISIBLY unauthored rather than silently unmatched.
+Every count the router published was a **floor**.
+
+~~**All 60 NOT-ASSESSED cases have zero core blockers.**~~ Router-era. There are **135**
+NOT-ASSESSED cases now, and the reason is authoring, not aim. Declared routing makes each one
+assessable *once somebody authors it* — which is not the same as runnable, and this document does
+not conflate them.
 
 ## §2.4 · THE MEASURED UNBLOCK YIELD — the number this plan is sequenced on
+
+> ### ⚠ ROUTER-ERA · NOT REPRODUCIBLE UNDER `W10` · NEITHER WITHDRAWN NOR CONFIRMED
+> Every count in this section was computed from a `results.json` produced by the **regex router**,
+> which `W10` deleted. Routing is now an authored `exercises:` declaration, so the corpus verdicts
+> are **6 BLOCKED · 2 DEGRADED · 135 NOT-ASSESSED** — and 135 of those mean *nobody has authored a
+> declaration yet*, which is a fact about authoring, not about the design. The ARC lane has **0 of
+> 611 rows declared**, so its column is **unmeasured**, not measured as zero (§42.2's polarity
+> rule; §0.1 pt 4 in both directions). Re-measuring is `W13`'s lane.
+> Commands: `cd proposals/2026-09-01-season-loop-tests/tracer && python exercises.py` · `python run_cases.py`.
+
+> ⚠ **AND THIS IS THE LOAD-BEARING ONE, by the section's own title.** The set cover below is
+> computed over probe ids in a `blockers` field that no longer contains any, so it cannot be
+> re-derived today at all. **The sequencing it justified is not being re-litigated on that basis**
+> — the ordering also follows from the dependency graph in Part 4, which is independent of these
+> counts — but no reader should take the yield figures as current, and `W13`'s authoring lane is
+> what makes them checkable again.
 
 A case is **freed** when *every one* of its blockers is a hole that closed. Set cover over the 76
 blocked cases, using `01_NPC_VS_ARC.md` §2.1's probe→hole mapping:
@@ -428,6 +480,36 @@ R={'W10','A3','W13','P38','F3','F16b','P33'};\
 print([ (s, sum(1 for c in d[s] if c.get('blockers') and set(c['blockers'])<=R)) for s in ('NPC','ARC')])"
 ```
 
+> ### ⚠ THAT COMMAND RETURNS `[('NPC', 0), ('ARC', 0)]` AS OF `W10`, AND EVERY FIGURE IN THE TABLE
+> ### ABOVE IS ROUTER-ERA. Amended 2026-09-02 by `W10`'s adversarial pass.
+>
+> **What broke it, and it is not a bug.** The table was computed from a `results.json` whose
+> `blockers` were **probe ids**, because under the regex router a probe was the only thing a case
+> row could reach. `W10` deleted that router; `blockers` now names the **declared token that
+> failed** — a hole id, a verb, or `probe:PID` — so a set membership test against bare probe ids
+> matches nothing. `W10`'s own note says naming `H-84` is a better answer than "P22 gapped", and
+> this is the price of that: the old query no longer has a subject.
+>
+> **And the old numbers were a FLOOR, not a total.** A row matching no pattern fell silently to
+> UNMAPPED, so every count derived from routing understated the corpus **in the direction that
+> flattered it**. That applies to the "published" column and to both "measured" columns alike.
+>
+> **Status of the finding: NOT REFUTED, NOT REPRODUCIBLE — awaiting re-measurement.** `§0.1`
+> point 4 governs, and it cuts both ways: a router-era number is not evidence, and its absence is
+> not evidence against. Do not cite the `0` / `2` / `3` cells as current, and do not delete them
+> either — they are what a re-measurement has to beat.
+>
+> **What re-measures it.** Declared coverage, which is `W13`'s lane and is thin:
+> ```
+> cd proposals/2026-09-01-season-loop-tests/tracer && python exercises.py
+> #   NPC: 35/292 rows authored (32/122 core)
+> #   ARC:  0/611 rows authored ( 0/300 core)
+> ```
+> The ARC lane has **no declared row at all**, so *every* arc figure in this section is currently
+> unmeasured rather than measured-as-zero — §42.2's polarity rule, applied to this instrument.
+> The re-measurement is meaningful once `W13` authors the arc overlay, and its command is the one
+> above with `R` rewritten over declared tokens rather than probe ids.
+
 > **The qualitative conclusion survives and is sharper; the number `0%` is wrong.** The NPC pathway
 > is *overwhelmingly* blocked by holes — 21 of 23 blocked cases have no refusal in them — and the arc
 > pathway is *nearly half* refusal-touching. **A claim of exactly zero is the kind of number that
@@ -494,6 +576,67 @@ row**. By §0.05's own test — *would the game behave differently if this docum
 counts can never again be a hand-typed sentence); planting a row with no `grade` makes it exit 1;
 planting a `default:` on an `absent` row makes it exit 1.
 
+> ### ✅ **`W0` LANDED 2026-09-02 — and its Proof's first clause is WRONG. Recorded loudly rather than quietly satisfied.**
+>
+> `hole_register.yaml` carries **54 rows** — the 32 transcribed mechanically from `V2` §VII, the
+> 18 holes of §1.4 with its four §62/§54 carry-overs expanded to four rows, and `A18`.
+> `tracer/register.py` reads it and nothing else does.
+>
+> **`--check` exits 1, and it must.** *"Exits 0"* was written before anyone transcribed the rows,
+> and it contradicts **this document's own §1.5**: if not one of the 32 rows carries `site:`,
+> `sweep:` or `cite:`, then a register that transcribes them faithfully **cannot** pass the rules
+> that read those fields. Writing 0 would have required backfilling citations nobody derived —
+> laundering a transcription into a closure, which is the move the register exists to stop. So the
+> honest proof is a **measurement**, and it is stronger than the assertion it replaces:
+>
+> | rule | today | closed by |
+> |---|---|---|
+> | `R0` shape · `R1` graded · `G8` discharged | **ok** — `--check --rule R0,R1,G8` exits 0 | — |
+> | `R2` an `assumption` carries `site:` + 3 `sweep:` points | **23 violations** | `W1` |
+> | `R3` an `absent` carries no `default:` | **2 — `H-02` and `H-20`** | `W3`, `W1` |
+> | `G6` an `absent` carries a `cite:` | **34 violations** | `W1` |
+>
+> **One tier assignment was overturned by the adversarial pass and is corrected here.** `H-55`
+> (`D22` × `H-33` — per-write MATTER emissions under total fan-out flooding every ledger) was
+> placed in **Tier 0** and belongs in **Tier 1**: §VII.1's bar is *"required before ANY season
+> completes"*, and **a flooded ledger completes the season** — eviction churn is a fidelity defect,
+> not a completion blocker. It was also internally inconsistent, since `H-33` — the unfilled
+> predicates that CAUSE the total fan-out — is Tier 1, and an interaction row cannot block harder
+> than its own component.
+
+> **`R3`'s two are a finding, not noise.** `V2` grades `H-02` and `H-20` partly `absent` **and
+> supplies each a default**. A part-absent hole with one `default:` field is **not representable in
+> §G4's shape**, and §42.2.1 forbids the combination it expresses. The fix is to split the hole, not
+> to delete the default.
+>
+> **Both plants fire**, and a third was added: an ungraded row fails `R1`; a `default:` on an
+> `absent` row fails `R3`; and `--verify-transcription` re-extracts `V2`'s tables and fails on
+> drift **in either direction**, so the register and the prose cannot part company silently.
+>
+> **Also discharged from the list above:** the `§D20`–`§D26` citation form — **eighteen** citations,
+> not the four this item names, **and on two grounds rather than one.** Part D has only
+> `§D1`–`§D5` (verified: the headings are at `ARCHITECTURE_V2.md` `:277`, `:289`, `:305`, `:350`,
+> `:360`).
+>
+> - **Thirteen are above `§D5`** — `§D6`, `§D7`, `§D8`, `§D11`, `§D18`, `§D20`, `§D21`, `§D22`,
+>   `§D26` — so **no section of that name exists** and each is a Part B defect id wearing a
+>   section's clothes. Fixing only the four this item names would have left five wrong on
+>   identical grounds, which the note above calls *"the worst of both"*.
+> - **Five are `§D1`–`§D5`, and they rest on a different ground that must be stated rather than
+>   folded into the first:** they are the *`where`* column of §0.3's defect table (`:68`–`:72`),
+>   which is a **defect-id column** — its rows 13 and 14 hold `**§G**` and `**Part VII**`, so the
+>   column mixes both namespaces and normalising the twelve defect rows to ids is an **editorial**
+>   call, not a consequence of the range rule. ⚠ **Two of those five were defensible as section
+>   references** — row 1's verdict restates §D1's argument and row 4's restates §D4's heading —
+>   and are changed anyway, for column consistency. A reader applying only the range rule could
+>   not reproduce those five edits, which is why the ground is written out here.
+>
+> **No `§D1`–`§D5` outside that column was touched**; each surviving one is a genuine section
+> reference (`:152`, `:333`, `:350`, `:535`, `:602`, `:688`). And **`V2` §I2's artifact 0 is now
+> marked UNMET**, which it is — on `H-02` and several more. `register.py --counts` **names** them,
+> so it can no longer be a sentence; the count is not restated here because it moves with every
+> re-grade and every re-tier.
+
 **Size S.** Depends on nothing.
 
 ---
@@ -513,6 +656,51 @@ Move `H-26` **to Tier 0**.
 **Proof.** `register.py --check` green **with Tier 0 containing no `absent` row** — which is `V2`
 §I2's **artifact 0**, and the only one of the eight that writing can satisfy. Every closed row's
 `cite:` resolves to a line that says what the row claims (spot-check by a critic, not by the author).
+
+> ### ✅ **`W1` LANDED 2026-09-02. The ladder ran; two of this item's own claims did not survive it.**
+>
+> **All fourteen rows moved**, each carrying the citation that closes it:
+>
+> | | rows | grade |
+> |---|---|---|
+> | §3.1 closed | `H-23` (as a **refusal**) · `H-37` · `H-38` · `H-60` | `ruled` |
+> | §3.1 closed, with an obligation | `H-25` | **`measured`**, not `ruled` — the argument is sound and **unexecuted**, and `W11` discharges it |
+> | §3.4 closed, **held back for objection** | `H-36`, receiver-side | `ruled` |
+> | §3.2 re-graded | `H-20` `H-26` `H-31` `H-32` `H-33` `H-39` | `assumption`, each with a `site:` and three distinct `sweep:` points |
+> | §3.2/§3.3 re-graded **DOWN** from `ruled` | `H-27` `H-28` | `assumption` — a **strengthening**: the answers survive, the arguments for them do not |
+>
+> `H-26` moved to **Tier 0**, in the register *and* in `V2`'s tables — a tier that disagrees
+> between the two is `W0`'s counts defect, one field over.
+>
+> **Measured** — `python tracer/register.py --counts` and `--check`:
+> `absent` **34 → 22** · `assumption` 12 → 20 · `measured` 0 → **1** · `ruled` 8 → 11 ·
+> `R3` **2 → 1** · `G6` **34 → 22**.
+>
+> #### ⚠ **THIS ITEM'S PROOF IS UNREACHABLE, AND §3.6 SAYS SO ALREADY.**
+> *"Tier 0 containing no `absent` row"* cannot hold after `W1`. **§3.6's own residue table says one
+> `absent` row survives the ladder — `H-02`, which is Tier 0 and falls out of `W3`.** The two
+> sentences were always in conflict and §3.6 is the careful one. Artifact 0 closes at **`W3`**, not
+> here, and it is now UNMET on `H-02` plus seven of the rows `W0` carried.
+>
+> #### ⚠ **NO WORK ITEM RUNS THE LADDER OVER THE TWENTY-TWO ROWS `W0` ADDED.**
+> This item is scoped to §3.1–§3.4, which is **the twelve**. The 22 holes of §1.4 are discharged
+> **by construction** at `W2`/`W3`/`W5` rather than by the five tests, so they stay `absent` with an
+> empty `cite:` and **they are the whole of `G6`'s remaining 22.** That is the honest state and not a
+> gap to paper over: closing them by ladder would be inventing closures for holes whose answer is a
+> table nobody has built yet. **Each building item must set its rows' grades as it lands.**
+>
+> #### ⚠ **`R2`'S 23 VIOLATIONS ARE NOT THIS ITEM'S EITHER, AND NOBODY OWNS THEM.**
+> They are the **pre-existing** `assumption` rows — `H-03`–`H-11`, `H-29`, `H-30`, `H-34` — which
+> `V2` graded `assumption` and never gave a `site:` or a `sweep:`. That is §1.5's finding, and no
+> item in Part 4 is assigned to fill them; each belongs with the item that builds what its default
+> is injected into (`H-06`/`H-07`/`H-08` with `W8`, `H-09` with `W6`, `H-29` with `W5`).
+>
+> **Two line numbers in §3.2 are off** and are corrected in the rows that cite them: the *"vacant
+> date fires… and lapses"* sentence is at **`:835`**, not `:837`; *"`yield` — only here"* is at
+> **`:856`**, not `:855`. **Neither claim is wrong** — every one of the fourteen citations was
+> verified by hand against #353 and then mechanised, so it stops depending on anyone remembering:
+> `python tracer/register.py --verify-citations` checks that every `:NNN` exists and every verbatim
+> quote is at the line cited, and it **distinguishes a fabricated quote from a wrong line number**.
 
 **Size S–M.** Depends on **W0**.
 
@@ -583,6 +771,121 @@ and nothing else** — asserted, not printed, which is **G3**.
 
 **Size S–M.** Depends on **W2**. Parallel with **W3**.
 
+> ### ⚠ THE GOVERNANCE SLICE'S ADVERSARIAL PASS — it overturned the headline, and found a
+> ### fabrication committed inside the fix for a fabrication
+>
+> **1. "The governance verbs now RUN" is true of the FOLD and false of any person.**
+> `person_side_eligible` declines every `remit:` alternative unconditionally — that is **`H-71`,
+> already registered `absent` and TIER 0**, with its `unblocks:` already reading *"9 of 32 verbs
+> cannot be formed person-side — 8 remit-ONLY"*. All four slice verbs are remit-only, so
+> `Query.opening_set` never offers them **in any world**, including one where the actor genuinely
+> holds the office whose remit names the act. **`resolvable_verbs()` moving 8 → 12 cannot affect
+> any run.** I built the RESOLVE half of a mechanism whose DELIBERATE half is an open tier-0 hole,
+> and said it runs. `test_no_person_can_choose_a_governance_verb_and_h71_is_why` pins it and goes
+> red the day `H-71` closes.
+>
+> **2. `confer` published a FABRICATED `tenure.closed`.** `_fold` emitted every kind in `emits:`
+> once anything changed, and `confer` declares both `tenure.opened` and `tenure.closed` — so
+> conferring onto an unheld office announced a closure that never happened. **That is the
+> fabricated-`person.died` class, committed inside the fix for it**, and the existing guard could
+> not see it because it is all-or-nothing per act. An effect may now return `{kind: [ids]}` and
+> the fold emits only what was earned.
+>
+> **3. The `scale:` column reaches NO resolver** — validated at load and read by nothing else.
+> **Third instance of this defect in one session**, after `stratum` (`H-83`) and `contests:`; this
+> session diagnosed both and then shipped a third. Registered as **`H-89`**, `absent`, with the
+> candidate readers named and none chosen, because choosing is a design decision.
+>
+> **4. Three predicates were wrong.** `_req_confer` dropped a conjunct *and* an `or` disjunct — an
+> **over-refusal**, `G4`; `_req_revoke` omitted the office check and could revoke a person's
+> possession of a **book**, since §13 makes possession a `hold` — an **over-admission**;
+> `_req_convene` tested that the venue *is* a rung rather than that its **container resolves**,
+> and `Query.parent_of` already existed. All three now implement Part E's full text.
+>
+> **5. `H-87`'s cap was unreachable.** `contest_subsystem` ran BEFORE the depth check, so
+> `ContestError("max_depth reached")` could not fire for any rostered prize — the registered
+> number had no consumer and its sweep was three arms identical by construction. The dispatch
+> moved below the check. ⚠ My first attempt added a SECOND cap test twelve lines above the
+> existing one — §8 broken in the act of fixing an ordering bug.
+>
+> **6. `person.died` 4 → 0 was not caused by this change.** `W9`'s *"an effect that touched
+> nothing"* guard already drove it to 0 and predates the seam work; and the seam is never reached
+> anyway, because `kill / wound` left the chooser's set. Two sufficient causes, the earlier one
+> already fired — the commit banked a delta it did not produce, and the `4` shipped with no
+> command (`G11`, again).
+>
+> **7. `PROBE FLIPS 0` was not reassurance.** None of the new code is on an exercised path: the
+> governance verbs cannot be chosen (1), `kill / wound` cannot be chosen, and the only probes
+> reaching `contest()` use an unrostered prize. Arms identical by construction, reported as a
+> control — §0.1 pt 4.
+>
+> **Two tests could not fail** and were rebuilt: the channel test used a hand-built Event and
+> **would have passed on the pre-session tree**; and the "genuinely crossed" assertion was
+> satisfied entirely by the unauthored `person` default bucket. A third guard, `W2`'s write-site
+> walk, exempted the fold by **line proximity** and broke when the fold grew eight lines — it
+> exempts by AST containment now.
+
+> ### LANDED 2026-09-02 — and the gate found six silent MATTER writes on its first run
+>
+> **`shape.World.write` is the emitter.** `H-12` is RULED that way (*"MATTER emits an Event per
+> write so crossings have an antecedent"*, default *"Part D's `emits:` column"*), and `W4` executes
+> the ruling rather than making one. A MATTER write on a row Part D gives an `emits:` must name one
+> of the declared kinds; a kind the row does not declare is refused. That pairing is **`D22` made
+> mechanical in both directions** — a silent write and a fabricated kind are the two ways the
+> column can be wrong. Emission lives in `write()` rather than at each call site because it keys on
+> `(record_kind, fieldname)`, the same key the write class and the social partition already use, so
+> **a new MATTER write inherits its emission by existing rather than by remembering** (§8).
+>
+> | proof clause | result |
+> |---|---|
+> | a crossing's `causes[]` walks to the wear that crossed the floor | **yes** — `condition.band_crossed → condition.worn → … → ROOT`, asserted in `test_w4_a_band_crossing_walks_back_to_the_wear_that_caused_it` |
+> | `[ROOT]` only for the seed and a clock's genuine first emission | **one `[ROOT]` at 1, 2, 3 and 4 seasons**, always `condition.worn` at season 0, always one per site — asserted, not printed (`G3`) |
+> | `(Claim, confidence)` decays at MATTER and emits | **yes** — the third licensed clock (#353 `:864`) runs; a decay walks back through its deposit to the act that was witnessed |
+>
+> ```
+> cd proposals/2026-09-01-season-loop-tests/tracer
+> python -m pytest test_tracer_is_honest.py -q -k w4       # 4 passed
+> python delta.py                                          # PROBE FLIPS 0
+> ```
+> **Events per 2-season run: 18 → 108. Distinct kinds emitted: 9 → 12. `TRACE.EVENT` 62 → 1204.**
+>
+> **THREE DEFECTS THE PROOF CLAUSES CAUGHT WHILE `W4` WAS BEING BUILT**, which is the argument for
+> asserting them rather than printing them:
+> 1. `write()` used the **TRACE LABEL** as the Event subject, so every site's wear emitted under
+>    the subject `"condition"`, `last_emission_of` never matched, and the clock **re-rooted every
+>    season**. The ROOT count caught it on the first run.
+> 2. A claim's first decay rooted at the seed, because **the deposit that created it emitted
+>    nothing** — Part D declares `claim.deposited` on `(Person, claim_ledger)` and nothing ever
+>    emitted it. 63 spurious roots in a 3-season run. A claim is not a clock; it is a thing a
+>    witness deposited, and the deposit has an Event.
+> 3. `P18` **asserted `ev.causes == [ROOT]`** — a probe pinning the defect `H-12` rules against. It
+>    now checks the antecedent resolves to a `condition.worn` for the same site in the same season,
+>    which is the claim `H-12` actually makes.
+>
+> **SIX SILENT MATTER WRITES, found by turning the gate on:** `(Record, matured)`, `(Person,
+> exists)` twice, `(Tenure, until)`, `(Record, ttl)` and `(Rung, envelope)` — every one on a row
+> whose `emits:` Part D declares. **Five are fixed. The sixth is a finding and is registered as
+> `H-86`:** `(Record, ttl)` declares only `record.expired`, and the row is decremented every
+> season, so emitting it per write would **assert an expiry that has not happened** — the
+> fabrication `G1` forbids — while refusing the write would stop §13's licensed clock. Part D's
+> column does not distinguish a per-write kind from a conditional one. The exempt rows are data
+> (`rosters.yaml: conditional_emission_rows`), the ambiguity is registered rather than decided, and
+> its third sweep point (split the column into `emits_per_write:` and `emits_when:`) is the real
+> fix and belongs to whoever ratifies Part D.
+>
+> **Register.** `H-12` gains its `site:` and its execution note — `unblocks:` is left verbatim,
+> because the transcription gate is right that an execution note is not a transcription. **`H-40`
+> closes in two halves by §0's tests**: the SCHEMA_ROW half is **superseded** (`W2` gave Part D the
+> `(Claim, confidence)` row), and the FORMULA half is answered by **precedent** — `Site.condition`
+> wear is the other licensed MATTER clock and #353 gives *it* no rate either, so it is a registered
+> fixture that refuses when unregistered. `absent` → `assumption`, `site: Fixtures.claim_decay`,
+> sweep `[0, 5, 20]`. **`G6` 17 → 16.** Grading it `ruled` would credit an invented number to #353;
+> leaving it `absent` would deny a mechanism that now runs.
+>
+> **One defect of my own, caught by an existing guard:** the first version re-implemented S19.4's
+> empty-`causes[]` refusal inside `write()`, one constructor away from `Event.__post_init__`, which
+> already does it. Two messages for one rule is §8 exactly. Deleted.
+
 ---
 
 ## **W5 — PART F: THE PERSON'S DECISION.**
@@ -633,6 +936,91 @@ being a queryable object rather than a table a human reads a page at a time.
 
 **Size M.** Depends on **W2** and **W4**. Parallel with **W5**.
 
+> ### LANDED 2026-09-02 — and §1.4 hole 16 stopped being an argument
+>
+> **The five channels have predicates**, injected and declared in
+> `rosters.yaml: witness_channel_predicates`, each computed from WORLD STATE — §19.3 removes
+> `target` from the Event and says why: *"observers are computed at WITNESS from presence; the
+> emitter declares no recipient."* `shape.observers_for` is the reader, and the presence index
+> this barrier has always built was **unused until now**.
+>
+> | mode | events (3 seasons) | deposits | ledgers (sorted, as the instrument prints them) |
+> |---|---:|---:|---|
+> | `total` — **#353's specified behaviour, and the control** | 896 | **678** | `[200, 200, 200]` *(at the `L` cap)* |
+> | `presence_only` | 161 | **68** | `[0, 34, 34]` |
+> | `all_five` | 165 | **71** | `[0, 34, 37]` |
+>
+> *(The triples are quoted as the instrument sorts them. The first version of this table retyped
+> them in a third order, and `hole_register.yaml` in a fourth — same multisets, three spellings,
+> none of them a copy. `delta.py`'s own instruction is quote, don't retype.)*
+>
+> ```
+> cd proposals/2026-09-01-season-loop-tests/tracer
+> python -m pytest test_tracer_is_honest.py -q -k w6      # 3 passed
+> ```
+>
+> ### ⚠ AMENDED BY `W6`'s ADVERSARIAL PASS — three corrections to the note above
+>
+> **1. `P15`'s flip was false when first published.** It passed on a channel BROKEN CLOSED, not
+> on a predicate that excludes: `_event_place` tested `e.subject in w.rungs` first, and every
+> person has a same-id `person`-kind Rung, so presence answered *"who is contained IN p_high"* —
+> nobody. `presence_only` excluded the speaker and everyone in the room, and `P15`'s only
+> assertion (`narrow < total`) could not tell that from an exclusion. It now asserts BOTH
+> directions. **This was a repeat** of a conflation `witness` had already retracted once.
+>
+> **2. `all_five` is a measurement of THREE channels, not five.** `_ch_post_remit` compared an
+> office id against remit ACT NAMES and could not return `True` in any world (the correct lookup
+> already lived once in `_eligible` — §8, one function apart). `_ch_chronicle` does not read `pid`
+> at all and fired zero times, because **no `binding_decision` verb was executable** — so the
+> published justification for its design was wrong even where its number was right. Both are
+> fixed, and the governance slice is what makes them reachable; before it, two of the five
+> channels could never admit anybody.
+>
+> **3. §1.4 hole 16 is `H-55`, and it was `absent` with every field empty** while this note claimed
+> the item discharges it. It closes **`measured`**, not `ruled`: a row carries the interaction now
+> and the arms are quantified, but the DEFAULT is still `total`, so `W6` makes the flood
+> **boundable and measured, not bounded**.
+>
+> ### ⚠ THE THIRD PROOF CLAUSE IS NOT DISCHARGED, AND IS NOT REACHABLE AS THE ITEM IS SHAPED
+>
+> `W6`'s Proof has three clauses. The two below are met. The third — *"a `tell` reaches **only the
+> told**"* — is not, and the reason is structural rather than unfinished work: **§19.3 removes
+> `target` from the Event on purpose** (*"observers are computed at WITNESS from presence; THE
+> EMITTER DECLARES NO RECIPIENT"*), and §F1's Candidate carries no operand channel (`H-80`), so
+> nothing in the world records who was told. `tell` emits `news.told` with the TELLER as subject;
+> under the three arms it reaches everyone, everyone in the teller's rung, or that plus the
+> teller's `knot` partners. None is *"only the told"*.
+>
+> And `observers_for` applies **one mode to every event kind**, so there is no arm in which
+> `news.told` uses a narrower channel set than `condition.worn`. Satisfying the clause needs a
+> PER-KIND channel policy — a different shape from the one this item built. Recorded as
+> undischarged under §42.2's polarity rule rather than left silent.
+>
+> **`P15` flips to PASS BY CONSTRUCTION**, which is `W6`'s first Proof clause — the same Event
+> reaches five persons under `total` and fewer under `presence_only`, so a channel predicate now
+> **excludes**, which is what `S61` says a wrapper cannot do. **Deposits fall from `N × E` to a
+> number the sweep reports** — the second clause — by a factor of ten.
+>
+> ⚠ **THE DEFAULT STAYS `total`, AND THAT IS NOT AN OVERSIGHT.** `H-33` remains `assumption`:
+> #353 names the five channels and supplies **no predicate for any of them**, so these are an
+> injected default and grading the row `ruled` on the back of this item would credit the design
+> with an answer this session invented. `total` is the default because it is what #353 specifies,
+> and it is therefore also the control arm. A guard asserts the grade has not drifted.
+>
+> ⚠ **`chronicle` IS DELIBERATELY NOT `everyone`.** A public channel matching every person would
+> make `all_five` identical to `total`, and the sweep would carry two points that are one arm
+> wearing two names. It is the matter-of-record channel: what a `binding_decision` verb emits is
+> public, because that is the design's own category for an act whose effect is institutional.
+> A guard asserts `all_five` sits strictly between the other two.
+>
+> **WHY THIS BECAME URGENT RATHER THAN OPTIONAL, WHICH IS THE ITEM'S OWN CLAIM.** §1.4 hole 16
+> says `D22` and `H-33` are *"individually fine and jointly fatal"* and that **no row in `V2`
+> carries the interaction**. `W4` landed `D22`, and the argument became a measurement within the
+> hour: events per run **207 → 896 → 3389** over two, three and four seasons, every ledger pinned
+> at the `L = 200` cap, and **the test suite stopped finishing**. The cleanest example in the
+> corpus of a defect that appears only when two rows are read together — and it appeared by
+> running, not by reading.
+
 ---
 
 ## **W7 — THE SITTING DECIDES, AND THE CONTEST RETURNS A DEGREE.**
@@ -677,9 +1065,15 @@ with them** — a guard for a thing that no longer exists is the apparatus this 
 **NOT-ASSESSED then means *"nobody authored an `exercises:`"*** — a fact about authoring, which is
 fixable — instead of *"the regex missed"*, which is not.
 
-**The measured size of the job: 230 of 422 `core` rows (54.5%) never routed**, and **all 60
+~~**The measured size of the job: 230 of 422 `core` rows (54.5%) never routed**, and **all 60
 NOT-ASSESSED cases have zero core blockers**, so every one of the 60 becomes assessable. It is
-**~973 rows** across both case directories.
+**~973 rows** across both case directories.~~
+
+⚠ **STRUCK — router-era, and this item is the thing that made it so.** `W10`'s own DO section
+described the job in the vocabulary of the router it deletes. The measurement that replaces it is
+authored coverage, which is the honest denominator: **NPC 35 of 292 rows (32 of 122 core); ARC 0 of
+611 (0 of 300 core)**, plus 69 `UNCLEAR:` rows that are the source's own admission and are not
+anybody's to author. `cd proposals/2026-09-01-season-loop-tests/tracer && python exercises.py`.
 
 **Discharges.** §H1 and **the entire bare-token class** — structurally, by deleting the router,
 rather than by enumerating another word.
@@ -688,6 +1082,60 @@ rather than by enumerating another word.
 declared verbs executed**; **no PLAYABLE verdict rests on a row with an empty `exercises:`.**
 
 **Size L.** Depends on **W3** for the vocabulary. A parallel lane thereafter.
+
+> ### LANDED 2026-09-02 — the mechanism, and what its adversarial pass changed
+>
+> **The mechanism is done and the authoring is not.** `ROUTES`..`ROUTES_5`, `COMPILED` and
+> `route()` are deleted; `route_precision.py` is deleted; `exercises.py` is the only path from a
+> case row to a verdict, binding each declaration to its row by `need_sha` — the first 12 hex of
+> the sha256 of the whitespace-normalised need — so a reworded row orphans its annotation loudly.
+> Authoring stands at **35 of 292 NPC rows (32 of 122 core); 0 of 611 ARC rows**:
+> ```
+> cd proposals/2026-09-01-season-loop-tests/tracer && python exercises.py
+> ```
+>
+> **⚠ CORRECTION TO THIS LANE'S OWN COMMIT MESSAGE.** `5a1d388` published *"`run_cases.py`
+> 633 → 319 lines"*. **319 does not reproduce; the file was 366 at that commit and is 376 now.**
+> The `633` is right. `git show 5a1d388:proposals/2026-09-01-season-loop-tests/tracer/run_cases.py
+> | wc -l` is the check, and `G11` — every number ships with its command — is the rule that would
+> have caught it before it was published. Recorded here rather than by rewriting a pushed commit.
+>
+> **Six defects the adversarial pass found in the landed mechanism, all fixed:**
+>
+> | | what was wrong | why it mattered |
+> |---|---|---|
+> | 1 | `resolve` graded an `assumption` register row as **PASS** | 15 rows published PASS while their own `from:` said the injected default was the *negation* of the need. Now three states — `absent` blocks, `assumption` is `ASSUMED` and carries the case to **DEGRADED**, `ruled`/`measured` pass |
+> | 2 | `token == "term.matured"` — a **one-element kind list in a Python body**, added in the commit that deleted the router for that exact habit | The seventh recurrence of the bare-token class. Replaced by a union over `shape.MATRIX`'s and the verb table's `emits:` columns, so it moves when the data moves |
+> | 3 | the token-resolution guard matched **three of `resolve`'s four failure strings** | A token naming a nonexistent Event kind was unguarded. Now asserted on a `bound` flag — *does this token name anything* — which is deliberately not `ok`, since a token can name a real thing that is `absent`. `G3` |
+> | 4 | `unbound()` **skips a `case:` id it does not recognise**, and is called once per lane | A file naming a case in neither lane passed both checks with every row bound to nothing. `orphan_cases()` closes it |
+> | 5 | the anti-router guard had **three evasions** — scoped to a function named `grade`, fired only on a receiver named `re`, and blacklisted three names | Replaced by a taint check: a need's TEXT may only be hashed, rendered or tokenised by a declared sanitizer, across whole modules and every scope. ⚠ **The claim "it would not have caught the router it replaced" was HALF WRONG and is corrected here.** Its *AST half* would not have — `COMPILED` held precompiled patterns, so there was no `re.` receiver, and `route()` is not `grade`. Its *blacklist half* would have, by name, and only by name: a rename defeats it. Settled by `git show 5a1d388:proposals/2026-09-01-season-loop-tests/tracer/test_tracer_is_honest.py`, which is the command `G11` asked for and the first version of this row did not give |
+> | 6 | two grading guards were **satisfiable by deleting the rule they named**, and one of the rules was **inert** (`more than half unrouted` — its own predicate proved the strict clause below returned the same verdict) | The rule is deleted; the guards now build the discriminating input, with a control that reaches PLAYABLE so the assertion can observe its own failure. §0.1 pt 2 |
+>
+> **Not fixed, and named instead:** every router-era count is marked where it stands rather than
+> deleted — §2.1, §2.2, §2.3, §2.4, §3.5, this item's own DO section, `W13`'s arc partition and
+> `01_NPC_VS_ARC.md`. **Eight surfaces, not the three the first version of this note claimed.**
+> The finding is neither withdrawn nor confirmed; re-measuring it *is* `W13`'s authoring lane.
+>
+> ### THE SECOND PASS, on the reconciliation above — seven more, and it overturned one of my fixes
+>
+> | | what was wrong | why it mattered |
+> |---|---|---|
+> | 1 | **the taint check was a name test wearing a dataflow test's clothes.** `text = r["need"]` laundered the taint in one statement, so the retired router came back **verbatim with one identifier renamed**, past all five of its plants | It also skipped module scope (where `ROUTES`/`COMPILED` actually lived), let the word `UNCLEAR` **in a comment inside a call's parentheses** exempt it, and could not see a bound method handed to an exempt builtin. Rewritten as real dataflow — assignment, walrus, `for`, comprehension and `with` targets, to a fixpoint, per lexical scope — with four more plants |
+> | 2 | it scanned a **two-name filename tuple**, leaving `report.py` — the SOLE EMITTER — unscanned, and `report.py` had two inline need operations | A filename roster is a word roster one level up (`G2`), and `test_jordan_no_definition_is_hardcoded_in_a_body` had settled that shape 400 lines above. The file set is now globbed; rendering and tokenisation got **declared sanitizers** (`need_display`, `need_terms`) so the scan could be total instead of scoped away |
+> | 3 | it **could not observe that it had scanned anything** | `not []` is true of an empty corpus. It now counts sanitizer applications and fails if the pipeline contains none — rename the extraction key and the guard goes red instead of quietly green |
+> | 4 | `grade` **never read `bound`**, the flag fix 3 of the first pass added | A mistyped token (`create_recrod`) resolved `ok=False` → graded `GAP` → made its case **BLOCKED** and landed in `blockers` beside real holes, while `report.py`'s legend told the reader *"`GAP` — a declared token named a real thing"*. An unbound token is `INSTRUMENT-ERROR` now, kept out of `blockers` |
+> | 5 | **the caselog never rendered the declaration.** The table had a `probe` column, `None` on eight of nine declared rows | W10's claim is that a wrong binding is *"an authoring error somebody can argue with"*. A binding no reader can see is no better than a regex no reader can see |
+> | 6 | the kind token's stated semantics were **false in the flattering direction** — *"satisfied when the kind appears in a run"* for what is a **static table lookup** | `term.matured` published PASS because a Part D row *lists* the kind. Corrected in the docstring, the `detail` string and the caselog. **`W4` is the item that makes it a run** — today 25 of 40 declared kinds are emitted by nothing |
+> | 7 | **`H-46`'s `cite` argued for a grade the row does not carry** — `H-20`'s conclusion, pasted | It satisfied `G6` (*a refusal nobody argued for is not a refusal*) on an argument for a DIFFERENT refusal, on a `tier: 0` row. The grade was right and the citation wrong; new register rule **`G12`** fails on recurrence |
+>
+> **And two the pass reported as observations, both real:** `verb_table.yaml` declared
+> `writes_note` **twice** on `issue` and on `petition`, so `yaml.safe_load` silently discarded
+> Part E's transcribed cell in the file whose whole purpose is fidelity to Part E. Both cells are
+> merged, and `shape.load_yaml` is now the instrument's only YAML entry point and **refuses a
+> duplicate key**. ⚠ Severity stated accurately: `writes_note` has no reader, so *that* instance
+> lost transcribed text and not behaviour — what earns the guard is the same class at the ROW
+> level, which did change behaviour (two `(Office, exists)` rows, gate behaviour depending on file
+> order). `report.py`'s unused `defaultdict` import is gone.
 
 ---
 
@@ -718,8 +1166,14 @@ twelve is a bug.
 
 ## **W13 — THE ARC RE-AUTHORING LANE.** *Not a specification change. Do not confuse the two.*
 
-**The exact list, computed rather than estimated** (`results.json` blockers; reproduction command in
-§3.5):
+**The list, computed rather than estimated — FROM A ROUTER-ERA `results.json`, and no longer
+re-derivable** (reproduction command and its failure in §3.5). ⚠ Amended 2026-09-02 by `W10`'s
+adversarial pass: the arc lane has **0 of 611 rows declared**, so nothing in the current
+`results.json` produces this partition, and the token set it was computed over (`A3`, `W13`,
+`P38`, `F3`, `F16b`) no longer appears in any `blockers` field. Treat the two rows below as the
+**work list they were authored as** — which is all `W13` ever needed them for — and not as a
+measurement anyone can check today. Re-deriving it is part of this lane: an arc gets its
+`exercises:` before its re-authoring is judged.
 
 | | arcs |
 |---|---|
@@ -754,6 +1208,18 @@ this chain has required, and it is additive.**
    bound"*. **Leaving it as-is would be a probe asserting a rule the design no longer has.**
 4. Re-state #353 §26.3's prose in scenes. **The spray argument survives the noun change unaltered** —
    five scenes each spent petitioning is exactly the triage the budget exists to create.
+
+   > ⚠ **LANDED 2026-09-02 AS A REFUSAL TO EDIT #353, AND THE REASON IS THE POINT.** The W17
+   > adversarial pass found this clause undelivered: `:896`, `:912-913` and `:922-923` still count
+   > **acts**. They stay that way. **#353 is the specification under test**, `register.py
+   > --verify-citations` pins ~40 register quotations to its line numbers, and an instrument that
+   > edits its own subject to agree with a later ruling destroys the only fixed point the whole
+   > chain measures against. The re-statement belongs in the surfaces that *derive* from it, and
+   > that is where it landed: `Scene`'s docstring, `Query.budget`, `deliberate`'s refusal law,
+   > `H-10`/`H-28`/`H-35`/`H-76`/`H-77`/`H-78`, `ARCHITECTURE_V2.md` §F3, and the
+   > `act_budget` → `scene_budget` rename across 16 sites. **#353 `:1990` still lists "Does a scene
+   > equal an act?" as open and that is correct of #353** — the ruling is Jordan's, dated after it,
+   > and `A32` is where the instrument records that it is now settled.
 
 **Does NOT change.** Parts D and E. The verb table's ~28 rows are the interactions; a level is added
 above them. **This is the cheapest shape the ruling could have taken, and it is worth saying so.**
@@ -956,6 +1422,45 @@ That is **honest** (it is #353's specified behaviour), it makes the log walk, an
 > **Check 2 is the one that cannot be faked, and check 5 is the one that stops the author moving the
 > goalposts after seeing the result.** The session this plan follows failed at exactly that seam:
 > it graded cases against probes it had written, and the probes were the model.
+
+---
+
+### ⚠ **LANDED 2026-09-02 — ARTIFACT 2 RUNS, AND THE BAR IS NOT MET AS THIS SECTION WRITES IT.**
+
+Both halves are true and neither may be dropped. `python headless.py --case NPC-088 --seasons 2
+--seed 0` completes, reproducibly, with a computed option set and no `effect` lambda. **The number
+this plan is subordinate to went from zero to one.** What follows is what the adversarial pass
+established about the six checks, recorded here because §7.3 binds this document to `G5`.
+
+| check | state |
+|---|---|
+| **1** reproducible | **MET.** Byte-identical across runs; a different seed diverges |
+| **2** a chain of ≥4 Events | **MET AT FOUR SEASONS, NOT AT THE PUBLISHED TWO** — and by ONE mechanism repeating, not by the chain this section describes |
+| **3** zero fills off the register | **MET**, and getting there gave `site:` to four rows that had carried an empty one since `W0` |
+| **4** no `effect`, no roster | **MET**, asserted over signatures |
+| **4b** ≤ `budget` scenes, swept bound | **MET** |
+| **5** `exercises:` before the run | **NOT MET AS WRITTEN.** Authored after; the file declares it and substitutes a cited outside source per row |
+| **6** the float control fires | **MET** |
+
+**Three things this section asks for that the run does not do, and none is a defect in the run:**
+
+1. **The chain in §6.3 check 2 requires links this design has no verb for.** *"a claim deposited in
+   another person's ledger → that person's Q2 question → their act"* is unreachable: nothing in the
+   resolvable vocabulary moves a Record to a second person, so only its maker ever holds one and
+   **only Carin ever acts**. That is `H-84`, graded `absent` — inventing a `give_record` verb to
+   close it would be §8.1's first forbidden move.
+2. **Checks 1 and 2 cannot both hold at `--seasons 2`.** The only chaining edge is term
+   maturation, one stage per season, so the chain reaches `1 + seasons − 1`: depth 2 at two
+   seasons, depth 4 at four. Both are measured and printed.
+3. **The chain's length is `1 + record_stages_default`**, a number this session invented (`H-80`).
+   Its `0` control is now executed rather than described: depth 1 · 4 · 7 at 0 · 3 · 6.
+
+**What the milestone does establish, and it is not small:** the loop runs a season end to end from
+a computed `q`, a computed option set and a table-driven fold; and running it found **eight defects
+no amount of reading had found** — `causes=[ROOT]` everywhere (`H-82`), a dead Q2 (`H-04`), claims
+that could only be about actors (`H-79`), Events carrying no `changes[]`, a `person.died` emitted
+when nobody died, the verb table's `stratum` column reaching no resolver (`H-83`), `A28`
+short-circuited since `W3` on the one invariant it exists to check, and `H-84` above.
 
 ---
 

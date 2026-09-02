@@ -7,6 +7,32 @@
 > **ZERO percent of the NPC set's core blocks are design refusals. THIRTY-THREE percent of the arc
 > set's are.** The two pathways were assumed to be two samples of one question. They are not.
 
+> ### ⚠ EVERY NUMBER IN THIS DOCUMENT IS ROUTER-ERA AND IS NOT CURRENTLY REPRODUCIBLE.
+> Amended 2026-09-02 by `W10`'s adversarial pass. **The finding is not withdrawn and not
+> confirmed.**
+>
+> The census below counts **probe ids** in `results.json`'s `blockers`, because under the regex
+> router a probe was the only thing a case row could reach. `W10` deleted that router: routing is
+> now an authored `exercises:` declaration bound to each row by the sha of its own need text, and
+> `blockers` names the declared token that failed — a hole id, a verb, or `probe:PID`. The old
+> query has no subject, and re-running it returns zero in both columns.
+>
+> Two consequences, and the second is the one that matters:
+>
+> 1. **The router's counts were a floor.** A row matching no pattern fell silently to UNMAPPED,
+>    so every figure here understated the corpus **in the direction that flattered it**. `PLAN.md`
+>    §3.5 already found three cells wrong in exactly that direction before `W10` landed.
+> 2. **The ARC lane has 0 of 611 rows declared today** (`cd proposals/2026-09-01-season-loop-tests/tracer
+>    && python exercises.py`). So the arc column is **unmeasured**, not measured-as-something —
+>    §42.2's polarity rule. The NPC lane has 35 of 292 (32 of 122 core), which is a sample, not a
+>    census.
+>
+> **Do not cite these percentages as current.** They are kept because they are what a
+> re-measurement has to beat, and because the qualitative claim — that the two pathways fail for
+> categorically different reasons — is a live hypothesis that `W13`'s authoring lane is the test
+> of. `CLAUDE.md` §0.1 point 4: a number without a control is not a measurement, in either
+> direction.
+
 ---
 
 ## §1 · The measurement

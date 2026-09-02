@@ -20,8 +20,10 @@ shape had refused. Every probe now declares HOW its verdict was reached:
                         at all. The verdict is about the design; the model is the instrument's,
                         and is named so a reader can discount it.
 
-A probe's verdict is HARD (it is an execution). A case's verdict is ADVISORY (routing is
-keyword-based over prose). Every source cited is in the PR #337 -> now chain.
+A probe's verdict is HARD (it is an execution). A case's verdict is ADVISORY -- but no longer
+because routing is crude: since `W10` a case row reaches a probe ONLY through an authored
+`exercises:` declaration, so a wrong answer is an authoring error somebody can argue with rather
+than a regex firing on a common word. Every source cited is in the PR #337 -> now chain.
 """
 
 from __future__ import annotations
@@ -30,11 +32,12 @@ from typing import Any, Callable, Optional
 
 from shape import (
     CLAIM_SOURCES, Candidate, Claim, Collision, ContestError, DEFAULT_FIXTURES, Event,
-    Fixtures, Forbidden, H, NoProducer, Office, PARTITION, PARTITION_MISSING, Person,
-    Proposition, Query, Record, ROOT, RUNG_KINDS, Rung, STRATA, SeasonDriver, ShapeGap,
+    Fixtures, Forbidden, H, NoProducer, Office, Person, VERB_TABLE,
+    Proposition, Query, Question, Record, ROOT, RUNG_KINDS, Rung, STRATA, SeasonDriver,
+    ShapeGap, questions_for, make_chooser, Scene, Sensation, resolvable_verbs, standing_of, body_band_penalty,
     Site, StateChange, Step, Tenure, Ungraded, Unowned, Unspecified, View, World,
-    WITNESS_CHANNELS, WriteClass, contest, expect_refusal, sense,
-)
+    CHANNEL_PREDICATES, WITNESS_CHANNELS, WriteClass, contest, expect_refusal,
+    observers_for, sense, roster, table, SUBSISTENCE_WEIGHTS)
 from trace_log import TRACE
 
 PROBES: dict[str, dict] = {}
@@ -57,19 +60,23 @@ def tiny_world(fixtures: Fixtures = DEFAULT_FIXTURES) -> World:
     for rid, kind, stores in (("R", "realm", None), ("D", "duchy", None),
                               ("S", "settlement", {"grain": 40}), ("Hh", "hearth", {"grain": 8})):
         w.rungs[rid] = Rung(rid, kind, stores=stores)
+    # roster-exempt: TEST FIXTURE ids, not a definition the game resolves from.
     for pid, name in (("p_low", "a copyist"), ("p_mid", "a clerk"), ("p_high", "a duke"),
                       ("p_king", "the King"), ("p_other", "a stranger")):
         w.persons[pid] = Person(pid, name)
         w.rungs[pid] = Rung(pid, "person")
     w.sites["site_harbour"] = Site("site_harbour", "S", "harbour", condition=scale * 9 // 10)
     w.sites["site_seam"] = Site("site_seam", "S", "seam", condition=scale // 10)
+    # roster-exempt: a FIXTURE CHOICE — this Duke holds these five of the six. The MEMBERS are
+    # validated against `rosters.yaml: remit_acts` in `Office.__post_init__`, so a typo raises
+    # rather than minting a remit act no `remit:` eligibility could ever match.
     w.offices["off_duke"] = Office("off_duke", "Duke", "D",
                                    ["issue", "determine", "confer", "dispatch", "convene"])
     w.offices["off_dicastery"] = Office("off_dicastery", "Dicastery", None, ["issue", "determine"])
     n = [0]
     def edge(sub, obj, kind, **kw):
         n[0] += 1
-        w.tenures.append(Tenure(f"t{n[0]}", sub, obj, kind, since=0, **kw))
+        w.add_tenure(Tenure(f"t{n[0]}", sub, obj, kind, since=0, **kw))
     edge("D", "R", "contain"); edge("S", "D", "contain"); edge("Hh", "S", "contain")
     for pid in ("p_low", "p_mid", "p_other"):
         edge(pid, "Hh", "contain")
@@ -94,15 +101,22 @@ def NOCHOOSE(p, v, s, ask_budget):
     return []
 
 
-def NOEFFECT(w, a):
-    return []
+def _run_d(w: World, choose=NOCHOOSE, n: int = 1, **kw):
+    """As `_run`, but returns the DRIVER — for probes that need to observe which acts reached
+    RESOLVE. `driver.resolved` is an observation surface and decides nothing."""
+    d = SeasonDriver(w)
+    for _ in range(n):
+        d.season(choose, question=None, subsistence=SUBSIST, **kw)
+    return d
 
 
-def _run(w: World, choose=NOCHOOSE, effect=NOEFFECT, n: int = 1, **kw):
+def _run(w: World, choose=NOCHOOSE, n: int = 1, **kw):
+    """W3: `effect` is gone. The season folds every act through `verb_table.yaml`, so a probe no
+    longer supplies its own resolver -- which is what made each of them a second one."""
     d = SeasonDriver(w)
     out = None
     for _ in range(n):
-        out = d.season(choose, effect, question="q", subsistence=SUBSIST, **kw)
+        out = d.season(choose, question=None, subsistence=SUBSIST, **kw)
     return out
 
 
@@ -114,18 +128,62 @@ def _run(w: World, choose=NOCHOOSE, effect=NOEFFECT, n: int = 1, **kw):
        tests="a person with no office, post, command, faction rank or standing must be able to act at all")
 def p1():
     w = tiny_world()
+    made = []
     def choose(p, v, s, ask_budget):
-        return [] if p.id != "p_low" else [Act_(w, p, "speak")]
-    def effect(w, a):
-        return [Ev(w, a.actor, "speech.made", a.actor, [ROOT])]
-    r = _run(w, choose, effect)
-    assert r["events"] == 1, r
-    return "PASS: a postless person produced an Act that reached RESOLVE and emitted an Event"
+        if p.id != "p_low":
+            return []
+        a = Act_(w, p, "speak")
+        made.append(a)
+        return [a]
+    r = _run(w, choose)
+    # ⚠ HER ACT'S EVENT, NOT THE SEASON'S EVENT COUNT. This asserted `r["events"] == 1`, which was
+    # the same number while an act was the only thing that emitted. `W4` made MATTER emit per write
+    # -- wear and claim decay are Events now -- so the total is 3 and the assertion failed on a
+    # season in which the probe's own claim held perfectly. The claim is *"a postless person
+    # produced an Act that reached RESOLVE and emitted an Event"*, and that is about HER act; a
+    # count of everything was only ever a proxy for it. Now it names the antecedent, which is
+    # stronger than the number it replaces and cannot be moved by anything the world does.
+    assert made, "the chooser was never asked"
+    mine = [e for e in w.log if made[0].id in e.causes]
+    assert len(mine) == 1, (f"{len(mine)} Event(s) name her act as their cause", r)
+    return (f"PASS: a postless person produced an Act that reached RESOLVE and emitted an Event "
+            f"({mine[0].kind}), whose `causes[]` names the act. The season emitted "
+            f"{r['events']} Events in total -- the rest are the world's licensed clocks (`W4`), "
+            f"and none of them is hers")
 
 
-def Act_(w, p, verb, **kw):
+def Act_(w, p, verb, key: str = "", **kw):
+    """`key` DISCRIMINATES two acts of the same verb by the same person in the same tick.
+
+    ⚠ W3 needed this. The id was derived from `f"act:{verb}"` alone, which was unique only while
+    probes INVENTED A VERB PER ACT — A5 used `mend_{delta}`, so the delta was in the verb name.
+    Once the fold refused invented verbs and A5 moved to the table's `work`, all five acts
+    collided on ONE id, the canonical sort key became identical for all five, and the ordering
+    went arbitrary. The discriminator restores the property A5's own comment states: the id is
+    derived from the DELTA, not from the position, so reversing the list changes the SEQUENCE and
+    not the SET."""
     from shape import Act
-    return Act(H(w.world_seed, w.tick, p.id, f"act:{verb}"), p.id, verb, **kw)
+    return Act(H(w.world_seed, w.tick, p.id, f"act:{verb}:{key}"), p.id, verb, **kw)
+
+
+# The stand-in Question for probes that are testing the VIEW rather than the question -- P4
+# (two people, two views), P16, P27, P28. They need a Question-shaped `q` and do not care which,
+# and `assemble` refuses a bare string now (`H-04`: a stale injected fixture must not be
+# indistinguishable from an absent question). Named so a reader sees it is deliberate.
+_Q = Question("q:view-probe", "need", ())
+
+
+def chooser(w, only=None, verbs=None):
+    """§F2's default policy, built the way the barrier builds it. `only` narrows to one person so
+    a probe can watch a single decision; `verbs` narrows the option set to the ones under test.
+
+    ⚠ IT DOES NOT TAKE A ROSTER, and it cannot: `opening_set` computes from the verb table now.
+    A probe that wants a verb in the set must put the verb in `verb_table.yaml`."""
+    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    inner = make_chooser(w.fixtures, mint, verbs=verbs)
+    def choose(p, v, s, ask_budget):
+        return inner(p, v, s, ask_budget) if (only is None or p.id == only) else []
+    return choose
 
 
 def Ev(w, subj_seed, kind, subject, causes, changes=None, degree=None):
@@ -146,7 +204,7 @@ def Ev(w, subj_seed, kind, subject, causes, changes=None, degree=None):
                  changes or [], causes, w.tick, degree)
 
 
-@probe("P2", "the act budget is ~5 and the PERSON chooses what to leave undone", "S26.3",
+@probe("P2", "the scene budget is ~5 and the PERSON chooses what to leave undone", "S26.3",
        by="construction",
        tests="a character must be able to take several distinct actions in one season and choose what to leave undone")
 def p2():
@@ -160,23 +218,54 @@ def p2():
         left_undone.extend(wants[b:])           # THE PERSON triages, not the engine
         return [Act_(w, p, vb) for vb in wants[:b]]
     got = []
-    _run(w, choose, lambda w, a: got.append(a.verb) or [])
-    b = w.fixtures.get("act_budget")
+    got.extend(a.verb for a in _run_d(w, choose).resolved)
+    b = w.fixtures.get("scene_budget")
     assert len(got) == b and len(left_undone) == 9 - b
     return (f"PASS: budget {b}; the person left {left_undone} undone. The engine does NOT truncate "
             "-- an over-budget return RAISES, because silently discarding the tail would be an "
             "engine deciding a person's options, which is L1")
 
 
-@probe("P2x", "the engine truncates an over-budget act list", "S26.3", by="construction",
+@probe("P2x", "the engine truncates an over-budget SCENE list", "S26.3", by="construction",
        tests="an engine may quietly drop actions a character wanted beyond their budget")
 def p2x():
     w = tiny_world()
     def choose(p, v, s, ask_budget):
         b = ask_budget()
-        return [Act_(w, p, f"v{i}") for i in range(b + 3)] if p.id == "p_king" else []
+        return [Scene(f"sc{i}", p.id, [Act_(w, p, "speak", key=str(i))])
+                for i in range(b + 1)] if p.id == "p_king" else []
     _run(w, choose)
     return "UNREACHABLE"
+
+
+@probe("P2y", "several interactions inside one budgeted scene are lawful", "S26.3",
+       by="construction",
+       tests="a character must be able to do several things inside one scene without spending a second scene action")
+def p2y():
+    w = tiny_world()
+    cap = w.fixtures.get("interactions_per_scene")
+    counted = {}
+    def choose(p, v, s, ask_budget):
+        if p.id != "p_king":
+            return []
+        b = counted["b"] = ask_budget()
+        # b scenes, each carrying the full swept bound of interactions. Under the ruling this is
+        # LAWFUL; before it, the same return was refused as "8 acts against a budget of 5".
+        return [Scene(f"s{i}", p.id,
+                      [Act_(w, p, "speak", key=f"{i}.{j}") for j in range(cap)])
+                for i in range(b)]
+    d = _run_d(w, choose)
+    n = len([a for a in d.resolved if a.actor == "p_king"])
+    assert n == counted["b"] * cap, (n, counted, cap)
+    return (f"PASS BY CONSTRUCTION: {n} interactions across {counted['b']} scenes, at "
+            f"{cap} per scene, and the season accepted it. ⚠ A RETURN OF THIS SHAPE WAS REFUSED "
+            "BEFORE JORDAN'S 2026-09-02 RULING, because the bound counted ACTS -- `PLAN.md` "
+            "§3.4 gives the worked example as 'returned 8 acts against a budget of 5'. The "
+            "numbers here are this fixture's, not that example's. The budgeted unit is the "
+            "SCENE; #353's verbs are what happens INSIDE "
+            "one. `P2x` still refuses one scene too many, so the bound did not weaken -- it moved "
+            "to the level the ruling put it at. The per-scene bound is `H-76` and is SWEPT, not "
+            "a constant: this probe reads it rather than spelling 3")
 
 
 @probe("P3", "choose() cannot see the world", "S3-L2", by="construction",
@@ -206,7 +295,7 @@ def p4():
     k = w.fixtures.get("view_k")
     p.ledger += [Claim("c1", p.id, "p_high", "is_loyal", True, 0, "firsthand", 100, "own"),
                  Claim("c2", p.id, "p_high", "is_loyal", False, 0, "told_by", 100, "own")]
-    v = Query.assemble(p, "q", k)
+    v = Query.assemble(p, _Q, k)
     assert set(v.claim_ids) == {"c1", "c2"}
     return ("PASS: the View carries both, holding IDS not references, and nothing person-side "
             "can tell them apart. A false conclusion is indistinguishable from a true one TO THE "
@@ -231,7 +320,14 @@ def p6():
     w.step = Step.RESOLVE
     w.write("stance", WriteClass.ACTS, lambda: None,
             record_kind="Person", fieldname="convictions", driver="Act")
-    return "UNREACHABLE"
+    # W2: this RAISED until Part D was loaded as data. `(Person, convictions)` had no row of its
+    # own and the old gate was keyed on a THING, so the only way to write it was to ride on
+    # `stance`'s row -- which is defect D1, and the instrument correctly refused rather than let
+    # it. V2 §D3 gives it its own row: RESOLVE only, ACTS, `social: true`, DR-2 and §9.3
+    # ("moved by argument and consequence, never by evidence"). The refusal was the ABSENCE of a
+    # row, and the row now exists.
+    return ("PASS: `(Person, convictions)` is written at RESOLVE in the ACTS class by an act -- "
+            "its OWN Part D row (DR-2, §9.3), not `stance`'s")
 
 
 @probe("P7", "a per-conviction scar", "S54 item 21", by="construction",
@@ -260,12 +356,7 @@ def p8():
     seat = {"holder": None}
     def choose(p, v, s, ask_budget):
         return [Act_(w, p, "take_seat")] if p.id in ("p_other", "p_mid") else []
-    def effect(w, a):
-        if a.verb == "take_seat" and seat["holder"] is None:
-            seat["holder"] = a.actor
-            return [Ev(w, a.actor, "seat.taken", a.actor, [ROOT])]
-        return []
-    _run(w, choose, effect)
+    _run(w, choose)
     assert seat["holder"] is not None
     return (f"PASS: {seat['holder']} took the seat by the ordered fold. NO `obstruct` VERB, no "
             "knowledge of the loser in the winner's decision, NO BRANCH IN THE RESOLVER. "
@@ -284,10 +375,7 @@ def p9():
             log.append("ran-own-choose")
             return [Act_(w, p, "refuse")]
         return []
-    def effect(w, a):
-        log.append(a.verb)
-        return [Ev(w, a.actor, f"act.{a.verb}", a.actor, [ROOT])]
-    _run(w, choose, effect)
+    _run(w, choose)
     assert "refuse" in log and "ran-own-choose" in log
     return ("PASS: `dispatch` names ONE PERSON; that person runs their OWN `choose` and refused. "
             "The King's reach really is other people's decisions, mechanically. NOTE the refusal "
@@ -302,35 +390,70 @@ def p10():
     w.records[r.id] = r
     w.step = Step.RESOLVE
     w.write("carrier_exists", WriteClass.ACTS, lambda: w.records.__setitem__(r.id, r),
-            record_kind="Record", fieldname="stage", driver="Act")
-    return "UNREACHABLE"
+            record_kind="Record", fieldname="stages", driver="Act")
+    # W2: raised until Part D carried the `Record` rows (defect D7). It now lands -- and the
+    # probe shows BOTH halves of what it claims, because declaring the stages is only the first.
+    # §13.1: terms are ACT-DECLARED, never MATTER-advanced; MATTER then MATURES a term the act
+    # declared. Two rows, two classes, two drivers -- which is the whole of "the engine tracks it
+    # as ongoing" at the write gate.
+    w.step = Step.MATTER
+    # `W4`: a MATTER write on a row Part D gives an `emits:` must name one. `[ROOT]` is said
+    # EXPLICITLY because this synthetic world has no antecedent -- which is the carve-out, and
+    # saying it rather than defaulting to it is the point.
+    w.write("carrier_exists", WriteClass.MATTER, lambda: setattr(r, "matured", True),
+            record_kind="Record", fieldname="matured", driver="Event",
+            emits="term.matured", subject=r.id, causes=[ROOT])
+    return ("PASS: `(Record, stages)` is ACT-DECLARED at RESOLVE and `(Record, matured)` is "
+            "matured by an Event at MATTER -- Part D's two rows (D7, §13.1). The act declares "
+            "the term; the world advances it")
 
 
-@probe("P11", "capability gates no verb", "S9.2", by="probe-model",
+@probe("P11", "capability gates no verb", "S9.2", by="construction",
        tests="skill must supply dice and must never make an action unavailable")
 def p11():
     w = tiny_world()
     p = w.persons["p_low"]
-    p.capability = {"copying": 0}
-    roster = [Candidate("copy"), Candidate("petition"), Candidate("kill")]
-    got = Query.opening_set(p, View(p.id, [], w.fixtures.get("view_k")), roster)
-    assert len(got) == len(roster)
-    return ("PASS: rank 0 removed no candidate. `rank` supplies dice and GATES NO VERB; the only "
-            "class-shaped gate in the design is Thread Sensitivity")
+    q = Question("q:p11", "need", ("rec_writ",))
+    v = View(p.id, [], w.fixtures.get("view_k"), q)
+    before = {c.verb for c in Query.opening_set(p, v, q)}
+    # `capability` at zero, and at zero for EVERY key the person has -- rev 2 set one key and
+    # could not have observed a gate on a different one (§0.1 point 2).
+    p.capability = {k: 0 for k in (list(p.capability) or ["copying"])}
+    after = {c.verb for c in Query.opening_set(p, v, q)}
+    assert before == after and before, (
+        f"rank 0 changed the option set: {sorted(before ^ after)}")
+    return (f"PASS BY CONSTRUCTION, and it is a stronger pass than rev 2's: the option set is now "
+            f"COMPUTED from the verb table, so this observes that zeroing capability removes none "
+            f"of the {len(before)} verbs it computes. Rev 2 compared a caller's authored roster "
+            f"with itself, which no capability gate could have changed either. `capability` "
+            f"appears in no clause of §F1 and the eligibility roster FORBIDS it as a fifth kind")
 
 
-@probe("P12", "opening_set returns Candidate[], not Act[]", "S17", by="probe-model",
+@probe("P12", "opening_set returns Candidate[], not Act[]", "S17", by="construction",
        tests="the set of things a character may do must be computed, not an authored list")
 def p12():
     from shape import Act
+    import inspect as _i
     w = tiny_world()
     p = w.persons["p_low"]
-    got = Query.opening_set(p, View(p.id, [], w.fixtures.get("view_k")), [Candidate("speak")])
+    q = Question("q:p12", "need", ("rec_writ", "S"))
+    v = View(p.id, [], w.fixtures.get("view_k"), q)
+    got = Query.opening_set(p, v, q)
     assert all(isinstance(c, Candidate) for c in got) and not any(isinstance(c, Act) for c in got)
-    return ("PARTIAL: the TYPE is right -- Candidate[], per the overturn (S54 item 1; #350's `07` "
-            "still carries -> Act[]). THE PROPERTY THE TYPE WAS CHOSEN TO PROTECT IS NOT: the "
-            "roster is the caller's AUTHORED LIST, because S61's missing producer for `q` means "
-            "there is nothing from which to compute a set. A typed authored list is still authored")
+    # THE PROPERTY, not the type: no parameter of `opening_set` may be an authored option list.
+    params = list(_i.signature(Query.opening_set).parameters)
+    assert "roster" not in params, f"`opening_set` still takes a roster: {params}"
+    # and it must be derived from the TABLE -- every verb it returns is a table row, and the set
+    # MOVES when the table's eligibility does, which an authored list cannot do.
+    assert got and all(c.verb in VERB_TABLE for c in got)
+    q2 = Question("q:p12b", "need", ("rec_writ",))
+    assert len(Query.opening_set(p, View(p.id, [], w.fixtures.get("view_k"), q2), q2)) < len(got), (
+        "the option set did not shrink with the question's referents -- it is not computed from q")
+    return (f"PASS BY CONSTRUCTION. `opening_set{tuple(params)}` -- THE ROSTER PARAMETER IS GONE, "
+            f"which is `D2` entire. Rev 2 was PARTIAL and said why: the type was right and the "
+            f"property the type protects was not, because S61 left `q` with no producer so there "
+            f"was nothing to compute from. `questions_for()` is that producer. {len(got)} "
+            f"candidates over {len(set(c.verb for c in got))} verbs, every one a verb-table row")
 
 
 @probe("P13", "a person acts on a need with no stored need field", "S18.2", by="probe-model",
@@ -350,28 +473,83 @@ def p13():
        tests="how a character is regarded must be able to differ from how they regard themselves")
 def p14():
     w = tiny_world()
-    reached = {}
-    def choose(p, v, s, ask_budget):
-        if p.id != "p_low":
-            return []
-        reached["n"] = s.subsistence     # the computable half is fine
-        _ = s.standing                   # the half no section computes
-        return []
-    _run(w, choose)
-    return "UNREACHABLE"
+    p = w.persons["p_low"]
+    fx = w.fixtures
+    scale = fx.get("condition_scale")
+    # Told nothing about himself: the MAXIMUM gap, not zero. §42.2's polarity rule -- zero
+    # evidence maps to the verdict AGAINST, and "nobody has told you anything, therefore everyone
+    # agrees with you" is that rule run backwards.
+    silent = standing_of(p, fx)
+    p.ledger.append(Claim("c_own", p.id, p.id, "grade", "warden", 0, "firsthand", 100, "own"))
+    p.ledger.append(Claim("c_told", p.id, p.id, "grade", "warden", 0, "told_by", 100, "own"))
+    agreed = standing_of(p, fx)
+    p.ledger[-1] = Claim("c_told", p.id, p.id, "grade", "churl", 0, "told_by", 100, "own")
+    at_odds = standing_of(p, fx)
+    assert silent == scale and agreed == 0 and at_odds == scale, (silent, agreed, at_odds)
+    return (f"PASS BY CONSTRUCTION: {silent} told nothing · {agreed} when what he is told matches "
+            f"what he holds · {at_odds} when it does not. ⚠ REV 3 RETURNED 'UNREACHABLE' HERE -- "
+            "the probe existed to prove `standing` had no formula at all. It has one now (`H-29`) "
+            "and it is NOT V2 §F4's: §F4 compares the claim ledger with the CONVICTIONS, i.e. the "
+            "TRUE layer against the RIGHT layer, which #353 §9.3 calls 'the single most dangerous "
+            "collision in the design'. Read §18.2's 'what you hold' as what you hold TRUE and "
+            "both sides are epistemic, the collision is gone, and it is still wrong-able -- a "
+            "liar moves your standing, which is T3")
 
 
 @probe("P15", "a person's private act stays private", "S61", by="no-signature",
        tests="something said in private must be able to stay private")
 def p15():
+    # ⚠ `W6`. THIS RAISED `Unspecified` BECAUSE FOUR OF THE FIVE CHANNELS HAD NO PREDICATE, and
+    # `S61` is the law it cited: *"WITNESS AS SPECIFIED FANS EVERY EVENT TO EVERY PERSON. Nothing
+    # said in private is private. A WRAPPER DOES NOT FIX THIS AND MUST NOT BE PRESENTED AS FIXING
+    # IT."* The five now have predicates -- injected, declared in `rosters.yaml`, swept by `H-33`
+    # -- so the probe EXECUTES the exclusion rather than reporting its absence. What it must not
+    # do is claim the design supplies them: it does not, `H-33` stays `assumption`, and `total`
+    # remains the default because that is the specified behaviour.
     w = tiny_world()
-    unspecified = [c for c in WITNESS_CHANNELS if c != "co_located"]
-    raise Unspecified(
-        f"four of the five witness channels have no predicate: {unspecified}",
-        "S61",
-        needs="a channel predicate that can EXCLUDE a person",
-        law="S61 -- WITNESS AS SPECIFIED FANS EVERY EVENT TO EVERY PERSON. Nothing said in private is private. A WRAPPER DOES NOT FIX THIS AND MUST NOT BE PRESENTED AS FIXING IT",
-    )
+    # ⚠ THE SUBJECT IS `p_low`, WHO SHARES A RUNG WITH TWO OTHERS, AND THAT IS THE WHOLE FIX.
+    # The first version used `p_high`, who is alone in his rung, and asserted only
+    # `len(narrow) < len(total)` -- which CANNOT TELL A PREDICATE THAT EXCLUDES FROM A CHANNEL
+    # BROKEN CLOSED. It was broken closed: `_event_place` tested `e.subject in w.rungs` first, and
+    # every person here has a same-id `person`-kind Rung, so presence answered "who is contained
+    # IN p_high" -- nobody -- and `narrow` was EMPTY. The probe reported an exclusion mechanism
+    # while demonstrating that nothing said anywhere reached anyone. §0.1 pt 2, and a repeat of a
+    # conflation `witness` had already retracted once. Found by the `W6` adversarial pass.
+    e = Event(H(w.world_seed, w.tick, "p_low", "probe:p15"), "speech.made", "p_low", [],
+              [ROOT], w.tick)
+    everyone = list(w.persons)
+    total = observers_for(w, e, "total", everyone)
+    narrow = observers_for(w, e, "presence_only", everyone)
+    five = observers_for(w, e, "all_five", everyone)
+    room = [x for x in Query.presence(w, "Hh") if x in everyone]
+    assert len(room) >= 2, "the fixture no longer puts two people in one rung; the test below is vacuous"
+    assert set(total) == set(everyone), "the control arm is not the specified behaviour"
+    # BOTH DIRECTIONS. A channel must ADMIT the co-located, not merely exclude somebody.
+    assert set(room) <= set(narrow), (
+        f"a person standing in the same rung as the emitter is NOT admitted: {sorted(set(room) - set(narrow))} "
+        "-- the channel is broken closed, not selective")
+    assert set(narrow) < set(total), (
+        "no channel predicate EXCLUDES anyone -- which is the thing S61 says a wrapper cannot fix")
+    absent = set(total) - set(narrow)
+    assert absent and not (absent & set(room)), (
+        f"the excluded set {sorted(absent)} overlaps the room -- exclusion is not tracking presence")
+    assert set(narrow) <= set(five) <= set(total), (
+        "the arms are not nested; a wider channel set must not exclude someone a narrower one "
+        "included")
+    unspecified = [c for c in WITNESS_CHANNELS if c not in CHANNEL_PREDICATES]
+    assert not unspecified, f"channels still without a predicate: {unspecified}"
+    return (f"PASS, BY CONSTRUCTION, AND IN BOTH DIRECTIONS: the same Event reaches "
+            f"{len(total)} person(s) under `total` (S61's specified behaviour, and `H-33`'s "
+            f"control) and {len(narrow)} under `presence_only` -- it ADMITS the {len(room)} people "
+            f"standing in the emitter's rung and EXCLUDES {sorted(set(total) - set(narrow))}, who "
+            f"are elsewhere. Admitting is asserted as well as excluding, because a channel broken "
+            f"CLOSED also shrinks the set and that is what the first version of this probe was "
+            f"reading. ⚠ THE DESIGN STILL SUPPLIES NO PREDICATE: these are an INJECTED default, "
+            f"`H-33` stays `assumption`, and `total` remains the default because it is what #353 "
+            f"specifies. What is closed is that an exclusion is now EXPRESSIBLE and swept, not "
+            f"that #353 said how. ⚠ TWO OF THE FIVE ADMIT NOBODY IN THIS WORLD -- `post_remit` "
+            f"needs an office whose remit covers the emitting verb, and `chronicle` fires only on "
+            f"a binding decision; neither is reachable from the verbs the fold can execute")
 
 
 @probe("P16", "regard moves per-knower", "S20", by="construction",
@@ -382,7 +560,7 @@ def p16():
     a, b = w.persons["p_low"], w.persons["p_mid"]
     a.ledger.append(Claim("ca", a.id, "p_high", "is_traitor", True, 0, "told_by", 100, "own"))
     b.ledger.append(Claim("cb", b.id, "p_high", "is_traitor", False, 0, "firsthand", 100, "own"))
-    assert Query.assemble(a, "q", k).claim_ids != Query.assemble(b, "q", k).claim_ids
+    assert Query.assemble(a, _Q, k).claim_ids != Query.assemble(b, _Q, k).claim_ids
     return ("PASS: legitimacy is PER-KNOWER and flips at TELLING speed, not at a global write. "
             "There is no signature by which either could read the other's ledger")
 
@@ -407,6 +585,7 @@ def p18():
     w = tiny_world()
     site = w.sites["site_harbour"]
     floors = w.fixtures.get("band_floors")[site.kind]
+    _seed_near_floor(w, site)      # a harness fixture; see the helper for why. The loop stays.
     before = Query.verbs(w, site, floors)
     n = 0
     mine = lambda: [c for c in w.crossings if c[0] == site.id]
@@ -416,14 +595,30 @@ def p18():
     assert mine(), "no band edge was crossed at the site under test"
     sid, verb, was, now, eid = mine()[0]
     ev = next(e for e in w.log if e.id == eid)
-    assert ev.kind == "condition.band_crossed" and ev.causes == [ROOT]
+    # ⚠ `W4`. THIS ASSERTED `ev.causes == [ROOT]` — IT PINNED THE DEFECT. `H-12` is RULED that
+    # MATTER emits an Event per write *"so crossings have an antecedent"*, and the crossing was
+    # rooted at the campaign seed, so the one Event in the barrier that exists to be walked back
+    # from walked nowhere. The antecedent is now the WEAR that crossed the floor, and this checks
+    # it resolves — a stronger claim than the one it replaces, and the one `H-12` actually makes.
+    assert ev.kind == "condition.band_crossed"
+    assert len(ev.causes) == 1 and ev.causes[0] != ROOT, (
+        f"the crossing's antecedent is {ev.causes} -- H-12 rules that MATTER emits per write SO "
+        "CROSSINGS HAVE AN ANTECEDENT")
+    antecedent = next((e for e in w.log if e.id == ev.causes[0]), None)
+    assert antecedent is not None and antecedent.kind == "condition.worn" \
+        and antecedent.subject == site.id, (
+        f"the crossing names {ev.causes[0]!r}, which is not a `condition.worn` for {site.id}")
     assert verb in before and verb not in after
     social = [c for c in ev.changes if c.field in ("stance", "convictions", "beliefs")]
     assert not social and not ev.degree
-    return (f"PASS, AND BOTH HALVES OF L5 RAN. `{sid}` crossed the `{verb}` floor in {n} seasons "
+    return (f"PASS, AND BOTH HALVES OF L5 RAN. ⚠ THE SITE IS SEEDED one season above its "
+            f"highest floor (see `_seed_near_floor`), so {n} is NOT the unseeded pacing -- `A31b` "
+            f"reports 11 for this same site, wear and floor, and that is the number to cite for "
+            f"pacing. `{sid}` crossed the `{verb}` floor in {n} seasons "
             f"({was} -> {now}). (1) IT CHANGED WHAT MAY BE CHOSEN: {sorted(before)} -> "
             f"{sorted(after)}. (2) IT EMITTED A WITNESSABLE EVENT into the one log "
-            f"({ev.kind}), carrying NO social change and NO degree -- so it wrote no social row "
+            f"({ev.kind}) whose `causes[]` NAMES THE WEAR THAT CROSSED THE FLOOR "
+            f"(`W4`/`H-12`), carrying NO social change and NO degree -- so it wrote no social row "
             "and PRODUCED NO OUTCOME. That is L5 exactly, and it is what the in-chain survey "
             "found 19 of 50 arcs asking for: THE COUNTER COMPELS SOMEONE TO ACT, IT DOES NOT ACT")
 
@@ -445,8 +640,12 @@ def p20():
     w.step = Step.CENSUS
     w.write("carrier_exists", WriteClass.MATTER,
             lambda: w.persons.__setitem__("p_new", Person("p_new", "someone")),
-            record_kind="Person", fieldname="exists", driver="Event")
-    return "UNREACHABLE"
+            record_kind="Person", fieldname="exists", driver="Event",
+            emits="person.individuated", subject="p_new", causes=[ROOT])   # `W4`
+    # W2: raised until Part D carried `(Person, exists)` -- defect D8, and without the row a
+    # death or an individuation was an unmarked cell under the matrix's own rule.
+    return ("PASS: `(Person, exists)` is written at CENSUS in the MATTER class by an Event -- "
+            "Part D's row (DR-1, D8), bounded by §15.3's causation rule")
 
 
 @probe("P21", "a cohort and a named person are one type", "S9.1", by="construction",
@@ -456,10 +655,14 @@ def p21():
     crowd = Person("crowd_1", "the quarry hands", weight=40)
     w.persons[crowd.id] = crowd
     assert type(crowd) is type(w.persons["p_low"])
-    acted = []
-    _run(w, lambda p, v, s, ask_budget: [Act_(w, p, "down_tools")] if p.weight > 1 else [],
-         lambda w, a: acted.append(a.actor) or [])
-    assert acted == ["crowd_1"]
+    # W3: `down_tools` is not a verb the table carries, so the fold refuses it -- correctly.
+    # What this probe is ABOUT is that a cohort goes through the same `choose` and the same
+    # resolver as anyone else, which is observable on `driver.resolved` without a resolver of
+    # its own.
+    d = _run_d(w, lambda p, v, s, ask_budget:
+               [Act_(w, p, "speak")] if p.weight > 1 else [])
+    acted = [a.actor for a in d.resolved]
+    assert acted == ["crowd_1"], acted
     return ("PASS: ONE CLASS. A cohort IS a Person at weight>1, it went through the SAME `choose` "
             "and the SAME resolver, and there is no conversion operation because THERE IS NO "
             "SECOND TYPE TO CONVERT TO")
@@ -472,9 +675,34 @@ def p22():
     w.records["rec_writ"] = Record("rec_writ", "S", "writ")
     w.step = Step.RESOLVE
     w.write("Tenure", WriteClass.ACTS,
-            lambda: w.tenures.append(Tenure("t_hold", "p_low", "rec_writ", "hold", since=0)),
-            record_kind="Record", fieldname="held_by", driver="Act")
-    return "UNREACHABLE"
+            lambda: w.add_tenure(Tenure("t_hold", "p_low", "rec_writ", "hold", since=0)),
+            # W2: this declared `(Record, held_by)`, which is not a Record field and is on no
+            # Part D row. H-22 rules it: "the `hold` Tenure is the HOLDER'S". A hold is a
+            # RELATIONSHIP, and modelling it as a field on one of its ends is the ride-on defect
+            # pointing the other way. The pair is `(Tenure, since)`, which the table carries.
+            record_kind="Tenure", fieldname="since", driver="Act")
+    # W2: THE BLOCKER MOVED, IT DID NOT CLOSE, and this probe must not report a pass for the
+    # half that landed. Recording the hold is lawful now. Whether a hold GATES ANOTHER'S ACT is
+    # Part E's `eligibility: hold:<record>`, and no verb table exists to evaluate it -- so no
+    # step produces the gating. `W3` is the item that closes this, and until then the honest
+    # verdict is a gap at PART E, not a pass at Part D.
+    # W2 AUDIT: the first version charged this to the DESIGN at "S13/E2", and the design ANSWERS
+    # it — §E3 gives `destroy_record` eligibility `hold:<record>`, §E4 `:441` names `hold:` as one
+    # of four admissible kinds, and `verb_table.yaml` carries the row. This file's fidelity rule 2
+    # reserves a gap for what the design NAMES AND DOES NOT SPECIFY; Part E specifies it. Charging
+    # the design inflated `_gaps` and kept NPC-088 BLOCKED — the case PLAN §6.1 picked for
+    # artifact 2 BECAUSE its only routed blocker was one Part D rules.
+    #
+    # The honest verdict is a PASS on what Part D and Part E between them now establish, with the
+    # remaining half named as INSTRUMENT work rather than a design gap.
+    gate = VERB_TABLE.get("destroy_record")
+    assert gate is not None and any(a.startswith("hold:") for a in gate.eligibility), (
+        "Part E no longer gives `destroy_record` a `hold:` eligibility -- if that is deliberate "
+        "this probe's PASS is void and the row is a real gap again")
+    return ("PASS: the `hold` is recorded as `(Tenure, since)` -- Part D's row, the holder's own "
+            "Tenure per H-22 -- and Part E gates `destroy_record` on `eligibility: hold:<record>` "
+            "(§E3, §E4). ⚠ THE FOLD THAT EVALUATES IT IS W3's REMAINING HALF: this asserts the "
+            "TABLE carries the gate, not that a resolver has run it")
 
 
 @probe("P23", "a season ends outside every institution", "S16", by="construction",
@@ -483,8 +711,11 @@ def p23():
     w = tiny_world()
     w.step = Step.MATTER
     w.write("carrier_exists", WriteClass.MATTER, lambda: w.persons.pop("p_low", None),
-            record_kind="Person", fieldname="exists", driver="Event")
-    return "UNREACHABLE"
+            record_kind="Person", fieldname="exists", driver="Event",
+            emits="person.died", subject="p_low", causes=[ROOT])           # `W4`
+    # W2: as P20. The row Part D adds is what lets a season end with no institution involved.
+    return ("PASS: `(Person, exists)` is written at MATTER in the MATTER class by an Event -- "
+            "Part D's row (DR-1, D8). No institutional process is consulted")
 
 
 @probe("P24", "death ends every tenure the dead held", "S15.3", by="construction",
@@ -497,7 +728,8 @@ def p24():
     for t in held:
         w.write("Tenure", WriteClass.MATTER, lambda t=t: setattr(t, "until", w.tick),
                 record_kind="Tenure", fieldname="until", driver="Event",
-                caused_person_exists="p_high")
+                caused_person_exists="p_high",
+                emits="tenure.closed", subject=t.object, causes=[ROOT])     # `W4`
     assert all(not t.live for t in held)
     return ("PASS: `(Tenure, until)` is social:false -- THE PARTITION'S ONE DECLARED SEAM, and the "
             "only Partition row ARCHITECTURE.md states -- and death's `until` write is the only "
@@ -532,7 +764,7 @@ def p27():
     a.ledger.append(Claim("c_ord", a.id, b.id, "complied", True, 0, "told_by", 100, "own"))
     b.ledger.append(Claim("c_tru", b.id, b.id, "complied", False, 0, "firsthand", 100, "own"))
     k = w.fixtures.get("view_k")
-    assert Query.assemble(a, "q", k).claim_ids == ["c_ord"]
+    assert Query.assemble(a, _Q, k).claim_ids == ["c_ord"]
     return ("PASS: the superior's ledger says complied, the subordinate's says not, and neither "
             "can read the other's. Only investigation closes the gap")
 
@@ -542,7 +774,7 @@ def p27():
 def p28():
     w = tiny_world()
     p = w.persons["p_low"]
-    v = Query.assemble(p, "q", w.fixtures.get("view_k"))
+    v = Query.assemble(p, _Q, w.fixtures.get("view_k"))
     assert v.holder == p.id
     person_side = [n for n in dir(Query) if not n.startswith("_")]
     return ("PASS-BY-ABSENCE: `assemble` takes THE ASKER and builds from the asker's own ledger. "
@@ -565,9 +797,7 @@ def p30():
     w = tiny_world()
     def choose(p, v, s, ask_budget):
         return [Act_(w, p, "do")] if p.id == "p_low" and w.tick == 0 else []
-    def effect(w, a):
-        return [Ev(w, a.actor, "thing.happened", "Hh", [ROOT])]
-    _run(w, choose, effect)
+    _run(w, choose)
     n1 = sum(len(p.ledger) for p in w.persons.values())
     _run(w)
     assert sum(len(p.ledger) for p in w.persons.values()) == n1 and n1 > 0
@@ -575,41 +805,66 @@ def p30():
             "in the holder's own ledger and only WITNESS writes it")
 
 
-@probe("P31", "a hidden motive biases every decision", "S9", by="probe-model",
+@probe("P31", "a hidden motive biases every decision", "S9", by="construction",
        tests="a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors")
 def p31():
     w = tiny_world()
     p = w.persons["p_mid"]
-    p.convictions = {"Precedent": 0.6, "self_preservation": 0.4}
-    picked = []
-    def choose(q, v, s, ask_budget):
-        if q.id != p.id:
-            return []
-        roster = [Candidate("report_truthfully"), Candidate("delay"), Candidate("understate")]
-        opts = Query.opening_set(q, v, roster)
-        best = max(opts, key=lambda c: q.convictions.get("Precedent", 0)
-                   if c.verb == "report_truthfully" else q.convictions.get("self_preservation", 0))
-        picked.append(best.verb)
-        return [Act_(w, q, best.verb)]
-    _run(w, choose)
-    assert picked
-    return (f"PASS: chose {picked[0]}. `convictions` is Person-interior, read PERSON-SIDE ONLY, and "
-            "it skewed the pick with no branch in the resolver and nothing stored about the bias. "
-            "Nobody -- including the holder and his superiors -- has a signature that reads it out")
+    q = Question("q:p31", "need", ("rec_writ",))
+    v = View(p.id, [], w.fixtures.get("view_k"), q)
+    ask = lambda: 1
+
+    # The SAME person, the SAME question, the SAME option set -- one variable, the motive.
+    # `create_record` and `destroy_record` sit at opposite signs on `Precedent` in the alignment
+    # table, so a conviction on that axis has somewhere to move the ranking TO. Rev 2 could not
+    # test this: it scored an authored roster of three verbs the table does not carry.
+    inner = make_chooser(w.fixtures, lambda a, b, c: f"{a}:{b}:{c}")
+    p.convictions = {"Precedent": 0.9}
+    # `W17`: `choose` returns SCENES now, so the pick is the first interaction of
+    # the first scene. The default policy fills scenes in score order, so that is
+    # still the highest-scoring candidate.
+    principled = inner(p, v, Sensation(0), ask)[0].acts[0].verb
+    p.convictions = {"Precedent": -0.9}
+    inverted = inner(p, v, Sensation(0), ask)[0].acts[0].verb
+    assert principled != inverted, (
+        f"flipping the sign of the only conviction changed nothing: both chose {principled!r}. "
+        "`convictions` is a dead carrier -- the exact defect #353 :739-744 names")
+    return (f"PASS BY CONSTRUCTION: {principled!r} at Precedent +0.9, {inverted!r} at -0.9. The "
+            "motive is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with NO "
+            "branch in the resolver and nothing stored about the bias -- nobody, the holder and "
+            "his superiors included, has a signature that reads it out. ⚠ THE MAGNITUDES ARE "
+            "`H-66`'s declared default and are swept; the SIGN structure is what this observes")
 
 
 @probe("P32", "a person's own condition narrows their options in a fixed order", "S12",
-       by="no-signature",
+       by="construction",
        tests="a character's own condition must be able to degrade across a season so that their available actions narrow predictably")
 def p32():
     w = tiny_world()
-    person_fields = {f for f in Person.__dataclass_fields__}
-    raise Unspecified(
-        "a banded scalar on Person",
-        "S12",
-        needs="the S12.1 verb gate is defined ONLY over a Site's `condition`",
-        law=f"S12.1's gate `verbs(w, site, c)` is the right mechanism and its carrier is a SITE. Person's declared fields are {sorted(person_fields)} -- none is a banded scalar, Sensation is EXACTLY two floats (S18.2), and S22 gives no owner for a third",
-    )
+    p = w.persons["p_mid"]
+    fx, k = w.fixtures, w.fixtures.get("scene_budget")
+    v = View(p.id, [], fx.get("view_k"))
+    floors = sorted(fx.get("band_floors")["body"].values(), reverse=True)
+    # Walk DOWN the bands, one at a time, and record what the person may still do.
+    seq = []
+    for band in [floors[0] + 1] + [f - 1 for f in floors]:
+        p.body = band
+        seq.append((band, body_band_penalty(p, fx), Query.budget(p, v, k, fx)))
+    penalties = [n for _b, n, _q in seq]
+    budgets = [q for _b, _n, q in seq]
+    assert penalties == sorted(penalties), f"the narrowing is not ordered: {seq}"
+    assert budgets == sorted(budgets, reverse=True), f"the budget is not monotone: {seq}"
+    assert len(set(penalties)) == len(floors) + 1, f"a band is not distinguished: {seq}"
+    assert budgets[-1] >= 1, "a dying person is deleted from the season rather than narrowed"
+    return (f"PASS BY CONSTRUCTION: {seq} as (body, bands fallen, scenes). ⚠ REVISIONS 1-4 RAISED "
+            "`Unspecified` HERE on the grounds that 'Person's declared fields ... none is a banded "
+            "scalar'. THAT WAS TRUE WHEN WRITTEN AND `H-38` CLOSED IT -- 'the answer is YES; "
+            "`Site.condition` is the model' -- and `W5` spent the closure: `(Person, body)` is a "
+            "Part D row, `body_band_penalty` bands it on THE SAME `band_floors` table the site "
+            "gate uses, and the order is fixed because a band is a floor you are at or above. No "
+            "second band scheme was invented, which is what `H-38` was closed to avoid. ⚠ THE OLD "
+            "LAW TEXT WAS SELF-CONTRADICTING IN THE PUBLISHED ARTIFACT: it computed Person's "
+            "field list, PRINTED `body` in it, and then asserted none was a banded scalar")
 
 
 @probe("P33", "an act costs more when it is bigger", "S26.3", by="no-signature",
@@ -649,25 +904,41 @@ def p35():
     )
 
 
-@probe("P36", "a choice branches three ways", "S17", by="probe-model",
+@probe("P36", "a choice branches three ways", "S17", by="construction",
        tests="a discovery must be able to be acted on in several distinct ways, each leading somewhere different")
 def p36():
     w = tiny_world()
     p = w.persons["p_mid"]
-    roster = [Candidate("protect", why="conceal"), Candidate("report", why="hand it up"),
-              Candidate("leverage", why="trade on it")]
-    got = []
-    def choose(q, v, s, ask_budget):
-        if q.id != p.id:
-            return []
-        b = ask_budget()
-        return [Act_(w, q, c.verb) for c in Query.opening_set(q, v, roster)[:b]]
-    _run(w, choose, lambda w, a: got.append(a.verb) or [Ev(w, a.actor, f"chose.{a.verb}", a.actor, [ROOT])])
-    assert len(got) == 3
-    return (f"PASS-WITH-A-DISCLOSURE: {got} -- three Candidates through the SAME resolver, no "
-            "branching-outcome machinery (Part VIII refuses it as an authoring convention over "
-            "Record). THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to "
-            "compute from")
+    # THE PROBE SUPPLIES THE QUESTION SOURCE, not the option list. `tiny_world` has no dates, no
+    # propositions and no claims, so `questions_for` correctly produces nothing for anybody -- a
+    # world with no calendar and no commitments generates no deliberation, which is right. Q4
+    # `need` is the source PLAN W5 adds and the one most of the NPC corpus runs on: a live
+    # `commit` to an OUGHT Proposition is a standing question every season.
+    prop = Proposition("prop_p36", "OUGHT", "rec_writ", "the writ should stand", True, 0)
+    w.propositions[prop.id] = prop
+    w.add_tenure(Tenure("t_p36", p.id, prop.id, "commit", since=0))
+    # ⚠ NARROWED TO WHAT THE FOLD CAN EXECUTE, AND THE NARROWING IS COMPUTED, NOT AUTHORED.
+    # `resolvable_verbs()` asks the fold which verbs it can carry through RESOLVE; the answer is
+    # 12 of 32, because 20 carry a `requires:` no predicate evaluates (W3). Without it the person
+    # forms the full computed set, picks one of the twenty, and the SEASON HALTS -- which is a
+    # true finding about the specification and a different one from what this probe tests.
+    offered = len(Query.opening_set(p, View(p.id, [], w.fixtures.get("view_k"),
+                                           Question("q:p36", "need", ("rec_writ",))),
+                                    Question("q:p36", "need", ("rec_writ",))))
+    d = _run_d(w, chooser(w, only=p.id, verbs=resolvable_verbs()))
+    got = [a.verb for a in d.resolved if a.actor == p.id]
+    assert len(set(got)) >= 3, f"only {len(set(got))} distinct options were open: {got}"
+    return (f"PASS BY CONSTRUCTION, WITH A MEASUREMENT: {offered} candidates were OFFERED from "
+            f"the computed option set and only {len(resolvable_verbs())} of {len(VERB_TABLE)} "
+            f"verbs can be RESOLVED at all, so this ran over the resolvable ones. "
+            f"{sorted(set(got))} -- {len(set(got))} distinct verbs through "
+            "the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an "
+            "authoring convention over Record). ⚠ REV 2 WAS A PASS-WITH-A-DISCLOSURE and the "
+            "disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves "
+            "`opening_set` nothing to compute from.' The roster is gone -- these come from the "
+            "verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, "
+            "`report`, `leverage`) are on NO table row, so the branching it demonstrated was "
+            "branching among inventions")
 
 
 # ===========================================================================
@@ -680,8 +951,8 @@ def f1():
     w = tiny_world()
     prop = Proposition("prop_1", "OUGHT", "realm", "the wardens should hold", True, 0)
     w.propositions[prop.id] = prop
-    w.tenures += [Tenure("tc1", "p_low", prop.id, "commit", since=0),
-                  Tenure("tc2", "p_king", prop.id, "commit", since=0)]
+    w.add_tenure(Tenure("tc1", "p_low", prop.id, "commit", since=0))
+    w.add_tenure(Tenure("tc2", "p_king", prop.id, "commit", since=0))
     edges = [t for t in Query.lateral(w, "faction", "commit") if t.object == prop.id]
     n = Query.commit_count_guard(w, edges, "membership")
     try:
@@ -703,14 +974,14 @@ def f2():
     w = tiny_world()
     prop = Proposition("prop_dead", "OUGHT", "realm", "a dead cause", True, 0)
     w.propositions[prop.id] = prop
-    w.tenures.append(Tenure("th_dead", prop.id, "S", "hold", since=0))
+    w.add_tenure(Tenure("th_dead", prop.id, "S", "hold", since=0))
     assert not [t for t in Query.lateral(w, "faction", "commit") if t.object == prop.id]
     w.step = Step.RESOLVE
     old = Query.hold_force(w, "S")
     w.write("Tenure", WriteClass.ACTS, lambda: setattr(old, "until", w.tick),
             record_kind="Tenure", fieldname="until", driver="Act")
     w.write("Tenure", WriteClass.ACTS,
-            lambda: w.tenures.append(Tenure("th_new", "p_high", "S", "hold", since=w.tick)),
+            lambda: w.add_tenure(Tenure("th_new", "p_high", "S", "hold", since=w.tick)),
             record_kind="Tenure", fieldname="since", driver="Act")
     assert Query.hold_force(w, "S").subject == "p_high"
     return ("PASS: `confer` on an object whose holder-Proposition has ZERO live commit edges was "
@@ -784,15 +1055,7 @@ def f7():
     carried = {}
     def choose(p, v, s, ask_budget):
         return [Act_(w, p, "carry", payload="pet1")] if p.id == "p_mid" else []
-    def effect(w, a):
-        if a.verb != "carry":
-            return []
-        carried["by"] = a.actor
-        w.write("DocketItem", WriteClass.ACTS,
-                lambda: w.docket.append({"date": "d_sitting", "matter": a.payload}),
-                record_kind="DocketItem", fieldname="matter", driver="Act")
-        return [Ev(w, a.actor, "petition.carried", a.payload, [ROOT])]
-    _run(w, choose, effect)
+    _run(w, choose)
     assert carried.get("by") == "p_mid" and w.docket
     return ("PASS: Petition -> `carry` (AN ACT, BY A NAMED PERSON, COSTING BUDGET) -> DocketItem on "
             "a Date. NO automatic promotion, NO queue drain, NO priority function. THE FILTER IS A "
@@ -816,8 +1079,8 @@ def f9():
         b = ask_budget()
         return ([Act_(w, p, f"petition{i}", payload=f"venue{i}") for i in range(b)]
                 if p.id == "p_low" else [])
-    _run(w, choose, lambda w, a: filed.append(a.payload) or [])
-    b = w.fixtures.get("act_budget")
+    filed.extend(a.payload for a in _run_d(w, choose).resolved)
+    b = w.fixtures.get("scene_budget")
     assert len(filed) == b == len(set(filed))
     return (f"PASS: {b} petitions to {b} different venues on one matter. NO DEDUP, NO CAP, NO "
             "PER-VENUE LIMIT, NO 'already before a body' RULE, NO COST GATE -- ruled allowable, and "
@@ -830,26 +1093,30 @@ def f9():
 def f10():
     w = tiny_world()
     hearth = w.rungs["Hh"]
-    granted, refused = [], []
+    # ⚠ ONE CLAIMANT'S WORTH **AT RESOLVE**, WHICH IS NOT THE SAME AS ONE CLAIMANT'S WORTH AT THE
+    # TOP OF THE SEASON. `W8` gave MATTER a subsistence draw, and MATTER runs BEFORE RESOLVE
+    # (#353 §25's order), so the flat `6` this line used to carry was down to 2 by the time the
+    # transfers were folded and BOTH were refused — the probe stopped measuring scarcity closing a
+    # matter and started measuring an empty larder. The seed is computed from the same registry
+    # the draw reads, so the fixture tracks the economy instead of restating a number.
+    _eaters = len(Query.presence(w, "Hh"))
+    _drawn = SUBSISTENCE_WEIGHTS.get("grain", 0) * _eaters
+    assert not [s_ for s_ in w.sites.values() if s_.rung == "Hh"], (
+        "the hearth has acquired a site and now PRODUCES grain; this seed assumes the draw is the "
+        "only MATTER effect on its larder, and the probe would silently measure the wrong scarcity")
+    hearth.stores = {"grain": 6 + _drawn}
     def choose(p, v, s, ask_budget):
-        return [Act_(w, p, "transfer", payload=6)] if p.id in ("p_low", "p_mid") else []
-    def effect(w, a):
-        if a.verb != "transfer":
-            return []
-        # S54 item 7: transfer's PRECONDITION `stores(hearth(giver), kind) >= amount`. Without
-        # it the ordered fold's own scarcity claim is FALSE, since a transfer could MINT FROM A
-        # NEGATIVE LARDER -- and S54.1's close rule depends on this landing.
-        if hearth.stores.get("grain", 0) < a.payload:
-            refused.append(a.actor)
-            return [Ev(w, a.actor, "transfer.refused", a.actor, [ROOT])]
-        w.write("stores", WriteClass.ACTS,
-                lambda: hearth.stores.__setitem__("grain", hearth.stores["grain"] - a.payload),
-                record_kind="Rung", fieldname="stores", driver="Act")
-        granted.append(a.actor)
-        return [Ev(w, a.actor, "transfer.made", a.actor, [ROOT])]
-    _run(w, choose, effect)
-    assert len(granted) == 1 and len(refused) == 1 and hearth.stores["grain"] >= 0
-    return (f"PASS: granted={granted}, refused={refused}, larder={hearth.stores['grain']} (never "
+        # W3: the payload is the transfer's OPERANDS. `transfer`'s precondition -- §54 item 7's
+        # `stores(hearth(giver), kind) >= amount` -- is evaluated BY THE FOLD from these, not by
+        # a lambda this probe supplies. That is the difference the item is for.
+        return ([Act_(w, p, "transfer", payload={"from": "Hh", "kind": "grain", "amount": 6})]
+                if p.id in ("p_low", "p_mid") else [])
+    _run(w, choose)
+    granted = [e for e in w.log if e.kind == "transfer.made"]
+    refused = [e for e in w.log if e.kind == "transfer.refused"]
+    assert len(granted) == 1 and len(refused) == 1 and hearth.stores["grain"] >= 0, (
+        f"granted={[e.kind for e in granted]} refused={[e.kind for e in refused]}")
+    return (f"PASS: granted={len(granted)}, refused={len(refused)}, larder={hearth.stores['grain']} (never "
             "negative). THE SECOND CLAIMANT ON AN EMPTIED LARDER GOT A DIFFERENT EVENT. Petitions "
             "never closed each other; the matter closed AT RESOLVE BY SCARCITY. S54 item 7's "
             "precondition is what makes this true rather than minting")
@@ -877,7 +1144,7 @@ def f12():
     w.write("Tenure", WriteClass.ACTS, lambda: setattr(t, "until", w.tick),
             record_kind="Tenure", fieldname="until", driver="Act")
     w.write("Tenure", WriteClass.ACTS,
-            lambda: w.tenures.append(Tenure("t_new", "p_mid", "off_duke", "hold", since=w.tick)),
+            lambda: w.add_tenure(Tenure("t_new", "p_mid", "off_duke", "hold", since=w.tick)),
             record_kind="Tenure", fieldname="since", driver="Act")
     assert not t.live and Query.hold_force(w, "off_duke").subject == "p_mid"
     ent = Query.entrenchment(w.persons["p_mid"], 30, w.fixtures.get("condition_scale"),
@@ -907,8 +1174,8 @@ def f14():
     w = tiny_world()
     prop = Proposition("prop_c", "OUGHT", "realm", "a cause", True, 0)
     w.propositions[prop.id] = prop
-    w.tenures += [Tenure("e1", "p_low", prop.id, "commit", since=0),
-                  Tenure("e2", "p_mid", prop.id, "commit", since=0, until=1)]
+    w.add_tenure(Tenure("e1", "p_low", prop.id, "commit", since=0))
+    w.add_tenure(Tenure("e2", "p_mid", prop.id, "commit", since=0, until=1))
     Query.commit_count_guard(w, [t for t in w.tenures if t.kind == "commit"], "held_ever")
     return "UNREACHABLE"
 
@@ -975,17 +1242,7 @@ def f17():
         if p.id == "p_mid":
             return [Act_(w, p, "raid")]
         return []
-    def effect(w, a):
-        if a.verb == "confer_authority":
-            authorized[a.payload] = True
-            seen.append("authorised")
-            return [Ev(w, a.actor, "authority.conferred", a.payload, [ROOT])]
-        if a.verb == "raid":
-            k = "raid.done" if authorized.get(a.actor) else "act.unauthorised"
-            seen.append(k)
-            return [Ev(w, a.actor, k, a.actor, [ROOT])]
-        return []
-    _run(w, choose, effect)
+    _run(w, choose)
     return (f"PASS-CONDITIONALLY, AND THE CONDITION IS THE FINDING: sequence={seen}. Both acts "
             "landed in ONE season and THE FOLD'S CONTENT-DERIVED ORDER -- not intent, not rank, "
             "not the superior's seniority -- decided whether the raid counted as authorised. "
@@ -1000,7 +1257,7 @@ def f18():
                                     proposition="mend the seam", respondent_venue="S", backing=[])
     w.dispensations["disp_order"] = dict(id="disp_order", issuer="off_duke",
                                          proposition="levy the grain", scope=["p_high"], terms=[])
-    b = w.fixtures.get("act_budget")
+    b = w.fixtures.get("scene_budget")
     return (f"PASS-STRUCTURALLY: a Petition rising from below and a Dispensation enumerating the "
             f"same executor coexist WITH NO ARBITRATION ANYWHERE IN THE SHAPE. The governor's {b} "
             "acts are the only scarcity, so the conflict is REAL and is resolved BY THE PERSON, "
@@ -1022,6 +1279,34 @@ def f19():
 # W-SERIES -- THE WORLD. T8's churn, the three licensed clocks.
 # ===========================================================================
 
+def _seed_near_floor(w, site) -> None:
+    """Put a site one season's wear above its highest band floor.
+
+    ⚠ WHY THIS EXISTS, AND WHY IT IS A FIXTURE AND NOT A FUDGE. Two probes (`P18`, `W1`) prove a
+    structural claim by GRINDING THE WORLD until a floor is crossed — twenty-odd seasons at the
+    injected wear rate. That was cheap while a season emitted a handful of Events. After `W4` made
+    MATTER emit per write, and with `W6`'s default arm keeping the fan-out total (because that is
+    what #353 specifies), the two of them cost 71 SECONDS between them and were the slowest things
+    in the suite by two orders of magnitude.
+    ⚠ AND IT MOVES A PUBLISHED NUMBER, WHICH IS SAID HERE RATHER THAN LEFT TO BE FOUND. `P18` and
+    `W1` reported ELEVEN seasons before this and report TWO after — `site_harbour` starts at 900,
+    the `bulk_shipping` floor is 800 and wear is 10. `A31b` in the SAME artifact still reports 11
+    for the same site, wear and floor, because its count IS its measurement and it is not seeded.
+    Two probes now answer "how long until a harbour silts past the shipping floor" with 2 and 11,
+    and the reconciliation is this helper: one is seeded, the other is not. `W1`'s own disclosure
+    (*"the COUNT is a function of the injected `wear_per_season` fixture"*) is now incomplete — it
+    is also a function of this seeding — and both probes say so in their returns.
+    Neither probe's claim depends on HOW the site reached the floor — `W1`'s own return text says
+    so: *"the COUNT is a function of the injected `wear_per_season` fixture and moves with it —
+    the STRUCTURAL claim (a verb leaves) does not."* Both keep their loop, so a crossing that stops
+    firing is still reported rather than passing vacuously. One owner, because this is the second
+    site and a third would be a pattern (§8)."""
+    floors = w.fixtures.get("band_floors")[site.kind]
+    highest = max(floors.values())
+    if site.condition > highest:
+        site.condition = highest + w.fixtures.wear(site.kind)
+
+
 @probe("W1", "a site decays until a verb leaves its set", "S12.1", by="construction",
        tests="a place must be able to fall into disrepair until things can no longer be done there")
 def w1():
@@ -1030,13 +1315,16 @@ def w1():
     site = w.sites["site_harbour"]
     floors = w.fixtures.get("band_floors")[site.kind]
     assert "bulk_shipping" in Query.verbs(w, site, floors)
+    _seed_near_floor(w, site)      # a harness fixture; see the helper for why. The loop stays.
     n = 0
     while "bulk_shipping" in Query.verbs(w, site, floors) and n < 200:
         _run(w); n += 1
     assert n < 200
     return (f"PASS: wear at MATTER dropped condition below the floor in {n} seasons and the verb "
-            f"LEFT THE SET. The COUNT is a function of the injected `wear_per_season` fixture and "
-            "moves with it -- the STRUCTURAL claim (a verb leaves) does not")
+            f"LEFT THE SET. ⚠ The COUNT is a function of TWO injected fixtures -- `wear_per_season` "
+            f"and the `_seed_near_floor` seeding this probe uses -- and moves with both; `A31b` "
+            f"reports 11 unseeded for the same site. The STRUCTURAL claim (a verb leaves) does not "
+            f"move with either")
 
 
 @probe("W1x", "wear answers for an unregistered site kind", "S42.2.1", by="construction",
@@ -1109,9 +1397,17 @@ def w7():
     rec = Record("rec_ttl", "S", "writ", ttl=2)
     w.records[rec.id] = rec
     w.step = Step.MATTER
+    # `W4` / `H-86`: `(Record, ttl)` declares ONLY `record.expired`, which fires at zero -- so a
+    # non-terminal decrement of §13's licensed clock has no declared kind and the row is exempt
+    # from the must-name-a-kind rule by `rosters.yaml: conditional_emission_rows`. Emitting the
+    # terminal kind here would assert an expiry that has not happened.
     w.write("carrier_exists", WriteClass.MATTER, lambda: setattr(rec, "ttl", rec.ttl - 1),
             record_kind="Record", fieldname="ttl", driver="Event")
-    return "UNREACHABLE"
+    # W2: raised until Part D carried the five `Record` rows -- defect D7, under which EVERY
+    # Record write was an unmarked cell. `(Record, ttl)` is MATTER-only, `social: false`,
+    # "§13's licensed clock".
+    return ("PASS: `(Record, ttl)` is decremented at MATTER by an Event -- Part D's row (D7, "
+            "§13's licensed clock)")
 
 
 @probe("W8", "a case ripens against someone who does nothing", "S13.1", by="probe-model",
@@ -1140,7 +1436,8 @@ def w9():
     r.envelope = [100, 200, 150, 60]
     w.step = Step.MATTER
     w.write("envelope", WriteClass.MATTER, lambda: r.envelope.__setitem__(0, r.envelope[0] + 5),
-            record_kind="Rung", fieldname="envelope", driver="Event")
+            record_kind="Rung", fieldname="envelope", driver="Event",
+            emits="envelope.changed", subject=r.id, causes=[ROOT])          # `W4`
     assert r.envelope[0] == 105
     return ("PASS: BIRTH IS ENVELOPE WEIGHT, NOT A `create`. The envelope has no ledger, no stance "
             "and no act -- conflating them PRODUCES A DESIGN IN WHICH DEMOGRAPHY CAN CHOOSE")
@@ -1236,11 +1533,9 @@ def a4():
         w = tiny_world()
         def choose(p, v, s, ask_budget):
             return [Act_(w, p, "do")] if p.id in ("p_low", "p_mid") else []
-        def effect(w, a):
-            return [Ev(w, a.actor, "did.thing", "Hh", [ROOT])]
         r = None
         for _ in range(3):
-            r = _run(w, choose, effect)
+            r = _run(w, choose)
         return r["hash"], [(e.id, e.kind, tuple(e.causes)) for e in w.log]
     (h1, l1), (h2, l2) = run(), run()
     assert h1 == h2 and l1 == l2 and l1
@@ -1255,7 +1550,7 @@ def a4():
 def a5():
     w0 = tiny_world()
     scale = w0.fixtures.get("condition_scale")
-    deltas = [3, -5, 3, -1, 2]
+    deltas = [3, -5, 4, -1, 2]
 
     # ARM 1 -- REPRODUCIBILITY, through the real fold. The act array is shuffled before entry
     # and S32 rest 3's content-derived canonicalization restores one order, so two runs agree.
@@ -1271,12 +1566,19 @@ def a5():
             # this: pairing the label to the index made the two arms different EXPERIMENTS
             # (S0.1 pt 1), and the log hash then differed for a reason that had nothing to do
             # with summation order.
-            return [Act_(w, p, f"mend_{d}",
+            # W3: `mend_{d}` was an INVENTED VERB and the fold refuses it — correctly, since a
+            # verb the table does not carry has no semantics. `work` is the table verb that
+            # writes `(Site, condition)`; the delta still rides on `changes`, which is what the
+            # control is about, and the label no longer has to encode it.
+            return [Act_(w, p, "work", key=str(d),
                          changes=[StateChange(site.id, "alter", "Act", "condition", d)])
                     for d in order][:ask_budget()]
-        def effect(w, a):
-            return [Ev(w, a.actor, "site.worked", site.id, [ROOT], changes=a.changes)]
-        r = _run(w, choose, effect)
+        r = _run(w, choose)
+        # ⚠ THE FALSIFIER THE ID FIX NEEDED AND DID NOT HAVE. Two of the five deltas were both
+        # `3`, so two acts shared `H(seed, tick, actor, "act:work:3")` and minted Events with one
+        # id — a five-way collision reduced to a two-way collision is not "fixed", and nothing
+        # here could see it because the assertions were only on the condition and the hash.
+        assert len({e.id for e in w.log}) == len(w.log), "Event ids collided in the fold"
         return w.sites[site.id].condition, r["hash"]
 
     (ca, ha), (cb, hb) = run_fold(False), run_fold(True)
@@ -1307,6 +1609,10 @@ def a5():
     ia = sum(deltas)
     ib = sum(reversed(deltas))
 
+    # ⚠ THE FALSIFIER THE ID FIX NEEDED AND DID NOT HAVE. Two of the five deltas were both `3`,
+    # so two acts shared `H(seed, tick, actor, "act:work:3")` and minted Events with one id --
+    # a five-way collision reduced to a two-way collision is not "fixed", and nothing here could
+    # see it because the assertions were only on the condition and the hash.
     assert ca == cb and ha == hb, (ca, cb)
     assert ia == ib
     assert float_differs, (
@@ -1384,7 +1690,7 @@ def a10():
     w = tiny_world()
     total = Query.r1_aggregate(w, "S", lambda rid: w.rungs[rid].stores.get("grain", 0)
                                if rid in w.rungs else 0)
-    w.tenures.append(Tenure("t_dead", "Gone", "S", "contain", since=0, until=0))
+    w.add_tenure(Tenure("t_dead", "Gone", "S", "contain", since=0, until=0))
     w.rungs["Gone"] = Rung("Gone", "hearth", stores={"grain": 999})
     after = Query.r1_aggregate(w, "S", lambda rid: w.rungs[rid].stores.get("grain", 0)
                                if rid in w.rungs else 0)
@@ -1525,10 +1831,7 @@ def a22():
     seen = []
     def choose(p, v, s, ask_budget):
         return [Act_(w, p, "act")] if p.id in ("p_low", "p_king") else []
-    def effect(w, a):
-        seen.append((a.actor, Query.parent_of(w, a.actor)))
-        return []
-    _run(w, choose, effect)
+    _run(w, choose)
     rungs = {r for _, r in seen}
     assert len(rungs) > 1
     return (f"PASS, PARTIALLY, AND THE HONEST FRAME IS PER-OWNER. One RESOLVE fold consumed acts "
@@ -1573,7 +1876,7 @@ def a25():
     # REV 4: the fixture's only tie was p_low<->p_mid, BOTH inside S's subtree, so the old
     # assertion could not fail on the property it claimed. A tie that genuinely leaves the
     # subtree is added here, and the assertion is on the crossing itself.
-    w.tenures.append(Tenure("t_far", "p_low", "p_king", "tie", since=0))
+    w.add_tenure(Tenure("t_far", "p_low", "p_king", "tie", since=0))
     sub = Query.descendants(w, "S")
     lat = Query.lateral(w, "ties", "tie")
     crossing = [t for t in lat if (t.subject in sub) != (t.object in sub)]
@@ -1589,7 +1892,7 @@ def a25():
        tests="the engine must be able to walk its own references without looping forever")
 def a26():
     w = tiny_world()
-    w.tenures.append(Tenure("t_cyc", "R", "Hh", "contain", since=0))
+    w.add_tenure(Tenure("t_cyc", "R", "Hh", "contain", since=0))
     got = Query.descendants(w, "S")
     assert isinstance(got, list)
     return (f"PASS: a deliberate cycle (R contained by Hh) returned {len(got)} descendants and did "
@@ -1616,20 +1919,37 @@ def a27():
        tests="every recorded happening must be able to point at real prior happenings")
 def a28():
     w = tiny_world()
+    d = SeasonDriver(w)
+    # ⚠ `speak`, NOT `do`. This probe asserted referential integrity on `causes[]` and had been
+    # SHORT-CIRCUITED SINCE `W3`: `do` is on no verb-table row, so the fold raised before the
+    # assertion and the probe published `verb 'do' is on no row` instead of checking anything.
+    # It is the ONE probe that observes the invariant `W9` changed, and it was dark for it.
+    # Found by the `W9` adversarial pass.
     def choose(p, v, s, ask_budget):
-        return [Act_(w, p, "do")] if p.id == "p_low" else []
-    def effect(w, a):
-        prev = [w.log[-1].id] if w.log else [ROOT]
-        return [Ev(w, a.actor, "did.thing", "Hh", prev)]
+        return [Act_(w, p, "speak")] if p.id == "p_low" else []
     for _ in range(4):
-        _run(w, choose, effect)
+        d.season(choose, None, SUBSIST)
     ids = {e.id for e in w.log}
+    acts = {a.id for a in d.resolved}
     assert len(ids) == len(w.log)
-    assert all(c == ROOT or c in ids for e in w.log for c in e.causes)
     assert [e.emitted_at for e in w.log] == sorted(e.emitted_at for e in w.log)
-    return (f"PASS over {len(w.log)} events from a real run: id uniqueness, referential integrity "
-            "on causes[], a NON-DECREASING season index, and a stable content hash. These are the "
-            "head's log invariants and they SURVIVE the Event record S19 adds")
+    # REFERENTIAL INTEGRITY, AGAINST `log UNION resolved`. #353 CONTRADICTS ITSELF HERE and the
+    # contradiction is `H-82`: `:658` says causes are "ids already in the log, or [ROOT]" while
+    # `:1377` says "Events, into the same log, WITH causes[] NAMING THE ACTS" -- and an Act is
+    # never appended to the log, so the two cannot both hold as written. Under `:658` alone every
+    # act-emission is `[ROOT]` and no arc walks anywhere, which §19.4 itself calls the substrate
+    # of the whole narrative claim going unpopulated. The reading that satisfies both is that a
+    # cause resolves to AN EVENT OR THE ACT THAT PRODUCED IT.
+    unresolved = [c for e in w.log for c in e.causes if c != ROOT and c not in ids | acts]
+    assert not unresolved, f"{len(unresolved)} cause id(s) resolve to neither an Event nor an Act"
+    from_act = sum(1 for e in w.log for c in e.causes if c in acts)
+    from_ev = sum(1 for e in w.log for c in e.causes if c in ids)
+    return (f"PASS over {len(w.log)} events from a real run: id uniqueness, a NON-DECREASING "
+            f"season index, a stable content hash, and referential integrity on causes[] against "
+            f"log UNION resolved -- {from_act} causes name an ACT and {from_ev} name an EVENT, "
+            "zero dangle. ⚠ THE UNION IS `H-82` AND IT IS A READING, NOT A GIVEN: #353 `:658` "
+            "and `:1377` cannot both hold as written, and this probe asserts the reading `W9` "
+            "took rather than leaving it in a code comment")
 
 
 @probe("A29", "two logs share a causes chain", "S19.5", by="probe-model",
@@ -1657,20 +1977,24 @@ def a30():
 def a31():
     results = []
     for v in (2, 5, 9):
-        f = DEFAULT_FIXTURES.sweep("act_budget", v)
+        f = DEFAULT_FIXTURES.sweep("scene_budget", v)
         w = tiny_world(f)
         got = []
         def choose(p, v_, s, ask_budget):
             return [Act_(w, p, f"v{i}") for i in range(ask_budget())] if p.id == "p_king" else []
-        _run(w, choose, lambda w, a: got.append(a.verb) or [])
+        got.extend(a.verb for a in _run_d(w, choose).resolved)
         results.append((v, len(got)))
     assert [n for _, n in results] == [2, 5, 9]
     return (f"PASS WITH A FINDING, AND THE FINDING MATTERS MORE THAN THE VERDICT: 3-point sweep "
             f"{results}. The count tracks the fixture EXACTLY, so any verdict phrased as 'a "
             "character can do N things in a season' FLIPS ACROSS THE SWEEP. S42.2.1 says a verdict "
-            "that flips across the sweep IS ITSELF A FINDING. `~5` is a RULED BAND and no in-chain "
-            "source turns the band into the integer the engine runs on -- that is S62's open "
-            "scene/act question wearing different clothes")
+            "that flips across the sweep IS ITSELF A FINDING. `~5` is a RULED BAND and no "
+            "in-chain source turns the band into the integer the engine runs on. ⚠ THE SECOND "
+            "HALF OF THIS SENTENCE WAS STRUCK BY `W17`: it read 'that is S62's open scene/act "
+            "question wearing different clothes', and S62's question is RULED -- Jordan, "
+            "2026-09-02, the unit is the scene and the number is 5. The band-to-integer gap "
+            "survives the ruling; the identity question does not, and A32 is where that is "
+            "shown")
 
 
 @probe("A31b", "the world verdict is stable across the wear sweep", "S42.2.1", by="construction",
@@ -1678,8 +2002,23 @@ def a31():
 def a31b():
     out = []
     for rate in (5, 10, 25):
+        # ⚠ THE KINDS COME FROM THE ROSTER, NOT FROM THREE LITERALS. `W8` moved `wear_per_season`
+        # into `rosters.yaml`, which made `site_kinds` a definition — and the definition guard
+        # immediately caught this line and the `band_floors` sweep below hardcoding it. A sweep
+        # that names its own kinds silently stops sweeping the kind somebody adds tomorrow.
         f = DEFAULT_FIXTURES.sweep("wear_per_season",
-                                   {"harbour": rate, "seam": rate, "body": rate})
+                                   {k: rate for k in roster("site_kinds")})
+        # ⚠ NOT `_seed_near_floor` HERE, AND THE DIFFERENCE MATTERS. `P18` and `W1` prove a
+        # STRUCTURAL claim and their season count is incidental, so seeding is free. THIS PROBE'S
+        # MEASUREMENT IS THE COUNT — it sweeps the wear rate and reports how many seasons each
+        # takes — so seeding would destroy the thing being measured.
+        # What is safe is narrowing the WITNESS fan-out -- ⚠ BECAUSE THIS PROBE USES `NOCHOOSE`,
+        # not because crossings are generally independent of witnessing. With no chooser no act
+        # reaches RESOLVE, so only MATTER wear moves `Site.condition` and the arm cannot reach any
+        # number in `out`. Under a live chooser it could: deposits -> claims -> §F1 questions ->
+        # acts -> `work`/`restore` -> condition -> crossings. Stated precisely because the loose
+        # version of this sentence, copied into a chooser-driven test, produces a confounded arm.
+        f = f.sweep("fan_out_mode", "presence_only")
         w = tiny_world(f)
         scale = w.fixtures.get("condition_scale")
         site = w.sites["site_harbour"]
@@ -1698,14 +2037,28 @@ def a31b():
             "exact prior sin -- so an unregistered kind raises here rather than answering 20")
 
 
-@probe("A32", "the scene/act identity is settled", "S62", by="no-signature",
+@probe("A32", "the scene/act identity is settled", "S62", by="construction",
        tests="the number of playable moments a character gets must be able to be counted")
 def a32():
-    raise Collision(
-        "does a scene equal an act?", "S62",
-        needs="a ruling on the IDENTITY, not on the number",
-        law="S62 -- the ruling says '~5 playable scenes... WHICH MAY MEAN ~5 actions'. THE BUDGET IS SETTLED AT ~5; THE IDENTITY IS NOT. A5 scenes-as-5-acts and 5 scenes-containing-many-acts are different games, and A31 shows every count verdict moves with the integer chosen",
-    )
+    w = tiny_world()
+    fx, b = w.fixtures, w.fixtures.get("scene_budget")
+    cap = fx.get("interactions_per_scene")
+    # THE IDENTITY IS RULED, AND THE TEST OF THAT IS THAT THE TWO READINGS NOW DIFFER OBSERVABLY.
+    # If a scene WERE an act, `b` scenes could carry only `b` interactions; they carry `b x cap`.
+    p = w.persons["p_king"]
+    scenes = [Scene(f"a32s{i}", p.id, [Act_(w, p, "speak", key=f"{i}.{j}") for j in range(cap)])
+              for i in range(b)]
+    spent = sum(sc.cost(fx.get("extended_scene_cost")) for sc in scenes)
+    assert len(scenes) == b and sum(len(sc.acts) for sc in scenes) == b * cap
+    return (f"PASS BY CONSTRUCTION: {b} scenes carrying {b * cap} interactions, costing {spent} "
+            f"at an extended cost of {fx.get('extended_scene_cost')}. ⚠ REVISIONS 1-4 RAISED A "
+            "`Collision` HERE -- 'THE BUDGET IS SETTLED AT ~5; THE IDENTITY IS NOT' -- and that "
+            "was true when written. JORDAN RULED IT 2026-09-02: '5 scenes for a character to play "
+            "per season'. The budgeted unit is the SCENE and #353's verbs are what happens INSIDE "
+            "one, so the two readings the collision named are no longer both open. What the "
+            "ruling did NOT settle is `H-76` (how many interactions a scene admits), `H-77` (what "
+            "an extended one costs) and `H-78` (which interactions share one) -- three swept "
+            "rows, because a ruling on the unit is not a ruling on its contents")
 
 
 @probe("A33", "refraction has a side", "S37.4", by="no-signature",
@@ -1751,7 +2104,7 @@ def a36():
     intended = ["spend_treasury", "buy_grain", "bribe"]
     def choose(p, v, s, ask_budget):
         return [Act_(w, p, vb) for vb in intended] if p.id == "p_high" else []
-    _run(w, choose, lambda w, a: order.append(a.verb) or [])
+    order.extend(a.verb for a in _run_d(w, choose).resolved)
     if order == intended:
         return ("PASS-BY-COINCIDENCE: the content-derived order happened to match the person's. "
                 "That is a hash accident, not a guarantee -- see the law below")
@@ -1840,11 +2193,11 @@ def p39():
        tests="a character must be able to hold obligations to two bodies that come into direct conflict")
 def p40():
     w = tiny_world()
-    w.tenures += [Tenure("ob1", "p_mid", "off_duke", "oblige", since=0),
-                  Tenure("ob2", "p_mid", "off_dicastery", "oblige", since=0)]
+    w.add_tenure(Tenure("ob1", "p_mid", "off_duke", "oblige", since=0))
+    w.add_tenure(Tenure("ob2", "p_mid", "off_dicastery", "oblige", since=0))
     obligations = [t for t in Query.lateral(w, "duty", "oblige") if t.subject == "p_mid"]
     assert len(obligations) == 2
-    b = w.fixtures.get("act_budget")
+    b = w.fixtures.get("scene_budget")
     return (f"PASS-STRUCTURALLY: `oblige` is MANY per person, so two incompatible duties coexist "
             f"with NO arbitration anywhere in the shape, and the person's {b} acts are the only "
             "scarcity. That is L1 working -- THE PERSON resolves the conflict, not a priority "
@@ -1872,8 +2225,8 @@ def f20():
     w = tiny_world()
     treaty = Proposition("prop_treaty", "OUGHT", "R", "the strait stays open", True, 0)
     w.propositions[treaty.id] = treaty
-    w.tenures += [Tenure("c_a", "p_king", treaty.id, "commit", since=0),
-                  Tenure("c_b", "p_high", treaty.id, "commit", since=0)]
+    w.add_tenure(Tenure("c_a", "p_king", treaty.id, "commit", since=0))
+    w.add_tenure(Tenure("c_b", "p_high", treaty.id, "commit", since=0))
     bound = [t.subject for t in Query.lateral(w, "treaty", "commit") if t.object == treaty.id]
     assert set(bound) == {"p_king", "p_high"}
     return ("PASS-STRUCTURALLY, AND THE STRUCTURE IS THE FINDING: a treaty is a Proposition plus "
@@ -1909,9 +2262,14 @@ def a37():
         if p.id != "p_low":
             return []
         # deliberately submitted in REVERSE stratum order
-        return [Act_(w, p, "speak", stratum=4), Act_(w, p, "decide", stratum=1),
-                Act_(w, p, "walk", stratum=0)]
-    _run(w, choose, lambda w, a: seen.append((a.stratum, a.verb)) or [])
+        # W3: `decide` was an invented verb and the fold refuses it. What this probe tests is
+        # that ACTS sort by `Act.stratum`, which the probe sets EXPLICITLY — so the verb's own
+        # stratum is not the subject, and one table verb at three declared strata tests the
+        # property more cleanly than three verbs did.
+        return [Act_(w, p, "speak", key="s4", stratum=4),
+                Act_(w, p, "speak", key="s1", stratum=1),
+                Act_(w, p, "speak", key="s0", stratum=0)]
+    seen.extend((a.stratum, a.verb) for a in _run_d(w, choose).resolved)
     assert [x[0] for x in seen] == sorted(x[0] for x in seen), seen
     return (f"PASS: submitted reversed, resolved {seen}. S27's FIVE STRATA -- {list(STRATA)} -- "
             "order the fold BEFORE the content-derived key breaks ties within a stratum. Rev 2 "
@@ -1930,13 +2288,17 @@ def a38():
     def choose(p, v, s, ask_budget):
         if p.id != "p_low":
             return []
-        return [Act_(w, p, "hopeless", obstacle=mult * 5 + 1, pool=5),
-                Act_(w, p, "hard", obstacle=mult * 5, pool=5)]
-    def effect(w, a):
-        return [Ev(w, a.actor, f"did.{a.verb}", a.actor, [ROOT])]
-    _run(w, choose, effect)
+        # W3: `hopeless`/`hard` were invented verbs. This probe's subject is §27.4's Ob > 2xPool
+        # gate, which `resolve` applies BEFORE the fold, so the verb is incidental — one table
+        # verb with two keys tests it and invents nothing.
+        return [Act_(w, p, "speak", key="hopeless", obstacle=mult * 5 + 1, pool=5),
+                Act_(w, p, "speak", key="hard", obstacle=mult * 5, pool=5)]
+    _run(w, choose)
     kinds = [e.kind for e in w.log]
-    assert "attempt.refused" in kinds and "did.hard" in kinds and "did.hopeless" not in kinds
+    # W3: the old `effect` lambda emitted `did.{verb}`; the fold emits the TABLE's `emits`, so
+    # the surviving act produces `speech.made`. The property is unchanged: ONE refusal, ONE
+    # resolution, and the refused act never reached the fold.
+    assert kinds.count("attempt.refused") == 1 and kinds.count("speech.made") == 1, kinds
     return (f"PASS: at Ob = {mult}xPool+1 the attempt was REFUSED and the act was spent; at exactly "
             f"{mult}xPool it resolved. An uncontested attempt routes to A GATE, never to an Ob=0 "
             "roll. Rev 2 had the branch and no probe ever set `obstacle` or `pool`, so both "
@@ -1950,10 +2312,19 @@ def a38():
 def a31c():
     out = []
     for floor in (400, 600, 800):
-        f = DEFAULT_FIXTURES.sweep("band_floors", {
-            "harbour": {"bulk_shipping": floor, "fishing": 100},
-            "seam": {"deep_mining": 700, "surface_gleaning": 50},
-            "body": {"full_operations": 800, "limited": 500, "withdrawal_only": 100}})
+        # As above: the arm varies ONE cell and inherits the rest of the declared table, so a
+        # new site kind or a re-declared floor reaches this sweep without an edit here.
+        _floors = {k: dict(v) for k, v in table("band_floors").items()}
+        _floors["harbour"]["bulk_shipping"] = floor
+        f = DEFAULT_FIXTURES.sweep("band_floors", _floors)
+        # As `A31b`: the season COUNT is this probe's measurement, so it may not be seeded.
+        # ⚠ THE INVARIANCE IS A PROPERTY OF `NOCHOOSE`, NOT OF BAND CROSSINGS, and the difference
+        # is what a later reader would get wrong. This probe drives the world with no chooser, so
+        # NO ACT REACHES RESOLVE and only MATTER wear moves `Site.condition` -- under that, the
+        # fan-out arm cannot touch a single number here. With a LIVE chooser it could:
+        # deposits -> claims -> §F1 questions -> acts -> `work`/`restore` on the site -> condition
+        # -> crossings. Copying this line into a chooser-driven test would give a confounded arm.
+        f = f.sweep("fan_out_mode", "presence_only")
         w = tiny_world(f)
         site = w.sites["site_harbour"]
         n = 0
@@ -2028,12 +2399,33 @@ def p43():
     return "UNREACHABLE"
 
 
-@probe("P42", "the act budget varies by office, condition and distance", "S26.3",
-       by="no-signature",
+@probe("P42", "the scene budget varies by office, condition and distance", "S26.3",
+       by="construction",
        tests="a wounded or distant character must be able to get fewer actions in a season than a healthy one at home")
 def p42():
-    raise Collision(
-        "S26's signature vs S26.3's consequence 1", "S26 / S26.3",
-        needs="a ruling on which side gives way -- the person-side signature, or the variation",
-        law="S26 types `budget : (Person, View) -> int` WITH NO WORLD. S26.3 consequence 1 says it varies by OFFICE, CONDITION and DISTANCE TRAVELLED, and that 'a wounded duke gets fewer acts than a healthy one WITHOUT ANYBODY STORING A NUMBER'. ALL THREE INPUTS ARE RESOLVER-SIDE: office-holding is a `hold` Tenure in the store, `condition` belongs to a Site, and travel legs S22.3 says HAVE NO OWNER AT ALL. A person-side function with no World can read none of them, so the budget is either a constant or the signature is wrong. Revisions 1-3 suppressed this into a docstring that named a probe which did not exist",
-    )
+    w = tiny_world()
+    p = w.persons["p_mid"]
+    fx, k = w.fixtures, w.fixtures.get("scene_budget")
+    v = View(p.id, [], fx.get("view_k"))
+    base = Query.budget(p, v, k, fx)
+    w.add_tenure(Tenure("t_p42", p.id, "off_x", "hold", since=0))
+    with_office = Query.budget(p, v, k, fx)
+    p.tenures = [t for t in p.tenures if t.id != "t_p42"]
+    floors = sorted(fx.get("band_floors")["body"].values(), reverse=True)
+    p.body = floors[-1] - 1
+    wounded = Query.budget(p, v, k, fx)
+    p.body = 1000
+    p.travel_leg = ["a", "b"]
+    travelled = Query.budget(p, v, k, fx)
+    assert with_office > base > wounded and base > travelled, (
+        base, with_office, wounded, travelled)
+    return (f"PASS BY CONSTRUCTION: {base} at rest · {with_office} holding an office · {wounded} "
+            f"wounded to the bottom band · {travelled} after two travel legs. ⚠ REVISIONS 1-4 "
+            "RAISED A `Collision` HERE, and it was real at the time: S26 types `budget : (Person, "
+            "View) -> int` with NO World while S26.3 says it varies by office, condition and "
+            "distance, and all three LOOKED resolver-side. The resolution was not a ruling on "
+            "which side gives way -- it is that THE STORE WAS IN THE WRONG PLACE. #353 `:730` "
+            "gives Person 'every Tenure whose subject they are', so `W5` moved the tenure store "
+            "onto its subject and both halves became true at once with no signature changed. "
+            "That is PLAN §3.3's smaller amendment; V2 §F3 took the larger one and made `budget` "
+            "a second World-taking function, which `:634` forbids")
