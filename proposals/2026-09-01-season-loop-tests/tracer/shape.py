@@ -1327,12 +1327,25 @@ def _req_move(w: "World", a: "Act") -> bool:
 
 @requires_predicate("work")
 def _req_work(w: "World", a: "Act") -> bool:
-    """§12.1: `condition >= floor(verb)`. The floors are `H-08` and come from Fixtures, swept."""
+    """§12.1: `condition >= floor(verb)`. The floors are `H-08` and come from Fixtures, swept.
+    ⚠ THE FIRST VERSION CHECKED `condition >= 0`, WHICH IS EVERY POSSIBLE CONDITION. A predicate
+    that cannot fail is not a predicate — it is a `return True` with a docstring, and §0.1 point 2
+    calls that an assertion that cannot observe the failure it excludes. The floors come from
+    `Fixtures`, which RAISES on an unregistered site kind rather than defaulting, so an unswept
+    floor cannot slip in silently."""
     for ch in a.changes:
         site = w.sites.get(ch.subject)
-        if site is not None:
-            return site.condition >= 0        # the per-verb floor is H-08; presence of the site
-    return True                               # is what this fold can check without inventing one
+        if site is None:
+            continue
+        floors = w.fixtures.get("band_floors").get(site.kind)
+        if floors is None:
+            raise Unspecified(
+                f"no band floors for site kind {site.kind!r}", "S12.1",
+                needs="a per-kind floor table -- register row H-08",
+                law="§12.1 gates verbs on `condition` against per-kind FLOORS, and §42.2.1 "
+                    "forbids picking a plausible number for a kind nobody registered")
+        return site.condition >= min(floors.values())
+    return True
 
 
 # Verbs the probe corpus uses that #353 does not name AS A VERB — checked, not assumed: the
@@ -1574,7 +1587,17 @@ class SeasonDriver:
                        for t in w.tenures):
                     return True
             elif kind == "presence":
-                return True                       # the presence index is H-33; not resolvable here
+                # ⚠ NOT `return True`. The presence index is `H-33` and does not exist, so this
+                # predicate cannot be evaluated — and admitting on an unevaluable predicate is a
+                # SILENT FILL off the register (G1) at the opposite polarity to §42.2, which sends
+                # zero evidence to the verdict AGAINST. It refuses, and says which hole.
+                #
+                # It does NOT raise, because eligibility is a DISJUNCTION: `work` is `own |
+                # presence:<site>` and `own` already admits, so raising here would refuse acts the
+                # design permits. This branch declines and the loop tries the next alternative.
+                TRACE.note(f"`presence:` eligibility is unevaluable (H-33, the presence index); "
+                           f"declining this alternative for {a.verb}", "H-33")
+                continue
         return False
 
     def _fold(self, w: "World", a: Act) -> list[Event]:

@@ -742,6 +742,19 @@ rows:
     cite:      "MEASURED BY EXECUTION, W3: removing the `effect` lambda moved FOURTEEN probes from PASS to GAP and raised `_gaps` 59 -> 73. Every one of those passes rested on semantics the probe supplied, because a caller-supplied resolver may say anything. Checked against #353 rather than assumed: `take_seat`, `press_claim`, `raid` and `confer_authority` appear ZERO times in its 2,067 lines and the other four appear only as ordinary English, never as verb names — so none is a Part E omission of the kind `utter`/`establish`/`exchange`/`succeed` were, and all eight are the instrument's. `INVENTED_VERBS` in `shape.py` carries the list so the fold attributes the gap to the CALLER rather than to the design, and the set SHRINKS as probes are re-authored. ⚠ THE HEADLINE NUMBERS GOT WORSE AND THAT IS THE POINT: what the instrument could invent is exactly what it stopped being able to invent."
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
 
+  - id:        H-65
+    tier:      0
+    hole:      "PART E's `requires:` COLUMN IS PROSE. 'the teller holds a claim on the subject', 'a `contain` path exists', '`condition >= floor(verb)`' — the fold cannot read any of them, so every precondition needs an instrument-supplied PREDICATE. That is the same defect `resolve` had, one column along: a rule stated where the code cannot evaluate it"
+    kind:      "FORMULA ×per verb"
+    owner:     "the resolver (Part E)"
+    grade:     "assumption"
+    default:   "one predicate per verb in `REQUIRES_PREDICATES`, owned by the resolver; a verb with a prose precondition and NO predicate REFUSES rather than silently succeeding"
+    site:      "resolver.REQUIRES_PREDICATES"
+    sweep:     ["predicate per verb, refuse when absent (the default)", "requires: stated structurally in the table", "no preconditions — every eligible act succeeds"]
+    unblocks:  "unmeasured"
+    cite:      "FOUND BY EXECUTION IN W3, and it is the twin of H-63: that column names the CELL and not the VALUE, this one states the PRECONDITION and not in a form the fold can evaluate. Three predicates exist so far — `transfer` (#353 §54 item 7, `stores(hearth(giver), kind) >= amount`, which is what §27.1's scarcity rests on), `move` (§E3's 'a `contain` path exists', over #353 §15's one-parent ladder) and `work` (§12.1's `condition >= floor(verb)`, floors from Fixtures which RAISE on an unregistered kind). ⚠ `work`'s FIRST VERSION CHECKED `condition >= 0`, which is every possible condition — a predicate that cannot fail is a `return True` with a docstring, and §0.1 point 2 names that as an assertion unable to observe what it excludes. Corrected before it was committed. MEASURED: 26 of the 32 verbs carry a prose precondition and 3 have a predicate, reproducible with `python -c \"import sys;sys.path.insert(0,'proposals/2026-09-01-season-loop-tests/tracer');import shape as S;print(sum(1 for r in S.VERB_TABLE.values() if r.requires.strip() not in S.NO_PRECONDITION), len(S.REQUIRES_PREDICATES))\"`. The other 23 REFUSE, which is the honest state and is what keeps the count visible."
+    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+
 # ---------------------------------------------------------------------------
 # THE DISCHARGE MAP -- guardrail G8.
 # "Every defect gets a register row, or is discharged with a named section."

@@ -1486,3 +1486,43 @@ def test_jordan_a_roster_edit_is_a_data_edit_and_nothing_else():
     finally:
         S._ROSTERS["tenure_kinds"]["values"].remove("_planted_kind")
     assert set(S.roster("tenure_kinds")) == before
+
+
+def test_w3_the_fold_refuses_rather_than_filling_and_the_gap_is_countable():
+    """The fold's three fills — eligibility, `requires`, effects — must REFUSE where they cannot
+    evaluate, never admit. G1: a fill off the register is a red test, and §42.2 sends zero evidence
+    to the verdict AGAINST the thing measured, so a predicate that cannot be evaluated must not
+    return True.
+
+    ⚠ TWO OF THE THREE GOT THIS WRONG IN THE FIRST DRAFT. `presence:` eligibility returned True
+    unconditionally with the comment "the presence index is H-33; not resolvable here" — an
+    unevaluable predicate admitting. And `_req_work` checked `condition >= 0`, which is EVERY
+    possible condition: a predicate that cannot fail is a `return True` with a docstring."""
+    prose = [v for v, r in S.VERB_TABLE.items()
+             if r.requires.strip() not in S.NO_PRECONDITION]
+    assert prose, "no verb carries a precondition -- the check is vacuous"
+    # The gap is COUNTABLE, which is what stops it being forgotten: H-65's number.
+    missing = [v for v in prose if v not in S.REQUIRES_PREDICATES]
+    assert len(missing) == len(prose) - len(
+        [v for v in prose if v in S.REQUIRES_PREDICATES])
+
+    # A verb with a prose precondition and no predicate must REFUSE, not succeed.
+    w = _w()
+    w.step = Step.RESOLVE
+    d = S.SeasonDriver(w)
+    victim = next(v for v in missing)
+    act = S.Act(id="a_x", actor="p_low", verb=victim)
+    with pytest.raises(Unspecified) as e:
+        d._fold(w, act)
+    assert "precondition" in str(e.value) or "no row" in str(e.value)
+
+    # `_req_work` must be able to FAIL. A site below every floor is unworkable.
+    site = w.sites["site_harbour"]
+    kept, site.condition = site.condition, 0
+    try:
+        ch = S.StateChange(site.id, "alter", "Act", "condition", -1)
+        assert not S._req_work(w, S.Act(id="a_w", actor="p_low", verb="work", changes=[ch])), (
+            "`work`'s precondition admitted a site at condition 0 -- it cannot observe the "
+            "failure it excludes")
+    finally:
+        site.condition = kept

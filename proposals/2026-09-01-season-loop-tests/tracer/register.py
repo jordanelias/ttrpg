@@ -412,7 +412,14 @@ def verify_citations(reg: dict) -> list:
             if b > len(src):
                 bad.append(f"{r['id']}: cites :{a}-{b} and #353 has {len(src)} lines")
         named = sources_named(cite)
-        quotes = QUOTE_RE.findall(cite)
+        # A quote INSIDE a backticked span is part of a COMMAND, not a quotation of a source.
+        # G11 asks for a reproduction command on every number, so a cite that obeys G11 contains
+        # one, and a command carrying a double-quoted string would otherwise be checked against
+        # #353 and reported FABRICATED. Positional rather than a strip, because a legitimate
+        # quotation may itself contain backticks — H-33's does.
+        code = [(m.start(), m.end()) for m in re.finditer(r"`[^`]*`", cite)]
+        quotes = [m.group(1) for m in QUOTE_RE.finditer(cite)
+                  if not any(a <= m.start() and m.end() <= b for a, b in code)]
         if quotes and not named:
             bad.append(f"{r['id']}: quotes something and names no source this checker can open")
         for quote in quotes:
