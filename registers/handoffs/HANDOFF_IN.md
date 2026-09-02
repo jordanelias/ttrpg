@@ -3975,3 +3975,36 @@ first work item and everything waits on it.**
   four ARC cases were wrong in a merged PR. Regenerated and committed; the fix is `W15`.
 
 **No ED allocated.** A gap in a PROPOSED architecture gets no id; the adoption decision gets one.
+
+---
+
+## 2026-09-02 (third entry) — **H-35 RULED BY JORDAN. THE ESCALATION QUEUE IS EMPTY.**
+
+**Verbatim:** *"5 scenes for a character to play per season"* — answering the one escalation
+`PLAN.md` §3.4 raised. This is **reading 2** of the three the in-chain ruling doc
+(`proposals/2026-08-31-pr350-archive-recovery/02_SCENE_BUDGET_RULING.md`) flagged.
+
+| | |
+|---|---|
+| **the unit** | **the SCENE**, not the act. `budget` bounds scenes; #353's ~28 verbs are what happens *inside* one |
+| **the number** | **5** |
+| **who** | **"a character"** — the neutral word. With #353's L1 and §26 (everyone runs `choose`), this **closes the reading-3 hazard** the ruling doc named as the one to watch: the archive gave named NPCs no budget and made their scenes cost *the player's*, which is the player-only mechanism §07 §1 forbids. **Rejected, toward the shape's symmetry.** |
+
+**Two `assumption` rows the ruling CREATES** — Jordan ruled the unit and the number and did **not**
+rule these, so they are injected, declared and swept, never hardcoded: **interactions per scene
+(default 1–3)** and **extended-scene cost (default 2)**, both cited to `player_agency_v30.md` §6.3,
+which is `## Status: CANONICAL` but pre-#337 and therefore **reference under §0.05**.
+
+**What it costs — named, because the escalation named it and Jordan accepted it.** A new work item
+**`W17`, the scene container**, now sits **on the critical path**:
+`W0 → W1 → W2 → W3 → W5 → W17 → W9`. **Parts D and E are unchanged** — a level is added above the
+verb table, which is the cheapest shape this ruling could take. ⚠ **Probe `P2x` must be
+re-expressed**: it fails on *"8 acts against a budget of 5"*, which under the ruling is **lawful**;
+the propositions to test are *more scenes than budget* and *more interactions than the swept bound*.
+
+### Next actions — unchanged except for the insertion
+
+1. `W15` + `W0` (both S, depend on nothing), then the path above to **artifact 2 — one NPC season on
+   NPC-088, end to end**.
+2. `W10` declared routing, beside the path. `W13` the arc lane (14 refusal-only, 8 mixed).
+3. **Nothing is waiting on a ruling.** `H-36` remains held back for objection only.

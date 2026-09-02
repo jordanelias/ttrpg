@@ -670,7 +670,7 @@ lists of open items. **They are rows now.**
 | **H-07** | wear per site kind — **NO silent default; an unregistered kind RAISES** | NUMBER ×kinds | params | **assumption** | per-kind table; §42.2.1 names the silent default as the prior sin | any Site |
 | **H-08** | band floors per site kind per verb | NUMBER ×kinds | params | **assumption** | per-kind table | L5, §12.1 |
 | **H-09** | ledger cap `L` · View `K` · claim confidence | NUMBER ×3 | params | **assumption** | `200` · `12` · `100` | WITNESS, DELIBERATE |
-| **H-10** | the act budget as an **integer** of the ruled band `~5` | NUMBER | params | **assumption** | `5`; **swept 2·5·9 — the count verdict flips, which is the finding** | DELIBERATE |
+| **H-10** | the **SCENE** budget as an **integer** of the ruled band `~5` *(⚠ **the unit was ruled 2026-09-02**: scenes, not acts — H-35)* | NUMBER | params | **assumption** | `5`; **swept 2·5·9 — the count verdict flips, which is the finding** | DELIBERATE |
 | **H-11** | the subsistence formula over an **open** `MatterKind` registry | FORMULA | Rung (matter) + params | **assumption** | draw from the containing rung's stores, scaled by weight | `Sensation` |
 | **H-12** | MATTER emits an Event per write so crossings have an antecedent | PRODUCER | the log | **ruled** — §D22 | Part D's `emits:` column | every crossing |
 
@@ -693,7 +693,7 @@ lists of open items. **They are rows now.**
 | **H-32** | `judging_set_rule` | RULING | Rung | **absent** | none. ⚠ **nothing is decided at a sitting** | 2 |
 | **H-33** | the five witness channel predicates | FORMULA ×5 | the presence index (Nobody) | **absent** | none. ⚠ **fan-out is total; nothing said in private is private** | 1 |
 | **H-34** | establishment size per office kind | NUMBER | params | **assumption** | a per-kind number | 1 |
-| **H-35** | **does a scene equal an act?** | RULING | **Jordan** | **absent** | none — survives all five tests | 1 |
+| **H-35** | **does a scene equal an act?** | RULING | **Jordan** | ✅ **RULED 2026-09-02** — *"5 scenes for a character to play per season"* | **the SCENE is the budgeted unit; the number is 5; every character has it.** Interactions-per-scene (1–3) and extended-scene cost (2) become **`assumption` rows**, cited to `player_agency_v30.md` §6.3 and swept. See `PLAN.md` §3.4 and **W17** | 1 |
 | **H-36** | refraction: emitter- or receiver-side, and by how much | RULING + FORMULA | the design; params | **absent** | none | 2 |
 | **H-37** | the argument layer's named-fault roster | SCHEMA_ROW | the design | **absent** | none | 2 |
 | **H-38** | does a person carry a banded scalar? | RULING | Person, or refused | **absent** | none | 2 |
@@ -714,7 +714,9 @@ lists of open items. **They are rows now.**
 > and filled them silently. **Twelve refusals a reader can count is worth more than an unknown
 > number an instrument fills.**
 
-**Three of the twelve are genuine escalations** — H-35 (scene=act), H-36 (refraction's side), H-38
+⚠ **CORRECTED 2026-09-02 — ZERO of the twelve are live escalations.** `H-35` was **ruled by Jordan** (above); `H-36` closes receiver-side on architecture and `H-38` on precedent — see `PLAN.md` §3.1–§3.4, which runs `CLAUDE.md` §0's five tests over all twelve and closes or downgrades eleven **in chain**. The sentence below is the pre-adjudication claim, kept so the correction is legible.
+
+~~**Three of the twelve are genuine escalations**~~ — H-35 (scene=act), H-36 (refraction's side), H-38
 (a person's banded scalar): each is two defensible options leading to materially different games.
 **The other nine are authoring work**, not decisions: someone must write a margin model, a judging
 rule, five channel predicates, a fault roster, a distribution, a termination argument, a cost model.

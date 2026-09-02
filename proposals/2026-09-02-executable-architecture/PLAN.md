@@ -22,8 +22,8 @@ This document is that. It carries seven things and nothing else:
 | **1** | the **adjudication** of PR #354 by a structurally-independent read-only critic | a plan built on an unaudited proposal inherits its errors — and it found nineteen holes with no row, eight wrong counts, and three of this chain's own rulings wrong |
 | **2** | what was **measured** for this plan, by execution, during its composition | a plan built on remembered numbers is the failure this chain exists to end |
 | **3** | the **decision queue** — `CLAUDE.md` §0's five tests, run over the twelve `absent` rows | *"escalate only what survives all five"*, and nobody had run them |
-| **4** | **sixteen work items**, each with a deliverable and a DONE-WHEN that executes | §0.2: a juncture is done when the behaviour runs |
-| **5** | the **dependency graph** and the **critical path** | six of the sixteen reach the bar; the other ten run beside it |
+| **4** | **seventeen work items**, each with a deliverable and a DONE-WHEN that executes | §0.2: a juncture is done when the behaviour runs |
+| **5** | the **dependency graph** and the **critical path** | seven of the seventeen reach the bar; the other ten run beside it |
 | **6** | the **first milestone**, named down to the case and the six checks that close it | *"the tested version ran zero cases end to end"* |
 | **7–9** | **guardrails**, **what not to do**, and **how to falsify this plan** | the guardrails are what stop the next session repeating this one |
 
@@ -41,7 +41,7 @@ a line **of #353**. Where no test closes it, the hole stays open and is named.
 > an object** — a markdown table nothing reads, whose own counts do not reproduce from its own rows.
 > **That is why `W0` is first and everything waits on it.**
 >
-> **3.** **The tested version ran zero cases end to end.** Every one of the sixteen items is
+> **3.** **The tested version ran zero cases end to end.** Every one of the seventeen items is
 > subordinate to making that number **one**.
 
 ---
@@ -360,22 +360,51 @@ Magnitude stays `assumption`. **Unblocks `F6`, NPC-020 and two arcs.** Per `CLAU
 loud-exception rule: **close it, and name it as held back in the PR body** so a reviewer who
 disagrees can say so. Do not send it to Jordan.
 
-### **H-35 — does a scene equal an act? ESCALATE. It is the only one that survives all five.**
+### **H-35 — does a scene equal an act? ✅ RULED BY JORDAN, 2026-09-02. THE QUEUE IS EMPTY.**
 
-The ambiguity is in **Jordan's own sentence**, quoted in chain: *"i expect a character to get ~5
-playable **scenes** per season, **which may mean** that they get ~5 actions."*
+> **Verbatim, in answer to the escalation this document raised:**
+> ### ***"5 scenes for a character to play per season"***
 
-| option | what it costs |
+This is **reading 2** of the three the in-chain ruling doc flagged, and it is the reading that ruling
+doc marked as the one the canonical prior art already supplies. **The budgeted unit is the SCENE.**
+
+| what the ruling settles | |
 |---|---|
-| **1 · one scene = one act**, budget 5 acts | simplest; NPC and player run the identical loop; a player season is 5 resolutions |
-| **2 · a scene contains 1–3 acts** and costs 1–2 scene actions | a **second budget object** and **a container the loop does not have**; `capacity` moves to the scene |
+| **the unit** | **the scene**, not the act. `budget` bounds scenes; #353's verbs are what happens *inside* one |
+| **the number** | **5** |
+| **who gets it** | **"a character"** — the neutral word, not *"the player"*. See below; this closes the hazard the ruling doc named as the one to watch |
 
-**Two defensible options leading to materially different games** — §0's definition of a genuine
-escalation. ⚠ *(An answer exists in the pre-#337 archive; under this session's scope rule it is a
-**subject**, not a reason, and it is not offered as one.)*
+### What it settles that was open, and how each is graded
 
-> **It blocks nothing on the critical path.** Artifact 2 runs at H-10's integer `5` either way. **Ask
-> it; do not wait on it.**
+| | grade | basis |
+|---|---|---|
+| the unit is the scene · the number is 5 | **RULED** | Jordan, 2026-09-02, verbatim above |
+| **every character has the budget — the archive's asymmetric economy is REJECTED** | **ruled by design document + architecture** (§0 tests 3 and 5) | Jordan said *"a character"*. #353 L1 makes the person the only actor and §26 has **everyone run `choose`**. The in-chain ruling doc flagged reading 3 — *"named NPCs have no action budget at all; they generate Scene Slate entries that cost **the player's** budget"* — as **"precisely the player-only mechanism §07 §1 forbids"**. It is now closed against the archive and toward the shape |
+| **how many interactions a scene admits** | **`assumption`, default 1–3** | ⚠ **NOT ruled.** Jordan did not say. The default comes from `player_agency_v30.md` §6.3 — *"One scene action = one scene opportunity pursued. A scene contains 1–3 mechanical interactions"* — which is `## Status: CANONICAL` but **pre-#337 and, under §0.05, reference rather than mechanism.** Inject it, declare it, **sweep it 1 · 3 · unbounded** |
+| **whether an extended scene costs 2** | **`assumption`, default 2** | same source, same grading. Sweep `1 · 2` |
+| rank changing the budget | **already consistent, no action** | #353 §26.3 varies `budget` by *"office, condition, distance travelled"* and `V2` §F3's formula carries `office_bonus`. `player_agency_v30`'s Standing `+1`/`+2` is the same shape. **PR #350's *"No office, rank or holding changes it, ever"* was already overturned by #353** |
+
+### What it costs, stated plainly, because the escalation named this cost and Jordan accepted it
+
+**It buys the container the loop does not have.** The question as put said reading 2 *"costs a second
+budget object and a container the loop does not have"*. That is now work, not a hypothetical:
+
+- **`budget` returns SCENE actions.** #353 §26.3's prose counts acts throughout — *"a wounded duke gets
+  fewer **acts**"*, *"a character who spends all five **acts** petitioning"*. **The argument survives
+  the noun change unaltered** (five scenes each spent petitioning is still the triage the budget
+  exists to create), but every one of those sentences needs re-stating in scenes.
+- **Part E's verb table is UNCHANGED and is now correctly placed.** Its ~28 verbs are the *mechanical
+  interactions*; the scene is the container above them. **Nothing in Parts D or E is invalidated** —
+  a level is added above, which is the cheapest possible shape for this ruling to take.
+- ⚠ **Probe `P2x` changes meaning and must be re-expressed.** It currently fails with *"`p_king`
+  returned 8 acts against a budget of 5"*. Under the ruling **8 interactions across ≤5 scenes is
+  lawful**, so as written the probe now tests the wrong proposition. **This is a real defect the
+  ruling creates and it is named rather than absorbed** — work item **W17**.
+
+> ### **THE `needs_jordan` QUEUE FOR THIS PROPOSAL IS NOW EMPTY.**
+> `ARCHITECTURE_V2.md` sent three escalations. One closed on precedent (`H-38`), one closed on
+> architecture and is held back for objection (`H-36`), and **the one that genuinely survived all five
+> tests has been answered.** Nothing in this plan is now waiting on a ruling.
 
 ## §3.5 · WHAT THE H-23 RULING DOES TO THE HEADLINE NUMBER — and it must be published
 
@@ -407,12 +436,13 @@ print([ (s, sum(1 for c in d[s] if c.get('blockers') and set(c['blockers'])<=R))
 
 ## §3.6 · The residue, and it is small
 
-| | `V2` | after the ladder |
-|---|---:|---:|
-| `absent` rows | **12** | **1** — `H-02`'s two verb rows, which fall out of **W3** |
-| **genuine Jordan escalations** | **3** | **1** — `H-35`, blocking nothing |
-| conditional closures held back in the PR body | 0 | **1** — `H-36` |
-| **holes with NO ROW AT ALL** | *unknown* | **19** — §1.4 plus `A18` |
+| | `V2` | after the ladder | after Jordan's 2026-09-02 ruling |
+|---|---:|---:|---:|
+| `absent` rows | **12** | **1** — `H-02`'s two verb rows, which fall out of **W3** | **1** |
+| **genuine Jordan escalations** | **3** | **1** — `H-35` | **0 — THE QUEUE IS EMPTY** |
+| conditional closures held back in the PR body | 0 | **1** — `H-36` | **1** |
+| new `assumption` rows the ruling creates | — | — | **2** — interactions per scene (1–3) · extended-scene cost (2) |
+| **holes with NO ROW AT ALL** | *unknown* | **19** — §1.4 plus `A18` | **19** |
 
 > ### THE SHAPE OF THE WORK, RESTATED
 > **`ARCHITECTURE_V2.md` reports twelve refusals and three escalations. In chain there is one open
@@ -565,7 +595,10 @@ computed from `verb_table.yaml` — **remove the `roster` parameter**, which is 
 scores with an `alignment` table **registered as its own `assumption` row** (§1.4 hole 7: the closed
 13 axes are enumerated nowhere, so the table is a row before it is a formula). **`budget(p, view)`
 person-side**, reading own `hold` Tenures, own body band, own travel legs — **the smaller amendment
-of §3.3**. `standing` with a **defined predicate vocabulary and a defined `agreement`** — `V2`
+of §3.3** — and, per Jordan's 2026-09-02 ruling, **returning SCENE actions rather than acts** (§3.4).
+`choose` returns **at most `budget` scenes**, each resolving into 1–3 verb applications from
+`verb_table.yaml`; the interactions-per-scene bound and the extended-scene cost are **`assumption`
+rows, swept** — never constants in a body. `standing` with a **defined predicate vocabulary and a defined `agreement`** — `V2`
 §F4's `agreement(claims, convictions)` is undefined and compares the TRUE layer with the RIGHT layer
 that #353 `:352-362` calls *"the most dangerous collision in the design"*, so **H-29's default is not
 injectable as written**. A **View-builder rule row**: #353 says *"at most K ids … BUILT, not
@@ -705,6 +738,35 @@ petition chain ends at a sitting and a sitting does not decide until `H-32` has 
 
 ---
 
+## **W17 — THE SCENE CONTAINER.** *(Jordan's 2026-09-02 ruling, §3.4)*
+
+**Do.** Add the scene as the level above the verb table — **the only structural change any ruling in
+this chain has required, and it is additive.**
+
+1. `budget` returns **scene actions**; `choose` returns at most that many **scenes**.
+2. A scene carries its 1–3 verb applications. Both that bound and the **extended-scene cost of 2** are
+   **register rows graded `assumption`**, citing `player_agency_v30.md` §6.3 as the default, with a
+   declared sweep — **not constants**, because Jordan ruled the unit and the number and **did not rule
+   these**.
+3. **Re-express `P2x`.** It currently fails on *"`p_king` returned 8 acts against a budget of 5"*,
+   which under the ruling is **lawful**. The propositions it should test are *"a person returned more
+   SCENES than `budget` allows"* and, separately, *"a scene carried more interactions than the swept
+   bound"*. **Leaving it as-is would be a probe asserting a rule the design no longer has.**
+4. Re-state #353 §26.3's prose in scenes. **The spray argument survives the noun change unaltered** —
+   five scenes each spent petitioning is exactly the triage the budget exists to create.
+
+**Does NOT change.** Parts D and E. The verb table's ~28 rows are the interactions; a level is added
+above them. **This is the cheapest shape the ruling could have taken, and it is worth saying so.**
+
+**Proof.** A person with `budget = 5` returning 6 scenes raises; a scene carrying 4 interactions
+raises at the swept bound of 3 and **passes at the swept bound of `unbounded`, with the flip
+reported**; `P2x` fails on scene count and no longer on interaction count.
+
+**Size S–M.** Depends on **W3** and **W5**. ⚠ **On the critical path to `W9`** — artifact 2 cannot
+count a season's activity until it knows what it is counting.
+
+---
+
 ## **W14 — THE GODOT PORT ARTIFACTS.** *(#353 §66 items 1, 3, 6)*
 
 **Observation only. Not on this plan's path. Do not start before `W9`.** Named so that a reader does
@@ -764,15 +826,19 @@ left.**
 
 # PART 5 · SEQUENCE, INTERDEPENDENCIES AND THE CRITICAL PATH
 
-## §5.1 · The critical path — six items, and they are hard blocks
+## §5.1 · The critical path — seven items, and they are hard blocks
 
 ```
-W0 ──▶ W1 ──▶ W2 ──▶ W3 ──▶ W5 ──▶ W9
-(register  (re-grade  (Part D   (Part E   (the        (ARTIFACT 2:
- as data)   by the     as data)  as data,  person's     one NPC season,
-            5 tests)             one       decision)    end to end)
-                                 resolve)
+W0 ──▶ W1 ──▶ W2 ──▶ W3 ──▶ W5 ──▶ W17 ──▶ W9
+(register  (re-grade  (Part D   (Part E   (the      (the scene   (ARTIFACT 2:
+ as data)   by the     as data)  as data,  person's   container —   one NPC season,
+            5 tests)             one       decision)  RULED         end to end)
+                                 resolve)             2026-09-02)
 ```
+
+⚠ **`W17` was added by Jordan's 2026-09-02 ruling on `H-35`** (§3.4). The escalation as put said the
+scene reading *"costs a container the loop does not have"*; that cost is now real, **and it is
+additive rather than invalidating** — Parts D and E stand unchanged beneath it.
 
 **Why each edge is a hard block and not a preference:**
 
@@ -782,9 +848,11 @@ W0 ──▶ W1 ──▶ W2 ──▶ W3 ──▶ W5 ──▶ W9
 | **W0 → W2** | every new Part D row needs a **grade**, and #353's polarity rule (`:1576-1578`) **fails an ungraded row** rather than defaulting it. Adding rows before there is a grader inverts the polarity |
 | **W2 → W3** | every verb's `writes:` cell **must be a Part D row** (§E2). A verb table over a matrix that does not carry `(Proposition, exists)` cannot express `utter` |
 | **W3 → W5** | `opening_set` is **computed from the verb table**. That is the whole of `D2`: option sets stop being authored the moment the verb table exists, and not before |
+| **W5 → W17** | `budget` must return the ruled unit before a container can bound anything |
+| **W17 → W9** | artifact 2 counts a season's activity, so it must know **what it is counting**. The ruling makes that a scene |
 | **W5 → W9** | without a computed `q` the season is **graded, not run**. This is the distinction the entire session failed to cross |
 
-**Everything else is off the path.** `W6`, `W7`, `W8`, `W10`–`W14` do not block artifact 2.
+**Everything else is off the path.** `W6`, `W7`, `W8`, `W10`–`W14` and `W16` do not block artifact 2.
 
 ## §5.2 · What runs in parallel, and the condition that makes it safe
 
@@ -866,7 +934,7 @@ Kolbrun Thale.**
 
 **`W15` · `W0` · `W1` (only the rows `W9` touches) · `W2` · `W3` (verbs `create_record`, `move`,
 `tell`, `transfer`, `destroy_record`, `kill`, plus **`utter`**) · `W4` · `W5` (Q2 and Q4 sources; a
-**non-zero** `alignment` default; person-side `budget`).**
+**non-zero** `alignment` default; person-side `budget`) · **`W17`** (the scene container).**
 
 **`W6`, `W7` and `W8` are not required.** The `H-33` default at this milestone is **total fan-out** —
 declared as such in the register with `site: witness.fan_out` and `sweep: [total, presence, five]`.
@@ -881,6 +949,7 @@ That is **honest** (it is #353's specified behaviour), it makes the log walk, an
 | **2** | The log contains, **in `causes[]` order**: `record.created` *(causes: her act)* → `term.matured` at MATTER *(causes: `record.created`)* → a claim deposited in another person's ledger → **that person's Q2 question** → **their act** → `news.told` \| `record.destroyed` \| `person.died`. **A chain of at least four Events walks from her act, with no `[ROOT]` after the seed.** |
 | **3** | **The fixture-read log names only sites present on `hole_register.yaml`.** Zero fills off the register — `V2` §G's central claim, made falsifiable. |
 | **4** | `resolve` was called **with no `effect` lambda**, and `opening_set` **with no roster**. |
+| **4b** | **Carin returned at most `budget` SCENES**, and each scene's interaction count was checked against the **swept** bound rather than a constant. *(Added by the 2026-09-02 ruling; §3.4.)* |
 | **5** | Her `season_requires` core rows each carry an `exercises:` **written before the run and not edited after it**, and each declared verb's `emits:` kind appears in the log with `causes[]` walking back to her act. Her **three currently-unmapped core rows** resolve to a verb with eligibility `hold:<record>`, a Q2 question in another person, and a Record stage — **or are recorded NOT-ASSESSED with the reason.** |
 | **6** | **The A5-style float control still fires.** `W11` may follow, but the float arm must not have been removed to make the run clean. |
 
@@ -1011,7 +1080,7 @@ question to Jordan**, `H-36` a closure explicitly offered for objection.
 | the critical path is `W0→W1→W2→W3→W5→W9` | an artifact-2 run that completes without one of the six, **or** a seventh item that turns out to block it |
 | `W0` is first | a re-grade, a matrix row or a verb row that can be written correctly **without** a graded register — show one |
 | eleven of twelve `absent` rows close in chain | **a cited line that does not say what §3.1–§3.4 claims it says.** Every citation is a file and a line; check them |
-| `H-35` is the only genuine escalation | a second row where two defensible options lead to materially different games and no test of the five returns an answer |
+| the escalation queue is empty | a row where two defensible options lead to materially different games and no test of the five returns an answer. *(`H-35` was the last one and is now ruled — §3.4.)* |
 | the register is now complete | **a hole an instrument must fill that carries no row** — `V2`'s own falsifier, which fired **19 times** against `V2` and will be re-run against `hole_register.yaml` |
 | declared routing makes 60 cases assessable | a case with `exercises:` authored on every core row that is still NOT-ASSESSED for a reason that is not *"nobody authored it"* |
 | the 22-arc residue needs re-authoring, not design | a re-authored arc, expressed purely through §36.3's petition chain and §37's `tell`, that **still** routes to a refusal probe |
@@ -1036,7 +1105,7 @@ return.**
 | **Adjudicated by** | a read-only `valoria-critic` on the top tier — `Read`/`Grep`/`Glob`, **no write tools**, so its independence is a property of `.claude/agents/valoria-critic.md` and not of its prompt (`CLAUDE.md` §10). It read #353 (2,068 lines) and `ARCHITECTURE_V2.md` (830) in full, produced **no files**, and stated its own coverage, its own sampling and its own null results |
 | **Measured by** | direct execution during composition — `report.py`, `pytest test_tracer_is_honest.py` (**63 passed**), and set-cover/verdict queries over `results.json`, each with its command in-line |
 | **Corrections this document makes to its own author's prior work** | three, in §1.3: `H-23` (a precedent that would have overturned an explicit sentence of the specification), `H-36` (emitter- vs receiver-side, decided the wrong way), and the Part E verb-roster check (**a keyword search reported as a verified negative** — the same router failure the plan exists to end) |
-| **Escalations** | **one** — `H-35`, and it blocks nothing |
+| **Escalations** | **zero.** `H-35` was escalated and **ruled by Jordan on 2026-09-02** — *"5 scenes for a character to play per season"* — and is recorded at §3.4 with its consequences and the two `assumption` rows it creates. **Nothing in this plan is waiting on a ruling.** |
 | **Held back for objection** | **one** — `H-36`, closed receiver-side |
 | **Scope** | every closure is made **in chain** (PR #337 → now). `W16` records what a tree-wide search returns and **the plan rests on none of it** |
 | **`ED` allocated** | **none.** A gap in a `PROPOSED` architecture gets no ID; the adoption decision gets one |
