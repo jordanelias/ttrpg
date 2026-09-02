@@ -2437,7 +2437,20 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint) ->
 
     def scene(n: int, chunk: list) -> "Scene":
         return Scene(mint(p.id, "scene", str(n)), p.id,
-                     [Act(mint(p.id, c.verb, c.subject or ""), p.id, c.verb) for c in chunk],
+                     # ⚠ THE CANDIDATE'S SUBJECT REACHES THE ACT, AND IT USED NOT TO. This read
+                     # `Act(mint(...), p.id, c.verb)` — three arguments — so `opening_set`
+                     # computed a subject from the question's referents, `mint` folded it into the
+                     # act's ID, and the act itself carried NOTHING. `_req_tell` reads
+                     # `payload["subject"]` and got `None`, so `tell` was attempted and refused in
+                     # every world in the corpus; `_eff_tell` had no target either.
+                     #
+                     # ⚠ THIS IS HALF OF `H-94` AND ONLY HALF. The other half is structural and is
+                     # NOT fixed here: `Candidate := (verb, subject, why)` (S17) has no operand
+                     # field at all, so `transfer`'s `stores(hearth(giver), kind) >= amount` still
+                     # has no `kind` and no `amount` that any part of the pipeline can carry. That
+                     # needs a ruling on where operands live, not a keyword argument.
+                     [Act(mint(p.id, c.verb, c.subject or ""), p.id, c.verb,
+                          payload={"subject": c.subject} if c.subject else None) for c in chunk],
                      # `H-77`: a scene carrying more than one interaction is the EXTENDED one.
                      # This is what `extended` MEANS, and until W17's adversarial pass nothing
                      # ever set it -- so `Scene.cost` returned 1 unconditionally, H-77's sweep

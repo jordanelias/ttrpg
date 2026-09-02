@@ -3423,9 +3423,24 @@ def test_w8_the_proof_clause_is_not_met_and_h94_is_why():
     assert settle == sorted(settle) and settle[-1] > settle[0], (
         f"the settlement no longer overflows: {settle}")
     assert minted, "the chooser minted nothing; this test cannot observe H-94"
-    assert not [a for a in minted if a.payload or a.changes], (
-        f"{len([a for a in minted if a.payload or a.changes])} of {len(minted)} minted acts now "
-        "carry operands — `H-94` has closed, and `W8`'s proof clause is owed a fresh measurement")
+    # ⚠ NARROWED: `H-94` IS HALF CLOSED AND THIS ASSERTION NOW PINS THE HALF THAT IS NOT. It read
+    # `not [a for a in minted if a.payload or a.changes]` — no minted act carries anything — and
+    # that stopped being true when `pack_scenes` began carrying the Candidate's SUBJECT into the
+    # payload instead of folding it into the act id and discarding it. The subject was always
+    # computed by `opening_set`; dropping it was a bug, and `_req_tell` reads exactly that key.
+    #
+    # What remains is the STRUCTURAL half: `Candidate := (verb, subject, why)` (S17) has no
+    # operand field at all, so `transfer`'s `stores(hearth(giver), kind) >= amount` still has no
+    # `kind` and no `amount` any part of the pipeline can carry. A minted act may therefore carry
+    # a subject and NOTHING ELSE, and the day it carries a second key `H-94` has closed.
+    extra = [a for a in minted if a.changes or set((a.payload or {})) - {"subject"}]
+    assert not extra, (
+        f"{len(extra)} of {len(minted)} minted acts now carry an operand beyond `subject` "
+        f"({sorted({k for a in extra for k in (a.payload or {})} - {'subject'})}) — the structural "
+        "half of `H-94` has closed, and `W8`'s proof clause is owed a fresh measurement")
+    assert any((a.payload or {}).get("subject") for a in minted), (
+        "no minted act carries a subject — `pack_scenes` has gone back to dropping the operand "
+        "`opening_set` computed, and `tell` will be refused in every world again")
 
 
 def test_w8_work_emits_a_success_while_repairing_nothing(): 
@@ -4199,20 +4214,37 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `tell` and `transfer` were among its "seven that execute" and both are always REFUSED.
     ever = {v for r in live for v in r["executed"]}
     refused_only = {v for r in live for v in r["refused"]} - ever
-    assert ever == {"create_record", "forge", "move", "speak", "utter", "work"}, (
+    assert ever == {"create_record", "forge", "move", "speak", "tell", "utter", "work"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
-        "must be re-measured. It is SIX; rev 1 published seven by counting attempts")
-    assert refused_only == {"tell", "transfer"}, (
-        f"the always-refused set moved to {sorted(refused_only)}; `H-94` names why these two fail "
-        "(an act carries no operands), so a change here means `H-94` has moved")
+        "must be re-measured rather than reused")
+    assert refused_only == {"transfer"}, (
+        f"the always-refused set moved to {sorted(refused_only)}. `transfer` is the STRUCTURAL "
+        "half of `H-94`: `Candidate := (verb, subject, why)` has no operand field, so "
+        "`stores(hearth(giver), kind) >= amount` has no `kind` and no `amount` to read. `tell` "
+        "was the other half and it is fixed — `pack_scenes` now carries the Candidate's subject "
+        "into the payload instead of folding it into the act id and discarding it")
 
     # `H-96` — the ranking cannot discriminate, which is WHY one executed set survives worlds that
     # genuinely differ. This is the load-bearing assertion; the identical set alone proves nothing.
     assert len({r["seasons"] for r in live}) > 1, (
         "every case ran for the same number of seasons — `temporal.span_seasons` is not being "
         "read, and the worlds are identical again for the reason rev 1 was overturned")
-    assert len({tuple(r["executed"]) for r in live}) == 1, (
-        "the worlds no longer agree — that is PROGRESS, and `H-96` must be re-derived")
+    # ⚠ THE WORLDS DISCRIMINATE NOW, AND EXACTLY ONCE. Two executed sets: the five cases the
+    # corpus declares `span_seasons: 1` do not `tell`, because a claim is deposited at WITNESS at
+    # the END of a season and a one-season life never holds one to tell. That is the corpus's own
+    # data changing the outcome — the first behavioural difference the larger surface produced,
+    # and it appeared only once `temporal.span_seasons` was read and the subject stopped being
+    # dropped. `H-96` still holds for everything else: 2..7 of 22 candidates separate.
+    by_sig = {}
+    for r in live:
+        by_sig.setdefault(tuple(r["executed"]), []).append(r)
+    assert len(by_sig) == 2, (
+        f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived")
+    small = min(by_sig.values(), key=len)
+    assert {r["seasons"] for r in small} == {1} and len(small) == 5, (
+        f"the divergent group is no longer the five one-season cases: "
+        f"{sorted({r['seasons'] for r in small})}, n={len(small)}. The explanation on `H-96` "
+        "(a claim lands at WITNESS, so a one-season life has none to tell) no longer holds")
     foldable = set(S.resolvable_verbs())
     assert foldable - ever - refused_only == {"confer", "convene", "dispatch", "revoke",
                                               "destroy_record"}, (
