@@ -3928,3 +3928,50 @@ is LIVE and none of this is; a session orienting from §1 would otherwise never 
   (`H-38`). Each is two defensible options leading to materially different games.
 
 **No ED allocated.** A gap in a PROPOSED architecture gets no id; the adoption decision gets one.
+
+---
+
+## 2026-09-02 (second entry) — PR #354 ADJUDICATED, AND THE IMPROVEMENT PLAN
+
+`proposals/2026-09-02-executable-architecture/PLAN.md` — **PROPOSED, HELD BACK IN FULL.** A
+structurally-independent read-only critic on the top tier adjudicated `ARCHITECTURE_V2.md` against
+#353's full text and the instrument's source, produced no files, and stated its own null results.
+Its return plus direct measurement is the plan.
+
+### What changed in the entry above, and it is most of it
+
+| the entry above says | measured / adjudicated |
+|---|---|
+| *"Three questions are Jordan's — `H-35`, `H-36`, `H-38`"* | **ONE.** `H-38` closes on precedent (`Site.condition`, #353 `:442-462`) and is **already presupposed by `V2`'s own Part D row and §F3**. `H-36` closes **receiver-side** (every witness mints its own claim; the Dispensation is immutable with no bare effect field) and is **held back in the PR body for objection**. Only `H-35` survives all five tests — **and it blocks nothing** |
+| *"`H-20` … ~28 cases"* | **21 of 76 blocked cases** by set cover — still the largest single row, and the figure now has a command |
+| *"0% vs 33% refusals"* | **`0%` is wrong.** `P33` is a §26.3 RULING (*"a petition consumes budget like any act, and that is the whole of the pricing"*), so NPC refusals are 2–3 of 26. `01_NPC_VS_ARC.md` §1 now carries a marked correction |
+| the 39-hole register | **32 rows are present, the counts do not reproduce, and NINETEEN holes have no row** — among them `(Claim, confidence)` (a licensed clock with no Part D row), `utter` (no verb creates a Proposition, so `commit`/`petition`/`issue` cannot fire), the nine Dispensation terms, the six investigation acts, the 13 conviction axes, and `A18`'s contract descent (which is why **R-1 and R-2 are unenforceable in principle**) |
+
+### The finding that reorganises the work
+
+**The register is not an object.** `V2` §0.3 claims it is *"rows, not prose"*; **not one of its 32
+rows carries the `site:`, `sweep:` or `cite:` fields its own §G4 defines**, and by §0.05's test it is
+prose. That is why it could not report nineteen missing entries or eleven answerable refusals.
+**`W0` — materialise it as `hole_register.yaml` behind a blocking `register.py --check` — is the
+first work item and everything waits on it.**
+
+### Next actions
+
+1. **`W0` + `W15`** — the register as data; one writer per artifact. Both S, both depend on nothing.
+2. **Critical path: `W0 → W1 → W2 → W3 → W5 → W9`**, ending at **artifact 2 — one NPC season, end to
+   end, on NPC-088 Carin Vedel** (#353 §13.1 already narrates her season; she needs no sitting, no
+   contest and no dispensation, so her season tests the loop rather than the defaults).
+3. **`W10` — declared routing.** 230 of 422 core rows never routed; all 60 NOT-ASSESSED cases have
+   **zero** core blockers. Start it after `W3`, beside the path, never in front of it.
+4. **`W13` — the arc lane, now an exact list**: 14 refusal-only arcs to re-author, 8 mixed that need
+   a hole closed **first**. Both lists are in `PLAN.md` §W13 with the command that produced them.
+5. **Ask Jordan `H-35` only.** Do not send `H-36` or `H-38`.
+
+### Two artifacts banked this session
+
+- **The 143-case run REPRODUCES** — `report.py` returns `results.json` and `TRACE.txt` byte-identical;
+  63/63 honesty tests pass. First execution artifact in the chain under §0.2.
+- **The committed markdown was stale by one fix** (two entrypoints wrote overlapping outputs), so
+  four ARC cases were wrong in a merged PR. Regenerated and committed; the fix is `W15`.
+
+**No ED allocated.** A gap in a PROPOSED architecture gets no id; the adoption decision gets one.

@@ -4,6 +4,7 @@
 
 | file | what it is |
 |---|---|
+| **`PLAN.md`** | **the improvement plan — read this first if you are about to do work.** What to build, in what order, what may not be invented while building it, and the one question for Jordan. It also **adjudicates `ARCHITECTURE_V2.md` and corrects it in three places** |
 | **`ARCHITECTURE_V2.md`** | **the proposal.** Read Part A before the tables, or they look like bureaucracy |
 | `../2026-09-01-season-loop-tests/` | the executed session it rests on — instrument, 143 cases, run output |
 | `../2026-09-01-season-loop-tests/session/00_FINDINGS_LEDGER.md` | the 56 findings, transcribed |
@@ -21,14 +22,14 @@ An instrument implementing #353 was built and attacked four times: three structu
 read-only critics and one anti-fabrication auditor, **56 findings**. Rounds 1 and 2 flattered the
 shape; round 3's errors ran **both ways**, which is worse. The measured result of the tested version:
 
-**46 NPCs · 97 arcs · 972 requirement rows · 120 probe executions · ZERO cases that ran end to end.**
+**46 NPCs · 97 arcs · 972 requirement rows · 121 probe executions · ZERO cases that ran end to end.**
 
 ## What it inherits, and it is most of the document
 
 **Parts I–VI of #353 are right and are inherited whole** — the one sentence, the nine throughlines,
 the five laws, R-1/R-2, the two topologies, the six steps, `Event` without an actor or a target, one
 log, the seam, no per-container clock, fixed point, the Godot port, **and all of Part VIII's
-refusals**. 41 of 62 probe PASSes were raised by a gate, a type or a law in the shape itself.
+refusals**. 43 of 63 probe PASSes were raised by a gate, a type or a law in the shape itself.
 
 **A successor that rewrites Parts I–VI is a worse document.** The failures are not in the
 architecture; they are in what the architecture declines to say.
@@ -64,3 +65,17 @@ architecture; they are in what the architecture declines to say.
   direction; only the probe ledger is cited.
 - **Nothing executes.** §I2 lists eight artifacts and marks the seven that cannot be satisfied by
   writing. **Artifact 2 is the bar: one NPC season, end to end. The tested version ran zero.**
+
+---
+
+## What the plan adds, in four lines
+
+- **Eleven of `ARCHITECTURE_V2.md`'s twelve `absent` holes close or downgrade *in chain*** once
+  `CLAUDE.md` §0's five tests are actually run over them. **One genuine escalation survives** —
+  does a scene equal an act? — **and it blocks nothing.**
+- **Nineteen holes have no row at all.** The register could not report this because **it is a
+  markdown table nothing reads**, whose own counts do not reproduce from its own rows.
+- **The critical path is six items** — `W0 → W1 → W2 → W3 → W5 → W9` — ending at **one NPC season
+  running end to end**. Everything else runs beside it.
+- **Three of this chain's own rulings are overturned in `PLAN.md` §1.3**, including a "verified
+  negative" that was a keyword search.

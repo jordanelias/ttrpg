@@ -28,7 +28,7 @@ the 97-arc corpus are subjects in exactly that sense.
 ## §0.2 · What this document INHERITS UNCHANGED, and why that matters
 
 > **Parts I–VI of #353 are RIGHT and are inherited whole.** This is not deference. It is the
-> session's measured result: 120 probe executions produced **62 PASSes**, of which **41 were raised
+> session's measured result: 121 probe executions produced **63 PASSes**, of which **43 were raised
 > by a gate, a type or a law in the shape itself**, and an independent citation audit at ~40 sites
 > across two adversaries found **every quotation verbatim and every section saying what was claimed**,
 > with one wrong section number between them.
@@ -732,7 +732,7 @@ only the design will be measured by an instrument that repeats them.
 > eleven unreachable probes and a 46% miss rate. **The ruling is: don't route — declare.**"*
 
 **The ruling governs key-type routing inside the engine. It describes the harness exactly.** Five
-recurrences of the bare-token class; 50 of 143 cases NOT-ASSESSED; both surviving PLAYABLEs
+recurrences of the bare-token class; 60 of 143 cases NOT-ASSESSED; both surviving PLAYABLEs
 artifacts. **Every `season_requires` row carries the verb or contract it exercises, authored with
 the row.** NOT-ASSESSED then means *"nobody said what this needs"* — a fact about authoring, which
 is fixable — instead of *"the regex missed"*, which is not.
@@ -771,7 +771,7 @@ is fixable — instead of *"the regex missed"*, which is not.
 | **H-20** — the axis registry + row | the corpus's largest non-refusal blocker | **~28** |
 | **H-21** — material vs social | an over-refusal that cost ten arcs | **~19** |
 | **H-22** — the five Record rows | every Record write stops being an unmarked cell | **~13** |
-| **§H1** — declared routing | 50 NOT-ASSESSED become a fact about authoring | **~50 assessable** |
+| **§H1** — declared routing | 60 NOT-ASSESSED become a fact about authoring | **60 assessable** |
 
 **And what it does not buy, stated so the claim is falsifiable:** ~22 core blocks remain — a Rung
 storing a social aggregate, a threshold producing an outcome, a fourth clock, a faction acting, a
