@@ -1005,6 +1005,19 @@ rows:
     cite:      "FOUND BY MAKING PART E's `contests:` COLUMN REAL. Jordan, 2026-09-02: *that would trigger the personal combat scene. you can't just kill or wound imo.* ARCHITECTURE_V2.md:394 declares the column (*if set, routes to the seam at RESOLVE, S39*) and :434 sets `contests: the body` on `kill / wound`; the transcription put it in `requires_note`, which nothing reads, and the fold executed a kill as a DIRECT WRITE. With the routing real the seam fires -- and immediately refuses, because S39.3 gives the cap no default. That refusal is CORRECT and it is the design working; what was missing is a caller who decided. This row is that decision, injected and swept rather than typed into a body, on H-09's precedent for `ledger_cap` and `view_k`. ⚠ NOT `ruled`: S39.3 refuses a default precisely so a harness number is not later cited as canon, and grading this `ruled` would do exactly that."
     source:    "W6 adversarial pass / Jordan 2026-09-02"
 
+  - id:        H-88
+    tier:      0
+    hole:      "the seam does not DISPATCH. S39's `contest()` is one generic function that raises on a degree ladder nobody wrote -- but the three subsystems a contest belongs to are BUILT, each declared in references/module_contracts.yaml with a doc, a sim module and a resolver: personal_combat (d_sigma), mass_battle (dice_pool), social_contest (dice_pool). The seam was never missing a ladder; it was failing to call the engine that owns the prize"
+    kind:      "WIRING"
+    owner:     "the seam (RESOLVE) -- the subsystems themselves are built and out of this chain"
+    grade:     "assumption"
+    default:   "rosters.yaml contest_subsystems maps a PRIZE to the module that owns it; the seam resolves the module and REFUSES BY NAME, citing its declared resolver and doc"
+    site:      "shape.contest_subsystem, called by shape.contest before the generic ladder refusal"
+    sweep:     ["refuse naming the subsystem (the default)", "refuse generically, as before", "call the subsystem -- out of this chain's scope"]
+    unblocks:  "every verb that declares `contests:`, and W7's degree question, which may be the WRONG question"
+    cite:      "JORDAN, 2026-09-02, VERBATIM: *a contest seems like it can be a call for a different subsystem like personal combat, mass battle or social contest.* He is right and the tree agrees: all three modules exist in references/module_contracts.yaml with real docs, sim modules and declared resolvers -- personal_combat points at systems/combat/combat_engine_v1/, the 51-weapon balance harness with typed params already exported. ⚠ THIS REFRAMES W7. PLAN W7 asks for H-31 default so contest() returns a BAND instead of raising, which presumes the seam must compute a degree ITSELF. If the seam dispatches, the degree is the SUBSYSTEM's output and inventing one here would be the second resolver S27.2 names as its highest-value refusal. Held rather than acted on: W7 is not re-scoped by this row, and whoever runs it should read this first. ⚠ NEITHER HALF OF THE MAPPING IS INVENTED: the prize is what Part E's `contests:` column carries, and the subsystem is a module the contracts file already declares -- contest_subsystem RAISES if the roster ever names a module the contracts do not. Wiring the engines is OUT OF THIS CHAIN (Jordan ruled only this proposal chain is in scope), so the default refuses by name, which makes the remaining work visible per subsystem instead of as one undifferentiated hole."
+    source:    "Jordan 2026-09-02"
+
 # ---------------------------------------------------------------------------
 # THE DISCHARGE MAP -- guardrail G8.
 # "Every defect gets a register row, or is discharged with a named section."

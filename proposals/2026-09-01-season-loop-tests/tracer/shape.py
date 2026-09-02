@@ -3681,6 +3681,33 @@ class SeasonDriver:
 # S39 -- THE SEAM
 # ===========================================================================
 
+def contest_subsystem(prize: Any) -> Optional[dict]:
+    """Which subsystem owns a contest for this prize, from `rosters.yaml` crossed with
+    `references/module_contracts.yaml`.
+
+    Neither half is invented here: the PRIZE is what Part E's `contests:` column carries, and the
+    SUBSYSTEM is a module the contracts file already declares with a doc and a resolver. Returns
+    `None` for a prize no roster row claims -- which is a real answer, not a failure, and leaves
+    the generic refusal below it intact."""
+    row = _ROSTERS.get("contest_subsystems") or {}
+    name = (row.get("prizes") or {}).get(str(prize))
+    if name is None:
+        return None
+    import yaml as _y
+    contracts = _HERE.parent.parent.parent / "references" / "module_contracts.yaml"
+    if not contracts.exists():
+        return dict(module=name, resolver="unknown", doc="module_contracts.yaml not found")
+    for m in (_y.safe_load(contracts.read_text()) or {}).get("modules") or []:
+        if m.get("module") == name:
+            return dict(module=name, resolver=m.get("resolver") or "undeclared",
+                        doc=m.get("doc") or "no doc")
+    raise Unspecified(
+        f"`contest_subsystems` maps {prize!r} to {name!r}, which is in no module contract", "S39",
+        needs="a module named in references/module_contracts.yaml",
+        law="the roster may only name a subsystem the contracts file declares -- otherwise the "
+            "dispatch target is invented")
+
+
 def contest(w: World, rung: str, prize: Any, claimants: list[str],
             depth: int, max_depth: int, causes: list[str],
             extension: Optional[Callable[[str], bool]] = None):
@@ -3701,6 +3728,28 @@ def contest(w: World, rung: str, prize: Any, claimants: list[str],
     if not causes:
         raise Forbidden("contest called with causes=[]", "S39.2",
                         law="S39.2 line 2 -- Events, into the same log, WITH causes[] NAMING THE ACTS")
+    # ⚠ A CONTEST IS A DISPATCH TO A SUBSYSTEM, NOT A GENERIC ROLL. Jordan, 2026-09-02: *"a
+    # contest seems like it can be a call for a different subsystem like personal combat, mass
+    # battle or social contest."* All three ARE BUILT -- `references/module_contracts.yaml` gives
+    # each a doc, a sim module and a declared resolver (`d_sigma` for personal combat, `dice_pool`
+    # for the other two). So this seam was never missing a degree ladder it had to invent; it was
+    # failing to CALL the engine that owns the prize.
+    #
+    # Wiring those engines is out of this chain's scope (Jordan ruled only this proposal chain is
+    # in scope), so the refusal below NAMES the subsystem and its resolver instead of reporting one
+    # undifferentiated hole. That turns "the degree ladder's margin model is absent" -- which reads
+    # as a missing design -- into "this act belongs to `personal_combat`, whose resolver is
+    # `d_sigma`, and nothing connects them", which is a wiring statement somebody can act on.
+    _sub = contest_subsystem(prize)
+    if _sub is not None:
+        raise Unspecified(
+            f"a contest for {prize!r} belongs to the `{_sub['module']}` subsystem "
+            f"(resolver: {_sub['resolver']}), and nothing connects the seam to it", "S39",
+            needs=f"the seam to call {_sub['module']} ({_sub['doc']})",
+            law="Jordan 2026-09-02 -- a contest is a call for a different subsystem. The three "
+                "are declared in references/module_contracts.yaml WITH resolvers, so the seam's "
+                "job is to DISPATCH; inventing a degree ladder here would be a second resolver, "
+                "which S27.2 names as its highest-value refusal")
     if depth >= max_depth:
         TRACE.decision("contest depth cap reached", "S39.3",
                        chose="typed error result returned to the caller",

@@ -258,6 +258,29 @@ rosters:
       post_remit:    "the person holds a live office Tenure whose remit covers the verb that emitted this kind"
       chronicle:     "the kind is emitted by a `binding_decision` verb -- a matter of record, and public because the decision is institutional"
 
+  contest_subsystems:
+    source: "`references/module_contracts.yaml` names `personal_combat`, `mass_battle` and `social_contest` as modules with real docs and real resolvers. `ARCHITECTURE_V2.md:394` declares `contests: <prize>` — *if set, routes to the seam at RESOLVE (§39)*."
+    cite: "H-88"
+    note: >-
+      ⚠ A CONTEST IS A DISPATCH, NOT A GENERIC ROLL. Jordan, 2026-09-02: *"a contest seems like it
+      can be a call for a different subsystem like personal combat, mass battle or social
+      contest."* The seam was ONE function raising `Unspecified` on a degree ladder nobody had
+      written — but the three subsystems it should be calling ARE BUILT, each with a doc, a sim
+      module and a declared resolver (`d_sigma` for personal combat, `dice_pool` for the other
+      two). So the seam was not missing a ladder; it was failing to dispatch.
+      This roster maps a PRIZE to the subsystem that owns it. The prize is what Part E's column
+      carries; the subsystem is what `module_contracts.yaml` already names, so neither half is
+      invented here. ⚠ WIRING THE ACTUAL ENGINES IS OUT OF THIS CHAIN'S SCOPE (Jordan ruled only
+      this proposal chain is in scope), so the seam names the subsystem and its resolver and
+      REFUSES — which is a far more useful refusal than a generic one, and makes the remaining
+      work visible per subsystem rather than as one undifferentiated hole.
+    prizes:
+      "the body":       "personal_combat"
+      "a field":        "mass_battle"
+      "a standing":     "social_contest"
+      "a proposition":  "social_contest"
+    values: []
+
   conditional_emission_rows:
     source: "`W4`. Part D's `emits:` column does not distinguish a kind emitted ON EVERY WRITE from one emitted only WHEN A CONDITION HOLDS, and the two are different things."
     note: >-
