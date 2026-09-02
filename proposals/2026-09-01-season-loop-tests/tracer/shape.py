@@ -561,6 +561,66 @@ CLAIM_SUBJECT_RULES = roster("claim_subject_rules")
 # unbound roster was the one whose absence silently restores a ruled-against behaviour.
 TITLE_DOMAINS = roster_map("titles", "domains")
 
+# ⚠ THE OFFICE'S THREE CANON AXES -- `H-99`, and they are BOUND AT IMPORT for the reason the
+# comment above gives: an unbound roster is the one whose absence goes unnoticed. Jordan asked
+# *"does the office schema include faction belonging, scale of office, type of office, etc?"* and
+# it did not. `FACTIONS` is the belonging, `BODY_FACTION`/`BODY_FUNCTION` the type. SCALE is
+# deliberately not here -- an office's scale is the RUNG it is seated at, which `Office.seat`
+# already carries; a body does not fix a rung.
+#
+# ⚠ SOURCED UNDER THE 2026-09-02 PRECEDENCE RULING, WHICH `rosters.yaml`'s header states in full:
+# `systems/world/` is CANON for identity/names/organizations, `systems/factions/` near-canon only
+# where it concerns a faction's identity AND world is silent, `research/` reference. The first
+# version of these rosters was sourced from the near-canon tier and carried a name that tier
+# itself calls *"institutional infrastructure, not a faction"*.
+FACTIONS = roster("factions")
+BODY_FACTION = roster_map("office_bodies", "faction")
+BODY_FUNCTION = roster_map("office_bodies", "function")
+ROLE_TEMPLATE_OF = roster_map("role_templates", "by_faction")
+
+
+def office_faction(body: str | None, declared: str | None) -> str:
+    """The faction an office belongs to: DERIVED from its canonical body where it has one,
+    authored where canon gives its faction no organ.
+
+    ⚠ ONE AUTHORED FIELD, TWO DERIVED, AND A DISAGREEMENT REFUSES. `office_bodies` already binds
+    every body to its faction, so an overlay that names a `body` need not -- and may not -- name a
+    different faction. A `Cardinal of Justice` seated in the Crown is a mis-seating, and it is
+    exactly the kind of error a re-scaling pass makes at volume; without this it would be silent
+    and would then read as canon.
+
+    ⚠ AN ABSENT BODY IS NOT AN ERROR. The Restoration Movement's authority is *"informal"*
+    (`worldbuilding_v30.md` §8) and canon gives it no organ, so such a case authors `faction`
+    directly. That is a real gap in canon, carried as one rather than filled."""
+    if body is not None:
+        if body not in BODY_FACTION:
+            raise Unspecified(
+                f"{body!r} is not a canonical body", "rosters.yaml -- office_bodies",
+                needs="name a body from `systems/world/`, or drop `body` and author `faction`",
+                law="Jordan 2026-09-02 -- systems/world is canon for organizations. Inventing a "
+                    "body here would be indistinguishable from canon to the next session")
+        derived = BODY_FACTION[body]
+        if declared is not None and declared != derived:
+            raise Forbidden(
+                f"office body {body!r} belongs to {derived!r}, not {declared!r}",
+                "rosters.yaml -- office_bodies",
+                needs="drop the `faction:` field; it derives from `body:`",
+                law="H-99 -- one authored field, two derived. A body's faction is canon's, and a "
+                    "disagreement is a mis-seating rather than a second opinion")
+        return derived
+    if declared is None:
+        raise Unspecified(
+            "an office names neither a `body` nor a `faction`", "the case overlay",
+            needs="name a canonical body, or the faction directly where canon gives it no organ",
+            law="H-99 -- an office belongs to something. §42.2's polarity rule: no evidence of "
+                "belonging is a refusal, never a default faction")
+    if declared not in FACTIONS:
+        raise Unspecified(
+            f"{declared!r} is not a canonical faction", "rosters.yaml -- factions",
+            needs="use a faction named in `systems/world/`",
+            law="Jordan 2026-09-02 -- systems/world is canon for identity and names")
+    return declared
+
 # ===========================================================================
 # PART E, LOADED FROM DATA -- W3. THE RESOLVER'S BODY.
 #

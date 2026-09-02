@@ -1106,7 +1106,7 @@ rows:
     site:      "corpus_run.run_case — an unrepresentable scale REFUSES by name rather than being folded onto the nearest rung"
     sweep:     []
     unblocks:  "10 `world`-scale cases, which no ruling covers. The 47 `faction` cases are refused by ruling and need re-scaling in the CORPUS, not a change here"
-    cite:      "FOUND BY RUNNING THE WHOLE CORPUS. Census reproduced by hand and by command: person 37 · realm 48 · settlement 1 · faction 47 · world 10 = 143; representable 86; unrepresentable 57. ⚠ THE FIRST VERSION OF THIS ROW GRADED IT `absent` AND CALLED THE FACTION HALF AN OPEN DESIGN CALL. THAT WAS WRONG AND IS RETRACTED: it is ANSWERED at §0 test 3 and test 4. ARCHITECTURE_V2.md:93 lists *a faction acting as an actor* among five REFUSALS that *held under 143 cases and are not weakened here*, costing 3 cases; `H-21` is `ruled` — *a faction's treasury is matter at the rung or office that holds it*; and shape.py says it in terms — *A FACTION IS NOT ONE OF THEM, AND THAT IS A RULING RATHER THAN AN OMISSION … a faction never acts: a PERSON HOLDING AN OFFICE acts*. Probe `F11` raises `Forbidden` with *THIS IS NOT A LIMITATION TO WORK AROUND*. Re-filing a ruled refusal as a Tier-0 hole is the over-refusal's mirror image and exactly as bad (PLAN.md:79). ⚠ AND THE PRODUCER'S STATED MECHANISM WAS ALSO WRONG: rev 1 said a faction IS modelled, as the lateral graph read by `Query.lateral`. `Query.lateral(w, name, kind)` NEVER USES `name` except in a trace line — it returns every live Tenure of that kind in the world, so it cannot distinguish two factions, has no membership predicate and no boundary. It is a filter on tenure kind, not a faction model. ⚠ WHAT SURVIVES AS A REAL FINDING: 40% of the corpus was authored at a scale the architecture rules out, which is a fact about the CORPUS meeting the ruling, not a hole in the architecture. The open half is `world` (10 cases), which no ruling covers. ⚠ AND THE REFUSAL'S STATED REASON WAS INCONSISTENT WITH `H-96`: rev 1 justified refusing by saying a mapping would *manufacture a pass*, while `H-96` simultaneously claimed the rung decides nothing — under which no mapping could manufacture anything. `H-96` is now about the ranking, not the ladder, and the inconsistency is gone."
+    cite:      "FOUND BY RUNNING THE WHOLE CORPUS. Census reproduced by hand and by command: person 37 · realm 48 · settlement 1 · faction 47 · world 10 = 143; representable 86; unrepresentable 57 AT THE TIME OF MEASUREMENT. ⚠ `W28` IS MOVING IT AND THE FIGURE IS NOW DERIVED RATHER THAN PINNED: each overlay in `cases/exercises/` re-scales exactly one case, so unrepresentable = 57 - (overlays loaded). Measured 2026-09-02 with three overlays: faction 44 · world 10 · unrepresentable 54 · runnable 89. The falsifier is `test_the_corpus_runs_and_the_ranking_cannot_discriminate`, which computes the census from `RESCALES` and fails if the corpus or `rung_kinds` moves it any other way -- it FIRED on the first three re-scales, which is why the arithmetic replaced the constant rather than the constant being re-pinned. ⚠ THE FIRST VERSION OF THIS ROW GRADED IT `absent` AND CALLED THE FACTION HALF AN OPEN DESIGN CALL. THAT WAS WRONG AND IS RETRACTED: it is ANSWERED at §0 test 3 and test 4. ARCHITECTURE_V2.md:93 lists *a faction acting as an actor* among five REFUSALS that *held under 143 cases and are not weakened here*, costing 3 cases; `H-21` is `ruled` — *a faction's treasury is matter at the rung or office that holds it*; and shape.py says it in terms — *A FACTION IS NOT ONE OF THEM, AND THAT IS A RULING RATHER THAN AN OMISSION … a faction never acts: a PERSON HOLDING AN OFFICE acts*. Probe `F11` raises `Forbidden` with *THIS IS NOT A LIMITATION TO WORK AROUND*. Re-filing a ruled refusal as a Tier-0 hole is the over-refusal's mirror image and exactly as bad (PLAN.md:79). ⚠ AND THE PRODUCER'S STATED MECHANISM WAS ALSO WRONG: rev 1 said a faction IS modelled, as the lateral graph read by `Query.lateral`. `Query.lateral(w, name, kind)` NEVER USES `name` except in a trace line — it returns every live Tenure of that kind in the world, so it cannot distinguish two factions, has no membership predicate and no boundary. It is a filter on tenure kind, not a faction model. ⚠ WHAT SURVIVES AS A REAL FINDING: 40% of the corpus was authored at a scale the architecture rules out, which is a fact about the CORPUS meeting the ruling, not a hole in the architecture. The open half is `world` (10 cases), which no ruling covers. ⚠ AND THE REFUSAL'S STATED REASON WAS INCONSISTENT WITH `H-96`: rev 1 justified refusing by saying a mapping would *manufacture a pass*, while `H-96` simultaneously claimed the rung decides nothing — under which no mapping could manufacture anything. `H-96` is now about the ranking, not the ladder, and the inconsistency is gone."
     source:    "corpus run, Jordan-directed 2026-09-02"
 
   - id:        H-96
@@ -1164,6 +1164,95 @@ rows:
 # for an id Part B does not define. Part B's ids are re-read from the document, never pinned here.
 # ---------------------------------------------------------------------------
 
+  - id: H-99
+    tier: 1
+    hole: >-
+      THE OFFICE SCHEMA HAD NO FACTION, NO BODY AND NO TYPE. `W28`'s re-scaling gives each
+      faction-scale case an `office:` block, and the first version carried `post`, `remit` and
+      `why` only. So an office knew what it may DO and not what it BELONGS TO, which throws away
+      the faction the case was scaled off — the exact reading `scale: faction` was recording
+    kind: SCHEMA_ROW
+    owner: the corpus overlay's `office:` block, and the rosters its fields resolve against
+    grade: ruled
+    default: >-
+      `office.body` names a canonical organization from `office_bodies`; `faction` and `function`
+      derive from that row. Where canon has no body for the faction, `office.faction` is authored
+      directly from `factions` and `body` is absent. Scale is the seat's rung, not a property of
+      the body
+    site: corpus_run._check_office and shape.office_faction -- refused at overlay LOAD, before any world is built
+    sweep: []
+    unblocks: >-
+      the 47 `faction`-scale cases, each of which needs somewhere for its faction to go once the
+      case is re-scaled onto a rung
+    cite: >-
+      JORDAN ASKED THE QUESTION THAT FOUND THIS: *does the office schema include faction belonging,
+      scale of office, type of office, etc?* It did not.
+      ⚠ THE ANSWER IS SOURCED, AND THE SOURCING IS ITSELF A RULING — four Jordan messages on
+      2026-09-02 establish the four-tier order now recorded in `rosters.yaml`'s header:
+      *systems/world contains information to use regarding factions that should be considered more
+      thoroughly for actions, but for the identity/names/organizations it is canon*; *systems/factions
+      if it concerns directly the identity of a faction can be concerned near-canon but superseded by
+      anything in world*; *research/ contains useful information to make everything more robust*; and
+      the settlement governance redesign is *just for ideas. do not treat as required*.
+      ⚠ REV 1 OF THIS WORK WAS SOURCED FROM THE NEAR-CANON TIER AND WAS WRONG TWICE OVER. It drew
+      `factions` from systems/factions/faction_canon_v30.md and carried `Ministry of the Peninsula`,
+      which appears ZERO times in all of `systems/world/` and which that same document calls
+      "Treated as institutional infrastructure, not a faction." — so the near-canon source excluded
+      it and the over-read added it back. Reproduce the absence with
+      `grep -rc "Ministry of the Peninsula" systems/world/`.
+      ⚠ TWO SUPERSEDED NAMES WERE ALSO IN CIRCULATION AND ARE EXCLUDED BY READING RATHER THAN
+      COUNTING: `People's Revolution` is the pre-ED-061 name for `Restoration Movement`
+      (systems/world/geography_v30.md orders the rename and it is unpropagated), and `Niflhel` is
+      dissolved (systems/world/worldbuilding_v30.md §3.2, §10). A frequency-ranked grep over
+      `systems/world/` returns both at ranks that would have carried them in.
+      ⚠ THE FOLD NOT TAKEN IS THE LOAD-BEARING PART: world's four organization tables (§3.1 Church,
+      §4.1 Löwenritter, §5.1 Guilds, §6.1 Crown) each carry a Function column, and those functions
+      genuinely converge on one small set — judicial, military, economic, knowledge, administrative.
+      Collapsing them would have produced a tidier `office_type` roster and would have put an
+      INVENTED taxonomy where canon named bodies. World is canon for organizations, so the bodies
+      are carried by name with their Function cells quoted verbatim.
+      ⚠ THE FALSIFIER IS A MUTATION, NOT THE HAPPY PATH:
+      `test_h99_the_office_carries_its_three_canon_axes_and_a_misseating_refuses` seats all 16
+      canonical bodies under each of the 7 factions that do not own them and requires 112 refusals.
+      Mutation-verified 3/3 — drop the mismatch compare, accept an unknown body, or restore the
+      excluded name to the DATA, and each turns it red.
+    source: Jordan 2026-09-02 -- the office schema question and the source-precedence ruling
+  - id: H-100
+    tier: 1
+    hole: >-
+      WHAT A REVOCATION COSTS IS NOT MODELLED, ONLY WHO MAY ATTEMPT ONE. Jordan's governance canon
+      gives the PRECONDITION — a title needs holdings, an office needs purview, and `_req_revoke`
+      is the three-term conjunction that enforces it. Nothing says what happens to the person
+      revoked, and the corpus contains seats held six different ways
+    kind: ABSENT_RULE
+    owner: Part E's `revoke` row (its `writes`), and whatever would carry a seat's provenance
+    grade: absent
+    default: ''
+    site: ''
+    sweep: []
+    unblocks: >-
+      every `revoke`, and any later question about whether losing a seat is survivable -- there is
+      one outcome for all seats today
+    cite: >-
+      FROM research/governance/political_hierarchy_standing.md, WHICH JORDAN POINTED AT: *the
+      research directory will also speak towards the kind of governance and bureaucratic functions
+      that may be relevant to game too*, and *research/ contains useful information to make
+      everything more robust*. Its finding is that a rank is "only ever as solid as the currency
+      backing it", and that demotion severity is keyed to HOW the seat was won — "favor-derived
+      seats ... face total ruin, while kinship-derived seats get containment".
+      ⚠ THAT IS THE SAME QUESTION JORDAN'S GOVERNANCE CANON ANSWERS FROM THE OTHER SIDE, WHICH IS
+      WHY IT IS A ROW AND NOT A SHRUG: purview and holdings say WHO MAY REVOKE; a seat's provenance
+      would say WHAT REVOCATION COSTS. Together they are a mechanic; separately the first is a gate
+      with a uniform consequence behind it.
+      ⚠ THIS ROW EXISTS INSTEAD OF A ROSTER, DELIBERATELY. A `power_bases` roster (bureaucratic,
+      kinship, military, ideological, patronage, purchased) was built from this research and DELETED
+      in the same session: nothing read it, no corpus case states how a seat was won, and CLAUDE.md
+      §0.1 point 5 forbids minting an artifact that is load-bearing on nothing. The insight is real
+      and belongs where it can be acted on.
+      ⚠ THE RESEARCH IS TIER 3 AND CANNOT SETTLE THIS. It is reference under the 2026-09-02
+      precedence ruling; the six bases are a vocabulary a design call could adopt, not a decision
+      the research makes.
+    source: research/ -- Jordan-directed 2026-09-02
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

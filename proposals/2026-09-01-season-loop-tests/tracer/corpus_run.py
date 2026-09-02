@@ -71,6 +71,83 @@ def endings() -> dict:
 ENDINGS = endings()
 
 
+def rescales() -> dict:
+    """`W28`. The corpus's `scale:` re-authoring, as an OVERLAY keyed by case id.
+
+    ⚠ AN OVERLAY, NOT AN EDIT TO THE CORPUS, AND THE REASON IS ARCHITECTURAL. 47 of the 57
+    unrepresentable cases live in `2026-08-31-shape-tracer/cases/` — a PREDECESSOR proposal's
+    committed corpus, which this chain reads and does not own. Editing another chain's extraction
+    would destroy the record of what was extracted, and the corpus is evidence. `cases/exercises/`
+    is already the established overlay: per-case files, bound by id, carrying this chain's answers
+    about someone else's rows. One overlay mechanism, not two (§8).
+
+    ⚠ EVERY RE-SCALE CARRIES ITS `why:`, WHICH IS WHAT MAKES IT AUTHORING RATHER THAN INVENTION.
+    The defect being repaired is that `CASE_BRIEF.md`'s schema offered `faction` and `world`, which
+    `rung_kinds` has never had — so the extractors wrote a vocabulary the architecture had already
+    closed. A re-scale is a reading of the case's OWN text; where the text does not say, the case
+    stays unrepresentable, which is the honest answer (§42.2's polarity rule).
+
+    ⚠ AND THERE IS NO CLASSIFIER. 23 of the 47 match none of the institution words the other 24
+    do, so a keyword rule would cover half the corpus and silently mis-scale the rest — the ROUTER
+    `W10` deleted, returning as a corpus tool. Measured before deciding not to build one."""
+    import yaml
+    out: dict = {}
+    d = Path(__file__).resolve().parents[1] / "cases" / "exercises"
+    if not d.is_dir():
+        return out
+    for f in sorted(d.glob("*.yaml")):
+        doc = yaml.safe_load(f.read_text()) or {}
+        sc = doc.get("scale")
+        if doc.get("case") and isinstance(sc, dict):
+            if not sc.get("why"):
+                raise SystemExit(f"{f.name}: a `scale:` re-authoring with no `why:` — the "
+                                 "derivation is what distinguishes this from an invention")
+            _check_office(f.name, sc.get("office"))
+            out[doc["case"]] = sc
+    return out
+
+
+def _check_office(where: str, off) -> None:
+    """`H-99`. An overlay's `office:` block, resolved against canon AT LOAD.
+
+    ⚠ THE THREE AXES JORDAN ASKED FOR, AND THE CHECK IS HERE BECAUSE THE ERROR IS A RE-SCALING
+    ERROR. 47 cases get an office authored by hand; the failure mode at that volume is a body
+    seated in the wrong faction, which nothing downstream would notice — the world would build,
+    the season would run, and a Cardinal would quietly belong to the Crown. `office_faction`
+    refuses the mismatch, and refusing at LOAD means a bad overlay never reaches a world.
+
+    ⚠ IT ALSO REFUSES A REMIT ACT THAT IS NOT IN THE ROSTER, for the same reason `Office` does:
+    a remit is what the office MAY DO, and an unrecognised verb there is a silent no-op."""
+    if off is None:
+        return
+    if not isinstance(off, dict) or not off.get("post"):
+        raise SystemExit(f"{where}: an `office:` block with no `post:`")
+    if not off.get("why"):
+        raise SystemExit(f"{where}: an `office:` with no `why:` — same rule as `scale:`")
+    try:
+        S.office_faction(off.get("body"), off.get("faction"))
+    except (S.Unspecified, S.Forbidden) as e:
+        raise SystemExit(f"{where}: {e}") from None
+    for act in (off.get("remit") or []):
+        if act not in S.REMIT_ACTS:
+            raise SystemExit(f"{where}: remit act {act!r} is not in `remit_acts`")
+
+
+RESCALES = rescales()
+
+
+def apply_rescale(case: dict) -> dict:
+    """The case as the overlay re-authors it. Returns a copy; the corpus object is untouched."""
+    sc = RESCALES.get(str(case.get("id")))
+    if not sc:
+        return case
+    c = dict(case)
+    c["scale"] = sc.get("is", case.get("scale"))
+    if sc.get("office"):
+        c["office"] = sc["office"]
+    return c
+
+
 def seasons_for(case: dict) -> int:
     """The case's own `temporal.span_seasons` where it is an integer, clamped to `MAX_SEASONS`."""
     t = case.get("temporal")
@@ -111,6 +188,22 @@ def build_at(case: dict, seed: int = 0) -> S.World:
         w.add_tenure(S.Tenure(f"t_{pid}_in", pid, ids[chain[0]], "contain", 0))
         pick = int(S.H(seed, 0, str(case.get("id")), f"axis:{pid}"), 16) % len(axes)
         w.persons[pid].convictions = {axes[pick]: 0.9}
+    # ⚠ `W28`: THE CASE MAY SEAT ITS OWN ACTOR ON AN OFFICE. A re-scaled case carries
+    # `office: {post, remit, why}` — `post` names the office the prose names, `remit` the acts it
+    # carries, and `why` records the DERIVATION, because that is what makes this authoring rather
+    # than invention. A case without an `office:` block is unchanged.
+    #
+    # ⚠ AND THERE IS NO CLASSIFIER HERE, DELIBERATELY. 23 of the 47 faction cases match none of the
+    # institution words the other 24 do, so a keyword rule would cover half the corpus and quietly
+    # mis-scale the rest — which is the ROUTER `W10` deleted, returning as a corpus tool. Every
+    # re-scale is authored against the case's own text and carries its `why:`; where the text does
+    # not say, the case stays unrepresentable and that is the honest answer (§42.2).
+    off = case.get("office")
+    if isinstance(off, dict) and off.get("post"):
+        oid = f"off_{case.get('id', 'x')}"
+        w.offices[oid] = S.Office(oid, str(off["post"]), ids[chain[0]],
+                                  [a for a in (off.get("remit") or []) if a in S.REMIT_ACTS])
+        w.add_tenure(S.Tenure(f"t_{oid}", "p_a", oid, "hold", 0))
     prop = S.Proposition("prop_x", "OUGHT", ids[chain[0]], "a standing ambition", True, 0)
     w.propositions[prop.id] = prop
     for pid in ("p_a", "p_b", "p_c"):
@@ -206,6 +299,7 @@ def _span_status(case: dict) -> str:
 
 
 def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
+    case = apply_rescale(case)
     scale, cid = str(case.get("scale")), case["id"]
     if scale not in set(S.RUNG_KINDS):
         return dict(id=cid, scale=scale, status="UNREPRESENTABLE", executed=[], refused=[],

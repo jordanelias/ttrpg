@@ -4207,11 +4207,24 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # the corpus or to `rung_kinds` and must re-derive the row rather than reuse it.
     from collections import Counter
     census = Counter(r["scale"] for r in unrep)
-    assert dict(census) == {"faction": 47, "world": 10}, (
-        f"the unrepresentable census moved: {dict(census)} (was faction 47, world 10). Either the "
-        "corpus was re-scaled or `rung_kinds` grew — `H-95` must be re-derived, not reused")
-    assert len(live) == 86 and len(rows) == 143, (
-        f"the corpus size moved: {len(live)} runnable of {len(rows)}; `H-95`'s 40% is stale")
+    # ⚠ THE `faction` COUNT IS DERIVED FROM THE OVERLAYS, NOT PINNED — and the change is `W28`'s
+    # doing. The first version asserted `{"faction": 47, "world": 10}` flat, and it FIRED correctly
+    # on the first three re-scales: 47 -> 44. Re-pinning it to 44 would buy one commit and go stale
+    # on the next overlay, and re-pinning is the uncontrolled path `CLAUDE.md` §7 names. So the
+    # invariant is stated as the arithmetic it always was: the corpus holds 47 `faction` cases, an
+    # overlay re-scales one each, and every one that remains is unrepresentable. A corpus change or
+    # a `rung_kinds` change still fails this; only an overlay may move it, and only by exactly one.
+    rescaled_from = Counter(sc["was"] for sc in C.RESCALES.values())
+    expected = {"faction": 47 - rescaled_from.get("faction", 0),
+                "world": 10 - rescaled_from.get("world", 0)}
+    expected = {k: v for k, v in expected.items() if v}
+    assert dict(census) == expected, (
+        f"the unrepresentable census is {dict(census)}, and {len(C.RESCALES)} overlays re-scale "
+        f"{dict(rescaled_from)} out of a corpus of 47 faction / 10 world, which predicts "
+        f"{expected}. Either the corpus changed or `rung_kinds` grew — `H-95` must be re-derived")
+    assert len(live) == 143 - sum(census.values()) and len(rows) == 143, (
+        f"the corpus size moved: {len(live)} runnable of {len(rows)}")
+    assert sum(census.values()) + len(live) == 143, "a case is neither runnable nor unrepresentable"
 
     # ⚠ THE EXECUTION MEASURE IS PART E's OWN COLUMNS, NOT `driver.resolved`. `resolved.append(a)`
     # is the FIRST statement of `_fold`, before eligibility and before the requires predicate, so
@@ -4403,3 +4416,77 @@ def test_w18_the_run_instrument_and_its_control():
     assert sum(1 for r in arc if r["status"] == "SPAN-UNAUTHORED") > 0, (
         "no arc is SPAN-UNAUTHORED; prose spans are being silently defaulted, and an arc reported "
         "as running its span would not have run it")
+
+
+def test_h99_the_office_carries_its_three_canon_axes_and_a_misseating_refuses():
+    """`H-99`. Jordan, 2026-09-02: *"does the office schema include faction belonging, scale of
+    office, type of office, etc?"* It did not — the office block carried `post`, `remit`, `why`.
+
+    ⚠ THE FALSIFIER IS THE MIS-SEATING, NOT THE HAPPY PATH (§0.1 point 2). Asserting that
+    `Cardinal of Justice` derives `Church of Solmund` observes nothing: a schema that ignored the
+    body entirely and returned the first faction alphabetically would also have to be caught. So
+    every arm below MUTATES the input into the error a hand-authored re-scaling actually makes at
+    volume — a real body under the wrong faction — and requires a refusal.
+
+    ⚠ AND THE SOURCE PRECEDENCE IS ASSERTED AS DATA, because it is a RULING and prose cannot hold
+    it (§0.05). Jordan, 2026-09-02: *"systems/world ... for the identity/names/organizations it is
+    canon"*; *"systems/factions ... near-canon but superseded by anything in world."* The name that
+    broke this rule once is `Ministry of the Peninsula`, and it must stay out by DATA."""
+    # 1 — the three axes exist and resolve, and SCALE is not among them by design.
+    assert S.FACTIONS and S.BODY_FACTION and S.BODY_FUNCTION
+    assert S.office_faction("Cardinal of Justice", None) == "Church of Solmund"
+    assert S.ROLE_TEMPLATE_OF["Church of Solmund"] == "ecclesiastical"
+    assert "Judicial" in S.BODY_FUNCTION["Cardinal of Justice"]
+    assert not (set(S.BODY_FACTION) & set(S.RUNG_KINDS)), (
+        "a body is being used as a rung; an office's scale is its SEAT, not its organ")
+
+    # 2 — THE MUTATION. Every canonical body, declared under a faction that is not its own,
+    #     must refuse. Without this the derivation is decorative.
+    checked = 0
+    for body, owner in S.BODY_FACTION.items():
+        for other in S.FACTIONS:
+            if other == owner:
+                continue
+            with pytest.raises(S.Forbidden):
+                S.office_faction(body, other)
+            checked += 1
+    assert checked >= 16 * 7, f"only {checked} mis-seatings were tried"
+
+    # 3 — the two ways an office can name nothing at all.
+    with pytest.raises(S.Unspecified):
+        S.office_faction(None, None)
+    with pytest.raises(S.Unspecified):
+        S.office_faction("Ministry of Silly Walks", None)
+    with pytest.raises(S.Unspecified):
+        S.office_faction(None, "Niflhel")
+
+    # 4 — THE PRECEDENCE RULING, AS DATA. Three names that a reasonable reader would have
+    #     included and canon excludes. Each was in a draft of this roster or in circulation.
+    for excluded, why in [
+        ("Ministry of the Peninsula", "faction_canon_v30.md:374 — 'institutional infrastructure, "
+                                      "not a faction'; absent from all of systems/world/"),
+        ("People's Revolution", "the pre-ED-061 name for Restoration Movement"),
+        ("Niflhel", "dissolved — worldbuilding_v30.md §3.2, §10"),
+    ]:
+        assert excluded not in S.FACTIONS, f"{excluded!r} is a member: {why}"
+    assert "Restoration Movement" in S.FACTIONS and "Schoenland" in S.FACTIONS
+
+    # 5 — the two factions with no role template RAISE rather than defaulting (§42.2 polarity).
+    for f in ("Guilds", "Schoenland"):
+        assert f in S.FACTIONS and f not in S.ROLE_TEMPLATE_OF, (
+            f"{f} has a role template; §4's player-eligible column does not list it, so one was "
+            "invented — the fabrication the precedence ruling exists to stop")
+
+    # 6 — EVERY LOADED OVERLAY RESOLVES, and the loader refuses a mis-seated one.
+    import corpus_run as C
+    for cid, sc in C.RESCALES.items():
+        off = sc.get("office") or {}
+        assert S.office_faction(off.get("body"), off.get("faction")) in S.FACTIONS, cid
+    with pytest.raises(SystemExit):
+        C._check_office("mutant.yaml", {"post": "X", "why": "y",
+                                        "body": "Cardinal of Justice", "faction": "Crown"})
+    with pytest.raises(SystemExit):
+        C._check_office("mutant.yaml", {"post": "X", "why": "y", "faction": "Crown",
+                                        "remit": ["annex"]})
+    with pytest.raises(SystemExit):
+        C._check_office("mutant.yaml", {"post": "X", "faction": "Crown"})

@@ -43,6 +43,38 @@
 #   * "one file rosters i think" — ONE FILE, not one per subsystem. If it grows past legibility
 #     that is a reason to ask again, not a reason to split it unilaterally.
 #
+# SOURCE PRECEDENCE FOR CANON VOCABULARY — RULED BY JORDAN, 2026-09-02, ACROSS FOUR MESSAGES.
+# Read this before adding or changing any roster whose members are WORLD content (faction names,
+# organizations, offices, places, people). It does not govern rosters that are architecture
+# (`rung_kinds`, `remit_acts`, `tenure_kinds`) — those come from #353 and this chain.
+#
+#   TIER 1 · `systems/world/`   — CANON.  Verbatim: *"systems/world contains information to use
+#            regarding factions that should be considered more thoroughly for actions, but for the
+#            identity/names/organizations it is canon."*
+#   TIER 2 · `systems/factions/` — NEAR-CANON, AND ONLY CONDITIONALLY. Verbatim: *"systems/factions
+#            if it concerns directly the identity of a faction can be concerned near-canon but
+#            superseded by anything in world."* Two conditions, both required: it must concern
+#            directly a faction's IDENTITY, and world must not say otherwise.
+#   TIER 3 · `research/`        — REFERENCE. Verbatim: *"research/ contains useful information to
+#            make everything more robust"*, and *"the research directory will also speak towards
+#            the kind of governance and bureaucratic functions that may be relevant to game too."*
+#            It informs DESIGN; it is not a source of canon names.
+#   TIER 4 · `systems/settlements/governance_play_redesign_v1.md` — IDEAS. Verbatim: *"governance
+#            play redesign is just for ideas. do not treat as required."*
+#
+# ⚠ THE PRECEDENCE IS A RULE ABOUT SOURCING, AND IT HAS ALREADY CAUGHT TWO ERRORS IN THIS FILE —
+# which is why it is written here rather than in a plan nobody re-reads.
+#   1. `factions` was sourced from TIER 2 and included `Ministry of the Peninsula`. World never
+#      names it, and tier 2 itself says it is *"institutional infrastructure, not a faction"*.
+#   2. Two rosters (`governance_modes`, `power_bases`) were built from TIER 3 and DELETED again.
+#      They were not wrong; they were UNREAD — nothing in the loop or the office schema consumed
+#      either, and `§0.1` point 5 forbids minting apparatus that is load-bearing on nothing. The
+#      insight that motivated them is real and is recorded at `H-100`, where it can be acted on,
+#      instead of sitting here as two lists shaped like mechanism.
+#
+# ⚠ SILENCE IN TIER 1 IS NOT SUPERSESSION. `role_templates` is tier 2 and survives because world
+# has no competing concept — not because tier 2 won. The day world names one, world wins.
+#
 # ⚠ EVERY ROSTER HERE IS OPEN BY THE SAME RULING. None of them is closed by being written down.
 # The `source:` field says where the current membership comes from; it is provenance, NOT
 # ratification, and a roster with `open: true` must never be cited as settling a register row.
@@ -465,6 +497,153 @@ rosters:
     weights:
       grain: 2
       salt:  1
+  factions:
+    source: "`systems/world/geography_v30.md` (`## Status: CANONICAL`) starting-control table; `systems/world/worldbuilding_v30.md` §3, §4, §5, §8, §10."
+    row: H-99
+    note: >-
+      ⚠ SOURCED FROM `systems/world/` BECAUSE JORDAN RULED THE PRECEDENCE, AND THE FIRST VERSION OF
+      THIS ROSTER WAS SOURCED WRONG. It cited `systems/factions/faction_canon_v30.md`. Jordan,
+      2026-09-02: *"systems/factions, systems/settlements are for inspiration/reference only.
+      systems/world contains information to use regarding factions ... but for the
+      identity/names/organizations it is canon"*, then: *"systems/factions if it concerns directly
+      the identity of a faction can be concerned near-canon but superseded by anything in world."*
+      A faction's NAME is identity, so this roster is world's to give. See the file header for the
+      three-tier order.
+      ⚠ `Ministry of the Peninsula` IS EXCLUDED, AND NOT BY THE PRECEDENCE RULING — BY THE
+      NEAR-CANON SOURCE'S OWN WORDS. It was in the first version of this list. It appears ZERO
+      times in all of `systems/world/`, and `faction_canon_v30.md:374` says of it: *"Treated as
+      institutional infrastructure, NOT a faction."* So the tier-2 document I had over-read
+      excludes it itself. An office may still BELONG to a ministry — that is `office_bodies`'
+      `Ministries` row, which is what a ministry actually is here.
+      ⚠ TWO NAMES IN CIRCULATION ARE SUPERSEDED AND ARE NOT MEMBERS. `People's Revolution`
+      (`southernmost_v30.md` §6.2, one occurrence) is the old name for `Restoration Movement` —
+      `geography_v30.md`'s ED-061 is *"'Revolution' -> 'Restoration Movement' naming
+      standardisation across all docs"*, i.e. the rename is ordered and unpropagated, not a second
+      faction. `Niflhel` (10 occurrences) is DISSOLVED: `worldbuilding_v30.md` §3.2 renames the
+      mechanic *"Olafsson-Broker Exposure (formerly Olafsson-Niflhel)"* and §10 says
+      *"post-Niflhel-dissolution"*. A frequency-ranked grep over `systems/world/` returns both at
+      ranks that would have carried them in; they are excluded by reading, not by counting.
+      ⚠ `Schoenland` IS A MEMBER AND IS FOREIGN. It holds T16 in the canonical starting-control
+      table and grants or refuses Altonian naval passage (`geography_v30.md`, Invasion Routes). It
+      is not player-eligible and has no `role_template`, which `faction_role_template` records as
+      an absence rather than filling.
+      ⚠ REFERENCE, NOT MECHANISM (§0.05), AND A FACTION STILL NEVER ACTS. `ARCHITECTURE_V2.md:93`
+      lists a faction acting among five refusals held under all 143 cases. This roster names what
+      an OFFICE BELONGS TO; the actor is always the person holding the office.
+    values: ["Crown", "Church of Solmund", "Hafenmark", "Varfell", "Löwenritter",
+             "Guilds", "Restoration Movement", "Schoenland"]
+
+  role_templates:
+    source: "`systems/factions/faction_canon_v30.md` §4 'Role Templates and Expected Convictions', per PP-686 §3.3.1 over the PP-684 13-Conviction taxonomy."
+    row: H-99
+    note: >-
+      ⚠ TIER 2 — NEAR-CANON, AND IT SURVIVES BECAUSE WORLD IS SILENT, NOT BECAUSE IT OUTRANKS
+      ANYTHING. Jordan: *"systems/factions if it concerns directly the identity of a faction can be
+      concerned near-canon but superseded by anything in world."* §4 binds each template to a
+      weighted conviction vector and to a player-eligible faction — that is directly a faction's
+      identity — and `systems/world/` has no competing role-template concept, so there is nothing
+      to be superseded BY. The day world says otherwise, world wins and this roster changes.
+      ⚠ TWO OF THE EIGHT FACTIONS HAVE NO TEMPLATE, RECORDED AS AN ABSENCE. §4's player-eligible
+      column covers Crown, Church of Solmund, Hafenmark, Varfell, Löwenritter and Restoration
+      Movement. `Guilds` and `Schoenland` are absent from it. `faction_role_template` leaves them
+      out rather than assigning a plausible one — inventing `mercantile-procedural` for the Guilds
+      is exactly the fabrication the source-precedence ruling exists to prevent, and it would read
+      as canon a session later.
+      ⚠ `intelligence-diplomatic` IS UNCLAIMED BY ANY FACTION AND STAYS IN THE ROSTER. §4's own
+      note assigns Varfell to `military-order` on Jordan's 2026-04-19 decision that Vaynard
+      expansion is *"purely military"*, leaving this template a candidate nothing holds. It is a
+      member because a corpus case may name an intelligence office; it binds to no faction.
+    values: [sovereign, ecclesiastical, mercantile-procedural, intelligence-diplomatic,
+             reformist, military-order]
+    by_faction:
+      # ⚠ A ROLE TEMPLATE IS A PROPERTY OF THE FACTION, NOT OF THE OFFICE, so it is a mapping keyed
+      # on `factions` rather than a field on the office block. §4's table is a function of the
+      # faction: every Crown office is `sovereign`, whoever holds it. Carrying it per-office would
+      # store the same derivable fact 47 times and let two offices of one faction disagree.
+      # ⚠ SIX OF EIGHT FACTIONS, AND THE TWO GAPS ARE DELIBERATE. `Guilds` and `Schoenland` are not
+      # in §4's player-eligible column and get no entry, so a lookup for them RAISES per §42.2's
+      # polarity rule. Assigning the Guilds `mercantile-procedural` because it sounds right is the
+      # fabrication the precedence ruling exists to stop, and it would read as canon a session on.
+      # ⚠ `Varfell` AND `Löwenritter` SHARE `military-order`, WHICH IS CANON AND NOT A COLLISION.
+      # §4: *"Both Varfell and Löwenritter use military-order template; their differentiation comes
+      # from Mission, leader Convictions, and stat profile, not role template."*
+      "Crown": sovereign
+      "Church of Solmund": ecclesiastical
+      "Hafenmark": mercantile-procedural
+      "Varfell": military-order
+      "Löwenritter": military-order
+      "Restoration Movement": reformist
+
+  office_bodies:
+    source: "`systems/world/worldbuilding_v30.md` §6.1 (Court Parliament and Governance), §3.1 (Church Four-Cardinal structure), §4.1 (Löwenritter internal structure), §5.1 (Guild structure)."
+    row: H-99
+    note: >-
+      ⚠ THIS IS THE *TYPE OF OFFICE* AXIS JORDAN ASKED FOR, AND IT IS CANON'S OWN ORGANIZATION
+      NAMES RATHER THAN A TAXONOMY FOLDED OUT OF THEM. Jordan, 2026-09-02: *"does the office schema
+      include faction belonging, scale of office, type of office, etc?"* — it did not; the office
+      block carried `post`, `remit`, `why` and nothing else. World gives four tables of bodies with
+      a Function column each, and the temptation was to collapse those functions into a tidy set
+      (`judicial, military, economic, knowledge, administrative, ...`) because the Church's four
+      arms and the Crown's five bodies genuinely do converge on one. THAT FOLD IS NOT TAKEN. World
+      is canon for ORGANIZATIONS; an invented functional taxonomy sitting where canon named bodies
+      would read as canon to the next session, which is the defect the precedence ruling names.
+      ⚠ `faction` AND `function` ARE PROPERTIES OF THE BODY, SO AN OFFICE AUTHORS ONE FIELD AND
+      DERIVES TWO. `office.body` is the authored value; the faction it belongs to and what it does
+      are looked up here. Where a case's office has no canonical body — the Restoration Movement's
+      authority is *"informal"* (§8) and it has no organ in world — `office.faction` is authored
+      directly and `body` is absent. That is a real gap in canon, carried as one.
+      ⚠ THE `function` STRINGS ARE QUOTED, NOT PARAPHRASED. Each is world's own Function/Portfolio
+      cell, so a reader can diff this against the source table without interpretation in between.
+      ⚠ `Lions' Helm` CARRIES ITS OWN CANON WARNING. §4.1's cell is literally *"Naval affairs [NO
+      MECHANICS — ED-NEW-10: future naval design question]"*. It is a member because it is a real
+      arm of a real faction; an office seated in it has no mechanical support and canon says so.
+      ⚠ SCALE IS NOT HERE. An office's scale is the rung it is seated at (`rung_kinds`), which the
+      case's `scale.is` already carries. A body does not fix a rung: `Praefectures` administer
+      regions and `Ministries` serve the realm, but the SEAT is where the person sits.
+    # ⚠ MEMBERSHIP LIVES IN `faction:`, NOT IN A `values:` LIST — the `titles` precedent (§8),
+    # which also carries its membership in its mapping. A body with no faction is not a body.
+    faction:
+      # --- Crown / realm government · worldbuilding_v30.md §6.1 ---
+      "Imperial Court": "Crown"
+      "Court Parliament": "Crown"
+      "Ministries": "Crown"
+      "Rectorates": "Crown"
+      "Praefectures": "Crown"
+      # --- Church of Solmund · worldbuilding_v30.md §3.1 ---
+      "Holy See": "Church of Solmund"
+      "Cardinal of Fortitude": "Church of Solmund"
+      "Cardinal of Justice": "Church of Solmund"
+      "Cardinal of Prudence": "Church of Solmund"
+      "Cardinal of Temperance": "Church of Solmund"
+      # --- Löwenritter · worldbuilding_v30.md §4.1 ---
+      "Lions' Table": "Löwenritter"
+      "Lions' Helm": "Löwenritter"
+      "Knights of the Peace": "Löwenritter"
+      "Royal Investigators": "Löwenritter"
+      "Riskbreakers": "Löwenritter"
+      # --- Guilds · worldbuilding_v30.md §5.1, §5.3 ---
+      "Guild": "Guilds"
+    function:
+      # --- Crown / realm government · worldbuilding_v30.md §6.1 ---
+      "Imperial Court": "Advisory. Informal power arena."
+      "Court Parliament": "Recommends policies, nominates Ministers/Rectorates/Magistrates."
+      "Ministries": "Execute government services."
+      "Rectorates": "Judicial. Execute law."
+      "Praefectures": "Local governance. Administer regions."
+      # --- Church of Solmund · worldbuilding_v30.md §3.1 ---
+      "Holy See": "Church leadership. 'Holy See' = formal title, 'Confessor' = address (§2, ED-NEW-04)."
+      "Cardinal of Fortitude": "Military. Knights Templar, enforcement, monstrous incursion suppression."
+      "Cardinal of Justice": "Judicial. Inquisitors, Grand Adjudication, heresy investigation, text suppression."
+      "Cardinal of Prudence": "Economic. Tithes, charities, Church land management."
+      "Cardinal of Temperance": "Knowledge. Universities, observatories, monasteries, archives."
+      # --- Löwenritter · worldbuilding_v30.md §4.1 ---
+      "Lions' Table": "Military coordination, levy operations, Royal Guard."
+      "Lions' Helm": "Naval affairs [NO MECHANICS — ED-NEW-10: future naval design question]."
+      "Knights of the Peace": "Road patrol, civilian protection, law enforcement."
+      "Royal Investigators": "Investigation, counter-espionage, court prosecution."
+      "Riskbreakers": "Extralegal infiltration. Loyal to Valoria the concept, not institutions."
+      # --- Guilds · worldbuilding_v30.md §5.1, §5.3 ---
+      "Guild": "Burgher status: Guild Masters and Free Masters qualify for political participation."
 
 tables:
 

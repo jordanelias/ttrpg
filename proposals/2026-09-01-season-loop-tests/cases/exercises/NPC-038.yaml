@@ -1,0 +1,35 @@
+# NPC-038 · ARNLOD OLAFSSON — `W28`'s `scale:` re-authoring. See NPC-033 for what is being repaired.
+#
+# ⚠ THIS CASE IS A DIRECT CANON HIT, AND IT CORRECTS THE FIRST DRAFT OF THIS FILE. Rev 1 read
+# "Cardinal Justice" as a generic realm office and gave it no body. `systems/world/`'s
+# `worldbuilding_v30.md` §3.1 — the Church of Solmund Four-Cardinal structure — has a row whose
+# Cardinal is **Justice**, whose Arm is **Judicial**, whose Portfolio is *"Inquisitors, Grand
+# Adjudication, heresy investigation, text suppression"*, and whose **Named NPC is Arnlod
+# Olafsson**. The corpus case and canon are the same person. Nothing here is inferred.
+case: NPC-038
+name: Arnlod Olafsson
+scale:
+  was: faction
+  is: realm
+  why: >-
+    `one_line`: "Cardinal Justice, the Church's institutional head of the Inquisition, whose own
+    hidden compromising connection is a standing liability to the entire apparatus he authorizes."
+    The INSTITUTIONAL HEAD of a realm-wide Church body acts at the realm; "the entire apparatus"
+    is the stated reach. `who_acts` names a "nominal superior" and "the rest of the Inquisitor
+    ladder (subordinates)", so the case itself describes a ladder he sits near the top of. Canon
+    agrees from the other side: §3.1's four Cardinals are the Church's arms, not any one
+    settlement's, and the Church holds Himmelenger (T9, Cathedral City) as a realm-scale seat.
+  office:
+    post: "Cardinal Justice"
+    body: "Cardinal of Justice"
+    remit: [issue, determine, dispatch]
+    why: >-
+      ⚠ `body` IS AUTHORED AND `faction` DERIVES — canon binds `Cardinal of Justice` to the Church
+      of Solmund, so naming both would be storing a derivable fact twice and letting them disagree.
+      The remit is read from the case's own nouns, checked against canon's Portfolio cell:
+      "the entire apparatus he AUTHORIZES" is `issue`; "institutional head of the INQUISITION" —
+      §3.1's Arm for this seat is literally *Judicial* — is `determine`; the subordinate Inquisitor
+      ladder he directs is `dispatch`. ⚠ NOT `confer` or `revoke`: the case never says he appoints
+      or removes anyone, and those are the governance canon's title/office verbs, which Jordan
+      ruled turn on holdings and purview. Canon does not add them either — §3.5's Excommunication
+      is a Church power over STANDING, not over an office's tenure.
