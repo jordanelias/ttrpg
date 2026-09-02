@@ -1288,11 +1288,23 @@ def test_w2_every_write_call_site_names_a_pair_on_the_matrix():
     assert not unexplained, (
         "write call sites whose (record_kind, fieldname) are not literals and are not the fold: "
         f"{unexplained}")
-    src = (HERE / "shape.py").read_text()
-    assert "is on no row of\n                    \"write_matrix.yaml" in src or \
-           "which is on no row of " in src, (
-        "the verb-table loader no longer checks `writes:` against the matrix, so the fold's "
-        "generic write has NO coverage at all -- the exemption above is void")
+    # ⚠ THE FIRST VERSION OF THIS ASSERTION WAS A SUBSTRING MATCH ON `shape.py`'s SOURCE — which
+    # is G3's own worked example of what not to do, committed inside the exemption that invokes
+    # G3. Delete the loader's check, leave the message in a comment, and it passed. The property
+    # is exercised instead: a verb whose `writes:` names a pair off the matrix must make the
+    # LOADER refuse, which is what the exemption claims covers the fold.
+    import copy as _copy, yaml as _yaml
+    doc = _yaml.safe_load((REG.ARCH_DIR / "verb_table.yaml").read_text())
+    doc["verbs"][0] = dict(doc["verbs"][0], writes=["Person.no_such_field"])
+    import unittest.mock as _mock, io as _io
+    with _mock.patch.object(S, "VERB_TABLE_YAML") as fake:
+        fake.exists.return_value = True
+        fake.read_text.return_value = _yaml.safe_dump(doc)
+        with pytest.raises(SystemExit) as e:
+            S._load_verb_table()
+    assert "no row of" in str(e.value), (
+        "the verb-table loader no longer refuses a `writes:` off the matrix, so the fold's "
+        f"generic write has NO coverage and the exemption above is void: {e.value}")
     off = {p: where for p, where in pairs.items()
            if p not in S.MATRIX and p not in S.MATRIX_RETIRED}
     assert not off, (
@@ -1526,3 +1538,27 @@ def test_w3_the_fold_refuses_rather_than_filling_and_the_gap_is_countable():
             "failure it excludes")
     finally:
         site.condition = kept
+
+
+def test_w3_the_write_class_check_still_refuses_a_wrong_class():
+    """§30.2: *the write class is a PARAMETER of the store API, checked PER WRITE SITE.*
+
+    ⚠ HONEST LIMIT, NAMED RATHER THAN LEFT TO BE FOUND. For the FOLD's own writes the check is
+    CIRCULAR: `_apply_write` passes `mrow.write_class(step)` and `World.write` computes the same
+    expression from the same map, so `expect is wclass` always holds. That is not a defect to fix
+    by contriving a second opinion — a table-driven fold and its gate necessarily read one table —
+    but it does mean the per-site check no longer catches anything for the 32 table verbs, and the
+    coverage claim must not be made for them.
+
+    What the gate DOES still enforce is that a caller passing a WRONG class is refused, which is
+    what the check is for. That is exercised here directly, since no fold write can exercise it."""
+    w = _w()
+    w.step = Step.RESOLVE
+    # `(Rung, stores)` at RESOLVE is the ACTS class. MATTER must be refused.
+    with pytest.raises(Forbidden) as e:
+        w.write("stores", WriteClass.MATTER, lambda: None,
+                record_kind="Rung", fieldname="stores", driver="Act")
+    assert "class" in str(e.value).lower(), str(e.value)
+    # And the right class is admitted, so the refusal above is about the CLASS and not the row.
+    w.write("stores", WriteClass.ACTS, lambda: None,
+            record_kind="Rung", fieldname="stores", driver="Act")

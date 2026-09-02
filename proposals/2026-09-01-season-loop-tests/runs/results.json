@@ -201,8 +201,8 @@
       "kind": "UNSPECIFIED",
       "section": "S27/E2",
       "title": "a claim survives the season",
-      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'do' as a verb. This is the CALLER'S invention and the gap is the caller's",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
+      "needs": "a row in verb_table.yaml, ruled before it is added",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
       "by": "construction",
       "tests": "what a character learned must still be true for them next season"
      }
@@ -620,8 +620,8 @@
       "kind": "UNSPECIFIED",
       "section": "S27/E2",
       "title": "a hidden motive biases every decision",
-      "needs": "a row in verb_table.yaml, ruled before it is added",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'report_truthfully' as a verb. This is the CALLER'S invention and the gap is the caller's",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
       "by": "probe-model",
       "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
      }
@@ -997,8 +997,8 @@
       "kind": "UNSPECIFIED",
       "section": "S27/E2",
       "title": "the act budget is ~5 and the PERSON chooses what to leave undone",
-      "needs": "a row in verb_table.yaml, ruled before it is added",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'v4' as a verb. This is the CALLER'S invention and the gap is the caller's",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
       "by": "construction",
       "tests": "a character must be able to take several distinct actions in one season and choose what to leave undone"
      }
@@ -2576,8 +2576,8 @@
       "kind": "UNSPECIFIED",
       "section": "S27/E2",
       "title": "a hidden motive biases every decision",
-      "needs": "a row in verb_table.yaml, ruled before it is added",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'report_truthfully' as a verb. This is the CALLER'S invention and the gap is the caller's",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
       "by": "probe-model",
       "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
      }
@@ -3210,8 +3210,8 @@
       "kind": "UNSPECIFIED",
       "section": "S27/E2",
       "title": "an order is the subordinate's own choice",
-      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'refuse' as a verb. This is the CALLER'S invention and the gap is the caller's",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
+      "needs": "a row in verb_table.yaml, ruled before it is added",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
       "by": "construction",
       "tests": "a superior must be able to direct a subordinate, and the subordinate must be able to refuse or deviate"
      }
@@ -3559,8 +3559,8 @@
       "kind": "UNSPECIFIED",
       "section": "S27/E2",
       "title": "a hidden motive biases every decision",
-      "needs": "a row in verb_table.yaml, ruled before it is added",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'report_truthfully' as a verb. This is the CALLER'S invention and the gap is the caller's",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
       "by": "probe-model",
       "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
      }
@@ -4725,8 +4725,8 @@
       "kind": "UNSPECIFIED",
       "section": "S27/E2",
       "title": "a person's response is a lookup on their own state, not a deliberation",
-      "needs": "a row in verb_table.yaml, ruled before it is added",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'purge' as a verb. This is the CALLER'S invention and the gap is the caller's",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
       "by": "probe-model",
       "tests": "a character's reaction must be able to be fully determined by their internal state rather than by a choice"
      }
@@ -4949,8 +4949,8 @@
       "kind": "UNSPECIFIED",
       "section": "S27/E2",
       "title": "a person's response is a lookup on their own state, not a deliberation",
-      "needs": "a row in verb_table.yaml, ruled before it is added",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'purge' as a verb. This is the CALLER'S invention and the gap is the caller's",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
       "by": "probe-model",
       "tests": "a character's reaction must be able to be fully determined by their internal state rather than by a choice"
      }
@@ -5359,8 +5359,8 @@
       "kind": "UNSPECIFIED",
       "section": "S27/E2",
       "title": "a verdict is stable across a fixture sweep",
-      "needs": "a row in verb_table.yaml, ruled before it is added",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'v0' as a verb. This is the CALLER'S invention and the gap is the caller's",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
       "by": "construction",
       "tests": "a conclusion drawn from the engine must not depend on a number nobody decided"
      }
@@ -5962,8 +5962,8 @@
       "kind": "UNSPECIFIED",
       "section": "S27/E2",
       "title": "a hidden motive biases every decision",
-      "needs": "a row in verb_table.yaml, ruled before it is added",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'report_truthfully' as a verb. This is the CALLER'S invention and the gap is the caller's",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
       "by": "probe-model",
       "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
      }
@@ -6671,8 +6671,8 @@
       "kind": "UNSPECIFIED",
       "section": "S27/E2",
       "title": "a hidden motive biases every decision",
-      "needs": "a row in verb_table.yaml, ruled before it is added",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'report_truthfully' as a verb. This is the CALLER'S invention and the gap is the caller's",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
       "by": "probe-model",
       "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
      }
@@ -6794,8 +6794,8 @@
       "kind": "UNSPECIFIED",
       "section": "S27/E2",
       "title": "a hidden motive biases every decision",
-      "needs": "a row in verb_table.yaml, ruled before it is added",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'report_truthfully' as a verb. This is the CALLER'S invention and the gap is the caller's",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
       "by": "probe-model",
       "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
      }
@@ -7885,8 +7885,8 @@
       "kind": "UNSPECIFIED",
       "section": "S27/E2",
       "title": "a person's act order is the order it resolves in",
-      "needs": "a row in verb_table.yaml, ruled before it is added",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'buy_grain' as a verb. This is the CALLER'S invention and the gap is the caller's",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
       "by": "construction",
       "tests": "what a character does first must be able to close off what they could have done after"
      }
@@ -8153,8 +8153,8 @@
       "kind": "UNSPECIFIED",
       "section": "S27/E2",
       "title": "a hidden motive biases every decision",
-      "needs": "a row in verb_table.yaml, ruled before it is added",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'report_truthfully' as a verb. This is the CALLER'S invention and the gap is the caller's",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
       "by": "probe-model",
       "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
      }
@@ -10250,7 +10250,7 @@
      "verdict": {
       "id": "A5",
       "verdict": "PASS",
-      "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 892 == 892 and the LOG CONTENT HASH matches (5337707cc504...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.19999999999999998 vs 0.2 -- DIFFERENT, and the same five summed as integers give 2 vs 2 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+      "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (b963be88d075...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
       "kind": null,
       "section": "S32",
       "title": "the fold is order-independent, and the float control actually fires",
@@ -10548,8 +10548,8 @@
       "kind": "UNSPECIFIED",
       "section": "S27/E2",
       "title": "a verdict is stable across a fixture sweep",
-      "needs": "a row in verb_table.yaml, ruled before it is added",
-      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+      "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'v0' as a verb. This is the CALLER'S invention and the gap is the caller's",
+      "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
       "by": "construction",
       "tests": "a conclusion drawn from the engine must not depend on a number nobody decided"
      }
@@ -11165,8 +11165,8 @@
    "kind": "UNSPECIFIED",
    "section": "S27/E2",
    "title": "a claim survives the season",
-   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'do' as a verb. This is the CALLER'S invention and the gap is the caller's",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
    "by": "construction",
    "tests": "what a character learned must still be true for them next season"
   },
@@ -11285,8 +11285,8 @@
    "kind": "UNSPECIFIED",
    "section": "S27/E2",
    "title": "a hidden motive biases every decision",
-   "needs": "a row in verb_table.yaml, ruled before it is added",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'report_truthfully' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "by": "probe-model",
    "tests": "a character must be able to act on a private motive that consistently skews their judgement, unrecognised by themselves and by their superiors"
   },
@@ -11389,8 +11389,8 @@
    "kind": "UNSPECIFIED",
    "section": "S27/E2",
    "title": "the act budget is ~5 and the PERSON chooses what to leave undone",
-   "needs": "a row in verb_table.yaml, ruled before it is added",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'v4' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "by": "construction",
    "tests": "a character must be able to take several distinct actions in one season and choose what to leave undone"
   },
@@ -11615,8 +11615,8 @@
    "kind": "UNSPECIFIED",
    "section": "S27/E2",
    "title": "an order is the subordinate's own choice",
-   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'refuse' as a verb. This is the CALLER'S invention and the gap is the caller's",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
    "by": "construction",
    "tests": "a superior must be able to direct a subordinate, and the subordinate must be able to refuse or deviate"
   },
@@ -11691,8 +11691,8 @@
    "kind": "UNSPECIFIED",
    "section": "S27/E2",
    "title": "a person's response is a lookup on their own state, not a deliberation",
-   "needs": "a row in verb_table.yaml, ruled before it is added",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'purge' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "by": "probe-model",
    "tests": "a character's reaction must be able to be fully determined by their internal state rather than by a choice"
   },
@@ -11713,8 +11713,8 @@
    "kind": "UNSPECIFIED",
    "section": "S27/E2",
    "title": "a verdict is stable across a fixture sweep",
-   "needs": "a row in verb_table.yaml, ruled before it is added",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'v0' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "by": "construction",
    "tests": "a conclusion drawn from the engine must not depend on a number nobody decided"
   },
@@ -11805,8 +11805,8 @@
    "kind": "UNSPECIFIED",
    "section": "S27/E2",
    "title": "a person's act order is the order it resolves in",
-   "needs": "a row in verb_table.yaml, ruled before it is added",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'buy_grain' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "by": "construction",
    "tests": "what a character does first must be able to close off what they could have done after"
   },
@@ -11869,7 +11869,7 @@
   "A5": {
    "id": "A5",
    "verdict": "PASS",
-   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 892 == 892 and the LOG CONTENT HASH matches (5337707cc504...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.19999999999999998 vs 0.2 -- DIFFERENT, and the same five summed as integers give 2 vs 2 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (b963be88d075...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
    "kind": null,
    "section": "S32",
    "title": "the fold is order-independent, and the float control actually fires",
@@ -12011,8 +12011,8 @@
    "kind": "UNSPECIFIED",
    "section": "S27/E2",
    "title": "petition spray",
-   "needs": "a row in verb_table.yaml, ruled before it is added",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'petition2' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "by": "construction",
    "tests": "a character must be able to spend a whole season putting the same matter to many people"
   },
@@ -12125,8 +12125,8 @@
    "kind": "UNSPECIFIED",
    "section": "S27/E2",
    "title": "two runs of the same seed produce the same log AND the same hash",
-   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'do' as a verb. This is the CALLER'S invention and the gap is the caller's",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
    "by": "construction",
    "tests": "the same starting conditions must be able to produce the same history"
   },
@@ -12277,8 +12277,8 @@
    "kind": "UNSPECIFIED",
    "section": "S27/E2",
    "title": "the loop's steps partition per container",
-   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'act' as a verb. This is the CALLER'S invention and the gap is the caller's",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
    "by": "construction",
    "tests": "each region must be able to run its own slice of the loop"
   },
@@ -12309,8 +12309,8 @@
    "kind": "UNSPECIFIED",
    "section": "S27/E2",
    "title": "the log's invariants hold",
-   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'do' as a verb. This is the CALLER'S invention and the gap is the caller's",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
    "by": "construction",
    "tests": "every recorded happening must be able to point at real prior happenings"
   },
@@ -12470,8 +12470,8 @@
    "kind": "UNSPECIFIED",
    "what": "verb 'do' is on no row of the verb table",
    "where": "S27/E2",
-   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'do' as a verb. This is the CALLER'S invention and the gap is the caller's",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
    "case": "probe:P30",
    "expected": false
   },
@@ -12515,8 +12515,8 @@
    "kind": "UNSPECIFIED",
    "what": "verb 'report_truthfully' is on no row of the verb table",
    "where": "S27/E2",
-   "needs": "a row in verb_table.yaml, ruled before it is added",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'report_truthfully' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "case": "probe:P31",
    "expected": false
   },
@@ -12533,8 +12533,8 @@
    "kind": "UNSPECIFIED",
    "what": "verb 'v4' is on no row of the verb table",
    "where": "S27/E2",
-   "needs": "a row in verb_table.yaml, ruled before it is added",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'v4' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "case": "probe:P2",
    "expected": false
   },
@@ -12650,8 +12650,8 @@
    "kind": "UNSPECIFIED",
    "what": "verb 'refuse' is on no row of the verb table",
    "where": "S27/E2",
-   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'refuse' as a verb. This is the CALLER'S invention and the gap is the caller's",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
    "case": "probe:P9",
    "expected": false
   },
@@ -12677,8 +12677,8 @@
    "kind": "UNSPECIFIED",
    "what": "verb 'purge' is on no row of the verb table",
    "where": "S27/E2",
-   "needs": "a row in verb_table.yaml, ruled before it is added",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'purge' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "case": "probe:P37",
    "expected": false
   },
@@ -12686,8 +12686,8 @@
    "kind": "UNSPECIFIED",
    "what": "verb 'v0' is on no row of the verb table",
    "where": "S27/E2",
-   "needs": "a row in verb_table.yaml, ruled before it is added",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'v0' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "case": "probe:A31",
    "expected": false
   },
@@ -12740,8 +12740,8 @@
    "kind": "UNSPECIFIED",
    "what": "verb 'buy_grain' is on no row of the verb table",
    "where": "S27/E2",
-   "needs": "a row in verb_table.yaml, ruled before it is added",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'buy_grain' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "case": "probe:A36",
    "expected": false
   },
@@ -12857,8 +12857,8 @@
    "kind": "UNSPECIFIED",
    "what": "verb 'petition2' is on no row of the verb table",
    "where": "S27/E2",
-   "needs": "a row in verb_table.yaml, ruled before it is added",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'petition2' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "case": "probe:F9",
    "expected": false
   },
@@ -12920,8 +12920,8 @@
    "kind": "UNSPECIFIED",
    "what": "verb 'do' is on no row of the verb table",
    "where": "S27/E2",
-   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'do' as a verb. This is the CALLER'S invention and the gap is the caller's",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
    "case": "probe:A4",
    "expected": false
   },
@@ -13028,8 +13028,8 @@
    "kind": "UNSPECIFIED",
    "what": "verb 'act' is on no row of the verb table",
    "where": "S27/E2",
-   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'act' as a verb. This is the CALLER'S invention and the gap is the caller's",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
    "case": "probe:A22",
    "expected": false
   },
@@ -13037,8 +13037,8 @@
    "kind": "UNSPECIFIED",
    "what": "verb 'do' is on no row of the verb table",
    "where": "S27/E2",
-   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'do' as a verb. This is the CALLER'S invention and the gap is the caller's",
-   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
+   "needs": "a row in verb_table.yaml, ruled before it is added",
+   "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids",
    "case": "probe:A28",
    "expected": false
   },
@@ -13110,7 +13110,7 @@
   "STEP": 2090,
   "BARRIER": 710,
   "DECISION": 712,
-  "WRITE": 584,
+  "WRITE": 585,
   "QUERY": 3372,
   "ACT": 54,
   "EVENT": 36,

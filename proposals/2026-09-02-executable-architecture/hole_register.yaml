@@ -72,12 +72,12 @@ rows:
     hole:      "what each verb writes, requires and emits"
     kind:      "PRODUCER"
     owner:     "the resolver; writes owned per §22"
-    grade:     "absent"
-    default:   "Part E's table"
+    grade:     "ruled"
+    default:   "`verb_table.yaml` — 32 rows in §E2's shape, read by one `resolve`"
     site:      ""
     sweep:     []
     unblocks:  "**all 143**"
-    cite:      ""
+    cite:      "CLOSED BY W3. V2 graded this row `ruled` for 24 verbs, `absent` for 2 and `assumption` for 3, and the register recorded the STRICTEST grade present — `absent` — under §42.2's polarity rule. The two absent portions were `determine`, blocked on `judging_set_rule`, and `refract`, blocked on emitter-vs-receiver. BOTH ARE NOW CLOSED BY THEIR OWN ROWS: H-32 is `assumption` with a site and a swept predicate, and H-36 was RULED BY JORDAN on 2026-09-02. So no part of this hole is `absent` any more, and the split grade that forced the row to `absent` has nothing left in it. ⚠ THE W3 ADVERSARIAL PASS CAUGHT THIS LEFT OPEN — PLAN §W1's own note says artifact 0 closes at W3, and W3 shipped without touching the row. A hole closed in the code and open on the register is the board defect §0.2 names."
     source:    "ARCHITECTURE_V2.md §VII.1, transcribed verbatim | V2's grade cell: **ruled** for 24 rows, **absent** for 2, **assumption** for 3 — Part E"
   - id:        H-03
     tier:      0
@@ -468,12 +468,12 @@ rows:
     hole:      "`utter` -- Proposition creation. `commit`, `petition` and `issue` all `require` a Proposition to exist and NO VERB CREATES ONE, so the season cannot start"
     kind:      "PRODUCER"
     owner:     "the resolver (Part E)"
-    grade:     "absent"
-    default:   "none"
+    grade:     "ruled"
+    default:   "`utter`, stratum social, eligibility `own`, writing `(Proposition, exists)` — the CREATION row only, since §14 makes a Proposition immutable"
     site:      ""
     sweep:     []
     unblocks:  "unmeasured"
-    cite:      ""
+    cite:      "CLOSED BY W3, which added the verb. ⚠ THE ROW WAS LEFT `absent` AFTER THE VERB LANDED and the W3 adversarial pass caught it — a hole closed in the code and open on the register is the board defect CLAUDE.md §0.2 names, one register along. #353 mentions `utter`, and §14 `:509` makes a Proposition 'identity-bearing and IMMUTABLE. Fixed at utterance, never destroyed', so the verb admits CREATION and nothing else. `commit`, `petition` and `issue` all require a Proposition to exist and can now fire."
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-43
     tier:      0

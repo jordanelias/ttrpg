@@ -78,12 +78,13 @@ verbs:
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "confer"
     stratum:     "binding_decision"
-    eligibility: ["remit:confer + the office's conferral basis"]
-    requires:    "1-per-object: no live hold on the object, or the holder-Proposition has zero live commit (§54 it. 20)"
+    eligibility: ["remit:confer"]
+    requires:    "the office's conferral basis, and 1-per-object: no live hold on the object, or the holder-Proposition has zero live commit (§54 it. 20)"
     writes:      ["Tenure.until", "Tenure.since"]
     emits:       ["tenure.opened", "tenure.closed"]
     emits_on_refusal: ["confer.refused"]
     grade:       "ruled"
+    eligibility_note: "⚠ W3 AUDIT: §E3's eligibility cell carried a PRECONDITION as well as the remit act — `remit:confer + ...`. The fold split on the first `:` and tested the whole tail against the remit roster, so it NEVER MATCHED and a holder of the remit was silently refused. The act is the eligibility; the basis is a `requires`."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "convene"
     stratum:     "binding_decision"
@@ -186,7 +187,8 @@ verbs:
   - verb:        "kill / wound"
     stratum:     "contested_physical"
     eligibility: ["own"]
-    requires:    "contests: the body → the seam (§39)"
+    requires:    "—"
+    requires_note: "contests: the body → the seam (§39)"
     writes:      ["Person.body", "Person.exists", "Tenure.until"]
     emits:       ["person.died"]
     emits_on_refusal: []
@@ -194,12 +196,13 @@ verbs:
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "levy"
     stratum:     "uncontested_material"
-    eligibility: ["remit:issue + presence"]
+    eligibility: ["remit:issue", "presence:<rung>"]
     requires:    "stores(...) >= amount"
     writes:      ["Rung.stores"]
     emits:       ["levy.taken"]
     emits_on_refusal: ["levy.refused"]
     grade:       "assumption"
+    eligibility_note: "⚠ W3 AUDIT: §E3's eligibility cell carried a PRECONDITION as well as the remit act — `remit:levy + ...`. The fold split on the first `:` and tested the whole tail against the remit roster, so it NEVER MATCHED and a holder of the remit was silently refused. The act is the eligibility; the basis is a `requires`."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "move"
     stratum:     "movement"
@@ -233,7 +236,8 @@ verbs:
   - verb:        "petition"
     stratum:     "social"
     eligibility: ["own"]
-    requires:    "— no dedup, no cap, no per-venue limit (§26.3)"
+    requires:    "—"
+    requires_note: "— no dedup, no cap, no per-venue limit (§26.3)"
     writes:      ["Petition.exists"]
     emits:       ["petition.filed"]
     emits_on_refusal: []
@@ -275,12 +279,13 @@ verbs:
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "revoke"
     stratum:     "binding_decision"
-    eligibility: ["remit:revoke + the office's revocation basis"]
-    requires:    "a live hold exists"
+    eligibility: ["remit:revoke"]
+    requires:    "the office's revocation basis, and a live hold exists"
     writes:      ["Tenure.until"]
     emits:       ["tenure.closed"]
     emits_on_refusal: ["revoke.refused"]
     grade:       "ruled"
+    eligibility_note: "⚠ W3 AUDIT: §E3's eligibility cell carried a PRECONDITION as well as the remit act — `remit:revoke + ...`. The fold split on the first `:` and tested the whole tail against the remit roster, so it NEVER MATCHED and a holder of the remit was silently refused. The act is the eligibility; the basis is a `requires`."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "speak"
     stratum:     "social"
@@ -327,7 +332,8 @@ verbs:
   - verb:        "tie / knot"
     stratum:     "social"
     eligibility: ["own"]
-    requires:    "stored once, on the lower id (§15.1)"
+    requires:    "—"
+    requires_note: "stored once, on the lower id (§15.1)"
     writes:      ["Tenure.since"]
     emits:       ["bond.formed"]
     emits_on_refusal: []
@@ -337,10 +343,11 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own", "hold:<store>"]
     requires:    "stores(hearth(giver), kind) >= amount (§54 it. 7)"
-    writes:      ["Rung.stores"]
+    writes:      ["Rung.stores", "Rung.stores"]
     emits:       ["transfer.made"]
     emits_on_refusal: ["transfer.refused"]
     grade:       "ruled"
+    writes_note: "×2, ONE PER SIDE (§E3 `:418`). ⚠ W3 AUDIT: this was collapsed to ×1 and the effect only DECREMENTED the giver, so six grain left the world and arrived nowhere — in an economy where `yield` is the only source (#353 `:856`)."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "utter"
     stratum:     "social"

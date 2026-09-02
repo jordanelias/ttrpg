@@ -1352,10 +1352,38 @@ def _req_work(w: "World", a: "Act") -> bool:
 # strings `take_seat`, `press_claim`, `raid` and `confer_authority` appear ZERO times in its 2,067
 # lines, and `fight`/`refuse`/`do`/`act` appear only as ordinary English. They are the caller's
 # inventions and the fold says so, rather than charging them to the design. Register row H-64.
-INVENTED_VERBS = frozenset(  # roster-exempt: not a game definition — the OPPOSITE, a list of
-                             # things the game does not define, kept so the fold can attribute a
-                             # gap correctly. It SHRINKS as probes are re-authored.
-    ["take_seat", "press_claim", "raid", "confer_authority", "fight", "refuse", "do", "act"])
+def names_a_verb(verb: str) -> bool:
+    """Does #353 mention this word AT ALL? Asked of the source, never of a list.
+
+    ⚠ THE FIRST VERSION WAS A HARDCODED LIST OF EIGHT, and the probe corpus invents at least
+    fifteen — `v4`, `v0`, `buy_grain`, `petition2`, `report_truthfully`, `leverage`, `purge` were
+    all missing from it. So HALF the gaps the fold reported were billed to the SPECIFICATION,
+    telling a reader that #353 owes a row for `purge`. That is the mis-attribution the branch
+    below exists to prevent, committed by the mechanism meant to prevent it. A list of names is a
+    router and routers miss (`G2`); the property is cheap and cannot be spelled around.
+
+    ⚠ IT TESTS MENTION, NOT VERBHOOD, and the weaker claim is the honest one. A backtick test was
+    tried first and is wrong: #353 writes `confer` and `transfer` in backticks but `move` and
+    `utter` bare, so the stricter property called two verbs it DOES name inventions. The
+    consequence of the weaker test is over-attribution to the design in one direction only — a
+    word #353 uses in ordinary English (`act`, `do`) reads as named — which is the SAFE direction:
+    it never tells a reader the design owes a row for `purge`.
+
+    ⚠ `speak` and `forge` occur ZERO times in #353. V2's Part E added them and declared them
+    `assumption`, which V2 §1.2 says in as many words. They are declared additions, not silent
+    inventions, and the table is where that declaration lives."""
+    import re as _re
+    return bool(_re.search(r"\b" + _re.escape(verb) + r"\b", SOURCE_353_TEXT()))
+
+
+_S353_CACHE: list = []
+
+
+def SOURCE_353_TEXT() -> str:
+    if not _S353_CACHE:
+        f = _HERE.parent.parent / "2026-09-01-holonic-architecture" / "ARCHITECTURE.md"
+        _S353_CACHE.append(f.read_text() if f.exists() else "")
+    return _S353_CACHE[0]
 
 NO_PRECONDITION = ("—", "-", "")
 
@@ -1413,15 +1441,23 @@ def _eff_work(w: "World", a: "Act") -> None:
 
 @effect_for("transfer")
 def _eff_transfer(w: "World", a: "Act") -> None:
-    """§54 item 7's mirror: the giver's store goes DOWN by the amount. #353 states the
-    PRECONDITION (`stores(...) >= amount`) and this is its only consistent effect -- a
-    precondition on a quantity that the act never spends would never bind twice."""
+    """§54 item 7's mirror: the giver's store goes DOWN and the receiver's goes UP.
+
+    ⚠ THE FIRST VERSION ONLY DECREMENTED, and §E3 says `transfer` writes `(Rung, stores)` **×2**,
+    one per side. A one-sided transfer ANNIHILATES MATTER -- six grain left the world and arrived
+    nowhere, in an economy where `yield` is the only source (#353 `:856`). The scarcity proof still
+    passed, because it only watched the giver: a run can be right about the thing it looks at and
+    wrong about the world."""
     give = (a.payload or {}) if isinstance(a.payload, dict) else {}
-    rung = w.rungs.get(give.get("from", ""))
+    src = w.rungs.get(give.get("from", ""))
+    dst = w.rungs.get(give.get("to", ""))
     kind, amount = give.get("kind", "grain"), give.get("amount", 1)
-    if rung is not None:
-        rung.stores = dict(rung.stores or {})
-        rung.stores[kind] = rung.stores.get(kind, 0) - amount
+    if src is not None:
+        src.stores = dict(src.stores or {})
+        src.stores[kind] = src.stores.get(kind, 0) - amount
+    if dst is not None:
+        dst.stores = dict(dst.stores or {})
+        dst.stores[kind] = dst.stores.get(kind, 0) + amount
 
 
 class SeasonDriver:
@@ -1611,7 +1647,7 @@ class SeasonDriver:
             # HOLE IN THE SPECIFICATION (`utter`, `establish`, `exchange`, `succeed` were four,
             # and W3 filled them); a verb nobody names is THE CALLER'S INVENTION. The instrument
             # must not charge its own inventions to the design.
-            named = a.verb in INVENTED_VERBS
+            named = not names_a_verb(a.verb)
             raise Unspecified(
                 f"verb {a.verb!r} is on no row of the verb table", "S27/E2",
                 needs=("a row in verb_table.yaml, ruled before it is added" if not named else
@@ -1661,18 +1697,26 @@ class SeasonDriver:
                         "the cell without the value changes nothing, so a precondition on a "
                         "quantity the act never spends cannot bind twice -- and §27.1's scarcity "
                         "stops happening. Register row H-63")
-            for pair in row.writes:
+            # ⚠ THE EFFECT RUNS ONCE PER ACT, NOT ONCE PER PAIR. It ran per pair, so `move` --
+            # which declares three -- closed and reopened the actor's containment three times and
+            # minted three Tenures with the SAME id. Every pair is still GATED (class, Partition
+            # and driver are checked for each), and the state change happens exactly once.
+            # The alternative considered and rejected: gate all pairs dry, then apply. That
+            # separates the check from the write, which is precisely what §30.2 forbids -- "the
+            # gate APPLIES the write".
+            for n, pair in enumerate(row.writes):
                 kind, _, fld = pair.partition(".")
-                self._apply_write(w, a, kind, fld, eff)
+                self._apply_write(w, a, kind, fld, eff if n == 0 else None)
         # The act's proposed changes ride on the success Events -- §27.3's accumulator sums
         # them across the fold and clamps ONCE, which is order-independent as a fact.
         return ev(row.emits, [ROOT], a.changes)
 
-    def _apply_write(self, w: "World", a: Act, kind: str, fld: str, eff) -> None:
+    def _apply_write(self, w: "World", a: Act, kind: str, fld: str, eff=None) -> None:
         """The fold's write. It carries no per-verb behaviour -- the effect of a write is the
         matrix row's business, and what a verb writes is the verb table's."""
         mrow = matrix_row(kind, fld)
-        w.write(fld, mrow.write_class(Step.RESOLVE), lambda: eff(w, a),
+        w.write(fld, mrow.write_class(Step.RESOLVE),
+                (lambda: eff(w, a)) if eff is not None else (lambda: None),
                 record_kind=kind, fieldname=fld, driver="Act")
 
     def resolve(self, acts: list[Act],

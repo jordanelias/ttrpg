@@ -74,7 +74,7 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'] are named and NONE has a predicate
 
 ### clamping site_harbour.condition  ·  `S27.3`  ·  taken 2x
-- **chose:** sum [2, -5, -1, 3, 3] = 2, then clamp ONCE  (2x)
+- **chose:** sum [2, 4, -5, -1, 3] = 3, then clamp ONCE  (2x)
 - *not taken:* clamp per delta (arrival-order dependent)
 
 ### fan-out over 5 events  ·  `S28/S61`  ·  taken 2x

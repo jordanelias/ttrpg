@@ -1291,7 +1291,7 @@ def a4():
 def a5():
     w0 = tiny_world()
     scale = w0.fixtures.get("condition_scale")
-    deltas = [3, -5, 3, -1, 2]
+    deltas = [3, -5, 4, -1, 2]
 
     # ARM 1 -- REPRODUCIBILITY, through the real fold. The act array is shuffled before entry
     # and S32 rest 3's content-derived canonicalization restores one order, so two runs agree.
@@ -1315,6 +1315,11 @@ def a5():
                          changes=[StateChange(site.id, "alter", "Act", "condition", d)])
                     for d in order][:ask_budget()]
         r = _run(w, choose)
+        # ⚠ THE FALSIFIER THE ID FIX NEEDED AND DID NOT HAVE. Two of the five deltas were both
+        # `3`, so two acts shared `H(seed, tick, actor, "act:work:3")` and minted Events with one
+        # id — a five-way collision reduced to a two-way collision is not "fixed", and nothing
+        # here could see it because the assertions were only on the condition and the hash.
+        assert len({e.id for e in w.log}) == len(w.log), "Event ids collided in the fold"
         return w.sites[site.id].condition, r["hash"]
 
     (ca, ha), (cb, hb) = run_fold(False), run_fold(True)
@@ -1345,6 +1350,10 @@ def a5():
     ia = sum(deltas)
     ib = sum(reversed(deltas))
 
+    # ⚠ THE FALSIFIER THE ID FIX NEEDED AND DID NOT HAVE. Two of the five deltas were both `3`,
+    # so two acts shared `H(seed, tick, actor, "act:work:3")` and minted Events with one id --
+    # a five-way collision reduced to a two-way collision is not "fixed", and nothing here could
+    # see it because the assertions were only on the condition and the hash.
     assert ca == cb and ha == hb, (ca, cb)
     assert ia == ib
     assert float_differs, (

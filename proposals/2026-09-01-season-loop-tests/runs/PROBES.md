@@ -224,8 +224,8 @@ either** — they are listed individually below and should be discounted accordi
 ### `A22` — the loop's steps partition per container  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
 **what:** verb 'act' is on no row of the verb table
 
-**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'act' as a verb. This is the CALLER'S invention and the gap is the caller's
-**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
+**needs:** a row in verb_table.yaml, ruled before it is added
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids
 
 ### `A23` — an aggregate over ended edges is monotone  ·  **FORBIDDEN**  ·  `S22.4`  ·  by `construction`
 **what:** aggregate 'revocations_ever' composed over 1 ENDED edge(s)
@@ -242,8 +242,8 @@ either** — they are listed individually below and should be discounted accordi
 ### `A28` — the log's invariants hold  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
 **what:** verb 'do' is on no row of the verb table
 
-**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'do' as a verb. This is the CALLER'S invention and the gap is the caller's
-**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
+**needs:** a row in verb_table.yaml, ruled before it is added
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids
 
 ### `A29` — two logs share a causes chain  ·  **FORBIDDEN**  ·  `S19.5`  ·  by `probe-model`
 **what:** an Event in log A naming an Event in log B as its cause
@@ -266,8 +266,8 @@ either** — they are listed individually below and should be discounted accordi
 ### `A31` — a verdict is stable across a fixture sweep  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
 **what:** verb 'v0' is on no row of the verb table
 
-**needs:** a row in verb_table.yaml, ruled before it is added
-**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids
+**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'v0' as a verb. This is the CALLER'S invention and the gap is the caller's
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
 
 ### `A32` — the scene/act identity is settled  ·  **COLLISION**  ·  `S62`  ·  by `no-signature`
 **what:** does a scene equal an act?
@@ -290,14 +290,14 @@ either** — they are listed individually below and should be discounted accordi
 ### `A36` — a person's act order is the order it resolves in  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
 **what:** verb 'buy_grain' is on no row of the verb table
 
-**needs:** a row in verb_table.yaml, ruled before it is added
-**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids
+**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'buy_grain' as a verb. This is the CALLER'S invention and the gap is the caller's
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
 
 ### `A4` — two runs of the same seed produce the same log AND the same hash  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
 **what:** verb 'do' is on no row of the verb table
 
-**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'do' as a verb. This is the CALLER'S invention and the gap is the caller's
-**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
+**needs:** a row in verb_table.yaml, ruled before it is added
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids
 
 ### `A6` — an institution acts  ·  **FORBIDDEN**  ·  `S3-L1`  ·  by `no-signature`
 **what:** 'The Church excommunicates'
@@ -386,8 +386,8 @@ either** — they are listed individually below and should be discounted accordi
 ### `F9` — petition spray  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
 **what:** verb 'petition2' is on no row of the verb table
 
-**needs:** a row in verb_table.yaml, ruled before it is added
-**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids
+**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'petition2' as a verb. This is the CALLER'S invention and the gap is the caller's
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
 
 ### `P14` — standing is computed  ·  **UNSPECIFIED**  ·  `S18.2`  ·  by `construction`
 **what:** Sensation.standing
@@ -416,8 +416,8 @@ either** — they are listed individually below and should be discounted accordi
 ### `P2` — the act budget is ~5 and the PERSON chooses what to leave undone  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
 **what:** verb 'v4' is on no row of the verb table
 
-**needs:** a row in verb_table.yaml, ruled before it is added
-**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids
+**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'v4' as a verb. This is the CALLER'S invention and the gap is the caller's
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
 
 ### `P25` — a storm ends a tenure  ·  **FORBIDDEN**  ·  `S15.3`  ·  by `construction`
 **what:** an actorless row wrote Tenure.until with no (Person, exists) change of its own
@@ -446,14 +446,14 @@ either** — they are listed individually below and should be discounted accordi
 ### `P30` — a claim survives the season  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
 **what:** verb 'do' is on no row of the verb table
 
-**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'do' as a verb. This is the CALLER'S invention and the gap is the caller's
-**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
+**needs:** a row in verb_table.yaml, ruled before it is added
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids
 
 ### `P31` — a hidden motive biases every decision  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `probe-model`
 **what:** verb 'report_truthfully' is on no row of the verb table
 
-**needs:** a row in verb_table.yaml, ruled before it is added
-**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids
+**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'report_truthfully' as a verb. This is the CALLER'S invention and the gap is the caller's
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
 
 ### `P32` — a person's own condition narrows their options in a fixed order  ·  **UNSPECIFIED**  ·  `S12`  ·  by `no-signature`
 **what:** a banded scalar on Person
@@ -482,8 +482,8 @@ either** — they are listed individually below and should be discounted accordi
 ### `P37` — a person's response is a lookup on their own state, not a deliberation  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `probe-model`
 **what:** verb 'purge' is on no row of the verb table
 
-**needs:** a row in verb_table.yaml, ruled before it is added
-**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids
+**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'purge' as a verb. This is the CALLER'S invention and the gap is the caller's
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
 
 ### `P38` — an outcome is judged by a referee  ·  **NO-PRODUCER**  ·  `S1`  ·  by `no-signature`
 **what:** a GM, referee or adjudicator
@@ -523,8 +523,8 @@ either** — they are listed individually below and should be discounted accordi
 ### `P9` — an order is the subordinate's own choice  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
 **what:** verb 'refuse' is on no row of the verb table
 
-**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'refuse' as a verb. This is the CALLER'S invention and the gap is the caller's
-**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
+**needs:** a row in verb_table.yaml, ruled before it is added
+**law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids
 
 ### `W10` — a settlement holds a level of discontent  ·  **FORBIDDEN**  ·  `S10.1`  ·  by `construction`
 **what:** Rung.morale assigned -- not a declared field of S10's record
