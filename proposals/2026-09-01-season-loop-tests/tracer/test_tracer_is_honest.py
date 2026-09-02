@@ -1071,3 +1071,85 @@ def test_w0_artifact_0_is_computed_from_the_rows_rather_than_asserted():
             r["grade"], r["cite"] = "ruled", "planted"
     assert not REG.counts(reg)["tier0_absent"], (
         "artifact 0 still reports UNMET after every Tier 0 `absent` row was closed")
+
+
+# ===========================================================================
+# W1 -- THE FIVE TESTS, RUN AND WRITTEN INTO THE ROWS
+#
+# `PLAN.md` PART 9 gives the falsifier for this item in one line: *"a cited line that does not say
+# what §3.1-§3.4 claims it says. Every citation is a file and a line; check them."* A closure
+# resting on a line that does not say what the row claims is worse than an open hole -- the hole is
+# visible and the false closure is not. `CLAUDE.md` §0 calls the repository's anti-fabrication gate
+# leaky and says to verify provenance BY HAND against the cited source; these tests are that check
+# mechanised, so it stops depending on anyone remembering.
+# ===========================================================================
+
+def test_w1_every_citation_in_the_register_resolves_in_353():
+    """Every `:NNN` a `cite:` names exists in #353, and every verbatim quote is at the line cited.
+    Fourteen rows were closed or re-graded on citations; this is what stops the fifteenth being
+    closed on one nobody checked."""
+    bad = REG.verify_citations(REG.load())
+    assert not bad, "unresolved citations:\n  " + "\n  ".join(bad)
+
+
+def test_w1_the_citation_gate_tells_a_fabrication_from_a_wrong_line_number():
+    """They are DIFFERENT DEFECTS and collapsing them would be the same error as reporting a
+    verified citation as fabricated -- which is what the first version of this gate did to all
+    eight quotes it was given, because it compared typography instead of prose. A quote wrapped
+    across lines, inside a blockquote, with `**emphasis**` mid-clause and an em-dash where the
+    cite typed two hyphens, is the SAME CLAIM."""
+    reg = REG.load()
+    row = next(r for r in reg["rows"] if r["id"] == "H-23")
+    kept = row["cite"]
+
+    row["cite"] = '#353 :929-930 VERBATIM: "A petition costs standing when it is refused."'
+    bad = REG.verify_citations(reg)
+    assert any("FABRICATED" in b for b in bad), "a quote #353 does not contain passed"
+
+    row["cite"] = '#353 :100 VERBATIM: "No cost clause is required"'
+    bad = REG.verify_citations(reg)
+    assert any("LINE NUMBER is wrong" in b for b in bad), (
+        "a real quote at the wrong line was not distinguished from a fabrication")
+
+    row["cite"] = "#353 :9999 -- see there"
+    assert any("2067 lines" in b or "has" in b for b in REG.verify_citations(reg)), (
+        "a line number past the end of the file passed")
+
+    row["cite"] = kept
+    assert not REG.verify_citations(reg), "the restored citation stopped resolving"
+
+
+def test_w1_a_register_whose_citations_carry_no_line_reference_fails():
+    """§42.2's polarity rule again. A `cite:` field full of prose that names no line verifies
+    nothing, and reporting `all resolve` over it would be the strongest possible false green."""
+    reg = REG.load()
+    for r in reg["rows"]:
+        if r["cite"]:
+            r["cite"] = "answered in chain, trust me"
+    bad = REG.verify_citations(reg)
+    assert bad and "nothing was verified" in bad[0], (
+        "citations with no line references reported as resolving")
+
+
+def test_w1_the_ladder_closed_the_rows_it_said_it_would():
+    """§3.1-§3.4 name the rows the five tests close or re-grade. This asserts the ROWS MOVED and
+    that each carries what its new grade requires -- not that the register is clean, which it is
+    not: `H-02` stays `absent` until W3, and the 22 rows W0 added were never put through the
+    ladder at all."""
+    reg = {r["id"]: r for r in REG.load()["rows"]}
+    for rid in ("H-23", "H-37", "H-38", "H-36", "H-60"):
+        assert reg[rid]["grade"] == "ruled", f"{rid} was to close as ruled, is {reg[rid]['grade']}"
+        assert reg[rid]["cite"].strip(), f"{rid} closed with no citation"
+    assert reg["H-25"]["grade"] == "measured", (
+        "H-25 is an ARGUMENT that is sound and UNEXECUTED -- `measured`, not `ruled`; W11 "
+        "discharges it")
+    for rid in ("H-20", "H-26", "H-27", "H-28", "H-31", "H-32", "H-33", "H-39"):
+        r = reg[rid]
+        assert r["grade"] == "assumption", f"{rid} was to re-grade to assumption, is {r['grade']}"
+        assert r["site"].strip(), f"{rid} is an assumption with no injection site"
+        assert len({str(x) for x in r["sweep"]}) >= 3, f"{rid} carries fewer than 3 distinct sweep points"
+    assert reg["H-26"]["tier"] == 0, "H-26 was to move to Tier 0 (`yield` is the only matter source)"
+    # H-33's sweep MUST retain total fan-out: it is #353's specified behaviour and therefore the
+    # control any predicate is measured against (W6's guardrail).
+    assert any("total" in str(x) for x in reg["H-33"]["sweep"]), (
+        "H-33's sweep dropped total fan-out, which is the control")

@@ -661,6 +661,12 @@ lists of open items. **They are rows now.**
 row (§1.4). Until every one is `ruled`, `measured` or `assumption`-with-a-default, no case runs.**
 `python proposals/2026-09-01-season-loop-tests/tracer/register.py --counts` is what says so.
 
+> ⬆ **`H-26` was moved into the table above from Tier 1 by `W1` ** (`PLAN.md` §3.2): `yield` is the matter
+> economy's **only** source — #353 `:856`, *"`yield` — **only here.** Blocked on `season_factor`'s
+> distribution"* — and `H-11` draws subsistence from stores, so **every multi-season run starves
+> without it.** The register is the object; this table is moved to match it, because a tier that
+> disagrees between the two is the defect `W0` found in the counts, one field over.
+
 | id | hole | kind | owner | grade | default | unblocks |
 |---|---|---|---|---|---|---|
 | **H-01** | the `social:` value for every `(kind, field)` in Part II | SCHEMA_ROW ×33 | the design (a static column) | **ruled** — Part D | Part D's table | **all 143** |
@@ -675,6 +681,7 @@ row (§1.4). Until every one is `ruled`, `measured` or `assumption`-with-a-defau
 | **H-10** | the **SCENE** budget as an **integer** of the ruled band `~5` *(⚠ **the unit was ruled 2026-09-02**: scenes, not acts — H-35)* | NUMBER | params | **assumption** | `5`; **swept 2·5·9 — the count verdict flips, which is the finding** | DELIBERATE |
 | **H-11** | the subsistence formula over an **open** `MatterKind` registry | FORMULA | Rung (matter) + params | **assumption** | draw from the containing rung's stores, scaled by weight | `Sensation` |
 | **H-12** | MATTER emits an Event per write so crossings have an antecedent | PRODUCER | the log | **ruled** — D22 | Part D's `emits:` column | every crossing |
+| **H-26** | `season_factor`'s distribution — **blocks `yield`** | SCHEMA_ROW | params | **absent** | none | 1 |
 
 ## §VII.2 · TIER 1 — what the corpus then hits, ranked by core blocks
 
@@ -686,7 +693,6 @@ row (§1.4). Until every one is `ruled`, `measured` or `assumption`-with-a-defau
 | **H-23** | act cost beyond budget consumption | RULING → FORMULA | params | **absent** | none — §63.1 may accept it instead | ~7 |
 | **H-24** | `(Person, exists)` | SCHEMA_ROW | the design | **ruled** — Part D, bounded by §15.3 | Part D | every death |
 | **H-25** | a termination bound per self-feeding loop | RULING | — | **absent** | none. ⚠ **three of four in-chain feedback loops name no off-switch and the fourth's is self-defeating** | ~4 |
-| **H-26** | `season_factor`'s distribution — **blocks `yield`** | SCHEMA_ROW | params | **absent** | none | 1 |
 | **H-27** | travel-leg ownership | SCHEMA_ROW | **Person, as the Tenure's subject** | **ruled** — §D4, by precedent | §15.1 | 1 |
 | **H-28** | `budget`'s placement | RULING — **answered by precedent** | resolver-side, barrier-computed | **ruled** — §F3 | `sense()` | every "wounded duke" |
 | **H-29** | `standing`'s formula | FORMULA | Person | **assumption** | §F4's agreement over own `told_by` claims | 2 |

@@ -575,6 +575,51 @@ Move `H-26` **to Tier 0**.
 §I2's **artifact 0**, and the only one of the eight that writing can satisfy. Every closed row's
 `cite:` resolves to a line that says what the row claims (spot-check by a critic, not by the author).
 
+> ### ✅ **`W1` LANDED 2026-09-02. The ladder ran; two of this item's own claims did not survive it.**
+>
+> **All fourteen rows moved**, each carrying the citation that closes it:
+>
+> | | rows | grade |
+> |---|---|---|
+> | §3.1 closed | `H-23` (as a **refusal**) · `H-37` · `H-38` · `H-60` | `ruled` |
+> | §3.1 closed, with an obligation | `H-25` | **`measured`**, not `ruled` — the argument is sound and **unexecuted**, and `W11` discharges it |
+> | §3.4 closed, **held back for objection** | `H-36`, receiver-side | `ruled` |
+> | §3.2 re-graded | `H-20` `H-26` `H-31` `H-32` `H-33` `H-39` | `assumption`, each with a `site:` and three distinct `sweep:` points |
+> | §3.2/§3.3 re-graded **DOWN** from `ruled` | `H-27` `H-28` | `assumption` — a **strengthening**: the answers survive, the arguments for them do not |
+>
+> `H-26` moved to **Tier 0**, in the register *and* in `V2`'s tables — a tier that disagrees
+> between the two is `W0`'s counts defect, one field over.
+>
+> **Measured** — `python tracer/register.py --counts` and `--check`:
+> `absent` **34 → 22** · `assumption` 12 → 20 · `measured` 0 → **1** · `ruled` 8 → 11 ·
+> `R3` **2 → 1** · `G6` **34 → 22**.
+>
+> #### ⚠ **THIS ITEM'S PROOF IS UNREACHABLE, AND §3.6 SAYS SO ALREADY.**
+> *"Tier 0 containing no `absent` row"* cannot hold after `W1`. **§3.6's own residue table says one
+> `absent` row survives the ladder — `H-02`, which is Tier 0 and falls out of `W3`.** The two
+> sentences were always in conflict and §3.6 is the careful one. Artifact 0 closes at **`W3`**, not
+> here, and it is now UNMET on `H-02` plus seven of the rows `W0` carried.
+>
+> #### ⚠ **NO WORK ITEM RUNS THE LADDER OVER THE TWENTY-TWO ROWS `W0` ADDED.**
+> This item is scoped to §3.1–§3.4, which is **the twelve**. The 22 holes of §1.4 are discharged
+> **by construction** at `W2`/`W3`/`W5` rather than by the five tests, so they stay `absent` with an
+> empty `cite:` and **they are the whole of `G6`'s remaining 22.** That is the honest state and not a
+> gap to paper over: closing them by ladder would be inventing closures for holes whose answer is a
+> table nobody has built yet. **Each building item must set its rows' grades as it lands.**
+>
+> #### ⚠ **`R2`'S 23 VIOLATIONS ARE NOT THIS ITEM'S EITHER, AND NOBODY OWNS THEM.**
+> They are the **pre-existing** `assumption` rows — `H-03`–`H-11`, `H-29`, `H-30`, `H-34` — which
+> `V2` graded `assumption` and never gave a `site:` or a `sweep:`. That is §1.5's finding, and no
+> item in Part 4 is assigned to fill them; each belongs with the item that builds what its default
+> is injected into (`H-06`/`H-07`/`H-08` with `W8`, `H-09` with `W6`, `H-29` with `W5`).
+>
+> **Two line numbers in §3.2 are off** and are corrected in the rows that cite them: the *"vacant
+> date fires… and lapses"* sentence is at **`:835`**, not `:837`; *"`yield` — only here"* is at
+> **`:856`**, not `:855`. **Neither claim is wrong** — every one of the fourteen citations was
+> verified by hand against #353 and then mechanised, so it stops depending on anyone remembering:
+> `python tracer/register.py --verify-citations` checks that every `:NNN` exists and every verbatim
+> quote is at the line cited, and it **distinguishes a fabricated quote from a wrong line number**.
+
 **Size S–M.** Depends on **W0**.
 
 ---

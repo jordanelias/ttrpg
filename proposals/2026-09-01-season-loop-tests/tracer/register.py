@@ -137,7 +137,17 @@ def v2_rows() -> dict:
             continue
         if on and ln.startswith("| **H-"):
             c = [x.strip() for x in ln.strip().strip("|").split("|")]
-            out[c[0].replace("*", "").strip()] = dict(
+            rid = c[0].replace("*", "").strip()
+            if not re.fullmatch(r"H-\d{2}", rid):
+                # The id CELL must carry the id and nothing else. A marker put there -- an
+                # arrow, a footnote -- silently becomes part of the id, and both directions of
+                # the round trip then fire with a confusing "fabricated row" verdict rather
+                # than naming the real cause. Say the real cause.
+                raise SystemExit(
+                    f"ARCHITECTURE_V2.md Part VII: id cell reads {rid!r}, which is not `H-NN`. "
+                    "The id cell carries the id and nothing else -- put any marker in prose "
+                    "beside the table, not in the cell.")
+            out[rid] = dict(
                 tier=tier, hole=c[1], kind=c[2], owner=c[3],
                 grade_cell=c[4], default=c[5], unblocks=c[6])
     return out
@@ -303,6 +313,91 @@ def counts(reg: dict) -> dict:
     }
 
 
+SOURCE_353 = PROPOSALS / "2026-09-01-holonic-architecture" / "ARCHITECTURE.md"
+LINEREF_RE = re.compile(r":(\d{2,4})(?:-(\d{2,4}))?\b")
+# A quoted span long enough to be a claim rather than a term. `cite:` is free text, so this
+# finds the quotes an author actually wrote rather than requiring a format.
+QUOTE_RE = re.compile(r'"([^"]{25,})"')
+
+
+def _cite_norm(text: str) -> str:
+    """Compare PROSE, not typography. #353 is markdown: the sentence a row quotes arrives wrapped
+    across lines, inside a blockquote, with `**emphasis**` mid-clause and an em-dash where a cite
+    typed two hyphens. None of that is part of the claim, and a matcher that fails on it reports a
+    verified citation as FABRICATED -- which is exactly what the first version of this function
+    did to all eight of them."""
+    text = re.sub(r"[*`]", "", text)                    # markdown emphasis and code spans
+    text = re.sub(r"^\s*>+\s*", "", text)               # blockquote markers
+    text = re.sub(r"^\s*[-*+]\s+", "", text)            # list markers
+    text = text.replace("\u2014", "-").replace("\u2013", "-")   # em / en dash
+    text = re.sub(r"-{2,}", "-", text)                  # `--` typed for an em dash
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def _contains(hay: str, needle: str) -> bool:
+    """An elided quote (`... `) matches when every fragment is present, in order. Eliding the
+    middle of a long sentence is normal citation practice; treating it as a mismatch would push
+    an author toward quoting less precisely, not more."""
+    pos = 0
+    for frag in [f.strip() for f in needle.split("...") if f.strip()]:
+        i = hay.find(frag, pos)
+        if i < 0:
+            return False
+        pos = i + len(frag)
+    return True
+
+
+def verify_citations(reg: dict) -> list:
+    """EVERY `:NNN` A `cite:` NAMES MUST EXIST, AND EVERY VERBATIM QUOTE MUST BE THERE.
+
+    `PLAN.md` PART 9 gives this as the falsifier for `W1`: *"a cited line that does not say what
+    §3.1-§3.4 claims it says. Every citation is a file and a line; check them."* A closure resting
+    on a line that does not say what the row claims is worse than an open hole, because the hole
+    is visible and the false closure is not -- and `CLAUDE.md` §0 calls the anti-fabrication gate
+    leaky and says to verify provenance BY HAND. This is that check, mechanised, so it does not
+    depend on anyone remembering.
+
+    A quote is matched with whitespace collapsed, because the source wraps mid-sentence and a
+    citation should not fail on a line break. The window is +/-6 lines: a row citing `:929-930`
+    for a sentence that begins at `:927` is imprecise, not fabricated, and this reports the
+    difference rather than conflating them."""
+    if not SOURCE_353.exists():
+        return [f"#353 not found at {SOURCE_353} -- citations cannot be verified, which is a "
+                "FAILURE and not a pass (§42.2's polarity rule)"]
+    src = SOURCE_353.read_text().splitlines()
+    flat = [_cite_norm(ln) for ln in src]
+    bad, checked = [], 0
+    for r in reg["rows"]:
+        cite = str(r.get("cite") or "")
+        if not cite.strip():
+            continue
+        refs = [(int(a), int(b or a)) for a, b in LINEREF_RE.findall(cite)]
+        for a, b in refs:
+            checked += 1
+            if b > len(src):
+                bad.append(f"{r['id']}: cites :{a}-{b} and #353 has {len(src)} lines")
+        for quote in QUOTE_RE.findall(cite):
+            if not refs:
+                continue
+            checked += 1
+            needle = _cite_norm(quote).rstrip(".")
+            window = set()
+            for a, b in refs:
+                window |= set(range(max(1, a - 6), min(len(src), b + 6) + 1))
+            hay = " ".join(flat[i - 1] for i in sorted(window))
+            if not _contains(hay, needle):
+                # Not found where cited. Is it anywhere at all? The two are different defects:
+                # a wrong line number, versus a quote the source does not contain.
+                whole = " ".join(flat)
+                where = "NOWHERE IN #353 -- FABRICATED" if not _contains(whole, needle) else \
+                        "elsewhere in #353 -- the LINE NUMBER is wrong"
+                bad.append(f"{r['id']}: quoted text is {where}: {quote[:70]!r}")
+    if not checked:
+        return ["no citation carried a line reference or a quote -- nothing was verified, which "
+                "is a FAILURE and not a pass"]
+    return bad
+
+
 def verify_transcription(reg: dict) -> list:
     """The 32 rows must still say what V2's tables say. Pins `hole`, `kind`, `owner` and
     `unblocks` -- NOT `grade`, which `W1` deliberately changes as it runs the ladder. Drift in
@@ -331,14 +426,24 @@ def verify_transcription(reg: dict) -> list:
         for f in ("hole", "kind", "owner", "unblocks"):
             if str(r.get(f)) != src[f]:
                 bad.append(f"{rid}.{f}: register has {r.get(f)!r}, V2 has {src[f]!r}")
-        # `default` IS PINNED, through its one declared normalisation. It was unpinned in the
-        # first draft while the docstring named only `grade` as excluded -- and `default` is the
-        # field an instrument injects FROM and the field R3 reads, so an unpinned `default` is
-        # the most consequential silent edit this file could carry.
-        if str(r.get("default")) != normalised_default(src["default"]):
-            bad.append(f"{rid}.default: register has {r.get('default')!r}, V2 has "
-                       f"{src['default']!r} (normalises to "
-                       f"{normalised_default(src['default'])!r})")
+        # `default` IS PINNED -- through its one declared normalisation, and ONLY WHILE THE ROW
+        # STILL CARRIES V2'S GRADE. It is the field an instrument injects FROM and the field R3
+        # reads, so an unpinned `default` is the most consequential silent edit this file could
+        # carry. But a re-grade is REQUIRED to move it: `absent` forbids a default (R3) and
+        # `assumption` requires one (§G4), so W1 cannot re-grade a row without rewriting its
+        # default, and pinning it unconditionally would make the guard fire on the work the plan
+        # exists to do. So a moved default is drift while the grade is unchanged, and a reported
+        # NOTE once the grade has moved -- the same treatment `grade` itself gets, for the same
+        # reason.
+        v2_grade = grade_of(src["grade_cell"])
+        if r.get("grade") == v2_grade:
+            if str(r.get("default")) != normalised_default(src["default"]):
+                bad.append(f"{rid}.default: register has {r.get('default')!r}, V2 has "
+                           f"{src['default']!r} (normalises to "
+                           f"{normalised_default(src['default'])!r})")
+        elif str(r.get("default")) != normalised_default(src["default"]):
+            bad.append(f"NOTE {rid}.default: rewritten with the re-grade "
+                       f"{v2_grade!r} -> {r.get('grade')!r}")
         if r.get("tier") != src["tier"]:
             bad.append(f"{rid}.tier: register has {r.get('tier')}, V2 has {src['tier']}")
         if r.get("grade") and grade_of(src["grade_cell"]) != r["grade"]:
@@ -353,9 +458,11 @@ def main(argv=None) -> int:
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--counts", action="store_true")
     ap.add_argument("--verify-transcription", action="store_true")
+    ap.add_argument("--verify-citations", action="store_true",
+                    help="every `:NNN` a cite names exists, and every verbatim quote is there")
     ap.add_argument("--rule", default="", help="comma-separated subset, e.g. R0,R1,R2,R3")
     a = ap.parse_args(argv)
-    if not (a.check or a.counts or a.verify_transcription):
+    if not (a.check or a.counts or a.verify_transcription or a.verify_citations):
         ap.print_help()
         return 0
     reg = load()
@@ -391,6 +498,19 @@ def main(argv=None) -> int:
         for b in drift:
             print("    " + b)
         rc |= 1 if drift else 0
+
+        cbad = verify_citations(reg)
+        print("CITATIONS: " + ("all resolve" if not cbad else f"{len(cbad)} unresolved"))
+        for b in cbad:
+            print("    " + b)
+        rc |= 1 if cbad else 0
+
+    if a.verify_citations:
+        cbad = verify_citations(reg)
+        for b in cbad:
+            print("    " + b)
+        print(f"CITATIONS: {'all resolve' if not cbad else str(len(cbad)) + ' unresolved'}")
+        rc |= 1 if cbad else 0
 
     if a.check:
         only = [s.strip() for s in a.rule.split(",") if s.strip()] or None

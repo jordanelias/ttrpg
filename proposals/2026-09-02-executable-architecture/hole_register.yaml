@@ -204,12 +204,12 @@ rows:
     hole:      "L3 clause 1's **closed axis registry**, and the row admitting the increment"
     kind:      "RULING (roster) + SCHEMA_ROW"
     owner:     "the design owns the registry; **Person owns the counter**"
-    grade:     "absent"
-    default:   "the row is `(Person, axis_count[axis])`; ⚠ the axis must **not** be spelled `exposure` bare — §54 item 6's collision with the need scalar"
-    site:      ""
-    sweep:     []
+    grade:     "assumption"
+    default:   "the closed 13 (once enumerated -- that enumeration is H-46 and is its OWN row) plus the corpus-asked `suspicion` and `harm_borne`; the row is `(Person, axis_count[axis])`"
+    site:      "registry: the axis roster"
+    sweep:     ["the closed 13 alone", "13 + suspicion + harm_borne (the default)", "corpus-asked only"]
     unblocks:  "**~28**"
-    cite:      ""
+    cite:      "PLAN §3.2. SCHEMA_ROW-shaped by V2's own kinds, so the row is injectable and only the roster is open. ⚠ THE AXIS MUST NEVER BE SPELLED `exposure` BARE -- #353 :1897 names \"The Exposure collision -- three senses of one word, including a need scalar and a per-person tally\". Verified by hand 2026-09-02."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **assumption** for the row (Part D) · **absent** for the roster"
   - id:        H-21
     tier:      1
@@ -240,12 +240,12 @@ rows:
     hole:      "act cost beyond budget consumption"
     kind:      "RULING → FORMULA"
     owner:     "params"
-    grade:     "absent"
-    default:   "none"
+    grade:     "ruled"
+    default:   "none -- and the REFUSAL is the ruling: budget consumption IS the pricing"
     site:      ""
     sweep:     []
     unblocks:  "~7"
-    cite:      ""
+    cite:      "PLAN §3.1, test 3 (answered by a design document). #353 :929-930 VERBATIM: \"No cost clause is required. A petition consumes budget like any act, and that is the whole of the pricing.\" The document RETRACTS an earlier standing-cost proposal in place. Closing this as a FORMULA would have overturned an explicit sentence of the specification under test -- G4's over-refusal, mirrored. Verified by hand 2026-09-02."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent** | V2's default cell: none — §63.1 may accept it instead"
   - id:        H-24
     tier:      1
@@ -264,48 +264,48 @@ rows:
     hole:      "a termination bound per self-feeding loop"
     kind:      "RULING"
     owner:     "—"
-    grade:     "absent"
-    default:   "none"
-    site:      ""
+    grade:     "measured"
+    default:   "none to inject -- it is an ARGUMENT, and the obligation is an execution (W11)"
+    site:      "engine: a seeded N-season run of a spiral case in which the feeding acts cease"
     sweep:     []
     unblocks:  "~4"
-    cite:      ""
+    cite:      "PLAN §3.1, test 5 (architecture, with a `measured` obligation). #353 :184-186 VERBATIM: \"every clock that moves such a quantity -- other than the three the world already licenses (matter, bodies, the confidence of a memory) -- was set by a nameable act, so it can be bribed, delayed, burned, or killed.\" Every cross-season feed is a budgeted act by a person; a spiral nobody feeds stops. GRADE IS `measured`, NOT `ruled`: the argument is sound and UNEXECUTED, and W11 is what discharges it. Verified by hand 2026-09-02."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent** | V2's default cell: none. ⚠ **three of four in-chain feedback loops name no off-switch and the fourth's is self-defeating**"
   - id:        H-26
-    tier:      1
+    tier:      0
     hole:      "`season_factor`'s distribution — **blocks `yield`**"
     kind:      "SCHEMA_ROW"
     owner:     "params"
-    grade:     "absent"
-    default:   "none"
-    site:      ""
-    sweep:     []
+    grade:     "assumption"
+    default:   "constant `1`, swept"
+    site:      "matter.season_factor"
+    sweep:     [0.5, 1, 2]
     unblocks:  "1"
-    cite:      ""
+    cite:      "PLAN §3.2, AND IT MOVES TO TIER 0. NUMBER/FORMULA-shaped, so a default is injectable. Tier 0 because `yield` is the matter economy's ONLY source -- #353 :856 VERBATIM: \"`yield` | **only here.** Blocked on `season_factor`'s distribution (§22.3)\" -- and H-11 draws subsistence from stores, so EVERY MULTI-SEASON RUN STARVES without it. ⚠ PLAN §3.2 cites :855 for that line; it is at :856. Verified by hand 2026-09-02."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent**"
   - id:        H-27
     tier:      1
     hole:      "travel-leg ownership"
     kind:      "SCHEMA_ROW"
     owner:     "**Person, as the Tenure's subject**"
-    grade:     "ruled"
-    default:   "§15.1"
-    site:      ""
-    sweep:     []
+    grade:     "assumption"
+    default:   "the traveller owns the leg, as the Tenure's SUBJECT"
+    site:      "person.travel_legs"
+    sweep:     ["subject-owned (the default)", "owned by the containing Rung", "unowned -- refuse"]
     unblocks:  "1"
-    cite:      ""
+    cite:      "PLAN §3.2/§3.3. RE-GRADED DOWN from V2's `ruled`, which is a STRENGTHENING and not a weakening: #353 :546 rules \"Every Tenure is owned by its SUBJECT\", but V2 §D4 reaches that answer by conflating a Person with its person-kind Rung, and #353 :539 types `contain : Rung -> Rung` while :390-392 keeps the two distinct. The ANSWER survives; the ARGUMENT for it does not, so the honest grade is `assumption`. Verified by hand 2026-09-02."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **ruled** — §D4, by precedent"
   - id:        H-28
     tier:      1
     hole:      "`budget`'s placement"
     kind:      "RULING — **answered by precedent**"
     owner:     "resolver-side, barrier-computed"
-    grade:     "ruled"
-    default:   "`sense()`"
-    site:      ""
-    sweep:     []
+    grade:     "assumption"
+    default:   "`budget : (Person, View) -> int` PERSON-SIDE, reading own `hold` Tenures, own body band, own travel legs -- the SMALLER amendment; and per Jordan's 2026-09-02 ruling it returns SCENE actions, not acts"
+    site:      "person.budget"
+    sweep:     ["person-side (the default)", "resolver-side barrier-computed (V2 §F3)", "constant 5"]
     unblocks:  "every \"wounded duke\""
-    cite:      ""
+    cite:      "PLAN §3.3. RE-GRADED DOWN from V2's `ruled`. V2 §F3 makes `budget` a SECOND non-decision function taking a World, and #353 :634 VERBATIM says `sense()` is \"the one non-decision function permitted a `World`\" -- both cannot hold, and V2 §0.3 does not list the amendment. The smaller amendment is available: #353 :546 gives a Person every Tenure it is subject of, and :605 lists `entrenchment(p, ...)` among the PERSON-SIDE queries that read the asker's own interior. So §18.2's \"the ONE\" survives. Verified by hand 2026-09-02."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **ruled** — §F3"
   - id:        H-29
     tier:      1
@@ -336,36 +336,36 @@ rows:
     hole:      "the degree ladder's margin model"
     kind:      "FORMULA"
     owner:     "params (the one ladder)"
-    grade:     "absent"
-    default:   "none"
-    site:      ""
-    sweep:     []
+    grade:     "assumption"
+    default:   "four bands read off `margin = successes - obstacle`; the BAND EDGES are the swept triple"
+    site:      "contest.degree_from_margin"
+    sweep:     ["edges (1,3,5)", "edges (2,4,6)", "edges (1,2,4)"]
     unblocks:  "every contest"
-    cite:      ""
+    cite:      "PLAN §3.2. Shape ruled by #353 :1400-1401 VERBATIM: \"There is one degree ladder for every scale of the game -- four bands read off the margin, never off the obstacle's size. A duel, a debate, a siege and an examination all use it.\" Only the EDGES are open, so this is inject-declare-sweep, not a refusal. Verified by hand 2026-09-02."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent** | V2's default cell: none. ⚠ **every contest is blocked**"
   - id:        H-32
     tier:      1
     hole:      "`judging_set_rule`"
     kind:      "RULING"
     owner:     "Rung"
-    grade:     "absent"
-    default:   "none"
-    site:      ""
-    sweep:     []
+    grade:     "assumption"
+    default:   "live holders of a `hold` on an Office whose `remit.acts` includes `determine` AND whose `scope_rung` contains the sitting's rung; EMPTY SET -> the date fires and lapses"
+    site:      "sitting.judging_set"
+    sweep:     ["remit+scope (the default)", "remit only", "scope only"]
     unblocks:  "2"
-    cite:      ""
+    cite:      "PLAN §3.2. Shape ruled: `judging_set(w, ...)` is listed among the RESOLVER-SIDE Queries at #353 :599, so its shape is settled and only the predicate is open. The empty-set behaviour is #353 :835 VERBATIM: \"A vacant date fires, allocates nothing, and lapses. It does not block.\" ⚠ PLAN §3.2 cites :837 for that sentence; it is at :835. Verified by hand 2026-09-02."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent** | V2's default cell: none. ⚠ **nothing is decided at a sitting**"
   - id:        H-33
     tier:      1
     hole:      "the five witness channel predicates"
     kind:      "FORMULA ×5"
     owner:     "the presence index (Nobody)"
-    grade:     "absent"
-    default:   "none"
-    site:      ""
-    sweep:     []
+    grade:     "assumption"
+    default:   "co_located = presence at the subject's rung at the barrier; post_remit = holders of an office whose `scope_rung` contains it; witness_key = persons named in `changes[]`; document_key = holders of a Record whose subject matter names the subject; chronicle = holders of a chronicle Record, else nobody"
+    site:      "witness.fan_out"
+    sweep:     ["total (the CONTROL -- #353's specified behaviour)", "presence-only", "all five predicates"]
     unblocks:  "1"
-    cite:      ""
+    cite:      "PLAN §3.2. Derivable from the presence index (#353 :1004 -- \"compute its observer set from the presence index and the five channels\") and `hold` Tenures. ⚠ TOTAL FAN-OUT MUST STAY IN THE SWEEP: it is #353's specified behaviour and therefore the CONTROL any predicate is measured against (W6's guardrail). Verified by hand 2026-09-02."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent** | V2's default cell: none. ⚠ **fan-out is total; nothing said in private is private**"
   - id:        H-34
     tier:      1
@@ -396,48 +396,48 @@ rows:
     hole:      "refraction: emitter- or receiver-side, and by how much"
     kind:      "RULING + FORMULA"
     owner:     "the design; params"
-    grade:     "absent"
-    default:   "none"
+    grade:     "ruled"
+    default:   "RECEIVER-side. Distortion at each WITNESS deposit, plus the deliberate `refract` act"
     site:      ""
     sweep:     []
     unblocks:  "2"
-    cite:      ""
+    cite:      "PLAN §3.4, test 5 (architecture). #353 :668 VERBATIM: \"Attribution is a per-witness `Claim`, not a field on the Event\"; :719 VERBATIM: the Dispensation is \"nine typed terms, no bare effect field\"; :1286-1288: \"Publishing is a `tell`, so it distorts in transit.\" THERE IS NO EMITTER-SIDE OBJECT TO DISTORT -- emitter-side would need a second, MUTABLE Dispensation, which §37.1 forbids. ⚠ HELD BACK FOR OBJECTION in the PR body per CLAUDE.md §2; magnitude stays a separate `assumption`. Verified by hand 2026-09-02."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent**"
   - id:        H-37
     tier:      1
     hole:      "the argument layer's named-fault roster"
     kind:      "SCHEMA_ROW"
     owner:     "the design"
-    grade:     "absent"
-    default:   "none"
+    grade:     "ruled"
+    default:   "none -- out of the season loop's scope, so nothing is injected here"
     site:      ""
     sweep:     []
     unblocks:  "2"
-    cite:      ""
+    cite:      "PLAN §3.1, test 2 (irrelevant). #353 :1931-1933 VERBATIM: \"The twelve named argument faults and the stasis ladder ... were scoped out by a declared narrowing (the three deferred subsystems are out of scope except at the seam). A declared scoping is not a drop.\" P41's needs route to the deferred subsystem, not to a season-loop row. Verified by hand 2026-09-02."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent**"
   - id:        H-38
     tier:      1
     hole:      "does a person carry a banded scalar?"
     kind:      "RULING"
     owner:     "Person, or refused"
-    grade:     "absent"
-    default:   "none"
+    grade:     "ruled"
+    default:   "YES -- a person carries a banded scalar, on `Site.condition`'s model"
     site:      ""
     sweep:     []
     unblocks:  "2"
-    cite:      ""
+    cite:      "PLAN §3.1, test 4 (precedent). #353 :447 VERBATIM: \"An accumulator that reads its own previous value **is** primary state\"; :453 §12.1's heading VERBATIM: \"`condition` gates verbs, and that is how damage removes an option\"; bodies are already written at MATTER (:854). V2 PRESUPPOSES the answer twice in its own text -- Part D's `(Person, body)` row and §F3's `condition_penalty(p's body band)`. NOT Jordan's. Verified by hand 2026-09-02."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent**"
   - id:        H-39
     tier:      1
     hole:      "the cohort's construal spread — the rule is stated, the representation is not"
     kind:      "SCHEMA_ROW"
     owner:     "Person"
-    grade:     "absent"
-    default:   "none"
-    site:      ""
-    sweep:     []
+    grade:     "assumption"
+    default:   "a per-person scalar on the cohort's members"
+    site:      "cohort.construal_spread"
+    sweep:     ["per-person scalar (the default)", "one scalar per cohort", "no representation -- refuse"]
     unblocks:  "—"
-    cite:      ""
+    cite:      "PLAN §3.2. A representation choice with one obvious shape; nothing in chain rules it, and nothing in chain forbids the obvious one. Verified by hand 2026-09-02."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent**"
   - id:        H-40
     tier:      0
@@ -684,12 +684,12 @@ rows:
     hole:      "player/NPC budget symmetry -- ALREADY ANSWERED by #353 `:876` (everyone runs `choose`) and RECORDED NOWHERE AS CLOSED"
     kind:      "RULING"
     owner:     "Person"
-    grade:     "absent"
-    default:   "none"
+    grade:     "ruled"
+    default:   "symmetric -- every character runs `choose` and every character has a budget"
     site:      ""
     sweep:     []
     unblocks:  "unmeasured"
-    cite:      ""
+    cite:      "PLAN §3.1, test 3 (answered by a design document). #353 :876 types `choose : (Person, View, Sensation) -> Act[] -- ordered, bounded by budget(person, view)`. NOTE, because the plan states this more strongly than the source does: :876 is a TYPE SIGNATURE, not a sentence. It carries the claim because it is typed over `Person` with no player carve-out anywhere, and Jordan's 2026-09-02 ruling says \"a character\" -- the neutral word. Verified by hand 2026-09-02."
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row | `absent` here ONLY because W0 transcribes the state V2 left; W1 closes it"
   - id:        H-61
     tier:      1
