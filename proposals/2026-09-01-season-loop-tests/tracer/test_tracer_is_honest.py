@@ -442,17 +442,6 @@ def test_a_hand_raised_gap_is_never_labelled_construction():
     assert not offenders, offenders
 
 
-def test_the_router_guards_the_known_substring_traps():
-    """The in-chain run's two most expensive corrections were a bare `ambient` (8 arcs -> 3)
-    and a bare `counter` matching inside 'counter-productive' (10 -> 8). This instrument
-    reproduced the class a THIRD time with a bare `standing` (18 core rows) before it was
-    guarded. The class recurs; the guard is what stops it."""
-    assert R.route("a counter-productive policy must be able to be reversed") != "A3"
-    assert R.route("an ambient environmental quantity must be able to worsen") != "W3"
-    assert R.route("a standing armed institution must be able to reassess its loyalty") != "P14"
-    assert R.route("a person with no tracked standing must still be able to act") != "P14"
-
-
 def test_unmapped_rows_are_never_silently_passed():
     src = inspect.getsource(R.grade)
     assert "unmapped" in src and "NOT-ASSESSED" in src
@@ -485,13 +474,25 @@ def test_playable_requires_that_every_core_row_was_actually_aimed_at():
 
 
 def test_a_blocker_outranks_an_unaimed_row():
-    """A core row that DID route and DID hit a gap is a fact about the SHAPE; a core row that
-    failed to route is a fact about the AIM. The first outranks the second."""
-    got = R.grade({"id": "T", "season_requires": [
-        {"need": "a settlement unrest level must be able to rise and fall", "hardness": "core"},
-        {"need": "zzzz qqqq wwww vvvv", "hardness": "core"},
-    ]})
-    assert got["verdict"] == "BLOCKED", got["verdict"]
+    """A core row that IS declared and DOES hit a gap is a fact about the SHAPE; a core row
+    nobody declared is a fact about the AUTHORING. The first outranks the second.
+
+    ⚠ REWRITTEN FOR `W10`. It used to plant two needs and rely on the regex router to reach a
+    probe for one of them — so it tested the router as much as the grading rule. The rule is now
+    stated over declarations, which is where it belongs and where it can be read."""
+    planted = {"T": {EX.need_sha("a declared row that gaps"): {
+        "need": "a declared row that gaps", "exercises": ["comply"]}}}
+    saved, R.OVERLAY = R.OVERLAY, planted
+    try:
+        got = R.grade({"id": "T", "season_requires": [
+            {"need": "a declared row that gaps", "hardness": "core"},
+            {"need": "a row nobody declared", "hardness": "core"},
+        ]})
+    finally:
+        R.OVERLAY = saved
+    assert got["verdict"] == "BLOCKED", got
+    assert got["core_unmapped"] == 1, got          # the undeclared row is still reported
+    assert got["blockers"] == ["comply"], got["blockers"]
 
 
 def test_no_playable_case_has_an_unmapped_core_row():
@@ -706,33 +707,22 @@ def test_r3_the_band_floors_are_swept():
     assert "scale * 8 // 10" not in body, "a band edge is still a literal in a probe body"
 
 
-def test_r3_no_bare_token_route_is_decisive():
-    """DEFECT C3 — the class has now recurred FOUR times in this chain: `ambient` (8 arcs -> 3),
-    `counter` inside 'counter-productive' (10 -> 8), adjectival `standing` (18 core rows), and
-    `standing condition` escaping the whitelist built for the third. A whitelist was the wrong
-    shape; these are the specific escapes, pinned."""
-    checks = [
-        ("a persistent, standing condition of being rich but politically powerless", "P14"),
-        ("a compound set of prerequisites must be assembled", "A15"),
-        ("must produce a different and better outcome for the world", "W5"),
-        ("the cause of the sea-route blockage must be discoverable", "P8"),
-        ("an emergency power applying everywhere in the territory", "F5"),
-        ("a hidden personal quantity must accumulate at a fixed increment per use", "P5"),
-        ("which of several competing internal loyalties is appealed to", "F7"),
-        ("independent fieldwork must be able to investigate the claim", "F12"),
-    ]
-    bad = [(txt, got) for txt, banned in checks
-           if (got := R.route(txt)) == banned]
-    assert not bad, f"bare-token routes still decisive: {bad}"
-
-
 def test_r3_a_working_mechanism_is_not_reported_as_a_blocker():
     """DEFECT C10. A1 provokes `causes=[]` to demonstrate the refusal; routing provenance rows
     to it graded them BLOCKED — reporting the design's causes[] rule as the thing that blocks
     causal reconstruction. A2 is the probe that DEMONSTRATES provenance, and it passes."""
-    assert R.route("the story must be able to be reconstructed from what caused what") == "A2"
-    assert R.route("an accumulated change must be attributable back to which actor caused it") == "A2"
+    # ⚠ THE ROUTING HALF OF C10 IS NOW STRUCTURALLY IMPOSSIBLE, WHICH IS `W10`'S POINT. A
+    # provenance row reached `A1` because a regex matched a common word; nothing can reach any
+    # probe by accident now, because every binding is authored and named. What survives as a
+    # testable claim is the MECHANISM half — that a probe demonstrating provenance exists and
+    # passes, so an author has something true to point at.
     assert R.run_probe("A2")["verdict"] == "PASS"
+    # A1 GAPS BY DESIGN — it PROVOKES the `causes=[]` refusal to show the rule fires — and that
+    # is exactly why routing a provenance row to it graded the row BLOCKED. The two halves must
+    # stay distinguishable: one demonstrates the refusal, the other demonstrates the mechanism.
+    a1 = R.run_probe("A1")
+    assert a1["verdict"] == "GAP" and a1["kind"] == "FORBIDDEN", a1
+    assert R.run_probe("A2")["verdict"] == "PASS", "the mechanism half stopped demonstrating"
 
 
 def test_r4_l3_clause_1_is_permitted_and_clause_2_is_refused():
@@ -783,35 +773,6 @@ def test_r4_event_ids_are_unique_per_draw_and_reproducible():
     ids = [e.id for e in w1.log]
     assert len(ids) == len(set(ids)), "ids must be unique per draw"
     assert w1.content_hash() == w2.content_hash(), "and identical across runs of the same seed"
-
-
-def test_r4_no_route_is_decisive_on_a_single_common_word():
-    """THE STRUCTURAL ANSWER TO A CLASS THAT HAS RECURRED FIVE TIMES.
-
-    `ambient` (8 arcs -> 3) · `counter` inside "counter-productive" (10 -> 8) · adjectival
-    `standing` (18 core rows) · `standing condition` escaping the whitelist built for the third ·
-    and `age\\w*` matching AGENT/AGENTS/AGENCY/AGENDA, which produced the arc corpus's ONLY
-    PLAYABLE verdict on rows about "two AGENTS belonging to rival powers".
-
-    Four of the five were caught one at a time, by a reader, AFTER the verdict was published. A
-    whitelist of guarded tokens cannot work -- the fourth recurrence IS that whitelist failing,
-    and the fifth was not on it. This forbids the SHAPE instead: no route may be claimable by one
-    ordinary English word in a neutral carrier."""
-    import route_precision
-    offenders = route_precision.audit()
-    assert not offenders, (
-        "routes decisive on a single common word: " +
-        "; ".join(f"{pid} fires on {w!r}" for pid, w, _ in offenders))
-
-
-def test_r4_every_probe_is_reachable_or_declared_unroutable():
-    """S44.4's in-chain ruling names "ELEVEN UNREACHABLE PROBES and a 46% miss rate" as the
-    symptom of a router reconstructing what the author knew. A probe no route reaches is either
-    a coverage hole or an instrument self-check -- and an UNDECLARED self-check is
-    indistinguishable from the hole."""
-    import route_precision
-    un = route_precision.unreachable()
-    assert not un, f"probes no route reaches and no declaration covers: {un}"
 
 
 def test_the_corpus_defects_are_reported_not_hidden():
@@ -1006,6 +967,7 @@ def test_w15_every_case_record_in_the_caselog_equals_results_json():
 # assert the CHECKER WORKS, which is the part a later session could break without noticing.
 # ===========================================================================
 
+import exercises as EX
 import register as REG
 
 
@@ -2565,3 +2527,104 @@ def test_w9_the_sweeps_the_register_declares_are_executed():
 
     for k, v in moved.items():
         print(f"\n  {k}: {v}")
+
+
+# ===========================================================================
+# W10 — DECLARED ROUTING. Four router guards retired with the router; this is what replaces
+# them, and it forbids the SHAPE rather than enumerating the words (`G2`).
+# ===========================================================================
+
+def test_w10_no_pattern_is_matched_against_a_case_need():
+    """THE ROUTER CANNOT COME BACK BY ACCRETION, because the shape is forbidden rather than its
+    vocabulary policed.
+
+    ⚠ FOUR TESTS RETIRED WITH `ROUTES`, and each was a guard on a thing that no longer exists —
+    which `CLAUDE.md` §0.3 names as the apparatus loop in its purest form. What they were
+    protecting was one property: that no verdict turns on a substring of a case's prose. That
+    property is now structural, and this asserts it over the AST: nothing in the pipeline applies
+    a regex to a `need`.
+
+    `PLAN.md` §7.4 is why it is worth a guard at all — the bare-token class recurred SIX times,
+    and the whitelist built for the fourth did not catch the fifth (`age\\w*` matching AGENT,
+    AGENCY, AGENDA). A roster of words is a specification nobody ratified."""
+    import ast as ast_
+    # SCOPED TO THE FUNCTIONS THAT DECIDE, not to whole modules. A regex parsing a markdown fence
+    # or classifying an `H-NN` TOKEN decides nothing about what a need means; a regex whose
+    # SUBJECT is the need text is the router. The first version flagged both of the former and
+    # would have pushed the fix toward deleting lawful code.
+    src = (HERE / "run_cases.py").read_text()
+    tree = ast_.parse(src)
+    deciders = {"grade"}
+    offenders = []
+    for node in ast_.walk(tree):
+        if not (isinstance(node, ast_.FunctionDef) and node.name in deciders):
+            continue
+        for call in ast_.walk(node):
+            if not isinstance(call, ast_.Call):
+                continue
+            fn = call.func
+            if getattr(getattr(fn, "value", None), "id", None) != "re":
+                continue
+            seg = ast_.get_source_segment(src, call) or ""
+            # The ONE lawful use inside `grade`: `UNCLEAR:` is a marker THE CASE SOURCE WRITES
+            # ABOUT ITSELF — the source saying it does not know — and not a claim about what the
+            # row needs. #353's brief is explicit that an unclear source IS ITSELF DATA.
+            if "UNCLEAR" in seg:
+                continue
+            offenders.append((node.name, call.lineno, seg[:70]))
+    assert not offenders, (
+        "a regex decides routing inside `grade`:\n  "
+        + "\n  ".join(f"{n}:{ln}  {s}" for n, ln, s in offenders))
+    # AND THE DECIDING PATH IS THE OVERLAY. If `grade` stops consulting it, routing has moved
+    # somewhere this test is not looking.
+    body = ast_.get_source_segment(src, next(
+        n for n in ast_.walk(tree) if isinstance(n, ast_.FunctionDef) and n.name == "grade"))
+    assert "OVERLAY" in body and "need_sha" in body, (
+        "`grade` no longer routes through the authored overlay")
+    # AND THE ROUTER IS ACTUALLY GONE, not merely unused.
+    body = (HERE / "run_cases.py").read_text()
+    for dead in ("ROUTES", "COMPILED", "def route("):
+        assert dead not in _code_only(body), f"{dead!r} survives in run_cases.py"
+    assert not (HERE / "route_precision.py").exists(), (
+        "route_precision.py survives — a guard for a thing that no longer exists is the "
+        "apparatus §0.3 is about, and `PLAN.md` W10 retires it with the router")
+
+
+def test_w10_every_declared_token_resolves_and_every_binding_is_live():
+    """An `exercises:` token must name something real, and every overlay entry must bind to a
+    live corpus row.
+
+    ⚠ THE BINDING CHECK IS THE ONE THE `W9` PASS ASKED FOR. The first overlay was keyed on
+    nothing: it paraphrased each need, so an author could annotate a row that had been reworded —
+    or that never existed — and no one would know. Four of its seven entries in fact bound to
+    nothing, and `need_sha` caught all four on its first run."""
+    ov = EX.load()
+    for kind in ("NPC", "ARC"):
+        cases = R.load_cases(kind)
+        orphans = EX.unbound(ov, cases)
+        assert not orphans, (
+            f"{len(orphans)} overlay entr(ies) bind to no live {kind} row — a reworded corpus row "
+            f"orphaned its annotation: {orphans[:4]}")
+    reg = R._register()
+    for cid, rows in ov.items():
+        for sha, row in rows.items():
+            for tok in row.get("exercises") or []:
+                got = EX.resolve(tok, probes={p: R.run_probe(p) for p in P.PROBES},
+                                 verb_table=S.VERB_TABLE, resolvable=S.resolvable_verbs(),
+                                 register=reg)
+                assert "no probe" not in got["detail"] and "no register row" not in got["detail"] \
+                    and "on no verb-table row" not in got["detail"], (
+                    f"{cid} declares {tok!r}, which names nothing: {got['detail']}")
+
+
+def test_w10_no_playable_verdict_rests_on_an_undeclared_row():
+    """`PLAN.md` `W10`'s third Proof clause, asserted over the whole corpus rather than sampled."""
+    rep = json.loads((HERE.parent / "runs" / "results.json").read_text())
+    bad = [c["id"] for sec in ("NPC", "ARC") for c in rep[sec]
+           if c["verdict"] == "PLAYABLE" and c["core_unmapped"]]
+    assert not bad, f"PLAYABLE with undeclared core rows: {bad}"
+    authored = sum(len(c["routed"]) for sec in ("NPC", "ARC") for c in rep[sec])
+    undeclared = sum(len(c["unmapped"]) for sec in ("NPC", "ARC") for c in rep[sec])
+    print(f"\n  W10 — {authored} rows declared, {undeclared} awaiting an author. "
+          "NOT-ASSESSED now means the second, which is a fact about authoring.")
+    assert authored, "no row is declared at all — the overlay is not being read"

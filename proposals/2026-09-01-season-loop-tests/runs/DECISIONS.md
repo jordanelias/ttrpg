@@ -39,6 +39,12 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - *not taken:* per-container sort (voids the fold)
 - *not taken:* rank
 
+### ordering 2 acts  ·  `S27/S32`  ·  taken 8x
+- **chose:** five strata, then a content-derived hash key over one global array  (8x)
+- *not taken:* completion order
+- *not taken:* per-container sort (voids the fold)
+- *not taken:* rank
+
 ### site_seam crossed the `surface_gleaning` floor  ·  `S12.1/S3-L5`  ·  taken 8x
 - **chose:** EMIT a witnessable Event; write no social row; produce no outcome  (8x)
 - *not taken:* silently drop the verb from the set (then nobody can witness it)
@@ -48,12 +54,6 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - **chose:** EMIT a witnessable Event; write no social row; produce no outcome  (8x)
 - *not taken:* silently drop the verb from the set (then nobody can witness it)
 - *not taken:* write the consequence directly (L5 forbids: a crossing MAY NEVER PRODUCE AN OUTCOME)
-
-### ordering 2 acts  ·  `S27/S32`  ·  taken 8x
-- **chose:** five strata, then a content-derived hash key over one global array  (8x)
-- *not taken:* completion order
-- *not taken:* per-container sort (voids the fold)
-- *not taken:* rank
 
 ### ordering 5 acts  ·  `S27/S32`  ·  taken 4x
 - **chose:** five strata, then a content-derived hash key over one global array  (4x)
@@ -67,18 +67,30 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
 - *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'] are named and NONE has a predicate
 
-### ordering 3 acts  ·  `S27/S32`  ·  taken 2x
-- **chose:** five strata, then a content-derived hash key over one global array  (2x)
-- *not taken:* completion order
-- *not taken:* per-container sort (voids the fold)
-- *not taken:* rank
-
 ### clamping site_harbour.condition  ·  `S27.3`  ·  taken 2x
 - **chose:** sum [2, 4, -5, -1, 3] = 3, then clamp ONCE  (2x)
 - *not taken:* clamp per delta (arrival-order dependent)
 
 ### fan-out over 5 events  ·  `S28/S61`  ·  taken 2x
 - **chose:** EVERY event to EVERY person (5) -- the specified behaviour  (2x)
+- *not taken:* restrict by presence (the index is built and UNUSED -- no channel predicate exists to exclude anyone; S61 names this as the debt)
+- *not taken:* shard per rung (retired: made the parallelism claim unsound)
+- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'] are named and NONE has a predicate
+
+### ordering 3 acts  ·  `S27/S32`  ·  taken 2x
+- **chose:** five strata, then a content-derived hash key over one global array  (2x)
+- *not taken:* completion order
+- *not taken:* per-container sort (voids the fold)
+- *not taken:* rank
+
+### ordering 15 acts  ·  `S27/S32`  ·  taken 1x
+- **chose:** five strata, then a content-derived hash key over one global array  (1x)
+- *not taken:* completion order
+- *not taken:* per-container sort (voids the fold)
+- *not taken:* rank
+
+### fan-out over 15 events  ·  `S28/S61`  ·  taken 1x
+- **chose:** EVERY event to EVERY person (5) -- the specified behaviour  (1x)
 - *not taken:* restrict by presence (the index is built and UNUSED -- no channel predicate exists to exclude anyone; S61 names this as the debt)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
 - *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'] are named and NONE has a predicate
@@ -107,6 +119,10 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
 - *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'] are named and NONE has a predicate
 
+### transfer by p_low: precondition unmet  ·  `E2/S27.1`  ·  taken 1x
+- **chose:** emit the refusal -- scarcity falls out of the fold  (1x)
+- *not taken:* raise (no Event, no witness, no arc)
+
 ### date d_conf came due  ·  `S24`  ·  taken 1x
 - **chose:** fire-as-sitting  (1x)
 - *not taken:* block until a holder exists
@@ -116,22 +132,6 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - **chose:** fire-and-lapse  (1x)
 - *not taken:* block until a holder exists
 - *not taken:* defer to next season
-
-### transfer by p_low: precondition unmet  ·  `E2/S27.1`  ·  taken 1x
-- **chose:** emit the refusal -- scarcity falls out of the fold  (1x)
-- *not taken:* raise (no Event, no witness, no arc)
-
-### ordering 15 acts  ·  `S27/S32`  ·  taken 1x
-- **chose:** five strata, then a content-derived hash key over one global array  (1x)
-- *not taken:* completion order
-- *not taken:* per-container sort (voids the fold)
-- *not taken:* rank
-
-### fan-out over 15 events  ·  `S28/S61`  ·  taken 1x
-- **chose:** EVERY event to EVERY person (5) -- the specified behaviour  (1x)
-- *not taken:* restrict by presence (the index is built and UNUSED -- no channel predicate exists to exclude anyone; S61 names this as the debt)
-- *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'] are named and NONE has a predicate
 
 ### contest depth cap reached  ·  `S39.3`  ·  taken 1x
 - **chose:** typed error result returned to the caller  (1x)
