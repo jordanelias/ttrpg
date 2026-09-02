@@ -124,11 +124,92 @@ def build_at(case: dict, seed: int = 0) -> S.World:
     return w
 
 
-def run_case(case: dict, seed: int = 0) -> dict:
+# ===========================================================================
+# `W18` -- THE RUN DEFINITION, AS AN INSTRUMENT (`PLAN.md` §6.1, §6.2)
+#
+# `run_cases.py` GRADES; this RUNS. The difference is the whole of `PLAN.md` Part 4B: the first
+# item set optimised for a grading count that rose while zero cases ran.
+#
+# ⚠ A CHECK THIS CANNOT COMPUTE REPORTS `NOT-COMPUTABLE` AND NAMES THE ITEM THAT CLOSES IT. It
+# does NOT score. `R2` needs authored `exercises:` rows and a real cast (`W27`); `A2`'s DECIDER and
+# ROLL predicates need mechanisms `W26` and `W23` build; `A3` needs the case's own cast (`W27`).
+# A number that cannot fail is not a measurement (§0.1 pt 2), and it flatters toward progress every
+# time -- which this chain has now found in its own work six times.
+# ===========================================================================
+
+NOT_COMPUTABLE = {
+    "R2": "W10-core (author the rows) + W27 (a real cast)",
+    "A2": "W23 (contest results) + W26 (binding decisions) + W30 (the predicates)",
+    "A3": "W27 (the cast comes from the case)",
+}
+
+
+def _register_sites() -> str:
+    """Every `site:` on the register, as one string -- `R5`'s haystack.
+
+    ⚠ THE SAME READING `W9` CHECK 3 USES, not a second one (§8). That check asserts the milestone
+    run's fixture reads all resolve; this asks the same question per case."""
+    import register as REG
+    return " ".join(str(r.get("site") or "") for r in REG.load()["rows"])
+
+
+def _r3_propagates(w, driver) -> bool:
+    """`R3`: is there an **Act by another person** whose `causes[]` walks back to an act of a
+    different person?
+
+    ⚠ THE FIRST WORDING OF THIS CHECK SAID *AN EVENT* AND WAS SATISFIABLE 711 TIMES OVER ON DAY
+    ONE. Every `claim.deposited` Event has a cause whose `subject` differs from its own -- that is
+    what a witness deposit IS -- so an Event-level test scores every completing case immediately,
+    and the instrument built to say zero would have opened by saying twenty-seven. Measured: 711 of
+    711 deposits pass the loose reading; 0 Events have a cause that is an ACT by a different person.
+
+    ⚠ AND IT MUST GO THROUGH `causes[] -> Act.actor`, BECAUSE THE EVENT HAS NO ACTOR BY RULING.
+    #353 §19.3 puts `actor` among the three fields the Event does NOT carry; `driver.resolved` is
+    the only surface that knows who acted, which is also what `H-82`'s `log u resolved` integrity
+    check is for."""
+    acts = list(getattr(driver, "resolved", []))
+    if len(acts) < 2:
+        return False
+    # Event id -> the ACTOR of the act that emitted it, by the fold's own id derivation
+    # (`H(seed, tick, actor, f"{kind}:{act.id}")`), which is the same route execution attribution
+    # uses. One index, built once -- the first draft of this nested four loops and was O(n^4).
+    emitter: dict = {}
+    for a in acts:
+        row = S.VERB_TABLE.get(a.verb)
+        if row is None:
+            continue
+        for k in tuple(row.emits or ()) + tuple(row.emits_on_refusal or ()):
+            for t in range(w.tick + 2):
+                emitter[S.H(w.world_seed, t, a.actor, f"{k}:{a.id}")] = a.actor
+    for e in w.log:
+        mine = emitter.get(e.id)
+        if mine is None:
+            continue
+        for c in (e.causes or []):
+            theirs = emitter.get(c)
+            if theirs is not None and theirs != mine:
+                return True
+    return False
+
+
+def _span_status(case: dict) -> str:
+    """`A1`: an integer `span_seasons` is run in full; a prose span REFUSES rather than defaulting.
+
+    ⚠ REFUSES, NOT DEFAULTS. `MAX_SEASONS` clamps 3 arcs the corpus asks for at 8/10/16, and a
+    silent default would report a 2-season run as an arc that ran its span. `W29` lifts the clamp;
+    `W28` authors the prose spans."""
+    t = case.get("temporal")
+    n = t.get("span_seasons") if isinstance(t, dict) else None
+    if not isinstance(n, int) or n <= 0:
+        return "SPAN-UNAUTHORED"
+    return "CLAMPED" if n > MAX_SEASONS else "OK"
+
+
+def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     scale, cid = str(case.get("scale")), case["id"]
     if scale not in set(S.RUNG_KINDS):
         return dict(id=cid, scale=scale, status="UNREPRESENTABLE", executed=[], refused=[],
-                    seasons=0, why=f"`scale: {scale}` is not a rung kind")
+                    seasons=0, why=f"`scale: {scale}` is not a rung kind", checks={})
     n = seasons_for(case)
     w = build_at(case, seed)
     d = S.SeasonDriver(w)
@@ -143,10 +224,10 @@ def run_case(case: dict, seed: int = 0) -> dict:
         # the direction that flatters it"*. Rev 1 merged them and labelled the merged bucket
         # "an INSTRUMENT defect", which mis-attributes every design gap the fold can raise.
         return dict(id=cid, scale=scale, status="INSTRUMENT-DEFECT", executed=[], refused=[],
-                    seasons=n, why=f"{type(e).__name__}: {e}")
+                    seasons=n, why=f"{type(e).__name__}: {e}", checks={"R1": False})
     except (S.ShapeGap, S.Unspecified, S.Forbidden, S.NoProducer) as e:
         return dict(id=cid, scale=scale, status="DESIGN-GAP", executed=[], refused=[],
-                    seasons=n, why=f"{type(e).__name__}: {e}")
+                    seasons=n, why=f"{type(e).__name__}: {e}", checks={"R1": False})
     # EXECUTION, ATTRIBUTED TO THE ACT — not to any verb that shares an emission kind.
     #
     # ⚠ THE KIND ALONE IS NOT AN ATTRIBUTION, AND READING IT AS ONE PUT A FALSE POSITIVE IN THE
@@ -174,15 +255,72 @@ def run_case(case: dict, seed: int = 0) -> dict:
                 if S.H(w.world_seed, t, a.actor, f"{k}:{a.id}") in ids:
                     no_v.add(a.verb)
     ok, no = sorted(ok_v), sorted(no_v)
-    return dict(id=cid, scale=scale, status="RAN" if ok else "NO-EXECUTION",
-                executed=ok, refused=no, seasons=n, why="")
+    # ---- `W18`: §6.1's R1/R3/R4/R5 and §6.2's A1, computed. R2/A2/A3 are NOT-COMPUTABLE.
+    before = dict(S.DEFAULT_FIXTURES.reads)
+    w2 = build_at(case, seed)
+    d2 = S.SeasonDriver(w2)
+    mint2 = lambda pid, verb, subj: S.H(w2.world_seed, w2.tick, pid, f"act:{verb}:{subj}")
+    ch2 = S.make_chooser(w2.fixtures, mint2, verbs=S.resolvable_verbs())
+    try:
+        for _ in range(n):
+            d2.season(ch2, question=None, subsistence=P.SUBSIST)
+        r4 = w2.content_hash() == w.content_hash()
+    except Exception:
+        r4 = False
+    read = [k for k, c in w.fixtures.reads.items() if c > before.get(k, 0)]
+    sites = _register_sites()
+    checks = {
+        "R1": True,
+        "R3": _r3_propagates(w, d),
+        "R4": r4,
+        "R5": all(k in sites for k in read) if read else None,
+        "A1": _span_status(case),
+    }
+    # §6.1's statuses. `RUNS` needs R2, which is NOT-COMPUTABLE — so a case that passes everything
+    # computable is `RUNS-UNDECLARED`, which is the honest name for it and exists because the first
+    # draft had no status a case could occupy today.
+    core = checks["R1"] and checks["R4"] and (checks["R5"] is not False)
+    if not core:
+        status = "HALTS"
+    elif lane == "ARC" and checks["A1"] == "SPAN-UNAUTHORED":
+        status = "SPAN-UNAUTHORED"
+    elif checks["R3"]:
+        status = "RUNS-UNDECLARED"
+    else:
+        status = "RUNS-ALONE-UNDECLARED" if ok else "NO-EXECUTION"
+    return dict(id=cid, scale=scale, status=status, executed=ok, refused=no, seasons=n,
+                why="", checks=checks)
+
+
+def planted_control(seed: int = 0) -> tuple:
+    """`W18`'s CONTROL, and the only clause of its proof that demonstrates sensitivity.
+
+    ⚠ PRINTING ZERO WHERE ZERO IS ENTAILED IS NOT A CONTROL (§0.1 pt 4). The first draft called it
+    one. This plants a second person's Act caused by the first person's act and asserts `R3` flips
+    false -> true; without it the instrument has shown only that it can print a number.
+
+    Returns `(before, after)`."""
+    case = next(c for c in R.load_cases("NPC") if str(c.get("scale")) in set(S.RUNG_KINDS))
+    w = build_at(case, seed)
+    d = S.SeasonDriver(w)
+    before = _r3_propagates(w, d)
+    # Two acts, two actors, the second caused by the first. Hand-built: the point is to prove the
+    # DETECTOR works, not that the loop produces one -- the loop producing one is `W24`/`W25`.
+    a1 = S.Act(id="ctl_a", actor="p_a", verb="speak")
+    a2 = S.Act(id="ctl_b", actor="p_b", verb="speak")
+    d.resolved.extend([a1, a2])
+    k = S.VERB_TABLE["speak"].emits[0]
+    e1 = S.Event(S.H(w.world_seed, 0, "p_a", f"{k}:{a1.id}"), k, "p_a", [], [S.ROOT], 0)
+    e2 = S.Event(S.H(w.world_seed, 0, "p_b", f"{k}:{a2.id}"), k, "p_b", [], [e1.id], 0)
+    w.log.extend([e1, e2])
+    return before, _r3_propagates(w, d)
 
 
 def main(seed: int = 0) -> int:
     rows = []
     for lane in ("NPC", "ARC"):
         for c in R.load_cases(lane):
-            r = run_case(c, seed); r["lane"] = lane; rows.append(r)
+            r = run_case(c, seed, lane); r["lane"] = lane; rows.append(r)
     by = Counter(r["status"] for r in rows)
     print(f"CORPUS RUN — {len(rows)} cases, seed {seed}, seasons from `temporal.span_seasons`")
     for k, v in sorted(by.items()):
@@ -214,7 +352,12 @@ def main(seed: int = 0) -> int:
         print(f"\n  RANKING DISCRIMINATION   {min(n for n, _ in sep)}..{max(n for n, _ in sep)} of "
               f"{tot} candidates carry a nonzero conviction score; the rest TIE and are ordered "
               f"alphabetically by verb name")
-    live = [r for r in rows if r["status"] in ("RAN", "NO-EXECUTION")]
+    # ⚠ A CASE THAT EXECUTED, WHATEVER ITS BAR STATUS. `W18` renamed the statuses (`RAN` became
+    # `RUNS-UNDECLARED` / `RUNS-ALONE-UNDECLARED`), and this filter still named the old ones — so
+    # the verb counts went to 0 of 32 the moment the bar landed, silently, because an empty set has
+    # no obvious tell. Keyed on `checks["R1"]` now, which is the property meant all along: the run
+    # completed. Caught by reading the output rather than by a test, which is the honest account.
+    live = [r for r in rows if r.get("checks", {}).get("R1") is True]
     sigs = {tuple(r["executed"]) for r in live}
     print(f"\n  DISTINCT WORLDS RUN      {len(live)} (scales {sorted({r['scale'] for r in live})}, "
           f"season counts {sorted({r['seasons'] for r in live})})")
@@ -228,6 +371,28 @@ def main(seed: int = 0) -> int:
           f"predicate/effect · {len(foldable - set(ever) - set(tried))} foldable but never even "
           f"attempted ({sorted(foldable - set(ever) - set(tried))}) · "
           f"{len(set(tried) - set(ever))} attempted and always refused · {len(ever)} executed")
+
+    # ---- `W18`: THE BAR, per lane (`PLAN.md` §6.1 / §6.2) --------------------
+    print("\n" + "=" * 72)
+    print("THE BAR — `PLAN.md` Part 6.  Two counts, one per lane, NEVER averaged (`G10`):")
+    print("  the NPC number counts PROPAGATION; the ARC number counts ENDINGS.")
+    for lane in ("NPC", "ARC"):
+        ls = [r for r in rows if r["lane"] == lane]
+        st = Counter(r["status"] for r in ls)
+        headline = "RUNS" if lane == "NPC" else "ENDS"
+        print(f"\n  {lane}  ({len(ls)} cases)     ** {headline} = {st.get(headline, 0)} **")
+        for k, v in sorted(st.items(), key=lambda kv: -kv[1]):
+            print(f"     {k:24} {v}")
+        live = [r for r in ls if r["checks"]]
+        for c in ("R1", "R3", "R4", "R5"):
+            n = sum(1 for r in live if r["checks"].get(c) is True)
+            print(f"     check {c}: {n} of {len(live)} pass")
+    b, a = planted_control(seed)
+    print(f"\n  CONTROL — planted cross-person edge: R3 {b} -> {a}  "
+          f"{'(the detector works)' if (not b and a) else '⚠ THE CONTROL DID NOT FIRE'}")
+    print("\n  NOT-COMPUTABLE — reported, never scored:")
+    for k, why in NOT_COMPUTABLE.items():
+        print(f"     {k}: closed by {why}")
     return 0
 
 

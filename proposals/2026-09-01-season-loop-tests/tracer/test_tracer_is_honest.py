@@ -4190,11 +4190,16 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     §F2's scoring separates 2..7 of 22 candidates and the rest tie (`H-96`)."""
     import corpus_run as C
     import run_cases as R
-    rows = [C.run_case(c) for lane in ("NPC", "ARC") for c in R.load_cases(lane)]
+    rows = [C.run_case(c, 0, lane) for lane in ("NPC", "ARC") for c in R.load_cases(lane)]
     bad = [r for r in rows if r["status"] == "INSTRUMENT-DEFECT"]
     assert not bad, (f"the corpus runner has a call-site bug on {[(r['id'], r['why']) for r in bad][:3]}"
                      " — an instrument defect, which is NOT a finding about the design")
-    live = [r for r in rows if r["status"] in ("RAN", "NO-EXECUTION")]
+    # ⚠ KEYED ON `R1`, NOT ON A STATUS NAME. `W18` renamed the bar's statuses (`RAN` became
+    # `RUNS-UNDECLARED` / `RUNS-ALONE-UNDECLARED`), and a filter naming the old ones silently
+    # selects nothing — which is exactly what happened to `corpus_run.main` when `W18` landed: the
+    # verb counts went to `0 of 32` and an empty set has no obvious tell. The property meant all
+    # along is "the run completed", which is `R1`.
+    live = [r for r in rows if r.get("checks", {}).get("R1") is True]
     unrep = [r for r in rows if r["status"] == "UNREPRESENTABLE"]
 
     # `H-95` — the two scale vocabularies, asserted EXACTLY. `faction` is refused by RULING
@@ -4345,3 +4350,56 @@ def test_the_combat_seam_derives_one_field_and_it_decides_something():
     assert healthy > dying, (
         f"condition does not reach the engine: healthy won {healthy}/40 and dying {dying}/40. "
         "The derived field is decoration, and the seam is handing the subsystem a constant")
+
+
+def test_w18_the_run_instrument_and_its_control():
+    """`W18`. `PLAN.md` Part 6's bar, as an instrument. Three clauses, and **the control is first
+    because it is the only one that demonstrates sensitivity.**
+
+    ⚠ "THE CONTROL IS THAT THE INSTRUMENT CAN SAY ZERO" IS NOT A CONTROL, and `W18`'s first draft
+    said it was. Printing 0 on a corpus where 0 is entailed shows nothing (§0.1 pt 4). The planted
+    cross-person edge is the control: it must flip `R3` false → true, and if it ever stops flipping,
+    the instrument has gone blind and every zero it prints afterwards is worthless."""
+    import corpus_run as C
+    import run_cases as R
+
+    # 1 — THE CONTROL.
+    before, after = C.planted_control()
+    assert before is False and after is True, (
+        f"the planted cross-person edge did not flip R3 ({before} -> {after}). The detector is "
+        "blind, and every `RUNS = 0` it prints is uninformative rather than true")
+
+    rows = [C.run_case(c, 0, lane) for lane in ("NPC", "ARC") for c in R.load_cases(lane)]
+    npc = [r for r in rows if r["id"] in {c["id"] for c in R.load_cases("NPC")}]
+    arc = [r for r in rows if r not in npc]
+
+    # 2 — the two counts, and they are zero today.
+    assert sum(1 for r in npc if r["status"] == "RUNS") == 0, (
+        "an NPC case reaches RUNS — that is PROGRESS and Part 6's count must be re-derived, not "
+        "reused. `RUNS` needs `R2`, which `W18` declares NOT-COMPUTABLE, so this firing means "
+        "either `W10-core` landed or a status is being scored that should not be")
+    assert sum(1 for r in arc if r["status"] == "ENDS") == 0, (
+        "an ARC case reaches ENDS — `W30` has landed or `A2` is being scored while NOT-COMPUTABLE")
+
+    # ⚠ AND THE ZEROS MUST NOT BE VACUOUS. Cases have to be REACHING the checks for a zero to mean
+    # anything; if nothing completes, `RUNS = 0` says only that the instrument fell over.
+    completing = [r for r in rows if r.get("checks", {}).get("R1") is True]
+    assert len(completing) >= 80, (
+        f"only {len(completing)} cases complete a run; the two zeros are then a report about the "
+        "harness, not about the design")
+    assert all(r["checks"]["R4"] for r in completing), "a completing case is not reproducible"
+
+    # 3 — NOT-COMPUTABLE is reported, non-empty, and every entry names the item that closes it.
+    assert C.NOT_COMPUTABLE, "nothing is declared NOT-COMPUTABLE — R2/A2/A3 are being scored"
+    assert set(C.NOT_COMPUTABLE) == {"R2", "A2", "A3"}, sorted(C.NOT_COMPUTABLE)
+    for k, why in C.NOT_COMPUTABLE.items():
+        assert "W" in why, f"{k} does not name the item that closes it: {why!r}"
+    for r in completing:
+        assert "R2" not in r["checks"] and "A2" not in r["checks"], (
+            f"{r['id']} carries a score for a check declared NOT-COMPUTABLE — a number that cannot "
+            "fail is not a measurement, and this is the exact defect the declaration exists to stop")
+
+    # `A1` refuses a prose span rather than defaulting one — 25 ARC cases today.
+    assert sum(1 for r in arc if r["status"] == "SPAN-UNAUTHORED") > 0, (
+        "no arc is SPAN-UNAUTHORED; prose spans are being silently defaulted, and an arc reported "
+        "as running its span would not have run it")
