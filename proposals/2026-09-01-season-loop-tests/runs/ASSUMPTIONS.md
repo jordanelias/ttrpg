@@ -7,6 +7,14 @@ mean measuring nothing; asserting them silently would be the invention §42.3 na
 **0 of 0 declared assumptions were actually
 exercised by this run.**
 
+> **ZERO IS A MEASUREMENT HERE, NOT AN ABSENCE.** The instrument assumed three
+> schema rows until `W2` made Part D data: §D2's `DR-3` states all three, so
+> nothing is left to assume. The channel that would record one
+> (`shape.assume_partition_row`) is deliberately **kept live** — an empty dict
+> that no code path can populate would make this count satisfiable by deletion,
+> which is `CLAUDE.md` §0.1 point 2. If any future run has to assume a row, it
+> appears in the table below.
+
 | row | social | why | exercised |
 |---|---|---|---|
 

@@ -254,7 +254,24 @@ def emit(rep: dict, trace_rows: list) -> None:
            "numbers.** Without these the loop cannot complete one season, so refusing them would",
            "mean measuring nothing; asserting them silently would be the invention §42.3 names.",
            "", f"**{len(used)} of {len(_s.PARTITION_ASSUMED)} declared assumptions were actually",
-           "exercised by this run.**", "", "| row | social | why | exercised |", "|---|---|---|---|"]
+           "exercised by this run.**", ""]
+    if not _s.PARTITION_ASSUMED:
+        # ⚠ ZERO HERE IS A MEASUREMENT, NOT AN ABSENCE, AND A READER OF THIS FILE CANNOT TELL
+        # THE TWO APART UNLESS IT SAYS SO. The dict held three rows until `W2`; §D2's DR-3 now
+        # states all three, so the instrument no longer has to assume them. `W2` first published
+        # "zero exercised assumptions" as its proof while the dict had become a literal NO CODE
+        # PATH COULD POPULATE -- a claim satisfiable by deletion, §0.1 pt 2. The channel
+        # (`shape.assume_partition_row`) is kept live precisely so this line means something,
+        # and that argument lived only in a Python docstring where no reader of the artifact
+        # would meet it.
+        out += ["> **ZERO IS A MEASUREMENT HERE, NOT AN ABSENCE.** The instrument assumed three",
+                "> schema rows until `W2` made Part D data: §D2's `DR-3` states all three, so",
+                "> nothing is left to assume. The channel that would record one",
+                "> (`shape.assume_partition_row`) is deliberately **kept live** — an empty dict",
+                "> that no code path can populate would make this count satisfiable by deletion,",
+                "> which is `CLAUDE.md` §0.1 point 2. If any future run has to assume a row, it",
+                "> appears in the table below.", ""]
+    out += ["| row | social | why | exercised |", "|---|---|---|---|"]
     for k, (social, why) in sorted(_s.PARTITION_ASSUMED.items()):
         out.append(f"| `({k[0]}, {k[1]})` | {social} | {why} | {'yes' if k in used else 'no'} |")
     out += ["", "## Harness fixtures — every number this instrument used", "",
