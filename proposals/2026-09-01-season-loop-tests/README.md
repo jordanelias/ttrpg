@@ -20,7 +20,8 @@ to test*; they supply nothing about whether the shape is right.
 |---|---|
 | `tracer/shape.py` | **the instrument.** `ARCHITECTURE.md` implemented faithfully enough to EXECUTE — six steps, four barriers, the write matrix as a store-API parameter, the `Event` record §19 adds, the three-clause aggregation boundary, fixed point, the two topologies |
 | `tracer/probes.py` | the probes. Each is a REAL EXECUTION that either completes or raises a typed `ShapeGap` |
-| `tracer/run_cases.py` | the router and grader. Routes each case's `season_requires` rows onto probes |
+| `tracer/run_cases.py` | the GRADER. Reads each case's `season_requires` rows and the authored `exercises:` declaration naming which verb / hole / probe answers each one. ⚠ **It is no longer a router** — `W10` deleted the regex router and `route_precision.py` with it; routing is an authored declaration bound to its row by `need_sha`, so a wrong answer is an authoring error somebody can argue with |
+| `tracer/corpus_run.py` | the RUNNER, and the difference from the grader is the point. Builds a world per case and folds real seasons through it, reporting what EXECUTED. Built 2026-09-02 at Jordan's direction; `PLAN.md` Part 6 defines what it means for a case to run |
 | `tracer/report.py` | **the sole emitter of `runs/`** (W15, guardrail G7). `run_cases.py` runs the corpus and writes nothing; every artifact below comes from here |
 | `tracer/test_tracer_is_honest.py` | **the instrument's own adversarial test.** Count it rather than trusting this cell: `python -m pytest tracer/test_tracer_is_honest.py -q` |
 | `tracer/trace_log.py` | the tracing channel — every step, barrier, decision, write, act, event, claim and gap, in order |
