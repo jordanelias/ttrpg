@@ -120,8 +120,12 @@ def run(seasons: int = 2, seed: int = 0) -> dict:
         # Carin chooses from the resolvable subset, not from all 32. Which verbs those are moves
         # with `verb_table.yaml`, `REQUIRES_PREDICATES` and `EFFECTS`, so the number below is a
         # measurement of the specification's completeness, not a setting.
+        # `H-87`: the contest depth cap is the CALLER's to supply (S39.3 refuses a default), and
+        # artifact 2 never had to decide until Part E's `contests:` column became real and the
+        # seam started firing on `kill / wound`.
         out.append(d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
-                            None, subsistence))
+                            None, subsistence,
+                            contest_max_depth=w.fixtures.get("contest_max_depth")))
     return dict(seasons=out, hash=w.content_hash(), world=w,
                 events=len(w.log), acts=sum(s["acts"] for s in out),
                 resolvable=len(S.resolvable_verbs()), verbs=len(S.VERB_TABLE))

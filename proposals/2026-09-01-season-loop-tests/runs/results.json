@@ -228,16 +228,16 @@
      ],
      "resolved": [
       {
-       "ok": true,
+       "ok": false,
        "bound": true,
        "kind": "verb",
-       "detail": "'kill / wound' executes"
+       "detail": "'kill / wound' is on the table and the fold cannot execute it: needs an effect"
       }
      ],
      "unbound": [],
      "verdict": {
-      "verdict": "PASS",
-      "detail": "'kill / wound' executes",
+      "verdict": "GAP",
+      "detail": "'kill / wound' is on the table and the fold cannot execute it: needs an effect",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -983,6 +983,7 @@
    "core_blocked": 2,
    "blockers": [
     "H-84",
+    "kill / wound",
     "the six investigation acts"
    ],
    "unbound": [],
@@ -1069,10 +1070,10 @@
      ],
      "resolved": [
       {
-       "ok": true,
+       "ok": false,
        "bound": true,
        "kind": "verb",
-       "detail": "'kill / wound' executes"
+       "detail": "'kill / wound' is on the table and the fold cannot execute it: needs an effect"
       },
       {
        "ok": false,
@@ -1090,7 +1091,7 @@
      "unbound": [],
      "verdict": {
       "verdict": "GAP",
-      "detail": "'kill / wound' executes \u00b7 'the six investigation acts' is on the table and the fold cannot execute it: needs a `requires:` predicate \u00b7 'tell' executes",
+      "detail": "'kill / wound' is on the table and the fold cannot execute it: needs an effect \u00b7 'the six investigation acts' is on the table and the fold cannot execute it: needs a `requires:` predicate \u00b7 'tell' executes",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -9258,7 +9259,7 @@
   "P15": {
    "id": "P15",
    "verdict": "PASS",
-   "detail": "PASS, BY CONSTRUCTION: all five channels ['chronicle', 'co_located', 'document_key', 'post_remit', 'witness_key'] carry a predicate, and one of them EXCLUDES -- the same Event reaches 5 person(s) under `total` (S61's specified behaviour, and `H-33`'s control) and 0 under `presence_only`. \u26a0 THE DESIGN STILL SUPPLIES NO PREDICATE: these are an INJECTED default, `H-33` stays `assumption`, and `total` remains the default because it is what #353 specifies. What is closed is that an exclusion is now EXPRESSIBLE and swept, not that #353 said how",
+   "detail": "PASS, BY CONSTRUCTION, AND IN BOTH DIRECTIONS: the same Event reaches 5 person(s) under `total` (S61's specified behaviour, and `H-33`'s control) and 3 under `presence_only` -- it ADMITS the 3 people standing in the emitter's rung and EXCLUDES ['p_high', 'p_king'], who are elsewhere. Admitting is asserted as well as excluding, because a channel broken CLOSED also shrinks the set and that is what the first version of this probe was reading. \u26a0 THE DESIGN STILL SUPPLIES NO PREDICATE: these are an INJECTED default, `H-33` stays `assumption`, and `total` remains the default because it is what #353 specifies. What is closed is that an exclusion is now EXPRESSIBLE and swept, not that #353 said how. \u26a0 TWO OF THE FIVE ADMIT NOBODY IN THIS WORLD -- `post_remit` needs an office whose remit covers the emitting verb, and `chronicle` fires only on a binding decision; neither is reachable from the verbs the fold can execute",
    "kind": null,
    "section": "S61",
    "title": "a person's private act stays private",
@@ -9290,7 +9291,7 @@
   "P18": {
    "id": "P18",
    "verdict": "PASS",
-   "detail": "PASS, AND BOTH HALVES OF L5 RAN. `site_harbour` crossed the `bulk_shipping` floor in 2 seasons (800 -> 790). (1) IT CHANGED WHAT MAY BE CHOSEN: ['bulk_shipping', 'fishing'] -> ['fishing']. (2) IT EMITTED A WITNESSABLE EVENT into the one log (condition.band_crossed) whose `causes[]` NAMES THE WEAR THAT CROSSED THE FLOOR (`W4`/`H-12`), carrying NO social change and NO degree -- so it wrote no social row and PRODUCED NO OUTCOME. That is L5 exactly, and it is what the in-chain survey found 19 of 50 arcs asking for: THE COUNTER COMPELS SOMEONE TO ACT, IT DOES NOT ACT",
+   "detail": "PASS, AND BOTH HALVES OF L5 RAN. \u26a0 THE SITE IS SEEDED one season above its highest floor (see `_seed_near_floor`), so 2 is NOT the unseeded pacing -- `A31b` reports 11 for this same site, wear and floor, and that is the number to cite for pacing. `site_harbour` crossed the `bulk_shipping` floor in 2 seasons (800 -> 790). (1) IT CHANGED WHAT MAY BE CHOSEN: ['bulk_shipping', 'fishing'] -> ['fishing']. (2) IT EMITTED A WITNESSABLE EVENT into the one log (condition.band_crossed) whose `causes[]` NAMES THE WEAR THAT CROSSED THE FLOOR (`W4`/`H-12`), carrying NO social change and NO degree -- so it wrote no social row and PRODUCED NO OUTCOME. That is L5 exactly, and it is what the in-chain survey found 19 of 50 arcs asking for: THE COUNTER COMPELS SOMEONE TO ACT, IT DOES NOT ACT",
    "kind": null,
    "section": "S3-L5",
    "title": "a crossing compels a person to act",
@@ -9484,7 +9485,7 @@
   "P36": {
    "id": "P36",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 9 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['create_record', 'kill / wound', 'move', 'speak', 'tell', 'transfer', 'utter'] -- 7 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 8 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['create_record', 'move', 'speak', 'tell', 'transfer', 'utter', 'work'] -- 7 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
    "kind": null,
    "section": "S17",
    "title": "a choice branches three ways",
@@ -9716,7 +9717,7 @@
   "W1": {
    "id": "W1",
    "verdict": "PASS",
-   "detail": "PASS: wear at MATTER dropped condition below the floor in 2 seasons and the verb LEFT THE SET. The COUNT is a function of the injected `wear_per_season` fixture and moves with it -- the STRUCTURAL claim (a verb leaves) does not",
+   "detail": "PASS: wear at MATTER dropped condition below the floor in 2 seasons and the verb LEFT THE SET. \u26a0 The COUNT is a function of TWO injected fixtures -- `wear_per_season` and the `_seed_near_floor` seeding this probe uses -- and moves with both; `A31b` reports 11 unseeded for the same site. The STRUCTURAL claim (a verb leaves) does not move with either",
    "kind": null,
    "section": "S12.1",
    "title": "a site decays until a verb leaves its set",
@@ -11012,12 +11013,12 @@
  "_trace_counts": {
   "STEP": 1920,
   "BARRIER": 651,
-  "DECISION": 658,
-  "WRITE": 11928,
-  "EVENT": 9062,
-  "QUERY": 5316,
+  "DECISION": 657,
+  "WRITE": 11931,
+  "EVENT": 9067,
+  "QUERY": 3956,
   "ACT": 75,
-  "CLAIM": 4715,
+  "CLAIM": 4720,
   "GAP": 65,
   "NOTE": 96
  },

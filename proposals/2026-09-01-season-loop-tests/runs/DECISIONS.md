@@ -3,7 +3,7 @@
 Every branch the shape took that could have gone another way, with the alternatives
 it did not take. A decision nobody records is a decision nobody can audit.
 
-**658 decisions taken, 55 distinct.**
+**657 decisions taken, 54 distinct.**
 
 ### MATTER's cross-owner operations  ·  `S31.1`  ·  taken 167x
 - **chose:** serial: the actorless event channel; then parallel over Sites  (167x)
@@ -245,10 +245,6 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - *not taken:* completion order
 - *not taken:* per-container sort (voids the fold)
 - *not taken:* rank
-
-### kill / wound wrote nothing  ·  `E3`  ·  taken 1x
-- **chose:** emit the refusal, not the success  (1x)
-- *not taken:* emit `emits:` anyway (publishes an event for a state change that did not happen)
 
 ### transfer by p_mid: precondition unmet  ·  `E2/S27.1`  ·  taken 1x
 - **chose:** emit the refusal -- scarcity falls out of the fold  (1x)

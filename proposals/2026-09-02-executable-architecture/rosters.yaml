@@ -245,7 +245,12 @@ rosters:
       anything. It is the MATTER-OF-RECORD channel: what a binding decision emits is public,
       because a binding decision is the design's own category for an act whose effect is
       institutional rather than private.
-    values: ["chronicle", "co_located", "document_key", "post_remit", "witness_key"]
+    # ⚠ THE NAMES ARE NOT REPEATED HERE. `witness_channels` above is the one place the five are
+    # named; this row carries only what each one MEANS, and `shape.py` reads the names from there
+    # and the meanings from here. The first version listed all five again in a `values:` key, so a
+    # definition lived twice in one file and a test had to guard that the two copies agreed —
+    # guarding a duplicate is the shape §8 asks you not to create. Found by the `W6` adversarial
+    # pass.
     predicates:
       co_located:    "the person shares a live `contain` Tenure with the Event's place -- the presence index S28 already builds and the fan-out never read"
       document_key:  "the person holds a live `hold` Tenure over the Event's subject (a Record, a store)"

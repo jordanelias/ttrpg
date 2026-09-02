@@ -187,7 +187,8 @@ verbs:
     stratum:     "contested_physical"
     eligibility: ["own"]
     requires:    "—"
-    requires_note: "contests: the body → the seam (§39)"
+    contests: "the body"
+    requires_note: "⚠ `contests:` IS A REAL FIELD NOW, NOT A NOTE. ARCHITECTURE_V2.md:394 declares the column -- `contests: <prize> | none`, *if set, routes to the seam at RESOLVE (§39)* -- and :434 sets it on this row. The transcription put it here, where nothing reads it, so the fold executed a kill as a DIRECT WRITE. Jordan, 2026-09-02: *that would trigger the personal combat scene. you can't just kill or wound.* The design already said so."
     writes:      ["Person.body", "Person.exists", "Tenure.until"]
     emits:       ["person.died"]
     emits_on_refusal: []

@@ -508,27 +508,49 @@ def p15():
     # do is claim the design supplies them: it does not, `H-33` stays `assumption`, and `total`
     # remains the default because that is the specified behaviour.
     w = tiny_world()
-    e = Event(H(w.world_seed, w.tick, "p_high", "probe:p15"), "speech.made", "p_high", [],
+    # ⚠ THE SUBJECT IS `p_low`, WHO SHARES A RUNG WITH TWO OTHERS, AND THAT IS THE WHOLE FIX.
+    # The first version used `p_high`, who is alone in his rung, and asserted only
+    # `len(narrow) < len(total)` -- which CANNOT TELL A PREDICATE THAT EXCLUDES FROM A CHANNEL
+    # BROKEN CLOSED. It was broken closed: `_event_place` tested `e.subject in w.rungs` first, and
+    # every person here has a same-id `person`-kind Rung, so presence answered "who is contained
+    # IN p_high" -- nobody -- and `narrow` was EMPTY. The probe reported an exclusion mechanism
+    # while demonstrating that nothing said anywhere reached anyone. §0.1 pt 2, and a repeat of a
+    # conflation `witness` had already retracted once. Found by the `W6` adversarial pass.
+    e = Event(H(w.world_seed, w.tick, "p_low", "probe:p15"), "speech.made", "p_low", [],
               [ROOT], w.tick)
     everyone = list(w.persons)
     total = observers_for(w, e, "total", everyone)
     narrow = observers_for(w, e, "presence_only", everyone)
     five = observers_for(w, e, "all_five", everyone)
+    room = [x for x in Query.presence(w, "Hh") if x in everyone]
+    assert len(room) >= 2, "the fixture no longer puts two people in one rung; the test below is vacuous"
     assert set(total) == set(everyone), "the control arm is not the specified behaviour"
-    assert len(narrow) < len(total), (
+    # BOTH DIRECTIONS. A channel must ADMIT the co-located, not merely exclude somebody.
+    assert set(room) <= set(narrow), (
+        f"a person standing in the same rung as the emitter is NOT admitted: {sorted(set(room) - set(narrow))} "
+        "-- the channel is broken closed, not selective")
+    assert set(narrow) < set(total), (
         "no channel predicate EXCLUDES anyone -- which is the thing S61 says a wrapper cannot fix")
+    absent = set(total) - set(narrow)
+    assert absent and not (absent & set(room)), (
+        f"the excluded set {sorted(absent)} overlaps the room -- exclusion is not tracking presence")
     assert set(narrow) <= set(five) <= set(total), (
         "the arms are not nested; a wider channel set must not exclude someone a narrower one "
         "included")
     unspecified = [c for c in WITNESS_CHANNELS if c not in CHANNEL_PREDICATES]
     assert not unspecified, f"channels still without a predicate: {unspecified}"
-    return (f"PASS, BY CONSTRUCTION: all five channels {sorted(CHANNEL_PREDICATES)} carry a "
-            f"predicate, and one of them EXCLUDES -- the same Event reaches {len(total)} person(s) "
-            f"under `total` (S61's specified behaviour, and `H-33`'s control) and {len(narrow)} "
-            f"under `presence_only`. ⚠ THE DESIGN STILL SUPPLIES NO PREDICATE: these are an "
-            f"INJECTED default, `H-33` stays `assumption`, and `total` remains the default because "
-            f"it is what #353 specifies. What is closed is that an exclusion is now EXPRESSIBLE "
-            f"and swept, not that #353 said how")
+    return (f"PASS, BY CONSTRUCTION, AND IN BOTH DIRECTIONS: the same Event reaches "
+            f"{len(total)} person(s) under `total` (S61's specified behaviour, and `H-33`'s "
+            f"control) and {len(narrow)} under `presence_only` -- it ADMITS the {len(room)} people "
+            f"standing in the emitter's rung and EXCLUDES {sorted(set(total) - set(narrow))}, who "
+            f"are elsewhere. Admitting is asserted as well as excluding, because a channel broken "
+            f"CLOSED also shrinks the set and that is what the first version of this probe was "
+            f"reading. ⚠ THE DESIGN STILL SUPPLIES NO PREDICATE: these are an INJECTED default, "
+            f"`H-33` stays `assumption`, and `total` remains the default because it is what #353 "
+            f"specifies. What is closed is that an exclusion is now EXPRESSIBLE and swept, not "
+            f"that #353 said how. ⚠ TWO OF THE FIVE ADMIT NOBODY IN THIS WORLD -- `post_remit` "
+            f"needs an office whose remit covers the emitting verb, and `chronicle` fires only on "
+            f"a binding decision; neither is reachable from the verbs the fold can execute")
 
 
 @probe("P16", "regard moves per-knower", "S20", by="construction",
@@ -590,7 +612,10 @@ def p18():
     assert verb in before and verb not in after
     social = [c for c in ev.changes if c.field in ("stance", "convictions", "beliefs")]
     assert not social and not ev.degree
-    return (f"PASS, AND BOTH HALVES OF L5 RAN. `{sid}` crossed the `{verb}` floor in {n} seasons "
+    return (f"PASS, AND BOTH HALVES OF L5 RAN. ⚠ THE SITE IS SEEDED one season above its "
+            f"highest floor (see `_seed_near_floor`), so {n} is NOT the unseeded pacing -- `A31b` "
+            f"reports 11 for this same site, wear and floor, and that is the number to cite for "
+            f"pacing. `{sid}` crossed the `{verb}` floor in {n} seasons "
             f"({was} -> {now}). (1) IT CHANGED WHAT MAY BE CHOSEN: {sorted(before)} -> "
             f"{sorted(after)}. (2) IT EMITTED A WITNESSABLE EVENT into the one log "
             f"({ev.kind}) whose `causes[]` NAMES THE WEAR THAT CROSSED THE FLOOR "
@@ -1253,6 +1278,14 @@ def _seed_near_floor(w, site) -> None:
     MATTER emit per write, and with `W6`'s default arm keeping the fan-out total (because that is
     what #353 specifies), the two of them cost 71 SECONDS between them and were the slowest things
     in the suite by two orders of magnitude.
+    ⚠ AND IT MOVES A PUBLISHED NUMBER, WHICH IS SAID HERE RATHER THAN LEFT TO BE FOUND. `P18` and
+    `W1` reported ELEVEN seasons before this and report TWO after — `site_harbour` starts at 900,
+    the `bulk_shipping` floor is 800 and wear is 10. `A31b` in the SAME artifact still reports 11
+    for the same site, wear and floor, because its count IS its measurement and it is not seeded.
+    Two probes now answer "how long until a harbour silts past the shipping floor" with 2 and 11,
+    and the reconciliation is this helper: one is seeded, the other is not. `W1`'s own disclosure
+    (*"the COUNT is a function of the injected `wear_per_season` fixture"*) is now incomplete — it
+    is also a function of this seeding — and both probes say so in their returns.
     Neither probe's claim depends on HOW the site reached the floor — `W1`'s own return text says
     so: *"the COUNT is a function of the injected `wear_per_season` fixture and moves with it —
     the STRUCTURAL claim (a verb leaves) does not."* Both keep their loop, so a crossing that stops
@@ -1278,8 +1311,10 @@ def w1():
         _run(w); n += 1
     assert n < 200
     return (f"PASS: wear at MATTER dropped condition below the floor in {n} seasons and the verb "
-            f"LEFT THE SET. The COUNT is a function of the injected `wear_per_season` fixture and "
-            "moves with it -- the STRUCTURAL claim (a verb leaves) does not")
+            f"LEFT THE SET. ⚠ The COUNT is a function of TWO injected fixtures -- `wear_per_season` "
+            f"and the `_seed_near_floor` seeding this probe uses -- and moves with both; `A31b` "
+            f"reports 11 unseeded for the same site. The STRUCTURAL claim (a verb leaves) does not "
+            f"move with either")
 
 
 @probe("W1x", "wear answers for an unregistered site kind", "S42.2.1", by="construction",
@@ -1963,10 +1998,12 @@ def a31b():
         # STRUCTURAL claim and their season count is incidental, so seeding is free. THIS PROBE'S
         # MEASUREMENT IS THE COUNT — it sweeps the wear rate and reports how many seasons each
         # takes — so seeding would destroy the thing being measured.
-        # What is safe is narrowing the WITNESS fan-out: wear is a MATTER write on a Site and does
-        # not depend on who witnesses it, so `H-33`'s `presence_only` arm leaves every number in
-        # `out` identical while making each of the ~150 seasons cheap. Without it this probe took
-        # longer than the entire rest of the suite once `W4` landed.
+        # What is safe is narrowing the WITNESS fan-out -- ⚠ BECAUSE THIS PROBE USES `NOCHOOSE`,
+        # not because crossings are generally independent of witnessing. With no chooser no act
+        # reaches RESOLVE, so only MATTER wear moves `Site.condition` and the arm cannot reach any
+        # number in `out`. Under a live chooser it could: deposits -> claims -> §F1 questions ->
+        # acts -> `work`/`restore` -> condition -> crossings. Stated precisely because the loose
+        # version of this sentence, copied into a chooser-driven test, produces a confounded arm.
         f = f.sweep("fan_out_mode", "presence_only")
         w = tiny_world(f)
         scale = w.fixtures.get("condition_scale")
@@ -2265,9 +2302,13 @@ def a31c():
             "harbour": {"bulk_shipping": floor, "fishing": 100},
             "seam": {"deep_mining": 700, "surface_gleaning": 50},
             "body": {"full_operations": 800, "limited": 500, "withdrawal_only": 100}})
-        # As `A31b`: the season COUNT is this probe's measurement, so it may not be seeded — but
-        # a band crossing does not depend on who witnesses it, so `H-33`'s `presence_only` arm
-        # leaves every number identical and makes the ~80 seasons per point affordable.
+        # As `A31b`: the season COUNT is this probe's measurement, so it may not be seeded.
+        # ⚠ THE INVARIANCE IS A PROPERTY OF `NOCHOOSE`, NOT OF BAND CROSSINGS, and the difference
+        # is what a later reader would get wrong. This probe drives the world with no chooser, so
+        # NO ACT REACHES RESOLVE and only MATTER wear moves `Site.condition` -- under that, the
+        # fan-out arm cannot touch a single number here. With a LIVE chooser it could:
+        # deposits -> claims -> §F1 questions -> acts -> `work`/`restore` on the site -> condition
+        # -> crossings. Copying this line into a chooser-driven test would give a confounded arm.
         f = f.sweep("fan_out_mode", "presence_only")
         w = tiny_world(f)
         site = w.sites["site_harbour"]

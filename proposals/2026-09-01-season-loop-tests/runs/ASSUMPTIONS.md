@@ -30,6 +30,7 @@ exercised by this run.**
 | `confidence_default` | `100` | no — a harness fixture |
 | `claim_decay_per_season` | `5` | no — a harness fixture |
 | `fan_out_mode` | `total` | no — a harness fixture |
+| `contest_max_depth` | `2` | no — a harness fixture |
 | `entrenchment_seasons` | `60` | yes — §15.2 |
 | `obstacle_refusal_multiple` | `2` | yes — §27.4 |
 | `band_floors` | `{'harbour': {'bulk_shipping': 800, 'fishing': 100}, 'seam': {'deep_mining': 700, 'surface_gleaning': 50}, 'body': {'full_operations': 800, 'limited': 500, 'withdrawal_only': 100}}` | no — a harness fixture |

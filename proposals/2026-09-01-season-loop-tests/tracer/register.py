@@ -273,7 +273,14 @@ def rule_G12(reg: dict) -> list:
         for g in ("ruled", "assumption", "absent", "measured"):
             if r.get("grade") == g:
                 continue
-            if _re.search(r"STAYS\s+`?%s`?" % g, cite, _re.I):
+            # ⚠ SCOPED TO A CLAIM ABOUT **THIS** ROW. The pattern was any occurrence of
+            # `STAYS <grade>`, and it fired on `H-55`, whose cite legitimately says *"`H-33` stays
+            # `assumption`"* -- a CROSS-REFERENCE to a different row, on a row graded `measured`.
+            # A guard that reddens correct prose pushes the fix toward mangling the prose, and
+            # `PLAN.md` `G4` weighs that equally with an invention. `THIS ROW` is the shape the
+            # real defect had (`H-46` carried `H-20`'s *"THIS ROW THEREFORE STAYS `assumption`"*
+            # verbatim), so requiring it keeps the catch and drops the false positive.
+            if _re.search(r"THIS ROW[^.]{0,80}?STAYS\s+`?%s`?" % g, cite, _re.I):
                 bad.append(f"{r['id']}: graded `{r.get('grade')}` and its `cite:` argues it "
                            f"STAYS `{g}` -- one of the two is wrong")
     return bad

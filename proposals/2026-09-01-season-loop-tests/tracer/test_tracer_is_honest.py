@@ -1555,7 +1555,11 @@ def test_jordan_no_definition_is_hardcoded_in_a_body():
                           if f.name not in (MODEL, "test_tracer_is_honest.py")))
     assert {"probes.py", "report.py", "run_cases.py", "headless.py"} <= set(CORPUS), CORPUS
     FILES = (MODEL,) + CORPUS
-    known = {frozenset(r["values"]) for r in S._ROSTERS.values()}
+    # ⚠ A ROSTER ROW NEED NOT CARRY `values:`. `witness_channel_predicates` carries only
+    # `predicates:` — the five names live once, in `witness_channels`, and that row states what
+    # each MEANS. Assuming the key existed made this guard raise a KeyError on a data shape the
+    # file legitimately supports, which is a guard failing on correct data (`G4`).
+    known = {frozenset(r["values"]) for r in S._ROSTERS.values() if "values" in r}
     offenders, exempted = [], []
     for fname in FILES:
         tree = ast_.parse((HERE / fname).read_text())
@@ -2830,9 +2834,13 @@ def test_w6_h33s_declared_sweep_runs_and_the_deposit_count_falls():
     assert got["all_five"][1] < got["total"][1], (
         f"`all_five` is indistinguishable from `total`: {got} — `chronicle` is matching everyone, "
         "which is the degenerate reading `rosters.yaml` warns against")
-    assert max(got["total"][2]) >= S.DEFAULT_FIXTURES.get("ledger_cap"), (
-        "the control arm no longer floods the ledger to its cap — then the finding this item "
-        "exists to fix has gone away and the item should be re-argued, not quietly passed")
+    # ⚠ `==`, NOT `>=`. The cap fix (`if` -> `while`: one deposit can mint several claims, so a
+    # single pop left the ledger at 203 against `L = 200`) had NO FALSIFIER, because `>=` passes
+    # 203 exactly as it passes 200. One character. Found by the `W6` adversarial pass.
+    assert max(got["total"][2]) == S.DEFAULT_FIXTURES.get("ledger_cap"), (
+        f"the control arm's fullest ledger is {max(got['total'][2])}, not exactly the "
+        f"`L = {S.DEFAULT_FIXTURES.get('ledger_cap')}` cap. Above it, the cap is not a cap; below "
+        "it, the flood this item exists to bound has gone away and the item should be re-argued")
 
 
 def test_w6_an_unrecognised_fan_out_mode_refuses_rather_than_falling_back():
@@ -2852,12 +2860,37 @@ def test_w6_every_named_channel_has_a_predicate_and_they_are_data():
     and MUST NOT BE PRESENTED AS FIXING IT."* So this asserts two things at once — that every
     named channel resolves to a predicate, and that the predicates are DATA rather than a literal
     roster in a Python body (Jordan, 2026-09-02: definitions are not hardcoded)."""
-    named = S.roster("witness_channel_predicates")
-    assert set(named) == set(S.WITNESS_CHANNELS), (
-        f"the predicate roster and `WITNESS_CHANNELS` disagree: {sorted(named)} vs "
-        f"{sorted(S.WITNESS_CHANNELS)}")
-    assert set(named) == set(S.CHANNEL_PREDICATES), (
-        f"a named channel has no predicate function: {sorted(set(named) - set(S.CHANNEL_PREDICATES))}")
+    # ⚠ TWO ASSERTIONS RETIRED HERE, BOTH VACUOUS. `set(named) == set(WITNESS_CHANNELS)` guarded
+    # a duplicate that no longer exists — the names live once, in `witness_channels`, and the
+    # predicate row carries only meanings. `set(named) == set(CHANNEL_PREDICATES)` was true BY
+    # CONSTRUCTION, because the map is built by iterating the roster and raising on a missing
+    # function; the failure it named raises at IMPORT, collecting as an error in all 126 tests
+    # rather than as a failure here. Found by the `W6` adversarial pass.
+    meanings = S._ROSTERS["witness_channel_predicates"]["predicates"]
+    assert set(meanings) == set(S.WITNESS_CHANNELS), (
+        f"a channel is named without a stated meaning, or vice versa: "
+        f"{set(meanings) ^ set(S.WITNESS_CHANNELS)}")
+    # AND WHICH CHANNELS CAN ACTUALLY ADMIT ANYONE, WHICH IS THE THING THE FIRST VERSION ASSERTED
+    # BY IMPLICATION AND NEVER MEASURED. Two of the five admit nobody in the world the fold can
+    # currently drive, and that is published rather than left for a reader to discover.
+    import headless as HL
+    w = HL.build_world(0)
+    d = S.SeasonDriver(w)
+    mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    for _ in range(2):
+        d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()), None, HL.subsistence)
+    everyone = list(w.persons)
+    fires = {c: sum(1 for e in w.log if any(fn(w, e, pid) for pid in everyone))
+             for c, fn in S.CHANNEL_PREDICATES.items()}
+    print(f"\n  W6 — events on which each channel admits at least one person: {fires}")
+    assert fires["co_located"], "the presence channel admits nobody — it is broken closed"
+    inert = sorted(c for c, n in fires.items() if not n)
+    assert inert == ["chronicle", "post_remit"], (
+        f"the inert channels are {inert}, not the two this item published. `chronicle` fires only "
+        "on a `binding_decision` verb and `post_remit` needs an office whose remit covers the "
+        "emitting verb; NEITHER is reachable from the verbs the fold can execute, so the "
+        "`all_five` arm is currently a measurement of THREE channels and the register says so. If "
+        "this list has changed, the register's reading of `H-33` has to change with it")
     # AND THE INJECTION IS DECLARED AS ONE. `H-33` must not read `ruled` off the back of this.
     h33 = R._register()["H-33"]
     assert h33["grade"] == "assumption", (

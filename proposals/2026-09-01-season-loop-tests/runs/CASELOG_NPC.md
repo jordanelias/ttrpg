@@ -33,7 +33,7 @@ corpus in the direction that flattered it.
 | Her work must be able to accumulate institutional attention gradually across multiple undiscovered seasons, not only through a single detected incident. | `probe:P17` | **GAP** | P17: GAP |
 | **[core]** A person with no faction rank, no assigned Duty, and no tracked Standing must still be able to generate a scene opportunity that brings a player into contact with her. | `speak` · `H-04` | **ASSUMED** | 'speak' executes · H-04: assumption -- rests on an injected default |
 | **[core]** A person with no political voice must be able to become personally significant -- worth a scene, worth a decision -- purely through the discovered effect of her private labor, without her ev | `H-79` · `H-84` | **GAP** | H-79: assumption -- rests on an injected default · H-84: absent |
-| Her season must be able to end through means that require no institutional process at all -- being found and killed, or simply vanishing -- not only through an arrest, trial, or faction-tree | `kill / wound` | PASS | 'kill / wound' executes |
+| Her season must be able to end through means that require no institutional process at all -- being found and killed, or simply vanishing -- not only through an arrest, trial, or faction-tree | `kill / wound` | **GAP** | 'kill / wound' is on the table and the fold cannot execute it: needs an effect |
 | **[core]** The engine must represent something about a season of her life beyond identity-only reference data -- some tracked state that a player interaction can actually change -- for at least the sea | `create_record` · `term.matured` | PASS | 'create_record' executes · term.matured: declared in an emits: column (static, not a run) |
 | A single scene of investigation, discovery, or protection involving her must be able to permanently change a persistent fact about her (protected / exposed / arrested / dead) that carries fo | `H-84` | **GAP** | H-84: absent |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | the source says it does not know |
@@ -99,14 +99,14 @@ corpus in the direction that flattered it.
 | Her overt institutional rank and her covert rank must be able to move independently -- advancement or disgrace in one must not automatically imply the same in the other. | — | UNMAPPED | nobody has authored an `exercises:` for this row |
 
 ## NPC-010 — Dalla Virke  ·  **BLOCKED**
-*person · 8 rows, 4 core · blockers: H-84, the six investigation acts*
+*person · 8 rows, 4 core · blockers: H-84, kill / wound, the six investigation acts*
 *ends when:* never explicitly named; presumably her exposure or recall event, or indefinite continuation.
 
 | need | rests on | verdict | why |
 |---|---|---|---|
 | **[core]** A non-faction, non-institutional actor must be able to hold and trade a resource (information, trust, access) that no faction's own action economy owns or produces -- a market that exists ou | `transfer` · `H-84` | **GAP** | 'transfer' executes · H-84: absent |
 | **[core]** Information she sells must be able to be true, false, or fabricated, with the buyer unable to distinguish which in advance, and her incentive to fabricate must rise specifically when honest  | `H-79` · `probe:P31` | **ASSUMED** | H-79: assumption -- rests on an injected default · P31: PASS |
-| **[core]** She must be discoverable, killable, buyable, or turnable by an outside actor as four textually distinct outcomes with different consequences for her network, not variations on one generic 'r | `kill / wound` · `the six investigation acts` · `tell` | **GAP** | 'kill / wound' executes · 'the six investigation acts' is on the table and the fold cannot execute it: needs a `requires:` predicate · 'tell' executes |
+| **[core]** She must be discoverable, killable, buyable, or turnable by an outside actor as four textually distinct outcomes with different consequences for her network, not variations on one generic 'r | `kill / wound` · `the six investigation acts` · `tell` | **GAP** | 'kill / wound' is on the table and the fold cannot execute it: needs an effect · 'the six investigation acts' is on the table and the fold cannot execute it: ne |
 | **[core]** Her personal judgment about a specific past transaction (vetting goods as safe and legitimate) must be able to be wrong in a way that is discoverable later and attributable specifically to h | `H-22` · `H-79` | **ASSUMED** | H-22: ruled · H-79: assumption -- rests on an injected default |
 | A revelation that damages her standing with one party (a partner learning she shields certain clients from her own family's operations) must be able to threaten her position with a different | — | UNMAPPED | nobody has authored an `exercises:` for this row |
 | Her removal (replacement by someone with no local relationships) must be able to collapse benefits that other, unrelated actors were quietly relying on, in the same season, as a single casca | — | UNMAPPED | nobody has authored an `exercises:` for this row |

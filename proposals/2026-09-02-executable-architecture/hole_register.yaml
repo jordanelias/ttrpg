@@ -624,12 +624,12 @@ rows:
     hole:      "`D22` x `H-33`: per-write MATTER emissions under TOTAL fan-out flood every ledger every season and churn the `L=200` eviction. Two rows that are individually fine and JOINTLY break the log. No row carries the interaction"
     kind:      "RULING"
     owner:     "the log; the presence index"
-    grade:     "absent"
-    default:   "none"
-    site:      ""
-    sweep:     []
+    grade:     "measured"
+    default:   "none -- this row asks whether ANYTHING carries the interaction, and the answer is now yes; WHICH arm to ship is H-33 question, not this one"
+    site:      "shape.observers_for, read at WITNESS for every Event -- the row that carries the D22 x H-33 interaction, and H-33 fan_out_mode is the dial that moves it"
+    sweep:     ["total (678 deposits over 3 seasons, ledgers at the L=200 cap)", "presence_only (68)", "all_five (71)"]
     unblocks:  "unmeasured"
-    cite:      ""
+    cite:      "CLOSED `measured` BY W6, AND `measured` RATHER THAN `ruled` IS THE POINT. This row is PLAN 1.4 hole 16 and its claim was NO ROW CARRIES THE INTERACTION. One does now: shape.observers_for is read at every WITNESS and H-33 fan_out_mode selects the arm. And the interaction is no longer an argument -- W4 landed D22 and it became a measurement within the hour: events per run 207 -> 896 -> 3389 at two, three and four seasons, every ledger pinned at the L=200 cap, and the test suite stopped finishing. Over three seasons the arms give 678 / 68 / 71 deposits. ⚠ WHAT IS NOT CLOSED: the DEFAULT is still `total`, so under the specified behaviour the flood still happens -- W6 makes it BOUNDABLE and MEASURED, not bounded. Choosing an arm is H-33 question and H-33 stays `assumption` because #353 supplies no predicate. `ruled` would credit a decision nobody has made. ⚠ AND THE ARMS ARE NARROWER THAN THEY LOOK: of five channels only THREE can admit anyone in a world the fold can drive (co_located, witness_key, document_key); post_remit needs an office whose remit covers the emitting verb and chronicle fires only on a binding_decision, and NONE of the eight binding-decision verbs is executable. So `all_five` is currently a measurement of three. Falsifier: test_w6_every_named_channel_has_a_predicate_and_they_are_data asserts exactly which two are inert."
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-56
     tier:      1
@@ -992,6 +992,19 @@ rows:
     unblocks:  "W4's per-write emission rule on every Part D row"
     cite:      "FOUND BY W4, BY THE GATE FIRING. Six probes flipped PASS -> GAP the moment write() began requiring a declared emission, and five were genuine silent MATTER writes that are now fixed. The sixth, (Record, ttl), is not fixable that way: emitting record.expired on a non-terminal decrement asserts an expiry that has not happened, which is the fabrication G1 forbids, and refusing the write would stop 13's licensed clock. So the column is ambiguous rather than the write being wrong. The third sweep point is the real fix and it is a Part D schema change, which is not W4's to make -- CLAUDE.md 0.05: the design document is reference, and the column belongs to whoever ratifies it. Registered rather than decided."
     source:    "W4"
+  - id:        H-87
+    tier:      0
+    hole:      "the contest depth cap. S39.3 REFUSES a default in terms -- *the depth cap has NO DEFAULT; a default is a number somebody made up and it will be cited later as though it were measured* -- so `contest()` takes it from the CALLER. Nothing in the corpus said what a caller should pass, and artifact 2 never had to decide because no contest had ever fired"
+    kind:      "NUMBER"
+    owner:     "the harness (the caller of `resolve`), per S39.3"
+    grade:     "assumption"
+    default:   "`contest_max_depth = 2`"
+    site:      "Fixtures contest_max_depth -- read by headless.run and passed to SeasonDriver.season for every RESOLVE"
+    sweep:     [1, 2, 4]
+    unblocks:  "every verb that declares `contests:` -- today `kill / wound`, and W7's sitting"
+    cite:      "FOUND BY MAKING PART E's `contests:` COLUMN REAL. Jordan, 2026-09-02: *that would trigger the personal combat scene. you can't just kill or wound imo.* ARCHITECTURE_V2.md:394 declares the column (*if set, routes to the seam at RESOLVE, S39*) and :434 sets `contests: the body` on `kill / wound`; the transcription put it in `requires_note`, which nothing reads, and the fold executed a kill as a DIRECT WRITE. With the routing real the seam fires -- and immediately refuses, because S39.3 gives the cap no default. That refusal is CORRECT and it is the design working; what was missing is a caller who decided. This row is that decision, injected and swept rather than typed into a body, on H-09's precedent for `ledger_cap` and `view_k`. ⚠ NOT `ruled`: S39.3 refuses a default precisely so a harness number is not later cited as canon, and grading this `ruled` would do exactly that."
+    source:    "W6 adversarial pass / Jordan 2026-09-02"
+
 # ---------------------------------------------------------------------------
 # THE DISCHARGE MAP -- guardrail G8.
 # "Every defect gets a register row, or is discharged with a named section."

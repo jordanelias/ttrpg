@@ -251,6 +251,11 @@ DEFAULT_FIXTURES = Fixtures(
     # PERSON"*), so the sweep's control arm is the design as written rather than a baseline
     # somebody invented. The three points are `H-33`'s own declared sweep.
     fan_out_mode="total",
+    # `H-87`. S39.3 REFUSES a default for the contest depth cap -- *"a default is a number
+    # somebody made up and it will be cited later as though it were measured"* -- so `contest()`
+    # takes it from the CALLER. This is the caller's number, injected and swept, and it lives here
+    # rather than in a body so that it is one.
+    contest_max_depth=2,
     # S15.2: entrenchment(h,H) = min(1, seasons_held / 60). The 60 IS in-chain; it is a fixture
     # only so no literal sits in a body.
     entrenchment_seasons=60,
@@ -625,6 +630,14 @@ class VerbRow:
     emits: tuple
     emits_on_refusal: tuple
     grade: str
+    # ⚠ PART E'S `contests:` COLUMN, WHICH WAS TRANSCRIBED INTO A NOTE AND LOST.
+    # `ARCHITECTURE_V2.md:394` declares it — *"`contests: <prize> | none` — if set, ROUTES TO THE
+    # SEAM AT RESOLVE (§39)"* — and `:434` sets it on `kill / wound` (*"`contests: the body` → the
+    # seam"*). The loader had no such field, so the routing landed in `requires_note`, which
+    # nothing reads, and the fold executed a kill AS A DIRECT WRITE. Jordan, 2026-09-02:
+    # *"that…would trigger the personal combat scene. you can't just kill or wound imo."* The
+    # design agrees with him and the instrument was the thing disagreeing.
+    contests: str = ""
 
     def eligibility_kinds(self) -> tuple:
         return tuple(a.split(":")[0].strip() for a in self.eligibility)
@@ -642,7 +655,8 @@ def _load_verb_table() -> dict:
             raise SystemExit(f"verb_table.yaml: {name!r} appears more than once")
         row = VerbRow(name, r["stratum"], tuple(r["eligibility"]), r["requires"],
                       tuple(r["writes"]), tuple(r["emits"]),
-                      tuple(r["emits_on_refusal"]), r["grade"])
+                      tuple(r["emits_on_refusal"]), r["grade"],
+                      str(r.get("contests") or "").strip())
         # EVERY `writes:` MUST BE A PART D ROW. Checked AT LOAD, not at the first act that uses
         # it: a verb naming an unmarked cell is a defect in the table, and finding it when some
         # case happens to exercise that verb makes it look like a defect in the case.
@@ -1858,7 +1872,11 @@ def resolvable_verbs() -> frozenset:
     COMPUTED, NEVER LISTED. A caller narrowing an option set to these is not authoring a roster --
     it is asking the fold what it can execute, and the answer moves when `verb_table.yaml` or the
     predicate registry moves. W3 measured 12 of 32; this is that measurement as a function, so a
-    probe can report both numbers instead of hardcoding either."""
+    probe can report both numbers instead of hardcoding either.
+
+    THREE GATES: a precondition the fold can evaluate, an effect for whatever it writes, and NOT
+    routing to a contest — a contesting verb's resolution is the seam's, and the seam does not
+    return yet (`H-31`, `W7`)."""
     out = set()
     for v, row in VERB_TABLE.items():
         # ⚠ BOTH GATES, NOT JUST THE PRECONDITION. The first version checked `requires:` alone and
@@ -1869,7 +1887,17 @@ def resolvable_verbs() -> frozenset:
         # by running the corpus, not by reading it.
         gated = (row.requires or "").strip() in NO_PRECONDITION or v in REQUIRES_PREDICATES
         effected = not row.writes or v in EFFECTS
-        if gated and effected:
+        # ⚠ AND A THIRD GATE: A VERB THAT CONTESTS DOES NOT TAKE THE EFFECT PATH AT ALL.
+        # `ARCHITECTURE_V2.md:394` — *"`contests: <prize>` — if set, ROUTES TO THE SEAM at
+        # RESOLVE (§39)"* — so such a verb is executable only if the SEAM can return, and today
+        # `contest()` raises `Unspecified` at S39.4 (*"the degree ladder's margin model"*, `H-31`)
+        # before it returns anything. So `kill / wound` is NOT executable, and it was counted as
+        # executable only because the instrument read its own `EFFECTS` entry and never read the
+        # column that says the effect is not the path. Jordan, 2026-09-02: *"you can't just kill
+        # or wound imo."* Correct, and the design agreed at `:434` all along.
+        # `W7` is the item that makes the seam return; this line is what will admit the verb again.
+        contested = bool(row.contests)
+        if gated and effected and not contested:
             out.add(v)
     return frozenset(out)
 
@@ -2021,8 +2049,12 @@ def person_side_eligible(p: Person, row: "VerbRow") -> bool:
         the person owns the tenure and the office owns the remit. Unlike `budget`'s collision
         there is no relocation available: two holders of one office share one remit, so it is not
         the person's state to move. §F1 asserts this clause is person-side and does not say how.
-      * `presence:<rung>` -- `H-33`, the presence index, which does not exist. Same treatment the
-        resolver already gives it; this is precedent, not a new refusal."""
+      * `presence:<rung>` -- declined because the ARGUMENT IS A PLACEHOLDER naming a kind of
+        rung rather than an id, which is `H-75`, and is the same reasoning the `hold:<store>`
+        branch already carries one block below. ⚠ CORRECTED BY `W6`'s adversarial pass: this said
+        *"`H-33`, the presence index, which does not exist"*, and `W6` BUILT it -- `_ch_co_located`
+        reads it and `H-33` now carries a `site:`. The citation survived the thing it cited. The
+        refusal itself is unchanged and correct; only its reason was stale."""
     for alt in row.eligibility:
         kind, _, raw = alt.partition(":")
         kind, raw = kind.strip(), raw.strip()
@@ -2320,12 +2352,28 @@ def claim_subjects(e: "Event", rule: str) -> list:
 # ---------------------------------------------------------------------------
 
 def _event_place(w: "World", e: "Event") -> Optional[str]:
-    """The rung an Event happened at, derived from its subject. A person's place is the rung that
-    contains them; a site's is the rung it sits in; a rung's is itself."""
-    if e.subject in w.rungs:
-        return e.subject
+    """The rung an Event happened at, derived from its subject.
+
+    ⚠ A PERSON IS ASKED BEFORE A RUNG, AND THE ORDER IS THE WHOLE OF THIS FUNCTION'S CORRECTNESS.
+    The first version tested `e.subject in w.rungs` FIRST — and `probes.py` gives every person a
+    same-id `person`-kind Rung, so for a person-subject Event this returned the person's own rung
+    and `Query.presence` then answered *"who is contained IN p_high"*, which is nobody. Under the
+    `presence_only` arm that excluded THE SPEAKER AND EVERYONE STANDING IN THE ROOM, and `P15`
+    read the resulting empty set as a channel predicate excluding people. It was a channel BROKEN
+    CLOSED, and `P15`'s only assertion (`narrow < total`) could not tell the two apart — §0.1 pt 2.
+    **THIS IS A REPEAT.** `witness`'s own rev-2 retraction records the identical conflation:
+    *"because every person has a `person`-kind Rung, made almost every Event private to its own
+    subject"*, and `PLAN.md` §D4 names it as a standing hazard. Found by the `W6` adversarial
+    pass."""
+    if e.subject in w.persons:
+        for t in w.tenures:
+            if t.kind == "contain" and t.subject == e.subject and t.live:
+                return t.object
+        return None
     if e.subject in w.sites:
         return getattr(w.sites[e.subject], "rung", None)
+    if e.subject in w.rungs:
+        return e.subject
     for t in w.tenures:
         if t.kind == "contain" and t.subject == e.subject and t.live:
             return t.object
@@ -2333,8 +2381,19 @@ def _event_place(w: "World", e: "Event") -> Optional[str]:
 
 
 def _ch_co_located(w, e, pid) -> bool:
+    """⚠ READS THE BARRIER'S PRESENCE INDEX, WHICH IS WHAT MAKES THE CLAIM ABOUT IT TRUE. `W6`
+    published *"the presence index this barrier has always built was UNUSED until this line"* while
+    this function called `Query.presence` DIRECTLY, rebuilding the answer with a full `w.tenures`
+    scan for every (event, person) pair. The index stayed unused and the claim was false — which is
+    the failure `shape.py`'s own fidelity rule names: *a false claim of enforcement is worse than
+    none, because it stops the next reader from checking.* It is also where the narrow arm's cost
+    went. `cache_at_barrier` is safe here because the fan is built BEFORE `witness` enters its
+    parallel map. Found by the `W6` adversarial pass."""
     place = _event_place(w, e)
-    return place is not None and pid in Query.presence(w, place)
+    if place is None:
+        return False
+    index = w.cache_at_barrier("presence", lambda: {r: Query.presence(w, r) for r in w.rungs})
+    return pid in index.get(place, ())
 
 
 def _ch_document_key(w, e, pid) -> bool:
@@ -2350,18 +2409,44 @@ def _ch_witness_key(w, e, pid) -> bool:
 
 
 def _ch_post_remit(w, e, pid) -> bool:
-    verbs = [v for v, r in VERB_TABLE.items() if e.kind in (r.emits or ())]
-    remits = {x.split(":", 1)[1] for v in verbs for x in (VERB_TABLE[v].eligibility or ())
-              if x.startswith("remit:")}
+    """⚠ THIS COULD NEVER RETURN `True`. It compared `t.object` -- AN OFFICE ID -- against a set of
+    REMIT ACT NAMES, and fell back to `getattr(t, "remit", None)` on a `Tenure` that has no such
+    field. So `off_duke` was tested against `{"issue"}` and `None` against `{"issue"}`, and a
+    channel that admits nobody in every possible world was reported as one of five carrying a
+    predicate.
+
+    The correct lookup ALREADY LIVES ONCE, in `_eligible`: the tenure's object is an OFFICE, and
+    the office carries `remit_acts`. Re-deriving it here was `CLAUDE.md` §8 broken one function
+    apart, which is how it came out wrong. Found by the `W6` adversarial pass."""
+    remits = {x.split(":", 1)[1] for r in VERB_TABLE.values() if e.kind in (r.emits or ())
+              for x in (r.eligibility or ()) if x.startswith("remit:")}
     if not remits:
         return False
-    return any(t.kind in ("hold", "commit") and t.subject == pid and t.live
-               and (t.object in remits or getattr(t, "remit", None) in remits)
-               for t in w.tenures)
+    for t in w.tenures:
+        if t.subject == pid and t.kind == "hold" and t.live:
+            off = w.offices.get(t.object)
+            if off and remits & set(off.remit_acts):
+                return True
+    return False
 
 
 def _ch_chronicle(w, e, pid) -> bool:
-    return any(r.stratum == "binding_decision" for v, r in VERB_TABLE.items()
+    """The matter-of-record channel: what a binding decision emits is public.
+
+    ⚠ THIS DOES NOT READ `pid`, AND SAYING SO IS THE HONEST DESCRIPTION. It is an EVENT-KIND
+    FILTER, not a per-person predicate: when it fires it fires for everyone alive, so it is
+    `total` conditioned on kind. That is a defensible thing for a PUBLIC channel to be -- a matter
+    of record is public to everyone by definition -- but the justification published with `W6` was
+    that `chronicle` is *"deliberately not `everyone`"* and that this is what keeps `all_five`
+    distinct from `total`. **That reasoning was wrong.** What keeps them distinct in the measured
+    run is that `chronicle` matches NOBODY: the eight `binding_decision` verbs all have prose
+    `requires:` and none is in `REQUIRES_PREDICATES`, so `resolvable_verbs()` excludes every one
+    of them, and the MATTER/WITNESS kinds appear on no verb's `emits:` at all. The `any(...)` is
+    over an empty generator for every Event the fold can currently produce.
+    So the whole of `all_five - presence_only` is `document_key`. Recorded rather than papered
+    over, and the register carries it as the reason `H-33`'s `all_five` arm is not yet a
+    measurement of five channels. Found by the `W6` adversarial pass."""
+    return any(r.stratum == "binding_decision" for r in VERB_TABLE.values()
                if e.kind in (r.emits or ()))
 
 
@@ -2373,7 +2458,7 @@ def _ch_chronicle(w, e, pid) -> bool:
 # data edit plus a function, and a channel with no function RAISES at import rather than silently
 # never matching.
 CHANNEL_PREDICATES = {}
-for _c in sorted(roster("witness_channel_predicates")):
+for _c in sorted(WITNESS_CHANNELS):
     _fn = globals().get(f"_ch_{_c}")
     if _fn is None:
         raise Unspecified(
@@ -2396,7 +2481,7 @@ def observers_for(w: "World", e: "Event", mode: str, everyone: list) -> list:
     if mode == "presence_only":
         live = ("co_located",)
     elif mode == "all_five":
-        live = tuple(roster("witness_channel_predicates"))
+        live = tuple(WITNESS_CHANNELS)     # the names live once, in `witness_channels`
     else:
         raise Unspecified(
             f"fan-out mode {mode!r} is not one of H-33's declared sweep points", "H-33",
@@ -3201,7 +3286,10 @@ class SeasonDriver:
                     TRACE.note(f"`hold:<{arg}>` names an object KIND, not an id (H-75); "
                                f"{row.verb!r} declines rather than admitting on any held object")
             elif kind == "presence":
-                # ⚠ NOT `return True`. The presence index is `H-33` and does not exist, so this
+                # ⚠ NOT `return True`, and ⚠ THE REASON WAS CORRECTED BY `W6`'s ADVERSARIAL
+                # PASS: this said "the presence index is `H-33` and does not exist", and `W6`
+                # built it. What still declines the branch is `H-75` -- the argument is a
+                # PLACEHOLDER naming a kind of rung, not an id, so there is nothing to look up.
                 # predicate cannot be evaluated — and admitting on an unevaluable predicate is a
                 # SILENT FILL off the register (G1) at the opposite polarity to §42.2, which sends
                 # zero evidence to the verdict AGAINST. It refuses, and says which hole.
@@ -3389,8 +3477,17 @@ class SeasonDriver:
                                "S27.4", chose="refuse; the season is spent",
                                alternatives=["roll it anyway", "route to an Ob=0 roll"])
                 continue
-            # S39.2 line 1: loop -> subsystem, when an act's contests[] names one.
-            if a.contests:
+            # S39.2 line 1: loop -> subsystem, when an act contests something.
+            #
+            # ⚠ THE VERB'S COLUMN, NOT ONLY THE ACT'S FIELD, AND THAT IS WHY THE SEAM NEVER FIRED.
+            # `ARCHITECTURE_V2.md:394` puts `contests:` on the VERB ROW — *"if set, routes to the
+            # seam at RESOLVE"* — and `:434` sets it on `kill / wound`. This read only `a.contests`,
+            # which no chooser sets, so a kill took the EFFECT path and wrote a death directly.
+            # Jordan, 2026-09-02: *"that…would trigger the personal combat scene. you can't just
+            # kill or wound imo."* The design said so at `:434` and the instrument did not read it.
+            _row = VERB_TABLE.get(a.verb)
+            _contests = list(a.contests or ()) or ([_row.contests] if _row and _row.contests else [])
+            if _contests:
                 if contest_max_depth is None:
                     raise Forbidden("a contest was reached with no caller-supplied max_depth",
                                     "S39.3", law="S39.3 -- the depth cap has NO DEFAULT; a default is a number somebody made up and it will be cited later as though it were measured")
@@ -3400,7 +3497,8 @@ class SeasonDriver:
                 # PERMANENTLY FALSE and every contest was called with [ROOT]. Retraction 4
                 # replaced rev 1's fabricated cause with an unreachable branch rather than with
                 # the rule. The act id is named directly.
-                r = contest(w, rung=a.payload or "R", prize=a.contests[0],
+                r = contest(w, rung=(a.payload if isinstance(a.payload, str) else None) or "R",
+                            prize=_contests[0],
                             claimants=[a.actor], depth=0, max_depth=contest_max_depth,
                             causes=[a.id])
                 if isinstance(r, ContestError):
@@ -3458,8 +3556,9 @@ class SeasonDriver:
         #    is private. A wrapper does not fix this and must not be presented as fixing it."
         # The five channels are NAMED (S20) and NONE of their predicates is given, so there is
         # no predicate by which anyone could be EXCLUDED. The fan-out is therefore total.
-        index = w.cache_at_barrier("presence", lambda: {
-            r: Query.presence(w, r) for r in w.rungs})
+        # Seeds the cache `_ch_co_located` reads. Before `W6`'s adversarial pass this was built
+        # here and read NOWHERE -- the predicate rebuilt it per (event, person).
+        w.cache_at_barrier("presence", lambda: {r: Query.presence(w, r) for r in w.rungs})
         everyone = list(w.persons)
         # `W6` / `H-33`. THE CHANNELS HAVE PREDICATES NOW, and the mode says which are live.
         # `total` is the specified behaviour and the sweep's control; the presence index this
