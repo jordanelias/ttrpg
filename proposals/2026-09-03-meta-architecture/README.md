@@ -48,9 +48,13 @@ existing tree with better prose.
   `tenure_kind` and no second ladder.
 - **A `Title` is not an entity**, and the missing conferral path is a **half-landed ruling** (two
   eligibility models, only `revoke` rebuilt on the second) rather than a hole in the ontology.
-- **One question is genuinely Jordan's**: whether `hold` on a Rung means *governing* or *owning*.
-  **Delegation — and therefore regency and puppet rulers — is expressible in one reading and not the
-  other.**
+- ✅ **RULED 2026-09-03, and it dissolved the question rather than answering it.** Jordan:
+  *"Regency and puppet rulers must be possible."* · *"Same with delegation."* The document had
+  offered two readings of `hold`; **both were wrong**, because the blocker was never the `hold`
+  overload — it was that **rank+containment is not conferrable**, so a delegate has no seam to enter
+  through. The answer is one sentence: **AUTHORITY IS A PROPERTY OF THE SEAT BEING EXERCISED, NEVER
+  OF THE PERSON EXERCISING IT.** A regency, a puppet ruler, a governor, a council and a mayoral
+  election are then all **a conferred seat**, with no mechanism written for any of them.
 
 ## What it is not
 

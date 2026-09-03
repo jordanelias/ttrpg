@@ -612,28 +612,122 @@ band their difference.** A track is a stored aggregate wearing a stage's clothes
 > office scale, and should be SPLIT rather than patched** — which would also cost `H-101` its
 > one-row justification.
 
-## §E.2 · `hold` is overloaded, and Jordan's ruling makes two of its objects disjoint
+## §E.2 · Delegation — **RULED BY JORDAN, 2026-09-03: regency and puppet rulers MUST be possible**
 
-`hold : Person → Office | Rung | Record | Proposition`, one per object, glossed *"office-holding,
-tenancy, custody"*. Jordan then ruled, in the chain: **governing authority and holdings are
-different things** — *"they do not necessarily have all territories/provinces/duchies in their
-holdings"* — and made the difference operational: *"King/Queen cannot revoke title of Duke/Duchess if
-they do not have duchy is in their holdings."*
+> **Verbatim: *"Regency and puppet rulers must be possible."***
 
-> **So `hold : Person → Rung` is carrying both meanings, and by AX-4 a value with two meanings has
-> two owners' worth of writers.** Today only the coincidence that a Title is an `Office` keeps
-> governing and owning apart — and §D.7.1 shows that coincidence is itself the conflation.
+**This was the one question §F.3 sent to Jordan, and the answer does not pick either option that was
+offered. It dissolves them** — because deriving what regency actually *requires* shows that the
+blocker was never the one named.
 
-**This is genuinely `absent` in §G's sense — two readings, materially different games:**
+### §E.2.1 What regency requires, derived
 
-| reading | what it makes expressible |
+**A regency is: the title stays with one person; another governs the domain.** A puppet ruler is the
+same shape read the other way — one person holds the title, another exercises the authority.
+
+> **So the requirement is exactly: THE TITLE AND THE GOVERNING MUST BE SEPARABLE.**
+
+Now ask what makes a governance act eligible. The chain carries **two answers**, and §D.7.2 already
+found that only `revoke` was rebuilt on the second:
+
+| model | conferrable? |
 |---|---|
-| **`hold` means OWNING; governing is the title** | holdings and governance are cleanly disjoint, and a title is the only route to authority |
-| **`hold` means GOVERNING; owning needs its own kind** | **delegation becomes expressible** — *"Kings, Dukes, Counts and Lords can assign others of lesser rank to govern any of their holdings in their stead"*, which is how **regency and puppet rulers** arise |
+| **`remit:<act>`** on an office | ✅ **yes — `confer` is the verb that does it** |
+| **RANK + CONTAINMENT** — the actor holds a title whose domain contains the holding | ❌ **no.** It reads the actor's **own** title-holds and walks containment. **There is no seam by which a delegate enters** |
 
-⚠ **The second is the one the chain will need and does not have** — delegation is registered unbuilt
-under `H-90`. But it costs a new `tenure_kind`, which §D.8's admission test resists. **That is a real
-trade and it is Jordan's.**
+> ### **THE BLOCKER IS NOT THE `hold` OVERLOAD. IT IS THAT RANK+CONTAINMENT IS NOT CONFERRABLE.**
+> A regent has no title over the domain — that is what makes them a regent. Under rank+containment
+> they are ineligible, and no amount of conferring changes it, because the check never looks at
+> anything that can be conferred. **Delegation is unbuildable under that model by construction**,
+> which is why `H-90` records it as unbuilt rather than as merely unwritten.
+
+### §E.2.2 The axiom this forces, stated as one sentence
+
+> ## **AUTHORITY IS A PROPERTY OF THE SEAT BEING EXERCISED, NEVER OF THE PERSON EXERCISING IT.**
+
+**Everything Jordan named falls out of that sentence and nothing else is needed:**
+
+| | is |
+|---|---|
+| a **title** | a seat on the governance ladder, whose scope is a rung kind and everything it contains |
+| an **office** | a seat in a body, whose scope is its `remit.scope_rung` |
+| **delegation** | **conferring a seat.** `establish` the seat, `confer` it, `revoke` it — three verbs the table already carries |
+| a **regency** | a seat conferred over the domain **while the title stays put.** The child keeps the crown; the regent governs; `revoke` at majority |
+| a **puppet ruler** | the mirror — the puppet holds the title, and the seat carrying its remit has been conferred elsewhere. **Nobody had to write a "puppet" mechanism** |
+| **rank + containment** | **the special case** where the seat being exercised is the actor's own title |
+
+⚠ **AND THIS IS WHY THE CONFERRAL PATH WAS THE HALF THAT WENT MISSING** (§D.7.2). Under
+"authority belongs to the person" you only ever need to check it — which is `revoke`. Under
+"authority belongs to the seat" you must also be able to **hand it over**, which is `confer`. **The
+tree built the model that does not need conferral, and then found conferral missing.** The asymmetry
+was the symptom; this is the cause.
+
+### §E.2.3 What it settles about `hold`, and it is the reading that was NOT the delegation lever
+
+**`hold` on a Rung means OWNING — holdings — and governing authority is a seat.** Jordan's own
+earlier ruling already says so operationally: *"King/Queen cannot revoke title of Duke/Duchess if
+they do not have duchy is in their holdings."* **Holdings GATE the act; they are not the authority.**
+Two distinct terms in one predicate, which is what `_req_revoke` computes and what its three-term
+conjunction is.
+
+⚠ **A CORRECTION TO THIS DOCUMENT'S OWN EARLIER FRAMING, RECORDED RATHER THAN OVERWRITTEN.** An
+earlier §E.2 posed this as *"`hold` means owning"* **versus** *"`hold` means governing, and only the
+second makes delegation expressible."* **That was wrong.** Delegation is expressible under the
+*first* reading, once authority is a property of the seat — and the second reading would have made
+governance authority a `hold` on a Rung, which is **not conferrable to someone who does not hold the
+rung**, i.e. it would have failed the very requirement it was offered to satisfy. **The menu was
+false and the derivation is what caught it.**
+
+### §E.2.4 The cost, and the falsifier
+
+**Cost: one unification, not one addition.** Governance acts must evaluate eligibility through the
+conferrable channel. `tenure_kinds` does not move; no new carrier; `establish`/`confer`/`revoke`
+already exist. **What must change is the check, and `_req_revoke` is the site.**
+
+⚠ **And a real consequence, named rather than discovered later:** if a regent's authority is a
+conferred seat, then **purview must be asked of the SEAT being exercised, not of the actor** (§E.1.3).
+A regent exercising a conferred remit has the *office's* purview, not their own — and a Query that
+reads the actor's own title-holds gives the wrong answer for every delegate.
+
+### §E.2.5 Delegation's three shapes — **RULED THE SAME DAY, and the third one earns its place**
+
+> **Jordan, 2026-09-03: *"Same with delegation."*** And the chain's own statement of what delegation
+> covers: *"All of Kings, Dukes, Counts and Lords can assign others of lesser rank to govern any of
+> their holdings in their stead"* — **a governor for a duchy, a council for a province, mayoral
+> elections for a settlement.**
+
+**All three are the same sentence, and none needs a new primitive:**
+
+| shape | is | mechanism |
+|---|---|---|
+| **a governor** | one person conferred a seat over the holding | `establish` → `confer`. The title never moves |
+| **a council** | **one seat, many holders** | ⚠ **not N seats.** `hold` is **1-per-object** (§D.8), so a council is one Office whose **`establishment[]`** is its membership — *"the named persons the office employs. Finite, contested, durable"* — and §D.6's pool substitution already reads it |
+| **a mayoral election** | ⚠ **a seat filled by a PROCESS, not by a superior** | a Date fires; the judging set decides; the decision opens the `hold`. **`determine`, not `confer`** |
+
+> ### **THE THIRD SHAPE IS THE ONE THAT TEACHES SOMETHING: CONFERRAL IS NOT THE ONLY WAY A SEAT IS
+> FILLED, AND THE SCHEMA ALREADY SAID SO.**
+> §D.6 gives an Office a **`conferral`** field — *"the basis, **per office**"* — which is exactly the
+> slot that distinguishes *the Duke names him* from *the burghers elect him* from *it passes to the
+> eldest*. **Delegation does not need a delegation mechanism. It needs the `conferral` basis to be
+> specified**, and that field has been on the Office since #353 carrying nothing.
+
+⚠ **AND THIS IS WHY "AUTHORITY BELONGS TO THE SEAT" IS LOAD-BEARING RATHER THAN TIDY.** If authority
+belonged to the *person*, an election would have to *transfer* something from the electors — who
+have nothing to give, because they were never governing. **It is only because the seat carries the
+authority that a body with no authority of its own can decide who occupies it**, which is what an
+election is and what a regency council is.
+
+**And the political consequence, which is the point of doing this top-down:** a seat that can be
+filled three different ways is a seat worth **fighting over three different ways**. Conferral is
+bought and owed; an election is canvassed; succession is bred for. **One primitive, three genres of
+play, no branch in the resolver** — which is `T-g`'s shape (obstruction needs no verb) at the
+institutional scale.
+
+> **FALSIFIER.** *Find an authority in the chain that must be exercisable by a person to whom no seat
+> could be conferred.* If one exists, authority is not purely a property of the seat and this
+> section needs a second term. **Sovereign power is the candidate** — `H-90` records it as having no
+> representation at all, and *"uncontested and absolute"* may be precisely the thing that cannot be
+> handed over.
 
 ## §E.3 · The ladder — what is architectural, and what is merely content
 
@@ -671,6 +765,8 @@ the ladder has stopped being data.
 | a **title** | a rank whose domain is a rung kind — **not an entity, and not an Office** | §D.7; the conflation is a half-landed ruling, §D.7.2 |
 | a **site** | the material particular that accumulates and gates | §D.3 |
 | **subordination** | **not a thing at all — a Query** | §E.1, from AX-4 + T-h |
+| **authority** | **a property of the SEAT being exercised, never of the person** | §E.2.2 — forced by Jordan's 2026-09-03 ruling |
+| **a regency · a puppet · a delegation** | **a conferred seat.** No mechanism for any of the three | §E.2.2 · §E.2.5 |
 
 ## §F.2 · Stage 2, and the two things it must not do
 
@@ -683,6 +779,9 @@ consequences, slices, season loops.** Stage 2 takes the second, and inherits fou
 3. **Where the chain reaches for a TRACK, look for two things that can disagree and band their
    gap** (§E.1.3). This is the general form, and the arc corpus is full of tracks.
 4. **The ladder's membership is content; its ordering and its walkability are architecture** (§E.3).
+5. **Authority belongs to the seat, so purview must be asked of the SEAT being exercised, not of the
+   actor** (§E.2.4) — a Query that reads the actor's own title-holds gives the wrong answer for
+   every delegate, and delegation is now ruled in.
 
 > ⛔ **Do not build a second ladder.** ⛔ **Do not index code by scale** — a module is registered
 > against a role and runs at whatever rungs the step hands it. Scale-indexed code is scale-divergent
@@ -691,11 +790,17 @@ consequences, slices, season loops.** Stage 2 takes the second, and inherits fou
 
 ## §F.3 · Open — and only one is Jordan's
 
-| | who answers it |
+> ### ✅ **THE ONE QUESTION THIS DOCUMENT SENT TO JORDAN IS RULED, AND THE QUEUE IS EMPTY.**
+> *"Regency and puppet rulers must be possible."* · *"Same with delegation."* (2026-09-03, §E.2)
+> **It did not pick either option offered — it showed the menu was false**, and the answer is
+> `AUTHORITY IS A PROPERTY OF THE SEAT BEING EXERCISED` (§E.2.2).
+
+| still open | who answers it |
 |---|---|
-| **`hold` on a Rung: governing or owning?** (§E.2) | ⚠ **Jordan.** Two defensible readings, materially different games — **delegation, regency and puppet rulers are expressible in one and not the other** |
+| **`Office.conferral` is unspecified** — the basis per office | ⚠ **new, and created by the ruling.** §E.2.5: delegation needs no mechanism, it needs this field to carry *named / elected / inherited*. Answerable in the chain |
+| **sovereign power has no representation** (`H-90`) | it is §E.2.4's own falsifier — *"uncontested and absolute"* may be exactly what cannot be conferred. **Jordan's, if the falsifier fires** |
 | office subordination's **parallel** mode (§E.1.4) | falsifies or splits §E.1; answerable inside the chain |
-| `judging_set_rule` (§D.2) | already `H-32` — and it also gates §D.2's own predicate |
+| `judging_set_rule` (§D.2) | already `H-32` — and it now gates more than it did: **an election is a sitting**, so §E.2.5's third shape runs through it |
 
 **Everything else this document touches was closed by derivation, and each closure names its ground.**
 
