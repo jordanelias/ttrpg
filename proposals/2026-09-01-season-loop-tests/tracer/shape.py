@@ -688,9 +688,31 @@ class VerbRow:
     # A verb WITH `contests:` declares `writes` as a MAP from degree, and `writes` holds the union
     # (so the load-time Part D check below still sees every pair it must validate).
     writes_by_degree: dict = field(default_factory=dict)
+    # ⚠ AND SO IS `emits:`, FOR THE SAME REASON ONE FIELD DEEPER. A flat `emits` on a contested
+    # verb reports ONE outcome for every band -- `kill / wound` emitted `person.died` whether the
+    # target died, was wounded, or walked away untouched. That is ID-9's class (a success report
+    # for something that did not happen) inside the epistemic layer, where every witness then
+    # mints a claim from it.
+    emits_by_degree: dict = field(default_factory=dict)
 
     def eligibility_kinds(self) -> tuple:
         return tuple(a.split(":")[0].strip() for a in self.eligibility)
+
+    def emits_at(self, degree: str | None) -> tuple:
+        """WHAT THIS ACT REPORTS, GIVEN WHAT THE SEAM RETURNED. Same polarity as `writes_at`:
+        an uncontested verb ignores the degree; a contested one with no degree, or with a degree
+        it does not declare, RAISES rather than reporting the wrong outcome."""
+        if not self.emits_by_degree:
+            return self.emits
+        if degree is None:
+            raise SystemExit(
+                f"{self.verb!r} declares `contests: {self.contests}` and was folded with no "
+                "degree, so there is no way to say WHICH outcome to report.")
+        if degree not in self.emits_by_degree:
+            raise SystemExit(
+                f"{self.verb!r} has no `emits` branch for degree {degree!r}. Declared: "
+                f"{sorted(self.emits_by_degree)}.")
+        return tuple(self.emits_by_degree[degree])
 
     def writes_at(self, degree: str | None) -> tuple:
         """THE PAIRS THIS ACT ACTUALLY WRITES, GIVEN WHAT THE SEAM RETURNED.
@@ -735,12 +757,26 @@ def _load_verb_table() -> dict:
             flat = tuple(dict.fromkeys(w for v in by_degree.values() for w in v))
         else:
             flat = tuple(raw_writes)
+        raw_emits = r["emits"]
+        emits_by_degree: dict = {}
+        if isinstance(raw_emits, dict):
+            emits_by_degree = {str(k): list(v or []) for k, v in raw_emits.items()}
+            flat_emits = tuple(dict.fromkeys(e for v in emits_by_degree.values() for e in v))
+        else:
+            flat_emits = tuple(raw_emits)
         row = VerbRow(name, r["stratum"], tuple(r["eligibility"]), r["requires"],
-                      flat, tuple(r["emits"]),
+                      flat, flat_emits,
                       tuple(r["emits_on_refusal"]), r["grade"],
                       str(r.get("scale") or "person").strip(),
                       str(r.get("contests") or "").strip(),
-                      by_degree)
+                      by_degree, emits_by_degree)
+        # The two keyed columns must agree on their band set, or a band writes with nothing to
+        # report or reports with nothing written.
+        if by_degree and emits_by_degree and set(by_degree) != set(emits_by_degree):
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} keys `writes` on {sorted(by_degree)} and `emits` on "
+                f"{sorted(emits_by_degree)}. A band in one and not the other is an outcome that "
+                "either changes the world silently or reports a change it did not make.")
         # LOADER INVARIANT 12 (#358 rev.2 §B.13). The two shapes are NOT interchangeable, and
         # both directions are checked: a contested verb with a flat list is the `kill / wound`
         # defect, and an uncontested verb with a degree map is a verb claiming an outcome it

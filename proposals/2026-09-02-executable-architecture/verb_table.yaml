@@ -247,17 +247,64 @@ verbs:
     # the attempt happened, was witnessed, and cost a scene. That is what separates a LOSS (the
     # contest occurred and went against you) from a REFUSAL (the precondition failed, no contest).
     #
-    # ⚠ THE BANDS ARE `assumption`, NOT `ruled`. #358 §C.4 gives the SHAPE and no stage assigns
-    # which writes belong to which degree; H-98 is the row that owns the mapping. Injected per
-    # ID-6 -- declared here, swept at H-98's site -- rather than filled silently.
+    # ⚠ RE-DERIVED 2026-09-03 ON A JORDAN RULING, AND THE FIRST VERSION OF THIS BLOCK WAS WRONG
+    # IN KIND. Verbatim: *"kill/wound degrees should be directly taken from scene combat, which is
+    # what actually needs to be called when kill/wound is considered."*
+    #
+    # The first version guessed four bands and graded them `assumption` with a sweep. That was an
+    # invented MAPPING from a winner to a degree -- exactly the second resolver §27.2 forbids,
+    # arriving as a data row instead of as code. The ruling says the degree is not mapped: it is
+    # READ OFF THE SCENE, because scene combat computed it.
+    #
+    # WHAT THE SCENE ACTUALLY CARRIES (`combat_seam.resolve` -> `wound_state`, read from the
+    # engine's own WoundTracker on the combatants the seam holds):
+    #   felled            -- the fighter went down. `wrapper.fight` sets a result ONLY on a
+    #                        felling, so `result != 0` and `felled` are the same event.
+    #   wounds            -- gates crossed, floor(cumulative_damage / wound_interval)
+    #   health_remaining  -- what is left
+    #   result == 0       -- UNRESOLVED, and a RULED legitimate outcome (Jordan 2026-06-02):
+    #                        *"an undecided fight is a legitimate outcome."* Not a failure.
+    #
+    # SO THE BANDS BELOW ARE A READING, NOT A GUESS, AND TWO OF THE THREE ARE MECHANICAL:
+    #   felled                      -> the person is down: body, existence, and every tenure
+    #                                  naming them closes. This is the kill.
+    #   unresolved AND wounds > 0   -> blood was drawn and nobody fell: body only. This is the
+    #                                  wound, and it is the case the verb's name has always
+    #                                  carried and the table could not express.
+    #   unresolved AND wounds == 0  -> the fight happened and changed nothing. WRITES NOTHING and
+    #                                  STILL EMITS: the attempt was made, witnessed, and cost a
+    #                                  scene. That is a LOSS, not a REFUSAL.
+    #
+    # ⚠ WHAT REMAINS OPEN IS NARROWER THAN IT WAS AND IS STILL H-98: the engine does not separate
+    # a decisive win from a narrow one beyond wound count on the VICTOR, so a fourth band
+    # (Overwhelming vs Success) has no source in the data. It is NOT invented here. The three
+    # bands below are the ones the scene can distinguish.
     writes:
-      Overwhelming: ["Person.body", "Person.exists", "Tenure.until"]
-      Success:      ["Person.body", "Person.exists", "Tenure.until"]
-      Partial:      ["Person.body"]
-      Failure:      []
-    writes_grade: "assumption"
-    writes_sweep: "H-98 -- sweep Partial across {body} / {body,exists} / {} and report any flip"
-    emits:       ["person.died"]
+      Felled:       ["Person.body", "Person.exists", "Tenure.until"]
+      Wounded:      ["Person.body"]
+      Untouched:    []
+    writes_grade: "ruled -- the SPLIT is read from scene combat (Jordan 2026-09-03); H-98 keeps only the question of whether a decisive win is distinguishable from a narrow one, which the engine currently does not answer"
+    writes_source: "combat_seam.resolve -> wound_state[loser]: felled | wounds | health_remaining"
+    # ⚠ `emits:` IS DEGREE-KEYED TOO, AND THE FLAT VERSION WAS A LIVE `ID-9` DEFECT.
+    # This read `["person.died"]` for every band. With the bands above that means A WOUND EMITS
+    # `person.died` -- a success report for something that did not happen, in the verb whose own
+    # name carries the distinction. Every witness in the world would mint a claim that a living
+    # man was killed.
+    #
+    # ⚠ AND THE ANSWER WAS ALREADY IN THE MATRIX, WHICH IS WHY THIS IS A TRANSCRIPTION DEFECT
+    # RATHER THAN A DESIGN GAP: `write_matrix.yaml`'s `Person.body` row declares
+    # `body.changed` · `person.died`, and `Person.exists` declares `person.died`. The kinds
+    # existed; the verb table used one of them for both outcomes.
+    #
+    # `contest.undecided` is the one NEW kind, and declaring it here IS its declaration -- under
+    # invariant 7 the registered roster is DERIVED from the emission columns, so a kind for an
+    # outcome that writes nothing has no other home. It is required because the act still
+    # happened: it was attempted, witnessed, and cost a scene. Jordan, 2026-06-02: *an undecided
+    # fight is a legitimate outcome.* An outcome nothing emits is an outcome nobody can witness.
+    emits:
+      Felled:      ["person.died"]
+      Wounded:     ["body.changed"]
+      Untouched:   ["contest.undecided"]
     # ⚠ WAS `[]`. Under #358 rev.2 loader invariant 4 (widened, F7) every failable clause needs a
     # refusal kind, and a contested verb can be refused by the seam at the depth cap (§C.5 returns
     # a typed Refusal, never a raise). A contest that cannot report its own refusal is D22.

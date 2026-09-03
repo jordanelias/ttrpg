@@ -542,14 +542,45 @@ for a in acts:
 >   Failure:      []           # ⚠ AN EMPTY LIST IS LAWFUL HERE AND NOWHERE ELSE
 > ```
 >
+⚠ **AND THE BAND NAMES ABOVE ARE ILLUSTRATIVE, NOT A ROSTER — RULED 2026-09-03.** Jordan:
+> *"kill/wound degrees should be directly taken from scene combat, which is what actually needs to
+> be called when kill/wound is considered."* **The degree is READ OFF THE SUBSYSTEM, never mapped
+> onto it by the table.** A contested verb's branches are named by what its subsystem can actually
+> distinguish, and where the subsystem distinguishes fewer states than a four-band ladder, **the
+> verb declares fewer branches rather than the table inventing the difference.** The live instance
+> is exactly this: personal combat separates *felled* from *unresolved* and grades the second by
+> wound count, so `kill / wound` carries **three** branches and the fourth is registered as having
+> no source in the data.
+>
+> **That is `T-k` holding rather than bending.** One ladder still reads the margin; what this says
+> is that a verb may not declare a band its subsystem cannot report, which is `ID-5`'s polarity
+> applied to the outcome column — absence refuses, it does not default to a full write.
+
 > **`Failure: []` is the only place in this architecture where writing nothing is correct**, and it is
 > correct because the act still **emits**: the fold reaches `emit(row.emits, …, degree)` with an empty
 > receipt list, so the attempt happened, was witnessed, and cost a scene. **That is the difference
 > between a refusal (the precondition failed, no contest occurred) and a loss (the contest occurred
 > and went against you)** — two outcomes the five-column table could not tell apart.
 
-⚠ **THIS IS A SIXTH COLUMN, AND `§A.1` SAYS A VERB NEEDING MORE COLUMNS IS ONE THE DESIGN HAS NOT
-FINISHED THINKING ABOUT.** That rule stands and this is the exception it warns about, so it is stated
+> ### ⚠ **AND `emits` KEYS THE SAME WAY — FOUND BY APPLYING THIS SECTION TO THE LIVE TABLE, 2026-09-03.**
+> Keying only `writes` is half the repair, and the missing half is the more dangerous one. With
+> `kill / wound`'s bands landed and its `emits` still flat, **a wound emitted `person.died`** — the
+> verb whose own name carries the distinction reporting the wrong one, on every band. That is
+> `ID-9`'s class *inside the epistemic layer*, where WITNESS then mints a claim from it and every
+> ledger in the world records a living man as killed.
+>
+> **A degree changes what happened AND what is reported, and the second is what other people act
+> on.** So both columns key on the band, and the loader asserts **the two key sets are equal** — a
+> band in one and not the other is an outcome that either changes the world silently or reports a
+> change it did not make.
+>
+> ⚠ **The kinds for it were already declared.** `write_matrix.yaml`'s `Person.body` row carries
+> `body.changed` · `person.died`; the verb table used one of them for both outcomes. **This was a
+> transcription defect, not a design gap** — which is the third time in this chain that a column
+> was honoured and its content quietly collapsed.
+
+⚠ **THIS IS A SIXTH AND SEVENTH COLUMN, AND `§A.1` SAYS A VERB NEEDING MORE COLUMNS IS ONE THE
+DESIGN HAS NOT FINISHED THINKING ABOUT.** That rule stands and this is the exception it warns about, so it is stated
 at full strength rather than smuggled: **the sixth column exists only for verbs that declare
 `contests:`, it is a re-keying of the third column rather than a new kind of thing, and any verb
 without `contests:` is refused if it uses it.** A seventh column has no such argument available.
