@@ -485,7 +485,7 @@ rows:
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-43
     tier:      0
-    hole:      "Petition, Dispensation and Proposition are 'created, not written' and so BYPASS `write()`. #353 `:1061-1064`: 'Either the gate applies the write, or direct assignment is made impossible.' An object created beside the gate is the unmarked-cell defect wearing a different hat"
+    hole:      "⚠ PARTLY DISCHARGED AND THE ROW IS STALE (recorded 2026-09-03): write_matrix.yaml now carries `Proposition.exists`, `Petition.exists` and `Dispensation.exists` citing W2/H-43, and `utter` writes Proposition THROUGH THE GATE (`_eff_utter`). The Proposition half is built; the Petition/Dispensation halves have rows and no effects. Under G.4.8 an instrument may fill only what the register declares, so either this grade is wrong or a fill went off-register -- SPLIT THE ROW rather than regrading the whole. Petition, Dispensation and Proposition are 'created, not written' and so BYPASS `write()`. #353 `:1061-1064`: 'Either the gate applies the write, or direct assignment is made impossible.' An object created beside the gate is the unmarked-cell defect wearing a different hat"
     kind:      "PRODUCER"
     owner:     "the write gate (Part D)"
     grade:     "absent"
@@ -714,7 +714,7 @@ rows:
 
   - id:        H-62
     tier:      0
-    hole:      "NO PART E VERB WRITES ANY `Person` INTERIOR FIELD. `(Person, convictions)`, `(Person, beliefs)`, `(Person, scar)`, `(Person, axis_count)` and `(Person, stance)` are all `social: true` -- only an act may write them -- and the verb table carries no act that does. #353 §9.3 requires convictions to move BY ARGUMENT AND CONSEQUENCE, so the rows are mandated and the producers are missing"
+    hole:      "⚠ SHAPE SUPPLIED 2026-09-03 (#358 rev.2 §C.4 / §F.20a): an interior write is a CONSEQUENCE OF AN OUTCOME, which is what the new Degree-keyed `writes` column declares -- so the verbs are still unwritten and there is now a column to write them in. Measured with write_matrix.yaml's header command: 11 RES rows have no producing verb, 6 of them `Person` interior. NO PART E VERB WRITES ANY `Person` INTERIOR FIELD. `(Person, convictions)`, `(Person, beliefs)`, `(Person, scar)`, `(Person, axis_count)` and `(Person, stance)` are all `social: true` -- only an act may write them -- and the verb table carries no act that does. #353 §9.3 requires convictions to move BY ARGUMENT AND CONSEQUENCE, so the rows are mandated and the producers are missing"
     kind:      "PRODUCER ×5"
     owner:     "the resolver (Part E)"
     grade:     "absent"
@@ -842,7 +842,7 @@ rows:
     source:    "W5 — found by execution"
   - id:        H-75
     tier:      1
-    hole:      "§E4's `hold:<object>` argument is a PLACEHOLDER naming a KIND (`<store>`, `<record>`), and nothing binds it to WHICH object the act is about"
+    hole:      "⚠ PRESENT-TENSE CONSEQUENCE RECORDED 2026-09-03: `destroy_record`'s eligibility is [`hold:<record>`, `presence`] and BOTH alternatives decline -- the placeholder branch refuses to guess (this row) and the presence branch declines on H-33 -- with no `own` alternative, so THE VERB CANNOT FIRE FOR ANY ACTOR while `_eff_destroy_record` exists as dead code. This row said only that it `unblocks destroy_record` as a future. §E4's `hold:<object>` argument is a PLACEHOLDER naming a KIND (`<store>`, `<record>`), and nothing binds it to WHICH object the act is about"
     kind:      "SCHEMA_ROW"
     owner:     "Part E (the eligibility column) + the act's payload"
     grade:     "absent"
@@ -1045,7 +1045,7 @@ rows:
     kind:      "RULING + WIRING"
     owner:     "Jordan (the canon); the resolver (the eligibility model)"
     grade:     "ruled"
-    default:   "the title ladder is rosters.yaml `titles`, total over rung_kinds and read through roster_map; authority over a holding is shape.under_purview (the actor holds a title whose domain CONTAINS the holding); ownership is shape.in_holdings (a `hold` Tenure whose object is a RUNG). Revoking a TITLE requires all three of purview, holdings and STRICTLY higher rank; revoking an ORDINARY OFFICE requires purview alone"
+    default:   "⚠ SUPERSEDED 2026-09-03 by #358 rev.2 §E.2.2 -- AUTHORITY IS A PROPERTY OF THE SEAT BEING EXERCISED, NEVER OF THE PERSON EXERCISING IT. The prior default read authority off the ACTOR'S OWN title-holds, and that is now the SPECIAL CASE where the seat exercised happens to be the actor's own title; it gives the wrong answer for every delegate, which is why a regency was unbuildable rather than merely unwritten. New default: eligibility resolves through `Act.via` -- the seat carried by the act -- and purview is asked of `via.scope`. The title ladder is unchanged (rosters.yaml `titles`, ordinal over rung_kinds); what changes is WHOSE ladder position the check reads. Site: `_req_revoke`, and `Act.via` must exist before it can be applied); ownership is shape.in_holdings (a `hold` Tenure whose object is a RUNG). Revoking a TITLE requires all three of purview, holdings and STRICTLY higher rank; revoking an ORDINARY OFFICE requires purview alone"
     site:      "rosters.yaml titles -- read by shape.title_domain / title_rank / titles_held / highest_title_rank / under_purview / in_holdings, and by _req_revoke"
     sweep:     []
     unblocks:  "the eligibility half of the governance slice. ⚠ IT DOES NOT UNBLOCK H-89, AND SAYING SO WAS FALSE: this row claimed *the scale column has a reader now*, and it has not -- `row.scale` is read at load-time validation and by one ASSERTION in the test file, and a test is not a resolver. H-89 is unmoved. Corrected by the governance-canon adversarial pass, which is the second time in two stages that a row of mine claimed an unblock it had not performed."
@@ -1145,7 +1145,7 @@ rows:
 
   - id:        H-98
     tier:      0
-    hole:      "THE SUBSYSTEM RETURNS A WINNER AND THE SEAM'S CONTRACT WANTS A DEGREE. S39.4 reads four bands off a MARGIN; `wrapper.fight` returns `+1` / `-1` / `0`. No document maps one onto the other, and `0` is a RULED outcome rather than a failure — Jordan, 2026-06-02, in the engine: *NO automatic tiebreak … an undecided fight is a legitimate outcome*"
+    hole:      "⚠ NARROWED BY A JORDAN RULING, 2026-09-03: *'kill/wound degrees should be directly taken from scene combat, which is what actually needs to be called when kill/wound is considered.'* THE SOURCE IS SETTLED AND THIS ROW IS NO LONGER ABOUT A MAPPING. `wrapper.fight` returns +1/-1/0 and DISCARDS what it computed; the seam constructs the Combatants and still holds them, so the engine's own WoundTracker (felled / wounds / max_wounds / health_remaining) is readable after the call. `combat_seam.resolve` now returns it as `wound_state`, and `verb_table.yaml`'s `kill / wound` reads three bands off it -- felled, unresolved-with-wounds, unresolved-untouched -- two of which are mechanical. WHAT SURVIVES IN THIS ROW: the engine does not separate a DECISIVE win from a NARROW one beyond wound count on the victor, so a fourth band has no source in the data and is NOT invented. That is an edge over a real quantity, not a correspondence between types that never meet -- a much smaller question than the one this row opened with. THE SUBSYSTEM RETURNS A WINNER AND THE SEAM'S CONTRACT WANTS A DEGREE. S39.4 reads four bands off a MARGIN; `wrapper.fight` returns `+1` / `-1` / `0`. No document maps one onto the other, and `0` is a RULED outcome rather than a failure — Jordan, 2026-06-02, in the engine: *NO automatic tiebreak … an undecided fight is a legitimate outcome*"
     kind:      "COLLISION"
     owner:     "S39.4's ladder and the subsystem's return type"
     grade:     "absent"

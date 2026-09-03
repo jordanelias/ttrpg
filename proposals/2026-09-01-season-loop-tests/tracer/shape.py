@@ -678,9 +678,63 @@ class VerbRow:
     # *"that…would trigger the personal combat scene. you can't just kill or wound imo."* The
     # design agrees with him and the instrument was the thing disagreeing.
     contests: str = ""
+    # ⚠ THE SIXTH COLUMN, ADDED 2026-09-03 (#358 rev.2 §C.4 / F6, loader invariant 12).
+    # `writes` was a flat tuple applied UNCONDITIONALLY AFTER THE SEAM RESOLVED, so a LOST contest
+    # wrote exactly what a won one did -- `kill / wound` killed on any degree, and `Event.degree`
+    # was read by nothing anywhere. A resolution whose result is discarded is not a weak outcome
+    # model; it is a contest that did not happen.
+    #
+    # A verb WITHOUT `contests:` keeps the flat tuple and this stays empty.
+    # A verb WITH `contests:` declares `writes` as a MAP from degree, and `writes` holds the union
+    # (so the load-time Part D check below still sees every pair it must validate).
+    writes_by_degree: dict = field(default_factory=dict)
+    # ⚠ AND SO IS `emits:`, FOR THE SAME REASON ONE FIELD DEEPER. A flat `emits` on a contested
+    # verb reports ONE outcome for every band -- `kill / wound` emitted `person.died` whether the
+    # target died, was wounded, or walked away untouched. That is ID-9's class (a success report
+    # for something that did not happen) inside the epistemic layer, where every witness then
+    # mints a claim from it.
+    emits_by_degree: dict = field(default_factory=dict)
 
     def eligibility_kinds(self) -> tuple:
         return tuple(a.split(":")[0].strip() for a in self.eligibility)
+
+    def emits_at(self, degree: str | None) -> tuple:
+        """WHAT THIS ACT REPORTS, GIVEN WHAT THE SEAM RETURNED. Same polarity as `writes_at`:
+        an uncontested verb ignores the degree; a contested one with no degree, or with a degree
+        it does not declare, RAISES rather than reporting the wrong outcome."""
+        if not self.emits_by_degree:
+            return self.emits
+        if degree is None:
+            raise SystemExit(
+                f"{self.verb!r} declares `contests: {self.contests}` and was folded with no "
+                "degree, so there is no way to say WHICH outcome to report.")
+        if degree not in self.emits_by_degree:
+            raise SystemExit(
+                f"{self.verb!r} has no `emits` branch for degree {degree!r}. Declared: "
+                f"{sorted(self.emits_by_degree)}.")
+        return tuple(self.emits_by_degree[degree])
+
+    def writes_at(self, degree: str | None) -> tuple:
+        """THE PAIRS THIS ACT ACTUALLY WRITES, GIVEN WHAT THE SEAM RETURNED.
+
+        An uncontested verb ignores the degree entirely. A contested one looks the degree up, and
+        an ABSENT degree RAISES rather than falling back to the union -- §42.2's polarity: zero
+        evidence goes to the verdict AGAINST, never to a silent full write. `Failure: []` is
+        lawful and means the act still EMITS having written nothing, which is what separates a
+        LOSS from a REFUSAL."""
+        if not self.writes_by_degree:
+            return self.writes
+        if degree is None:
+            raise SystemExit(
+                f"{self.verb!r} declares `contests: {self.contests}` and was folded with no "
+                "degree. A contested verb's writes are degree-keyed (#358 rev.2 §C.4); folding "
+                "one without a degree is the defect that column exists to make unwritable.")
+        if degree not in self.writes_by_degree:
+            raise SystemExit(
+                f"{self.verb!r} has no `writes` branch for degree {degree!r}. Declared: "
+                f"{sorted(self.writes_by_degree)}. An unlisted degree RAISES rather than "
+                "defaulting -- a missing branch is a hole, not a full write.")
+        return tuple(self.writes_by_degree[degree])
 
 
 def _load_verb_table() -> dict:
@@ -693,11 +747,50 @@ def _load_verb_table() -> dict:
         name = r["verb"]
         if name in out:
             raise SystemExit(f"verb_table.yaml: {name!r} appears more than once")
+        # ⚠ `writes:` NOW TAKES TWO SHAPES (#358 rev.2 invariant 12). A mapping is degree-keyed;
+        # a sequence is the flat form. The union feeds the Part D check below either way, so a
+        # pair named in ANY branch is still validated against the matrix at load.
+        raw_writes = r["writes"]
+        by_degree: dict = {}
+        if isinstance(raw_writes, dict):
+            by_degree = {str(k): list(v or []) for k, v in raw_writes.items()}
+            flat = tuple(dict.fromkeys(w for v in by_degree.values() for w in v))
+        else:
+            flat = tuple(raw_writes)
+        raw_emits = r["emits"]
+        emits_by_degree: dict = {}
+        if isinstance(raw_emits, dict):
+            emits_by_degree = {str(k): list(v or []) for k, v in raw_emits.items()}
+            flat_emits = tuple(dict.fromkeys(e for v in emits_by_degree.values() for e in v))
+        else:
+            flat_emits = tuple(raw_emits)
         row = VerbRow(name, r["stratum"], tuple(r["eligibility"]), r["requires"],
-                      tuple(r["writes"]), tuple(r["emits"]),
+                      flat, flat_emits,
                       tuple(r["emits_on_refusal"]), r["grade"],
                       str(r.get("scale") or "person").strip(),
-                      str(r.get("contests") or "").strip())
+                      str(r.get("contests") or "").strip(),
+                      by_degree, emits_by_degree)
+        # The two keyed columns must agree on their band set, or a band writes with nothing to
+        # report or reports with nothing written.
+        if by_degree and emits_by_degree and set(by_degree) != set(emits_by_degree):
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} keys `writes` on {sorted(by_degree)} and `emits` on "
+                f"{sorted(emits_by_degree)}. A band in one and not the other is an outcome that "
+                "either changes the world silently or reports a change it did not make.")
+        # LOADER INVARIANT 12 (#358 rev.2 §B.13). The two shapes are NOT interchangeable, and
+        # both directions are checked: a contested verb with a flat list is the `kill / wound`
+        # defect, and an uncontested verb with a degree map is a verb claiming an outcome it
+        # never resolves.
+        if row.contests and not by_degree:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares `contests: {row.contests}` and a FLAT "
+                "`writes:`. Its writes must be keyed by Degree (#358 rev.2 §C.4) -- otherwise "
+                "losing the contest writes exactly what winning it does, which is the defect "
+                "that routes to the seam and then discards what the seam returned.")
+        if by_degree and not row.contests:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} has a degree-keyed `writes:` and no `contests:`. "
+                "Nothing resolves a degree for it, so no branch could ever be selected.")
         # EVERY `writes:` MUST BE A PART D ROW. Checked AT LOAD, not at the first act that uses
         # it: a verb naming an unmarked cell is a defect in the table, and finding it when some
         # case happens to exercise that verb makes it look like a defect in the case.
@@ -4128,7 +4221,21 @@ class SeasonDriver:
         # Which of `emits:` the effect actually earned. Empty means "all of them", which is the
         # contract every effect returning a plain list keeps.
         earned: set = set()
-        if row.writes:
+        # ⚠ `writes_at(degree)`, NOT `row.writes` (#358 rev.2 §C.4 / invariant 12, 2026-09-03).
+        # An UNCONTESTED verb has no `writes_by_degree`, so this returns the flat tuple and the
+        # behaviour is identical -- the call is here so the new column HAS A READER. A column no
+        # resolver consults is not a weak mechanism, it is one that does not exist (ID-13), and
+        # this file already carries three instances of that defect found the hard way.
+        #
+        # ⚠ A CONTESTED VERB NEVER REACHES THIS LINE TODAY. The contest branch in `resolve()`
+        # `continue`s before the fold, because the subsystem returns a WINNER and no mapping to a
+        # degree exists (H-98, tier 0, absent). `writes_at(None)` on a contested verb RAISES
+        # rather than falling back to the union -- so if that branch is ever wired to fall
+        # through without minting a degree, it fails loudly here instead of silently writing the
+        # full kill. That is the guard, and it is the reason the parameter is not optional.
+        _degree_for_writes = None      # the seam mints this once H-98 rules the bands
+        _pairs = row.writes_at(_degree_for_writes) if row.writes else ()
+        if _pairs:
             eff = EFFECTS.get(a.verb)
             if eff is None:
                 raise Unspecified(
@@ -4146,7 +4253,7 @@ class SeasonDriver:
             # The alternative considered and rejected: gate all pairs dry, then apply. That
             # separates the check from the write, which is precisely what §30.2 forbids -- "the
             # gate APPLIES the write".
-            for n, pair in enumerate(row.writes):
+            for n, pair in enumerate(_pairs):
                 kind, _, fld = pair.partition(".")
                 # The effect runs ONCE, on the first pair: a verb writing three cells is ONE
                 # operation, and running it per pair minted three Tenures for one `move`.
@@ -4325,6 +4432,18 @@ class SeasonDriver:
                     # records THAT THE CONTEST RAN and who prevailed, with `changes=[]`: no state
                     # moves, no degree is minted, and `person.died` stays unemitted, which is the
                     # honest report that the outcome model is missing rather than empty.
+                    #
+                    # ⚠ WHAT CHANGED 2026-09-03, AND WHAT DID NOT (#358 rev.2 §C.4 / F6).
+                    # THE PLACE THE MAPPING LANDS NOW EXISTS: `VerbRow.writes_at(degree)` is the
+                    # reader, and `kill / wound` declares its four branches in `verb_table.yaml`
+                    # at grade `assumption` with a sweep. So this is no longer "there is nowhere
+                    # to put the answer" -- it is "the bands are not ruled".
+                    # WHAT DID NOT CHANGE: `combat_seam.resolve` returns `winner` and
+                    # `result in {1, -1, 0}`. A WINNER IS NOT A DEGREE. Turning one into the
+                    # other is still H-98, still tier 0, still `absent`, and filling it here
+                    # would be an instrument inventing off the register (G.4.8). The correct
+                    # sequence is: the subsystem returns a MARGIN -> the one ladder mints a
+                    # Degree -> `writes_at` selects the branch. Two of those three now exist.
                     _win = r.get("winner")
                     out.append(Event(
                         H(w.world_seed, w.tick, a.actor, f"contest:{_contests[0]}:{a.id}"),

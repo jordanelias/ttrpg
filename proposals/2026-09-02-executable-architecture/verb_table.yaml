@@ -45,6 +45,40 @@
 # nothing is skipped now. A filter that drops what it cannot parse reports clean over an unknown
 # number of missing rows.
 
+# =============================================================================================
+# ⚠ CONDITIONED BY #358 rev.2, 2026-09-03. WHAT THIS TABLE NOW FAILS, AND THE RESOLUTION FOR EACH.
+#
+# #358's Stage 4 was rewritten after an adversarial pass; its loader gained a twelfth invariant and
+# corrected four others. Run against THIS table, the rewritten loader refuses it in three places.
+# They are recorded here rather than fixed silently, because two of the three need a ruling.
+#
+# 1. `scale:` ON TEN ROWS FAILS INVARIANT 10 (unknown key; `scale:` refused BY NAME).
+#    Rows: confer, convene, determine, dispatch, establish, exchange, issue, levy, revoke, succeed.
+#    #358 §E.3 and Stage 2 §C.3: scale is a POSITION IN THE CONTAINMENT TREE, derived on demand,
+#    stored nowhere -- "a label cannot be walked", and indexing code by scale deletes the property
+#    that makes one type with many kinds worth having.
+#    ⚠ DO NOT DELETE THE TEN KEYS YET. They answer a real Jordan question ("is it unnecessary to
+#    nest these and instead just explicitly define scale?"), and #358 rev.2 supplies the answer:
+#    THE SCOPE OF THE SEAT BEING EXERCISED -- `Act.via.scope` -- not a column on the verb. The key
+#    is retired when `Act.via` carries the scope; until then each row's `scale_note` is the
+#    provenance that would be lost. Tracked as the conditioning item, not as a hole.
+#
+# 2. `kill / wound` NOW CARRIES A `Degree`-KEYED `writes` (invariant 12, #358 §C.4 / F6).
+#    Done, in this file. It is the only row declaring `contests:`, so it is the only row affected.
+#    The BANDS are `assumption` and swept at H-98; the SHAPE is ruled.
+#
+# 3. INVARIANT 4 IS WIDENED to every failable clause, not only a `requires`.
+#    `kill / wound` gained `kill.refused` (a seam can return a typed Refusal at the depth cap).
+#    ⚠ STILL OPEN: eligibility itself can decline -- `destroy_record` declines on BOTH its
+#    alternatives (H-75) and can never fire -- and no row declares an eligibility-refusal kind.
+#    The live fold emits `act.ineligible` and `act.refused` as BODY LITERALS, which invariant 7's
+#    derived kind roster refuses at `append` and which ID-12 refuses outright. Owner: this table.
+#
+# WHAT #358 rev.2 DOES NOT CHANGE HERE, checked rather than assumed: all 32 `writes:` entries
+# resolve to `write_matrix.yaml` rows; all eligibility kinds are in the four-member roster and none
+# is `capability`; all 24 verbs carrying a `requires` carry a non-empty `emits_on_refusal`.
+# =============================================================================================
+
 verbs:
   - verb:        "carry"
     stratum:     "social"
@@ -203,11 +237,80 @@ verbs:
     requires:    "—"
     contests: "the body"
     requires_note: "⚠ `contests:` IS A REAL FIELD NOW, NOT A NOTE. ARCHITECTURE_V2.md:394 declares the column -- `contests: <prize> | none`, *if set, routes to the seam at RESOLVE (§39)* -- and :434 sets it on this row. The transcription put it here, where nothing reads it, so the fold executed a kill as a DIRECT WRITE. Jordan, 2026-09-02: *that would trigger the personal combat scene. you can't just kill or wound.* The design already said so."
-    writes:      ["Person.body", "Person.exists", "Tenure.until"]
-    emits:       ["person.died"]
-    emits_on_refusal: []
+    # ⚠ DEGREE-KEYED 2026-09-03 (#358 rev.2 §C.4 / F6, loader invariant 12). The flat list below
+    # was UNCONDITIONAL AFTER THE SEAM RESOLVED, so LOSING the fight killed the loser's target
+    # exactly as winning it did. `contests:` routed to the seam and then nothing read the degree
+    # that came back -- which is the same defect as the transcription note above, one layer deeper:
+    # the column was honoured and its RESULT was discarded.
+    #
+    # `Failure: []` is lawful HERE AND NOWHERE ELSE, and the act still EMITS with degree=Failure:
+    # the attempt happened, was witnessed, and cost a scene. That is what separates a LOSS (the
+    # contest occurred and went against you) from a REFUSAL (the precondition failed, no contest).
+    #
+    # ⚠ RE-DERIVED 2026-09-03 ON A JORDAN RULING, AND THE FIRST VERSION OF THIS BLOCK WAS WRONG
+    # IN KIND. Verbatim: *"kill/wound degrees should be directly taken from scene combat, which is
+    # what actually needs to be called when kill/wound is considered."*
+    #
+    # The first version guessed four bands and graded them `assumption` with a sweep. That was an
+    # invented MAPPING from a winner to a degree -- exactly the second resolver §27.2 forbids,
+    # arriving as a data row instead of as code. The ruling says the degree is not mapped: it is
+    # READ OFF THE SCENE, because scene combat computed it.
+    #
+    # WHAT THE SCENE ACTUALLY CARRIES (`combat_seam.resolve` -> `wound_state`, read from the
+    # engine's own WoundTracker on the combatants the seam holds):
+    #   felled            -- the fighter went down. `wrapper.fight` sets a result ONLY on a
+    #                        felling, so `result != 0` and `felled` are the same event.
+    #   wounds            -- gates crossed, floor(cumulative_damage / wound_interval)
+    #   health_remaining  -- what is left
+    #   result == 0       -- UNRESOLVED, and a RULED legitimate outcome (Jordan 2026-06-02):
+    #                        *"an undecided fight is a legitimate outcome."* Not a failure.
+    #
+    # SO THE BANDS BELOW ARE A READING, NOT A GUESS, AND TWO OF THE THREE ARE MECHANICAL:
+    #   felled                      -> the person is down: body, existence, and every tenure
+    #                                  naming them closes. This is the kill.
+    #   unresolved AND wounds > 0   -> blood was drawn and nobody fell: body only. This is the
+    #                                  wound, and it is the case the verb's name has always
+    #                                  carried and the table could not express.
+    #   unresolved AND wounds == 0  -> the fight happened and changed nothing. WRITES NOTHING and
+    #                                  STILL EMITS: the attempt was made, witnessed, and cost a
+    #                                  scene. That is a LOSS, not a REFUSAL.
+    #
+    # ⚠ WHAT REMAINS OPEN IS NARROWER THAN IT WAS AND IS STILL H-98: the engine does not separate
+    # a decisive win from a narrow one beyond wound count on the VICTOR, so a fourth band
+    # (Overwhelming vs Success) has no source in the data. It is NOT invented here. The three
+    # bands below are the ones the scene can distinguish.
+    writes:
+      Felled:       ["Person.body", "Person.exists", "Tenure.until"]
+      Wounded:      ["Person.body"]
+      Untouched:    []
+    writes_grade: "ruled -- the SPLIT is read from scene combat (Jordan 2026-09-03); H-98 keeps only the question of whether a decisive win is distinguishable from a narrow one, which the engine currently does not answer"
+    writes_source: "combat_seam.resolve -> wound_state[loser]: felled | wounds | health_remaining"
+    # ⚠ `emits:` IS DEGREE-KEYED TOO, AND THE FLAT VERSION WAS A LIVE `ID-9` DEFECT.
+    # This read `["person.died"]` for every band. With the bands above that means A WOUND EMITS
+    # `person.died` -- a success report for something that did not happen, in the verb whose own
+    # name carries the distinction. Every witness in the world would mint a claim that a living
+    # man was killed.
+    #
+    # ⚠ AND THE ANSWER WAS ALREADY IN THE MATRIX, WHICH IS WHY THIS IS A TRANSCRIPTION DEFECT
+    # RATHER THAN A DESIGN GAP: `write_matrix.yaml`'s `Person.body` row declares
+    # `body.changed` · `person.died`, and `Person.exists` declares `person.died`. The kinds
+    # existed; the verb table used one of them for both outcomes.
+    #
+    # `contest.undecided` is the one NEW kind, and declaring it here IS its declaration -- under
+    # invariant 7 the registered roster is DERIVED from the emission columns, so a kind for an
+    # outcome that writes nothing has no other home. It is required because the act still
+    # happened: it was attempted, witnessed, and cost a scene. Jordan, 2026-06-02: *an undecided
+    # fight is a legitimate outcome.* An outcome nothing emits is an outcome nobody can witness.
+    emits:
+      Felled:      ["person.died"]
+      Wounded:     ["body.changed"]
+      Untouched:   ["contest.undecided"]
+    # ⚠ WAS `[]`. Under #358 rev.2 loader invariant 4 (widened, F7) every failable clause needs a
+    # refusal kind, and a contested verb can be refused by the seam at the depth cap (§C.5 returns
+    # a typed Refusal, never a raise). A contest that cannot report its own refusal is D22.
+    emits_on_refusal: ["kill.refused"]
     grade:       "ruled"
-    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed; writes re-keyed by #358 rev.2 §C.4"
   - verb:        "levy"
     scale:   "settlement"
     scale_note: "a levy moves a Rung's stores -- the rung IS the subject"
@@ -219,6 +322,7 @@ verbs:
     emits_on_refusal: ["levy.refused"]
     grade:       "assumption"
     eligibility_note: "⚠ W3 AUDIT: §E3's eligibility cell carried a PRECONDITION as well as the remit act — `remit:levy + ...`. The fold split on the first `:` and tested the whole tail against the remit roster, so it NEVER MATCHED and a holder of the remit was silently refused. The act is the eligibility; the basis is a `requires`."
+    eligibility_substitution: "⚠ DECLARED 2026-09-03 rather than left silent. The source cell named `remit:levy`, and `levy` IS NOT IN `remit_acts` (issue · determine · confer · revoke · dispatch · convene, a CLOSED roster). W3 substituted `remit:issue` and wrote no note, which is an off-register fill under §42.2/G.4.8 — an instrument may fill exactly what the register declares. Either `levy` joins the roster (a ruling: it is a SEVENTH remit act) or `issue` is genuinely the remit a levy exercises (defensible — a levy is issued). Injected as `issue`, declared here, swept at the site. The same substitution is live on `establish`, which uses `remit:confer` and is likewise not a remit act."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "move"
     stratum:     "movement"

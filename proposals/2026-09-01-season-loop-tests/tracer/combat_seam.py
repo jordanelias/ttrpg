@@ -36,11 +36,30 @@ how much punishment the body takes. A healthy person gets the class default; eac
 Which field the penalty lands on is the injected part and is registered (`H-97`); the magnitude is
 not invented, because the bands already exist.
 
-⚠ AND THE SEAM DOES NOT MINT A DEGREE. `contest()`'s contract (S39.4) reads a band off a MARGIN;
-the subsystem returns a WINNER. Those are different types and no mapping between them exists in
-any document. Inventing one here would be the second resolver §27.2 forbids, arriving in the seam
-for the second time. The outcome is returned as the engine gave it, and the mismatch is registered
-(`H-98`) rather than papered over.
+⚠ THE SEAM STILL DOES NOT MINT A DEGREE — IT NOW READS ONE. ⚠ SUPERSEDED IN PART 2026-09-03 BY A
+JORDAN RULING: *"kill/wound degrees should be directly taken from scene combat, which is what
+actually needs to be called when kill/wound is considered."*
+
+The paragraph that stood here said the subsystem returns a WINNER, that `contest()` wants a band
+off a MARGIN, and that **no mapping between them exists in any document**. The first two are still
+true. The third was true of the DOCUMENTS and false of the DATA, and that is the correction:
+
+  `wrapper.fight` returns `+1 / -1 / 0` and THROWS AWAY WHAT IT COMPUTED. But the seam constructs
+  `A` and `B` and still holds them after the call, and each carries a `WoundTracker` (`.wt`) with
+  `felled`, `wounds`, `max_wounds`, `health_remaining` and `health_full`. The severity of the
+  outcome was computed by scene combat and is sitting on objects this module owns.
+
+**So the degree is READ OFF THE SCENE, not mapped from a winner.** That is the ruling made
+mechanical, and it invents nothing: this module already returns `parties={id: A.end}` by reading
+the Combatants after the fight, and the wound state is the same read one field deeper.
+
+⚠ WHAT IS STILL REGISTERED, NARROWED RATHER THAN CLOSED (`H-98`). The engine distinguishes exactly
+two terminal states — FELLED (`result != 0`; `wrapper.fight` sets a result only when a fighter is
+felled) and UNRESOLVED (`result == 0`, *"an undecided fight is a legitimate outcome"*, Jordan
+2026-06-02) — and the wound counts grade the second. What the DATA does not carry is any
+separation of a decisive win from a narrow one beyond wound count on the victor. So the bands
+below the felled/unresolved split are the remaining decision, and they are edges over a quantity
+that exists rather than a mapping between types that do not meet.
 """
 from __future__ import annotations
 
@@ -137,8 +156,26 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any) -> dict:
     finally:
         wrapper._TRACE = prev
     winner = a_id if result == 1 else (b_id if result == -1 else None)
+
+    # ⚠ THE OUTCOME'S SEVERITY, READ OFF THE COMBATANTS THE SCENE JUST FOUGHT WITH (Jordan
+    # 2026-09-03). No number is invented and no rule is re-implemented: every field below is a
+    # property the engine's own `WoundTracker` computes, on objects this module constructed.
+    # `fight()` collapses all of it to an int at the return; this reads it before it is lost.
+    def _state(c) -> dict:
+        wt = getattr(c, "wt", None)
+        if wt is None:                      # ID-5 polarity: absence REFUSES, it does not default
+            return dict(available=False)
+        return dict(available=True, felled=bool(wt.felled), wounds=int(wt.wounds),
+                    max_wounds=int(wt.max_wounds),
+                    health_remaining=int(wt.health_remaining), health_full=int(wt.health_full))
+    _wounds = {a_id: _state(A), b_id: _state(B)}
+
     return dict(status="RESOLVED", module="personal_combat", resolver="d_sigma",
                 result=result, winner=winner,
+                # THE DEGREE SOURCE. A caller reads severity from here; it does not map it from
+                # `winner`, which carries none. `H-98`'s remaining half is which wound counts sit
+                # in which band -- an edge over a real quantity, not an invented correspondence.
+                wound_state=_wounds,
                 # ⚠ `0` IS A RULED OUTCOME, NOT A FAILURE — Jordan, 2026-06-02, in the engine:
                 # *"an undecided fight is a legitimate outcome."* The seam must not retry it into
                 # a decision, which is what a caller expecting a winner would be tempted to do.

@@ -1,6 +1,24 @@
 # The season loop, executable — the successor to PR #353
 
-## Status: **PROPOSED (2026-09-02). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.** Nothing here runs.
+## Status: **PROPOSED (2026-09-02, conditioned 2026-09-03). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.** Nothing here runs.
+
+> ### ⚠ **CONDITIONED BY #358 rev.2 ON 2026-09-03 — what its rewritten loader does to this chain.**
+> The meta-architecture was rewritten after an adversarial pass; its loader gained a twelfth
+> invariant and corrected four others. **Run against this chain's data, it refuses it in three
+> places and supplies the shape for two tier-0 holes.**
+>
+> | | |
+> |---|---|
+> | **`scale:` on TEN verb rows** | fails invariant 10 (`scale:` refused by name). **Not deleted** — the keys answer a real Jordan question, and rev.2 supplies the answer as `Act.via.scope` rather than a column. Retired when `Act.via` carries the scope |
+> | **`kill / wound`'s `writes`** | **now `Degree`-keyed** (invariant 12). A lost fight used to kill exactly as a won one did, because the seam's degree was discarded on arrival. Bands are `assumption`, swept at `H-98`; the shape is ruled |
+> | **invariant 4 widened** | every failable clause needs a refusal kind, not only a `requires`. `kill / wound` gained one. ⚠ **Still open:** eligibility can decline and no row declares a refusal for it, while the fold emits `act.ineligible` / `act.refused` / `contest.resolved` as **body literals** that invariant 7 refuses |
+> | **`H-98`, `H-62`** | **shape supplied, bands still open.** The `Degree`-keyed column is where a contest's outcome and a person's interior consequence both become expressible |
+> | **`Date.fired`** | **fixed** — `RES` dropped. Its own `by:` cell said *"§24 has no actor"*, so the ACTS class contradicted its provenance on the same line |
+> | **`H-90`** | **default superseded** — authority is a property of the seat exercised, not of the actor's own title-holds, which is why a regency was unbuildable rather than unwritten |
+>
+> **Measured, not asserted:** `write_matrix.yaml`'s header carries the reproducing command for the
+> **eleven** RES rows with no producing verb (**nine** after rev.2 deletes `Person.beliefs` and
+> replaces `Tenure.payload`). Build step 2's first publication named two.
 
 | file | what it is |
 |---|---|
