@@ -7,7 +7,7 @@
 | **`01_AXIOMS.md`** | **Stage 1 — axioms, idioms, schema.** Start at PART A |
 | **`02_HIERARCHIES.md`** | **Stage 2 — hierarchies, dependencies, nests, scales** |
 | **`03_VERBS_AND_LOOPS.md`** | **Stage 3 — verbs, consequences, slices, season loops** |
-| **`04_CODE_ARCHITECTURE.md`** | **Stage 4 — the code shape.** PARTS A–F complete; ⚠ **PART G outstanding** |
+| **`04_CODE_ARCHITECTURE.md`** | **Stage 4 — the code shape (A–F) and THE METHOD (G).** Read **PART G first** |
 
 ## What this is
 
@@ -22,8 +22,18 @@ consequently"* hierarchies/dependencies/nests/scales, *"and therefore"* verbs/co
 season-loops — and **Stage 4 is a read-only Fable synthesis holding all three in context to design
 the code architecture.**
 
-⚠ **STAGE 4 IS COMPLETE EXCEPT FOR PART G** (shape · organize · articulate · orchestrate), which is
-outstanding.
+**STAGE 4 IS COMPLETE, AND ITS PART G IS THE MOST DURABLE THING IN THIS DIRECTORY.** A–F describe how
+this design came out; **G says how design proceeds going forward:**
+
+> **Derive the shape from the axioms WITH THE TREE CLOSED; decompose it by WHO WRITES WHAT; write it
+> in a form A LOADER OR A FALSIFIER CAN EVALUATE; and close a stage ONLY ON REPRESENTATIONS.**
+
+Two results in G are worth naming here. **A check is exactly as strong as the representation of the
+thing it checks** — so if the guarded thing is prose, the guard is prose, and the honest act is to
+type the thing first. And **the hazard a session under pressure repeats is deferring to what exists
+instead of deriving from what is true**, whose fix is a *scope*, not an instruction: the derivation
+runs with the tree closed, enforced by what an agent can reach rather than by a sentence in its
+prompt.
 
 **PART F is the section to read first.** Thirty-one gaps, and its closing finding is about the
 exercise rather than the architecture: **the architecture is derived through Stages 1 and 2 and

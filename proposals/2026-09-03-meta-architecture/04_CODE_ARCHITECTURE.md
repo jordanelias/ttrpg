@@ -7,13 +7,19 @@
 
 ---
 
-> # ⚠ COMPLETE EXCEPT FOR PART G
+> # COMPLETE — PARTS A THROUGH G
 >
-> PARTS A–F are here. **PART G — SHAPE · ORGANIZE · ARTICULATE · ORCHESTRATE — was commissioned and
-> is not yet written**, and under Jordan's framing it is the most durable part of the document: the
-> one that says how design proceeds going forward rather than how this design came out.
+> **PART G is the durable one, and the one to read first.** A–F describe how *this* design came out;
+> **G says how design proceeds going forward** — shape · organize · articulate · orchestrate, kept
+> apart because collapsing them into the word *architecture* is itself the failure. Its one sentence:
 >
-> **PART F is the section to read first.** It carries thirty-one gaps, and its closing finding is
+> > **Derive the shape from the axioms WITH THE TREE CLOSED; decompose it by WHO WRITES WHAT; write it
+> > in a form A LOADER OR A FALSIFIER CAN EVALUATE; and close a stage ONLY ON REPRESENTATIONS.**
+>
+> **Every rule in G names the corpse that would return if it were dropped**, and it ends by saying
+> that a rule with no corpse behind it should be deleted.
+>
+> **PART F is the section to read second.** It carries thirty-one gaps, and its closing finding is
 > about this exercise rather than about the architecture: **the architecture is derived through
 > Stages 1 and 2 and ASSUMED through Stage 3.** Stage 3 states its subjects as properties without
 > representations, which is where the gap density is.
@@ -651,7 +657,285 @@ shapes were expressible and are re-keyed for idempotence. The `Seat` unification
 
 ---
 
-> ## ⚠ PART G WAS COMMISSIONED AND IS NOT YET WRITTEN
-> **SHAPE · ORGANIZE · ARTICULATE · ORCHESTRATE** — the part that says how design proceeds going
-> forward, and the part Jordan's framing makes the most durable of all. It is outstanding, and its
-> absence is marked here rather than implied.
+# PART G · THE METHOD — HOW DESIGN PROCEEDS FROM HERE
+
+PARTS A–F describe how *this* design came out. **This Part says how design is done so that the next
+one comes out the same way without this session in the room.**
+
+Four questions, kept apart on purpose: **SHAPE** (what form, and what fixes it) · **ORGANIZE** (what
+the unit of decomposition is) · **ARTICULATE** (how it is written so it survives a session boundary)
+· **ORCHESTRATE** (how the work is run). **They are usually collapsed into the word *architecture*,
+and the collapse is the failure: a session that cannot say which of the four it is doing does all
+four badly at once.**
+
+> **Where a principle below has a corpse behind it, the corpse is cited. A principle with a corpse
+> beats one with an argument, because the argument can be re-litigated next session and the corpse
+> cannot.**
+
+---
+
+## §G.1 · SHAPE — what determines the form
+
+**G.1.1 · Shape is derived, and the derivation runs in ONE direction.** Axioms → theorems → idioms →
+admission tests → fields. **Nothing runs the other way.** A field is admitted because a predicate
+admits it; a predicate exists because a theorem needs it; a theorem is a theorem because an axiom
+forces it. ⚰ *The tracer's entity model — every new requirement landing as another field.* **A schema
+that lists fields can only grow; a schema that states what a thing IS can answer a requirement.**
+
+**G.1.2 · Know which statements are axioms.** *"Break an axiom and you have chosen a different game —
+deliberately, and you can say what you chose. Break a theorem and you have introduced a
+contradiction, which shows up later as a defect nobody can localise."* ⚰ *`L3`, argued for four
+revisions as free-standing when its clause-2 hole is exactly what `AX-4` predicts.* **A session
+defending a rule by repetition has not asked which kind of rule it is.**
+
+**G.1.3 · The axiom-set falsifier is live and has a hit rate.** *Derive any one from the other five*
+found `AX-6` missing. **So every time a derivation reaches for something it cannot name, the reaching
+is evidence about the axiom set, not about the derivation.**
+
+**G.1.4 · A shape is a set of refusals, each with what pays for it.** Where the answer is *nothing*
+the refusal is free; where it is *8 of 50 surveyed arcs, honestly*, the price is on the row. **A
+design that cannot say what each refusal costs has not refused anything — it has merely not built
+something yet.**
+
+**G.1.5 · Where the design reaches for a TRACK, find two things that can disagree and band their
+gap.** *A track is a stored aggregate wearing a stage's clothes.* The general instance is `AX-3`: two
+layers that *look alike from any distance* need different homes, different movers, different times.
+**Any proposal with one quantity that both measures and decides is that collision in a new dress.**
+
+**G.1.6 · Architecture fixes the ordering and the walkability; content fixes the membership.**
+> **A shape decision is one that would be correct for ANY membership of the data it governs.** If a
+> rule is correct only for this roster, it is content. If it branches on a member, it is drift.
+
+**G.1.7 · Structural before mechanical before convention — and say which.** ⚰ *A claim of STRUCTURAL
+that is MECHANICAL is "a guard that cannot observe what it guards."* **Design the type first, then
+the hook:** a constraint carried by a return type — `veto : bool` — cannot be argued around; one
+carried by a rule can.
+
+**G.1.8 · Derive first; compare to what exists second; NEVER the reverse.** ⚰ *Stage 1's first PART E,
+withdrawn in full: "evidence that something is already so is not an argument that it should be so."*
+§G.4.6 says what structure makes this hold under pressure.
+
+---
+
+## §G.2 · ORGANIZE — the unit of decomposition
+
+**G.2.1 · The unit is an OWNER.** The module rule is `AX-4` applied to code rather than to state, and
+it generalises into a test for a decomposition nobody here has seen:
+
+> **Name the writer of every value the proposed module touches.**
+> **Exactly one, and it is this module** → you have found a unit.
+> **You cannot name one** → the model is incomplete — that is `AX-4`'s own test.
+> **You can name two** → you have found a defect, and the decomposition is wrong at that value.
+
+⚰ *A per-issue stance store sitting beside `Person.stance`; `Coherence` read in three places and
+owned in none; travel legs in the write matrix and in no ownership row.*
+
+**G.2.2 · Decompose along ownership — never along subject, scale or phase.** Each is an *axis*, and
+the test is exact: **a LEVEL is a parent (knowing it constrains the child); an AXIS is an index.**
+⚰ *`here.kind == "person"` inside a resolver precondition; `phase:` needing to be a set because one
+write class is written in two steps; a rung-level rule placed on a code-level object, where the rule
+had no referent.*
+
+**G.2.3 · One type, many kinds; the membership in data.** **The test before adding a type: does any
+mechanism need to behave differently for this variant in a way a data row could not express?** If
+no, it is a kind. ⚰ *`Title` — one class doing two jobs, patched by a refusal asserting the two are
+mutually exclusive categories, which the ruling contradicts.*
+
+**G.2.4 · A relation whose subject cannot act is a field wearing a relation's shape.** Name the
+subject; ask whether it can act; if not, re-subject the edge onto the person whose act maintains it,
+or admit it is a field. ⚰ *`succeed` — the only Tenure whose subject is not a person, and the only
+one nothing can end.*
+
+**G.2.5 · The reverse index is owned by Nobody and stored nowhere.** Covers every *index*, *lookup*,
+*summary* and *roll-up* a session proposes: recomputable → not stored; needed for cost → built at a
+barrier, discarded at the next.
+
+**G.2.6 · Resolution is a row — never an import, never an inference.** ⚰ *The 114-line regex router
+with eleven unreachable probes and a 46% miss rate, and its five recurrences ending in `age\w*`
+matching agent / agency / agenda.* **A module that must interpret content to decide where it goes has
+become that router.**
+
+**G.2.7 · A boundary enforced by a scan is a DIRECTORY.**
+> **When the strongest enforcement available is a scan, the unit of organisation must be the unit the
+> scan can see. A boundary drawn inside a file is drawn nowhere.**
+
+---
+
+## §G.3 · ARTICULATE — how it is written so it survives
+
+**Load-bearing here in a way it would not be elsewhere, and the reason is in the governing document:
+there is no context between sessions.** A design that cannot be re-read correctly by someone with no
+memory of it has failed whatever its merits. ⚰ *"Prose registers are re-typed; rows are inherited.
+Fourteen-plus of the census's items were lost at a section restating its neighbours."*
+
+**G.3.1 · A design statement survives only in a form something other than a reader can evaluate.**
+
+| form | survives because | what belongs in it |
+|---|---|---|
+| **data a loader validates** | **a contradiction fails the load, with the row named** | every closed set, table, fixture, the write matrix, the verb table, the register, the manifest |
+| **code with a falsifier** | **red before the change, green after; a later session runs it** | every mechanism; every claim of the form *X reads Y* or *nothing writes Z* |
+| **prose** | **it does not, on its own** — only as a *pointer* to one of the above | intent · history · the worked failure · the rejected alternative · the corpse |
+
+> ### **THE RULE: A STATEMENT THAT BINDS BEHAVIOUR GOES IN THE FIRST OR THE SECOND. Prose may carry
+> it only as a pointer, with the command or the row id.**
+
+⚰ **This document's own `F.24`.** *A verb is a declaration in five columns* — and every row's second
+column was written as a **prose string**, so the load-time guard `F.23` proposes over it *is a
+comment*. The same shape three times in the chain: an eligibility cell carrying a precondition, where
+the fold split on the first `:` and **never matched**; `contests:` transcribed as a note nothing
+reads, **so the fold executed a kill as a direct write**; and the write matrix's own verdict on
+itself, *a comment is not a constraint*.
+
+> ### **THE GENERALISATION OF THE `F.23`→`F.24` CHAIN:**
+> **A CHECK IS EXACTLY AS STRONG AS THE REPRESENTATION OF THE THING IT CHECKS.** Before writing any
+> guard, ask what form the guarded thing is in. **If it is prose, the guard is prose, and the honest
+> act is to type the thing first.**
+
+**G.3.2 · What must be written down, and where.**
+
+| what | where | ⚰ corpse |
+|---|---|---|
+| the **admission test** of every entity — IS · OWNS · ADMITS · NEVER, *including the reader clause* | beside the type, **on every entry** | `Rung.stake` re-admitted silently because its entry lacked the clause |
+| the **reader of every declared field, with the command to re-run the claim** | the field's row; the `ID-13` scan | *"no formula reads any of them"* was true of #353 and **false at HEAD** — the claim carried no command, so it aged into falsehood between revisions |
+| the **closer of every opener**, per kind | the verb table; `ID-14` at load | four of seven relations open-only |
+| the **grade, default, site and sweep** of every hole | the register, as rows | an `absent` hole filled *inside a subscript* for four revisions |
+| the **falsifier of every claim, and its outcome** | the same commit | fifteen of twenty PASS probes with no assertion — *a PASS meant did not crash* |
+| the **rejected alternative** of every call | beside the call | the regency menu — *the menu was false, and the derivation is what caught it* |
+| the **correction, recorded rather than overwritten** | in place, marked | *a superseded derivation that stays legible is how the next session avoids re-deriving it* |
+| the **enforcement grade**, in both target languages | beside the invariant | *overstating this column is the failure mode* |
+
+**G.3.3 · What must NOT be written.**
+
+- **A count typed by hand.** ⚰ *A tally summing to 34 over 32 rows; a header saying "ten holes" over
+  twelve.* **A number appears in prose only with the command that reproduces it.**
+- **A definition twice.** ⚰ *A definition living twice in one file with a test guarding that the two
+  copies agree — guarding a duplicate is the shape §8 asks you not to create.* And its asymmetric
+  successor: *add one roster row and an office silently became a title, flipping its revocation, with
+  133 tests green.*
+- **A coined word where a plain one exists**, or a letter-number where a word exists. ⚰ *A draft
+  spelling the steps `B1…M2`, then citing review findings `B1` and `M1` in the same file: two
+  namespaces, one token shape.*
+- **A default in a body.** ⚰ *A wear table returning `20` for an unregistered kind — it answers,
+  plausibly and wrongly, forever.*
+- **A finding as a document.** A finding is an edit, or a row that needs a human, or nothing.
+- **A fact about the tree stated as timeless.** Every *X is / X does* about code is a fact **at a
+  commit** and must say so.
+- **A "structural" that is mechanical.** PART D exists to prevent it.
+
+**G.3.4 · Define a term where it is INVOKED, not only where it is described.** The data row carries
+its meaning in its own column; the loader's refusal message names the rule it enforces; the register
+row carries its citation. ⚰ *`evacuate` — a word coined for what `retire` already covered, read cold
+by a later session as "queued for deletion", escalating a non-existent blocker across three surfaces.*
+
+**G.3.5 · The single test, applied in both directions.** *If this document were deleted, would the
+game behave differently?* **No** → it is reference. **Yes** → the mechanism is in the wrong place;
+move it into data or code and leave a pointer. **Run it over every design statement at a stage
+boundary.** It is the one articulation rule that needs no judgement.
+
+---
+
+## §G.4 · ORCHESTRATE — how the work is run
+
+**G.4.1 · What a stage boundary is FOR: it closes on REPRESENTATIONS, not on properties.**
+
+The evidence is PART F's own distribution. Stages 1 and 2 are nearly closed on their subjects; Stage
+3 carries most of the gaps, **and the reason is uniform — it was asked for properties and delivered
+each as a sentence without a form.**
+
+> ### **A STAGE MAY STATE A PROPERTY ONLY TOGETHER WITH THE REPRESENTATION THAT CARRIES IT, OR A HOLE
+> ROW THAT GRADES ITS ABSENCE. A property with neither is not a result of the stage — it is work the
+> stage has handed forward without saying so.**
+
+**Applied mechanically at the boundary:** for every sentence of the form *an X does / has / never Y*,
+point at the type, the column, the row or the falsifier — or at the graded hole. **This is §G.3.5 run
+as a gate**, and it would have turned Stage 3's twenty-odd forward-handed properties into twenty
+register rows **at the moment they were written, which is when they were cheapest.**
+
+**G.4.2 · Producing and checking are different jobs, and the division is STRUCTURAL.** Independence
+is a tool list, not a sentence — a critic declared `Read, Grep, Glob` **cannot write, whatever its
+prompt says.** Put the stronger tier where the error is silent: *a synthesis artifact is reviewable
+and cheap to revise; an audit verdict or a guardrail decision is where being wrong is silent.*
+
+**G.4.3 · The critic attacks the SETUP, not only the result — and in BOTH directions.**
+⚰ *An adversarial pass that attacked a result's statistics and never its setup — "are the two arms
+the same experiment?"* ⚰ *And the mirror: a pooled faction-wide resource refused wholesale, which
+**survived all four adversarial passes** because every critic was checking for inventions and none for
+over-refusals. Correcting it unblocked ten arcs.*
+
+> **An error AGAINST the design is as serious as one FOR it, and is harder to see, because it looks
+> like rigour.** A critic's charter names both questions: *did the producer invent?* and *did the
+> producer refuse what the design permits?*
+
+**G.4.4 · The adversarial pass produces EDITS, and at most one row.** Everything else is fixed in the
+commit or dropped. **The generalisation of why:** the loop's carrier is prose — forbid the guard and
+a session writes a finding; forbid the finding and it writes a plan. **The only terminal states are
+an edit, or a row that has survived the five tests.**
+
+**G.4.5 · Anything that looks like a ruling gets the five tests before it gets a human.** Superseded ·
+irrelevant · answered by a design document · answered by precedent · answered by what makes sense for
+the architecture. ⚰ *Corpses run both ways: `budget`'s placement escalated when precedent answered
+it; and a 156-row queue that formed because nothing ran the tests.* **And the grade decides the
+behaviour** — refuse at `absent`; inject · declare · sweep at `assumption`; *and a verdict that flips
+across the sweep is itself a finding, and a more important one than the verdict.*
+
+**G.4.6 · The one hazard a session under pressure repeats, and the structure that prevents it.**
+
+> **DEFERRING TO WHAT EXISTS INSTEAD OF DERIVING FROM WHAT IS TRUE.**
+
+This session's three worst failures — sweeping a repository that was out of scope, treating the prior
+chain as a baseline, and recording findings instead of resolving them — **are one mistake.** It has a
+signature: **the session opens the tree FIRST, because the tree is enumerable and derivation is
+not**, and everything it then produces is the tree with better prose. ⚰ *Stage 1 fell into it and
+withdrew a whole Part; the chain fell into it and "built the model that does not need conferral, and
+then found conferral missing"; and it is the exact mechanism of §0.3's loop, where a doctrine
+demanding exhaustiveness drifts to whichever surface is enumerable.*
+
+**The structure that prevents it — a synthesis call, with its alternative named:**
+
+> ### **THE DERIVATION RUNS WITH THE TREE CLOSED. THE TREE IS OPENED ONLY TO FALSIFY.**
+> A design session's **first** artifact is the derivation from the axioms, produced by an agent whose
+> scope **excludes** the implementation trees — enforced the way the critic's read-only status is
+> enforced, **by what the agent can reach, not by a sentence in its prompt.** Its **second** artifact
+> is the comparison: for each place the tree and the derivation differ, either the tree is defective
+> (an edit) or the derivation is (a correction recorded in place). The prior chain is read *between*
+> the two, as evidence at its own strength.
+
+**The rejected alternative is the instruction *"do not read `canon/`, `systems/`, …"* — which is a
+display string.** This session was given exactly that instruction and honoured it; an earlier draft
+was given the same instruction and did not. **The difference between an instruction and a scope is
+the difference the critic's tool list already demonstrates, and it is the only kind of difference
+that survives pressure.**
+
+**G.4.7 · A session's product is an edit, a commit and a handoff — and the milestone is done when the
+behaviour EXECUTES.** ⚰ *The reward term moved last: "a clean tree, a passing suite and a banked
+ratchet still read as a finished session."* **So a session closes on the artifact the milestone
+names — a hash somebody looked at, a case that ran, a falsifier that was red and is green — and not
+on the document that describes it.**
+
+**G.4.8 · An instrument may fill only what the register declares.** *A fill off the register is a
+defect,* which **makes the antagonist's question a grep rather than a judgement.** ⚰ *The session
+diagnosed mid-run: "it fixes errors with scripts to make them run, followed by antagonists
+identifying that the scripts no longer possess fidelity to the ideal code shape" — sixteen forced
+inventions, twenty-four avoidable, no fixed point.* **The register is what turns the loop into a list
+with a bottom.**
+
+---
+
+## §G.5 · The one sentence, and how to falsify this Part
+
+> ### **DERIVE THE SHAPE FROM THE AXIOMS WITH THE TREE CLOSED; DECOMPOSE IT BY WHO WRITES WHAT; WRITE IT IN A FORM A LOADER OR A FALSIFIER CAN EVALUATE; AND CLOSE A STAGE ONLY ON REPRESENTATIONS.**
+> **Everything else in this Part is a corpse that shows what happens when one of the four is skipped.**
+
+| claim | what would show it wrong |
+|---|---|
+| **G.1** — shape is fully determined by derivation | a field the admission tests admit that the game needs refused, or refuse that it needs admitted, **and** no axiom or theorem accounts for the disagreement. `F.4`'s `Tenure.degree` is the standing candidate |
+| **G.2** — the owner is the unit | a value with exactly one writer whose module boundary is nonetheless wrong for a reason ownership cannot express |
+| **G.3** — data and falsifiers survive, prose does not | a design statement carried correctly across three sessions **by prose alone**, with no row and no test, and still read the same way |
+| **G.4.1** — stages close on representations | a stage whose forward-handed properties would have been **cheaper** to represent later than at the boundary |
+| **G.4.6** — a tree-closed derivation prevents the deferral hazard | a session **with the tree closed** that still produced the existing tree with better prose. If that happens, the hazard is not scope and this Part has misdiagnosed it |
+
+> ### **WHAT THIS PART IS NOT**
+> **It is not a process document to be maintained.** It is a set of rules each of which names the
+> corpse that would come back if it were dropped. **If a rule here ever has no corpse behind it,
+> delete the rule** — a principle that has never been paid for is exactly the kind of apparatus §0.3
+> measured, and this Part would rather be short than be that.
