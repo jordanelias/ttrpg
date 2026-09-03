@@ -88,7 +88,20 @@ person. Nothing moves a Record to a second person, so the second person's questi
 
 ⚠ **And the open debt above all of it: SPIRALS.** Four arcs plus the King are self-feeding loops, and
 **nothing bounds one across seasons.** The contest cap bounds within a tick; nothing bounds
-season-to-season feedback, and no stage pretends otherwise.
+season-to-season feedback.
+
+⚠ **CORRECTED 2026-09-03 — this sentence ended *"and no stage pretends otherwise"*, and a stage now
+does.** Stage 1's `ID-16` states the missing axis — *a design enumerates its loops and signs each
+one* — and says why a design made almost entirely of refusals converges: every refusal is a damping
+term. **The debt is not closed and its shape has changed**: what is missing is no longer a doctrine
+but a **representation**, and `ID-16` names the blocker rather than papering it — the enumeration is
+a cycle over *what a verb writes* × *what its precondition reads*, and `requires` is prose in all 32
+rows (`F.24`). **So the honest state has two halves.** The **declared** signed list is buildable now — a closed set
+in the register a loader reads, which `G.3.1` ranks first — and it is what `ID-16` owes. The
+**derived** check that recomputes the cycles from `writes` × typed `requires` and compares them to
+the declared list is blocked until `requires` is typed. **What would be reference rather than
+mechanism is a table of loops written into a markdown file**, which is a narrower thing than *the
+enumeration is unbuildable*, and Stage 1 records the correction.
 
 ---
 

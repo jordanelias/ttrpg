@@ -1,6 +1,38 @@
 # THE META-ARCHITECTURE — the layer above the plan
 
-## Status: **PROPOSED (2026-09-03, rev. 2). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
+## Status: **PROPOSED (2026-09-03, rev. 3). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
+
+> ### ⚠ **REV. 3 — the change list an outside evaluation left unapplied, applied; and its own two
+> ### grading errors caught by the critics who checked the applying.**
+> **`proposals/2026-09-03-v2-against-the-meta-architecture.md` §6A prescribed thirteen edits and
+> applied none of them** — it is an evaluation, and its §6 recommendations were *"proposals, not
+> applied edits."* Rev. 2 had already landed five (`ID-16`/`17`/`18`, `§C.11`, the irreversibility
+> enumeration). **Rev. 3 lands the remaining eight and the one the change list omitted**, and every
+> entry names the file and section it touched:
+>
+> - **ADDED** — `§D.0`, the third admission clause (*what kind of assertion is this field making?*),
+>   asked of every carrier rather than re-derived per entry · **`§G.2.9`**, *a procedure is required
+>   wherever the order of sub-steps changes the outcome* · `PART D` **`27a`** (a proper-noun scan of
+>   the rule-bearing content layer, where `D-27` scans only code) and **`41a`** (the permutation
+>   falsifier for `DELIBERATE`'s pure map — the property was asserted structurally and never observed)
+>   · **`§E.2.2a`**, two corpses of a kind this exercise did not have · **`§D.9`**'s word reservation
+>   on `Claim`.
+> - **CORRECTED** — **`Tenure.conferrer` DELETED** (`ID-13` admits no third state, and it had no
+>   reader anywhere) · **`establishment` is a Query at BOTH Stage 1 sites**, `§D.6`'s `OWNS` line and
+>   `§E.2.5`'s council row · `§B.8` gains `T-o`, which Stage 1 declared and the type section omitted ·
+>   **`ID-16`'s *unbuildable* is retracted in half** — the *declared* signed loop list is buildable
+>   today and is what the idiom owes; only the *derived* check waits on `F.24` · three stale counts
+>   (`§B.13`'s invariants, `PART D`'s denominator, the front door's).
+> - **REGRADED** — `§F.4`'s `ID-15` row was marked ✅ *fired and survived* on a candidate that could
+>   not fire it, **and the candidate that can was in the same source, in the section this exercise
+>   had already quoted for something else.** It is now RUN
+>   against both, **open**, and the harder one is named. *A weakness recorded as a strength, inside
+>   the falsifier table, is `§G.4.3`'s third direction — and it was caught by the critic, not by the
+>   author.*
+> - **PROPAGATED** — the readings and the front door, which rev. 2 left behind: Reading 05 (three
+>   closing routes, not two), Reading 07 (`ID-16` now names what closes the spiral hole), Reading 09
+>   (`§C.11`, and what it does **not** reach), `00_THE_METHOD.md` (the third critic direction, the
+>   admission clause, the count).
 
 > ### ⚠ **REV. 2 — a read-only adversarial pass over this exercise, the executable chain (#357) and an
 > ### independent governance design (#359) found TWENTY defects, FOURTEEN of them here.**
