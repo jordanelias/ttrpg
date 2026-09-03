@@ -11,9 +11,14 @@
 # §1 · Political strife among ruling factions
 
 **A faction is a Proposition somebody uttered plus the `commit` edges of everyone who signed it.**
-Not a type. So *multiple ruling factions* is several propositions with overlapping commitment sets and
+So *multiple ruling factions* is several propositions with overlapping commitment sets and
 persons holding seats — and **a person may commit to two that conflict, which nothing forbids.** They
 are a live contradiction, and their own scoring will make them betray one.
+
+> ⚠ **AMENDED 2026-09-03.** This paragraph read *"Not a type."* **It is a type** — a `Faction` view
+> resolved from that proposition at a barrier (Stage 4 §B.6.1), so consumers get a roster instead of
+> recomputing one. **Nothing in the strife below changes**, because the view carries no state: every
+> mechanism in this section still runs on the propositions and the `commit` edges themselves.
 
 ## §1.1 · Seven sources of contention, none of them implemented
 

@@ -1147,7 +1147,7 @@ the ladder has stopped being data.
 | | answer | derived from |
 |---|---|---|
 | a **person** | the only thing that can be wrong | AX-2 · §D.1 — ⚠ its own admission test **fails today** on `convictions`/`beliefs`/`stance` (`D21`) |
-| a **faction** | a Proposition plus its `commit` edges | **T-h**, derived from AX-1, not stipulated |
+| a **faction** | a Proposition plus its `commit` edges — **and a `Faction` VIEW resolved from them for consumers** | **T-h**, derived from AX-1, not stipulated; the view is §D.11 · `ID-15` |
 | an **office** | a seat in a body carrying a remit; adds no verb and no modifier | §D.6 |
 | a **title** | a rank whose domain is a rung kind — **not an entity, and not an Office** | §D.7; the conflation is a half-landed ruling, §D.7.2 |
 | a **site** | the material particular that accumulates and gates | §D.3 |

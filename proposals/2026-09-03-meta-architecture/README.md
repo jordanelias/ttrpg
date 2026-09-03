@@ -47,7 +47,7 @@ instead of deriving from what is true**, whose fix is a *scope*, not an instruct
 runs with the tree closed, enforced by what an agent can reach rather than by a sentence in its
 prompt.
 
-**PART F is the section to read first.** Thirty-one gaps, and its closing finding is about the
+**PART F is the section to read first.** Thirty-three gaps, and its closing finding is about the
 exercise rather than the architecture: **the architecture is derived through Stages 1 and 2 and
 ASSUMED through Stage 3** — Stage 3 states its subjects as properties without representations, which
 is where the density is. **Two gaps block the build outright:** nothing founds a hearth or builds a

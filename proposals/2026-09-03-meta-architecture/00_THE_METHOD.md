@@ -33,6 +33,23 @@ where the problem is.**
 | none, but recomputing is too costly | a **BARRIER CACHE** — built at a barrier, discarded at the next |
 | ⚠ **two** | **a defect, and you have just located it exactly** |
 
+> ### ⚠ **AND THE QUESTION IS NEVER *"SHOULD THIS EXIST AS AN OBJECT?"***
+> That conflates **DEPLOYING** with **OWNING**, and it has no right answer — which is why asking it
+> carefully still gets it wrong. **Ask both halves:**
+>
+> | | |
+> |---|---|
+> | **what does code need to HOLD?** | if a consumer must iterate it, name it and build it |
+> | **what WRITES it?** | if the answer is **nothing**, it is a **VIEW** — built at a barrier, dropped at the next |
+>
+> **Two yeses give a carrier. Hold-yes and write-nothing give a view. Neither gives a Query.**
+>
+> **FIRST-CLASS FOR CONSUMERS IS NOT FIRST-CLASS FOR STATE.** ⚰ *Four stages concluded a faction is
+> not an object — right about ownership, wrong about deployment — and left the battle seam, the squad
+> grid, the UI and the AI each recomputing a roster nobody had named.* **The price is real and must be
+> stated when taken: a view is a type, and a type can gain a field. Its defence is LIFETIME, not
+> ABSENCE, and that is strictly weaker.**
+
 ## 2 · WHAT CAN CHECK THIS?
 
 | answer | verdict |
@@ -128,6 +145,17 @@ corpse for the hazard and none for the fix.**
 
 That is question 1 again, and it is why `H-101` needed no new edge, why closure needed no four verbs,
 and why four stages of design **added no primitive at all.**
+
+⚠ **AND THE CLAIM WAS TESTED AFTER THE FACT, WHICH IS THE ONLY REASON IT IS WORTH ANYTHING.** Jordan
+ruled two things the design had not anticipated — **a faction is a deployable container**, and
+**factions can be at war** — each of which looks like a demand for a new primitive. Neither was:
+a faction is a **Query return** over edges that already existed, and a war is a **Proposition with an
+owned edge**, the same shape as subordination. **The vocabulary did not grow.**
+
+> **What the design could NOT absorb was their REPRESENTATION** — whose edge a war is, and whether
+> `at_war` reaches a verb's `requires` (`F.32`, `F.33`). **A property stated without its
+> representation, from a different author, on the first try.** That is rule 3 above failing in the
+> wild, and it is the strongest evidence in the exercise that rule 3 is the one that binds.
 
 > **A meta-architecture that answers questions by growing the vocabulary has renamed the problem
 > rather than found the shape.**
