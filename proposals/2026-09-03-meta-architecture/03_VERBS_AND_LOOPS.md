@@ -226,13 +226,38 @@ different vocabularies.** Any part of that needing a second story is a defect.
 |---|---|
 | loop → subsystem | **the call** — when two acts contend for one subject, or an act names a contest |
 | subsystem → loop | **Events**, into the same log, naming the acts that caused them |
-| loop → subsystem | **the persons** — read, never written |
+| loop → subsystem | **the persons** — read, never written — **and the ROSTER IS FROZEN AT ENTRY** (§E.2.1) |
 | subsystem → loop | **the outcome's degree**, from the one ladder |
 
 **The leaks, each of which is tempting:** a state write from inside a contest bypasses the write
 rules, the witness layer and the log at once · a second resolver · **a faction as a combatant, which
 deletes `AX-1` at the seam** · a subsystem-specific event family, when a contest's outcome is an
 Event like any other.
+
+### §E.2.1 · ⚠ The roster contract — added 2026-09-03, and the stage was thin here
+
+Jordan, on mass battle and grid squad combat: sides must be definable. **This section said *a
+read-only projection* and left the roster implicit, which is not enough.**
+
+> ### **THE SIDES ARE RESOLVED ONCE, AT THE SEAM BOUNDARY, AND HELD FOR THE CONTEST'S DURATION.**
+
+**Not for cost — for correctness.** Recomputed per tick, **a unit's side could change mid-battle
+because somebody repudiated three duchies away.** A fight resolves against the world as it was when
+the fight started.
+
+| | |
+|---|---|
+| **sides** | two resolved `Faction` views (Stage 1 §D.11) — their `members` rosters |
+| **units** | **persons, at weight.** One type; there is no unit class |
+| **stakes** | `holdings` and `seats`, for what a defeat costs |
+| **frozen** | at entry, for the duration |
+
+⚠ **THE MECHANISM ALREADY EXISTED AND THIS STAGE UNDER-USED IT.** A barrier cache is exactly *built
+once, read-only until the next barrier, discarded there* — **so freezing the roster adds no
+machinery**, it names a contract the cache already provides.
+
+**One scale down, unchanged:** a squad is the members of a faction present at a rung, resolved once,
+every combatant a `Person`.
 
 ## §E.3 · One ladder, and variation by declared extension
 

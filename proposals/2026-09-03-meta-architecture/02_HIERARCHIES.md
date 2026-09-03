@@ -72,10 +72,27 @@ immediately breaks.
 | candidate | nests? | why |
 |---|---|---|
 | place in place | **yes** | single parent, walkable, finite by roster |
-| faction under faction | **no** | a person's edges; many at once; spans places freely |
+| faction under faction | **no** | a person's edges; many at once; spans places freely. ⚠ **But see §B.1.1 — *not a nesting* is not the same as *not a container*** |
 | office under office | **no** | same relation, same reason (§A.3) |
 | rank under rank | **no** | an ordering has no parent |
 | **a contest inside a season** | **YES — and it is the other kind** | §B.2 |
+
+### §B.1.1 · ⚠ A container for READING is not a nesting — added 2026-09-03
+
+Jordan: *"Factions could also be a container for people and holdings."* **Both halves are true and
+they are not in tension, because they answer different questions.**
+
+| | |
+|---|---|
+| **NESTING** — asked of the containment tree | **no.** A person commits to several factions at once, so single-parent fails and *aggregate over my descendants* stops being well-defined |
+| **CONTAINER** — asked of what code may hold | **yes**, as a resolved view (Stage 1 §D.11): members, holdings, seats, resolved at a barrier and owning nothing |
+
+> **The stored version is what breaks things, and precisely because it would be a second home.**
+> Membership written on the faction disagrees with the `commit` edges the moment either moves. **The
+> view is the same data read from the other end**, and it cannot drift because it is not a copy.
+
+**So: `holdings(faction)` and `members(faction)` are NAMED QUERIES** — first-class things to *ask
+for*, never things to *own*. `ID-15`.
 
 ## §B.2 · The second kind of nesting, and it is PROCESS not PLACE
 
@@ -226,6 +243,21 @@ that cites itself.
    the same sentence, which is why `AX-4` is the most productive axiom in the set.
 5. **The subordination graph has no root**, so any mechanism that needs one has smuggled an
    institution back in.
+
+## §E.0 · ⚠ Where THIS stage hands properties forward — recorded 2026-09-03
+
+**Stage 4 §G.4.1 says a stage may state a property only with the representation that carries it, or a
+register row grading its absence. Applied to this document, two claims have neither:**
+
+| claim | what it lacks |
+|---|---|
+| *"only places nest"* | **no check.** Nothing refuses a second nesting relation if someone adds one |
+| *"the subordination graph has no root"* | **no check.** Nothing detects a root being introduced, and a root is a sovereign nobody swore to |
+
+**Recorded rather than repaired**, because a guard over a shape nothing yet builds would be apparatus
+ahead of its subject. ⚠ **But they are hereby graded ABSENT rather than left as assertions** — which
+is the honest state, and the difference between a property handed forward *deliberately* and one
+handed forward *silently*.
 
 ## §E.1 · Open, and neither is Stage 2's to settle
 

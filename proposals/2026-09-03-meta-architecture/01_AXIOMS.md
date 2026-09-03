@@ -342,6 +342,10 @@ carry weight, because obstruction is a mechanic the design never implements and 
 > carry its identity across time is an utterance — a `Proposition` — plus the edges of the people
 > who signed it.
 
+⚠ **AND A THIRD, ADDED 2026-09-03: T-h SAYS WHAT A FACTION OWNS, NOT WHETHER IT EXISTS.** It is not
+an actor and owns nothing — **and it is still a first-class object code deploys**, resolved at a
+barrier (§D.11). Reading `T-h` as *there is no such object* is what left every consumer recomputing.
+
 ⚠ **TWO CORRECTIONS, BOTH FOUND ADVERSARIALLY.**
 
 **(a) The step does not go through as written.** *"What remains that can carry identity across time
@@ -463,6 +467,21 @@ matters. `ID-13` is that property.**
 cannot be discharged, a bond cannot be broken, a succession pointer cannot be changed. **The check
 is one line — for every verb that writes `(Tenure, since)`, name the verb that writes `(Tenure,
 until)` for the same kind** — and it is the check that would have found all four at once.
+
+### **ID-15 · FIRST-CLASS FOR CONSUMERS ≠ FIRST-CLASS FOR STATE.**
+
+> Ask two questions, never one. **What does code need to HOLD?** and **what WRITES it?** When the
+> second answer is *nothing*, the thing is a **view** — resolved at a barrier, deployed freely, owning
+> nothing.
+
+⚠ **ADDED 2026-09-03. The defect it prevents is one this document committed**: §D.10 listed the
+faction under *what has no entity*, which was true of ownership and false of deployment, and left
+every consumer to recompute a roster nobody had named. **The single question *"should X be an
+object?"* cannot be answered, because it conflates the two.**
+
+**It cuts the other way just as hard**, which is why it is an idiom rather than a permission: a thing
+that owns nothing may **never** acquire a field, appear as an actor, or be the subject of an edge.
+**A view that starts owning is a carrier nobody declared.**
 
 > ### **THE JOINT STATEMENT, AND IT IS THE POINT OF PART C**
 > **ID-9 is about the thing under test; ID-10 is about the instrument.** The defect class the
@@ -716,12 +735,55 @@ special clause: such a count has no owner.
 
 | the thing | what it actually is |
 |---|---|
-| a **faction** | a `Proposition` plus its `commit` edges (T-h) |
+| a **faction** | ⚠ **AMENDED — see §D.11.** A `Proposition` plus its `commit` edges is what it OWNS; it *does* exist as an object, as a **resolved view** |
 | an **address** | a `contain` Tenure |
 | a **need** | a `Sensation` plus a Query |
 | **annexation** | a `hold` at distance — **not a verb** |
 | **secession** | the `commit` edges moving — **not a verb** |
 | every **aggregate** | a Query, owned by Nobody (T-a) |
+
+## §D.11 · `Faction` — **a resolved view. First-class for consumers, never for state**
+
+⚠ **AMENDED 2026-09-03, Jordan-directed.** Verbatim: *"factions can't act by themselves, but they
+should be available as an abstraction for all the people who belong to that faction such that the
+game code can actually deploy it."*
+
+**§D.10 above was correct about OWNERSHIP and wrong about DEPLOYMENT.** Saying a faction *has no
+entity* left every consumer — the battle seam, the port, the decision policy — to recompute a set
+nobody had named.
+
+```
+Faction := ( proposition : PropositionId   -- identity. Immutable, uttered by a named person
+           , members     : PersonId[]      -- live `commit` edges
+           , holdings    : RungId[]        -- the union of its members' holds
+           , seats       : SeatId[]        -- the seats its members hold
+           , head?       : PersonId        -- by the proposition's own rule
+           )
+```
+
+**Built at a barrier, handed to whatever needs it, discarded there.**
+
+> **IS.** The people committed to one uttered proposition, resolved on demand.
+> **OWNS.** ⛔ **NOTHING.** Every field above is a Query over edges other things own.
+> **ADMITS.** ⛔ **No field, ever.** A field needs an owner and a faction has none.
+> **NEVER.** `Act.actor` · a `contest` claimant · a `hold` subject · a parameter of `resolve`.
+
+| `AX-1` still holds because | code gets what it needs because |
+|---|---|
+| it has **no verbs** | it is a real object with real rosters |
+| it is never `Act.actor` | the battle seam iterates `members` |
+| `resolve` has **no faction parameter** | the port and the UI take one |
+
+⚠ **AND THE RESOLVED FORM BEATS A STORED ONE ON ITS OWN TERMS: IT CANNOT GO STALE.** A stored roster
+drifts from the commit edges and needs a reconciliation pass; a resolved one **is** the edges. The
+`hold`-subject prohibition stays exactly as it was — it is what prevents **territory held by a banner
+nobody carries**, uncontestable because the holder can never appear at a venue.
+
+> ### **THE GENERAL RULE, AND IT IS WORTH MORE THAN THIS ENTRY**
+> **AN ABSTRACTION MAY BE FIRST-CLASS FOR CONSUMERS WITHOUT BEING FIRST-CLASS FOR STATE.**
+> *"Should a faction exist as an object?"* was the wrong question, because it conflated **deploying**
+> with **owning**. Ask instead: *what does code need to HOLD?* and *what WRITES it?* — **and when the
+> second answer is nothing, you have a view, not a carrier.** `ID-15` states it as an idiom.
 
 ---
 
@@ -891,6 +953,31 @@ falsifier fired correctly against that framing.
   than an unrepresentable one, because there is no single institutional edge to hold one state.
 - **Nothing institutional needs a write.** `(Office, rung)` having no write-matrix row stops being a
   blocker, because the relation was never on the office.
+
+### §E.1.6 · **WAR IS THE SECOND INSTANCE OF THIS PATTERN — added 2026-09-03**
+
+Jordan: *"it should be possible for factions to be flagged at war with another one."*
+
+⚠ **AND THE COMMITMENT-ONLY MODEL HAS A REAL GAP HERE, WHICH THIS SECTION DID NOT SEE.** It cannot
+express **a war that outlives its supporters** — the normal historical case. Under commitments alone
+a war evaporates the moment enthusiasm does, which is wrong.
+
+> **The fix is the shape this section already found. A declaration of war is a Proposition somebody
+> UTTERED, plus an owned edge; peace is `until` written on it.**
+>
+> | | |
+> |---|---|
+> | **de jure** | the uttered war, persisting until somebody makes peace |
+> | **de facto** | the commitment share, which may be near zero |
+> | **the gap** | *"we are still at war, and nobody will muster"* |
+
+**Why not a boolean between two faction objects:** a boolean has **no owner**, so nothing could end
+it and nobody declared it — and no duke could refuse to fight a war his king declared.
+
+> ### ⚠ **TWO INSTANCES MAKE IT THE PATTERN, NOT A SPECIAL CASE FOR `H-101`.**
+> **Subordination and war are the same shape: an uttered Proposition · an owned edge · a gap between
+> the sworn and the actual.** Expect a third. **When the design next reaches for a relation between
+> two things that cannot act, this is the shape to reach for first.**
 
 > ### **THE GENERAL RESULT, AND STAGE 2 INHERITS IT**
 > **THERE ARE NO INSTITUTIONAL RELATIONS. THERE ARE ONLY PEOPLE'S RELATIONS, READ IN AGGREGATE.**
@@ -1087,6 +1174,11 @@ consequences, slices, season loops.** Stage 2 takes the second, and inherits fou
    are irreversible**, so this is a precondition of Stage 2 rather than a finding beside it.
 7. **A declared field that reaches no reader is not a mechanism** (`ID-13`) — and the `scale:`
    column, which Stage 2 is precisely about, is the chain's own third instance of that defect.
+8. ⚠ **First-class for consumers is not first-class for state** (`ID-15`, §D.11). Stage 2 decomposes,
+   and **the unit of decomposition is an owner — so a thing that owns nothing is never a unit**, however
+   freely code deploys it.
+9. ⚠ **The uttered-declaration pattern has two instances** (§E.1.6) — subordination and war. **Stage 2
+   should expect the third rather than model it as a special case.**
 
 > ⛔ **Do not build a second ladder.** ⛔ **Do not index code by scale** — a module is registered
 > against a role and runs at whatever rungs the step hands it. Scale-indexed code is scale-divergent
@@ -1118,6 +1210,8 @@ consequences, slices, season loops.** Stage 2 takes the second, and inherits fou
 | **§E.3: roster membership is not architectural** | a mechanism that is correct only for one particular set of rung kinds |
 | **the admission tests decide real cases** | a field the test admits that should be refused, or refuses that should be admitted. ⚠ `(Person, convictions)` is currently **refused by §D.1 and mandated by the design** — which is `D21`, and is the test working |
 | **PART C closes the defect class** | a new instance of *"reports success for something that did not happen"* that neither `ID-9` nor `ID-10` catches |
+| **`ID-15` — a view may own nothing and still be deployed** | a consumer that genuinely needs a faction to hold state of its own, which no owner elsewhere can carry. ⚠ **The battle seam is the live candidate and has not been tested** |
+| **§E.1.6 — war is an uttered declaration, not a flag** | a war whose beginning no person authored, that the design nonetheless needs. If one exists, the pattern is wrong and a flag is right |
 
 ## §F.5 · What this document is not
 
