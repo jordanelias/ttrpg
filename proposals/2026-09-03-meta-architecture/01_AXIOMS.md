@@ -156,10 +156,16 @@ world creating the only kind of thing `AX-1` lets act** — and the easy defence
 chain itself, which rules that *birth is envelope weight, not a `create`*, so individuation is not
 "bodies". What demands one is graded `absent`.
 
-**The consequence is that `T-c` and §D.4's NEVER are both quantified over MATTER, so a
-CENSUS-advanced quantity evades them verbatim.** Either CENSUS's individuation is a fourth licensed
-motion and `AX-5` says *four*, or it is demand-driven and therefore authored — **and nothing states
-which.** The word CENSUS did not appear in the first publication of this document at all.
+**RESOLVED, and the list stays at three.** CENSUS is **demand-driven only** — *nothing generates
+without a demand, and no clock generates anything*. A demand is produced by acts. **So individuation
+is authored: the demand is its author**, and `T-c` is satisfied rather than evaded. `AX-5` says
+three.
+
+⚠ **What this costs, and it is a real constraint rather than a free pass:** the world may never
+individuate a person nobody's act demanded. **A world-generation roster is not a clock and is
+lawful; a population that grows on its own is not.** And `T-c` and §D.4's NEVER should be quantified
+over *the licensed motions*, not over *MATTER*, or a CENSUS write evades them on a technicality —
+which is the wording this document shipped.
 
 ---
 
@@ -494,13 +500,29 @@ a schema that lists fields can only grow.
 > **NEVER.** Anything about another person. Any aggregate. The reverse index of its own ties — that
 > is Nobody's.
 
-⚠ **THE FOUR-WAY CLAIM IS NOT EXHAUSTIVE, AND THE TEST OVER-REFUSES TWICE.** `weight` is none of the
-four — a cohort headcount is not what a person can do, holds true, holds right, or is taken to be —
-and it is **the field `T-l` is stated over**. `capability` is read at RESOLVE for dice and by no
-decision, so the reader clause refuses it too, yet the design mandates both. **A fifth category is
-needed — *what the person IS, as a quantity the world reads off them* — or the test refuses two
-fields the shape requires.** Recorded rather than patched, because inventing the fifth category to
-save the test is how a schema starts growing again.
+### §D.1.1 · The fifth category, and the reader clause split in two
+
+The four categories above are all things a person **holds**. `weight` and `capability` are not held —
+they are **read off**, by the world, without asking. A cohort's headcount and a practitioner's rank
+are facts about a person that the person does not consult in order to decide.
+
+> **FIFTH CATEGORY — what the world reads off a person without asking them.**
+> `weight`, `capability`. **And the boundary is already named in the design**: `standing` is defined
+> as *the gap between what everyone reads off you and what you hold*. That sentence presupposes both
+> sides. **The fifth category is the other side of the design's own most-quoted definition**, so it
+> is derived rather than invented to save the test.
+
+**The reader clause therefore splits, and the split is what makes it decidable:**
+
+| category | admitted when |
+|---|---|
+| what a person **holds** (1–4) | **a decision reads it.** If nothing they decide consults it, it is dead state |
+| what the world **reads off** them (5) | **a resolver reads it.** It never enters `choose`, and by `T-f` it cannot |
+
+⚠ **The two clauses are not interchangeable, and using the first on a fifth-category field is what
+made this test over-refuse.** `capability` supplies dice at RESOLVE and gates nothing — correct under
+the second clause, dead under the first. **A schema test that cannot say which side of `standing` a
+field sits on will refuse half the person.**
 
 ⚠ **CORRECTED — THIS SECTION SHIPPED A STALE FACT, AND AN ADVERSARIAL PASS CAUGHT IT.** It read
 *"`convictions`, `beliefs` and `stance` are declared and **no formula reads any of them**"*. **That
@@ -508,10 +530,25 @@ was true of `#353` and false at HEAD:** `W5` landed the scoring function, `score
 `convictions × alignment` inside `choose`, `stance_toward` reads `stance`, and the register row this
 was cited to — `H-03` — is marked **DISCHARGED**. Two of the three are consumed.
 
-**What survives is narrower and sharper. `beliefs` IS dead**, and worse than the original claim:
-the only function in the chain whose *name* points at it reads the **claim ledger** instead — so the
-one place a later reader would go to check the `AX-3` boundary is a name pointing at the wrong
-layer. **That is the admission test earning its place**, and it is one field, not three.
+**What survives is narrower and sharper: `beliefs` is not read — and §D.1's test says a field nothing
+reads is not a field. So the schema refuses it, and the resolution is to DELETE it rather than find
+it a reader.**
+
+> ### **A BELIEF IS NOT A FIELD. IT IS A `commit` TO AN `OUGHT`.**
+> §D.5 already establishes that *a Proposition of mood `OUGHT` is an uttered Belief*, and `commit`
+> already binds a person to a Proposition. **So what a person holds RIGHT is the set of `OUGHT`
+> Propositions they have committed to** — a Query over edges they already own, stored nowhere.
+>
+> **Everything the field was for survives, and three things improve.** A belief becomes **utterable**,
+> so somebody said it first and can be named. It becomes **shareable**, because two people commit to
+> one Proposition and are thereby known to agree. And it becomes **abandonable** by `repudiate`,
+> which is `T-m` — where a `strong | wavering | revised` enum on a private field was a state nobody
+> could contest.
+
+**`convictions` stays a field and `beliefs` does not, and the asymmetry is the point:** convictions
+are the closed axes a person is scored on, which `choose` reads; beliefs are commitments to specific
+propositions, which are edges. **The chain had them as two shapes of one thing, and the field was the
+wrong one to keep.**
 
 ⚠ **AND THE LESSON IS THE DOCUMENT'S OWN `ID-11`, BROKEN BY ITS AUTHOR:** the claim carried no
 command, so it could not be re-checked, and it aged into falsehood between two revisions of the
@@ -737,49 +774,81 @@ axiom the Query version was invented to satisfy, better:
 > made of** — and it is the difference between *the Löwenritter drifted* and *the Grandmaster
 > forswore the King*, which are not the same story.
 
-### §E.1.2 ⚠ **AND THE REPLACEMENT INHERITS A RATCHET, WHICH IS THE REAL FINDING**
+### §E.1.2 · **CLOSURE IS NOT A VERB. IT IS A CONSEQUENCE OF OWNERSHIP.**
 
-**`oblige` opens a Tenure and NO VERB CLOSES IT.** `repudiate` reads *"a live **`commit`** exists"* —
-it ends a commitment, never a duty. **Swear once and you are bound forever.**
+Asking *which verb ends an `oblige`* is the wrong question, and the four-relation table below is
+what asking it wrongly looks like. **The design question is: what must be true of a relation so that
+open-without-close cannot be expressed?**
 
-**Measured over the whole vocabulary, because one instance is an anecdote:**
+> ### **T-m · AN OWNER MAY ALWAYS END WHAT THEY OWN.**
+> **From `AX-4` + `AX-1`.** A Tenure is owned by its subject and the owner is its only writer.
+> `until` is a field of the Tenure. **Therefore writing `until` is already within the owner's
+> authority, and needs no separate grant.** Ending a relation you hold is not a capability the
+> vocabulary confers on you — it is the same authority by which you hold it.
 
-| tenure kind | opened by | closed by |
-|---|---|---|
-| `hold` | `confer` | `confer`, `revoke` |
-| `contain` | `move` | `move` |
-| `commit` | `commit`, `confer` | `confer`, `repudiate` |
-| **`oblige`** | `oblige` | ⛔ **NOTHING** |
-| **`succeed`** | `succeed` | ⛔ **NOTHING** |
-| **`tie`** | `tie / knot` | ⛔ **NOTHING** |
-| **`knot`** | `tie / knot` | ⛔ **NOTHING** |
+**This is the whole repair, and it is one sentence rather than four verbs.** A vocabulary that gates
+`(Tenure, until)` per-verb has made closure a privilege to be remembered. A vocabulary that gates it
+per-owner cannot forget, because there is nothing to remember: **the writer is already established
+by who the subject is.**
 
-> ### **FOUR OF SEVEN RELATIONS CAN BE OPENED AND NEVER CLOSED.**
-> **You cannot discharge a duty, break a bond, or change a succession pointer.** §D.8 says
-> *"`until?` is what makes an ended relation a fact"* — the design gives every Tenure that field and
-> then supplies no verb to write it for four of the seven kinds.
+> ### **T-n · AN END THAT IS NOT THE OWNER'S DISCRETION IS DECLARED BY THE ACT THAT OPENED IT.**
+> **From `AX-6` + `T-c`.** Some relations should not end at the holder's whim — a term of service, a
+> wardship that lapses at majority. But an end condition nobody declared is **a clock nobody wound**,
+> which `T-c` forbids. **So the opening act declares the terms**, exactly as §13.1 has an
+> Inquisitor's `open_case` declare its stages rather than letting MATTER advance them.
 
-**This is `T-c`'s shape one step over.** `T-c` forbids a quantity that advances with no author. Here
-the state does not advance — **it becomes permanent** with no author, and no act can unwind it. A
-bond nobody can break is exactly as unbuyable, undelayable and unkillable as a clock nobody wound.
+**Together `T-m` and `T-n` are exhaustive over the ways a relation can end**: by its owner's choice,
+or by a term its author set. **There is no third way, and that is what makes open-without-close
+unspellable** rather than merely detectable.
 
-⚠ **AND IT IS WHY THE FIRST ANSWER LOOKED RIGHT.** Facing an irreversible edge, "make it a Query" is
-the reachable repair — a Query can go down. **The reversibility was real and the diagnosis was
-wrong:** the defect is not that the relation is stored, it is that the vocabulary has no verb to end
-it.
+⚠ **THE PRICE, NAMED BECAUSE IT IS REAL.** Under `T-m` a duty can always be forsworn, which sounds
+like duties stop binding. **They bind by cost, not by impossibility.** Forswearing spends an act from
+a budget of ~5, it emits, and witnesses mint claims about it — so what a person cannot do is forswear
+*unnoticed*. **That is the same shape as `T-g`: the design does not prevent the move, it makes the
+move visible and expensive.** A duty nobody may leave is a duty no drama can attach to.
 
-### §E.1.3 The repair, and it is a data edit rather than a mechanism
+### §E.1.3 · What `T-m` forces, which is where the shape actually changes
 
-**`(Tenure, until)` is already a write-matrix row.** `repudiate` already writes it. What scopes it to
-`commit` is **one phrase in one `requires:` cell.** Widen the domain and four ratchets close at once.
+Applying it is not a tidy-up. **Two of the seven relations cannot satisfy `T-m` as they are shaped,
+and in both cases the shape is what has to move.**
 
-> **Nothing new is built. No `tenure_kind` moves. No carrier is added.** The seat of the defect is a
-> precondition string, and that is the whole of it.
+**`tie` and `knot` — a symmetric relation cannot have a single owner.** They are stored once, on the
+lower-id endpoint, so under `AX-4` the *other* person owns nothing and by `T-m` cannot end a
+relation they are inside. **Whether you can walk away from a bond would depend on an id comparison**,
+which is not a thing the fiction can express.
 
-⚠ **What is NOT a data edit, and must be ruled rather than assumed: what ending each one COSTS.**
-Forswearing a duty, cutting a knot and breaking a succession are three different acts with three
-different prices, and pricing them is design work. **The register carries `H-100` — *what a
-revocation costs* — for exactly this, and this finding widens it from titles to four relations.**
+> **The shape that satisfies both rules: two directed edges, each owned by its subject.** A tie is a
+> **regard**, and regard was never symmetric — which is the epistemic posture the rest of the design
+> already takes. It also buys the most interesting case for free: **I have cut you off and you do not
+> know it**, which is `AX-2` at the level of relationships.
+>
+> **The counter-argument the chain gives is real and survives**: a shared `strain` on two directed
+> records has two homes and can disagree with itself. **The resolution is that they are two different
+> things.** Regard is owned per endpoint; strain is the *interaction* of the two regards, and by
+> `T-a` an interaction of two owners' values is a **Query**, stored nowhere. The chain reached for
+> one storage location because it was storing an aggregate.
+
+**`succeed` — its subject is a `Rung`, and a Rung cannot act.** By `AX-4` the rung owns the edge; by
+`AX-1` the rung can never write anything. **So it has an owner that cannot author**, and `T-m` has no
+one to name. This is not a missing verb — **it is the only Tenure whose subject is not a person, and
+that is why it is the only one nothing can end.**
+
+> **The shape that satisfies `T-m`: succession is a disposition of the holder, not a property of the
+> place.** The person who holds the rung declares who follows them — owned by the holder, endable by
+> the holder, and lapsing on their death through the same causation rule §15.3 already gives death
+> over `until`. **A pointer the place owns is a pointer nobody can change; a pointer the holder owns
+> is an act of politics**, which is what succession is.
+
+**The general result, which is the part worth carrying into Stage 2:**
+
+> ### **AN EDGE WHOSE SUBJECT CANNOT ACT IS NOT A RELATION. IT IS A FIELD WEARING A RELATION'S SHAPE.**
+> `contain` is the honest case — `Rung → Rung`, subject cannot act, and it is correctly not something
+> anybody ends by choice; it moves when a person moves. **Every other edge whose subject cannot act
+> should be re-subjected onto the person whose act maintains it, or admitted to be a field.**
+
+**The evidence this was worth doing, stated once and not dwelt on:** of seven relation kinds, four
+have no closing verb today — `oblige`, `succeed`, `tie`, `knot`. `T-m` and `T-n` account for all
+four, and the two schema corrections above are what applying them costs.
 
 ### §E.1.4 What survives from the withdrawn version — the *de jure* / *de facto* gap
 
@@ -796,18 +865,39 @@ revocable, authored on both sides, and owned.
 > look for two things that can disagree and band their gap.** A track is a stored aggregate wearing
 > a stage's clothes.
 
-### §E.1.5 The office scale — **SPLIT, by this section's own falsifier**
+### §E.1.5 The office scale — **RESOLVED, and `T-m` is what un-splits it**
 
-The withdrawn version claimed one relation answers both scales. **Its own falsifier fires.** Office
-subordination under it is a function of the superior's remit scope and the subordinate's seat;
-`Office.remit` is written only by `establish`, and **`(Office, rung)` has no write-matrix row at
-all**, so the seat cannot move. **De facto office subordination could then change only by the
-superior's own act — requiring an institution to voluntarily record its own involuntary loss**,
-which is the one thing a detachment never is.
+An earlier pass split `H-101`: the faction half derived, the office half not. **The split was an
+artifact of framing office subordination as a containment of REMIT SCOPES** — under which the only
+thing that could change the relation is the superior's own `establish` act, requiring an institution
+to voluntarily record its own involuntary loss. That is the one thing a detachment never is, so the
+falsifier fired correctly against that framing.
 
-**So the honest disposition is the one the falsifier prescribes: SPLIT.** Faction subordination is an
-`oblige` edge between persons. Office subordination is not yet derived, and **`H-101` loses its
-one-row justification** — which is a cost, stated rather than absorbed.
+> ### **`T-m` DISSOLVES IT: SUBORDINATION IS SWORN BY A PERSON, AT BOTH SCALES.**
+> A scope containment has no author and no owner. **An `oblige` has both.** The Cardinal obliges to
+> the Confessor exactly as the Grandmaster obliges to the King — `Person → Office` and
+> `Person → Person` are the **same rostered edge**, and `oblige`'s domain already admits both.
+>
+> **So `H-101` keeps its one-row justification, for a better reason than it had:** not *"two scales
+> happen to share a shape"* but *"there is one relation, and it was never institutional."*
+
+**What this buys, each being something the scope framing could not say:**
+
+- **A body's subordination is exactly as strong as the people currently seated in it.** A Cardinal
+  who forswears takes the See's hold on him with him, and his successor starts unbound.
+- **Detachment has an author and a date.** Somebody forswore, at a venue, and witnesses minted claims
+  about it — so it can be denied, misreported, or not yet known.
+- **Two arms of one body may differ.** One Cardinal loyal and one not is the ordinary case rather
+  than an unrepresentable one, because there is no single institutional edge to hold one state.
+- **Nothing institutional needs a write.** `(Office, rung)` having no write-matrix row stops being a
+  blocker, because the relation was never on the office.
+
+> ### **THE GENERAL RESULT, AND STAGE 2 INHERITS IT**
+> **THERE ARE NO INSTITUTIONAL RELATIONS. THERE ARE ONLY PEOPLE'S RELATIONS, READ IN AGGREGATE.**
+> A faction under a faction, an office under an office, a chain of command, a body's loyalty — each
+> is a Query over the sworn edges of the persons currently seated. **`AX-1` said only a person ACTS;
+> this says only a person RELATES**, and the second follows from the first the moment `T-m` makes
+> ownership the source of authority.
 
 ## §E.2 · Delegation — **RULED BY JORDAN, 2026-09-03: regency and puppet rulers MUST be possible**
 
@@ -1012,13 +1102,8 @@ consequences, slices, season loops.** Stage 2 takes the second, and inherits fou
 
 | still open | who answers it |
 |---|---|
-| **`Office.conferral` is unspecified** — the basis per office | ⚠ **new, and created by the ruling.** §E.2.5: delegation needs no mechanism, it needs this field to carry *named / elected / inherited*. Answerable in the chain |
-| **What ending each relation COSTS** (§E.1.3) | ⚠ **new.** Closing the four ratchets is a data edit; **pricing** forswearing a duty, cutting a knot and breaking a succession is design work. Widens `H-100` from titles to four relations |
-| **Is CENSUS's individuation a FOURTH licensed motion?** (`AX-5`) | ⚠ **new.** Either `AX-5` says four, or individuation is authored. Nothing states which |
-| **Office subordination** — `H-101` is now SPLIT (§E.1.5) | the faction half is derived; the office half is not, and `H-101` loses its one-row justification |
-| **sovereign power has no representation** (`H-90`) | it is §E.2.4's own falsifier — *"uncontested and absolute"* may be exactly what cannot be conferred. **Jordan's, if the falsifier fires** |
-| office subordination's **parallel** mode (§E.1.4) | falsifies or splits §E.1; answerable inside the chain |
-| `judging_set_rule` (§D.2) | already `H-32` — and it now gates more than it did: **an election is a sitting**, so §E.2.5's third shape runs through it |
+| **`Office.conferral`'s VOCABULARY** — *named · elected · inherited · …* | **content, not architecture** (§E.3's rule). The architecture is settled: the basis names **which act fills the seat**, and an election is `determine`, not `confer` |
+| **What a particular ending COSTS** in standing, matter or Momentum | **Stage 3.** `T-m` settles that the price is *an act* and the binding is *the consequence*; per-verb pricing is the verb table's business |
 
 **Everything else this document touches was closed by derivation, and each closure names its ground.**
 
