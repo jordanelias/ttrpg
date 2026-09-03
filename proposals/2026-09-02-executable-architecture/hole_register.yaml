@@ -1233,6 +1233,54 @@ rows:
     cite:      "BLOCKED ON `H-94`, MEASURED: `write_matrix.yaml` types what every verb writes, and `requires` is a PROSE STRING in all 32 rows of `verb_table.yaml`, so one half of the cycle graph is data and the other is English. `F.24a` reads the grammar off those 32 cells and finds it needs seven forms, which is what makes the derived half tractable rather than hypothetical -- but until `requires` is typed the enumeration is a list somebody authored and `G13` can only check the rows that exist. ⚠ THIS ROW IS THE HONEST FORM OF `ID-16` AND IS WHY THE OTHERS DO NOT OVERCLAIM: a gate that validates every declared loop cannot see one nobody declared"
     source:    "ID-16 -- the meta-architecture, folded back into the register that reads it"
 
+  # -------------------------------------------------------------------------
+  # SHAPE CONFORMANCE AGAINST THE META-ARCHITECTURE. Added 2026-09-03.
+  #
+  # ⚠ THESE ARE NOT NEW HOLES IN THE DESIGN. They are places where THIS TRACER'S TYPES disagree
+  # with the shape #358 Stage 4 states, found by reading the two against each other. Three
+  # deviations were FIXED in the same pass and carry no row, because a fixed thing is not a hole:
+  # `Scene` gained its `occasion`, `Act` gained `scene`, and `Tenure.conferrer` was deleted for
+  # having no reader. The three below are registered instead of fixed, because each needs a
+  # design decision or a rewrite of a surface Jordan has ruled on, and a half-done shape change
+  # is worse than a declared one.
+  # -------------------------------------------------------------------------
+  - id:        H-107
+    tier:      1
+    kind:      "SCHEMA_COLUMN"
+    hole:      "`Event.subject` EXISTS AND CARRIES TWO DIFFERENT THINGS. The meta-architecture refuses the field outright -- *no actor, no target, no subject on Event; the fields do not exist* -- and grades that STRUCTURAL. Here it is declared, and what it holds depends on who emitted: `World.write` sets it to THE CHANGED THING, the fold sets it to `a.actor`. One column, two meanings, and the second is the one `T-d` forbids"
+    owner:     "shape.py -- `Event`, `World.write`, the fold's `ev()`"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "nothing today -- it is a shape defect, not a blocker, and it is registered so the next session does not have to re-find it"
+    cite:      "MEASURED 2026-09-03 BY READING BOTH EMITTERS. `World.write` constructs `Event(..., subject=subj, changes=[StateChange(subj, ...)])`, so the field DUPLICATES what `changes[]` already carries -- `ID-2`, two homes for one value. The fold constructs `Event(H(...), k, a.actor, ...)`, so for an act-emitted Event the field IS THE ACTOR, which is what the Event's own docstring says is not on it. ⚠ THE BLAST RADIUS IS WHY THIS IS A ROW AND NOT A FIX: 16 readers in `shape.py`, and they are not cosmetic -- `place_of` resolves an Event's rung through it, THREE WITNESS CHANNEL PREDICATES compute the observer set through it, and `content_hash` folds it in. Changing it silently changes WHO WITNESSES WHAT, which is the confounded-measurement hazard CLAUDE.md §0.1 opens with. ⚠ AND THE ROUTE OUT IS ALREADY HALF BUILT: the deposit no longer depends on it (`claim_subjects` reads `changes[]` and, for an Event that wrote nothing, the act's referents), so the remaining readers are `place_of`, the three predicates and the hash"
+    source:    "shape conformance against #358 Stage 4 §B.9 / PART D row 9"
+  - id:        H-108
+    tier:      0
+    kind:      "SCHEMA_COLUMN"
+    hole:      "`Act` CARRIES NO `via : SeatId?`, SO AUTHORITY IS READ OFF THE ACTOR AND DELEGATION IS UNBUILDABLE HERE. The meta-architecture's rule is that authority is a property of the SEAT being exercised, never of the person exercising it, and its mechanism is one field: `Act.via`, with every purview walk going through `via.scope`. `_req_revoke` instead reads the ACTOR's own purview, holdings and title rank"
+    owner:     "shape.py -- `Act`, `_req_revoke`, `under_purview`"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "regency, puppet rulers, governors, councils and mayoral elections -- every case where somebody exercises an authority that is not their own"
+    cite:      "JORDAN RULED THE REQUIREMENT AND THE MODEL CANNOT MEET IT, and the ruling is recorded at proposals/2026-09-03-meta-architecture/01_AXIOMS.md — \"Regency and puppet rulers must be possible.\" (2026-09-03). The check reads the actor's OWN title-holds -- `under_purview(w, a.actor, domain)`, `in_holdings(w, a.actor, domain)`, `highest_title_rank(w, a.actor)` -- and a delegate by definition holds no title over the domain, so THERE IS NO SEAM FOR ONE TO ENTER THROUGH. No amount of conferring changes it, because the check never looks at anything conferrable. ⚠ IT IS NOT A MISSING VERB: `establish`, `confer` and `revoke` are all in the table. It is a missing PARAMETER on the act, and the fix is one field plus routing every purview walk through it"
+    source:    "shape conformance against #358 Stage 4 §B.9 / §E.2.2"
+  - id:        H-109
+    tier:      1
+    kind:      "COLLISION"
+    hole:      "THERE IS AN `is_title` BRANCH. `_req_revoke` computes `target_is_title = title_domain(post) is not None` and takes one of two rules on it. The meta-architecture states the opposite in terms -- there is no `Title` type and NO `is_title` BRANCH ANYWHERE -- and makes the difference two VALUES of a seat's declared `revocation` basis instead of two code paths"
+    owner:     "shape.py -- `_req_revoke`; `rosters.yaml` -- the revocation basis"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "nothing today -- but every future seat kind inherits the branch, which is what `ID-4` (declare, don't route) exists to prevent"
+    cite:      "READ AT `_req_revoke`, WHERE THE BRANCH IS EXPLICIT AND COMMENTED AS A RULING: *two rules, and which one applies turns on whether the target is a title*. The two rules are real and Jordan ruled both -- an ordinary office is revocable on purview, a title needs purview plus holdings plus rank -- so this row is NOT an argument that the behaviour is wrong. It is that the DISCRIMINATOR is computed from the post's name rather than declared on the seat, so adding a third kind of seat means editing a resolver instead of a data row. ⚠ IT IS ENTANGLED WITH `H-108` AND SHOULD BE FIXED WITH IT, NOT BEFORE: both are the same question -- what does the actor exercise -- answered once on the act and once in a branch"
+    source:    "shape conformance against #358 Stage 4 §B.7 / §D.7"
+
 # ---------------------------------------------------------------------------
 # THE DISCHARGE MAP -- guardrail G8.
 # "Every defect gets a register row, or is discharged with a named section."

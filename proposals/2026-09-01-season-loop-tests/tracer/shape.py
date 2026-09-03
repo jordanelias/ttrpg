@@ -1208,7 +1208,16 @@ class Tenure:
     kind: str
     since: int
     until: Optional[int] = None
-    conferrer: Optional[str] = None
+    # ⚠ `conferrer: Optional[str]` WAS DECLARED HERE AND IS DELETED (2026-09-03). It occurred
+    # EXACTLY ONCE in the whole tracer — this line — and reached no reader, which by `ID-13` is
+    # not a weak field but one that does not exist, wearing a schema's clothes. The same field
+    # was deleted from the meta-architecture's own `Tenure` on the same grounds and the same day;
+    # this is that ruling applied where the type actually runs.
+    #
+    # ⚠ AND THE DELETION OPENS NOTHING, which is the half worth stating. WHO MAY REVOKE is the
+    # Seat's declared `revocation` basis (`T-o`), not the identity of whoever conferred; WHAT
+    # CONFERRED a Tenure is the opening Act, in an append-only log with `causes[]`. A field here
+    # would be a second home for a fact the act already holds — `ID-2`.
     degree: Optional[str] = None
     payload: Any = None
 
