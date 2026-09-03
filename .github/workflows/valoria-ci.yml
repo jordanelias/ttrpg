@@ -504,7 +504,25 @@ jobs:
   ci-summary:
     name: All Gates Green
     runs-on: ubuntu-latest
-    if: always()
+    # ⚠ `!cancelled()`, NOT `always()` — and the difference is a polarity rule, not leniency.
+    #
+    # THE DEFECT THIS FIXES. Under `always()` this job runs even when the WHOLE RUN was cancelled --
+    # which is what `cancel-in-progress` does to the previous run on every push. Its `needs` are then
+    # `cancelled`, the assertion below treats "not success" as failure, and the gate REPORTS A FAILURE
+    # FOR SOMETHING THAT DID NOT FAIL. Measured on run 33711226681: four jobs `success`, two
+    # `cancelled`, ZERO `failure` -- and a red PR. Recorded as a supersession artifact on at least
+    # PRs #342, #351 and #354 before anyone read the log.
+    #
+    # WHY NOT MAP `cancelled` -> PASS. That would be a false GREEN, which is worse. §42.2's polarity
+    # rule: zero evidence maps to the verdict AGAINST the thing measured, and a superseded run has no
+    # evidence either way. So the honest outcome is NO VERDICT -- the job is skipped and the fresh run
+    # on the new head is the one that speaks.
+    #
+    # WHAT THIS DELIBERATELY DOES NOT CHANGE. A JOB timeout also reports `cancelled` while the RUN is
+    # not cancelled, so `!cancelled()` is true, this job still runs, and it still fails -- which is the
+    # behaviour the `timeout-minutes: 20` comment above depends on. The two cases were conflated;
+    # they are now distinguished. A real failure still fails.
+    if: ${{ !cancelled() }}
     needs:
       - syntax-check
       - validators
@@ -516,4 +534,4 @@ jobs:
       - name: Assert all gates ran and succeeded
         run: |
           echo '${{ toJSON(needs) }}' > needs.json
-          python3 -c "import json,sys; d=json.load(open('needs.json')); [print(f\"{k}: {v['result']}\") for k,v in d.items()]; bad={k:v['result'] for k,v in d.items() if v['result']!='success'}; print('FAILED (not success):', bad) if bad else print('All gates green.'); sys.exit(1 if bad else 0)"
+          python3 -c "import json,sys; d=json.load(open('needs.json')); [print(f\"{k}: {v['result']}\") for k,v in d.items()]; bad={k:v['result'] for k,v in d.items() if v['result']!='success'}; print('FAILED (not success):', bad) if bad else print('All gates green.'); print('NOTE: a `cancelled` job here is a TIMEOUT, not a superseded run -- a cancelled run skips this job entirely.') if any(v=='cancelled' for v in bad.values()) else None; sys.exit(1 if bad else 0)"
