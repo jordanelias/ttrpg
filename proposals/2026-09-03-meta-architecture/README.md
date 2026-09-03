@@ -4,6 +4,7 @@
 
 | file | what it is |
 |---|---|
+| **`00_THE_METHOD.md`** | ⭐ **THE FRONT DOOR — read this first, and on most days only this.** Three generators · three questions · six moves · four rules of emergence · one hazard |
 | **`01_AXIOMS.md`** | **Stage 1 — axioms, idioms, schema.** Start at PART A |
 | **`02_HIERARCHIES.md`** | **Stage 2 — hierarchies, dependencies, nests, scales** |
 | **`03_VERBS_AND_LOOPS.md`** | **Stage 3 — verbs, consequences, slices, season loops** |
@@ -16,6 +17,10 @@ hierarchies, dependencies, nests and scales and therefore discussing verbs, cons
 slices and season loops… We are not building something bottom up that can run as code — we are
 performing a meta-architecture exercise from top down to determine the ideal logical shape for
 future work."*
+
+**`00_THE_METHOD.md` is the unification and the working instrument. The four stages are the
+derivation that justifies it** — consult them when one of the three questions is contested, and
+believe the stage over the front page if they ever disagree.
 
 **Four stages.** Jordan's own ordering gives the first three — axioms/idioms/schema, *"and
 consequently"* hierarchies/dependencies/nests/scales, *"and therefore"* verbs/consequences/slices/
