@@ -361,11 +361,11 @@ rows:
     kind:      "FORMULA ×5"
     owner:     "the presence index (Nobody)"
     grade:     "assumption"
-    default:   "TOTAL FAN-OUT -- #353's specified behaviour, and PLAN §6.2's stated default for artifact 2"
+    default:   "TOTAL FAN-OUT -- #353's specified behaviour, and PLAN §6.3 (§6.2 before the 2026-09-02 rewrite moved it)'s stated default for artifact 2"
     site:      "shape.observers_for -- read at WITNESS for every Event; the predicates are rosters.yaml witness_channel_predicates and the arm is the fan_out_mode fixture"
     sweep:     ["total (the default AND the control -- #353's specified behaviour)", "presence-only", "all five predicates"]
     unblocks:  "1"
-    cite:      "PLAN §3.2. Shape derivable from the presence index (#353 :1004 -- \"compute its observer set from the presence index and the five channels\") and `hold` Tenures. ⚠ THE DEFAULT WAS THE FIVE PREDICATES AND IS CORRECTED TO TOTAL FAN-OUT: PLAN §6.2 states \"the `H-33` default at this milestone is TOTAL FAN-OUT... `sweep: [total, presence, five]`\", and §3.2 disagreed with it. G1 makes the instrument inject THE REGISTER'S default, so the five-predicate value would have given artifact 2's minimum work-item set W6's content -- a presence index and office-scope predicates -- without anyone deciding that. The five predicates stay as a SWEEP ARM, which is what §6.2 asks for. ⚠ EXECUTED BY W6, AND THE ROW STAYS `assumption`. shape.observers_for reads the five predicates from rosters.yaml witness_channel_predicates and the arm from the fan_out_mode fixture. The declared sweep RUNS: over three seasons, deposits fall 678 (total) -> 68 (presence_only) -> 71 (all_five), and ledgers go from pinned at the L=200 cap to 34/34/0. P15 flips to PASS BY CONSTRUCTION. What is NOT closed is the grade: #353 names the five channels and supplies NO predicate for any of them, so these are an injected default, `total` remains the default because it is the specified behaviour, and grading this row `ruled` would credit the design with an answer this session invented. `unblocks:` is left verbatim -- the transcription gate is right that an execution note is not a transcription."
+    cite:      "PLAN §3.2. Shape derivable from the presence index (#353 :1004 -- \"compute its observer set from the presence index and the five channels\") and `hold` Tenures. ⚠ THE DEFAULT WAS THE FIVE PREDICATES AND IS CORRECTED TO TOTAL FAN-OUT: PLAN §6.3 (§6.2 before the 2026-09-02 rewrite moved it) states \"the `H-33` default at this milestone is TOTAL FAN-OUT... `sweep: [total, presence, five]`\", and §3.2 disagreed with it. G1 makes the instrument inject THE REGISTER'S default, so the five-predicate value would have given artifact 2's minimum work-item set W6's content -- a presence index and office-scope predicates -- without anyone deciding that. The five predicates stay as a SWEEP ARM, which is what §6.2 asks for. ⚠ EXECUTED BY W6, AND THE ROW STAYS `assumption`. shape.observers_for reads the five predicates from rosters.yaml witness_channel_predicates and the arm from the fan_out_mode fixture. The declared sweep RUNS: over three seasons, deposits fall 678 (total) -> 68 (presence_only) -> 71 (all_five), and ledgers go from pinned at the L=200 cap to 34/34/0. P15 flips to PASS BY CONSTRUCTION. What is NOT closed is the grade: #353 names the five channels and supplies NO predicate for any of them, so these are an injected default, `total` remains the default because it is the specified behaviour, and grading this row `ruled` would credit the design with an answer this session invented. `unblocks:` is left verbatim -- the transcription gate is right that an execution note is not a transcription."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent** | V2's default cell: none. ⚠ **fan-out is total; nothing said in private is private**"
   - id:        H-34
     tier:      1
@@ -446,7 +446,15 @@ rows:
     owner:     "Claim; the log"
     grade:     "assumption"
     default:   "`claim_decay_per_season = 5`, confidence lost per season by a claim nobody refreshed"
-    site:      "Fixtures.claim_decay -- read at MATTER for every claim in every ledger; RAISES when unregistered, on `wear`'s precedent"
+    site: >-
+      `Fixtures.claim_decay` reading the `claim_decay_per_season` fixture at MATTER, for every
+      claim in every ledger; RAISES when unregistered, on `wear`'s precedent.
+      ⚠ THE FIXTURE NAME IS SPELLED OUT HERE BECAUSE `R5` AND `W9`'s CHECK 3 RESOLVE A READ BY
+      LOOKING FOR ITS NAME IN THIS COLUMN. It was absent, and so was the read: the accessor went
+      straight to `self._v` and never incremented `Fixtures.reads`, so the fixture was invisible
+      to both guards and check 3 was GREEN BECAUSE OF THE BYPASS. Routing the read through
+      `get()` turned it red with `missing == ['claim_decay_per_season']`, which is the guard
+      finally observing the thing it guards (§0.1 point 2).
     sweep:     [0, 5, 20]
     unblocks:  "the third licensed clock, and every arc that walks back through a claim"
     cite:      "CLOSED IN TWO HALVES BY W2 AND W4, by CLAUDE.md 0's five tests. The SCHEMA_ROW half is SUPERSEDED: W2 gave Part D a `(Claim, confidence)` row, MATTER-only, emitting `claim.decayed`, so the row this hole says is missing exists. The FORMULA half is answered by PRECEDENT (test 4): `Site.condition` wear is the other licensed MATTER clock and #353 gives IT no rate either -- it is a registered per-kind fixture that RAISES when unregistered (S42.2.1: `a wear table that returns 20 for an unregistered site kind does not fail, it answers plausibly and wrongly forever`). `H-09` treats `Claim.confidence`'s DEFAULT the same way, one field over. So this takes the same shape: an INJECTED DEFAULT with a site and a three-point sweep, not a `ruled` value the design states. Grading it `ruled` would credit an invented number to #353; leaving it `absent` after building the clock would deny a mechanism that now runs. W4 executes it and the run is the artifact."
@@ -1106,7 +1114,7 @@ rows:
     site:      "corpus_run.run_case — an unrepresentable scale REFUSES by name rather than being folded onto the nearest rung"
     sweep:     []
     unblocks:  "10 `world`-scale cases, which no ruling covers. The 47 `faction` cases are refused by ruling and need re-scaling in the CORPUS, not a change here"
-    cite:      "FOUND BY RUNNING THE WHOLE CORPUS. Census reproduced by hand and by command: person 37 · realm 48 · settlement 1 · faction 47 · world 10 = 143; representable 86; unrepresentable 57. ⚠ THE FIRST VERSION OF THIS ROW GRADED IT `absent` AND CALLED THE FACTION HALF AN OPEN DESIGN CALL. THAT WAS WRONG AND IS RETRACTED: it is ANSWERED at §0 test 3 and test 4. ARCHITECTURE_V2.md:93 lists *a faction acting as an actor* among five REFUSALS that *held under 143 cases and are not weakened here*, costing 3 cases; `H-21` is `ruled` — *a faction's treasury is matter at the rung or office that holds it*; and shape.py says it in terms — *A FACTION IS NOT ONE OF THEM, AND THAT IS A RULING RATHER THAN AN OMISSION … a faction never acts: a PERSON HOLDING AN OFFICE acts*. Probe `F11` raises `Forbidden` with *THIS IS NOT A LIMITATION TO WORK AROUND*. Re-filing a ruled refusal as a Tier-0 hole is the over-refusal's mirror image and exactly as bad (PLAN.md:79). ⚠ AND THE PRODUCER'S STATED MECHANISM WAS ALSO WRONG: rev 1 said a faction IS modelled, as the lateral graph read by `Query.lateral`. `Query.lateral(w, name, kind)` NEVER USES `name` except in a trace line — it returns every live Tenure of that kind in the world, so it cannot distinguish two factions, has no membership predicate and no boundary. It is a filter on tenure kind, not a faction model. ⚠ WHAT SURVIVES AS A REAL FINDING: 40% of the corpus was authored at a scale the architecture rules out, which is a fact about the CORPUS meeting the ruling, not a hole in the architecture. The open half is `world` (10 cases), which no ruling covers. ⚠ AND THE REFUSAL'S STATED REASON WAS INCONSISTENT WITH `H-96`: rev 1 justified refusing by saying a mapping would *manufacture a pass*, while `H-96` simultaneously claimed the rung decides nothing — under which no mapping could manufacture anything. `H-96` is now about the ranking, not the ladder, and the inconsistency is gone."
+    cite:      "FOUND BY RUNNING THE WHOLE CORPUS. Census reproduced by hand and by command: person 37 · realm 48 · settlement 1 · faction 47 · world 10 = 143; representable 86; unrepresentable 57 AT THE TIME OF MEASUREMENT. ⚠ `W28` IS MOVING IT AND THE FIGURE IS NOW DERIVED RATHER THAN PINNED: each overlay in `cases/exercises/` re-scales exactly one case, so unrepresentable = 57 - (overlays loaded). Measured 2026-09-02 with three overlays: faction 44 · world 10 · unrepresentable 54 · runnable 89. The falsifier is `test_the_corpus_runs_and_the_ranking_cannot_discriminate`, which computes the census from `RESCALES` and fails if the corpus or `rung_kinds` moves it any other way -- it FIRED on the first three re-scales, which is why the arithmetic replaced the constant rather than the constant being re-pinned. ⚠ THE FIRST VERSION OF THIS ROW GRADED IT `absent` AND CALLED THE FACTION HALF AN OPEN DESIGN CALL. THAT WAS WRONG AND IS RETRACTED: it is ANSWERED at §0 test 3 and test 4. ARCHITECTURE_V2.md:93 lists *a faction acting as an actor* among five REFUSALS that *held under 143 cases and are not weakened here*, costing 3 cases; `H-21` is `ruled` — *a faction's treasury is matter at the rung or office that holds it*; and shape.py says it in terms — *A FACTION IS NOT ONE OF THEM, AND THAT IS A RULING RATHER THAN AN OMISSION … a faction never acts: a PERSON HOLDING AN OFFICE acts*. Probe `F11` raises `Forbidden` with *THIS IS NOT A LIMITATION TO WORK AROUND*. Re-filing a ruled refusal as a Tier-0 hole is the over-refusal's mirror image and exactly as bad (PLAN.md:79). ⚠ AND THE PRODUCER'S STATED MECHANISM WAS ALSO WRONG: rev 1 said a faction IS modelled, as the lateral graph read by `Query.lateral`. `Query.lateral(w, name, kind)` NEVER USES `name` except in a trace line — it returns every live Tenure of that kind in the world, so it cannot distinguish two factions, has no membership predicate and no boundary. It is a filter on tenure kind, not a faction model. ⚠ WHAT SURVIVES AS A REAL FINDING: 40% of the corpus was authored at a scale the architecture rules out, which is a fact about the CORPUS meeting the ruling, not a hole in the architecture. The open half is `world` (10 cases), which no ruling covers. ⚠ AND THE REFUSAL'S STATED REASON WAS INCONSISTENT WITH `H-96`: rev 1 justified refusing by saying a mapping would *manufacture a pass*, while `H-96` simultaneously claimed the rung decides nothing — under which no mapping could manufacture anything. `H-96` is now about the ranking, not the ladder, and the inconsistency is gone."
     source:    "corpus run, Jordan-directed 2026-09-02"
 
   - id:        H-96
@@ -1121,6 +1129,32 @@ rows:
     unblocks:  "every act any person ever chooses"
     cite:      "FOUND BY RUNNING THE WHOLE CORPUS, at Jordan's direction. Command: `python corpus_run.py`. ⚠ THIS ROW REPLACES A HEADLINE ITS OWN ADVERSARIAL PASS OVERTURNED, AND THE RETRACTION IS THE USEFUL PART. Rev 1 published *the rung ladder decides nothing about behaviour — three worlds produce ONE verb set*, graded `measured`. It was a THEOREM ABOUT THE FIXTURE: `build_at` hung every person, the Proposition, the convictions and the sites on the deepest rung, so `scale` varied only the count of rungs ABOVE the actors — and `View.__slots__` is `(holder, claim_ids, question)` with `__getattr__` raising, so L2 closes by TYPE the only channel through which a rung could reach a verb choice. The outcome was fixed before the run, by a ruled refusal plus an identical fixture. §0.1 pt 4: the control arm was the same arm. ⚠ REV 2 MAKES THE WORLDS GENUINELY DIFFER — convictions seeded per case id over the `conviction_axes` roster, season counts read from `temporal.span_seasons` (1..6), a Date where `ENDINGS_CLASSIFIED.yaml` says the ending is forced by a threshold — AND THE EXECUTED SET IS STILL ONE. This row is why: with 22 candidates and 15 slots the triage is real, but the conviction term can separate only 2 to 7 of the 22, so the surviving set barely moves and its order is mostly alphabetical. ⚠ IT IS `H-66` ARRIVING AS A BEHAVIOUR: that row grades the alignment table `assumption` and sweeps it `declared / uniform / sign_only`, and the `uniform` arm is described as the CONTROL that makes convictions unable to discriminate at all. The measured state is much closer to `uniform` than to `declared`, not because the weights are wrong but because the table is SPARSE."
     source:    "corpus run, Jordan-directed 2026-09-02"
+
+  - id:        H-97
+    tier:      1
+    hole:      "WHICH `Combatant` FIELD A PERSON'S CONDITION LANDS ON. The seam calls `personal_combat` now, and that engine wants a fighter with nine attributes, a weapon, armour and a tradition; a tracer `Person` carries nothing combat-shaped except `body`. One field must be derived and the rest left at the class's defaults, and WHICH ONE is not stated anywhere"
+    kind:      "SCHEMA_ROW"
+    owner:     "the seam (combat_seam), not systems/combat"
+    grade:     "assumption"
+    default:   "`end` — the Combatant field that drives `wound_interval`, `max_wounds` and `health_full`, i.e. how much punishment the body takes. Value = the class default (4) minus `body_band_penalty`, floored at 1"
+    site:      "combat_seam.derive_party"
+    sweep:     ['`end` (the default)', '`strength`', 'no derivation at all — every fighter at the class defaults: THE CONTROL, under which condition cannot reach the engine']
+    unblocks:  "every contest whose prize routes to personal_combat"
+    cite:      "JORDAN, 2026-09-02: *kill / wound points towards a seam that should be calling in the personal combat system.* ⚠ THE MAGNITUDE IS NOT INVENTED, ONLY THE FIELD. `body_band_penalty` already owns the body-to-bands reading — it counts `band_floors[body]` floors passed, and `H-38` closed with *Site.condition is the model*, so that table is the registered one. A second body-to-number mapping would have been the invention `H-38` was closed to avoid (§8). ⚠ THE DISCIPLINE IS `engine/cross_scale/combat_bridge.py`'s, FOLLOWED RATHER THAN REINVENTED, per §0's *answered by precedent*: derive exactly one field from something the actor genuinely has, leave every other at the class's own constructor default, and return a typed gap rather than fabricate a party. ⚠ THE CONTROL ARM IS REAL: with no derivation every fighter is identical and condition decides nothing, which a test refuses — measured healthy 22/40 against dying 13/40, so the field is load-bearing rather than decorative."
+    source:    "Jordan 2026-09-02 -- the calling seam"
+
+  - id:        H-98
+    tier:      0
+    hole:      "THE SUBSYSTEM RETURNS A WINNER AND THE SEAM'S CONTRACT WANTS A DEGREE. S39.4 reads four bands off a MARGIN; `wrapper.fight` returns `+1` / `-1` / `0`. No document maps one onto the other, and `0` is a RULED outcome rather than a failure — Jordan, 2026-06-02, in the engine: *NO automatic tiebreak … an undecided fight is a legitimate outcome*"
+    kind:      "COLLISION"
+    owner:     "S39.4's ladder and the subsystem's return type"
+    grade:     "absent"
+    default:   ""
+    site:      ""
+    sweep:     []
+    unblocks:  "every verb that declares `contests:`, and whatever reads a contest's degree"
+    cite:      "FOUND BY BUILDING THE CALL Jordan ruled for. `H-88` said that if the seam dispatches, *the degree is the SUBSYSTEM's output and inventing one here would be the second resolver S27.2 names* — and calling the subsystem shows the subsystem does not produce one. It produces a winner and a legitimate undecided case. So the degree ladder is not merely unwritten at the seam; the thing it was to be read from is a different shape. ⚠ NOT RESOLVED BY MAPPING, AND THE SEAM ASSERTS IT DOES NOT: a test refuses any `degree`/`band` key on the seam's return, because mapping a winner onto a band is the second resolver arriving in the seam for the SECOND time (rev 1 of `contest()` hardcoded `band = Partial`). `absent` with no default: choosing between *give the ladder a margin the subsystem can supply*, *change what a contest returns*, and *let the prize decide the shape* is a design call."
+    source:    "Jordan 2026-09-02 -- the calling seam"
 
 # ---------------------------------------------------------------------------
 # THE DISCHARGE MAP -- guardrail G8.
@@ -1137,6 +1171,160 @@ rows:
 # G8 fails on: a Part B defect with no entry; an entry naming a row that does not exist; an entry
 # for an id Part B does not define. Part B's ids are re-read from the document, never pinned here.
 # ---------------------------------------------------------------------------
+
+  - id: H-99
+    tier: 1
+    hole: >-
+      THE OFFICE SCHEMA HAD NO FACTION, NO BODY AND NO TYPE. `W28`'s re-scaling gives each
+      faction-scale case an `office:` block, and the first version carried `post`, `remit` and
+      `why` only. So an office knew what it may DO and not what it BELONGS TO, which throws away
+      the faction the case was scaled off — the exact reading `scale: faction` was recording
+    kind: SCHEMA_ROW
+    owner: the corpus overlay's `office:` block, and the rosters its fields resolve against
+    grade: ruled
+    default: >-
+      `office.body` names a canonical organization from `office_bodies`; `faction` and `function`
+      derive from that row. Where canon has no body for the faction, `office.faction` is authored
+      directly from `factions` and `body` is absent. Scale is the seat's rung, not a property of
+      the body
+    site: corpus_run._check_office and shape.office_faction -- refused at overlay LOAD, before any world is built
+    sweep: []
+    unblocks: >-
+      the 47 `faction`-scale cases, each of which needs somewhere for its faction to go once the
+      case is re-scaled onto a rung
+    cite: >-
+      JORDAN ASKED THE QUESTION THAT FOUND THIS: *does the office schema include faction belonging,
+      scale of office, type of office, etc?* It did not.
+      ⚠ THE ANSWER IS SOURCED, AND THE SOURCING IS ITSELF A RULING — four Jordan messages on
+      2026-09-02 establish the four-tier order now recorded in `rosters.yaml`'s header:
+      *systems/world contains information to use regarding factions that should be considered more
+      thoroughly for actions, but for the identity/names/organizations it is canon*; *systems/factions
+      if it concerns directly the identity of a faction can be concerned near-canon but superseded by
+      anything in world*; *research/ contains useful information to make everything more robust*; and
+      the settlement governance redesign is *just for ideas. do not treat as required*.
+      ⚠ REV 1 OF THIS WORK WAS SOURCED FROM THE NEAR-CANON TIER AND WAS WRONG TWICE OVER. It drew
+      `factions` from systems/factions/faction_canon_v30.md and carried `Ministry of the Peninsula`,
+      which appears ZERO times in all of `systems/world/` and which that same document calls
+      "Treated as institutional infrastructure, not a faction." — so the near-canon source excluded
+      it and the over-read added it back. Reproduce the absence with
+      `grep -rc "Ministry of the Peninsula" systems/world/`.
+      ⚠ TWO SUPERSEDED NAMES WERE ALSO IN CIRCULATION AND ARE EXCLUDED BY READING RATHER THAN
+      COUNTING: `People's Revolution` is the pre-ED-061 name for `Restoration Movement`
+      (systems/world/geography_v30.md orders the rename and it is unpropagated), and `Niflhel` is
+      dissolved (systems/world/worldbuilding_v30.md §3.2, §10). A frequency-ranked grep over
+      `systems/world/` returns both at ranks that would have carried them in.
+      ⚠ THE FOLD NOT TAKEN IS THE LOAD-BEARING PART: world's four organization tables (§3.1 Church,
+      §4.1 Löwenritter, §5.1 Guilds, §6.1 Crown) each carry a Function column, and those functions
+      genuinely converge on one small set — judicial, military, economic, knowledge, administrative.
+      Collapsing them would have produced a tidier `office_type` roster and would have put an
+      INVENTED taxonomy where canon named bodies. World is canon for organizations, so the bodies
+      are carried by name with their Function cells quoted verbatim.
+      ⚠ THE FALSIFIER IS A MUTATION, NOT THE HAPPY PATH:
+      `test_h99_the_office_carries_its_three_canon_axes_and_a_misseating_refuses` seats all 16
+      canonical bodies under each of the 7 factions that do not own them and requires 112 refusals.
+      Mutation-verified 3/3 — drop the mismatch compare, accept an unknown body, or restore the
+      excluded name to the DATA, and each turns it red.
+    source: Jordan 2026-09-02 -- the office schema question and the source-precedence ruling
+  - id: H-100
+    tier: 1
+    hole: >-
+      WHAT A REVOCATION COSTS IS NOT MODELLED, ONLY WHO MAY ATTEMPT ONE. Jordan's governance canon
+      gives the PRECONDITION — a title needs holdings, an office needs purview, and `_req_revoke`
+      is the three-term conjunction that enforces it. Nothing says what happens to the person
+      revoked, and the corpus contains seats held six different ways
+    kind: ABSENT_RULE
+    owner: Part E's `revoke` row (its `writes`), and whatever would carry a seat's provenance
+    grade: absent
+    default: ''
+    site: ''
+    sweep: []
+    unblocks: >-
+      every `revoke`, and any later question about whether losing a seat is survivable -- there is
+      one outcome for all seats today
+    cite: >-
+      FROM research/governance/political_hierarchy_standing.md, WHICH JORDAN POINTED AT: *the
+      research directory will also speak towards the kind of governance and bureaucratic functions
+      that may be relevant to game too*, and *research/ contains useful information to make
+      everything more robust*. Its finding is that a rank is "only ever as solid as the currency
+      backing it", and that demotion severity is keyed to HOW the seat was won — "favor-derived
+      seats ... face total ruin, while kinship-derived seats get containment".
+      ⚠ THAT IS THE SAME QUESTION JORDAN'S GOVERNANCE CANON ANSWERS FROM THE OTHER SIDE, WHICH IS
+      WHY IT IS A ROW AND NOT A SHRUG: purview and holdings say WHO MAY REVOKE; a seat's provenance
+      would say WHAT REVOCATION COSTS. Together they are a mechanic; separately the first is a gate
+      with a uniform consequence behind it.
+      ⚠ THIS ROW EXISTS INSTEAD OF A ROSTER, DELIBERATELY. A `power_bases` roster (bureaucratic,
+      kinship, military, ideological, patronage, purchased) was built from this research and DELETED
+      in the same session: nothing read it, no corpus case states how a seat was won, and CLAUDE.md
+      §0.1 point 5 forbids minting an artifact that is load-bearing on nothing. The insight is real
+      and belongs where it can be acted on.
+      ⚠ THE RESEARCH IS TIER 3 AND CANNOT SETTLE THIS. It is reference under the 2026-09-02
+      precedence ruling; the six bases are a vocabulary a design call could adopt, not a decision
+      the research makes.
+    source: research/ -- Jordan-directed 2026-09-02
+  - id: H-101
+    tier: 0
+    hole: >-
+      NOTHING CAN BE UNDER ANYTHING, AT EITHER INSTITUTIONAL SCALE. `factions` is a flat set of
+      eight names and `Office` has no superior, so the Löwenritter and the Crown are siblings and a
+      Cardinal and the Confessor are peers. Canon says both are ladders whose subordination is a
+      MUTABLE, CONTESTED TRACK — and ships the detachment of each as a named event. Nothing here
+      can express "under", so nothing can express ceasing to be under, which is the thing the
+      events are about
+    kind: ABSENT_RULE
+    owner: the `factions` roster and `Office` -- ONE relation, asked at two scales
+    grade: absent
+    default: ''
+    site: ''
+    sweep: []
+    unblocks: >-
+      whose purview reaches whom, which is Jordan's governance canon one level up; the Ehrenwall
+      Split and the Jarnstal Drift, both named canon events; and the 14 corpus cases that name a
+      superior, a subordinate or a ladder
+    cite: >-
+      JORDAN ASKED IT AT THE FACTION SCALE, 2026-09-02 — *do our factions have the ability to be
+      under larger factions? eg Lowenritter is a faction that is technically under control of
+      King* — then extended it: *same applies to nesting offices*. Canon answers yes to both, in
+      its own tables, and the two answers have the SAME SHAPE, which is why this is one row and
+      not two: building two mechanisms for one relation is the §8 violation.
+      ⚠ FACTIONS — the decisive evidence is an attribution canon makes against itself.
+      systems/world/worldbuilding_v30.md §4.1 lists the Riskbreakers as a LÖWENRITTER arm, while
+      §10's card catalogue files Riskbreaker Exposure under the faction *Crown* and §4.3 gives its
+      effect as
+      "Crown Domain Actions against non-Crown factions +1 Ob".
+      A Löwenritter arm's exposure damages the CROWN. The same catalogue files Ehrenwall Split and
+      Lions' Table Mutiny under *Löwenritter*. Canon holds both relations at once, deliberately.
+      ⚠ OFFICES — §6.1 gives Court Parliament the function
+      "Recommends policies, nominates Ministers/Rectorates/Magistrates."
+      which is a nomination chain; §3.1's four Cardinals are arms of the Holy See; and 14 corpus
+      cases name a superior or a subordinate outright, among them NPC-038's *Confessor Arne
+      Himlensendt (nominal superior)* with *the rest of the Inquisitor ladder (subordinates)*, and
+      NPC-021's *four subordinate arm-leaders (military, judicial, economic, scholarly)*.
+      ⚠ BOTH ARE TRACKS, NOT FACTS, WHICH IS WHY A STATIC PARENT FIELD WOULD BE WRONG AT EITHER
+      SCALE. At the faction scale §10 fires the Split when the
+      "Löwenritter Autonomy track reaches Split"
+      — graduated autonomy explicitly replacing a binary Coup Counter, which §4.3 records as the
+      reason for the card's rename. At the office scale §3.2's Cardinal Independence Check is the
+      same thing one level down —
+      "Cardinal acts against explicit Holy See instruction: relevant pool vs Ob 3"
+      — and Jarnstal Drift ends
+      "At 3: Church Military controlled by Jarnstal, not the Confessor".
+      Encoding a static parent on a roster row or an `Office.reports_to` string would freeze the
+      pre-detachment state as permanent and make canon's own events unrepresentable — the same
+      class of error as the corpus declaring `scale: faction` against a closed vocabulary (H-95).
+      ⚠ THE TWO CANON MECHANISMS ARE BOTH ABOUT SUBORDINATION FAILING, which is the strongest
+      signal that this relation is game rather than bookkeeping: what a player watches is a
+      subordinate becoming autonomous, at whichever scale it happens.
+      ⚠ NOT SOLVED BY `contain`. `rung_kinds` is the containment ladder and a faction is not a
+      rung — a RULING (ARCHITECTURE_V2.md:93, H-21, H-95), not an omission. An institutional
+      relation needs its own carrier, and the candidates are `tenure_kinds` members already
+      rostered (`oblige`, `tie`) rather than a ninth rung or a second ladder.
+      ⚠ TIER 0 BECAUSE IT REACHES THE GOVERNANCE CANON. Jordan ruled that revoking an office turns
+      on PURVIEW, and `under_purview` walks the RUNG ladder only. If the Löwenritter is under the
+      Crown, a Crown office-holder's purview reaches a Löwenritter seat; after a Split it does not.
+      If a Cardinal is under the Confessor, the Confessor's purview reaches that seat; after
+      Jarnstal Drift 3 it does not. Today `office.faction` answers Löwenritter and nothing can ask
+      what that is under, so the purview test cannot tell the two states of either event apart.
+    source: Jordan 2026-09-02 -- "the ability to be under", extended to offices
 
 discharges:
   D1:   "row:H-01"

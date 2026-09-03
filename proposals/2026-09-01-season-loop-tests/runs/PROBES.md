@@ -18,9 +18,9 @@ checking.* So every probe declares its provenance:
 
 ## ⚠ THE ENFORCEMENT SPLIT — the single most important number in this ledger
 
-**Of 58 PROBES that did not pass, 29 were raised BY THE SHAPE ITSELF and 23 exist only because THERE IS NO SIGNATURE TO CALL.**
+**Of 59 PROBES that did not pass, 30 were raised BY THE SHAPE ITSELF and 23 exist only because THERE IS NO SIGNATURE TO CALL.**
 
-> ⚠ **THIS COUNTS PROBES, NOT GAP EVENTS, and the two numbers differ.** `results.json`'s `_trace_counts.GAP` is 65 — every gap RAISED during the run, including several inside one probe and several the corpus cases hit. This line counts probes whose VERDICT is not PASS: 58 of 122. Both are honest counts of different populations, and `G10` forbids reporting either without its basis — which this file did until the `W5` adversarial pass read both.
+> ⚠ **THIS COUNTS PROBES, NOT GAP EVENTS, and the two numbers differ.** `results.json`'s `_trace_counts.GAP` is 66 — every gap RAISED during the run, including several inside one probe and several the corpus cases hit. This line counts probes whose VERDICT is not PASS: 59 of 122. Both are honest counts of different populations, and `G10` forbids reporting either without its basis — which this file did until the `W5` adversarial pass read both.
 
 That is close to an even split, and it matters more than any case verdict. A refusal a
 gate enforces and a refusal that exists because nobody wrote the function are different
@@ -32,7 +32,7 @@ has no module system and no visibility modifiers, so the guarantee there is
 a contributor closes by simply writing the function — no gate fires, no test goes red,
 and the design's own §27.2 admission applies: *enforced by a person noticing*.
 
-**And 15 of 64 PASSes are not by construction
+**And 15 of 63 PASSes are not by construction
 either** — they are listed individually below and should be discounted accordingly. A
 `probe-model` PASS means the instrument supplied something the design does not.
 
@@ -52,6 +52,7 @@ either** — they are listed individually below and should be discounted accordi
 | `A21` | **FORBIDDEN** | no-signature | S37.3 | an order from above must be able to reach everyone it applies to |
 | `A22` | **UNSPECIFIED** | construction | S27/E2 | each region must be able to run its own slice of the loop |
 | `A23` | **FORBIDDEN** | construction | S22.4 | a running total of everything that ever happened must be able to be kept |
+| `A26` | **FORBIDDEN** | construction | S10 | the engine must be able to walk its own references without looping forever |
 | `A27` | **UNOWNED** | no-signature | S22.3 | every value in the game must be able to name who writes it |
 | `A29` | **FORBIDDEN** | probe-model | S19.5 | a subsystem must be able to keep its own record of what it did |
 | `A3` | **FORBIDDEN** | construction | S3-L4 | the story must be able to conclude when a tracked quantity reaches a value |
@@ -104,7 +105,6 @@ either** — they are listed individually below and should be discounted accordi
 | `A2` | PASS | probe-model | S19.4 | a sequence of related happenings must be able to be read back as one story |
 | `A24` | PASS | construction | S35 | a mechanism written for the powerful must be able to work for a whole population |
 | `A25` | PASS | construction | S6.2 | a cause that spans several regions must be able to exist with no parent region |
-| `A26` | PASS | construction | S38.1 | the engine must be able to walk its own references without looping forever |
 | `A28` | PASS | construction | S19.1 | every recorded happening must be able to point at real prior happenings |
 | `A31b` | PASS | construction | S42.2.1 | a conclusion about how fast the world decays must not depend on a number nobody decided |
 | `A31c` | PASS | construction | S42.2.1 | a conclusion about which actions a place supports must not depend on a number nobody decided |
@@ -235,6 +235,12 @@ either** — they are listed individually below and should be discounted accordi
 
 **needs:** filter to until == null before summing
 **law:** L3 clause 3 -- ended Tenures PERSIST as historical claim subjects (S15.2), so a count over live AND ended rows is monotone non-decreasing. That is a ratchet built entirely out of 'structural' edges
+
+### `A26` — the graph is traversed without hanging  ·  **FORBIDDEN**  ·  `S10`  ·  by `construction`
+**what:** `contain` from realm 'R' to hearth 'Hh' does not go up the ladder
+
+**needs:** a parent strictly above the child on `rung_kinds`
+**law:** #353 §10 -- `contain : Rung -> Rung` is the containment LADDER. An edge that does not ascend makes `under_purview` walk sideways or loop, and Jordan's governance canon reads purview off that walk
 
 ### `A27` — every value the game needs has an owner  ·  **UNOWNED**  ·  `S22.3`  ·  by `no-signature`
 **what:** 4 values named in the ownership table's OWN gap list

@@ -10138,11 +10138,13 @@
   },
   "A26": {
    "id": "A26",
-   "verdict": "PASS",
-   "detail": "PASS: a deliberate cycle (R contained by Hh) returned 8 descendants and did not hang. ITERATIVE, WITH A VISITED SET, NEVER RECURSION -- the reference graph is CYCLIC ON PURPOSE (conferral path, containment path, tie graph, claim citation graph) and a tree walk hangs ON THE NORMAL CASE, not on an edge case",
-   "kind": null,
-   "section": "S38.1",
+   "verdict": "GAP",
+   "detail": "`contain` from realm 'R' to hearth 'Hh' does not go up the ladder",
+   "kind": "FORBIDDEN",
+   "section": "S10",
    "title": "the graph is traversed without hanging",
+   "needs": "a parent strictly above the child on `rung_kinds`",
+   "law": "#353 \u00a710 -- `contain : Rung -> Rung` is the containment LADDER. An edge that does not ascend makes `under_purview` walk sideways or loop, and Jordan's governance canon reads purview off that walk",
    "by": "construction",
    "tests": "the engine must be able to walk its own references without looping forever"
   },
@@ -10884,6 +10886,15 @@
    "expected": false
   },
   {
+   "kind": "FORBIDDEN",
+   "what": "`contain` from realm 'R' to hearth 'Hh' does not go up the ladder",
+   "where": "S10",
+   "needs": "a parent strictly above the child on `rung_kinds`",
+   "law": "#353 \u00a710 -- `contain : Rung -> Rung` is the containment LADDER. An edge that does not ascend makes `under_purview` walk sideways or loop, and Jordan's governance canon reads purview off that walk",
+   "case": "probe:A26",
+   "expected": false
+  },
+  {
    "kind": "UNOWNED",
    "what": "4 values named in the ownership table's OWN gap list",
    "where": "S22.3",
@@ -11013,14 +11024,14 @@
  "_trace_counts": {
   "STEP": 1920,
   "BARRIER": 651,
-  "DECISION": 658,
-  "QUERY": 5460,
+  "DECISION": 659,
+  "QUERY": 5989,
   "NOTE": 468,
-  "WRITE": 24493,
+  "WRITE": 24490,
   "EVENT": 18927,
   "ACT": 75,
   "CLAIM": 8335,
-  "GAP": 65
+  "GAP": 66
  },
  "_corpus_defects": [
   "ARC1.yaml: committed inside a markdown fence with transcript preamble",

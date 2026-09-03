@@ -70,9 +70,20 @@ def tiny_world(fixtures: Fixtures = DEFAULT_FIXTURES) -> World:
     # roster-exempt: a FIXTURE CHOICE — this Duke holds these five of the six. The MEMBERS are
     # validated against `rosters.yaml: remit_acts` in `Office.__post_init__`, so a typo raises
     # rather than minting a remit act no `remit:` eligibility could ever match.
+    # ⚠ EVERY OFFICE NAMES ITS FACTION (`H-99`). Jordan, 2026-09-02: *"Why would requiring a
+    # faction on every office break canon? Wouldn't it just imply that we don't have enough
+    # factions?"* Both fixtures could answer, which is the evidence the requirement is right --
+    # and where one could not, the refusal would be the finding rather than a silent `None`.
+    #   `Duke` -> Crown, not Varfell or Hafenmark. Those two are named duchies with named holders
+    #   in canon (Vaynard, Baralta); binding a GENERIC probe duke to one would import a specific
+    #   character's situation into a fixture. The Crown holds a duchy too (Valorsmark, §7.1) and
+    #   the probe's ladder runs up to `realm`, which is the Crown's scale.
+    #   `Dicastery` -> Church of Solmund. Unambiguous.
     w.offices["off_duke"] = Office("off_duke", "Duke", "D",
-                                   ["issue", "determine", "confer", "dispatch", "convene"])
-    w.offices["off_dicastery"] = Office("off_dicastery", "Dicastery", None, ["issue", "determine"])
+                                   ["issue", "determine", "confer", "dispatch", "convene"],
+                                   faction="Crown")
+    w.offices["off_dicastery"] = Office("off_dicastery", "Dicastery", None,
+                                        ["issue", "determine"], faction="Church of Solmund")
     n = [0]
     def edge(sub, obj, kind, **kw):
         n[0] += 1

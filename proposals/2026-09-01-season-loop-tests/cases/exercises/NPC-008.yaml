@@ -1,0 +1,38 @@
+# NPC-008 · PEDER ALMSTEDT — `W28`'s `scale:` re-authoring. See NPC-033 for what is being repaired.
+#
+# ⚠ REV 1 SEATED HIM IN A FACTION CANON DOES NOT HAVE, AND CANON CORRECTED IT TWICE OVER. It read
+# "the Ministry" as the **Ministry of the Peninsula**, taken from `systems/factions/`. That name
+# appears ZERO times in all of `systems/world/`, and `faction_canon_v30.md:374` — the very
+# document it came from — says of it: *"Treated as institutional infrastructure, NOT a faction."*
+# So the near-canon source excluded it and the over-read put it back. Under the 2026-09-02
+# precedence ruling the body is world's to name, and world names it: §6.1's **Ministries**.
+case: NPC-008
+name: Peder Almstedt
+scale:
+  was: faction
+  is: realm
+  why: >-
+    `one_line`: "The Ministry's Chief Parliamentary Clerk, whose custody of the sole surviving
+    record of the founding settlement's terms lets him passively obstruct any reform that would
+    alter it." PARLIAMENT is the realm's deliberative body — Jordan's 2026-09-02 governance canon
+    puts it at the top of the ladder ("there is a Parliament, so there is no monopoly of power in
+    the ruler"), and `worldbuilding_v30.md` §6.1 seats Court Parliament and the Ministries in the
+    realm government. ⚠ The "founding SETTLEMENT's terms" is the subject of the record he holds,
+    not the scale at which he acts; misreading it as `settlement` would put a realm clerk inside
+    one town.
+  office:
+    post: "Chief Parliamentary Clerk"
+    body: "Ministries"
+    remit: [issue]
+    why: >-
+      ⚠ `Ministries`, NOT `Court Parliament`, AND THE CASE'S OWN POSSESSIVE DECIDES IT: he is
+      "**the Ministry's** Chief Parliamentary Clerk" — Ministry staff whose brief is Parliament,
+      not a member of it. Canon makes the same cut: §6.1 composes Court Parliament of *"Landed +
+      distinguished service aristocrats"*, which a clerk is not, while Ministries *"execute
+      government services"*, which is what a records custodian does. Seating him in Parliament
+      would promote him into the aristocracy the case never gives him.
+      His power in the case is CUSTODY of a record and PASSIVE obstruction — he holds and
+      withholds. `issue` is the only remit act the text supports. ⚠ Explicitly NOT `determine` or
+      `convene`: the case says he obstructs reform others propose, never that he decides or calls a
+      sitting. A clerk who could convene Parliament would be a different character, and §6.1 gives
+      the nominating power to Parliament itself rather than to the Ministries that serve it.

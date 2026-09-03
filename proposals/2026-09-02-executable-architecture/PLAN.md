@@ -5,7 +5,7 @@
 ## own text. §2.6 and W16 record what a tree-wide search returns and **the plan rests on none of it.**
 ## Companion to `ARCHITECTURE_V2.md` (the specification) and `01_NPC_VS_ARC.md` (the split).
 ## Under `CLAUDE.md` §0.05 this document is **REFERENCE, never mechanism.** Under §0.2 **nothing in
-## it runs** — **Part 6** names the first thing that would.
+## it runs** — **Part 6** names what would.
 
 ---
 
@@ -43,6 +43,10 @@ a line **of #353**. Where no test closes it, the hole stays open and is named.
 >
 > **3.** **The tested version ran zero cases end to end.** Every one of the seventeen items is
 > subordinate to making that number **one**.
+>
+> ⚠ **AND ONE WAS REACHED WHILE THE GOAL WAS NOT — which is why PART 4B exists.** Artifact 2 runs;
+> 0 of 143 cases run by Part 6's current definition. The number this document is subordinate to is
+> now TWO counts over the whole corpus, not one case.
 
 ---
 
@@ -66,7 +70,7 @@ files, and stated its own coverage and its own null results. Its return is the s
 
 Eleven of the fourteen retractions in `V2` §0.3 are upheld outright against #353's text — not a
 sample, all fourteen were checked. The inheritance of L1, L3 clause 1, Part VIII's refusals whole,
-one log, the seam, no per-container clock and fixed point: **uphold.** The 63 honesty tests
+one log, the seam, no per-container clock and fixed point: **uphold.** The honesty tests
 reproduce; `A31` does sweep 2 · 5 · 9; `shape_rev1.py` does declare the twelve Partition rows the
 first antagonist's finding is about, so the retraction record is verifiable.
 
@@ -138,7 +142,7 @@ cd proposals/2026-09-01-season-loop-tests/tracer && python3 report.py
 
 `results.json` and `TRACE.txt` came back **byte-identical** to the committed versions. That is an
 execution artifact under §0.2 and it is the first one this chain has: **the 143-case run reproduces.**
-`python3 -m pytest test_tracer_is_honest.py -q` → **63 passed.**
+`python3 -m pytest test_tracer_is_honest.py -q` → **63 passed** ⚠ **AT THE TIME OF WRITING. The file defines 143 tests today; run the command rather than citing this number, which is what `G11` asks for and what this line was doing wrong (`W19`).**
 
 **But six markdown artifacts changed**, because two entrypoints write overlapping outputs:
 
@@ -263,7 +267,7 @@ blocked cases, using `01_NPC_VS_ARC.md` §2.1's probe→hole mapping:
 |---|---:|---:|---:|---|
 | **H-20 alone** | **21** | 5 | 16 | |
 | H-20 + H-22 | **33** | 12 | 21 | |
-| H-20 + H-22 + H-23 | 37 | 13 | 24 | ⚠ **`H-23` is a REFUSAL, ruled in §3.1 — it frees nothing. Row kept so the raw computation is auditable; see §5.4** |
+| H-20 + H-22 + H-23 | 37 | 13 | 24 | ⚠ **`H-23` is a REFUSAL, ruled in §3.1 — it frees nothing. Row kept so the raw computation is auditable; see §5.2 — ⚠ the set-cover table this pointed at was router-era and is deleted** |
 | **every non-refusal hole** | **54** | **23 — every blocked NPC case** | 31 | |
 | **residual** | **22** | **0** | **22** | |
 
@@ -1051,7 +1055,7 @@ the control that catches a starving world, which is what H-26 blocked; `W5` flip
 
 ---
 
-## **W9 — ARTIFACT 2: ONE NPC SEASON, END TO END.** ⭐ **THE BAR.** See Part 6.
+## **W9 — ARTIFACT 2: ONE NPC SEASON, END TO END.** ⭐ **THE BAR — AS PART 6 THEN DEFINED IT.** Part 6 now supersedes that bar with two per-lane counts; `W9`'s own landed record is preserved at §6.5.
 
 **Size M.** Depends on **W0–W5**. **`W6`, `W7`, `W8` are NOT required.**
 
@@ -1290,140 +1294,585 @@ left.**
 
 ---
 
-# PART 5 · SEQUENCE, INTERDEPENDENCIES AND THE CRITICAL PATH
+# PART 4B · THE SECOND ITEM SET — `W18`–`W32`, SEQUENCED ON **RUNNING** RATHER THAN GRADING
 
-## §5.1 · The critical path — seven items, and they are hard blocks
+> **Added 2026-09-02, at Jordan's direction, after the first item set's critical path was completed
+> and the goal was still not met.** `W0`–`W17` above are unchanged and stay citable; nothing in
+> them is withdrawn. This part is what the plan did not contain.
 
-```
-W0 ──▶ W1 ──▶ W2 ──▶ W3 ──▶ W5 ──▶ W17 ──▶ W9
-(register  (re-grade  (Part D   (Part E   (the      (the scene   (ARTIFACT 2:
- as data)   by the     as data)  as data,  person's   container —   one NPC season,
-            5 tests)             one       decision)  RULED         end to end)
-                                 resolve)             2026-09-02)
-```
+## §4B.0 · Why the plan needed a second item set, stated as a defect in the first
 
-⚠ **`W17` was added by Jordan's 2026-09-02 ruling on `H-35`** (§3.4). The escalation as put said the
-scene reading *"costs a container the loop does not have"*; that cost is now real, **and it is
-additive rather than invalidating** — Parts D and E stand unchanged beneath it.
+**`PLAN.md` was written before any case had ever been executed.** Its instrument was
+`run_cases.py`, which **grades** — it reads a case's prose `need` rows, looks up an authored
+declaration naming the verb / hole / probe that answers each, and returns
+`PLAYABLE / DEGRADED / BLOCKED / NOT-ASSESSED`. Every yield figure in Parts 2 and 5 is a grading
+yield. Part 6's bar is **one** NPC season.
 
-**Why each edge is a hard block and not a preference:**
+So the first item set optimised for a number that can rise while nothing runs, and it did:
 
-| edge | why it cannot be reordered |
-|---|---|
-| **W0 → W1** | a re-grade that is not written into a checkable row is a paragraph. The whole failure of `V2`'s register is that its grades live in prose |
-| **W0 → W2** | every new Part D row needs a **grade**, and #353's polarity rule (`:1576-1578`) **fails an ungraded row** rather than defaulting it. Adding rows before there is a grader inverts the polarity |
-| **W2 → W3** | every verb's `writes:` cell **must be a Part D row** (§E2). A verb table over a matrix that does not carry `(Proposition, exists)` cannot express `utter` |
-| **W3 → W5** | `opening_set` is **computed from the verb table**. That is the whole of `D2`: option sets stop being authored the moment the verb table exists, and not before |
-| **W5 → W17** | `budget` must return the ruled unit before a container can bound anything |
-| **W17 → W9** | artifact 2 counts a season's activity, so it must know **what it is counting**. The ruling makes that a scene |
-| **W5 → W9** | without a computed `q` the season is **graded, not run**. This is the distinction the entire session failed to cross |
-
-**Everything else is off the path.** `W6`, `W7`, `W8`, `W10`–`W14` and `W16` do not block artifact 2.
-
-## §5.2 · What runs in parallel, and the condition that makes it safe
-
-| lane | after | touches |
+| | measured | command |
 |---|---|---|
-| **W4** MATTER emits | W2 | the MATTER step body |
-| **W6** witness predicates | W2 + W4 | the WITNESS step body |
-| **W7** sitting + contest | W3 | the seam and `determine` only |
-| **W8** matter economy | W2 | MATTER + the fixtures registry |
-| **W10** declared routing | W3 | the case corpus and `run_cases.py` |
-| **W13** arc re-authoring | W1 *(authoring)*; W7 + W10 *(validation)* | the arc corpus only |
+| the critical path `W0→W1→W2→W3→W5→W17→W9` | **complete** — every item executes and is tested | `python -m pytest test_tracer_is_honest.py -q` (143 passed) ⚠ **NOT** `grep LANDED`: only `W0`/`W1`/`W4`/`W6`/`W10`/`W17` carry a note, which is `W19`'s subject |
+| cases that GRADE as `PLAYABLE` | **0 of 143**, both lanes | `python run_cases.py` |
+| cases whose season loop **runs** by §6.1's definition | **0 of 46 — INFERRED, not measured** | ⚠ no instrument computes it; that is `W18`. Derived from `N3` (no act cites its question, so no chain walks deliberation) and from **0 Events whose cause is an Act by a different person** — `python -c` over `headless.run(3,0)` comparing `causes[] → Act.actor` |
+| arcs that reach an **ending** by §6.2's definition | **0 of 97 — INFERRED, not measured** | ⚠ same: no ending predicate exists (`W30`), `Q1` never forms (`N1`), and the contest branch cannot reach a subsystem (`N2`) |
+| verbs that execute anywhere in the corpus | **6 of 32** | `python corpus_run.py` |
+| Events whose cause is an **Act by a different person** | **0** (21 acts, all Carin's) | `python -c` over `headless.run(3,0)`, matching `causes[]` against `driver.resolved[…].actor` |
 
-> **The condition, and it is the whole reason these are safe:** **the YAML tables are the only shared
-> surface, and each lane APPENDS rows rather than rewriting them.** A lane that edits another lane's
-> rows is not a parallel lane; it is a merge conflict with a schedule. `CLAUDE.md` §10's
-> `isolation: worktree` rule applies if these are run as agents.
+⚠ **THE PATH IS EXHAUSTED, NOT WRONG.** Every item on it landed and each was worth landing — the
+write gate, the resolver reading a table, the register computing its own counts, refusal-on-absence.
+What the path never contained was an item whose proof was *a case running*. `§0.2` says done means
+it runs; the plan's own bar said done means **one** thing runs, and one is what was delivered.
 
-## §5.3 · The long pole, and why it is not the critical path
+⚠ **AND THE INSTRUMENT THAT REVEALED THIS IS NOT IN THE PLAN EITHER.** `corpus_run.py` was built
+2026-09-02 at Jordan's direction — *"shouldn't we consider running all NPCs and all arcs in our test
+runs? a larger surface introduces more complexity, but given our goals, what solves one may solve
+another while providing more pushback as to whether something is the RIGHT solve"* — and appears
+nowhere in this document, either README, or `HANDOFF_IN.md`. `W18` fixes that first, because
+**`§0.1` point 4 leaves every number below uncontrolled until it does**.
 
-**`W10` is the long pole for measured improvement on the NPC pathway** — 973 rows, and until it
-lands **60 of 143 cases stay NOT-ASSESSED for a reason that is about the router, not the design**,
-so no re-run can show how far Parts D–F actually clear the pathway.
+## §4B.1 · Five defects found by running, none of which had a register row
 
-**It is still not on artifact 2's path**, because artifact 2 is **one** case whose `exercises:` are
-authored by hand as part of `W9`. **Start `W10` the moment `W3` fixes the verb vocabulary, and run
-it beside the path, never in front of it.**
+Each is assigned to the item that closes it (`G5`: findings are edits to the thing under review, not
+a findings document).
 
-## §5.4 · The measured payoff of each stage — so the sequence can be argued with
+| # | defect | measured | closed by |
+|---|---|---|---|
+| **N1** | **`Q1` is dead in the loop.** `calendar()` fires a Date and sets `fired=True`; `questions_for` at DELIBERATE the same tick requires `not fired`. The Q2 timing defect `W9` fixed, one barrier over. | ARC-01, 4 seasons: date fires at tick 1, docket populated, **`date_due` questions formed: 0** | **`W20`** |
+| **N2** | **The loop cannot reach the contest seam.** `SeasonDriver.resolve` calls `contest(... claimants=[a.actor] ...)` — ONE party — so `combat_seam` returns `PARTY-GAP` and `contest()` raises. | a `kill / wound` act through `d.resolve` raises `Unspecified … needs two parties; got 1`; the same seam called directly with two returns `RESOLVED` | **`W23`** |
+| **N3** | **Deliberation is absent from the causal graph.** `Act` has no `question` field and `Candidate.why` is a source *name*, so an act never cites what prompted it. | 60 act-Events, **0** whose `causes[]` resolve to a question; 0 cross-person edges | **`W25`** |
+| **N4** | **Every corpus world has the same cast and the same motive.** `build_at` makes `p_a/p_b/p_c` with one shared OUGHT for all 143; `who_acts` (median 4, max 11) and `knowledge` are read by nothing. | 2 distinct executed sets over 86 worlds; the 5 that differ are exactly the 5 with `span_seasons: 1` | **`W27`** |
+| **N5** | **A register `site:` is never checked to exist.** `H-32` is `assumption` with `site: sitting.judging_set`; no `sitting` symbol exists and `Query.judging_set` raises. `R2` tests non-emptiness only. | `grep -n sitting shape.py` → comments only | **`W19`** |
 
-Set cover over the 76 blocked cases (§2.4). **A case is *freed* when every one of its blockers is a
-hole that closed.** This is what the sequence is buying, stage by stage:
+⚠ **`N2` QUALIFIES A CLAIM THIS CHAIN PUBLISHED THE SAME DAY.** Commit `e5a848e` says *"the seam
+CALLS personal combat"*, and its 22/40-vs-13/40 condition measurement is real — **of
+`combat_seam.resolve`**. It is false of any season run, because the loop hands the seam one
+claimant. The seam is built and the call site is not wired to it. Recorded here rather than
+softened in the commit message, which is pushed.
 
-| after | frees | NPC | ARC | note |
-|---|---:|---:|---:|---|
-| `W1` closes `H-20`'s roster | **21** | 5 | 16 | the largest single row in the corpus |
-| + `H-22` (`W2`'s Record rows) | **33** | 12 | 21 | |
-| + `H-23` — **now a REFUSAL, so it frees nothing** | 33 | 12 | 21 | ⚠ `V2` counted this as 3 cases of upside. **It is 3 cases of correctly-priced refusal** |
-| + every remaining non-refusal hole | **54** | **23 — every blocked NPC case** | 31 | |
-| **residue** | **22** | **0** | **22** | `W13`'s lane, and no specification change touches it |
+## §4B.2 · The four buckets — what actually stands between here and 143 running
 
-⚠ **Freed is not runnable.** A freed case has no blocker; whether it *runs* depends on `W10` giving
-its rows an `exercises:` and on Parts D–F being total for what they exercise. **The honest ceiling is
-121 of 143 cases carrying no refusal blocker**, and that is an upper bound, not a forecast: new
-routes reach new refusals, and §1.4's nineteen rowless holes are where they will reach them.
+**A · Blocked by a ruling already made. The corpus is wrong, not the architecture.**
+**47 cases declare `scale: faction`** (NPC 18, ARC 29), and a faction acting is a *ruled refusal* —
+`ARCHITECTURE_V2.md:93` (held under 143 cases), `H-21` ruled, `H-95` ruled, and `shape.py`'s own
+*"a faction never acts: a PERSON HOLDING AN OFFICE acts"*. The origin is traceable:
+`2026-08-31-shape-tracer/cases/CASE_BRIEF.md` gives the extraction schema as
+`scale: <person | settlement | faction | realm | world>` — **the brief was written in a vocabulary
+the architecture had already closed**, so every extractor used it. The fix is a corpus authoring
+pass (`W28`), not a design item. ⚠ And re-scaling alone buys representability, **not behaviour**:
+the re-scaled actor is an office-holder, and `person_side_eligible` declines every `remit:` verb
+(`H-71`), so a re-scaled corpus without `W21` yields 133 worlds executing the same six verbs.
 
-## §5.5 · What is NOT sequenced here, stated so its absence is deliberate
+**B · Blocked by an open design hole.** `H-71` (9 of 32 verbs unformable person-side) · `H-94`
+(`transfer` refused 86/86; nothing to act *on*) · `H-84` (nothing moves a Record → 0 cross-person
+propagation) · `H-75` · `H-98` (winner vs degree) · `H-32` · `H-95`'s `world` half (10 cases) ·
+`H-43/44/45/52/58/62` (one verb family each) · `H-33` (the flood, which is why `MAX_SEASONS=6`
+exists) · `H-96` (the ranking decides by alphabetical tie-break for 15–20 of 22 candidates).
 
-- **`W14`, the Godot port.** #353 §66's items 1, 3 and 6 are untouched by `V2` and by this plan.
-- **The 22-arc residue's design implications.** `01_NPC_VS_ARC.md` §2.2 is right that no
-  specification work unblocks them; whether the *design* should change to accommodate them is a
-  question this plan does not raise and does not answer.
-- **`H-35`.** Asked in §3.4, blocking nothing, and the plan proceeds at `budget = 5` acts either way.
+**C · Blocked by unbuilt code with no hole.** N1–N5 above, plus: `Event.subject` carries the actor
+(so every witness deposits an identical, certain attribution — #353 §19.3's *"may be wrong… may not
+conclude at all"* is unreachable) · `term.matured` bypasses the write gate and marks nothing ·
+`work` emits success and changes nothing · no ending is evaluated anywhere · the `World.tenures`
+rebuild is ~N³ (100 persons → **seconds per season, rising ~N³** (11.44 s when first measured; **5.11 s** on a re-run at 97 persons — the literal moves with the tree and the shape is what the row asserts)).
+
+**D · Blocked by unauthored data.** 868 undeclared `exercises:` rows — **which serve grading, not
+running** · 47 ARC cases with no ending classification · 47 `scale:` values in the wrong vocabulary
+· 40 prose ARC spans · 143 casts that exist only as prose in `who_acts`.
+
+---
+
+# PART 4B.3 · THE ITEMS
+
+Sizes as Part 4 uses them (S ≈ half a day, M ≈ one to two, L ≈ three or more). **Every proof is an
+execution** (`§0.2`), and every yield is a measured count with its command, or is marked inferred.
+
+## The instrument, and the board — first, because nothing after them is measurable
+
+### **`W18` — THE RUN DEFINITION, AS AN INSTRUMENT.**
+**Do.** `corpus_run.py` computes, per case, **every check that is computable today** — `R1`, `R3`,
+`R4`, `R5` and `A1` — and prints one table per lane plus per-verb execution and cross-person edge
+counts. Reads `ENDINGS_CLASSIFIED.yaml`. Refuses a prose span on an arc rather than defaulting one.
+
+⚠ **A CHECK IT CANNOT COMPUTE REPORTS `NOT-COMPUTABLE` AND NAMES THE ITEM THAT CLOSES IT — it does
+NOT score.** `R2` needs authored `exercises:` rows (8 of 143 cases have any) and a real cast
+(`W27`); `A2`'s DECIDER and ROLL predicates need binding decisions (`W26`) and contest results
+(`W23`) that do not exist yet; `A3` needs the case's own cast (`W27`). **An instrument that silently
+scores an uncomputable check is the defect this chain has found in its own work five times** — a
+number that cannot fail is not a measurement (§0.1 pt 2), and it flatters in the direction of
+progress every time.
+
+⚠ **THIS ITEM AND `W30` OVERLAPPED IN THE FIRST DRAFT OF THIS PART, AND THE OVERLAP IS RECORDED
+RATHER THAN QUIETLY REMOVED.** `W18` was written as computing `A1`–`A3` while `W30` was written as
+implementing `A2`, which is impossible for `W18` to have done: `A2`'s labels depend on mechanisms
+`W23` and `W26` build. Caught on re-reading before any code was written. The split is now: **`W18`
+builds the frame and reports the gaps; `W30` fills `A2` when its dependencies land.**
+
+**Depends.** Nothing. **Size.** M.
+**Proof — and the control is the PLANTED case, not the zero.**
+1. **The control.** A planted world carrying one hand-built Act by a second person, caused by the
+   first person's act, **flips that case's `R3` column from false to true** and flips no other
+   case. Without it the instrument has demonstrated nothing: printing 0 on a corpus where 0 is
+   entailed is not evidence of sensitivity.
+2. It prints `NPC RUNS 0` and `ARC ENDS 0` today, against a corpus where 86 cases already "RAN"
+   under the loose reading this replaces.
+3. It prints a **non-empty** `NOT-COMPUTABLE` list naming `W23`/`W26`/`W27`.
+
+⚠ **THE FIRST DRAFT CALLED CLAUSE 2 "THE CONTROL" AND IT IS NOT ONE** (§0.1 pt 4). It also had the
+planted case flip a case to **`RUNS`**, which is impossible while `W18` itself declares `R2`
+uncomputable — a status needing five checks cannot be reached with four. The control flips a
+**column**, and `§6.1` gains `RUNS-UNDECLARED` so today's 27 completing cases have a status to be
+in at all.
+**Yield.** 0 cases, and every number after it.
+
+### **`W19` — BOARD, REGISTER AND STALE-TEXT HYGIENE.**
+**Do.** `LANDED` notes for `W2`/`W3`/`W5`/`W15`, which are done in code and open on the board — the
+§0.2 board defect, in this document. **`W9` IS ON THAT LIST TOO, AND ITS NOTE WAS DELETED BY THIS
+REWRITE** — it lived in the Part 6 that Part 6 replaced (*"LANDED 2026-09-02 — ARTIFACT 2 RUNS, AND
+THE BAR IS NOT MET AS THIS SECTION WRITES IT"*), and §6.3 now quotes a block that no longer exists.
+Restore it. Replace *"63 passed"* (**§2.1 and §10 Provenance** — not §9.1, which never carried it)
+with the command; the file defines **143** tests. Correct
+**`2026-09-02-executable-architecture/README.md`**, which still publishes the old bar (*"one NPC
+season"*) and the old six-item critical path — ⚠ **not** `season-loop-tests/README.md`, which was
+already corrected and calls `run_cases.py` the GRADER. A fourth `HANDOFF_IN.md` entry naming this
+part; its last entry predates `W0`.
+
+`register.py` gains **`S1`: every `site:` resolves to a symbol** (fails on `H-32` today, `N5`) and a
+`kind:` roster (29 distinct values against the 5 `V2` declares). ⚠ Named `S1`, **not `R4`** — §6.1
+already uses `R1`–`R5` for the run checks, and a second `R4` meaning "every site resolves" beside a
+first meaning "reproducible" is the vocabulary collision `CLAUDE.md` §4 forbids.
+`DEFAULT_FIXTURES` reads its values **from** the register's `default:` — one owner (§8), where today
+12 pairs are duplicated and never compared.
+**Depends.** Nothing. **Size.** S.
+**Proof.** `register.py --check` fails `S1` before `H-32`'s site is real and passes `S1` after; a
+planted fixture literal that disagrees with its register row fails. ⚠ **`--check` exits 1 today and
+will keep doing so**: `R2` has 6 violations (`H-05`/`H-30`/`H-34` — `assumption` with no site and no
+sweep) and `G6` has 15. This item does not clear them and does not claim to; whoever owns those rows
+does. A green `--check` is not this item's proof and never was.
+
+## The loop's dead edges — the critical path
+
+### **`W20` — `Q1` FORMS.** *(N1)*
+**Do.** `questions_for` reads Dates fired **this tick** (`fired_at == tick`, written by `calendar`)
+rather than `not fired`.
+**Depends.** `W18`. **Size.** S.
+**Proof.** ARC-01's world forms ≥1 `date_due` question at tick 1 (**0 today**); a world with no Date
+forms none.
+**Yield.** **11 arcs today** — 19 `forced_by_threshold` exist but 8 are `faction`/`world`, so 19 is the
+**post-`W28`** figure and the first draft published it without that condition. And the whole
+Date → sitting → `determine` path becomes reachable at all, which is the larger half.
+
+### **`W21` — `H-71`: AN OFFICE-HOLDER CAN FORM A REMIT VERB.**
+**Do.** The barrier builds the View with `remits` — the union of `remit.acts` over Offices the person
+holds, from their **own** `hold` Tenures. The View is *"BUILT, not filtered"* (S18) and `deliberate`
+already holds the World, so this is a build-time widening, not `choose` reading the world.
+`person_side_eligible` evaluates `remit:<act>` against `v.remits`. Grade `assumption`; sweep
+**`[remit-as-a-CLAIM in the holder's ledger, view-carried, tenure-payload (H-50), decline (today —
+the control)]`**.
+
+⚠ **THE CLAIM-CARRIED ARM IS FIRST BECAUSE THE ARCHITECTURE'S OWN TEXT PREFERS IT, AND THE FIRST
+DRAFT OMITTED IT.** A View field is world truth injected at build time and therefore *infallible* —
+which is precisely what L2 says a person's basis for deciding must not be, and what §F1 means by
+*"a filter on world truth would be `choose` reading the world"*. A remit deposited as a Claim when
+`office.conferred` is witnessed makes a revoked holder **still believe** they hold the remit, form
+the act, and receive `convene.refused` from the fold — T3 and L2 working, and the same shape §F1
+already licenses for `requires`. It also leaves S18's *"at most K claim ids from the holder's OWN
+ledger"* intact, where a `remits` field widens the View's definition for the second time (`W5`
+added `question`). ⚠ The `tenure-payload` arm needs `H-50` to move first; it is `absent` with an
+empty cite today.
+**Depends.** `W18`. **Size.** M.
+**Proof.** With `p_a` holding an office whose `remit.acts ⊇ {convene}`, `opening_set` offers
+`convene`, and `test_no_person_can_choose_a_governance_verb_and_h71_is_why` goes **red as designed** —
+that test's docstring already says it should.
+**Yield.** **9 of 32 verbs** become formable; every DECIDER and THRESHOLD ending runs through them.
+
+### **`W22` — `H-94`'s STRUCTURAL HALF: OPERANDS FROM THE PERSON'S OWN INTERIOR.**
+**Do.** `Candidate` gains `operands`, derived person-side: the question's referent as target
+(`kill / wound`, `tie / knot`, `succeed`, `oblige`, `tell`); the actor's own hearth as `from` and a
+held-store claim as `kind`/`amount` (`transfer`); the subject Record as the `hold:` argument
+(`destroy_record`, closing `H-75`'s placeholder for the actor's own holds). `pack_scenes` carries
+them into `Act.payload`. ⚠ The bug half is already closed — the Candidate's `subject` reaches the
+payload — and this is the half that needed a ruling on where operands live.
+**Depends.** `W18`. **Size.** M.
+**Proof.** `transfer` executes in ≥1 corpus world (**refused in 86 of 86 today**); and `transfer`
+twice from a one-unit larder yields `.made` then `.refused` — **`W3`'s own proof clause, never
+tested**.
+**Yield.** +5 verbs, plus `destroy_record`.
+
+### **`W23` — THE CONTEST BRANCH REACHES THE ENGINE.** *(N2)*
+**Do.** `resolve` passes `claimants=[a.actor, payload.subject]`. The seam's dict becomes Events —
+`contest.resolved{winner}` / `contest.unresolved` — and the winner's writes proceed through `_fold`
+while the loser's are refused through `emits_on_refusal`. ⚠ Latent and fixed here: `out.extend(r)`
+on a dict would extend the Event list with the dict's **keys**.
+
+⚠ **AND `kill / wound` GAINS A `requires` PREDICATE AND AN EFFECT, WITHOUT WHICH THIS ITEM CANNOT
+REACH ITS OWN PROOF.** It is excluded from `resolvable_verbs()` — no predicate, and the effect is
+gated behind `contests:` — and `make_chooser(verbs=resolvable_verbs())` narrows the candidate set,
+so **no person in any corpus world can form the act at all**. Wiring the call site while nothing can
+call it would leave the proof satisfiable only by a hand-built Act handed to `resolve`, which is
+exactly what `N2` already did. The first draft of this item omitted that and no other item carried
+it. **Also required: the target must be a PERSON** — today a question's referent is a rung or a
+Proposition, so `W22`'s operand derivation must yield a person subject here or the seam returns
+`PARTY-GAP "claimant not a person"`.
+**Depends.** `W22`. **Size.** S–M.
+**Proof.** A `kill / wound` act **in the loop** produces a `contest.*` Event with `causes=[act]` and,
+on a kill, `person.died` — today it raises `PARTY-GAP`. Result `0` produces `contest.unresolved`
+and no death, honouring Jordan's 2026-06-02 ruling that an undecided fight is a legitimate outcome.
+Determinism holds across two runs.
+**Yield.** ROLL endings become reachable. ⚠ `H-98` stays open: the seam still mints no band.
+
+### **`W24` — PROPAGATION: A RECORD MOVES, AND A WITNESS ATTRIBUTES.**
+**Do.** (a) `H-84` by §0 test 4 (precedent). Possession is already a `hold` Tenure (#353 §13
+extends `hold`'s domain to Records; §15 makes it 1-per-object), and the tree already **opens and
+closes** such Tenures — `confer` writes `(Tenure, since) → tenure.opened` and `revoke` writes
+`(Tenure, until) → tenure.closed`. Moving a Record is that pair applied to a Record's hold. ⚠ The
+first draft called this *"the existing `transfer` shape"*, which **contradicts `H-84`'s own text** —
+Part E's `transfer` moves `(Rung, stores)`, MATTER, not Records. The mechanism is precedent; the
+name was an invention. The Do must **name the verb and its Part E row** — extend `transfer`'s
+`writes:` to carry the Tenure pair, or add a row — and a Part E edit is a data change under `W3`'s
+guardrail. Register `assumption`, control arm "Records never move".
+(b) `Event.subject` becomes the **primary changed object**, and the ACTOR is deposited per-witness
+as a Claim through the `witness_key` channel — restoring #353 §19.3's *"attribution is a per-witness
+Claim… may be wrong"*, which the ruled `H-36` cites verbatim. (c) `term.matured` goes through
+`write()` and marks the stage.
+
+⚠ **Do NOT add a `target` or `actor` field to `Event`** — §19.3 rules them off. ⚠ **AND THE FIRST
+DRAFT SAID THE ACTOR IS READ FROM `changes[]`, WHICH IS FALSE**: `changes[]` carries `StateChange`
+rows about the *changed objects*, never the actor. Once `subject` is the changed object the actor is
+on the Event nowhere at all, and the only resolver-side route is **`causes[] → act id →
+`driver.resolved[…].actor`** — the same route `R3` uses and the same integrity surface `H-82`'s
+`log ∪ resolved` names.
+
+⚠ **WHAT ELSE MOVES, MEASURED BEFORE THE ITEM STARTS RATHER THAN DISCOVERED DURING IT.** Six readers
+of `Event.subject` change meaning: `last_emission_of` (find-by-kind+subject), **`content_hash`** —
+so **every golden and every published hash re-records, and `W11`'s artifacts with them** —
+`claim_subjects`' fallback, **`_event_place`** (a Record subject has no `contain` Tenure, so record
+Events become unwitnessable under `presence_only`/`all_five`, which changes what `H-33`'s sweep arms
+MEAN), and **`_ch_witness_key`** (`pid == e.subject`, so an actor stops auto-witnessing their own
+act under the narrow arms). Under the ruled `total` default nothing breaks at WITNESS; every hash
+still changes.
+**Depends.** `W22`. **Size.** M.
+**Proof.** On NPC-088's world the bailiff forms ≥1 question and acts; **cross-person cause edges > 0**
+(0 today); the three ledgers stop being identical (they are byte-identical today — same subjects,
+all `True`, all confidence 95); ROOT count unchanged, which is `W4`'s guard still holding.
+**Yield.** `R3` becomes reachable for every representable NPC case (inferred).
+
+### **`W25` — THE DELIBERATION EDGE.** *(N3)*
+**Do.** `Act` carries `question`; `resolved` acts carry `question → claim/date id`, so a walk goes
+Event → act → question → the claim's deposit → the witnessed Event. `H-82`'s integrity check becomes
+checkable over `log ∪ resolved`.
+**Depends.** `W20`, `W24`. **Size.** S.
+**Proof.** §6.3's check-2 chain walks **five links across two persons** on NPC-088 — unreachable
+today, and the reason Part 6's bar was *"not met as §6.3 writes it"*. A planted act citing no
+question fails integrity.
+
+### **`W26` — THE SITTING DECIDES.** *(`H-32`'s default, built)*
+**Do.** `Query.judging_set` per `H-32`'s stated default — holders of a `determine` remit whose scope
+contains the venue. `determine` gains a predicate (fired Date + docket item + non-empty judging set)
+and an effect. A vacant date fires and lapses (#353 `:835`). `H-32`'s phantom `site:` becomes real.
+**Depends.** `W20`, `W21`. **Size.** M.
+**Proof.** In one seeded run: `convene` → `date.scheduled` → next season `date.fired` → `Q1` →
+`determine` → `matter.determined`, with `causes[]` walking the whole way. `F8`/`F21` flip. An empty
+judging set produces a lapse Event and no decision.
+**Yield.** DECIDER and forced-THRESHOLD endings — the two largest ending classes.
+
+## The corpus becomes the world
+
+### **`W27` — THE CAST COMES FROM THE CASE.** *(N4)*
+**Do.** `build_at` reads `who_acts` (persons directly; roles become an Office at the case's rung
+carrying the remit the role implies, from a per-case `cast:` block `W28` authors), `one_line` → the
+OUGHT Proposition, `knowledge` rows → initial Claims and Records. Cast size is the case's, not three.
+**Depends.** `W21`, `W22`; **`W28` must merge first** (both the re-scale and the `cast:` blocks);
+**and `W29`**, which the first draft omitted — this item's own proof runs an 11-actor case, and an
+11-person world is beyond the scan ceiling `W29` lifts. **Size.** M–L.
+**Proof.** Distinct executed sets across the corpus **> 2** (2 today), and `H-96`'s discrimination
+line moves. A case with 11 actors runs within `W29`'s budget.
+**Yield.** Every case becomes its own world — which is the control for every number after it.
+
+### **`W28` — RE-SCALE THE 47, RULE THE 10, CLASSIFY THE 47, AUTHOR THE SPANS.** *(authoring; parallel from day one)*
+**Do.** `scale:` → a rung kind plus `office:` for the 47 faction cases. Fix `CASE_BRIEF.md`'s schema
+line, which is where the wrong vocabulary entered. **The loader refuses a foreign scale at load**, so
+it cannot recur — today `corpus_run` refuses at run time while `run_cases` grades faction cases
+happily. ENDING labels for the 47 unclassified ARC cases. Integer spans for the 40 prose ARC spans
+(the NPC lane may default). For `world` (10 cases): propose by §0 test 5 that a world is *the set of
+realms* and re-scale to `realm` with ≥2 realm Rungs; escalate **only** if Jordan rejects that
+reading.
+⚠ **AND THE `cast:` BLOCKS — 143 OF THEM — WHICH THE FIRST DRAFT ASSIGNED TO NOBODY.** `W27`
+depends on *"a per-case `cast:` block `W28` authors"* and `W28`'s Do did not contain one. It is the
+largest authoring deliverable here: `who_acts` is prose (median 4 entries, max 11), and a world
+cannot be built from it until each entry resolves to a person, an office at a rung, or a non-actor.
+**Non-actor entries are part of the deliverable, not an omission** — ~44 of 97 ARC cases name a
+player, a PC or the party, and those become `WAITS-ON-PLAYER` rather than a failure.
+
+⚠ **ORDER INSIDE THE ITEM MATTERS.** Re-scale the 47 **before** the loader begins refusing a foreign
+scale, or `load_cases` refuses them in the grader too and `run_cases.py` loses 47 cases while they
+are being fixed.
+
+⚠ **THE `world` HALF: DECIDED HERE, NOT ESCALATED — the first draft did both and they contradict.**
+By §0 test 5: a `world`-scale case is instantiated as ≥2 realm Rungs under a shared container,
+because `rung_kinds` has eight members, no in-chain text defines `world`, and re-scaling is the only
+move that makes the 10 cases representable at all. Recorded on `H-95` and **removed from §9.0's
+escalation list**. Jordan may overturn it; that is a ruling, not an open question this plan waits on.
+
+**Depends.** `W18` (the vocabulary). **Size.** L.
+**Proof.** `python corpus_run.py` → `UNREPRESENTABLE 0` (**57 today**) and `ENDING-UNCLASSIFIED 0`
+(**47 today**); a planted `scale: faction` fails at load; every case resolves a `cast:` block or is
+reported `WAITS-ON-PLAYER` naming the entry that caused it.
+**Yield.** **+47 representable immediately, +10 on the `world` reading — the largest single number in
+this plan.**
+
+### **`W29` — SPANS, AND THE SCAN CEILING.**
+**Do.** Cache `World.tenures` per barrier (`cache_at_barrier` already exists; invalidate on
+`add_tenure` and any `until` write). Lift `MAX_SEASONS`. Keep `fan_out_mode=total` as the control
+arm.
+**Depends.** `W18`. **Size.** S–M.
+**Proof.** 100 persons × 1 season in **under 1 s**, against a re-measured baseline stated with its conditions (5.11 s at 97 persons in one `d.season`; 11.44 s when first measured — ⚠ **carry the conditions, not the literal**, and the `70,104 view rebuilds` figure has no instrument that prints it and must not be republished until one does);
+ARC-44 runs its full 16 seasons unclamped; suite wall time reported before and after.
+**Yield.** 3 clamped arcs, and every cast larger than three.
+
+### **`W30` — ENDINGS ARE EVALUATED.**
+**Do.** §6.2's five `A2` ending predicates in `corpus_run` — the checks `W18` reports as
+`NOT-COMPUTABLE` — plus `WAITS-ON-PLAYER` and `REFUSED-BY-L5`. `A3` lands with `W27`'s cast.
+**Depends.** `W18`, `W23`, `W26`, **and `W24 → W25`** — which the first draft omitted and Part 5
+confined to *"gates NPC RUNS"*. It gates the ARC lane too: DECIDER requires *"`causes[]` walks back
+to an earlier Event by a different person"* and NEVER requires `R3`, so **30 of the 50 labelled arcs
+(DECIDER 20 + NEVER 10) cannot reach `ENDS` without cross-person propagation.** **Size.** M.
+**Proof.** ARC `ENDS > 0` with a per-label breakdown; and a `NEVER` arc whose content hash stops
+moving is reported as a **fixed point**, not as `ENDS`.
+**Yield.** The ARC number comes into existence.
+
+## The coverage tail — parallel lanes, after the path
+
+### **`W31` — VERB COVERAGE, GROUPED BY WHAT BLOCKS IT.** **Size.** L, itemised per verb.
+(a) **No hole, merely unbuilt** — `commit`, `repudiate`, `oblige`, `tie / knot`, `forge`, `petition`,
+`carry`, `succeed`. ⚠ **`commit` first**: `Q4` (a live `commit` to an OUGHT) is the only question
+source that fires in a quiet season, and **no verb can create one** — every world seeds it by hand.
+(b) **Hole-gated** — each lands only when its row moves by §0's ladder.
+**Proof.** Per verb: `corpus_run`'s executed set gains it in ≥1 world.
+
+### **`W32` — `work` DOES SOMETHING.**
+**Do.** `work`'s delta lands in §27.3's accumulator; `H-86` splits into `emits_per_write` /
+`emits_when`. **Size.** S.
+**Proof.** Site condition moves after a `work` act, and
+`test_w8_work_emits_a_success_while_repairing_nothing` **inverts** — a test that pins a defect
+should die when the defect does.
+
+### Items carried forward, reframed
+- **`W13`** (arc re-authoring) — kept, but judged by `W30`'s `ENDS`, never by a grading verdict.
+  Starts after `W28`. A rewrite that still ends `REFUSED-BY-L5` is a defect in the rewrite.
+- **`W12`** (the twelve transitions) — kept, after `W30`.
+- **`W10`** (declared routing) — **demoted**. Author `exercises:` for **core rows only** (~390),
+  because §6.1's `R2` reads them. ⚠ **~390 is the UNDECLARED core count**, not the core count: 427 core rows exist (NPC 126 + ARC 301) and ~35 are declared. The 476 non-core rows are dropped.
+- **`W11`** — its reproducibility and float clauses are covered by `W9` checks 1 and 6; only the
+  `H-25` spiral and serial-vs-pooled clauses remain.
+- **`W14`** (Godot) — stays deferred, and not before `W30`.
 
 ---
 
-# PART 6 · THE FIRST MILESTONE — ARTIFACT 2, IN FULL
+# PART 5 · SEQUENCE AND THE CRITICAL PATH — REWRITTEN 2026-09-02
 
-> ### **THE TESTED VERSION RAN ZERO CASES END TO END. ONE IS AN INFINITE IMPROVEMENT OVER ZERO, AND IT IS THE ONLY NUMBER THAT WOULD PROVE ANY OF THIS.**
+> ⚠ **The previous Part 5 is superseded and its critical path is COMPLETE.**
+> `W0 → W1 → W2 → W3 → W5 → W17 → W9` all landed, and the goal is not met. That path is
+> **exhausted, not wrong** — see §4B.0. It is preserved in git history; every edge argument it made
+> still holds for the items it sequenced.
 
-## §6.1 · The case: **NPC-088, Carin Vedel, the copyist**
+```
+W18 ──▶ W20 ──▶ W21 ──▶ W26 ─────────────▶ W30     deadline → office-holder → sitting → endings
+  │       └──▶ W22 ──▶ W23 ───────────────▶ W30     operands → the contest reaches the engine
+  │              └──▶ W24 ──▶ W25 ────────▶ W30     propagation → walkable deliberation
+  ├──▶ W29 ──────────────────────▶ W27              [gates spans > 6 and casts > 3]
+  ├──▶ W10-core ─────────────────────────▶ R2       [gates NPC RUNS — see §5.3]
+  └──▶ W28 (authoring, parallel) ─▶ W27 ──▶ W30
+W19 alongside W18.   W31 · W32 · W13 · W12 after W30, in parallel.
+```
 
-**Chosen on four grounds, all checkable:**
+⚠ **THIS IS A TOPOLOGICAL ORDER, NOT A CHAIN.** `W22` does not depend on `W21`; `W26` does not
+depend on `W23`. The arrows are dependencies; the linear reading below is one valid sequence through
+them, not the only one.
 
-1. **#353 §13.1 already narrates her season as the worked lawful case.** The specification's own
-   example is the cheapest possible first execution: if it does not run, the failure is unambiguous.
-2. **Her only routed blocker is `P22` → `H-22`**, which Part D rules. Nothing about her needs a
-   ruling that does not exist.
-3. **Her needs exercise the largest number of ruled rows**: a Record created with **act-declared
-   stages**, MATTER **maturation** whose Event names her act as its cause, a `hold` on a Record,
-   and `(Person, exists)` as an ending.
-4. **She needs no sitting (`H-32`), no contest (`H-31`) and no dispensation (`H-36`)** — the three
-   places where a default is still being injected. **Her season is the one that tests the loop
-   rather than the defaults.**
+**THE CRITICAL PATH TO "ALL 143 RUN": `W18 → W20 → W21 → W22 → W23 → W26 → W27 → W30`,** with
+**`W28` merging before `W27`** (representability *and* the `cast:` blocks), **`W29` before `W27`**,
+**`W24 → W25` before either lane can score** — NPC `RUNS` via `R3` and ARC `ENDS` via DECIDER and
+NEVER — and **`W10-core` before any NPC case can reach `RUNS`** (§5.3).
 
-**Second case if she fails for a reason about her own rows rather than about the shape:** **NPC-033,
-Kolbrun Thale.**
+## §5.1 · Two ordering choices, made rather than left open
 
-## §6.2 · The minimum work-item set
+**Loop fixes before the corpus re-scale**, though `W28` has the largest yield. Re-scaling first would
+bank *"133 representable"* against a loop whose 133 worlds all execute the same six verbs — and that
+number has already been banked once, as *"86 RAN"*, which `§4B.0` shows meant almost nothing. The
+authoring runs in parallel from day one and merges at `W27`, so no time is lost.
 
-**`W15` · `W0` · `W1` (only the rows `W9` touches) · `W2` · `W3` (verbs `create_record`, `move`,
-`tell`, `transfer`, `destroy_record`, `kill`, plus **`utter`**) · `W4` · `W5` (Q2 and Q4 sources; a
-**non-zero** `alignment` default; person-side `budget`) · **`W17`** (the scene container).**
+**`H-71` before `H-94`.** DECIDER and THRESHOLD are the two largest ending classes and both run
+through remit verbs; ROLL runs through operands and is smaller.
 
-**`W6`, `W7` and `W8` are not required.** The `H-33` default at this milestone is **total fan-out** —
-declared as such in the register with `site: witness.fan_out` and `sweep: [total, presence, five]`.
-That is **honest** (it is #353's specified behaviour), it makes the log walk, and it is exactly what
-`V2` §G's inject-declare-sweep doctrine is for.
+## §5.2 · Measured unblock yield, so the sequence can be argued with
 
-## §6.3 · What proves it done — six checks, all executions
+| item | yield | basis |
+|---|---|---|
+| `W28` | **57 cases** | scale census, `run_cases.load_cases` |
+| `W26` | **≤31 endings after `W28`** | DECIDER 20 + forced 19 overlap at 9; only 12 DECIDER are representable today. The first draft's `~31` was loose in both directions |
+| `W20` | **11 arcs today, 19 after `W28`** | `forced_by_threshold` ∩ representable |
+| `W21` | **9 of 32 verbs** | remit-gated verbs in `verb_table.yaml` |
+| `W22` | 6 verbs | operand-gated verbs |
+| `W24` | 27 → 45 NPC cases | inferred from an identical fixture |
+| `W29` | 3 arcs + every large cast | clamped spans; `who_acts` sizes |
+| `W31` | up to 20 verbs | the unbuilt/hole-gated split |
 
-| # | check |
-|---|---|
-| **1** | `python tracer/headless.py --case NPC-088 --seasons 2 --seed 0` prints a content hash. **Run twice: byte-identical.** |
-| **2** | The log contains, **in `causes[]` order**: `record.created` *(causes: her act)* → `term.matured` at MATTER *(causes: `record.created`)* → a claim deposited in another person's ledger → **that person's Q2 question** → **their act** → `news.told` \| `record.destroyed` \| `person.died`. **A chain of at least four Events walks from her act, with no `[ROOT]` after the seed.** |
-| **3** | **The fixture-read log names only sites present on `hole_register.yaml`.** Zero fills off the register — `V2` §G's central claim, made falsifiable. |
-| **4** | `resolve` was called **with no `effect` lambda**, and `opening_set` **with no roster**. |
-| **4b** | **Carin returned at most `budget` SCENES**, and each scene's interaction count was checked against the **swept** bound rather than a constant. *(Added by the 2026-09-02 ruling; §3.4.)* |
-| **5** | Her `season_requires` core rows each carry an `exercises:` **written before the run and not edited after it**, and each declared verb's `emits:` kind appears in the log with `causes[]` walking back to her act. Her **three currently-unmapped core rows** resolve to a verb with eligibility `hold:<record>`, a Q2 question in another person, and a Record stage — **or are recorded NOT-ASSESSED with the reason.** |
-| **6** | **The A5-style float control still fires.** `W11` may follow, but the float arm must not have been removed to make the run clean. |
+## §5.3 · The trace this plan owes, and the hole it exposes — `R2`
 
-> **Check 2 is the one that cannot be faked, and check 5 is the one that stops the author moving the
-> goalposts after seeing the result.** The session this plan follows failed at exactly that seam:
-> it graded cases against probes it had written, and the probes were the model.
+⚠ **COMPLETING THE CRITICAL PATH AS FIRST WRITTEN WOULD HAVE PRODUCED NPC `RUNS` = 0.** Traced
+item by item: `R1` reaches 45 (46 with the `world` reading), `R3` becomes reachable through
+`W24`/`W25`/`W27`, `R4` and `R5` already hold — and **`R2` stays at 0**, because it requires a core
+`exercises:` declaration and only **8 of 143 cases have any**. The item that authors them,
+`W10-core`, was placed *"after `W30`, in parallel"* and was a dependency of nothing.
+
+A plan whose critical path cannot reach its own bar is the defect this Part exists to fix, arriving
+in the fix. Two ways out, and this plan takes the first:
+
+1. **`W10-core` joins the NPC path** — author core `exercises:` rows for the NPC lane (**~390
+   undeclared core rows** of 427 core rows total; the first draft's "~390 core rows" conflated the
+   two). It is authoring, so it runs in parallel with `W28` from day one.
+2. *(Rejected.)* Redefine `R2` as "the named person executes ≥1 verb" and demote the declaration to
+   a separate `DECLARED` column. Rejected because `R2` is the only check that ties a run to **what
+   the case actually asked for**; without it a case "runs" by doing anything at all, and the bar
+   stops being about the corpus.
+
+⚠ **AND `ARC ENDS` CANNOT REACH 97 BY CONSTRUCTION** — which the bar must say rather than imply.
+The ceiling is set by the plan's own statuses: `UNCLEAR` endings (3 labelled, plus a share of the 47
+unclassified), `REFUSED-BY-L5` (an arc whose only ending is the threshold itself), and
+**`WAITS-ON-PLAYER` — ~44 of 97 ARC cases name a player, a PC or the party in `who_acts`** — plus
+the 14 refusal-only arcs §8.4 already names. **`ENDS` is not the goal for those cases; `RUNS` is.**
+See §6.4.
 
 ---
+
+# PART 6 · THE BAR — REWRITTEN 2026-09-02
+
+> ⚠ **The previous Part 6 is superseded.** Its bar was **one** NPC season (NPC-088, Carin Vedel),
+> and `W9` met it in form while its own check 2 did not: the chain it produced is one mechanism
+> repeating, and the multi-person chain §6.3 describes is unreachable. The six checks are kept as
+> `R1`–`R5` below, generalised from one case to the corpus. **A bar that one case can satisfy is a
+> bar this plan has already shown can be met while nothing runs.**
+
+**The bar is now two counts, one per lane, and they may never be averaged (`G10`):** the NPC number
+counts **propagation**, the ARC number counts **endings**. They measure different things.
+
+Both definitions are predicates over a run's own artifacts — `w.log`, `causes[]`, the ledgers,
+`w.dates`, the content hash. **Editing a case changes the world that gets built; it cannot satisfy a
+predicate about what that world then does.** That is what makes this bar unsatisfiable by writing,
+which `§0.2` requires and the old bar's row 4 did not achieve.
+
+## §6.1 · The NPC lane — "this NPC's season loop runs"
+
+The world is built **from the case** (`W27`): the named person, holding the office the case names, at
+the rung it names; the case's ambition as an OUGHT Proposition with a live `commit`; the rest of
+`who_acts` present.
+
+| check | predicate | today |
+|---|---|---|
+| **R1 completes** | every season returns; no `DESIGN-GAP`, no `INSTRUMENT-DEFECT` | 27 of 46 |
+| **R2 acts through a declared verb** | the named person executes a verb the case's **core** `exercises:` names, attributed by act id; the declaration's `need_sha` must predate the run | not computed |
+| **R3 propagates** | ≥1 **Act by another person** whose `causes[]` walks back to the named person's act, resolved via `causes[] → Act.actor` on `driver.resolved` | **0 of 46** |
+| **R4 reproducible** | same content hash twice; the float arm differs | met for NPC-088 only |
+| **R5 no fill off the register** | the fixture-read log ⊆ the register's `site:` set | met (`W9` check 3) |
+
+⚠ **`R3` SAYS *AN ACT BY ANOTHER PERSON*, AND THE FIRST WORDING SAID *AN EVENT*, WHICH WAS
+SATISFIABLE 711 TIMES OVER ON DAY ONE.** Every `claim.deposited` Event has a cause whose `subject`
+differs from its own — that is what a witness deposit *is* — so an Event-level test would have
+scored `R3` for all 27 completing NPC cases the moment `W18` shipped, and the instrument built to
+say zero would have opened by saying twenty-seven. Measured: **711 of 711** deposits pass the loose
+reading; **0** Events have a cause that is an Act by a different person, and only Carin ever acts.
+`Event` carries no actor by ruling (#353 §19.3), so "by another person" **must** resolve through
+`causes[] → Act.actor` on `driver.resolved` — which is also what `H-82`'s `log ∪ resolved`
+integrity check is for. A check that cannot fail is not a check (§0.1 pt 2).
+
+Statuses: `RUNS` (all five) · `RUNS-ALONE` (`R1`, `R4`, `R5`, and `R2`, but not `R3`) ·
+**`RUNS-UNDECLARED`** (`R1`, `R3`, `R4`, `R5` hold and `R2` is uncomputable — the honest status for
+a case that propagates while nobody has authored its `exercises:` rows, which is 135 of 143 today) ·
+`HALTS` · `UNREPRESENTABLE`.
+⚠ `ends_when: never` is **correct** for this lane — 38 of 46 NPC cases say it. An NPC loop is proven
+by propagation, not by ending.
+
+## §6.2 · The ARC lane — "this arc runs"
+
+`R1`–`R5`, plus:
+
+- **A1 · the span is honoured.** An integer `span_seasons` is run in full, unclamped. A prose span is
+  `SPAN-UNAUTHORED` — refused, never defaulted.
+- **A2 · the ending is reached within the span**, by the case's `ENDINGS_CLASSIFIED` label:
+  - **DECIDER** — a `binding_decision` Event by a named cast member whose `causes[]` walks back to an
+    earlier Event by a *different* person.
+  - **ROLL** — a seam Event from a subsystem with two named claimants (**including result `0`**,
+    which is a ruled legitimate outcome, not a failure).
+  - **THRESHOLD** — `date.fired` → a `Q1` question for a named person → that person's binding act or
+    refusal citing the date. ⚠ An arc whose *only* ending is the threshold itself is
+    `REFUSED-BY-L5`: a crossing may never produce an outcome, and the corpus asking it to is a
+    finding about the corpus.
+  - **NEVER** — `A1` and `R3` across the full span, **and** `content_hash(N) != content_hash(N-1)`:
+    the arc must still be moving. An arc that reaches a fixed point is reported as one, never as
+    `ENDS`.
+  - **UNCLEAR** — `ENDING-UNCLASSIFIED`.
+- **A3 · cast coverage.** Every `who_acts` entry that is a person acts at least once. Entries that
+  are not persons ("the faction", "the players") are reported `L1-REFUSED` or `WAITS-ON-PLAYER` —
+  the arc ran to the point where a Date or Petition awaits a holder the engine does not supply.
+
+Statuses: `ENDS` · `RUNS-WITHOUT-ENDING` · `WAITS-ON-PLAYER` · `HALTS` · `UNREPRESENTABLE` ·
+`SPAN-UNAUTHORED` · `ENDING-UNCLASSIFIED` · `REFUSED-BY-L5`.
+
+**Today: NPC `RUNS` = 0 of 46. ARC `ENDS` = 0 of 97.** Command: `python corpus_run.py`.
+
+## §6.3 · Rulings this Part carries forward, because the register cites them
+
+⚠ **THE CITATION GATE CAUGHT THIS REWRITE DROPPING A LIVE RULING, WHICH IS THE GATE WORKING.**
+Replacing Part 6 broke `H-33`'s `cite:`, because that row quotes the superseded §6.2. A rewrite may
+supersede an argument; it may not silently delete a decision the register depends on. Both are
+restored here, verbatim where a row quotes them.
+
+**The fan-out default.** The `H-33` default at this milestone is TOTAL FAN-OUT — #353's specified
+behaviour — with `sweep: [total, presence, five]`. The five channel predicates are a **sweep arm**,
+not the default: `G1` makes the instrument inject *the register's* default, so setting it to the
+five predicates would have handed the milestone `W6`'s content — a presence index and office-scope
+predicates — without anyone deciding it. `W6` has since built the predicates and measured the arms
+— deposits fall by roughly a factor of ten, **711 → 66 measured today** (⚠ the `678 → 68` this
+line and `H-33`'s cite both carried is a stale literal from an earlier tree; the factor holds, the
+numbers moved) — and **the default still stands at `total`**, because #353
+names the five channels and supplies no predicate for any of them; grading the row `ruled` on the
+back of an implementation would credit the design with an answer this chain invented.
+
+**The multi-person chain**, which `H-84` cites and which `§6.1`'s `R3` and `§6.2`'s DECIDER predicate
+both now formalise: a claim deposited in **another** person's ledger → that person's `Q2` question →
+**their** act. Links three through five are unreachable, and `H-84` is why — nothing moves a Record
+to a second person. `W9` measured it and built nothing that could have fixed it; `W24` is the item
+that does. The old Part 6 recorded this as *"the bar is NOT MET as §6.3 writes it"*; this Part
+records it as a count that is zero, which is the same fact with an instrument attached.
+
+---
+
+## §6.4 · What "run all 143" means when `ENDS` is unreachable for some — the expected distribution
+
+⚠ **THE GOAL SAYS *RUN*; THIS BAR'S ARC HALF COUNTS *ENDINGS*, AND THOSE ARE NOT THE SAME TARGET.**
+Stating the expected terminal distribution is how the bar avoids promising a number it cannot reach.
+
+| lane | terminal status | expected | why |
+|---|---|---|---|
+| **NPC** | `RUNS` | the goal is **46** | `R1` reaches 45–46; `R3` via `W24`/`W25`; `R2` via `W10-core` (§5.3) |
+| **ARC** | `ENDS` | **fewer than 97, and that is correct** | the classes below are not failures |
+| | `WAITS-ON-PLAYER` | ~44 name a player/PC/party in `who_acts` | the arc ran to the point where a Date or Petition awaits a holder the engine does not supply — **that is the arc running** |
+| | `REFUSED-BY-L5` | some of THRESHOLD | a crossing may never produce an outcome; the corpus asking it to is a finding about the corpus |
+| | `ENDING-UNCLASSIFIED` | 0 after `W28` | 47 today |
+| | `RUNS-WITHOUT-ENDING` | the NEVER class, 10 labelled | correct for an arc authored not to terminate |
+
+**So "all 97 arcs run" means: every arc reaches a terminal status that is not `HALTS`,
+`UNREPRESENTABLE` or `SPAN-UNAUTHORED`.** `ENDS` is the subset that terminates *in the engine*.
+Publishing only `ENDS` would report a design working as intended as a failure — and would create
+pressure to invent an ending for an arc the corpus says has none, which is `G1` at the corpus level.
+
+## §6.5 · `W9`'s landed record — RESTORED, because this rewrite deleted it
+
+⚠ **THE PART 6 THAT THIS PART REPLACED CARRIED `W9`'s ONLY `LANDED` NOTE, AND REPLACING IT DELETED
+THE EVIDENCE FOR THE ONE ITEM THE OLD BAR WAS ABOUT.** §6.3 then quoted a block that no longer
+existed. A rewrite may supersede a bar; it may not delete the record of what was measured against
+it. Restored verbatim from `7870283^`, unedited — its verdicts stand as they were written, and this
+Part's two counts are what replaces the *bar*, not what replaces the *measurement*.
 
 ### ⚠ **LANDED 2026-09-02 — ARTIFACT 2 RUNS, AND THE BAR IS NOT MET AS THIS SECTION WRITES IT.**
 
@@ -1461,8 +1910,6 @@ no amount of reading had found** — `causes=[ROOT]` everywhere (`H-82`), a dead
 that could only be about actors (`H-79`), Events carrying no `changes[]`, a `person.died` emitted
 when nobody died, the verb table's `stratum` column reaching no resolver (`H-83`), `A28`
 short-circuited since `W3` on the one invariant it exists to check, and `H-84` above.
-
----
 
 # PART 7 · THE GUARDRAILS
 
@@ -1573,25 +2020,47 @@ Two core rows — `EMG-C2`'s *"campaign-wide **institutional threat value**"* an
 
 ## §8.5 · Do not treat this plan as ratified
 
-Nothing here is ratified by merging it. It is `PROPOSED`, held back in full, and **`H-35` is an open
+Nothing here is ratified by merging it. It is `PROPOSED`, held back in full. ⚠ **`H-35` WAS an open
 question to Jordan**, `H-36` a closure explicitly offered for objection.
 
 ---
 
 # PART 9 · HOW TO FALSIFY THIS PLAN
 
+> ⚠ **REWRITTEN IN PART 2026-09-02.** The first table's falsifiers were written for the first item
+> set. Several have now FIRED, and a falsifier that fired is worth more than one that did not — the
+> rows below record which, rather than being quietly replaced. The second table is the live one.
+
+## §9.0 · The falsifiers that FIRED
+
+| claim | how it was falsified |
+|---|---|
+| *"the whole plan: artifact 2 does not run after `W0–W5`"* | **artifact 2 ran, and the diagnosis was still incomplete.** One case running proved the diagnosis of *why nothing ran* was right, and proved nothing about the goal: 0 of 143 cases run by Part 6's current definition. The falsifier was too weak, not wrong |
+| *"declared routing makes 60 cases assessable"* | never tested — **0 of 143 grade `PLAYABLE`**, and 868 of 903 rows are unauthored, so the antecedent never obtained |
+| *"the register is now complete"* | **fired repeatedly.** `H-86` … `H-98` were all added by instruments needing a hole that carried no row. `V2`'s own falsifier, still firing against its successor |
+| *"the escalation queue is empty"* | **fired.** `H-94`'s structural half, `H-98`, and `H-95`'s `world` half are live escalations, each a design choice with two defensible options |
+
+## §9.1 · The live falsifiers — for the SECOND item set
+
 | claim | what would prove it wrong |
 |---|---|
-| the critical path is `W0→W1→W2→W3→W5→W9` | an artifact-2 run that completes without one of the six, **or** a seventh item that turns out to block it |
+| the critical path is `W18→W20→W21→W22→W23→W26→W27→W30` | a case that reaches `RUNS` or `ENDS` **without** one of the eight — show it — **or** a ninth item that turns out to block it |
+| `W18` is first | any later yield figure that can be argued without it. §0.1 pt 4: name the control |
+| the 47 faction cases are the CORPUS's defect, not the architecture's | a reading of `ARCHITECTURE_V2.md:93`, `H-21` or #353 under which a faction acts as an actor — the refusal is ruled, so this is falsified by overturning the ruling, not by disliking it |
+| `W28` is the largest single yield | a re-scaled corpus that does **not** move `UNREPRESENTABLE` from 57 toward 0 |
+| the bar cannot be satisfied by writing | **a case edit that flips a status without changing what the world does.** This is the load-bearing one: Part 6's predecessor failed exactly here, and if Part 6 fails it too the plan is measuring authorship again |
+| propagation gates the NPC lane | an NPC case reaching `RUNS` with **0** cross-person cause edges |
+| `H-71` before `H-94` | an ending class that runs through operands and outnumbers DECIDER + THRESHOLD |
+
+| claim | what would prove it wrong |
+|---|---|
+| the critical path is `W0→W1→W2→W3→W5→W9` *(FIRST SET — historical)* | an artifact-2 run that completes without one of the six, **or** a seventh item that turns out to block it |
 | `W0` is first | a re-grade, a matrix row or a verb row that can be written correctly **without** a graded register — show one |
 | eleven of twelve `absent` rows close in chain | **a cited line that does not say what §3.1–§3.4 claims it says.** Every citation is a file and a line; check them |
-| the escalation queue is empty | a row where two defensible options lead to materially different games and no test of the five returns an answer. *(`H-35` was the last one and is now ruled — §3.4.)* |
-| the register is now complete | **a hole an instrument must fill that carries no row** — `V2`'s own falsifier, which fired **19 times** against `V2` and will be re-run against `hole_register.yaml` |
-| declared routing makes 60 cases assessable | a case with `exercises:` authored on every core row that is still NOT-ASSESSED for a reason that is not *"nobody authored it"* |
 | the 22-arc residue needs re-authoring, not design | a re-authored arc, expressed purely through §36.3's petition chain and §37's `tell`, that **still** routes to a refusal probe |
 | **the whole plan** | **artifact 2 does not run after `W0–W5`.** Everything above is a hypothesis about why the tested version ran zero cases end to end. **One case running is the only evidence that the diagnosis was right.** |
 
-## §9.1 · What would make THIS document done — §0.2's standard, applied to itself
+## §9.2 · What would make THIS document done — §0.2's standard, applied to itself
 
 **Nothing in it runs.** It is reference under §0.05 and it is prose under §0.2. Exactly **one** of
 its claims is satisfiable by writing — **`V2` §I2's artifact 0**, *"Part VII has no `absent` row in
@@ -1608,9 +2077,9 @@ return.**
 | | |
 |---|---|
 | **Adjudicated by** | a read-only `valoria-critic` on the top tier — `Read`/`Grep`/`Glob`, **no write tools**, so its independence is a property of `.claude/agents/valoria-critic.md` and not of its prompt (`CLAUDE.md` §10). It read #353 (2,068 lines) and `ARCHITECTURE_V2.md` (830) in full, produced **no files**, and stated its own coverage, its own sampling and its own null results |
-| **Measured by** | direct execution during composition — `report.py`, `pytest test_tracer_is_honest.py` (**63 passed**), and set-cover/verdict queries over `results.json`, each with its command in-line |
+| **Measured by** | direct execution during composition — `report.py`, `pytest test_tracer_is_honest.py` (**63 passed at composition; 143 today — run it**), and set-cover/verdict queries over `results.json`, each with its command in-line |
 | **Corrections this document makes to its own author's prior work** | three, in §1.3: `H-23` (a precedent that would have overturned an explicit sentence of the specification), `H-36` (emitter- vs receiver-side, decided the wrong way), and the Part E verb-roster check (**a keyword search reported as a verified negative** — the same router failure the plan exists to end) |
-| **Escalations** | **zero.** `H-35` was escalated and **ruled by Jordan on 2026-09-02** — *"5 scenes for a character to play per season"* — and is recorded at §3.4 with its consequences and the two `assumption` rows it creates. **Nothing in this plan is waiting on a ruling.** |
+| **Escalations** | **zero.** `H-35` was escalated and **ruled by Jordan on 2026-09-02** — *"5 scenes for a character to play per season"* — and is recorded at §3.4 with its consequences and the two `assumption` rows it creates. **Nothing in the FIRST item set was waiting on a ruling ⚠ **and that is no longer true of the document**: §9.0 records three live escalations — `H-94`'s structural half, `H-98`, and (until `W28` decided it) `H-95`'s `world` half.** |
 | **Held back for objection** | **one** — `H-36`, closed receiver-side |
 | **Scope** | every closure is made **in chain** (PR #337 → now). `W16` records what a tree-wide search returns and **the plan rests on none of it** |
 | **`ED` allocated** | **none.** A gap in a `PROPOSED` architecture gets no ID; the adoption decision gets one |

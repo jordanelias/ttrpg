@@ -1840,7 +1840,30 @@ def test_w5_q_has_a_producer_across_all_four_sources():
             p.ledger.append(S.Claim("c_t", p.id, p.id, "office", "duke", 0,
                                     "told_by", 100, "own"))
         elif src == "band_crossed":
-            w.crossings.append((p.id, "subsistence", 0))
+            # ⚠ REV 1 PLANTED A TUPLE THE WRITER NEVER PRODUCES, AND SO TESTED ITSELF. It wrote
+            # `w.crossings.append((p.id, "subsistence", 0))` -- a PERSON-keyed 3-tuple. `matter()`
+            # appends `(site_id, verb, before, after, event_id)`, a SITE-keyed 5-tuple, and the
+            # reader compared element 0 to `p.id`, so Q3 produced ZERO questions in every real run
+            # while this assertion stayed green. The test and the reader shared a wrong shape, the
+            # same off-by-one failure the `claim_landed` arm above already records.
+            #
+            # ⚠ NOW DRIVEN THROUGH THE REAL WRITER. A site at the person's own rung is worn past a
+            # floor by `matter()`, so the tuple under test is the one the loop actually emits, and
+            # the question forms because the person is PRESENT to notice it.
+            here = next((t.object for t in w.tenures
+                         if t.subject == p.id and t.kind == "contain" and t.until is None), None)
+            assert here is not None, "the fixture person is contained nowhere; Q3 needs a place"
+            # The site kind and its floors are read from the fixture, never typed here -- the
+            # floors are per-KIND (`band_floors: {harbour: ..., seam: ..., body: ...}`), so a kind
+            # this table does not carry has no floor to cross and the arm would be vacuous again.
+            floors_by_kind = w.fixtures.get("band_floors")
+            kind = next(k for k in floors_by_kind if k != "body")
+            top = max(floors_by_kind[kind].values())
+            w.sites["s_q3"] = S.Site("s_q3", here, kind, top + 5, [])
+            S.SeasonDriver(w).matter()
+            assert w.crossings, "the fixture no longer crosses a floor -- Q3 has nothing to read"
+            assert w.crossings[0][0] in w.sites, (
+                "a crossing is keyed on something that is not a site; the writer changed shape")
         elif src == "need":
             pr = S.Proposition("pr_t", "OUGHT", "rec_writ", "it should stand", True, 0)
             w.propositions[pr.id] = pr
@@ -3011,14 +3034,18 @@ def test_the_governance_slice_executes_and_a_binding_decision_reaches_a_rung():
           f"{len(S.resolvable_verbs())} of {len(S.VERB_TABLE)} verbs now execute")
 
 
-def _seat(w, person, office_id, post, rung, remit=("issue", "revoke"), first=False):
+def _seat(w, person, office_id, post, rung, remit=("issue", "revoke"), first=False,
+          faction: str = "Crown"):
     """Seat `person` on a new office. ONE OWNER for the fixture, because every governance test
     needs one and the governance-canon pass found the suite had built exactly TWO offices in the
     entire instrument — so the worlds it asserted about were not the worlds the ruling is about.
 
     `first=True` inserts the tenure at the head of `w.tenures`, which is how the insertion-order
     dependence in the old `under_purview` is made observable rather than argued about."""
-    w.offices[office_id] = S.Office(office_id, post, rung, list(remit))
+    # `faction` defaults to Crown here because the governance fixtures model the REALM ladder
+    # Jordan ruled on (king / duke / clerk), which is the Crown's. A test that needs a different
+    # belonging passes one; `Office` refuses anything off the roster either way (`H-99`).
+    w.offices[office_id] = S.Office(office_id, post, rung, list(remit), faction=faction)
     ten = S.Tenure(f"t_{office_id}_{person}", person, office_id, "hold", 0)
     w.add_tenure(ten)
     if first:
@@ -4190,11 +4217,16 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     §F2's scoring separates 2..7 of 22 candidates and the rest tie (`H-96`)."""
     import corpus_run as C
     import run_cases as R
-    rows = [C.run_case(c) for lane in ("NPC", "ARC") for c in R.load_cases(lane)]
+    rows = [C.run_case(c, 0, lane) for lane in ("NPC", "ARC") for c in R.load_cases(lane)]
     bad = [r for r in rows if r["status"] == "INSTRUMENT-DEFECT"]
     assert not bad, (f"the corpus runner has a call-site bug on {[(r['id'], r['why']) for r in bad][:3]}"
                      " — an instrument defect, which is NOT a finding about the design")
-    live = [r for r in rows if r["status"] in ("RAN", "NO-EXECUTION")]
+    # ⚠ KEYED ON `R1`, NOT ON A STATUS NAME. `W18` renamed the bar's statuses (`RAN` became
+    # `RUNS-UNDECLARED` / `RUNS-ALONE-UNDECLARED`), and a filter naming the old ones silently
+    # selects nothing — which is exactly what happened to `corpus_run.main` when `W18` landed: the
+    # verb counts went to `0 of 32` and an empty set has no obvious tell. The property meant all
+    # along is "the run completed", which is `R1`.
+    live = [r for r in rows if r.get("checks", {}).get("R1") is True]
     unrep = [r for r in rows if r["status"] == "UNREPRESENTABLE"]
 
     # `H-95` — the two scale vocabularies, asserted EXACTLY. `faction` is refused by RULING
@@ -4202,11 +4234,24 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # the corpus or to `rung_kinds` and must re-derive the row rather than reuse it.
     from collections import Counter
     census = Counter(r["scale"] for r in unrep)
-    assert dict(census) == {"faction": 47, "world": 10}, (
-        f"the unrepresentable census moved: {dict(census)} (was faction 47, world 10). Either the "
-        "corpus was re-scaled or `rung_kinds` grew — `H-95` must be re-derived, not reused")
-    assert len(live) == 86 and len(rows) == 143, (
-        f"the corpus size moved: {len(live)} runnable of {len(rows)}; `H-95`'s 40% is stale")
+    # ⚠ THE `faction` COUNT IS DERIVED FROM THE OVERLAYS, NOT PINNED — and the change is `W28`'s
+    # doing. The first version asserted `{"faction": 47, "world": 10}` flat, and it FIRED correctly
+    # on the first three re-scales: 47 -> 44. Re-pinning it to 44 would buy one commit and go stale
+    # on the next overlay, and re-pinning is the uncontrolled path `CLAUDE.md` §7 names. So the
+    # invariant is stated as the arithmetic it always was: the corpus holds 47 `faction` cases, an
+    # overlay re-scales one each, and every one that remains is unrepresentable. A corpus change or
+    # a `rung_kinds` change still fails this; only an overlay may move it, and only by exactly one.
+    rescaled_from = Counter(sc["was"] for sc in C.RESCALES.values())
+    expected = {"faction": 47 - rescaled_from.get("faction", 0),
+                "world": 10 - rescaled_from.get("world", 0)}
+    expected = {k: v for k, v in expected.items() if v}
+    assert dict(census) == expected, (
+        f"the unrepresentable census is {dict(census)}, and {len(C.RESCALES)} overlays re-scale "
+        f"{dict(rescaled_from)} out of a corpus of 47 faction / 10 world, which predicts "
+        f"{expected}. Either the corpus changed or `rung_kinds` grew — `H-95` must be re-derived")
+    assert len(live) == 143 - sum(census.values()) and len(rows) == 143, (
+        f"the corpus size moved: {len(live)} runnable of {len(rows)}")
+    assert sum(census.values()) + len(live) == 143, "a case is neither runnable nor unrepresentable"
 
     # ⚠ THE EXECUTION MEASURE IS PART E's OWN COLUMNS, NOT `driver.resolved`. `resolved.append(a)`
     # is the FIRST statement of `_fold`, before eligibility and before the requires predicate, so
@@ -4225,10 +4270,26 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     assert ever <= foldable_all, (
         f"{sorted(ever - foldable_all)} executed while the fold cannot execute them — the "
         "attribution has gone back to matching on emission kind, which two pairs of verbs share")
-    assert ever == {"create_record", "move", "speak", "tell", "utter", "work"}, (
+    # ⚠ 5, NOT 6, AND THE NUMBER WENT DOWN BECAUSE THE OLD ONE WAS WRONG (§0.1 point 4 -- a
+    # number without a control is not a measurement in EITHER direction). `move` was counted as
+    # executing in every world; the adversarial pass showed `_req_move` could not refuse anybody
+    # (it ended `or here.kind == "person"`, true of every person) and `_eff_move` closed every live
+    # `contain` while opening none, then returned `[a.actor]` regardless -- so `travel.moved` was
+    # published for a state change that did not happen. Measured on NPC-088 at seed 0: live
+    # `contain` edges 10 -> 7 in season 1, `Query.presence` empty for every rung thereafter, and
+    # three more fabricated `travel.moved` in each of seasons 2 and 3. `move` has no destination to
+    # move to -- that is `H-94` in a second verb -- so it now refuses alongside `transfer`, and the
+    # honest count is 5.
+    assert ever == {"create_record", "speak", "tell", "utter", "work"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
-    assert refused_only == {"transfer"}, (
+    # ⚠ `move` JOINED `transfer` HERE, AND IT IS THE SAME HOLE. Both are refused for want of an
+    # OPERAND the Candidate cannot carry: `transfer` has no `kind`/`amount`, `move` has no `to`.
+    # `Candidate := (verb, subject, why)` and a candidate's `subject` comes from the QUESTION's
+    # referents -- a claim's subject or a Proposition -- never a destination rung, so there is no
+    # route from the person's decision to a place. `move` used to "execute" by closing every
+    # containment and opening none; see the executed-set note above.
+    assert refused_only == {"move", "transfer"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `transfer` is the STRUCTURAL "
         "half of `H-94`: `Candidate := (verb, subject, why)` has no operand field, so "
         "`stores(hearth(giver), kind) >= amount` has no `kind` and no `amount` to read. `tell` "
@@ -4262,3 +4323,213 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
         "five are the governance verbs and `H-71` is why; any movement means `H-71` has moved")
 
 
+
+
+def test_the_seam_calls_personal_combat_rather_than_naming_it():
+    """JORDAN, 2026-09-02: *"kill / wound points towards a seam that should be calling in the
+    personal combat system."*
+
+    Before this, `contest()` resolved the subsystem by name and then REFUSED — a pointer, not a
+    call — on a scope note that ruling overrides. The seam calls now, and these are the properties
+    that make the call honest rather than merely present."""
+    import combat_seam as C
+    w = P.tiny_world(); w.step = S.Step.RESOLVE
+    if C.engine() is None:                     # a NAMED gap, never a silent skip
+        assert C.load_error(), "the engine is unavailable and the seam reports no reason"
+        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+
+    out = S.contest(w, "S", "the body", ["p_low", "p_mid"], 0, 2, ["act1"])
+    assert out["status"] == "RESOLVED" and out["module"] == "personal_combat", out
+    assert out["resolver"] == "d_sigma", (
+        "the seam is not using the resolver `module_contracts.yaml` declares for this prize")
+
+    # ⚠ DETERMINISM, WHICH IS THE WHOLE REASON THE SEED IS DERIVED FROM THE WORLD'S CLOCK.
+    # `wrapper.fight`'s own note says to pass `random.Random(seed)`; an unseeded call would make
+    # every campaign unreproducible, which `W11` and `test_w9_check1` both rest on.
+    again = S.contest(w, "S", "the body", ["p_low", "p_mid"], 0, 2, ["act1"])
+    assert again["result"] == out["result"] and again["seed"] == out["seed"], (
+        "the same contest in the same world gave a different answer — the seam is not seeded "
+        "from the world clock and the instrument is no longer reproducible")
+
+    # ⚠ THE SEAM MINTS NO DEGREE, AND THAT IS `H-98`. `contest()`'s contract reads a band off a
+    # MARGIN; the engine returns a WINNER (+1/-1/0). Mapping one onto the other is the second
+    # resolver §27.2 forbids, so the outcome is returned as the engine gave it.
+    assert "degree" not in out and "band" not in out, (
+        f"the seam has started reporting a degree ({ {k: out[k] for k in out if k in ('degree','band')} }) "
+        "— it has become the second resolver, which is S27.2's highest-value refusal")
+    assert out["result"] in (-1, 0, 1), out["result"]
+
+    # ⚠ `0` IS A RULED OUTCOME. Jordan, 2026-06-02, in the engine: "an undecided fight is a
+    # legitimate outcome." A seam that retried it into a decision would overwrite that ruling.
+    assert out["unresolved"] == (out["result"] == 0)
+
+    # A party it cannot derive is a GAP, never a fabricated side (`combat_bridge`'s rule).
+    gap = C.resolve(w, ["p_low"], ["a"], "the body")
+    assert gap["status"] == "PARTY-GAP" and "two parties" in gap["why"], gap
+
+
+def test_the_combat_seam_derives_one_field_and_it_decides_something():
+    """`H-97`. A tracer `Person` carries nothing combat-shaped except `body`, so the seam derives
+    EXACTLY ONE `Combatant` field from it and leaves every other at the class's own default —
+    `engine/cross_scale/combat_bridge.py`'s discipline, followed rather than reinvented.
+
+    ⚠ AND IT INVENTS NO NUMBER. `body_band_penalty` already owns the body → bands reading (it is
+    `H-38`'s closure spent), so the magnitude comes from `band_floors["body"]`, which is
+    registered. The injected part is WHICH field the penalty lands on, and that is what `H-97`
+    grades.
+
+    ⚠ THE SECOND ASSERTION IS THE ONE THAT MATTERS. A derivation that reaches the engine and
+    changes no outcome would be decoration — the `uniform` arm of its own sweep. Condition has to
+    move the result, or the seam is passing a constant."""
+    import combat_seam as C
+    w = P.tiny_world()
+    if C.engine() is None:
+        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+    scale = w.fixtures.get("condition_scale")
+    ends = {}
+    for body in (scale, 700, 400, 50):
+        w.persons["p_low"].body = body
+        ends[body] = C.derive_party(w.persons["p_low"], w.fixtures, "x").end
+    assert ends[scale] > ends[700] > ends[400] > ends[50] >= 1, (
+        f"the derived `end` is not monotone in body condition: {ends}. A dying fighter must not "
+        "be as durable as a healthy one, and the floor of 1 is why a dying one still fights")
+
+    def wins(body_a: int) -> int:
+        w.persons["p_low"].body = body_a
+        w.persons["p_mid"].body = scale
+        n = 0
+        for t in range(40):
+            w.tick = t
+            n += C.resolve(w, ["p_low", "p_mid"], ["a"], "the body")["winner"] == "p_low"
+        return n
+    healthy, dying = wins(scale), wins(50)
+    assert healthy > dying, (
+        f"condition does not reach the engine: healthy won {healthy}/40 and dying {dying}/40. "
+        "The derived field is decoration, and the seam is handing the subsystem a constant")
+
+
+def test_w18_the_run_instrument_and_its_control():
+    """`W18`. `PLAN.md` Part 6's bar, as an instrument. Three clauses, and **the control is first
+    because it is the only one that demonstrates sensitivity.**
+
+    ⚠ "THE CONTROL IS THAT THE INSTRUMENT CAN SAY ZERO" IS NOT A CONTROL, and `W18`'s first draft
+    said it was. Printing 0 on a corpus where 0 is entailed shows nothing (§0.1 pt 4). The planted
+    cross-person edge is the control: it must flip `R3` false → true, and if it ever stops flipping,
+    the instrument has gone blind and every zero it prints afterwards is worthless."""
+    import corpus_run as C
+    import run_cases as R
+
+    # 1 — THE CONTROL.
+    before, after = C.planted_control()
+    assert before is False and after is True, (
+        f"the planted cross-person edge did not flip R3 ({before} -> {after}). The detector is "
+        "blind, and every `RUNS = 0` it prints is uninformative rather than true")
+
+    rows = [C.run_case(c, 0, lane) for lane in ("NPC", "ARC") for c in R.load_cases(lane)]
+    npc = [r for r in rows if r["id"] in {c["id"] for c in R.load_cases("NPC")}]
+    arc = [r for r in rows if r not in npc]
+
+    # 2 — the two counts, and they are zero today.
+    assert sum(1 for r in npc if r["status"] == "RUNS") == 0, (
+        "an NPC case reaches RUNS — that is PROGRESS and Part 6's count must be re-derived, not "
+        "reused. `RUNS` needs `R2`, which `W18` declares NOT-COMPUTABLE, so this firing means "
+        "either `W10-core` landed or a status is being scored that should not be")
+    assert sum(1 for r in arc if r["status"] == "ENDS") == 0, (
+        "an ARC case reaches ENDS — `W30` has landed or `A2` is being scored while NOT-COMPUTABLE")
+
+    # ⚠ AND THE ZEROS MUST NOT BE VACUOUS. Cases have to be REACHING the checks for a zero to mean
+    # anything; if nothing completes, `RUNS = 0` says only that the instrument fell over.
+    completing = [r for r in rows if r.get("checks", {}).get("R1") is True]
+    assert len(completing) >= 80, (
+        f"only {len(completing)} cases complete a run; the two zeros are then a report about the "
+        "harness, not about the design")
+    assert all(r["checks"]["R4"] for r in completing), "a completing case is not reproducible"
+
+    # 3 — NOT-COMPUTABLE is reported, non-empty, and every entry names the item that closes it.
+    assert C.NOT_COMPUTABLE, "nothing is declared NOT-COMPUTABLE — R2/A2/A3 are being scored"
+    assert set(C.NOT_COMPUTABLE) == {"R2", "A2", "A3"}, sorted(C.NOT_COMPUTABLE)
+    for k, why in C.NOT_COMPUTABLE.items():
+        assert "W" in why, f"{k} does not name the item that closes it: {why!r}"
+    for r in completing:
+        assert "R2" not in r["checks"] and "A2" not in r["checks"], (
+            f"{r['id']} carries a score for a check declared NOT-COMPUTABLE — a number that cannot "
+            "fail is not a measurement, and this is the exact defect the declaration exists to stop")
+
+    # `A1` refuses a prose span rather than defaulting one — 25 ARC cases today.
+    assert sum(1 for r in arc if r["status"] == "SPAN-UNAUTHORED") > 0, (
+        "no arc is SPAN-UNAUTHORED; prose spans are being silently defaulted, and an arc reported "
+        "as running its span would not have run it")
+
+
+def test_h99_the_office_carries_its_three_canon_axes_and_a_misseating_refuses():
+    """`H-99`. Jordan, 2026-09-02: *"does the office schema include faction belonging, scale of
+    office, type of office, etc?"* It did not — the office block carried `post`, `remit`, `why`.
+
+    ⚠ THE FALSIFIER IS THE MIS-SEATING, NOT THE HAPPY PATH (§0.1 point 2). Asserting that
+    `Cardinal of Justice` derives `Church of Solmund` observes nothing: a schema that ignored the
+    body entirely and returned the first faction alphabetically would also have to be caught. So
+    every arm below MUTATES the input into the error a hand-authored re-scaling actually makes at
+    volume — a real body under the wrong faction — and requires a refusal.
+
+    ⚠ AND THE SOURCE PRECEDENCE IS ASSERTED AS DATA, because it is a RULING and prose cannot hold
+    it (§0.05). Jordan, 2026-09-02: *"systems/world ... for the identity/names/organizations it is
+    canon"*; *"systems/factions ... near-canon but superseded by anything in world."* The name that
+    broke this rule once is `Ministry of the Peninsula`, and it must stay out by DATA."""
+    # 1 — the three axes exist and resolve, and SCALE is not among them by design.
+    assert S.FACTIONS and S.BODY_FACTION and S.BODY_FUNCTION
+    assert S.office_faction("Cardinal of Justice", None) == "Church of Solmund"
+    assert S.ROLE_TEMPLATE_OF["Church of Solmund"] == "ecclesiastical"
+    assert "Judicial" in S.BODY_FUNCTION["Cardinal of Justice"]
+    assert not (set(S.BODY_FACTION) & set(S.RUNG_KINDS)), (
+        "a body is being used as a rung; an office's scale is its SEAT, not its organ")
+
+    # 2 — THE MUTATION. Every canonical body, declared under a faction that is not its own,
+    #     must refuse. Without this the derivation is decorative.
+    checked = 0
+    for body, owner in S.BODY_FACTION.items():
+        for other in S.FACTIONS:
+            if other == owner:
+                continue
+            with pytest.raises(S.Forbidden):
+                S.office_faction(body, other)
+            checked += 1
+    assert checked >= 16 * 7, f"only {checked} mis-seatings were tried"
+
+    # 3 — the two ways an office can name nothing at all.
+    with pytest.raises(S.Unspecified):
+        S.office_faction(None, None)
+    with pytest.raises(S.Unspecified):
+        S.office_faction("Ministry of Silly Walks", None)
+    with pytest.raises(S.Unspecified):
+        S.office_faction(None, "Niflhel")
+
+    # 4 — THE PRECEDENCE RULING, AS DATA. Three names that a reasonable reader would have
+    #     included and canon excludes. Each was in a draft of this roster or in circulation.
+    for excluded, why in [
+        ("Ministry of the Peninsula", "faction_canon_v30.md:374 — 'institutional infrastructure, "
+                                      "not a faction'; absent from all of systems/world/"),
+        ("People's Revolution", "the pre-ED-061 name for Restoration Movement"),
+        ("Niflhel", "dissolved — worldbuilding_v30.md §3.2, §10"),
+    ]:
+        assert excluded not in S.FACTIONS, f"{excluded!r} is a member: {why}"
+    assert "Restoration Movement" in S.FACTIONS and "Schoenland" in S.FACTIONS
+
+    # 5 — the two factions with no role template RAISE rather than defaulting (§42.2 polarity).
+    for f in ("Guilds", "Schoenland"):
+        assert f in S.FACTIONS and f not in S.ROLE_TEMPLATE_OF, (
+            f"{f} has a role template; §4's player-eligible column does not list it, so one was "
+            "invented — the fabrication the precedence ruling exists to stop")
+
+    # 6 — EVERY LOADED OVERLAY RESOLVES, and the loader refuses a mis-seated one.
+    import corpus_run as C
+    for cid, sc in C.RESCALES.items():
+        off = sc.get("office") or {}
+        assert S.office_faction(off.get("body"), off.get("faction")) in S.FACTIONS, cid
+    with pytest.raises(SystemExit):
+        C._check_office("mutant.yaml", {"post": "X", "why": "y",
+                                        "body": "Cardinal of Justice", "faction": "Crown"})
+    with pytest.raises(SystemExit):
+        C._check_office("mutant.yaml", {"post": "X", "why": "y", "faction": "Crown",
+                                        "remit": ["annex"]})
+    with pytest.raises(SystemExit):
+        C._check_office("mutant.yaml", {"post": "X", "faction": "Crown"})
