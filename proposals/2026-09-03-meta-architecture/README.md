@@ -9,6 +9,13 @@
 | **`02_HIERARCHIES.md`** | **Stage 2 — hierarchies, dependencies, nests, scales** |
 | **`03_VERBS_AND_LOOPS.md`** | **Stage 3 — verbs, consequences, slices, season loops** |
 | **`04_CODE_ARCHITECTURE.md`** | **Stage 4 — the code shape (A–F) and THE METHOD (G).** Read **PART G first** |
+| | **THE READINGS — the stages indexed by question rather than by stage.** They introduce nothing; **if a reading and a stage disagree, the stage is right** |
+| `05_ONTOLOGY.md` | objects · relations · edges · fields — and the four kinds of value |
+| `06_STRUCTURE.md` | hierarchies · nestings · dependencies · state changes |
+| `07_DYNAMICS.md` | slices · graphs · chains · loops · echo and propagation |
+| `08_DATA_AND_KEYS.md` | dictionaries · definitions · registers · keys — **and why there is no bus** |
+| `09_WORKED_EXAMPLES.md` | political strife · a settlement at risk of revolt · excommunication — each ending in **what is blocked today, at a nameable row** |
+| **`10_FACTIONS_AND_DEPLOYMENT.md`** | ⚠ **AMENDS the stages.** The faction as a deployable abstraction; war as an uttered declaration |
 
 ## What this is
 
