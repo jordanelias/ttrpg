@@ -77,6 +77,18 @@ GRADES = ("ruled", "measured", "assumption", "absent")
 GRADE_STRICTNESS = ("absent", "assumption", "measured", "ruled")
 FIELDS = ("id", "tier", "hole", "kind", "owner", "grade",
           "default", "site", "sweep", "unblocks", "cite", "source")
+# ⚠ `sign` IS DECLARED OPTIONAL AND IS REQUIRED ON EXACTLY ONE KIND. `ID-16` — *a design
+# enumerates its loops and signs each one* — and the register is where the enumeration lives,
+# because every one of its nine existing kinds names an ABSENCE and a feedback path is not an
+# absence. Optional rather than universal: adding a twelfth mandatory column would have forced a
+# meaningless cell onto 91 rows, and a column that is meaningless on 91 rows is not read on any of
+# them. `G13` is the reader, which is what keeps this from being a column nobody consults (`ID-13`).
+OPTIONAL_FIELDS = ("sign",)
+LOOP_KIND = "LOOP"
+# `+` AMPLIFYING · `-` DAMPING. Two values and no third: a loop whose sign nobody can name is the
+# finding `ID-16` exists to surface, and it is recorded as an `absent` row rather than as a
+# question mark in this column.
+LOOP_SIGNS = ("+", "-")
 SWEEP_POINTS = 3
 # Part B of ARCHITECTURE_V2.md carries D1..D26. The bound is re-derived from the document by
 # `part_b_defects()` rather than pinned here; this is only the pattern.
@@ -200,7 +212,7 @@ def part_b_defects() -> set:
 def rule_R0(reg: dict) -> list:
     bad, seen = [], set()
     for r in reg["rows"]:
-        extra = sorted(set(r) - set(FIELDS))
+        extra = sorted(set(r) - set(FIELDS) - set(OPTIONAL_FIELDS))
         missing = sorted(set(FIELDS) - set(r))
         if extra:
             bad.append(f"{r.get('id','?')}: keys outside the declared shape: {extra}")
@@ -324,8 +336,46 @@ def rule_G8(reg: dict) -> list:
     return bad
 
 
+def rule_G13(reg: dict) -> list:
+    """`ID-16`: a design enumerates its loops and SIGNS each one — and the sign is read here.
+
+    ⚠ **THIS GATE IS WHAT MAKES THE COLUMN A MECHANISM RATHER THAN A NOTE.** `ID-13` is explicit
+    that a column no resolver consults is not a weak mechanism but one that does not exist, so a
+    `sign:` nobody validates would be exactly the defect the idiom it serves is trying to prevent.
+    Three clauses, and the third is the one with teeth:
+
+      1. a `LOOP` row carries a `sign`, and it is `+` or `-`. A feedback path whose direction
+         nobody will state is not enumerated, it is merely mentioned.
+      2. a row of any OTHER kind carries no `sign`. The column means one thing.
+      3. **an amplifying loop must name what bounds it**, in `default:`. A `+` loop with no bound
+         is a spiral, which is `F.28` — *nothing bounds a spiral across seasons* — and the whole
+         reason `ID-16` says a design of nothing but damping converges is that the two failures
+         are opposite and a design can have both. A `-` loop needs no such cell; convergence is
+         not a crash.
+
+    ⚠ **AND IT DOES NOT CHECK THAT THE ENUMERATION IS COMPLETE, WHICH IS THE HALF THAT IS STILL
+    ABSENT.** Completeness needs the cycle set computed from `writes` × typed `requires`, and
+    `requires` is prose in all 32 verb rows (`H-94`/`F.24`). `H-102` is that row. This gate checks
+    every loop somebody declared; it cannot see one nobody did."""
+    bad = []
+    for r in reg["rows"]:
+        sign, kind = r.get("sign"), str(r.get("kind") or "")
+        if kind == LOOP_KIND:
+            if sign not in LOOP_SIGNS:
+                bad.append(f"{r.get('id','?')}: kind is LOOP and sign is {sign!r}, "
+                           f"not one of {list(LOOP_SIGNS)}")
+            elif sign == "+" and normalised_default(str(r.get("default") or "")) == "none":
+                bad.append(f"{r.get('id','?')}: an amplifying loop with no bound in `default:` "
+                           "-- that is a spiral, and F.28 is the row that says nothing catches one")
+        elif sign is not None:
+            bad.append(f"{r.get('id','?')}: carries `sign` on a {kind or 'kind-less'} row; "
+                       "the column belongs to LOOP rows only")
+    return bad
+
+
 RULES = {"R0": rule_R0, "R1": rule_R1, "R2": rule_R2,
-         "R3": rule_R3, "G6": rule_G6, "G8": rule_G8, "G12": rule_G12}
+         "R3": rule_R3, "G6": rule_G6, "G8": rule_G8, "G12": rule_G12,
+         "G13": rule_G13}
 
 
 def check(reg: dict, only: list | None = None) -> dict:

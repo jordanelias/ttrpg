@@ -4616,3 +4616,41 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
     assert not C._r3_propagates(w2, S.SeasonDriver(w2)), (
         "`_r3_propagates` returned true on a world where nobody has acted — it is not measuring "
         "propagation")
+
+
+def test_id16_the_sign_column_has_a_reader_and_it_can_fail():
+    """`G13` — the gate that makes `sign:` a mechanism rather than a note.
+
+    ⚠ MUTATION-CHECKED, BECAUSE A GATE NOBODY HAS SEEN FAIL IS `ID-10`'s ABSENT CHECK. Three
+    plants, one per clause. The clean register must pass, and each mutation must be named."""
+    import copy
+    import register as R
+
+    reg = R.load()
+    assert R.rule_G13(reg) == [], "the committed register does not satisfy its own loop gate"
+
+    loops = [r for r in reg["rows"] if r.get("kind") == R.LOOP_KIND]
+    assert loops, "no LOOP row exists, so every clause below would pass vacuously"
+    assert all(r.get("sign") in R.LOOP_SIGNS for r in loops)
+    assert any(r["sign"] == "+" for r in loops), (
+        "every declared loop is damping — which is the state `ID-16` says converges, and if it "
+        "is true it should be said, not left to be inferred from a table nobody signed")
+
+    # 1 — a LOOP row with no sign.
+    m = copy.deepcopy(reg)
+    for r in m["rows"]:
+        r.pop("sign", None)
+    assert R.rule_G13(m), "a LOOP row with no sign passed"
+
+    # 2 — an AMPLIFYING loop with nothing bounding it. This is the clause with teeth: `F.28` is
+    #     the row that says nothing catches a spiral across seasons.
+    m2 = copy.deepcopy(reg)
+    for r in m2["rows"]:
+        if r.get("sign") == "+":
+            r["default"] = "none"
+    assert R.rule_G13(m2), "an unbounded amplifying loop passed"
+
+    # 3 — the column on a row it does not belong to.
+    m3 = copy.deepcopy(reg)
+    next(r for r in m3["rows"] if r.get("kind") != R.LOOP_KIND)["sign"] = "-"
+    assert R.rule_G13(m3), "a `sign` on a non-LOOP row passed"

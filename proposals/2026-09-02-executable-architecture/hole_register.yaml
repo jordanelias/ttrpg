@@ -1156,6 +1156,83 @@ rows:
     cite:      "FOUND BY BUILDING THE CALL Jordan ruled for. `H-88` said that if the seam dispatches, *the degree is the SUBSYSTEM's output and inventing one here would be the second resolver S27.2 names* — and calling the subsystem shows the subsystem does not produce one. It produces a winner and a legitimate undecided case. So the degree ladder is not merely unwritten at the seam; the thing it was to be read from is a different shape. ⚠ NOT RESOLVED BY MAPPING, AND THE SEAM ASSERTS IT DOES NOT: a test refuses any `degree`/`band` key on the seam's return, because mapping a winner onto a band is the second resolver arriving in the seam for the SECOND time (rev 1 of `contest()` hardcoded `band = Partial`). `absent` with no default: choosing between *give the ladder a margin the subsystem can supply*, *change what a contest returns*, and *let the prize decide the shape* is a design call."
     source:    "Jordan 2026-09-02 -- the calling seam"
 
+  # -------------------------------------------------------------------------
+  # `ID-16` -- THE LOOPS, NAMED AND SIGNED. Added 2026-09-03.
+  #
+  # ⚠ WHY THESE ARE ROWS AND NOT A TABLE IN A DOCUMENT. The meta-architecture's `ID-16` asks a
+  # design to enumerate its feedback paths and state which way each points, and its own rev. 3
+  # correction is that the DECLARED list is buildable today while the DERIVED one -- recomputed
+  # from `writes` x typed `requires` -- is blocked on `H-94`/`F.24`. A list in markdown would be
+  # REFERENCE under CLAUDE.md §0.05; a row a loader validates is not. `G13` is that loader.
+  #
+  # ⚠ AND THE ENUMERATION IS NOT COMPLETE. `H-106` is that row, and it is `absent` on purpose:
+  # these are the loops with executable evidence, not all the loops there are.
+  # -------------------------------------------------------------------------
+  - id:        H-102
+    tier:      1
+    kind:      "LOOP"
+    sign:      "+"
+    hole:      "THE PROPAGATION LOOP, and it is the only amplifying one anybody has evidenced: a claim lands in a ledger -> raises a Q2 question -> forms a candidate -> becomes an act -> emits an Event -> is witnessed -> deposits as a claim in SOMEONE ELSE'S ledger -> raises their question. More acts mean more claims mean more questions mean more acts"
+    owner:     "shape.py -- `occasioned_by`, `claim_subjects`, the WITNESS deposit"
+    grade:     "measured"
+    default:   "BOUNDED BY THREE DAMPING DEVICES, each already in the loop and each separately measurable: the scene budget (`ask_budget`, five scenes a season, so a person cannot act on every question they form), the ledger cap with eviction on `(confidence, recency)`, and `claim_decay_rate`. The loop amplifies within a season and all three of these cut it between seasons"
+    site:      "shape.py `occasioned_by` / `claim_subjects` / `SeasonDriver.witness`"
+    sweep:     []
+    unblocks:  "the chain Reading 07 §4 calls 'the one that is actually the game'"
+    cite:      "MEASURED 2026-09-03, BOTH SIDES OF THE SAME COMMAND. `python corpus_run.py` before: NPC check R3 0 of 30, ARC 0 of 59, RUNS-ALONE-UNDECLARED 64. After: NPC 30 of 30, ARC 54 of 59, RUNS-ALONE-UNDECLARED 5. R3 is 'an act by one person whose causes walk back to an act of another', and it was the ONLY check the corpus failed -- R1, R4 and R5 passed every runnable case before and after, so nothing else moved. The falsifier is `test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told`, which is mutation-checked: it fails on the pre-fix `shape.py` and passes after, and carries its own control asserting the detector says FALSE on a world where nobody has acted. ⚠ THE SIGN IS `+` AND THAT IS THE POINT OF RECORDING IT: this design is made almost entirely of refusals and every refusal is a damping term, so an amplifying path is the rare one and is the one a reader needs told about"
+    source:    "ID-16 -- the meta-architecture, folded back into the register that reads it"
+  - id:        H-103
+    tier:      1
+    kind:      "LOOP"
+    sign:      "-"
+    hole:      "CLAIM DECAY. A held claim's confidence falls each season at `claim_decay_rate`, so a belief nobody refreshes stops carrying weight -- which damps the propagation loop between seasons rather than within one"
+    owner:     "shape.py -- the MATTER decay pass"
+    grade:     "measured"
+    default:   "none -- a damping loop needs no bound, which is what makes `G13` ask for one only on `+`"
+    site:      "shape.py `matter()` claim decay; `rosters.yaml claim_decay_rate`"
+    sweep:     [0, 5, 20]
+    unblocks:  "nothing -- it is a bound, not a blocker"
+    cite:      "EXECUTED AND SWEPT at three points by `test_w4_h40s_declared_sweep_is_executed_and_its_zero_arm_does_not_fabricate`, whose zero arm asserts NO decay Event is emitted at rate 0 -- a decay that did not happen -- and whose live arms assert confidence actually falls. ⚠ THAT SWEEP IS ALSO THE GUARD THAT CAUGHT `H-102`'s FIRST IMPLEMENTATION: minting one extra claim per telling pushed the decayed claims out past the ledger cap, and all three arms then reported a minimum confidence of 100. A damping loop made unobservable by an amplifying one is exactly the interaction this enumeration exists to make visible"
+    source:    "ID-16 -- the meta-architecture, folded back into the register that reads it"
+  - id:        H-104
+    tier:      1
+    kind:      "LOOP"
+    sign:      "-"
+    hole:      "LEDGER EVICTION AT THE CAP. A person holds at most `ledger_cap` claims and the comparator drops on `(confidence, recency)` and nothing else, so a ledger cannot grow without bound however much is witnessed"
+    owner:     "shape.py -- the WITNESS eviction"
+    grade:     "measured"
+    default:   "none -- a damping loop needs no bound"
+    site:      "shape.py `SeasonDriver.witness` eviction; `rosters.yaml ledger_cap`"
+    sweep:     []
+    unblocks:  "nothing -- it is a bound, not a blocker"
+    cite:      "EXECUTED IN EVERY CORPUS RUN, and the cap was found NOT holding once already: the eviction was written `if` where it needed `while`, so one deposit minting several claims settled the ledger at 203 against a cap of 200. That is recorded on the deposit itself. ⚠ IT IS SIGNED HERE BECAUSE IT IS ONE OF THE THREE THINGS BOUNDING `H-102`, and a bound nobody has written down is a bound the next session may remove without knowing what it was holding"
+    source:    "ID-16 -- the meta-architecture, folded back into the register that reads it"
+  - id:        H-105
+    tier:      0
+    kind:      "LOOP"
+    sign:      "-"
+    hole:      "SITE CONDITION IS A SEVERED LOOP, NOT A DAMPING ONE. Wear lowers a site's condition every season and `work` is the arm that would raise it -- but `work` emits `site.worked` while accumulating no delta, so the raising arm does not connect and condition only ever falls. A loop with one arm cut is a RATCHET wearing a loop's clothes"
+    owner:     "Part E -- `work`'s effect"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "any case where a place recovers; `F.20`'s 'the world only decays' is this row seen from the other side"
+    cite:      "THE META-ARCHITECTURE NAMES THIS EXACT INSTANCE AS ITS WORKED EXAMPLE OF `ID-9` -- a gate that reports a success for something that did not happen: *`work` emits `site.worked` while accumulating no delta, which makes site condition a one-way ratchet -- wear falls it every season and neither verb that could raise it can*. It is registered as a LOOP row rather than only as a producer gap because the SIGN is the finding: read as a damping loop it looks like a design choice, and read as a severed loop it is `AX-6`'s ratchet with nobody named as its author. Reproduce by running any corpus case and reading `site.worked` against the site's condition"
+    source:    "ID-16 -- the meta-architecture, folded back into the register that reads it"
+  - id:        H-106
+    tier:      1
+    kind:      "ABSENT_RULE"
+    hole:      "THE LOOP ENUMERATION IS NOT COMPLETE AND NOTHING CAN SAY HOW INCOMPLETE. `ID-16`'s representation has two halves: a DECLARED signed list, which `H-102`..`H-105` and `G13` now are, and a DERIVED check that recomputes the cycle set from what verbs WRITE against what their preconditions READ and asserts the two agree. The second half is what turns the list from an authored claim into a falsifiable one, and it cannot be built"
+    owner:     "the `requires` grammar -- `H-94` / `F.24`"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "any statement of the form 'these are the loops', as opposed to 'these are the loops somebody wrote down'"
+    cite:      "BLOCKED ON `H-94`, MEASURED: `write_matrix.yaml` types what every verb writes, and `requires` is a PROSE STRING in all 32 rows of `verb_table.yaml`, so one half of the cycle graph is data and the other is English. `F.24a` reads the grammar off those 32 cells and finds it needs seven forms, which is what makes the derived half tractable rather than hypothetical -- but until `requires` is typed the enumeration is a list somebody authored and `G13` can only check the rows that exist. ⚠ THIS ROW IS THE HONEST FORM OF `ID-16` AND IS WHY THE OTHERS DO NOT OVERCLAIM: a gate that validates every declared loop cannot see one nobody declared"
+    source:    "ID-16 -- the meta-architecture, folded back into the register that reads it"
+
 # ---------------------------------------------------------------------------
 # THE DISCHARGE MAP -- guardrail G8.
 # "Every defect gets a register row, or is discharged with a named section."
