@@ -2814,15 +2814,33 @@ def claim_subjects(e: "Event", rule: str, refs: Optional[list] = None) -> list:
         for c in e.changes:
             if c.subject and c.subject not in out:
                 out.append(c.subject)
-        # ⚠ **AND WHAT THE ACT NAMED, WHICH IS THE HALF THAT WAS MISSING AND THE HALF THAT
-        # CARRIES THE ONLY TRANSPORT THE DESIGN HAS.** Reading 07 §3: *"the `tell` chain is the
-        # only transport … if a thing is known two duchies away, a named person carried it and
-        # spent a scene doing so."* A telling writes nothing, so `changes[]` is empty and every
-        # claim it deposited was minted about **the teller** — by the `or [e.subject]` fallback
-        # below, `e.subject` being the actor. §F1's Q2 admits a claim whose subject is the holder
-        # or something the holder holds, so *a claim about the teller can never raise the
-        # listener's question*: the news arrived and could not be acted on. Measured before this
-        # line existed: 6 `news.told` Events, every deposit subject the teller, `R3` = 0 of 30.
+        # ⚠ **AND WHAT THE ACT NAMED, WHICH IS THE HALF THAT WAS MISSING.** An Event that wrote
+        # nothing has an empty `changes[]`, so every claim deposited from one was minted about
+        # **the actor** — by the `or [e.subject]` fallback below, `e.subject` being the actor for
+        # anything the fold emits. §F1's Q2 admits a claim whose subject is the holder or
+        # something the holder holds, so *a claim about the actor can never raise a listener's
+        # question*: the news arrived in a form nobody could act on. Measured before this line
+        # existed: `R3` = 0 of 30 on the NPC lane, 0 of 59 on ARC.
+        #
+        # ⚠ **THE RULE IS ABOUT WRITE-NOTHING EVENTS, NOT ABOUT `tell`, AND SAYING OTHERWISE WAS
+        # AN OVERCLAIM A CRITIC BROKE.** The first writing of this comment quoted Reading 07 §3 —
+        # *"the `tell` chain is the only transport"* — as though this line served `tell` alone. It
+        # does not: it fires for every verb with `writes: []` (`speak`, `comply`, `dispatch`,
+        # `evade`/`defy`, `refract`, the investigation acts), for `contest.resolved`, and for
+        # every refusal. That is **correct and it is a different carrier**: Reading 07 §5 names
+        # three, and the first is PRESENCE — *you were there*. A speech changes nothing and is
+        # still witnessed, and what a witness learns is what was spoken ABOUT. Transport is what
+        # reaches somebody who was NOT there, and that is still `tell` alone.
+        #
+        # ⚠ **AND THE CASCADE IS WORTH NAMING, BECAUSE IT EXPLAINS THE MEASUREMENT.** `speak` has
+        # no precondition; `_req_tell` requires the teller to hold a claim on the subject. So a
+        # witnessed speech about a proposition deposits the very claim `tell` needs, and `tell`
+        # then executes *because* `speak` seeded it. The propagation this closes runs through
+        # both, not through `tell` by itself.
+        #
+        # ⚠ **REFUSALS PROPAGATE TOO, AND THAT IS A DESIGN QUESTION NOBODY HAS RULED** — a
+        # `news.untold` deposits a claim about the subject that was not told about. Registered as
+        # `H-111` rather than decided here.
         # ⚠ `actor` STAYS THE DECLARED INCUMBENT and is untouched — it is the roster's control
         # arm, and this adds nothing to it.
         #
@@ -2869,13 +2887,26 @@ def occasioned_by(w: "World", q: Optional["Question"]) -> list:
         The claim IS a belief about that Event — `Claim.predicate` is literally `e.kind` at the
         deposit — so citing the transport instead would put the postman in the arc. The deposit
         stays in the graph on its own `causes[]`; nothing is lost by not naming it twice.
-      * `date_due` · `band_crossed` — the Event that last changed the thing the question is
-        about. A term maturing and a band crossing both emit, and both are antecedents of a
-        decision taken because of them.
+      * `date_due` — the Event that last changed the thing the question is about. A term
+        maturing emits, and it is the antecedent of a decision taken because of it.
+      * `band_crossed` — ⚠ **THIS ROUTE IS DEAD, AND IT IS NAMED DEAD RATHER THAN LEFT TO LOOK
+        LIVE.** `questions_for` builds the question as `Question(f"q:band:{what}", "band_crossed",
+        (what,), what)` where `what` is the crossing's **verb** — `"work"` — not an id, so the
+        search below can never match: nothing in the log has id `"work"` or a change whose
+        subject is `"work"`. The crossing Event's id EXISTS, as element 4 of the `w.crossings`
+        tuple `(s.id, verb, before, after, ev.id)`, and `questions_for` discards it. Carrying it
+        onto the Question is a one-line change to a surface this function does not own, so it is
+        registered (`H-110`) rather than taken here. **A route that returns nothing is honest; a
+        docstring saying it walks is not, and the first writing of this one said it walks.**
       * `need` — **empty, on purpose.** A standing commitment to an OUGHT is interior; no Event
         caused it this season, and `ID-5`'s polarity says absence maps to the refusal rather than
         to a plausible default. An act taken out of a standing ambition genuinely has no
         antecedent but the actor, and `[ROOT]` is what the design already has for that.
+
+    ⚠ **SO TWO OF FOUR ROUTES ARE LIVE** — `claim_landed`, which is the one propagation runs on,
+    and `date_due`. One is empty by design (`need`) and one is dead for a reason it does not own
+    (`band_crossed`). Stated as two rather than four because *"one route per question source"*
+    was the first writing and it was an overclaim.
 
     ⚠ **IT RETURNS IDS AND WRITES NOTHING.** Resolver-side, read-only over `w.log`, callable from
     a test without a driver — which is `ID-10`: a check that cannot observe the failure it
@@ -3862,10 +3893,11 @@ class SeasonDriver:
         # thing to DECIDE, and giving it back as a resolver parameter is how the second resolver
         # returns. This list is appended by the fold and read by nobody inside it.
         self.resolved: list[Act] = []
-        # ⚠ SEASON-LOCAL, LIKE `resolved`, AND FOR THE SAME REASON. The Scene is the budgeted
-        # unit and carries the `occasion` — the question the person is spending it on — so the
-        # fold can name what occasioned an act. It is resolver-side and no person-side Query
-        # reaches it, exactly as `resolved` is.
+        # ⚠ RESOLVER-SIDE, AND CUMULATIVE — like `resolved`, which is also never reset. The
+        # Scene is the budgeted unit and carries the `occasion`, so the fold can name what
+        # occasioned an act. No person-side Query reaches it, exactly as none reaches `resolved`.
+        # It is NOT season-local: see the note at the `_fold` call site for why R3 depends on
+        # that, and do not "fix" it into one.
         self.scenes: dict = {}
         # Event id -> the Act that emitted it. See the note at the `_fold` call site.
         self.act_of: dict = {}
@@ -4623,9 +4655,15 @@ class SeasonDriver:
             produced = self._fold(w, a)
             # ⚠ WHICH ACT EMITTED WHICH EVENT, recorded once here rather than re-derived from the
             # id hash by every consumer. WITNESS needs it to answer *what is this deposit ABOUT*
-            # for an Event that wrote nothing: a telling changes no state, so `changes[]` is
-            # empty and the only thing that knows what was told is the act. Resolver-side and
-            # season-local, beside `resolved` and `scenes`.
+            # for an Event that wrote nothing: an act that changes no state has an empty
+            # `changes[]`, and the only thing that knows what it named is the act.
+            # ⚠ **RESOLVER-SIDE AND CUMULATIVE ACROSS SEASONS — NOT season-local, and the
+            # difference is load-bearing.** `resolved`, `scenes` and `act_of` are never reset by
+            # `season()`, and `R3` REQUIRES that: a claim deposited at WITNESS in season *t* is
+            # read at DELIBERATE in *t+1*, so the act that occasioned this one is a PREVIOUS
+            # season's act and must still be reachable. A session that makes these three
+            # season-local to tidy them blinds the propagation check silently — it would still
+            # pass, on zero.
             for _e in produced:
                 self.act_of[_e.id] = a
             for ch in (c for e in produced for c in e.changes):

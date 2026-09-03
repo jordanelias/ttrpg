@@ -4604,6 +4604,25 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
         checked += 1
     assert checked >= 1, "no telling carried a referent, so clause 4 asserted nothing"
 
+    # 4a — AND IT CITES NOTHING ELSE. ⚠ THIS IS THE CLAUSE A CRITIC ASKED FOR AND THE FIRST
+    #      WRITING OF THIS TEST DID NOT HAVE: every clause above passes just as well against an
+    #      `_occasion_ids` that returned EVERY id in the log, and over-citation is exactly what
+    #      would inflate `R3` into meaninglessness. An act-emitted Event may cite its own act and
+    #      the antecedents of its occasion, and nothing else.
+    checked_causes = 0
+    for e in w.log:
+        act = d.act_of.get(e.id)
+        if act is None:
+            continue
+        sc = d.scenes.get(getattr(act, "scene", None) or "")
+        allowed = {act.id} | set(S.occasioned_by(w, getattr(sc, "occasion", None)))
+        assert set(e.causes) <= allowed, (
+            f"{e.kind} cites {sorted(set(e.causes) - allowed)}, which is neither its act nor an "
+            "antecedent of its occasion — causes[] is being padded, and a padded causes[] scores "
+            "R3 for free")
+        checked_causes += 1
+    assert checked_causes >= 1, "no act-emitted Event was checked for over-citation"
+
     # 5 — AND THE WHOLE POINT: A REAL RUN PRODUCES A CROSS-PERSON CAUSAL EDGE. Not planted — this
     #     is the same `R3` the corpus scores, run over a world built from a corpus case.
     assert C._r3_propagates(w, d), (

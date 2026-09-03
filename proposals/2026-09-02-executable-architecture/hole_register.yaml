@@ -969,7 +969,7 @@ rows:
     site:      ""
     sweep:     []
     unblocks:  "a person HOLDING another's Record — durable, re-readable, inheritable knowledge. ⚠ NARROWED 2026-09-03: this read 'every case where one person's work reaches another', which is no longer what it blocks. One person's work now reaches another through the telling chain (Reading 07 §3: 'the `tell` chain is the only transport'), measured as R3 30 of 30 on the NPC lane and 54 of 59 on ARC, from 0 and 0. What a Record still buys and a claim does not is PERSISTENCE IN SOMEONE ELSE'S HANDS"
-    cite:      "FOUND BY THE `W9` ADVERSARIAL PASS, AS THE REASON `H-79` DID NOT DELIVER WHAT IT CLAIMED. Part E's `transfer` moves `(Rung, stores)` — MATTER, not Records — and `destroy_record` is gated `hold:<record> | presence`, both unevaluable person-side. So a Record is created by its maker, held by its maker, and reachable by nobody: the bailiff forms zero questions in every season of artifact 2 and ONLY CARIN EVER ACTS. `PLAN.md` §6.3's chain requires a claim deposited in another person's ledger, then that person's Q2 question, then their act, and links 3 through 5 are unreachable for this reason and not because of anything `W9` built. ⚠ GRADED `absent`, NOT `assumption`, AND DELIBERATELY: #353 names the six investigation acts (`verb_table.yaml`, `requires: per act`, no predicate) as how a thing is FOUND, and #353 `:499` gives \"burn the Record that carries it\" as what a finder does — so the design plainly intends discovery to exist and states no mechanism. Inventing a `give_record` verb here would be adding a row to Part E to make a milestone pass, which §8.1's first rule forbids in terms: do not weaken the design to make cases pass."
+    cite:      "FOUND BY THE `W9` ADVERSARIAL PASS, AS THE REASON `H-79` DID NOT DELIVER WHAT IT CLAIMED. Part E's `transfer` moves `(Rung, stores)` — MATTER, not Records — and `destroy_record` is gated `hold:<record> | presence`, both unevaluable person-side. So a Record is created by its maker, held by its maker, and reachable by nobody: the bailiff forms zero questions in every season of artifact 2 and ONLY CARIN EVER ACTS. `PLAN.md` §6.3's chain requires a claim deposited in another person's ledger, then that person's Q2 question, then their act, and links 3 through 5 are unreachable for this reason and not because of anything `W9` built. ⚠ GRADED `absent`, NOT `assumption`, AND DELIBERATELY: #353 names the six investigation acts (`verb_table.yaml`, `requires: per act`, no predicate) as how a thing is FOUND, and #353 `:499` gives \"burn the Record that carries it\" as what a finder does — so the design plainly intends discovery to exist and states no mechanism. Inventing a `give_record` verb here would be adding a row to Part E to make a milestone pass, which §8.1's first rule forbids in terms: do not weaken the design to make cases pass. ⚠ AMENDED 2026-09-03: everything above is the state as MEASURED BEFORE the N3 fix and is kept because it is the argument that produced this row. It is no longer the current state -- a listener now forms Q2 questions from a telling, without any Record moving, and this row narrowed accordingly. What still stands is the Record half: no verb moves one, so nobody but a maker ever HOLDS one."
     source:    "W9 — found by the adversarial pass"
   # -------------------------------------------------------------------------
   # W10 — found by AUTHORING an `exercises:`, which is the mechanism working: a row that rests
@@ -1175,21 +1175,21 @@ rows:
     hole:      "THE PROPAGATION LOOP, and it is the only amplifying one anybody has evidenced: a claim lands in a ledger -> raises a Q2 question -> forms a candidate -> becomes an act -> emits an Event -> is witnessed -> deposits as a claim in SOMEONE ELSE'S ledger -> raises their question. More acts mean more claims mean more questions mean more acts"
     owner:     "shape.py -- `occasioned_by`, `claim_subjects`, the WITNESS deposit"
     grade:     "measured"
-    default:   "BOUNDED BY THREE DAMPING DEVICES, each already in the loop and each separately measurable: the scene budget (`ask_budget`, five scenes a season, so a person cannot act on every question they form), the ledger cap with eviction on `(confidence, recency)`, and `claim_decay_rate`. The loop amplifies within a season and all three of these cut it between seasons"
+    default:   "BOUNDED, AND UNDER THIS INSTRUMENT'S OWN FIXTURES IT CANNOT AMPLIFY AT ALL -- which is a statement about the fixtures, not about the topology. Three devices: `ask_budget` (five scenes a season, so a person cannot act on every question they form), `ledger_cap` = 200 with eviction on `(confidence, recency)`, and `claim_decay_per_season` -- all three are `DEFAULT_FIXTURES` literals in `shape.py`. ⚠ AND A FOURTH THAT IS NOT A BOUND BUT FLATTENS IT ANYWAY: `question_aggregation_rule: first` collapses any number of landed claims to ONE question per person per season, so acts do not grow with claims however many land. ⚠ THE LOOP'S PERIOD IS ONE SEASON -- WITNESS at the end of `t` is read at DELIBERATE in `t+1` -- so the budget cuts it EVERY PERIOD rather than between periods; the first writing of this cell said the opposite"
     site:      "shape.py `occasioned_by` / `claim_subjects` / `SeasonDriver.witness`"
     sweep:     []
     unblocks:  "the chain Reading 07 §4 calls 'the one that is actually the game'"
-    cite:      "MEASURED 2026-09-03, BOTH SIDES OF THE SAME COMMAND. `python corpus_run.py` before: NPC check R3 0 of 30, ARC 0 of 59, RUNS-ALONE-UNDECLARED 64. After: NPC 30 of 30, ARC 54 of 59, RUNS-ALONE-UNDECLARED 5. R3 is 'an act by one person whose causes walk back to an act of another', and it was the ONLY check the corpus failed -- R1, R4 and R5 passed every runnable case before and after, so nothing else moved. The falsifier is `test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told`, which is mutation-checked: it fails on the pre-fix `shape.py` and passes after, and carries its own control asserting the detector says FALSE on a world where nobody has acted. ⚠ THE SIGN IS `+` AND THAT IS THE POINT OF RECORDING IT: this design is made almost entirely of refusals and every refusal is a damping term, so an amplifying path is the rare one and is the one a reader needs told about"
+    cite:      "⚠ WHAT IS MEASURED IS THE EXISTENCE OF THE EDGE, NOT A GAIN, AND THE SIGN IS A CLAIM ABOUT TOPOLOGY RATHER THAN ABOUT THIS RUN. A critic broke the first writing of this row, which read as though `+` had been measured: it had not, and under `question_aggregation_rule: first` plus a five-scene budget this loop provably CANNOT amplify in acts here. The topology is amplifying -- an act deposits claims that raise questions that become acts -- and the fixtures flatten it, which is the pair `ID-16` exists to make visible: a design can carry an amplifying path and a configuration that hides it. Measuring the GAIN needs `H-106`. WHAT IS MEASURED, BOTH SIDES OF THE SAME COMMAND: `python corpus_run.py` before: NPC check R3 0 of 30, ARC 0 of 59, RUNS-ALONE-UNDECLARED 64. After: NPC 30 of 30, ARC 54 of 59, RUNS-ALONE-UNDECLARED 5. R3 is 'an act by one person whose causes walk back to an act of another', and it was the ONLY check the corpus failed -- R1, R4 and R5 passed every runnable case before and after, so nothing else moved. The falsifier is `test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told`, which is mutation-checked: it fails on the pre-fix `shape.py` and passes after, and carries its own control asserting the detector says FALSE on a world where nobody has acted. ⚠ THE SIGN IS `+` AND THAT IS THE POINT OF RECORDING IT: this design is made almost entirely of refusals and every refusal is a damping term, so an amplifying path is the rare one and is the one a reader needs told about"
     source:    "ID-16 -- the meta-architecture, folded back into the register that reads it"
   - id:        H-103
     tier:      1
     kind:      "LOOP"
     sign:      "-"
-    hole:      "CLAIM DECAY. A held claim's confidence falls each season at `claim_decay_rate`, so a belief nobody refreshes stops carrying weight -- which damps the propagation loop between seasons rather than within one"
+    hole:      "CLAIM DECAY. A held claim's confidence falls each season at `claim_decay_per_season`, so a belief nobody refreshes stops carrying weight -- which damps the propagation loop between seasons rather than within one"
     owner:     "shape.py -- the MATTER decay pass"
     grade:     "measured"
     default:   "none -- a damping loop needs no bound, which is what makes `G13` ask for one only on `+`"
-    site:      "shape.py `matter()` claim decay; `rosters.yaml claim_decay_rate`"
+    site:      "shape.py `matter()` claim decay; the fixture is `claim_decay_per_season` in `DEFAULT_FIXTURES` (shape.py), read through `Fixtures.decay` -- ⚠ NOT a `rosters.yaml` key, and the first writing of this cell said it was, which is the declared-and-unlocatable defect `H-06` indicts"
     sweep:     [0, 5, 20]
     unblocks:  "nothing -- it is a bound, not a blocker"
     cite:      "EXECUTED AND SWEPT at three points by `test_w4_h40s_declared_sweep_is_executed_and_its_zero_arm_does_not_fabricate`, whose zero arm asserts NO decay Event is emitted at rate 0 -- a decay that did not happen -- and whose live arms assert confidence actually falls. ⚠ THAT SWEEP IS ALSO THE GUARD THAT CAUGHT `H-102`'s FIRST IMPLEMENTATION: minting one extra claim per telling pushed the decayed claims out past the ledger cap, and all three arms then reported a minimum confidence of 100. A damping loop made unobservable by an amplifying one is exactly the interaction this enumeration exists to make visible"
@@ -1202,16 +1202,15 @@ rows:
     owner:     "shape.py -- the WITNESS eviction"
     grade:     "measured"
     default:   "none -- a damping loop needs no bound"
-    site:      "shape.py `SeasonDriver.witness` eviction; `rosters.yaml ledger_cap`"
+    site:      "shape.py `SeasonDriver.witness` eviction; the fixture is `ledger_cap` = 200 in `DEFAULT_FIXTURES` (shape.py) -- ⚠ NOT a `rosters.yaml` key"
     sweep:     []
     unblocks:  "nothing -- it is a bound, not a blocker"
-    cite:      "EXECUTED IN EVERY CORPUS RUN, and the cap was found NOT holding once already: the eviction was written `if` where it needed `while`, so one deposit minting several claims settled the ledger at 203 against a cap of 200. That is recorded on the deposit itself. ⚠ IT IS SIGNED HERE BECAUSE IT IS ONE OF THE THREE THINGS BOUNDING `H-102`, and a bound nobody has written down is a bound the next session may remove without knowing what it was holding"
+    cite:      "EXECUTED IN EVERY CORPUS RUN, and the cap was found NOT holding once already: the eviction was written `if` where it needed `while`, so one deposit minting several claims settled the ledger at 203 against a cap of 200. That is recorded on the deposit itself. ⚠ IT IS SIGNED HERE BECAUSE IT IS ONE OF THE THREE THINGS BOUNDING `H-102`, and a bound nobody has written down is a bound the next session may remove without knowing what it was holding. REPRODUCE: `python -m pytest test_tracer_is_honest.py -k eviction -s`, and read `ledger_cap` against the ledger lengths any corpus run leaves"
     source:    "ID-16 -- the meta-architecture, folded back into the register that reads it"
   - id:        H-105
     tier:      0
-    kind:      "LOOP"
-    sign:      "-"
-    hole:      "SITE CONDITION IS A SEVERED LOOP, NOT A DAMPING ONE. Wear lowers a site's condition every season and `work` is the arm that would raise it -- but `work` emits `site.worked` while accumulating no delta, so the raising arm does not connect and condition only ever falls. A loop with one arm cut is a RATCHET wearing a loop's clothes"
+    kind:      "PRODUCER"
+    hole:      "⚠ CARRIED `kind: LOOP` AND `sign: -` UNTIL A CRITIC READ IT AGAINST ITS OWN TEXT, AND THAT WAS THE COLUMN MEANING TWO THINGS IN THE ROW SET THAT DEFINES IT: `-` IS DAMPING, and this row says in its own first sentence that the thing is NOT damping. A severed loop is not a loop with a sign, it is a MISSING PRODUCER, and filing it as a LOOP satisfied `G13` at the cost of `CLAUDE.md` §4's idempotence -- in the enumeration whose whole purpose is that a sign means one thing. Re-filed as PRODUCER, which is what it is; the finding below is unchanged and is why the row exists. SITE CONDITION IS A SEVERED LOOP, NOT A DAMPING ONE. Wear lowers a site's condition every season and `work` is the arm that would raise it -- but `work` emits `site.worked` while accumulating no delta, so the raising arm does not connect and condition only ever falls. A loop with one arm cut is a RATCHET wearing a loop's clothes"
     owner:     "Part E -- `work`'s effect"
     grade:     "absent"
     default:   "none"
@@ -1280,6 +1279,31 @@ rows:
     unblocks:  "nothing today -- but every future seat kind inherits the branch, which is what `ID-4` (declare, don't route) exists to prevent"
     cite:      "READ AT `_req_revoke`, WHERE THE BRANCH IS EXPLICIT AND COMMENTED AS A RULING: *two rules, and which one applies turns on whether the target is a title*. The two rules are real and Jordan ruled both -- an ordinary office is revocable on purview, a title needs purview plus holdings plus rank -- so this row is NOT an argument that the behaviour is wrong. It is that the DISCRIMINATOR is computed from the post's name rather than declared on the seat, so adding a third kind of seat means editing a resolver instead of a data row. ⚠ IT IS ENTANGLED WITH `H-108` AND SHOULD BE FIXED WITH IT, NOT BEFORE: both are the same question -- what does the actor exercise -- answered once on the act and once in a branch"
     source:    "shape conformance against #358 Stage 4 §B.7 / §D.7"
+
+  - id:        H-110
+    tier:      1
+    kind:      "WIRING"
+    hole:      "A BAND CROSSING KNOWS WHICH EVENT IT WAS AND THE QUESTION IT RAISES THROWS THAT AWAY. `matter()` records a crossing as `(site_id, verb, before, after, ev.id)` and `questions_for` builds `Question(..., \"band_crossed\", (what,), what)` where `what` is the VERB. So the question's `about` is a verb name, not an id, and nothing can walk from a band-crossed question to the Event that crossed the band"
+    owner:     "shape.py -- `questions_for`'s Q3 branch"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "the `band_crossed` route of `occasioned_by` -- one of the four question sources, dead for this reason alone"
+    cite:      "FOUND BY AN ADVERSARIAL PASS OVER THE `N3` FIX, WHICH HAD DOCUMENTED THE ROUTE AS LIVE. The walk searches the log for an Event whose id is `about` or one of whose changes has `about` as its subject; with `about` = `work` neither can ever match, so the route returns empty for every band crossing in every run. ⚠ THE FIX IS ONE LINE AND IS NOT TAKEN HERE ON PURPOSE: the crossing Event id is already in the tuple, and carrying it onto the Question changes a surface `occasioned_by` does not own -- `questions_for` is §F1's Q3 and its shape is what `H-54` and the aggregation rule read. A one-line change to a rule three other rows depend on is a design edit, not a repair"
+    source:    "adversarial pass over the N3 fix, 2026-09-03"
+  - id:        H-111
+    tier:      1
+    kind:      "RULING"
+    hole:      "A REFUSAL PROPAGATES AS NEWS AND NOBODY HAS RULED THAT IT SHOULD. Every refusal Event writes nothing, so it takes the same deposit path as a speech or a telling: `news.untold` deposits a claim ABOUT THE SUBJECT THAT WAS NOT TOLD ABOUT, which can raise a listener's question next season. An attempt that failed is witnessed -- that much is `§E2`'s 'failure emits, never raises' -- but whether it should seed the same deliberation a success seeds is a design question"
+    owner:     "unassigned -- it is a consequence of the deposit rule, not of any one verb"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "nothing -- it is a question about what the world SHOULD do, and both answers run"
+    cite:      "FOUND BY AN ADVERSARIAL PASS OVER THE `N3` FIX, WHICH SHIPPED THE BEHAVIOUR WITHOUT NAMING IT. The deposit rule is keyed on 'this Event wrote nothing', and refusals are exactly that, so the behaviour arrived as a side effect of a fix aimed at tellings. ⚠ IT IS REGISTERED RATHER THAN DECIDED BECAUSE BOTH READINGS ARE DEFENSIBLE AND ONE IS ALREADY RUNNING: seeing somebody try and fail is real information -- the reason `§E2` makes failure emit at all -- and a design might equally hold that only what HAPPENED occasions a decision. Whoever rules it should say so here rather than in a resolver"
+    source:    "adversarial pass over the N3 fix, 2026-09-03"
 
 # ---------------------------------------------------------------------------
 # THE DISCHARGE MAP -- guardrail G8.
