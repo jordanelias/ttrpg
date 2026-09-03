@@ -1,6 +1,26 @@
 # THE META-ARCHITECTURE — the layer above the plan
 
-## Status: **PROPOSED (2026-09-03). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
+## Status: **PROPOSED (2026-09-03, rev. 2). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
+
+> ### ⚠ **REV. 2 — a read-only adversarial pass over this exercise, the executable chain (#357) and an
+> ### independent governance design (#359) found TWENTY defects, FOURTEEN of them here.**
+> **`01_AXIOMS.md` and `04_CODE_ARCHITECTURE.md` are rewritten in place, every change marked with its
+> finding id.** The four that change what the architecture IS:
+>
+> - **`AX-3` and `AX-5` contradicted each other.** *"Nothing moves either on a clock"* against a
+>   `MATTER`-class `(Claim, confidence)` fade. `AX-3` gains the carve-out: fading **removes**, never
+>   **revises**.
+> - **`AX-6` had no scope clause**, so it either forbade this document's own schema or could not
+>   reach `T-a`'s ratchet. It now binds **game state**; schema permanences are enumerated (`ID-18`).
+> - **The write gate never checked `subject == actor`** — `AX-4`'s second clause was `CONVENTION`,
+>   and two live verbs write another person's `Tenure.until`. **`T-o` makes the third closing path
+>   lawful and declared**, and `§E.1.2`'s *"there is no third way"* is retracted.
+> - **A lost contest still wrote.** `writes:` is now **`Degree`-keyed** for any verb declaring
+>   `contests:` — the one thing #359 contributed, filed as corroboration until it was traced.
+>
+> Three new idioms (`ID-16` loops · `ID-17` licensed suspension · `ID-18` schema permanences), a new
+> `§C.11` explanation contract, `§F.24a`'s seven-form `requires` grammar **derived from the 32 live
+> cells rather than assumed**, and loader invariant 12.
 
 | file | what it is |
 |---|---|

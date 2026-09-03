@@ -7,6 +7,33 @@
 
 ---
 
+> # ⚠ **REWRITTEN 2026-09-03 (rev. 2). WHAT CHANGED AND WHY, BEFORE ANYTHING ELSE.**
+>
+> **A read-only adversarial pass over this document, the executable chain (#357) and an independent
+> governance design (#359) found TWENTY defects. Fourteen are in this document.** Every change below
+> is marked in place with its finding id; nothing is overwritten silently, because *a superseded
+> derivation that stays legible is how the next session avoids re-deriving it.*
+>
+> | | the defect | where |
+> |---|---|---|
+> | **F3** | **the gate never checks `subject == actor`** — `AX-4`'s second clause was enforced by per-verb eligibility alone, and two live verbs write another person's `Tenure.until` | `§C.2`, `§B.8`, `PART D` |
+> | **F6** | **a LOST contest still writes.** `writes:` is unconditional, so `kill / wound` kills on any degree; `Event.degree` has no reader in four stages | `§C.4`, `§B.9` |
+> | **F4** | **loader invariant 6 is unsatisfiable.** `release`'s domain is `tenure_kinds`, which contains `contain`, whose subject can never act | `§B.13`, `PART E` step 6 |
+> | **F5** | **build step 2 undercounts its own failure ~4×** — nine matrix rows have no producing verb, not two, and four of them are `Person` interior fields | `PART E` step 2, `PART F` |
+> | **F9** | **`STRUCTURAL` is claimed where only a checker or a scan exists**, and the count of structural rows is a hand tally its own `G.3.3` forbids | `PART D` |
+> | **F8** | **this document forbids the ledger read two live verbs need** | `§B.2`, `§C.3` |
+> | **F10** | **`PART D` row 1 contradicts `§D.11`** — "a faction has no type and no id" versus a declared `Faction` view type | `PART D` |
+> | **F7** | `F.1`'s demand needs a per-conjunct refusal kind the fold cannot emit | `§C.7`, `PART F` |
+> | **F13** | the live fold mints **three Event kinds no column declares**, which invariant 7 would refuse | `PART F` |
+>
+> **What #359 contributed, and it is one thing rather than the two the cross-read claimed:** the
+> **degree-keyed consequence column** (`§C.4`, `§A.1`). It was filed as mere corroboration of `T-k`
+> and is not — it exposes `F6`, gives `Event.degree` its reader, gives the four `Person` interior
+> rows a producer, and gives `H-98` the shape of its missing mapping. **Everything else it offered
+> was already derivable here, and one thing the cross-read graded as its own gap was not a gap.**
+>
+> ---
+>
 > # COMPLETE — PARTS A THROUGH G
 >
 > **PART G is the durable one, and the one to read first.** A–F describe how *this* design came out;
@@ -44,6 +71,25 @@ to every invariant in both target languages:
 > **A claim of STRUCTURAL that is actually MECHANICAL is the defect class Stage 1 §0.2 names** — *a
 > guard that cannot observe what it guards.* So the grade is stated per invariant, and the Python and
 > GDScript grades are stated separately wherever they differ.
+
+⚠ **AND THE FIRST PUBLICATION BROKE ITS OWN RULE, WHICH IS `F9`.** Several `PART D` rows read
+**"STRUCTURAL (typed)"** with **no checker named**, in a Python build that has no enforced type
+checker — while `§B.1`'s very first row honestly concedes *"STRUCTURAL under a checker; MECHANICAL at
+runtime"* for the same class of claim. **The concession is the correct form and it is now applied
+uniformly.**
+
+> ### **THE RULE, STATED SO THE COLUMN CANNOT DRIFT AGAIN**
+> **`STRUCTURAL` means the defect HAS NO SPELLING in the target language as built.** A property that
+> holds only when an optional checker is run is **`STRUCTURAL under a checker · MECHANICAL at
+> runtime`**, written out, both halves. **If the build does not run the checker in CI, the runtime
+> grade is the real one.**
+
+⚠ **AND THE COUNT IS DELETED RATHER THAN CORRECTED.** The closing note said *"of forty-six rows,
+sixteen are STRUCTURAL in Python"*. An independent recount reached **22 rows with a structural
+component**, and the discrepancy is not the point — **`G.3.3` forbids a count typed by hand**, and
+this one had no stated counting rule, so neither figure is reproducible. **The ratio claim now names
+the rule instead of the number:** count the rows whose grade column contains no `CONVENTION` term and
+names no scan, and report it with the command.
 
 ---
 
@@ -174,7 +220,7 @@ LOCATION:   the person-kind Rung sharing its n; its contain edge is where they a
 | **WITNESS never touches a conviction** | MECHANICAL / CONVENTION + scan | the INTERIOR token opens only the ledger path; convictions are ACTS rows, and the gate refuses an INTERIOR token on one |
 | **evidence cannot move a conviction** | MECHANICAL | *a loader check the stages do not name:* a verb writing a category-3 field may not phrase its `requires` over the actor's ledger. **Synthesis addition** |
 | **a field nothing reads is not a field** | MECHANICAL, weakly — a static-reference scan | **not structural; the honest state** |
-| **the ledger is never read by another person** | STRUCTURAL by signature | `person_q` takes the asker; a resolver-side Query over ledgers does not exist and must not be added |
+| **the ledger is never read by ANOTHER person** | STRUCTURAL by signature | `person_q` takes the asker. ⚠ **CORRECTED (F8): the first wording said a resolver-side Query over ledgers *"does not exist and must not be added"*, and that forbids what two live verbs require.** `tell`'s precondition is *"the teller holds a claim on the subject"* and `comply`'s is *"a claim of the dispensation's terms is in the actor's OWN ledger"* — both evaluated at RESOLVE. **The carve-out is exact and it is not a widening: the fold may ask the ACTOR'S OWN ledger, through the `PersonInterior` snapshot the act carries, and no other.** A Query taking a ledger and an asker who is not its holder still does not exist |
 
 ## §B.3 · `Rung` — *the address, never the occupant*
 
@@ -341,14 +387,40 @@ beside it.
 **The loader's cross-validation — each an ID-13 or ID-14 check firing at load, not at the first act
 that would have hit it:**
 
-1. every `verb.writes` pair is a matrix row · 2. every matrix row with `RES` has ≥1 producing verb ·
-3. eligibility kinds ⊆ the roster, **`capability` refused by name** · 4. a verb with a `requires` has
-a non-empty `emits_on_refusal` · 5. **`act_only` ⇒ steps ⊆ {RES}; `MAT` ⇒ `world_or_act`** — the
-fourth-clock refusal, at load · 6. **`release`'s kind domain == `tenure_kinds`** · 7. the Event-kind
-roster is **derived** from every emission column, and the log accepts no other kind · 8. alignment
-keys ⊆ axes × verbs, and not all zero · 9. contest prizes ⊆ the subsystem roster ·
+1. every `verb.writes` pair is a matrix row — **for every `Degree` branch of a degree-keyed verb** ·
+2. every matrix row with `RES` has ≥1 producing verb ·
+3. eligibility kinds ⊆ the roster, **`capability` refused by name** ·
+4. **every failable clause has a refusal kind** — ⚠ **WIDENED (F7)**: not only a verb with a
+`requires`, but each **conjunct** of it, and any eligibility alternative that can decline. The first
+wording covered `requires` alone and was satisfied by luck, because every verb with no `requires` is
+`own`, which cannot fail ·
+5. **`act_only` ⇒ steps ⊆ {RES}; `MAT` ⇒ `world_or_act`** — the fourth-clock refusal, at load ·
+6. ⚠ **CORRECTED (F4): `release`'s kind domain == `tenure_kinds \ {contain}`**, and **every kind's
+OPENER set is declared too** (`ID-14`'s added half) ·
+7. the Event-kind roster is **derived** from every emission column, and the log accepts no other kind ·
+8. alignment keys ⊆ axes × verbs, and not all zero · 9. contest prizes ⊆ the subsystem roster ·
 10. **unknown keys rejected — a `scale:` key fails the load** · 11. every fixture the code names has
-a register row not graded `absent`, or the run refuses **at that site, with the row's id**.
+a register row not graded `absent`, or the run refuses **at that site, with the row's id** ·
+12. ⚠ **NEW (F6): a verb declaring `contests:` has a `Degree`-keyed `writes`, and one without it does
+not** — the two shapes are not interchangeable and a flat list on a contested verb is the `kill`
+defect at load.
+
+> ### ⚠ **F4 · WHY INVARIANT 6 WAS UNSATISFIABLE, AND IT WOULD HAVE FAILED THE BUILD AT STEP 2**
+> `tenure_kinds` is `[hold, contain, commit, oblige, succeed, tie, knot]` — **`contain` is in it.**
+> `release`'s eligibility is `own`, which means `subject == actor`; `contain`'s subject is a `Rung`;
+> **`AX-1` says a Rung can never act.** So the invariant demanded a `release` declaration for a kind
+> no actor can ever exercise — a declared row that reaches no caller, which is `ID-13` **created by a
+> loader invariant.** Build step 6's proof, *"`release` closes a Tenure of every kind"*, was
+> unsatisfiable as written.
+>
+> **`contain` is the honest exception and Reading 05 already said so** — *"`contain` is `Rung → Rung`,
+> subject cannot act, and it is correctly not something anybody ends by choice; it moves when a person
+> moves."* The invariant now says what the ontology already said.
+
+⚠ **AND INVARIANT 11 IS NOT A LOAD CHECK.** It refuses *"at that site"* — at the first call reaching a
+fixture — which is run-time. Ten of the twelve fire at load. **It is listed here because it belongs to
+the same discipline and it is graded separately**, rather than left to imply a guarantee the loader
+does not give.
 
 **Grade: MECHANICAL, all eleven.** What stays CONVENTION is a session editing the data to make a
 contradiction consistent — **which is a visible diff, and the only honest thing to say.**
@@ -378,15 +450,46 @@ season(w):
 ## §C.2 · The write gate — the seam every mutation crosses
 
 ```
-gate.write(token, kind, field, id, change) -> Receipt
+gate.write(token, kind, field, id, change, actor?, via?) -> Receipt
   row = matrix[(kind,field)]                     or raise Unmarked        -- ID-5 polarity
   token.class in classes_of(row.steps)           or raise WrongStep
   row.writer == act_only => token.class == ACTS  or raise
-  (Tenure, until) under MATTER => cause is a death it caused, or this Tenure's declared maturation
+
+  -- ⚠ F3 · AX-4 CLAUSE 2, ENFORCED HERE FOR THE FIRST TIME
+  kind is Tenure => one of:
+      actor == subject(id)                                   -- T-m, the owner's discretion
+      cause is this Tenure's declared `term` maturation       -- T-n
+      via is a Seat whose `revocation` basis reaches it       -- T-o, and `via` MUST be present
+      cause is an existence change this same act caused       -- destroy's cascade
+    otherwise                                                 raise NotYours
+
   before = get(); store._set(); after = get()                             -- THE GATE APPLIES THE WRITE
+  before == after                                or raise NoOpReceipt     -- ⚠ F9 · see PART D row 5
   r = Receipt(...); minted[t].add(r.id)
   emit row.on_write; if band(before) != band(after): emit row.on_condition.crossing
 ```
+
+> ### ⚠ **F3 · WHAT THIS FIXES, AND IT IS THE LARGEST DEFECT IN THE FIRST PUBLICATION**
+> **`AX-4` says the owner is the value's ONLY writer. The gate never checked it.** It matched the
+> row, the token class and the `writer:` column — all three about *which STEP may write* — and
+> **nothing about WHO.** Ownership was enforced by per-verb eligibility, which is `CONVENTION`, in
+> the document whose `PART D` row 10 claims *"two homes for one relation — STRUCTURAL"*.
+>
+> **The tree shows what that costs.** `verb_table.yaml` has `revoke` (`remit:revoke`) and `confer`
+> (`remit:confer`) **both writing `Tenure.until` on an edge whose subject is somebody else**, and
+> `kill / wound` writing `Tenure.until` on the victim's edges. Under the first gate all three are
+> lawful and none is declared as an exception.
+>
+> **`T-o` (Stage 1 `§E.1.2`) is what makes the third case lawful rather than merely tolerated**, and
+> the `via` requirement is what makes it checkable: **a revocation with no seat in `Act.via` is
+> refused at the gate**, so "a superior may revoke" cannot degrade into "anyone with a remit string".
+
+⚠ **`NoOpReceipt` IS `ID-9` MADE MECHANICAL, AND `ID-9`'S OWN WORKED EXAMPLE SURVIVED WITHOUT IT
+(F9).** `PART D` row 5 claimed to make *a success Event for a write that did not happen* unwritable,
+by checking that every receipt was minted by the gate. **A receipt with `before == after` IS minted by
+the gate** — so `work` emitting `site.worked` while accumulating no delta, which is the instance
+`ID-9` is written from, passes the check unchanged. **The append-side test could not observe the
+failure it excludes; the write side can.**
 
 ## §C.3 · DELIBERATE ↔ decision
 
@@ -402,13 +505,60 @@ STRUCTURAL in a typed build; MECHANICAL by path scan in Python and GDScript.
 ```
 acts = canonical_order(flatten(scenes))     -- (stratum, actor-hash, intra-person position)
 for a in acts:
-  eligible or emit(row.emits_on_refusal); continue
-  row.requires AGAINST THE WORLD ITS PREDECESSORS LEFT
-      or emit(row.emits_on_refusal); continue          -- THE SCARCITY CHANNEL
-  if row.contests: degree, evs = seam.contest(...)     -- Refusal => emit refusal kind
-  receipts = [gate.write(...) for (k,f) in row.writes]
+  eligible or emit(row.refusal_for(ELIGIBILITY)); continue
+  (ok, failed_conjunct) = eval(row.requires, world_as_predecessors_left_it)
+  ok or emit(row.refusal_for(failed_conjunct)); continue   -- THE SCARCITY CHANNEL · ⚠ F7
+  degree = FULL
+  if row.contests: degree, evs = seam.contest(...)         -- Refusal => emit refusal kind
+  receipts = [gate.write(..., actor=a.actor, via=a.via)
+              for (k,f) in row.writes_at(degree)]          -- ⚠ F6 · DEGREE-KEYED
   emit(row.emits, changes=receipts, causes=[a.id]+occasion, degree)
 ```
+
+> ### ⚠ **F6 · `writes_at(degree)` IS THE ONE THING #359 CONTRIBUTED, AND IT WAS FILED AS A
+> ### CORROBORATION FOR A DAY BEFORE ANYBODY NOTICED WHAT IT EXPOSED.**
+>
+> **The defect.** Stage 3 `§A.1` fixes a verb at **five columns** — who may attempt it, what must
+> hold, what it writes, what it emits, what it emits on refusal. **None of the five is conditional on
+> the outcome.** So the fold above ran `row.writes` **unconditionally after resolving a contest**,
+> and the live table proves the cost: `kill / wound` declares `contests: the body` and
+> `writes: [Person.body, Person.exists, Tenure.until]`. **Losing the fight kills you exactly as
+> winning it does.**
+>
+> **The second half of the defect is quieter and worse.** `Event.degree?` is declared in `§B.9` and
+> **read nowhere in four stages** — `ID-13`, one line below `Tenure.conferrer`, in the same type
+> block. A degree that no consequence consumes is not a weak outcome model; **it is a resolution
+> whose result is discarded.** The tracer already lives it: the live seam records `contest.resolved`
+> with `changes=[]` because *"turning 'p_low won' into 'p_mid died' is the mapping nobody has made."*
+>
+> **The repair, and it is an AMENDMENT to `§A.1` stated as one.** A verb with `contests:` declares
+> `writes` **as a map from `Degree`**, not as a list:
+>
+> ```
+> writes:                      # a verb with no `contests:` keeps the flat list
+>   Overwhelming: [Person.exists, Person.body, Tenure.until]
+>   Success:      [Person.body, Tenure.until]
+>   Partial:      [Person.body]
+>   Failure:      []           # ⚠ AN EMPTY LIST IS LAWFUL HERE AND NOWHERE ELSE
+> ```
+>
+> **`Failure: []` is the only place in this architecture where writing nothing is correct**, and it is
+> correct because the act still **emits**: the fold reaches `emit(row.emits, …, degree)` with an empty
+> receipt list, so the attempt happened, was witnessed, and cost a scene. **That is the difference
+> between a refusal (the precondition failed, no contest occurred) and a loss (the contest occurred
+> and went against you)** — two outcomes the five-column table could not tell apart.
+
+⚠ **THIS IS A SIXTH COLUMN, AND `§A.1` SAYS A VERB NEEDING MORE COLUMNS IS ONE THE DESIGN HAS NOT
+FINISHED THINKING ABOUT.** That rule stands and this is the exception it warns about, so it is stated
+at full strength rather than smuggled: **the sixth column exists only for verbs that declare
+`contests:`, it is a re-keying of the third column rather than a new kind of thing, and any verb
+without `contests:` is refused if it uses it.** A seventh column has no such argument available.
+
+> ### **AND IT IS WHY `T-k` SURVIVES CONTACT WITH #359 RATHER THAN LOSING TO IT.**
+> #359's own principle is *"every consequence table is keyed by `Degree` and by nothing else"*, with
+> the generator private to each scale. **The keying is right and the privacy is wrong** — one ladder
+> in the seam is `T-k`, and a per-scale generator is the second ladder `T-k` refuses. **Take the
+> column; refuse the placement.**
 
 | property | construction | grade |
 |---|---|---|
@@ -471,6 +621,51 @@ which a verb declares when its `requires` names a person who is not individuated
 kind once and individuates from the envelope with `causes[]` naming the refusal. **The absence of a
 fourth clock stays CONVENTION**, as the chain already says.
 
+## §C.11 · ⚠ **THE EXPLANATION CONTRACT — added 2026-09-03. There is no referee, so the engine inherits the referee's SECOND job**
+
+`CLAUDE.md` opens with *"There is no GM — the engine resolves everything."* Four stages read that as a
+**constraint on authoring** — every rule must be evaluable, nothing may be adjudicated. **It is also
+an obligation**, and removing the referee does not remove the question the referee answered: *why did
+that happen?*
+
+⚠ **THE OBVIOUS FORMULATION IS WRONG AND MUST BE REFUSED BY NAME.** *"The player is not an actor, so
+`AX-2` does not reach them"* fails immediately: **the player CONTROLS a person.** For an NPC, `choose`
+is the decision procedure; **for a player character the player IS the decision procedure**, so
+anything shown before they declare is shown *inside a decision* in the only sense `AX-2` cares about.
+A split on **who is looking** breaches the axiom.
+
+> ### **THE SPLIT THAT HOLDS IS ON WHAT IS SHOWN.**
+> **The engine owes the ARITHMETIC of what the character already holds, and nothing else.**
+>
+> | | |
+> |---|---|
+> | **what the person holds** | `AX-2`, absolutely. The `View` is `ClaimId[]`; nothing is added and no resolver-side Query becomes visible |
+> | **why what they hold says what it says** | ⛔ **not information about the world.** It is the derivation of a value the character already has, and displaying it adds no world truth |
+
+**The signature, and it is what keeps the contract from widening:**
+
+```
+explain(p : PersonInterior, v : Value) -> Derivation      -- person_q. NO World parameter.
+```
+
+**By `T-f` it cannot reach `World`**, so it cannot explain a resolver-side Query even by accident.
+**And it may NOT walk `causes[] → state/acts → Act.actor`** — that path reaches the attribution `T-d`
+forbids, is resolver-side, and `F.13` grades its guard `CONVENTION`. The derivation is assembled from
+the holder's own `Claim` rows — their `source`, `confidence` and `when` — and from nothing else.
+
+**Hidden actors are hidden in their EXISTENCE, never in their ARITHMETIC.** *"Subsistence fell by 1
+from a cause you cannot name"* is admissible, because the character can already see the fall; what
+they are additionally given is that it has an author they do not know. **A preview naming the author
+is a breach; one saying the effect is unattributed is not** — and the second is what makes
+investigation worth a scene.
+
+⚠ **WHAT THIS DOES NOT CLOSE, said because a cross-read claimed it did.** Reading 09 `§2.2`'s revolt
+Query is **resolver-side by construction** — *"the mayor does not know how bad it is"* — and this
+contract does not reach it. A mayor who holds claims about three angry guilds is owed the sum of
+**those claims**; a mayor who holds nothing is owed nothing. **The decomposition is admissible exactly
+to the extent the character's own ledger already names its terms**, which is a narrower promise than
+the one #359 makes and the only one `AX-2` permits.
+
 ## §C.8–§C.10 · Data, the log, and the Godot boundary
 
 A value lives in one file, read by one loader, so *never in prose and never in two files* is a fact
@@ -493,16 +688,17 @@ the assumption is the failure mode.**
 
 | # | the defect | the construction | grade (Py / GD) |
 |---|---|---|---|
-| 1 | **an institution acts** | a faction has no type and no id; `Act.actor : PersonId`; no institution parameter anywhere; a seat enters only through `Act.via` | STRUCTURAL / MECHANICAL |
+| 1 | **an institution acts** | ⚠ **CORRECTED (F10).** A faction **has** a view type and an id — `§D.11` and Reading 10 declare `Faction := (proposition, members, holdings, seats, head?)`, and Reading 10 amends the stages. What holds is narrower and is the real refusal: **it owns nothing, has no verbs, is never `Act.actor`, and is not a parameter of `resolve`.** `Act.actor : PersonId`; a seat enters only through `Act.via` | STRUCTURAL / MECHANICAL |
 | 2 | **a decision reads world truth** | `choose` has no `World`; `decision/` cannot name `state/` or `world_q`; `View` holds ids; `PersonInterior` is a frozen copy | STRUCTURAL / MECHANICAL |
 | 3 | a write outside the matrix | one path; an unmarked cell raises; no public setters | MECHANICAL |
 | 4 | a write at the wrong step | tokens; the gate matches class to row | MECHANICAL / CONVENTION + scan |
-| 5 | **a success Event for a write that did not happen** | `changes[] : Receipt[]`; only the gate mints; append checks the minted set | MECHANICAL |
+| 5 | **a success Event for a write that did not happen** | ⚠ **STRENGTHENED (F9).** Append checks the minted set — **which a no-op receipt passes**, so `ID-9`'s own worked instance (`work` emitting `site.worked` with no delta) survived this row. The gate now refuses `before == after` at the write, so the receipt is never minted and there is nothing to append | MECHANICAL, at the write rather than at the append |
 | 6 | a causal orphan | non-empty by constructor; `ROOT` typed; integrity over `log ∪ acts` | STRUCTURAL at the constructor |
 | 7 | a refusal that raises | the failure path is `emit`; loader invariant 4 | MECHANICAL |
 | 8 | a stored aggregate | no field slot; a Query is a function; a cache is driver-local | STRUCTURAL at the type; CONVENTION at a schema edit |
 | 9 | **an Event with an actor, target or subject** | the fields do not exist; `changes[]` is plural | STRUCTURAL |
 | 10 | two homes for one relation | one store keyed by subject; the object side is a cache | STRUCTURAL |
+| **10a** | ⚠ **NEW (F3) · a write by a non-owner** | the gate checks `actor == subject(id)` on every Tenure write, and admits three declared exceptions only — `T-n`'s matured term, `T-o`'s seat revocation **with `Act.via` present**, and a destroy cascade citing the existence change that caused it | MECHANICAL at the gate — **and it was CONVENTION before, enforced by per-verb eligibility alone** |
 | 11 | a seat that knows its holder | no field | STRUCTURAL |
 | 12 | **a relation with two owners** | directed `tie`/`knot`; no symmetric kind exists | STRUCTURAL |
 | 13 | a relation whose subject cannot act | `subject` admits `RungId` for `contain` only | STRUCTURAL (typed) |
@@ -523,6 +719,8 @@ the assumption is the failure mode.**
 | 28 | **a branch on a rung-kind member** | none at the type; **the falsifier IS the mechanism** — re-run the seeded season with `rung_kinds` extended by a synthetic kind and permuted; any test that moves branched on a member | CONVENTION at authoring; MECHANICAL as that one test |
 | 29 | order-dependent summation | `condition`, `stores`, `margin` are integers, and integer addition is associative; the act array is canonicalised | STRUCTURAL for the sum; MECHANICAL for the order |
 | 30 | **two degree ladders** | one `seam/ladder`; subsystems return a `Margin` | **CONVENTION** — Stage 1's named weak point, carried at that strength |
+| **30a** | ⚠ **NEW (F6) · a contest whose outcome changes nothing** | `writes` is `Degree`-keyed for any verb declaring `contests:`; loader invariant 12 refuses a flat list on one; the fold calls `writes_at(degree)` | MECHANICAL at load |
+| **30b** | ⚠ **NEW (`ID-18`) · a schema permanence nobody enumerated** | the three the schema grants are listed here rather than left implicit: **`Tenure` is never deleted** (`until` is what makes an ended relation a fact) · **`Proposition` has no setter and no delete** (its immutability is what lets a faction collapse for free) · **the log is append-only**. Each is authored by the designer at a commit, not by an act, and `AX-6`'s scope clause says so | **CONVENTION, and deliberately** — a loader cannot see a language-level guarantee, which is why `ID-18` puts the list here and not in `§B.13` |
 | 31 | a cohort subclass | one class; no conversion exists because there is nothing to convert to | CONVENTION + one test |
 | 32 | a title/office collision | **there is no `Title` type to collide with** | STRUCTURAL by absence |
 | 33 | eligibility by capability, or a seat with a modifier | no bonus field; no modifier column; `capability` is not an eligibility kind and the loader raises on one | STRUCTURAL at the type; MECHANICAL at load |
@@ -559,7 +757,7 @@ why its proof is step 2 loading against it.
 |---|---|---|---|
 | **0** | typed ids · the owned versioned `H` · fixed-point scale and band compare | 1,000 ids minted twice under one seed are bit-identical; a golden hash pinned; `H` is not a language `hash()` | **critical** |
 | **1** | the carrier types as field declarations, **no behaviour** | nothing on its own — **its proof is step 2** | **critical** |
-| **2** | `data/` + the one loader with the eleven invariants; `release` as a row; the `writer:`/`on_write` re-keying | every file loads; **each invariant fails on a planted violation naming the row, then passes**; a `scale:` key is refused. ⚠ **THIS STEP CANNOT PASS TODAY** — invariant 2 fails on `(Rung, exists)` and `(Site, exists)`, which have no producing verb (§F.20) | **critical** |
+| **2** | `data/` + the one loader with the **twelve** invariants; `release` as a row; the `writer:`/`on_write` re-keying; **the `Degree`-keyed `writes` for every contested verb** | every file loads; **each invariant fails on a planted violation naming the row, then passes**; a `scale:` key is refused. ⚠ **THIS STEP CANNOT PASS TODAY, AND THE FIRST PUBLICATION UNDERSTATED BY HOW MUCH — `F5`.** It named **two** rows failing invariant 2. Against the live matrix there are **nine**: `(Rung, exists)`, `(Site, exists)`, `(Rung, dates)`, `(Date, fired)`, and — the four that matter — **`(Person, convictions)`, `(Person, stance)`, `(Person, scar)`, `(Person, axis_count)`. No verb in the table writes any `Person` interior field at all**, which is tier-0 `H-62` in the executable chain and is graded **nowhere in this document**. See `F.20`. | **critical** |
 | **3** | the stores with private setters · the gate · the four tokens · the receipt mint · the log · the ledgers · the act store · `World` | a wrong-token write raises; an unmarked cell raises; a planted direct assignment is caught by the setter scan; **an Event carrying an unminted receipt fails `append`** | **critical** |
 | **4** | live/ended Tenures · `world_q` (the `contain` walk, purview, rank, `holder_of`, `establishment`, `judging_set`, `place_of`) · the barrier cache | walk and rank stay green under the **permuted-roster run** (D-28); the object-side cache equals a brute-force scan; `ended()` is named by no int-returning function | **critical** |
 | **5** | the driver · MATTER · CALENDAR · the headless runner | a seeded two-season run with **no acts**, twice, byte-identical including the hash; every MATTER Event has non-empty `causes[]`; a vacant date fires and lapses | **critical** |
@@ -618,10 +816,45 @@ make a reference resolve.**
 | **F.18** | **upkeep's source** — *"out of the office's stake"*, and `stake` was retired | unpaid; establishment persists until released | **no economic pressure on any office**, and *"finite, contested"* has no mechanism. A MATTER payment would be a fourth clock, so the repair is a verb |
 | **F.19** | the envelope, individuation, and `weight` | individuation decrements a band and mints at weight 1 | without the construal spread, **a cohort at weight 200 chooses as one mind** |
 | **F.20** | ⚠ **FOUNDING VERBS** — no stage names a verb that founds a hearth or builds a site | the rows are dropped until a verb is ruled | **the world only decays — nothing is ever founded or built.** This is what blocks build step 2 |
+| **F.20a** | ⚠ **NEW (F5) · NO VERB WRITES ANY `Person` INTERIOR FIELD.** `§B.2` carries `convictions`, `stance[]`, `scar[axis]`, `axis_count[axis]` and names a reader for each; **it names no writer for any of them.** The four are `RES`-stepped matrix rows with no producing verb | that a consequence table would supply them | **every interior consequence is inert.** A person's convictions cannot move, so `choose` scores against a constant, `standing` has nothing to diverge from, and the epistemic layer has no moral layer to disagree with. ⚠ **This is the gap the degree-keyed column (`§C.4`, `F6`) is the shape of the answer to** — an interior write is a *consequence of an outcome*, which is exactly what the sixth column declares |
+| **F.20b** | ⚠ **NEW (F13) · THE FOLD MINTS EVENT KINDS NO COLUMN DECLARES.** The live implementation emits `act.ineligible`, `act.refused` and `contest.resolved` as **body literals**, as a fallback where a row declares no refusal kind | that invariant 7's derived roster covers every kind | **invariant 7 refuses all three at `append`**, so the loop as built cannot run under the loader as specified. Either the three become declared columns — an eligibility-refusal kind per verb (`F7`, invariant 4 widened) and a `contest.resolved` emission column — **or the derived roster is not derived.** A definition living as a literal in a body is what `ID-12` refuses |
 | **F.21** | the rank of a cluster seat (`scope = null`) | no rank; the loader forbids a `higher_rank` conjunct on one | church seats become revocable by purview alone — **which they also lack** |
 | **F.22** | **how succession fills a seat** — death does not open a conferral Date | the named heir is eligible by `own` — **an eligibility the four kinds cannot spell** | every death is a vacancy only a superior can fill, **which may be right for an office and is wrong for a crown** |
 | **F.23** | the `AX-3` loader check | no verb writing a conviction has a ledger-phrased `requires` | **unenforceable while `requires` is prose** (F.24) — evidence moves a conviction through any verb whose author phrases it so, and the check is a comment |
-| **F.24** | ⚠ **THE GRAMMAR OF `requires`** — Stage 3 fixes five columns and never says what the second contains; every row carries it as **a prose string** | a small typed predicate grammar | **the resolver needs a body per verb to evaluate prose, and `D20 — the resolver has no body` returns as `the resolver has thirty`** |
+| **F.24** | ⚠ **THE GRAMMAR OF `requires`** — Stage 3 fixes five columns and never says what the second contains; every row carries it as **a prose string** | ⚠ **NO LONGER ASSUMED — DERIVED. See `§F.24a`** | **the resolver needs a body per verb to evaluate prose, and `D20 — the resolver has no body` returns as `the resolver has thirty`. This is still the item everything dynamic depends on:** `ID-16`'s loop enumeration, `F.1`'s per-conjunct demand and `F.23`'s `AX-3` check are each blocked on it |
+
+## §F.24a · ⚠ **THE GRAMMAR, READ OFF THE 32 LIVE CELLS RATHER THAN DESIGNED — added 2026-09-03**
+
+`F.24` said *"assumed: a small typed predicate grammar"* and supplied none, which is the shape of
+handing a property forward. **The 32 `requires` cells in the executable chain are the specification,
+and reading them yields SEVEN forms.** They are listed with their live instance so a later session
+can check the derivation rather than trust it:
+
+| # | form | live cell |
+|---|---|---|
+| 1 | **existence over an edge kind** | `repudiate` — *a live commit exists* · `revoke` — *a live hold exists* |
+| 2 | **a computed scalar against a threshold** | `transfer` — `stores(hearth(giver), kind) >= amount` · `work` — `condition >= floor(verb)` |
+| 3 | **path existence in the containment tree** | `move` — *a contain path exists* |
+| 4 | **cardinality on an object** | `confer` — *1-per-object: no live hold on the object* |
+| 5 | **a relation between actor and subject** | `succeed` — *the actor holds the office whose heir is being designated* |
+| 6 | ⚠ **membership in the ACTOR'S OWN ledger** | `tell` — *the teller holds a claim on the subject* · `comply` | 
+| 7 | ⚠ **a basis lookup on the exercised seat** | `confer` / `revoke` — *the office's conferral / revocation basis* |
+
+⚠ **AND TWO CELLS ARE NOT PREDICATES AT ALL, WHICH IS THE FINDING RATHER THAN A ROUNDING ERROR.**
+`issue` — *"scope enumerates executors, not places"* — and `open_case` — *"the act DECLARES the stages
+and their terms"* — are **constraints on the well-formedness of the Act**, not questions asked of the
+world. **They belong in the `Act` schema and are refused at construction**, not evaluated at RESOLVE.
+A grammar that admitted them would have to be able to talk about the act's own payload, which is how
+a predicate language becomes a second resolver.
+
+> **Forms 6 and 7 are the two the cross-read missed**, and each carries a consequence: **6 is why
+> `§B.2` needed the own-ledger carve-out (`F8`)**, and **7 is why `T-o` exists (`F3`)** — a basis
+> lookup on a seat is exactly the authority a revocation exercises.
+
+**The grammar is small, and that is the claim `F.24` assumed and never demonstrated.** Seven forms,
+two of which are lookups, closes 30 of 32 cells; the other two are schema constraints. **An
+independent governance design reached the same shape from a disjoint corpus** — a quantifier, a
+comparison and a relation, and nothing else — which is corroboration rather than a source.
 | **F.25** | sum-then-clamp against the sequential fold | bounded scalars clamp at stratum end; integer stores check sequentially | a `restore` in the same stratum is invisible to a `work`'s band gate — **a site that was repaired refuses the verb the repair reopened** |
 | **F.26** | the canonical order key | `(stratum, actor-hash, intra-person position)` | **a hash decides who eats when two people reach one larder, and the design has no better answer — which should be said aloud rather than discovered** |
 | **F.27** | Thread Sensitivity — *the only class-shaped gate* | not modelled | nothing. **Named because an implementer will look for it in the eligibility kinds and it is deliberately not there** |
@@ -851,6 +1084,24 @@ point at the type, the column, the row or the falsifier — or at the graded hol
 as a gate**, and it would have turned Stage 3's twenty-odd forward-handed properties into twenty
 register rows **at the moment they were written, which is when they were cheapest.**
 
+⚠ **AND A REPRESENTATION IS NOT ENOUGH, WHICH IS THE CLAUSE THIS RULE WAS MISSING (added
+2026-09-03).** A stage can close on representations and still be **behaviourally wrong**: `PART D`
+row 5 was a typed representation of *no false success report* that a no-op receipt walked straight
+through, and loader invariant 6 was a typed representation of a property **no actor could ever
+satisfy.** Both are consistent; both are wrong; **no amount of pointing at the type would have found
+either.**
+
+> ### **THE FALSIFIER FOR A DESIGN CLAIM IS A TRACE, NOT A GREP.**
+> The evidence is an audit whose seven principle-derived findings were **all** local inconsistencies
+> between two passages — findable by turning a statement into a grep — while an independent pass that
+> traced the mechanics found **three behavioural bugs in text that reads perfectly.** *Principles
+> catch contradiction; only tracing catches error.*
+>
+> **`§0.2` already owns the answer and `G.4.1` did not cite it:** a stage boundary closes on a
+> representation **plus one execution** of the thing it represents, or the representation is a
+> hypothesis. Build step 8 is that execution for this document, and every claim above it is a
+> hypothesis until it runs.
+
 **G.4.2 · Producing and checking are different jobs, and the division is STRUCTURAL.** Independence
 is a tool list, not a sentence — a critic declared `Read, Grep, Glob` **cannot write, whatever its
 prompt says.** Put the stronger tier where the error is silent: *a synthesis artifact is reviewable
@@ -865,6 +1116,23 @@ over-refusals. Correcting it unblocked ten arcs.*
 > **An error AGAINST the design is as serious as one FOR it, and is harder to see, because it looks
 > like rigour.** A critic's charter names both questions: *did the producer invent?* and *did the
 > producer refuse what the design permits?*
+
+⚠ **THERE IS A THIRD DIRECTION AND THE CHARTER MISSED IT (added 2026-09-03).** An independent design
+audited itself against its own principles, found seven violations, and **listed a defect among the
+things it had got right** — a feedback loop that penalises good governance, filed in the table headed
+*the negative loops that are correct*. Neither invented nor over-refused: **misclassified in sign, by
+the author, inside the section built to catch exactly that.**
+
+> **So the charter has three questions, and the third is a `§0.1` pt 4 setup error rather than a
+> reading error:** *did the producer invent?* · *did the producer refuse what the design permits?* ·
+> **and *did the producer grade something backwards?*** The third is the one an author cannot ask of
+> themselves, because the misgrading and the confidence come from the same place.
+
+⚠ **AND THIS DOCUMENT'S OWN REWRITE IS THE FOURTH INSTANCE OF THE SECOND DIRECTION.** The cross-read
+that fed it graded `contract` — what a subordination owes — as *"a real question #358 leaves open"*,
+**with `§E.1.6`'s pattern in front of it and already banked as that section's best result.** The
+answer was one derivation away (`§E.1.7`). **A critic charter that names the direction is not the same
+as a critic that runs it.**
 
 **G.4.4 · The adversarial pass produces EDITS, and at most one row.** Everything else is fixed in the
 commit or dropped. **The generalisation of why:** the loop's carrier is prose — forbid the guard and

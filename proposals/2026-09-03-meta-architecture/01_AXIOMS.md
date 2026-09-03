@@ -112,7 +112,20 @@ to the person holding it*, which is the condition every deception mechanism in t
 
 > They are held in different places, moved by different forces, at different times. **Evidence moves
 > what is held true. Argument and consequence move what is held right.** Nothing moves either on a
-> clock.
+> clock — ⚠ **save the one fading `AX-5` licenses, which only REMOVES and never REVISES.**
+
+⚠ **THE CARVE-OUT IS A CORRECTION, NOT A HEDGE (F1, 2026-09-03).** The sentence read *"Nothing moves
+either on a clock"* full stop, and it contradicted `AX-5` in the tree: **`(Claim, confidence)` is a
+`MATTER`-class write** (`write_matrix.yaml`), Reading 07 calls fading *"one of only three things the
+world does unasked"*, and eviction ranks on confidence × recency. **So what is held true DID move on
+a clock, by the design's own third motion**, and two axioms were in contradiction with nothing
+flagging it.
+
+**What makes the carve-out safe rather than a hole:** fading changes a claim's **confidence**, never
+its **value**. A memory can dim to nothing and can never become a *different* memory. **Revision
+still requires evidence, which is the whole of what `AX-3` protects** — and the axiom set's own
+falsifier (`§F.4` row 1) named `AX-5` as the standing candidate for dependence without ever checking
+it against `AX-3`.
 
 **Why it is axiomatic.** A design could have one layer carrying both. This axiom is the reason
 investigation cannot become moral re-engineering: if evidence could move a conviction, then finding
@@ -171,8 +184,26 @@ which is the wording this document shipped.
 
 ### **AX-6 · NOTHING BECOMES PERMANENT WITHOUT AN AUTHOR.**
 
-> A state that no act can undo is a state nobody chose to make final. **Every irreversibility in the
-> game was made by somebody**, and is therefore itself contestable.
+> A state that no act can undo is a state nobody chose to make final. **Every irreversibility IN THE
+> GAME STATE was made by somebody**, and is therefore itself contestable.
+
+⚠ **THE SCOPE CLAUSE IS LOAD-BEARING AND WAS MISSING (F2, 2026-09-03).** `AX-6` quantifies over
+**state**, not over **schema**. Without that word it is either false or unusable:
+
+| | |
+|---|---|
+| read as *any* permanence | it **forbids this document's own schema** — `Tenure`'s `NEVER: deletion`, `Proposition`'s immutability, the append-only log. No in-fiction act authored any of the three |
+| read as *an in-fiction act* | it **cannot reach `T-a`'s ratchet clause**, whose monotonicity is a property of the schema rather than an authorless change |
+
+**Both readings were in use at once**, which is how `T-a` came to derive the ended-edge refusal from
+`AX-6` while `AX-6` simultaneously licensed the ended edges that make it monotone.
+
+> ### **THE SPLIT, AND `§F.4` ROW 2 IS HEREBY RECORDED AS FIRED.**
+> **`AX-6` governs GAME STATE: every irreversibility a person could be subject to has an in-fiction
+> author.** **Schema permanences are a different thing** — authored by the designer, at a commit,
+> and they are contestable by editing the design rather than by an act. They are not exempt; they are
+> **enumerated**, and the enumeration lives in `PART D` as a marker rather than in a loader, because
+> a loader cannot see a language-level guarantee. `ID-18` states the obligation.
 
 ⚠ **THIS AXIOM WAS MISSING FROM THE FIRST PUBLICATION, AND AN ADVERSARIAL PASS FOUND ITS ABSENCE.**
 It is recorded that way rather than quietly inserted, because *how* it was found is the argument for
@@ -458,10 +489,23 @@ misses them** — a test asserting *every channel has a predicate* passes while 
 nobody. **`ID-10` says assert what you can observe; it does not say assert the property that
 matters. `ID-13` is that property.**
 
-### **ID-14 · WHAT AN ACT CAN OPEN, AN ACT MUST BE ABLE TO CLOSE.**
+### **ID-14 · WHAT AN ACT CAN OPEN, AN ACT MUST BE ABLE TO CLOSE — AND BOTH HALVES ARE DECLARED.**
 
 > Otherwise the vocabulary contains a ratchet, and `AX-6` is violated by the grammar rather than by
 > any particular rule.
+
+⚠ **THE OPENER HALF WAS MISSING, AND THE CLOSER HALF ALONE IS THE WEAKER ONE (added 2026-09-03).**
+The check as first written asks, for every kind, *which verb closes it*. **It never asks which verbs
+may OPEN it** — so a hold opened by an undeclared verb passes every gate, and `Seat.conferral`
+(*"which ACT fills the seat"*) sits on the schema carrying nothing.
+
+> **State it as one map, load-checked in both directions:** for every `tenure_kind`, the declared set
+> of **openers** and the declared set of **closers**. A verb writing `(Tenure, since)` for a kind
+> whose opener set does not name it **fails the load**, exactly as a kind with no closer does.
+
+**What this buys immediately:** `Seat.conferral` becomes `hold-kind → {confer | determine | succeed}`
+and stops being a field nobody reads — which is `ID-13` closed at the site `§E.2.5` says has *"been
+on the Office since #353 carrying nothing."*
 
 **Measured, and it is not an edge case: four of seven relations are open-only** (§E.1.2). A duty
 cannot be discharged, a bond cannot be broken, a succession pointer cannot be changed. **The check
@@ -482,6 +526,66 @@ object?"* cannot be answered, because it conflates the two.**
 **It cuts the other way just as hard**, which is why it is an idiom rather than a permission: a thing
 that owns nothing may **never** acquire a field, appear as an actor, or be the subject of an edge.
 **A view that starts owning is a carrier nobody declared.**
+
+### **ID-16 · A DESIGN ENUMERATES ITS LOOPS AND SIGNS EACH ONE.**
+
+> Every feedback path appears in the register with a direction. **A model in which every loop is
+> negative CONVERGES** — season 40 resembles season 30 — and convergence is not a design goal, it is
+> what happens when a design has no other ideas.
+
+⚠ **ADDED 2026-09-03 from an independent governance design (#359 `TL-7`), and the FIRST DRAFT OF THIS
+IDIOM SHIPPED A FALSIFIER THAT IS ITSELF THE DEFECT IT NAMES.** It proposed *"count the damping terms,
+count the amplifying terms, and a zero in the second column is the finding"* — **a term-grep over
+prose**, which is the exact error corrected two sections earlier in this document's own reading of
+`amplif*`. A count of words is not a measurement of a model.
+
+> ### **THE REPRESENTATION IS A CYCLE ENUMERATION OVER THE WRITE/READ GRAPH, AND IT IS BLOCKED.**
+> A loop is a cycle in *what a verb writes* × *what a verb's precondition reads*. The first half is
+> data today (`write_matrix.yaml`). **The second half is a prose string in all 32 rows** — `F.24` —
+> so the graph cannot be built and the enumeration cannot be derived. **`ID-16` is therefore stated
+> with its blocker named: it is unbuildable until `requires` is typed**, and that is the honest form
+> rather than a hand-listed table that would be reference under `§0.05`.
+
+**Why it is worth stating anyway.** This design is made almost entirely of refusals — `T-a` refuses
+the stored aggregate, `AX-6` the ratchet, `T-b` the deciding threshold, `ID-5` the silent default —
+**and every one of them is a damping term.** A design that can name every way a quantity may be
+written, and cannot say which way a loop points across seasons, is missing an axis rather than a rule.
+Reading 07 and `F.28` both admit the hole; neither names what would close it.
+
+### **ID-17 · A SUSPENSION IS A UNIFORM RULE, AND ITS LICENSED FORM IS A BAND ON A QUERY.**
+
+> Where a limit lifts, **the lifting is itself a rule applying identically to every entity of a
+> kind** — never an exception carved for one.
+
+⚠ **AND THE FORM MATTERS MORE THAN THE PROHIBITION, WHICH THIS DOCUMENT ALREADY HAD THREE TIMES.**
+*"A mechanism that special-cases a kind is wrong for every membership"* is stated at `§E.3`, at Stage
+2 `§C.2` and at `G.1.6`. **What was missing is what a LAWFUL exception looks like** — and a
+prohibition with no licensed alternative is broken quietly by the next session that genuinely needs
+one.
+
+> **The licensed form is already in the vocabulary: `T-b`.** A band on a Query **changes what may be
+> chosen and never produces an outcome**, and it applies to whoever crosses it. `§D.3`'s site bands
+> are the worked instance — damage removes an option rather than adding difficulty. **A suspension is
+> a band, or it is a special case wearing a rule's clothes.**
+
+⚠ **The imported version said "attached to a named regime", and `regime` is refused** under `§4`'s
+word rule: it is a coinage for a thing `band` already covers, and it arrives carrying a governance
+model this design does not have.
+
+### **ID-18 · A PERMANENCE THE SCHEMA GRANTS IS ENUMERATED WHERE A READER WILL MEET IT.**
+
+> `AX-6` binds **game state**. The schema's own permanences — `Tenure`'s no-deletion, `Proposition`'s
+> immutability, the append-only log — are authored by the designer and are **listed**, because an
+> axiom that quantifies over irreversibilities while its own document lists none is `ID-13` at the
+> level of the axiom set.
+
+**The evidence it is needed:** this chain discovered **four ratchets in its own relation vocabulary
+by adversarial pass** rather than by reading a register. **A list would have found all four at
+once**, which is what `ID-14` says about its own one-line check and what nothing said about the rest.
+
+> ⚠ **NOT a loader invariant.** None of the three is a data row — they are language-level guarantees
+> a loader cannot see. **The home is `PART D`**, beside the impossibilities, which is where a reader
+> already goes to ask what cannot be spelled.
 
 > ### **THE JOINT STATEMENT, AND IT IS THE POINT OF PART C**
 > **ID-9 is about the thing under test; ID-10 is about the instrument.** The defect class the
@@ -859,9 +963,37 @@ by who the subject is.**
 > which `T-c` forbids. **So the opening act declares the terms**, exactly as §13.1 has an
 > Inquisitor's `open_case` declare its stages rather than letting MATTER advance them.
 
-**Together `T-m` and `T-n` are exhaustive over the ways a relation can end**: by its owner's choice,
-or by a term its author set. **There is no third way, and that is what makes open-without-close
-unspellable** rather than merely detectable.
+⚠ **CORRECTED 2026-09-03 (F3). THE FIRST WORDING SAID `T-m` AND `T-n` ARE EXHAUSTIVE AND THAT
+*"THERE IS NO THIRD WAY"*. THE TREE HAS TWO INSTANCES OF THE THIRD WAY AND HAS HAD THEM ALL ALONG.**
+
+`verb_table.yaml` carries **`revoke`** (eligibility `remit:revoke`, `writes: [Tenure.until]`) and
+**`confer`** (eligibility `remit:confer`, `writes: [Tenure.until, Tenure.since]`). **In both, a
+person who is not the Tenure's subject writes its `until`.** That is neither the owner's discretion
+nor a term the opening act declared.
+
+> ### **THERE ARE THREE WAYS, AND THE THIRD IS NOT A DEFECT — IT IS WHAT AN OFFICE IS FOR.**
+>
+> | | authority | who |
+> |---|---|---|
+> | **`T-m`** the owner's discretion | `subject == actor` | the holder |
+> | **`T-n`** a declared term | the Tenure's own `term`, set by the opening act | MATTER, or the term's `closer` |
+> | **`T-o`** ⚠ **NEW · a REVOCATION declared on the seat** | the **Seat's** `revocation` basis, exercised through `Act.via` | a superior, at a venue, paying an act |
+>
+> ### **T-o · A SEAT MAY END WHAT ITS REMIT REACHES, AND THE SEAT DECLARES THE REACH.**
+> **From `AX-1` + `§E.2.2`.** Authority is a property of the seat being exercised. A revocation is
+> therefore not a person overriding an owner — **it is the seat's declared remit, exercised by
+> whoever currently occupies it**, and it is refused the instant the occupant is not seated.
+
+**Why this is a repair and not a widening.** The exhaustiveness claim was doing real work — it is
+what makes open-without-close unspellable — and `T-o` preserves it, because **a revocation is still
+DECLARED, on the Seat, at `establish` time.** What changes is *where* the declaration lives: `T-n`
+puts it on the Tenure, `T-o` puts it on the Seat. **Three declared ways is still a closed set; two
+ways plus an undeclared verb that quietly does a third thing is not.**
+
+⚠ **AND IT NAMES A REAL DEFECT THE FIRST WORDING HID: `Seat.revocation` and `Tenure.term.closer`
+are two homes for *who may end this hold*.** That is `G.2.1`'s own *"you can name two"* test firing
+inside the schema. **The Seat's is authoritative** — a term's closer names a *basis*, and the basis
+resolves against the seat. Say so at both sites or the next session will write the third.
 
 ⚠ **THE PRICE, NAMED BECAUSE IT IS REAL.** Under `T-m` a duty can always be forsworn, which sounds
 like duties stop binding. **They bind by cost, not by impossibility.** Forswearing spends an act from
@@ -978,6 +1110,34 @@ it and nobody declared it — and no duke could refuse to fight a war his king d
 > **Subordination and war are the same shape: an uttered Proposition · an owned edge · a gap between
 > the sworn and the actual.** Expect a third. **When the design next reaches for a relation between
 > two things that cannot act, this is the shape to reach for first.**
+
+### §E.1.7 · **WHAT IS OWED — the pattern's third slot, which this section had and did not use**
+
+⚠ **ADDED 2026-09-03, and it closes an over-refusal committed against this document by its own
+evaluator.** An external design (#359) attaches a `contract : { levy, tax, obligations, autonomy }`
+to its subordination relation, and a cross-read graded that *"a real question #358 leaves open"* on
+the ground that `oblige` carries a subject, an object, dates and a term, and **what is owed is
+nowhere.** That grade was wrong, and the derivation is one step:
+
+> ### **AN OATH IS AN UTTERANCE. WHAT IS OWED IS THE `OUGHT` PROPOSITION IT UTTERS.**
+> `§D.5` already establishes that *a Proposition of mood `OUGHT` is an uttered Belief*, and `commit`
+> already binds a person to a Proposition. **An `oblige` whose terms are an `OUGHT` Proposition is
+> the pattern this section just named, with its third slot filled** — the utterance carries the
+> terms, the edge carries the swearing, and the gap between them is the Query.
+
+**And it is better than a field of four columns**, for the reasons the pattern is worth having:
+
+- **The terms were SAID by somebody**, at a venue, and can be quoted, disputed and misreported.
+- **Two people may swear to the same terms** by committing to one Proposition, and are thereby known
+  to have sworn the same thing — where four columns on two edges can silently differ.
+- **The terms are immutable**, so *renegotiation* is a new utterance and a new edge, which is what
+  renegotiation is. A mutable `contract` field would be a treaty nobody signed.
+- **Breach is the sworn/performed gap** — a Query, banded under `T-b` — rather than a boolean nobody
+  authored.
+
+> **The lesson is the evaluator's, not the design's: an error AGAINST the design looks like rigour.**
+> The cross-read had `§E.1.6`'s pattern in front of it, had already banked it as the section's best
+> result, and still graded the slot empty. **`G.4.3` names this direction and it fired anyway.**
 
 > ### **THE GENERAL RESULT, AND STAGE 2 INHERITS IT**
 > **THERE ARE NO INSTITUTIONAL RELATIONS. THERE ARE ONLY PEOPLE'S RELATIONS, READ IN AGGREGATE.**
