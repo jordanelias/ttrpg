@@ -38,14 +38,32 @@ existing tree with better prose.
 
 ## What Stage 1 concludes
 
-- **There are five axioms, not five laws.** Two of the chain's five "laws" are **theorems** — `L3` of
-  `AX-4`, `L5` of `AX-1` — and PART B derives them. The demotion is the point: **break an axiom and
-  you have chosen a different game; break a theorem and you have introduced a contradiction.**
+- **Axioms and theorems are different things, and the chain's five coordinate "laws" mix them.**
+  `L5` derives from `AX-1`; `L3`'s clause 1 from `AX-4` and its clause 3 from `AX-6` — ⚠ **not all
+  of `L3` from `AX-4`, which the first publication claimed and an adversarial pass broke.** The
+  demotion is the point: **break an axiom and you have chosen a different game, deliberately; break
+  a theorem and you have introduced a contradiction that surfaces later as a defect nobody can
+  localise.**
 - **The schema is written as ADMISSION TESTS, not field lists.** A schema that lists fields can only
   grow, which is exactly how the entities *"grew one defect at a time."*
-- **`H-101` closes by derivation.** Subordination **cannot be stored** — by `AX-4` nothing owns an
-  edge between two immutable Propositions — so it is a **Query** at every scale, needing no new
-  `tenure_kind` and no second ladder.
+- ⚠ **`H-101`'s first answer was WRONG and is corrected in place.** It said subordination *cannot be
+  stored*. An adversarial pass showed the step never established that the edge is
+  Proposition→Proposition, and that **`oblige` — already rostered, and named by `H-101` itself** — is
+  storable, owned by the person who swore it, and **more `AX-1`-faithful than a Query nobody
+  authored.** The faction half is derived; **the office half SPLITS**, by this section's own
+  falsifier.
+- **And the correction found the better result: FOUR OF SEVEN RELATIONS CAN BE OPENED AND NEVER
+  CLOSED.** `oblige`, `succeed`, `tie`, `knot` have no closing verb, so a duty cannot be discharged,
+  a bond cannot be broken and a succession cannot be changed. **That is why the first answer looked
+  right** — facing an irreversible edge, "make it a Query" is the reachable repair. The reversibility
+  was real; the diagnosis was wrong.
+- **There are SIX axioms.** `AX-6` — *nothing becomes permanent without an author* — was found
+  missing when two separate derivations reached for it and neither could get there from the other
+  five: `L3`'s ratchet clause, and the four open-only relations above. **`AX-1` says nothing moves
+  without an author; `AX-6` says nothing stops being able to move without one.**
+- **Part C gained two idioms because it FAILED its own acceptance test.** The chain's commonest
+  instance of the named defect class is *a declared axis that decides nothing* — which `ID-9` misses
+  (it needs a write) and `ID-10` is satisfied by. `ID-13` and `ID-14` close it.
 - **A `Title` is not an entity**, and the missing conferral path is a **half-landed ruling** (two
   eligibility models, only `revoke` rebuilt on the second) rather than a hole in the ontology.
 - ✅ **RULED 2026-09-03, and it dissolved the question rather than answering it.** Jordan:

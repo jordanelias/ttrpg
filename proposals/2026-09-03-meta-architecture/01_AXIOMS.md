@@ -63,7 +63,8 @@ if removed.** The chain currently states five "laws" of coordinate rank. **Two o
 axioms — they are theorems**, and PART B derives them. Demoting them is not a weakening: it tells a
 future session which statements it may never trade away and which it should expect to re-derive.
 
-There are **five**.
+**There are SIX.** ⚠ The first publication said five; `AX-6` was found missing by an adversarial
+pass, and §A.1 records which theorems had been leaning on it unstated.
 
 ---
 
@@ -81,7 +82,14 @@ core-blocked by refusals descending from this axiom, and they are not repairable
 **they were authored against a model with faction meters, world tracks and a GM.** AX-1 is what
 makes them unrunnable, deliberately.
 
-⚠ **THE FIGURE USUALLY QUOTED HERE IS `22`, AND IT IS ROUTER-ERA.** `W10` deleted the regex router,
+⚠ **AND THE `22` IS NOT AX-1'S BILL. ONLY ABOUT A QUARTER OF IT IS.** The chain's own table makes 22
+the **sum of five refusals**: a social aggregate on a Rung (~8, which is `AX-4`), a threshold
+producing an outcome (~4, `T-b`), a fourth clock (~4, `T-c`), a faction acting (3, `AX-1`), a GM
+adjudicating (3, `AX-1`). **Six of 22 descend from `AX-1`.** Parking the whole figure here
+overstated this axiom's cost ~3.7× and understated `AX-4`'s — **in the one place this document
+quantifies what an axiom costs**, which is the worst place to be loose.
+
+⚠ **THE FIGURE IS ALSO ROUTER-ERA.** `W10` deleted the regex router,
 so the query that produced it *"has no subject, and re-running it returns zero in both columns"*.
 The qualitative claim — that the two pathways fail for categorically different reasons — is a **live
 hypothesis**, not a measurement, and `W13`'s authoring lane is the test of it. **Do not cite `22` as
@@ -141,13 +149,49 @@ would be a different game.
 **So the axiom is the list, and the prohibition is `T-c`.** Stating it the other way round hides the
 one part that is a genuine design choice inside the part that is a consequence.
 
+⚠ **AND THE LIST MAY BE INCOMPLETE — THERE IS A FOURTH CANDIDATE THIS DOCUMENT NEVER NAMED.** The
+loop has **two** world-writing steps, not one: CENSUS reconciles the envelope and performs
+**individuation**, admitting `(Person, exists)` and emitting `person.individuated`. **That is the
+world creating the only kind of thing `AX-1` lets act** — and the easy defence is foreclosed by the
+chain itself, which rules that *birth is envelope weight, not a `create`*, so individuation is not
+"bodies". What demands one is graded `absent`.
+
+**The consequence is that `T-c` and §D.4's NEVER are both quantified over MATTER, so a
+CENSUS-advanced quantity evades them verbatim.** Either CENSUS's individuation is a fourth licensed
+motion and `AX-5` says *four*, or it is demand-driven and therefore authored — **and nothing states
+which.** The word CENSUS did not appear in the first publication of this document at all.
+
 ---
+
+### **AX-6 · NOTHING BECOMES PERMANENT WITHOUT AN AUTHOR.**
+
+> A state that no act can undo is a state nobody chose to make final. **Every irreversibility in the
+> game was made by somebody**, and is therefore itself contestable.
+
+⚠ **THIS AXIOM WAS MISSING FROM THE FIRST PUBLICATION, AND AN ADVERSARIAL PASS FOUND ITS ABSENCE.**
+It is recorded that way rather than quietly inserted, because *how* it was found is the argument for
+it: **two separate derivations reached for it and neither could get there from `AX-1`..`AX-5`.**
+
+- **`T-a` could not derive L3's clause 3** — *any Query monotone in the ENDED-edge set is a ratchet
+  and is refused.* That clause constrains a **Query**, which by construction has no owner and no
+  writer, so `AX-4` — a statement about owners and writers — cannot reach it.
+- **§E.1.2 found four of seven relations openable and never closable**, which no axiom forbade.
+
+**Both are one thing: a state becoming final with nobody having made it final.** `AX-1` says nothing
+*moves* without an author; `AX-6` says nothing *stops being able to move* without one. **They are the
+same commitment about authorship, applied to change and to its cessation** — and the second was
+being relied on throughout while never stated.
+
+**What it costs to deny it:** permanent grudges, unbreakable bonds, duties nobody can discharge, and
+counters that only climb — each of which the chain has an instance of, and each of which is a
+shadow actor wearing a state's clothes rather than a clock's.
 
 ## §A.1 · What is NOT an axiom, and why the demotion matters
 
 | stated in the chain as | actually | derived in |
 |---|---|---|
-| **L3** — every aggregate is a function, never a field | **a theorem of AX-4** | `T-a` |
+| **L3** clause 1 — a counter only per `(Person, axis)` | **a theorem of `AX-4`** | `T-a` |
+| **L3** clause 3 — no ratchet over ended edges | **a theorem of `AX-6`** ⚠ *not `AX-4`; corrected* | `T-a` |
 | **L5**'s first half — a crossing may never produce an outcome | **a theorem of AX-1** | `T-b` |
 | **L5**'s second half — every other clock was wound by an act | **a theorem of AX-1 + AX-5** | `T-c` |
 | **L2**'s enforcement — `choose` takes no `World` | **a theorem of AX-2** | `T-f` |
@@ -173,25 +217,47 @@ a flat list of laws cannot.
 
 ### **T-a · An aggregate cannot be stored.** *(the chain's L3)*
 > **From AX-4.** An aggregate is by definition a value over many owners. A value over many owners has
-> no single owner. AX-4 says every value has exactly one owner. **Therefore an aggregate is not a
-> value that can be written — it can only be computed.**
+> no single owner. `AX-4` says every value has exactly one owner and that the owner is its only
+> writer. **Therefore an aggregate cannot be a FIELD.** What it can be is a function — which is why
+> the chain assigns every aggregate to **Nobody**: ownerlessness is the licensed state of a Query,
+> not a refusal condition.
 
-**What the derivation buys that L3 does not.** L3's clause 2 (*no resolver-side Query may aggregate
-per-person tallies across holders*) was added because clause 1 did not bind, and clause 3 because
-clause 2 did not either. **Under AX-4 all three collapse into one question — *what owns this?* —**
-and the ratchet cases fall out directly: `count{commit edges, live and ended}` has no owner, so it
-is refused without needing a third clause about ended edges.
+⚠ **CORRECTED. THE FIRST PUBLICATION OF THIS THEOREM CONTRADICTED ITSELF INSIDE ITS OWN PARAGRAPH**,
+and an adversarial pass caught it. It concluded *"an aggregate can only be computed"* and then, six
+lines later, that a monotone count *"has no owner, **so it is refused**"* — **the same premise
+yielding compute-it and refuse-it.** Both cannot follow.
 
-⚠ **This does not mean delete the clauses.** It means they are *checks*, not *laws*, and a fourth
-evasion should be expected and answered the same way rather than by a fourth clause.
+**What `AX-4` actually reaches, stated exactly:**
+
+| L3's clause | derives from |
+|---|---|
+| **1** — a counter exists only per `(Person, axis)` on a closed registry | **`AX-4`.** A cross-holder tally has no owner, so it cannot be a field |
+| **2** — no resolver-side Query may aggregate tallies across holders | ⚠ **neither.** It is a **read-side check** on a Query, and a Query has no owner for `AX-4` to constrain |
+| **3** — a Query monotone in the ENDED-edge set is a ratchet, and is refused | **`AX-6`**, and nothing else. It is a statement about **permanence**, not about ownership |
+
+**So L3 is not wholly a theorem of `AX-4`**, and §A.1's demotion is corrected to say which clause
+goes where. ⚠ **The document's own §E.1.4 was the tell:** it reached for clause 3 **by name** to get
+reversibility, in a document whose PART B claimed that clause unnecessary.
+
+⚠ **And a second correction: `T-a` says an aggregate cannot be STORED; `ID-1` licenses a cache at a
+barrier, and a cache is storage.** The reconciliation is that a barrier cache is discarded at the
+next barrier and therefore **cannot go stale**, which is what `AX-4`'s ownership rule is protecting
+against. Say *cannot be a field*, never *cannot be stored*.
 
 ### **T-b · A threshold may change what can be chosen; it may never produce an outcome.** *(L5, first half)*
 > **From AX-1.** An outcome is what a decision produces. Only persons decide. A threshold is not a
 > person. **Therefore a threshold that produced an outcome would be an actor.**
 
 **And the corpus agrees with the theorem rather than with the fear.** In the 50-arc in-chain survey,
-**19** wanted a crossing to *force a moment* and then have a person choose; only **8** wanted the
-crossing to act. **The design refuses the 8 and supplies the 19 exactly.**
+**19** wanted a crossing to *force a moment* and then have a person choose. **The design supplies
+that exactly.**
+
+⚠ **THE COUNTERPART FIGURE IS WITHDRAWN, NOT CORRECTED.** This read *"only **8** wanted the crossing
+to act"*, making a tidy partition of 27. **The chain does not carry an 8 for that refusal** — its
+figure for *a threshold producing an outcome* is **~4**, and the two 8s that do exist are a
+different bucket and the faction/world re-scale count in this document's own next sentence. **The
+same token was doing two incompatible jobs one line apart**, which is `ID-11`'s failure and `G11`'s,
+by the author who wrote them down.
 
 ⚠ **CARRY THE CONDITION, NOT THE LITERAL.** `PLAN.md` `W20` measures that **11** of those 19 are
 reachable today — the other 8 are `faction`/`world`-scaled and unrepresentable until `W28`
@@ -199,8 +265,13 @@ re-scales them. **19 is the post-`W28` figure**, and the first draft that publis
 condition is the error this note exists to not repeat.
 
 ### **T-c · Every clock outside the three was wound by a nameable act, and therefore has handles.** *(L5, second half)*
-> **From AX-1 + AX-5.** AX-5 lists what moves by itself. AX-1 forbids a non-person actor. A quantity
-> advancing outside AX-5's list, with no author, is an actor arriving through a side door.
+> **From `AX-1` + `AX-5`, and the step needs stating rather than waving at.** `AX-5` lists what moves
+> by itself. `AX-1` forbids a non-person actor. **The step that was smuggled:** `AX-1` as written
+> forbids a non-person being *the subject of a decision*, and an authorless clock decides nothing —
+> so the derivation goes through only if *causing a change the game reads* counts as acting.
+> **It does, and that is the reading `AX-1` is stated under**; but a reader who takes `AX-1`
+> narrowly gets no prohibition, so the chain is right to also carry the fourth-clock refusal
+> **first-class** rather than only as a consequence.
 
 **The consequence is the design's best single property and it is a THEOREM, not a preference:** a
 wound clock can be **bribed, delayed, burned, or killed** — bribe the clerk who set the term, burn
@@ -213,9 +284,22 @@ undelayable and unkillable, which is what a GM is.**
 
 **This is why covert action and false attribution are expressible without a mechanism for either.**
 
+⚠ **AND TODAY THE THEOREM IS HONOURED IN A FIELD NAME AND VIOLATED IN MECHANISM.** `Event` has no
+`actor` field — but it has `subject`, **which the fold sets to the actor**, and WITNESS deposits
+every claim with `subject = event.subject`. **So every ledger in the world reads "I hold that
+`<actor>` did `<kind>`", certainly and identically** — exactly the privileged access `AX-2` forbids,
+arriving one field over. The chain agrees: `W24` proposes making `subject` the changed object and
+depositing the actor per-witness, describing it as **restoring** §19.3 — and *restoring* concedes it
+is not there. **`T-d` is currently a naming convention, not a mechanism.**
+
 ### **T-e · An `Event` carries no target.**
-> **From AX-1.** A target field presumes delivery. Delivery without an act is transport by nobody.
-> **The only transport is a person telling another person.**
+> **From `AX-1`.** A target field presumes delivery. Delivery without an act is transport by nobody.
+
+⚠ **SOFTENED. The gloss *"the only transport is a person telling another person"* is quoted
+faithfully from the chain and the chain contradicts itself:** four of its five witness channels —
+co-location, a document, a witness key, a chronicle — deliver a claim with nobody telling. **The
+theorem survives on the narrow ground (`Event` names no recipient); the strong gloss does not**, and
+promoting it here without noticing was an inherited error rather than an invented one.
 
 ⚠ **These two are the pair a porter will want to break for routing convenience.** T-d and T-e say
 the cost is not convenience — it is the deletion of two mechanisms the design has no other way to
@@ -230,9 +314,19 @@ express.
 known degradation of an axiom's enforcement, not as an equivalent.
 
 ### **T-g · Obstruction needs no verb.**
-> **From AX-1 + AX-4.** A stranger takes the seat. The seat's state changed, written by its one
-> owner. The ambition-holder reads the seat and finds it filled. **No `obstruct` verb, no knowledge
-> of her in the stranger's decision, no branch in the resolver.**
+> **From `AX-1` + `AX-4`.** A stranger takes the seat. **No `obstruct` verb, no knowledge of her in
+> the stranger's decision, no branch in the resolver.**
+
+⚠ **CORRECTED — the mechanic is real and the first derivation offered for it was not.** It said
+*"the seat's state changed, written by its one owner"*, which §D.6 forbids in its own NEVER row:
+**who holds an office is not on the office.** Nothing about the seat changes; a **new Tenure owned
+by the stranger** comes into being. And *"the ambition-holder reads the seat"* is the object-side
+index — Nobody's, resolver-side, and therefore unreachable from `choose` by `T-f`.
+
+**The lawful account:** the obstruction is enforced at RESOLVE by `confer`'s 1-per-object
+precondition, which refuses the second conferral. **The ambition-holder never reads anything; her
+act is simply refused, and the refusal emits.** That is a better result than the first version
+claimed — it needs no read at all — and it is `emits_on_refusal` doing the work `§27.1` assigns it.
 
 **This is the worked example of what "emergent" means here** — and it is a proof that the axioms
 carry weight, because obstruction is a mechanic the design never implements and always has.
@@ -242,8 +336,21 @@ carry weight, because obstruction is a mechanic the design never implements and 
 > carry its identity across time is an utterance — a `Proposition` — plus the edges of the people
 > who signed it.
 
-**And it yields the collapse property for free:** a faction ends when people leave, with no
-dissolution mechanism, because there is nothing left to be the faction.
+⚠ **TWO CORRECTIONS, BOTH FOUND ADVERSARIALLY.**
+
+**(a) The step does not go through as written.** *"What remains that can carry identity across time
+is an utterance"* is false — a `Rung`, a `Record` and an `Office` all carry identity across time and
+none of them acts. `AX-1` gets you *a faction is not an actor*; it does **not** get you *therefore a
+Proposition*. That choice is an argument about what a faction IS, and it belongs in §D.5 as a
+design claim, not in PART B as a derivation.
+
+**(b) The collapse property is NOT free, and the chain retracts it in the sentence it comes from.**
+*"A faction collapses when people leave… there is nothing left to be the faction"* is immediately
+followed by *"⚠ THAT SENTENCE IS NOT YET TRUE"* — a Proposition may be a `hold` subject and is never
+destroyed, **so a memberless faction leaves territory held by a banner nobody carries**,
+uncontestable because the holder can never appear at a venue. This document reproduces that
+retraction in §D.5 and still presented the property as free here. **It is a debt, not a dividend** —
+and under `AX-6` it is the same defect as §E.1.2's: a state nobody can end.
 
 ### **T-i · No container gets a clock.**
 > **From AX-5** (a container is not on the list) **plus the nesting rule** (a nesting form needs a
@@ -324,6 +431,33 @@ pipe. And in the instrument as it stood at PR #351, **15 of 20 PASS probes conta
 all** — a PASS meant *did not crash*. ⚠ That last figure is **of that version** (the honesty suite is
 143 tests now, was 20); it is cited as the worked example of the shape, never as current state.
 
+### **ID-13 · A DECLARED FIELD MUST REACH A READER, OR IT IS NOT DECLARED.**
+
+> A column, flag or axis that no resolver consults is **not a weak mechanism — it is a mechanism
+> that does not exist**, wearing a schema's clothes. And it fails silently in the one direction that
+> flatters: everything it would have refused is permitted.
+
+⚠ **ADDED AFTER `ID-9` AND `ID-10` FAILED §0.2's ACCEPTANCE TEST.** An adversarial pass found that
+the chain's **most frequent** instance of the defect class is neither a bad write nor a blind
+assertion: it is a **declared axis that decides nothing** — a stratum column that reached no
+resolver, a `scale:` column that reaches none (*"the third instance of this defect in one session"*),
+a `contests:` field transcribed where nothing reads it so a kill executed as a direct write, two
+witness-channel predicates that can never return true, and a rank function whose only caller was its
+own test. **`ID-9` needs a write and none of these writes; `ID-10` is satisfied by them and still
+misses them** — a test asserting *every channel has a predicate* passes while two predicates admit
+nobody. **`ID-10` says assert what you can observe; it does not say assert the property that
+matters. `ID-13` is that property.**
+
+### **ID-14 · WHAT AN ACT CAN OPEN, AN ACT MUST BE ABLE TO CLOSE.**
+
+> Otherwise the vocabulary contains a ratchet, and `AX-6` is violated by the grammar rather than by
+> any particular rule.
+
+**Measured, and it is not an edge case: four of seven relations are open-only** (§E.1.2). A duty
+cannot be discharged, a bond cannot be broken, a succession pointer cannot be changed. **The check
+is one line — for every verb that writes `(Tenure, since)`, name the verb that writes `(Tenure,
+until)` for the same kind** — and it is the check that would have found all four at once.
+
 > ### **THE JOINT STATEMENT, AND IT IS THE POINT OF PART C**
 > **ID-9 is about the thing under test; ID-10 is about the instrument.** The defect class the
 > handoff names spans both, which is why closing only one reroutes rather than terminates —
@@ -360,10 +494,28 @@ a schema that lists fields can only grow.
 > **NEVER.** Anything about another person. Any aggregate. The reverse index of its own ties — that
 > is Nobody's.
 
-⚠ **THE SECOND HALF OF THE ADMISSION TEST FAILS TODAY, AND IT IS `D21`.** `convictions`, `beliefs`
-and `stance` are declared as fields and **no formula reads any of them**. Until §F2's scoring
-function exists they are exactly the dead state the test is written to catch. **The schema does not
-absolve the model here; it convicts it.**
+⚠ **THE FOUR-WAY CLAIM IS NOT EXHAUSTIVE, AND THE TEST OVER-REFUSES TWICE.** `weight` is none of the
+four — a cohort headcount is not what a person can do, holds true, holds right, or is taken to be —
+and it is **the field `T-l` is stated over**. `capability` is read at RESOLVE for dice and by no
+decision, so the reader clause refuses it too, yet the design mandates both. **A fifth category is
+needed — *what the person IS, as a quantity the world reads off them* — or the test refuses two
+fields the shape requires.** Recorded rather than patched, because inventing the fifth category to
+save the test is how a schema starts growing again.
+
+⚠ **CORRECTED — THIS SECTION SHIPPED A STALE FACT, AND AN ADVERSARIAL PASS CAUGHT IT.** It read
+*"`convictions`, `beliefs` and `stance` are declared and **no formula reads any of them**"*. **That
+was true of `#353` and false at HEAD:** `W5` landed the scoring function, `score()` sums
+`convictions × alignment` inside `choose`, `stance_toward` reads `stance`, and the register row this
+was cited to — `H-03` — is marked **DISCHARGED**. Two of the three are consumed.
+
+**What survives is narrower and sharper. `beliefs` IS dead**, and worse than the original claim:
+the only function in the chain whose *name* points at it reads the **claim ledger** instead — so the
+one place a later reader would go to check the `AX-3` boundary is a name pointing at the wrong
+layer. **That is the admission test earning its place**, and it is one field, not three.
+
+⚠ **AND THE LESSON IS THE DOCUMENT'S OWN `ID-11`, BROKEN BY ITS AUTHOR:** the claim carried no
+command, so it could not be re-checked, and it aged into falsehood between two revisions of the
+chain. **A schema claim about what code reads must ship the way to re-run it.**
 
 ## §D.2 · `Rung` — **the address, never the occupant**
 
@@ -371,7 +523,11 @@ absolve the model here; it convicts it.**
 > `person` kind is the address slot and the `Person` is who stands in it — and that sentence
 > generalises to all eight kinds, which is the container rule.
 >
-> **OWNS.** Matter (stores, its Sites, its Records, the transmission pointer), dates, envelope, stake.
+> **OWNS.** Matter (stores, its Sites, its Records, the transmission pointer), dates, envelope, and
+> ⚠ `stake` — **which the chain RETIRED as a dead row**, along with `Site.drawers`, `Person.marks`
+> and `Person.capability`, because their declared `emits:` name kinds no verb produces. Listing it
+> here re-admitted it silently. **It is named as retired, and the reader clause §D.1 carries should
+> be on every entry rather than only on `Person` — its absence here is what let this through.**
 >
 > **ADMITS.** *Is it an arrangement of a place, rather than a choice, a mood, or a reputation?*
 >
@@ -389,7 +545,8 @@ at a sitting*.
 > **IS.** A thing in the world whose condition reads its own previous value, and which **gates verbs
 > by band**. That is how damage removes an option rather than adding difficulty.
 >
-> **OWNS.** `condition`, `drawers`, `kind`.
+> **OWNS.** `condition`, `kind`, and ⚠ `drawers` — **retired as a dead row with `Rung.stake`; see
+> §D.2.**
 >
 > **ADMITS.** *Does it accumulate from its own prior value, and is it physical?*
 >
@@ -546,71 +703,111 @@ carried in the chain, and nothing else.**
 
 ---
 
-## §E.1 · `H-101` — subordination. **It cannot be stored, and that answers it.**
+## §E.1 · `H-101` — subordination. **It IS storable, and the reason it looked otherwise is a ratchet in the vocabulary**
 
-`H-101` is tier 0 and `absent`: *nothing can be under anything, at either institutional scale.*
-Jordan asked it twice — *"do our factions have the ability to be under larger factions?"*, then
-*"same applies to nesting offices"* — and the register's own note says the two have **the same
-shape**, which is why it is one row: *"building two mechanisms for one relation is the §8 violation."*
+⚠ **THIS SECTION IS A CORRECTION. Its first published answer was wrong, and the wrongness is
+recorded rather than overwritten**, because a superseded derivation that stays legible is how the
+next session avoids re-deriving it.
 
-### §E.1.1 The derivation, in three steps
+> **WHAT IT SAID:** subordination *cannot* be stored — an edge between two immutable Propositions has
+> no owner, `AX-4` forbids it, therefore it is a Query at every scale.
+>
+> **WHAT WAS WRONG:** the step is locally sound — no `tenure_kind` takes a Proposition as **subject**
+> — but **it never established that the edge is Proposition→Proposition.** That premise was smuggled.
+> And the alternatives table refuted a strawman: *a new `under` kind **with a stage field***, where
+> the whole refutation lands on the stage field and none of it on the edge.
 
-> **STEP 1 — a subordination edge between factions has no owner, so AX-4 forbids it.**
-> By **T-h** a faction is a `Proposition` plus its `commit` edges. By §D.5 a Proposition is
-> **immutable and unowned** — unowned precisely *because* nothing may change it. By §D.8 a Tenure is
-> owned by its **subject**. So an edge whose subject is a Proposition has no owner and no writer.
-> **There is nothing that could legally hold "the Löwenritter is under the Crown."**
+### §E.1.1 The candidate the register already names, and the derivation that was missed
 
-> **STEP 2 — what CAN be stored is already stored, and it is enough.**
-> `commit : Person → Proposition` is owned by the person who made it. **A faction is under another
-> exactly to the degree that the people committed to the first are also committed to the second.**
-> That is a function over live edges — by **T-a**, a Query, owned by Nobody.
+`H-101`'s own text: *"the candidates are `tenure_kinds` members **already rostered** (`oblige`, `tie`)
+rather than a ninth rung or a second ladder."*
 
-> **STEP 3 — the same move answers the office scale, which is why it is one row and not two.**
-> An Office owns its `remit` and its scope (§D.6). **One office is under another exactly when the
-> superior's remit scope reaches the subordinate's seat.** Also a function over data each office
-> already owns. **One rule — *subordination is computed, never stored* — asked at two scales. The
-> §8 unit is the RULE, and the rule lives once.**
+`oblige : Person → Person | Office`, many, **owned by its Person subject** — and it survives every
+axiom the Query version was invented to satisfy, better:
 
-### §E.1.2 What the derivation buys, and it is more than it costs
+| | the Query version | **an `oblige` edge** |
+|---|---|---|
+| `AX-4` — one owner | Nobody owns it | **the person who swore it owns it** |
+| `AX-1` — a person acts | ⚠ **nobody authored it** | **a named person swore it, at a venue, paying budget** |
+| new `tenure_kind`? | none | **none** — it is rostered |
+| detachment | people drift, and a number falls | **a named person forswears.** The event has an author |
 
-| property | why it falls out |
-|---|---|
-| **it is contested** | a Query over other people's commitments is exactly what no single actor controls |
-| **it is reversible** | ⚠ **a Query can go DOWN. A stored counter cannot.** §22.4 clause 3 refuses a monotone count over structural edges as a ratchet — so a stored autonomy track is refused by the architecture, and the computed one is not |
-| **detachment needs no verb** | people repudiate a commitment, one at a time, each paying budget. **The faction detaches because nobody is holding it, which is T-h's collapse property at one remove** |
-| **nobody can read it truly** | a Query over commitments is **resolver-side**, so by **T-f** it is unreachable from `choose`. A person acts on `leaders_as_claimed`, never on the real number |
-| **it needs no new `Tenure` kind** | `tenure_kinds` does not move, which §D.8's admission test requires |
+> **THE SECOND ROW IS THE ONE THAT DECIDES IT.** A Query is a fact about a population that nobody
+> chose. An `oblige` edge is a promise somebody made. **`AX-1` says the second is what this game is
+> made of** — and it is the difference between *the Löwenritter drifted* and *the Grandmaster
+> forswore the King*, which are not the same story.
 
-### §E.1.3 *De jure* and *de facto* are both derivable, and their gap is the mechanism
+### §E.1.2 ⚠ **AND THE REPLACEMENT INHERITS A RATCHET, WHICH IS THE REAL FINDING**
 
-**An office-holder may `utter` a Proposition of mood `HOLDS` asserting the subordination.** That is
-storable — immutable, unowned, never destroyed (§D.5). **It is the *de jure* claim.** The commitment
-Query is the *de facto* state.
+**`oblige` opens a Tenure and NO VERB CLOSES IT.** `repudiate` reads *"a live **`commit`** exists"* —
+it ends a commitment, never a duty. **Swear once and you are bound forever.**
 
-> **AX-2 GUARANTEES THEY CAN DISAGREE, AND NOBODY HAS PRIVILEGED ACCESS TO WHICH IS REAL.** A banner
-> that still flies over people who have stopped carrying it is not a modelling failure — **it is the
-> only thing AX-2 permits.** By **T-b** a band on that gap may change what may be chosen and by
-> whom, and may never produce an outcome. **So the gap is playable without a single new primitive.**
+**Measured over the whole vocabulary, because one instance is an anecdote:**
 
-**This is the general result, and it is worth more than the instance:** where the chain reaches for a
-*track* — a stored stage that advances — the axioms say look for **two things that can disagree, and
-band their difference.** A track is a stored aggregate wearing a stage's clothes.
+| tenure kind | opened by | closed by |
+|---|---|---|
+| `hold` | `confer` | `confer`, `revoke` |
+| `contain` | `move` | `move` |
+| `commit` | `commit`, `confer` | `confer`, `repudiate` |
+| **`oblige`** | `oblige` | ⛔ **NOTHING** |
+| **`succeed`** | `succeed` | ⛔ **NOTHING** |
+| **`tie`** | `tie / knot` | ⛔ **NOTHING** |
+| **`knot`** | `tie / knot` | ⛔ **NOTHING** |
 
-### §E.1.4 Alternatives, and the falsifier
+> ### **FOUR OF SEVEN RELATIONS CAN BE OPENED AND NEVER CLOSED.**
+> **You cannot discharge a duty, break a bond, or change a succession pointer.** §D.8 says
+> *"`until?` is what makes an ended relation a fact"* — the design gives every Tenure that field and
+> then supplies no verb to write it for four of the seven kinds.
 
-| alternative | why it is refused |
-|---|---|
-| a new `under` Tenure kind with a stage field | the stage field **is** the stored aggregate T-a refuses, and it ratchets |
-| extend `contain` to factions and offices | ⛔ **breaks the single-parent tree and R-1's subtree aggregation.** Both are lateral: a faction spans rungs freely, an Office may have `rung? = null` |
-| two mechanisms, one per scale | the §8 violation `H-101` names in its own text |
+**This is `T-c`'s shape one step over.** `T-c` forbids a quantity that advances with no author. Here
+the state does not advance — **it becomes permanent** with no author, and no act can unwind it. A
+bond nobody can break is exactly as unbuyable, undelayable and unkillable as a clock nobody wound.
 
-> **FALSIFIER.** *Name a subordination whose de facto state is not recoverable from `commit` edges
-> and remit scopes.* The candidate the chain itself supplies is an order whose chain of command is
-> **parallel** rather than subordinate — reporting through its own head even while serving under
-> another's. If that needs its own edge, **§E.1 is right at the faction scale and wrong at the
-> office scale, and should be SPLIT rather than patched** — which would also cost `H-101` its
-> one-row justification.
+⚠ **AND IT IS WHY THE FIRST ANSWER LOOKED RIGHT.** Facing an irreversible edge, "make it a Query" is
+the reachable repair — a Query can go down. **The reversibility was real and the diagnosis was
+wrong:** the defect is not that the relation is stored, it is that the vocabulary has no verb to end
+it.
+
+### §E.1.3 The repair, and it is a data edit rather than a mechanism
+
+**`(Tenure, until)` is already a write-matrix row.** `repudiate` already writes it. What scopes it to
+`commit` is **one phrase in one `requires:` cell.** Widen the domain and four ratchets close at once.
+
+> **Nothing new is built. No `tenure_kind` moves. No carrier is added.** The seat of the defect is a
+> precondition string, and that is the whole of it.
+
+⚠ **What is NOT a data edit, and must be ruled rather than assumed: what ending each one COSTS.**
+Forswearing a duty, cutting a knot and breaking a succession are three different acts with three
+different prices, and pricing them is design work. **The register carries `H-100` — *what a
+revocation costs* — for exactly this, and this finding widens it from titles to four relations.**
+
+### §E.1.4 What survives from the withdrawn version — the *de jure* / *de facto* gap
+
+**The gap survives, and the correction makes it better.** The old version put *de jure* in an
+immutable Proposition, which had no un-utter and no arbiter — **a permanent ratchet, and the same
+defect this section just found in the vocabulary.** An `oblige` edge with a closable `until` is
+revocable, authored on both sides, and owned.
+
+> **`de jure` is the sworn edge. `de facto` is the commitment overlap, a Query.** `AX-2` guarantees
+> they can disagree and that nobody has privileged access to which is real; **`T-b` makes a band on
+> their gap change what may be chosen and never produce an outcome.**
+>
+> **The general result stands and is the part worth carrying: where the chain reaches for a TRACK,
+> look for two things that can disagree and band their gap.** A track is a stored aggregate wearing
+> a stage's clothes.
+
+### §E.1.5 The office scale — **SPLIT, by this section's own falsifier**
+
+The withdrawn version claimed one relation answers both scales. **Its own falsifier fires.** Office
+subordination under it is a function of the superior's remit scope and the subordinate's seat;
+`Office.remit` is written only by `establish`, and **`(Office, rung)` has no write-matrix row at
+all**, so the seat cannot move. **De facto office subordination could then change only by the
+superior's own act — requiring an institution to voluntarily record its own involuntary loss**,
+which is the one thing a detachment never is.
+
+**So the honest disposition is the one the falsifier prescribes: SPLIT.** Faction subordination is an
+`oblige` edge between persons. Office subordination is not yet derived, and **`H-101` loses its
+one-row justification** — which is a cost, stated rather than absorbed.
 
 ## §E.2 · Delegation — **RULED BY JORDAN, 2026-09-03: regency and puppet rulers MUST be possible**
 
@@ -742,6 +939,19 @@ say almost none of that is an architectural question.**
 > **NOT ARCHITECTURAL:** **which** kinds exist, and how many. That is content, and by **ID-12** it
 > lives in data and is changed by editing a list.
 
+⚠ **AND THE FALSIFIER FIRES THREE TIMES TODAY, SO THIS IS A PRESCRIPTION, NOT A DESCRIPTION.** The
+chain contains `here.kind == "person"` inside a resolver precondition — literally the shape named
+below as scripting drift; the verb table hard-names four rung kinds in its `scale:` column and is
+validated against the roster **at load**, so removing a kind fails the load rather than editing
+data; and the titles table is declared **total** over `rung_kinds`. **The coupling is already known
+to be silent and load-bearing** — the chain records an office silently *becoming a title* on a
+one-line roster addition, flipping its revocation rule, with the suite green.
+
+**So `rosters.yaml`'s own promise — that changing a definition "touches no other system" — is false
+today.** The architectural claim stands as a claim about what the shape SHOULD be; it is not a
+description of what it IS, and the difference is `ID-13`: a roster is only data if nothing branches
+on its members.
+
 **The consequence for an idealized shape:** do not spend design effort ruling the roster's
 membership. **Spend it on the two properties that are load-bearing** — that the ladder is ordered,
 and that it is walked rather than labelled — **because a mechanism that reads the ordinal and walks
@@ -764,7 +974,7 @@ the ladder has stopped being data.
 | an **office** | a seat in a body carrying a remit; adds no verb and no modifier | §D.6 |
 | a **title** | a rank whose domain is a rung kind — **not an entity, and not an Office** | §D.7; the conflation is a half-landed ruling, §D.7.2 |
 | a **site** | the material particular that accumulates and gates | §D.3 |
-| **subordination** | **not a thing at all — a Query** | §E.1, from AX-4 + T-h |
+| **subordination** | ⚠ **CORRECTED: an `oblige` edge, owned by the person who swore it** — not a Query. The first answer was wrong and §E.1 records why | §E.1.1 |
 | **authority** | **a property of the SEAT being exercised, never of the person** | §E.2.2 — forced by Jordan's 2026-09-03 ruling |
 | **a regency · a puppet · a delegation** | **a conferred seat.** No mechanism for any of the three | §E.2.2 · §E.2.5 |
 
@@ -782,6 +992,11 @@ consequences, slices, season loops.** Stage 2 takes the second, and inherits fou
 5. **Authority belongs to the seat, so purview must be asked of the SEAT being exercised, not of the
    actor** (§E.2.4) — a Query that reads the actor's own title-holds gives the wrong answer for
    every delegate, and delegation is now ruled in.
+6. ⚠ **The relation vocabulary contains four ratchets** (§E.1.2). Four of seven tenure kinds can be
+   opened and never closed. **Stage 2 cannot reason about hierarchies while the edges that make them
+   are irreversible**, so this is a precondition of Stage 2 rather than a finding beside it.
+7. **A declared field that reaches no reader is not a mechanism** (`ID-13`) — and the `scale:`
+   column, which Stage 2 is precisely about, is the chain's own third instance of that defect.
 
 > ⛔ **Do not build a second ladder.** ⛔ **Do not index code by scale** — a module is registered
 > against a role and runs at whatever rungs the step hands it. Scale-indexed code is scale-divergent
@@ -798,6 +1013,9 @@ consequences, slices, season loops.** Stage 2 takes the second, and inherits fou
 | still open | who answers it |
 |---|---|
 | **`Office.conferral` is unspecified** — the basis per office | ⚠ **new, and created by the ruling.** §E.2.5: delegation needs no mechanism, it needs this field to carry *named / elected / inherited*. Answerable in the chain |
+| **What ending each relation COSTS** (§E.1.3) | ⚠ **new.** Closing the four ratchets is a data edit; **pricing** forswearing a duty, cutting a knot and breaking a succession is design work. Widens `H-100` from titles to four relations |
+| **Is CENSUS's individuation a FOURTH licensed motion?** (`AX-5`) | ⚠ **new.** Either `AX-5` says four, or individuation is authored. Nothing states which |
+| **Office subordination** — `H-101` is now SPLIT (§E.1.5) | the faction half is derived; the office half is not, and `H-101` loses its one-row justification |
 | **sovereign power has no representation** (`H-90`) | it is §E.2.4's own falsifier — *"uncontested and absolute"* may be exactly what cannot be conferred. **Jordan's, if the falsifier fires** |
 | office subordination's **parallel** mode (§E.1.4) | falsifies or splits §E.1; answerable inside the chain |
 | `judging_set_rule` (§D.2) | already `H-32` — and it now gates more than it did: **an election is a sitting**, so §E.2.5's third shape runs through it |
@@ -808,7 +1026,8 @@ consequences, slices, season loops.** Stage 2 takes the second, and inherits fou
 
 | claim | what would show it wrong |
 |---|---|
-| **the five axioms are independent** | derive any one from the other four. **AX-5 is the candidate**: if the three-item list is itself derivable, the set is four |
+| **the six axioms are independent** | derive any one from the other five. **`AX-5` is the standing candidate** — if the three-item list is itself derivable, the set is five. ⚠ **`AX-6` was found by this falsifier firing on the first publication**, so the falsifier is live and has a hit rate |
+| **`AX-6` is not itself two axioms** | show a permanence the *relation* case needs and the *ratchet* case does not, or the reverse — that would split it |
 | **T-a: L3 is a theorem of AX-4** | an aggregate with exactly one owner that AX-4 permits and L3 refuses |
 | **§E.1: subordination is a Query, not an edge** | a subordination whose de facto state is not recoverable from `commit` edges and remit scopes |
 | **§E.3: roster membership is not architectural** | a mechanism that is correct only for one particular set of rung kinds |
