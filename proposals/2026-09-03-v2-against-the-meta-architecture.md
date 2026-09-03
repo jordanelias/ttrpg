@@ -837,6 +837,140 @@ free to fix now and expensive to fix after a loader reads either word.
 
 ---
 
+# §6A · THE EXACT CHANGE LIST FOR #358 — file, section, edit
+
+**Thirteen edits. Five are ADDITIONS of something #358 does not have; three are CORRECTIONS of
+something #358 has wrong; five are SHARPENINGS of something it has under-grounded.** Nothing here
+touches #358's axiom set: `AX-1`..`AX-6` and `T-a`..`T-n` are unchanged, and v2 moved none of them.
+
+## ADD — five, and the first two are the whole of v2's positive contribution
+
+| # | file · section | the edit |
+|---|---|---|
+| **A1** | `01_AXIOMS.md` PART C, after `ID-15` | **`ID-16` · NAME EVERY LOOP AND ITS SIGN.** *Every feedback path in the model appears in a signed list; a design in which every loop is negative converges, and convergence is not a design goal.* Falsifier ships with it: count the damping terms and the amplifying terms, and a zero in the second column is the finding. **This is the only edit that closes a hole #358 names in itself twice and closes nowhere** (`07_DYNAMICS.md:89`, `F.28`) |
+| **A2** | `04_CODE_ARCHITECTURE.md` PART C, new `§C.11` | **THE EXPLANATION CONTRACT.** *There is no referee, so the engine inherits the referee's second job.* The split is on **what is shown**, never on who is looking: the engine owes the **arithmetic of what the character already holds**, and nothing else. Hidden actors are hidden in their **existence**, never in their **arithmetic**. **This also closes `09_WORKED_EXAMPLES.md §2.2`'s dangling half** — the revolt Query that is currently a number nobody is allowed to look at |
+| **A3** | `01_AXIOMS.md` PART C | **`ID-17` · A SUSPENSION IS ITSELF A UNIFORM RULE**, attached to a named regime, never an exception carved for one entity. #358 has the *prohibition* three times (`01_AXIOMS.md:1135`, Stage 2 `§C.2`, `G.1.6`) and **no licensed form for a lawful exception**, and a prohibition with no alternative is broken quietly |
+| **A4** | `04_CODE_ARCHITECTURE.md` `§G.2`, after `G.2.7` | **`G.2.8` · A PROCEDURE IS REQUIRED WHEREVER THE ORDER OF SUB-STEPS CHANGES THE OUTCOME.** #358 has both forms — the ordered fold and the pure map — and never states the criterion that decides which a thing is |
+| **A5** | `04_CODE_ARCHITECTURE.md` `§B.13`, as **loader invariant 12** | **THE AUTHORED-IRREVERSIBILITY ENUMERATION.** `AX-6` quantifies over irreversibilities and #358 lists none, which is why it found **four ratchets in its own relation vocabulary by adversarial pass rather than by reading a register**. `Proposition` immutability, ended-Tenure persistence and the append-only log are authored permanences enumerated nowhere. `ID-14`'s check covers `tenure_kinds` and stops there |
+
+## CORRECT — three, all found in #358's own text
+
+| # | file · line | the defect |
+|---|---|---|
+| **C1** | `04_CODE_ARCHITECTURE.md:257` | **`Tenure.conferrer? : SeatId` occurs exactly once in all twelve files and reaches no reader.** By `ID-13` that is not a weak field, it is one that does not exist. `degree?` sits **on the same line** and *is* in the hole register as `F.4`. Give `conferrer` a **seat-shaped** reader or delete it — ⚠ **not** v2's person→person patronage reader, which belongs on `oblige`, because hanging a person-relation off a seat pointer is what `§E.2.2` forbids |
+| **C2** | `01_AXIOMS.md:1078` | **`§E.2.5` puts a council's membership in an `establishment[]` FIELD on the Office**, which `05_ONTOLOGY.md:91` calls *"a set of edges pretending to be a field"* and Stage 4 `§B.7` fixes to a Query over `oblige`. Stage 4 is later and governs — but `§E.2.5` is marked in **neither `PART F` nor `§F.32`**, so a reader arriving at Stage 1 gets the superseded shape with no warning |
+| **C3** | `01_AXIOMS.md` `§F.4` falsifier table | The row *"`ID-15` — a consumer that genuinely needs a faction to hold state of its own"* names the battle seam as **untested**. v2 is that test and it **passes**: v2's own battle/squad requirement is satisfied by the resolved view plus `holdings`/`members`/`seats`, with no faction-owned field. **Record the falsifier as fired and survived** rather than leaving it open |
+
+## SHARPEN — five
+
+| # | file · section | what gets stronger |
+|---|---|---|
+| **S1** | `01_AXIOMS.md §E.2.2` | **Two corpses, and of a kind #358 does not have.** Its four existing ones are *tree defects* found by reading the repository; v2's are **in-fiction absurdities** — a seat-holder commanding a rival's governor, a revolt rule stripping a rival's settlement. `G.1.2` prefers a corpse to an argument; **a corpse a player would notice beats one only a maintainer would** |
+| **S2** | `04_CODE_ARCHITECTURE.md §G.4.3` | **A third critic direction.** The charter names *invent* and *over-refuse*; v2 adds **a self-audit that recorded a defect as a virtue** — misclassified in sign, by the author, inside the section built to catch it |
+| **S3** | `04_CODE_ARCHITECTURE.md §G.4.1` | **The trace clause.** A stage closing on representations can still be behaviourally wrong; **the falsifier for a design claim is a trace, not a grep.** `G.4.7` binds milestones and `G.4.1` binds stage boundaries, so the connection is genuinely missing rather than merely unstated |
+| **S4** | `05_ONTOLOGY.md §3` | **An admission dimension orthogonal to `IS · OWNS · ADMITS · NEVER`** — v2's per-field assertion tag, with a demonstrated hit rate of two (it moved the vacuum/stabilisation timers off the place they were never about, and forced a real semantic qualifier onto acceptance) |
+| **S5** | `04_CODE_ARCHITECTURE.md` PART D, beside `D-27` | **A CONTENT-layer proper-noun scan.** `D-27` and `D-28` scan **code**; content is where a rule system rots, and #358's faction ontology — any uttered `Proposition` plus commits — makes **every** faction runtime-manufactured, so the rule binds harder here than in the design it came from |
+
+## AND THE AXIOMS DO NOT MOVE
+
+**No axiom, theorem or schema entry changes.** Nine v2 structural proposals were tested against them
+and eight were refused by derivation (§4); the ninth split. **A meta-architecture whose axioms
+survive an independent domain design built from a disjoint corpus has been tested rather than
+merely asserted** — which is the result, and it is not the one this exercise was looking for.
+
+---
+
+# §6B · WHAT #359 DOES TO THE ACTUAL WORK, WITH #357 IN VIEW
+
+**#357 is where the code shape actually lives**, and it is data, not prose: `verb_table.yaml` (32
+verbs), `write_matrix.yaml` (40 rows), `hole_register.yaml` (91 rows), against a tracer whose
+`test_tracer_is_honest.py` runs 145 tests green while the corpus reports **89 of 143 runnable, NPC
+RUNS = 0, ARC ENDS = 0, and 5 of 32 verbs executed.** Measured against that, v2's effect is small,
+sharp, and concentrated in one place.
+
+## §6B.1 · The one thing v2 materially unblocks — `H-94` / `F.24`, and it is tier 0
+
+**All 32 `requires` cells in `verb_table.yaml` are prose strings.** That is `F.24` — *the resolver has
+no body returns as the resolver has thirty* — and its live twin `H-94`, graded **tier 0, absent**,
+whose `unblocks` column reads *"every verb with operands — measured at 7 of 7."*
+
+**Reading the 32 cells, the grammar they need is FIVE forms and no more:**
+
+| form | live instance |
+|---|---|
+| existence over an edge kind | `a live commit exists` · `a live hold exists` |
+| a computed scalar against a threshold | `stores(hearth(giver), kind) >= amount` · `condition >= floor(verb)` |
+| path existence | `a contain path exists` |
+| cardinality on an object | `1-per-object: no live hold on the object` |
+| a relation between actor and subject | `the teller holds a claim on the subject` |
+
+**v2's `∃ inst : presence(inst) ≥ 2 ∧ hostile(inst, holder)` is the same grammar** — quantifier,
+comparison, relation — arrived at independently in a domain that never saw this table. `F.24`
+*assumes* the grammar can be small and never demonstrates it; **the verb table demonstrates it and v2
+corroborates it from outside.** That is the one place reading #359 changes what a builder does next.
+
+## §6B.2 · The schema change v2 forces, and it is a MECHANISM rather than a doctrine edit
+
+`hole_register.yaml`'s 91 rows carry `kind ∈ {SCHEMA_ROW, FORMULA, RULING, COLLISION, PRODUCER,
+NUMBER, WIRING, ABSENT_RULE, SCHEMA_COLUMN}`. **Every one of those names an ABSENCE.** There is no
+row kind for a feedback path and **no `sign` column anywhere in the file.**
+
+> **So `ID-16` (§6A/A1) and `ID-17`'s sibling cannot be taken as prose.** Under `§0.05` the register
+> is a mechanism — code reads it — and the doctrine is reference. **Taking `TL-7` means adding a
+> `LOOP` row kind and a `sign: +|-` column to `hole_register.yaml`, and taking `TL-12` means a
+> `RATCHET` kind or a `reversible:` column.** That is a data-file schema change with a loader behind
+> it, which is the only form in which either transfer is real.
+
+⚠ **And it is the shape #358's own `G.4.1` demands:** a stage may state a property only with the
+representation that carries it. **The first draft of this evaluation handed `TL-7` forward as an
+idiom owing a representation. This is the representation.**
+
+## §6B.3 · The nine tier-0 blockers, scored against v2 — six untouched
+
+| blocker | what it blocks | does v2 help? |
+|---|---|---|
+| `H-94` act carries no operands | 7 of 7 verbs the decision computes | ✅ **yes — §6B.1** |
+| `H-98` subsystem returns a winner, seam wants a degree | every verb declaring `contests:` | ➖ corroborates only (`TL-3` = `T-k`; #358 Stage 3 `§E.3` already answers it) |
+| `H-101` nothing can be under anything | whose purview reaches whom | ➖ corroborates only; v2's **liege tree is refused** and #358 `§E.1` already answers it with `oblige` |
+| `H-43` Petition/Dispensation bypass `write()` | the write gate's completeness | ⛔ **no** — #358 `§B.5` folds them into `Record` kinds; v2 is silent |
+| `H-46` alignment table has no rows | the scoring function | ⛔ **no** |
+| `H-49` `(Person, weight)` has no matrix row | cohorts | ⛔ **no** |
+| `H-62` no verb writes any Person interior field | every interior consequence | ⛔ **no** |
+| `H-71` eligibility person-side vs `remit:` | 9 of 32 verbs | ➖ partial — `TL-11`'s basis→route table is the `Seat.conferral` vocabulary, which is the same slot |
+| `H-84` no verb moves a Record to a second person | ***"the whole of NPC…"*** — this is why **ARC ENDS = 0** | ⛔ **no, and this is the one that matters most** |
+
+> ### **THE HONEST SCORE: OF NINE TIER-0 BLOCKERS, v2 MATERIALLY HELPS ONE, CORROBORATES TWO, PARTLY TOUCHES ONE, AND IS SILENT ON FIVE.**
+> **`H-84` is the sharpest silence.** #358 already knows it — *"no Event anywhere has a cause that is
+> an act by a different person… the clock ticks, the fold folds, the world wears, and no story has
+> ever crossed between two people"* (`07_DYNAMICS.md`). v2 **cannot** help, because it has no
+> epistemic layer at all: no ledgers, no per-witness attribution, no transport. **The thing standing
+> between #357 and a running corpus is the layer #359 does not model.**
+
+## §6B.4 · What v2 changes about #357's INSTRUMENT rather than its model
+
+`test_tracer_is_honest.py` is 145 tests green against a corpus reporting **zero NPC runs**. v2's
+method result names that shape exactly — **principles catch contradiction; only tracing the mechanics
+catches error** — and its own split is the evidence: seven self-audit findings were all local
+inconsistencies findable by grep, while three of the independent critic's nine were behavioural bugs
+in text that reads perfectly.
+
+> **So the 145 are a consistency gate, not a behaviour gate**, and #357's own `NPC RUNS = 0` is the
+> measurement that says so. That is `§0.2` — *done means it runs* — arriving as an audit finding
+> instead of a doctrine, which is the form that survives a reader who has not read `CLAUDE.md`.
+
+## §6B.5 · What v2 does NOT do to the work, said plainly
+
+- **It does not change the season loop.** #357's six-step barrier sequence stands; v2's twelve phases
+  include **three scale-indexed resolution phases**, which Stage 2 `§C.3` forbids by name.
+- **It does not touch the 54 UNREPRESENTABLE cases** (44 faction · 10 world). Those are `H-101` and
+  `H-95`, and #358 already answers the first.
+- **It does not move the critical path.** `W18 → W20 → W21 → W22 → W23 → W26 → W27 → W30` is
+  unchanged; v2 adds no item to it and removes none.
+- **It does not supply a single number that can be used.** v2 declares its own parameters unvalidated
+  and names campaign length as the question that must be settled first.
+
+---
+
 # §7 · FALSIFIERS FOR THIS EVALUATION
 
 | claim here | what would show it wrong |
@@ -931,7 +1065,34 @@ free to fix now and expensive to fix after a loader reads either word.
            THE TWO FAILURES ARE PRE-EXISTING AND UNRELATED: test_forked_status.py asserts every FORK
            row's ref resolves via `git cat-file -e`, and this clone does not carry the fork refs.
            This change is one new untracked markdown file and touches no code, register or ledger]
-[CONFIDENCE: high on §1, §3 and §5 — every claim is a citation or a reproducible count.
+[ADDED §6A/§6B 2026-09-03, Jordan-directed: "what exactly changes #358?" and "with #357 pulled in
+             for the actual code shape, what does #359 do to the work?" §6A is the itemized change
+             list — 5 additions, 3 corrections, 5 sharpenings, and NO axiom, theorem or schema entry
+             moves. §6B scores v2 against #357's live artifacts rather than against #358's prose]
+[MEASURED: proposals/2026-09-02-executable-architecture/verb_table.yaml — 32 verbs, ALL 32 with a
+             PROSE `requires`, 24 carrying `emits_on_refusal`, grades 20 ruled / 10 assumption /
+             2 absent. Reproduce: python3 -c "import yaml;d=yaml.safe_load(open(...))['verbs']"]
+[MEASURED: write_matrix.yaml — 40 rows; `social:` takes true(20)/false(18)/n/a(2), which is the
+             column #358 §B.13 proposes renaming to `writer:`; `steps` is a LIST on every row,
+             confirming Stage 2 §D.2's "phase is a set, not a value"]
+[MEASURED: hole_register.yaml — 91 rows; grades assumption 42 / absent 28 / ruled 18 / measured 3;
+             tiers 0:37, 1:54; kind ∈ {SCHEMA_ROW, FORMULA, RULING, COLLISION, PRODUCER, NUMBER,
+             WIRING, ABSENT_RULE, SCHEMA_COLUMN} — EVERY ONE NAMES AN ABSENCE. No LOOP kind and no
+             `sign` column exist, which is why §6B.2 grades TL-7's transfer a SCHEMA CHANGE to a
+             loader-read data file rather than a doctrine edit]
+[MEASURED: of the 9 tier-0 `absent` rows (H-43, H-46, H-49, H-62, H-71, H-84, H-94, H-98, H-101),
+             v2 materially helps ONE (H-94), corroborates two (H-98, H-101), partly touches one
+             (H-71), and is silent on five. H-84 — "no verb moves a Record to a second person",
+             which is why ARC ENDS = 0 — is the sharpest silence, and v2 CANNOT help because it has
+             no epistemic layer to move anything with]
+[ASSUMPTION: the five-form predicate grammar in §6B.1 is READ OFF the 32 live `requires` cells, not
+             designed. A sixth form may exist in a cell I read as one of the five; the claim is that
+             the grammar is SMALL, which is what F.24 assumes and never demonstrates — not that five
+             is the exact number]
+[CONFIDENCE: high on §6A and §6B.1-§6B.3 — every figure is a reproducible parse of a live file.
+             medium on §6B.4 — that the 145 tracer tests are a consistency rather than behaviour
+             gate follows from #357's own NPC RUNS = 0, but I did not read all 267KB of that suite.
+             high on §1, §3 and §5 — every claim is a citation or a reproducible count.
              high on §2.1's narrowed claim, §2.4, §2.5 and §4.8 after the critique.
              medium on §4.1's grounds — AX-4 is now the primary ground and it is sound, but the
              first draft's T-e citation was withdrawn and a third reader may find a fourth ground.
