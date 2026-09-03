@@ -5,6 +5,9 @@
 | file | what it is |
 |---|---|
 | **`01_AXIOMS.md`** | **Stage 1 — axioms, idioms, schema.** Start at PART A |
+| **`02_HIERARCHIES.md`** | **Stage 2 — hierarchies, dependencies, nests, scales** |
+| **`03_VERBS_AND_LOOPS.md`** | **Stage 3 — verbs, consequences, slices, season loops** |
+| **`04_CODE_ARCHITECTURE.md`** | **Stage 4 — the code shape.** ⚠ **INCOMPLETE — truncated by a rate limit; PARTS E and F were never produced** |
 
 ## What this is
 
@@ -14,7 +17,16 @@ slices and season loops… We are not building something bottom up that can run 
 performing a meta-architecture exercise from top down to determine the ideal logical shape for
 future work."*
 
-**Three stages, in that derivation order. This directory holds the first.**
+**Four stages.** Jordan's own ordering gives the first three — axioms/idioms/schema, *"and
+consequently"* hierarchies/dependencies/nests/scales, *"and therefore"* verbs/consequences/slices/
+season-loops — and **Stage 4 is a read-only Fable synthesis holding all three in context to design
+the code architecture.**
+
+⚠ **STAGE 4 IS INCOMPLETE.** It delivered PARTS A–D and was **truncated by a session rate limit
+mid-sentence at item 25 of PART D**. **PART E (the build order) and PART F (where the three stages
+are insufficient) were never produced**, and nothing has been written in their place. PART F was the
+section commissioned to name every gap rather than paper over one, so **its absence is the largest
+known hole in this directory** — not a formatting loss.
 
 ## Scope — the rule this exercise is under
 
