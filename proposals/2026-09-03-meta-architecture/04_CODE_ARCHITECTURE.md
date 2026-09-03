@@ -4,6 +4,9 @@
 ## Produced by a **read-only** Fable 5.1 synthesis holding Stages 1–3 in context. Concrete shapes taken
 ## from, amended against, or rejected from the chain (#353 `ARCHITECTURE.md`, `ARCHITECTURE_V2.md`,
 ## the three YAML files). **Nothing under `canon/`, `systems/`, `research/` or `engine/` was read.**
+## ⚠ **AMENDED 2026-09-03 (Jordan-directed, `10_FACTIONS_AND_DEPLOYMENT.md`)** — §B.6.1 `Faction` as a
+## Query return · §C.5.1 the roster contract · **D-18 upgraded, D-47..D-51 added, D-1/14 reconstructed
+## and the STRUCTURAL count corrected** · F.23 narrowed, F.32–F.33 opened · **§G.2.8**, the general rule.
 
 ---
 
@@ -22,7 +25,7 @@
 > | **F5** | **build step 2 undercounts its own failure ~4×** — nine matrix rows have no producing verb, not two, and four of them are `Person` interior fields | `PART E` step 2, `PART F` |
 > | **F9** | **`STRUCTURAL` is claimed where only a checker or a scan exists**, and the count of structural rows is a hand tally its own `G.3.3` forbids | `PART D` |
 > | **F8** | **this document forbids the ledger read two live verbs need** | `§B.2`, `§C.3` |
-> | **F10** | **`PART D` row 1 contradicts `§D.11`** — "a faction has no type and no id" versus a declared `Faction` view type | `PART D` |
+> | **F10** | **`PART D` row 1 contradicted `§D.11`** — "a faction has no type and no id" versus a declared `Faction` view type. ⚠ **FOUND TWICE, INDEPENDENTLY, AND `origin/main` GOT THERE FIRST WITH A BETTER ANSWER.** PR #360 folded the faction amendment into Stage 4 as `§B.6.1` and rewrote the row on a stronger ground than this pass had: not *"the type exists after all"* but ***"you cannot pass a `Faction` where a `PersonId` is required, and there is nothing to pass it to."* The merge takes main's text.** Two adversarial passes on disjoint branches converging on one row is the corroboration signature `G.4.3` wants | `PART D` — **resolved on main** |
 > | **F7** | `F.1`'s demand needs a per-conjunct refusal kind the fold cannot emit | `§C.7`, `PART F` |
 > | **F13** | the live fold mints **three Event kinds no column declares**, which invariant 7 would refuse | `PART F` |
 >
@@ -46,7 +49,7 @@
 > **Every rule in G names the corpse that would return if it were dropped**, and it ends by saying
 > that a rule with no corpse behind it should be deleted.
 >
-> **PART F is the section to read second.** It carries thirty-one gaps, and its closing finding is
+> **PART F is the section to read second.** It carries thirty-three gaps, and its closing finding is
 > about this exercise rather than about the architecture: **the architecture is derived through
 > Stages 1 and 2 and ASSUMED through Stage 3.** Stage 3 states its subjects as properties without
 > representations, which is where the gap density is.
@@ -264,6 +267,34 @@ permanent thing to have an author** — and this is not the attribution T-d forb
 > `PropositionId`. A faction's claim on territory is a `HOLDS` Proposition its members commit to, and
 > a person holds the seat. **STRUCTURAL.**
 
+### §B.6.1 · ⚠ **AMENDED — `Faction` IS A TYPE, AND IT IS A QUERY RETURN** (Jordan, 2026-09-03)
+
+The paragraph above is right about **ownership** and was wrong about **deployment**: it left every
+consumer — the battle seam, the squad grid, the UI, the AI — to recompute a set nobody had named.
+
+```
+Faction := ( proposition : PropositionId   -- identity. Immutable, uttered by a named person (AX-6)
+           , members     : PersonId[]      -- live `commit` edges
+           , holdings    : RungId[]        -- the union of members' `hold` objects
+           , seats       : SeatId[]        -- the seats members hold
+           , head?       : PersonId )      -- by the proposition's own rule. Input is F.4
+faction_q.resolve(w, prop) -> Faction      -- built at a barrier, handed on, dropped at the next
+NEVER: a member of `World` · a field of its own · `Act.actor` · a `contest` claimant · a `hold` subject
+```
+
+**It is the barrier cache's shape, not a new mechanism** — which is why it costs nothing and cannot
+go stale. **A stored roster drifts from the commit edges and needs a reconciliation pass; a resolved
+one IS the edges.**
+
+| what changed | what did **not** |
+|---|---|
+| `holdings(faction)` is a **named Query**, so faction territory is first-class to *ask for* | `hold.subject` is still `PersonId` — D-14 is untouched, and the banner still holds nothing |
+| code holds a real object with real rosters | it has **no verbs**, and `resolve` still has **no faction parameter** |
+
+> **THE PRICE, AND IT IS REAL.** *A faction cannot gain a field* was previously STRUCTURAL **by
+> absence of a type**. A type now exists, and that guard drops to **the view's lifetime** — see D-47.
+> This is the only grade in Part D that the amendment weakens, and it is recorded rather than absorbed.
+
 ## §B.7 · `Seat` — the chain's `Office`. **There is no `Title` type.**
 
 ```
@@ -364,6 +395,8 @@ View      := ClaimId[]   -- IDS. STRUCTURAL: a packed int array holds no referen
 Sensation := (subsistence, standing)  -- GDScript Vector2 is STRUCTURAL against widening; Python a 2-field tuple is CONVENTION
 Refusal   := typed result -- what the seam returns at the depth cap. NEVER a raise
 world_q.<n>(w : World, ...)          person_q.<n>(p : PersonInterior, ...)
+faction_q.resolve(w, prop) -> Faction -- §B.6.1. A VIEW: same lifetime rule as the cache
+faction_q.at_war(w, a, b) -> bool     -- over live `commit`s to a WAR Proposition. NEVER a stored flag
 cache.build(w) at a barrier -> Cache -- built and dropped by the driver
 ```
 
@@ -371,6 +404,10 @@ cache.build(w) at a barrier -> Cache -- built and dropped by the driver
 barrier and therefore cannot go stale.* STRUCTURAL in one respect — the cache is a local of the
 driver's step call, so nothing inside a step can hold it past the barrier without the driver handing
 it on.
+
+> **`Faction` inherits that property whole, and this is the whole of its defence.** It is a return
+> value, never a member of `World`; a field set on one is dropped with the view. **The lifetime rule
+> is doing the work that the absence of a type used to do** — which is weaker, and is why D-47 exists.
 
 ## §B.13 · The data layer, and the loader's eleven invariants
 
@@ -625,6 +662,31 @@ a faction as combatant — `claimants : PersonId[]`, STRUCTURAL; a subsystem eve
 roster, MECHANICAL; a widened outcome — `veto : bool` and the ladder takes the minimum, **STRUCTURAL
 by signature.**
 
+### §C.5.1 · ⚠ **THE ROSTER CONTRACT — added 2026-09-03, and it is a STATEMENT, not a new mechanism**
+
+Stages 1–3 said *a read-only projection* and stopped, leaving the roster's stability implicit. Made
+explicit:
+
+> ### **THE SIDES ARE RESOLVED ONCE, AT THE SEAM BOUNDARY, AND HELD FOR THE CONTEST'S DURATION.**
+
+```
+sides = (faction_q.resolve(proj, A), faction_q.resolve(proj, B))   -- ONCE, before provider.run
+units = PersonId[] at weight            -- one type. There is NO unit class, at any scale
+stakes = holdings + seats               -- what a defeat can cost, already typed
+```
+
+| | |
+|---|---|
+| **why it must be stated** | otherwise an implementer hands the wrapper a live world and a unit changes side mid-battle **because somebody repudiated three duchies away** |
+| **why it costs nothing** | `proj` is built at the barrier and `commit` edges move only through an Act — so re-resolving *from the projection* returns the identical roster. **The freeze is a consequence, not an addition** |
+| **what it actually forbids** | handing the wrapper anything that is not the projection. That is the whole content of the contract |
+| **grid squad combat** | the same thing one scale down — the squad is `members ∩ present-at-rung`, resolved once, every combatant a `Person` |
+
+⚠ **In GDScript the consequence does not hold for free.** `proj` there is a reference to live objects
+unless it is actually copied, so the guarantee Python gets from the snapshot **must be bought with a
+copy or a lock**. See D-49, which is the one row in Part D whose Python and GDScript grades diverge
+for this reason.
+
 ## §C.6 · WITNESS ↔ the ledgers — attribution is per channel, per witness
 
 **Synthesis call, and it is the mechanism `T-d` needs.** The Event has no actor. A witness who was
@@ -719,7 +781,7 @@ the assumption is the failure mode.**
 
 | # | the defect | the construction | grade (Py / GD) |
 |---|---|---|---|
-| 1 | **an institution acts** | ⚠ **CORRECTED (F10).** A faction **has** a view type and an id — `§D.11` and Reading 10 declare `Faction := (proposition, members, holdings, seats, head?)`, and Reading 10 amends the stages. What holds is narrower and is the real refusal: **it owns nothing, has no verbs, is never `Act.actor`, and is not a parameter of `resolve`.** `Act.actor : PersonId`; a seat enters only through `Act.via` | STRUCTURAL / MECHANICAL |
+| 1 | **an institution acts** | ⚠ **CONSTRUCTION AMENDED, GRADE UNCHANGED (§B.6.1).** A faction now *has* a type. What carries the row is that the type has **no verbs**: `Act.actor : PersonId`, no institution parameter anywhere, `resolve` takes no faction, and a seat enters only through `Act.via`. **You cannot pass a `Faction` where a `PersonId` is required, and there is nothing to pass it to** | STRUCTURAL / MECHANICAL |
 | 2 | **a decision reads world truth** | `choose` has no `World`; `decision/` cannot name `state/` or `world_q`; `View` holds ids; `PersonInterior` is a frozen copy | STRUCTURAL / MECHANICAL |
 | 3 | a write outside the matrix | one path; an unmarked cell raises; no public setters | MECHANICAL |
 | 4 | a write at the wrong step | tokens; the gate matches class to row | MECHANICAL / CONVENTION + scan |
@@ -733,11 +795,11 @@ the assumption is the failure mode.**
 | 11 | a seat that knows its holder | no field | STRUCTURAL |
 | 12 | **a relation with two owners** | directed `tie`/`knot`; no symmetric kind exists | STRUCTURAL |
 | 13 | a relation whose subject cannot act | `subject` admits `RungId` for `contain` only | STRUCTURAL (typed) |
-| 14 | **a banner holding territory** | `hold`'s subject is `PersonId` | STRUCTURAL (typed) |
+| 14 | **a banner holding territory** | `hold`'s subject is `PersonId`. **`Faction.holdings` is a Query that READS members' holds and cannot write one** — the debt closes on the read side without reopening on the write side | STRUCTURAL (typed) |
 | 15 | **open-without-close in the vocabulary** | `release` generic; the loader asserts its domain equals `tenure_kinds` | MECHANICAL at load |
 | 16 | a ratchet over ended edges | `ended()` separate; a scan forbids int-returning callers | MECHANICAL |
 | 17 | a fourth clock | the MATTER token; loader invariant 5 | MECHANICAL at load |
-| 18 | evidence moving a conviction | INTERIOR cannot reach an ACTS row; the ledger-phrased-`requires` loader check | MECHANICAL |
+| 18 | **evidence moving a conviction** | ⚠ **UPGRADED 2026-09-03 — it was MECHANICAL on a check `F.24` disarms.** The INTERIOR write is performed by a function whose signature takes `PersonInterior` **and no ledger reference**, exactly as `choose` takes no `World` (D-2). *A conviction cannot be moved by evidence the writer cannot name.* The loader check becomes a second line, not the only one | **STRUCTURAL by signature** / MECHANICAL |
 | 19 | **a default contest depth** | `max_depth` has no default in the signature | STRUCTURAL |
 | 20 | a nested contest that crashes | the cap returns `Refusal` | MECHANICAL; **in GDScript the test must actually reach the cap** |
 | 21 | a container with a clock | carriers have no behaviour; only the driver calls a step; `t` advances in one line | STRUCTURAL by absence of a method |
@@ -768,12 +830,28 @@ the assumption is the failure mode.**
 | 44 | **a belief as a private, uncontestable field** | the field is deleted; a belief is a `commit` to an `OUGHT` — utterable, shareable, releasable | STRUCTURAL by absence |
 | 45 | the season advanced twice | `t += 1` occurs once, in the driver; CALENDAR has no access to `t` | MECHANICAL |
 | 46 | world state behind a global name (Godot) | `World` constructed by the driver and threaded by parameter; the two licensed guards | MECHANICAL — *unreachable-by-name, not unwritable* |
+| **47** | ⚠ **a faction field that outlives a barrier** — *the guard the amendment cost* | `Faction` is a **Query return, never a member of `World`**; a field set on one is dropped with the view, exactly as D-34 drops the cache | STRUCTURAL for lifetime; **CONVENTION that nobody promotes it into `World`** |
+| **48** | **a war nobody declared, or that nobody can end** | war is a `WAR` Proposition with an `utterer` (AX-6) plus `commit` edges owned by their subjects; `at_war` is a Query over the live ones; peace is `until`, written by an owner (T-m). **There is no boolean between two factions to set, because there is no faction record to hold one** | STRUCTURAL at the type |
+| **49** | **a unit changing side mid-contest** | the roster resolves once from `proj` (§C.5.1); `commit` moves only through an Act, and no Act resolves inside another's resolution | STRUCTURAL in Python **/ MECHANICAL in GDScript — `proj` is a live reference there unless copied, and the guarantee must be bought** |
+| **50** | ⚠ **a test that cannot observe its own failure** — *`ID-10`'s first representation* | conditional assertions go through `assert_over(iter, pred, min_checked)`, which **raises when `min_checked` was never reached**; §0.1 point 2's rule made callable | **CONVENTION** + a scan for a bare `for … if … assert` under `tests/` |
+| **51** | **an unpriced refusal** | the budget is debited **at RESOLVE entry, before eligibility is evaluated**, so a refused act costs exactly what a made one costs. *Attempting and being turned away at the venue is a real expenditure of a season* | STRUCTURAL by ordering — one debit, ahead of the branch. **Falsifier: a refusal Event's `changes[]` is non-empty, carrying the debit's receipt — a refusal is no longer a no-op** |
 
 > ### **WHAT THE TABLE SAYS ABOUT ITSELF, AND IT IS THE HONEST PRICE**
-> **Of forty-six rows, sixteen are STRUCTURAL in Python and fewer in GDScript; the rest are one path
-> with one test.** That ratio is the price of the design, and it is why **the loader and the two scans
-> carry more weight than any single type**: most of what this architecture refuses, it refuses by
-> making the bypass **visible**, not by making it **unspellable**.
+> **Of fifty-one rows, twenty-seven carry a Python grade beginning STRUCTURAL, and fewer hold in
+> GDScript; the rest are one path with one test.** That ratio is the price of the design, and it is
+> why **the loader and the two scans carry more weight than any single type**: most of what this
+> architecture refuses, it refuses by making the bypass **visible**, not by making it **unspellable**.
+> Three of the twenty-seven pair the STRUCTURAL clause with a CONVENTION one covering a *different*
+> bypass (**8, 34, 47**), and reading them as wholly structural is the misreading this column exists
+> to prevent.
+>
+> ⚠ **THIS CORRECTS THE PREVIOUS SENTENCE, WHICH SAID *sixteen of forty-six* AND DID NOT RECONCILE
+> AGAINST THE TABLE.** The counting rule is now stated so a reader can re-run it: *the first word of
+> the Python clause.* Five rows were added and one upgraded on 2026-09-03; those account for **five**
+> of the eleven (rows 47, 48, 49, 51 and the D-18 upgrade; row 50 is CONVENTION), and **the remaining
+> six were a miscount in the original** — recorded here rather than
+> quietly replaced, because a self-authored number that nobody could reproduce is exactly what §0.1
+> point 4 is about.
 
 ---
 
@@ -820,10 +898,11 @@ why its proof is step 2 loading against it.
 
 # PART F · WHERE THE THREE STAGES ARE INSUFFICIENT
 
-**Thirty-one entries.** Format throughout: what was needed · which stage should have supplied it ·
-what was assumed · what goes wrong if the assumption is wrong. The numbering is fixed so the six
-forward references in PARTS B and C resolve, **and each is a real gap rather than a number filled to
-make a reference resolve.**
+**Thirty-three entries** (thirty-one from the stages; **F.32 and F.33 were opened by the 2026-09-03
+faction amendment and charge to no stage**). Format throughout: what was needed · which stage should
+have supplied it · what was assumed · what goes wrong if the assumption is wrong. The numbering is
+fixed so the six forward references in PARTS B and C resolve, **and each is a real gap rather than a
+number filled to make a reference resolve.**
 
 | § | the gap | assumed | if the assumption is wrong |
 |---|---|---|---|
@@ -851,8 +930,8 @@ make a reference resolve.**
 | **F.20b** | ⚠ **NEW (F13) · THE FOLD MINTS EVENT KINDS NO COLUMN DECLARES.** The live implementation emits `act.ineligible`, `act.refused` and `contest.resolved` as **body literals**, as a fallback where a row declares no refusal kind | that invariant 7's derived roster covers every kind | **invariant 7 refuses all three at `append`**, so the loop as built cannot run under the loader as specified. Either the three become declared columns — an eligibility-refusal kind per verb (`F7`, invariant 4 widened) and a `contest.resolved` emission column — **or the derived roster is not derived.** A definition living as a literal in a body is what `ID-12` refuses |
 | **F.21** | the rank of a cluster seat (`scope = null`) | no rank; the loader forbids a `higher_rank` conjunct on one | church seats become revocable by purview alone — **which they also lack** |
 | **F.22** | **how succession fills a seat** — death does not open a conferral Date | the named heir is eligible by `own` — **an eligibility the four kinds cannot spell** | every death is a vacancy only a superior can fill, **which may be right for an office and is wrong for a crown** |
-| **F.23** | the `AX-3` loader check | no verb writing a conviction has a ledger-phrased `requires` | **unenforceable while `requires` is prose** (F.24) — evidence moves a conviction through any verb whose author phrases it so, and the check is a comment |
-| **F.24** | ⚠ **THE GRAMMAR OF `requires`** — Stage 3 fixes five columns and never says what the second contains; every row carries it as **a prose string** | ⚠ **NO LONGER ASSUMED — DERIVED. See `§F.24a`** | **the resolver needs a body per verb to evaluate prose, and `D20 — the resolver has no body` returns as `the resolver has thirty`. This is still the item everything dynamic depends on:** `ID-16`'s loop enumeration, `F.1`'s per-conjunct demand and `F.23`'s `AX-3` check are each blocked on it |
+| **F.23** | the `AX-3` loader check | no verb writing a conviction has a ledger-phrased `requires` | ⚠ **NARROWED 2026-09-03.** It read *unenforceable while `requires` is prose (F.24) — the check is a comment*, and **that made `AX-3` the least-defended axiom in the design, guarded only by something F.24 disarms.** D-18's signature construction now carries it, so this entry covers **the second line only**. The gap survives at its own reduced strength; the axiom no longer depends on it |
+| **F.24** | ⚠ **THE GRAMMAR OF `requires`** — Stage 3 fixes five columns and never says what the second contains; every row carries it as **a prose string** | ⚠ **NO LONGER ASSUMED — DERIVED. See `§F.24a`** | **the resolver needs a body per verb to evaluate prose, and `D20 — the resolver has no body` returns as `the resolver has thirty`. This is still the item everything dynamic depends on:** `ID-16`'s loop enumeration and `F.1`'s per-conjunct demand are both blocked on it. ⚠ **`F.23`'s `AX-3` check IS NO LONGER ONE OF THEM** — a merge with `origin/main` (2026-09-03) landed `D-18`'s signature construction, which carries `AX-3` **STRUCTURALLY** by giving the interior write no ledger reference to name. The loader check is now a second line rather than the only one, so the axiom does not wait on this row. |
 
 ## §F.24a · ⚠ **THE GRAMMAR, READ OFF THE 32 LIVE CELLS RATHER THAN DESIGNED — added 2026-09-03**
 
@@ -885,25 +964,32 @@ a predicate language becomes a second resolver.
 **The grammar is small, and that is the claim `F.24` assumed and never demonstrated.** Seven forms,
 two of which are lookups, closes 30 of 32 cells; the other two are schema constraints. **An
 independent governance design reached the same shape from a disjoint corpus** — a quantifier, a
-comparison and a relation, and nothing else — which is corroboration rather than a source.
-| **F.25** | sum-then-clamp against the sequential fold | bounded scalars clamp at stratum end; integer stores check sequentially | a `restore` in the same stratum is invisible to a `work`'s band gate — **a site that was repaired refuses the verb the repair reopened** |
+comparison and a relation, and nothing else — which is corroboration rather than a source.| **F.25** | sum-then-clamp against the sequential fold | bounded scalars clamp at stratum end; integer stores check sequentially | a `restore` in the same stratum is invisible to a `work`'s band gate — **a site that was repaired refuses the verb the repair reopened** |
 | **F.26** | the canonical order key | `(stratum, actor-hash, intra-person position)` | **a hash decides who eats when two people reach one larder, and the design has no better answer — which should be said aloud rather than discovered** |
 | **F.27** | Thread Sensitivity — *the only class-shaped gate* | not modelled | nothing. **Named because an implementer will look for it in the eligibility kinds and it is deliberately not there** |
 | **F.28** | termination across seasons | **nothing bounds a spiral, and nothing here pretends to** | — |
 | **F.29** | act cost beyond the budget | the budget is the whole price, as ruled | **a scene yields unbounded forgeries** |
 | **F.30** | a person and their person-rung sharing an id | same `n`, different tag | an individuated Person needs a new person-rung and `contain` edge in the same CENSUS write, or **the new Person is nowhere**, which `co_located` reads as unwitnessable |
 | **F.31** | the world-generation roster | a registry row read once at boot | nothing architectural — but **the acceptance case needing a postless person is unreachable** |
+| **F.32** | ⚠ **WHOSE EDGE A WAR IS, AND THEREFORE WHO MAY MAKE PEACE** *(§B.6.1, D-48)* — opened by the 2026-09-03 amendment, charged to no stage | a `commit` whose subject is the declaring **person**, so `T-m` gives peace to the declarer | **the declarer dies and the war can be ended by nobody** — an open-only relation, which is precisely the ratchet `AX-6`/`T-m` were written to eliminate. The repair is an edge subjected to *the seat's holder*, and **the design has no Tenure that changes hands** |
+| **F.33** | **whether `at_war` may appear in a verb's `requires`** *(D-48)* | it is asked by the **seam**, never by the resolver — so a declaration licenses no act by itself | if raising levies or crossing a border is gated on it, war stops being a Query the combat seam asks and becomes **an input to eligibility** — and `F.24`'s grammar then needs a Query term it does not have |
 
-## §F.32 · What is NOT a gap, said so the count is honest
+## §F.34 · What is NOT a gap, said so the count is honest
 
 The `writer:` renaming and the `on_write`/`on_condition` split are **calls, not gaps** — the chain's
 shapes were expressible and are re-keyed for idempotence. The `Seat` unification, `release`, directed
 `tie`/`knot`, deleted `beliefs` and `judging_set_rule`, and `hold`'s Person-only subject are
 **derivations the stages force**, recorded in §A.3 rather than here.
 
-## §F.33 · **THE SHAPE OF THIS LIST, WHICH IS ITSELF THE FINDING**
+**Added 2026-09-03, so the amendment does not inflate the count either.** `Faction.head?`'s rule is
+**not a new gap** — it is a *consumer* of `F.4`, and if `Tenure.degree` gets a reader the head
+resolves with it. `holdings(faction)` over two members holding one rung is **not a gap** — it is a
+set union. **The roster contract (§C.5.1) is not a gap and not an addition:** it states a property the
+projection already had, and its entire content is *do not hand the wrapper a live world*.
 
-> **Thirty-one entries, and they are not evenly distributed.**
+## §F.35 · **THE SHAPE OF THIS LIST, WHICH IS ITSELF THE FINDING**
+
+> **Thirty-three entries, and they are not evenly distributed.**
 >
 > **Stages 1 and 2 are nearly closed on their own subjects.** The gaps tracing to them — `F.3`, `F.6`,
 > `F.7`, `F.17`, `F.21`, `F.22` — are places where **a theorem was stated and its mechanism left to
@@ -918,6 +1004,14 @@ shapes were expressible and are re-keyed for idempotence. The `Seat` unification
 > it is the honest finding: THE ARCHITECTURE ABOVE IS DERIVED THROUGH STAGES 1 AND 2 AND ASSUMED
 > THROUGH STAGE 3.** A reader deciding what to build first should weight these entries by which
 > stage they charge.
+>
+> ⚠ **AND THE 2026-09-03 AMENDMENT IS THIS THESIS RUNNING LIVE, WHICH IS WORTH MORE THAN THE TWO
+> ENTRIES.** Jordan stated two properties — *a faction is a deployable container* and *factions can
+> be at war* — and the design absorbed both **without a new primitive**: a Query return and a
+> Proposition with an owned edge. **What it could not absorb was their representation**, and the two
+> unabsorbed pieces (`F.32` whose edge a war is, `F.33` whether `at_war` reaches `requires`) are both
+> *"a property was stated and its representation was left to later"* — **the same failure mode, from a
+> different author, on the first try.** The list's shape is not an artefact of who wrote Stage 3.
 
 ---
 
@@ -1022,6 +1116,26 @@ become that router.**
 **G.2.7 · A boundary enforced by a scan is a DIRECTORY.**
 > **When the strongest enforcement available is a scan, the unit of organisation must be the unit the
 > scan can see. A boundary drawn inside a file is drawn nowhere.**
+
+**G.2.8 · FIRST-CLASS FOR CONSUMERS IS NOT FIRST-CLASS FOR STATE** *(added 2026-09-03 — the general
+rule Jordan's faction ruling settles, and the only §G.2 entry whose corpse is this exercise's own).*
+
+> **Never ask *"should this exist as an object?"* — that conflates DEPLOYING with OWNING and has no
+> right answer. Ask both halves:**
+> **1 · What does code need to HOLD?** → if a consumer must iterate it, name it and build it.
+> **2 · What WRITES it?** → if the answer is *nothing*, it is a **view**, and it is built at a
+> barrier and dropped at the next.
+> **Two yeses give a carrier; hold-yes and write-nothing give a view; neither gives a Query.**
+
+⚰ *Stages 1–3 answered the single question, concluded a faction is not an object, and left the battle
+seam, the squad grid, the UI and the AI each recomputing a roster nobody had named. The conclusion was
+right about ownership and wrong about deployment, and it took a ruling to catch — which is the point:*
+**the single question cannot express the case, so no amount of care answering it would have found this.**
+
+⚠ **The rule has a price and it is charged in Part D.** A view is a type, and a type can gain a field.
+The defence is **lifetime, not absence** (D-47) — strictly weaker than the guard it replaces. **State
+the drop when you take it**; a rule whose cost is unrecorded is how a design accretes carriers one
+reasonable step at a time.
 
 ---
 
@@ -1232,6 +1346,7 @@ with a bottom.**
 | **G.3** — data and falsifiers survive, prose does not | a design statement carried correctly across three sessions **by prose alone**, with no row and no test, and still read the same way |
 | **G.4.1** — stages close on representations | a stage whose forward-handed properties would have been **cheaper** to represent later than at the boundary |
 | **G.4.6** — a tree-closed derivation prevents the deferral hazard | a session **with the tree closed** that still produced the existing tree with better prose. If that happens, the hazard is not scope and this Part has misdiagnosed it |
+| **G.2.8** — the two-question test separates views from carriers | a value that **must be held by a consumer AND written by exactly one owner**, where making it a carrier is nonetheless wrong; or a view whose lifetime defence (D-47) is found insufficient in practice, which would mean *absence of a type* was load-bearing after all |
 
 > ### **WHAT THIS PART IS NOT**
 > **It is not a process document to be maintained.** It is a set of rules each of which names the
