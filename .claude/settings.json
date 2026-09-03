@@ -40,7 +40,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python tools/hook_naming_guard.py"
+            "command": "python \"$CLAUDE_PROJECT_DIR/tools/hook_naming_guard.py\""
           }
         ]
       },
@@ -49,7 +49,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python tools/hook_md_sweep_guard.py"
+            "command": "python \"$CLAUDE_PROJECT_DIR/tools/hook_md_sweep_guard.py\""
           }
         ]
       }
