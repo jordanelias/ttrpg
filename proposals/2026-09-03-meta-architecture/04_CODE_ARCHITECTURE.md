@@ -7,23 +7,21 @@
 
 ---
 
-> # ⚠ THIS DOCUMENT IS INCOMPLETE, AND THE MISSING PART IS THE ONE THAT MATTERED MOST
+> # ⚠ COMPLETE EXCEPT FOR PART G
 >
-> **Stage 4 was truncated by a session rate limit mid-sentence at item 25 of PART D.** It delivered
-> PART A (the architecture), PART B (the type shapes), PART C (the seams) and PART D items 1–24.
+> PARTS A–F are here. **PART G — SHAPE · ORGANIZE · ARTICULATE · ORCHESTRATE — was commissioned and
+> is not yet written**, and under Jordan's framing it is the most durable part of the document: the
+> one that says how design proceeds going forward rather than how this design came out.
 >
-> **PART E (the build order) and PART F (where the three stages are insufficient) were never
-> produced.** PART F was commissioned in these terms: *"name every place you needed something the
-> stages do not supply, and say what you assumed. Do not paper over a gap to make the architecture
-> look complete — a named gap is worth more than a smooth design resting on an invention."*
+> **PART F is the section to read first.** It carries thirty-one gaps, and its closing finding is
+> about this exercise rather than about the architecture: **the architecture is derived through
+> Stages 1 and 2 and ASSUMED through Stage 3.** Stage 3 states its subjects as properties without
+> representations, which is where the gap density is.
 >
-> **Nothing has been written in its place, and nothing should be.** The synthesis marks its own
-> assumptions inline throughout — every one tagged *my call* with the alternative it rejected, and
-> several forward-referencing a §F that does not exist (`§F.1`, `§F.4`, `§F.5`, `§F.6`, `§F.7`,
-> `§F.15`). **Those dangling references are the honest record of what is missing**, and they are the
-> first thing a completion pass should collect.
-
----
+> ⚠ **Two gaps block the build outright.** `F.20` — nothing founds a hearth or builds a site, so
+> **the world only decays** — fails the loader at build step 2. `F.24` — every verb's `requires` is a
+> **prose string**, so evaluating it needs a body per verb, and *the resolver has no body* returns as
+> **the resolver has thirty**.
 
 ## §0 · How enforcement is graded, and why the grade is stated per invariant
 
@@ -513,11 +511,147 @@ the assumption is the failure mode.**
 | 22 | a subsystem writing state | no token crosses the seam; the projection is read-only | STRUCTURAL / MECHANICAL |
 | 23 | a subsystem widening an outcome | `veto : bool`; the ladder takes the minimum | STRUCTURAL by signature |
 | 24 | a subsystem returning a winner | the return type is `Margin` | MECHANICAL |
-| 25 | *a subsystem-specific Event family* | ⚠ **TRUNCATED MID-SENTENCE BY THE RATE LIMIT** | — |
+| 25 | **a subsystem-specific Event family** | the kind roster is **derived** (loader inv. 7) from the matrix's `on_write`/`on_condition` and the table's `emits`/`emits_on_refusal`; `log.append` refuses any other kind, **and a subsystem has no data file of its own in which to add one** | MECHANICAL |
+| 26 | a silent default for an unregistered kind | every table lookup raises on a missing key; `default_cell` applies only to an unlisted *pair* of registered keys | MECHANICAL |
+| 27 | a roster literal in a body | **none** — a list can always be typed into code | CONVENTION + a scan of `loop/`, `seam/`, `decision/` |
+| 28 | **a branch on a rung-kind member** | none at the type; **the falsifier IS the mechanism** — re-run the seeded season with `rung_kinds` extended by a synthetic kind and permuted; any test that moves branched on a member | CONVENTION at authoring; MECHANICAL as that one test |
+| 29 | order-dependent summation | `condition`, `stores`, `margin` are integers, and integer addition is associative; the act array is canonicalised | STRUCTURAL for the sum; MECHANICAL for the order |
+| 30 | **two degree ladders** | one `seam/ladder`; subsystems return a `Margin` | **CONVENTION** — Stage 1's named weak point, carried at that strength |
+| 31 | a cohort subclass | one class; no conversion exists because there is nothing to convert to | CONVENTION + one test |
+| 32 | a title/office collision | **there is no `Title` type to collide with** | STRUCTURAL by absence |
+| 33 | eligibility by capability, or a seat with a modifier | no bonus field; no modifier column; `capability` is not an eligibility kind and the loader raises on one | STRUCTURAL at the type; MECHANICAL at load |
+| 34 | a stale cache | a local of the driver's step call, dropped at the next barrier | STRUCTURAL for lifetime; CONVENTION that a step builds no private dict |
+| 35 | **a new draw moving unrelated goldens** | `H(seed, tick, subject, purpose)`; no counter, no service | MECHANICAL (a pinned golden); CONVENTION on `purpose` uniqueness — **the chain's own measured hazard** |
+| 36 | a hidden turn order | the canonical key is declared data plus a hash tiebreak; rank never breaks a tie | MECHANICAL |
+| 37 | a `social:` value that varies by step | `writer:` is a static column; loader inv. 5 | MECHANICAL at load |
+| 38 | a constant invented at the keyboard | every fixture injected by name from a register row; a missing row raises **at the named site** | MECHANICAL + a numeric-literal scan |
+| 39 | eviction ranking on salience | the comparator's signature takes `confidence` and `recency` **and nothing else** | STRUCTURAL by signature |
+| 40 | a knot deposit minting a new id | the deposit constructor reuses the event id | MECHANICAL |
+| 41 | **a decision reading a moving world** | DELIBERATE runs with no token in scope, on a projection built at barrier 2 | STRUCTURAL (no token) / MECHANICAL (scan) |
+| 42 | **a person knowing their faction's true strength** | every lateral traversal lives in `world_q`, which `decision/` cannot name; the person has `leaders_as_claimed` and nothing else | STRUCTURAL (typed) / MECHANICAL |
+| 43 | a convening predicate reading another person's interior | the predicate is a declared form over three named sources, not code | MECHANICAL at load; CONVENTION that nobody adds a fourth |
+| 44 | **a belief as a private, uncontestable field** | the field is deleted; a belief is a `commit` to an `OUGHT` — utterable, shareable, releasable | STRUCTURAL by absence |
+| 45 | the season advanced twice | `t += 1` occurs once, in the driver; CALENDAR has no access to `t` | MECHANICAL |
+| 46 | world state behind a global name (Godot) | `World` constructed by the driver and threaded by parameter; the two licensed guards | MECHANICAL — *unreachable-by-name, not unwritable* |
 
-> ### ⚠ **THE DOCUMENT ENDS HERE.**
-> **PART E (the build order) and PART F (where the three stages are insufficient) were commissioned
-> and never produced.** See the notice at the head of this file. **Do not treat the absence of a
-> §F as the absence of gaps** — the synthesis marks assumptions inline throughout and forward-
-> references a §F that does not exist at `§F.1`, `§F.4`, `§F.5`, `§F.6`, `§F.7` and `§F.15`.
-> **Those six dangling references are the known-incomplete set, and there may be more.**
+> ### **WHAT THE TABLE SAYS ABOUT ITSELF, AND IT IS THE HONEST PRICE**
+> **Of forty-six rows, sixteen are STRUCTURAL in Python and fewer in GDScript; the rest are one path
+> with one test.** That ratio is the price of the design, and it is why **the loader and the two scans
+> carry more weight than any single type**: most of what this architecture refuses, it refuses by
+> making the bypass **visible**, not by making it **unspellable**.
+
+---
+
+# PART E · THE BUILD ORDER
+
+Derived from what each module reads. **A step is on the critical path if one NPC's season cannot
+execute without it.** Each names the artifact that proves it, because a step is done when the
+behaviour executes — and **step 1 is the one deliverable here that writing can satisfy**, which is
+why its proof is step 2 loading against it.
+
+| # | delivers | done when | path |
+|---|---|---|---|
+| **0** | typed ids · the owned versioned `H` · fixed-point scale and band compare | 1,000 ids minted twice under one seed are bit-identical; a golden hash pinned; `H` is not a language `hash()` | **critical** |
+| **1** | the carrier types as field declarations, **no behaviour** | nothing on its own — **its proof is step 2** | **critical** |
+| **2** | `data/` + the one loader with the eleven invariants; `release` as a row; the `writer:`/`on_write` re-keying | every file loads; **each invariant fails on a planted violation naming the row, then passes**; a `scale:` key is refused. ⚠ **THIS STEP CANNOT PASS TODAY** — invariant 2 fails on `(Rung, exists)` and `(Site, exists)`, which have no producing verb (§F.20) | **critical** |
+| **3** | the stores with private setters · the gate · the four tokens · the receipt mint · the log · the ledgers · the act store · `World` | a wrong-token write raises; an unmarked cell raises; a planted direct assignment is caught by the setter scan; **an Event carrying an unminted receipt fails `append`** | **critical** |
+| **4** | live/ended Tenures · `world_q` (the `contain` walk, purview, rank, `holder_of`, `establishment`, `judging_set`, `place_of`) · the barrier cache | walk and rank stay green under the **permuted-roster run** (D-28); the object-side cache equals a brute-force scan; `ended()` is named by no int-returning function | **critical** |
+| **5** | the driver · MATTER · CALENDAR · the headless runner | a seeded two-season run with **no acts**, twice, byte-identical including the hash; every MATTER Event has non-empty `causes[]`; a vacant date fires and lapses | **critical** |
+| **6** | RESOLVE: canonical order, the fold, eligibility over `Act.via`, refusals that emit, writes through the gate | an **authored** `Act[]` runs a season; `transfer` twice on one larder → `made` then `refused`; **`confer` twice on one seat → `opened` then `confer.refused` with no `obstruct` anywhere**; `release` closes a Tenure of every kind | **critical** |
+| **7** | WITNESS: fan-out `total` first, then the five predicates and the per-channel `mints:` | after a co-located act **the witness's ledger holds a `did` claim and the document holder's does not**; eviction holds the cap | **critical** |
+| **8** | `decision/` + `loop/deliberate` + the `alignment` sweep | ⭐ **ONE NPC'S SEASON RUNS END TO END FROM Q1–Q4 WITH ZERO AUTHORED ACTS**, and `causes[]` walks from the resolved Event back to the raising Event; the import scan is green; the three-point sweep is run and any flip reported | **critical — THE BAR** |
+| **9** | CENSUS: demand-driven individuation · the world-gen roster | a `dispatch` to a non-existent clerk emits `person.demanded`; next season a Person exists whose `person.individuated` cites it | beside |
+| **10** | `seam/contest` · `manifest/` · a stub wrapper returning a `Margin` | a `kill/wound` routes to the seam; the nested run returns `Refusal` at the cap — **and in GDScript actually reaches it without a crash**; a misspelled manifest row fails at boot naming the row | beside |
+| **11** | the real subsystem wrappers | out of this chain's scope by ruling | beside |
+| **12** | the parallel DELIBERATE map | serial and pooled runs produce the identical hash | beside — an optimisation |
+| **13** | the Godot shell · the two licensed guards | both guards red on a planted violation, then green; a headless run prints the Python oracle's hash in the integer domain | beside, from step 3 |
+
+**Critical path: 0 → 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8.** Step 8 is the bar; nothing after it is on the path.
+
+## §E.1 · Ordering constraints this design adds that the chain's plan does not have
+
+- **Step 2 is a gate the chain never had.** The data must be *consistent* before any store exists —
+  and **two of the chain's rows fail it today.**
+- **`release` is authored in step 2 and executes in step 6.** ID-14's check runs at load, so a build
+  that lands the verb table without `release` **fails step 2, not step 6.**
+- **The act store lands in step 3**, before `causes[]` integrity can be written, because that check
+  reads it. The chain's log has no such dependency.
+- **`decision/` is a directory from its first commit.** The isolation scan matches by path, so a
+  `choose` drafted inside `loop/` and moved later **would have been green while violating AX-2.**
+- **`titles.domains` moves off the critical path** — under §B.7 it is world-generation content read
+  at step 9, not architecture read by the loader.
+
+---
+
+# PART F · WHERE THE THREE STAGES ARE INSUFFICIENT
+
+**Thirty-one entries.** Format throughout: what was needed · which stage should have supplied it ·
+what was assumed · what goes wrong if the assumption is wrong. The numbering is fixed so the six
+forward references in PARTS B and C resolve, **and each is a real gap rather than a number filled to
+make a reference resolve.**
+
+| § | the gap | assumed | if the assumption is wrong |
+|---|---|---|---|
+| **F.1** | **what a DEMAND is** *(§C.7)* — Stage 1 rules individuation demand-driven and stops | a refusal Event kind `person.demanded` | a demand arising from a Date or a Petition individuates nobody, and *nothing generates without a demand* **starves the political layer of the persons it needs** |
+| **F.2** | **what opens a contest** — Stage 3 gives two triggers and never relates them | only a declared `contests:`; undeclared contention is scarcity | every collision on an undeclared subject is a refusal where it should be a fight |
+| **F.3** | **where a declared term lives, and who matures it** — Stage 1 gives `T-n`; nothing says where it is stored | `Tenure.term`; MATTER matures it; the causation rule generalises to two causes | if #353's *"only Tenure write in MATTER"* is literal, **a term of service has no lawful end and `T-n` is unimplementable** |
+| **F.4** | **what `Tenure.degree` IS** *(§B.8)* — a field with a writer and no reader | carried unread — which under ID-13 is a field that does not exist | if it is the strength of a `commit`, **every faction's leadership Query has no input and every faction is leaderless** |
+| **F.5** | **`coherence`'s reader** *(§B.2)* | carried unread, flagged for deletion | if the social-contest wrapper's margin reads it, **social contests are undecidable** |
+| **F.6** | **`capability`'s season writer** *(§B.2)* — Stage 1 keeps the field and says nothing about advancement | world-gen writes it once; nothing else does | **a character never improves at anything** — a constant no act can move, which is `AX-6` applied to skill. The repair is a `practice` verb, not a field |
+| **F.7** | **what bounds `establish`** *(§B.7)* | remit ⊆ the exercised seat's; scope under its purview | the subset rule **forbids constitutional invention**, and Stage 1's own sovereign-power falsifier fires here rather than being answered |
+| **F.8** | **the judging set** — every stage leaves it open; Stage 1 calls it *the live threat* | a Query over seats whose remit covers the matter | if judges are a venue's custom, **two venues with identical seats must decide identically** and local custom is unrepresentable |
+| **F.9** | **the ladder's margin model and band edges** | only the type — four bands on a fixed-point margin | **nothing runs at the seam until the edges exist**, and an implementer writes the ladder in the subsystem — the refusal `T-k` says is enforced by a person noticing |
+| **F.10** | refraction's side | receiver-side, per the chain's held-back closure | `terms.distorted` needs a mutable emitter-side object, which §37.1 forbids |
+| **F.11** | `standing`'s formula and **polarity** | V2's, as amended | if standing reads others' regard, it needs a cross-holder read §20 forbids — and the fallback is **one scalar**, weakening the `Vector2` argument |
+| **F.12** | **scene packing, what expands a scene, and where `max_depth` comes from** | packing by the assumption row; NPC scenes expand only through `contests:`; the cap is a fixture for NPCs | if accepting a duel is an NPC choice, **`choose` needs a depth term and the budget's meaning changes** |
+| **F.13** | whether an `Act` persists | a resolver-side act store | if a future Query exposes it person-side, **attribution becomes world truth and `AX-2` breaks silently.** The guard is a scan, and it is CONVENTION |
+| **F.14** | **an Event's place** | `place_of` — the scene's place, or the changed thing's rung | a plague is *one Event spanning many rungs* and **has no single place**; `place_of` must return a set and my signature does not |
+| **F.15** | **the nine dispensation terms** *(§B.5)* — *"nine typed terms"* and nothing lists them | a schema for one Record kind, **unspecified** | **not an assumption so much as an absence: the entire downward mechanism has no executable content**, and `issue` produces a document nobody can comply with |
+| **F.16** | **what each witness channel mints** — `T-d` says attribution is per-witness; no stage says which witness gets which claim | a `mints:` column; only `co_located` mints attribution | covert action against an office becomes impossible where it should be **a report that can be false** |
+| **F.17** | how a person joins an establishment | `oblige`'s `requires` reads the seat's `binds` | if admission is a seat's own act, the closed remit roster **needs a sixth member — a ruling, not a row** |
+| **F.18** | **upkeep's source** — *"out of the office's stake"*, and `stake` was retired | unpaid; establishment persists until released | **no economic pressure on any office**, and *"finite, contested"* has no mechanism. A MATTER payment would be a fourth clock, so the repair is a verb |
+| **F.19** | the envelope, individuation, and `weight` | individuation decrements a band and mints at weight 1 | without the construal spread, **a cohort at weight 200 chooses as one mind** |
+| **F.20** | ⚠ **FOUNDING VERBS** — no stage names a verb that founds a hearth or builds a site | the rows are dropped until a verb is ruled | **the world only decays — nothing is ever founded or built.** This is what blocks build step 2 |
+| **F.21** | the rank of a cluster seat (`scope = null`) | no rank; the loader forbids a `higher_rank` conjunct on one | church seats become revocable by purview alone — **which they also lack** |
+| **F.22** | **how succession fills a seat** — death does not open a conferral Date | the named heir is eligible by `own` — **an eligibility the four kinds cannot spell** | every death is a vacancy only a superior can fill, **which may be right for an office and is wrong for a crown** |
+| **F.23** | the `AX-3` loader check | no verb writing a conviction has a ledger-phrased `requires` | **unenforceable while `requires` is prose** (F.24) — evidence moves a conviction through any verb whose author phrases it so, and the check is a comment |
+| **F.24** | ⚠ **THE GRAMMAR OF `requires`** — Stage 3 fixes five columns and never says what the second contains; every row carries it as **a prose string** | a small typed predicate grammar | **the resolver needs a body per verb to evaluate prose, and `D20 — the resolver has no body` returns as `the resolver has thirty`** |
+| **F.25** | sum-then-clamp against the sequential fold | bounded scalars clamp at stratum end; integer stores check sequentially | a `restore` in the same stratum is invisible to a `work`'s band gate — **a site that was repaired refuses the verb the repair reopened** |
+| **F.26** | the canonical order key | `(stratum, actor-hash, intra-person position)` | **a hash decides who eats when two people reach one larder, and the design has no better answer — which should be said aloud rather than discovered** |
+| **F.27** | Thread Sensitivity — *the only class-shaped gate* | not modelled | nothing. **Named because an implementer will look for it in the eligibility kinds and it is deliberately not there** |
+| **F.28** | termination across seasons | **nothing bounds a spiral, and nothing here pretends to** | — |
+| **F.29** | act cost beyond the budget | the budget is the whole price, as ruled | **a scene yields unbounded forgeries** |
+| **F.30** | a person and their person-rung sharing an id | same `n`, different tag | an individuated Person needs a new person-rung and `contain` edge in the same CENSUS write, or **the new Person is nowhere**, which `co_located` reads as unwitnessable |
+| **F.31** | the world-generation roster | a registry row read once at boot | nothing architectural — but **the acceptance case needing a postless person is unreachable** |
+
+## §F.32 · What is NOT a gap, said so the count is honest
+
+The `writer:` renaming and the `on_write`/`on_condition` split are **calls, not gaps** — the chain's
+shapes were expressible and are re-keyed for idempotence. The `Seat` unification, `release`, directed
+`tie`/`knot`, deleted `beliefs` and `judging_set_rule`, and `hold`'s Person-only subject are
+**derivations the stages force**, recorded in §A.3 rather than here.
+
+## §F.33 · **THE SHAPE OF THIS LIST, WHICH IS ITSELF THE FINDING**
+
+> **Thirty-one entries, and they are not evenly distributed.**
+>
+> **Stages 1 and 2 are nearly closed on their own subjects.** The gaps tracing to them — `F.3`, `F.6`,
+> `F.7`, `F.17`, `F.21`, `F.22` — are places where **a theorem was stated and its mechanism left to
+> Stage 3.**
+>
+> **Stage 3 is where the density is.** What a verb's second column contains (`F.24`), what opens a
+> contest (`F.2`), what a witness mints (`F.16`), what a dispensation says (`F.15`), what a scene
+> packs (`F.12`), and what the loop's one new step reads (`F.1`) are **all Stage 3's subjects, and
+> Stage 3 states each as a property without a representation.**
+>
+> **That is not a criticism of the exercise — the ordering put representation last on purpose — but
+> it is the honest finding: THE ARCHITECTURE ABOVE IS DERIVED THROUGH STAGES 1 AND 2 AND ASSUMED
+> THROUGH STAGE 3.** A reader deciding what to build first should weight these entries by which
+> stage they charge.
+
+---
+
+> ## ⚠ PART G WAS COMMISSIONED AND IS NOT YET WRITTEN
+> **SHAPE · ORGANIZE · ARTICULATE · ORCHESTRATE** — the part that says how design proceeds going
+> forward, and the part Jordan's framing makes the most durable of all. It is outstanding, and its
+> absence is marked here rather than implied.

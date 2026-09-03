@@ -7,7 +7,7 @@
 | **`01_AXIOMS.md`** | **Stage 1 — axioms, idioms, schema.** Start at PART A |
 | **`02_HIERARCHIES.md`** | **Stage 2 — hierarchies, dependencies, nests, scales** |
 | **`03_VERBS_AND_LOOPS.md`** | **Stage 3 — verbs, consequences, slices, season loops** |
-| **`04_CODE_ARCHITECTURE.md`** | **Stage 4 — the code shape.** ⚠ **INCOMPLETE — truncated by a rate limit; PARTS E and F were never produced** |
+| **`04_CODE_ARCHITECTURE.md`** | **Stage 4 — the code shape.** PARTS A–F complete; ⚠ **PART G outstanding** |
 
 ## What this is
 
@@ -22,11 +22,15 @@ consequently"* hierarchies/dependencies/nests/scales, *"and therefore"* verbs/co
 season-loops — and **Stage 4 is a read-only Fable synthesis holding all three in context to design
 the code architecture.**
 
-⚠ **STAGE 4 IS INCOMPLETE.** It delivered PARTS A–D and was **truncated by a session rate limit
-mid-sentence at item 25 of PART D**. **PART E (the build order) and PART F (where the three stages
-are insufficient) were never produced**, and nothing has been written in their place. PART F was the
-section commissioned to name every gap rather than paper over one, so **its absence is the largest
-known hole in this directory** — not a formatting loss.
+⚠ **STAGE 4 IS COMPLETE EXCEPT FOR PART G** (shape · organize · articulate · orchestrate), which is
+outstanding.
+
+**PART F is the section to read first.** Thirty-one gaps, and its closing finding is about the
+exercise rather than the architecture: **the architecture is derived through Stages 1 and 2 and
+ASSUMED through Stage 3** — Stage 3 states its subjects as properties without representations, which
+is where the density is. **Two gaps block the build outright:** nothing founds a hearth or builds a
+site (`F.20`, so *the world only decays*), and every verb's `requires` is a prose string (`F.24`, so
+*the resolver has no body* returns as *the resolver has thirty*).
 
 ## Scope — the rule this exercise is under
 
