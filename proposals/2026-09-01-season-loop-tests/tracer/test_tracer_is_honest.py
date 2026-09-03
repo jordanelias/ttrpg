@@ -4533,3 +4533,86 @@ def test_h99_the_office_carries_its_three_canon_axes_and_a_misseating_refuses():
                                         "remit": ["annex"]})
     with pytest.raises(SystemExit):
         C._check_office("mutant.yaml", {"post": "X", "faction": "Crown"})
+
+
+# ---------------------------------------------------------------------------
+# `N3` — THE OCCASION EDGE. The falsifier ships with the claim (`ID-11`).
+#
+# ⚠ WHAT WAS MEASURED BEFORE THIS EXISTED, so the number is re-runnable rather than remembered:
+# `R3` — an act by one person caused by an act of another — scored **0 of 30** on the NPC lane and
+# **0 of 59** on ARC, while `R1`, `R4` and `R5` passed every case. `PLAN.md`'s `N3` names the
+# reason: *60 act-Events, 0 resolving to a question*. Two edges were missing and each hid the
+# other, which is why fixing one alone moves nothing:
+#   1. an act's Event cited only the act, so nothing said what OCCASIONED the act; and
+#   2. a telling writes nothing, so its deposit was minted about THE TELLER — and §F1's Q2 admits
+#      a claim about the holder or something they hold, so the news reached the listener in a form
+#      their own deliberation could never pick up.
+# ---------------------------------------------------------------------------
+
+
+def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told():
+    import corpus_run as C
+    import run_cases as R
+    from collections import Counter
+
+    case = next(c for c in R.load_cases("NPC") if str(c.get("scale")) in set(S.RUNG_KINDS))
+    w = C.build_at(case, 0)
+    d = S.SeasonDriver(w)
+    mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs())
+    for _ in range(3):
+        d.season(ch, question=None, subsistence=C.P.SUBSIST)
+
+    # 1 — EVERY ACT THAT CAME THROUGH DELIBERATE NAMES ITS SCENE, and every scene its occasion.
+    #     A bare Act built by hand has neither and is not asserted over.
+    assert d.resolved, "no acts resolved — the rest of this test would pass vacuously"
+    assert all(a.scene for a in d.resolved), "an act came out of DELIBERATE with no scene"
+    assert all(sc.occasion is not None for sc in d.scenes.values()), "a scene carries no occasion"
+
+    # 2 — THE WALK RETURNS AN ANTECEDENT FOR A `claim_landed` QUESTION, and the antecedent is a
+    #     real Event id in the log. `occasioned_by` is callable without a driver, which is the
+    #     property `ID-10` asks for: the check can observe the failure it excludes.
+    ids = {e.id for e in w.log}
+    landed = [sc.occasion for sc in d.scenes.values()
+              if getattr(sc.occasion, "source", None) == "claim_landed"]
+    assert landed, "no claim_landed question formed — the transport never reached anybody"
+    walked = [x for q in landed for x in S.occasioned_by(w, q)]
+    assert walked, "every claim_landed question walked back to nothing"
+    assert all(x in ids for x in walked), "the walk returned an id that is not in the log"
+
+    # 3 — `need` RETURNS EMPTY ON PURPOSE, and this asserts the refusal rather than assuming it.
+    #     A standing ambition has no antecedent Event; `ID-5`'s polarity forbids inventing one.
+    for q in (sc.occasion for sc in d.scenes.values()):
+        if getattr(q, "source", None) == "need":
+            assert S.occasioned_by(w, q) == [], "a `need` question was given a fabricated cause"
+
+    # 4 — A TELLING'S DEPOSIT IS ABOUT WHAT WAS TOLD, NEVER ABOUT THE TELLER. This is the clause
+    #     that makes the listener's Q2 reachable, and the one that was inverted.
+    told = [e for e in w.log if e.kind == "news.told"]
+    assert told, "no telling executed — clause 4 would pass vacuously"
+    checked = 0
+    for e in told:
+        act = d.act_of.get(e.id)
+        refs = S.act_refs(act)
+        if not refs:
+            continue
+        subs = S.claim_subjects(e, w.fixtures.get("claim_subject_rule"), refs)
+        assert act.actor not in subs or act.actor in refs, (
+            f"a telling deposited a claim about the teller {act.actor!r}: {subs} — §F1's Q2 can "
+            "never fire on it for the listener, which is what made `R3` zero")
+        assert set(subs) <= set(refs), f"a telling's deposit named something the act did not: {subs}"
+        checked += 1
+    assert checked >= 1, "no telling carried a referent, so clause 4 asserted nothing"
+
+    # 5 — AND THE WHOLE POINT: A REAL RUN PRODUCES A CROSS-PERSON CAUSAL EDGE. Not planted — this
+    #     is the same `R3` the corpus scores, run over a world built from a corpus case.
+    assert C._r3_propagates(w, d), (
+        "no act by one person is caused by an act of another — `R3` is back to zero and the "
+        "chain Reading 07 §4 calls 'the one that is actually the game' is severed again")
+
+    # 6 — THE CONTROL, so a green clause 5 is not just the detector answering true to anything.
+    #     A world with no acts cannot propagate, and the same call must say so.
+    w2 = C.build_at(case, 0)
+    assert not C._r3_propagates(w2, S.SeasonDriver(w2)), (
+        "`_r3_propagates` returned true on a world where nobody has acted — it is not measuring "
+        "propagation")

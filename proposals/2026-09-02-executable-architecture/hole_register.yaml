@@ -961,14 +961,14 @@ rows:
     source:    "W9 — found by the adversarial pass"
   - id:        H-84
     tier:      0
-    hole:      "no verb in the resolvable vocabulary moves a Record to another person, so no second person ever holds one and §F1's Q2 never fires for anybody but the maker"
+    hole:      "no verb in the resolvable vocabulary moves a Record to another person, so no second person ever holds one. ⚠ CORRECTED 2026-09-03 — the second clause of this hole read 'and §F1's Q2 never fires for anybody but the maker', AND THAT IS NOW FALSE BY MEASUREMENT. Q2 fires for a listener without any Record moving, because a TELLING deposits a claim about what was told; the Record half of the hole stands and the consequence half was too wide"
     kind:      "PRODUCER"
     owner:     "Part E — the verb that would do it"
     grade:     "absent"
     default:   "none"
     site:      ""
     sweep:     []
-    unblocks:  "every case where one person's work reaches another — the whole of NPC-088's arc_trajectory"
+    unblocks:  "a person HOLDING another's Record — durable, re-readable, inheritable knowledge. ⚠ NARROWED 2026-09-03: this read 'every case where one person's work reaches another', which is no longer what it blocks. One person's work now reaches another through the telling chain (Reading 07 §3: 'the `tell` chain is the only transport'), measured as R3 30 of 30 on the NPC lane and 54 of 59 on ARC, from 0 and 0. What a Record still buys and a claim does not is PERSISTENCE IN SOMEONE ELSE'S HANDS"
     cite:      "FOUND BY THE `W9` ADVERSARIAL PASS, AS THE REASON `H-79` DID NOT DELIVER WHAT IT CLAIMED. Part E's `transfer` moves `(Rung, stores)` — MATTER, not Records — and `destroy_record` is gated `hold:<record> | presence`, both unevaluable person-side. So a Record is created by its maker, held by its maker, and reachable by nobody: the bailiff forms zero questions in every season of artifact 2 and ONLY CARIN EVER ACTS. `PLAN.md` §6.3's chain requires a claim deposited in another person's ledger, then that person's Q2 question, then their act, and links 3 through 5 are unreachable for this reason and not because of anything `W9` built. ⚠ GRADED `absent`, NOT `assumption`, AND DELIBERATELY: #353 names the six investigation acts (`verb_table.yaml`, `requires: per act`, no predicate) as how a thing is FOUND, and #353 `:499` gives \"burn the Record that carries it\" as what a finder does — so the design plainly intends discovery to exist and states no mechanism. Inventing a `give_record` verb here would be adding a row to Part E to make a milestone pass, which §8.1's first rule forbids in terms: do not weaken the design to make cases pass."
     source:    "W9 — found by the adversarial pass"
   # -------------------------------------------------------------------------
