@@ -31,6 +31,43 @@
 # W2 ADDS each name the §1.4 hole they carry and the `hole_register.yaml` row that grades it, so
 # no row here is a value nobody can trace.
 
+# =============================================================================================
+# ⚠ CONDITIONED BY #358 rev.2, 2026-09-03 — INVARIANT 2, MEASURED RATHER THAN ASSERTED.
+#
+# #358 rev.2 build step 2 says this file cannot pass its loader today, and the first publication
+# named TWO failing rows. Measured against this table and `verb_table.yaml` together, the count is
+# ELEVEN, and both smaller figures were wrong in different ways.
+#
+#   Reproduce:
+#     python3 -c "import yaml; rows=yaml.safe_load(open('write_matrix.yaml'))['rows']; \
+#       v=yaml.safe_load(open('verb_table.yaml'))['verbs']; p=set(); \
+#       [p.update(sum(x['writes'].values(),[]) if isinstance(x.get('writes'),dict) else (x.get('writes') or [])) for x in v]; \
+#       print([f\"{r['kind']}.{r['field']}\" for r in rows if 'RES' in (r.get('steps') or []) and f\"{r['kind']}.{r['field']}\" not in p])"
+#
+#   ELEVEN RES-stepped rows with no producing verb:
+#     Date.fired · Rung.dates · Rung.exists · Site.exists · Tenure.payload
+#     Person.axis_count · Person.beliefs · Person.coherence · Person.convictions
+#     Person.scar · Person.stance
+#
+#   NINE after #358 rev.2's two schema changes land: `Person.beliefs` is DELETED (§D.1.1 -- a
+#   belief is a `commit` to an OUGHT, not a field) and `Tenure.payload` is REPLACED by `term?`
+#   (§B.8). Both figures are true of their own basis; a session citing either must say which.
+#
+#   Date.fired is now fixed in place (below) -- it was a data error, not a hole.
+#
+# ⚠ THE SIX `Person` ROWS ARE THE FINDING, AND THEY ARE ONE HOLE, NOT SIX.
+# NO VERB IN THE 32-ROW TABLE WRITES ANY `Person` INTERIOR FIELD. That is tier-0 `H-62`, and it
+# means every interior consequence is inert: convictions cannot move, so `choose` scores against a
+# constant and `standing` has nothing to diverge from. #358 rev.2 §C.4 supplies the SHAPE of the
+# answer -- an interior write is a CONSEQUENCE OF AN OUTCOME, which is what the new `Degree`-keyed
+# `writes` column declares. The verbs are still unwritten; what changed is that there is now a
+# column to write them in.
+#
+# ⚠ AND THE HEADER'S OWN RETIREMENT RULE IS NOT APPLIED TO ITSELF. This file retires rows with no
+# producing verb; eleven such rows are live. The discrepancy is tracked (H-41, H-50, H-62) and the
+# rule as stated is false of its own table -- recorded, per §0.1 pt 3, rather than quietly widened.
+# =============================================================================================
+
 rows:
   - kind:    "Act[]"
     field:   "returned"
@@ -62,8 +99,13 @@ rows:
     emits:   "`date.scheduled`"
   - kind:    "Date"
     field:   "fired"
-    steps:   [CAL, RES]
-    class:   "CALENDAR/ACTS"
+    # ⚠ `RES` DROPPED 2026-09-03 (#358 rev.2 invariant 2). This row's own provenance says
+    # "§24 has NO ACTOR" -- a date fires because the calendar reaches it, which is CAL. The `RES`
+    # made it an ACTS-class row, so invariant 2 demanded a producing VERB for a thing no person
+    # does, and no verb has ever written it. This is a data error, not a hole: the column
+    # contradicted the `by:` cell on its own line.
+    steps:   [CAL]
+    class:   "CALENDAR"
     social:  "false"
     by:      "DR-3 · §24 has no actor"
     emits:   "`date.fired`"
