@@ -199,13 +199,19 @@ class Fixtures:
         `assumption`), not a value the design states. It is registered rather than literal for the
         same reason `wear` is: *"a wear table that returns 20 for an unregistered site kind does
         not fail — it answers, plausibly and wrongly, forever."*"""
-        table = self._v
-        if "claim_decay_per_season" not in table:
+        # ⚠ ROUTED THROUGH `get()`, AND THE BYPASS WAS LOAD-BEARING ON A GREEN CHECK. This read
+        # `self._v` directly, so `self.reads` was never incremented and `claim_decay_per_season`
+        # was INVISIBLE to R5 and to `W9`'s check 3 -- the two guards whose whole job is "no fill
+        # off the register". Check 3 was green BECAUSE of the bypass: route the read properly and
+        # it fails with `missing == ["claim_decay_per_season"]` unless the fixture is named in a
+        # register row's `site:`. A guard that cannot see the thing it guards is not a weak guard,
+        # it is an absent one (§0.1 point 2). Found by the adversarial pass.
+        if "claim_decay_per_season" not in self._v:
             raise Ungraded(
                 "claim confidence decay is not registered", "S42.2.1",
                 needs="a `claim_decay_per_season` fixture row",
                 law="S42.2.1 -- an unregistered rate must REFUSE, never answer plausibly")
-        return table["claim_decay_per_season"]
+        return self.get("claim_decay_per_season")
 
     def sweep(self, name: str, value: Any) -> "Fixtures":
         f = Fixtures(**self._v)
@@ -1425,6 +1431,15 @@ class Office:
     establishment: list[str] = field(default_factory=list)
     dates: list[str] = field(default_factory=list)
     upkeep: Any = None
+    # ⚠ `H-99`, AND THESE FIELDS EXIST BECAUSE THE FIRST VERSION VALIDATED THEM AND THREW THEM
+    # AWAY. `corpus_run._check_office` called `office_faction(...)` at overlay load and DISCARDED
+    # the return; `Office` had no faction and no body, so nothing downstream could read either.
+    # That is exactly the criterion on which `governance_modes` and `power_bases` were deleted
+    # from `rosters.yaml` in the same session -- an artifact nothing reads -- applied to two
+    # rosters and not to the schema that motivated them. Found by the adversarial pass.
+    body: Optional[str] = None
+    faction: Optional[str] = None
+    body_function: Optional[str] = None
 
     def __post_init__(self):
         # The remit is a fixture choice; its MEMBERS are not. A typo here would mint a remit act
@@ -1435,6 +1450,42 @@ class Office:
             raise Unowned(f"office {self.id!r} claims remit acts not on the roster: {bad}",
                           "S11", needs="an act from rosters.yaml: remit_acts",
                           law="#353 §11 -- the remit acts are a CLOSED set")
+        # The three canon axes, resolved ONCE, at construction, on the object the world holds.
+        # `office_faction` refuses an unknown body, an unknown faction, a body/faction mismatch
+        # and an office that belongs to nothing.
+        # ⚠ REQUIRED ON EVERY OFFICE, AND THE ARGUMENT FOR MAKING IT OPTIONAL WAS WRONG. Rev 1
+        # made it optional on the reasoning that requiring it "would break every test fixture and
+        # import canon into the substrate". Both halves fail on inspection. There are FOUR Office
+        # construction sites in the whole chain, not "every fixture"; and `shape.py` already reads
+        # the canon factions from `rosters.yaml` at import, so the substrate knew about them
+        # either way. Jordan, 2026-09-02, put the real question: *"Why would requiring a faction on
+        # every office break canon? Wouldn't it just imply that we don't have enough factions?"*
+        #
+        # ⚠ THAT IS §42.2's POLARITY RULE, AND IT CUTS THE RIGHT WAY. Optional turns an office
+        # nobody can place into a silent `None`; required turns it into a REFUSAL that names the
+        # gap -- either the roster is missing a faction, or the office is mis-conceived, and both
+        # are findings worth having. An office belongs to something or we do not know what it is.
+        self.faction = office_faction(self.body, self.faction)
+        if self.body is not None:
+            self.body_function = BODY_FUNCTION[self.body]
+        # ⚠ A TITLE IS NOT AN OFFICE, AND CONFLATING THEM PUT A KING IN THE CHURCH. `titles`
+        # carries the governance ladder Jordan ruled (`title_domain`, read by `_req_revoke`), so a
+        # `post` that names a TITLE is a seat on that ladder and cannot also be an organ of a
+        # faction. The overlay `{post: "King", body: "Cardinal of Justice"}` was ACCEPTED before
+        # this check and produced a realm title whose Church affiliation existed nowhere in canon.
+        if self.body is not None and title_domain(self.post) is not None:
+            raise Forbidden(
+                f"office {self.id!r} names the TITLE {self.post!r} and the body {self.body!r}",
+                "rosters.yaml -- titles vs office_bodies",
+                needs="a title is held at a rung on the governance ladder, not seated in an organ",
+                law="Jordan 2026-09-02 -- the title ladder turns on holdings and purview; an "
+                    "office belongs to a faction's body. A post is one or the other, never both")
+        # A titled post must sit at the rung its title governs. Otherwise a Duke seated at the
+        # realm has realm-wide purview (`under_purview` walks up to the SEAT), which is the
+        # governance canon inverted by a data-entry slip.
+        dom = title_domain(self.post)
+        if dom is not None and self.scope_rung is None and self.rung is not None:
+            self.scope_rung = self.rung
 
 
 
@@ -1574,7 +1625,41 @@ class World:
 
     def add_tenure(self, t: Tenure) -> Tenure:
         """The ONE writer. Routes to `t.subject`'s own list, or to `_unowned` when the subject is
-        not a person (`contain : Rung -> Rung` is most of those)."""
+        not a person (`contain : Rung -> Rung` is most of those).
+
+        ⚠ IT NOW VALIDATES, AND REV 1 VALIDATED NOTHING -- so `rung_kinds` was a MEMBERSHIP SET
+        WEARING THE NAME OF A HIERARCHY. Jordan, 2026-09-02: *settlements are nested inside
+        territories inside provinces inside duchies inside realm? I think that is required too, or
+        is that unnecessary to nest these and instead just explicitly define scale?* The nesting is
+        required and it is the thing `under_purview` WALKS -- a scale label cannot be walked, so
+        the two are not interchangeable. But no `contain` edge was direction-checked, so a
+        settlement containing a duchy was accepted, and `probes` builds an outright cycle.
+        Measured: `corpus_run.build_at` gives 37 person-scale cases a `person`-kind rung containing
+        three person rungs, and nothing refused.
+
+        ⚠ AND `Tenure.kind` WAS UNCHECKED, which made `TENURE_KINDS` a write-only roster.
+        `Tenure(..., "holds", ...)` -- the plural typo -- was accepted, and `_eligible` tests
+        `t.kind == "hold"`, so the office would be silently unheld by everybody. That is the same
+        failure shape `Office.__post_init__` already refuses for remit acts (§8: one rule, applied
+        at every constructor rather than at one)."""
+        if t.kind not in TENURE_KINDS:
+            raise Unowned(
+                f"tenure {t.id!r} has kind {t.kind!r}, which is not on the roster",
+                "S15", needs=f"a kind from rosters.yaml: tenure_kinds {sorted(TENURE_KINDS)}",
+                law="#353 §15 -- the seven Tenure kinds are a CLOSED set. An unrostered kind is "
+                    "not an error at write time and a silent never-match at read time")
+        if t.kind == "contain":
+            sub, obj = self.rungs.get(t.subject), self.rungs.get(t.object)
+            if sub is not None and obj is not None:
+                order = list(RUNG_KINDS)
+                if order.index(obj.kind) <= order.index(sub.kind):
+                    raise Forbidden(
+                        f"`contain` from {sub.kind} {t.subject!r} to {obj.kind} {t.object!r} does "
+                        f"not go up the ladder", "S10",
+                        needs="a parent strictly above the child on `rung_kinds`",
+                        law="#353 §10 -- `contain : Rung -> Rung` is the containment LADDER. An "
+                            "edge that does not ascend makes `under_purview` walk sideways or "
+                            "loop, and Jordan's governance canon reads purview off that walk")
         (self.persons[t.subject].tenures if t.subject in self.persons else self._unowned).append(t)
         return t
 
@@ -2399,8 +2484,26 @@ def questions_for(w: World, p: Person) -> list[Question]:
 
     # Q3 -- a Sensation band change: `subsistence` crossing a floor since last season. The
     # crossing is D22's emission, read person-side; the loop records them on `w.crossings`.
+    # ⚠ REV 1 COMPARED A SITE ID TO A PERSON ID, SO Q3 COULD NEVER FIRE. `matter()` appends
+    # `(s.id, verb, before, after, ev.id)` where `s` is a SITE, and this read `if who == p.id`.
+    # A site id never equals a person id, so `band_crossed` produced ZERO Questions in every run
+    # while `rosters.yaml` declared four sources and three were live. The falsifier did not catch
+    # it because the test hand-planted a PERSON-keyed 3-tuple that `matter()` never emits -- it
+    # asserted the reader against a shape the writer does not produce, which is a test of itself.
+    # Found by the adversarial pass.
+    #
+    # ⚠ THE FIX IS PRESENCE, NOT A RENAME, and it is the reading §F1 Q3 actually asks for: a
+    # crossing is a fact about a PLACE, and it becomes a person's question when that person is
+    # THERE to notice it. `Query.presence` is the existing owner of "who is at this rung" (§8), so
+    # nothing new is invented here. A person elsewhere gets no question, which is L2 working.
+    #
+    # ⚠ AND THIS IS WHY `F1`'s MOVE BUG MATTERED BEYOND MOVE: while every actor left the world in
+    # season 1, `presence` was empty for every rung, so this source would have stayed dead even
+    # once keyed correctly. The two defects hid each other.
     for who, what, *_rest in w.crossings:
-        if who == p.id:
+        site = w.sites.get(who)
+        at = getattr(site, "rung", None) if site is not None else None
+        if who == p.id or (at is not None and p.id in Query.presence(w, at)):
             out.append(Question(f"q:band:{what}", "band_crossed", (what,), what))
 
     # Q4 -- `need`. A live `commit` Tenure whose object is an OUGHT Proposition is a STANDING
@@ -3180,15 +3283,37 @@ def _req_tell(w: "World", a: "Act") -> bool:
 
 @requires_predicate("move")
 def _req_move(w: "World", a: "Act") -> bool:
-    """§E3: *a `contain` path exists*. #353 §15 types `contain : Rung -> Rung` with ONE parent, so
-    a path exists when the mover's own rung is on the containment ladder. The DESTINATION is the
-    act's payload where it names one; where it does not, the ladder's existence is what the fold
-    can check without inventing a route."""
+    """§E3: *a `contain` path exists* -- BETWEEN THE MOVER'S RUNG AND A NAMED DESTINATION.
+
+    ⚠ REV 1 HAD NO DESTINATION TERM AND THE OMISSION EVACUATED EVERY WORLD IN THE CORPUS. It read
+    the ladder's existence as the whole precondition and ended `or here.kind == "person"`, which is
+    true of every person, so the predicate COULD NOT REFUSE ANYBODY. `_eff_move` then closed every
+    live `contain` and, with no `to`, opened none. Measured on `NPC-088` at seed 0: live `contain`
+    edges 10 -> 7 in season 1, `Query.presence` empty for every rung from then on, and
+    `travel.moved` emitted three more times in each of seasons 2 and 3 -- a published success for a
+    state change that did not happen. That is the fabricated-success class already registered for
+    `work` (`test_w8_work_emits_a_success_while_repairing_nothing`) and for `kill`, and `move` was
+    the third instance with no guard.
+
+    ⚠ THE DESTINATION IS NOT AVAILABLE, AND THAT IS `H-94` ARRIVING IN A SECOND VERB. A computed
+    Candidate carries `(verb, subject, why)` and `pack_scenes` puts only `subject` on the payload;
+    `subject` comes from the QUESTION's referents -- a claim's subject or a Proposition -- never a
+    rung. So there is no route from the person's decision to a destination, and inventing one
+    (moving "to" the claim's subject) would put a second resolver in the predicate. `move`
+    therefore REFUSES for want of an operand exactly as `transfer` does, which is the honest
+    reading and drops the executed-verb count from 6 to 5. The old 6 counted a verb that never
+    moved anybody."""
     here = w.rungs.get(a.actor)
     if here is None:
         return False
-    return any(t.subject == a.actor or t.subject == here.id
-               for t in w.tenures if t.kind == "contain") or here.kind == "person"
+    dest = (a.payload or {}).get("to") if isinstance(a.payload, dict) else None
+    if not dest or dest not in w.rungs:
+        return False
+    if dest == a.actor:
+        return False
+    on_ladder = any(t.subject == a.actor or t.subject == here.id
+                    for t in w.tenures if t.kind == "contain" and t.until is None)
+    return on_ladder or here.kind == "person"
 
 
 @requires_predicate("work")
@@ -3353,12 +3478,36 @@ def _eff_move(w: "World", a: "Act") -> None:
     what a `move` DOES is stated here rather than in the table — one implementation owned by the
     resolver, which is the distinction §27.2 draws against a caller-supplied lambda."""
     dest = (a.payload or {}).get("to") if isinstance(a.payload, dict) else None
+    if not dest:
+        # ⚠ UNREACHABLE VIA THE FOLD, AND ASSERTED RATHER THAN TOLERATED. `_req_move` now refuses a
+        # destination-less move, so arriving here means the predicate was bypassed. Rev 1 fell
+        # through, closed every live leg and STILL returned `[a.actor]`, so `_fold` saw a non-empty
+        # `changed` and published `travel.moved` for a move that did not happen. Returning `[]`
+        # would be quieter and just as wrong: the caller would report a no-op as a legitimate
+        # nothing. §42.2's polarity rule -- no destination is a refusal, never a silent success.
+        # ⚠ `InstrumentDefect` IS A PLAIN Exception AND TAKES NO KEYWORDS -- unlike every
+        # `ShapeGap`. The first version of this guard passed `needs=`/`law=` and would have raised
+        # `TypeError: InstrumentDefect() takes no keyword arguments` if it ever fired: a guard
+        # that crashes instead of reporting. It never fired because `_req_move` refuses first,
+        # which is exactly why it went unnoticed -- found by MUTATING the predicate back to its
+        # broken form and watching the guard fail differently than it claims to.
+        raise InstrumentDefect(
+            "a `move` with no destination reached the effect: `_req_move` refuses these, so an "
+            "effect running without its predicate is a call-site bug. D22 -- an emission asserts "
+            "a state change, and a `move` with no `to` changes nothing")
     for t in w.tenures:
         if t.subject == a.actor and t.kind == "contain" and t.until is None:
             t.until = w.tick
-    if dest:
-        w.add_tenure(Tenure(H(w.world_seed, w.tick, a.actor, f"leg:{a.id}"),
-                                a.actor, dest, "contain", since=w.tick))
+    w.add_tenure(Tenure(H(w.world_seed, w.tick, a.actor, f"leg:{a.id}"),
+                        a.actor, dest, "contain", since=w.tick))
+    # ⚠ THE DECLARED WRITE, NOW ACTUALLY WRITTEN. `verb_table.yaml`'s `move` row names
+    # `(Person, travel_leg)` as its FIRST write and rev 1 never touched the field, so
+    # `Query.budget`'s distance penalty read `len(p.travel_leg)` == 0 in every run and the only
+    # test of it set the field by hand. A declared write that no effect performs is a lie the
+    # write matrix cannot catch, because the matrix gates writes that HAPPEN.
+    mover = w.persons.get(a.actor)
+    if mover is not None:
+        mover.travel_leg = list(mover.travel_leg) + [dest]
     return [a.actor]
 
 
@@ -4143,12 +4292,48 @@ class SeasonDriver:
                 # PERMANENTLY FALSE and every contest was called with [ROOT]. Retraction 4
                 # replaced rev 1's fabricated cause with an unreachable branch rather than with
                 # the rule. The act id is named directly.
+                # ⚠ THE TARGET IS THE SECOND CLAIMANT, AND REV 1 NEVER PASSED IT, SO THE SEAM
+                # JORDAN RULED FOR COULD NOT BE REACHED FROM THE FOLD AT ALL. `claimants=[a.actor]`
+                # is one-claimant by construction; `combat_seam.resolve` refuses a party of one
+                # (correctly -- a fight needs two), so every `kill / wound` driven through
+                # `resolve()` raised `Unspecified: personal combat needs two parties; got 1`.
+                # The only test of the seam called `contest()` DIRECTLY with two claimants, so
+                # nothing observed the gap: the seam worked and the road to it did not.
+                # Reproduce the old failure by deleting `_target`:
+                #   d.resolve([Act("k","p_low","kill / wound",payload={"subject":"p_mid"})], 2)
+                _target = (a.payload or {}).get("subject") if isinstance(a.payload, dict) else None
+                _parties = [a.actor] + ([_target] if _target and _target != a.actor else [])
                 r = contest(w, rung=(a.payload if isinstance(a.payload, str) else None) or "R",
                             prize=_contests[0],
-                            claimants=[a.actor], depth=0, max_depth=contest_max_depth,
+                            claimants=_parties, depth=0, max_depth=contest_max_depth,
                             causes=[a.id])
                 if isinstance(r, ContestError):
                     TRACE.note(f"contest returned {r}", "S39.3")
+                elif isinstance(r, dict):
+                    # ⚠ THE SEAM RETURNS A SUBSYSTEM RESULT, NOT EVENTS, AND REV 1 EXTENDED THE
+                    # EVENT LIST WITH ITS KEYS. `out.extend(r)` over a dict yields the STRINGS
+                    # 'status', 'module', 'winner', ... so `resolve()` handed nine strings back to
+                    # `season()` as if they were Events. Invisible until now only because the road
+                    # to the seam was closed (the one-claimant bug above): the first act to reach
+                    # the seam is the first act to hit this.
+                    #
+                    # ⚠ WHAT THE FOLD MAY WRITE HERE IS `H-98`, AND IT IS OPEN. The verb row
+                    # declares `emits: [person.died]` and `writes: [Person.body, Person.exists,
+                    # Tenure.until]`; the subsystem returns a WINNER and a legitimate UNDECIDED
+                    # case. Turning "p_low won" into "p_mid died" is the mapping H-98 says nobody
+                    # has made -- and S27.2 calls inventing it the second resolver. So the fold
+                    # records THAT THE CONTEST RAN and who prevailed, with `changes=[]`: no state
+                    # moves, no degree is minted, and `person.died` stays unemitted, which is the
+                    # honest report that the outcome model is missing rather than empty.
+                    _win = r.get("winner")
+                    out.append(Event(
+                        H(w.world_seed, w.tick, a.actor, f"contest:{_contests[0]}:{a.id}"),
+                        "contest.resolved", a.actor, [], [a.id], w.tick))
+                    TRACE.decision(
+                        f"contest for {_contests[0]!r} resolved; winner={_win!r}", "S39/H-98",
+                        chose="record that it ran; write nothing",
+                        alternatives=["map winner -> person.died (H-98: the missing model)",
+                                      "raise (E2: failure emits, never raises)"])
                 else:
                     out.extend(r)
                 continue

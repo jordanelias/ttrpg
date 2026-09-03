@@ -446,7 +446,15 @@ rows:
     owner:     "Claim; the log"
     grade:     "assumption"
     default:   "`claim_decay_per_season = 5`, confidence lost per season by a claim nobody refreshed"
-    site:      "Fixtures.claim_decay -- read at MATTER for every claim in every ledger; RAISES when unregistered, on `wear`'s precedent"
+    site: >-
+      `Fixtures.claim_decay` reading the `claim_decay_per_season` fixture at MATTER, for every
+      claim in every ledger; RAISES when unregistered, on `wear`'s precedent.
+      ⚠ THE FIXTURE NAME IS SPELLED OUT HERE BECAUSE `R5` AND `W9`'s CHECK 3 RESOLVE A READ BY
+      LOOKING FOR ITS NAME IN THIS COLUMN. It was absent, and so was the read: the accessor went
+      straight to `self._v` and never incremented `Fixtures.reads`, so the fixture was invisible
+      to both guards and check 3 was GREEN BECAUSE OF THE BYPASS. Routing the read through
+      `get()` turned it red with `missing == ['claim_decay_per_season']`, which is the guard
+      finally observing the thing it guards (§0.1 point 2).
     sweep:     [0, 5, 20]
     unblocks:  "the third licensed clock, and every arc that walks back through a claim"
     cite:      "CLOSED IN TWO HALVES BY W2 AND W4, by CLAUDE.md 0's five tests. The SCHEMA_ROW half is SUPERSEDED: W2 gave Part D a `(Claim, confidence)` row, MATTER-only, emitting `claim.decayed`, so the row this hole says is missing exists. The FORMULA half is answered by PRECEDENT (test 4): `Site.condition` wear is the other licensed MATTER clock and #353 gives IT no rate either -- it is a registered per-kind fixture that RAISES when unregistered (S42.2.1: `a wear table that returns 20 for an unregistered site kind does not fail, it answers plausibly and wrongly forever`). `H-09` treats `Claim.confidence`'s DEFAULT the same way, one field over. So this takes the same shape: an INJECTED DEFAULT with a site and a three-point sweep, not a `ruled` value the design states. Grading it `ruled` would credit an invented number to #353; leaving it `absent` after building the clock would deny a mechanism that now runs. W4 executes it and the run is the artifact."
@@ -1253,6 +1261,71 @@ rows:
       precedence ruling; the six bases are a vocabulary a design call could adopt, not a decision
       the research makes.
     source: research/ -- Jordan-directed 2026-09-02
+  - id: H-101
+    tier: 0
+    hole: >-
+      NOTHING CAN BE UNDER ANYTHING, AT EITHER INSTITUTIONAL SCALE. `factions` is a flat set of
+      eight names and `Office` has no superior, so the Löwenritter and the Crown are siblings and a
+      Cardinal and the Confessor are peers. Canon says both are ladders whose subordination is a
+      MUTABLE, CONTESTED TRACK — and ships the detachment of each as a named event. Nothing here
+      can express "under", so nothing can express ceasing to be under, which is the thing the
+      events are about
+    kind: ABSENT_RULE
+    owner: the `factions` roster and `Office` -- ONE relation, asked at two scales
+    grade: absent
+    default: ''
+    site: ''
+    sweep: []
+    unblocks: >-
+      whose purview reaches whom, which is Jordan's governance canon one level up; the Ehrenwall
+      Split and the Jarnstal Drift, both named canon events; and the 14 corpus cases that name a
+      superior, a subordinate or a ladder
+    cite: >-
+      JORDAN ASKED IT AT THE FACTION SCALE, 2026-09-02 — *do our factions have the ability to be
+      under larger factions? eg Lowenritter is a faction that is technically under control of
+      King* — then extended it: *same applies to nesting offices*. Canon answers yes to both, in
+      its own tables, and the two answers have the SAME SHAPE, which is why this is one row and
+      not two: building two mechanisms for one relation is the §8 violation.
+      ⚠ FACTIONS — the decisive evidence is an attribution canon makes against itself.
+      systems/world/worldbuilding_v30.md §4.1 lists the Riskbreakers as a LÖWENRITTER arm, while
+      §10's card catalogue files Riskbreaker Exposure under the faction *Crown* and §4.3 gives its
+      effect as
+      "Crown Domain Actions against non-Crown factions +1 Ob".
+      A Löwenritter arm's exposure damages the CROWN. The same catalogue files Ehrenwall Split and
+      Lions' Table Mutiny under *Löwenritter*. Canon holds both relations at once, deliberately.
+      ⚠ OFFICES — §6.1 gives Court Parliament the function
+      "Recommends policies, nominates Ministers/Rectorates/Magistrates."
+      which is a nomination chain; §3.1's four Cardinals are arms of the Holy See; and 14 corpus
+      cases name a superior or a subordinate outright, among them NPC-038's *Confessor Arne
+      Himlensendt (nominal superior)* with *the rest of the Inquisitor ladder (subordinates)*, and
+      NPC-021's *four subordinate arm-leaders (military, judicial, economic, scholarly)*.
+      ⚠ BOTH ARE TRACKS, NOT FACTS, WHICH IS WHY A STATIC PARENT FIELD WOULD BE WRONG AT EITHER
+      SCALE. At the faction scale §10 fires the Split when the
+      "Löwenritter Autonomy track reaches Split"
+      — graduated autonomy explicitly replacing a binary Coup Counter, which §4.3 records as the
+      reason for the card's rename. At the office scale §3.2's Cardinal Independence Check is the
+      same thing one level down —
+      "Cardinal acts against explicit Holy See instruction: relevant pool vs Ob 3"
+      — and Jarnstal Drift ends
+      "At 3: Church Military controlled by Jarnstal, not the Confessor".
+      Encoding a static parent on a roster row or an `Office.reports_to` string would freeze the
+      pre-detachment state as permanent and make canon's own events unrepresentable — the same
+      class of error as the corpus declaring `scale: faction` against a closed vocabulary (H-95).
+      ⚠ THE TWO CANON MECHANISMS ARE BOTH ABOUT SUBORDINATION FAILING, which is the strongest
+      signal that this relation is game rather than bookkeeping: what a player watches is a
+      subordinate becoming autonomous, at whichever scale it happens.
+      ⚠ NOT SOLVED BY `contain`. `rung_kinds` is the containment ladder and a faction is not a
+      rung — a RULING (ARCHITECTURE_V2.md:93, H-21, H-95), not an omission. An institutional
+      relation needs its own carrier, and the candidates are `tenure_kinds` members already
+      rostered (`oblige`, `tie`) rather than a ninth rung or a second ladder.
+      ⚠ TIER 0 BECAUSE IT REACHES THE GOVERNANCE CANON. Jordan ruled that revoking an office turns
+      on PURVIEW, and `under_purview` walks the RUNG ladder only. If the Löwenritter is under the
+      Crown, a Crown office-holder's purview reaches a Löwenritter seat; after a Split it does not.
+      If a Cardinal is under the Confessor, the Confessor's purview reaches that seat; after
+      Jarnstal Drift 3 it does not. Today `office.faction` answers Löwenritter and nothing can ask
+      what that is under, so the purview test cannot tell the two states of either event apart.
+    source: Jordan 2026-09-02 -- "the ability to be under", extended to offices
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

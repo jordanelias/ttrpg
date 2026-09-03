@@ -1840,7 +1840,30 @@ def test_w5_q_has_a_producer_across_all_four_sources():
             p.ledger.append(S.Claim("c_t", p.id, p.id, "office", "duke", 0,
                                     "told_by", 100, "own"))
         elif src == "band_crossed":
-            w.crossings.append((p.id, "subsistence", 0))
+            # ⚠ REV 1 PLANTED A TUPLE THE WRITER NEVER PRODUCES, AND SO TESTED ITSELF. It wrote
+            # `w.crossings.append((p.id, "subsistence", 0))` -- a PERSON-keyed 3-tuple. `matter()`
+            # appends `(site_id, verb, before, after, event_id)`, a SITE-keyed 5-tuple, and the
+            # reader compared element 0 to `p.id`, so Q3 produced ZERO questions in every real run
+            # while this assertion stayed green. The test and the reader shared a wrong shape, the
+            # same off-by-one failure the `claim_landed` arm above already records.
+            #
+            # ⚠ NOW DRIVEN THROUGH THE REAL WRITER. A site at the person's own rung is worn past a
+            # floor by `matter()`, so the tuple under test is the one the loop actually emits, and
+            # the question forms because the person is PRESENT to notice it.
+            here = next((t.object for t in w.tenures
+                         if t.subject == p.id and t.kind == "contain" and t.until is None), None)
+            assert here is not None, "the fixture person is contained nowhere; Q3 needs a place"
+            # The site kind and its floors are read from the fixture, never typed here -- the
+            # floors are per-KIND (`band_floors: {harbour: ..., seam: ..., body: ...}`), so a kind
+            # this table does not carry has no floor to cross and the arm would be vacuous again.
+            floors_by_kind = w.fixtures.get("band_floors")
+            kind = next(k for k in floors_by_kind if k != "body")
+            top = max(floors_by_kind[kind].values())
+            w.sites["s_q3"] = S.Site("s_q3", here, kind, top + 5, [])
+            S.SeasonDriver(w).matter()
+            assert w.crossings, "the fixture no longer crosses a floor -- Q3 has nothing to read"
+            assert w.crossings[0][0] in w.sites, (
+                "a crossing is keyed on something that is not a site; the writer changed shape")
         elif src == "need":
             pr = S.Proposition("pr_t", "OUGHT", "rec_writ", "it should stand", True, 0)
             w.propositions[pr.id] = pr
@@ -3011,14 +3034,18 @@ def test_the_governance_slice_executes_and_a_binding_decision_reaches_a_rung():
           f"{len(S.resolvable_verbs())} of {len(S.VERB_TABLE)} verbs now execute")
 
 
-def _seat(w, person, office_id, post, rung, remit=("issue", "revoke"), first=False):
+def _seat(w, person, office_id, post, rung, remit=("issue", "revoke"), first=False,
+          faction: str = "Crown"):
     """Seat `person` on a new office. ONE OWNER for the fixture, because every governance test
     needs one and the governance-canon pass found the suite had built exactly TWO offices in the
     entire instrument — so the worlds it asserted about were not the worlds the ruling is about.
 
     `first=True` inserts the tenure at the head of `w.tenures`, which is how the insertion-order
     dependence in the old `under_purview` is made observable rather than argued about."""
-    w.offices[office_id] = S.Office(office_id, post, rung, list(remit))
+    # `faction` defaults to Crown here because the governance fixtures model the REALM ladder
+    # Jordan ruled on (king / duke / clerk), which is the Crown's. A test that needs a different
+    # belonging passes one; `Office` refuses anything off the roster either way (`H-99`).
+    w.offices[office_id] = S.Office(office_id, post, rung, list(remit), faction=faction)
     ten = S.Tenure(f"t_{office_id}_{person}", person, office_id, "hold", 0)
     w.add_tenure(ten)
     if first:
@@ -4243,10 +4270,26 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     assert ever <= foldable_all, (
         f"{sorted(ever - foldable_all)} executed while the fold cannot execute them — the "
         "attribution has gone back to matching on emission kind, which two pairs of verbs share")
-    assert ever == {"create_record", "move", "speak", "tell", "utter", "work"}, (
+    # ⚠ 5, NOT 6, AND THE NUMBER WENT DOWN BECAUSE THE OLD ONE WAS WRONG (§0.1 point 4 -- a
+    # number without a control is not a measurement in EITHER direction). `move` was counted as
+    # executing in every world; the adversarial pass showed `_req_move` could not refuse anybody
+    # (it ended `or here.kind == "person"`, true of every person) and `_eff_move` closed every live
+    # `contain` while opening none, then returned `[a.actor]` regardless -- so `travel.moved` was
+    # published for a state change that did not happen. Measured on NPC-088 at seed 0: live
+    # `contain` edges 10 -> 7 in season 1, `Query.presence` empty for every rung thereafter, and
+    # three more fabricated `travel.moved` in each of seasons 2 and 3. `move` has no destination to
+    # move to -- that is `H-94` in a second verb -- so it now refuses alongside `transfer`, and the
+    # honest count is 5.
+    assert ever == {"create_record", "speak", "tell", "utter", "work"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
-    assert refused_only == {"transfer"}, (
+    # ⚠ `move` JOINED `transfer` HERE, AND IT IS THE SAME HOLE. Both are refused for want of an
+    # OPERAND the Candidate cannot carry: `transfer` has no `kind`/`amount`, `move` has no `to`.
+    # `Candidate := (verb, subject, why)` and a candidate's `subject` comes from the QUESTION's
+    # referents -- a claim's subject or a Proposition -- never a destination rung, so there is no
+    # route from the person's decision to a place. `move` used to "execute" by closing every
+    # containment and opening none; see the executed-set note above.
+    assert refused_only == {"move", "transfer"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `transfer` is the STRUCTURAL "
         "half of `H-94`: `Candidate := (verb, subject, why)` has no operand field, so "
         "`stores(hearth(giver), kind) >= amount` has no `kind` and no `amount` to read. `tell` "

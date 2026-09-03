@@ -124,13 +124,24 @@ def _check_office(where: str, off) -> None:
         raise SystemExit(f"{where}: an `office:` block with no `post:`")
     if not off.get("why"):
         raise SystemExit(f"{where}: an `office:` with no `why:` — same rule as `scale:`")
+    if not off.get("body") and not off.get("faction"):
+        # ⚠ REQUIRED AT THE OVERLAY, WHERE THE RULING APPLIES. `Office` leaves belonging optional
+        # because a test fixture is not a canon office; a corpus overlay that names neither a
+        # `body` nor a `faction` has simply not answered Jordan's question, and §42.2's polarity
+        # rule makes no evidence a refusal rather than a default.
+        raise SystemExit(f"{where}: an `office:` names neither a `body` nor a `faction`")
+    # ⚠ THE VALIDATOR IS THE CONSTRUCTOR, NOT A SECOND COPY OF ITS RULES (§8). Rev 1 re-checked
+    # the faction and the remit here by hand, and drifted immediately: `Office.__post_init__`
+    # refuses a post that is both a TITLE and a body, and this loader did not, so
+    # `{post: "King", body: "Cardinal of Justice"}` passed the overlay gate and was refused only
+    # later at world-build. Building a throwaway Office means every rule the class enforces --
+    # present and future -- applies at LOAD, before any world exists.
     try:
-        S.office_faction(off.get("body"), off.get("faction"))
-    except (S.Unspecified, S.Forbidden) as e:
+        S.Office("probe:" + where, str(off["post"]), None,
+                 list(off.get("remit") or []),
+                 body=off.get("body"), faction=off.get("faction"))
+    except (S.Unspecified, S.Forbidden, S.Unowned) as e:
         raise SystemExit(f"{where}: {e}") from None
-    for act in (off.get("remit") or []):
-        if act not in S.REMIT_ACTS:
-            raise SystemExit(f"{where}: remit act {act!r} is not in `remit_acts`")
 
 
 RESCALES = rescales()
@@ -170,6 +181,13 @@ def build_at(case: dict, seed: int = 0) -> S.World:
     w = S.World(seed, S.DEFAULT_FIXTURES)
     order = list(S.RUNG_KINDS)
     chain = order[order.index(scale):] if scale in order else []
+    # ⚠ NO SYNTHETIC `person`-KIND RUNG. Rev 1 minted `r_person` for a `scale: person` case AND
+    # made each of the three people a `person` rung contained in it — a person inside a person.
+    # Nothing refused it, because `add_tenure` validated no direction; `W28`'s ladder check found
+    # it on the first build. `H-95` counts 37 person-scale cases, so 37 worlds had that shape.
+    # The people ARE the bottom rung (`tiny_world` models it that way), so the synthetic one is
+    # not a missing parent, it is a duplicate of the persons themselves.
+    chain = [k for k in chain if k != "person"]
     ids = {k: f"r_{k}" for k in chain}
     for k in chain:
         w.rungs[ids[k]] = S.Rung(ids[k], k)
@@ -185,7 +203,11 @@ def build_at(case: dict, seed: int = 0) -> S.World:
         # ⚠ A PERSON IS THE BOTTOM RUNG OF THE LADDER, and `tiny_world` models it that way. Without
         # this, `_req_move`'s `w.rungs.get(a.actor)` is None and `move` is refused everywhere.
         w.rungs[pid] = S.Rung(pid, "person")
-        w.add_tenure(S.Tenure(f"t_{pid}_in", pid, ids[chain[0]], "contain", 0))
+        # The parent is the deepest NON-person rung, which after the filter above is `chain[0]`.
+        # A case scaled at `person` therefore seats its people in the `hearth` -- the next rung up
+        # -- rather than in a person-shaped container, which is what the ladder actually says.
+        if chain:
+            w.add_tenure(S.Tenure(f"t_{pid}_in", pid, ids[chain[0]], "contain", 0))
         pick = int(S.H(seed, 0, str(case.get("id")), f"axis:{pid}"), 16) % len(axes)
         w.persons[pid].convictions = {axes[pick]: 0.9}
     # ⚠ `W28`: THE CASE MAY SEAT ITS OWN ACTOR ON AN OFFICE. A re-scaled case carries
@@ -202,7 +224,13 @@ def build_at(case: dict, seed: int = 0) -> S.World:
     if isinstance(off, dict) and off.get("post"):
         oid = f"off_{case.get('id', 'x')}"
         w.offices[oid] = S.Office(oid, str(off["post"]), ids[chain[0]],
-                                  [a for a in (off.get("remit") or []) if a in S.REMIT_ACTS])
+                                  # ⚠ NO SILENT FILTER. Rev 1 wrote
+                                  # `[a for a in ... if a in S.REMIT_ACTS]`, dropping an
+                                  # unrecognised remit act on the floor -- a quiet default sitting
+                                  # underneath `Office.__post_init__`'s loud one, which could then
+                                  # never fire. Pass them through and let the constructor refuse.
+                                  list(off.get("remit") or []),
+                                  body=off.get("body"), faction=off.get("faction"))
         w.add_tenure(S.Tenure(f"t_{oid}", "p_a", oid, "hold", 0))
     prop = S.Proposition("prop_x", "OUGHT", ids[chain[0]], "a standing ambition", True, 0)
     w.propositions[prop.id] = prop
