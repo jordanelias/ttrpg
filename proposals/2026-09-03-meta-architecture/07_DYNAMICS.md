@@ -96,8 +96,10 @@ one* — and says why a design made almost entirely of refusals converges: every
 term. **The debt is not closed and its shape has changed**: what is missing is no longer a doctrine
 but a **representation**, and `ID-16` names the blocker rather than papering it — the enumeration is
 a cycle over *what a verb writes* × *what its precondition reads*, and `requires` is prose in all 32
-rows (`F.24`). **So the honest state has two halves.** The **declared** signed list is buildable now — a closed set
-in the register a loader reads, which `G.3.1` ranks first — and it is what `ID-16` owes. The
+rows (`F.24`). **So the honest state has two halves.** The **declared** signed list is buildable now — a `LOOP` row
+kind with a `sign` column in `hole_register.yaml`, the closed-set form `G.3.1` puts first — and it is
+what `ID-16` owes. ⚠ **It is not yet a mechanism**: nothing reads a `sign` column until the derived
+check does, and by `ID-13` a column no resolver consults does not exist. The
 **derived** check that recomputes the cycles from `writes` × typed `requires` and compares them to
 the declared list is blocked until `requires` is typed. **What would be reference rather than
 mechanism is a table of loops written into a markdown file**, which is a narrower thing than *the

@@ -546,11 +546,19 @@ prose**, which is the exact error corrected two sections earlier in this documen
 
 ⚠ **CORRECTED 2026-09-03 — THE FIRST WORDING SAID *UNBUILDABLE*, AND THAT REFUSED A FORM THE DESIGN
 PERMITS.** *Derived* and *declared* are different things, and only the first is blocked. **A signed
-loop list is a closed set**, and `G.3.1` ranks *data a loader validates* **first** precisely because
-*"a contradiction fails the load, with the row named"* — a `LOOP` row kind with a `sign: +|-` column,
-in the register the loader already reads, is a **mechanism** under `§0.05` and not reference. What
-would be reference is a **table of loops in a markdown file**, which is what the first wording was
-actually right to refuse and wrong to generalise from.
+loop list is a closed set**, and `G.3.1` puts *data a loader validates* first among its three forms
+precisely because *"a contradiction fails the load, with the row named"* — so the declared form is a
+`LOOP` row kind with a `sign: +|-` column in `hole_register.yaml`, whose nine existing kinds all name
+an ABSENCE and which carries no sign column at all. What would be reference is a **table of loops in
+a markdown file**, which is what the first wording was right to refuse and wrong to generalise from.
+
+⚠ **AND THE GRADE IS NOT *MECHANISM* YET, WHICH THIS CORRECTION FIRST CLAIMED AND `ID-13` REFUSES
+ONE PAGE UP.** *"A column that no resolver consults is not a weak mechanism — it is a mechanism that
+does not exist."* A `sign` column is consulted by nothing until the derived check reads it, and
+`hole_register.yaml` is **not** loaded by `shape.py` at all — it is read by the tracer's `register.py`
+and `run_cases.py`, by id. **So the honest grade is: data that can be authored today, and reference
+until it has a reader.** The reader is the derived check; the two halves are one deliverable in two
+commits, not one buildable and one blocked.
 
 > **So the honest split is:** the **declared** list is buildable today and is the representation this
 > idiom owes; the **derived** check — recompute the cycle set from `writes` × typed `requires` and
@@ -619,7 +627,7 @@ a schema that lists fields can only grow.
 > **IS** — the one sentence. **OWNS** — what it is the single writer of.
 > **ADMITS** — the test a proposed new field must pass. **NEVER** — what may not be on it, with why.
 
-### §D.0 · The third admission clause — **WHAT KIND OF ASSERTION IS THIS FIELD MAKING?** *(added 2026-09-03)*
+## §D.0 · The third admission clause — **WHAT KIND OF ASSERTION IS THIS FIELD MAKING?** *(added 2026-09-03)*
 
 `ADMITS` as written asks two questions — **who owns this** and **who reads it** — and they are
 independent of a third the entries keep answering ad hoc: **what kind of claim about the world does
@@ -646,36 +654,46 @@ re-derives it, and the entry that does not think to ask admits the field.
 > output is usually a MOVE rather than a refusal: the field is real and it belongs to a different
 > carrier.
 
-**WHY THIS IS A DERIVATION AND NOT AN IMPORT, WHICH IS THE CLAIM THAT HAS TO SURVIVE.** The clause
-is not a new dimension; it is three things this document already says, stated once instead of three
-times:
+**WHAT IS DERIVED HERE AND WHAT IS IMPORTED — STATED HONESTLY, BECAUSE THE FIRST WRITING OF THIS
+PARAGRAPH CLAIMED THREE GROUNDS AND ONLY ONE HOLDS.**
 
-1. **§D.2 asked for it in terms and did not get it.** Of `judging_set_rule` on a `Rung`: *"If it
-   selects **who decides**, it is decision-shaped state on a container, and **either the predicate
-   needs a third term** or the field belongs elsewhere."* **This is that third term** — and the site
-   resolved the other way, to a Query over seats *"which are arrangements of the political layer, not
-   a rule stored on a place"* (Stage 4 `§B.7`), which is the same verdict the clause returns.
-2. **§D.1.1 already carries one of the three kinds as a primitive.** *Read off* is its fifth category
-   — *"what the world reads off a person without asking them"* — with its own admission clause. What
-   is new is asking it of **every** carrier rather than of `Person` alone.
-3. **§E.1.4 is the same distinction one level up**: the sworn edge against the commitment overlap is
-   *declared* against *the case*, at the level of a relation instead of a field.
+1. ✅ **`§D.1.1` already carries one of the three kinds as a primitive.** *Read off* is its fifth
+   category — *"what the world reads off a person without asking them"* — with its own admission
+   clause. **What is new is asking it of every carrier rather than of `Person` alone**, which is a
+   generalisation of this document's own move and is the one ground that survives.
+2. ⚠ **`§D.2`'s *"third term"* was cited and it is a TERM-MATCH, not the same request.** `§D.2` asks
+   for a third disjunct **in `Rung`'s own predicate** — something beside *a choice, a mood, or a
+   reputation* that would exclude decision-shaped state — and it offers *"or the field belongs
+   elsewhere"* as the alternative. **The site took that second branch**: Stage 4 `§B.7` deleted the
+   field and made the judging set a Query over seats, i.e. it moved to **no carrier at all**, where
+   this clause's stated output is a move **to a different carrier**. The clause is adjacent to
+   `§D.2`'s request; it is not the thing `§D.2` asked for, and saying so was a back-fill.
+3. ⚠ **`§E.1.4` was filed as *the case* and that is wrong by this clause's own table.** The
+   commitment overlap is a Query over `commit` edges, and every `commit` is a **declared** thing. The
+   de jure–de facto gap is *declared against declared-in-aggregate*, which by the note above is the
+   signature of a **Query**, not a second assertion kind.
 
-**So the clause makes something unnecessary rather than adding something** — §D.1.1's per-entry
-special case, §D.2's per-entry re-derivation, and the third term §D.2 asked for. ⚠ **`Rung.stake` is
-NOT an instance and was nearly filed as one.** §D.2 and `G.3.2` both record why it got through: its
-entry **lacked the reader clause**, not this one. **A near-miss recorded rather than banked** —
-counting it would have been this clause's own first act of grading something backwards, which is
-exactly the third direction `§G.4.3` adds.
+> ### **SO THE HONEST STATUS: ONE GROUND DERIVED, THE AXIS ITSELF IMPORTED AS A FALSIFIER-SOURCED
+> ### SHARPENING, AND THE CLAUSE STANDS ON ITS HIT RATE RATHER THAN ON A DERIVATION.**
+> `G.4.6` licenses exactly this — prior work *"read between the two, as evidence at its own
+> strength"* — and it is a weaker warrant than `§G.2.9` has, where both forms were already in the
+> architecture. **Recorded as weaker rather than dressed up.** If a later stage finds the axis earns
+> nothing beyond `§D.1.1`'s fifth category, the right move is to delete it, not to defend it.
+
+⚠ **`Rung.stake` is NOT an instance and was nearly filed as one.** §D.2 and `G.3.2` both record why
+it got through: its entry **lacked the reader clause**, not this one. **A near-miss recorded rather
+than banked** — counting it would have been this clause's own first act of grading something
+backwards, which is exactly the third direction `§G.4.3` adds.
 
 ⚠ **Its provenance, and the scope rule.** The dimension came from an independent governance design
 (#359), **admissible as a falsifier and not as a source**, which tags every territorial field
 `dejure | defacto | civic` and holds that an untaggable field is mis-modelled. **Its vocabulary is
 refused** — those three names carry a governance model this design does not have, and `civic` is a
 coinage under `§4`'s word rule. **What is kept is the dimension**, restated in this design's own terms
-as the *declared / actual / taken-to-be* split it already runs on: §E.1.4's de jure–de facto gap is
-the same distinction at the level of a relation, and `standing` is the gap between two of these kinds
-inside one person.
+in **one** set of names — *declared · the case · read off* — used identically wherever the clause is
+cited, because a triple with two vocabularies is `CLAUDE.md` §4's idempotence failure committed in
+the section that invokes it. **`standing` is the gap between two of these kinds inside one person**,
+which is why it is a Query and not a fourth kind.
 
 ---
 
@@ -766,6 +784,15 @@ chain. **A schema claim about what code reads must ship the way to re-run it.**
 > **NEVER.** Any social aggregate — no norms, no unrest, no legitimacy, no reputation, no
 > discipline-as-a-stored-value. **This is the row the whole ownership table exists to protect.**
 
+⚠ **RESOLVED IN THE DESIGN 2026-09-03, AND STILL ABSENT IN THE DATA — the two halves must not be
+confused, and this paragraph asserted only the second.** Stage 4 `§B.7` **deletes `judging_set_rule`
+from `Rung`**: the judging set is *"the seats whose remit covers the matter at that venue — a Query
+over seats, which are arrangements of the political layer, not a rule stored on a place."* Stage 4 is
+later and governs, **so the predicate below is no longer under threat from this field**; what remains
+open is `H-32`/`D11` — nothing in the verb table decides anything at a sitting — which is a producer
+gap, not a schema question. **The original wording is kept below because its reasoning is what
+produced the deletion.**
+
 ⚠ **`judging_set_rule` IS THE LIVE THREAT TO THIS PREDICATE AND IT IS UNSPECIFIED.** If it selects
 *who decides*, it is decision-shaped state on a container, and either the predicate needs a third
 term or the field belongs elsewhere. **Do not cite "arrangements, not choices" as settled until it
@@ -832,9 +859,11 @@ abandon it.
 > `establishment[]`, one section apart, and neither was graded until an outside evaluation read the
 > two stages against each other.**
 >
-> **ADMITS.** *Is it a property of the seat that survives the holder leaving it?* — **and §D.0's third
-> clause is what catches this one:** a roster is not a property of the seat at all, it is a **set of
-> declared edges** each owned by the person who swore it.
+> **ADMITS.** *Is it a property of the seat that survives the holder leaving it?* — **and what
+> catches this one is `T-a` with `ID-2`, not §D.0's third clause:** a roster is a value over many
+> owners, so it cannot be a field at all, and each membership is an edge whose subject already owns
+> it. *(§D.0 does not fire here — a roster of `oblige` edges is declared, and each edge names the act
+> that declared it. Saying otherwise would credit the new clause with a catch the old rules make.)*
 >
 > **NEVER.** **Who holds it.** That is a `hold` Tenure, owned by the holder — because an office that
 > knows its holder has two homes for one fact. **Nor who serves it**, for exactly the same reason —
@@ -1526,7 +1555,7 @@ consequences, slices, season loops.** Stage 2 takes the second, and inherits fou
 | **§E.3: roster membership is not architectural** | a mechanism that is correct only for one particular set of rung kinds |
 | **the admission tests decide real cases** | a field the test admits that should be refused, or refuses that should be admitted. ⚠ `(Person, convictions)` is currently **refused by §D.1 and mandated by the design** — which is `D21`, and is the test working |
 | **PART C closes the defect class** | a new instance of *"reports success for something that did not happen"* that neither `ID-9` nor `ID-10` catches |
-| **`ID-15` — a view may own nothing and still be deployed** | a consumer that genuinely needs a faction to hold state of its own, which no owner elsewhere can carry. ⚠ **RUN 2026-09-03 AGAINST TWO CANDIDATES. NEITHER FIRED, AND THE ROW STAYS OPEN.** The test material is an independent governance design (#359), built from a disjoint corpus and admissible here **as a falsifier only**. **Candidate 1 — faction-scale military capacity.** `force_limit(f) = base + ⌊Σ over held settlements of (Prosperity + FacilityTier) / 4⌋` (`03-design-v2.md:852`): every term of the sum is owned by a settlement, `base` is a fixture owned by nobody, and the domain is `Faction.holdings`, which §D.11 reads off members' `hold` edges. **It is a Query, and a Query was never the shape this falsifier asks for** — so it is a weak test and is recorded as one. ⚠ **Candidate 2 is the real one, and it was nearly missed** — `Polity.Legitimacy 0–7 **STORED at the polity**, written by polity-scale events only: coronation · bull · succession · treaty · excommunication · deposition` (`:493`), adopted after that design argued its way OUT of the distributed form: *"a coronation becomes twelve writes … the same event has a different magnitude for a large faction than a small one, in the wrong direction … **a papal bull is not a fact about a village**"* (`:482-491`). **That is exactly the shape — faction-scale, written and read back across seasons, argued to be uncarriable by any smaller owner.** **It does not fire here, and the reason is a layer #359 does not have:** **an Event does not travel; a Claim does** (Reading 07 §5). A coronation is therefore **one** entry in the log — no magnitude is applied anywhere, so the twelve-writes defect cannot be spelled — and the two halves of *legitimacy* land in two places that already exist: the **de jure** half is a `Proposition` of right with a nameable utterer plus the sworn edges, both stored and both owned; the **de facto** half is the commitment share (Reading 09 §2), a Query owned by nobody and reversible, with §E.1.4 banding the gap between them. **The owners are elsewhere: the log holds the event, each person holds their claim, each swearer owns their edge.** ⚠ **Why the row does not close.** This is a **derivation, not an execution**, which under §0.2 is a hypothesis; and the untested half is durable *right* — whether the Query reproduces a title's standing forty seasons on from Records and ended edges alone, with nothing stored. **§D.2's `NEVER` — no stored legitimacy — is the row under test, and it is now under test by a named case rather than by nothing** |
+| **`ID-15` — a view may own nothing and still be deployed** | a consumer that genuinely needs a faction to hold state of its own, which no owner elsewhere can carry. ⚠ **RUN 2026-09-03 AGAINST TWO CANDIDATES. NEITHER FIRED, AND THE ROW STAYS OPEN.** The test material is an independent governance design (#359), built from a disjoint corpus and admissible here **as a falsifier only**. **Candidate 1 — faction-scale military capacity.** `force_limit(f) = base + ⌊Σ over held settlements of (Prosperity + FacilityTier) / 4⌋` (`03-design-v2.md:852`): every term of the sum is owned by a settlement, `base` is a fixture owned by nobody, and the domain is `Faction.holdings`, which §D.11 reads off members' `hold` edges. **It is a Query, and a Query was never the shape this falsifier asks for** — so it is a weak test and is recorded as one. ⚠ **Candidate 2 is the real one, and it was nearly missed** — `Polity.Legitimacy 0–7 **STORED at the polity**, written by polity-scale events only: coronation · bull · succession · treaty · excommunication · deposition` (`:493`), adopted after that design argued its way OUT of the distributed form: *"a coronation becomes twelve writes … the same event has a different magnitude for a large faction than a small one, in the wrong direction … **a papal bull is not a fact about a village**"* (`:482-491`). **That is exactly the shape — faction-scale, written and read back across seasons, argued to be uncarriable by any smaller owner.** **It does not fire here, and the test is to ask, of each of those six writers, who owns the change in THIS design:** a **coronation** and a **succession** open a `hold` (§D.8) · a **bull** and an **excommunication** are an `issue` — *"a dispensation whose scope enumerates EXECUTORS, not places. IT DOES NOT APPLY. It lands as a compliance contest, per person"* (Reading 09 §3.2), so what is owned is **each executor's response**, and the written record of the sentence is a `Record` (§D.4) held by whoever holds it · a **treaty** is an uttered `Proposition` plus `commit` edges owned by their subjects (§E.1.6) · a **deposition** is `revoke`, exercised through a seat (`T-o`). **Six writers, six owners, none of them the faction** — and the twelve-writes defect cannot be spelled here at all, because *an Event does not travel; a Claim does* (Reading 07 §5), so a coronation is **one** entry in the log and no magnitude is applied anywhere. ⚠ **The de jure / de facto split must be stated the right way round, and the first wording had it inverted.** #359's `Legitimacy` is its **de jure** term — *"do they have the right to rule"* against `PS`'s *"do the people go along with it"* (`:502-503`). Under §E.1.4 the de jure side is **the sworn edge and the uttered Proposition**, both owned and both stored; the commitment share is the **de facto** side and is a separate question (Reading 09 §2 computes it for *risk of revolt*, not for legitimacy). **Both sides have owners elsewhere; neither is a faction field.** ⚠ **Why the row does not close.** This is a **derivation, not an execution**, which under §0.2 is a hypothesis; and the untested half is durable *right* — whether the Query reproduces a title's standing forty seasons on from Records and ended edges alone, with nothing stored. **§D.2's `NEVER` — no stored legitimacy — is the row under test, and it is now under test by a named case rather than by nothing** |
 | **§E.1.6 — war is an uttered declaration, not a flag** | a war whose beginning no person authored, that the design nonetheless needs. If one exists, the pattern is wrong and a flag is right |
 
 ## §F.5 · What this document is not

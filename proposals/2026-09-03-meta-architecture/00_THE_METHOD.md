@@ -48,7 +48,9 @@ where the problem is.**
 > **What kind of assertion is it — DECLARED, THE CASE, or READ OFF?** A declared value whose declaring
 > act cannot be named, a case value that changes with no act and none of the three motions, a read-off
 > value nothing at a venue could perceive: each is **on the wrong carrier**, and the verdict is
-> usually *move it*, not *refuse it*. ⚰ *`judging_set_rule` — which seats decide — sat on a place.*
+> usually *move it*, not *refuse it*. ⚠ **The clause is an import, kept on its hit rate rather than a
+> derivation** — `§D.0` says so of itself. *`judging_set_rule`, which seats decide, sat on a place;
+> that one was caught by `§D.2`'s own NEVER, not by this clause.*
 >
 > **FIRST-CLASS FOR CONSUMERS IS NOT FIRST-CLASS FOR STATE.** ⚰ *Four stages concluded a faction is
 > not an object — right about ownership, wrong about deployment — and left the battle seam, the squad

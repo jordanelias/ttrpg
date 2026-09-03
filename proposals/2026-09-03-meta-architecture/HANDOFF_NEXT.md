@@ -27,7 +27,9 @@ that would show it done.
 
 **Nothing below depends on a ruling except where marked. Items 1–4 are mechanical.**
 
-### 1 · Finish enforcing rev. 2 in `shape.py` — the six that are documented and not implemented
+### 1 · Finish enforcing rev. 2 in `shape.py` — the FIVE that are documented and not implemented
+
+⚠ *(This read SIX and listed `1f`, which is prose in #358 and has nothing for `shape.py` to enforce. Closed and struck 2026-09-03; the five below are the code items.)*
 
 `proposals/2026-09-01-season-loop-tests/tracer/shape.py`
 
@@ -38,7 +40,7 @@ that would show it done.
 | 1c | **the three fabricated Event kinds** — `act.ineligible`, `act.refused`, `contest.resolved` are body literals at `:4107`, `:4124`, `:4167`, `:4331`. Give each a declared column | the derived kind roster covers every kind the fold can emit; no literal remains |
 | 1d | **invariant 4 widened in code** — every failable eligibility alternative needs a refusal kind | `destroy_record` (which declines on both alternatives) emits a declared refusal instead of a literal |
 | 1e | **`ID-14`'s opener/closer map** as a loader function over `verb_table.yaml` | the map is computed; the four open-only kinds fail the load with their names |
-| ~~1f~~ | ✅ **CLOSED (rev. 3) — already done, and this row was stale bookkeeping.** `ID-18`'s list is `PART D` row **30b**, which PART 1 above records as landed in rev. 2. Rev. 3 amends that row to say why the **four open-only relation kinds are NOT on it**: a permanence nobody authored is a defect, not a grant, and the list finds them by the question it forces rather than by containing them. ⚠ **§0.2 — a juncture done in the tree and open on the board is a BOARD defect** | — |
+| ~~1f~~ | ✅ **CLOSED (rev. 3) — already done, and it never belonged under this heading.** `ID-18`'s list is `PART D` row **30b**, which PART 1 records as landed in rev. 2, and rev. 3 amends that row to say why the **four open-only relation kinds are NOT on it**: a permanence nobody authored is a defect, not a grant. ⚠ **The closure ground is NOT §0.2** — `ID-18` and row 30b both say the enumeration is *not a loader invariant* (*"a loader cannot see a language-level guarantee"*), so a prose row is the right home and there is nothing for `shape.py` to enforce. **Citing §0.2 here would be done-on-a-document quoting the section that forbids exactly that** | — |
 
 ### 2 · The five root causes that block #359's actions — ⚠ **this is the real backlog**
 
@@ -63,7 +65,14 @@ The nine collapse to five causes, and four are holes #357 already registers.
 
 ### 4 · Deferred deliberately
 
-- ⚠ **`ID-16` — HALF OF THIS DEFERRAL IS RETRACTED (rev. 3), and the retracted half is the next actionable item.** *Derived* and *declared* are different things. The cycle enumeration over `writes` × typed `requires` is genuinely blocked on `F.24`, since `requires` is prose in all 32 rows. **The DECLARED signed list is not blocked, and it is what the idiom owes.** Its home is `hole_register.yaml`, whose nine `kind` values all name an ABSENCE and which carries **no `sign` column at all** — so the change is a **`LOOP` row kind plus `sign: +|-`**, with `shape.py` loading it. **A data-schema change with a loader behind it is the only form in which this transfer is real** (`§0.05`), and it is **#357 work** — which is why rev. 3 states the representation in #358 and does not fabricate the rows. *Still forbidden: a table of loops in a markdown file. That is reference.*
+- ⚠ **`ID-16` — HALF OF THIS DEFERRAL IS RETRACTED (rev. 3), and the retracted half is the next actionable item.** *Derived* and *declared* are different things. The cycle enumeration over `writes` × typed `requires` is genuinely blocked on `F.24`, since `requires` is prose in all 32 rows. **The DECLARED signed list is not blocked, and it is what the idiom owes.** Its home is `hole_register.yaml`, whose nine `kind` values all name an
+  ABSENCE and which carries **no `sign` column at all** — so the change is a **`LOOP` row kind plus
+  `sign: +|-`**. ⚠ **And the loader does not read that file today**: `shape.py` loads `rosters.yaml`,
+  `verb_table.yaml` and `write_matrix.yaml`; `hole_register.yaml` is read by `register.py` and
+  `run_cases.py`, by id. **So this is two commits, not one** — author the rows, then give the column
+  a reader, because until something consults `sign` it is data and not yet a mechanism (`ID-13`).
+  It is **#357 work**, which is why rev. 3 states the representation in #358 and does not fabricate
+  the rows. *Still forbidden: a table of loops in a markdown file. That is reference.*
 - **`Rung.dates`** still carries `RES` with no producer. Unlike `Date.fired` this may be a real hole rather than a data error; establish which before editing.
 
 ---

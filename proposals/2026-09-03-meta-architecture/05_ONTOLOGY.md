@@ -60,9 +60,10 @@ Owner and reader are two questions; the third is independent of both. **A field 
 DECLARED** (somebody said so, and the saying is the fact), **what IS THE CASE** (true whether or not
 anybody says so), **or what is READ OFF** (others take you to be this). **A field that cannot be
 sorted into one of the three is mis-modelled** — and the usual verdict is not *refused* but *filed on
-the wrong object*: `judging_set_rule` was a declared thing on a place, and moved to a Query over
-seats. The stage is the authority; this line only records that the reading's two clauses are no
-longer the whole test.
+the wrong object*. ⚠ **Stage 1 grades the clause itself as an import kept on its hit rate rather than
+a derivation**, and says which of its three offered grounds survived; read it there before citing it.
+The stage is the authority. This line records only that the reading's two clauses are no longer the
+whole test.
 
 ---
 

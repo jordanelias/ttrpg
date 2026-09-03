@@ -6,9 +6,14 @@
 > ### grading errors caught by the critics who checked the applying.**
 > **`proposals/2026-09-03-v2-against-the-meta-architecture.md` §6A prescribed thirteen edits and
 > applied none of them** — it is an evaluation, and its §6 recommendations were *"proposals, not
-> applied edits."* Rev. 2 had already landed five (`ID-16`/`17`/`18`, `§C.11`, the irreversibility
-> enumeration). **Rev. 3 lands the remaining eight and the one the change list omitted**, and every
-> entry names the file and section it touched:
+> applied edits."* ⚠ **The arithmetic, re-run rather than asserted: rev. 2 had already landed SIX of
+> the thirteen** — `A1` (`ID-16`), `A2` (`§C.11`), `A3` (`ID-17`), `A5` (the irreversibility
+> enumeration, which landed as `PART D` row 30b and not as the prescribed loader invariant), `S2`
+> (`§G.4.3`'s third critic direction) and `S3` (`§G.4.1`'s trace clause). **Rev. 3 lands the other
+> SEVEN** — `A4`, `C1`, `C2`, `C3`, `S1`, `S4`, `S5` — **plus `§6/3`'s permutation falsifier, which
+> §6A's thirteen omitted, plus five defects found in passing and named as such**: `T-o` missing from
+> `§B.8`, `ID-16`'s over-refusal, `§D.6`'s second `establishment` site, three stale counts, and a
+> gap-register table broken since #361's merge. Every entry names the file and section it touched:
 >
 > - **ADDED** — `§D.0`, the third admission clause (*what kind of assertion is this field making?*),
 >   asked of every carrier rather than re-derived per entry · **`§G.2.9`**, *a procedure is required
@@ -24,13 +29,13 @@
 >   today and is what the idiom owes; only the *derived* check waits on `F.24` · three stale counts
 >   (`§B.13`'s invariants, `PART D`'s denominator, the front door's).
 > - **REGRADED** — `§F.4`'s `ID-15` row was marked ✅ *fired and survived* on a candidate that could
->   not fire it, **and the candidate that can was in the same source, in the section this exercise
->   had already quoted for something else.** It is now RUN
+>   not fire it, **and the candidate that can — `Polity.Legitimacy`, stored at the polity — was in
+>   the same document.** It is now RUN
 >   against both, **open**, and the harder one is named. *A weakness recorded as a strength, inside
 >   the falsifier table, is `§G.4.3`'s third direction — and it was caught by the critic, not by the
 >   author.*
 > - **PROPAGATED** — the readings and the front door, which rev. 2 left behind: Reading 05 (three
->   closing routes, not two), Reading 07 (`ID-16` now names what closes the spiral hole), Reading 09
+>   closing routes, not two; and `§D.0`'s clause), Reading 07 (`ID-16` now names what closes the spiral hole), Reading 09
 >   (`§C.11`, and what it does **not** reach), `00_THE_METHOD.md` (the third critic direction, the
 >   admission clause, the count).
 
