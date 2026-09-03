@@ -2,6 +2,8 @@
 
 ## Status: **PROPOSED (2026-09-03). HELD BACK IN FULL.**
 ## ⚠ **This document AMENDS the stages** — it is not only a reading. Jordan-directed, 2026-09-03.
+## ✅ **FOLDED IN 2026-09-03 — this is the RATIONALE, and the stages are now the text.** A reader who
+## wants the current design reads the stages; this page says *why* they say what they do.
 
 > **Jordan, verbatim:** *"factions can't act by themselves, but they should be available as an
 > abstraction for all the people who belong to that faction such that the game code can actually
@@ -104,6 +106,40 @@ present at a rung, resolved once, and every combatant is a `Person`.
 2. **The seam's projection gains a stated roster contract** — sides resolved and frozen at entry,
    explicitly, rather than left implicit.
 3. **War joins subordination as the second instance of the uttered-declaration pattern.**
+
+## §4.1 · ⚠ **WHERE THEY ACTUALLY LANDED — and it was more than three**
+
+**Recorded because a fold that reports its own estimate is not a fold.** Three edits were forecast;
+**nine files moved** — the seven in the table below, plus this page's own status line and the suite
+`README.md` — and two of the extras are the ones worth reading.
+
+| stage | site | what landed |
+|---|---|---|
+| 1 | **§D.11**, §D.10, `T-h`, **`ID-15`**, §E.1.6, §F.2, §F.4 | the `Faction` view · the general rule · war as the second instance |
+| 2 | **§B.1.1**, §E.0 | *not a nesting* ≠ *not a container* · two properties graded ABSENT |
+| 3 | **§E.2.1** | the roster contract |
+| 4 | **§B.6.1**, §B.10–12, **§C.5.1** | the type · `faction_q` · the seam's contract, with its GDScript price |
+| 4 | **D-1, D-14, D-18, D-47..D-51** | one construction rebuilt · one grade **upgraded** · five rows added |
+| 4 | F.23, **F.32, F.33**, §F.34, §F.35 | one gap narrowed · two opened · the count corrected |
+| 4 | **§G.2.8**, §G.5 | the rule, with a falsifier |
+| 0 | **question 1** | the two-question test, at the front door |
+| readings | 05, 09 | *"not a type"* corrected where it had already propagated |
+
+> ### **THE TWO EXTRAS THAT WERE NOT FORECAST, AND BOTH ARE COSTS RATHER THAN GAINS**
+>
+> **1 · A guard was LOST.** *A faction cannot gain a field* was STRUCTURAL **by absence of a type**;
+> a type now exists and the defence drops to the view's **lifetime** (D-47). **Strictly weaker, and
+> recorded rather than absorbed** — this is the only grade in Part D the amendment reduces.
+>
+> **2 · Two gaps OPENED** (`F.32` whose edge a war is, so who may make peace when the declarer is
+> dead; `F.33` whether `at_war` may appear in a verb's `requires`). **Both are properties stated
+> without their representation — the exact failure §F.35 charges to Stage 3, reproduced by a
+> different author on the first try.** The finding is not about Stage 3.
+
+**And one thing that did NOT happen, which is the load-bearing result: NO PRIMITIVE WAS ADDED.** A
+faction is a Query return over edges that already existed; a war is a Proposition with an owned edge.
+**Two rulings that each looked like a demand for new vocabulary cost none** — which is the strongest
+test the method in `00_THE_METHOD.md` has been put to, because it was applied after the fact.
 
 > ### **THE GENERAL RULE THIS SETTLES, AND IT IS WORTH MORE THAN THE THREE EDITS**
 > **AN ABSTRACTION MAY BE FIRST-CLASS FOR CONSUMERS WITHOUT BEING FIRST-CLASS FOR STATE.** The

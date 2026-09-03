@@ -111,3 +111,10 @@ plus its `commit` edges, so when the last person releases there is nothing left 
 
 ⚠ **Provided nothing else can hold it.** `hold`'s subject must be a Person only, or you get territory
 held by a banner nobody carries — **uncontestable, because the holder can never appear at a venue.**
+
+⚠ **AMENDED 2026-09-03 — *a faction IS a Proposition plus its edges* is right about IDENTITY and was
+wrong about DEPLOYMENT.** `Faction` is now a type: a **Query return** resolving that proposition into
+`(members, holdings, seats, head?)`, built at a barrier and dropped at the next (Stage 4 §B.6.1). It
+owns nothing, admits no field, and appears in no actor position — **so the collapse-for-free property
+above is untouched**, because the view is the edges and the edges are still the only state. `hold`'s
+subject is still `Person` only. See `10_FACTIONS_AND_DEPLOYMENT.md` and Stage 1 §D.11.
