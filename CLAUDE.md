@@ -769,7 +769,7 @@ Run the unit tests locally: `pip install pyyaml pytest numpy && python -m pytest
 | Finding inert/inconsistent mechanics | `valoria-mechanic-audit` |
 | Philosophy (**P-01..P-15**) compliance | `valoria-canon-guard` |
 | Key IN → resolver → OUT contract closure | `valoria-module-adjudicator` |
-| NERS resolver stress methodology | `valoria-resolution-diagnostic` |
+| **A NERS pass** — is this object necessary / elegant / robust / smooth; is one option dominant; does this add a system; false N-lines — on **any** design object, plus rolling-engine resolver stress as its second instrument | `valoria-resolution-diagnostic` (rebuilt 2026-09-04 — the charter's four definitions are now stated in it; `canon/definitions.yaml`, cited as their source by two skills, **does not exist**, and authoring their canonical home is open) |
 | Emergent-arc generation | **RETIRED 2026-08-21** (ED-IN-0194) — its subject `arcs/` was evacuated 2026-08-05. |
 | Editorial-debt workflow over the JSONL ledger | `valoria-editorial-register` |
 | "Where are we in the workplan?" / progress board | **RETIRED 2026-08-21** (ED-IN-0194). Read `workplans/workplan_v6_progress.yaml` directly, and `python tools/m1_acceptance.py --summary` for whether the milestone RUNS — which is the only reading of "where are we" that §0.2 accepts. |
