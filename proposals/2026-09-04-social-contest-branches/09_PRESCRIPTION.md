@@ -4,9 +4,12 @@
 ## Written by the orchestrator (Opus). **The Fable tier hit its usage limit mid-session**, so this is
 ## not the Fable-authored prescription the plan called for; the synthesis is Opus-tier and says so.
 ## Ranked by what is load-bearing on **the game**, per `CLAUDE.md` §0.1 pt 5 and §0.3.
-## ⚠ **AMENDED 2026-09-04 — §1.1 and the whole of §3 (Tier 2) are WITHDRAWN as out of scope.** They
-## prescribed work outside the social contest, which Jordan did not commission; the findings are
-## parked in `OUT_OF_SCOPE.md`. What remains is scoped to the social contest system.
+## ⚠ **AMENDED TWICE, 2026-09-04. MOST OF THIS DOCUMENT IS WITHDRAWN.**
+## §1.1 and §3 (Tier 2) — **out of scope**, parked in `OUT_OF_SCOPE.md`; Jordan did not commission work
+## outside the social contest. §1.2 and §2 (Tier 1) — **seam work**, withdrawn on Jordan's *"ignore the
+## seams, I am rebuilding a lot"* (2026-09-04). **What stands is §4 (the branches), §5 (meta-architecture
+## posture) and §6 (process).** The measurements behind the withdrawn sections are preserved in place,
+## because they say what a rebuild must not reproduce.
 
 ---
 
@@ -38,67 +41,30 @@ Verified, real, and **not part of the social contest.** Parked in `OUT_OF_SCOPE.
 evidence and the falsifier owed by either disposition. **Jordan ruled 2026-09-04: "leave it, file the
 finding."**
 
-### 1.2 · The only production-path gate cannot see the regression it exists to catch
+### 1.2 · **WITHDRAWN — SEAM.** (The production-path gate that cannot see a kernel regression)
 
-`engine/tests/test_mc_v18_regression.py:151-158` sums `world.scenes_resolved` and asserts `> 0`.
-`engine/mc_v18.py:156-160` **also increments that counter for parliamentary votes**. So the assertion
-passes with **zero kernel contests** — and its own docstring says it exists to catch *"the promoted
-kernel was reachable in code but dead-in-campaign"*, which is precisely the failure it cannot observe.
-`CLAUDE.md` §0.1 pt 2, in the one gate guarding this subsystem.
+The finding stands (`test_mc_v18_regression.py` sums a counter `mc_v18.py:160` also increments for the
+§10 vote, so it passes with zero kernel contests). But it is a test **of the seam path**, and the seam
+is being rebuilt. Its fix is held, unlanded, in `stash@{0}` and should be re-derived against whatever
+the rebuilt seam looks like rather than applied to the one being replaced.
 
-**Prescription: count kernel contests separately.** One counter, one expression, no new guard — this is
-the §0.1 pt 5 case where a guard is *earned*, because the artifact is load-bearing on the game.
-**Falsifier: it must fail on a tree where the contest path is stubbed out but votes still run.**
+## §2 · TIER 1 — **WITHDRAWN 2026-09-04. SEAM WORK.**
 
----
+Both items were seam work and Jordan is rebuilding that layer: **§2.1** the faculty derivation at
+`scene_dispatch.py:139` (`_emergency_council_parties`, a `[SEED]` bridge deriving the two sides from
+incommensurable quantities — one faction's Legitimacy against the inverse of the *same* faction's
+Stability), and **§2.2** the six parameters `scene_dispatch.py:300-301` fails to pass.
 
-## §2 · TIER 1 — THE SOCIAL CONTEST'S ACTUAL DEFECT
+**The measurements survive the withdrawal and are worth carrying into the rebuild**, because they say
+what the seam must not do again: 81.9 % of 4,979 councils fought at side-A faculty 1, 87.7 % won by the
+crisis side, 74.8 % of echoes floor-clamped to no-ops, and **zero player decisions on the production
+path** (all 846 traced moves the defaulted `logos_spammer`). A rebuilt seam that reproduces those
+numbers has reproduced the defect.
 
-### 2.1 · The faculty derivation is a provisional bridge that makes every contest a foregone conclusion
-
-`engine/cross_scale/scene_dispatch.py:139` derives both sides as
-`(max(1, round(f.L)), max(1, round(7.0 - f.Sta)))`. **Measured over 4,979 councils: 81.9 % are fought
-at side-A faculty 1, and 87.7 % are won by the crisis side.** Faculty 1 against faculty 6 is not a
-contest under any resolver, and the ratified terminal is behaving correctly when it returns a
-near-unanimous verdict for the strong side.
-
-This is a `[SEED]` bridge — self-declared provisional, never ratified — and it is **the single highest-value
-change available to the social contest.** Fix it and the ratified mechanism starts producing real
-verdicts; leave it and every downstream branch inherits a decided contest.
-
-**Prescription — this needs a design call, and here is the architecture-conformant default.** The two
-sides are currently derived from **incommensurable quantities**: one faction's Legitimacy against the
-*inverse* of the same faction's Stability. Under `CLAUDE.md` §4's *idempotent in meaning* test that is
-already a defect — the two numbers do not measure comparable things. The default that follows from the
-architecture is to derive **both sides from the same quantity on two different parties**, which is what
-a contest is. If the Emergency Council genuinely has only one faction, then it is **not a contest** and
-should not be routed to a contest resolver — that is the honest reading of `_emergency_council_parties`'
-own `[SEED]` marker.
-
-**Do not attempt to fix this by giving the weak side more dice.** The resolution-diagnostic material
-records that the `1/√N` non-uniformity **cannot be fixed by any pool transformation** — a Stage-4
-aggregation sweep proved it. Adding dice moves the operating point; it does not make the contest close.
-
-**Escalation:** whether an Emergency Council is one faction in crisis (therefore not a contest) or two
-parties (therefore a contest, and who is the second) is a live design choice with materially different
-games behind it. **This survives all five tests and is Jordan's.**
-
-### 2.2 · The seam discards the design — six parameters
-
-`engine/cross_scale/scene_dispatch.py:300-301` passes none of: **venue preset · policies · armature ·
-record · world · proceeding literal.** These six are the entire distance between the kernel that exists
-and the kernel the tests exercise. Consequences measured: Stage-3/Gate-C (CR4 terrain, CR5 backfire,
-the adjudicator armature) is unreachable in production; `proceeding_venue` passes no preset so all
-eight proceedings run on `Venue` defaults and the ~260-line venue library is unreachable; **zero player
-decisions occur on the production path** (all 846 traced moves were the defaulted `logos_spammer`).
-
-**Prescription: open the seam before building anything on it.** In dependency order —
-`armature=` passthrough (closes the Stage-3 reachability defect), `rng` injection at **all three** draw
-sites (`resolver.py:32`, `:334`, `:139`/`:144` — not one), then policies and venue preset.
-**Control: the two campaign goldens must not move**, because opening a parameter with its current
-default is meant to be value-identical. If they move, the change was not what it claimed.
-
----
+**And one design question outlives the code it was found in:** whether an Emergency Council is one
+faction in crisis — in which case it is **not a contest** and should not route to a contest resolver —
+or two parties, and who the second is. That is Jordan's, and it is a question about the rebuild rather
+than about the seam being replaced.
 
 ## §3 · TIER 2 — **WITHDRAWN 2026-09-04. OUT OF SCOPE.**
 
