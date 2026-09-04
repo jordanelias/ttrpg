@@ -561,6 +561,10 @@ VIEW_BUILDER_RULES = roster("view_builder_rules")
 QUESTION_AGGREGATION = roster("question_aggregation", ordered=True)
 SCENE_PACKING_RULES = roster("scene_packing_rules")
 CLAIM_SUBJECT_RULES = roster("claim_subject_rules")
+# `W-B` / `H-122`. WHO RECEIVES A CLAIM MINTED FROM WHAT THE FOLD READ. Bound at import
+# like every other roster, and for the reason `TITLE_DOMAINS` records below: an unbound
+# roster is the one whose absence goes unnoticed.
+OBSERVATION_DEPOSIT_MODES = roster("observation_deposit_modes")
 # ⚠ BOUND AT IMPORT LIKE THE OTHERS, AND THAT IS THE POINT. `titles` was the ONE roster read
 # lazily through a bare `_ROSTERS.get(...) or {}`, so it alone got no existence refusal -- and
 # because `_req_revoke` fails OPEN into purview-for-everything when the mapping is empty, the one
@@ -1784,6 +1788,12 @@ DEFAULT_FIXTURES = Fixtures(
     extended_scene_cost=2,             # `H-77`, swept 1 / 2 / 3
     scene_packing_rule="greedy",       # `H-78`, swept greedy / one_per_scene / by_subject
     claim_subject_rule="both",         # `H-79`, swept actor / per_change / both
+    # `W-B` / `H-122`. WHO RECEIVES A CLAIM MINTED FROM WHAT THE FOLD READ. #353 §28 says WITNESS
+    # deposits and never says whether the deposit may carry the reads, or to whom; the arms are
+    # `rosters.yaml: observation_deposit_modes` and the row is `H-122`. `none` is the CONTROL --
+    # the behaviour before `W-B` exactly -- and the default below is argued on the row rather than
+    # assumed here. Injection site: this line, read by `SeasonDriver.witness`.
+    observation_deposit_mode="actor",  # `H-122`, swept none / actor / total
     # `H-80`. #353 §13.1 says the ACT declares a Record's stages and their terms. §F1's Candidate
     # is `(verb, subject, why)` and carries no operands, so NO COMPUTED ACT CAN DECLARE ANY --
     # `(Record, stages)` is a Part D row unreachable from the person's own decision. These are
@@ -2046,6 +2056,25 @@ class Event:
     causes: list[str]
     emitted_at: int
     degree: Optional[str] = None
+    # `W-B`. WHAT THE FOLD READ TO REACH THIS EVENT -- a tuple of `Observation`, the same triple a
+    # `Claim` carries, which is what `Observation`'s own docstring says it is: *"an Observation is
+    # what a Claim would be if the reader wrote one."*
+    #
+    # ⚠ IT IS NOT A FOURTH ABSENT FIELD. S19.3 names three fields deliberately NOT on an Event --
+    # actor, target, stat_deltas -- and each absence is a design decision about ATTRIBUTION or
+    # RECIPIENCY. This is neither: it is the record of what the fold read, and §27.1 already makes
+    # reading the precondition the fold's business. `PLAN.md` §8.1's ban is on `target`/`actor`,
+    # and `H-79` spent its own argument on reading `changes[]` rather than adding a field, so the
+    # bar for adding one is stated here: this carries something NO existing field holds. `changes[]`
+    # is what the act WROTE; `observed` is what it READ, and a refusal writes nothing and reads
+    # everything.
+    #
+    # ⚠ EMPTY IS HONEST AND IS THE COMMON CASE. An untyped verb, a `NO_PRECONDITION` verb, and
+    # every Event `matter()` or `calendar()` emits carry `()`: no read went through the
+    # `Observation` channel. A verb on `REQUIRES_PREDICATES` reads the world through a hand-written
+    # predicate that records nothing, so it too carries `()` -- that is a gap in the OLD channel,
+    # not a claim that nothing was read, and it closes when the verb is typed.
+    observed: tuple = ()
 
     def __post_init__(self) -> None:
         if not self.causes:
@@ -5629,9 +5658,19 @@ class SeasonDriver:
                     "§27.2 forbids" + ("" if not named else
                     ". ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)"))
 
+        # `W-B`. THE READS THIS ACT'S PRECONDITION MADE, ON EVERY EVENT THE ACT EMITS.
+        # ⚠ DECLARED BEFORE `ev` AND REBOUND BY THE `requires` BLOCK BELOW, DELIBERATELY. `ev`
+        # closes over the NAME, so it reads whatever `verdict` is bound to AT CALL TIME -- which
+        # is `UNKNOWN, ()` for the ineligibility return above (eligibility reads tenures, not the
+        # requirement, so it observed nothing) and the evaluated Verdict for every return after
+        # it. The alternative -- passing `observed` as a parameter to all four `ev(...)` call
+        # sites -- puts the same fact in four places, which is `§8` one seam over.
+        verdict = Verdict(UNKNOWN, ())
+
         def ev(kinds, causes, changes=None):
             return [Event(H(w.world_seed, w.tick, a.actor, f"{k}:{a.id}"),
-                          k, a.actor, list(changes or []), list(causes), w.tick)
+                          k, a.actor, list(changes or []), list(causes), w.tick,
+                          observed=verdict.observed)
                     for k in kinds]
 
         if not self._eligible(w, a, row):
@@ -5650,8 +5689,19 @@ class SeasonDriver:
                 # branch below has always had, and the reason `work` (whose `_req_work` ended in
                 # a bare `return True` for an act naming no site) now refuses instead.
                 #
-                # ⚠ THE VERDICT'S `observed` IS DELIBERATELY DROPPED HERE. Attaching the reads to
-                # the Event is `W-B`; building the carrier before its reader exists is `ID-13`.
+                # ⚠ `W-B`: THE VERDICT'S `observed` NOW RIDES ON THE EVENT, AND THE REFUSAL'S
+                # READS ARE THE INFORMATIVE ONES. This block used to say the reads were
+                # "deliberately dropped here ... building the carrier before its reader exists is
+                # `ID-13`", and the reader existed already: `belief_contradicts` evaluates the same
+                # cell against `LedgerReader`, so a claim carrying `(subject, predicate, value)` is
+                # read by the same code that produced the Observation. The carrier is no longer
+                # dead -- `SeasonDriver.witness` deposits it, gated on `observation_deposit_mode`.
+                #
+                # ⚠ ATTACHED TO SUCCESS AND REFUSAL ALIKE. A refusal's reads are WHY it refused --
+                # `stores:grain -> 0` on an emptied hearth -- and it is the only read whose value
+                # can make `belief_contradicts` fire, because `0 >= 1` is the one thing in this
+                # grammar that evaluates False. Attaching only to the success would build the
+                # channel and leave out the traffic.
                 verdict = evaluate(row.requires_typed, WorldReader(w, a.actor),
                                    binding_from_act(a))
                 ok = verdict.value is True
@@ -6008,6 +6058,19 @@ class SeasonDriver:
         cap = w.fixtures.get("ledger_cap")
         conf = w.fixtures.get("confidence_default")
         claim_rule = w.fixtures.get("claim_subject_rule")
+        # `W-B` / `H-122`. WHO RECEIVES A CLAIM MINTED FROM WHAT THE FOLD READ. `none` is the
+        # CONTROL -- the behaviour before `W-B`, so every measurement of this item has a baseline
+        # (§0.1 point 4). Read here rather than inside the loop so the fixture is consulted once
+        # per barrier and `Fixtures.reads` counts a barrier, not a deposit.
+        obs_mode = w.fixtures.get("observation_deposit_mode")
+        if obs_mode not in OBSERVATION_DEPOSIT_MODES:
+            raise Unspecified(
+                f"observation-deposit mode {obs_mode!r} is not in the roster", "H-122",
+                needs=f"one of {sorted(OBSERVATION_DEPOSIT_MODES)}",
+                law="`observers_for`'s precedent, and for its reason: *'an unrecognised mode "
+                    "silently falling back would make every measurement of this sweep read the "
+                    "control'*. Here the control is `none`, i.e. depositing nothing, so a silent "
+                    "fallback would report `W-B` as having changed nothing")
         deposits = 0
         w._in_parallel_map = True
         for pid, e, channel in fan:
@@ -6041,6 +6104,58 @@ class SeasonDriver:
                         emits="claim.deposited", subject=c.id, causes=[e.id])
                 TRACE.claim(pid, e.id, src)
                 deposits += 1
+            # `W-B`. THE SECOND DEPOSIT: ONE CLAIM PER READ THE FOLD MADE, IN THE `requires`
+            # VOCABULARY. `Observation` is `(subject, predicate, value)` and so is `Claim`; its
+            # own docstring says an Observation *"is what a Claim would be if the reader wrote
+            # one"*, and this is the writer.
+            #
+            # ⚠ WHY THIS IS A SECOND LOOP AND NOT A RULE INSIDE `claim_subjects`. That function
+            # answers *what is this deposit ABOUT* for the EVENT-KIND claim, and its
+            # `actor`/`per_change`/`both` roster is `H-79`'s, already swept and already measured.
+            # An observation-claim's subject is not a choice -- it is the entity the reader read,
+            # and the Observation carries it. Overloading `H-79`'s rule would put two decisions on
+            # one fixture, which is exactly the defect `H-121` was minted to repair.
+            #
+            # ⚠ AND THE PREDICATE IS NOT `e.kind`. That is the whole point. The event-kind claim
+            # above carries `predicate = e.kind, value = True` -- `travel.blocked`, `act.refused`
+            # -- and `belief_contradicts` evaluates `requires_typed` against `LedgerReader`, whose
+            # vocabulary is `stores:<kind>` / `condition` / `contain.path:<to>` / `claim.held` /
+            # `exists:<kind>` / a relation stem. The two vocabularies are DISJOINT, and `True` can
+            # never make a comparator return False, so the belief channel was closed by a theorem
+            # rather than by a bug (`H-116`, measured: 0 claims in the derived namespace over a
+            # 3-season NPC-088 run before this line existed). These claims are in that namespace
+            # by construction, because the Observation's predicate is derived from the cell.
+            #
+            # ⚠ UNKNOWN IS NOT DEPOSITED, AND THE REASON IS `H-94`'s. A read the world could not
+            # answer is the INSTRUMENT'S GAP, and `operands_for` already refuses to mint an act
+            # with a hole precisely so that *"the instrument's own gap would become a FALSE BELIEF
+            # held by every witness, about a granary nobody named."* Depositing UNKNOWN would
+            # reintroduce that from the other end. It is also inert-but-costly: `LedgerReader`
+            # returns the stored value, `_as_number(UNKNOWN)` is UNKNOWN, and the clause returns
+            # UNKNOWN -- so the claim can never contradict anything while still consuming a slot
+            # the cap evicts somebody else for.
+            #
+            # ⚠ DE-DUPLICATED ON `(subject, predicate)`, WHICH IS THE KEY `LedgerReader.read`
+            # MATCHES ON. Two claims a reader cannot tell apart are one belief stored twice, and
+            # `claim_subjects` gives the same reason for its own de-duplication: a person holding
+            # two identical claims would double-count in every eviction comparison.
+            if obs_mode != "none" and (obs_mode == "total" or pid == e.subject):
+                seen_obs: set = set()
+                for o in (getattr(e, "observed", ()) or ()):
+                    if o.value is UNKNOWN or o.value is None:
+                        continue
+                    key = (o.subject, o.predicate)
+                    if key in seen_obs:
+                        continue
+                    seen_obs.add(key)
+                    oc = Claim(H(w.world_seed, w.tick, pid, f"obs:{e.id}:{len(seen_obs)}"),
+                               pid, o.subject, o.predicate, o.value, w.tick, src, conf, "own")
+                    w.write("claim_ledger", WriteClass.INTERIOR,
+                            lambda p=p, c=oc: p.ledger.append(c),
+                            record_kind="Person", fieldname="claim_ledger", driver="Event",
+                            emits="claim.deposited", subject=oc.id, causes=[e.id])
+                    TRACE.claim(pid, e.id, src)
+                    deposits += 1
             # ⚠ `while`, NOT `if`. THE CAP WAS NOT A CAP. One deposit can mint SEVERAL claims --
             # `claim_subjects` returns one per `StateChange` under the `per_change` rule -- and a
             # single `if` pops exactly one, so the ledger settled at 203 against `L = 200`. A cap
