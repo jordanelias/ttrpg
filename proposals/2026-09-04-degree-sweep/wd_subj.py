@@ -66,14 +66,16 @@ if __name__ == "__main__":
     real = [f for r in good for f in r["forks"]
             if f.get("status") in ("DIVERGED", "RECONVERGED")]
     div = [f for f in real if not f["reconverged"]]
-    out = dict(mode=mode, chunk=[a, b], n_cases_ok=len(good), n_cases_failed=len(rows) - len(good),
+    out = dict(mode=mode, slots=slots, chunk=[a, b],
+               n_cases_ok=len(good), n_cases_failed=len(rows) - len(good),
                probed=sum(r["n_forks"] for r in good),
                no_live_window=sum(r["n_no_live_window"] for r in good),
                inert=sum(r["n_inert"] for r in good),
                genuine=len(real), diverged=len(div), reconverged=len(real) - len(div),
                changed_slot_kinds=dict(kinds))
-    json.dump(out, open(Path(__file__).parent / "runs" / f"wd_subj_{mode}_{a}_{b}.json", "w"),
+    stem = f"wd_subj_{mode}_{a}_{b}" if slots == "narrow" else f"wd_subj_{slots}_{mode}_{a}_{b}"
+    json.dump(out, open(Path(__file__).parent / "runs" / f"{stem}.json", "w"),
               indent=1, default=str)
-    print(f"(verb,subject) {mode}[{a}:{b}] cases {out['n_cases_ok']}/{len(rows)} probed "
+    print(f"(verb,subject) {slots}/{mode}[{a}:{b}] cases {out['n_cases_ok']}/{len(rows)} probed "
           f"{out['probed']} nolive {out['no_live_window']} inert {out['inert']} genuine "
           f"{out['genuine']} DIVERGED {out['diverged']} kinds {out['changed_slot_kinds']}")

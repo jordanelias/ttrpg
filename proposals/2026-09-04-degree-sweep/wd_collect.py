@@ -24,6 +24,7 @@ def collect(slots: str, mode: str) -> dict:
     files = sorted(OUT.glob(f"wd_chunk_{slots}_{mode}_*.json"),
                    key=lambda p: int(p.stem.split("_")[-2]))
     parts = [json.load(open(f)) for f in files]
+    assert parts, f"no chunks on disk for {slots}/{mode}; run `wd_chunk.py {mode} {slots} <a> <b>`"
     covered = []
     for p in parts:
         covered.extend(range(p["chunk"][0], p["chunk"][1]))
@@ -65,10 +66,29 @@ def main() -> int:
                    "), so `resolve()`'s `Forbidden` branch is unreachable and the probe is left "
                    "unedited. `n_cases_failed` below is the empirical check.")
 
+    log.rule("W-D.0 — WHICH CELLS OF THE DECLARED SWEEP CROSS CAN THE QUESTION BE ASKED AT?")
+    log("⚠ CORRECTION", "THE FIRST WRITING OF THIS ITEM SAID `exactly ONE cell gives L <= 3` AND "
+                        "THAT IS FALSE. TWO of the nine cells qualify, and the one that was NOT "
+                        "run is the SMALLER intervention. Found by an independent read-only "
+                        "critic, 2026-09-04; re-measured over the corpus by `wd_cells.py`.",
+        "`L` is THE PACKER'S OWN TAKE — `sum(len(sc.acts) for sc in pack_scenes(...))`, read off "
+        "`recorder.in_budget` — and NOT the slot product `scene_budget x interactions_per_scene`. "
+        "The product was used as a proxy for it. `take()` charges an EXTENDED scene "
+        "`extended_scene_cost`=2 and takes a whole chunk whenever `ext <= left`, so at 2 x 3 the "
+        "first chunk of three candidates is taken entire for a cost of 2 and L = 3, not 6. And L "
+        "is PER DELIBERATION, not per cell: it varies with the person's own ranked list, so "
+        "`L <= 3` is a property of a deliberation and a cell is askable when ANY of its "
+        "deliberations has one.")
+
     for slots, title in (("default", "W-D.1 — THE SHIPPED FIXTURE POINT (5 x 3 = 15 slots)"),
                          ("narrow", "W-D.2 — THE ACCEPTANCE FIXTURE POINT (2 x 1 = 2 slots): "
                                     "scene_budget=2 (`H-10` arm) x interactions_per_scene=1 "
-                                    "(`H-76` arm)")):
+                                    "(`H-76` arm) — TWO declared-arm changes"),
+                         ("2x3", "W-D.2b — THE SECOND QUALIFYING CELL (2 x 3 = 6 slots): "
+                                 "scene_budget=2 (`H-10` arm) x interactions_per_scene LEFT AT "
+                                 "ITS DEFAULT — ONE declared-arm change, so by the item's own "
+                                 "minimum-departure criterion this is the BETTER acceptance "
+                                 "point, and it was never run until the adversarial pass")):
         log.rule(title)
         out[slots] = {}
         for mode in ARMS:
@@ -100,28 +120,67 @@ def main() -> int:
             "for every person with a question, whatever their candidate set), so these MUST be "
             "equal; INERT and GENUINE legitimately differ, because a dropped Candidate shrinks "
             "the packer's own take `L` — which is why the denominator is printed with every rate")
+        # ⚠ ASSERTED, NOT LOGGED. These three read clean and used to be PRINTED and then written
+        # to the artifact regardless of their values, which makes them eye-checks: a
+        # reconstruction defect would have shipped a green-looking log. The pytest tests assert
+        # only on the NPC-088 slice, so nothing gated them at corpus scale. Raised by the `W-D`
+        # adversarial pass, 2026-09-04.
+        assert len(set(p.values())) == 1, (
+            f"{slots}: `probed` differs across arms {p}. The deliberation count cannot depend on "
+            "`observation_deposit_mode`, so the three arms are not the same experiment and every "
+            "rate below compares different denominators")
+        assert len(set(nl.values())) == 1, (
+            f"{slots}: NO-LIVE-WINDOW differs across arms {nl}; same reason as `probed`")
+        assert all(cov.values()), (
+            f"{slots}: an arm does not cover all {len(CASES)} case slots exactly once: {cov}. A "
+            "chunk was dropped or run twice, so the concatenation is not the corpus")
+        # CONFOUND 1 at corpus scale, likewise asserted rather than printed.
+        for m in ARMS:
+            r = out[slots][m]
+            assert r["window_slots_same_tick"] == 0, (
+                f"{slots}/{m}: {r['window_slots_same_tick']} of {r['window_slots_checked']} "
+                "scored window slots sit at the fork's own tick or earlier. DELIBERATE is a "
+                "parallel map over a frozen world, so those slots cannot differ and counting "
+                "them inflates reconvergence")
+            assert r["n_cases_failed"] == 0 and r["fork_rows_failed"] == 0, (
+                f"{slots}/{m}: {r['n_cases_failed']} cases and {r['fork_rows_failed']} fork rows "
+                "failed; the rates are over a silently smaller population than the log says")
+            # §0.1 pt 2 -- ASSERT THAT IT ASSERTED. A window check over zero windows is absent.
+            if r["genuine"]:
+                assert r["window_slots_checked"] > 0, (
+                    f"{slots}/{m}: {r['genuine']} genuine forks and ZERO window slots inspected — "
+                    "the strictly-later-tick check has nothing to be true of")
 
-    log.rule("W-D.3 — CONTROLS")
-    n = out["narrow"]["none"]
-    log("NEGATIVE", f"`observation_deposit_mode = none` at 2 slots: {n['reconverged']} of "
-                    f"{n['genuine']} genuine forks RECONVERGED = "
-                    f"{n['reconvergence_rate']*100:.2f}%, DIVERGED {n['diverged']}",
-        "THE SINGLE MOST IMPORTANT NUMBER. `none` is the pre-`W-B` deposit behaviour exactly. A "
-        "non-100% here would mean something other than `W-B` moved the harness and every other "
-        "figure in this item would be confounded")
+    log.rule("W-D.3 — CONTROLS, AT BOTH QUALIFYING CELLS")
     sample = CASES[:3]
-    pc = positive_control(sample)
-    out["positive_control"] = pc
-    log("POSITIVE", f"planted widened clause 4, at the CONTROL arm `none`, cases {pc['cases']} — "
-                    f"detected on ALL {len(pc['plants'])} plants: {pc['detected_all']}", PLANT_WHY)
-    for o in pc["plants"]:
-        log("  PLANT", f"predicate {o['predicate']:16} genuine {o['genuine']:3}  DIVERGED "
-                       f"{o['diverged']:3}  detected {o['detected']}")
-    cc = comparator_control(sample)
-    out["comparator_control"] = cc
-    log("POSITIVE-2", f"comparator-only plant (a token spliced into one later ranked list): "
-                      f"{cc['perturbations_applied']} fork streams perturbed, genuine "
-                      f"{cc['genuine']}, DIVERGED {cc['diverged']} -> detected {cc['detected']}")
+    for slots, label in (("narrow", "2 x 1 = 2 slots"), ("2x3", "2 x 3 = 6 slots")):
+        n = out[slots]["none"]
+        log("NEGATIVE", f"[{label}] `observation_deposit_mode = none`: {n['reconverged']} of "
+                        f"{n['genuine']} genuine forks RECONVERGED = "
+                        f"{n['reconvergence_rate']*100:.2f}%, DIVERGED {n['diverged']}",
+            "THE SINGLE MOST IMPORTANT NUMBER. `none` is the pre-`W-B` deposit behaviour exactly. "
+            "A non-100% here would mean something other than `W-B` moved the harness and every "
+            "other figure in this item would be confounded")
+        assert n["diverged"] == 0 and n["genuine"] > 0, (
+            f"{slots}: the negative control is not clean ({n['diverged']} DIVERGED of "
+            f"{n['genuine']} genuine); every other figure at this cell is confounded")
+        pc = positive_control(sample, slots=slots)
+        out[f"positive_control_{slots}"] = pc
+        log("POSITIVE", f"[{label}] planted widened clause 4, at the CONTROL arm `none`, cases "
+                        f"{pc['cases']} — detected on ALL {len(pc['plants'])} plants: "
+                        f"{pc['detected_all']}", PLANT_WHY)
+        for o in pc["plants"]:
+            log("  PLANT", f"predicate {o['predicate']:16} genuine {o['genuine']:3}  DIVERGED "
+                           f"{o['diverged']:3}  detected {o['detected']}")
+        cc = comparator_control(sample, slots=slots)
+        out[f"comparator_control_{slots}"] = cc
+        log("POSITIVE-2", f"[{label}] comparator-only plant (a token spliced into one later "
+                          f"ranked list): {cc['perturbations_applied']} fork streams perturbed, "
+                          f"genuine {cc['genuine']}, DIVERGED {cc['diverged']} -> detected "
+                          f"{cc['detected']}")
+    # kept under their historical keys so a reader of the committed artifact still finds them
+    out["positive_control"] = out["positive_control_narrow"]
+    out["comparator_control"] = out["comparator_control_narrow"]
 
     log.rule("W-D.4 — PER-FORK FORENSICS on every divergence")
     out["forensics"] = {}
