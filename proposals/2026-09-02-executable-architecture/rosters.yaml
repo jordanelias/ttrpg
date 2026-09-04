@@ -261,9 +261,15 @@ rosters:
       That is what makes a listener's Q2 reachable at all — a claim about the teller can never
       satisfy *the holder, or something they hold* — and it is what took `R3` from 0 of 30 to 30
       of 30 (`H-102`).
-      ⚠ **THE PRICE, STATED RATHER THAN LEFT TO BE DISCOVERED: NO LEDGER RECORDS WHO SPOKE.** For
-      a speech, a telling, a compliance or any refusal, the deposit no longer names the actor, so
-      under the DEFAULT arm the attribution of a write-nothing act is in nobody's ledger.
+      ⚠ **THE PRICE, STATED RATHER THAN LEFT TO BE DISCOVERED: WHERE THE ACT NAMED SOMETHING, NO
+      LEDGER RECORDS WHO SPOKE.** For a speech, a telling, a compliance or a refusal THAT NAMES ITS
+      SUBJECT, the deposit no longer names the actor, so under the DEFAULT arm the attribution of
+      that act is in nobody's ledger. ⚠ **NARROWED 2026-09-04 — the first writing said this of every
+      write-nothing act and that is not what the code does.** The replacement is guarded on
+      `any(refs)`: a write-nothing act that names NOTHING leaves `out` untouched, and the actor
+      survives — via the standing `out or [e.subject]` fallback under `per_change`, and because the
+      actor is already in `out` under `both`. So the price is paid exactly where there is a named
+      subject to pay it with, which is also the only place the Q2 reachability it buys applies.
       Attribution is `T-d`'s subject and `H-107`'s — an Event carries no actor, and the tracer's
       `Event.subject`, which still does, is the row for it. The `actor` arm is untouched and is
       where the incumbent behaviour survives.

@@ -1159,11 +1159,21 @@ rows:
   # -------------------------------------------------------------------------
   # `ID-16` -- THE LOOPS, NAMED AND SIGNED. Added 2026-09-03.
   #
-  # ⚠ WHY THESE ARE ROWS AND NOT A TABLE IN A DOCUMENT. The meta-architecture's `ID-16` asks a
-  # design to enumerate its feedback paths and state which way each points, and its own rev. 3
-  # correction is that the DECLARED list is buildable today while the DERIVED one -- recomputed
-  # from `writes` x typed `requires` -- is blocked on `H-94`/`F.24`. A list in markdown would be
-  # REFERENCE under CLAUDE.md §0.05; a row a loader validates is not. `G13` is that loader.
+  # ⚠ WHY THESE ARE ROWS AND NOT A TABLE IN A DOCUMENT -- AND WHAT THAT DOES AND DOES NOT BUY.
+  # The meta-architecture's `ID-16` asks a design to enumerate its feedback paths and state which
+  # way each points, and its own rev. 3 correction is that the DECLARED list is buildable today
+  # while the DERIVED one -- recomputed from what is WRITTEN against EVERY TYPED READER, not from
+  # `writes` x verb `requires`, which is the wording `H-106` corrects and which would have excluded
+  # all four declared loops -- is blocked on `H-94`/`F.24`.
+  #
+  # ⚠ AND THE HONEST GRADE OF THE ROWS IS REFERENCE, NOT MECHANISM. This block first argued that a
+  # markdown list is REFERENCE under CLAUDE.md §0.05 while `a row a loader validates is not`. That
+  # is an overclaim and is retracted. `G13` validates the SHAPE of a declared row -- that `kind:
+  # LOOP` carries a `sign:` and that the sign is one of `+`/`-`. It cannot see whether the loop
+  # described is real, whether its sign is right (`H-105` carried `-` on a row whose own first
+  # sentence said it was not damping, and a critic caught that, not the gate), or whether one is
+  # missing (`H-106`). A loader that checks a column's shape makes the column WELL-FORMED
+  # reference; the mechanism is still the code the row describes.
   #
   # ⚠ AND THE ENUMERATION IS NOT COMPLETE. `H-106` is that row, and it is `absent` on purpose:
   # these are the loops with executable evidence, not all the loops there are.
@@ -1179,7 +1189,7 @@ rows:
     site:      "shape.py `occasioned_by` / `claim_subjects` / `SeasonDriver.witness`"
     sweep:     []
     unblocks:  "the chain Reading 07 §4 calls 'the one that is actually the game'"
-    cite:      "⚠ WHAT IS MEASURED IS THE EXISTENCE OF THE EDGE, NOT A GAIN, AND THE SIGN IS A CLAIM ABOUT TOPOLOGY RATHER THAN ABOUT THIS RUN. A critic broke the first writing of this row, which read as though `+` had been measured: it had not, and under `question_aggregation_rule: first` plus a five-scene budget this loop provably CANNOT amplify in acts here. The topology is amplifying -- an act deposits claims that raise questions that become acts -- and the fixtures flatten it, which is the pair `ID-16` exists to make visible: a design can carry an amplifying path and a configuration that hides it. Measuring the GAIN needs `H-106`. WHAT IS MEASURED, BOTH SIDES OF THE SAME COMMAND: `python corpus_run.py` before: NPC check R3 0 of 30, ARC 0 of 59, RUNS-ALONE-UNDECLARED 64. After: NPC 30 of 30, ARC 54 of 59, RUNS-ALONE-UNDECLARED 5. ⚠ AND THE FIVE ARC MISSES ARE FULLY ACCOUNTED FOR, WHICH IS WHY THE NUMBER IS NOT LEFT AS A RAGGED 54 OF 59: they are ARC-23, ARC-26, ARC-42, SCN-01 and SCN-02, and those are EXACTLY the five runnable ARC cases whose `temporal.span_seasons` is 1 -- the complete set, checked both directions. The loop's period is one season: WITNESS deposits at the end of `t` and DELIBERATE reads at `t+1`, so a ONE-SEASON RUN HAS NO `t+1` AND CANNOT CLOSE THE LOOP AT ALL. R3 therefore passes 54 of the 54 cases where it is structurally possible, and fails 5 of 5 where it is not. ⚠ AND A FIXTURE CONTROL WAS RUN, BECAUSE 30 OF 30 COULD HAVE BEEN A PROPERTY OF THE FIXTURES RATHER THAN OF THE DESIGN. Every corpus world seats three persons committed to one OUGHT, `speak` has no precondition, and `fan_out_mode` is `total` -- so every speech could have been reaching every ledger and scoring R3 for free. SWEPT TO `presence_only`: R3 is UNCHANGED at 30 of 30 NPC and 54 of 59 ARC, while the arm itself is far from inert -- `claim.deposited` falls 2211 -> 312 in a three-season run and total ledger holdings 600 -> 312. REPRODUCE: rebind `S.DEFAULT_FIXTURES = S.DEFAULT_FIXTURES.sweep(\"fan_out_mode\", \"presence_only\")` before importing `corpus_run`, then run `run_case` over both lanes. ⚠ A CONTROL THAT MOVES THE INPUT SEVENFOLD AND NOT THE VERDICT IS EVIDENCE; ONE THAT MOVED NEITHER WOULD HAVE BEEN AN INERT ARM PRINTED AS A CONTROL, WHICH IS §0.1 POINT 4'S OWN COMPLAINT. R3 is 'an act by one person whose causes walk back to an act of another', and it was the ONLY check the corpus failed -- R1, R4 and R5 passed every runnable case before and after, so nothing else moved. The falsifier is `test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told`, which is mutation-checked: it fails on the pre-fix `shape.py` and passes after, and carries its own control asserting the detector says FALSE on a world where nobody has acted. ⚠ THE SIGN IS `+` AND THAT IS THE POINT OF RECORDING IT: this design is made almost entirely of refusals and every refusal is a damping term, so an amplifying path is the rare one and is the one a reader needs told about"
+    cite:      "⚠ WHAT IS MEASURED IS THE EXISTENCE OF THE EDGE, NOT A GAIN, AND THE SIGN IS A CLAIM ABOUT TOPOLOGY RATHER THAN ABOUT THIS RUN. A critic broke the first writing of this row, which read as though `+` had been measured: it had not, and under `question_aggregation_rule: first` plus a five-scene budget this loop provably CANNOT amplify in acts here. The topology is amplifying -- an act deposits claims that raise questions that become acts -- and the fixtures flatten it, which is the pair `ID-16` exists to make visible: a design can carry an amplifying path and a configuration that hides it. Measuring the GAIN needs `H-106`. WHAT IS MEASURED, BOTH SIDES OF THE SAME COMMAND: `python corpus_run.py` before: NPC check R3 0 of 30, ARC 0 of 59, RUNS-ALONE-UNDECLARED 64. After: NPC 30 of 30, ARC 54 of 59, RUNS-ALONE-UNDECLARED 5. ⚠ AND THE FIVE ARC MISSES ARE FULLY ACCOUNTED FOR, WHICH IS WHY THE NUMBER IS NOT LEFT AS A RAGGED 54 OF 59: they are ARC-23, ARC-26, ARC-42, SCN-01 and SCN-02, and those are EXACTLY the five runnable ARC cases whose `temporal.span_seasons` is 1 -- the complete set, checked both directions. The loop's period is one season: WITNESS deposits at the end of `t` and DELIBERATE reads at `t+1`, so a ONE-SEASON RUN HAS NO `t+1` AND CANNOT CLOSE THE LOOP AT ALL. R3 therefore passes 54 of the 54 cases where it is structurally possible, and fails 5 of 5 where it is not. ⚠ A FIXTURE CONTROL WAS RUN IN THREE ARMS, AND THE FIRST ARM WAS THE WRONG VARIABLE -- recorded because getting it wrong is the instructive part. THE CONFOUND: every corpus world seats three persons in ONE rung, `speak` has no precondition, and `fan_out_mode` is `total` -- so every speech could be reaching every ledger and scoring R3 for free. ARM 1, `presence_only` alone: R3 unchanged at 30/30 and 54/59, deposits 2211 -> 312. ⚠ THIS ARM DOES NOT TEST THE CONFOUND AND THE FIRST WRITING OF THIS CELL CLAIMED IT DID. All three persons share a rung, so the co-location predicate admits everyone under `presence_only` too; the fall is MATTER emissions whose subject has no place being dropped from the fan, not speech reach. An arm on the wrong variable is §0.1 point 4's second half, and it reads exactly like evidence. ARM 2, `presence_only` + one person moved to another rung: R3 still TRUE; the moved person's ledger falls 104 -> 30 and deposits 312 -> 178. Propagation survives losing one of three, which is correct -- the remaining pair are still co-located and R3 asks whether ANY act is caused by another's. ARM 3, `presence_only` + ALL THREE at different rungs: **R3 = FALSE, with 63 acts still resolved and 104 deposits**. ⚠ ARM 3 IS THE ONE THAT EARNS THE ROW. It shows the detector returning FALSE on a POPULATED world -- three actors, sixty-three acts -- which is the specificity `planted_control` cannot show, since that one short-circuits on fewer than two acts. R3 is measuring propagation and not merely answering true to anything. REPRODUCE: sweep `fan_out_mode` to `presence_only`, close each person's `contain` and re-seat them at distinct non-person rungs, run three seasons, call `_r3_propagates`. R3 is 'an act by one person whose causes walk back to an act of another', and it was the ONLY check the corpus failed -- R1, R4 and R5 passed every runnable case before and after, so nothing else moved. The falsifier is `test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told`, which is mutation-checked: it fails on the pre-fix `shape.py` and passes after, and carries its own control asserting the detector says FALSE on a world where nobody has acted. ⚠ THE SIGN IS `+` AND THAT IS THE POINT OF RECORDING IT: this design is made almost entirely of refusals and every refusal is a damping term, so an amplifying path is the rare one and is the one a reader needs told about"
     source:    "ID-16 -- the meta-architecture, folded back into the register that reads it"
   - id:        H-103
     tier:      1
@@ -1222,7 +1232,7 @@ rows:
   - id:        H-106
     tier:      1
     kind:      "ABSENT_RULE"
-    hole:      "THE LOOP ENUMERATION IS NOT COMPLETE AND NOTHING CAN SAY HOW INCOMPLETE. `ID-16`'s representation has two halves: a DECLARED signed list, which `H-102`..`H-105` and `G13` now are, and a DERIVED check that recomputes the cycle set from WHAT IS WRITTEN against EVERY TYPED READER -- the question sources, the witness channel predicates and the eviction comparator as much as a verb's `requires` -- and asserts the two agree. ⚠ CORRECTED 2026-09-04: this row first said `writes` x verb PRECONDITIONS, and that definition excludes all four loops the register declares -- none of them has a verb `requires` on its cycle, and the verb carrying the propagation loop has no precondition at all. A derived check built to the first wording would have failed on a correct system. The second half is what turns the list from an authored claim into a falsifiable one, and it cannot be built"
+    hole:      "THE LOOP ENUMERATION IS NOT COMPLETE AND NOTHING CAN SAY HOW INCOMPLETE. `ID-16`'s representation has two halves: a DECLARED signed list, which the four `kind: LOOP` rows -- `H-102`, `H-103`, `H-104` and `H-112` -- now are (`H-105` sits between them in the file and is NOT one of them: it was re-filed `PRODUCER`), and a DERIVED check that recomputes the cycle set from WHAT IS WRITTEN against EVERY TYPED READER -- the question sources, the witness channel predicates and the eviction comparator as much as a verb's `requires` -- and asserts the two agree. ⚠ CORRECTED 2026-09-04: this row first said `writes` x verb PRECONDITIONS, and that definition excludes all four loops the register declares -- because THE WRITE EDGE ON EVERY ONE OF THEM BELONGS TO A STEP, not to a verb: WITNESS writes the ledger, MATTER decays, WITNESS evicts. ⚠ AND THE FIRST WRITING OF THIS CORRECTION GAVE THE WRONG REASON: it said no verb `requires` sits on the cycle, which is FALSE -- `tell` requires the teller to hold a claim on the subject, and `_req_tell` reads exactly what WITNESS wrote. The conclusion is a write-side one and was argued read-side. A derived check built to the first wording would have failed on a correct system. The second half is what turns the list from an authored claim into a falsifiable one, and it cannot be built"
     owner:     "the `requires` grammar -- `H-94` / `F.24`"
     grade:     "absent"
     default:   "none"
@@ -1250,13 +1260,26 @@ rows:
   #     this one is not. Left: it is the budget's own unit (`H-77`), which §B.9 does not model.
   #   * `Act.{changes, reads, contests, stratum, obstacle, pool}` and no `terms?`. Left: each has
   #     live readers in the fold; removing any is a resolver change, not a shape edit.
-  #   * `Tenure.{degree, payload}` where §B.8 has `term?`. Left: `degree` is `F.4`'s open question
-  #     and `payload` is what `term?` would replace -- both wait on `H-98`.
-  #   * `Event.changes` is a fold-built `StateChange[]`, not gate-minted `Receipt[]`, and
-  #     `season()` appends to the log with a bare `list.append` -- so §C.2's "an Event reporting a
-  #     write the gate did not apply fails at append" HAS NO IMPLEMENTATION HERE. This is the
-  #     largest of the seven and it is `ID-9`'s own mechanism; it is listed in the meta-
-  #     architecture's HANDOFF as pending rather than rowed, because it is a build item.
+  #     ⚠ AND `refs` IS ABSENT FROM THE TYPE, which this bullet omitted until 2026-09-04. §B.9's
+  #     `Act` carries `refs` as a STORED field; the tracer DERIVES it, in `act_refs()`, off
+  #     `changes`/`reads`/`contests`/`payload`. Left deliberately: the derived form has no second
+  #     home to drift from (`ID-2`) and is what `N3` and `claim_subjects` read, so storing it
+  #     would ADD the divergence the meta-architecture's field is there to avoid. If §B.9 means
+  #     the field to be authored rather than computed, that is a Stage 4 call, not a tracer fix.
+  #     (`via : SeatId?` is the other missing one and IS rowed, as `H-108`.)
+  #   * `Tenure.payload` where §B.8 has `term?`. Left: `payload` is what `term?` would replace,
+  #     and it waits on `H-98`. ⚠ `degree` WAS LISTED HERE AS A DEVIATION UNTIL 2026-09-04 AND IS
+  #     NOT ONE: §B.8's type line reads `, degree? )`. It is `F.4`'s open question about what the
+  #     field should HOLD, which is a different thing from the two shapes disagreeing.
+  #   * `Event.changes` is a fold-built `StateChange[]`, not gate-minted `Receipt[]`, and the log
+  #     is appended to with a bare `list.append` at FIVE sites, not one -- `shape.py` lines 1985,
+  #     3973, 4010, 4173 and 4852 (this bullet named only `season()`'s until 2026-09-04, which
+  #     understated the work by a factor of five and would have read as a one-line fix). So §C.2's
+  #     "an Event reporting a write the gate did not apply fails at append" HAS NO IMPLEMENTATION
+  #     HERE, and closing it means ONE append-side owner every site routes through, not a check
+  #     bolted to the driver. This is the largest of the seven and it is `ID-9`'s own mechanism;
+  #     it is listed in the meta-architecture's HANDOFF as pending rather than rowed, because it
+  #     is a build item.
   #   * `Person.beliefs` survives with a matrix row where §D.1.1 deletes the field.
   #   * `Rung._DECLARED` still carries `stake`, `transmission`, `judging_set_rule`; §B.3 deletes
   #     all three, and Stage 4 §B.7 moves the judging set to a Query over seats.

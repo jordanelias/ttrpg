@@ -4637,8 +4637,13 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
         "propagation")
 
 
-def test_id16_the_sign_column_has_a_reader_and_it_can_fail():
-    """`G13` — the gate that makes `sign:` a mechanism rather than a note.
+def test_id16_the_sign_column_is_shape_validated_and_the_gate_can_fail():
+    """`G13` — the gate that validates the `sign:` column's SHAPE.
+
+    ⚠ RENAMED 2026-09-04. It was `..._has_a_reader...` and its first line called G13 *the gate that
+    makes `sign:` a mechanism rather than a note* — which the commit that wrote it later retracted:
+    no RESOLVER reads `sign`, and deleting the column leaves the season loop byte-identical. A test
+    whose NAME asserts a retracted claim is the artifact reporting a success that did not happen.
 
     ⚠ MUTATION-CHECKED, BECAUSE A GATE NOBODY HAS SEEN FAIL IS `ID-10`'s ABSENT CHECK. Three
     plants, one per clause. The clean register must pass, and each mutation must be named."""

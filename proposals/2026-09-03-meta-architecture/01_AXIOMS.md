@@ -547,9 +547,17 @@ prose**, which is the exact error corrected two sections earlier in this documen
 
 ⚠ **CORRECTED 2026-09-04 — THE FIRST WORDING SAID *what a VERB writes × what a VERB'S PRECONDITION
 reads*, AND THAT DEFINITION EXCLUDES EVERY LOOP THE DESIGN HAS ACTUALLY FOUND.** Checked against
-the four that were declared: the propagation loop is written by WITNESS and read by the question
-sources, with **no verb `requires` on the cycle at all** — the verb carrying it, `speak`, has
-`requires: "—"`. Decay is a MATTER writer; eviction is a WITNESS writer. **So the derived check as
+the four that were declared: **the WRITE edge on every one of them belongs to a STEP, not to a
+verb.** WITNESS writes the ledger; MATTER decays; WITNESS evicts. A definition quantifying over
+*what a **verb** writes* cannot see any of them.
+
+⚠ **AND THE FIRST WRITING OF THIS CORRECTION GAVE THE WRONG REASON, WHICH A CRITIC OVERTURNED.** It
+said there was *no verb `requires` on the cycle at all*. **That is false:** `tell`'s precondition is
+*"the teller holds a claim on the subject"*, and `_req_tell` reads the teller's ledger — a verb
+`requires` reading exactly what WITNESS writes, squarely on the cycle. What is missing is the other
+half: `tell` declares `writes: []`, so the write belongs to the step. **The conclusion is a
+write-side one and was argued read-side**, and a session opening `_req_tell` would have concluded
+this correction was itself wrong. **So the derived check as
 first specified would have returned a set DISJOINT from the declared list and failed on a correct
 system** — a falsifier that cannot pass is not blocked, it is mis-specified, and it would have read
 as evidence the declared rows were wrong. `F.24` still blocks the verb-precondition *half*; it was
@@ -575,10 +583,14 @@ badly-declared loop, no RESOLVER reads `sign`, and deleting the column leaves th
 byte-identical.
 
 > **So the honest split is:** the **declared** list is buildable today and is the representation this
-> idiom owes; the **derived** check — recompute the cycle set from `writes` × typed `requires` and
-> assert it equals the declared list — is blocked until `F.24` lands, and it is what turns the list
-> from an authored claim into a falsifiable one. **State the list now; the checker follows the
-> grammar.** ⚠ **An error AGAINST the design is as serious as one for it** (`G.4.3`), and this one was
+> idiom owes; the **derived** check — recompute the cycle set from **what is written** against
+> **every typed reader**, and assert it equals the declared list — is blocked until `F.24` lands,
+> and it is what turns the list from an authored claim into a falsifiable one. **State the list now;
+> the checker follows the grammar.** ⚠ *This sentence read `writes` × typed `requires` until
+> 2026-09-04. That is the narrower definition the box above corrects — verb preconditions are ONE
+> typed reader among several, and on all four declared loops the WRITE edge belongs to a step, so a
+> check scoped to verbs alone would recompute an empty set. The correction is stated three
+> paragraphs up; this quote no longer contradicts it.* ⚠ **An error AGAINST the design is as serious as one for it** (`G.4.3`), and this one was
 > made in the idiom that exists to catch a design's own blind side.
 
 **Why it is worth stating anyway.** This design is made almost entirely of refusals — `T-a` refuses

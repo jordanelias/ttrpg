@@ -375,9 +375,12 @@ def rule_G13(reg: dict) -> list:
          not a crash.
 
     ⚠ **AND IT DOES NOT CHECK THAT THE ENUMERATION IS COMPLETE, WHICH IS THE HALF THAT IS STILL
-    ABSENT.** Completeness needs the cycle set computed from `writes` × typed `requires`, and
-    `requires` is prose in all 32 verb rows (`H-94`/`F.24`). `H-102` is that row. This gate checks
-    every loop somebody declared; it cannot see one nobody did."""
+    ABSENT.** Completeness needs the cycle set computed from **what is written** × **every typed
+    reader** — the question sources and the channel predicates as much as a verb's `requires`,
+    since the write edge on every declared loop belongs to a STEP rather than to a verb. **`H-106`
+    is that row** (not `H-102`, which is the propagation loop; the first writing of this docstring
+    named the wrong one). This gate checks every loop somebody declared; it cannot see one nobody
+    did — which is how `H-112` went unrecorded until an audit read `World.write`."""
     bad = []
     for r in reg["rows"]:
         sign, kind = r.get("sign"), str(r.get("kind") or "")

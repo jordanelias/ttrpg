@@ -99,8 +99,8 @@ does.** Stage 1's `ID-16` states the missing axis — *a design enumerates its l
 one* — and says why a design made almost entirely of refusals converges: every refusal is a damping
 term. **The debt is not closed and its shape has changed**: what is missing is no longer a doctrine
 but a **representation**, and `ID-16` names the blocker rather than papering it — the enumeration is
-a cycle over *what a verb writes* × *what its precondition reads*, and `requires` is prose in all 32
-rows (`F.24`). **So the honest state has two halves.** The **declared** signed list is buildable now — a `LOOP` row
+a cycle over *what is written* × *what every typed reader consults*, of which a verb's `requires` is
+one, and `requires` is prose in all 32 rows (`F.24`). **So the honest state has two halves.** The **declared** signed list is buildable now — a `LOOP` row
 kind with a `sign` column in `hole_register.yaml`, the closed-set form `G.3.1` puts first — and it is
 what `ID-16` owes. ⚠ **It is not yet a mechanism**: `G13` validates the column's SHAPE — a LOOP row must carry a sign,
 an amplifying one must name its bound — and no RESOLVER reads it, which is the reading `ID-13`
@@ -108,8 +108,12 @@ requires. Delete the column and the season loop is byte-identical. The
 **derived** check recomputes the cycles from **what is written** × **every typed reader** — the
 question sources and the channel predicates as much as a verb's `requires` — and compares them to
 the declared list. ⚠ *Stage 1 corrected that definition on 2026-09-04: stated as `writes` × verb
-`requires` alone it excludes all four declared loops, none of which has a verb precondition on its
-cycle.* The `requires` half is blocked until it is typed. **What would be reference rather than
+`requires` alone it recomputes an empty set, because on all four declared loops the WRITE edge
+belongs to a STEP — WITNESS writes the ledger, MATTER decays, WITNESS evicts — and no verb declares
+those writes. The reason is a write-side one: `tell` DOES carry a `requires` on the cycle (`_req_tell`
+reads the ledger WITNESS wrote), so the first wording of the correction, which said no verb
+precondition sits on a cycle at all, was itself false.* The `requires` half is blocked until it is
+typed. **What would be reference rather than
 mechanism is a table of loops written into a markdown file**, which is a narrower thing than *the
 enumeration is unbuildable*, and Stage 1 records the correction.
 
