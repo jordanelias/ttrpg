@@ -294,6 +294,40 @@ rosters:
       subject is READ off the Event the design already has. `H-79` is the row.
     values: [actor, per_change, both]
 
+  observation_deposit_modes:
+    source: "`W-B`. #353 §28 says WITNESS deposits a Claim and never says whether a deposit may carry WHAT THE FOLD READ, or to whom. §20 types the Claim and stops there."
+    cite: "H-122"
+    open: true
+    note: >-
+      ⚠ THIS IS THE WRITE SIDE OF `H-116`, AND THE READ SIDE ALREADY SHIPPED. `belief_contradicts`
+      evaluates the verb's own `requires_typed:` cell against `LedgerReader`, so the vocabulary a
+      claim must be in to reach §F1 clause 4 is `stores:<kind>` / `condition` / `contain.path:<to>`
+      / `claim.held` / `exists:<kind>` / a relation stem — the strings `Observation` DERIVES from
+      the cell's own fields. Every deposit before `W-B` carried `predicate = e.kind` and
+      `value = True`, which is a DISJOINT vocabulary and a value no comparator can send to False,
+      so clause 4 could not fire in any run. Measured on NPC-088 over 3 seasons at seed 0: **600
+      claims in ledgers, 0 of them in the derived namespace, 0 of them falsy.** The channel was
+      closed by a theorem, not by a bug.
+      `none` is THE CONTROL and is the behaviour before `W-B` exactly, so every measurement of this
+      item has a baseline (`CLAUDE.md` §0.1 point 4). `actor` deposits an act's reads to the actor
+      alone — the minimum that closes the loop, and the arm where every claim minted is one its
+      holder can read back, because `belief_contradicts` binds `from` to the person's OWN
+      containing rung and `actor` to their own id. `total` gives the reads the same fan-out the
+      Event itself got, which is #353 §61's shape for the Event and is not stated for the read.
+      ⚠ THE OBJECTION TO `total` IS §F1'S EPISTEMOLOGY AND IT IS WEAKER THAN IT LOOKS. The fold
+      reads with `WorldReader` — world truth — so fanning a read to everyone teaches everyone a
+      VERIFIED fact, and §F1 rests on people acting on beliefs that may be wrong. But
+      `LedgerReader` resolves on `(when, confidence)` and the cap evicts, so a season-1 observation
+      of `stores:grain = 5` is a STALE belief the moment the granary empties, and a person acting
+      on it acts wrongly. The epistemic gap survives as RECENCY rather than as absence. That is a
+      reading, not a result; the arm is swept and the measurement is on `H-122`.
+      ⚠ UNKNOWN IS NEVER DEPOSITED IN ANY ARM. A read the world could not answer is the
+      INSTRUMENT'S gap, and `H-94`'s `operands_for` refuses to mint an act with a hole precisely so
+      that gap does not become a false belief; depositing UNKNOWN would reintroduce it from the
+      other end. It is inert besides — it reads back UNKNOWN and can contradict nothing — while
+      still costing a ledger slot the cap evicts somebody else for.
+    values: [none, actor, total]
+
   witness_channel_predicates:
     source: "#353 §20 names the five witness channels and gives NONE of them a predicate. `S61`: *\"WITNESS AS SPECIFIED FANS EVERY EVENT TO EVERY PERSON. Nothing said in private is private.\"*"
     cite: "H-33"

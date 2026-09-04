@@ -5223,11 +5223,32 @@ def test_wa_the_fold_and_the_person_read_the_same_cell_with_opposite_polarities(
     assert kinds == ["transfer.refused"], (
         f"an operand-less `transfer` emitted {kinds}. UNKNOWN must refuse in the fold; admitting "
         "it would move grain the act never named -- `H-94` filled by accident")
-    # And the reads are on the Verdict and NOWHERE ELSE: attaching them to the Event is `W-B`.
+    # And the reads are on the Verdict.
     assert all(isinstance(o, S.Observation) for o in verdict.observed)
+    # ⚠ **THIS ASSERTION WAS INVERTED BY `W-B` AND THE INVERSION IS THE POINT, NOT A RELAXATION.**
+    # It read `assert not any(hasattr(e, "observed") for e in ev)` -- *"an Event grew an
+    # `observed` field, that is `W-B` and this item must not have built it"* -- and it was `W-A`'s
+    # guard against building a carrier before its reader exists (`ID-13`). `W-B` is the item that
+    # builds it, and the reader is `belief_contradicts`, which evaluates the same cell against
+    # `LedgerReader`. So the guard is not deleted: it now asserts the field EXISTS and CARRIES THE
+    # SAME READS THE VERDICT DID, which is the property that would break if `W-B` were reverted
+    # halfway -- a field added and never populated is the dead carrier from the other direction.
     ev = d._fold(w, S.Act(id="wa_t2", actor="p_low", verb="transfer", payload={"subject": "Hh"}))
-    assert not any(hasattr(e, "observed") for e in ev), (
-        "an Event grew an `observed` field -- that is `W-B` and this item must not have built it")
+    assert all(hasattr(e, "observed") for e in ev), (
+        "an Event lost its `observed` field -- `W-B` attaches the fold's reads to every Event an "
+        "act emits, and a missing field means the carrier was reverted")
+    # ⚠ AND ON THIS ACT BOTH ARE EMPTY, WHICH IS ASSERTED AS A VALUE RATHER THAN LEFT VACUOUS
+    # (§0.1 point 2). `transfer`'s cell is `of: from`, the payload binds only `subject`, so
+    # `ScalarThreshold.check` returns UNKNOWN BEFORE calling `_observe` and nothing is recorded.
+    # Pinning `()` is what would catch a fold that leaked a PREVIOUS act's reads onto this one --
+    # the failure a hoisted `verdict` would produce. The POPULATED case is
+    # `test_wb_the_fold_attaches_the_verdicts_reads_to_every_event_the_act_emits`, which is where
+    # it belongs: this is `W-A`'s test and its subject is the UNKNOWN polarity.
+    assert verdict.observed == (), verdict.observed
+    assert all(e.observed == () for e in ev), (
+        f"the Event carries {[e.observed for e in ev]} for an act whose precondition returned "
+        "UNKNOWN before reading anything. A non-empty tuple here is another act's reads leaking "
+        "through, which is the second resolver §27.2 forbids")
 
 
 def test_wa_work_refuses_for_want_of_a_site_and_that_is_a_polarity_correction():
@@ -5992,3 +6013,349 @@ def test_wc_the_matter_kind_comes_from_the_question_before_it_comes_from_the_fix
     q3 = S.Question("q:wc_kind3", "need", ("Hh",), "prop_x")
     assert S.operands_for(p, row, q3, "Hh", w.fixtures)["kind"] == "grain"
     assert S.store_kind_of(p, q3) is None
+
+
+# ===========================================================================
+# W-B — `Event.observed`: THE FOLD ATTACHES WHAT IT READ, AND WITNESS DEPOSITS IT.
+#
+# THE LOOP THIS CLOSES, AND THE THEOREM THAT CLOSED IT. `Query.opening_set`'s four clauses never
+# consult world state — §F1 puts the person on BELIEFS — so the only channel from what happened
+# to what is next decided is a ledger claim read by `belief_contradicts`. And that function could
+# not read any claim this corpus deposited: every deposit carried `predicate = e.kind` and
+# `value = True`, while the `requires` vocabulary is `stores:<kind>` / `condition` /
+# `contain.path:<to>` / `claim.held` / `exists:<kind>` / a relation stem. Disjoint vocabularies,
+# and `True` can never make a comparator return False. Closed by a theorem, not by a bug — and
+# MEASURED at seed 0 over three NPC-088 seasons before this item: 600 claims in ledgers, ZERO in
+# the derived namespace, ZERO falsy. `test_wb_the_control_arm_deposits_no_claim_in_the_grammar`
+# is that measurement, kept as the `none` arm rather than as a sentence.
+# ===========================================================================
+
+
+def _wb_world(mode: str, grain: int = 0):
+    """`tiny_world` with `Hh`'s granary set, and one deposit mode. `grain=0` is the arm that can
+    produce a FALSE: `stores(Hh, grain) = 0` against `amount = 1`."""
+    w = P.tiny_world(S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", mode))
+    w.rungs["Hh"].stores["grain"] = grain
+    return w
+
+
+def _wb_fold_one(w, verb="transfer", actor="p_low", subject="S"):
+    """One act through the fold, WITNESSED. Returns `(driver, events)`."""
+    p = w.persons[actor]
+    row = S.VERB_TABLE[verb]
+    q = S.Question("q:wb", "need", (subject,), "prop")
+    ops = S.operands_for(p, row, q, subject, w.fixtures)
+    assert ops is not None, f"{verb} formed no operands — the fixture changed, not the item"
+    d = S.SeasonDriver(w)
+    w.step = S.Step.RESOLVE
+    a = S.Act(id=f"wb_{verb}", actor=actor, verb=verb, payload=dict(ops))
+    evs = d._fold(w, a)
+    for e in evs:
+        w.log.append(e)
+        d.act_of[e.id] = a
+    w.step = S.Step.WITNESS
+    d.witness(evs)
+    return d, evs, ops, row, q
+
+
+def test_wb_the_fold_attaches_the_verdicts_reads_to_every_event_the_act_emits():
+    """EDIT 2, EXECUTED. The reads that produced the verdict ride on the Event — refusal AND
+    success — and a verb whose precondition read nothing through the `Observation` channel
+    carries `()`.
+
+    ⚠ THE REFUSAL IS THE INFORMATIVE ONE AND IS ASSERTED FIRST. `stores:grain -> 0` is *why* it
+    refused, and `0 >= 1` is the only thing in this grammar that can evaluate False — which is
+    what makes the deposit below able to contradict anything at all.
+
+    ⚠ THE EMPTY CASE IS ASSERTED TOO, AND NOT AS DECORATION. `create_record` is untyped, so its
+    Event must carry `()` rather than the previous act's reads: `verdict` is a `_fold` local that
+    `ev` closes over, and a version that hoisted it to the driver would leak one act's reads onto
+    the next act's Events. That is the failure this half excludes (§0.1 point 2).
+
+    MUTATION (run 2026-09-04): drop `observed=verdict.observed` from `_fold`'s `ev(...)` — every
+    Event carries `()` and this goes RED on the first assertion with `refusal carried no reads`.
+    Restored, GREEN. MUTATION 2: hoist `verdict` out of `_fold` onto the driver — the untyped
+    assertion goes RED with `create_record carried 1 read`. Restored, GREEN."""
+    # THE REFUSAL — an empty granary.
+    w = _wb_world("none", grain=0)
+    _d, evs, _ops, _row, _q = _wb_fold_one(w)
+    assert [e.kind for e in evs] == ["transfer.refused"], [e.kind for e in evs]
+    obs = evs[0].observed
+    assert obs, "the refusal carried no reads — `Event.observed` is not reaching the Event"
+    assert all(isinstance(o, S.Observation) for o in obs), obs
+    assert (obs[0].subject, obs[0].predicate, obs[0].value) == ("Hh", "stores:grain", 0), obs
+
+    # THE SUCCESS — the same cell, a stocked granary. A success carries its reads too.
+    w2 = _wb_world("none", grain=8)
+    _d2, evs2, _o2, _r2, _q2 = _wb_fold_one(w2)
+    assert [e.kind for e in evs2] == ["transfer.made"], [e.kind for e in evs2]
+    assert evs2[0].observed and evs2[0].observed[0].value == 8, evs2[0].observed
+
+    # THE EMPTY CASE — an untyped verb reads nothing through this channel and says so.
+    w3 = _wb_world("none", grain=8)
+    _d3, evs3, _o3, _r3, _q3 = _wb_fold_one(w3, verb="create_record", subject="S")
+    assert evs3, "create_record emitted nothing — the fixture changed"
+    assert all(e.observed == () for e in evs3), (
+        f"`create_record` carried {[len(e.observed) for e in evs3]} read(s). It is untyped, so "
+        "nothing went through the `Observation` channel — a non-empty tuple here is a previous "
+        "act's reads leaking through a hoisted `verdict`")
+
+
+def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_goes():
+    """**THE ACCEPTANCE, END TO END, WITH ITS CONTROL.** A claim in the `requires` vocabulary,
+    with a value that can be False, lands in a ledger, and `belief_contradicts` reads it.
+
+    The chain, each link executed here rather than argued:
+      1. `stores(Hh, grain) = 0` and `amount = 1`, so the fold's `scalar_threshold` is False.
+      2. The refusal Event carries `Observation('Hh', 'stores:grain', 0)`.
+      3. WITNESS deposits `Claim(subject='Hh', predicate='stores:grain', value=0)` to the actor.
+      4. `belief_contradicts` evaluates THE SAME CELL against `LedgerReader`: `0 >= 1` is False.
+      5. `opening_set` clause 4 drops the `transfer` Candidate.
+
+    ⚠ THE SUBJECTS MATCH BECAUSE BOTH SIDES BIND `from` THE SAME WAY, and that is `W-C`'s
+    one-owner binding being spent rather than restated: the fold binds `from` off `Act.payload`,
+    the person binds it off `containing_rung_of(p)`, and `pack_scenes` put the second on the
+    first. A claim about a rung the person will never bind would be inert.
+
+    ⚠ THE CONTROL IS THE `BEFORE` HALF AND IT IS NOT DECORATION (§0.1 point 4). Without it this
+    shows only that a person holding a contradicting claim forms no Candidate — which was already
+    true and is `W-A`. What is new is that the LOOP produced the claim.
+
+    ⚠ WHAT THIS DOES **NOT** CLAIM. Whether closing this channel changes what the corpus decides
+    is `W-D`'s measurement. The candidate count below is this world's, under a planted empty
+    granary, and is evidence the mechanism EXECUTES — never a reconvergence figure.
+
+    MUTATION (run 2026-09-04): set `observation_deposit_mode` to `none` in `_wb_world` — the claim
+    never lands, `contradicts AFTER` stays False, and this goes RED on the `AFTER` assertion.
+    Restored, GREEN. MUTATION 2: deposit `o.predicate` as `e.kind` instead — the claim lands in
+    the event-kind namespace, `LedgerReader.read` finds nothing, and it goes RED the same way.
+    Restored, GREEN."""
+    w = _wb_world("actor", grain=0)
+    p, row = w.persons["p_low"], S.VERB_TABLE["transfer"]
+    q = S.Question("q:wb", "need", ("S",), "prop")
+    ops = S.operands_for(p, row, q, "S", w.fixtures)
+
+    # ---- CONTROL: nothing in the ledger, so nothing is contradicted.
+    assert not S.belief_contradicts(p, row, "S", ops), (
+        "a person holding no claim about `Hh` was treated as knowing `transfer` fails — §F1's "
+        "asymmetry is gone and this test can no longer observe what it is for")
+    w.step = S.Step.DELIBERATE
+    before = S.Query.opening_set(p, S.Query.assemble(p, q, w.fixtures.get("view_k")), q,
+                                 w.fixtures)
+    assert any(c.verb == "transfer" for c in before), (
+        "no `transfer` Candidate formed even before the deposit — the control is broken, not the "
+        "claim")
+
+    # ---- THE LOOP: fold, refuse, witness.
+    _d, evs, _o, _r, _q = _wb_fold_one(w)
+    assert evs[0].kind == "transfer.refused", evs[0].kind
+    landed = [c for c in p.ledger if c.predicate == "stores:grain"]
+    assert len(landed) == 1, (
+        f"{len(landed)} `stores:grain` claim(s) in the actor's ledger; expected exactly one. "
+        f"Ledger: {[(c.subject, c.predicate, c.value) for c in p.ledger]}")
+    assert (landed[0].subject, landed[0].value) == ("Hh", 0), landed[0]
+    assert landed[0].holder == p.id and landed[0].visibility == "own", landed[0]
+
+    # ---- THE READ: the same cell, the person's own ledger, and it is FALSE.
+    v = S.evaluate(row.requires_typed, S.LedgerReader(p.ledger), S.binding_of(p.id, ops))
+    assert v.value is False, (
+        f"the deposited claim evaluated {v.value!r}, not False. `LedgerReader.read` returns the "
+        "stored value verbatim, so `0 >= 1` is the whole mechanism — a non-False here means the "
+        "claim is not in the vocabulary the cell reads")
+    assert S.belief_contradicts(p, row, "S", ops)
+
+    # ---- THE DECISION: clause 4 drops it.
+    w.step = S.Step.DELIBERATE
+    after = S.Query.opening_set(p, S.Query.assemble(p, q, w.fixtures.get("view_k")), q,
+                                w.fixtures)
+    assert not any(c.verb == "transfer" for c in after), (
+        f"the `transfer` Candidate survived a claim that makes its requirement known-false: "
+        f"{[c.verb for c in after]}")
+    assert len(after) == len(before) - 1, (
+        f"{len(before)} -> {len(after)} candidates. Exactly one Candidate should go — a larger "
+        "drop means the deposit contradicted a verb this test did not plant a belief about")
+
+
+def test_wb_an_unknown_read_is_never_deposited_because_it_is_the_instruments_own_gap():
+    """PROHIBITION 3, EXECUTED. `H-94`'s `operands_for` returns `None` rather than minting an act
+    with a hole, precisely so *"the instrument's own gap would [not] become a FALSE BELIEF held by
+    every witness, about a granary nobody named"*. Depositing an UNKNOWN read reintroduces that
+    from the other end.
+
+    It is inert besides — `LedgerReader` returns the stored value, `_as_number(UNKNOWN)` is
+    UNKNOWN, and the clause returns UNKNOWN, so the claim can contradict nothing — while still
+    costing a slot the cap evicts somebody else for. That is `H-40`'s hazard paid for nothing.
+
+    ⚠ THE SCAN ASSERTS IT SCANNED (§0.1 point 2). A run producing no UNKNOWN read would pass this
+    trivially, so the count of UNKNOWN reads is asserted non-zero first. `work`'s `condition` on a
+    referent that is not a Site is the live case and is `H-121`'s own finding.
+
+    MUTATION (run 2026-09-04): drop the `if o.value is UNKNOWN ... continue` guard in `witness` —
+    3 `condition = UNKNOWN` claims and 3 `contain.path:* = UNKNOWN` claims land, and this goes RED
+    on the second assertion. Restored, GREEN."""
+    import headless as HL
+    w = HL.build_world(0, S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", "total"))
+    d = S.SeasonDriver(w)
+    mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    for _ in range(3):
+        d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+                 None, HL.subsistence)
+    unknown = [(e.kind, o.predicate) for e in w.log for o in e.observed if o.value is S.UNKNOWN]
+    assert unknown, (
+        "the run produced NO unreadable observation, so this scan cannot observe the deposit it "
+        "excludes — the world builder changed, not the rule")
+    deposited = [(c.subject, c.predicate) for p in w.persons.values() for c in p.ledger
+                 if c.value is S.UNKNOWN]
+    assert not deposited, (
+        f"{len(deposited)} UNKNOWN claim(s) reached a ledger, e.g. {deposited[:5]}. A read the "
+        "world could not answer is the INSTRUMENT'S gap, and depositing it is `H-94`'s false "
+        "belief arriving from the write side")
+
+
+def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_do():
+    """THE `none` ARM IS THE CONTROL AND IT CARRIES THE MEASUREMENT `H-116` REPORTED. Before
+    `W-B`, over three seeded NPC-088 seasons: claims in ledgers, ZERO of them in the vocabulary
+    `belief_contradicts` reads. That is the theorem, and it is asserted here rather than recited.
+
+    ⚠ THE CONTROL IS NOT BYTE-IDENTICAL TO PRE-`W-B` AND SAYING OTHERWISE WOULD BE FALSE.
+    `content_hash` folds `Event.observed`, and the fold attaches it in EVERY arm — the mode gates
+    the DEPOSIT, at WITNESS, not the carrier, in the fold. So `none` reproduces the deposits, the
+    events and the ledger contents exactly, and its world hash differs from the pre-`W-B` hash
+    BECAUSE THE LOG NOW RECORDS THE READS. That difference is the free falsifier
+    (`test_wb_the_carrier_moves_the_seeded_hash`) firing, not a defect in the control.
+
+    MUTATION (run 2026-09-04): make `none` deposit as `actor` does — the `none` count goes to 2
+    and this goes RED on the first assertion. Restored, GREEN."""
+    import headless as HL
+
+    def grammar_claims(mode):
+        w = HL.build_world(0, S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", mode))
+        d = S.SeasonDriver(w)
+        mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+        for _ in range(3):
+            d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+                     None, HL.subsistence)
+        total = sum(len(p.ledger) for p in w.persons.values())
+        return total, [(c.subject, c.predicate, c.value)
+                       for p in w.persons.values() for c in p.ledger
+                       if str(c.predicate).partition(":")[0] in S.REQUIRES_STEMS]
+
+    held, none_arm = grammar_claims("none")
+    assert held > 0, "the control run deposited nothing at all — the world builder changed"
+    assert none_arm == [], (
+        f"the CONTROL arm holds {len(none_arm)} claim(s) in the `requires` vocabulary: "
+        f"{none_arm[:5]}. `none` is defined as the behaviour before `W-B`, and before `W-B` the "
+        "two vocabularies were disjoint")
+    _h2, actor_arm = grammar_claims("actor")
+    _h3, total_arm = grammar_claims("total")
+    print(f"\n  W-B — grammar-vocabulary claims held after 3 seasons, by deposit mode: "
+          f"none={len(none_arm)} actor={len(actor_arm)} total={len(total_arm)}")
+    assert actor_arm, (
+        "the `actor` arm deposited NO claim in the vocabulary `belief_contradicts` reads — the "
+        "channel this item exists to open is still closed")
+    assert len(total_arm) >= len(actor_arm), (
+        f"`total` held {len(total_arm)} and `actor` held {len(actor_arm)}: a wider fan-out "
+        "deposited fewer claims, which means the cap is evicting them faster than they land")
+
+
+def test_wb_the_carrier_moves_the_seeded_hash():
+    """THE FREE FALSIFIER, SPENT. `content_hash` folded `getattr(e, 'observed', None)` before this
+    field existed, with a comment promising the fold is *"forward-compatible without a second edit
+    the day that field lands"*. This is the day. If the hash did not move, either the field is not
+    reaching the Event or the hash is not folding it, and that comment was false.
+
+    Run as a DIFFERENCE rather than against a pinned literal: two identical seeded worlds, one
+    whose Events carry their reads and one whose Events are stripped of them. Same log, same
+    state, same everything else.
+
+    MUTATION (run 2026-09-04): delete the `for o in (getattr(e, "observed", None) or [])` loop
+    from `World.content_hash` — the two hashes match and this goes RED. Restored, GREEN."""
+    import headless as HL
+    hashes = []
+    for strip in (False, True):
+        w = HL.build_world(0, S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", "none"))
+        d = S.SeasonDriver(w)
+        mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+        for _ in range(2):
+            d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+                     None, HL.subsistence)
+        carried = sum(len(e.observed) for e in w.log)
+        if strip:
+            for e in w.log:
+                e.observed = ()
+        hashes.append(w.content_hash())
+    assert carried > 0, (
+        "no Event in the seeded run carries a read, so this comparison is between two identical "
+        "worlds and could not observe the failure it excludes")
+    assert hashes[0] != hashes[1], (
+        f"stripping every Event's reads left the world hash at {hashes[0]} — `content_hash`'s "
+        "`W-B` forward-compatibility fold does not reach the field it was written for")
+
+
+def test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total():
+    """**THE NAMED FALSIFIER, AND IT FIRES.** `claim_subjects` records the precedent: adding
+    referents to every deposit inflated the ledger until the cap — which evicts on
+    `(confidence, recency)` — pushed the decayed claims out, and all three arms of `H-40` reported
+    a minimum confidence of 100. *"The rate is inert and this sweep is measuring nothing"*, which
+    is `ID-10` produced by a fix rather than by a bug.
+
+    `W-B` does the same thing harder: one claim per read, per witness, per Event. So `H-40`'s
+    sweep is re-run IN EVERY ARM, and the result decides the default rather than being reported
+    beside it.
+
+    MEASURED 2026-09-04, seed 0, three NPC-088 seasons, `(decay events, min confidence)` by rate:
+      * `none`  — 0/100 · 183/95 · 183/80.  The sweep is observable. (The control.)
+      * `actor` — 0/100 · 191/95 · 191/80.  Unchanged. 70 evictions against the control's 48.
+      * `total` — 0/100 · 240/100 · 240/100. **INERT.** 282 evictions; every decayed claim is
+        evicted before the season ends, so minimum confidence is 100 at every rate.
+
+    That is `H-40` made unobservable by `W-B` at `total`, exactly as the precedent predicted — and
+    it is why the default is `actor`. Recorded on `H-122`.
+
+    ⚠ THIS ASSERTS THE FINDING, NOT ITS ABSENCE. A later change that makes `total` observable
+    again turns this RED, which is correct: the row's argument would then rest on a fact that had
+    stopped being true.
+
+    MUTATION (run 2026-09-04): change the `actor` arm to deposit to every witness (i.e. make it
+    `total`) — the `actor` ordering collapses to 100/100/100 and this goes RED on the second
+    assertion. Restored, GREEN."""
+    import headless as HL
+    from collections import Counter
+    out = {}
+    for mode in ("none", "actor", "total"):
+        seen = {}
+        for rate in (0, 5, 20):
+            fx = (S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", mode)
+                  .sweep("claim_decay_per_season", rate))
+            w = HL.build_world(0, fx)
+            d = S.SeasonDriver(w)
+            mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+            for _ in range(3):
+                d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+                         None, HL.subsistence)
+            confs = [c.confidence for p in w.persons.values() for c in p.ledger]
+            ev = Counter(e.kind for e in w.log)
+            occ = sum(len(p.ledger) for p in w.persons.values())
+            seen[rate] = (ev["claim.decayed"], min(confs), ev["claim.deposited"] - occ)
+        out[mode] = seen
+    print(f"\n  W-B / H-40 — (decay events, min confidence, evictions) by rate, per arm:")
+    for mode, seen in out.items():
+        print(f"     {mode:6} {seen}")
+
+    # THE CONTROL ARM MUST STILL MEASURE SOMETHING, or nothing below is interpretable.
+    assert out["none"][20][1] < out["none"][5][1] < out["none"][0][1], (
+        f"`H-40`'s sweep is not observable in the CONTROL arm: {out['none']}. `W-B` cannot be "
+        "blamed for that, and no other reading here is worth anything until it is fixed")
+    # THE DEFAULT ARM PRESERVES IT.
+    assert out["actor"][20][1] < out["actor"][5][1] < out["actor"][0][1], (
+        f"`H-40`'s sweep went inert in the DEFAULT arm: {out['actor']}. That is the precedent in "
+        "`claim_subjects` repeating, and the default must move rather than the assertion")
+    # AND `total` DOES NOT — asserted, because it is the finding.
+    assert out["total"][20][1] == out["total"][5][1] == out["total"][0][1] == 100, (
+        f"`total` no longer flattens `H-40`: {out['total']}. `H-122`'s argument for `actor` rests "
+        "on this being true; if it has stopped being true the ROW must be re-argued, not this line")
+    # AND THE MECHANISM IS THE CAP, not a coincidence: evictions rise monotonically with fan-out.
+    assert (out["none"][5][2] < out["actor"][5][2] < out["total"][5][2]), (
+        f"evictions do not rise with the deposit fan-out: "
+        f"{[out[m][5][2] for m in ('none', 'actor', 'total')]}. Then the flattening above has "
+        "some other cause and the reading on `H-122` is wrong")
