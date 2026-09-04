@@ -1711,7 +1711,30 @@ rows:
       `acts_differ`/`hash_differ` both True at the fork's own site, and the next three decisions
       identical regardless, consistent with arm 9c/9d's finding that no claim can reach
       `opening_set`. INERT-BY-CONSTRUCTION is reported separately and is never folded into
-      RECONVERGED.
+      RECONVERGED. ⚠ SUPERSEDED IN FIGURE, CONFIRMED IN SUBSTANCE - 2026-09-04, FULL CORPUS.
+      The 54 above is sample=3/seasons=3. Re-run over the whole runnable corpus at seed 0,
+      seasons 4, at `scene_budget=2 x interactions_per_scene=1`: 89 cases, 3204 probed, 801
+      NO-LIVE-WINDOW, 1608 INERT-BY-CONSTRUCTION, 795 REAL FORKS, 795 RECONVERGED, 0 DIVERGED,
+      reconvergence 100.0%, `changed_distribution = {0: 795}` - every real fork changed NONE of
+      its three following decisions. CITE 795, NOT 54, AND NOT #366's 2,403: under the native
+      fork the 2,403 are the INERT-BY-CONSTRUCTION population at the DEFAULT point (3204 - 801,
+      same denominator, opposite classification), not forks. Reproduction: `A9.run(K.Log(),
+      seed=0, fixtures=S.Fixtures(**{**dict(S.DEFAULT_FIXTURES._v), 'scene_budget': 2,
+      'interactions_per_scene': 1}))`. ⚠ AND THE TWO FIXTURE POINTS `runs/OPUS_PROMPTS.md` GAVE
+      W-D BOTH RETURN ZERO REAL FORKS over the same corpus - rate `None` (0/0), so W-D's "strictly
+      below 100%" was not evaluable there at all. The W-D prompt is corrected to the 2-slot point;
+      `EXECUTION_PLAN.md` §0 row 5 carries the correction. ⚠ A DEFECT IN THIS ROW'S OWN
+      INSTRUMENT, FOUND BY THE SAME RUN: `budget_report`'s `slots = scene_budget x
+      interactions_per_scene` IS NOT THE REAL BOUND. `Query.budget` (shape.py line 2318) is
+      PER PERSON - `max(1, k + offices*budget_office_bonus - body_band_penalty - legs*penalty)` -
+      and an extended scene costs `extended_scene_cost` (shape.py lines 2858 and 2870), so office-holders
+      carry a larger budget than the product. Measured at `interactions_per_scene=1`: the
+      per-deliberation in-budget take L is {5: 70, 6: 72, 7: 146} over 288 sampled deliberations,
+      so 146 of them took ALL 7 candidates - the budget did NOT bind there - while
+      `budget_binds` reported True at 1068 of 1068. THE 100% BINDING RATE IN THIS ROW IS
+      OVERSTATED. The VERDICT at both points survives (7 candidates vs a true max of 7 at
+      ips=3 and 5 at ips=1 for a person with no offices), which is why this was invisible;
+      the RATE does not. Owner of the fix is W-D, which owns arm 9.
 
   - id:        "H-118"
     tier:      1

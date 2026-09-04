@@ -370,15 +370,39 @@ counts same-tick decisions counts slots that cannot differ, and a fork in the fi
 season has no live slot at all. Take only decisions at a STRICTLY LATER tick, and
 report a fork that cannot fill the window as NO-LIVE-WINDOW, excluded from the rate.
 
-Run arm 9 over the full runnable corpus at seed 0 at BOTH DEFAULT_FIXTURES and
-interactions_per_scene=1, each with observation_deposit on and off — four arms.
-Report per arm: forks probed; INERT-BY-CONSTRUCTION / NO-LIVE-WINDOW / DIVERGED /
-RECONVERGED; reconvergence over DIVERGED+RECONVERGED only; budget_binds rate; world
-fingerprint divergence (not content_hash alone). Positive control: in probes.tiny_world,
-a planted (Hh, "stores:grain", 0) claim at t flips p_low's decision at t+1 — print the
-two ranked lists. Negative control: observation_deposit=off at interactions_per_scene=1
-must return reconvergence to the pre-W-A figure; if it does not, something other than
-the belief edge moved and you must find it before reporting.
+⚠ THE FIXTURE POINT WAS WRONG AND IS CORRECTED (measured 2026-09-04, full corpus).
+This prompt read "at BOTH DEFAULT_FIXTURES and interactions_per_scene=1". Arm 9 returns
+ZERO real forks at BOTH: 89 cases, 3204 probed, 801 NO-LIVE-WINDOW, 2403
+INERT-BY-CONSTRUCTION, real forks 0, reconvergence rate None (0/0). A fork is real only
+when the probed alternative t reaches the last in-budget slot L, and MAX_ALT=3
+(arm9_forking.py:55) while L>=4 at every live-window deliberation. "Strictly below 100%"
+is not evaluable on 0/0. H-117's own cite already recorded the mechanism -- "MAX_ALT's
+top-3-alternatives probe does not reach it at that person's own in-budget count (L=5)
+without also narrowing the budget itself" -- and this run is its corpus-wide confirmation.
+
+Run arm 9 over the full runnable corpus at seed 0 at scene_budget=2 x
+interactions_per_scene=1 (2 slots), with observation_deposit on and off. Both knobs are
+`assumption` with declared sweep points (H-10 sweep [2,5,9]; H-76 sweep [1,3,unbounded]),
+so this SELECTS a declared value and invents no constant (S42.2.1). Report per arm: forks
+probed; INERT-BY-CONSTRUCTION / NO-LIVE-WINDOW / DIVERGED / RECONVERGED; reconvergence
+over DIVERGED+RECONVERGED only; budget_binds rate; world fingerprint divergence (not
+content_hash alone). Positive control: in probes.tiny_world, a planted
+(Hh, "stores:grain", 0) claim at t flips p_low's decision at t+1 — print the two ranked
+lists. Negative control: observation_deposit=off must return reconvergence to the
+PRE-W-A BASELINE MEASURED AT THAT POINT — 795 real forks, 795 RECONVERGED, 0 DIVERGED,
+100.0%, changed_distribution {0: 795}, budget 1068/1068 (seed 0, seasons 4, 89 cases).
+If it does not, something other than the belief edge moved and you must find it before
+reporting.
+
+⚠ TWO OF THE FOUR ARMS ARE NOT BUILDABLE UNTIL W-B LANDS. `observation_deposit` occurs
+ZERO times in shape.py; it exists only in this file and EXECUTION_PLAN.md, and it is
+W-B's item 4. Do not report an `off` arm you did not run.
+
+⚠ AND THE NEGATIVE CONTROL IS STATED TWO WAYS ACROSS THE TWO DOCUMENTS. This prompt says
+"return reconvergence to the pre-W-A figure"; EXECUTION_PLAN.md:92 says "returning
+reconvergence to 100% at the same fixture point". At this point they coincide (the pre-W-A
+figure IS 100.0%), so the conflict is inert today -- but it is a real divergence between
+the two surfaces and the next session to move either must move both.
 Write results only to runs/SWEEP_LOG.txt and runs/results.json via sweep.py; do not
 edit README.md. Every number in your commit message is copied from results.json.
 ```

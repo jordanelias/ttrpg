@@ -14,18 +14,36 @@ is a work order with falsifiers, execution artifacts and the two prompts per ite
 ## 0 · What the planning review OVERTURNED in this sweep's own findings
 
 I asked it to contradict me. It did, on four counts, and all four are verified against the tree.
+⚠ **A FIFTH was added 2026-09-04** by an independent read-only critic on the sweep's own follow-on
+measurement; it is row 5 and it changes W-D's fixture point.
 **They are corrected in `README.md` and in the register rows; they are repeated here because they
 change the ORDER of the work below.**
 
 | # | my claim | the correction | verified at |
 |---|---|---|---|
 | **1** | *"the design's worked example is one type mismatch from running"* — this report's headline action | **One type mismatch AND one operand.** The corpus's refusals are **operand-gap** refusals: `pack_scenes` puts only `subject` on the payload, so `_req_transfer` reads an empty `from` and refuses a well-stocked granary. **Opening the belief channel first would teach every witness a FALSE fact.** `H-94` is ON the critical path | `shape.py:2739` and its own comment; `_req_transfer` `:3532-3535` |
-| **2** | *"zero of 4,800 claims are falsy"* | **A theorem, not a sample.** `witness` mints `Claim(cid, pid, subj, e.kind, True, …)` — predicate is the Event kind, value is a literal `True`, always. I sampled what the code states | `shape.py:4782` |
-| **3** | *"the engine has no native x-instead-of-y moment"* | **Half wrong.** 15 slots vs ~7 candidates at the default — but `interactions_per_scene` is swept `1/3/unbounded` on `H-76`, and at `1` it is **5 slots vs 7: the budget binds natively.** `H-117` re-kinded from `ABSENT_RULE`; the defect underneath is `H-96` (alphabetical survival) | `shape.py:952`, `:1020` |
+| **2** | *"zero of 4,800 claims are falsy"* | **A theorem, not a sample.** `witness` mints `Claim(cid, pid, subj, e.kind, True, …)` — predicate is the Event kind, value is a literal `True`, always. I sampled what the code states | `shape.py:4887` — ⚠ re-resolved 2026-09-04; `:4782` is a comment on ordered folds |
+| **3** | *"the engine has no native x-instead-of-y moment"* | **Half wrong.** 15 slots vs ~7 candidates at the default — but `interactions_per_scene` is swept `1/3/unbounded` on `H-76`, and at `1` it is **5 slots vs 7: the budget binds natively.** `H-117` re-kinded from `ABSENT_RULE`; the defect underneath is `H-96` (alphabetical survival) | `shape.py:983` (`scene_budget`), `:1051` (`interactions_per_scene`) — ⚠ this row cited `:952`/`:1020`, which are a `site_yield` error string and unrelated code; re-resolved 2026-09-04 |
 | **4** | *"12 interpersonal verbs carry no degree column"* framed as a defect | **§27.4's design.** An uncontested attempt routes to a gate, never an Ob=0 roll. **Speech is not owed a degree.** The real defect is narrower: no verb claims `a proposition`/`a standing`, and Jordan already said those can wait | `rosters.yaml:347`, `:356-360` |
+| **5** | *"at `1` it is **5 slots vs 7: the budget binds natively**"* — correction #3 above, which chose W-D's fixture point | ⚠ **TRUE AND INSUFFICIENT; W-D IS UNEXECUTABLE ON IT.** A fork is real only when the probed alternative `t` reaches the last in-budget slot `L`; `MAX_ALT=3` while `L>=4` at every live-window deliberation, so arm 9 returns **ZERO real forks and a rate of `None` (0/0)** over the full 89-case corpus at **both** points `runs/OPUS_PROMPTS.md` named — 3204 probed, 801 NO-LIVE-WINDOW, 2403 INERT-BY-CONSTRUCTION, 0 real. **Binding is necessary, not sufficient.** Corrected in the W-D prompt to `scene_budget=2 x interactions_per_scene=1`, where the baseline is **795 real forks at 100.0%** | `arm9_forking.py:55` (`MAX_ALT`), `:196-206` (the classifier); `H-117`'s cite already recorded the mechanism |
+
+⚠ **AND THE FIXTURE POINTS WERE NEVER IN THIS DOCUMENT.** `§2`'s W-D row says only *"a binding
+fixture point"*; the two unexecutable points are `runs/OPUS_PROMPTS.md`'s. **This plan did not
+forbid `scene_budget=2`** — the prompt simply never offered it. Correction #5 is therefore an
+amendment to the PROMPT, and the row below is unchanged.
+
+⚠ **THE NEGATIVE CONTROL IS STATED TWO WAYS.** `§2` below says *"returning reconvergence to 100%
+at the same fixture point"*; `runs/OPUS_PROMPTS.md` says *"return reconvergence to the pre-W-A
+figure"*. At the corrected point the pre-W-A figure **is** 100.0%, so the two coincide and the
+conflict is inert today. It is still two declarations of one control (`ID-12`), and a session
+moving either must move both.
+
+⚠ **TWO OF W-D's FOUR ARMS CANNOT BE BUILT YET.** `observation_deposit` occurs **zero** times in
+`shape.py` — it lives only in this file and the prompts, and it is **W-B's item 4**. W-D's
+negative control does not exist until W-B lands, which is a harder block than the arithmetic above.
 
 ⚠ **One more, load-bearing on any future forking test:** RESOLVE re-sorts acts by `(stratum, hash)`
-(`shape.py:4570-4571`), so **within-budget rank order is inert at RESOLVE by design.** Only a fork
+(`shape.py:4677-4678`), so **within-budget rank order is inert at RESOLVE by design.** Only a fork
 that changes the *set* is a fork.
 
 ---
@@ -36,9 +54,9 @@ Four edges must be live. Today:
 
 | edge | where | state |
 |---|---|---|
-| **E1 world → belief** | WITNESS deposit, `shape.py:4782` | present, **wrong payload** (predicate = Event kind, value = `True`) |
-| **E2 belief → candidate set** | clause 4 `belief_contradicts` `:2537`; clause 3 via Q2 | **severed / degenerate** |
-| **E3 belief → ranking** | §F2 score `:2447-2472` | **dead** — no verb writes any interior field (`H-62`) |
+| **E1 world → belief** | WITNESS deposit, `shape.py:4887` | present, **wrong payload** (predicate = Event kind, value = `True`) |
+| **E2 belief → candidate set** | clause 4 `belief_contradicts` `:2642`; clause 3 via Q2 | **severed / degenerate** |
+| **E3 belief → ranking** | §F2 score, `make_chooser` `:2529` | **dead** — no verb writes any interior field (`H-62`) |
 | **E0 exclusivity** | `pack_scenes` / `ask_budget` | binds only at `interactions_per_scene=1` |
 
 Plus a precondition the sweep missed: **E1 must carry TRUE facts**, i.e. acts must be well-formed
