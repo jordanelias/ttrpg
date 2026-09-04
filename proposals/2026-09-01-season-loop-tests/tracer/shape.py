@@ -2887,8 +2887,15 @@ def occasioned_by(w: "World", q: Optional["Question"]) -> list:
         The claim IS a belief about that Event — `Claim.predicate` is literally `e.kind` at the
         deposit — so citing the transport instead would put the postman in the arc. The deposit
         stays in the graph on its own `causes[]`; nothing is lost by not naming it twice.
-      * `date_due` — the Event that last changed the thing the question is about. A term
-        maturing emits, and it is the antecedent of a decision taken because of it.
+      * `date_due` — ⚠ **ALSO DEAD, AND FOR A DIFFERENT CAUSE THAN `band_crossed`.** `calendar()`
+        writes `Date.fired` through the gate with **no `emits=`**, and the gate builds an Event
+        only when one is passed (it is *required* only at MATTER), so **no Event in any log
+        carries a date id** and the search below cannot match. `write_matrix.yaml` declares
+        `date.fired` for `(Date, fired)` and nothing emits it — a CALENDAR-class silent write of
+        exactly the shape the gate refuses at MATTER. Doubly latent today, because `N1` means Q1
+        never forms at all; when `W20` closes `N1` the question will form and walk to nothing.
+        **Making CALENDAR emit is `W20`'s and is not done here** — it would put a new Event in
+        every log and move every hash.
       * `band_crossed` — ⚠ **THIS ROUTE IS DEAD, AND IT IS NAMED DEAD RATHER THAN LEFT TO LOOK
         LIVE.** `questions_for` builds the question as `Question(f"q:band:{what}", "band_crossed",
         (what,), what)` where `what` is the crossing's **verb** — `"work"` — not an id, so the
@@ -2903,10 +2910,14 @@ def occasioned_by(w: "World", q: Optional["Question"]) -> list:
         to a plausible default. An act taken out of a standing ambition genuinely has no
         antecedent but the actor, and `[ROOT]` is what the design already has for that.
 
-    ⚠ **SO TWO OF FOUR ROUTES ARE LIVE** — `claim_landed`, which is the one propagation runs on,
-    and `date_due`. One is empty by design (`need`) and one is dead for a reason it does not own
-    (`band_crossed`). Stated as two rather than four because *"one route per question source"*
-    was the first writing and it was an overclaim.
+    ⚠ **SO ONE OF FOUR ROUTES IS LIVE** — `claim_landed`, which is the one propagation runs on.
+    One is empty by design (`need`) and **two are dead**, each for a cause it does not own:
+    `band_crossed` because the question carries a verb name where an id is needed, `date_due`
+    because CALENDAR emits nothing. ⚠ **This count has been wrong twice**: *"one route per
+    question source"* first, then *"two of four"* after a critic found `band_crossed`. Both were
+    written by looking at this function rather than at what feeds it. **The lesson is in the
+    count, not in the routes: a route's liveness is a property of its PRODUCER, and this function
+    cannot see its producers.**
 
     ⚠ **IT RETURNS IDS AND WRITES NOTHING.** Resolver-side, read-only over `w.log`, callable from
     a test without a driver — which is `ID-10`: a check that cannot observe the failure it
@@ -2921,6 +2932,19 @@ def occasioned_by(w: "World", q: Optional["Question"]) -> list:
             if e.kind == "claim.deposited" and any(c.subject == about for c in e.changes):
                 return [x for x in (e.causes or []) if x != ROOT]
         return []
+    if q.source not in ("date_due", "band_crossed"):
+        # ⚠ NOT A BARE `else`. An undeclared source added to the roster would otherwise fall into
+        # the id search below and answer plausibly forever, which is the polarity `ID-5` refuses:
+        # zero evidence maps to the verdict AGAINST the thing measured, never to a quiet default.
+        # ⚠ AND IT IS DEFENCE IN DEPTH, NOT THE FIRST GATE: `Question.__post_init__` already
+        # refuses a source outside `question_sources`, so this is unreachable from a rostered
+        # question and would fire only if that constructor were bypassed or the roster grew
+        # without this function being taught the new route.
+        raise Unspecified(
+            f"no occasion route for question source {q.source!r}", "ID-16",
+            needs=f"a route here, or one of {sorted(QUESTION_SOURCES)}",
+            law="ID-5 -- refuse, don't default. A new question source silently taking the id "
+                "search would answer plausibly and wrongly for every question it raised")
     for e in reversed(w.log):
         if e.id == about or any(c.subject == about for c in e.changes):
             return [e.id]

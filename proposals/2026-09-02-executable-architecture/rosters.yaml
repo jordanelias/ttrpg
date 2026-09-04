@@ -255,6 +255,24 @@ rosters:
       `StateChange` with the CHANGED THING as its subject, which is what makes "something they
       hold" reachable and what #353 §13.1's own narration needs — a copy that can be found,
       carried, hidden or destroyed. `both` keeps the actor claim and adds the per-change ones.
+      ⚠ **AND SINCE 2026-09-03 THAT LAST CLAUSE HOLDS ONLY WHERE `changes[]` IS NON-EMPTY.** An
+      Event that WROTE NOTHING has no per-change subject to add, and under `per_change` and
+      `both` alike its deposit is now minted about WHAT THE ACT NAMED instead of about the actor.
+      That is what makes a listener's Q2 reachable at all — a claim about the teller can never
+      satisfy *the holder, or something they hold* — and it is what took `R3` from 0 of 30 to 30
+      of 30 (`H-102`).
+      ⚠ **THE PRICE, STATED RATHER THAN LEFT TO BE DISCOVERED: NO LEDGER RECORDS WHO SPOKE.** For
+      a speech, a telling, a compliance or any refusal, the deposit no longer names the actor, so
+      under the DEFAULT arm the attribution of a write-nothing act is in nobody's ledger.
+      Attribution is `T-d`'s subject and `H-107`'s — an Event carries no actor, and the tracer's
+      `Event.subject`, which still does, is the row for it. The `actor` arm is untouched and is
+      where the incumbent behaviour survives.
+      ⚠ **AND THE REASON IT REPLACES RATHER THAN JOINS IS RECORDED HONESTLY, BECAUSE IT IS NOT A
+      DERIVATION.** Joining mints one extra claim per write-nothing Event; the cap evicts on
+      `(confidence, recency)`; `H-40`'s decay sweep then reported a minimum confidence of 100 in
+      all three arms. **That interaction is a real finding — a damping loop made unobservable by
+      an amplifying one, which is `H-103`'s cite — and it is not the ground for the choice.** The
+      ground is that the teller is not the news.
       ⚠ THIS ADDS NO FIELD TO `Event`. `PLAN.md` §8.1 forbids adding a `target` or `actor` field
       to Event, and this needs neither: `changes[]` already names what was written, so the
       subject is READ off the Event the design already has. `H-79` is the row.

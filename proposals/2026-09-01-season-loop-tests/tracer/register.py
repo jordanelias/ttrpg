@@ -82,7 +82,11 @@ FIELDS = ("id", "tier", "hole", "kind", "owner", "grade",
 # because every one of its nine existing kinds names an ABSENCE and a feedback path is not an
 # absence. Optional rather than universal: adding a twelfth mandatory column would have forced a
 # meaningless cell onto 91 rows, and a column that is meaningless on 91 rows is not read on any of
-# them. `G13` is the reader, which is what keeps this from being a column nobody consults (`ID-13`).
+# them. ⚠ `G13` VALIDATES ITS SHAPE; NO RESOLVER READS IT. The first writing of this comment
+# called G13 "the reader … which keeps this from being a column nobody consults (`ID-13`)", and
+# that overstated it: `ID-13` speaks of a column no RESOLVER consults, and `§0.05`'s test decides
+# it -- delete `sign` and the season loop is byte-identical. The column is SHAPE-VALIDATED
+# REFERENCE. What would give it a reader in `ID-13`'s sense is the derived check (`H-106`).
 OPTIONAL_FIELDS = ("sign",)
 LOOP_KIND = "LOOP"
 # `+` AMPLIFYING · `-` DAMPING. Two values and no third: a loop whose sign nobody can name is the
@@ -110,7 +114,18 @@ REG_ID_RE = r"H-\d{2,3}"
 
 
 def normalised_default(cell: str) -> str:
-    """V2 writes an `absent` row's default as "none" FOLLOWED BY COMMENTARY -- "none. ⚠ every
+    """⚠ `default:` MEANS TWO THINGS AND BOTH ARE DECLARED HERE. On an ordinary row it is *the
+    value an instrument may inject*. On a `LOOP` row it is **what bounds the loop**, which is what
+    `G13` clause 3 reads. A column with two meanings is `CLAUDE.md` §4's hazard, carried
+    deliberately rather than by accident: a bound is a loop's analogue of a default, and a
+    thirteenth column for four rows would put an empty cell on ninety-eight. **Say it here, or the
+    next reader derives one meaning and misses the other.**
+
+    ⚠ AND `G13` CLAUSE 3 IS A PRESENCE CHECK, NOT A BOUND CHECK: any non-`none` string passes, so
+    `default: "TBD"` would satisfy it — one notch from the term-grep `ID-16`'s own first draft was
+    indicted for. Left as a presence check on purpose; see the `G13` docstring.
+
+    V2 writes an `absent` row's default as "none" FOLLOWED BY COMMENTARY -- "none. ⚠ every
     contest is blocked", "none — §63.1 may accept it instead". The field means *the value an
     instrument may inject*, and a warning is not a value, so it normalises to `none`. THIS IS THE
     ONE NORMALISATION APPLIED TO `default`, it is declared here rather than in prose, and
@@ -339,15 +354,21 @@ def rule_G8(reg: dict) -> list:
 def rule_G13(reg: dict) -> list:
     """`ID-16`: a design enumerates its loops and SIGNS each one — and the sign is read here.
 
-    ⚠ **THIS GATE IS WHAT MAKES THE COLUMN A MECHANISM RATHER THAN A NOTE.** `ID-13` is explicit
-    that a column no resolver consults is not a weak mechanism but one that does not exist, so a
-    `sign:` nobody validates would be exactly the defect the idiom it serves is trying to prevent.
+    ⚠ **THIS GATE VALIDATES THE COLUMN'S SHAPE. IT DOES NOT MAKE IT A MECHANISM, AND THE FIRST
+    WRITING OF THIS DOCSTRING SAID IT DID.** No resolver consults `sign`: delete the column and the
+    season loop is byte-identical, which is `§0.05`'s own test. What this gate buys is that a
+    declared loop cannot be declared badly — worth having, and a smaller claim than the one it
+    replaced. **The reader that would satisfy `ID-13` is the derived check (`H-106`), unbuilt.**
     Three clauses, and the third is the one with teeth:
 
       1. a `LOOP` row carries a `sign`, and it is `+` or `-`. A feedback path whose direction
          nobody will state is not enumerated, it is merely mentioned.
       2. a row of any OTHER kind carries no `sign`. The column means one thing.
-      3. **an amplifying loop must name what bounds it**, in `default:`. A `+` loop with no bound
+      3. **an amplifying loop must name what bounds it**, in `default:` — ⚠ **a PRESENCE check:
+         any non-`none` string passes.** Hardening it into a real bound check would need this
+         module to import the fixtures, and the column is reference either way (`§0.1` pt 5: a
+         stronger checker over a non-load-bearing artifact guards nothing). Saying so was the
+         fix; building it was not. A `+` loop with no bound
          is a spiral, which is `F.28` — *nothing bounds a spiral across seasons* — and the whole
          reason `ID-16` says a design of nothing but damping converges is that the two failures
          are opposite and a design can have both. A `-` loop needs no such cell; convergence is

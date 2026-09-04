@@ -27,7 +27,7 @@ that would show it done.
 
 **Nothing below depends on a ruling except where marked. Items 1–4 are mechanical.**
 
-### 1 · Finish enforcing rev. 2 in `shape.py` — the FIVE that are documented and not implemented
+### 1 · Finish enforcing rev. 2 in `shape.py` — the SIX that are documented and not implemented
 
 ⚠ *(This read SIX and listed `1f`, which is prose in #358 and has nothing for `shape.py` to enforce. Closed and struck 2026-09-03; the five below are the code items.)*
 
@@ -39,6 +39,7 @@ that would show it done.
 | 1b | **the gate refuses a receipt with `before == after`** | a planted no-op write raises. ⚠ **Run `work` first** — this is `ID-9`'s own measured instance and it may already be live |
 | 1c | **the three fabricated Event kinds** — `act.ineligible`, `act.refused`, `contest.resolved` are body literals at `:4107`, `:4124`, `:4167`, `:4331`. Give each a declared column | the derived kind roster covers every kind the fold can emit; no literal remains |
 | 1d | **invariant 4 widened in code** — every failable eligibility alternative needs a refusal kind | `destroy_record` (which declines on both alternatives) emits a declared refusal instead of a literal |
+| 1g | ⚠ **THE APPEND-SIDE INTEGRITY CHECK, WHICH IS `ID-9`'S OWN MECHANISM AND HAS NO IMPLEMENTATION.** Stage 4 `§C.2` says *only the gate mints a Receipt* and *the log's append asserts every receipt id is in the gate's minted set for this tick*, so **an Event reporting a write the gate did not apply fails at append**. In the tracer `Event.changes` is a fold-built `StateChange[]` and `season()` appends with a bare `list.append`; `Event.__post_init__` checks only `causes`. **Nothing refuses a fabricated change.** | a planted Event whose `changes[]` names a receipt the gate never minted raises at append |
 | 1e | **`ID-14`'s opener/closer map** as a loader function over `verb_table.yaml` | the map is computed; the four open-only kinds fail the load with their names |
 | ~~1f~~ | ✅ **CLOSED (rev. 3) — already done, and it never belonged under this heading.** `ID-18`'s list is `PART D` row **30b**, which PART 1 records as landed in rev. 2, and rev. 3 amends that row to say why the **four open-only relation kinds are NOT on it**: a permanence nobody authored is a defect, not a grant. ⚠ **The closure ground is NOT §0.2** — `ID-18` and row 30b both say the enumeration is *not a loader invariant* (*"a loader cannot see a language-level guarantee"*), so a prose row is the right home and there is nothing for `shape.py` to enforce. **Citing §0.2 here would be done-on-a-document quoting the section that forbids exactly that** | — |
 
@@ -65,14 +66,7 @@ The nine collapse to five causes, and four are holes #357 already registers.
 
 ### 4 · Deferred deliberately
 
-- ✅ **`ID-16`'s DECLARED HALF IS BUILT (2026-09-03).** `hole_register.yaml` now carries a `LOOP` row kind and an optional `sign: +|-` column, `register.py`'s **`G13`** reads it — a LOOP row must carry a sign, a non-LOOP row must not, and **an amplifying loop must name what bounds it**, since a `+` with no bound is the spiral `F.28` says nothing catches. Mutation-checked 3 of 3. Five rows landed: `H-102` the propagation loop (`+`, bounded by the scene budget, ledger eviction and claim decay), `H-103` claim decay (`-`), `H-104` eviction (`-`), `H-105` **site condition as a SEVERED loop rather than a damping one** — `work` emits without accumulating, so the raising arm never connects — and `H-106`, which says the enumeration is **not complete** and cannot be until `requires` is typed (`H-94`). ⚠ **THE DERIVED HALF IS STILL BLOCKED AND `H-106` IS THE ROW THAT SAYS SO**: recomputing the cycle set from `writes` × typed `requires` needs a grammar, and `requires` is prose in all 32 verb rows. A gate that validates every declared loop cannot see one nobody declared.
-  ABSENCE and which carries **no `sign` column at all** — so the change is a **`LOOP` row kind plus
-  `sign: +|-`**. ⚠ **And the loader does not read that file today**: `shape.py` loads `rosters.yaml`,
-  `verb_table.yaml` and `write_matrix.yaml`; `hole_register.yaml` is read by `register.py` and
-  `run_cases.py`, by id. **So this is two commits, not one** — author the rows, then give the column
-  a reader, because until something consults `sign` it is data and not yet a mechanism (`ID-13`).
-  It is **#357 work**, which is why rev. 3 states the representation in #358 and does not fabricate
-  the rows. *Still forbidden: a table of loops in a markdown file. That is reference.*
+- ✅ **`ID-16`'s DECLARED HALF IS BUILT (2026-09-03).** `hole_register.yaml` carries a `LOOP` row kind and an optional `sign: +|-` column, and **`register.py`'s `G13` validates its shape** — a LOOP row must carry a sign, a non-LOOP row must not, and an amplifying loop must name what bounds it. Mutation-checked 3 of 3. ⚠ **`G13` VALIDATES THE SHAPE; IT DOES NOT MAKE THE COLUMN A MECHANISM** — no resolver reads `sign`, and deleting it leaves the season loop byte-identical, which is `§0.05`'s test. Corrected 2026-09-04; the first wording claimed the stronger thing. Six rows now: `H-102` propagation (`+`), `H-112` WITNESS re-witnessing its own emissions (`+`, found by audit, bounded by one `if` in `World.write`), `H-103` decay (`-`), `H-104` eviction (`-`), `H-105` site condition (re-filed PRODUCER — a severed loop is not a loop), and `H-106`, which says the enumeration is **not complete**. ⚠ **THE DERIVED HALF IS STILL BLOCKED, AND ITS DEFINITION WAS ALSO WRONG**: stated as `writes` × verb `requires` it excludes all four declared loops, none of which has a verb precondition on its cycle. The graph is *what is written* × *every typed reader*. `H-106` is the row. **A table of loops in a markdown file would still be reference.**
 - **`Rung.dates`** still carries `RES` with no producer. Unlike `Date.fired` this may be a real hole rather than a data error; establish which before editing.
 
 ---

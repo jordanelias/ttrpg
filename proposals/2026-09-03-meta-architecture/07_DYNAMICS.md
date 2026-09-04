@@ -80,8 +80,12 @@ RESOLVE — bounded by a caller-supplied cap.
 > → emits an Event → is witnessed → **deposits as a claim in SOMEONE ELSE'S ledger** → raises *their*
 > question.
 
-**Measured today: ZERO instances.** No Event anywhere has a cause that is an act by a different
-person. Nothing moves a Record to a second person, so the second person's question never fires.
+~~**Measured today: ZERO instances.**~~ ⚠ **SUPERSEDED 2026-09-04, AND THE ZERO IS KEPT LEGIBLE
+RATHER THAN DELETED.** It was true when written and is not now: the corpus check that asks exactly
+this — an act by one person caused by an act of another — passes **30 of 30** on the NPC lane and
+**54 of 59** on ARC, the five misses being the five one-season cases where the loop has no `t+1` to
+close in. `H-102` is the row. **The second sentence still stands**: nothing moves a Record to a
+second person (`H-84`), and what closed the chain was a claim reaching a listener, not a Record.
 
 > **The clock ticks, the fold folds, the world wears — and no story has ever crossed between two
 > people.** Every graph in §2 exists; the one chain that would connect them has zero links.
@@ -98,10 +102,14 @@ but a **representation**, and `ID-16` names the blocker rather than papering it 
 a cycle over *what a verb writes* × *what its precondition reads*, and `requires` is prose in all 32
 rows (`F.24`). **So the honest state has two halves.** The **declared** signed list is buildable now — a `LOOP` row
 kind with a `sign` column in `hole_register.yaml`, the closed-set form `G.3.1` puts first — and it is
-what `ID-16` owes. ⚠ **It is not yet a mechanism**: nothing reads a `sign` column until the derived
-check does, and by `ID-13` a column no resolver consults does not exist. The
-**derived** check that recomputes the cycles from `writes` × typed `requires` and compares them to
-the declared list is blocked until `requires` is typed. **What would be reference rather than
+what `ID-16` owes. ⚠ **It is not yet a mechanism**: `G13` validates the column's SHAPE — a LOOP row must carry a sign,
+an amplifying one must name its bound — and no RESOLVER reads it, which is the reading `ID-13`
+requires. Delete the column and the season loop is byte-identical. The
+**derived** check recomputes the cycles from **what is written** × **every typed reader** — the
+question sources and the channel predicates as much as a verb's `requires` — and compares them to
+the declared list. ⚠ *Stage 1 corrected that definition on 2026-09-04: stated as `writes` × verb
+`requires` alone it excludes all four declared loops, none of which has a verb precondition on its
+cycle.* The `requires` half is blocked until it is typed. **What would be reference rather than
 mechanism is a table of loops written into a markdown file**, which is a narrower thing than *the
 enumeration is unbuildable*, and Stage 1 records the correction.
 

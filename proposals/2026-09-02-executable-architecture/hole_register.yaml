@@ -1172,20 +1172,20 @@ rows:
     tier:      1
     kind:      "LOOP"
     sign:      "+"
-    hole:      "THE PROPAGATION LOOP, and it is the only amplifying one anybody has evidenced: a claim lands in a ledger -> raises a Q2 question -> forms a candidate -> becomes an act -> emits an Event -> is witnessed -> deposits as a claim in SOMEONE ELSE'S ledger -> raises their question. More acts mean more claims mean more questions mean more acts"
+    hole:      "THE PROPAGATION LOOP -- ⚠ NOT the only amplifying one, which this row claimed until `H-112` was found by an audit reading `World.write` rather than the register: a claim lands in a ledger -> raises a Q2 question -> forms a candidate -> becomes an act -> emits an Event -> is witnessed -> deposits as a claim in SOMEONE ELSE'S ledger -> raises their question. More acts mean more claims mean more questions mean more acts"
     owner:     "shape.py -- `occasioned_by`, `claim_subjects`, the WITNESS deposit"
     grade:     "measured"
     default:   "BOUNDED, AND UNDER THIS INSTRUMENT'S OWN FIXTURES IT CANNOT AMPLIFY AT ALL -- which is a statement about the fixtures, not about the topology. Three devices: `ask_budget` (five scenes a season, so a person cannot act on every question they form), `ledger_cap` = 200 with eviction on `(confidence, recency)`, and `claim_decay_per_season` -- all three are `DEFAULT_FIXTURES` literals in `shape.py`. ⚠ AND A FOURTH THAT IS NOT A BOUND BUT FLATTENS IT ANYWAY: `question_aggregation_rule: first` collapses any number of landed claims to ONE question per person per season, so acts do not grow with claims however many land. ⚠ THE LOOP'S PERIOD IS ONE SEASON -- WITNESS at the end of `t` is read at DELIBERATE in `t+1` -- so the budget cuts it EVERY PERIOD rather than between periods; the first writing of this cell said the opposite"
     site:      "shape.py `occasioned_by` / `claim_subjects` / `SeasonDriver.witness`"
     sweep:     []
     unblocks:  "the chain Reading 07 §4 calls 'the one that is actually the game'"
-    cite:      "⚠ WHAT IS MEASURED IS THE EXISTENCE OF THE EDGE, NOT A GAIN, AND THE SIGN IS A CLAIM ABOUT TOPOLOGY RATHER THAN ABOUT THIS RUN. A critic broke the first writing of this row, which read as though `+` had been measured: it had not, and under `question_aggregation_rule: first` plus a five-scene budget this loop provably CANNOT amplify in acts here. The topology is amplifying -- an act deposits claims that raise questions that become acts -- and the fixtures flatten it, which is the pair `ID-16` exists to make visible: a design can carry an amplifying path and a configuration that hides it. Measuring the GAIN needs `H-106`. WHAT IS MEASURED, BOTH SIDES OF THE SAME COMMAND: `python corpus_run.py` before: NPC check R3 0 of 30, ARC 0 of 59, RUNS-ALONE-UNDECLARED 64. After: NPC 30 of 30, ARC 54 of 59, RUNS-ALONE-UNDECLARED 5. ⚠ AND THE FIVE ARC MISSES ARE FULLY ACCOUNTED FOR, WHICH IS WHY THE NUMBER IS NOT LEFT AS A RAGGED 54 OF 59: they are ARC-23, ARC-26, ARC-42, SCN-01 and SCN-02, and those are EXACTLY the five runnable ARC cases whose `temporal.span_seasons` is 1 -- the complete set, checked both directions. The loop's period is one season: WITNESS deposits at the end of `t` and DELIBERATE reads at `t+1`, so a ONE-SEASON RUN HAS NO `t+1` AND CANNOT CLOSE THE LOOP AT ALL. R3 therefore passes 54 of the 54 cases where it is structurally possible, and fails 5 of 5 where it is not. R3 is 'an act by one person whose causes walk back to an act of another', and it was the ONLY check the corpus failed -- R1, R4 and R5 passed every runnable case before and after, so nothing else moved. The falsifier is `test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told`, which is mutation-checked: it fails on the pre-fix `shape.py` and passes after, and carries its own control asserting the detector says FALSE on a world where nobody has acted. ⚠ THE SIGN IS `+` AND THAT IS THE POINT OF RECORDING IT: this design is made almost entirely of refusals and every refusal is a damping term, so an amplifying path is the rare one and is the one a reader needs told about"
+    cite:      "⚠ WHAT IS MEASURED IS THE EXISTENCE OF THE EDGE, NOT A GAIN, AND THE SIGN IS A CLAIM ABOUT TOPOLOGY RATHER THAN ABOUT THIS RUN. A critic broke the first writing of this row, which read as though `+` had been measured: it had not, and under `question_aggregation_rule: first` plus a five-scene budget this loop provably CANNOT amplify in acts here. The topology is amplifying -- an act deposits claims that raise questions that become acts -- and the fixtures flatten it, which is the pair `ID-16` exists to make visible: a design can carry an amplifying path and a configuration that hides it. Measuring the GAIN needs `H-106`. WHAT IS MEASURED, BOTH SIDES OF THE SAME COMMAND: `python corpus_run.py` before: NPC check R3 0 of 30, ARC 0 of 59, RUNS-ALONE-UNDECLARED 64. After: NPC 30 of 30, ARC 54 of 59, RUNS-ALONE-UNDECLARED 5. ⚠ AND THE FIVE ARC MISSES ARE FULLY ACCOUNTED FOR, WHICH IS WHY THE NUMBER IS NOT LEFT AS A RAGGED 54 OF 59: they are ARC-23, ARC-26, ARC-42, SCN-01 and SCN-02, and those are EXACTLY the five runnable ARC cases whose `temporal.span_seasons` is 1 -- the complete set, checked both directions. The loop's period is one season: WITNESS deposits at the end of `t` and DELIBERATE reads at `t+1`, so a ONE-SEASON RUN HAS NO `t+1` AND CANNOT CLOSE THE LOOP AT ALL. R3 therefore passes 54 of the 54 cases where it is structurally possible, and fails 5 of 5 where it is not. ⚠ AND A FIXTURE CONTROL WAS RUN, BECAUSE 30 OF 30 COULD HAVE BEEN A PROPERTY OF THE FIXTURES RATHER THAN OF THE DESIGN. Every corpus world seats three persons committed to one OUGHT, `speak` has no precondition, and `fan_out_mode` is `total` -- so every speech could have been reaching every ledger and scoring R3 for free. SWEPT TO `presence_only`: R3 is UNCHANGED at 30 of 30 NPC and 54 of 59 ARC, while the arm itself is far from inert -- `claim.deposited` falls 2211 -> 312 in a three-season run and total ledger holdings 600 -> 312. REPRODUCE: rebind `S.DEFAULT_FIXTURES = S.DEFAULT_FIXTURES.sweep(\"fan_out_mode\", \"presence_only\")` before importing `corpus_run`, then run `run_case` over both lanes. ⚠ A CONTROL THAT MOVES THE INPUT SEVENFOLD AND NOT THE VERDICT IS EVIDENCE; ONE THAT MOVED NEITHER WOULD HAVE BEEN AN INERT ARM PRINTED AS A CONTROL, WHICH IS §0.1 POINT 4'S OWN COMPLAINT. R3 is 'an act by one person whose causes walk back to an act of another', and it was the ONLY check the corpus failed -- R1, R4 and R5 passed every runnable case before and after, so nothing else moved. The falsifier is `test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told`, which is mutation-checked: it fails on the pre-fix `shape.py` and passes after, and carries its own control asserting the detector says FALSE on a world where nobody has acted. ⚠ THE SIGN IS `+` AND THAT IS THE POINT OF RECORDING IT: this design is made almost entirely of refusals and every refusal is a damping term, so an amplifying path is the rare one and is the one a reader needs told about"
     source:    "ID-16 -- the meta-architecture, folded back into the register that reads it"
   - id:        H-103
     tier:      1
     kind:      "LOOP"
     sign:      "-"
-    hole:      "CLAIM DECAY. A held claim's confidence falls each season at `claim_decay_per_season`, so a belief nobody refreshes stops carrying weight -- which damps the propagation loop between seasons rather than within one"
+    hole:      "CLAIM DECAY. A held claim's confidence falls each season at `claim_decay_per_season`, so a belief nobody refreshes stops carrying weight. ⚠ NARROWED 2026-09-04: this said the decay 'damps the propagation loop between seasons', AND THAT COUPLING IS NOT THE ONE THE GRADED RUN EXERCISES. Q2 fires on `c.when == landed` and the default view rule is `recent`; neither reads confidence, so in the run that grades H-102 the decay reaches the propagation loop ONLY through eviction ORDER at the cap and through the non-default `highest_confidence` view arm. The sweep below observes confidence FALLING; it does not observe the damping this row asserted. The sign stays `-` -- what is narrowed is what it is signed AGAINST"
     owner:     "shape.py -- the MATTER decay pass"
     grade:     "measured"
     default:   "none -- a damping loop needs no bound, which is what makes `G13` ask for one only on `+`"
@@ -1222,7 +1222,7 @@ rows:
   - id:        H-106
     tier:      1
     kind:      "ABSENT_RULE"
-    hole:      "THE LOOP ENUMERATION IS NOT COMPLETE AND NOTHING CAN SAY HOW INCOMPLETE. `ID-16`'s representation has two halves: a DECLARED signed list, which `H-102`..`H-105` and `G13` now are, and a DERIVED check that recomputes the cycle set from what verbs WRITE against what their preconditions READ and asserts the two agree. The second half is what turns the list from an authored claim into a falsifiable one, and it cannot be built"
+    hole:      "THE LOOP ENUMERATION IS NOT COMPLETE AND NOTHING CAN SAY HOW INCOMPLETE. `ID-16`'s representation has two halves: a DECLARED signed list, which `H-102`..`H-105` and `G13` now are, and a DERIVED check that recomputes the cycle set from WHAT IS WRITTEN against EVERY TYPED READER -- the question sources, the witness channel predicates and the eviction comparator as much as a verb's `requires` -- and asserts the two agree. ⚠ CORRECTED 2026-09-04: this row first said `writes` x verb PRECONDITIONS, and that definition excludes all four loops the register declares -- none of them has a verb `requires` on its cycle, and the verb carrying the propagation loop has no precondition at all. A derived check built to the first wording would have failed on a correct system. The second half is what turns the list from an authored claim into a falsifiable one, and it cannot be built"
     owner:     "the `requires` grammar -- `H-94` / `F.24`"
     grade:     "absent"
     default:   "none"
@@ -1242,6 +1242,31 @@ rows:
   # having no reader. The three below are registered instead of fixed, because each needs a
   # design decision or a rewrite of a surface Jordan has ruled on, and a half-done shape change
   # is worse than a declared one.
+  #
+  # ⚠ AND THE PASS WAS PARTIAL. Added 2026-09-04, after an audit read §B against the types rather
+  # than against this header. Deviations that are neither fixed nor rowed above, each with why it
+  # is left:
+  #   * `Scene.extended` -- §B.9 has no such field. `place`'s omission is declared on the type and
+  #     this one is not. Left: it is the budget's own unit (`H-77`), which §B.9 does not model.
+  #   * `Act.{changes, reads, contests, stratum, obstacle, pool}` and no `terms?`. Left: each has
+  #     live readers in the fold; removing any is a resolver change, not a shape edit.
+  #   * `Tenure.{degree, payload}` where §B.8 has `term?`. Left: `degree` is `F.4`'s open question
+  #     and `payload` is what `term?` would replace -- both wait on `H-98`.
+  #   * `Event.changes` is a fold-built `StateChange[]`, not gate-minted `Receipt[]`, and
+  #     `season()` appends to the log with a bare `list.append` -- so §C.2's "an Event reporting a
+  #     write the gate did not apply fails at append" HAS NO IMPLEMENTATION HERE. This is the
+  #     largest of the seven and it is `ID-9`'s own mechanism; it is listed in the meta-
+  #     architecture's HANDOFF as pending rather than rowed, because it is a build item.
+  #   * `Person.beliefs` survives with a matrix row where §D.1.1 deletes the field.
+  #   * `Rung._DECLARED` still carries `stake`, `transmission`, `judging_set_rule`; §B.3 deletes
+  #     all three, and Stage 4 §B.7 moves the judging set to a Query over seats.
+  #   * `Office.establishment` is a field with a matrix row AND a producing verb, where §B.7 and
+  #     Stage 1 §D.6/§E.2.5 make it a Query over `oblige`. ⚠ THE PROSE WAS FIXED ON BOTH STAGE 1
+  #     SITES THIS SESSION AND THE CODE WAS NOT, which is the gap between a design and its
+  #     instrument stated precisely.
+  # NONE of these is rowed, because a row per shape deviation would put seven `absent` entries in
+  # a register whose tier-0 list is already the thing blocking artifact 0. They are declared here,
+  # where the claim they qualify is made.
   # -------------------------------------------------------------------------
   - id:        H-107
     tier:      1
@@ -1289,7 +1314,7 @@ rows:
     default:   "none"
     site:      ""
     sweep:     []
-    unblocks:  "the `band_crossed` route of `occasioned_by` -- one of the four question sources, dead for this reason alone"
+    unblocks:  "the `band_crossed` route of `occasioned_by` -- one of the four question sources. ⚠ AND IT IS NOT THE ONLY DEAD ONE: `date_due` is dead for a SECOND, unrelated cause -- `calendar()` writes `Date.fired` through the gate with NO `emits=`, so no Event in any log carries a date id and that route cannot match either. `write_matrix.yaml` declares `date.fired` for `(Date, fired)` and nothing emits it: a CALENDAR-class silent write of the shape the gate refuses at MATTER. Closing `N1` (`W20`) without making CALENDAR emit yields a Q1 that forms and walks to nothing. ONE of four routes is live"
     cite:      "FOUND BY AN ADVERSARIAL PASS OVER THE `N3` FIX, WHICH HAD DOCUMENTED THE ROUTE AS LIVE. The walk searches the log for an Event whose id is `about` or one of whose changes has `about` as its subject; with `about` = `work` neither can ever match, so the route returns empty for every band crossing in every run. ⚠ THE FIX IS ONE LINE AND IS NOT TAKEN HERE ON PURPOSE: the crossing Event id is already in the tuple, and carrying it onto the Question changes a surface `occasioned_by` does not own -- `questions_for` is §F1's Q3 and its shape is what `H-54` and the aggregation rule read. A one-line change to a rule three other rows depend on is a design edit, not a repair"
     source:    "adversarial pass over the N3 fix, 2026-09-03"
   - id:        H-111
@@ -1304,6 +1329,20 @@ rows:
     unblocks:  "nothing -- it is a question about what the world SHOULD do, and both answers run"
     cite:      "FOUND BY AN ADVERSARIAL PASS OVER THE `N3` FIX, WHICH SHIPPED THE BEHAVIOUR WITHOUT NAMING IT. The deposit rule is keyed on 'this Event wrote nothing', and refusals are exactly that, so the behaviour arrived as a side effect of a fix aimed at tellings. ⚠ IT IS REGISTERED RATHER THAN DECIDED BECAUSE BOTH READINGS ARE DEFENSIBLE AND ONE IS ALREADY RUNNING: seeing somebody try and fail is real information -- the reason `§E2` makes failure emit at all -- and a design might equally hold that only what HAPPENED occasions a decision. Whoever rules it should say so here rather than in a resolver"
     source:    "adversarial pass over the N3 fix, 2026-09-03"
+
+  - id:        H-112
+    tier:      1
+    kind:      "LOOP"
+    sign:      "+"
+    hole:      "WITNESS'S OWN EMISSIONS RE-WITNESSED. A deposit emits `claim.deposited`; if that emission reaches the fan-out it is witnessed; the deposits from THAT mint further emissions. It is a second amplifying loop, distinct from `H-102` -- that one runs through a PERSON deciding, and this one closes entirely inside the machinery with nobody acting"
+    owner:     "shape.py -- `World.write`'s `_emitted_by_write` buffer and `matter()`'s drain"
+    grade:     "measured"
+    default:   "BOUNDED BY A SCOPE DECISION IN ONE LINE OF CODE: the buffer is filled ONLY at MATTER (`if step is Step.MATTER`), and `claim.deposited` is a WITNESS-step emission, so it never enters the buffer and is never re-fanned. ⚠ THE BOUND IS A COMMENT AND AN `if`, WHICH IS THE WEAKEST FORM `§G.3.1` RANKS -- and H-104's own cite states the cost: a bound nobody has written down is one the next session may remove without knowing what it was holding. It is written down here"
+    site:      "shape.py `World.write` (the MATTER-only buffer append); shape.py `matter()` (the drain)"
+    sweep:     []
+    unblocks:  "nothing -- it is a bound, and the row exists so the bound survives the next edit"
+    cite:      "MEASURED BEFORE THE GUARD EXISTED AND RECORDED IN THE CODE THAT ADDED IT: `claim.deposited` reached 249 in a TWO-SEASON run and was ACCELERATING. That is an amplifying loop with executable evidence, and it had no register row until an audit read `World.write` instead of the register -- which is `H-106` demonstrated rather than argued: a gate that validates every declared loop cannot see one nobody declared. REPRODUCE: remove the `if step is Step.MATTER` guard on the buffer append, run two seasons, count `claim.deposited`. ⚠ DO NOT BUILD A TEST FOR IT -- the guard is one line and a test would guard the guard, which is the `§0.1` point 5 predicate refusing itself"
+    source:    "audit of the session's work, 2026-09-04"
 
 # ---------------------------------------------------------------------------
 # THE DISCHARGE MAP -- guardrail G8.

@@ -540,9 +540,20 @@ prose**, which is the exact error corrected two sections earlier in this documen
 `amplif*`. A count of words is not a measurement of a model.
 
 > ### **THE REPRESENTATION IS A CYCLE ENUMERATION OVER THE WRITE/READ GRAPH, AND IT IS BLOCKED.**
-> A loop is a cycle in *what a verb writes* × *what a verb's precondition reads*. The first half is
-> data today (`write_matrix.yaml`). **The second half is a prose string in all 32 rows** — `F.24` —
-> so the graph cannot be built and the enumeration cannot be **derived**.
+> A loop is a cycle in **what is written** × **what is read**. The first half is data today
+> (`write_matrix.yaml`, whose `steps` column covers all four write classes). The second half is
+> **every typed reader** — a verb's `requires` (`F.24`), the question sources, the witness channel
+> predicates, and the eviction comparator.
+
+⚠ **CORRECTED 2026-09-04 — THE FIRST WORDING SAID *what a VERB writes × what a VERB'S PRECONDITION
+reads*, AND THAT DEFINITION EXCLUDES EVERY LOOP THE DESIGN HAS ACTUALLY FOUND.** Checked against
+the four that were declared: the propagation loop is written by WITNESS and read by the question
+sources, with **no verb `requires` on the cycle at all** — the verb carrying it, `speak`, has
+`requires: "—"`. Decay is a MATTER writer; eviction is a WITNESS writer. **So the derived check as
+first specified would have returned a set DISJOINT from the declared list and failed on a correct
+system** — a falsifier that cannot pass is not blocked, it is mis-specified, and it would have read
+as evidence the declared rows were wrong. `F.24` still blocks the verb-precondition *half*; it was
+never the whole graph.
 
 ⚠ **CORRECTED 2026-09-03 — THE FIRST WORDING SAID *UNBUILDABLE*, AND THAT REFUSED A FORM THE DESIGN
 PERMITS.** *Derived* and *declared* are different things, and only the first is blocked. **A signed
@@ -558,7 +569,10 @@ does not exist."* A `sign` column is consulted by nothing until the derived chec
 `hole_register.yaml` is **not** loaded by `shape.py` at all — it is read by the tracer's `register.py`
 and `run_cases.py`, by id. **So the honest grade is: data that can be authored today, and reference
 until it has a reader.** The reader is the derived check; the two halves are one deliverable in two
-commits, not one buildable and one blocked.
+commits, not one buildable and one blocked. ⚠ **The declared half was built on 2026-09-03 and a
+gate — `G13` — validates its SHAPE. That does not promote the grade**: `G13` refuses a
+badly-declared loop, no RESOLVER reads `sign`, and deleting the column leaves the season loop
+byte-identical.
 
 > **So the honest split is:** the **declared** list is buildable today and is the representation this
 > idiom owes; the **derived** check — recompute the cycle set from `writes` × typed `requires` and
