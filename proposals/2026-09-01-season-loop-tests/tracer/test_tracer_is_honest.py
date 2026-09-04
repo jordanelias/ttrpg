@@ -420,10 +420,16 @@ def test_h115_the_degree_branches_raise_unspecified_not_systemexit():
     `corpus_run.run_case`'s `except (S.ShapeGap, S.Unspecified, S.Forbidden, S.NoProducer)` never
     caught it and a one-case design gap ended the whole corpus run.
 
-    FALSIFIER (`arm2_onramp.run_2c`'s own repro): `SeasonDriver._fold`'s `_degree_for_writes` is
-    hardcoded `None` (H-98 is still open), so folding `kill / wound` DIRECTLY -- bypassing
-    `contest()`, exactly as a contest branch wired to fall through would -- reaches
+    FALSIFIER (`arm2_onramp.run_2c`'s own repro): folding `kill / wound` DIRECTLY -- bypassing
+    `contest()`, so no `Resolution` arrives -- reaches
     `row.writes_at(None)` on a verb whose `writes` IS degree-keyed. That must now raise
+
+    ⚠ THE REPRO'S REASON CHANGED ON 2026-09-04 AND THE REPRO DID NOT. It used to be that
+    `_fold` hardcoded `_degree_for_writes = None`, so EVERY fold of a contested verb hit this.
+    `W-E` closed that link: the degree now arrives on `_fold`'s `resolution` parameter from
+    `resolve()`'s seam branch. What is still true, and is what this test pins, is that a caller
+    who folds a contested act WITHOUT one gets a typed `ShapeGap` rather than a silent full
+    write -- which is the guard, now on its reachable path instead of on its universal one.
     `Unspecified`, a `ShapeGap`, and be CAUGHT by run_case's own catch clause rather than escape
     it. MUTATION CHECK: reverting either run-time raise in `emits_at`/`writes_at` to `SystemExit`
     makes the second assertion fail -- `SystemExit` is a `BaseException`, not a `ShapeGap`, so
