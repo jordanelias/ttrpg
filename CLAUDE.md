@@ -162,6 +162,67 @@ the game work. our design documents in .MD are reference and information only."*
 **The test to apply:** *if this document were deleted, would the game behave differently?* If no, it
 is reference. If yes, the mechanism is in the wrong place and belongs in code.
 
+### 0.06 NERS — the four criteria a design is judged against (Jordan's definitions; canonical home, 2026-09-04)
+
+**This is the canonical home for the NERS charter.** It had none: `canon/definitions.yaml` has been
+cited as its source by `valoria-resolution-diagnostic` and `valoria-module-adjudicator` and **has
+never existed** — a gap ED-929 filed 2026-06-11 ("cited by skills but absent; PI `<definitions>`
+operative") and that stayed open because the definitions lived only in project instructions, which do
+not survive into the tree. They are Jordan's, reproduced verbatim; §0.05 makes them **reference**, and
+that is the correct status — NERS judges a design, it does not resolve anything at runtime.
+
+```
+ALL DIRECTIONS  top-down · bottom-up · vertical · diagonal · lateral · horizontal
+```
+
+> **NECESSARY (N)** — unable to be removed without **worsening the gameplay experience**; makes the
+> game more **robust and elegant**; **smooth integration** with existing play; supports a **cohesive
+> gameplay experience from all directions**.
+>
+> **ELEGANT (E)** — **logically simple**; clear approach; **no unnecessary overhead**; easy to
+> understand; **allows the player to intuit complex outcomes from simple choices**.
+>
+> **ROBUST (R)** — allows the player to think **strategically**; allows **customization** of
+> characters / settlements / factions; allows **creativity and variety in approach and resolution**;
+> makes players feel **important to** the game world; makes players feel like they **impact** the
+> game world; provides **emergent and compelling narrative hooks and scenarios WITHOUT player
+> involvement**; mechanics are **fully formed, error-free, and complete** opportunities for engaging
+> the player.
+>
+> **SMOOTH (S)** — integrates **cleanly without friction points**; mechanics **interact cleanly with
+> other interdependent mechanics**; **zooms out and in well across scales of play**; **transitions
+> and sequences cleanly** between mechanical systems; **pauses correctly** when other systems or
+> scales are called for; **calculations consistent in methodology** with other mechanics; integrates
+> into a **unified mechanical approach**.
+
+**Read the definitions, not the acronym — three of them are wider than the shorthand, and the tree
+has already drifted on all three.**
+
+- **N is defined THROUGH the other three,** and is tested **from all six directions**. An object may
+  be necessary looking up the ladder and free looking down it; an N-line holding in exactly one
+  direction is a *narrowed* one, not a passing one.
+- **E is legibility, not tidiness** — *"no unnecessary overhead"* and *"intuit complex outcomes from
+  simple choices"* are **two different tests**, and a mechanism can pass the first and fail the
+  second. ⚠ **And E is never scored as an independent axis.** Scored alone it is satisfiable by
+  amputation: cut enough and what remains is simple, clear and cheap. Score it **last, as a ratio
+  against what N and R found** — an audit that scores four axes and averages them **rates an
+  amputated design as elegant.**
+- **R has a half with no player in it** — *"emergent hooks and scenarios WITHOUT player
+  involvement"*: the world must generate drama when nobody is watching. **And R includes
+  completeness** (*"fully formed, error-free, and complete"*), which is where a mechanism that breaks
+  at its extremes fails. Only R's *player* half is scoped to seats a player can occupy; the other two
+  halves bind everywhere, so a blocked "is this seat playable?" question never makes **R**
+  unscorable — only part of it.
+- **S carries two concrete tests the shorthand drops:** *pauses correctly* when another system or
+  scale is called for, and *calculations consistent in methodology* with sibling mechanics. Two
+  ladders for one quantity is an S defect even when each is individually correct.
+
+**The method** — how a pass is actually run, and the discipline that keeps it honest (a PASS is
+licensed by a **named failed attack**, not by an absent finding; withholding is symmetric; the pass
+fires on itself) — lives in **`skills/valoria-resolution-diagnostic/SKILL.md`**, which is the single
+owner of the procedure. This subsection owns the **definitions**; do not restate the method here, and
+do not restate the definitions there.
+
 ### 0.1 Measurement discipline — five checks, each with an artifact (ED-MB-0042, 2026-07-25)
 
 These exist because a flag was flipped on a **confounded measurement**, shipped a default, re-recorded
@@ -769,7 +830,7 @@ Run the unit tests locally: `pip install pyyaml pytest numpy && python -m pytest
 | Finding inert/inconsistent mechanics | `valoria-mechanic-audit` |
 | Philosophy (**P-01..P-15**) compliance | `valoria-canon-guard` |
 | Key IN → resolver → OUT contract closure | `valoria-module-adjudicator` |
-| **A NERS pass** — is this object necessary / elegant / robust / smooth; is one option dominant; does this add a system; false N-lines — on **any** design object, plus rolling-engine resolver stress as its second instrument | `valoria-resolution-diagnostic` (rebuilt 2026-09-04 — the charter's four definitions are now stated in it; `canon/definitions.yaml`, cited as their source by two skills, **does not exist**, and authoring their canonical home is open) |
+| **A NERS pass** — is this object necessary / elegant / robust / smooth; is one option dominant; does this add a system; false N-lines — on **any** design object, plus rolling-engine resolver stress as its second instrument | `valoria-resolution-diagnostic` — it owns the **method**. The four **definitions** are §0.06 above, which is their canonical home as of 2026-09-04 (`canon/definitions.yaml`, cited as their source by two skills since 2026-06, never existed — ED-929) |
 | Emergent-arc generation | **RETIRED 2026-08-21** (ED-IN-0194) — its subject `arcs/` was evacuated 2026-08-05. |
 | Editorial-debt workflow over the JSONL ledger | `valoria-editorial-register` |
 | "Where are we in the workplan?" / progress board | **RETIRED 2026-08-21** (ED-IN-0194). Read `workplans/workplan_v6_progress.yaml` directly, and `python tools/m1_acceptance.py --summary` for whether the milestone RUNS — which is the only reading of "where are we" that §0.2 accepts. |

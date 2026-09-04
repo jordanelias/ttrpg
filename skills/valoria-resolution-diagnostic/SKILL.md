@@ -13,7 +13,9 @@ description: >
   friction-free integration, clean scale zoom, correct pausing, and calculations consistent in
   methodology. The pass is graded on the cuts that turn out to be FREE — an object whose claimed
   loss survives its own removal (the false N-line), which is the highest-value thing it produces.
-  Two evidence instruments, one verdict: (1) the object ledger, for any design shape; (2) the
+  The definitions themselves are canon and live in CLAUDE.md §0.06 — read them there; this skill
+  owns the METHOD, not the definitions. Two evidence instruments, one verdict: (1) the object
+  ledger, for any design shape; (2) the
   Phase 0-6 rolling-engine diagnostic, for anything that resolves by a DRAW (dice, U[0,1), card).
   ALWAYS use for: "NERS audit", "NERS pass", "NERS review", "is this NERS compliant", "is this
   necessary", "is this elegant", "is this robust", "false N-line", "does this add a system",
@@ -61,59 +63,30 @@ skips first, so they are stated before the method:
 
 ---
 
-## THE CHARTER — the canonical definitions
+## THE CHARTER — where the definitions live
 
-**These are the definitions, supplied by Jordan. They are the criteria; everything below them is
-scoring discipline layered on top, and none of it may quietly redefine a letter.**
+> **The four definitions are canon and they live in `CLAUDE.md` §0.06. READ THEM THERE.**
 
-```
-ALL DIRECTIONS  top-down · bottom-up · vertical · diagonal · lateral · horizontal
-```
+They are **not** reproduced here, deliberately. They were homeless until 2026-09-04 —
+`canon/definitions.yaml` was cited as their source by this skill and by
+`valoria-module-adjudicator` and **never existed** (ED-929, filed 2026-06-11) — and the fix for a
+homeless definition is one home, not a second copy. A copy here would be a second owner and would
+drift, which is the defect this repository keeps filing.
 
-> **NECESSARY (N)** — unable to be removed without **worsening the gameplay experience**; makes the
-> game more **robust and elegant**; **smooth integration** with existing play; supports a **cohesive
-> gameplay experience from all directions**.
->
-> **ELEGANT (E)** — **logically simple**; clear approach; **no unnecessary overhead**; easy to
-> understand; **allows the player to intuit complex outcomes from simple choices**.
->
-> **ROBUST (R)** — allows the player to think **strategically**; allows **customization** of
-> characters / settlements / factions; allows **creativity and variety in approach and resolution**;
-> makes players feel **important to** the game world; makes players feel like they **impact** the game
-> world; provides **emergent and compelling narrative hooks and scenarios WITHOUT player
-> involvement**; mechanics are **fully formed, error-free, and complete** opportunities for engaging
-> the player.
->
-> **SMOOTH (S)** — integrates **cleanly without friction points**; mechanics **interact cleanly with
-> other interdependent mechanics**; **zooms out and in well across scales of play**; **transitions and
-> sequences cleanly** between mechanical systems; **pauses correctly** when other systems or scales
-> are called for; **calculations consistent in methodology** with other mechanics; integrates into a
-> **unified mechanical approach**.
+**Division of ownership, so neither file grows into the other:**
 
-⚠ **THESE DEFINITIONS HAVE NO HOME IN THE TREE.** `canon/definitions.yaml` — cited as the source of
-the NERS criteria by the previous revision of this file **and** by `valoria-module-adjudicator`
-(whose *all directions* block names the same six) — **does not exist**, and no live surface spells
-the four letters out. The text above is Jordan's, given directly. Under CLAUDE.md §0.05 this file is
-**reference, not mechanism**, so a second copy is not the fix: **authoring the canonical home is an
-open editorial item**, flagged here rather than done, because where canon lives is a canon decision.
+| | owns |
+|---|---|
+| `CLAUDE.md` §0.06 | **the definitions** — what N, E, R and S mean, the six directions, and the three ways the shorthand is narrower than the text |
+| **this file** | **the method** — how a pass is run, what it produces, and the discipline that keeps it honest |
 
-**Read what these actually say, because three of them are wider than the shorthand:**
-
-- **N is defined THROUGH the other three.** An N-line may name a loss of emergence, of robustness, of
-  elegance or of smooth integration — and it is tested **from all six directions**, not just the one
-  the object faces.
-- **E is legibility, not tidiness.** "No unnecessary overhead" and "intuit complex outcomes from
-  simple choices" are two different tests, and a mechanism can pass the first and fail the second.
-- **R has a half with no player in it.** *"Emergent and compelling narrative hooks and scenarios
-  without player involvement"* — the world must generate drama when nobody is watching. **And R
-  includes completeness:** *"fully formed, error-free, and complete"*, which is where a mechanism
-  that breaks at its extremes fails.
-- **S has two concrete tests the shorthand drops:** *pauses correctly* when another system or scale
-  is called for, and *calculations consistent in methodology* with sibling mechanics.
+Two things from §0.06 are restated below only because the *method* is built on them and would be
+unreadable without them: **E is scored as a ratio, never as an independent axis** (Rule 1), and **R's
+player half alone is scoped to occupiable seats** (Rule 3). Everything else, read there.
 
 ---
 
-## THE FOUR RULES — how to SCORE the charter without mis-scoring it
+## THE FOUR RULES — how to SCORE the charter (CLAUDE.md §0.06) without mis-scoring it
 
 The definitions say what the letters mean. These four say how a pass goes wrong, and each exists
 because a pass went wrong that way.

@@ -133,7 +133,7 @@ VERDICT: CONFORMANT | NON-CONFORMANT — <one-line reason>
   J-findings: <judgment items>
 
 GRAPH VERDICT: CLOSED | OPEN — <emit/consume closure %, cross-scale coverage, cycle table>
-ALL-DIRECTIONS COVERAGE (the six directions; charter in valoria-resolution-diagnostic — `canon/definitions.yaml` DOES NOT EXIST):
+ALL-DIRECTIONS COVERAGE (the six directions — CLAUDE.md §0.06):
   lateral/horizontal (same-scale edges): <count, gaps>
   vertical (cross-scale via §3/§5):      <count, gaps>
   top-down (aggregate → substrate reads): <…>
