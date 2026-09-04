@@ -1680,8 +1680,8 @@ rows:
       candidates carry a nonzero score and the rest sort alphabetically by verb name. CONSEQUENCE
       FOR ANY FUTURE FORKING TEST - the engine has no native x-instead-of-y moment, so exclusivity
       has to be introduced by the instrument before the question can be asked at all.
-    kind:      "ABSENT_RULE"
-    owner:     "`ask_budget` and `pack_scenes` - the budget is asked for and never binds"
+    kind:      "NUMBER"
+    owner:     "`interactions_per_scene` - the fixture whose value decides whether the budget binds"
     grade:     "measured"
     default:   ""
     site:      "proposals/2026-09-04-degree-sweep/arm9_forking.py (arms 7c / 9f)"

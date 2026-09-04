@@ -48,16 +48,22 @@ _REAL_PACK = S.pack_scenes
 
 class recorder:
     """Record each deliberation's ranked list, in order, and optionally FORK one of them."""
-    def __init__(self, fork_at: int = -1, take: int = 0):
-        self.fork_at, self.take = fork_at, take
-        self.seen: list = []          # [(person_id, [verb,...]), ...] in deliberation order
+    def __init__(self, fork_at: int = -1, take: int = 0, w=None):
+        self.fork_at, self.take, self.w = fork_at, take, w
+        self.seen: list = []   # [(person_id, [verb,...], tick), ...] in deliberation order
 
     def __enter__(self):
         self.n = 0
         rec = self
         def packed(p, ranked, budget, fx, mint, occasion=None, _r=_REAL_PACK):
             i = rec.n; rec.n += 1
-            rec.seen.append((getattr(p, "id", "?"), [c.verb for c in ranked]))
+            # ⚠ THE TICK IS RECORDED BECAUSE DELIBERATE IS A PARALLEL MAP OVER A FROZEN WORLD
+            # (shape.py:4204-4221: `w.frozen` is required, `w._in_parallel_map = True`, and the
+            # law says the freeze "IS WHAT MAKES THE MAP SAFE TO PARALLELISE"). So every person
+            # in a season deliberates against the IDENTICAL pre-RESOLVE state, and decisions bind
+            # in order only ACROSS seasons. A lookahead that counts same-season decisions counts
+            # slots that CANNOT differ. Jordan caught this.
+            rec.seen.append((getattr(p, "id", "?"), [c.verb for c in ranked], int(rec.w.tick)))
             if i == rec.fork_at and ranked:
                 j = rec.take % len(ranked)
                 ranked = list(ranked[j:j + 1])
@@ -78,7 +84,7 @@ def _run(case: dict, seed: int, seasons: int, fork_at: int = -1, take: int = 0) 
     d = S.SeasonDriver(w)
     mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs())
-    rec = recorder(fork_at, take)
+    rec = recorder(fork_at, take, w)
     try:
         with rec:
             for _ in range(seasons):
@@ -91,70 +97,69 @@ def _run(case: dict, seed: int, seasons: int, fork_at: int = -1, take: int = 0) 
                 log_hash=w.content_hash(), n_events=len(w.log))
 
 
-def fork_case(case: dict, seed: int = 0, seasons: int = 3) -> dict:
-    """Every decision point flipped every way, each followed `LOOKAHEAD` decisions forward."""
+def fork_case(case: dict, seed: int = 0, seasons: int = 4) -> dict:
+    """Every decision point flipped every way, each followed `LOOKAHEAD` decisions forward.
+
+    ⚠⚠ THE LOOKAHEAD IS SEASON-AWARE, AND THE FIRST VERSION WAS NOT. JORDAN ASKED *"did you
+    ensure that decisions bind in order?"* and the answer was NO. `DELIBERATE` is a PARALLEL MAP
+    OVER A FROZEN WORLD (shape.py:4204-4221 -- `w.frozen` is required, `w._in_parallel_map = True`,
+    and the law reads *"the world is FROZEN from the end of MATTER to the start of RESOLVE. THIS
+    IS WHAT MAKES THE MAP SAFE TO PARALLELISE"*). So every person in a season deliberates against
+    the IDENTICAL pre-RESOLVE state, and decisions bind in order only ACROSS seasons.
+
+    TWO CONSEQUENCES, BOTH OF WHICH INFLATED THE FIRST RESULT:
+      1. a window counting SAME-TICK decisions counts slots that CANNOT differ. With 3 persons a
+         fork at the first deliberation of a season had 2 of its 3 slots dead by construction.
+      2. a fork in the LAST season had ZERO live slots, and every one was scored `reconverged`.
+    The window now takes only decisions at a STRICTLY LATER TICK, and a fork that cannot fill it
+    is reported `NO-LIVE-WINDOW` and excluded from the rate rather than counted as reconverged."""
     base = _run(case, seed, seasons)
     if not base["ok"]:
         return dict(case=case["id"], ok=False, why=base["why"])
     D = base["decisions"]
     forks = []
     for i in range(len(D)):
+        tick_i = D[i][2]
+        # the live window: the next LOOKAHEAD decisions at a STRICTLY LATER tick
+        live_idx = [j for j in range(i + 1, len(D)) if D[j][2] > tick_i][:LOOKAHEAD]
         n_alt = min(MAX_ALT, max(0, len(D[i][1]) - 1))
         for t in range(1, n_alt + 1):
+            if len(live_idx) < LOOKAHEAD:
+                forks.append(dict(at=i, take=t, ok=True, flipped=None,
+                                  status="NO-LIVE-WINDOW", n_live=len(live_idx),
+                                  why=f"fork at tick {tick_i}; only {len(live_idx)} decision(s) "
+                                      f"at a later tick exist, and same-tick decisions cannot "
+                                      f"differ (DELIBERATE is a frozen map)"))
+                continue
             f = _run(case, seed, seasons, fork_at=i, take=t)
             if not f["ok"]:
                 forks.append(dict(at=i, take=t, ok=False, why=f["why"])); continue
             FD = f["decisions"]
-            # THE THREE DECISIONS AFTER THE FORK, ours against the baseline's.
             window = []
-            for k in range(1, LOOKAHEAD + 1):
-                j = i + k
+            for k, j in enumerate(live_idx, 1):
                 b = D[j] if j < len(D) else None
                 a = FD[j] if j < len(FD) else None
-                window.append(dict(k=k,
-                                   baseline=(b[0], b[1][:1]) if b else None,
-                                   forked=(a[0], a[1][:1]) if a else None,
+                window.append(dict(k=k, at=j, tick=(b[2] if b else None),
                                    same=(b == a)))
             changed = [x["k"] for x in window if x["same"] is False]
-            # Did the ACT actually differ at the fork? (the control -- a fork that changes
-            # nothing at its own site cannot be evidence about what happens downstream)
             took_b = D[i][1][0] if D[i][1] else None
             took_f = FD[i][1][t % len(FD[i][1])] if i < len(FD) and FD[i][1] else None
-            forks.append(dict(at=i, take=t, ok=True,
+            forks.append(dict(at=i, take=t, ok=True, status="MEASURED",
+                              tick=tick_i, live_window=live_idx,
                               flipped=(took_b != took_f), from_verb=took_b, to_verb=took_f,
                               window=window, n_changed=len(changed), changed_at=changed,
                               reconverged=(len(changed) == 0),
                               acts_differ=(f["acts"] != base["acts"]),
                               hash_differ=(f["log_hash"] != base["log_hash"])))
-    real = [f for f in forks if f.get("ok") and f.get("flipped")]
+    real = [f for f in forks if f.get("status") == "MEASURED" and f.get("flipped")]
+    nolive = [f for f in forks if f.get("status") == "NO-LIVE-WINDOW"]
     return dict(case=case["id"], scale=case.get("scale"), ok=True,
                 n_decisions=len(D), n_forks=len(forks), n_real_forks=len(real),
+                n_no_live_window=len(nolive),
                 n_reconverged=sum(1 for f in real if f["reconverged"]),
                 n_diverged=sum(1 for f in real if not f["reconverged"]),
                 mean_changed=(sum(f["n_changed"] for f in real) / len(real)) if real else 0.0,
                 forks=forks, baseline_decisions=len(D))
-
-
-def claim_channel(sample: int = 8, seasons: int = 3, seed: int = 0) -> dict:
-    """ARM 9d -- can ANY claim the corpus deposits reach the decision function?"""
-    cs = [C.apply_rescale(c) for c in R.load_cases("NPC")]
-    cs = [c for c in cs if str(c.get("scale")) in set(S.RUNG_KINDS)][:sample]
-    preds = collections.Counter(); n = falsy = elig = 0
-    for case in cs:
-        w = C.build_at(case, seed); d = S.SeasonDriver(w)
-        mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-        ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs())
-        for _ in range(seasons):
-            d.season(ch, question=None, subsistence=K.C.P.SUBSIST)
-        for p in w.persons.values():
-            for c in p.ledger:
-                n += 1; preds[c.predicate] += 1
-                if c.value is False:
-                    falsy += 1
-                    if c.predicate in S.PERSON_PREDICATES:
-                        elig += 1
-    return dict(cases=len(cs), n_claims=n, predicates=dict(preds), falsy=falsy, eligible=elig,
-                person_predicates=sorted(S.PERSON_PREDICATES))
 
 
 def locality(case: dict, seed: int = 0, seasons: int = 3) -> dict:
@@ -186,7 +191,7 @@ def locality(case: dict, seed: int = 0, seasons: int = 3) -> dict:
                 local_only=(diff == [0]))
 
 
-def run(log: Log, seed: int = 0, seasons: int = 3, sample: int = 0) -> dict:
+def run(log: Log, seed: int = 0, seasons: int = 4, sample: int = 0) -> dict:
     log.rule("ARM 9 — THE FORKING EXERCISE: flip every decision, follow it three decisions on")
     log("ASK", "Jordan 2026-09-04: 'within each season ... there is a mechanical moment where x "
                "occurs instead of y ... explore what happens when each mechanical that chooses x "
@@ -196,6 +201,16 @@ def run(log: Log, seed: int = 0, seasons: int = 3, sample: int = 0) -> dict:
                "person's own ranked candidate list, of which one element is taken.")
     log("SETUP", f"lookahead {LOOKAHEAD} — {LOOKAHEAD_WHY}")
     log("SETUP", f"alternatives probed per decision: {MAX_ALT} — {MAX_ALT_WHY}")
+    log("⚠ ORDER", "DELIBERATE IS A PARALLEL MAP OVER A FROZEN WORLD, so decisions bind in "
+                     "order only ACROSS seasons — never within one.",
+        "shape.py:4204-4221 requires `w.frozen` and sets `w._in_parallel_map = True`; the law "
+        "reads 'the world is FROZEN from the end of MATTER to the start of RESOLVE. THIS IS WHAT "
+        "MAKES THE MAP SAFE TO PARALLELISE'. JORDAN CAUGHT THAT THE FIRST VERSION OF THIS ARM "
+        "IGNORED IT. Its window counted SAME-TICK decisions, which cannot differ by construction "
+        "(2 of 3 slots dead for a fork at a season's first deliberation), and it scored every "
+        "fork in the LAST season as `reconverged` when such a fork has NO live slot at all. The "
+        "window now takes only decisions at a STRICTLY LATER tick, and a fork that cannot fill "
+        "it is excluded as NO-LIVE-WINDOW rather than counted.")
     log("SETUP", "BASELINE takes `ranked[0]` alone at every decision; a FORK takes `ranked[t]` at "
                  "exactly one decision and `ranked[0]` everywhere else",
         "arm 7c measured that the act budget never binds — every person otherwise takes ALL 7 "
@@ -214,12 +229,18 @@ def run(log: Log, seed: int = 0, seasons: int = 3, sample: int = 0) -> dict:
             rows.append(r)
 
     good = [r for r in rows if r.get("ok")]
+    tot_nolive = sum(r.get("n_no_live_window", 0) for r in good)
     tot_forks = sum(r["n_real_forks"] for r in good)
     tot_recon = sum(r["n_reconverged"] for r in good)
     tot_div = sum(r["n_diverged"] for r in good)
     log.rule("ARM 9a — did the fork actually flip anything? (the control)")
     probed = sum(r["n_forks"] for r in good)
-    log("CONTROL", f"{tot_forks} of {probed} probed forks changed the act actually taken",
+    log("EXCLUDED", f"{tot_nolive} of {probed} probed forks have NO LIVE WINDOW and are not "
+                    f"scored — they sit in the final season, where every later decision is "
+                    f"same-tick and cannot differ",
+        "the first version of this arm counted every one of these as `reconverged`, which is the "
+        "larger half of the inflation Jordan's question exposed")
+    log("CONTROL", f"{tot_forks} of {probed - tot_nolive} SCORED forks changed the act taken",
         "a fork that leaves the act unchanged cannot be evidence about what happens downstream, "
         "so only the genuine ones are counted below")
 
@@ -310,7 +331,8 @@ def run(log: Log, seed: int = 0, seasons: int = 3, sample: int = 0) -> dict:
         "note to a predicate' — and `F.24`/`H-94` is typing `requires`. Both unbuilt, same class "
         "as arm 6's five.")
     return dict(seed=seed, seasons=seasons, lookahead=LOOKAHEAD,
-                n_cases=len(good), probed=probed, real_forks=tot_forks,
+                n_cases=len(good), probed=probed, no_live_window=tot_nolive,
+                real_forks=tot_forks,
                 reconverged=tot_recon, diverged=tot_div,
                 changed_distribution=dict(dist),
                 reconvergence_rate=(tot_recon / tot_forks) if tot_forks else None,

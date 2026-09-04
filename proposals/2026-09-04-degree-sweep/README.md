@@ -54,7 +54,31 @@ dependency order, not a wish list.
 | **2** | **outcome → magnitude** (degrees) | **ABSENT** | 0 acts resolve at a degree; 12 of 12 interpersonal verbs degreeless | a degree is a *magnitude on an edge*. Build the edge first or you get a better-labelled log |
 | **3** | **world → belief** | **PRESENT, WRONG PAYLOAD** | 339,804 claims deposited, carrying event-kind predicates | cheapest of the three, and probably the shortest path to closing #1 |
 
-### The single most actionable thing in this report
+### ⚠ CORRECTED 2026-09-04 BY A FABLE-TIER PLANNING REVIEW — the "one type mismatch" claim below was wrong in a way that would have caused harm
+
+I wrote that the design's worked example is **one type mismatch from running**, and made that this
+report's most actionable item. **It is one type mismatch AND one operand away, and doing the type
+fix alone would be actively harmful.**
+
+The refusals I measured are **operand-gap refusals, not world refusals.** `pack_scenes`
+(`shape.py:2739`) puts **only `subject`** on the payload — the code comment directly above it says
+so: *"`transfer`'s `stores(hearth(giver), kind) >= amount` still has no `kind` and no `amount` that
+any part of the pipeline can carry."* So `_req_transfer` reads `give.get("from","")` → `""` →
+`w.rungs.get("")` → `None` → **False**, and `_req_move` reads `to` → `None` → **False**.
+
+**Every `transfer.refused` and `travel.blocked` in the corpus is a malformed act, not an empty
+granary.** Open the belief→decision channel without first supplying operands and the first thing it
+does is teach every witness a **false fact about the world** — *"the hearth cannot supply grain"* —
+derived from an act that was never well-formed. `H-94`'s structural half is therefore **on** the
+critical path, not behind it.
+
+⚠ **A second correction, of degree rather than direction:** my "zero of 4,800 claims are falsy" is a
+sample statistic for something true **by construction**. `witness()` mints every claim as
+`Claim(cid, pid, subj, e.kind, True, …)` (`shape.py:4782`) — predicate is the Event kind, value is a
+**literal `True`**, always. Disjointness from `PERSON_PREDICATES` is a theorem; I sampled what I
+could have proved.
+
+### The single most actionable thing in this report *(as corrected above)*
 
 `opening_set`'s own docstring describes the feedback loop as working:
 
@@ -135,6 +159,31 @@ own printed counts rather than trusting either number.
 ---
 
 ## 1 · THE FORKING EXERCISE — flip every decision, follow it three decisions on (ARM 9)
+
+> ### ⚠⚠ THE HEADLINE FIGURE BELOW IS SUPERSEDED AND INFLATED. JORDAN ASKED *"did you ensure that decisions bind in order?"* AND THE ANSWER WAS NO.
+>
+> **`DELIBERATE` is a PARALLEL MAP OVER A FROZEN WORLD** — `shape.py:4204-4221` requires
+> `w.frozen`, sets `w._in_parallel_map = True`, and the law reads *"the world is FROZEN from the
+> end of MATTER to the start of RESOLVE. THIS IS WHAT MAKES THE MAP SAFE TO PARALLELISE."* So
+> every person in a season deliberates against the identical pre-RESOLVE state: **decisions bind
+> in order only ACROSS seasons, never within one.**
+>
+> **Two ways that inflated the result, both verified by printing the tick per deliberation
+> (D0,D1,D2 → tick 0; D3,D4,D5 → tick 1; D6,D7,D8 → tick 2):**
+> 1. a window counting same-tick decisions counts slots that **cannot** differ. With 3 persons, a
+>    fork at a season's first deliberation had **2 of its 3 slots dead by construction**;
+> 2. a fork in the **final season** had **zero** live slots — and every one was scored
+>    `reconverged`. That is the larger half.
+>
+> **The instrument is fixed** (`arm9_forking.py` now takes only decisions at a strictly later tick
+> and reports a fork that cannot fill the window as `NO-LIVE-WINDOW`, excluded from the rate rather
+> than counted). On the first case re-measured under the corrected window — 4 seasons, 36 forks —
+> **9 were excluded as NO-LIVE-WINDOW and 27 were scored: 27 reconverged, 0 diverged.** The
+> corpus-wide re-run is in flight; **treat the 2,403 / 100% below as the pre-correction figure
+> until it lands**, and read the direction rather than the number.
+>
+> ⚠ The `acts diff at the fork index alone` control is **unaffected** — it compares the whole run
+> across all seasons, so it never depended on the window.
 
 **The ask, verbatim:** *"within each season for NPC or arc, there is a mechanical moment where x
 occurs instead of y (and maybe z or more). I need you to explore what happens when each mechanical
@@ -480,6 +529,26 @@ other half ~27-29.
 ⚠ **Measured on a world fingerprint, not on `content_hash`.** §7 showed `content_hash` hashes the
 log only, so a flexibility number built on it would have reported **64 of 64** and called log
 divergence world divergence. The two columns above are exactly that gap.
+
+### 8.0 · ⚠ CORRECTED — the budget DOES bind, at a declared sweep point
+
+I reported that the engine has *no* native x-instead-of-y moment and that exclusivity had to be
+introduced by the instrument. **Half wrong.** At `DEFAULT_FIXTURES` the budget is
+`scene_budget=5 × interactions_per_scene=3` = **15 slots** against ~7 candidates, so it does not
+bind. But `interactions_per_scene` is **swept `1 / 3 / unbounded`** on `H-76`, and at the declared
+`1` point the budget is **5 slots against 7 candidates — it binds natively.**
+
+So the honest statement is: **the budget does not bind at the default fixture point, and does bind
+at a declared alternative the register already carries.** My `H-117` row is mis-kinded as
+`ABSENT_RULE`; the rule exists as data. The defect underneath is `H-96` — *which* candidates survive
+is decided alphabetically.
+
+⚠ **And a third correction that bears on this arm's design:** RESOLVE re-sorts every act by
+`(stratum, hash)` (`shape.py:4570-4571`), so **within-budget rank order is inert at RESOLVE by
+design.** A fork that reorders inside the budget changes nothing and must not be scored as
+reconvergence — only a fork that changes the *set* is a fork. My substitution branch does change
+the set, so the measurement stands; but the *native* fork is at the budget boundary and that is
+what a future run should use.
 
 ### 8.1 · A null result this sweep produced, and why it was wrong (ARM 7c)
 
