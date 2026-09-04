@@ -747,11 +747,29 @@ def requirement_form(name: str):
         if name not in REQUIRES_FORMS:
             raise SystemExit(f"{name!r} is not in rosters.yaml's requires_forms roster")
         REQUIREMENT_TYPES[name] = cls
+        # ⚠ THE FORM'S NAME, ON THE CLASS. `rosters.yaml` gives each form a `needs:` -- the closed
+        # set of operands a cell OF THAT FORM MAY reference -- and `operands_for` reads it to
+        # decide which operands a Candidate carries BEYOND the ones its own cell binds. Without
+        # this the mapping would have to be re-derived by scanning `REQUIREMENT_TYPES` backwards,
+        # which is the same declaration written twice.
+        cls._form = name
         return cls
     return deco
 
 
 class Requirement:
+    # The form's name, stamped by `@requirement_form`. `AllOf` has none -- a conjunction is not a
+    # form (`rosters.yaml`: "CONJUNCTION IS NOT AN EIGHTH FORM") -- and unions its clauses'.
+    _form = ""
+
+    def needs(self) -> frozenset:
+        """The operand names a cell OF THIS FORM MAY reference -- `rosters.yaml`'s `needs:`.
+
+        Wider than `operands()`, which is what THIS cell actually binds. The gap between them is
+        where `operands_for` looks for the operands an act needs and its precondition does not:
+        `transfer`'s cell binds one rung (`from`) and §E3 gives it TWO `Rung.stores` writes."""
+        return frozenset(REQUIRES_FORM_NEEDS.get(self._form) or ())
+
     # ⚠ EVERY FORM DECLARES THE STEMS IT ASKS FOR, so `_build_clause` can close the predicate
     # vocabulary at LOAD without a second list to keep in step (§8). A form that reads a stem it
     # does not declare here would pass the load check and still read UNKNOWN forever -- so the
@@ -971,6 +989,8 @@ class AllOf(Requirement):
     def entity_operands(self) -> tuple:
         return tuple(dict.fromkeys(o for c in self.clauses for o in c.entity_operands()))
 
+    def needs(self) -> frozenset:
+        return frozenset().union(*(c.needs() for c in self.clauses)) if self.clauses else frozenset()
 
     def stems(self) -> tuple:
         return tuple(x for c in self.clauses for x in c.stems())
@@ -988,21 +1008,28 @@ class AllOf(Requirement):
 
 @dataclass(frozen=True)
 class TypedRequires:
-    """ONE `requires_typed:` CELL -- the clause tree, plus the operand values the CELL supplies.
+    """ONE `requires_typed:` CELL -- the clause tree, and nothing else.
 
-    ⚠ `operand_defaults` IS WHERE `_req_transfer`'s TWO LITERALS WENT, and it is a MOVE rather
-    than an invention. That predicate read `give.get("kind", "grain")` and `give.get("amount", 1)`
-    -- two bare literals in a body, which §0.05 puts in the data file. They are carried verbatim
-    so retiring the predicate is value-identical; `H-94` is the row for where a real operand comes
-    from, and it is open."""
+    ⚠ `operand_defaults` WAS A FIELD HERE AND `W-C` DELETED IT, WHICH IS THE ONE-OWNER HALF OF
+    `H-94`. It held `transfer`'s `{kind: grain, amount: 1}` -- the relocated form of
+    `_req_transfer`'s two literals -- and it filled them INSIDE `evaluate`, i.e. at the FOLD, for
+    an act whose payload carried neither. Two consequences, and the second is why it could not
+    stay once operands became real: (1) the value had two homes, the cell and the person's
+    derivation, free to disagree; (2) the fold would ADMIT a `transfer` on operands the cell had
+    invented and `_eff_transfer` would then raise on the very same operands being absent from the
+    payload -- a precondition and an effect reading different acts. The values moved to
+    `DEFAULT_FIXTURES` (`default_store_kind`, `default_transfer_amount`), unchanged, where the
+    person derives them and the act CARRIES them."""
     requirement: Requirement
-    operand_defaults: dict = field(default_factory=dict)
 
     def operands(self) -> tuple:
         return self.requirement.operands()
 
     def entity_operands(self) -> tuple:
         return self.requirement.entity_operands()
+
+    def needs(self) -> frozenset:
+        return self.requirement.needs()
 
     def stems(self) -> tuple:
         """Delegated like every other accessor here, so the load-time stem closure sees a cell's
@@ -1028,50 +1055,53 @@ def evaluate(req: Optional[TypedRequires], reader, binding: dict) -> Verdict:
     polarities the two sites actually have."""
     if req is None:
         return Verdict(UNKNOWN, ())
-    b = dict(req.operand_defaults)
-    b.update({k: v for k, v in (binding or {}).items() if v is not None})
+    # ⚠ THE BINDING IS THE CALLER'S AND THE CELL CONTRIBUTES NOTHING TO IT. Until `W-C` this
+    # started from `req.operand_defaults`, so an operand the ACT did not carry was supplied HERE
+    # -- under both readers, invisibly. An unsupplied operand is UNKNOWN now, and UNKNOWN refuses
+    # in the fold and does not contradict for the person, which is the polarity pair the rest of
+    # this block is built on.
+    b = {k: v for k, v in (binding or {}).items() if v is not None}
     observed: list = []
     return Verdict(req.check(reader, b, observed), tuple(observed))
+
+
+def binding_of(actor: str, operands: dict) -> dict:
+    """THE ONE BINDING. An actor, plus the operands something carries -- and BOTH READERS BUILD IT
+    HERE, which is `W-C`'s whole point.
+
+    ⚠ WHAT THIS REPLACED WAS TWO DIFFERENT DECISIONS WEARING ONE DECLARATION'S CLOTHES.
+    `binding_from_act` did a LITERAL key match on the payload; `binding_from` (the person's side,
+    now deleted) REBOUND the Candidate's `subject` onto whatever the requirement's entity operand
+    happened to be called -- `from` for `transfer`, `to` for `move`, `site` for `restore`. So the
+    person evaluated `stores(SUBJECT, kind)` and the fold evaluated `stores(<unbound>, kind)`:
+    not the same cell asked twice, but a second, undeclared decision about WHOSE granary the
+    requirement is about. The person's rebinding was also WRONG on its own terms -- §54 item 7
+    says `hearth(GIVER)`, and the giver is the actor, never the referent.
+
+    There is nothing left to rebind: `operands_for` derives every operand the cell names, the act
+    CARRIES them, and both sides pass the same bag through here. `actor` is the one operand that
+    is never carried, because it is structural on both sides -- `Act.actor` for the fold, `p.id`
+    for the person -- and a copy of it on the payload would be a second home for a fact the Act
+    already holds (`ID-2`).
+
+    Operands outside `requires_operands` are dropped: a payload is also where `record`, `stages`,
+    `venue` and `harm` ride, and the grammar's vocabulary is closed."""
+    return {"actor": actor,
+            **{k: v for k, v in (operands or {}).items() if k in REQUIRES_OPERANDS}}
 
 
 def binding_from_act(a) -> dict:
     """THE RESOLVER'S BINDING -- `Act.payload`, plus the actor.
 
-    ⚠ IT IS ALLOWED TO BE INCOMPLETE, AND TODAY IT ALWAYS IS. `pack_scenes` puts only the
-    Candidate's `subject` on the payload, so `transfer` has no `kind`, `move` has no `to` and
-    `work` has no `site`. Every one of those evaluates to UNKNOWN and the fold refuses -- which is
-    what those verbs already did through their hand-written predicates. Where operands come from
-    is `H-94`, and it is not answered here."""
-    d = a.payload if isinstance(getattr(a, "payload", None), dict) else {}
-    b = {k: v for k, v in d.items() if k in REQUIRES_OPERANDS}
-    b["actor"] = a.actor
-    return b
-
-
-def binding_from(req: Optional[TypedRequires], actor: str, subject) -> dict:
-    """THE PERSON'S BINDING -- what a Candidate can supply, which is ONE entity and the actor.
-
-    §F1 clause 4 asks whether `requires(verb)` is known-false ABOUT THIS SUBJECT, and a Candidate
-    is `(verb, subject, why)`, so the subject binds the requirement's OWN entity operand --
-    `from` for `transfer`, `to` for `move`, `site` for `restore` -- whatever that operand is
-    named. Everything else is unbound and therefore UNKNOWN, which is the honest reading: a person
-    with no belief about it is not a person who believes it false.
-
-    ⚠ TAKES NO WORLD, AND NEITHER DOES ANYTHING IT CALLS -- BUT NOT BECAUSE THAT TEST SAYS SO.
-    An earlier draft of this docstring claimed `L2` here was "asserted by AST in
-    `test_w5_sense_is_still_the_only_world_taking_non_decision_function`". IT IS NOT: that walk
-    inspects only functions whose FIRST PARAMETER IS ANNOTATED `Person`, and `binding_from`,
-    `evaluate`, `LedgerReader.__init__`/`read` and every `Requirement.check` fail that filter, so
-    none of them is examined. Add a `w` parameter here tomorrow and the test stays green. Found by
-    the W-A adversarial pass, and corrected rather than left: a false claim of enforcement is
-    worse than none, because it stops the next reader from checking. What IS true is that the one
-    CALLER, `belief_contradicts(p: Person, ...)`, does match the filter and is covered -- so the
-    guard reaches the boundary and not this function."""
-    b: dict = {"actor": actor}
-    if req is not None and subject is not None:
-        for op in req.entity_operands():
-            b[op] = subject
-    return b
+    ⚠ IT WAS ALLOWED TO BE INCOMPLETE AND IT ALWAYS WAS; `W-C` CLOSED THAT AND DID NOT MAKE IT
+    IMPOSSIBLE. `pack_scenes` used to put only the Candidate's `subject` on the payload, so
+    `transfer` had no `kind`, `move` had no `to` and `work` had no `site`, and every one of those
+    evaluated UNKNOWN and refused. A COMPUTED act now carries the operands its verb's cell names,
+    because a Candidate that could not bind them was never formed. A HAND-BUILT act still binds
+    whatever its author put on the payload, and an author who omits one still gets UNKNOWN and a
+    refusal -- which is the polarity §42.2 wants and the reason this is not asserted here."""
+    return binding_of(a.actor,
+                      a.payload if isinstance(getattr(a, "payload", None), dict) else {})
 
 
 class WorldReader:
@@ -1299,14 +1329,13 @@ def build_typed_requires(verb: str, cell) -> Optional[TypedRequires]:
                          "`requires_typed_note:` saying why")
     if not isinstance(cell, dict):
         raise SystemExit(f"verb_table.yaml: {verb!r} `requires_typed:` is not a mapping: {cell!r}")
-    defaults = dict(cell.get("operand_defaults") or {})
-    for o in defaults:
-        if o not in REQUIRES_OPERANDS:
-            raise SystemExit(
-                f"verb_table.yaml: {verb!r} defaults operand {o!r}, which is not in "
-                f"rosters.yaml's requires_operands: {sorted(REQUIRES_OPERANDS)}")
-    body = {k: v for k, v in cell.items() if k != "operand_defaults"}
-    return TypedRequires(_build_clause(verb, body), defaults)
+    # ⚠ `operand_defaults:` IS NO LONGER A KEY AND A CELL CARRYING ONE MUST REFUSE, not be
+    # ignored. `W-C` moved `transfer`'s two to `DEFAULT_FIXTURES`; dropping the key silently would
+    # let a later table edit re-introduce a fold-side default that no longer has a reader, and it
+    # would read as accepted. `_build_clause` raises on any key the form does not take, so the
+    # refusal is already structural -- this comment is here so the next reader knows the absence
+    # is a decision and not an oversight.
+    return TypedRequires(_build_clause(verb, cell))
 
 
 # ===========================================================================
@@ -1763,6 +1792,23 @@ DEFAULT_FIXTURES = Fixtures(
     record_stage_term=1,
     budget_office_bonus=1,
     budget_leg_penalty=1,
+    # `H-94`, `W-C`. THE TWO OPERANDS §54 ITEM 7'S FORMULA NAMES AND THE DESIGN NEVER SUPPLIES.
+    # `stores(hearth(giver), kind) >= amount`: `hearth(giver)` is the actor's own live `contain`
+    # Tenure and `to` is the question's referent, so both are DERIVED person-side -- but `kind`
+    # and `amount` are values nobody states, which is `H-80`'s shape exactly (a declared stand-in
+    # for operands the person cannot supply). Declare, default, sweep.
+    #
+    # ⚠ THESE ARE A MOVE, NOT AN INVENTION, AND THE OLD HOME IS DELETED. They were
+    # `transfer`'s `operand_defaults: {kind: grain, amount: 1}` in `verb_table.yaml` -- the
+    # relocated form of `_req_transfer`'s two literals -- and that cell filled them AT THE FOLD,
+    # under the person, for an act whose payload carried neither. Two owners of one value, and
+    # the fold's copy would have admitted a `transfer` whose effect then raised on the operands
+    # the precondition had invented for it. The values are carried across unchanged.
+    default_store_kind="grain",        # `H-94`, swept with the amount below
+    # ⚠ `0` IS THE CONTROL AND IT IS SWEPT FIRST. Nothing is spent, so scarcity never binds and
+    # `stores >= 0` admits every giver: a run at this point shows how much of the transfer
+    # behaviour rests on the default rather than on the world.
+    default_transfer_amount=1,         # `H-94`, swept 0 / 1 / 3
 )
 # The immutable baseline. `ALIGNMENT` is REBOUND by a sweep; this is not, so every sweep point is
 # built from the declared table rather than from the previous point (see `alignment_at`).
@@ -2115,10 +2161,25 @@ class Question:
 
 @dataclass
 class Candidate:
-    """S17 -- `opening_set` RETURNS Candidate[], NOT Act[]."""
+    """S17 -- `opening_set` RETURNS Candidate[], NOT Act[].
+
+    ⚠ `operands` IS THE STRUCTURAL HALF OF `H-94`, AND IT IS NOT A FOURTH FIELD BOLTED ON. S17
+    types the Candidate `(verb, subject, why)`, and `H-94` measured what that costs: `transfer`'s
+    `stores(hearth(giver), kind) >= amount` has no `kind` and no `amount` that any part of the
+    deliberation-to-resolution pipeline can carry, so the verb was attempted and refused in every
+    world in the corpus. The row asked WHERE OPERANDS LIVE. They live here, on the Candidate,
+    because the person is who derives them -- `hearth(giver)` is the giver's own Tenure and the
+    referent is the person's own question -- and a channel anywhere further down (the Act, the
+    Scene, the payload) would have to be filled by something that is not the person, which is L2.
+
+    ⚠ AND THE FIELD IS NEVER PARTIAL. A form whose operands cannot all be bound forms NO
+    Candidate (`operands_for` returns `None`), because an act minted with a hole is refused by the
+    fold for a reason that is about the INSTRUMENT, and once `W-B` deposits observations that
+    refusal becomes a FALSE BELIEF held by everyone who witnessed it."""
     verb: str
     subject: Optional[str] = None
     why: str = ""
+    operands: dict = field(default_factory=dict)
 
 
 @dataclass
@@ -2496,6 +2557,33 @@ class World:
         out.extend(self._unowned)
         return _TenureView(out)
 
+
+    def contain_ascends(self, subject: str, object_: str) -> bool:
+        """MAY `subject` BE CONTAINED IN `object_`? The §10 ladder, asked rather than raised.
+
+        ⚠ ONE OWNER, TWO POLARITIES, AND `W-C` MADE THE SECOND ONE REACHABLE. The rule lived
+        inside `add_tenure`, where its only expression was a `Forbidden`. That was survivable while
+        no COMPUTED act ever named a destination: once `move` carries a real `to`, a person can
+        name any rung their containment path reaches -- including a SIBLING, because
+        `contain.path` asks for a shared ancestor and a sibling has one -- and the ladder then
+        refused the write by RAISING, which kills the season. A person attempting a journey the
+        world will not seat them in is not an instrument defect and not a design gap; it is a
+        BLOCKED TRAVEL, which is the Event `move` already declares.
+
+        So the question is asked here and answered twice: `add_tenure` raises on it, because a
+        caller writing an illegal edge directly is a bug, and `_eff_move` declines on it, because a
+        person is allowed to try. Two readings of one declaration -- the same shape `evaluate`
+        gives a `requires` cell, and the reason neither site re-implements the ladder.
+
+        Non-rungs pass: `add_tenure` never checked an edge whose ends are not both rungs (a
+        `contain` onto a Record means something else), and narrowing that here would be a new
+        rule wearing a refactor's clothes."""
+        sub, obj = self.rungs.get(subject), self.rungs.get(object_)
+        if sub is None or obj is None:
+            return True
+        order = list(RUNG_KINDS)
+        return order.index(obj.kind) > order.index(sub.kind)
+
     def add_tenure(self, t: Tenure) -> Tenure:
         """The ONE writer. Routes to `t.subject`'s own list, or to `_unowned` when the subject is
         not a person (`contain : Rung -> Rung` is most of those).
@@ -2521,18 +2609,15 @@ class World:
                 "S15", needs=f"a kind from rosters.yaml: tenure_kinds {sorted(TENURE_KINDS)}",
                 law="#353 §15 -- the seven Tenure kinds are a CLOSED set. An unrostered kind is "
                     "not an error at write time and a silent never-match at read time")
-        if t.kind == "contain":
-            sub, obj = self.rungs.get(t.subject), self.rungs.get(t.object)
-            if sub is not None and obj is not None:
-                order = list(RUNG_KINDS)
-                if order.index(obj.kind) <= order.index(sub.kind):
-                    raise Forbidden(
-                        f"`contain` from {sub.kind} {t.subject!r} to {obj.kind} {t.object!r} does "
-                        f"not go up the ladder", "S10",
-                        needs="a parent strictly above the child on `rung_kinds`",
-                        law="#353 §10 -- `contain : Rung -> Rung` is the containment LADDER. An "
-                            "edge that does not ascend makes `under_purview` walk sideways or "
-                            "loop, and Jordan's governance canon reads purview off that walk")
+        if t.kind == "contain" and not self.contain_ascends(t.subject, t.object):
+            sub, obj = self.rungs[t.subject], self.rungs[t.object]
+            raise Forbidden(
+                f"`contain` from {sub.kind} {t.subject!r} to {obj.kind} {t.object!r} does "
+                f"not go up the ladder", "S10",
+                needs="a parent strictly above the child on `rung_kinds`",
+                law="#353 §10 -- `contain : Rung -> Rung` is the containment LADDER. An "
+                    "edge that does not ascend makes `under_purview` walk sideways or "
+                    "loop, and Jordan's governance canon reads purview off that walk")
         (self.persons[t.subject].tenures if t.subject in self.persons else self._unowned).append(t)
         return t
 
@@ -3025,7 +3110,7 @@ class Query:
         return max(1, b)
 
     @staticmethod
-    def opening_set(p: Person, v: View, q: Question) -> list[Candidate]:
+    def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candidate]:
         """§F1 -- COMPUTED FROM THE VERB TABLE. No `roster` parameter: that is `D2` entire.
 
         ⚠ WHAT CHANGED, AND WHY IT COULD NOT CHANGE BEFORE. Rev 2 took `roster: list[Candidate]`
@@ -3035,11 +3120,33 @@ class Query:
         nothing to compute a set FROM. `questions_for()` is that producer, so the roster's excuse
         is gone and with it the roster.
 
-            { Candidate(verb, subject, why) :
+            { Candidate(verb, subject, why, operands) :
                 verb    in the verb table                            -- clause 1
               , eligibility(verb, p) holds                           -- clause 2
               , subject in referents(q)                              -- clause 3
-              , requires(verb) not KNOWN-FALSE from p's OWN claims }  -- clause 4
+              , requires(verb) not KNOWN-FALSE from p's OWN claims    -- clause 4
+              , every operand requires(verb) names is DERIVABLE }     -- `W-C`, `H-94`
+
+        ⚠ THE FIFTH LINE IS NOT A FIFTH CLAUSE OF §F1 AND MUST NOT BE READ AS ONE. Clauses 1-4
+        are the design's; this is the instrument declining to MINT AN ACT WITH A HOLE. The
+        difference matters because the two have opposite polarities: a clause of §F1 narrows what
+        a person is willing to attempt, and this narrows what the person can COHERENTLY SAY. An
+        act missing an operand is refused by the fold for the instrument's reason, and `W-B` will
+        deposit that refusal as a belief -- so forming it would put a fabricated fact about a
+        granary nobody named into every witness's ledger. `operands_for` traces every decline, so
+        the count is measurable rather than inferred from a verb's absence.
+
+        ⚠ `fx` IS THE FOURTH PARAMETER AND IT IS `budget`'s PRECEDENT, NOT A WIDENING. §F1 types
+        this `opening_set(p, view, q)`. `Fixtures` is the PARAMS REGISTRY -- flat numbers, no
+        entity, identical for every person in the season, assigned to `params` by #353 §22 -- and
+        `Query.budget` already takes one for exactly this reason, with the argument written out
+        there. Two of `transfer`'s operands (`kind`, `amount`) are values the design supplies NO
+        number for, so they are fixtures with a register row and a sweep (`H-94`), and a person
+        who cannot reach the registry cannot derive them. The alternative was to leave them in the
+        verb table's `operand_defaults`, where the FOLD filled them under the person -- which is
+        the two-owner defect this item deletes. What §F1's signature is protecting is that no
+        AUTHORED OPTION LIST reaches here (`D2`); a params registry is not one, and the AST proof
+        still sees no `World`.
 
         ⚠ CLAUSE 4 IS THE EPISTEMIC DESIGN AND IS NOT "requires holds". §F1: the person filters on
         WHAT THEY BELIEVE, "so a person who *wrongly* believes the granary full still forms the
@@ -3062,9 +3169,16 @@ class Query:
             if not person_side_eligible(p, row):
                 continue
             for subject in q.referents:
-                if belief_contradicts(p, row, subject):
+                # ⚠ OPERANDS BEFORE THE BELIEF TEST, AND THE ORDER IS THE POINT. Clause 4 asks
+                # whether the requirement is known-false ABOUT THIS BINDING, so the binding has to
+                # exist first -- asking it of an unbound cell is what made the person read a
+                # different granary from the fold.
+                ops = operands_for(p, row, q, subject, fx)
+                if ops is None:
                     continue
-                out.append(Candidate(verb, subject, why=q.source))
+                if belief_contradicts(p, row, subject, ops):
+                    continue
+                out.append(Candidate(verb, subject, why=q.source, operands=ops))
         return out
 
     @staticmethod
@@ -3262,7 +3376,7 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
         q = getattr(v, "question", None)
         if q is None:
             return []
-        cands = Query.opening_set(p, v, q)
+        cands = Query.opening_set(p, v, q, fx)
         if verbs is not None:
             cands = [c for c in cands if c.verb in verbs]
         u = urgency(s.subsistence, fx)
@@ -3348,7 +3462,180 @@ def person_side_eligible(p: Person, row: "VerbRow") -> bool:
     return False
 
 
-def belief_contradicts(p: Person, row: "VerbRow", subject: str) -> bool:
+def hearth_of(p: Person) -> Optional[str]:
+    """§54 item 7's `hearth(giver)` -- WHERE THE GIVER IS, READ OFF THE GIVER.
+
+    A person's live `contain` Tenure. `W5` moved the tenure store onto the Person precisely so a
+    person-side function could ask this without a World, and this is that move being spent rather
+    than restated: #353 `:730` gives a Person "every Tenure whose subject they are", and where you
+    are is one of them.
+
+    ⚠ IT IS NOT A CHOICE, AND THAT IS WHY IT IS DERIVED RATHER THAN OFFERED. `H-94` asked where
+    `transfer`'s operands come from and the answer differs per operand: the giver's hearth is
+    STATE (the actor is somewhere, and it is wherever they are), the receiver is the question's
+    referent, and `kind`/`amount` are values the design does not supply at all. Only the third
+    kind needs a fixture. Reading the first as a choice would invent an option the person does not
+    have; reading it as a fixture would invent a hearth.
+
+    `None` for a person with no live containment -- a person nowhere cannot give from a store, and
+    the Candidate is not formed. That is a REFUSAL and not a hole in the design: #353 seats every
+    person on the ladder, so a person off it is a WORLD the case failed to build."""
+    return next((t.object for t in p.tenures if t.kind == "contain" and t.live), None)
+
+
+def store_kind_of(p: Person, q: "Question") -> Optional[str]:
+    """The matter kind THE QUESTION IS ABOUT, from the person's own ledger. `None` if it says none.
+
+    `q.about` is the originating object's id; for §F1's Q2 (`claim_landed`) that is a Claim in
+    THIS person's ledger, and a claim whose predicate is `stores:<kind>` names a kind. The
+    predicate is the one the grammar DERIVES (`f"{scalar}:{key}"`, `Observation`'s docstring), so
+    this reads the same namespace `belief_contradicts` reads and the write side has a name to aim
+    at -- which is `H-116`'s other half and is `W-B`, not this item.
+
+    ⚠ PERSON-SIDE, AND THE LEDGER IS THE REASON IT CAN BE. §20: claims live in the holder's own
+    ledger and nobody else may read it. Looking `q.about` up in the WORLD would make this a
+    resolver read wearing a person's signature."""
+    if q is None or not q.about:
+        return None
+    for c in p.ledger:
+        if c.id != q.about:
+            continue
+        # `stores` is `transfer`'s own `scalar:`, and `f"{scalar}:{key}"` is how `Observation`
+        # derives the predicate -- so this reads the namespace the cell writes rather than a
+        # second vocabulary. A claim about anything else names no matter kind.
+        stem, sep, arg = str(c.predicate).partition(":")
+        return arg if sep and arg and stem == "stores" else None
+    return None
+
+
+def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"):
+    """ONE OPERAND, FROM THE PERSON'S OWN STATE. `None` means THIS PERSON CANNOT SUPPLY IT.
+
+    ⚠ THE CHAIN IS NOT THE ROUTER `G2` FORBIDS, on `WorldReader.read`'s own precedent. It
+    enumerates the CLOSED OPERAND VOCABULARY -- `rosters.yaml: requires_operands`, eight names,
+    where an unrostered one already refuses at load -- and not verbs, entities or outcomes. There
+    is no shape to forbid instead: each of the eight is a different question, and a per-verb table
+    would be the special case `G2` is actually about.
+
+    THE RULE IT IMPLEMENTS, stated once so the branches are readable as one decision rather than
+    eight: AN OPERAND NAMING WHAT THE ACT IS ABOUT BINDS THE QUESTION'S REFERENT; AN OPERAND
+    NAMING THE ACTOR'S OWN POSITION BINDS THE ACTOR'S OWN STATE; AN OPERAND THE DESIGN SUPPLIES NO
+    VALUE FOR IS A FIXTURE. That is why `subject`, `to` and `site` all bind the referent and are
+    not one name -- the cells name them differently because they mean different things TO THE
+    VERB, and the person answers all three the same way, with the thing they were asked about.
+
+    ⚠ AN OPERAND WITH NO BRANCH DECLINES, AND `floor` IS THE LIVE CASE. §12.1's floors are
+    per-SITE-KIND (`band_floors`), and person-side there is no way to learn a site's kind without
+    `w.sites` -- so a person cannot name the floor, and a cell binding `floor` as an OPERAND would
+    form no Candidate and say so in the trace. No live cell does: `work` reads its floor as a
+    SECOND READ on the site (`threshold_predicate`), which the world answers. Declining is
+    therefore the honest branch AND the one with nothing dead behind it (`ID-13`) -- the
+    alternative, `min` over every kind's floors, is a number nobody chose."""
+    if name == "actor":
+        return p.id
+    # What the act is ABOUT -- three cell-side names for the one thing the person was asked about.
+    if name == "subject":
+        return subject
+    if name == "to":
+        return subject
+    if name == "site":
+        return subject
+    # Where the ACTOR is. §54 item 7's `hearth(giver)`.
+    if name == "from":
+        return hearth_of(p)
+    # Values the design states no number for. `H-94`, declared / defaulted / swept.
+    if name == "kind":
+        return store_kind_of(p, q) or fx.get("default_store_kind")
+    if name == "amount":
+        return fx.get("default_transfer_amount")
+    return None
+
+
+# ⚠ TWO NAMES, AND THEY ARE THE SAME FACT. `subject` is *what the act is about* and `to` is *the
+# far end it is aimed at*; the person answers both with the referent they were asked about, so
+# carrying both is one fact under the two names the closed vocabulary has for it -- not a second
+# decision. A Candidate carries them BEYOND the operands its own cell binds, and the reason is in
+# Part E's write column rather than in its `requires` column: `transfer` declares
+# `writes: [Rung.stores, Rung.stores]` -- TWO rungs -- and its cell names ONE (`from`, the giver's
+# hearth). The receiver is declared by the WRITE and asked for by no precondition, so a rule that
+# carried only what the precondition binds would mint a transfer that cannot be performed.
+# ⚠ `site` IS NOT IN THIS TUPLE AND THE OMISSION IS THE POINT. `subject` and `to` are POSITIONS in
+# an act; `site` asserts a TYPE -- *this referent is a Site* -- and only a cell that actually reads
+# it may make that assertion on the person's behalf. `existence`'s `needs:` admits `site`, so
+# including it here would put a `site` on every `carry`.
+# roster-exempt: MECHANISM, and under the guard's own threshold besides. These are two members of
+# `rosters.yaml: requires_operands` singled out by the argument above -- the roster is still the
+# declaration of WHAT AN OPERAND MAY BE; this names which two the person answers with the referent.
+_REFERENT_OPERANDS = ("subject", "to")
+
+
+def operands_for(p: Person, row: "VerbRow", q: "Question", subject,
+                 fx: "Fixtures") -> Optional[dict]:
+    """§F1'S MISSING CHANNEL: the operands a Candidate carries, DERIVED PERSON-SIDE. `None` means
+    THIS PERSON CANNOT FORM THIS CANDIDATE.
+
+    ⚠ THE RETURN OF `None` IS THE LOAD-BEARING HALF, NOT THE DICT. Never mint an act with a hole.
+    An act missing an operand is refused by the fold for a reason that is about the INSTRUMENT
+    rather than about the world, and once `W-B` attaches a Verdict's reads to its Event that
+    refusal is deposited at WITNESS and becomes a belief every witness holds -- a FALSE one, about
+    a granary that was never asked about. Refusing to form the Candidate keeps the instrument's
+    own gap out of everybody's ledger, and `TRACE.note` makes it countable instead.
+
+    ⚠ WHAT IS CARRIED: THE CELL'S OWN OPERANDS, PLUS `subject`/`to` WHERE THE FORM ADMITS THEM.
+    The rule the item states is *a form whose `needs` cannot be bound forms no Candidate*, and
+    `needs:` is read here as the CEILING on what may be carried rather than the FLOOR of what must
+    bind. Both halves of that are load-bearing and neither is a softening:
+      * as a FLOOR it declines on operands nobody asks about. `scalar_threshold`'s `needs:`
+        includes `floor`, which no live cell binds as an operand (`work` reads its floor as a
+        SECOND READ on the site, which the world answers) and which a person cannot derive at all
+        -- §12.1's floors are per SITE KIND and a kind is a world read. So the floor reading
+        refuses `transfer` and `work` for want of a value neither of them reads, which is a
+        refusal for a reason that is not there.
+      * as a CEILING it is exactly what keeps the two vocabularies apart. `existence`'s `needs:`
+        admits `site` and `from`; carrying them would put a `site` on every `carry`, for no
+        reader. And an UNTYPED verb carries NOTHING, which is what stops `kind` -- a MATTER kind
+        here and a RECORD kind in `_eff_create_record` -- from arriving on a `create_record` and
+        silently making every record a record of grain.
+
+    ⚠ AN UNTYPED VERB IS NOT DECLINED. `{}` is the right answer for `speak`, `utter` and
+    `create_record`: the grammar states no precondition for them, so there is nothing to bind, and
+    refusing them would be reading "no cell" as "an unmet cell" -- the UNKNOWN/False collapse the
+    whole of this block exists to refuse. Their effects want operands of their own (`stages` is
+    `H-80`, `harm` is `W-E`); those are not in `requires_operands` and are not this item.
+
+    ⚠ NO WORLD, AND THE GUARD ACTUALLY REACHES IT. The AST proof in
+    `test_w5_sense_is_still_the_only_world_taking_non_decision_function` examines every function
+    whose FIRST parameter is annotated `Person`, which is why `p` is first here and not `row`:
+    `binding_from`'s docstring recorded that the same guard could not see IT, because its first
+    parameter was a `TypedRequires`. A signature is where that gets fixed, not a sentence."""
+    req = row.requires_typed
+    if req is None:
+        return {}
+    bound = tuple(req.operands())
+    admitted = req.needs()
+    out: dict = {}
+    for name in bound + tuple(n for n in _REFERENT_OPERANDS
+                              if n in admitted and n not in bound):
+        # `actor` is structural on both sides and is never carried; see `binding_of`.
+        if name == "actor":
+            continue
+        v = _derive_operand(p, name, q, subject, fx)
+        if v is None:
+            if name not in bound:
+                # An operand the CELL does not read cannot make the act malformed -- it is simply
+                # not carried. Declining here would refuse a verb for want of a value nothing asks
+                # for, which is the FLOOR reading this function's docstring rejects.
+                continue
+            TRACE.note(f"{row.verb!r} needs operand {name!r} and {p.id} cannot derive it "
+                       f"person-side (H-94); NO Candidate is formed -- an act minted with a hole "
+                       f"is refused for the instrument's reason and witnessed as a false belief",
+                       "§F1/H-94")
+            return None
+        out[name] = v
+    return out
+
+
+def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict) -> bool:
     """§F1 clause 4 -- is `requires(verb)` KNOWN-FALSE from `p`'s OWN claims?
 
     ⚠ THE ASYMMETRY IS THE WHOLE POINT AND MUST NOT BE SOFTENED TO "requires holds". This returns
@@ -3374,11 +3661,20 @@ def belief_contradicts(p: Person, row: "VerbRow", subject: str) -> bool:
     ⚠ AN UNTYPED VERB IS NOT CONTRADICTED. `evaluate(None, ...)` is UNKNOWN, and UNKNOWN is not
     False: a person cannot know a requirement fails when nothing states what the requirement is.
     That polarity is the OPPOSITE of the fold's, deliberately -- §F1 filters on belief and §42.2
-    governs the resolver -- and the same `Verdict` carries both readings."""
+    governs the resolver -- and the same `Verdict` carries both readings.
+
+    ⚠ `W-C`: IT READS THE CANDIDATE'S OWN OPERANDS, WHICH IS WHAT MAKES THIS THE SAME QUESTION
+    THE FOLD ASKS. It used to call `binding_from`, which rebound `subject` onto whichever operand
+    the cell called its entity -- so for `transfer` the person asked *does the RECEIVER hold the
+    grain*, and §54 item 7 asks about the GIVER's hearth. The person was reading a different cell
+    from the fold and getting a defensible-looking answer to the wrong question. `operands` is the
+    same bag the Act will carry, passed through the same `binding_of`, so the two sides now differ
+    only in WHAT THEY READ (one ledger, one world) and in POLARITY -- which is the difference
+    that is supposed to be there."""
     if (row.requires or "").strip() in NO_PRECONDITION:
         return False
     return evaluate(row.requires_typed, LedgerReader(p.ledger),
-                    binding_from(row.requires_typed, p.id, subject)).value is False
+                    binding_of(p.id, operands)).value is False
 
 
 def questions_for(w: World, p: Person) -> list[Question]:
@@ -3516,6 +3812,20 @@ def standing_of(p: Person, fx: "Fixtures") -> int:
     return scale if paired == 0 else (dis * scale) // paired
 
 
+def _payload_of(c: "Candidate") -> Optional[dict]:
+    """WHAT A COMPUTED ACT CARRIES: its subject, and the operands its verb's cell names.
+
+    ⚠ `subject` STAYS EVEN WHEN NO CELL BINDS IT, because it is not only an operand. `act_refs`
+    reads it to say what an act NAMES, `claim_subjects` reads it to say what a deposit is ABOUT,
+    and `tell` -- whose `writes:` is empty by design -- has nothing else that knows what was told.
+    Dropping it for a verb whose requirement happens not to mention `subject` would break the
+    causal graph for the one verb the corpus most relies on."""
+    d = dict(c.operands or {})
+    if c.subject:
+        d.setdefault("subject", c.subject)
+    return d or None
+
+
 def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
                 occasion: Optional["Question"] = None) -> list:
     """`H-78`: WHICH interactions share one scene. `H-76` says how many; this says which.
@@ -3551,13 +3861,16 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
                      # `payload["subject"]` and got `None`, so `tell` was attempted and refused in
                      # every world in the corpus; `_eff_tell` had no target either.
                      #
-                     # ⚠ THIS IS HALF OF `H-94` AND ONLY HALF. The other half is structural and is
-                     # NOT fixed here: `Candidate := (verb, subject, why)` (S17) has no operand
-                     # field at all, so `transfer`'s `stores(hearth(giver), kind) >= amount` still
-                     # has no `kind` and no `amount` that any part of the pipeline can carry. That
-                     # needs a ruling on where operands live, not a keyword argument.
+                     # ⚠ THAT WAS HALF OF `H-94` AND `W-C` CLOSED THE OTHER HALF. The
+                     # Candidate carries `operands` now, derived person-side from the actor's own
+                     # Tenures, the question's referent and two fixtures, so
+                     # `stores(hearth(giver), kind) >= amount` has a `from`, a `kind` and an
+                     # `amount` -- and the act CARRIES them, which is what makes the fold bind
+                     # what the person bound. The subject is written first and the operands over
+                     # it, so a cell that binds the referent under its own name (`to`, `site`)
+                     # cannot disagree with `subject` about which thing that is.
                      [Act(mint(p.id, c.verb, c.subject or ""), p.id, c.verb,
-                          payload={"subject": c.subject} if c.subject else None) for c in chunk],
+                          payload=_payload_of(c)) for c in chunk],
                      # `H-77`: a scene carrying more than one interaction is the EXTENDED one.
                      # This is what `extended` MEANS, and until W17's adversarial pass nothing
                      # ever set it -- so `Scene.cost` returned 1 unconditionally, H-77's sweep
@@ -4427,6 +4740,35 @@ def effect_for(verb: str):
     return deco
 
 
+def _operand(a: "Act", name: str):
+    """THE FOLD'S ONE READ OF A CARRIED OPERAND. A missing one RAISES.
+
+    ⚠ AN ABSENT OPERAND AT RESOLVE IS AN `InstrumentDefect`, NOT A REFUSAL, AND THE DISTINCTION
+    IS THE WHOLE OF `W-C`'s SECOND HALF. A refusal says *the world would not permit this*; a
+    caller minting a `transfer` that names no receiver is saying nothing about the world at all.
+    Filing it as a refusal would emit `emits_on_refusal`, `W-B` would deposit that at WITNESS, and
+    every witness would end the season holding a belief about a granary the act never named --
+    the instrument's own gap, laundered into the game as evidence. `operands_for` is what makes
+    this unreachable from a COMPUTED act: a Candidate whose operands cannot be derived is never
+    formed, so an act arriving here without one came from a hand-written call site.
+
+    ⚠ IT IS THE OWNER OF THE RULE, AND THREE EFFECTS HAD THEIR OWN COPY. `_eff_move` raised on a
+    missing `to` and `_eff_work` on a missing `site` -- both correct, both written twice -- while
+    `_eff_transfer` DEFAULTED four operands (`from`/`to` to `""`, `kind` to `"grain"`, `amount` to
+    `1`) and `_eff_confer` defaulted `to` to the actor, i.e. conferred an office on whoever
+    happened to be acting when the act named nobody. Same situation, four verbs, three answers.
+    §8: the rule lives once."""
+    d = a.payload if isinstance(getattr(a, "payload", None), dict) else {}
+    if d.get(name) is None:
+        raise InstrumentDefect(
+            f"a {a.verb!r} reached its effect with no {name!r} operand. The fold binds operands "
+            f"from the act's payload and `operands_for` forms NO Candidate whose operands it "
+            f"cannot derive, so an act minted without one is a CALLER defect and not a design "
+            f"gap -- and fabricating a value here would name a thing nobody chose. Payload: "
+            f"{sorted(d)}")
+    return d[name]
+
+
 # --- THE GOVERNANCE SLICE'S EFFECTS. `dispatch` needs none: Part E gives it `writes: []`, so an
 # order is an EMISSION and nothing else, which is `L1` in one row -- a dispatch does not move a
 # person, it tells one, and whether they go is their own act next season.
@@ -4441,7 +4783,10 @@ def _eff_confer(w: "World", a: "Act") -> list:
     which makes it emit the REFUSAL. My first version did both, and the fold correctly refused an
     act whose state change had in fact happened. `_apply_write`'s docstring states the contract."""
     d = (a.payload or {}) if isinstance(a.payload, dict) else {}
-    obj, to = d.get("office"), d.get("to") or a.actor
+    # ⚠ `to` WAS `d.get("to") or a.actor` -- a silent default that seated the ACTOR whenever the
+    # act named nobody, which is the same class as `_eff_transfer`'s four and is deleted with
+    # them. A conferral onto nobody is a malformed act, not a self-conferral.
+    obj, to = d.get("office"), _operand(a, "to")
     if not obj or obj not in w.offices:
         return []
     closed = []
@@ -4499,24 +4844,34 @@ def _eff_move(w: "World", a: "Act") -> None:
     names one. ⚠ This is `H-63`: Part E's `writes:` names the three cells and never the values, so
     what a `move` DOES is stated here rather than in the table — one implementation owned by the
     resolver, which is the distinction §27.2 draws against a caller-supplied lambda."""
-    dest = (a.payload or {}).get("to") if isinstance(a.payload, dict) else None
-    if not dest:
-        # ⚠ UNREACHABLE VIA THE FOLD, AND ASSERTED RATHER THAN TOLERATED. `_req_move` now refuses a
-        # destination-less move, so arriving here means the predicate was bypassed. Rev 1 fell
-        # through, closed every live leg and STILL returned `[a.actor]`, so `_fold` saw a non-empty
-        # `changed` and published `travel.moved` for a move that did not happen. Returning `[]`
-        # would be quieter and just as wrong: the caller would report a no-op as a legitimate
-        # nothing. §42.2's polarity rule -- no destination is a refusal, never a silent success.
-        # ⚠ `InstrumentDefect` IS A PLAIN Exception AND TAKES NO KEYWORDS -- unlike every
-        # `ShapeGap`. The first version of this guard passed `needs=`/`law=` and would have raised
-        # `TypeError: InstrumentDefect() takes no keyword arguments` if it ever fired: a guard
-        # that crashes instead of reporting. It never fired because `_req_move` refuses first,
-        # which is exactly why it went unnoticed -- found by MUTATING the predicate back to its
-        # broken form and watching the guard fail differently than it claims to.
-        raise InstrumentDefect(
-            "a `move` with no destination reached the effect: `_req_move` refuses these, so an "
-            "effect running without its predicate is a call-site bug. D22 -- an emission asserts "
-            "a state change, and a `move` with no `to` changes nothing")
+    dest = _operand(a, "to")
+    # ⚠ THE GUARD MOVED TO `_operand` AND ITS HISTORY IS KEPT HERE, because the history is what
+    # makes the guard's shape legible. Rev 1 fell through on a missing destination, closed every
+    # live leg and STILL returned `[a.actor]`, so `_fold` saw a non-empty `changed` and published
+    # `travel.moved` for a move that did not happen. Returning `[]` would be quieter and just as
+    # wrong: the caller would report a no-op as a legitimate nothing. §42.2's polarity rule -- no
+    # destination is a refusal, never a silent success. The version of this guard that lived here
+    # was found to pass `needs=`/`law=` to `InstrumentDefect`, which takes no keywords, so it
+    # would have raised `TypeError` if it had ever fired -- a guard that crashes instead of
+    # reporting, unfired because the precondition refuses first. One owner is also one place for
+    # that mistake to be made.
+    # ⚠ A DESTINATION THE LADDER WILL NOT SEAT THE MOVER IN IS A BLOCKED TRAVEL, NOT A CRASH, and
+    # this branch is `W-C`'s doing: once `move` carries a real `to`, a person can name any rung
+    # their containment path reaches, and `contain.path` asks for a SHARED ANCESTOR -- which a
+    # sibling has. So `move p_low -> p_mid` passed the precondition, `add_tenure` raised
+    # `Forbidden` on the §10 ladder, and the season died. Declining here returns nothing changed,
+    # so the fold emits `move`'s own `emits_on_refusal`. The rule itself is not re-implemented:
+    # `World.contain_ascends` is the one owner and `add_tenure` still RAISES on it, because a
+    # caller writing the edge directly is a bug where a person attempting the journey is not.
+    if not w.contain_ascends(a.actor, dest):
+        # ⚠ THE INSTANCE DETAIL SITS AFTER ` -> `, WHICH IS `report.py`'s CLUSTER KEY
+        # (`d.what.split(" -> ")[0]`). Putting the actor and the destination in the prefix would
+        # mint one register entry per pair and leave the label reading mid-sentence.
+        TRACE.decision(f"a move's destination is not up the §10 ladder -> {a.actor} into {dest!r}",
+                       "S10/E3", chose="change nothing, so the fold emits the refusal",
+                       alternatives=["write the edge anyway (add_tenure raises and the season "
+                                     "dies)", "let the precondition admit it and crash later"])
+        return []
     for t in w.tenures:
         if t.subject == a.actor and t.kind == "contain" and t.until is None:
             t.until = w.tick
@@ -4543,20 +4898,12 @@ def _eff_work(w: "World", a: "Act") -> None:
     ⚠ IT REPORTS THE SITE ANYWAY. The fold now refuses an act whose effect touched nothing, and
     `work`'s DELTA is deferred while its SUBJECT is not: the act is about that site, and saying
     so is what keeps the deferral from reading as a no-op."""
-    d = a.payload if isinstance(a.payload, dict) else {}
     # ⚠ NO FALLBACK. This read `or next((x for x in sorted(w.sites)), None)` -- the alphabetically
     # FIRST site in the world -- so a `work` with no site named one nobody chose. `_eff_move`
-    # refuses the identical situation (`InstrumentDefect`, a caller minted a malformed act) and
-    # this did not; found by the W-A adversarial pass, which noted the two are the same defect one
-    # verb along. It was reachable only because the precondition now refuses first, which is
-    # exactly why `_eff_move`'s own guard sat un-fired and broken for so long.
-    site = d.get("site")
-    if site is None:
-        raise InstrumentDefect(
-            "a `work` with no `site` reached the effect. The fold binds operands from the act's "
-            "payload; an act minted without one is a CALLER defect, not a design gap, and "
-            "fabricating the alphabetically first site would name a place nobody chose.")
-    return [site] if site else []
+    # refused the identical situation and this did not; found by the W-A adversarial pass, which
+    # noted the two are the same defect one verb along. `W-C` gave that answer ONE owner
+    # (`_operand`) rather than two copies of it.
+    return [_operand(a, "site")]
 
 
 @effect_for("create_record")
@@ -4618,6 +4965,14 @@ def _eff_kill(w: "World", a: "Act") -> None:
     p = w.persons.get(who)
     if p is None:
         return None
+    # ⚠ `harm` KEEPS ITS DEFAULT AND `W-C` LEFT IT DELIBERATELY -- IT IS `W-E`. Every other
+    # `.get(<operand>, <literal>)` in this block is deleted, and this one is not, because `harm`
+    # is NOT in `rosters.yaml: requires_operands`: no cell can bind it, `operands_for` cannot
+    # derive it, and there is no route by which a computed act could carry it. Deleting the
+    # default here without that route would make `kill / wound` raise on every act the loop
+    # produces, so the honest move is to name the item that supplies it rather than to break the
+    # verb for tidiness. ⚠ AND THE DEFAULT IS NOT INNOCENT: `p.body` is FULL body, so an act that
+    # names no harm KILLS. `W-E` owns both halves.
     p.body = max(0, p.body - int(d.get("harm", p.body)))
     if p.body > 0:
         return None
@@ -4652,19 +5007,35 @@ def _eff_transfer(w: "World", a: "Act") -> None:
     nowhere, in an economy where `yield` is the only source (#353 `:856`). The scarcity proof still
     passed, because it only watched the giver: a run can be right about the thing it looks at and
     wrong about the world."""
-    give = (a.payload or {}) if isinstance(a.payload, dict) else {}
-    src = w.rungs.get(give.get("from", ""))
-    dst = w.rungs.get(give.get("to", ""))
-    kind, amount = give.get("kind", "grain"), give.get("amount", 1)
-    if src is not None:
-        src.stores = dict(src.stores or {})
-        src.stores[kind] = src.stores.get(kind, 0) - amount
-    if dst is not None:
-        dst.stores = dict(dst.stores or {})
-        dst.stores[kind] = dst.stores.get(kind, 0) + amount
+    # ⚠ FOUR SILENT DEFAULTS STOOD HERE AND `W-C` DELETED ALL FOUR: `from`/`to` defaulted to
+    # `""`, `kind` to `"grain"` and `amount` to `1`. Each was §0.05's literal-in-a-body, and
+    # together they made an operand-less `transfer` a WELL-FORMED act about a granary nobody
+    # named. They are `_operand` reads now, and their two open values are fixtures with a register
+    # row and a sweep (`H-94`).
+    src = w.rungs.get(_operand(a, "from"))
+    dst = w.rungs.get(_operand(a, "to"))
+    kind, amount = _operand(a, "kind"), _operand(a, "amount")
+    # ⚠ A SIDE THAT IS NOT A RUNG MEANS THE TRANSFER DID NOT HAPPEN, and returning nothing is what
+    # makes the fold emit the refusal. This branch became REACHABLE the moment operands became
+    # real: a person names a receiver from their question's referents and may name something that
+    # is no rung at all. The old shape moved the giver's side anyway, which is the matter
+    # ANNIHILATION this effect's own docstring records -- grain leaving the world and arriving
+    # nowhere -- and it survived only because no computed act ever bound `from` to begin with.
+    # §42.2's polarity: an unperformable transfer refuses; it does not half-happen.
+    if src is None or dst is None:
+        TRACE.decision(f"transfer names a side that is no rung -> from "
+                       f"{_operand(a, 'from')!r} to {_operand(a, 'to')!r}", "E3/S27.1",
+                       chose="change nothing, so the fold emits the refusal",
+                       alternatives=["move the giver's side anyway (matter leaves the world)"])
+        return []
+    src.stores = dict(src.stores or {})
+    src.stores[kind] = src.stores.get(kind, 0) - amount
+    dst.stores = dict(dst.stores or {})
+    dst.stores[kind] = dst.stores.get(kind, 0) + amount
     # BOTH SIDES, because §E3 says `transfer` writes `(Rung, stores)` twice -- one per side -- and
-    # a one-sided report would make the Event name half of what it did.
-    return [r.id for r in (src, dst) if r is not None]
+    # a one-sided report would make the Event name half of what it did. The `if r is not None`
+    # filter that stood here is gone with the branch above that made it necessary.
+    return [src.id, dst.id]
 
 
 class SeasonDriver:

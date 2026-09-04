@@ -9229,7 +9229,7 @@
   "P12": {
    "id": "P12",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION. `opening_set('p', 'v', 'q')` -- THE ROSTER PARAMETER IS GONE, which is `D2` entire. Rev 2 was PARTIAL and said why: the type was right and the property the type protects was not, because S61 left `q` with no producer so there was nothing to compute from. `questions_for()` is that producer. 44 candidates over 22 verbs, every one a verb-table row",
+   "detail": "PASS BY CONSTRUCTION. `opening_set('p', 'v', 'q', 'fx')` -- THE ROSTER PARAMETER IS GONE, which is `D2` entire. Rev 2 was PARTIAL and said why: the type was right and the property the type protects was not, because S61 left `q` with no producer so there was nothing to compute from. `questions_for()` is that producer. 44 candidates over 22 verbs, every one a verb-table row",
    "kind": null,
    "section": "S17",
    "title": "opening_set returns Candidate[], not Act[]",
@@ -11024,13 +11024,13 @@
  "_trace_counts": {
   "STEP": 1920,
   "BARRIER": 651,
-  "DECISION": 660,
+  "DECISION": 661,
   "QUERY": 5989,
   "NOTE": 468,
-  "WRITE": 24484,
-  "EVENT": 18922,
+  "WRITE": 24491,
+  "EVENT": 18927,
   "ACT": 75,
-  "CLAIM": 8330,
+  "CLAIM": 8335,
   "GAP": 66
  },
  "_corpus_defects": [

@@ -521,10 +521,7 @@ verbs:
       key:       kind
       threshold: amount
       comparator: ">="
-      operand_defaults:
-        kind:    grain
-        amount:  1
-    requires_typed_note: "§E3 `:418` — ***`stores(hearth(giver), kind) >= amount`*** (§54 it. 7), the scarcity predicate §27.1 rests on. ⚠ `operand_defaults` IS A MOVE, NOT AN INVENTION: `_req_transfer` read `give.get(\"kind\", \"grain\")` and `give.get(\"amount\", 1)` — two bare literals in a body — and they are carried here verbatim so retiring that predicate is value-identical. §0.05 puts a value the engine uses in the data file. Where a REAL `kind` and `amount` come from is `H-94`, open: `from` is unbound for every computed act, so the verdict is UNKNOWN and the fold refuses, exactly as before."
+    requires_typed_note: "§E3 `:418` — ***`stores(hearth(giver), kind) >= amount`*** (§54 it. 7), the scarcity predicate §27.1 rests on. ⚠ `operand_defaults:` STOOD HERE AND `W-C` DELETED IT. It held `kind: grain` / `amount: 1`, carried over from `_req_transfer`'s two literals, and `evaluate` bound them for any act whose payload lacked them — i.e. THE FOLD supplied the person's operands, invisibly, under the person. Once `H-94`'s structural half closed that became two owners of one value AND an incoherence: the cell would ADMIT a transfer on operands it had invented, and `_eff_transfer` would then raise on those same operands being absent from the payload. The values moved unchanged to `DEFAULT_FIXTURES` (`default_store_kind`, `default_transfer_amount`), where `operands_for` derives them PERSON-SIDE and the act CARRIES them; `from` is the actor's own live `contain` Tenure and `to` is the question's referent, so neither is a fixture at all."
     writes:      ["Rung.stores", "Rung.stores"]
     emits:       ["transfer.made"]
     emits_on_refusal: ["transfer.refused"]

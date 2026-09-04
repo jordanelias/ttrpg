@@ -426,11 +426,11 @@ def p11():
     p = w.persons["p_low"]
     q = Question("q:p11", "need", ("rec_writ",))
     v = View(p.id, [], w.fixtures.get("view_k"), q)
-    before = {c.verb for c in Query.opening_set(p, v, q)}
+    before = {c.verb for c in Query.opening_set(p, v, q, w.fixtures)}
     # `capability` at zero, and at zero for EVERY key the person has -- rev 2 set one key and
     # could not have observed a gate on a different one (§0.1 point 2).
     p.capability = {k: 0 for k in (list(p.capability) or ["copying"])}
-    after = {c.verb for c in Query.opening_set(p, v, q)}
+    after = {c.verb for c in Query.opening_set(p, v, q, w.fixtures)}
     assert before == after and before, (
         f"rank 0 changed the option set: {sorted(before ^ after)}")
     return (f"PASS BY CONSTRUCTION, and it is a stronger pass than rev 2's: the option set is now "
@@ -449,7 +449,7 @@ def p12():
     p = w.persons["p_low"]
     q = Question("q:p12", "need", ("rec_writ", "S"))
     v = View(p.id, [], w.fixtures.get("view_k"), q)
-    got = Query.opening_set(p, v, q)
+    got = Query.opening_set(p, v, q, w.fixtures)
     assert all(isinstance(c, Candidate) for c in got) and not any(isinstance(c, Act) for c in got)
     # THE PROPERTY, not the type: no parameter of `opening_set` may be an authored option list.
     params = list(_i.signature(Query.opening_set).parameters)
@@ -458,7 +458,8 @@ def p12():
     # MOVES when the table's eligibility does, which an authored list cannot do.
     assert got and all(c.verb in VERB_TABLE for c in got)
     q2 = Question("q:p12b", "need", ("rec_writ",))
-    assert len(Query.opening_set(p, View(p.id, [], w.fixtures.get("view_k"), q2), q2)) < len(got), (
+    assert len(Query.opening_set(p, View(p.id, [], w.fixtures.get("view_k"), q2), q2,
+                                w.fixtures)) < len(got), (
         "the option set did not shrink with the question's referents -- it is not computed from q")
     return (f"PASS BY CONSTRUCTION. `opening_set{tuple(params)}` -- THE ROSTER PARAMETER IS GONE, "
             f"which is `D2` entire. Rev 2 was PARTIAL and said why: the type was right and the "
@@ -937,7 +938,7 @@ def p36():
     # true finding about the specification and a different one from what this probe tests.
     offered = len(Query.opening_set(p, View(p.id, [], w.fixtures.get("view_k"),
                                            Question("q:p36", "need", ("rec_writ",))),
-                                    Question("q:p36", "need", ("rec_writ",))))
+                                    Question("q:p36", "need", ("rec_writ",)), w.fixtures))
     d = _run_d(w, chooser(w, only=p.id, verbs=resolvable_verbs()))
     got = [a.verb for a in d.resolved if a.actor == p.id]
     assert len(set(got)) >= 3, f"only {len(set(got))} distinct options were open: {got}"
@@ -1136,7 +1137,15 @@ def f10():
         # W3: the payload is the transfer's OPERANDS. `transfer`'s precondition -- §54 item 7's
         # `stores(hearth(giver), kind) >= amount` -- is evaluated BY THE FOLD from these, not by
         # a lambda this probe supplies. That is the difference the item is for.
-        return ([Act_(w, p, "transfer", payload={"from": "Hh", "kind": "grain", "amount": 6})]
+        # ⚠ `to` IS NOT DECORATION AND `W-C` MADE ITS ABSENCE FATAL. §E3 gives `transfer` TWO
+        # `Rung.stores` writes -- one per side -- and the four silent `.get(<operand>, <literal>)`
+        # defaults that used to stand in `_eff_transfer` meant this probe could name one side and
+        # get a well-formed act anyway. It cannot now: an act minted without a receiver raises
+        # `InstrumentDefect`, because a transfer to nobody is a malformed act rather than a
+        # refusal. `S` is the settlement the hearth sits in, so the grain goes UP the ladder and
+        # is not annihilated -- which is the failure this effect's own docstring records.
+        return ([Act_(w, p, "transfer",
+                      payload={"from": "Hh", "to": "S", "kind": "grain", "amount": 6})]
                 if p.id in ("p_low", "p_mid") else [])
     _run(w, choose)
     granted = [e for e in w.log if e.kind == "transfer.made"]
