@@ -329,6 +329,57 @@ def test_h118_content_hash_folds_persons_sites_rungs_tenures_not_only_the_log():
         "reading the log alone made this state divergence invisible")
 
 
+def test_h118_content_hash_folds_every_game_state_collection():
+    """`H-118`, THE HALF THE FIRST FIX MISSED. Rev 1 of the fix folded persons/sites/rungs/
+    tenures and its docstring said the gap was closed. It was not: `records` and `propositions`
+    were omitted, and `create_record` and `utter` -- two of the FIVE verbs that execute in the
+    corpus -- write exactly those (`_eff_create_record` at shape.py, `_eff_utter`). So H-118's
+    own blindness was still live on the collections the corpus actually moves. Found by the W-0
+    adversarial pass.
+
+    THIS TEST IS THE REASON IT CANNOT RECUR. It does not check a list of names; it reads the
+    World's OWN attributes and asserts every game-state mapping/sequence is declared in
+    `_STATE_COLLECTIONS`/`_STATE_SEQUENCES`. Adding a collection to `World.__init__` without
+    folding it FAILS HERE.
+
+    MUTATION CHECK: drop any entry from `_STATE_COLLECTIONS` and this fails naming it; add a new
+    `self.foo: dict = {}` to `World.__init__` without declaring it and this fails naming `foo`.
+
+    ⚠ THE EXCLUSIONS ARE INFRASTRUCTURE, NOT STATE, and each is named rather than pattern-matched
+    so that adding one is a deliberate act: the log is folded separately; `writes`/`crossings`/
+    `_emitted_by_write` are the write-gate's own audit channels; `manifest` is S43's boot
+    resolution; `fixtures` is configuration, not world state; the underscored ones are caches."""
+    w = _w()
+    declared = set(S.World._STATE_COLLECTIONS) | set(S.World._STATE_SEQUENCES) | {"tenures"}
+    INFRASTRUCTURE = {"log", "writes", "crossings", "manifest", "fixtures", "docket_seen"}
+    missed = []
+    for name, val in vars(w).items():
+        if name.startswith("_") or name in INFRASTRUCTURE or name in declared:
+            continue
+        if isinstance(val, (dict, list)) and name != "tenures":
+            missed.append(name)
+    assert not missed, (
+        f"World holds game-state collection(s) {sorted(missed)} that `content_hash` does not "
+        f"fold. Declare them in `World._STATE_COLLECTIONS`/`_STATE_SEQUENCES`, or add them to "
+        f"this test's INFRASTRUCTURE set with a reason. H-118 is exactly this defect.")
+
+
+def test_h118_a_record_written_with_no_event_moves_the_hash():
+    """`H-118` on the collection the corpus actually writes. `create_record` is one of the five
+    verbs that execute, so a Record divergence invisible to `content_hash` is a LIVE hole, not a
+    theoretical one -- which is what rev 1 of the fix left open.
+
+    FALSIFIER: add a Record to one of two identical worlds with NO Event appended; the hashes
+    must differ. MUTATION CHECK: remove `"records"` from `World._STATE_COLLECTIONS` and this
+    fails, because the Record becomes invisible to the hash again."""
+    w1, w2 = _w(), _w()
+    assert w1.content_hash() == w2.content_hash()
+    w2.records["r_probe"] = S.Record("r_probe", "p_low", "text", ())
+    assert w1.content_hash() != w2.content_hash(), (
+        "a Record written with no Event must move the hash -- `create_record` executes in the "
+        "corpus, so this blindness was live")
+
+
 def test_h115_the_degree_branches_raise_unspecified_not_systemexit():
     """`H-115`: `VerbRow.emits_at`/`writes_at` raised `SystemExit` on their two run-time degree
     refusals (pre-fix: shape.py:708/712/728/733). `SystemExit` derives from `BaseException`, so

@@ -168,8 +168,13 @@ def run_2c(log: Log) -> dict:
         ("the guard fires correctly — a degreeless contested fold does NOT write the full kill",
          "the direction the comment claims is real and this arm confirms it"),
         ("but it raises `SystemExit`, the ONLY run-time refusal in shape.py that is not a typed gap",
-         "18 SystemExit raises in shape.py; 14 are load-time (missing/malformed YAML) and "
-         "correctly fatal. The 4 run-time ones are exactly the degree branches (708, 712, 728, 733)"),
+         "⚠ FIXED BY W-0 2026-09-04, and this arm now records the history rather than the state. "
+         "AS FOUND there were 18 `SystemExit` raises in shape.py: 14 load-time and correctly "
+         "fatal, and 4 run-time ones that were exactly the degree branches. Those 4 now raise "
+         "`Unspecified` and are CAUGHT as DESIGN-GAP; the 14 remain, at lines 365, 383, 395, "
+         "454, 774, 780, 807, 816, 822, 831, 839, 844, 852, 856. Line numbers re-derived after "
+         "the edit rather than carried over — the first restatement of them was +31 stale, "
+         "copied from the pre-fix register row, and an adversarial pass caught it"),
         ("so it is not classified: no DESIGN-GAP row, no `kind` histogram entry, no §-citation",
          "the 78 typed gaps carry `where`/`needs`/`law`; SystemExit carries a bare string"),
         ("and it ends the PROCESS, so every case after it in the corpus goes unmeasured",

@@ -1716,7 +1716,21 @@ rows:
   - id:        "H-118"
     tier:      1
     hole:      >-
-      `World.content_hash` (proposals/2026-09-01-season-loop-tests/tracer/shape.py:2026-2033) ITERATES `self.log` ONLY - it reads `persons`,
+      ⚠ CLOSED 2026-09-04 BY W-0, AND THEN CLOSED PROPERLY. The state below is the state AS
+      FOUND and is kept because it is the argument that produced this row. W-0's first attempt
+      folded persons/sites/rungs/tenures and its docstring claimed the gap shut; an adversarial
+      pass found it had folded FOUR OF ELEVEN, omitting `records` and `propositions` among
+      others - and `create_record` and `utter`, TWO OF THE FIVE VERBS THAT EXECUTE IN THE
+      CORPUS, write exactly those. So the same blindness was live on the collections the corpus
+      actually moves, behind a docstring saying otherwise. `content_hash` now folds every
+      game-state collection from a declared `World._STATE_COLLECTIONS`/`_STATE_SEQUENCES`, and
+      `test_h118_content_hash_folds_every_game_state_collection` reads the World's OWN attributes
+      and fails when one is added and not folded - so the enumeration cannot go stale again.
+      Mutation-checked both ways. R4 re-verified over 15 NPC cases, R4-false ids: [].
+      ⚠ THE `StateChange.delta` HALF REMAINS OPEN: `_apply_write` still constructs
+      `StateChange(t, "set", "Act", fld)` with no delta, so two runs writing DIFFERENT VALUES to
+      the same field still hash identically. That is not closed here and is not claimed to be.
+      AS FOUND: `World.content_hash` (shape.py) ITERATED `self.log` ONLY - it read `persons`,
       `tenures`, `sites` and `rungs` not at all. Demonstrated - delete a person from one of two
       identical worlds with no Event appended and the hashes still match. `R4`, named a
       load-bearing control in #362's body as the byte-identical corpus_run output, therefore

@@ -1734,7 +1734,13 @@ def _entity_digest(obj: Any) -> str:
     incidental."""
     if hasattr(obj, "__dataclass_fields__"):
         return repr(obj)
-    return repr(sorted(vars(obj).items()))
+    if isinstance(obj, dict):
+        # `dates`, `petitions`, `dispensations` and `docket` hold PLAIN DICTS, not entities.
+        # `sorted` on the items makes the digest independent of insertion order (R4).
+        return repr(sorted((str(k), repr(v)) for k, v in obj.items()))
+    if hasattr(obj, "__dict__"):
+        return repr(sorted(vars(obj).items()))
+    return repr(obj)
 
 
 class World:
@@ -2068,29 +2074,56 @@ class World:
         self.draw += 1
         return self.draw
 
-    def content_hash(self) -> str:
-        """`H-118`: REV 1 (of this fix) hashed the log alone. Demonstrated there -- delete a
-        person from one of two identical worlds with no Event appended, and the hashes still
-        matched, because `content_hash` read the log and nothing else. It now folds `persons`,
-        `sites`, `rungs` and `tenures` -- IN ID ORDER -- ahead of the log, so a state divergence
-        that never reaches the log is no longer invisible to it.
+    # `H-118`: EVERY GAME-STATE COLLECTION ON `World`, DECLARED ONCE. A hash that enumerates
+    # collections inline goes stale the day someone adds one, silently and in the direction that
+    # flatters it -- which is the defect H-118 IS. Declared here so `content_hash` iterates a
+    # list rather than a hand-written sequence, and so
+    # `test_h118_content_hash_folds_every_game_state_collection` can assert this covers the
+    # World's actual attributes rather than a copy of them (§8: the rule lives once).
+    #
+    # ⚠ THE FIRST VERSION OF THIS FIX FOLDED FOUR OF ELEVEN AND ITS DOCSTRING CLAIMED THE GAP
+    # CLOSED. Found by the W-0 adversarial pass, which is the reason the set is derived and
+    # tested rather than typed: `records` and `propositions` were among the omissions, and
+    # `create_record` and `utter` -- two of the FIVE verbs that execute in the corpus -- write
+    # exactly those (`_eff_create_record`, `_eff_destroy_record`, `_eff_utter`). So the same
+    # blindness H-118 measured on `persons` was live on the collections the corpus actually
+    # moves, behind a docstring saying otherwise.
+    # roster-exempt: MECHANISM, on the same ground as `_STEP_CLASS` above. These are `World`'s
+    # OWN PYTHON ATTRIBUTE NAMES -- what the object calls its own fields -- not the game's
+    # vocabulary. `rosters.yaml` holds what the WORLD contains; this holds where THIS CLASS puts
+    # it, and the test below derives the check from `vars(World)` rather than from this tuple, so
+    # the tuple is a hash ORDER and not a definition. Moving it to data would invite someone to
+    # edit how the hash works while believing they were editing the game.
+    _STATE_COLLECTIONS = ("persons", "rungs", "offices", "sites", "records", "propositions",
+                          "dates", "petitions", "dispensations")
+    # roster-exempt: MECHANISM, as `_STATE_COLLECTIONS` directly above -- the one state field that
+    # is a LIST rather than a mapping, split out because its order is semantic (S31's queue) and
+    # it is therefore folded positionally rather than sorted.
+    _STATE_SEQUENCES = ("docket",)
 
-        ⚠ SORTED-KEY ORDER, NEVER INSERTION ORDER (R4). `self.persons`/`self.sites`/`self.rungs`
-        are hashed via `sorted(...)` over their own dict keys, and `self.tenures` (the read-only
-        owner-first VIEW, S15.1) is re-sorted here by `t.id` rather than trusted to already be in
-        one -- its own order is owner-then-unowned, which is a CONSTRUCTION order, not an id
+    def content_hash(self) -> str:
+        """`H-118`: REV 1 hashed the log alone. Demonstrated there -- delete a person from one of
+        two identical worlds with no Event appended, and the hashes still matched. It now folds
+        EVERY game-state collection (`_STATE_COLLECTIONS` + `_STATE_SEQUENCES` + `tenures`) --
+        IN ID ORDER -- ahead of the log, so a state divergence that never reaches the log is no
+        longer invisible to it.
+
+        ⚠ SORTED-KEY ORDER, NEVER INSERTION ORDER (R4). Every mapping is hashed via `sorted(...)`
+        over its own keys, and `self.tenures` (the read-only owner-first VIEW, S15.1) is re-sorted
+        by `t.id` rather than trusted -- its own order is owner-then-unowned, a CONSTRUCTION
         order, and R4 (the same seed replaying byte-identically) would break the moment two runs
-        happened to add tenures in a different sequence for the same eventual world.
+        added tenures in a different sequence for the same eventual world. `docket` is a LIST and
+        its order is semantic (S31's queue), so it is folded in place, positionally.
 
         `Event.observed` DOES NOT EXIST YET (W-B) -- `getattr` guards it so this hash is
         forward-compatible without a second edit the day that field lands."""
         h = hashlib.blake2b(digest_size=16)
-        for pid in sorted(self.persons):
-            h.update(f"P|{pid}|{_entity_digest(self.persons[pid])}".encode())
-        for sid in sorted(self.sites):
-            h.update(f"Si|{sid}|{_entity_digest(self.sites[sid])}".encode())
-        for rid in sorted(self.rungs):
-            h.update(f"Ru|{rid}|{_entity_digest(self.rungs[rid])}".encode())
+        for name in self._STATE_COLLECTIONS:
+            for k in sorted(getattr(self, name, {}) or {}):
+                h.update(f"{name}|{k}|{_entity_digest(getattr(self, name)[k])}".encode())
+        for name in self._STATE_SEQUENCES:
+            for n, item in enumerate(getattr(self, name, ()) or ()):
+                h.update(f"{name}|{n}|{_entity_digest(item)}".encode())
         for t in sorted(self.tenures, key=lambda t: t.id):
             h.update(f"T|{t.id}|{_entity_digest(t)}".encode())
         for e in self.log:
