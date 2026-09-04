@@ -1119,20 +1119,27 @@ def f9():
 @probe("F10", "a matter closes by scarcity, not by cancelling", "S54.1", by="probe-model",
        tests="several live demands on one matter must be able to resolve without cancelling each other")
 def f10():
-    w = tiny_world()
-    hearth = w.rungs["Hh"]
+    # ⚠ ONE SEED, TWO WORLDS, BECAUSE THE CONSERVATION CLAUSE BELOW NEEDS A CONTROL. Same fixture,
+    # same tick, same MATTER step; the only difference is whether any act is chosen at all.
     # ⚠ ONE CLAIMANT'S WORTH **AT RESOLVE**, WHICH IS NOT THE SAME AS ONE CLAIMANT'S WORTH AT THE
     # TOP OF THE SEASON. `W8` gave MATTER a subsistence draw, and MATTER runs BEFORE RESOLVE
     # (#353 §25's order), so the flat `6` this line used to carry was down to 2 by the time the
     # transfers were folded and BOTH were refused — the probe stopped measuring scarcity closing a
     # matter and started measuring an empty larder. The seed is computed from the same registry
     # the draw reads, so the fixture tracks the economy instead of restating a number.
-    _eaters = len(Query.presence(w, "Hh"))
-    _drawn = SUBSISTENCE_WEIGHTS.get("grain", 0) * _eaters
-    assert not [s_ for s_ in w.sites.values() if s_.rung == "Hh"], (
-        "the hearth has acquired a site and now PRODUCES grain; this seed assumes the draw is the "
-        "only MATTER effect on its larder, and the probe would silently measure the wrong scarcity")
-    hearth.stores = {"grain": 6 + _drawn}
+    def seeded():
+        ww = tiny_world()
+        _eaters = len(Query.presence(ww, "Hh"))
+        _drawn = SUBSISTENCE_WEIGHTS.get("grain", 0) * _eaters
+        assert not [s_ for s_ in ww.sites.values() if s_.rung == "Hh"], (
+            "the hearth has acquired a site and now PRODUCES grain; this seed assumes the draw is "
+            "the only MATTER effect on its larder, and the probe would silently measure the wrong "
+            "scarcity")
+        ww.rungs["Hh"].stores = {"grain": 6 + _drawn}
+        return ww
+    _mass = lambda ww: sum(sum((r.stores or {}).values()) for r in ww.rungs.values())
+    w = seeded()
+    hearth = w.rungs["Hh"]
     def choose(p, v, s, ask_budget):
         # W3: the payload is the transfer's OPERANDS. `transfer`'s precondition -- §54 item 7's
         # `stores(hearth(giver), kind) >= amount` -- is evaluated BY THE FOLD from these, not by
@@ -1152,8 +1159,27 @@ def f10():
     refused = [e for e in w.log if e.kind == "transfer.refused"]
     assert len(granted) == 1 and len(refused) == 1 and hearth.stores["grain"] >= 0, (
         f"granted={[e.kind for e in granted]} refused={[e.kind for e in refused]}")
+    # ⚠ CONSERVATION, WITH A CONTROL, ADDED BY THE `W-C` ADVERSARIAL PASS -- AND THIS PROBE WAS
+    # SITTING ON THE FAILURE IT COULD NOT OBSERVE (§0.1 point 2). Its pre-`W-C` payload named
+    # `from` and NOT `to`; the old `_eff_transfer` decremented the giver and delivered nowhere, so
+    # `F10` DESTROYED 6 GRAIN ON EVERY RUN, in an economy where `yield` is the only source -- and
+    # every assertion above passed throughout, because all three watch the GIVER. Measured across
+    # the two trees: this world ends at total store mass 107 on `45a537c` and 113 here.
+    # THE CONTROL IS THE SECOND WORLD. Total mass is not conserved across a SEASON (MATTER yields
+    # and subsistence draws), so "conserved" is only meaningful against a run of the identical
+    # world in which nobody acts: MATTER is the same in both, and RESOLVE is the only difference.
+    # A one-sided transfer makes the treated arm 6 lighter than the control, which is the exact
+    # shape of the bug and the reason a bare before/after on this world would prove nothing.
+    control = seeded()
+    _run(control, NOCHOOSE)
+    assert _mass(w) == _mass(control), (
+        f"the transfers changed the world's TOTAL store mass: {_mass(w)} against a no-act control "
+        f"at {_mass(control)}. §E3 gives `transfer` TWO `(Rung, stores)` writes, one per side, so "
+        "a granted transfer is net zero over the world -- a difference here means matter was "
+        "minted or ANNIHILATED, which is what a one-sided effect does")
     return (f"PASS: granted={len(granted)}, refused={len(refused)}, larder={hearth.stores['grain']} (never "
-            "negative). THE SECOND CLAIMANT ON AN EMPTIED LARDER GOT A DIFFERENT EVENT. Petitions "
+            f"negative), total store mass {_mass(w)} == the no-act control's {_mass(control)}. "
+            "THE SECOND CLAIMANT ON AN EMPTIED LARDER GOT A DIFFERENT EVENT. Petitions "
             "never closed each other; the matter closed AT RESOLVE BY SCARCITY. S54 item 7's "
             "precondition is what makes this true rather than minting")
 

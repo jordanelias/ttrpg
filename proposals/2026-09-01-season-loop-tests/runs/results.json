@@ -9595,7 +9595,7 @@
   "F10": {
    "id": "F10",
    "verdict": "PASS",
-   "detail": "PASS: granted=1, refused=1, larder=0 (never negative). THE SECOND CLAIMANT ON AN EMPTIED LARDER GOT A DIFFERENT EVENT. Petitions never closed each other; the matter closed AT RESOLVE BY SCARCITY. S54 item 7's precondition is what makes this true rather than minting",
+   "detail": "PASS: granted=1, refused=1, larder=0 (never negative), total store mass 113 == the no-act control's 113. THE SECOND CLAIMANT ON AN EMPTIED LARDER GOT A DIFFERENT EVENT. Petitions never closed each other; the matter closed AT RESOLVE BY SCARCITY. S54 item 7's precondition is what makes this true rather than minting",
    "kind": null,
    "section": "S54.1",
    "title": "a matter closes by scarcity, not by cancelling",
@@ -11022,15 +11022,15 @@
   }
  ],
  "_trace_counts": {
-  "STEP": 1920,
-  "BARRIER": 651,
-  "DECISION": 661,
-  "QUERY": 5989,
-  "NOTE": 468,
-  "WRITE": 24491,
-  "EVENT": 18927,
+  "STEP": 1932,
+  "BARRIER": 655,
+  "DECISION": 665,
+  "QUERY": 6023,
+  "NOTE": 471,
+  "WRITE": 24527,
+  "EVENT": 18963,
   "ACT": 75,
-  "CLAIM": 8335,
+  "CLAIM": 8365,
   "GAP": 66
  },
  "_corpus_defects": [

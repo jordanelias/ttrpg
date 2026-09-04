@@ -1097,11 +1097,126 @@ rows:
     kind:      "COLLISION"
     owner:     "Part F (the person's decision) and Part E (the verb's requires/writes)"
     grade:     "assumption"
-    default:   "the operands are DERIVED PERSON-SIDE, per operand: `actor` is the person; `subject`/`to` are the question's referent; `from` is the object of the actor's own live `contain` Tenure (§54 item 7's `hearth(giver)`); `site` is the referent where a cell reads one; and `kind`/`amount` — the two the design supplies no value for — are the fixtures `default_store_kind` (grain) and `default_transfer_amount` (1), the instrument's declared stand-in. A cell naming an operand nobody can derive forms NO Candidate."
-    site:      "`shape.operands_for` / `shape._derive_operand` / `shape.hearth_of` — the derivation; fixtures `default_store_kind` and `default_transfer_amount` in `DEFAULT_FIXTURES` — the two values the design does not supply; `shape.pack_scenes` (`_payload_of`) — where they reach `Act.payload`; `shape.binding_of` — where both readers bind them"
+    default:   >-
+      the operands are DERIVED PERSON-SIDE, per operand: `actor` is the person; `subject`/`to` are the
+      question's referent; `from` is the object of the actor's own live `contain` Tenure, READ AS THE
+      CONTAINING RUNG OF ANY KIND — which is an ASSUMPTION with a named alternative (walk up to the
+      nearest `hearth`-KIND rung), not a value §54 item 7 supplies, and the cite records both readings
+      run over the corpus; `site` is the referent where a cell reads one; and `kind`/`amount` — the two
+      the design supplies no value for — are the fixtures `default_store_kind` (grain, declared and
+      swept on its OWN row `H-121`) and `default_transfer_amount` (1, swept here), the instrument's
+      declared stand-in. A cell naming an operand nobody can derive forms NO Candidate.
+    site:      >-
+      `shape.operands_for` / `shape._derive_operand` / `shape.containing_rung_of` — the derivation;
+      fixture `default_transfer_amount` in `DEFAULT_FIXTURES` — the value the design does not supply,
+      and the ONLY fixture this row's `sweep:` covers (`default_store_kind` is `H-121`);
+      `shape.pack_scenes` (`_payload_of`) — where they reach `Act.payload`; `shape.binding_of` — where
+      both readers bind them
     sweep:     [0, 1, 3]
     unblocks:  "every verb with operands. MEASURED after the derivation landed: the corpus's executed set went 4 -> 6 of 32 (`create_record, speak, tell, utter` -> `create_record, move, speak, tell, transfer, utter`) and the always-refused set 3 -> 1 (`move, transfer, work` -> `work`). `work` still refuses, and now for a reason about the WORLD rather than about the pipeline: its `site` is bound to the question's referent and no referent the corpus produces is a Site, so `condition` reads UNKNOWN."
-    cite:      "⚠ CLOSED 2026-09-04 BY `W-C`, AND THE HALF THIS ROW WAS HOLDING OPEN WAS THE STRUCTURAL ONE. THE BUG HALF WAS FIXED FIRST (`W8`): `pack_scenes` minted `Act(mint(...), p.id, c.verb)` — three arguments — so `opening_set` computed a subject from the question's referents, `mint` folded it into the act's ID, and the act carried nothing; `tell` was attempted and refused in every world, and carrying the subject took the corpus from ONE distinct behaviour to TWO. ⚠ THAT PUBLICATION FIRST SAID 6 -> 7 AND IT WAS AN INSTRUMENT DEFECT, NOT A DESIGN FACT: `corpus_run` attributed an execution by EMISSION KIND, and `forge` and `create_record` BOTH emit `record.created`. Attribution is exact now — the fold derives every emission id as `H(seed, tick, actor, kind:act_id)` — and the 4 -> 6 measured for this item is by ACT ID, not by kind. ⚠ THE STRUCTURAL HALF ASKED WHERE OPERANDS LIVE, AND IT CLOSES BY PRECEDENT RATHER THAN BY ESCALATION. `CLAUDE.md` §0's five tests, run in order. (1) SUPERSEDED — no: nothing later rules on the operand channel. (2) IRRELEVANT — no: `transfer` was attempted and refused in every world in the corpus, so the subject is live. (3) ANSWERED BY A DESIGN DOCUMENT — PARTLY, and this is what makes the rest tractable: §54 item 7 states the formula `stores(hearth(giver), kind) >= amount`, which is a per-operand answer and not one answer. `hearth(giver)` is the object of the ACTOR'S OWN live `contain` Tenure — PERSON STATE after `W5` relocated the tenure store onto the Person, not a choice and not a fixture; `to` is the question's referent, which the person already holds; and the document supplies NO value for `kind` or `amount`. (4) ANSWERED BY PRECEDENT — YES, and it is `H-80`, one row over and the same shape: a value the ACT must declare and the design never supplies, closed as §G's declare · default · sweep rather than as an escalation or a blocker. `H-80` is the precedent this row follows: `kind` and `amount` become fixtures with a `site:` and a three-point sweep, and everything else is derived. (5) ARCHITECTURE — not reached. So the operands live ON THE CANDIDATE, because the PERSON is who derives them: `hearth(giver)` is the giver's own Tenure and the referent is the person's own question, and any channel further down (the Act, the Scene, the payload) would have to be filled by something that is not the person, which is `L2`. ⚠ THE RULE THAT MAKES IT SAFE IS THE REFUSAL, NOT THE DICT: a cell whose operands cannot all be derived forms NO Candidate. Minting an act with a hole would have it refused for a reason about the INSTRUMENT, and `W-B` will deposit that refusal at WITNESS — so the instrument's own gap would become a FALSE BELIEF held by every witness, about a granary nobody named. `TRACE.note` counts every decline instead. ⚠ AND ONE OWNER: `transfer`'s `operand_defaults:` cell in `verb_table.yaml` and the four `.get(<operand>, <literal>)` defaults in `_eff_transfer` are DELETED, not left beside the derivation. The cell filled `kind`/`amount` inside `evaluate`, i.e. at the FOLD, under the person — so the fold would ADMIT a transfer on operands it had invented and the effect would then raise on those same operands being absent from the payload. ⚠ SWEEP, ALL THREE POINTS RUN 2026-09-04 AT BOTH LEVELS, on `default_transfer_amount` (`0` is the CONTROL — nothing is spent, so scarcity never binds and `stores >= 0` admits every giver). AT THE FOLD: a `transfer` minted through `pack_scenes` from a real Candidate moves NOTHING at 0 (no store value changes at all) and moves exactly ±1 and ±3 at the other two points, one per side. ACROSS THE 89 CORPUS WORLDS: the executed and refused COUNTS are IDENTICAL at all three points — the amount never crosses a scarcity threshold, since a hearth holds tens of units — while the worlds themselves DIFFER (digest of the 89 `content_hash`es: `9440e0cf48f9f8be` / `3e308adbf30772c4` / `e9ff344d04ab006d`) and total store mass is CONSERVED at 29,233 in every arm. So the amount moves the WORLD and not the DECISION. ⚠ TWO FINDINGS THE SWEEP PRODUCED AND NEITHER IS FLATTERING. (a) At 0 the fold still emits `transfer.made`: the fold's guard against an effect that touched nothing emitting the success watches the IDS an effect returns, not the VALUES it changed, so a transfer of nothing publishes a success. Reported, not fixed — the guard's polarity is the fold's business and the default is 1. (b) 650 of the corpus's 723 transfers are SELF-transfers (`from == to`, net zero) because most questions these worlds raise are about the actor's own containing rung; 73 cross rungs. A first reading of one sampled case said ALL of them were self-transfers and was wrong, which is §0.1 point 4 exactly — corrected by measuring the whole corpus, and recorded rather than quietly fixed. FALSIFIERS, all green: `test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this`, `test_wc_the_amount_sweep_runs_all_three_points_and_zero_spends_nothing`, `test_wc_a_candidate_declines_when_its_hearth_cannot_be_derived`, `test_wc_no_corpus_refusal_arises_from_a_missing_operand`, `test_wc_no_operand_carries_a_silent_default_outside_eff_kill`."
+    cite:      >-
+      ⚠ CLOSED 2026-09-04 BY `W-C`, AND THE HALF THIS ROW WAS HOLDING OPEN WAS THE STRUCTURAL ONE. THE
+      BUG HALF WAS FIXED FIRST (`W8`): `pack_scenes` minted `Act(mint(...), p.id, c.verb)` — three
+      arguments — so `opening_set` computed a subject from the question's referents, `mint` folded it
+      into the act's ID, and the act carried nothing; `tell` was attempted and refused in every world,
+      and carrying the subject took the corpus from ONE distinct behaviour to TWO. ⚠ THAT PUBLICATION
+      FIRST SAID 6 -> 7 AND IT WAS AN INSTRUMENT DEFECT, NOT A DESIGN FACT: `corpus_run` attributed an
+      execution by EMISSION KIND, and `forge` and `create_record` BOTH emit `record.created`.
+      Attribution is exact now — the fold derives every emission id as `H(seed, tick, actor,
+      kind:act_id)` — and the 4 -> 6 measured for this item is by ACT ID, not by kind. ⚠ THE STRUCTURAL
+      HALF ASKED WHERE OPERANDS LIVE, AND IT CLOSES BY ARCHITECTURE RATHER THAN BY ESCALATION.
+      `CLAUDE.md` §0's five tests, run in order. (1) SUPERSEDED — no: nothing later rules on the operand
+      channel. (2) IRRELEVANT — no: `transfer` was attempted and refused in every world in the corpus,
+      so the subject is live. (3) ANSWERED BY A DESIGN DOCUMENT — ⚠ **THIS ROW SAID YES FOR `from` AND
+      IT WAS FALSE. RETRACTED 2026-09-04 BY THE `W-C` ADVERSARIAL PASS, AND THIS IS THE MOST SERIOUS
+      THING THE PASS FOUND, BECAUSE IT IS A FABRICATED PROVENANCE ON THE ANTI-FABRICATION GATE'S OWN
+      FIELD.** The retracted wording was: *`hearth(giver)` is the object of the ACTOR'S OWN live
+      `contain` Tenure — PERSON STATE after `W5` relocated the tenure store onto the Person, not a
+      choice and not a fixture*. The document says NO SUCH THING. `ARCHITECTURE.md:1898` and
+      `ARCHITECTURE_V2.md:418` both give exactly `stores(hearth(giver), kind) >= amount` and NO
+      definition of `hearth`; and `hearth` is SEPARATELY a member of `rosters.yaml: rung_kinds`
+      (`ARCHITECTURE.md:376`), so if anything the document leans the OTHER way. What test 3 does answer
+      is the formula's SHAPE — there is a giver's store, a kind and an amount — and it answers nothing
+      about how `hearth(giver)` resolves. (4) ANSWERED BY PRECEDENT — YES for `kind`/`amount`, and it is
+      `H-80`, one row over and the same shape: a value the ACT must declare and the design never
+      supplies, closed as §G's declare · default · sweep rather than as an escalation or a blocker. Not
+      for `from`: `H-75` is the nearest shape (a cell naming an object KIND where the code holds an id,
+      answered by DECLINING rather than guessing) and its answer is unavailable here, because declining
+      means `transfer` forms no Candidate at all and `H-94` re-opens. (5) ANSWERED BY THE ARCHITECTURE —
+      YES, AND THIS IS WHERE `from` CLOSES. READING B — walk up to the nearest `hearth`-kind rung — IS
+      NOT PERSON-SIDE: `Rung.kind` and `Query.parent_of` are WORLD reads, and `containing_rung_of` is
+      exactly the site §F1's `L2` keeps World-free. A person knows WHICH rung contains them, because
+      that Tenure is their own; they do not know WHAT KIND it is. Giving the function a `World` turns
+      `test_w5_sense_is_still_the_only_world_taking_non_decision_function` RED, which is the falsifier
+      rather than a claim. The remaining alternative — let the FOLD compute `hearth(giver)`, which does
+      have a World — gives one operand two owners again, which is the divergence `W-C` closed. ⚠ AND
+      READING B WAS BUILT AND RUN BEFORE BEING REFUSED, because a declared alternative nobody executes
+      is the laundering §0.1 point 4 names. MEASURED 2026-09-04 over all 89 runnable corpus worlds.
+      CENSUS of what the shipped reading returns, over all 267 seatings (89 worlds × 3 persons):
+      `hearth` 111 · `realm` 153 · `settlement` 3 — so in 156 of 267 it returns a rung that is NOT of
+      kind `hearth`, and the divergence is real rather than theoretical. UNDER READING B: `transfer`
+      EXECUTED 702 -> 237, REFUSED 21 -> 0, and 0 -> 486 Candidates decline for want of `from`; the
+      executed SET does not move, because the 37 person-scale worlds are the ones whose ladder has a
+      hearth rung at all. ⚠ MOST OF THE DIVERGENCE IS THE WORLD BUILDER'S:
+      `corpus_run.build_at` truncates the ladder at each case's own `scale:`, so a realm-scale case has
+      no hearth rung to walk up to, and under a full ladder those 153 seatings would be hearths. ⚠ BUT
+      NOT ALL OF IT, AND THE CLOSURE DOES NOT REST ON PRETENDING OTHERWISE: a person may legitimately
+      sit ABOVE a hearth in a hand-built world — `tiny_world` seats the Duke in the settlement and the
+      King in the realm, deliberately — and there the readings still differ. What closes it is that a
+      PERSON-SIDE function cannot tell which case it is in, not that the cases coincide. So the operands
+      live ON THE CANDIDATE, because the PERSON is who derives them, and any channel further down (the
+      Act, the Scene, the payload) would have to be filled by something that is not the person, which is
+      `L2`. ⚠ THE RULE THAT MAKES IT SAFE IS THE REFUSAL, NOT THE DICT: a cell whose operands cannot all
+      be derived forms NO Candidate. Minting an act with a hole would have it refused for a reason about
+      the INSTRUMENT, and `W-B` will deposit that refusal at WITNESS — so the instrument's own gap would
+      become a FALSE BELIEF held by every witness, about a granary nobody named. `TRACE.note` counts
+      every decline instead. ⚠ AND ONE OWNER: `transfer`'s `operand_defaults:` cell in `verb_table.yaml`
+      and the four `.get(<operand>, <literal>)` defaults in `_eff_transfer` are DELETED, not left beside
+      the derivation. The cell filled `kind`/`amount` inside `evaluate`, i.e. at the FOLD, under the
+      person — so the fold would ADMIT a transfer on operands it had invented and the effect would then
+      raise on those same operands being absent from the payload. ⚠ SWEEP, ALL THREE POINTS RUN
+      2026-09-04 AT BOTH LEVELS, on `default_transfer_amount` (`0` is the CONTROL — nothing is spent, so
+      scarcity never binds and `stores >= 0` admits every giver). AT THE FOLD: a `transfer` minted
+      through `pack_scenes` from a real Candidate moves NOTHING at 0 (no store value changes at all) and
+      moves exactly ±1 and ±3 at the other two points, one per side. ACROSS THE 89 CORPUS WORLDS: the
+      executed and refused COUNTS are IDENTICAL at all three points — the amount never crosses a
+      scarcity threshold, since a hearth holds tens of units — while the worlds themselves DIFFER
+      (digest of the 89 `content_hash`es: `9440e0cf48f9f8be` / `3e308adbf30772c4` / `e9ff344d04ab006d`)
+      and total store mass is CONSERVED at 29,233 in every arm. So the amount moves the WORLD and not
+      the DECISION. ⚠ AND THAT INERTNESS IS THE INVERTED HALF OF A DEFECT: the fixture this row SWEPT is
+      the decision-inert one, and the fixture it named beside it and did NOT sweep —
+      `default_store_kind` — is decision-live. It has its own row, `H-121`, its own three arms and its
+      own measurement now. ⚠ TWO FINDINGS THE AMOUNT SWEEP PRODUCED AND NEITHER IS FLATTERING. (a) At 0
+      the fold still emits `transfer.made`: the fold's guard against an effect that touched nothing
+      emitting the success watches the IDS an effect returns, not the VALUES it changed, so a transfer
+      of nothing publishes a success. Reported, not fixed — the guard's polarity is the fold's business
+      and the default is 1. (b) 650 of the corpus's 723 transfers are SELF-transfers (`from == to`, net
+      zero) because most questions these worlds raise are about the actor's own containing rung; 73
+      cross rungs. A first reading of one sampled case said ALL of them were self-transfers and was
+      wrong, which is §0.1 point 4 exactly — corrected by measuring the whole corpus, and recorded
+      rather than quietly fixed. ⚠ TWO MORE CORRECTIONS FROM THE `W-C` ADVERSARIAL PASS, both to claims
+      this row and the code made about what `W-C` changed. (c) *'the one-sided transfer survived only
+      because no computed act ever bound `from` to begin with'* IS FALSE. No COMPUTED act bound it — but
+      probe `F10` did, in its payload, and omitted `to`, so the old effect decremented the hearth and
+      delivered nowhere: `F10` DESTROYED 6 GRAIN ON EVERY PROBE RUN, in an economy where `yield` is the
+      only source. Measured by weighing every rung across the probe's own season: total store mass ends
+      at 107 on `45a537c` against 113 here, and the difference is exactly the 6. So `F10`'s payload edit
+      is a BUG FIX IN A LIVE PROBE, not a signature accommodation, and `F10` now asserts conservation
+      against a no-act control — its old assertion set watched only the giver and could not observe the
+      failure it was sitting on (§0.1 point 2). (d) `_eff_confer`'s `d.get('to') or a.actor` ->
+      `_operand(a, 'to')` is RECLASSIFIED as a DELIBERATE EXTRA and not a path this row made reachable:
+      `confer` is untyped, `_req_confer` returns False when the payload names no `office`, and `office`
+      is not in `requires_operands` — so no computed act can reach that effect, and `corpus_run`'s own
+      output lists `confer` among the verbs never even attempted. The change is an improvement (a silent
+      self-conferral becomes a loud `InstrumentDefect`); it is not a consequence. FALSIFIERS, all green:
+      `test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this`,
+      `test_wc_the_amount_sweep_runs_all_three_points_and_zero_spends_nothing`,
+      `test_wc_the_store_kind_sweep_runs_all_three_arms_and_an_unstocked_kind_refuses`,
+      `test_wc_a_candidate_declines_when_its_hearth_cannot_be_derived`,
+      `test_wc_no_corpus_refusal_arises_from_a_missing_operand`,
+      `test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_eff_kill`,
+      `test_wc_the_fold_binds_what_the_person_bound`,
+      `test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason`, and probe `F10`.
     source:    "W8 -- found by execution"
 
   - id:        H-95
@@ -1806,6 +1921,73 @@ rows:
     cite: >-
       MEASURED 2026-09-04 by parsing all 32 verb rows and the roster. Prize-claim recount verified
       independently by a read-only critic.
+  - id:        "H-121"
+    tier:      0
+    hole:      >-
+      §54 ITEM 7 NAMES A MATTER KIND AND SUPPLIES NONE. `stores(hearth(giver), kind) >= amount` has a
+      `kind` operand, and no in-chain document says which store a `transfer` a person forms is about.
+      The value is decision-live rather than cosmetic: `WorldReader.read` returns 0 — not UNKNOWN — for
+      a kind a rung does not hold, so the scarcity predicate REFUSES on any kind the giver's rung does
+      not stock, and the corpus's whole `transfer` behaviour turns on which one is chosen.
+    kind:      "NUMBER"
+    owner:     "params — §54 item 7's `kind` operand"
+    grade:     "assumption"
+    default:   >-
+      `default_store_kind = "grain"` in `DEFAULT_FIXTURES`, taken second: a person deliberating ABOUT a
+      store already knows which one, so `store_kind_of` reads it from the person's own ledger where the
+      question names a claim whose predicate is `stores:<kind>`, and the fixture stands in only where
+      the question names none.
+    site:      >-
+      fixture `default_store_kind` in `shape.DEFAULT_FIXTURES`, read by `shape._derive_operand` for the
+      `kind` operand (after `shape.store_kind_of`), carried on the Candidate and into `Act.payload` by
+      `shape.pack_scenes`
+    sweep:
+      - 'grain — the default; stocked in the fixture hearth and in every corpus world'
+      - 'salt — a SECOND stocked kind, and the arm that proves the fixture reaches the effect: the store that moves is the one it names'
+      - 'coin — on `matter_kinds`, produced by no `site_yield` row and held by no rung: THE CONTROL, and the only arm that can flip the verdict'
+    unblocks:  >-
+      `transfer`, and with it the measurement `H-94` publishes. MEASURED 2026-09-04 across all 89
+      runnable corpus worlds: `transfer` executes 702 / refuses 21 at `grain` AND at `salt`, and **0 /
+      723 at `coin`, where it leaves the executed set entirely (6 verbs -> 5)**.
+    cite:      >-
+      ⚠ THIS ROW EXISTS BECAUSE THE `W-C` ADVERSARIAL PASS FOUND THE FIXTURE UNSWEPT, ITS COMMENT
+      CLAIMING IT WAS SWEPT, AND `R2` GREEN OVER BOTH. `shape.py` carried `default_store_kind = 'grain',
+      # H-94, swept with the amount below` and NOTHING SWEPT IT: every `.sweep(...)` call in the
+      instrument named `default_transfer_amount`, and `H-94`'s `sweep: [0, 1, 3]` are INTEGERS, which
+      cannot be arms for a matter kind. One `sweep:` field was carrying two declared fixtures, and
+      `register.rule_R2` counts DISTINCT POINTS ON A ROW — it cannot see that a row declares two
+      fixtures and sweeps one. So R2 passed on an unswept default, which is precisely the laundering R2
+      exists to stop, and the fix is a row per fixture rather than a wider rule. ⚠ AND THE POLARITY WAS
+      INVERTED, WHICH IS WHY THIS MATTERS BEYOND BOOKKEEPING. `H-94` records that the SWEPT fixture is
+      decision-INERT — identical executed and refused counts at 0 / 1 / 3 across the corpus, the amount
+      moving the world and not the decision. The UNSWEPT one is decision-LIVE: `shape.WorldReader.read`
+      returns `(r.stores or {}).get(arg, 0)` — 0, not UNKNOWN — so `0 >= 1` is False and a transfer of a
+      kind the giver does not stock REFUSES. ⚠ ALL THREE ARMS RUN 2026-09-04, AT BOTH LEVELS. AT THE
+      FOLD (`tiny_world`, hearth stocked with grain AND salt so the two live arms are distinguishable):
+      `grain` and `salt` emit `transfer.made` and move their OWN store by ±1, one per side; `coin` emits
+      `transfer.refused` and moves nothing at all. ACROSS THE 89 CORPUS WORLDS: 702 executed / 21
+      refused at `grain` and at `salt` — the corpus rungs own sites yielding grain, salt, ore and
+      timber, so those two arms are indistinguishable THERE and the world hashes still differ
+      (`0da4852d3e280d17` / `61be1739079e39dd` / `51b6386c07c2d52e` — this row's OWN digest over the
+      89 `content_hash`es, NOT comparable with `H-94`'s three, which come from a different digest
+      function) — and 0 executed / 723 refused at
+      `coin`, with `transfer` dropping out of the executed set. Total store mass is conserved at 29,233
+      in every arm. ⚠ THE VERDICT FLIPS ACROSS THIS SWEEP, AND §42.2.1 SAYS A VERDICT THAT FLIPS IS
+      ITSELF A FINDING. It is stated rather than smoothed: `H-94`'s headline — `transfer` executing 702
+      times, the verb the row is named for — rests on this fixture. It does not rest on the AMOUNT,
+      which is the one that was swept. ⚠ WHY THE ROW STAYS `assumption` RATHER THAN CLOSING. `CLAUDE.md`
+      §0's five tests: (1) not superseded; (2) live — the corpus folds it 723 times per arm; (3) NOT
+      answered by a design document, which is the whole hole — §54 item 7 names the operand and supplies
+      no value; (4) ANSWERED BY PRECEDENT, and it is `H-80` and `H-94`'s own `default_transfer_amount`:
+      a value the ACT must declare and the design never supplies, closed as §G's declare · default ·
+      sweep. That is what this row is. (5) not reached. The `grain` default is not neutral and is not
+      claimed to be — it is the kind `subsistence_weight` weights highest and the kind `tiny_world`
+      stocks — which is exactly why the `coin` arm is the control rather than the decoration. FALSIFIER:
+      `test_wc_the_store_kind_sweep_runs_all_three_arms_and_an_unstocked_kind_refuses`, GREEN. MUTATION
+      (run 2026-09-04): make `_derive_operand` return the literal `"grain"` for `kind` — the fixture
+      stops reaching the derivation and the test goes RED on the `salt` arm.
+    source:    "W-C adversarial pass 2026-09-04 -- found by reading the fixture's own comment against every `.sweep(...)` call"
+
 
 discharges:
   D1:   "row:H-01"

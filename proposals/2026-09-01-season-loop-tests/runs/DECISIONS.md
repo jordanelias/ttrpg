@@ -3,19 +3,19 @@
 Every branch the shape took that could have gone another way, with the alternatives
 it did not take. A decision nobody records is a decision nobody can audit.
 
-**661 decisions taken, 64 distinct.**
+**665 decisions taken, 64 distinct.**
 
-### MATTER's cross-owner operations  ·  `S31.1`  ·  taken 167x
-- **chose:** serial: the actorless event channel; then parallel over Sites  (167x)
+### MATTER's cross-owner operations  ·  `S31.1`  ·  taken 168x
+- **chose:** serial: the actorless event channel; then parallel over Sites  (168x)
 - *not taken:* shard the event channel per rung (breaks causes[]: one cause is one id)
 
-### individuation  ·  `S29`  ·  taken 151x
-- **chose:** demand-driven only; generated nobody  (151x)
+### individuation  ·  `S29`  ·  taken 152x
+- **chose:** demand-driven only; generated nobody  (152x)
 - *not taken:* a clock that generates (forbidden)
 - *not taken:* a world-gen roster (S54 item 18 -- not a clock, not folded in)
 
-### ordering 0 acts  ·  `S27/S32`  ·  taken 138x
-- **chose:** five strata, then a content-derived hash key over one global array  (138x)
+### ordering 0 acts  ·  `S27/S32`  ·  taken 139x
+- **chose:** five strata, then a content-derived hash key over one global array  (139x)
 - *not taken:* completion order
 - *not taken:* per-container sort (voids the fold)
 - *not taken:* rank
@@ -26,18 +26,18 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
+### fan-out over 6 events  ·  `S28/S61`  ·  taken 12x
+- **chose:** mode=total over 5 persons (the specified behaviour)  (6x)
+- **chose:** mode=presence_only over 5 persons (a swept arm of H-33)  (6x)
+- *not taken:* shard per rung (retired: made the parallelism claim unsound)
+- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
+- *not taken:* total (S61's specified behaviour, and H-33's control arm)
+
 ### ordering 1 acts  ·  `S27/S32`  ·  taken 11x
 - **chose:** five strata, then a content-derived hash key over one global array  (11x)
 - *not taken:* completion order
 - *not taken:* per-container sort (voids the fold)
 - *not taken:* rank
-
-### fan-out over 6 events  ·  `S28/S61`  ·  taken 11x
-- **chose:** mode=presence_only over 5 persons (a swept arm of H-33)  (6x)
-- **chose:** mode=total over 5 persons (the specified behaviour)  (5x)
-- *not taken:* shard per rung (retired: made the parallelism claim unsound)
-- *not taken:* the five channels ['post_remit', 'co_located', 'witness_key', 'document_key', 'chronicle'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
-- *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
 ### fan-out over 106 events  ·  `S28/S61`  ·  taken 10x
 - **chose:** mode=presence_only over 5 persons (a swept arm of H-33)  (10x)

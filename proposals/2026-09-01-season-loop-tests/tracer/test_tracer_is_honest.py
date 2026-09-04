@@ -3536,13 +3536,20 @@ def test_the_corpus_cannot_reach_the_governance_branch_and_h71_is_not_the_reason
         "and the tautology above has become a measurement")
 
 
-def _ten_seasons(w, seasons=10):
-    """Run a world under the COMPUTED chooser and return per-season stores plus the acts minted.
-    One owner, because three `W8` tests need the same run and a second copy would let them drift
-    into describing different worlds."""
+def _ten_seasons(w, seasons=10, verbs=None):
+    """Run a world under the COMPUTED chooser and return per-season stores, the acts minted, and
+    the driver. One owner, because three `W8` tests need the same run and a second copy would let
+    them drift into describing different worlds.
+
+    ⚠ `verbs` NARROWS THE OPTION SET AND IS WHAT GIVES THE ATTRIBUTION BELOW A CONTROL, which the
+    `W-C` adversarial pass found it did not have: `transfer` and `move` went live in the SAME run
+    and a store movement was attributed to one of them by reading. Suppressing one verb re-runs
+    the identical world with one variable removed, which is the only way to say which moved it
+    (§0.1 point 4). `None` means the full set, so the measured arm is unchanged."""
     d = S.SeasonDriver(w)
     mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs())
+    ch = S.make_chooser(w.fixtures, mint,
+                        verbs=S.resolvable_verbs() if verbs is None else verbs)
     minted = []
     def spy(p, v, sc, ask):
         out = ch(p, v, sc, ask)
@@ -3553,7 +3560,7 @@ def _ten_seasons(w, seasons=10):
     for _ in range(seasons):
         d.season(spy, question=None, subsistence=P.SUBSIST)
         hist.append({r: dict(w.rungs[r].stores) for r in w.rungs})
-    return hist, minted
+    return hist, minted, d
 
 
 def test_w8_matter_draws_before_it_produces_which_is_353s_stated_order():
@@ -3641,19 +3648,41 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     ⚠ WHAT CHANGED AND WHAT DID NOT, because "the number barely moved" is the reading §0.1 point 4
     forbids taking on faith. WHAT CHANGED: 108 of 252 minted acts now carry an operand beyond
     `subject` (0 of 56 before), `transfer` is granted 9 times and refused 27, `move` is granted 15
-    and blocked 21, and grain genuinely crosses between rungs. The settlement's total is LOWER
-    than before (374 → 356) because transfers now move some of it. WHAT DID NOT: the hearth still
+    and blocked 21, and grain genuinely crosses between rungs. WHAT DID NOT: the hearth still
     starves on season 2 and never recovers, because the only economy that reaches it is
     subsistence OUT and no site produces INTO it — and `work`, the verb that would repair a
     producer, still declares no delta (`test_w8_work_emits_a_success_while_repairing_nothing`).
     So the residual cause is the one `H-94` was masking: `work` writes `(Site, condition)` and
     Part E names the CELL and never the VALUE, which is `H-63`.
 
+    ⚠ THIS DOCSTRING SAID *"the settlement's total is LOWER than before (374 → 356) BECAUSE
+    TRANSFERS NOW MOVE SOME OF IT"*, AND THAT WAS A SINGLE-CAUSE ATTRIBUTION ACROSS A TWO-VARIABLE
+    CHANGE, PUBLISHED AS A MEASUREMENT. `transfer` and `move` went live in the SAME run. Corrected
+    by the `W-C` adversarial pass, by RUNNING the controls rather than re-reading the sentence:
+
+      * THE BEFORE FIGURE 374 DOES NOT REPRODUCE AND IS RETRACTED. Re-run on the pre-`W-C` tree
+        itself — same fixture, same ten seasons, same chooser — the settlement ends at **358**,
+        at `45a537c`, at `fda54d4` and at `1e21f24` alike. 374 was carried forward in prose from a
+        run nothing can reproduce; nothing ever asserted it, which is why it survived.
+      * THE REAL DELTA IS 358 → 356, i.e. **2**, and it is entirely `transfer`'s. Suppressing
+        `transfer` returns the settlement to 358; the two granted transfers whose `from` is `S`
+        and whose `to` is not (`S → p_high`, one grain each) are the whole of it, and the other
+        seven granted transfers out of `S` are SELF-transfers that move nothing.
+      * `move` IS NOT A CAUSE, and the plausible mechanism for it is refuted rather than
+        dismissed: an extra eater seated at `S` would draw 2 per season (grain's subsistence
+        weight), which is the right order of magnitude for the retracted number. Measured:
+        `Query.presence(w, "S")` is exactly `['p_high']` in every season of every arm, and
+        suppressing `move` leaves the settlement at **356** — unchanged.
+
+    Both controls are RUN below rather than recorded here, because a control in a docstring is
+    the thing §0.1 point 4 forbids.
+
     ⚠ AND THE ASSERTION IS INVERTED RATHER THAN DELETED. It used to pin that NO minted act carries
     an operand beyond `subject`; it now pins that some DO, and that they carry only names from the
     closed `requires_operands` vocabulary. Deleting it would have removed the only place this run
     observes the operand channel at all."""
-    hist, minted = _ten_seasons(P.tiny_world())
+    w = P.tiny_world()
+    hist, minted, d = _ten_seasons(w)
     hearth = [h["Hh"].get("grain", 0) for h in hist]
     settle = [h["S"].get("grain", 0) for h in hist]
     assert hearth == sorted(hearth, reverse=True) and hearth[-1] == 0, (
@@ -3685,6 +3714,36 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     assert any((a.payload or {}).get("subject") for a in minted), (
         "no minted act carries a subject — `pack_scenes` has gone back to dropping the operand "
         "`opening_set` computed, and `tell` will be refused in every world again")
+
+    # ⚠ THE TWO CONTROLS, RUN. `transfer` and `move` both went live in this run and the docstring
+    # attributed the settlement's fall to one of them by reading. These separate them, and they
+    # are assertions rather than a paragraph because §0.1 point 4 is about what was RUN.
+    ids = {e.id for e in w.log}
+    drained = sum(int((a.payload or {}).get("amount", 0))
+                  for a in d.resolved
+                  if a.verb == "transfer"
+                  and (a.payload or {}).get("from") == "S"
+                  and (a.payload or {}).get("to") != "S"
+                  and any(S.H(w.world_seed, t, a.actor, f"transfer.made:{a.id}") in ids
+                          for t in range(len(hist) + 1)))
+    # ASSERT THAT IT ASSERTED (§0.1 point 2): with nothing drained the equality below is 0 == 0
+    # and observes nothing at all.
+    assert drained > 0, (
+        "no granted `transfer` moved grain OUT of `S`, so the two equalities below are vacuous "
+        "and this run can no longer say what moved the settlement's larder")
+    no_transfer, _, _ = _ten_seasons(P.tiny_world(), verbs=S.resolvable_verbs() - {"transfer"})
+    assert no_transfer[-1]["S"].get("grain", 0) - settle[-1] == drained, (
+        f"the settlement ends at {settle[-1]} and at "
+        f"{no_transfer[-1]['S'].get('grain', 0)} with `transfer` suppressed, a difference of "
+        f"{no_transfer[-1]['S'].get('grain', 0) - settle[-1]} against {drained} grain actually "
+        "carried out of `S` by granted transfers. Something OTHER than `transfer` is moving the "
+        "settlement's larder and the docstring's attribution is confounded again")
+    no_move, _, _ = _ten_seasons(P.tiny_world(), verbs=S.resolvable_verbs() - {"move"})
+    assert no_move[-1]["S"].get("grain", 0) == settle[-1], (
+        f"suppressing `move` moved the settlement to {no_move[-1]['S'].get('grain', 0)} from "
+        f"{settle[-1]}. `move` relocates people and `Query.presence` is what the subsistence draw "
+        "reads, so `move` HAS become a cause of the settlement's larder — re-attribute the "
+        "docstring rather than re-pinning this number")
 
 
 def test_w8_work_emits_a_success_while_repairing_nothing(): 
@@ -5097,7 +5156,7 @@ def test_wa_a_planted_claim_removes_transfer_and_a_larger_one_leaves_it():
         # not typed into a roster here and it is not typed into a roster there; that is the point
         # of the whole item.
         # ⚠ AND `Hh` IS NOW LOAD-BEARING TWICE OVER, WHICH IS WHY THE ARM STILL FIRES: it is the
-        # question's referent AND it is `hearth_of(p_low)` -- the object of that person's own live
+        # question's referent AND it is `containing_rung_of(p_low)` -- the object of that person's own live
         # `contain` Tenure -- so it is what `from` binds to. Before `W-C` the subject was pushed
         # onto `from` by `binding_from`, which happened to give the same answer HERE and the wrong
         # one everywhere the referent is not your own hearth.
@@ -5150,7 +5209,7 @@ def test_wa_the_fold_and_the_person_read_the_same_cell_with_opposite_polarities(
     row = S.VERB_TABLE["transfer"]
     p = w.persons["p_low"]
     # The person's reading: UNKNOWN, so NOT contradicted. The operands are the Candidate's own --
-    # `from` is `hearth_of(p_low)`, not the subject -- so this is the binding the fold will see.
+    # `from` is `containing_rung_of(p_low)`, not the subject -- so this is the binding the fold will see.
     ops = S.operands_for(p, row, S.Question("q:wa_pol", "need", ("Hh",)), "Hh", w.fixtures)
     assert not S.belief_contradicts(p, row, "Hh", ops), (
         "a person holding no claim about `Hh` was treated as knowing `transfer` fails")
@@ -5451,8 +5510,16 @@ def test_wc_the_amount_sweep_runs_all_three_points_and_zero_spends_nothing():
         w.step = S.Step.RESOLVE
         kinds = [e.kind for e in d._fold(w, acts[0])]
         after = {r: dict(w.rungs[r].stores or {}) for r in w.rungs}
-        moved = {r: (before[r].get("grain"), after[r].get("grain"))
-                 for r in w.rungs if before[r] != after[r]}
+        # ⚠ ZERO-VALUED KEYS ARE NOT MOVEMENT, AND THIS ARM WAS COUPLED TO THE KIND FIXTURE UNTIL
+        # THE `W-C` ADVERSARIAL PASS. At `amount=0` the effect still runs
+        # `src.stores[kind] = src.stores.get(kind, 0) - 0`, which INSERTS the key when the rung
+        # does not hold it -- so a raw `before[r] != after[r]` reports "the stores moved" for a
+        # dict that gained a zero. It passed only because `tiny_world` happens to stock `grain`,
+        # i.e. this control arm would have reddened for a reason unrelated to spending the moment
+        # `default_store_kind` was swept (which it now is, one test down).
+        norm = lambda st: {k: v for k, v in st.items() if v}
+        moved = {r: (before[r].get(c.operands["kind"]), after[r].get(c.operands["kind"]))
+                 for r in w.rungs if norm(before[r]) != norm(after[r])}
         seen[amount] = (kinds, moved)
     # THE CONTROL, RUN: at 0 nothing is spent and no store value moves at all.
     assert seen[0][1] == {}, (
@@ -5469,6 +5536,105 @@ def test_wc_the_amount_sweep_runs_all_three_points_and_zero_spends_nothing():
     # measurement rather than a surprise the next reader has to re-derive.
     assert {a: k for a, (k, _m) in seen.items()} == {0: ["transfer.made"], 1: ["transfer.made"],
                                                      3: ["transfer.made"]}, seen
+
+
+def test_wc_the_store_kind_sweep_runs_all_three_arms_and_an_unstocked_kind_refuses():
+    """`H-121`'s SWEEP, ALL THREE ARMS EXECUTED — AND THE FIXTURE THIS SWEEPS WAS UNSWEPT, WHILE
+    ITS OWN COMMENT SAID IT WAS SWEPT. Added by the `W-C` adversarial pass.
+
+    `default_store_kind` shipped as `default_store_kind="grain",  # H-94, swept with the amount
+    below` and **nothing swept it**: every `.sweep(...)` in the instrument named
+    `default_transfer_amount`, and `H-94`'s `sweep: [0, 1, 3]` are INTEGERS, which cannot be arms
+    for a matter kind. One `sweep:` field was carrying two declared fixtures, and
+    `register.rule_R2` counts points on a ROW — it cannot see that the row declares two fixtures
+    and sweeps one. So R2 was green on an unswept default, which is exactly the laundering R2
+    exists to stop.
+
+    ⚠ AND THE POLARITY WAS INVERTED, WHICH IS THE WORSE HALF. `H-94` records that the SWEPT
+    fixture is decision-inert — executed and refused counts identical at 0 / 1 / 3 across the
+    corpus. The UNSWEPT one is decision-LIVE: `WorldReader.read` returns **0, not UNKNOWN**, for a
+    kind a rung does not hold, so `0 >= amount` is False and the transfer REFUSES.
+
+    THE THREE ARMS, and the third is the control because it is the only one that can flip the
+    verdict:
+      * `grain` — the default, stocked in the fixture hearth.
+      * `salt`  — a SECOND stocked kind. This arm is what proves the fixture reaches the effect
+        rather than the effect always moving grain: the store that moves is the one the fixture
+        names.
+      * `coin`  — registered in `rosters.yaml: matter_kinds`, produced by no site in
+        `tables.site_yield` and held by no rung. THE CONTROL.
+
+    MEASURED 2026-09-04 AT BOTH LEVELS. At the fold, below: `grain` and `salt` emit
+    `transfer.made` and move their own store ±1 per side; `coin` emits `transfer.refused` and
+    moves nothing. Across all 89 runnable corpus worlds: `transfer` executes 702 / refuses 21 at
+    `grain` AND at `salt` (both are stocked in those worlds, so they are indistinguishable there)
+    and **0 / 723 at `coin`, where `transfer` leaves the executed set entirely — 6 verbs to 5**.
+    So the corpus's 702-execution headline does rest on this value, and total store mass is
+    conserved at 29,233 in every arm.
+
+    MUTATION (run 2026-09-04): make `_derive_operand` return the literal `"grain"` for `"kind"`
+    instead of `store_kind_of(p, q) or fx.get("default_store_kind")` — the fixture stops reaching
+    the derivation, all three arms move grain, and this goes RED on the `salt` arm and on the
+    `coin` arm. Unmutated it is GREEN. That is precisely the laundering a declared-but-unrun
+    sweep permits."""
+    seen = {}
+    for kind in ("grain", "salt", "coin"):
+        fx = S.DEFAULT_FIXTURES.sweep("default_store_kind", kind)
+        w = P.tiny_world(fx)
+        # A SECOND STOCKED KIND, so the two live arms are distinguishable. Without it `salt` and
+        # `coin` would both refuse and the sweep would have two arms wearing three names.
+        w.rungs["Hh"].stores = dict(w.rungs["Hh"].stores or {}, salt=5)
+        p = w.persons["p_low"]
+        q = S.Question("q:wc_kind_sweep", "need", ("S",))
+        v = S.View(p.id, [], w.fixtures.get("view_k"), q)
+        c = next((c for c in S.Query.opening_set(p, v, q, w.fixtures) if c.verb == "transfer"),
+                 None)
+        assert c is not None, f"no `transfer` Candidate at kind={kind}"
+        assert c.operands.get("kind") == kind, (
+            f"the Candidate carries kind={c.operands.get('kind')!r} at sweep point {kind!r} -- "
+            "the fixture is not reaching the derivation and the sweep would be laundering")
+        mint = lambda pid, verb, subj: f"wc:kind:{kind}:{verb}"
+        acts = [a for sc in S.pack_scenes(p, [c], 5, w.fixtures, mint, occasion=q)
+                for a in sc.acts]
+        assert len(acts) == 1, acts
+        norm = lambda st: {k: val for k, val in st.items() if val}
+        before = {r: dict(w.rungs[r].stores or {}) for r in w.rungs}
+        d = S.SeasonDriver(w)
+        w.step = S.Step.RESOLVE
+        emitted = [e.kind for e in d._fold(w, acts[0])]
+        after = {r: dict(w.rungs[r].stores or {}) for r in w.rungs}
+        moved = {r: (before[r].get(kind), after[r].get(kind))
+                 for r in w.rungs if norm(before[r]) != norm(after[r])}
+        seen[kind] = (emitted, moved)
+
+    # THE TWO STOCKED ARMS EXECUTE, AND EACH MOVES ITS OWN KIND -- one per side, equal and
+    # opposite, which is §E3's two `(Rung, stores)` writes.
+    for kind, held, at_S in (("grain", 8, 40), ("salt", 5, None)):
+        emitted, moved = seen[kind]
+        assert emitted == ["transfer.made"], f"kind={kind} emitted {emitted}"
+        assert moved.get("Hh") == (held, held - 1), (
+            f"at kind={kind!r} the giver's store went {moved.get('Hh')}, expected "
+            f"{held} -> {held - 1}. The fixture names the store that moves, so a different one "
+            "moving means the kind is coming from somewhere other than the fixture")
+        assert moved.get("S") == (at_S, (at_S or 0) + 1), (
+            f"at kind={kind!r} the receiver's store went {moved.get('S')}, expected "
+            f"{at_S} -> {(at_S or 0) + 1}. §E3 gives `transfer` TWO `(Rung, stores)` writes, one "
+            "per side, and they must be equal and opposite in the kind the act names")
+
+    # THE CONTROL, RUN: a registered matter kind nobody stocks REFUSES, and moves nothing at all.
+    # This is the arm that flips the verdict, and §42.2.1 says a verdict that flips across a
+    # sweep is ITSELF a finding -- so it is stated in the docstring as a measurement rather than
+    # left as a passing assertion.
+    assert seen["coin"] == (["transfer.refused"], {}), (
+        f"at kind='coin' the fold emitted {seen['coin'][0]} and moved {seen['coin'][1]}. `coin` "
+        "is on `matter_kinds`, is produced by no site and is held by no rung, so "
+        "`stores(from, coin)` reads 0 and `0 >= 1` is False -- an execution here means the "
+        "scarcity predicate stopped reading the kind the act carries")
+    # AND THE SWEEP IS NOT THREE NAMES FOR ONE ARM (§0.1 point 2 / R2's DISTINCT-points rule).
+    assert len({str(v) for v in seen.values()}) == 3, (
+        f"the three arms produced {len({str(v) for v in seen.values()})} distinct outcomes: "
+        f"{seen}. A sweep whose arms cannot differ reports 'no verdict flipped' truthfully and "
+        "meaninglessly")
 
 
 def test_wc_a_candidate_declines_when_its_hearth_cannot_be_derived():
@@ -5497,14 +5663,15 @@ def test_wc_a_candidate_declines_when_its_hearth_cannot_be_derived():
     base = {(c.verb, c.subject) for c in S.Query.opening_set(p, v, q, w.fixtures)}
     assert ("transfer", "S") in base, (
         "`transfer x S` was never offered, so removing it proves nothing")
-    assert S.hearth_of(p) == "Hh", (
-        f"the fixture person's hearth is {S.hearth_of(p)!r}; this test needs one to take away")
+    assert S.containing_rung_of(p) == "Hh", (
+        f"the fixture person sits in {S.containing_rung_of(p)!r}; this test needs a containment "
+        "to take away")
 
     first = len(S.TRACE.rows)
     for t in p.tenures:                      # they are nowhere: every containment closed
         if t.kind == "contain" and t.live:
             t.until = w.tick
-    assert S.hearth_of(p) is None
+    assert S.containing_rung_of(p) is None
     after = {(c.verb, c.subject) for c in S.Query.opening_set(p, v, q, w.fixtures)}
 
     assert ("transfer", "S") not in after, (
@@ -5546,14 +5713,29 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # ⚠ THE WALK IS OVER TYPED VERBS AND THE SCOPE IS DECLARED RATHER THAN HIDDEN. An UNTYPED
     # verb's two bindings DO differ -- the person's is `{actor}` and the fold's is
     # `{actor, subject}`, because `_payload_of` always writes the subject and an untyped verb
-    # carries no operands -- and the difference has NO READER: `evaluate(None, ...)` returns
-    # UNKNOWN whatever it is handed, at both sites. Asserting equality there would be asserting a
-    # property nothing depends on, and would forbid the subject reaching `act_refs`.
+    # carries no operands -- and the difference has NO READER.
+    # ⚠ THE REASON GIVEN FOR THAT WAS WRONG AND IS CORRECTED BY THE `W-C` ADVERSARIAL PASS. It
+    # read *"`evaluate(None, ...)` returns UNKNOWN whatever it is handed, at both sites"*. The
+    # fold does not call `evaluate` for an untyped verb AT ALL: `_fold` branches on
+    # `requires_typed is None` to `REQUIRES_PREDICATES` and calls `pred(w, a)`, which reads the
+    # payload directly. The true statement is stronger -- FOR AN UNTYPED VERB THE FOLD BUILDS NO
+    # BINDING, so there is nothing for the divergence to be read by -- and it is asserted below
+    # rather than argued, because the old reason was an argument nobody could check.
+    all_typed = {vb for vb, r in S.VERB_TABLE.items() if r.requires_typed is not None}
+    # THE DECLARED EXCLUSION LIST, EMPTY TODAY AND NAMED SO IT CANNOT GROW SILENTLY. A typed verb
+    # belongs here only when something OTHER than this equality keeps it out of a person's option
+    # set -- `person_side_eligible` declining its only `eligibility:` alternative, say. The walk
+    # covers 9 of 9 as measured 2026-09-04, and the previous floor (`>= 5`) let four typed verbs
+    # drop out of the option set while this test stayed green and the claim "walked over every
+    # typed verb" stayed published.
+    WALK_EXCLUDES: frozenset = frozenset()
     cands = [c for c in S.Query.opening_set(p, v, q, w.fixtures)
              if S.VERB_TABLE[c.verb].requires_typed is not None]
-    assert len({c.verb for c in cands}) >= 5, (
-        f"only {sorted({c.verb for c in cands})} typed verbs are reachable -- the walk is not "
-        "seeing the grammar")
+    assert {c.verb for c in cands} == all_typed - WALK_EXCLUDES, (
+        f"the walk reached {sorted({c.verb for c in cands})} and the grammar's typed verbs are "
+        f"{sorted(all_typed - WALK_EXCLUDES)}. This equality is what licenses the sentence "
+        "'walked over every typed verb'; a verb that legitimately cannot be reached goes in "
+        "`WALK_EXCLUDES` with its reason, and is not dropped by lowering a floor")
     mint = lambda pid, verb, subj: f"wc:agree:{verb}:{subj}"
     checked = 0
     for c in cands:
@@ -5572,9 +5754,50 @@ def test_wc_the_fold_binds_what_the_person_bound():
             checked += 1
     assert checked >= 10, f"only {checked} operands were exercised; the walk proves too little"
 
+    # ⚠ AND THE UNTYPED HALF OF THE SCOPE NOTE, ASSERTED AGAINST THE FOLD'S OWN SOURCE. The claim
+    # is that the fold builds NO BINDING for an untyped verb, and what makes it true is that
+    # `_fold`'s single `evaluate(...)` call sits INSIDE the `requires_typed is not None` branch --
+    # the untyped path reaches `REQUIRES_PREDICATES` or raises, and neither constructs a binding.
+    # Move that call out of the branch and the `{actor}` vs `{actor, subject}` divergence acquires
+    # a reader while this test's scope note silently stops covering it, so the structure is what
+    # is pinned rather than a sentence about it.
+    import ast as _ast
+    _fold_fn = next(n for n in _ast.walk(_ast.parse((HERE / "shape.py").read_text()))
+                    if isinstance(n, _ast.FunctionDef) and n.name == "_fold")
+    _calls = [n for n in _ast.walk(_fold_fn)
+              if isinstance(n, _ast.Call) and getattr(n.func, "id", "") == "evaluate"]
+    # ASSERT THAT IT ASSERTED: zero calls would satisfy every clause below and observe nothing.
+    assert len(_calls) == 1, (
+        f"`_fold` makes {len(_calls)} `evaluate(...)` calls; this scope note is written for "
+        "exactly one, guarded by the typed branch")
+    _guarded = [n for n in _ast.walk(_fold_fn)
+                if isinstance(n, _ast.If) and "requires_typed" in _ast.unparse(n.test)
+                and any(c is _calls[0] for b in n.body for c in _ast.walk(b))]
+    assert _guarded, (
+        "`_fold` calls `evaluate(...)` outside its `requires_typed is not None` branch, so an "
+        "UNTYPED verb now reaches `evaluate` with a binding. The person's binding is `{actor}` "
+        "and the fold's is `{actor, subject}`; that divergence just acquired a reader, and this "
+        "test excludes untyped verbs from its equality on the grounds that it has none")
 
-def test_wc_no_operand_carries_a_silent_default_outside_eff_kill():
+
+def test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_eff_kill():
     """§0.05 IN THE ONE PLACE IT KEPT BEING BROKEN: no operand may be defaulted in a body.
+
+    ⚠ THIS TEST WAS CALLED `test_wc_no_operand_carries_a_silent_default_outside_eff_kill` AND THE
+    NAME CLAIMED MORE THAN THE BODY CHECKS. Renamed by the `W-C` adversarial pass, and the scope
+    is now in the name rather than buried four paragraphs down. WHAT IT COVERS, exactly: the
+    `.get("<operand>", <default>)` and `.setdefault("<operand>", <default>)` spellings, over the
+    eight names in `rosters.yaml: requires_operands` plus `harm`, IN `shape.py` ONLY.
+    WHAT IT DOES NOT COVER, and each is spellable around it today:
+      * `d.get("kind") or "grain"` -- DELIBERATE, see the paragraph below, and live and correct
+        in `_eff_create_record`/`_eff_utter` over payload keys that are not operands;
+      * `{"kind": "grain", **d}`, and `k = d.get("kind")` followed by an `if k is None`;
+      * `.get(name, dflt)` where `name` is a VARIABLE rather than a literal;
+      * anything in `probes.py`, `corpus_run.py` or any other module -- a probe writing a literal
+        payload is an author naming an act, not a body inventing an operand, so widening the scan
+        to them would redden correct code, which `G4` weighs equally with an invention.
+    The residual hazard is therefore real and named: this is ONE FAMILY OF SPELLINGS IN ONE FILE,
+    and the collision it cannot see is asserted directly, at the bottom of this test.
 
     `_eff_transfer` read `give.get("from", "")`, `give.get("to", "")`, `give.get("kind", "grain")`
     and `give.get("amount", 1)`, so an act naming NOTHING was a well-formed transfer of one grain
@@ -5589,11 +5812,16 @@ def test_wc_no_operand_carries_a_silent_default_outside_eff_kill():
 
     ⚠ THE SCANNED NAMES COME FROM THE ROSTER, so a ninth operand is covered the day it is added
     (`G2` -- forbid the shape, never enumerate the words). And the scan is deliberately narrow: it
-    catches `.get(name, default)` and not `.get(name) or fallback`. The second form survives in
-    `_eff_create_record` (`d.get("kind") or "text"`) and `_eff_utter`, over payload keys that are
-    NOT operands -- a Record's kind is not a matter kind -- and widening the regex would redden
-    correct code, which `G4` weighs equally with an invention. The genuine hazard in that
-    collision is asserted directly below instead.
+    catches `.get(name, default)` and `.setdefault(name, default)` and not `.get(name) or
+    fallback`. The last form survives in `_eff_create_record` (`d.get("kind") or "text"`) and
+    `_eff_utter`, over payload keys that are NOT operands -- a Record's kind is not a matter kind
+    -- and widening the regex would redden correct code, which `G4` weighs equally with an
+    invention. The genuine hazard in that collision is asserted directly below instead.
+
+    ⚠ AND THE COVERAGE CLAIM IS ITSELF CHECKED, ON PLANTS, because a regex that quietly stopped
+    matching would make this assertion absent rather than weak (§0.1 point 2) -- and because the
+    scan reports its own scope, so the scope had better be true. `setdefault` has no live hit, so
+    without a plant that half of the pattern would ship untested.
 
     MUTATION (run 2026-09-04): restore `give.get("kind", "grain")` in `_eff_transfer` and this
     goes RED naming that line. Unmutated it is GREEN. Second mutation, for the second arm: make
@@ -5603,22 +5831,68 @@ def test_wc_no_operand_carries_a_silent_default_outside_eff_kill():
     import re as _re
     src = (HERE / "shape.py").read_text()
     names = "|".join(sorted(_re.escape(o) for o in S.REQUIRES_OPERANDS) + ["harm"])
-    offenders = []
-    for m in _re.finditer(r'\.get\(\s*["\'](' + names + r')["\']\s*,', src):
+    pattern = _re.compile(r'\.(?:get|setdefault)\(\s*["\'](' + names + r')["\']\s*,')
+    # ⚠ THE ATTRIBUTION MATCHED A COLUMN-0 `def` ONLY, so a default inside a METHOD was reported
+    # against the previous top-level function -- a true violation named at the wrong site, which
+    # is how a reader dismisses it. Nearest preceding `def` at ANY indentation now.
+    heads = [(m2.start(), m2.group(1))
+             for m2 in _re.finditer(r"^[ \t]*def[ \t]+(\w+)", src, _re.M)]
+    def _enclosing(pos: int) -> str:
+        return next((n for start, n in reversed(heads) if start < pos), "<module>")
+    # THE DECLARED CARVE-OUTS, both `(operand, function)` and both with their reason. A carve-out
+    # that stops matching anything is asserted below, so a stale one cannot sit here hiding a
+    # widening.
+    EXEMPT = {
+        # `harm` is not in `requires_operands`, so no cell binds it, `operands_for` cannot derive
+        # it, and no computed act can carry one — deleting the default would make `kill / wound`
+        # raise on every act the loop produces. `W-E` owns it, and it is NOT innocent: the
+        # default is `p.body`, i.e. an act naming no harm KILLS.
+        ("harm", "_eff_kill"),
+        # `_payload_of` is the WRITE side, not a read with a fallback: the value supplied is
+        # `c.subject`, the Candidate's own derived subject, and the function's docstring says why
+        # it stays even where no cell binds it (`act_refs`, `claim_subjects`, and `tell`, whose
+        # `writes:` is empty by design, have nothing else that knows what was told). It is
+        # exempted rather than excluded from the pattern so that a LITERAL default appearing here
+        # later is still caught.
+        ("subject", "_payload_of"),
+    }
+    offenders, used = [], set()
+    for m in pattern.finditer(src):
         line = src.count("\n", 0, m.start()) + 1
-        # Which function is it in? The nearest preceding `def` at column 0 or 4.
-        head = src[:m.start()].rsplit("\ndef ", 1)[-1].split("(")[0]
-        if m.group(1) == "harm" and head == "_eff_kill":
+        head = _enclosing(m.start())
+        if (m.group(1), head) in EXEMPT:
+            used.add((m.group(1), head))
             continue
         offenders.append((line, head, m.group(1)))
     assert not offenders, (
         "an operand is silently defaulted in a body — §0.05 puts a value the engine uses in a "
         "data file or in `DEFAULT_FIXTURES` with a register row:\n  "
         + "\n  ".join(f"shape.py:{ln} in {fn}() defaults {op!r}" for ln, fn, op in offenders))
-    # AND THE SCAN IS NOT VACUOUS: the pattern must be able to find the one legitimate hit.
-    assert _re.search(r'\.get\(\s*["\']harm["\']\s*,', src), (
-        "the regex found not even `_eff_kill`'s `harm` — it cannot observe the failure it "
-        "excludes, which makes the assertion above absent rather than weak")
+    # AND THE SCAN IS NOT VACUOUS: the pattern must be able to find the legitimate hits, and
+    # EVERY declared carve-out must still match something. A carve-out nothing uses is a licence
+    # sitting open for whatever lands on that name next.
+    assert used == EXEMPT, (
+        f"declared carve-outs that matched nothing: {sorted(EXEMPT - used)}. The pattern cannot "
+        "observe the failure it excludes, which makes the assertion above absent rather than "
+        "weak — or the carve-out is stale and is now an open licence")
+    # AND THE SCOPE THE DOCSTRING PUBLISHES IS CHECKED ON PLANTS, in both directions. `setdefault`
+    # has no live hit, so this is the only thing standing between that half of the pattern and
+    # shipping untested; and the `or` spelling must NOT match, because the docstring declares it
+    # out of scope and `_eff_create_record` depends on that being true.
+    for planted in ('    x = d.get("kind", "grain")', '    d.setdefault("amount", 1)',
+                    '    y = give.get("from", "")'):
+        assert pattern.search(planted), f"the pattern no longer covers {planted.strip()!r}"
+    for outside in ('    k = d.get("kind") or "text"', '    z = d.get("kind")',
+                    '    n = d.get(name, 1)'):
+        assert not pattern.search(outside), (
+            f"the pattern now matches {outside.strip()!r}, which the docstring declares OUT of "
+            "scope — either the scope note is stale or correct code is about to redden")
+    # AND THE ATTRIBUTION FINDS A METHOD, which is the half that was broken: `_enclosing` must
+    # name an indented `def` rather than the nearest top-level one.
+    _m = _re.search(r"^[ \t]+def[ \t]+(\w+)", src, _re.M)
+    assert _m and _enclosing(_m.end()) == _m.group(1), (
+        "`_enclosing` cannot see an indented `def`, so a default inside a method would be "
+        "reported against the previous top-level function")
 
     # THE COLLISION, ASSERTED DIRECTLY. `kind` is a MATTER kind in `requires_operands` and a
     # RECORD kind in `_eff_create_record`. What keeps them apart is that an UNTYPED verb carries

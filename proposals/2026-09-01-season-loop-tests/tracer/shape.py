@@ -1804,7 +1804,22 @@ DEFAULT_FIXTURES = Fixtures(
     # under the person, for an act whose payload carried neither. Two owners of one value, and
     # the fold's copy would have admitted a `transfer` whose effect then raised on the operands
     # the precondition had invented for it. The values are carried across unchanged.
-    default_store_kind="grain",        # `H-94`, swept with the amount below
+    # ⚠ THE COMMENT HERE READ *"`H-94`, swept with the amount below"* AND NOTHING SWEPT IT. Struck
+    # by the `W-C` adversarial pass: every `.sweep(...)` in the instrument named
+    # `default_transfer_amount`, and `H-94`'s `sweep: [0, 1, 3]` are INTEGERS, which cannot be
+    # arms for a matter kind -- one `sweep:` field was carrying two declared fixtures and
+    # `register.rule_R2` cannot see that, so R2 was green on an unswept default. It has its own
+    # row now (`H-121`) and its own three arms, RUN: `grain` (stocked) · `salt` (a second stocked
+    # kind, which proves the fixture reaches the effect -- the store that moves is the one it
+    # names) · `coin` (registered in `rosters.yaml: matter_kinds`, produced by no site and held by
+    # no rung: THE CONTROL, and the only arm that can flip the verdict, because
+    # `WorldReader.read` returns 0 rather than UNKNOWN for a kind a rung does not hold, so
+    # `0 >= amount` is False and the transfer REFUSES).
+    # ⚠ AND THE POLARITY WAS INVERTED: the SWEPT fixture was the decision-inert one and this
+    # UNSWEPT one is decision-live. Measured over all 89 corpus worlds -- `transfer` executes
+    # 702 / refuses 21 at both `grain` and `salt`, and 0 / 723 at `coin`, where it leaves the
+    # executed set entirely (6 verbs -> 5). The 702-execution headline does rest on this value.
+    default_store_kind="grain",        # `H-121`, swept grain / salt / coin
     # ⚠ `0` IS THE CONTROL AND IT IS SWEPT FIRST. Nothing is spent, so scarcity never binds and
     # `stores >= 0` admits every giver: a run at this point shows how much of the transfer
     # behaviour rests on the default rather than on the world.
@@ -3462,8 +3477,8 @@ def person_side_eligible(p: Person, row: "VerbRow") -> bool:
     return False
 
 
-def hearth_of(p: Person) -> Optional[str]:
-    """§54 item 7's `hearth(giver)` -- WHERE THE GIVER IS, READ OFF THE GIVER.
+def containing_rung_of(p: Person) -> Optional[str]:
+    """WHERE THE ACTOR IS, READ OFF THE ACTOR: the object of their own live `contain` Tenure.
 
     A person's live `contain` Tenure. `W5` moved the tenure store onto the Person precisely so a
     person-side function could ask this without a World, and this is that move being spent rather
@@ -3471,11 +3486,52 @@ def hearth_of(p: Person) -> Optional[str]:
     are is one of them.
 
     ⚠ IT IS NOT A CHOICE, AND THAT IS WHY IT IS DERIVED RATHER THAN OFFERED. `H-94` asked where
-    `transfer`'s operands come from and the answer differs per operand: the giver's hearth is
+    `transfer`'s operands come from and the answer differs per operand: where the actor is, is
     STATE (the actor is somewhere, and it is wherever they are), the receiver is the question's
     referent, and `kind`/`amount` are values the design does not supply at all. Only the third
     kind needs a fixture. Reading the first as a choice would invent an option the person does not
-    have; reading it as a fixture would invent a hearth.
+    have; reading it as a fixture would invent a place.
+
+    ⚠ IT WAS CALLED `hearth_of` AND THE NAME ASSERTED SOMETHING THE CODE DOES NOT DO. RENAMED BY
+    THE `W-C` ADVERSARIAL PASS, WHICH IS ALSO WHERE THE ASSUMPTION IS DECLARED. §54 item 7 writes
+    `stores(hearth(giver), kind) >= amount` and supplies THE TOKEN AND NO DEFINITION
+    (`ARCHITECTURE.md:1898`, `ARCHITECTURE_V2.md:418`) -- while `hearth` is SEPARATELY a member of
+    `rosters.yaml: rung_kinds` (`person, hearth, community, settlement, territory, province,
+    duchy, realm`; `ARCHITECTURE.md:376`). So the term has a second, narrower reading the document
+    neither states nor excludes, and a function named for it was claiming the document had chosen.
+
+      READING A (this one, SHIPPED): the actor's containing rung, WHATEVER ITS KIND.
+      READING B (the alternative, NAMED so the choice is visible): walk up the containment ladder
+        to the nearest rung whose `kind` is `hearth`.
+
+    ⚠ MEASURED 2026-09-04, BOTH READINGS, OVER ALL 89 RUNNABLE CORPUS WORLDS, because a declared
+    alternative nobody runs is the laundering §0.1 point 4 names. Reading B was built and folded.
+      * CENSUS of what reading A returns, over all 267 corpus seatings (89 worlds x 3 persons):
+        `hearth` 111 · `realm` 153 · `settlement` 3. So in 156 of 267 the shipped reading returns
+        a rung that is NOT of kind `hearth` -- a majority, and the divergence is real, not
+        theoretical.
+      * `transfer` EXECUTED 702 -> 237, REFUSED 21 -> 0, and 0 -> 486 Candidates decline for want
+        of `from`. The executed SET does not move (`transfer` still executes, in the 37
+        person-scale worlds, which are the ones whose ladder HAS a hearth rung).
+      * MOST OF THE DIVERGENCE IS THE WORLD BUILDER'S. `corpus_run.build_at` truncates the ladder
+        at the case's own `scale:`, so a realm-scale case has no hearth rung to walk up to and
+        seats its people directly in the realm; under a full ladder those 153 seatings would be
+        hearths and the two readings would agree on them.
+      * ⚠ BUT NOT ALL OF IT, AND THE REMAINDER IS NOT A DEFECT. A person may legitimately sit
+        ABOVE a hearth in a hand-built world -- `tiny_world` seats the Duke in the settlement and
+        the King in the realm, deliberately -- and there the two readings still differ. So this is
+        not "a fixture bug that would vanish", and the closure below does not rest on pretending
+        it is.
+
+    ⚠ AND READING B IS REFUSED ON ARCHITECTURE (§0 test 5), NOT ON THE NUMBER. It is not
+    person-side: `Rung.kind` and `Query.parent_of` are WORLD reads, and this function is exactly
+    the site §F1's L2 keeps World-free -- a person knows WHICH rung contains them, because that
+    Tenure is their own, and does not know WHAT KIND of rung it is, because kinds are the world's.
+    Giving it a `World` turns
+    `test_w5_sense_is_still_the_only_world_taking_non_decision_function` red, which is the
+    falsifier for this paragraph rather than a claim about it. The remaining alternative -- let
+    the FOLD compute `hearth(giver)`, which does have a World -- gives one operand two owners
+    again, which is the divergence `W-C` closed.
 
     `None` for a person with no live containment -- a person nowhere cannot give from a store, and
     the Candidate is not formed. That is a REFUSAL and not a hole in the design: #353 seats every
@@ -3524,6 +3580,28 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
     not one name -- the cells name them differently because they mean different things TO THE
     VERB, and the person answers all three the same way, with the thing they were asked about.
 
+    ⚠ THE REFERENT IS WORLD-SOURCED, AND THAT IS §F1'S OWN SHAPE RATHER THAN A WIDENING OF IT.
+    Raised by the `W-C` adversarial pass and closed here rather than escalated, because it is
+    answered: three of the four question sources read the world (`questions_for` Q1 from
+    `w.dates`/`w.docket`, Q3 from `w.crossings`/`w.sites`, Q4 from `w.propositions`; only Q2 is
+    ledger-sourced), and `W-C` promotes that referent from *which Candidate forms* to *an operand
+    of the minted act*. §F1 states the derivation in terms -- `subject ∈ referents(q)`, "what the
+    question is ABOUT" -- and puts the epistemic constraint in a DIFFERENT clause: `requires(verb)
+    not KNOWN-false FROM p's OWN CLAIMS`, with its own warning that softening THAT clause is the
+    breach. So the belief filter is on the requirement, never on the referent; and `to`/`site` are
+    the referent under the two other names the closed operand vocabulary has for it, not a second
+    channel.
+    Two things make the promotion safe rather than merely licensed, and both are properties of
+    code above rather than of this paragraph. (a) EVERY SOURCE IS ADDRESSED TO THE PERSON: Q1
+    requires the Date's holder to be them or something they hold, Q2 reads their own ledger, Q3
+    requires them to be PRESENT where the band crossed, Q4 is their own live `commit`. A person
+    cannot be handed a referent they have no reach to. (b) THE REFERENT PROPOSES AND THE FOLD
+    DISPOSES: naming a receiver is not moving matter to it. `_eff_transfer` returns nothing when a
+    side is no rung and the fold emits `transfer.refused`; `move`'s `contain_path` cell reads
+    UNKNOWN off the world and `contain_ascends` blocks a sibling. Measured over the corpus: 21 of
+    723 transfers refused, 73 of 723 moves blocked -- so world-sourced ids do not DECIDE where
+    matter goes, which was the sharp form of the objection.
+
     ⚠ AN OPERAND WITH NO BRANCH DECLINES, AND `floor` IS THE LIVE CASE. §12.1's floors are
     per-SITE-KIND (`band_floors`), and person-side there is no way to learn a site's kind without
     `w.sites` -- so a person cannot name the floor, and a cell binding `floor` as an OPERAND would
@@ -3540,9 +3618,11 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
         return subject
     if name == "site":
         return subject
-    # Where the ACTOR is. §54 item 7's `hearth(giver)`.
+    # Where the ACTOR is. §54 item 7's `hearth(giver)`, READ AS the actor's containing rung of
+    # any kind -- a declared assumption with a named alternative and a measurement, not a reading
+    # the document supplies. See `containing_rung_of`, and register row `H-94`.
     if name == "from":
-        return hearth_of(p)
+        return containing_rung_of(p)
     # Values the design states no number for. `H-94`, declared / defaulted / swept.
     if name == "kind":
         return store_kind_of(p, q) or fx.get("default_store_kind")
@@ -4786,6 +4866,13 @@ def _eff_confer(w: "World", a: "Act") -> list:
     # ⚠ `to` WAS `d.get("to") or a.actor` -- a silent default that seated the ACTOR whenever the
     # act named nobody, which is the same class as `_eff_transfer`'s four and is deleted with
     # them. A conferral onto nobody is a malformed act, not a self-conferral.
+    # ⚠ THIS CHANGE IS A DELIBERATE EXTRA AND NOT A PATH `H-94` MADE REACHABLE; RECLASSIFIED BY
+    # THE `W-C` ADVERSARIAL PASS, because filing it as a consequence overstates what closing the
+    # operand channel did. NO COMPUTED ACT CAN REACH THIS EFFECT: `confer` is untyped, `office`
+    # is not in `rosters.yaml: requires_operands` so `operands_for` can never derive one, and
+    # `_req_confer` returns False when the payload names none -- `corpus_run`'s own output lists
+    # `confer` among the verbs "foldable but never even attempted". The improvement is real (a
+    # silent self-conferral becomes a loud `InstrumentDefect`) and nothing measurable moved.
     obj, to = d.get("office"), _operand(a, "to")
     if not obj or obj not in w.offices:
         return []
@@ -5016,12 +5103,22 @@ def _eff_transfer(w: "World", a: "Act") -> None:
     dst = w.rungs.get(_operand(a, "to"))
     kind, amount = _operand(a, "kind"), _operand(a, "amount")
     # ⚠ A SIDE THAT IS NOT A RUNG MEANS THE TRANSFER DID NOT HAPPEN, and returning nothing is what
-    # makes the fold emit the refusal. This branch became REACHABLE the moment operands became
-    # real: a person names a receiver from their question's referents and may name something that
-    # is no rung at all. The old shape moved the giver's side anyway, which is the matter
-    # ANNIHILATION this effect's own docstring records -- grain leaving the world and arriving
-    # nowhere -- and it survived only because no computed act ever bound `from` to begin with.
-    # §42.2's polarity: an unperformable transfer refuses; it does not half-happen.
+    # makes the fold emit the refusal. This branch became reachable FROM A COMPUTED ACT the moment
+    # operands became real: a person names a receiver from their question's referents and may name
+    # something that is no rung at all. The old shape moved the giver's side anyway, which is the
+    # matter ANNIHILATION this effect's own docstring records -- grain leaving the world and
+    # arriving nowhere. §42.2's polarity: an unperformable transfer refuses; it does not
+    # half-happen.
+    # ⚠ *"IT SURVIVED ONLY BECAUSE NO COMPUTED ACT EVER BOUND `from` TO BEGIN WITH"* STOOD HERE
+    # AND IS FALSE; STRUCK BY THE `W-C` ADVERSARIAL PASS. No COMPUTED act bound `from` -- but
+    # probe `F10` did, in its payload, and omitted `to`, so the old effect decremented `Hh` and
+    # delivered nowhere: `F10` DESTROYED 6 GRAIN ON EVERY PROBE RUN, in an economy where `yield`
+    # is the only source. Measured by weighing every rung across the probe's own season: total
+    # store mass ends at 107 on the pre-`W-C` tree (`45a537c`) and at 113 here, and the difference
+    # is exactly the 6. The path was reachable AND REACHED; only the computed path was closed, and
+    # `F10`'s payload edit is a BUG FIX in a live probe rather than a signature accommodation.
+    # `F10` now asserts conservation, because its old assertion set could not observe the failure
+    # it was sitting on (§0.1 point 2).
     if src is None or dst is None:
         TRACE.decision(f"transfer names a side that is no rung -> from "
                        f"{_operand(a, 'from')!r} to {_operand(a, 'to')!r}", "E3/S27.1",
