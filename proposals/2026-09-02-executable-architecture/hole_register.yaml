@@ -1786,7 +1786,16 @@ rows:
   - id:        "H-117"
     tier:      1
     hole:      >-
-      THE ACT BUDGET NEVER BINDS, SO §26.3'S TRIAGE NEVER HAPPENS. Measured in 12 of 12 sampled
+      ⚠ THE STATE BELOW IS THE STATE AS FOUND (`H-118`'s marker, and for `H-118`'s reason). It is
+      kept because it is the argument that produced this row, and its last sentence — "the engine
+      has no native x-instead-of-y moment, so exclusivity has to be introduced by the instrument"
+      — IS SUPERSEDED BY THIS ROW'S OWN `cite:`. W-0 built the native fork; `budget_binds` is now
+      True at 1,068 of 1,068 deliberations at 5 slots and there are 1,504 GENUINE native forks at
+      2 slots. What survives, and is the row's live content, is narrower: the budget BINDING and
+      `A9.MAX_ALT` REACHING PAST IT are two different conditions, and only the second makes the
+      x-instead-of-y question askable — which is why the question is unaskable at the shipped
+      fixture point and askable at two cells of the declared sweep cross.
+      AS FOUND: THE ACT BUDGET NEVER BINDS, SO §26.3'S TRIAGE NEVER HAPPENS. Measured in 12 of 12 sampled
       cases - every person takes ALL of their ranked candidates every season (3 deliberations x 7
       ranked = 21 acts resolved, all of them). §26.3 makes triage "the PERSON's own choice of what
       to leave undone"; in 143 cases nothing is ever left undone, so the ranking ORDERS acts and
@@ -1804,6 +1813,15 @@ rows:
     source:    "the degree sweep, 2026-09-04 — found by a null result that was an artifact"
     unblocks:  "choice as a mechanic at all; and the 22 corpus cases wanting a third party to step in"
     cite: >-
+      SOURCES QUOTED HERE: proposals/2026-09-04-degree-sweep/arm9_forking.py and
+      proposals/2026-09-02-executable-architecture/hole_register.yaml — this register, for this
+      row's own earlier paragraphs and for `H-122`'s standing copy of the retracted sentence.
+      ⚠ THIS LINE IS THE FIX FOR A REAL DEFECT AND IS WORTH ONE SENTENCE OF ITS OWN. The
+      supersession paragraph below first passed `verify_citations` because its author DELETED THE
+      QUOTATION MARKS around a self-quote, which makes the text invisible to `QUOTE_RE` — a
+      general recipe for passing the anti-fabrication gate by reformatting, demonstrated on a
+      benign case. The marks are restored and the sources are named instead, which is `H-122`'s
+      own precedent. Found by an independent read-only critic, 2026-09-04.
       MEASURED 2026-09-04. Found by a null result that was an artifact - a first forking harness
       ROTATED the ranked list so a different candidate led, and all four branches produced
       byte-identical worlds. A spy confirmed the patch was firing, so the null was real and its
@@ -1839,12 +1857,26 @@ rows:
       conditions, and only the second makes the x-instead-of-y question askable.
       ⚠ AND THOSE 2,403 ARE, NUMBER FOR NUMBER, THE FORKS `runs/arm9.json` PUBLISHED AS ITS 2,403
       SCORED AT 100% RECONVERGENCE. The pre-`H-117` harness restricted both baseline and fork to
-      `ranked[:1]`, so the alternative it flipped was inside the real budget and the taken SET
-      never moved; the same 2,403 probes are now classified INERT-BY-CONSTRUCTION. **The published
-      100% was a rate over probes that could not diverge by construction**, which is the strongest
-      statement this row's re-kinding has earned and it is recorded here rather than only on
-      `H-122`.
-      ⚠ THE SENTENCE ABOVE — 54 GENUINE forks, all RECONVERGED, read as consistent with arm
+      `ranked[:1]`, so the alternative it flipped was inside the real budget; the same 2,403 probes
+      are now classified INERT-BY-CONSTRUCTION.
+      ⚠⚠ **THE RETRACTION IS ABOUT RELEVANCE, NOT ABOUT POSSIBILITY, AND THE FIRST WORDING OF IT
+      HERE WAS WRONG.** It read "the published 100% was a rate over probes that could not diverge
+      by construction". That is true of the NATIVE harness — `fork_case` returns
+      `INERT-BY-CONSTRUCTION` on `t < L` WITHOUT calling `_run`, and RESOLVE re-sorts by
+      `(stratum, hash)` — and FALSE of the harness that produced the number: with both arms
+      truncated to `ranked[:1]` the baseline took `{ranked[0]}` and the fork took `{ranked[t]}`,
+      which is a different act and a different world. Those probes RAN and were free to diverge;
+      they did not. What is defensible is that the exclusivity was IMPOSED BY THE INSTRUMENT — the
+      alternative was already inside the engine's own budget, so the 2,403 measured a triage the
+      engine does not perform. **And whether they moved the act stream under that harness is NOT
+      RECOVERABLE FROM THE TREE**: `runs/arm9.json` predates the stream/decision split and its
+      only keys are `seed seasons lookahead n_cases probed no_live_window real_forks reconverged
+      diverged changed_distribution reconvergence_rate rows`, with `rows` holding per-CASE
+      aggregates and no per-fork record at all — no `acts_differ`, no `hash_differ`, no `inert`.
+      Retracting a merged number on a claim the surviving artifact cannot adjudicate is the failure
+      this repository files most often, so the claim is bounded to what the artifact supports.
+      Found by an independent read-only critic, 2026-09-04.
+      ⚠ THE SENTENCE ABOVE — "54 GENUINE forks, all RECONVERGED", read as consistent with arm
       9c/9d's finding — IS SUPERSEDED AS A CONCLUSION, THOUGH NOT AS A RUN. At 2 slots over the full
       corpus the genuine forks are 1,504 / 1,467 / 1,467 by deposit arm and they are NOT all
       reconverged: 100.00% / 95.77% / 87.59% on the verb-only fingerprint, and 68.88% / 65.44% /
@@ -2318,8 +2350,25 @@ rows:
       INERT-BY-CONSTRUCTION + 0 GENUINE** in all three arms — an EMPTY DENOMINATOR, no rate. Those
       2,403 are, number for number, the forks `runs/arm9.json` published as its 2,403 scored at
       100% reconvergence: the pre-`H-117` harness restricted both arms to `ranked[:1]`, so the
-      alternative it flipped was inside the real budget and the taken SET never moved. **The
-      published 100% was a rate over probes that could not diverge by construction.**
+      alternative it flipped was inside the real budget.
+      ⚠⚠ RETRACTED WORDING, KEPT IN PLACE SO WHAT WAS PUBLISHED IS STILL LEGIBLE — this row first
+      wrote: **The published 100% was a rate over probes that could not diverge by construction.**
+      THAT IS FALSE OF THE HARNESS THAT PRODUCED THE NUMBER. It is true of the NATIVE harness,
+      which returns `INERT-BY-CONSTRUCTION` on `t < L` without ever calling `_run` and whose
+      RESOLVE re-sorts by `(stratum, hash)` so an in-budget alternative cannot move the taken set.
+      But with BOTH arms truncated to `ranked[:1]` the baseline took `{ranked[0]}` and the fork
+      took `{ranked[t]}` — a different act, a different world. Those probes ran and were free to
+      diverge; they did not. **THE CORRECTED STATEMENT IS ABOUT RELEVANCE, NOT POSSIBILITY: the
+      2,403 were forks the engine's own budget would never have made, because the alternative was
+      already in-budget — the exclusivity was imposed by the instrument, so the number measured a
+      triage the engine does not perform.** And whether those probes moved the ACT STREAM under
+      that harness is not recoverable from the tree: `runs/arm9.json` predates the stream/decision
+      split, its keys are `seed seasons lookahead n_cases probed no_live_window real_forks
+      reconverged diverged changed_distribution reconvergence_rate rows`, and `rows` holds
+      per-CASE aggregates only — no `acts_differ`, no `hash_differ`, no `inert`, no per-fork
+      record. Retracting a merged number on a claim the surviving artifact cannot adjudicate is
+      this repository's most-filed failure, so the claim is bounded to what the artifact supports.
+      Found by an independent read-only critic, 2026-09-04; the same correction is on `H-117`.
       ⚠ EVERY DIVERGENCE IS THE SAME DEGENERATE SHAPE, AND IT IS TRUE WHEN RECORDED. Measured over
       the 89 baselines at the same fixture point, §F1 clause-4 drops are **0 / 37 / 123**; ALL of
       them are `move` on `contain.path:<the actor's own id>`, ALL SELF-REFERENTIAL (`to` == the

@@ -71,10 +71,29 @@ def _build_spy(case, seed):
 C.build_at = _build_spy
 
 
+FIXTURE_CELLS = {
+    # key        (scene_budget, interactions_per_scene)  slots  what it is
+    "default":   ((5, 3),  15, "`DEFAULT_FIXTURES` — the shipped point. 0 genuine forks."),
+    "narrow":    ((2, 1),   2, "`H-10` arm 2 x `H-76` arm 1. TWO declared-arm changes."),
+    "2x3":       ((2, 3),   6, "`H-10` arm 2, `interactions_per_scene` LEFT AT ITS DEFAULT — ONE "
+                               "declared-arm change, so it is the SMALLER intervention of the two "
+                               "cells at which the question is askable."),
+}
+
+
 def fixtures_for(mode: str, slots: str) -> "S.Fixtures":
+    """⚠ `narrow` IS `2x1` UNDER ITS OLD NAME AND IS KEPT SPELLED THAT WAY ON PURPOSE. The
+    committed `H-122` reproduce line, the shipped `runs/wd_chunk_narrow_*.json` artifacts and two
+    test docstrings all name it; renaming it would orphan them for no gain (`CLAUDE.md` §4's
+    no-retrofit posture). New cells are named by the cell — `2x3` reads cold as what it is."""
     fx = S.DEFAULT_FIXTURES
     if slots == "narrow":
         fx = fx.sweep("scene_budget", 2).sweep("interactions_per_scene", 1)
+    elif slots == "2x3":
+        # ONE sweep, not two: `interactions_per_scene` already defaults to 3.
+        fx = fx.sweep("scene_budget", 2)
+    elif slots != "default":
+        raise KeyError(f"unknown fixture cell {slots!r}; known: {sorted(FIXTURE_CELLS)}")
     return fx.sweep("observation_deposit_mode", mode)
 
 

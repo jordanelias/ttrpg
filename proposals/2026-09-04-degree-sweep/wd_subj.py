@@ -20,8 +20,15 @@ import wd_acceptance as W
 import arm9_subj as A9S
 
 if __name__ == "__main__":
-    mode, a, b = sys.argv[1], int(sys.argv[2]), int(sys.argv[3])
-    fx = W.fixtures_for(mode, "narrow")
+    # `wd_subj.py <mode> [<slots>] <a> <b>` -- `slots` defaults to `narrow` (2 x 1), which is the
+    # form the committed `wd_subj_<mode>_<a>_<b>.json` artifacts were written with and which
+    # `H-122` names. A named cell writes `wd_subj_<slots>_<mode>_<a>_<b>.json` instead.
+    argv = sys.argv[1:]
+    if len(argv) == 4:
+        mode, slots, a, b = argv[0], argv[1], int(argv[2]), int(argv[3])
+    else:
+        mode, slots, a, b = argv[0], "narrow", int(argv[1]), int(argv[2])
+    fx = W.fixtures_for(mode, slots)
     import collections
     rows, kinds = [], collections.Counter()
     for _, c in W.CASES[a:b]:
