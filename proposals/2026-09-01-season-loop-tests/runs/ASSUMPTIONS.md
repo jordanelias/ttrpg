@@ -48,3 +48,4 @@ exercised by this run.**
 | `budget_leg_penalty` | `1` | no — a harness fixture |
 | `default_store_kind` | `grain` | no — a harness fixture |
 | `default_transfer_amount` | `1` | no — a harness fixture |
+| `wound_harm_model` | `scene_fraction` | no — a harness fixture |

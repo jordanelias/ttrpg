@@ -5967,11 +5967,17 @@ def test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_e
     # that stops matching anything is asserted below, so a stale one cannot sit here hiding a
     # widening.
     EXEMPT = {
-        # `harm` is not in `requires_operands`, so no cell binds it, `operands_for` cannot derive
-        # it, and no computed act can carry one — deleting the default would make `kill / wound`
-        # raise on every act the loop produces. `W-E` owns it, and it is NOT innocent: the
-        # default is `p.body`, i.e. an act naming no harm KILLS.
-        ("harm", "_eff_kill"),
+        # ⚠ `("harm", "_eff_kill")` STOOD HERE UNTIL 2026-09-04 AND IS RETIRED WITH ITS SUBJECT,
+        # NOT WIDENED. `W-E` deleted the default: the severity of a wound is now READ off the
+        # personal-combat scene (`Resolution.result["wound_state"]`) under a swept fixture
+        # (`wound_harm_model`, `H-125`), so nothing in `_eff_kill` defaults an operand any more
+        # and the carve-out had nothing left to license.
+        # ⚠ AND IT ALMOST SURVIVED ON A DOCSTRING. `W-E`'s first rewrite of `_eff_kill` QUOTED the
+        # deleted line verbatim while explaining it; this scan reads raw source, so the carve-out
+        # went on matching, `used == EXEMPT` stayed green, and an open licence on the name `harm`
+        # would have shipped inside the commit that closed it. That is precisely the staleness the
+        # `used == EXEMPT` assertion below was written to catch, and it caught it -- the fix was to
+        # stop quoting the spelling, which `_eff_kill`'s docstring now says in terms.
         # `_payload_of` is the WRITE side, not a read with a fallback: the value supplied is
         # `c.subject`, the Candidate's own derived subject, and the function's docstring says why
         # it stays even where no cell binds it (`act_refs`, `claim_subjects`, and `tell`, whose

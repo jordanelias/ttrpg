@@ -5161,10 +5161,16 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
 
     ⚠ `W-E`, 2026-09-04. THE EFFECT NOW TAKES THE RESOLUTION, AND `harm` IS GONE. Register row
     `H-114` measured what the old signature cost: the effect could not honour the branch
-    `writes_at` had just selected, and `int(d.get("harm", p.body))` defaulted the harm to the
-    person's ENTIRE body -- so a fold at degree `Wounded` reached `p.body == 0`, passed
+    `writes_at` had just selected, and the payload's `harm` key was read with the person's ENTIRE
+    body as its fallback -- so a fold at degree `Wounded` reached `p.body == 0`, passed
     `if p.body > 0`, and DELETED THE PERSON. Both halves are closed here, and the `W-C` carve-out
     that named `harm` as `W-E`'s to own is retired with its subject rather than widened.
+    ⚠ THE OLD SPELLING IS DELIBERATELY NOT QUOTED IN THIS DOCSTRING. `W-C`'s guard
+    (`test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_eff_kill`) scans
+    RAW SOURCE TEXT, so quoting the deleted line here would keep its carve-out "used" and leave
+    an open licence on the name `harm` -- the exact staleness that test's own `used == EXEMPT`
+    assertion exists to catch, satisfied by prose describing the defect rather than by the defect.
+    Found while running that test against this change.
 
     WHERE THE MAGNITUDE COMES FROM NOW, AND WHY IT IS NOT INVENTED. JORDAN, 2026-09-04, VERBATIM:
     *"the combat engine determines the result there. your code just has to accept the result."*

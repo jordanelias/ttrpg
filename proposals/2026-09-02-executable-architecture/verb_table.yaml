@@ -299,8 +299,8 @@ verbs:
       Felled:       ["Person.body", "Person.exists", "Tenure.until"]
       Wounded:      ["Person.body"]
       Untouched:    []
-    writes_grade: "ruled -- the SPLIT is read from scene combat (Jordan 2026-09-03); H-98 keeps only the question of whether a decisive win is distinguishable from a narrow one, which the engine currently does not answer"
-    writes_source: "combat_seam.resolve -> wound_state[loser]: felled | wounds | health_remaining"
+    writes_grade: "ruled -- the SPLIT is read from scene combat (Jordan 2026-09-03); H-98 keeps only the question of whether a decisive win is distinguishable from a narrow one, which the engine currently does not answer. ⚠ EXECUTED 2026-09-04 (`W-E`): all three branches now run end to end through `SeasonDriver.resolve` -> `contest()` -> `combat_seam` -> `wrapper.fight`, and their consequences differ -- Felled deletes the subject and emits `person.died`, Wounded leaves them alive with a lower body and emits `body.changed`, Untouched writes nothing and emits `contest.undecided`. Falsifier: `test_we_a_contested_acts_consequence_differs_by_degree`."
+    writes_source: "combat_seam.resolve -> wound_state[THE ACT'S SUBJECT]: felled | wounds. ⚠ CORRECTED 2026-09-04 BY `W-E`, AND THE OLD CELL SAID `wound_state[loser]`, WHICH WOULD KILL THE WRONG PERSON. This verb's writes land on `payload[\"subject\"]` (`_eff_kill`), so if the ACTOR is the one felled, reading `[loser]` selects the `Felled` branch and the fold deletes the TARGET -- who is standing. The band is read off the person the writes land on. `health_remaining`/`health_full` are still read, but for the MAGNITUDE (`wound_harm_model`, `H-125`), not for the band."
     # ⚠ `emits:` IS DEGREE-KEYED TOO, AND THE FLAT VERSION WAS A LIVE `ID-9` DEFECT.
     # This read `["person.died"]` for every band. With the bands above that means A WOUND EMITS
     # `person.died` -- a success report for something that did not happen, in the verb whose own
