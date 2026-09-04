@@ -40,10 +40,10 @@ expressible, sometimes by showing it belongs to something else entirely.
 
 ---
 
-# §3 · Fields — and the two clauses that decide admission
+# §3 · Fields — and the three clauses that decide admission
 
-A field is a value the object owns and is the **only writer of**. Two clauses, and **using the wrong
-one is what makes a schema over- or under-refuse:**
+A field is a value the object owns and is the **only writer of**. Two clauses decide most cases, and
+**using the wrong one is what makes a schema over- or under-refuse:**
 
 | category | admitted when |
 |---|---|
@@ -54,6 +54,16 @@ one is what makes a schema over- or under-refuse:**
 everyone reads off you and what you hold* — a definition that presupposes both sides.
 
 **NEVER a field:** anything about another object · any aggregate · the reverse of its own edges.
+
+⚠ **AND A THIRD CLAUSE, ADDED TO STAGE 1 ON 2026-09-03 (`§D.0`) — WHAT KIND OF ASSERTION IS IT?**
+Owner and reader are two questions; the third is independent of both. **A field asserts what is
+DECLARED** (somebody said so, and the saying is the fact), **what IS THE CASE** (true whether or not
+anybody says so), **or what is READ OFF** (others take you to be this). **A field that cannot be
+sorted into one of the three is mis-modelled** — and the usual verdict is not *refused* but *filed on
+the wrong object*. ⚠ **Stage 1 grades the clause itself as an import kept on its hit rate rather than
+a derivation**, and says which of its three offered grounds survived; read it there before citing it.
+The stage is the authority. This line records only that the reading's two clauses are no longer the
+whole test.
 
 ---
 
@@ -68,12 +78,18 @@ the violation, not the solution.
 **`until` is what makes an ended relation a fact.** Rows are never deleted, because an ended tenure is
 a historical claim subject — argued over, read for entrenchment.
 
-**Two routes end one, and they are exhaustive:**
+**Three routes end one, and they are exhaustive** ⚠ *(this read TWO until 2026-09-03; Stage 1
+`§E.1.2` found a third in the live vocabulary and made it lawful as `T-o` rather than tolerated —
+the stage governs and this reading was stale)*:
 
 1. **The owner's discretion.** You may always end what you own, because `until` is a field of a thing
    you already write. **It binds by cost, not by impossibility** — forswearing spends a scene, emits,
    and witnesses mint claims about it. What you cannot do is forswear *unnoticed*.
 2. **A declared term**, set by the act that opened it and matured by the world, citing that act.
+3. **A revocation declared on the SEAT** (`T-o`) — the seat's own `revocation` basis, exercised
+   through `Act.via` by whoever currently occupies it, and refused the instant they do not. **It is
+   still declared**, which is why three ways is still a closed set: what changes is *where* the
+   declaration lives — `T-n` puts it on the Tenure, `T-o` on the Seat.
 
 **That exhaustiveness is what makes open-without-close UNSPELLABLE** rather than a thing you remember
 to check. Four of seven relations currently fail it.

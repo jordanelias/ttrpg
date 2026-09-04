@@ -44,6 +44,14 @@ where the problem is.**
 >
 > **Two yeses give a carrier. Hold-yes and write-nothing give a view. Neither gives a Query.**
 >
+> ### ⚠ **AND ONCE IT IS A FIELD, ONE MORE QUESTION BEFORE IT IS ADMITTED (`§D.0`, added 2026-09-03)**
+> **What kind of assertion is it — DECLARED, THE CASE, or READ OFF?** A declared value whose declaring
+> act cannot be named, a case value that changes with no act and none of the three motions, a read-off
+> value nothing at a venue could perceive: each is **on the wrong carrier**, and the verdict is
+> usually *move it*, not *refuse it*. ⚠ **The clause is an import, kept on its hit rate rather than a
+> derivation** — `§D.0` says so of itself. *`judging_set_rule`, which seats decide, sat on a place;
+> that one was caught by `§D.2`'s own NEVER, not by this clause.*
+>
 > **FIRST-CLASS FOR CONSUMERS IS NOT FIRST-CLASS FOR STATE.** ⚰ *Four stages concluded a faction is
 > not an object — right about ownership, wrong about deployment — and left the battle seam, the squad
 > grid, the UI and the AI each recomputing a roster nobody had named.* **The price is real and must be
@@ -85,9 +93,15 @@ precisely — which is worth more than a design you cannot fault.**
 3. **State no property without its representation** — or a register row that grades its absence. A
    property with neither is not a result; it is work handed forward silently.
 4. **Write it where a loader or a falsifier can evaluate it.**
-5. **Attack in both directions.** *Did the producer invent?* **and** *did the producer refuse what the
-   design permits?* An error against the design looks like rigour — one survived four adversarial
-   passes and cost ten arcs.
+5. **Attack in three directions.** *Did the producer invent?* · *did the producer refuse what the
+   design permits?* · **and *did the producer grade something backwards?*** An error against the
+   design looks like rigour — one survived four adversarial passes and cost ten arcs. ⚠ **The third
+   was added 2026-09-03 (`§G.4.3`) and this page carried two until then.** Its corpse: a design
+   audited itself, found seven violations, and **filed a defect in the table of things it had got
+   right** — a loop that penalises good governance, listed among *the negative loops that are
+   correct*. **Neither invented nor over-refused: misgraded, by the author, inside the section built
+   to catch it** — which is the one an author cannot ask of themselves, because the misgrading and
+   the confidence come from the same place.
 6. **Close on an execution artifact.** A finding is an edit, a row that needs Jordan, or nothing.
    **There is no third state.**
 
@@ -99,7 +113,7 @@ precisely — which is worth more than a design you cannot fault.**
 > is not the artifact.**
 
 This inverts the apparent hierarchy of the four stages, and the inversion is correct: **Stage 1 looks
-foundational and is the argument; Stage 4's eleven loader invariants are the only part that survives a
+foundational and is the argument; Stage 4's twelve loader invariants are the only part that survives a
 session boundary intact.**
 
 ---

@@ -7,6 +7,10 @@
 ## ⚠ **AMENDED 2026-09-03 (Jordan-directed, `10_FACTIONS_AND_DEPLOYMENT.md`)** — §B.6.1 `Faction` as a
 ## Query return · §C.5.1 the roster contract · **D-18 upgraded, D-47..D-51 added, D-1/14 reconstructed
 ## and the STRUCTURAL count corrected** · F.23 narrowed, F.32–F.33 opened · **§G.2.8**, the general rule.
+## ⚠ **REV. 3, 2026-09-03** — `Tenure.conferrer` **deleted** (§B.8) · `T-o` added to §B.8's closing
+## paths · `PART D` **27a** (content-layer proper-noun scan) and **41a** (`DELIBERATE` permutation
+## falsifier), **30b** amended · **§G.2.9** the procedure/order criterion · `F.28` amended and `§F.34`
+## given the two items that sat in neither register · three stale counts corrected. **See `README.md`.**
 
 ---
 
@@ -326,12 +330,12 @@ NEVER:   who holds it · who serves it · a modifier of any kind
 | **purview is asked of the seat exercised, not the actor** | MECHANICAL | `Act.via : SeatId?`; every purview walk uses `via.scope`. **A regent has the seat's purview** |
 | delegation = `establish` → `confer` → `revoke` | MECHANICAL | three rows the table already has |
 
-## §B.8 · `Tenure` — the one edge, and the three ways it closes
+## §B.8 · `Tenure` — the one edge, the three DECLARED ways it closes, and the existence cascade
 
 ```
 Tenure := ( id, kind, subject (THE OWNER), object, since, until?
           , term? (matures_at, declared_by : ActId, closer)   -- T-n. Replaces payload?
-          , degree?, conferrer? : SeatId )
+          , degree? )
 tie · knot   DIRECTED     succeed : Person -> Person     hold.subject : Person only
 NEVER: deletion.  LIVE: tenures.live(...) is the default iterator; tenures.ended(...) is separate and named
 ```
@@ -339,7 +343,8 @@ NEVER: deletion.  LIVE: tenures.live(...) is the default iterator; tenures.ended
 | path | authority | step |
 |---|---|---|
 | **the owner's discretion** (T-m) | `subject == actor`. One verb, `release`, generic over kind | RESOLVE / ACTS |
-| **a declared term** (T-n) | the Tenure's own `term`: a `closer` basis exercised by an act, or a `matures_at` MATTER matures with `causes[] = term.declared_by` | RESOLVE, or MATTER |
+| **a declared term** (T-n) | the Tenure's own `term`: a `closer` basis exercised by an act, or a `matures_at` MATTER matures with `causes[] = term.declared_by`. ⚠ **The basis resolves against the Seat** — `Seat.revocation` is authoritative and `term.closer` names a basis, not a second authority (Stage 1 `§E.1.2` asks that this be said at both sites) | RESOLVE, or MATTER |
+| **a revocation on the seat** (T-o) ⚠ **ADDED — and the count needs saying, because two readings of *three* were in circulation.** This table's three were `T-m`, `T-n` and the cascade; Stage 1 `§E.1.2`'s three are the **declared** ways — `T-m`, `T-n`, `T-o` — with the cascade filed separately as an existence change. **The type section was one short of Stage 1's set and the heading hid it** | the **Seat's** `revocation` basis, exercised through `Act.via`, refused the instant the occupant is not seated. **`PART D` row 10a already gates it; the type section never named it** | RESOLVE |
 | **subject or object ceases to exist** | `destroy` sets `until` on every Tenure naming the id **and nothing else** | MATTER (death) or RESOLVE (kill) |
 
 > **Synthesis call, and it resolves a real tension.** #353 says death's `until` is *the only Tenure
@@ -355,10 +360,34 @@ NEVER: deletion.  LIVE: tenures.live(...) is the default iterator; tenures.ended
 | invariant | grade | construction |
 |---|---|---|
 | one home, one writer | STRUCTURAL | one store keyed by subject; the object side is a barrier cache |
-| **what an act can open, an act can close** (ID-14) | MECHANICAL at load | the loader asserts `release`'s kind domain **equals** `tenure_kinds` |
+| **what an act can open, an act can close** (ID-14) | MECHANICAL at load | the loader asserts `release`'s kind domain equals `tenure_kinds \ {contain}` ⚠ *(this cell and `D-15` both said **equals `tenure_kinds`** after invariant 6 was corrected for F4 — `contain`'s subject can never act, so the unqualified form is unsatisfiable. Corrected 2026-09-03)* |
 | no ratchet over ended edges | MECHANICAL | `ended()` is separate; a scan forbids an int-returning `world_q` function from calling it |
 | **a symmetric relation with one owner** | STRUCTURAL | `tie`/`knot` are directed; no symmetric kind exists. *I have cut you off and you do not know it* is free |
 | **a relation whose subject cannot act** | STRUCTURAL (typed) | the subject type admits `RungId` for `contain` only |
+
+> ### ⚠ **`conferrer? : SeatId` IS DELETED — `ID-13` ADMITS NO THIRD STATE, AND THIS FIELD HAD NO
+> ### READER ANYWHERE IN THIS EXERCISE (added 2026-09-03)**
+> It was declared here and **read nowhere in the whole exercise** — the same defect as `degree?`, on
+> the same line, and `degree?` was in the hole register (`§F.4`) while this was in neither the
+> register nor `§F.34`'s not-a-gap list. **The register works; it was not run across the line it was
+> written on.**
+>
+> **Deletion rather than a reader, and the derivation is short.** Who may end a hold is answered by
+> `Seat.revocation` (`T-o`) — the *revoking* seat's declared remit, not the *conferring* seat's
+> identity — so the revocation path never asks this question. What conferred the Tenure is already
+> carried, once, by the opening `Act`: its `actor` and its `via : SeatId?`, in an append-only log with
+> `causes[]`. **A field on the Tenure would therefore be a second home for a fact the act already
+> holds** — `ID-2`, and `G.2.1`'s *you can name two* firing inside the schema exactly as `§E.1.2` says
+> it does for `Seat.revocation` and `term.closer`.
+>
+> ⚠ **The reader an outside evaluation offered is REFUSED, and refusing it is the point.** It proposed
+> patronage — *who raised whom*, so that a patron's fall exposes their clients. That is a
+> **person→person** relation hung off a **seat** pointer, which is a type mismatch before it is
+> anything else — and `§E.2.2` is what makes it visible: **authority is a property of the seat, and
+> patronage is not authority.** Who raised whom is a fact about two people, and it survives the
+> abolition of every seat either of them ever held. If that graph is wanted it is an `oblige` edge
+> between the raiser and the raised, owned by its subject, and it needs nothing on `Tenure`. **`ID-13` says
+> find a reader or delete; it does not license finding the wrong one.**
 
 ## §B.9 · `Act` · `Scene` · `Event` · `Claim` · **`Receipt`**
 
@@ -409,7 +438,7 @@ it on.
 > value, never a member of `World`; a field set on one is dropped with the view. **The lifetime rule
 > is doing the work that the absence of a type used to do** — which is weaker, and is why D-47 exists.
 
-## §B.13 · The data layer, and the loader's eleven invariants
+## §B.13 · The data layer, and the loader's twelve invariants
 
 Adopted verbatim from the chain: *would changing this change the GAME, or change how the code works?*
 And: *a number that is a property of a roster member travels with the roster; a number standing free
@@ -455,11 +484,15 @@ defect at load.
 > moves."* The invariant now says what the ontology already said.
 
 ⚠ **AND INVARIANT 11 IS NOT A LOAD CHECK.** It refuses *"at that site"* — at the first call reaching a
-fixture — which is run-time. Ten of the twelve fire at load. **It is listed here because it belongs to
+fixture — which is run-time. **Eleven of the twelve fire at load** ⚠ *(this read TEN, which was
+correct of eleven invariants and was not re-counted when the twelfth landed — corrected 2026-09-03
+in the same pass as the heading)*. **It is listed here because it belongs to
 the same discipline and it is graded separately**, rather than left to imply a guarantee the loader
 does not give.
 
-**Grade: MECHANICAL, all eleven.** What stays CONVENTION is a session editing the data to make a
+**Grade: MECHANICAL, all twelve.** ⚠ *(This said ELEVEN while the list above had already grown to
+twelve — the F6 invariant landed on 2026-09-03 and neither the heading nor this line was re-counted.
+Corrected 2026-09-03.)* What stays CONVENTION is a session editing the data to make a
 contradiction consistent — **which is a visible diff, and the only honest thing to say.**
 
 ---
@@ -563,8 +596,9 @@ for a in acts:
 > winning it does.**
 >
 > **The second half of the defect is quieter and worse.** `Event.degree?` is declared in `§B.9` and
-> **read nowhere in four stages** — `ID-13`, one line below `Tenure.conferrer`, in the same type
-> block. A degree that no consequence consumes is not a weak outcome model; **it is a resolution
+> **read nowhere in four stages** — `ID-13`, in the same type block that carried
+> `Tenure.conferrer` until it was deleted for the identical reason (§B.8). A degree that no
+> consequence consumes is not a weak outcome model; **it is a resolution
 > whose result is discarded.** The tracer already lives it: the live seam records `contest.resolved`
 > with `changes=[]` because *"turning 'p_low won' into 'p_mid died' is the mapping nobody has made."*
 >
@@ -796,7 +830,7 @@ the assumption is the failure mode.**
 | 12 | **a relation with two owners** | directed `tie`/`knot`; no symmetric kind exists | STRUCTURAL |
 | 13 | a relation whose subject cannot act | `subject` admits `RungId` for `contain` only | STRUCTURAL (typed) |
 | 14 | **a banner holding territory** | `hold`'s subject is `PersonId`. **`Faction.holdings` is a Query that READS members' holds and cannot write one** — the debt closes on the read side without reopening on the write side | STRUCTURAL (typed) |
-| 15 | **open-without-close in the vocabulary** | `release` generic; the loader asserts its domain equals `tenure_kinds` | MECHANICAL at load |
+| 15 | **open-without-close in the vocabulary** | `release` generic; the loader asserts its domain equals `tenure_kinds \ {contain}` (invariant 6, as corrected for F4) | MECHANICAL at load |
 | 16 | a ratchet over ended edges | `ended()` separate; a scan forbids int-returning callers | MECHANICAL |
 | 17 | a fourth clock | the MATTER token; loader invariant 5 | MECHANICAL at load |
 | 18 | **evidence moving a conviction** | ⚠ **UPGRADED 2026-09-03 — it was MECHANICAL on a check `F.24` disarms.** The INTERIOR write is performed by a function whose signature takes `PersonInterior` **and no ledger reference**, exactly as `choose` takes no `World` (D-2). *A conviction cannot be moved by evidence the writer cannot name.* The loader check becomes a second line, not the only one | **STRUCTURAL by signature** / MECHANICAL |
@@ -809,11 +843,12 @@ the assumption is the failure mode.**
 | 25 | **a subsystem-specific Event family** | the kind roster is **derived** (loader inv. 7) from the matrix's `on_write`/`on_condition` and the table's `emits`/`emits_on_refusal`; `log.append` refuses any other kind, **and a subsystem has no data file of its own in which to add one** | MECHANICAL |
 | 26 | a silent default for an unregistered kind | every table lookup raises on a missing key; `default_cell` applies only to an unlisted *pair* of registered keys | MECHANICAL |
 | 27 | a roster literal in a body | **none** — a list can always be typed into code | CONVENTION + a scan of `loop/`, `seam/`, `decision/` |
+| **27a** | ⚠ **NEW · a proper noun in the CONTENT layer** — *`D-27` scans code, and content is where a rule system rots* | **none at the type, and none possible**: the content layer is data, and data may say anything. **A scan of the data files for proper nouns**, run beside `D-27`'s scan of `loop/`, `seam/`, `decision/`. **Every hit is a scenario declaration or a defect, and there is no third case** — a rule keyed to a named faction is scripting drift that has moved out of the code where `D-27` can see it. ⚠ **And the discriminator has to be stated or the scan is noise, because one of the two cases is LICENSED and populous:** the world-generation roster (`F.31`, build step 9) is where proper nouns belong, and it will hit on every row. **The scan's domain is the RULE-BEARING files — the verb table, the write matrix, the register — where a proper noun cannot be a declaration because those files declare no world.** A hit there is a defect; a hit in the world roster is the roster doing its job ⚠ **It binds harder here than in the design it came from.** Under `§D.11` a faction is any uttered `Proposition` plus its `commit` edges, so **every faction that will ever exist is manufactured at runtime** — a content rule naming one is a promise the ontology cannot keep for any of them | CONVENTION + a scan of **the rule-bearing data files** — the verb table, the write matrix and the register; **not** the world-generation roster, which is where proper nouns belong |
 | 28 | **a branch on a rung-kind member** | none at the type; **the falsifier IS the mechanism** — re-run the seeded season with `rung_kinds` extended by a synthetic kind and permuted; any test that moves branched on a member | CONVENTION at authoring; MECHANICAL as that one test |
 | 29 | order-dependent summation | `condition`, `stores`, `margin` are integers, and integer addition is associative; the act array is canonicalised | STRUCTURAL for the sum; MECHANICAL for the order |
 | 30 | **two degree ladders** | one `seam/ladder`; subsystems return a `Margin` | **CONVENTION** — Stage 1's named weak point, carried at that strength |
 | **30a** | ⚠ **NEW (F6) · a contest whose outcome changes nothing** | `writes` is `Degree`-keyed for any verb declaring `contests:`; loader invariant 12 refuses a flat list on one; the fold calls `writes_at(degree)` | MECHANICAL at load |
-| **30b** | ⚠ **NEW (`ID-18`) · a schema permanence nobody enumerated** | the three the schema grants are listed here rather than left implicit: **`Tenure` is never deleted** (`until` is what makes an ended relation a fact) · **`Proposition` has no setter and no delete** (its immutability is what lets a faction collapse for free) · **the log is append-only**. Each is authored by the designer at a commit, not by an act, and `AX-6`'s scope clause says so | **CONVENTION, and deliberately** — a loader cannot see a language-level guarantee, which is why `ID-18` puts the list here and not in `§B.13` |
+| **30b** | ⚠ **NEW (`ID-18`) · a schema permanence nobody enumerated** | the three the schema grants are listed here rather than left implicit: **`Tenure` is never deleted** (`until` is what makes an ended relation a fact) · **`Proposition` has no setter and no delete** (its immutability is what lets a faction collapse for free) · **the log is append-only**. Each is authored by the designer at a commit, not by an act, and `AX-6`'s scope clause says so. ⚠ **The four open-only relation kinds are NOT on this list, and the distinction is the point** — a duty that could not be discharged, a bond that could not be broken, a succession pointer that could not be changed were **permanences nobody authored**, granted by an incomplete vocabulary rather than by a decision. They are the corpse that motivates the list, not a member of it, and `ID-14` plus the generic `release` is what closed them. **A permanence this row may hold is one a designer chose; one nobody chose is a defect, and the two must not be filed together.** ⚠ **This does not weaken `ID-18`'s claim that a list would have found all four at once** — it is how: enumerating permanences means asking of each *who authored this one*, and the four are exactly the entries where that question has no answer. **The list finds them by the question it forces, not by containing them** | **CONVENTION, and deliberately** — a loader cannot see a language-level guarantee, which is why `ID-18` puts the list here and not in `§B.13` |
 | 31 | a cohort subclass | one class; no conversion exists because there is nothing to convert to | CONVENTION + one test |
 | 32 | a title/office collision | **there is no `Title` type to collide with** | STRUCTURAL by absence |
 | 33 | eligibility by capability, or a seat with a modifier | no bonus field; no modifier column; `capability` is not an eligibility kind and the loader raises on one | STRUCTURAL at the type; MECHANICAL at load |
@@ -825,6 +860,7 @@ the assumption is the failure mode.**
 | 39 | eviction ranking on salience | the comparator's signature takes `confidence` and `recency` **and nothing else** | STRUCTURAL by signature |
 | 40 | a knot deposit minting a new id | the deposit constructor reuses the event id | MECHANICAL |
 | 41 | **a decision reading a moving world** | DELIBERATE runs with no token in scope, on a projection built at barrier 2 | STRUCTURAL (no token) / MECHANICAL (scan) |
+| **41a** | ⚠ **NEW · an order-dependent DELIBERATE** — *the pure-map claim, asserted structurally and never observed* | `D-41`'s construction is an **absence** — no token in scope — which by `ID-10` is a check that cannot see the failure it excludes. **The observable is a permutation:** shuffle the order in which persons are deliberated and the resulting **`Scene` SET and the season hash must be identical.** ⚠ *Set, not list — `RESOLVE` canonicalises the act array by `(stratum, actor-hash, intra-person position)`, so a differing `Scene[]` ORDER out of a pure map is not the defect; a differing MEMBERSHIP is.* ⚠ **`PART E` step 12 is the nearest thing that exists and is weaker** — it compares a serial run against a pooled one, which varies the *execution mode*, and it is graded *beside — an optimisation* rather than as a property of the loop | **MECHANICAL — one permutation test.** ⚠ *The grade is not a claim that structural absence is generally weak — `D-41` is STRUCTURAL and correctly so **for the property it carries**, which is that a decision cannot read a moving world. **Order-independence is a different property, and no absence carries it**: nothing about having no token stops a pure map from being written order-sensitively* |
 | 42 | **a person knowing their faction's true strength** | every lateral traversal lives in `world_q`, which `decision/` cannot name; the person has `leaders_as_claimed` and nothing else | STRUCTURAL (typed) / MECHANICAL |
 | 43 | a convening predicate reading another person's interior | the predicate is a declared form over three named sources, not code | MECHANICAL at load; CONVENTION that nobody adds a fourth |
 | 44 | **a belief as a private, uncontestable field** | the field is deleted; a belief is a `commit` to an `OUGHT` — utterable, shareable, releasable | STRUCTURAL by absence |
@@ -838,7 +874,13 @@ the assumption is the failure mode.**
 
 > ### **WHAT THE TABLE SAYS ABOUT ITSELF, AND IT IS THE HONEST PRICE**
 > **Of fifty-one rows, twenty-seven carry a Python grade beginning STRUCTURAL, and fewer hold in
-> GDScript; the rest are one path with one test.** That ratio is the price of the design, and it is
+> GDScript; the rest are one path with one test.** ⚠ **The denominator is the NUMBERED rows**; the
+> lettered ones (`10a`, `27a`, `30a`, `30b`, `41a`) are amendments to their neighbour and are not
+> counted, which is why the table has fifty-six entries and the sentence says fifty-one. **Stated
+> because the counting rule has to be re-runnable by a reader who did not write it**, which is the
+> whole point of the correction below.
+>
+> **Twenty-seven of fifty-one is the price of the design**, and it is
 > why **the loader and the two scans carry more weight than any single type**: most of what this
 > architecture refuses, it refuses by making the bypass **visible**, not by making it **unspellable**.
 > Three of the twenty-seven pair the STRUCTURAL clause with a CONVENTION one covering a *different*
@@ -964,10 +1006,18 @@ a predicate language becomes a second resolver.
 **The grammar is small, and that is the claim `F.24` assumed and never demonstrated.** Seven forms,
 two of which are lookups, closes 30 of 32 cells; the other two are schema constraints. **An
 independent governance design reached the same shape from a disjoint corpus** — a quantifier, a
-comparison and a relation, and nothing else — which is corroboration rather than a source.| **F.25** | sum-then-clamp against the sequential fold | bounded scalars clamp at stratum end; integer stores check sequentially | a `restore` in the same stratum is invisible to a `work`'s band gate — **a site that was repaired refuses the verb the repair reopened** |
+comparison and a relation, and nothing else — which is corroboration rather than a source.
+
+⚠ **THE TABLE RESUMES HERE.** `§F.24a` was inserted between `F.24` and `F.25` on 2026-09-03 and the
+remaining rows were concatenated onto its closing line, so `F.25`–`F.33` — including `F.28`, `F.32`
+and `F.33` — rendered as prose with literal pipes. **Header restored 2026-09-03 (rev. 3).**
+
+| § | the gap | assumed | if the assumption is wrong |
+|---|---|---|---|
+| **F.25** | sum-then-clamp against the sequential fold | bounded scalars clamp at stratum end; integer stores check sequentially | a `restore` in the same stratum is invisible to a `work`'s band gate — **a site that was repaired refuses the verb the repair reopened** |
 | **F.26** | the canonical order key | `(stratum, actor-hash, intra-person position)` | **a hash decides who eats when two people reach one larder, and the design has no better answer — which should be said aloud rather than discovered** |
 | **F.27** | Thread Sensitivity — *the only class-shaped gate* | not modelled | nothing. **Named because an implementer will look for it in the eligibility kinds and it is deliberately not there** |
-| **F.28** | termination across seasons | **nothing bounds a spiral, and nothing here pretends to** | — |
+| **F.28** | termination across seasons | ⚠ **AMENDED 2026-09-03 — *and nothing here pretends to* was true when written and is not now.** Stage 1's `ID-16` states the axis (*a design enumerates its loops and signs each one*) and splits the representation: the **declared** signed list is buildable today as a `LOOP` row kind with a `sign` column in `hole_register.yaml` (not in this markdown table, which would be reference), and the **derived** check that recomputes the cycle set from `writes` × typed `requires` — the thing that would give that column a reader — is blocked on `F.24`. **The spiral is still unbounded** — what changed is that the hole now has a shape and a first half that can be built | `ID-16`; **derived half blocked on `F.24`** |
 | **F.29** | act cost beyond the budget | the budget is the whole price, as ruled | **a scene yields unbounded forgeries** |
 | **F.30** | a person and their person-rung sharing an id | same `n`, different tag | an individuated Person needs a new person-rung and `contain` edge in the same CENSUS write, or **the new Person is nowhere**, which `co_located` reads as unwitnessable |
 | **F.31** | the world-generation roster | a registry row read once at boot | nothing architectural — but **the acceptance case needing a postless person is unreachable** |
@@ -986,6 +1036,21 @@ shapes were expressible and are re-keyed for idempotence. The `Seat` unification
 resolves with it. `holdings(faction)` over two members holding one rung is **not a gap** — it is a
 set union. **The roster contract (§C.5.1) is not a gap and not an addition:** it states a property the
 projection already had, and its entire content is *do not hand the wrapper a live world*.
+
+**Added 2026-09-03 (rev. 2 follow-up), for two items an outside evaluation found graded in neither
+list — which is the failure mode this section exists to prevent, since a defect in neither the gap
+register nor the not-a-gap register is invisible to both counts.**
+
+- **`Tenure.conferrer` is not a gap — it is DELETED** (§B.8). It had no reader in any file of this
+  exercise, and the fix `ID-13` licenses is a reader **or** removal, not a hole row. Its removal opens nothing:
+  who may revoke is `Seat.revocation` (`T-o`), and what conferred a Tenure is the opening `Act`'s
+  `actor` and `via` in an append-only log.
+- **Stage 1's `establishment` field is not a gap — it is SUPERSEDED** by `§B.7`'s Query over
+  `oblige`, and Stage 1 now says so at **both** sites: `§E.2.5`'s council row and `§D.6`'s `OWNS`
+  line, which listed it as owned state. ⚠ **It sat in neither register**, which is how a reader
+  arriving at Stage 1 got a shape Stage 4 had already refused, with no marker — and the second site
+  was found only because the first was being fixed. *The register works; nobody had run it across
+  the surfaces the rev. 2 pass had itself edited.*
 
 ## §F.35 · **THE SHAPE OF THIS LIST, WHICH IS ITSELF THE FINDING**
 
@@ -1136,6 +1201,35 @@ right about ownership and wrong about deployment, and it took a ruling to catch 
 The defence is **lifetime, not absence** (D-47) — strictly weaker than the guard it replaces. **State
 the drop when you take it**; a rule whose cost is unrecorded is how a design accretes carriers one
 reasonable step at a time.
+
+**G.2.9 · A PROCEDURE IS REQUIRED WHEREVER THE ORDER OF SUB-STEPS CHANGES THE OUTCOME — AND
+NOWHERE ELSE** *(added 2026-09-03).*
+
+> **This design carries both forms and never said which decides which.** `RESOLVE` is an **ordered
+> fold** — *each act sees the world its predecessors left* — and `DELIBERATE` is a **pure map**, where
+> order is not merely unnecessary but forbidden. **The criterion is the whole difference:** if
+> permuting the sub-steps can change the result, the order **is** the mechanism and the thing is a
+> procedure; if it cannot, order is an implementation detail and the thing is a map, an edge or a
+> Query.
+
+**What it buys, stated as the two errors it refuses in opposite directions.** Modelling a genuine
+procedure as a rate or an equilibrium **deletes the mechanism** — a siege, a succession and a vote are
+sequences whose intermediate states are the play, and an edge with a weight cannot hold *what happened
+between the second and third reading*. Modelling a rate as a procedure **invents an order nobody
+authored**, and an order nobody authored is `AX-5`'s fourth motion arriving through the back door: a
+step that advances because the code reached it.
+
+⚠ **AND THE CRITERION IS ITS OWN FALSIFIER, WHICH IS WHY IT IS A RULE AND NOT A PREFERENCE.** For
+anything claimed to be order-independent, **permute and compare** — that is `PART D` row 41a for
+`DELIBERATE`, and it is available anywhere the claim is made. **A property that cannot be permuted is
+a procedure whether or not it was written as one.**
+
+⚠ **Provenance, because the scope rule requires it.** This arrived from an independent governance
+design (#359), **as a falsifier and not as a source** — and it arrived inside a section
+this exercise's own evaluation had dismissed wholesale, which is the over-refusal `G.4.3`'s second
+direction exists to catch, committed against the document that names it. **The rule is admitted on its
+derivation here, not on that document's authority**: both forms were already in this architecture, and
+what was missing was the sentence that tells them apart.
 
 ---
 

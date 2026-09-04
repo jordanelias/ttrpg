@@ -113,6 +113,17 @@ acts on his own claims and on what people have told him — **which distorts.**
 > **The gap exists because the aggregate is UNOWNABLE, not because it is hidden.** Nobody chose to
 > conceal it; there is simply nothing to conceal.
 
+⚠ **AND WHAT THE PLAYER IS OWED, ADDED 2026-09-03 — because the sentence above answers `AX-2` and
+leaves a second question standing.** Stage 4 `§C.11` (the explanation contract) says there is no
+referee, so the engine inherits the referee's other job: *why did that happen*. **Its split is on WHAT
+IS SHOWN, never on who is looking** — the engine owes the **arithmetic of what the character already
+holds**, and nothing else. **That does NOT reach this Query**, and `§C.11` says so in terms: the mayor
+who holds claims about three angry guilds is owed the sum of *those claims*; the mayor who holds
+nothing is owed nothing. **So the number stays unreadable, and the reason the player gets is not the
+share but their own ledger.** A preview that named a group the mayor has no claim about would be a
+breach of `AX-2`, not a courtesy — which is why this section's *"nothing to conceal"* is the whole
+answer to the epistemics and only half the answer to the player.
+
 ---
 
 # §3 · Excommunicating a mayor on an inquisitor's findings
@@ -159,7 +170,7 @@ unmake him.
 
 | example | blocked by |
 |---|---|
-| the political trace (§1.3) | `oblige` **cannot be closed**, so nobody can forswear · the judging set is `absent`, so **nothing is decided at a sitting** · nothing moves a Record to a second person, so **S4 never happens** · cross-person causal edges measure **zero** |
+| the political trace (§1.3) | `oblige` **cannot be closed**, so nobody can forswear · the judging set is `absent`, so **nothing is decided at a sitting** · nothing moves a Record to a second person, so **S4 never happens** · ~~cross-person causal edges measure **zero**~~ ⚠ **SUPERSEDED 2026-09-04 — they no longer do: 30 of 30 on the NPC lane, 54 of 59 on ARC (`H-102`). The other three blockers in this row stand, and the Record clause is `H-84`, which is why S4 is still blocked** |
 | revolt (§2) | the commitment-share Query **is not computed anywhere** |
 | excommunication (§3) | the judging set is `absent` · the six investigation acts are `assumption` with **no stated writes** · **the nine dispensation terms are unspecified**, so `issue` produces a document nobody can comply with |
 

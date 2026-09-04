@@ -911,6 +911,23 @@ corroborates it from outside.** That is the one place reading #359 changes what 
 
 ## §6B.2 · The schema change v2 forces, and it is a MECHANISM rather than a doctrine edit
 
+⚠ **THE GRADE IN THIS SECTION'S TITLE AND BLOCKQUOTE IS RETRACTED, 2026-09-04, AND THIS IS THE
+SURFACE THAT ORIGINATED IT.** The schema change was taken — `hole_register.yaml` now has a `LOOP`
+kind, a `sign` column and a loader (`G13`) — and building it showed the grade was wrong. `G13`
+checks a declared row's SHAPE: that a `LOOP` row carries a sign, that the sign is `+` or `-`, that
+a non-LOOP row carries none, and that an amplifying loop names its bound. It cannot see whether the
+loop is real, whether its sign is right (`H-105` carried `-` on a row whose own first sentence said
+it was not damping, and a critic caught that, not the gate), or whether one is missing (`H-106`).
+No resolver reads `sign`; delete the column and the season loop is byte-identical. **A loader that
+validates a column's shape makes the column WELL-FORMED REFERENCE, not a mechanism** — so
+*"the only form in which either transfer is real"* claims more than a shape gate delivers. The
+retraction is recorded at `hole_register.yaml`'s `ID-16` header, `01_AXIOMS.md`'s `ID-16`,
+`07_DYNAMICS.md` and `register.py`'s `rule_G13`; it is repeated here because a reader following the
+`TL-7` trail lands on THIS section first, and a retraction the origin does not carry is half a
+retraction. The section below is left as written, as the argument that was made.
+
+⚠ *Row count below is stale: the file held 91 rows when this was written and holds 102 now.*
+
 `hole_register.yaml`'s 91 rows carry `kind ∈ {SCHEMA_ROW, FORMULA, RULING, COLLISION, PRODUCER,
 NUMBER, WIRING, ABSENT_RULE, SCHEMA_COLUMN}`. **Every one of those names an ABSENCE.** There is no
 row kind for a feedback path and **no `sign` column anywhere in the file.**

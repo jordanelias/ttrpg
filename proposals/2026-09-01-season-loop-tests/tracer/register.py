@@ -77,6 +77,25 @@ GRADES = ("ruled", "measured", "assumption", "absent")
 GRADE_STRICTNESS = ("absent", "assumption", "measured", "ruled")
 FIELDS = ("id", "tier", "hole", "kind", "owner", "grade",
           "default", "site", "sweep", "unblocks", "cite", "source")
+# ⚠ `sign` IS DECLARED OPTIONAL AND IS REQUIRED ON EXACTLY ONE KIND. `ID-16` — *a design
+# enumerates its loops and signs each one* — and the register is where the enumeration lives,
+# because every one of its nine existing kinds names an ABSENCE and a feedback path is not an
+# absence. Optional rather than universal: `FIELDS` holds twelve names, so a mandatory `sign` would
+# be the THIRTEENTH column, and it would force a meaningless cell onto the 98 rows that are not
+# loops — a column that is meaningless on 98 rows is not read on any of them. ⚠ This comment read
+# "a twelfth mandatory column … onto 91 rows" until 2026-09-04: off by one on the column (there are
+# twelve already) and stale by eleven on the rows (the file held 91 when the column was proposed and
+# holds 102 now). `:122` below had the arithmetic right and this line disagreed with it. ⚠ `G13` VALIDATES ITS SHAPE; NO RESOLVER READS IT. The first writing of this comment
+# called G13 "the reader … which keeps this from being a column nobody consults (`ID-13`)", and
+# that overstated it: `ID-13` speaks of a column no RESOLVER consults, and `§0.05`'s test decides
+# it -- delete `sign` and the season loop is byte-identical. The column is SHAPE-VALIDATED
+# REFERENCE. What would give it a reader in `ID-13`'s sense is the derived check (`H-106`).
+OPTIONAL_FIELDS = ("sign",)
+LOOP_KIND = "LOOP"
+# `+` AMPLIFYING · `-` DAMPING. Two values and no third: a loop whose sign nobody can name is the
+# finding `ID-16` exists to surface, and it is recorded as an `absent` row rather than as a
+# question mark in this column.
+LOOP_SIGNS = ("+", "-")
 SWEEP_POINTS = 3
 # Part B of ARCHITECTURE_V2.md carries D1..D26. The bound is re-derived from the document by
 # `part_b_defects()` rather than pinned here; this is only the pattern.
@@ -98,7 +117,18 @@ REG_ID_RE = r"H-\d{2,3}"
 
 
 def normalised_default(cell: str) -> str:
-    """V2 writes an `absent` row's default as "none" FOLLOWED BY COMMENTARY -- "none. ⚠ every
+    """⚠ `default:` MEANS TWO THINGS AND BOTH ARE DECLARED HERE. On an ordinary row it is *the
+    value an instrument may inject*. On a `LOOP` row it is **what bounds the loop**, which is what
+    `G13` clause 3 reads. A column with two meanings is `CLAUDE.md` §4's hazard, carried
+    deliberately rather than by accident: a bound is a loop's analogue of a default, and a
+    thirteenth column for four rows would put an empty cell on ninety-eight. **Say it here, or the
+    next reader derives one meaning and misses the other.**
+
+    ⚠ AND `G13` CLAUSE 3 IS A PRESENCE CHECK, NOT A BOUND CHECK: any non-`none` string passes, so
+    `default: "TBD"` would satisfy it — one notch from the term-grep `ID-16`'s own first draft was
+    indicted for. Left as a presence check on purpose; see the `G13` docstring.
+
+    V2 writes an `absent` row's default as "none" FOLLOWED BY COMMENTARY -- "none. ⚠ every
     contest is blocked", "none — §63.1 may accept it instead". The field means *the value an
     instrument may inject*, and a warning is not a value, so it normalises to `none`. THIS IS THE
     ONE NORMALISATION APPLIED TO `default`, it is declared here rather than in prose, and
@@ -200,7 +230,7 @@ def part_b_defects() -> set:
 def rule_R0(reg: dict) -> list:
     bad, seen = [], set()
     for r in reg["rows"]:
-        extra = sorted(set(r) - set(FIELDS))
+        extra = sorted(set(r) - set(FIELDS) - set(OPTIONAL_FIELDS))
         missing = sorted(set(FIELDS) - set(r))
         if extra:
             bad.append(f"{r.get('id','?')}: keys outside the declared shape: {extra}")
@@ -324,8 +354,55 @@ def rule_G8(reg: dict) -> list:
     return bad
 
 
+def rule_G13(reg: dict) -> list:
+    """`ID-16`: a design enumerates its loops and SIGNS each one — and the sign is read here.
+
+    ⚠ **THIS GATE VALIDATES THE COLUMN'S SHAPE. IT DOES NOT MAKE IT A MECHANISM, AND THE FIRST
+    WRITING OF THIS DOCSTRING SAID IT DID.** No resolver consults `sign`: delete the column and the
+    season loop is byte-identical, which is `§0.05`'s own test. What this gate buys is that a
+    declared loop cannot be declared badly — worth having, and a smaller claim than the one it
+    replaced. **The reader that would satisfy `ID-13` is the derived check (`H-106`), unbuilt.**
+    Three clauses, and the third is the one with teeth:
+
+      1. a `LOOP` row carries a `sign`, and it is `+` or `-`. A feedback path whose direction
+         nobody will state is not enumerated, it is merely mentioned.
+      2. a row of any OTHER kind carries no `sign`. The column means one thing.
+      3. **an amplifying loop must name what bounds it**, in `default:` — ⚠ **a PRESENCE check:
+         any non-`none` string passes.** Hardening it into a real bound check would need this
+         module to import the fixtures, and the column is reference either way (`§0.1` pt 5: a
+         stronger checker over a non-load-bearing artifact guards nothing). Saying so was the
+         fix; building it was not. A `+` loop with no bound
+         is a spiral, which is `F.28` — *nothing bounds a spiral across seasons* — and the whole
+         reason `ID-16` says a design of nothing but damping converges is that the two failures
+         are opposite and a design can have both. A `-` loop needs no such cell; convergence is
+         not a crash.
+
+    ⚠ **AND IT DOES NOT CHECK THAT THE ENUMERATION IS COMPLETE, WHICH IS THE HALF THAT IS STILL
+    ABSENT.** Completeness needs the cycle set computed from **what is written** × **every typed
+    reader** — the question sources and the channel predicates as much as a verb's `requires`,
+    since the write edge on every declared loop belongs to a STEP rather than to a verb. **`H-106`
+    is that row** (not `H-102`, which is the propagation loop; the first writing of this docstring
+    named the wrong one). This gate checks every loop somebody declared; it cannot see one nobody
+    did — which is how `H-112` went unrecorded until an audit read `World.write`."""
+    bad = []
+    for r in reg["rows"]:
+        sign, kind = r.get("sign"), str(r.get("kind") or "")
+        if kind == LOOP_KIND:
+            if sign not in LOOP_SIGNS:
+                bad.append(f"{r.get('id','?')}: kind is LOOP and sign is {sign!r}, "
+                           f"not one of {list(LOOP_SIGNS)}")
+            elif sign == "+" and normalised_default(str(r.get("default") or "")) == "none":
+                bad.append(f"{r.get('id','?')}: an amplifying loop with no bound in `default:` "
+                           "-- that is a spiral, and F.28 is the row that says nothing catches one")
+        elif sign is not None:
+            bad.append(f"{r.get('id','?')}: carries `sign` on a {kind or 'kind-less'} row; "
+                       "the column belongs to LOOP rows only")
+    return bad
+
+
 RULES = {"R0": rule_R0, "R1": rule_R1, "R2": rule_R2,
-         "R3": rule_R3, "G6": rule_G6, "G8": rule_G8, "G12": rule_G12}
+         "R3": rule_R3, "G6": rule_G6, "G8": rule_G8, "G12": rule_G12,
+         "G13": rule_G13}
 
 
 def check(reg: dict, only: list | None = None) -> dict:

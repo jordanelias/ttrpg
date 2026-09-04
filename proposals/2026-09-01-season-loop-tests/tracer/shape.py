@@ -1208,7 +1208,16 @@ class Tenure:
     kind: str
     since: int
     until: Optional[int] = None
-    conferrer: Optional[str] = None
+    # ⚠ `conferrer: Optional[str]` WAS DECLARED HERE AND IS DELETED (2026-09-03). It occurred
+    # EXACTLY ONCE in the whole tracer — this line — and reached no reader, which by `ID-13` is
+    # not a weak field but one that does not exist, wearing a schema's clothes. The same field
+    # was deleted from the meta-architecture's own `Tenure` on the same grounds and the same day;
+    # this is that ruling applied where the type actually runs.
+    #
+    # ⚠ AND THE DELETION OPENS NOTHING, which is the half worth stating. WHO MAY REVOKE is the
+    # Seat's declared `revocation` basis (`T-o`), not the identity of whoever conferred; WHAT
+    # CONFERRED a Tenure is the opening Act, in an append-only log with `causes[]`. A field here
+    # would be a second home for a fact the act already holds — `ID-2`.
     degree: Optional[str] = None
     payload: Any = None
 
@@ -1400,6 +1409,17 @@ class Scene:
     actor: str
     acts: list = field(default_factory=list)
     extended: bool = False
+    # ⚠ `occasion` IS THE QUESTION THE SCENE IS ABOUT, and it is the field that binds DELIBERATE
+    # into the causal graph. `N3` (PR #357) measured the absence: *60 act-Events, 0 resolving to
+    # a question* — an act never cited what made it, so `causes[]` could not walk from one
+    # person's act back to another's, and `R3` scored 0 of 30 while every other check passed.
+    # The meta-architecture types it here rather than on the Act: `Scene := (id, person,
+    # occasion : Question, place : RungId, interactions : Act[])`, because the occasion is what
+    # the person is spending the scene ON and the interactions are what they do in it.
+    # ⚠ `place` IS DELIBERATELY NOT ADDED. `ID-13` — a declared field must reach a reader — and
+    # nothing here reads a scene's place; `place_of(w, event)` already answers that question from
+    # the Event. Adding it to match a type signature would be the defect the idiom names.
+    occasion: Optional["Question"] = None
 
     # roster-exempt: MECHANISM. `PLAIN_COST` is the DEFINITION OF THE UNIT -- one ordinary scene
     # is one scene action -- not a tunable value. `H-77` tunes what an EXTENDED scene costs
@@ -1429,6 +1449,12 @@ class Act:
     # be the Ob=0 roll the section names, which is why it is not the default.
     obstacle: Optional[int] = None
     pool: Optional[int] = None
+    # ⚠ WHICH SCENE THIS INTERACTION BELONGS TO. The meta-architecture's `Act` carries `scene`,
+    # and it is what lets the fold ask what occasioned an act without the Act itself carrying a
+    # Question — the Scene owns the occasion, the Act names its Scene. Stamped by the driver as
+    # it flattens scenes into the produced list, so a caller that returns bare Acts (the
+    # pre-`W17` accounting, still lawful under `as_scenes`) simply has none.
+    scene: Optional[str] = None
 
 
 # S27: FIVE STRATA. movement / binding decisions / contested physical / uncontested material / social
@@ -2439,7 +2465,7 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
         # to `interactions_per_scene` of the ranked candidates. The default policy fills scenes
         # greedily in score order -- a person spends a scene on their best option and whatever
         # else it can carry, which is what "1-3 mechanical interactions" describes.
-        return pack_scenes(p, ranked, ask_budget(), fx, mint)
+        return pack_scenes(p, ranked, ask_budget(), fx, mint, occasion=q)
     return choose
 
 
@@ -2669,7 +2695,8 @@ def standing_of(p: Person, fx: "Fixtures") -> int:
     return scale if paired == 0 else (dis * scale) // paired
 
 
-def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint) -> list:
+def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
+                occasion: Optional["Question"] = None) -> list:
     """`H-78`: WHICH interactions share one scene. `H-76` says how many; this says which.
 
     ⚠ THIS WAS A COMMENT IN `make_chooser` UNTIL THE `W17` ADVERSARIAL PASS READ IT -- "the
@@ -2692,6 +2719,9 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint) ->
     width = 1 if rule == "one_per_scene" else (len(ranked) if per is None else per)
 
     def scene(n: int, chunk: list) -> "Scene":
+        # ⚠ `occasion=` IS NOT DECORATION. `choose` already holds the question — it refuses to
+        # produce anything without one — and dropping it here is what left the act with no route
+        # back to what raised it (`N3`).
         return Scene(mint(p.id, "scene", str(n)), p.id,
                      # ⚠ THE CANDIDATE'S SUBJECT REACHES THE ACT, AND IT USED NOT TO. This read
                      # `Act(mint(...), p.id, c.verb)` — three arguments — so `opening_set`
@@ -2713,7 +2743,7 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint) ->
                      # could not move any verdict, and the row passed R2 while being
                      # unexecutable. That is the laundering R2 exists to stop, in the row that
                      # was added the same day the rule was written.
-                     extended=len(chunk) > 1)
+                     extended=len(chunk) > 1, occasion=occasion)
 
     # ⚠ THE BOUND IS THE COST, NOT THE SCENE COUNT, and getting that wrong made the DEFAULT
     # chooser overspend by construction: once `extended` was actually set, five greedy scenes
@@ -2749,7 +2779,22 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint) ->
     return take(chunks)
 
 
-def claim_subjects(e: "Event", rule: str) -> list:
+def act_refs(a) -> list:
+    """The ids an Act NAMES — the meta-architecture's `Act.refs`, read off what the tracer's Act
+    already carries rather than added as a second home for it.
+
+    ⚠ **THIS EXISTS BECAUSE A TELLING CHANGES NOTHING.** `tell` declares `writes: []` — correctly;
+    it *"deposits at WITNESS, not here"* — so its Event's `changes[]` is empty, and a deposit that
+    reads only the Event has nothing to be about. The one thing that knows what was told is the
+    act, and `payload["subject"]` is where `pack_scenes` puts it and where `_req_tell` reads it."""
+    if a is None:
+        return []
+    pay = getattr(a, "payload", None)
+    subj = pay.get("subject") if isinstance(pay, dict) else (pay if isinstance(pay, str) else None)
+    return [subj] if subj else []
+
+
+def claim_subjects(e: "Event", rule: str, refs: Optional[list] = None) -> list:
     """`H-79`: what the claims deposited from one Event are ABOUT.
 
     `actor` is the incumbent — one claim, subject = the Event's own subject. `per_change` mints
@@ -2769,7 +2814,141 @@ def claim_subjects(e: "Event", rule: str) -> list:
         for c in e.changes:
             if c.subject and c.subject not in out:
                 out.append(c.subject)
+        # ⚠ **AND WHAT THE ACT NAMED, WHICH IS THE HALF THAT WAS MISSING.** An Event that wrote
+        # nothing has an empty `changes[]`, so every claim deposited from one was minted about
+        # **the actor** — by the `or [e.subject]` fallback below, `e.subject` being the actor for
+        # anything the fold emits. §F1's Q2 admits a claim whose subject is the holder or
+        # something the holder holds, so *a claim about the actor can never raise a listener's
+        # question*: the news arrived in a form nobody could act on. Measured before this line
+        # existed: `R3` = 0 of 30 on the NPC lane, 0 of 59 on ARC.
+        #
+        # ⚠ **THE RULE IS ABOUT WRITE-NOTHING EVENTS, NOT ABOUT `tell`, AND SAYING OTHERWISE WAS
+        # AN OVERCLAIM A CRITIC BROKE.** The first writing of this comment quoted Reading 07 §3 —
+        # *"the `tell` chain is the only transport"* — as though this line served `tell` alone. It
+        # does not: it fires for every verb with `writes: []` (`speak`, `comply`, `dispatch`,
+        # `evade`/`defy`, `refract`, the investigation acts), for `contest.resolved`, and for
+        # every refusal. That is **correct and it is a different carrier**: Reading 07 §5 names
+        # three, and the first is PRESENCE — *you were there*. A speech changes nothing and is
+        # still witnessed, and what a witness learns is what was spoken ABOUT. Transport is what
+        # reaches somebody who was NOT there, and that is still `tell` alone.
+        #
+        # ⚠ **AND THE CASCADE IS WORTH NAMING, BECAUSE IT EXPLAINS THE MEASUREMENT.** `speak` has
+        # no precondition; `_req_tell` requires the teller to hold a claim on the subject. So a
+        # witnessed speech about a proposition deposits the very claim `tell` needs, and `tell`
+        # then executes *because* `speak` seeded it. The propagation this closes runs through
+        # both, not through `tell` by itself.
+        #
+        # ⚠ **REFUSALS PROPAGATE TOO, AND THAT IS A DESIGN QUESTION NOBODY HAS RULED** — a
+        # `news.untold` deposits a claim about the subject that was not told about. Registered as
+        # `H-111` rather than decided here.
+        # ⚠ `actor` STAYS THE DECLARED INCUMBENT and is untouched — it is the roster's control
+        # arm, and this adds nothing to it.
+        #
+        # ⚠ **AND ONLY WHERE `changes[]` SUPPLIED NOTHING, WHICH IS NARROWER THAN THE FIRST
+        # WRITING AND THE SUITE IS WHY.** Adding the act's referents to EVERY deposit inflated the
+        # ledger enough that `H-40`'s decay sweep stopped being observable: the cap evicts on
+        # `(confidence, recency)`, so the extra claims pushed the decayed ones out and all three
+        # arms reported a minimum confidence of 100 — *"the rate is inert and this sweep is
+        # measuring nothing"*, which is `ID-10` produced by a fix rather than by a bug. The
+        # rationale only ever justified the empty case: an Event that wrote nothing has nothing
+        # for `per_change` to find, and that is exactly where a telling lands.
+        # ⚠ THE TEST IS ON `changes[]`, NOT ON `out`. Under the `both` rule `out` already holds
+        # the actor, so testing the accumulator would have skipped every telling — which is the
+        # case this exists for, and the first writing of this line did exactly that.
+        #
+        # ⚠ **AND IT REPLACES THE ACTOR RATHER THAN JOINING IT, WHICH IS BOTH THE CORRECT READING
+        # AND THE ONE THAT DOES NOT PERTURB THE LEDGER.** A claim minted from a telling is about
+        # WHAT WAS TOLD; the teller is not the news. Adding it as a second claim was measured and
+        # rejected: it mints one extra claim per telling, the cap evicts on `(confidence,
+        # recency)`, and `H-40`'s decay sweep then reported a minimum confidence of 100 in all
+        # three arms — the rate made inert by a fix, which is the `ID-10` defect class arriving
+        # from the direction nobody watches. One claim per witnessed Event either way, so the
+        # eviction pressure this sweep measures against is unchanged.
+        if not any(c.subject for c in e.changes) and any(refs or ()):
+            out = [r for r in (refs or ()) if r]
     return out or [e.subject]
+
+
+def occasioned_by(w: "World", q: Optional["Question"]) -> list:
+    """What EVENT occasioned a question — the antecedent an act formed from it must cite.
+
+    ⚠ THIS IS `N3`'s MISSING EDGE, AND `N3` WAS MEASURED, NOT INFERRED: *60 act-Events, 0
+    resolving to a question*. An act emitted `causes=[a.id]` and nothing else, so the graph knew
+    which act made an Event and never which Event made the act — and `R3` (an act by one person
+    caused by an act of another) scored **0 of 30** while `R1`, `R4` and `R5` all passed. The
+    chain Reading 07 §4 calls *"the one that is actually the game"* — a claim lands in a ledger,
+    raises a question, forms a candidate, becomes an act, emits an Event, is witnessed, deposits
+    in SOMEONE ELSE'S ledger — was built end to end except for this one edge.
+
+    **One route per question source, and `need` is a deliberate empty rather than a guess:**
+
+      * `claim_landed` — the deposit Event names the claim in its `changes[]`; its `causes[]`
+        name the Event the claim is ABOUT. **The originating Event is returned, not the deposit.**
+        The claim IS a belief about that Event — `Claim.predicate` is literally `e.kind` at the
+        deposit — so citing the transport instead would put the postman in the arc. The deposit
+        stays in the graph on its own `causes[]`; nothing is lost by not naming it twice.
+      * `date_due` — ⚠ **ALSO DEAD, AND FOR A DIFFERENT CAUSE THAN `band_crossed`.** `calendar()`
+        writes `Date.fired` through the gate with **no `emits=`**, and the gate builds an Event
+        only when one is passed (it is *required* only at MATTER), so **no Event in any log
+        carries a date id** and the search below cannot match. `write_matrix.yaml` declares
+        `date.fired` for `(Date, fired)` and nothing emits it — a CALENDAR-class silent write of
+        exactly the shape the gate refuses at MATTER. Doubly latent today, because `N1` means Q1
+        never forms at all; when `W20` closes `N1` the question will form and walk to nothing.
+        **Making CALENDAR emit is `W20`'s and is not done here** — it would put a new Event in
+        every log and move every hash.
+      * `band_crossed` — ⚠ **THIS ROUTE IS DEAD, AND IT IS NAMED DEAD RATHER THAN LEFT TO LOOK
+        LIVE.** `questions_for` builds the question as `Question(f"q:band:{what}", "band_crossed",
+        (what,), what)` where `what` is the crossing's **verb** — `"work"` — not an id, so the
+        search below can never match: nothing in the log has id `"work"` or a change whose
+        subject is `"work"`. The crossing Event's id EXISTS, as element 4 of the `w.crossings`
+        tuple `(s.id, verb, before, after, ev.id)`, and `questions_for` discards it. Carrying it
+        onto the Question is a one-line change to a surface this function does not own, so it is
+        registered (`H-110`) rather than taken here. **A route that returns nothing is honest; a
+        docstring saying it walks is not, and the first writing of this one said it walks.**
+      * `need` — **empty, on purpose.** A standing commitment to an OUGHT is interior; no Event
+        caused it this season, and `ID-5`'s polarity says absence maps to the refusal rather than
+        to a plausible default. An act taken out of a standing ambition genuinely has no
+        antecedent but the actor, and `[ROOT]` is what the design already has for that.
+
+    ⚠ **SO ONE OF FOUR ROUTES IS LIVE** — `claim_landed`, which is the one propagation runs on.
+    One is empty by design (`need`) and **two are dead**, each for a cause it does not own:
+    `band_crossed` because the question carries a verb name where an id is needed, `date_due`
+    because CALENDAR emits nothing. ⚠ **This count has been wrong twice**: *"one route per
+    question source"* first, then *"two of four"* after a critic found `band_crossed`. Both were
+    written by looking at this function rather than at what feeds it. **The lesson is in the
+    count, not in the routes: a route's liveness is a property of its PRODUCER, and this function
+    cannot see its producers.**
+
+    ⚠ **IT RETURNS IDS AND WRITES NOTHING.** Resolver-side, read-only over `w.log`, callable from
+    a test without a driver — which is `ID-10`: a check that cannot observe the failure it
+    excludes is absent, and this one can be asked directly what it found."""
+    if q is None:
+        return []
+    about = str(getattr(q, "about", "") or "")
+    if not about or q.source == "need":
+        return []
+    if q.source == "claim_landed":
+        for e in reversed(w.log):
+            if e.kind == "claim.deposited" and any(c.subject == about for c in e.changes):
+                return [x for x in (e.causes or []) if x != ROOT]
+        return []
+    if q.source not in ("date_due", "band_crossed"):
+        # ⚠ NOT A BARE `else`. An undeclared source added to the roster would otherwise fall into
+        # the id search below and answer plausibly forever, which is the polarity `ID-5` refuses:
+        # zero evidence maps to the verdict AGAINST the thing measured, never to a quiet default.
+        # ⚠ AND IT IS DEFENCE IN DEPTH, NOT THE FIRST GATE: `Question.__post_init__` already
+        # refuses a source outside `question_sources`, so this is unreachable from a rostered
+        # question and would fire only if that constructor were bypassed or the roster grew
+        # without this function being taught the new route.
+        raise Unspecified(
+            f"no occasion route for question source {q.source!r}", "ID-16",
+            needs=f"a route here, or one of {sorted(QUESTION_SOURCES)}",
+            law="ID-5 -- refuse, don't default. A new question source silently taking the id "
+                "search would answer plausibly and wrongly for every question it raised")
+    for e in reversed(w.log):
+        if e.id == about or any(c.subject == about for c in e.changes):
+            return [e.id]
+    return []
 
 
 # ---------------------------------------------------------------------------
@@ -3738,6 +3917,14 @@ class SeasonDriver:
         # thing to DECIDE, and giving it back as a resolver parameter is how the second resolver
         # returns. This list is appended by the fold and read by nobody inside it.
         self.resolved: list[Act] = []
+        # ⚠ RESOLVER-SIDE, AND CUMULATIVE — like `resolved`, which is also never reset. The
+        # Scene is the budgeted unit and carries the `occasion`, so the fold can name what
+        # occasioned an act. No person-side Query reaches it, exactly as none reaches `resolved`.
+        # It is NOT season-local: see the note at the `_fold` call site for why R3 depends on
+        # that, and do not "fix" it into one.
+        self.scenes: dict = {}
+        # Event id -> the Act that emitted it. See the note at the `_fold` call site.
+        self.act_of: dict = {}
 
     # -- CALENDAR -- barrier 1 -- DECIDES NOTHING (S24) ----------------------
     def calendar(self) -> None:
@@ -4096,8 +4283,15 @@ class SeasonDriver:
             left = b
             for sc in scenes:
                 left -= sc.cost(w.fixtures.get("extended_scene_cost"))
+                # ⚠ THE SCENE IS REGISTERED AND THE ACT IS STAMPED WITH IT. Season-local, beside
+                # `resolved`, and for the same reason: the fold needs to ask what occasioned an
+                # act, and nothing else in the loop knows. Without this the Scene is built,
+                # carries its occasion, and is dropped one line later — which is what `N3`
+                # measured as *an act never cites its question*.
+                self.scenes[sc.id] = sc
                 for n, a in enumerate(sc.acts):
                     TRACE.scene_act(p.id, a.verb, left, n + 1, len(sc.acts))
+                    a.scene = sc.id
                     produced.append(a)
             for i, a in enumerate(produced):
                 # L1 -- THE PERSON IS THE ONLY ACTOR. ⚠ REV 4: `Act.actor` is a bare id and
@@ -4166,6 +4360,23 @@ class SeasonDriver:
                            f"declining this alternative for {a.verb}", "H-33")
                 continue
         return False
+
+    def _occasion_ids(self, w: "World", a: Act) -> list:
+        """The antecedent Event ids for an act, via the Scene that carried it.
+
+        ⚠ **AN ACT WITH NO SCENE HAS NO OCCASION, AND THAT IS NOT A DEFECT.** `as_scenes` still
+        admits a bare `Act` as a one-interaction scene (the pre-`W17` accounting), and a
+        hand-authored act in a test or a probe never went through DELIBERATE at all. Those
+        genuinely have no question behind them, so they get nothing added and keep `[a.id]` —
+        which is the honest answer, not a fallback.
+
+        ⚠ **AND IT NEVER RETURNS THE ACT'S OWN EVENT.** The ids here are antecedents already in
+        the log when the act folds; an Event cannot cause itself, and `causes[]` must name ids
+        that exist."""
+        sc = self.scenes.get(getattr(a, "scene", None) or "")
+        if sc is None:
+            return []
+        return [c for c in occasioned_by(w, getattr(sc, "occasion", None)) if c != a.id]
 
     def _fold(self, w: "World", a: Act) -> list[Event]:
         """ONE act through the table. This is what `effect` used to be, and the difference is
@@ -4294,7 +4505,14 @@ class SeasonDriver:
         # declares `tenure.opened` AND `tenure.closed`, and conferring onto an unheld office
         # closes nothing -- publishing the second is a state change that did not happen.
         kinds = tuple(k for k in row.emits if k in earned) if earned else row.emits
-        return ev(kinds, [a.id], list(a.changes) + changed)
+        # ⚠ `[a.id]` ALONE WAS `N3`. §39.2 line 2 says `causes[]` NAMES THE ACTS, and that is
+        # necessary and was treated as sufficient: an Event named the act that emitted it and
+        # nothing named what occasioned the act, so the walk stopped dead at every decision and
+        # `R3` — the only check the corpus failed — could never fire from a real run. The
+        # occasion is on the Scene the act belongs to; `occasioned_by` turns it into the
+        # antecedent Event ids. Adding them here rather than at the twelve `ev(...)` call sites
+        # is `§8`: the rule lives once, on the one path every act-emission takes.
+        return ev(kinds, [a.id] + self._occasion_ids(w, a), list(a.changes) + changed)
 
     def _apply_write(self, w: "World", a: Act, kind: str, fld: str, eff=None,
                      earned: Optional[set] = None) -> list:
@@ -4459,6 +4677,19 @@ class SeasonDriver:
             # S27.1: CONTENTION IS AN ORDERED FOLD. Each act sees the world its predecessors
             # left. SEQUENCE, NOT SIMULTANEITY -- and NO ACT NEEDS TO KNOW ANOTHER EXISTED.
             produced = self._fold(w, a)
+            # ⚠ WHICH ACT EMITTED WHICH EVENT, recorded once here rather than re-derived from the
+            # id hash by every consumer. WITNESS needs it to answer *what is this deposit ABOUT*
+            # for an Event that wrote nothing: an act that changes no state has an empty
+            # `changes[]`, and the only thing that knows what it named is the act.
+            # ⚠ **RESOLVER-SIDE AND CUMULATIVE ACROSS SEASONS — NOT season-local, and the
+            # difference is load-bearing.** `resolved`, `scenes` and `act_of` are never reset by
+            # `season()`, and `R3` REQUIRES that: a claim deposited at WITNESS in season *t* is
+            # read at DELIBERATE in *t+1*, so the act that occasioned this one is a PREVIOUS
+            # season's act and must still be reachable. A session that makes these three
+            # season-local to tidy them blinds the propagation check silently — it would still
+            # pass, on zero.
+            for _e in produced:
+                self.act_of[_e.id] = a
             for ch in (c for e in produced for c in e.changes):
                 if ch.field and isinstance(ch.delta, int):
                     pending.setdefault(f"{ch.subject}|{ch.field}", []).append(ch.delta)
@@ -4545,7 +4776,7 @@ class SeasonDriver:
             # §F1's Q2 clause "a claim whose subject is SOMETHING THEY HOLD" unreachable and left
             # the narrative substrate empty. `changes[]` already names what an act touched, so
             # this reads the Event the design has rather than adding a field to it (§8.1).
-            for n, subj in enumerate(claim_subjects(e, claim_rule)):
+            for n, subj in enumerate(claim_subjects(e, claim_rule, act_refs(self.act_of.get(e.id)))):
                 cid = (e.id if via_knot and n == 0
                        else H(w.world_seed, w.tick, pid, f"claim:{e.id}:{n}"))
                 c = Claim(cid, pid, subj, e.kind, True, w.tick, src, conf, "own")

@@ -100,6 +100,12 @@ Suggested, not prescribed — Jordan named the axes and this is one reading of t
 - `pytest test_tracer_is_honest.py` — **145 passed**. All 8 register gates clean on every touched row.
 - Corpus: **89 of 143 runnable**, UNREPRESENTABLE 54 (faction 44 · world 10).
   **NPC RUNS = 0 · ARC ENDS = 0** — unchanged, and both remain honest zeros.
+  ⚠ **UPDATED 2026-09-03 — THE ZEROS ARE STILL ZERO AND THE CHECK UNDER THEM IS NOT.** `R3`
+  (an act by one person caused by an act of another) went **0 of 30 → 30 of 30** on the NPC lane
+  and **0 of 59 → 54 of 59** on ARC when `N3`'s two edges were closed; `RUNS-ALONE-UNDECLARED`
+  went 64 → 5. `RUNS` and `ENDS` themselves need `R2`/`A2`, which are NOT-COMPUTABLE, so they do
+  not move and nothing here claims they did. **Read the two numbers separately** — that is what
+  `PLAN.md` Part 6 means by never averaging the lanes, applied one level down.
 - Executed verbs **5 of 32** (`create_record, speak, tell, utter, work`); refused: `move`, `transfer`.
   ⚠ This went DOWN from 6 in this session and that is a correction, not a regression — see `4c68adc`.
 - Register: **91 rows** · absent 28 · assumption 42 · measured 3 · ruled 18 · tier 0: 37.
