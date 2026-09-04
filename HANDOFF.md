@@ -9,6 +9,33 @@ experiment it was the instrument for. Read this file, and your lane's, yourself.
 This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint machinery
 (which depended on the retired GitHub-API harness and token budgets).
 
+## ⚠ CURRENT — 2026-09-04, PR #368 (read this first; the 2026-08-27 section below is still true of `main`)
+
+**The season loop can branch now, and the interesting number is how little.** Forking every
+mechanical decision in the ARC/NPC corpus and following three decisions on: at session start
+**2,403 forks changed nothing downstream**. Now the world diverges **100%** of the time and later
+decisions diverge **~4%**. That gap is the result.
+
+Concretely: `move` and `transfer` execute for the first time (650 and 702 across the corpus,
+previously refused in every world), and success-vs-failure now leaves a trace a person can read —
+the fold records *what it looked at* rather than *that it said no*.
+
+**Full detail, the four retractions, and the open questions: `registers/handoffs/HANDOFF_IN.md`,
+top section.** The short version a cold session needs:
+
+- **Degree of success reaches nothing.** `_degree_for_writes` is hardcoded `None`, no verb declares
+  `writes_by_degree`, `Event.degree` is never assigned, and the bands are unruled (`H-98`). A partial
+  and an overwhelming success are identical today. Jordan asked for this next (W-E, 2026-09-04).
+- **Ripple is throttled by design**: `assemble` takes ONE question per person per season and all
+  three `H-54` arms return one; nothing accumulates in a person; cross-person transmission measures
+  **zero**. Every term damps.
+- **Two rulings wanted**: the undeclared content-hash tiebreak that decides which question a person
+  answers, and `H-111` — whether a failure should occasion a decision.
+- **Method**: producer → independent `valoria-critic` → fix pass, five items, a real defect found
+  **every** time. Do not skip the critic half.
+
+---
+
 ## ⚠ CURRENT — 2026-08-27 (read this first)
 
 **`main` IS GREEN, and so is PR #334's head.** Measured 2026-08-27 at `d7578a6`:
