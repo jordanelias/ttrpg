@@ -118,8 +118,14 @@ def p_success(base_ob, pool, net_sigma=0.0, tn=TN_STANDARD, capped=True):
     (the roll is boosted; base_Ob and TN are NOT modified, so the Ob floor is never
     breached):  shifted_mean = mu*N + net_boost ;  P = 1 - Phi((base_Ob - shifted_mean)/(sigma*sqrt(N)))."""
     mu, sigma = PER_DIE[tn]
-    shifted_mean = mu * pool + net_boost(net_sigma, pool, tn, capped)
-    z = (base_ob - shifted_mean) / (sigma * np.sqrt(max(1, pool)))   # [canonical: params/core.md §Continuous Engine]
+    # THE POOL FLOOR APPLIES TO THE MEAN TOO (Jordan, 2026-09-04: "1D is floor"). This read
+    # `mu * pool` against `np.sqrt(max(1, pool))` — flooring the spread but not the location, so
+    # below 1D it drifted ~10pp from the sampler. Kept byte-identical with the live owner,
+    # engine/autoload/sigma_leverage.py::p_success, which is what the parity goldens assert.
+    # Value-identical at and above 1D; no golden row carries a sub-1D pool.
+    effective_pool = max(1.0, float(pool))          # [canonical: params/core.md §Pool Floor (all systems)]
+    shifted_mean = mu * effective_pool + net_boost(net_sigma, effective_pool, tn, capped)
+    z = (base_ob - shifted_mean) / (sigma * np.sqrt(effective_pool))   # [canonical: params/core.md §Continuous Engine]
     return 1.0 - _phi(z)
 
 

@@ -4,6 +4,46 @@ Settled entries (dated 2026-07-25 and earlier) are in `tests/coverage_matrix_arc
 which was restored 2026-08-23 after the evacuation deleted it — see that file for why this
 one had drifted to 94% of a blocking cap with no working relief valve.
 
+## 2026-09-04 — the pool floor reaches the MEAN, not just the VARIANCE (Jordan: "1D is floor")
+
+**`p_success` floored the spread and not the location.** It computed `mu * pool` against
+`sqrt(max(1, pool))`, while `roll_net_continuous` — the sampler the game actually draws from —
+floors both via `effective_pool = max(1.0, float(pool))`. Two flooring conventions in one module.
+Invisible until fractional pools made sub-1D reachable.
+
+**Measured, base_Ob 1.0, net_sigma 0, 200k draws, seed 7 — closed form vs its own sampler:**
+
+| pool | before | after |
+|---|---|---|
+| 0.25 | 0.1303 vs 0.2275 — **9.7 pp apart** | 0.2266 vs 0.2275 — noise |
+| 0.50 | 0.1587 vs 0.2275 — **6.9 pp apart** | 0.2266 vs 0.2275 — noise |
+| 1.00 | 0.2266 vs 0.2275 — noise | unchanged |
+| 2.50 | 0.5000 vs 0.5012 — noise | unchanged |
+
+**CONTROL (§0.1 pt 4 — a number without a control is not a measurement).** No golden row carries a
+sub-1D pool: `p_success` golden pools are 1 / 5 / 10 / 26, and `max(1.0, pool) == pool` for every
+one, so the change must be **value-identical at and above 1D**. It is — **901 parity assertions pass
+against byte-unchanged `engine/tests/goldens/sigma_leverage_parity.json`.** Had a golden moved, the
+fix would have been wrong.
+
+**Falsifier (§0.1 pt 3):** `engine/tests/test_sigma_leverage_parity.py`. Before the fix it passed
+too — which is the point worth recording: **every pool >= 1 agreed to noise, so no test, golden or
+campaign could observe the defect.** It was reachable only by evaluating below the floor. A clamp
+applied to one moment of a distribution and not the other hides above that clamp.
+
+**Fixed in two places, kept byte-identical:** `engine/autoload/sigma_leverage.py::p_success` (the
+live `[CANONICAL]` owner) and `tests/sim/v32-combat-balance/m1_dice_sigma_core.py::p_success` (the
+Stage-1a seed the goldens are generated from, which is where the asymmetry was inherited from
+verbatim). Leaving the seed divergent would re-encode the bug on any future golden regeneration at a
+sub-1D pool.
+
+**Not changed:** `dice_engine.continuous_engine_sample` still does not floor, deliberately — it is
+the mathematical sampler, and the floor is a game rule its callers apply (`roll_net_continuous`,
+`p_success`, `tools/balance_oracle.py` all do). A NEW caller reaching the primitive directly would
+bypass the floor; that is a Phase-0 check, not a defect in the primitive.
+
+---
+
 ## 2026-07-29 — ED-MB-0055/0056/0057: 51x51 field, cell co-location measured, dead-primitive census
 
 **Field 50 -> 51 (Jordan directive).** Odd, so a mirror matchup has a true centre column instead of
