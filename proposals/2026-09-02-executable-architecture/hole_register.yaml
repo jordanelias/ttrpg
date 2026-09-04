@@ -1828,6 +1828,30 @@ rows:
       `opening_set`. INERT-BY-CONSTRUCTION is reported separately and is never folded into
       RECONVERGED.
 
+      W-D (2026-09-04): RE-RUN OVER THE WHOLE CORPUS RATHER THAN A SAMPLE, AND THIS ROW'S FINDING
+      HOLDS AT BOTH OF THE FIXTURE POINTS ABOVE. All 89 runnable worlds (`apply_rescale` applied),
+      seed 0, 4 seasons: at DEFAULT_FIXTURES (15 slots) AND at `interactions_per_scene=1` alone
+      (5 slots), every arm reads **3,204 probed = 801 NO-LIVE-WINDOW + 2,403 INERT-BY-CONSTRUCTION
+      + 0 GENUINE** -- an EMPTY DENOMINATOR, so no reconvergence rate exists at either point and
+      one quoted from either would be a ratio over zero. `budget_binds` is True at 1,068 of 1,068
+      deliberations at the 5-slot point and the forks are still all inert, which is this row's
+      point exactly: the budget BINDING and `MAX_ALT` REACHING PAST IT are two different
+      conditions, and only the second makes the x-instead-of-y question askable.
+      ⚠ AND THOSE 2,403 ARE, NUMBER FOR NUMBER, THE FORKS `runs/arm9.json` PUBLISHED AS ITS 2,403
+      SCORED AT 100% RECONVERGENCE. The pre-`H-117` harness restricted both baseline and fork to
+      `ranked[:1]`, so the alternative it flipped was inside the real budget and the taken SET
+      never moved; the same 2,403 probes are now classified INERT-BY-CONSTRUCTION. **The published
+      100% was a rate over probes that could not diverge by construction**, which is the strongest
+      statement this row's re-kinding has earned and it is recorded here rather than only on
+      `H-122`.
+      ⚠ THE SENTENCE ABOVE — 54 GENUINE forks, all RECONVERGED, read as consistent with arm
+      9c/9d's finding — IS SUPERSEDED AS A CONCLUSION, THOUGH NOT AS A RUN. At 2 slots over the full
+      corpus the genuine forks are 1,504 / 1,467 / 1,467 by deposit arm and they are NOT all
+      reconverged: 100.00% / 95.77% / 87.59% on the verb-only fingerprint, and 68.88% / 65.44% /
+      58.28% once the fingerprint includes the Candidate's SUBJECT. The sample of 3 cases x 3
+      seasons at the shipped `actor` default was too small to contain a divergence; the corpus is
+      not. See `H-122` for the measurement and its controls.
+
   - id:        "H-118"
     tier:      1
     hole:      >-
@@ -2265,6 +2289,98 @@ rows:
       retracted with it. `test_the_corpus_runs_and_the_ranking_cannot_discriminate` pins the
       threshold at 1 again and no longer pins the shipped default, so the default's falsifier moved
       to the clause-4 test named above rather than being dropped.
+      ⚠⚠ **`W-D` IS RUN AND THIS IS ITS RESULT. THE ACCEPTANCE IS MET ON THE PUBLISHED INSTRUMENT
+      AND THE PUBLISHED INSTRUMENT IS TOO COARSE TO LICENSE THE WORD `DECISION`. BOTH HALVES ARE
+      THE RESULT; REPORTING ONLY THE FIRST WOULD BE THE `claim.held` FAILURE ONE RESOLUTION UP.**
+      `arm9_forking.fork_case`, unmodified, over all 89 runnable worlds (`apply_rescale` applied —
+      THE 89 BASIS, not the 86 one every other figure on this row uses), seed 0, 4 seasons, at the
+      only fixture cell where the act budget binds tightly enough for `A9.MAX_ALT` to reach an
+      alternative outside it: `scene_budget=2` (a declared `H-10` arm) x `interactions_per_scene=1`
+      (a declared `H-76` arm) = 2 slots. Neither value is invented and the cell is forced by
+      `MAX_ALT`, not chosen for its answer (§0.1 point 4). Probed 3,204 = 801 NO-LIVE-WINDOW + INERT
+      + GENUINE, identically in every arm; 89 of 89 cases ran, 0 failed, 0 fork rows failed.
+      **RECONVERGENCE, verb-only fingerprint: `none` 1504/1504 = 100.00% (0 DIVERGED) · `actor`
+      1405/1467 = 95.77% (62) · `total` 1285/1467 = 87.59% (182).** The denominators differ because
+      a clause-4 drop shrinks the packer's own take `L` and reclassifies a fork as
+      INERT-BY-CONSTRUCTION (INERT 899 / 936 / 936); the CONTROL has the LARGER denominator and
+      zero divergences, so the effect is not a denominator artifact. Every divergent fork changed
+      EXACTLY ONE of the next three decisions. **`stream` vs `decision`, separated rather than
+      collapsed: 1504/1504 · 1467/1467 · 1467/1467 genuine forks changed the act stream AND the
+      event-log hash in every arm — that was already true before `W-B` and is not the finding —
+      while 1504 · 1405 · 1285 of them changed NO decision.** Reproduce:
+      `python proposals/2026-09-04-degree-sweep/wd_chunk.py <mode> narrow <a> <b>` for the four
+      slices per arm, then `python proposals/2026-09-04-degree-sweep/wd_collect.py`; artifacts
+      `runs/WD_LOG.txt` and `runs/wd_acceptance.json`.
+      ⚠ AT THE SHIPPED FIXTURE POINT THE QUESTION IS UNASKABLE, AND `EXECUTION_PLAN.md`'s OWN
+      SECOND POINT DOES NOT FIX IT. At `DEFAULT_FIXTURES` (15 slots) and at
+      `interactions_per_scene=1` alone (5 slots, `budget_binds` True at 1,068 of 1,068
+      deliberations), the corpus yields **3,204 probed = 801 NO-LIVE-WINDOW + 2,403
+      INERT-BY-CONSTRUCTION + 0 GENUINE** in all three arms — an EMPTY DENOMINATOR, no rate. Those
+      2,403 are, number for number, the forks `runs/arm9.json` published as its 2,403 scored at
+      100% reconvergence: the pre-`H-117` harness restricted both arms to `ranked[:1]`, so the
+      alternative it flipped was inside the real budget and the taken SET never moved. **The
+      published 100% was a rate over probes that could not diverge by construction.**
+      ⚠ EVERY DIVERGENCE IS THE SAME DEGENERATE SHAPE, AND IT IS TRUE WHEN RECORDED. Measured over
+      the 89 baselines at the same fixture point, §F1 clause-4 drops are **0 / 37 / 123**; ALL of
+      them are `move` on `contain.path:<the actor's own id>`, ALL SELF-REFERENTIAL (`to` == the
+      candidate's subject == the holder), ALL deposited by that person's own `travel.blocked`, and
+      **0 of 123 are cross-person even at `total`** — so `total`'s extra reach is NOT the
+      cross-person propagation §F1 wants and must not be cited as it. TRUE WHEN RECORDED: 123 of
+      123, checked by re-reading each deposit with `WorldReader` at the barrier that stored it,
+      which is the general form of the check that caught `claim.held`. The direction is worth
+      stating: the drop is present in the BASELINE and absent in the FORK — the fork prevented the
+      blocked attempt, so the person never learned the path was shut and still forms the Candidate.
+      ⚠ **AND THE INSTRUMENT'S DECISION FINGERPRINT IS VERBS ONLY, WHICH RETRACTS ARM 9c's
+      DIAGNOSIS — THE ONE `W-B` WAS BUILT ON.** `recorder` records `(person, [verb, ...], tick)`
+      while `opening_set` returns `Candidate(verb, subject, why, operands)`, so two candidate lists
+      about DIFFERENT SUBJECTS compare EQUAL. Widen it to `(verb, subject)` on a copy whose only
+      other line is identical (asserted by the test below) and the same runs read **`none`
+      1036/1504 = 68.88% · `actor` 960/1467 = 65.44% · `total` 855/1467 = 58.28%.** **THE CONTROL
+      IS NOT 100% AT THAT RESOLUTION.** Classifying every changed window slot: `none` = 510
+      SUBJECT-ONLY and **0 VERB-SET**; `actor` = 447 and **62**; `total` = 455 and **182** — and
+      those VERB-SET counts are EXACTLY the verb-only instrument's DIVERGED counts, which is the
+      arithmetic saying the two probes are one probe at two resolutions. ARM 9c's stated cause —
+      the deliberation never reads the world, so the ONLY channel from what happened to what is
+      next decided is a claim in the actor's ledger — and ARM 9d's measurement that the channel is
+      closed are BOTH narrower than they read. `opening_set` reads no World — but its `q` does: `questions_for(w, p)` takes
+      one and clause 3 is `subject in referents(q)`. TRACED, not inferred (NPC-088, `none`, forking
+      decision 0 from `('move','r_hearth')` to `('speak','r_hearth')`): p_c's tick-1 question list
+      goes `[claim_landed('p_c'), claim_landed('r_hearth'), ...]` to
+      `[claim_landed('r_hearth'), claim_landed('p_c'), ...]`, `question_aggregation_rule='first'`
+      (`H-54`) takes `qs[0]`, and all seven of p_c's candidates change subject from `p_c` to
+      `r_hearth` with the verb sequence unchanged. **So a fork already changed what a person
+      deliberates ABOUT before `W-B`, through Q2 and the ledger's APPEND ORDER — a second ledger
+      channel that is not `belief_contradicts`, and one nobody had measured.** What this costs THIS
+      row is bounded and should not be overstated: `W-B` is still the only channel that removes a
+      VERB from a candidate set (0 at `none` in 510 changed slots), and clause 4 still fires only
+      in the live arms. What it costs is the FRAMING — `W-B` opened a second channel beside an
+      existing one, it did not open the only one — and it means **`H-54` is decision-live**, which
+      that row does not say. THIS ROW STAYS `assumption`: §0's five tests land exactly where the
+      paragraphs above put them, `W-D` measures the consequence of the default rather than
+      re-arguing it, and nothing here is a live design choice between two defensible options — so
+      `needs_jordan` is FALSE and no row was opened.
+      ⚠ CONTROLS, BOTH DIRECTIONS, WITH OUTCOMES. NEGATIVE: `none` at the same fixture point,
+      1504/1504 = 100.00%, 0 DIVERGED — the pre-`W-B` deposit behaviour reproduces exactly on the
+      published instrument. POSITIVE: clause 4 widened by one event-kind predicate AT THE CONTROL
+      ARM, so the scorer must see a divergence planted by hand; run on four predicates the corpus
+      actually deposits (`travel.moved` 24/48, `stores.changed` 15/30, `record.created` 18/42,
+      `yield.taken` 15/30 DIVERGED/genuine) and DETECTED on all four. A first plant on `act.refused`
+      fired ZERO times because no corpus world emits that kind, and a plant that never fires is not
+      a control — which is why four are run and why that failure is recorded rather than dropped.
+      SECOND POSITIVE, on the comparator alone: a token spliced into one later ranked list, 51
+      streams perturbed, 15 DIVERGED, detected. CONFOUND 1 (the ordering one): 4,401 scored window
+      slots inspected at `actor`, 4,512 at `none`, and **0** at the fork's own tick or earlier.
+      CONFOUND 2: `A9._run` does not pass `contest_max_depth` and does not need to — `kill / wound`
+      is the only contesting verb and `resolvable_verbs()`, the set `make_chooser` is given,
+      excludes it (intersection empty), so the probe was left unedited and 0 of 89 cases failed in
+      any arm. FALSIFIERS:
+      `test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_the_control` and
+      `test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_percent_under_it`,
+      both on NPC-088 as a deterministic slice — the full sweep is NOT gated and that is stated in
+      both docstrings. Mutations run 2026-09-04: forcing every arm to `none` reds the first;
+      deleting the window's tick filter puts 18 of 51 scored slots at or before the fork's own tick
+      and reds it too; weakening that filter from `>` to `>=` moves NOTHING on this slice, recorded
+      because it is the mutation that looks like it should fire and does not.
     source:    "W-B 2026-09-04 -- the write side of `H-116`, whose read side shipped in `W-A`"
 
 

@@ -1,0 +1,18 @@
+{
+ "mode": "none",
+ "chunk": [
+  69,
+  89
+ ],
+ "n_cases_ok": 20,
+ "n_cases_failed": 0,
+ "probed": 720,
+ "no_live_window": 180,
+ "inert": 200,
+ "genuine": 340,
+ "diverged": 96,
+ "reconverged": 244,
+ "changed_slot_kinds": {
+  "SUBJECT-ONLY": 106
+ }
+}

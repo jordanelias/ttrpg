@@ -6824,3 +6824,237 @@ def test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total():
         "`claim_decay_per_season` has become behaviourally live — which is GOOD and means "
         "`H-40`'s sweep measures something at last, but it also means the minimum-confidence "
         "ordering above is no longer the only content of this test and the row must be re-argued")
+
+
+# =================================================================================================
+# `W-D` — THE ACCEPTANCE RUN. Does an open §F1 clause 4 make a fork change a LATER DECISION?
+# =================================================================================================
+
+_WD_SWEEP = HERE.parent.parent / "2026-09-04-degree-sweep"
+
+
+def _wd_arm9():
+    """`arm9_forking`, imported UNMODIFIED from the degree sweep. `W-D` re-uses the forking
+    probe; a re-implemented one measuring a different thing is the confound that would void it."""
+    if str(_WD_SWEEP) not in sys.path:
+        sys.path.insert(0, str(_WD_SWEEP))
+    import arm9_forking as A9          # noqa: E402
+    return A9
+
+
+def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_the_control():
+    """**`W-D`'s ACCEPTANCE, PINNED ON A DETERMINISTIC SLICE.**
+
+    THE QUESTION. The forking exercise (`runs/arm9.json`, seed 0, 4 seasons, 89 worlds) flipped
+    every mechanical decision in the corpus and followed three decisions on: **100%
+    reconvergence**. Its diagnosis was that `Query.opening_set` never consults world state, so the
+    only channel from what happened to what is next decided is a claim in the actor's own ledger
+    — and `belief_contradicts` could read no claim the corpus deposited (`H-116`). `W-B` opened
+    that channel. **Does a fork now change one of the next three decisions?**
+
+    THE ANSWER, AND IT IS PINNED HERE ON ONE CASE: **yes at `actor` and at `total`, never at
+    `none`.** NPC-088, seed 0, 4 seasons, at 2 slots — genuine forks / DIVERGED are
+    **17/0 at `none`, 16/2 at `actor`, 16/4 at `total`**.
+
+    ⚠ THE FIXTURE POINT IS FORCED, NOT CHOSEN, AND THAT IS THE ONLY REASON THIS TEST MAY MOVE IT.
+    `H-117` measured that at `DEFAULT_FIXTURES` (5 x 3 = 15 slots) the act budget NEVER BINDS —
+    every person takes ALL of their ranked candidates — so under the native fork every probe is
+    INERT-BY-CONSTRUCTION and there is no `x instead of y` moment to flip. A genuine fork needs an
+    alternative OUTSIDE the real budget and within `A9.MAX_ALT` (3) of the taken one, i.e. an
+    in-budget count `L <= 3`. Crossing the two DECLARED sweeps — `H-10` `scene_budget: [2, 5, 9]`
+    and `H-76` `interactions_per_scene: [1, 3, unbounded]` — exactly one cell gives `L <= 3`:
+    **2 x 1**. Both values are arms of existing register rows; neither is invented, and the cell is
+    determined by `MAX_ALT` rather than by its answer (`CLAUDE.md` §0.1 point 4).
+
+    ⚠ THE DENOMINATOR MOVES BETWEEN ARMS AND THIS TEST ASSERTS IT RATHER THAN HIDING IT. `probed`
+    and `NO-LIVE-WINDOW` are identical in all three arms (the deliberation count does not depend
+    on the deposit mode — `pack_scenes` is called for every person with a question, whatever their
+    candidate set). `INERT-BY-CONSTRUCTION` is 10 / 11 / 11, because the live arms drop a
+    Candidate and shrink the packer's own take `L`. So the denominators are 17 / 16 / 16 and a
+    ratio quoted without them is not a measurement.
+
+    ⚠ THE FULL SWEEP IS **NOT** GATED. `wd_acceptance.py` runs 89 worlds x 3 arms x 2 fixture
+    points and takes ~25 minutes; this is a slice of it chosen because it exercises the whole
+    path — fork -> different acts -> different deposits -> different ledger -> clause 4 -> a
+    different candidate list at a strictly later tick. Reproduce the corpus figures with
+    `python proposals/2026-09-04-degree-sweep/wd_acceptance.py`.
+
+    FALSIFIERS, each with the outcome recorded beside it:
+      * NEGATIVE CONTROL — `none` must be 0 DIVERGED. If it is not, something other than `W-B`
+        moved the harness. Run 2026-09-04: 0. GREEN.
+      * POSITIVE CONTROL — the scorer must be able to SEE a divergence. `wd_acceptance.py`'s
+        `positive_control` widens clause 4 by one event-kind predicate at `none` and the scorer
+        reports DIVERGED on all four plants. Not re-run here (it is a corpus-scale plant); the
+        comparator half is covered by the strictly-later-tick assertion below plus the `actor`
+        arm's own non-zero count, which is a divergence this test observes.
+      * MUTATION 1 (run 2026-09-04): `observation_deposit_mode` forced to `none` in all three
+        arms — the `actor` slot then reads (17 genuine, 0 DIVERGED), which is the `none` row of
+        this very run, and this goes RED on BOTH `got["actor"]["diverged"] > 0` and the pinned
+        `(16, 2)`.
+      * MUTATION 2 (run 2026-09-04, on a copy of `arm9_forking.py`): the live window's tick filter
+        DELETED — `[j for j in range(i+1, len(D))][:LOOKAHEAD]`, which is the arm's first version
+        and confound 1 exactly. **18 of 51 scored window slots at `none` then sit at the fork's
+        own tick or earlier** (17 of 48 at `actor` and at `total`) and this goes RED on
+        `bad_windows == 0`. ⚠ AND THE DIVERGENCE COUNTS DO NOT MOVE ON THIS SLICE (0 / 2 / 4 in
+        both), which is worth stating rather than implying otherwise: the window defect inflated
+        the ARM's rate in the corpus by scoring dead slots as reconverged, and on NPC-088 at 2
+        slots it would not have changed the acceptance verdict. The guard is still what stops the
+        regression; it is not what produced the result.
+      * MUTATION 3 (run 2026-09-04): the same tick filter weakened from `>` to `>=` — **nothing
+        moves at all** on this slice (0 / 2 / 4, `nolive` 9). Recorded because it is the mutation
+        that looks like it should fire and does not: with three persons per tick and a lookahead
+        of 3, a same-tick successor rarely changes which slots fill the window. A mutation that
+        does not kill is evidence about the mutation, not about the guard."""
+    A9 = _wd_arm9()
+    import corpus_run as C
+    case = C.apply_rescale(next(c for c in R.load_cases("NPC") if c["id"] == "NPC-088"))
+    base = S.DEFAULT_FIXTURES.sweep("scene_budget", 2).sweep("interactions_per_scene", 1)
+
+    got, windows, bad_windows = {}, 0, 0
+    for mode in ("none", "actor", "total"):
+        r = A9.fork_case(case, 0, 4, fixtures=base.sweep("observation_deposit_mode", mode))
+        assert r["ok"], f"{mode}: the baseline run failed: {r.get('why')}"
+        real = [f for f in r["forks"] if f.get("status") in ("DIVERGED", "RECONVERGED")]
+        # confound 1, CHECKED: every scored fork's lookahead is strictly LATER-tick. DELIBERATE is
+        # a parallel map over a frozen world, so same-tick slots cannot differ and counting them
+        # scores a reconvergence that was true by construction.
+        ticks = {i: d[2] for i, d in enumerate(r["decisions"])}
+        for f in real:
+            for j in f["live_window"]:
+                windows += 1
+                if ticks[j] <= f["tick"]:
+                    bad_windows += 1
+        got[mode] = dict(probed=r["n_forks"], nolive=r["n_no_live_window"], inert=r["n_inert"],
+                         genuine=len(real), diverged=sum(1 for f in real if not f["reconverged"]),
+                         acts_differ=sum(1 for f in real if f["acts_differ"]),
+                         hash_differ=sum(1 for f in real if f["hash_differ"]))
+    print(f"\n  W-D — NPC-088, seed 0, 4 seasons, 2 slots (scene_budget 2 x "
+          f"interactions_per_scene 1): {got}")
+
+    # §0.1 pt 2 — ASSERT THAT IT ASSERTED. A window check that inspected zero windows, or a rate
+    # over a zero denominator, is an ABSENT assertion wearing a green one's clothes.
+    assert windows >= 90, (
+        f"only {windows} lookahead slots were inspected; the strictly-later-tick check has "
+        "nothing to be true of and this test is not checking confound 1 at all")
+    assert bad_windows == 0, (
+        f"{bad_windows} of {windows} scored lookahead slots sit at the fork's OWN tick or "
+        "earlier. DELIBERATE is a parallel map over a frozen world (shape.py:4204-4221), so those "
+        "slots cannot differ and counting them inflates reconvergence — the exact defect the "
+        "NO-LIVE-WINDOW exclusion exists to prevent")
+    assert all(g["genuine"] > 0 for g in got.values()), (
+        f"an arm scored ZERO genuine forks: {got}. Then its reconvergence rate has an empty "
+        "denominator and neither a 100% nor a 0% reading from it means anything. The likely "
+        "cause is the fixture point moving off 2 slots, where `A9.MAX_ALT` can no longer reach "
+        "an alternative outside the real budget (`H-117`)")
+
+    # THE NEGATIVE CONTROL — the single most important number in `W-D`.
+    assert got["none"]["diverged"] == 0, (
+        f"the CONTROL arm diverged {got['none']['diverged']} times of {got['none']['genuine']}. "
+        "`none` deposits nothing in the `requires` vocabulary, so §F1 clause 4 cannot fire and "
+        "the candidate set must be invariant with respect to everything that happens. A "
+        "divergence here means some channel other than `W-B`'s reaches `opening_set`, and every "
+        "other figure in `W-D` is confounded until it is found")
+    # THE ACCEPTANCE — reconvergence STRICTLY below 100% at the shipped default.
+    assert got["actor"]["diverged"] > 0, (
+        f"the SHIPPED default diverged 0 times of {got['actor']['genuine']}: {got}. Either "
+        "`observation_deposit_mode` has been flipped to `none`, or the deposit no longer reaches "
+        "`belief_contradicts`, or the fork no longer changes which acts are performed")
+    # PINNED, so a mechanism change is visible rather than merely allowed.
+    assert (got["none"]["genuine"], got["none"]["diverged"]) == (17, 0), got
+    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (16, 2), got
+    assert (got["total"]["genuine"], got["total"]["diverged"]) == (16, 4), got
+    # AND THE TWO LAYERS ARE SEPARATED. Every genuine fork changes the act/event stream — that was
+    # already true BEFORE `W-B` and is not the finding. The finding is the DECISION count above.
+    assert all(g["acts_differ"] == g["genuine"] and g["hash_differ"] == g["genuine"]
+               for g in got.values()), (
+        f"a genuine fork failed to move the act stream or the event log: {got}. Then the fork is "
+        "not being applied and the reconvergence figures measure nothing")
+
+
+def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_percent_under_it():
+    """**THE LARGEST FINDING IN `W-D`, PINNED SO IT CANNOT BE RE-PUBLISHED WRONG.**
+
+    `arm9_forking.recorder` records a deliberation as `(person, [verb, ...], tick)` — **VERBS
+    ONLY**. `Query.opening_set` returns `Candidate(verb, subject, why, operands)`, so two candidate
+    lists holding the SAME VERBS about DIFFERENT SUBJECTS compare EQUAL and the fork is scored
+    RECONVERGED. Widen the fingerprint to `(verb, subject)` — the only edit, made on a COPY so the
+    shipped instrument is untouched — and over the 89 corpus worlds at the 2-slot fixture point,
+    seed 0, 4 seasons:
+
+    | arm | verb-only | (verb, subject) |
+    |---|---|---|
+    | `none`  | 1504/1504 = **100.00%** | 1036/1504 = **68.88%** |
+    | `actor` | 1405/1467 = **95.77%**  | 960/1467 = **65.44%** |
+    | `total` | 1285/1467 = **87.59%**  | 855/1467 = **58.28%** |
+
+    **SO THE CONTROL IS NOT 100% AT THE FINER RESOLUTION, AND WHAT THAT RETRACTS IS THE DIAGNOSIS,
+    NOT THE ARITHMETIC.** ARM 9c reads *"the deliberation never reads the world … the only channel
+    by which anything that happened can reach a later decision is a CLAIM in the actor's ledger"*,
+    and ARM 9d then measures that channel closed. `opening_set` does read no World — but its `q`
+    does: `questions_for(w, p)` takes one, and clause 3 is `subject in referents(q)`. TRACED on
+    NPC-088 at `none`, forking decision 0 from `('move','r_hearth')` to `('speak','r_hearth')`:
+    p_c's tick-1 question list goes `[claim_landed('p_c'), claim_landed('r_hearth'), …]` in the
+    baseline to `[claim_landed('r_hearth'), claim_landed('p_c'), …]` in the fork,
+    `question_aggregation_rule='first'` takes `qs[0]`, and all seven of p_c's candidates change
+    subject from `p_c` to `r_hearth` with the verb sequence unchanged. **A fork already changed
+    what a person deliberates ABOUT before `W-B` — through Q2 and the ledger's APPEND ORDER, which
+    is a second ledger channel and is not `belief_contradicts`.**
+
+    THE TWO CHANNELS DO NOT OVERLAP, WHICH IS WHY BOTH READINGS ARE TRUE AT ONCE. Classifying every
+    changed window slot over the corpus: `none` = 510 SUBJECT-ONLY and **0 VERB-SET**; `actor` =
+    447 SUBJECT-ONLY and **62 VERB-SET**; `total` = 455 and **182**. The VERB-SET counts are
+    **exactly** the verb-only instrument's own DIVERGED counts in every arm, which is the
+    arithmetic saying the two probes are one probe at two resolutions.
+
+    WHAT THIS TEST GUARDS. Not a rate — the shape. If `none` ever reports 0 divergences under the
+    widened fingerprint, the Q2 channel has closed and `W-D`'s reading must be rewritten; if
+    `actor` ever stops adding VERB-SET changes on top of it, `W-B` has stopped reaching a decision.
+
+    Reproduce the corpus figures with `python proposals/2026-09-04-degree-sweep/wd_collect.py`
+    (§W-D.5); the chunks it reads are written by `wd_subj.py`. The full sweep is NOT gated — this
+    is NPC-088 alone."""
+    if str(_WD_SWEEP) not in sys.path:
+        sys.path.insert(0, str(_WD_SWEEP))
+    import arm9_subj as A9S           # the copy; its ONLY edit is the fingerprint
+    import arm9_forking as A9
+    import corpus_run as C
+    # ⚠ THE COPY IS VERIFIED TO BE A COPY. A "widened fingerprint" that had drifted from the
+    # shipped probe in any other line would make this table a comparison of two instruments.
+    a, b = (_WD_SWEEP / "arm9_forking.py").read_text(), (_WD_SWEEP / "arm9_subj.py").read_text()
+    diff = [(x, y) for x, y in zip(a.splitlines(), b.splitlines()) if x != y]
+    assert len(a.splitlines()) == len(b.splitlines()) and len(diff) == 1, (
+        f"`arm9_subj.py` differs from `arm9_forking.py` in {len(diff)} lines, not 1: {diff[:4]}. "
+        "Then the two columns of the table above are two instruments, not two resolutions")
+    assert "c.verb for c in ranked" in diff[0][0] and "(c.verb, c.subject) for c in ranked" in diff[0][1], (
+        f"the one differing line is not the fingerprint: {diff[0]}")
+
+    case = C.apply_rescale(next(c for c in R.load_cases("NPC") if c["id"] == "NPC-088"))
+    base = S.DEFAULT_FIXTURES.sweep("scene_budget", 2).sweep("interactions_per_scene", 1)
+    got = {}
+    for mode in ("none", "actor", "total"):
+        fx = base.sweep("observation_deposit_mode", mode)
+        wide = A9S.fork_case(case, 0, 4, fixtures=fx)
+        narrow = A9.fork_case(case, 0, 4, fixtures=fx)
+        assert wide["ok"] and narrow["ok"]
+        rw = [f for f in wide["forks"] if f.get("status") in ("DIVERGED", "RECONVERGED")]
+        rn = [f for f in narrow["forks"] if f.get("status") in ("DIVERGED", "RECONVERGED")]
+        got[mode] = dict(genuine=len(rw), wide=sum(1 for f in rw if not f["reconverged"]),
+                         verbonly=sum(1 for f in rn if not f["reconverged"]))
+        assert len(rw) == len(rn), (
+            f"{mode}: the two probes scored different numbers of genuine forks "
+            f"({len(rw)} vs {len(rn)}). The fingerprint must not change WHICH forks are genuine — "
+            "only whether they diverged")
+    print(f"\n  W-D.5 — NPC-088, 2 slots, seed 0, 4 seasons — DIVERGED by fingerprint: {got}")
+    assert all(g["genuine"] > 0 for g in got.values()), got
+    # THE FINDING: the control is NOT 100% once a decision includes what it is ABOUT.
+    assert got["none"]["verbonly"] == 0 and got["none"]["wide"] > 0, (
+        f"the control arm reads {got['none']}. Verb-only 0 and (verb, subject) > 0 is the whole "
+        "finding: a fork changes what a person deliberates ABOUT even with no `W-B` deposit at "
+        "all, through `questions_for` Q2 -> `q.referents` -> `opening_set` clause 3. If the "
+        "second number is now 0, that channel has closed and `W-D`'s reading must be rewritten")
+    # AND `W-B` ADDS ON TOP OF IT rather than being the only channel.
+    assert got["actor"]["wide"] > got["none"]["wide"] and got["actor"]["verbonly"] > 0, (
+        f"the shipped default no longer adds divergence over the control: {got}")
+    assert (got["none"]["genuine"], got["none"]["wide"]) == (17, 7), got
+    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (16, 11), got
+    assert (got["total"]["genuine"], got["total"]["wide"]) == (16, 12), got

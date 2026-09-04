@@ -1,0 +1,19 @@
+{
+ "mode": "actor",
+ "chunk": [
+  69,
+  89
+ ],
+ "n_cases_ok": 20,
+ "n_cases_failed": 0,
+ "probed": 720,
+ "no_live_window": 180,
+ "inert": 208,
+ "genuine": 332,
+ "diverged": 111,
+ "reconverged": 221,
+ "changed_slot_kinds": {
+  "SUBJECT-ONLY": 95,
+  "VERB-SET": 16
+ }
+}

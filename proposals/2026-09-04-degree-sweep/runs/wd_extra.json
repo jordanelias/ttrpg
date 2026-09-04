@@ -1,0 +1,193 @@
+{
+ "none": {
+  "n_drops": 0,
+  "self_referential": 0,
+  "not_self_referential": 0,
+  "cross_person": 0,
+  "true_when_recorded": {},
+  "by_verb_predicate": {},
+  "depositing_kinds": {},
+  "non_self_referential_rows": [],
+  "n_false_when_recorded": 0,
+  "false_when_recorded_predicates": {},
+  "false_when_recorded_examples": []
+ },
+ "actor": {
+  "n_drops": 37,
+  "self_referential": 37,
+  "not_self_referential": 0,
+  "cross_person": 0,
+  "true_when_recorded": {
+   "True": 37
+  },
+  "by_verb_predicate": {
+   "move|contain.path:p_a": 37
+  },
+  "depositing_kinds": {
+   "travel.blocked": 37
+  },
+  "non_self_referential_rows": [],
+  "n_false_when_recorded": 42,
+  "false_when_recorded_predicates": {
+   "stores:grain": 42
+  },
+  "false_when_recorded_examples": [
+   {
+    "tick": 3,
+    "holder": "p_a",
+    "cid": "b04d6921625c79e7",
+    "subject": "r_hearth",
+    "predicate": "stores:grain",
+    "value": 138,
+    "in_grammar": true,
+    "world_at_deposit": 137,
+    "true_when_recorded": false
+   },
+   {
+    "tick": 3,
+    "holder": "p_a",
+    "cid": "b04d6921625c79e7",
+    "subject": "r_hearth",
+    "predicate": "stores:grain",
+    "value": 138,
+    "in_grammar": true,
+    "world_at_deposit": 137,
+    "true_when_recorded": false
+   },
+   {
+    "tick": 3,
+    "holder": "p_a",
+    "cid": "b04d6921625c79e7",
+    "subject": "r_hearth",
+    "predicate": "stores:grain",
+    "value": 138,
+    "in_grammar": true,
+    "world_at_deposit": 137,
+    "true_when_recorded": false
+   },
+   {
+    "tick": 3,
+    "holder": "p_a",
+    "cid": "b04d6921625c79e7",
+    "subject": "r_hearth",
+    "predicate": "stores:grain",
+    "value": 138,
+    "in_grammar": true,
+    "world_at_deposit": 137,
+    "true_when_recorded": false
+   },
+   {
+    "tick": 3,
+    "holder": "p_c",
+    "cid": "4bb1d3b5de151e35",
+    "subject": "r_realm",
+    "predicate": "stores:grain",
+    "value": 138,
+    "in_grammar": true,
+    "world_at_deposit": 137,
+    "true_when_recorded": false
+   },
+   {
+    "tick": 3,
+    "holder": "p_c",
+    "cid": "4bb1d3b5de151e35",
+    "subject": "r_realm",
+    "predicate": "stores:grain",
+    "value": 138,
+    "in_grammar": true,
+    "world_at_deposit": 137,
+    "true_when_recorded": false
+   }
+  ]
+ },
+ "total": {
+  "n_drops": 123,
+  "self_referential": 123,
+  "not_self_referential": 0,
+  "cross_person": 0,
+  "true_when_recorded": {
+   "True": 123
+  },
+  "by_verb_predicate": {
+   "move|contain.path:p_c": 37,
+   "move|contain.path:p_a": 37,
+   "move|contain.path:p_b": 49
+  },
+  "depositing_kinds": {
+   "travel.blocked": 123
+  },
+  "non_self_referential_rows": [],
+  "n_false_when_recorded": 183,
+  "false_when_recorded_predicates": {
+   "stores:grain": 183
+  },
+  "false_when_recorded_examples": [
+   {
+    "tick": 3,
+    "holder": "p_a",
+    "cid": "97c9063270cc08b0",
+    "subject": "r_hearth",
+    "predicate": "stores:grain",
+    "value": 138,
+    "in_grammar": true,
+    "world_at_deposit": 137,
+    "true_when_recorded": false
+   },
+   {
+    "tick": 3,
+    "holder": "p_b",
+    "cid": "5389d21c935f37ac",
+    "subject": "r_hearth",
+    "predicate": "stores:grain",
+    "value": 138,
+    "in_grammar": true,
+    "world_at_deposit": 137,
+    "true_when_recorded": false
+   },
+   {
+    "tick": 3,
+    "holder": "p_c",
+    "cid": "5193ddad00c82698",
+    "subject": "r_hearth",
+    "predicate": "stores:grain",
+    "value": 138,
+    "in_grammar": true,
+    "world_at_deposit": 137,
+    "true_when_recorded": false
+   },
+   {
+    "tick": 2,
+    "holder": "p_a",
+    "cid": "ff7938936692f241",
+    "subject": "r_hearth",
+    "predicate": "stores:grain",
+    "value": 106,
+    "in_grammar": true,
+    "world_at_deposit": 105,
+    "true_when_recorded": false
+   },
+   {
+    "tick": 2,
+    "holder": "p_b",
+    "cid": "fc44dc9229c684a0",
+    "subject": "r_hearth",
+    "predicate": "stores:grain",
+    "value": 106,
+    "in_grammar": true,
+    "world_at_deposit": 105,
+    "true_when_recorded": false
+   },
+   {
+    "tick": 2,
+    "holder": "p_c",
+    "cid": "dbd9cd32bbb3899f",
+    "subject": "r_hearth",
+    "predicate": "stores:grain",
+    "value": 106,
+    "in_grammar": true,
+    "world_at_deposit": 105,
+    "true_when_recorded": false
+   }
+  ]
+ }
+}
