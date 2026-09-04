@@ -560,8 +560,26 @@ def verify_citations(reg: dict) -> list:
         # #353 and reported FABRICATED. Positional rather than a strip, because a legitimate
         # quotation may itself contain backticks — H-33's does.
         code = [(m.start(), m.end()) for m in re.finditer(r"`[^`]*`", cite)]
-        quotes = [m.group(1) for m in QUOTE_RE.finditer(cite)
-                  if not any(a <= m.start() and m.end() <= b for a, b in code)]
+        # ⚠ MASK CODE SPANS BEFORE PAIRING, NOT AFTER. `QUOTE_RE` pairs `"` characters
+        # left-to-right and non-overlapping, so a `"` INSIDE a backticked span -- `f"q:claim:{c.id}"`,
+        # `f"claim:{e.id}:{n}"` -- is consumed as an opening or closing mark and shifts every pair
+        # after it, manufacturing spans that begin and end mid-sentence. Discarding those matches
+        # afterwards (what this did) removes the code-span match but leaves the SHIFT, so real
+        # prose downstream is reported FABRICATED for a reason that has nothing to do with it.
+        # Blanking the spans first, offsets preserved, makes the pairing correct. Found 2026-09-04
+        # when the self-citation fix below turned the misalignment from invisible into 7 spurious
+        # violations.
+        # ⚠ PAIR ON THE MASKED TEXT, EXTRACT FROM THE ORIGINAL. A legitimate quotation OFTEN
+        # CONTAINS a code span -- `H-33` quotes "the `total` default at this milestone is TOTAL
+        # FAN-OUT" -- so reading the quote off the masked string would hand the matcher a sentence
+        # with holes in it and report eight true citations as fabricated. Offsets are preserved by
+        # the blanking, so `cite[m.start(1):m.end(1)]` is the real text.
+        masked = list(cite)
+        for a, b in code:
+            for i in range(a, b):
+                masked[i] = " "
+        masked = "".join(masked)
+        quotes = [cite[m.start(1):m.end(1)] for m in QUOTE_RE.finditer(masked)]
         if quotes and not named:
             bad.append(f"{r['id']}: quotes something and names no source this checker can open")
         for quote in quotes:
@@ -576,6 +594,20 @@ def verify_citations(reg: dict) -> list:
             for token, path in named.items():
                 body = [_cite_norm(l) for l in path.read_text().splitlines()]
                 whole = " ".join(body)
+                # ⚠ A ROW MAY NOT BE ITS OWN SOURCE. When the named source is THIS REGISTER --
+                # which is legitimate and used, e.g. `H-122` quoting `H-94` -- the row's OWN
+                # `cite:` is removed from the haystack first. Without this, naming the register in
+                # your own `cite:` makes every quotation verify AGAINST ITSELF, which is a
+                # one-token way to pass the anti-fabrication gate and is WORSE than the defect it
+                # was added to fix: the `W-D` pass first "fixed" a flagged self-quote by DELETING
+                # ITS QUOTE MARKS (making the text invisible to `QUOTE_RE`), was told to restore
+                # them and name the register instead, and MUTATION-CHECKED THAT REMEDY -- planting
+                # `"71 GENUINE forks, all DIVERGED and never reconverged at all"` in `H-117`,
+                # which no source says, and watching `CITATIONS: all resolve` come back green.
+                # With this line the same mutation FIRES. Quoting another row still verifies;
+                # quoting yourself no longer does. 2026-09-04.
+                if path == REGISTER:
+                    whole = whole.replace(_cite_norm(cite), " ")
                 if _contains(whole, needle):
                     hit_any = True
                     if token != "#353" or not refs:

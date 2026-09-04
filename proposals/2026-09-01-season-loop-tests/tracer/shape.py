@@ -3907,6 +3907,24 @@ def questions_for(w: World, p: Person) -> list[Question]:
                 out.append(Question(f"q:need:{t.object}", "need",
                                     (prop.subject,), t.object))
 
+    # ⚠ TWO ORDERINGS LIVE IN THIS ONE LINE AND ONLY THE FIRST IS DECLARED ANYWHERE.
+    # `order[q.source]` is `rosters.yaml: question_sources`, whose own note says ORDER IS SEMANTIC
+    # and that editing it "changes which question a budget-bounded person answers first". That is
+    # the ACROSS-source rule, declared, and `H-54` sweeps its consumer.
+    # `q.id` is the WITHIN-source tiebreak and NOTHING DECLARES IT. For `claim_landed` -- the
+    # source that supplies most questions in the corpus -- `q.id` is `f"q:claim:{c.id}"` and
+    # `c.id` is a CONTENT HASH minted in `SeasonDriver.witness` off the depositing Event's own id,
+    # so WHICH QUESTION A PERSON ANSWERS IS SETTLED BY LEXICOGRAPHIC ORDER OVER HASHES. It is not
+    # cosmetic: MEASURED over 89 corpus baselines (`wd_extra.py`), the leading source is SHARED
+    # with at least one other question in 801 of 1,068 deliberations, and a traced fork moved
+    # `qs[0]` from a question about `p_c` to one about `r_hearth` purely because `0261...` sorts
+    # before `219a...` -- changing every Candidate that person formed.
+    # ⚠ THE SORT ALSO DESTROYS APPEND ORDER, so anything attributing this effect to "the ledger's
+    # append order" is wrong; `W-D` did, and is corrected. Disposition (`CLAUDE.md` §0's five
+    # tests) is recorded on `H-54`, which already owns "which question a budget-bounded person
+    # answers": it closes at step 4 on `H-54`'s own precedent, `needs_jordan` is FALSE, and NO
+    # RULE IS CHANGED HERE -- editing this sort is a design edit to a line three rows depend on,
+    # not a repair, so it is declared and left alone.
     order = {src: i for i, src in enumerate(QUESTION_SOURCES)}
     out.sort(key=lambda q: (order[q.source], q.id))
     return out

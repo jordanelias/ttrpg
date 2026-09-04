@@ -625,7 +625,7 @@ rows:
     site:      "Fixtures question_aggregation_rule -> shape.aggregate_questions, called by deliberate; rules from rosters.yaml question_aggregation"
     sweep:     ["first", "all", "one_per_source"]
     unblocks:  "every NPC season — it decides which question a budget-bounded person answers"
-    cite:      "TWO HOLES IN ONE ROW, AND `W5` DISCHARGES THEM DIFFERENTLY. (1) THE DROPPED `need` SOURCE is closed by construction: it is Q4 of `questions_for`, and this row states its own rationale — \"an NPC with a standing ambition and a quiet season forms no candidates at all\" — which is the sentence `PLAN.md` `W5` gives for adding it. (2) QUESTION AGGREGATION was being FILLED OFF THE REGISTER. `deliberate` read `qs[0] if qs else None`: an `absent` hole answered inside a subscript, with no row, no marker and no alternative, which is `G1`. It was decisive rather than cosmetic, because `question_sources` is ORDERED — taking the first silently ruled that A DATE ALWAYS BEATS A NEED, an unruled priority rule deciding what every NPC does first. FOUND BY THE `W5` ADVERSARIAL PASS, which read the subscript rather than the summary. `first` is now that behaviour declared and kept as the sweep control; `all` lets the budget triage, which is what §26.3 says triage is for."
+    cite:      "TWO HOLES IN ONE ROW, AND `W5` DISCHARGES THEM DIFFERENTLY. (1) THE DROPPED `need` SOURCE is closed by construction: it is Q4 of `questions_for`, and this row states its own rationale — \"an NPC with a standing ambition and a quiet season forms no candidates at all\" — which is the sentence `PLAN.md` `W5` gives for adding it. (2) QUESTION AGGREGATION was being FILLED OFF THE REGISTER. `deliberate` read `qs[0] if qs else None`: an `absent` hole answered inside a subscript, with no row, no marker and no alternative, which is `G1`. It was decisive rather than cosmetic, because `question_sources` is ORDERED — taking the first silently ruled that A DATE ALWAYS BEATS A NEED, an unruled priority rule deciding what every NPC does first. FOUND BY THE `W5` ADVERSARIAL PASS, which read the subscript rather than the summary. `first` is now that behaviour declared and kept as the sweep control; `all` lets the budget triage, which is what §26.3 says triage is for. ⚠ (3) AND THERE IS A THIRD ORDERING INSIDE THE SAME MECHANISM THAT NO ROW DECLARED, FOUND BY THE `W-D` ADVERSARIAL PASS 2026-09-04. `questions_for` ends `out.sort(key=lambda q: (order[q.source], q.id))`. `order[q.source]` is this row's declared across-source rule. `q.id` is a WITHIN-source tiebreak nobody stated — and for `claim_landed`, which supplies most of the corpus's questions, `q.id` is `f\"q:claim:{c.id}\"` where `c.id` is a CONTENT HASH minted in `SeasonDriver.witness` off the depositing Event's own id. So which question a person answers is settled, within a source, by LEXICOGRAPHIC ORDER OVER HASHES. It is decisive, not cosmetic: MEASURED over 89 corpus baselines (`proposals/2026-09-04-degree-sweep/wd_extra.py`), the leading source is SHARED with at least one other question in **801 of 1,068 deliberations** — so three quarters of the time this row's declared order does not pick the answer and the hash does — and a traced fork (NPC-088, `none`, 2 slots) moved `qs[0]` from a question about `p_c` to one about `r_hearth` solely because `0261...` sorts before `219a...`, changing every Candidate that person formed. All three of this row's arms are affected: `first` returns `qs[0]`, and `all`/`one_per_source` build their aggregate from `qs[0].id`, `qs[0].source` and `qs[0].about`. §0'S FIVE TESTS, RUN 2026-09-04. (1) SUPERSEDED — no; nothing rules on within-source order, and no register row mentions it. (2) IRRELEVANT — no; live and measured at 801/1,068. (3) ANSWERED BY A DESIGN DOCUMENT — no. V2 §F1 names four sources and stops; `rosters.yaml: question_sources` declares the ACROSS-source order and its note is silent on ties within one. (4) **ANSWERED BY PRECEDENT, AND IT CLOSES HERE.** This row IS the precedent: an ordering that decides which question a budget-bounded person answers, answered silently inside a subscript with no row and no alternative, is `G1`, and the remedy the tree has already applied twice is DECLARE THE INCUMBENT AT THE SITE AND RECORD IT ON THE ROW THAT OWNS THE MECHANISM — here, and again in `H-122`, where a tie resolved by append order was fixed by stating at the site which of two same-tick reads survives. So: the tiebreak is declared at `questions_for`'s sort and in the roster note, and recorded here, where this row's own `unblocks:` already says it decides which question a budget-bounded person answers. NO NEW ROW IS OPENED and `needs_jordan` is FALSE — it is not a live choice between two defensible options that would change ratified canon; it is this row's own open question at a finer grain, and this row is already `assumption`. (5) not reached. ⚠ AND NO RULE IS CHANGED: editing that sort is a design edit to a line three rows depend on, which this row's own `H-54` note at the `occasioned_by` walk already refuses to make as a repair."
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-55
     tier:      1
@@ -2093,8 +2093,16 @@ rows:
       REFUTING `claim.held` CLASS and are no longer deposited. What the count lost is a belief
       that was false at deposit; see the first paragraph of `cite:`.
     cite:      >-
-      SOURCES QUOTED HERE: proposals/2026-09-01-season-loop-tests/tracer/shape.py and
-      proposals/2026-09-02-executable-architecture/hole_register.yaml (row `H-94`).
+      SOURCES QUOTED HERE: proposals/2026-09-01-season-loop-tests/tracer/shape.py,
+      proposals/2026-09-02-executable-architecture/hole_register.yaml (row `H-94`) and
+      proposals/2026-09-04-degree-sweep/arm9_forking.py (arm 9c's own statement of its diagnosis,
+      added 2026-09-04 -- it was being quoted with no source that carries it).
+      ⚠ A ROW MAY NOT BE ITS OWN SOURCE, so where this row quotes ITS OWN retracted wording the
+      text is DISPLAYED and labelled RETRACTED WORDING / VERBATIM rather than set in quotation
+      marks. That is not the reformatting dodge this pass found on `H-117` -- it is the opposite:
+      `verify_citations` now removes a row's own `cite:` from the haystack before checking it, so
+      a self-quotation cannot verify against itself, and presenting one in quotation marks would
+      claim a verification that does not exist.
       ⚠⚠ **THE CONSTRAINT THIS ROW MUST CARRY, AND IT RETRACTS THE FIRST WRITING OF THIS ROW'S
       HEADLINE RESULT. A READ COMPUTED FROM THE LEDGER MAY NOT BE DEPOSITED INTO IT.**
       `WorldReader.read`'s `claim.held` branch answers from LEDGER MEMBERSHIP -- 'does the actor
@@ -2325,12 +2333,52 @@ rows:
       AND THE PUBLISHED INSTRUMENT IS TOO COARSE TO LICENSE THE WORD `DECISION`. BOTH HALVES ARE
       THE RESULT; REPORTING ONLY THE FIRST WOULD BE THE `claim.held` FAILURE ONE RESOLUTION UP.**
       `arm9_forking.fork_case`, unmodified, over all 89 runnable worlds (`apply_rescale` applied —
-      THE 89 BASIS, not the 86 one every other figure on this row uses), seed 0, 4 seasons, at the
-      only fixture cell where the act budget binds tightly enough for `A9.MAX_ALT` to reach an
-      alternative outside it: `scene_budget=2` (a declared `H-10` arm) x `interactions_per_scene=1`
-      (a declared `H-76` arm) = 2 slots. Neither value is invented and the cell is forced by
-      `MAX_ALT`, not chosen for its answer (§0.1 point 4). Probed 3,204 = 801 NO-LIVE-WINDOW + INERT
-      + GENUINE, identically in every arm; 89 of 89 cases ran, 0 failed, 0 fork rows failed.
+      THE 89 BASIS, not the 86 one every other figure on this row uses), seed 0, 4 seasons, at
+      `scene_budget=2` (a declared `H-10` arm) x `interactions_per_scene=1` (a declared `H-76`
+      arm) = 2 slots. Probed 3,204 = 801 NO-LIVE-WINDOW + INERT + GENUINE, identically in every
+      arm; 89 of 89 cases ran, 0 failed, 0 fork rows failed.
+      ⚠⚠ **RETRACTED, AND IT CHANGES THE HEADLINE: this row said 2 x 1 was -- RETRACTED WORDING,
+      VERBATIM -- the ONLY fixture cell where the act budget binds tightly enough for `A9.MAX_ALT`
+      to reach an alternative outside it, and that the cell was forced by `MAX_ALT`, not chosen
+      for its answer. THERE ARE TWO
+      SUCH CELLS, THE OTHER IS A SMALLER INTERVENTION, AND THE ACCEPTANCE FAILS AT IT.** Found by
+      an independent read-only critic, 2026-09-04. The error is one substitution: `L` is THE
+      PACKER'S OWN TAKE (`recorder.in_budget` records what `pack_scenes` returned) and NOT the
+      slot product `scene_budget x interactions_per_scene`, which the forcing argument used as a
+      proxy for it; and `L` is PER DELIBERATION, not per cell. `take()` charges an extended scene
+      `extended_scene_cost` = 2 and takes a whole chunk whenever `ext <= left`, so at 2 x 3 the
+      first chunk of three candidates is taken ENTIRE for a cost of 2 and `L = 3`, not 6 — inside
+      `MAX_ALT`. MEASURED over all NINE cells of the cross, 89 worlds, seed 0
+      (`wd_cells.py` -> `runs/wd_cells.json`): **2 of 9 are askable — 2 x 1 (1,467 genuine forks,
+      `L` distribution {2: 715, 3: 264, 4: 89}) and 2 x 3 (733 genuine, {3: 842, 4: 164, 6: 62});
+      the other seven yield 0 GENUINE.** The census re-derives the partition from baselines alone
+      and reproduces both full runs exactly (2 x 1 `actor`: probed 3,204 = 801 + 936 inert + 1,467
+      genuine, identical to the chunk totals), which is its own falsifier.
+      ⚠⚠ **AND 2 x 3 IS THE CHEAPER CELL: `interactions_per_scene` STAYS AT ITS DEFAULT, so it is
+      ONE declared-arm change against 2 x 1's TWO. On this item's own criterion — minimum
+      departure from the shipped fixture at which the question is askable — it was the better
+      acceptance point, and it was never run.** RUN NOW, same instrument, same chunked path, same
+      seed, same controls: **`none` 756/756 = 100.00% (0 DIVERGED) · `actor` 733/733 = 100.00%
+      (0 DIVERGED) · `total` 716/727 = 98.49% (11 DIVERGED)**, probed 3,204 = 801 NO-LIVE-WINDOW +
+      inert 1,647 / 1,670 / 1,676 + genuine 756 / 733 / 727, 89 of 89 cases, 0 failed, 0 fork rows
+      failed, 2,268 / 2,199 / 2,181 window slots inspected and **0** at the fork's own tick or
+      earlier. **SO THE ACCEPTANCE CRITERION — reconvergence strictly below 100% at the shipped
+      `actor` default with `none` at 100% — IS MET AT 2 x 1 AND IS NOT MET AT 2 x 3.** The verdict
+      is CELL-DEPENDENT and this row states that rather than reporting the cell that passes.
+      ⚠ THE 2 x 3 ZERO IS NOT AN INERT INSTRUMENT, AND SAYING SO NEEDS A CONTROL IN THE OTHER
+      DIRECTION (§0.1 point 4 cuts both ways). §F1 clause 4 DOES fire at that cell — 0 / 37 / 56
+      drops by arm over the 89 baselines, against 0 / 37 / 123 at 2 x 1 — so the channel is open
+      and its effect simply does not reach a later decision at `actor`. The widened
+      `(verb, subject)` fingerprint on the same runs finds SUBJECT-ONLY changes and **zero
+      VERB-SET** changes at `actor`, which is the same statement one resolution finer: `W-B`
+      removes no verb from a candidate set at 6 slots. And the positive control was re-run AT THIS
+      CELL, not carried over from the other one.
+      ⚠ WHAT THIS DOES AND DOES NOT IMPLY. It is NOT evidence of tuning: 2 x 3 was never run, so
+      no result could be selected on, `MAX_ALT = 3` is declared with its reason in
+      `arm9_forking.py`, and both sweeps pre-date `W-D` independently. What it IS: the item banked
+      a favourable result at one of two qualifying cells without running the other, which is the
+      asymmetry §0.1 point 4 exists to surface, and the honest reading of `W-B`'s reach is that it
+      moves a decision at 2 slots and does not at 6.
       **RECONVERGENCE, verb-only fingerprint: `none` 1504/1504 = 100.00% (0 DIVERGED) · `actor`
       1405/1467 = 95.77% (62) · `total` 1285/1467 = 87.59% (182).** The denominators differ because
       a clause-4 drop shrinks the packer's own take `L` and reclassifies a fork as
@@ -2339,10 +2387,29 @@ rows:
       EXACTLY ONE of the next three decisions. **`stream` vs `decision`, separated rather than
       collapsed: 1504/1504 · 1467/1467 · 1467/1467 genuine forks changed the act stream AND the
       event-log hash in every arm — that was already true before `W-B` and is not the finding —
-      while 1504 · 1405 · 1285 of them changed NO decision.** Reproduce:
-      `python proposals/2026-09-04-degree-sweep/wd_chunk.py <mode> narrow <a> <b>` for the four
-      slices per arm, then `python proposals/2026-09-04-degree-sweep/wd_collect.py`; artifacts
-      `runs/WD_LOG.txt` and `runs/wd_acceptance.json`.
+      while 1504 · 1405 · 1285 of them changed NO decision.**
+      ⚠ REPRODUCE — THE FULL SET, BECAUSE THE FIRST WRITING OF THIS LINE NAMED TWO OF THE FIVE
+      SCRIPTS AND COULD NOT REGENERATE HALF THE FIGURES ABOVE (the forensics come from
+      `wd_extra.py` and the widened-fingerprint table needs `wd_subj.py` to have RUN, since
+      `wd_collect` only globs its output). Found by an independent read-only critic, 2026-09-04.
+      From `proposals/2026-09-04-degree-sweep/`, with `<a> <b>` over `0 23 / 23 46 / 46 69 /
+      69 89` and `<mode>` over `none actor total`:
+      `python wd_chunk.py <mode> <default|narrow|2x3> <a> <b>` (the sweep, four slices per arm per
+      cell) · `python wd_subj.py <mode> [<slots>] <a> <b>` (the `(verb, subject)` fingerprint) ·
+      `python wd_extra.py` (corpus forensics, the event-kind and question-source censuses) ·
+      `python wd_cells.py` (the nine-cell askability census) · then
+      `python wd_collect.py`, which concatenates, asserts the reconstruction, runs both controls
+      at both askable cells and writes `runs/WD_LOG.txt` + `runs/wd_acceptance.json`. Artifacts:
+      `runs/wd_acceptance.json`, `runs/WD_LOG.txt`, `runs/wd_extra.json`, `runs/wd_cells.json`,
+      `runs/wd_chunk_*.json`, `runs/wd_subj_*.json`.
+      ⚠ DO NOT CITE `wd_acceptance.py`'s `main()`: it is dead code. MEASURED cause, 2026-09-04 —
+      `trace_log.TRACE` is a module-level singleton whose `rows` list nothing resets, and it grows
+      ~221,000 rows and ~97 MB of RSS PER CASE, strictly linear (six cases: 222,119 rows / 121 MB
+      to 1,324,298 rows / 604 MB; clearing per case holds it flat at ~220,000 for no time cost).
+      `main()` runs six 89-case sweeps in one process, so it is killed with no traceback. The
+      chunked path is not a different experiment — `Fixtures.sweep` copies, the `build_at` spy
+      keeps a one-element buffer, nothing reads `TRACE.rows` mid-run, and `wd_collect` now ASSERTS
+      that each arm covers all 89 case slots exactly once.
       ⚠ AT THE SHIPPED FIXTURE POINT THE QUESTION IS UNASKABLE, AND `EXECUTION_PLAN.md`'s OWN
       SECOND POINT DOES NOT FIX IT. At `DEFAULT_FIXTURES` (15 slots) and at
       `interactions_per_scene=1` alone (5 slots, `budget_binds` True at 1,068 of 1,068
@@ -2379,6 +2446,24 @@ rows:
       which is the general form of the check that caught `claim.held`. The direction is worth
       stating: the drop is present in the BASELINE and absent in the FORK — the fork prevented the
       blocked attempt, so the person never learned the path was shut and still forms the Candidate.
+      ⚠⚠ **AND THE UNFAVOURABLE HALF OF THAT SAME MEASUREMENT, WHICH THIS ROW RECORDED THE
+      FAVOURABLE HALF OF AND STOPPED. §0.1 point 4 IS SYMMETRIC AND THIS ROW WAS NOT.** The run
+      that produced the 123-of-123 true-when-recorded verdict also measured, at the same fixture point, that
+      **42 (`actor`) and 183 (`total`) IN-GRAMMAR DEPOSITS WERE FALSE WHEN RECORDED — all of them
+      `stores:grain`** (82 and 201 at the 2 x 3 cell). The cause is a read taken earlier in RESOLVE
+      than a later `_eff_transfer` mutation, so two persons record different values for one granary
+      in one barrier. **None carried a divergence, so no headline moves** — but a clean 123-of-123
+      truth verdict standing alone, over a population with 183 known-false members, is the
+      `claim.held` failure one resolution up: the number a later session reads must carry both.
+      Found by an independent read-only critic, 2026-09-04; the figures are in `runs/wd_extra.json`
+      under `false_when_recorded_predicates`.
+      ⚠ AND THE CROSS-PERSON CLAIM NOW CARRIES ITS OWN DENOMINATOR. `wd_extra.corpus_drops`
+      computed `cross_person` as: the depositing Event's actor is not the holder. That is False
+      BOTH when the depositor IS the holder and when the provenance walk FAILED — so a failed
+      lookup silently strengthened the 0-of-123 cross-person reading. It is measured rather than assumed:
+      **provenance resolved for 37 of 37 and 123 of 123 drops**, so the claim upholds. `dep_actor`
+      is taken as `Event.subject` and that it is the actor for EVERY kind is stated as an
+      assumption at the site rather than established.
       ⚠ **AND THE INSTRUMENT'S DECISION FINGERPRINT IS VERBS ONLY, WHICH RETRACTS ARM 9c's
       DIAGNOSIS — THE ONE `W-B` WAS BUILT ON.** `recorder` records `(person, [verb, ...], tick)`
       while `opening_set` returns `Candidate(verb, subject, why, operands)`, so two candidate lists
@@ -2387,24 +2472,67 @@ rows:
       1036/1504 = 68.88% · `actor` 960/1467 = 65.44% · `total` 855/1467 = 58.28%.** **THE CONTROL
       IS NOT 100% AT THAT RESOLUTION.** Classifying every changed window slot: `none` = 510
       SUBJECT-ONLY and **0 VERB-SET**; `actor` = 447 and **62**; `total` = 455 and **182** — and
-      those VERB-SET counts are EXACTLY the verb-only instrument's DIVERGED counts, which is the
-      arithmetic saying the two probes are one probe at two resolutions. ARM 9c's stated cause —
+      those VERB-SET counts are EXACTLY the verb-only instrument's DIVERGED counts.
+      ⚠ THAT IDENTITY IS A CONSISTENCY CHECK, NOT INDEPENDENT CORROBORATION, AND THIS ROW CALLED
+      IT, RETRACTED WORDING VERBATIM, the arithmetic saying the two probes are one probe at two
+      resolutions -- which claims more than it can. It CANNOT FAIL while every divergent fork changes exactly ONE window slot,
+      and `changed_distribution` is `{0: 1405, 1: 62}` and `{0: 1285, 1: 182}`: given that, the
+      VERB-SET slot count is identically the count of verb-differing divergent forks. It would
+      become informative only if a fork ever changed two verb-differing slots. Softened by an
+      independent read-only critic, 2026-09-04; the check is kept and still asserted, under its
+      true name. ARM 9c's stated cause —
       the deliberation never reads the world, so the ONLY channel from what happened to what is
       next decided is a claim in the actor's ledger — and ARM 9d's measurement that the channel is
       closed are BOTH narrower than they read. `opening_set` reads no World — but its `q` does: `questions_for(w, p)` takes
-      one and clause 3 is `subject in referents(q)`. TRACED, not inferred (NPC-088, `none`, forking
-      decision 0 from `('move','r_hearth')` to `('speak','r_hearth')`): p_c's tick-1 question list
-      goes `[claim_landed('p_c'), claim_landed('r_hearth'), ...]` to
-      `[claim_landed('r_hearth'), claim_landed('p_c'), ...]`, `question_aggregation_rule='first'`
-      (`H-54`) takes `qs[0]`, and all seven of p_c's candidates change subject from `p_c` to
-      `r_hearth` with the verb sequence unchanged. **So a fork already changed what a person
-      deliberates ABOUT before `W-B`, through Q2 and the ledger's APPEND ORDER — a second ledger
-      channel that is not `belief_contradicts`, and one nobody had measured.** What this costs THIS
-      row is bounded and should not be overstated: `W-B` is still the only channel that removes a
-      VERB from a candidate set (0 at `none` in 510 changed slots), and clause 4 still fires only
-      in the live arms. What it costs is the FRAMING — `W-B` opened a second channel beside an
-      existing one, it did not open the only one — and it means **`H-54` is decision-live**, which
-      that row does not say. THIS ROW STAYS `assumption`: §0's five tests land exactly where the
+      one and clause 3 is `subject in referents(q)`.
+      ⚠⚠ **THE CARRIER IS NOT THE LEDGER'S APPEND ORDER, WHICH IS THE WORDING THIS ROW SHIPPED.
+      `questions_for` SORTS, AND THE SORT DESTROYS APPEND ORDER — the truth is worse and it is
+      corrected here.** Its last two lines are `order = {src: i for i, src in
+      enumerate(QUESTION_SOURCES)}` then `out.sort(key=lambda q: (order[q.source], q.id))`.
+      Several `claim_landed` questions SHARE a source, so among them `q.id` ALONE decides — and
+      `q.id` is `f"q:claim:{c.id}"` where `c.id` is a CONTENT HASH,
+      `H(w.world_seed, w.tick, pid, f"claim:{e.id}:{n}")`, minted in `SeasonDriver.witness` off
+      the depositing Event's own id. **So WHICH QUESTION A PERSON ANSWERS IS DECIDED BY
+      LEXICOGRAPHIC ORDER OVER CONTENT-HASHED CLAIM IDS.** RE-TRACED WITH A SPY on `questions_for`,
+      not inferred (NPC-088, `none`, 2 slots, fork at decision 0 — p_a's `move` -> `speak`; p_c at
+      tick 1): the baseline's five `claim_landed` questions come back at LEDGER INDICES
+      [6, 0, 1, 9, 10] and the fork's six at [12, 5, 0, 1, 8, 9] — neither is append order, both
+      are ascending `q.id`. The fork's `speak` emits `speech.made` about `r_hearth`; the WITNESS
+      fan lands it in p_c's ledger at index 12 as claim `0261dc5bd7431c56`, and `0261...` sorts
+      before `219a...`, so `qs[0]` goes from `q:claim:219a9f960a5fa368` (referents ('p_c',)) to
+      `q:claim:0261dc5bd7431c56` (referents ('r_hearth',)), `question_aggregation_rule='first'`
+      (`H-54`) takes it, and all seven of p_c's candidates change subject from `p_c` to `r_hearth`
+      with the verb sequence unchanged — the flip this row reported, reached by a different
+      mechanism than the one it named. ⚠ AND THE DEPOSITING EVENT'S SUBJECT IS `p_a`, NOT `p_c`:
+      event-kind claims mint in EVERY arm and `fan_out_mode` defaults to `total`, so the pre-`W-B`
+      channel is CROSS-PERSON at the control arm.
+      ⚠ HOW OFTEN THE TIEBREAK DECIDES, MEASURED (`wd_extra.py`, 89 baselines): the leading source
+      is SHARED with at least one other question in **801 of 1,068 deliberations** — three
+      quarters of the corpus's questions are chosen by hash order — invariant across all three
+      arms and both askable cells. **This is an undeclared tiebreaker with decision consequences
+      sitting one level ABOVE `H-54`**, whose three arms (`first` / `all` / `one_per_source`) every
+      one read `qs[0]` or `qs[0].id`, and none of which says what breaks ties WITHIN a source. §0's
+      five tests on whether it needs its own row are run on `H-54`, which is where the disposition
+      is recorded; `needs_jordan` is FALSE and no row was opened. Found by an independent read-only
+      critic, 2026-09-04.
+      ⚠ AND THE RETRACTION'S SCOPE WAS UNDER-STATED: THIS ROW SAID, VERBATIM, A SECOND **LEDGER** CHANNEL --
+      AND THREE OF `questions_for`'S FOUR SOURCES ARE PURE **WORLD** READS — Q1 `w.dates` +
+      `w.docket`, Q3 `w.crossings` + `Query.presence`, Q4 `w.propositions`, none of which touches
+      `p.ledger`. So arm 9c's *"the only channel by which anything that happened can reach a later
+      decision is a CLAIM in the actor's ledger"* is falsified ARCHITECTURALLY in three places, not
+      one. MEASURED over the 89 baselines, which narrows it back down and is worth stating in both
+      directions: only **TWO of the four sources fire at all — `claim_landed` (5,086 / 5,646 /
+      5,769 by arm at 2 x 1) and `need` (1,068 in every arm); `date_due` and `band_crossed` fire
+      ZERO times.** `need` IS a world read and it LEADS 267 of 1,068 deliberations, but it is a
+      STANDING question off a live `commit` Tenure to an OUGHT Proposition — its referents do not
+      move with a fork — so in THIS corpus the live fork -> decision carrier is the traced one.
+      The honest statement: three world-only sources exist, one of them fires, and none of them
+      carries the effect measured here.
+      What this costs THIS row is bounded and should not be overstated: `W-B` is still the only
+      channel that removes a VERB from a candidate set (0 VERB-SET changes at `none` in either
+      askable cell), and clause 4 still fires only in the live arms. What it costs is the FRAMING —
+      `W-B` opened a second channel beside an existing one, it did not open the only one — and it
+      means **`H-54` is decision-live**, which that row does not say. THIS ROW STAYS `assumption`: §0's five tests land exactly where the
       paragraphs above put them, `W-D` measures the consequence of the default rather than
       re-arguing it, and nothing here is a live design choice between two defensible options — so
       `needs_jordan` is FALSE and no row was opened.
@@ -2416,6 +2544,22 @@ rows:
       `yield.taken` 15/30 DIVERGED/genuine) and DETECTED on all four. A first plant on `act.refused`
       fired ZERO times because no corpus world emits that kind, and a plant that never fires is not
       a control — which is why four are run and why that failure is recorded rather than dropped.
+      ⚠ THAT CAUSAL CLAUSE NOW HAS AN INSTRUMENT UNDER IT, AND IT SURVIVES. It was challenged as
+      unfalsifiable — a zero-divergence plant is equally consistent with the predicate never
+      matching a candidate's own subject, and `act.refused` IS a live emission path (`_fold`
+      returns `ev(row.emits_on_refusal or ("act.refused",), ...)` at two sites for any verb row
+      lacking `emits_on_refusal`), while nothing in `runs/` was a census of event kinds. MEASURED
+      over the 89 baselines, in every arm and at both askable cells (`wd_extra.py`,
+      `event_kinds`): **`act.refused` is emitted 0 times.** The 15 kinds the corpus does emit are
+      `claim.deposited` 264,102 · `claim.decayed` 80,154 · `term.matured` 1,602 · `record.created`
+      1,068 · `speech.made` 804 · `travel.moved` 749 · `condition.worn` 712 · `stores.changed` 623
+      · `yield.taken` 356 · `news.told` 328 · `travel.blocked` 319 · `transfer.made` 74 ·
+      `news.untold` 69 · `transfer.refused` 28 · `proposition.uttered` 3. So the clause was right,
+      and it is measured rather than asserted. Raised by an independent read-only critic,
+      2026-09-04.
+      ⚠ AND THE CONTROLS ARE RE-RUN AT THE SECOND ASKABLE CELL rather than carried over from the
+      first, because the 2 x 3 result is a ZERO at the shipped default and a zero from a blind
+      scorer is not a result.
       SECOND POSITIVE, on the comparator alone: a token spliced into one later ranked list, 51
       streams perturbed, 15 DIVERGED, detected. CONFOUND 1 (the ordering one): 4,401 scored window
       slots inspected at `actor`, 4,512 at `none`, and **0** at the fork's own tick or earlier.
