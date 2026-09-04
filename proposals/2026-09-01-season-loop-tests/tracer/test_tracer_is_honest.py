@@ -7412,3 +7412,44 @@ def _code_only_lines(path: Path) -> list:
             prev = tok.type
         keep[tok.start[0]] += tok.string + " "
     return keep
+
+
+def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
+    """A CORRECTION TO `verb_table.yaml`, EXECUTED. Its `writes_source:` cell said the band comes
+    from `wound_state[loser]`. `kill / wound` writes on `payload["subject"]` (`_eff_kill`), so on
+    a fight the ACTOR loses, the loser's tracker says `felled` and the fold would delete the
+    TARGET -- who is standing, unhurt or merely bled. The band is read off the person the writes
+    land on, and the cell now says so.
+
+    THE CASE IS REAL AND IS NAMED: act `we0` in `tiny_world` is a fight `p_low` starts and LOSES.
+    `wound_state[p_low].felled` is True, `wound_state[p_mid].felled` is False, and `p_mid` carries
+    one wound -- so the subject reading gives `Wounded` and the loser reading gives `Felled`.
+
+    ⚠ AND `winner` IS NOT A SAFE KEY EITHER, WHICH IS THE SECOND HALF OF WHY NOTHING HERE READS
+    IT. Measured over the same 40 seeds: `we4` returns `winner = p_low` with
+    `wound_state[p_low].felled` ALSO True, so "the loser" cannot even be derived from `winner`
+    without contradicting the scene. The seam returns both and the fold reads only the scene.
+
+    MUTATION (run 2026-09-04): change `combat_degree`'s subject lookup to the loser (the party
+    that is not `result["winner"]`) and this goes red -- `p_mid` is deleted by a fight he won."""
+    import combat_seam as C
+    if C.engine() is None:
+        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+    w = _w(); w.step = S.Step.RESOLVE
+    raw = S.contest(w, "R", "the body", ["p_low", "p_mid"], 0, 2, ["we0"])
+    assert raw["wound_state"]["p_low"]["felled"] is True, raw["wound_state"]
+    assert raw["wound_state"]["p_mid"]["felled"] is False, raw["wound_state"]
+    assert raw["wound_state"]["p_mid"]["wounds"] > 0, raw["wound_state"]
+    assert S.combat_degree(raw, "p_mid") == S.WOUNDED
+    assert S.combat_degree(raw, "p_low") == S.FELLED, (
+        "the two readings must actually differ on this case, or the assertion below is vacuous")
+
+    w2 = _w(); w2.step = S.Step.RESOLVE
+    d = S.SeasonDriver(w2)
+    evs = d.resolve([S.Act(id="we0", actor="p_low", verb="kill / wound",
+                           payload={"subject": "p_mid"})], 2)
+    assert [e.kind for e in evs] == ["body.changed"], [(e.kind, e.degree) for e in evs]
+    assert "p_mid" in w2.persons, (
+        "the subject was deleted by a fight the ACTOR lost -- the band is being read off the "
+        "loser, which is the defect `verb_table.yaml`'s `writes_source:` cell used to specify")
+    assert evs[0].degree == S.WOUNDED

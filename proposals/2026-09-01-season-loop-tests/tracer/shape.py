@@ -5249,7 +5249,16 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
         p.body = max(1, p.body * max(0, left) // full)
     if p.body > 0:
         return [who]
-    for t in list(p.tenures) + list(w._unowned):
+    # ⚠ `w.tenures`, NOT `p.tenures + w._unowned`, AND THAT IS A FIX `W-E`'s OWN TEST FOUND.
+    # `p.tenures` is the tenures this person is the SUBJECT of (§15.1 -- a Tenure is owned by its
+    # subject), so the old scan could not see an edge ANOTHER PERSON owns that names the dead one
+    # as its OBJECT. Measured in `tiny_world`: `t10`, a live `tie` from `p_low` to `p_mid`,
+    # survived `p_mid`'s death and then DANGLED, because `del w.persons[who]` had already removed
+    # the person it pointed at. §15.3 is explicit that the tenure ends THROUGH THE DEATH; this is
+    # the write the `Felled` branch declares (`Tenure.until`) actually reaching every edge it
+    # names. `w.tenures` is owner-first over every person plus `_unowned`, so it is a WIDENING of
+    # the same scan and not a second rule.
+    for t in list(w.tenures):
         if (t.subject == who or t.object == who) and t.live:
             t.until = w.tick
     del w.persons[who]
