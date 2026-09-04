@@ -1,0 +1,490 @@
+
+==============================================================================
+THE DEGREE SWEEP — degrees of success across the ARC and NPC corpus
+==============================================================================
+[SCOPE      ] cases: 46 NPC + 97 ARC = 143, from all 11 case files in the PR chain
+              | the loader globs BOTH 2026-08-31-shape-tracer/cases and 2026-09-01-season-loop-tests/cases
+[SCOPE      ] runnable (scale is a rung kind): 30 NPC + 59 ARC
+[SEED       ] 0 — the corpus arms are seeded and `R4` pins replay.
+              | ⚠ NARROWED: an earlier version of this line claimed EVERY draw in the instrument was seeded. It was false of arm 5a, which drew from module-level `random` unseeded, and 5a is exactly the arm whose published distribution drifted between runs. 5a is seeded now; the claim is stated at the size it can carry.
+
+==============================================================================
+ARM 0 — REACHABILITY: what the 143 cases actually reach
+==============================================================================
+[SCOPE      ] 143 cases run at seed 0
+[MEASURE    ] trace channel totals: {'STEP': 5784, 'BARRIER': 1928, 'DECISION': 5376, 'QUERY': 13014, 'NOTE': 17530, 'WRITE': 690178, 'EVENT': 448734, 'ACT': 10122, 'CLAIM': 339804}
+[⚠ 2x       ] EVERY COUNT ABOVE IS DOUBLE THE CORPUS, AND DELIBERATELY LEFT RAW.
+              | `corpus_run.run_case` folds the season TWICE — the measured run (:341) and the R4 determinism replay (:386-388) — and this census clears the trace once per case, so both are counted. Signature: `S24` reads 22 firings in 11 cases, i.e. 11 x 1 x 2. Halve for a per-corpus figure. Zero doubled is still zero, so the S39 result is unaffected — but the denominators are not per-corpus and saying so is cheaper than a second run. Found by the adversarial pass.
+[MEASURE    ] UNREPRESENTABLE by scale: {'faction': 44, 'world': 10} (total 54)
+              | printed here because `corpus_run.main()` prints it and `sweep.py` never calls that — a number in the README's scope table had no instrument in the shipped run
+
+==============================================================================
+ARM 0a — every decision site the corpus reached
+==============================================================================
+[SITE       ] E2/S27.1          3426 firings in  89 cases
+[SITE       ] S31.1              482 firings in  89 cases
+[SITE       ] S27/S32            482 firings in  89 cases
+[SITE       ] S28/S61            482 firings in  89 cases
+[SITE       ] S29                482 firings in  89 cases
+[SITE       ] S24                 22 firings in  11 cases
+
+==============================================================================
+ARM 0b — the sites it did NOT reach
+==============================================================================
+[SITE       ] S39                  0 firings   — the contest seam — where an act routes to a subsystem
+              | NEVER REACHED
+[SITE       ] S39.3                0 firings   — the contest depth cap
+              | NEVER REACHED
+[SITE       ] S39.4                0 firings   — the degree ladder's margin model
+              | NEVER REACHED
+[SITE       ] S27.4                0 firings   — the Ob/Pool budget refusal — the only other roll-shaped branch
+              | NEVER REACHED
+[VERDICT    ] 0 of 5376 decision firings are the contest seam
+[⚠ WEAK     ] THE S39 COUNT ALONE CANNOT CARRY THAT CONCLUSION, and an earlier draft rested it there.
+              | `S39` as a `TRACE.decision` exists at ONE site (shape.py:4957), reached only after a personal-combat dispatch RETURNS RESOLVED; the other three S39 sites are raises. `S39.4` has no `TRACE.decision` at all — it is only the `where` of a raise — so its zero is vacuous and cannot observe the failure it excludes (§0.1 pt 2). And a contested act reaching `resolve()` would raise `Forbidden` at shape.py:4611 first, because `corpus_run` calls `season()` with no `contest_max_depth`. All three paths are raises and produce no DECISION row.
+[VERDICT    ] the load-bearing evidence is the STATUS histogram: {'RUNS-UNDECLARED': 59, 'UNREPRESENTABLE': 54, 'SPAN-UNAUTHORED': 25, 'RUNS-ALONE-UNDECLARED': 5}
+              | DESIGN-GAP=0, INSTRUMENT-DEFECT=0. `run_case` converts every `ShapeGap` and `Forbidden` into one of those two statuses, so zero of both rules out the raise paths the S39 counter cannot see. Together with `S39 == 0`: no contest was dispatched AND none was attempted-and-refused. NOT ONE act in the corpus resolved at a degree.
+
+==============================================================================
+ARM 1 — ADMISSIBILITY: does the system accept the degrees Jordan named?
+==============================================================================
+[SETUP      ] contested verbs in the table: ['kill / wound']
+              | a verb routes to the degree seam only if it declares `contests:`. There is exactly one.
+[SETUP      ] 'kill / wound' declares contests='the body'
+              | so its prize routes to `personal_combat`
+[SETUP      ] declared degree branches: ['Felled', 'Untouched', 'Wounded']
+              | these are the ONLY tokens `writes_at` can select; an unlisted one raises by design (shape.py: 'an unlisted degree RAISES rather than falling back to the union')
+
+==============================================================================
+ARM 1a — LADDER C, the canonical four (dice_engine.degree_from_net)
+==============================================================================
+[WHY        ] engine/autoload/dice_engine.py::degree_from_net -- THE ladder, single owner for every scale (Jordan ruling 2026-08-14), read off the margin `net - ob`
+[INJECT     ] degree='Overwhelming' -> writes_at('Overwhelming')
+[RESULT     ] REFUSED — SystemExit [BaseException-ONLY]: 'kill / wound' has no `writes` branch for degree 'Overwhelming'. Declared: ['Felled', 'Untouched', 'Wounded']. An unlisted degree RAISES rather than defaulting -- a missing branch is a hole, not a full write.
+[INJECT     ] degree='Success' -> writes_at('Success')
+[RESULT     ] REFUSED — SystemExit [BaseException-ONLY]: 'kill / wound' has no `writes` branch for degree 'Success'. Declared: ['Felled', 'Untouched', 'Wounded']. An unlisted degree RAISES rather than defaulting -- a missing branch is a hole, not a full write.
+[INJECT     ] degree='Partial' -> writes_at('Partial')
+[RESULT     ] REFUSED — SystemExit [BaseException-ONLY]: 'kill / wound' has no `writes` branch for degree 'Partial'. Declared: ['Felled', 'Untouched', 'Wounded']. An unlisted degree RAISES rather than defaulting -- a missing branch is a hole, not a full write.
+[INJECT     ] degree='Failure' -> writes_at('Failure')
+[RESULT     ] REFUSED — SystemExit [BaseException-ONLY]: 'kill / wound' has no `writes` branch for degree 'Failure'. Declared: ['Felled', 'Untouched', 'Wounded']. An unlisted degree RAISES rather than defaulting -- a missing branch is a hole, not a full write.
+
+==============================================================================
+ARM 1b — LADDER D, the declared three (verb_table.yaml `kill / wound`)
+==============================================================================
+[WHY        ] proposals/2026-09-02-executable-architecture/verb_table.yaml, the `kill / wound` row -- the ONLY degree-keyed verb in the corpus
+[INJECT     ] degree='Felled' -> writes_at('Felled')
+[RESULT     ] ADMITTED writes=['Person.body', 'Person.exists', 'Tenure.until'] emits=['person.died']
+              | these are STATE PATHS the fold would write, and they differ per token — so the declared ladder does carry mechanical consequence, unlike the canonical one above
+[INJECT     ] degree='Wounded' -> writes_at('Wounded')
+[RESULT     ] ADMITTED writes=['Person.body'] emits=['body.changed']
+              | these are STATE PATHS the fold would write, and they differ per token — so the declared ladder does carry mechanical consequence, unlike the canonical one above
+[INJECT     ] degree='Untouched' -> writes_at('Untouched')
+[RESULT     ] ADMITTED writes=[] emits=['contest.undecided']
+              | these are STATE PATHS the fold would write, and they differ per token — so the declared ladder does carry mechanical consequence, unlike the canonical one above
+
+==============================================================================
+ARM 1c — THE CONTROL: a contested verb folded with NO degree at all
+==============================================================================
+[INJECT     ] degree=None
+[RESULT     ] REFUSED — SystemExit [BaseException-ONLY]: 'kill / wound' declares `contests: the body` and was folded with no degree. A contested verb's writes are degree-keyed (#358 rev.2 §C.4); folding one without a degree is the defect that column exists to make unwritable.
+              | the control matters: if a missing degree silently returned the union, every result above would be indistinguishable from a system with no ladder at all
+
+==============================================================================
+ARM 1d — AN UNCONTESTED VERB, the second control
+==============================================================================
+[INJECT     ] verb='speak' (declares no `contests:`) degree='Overwhelming'
+[RESULT     ] ADMITTED writes=[]
+              | an uncontested verb IGNORES the degree and returns its flat tuple — so passing a degree to an ordinary verb is silently a no-op, which is the third response class
+[INJECT     ] verb='work' (declares no `contests:`) degree='Overwhelming'
+[RESULT     ] ADMITTED writes=['Site.condition']
+              | an uncontested verb IGNORES the degree and returns its flat tuple — so passing a degree to an ordinary verb is silently a no-op, which is the third response class
+
+==============================================================================
+ARM 2 — THE ON-RAMP: can a season loop reach a degree at all?
+==============================================================================
+
+==============================================================================
+ARM 2a — does the chooser ever propose the contested verb?
+==============================================================================
+[MEASURE    ] `resolvable_verbs()` = 12 of 32 verbs
+              | the chooser draws candidates from this set only; a verb outside it can never be proposed
+[MEASURE    ] is 'kill / wound' in it? False
+[WHY-NOT    ] and the reason is NOT what an earlier draft of this arm said. 'kill / wound' HAS an effect (True, `_eff_kill` at shape.py:3847) and its `requires: '—'` is in `NO_PRECONDITION`, so both the predicate and effect gates PASS.
+              | the exclusion comes from the THIRD gate — `contested = bool(row.contests)` at shape.py:2336 — whose own comment says so. The distinction matters because a reader acting on 'add a predicate and an effect' would change nothing: what excludes this verb is precisely that it is CONTESTED, i.e. the fold defers it to the seam by design. Corrected after the adversarial pass.
+[VERDICT    ] the ONLY degree-keyed verb is NOT IN the candidate set
+              | so no act the chooser produces can carry `contests:`, so `contest()` is unreachable from `season()`, so no degree branch is ever selected. The road is built; there is no on-ramp.
+
+==============================================================================
+ARM 2b — forced past the chooser: does the seam CALL personal combat?
+==============================================================================
+[BUILD      ] world from case NPC-088 (Carin Vedel), scale person
+              | persons: ['p_a', 'p_b', 'p_c'] — the corpus seats three, which is what a contest needs
+[CALL       ] combat_seam.resolve(w, ['p_a','p_b'], ['cause_probe'], 'the body')
+              | this is the call `contest()` makes when a prize routes to `personal_combat`
+[RESULT     ] status=RESOLVED module=personal_combat resolver=d_sigma
+              | the LIVE engine at systems/combat/combat_engine_v1 actually ran — this is not a stub
+[RESULT     ] result=1 winner='p_a' unresolved=False bouts=3
+[WOUND      ] p_a: {'available': True, 'felled': False, 'wounds': 3, 'max_wounds': 3, 'health_remaining': 6, 'health_full': 40}
+              | the seam names this `THE DEGREE SOURCE` — severity is read off the scene, not mapped from the winner
+[WOUND      ] p_b: {'available': True, 'felled': True, 'wounds': 4, 'max_wounds': 3, 'health_remaining': 0, 'health_full': 40}
+              | the seam names this `THE DEGREE SOURCE` — severity is read off the scene, not mapped from the winner
+
+==============================================================================
+ARM 2b-control — do the seam's TWO degree surfaces agree with each other?
+==============================================================================
+[WHY        ] the seam returns both `winner` and `wound_state`. A degree mapping could be built on either. If they disagree, the choice of surface changes the outcome.
+[MEASURE    ] 300 seeded fights: 297 decided, 3 unresolved
+[MEASURE    ] winner is UNFELLED (surfaces agree): 279
+[MEASURE    ] winner is FELLED  (surfaces CONTRADICT): 18  = 6.1%
+[CAUSE      ] systems/combat/combat_engine_v1/wrapper.py:493 — `if result!=0 and rng.random()<cfg['UPSET_FLOOR']: result = -result`
+              | UPSET_FLOOR=0.05 inverts the RESULT after the fell was recorded and never touches the wound trackers. A deliberate designer rule (ED-PC-0036).
+[⚠ RETRACTED] an earlier draft of this arm said the desynchronisation was 'NOT declared anywhere'. FALSE — it is declared at the constant's own definition site.
+              | config.py:295-304, verbatim: 'the trace stream emits `engagement_end felled=X` and then `fight_result winner=X`, WITH NO IN-MODEL EVENT CORRESPONDING TO THE REVERSAL'. The producer cited wrapper.py:493 and never opened config.py. What remains true and is the narrowed claim: `combat_seam` names `wound_state` THE DEGREE SOURCE and returns `winner` beside it without repeating that warning, so a caller reading only the seam would not know the two disagree. Found by the adversarial pass.
+
+==============================================================================
+ARM 2c — the guard at shape.py:4448, and what it costs the corpus run
+==============================================================================
+[READ       ] shape.py:4441-4447 states the guard's INTENT, verbatim:
+[QUOTE      ] 'if that branch is ever wired to fall through without minting a degree, it fails loudly here instead of silently writing the full kill. That is the guard.'
+              | the DIRECTION is right — loud beats a silent full kill. This arm measures the MECHANISM.
+
+==============================================================================
+ARM 2c-i — is the guard's exception in the run's catch lists? (static)
+==============================================================================
+[READ       ] corpus_run.run_case:343  `except S.InstrumentDefect`
+[READ       ] corpus_run.run_case:350  `except (S.ShapeGap, S.Unspecified, S.Forbidden, S.NoProducer)`
+              | these two clauses are the ONLY handlers between a folding season and the caller
+[MEASURE    ] SystemExit        base=BaseException-ONLY caught by 343=False  by 350=False  -> ESCAPES THE RUN
+[MEASURE    ] Unspecified       base=Exception          caught by 343=False  by 350=True  -> CAUGHT
+[MEASURE    ] Forbidden         base=Exception          caught by 343=False  by 350=True  -> CAUGHT
+[MEASURE    ] InstrumentDefect  base=Exception          caught by 343=True  by 350=False  -> CAUGHT
+
+==============================================================================
+ARM 2c-ii — the same, executed (the fall-through under run_case's handlers)
+==============================================================================
+[PLANT      ] Act(id='sweep_kw', actor='p_a', verb='kill / wound', payload={'subject':'p_b'})
+              | the act the chooser cannot propose (2a). Folded DIRECTLY, which is exactly what the contest branch would do if wired to fall through once H-98 rules the bands.
+[CALL       ] d._fold(w, act)  wrapped in run_case's own two except clauses
+[RESULT     ] ESCAPED BOTH CLAUSES
+[DETAIL     ] SystemExit: 'kill / wound' declares `contests: the body` and was folded with no degree. A contested verb's writes are degree-keyed (#358 rev.2 §C.4); folding one without a degree is the defect that column exists to make unwritable.
+
+==============================================================================
+ARM 2c — what this costs, stated at its true size and no larger
+==============================================================================
+[COST       ] the guard fires correctly — a degreeless contested fold does NOT write the full kill
+              | the direction the comment claims is real and this arm confirms it
+[COST       ] but it raises `SystemExit`, the ONLY run-time refusal in shape.py that is not a typed gap
+              | 18 SystemExit raises in shape.py; 14 are load-time (missing/malformed YAML) and correctly fatal. The 4 run-time ones are exactly the degree branches (708, 712, 728, 733)
+[COST       ] so it is not classified: no DESIGN-GAP row, no `kind` histogram entry, no §-citation
+              | the 78 typed gaps carry `where`/`needs`/`law`; SystemExit carries a bare string
+[COST       ] and it ends the PROCESS, so every case after it in the corpus goes unmeasured
+              | a one-case design gap is converted into a whole-corpus run termination
+
+==============================================================================
+ARM 3 — THE DEPTH-3 DEGREE TREE, ACROSS THE WHOLE CORPUS
+==============================================================================
+[WHY        ] Jordan's ask: 'explore at each decision point to a depth of three the degree of success'. Three consecutive contested folds in one carried-forward world.
+[SETUP      ] branching factor = |ladder|; depth = 3; so 4^3 = 64 paths on ladder C and 3^3 = 27 on ladder D, per case
+[SETUP      ] a NODE is one contested act folded at one injected degree; the world carries forward along a path and is forked by deepcopy at every branch
+[TIMING     ] 178 trees in 1.6s
+
+==============================================================================
+ARM 3 RESULT — LADDER C — the canonical four
+==============================================================================
+[COUNT      ] 89 cases x 64 paths = 5696 paths enumerated
+[COUNT      ] paths that survive all 3 nodes: 0 (0.0%)
+[COUNT      ] deepest node reached, per case: {0: 89}
+              | 0 means the FIRST node refused, so every path is one node long and the other 60+ are never evaluated
+[COUNT      ] distinct leaf worlds per case: {0: 89}
+              | this is the discrimination measurement — if N surviving paths collapse to 1 leaf, the ladder produced N names for one future
+
+==============================================================================
+ARM 3 RESULT — LADDER D — the declared three
+==============================================================================
+[COUNT      ] 89 cases x 27 paths = 2403 paths enumerated
+[COUNT      ] paths that survive all 3 nodes: 2403 (100.0%)
+[COUNT      ] deepest node reached, per case: {3: 89}
+              | 0 means the FIRST node refused, so every path is one node long and the other 23+ are never evaluated
+[COUNT      ] distinct leaf worlds per case: {2: 89}
+              | this is the discrimination measurement — if N surviving paths collapse to 1 leaf, the ladder produced N names for one future
+
+==============================================================================
+ARM 4a — what does `content_hash` actually observe?
+==============================================================================
+[READ       ] shape.py:2026-2033 — `content_hash` iterates `self.log` ONLY
+              | it hashes each Event's id/kind/subject/emitted_at/degree/causes and each StateChange's subject/mode/driver/field/delta. It reads `w.persons`, `w.tenures`, `w.sites`, `w.rungs` — the WORLD — not at all.
+[BUILD      ] two identical worlds from NPC-088: hashes equal = True
+[MUTATE     ] delete person 'p_b' from world 2 — no Event appended
+              | this is the state a `Felled` fold leaves if its Event is dropped or never logged
+[RESULT     ] world1 hash == world2 hash ? True
+              | a world missing a person hashes identically to one that has them
+[VERDICT    ] `content_hash` is a hash of the LOG, not of the WORLD
+              | R4 — named a load-bearing control in PR #362 — pins that the EVENT STREAM replays identically. It does not pin that the world state does. A divergence in state that leaves the log identical is invisible to it. That is a narrower guarantee than the name `content_hash` suggests, and narrower than 'byte-identical corpus_run output' implies.
+
+==============================================================================
+ARM 4b — WHAT THE ENGINE RETURNS, which the calling code has to accept
+==============================================================================
+[RETRACTED  ] this arm first asked 'can four bands be read off this?' — the wrong question, retracted on Jordan's ruling 2026-09-04
+              | 'the combat engine determines the result there. your code just has to accept the result.' The measurement below is kept as a DESCRIPTION of the result-shape; the four-band verdict it originally carried is withdrawn.
+[MEASURE    ] 600 seeded fights, identical parties (the corpus derives one field, `end`)
+[MEASURE    ] decided 595, unresolved 5 (0.8%)
+              | `result == 0` is a RULED outcome (Jordan 2026-06-02), not a failure
+[MEASURE    ] winner's WOUNDS: 5 distinct value(s) — {0: 225, 1: 121, 2: 109, 3: 85, 4: 55}
+              | this is the quantity a band edge would have to cut
+[MEASURE    ] winner's HEALTH REMAINING: 24 distinct value(s) — {0: 28, 1: 9, 2: 7, 3: 5, 4: 6, 5: 22, 7: 1, 8: 14, 10: 1, 11: 4, 12: 42, 13: 1, 14: 11, 15: 17, 16: 2, 17: 3, 18: 12, 19: 20, 22: 44, 26: 120, 28: 1, 32: 16, 36: 49, 40: 160}
+              | this is the quantity a band edge would have to cut
+[MEASURE    ] loser's HEALTH REMAINING: 9 distinct value(s) — {0: 567, 5: 2, 12: 1, 14: 1, 19: 1, 26: 4, 32: 1, 36: 5, 40: 13}
+              | this is the quantity a band edge would have to cut
+[SHAPE      ] the result the code must accept is a TERMINAL STATE plus a severity reading: felled/not, and a wound count taking 5 distinct values
+              | that is what `combat_seam.resolve` already returns in `wound_state`, and it is what `Felled | Wounded | Untouched` is a faithful three-way reading of
+[CROSS-CHECK] 28 of 595 'losers' are NOT at health 0 (4.7%)
+              | `wrapper.fight` sets a result ONLY when a fighter is felled, so a loser above 0 health can only be an UPSET_FLOOR inversion. This independently reproduces Arm 2b-control's ~5% from a different quantity, which is why it is reported: two measurements of the same mechanism that did not share a code path
+
+==============================================================================
+ARM 5a — the real four-band distribution in person-to-person contest
+==============================================================================
+[SETUP      ] systems/social_contest/sim/contest GAMES = {'agon': 'WIRED', 'consensus': 'STUB', 'negotiation': 'STUB', 'inquiry': 'STUB'}
+              | JORDAN 2026-09-04: 'social contest is an unfinished engine.' ONE of four games is wired. Everything below measures the Persuasion Track only.
+[SETUP      ] resolver.py:307 — `DEGREE_ORDINAL[degree_from_net(net, base_ob, extension=self.degree_extension, pool=pool)]`
+              | the OWNER's ladder, with the contest's one declared extension consulted on the top band only. This is the call that mints a degree for an argument.
+[MEASURE    ] 120 contests -> 1142 `_reception` calls, each minting exactly one degree
+              | ⚠ NOT 'one per exchange'. `resolver.py:440-449` loops `for i in range(budget): for side in (A,B)` — two log rows per round — and `_reception` is called only on the rebut and advance branches (:370, :406). `pass`, `support`, `shift`, evidence, `barred` and irrelevant-ground mint no degree. So receptions < log rows, and the two must not be called by the same word. Found by the adversarial pass.
+[BAND       ] Failure       (ordinal 0) :     85    7.4%
+              | the ladder's floor — a failed argument still costs the season
+[BAND       ] Partial       (ordinal 1) :     83    7.3%
+[BAND       ] Success       (ordinal 2) :    607   53.2%
+[BAND       ] Overwhelming  (ordinal 3) :    367   32.1%
+[MEASURE    ] contest outcomes: {('a', 'win'): 26, ('b', 'win'): 94}
+[VERDICT    ] all four bands are POPULATED in live person-to-person resolution (4 of 4 occupied)
+              | so the four-band ladder is not aspirational for social interaction — it is running, and it is the degree model Jordan is asking about
+
+==============================================================================
+ARM 5b — the same acts, in the chain's verb table
+==============================================================================
+[SETUP      ] 32 verbs in the table; the interpersonal surface is these 12, chosen by what each row's own `emits:` says it does
+[ROW        ] speak                          contests=—        writes=[]                                 grade=assumption
+[ROW        ] tell                           contests=—        writes=[]                                 grade=ruled
+[ROW        ] utter                          contests=—        writes=['Proposition.exists']             grade=assumption
+[ROW        ] the six investigation acts     contests=—        writes=[]                                 grade=assumption
+[ROW        ] petition                       contests=—        writes=['Petition.exists']                grade=ruled
+[ROW        ] refract                        contests=—        writes=[]                                 grade=absent
+[ROW        ] comply                         contests=—        writes=[]                                 grade=ruled
+[ROW        ] evade / defy                   contests=—        writes=[]                                 grade=ruled
+[ROW        ] determine                      contests=—        writes=['Tenure.degree']                  grade=absent
+[ROW        ] repudiate                      contests=—        writes=['Tenure.until']                   grade=ruled
+[ROW        ] carry                          contests=—        writes=['DocketItem.matter']              grade=ruled
+[ROW        ] oblige                         contests=—        writes=['Tenure.since']                   grade=ruled
+[COUNT      ] of 12 interpersonal verbs: 12 carry NO degree column, 6 write NO state at all
+[VERDICT    ] every interpersonal act in the chain resolves BINARY — it emitted, or it refused
+              | there is no 'argued well', no 'partly convinced', no 'overwhelming'. The four bands running on `main` reach none of these rows.
+
+==============================================================================
+ARM 5c — the route is declared from one end and unclaimed from the other
+==============================================================================
+[READ       ] rosters.yaml `contest_subsystems.prizes` = {'the body': 'personal_combat', 'a field': 'mass_battle', 'a standing': 'social_contest', 'a proposition': 'social_contest'}
+[READ       ] prizes actually CLAIMED by a verb's `contests:` column = ['the body']
+[MEASURE    ] prizes routed to a subsystem that NO verb claims: ['a field', 'a proposition', 'a standing']
+[VERDICT    ] 3 of 4 declared prizes are unreachable
+              | `a standing` and `a proposition` both route to `social_contest` — whose `agon` game is wired and whose other three are stubs — and no verb points at either. `contest()`'s own refusal text says it: 'mass_battle and social_contest still resolve to a name only'. ⚠ So this is NOT a pure wiring gap: connecting `a proposition` to a verb would reach a wired track; connecting an investigation would reach `inquiry`, which is a stub.
+
+==============================================================================
+ARM 5d — THE DEPTH-3 FOUR-BAND TREE on person-to-person interaction
+==============================================================================
+[SETUP      ] decision point = one EXCHANGE (3 forced, then the contest runs out)
+[SETUP      ] branching factor 4 (the owner's bands); depth 3; 64 trajectories x 40 seeds = 2560 contests
+[SETUP      ] forced at `Bout._reception`, the single site that mints a degree (resolver.py:307). `_advance` and the ladder are untouched.
+[⚠ WHOSE BANDS] the three forced positions are A's opening, B's opening, A's second — NOT three of A's own decision points.
+              | `resolver.py:443` iterates `for side in (A, B)` and the forcing hook is side-agnostic, so axis 0 and axis 2 are A's and AXIS 1 IS THE OPPONENT'S. An earlier draft described all three as A's. Found by the adversarial pass; the marginal below is still a valid within-design marginal for A's own opening, and the axis-1 control now runs beside it.
+[COUNT      ] 64 trajectories x 40 seeds; 2 distinct MODAL outcomes
+              | the discrimination measurement: if every degree sequence lands on one modal outcome, the ladder named 4^3 things and produced one future
+[LEAF       ] modal outcome b/win        for  54 of 64 trajectories (84.4%)
+[LEAF       ] modal outcome a/win        for  10 of 64 trajectories (15.6%)
+[SPREAD     ] A's win rate across the 64 trajectories: min 0.000 · median 0.075 · max 1.000
+              | a ladder that discriminates should spread this; a ladder that does not would pin every trajectory at one rate
+
+==============================================================================
+ARM 5d-control — is the ladder MONOTONE? a higher band should not do less
+==============================================================================
+[WHY        ] a four-name ladder whose bands do not order the outcome is four names for one thing. This is the falsifier for 'the degrees mean something'.
+[RETRACTED  ] an earlier version of this control measured MEAN PEAK advA and reported NON-MONOTONE (Failure 6.877 > Overwhelming 6.624). WITHDRAWN — confounded.
+              | an Overwhelming opening ENDS THE CONTEST SOONER, so there are fewer exchanges in which to accumulate advance, and a running total falls as the opening improves for a reason that has nothing to do with the ladder's order. §0.1 pt 1: attack the SETUP. Caught by measuring contest LENGTH per band, which the first control never looked at.
+[METRIC     ] the uncontaminated reading is A's WIN RATE — an outcome, not a running total a shorter contest truncates. Exchange count is reported beside it as the quantity that confounded the first attempt.
+[BAND       ] opening forced to Failure       -> A wins   5.2% over   640 contests · 15.74 exchanges · opponent peak  8.711
+[BAND       ] opening forced to Partial       -> A wins  11.1% over   640 contests · 15.16 exchanges · opponent peak  8.495
+[BAND       ] opening forced to Success       -> A wins  24.1% over   640 contests · 13.88 exchanges · opponent peak  7.934
+[BAND       ] opening forced to Overwhelming  -> A wins  46.2% over   640 contests · 10.65 exchanges · opponent peak  6.233
+[AXIS-1     ] Failure 46.9% · Partial 23.8% · Success 10.3% · Overwhelming 5.6%  -> DECREASING (the opponent's band — as it must be)
+              | axis 1 is B's move and axis 2 is A's second — so 1 must fall and 2 must rise. They do, which is what licenses reading axis 0 as A's opening.
+[AXIS-2     ] Failure 9.8% · Partial 13.9% · Success 23.8% · Overwhelming 39.1%  -> INCREASING (A's own band)
+[BASELINE   ] unforced, identical parties, identical policies — A wins 28.3% (a/win 34 vs b/win 86 over 120 contests, arm 5a)
+              | the engine is asymmetric between A and B before any forcing (A moves first each round, resolver.py:443). So 46.2% is 'well above a 28.3% baseline', not 'near even', and 5.2% is far below it. An earlier draft printed the marginal with no baseline beside it.
+[⚠ SHORT    ] 4 of 64 trajectories ended in <= 3 exchanges, so their later forced bands were never consumed
+              | e.g. (Overwhelming, Failure, *) is four byte-identical rows — the contest ends after one round under `ProofBar(bar=2.0)`, so the third band is never read and those four are one trajectory. Arm 3 tracks `reached_depth` for exactly this and arm 5d did not.
+[VERDICT    ] A's win rate is monotone non-decreasing in the opening band: True
+              | a better opening degree wins more often. The four bands are ordered in EFFECT and not only in name — on the ONE wired game of an engine Jordan states is unfinished.
+
+==============================================================================
+ARM 6 — the v2 systems marked for import, checked against the tree
+==============================================================================
+[SOURCE     ] proposals/2026-09-03-meta-architecture/HANDOFF_NEXT.md §2 — 'The five root causes that block #359's actions — ⚠ this is the real backlog'
+[SOURCE     ] proposals/2026-09-03-governance-corpus-rebuild/03-design-v2.md §discovery — 'Discovery is a contest — the investigator's relevant capability against the scheme's `secrecy` — emitting a `Degree` like everything else'
+[ROW        ] 2a  a generic `release` verb (#358 §A.3 row 14)
+[           ]      blocks : defect · betray · breaking a treaty · releasing a guarantee — AND a person cannot resign an office, a direct T-m violation
+[           ]      STATE  : ABSENT (name probe; concept checked by hand — `repudiate` closes only a `commit` and `revoke` needs a remit, so no self-resignation path exists)
+[ROW        ] 2b  `the six investigation acts` split into six rows with writes
+[           ]      blocks : expose · Investigate — discovery is inert. #359's discovery model (a contest of capability against secrecy, EMITTING A DEGREE) is the shape
+[           ]      STATE  : NOT SPLIT — still ONE row: writes=[] contests=None grade='assumption'
+[ROW        ] 2c  `determine` graded, `judging_set` as a Query
+[           ]      blocks : vote — nothing is decided at a sitting
+[           ]      STATE  : `determine` grade='absent' contests=None; `judging_set` as a Query in shape.py: PRESENT
+[ROW        ] 2d  a founding verb writing `Rung.exists` / `Site.exists`
+[           ]      blocks : incorporation · building a holding — F.20: the world only decays
+[           ]      STATE  : ABSENT — zero producers
+[ROW        ] 2e  ⚠ NOT a `bargain` verb — the handoff says 'test composability FIRST … adding a verb is the LAST resort, not the first'. The prescribed deliverable is the COMPOSABILITY TEST (does `utter` a counter-OUGHT + `commit` already express it?)
+[           ]      blocks : the third response at every tier
+[           ]      STATE  : NOT TESTED — no `bargain` verb (which the handoff DEPRECATES adding) and no composability test for `utter`+`commit` anywhere in the chain, this sweep included
+
+==============================================================================
+ARM 6 — verdict
+==============================================================================
+[COUNT      ] 0 of 4 SCORABLE root-cause fixes are delivered; 1 is NOT TESTED (2e, whose prescribed deliverable is a composability test nobody has run)
+              | ⚠ an earlier draft reported '0 of 5' by counting 2e's missing `bargain` verb as an unmet deliverable. That inverts the handoff, which deprecates adding the verb. Corrected.
+[MEASURE    ] verbs declaring `contests:` : ['kill / wound']
+              | one — and it is the combat verb, not a social one
+[VERDICT    ] the v2 systems marked valuable were evaluated, ranked and prescribed — and not built
+              | PRs #358, #361 and #362 all edited the meta-architecture PROSE. None touched `verb_table.yaml`: `git diff 2c0ea60..1e163ee -- .../verb_table.yaml` is empty. What landed in #362 was thirteen edits to a document; what did not land is every one of the five mechanisms the same handoff calls the real backlog.
+[CONSEQUENCE] 2b is the one Jordan named, and it is why investigation is degreeless
+              | the prescription was a discovery CONTEST emitting a Degree. Without it `the six investigation acts` stays one row with `writes: []`, so investigating and accusing cannot carry a degree of success no matter what the ladder does.
+
+==============================================================================
+ARM 7 — ALTERNATIVE OUTCOMES WITHIN EACH SEASON, DEPTH 3 — THE FLEXIBILITY TEST
+==============================================================================
+[ASK        ] Jordan 2026-09-04: 'mechanical explorations of alternative outcomes within each arc/NPC season at a depth of three so that we can assess flexibility'
+[SETUP      ] branch = which RANKED candidate leads the season (k in 0..3); depth 3 seasons; 64 trajectories per case
+[SETUP      ] four, to match the arity of the degree ladder Jordan named, so the choice tree and the degree tree are the same width and their flexibility numbers are comparable
+[SETUP      ] the decision RULE is untouched — score, sort key, align, stance, urgency, ask_budget and pack_scenes all run unmodified; only the offset into the already-ranked list moves
+[METRIC     ] flexibility = distinct WORLD futures / trajectories that ran
+              | measured on a world fingerprint (persons, sites, rungs, tenures), NOT on `content_hash`, which arm 4a showed hashes the log only
+[COUNT      ] 89 cases x 64 = 5696 trajectories; 5696 ran, 0 raised
+
+==============================================================================
+ARM 7a — how many DIFFERENT futures does each case actually reach?
+==============================================================================
+[RESULT     ] distinct WORLD futures per case (of 64): {8: 17, 9: 18, 10: 2, 27: 16, 28: 32, 29: 4}
+              | this is the flexibility answer. A case scoring 1 reached ONE world state down all 64 alternative-outcome paths.
+[RESULT     ] distinct LOG futures per case:  {64: 89}
+              | the event stream is the surface that DOES move — so the loop is not inert; it is producing different narratives over an unchanging world
+[RESULT     ] distinct executed-VERB sets per case: {7: 52, 14: 37}
+[MEASURE    ] cases whose 64 alternatives collapse to <=1 world future: 0 of 89 (0.0%)
+[MEASURE    ] mean flexibility (distinct world futures / trajectories run): 0.3093
+              | 1.0 would mean every one of the 64 alternatives lands somewhere different
+
+==============================================================================
+ARM 7c — is the act budget EVER binding? (§26.3: 'the PERSON triages')
+==============================================================================
+[WHY        ] this probe exists because it explains the first version of arm 7. A rotation branch produced four byte-identical worlds; the patch was firing, so the null was real and its cause was here.
+[MEASURE    ] 12 of 12 sampled cases take EVERY ranked candidate every season
+              | e.g. 3 deliberations x 7 ranked = 21 acts resolved, all of them
+[VERDICT    ] the act budget is not binding in the corpus, so the ranking never EXCLUDES anything
+              | §26.3 makes triage the person's own choice of what to leave undone. In 143 cases nothing is left undone, so the ranking orders acts and never selects among them — which is why an ordering branch measures nothing and a SUBSTITUTION branch must.
+
+==============================================================================
+ARM 7b — the ceiling, and why the number above is the number it is
+==============================================================================
+[CAUSE      ] of the 12 interpersonal verbs, 6 write NO state at all (arm 5b) and none carries a degree column
+              | `speak`, `tell`, `the six investigation acts`, `refract`, `comply`, `evade / defy` each emit one Event and change nothing. A season composed of them CANNOT move the world, so choosing differently among them cannot either.
+[CAUSE      ] the ranking ties: `align` is sparse with `default_cell: 0.0`, so 2..7 of 22 candidates carry a nonzero score and the rest tie and sort alphabetically
+              | so rotating k often reorders candidates that were already indistinguishable to the person — the branch is real but the alternatives it reaches are near-identical
+[CEILING    ] the degree axis is not explorable at all for these verbs
+              | a second tree branching on Overwhelming/Success/Partial/Failure cannot be built over `speak` or `tell`: `writes_at` returns the flat tuple for an uncontested verb and the degree is discarded (arm 1d). The choice tree above is the ONLY alternative-outcome tree the corpus currently supports.
+
+==============================================================================
+ARM 8 — the v30 counterfactual corpus as a benchmark
+==============================================================================
+[SOURCE     ] v30-snapshot-2026-06-28:tests/stress/emergent_arc_2026-04-17_batch8_counterfactual.md — 916 lines, 2026-04-17
+[METHOD     ] quoted from the document: 'takes the path NOT taken (ALTERNATE DEGREE, alternate NPC choice, alternate trigger), and traces the emergent consequences forward'
+[COUNT      ] 11 counterfactual scenarios parsed
+[BRANCH     ] NEW-S92    [CHOICE] No player expedition reaches Southernmost. Arc A holds: "No PC expedition reaches Askeheim. Wardens cont
+[           ]            classified CHOICE because it names an actor choosing a different option
+[BRANCH     ] NEW-S93    [DEGREE] Player FAILS the Diagnosis roll (Cognition vs Ob 2 — ~75% success rate, so ~25% failure). Haelgrund's TS
+[           ]            classified DEGREE because it names a roll outcome, a degree, or a contest won/lost
+[BRANCH     ] NEW-S94    [STATE ] Church Stability ≥ 4 at Succession Contest (rather than ≤ 3). Himlensendt REFUSES consecration. Baralta 
+[           ]            classified STATE because it names a stored quantity, threshold or type differing
+[BRANCH     ] NEW-S95    [DEGREE] Vaynard's Forgetting Check at Core FAILS (Failure degree — "nothing operational"). No player was present
+[           ]            classified DEGREE because it names a roll outcome, a degree, or a contest won/lost
+[BRANCH     ] NEW-S96    [DEGREE] The Phase 2 Cultural Uprising of T9 Himmelenger roll FAILS. "Uprising crushed. TC +2. T9 PT +1. Uprising
+[           ]            classified DEGREE because it names a roll outcome, a degree, or a contest won/lost
+[BRANCH     ] NEW-S97    [DEGREE] The d10 roll is 4+ (the 70% non-abort result fires). Torsvald proceeds with the Riskbreaker operation in
+[           ]            classified DEGREE because it names a roll outcome, a degree, or a contest won/lost
+[BRANCH     ] NEW-S98    [CHOICE] Player distributes ALL significant Locks to Maret Uln alone (Path 2 from NEW-S81: "Temporal Window Acces
+[           ]            classified CHOICE because it names an actor choosing a different option
+[BRANCH     ] NEW-S99    [DEGREE] Player LOSES the bilateral personal combat. Player general at Stage 1 (incapacitated). The NPC general h
+[           ]            classified DEGREE because it names a roll outcome, a degree, or a contest won/lost
+[BRANCH     ] NEW-S100   [STATE ] The Himmelenger Cathedral configuration was STRUCTURAL scale (not Territorial). The originary Lock is a 
+[           ]            classified STATE because it names a stored quantity, threshold or type differing
+[BRANCH     ] NEW-S101   [DEGREE] Crown runs counter-intelligence (Intel vs Ob 2 each season) and SUCCEEDS. Varfell's approach to Strand i
+[           ]            classified DEGREE because it names a roll outcome, a degree, or a contest won/lost
+[BRANCH     ] NEW-S102   [DEGREE] Player uses Dissolution Residue at the Southernmost Core (Coherence 4), operation fails, hits Coherence 
+[           ]            classified DEGREE because it names a roll outcome, a degree, or a contest won/lost
+
+==============================================================================
+ARM 8 — how much of the design's own branch axis can the engine reach?
+==============================================================================
+[AXIS       ] DEGREE   7 of 11 scenarios (63.6%) — engine reach: NO
+              | arm 0: S39 fires 0 times in 5,376 decision firings; no corpus act resolves at a degree
+[AXIS       ] CHOICE   2 of 11 scenarios (18.2%) — engine reach: YES
+              | arm 7: a substitution branch changes the acts, but arm 7c shows the budget never binds, so the person never excludes anything on their own
+[AXIS       ] STATE    2 of 11 scenarios (18.2%) — engine reach: YES
+              | arm 7: state-threshold divergence is reachable — 8..29 distinct world futures per case
+[VERDICT    ] 7 of 11 (64%) of the corpus's OWN counterfactual branches are unreachable by the current engine
+              | the design's dominant way of generating an alternative future is to invert a roll. That is the one axis arm 0 measured at zero. Arm 7's flexibility number (mean 0.31) is therefore an upper bound reached WITHOUT the axis the design leans on hardest.
+[NOTE       ] two of the DEGREE rows name subsystems that exist
+              | 'Player LOSES the bilateral personal combat' is `personal_combat`, which `combat_seam` really does call (arm 2b) and which no verb routes to; 'Crown runs counter-intelligence (Intel vs Ob 2) and SUCCEEDS' is an investigation contest, which is HANDOFF_NEXT row 2b — the discovery model that was prescribed and not built (arm 6).
+
+==============================================================================
+ARM 9 — THE FORKING EXERCISE: flip every decision, follow it three decisions on
+==============================================================================
+[ASK        ] Jordan 2026-09-04: 'within each season ... there is a mechanical moment where x occurs instead of y ... explore what happens when each mechanical that chooses x instead chooses NOT x, and then figure out how that will change the progression of that simulation to the tune of three different mechanical decisions later'
+[UNIT       ] a DECISION, not a season. D0..Dn are the deliberations in order; each holds the person's own ranked candidate list, of which one element is taken.
+[SETUP      ] lookahead 3 — Jordan's number: 'to the tune of three different mechanical decisions later each time'. The horizon over which a fork is asked whether it mattered.
+[SETUP      ] alternatives probed per decision: 3 — the ranked list holds up to 7; probing the top 3 alternatives beyond the taken one keeps the run tractable and covers the candidates a person's own score actually separates -- 2..7 of 22 carry a nonzero score, the rest tie
+[SETUP      ] BASELINE takes `ranked[0]` alone at every decision; a FORK takes `ranked[t]` at exactly one decision and `ranked[0]` everywhere else
+              | arm 7c measured that the act budget never binds — every person otherwise takes ALL 7 candidates, and if everything is taken there is no `instead of` to flip. Restricting both arms to one act per deliberation is what makes x-vs-y a real substitution.
+
+==============================================================================
+ARM 9a — did the fork actually flip anything? (the control)
+==============================================================================
+[CONTROL    ] 2403 of 2403 probed forks changed the act actually taken
+              | a fork that leaves the act unchanged cannot be evidence about what happens downstream, so only the genuine ones are counted below
+
+==============================================================================
+ARM 9b — did the next 3 decisions change?
+==============================================================================
+[RESULT     ] RECONVERGED (all 3 following decisions identical): 2403 of 2403 (100.0%)
+[RESULT     ] DIVERGED (at least one of the next 3 differs): 0 (0.0%)
+[RESULT     ] decisions changed within the lookahead: {0: 2403}
+              | 0 means the fork closed immediately — the person did something else and the next 3 decision points presented the same options and took the same pick
+
+==============================================================================
+ARM 9c — the diagnosis, and my first one was WRONG
+==============================================================================
+[⚠ RETRACTED] an earlier draft of this arm said the cause was 'the acts do not move that world'. FALSE, and the control refutes it.
+              | forking D0 three ways gives world fingerprint b24bb0df -> a0862f1e and three distinct log hashes. THE WORLD DOES CHANGE. The fork is real in state and in narrative, and the next three decisions are still identical — which is a much stronger statement than the one I first wrote.
+[MEASURE    ] forks whose ACTS differ from baseline: 2403
+              | so the fork is real at its own site — different acts were performed
+[MEASURE    ] forks whose EVENT LOG differs: 2403
+              | and it is real in the narrative — a different event stream was written
+[CAUSE      ] the deliberation never reads the world. `opening_set` (shape.py:2220) has four clauses and NOT ONE of them consults world state
+              | clause 1 the verb table (static) · clause 2 `person_side_eligible(p, row)` · clause 3 `q.referents` · clause 4 `belief_contradicts(p, row, subject)`, which reads THE PERSON'S OWN LEDGER. That is §F1's epistemic design and it is deliberate — Jordan 2026-09-02, 'our understanding of all other words and actions is subjective and singular'. The consequence is that the only channel by which anything that happened can reach a later decision is a CLAIM in the actor's ledger.
+
+==============================================================================
+ARM 9d — and that one channel is closed (measured)
+==============================================================================
+[READ       ] `belief_contradicts` (shape.py:2537-2560) narrows the set only for a claim with `predicate in PERSON_PREDICATES` AND `value is False`
+[READ       ] PERSON_PREDICATES = ['church_standing', 'grade', 'heritage', 'office', 'residence']
+[MEASURE    ] claims actually deposited across 8 cases x 3 seasons: 4800
+[MEASURE    ] predicates actually used: ['claim.decayed', 'condition.worn', 'news.told', 'proposition.uttered', 'record.created', 'site.worked', 'speech.made', 'stores.changed', 'transfer.refused', 'travel.blocked', 'yield.taken']
+[MEASURE    ] claims with `value is False`                 : 0
+[MEASURE    ] ... AND predicate in PERSON_PREDICATES       : 0
+[VERDICT    ] the two predicate vocabularies are DISJOINT, and no claim is ever falsy — so clause 4 cannot fire, and the candidate set is invariant with respect to everything that happens in the simulation
+              | this is the mechanical cause of 100% reconvergence. A person deposits thousands of claims, the world moves, and not one claim can reach the function that decides what they may do next. `H-72` registers exactly this gap — 'the mapping from a `requires:` note to a predicate' — and `F.24`/`H-94` is typing `requires`. Both unbuilt, same class as arm 6's five.
