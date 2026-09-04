@@ -162,6 +162,36 @@ def fork_case(case: dict, seed: int = 0, seasons: int = 4) -> dict:
                 forks=forks, baseline_decisions=len(D))
 
 
+def claim_channel(sample: int = 8, seasons: int = 3, seed: int = 0) -> dict:
+    """ARM 9d -- can ANY claim the corpus deposits reach the decision function?
+
+    ⚠ THIS MEASUREMENT IS A SAMPLE STATISTIC FOR A THEOREM, and the planning review was right to
+    say so. `witness()` mints every claim as `Claim(cid, pid, subj, e.kind, True, ...)`
+    (shape.py:4782) -- the predicate IS the Event kind and the value IS a literal `True`, on every
+    path. So disjointness from `PERSON_PREDICATES` and the absence of a falsy claim are true BY
+    CONSTRUCTION, not because 4,800 samples happened to come out that way. The sample is kept
+    because it also reports WHICH predicates the corpus actually produces, which the theorem does
+    not, and because a future change that made a claim falsy would show up here."""
+    cs = [C.apply_rescale(c) for c in R.load_cases("NPC")]
+    cs = [c for c in cs if str(c.get("scale")) in set(S.RUNG_KINDS)][:sample]
+    preds = collections.Counter(); n = falsy = elig = 0
+    for case in cs:
+        w = C.build_at(case, seed); d = S.SeasonDriver(w)
+        mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+        ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs())
+        for _ in range(seasons):
+            d.season(ch, question=None, subsistence=K.C.P.SUBSIST)
+        for p in w.persons.values():
+            for c in p.ledger:
+                n += 1; preds[c.predicate] += 1
+                if c.value is False:
+                    falsy += 1
+                    if c.predicate in S.PERSON_PREDICATES:
+                        elig += 1
+    return dict(cases=len(cs), n_claims=n, predicates=dict(preds), falsy=falsy, eligible=elig,
+                person_predicates=sorted(S.PERSON_PREDICATES))
+
+
 def locality(case: dict, seed: int = 0, seasons: int = 3) -> dict:
     """ARM 9e -- IS THE HARNESS REPLAYING THE BASELINE, OR RE-DERIVING?
 
