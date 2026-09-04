@@ -108,9 +108,12 @@ requires. Delete the column and the season loop is byte-identical. The
 **derived** check recomputes the cycles from **what is written** × **every typed reader** — the
 question sources and the channel predicates as much as a verb's `requires` — and compares them to
 the declared list. ⚠ *Stage 1 corrected that definition on 2026-09-04: stated as `writes` × verb
-`requires` alone it recomputes an empty set, because on all four declared loops the WRITE edge
-belongs to a STEP — WITNESS writes the ledger, MATTER decays, WITNESS evicts — and no verb declares
-those writes. The reason is a write-side one: `tell` DOES carry a `requires` on the cycle (`_req_tell`
+`requires` alone it returns a set DISJOINT from the declared list, because on all four declared
+loops the WRITE edge belongs to a STEP — WITNESS writes the ledger, MATTER decays, WITNESS evicts —
+and no verb declares those writes. **Disjoint, not empty:** the verb-only graph has its own cycles
+(`work` on `Site.condition`, three verbs on `Rung.stores`, `confer`/`revoke` on `Tenure.until`), and
+the first of them is `H-105`, which the design found. This note said *empty* for one commit, which
+would have read as an argument that typing `requires` buys the enumeration nothing. The reason is a write-side one: `tell` DOES carry a `requires` on the cycle (`_req_tell`
 reads the ledger WITNESS wrote), so the first wording of the correction, which said no verb
 precondition sits on a cycle at all, was itself false.* The `requires` half is blocked until it is
 typed. **What would be reference rather than

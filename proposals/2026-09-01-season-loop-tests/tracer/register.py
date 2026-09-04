@@ -80,9 +80,12 @@ FIELDS = ("id", "tier", "hole", "kind", "owner", "grade",
 # ⚠ `sign` IS DECLARED OPTIONAL AND IS REQUIRED ON EXACTLY ONE KIND. `ID-16` — *a design
 # enumerates its loops and signs each one* — and the register is where the enumeration lives,
 # because every one of its nine existing kinds names an ABSENCE and a feedback path is not an
-# absence. Optional rather than universal: adding a twelfth mandatory column would have forced a
-# meaningless cell onto 91 rows, and a column that is meaningless on 91 rows is not read on any of
-# them. ⚠ `G13` VALIDATES ITS SHAPE; NO RESOLVER READS IT. The first writing of this comment
+# absence. Optional rather than universal: `FIELDS` holds twelve names, so a mandatory `sign` would
+# be the THIRTEENTH column, and it would force a meaningless cell onto the 98 rows that are not
+# loops — a column that is meaningless on 98 rows is not read on any of them. ⚠ This comment read
+# "a twelfth mandatory column … onto 91 rows" until 2026-09-04: off by one on the column (there are
+# twelve already) and stale by eleven on the rows (the file held 91 when the column was proposed and
+# holds 102 now). `:122` below had the arithmetic right and this line disagreed with it. ⚠ `G13` VALIDATES ITS SHAPE; NO RESOLVER READS IT. The first writing of this comment
 # called G13 "the reader … which keeps this from being a column nobody consults (`ID-13`)", and
 # that overstated it: `ID-13` speaks of a column no RESOLVER consults, and `§0.05`'s test decides
 # it -- delete `sign` and the season loop is byte-identical. The column is SHAPE-VALIDATED

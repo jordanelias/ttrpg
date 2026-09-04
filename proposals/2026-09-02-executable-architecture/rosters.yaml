@@ -270,6 +270,16 @@ rosters:
       survives — via the standing `out or [e.subject]` fallback under `per_change`, and because the
       actor is already in `out` under `both`. So the price is paid exactly where there is a named
       subject to pay it with, which is also the only place the Q2 reachability it buys applies.
+      ⚠ **AND THE NARROWING IS CODE-TRUE BUT CORPUS-VACUOUS, SAID HERE BECAUSE THE FIRST WRITING OF
+      IT READ AS A LIVE CASE.** Measured 2026-09-04 by wrapping `claim_subjects` over a full
+      `corpus_run`: **17,352 write-nothing deposits, 17,352 of them naming something, ZERO reaching
+      the `refs == []` fallback.** Every Act the fold mints comes from `pack_scenes`, which sets
+      `payload={"subject": ...}` from a Candidate drawn from `q.referents`, and all four question
+      sources produce non-empty referents — so the guard's false arm is unreachable from the corpus
+      as it stands. The branch is correct code and the sentence above is true OF it; what is not
+      true is that anything exercises it. Falsifier, and it is what makes this a measurement rather
+      than a reading of the source: a non-zero no-refs count would witness the case, and the count
+      is zero. `H-111`'s refusal question is where a witness would first appear.
       Attribution is `T-d`'s subject and `H-107`'s — an Event carries no actor, and the tracer's
       `Event.subject`, which still does, is the row for it. The `actor` arm is untouched and is
       where the incumbent behaviour survives.

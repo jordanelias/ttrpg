@@ -546,10 +546,22 @@ prose**, which is the exact error corrected two sections earlier in this documen
 > predicates, and the eviction comparator.
 
 ⚠ **CORRECTED 2026-09-04 — THE FIRST WORDING SAID *what a VERB writes × what a VERB'S PRECONDITION
-reads*, AND THAT DEFINITION EXCLUDES EVERY LOOP THE DESIGN HAS ACTUALLY FOUND.** Checked against
-the four that were declared: **the WRITE edge on every one of them belongs to a STEP, not to a
-verb.** WITNESS writes the ledger; MATTER decays; WITNESS evicts. A definition quantifying over
-*what a **verb** writes* cannot see any of them.
+reads*, AND THAT DEFINITION EXCLUDES EVERY LOOP THIS REGISTER DECLARES.** Checked against the four
+that were declared: **the WRITE edge on every one of them belongs to a STEP, not to a verb.**
+WITNESS writes the ledger; MATTER decays; WITNESS evicts. A definition quantifying over *what a
+**verb** writes* cannot see any of the four.
+
+⚠ **AND THE FIRST WRITING OF *THIS* CORRECTION SAID *EVERY LOOP THE DESIGN HAS ACTUALLY FOUND*,
+WHICH IS FALSE AND IS THE MORE DANGEROUS ERROR OF THE TWO.** The verb-scoped graph is not empty —
+it is DISJOINT from the declared four, which is a different and much weaker statement.
+`verb_table.yaml` supplies at least three verb-only cycles: `work` writes `Site.condition` and
+requires `condition >= floor(verb)`; `transfer`, `levy` and `exchange` each write `Rung.stores`
+behind a `stores(...) >= amount` precondition; `confer` and `revoke` turn over `Tenure.until`
+against each other's liveness test. **The first of those IS the site-condition loop — `H-105`, a
+thing the design found and filed.** So a verb-scoped check is precisely the check that would have
+caught it. Saying the definition recomputes nothing tells the next session that typing `requires`
+(`F.24` / `H-94`) buys the enumeration NOTHING, which is an argument for descoping the exact work
+`H-106` is blocked on. It buys three cycles; it does not buy these four.
 
 ⚠ **AND THE FIRST WRITING OF THIS CORRECTION GAVE THE WRONG REASON, WHICH A CRITIC OVERTURNED.** It
 said there was *no verb `requires` on the cycle at all*. **That is false:** `tell`'s precondition is
@@ -589,8 +601,10 @@ byte-identical.
 > the checker follows the grammar.** ⚠ *This sentence read `writes` × typed `requires` until
 > 2026-09-04. That is the narrower definition the box above corrects — verb preconditions are ONE
 > typed reader among several, and on all four declared loops the WRITE edge belongs to a step, so a
-> check scoped to verbs alone would recompute an empty set. The correction is stated three
-> paragraphs up; this quote no longer contradicts it.* ⚠ **An error AGAINST the design is as serious as one for it** (`G.4.3`), and this one was
+> check scoped to verbs alone returns a set DISJOINT from the declared list — **not an empty one,
+> which is what this note said for one commit and which `verb_table.yaml` refutes in five rows.**
+> The correction, and the correction to the correction, are stated in the two boxes above this
+> quote.* ⚠ **An error AGAINST the design is as serious as one for it** (`G.4.3`), and this one was
 > made in the idiom that exists to catch a design's own blind side.
 
 **Why it is worth stating anyway.** This design is made almost entirely of refusals — `T-a` refuses
