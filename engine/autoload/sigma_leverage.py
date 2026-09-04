@@ -255,10 +255,27 @@ def p_success(
     The roll is boosted; base_Ob and TN are NOT modified, so the Ob floor is never
     breached:  shifted_mean = μ·N + net_boost ;  P = 1 - Φ((base_Ob - shifted_mean)/(σ·√N)).
     [canonical: params/core.md §Continuous Engine]
+
+    THE POOL FLOOR APPLIES TO THE MEAN AS WELL AS THE VARIANCE (Jordan, 2026-09-04: "1D is
+    floor"). This line read `mu * pool` against `sqrt(max(1, pool))` — flooring the SPREAD but
+    not the LOCATION, so below 1D the closed form drifted away from the sampler that
+    `roll_net_continuous` actually draws from, which floors both via
+    `effective_pool = max(1.0, float(pool))`. Two flooring conventions in one module.
+    Measured before the fix, base_Ob 1.0, net_sigma 0, 200k draws, seed 7:
+        pool 0.25 -> p_success 0.1303 vs sampled 0.2275   (9.7 pp apart)
+        pool 0.50 -> p_success 0.1587 vs sampled 0.2275   (6.9 pp apart)
+        pool 1.00 -> p_success 0.2266 vs sampled 0.2275   (Monte-Carlo noise)
+    CONTROL: no golden row carries a sub-1D pool (p_success pools are 1/5/10/26), and
+    max(1.0, pool) == pool for every one of them, so this is VALUE-IDENTICAL at and above 1D
+    and the byte-exact parity goldens are what proves it. The bug was inherited verbatim from
+    m1_dice_sigma_core.p_success, which the Stage-1a port copied byte-for-byte; that copy is
+    fixed in the same commit so the two stay byte-identical.
+    [canonical: params/core.md §Pool Floor (all systems)]
     """
     mu, sigma = PER_DIE[tn]
-    shifted_mean = mu * pool + net_boost(net_sigma, pool, tn, capped)
-    z = (base_ob - shifted_mean) / (sigma * math.sqrt(max(1, pool)))   # [canonical: params/core.md §Continuous Engine]
+    effective_pool = max(1.0, float(pool))          # [canonical: params/core.md §Pool Floor (all systems)]
+    shifted_mean = mu * effective_pool + net_boost(net_sigma, effective_pool, tn, capped)
+    z = (base_ob - shifted_mean) / (sigma * math.sqrt(effective_pool))   # [canonical: params/core.md §Continuous Engine]
     return 1.0 - _phi(z)
 
 

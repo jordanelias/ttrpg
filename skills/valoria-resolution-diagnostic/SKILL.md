@@ -663,43 +663,48 @@ What *is* live and verified this session:
 | the degree ladder bands a fractional Ob correctly | ✅ net 1.9 / Ob 1.4 → margin +0.50 → **Partial** |
 | the **whole-success-wide Partial window** (`0 ≤ margin < 1`) is what keeps Partial reachable | ✅ on point-equality (`margin == 0`) Partial would essentially never fire against a fractional Ob |
 
-### §11.4 ⚠ THE SUB-1D SEAM — the stress point fractional pools open, measured
+### §11.4 The pool floor is 1D, and it applies to the MEAN as well as the VARIANCE
 
-**`p_success` floors the variance but NOT the mean; `roll_net_continuous` floors both.** Two flooring
-conventions in one module, disagreeing by up to ~10 percentage points below 1D:
+**RULED 2026-09-04 (Jordan): "1D is floor."** `params/core.md §Pool Floor (all systems)`.
+
+This is worth stating in a diagnostic because the engine got it wrong in a way that only fractional
+pools could expose. `p_success` floored the **spread** and not the **location**:
 
 ```
-p_success:            shifted_mean = mu * pool          # NOT floored
-                      z = (ob - mean) / (sigma * sqrt(max(1, pool)))   # floored
-roll_net_continuous:  effective_pool = max(1.0, float(pool))          # floored, then sampled
+was:   shifted_mean = mu * pool                        # NOT floored
+       z = (ob - mean) / (sigma * sqrt(max(1, pool)))  # floored
+now:   effective_pool = max(1.0, float(pool))          # floor once, use everywhere
 ```
 
-Measured, `base_Ob = 1.0`, `net_σ = 0`, 200k draws, seed 7:
+while `roll_net_continuous` — the sampler the game actually draws from — floored both. **Two
+flooring conventions in one module**, disagreeing by up to ~10 pp below 1D:
 
-| pool | `p_success` | sampled via `roll_net_continuous` | disagreement |
-|---|---|---|---|
-| 0.25 | 0.1303 | 0.2275 | **9.7 pp** |
-| 0.50 | 0.1587 | 0.2275 | **6.9 pp** |
-| 1.00 | 0.2266 | 0.2275 | 0.0009 — noise |
-| 2.50 | 0.5000 | 0.5012 | 0.0012 — noise |
+| pool | before: `p_success` vs sampled | after |
+|---|---|---|
+| 0.25 | 0.1303 vs 0.2275 — **9.7 pp** | 0.2266 vs 0.2275 — noise |
+| 0.50 | 0.1587 vs 0.2275 — **6.9 pp** | 0.2266 vs 0.2275 — noise |
+| 1.00 | 0.2266 vs 0.2275 — noise | unchanged |
 
-**Reproduce it before citing it** (§0.1 pt 3 — this is the falsifier, and it runs):
+**Fixed** in `engine/autoload/sigma_leverage.py::p_success` and, byte-identically, in the
+`m1_dice_sigma_core` seed the parity goldens are generated from. **The control:** no golden row
+carries a sub-1D pool (`p_success` pools are 1/5/10/26) and `max(1.0, pool) == pool` for all of
+them, so the change is **value-identical at and above 1D** — 901 parity assertions pass against
+**byte-unchanged** goldens.
 
-```python
-from engine.autoload import sigma_leverage as SL
-import random
-ob, pool, rng, N = 1.0, 0.25, random.Random(7), 200_000
-print(SL.p_success(ob, pool, 0.0),
-      sum(SL.roll_net_continuous(pool, rng=rng) >= ob for _ in range(N)) / N)
-```
+**What this leaves for a diagnostic to check, which is the reusable part:**
 
-**Scope it honestly.** Everything at pool ≥ 1 agrees to Monte-Carlo noise, and no live caller passes a
-sub-1D pool today, so this is **exposure, not a live regression** — Phase 1b, not Phase 6. It becomes
-live the moment a fractional pool can fall below 1D, which is exactly what "fractional dice pools"
-opens. The proposed one-line fix is to floor the mean too (`mu * max(1.0, pool)`), matching the
-canonical **Pool Floor (all systems)** that `roll_pool`, `roll_net_continuous` and `sigma_n` all
-already apply — **but it moves numbers below 1D, so it is a call to put to Jordan, not a silent
-edit.**
+- **A floor applied to one moment of a distribution and not the other is a defect that hides above
+  the floor.** Every pool ≥ 1 agreed to noise, so no test, golden or campaign could see it; it was
+  reachable only by evaluating below the floor. When you meet a clamp, ask **which terms it reaches**
+  — not whether it exists.
+- **`dice_engine.continuous_engine_sample` is the raw primitive and does NOT floor**, deliberately:
+  it is the mathematical sampler, and the floor is a game rule its callers apply
+  (`roll_net_continuous`, `p_success`, and `tools/balance_oracle.py` all do). That is fine while
+  every caller floors — **a new caller reaching the primitive directly bypasses the floor**, and
+  that is the thing to check at Phase 0, not a defect in the primitive.
+- **`roll_pool` is the discrete path and keeps `int(round(pool))`.** Whole dice are correct there; it
+  deals actual dice rather than sampling their limit distribution. A fractional pool sent to
+  `roll_pool` is a P-v finding.
 
 ### §11.5 The five properties, on this engine
 
@@ -707,7 +712,7 @@ edit.**
 |---|---|---|
 | **P-i** | **Legible odds** | the player cannot read their chance; advantage surfaced only as an opaque roll modifier rather than a named level (minor/moderate/strong/major) |
 | **P-ii** | **Uniform leverage** | exact by construction — so a failure means a **caller bypassed `net_boost`** with a flat bonus (§11.2), not engine drift |
-| **P-iii** | **Bounded, monotonic** | resolving on `eff_ob` (display) instead of `p_success`; a discrete boundary jumping a continuous input; the sub-1D seam (§11.4) |
+| **P-iii** | **Bounded, monotonic** | resolving on `eff_ob` (display) instead of `p_success`; a discrete boundary jumping a continuous input; a clamp that reaches one moment of the distribution and not the other (§11.4) |
 | **P-iv** | **Graded, recoverable** | a bare binary on an irreversible outcome where `degree_from_net` was available; a Partial band collapsed to point-equality against a fractional Ob |
 | **P-v** | **Right engine** | anything resolving by a bespoke draw instead of this stack; a fractional pool sent to `roll_pool`; a second degree ladder |
 
@@ -716,7 +721,7 @@ edit.**
 | phase | do |
 |---|---|
 | **0** | Draw present? Decompose. Every rolled component routes to `dice_engine` + `sigma_leverage`; anything else is a P-v finding. Flag bare-pool-vs-flat-Ob leftovers |
-| **1** | Locate the stress point — the **low-pool end** (and **below 1D**, §11.4), the **soft-cap saturation** region (`net_σ` well past `M_MAX = 1.5`), and any fractional-Ob call site. **1b:** how often is it reached? A fractional pool is routine; a sub-1D pool is not — yet |
+| **1** | Locate the stress point — the **low-pool end** (and the floor itself, §11.4), the **soft-cap saturation** region (`net_σ` well past `M_MAX = 1.5`), and any fractional-Ob call site. **1b:** how often is it reached? A fractional pool is routine; a sub-1D pool is not — yet |
 | **2** | What does it decide? Outcome type · stakes & reversibility · (impact, exposure, irreversibility) each H/M/L against numbers. Two H = candidate finding |
 | **3** | **3a** advantage enters via `levels_to_net_sigma`→`net_boost`, not a flat bonus · **3b** nothing resolves on `eff_ob` · **3c** the fractional-pool and fractional-Ob paths agree with the closed form · **3d** role conflation on a variable feeding or reading the roll |
 | **4** | Loops running through the engine's output or gating its input, cross-scale included. Defect = **both undamped and unbounded** — damper and cap are two separate checks |
