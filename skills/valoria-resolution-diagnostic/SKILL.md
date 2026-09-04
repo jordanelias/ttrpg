@@ -16,13 +16,15 @@ description: >
   The definitions themselves are canon and live in CLAUDE.md §0.06 — read them there; this skill
   owns the METHOD, not the definitions. Two evidence instruments, one verdict: (1) the object
   ledger, for any design shape; (2) the
-  Phase 0-6 rolling-engine diagnostic, for anything that resolves by a DRAW (dice, U[0,1), card).
+  Phase 0-6 resolution diagnostic, run against the ONE engine — the sigma-leverage mu-shift layer
+  (engine/autoload/sigma_leverage.py) atop the d10 substrate (engine/autoload/dice_engine.py), with
+  FRACTIONAL dice pools and FRACTIONAL obstacles — for anything that resolves by a draw.
   ALWAYS use for: "NERS audit", "NERS pass", "NERS review", "is this NERS compliant", "is this
   necessary", "is this elegant", "is this robust", "false N-line", "does this add a system",
   "is this seat playable", "is one option dominant", "does this propagate across scales",
   "engine audit", "resolution audit", "resolution diagnostic audit", "diagnose this resolver",
-  "stress test this roll", "leverage non-uniformity", "clamp/Ob-floor cliff", "wrong engine for
-  the pool". Do NOT use for pure internal-consistency checks with no cut question (formula gaps,
+  "stress test this roll", "sigma leverage", "mu-shift vs Ob-shift", "leverage non-uniformity",
+  "fractional pool", "fractional obstacle", "sub-1D pool", "soft cap saturation". Do NOT use for pure internal-consistency checks with no cut question (formula gaps,
   redundancy) — that is valoria-mechanic-audit; or for contract/seam closure — that is
   valoria-module-adjudicator, which defers behavioural NERS back here.
 ---
@@ -151,7 +153,7 @@ not require a draw. What requires a draw is the *second* instrument.
 | instrument | when | what it produces |
 |---|---|---|
 | **A — the object ledger** (§2–§9) | always | N-lines, false N-lines, the E ratio, the R gain/cost tables, the S traces |
-| **B — the rolling-engine diagnostic** (§10, Phases 0–6) | the target resolves an outcome by a **draw** (dice net, `U[0,1)`, card, shuffle) | the stress points and property violations that become N/R/S evidence |
+| **B — the resolution diagnostic** (§11, Phases 0–6) | the target resolves an outcome by a **draw** | stress points and property violations, against the **one** engine: σ-leverage μ-shift over the d10 substrate, fractional pool and fractional Ob |
 
 Instrument B is **evidence, not a verdict.** Its Phase 0–6 findings enter the ledger; they do not
 short-circuit it. A target with no draw runs instrument A alone — that is a normal NERS pass, not an
@@ -576,78 +578,165 @@ GRADE: paper | runs — <the execution artifact, or its absence>
 
 ---
 
-## §11 · INSTRUMENT B — THE ROLLING-ENGINE DIAGNOSTIC
+## §11 · INSTRUMENT B — THE RESOLUTION DIAGNOSTIC (the σ-leverage engine)
 
-Run this **only** when the target resolves by a draw. Its output is evidence for §2–§9, not a
-verdict of its own.
+Run this when the target resolves by a draw. Its output is evidence for §2–§9, not a verdict.
 
-> ⚠ **THIS SECTION CITES CODE, NOT NUMBERS, AND THAT IS DELIBERATE (CLAUDE.md §0.05).** Every constant this
-> section used to restate — the TN table, the degree bands, the per-die μ/σ — is owned by
-> `engine/autoload/dice_engine.py`. The previous revision restated them, and two had since been
-> **superseded by ruling**; a skill that carries its own copy of a formula is a second owner and will
-> drift. **Read the owner.**
+> **THERE IS ONE ENGINE.** *"d10 everywhere, fractional, σ-leveraged"* — Jordan, 2026-08-14, cited at
+> `systems/factions/sim/faction_action.py:126`. The **deterministic-odds / stochastic-resolution**
+> resolver that this file used to carry as a co-equal "Instance B" **has no implementation anywhere in
+> `engine/` or `systems/`** — its constants (`BASE`, `SLOPE`, `OVW_OFFSET`, `PARTIAL_BAND`,
+> `FAIL_FLOOR`) appear in no live module, its spec is at the fork, and the faction layer it was
+> written for now resolves through σ-leverage on a fractional pool. Under CLAUDE.md §0.05 the code is
+> the mechanism, so it is **dead canon** and is not an engine to diagnose against.
 
-**Live owners:**
+### §11.1 The stack, and its live owners
 
-| what | owner |
-|---|---|
-| die faces, pool roll, pool minimum | `engine/autoload/dice_engine.py::_die_result`, `::roll_pool` |
-| **the degree ladder — single owner for every scale** (Jordan, 2026-08-14) | `engine/autoload/dice_engine.py::degree_from_net` — **margin-based**: `margin = net − ob`; ≥3 Overwhelming, ≥1 Success, `0 ≤ margin < 1` Partial, `<0` Failure |
-| **TN** | `::_require_tn7` — **TN is 7, always** (Jordan, 2026-08-25, ED-IN-0196). A varying difficulty is an **Ob**, not a TN |
-| continuous engine `Normal(μ·N, σ·√N)` | `::continuous_engine_sample` |
-| the one declared-HELD second ladder | `systems/combat/combat_engine_v1/core.py` — guarded by `tests/valoria/test_degree_ladder_single_owner.py`. **Known, tracked, and not yours to re-file** |
-| frozen prose capture | `engine/engine_params/params_tables.yaml` — **reference, not mechanism**, and its *Degrees of Success* section holds the **PRE-RULING** bands. Never lift a number from it without reading the code first |
-| retired specs (`params/core.md`, the 2026-05-28 resolver and engine-replacement docs) | at the fork — resolve via `references/restructure_ledger.md` |
+Two layers, deliberately separated (D0-2) — diagnose them separately:
 
-### §11.1 The five properties
-
-| # | property | failing looks like |
+| layer | owner | what it does |
 |---|---|---|
-| **P-i** | **Legible odds** — the player can read their chance off the board | odds emerge only from opaque interactions |
-| **P-ii** | **Uniform, in-band leverage** — a unit of advantage moves P by a consistent amount across the *whole* input range | per-point dP varies by scale (`1/√N`), or spikes out of band at an extreme |
-| **P-iii** | **Bounded, monotonic response** — no cliffs; floors/caps respected; more advantage never lowers success | a continuous input crosses a discrete boundary that jumps the outcome |
-| **P-iv** | **Graded, recoverable output** — degrees, not a fragile binary, on pivotal stakes | a bare binary on an irreversible, load-bearing outcome |
-| **P-v** | **Right engine for the pool regime** | raw bare-stat dice on a pivotal action; a deterministic resolver on a healthy skill contest |
+| **substrate** | `engine/autoload/dice_engine.py` | pool and degree primitive. `roll_pool` (discrete), `continuous_engine_sample` (fractional), `degree_from_net` (**the** ladder, single owner for every scale) |
+| **advantage** | `engine/autoload/sigma_leverage.py` — `[CANONICAL — Stage 1a port 2026-06-30]` | turns signed advantages in σ-units into a **μ-shift** on the roll. Stdlib only. Single-sources σ-leverage for **combat and social contest both** |
+| pinned by | `engine/tests/test_sigma_leverage_parity.py` + `engine/tests/goldens/sigma_leverage_parity.json` | the execution artifact. Read it before claiming behaviour |
 
-### §11.2 Engine selection (apply first; testable, not by feel)
+**The API you are auditing against** — read it, do not restate it from memory:
+`sigma_n(pool)` = `0.8·√max(1,pool)` · `soft_cap(σ)` = `M_MAX·tanh(σ/M_MAX)`, `M_MAX = 1.5` ·
+`levels_to_net_sigma(agg, def)` · `net_boost(σ, pool)` · `p_success(base_ob, pool, net_sigma)` ·
+`roll_net_continuous(pool)`.
 
-- pool ≥ ~5D **and** a genuine setup/skill axis → **A, sigma-leverage continuous.**
-- bare stat (1–7), pivotal outcome, no aggregation available → **B, deterministic odds / stochastic
-  resolution.** `P` is a legible function of the stat contest; the draw stays, only the *odds* become
-  readable. This is what removes the old S-failure of dice-on-a-deterministic-ledger.
-- pool is aggregable → aggregate, then A.
-- shallow clock (one roll ≈ one segment) → a **disguised binary**; route to B or deepen the clock.
-- matches neither → **C**: diagnose against P-i…P-v directly, flag `[NEW ENGINE]`, do not force a fit.
+### §11.2 ⚠ ADVANTAGE IS A μ-SHIFT. IT IS NOT AN Ob REDUCTION.
 
-### §11.3 Phases
+This is the single most-drifted fact about this engine, and the previous revision of this file taught
+the retracted form.
+
+```
+net_boost(σ, N) = soft_cap(σ) · σ_per_die · √N        # boosts the ROLL
+p_success       = 1 − Φ( (base_Ob − (μ·N + net_boost)) / (σ_per_die·√N) )
+```
+
+**`base_Ob` and TN are never modified.** The earlier `Eff_Ob = base_Ob − eff_σ·σ_N` form drove
+effective Ob below 1, violating **P-232** (*Ob minimum 1*) and making the old `2·Ob` Overwhelming bar
+nonsensical at negative Ob. That was **F1, resolved by ED-884** with this reformulation.
+
+**Two consequences that change what you look for:**
+
+- **The `Ob ≥ 1` floor is unreachable by advantage, by construction.** "An Ob-shift collides with the
+  P-232 floor" is no longer a live hazard on this engine — do not go looking for it, and treat a
+  document that describes advantage as an Ob reduction as **stale**, not as a second design.
+- **`eff_ob()` / `effective_ob()` are DISPLAY ONLY** and say so in their own docstrings. A caller that
+  resolves on `eff_ob` instead of `p_success` has reintroduced the retracted form — **that** is the
+  finding to look for.
+
+**Uniform impact is exact, not approximate, and it is worth verifying rather than assuming.**
+`σ_per_die·√N` cancels in the z-score, so `Δz = soft_cap(net_σ)` at *every* pool size and every TN.
+Measured this session across pool ∈ {0.5, 1, 4, 9, 16, 25} at `net_σ = 1.0`: **Δz = 0.874174 at all
+six**, equal to `soft_cap(1.0)` to six decimals. P-ii holds **by construction here**, so a
+P-ii finding on this engine means a caller bypassed `net_boost`, not that the engine drifted.
+
+**The bypass to hunt for:** a flat `+X` to net or `−X` to Ob that is *not* σ_N-scaled gives
+`Δz = X/(0.8·√pool) ∝ 1/√pool` — hot at small pools, the exact non-uniformity this engine exists to
+kill, re-imported through a bonus. Advantage enters through `levels_to_net_sigma` → `net_boost`, or
+it is a defect.
+
+### §11.3 Fractional pools and fractional obstacles
+
+Both are canonical, and they are at different stages of reality. **Say which you are looking at.**
+
+**Fractional POOL — live.** `continuous_engine_sample(pool: float)` and
+`roll_net_continuous(pool: float)` take floats; `faction_action.py` already passes 4.3, 4.6, 4.9, 5.3.
+`roll_pool` is the **discrete** path and keeps `int(round(pool))`, correctly — it deals actual dice
+rather than sampling their limit distribution. A fractional pool routed to `roll_pool` is a finding.
+
+**Fractional Ob — RULED, and the derivation is IMPLEMENTED NOWHERE.** Jordan ruled 2026-08-14 that an
+obstacle rolled against a character or faction is *"their corresponding score/2 plus whatever specific
+modifiers exist for them in that instance."* **Every call site in the tree still passes a hand-set
+Ob.** `degree_from_net`'s own docstring flags this, and the distinction matters more here than
+anywhere, because this is the function a reader consults to learn what an obstacle *is*. Treat "Ob is
+derived" as **a ruling awaiting execution**, never as an accomplished fact.
+
+What *is* live and verified this session:
+
+| claim | verified |
+|---|---|
+| fractional Ob is **strictly monotonic** — no integer collapse | ✅ pool 9: Ob 1.4 → 0.8203, Ob 1.6 → 0.7977. `Ob 1.4 ≢ 1.6` |
+| the degree ladder bands a fractional Ob correctly | ✅ net 1.9 / Ob 1.4 → margin +0.50 → **Partial** |
+| the **whole-success-wide Partial window** (`0 ≤ margin < 1`) is what keeps Partial reachable | ✅ on point-equality (`margin == 0`) Partial would essentially never fire against a fractional Ob |
+
+### §11.4 ⚠ THE SUB-1D SEAM — the stress point fractional pools open, measured
+
+**`p_success` floors the variance but NOT the mean; `roll_net_continuous` floors both.** Two flooring
+conventions in one module, disagreeing by up to ~10 percentage points below 1D:
+
+```
+p_success:            shifted_mean = mu * pool          # NOT floored
+                      z = (ob - mean) / (sigma * sqrt(max(1, pool)))   # floored
+roll_net_continuous:  effective_pool = max(1.0, float(pool))          # floored, then sampled
+```
+
+Measured, `base_Ob = 1.0`, `net_σ = 0`, 200k draws, seed 7:
+
+| pool | `p_success` | sampled via `roll_net_continuous` | disagreement |
+|---|---|---|---|
+| 0.25 | 0.1303 | 0.2275 | **9.7 pp** |
+| 0.50 | 0.1587 | 0.2275 | **6.9 pp** |
+| 1.00 | 0.2266 | 0.2275 | 0.0009 — noise |
+| 2.50 | 0.5000 | 0.5012 | 0.0012 — noise |
+
+**Reproduce it before citing it** (§0.1 pt 3 — this is the falsifier, and it runs):
+
+```python
+from engine.autoload import sigma_leverage as SL
+import random
+ob, pool, rng, N = 1.0, 0.25, random.Random(7), 200_000
+print(SL.p_success(ob, pool, 0.0),
+      sum(SL.roll_net_continuous(pool, rng=rng) >= ob for _ in range(N)) / N)
+```
+
+**Scope it honestly.** Everything at pool ≥ 1 agrees to Monte-Carlo noise, and no live caller passes a
+sub-1D pool today, so this is **exposure, not a live regression** — Phase 1b, not Phase 6. It becomes
+live the moment a fractional pool can fall below 1D, which is exactly what "fractional dice pools"
+opens. The proposed one-line fix is to floor the mean too (`mu * max(1.0, pool)`), matching the
+canonical **Pool Floor (all systems)** that `roll_pool`, `roll_net_continuous` and `sigma_n` all
+already apply — **but it moves numbers below 1D, so it is a call to put to Jordan, not a silent
+edit.**
+
+### §11.5 The five properties, on this engine
+
+| # | property | what failing looks like HERE |
+|---|---|---|
+| **P-i** | **Legible odds** | the player cannot read their chance; advantage surfaced only as an opaque roll modifier rather than a named level (minor/moderate/strong/major) |
+| **P-ii** | **Uniform leverage** | exact by construction — so a failure means a **caller bypassed `net_boost`** with a flat bonus (§11.2), not engine drift |
+| **P-iii** | **Bounded, monotonic** | resolving on `eff_ob` (display) instead of `p_success`; a discrete boundary jumping a continuous input; the sub-1D seam (§11.4) |
+| **P-iv** | **Graded, recoverable** | a bare binary on an irreversible outcome where `degree_from_net` was available; a Partial band collapsed to point-equality against a fractional Ob |
+| **P-v** | **Right engine** | anything resolving by a bespoke draw instead of this stack; a fractional pool sent to `roll_pool`; a second degree ladder |
+
+### §11.6 Phases
 
 | phase | do |
 |---|---|
-| **0** | Draw present? Decompose. Assign A/B/C per §11.2. Flag any component still resolving bare-pool-vs-flat-Ob |
-| **1** | Locate the stress point — A: the **low-input end** and the sub-5D region. B: the **clamp boundaries**. C: wherever each property is likeliest to break. **1b:** how often is it reached? Weak/low-stat actors are routine, not edge |
-| **2** | What does it decide? Outcome type · stakes & reversibility · risk profile as (impact, exposure, irreversibility), each H/M/L against numbers, not feel. Two H = candidate finding |
-| **3** | **3a** leverage uniformity (P-ii) across the whole range · **3b** cliffs (P-iii), incl. an Ob-shift hitting the `Ob ≥ 1` floor and clamp edges staying monotonic · **3c** continuity correction where a continuous read runs at small pool · **3d** role conflation on a variable that feeds or reads the roll |
-| **4** | Loops running **through** the engine's output or gating its input, cross-scale included. Defect = **both undamped and unbounded** — damper and cap are two separate checks |
-| **5** | **Intent gate.** Deliberate *with* an adequate safeguard → pass. Deliberate without → finding. Accidental or undetermined → finding, marked `[INTENT UNDETERMINED]`. Do not guess |
+| **0** | Draw present? Decompose. Every rolled component routes to `dice_engine` + `sigma_leverage`; anything else is a P-v finding. Flag bare-pool-vs-flat-Ob leftovers |
+| **1** | Locate the stress point — the **low-pool end** (and **below 1D**, §11.4), the **soft-cap saturation** region (`net_σ` well past `M_MAX = 1.5`), and any fractional-Ob call site. **1b:** how often is it reached? A fractional pool is routine; a sub-1D pool is not — yet |
+| **2** | What does it decide? Outcome type · stakes & reversibility · (impact, exposure, irreversibility) each H/M/L against numbers. Two H = candidate finding |
+| **3** | **3a** advantage enters via `levels_to_net_sigma`→`net_boost`, not a flat bonus · **3b** nothing resolves on `eff_ob` · **3c** the fractional-pool and fractional-Ob paths agree with the closed form · **3d** role conflation on a variable feeding or reading the roll |
+| **4** | Loops running through the engine's output or gating its input, cross-scale included. Defect = **both undamped and unbounded** — damper and cap are two separate checks |
+| **5** | **Intent gate.** Deliberate + adequate safeguard → pass. Deliberate without → finding. Accidental or undetermined → finding, `[INTENT UNDETERMINED]`. Do not guess |
 | **6** | Score and triage, worst first. Carry findings into §2–§9 |
 
-### §11.4 The uniformity trap, which survives every ruling
+### §11.7 What is NOT a defect on this engine
 
-Advantage entering as a **flat** `+X` to net or a flat `−X` to Ob — not scaled by `σ_N = 0.8·√pool`
-— gives `Δz = X/(0.8·√pool) ∝ 1/√pool`: **hot at small pools**, which is the exact non-uniformity the
-continuous engine exists to kill, re-imported through a bonus. Uniform leverage requires σ_N-scaling
-on **whichever** axis it enters. *Scope: the `√N` term needs a varying pool — a fixed- or no-pool
-resolver is exempt.*
-
-⚠ **The μ-axis / Ob-axis DIVERGENCE that the previous revision taught HAS BEEN DELETED, not
-relocated.** It claimed a μ-shift protects the Failure floor while an Ob-shift inflates the
-Overwhelming ceiling twice as fast, because the old ladder keyed Overwhelming on `2·Ob`. **The live
-ladder reads the margin only** (`margin = net − ob`), so `net += δ` and `ob −= δ` move the margin
-identically and the two axes are interchangeable **in every band**, not merely at Success. Neither
-axis changes `σ_N`, so neither de-swings a small pool — that is a property of N, dissolved by more
-dice or by aggregation, never by relocating the operating point.
-
----
+- **The level values** (minor 0.25 / moderate 0.50 / strong 0.75 / major 1.00) are **Class B draft
+  sim-seeds, explicitly NOT canonical** and sim-tunable. A level number you disagree with is
+  `[OPEN — Jordan tuning]`, not a structural finding. Same for `M_MAX = 1.5`.
+- **Soft-cap saturation is the design**, not a cliff: `M·tanh(net/M)` has no hard ceiling and no
+  dead-zone. Check it is smooth, not that it is absent.
+- **TN never varies.** `PER_DIE` is a one-key dict so a stray TN raises `KeyError` **loudly** rather
+  than silently resolving as TN 6 or 8. A mechanism that wants a varying difficulty wants an **Ob**.
+  (ED-IN-0196: *"TN7 always. Never change TN anywhere ever."*)
+- **`systems/combat/combat_engine_v1/core.py`'s second, `2·Ob`-keyed ladder** is a **declared HELD**
+  exception guarded by `tests/valoria/test_degree_ladder_single_owner.py`. Known, tracked, **not yours
+  to re-file** — though it is a live instance of the charter's *calculations consistent in
+  methodology* (S) defect, and worth naming as such rather than as news.
 
 ## §12 · GUARDRAILS
 
