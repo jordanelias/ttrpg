@@ -711,8 +711,15 @@ class Observation:
 class Verdict:
     """`True | False | UNKNOWN`, plus every read that produced it.
 
-    `observed` is kept HERE and attached to NO Event: an Event carrying its reads is `W-B`, and
-    building the carrier before its reader exists is the dead-carrier defect `ID-13` refuses."""
+    `observed` is kept here AND is attached to every Event the act emits -- that is `W-B`
+    (`H-122`), landed 2026-09-04. `W-A` refused to attach it because *"building the carrier before
+    its reader exists is the dead-carrier defect `ID-13` refuses"*; the reader is
+    `belief_contradicts`, which evaluates the SAME cell against `LedgerReader`, so the refusal is
+    DISCHARGED rather than overridden and no second evaluator exists (§27.2). ⚠ THIS DOCSTRING
+    SAID THE OPPOSITE UNTIL THE `W-B` ADVERSARIAL PASS READ IT: it still described attaching the
+    field as the defect, in the file that had just attached it. A comment asserting the absence of
+    a field the class above it carries is the *doctrine asserting an enforcement that does not
+    exist* failure, one seam over."""
     value: Any
     observed: tuple = ()
 
@@ -1231,6 +1238,40 @@ REQUIRES_STEMS = frozenset({
     "exists", "stores", "condition", "floor", "contain.path", "held_by", "present_at",
     "claim.held",
 })
+
+# THE STEMS WHOSE VALUE IS COMPUTED **FROM THE HOLDER'S OWN LEDGER** -- and which therefore MAY
+# NOT BE DEPOSITED INTO IT. `WorldReader.read`'s `claim.held` branch answers
+# `any(c.subject == subject for c in p.ledger)`, so a WITNESS deposit of
+# `Observation(X, "claim.held", False)` appends a Claim whose `subject` IS `X` and makes that same
+# read return True from the barrier that stored it. **The belief is false the moment it becomes
+# readable, and it is made false by the act of recording it.**
+#
+# ⚠ THIS IS A CLOSURE PROPERTY OF THE GRAMMAR, NOT A SPECIAL CASE ON A VALUE OR AN ENTITY. The
+# rule quantifies over PREDICATES THAT READ THE STORE THEY WOULD BE WRITTEN INTO; `claim.held` is
+# the only member today because `OwnLedger` is the only form that reads a ledger. It is the THIRD
+# principled exclusion at the deposit site and it has the same shape as the other two -- UNKNOWN
+# (the instrument's gap must not become a belief) and duplicates (one belief, stored once).
+#
+# ⚠ MEASURED BEFORE EXCLUDING, seed 0, NPC-088 at `actor`, 8 seasons (`W-B` adversarial pass,
+# 2026-09-04): at end of season 0 `LedgerReader(p_a).read('r_hearth','claim.held')` is **False**
+# while `WorldReader(w,'p_a').read('r_hearth','claim.held')` is **True** -- the two readers
+# disagreeing about the SAME person's SAME ledger, which is the one thing `belief_contradicts`'
+# docstring says cannot happen (*"the same cell asked of two readers, differing only in WHAT THEY
+# READ and in POLARITY"*). The person then declines `tell` for a season on a belief the fold
+# would have admitted. It is not permanent: the block is per-SUBJECT and the claim is EVICTED by
+# the ledger cap at season 2, after which `tell` runs again -- so the belief is corrected by
+# FORGETTING rather than by anything the world did, which is a worse property than a wrong belief,
+# not a milder one.
+#
+# ⚠ THE ALTERNATIVE WAS BUILT IN ARGUMENT AND REJECTED, and is recorded so it is not re-derived:
+# make `LedgerReader` answer `claim.held` FROM MEMBERSHIP too, so the readers agree. That fails
+# three ways -- the deposited Claim's `value` would then be written and never read (`ID-13`'s dead
+# carrier, exactly what `W-A` refused to build), `any(c.subject == ...)` would live in two classes
+# (§8: never re-implement a rule), and the belief store would become incapable of being wrong for
+# form 6, which is the `T3` property `OwnLedger`'s own docstring exists to preserve.
+# roster-exempt: MECHANISM, as `REQUIRES_STEMS` above -- this is a property of the GRAMMAR'S
+# predicates (which of them read the ledger), not vocabulary the world contains.
+LEDGER_DERIVED_STEMS = frozenset({"claim.held"})
 
 
 class LedgerReader:
@@ -2947,8 +2988,12 @@ class World:
         added tenures in a different sequence for the same eventual world. `docket` is a LIST and
         its order is semantic (S31's queue), so it is folded in place, positionally.
 
-        `Event.observed` DOES NOT EXIST YET (W-B) -- `getattr` guards it so this hash is
-        forward-compatible without a second edit the day that field lands."""
+        `Event.observed` EXISTS AS OF `W-B` (2026-09-04) and this fold reaches it with no edit
+        here, which is what the forward-compatibility `getattr` was written for. ⚠ THE `getattr`
+        STAYS AND THE SENTENCE THAT SAID THE FIELD DOES NOT EXIST IS GONE: the guard is cheap and
+        keeps this callable on a stripped Event a test builds, but a docstring asserting the
+        absence of a field the dataclass declares is false, and false in the direction that stops
+        the next reader checking (found by the `W-B` adversarial pass)."""
         h = hashlib.blake2b(digest_size=16)
         for name in self._STATE_COLLECTIONS:
             for k in sorted(getattr(self, name, {}) or {}):
@@ -2963,8 +3008,9 @@ class World:
                      f"{','.join(e.causes)}".encode())
             for c in e.changes:
                 h.update(f"~{c.subject}|{c.mode}|{c.driver}|{c.field}|{c.delta}".encode())
-            # W-B forward-compatibility: `Event` carries no `observed` field today (getattr with
-            # a default guards that), and once it does this folds it with no second edit here.
+            # `Event.observed` is folded here. The `getattr` default is not a claim that the
+            # field is absent -- it is on `Event` since `W-B` -- it keeps this callable on an
+            # Event a test has stripped, which `test_wb_the_carrier_moves_the_seeded_hash` does.
             for o in (getattr(e, "observed", None) or []):
                 h.update(f"^{o}".encode())
         return h.hexdigest()
@@ -6072,6 +6118,27 @@ class SeasonDriver:
                     "control'*. Here the control is `none`, i.e. depositing nothing, so a silent "
                     "fallback would report `W-B` as having changed nothing")
         deposits = 0
+        # ⚠ PASS-SCOPED, KEYED BY PERSON -- NOT PER (PERSON, EVENT), WHICH IS WHERE IT WAS BUILT
+        # AND WHAT MADE THE DE-DUPLICATION BELOW A CLAIM THE CODE DID NOT DELIVER. `LedgerReader`
+        # matches on `(subject, predicate)` and resolves on `(when, confidence)` with a STRICT `>`,
+        # so two claims deposited in the SAME barrier with the same `confidence_default` tie on
+        # both keys and the FIRST APPENDED wins -- which is the append-order dependence
+        # `LedgerReader`'s own docstring says it exists to prevent (*"answering with the first
+        # found would make the verdict depend on append order"*). A `seen_obs` created inside the
+        # fan loop cannot see a collision across two Events, and `_eff_transfer` mutates
+        # `Rung.stores` during RESOLVE, so two transfers on one rung in one season read 8 then 7
+        # (`test_wb_two_reads_of_one_cell_in_one_barrier_deposit_exactly_one_claim` builds it).
+        # MEASURED over the 86 corpus worlds (`W-B` adversarial pass, 2026-09-04): at `total`,
+        # **651 surviving tied groups, 27 of them holding DIFFERENT values** -- e.g. `ARC-01`,
+        # `p_a`, `('r_realm','stores:grain',when=4,conf=100)` holding `[168, 167, 167]`. At
+        # `actor` it is 0, because one actor rarely acts twice on one rung in one season; the
+        # defect is reachable in the shipped grammar and lives in the arm the row also measures.
+        # ⚠ WHICH READ SURVIVES IS NOW STATED RATHER THAN LEFT TO A COMPARATOR IN ANOTHER CLASS.
+        # Within one barrier every read is equally recent BY `when`, so `LedgerReader` cannot rank
+        # them and something must: the first read the fan reaches -- i.e. the earliest Event in
+        # RESOLVE order -- is kept, which is the answer `LedgerReader`'s strict `>` already gave.
+        # This fix removes the TIE, not the answer.
+        seen_obs_by_pid: dict = {}
         w._in_parallel_map = True
         for pid, e, channel in fan:
             p = w.persons.get(pid)
@@ -6136,11 +6203,15 @@ class SeasonDriver:
             # the cap evicts somebody else for.
             #
             # ⚠ DE-DUPLICATED ON `(subject, predicate)`, WHICH IS THE KEY `LedgerReader.read`
-            # MATCHES ON. Two claims a reader cannot tell apart are one belief stored twice, and
+            # MATCHES ON -- AND ACROSS THE WHOLE BARRIER, WHICH IS THE SCOPE THAT READER OPERATES
+            # AT. Two claims a reader cannot tell apart are one belief stored twice, and
             # `claim_subjects` gives the same reason for its own de-duplication: a person holding
-            # two identical claims would double-count in every eviction comparison.
+            # two identical claims would double-count in every eviction comparison. The set is
+            # `seen_obs_by_pid` above; the first writing of this scoped it inside the fan loop, so
+            # the sentence was true of one Event and false of the pass. See that comment for the
+            # measurement.
             if obs_mode != "none" and (obs_mode == "total" or pid == e.subject):
-                seen_obs: set = set()
+                seen_obs = seen_obs_by_pid.setdefault(pid, set())
                 # `e.observed`, NOT `getattr(e, "observed", ())`. The field is on `Event` now, so
                 # a default here would be a guard for a case that cannot arise -- and it would
                 # SWALLOW the one case worth failing on, an object that is not an Event reaching
@@ -6149,10 +6220,23 @@ class SeasonDriver:
                 for o in e.observed:
                     if o.value is UNKNOWN or o.value is None:
                         continue
+                    # ⚠ AND A READ COMPUTED FROM THE LEDGER IS NEVER DEPOSITED INTO IT. See
+                    # `LEDGER_DERIVED_STEMS` for the measurement and for the alternative that was
+                    # rejected. In one line: `WorldReader.read(X, "claim.held")` answers from
+                    # LEDGER MEMBERSHIP, so storing `(X, "claim.held", False)` puts a claim about
+                    # `X` in the ledger and makes that read True -- the deposit falsifies its own
+                    # content, and the person then declines an act the fold would admit. This is
+                    # the same prohibition as the UNKNOWN guard above, one predicate over: a
+                    # deposit the instrument cannot stand behind is not deposited.
+                    if str(o.predicate).partition(":")[0] in LEDGER_DERIVED_STEMS:
+                        continue
                     key = (o.subject, o.predicate)
                     if key in seen_obs:
                         continue
                     seen_obs.add(key)
+                    # `e.id` is in the digest, so the per-person counter need only separate
+                    # two reads OF ONE EVENT; it spans the pass now and is still strictly
+                    # increasing, so no two ids collide.
                     oc = Claim(H(w.world_seed, w.tick, pid, f"obs:{e.id}:{len(seen_obs)}"),
                                pid, o.subject, o.predicate, o.value, w.tick, src, conf, "own")
                     w.write("claim_ledger", WriteClass.INTERIOR,

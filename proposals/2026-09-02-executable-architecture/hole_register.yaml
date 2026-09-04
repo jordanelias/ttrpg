@@ -457,7 +457,7 @@ rows:
       finally observing the thing it guards (§0.1 point 2).
     sweep:     [0, 5, 20]
     unblocks:  "the third licensed clock, and every arc that walks back through a claim"
-    cite:      "CLOSED IN TWO HALVES BY W2 AND W4, by CLAUDE.md 0's five tests. The SCHEMA_ROW half is SUPERSEDED: W2 gave Part D a `(Claim, confidence)` row, MATTER-only, emitting `claim.decayed`, so the row this hole says is missing exists. The FORMULA half is answered by PRECEDENT (test 4): `Site.condition` wear is the other licensed MATTER clock and #353 gives IT no rate either -- it is a registered per-kind fixture that RAISES when unregistered (S42.2.1: `a wear table that returns 20 for an unregistered site kind does not fail, it answers plausibly and wrongly forever`). `H-09` treats `Claim.confidence`'s DEFAULT the same way, one field over. So this takes the same shape: an INJECTED DEFAULT with a site and a three-point sweep, not a `ruled` value the design states. Grading it `ruled` would credit an invented number to #353; leaving it `absent` after building the clock would deny a mechanism that now runs. W4 executes it and the run is the artifact."
+    cite:      "CLOSED IN TWO HALVES BY W2 AND W4, by CLAUDE.md 0's five tests. The SCHEMA_ROW half is SUPERSEDED: W2 gave Part D a `(Claim, confidence)` row, MATTER-only, emitting `claim.decayed`, so the row this hole says is missing exists. The FORMULA half is answered by PRECEDENT (test 4): `Site.condition` wear is the other licensed MATTER clock and #353 gives IT no rate either -- it is a registered per-kind fixture that RAISES when unregistered (S42.2.1: `a wear table that returns 20 for an unregistered site kind does not fail, it answers plausibly and wrongly forever`). `H-09` treats `Claim.confidence`'s DEFAULT the same way, one field over. So this takes the same shape: an INJECTED DEFAULT with a site and a three-point sweep, not a `ruled` value the design states. Grading it `ruled` would credit an invented number to #353; leaving it `absent` after building the clock would deny a mechanism that now runs. W4 executes it and the run is the artifact. ⚠⚠ **THE SWEEP IS DECLARED, EXECUTED, AND MEASURING ALMOST NOTHING, AND THAT IS THIS ROW'S FINDING RATHER THAN `H-122`'s. MEASURED 2026-09-04 (the `W-B` adversarial pass, which re-ran the three points in three deposit arms): rate 5 and rate 20 produce IDENTICAL decay-event counts, IDENTICAL eviction counts, IDENTICAL ledger MEMBERSHIP (the same claim ids survive) and IDENTICAL acts, in all three arms.** The only statistic that moves is minimum confidence, and it is exactly `100 - rate` in every non-100 cell -- an arithmetic identity saying only that the deepest surviving claim decayed exactly once. So the sweep discriminates `0` from non-zero and nothing else: the VALUE of the rate is behaviourally inert. The cause is that no reader separates one confidence from another -- the eviction comparator multiplies `confidence` by recency and the ordering does not change, and `belief_contradicts` reads a claim VALUE and never its confidence. A mutation that gives `belief_contradicts` a confidence floor makes the rate live immediately (run 2026-09-04: `actor` goes (185,95,49)/(189,80,69)), which is the falsifier and also the shape of the fix if one is wanted. **This is not a reason to change the default**; it is a reason not to cite this sweep as evidence that a rate was measured. Asserted by `test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total`, which goes RED if the rate ever becomes live -- at which point this row must be re-argued rather than the line adjusted."
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-41
     tier:      1
@@ -1468,7 +1468,7 @@ rows:
     site:      ""
     sweep:     []
     unblocks:  "nothing -- it is a question about what the world SHOULD do, and both answers run"
-    cite:      "FOUND BY AN ADVERSARIAL PASS OVER THE `N3` FIX, WHICH SHIPPED THE BEHAVIOUR WITHOUT NAMING IT. The deposit rule is keyed on 'this Event wrote nothing', and refusals are exactly that, so the behaviour arrived as a side effect of a fix aimed at tellings. ⚠ IT IS REGISTERED RATHER THAN DECIDED BECAUSE BOTH READINGS ARE DEFENSIBLE AND ONE IS ALREADY RUNNING: seeing somebody try and fail is real information -- the reason `§E2` makes failure emit at all -- and a design might equally hold that only what HAPPENED occasions a decision.  Whoever rules it should say so here rather than in a resolver. ⚠ **`W-B` SHARPENS THIS ROW AND DOES NOT CLOSE IT, AND THE SHARPENING IS THAT A REFUSAL IS NOW THE MOST INFORMATIVE EVENT IN THE CORPUS.** Since 2026-09-04 the fold attaches `Verdict.observed` to every Event an act emits and WITNESS deposits it under `observation_deposit_mode` (`H-122`, default `actor`). A refusal writes nothing, so its `changes[]` is empty and it was already taking the write-nothing deposit path — but its READS are precisely WHY it refused (`stores:grain -> 0`, `claim.held -> False`), and a value a comparator can send to False is the only kind of claim §F1 clause 4 can fire on. So a refusal now propagates strictly more than a success does in the one respect that reaches a decision. MEASURED at the default arm over 86 corpus worlds, by tagging every depositable read with the kind of the Event that carried it: **310 of the 1,761 non-UNKNOWN reads carry a False-able value, and ALL 310 come from a refusal** — 258 `news.untold` (`claim.held` = False) and 52 `travel.blocked` (`contain.path:<person>` = False). ZERO come from a success: `transfer.made` reads a stocked granary (655), `travel.moved` reads a path that exists (587), `news.told` reads a claim that is held (159), and none of those values can make a comparator return False. After eviction, 200 of the 310 are still ledger-resident at the end of the run. ⚠ A FIRST WRITING OF THIS ROW SAID *186 of 200 come from `news.untold`* AND WAS INFERRED FROM THE PREDICATE RATHER THAN MEASURED FROM THE EVENT. The corrected figure is stronger, not weaker, and it was corrected by measuring the whole corpus rather than reasoning from one predicate — `CLAUDE.md` §0.1 point 4. ⚠ THIS DOES NOT ANSWER THE QUESTION AND MUST NOT BE READ AS ANSWERING IT. `CLAUDE.md` §0's five tests still land where they landed: not superseded, not irrelevant, and NOT answered by a design document — §E2 says failure emits and says nothing about whether it should seed deliberation. Precedent does not answer it either, because `H-122`'s precedent settles WHO RECEIVES a read, not WHETHER A FAILURE SHOULD OCCASION A DECISION, which is a claim about the world and not about a distribution rule. Both readings still run, so it stays `absent` with the argument sharpened rather than a default invented for it. What `W-B` changes is the STAKE: whoever rules it is now ruling on the channel that carries every falsifiable belief in the corpus, not on a bookkeeping detail"
+    cite:      "FOUND BY AN ADVERSARIAL PASS OVER THE `N3` FIX, WHICH SHIPPED THE BEHAVIOUR WITHOUT NAMING IT. The deposit rule is keyed on 'this Event wrote nothing', and refusals are exactly that, so the behaviour arrived as a side effect of a fix aimed at tellings. ⚠ IT IS REGISTERED RATHER THAN DECIDED BECAUSE BOTH READINGS ARE DEFENSIBLE AND ONE IS ALREADY RUNNING: seeing somebody try and fail is real information -- the reason `§E2` makes failure emit at all -- and a design might equally hold that only what HAPPENED occasions a decision.  Whoever rules it should say so here rather than in a resolver. ⚠ **`W-B` SHARPENS THIS ROW AND DOES NOT CLOSE IT, AND THE SHARPENING IS THAT A REFUSAL IS NOW THE MOST INFORMATIVE EVENT IN THE CORPUS.** Since 2026-09-04 the fold attaches `Verdict.observed` to every Event an act emits and WITNESS deposits it under `observation_deposit_mode` (`H-122`, default `actor`). A refusal writes nothing, so its `changes[]` is empty and it was already taking the write-nothing deposit path — but its READS are precisely WHY it refused (`stores:grain -> 0`, `claim.held -> False`), and a value a comparator can send to False is the only kind of claim §F1 clause 4 can fire on. So a refusal now propagates strictly more than a success does in the one respect that reaches a decision. MEASURED at the default arm over 86 corpus worlds, by tagging every depositable read with the kind of the Event that carried it: **310 of the 1,761 non-UNKNOWN reads carry a False-able value, and ALL 310 come from a refusal** — 258 `news.untold` (`claim.held` = False) and 52 `travel.blocked` (`contain.path:<person>` = False). ZERO come from a success: `transfer.made` reads a stocked granary (655), `travel.moved` reads a path that exists (587), `news.told` reads a claim that is held (159), and none of those values can make a comparator return False. After eviction, 200 of the 310 are still ledger-resident at the end of the run. ⚠⚠ **THOSE FIGURES ARE THE PRE-EXCLUSION ONES AND ARE KEPT ONLY BECAUSE THE SHAPE OF THE FINDING SURVIVES THEM. RE-MEASURED 2026-09-04 AFTER THE `W-B` ADVERSARIAL PASS: 297 False-able of 2,081 depositable, of which the 258 `claim.held` ones are NO LONGER DEPOSITED** (`shape.LEDGER_DERIVED_STEMS`; `WorldReader` answers that predicate from ledger membership, so depositing it falsified its own content -- see `H-122`). Ledger-resident False-able claims go 200 -> **10**, all `contain.path`, and §F1 clause-4 drops across the 86 worlds go 304 -> **13**, all `move` (plus 2 `transfer` drops in `headless`'s NPC-088 world, which is not among them). The claim this row rests on is unchanged and if anything cleaner: **every False-able read still comes from a refusal and none from a success.** ⚠ A FIRST WRITING OF THIS ROW SAID *186 of 200 come from `news.untold`* AND WAS INFERRED FROM THE PREDICATE RATHER THAN MEASURED FROM THE EVENT. The corrected figure is stronger, not weaker, and it was corrected by measuring the whole corpus rather than reasoning from one predicate — `CLAUDE.md` §0.1 point 4. ⚠ THIS DOES NOT ANSWER THE QUESTION AND MUST NOT BE READ AS ANSWERING IT. `CLAUDE.md` §0's five tests still land where they landed: not superseded, not irrelevant, and NOT answered by a design document — §E2 says failure emits and says nothing about whether it should seed deliberation. Precedent does not answer it either, because `H-122`'s precedent settles WHO RECEIVES a read, not WHETHER A FAILURE SHOULD OCCASION A DECISION, which is a claim about the world and not about a distribution rule. ⚠ **AND THE ROW MUST NOT READ AS A NEUTRAL CHOICE, WHICH IS HOW IT READ BEFORE THE ADVERSARIAL PASS.** The first writing said `both readings still run` and left it there. That was true and insufficient: for one season the running reading produced a belief that was FALSE AT DEPOSIT and correctable only by the ledger cap evicting it, and whoever rules this row would have been ruling with that in the corpus. It is fixed (`H-122`), and the row stays `absent` on the argument above rather than on the strength of a defect. What survives as a constraint on the ruling is narrower and real: the beliefs a refusal now seeds are `contain.path` beliefs that are TRUE when recorded and that a later `travel.moved` can overturn, so a ruler is choosing whether a TRUE, correctable belief about a failed attempt should occasion a decision -- not whether an artefact should. What `W-B` changes is the STAKE: whoever rules it is now ruling on the channel that carries every falsifiable belief in the corpus, not on a bookkeeping detail"
     source:    "adversarial pass over the N3 fix, 2026-09-03; sharpened by W-B 2026-09-04"
 
   - id:        H-112
@@ -1999,29 +1999,113 @@ rows:
     owner:     "WITNESS (the only minter of a root token, §20) -- as `H-79`, and the same barrier"
     grade:     "assumption"
     default:   >-
-      `actor` -- an act's reads are deposited to the actor alone. Chosen on the `H-40` measurement
-      below, not assumed: it is the minimum that closes the loop and the only live arm that leaves
-      `H-40`'s decay sweep observable.
+      `actor` -- an act's reads are deposited to the actor alone. TWO SEPARATE CHOICES, and only
+      one of them was made by a falsifier, which the first writing of this row did not distinguish.
+      **`actor` over `total`: by measurement** -- `total` flattens `H-40` (below) and, for form 6,
+      records a holder-relative value in the wrong holder's ledger (`sweep:`), while producing
+      IDENTICAL decisions (13 clause-4 drops in both live arms). **`actor` over `none`: a design
+      call** -- `none` deposits nothing, so §F1 clause 4 cannot fire at all, and `actor` is the
+      minimum arm that opens it. By the observability criterion alone `none` would win, because it
+      also leaves `H-80`'s depth clause alive; that cost is stated in `cite:` rather than omitted.
     site:      >-
       fixture `observation_deposit_mode` in `shape.DEFAULT_FIXTURES`, read once per barrier by
       `shape.SeasonDriver.witness`; the arms are `rosters.yaml: observation_deposit_modes` and an
       unrostered one refuses there on `observers_for`'s precedent. The CARRIER is
       `shape.Event.observed`, attached in `shape.SeasonDriver._fold` from `shape.evaluate`'s
       `Verdict.observed`, and folded into `shape.World.content_hash`.
+      THE DEPOSIT RULE AT THAT BARRIER CARRIES THREE EXCLUSIONS, all at the same site and all for
+      the same reason -- a deposit the instrument cannot stand behind is not made: UNKNOWN
+      (`H-94`'s gap arriving from the write side), DUPLICATES on `(subject, predicate)`
+      de-duplicated ACROSS THE WHOLE BARRIER via `seen_obs_by_pid`, and any predicate in
+      `shape.LEDGER_DERIVED_STEMS` -- a read COMPUTED FROM the holder's ledger, which may not be
+      written INTO it. See the two paragraphs below; both exclusions were added by the `W-B`
+      adversarial pass, 2026-09-04.
     sweep:
       - 'none — THE CONTROL. No observation is deposited; the vocabularies stay disjoint and clause 4 cannot fire. This is the pre-`W-B` deposit behaviour exactly.'
       - 'actor — only the actor learns what their own act read. The minimum that closes the loop, and the arm where every claim minted is one its holder can bind: `belief_contradicts` binds `from` to the person''s OWN containing rung and `actor` to their own id.'
-      - 'total — the reads get the same fan-out the Event itself got (§61 for the Event; #353 states nothing for the read).'
+      - 'total — the reads get the same fan-out the Event itself got (§61 for the Event; #353 states nothing for the read). ⚠ REJECTED ON TWO INDEPENDENT GROUNDS, and the second is a CORRECTNESS objection rather than an eviction one. (i) It flattens `H-40` (below). (ii) `OwnLedger` reads THE ACTOR''S OWN LEDGER and no other -- `WorldReader` is constructed with one actor id and its docstring makes that structural -- so a `claim.held` value is HOLDER-RELATIVE, and fanning it to every witness records a true fact about A''s ledger inside B''s as if it were about B''s. The §F1-epistemology paragraph below (`fanning a read to everyone teaches everyone a VERIFIED fact`) is FALSE for that form: it teaches everyone a fact that is not about them. ⚠ AND IT IS NOW UNREACHABLE RATHER THAN MERELY ARGUED AGAINST: `claim.held` is the ONLY predicate any reader answers from the asker''s own state -- every other stem in `REQUIRES_STEMS` reads the world -- so excluding it via `LEDGER_DERIVED_STEMS` closes this defect by construction. One edit, two findings, because both are consequences of the same property. Found by the `W-B` adversarial pass, 2026-09-04.'
     unblocks:  >-
-      §F1 clause 4, which was unreachable. MEASURED 2026-09-04, seed 0, over the 86 corpus worlds
-      whose `scale:` is a rung kind without the `rescales()` overlay (`corpus_run` runs 89; the three
-      re-scaled ones are outside this harness and the number is stated as the harness's, not the
-      corpus's): claims held in ledgers that are in the `requires` vocabulary go **0 (none) -> 1,086
-      (actor) -> 2,577 (total)**, of which values a comparator can send to False go **0 -> 200 ->
-      600**. The `none` figure is the theorem `H-116` reported, re-measured as a control.
+      §F1 clause 4, which was unreachable. RE-MEASURED 2026-09-04 after the `W-B` adversarial pass,
+      seed 0, ON BOTH BASES so no figure needs a qualifier at the point of use. Claims held in
+      ledgers that are in the `requires` vocabulary, by arm `none / actor / total`:
+      **0 / 850 / 1,692** over the 86 worlds whose raw `scale:` is a rung kind, and
+      **0 / 886 / 1,764** over the 89 worlds `corpus_run` actually runs (the three re-scaled ones
+      included). Of those, values a comparator can send to False: **0 / 10 / 33** and
+      **0 / 10 / 33**. The `none` figure is the theorem `H-116` reported, re-measured as a control.
+      ⚠ THESE ARE MUCH SMALLER THAN THE FIGURES THIS ROW FIRST CARRIED (1,086 / 2,577 held and
+      200 / 600 False-able, 86 basis) BECAUSE 258 OF THE 310 FALSE-ABLE READS WERE THE SELF-
+      REFUTING `claim.held` CLASS and are no longer deposited. What the count lost is a belief
+      that was false at deposit; see the first paragraph of `cite:`.
     cite:      >-
       SOURCES QUOTED HERE: proposals/2026-09-01-season-loop-tests/tracer/shape.py and
       proposals/2026-09-02-executable-architecture/hole_register.yaml (row `H-94`).
+      ⚠⚠ **THE CONSTRAINT THIS ROW MUST CARRY, AND IT RETRACTS THE FIRST WRITING OF THIS ROW'S
+      HEADLINE RESULT. A READ COMPUTED FROM THE LEDGER MAY NOT BE DEPOSITED INTO IT.**
+      `WorldReader.read`'s `claim.held` branch answers from LEDGER MEMBERSHIP -- 'does the actor
+      hold any claim whose subject is this'. So a WITNESS deposit of
+      `Observation(X, 'claim.held', False)` appends a Claim whose `subject` IS `X` and makes that
+      same read return True from the barrier that stored it. **The belief is false the moment it
+      becomes readable, and it is made false by the act of recording it.** MEASURED, seed 0,
+      NPC-088 at `actor`, 8 seasons: at end of season 0
+      `LedgerReader(p_a).read('r_hearth','claim.held')` is False while
+      `WorldReader(w,'p_a').read('r_hearth','claim.held')` is True -- the two readers disagreeing
+      about the SAME person's SAME ledger, which is exactly what `belief_contradicts`' docstring
+      says cannot happen. The person then declined `tell` for a season on a belief the fold would
+      have ADMITTED, and the block lifted at season 2 only because the ledger CAP EVICTED the
+      claim, i.e. by forgetting rather than by learning. THE DEPOSIT IS THEREFORE EXCLUDED
+      (`shape.LEDGER_DERIVED_STEMS`), and the exclusion is a CLOSURE PROPERTY OF THE GRAMMAR
+      rather than a special case: it quantifies over predicates that read the store they would be
+      written into, and `claim.held` is its only member because `OwnLedger` is the only form that
+      reads a ledger. §0's five tests on the CHOICE between excluding the deposit and making
+      `LedgerReader` answer `claim.held` from membership too: (1) not superseded, (2) not
+      irrelevant, (3) no design document decides it, (4) **ANSWERED BY PRECEDENT AND IT CLOSES
+      HERE** -- the UNKNOWN exclusion two paragraphs down is the same rule at the same site for
+      the same reason (`H-94`: 'the instrument's own gap would become a FALSE BELIEF held by every
+      witness'), and a `claim.held` deposit is a second instance of the instrument's own
+      bookkeeping becoming a false belief; (5) corroborates rather than being reached -- the
+      alternative would leave the deposited Claim's `value` written and never read, which is the
+      dead carrier `ID-13` refuses and which `W-A` refused to build, and would put
+      `any(c.subject == ...)` in two classes against §8. `needs_jordan` is FALSE and this is NOT
+      escalated. FALSIFIERS:
+      `test_wb_a_read_computed_from_the_ledger_is_never_deposited_into_it`, which asserts the
+      disagreement by planting a claim rather than merely asserting an absence, and
+      `test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_the_control`.
+      ⚠⚠ **WHAT THAT COSTS THIS ROW, STATED AS A RETRACTION AND NOT AS A FOOTNOTE.** §F1 clause-4
+      drops across the 86 corpus worlds go **304 at `actor` (288 `tell`, 16 `move`) BEFORE the
+      exclusion to 13 AFTER it, all `move`; 0 at `none` in both.** 95% of the corpus-visible
+      effect this row first published ran on a belief its own deposit falsified. WHAT SURVIVES IS
+      SMALLER AND TRUE, AND IT FIRES IN TWO SHAPES. (i) In `corpus_run`'s worlds, 13 `move`
+      Candidates: a `travel.blocked` refusal deposits `contain.path:<referent> = False` and the
+      following season the person declines a `move` the fold would also refuse. **No case's
+      executed set moves and `corpus_run.py`'s printed output is byte-identical to the control's.**
+      (ii) In `headless`'s seeded NPC-088 world, **2 `transfer` Candidates at `actor` and 0 at
+      `none`**, on `('hearth_ostvik','stores:grain',0)` deposited by a `transfer.refused` -- which
+      is THE ACCEPTANCE TEST'S OWN CHAIN, form 2 with `from` bound by `containing_rung_of`,
+      occurring with nothing planted. Acts per season go 7/7/7 to 7/6/6. At `total` it is 4 drops
+      and two are `p_bailiff`'s, i.e. a person acting on what SOMEONE ELSE'S act read -- the
+      cross-person propagation §F1 wants, in the arm this row rejects on other grounds. Both shapes
+      are asserted by
+      `test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_the_control`.
+      This is the honest statement of the result and it replaces the one this row shipped.
+      ⚠ AND THE PARTITION THE RETRACTED VERSION REPORTED (24 cases keeping `tell` at spans >= 3
+      rather than 0 keeping it) HAS A MECHANISM, MEASURED, because the retracted paragraph's own
+      explanation predicted `tell` would never run again anywhere and 24 cases contradicted it.
+      TWO routes around the block, both real, both per-subject: the person tells about a DIFFERENT
+      referent -- NPC-088 at `actor`, season 2, `tell` runs on `p_a` and on a record id while
+      `r_hearth` stays blocked -- and the block on `r_hearth` itself LIFTS at season 2 because the
+      ledger reaches its 200-claim cap and evicts the claim. Recorded because the retracted
+      paragraph could not account for its own number, which is how the defect was found.
+      ⚠ THE SECOND ADVERSARIAL FINDING, ALSO FIXED HERE: the `(subject, predicate)` de-duplication
+      was scoped INSIDE the fan loop, i.e. per (person, Event), so two Events of one season
+      observing one cell both deposited and tied on `(when, confidence)` -- and `LedgerReader`'s
+      strict `>` then resolves them by APPEND ORDER, which is the dependence its own docstring
+      says it exists to remove. Reachable and MEASURED at `total` over the 86 worlds before the
+      fix: 651 surviving tied groups, 27 holding DIFFERENT values (e.g. `ARC-01`, `p_a`,
+      `('r_realm','stores:grain',when=4,conf=100)` holding 168, 167, 167). The set is
+      `seen_obs_by_pid` and spans the barrier now; which of two same-tick reads survives -- the
+      first the fan reaches, i.e. the earliest Event in RESOLVE order -- is STATED at the site
+      rather than left to a comparator in another class. Falsifier:
+      `test_wb_two_reads_of_one_cell_in_one_barrier_deposit_exactly_one_claim`.
       ⚠ THE CHANNEL WAS CLOSED BY A THEOREM, NOT BY A BUG, WHICH IS WHY THIS IS A SCHEMA ROW AND
       NOT A DEFECT. Every deposit before `W-B` carried `predicate = e.kind` (`act.refused`,
       `travel.blocked`, `record.created`) and `value = True`; the `requires` vocabulary is
@@ -2040,18 +2124,44 @@ rows:
       the reader is `belief_contradicts`, which evaluates THE SAME CELL against `LedgerReader`. No
       second evaluator is added and §27.2 holds. `W-A`'s own guard was inverted in place rather than
       deleted: it now asserts the field exists and carries the verdict's reads unchanged.
-      ⚠ ALL THREE ARMS RUN 2026-09-04, AND THE NAMED FALSIFIER FIRED. **`H-40`'s decay sweep re-run
-      in every arm**, seed 0, three NPC-088 seasons, (decay events, min confidence, evictions) by
-      rate 0 / 5 / 20 — `none` = (0,100,0) (183,95,48) (183,80,48); `actor` = (0,100,0) (191,95,70)
-      (191,80,70); **`total` = (0,100,0) (240,100,282) (240,100,282), INERT.** At `total` the minimum
-      confidence is 100 at every rate, which is the precedent `claim_subjects` already records
-      happening once: "the rate is inert and this sweep is measuring nothing", `ID-10` produced by a
-      fix rather than by a bug. The mechanism is the cap and not a coincidence — evictions rise
-      48 → 70 → 282 with the fan-out, and across the corpus the persons pinned AT the ledger cap go
-      72 → 72 → 243 of 258. **That is the whole argument for the default**, and it is asserted rather
-      than reported: `test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total` goes
-      RED if `total` stops flattening `H-40` (this row would then need re-arguing) or if `actor`
-      starts to. Reproduce with `python -m pytest test_tracer_is_honest.py -k h40s_decay_sweep -s`.
+      ⚠ ALL THREE ARMS RUN 2026-09-04, AND THE NAMED FALSIFIER FIRED — **BUT IT ESTABLISHED LESS
+      THAN THE FIRST WRITING OF THIS PARAGRAPH CLAIMED, AND THE NARROWER STATEMENT IS THE ONE THAT
+      IS TRUE.** `H-40`'s decay sweep re-run in every arm, seed 0, three NPC-088 seasons,
+      (decay events, min confidence, evictions) by rate 0 / 5 / 20 — `none` = (0,100,0) (183,95,48)
+      (183,80,48); `actor` = (0,100,0) (185,95,49) (185,80,49); **`total` = (0,100,0) (219,100,204)
+      (219,100,204), INERT.** (Before the `claim.held` exclusion above, `actor` read 191/70 and
+      `total` 240/282; the exclusion removed most of `W-B`'s deposit pressure and did not change
+      which arm goes inert.)
+      ⚠ WHAT 'OBSERVABLE' MEANS HERE. Minimum confidence is exactly `100 - rate` in every non-100
+      cell, which is an ARITHMETIC IDENTITY and not a behavioural measurement: it says only that
+      the deepest surviving claim decayed exactly once. And rate 5 and rate 20 produce IDENTICAL
+      decay counts, IDENTICAL eviction counts, IDENTICAL ledger MEMBERSHIP and IDENTICAL acts in
+      all three arms. **So `claim_decay_per_season`'s VALUE is behaviourally inert in every arm** —
+      which is a finding about `H-40` and is recorded THERE, not here. The claim this row is
+      entitled to is the narrow one: **at `total`, no once-decayed claim survives eviction to
+      end-of-run**, i.e. `total` destroys the only signature the sweep has. The mechanism is the cap
+      — evictions rise 48 → 49 → 204 with the fan-out.
+      ⚠ AND THE CORPUS-SCALE CAP FIGURE THIS ROW USED TO CITE IS GONE: persons pinned AT the ledger
+      cap now read 72 / 72 / 72 of the 258 persons in the 86 worlds, in all three arms (it was
+      72 / 72 / 243 before the exclusion).
+      The `total` objection therefore no longer rests on cap pressure at corpus scale; it rests on
+      the NPC-088 flattening above and on the correctness objection in `sweep:`.
+      This is asserted rather than reported:
+      `test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total` goes RED if `total`
+      stops flattening `H-40`, if `actor` starts to, or if the rate stops being inert.
+      Reproduce with `python -m pytest test_tracer_is_honest.py -k h40s_decay_sweep -s`.
+      ⚠ THE DEFAULT'S COST, WHICH THE FIRST WRITING OF THIS ROW DID NOT DISCLOSE ANYWHERE. By the
+      criterion this row argues from — which arm leaves a declared sweep observable — `none` leaves
+      BOTH `H-40`'s and `H-80`'s discriminators alive, `actor` leaves one, `total` neither.
+      `W-B` SATURATES `H-80`'s depth clause at `actor`: longest maturation chain by stage count,
+      `none` {0:0, 3:6, 6:7} vs `actor` {0:0, 3:7, 6:7}, so at the shipped default that control
+      cannot tell 3 stages from 6, and `test_w9_h80s_zero_control_is_executed_not_merely_described`
+      pins `none` for that reason. **So `actor` over `none` is a DESIGN call — it is the minimum arm
+      that opens §F1 clause 4 at all, and `none` opens nothing — and NOT a falsifier outcome.** The
+      falsifier decided `actor` over `total`; the design decided `actor` over `none`. `H-80`'s
+      surviving discriminator is the maturation COUNT (15/21 at `none` and `actor`, 27/36 at
+      `total`), which is not ceiling-bounded and is now EXECUTED in every arm by that test rather
+      than asserted in a comment.
       ⚠ THE VERDICT FLIPS ACROSS THIS SWEEP AND §42.2.1 SAYS THAT IS ITSELF A FINDING. Stated rather
       than smoothed: at `none` §F1 clause 4 cannot fire at all; at `actor` and `total` it can. The
       corpus does not behave identically across the arms and this row does not claim it does —
@@ -2073,21 +2183,39 @@ rows:
       `test_wb_an_unknown_read_is_never_deposited_because_it_is_the_instruments_own_gap`, which
       asserts it observed a non-zero number of UNKNOWN reads before asserting none were deposited.
       ⚠ WHY THE ROW STAYS `assumption` RATHER THAN CLOSING. `CLAUDE.md` §0's five tests, in order.
-      (1) SUPERSEDED — no: nothing rules on who receives a read. (2) IRRELEVANT — no: the fold
-      records 2,820 reads onto Events across the corpus at the `none` control and 2,516 at each of
-      the two live arms — the count itself differs because the arms diverge — so the clause is live
-      in every arm. (3) ANSWERED BY A DESIGN
+      (1) SUPERSEDED — no: nothing rules on who receives a read. (2) IRRELEVANT — no. RE-DERIVED
+      PER ARM 2026-09-04 (the two live arms are measured separately now, because the first writing
+      reported one figure for both and that reads as a transcription error): reads recorded onto
+      Events over the 86 worlds are **2,820 at `none` and 2,807 at each of `actor` and `total`**
+      (2,892 / 2,879 / 2,879 on the 89-world basis). ⚠ THE EQUALITY IS REAL AND IT IS ITSELF THE
+      FINDING: `total` deposits ~2x the grammar claims `actor` does and produces **exactly the same
+      decisions** — clause-4 drops are 13 in BOTH live arms, on the same Candidates. In these
+      worlds all three persons act on the same referents, so under `actor` each already holds from
+      their own act every belief `total` would also give them from someone else's; the extra
+      deposits are duplicates. The arms diverge on ledger occupancy and eviction, which is what
+      decided the default, and NOT on what anybody decides. Stated rather than left as a
+      coincidence. (3) ANSWERED BY A DESIGN
       DOCUMENT — NO, and that is the hole: #353 §28 names the deposit and §20 types the Claim, and
       neither says whether a deposit may carry the fold's reads or to whom. (4) **ANSWERED BY
       PRECEDENT, AND THIS IS WHERE IT CLOSES.** `fan_out_mode` (`H-33`) and `claim_subject_rule`
       (`H-79`) are both exactly this shape — a distribution rule at WITNESS the design does not state
-      — and both are closed as §G's declare / default / sweep with the specified behaviour as the
-      control arm. That is what this row is, and the default is argued from the `H-40` measurement
-      rather than assumed. (5) not reached, so nothing escalates. `needs_jordan` is FALSE.
-      ⚠ THE OBJECTION TO `total` IS §F1'S EPISTEMOLOGY AND IT IS WEAKER THAN IT LOOKS — SAID AS A
-      READING, NOT AS A RESULT. The fold reads with `WorldReader`, i.e. world truth, so fanning a
-      read to everyone teaches everyone a VERIFIED fact, and §F1 rests on people acting on beliefs
-      that may be wrong. But `LedgerReader` resolves on (when, confidence) and the ledger evicts, so
+      — and both are closed as §G's declare / default / sweep **with the INSTRUMENT'S PRIOR
+      BEHAVIOUR as the control arm.** ⚠ THAT SENTENCE USED TO READ 'with the specified behaviour as
+      the control arm', WHICH IS TRUE OF `H-33` ALONE. `H-33`'s control `total` is S61's own words;
+      `H-79`'s control `actor` is the incumbent on a row whose own `hole:` says #353 never specifies
+      it, and `none` here is likewise the incumbent, not a specified behaviour. The precedent still
+      holds under the corrected description — declare / default / sweep against the prior behaviour
+      — so step 4 still closes, but it is a weaker precedent than the old sentence claimed and the
+      row must not lean on the stronger one. (5) not reached, so nothing escalates. `needs_jordan`
+      is FALSE.
+      ⚠ THE EPISTEMOLOGY OBJECTION TO `total` IS WEAKER THAN IT LOOKS — SAID AS A READING, NOT AS
+      A RESULT — AND IT WAS NOT THE STRONGEST OBJECTION AVAILABLE. The `sweep:` entry above now
+      carries that one: `claim.held` is HOLDER-RELATIVE, so `total` recorded a true fact about
+      one person's ledger inside another's. That is a correctness objection, not a reading, and it
+      is independent of everything in this paragraph. What follows is the reading, kept because it
+      is still the honest state of the weaker argument. The fold reads with `WorldReader`, i.e.
+      world truth, so fanning a read to everyone teaches everyone a VERIFIED fact, and §F1 rests on
+      people acting on beliefs that may be wrong. But `LedgerReader` resolves on (when, confidence) and the ledger evicts, so
       a season-1 observation of `stores:grain = 5` is a STALE belief the moment the granary empties,
       and a person acting on it acts wrongly. The epistemic gap survives as RECENCY rather than as
       absence, which is a better mechanism than absence. This did NOT decide the default — `H-40`'s
@@ -2100,22 +2228,43 @@ rows:
       `stores:grain` and value 0; `evaluate` against `LedgerReader` returns **False**; the Candidate
       is dropped (21). The subjects match because both sides bind `from` through `W-C`'s one owner —
       the fold off `Act.payload`, the person off `containing_rung_of` — and `pack_scenes` puts the
-      second on the first.
-      ⚠ REPRODUCTION, because three of the numbers above come from a sweep no committed script
-      runs and `G11` asks for a command on every number. The `H-40` re-run, the arm counts and the
-      hash movement are all pinned by tests: `python -m pytest test_tracer_is_honest.py -k
-      "h40s_decay_sweep or the_control_arm or carrier_moves or refusals_reads" -s` prints the
-      first two and asserts all four. The CORPUS-SCALE figures (1,086 / 2,577 grammar claims,
-      200 / 600 False-able, 72 / 72 / 243 persons at cap, 2,820 / 2,516 reads) were measured by
-      looping `corpus_run.build_at(case, 0)` over every case whose `scale:` is a rung kind, with
-      `w.fixtures` swept to each arm and `corpus_run.seasons_for(case)` seasons, then counting
-      `claim.deposited` Events against end-of-run ledger occupancy — no committed script does
-      this, and that is stated rather than implied. The corpus-level CONTROL that IS committed is
-      `python corpus_run.py` itself: at the `none` arm it reproduces the pre-`W-B` output exactly,
-      and the shipped `actor` default leaves every headline unchanged (6 verbs executed, 1 always
-      refused, 2 distinct executed sets, R1/R3/R4/R5 counts identical) while moving WHICH cases
-      fall in which set — which `test_the_corpus_runs_and_the_ranking_cannot_discriminate` now
-      pins as a season threshold.
+      second on the first. ⚠ 22 AND 21 ARE NOW ASSERTED AND PRINTED BY THAT TEST. They were quoted
+      here from an ad-hoc run while the test asserted only the DELTA, which is the unreproducible
+      number `G11` exists to stop.
+      ⚠ AND THE ACCEPTANCE DOES NOT WARRANT THE CORPUS PARAGRAPH, WHICH IS HOW IT WAS FIRST USED.
+      It is form 2 `scalar_threshold` with `from` bound by `containing_rung_of`; every clause-4
+      firing in the corpus is form 3 `contain_path` with operands bound by `_derive_operand` — a
+      different operand, a different derivation, and the one-owner binding argument says nothing
+      about it. `stores:grain` is in fact unreachable as a False in the corpus (0 of the 297
+      False-able reads over the 86 worlds), so the hand-emptied granary is not a convenience: it is
+      the only way to reach that chain at all. The acceptance is evidence the mechanism EXECUTES,
+      which is what its own docstring claims and all it may be cited for.
+      ⚠ REPRODUCTION, because several numbers above come from a sweep no committed script runs and
+      `G11` asks for a command on every number. Pinned by tests: `python -m pytest
+      test_tracer_is_honest.py -k "h40s_decay_sweep or the_control_arm or carrier_moves or
+      refusals_reads or clause_four_fires or read_computed or two_reads or h80s_zero" -s` prints
+      the `H-40` per-arm table, the arm counts, the acceptance's 22 -> 21, the `H-80` maturation
+      counts in all three arms, and ARC-01's clause-4 drops, and asserts every one of them.
+      THE CORPUS-SCALE FIGURES — grammar claims held 0 / 850 / 1,692 and 0 / 886 / 1,764,
+      False-able held 0 / 10 / 33, persons at cap 72 / 72 / 72 of the 86 worlds' 258 persons,
+      reads on Events
+      2,820 / 2,807 / 2,807 and 2,892 / 2,879 / 2,879, clause-4 drops 0 / 13 / 13 — were measured
+      by looping `corpus_run.build_at(case, 0)` over every case whose `scale:` is a rung kind
+      (both with and without `corpus_run.rescales()`), with `w.fixtures` swept to each arm and
+      `corpus_run.seasons_for(case)` seasons, counting `claim.deposited` Events against
+      end-of-run ledger occupancy and wrapping `shape.belief_contradicts` to count drops. NO
+      COMMITTED SCRIPT DOES THIS, which is stated rather than implied; the 13-drop result is
+      pinned on ONE case (ARC-01) by
+      `test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_the_control`.
+      ⚠ THE CORPUS-LEVEL CONTROL THAT IS COMMITTED IS `python corpus_run.py`, AND ITS RESULT IS
+      NOW A NULL ONE, WHICH THIS ROW STATES RATHER THAN OMITS. At the shipped `actor` default its
+      printed output is **byte-identical** to the `none` control's and to the pre-`W-B` tree's —
+      every headline AND the `tell` partition (84 cases with `tell` at spans 2..6, 5 without at
+      span 1, threshold 1). The first writing of this row reported that partition moving to 24/65
+      at a threshold of 2; that movement was the self-refuting `claim.held` belief and is
+      retracted with it. `test_the_corpus_runs_and_the_ranking_cannot_discriminate` pins the
+      threshold at 1 again and no longer pins the shipped default, so the default's falsifier moved
+      to the clause-4 test named above rather than being dropped.
     source:    "W-B 2026-09-04 -- the write side of `H-116`, whose read side shipped in `W-A`"
 
 
