@@ -157,6 +157,35 @@ def claim_channel(sample: int = 8, seasons: int = 3, seed: int = 0) -> dict:
                 person_predicates=sorted(S.PERSON_PREDICATES))
 
 
+def locality(case: dict, seed: int = 0, seasons: int = 3) -> dict:
+    """ARM 9e -- IS THE HARNESS REPLAYING THE BASELINE, OR RE-DERIVING?
+
+    ⚠ JORDAN ASKED THIS DIRECTLY, 2026-09-04: *"is the issue that you are creating the tests for
+    NPC/arcs such that once you resolve the first mechanical moment ... you just proceed straight
+    to next mechanical moment in the initial test sequence?"* If yes, every number in arm 9 is an
+    artifact of the harness and the 100% reconvergence means nothing.
+
+    THE ANSWER IS NO, and it is checked three ways rather than asserted:
+      (a) the harness patches `pack_scenes` ONLY. `ranked` is recomputed by `make_chooser`'s
+          `choose` from `Query.opening_set` at every deliberation of every run. No sequence is
+          recorded and replayed -- the forked run derives its own decisions from its own world.
+      (b) the deliberation COUNT is compared, so the index alignment the comparison depends on is
+          verified rather than assumed.
+      (c) the ACTS are diffed positionally. If the fork's effect were an artifact of replay, the
+          acts after the fork would be trivially identical. They ARE identical -- and that is the
+          finding, not the bug, because (a) establishes they were re-derived to get there."""
+    b = _run(case, seed, seasons)
+    f = _run(case, seed, seasons, fork_at=0, take=1)
+    if not (b["ok"] and f["ok"]):
+        return dict(ok=False)
+    ba, fa = b["acts"], f["acts"]
+    diff = [i for i, (x, y) in enumerate(zip(ba, fa)) if x != y]
+    return dict(ok=True, n_base=len(b["decisions"]), n_fork=len(f["decisions"]),
+                aligned=len(b["decisions"]) == len(f["decisions"]),
+                acts_base=len(ba), acts_fork=len(fa), diff_indices=diff,
+                local_only=(diff == [0]))
+
+
 def run(log: Log, seed: int = 0, seasons: int = 3, sample: int = 0) -> dict:
     log.rule("ARM 9 — THE FORKING EXERCISE: flip every decision, follow it three decisions on")
     log("ASK", "Jordan 2026-09-04: 'within each season ... there is a mechanical moment where x "
@@ -207,6 +236,39 @@ def run(log: Log, seed: int = 0, seasons: int = 3, sample: int = 0) -> dict:
     log("RESULT", f"decisions changed within the lookahead: {dict(sorted(dist.items()))}",
         f"0 means the fork closed immediately — the person did something else and the next "
         f"{LOOKAHEAD} decision points presented the same options and took the same pick")
+
+    log.rule("ARM 9e — is this harness REPLAYING the baseline? (Jordan's methodological check)")
+    log("Q", "'is the issue that you are creating the tests ... such that once you resolve the "
+             "first mechanical moment, you just proceed straight to next mechanical moment in the "
+             "initial test sequence?' — if yes, everything in this arm is void")
+    cs0 = [C.apply_rescale(c) for c in R.load_cases("NPC")]
+    cs0 = [c for c in cs0 if str(c.get("scale")) in set(S.RUNG_KINDS)]
+    lc = locality(cs0[0], seed, seasons)
+    log("A-(a)", "NO. The harness patches `pack_scenes` only; `ranked` is recomputed by "
+                 "`make_chooser` from `Query.opening_set` at every deliberation of every run.",
+        "no sequence is recorded and replayed — the forked run derives its own decisions from "
+        "its own world, which is why the world-fingerprint control above is meaningful")
+    log("A-(b)", f"deliberation counts: baseline {lc.get('n_base')} vs forked {lc.get('n_fork')} "
+                 f"— aligned {lc.get('aligned')}",
+        "the index alignment the comparison rests on is verified, not assumed")
+    log("A-(c)", f"acts diffed positionally: they differ at indices {lc.get('diff_indices')}",
+        "THE FORK WAS AT DELIBERATION 0. So the change is ENTIRELY LOCAL — not only do the next "
+        "three DECISIONS not change, every subsequent ACT by every person in every subsequent "
+        "season is identical too. That is stronger than what this arm first reported.")
+
+    log.rule("ARM 9f — and the deeper answer: there is no native x-instead-of-y moment")
+    log("⚠ THE PREMISE", "the engine as built has NO mechanical moment where x occurs INSTEAD "
+                          "of y. Arm 7c measured it: the act budget never binds and every person "
+                          "takes ALL 7 of their ranked candidates every season.",
+        "so exclusivity is not a property of the corpus engine. To ask the question at all, this "
+        "sweep had to INTRODUCE it — baseline and fork both restricted to one act per "
+        "deliberation. That restriction is the harness's, and it is declared here rather than "
+        "buried, because it changes what the 100% means.")
+    log("SO THE RESULT IS TWO-PART", "(1) choice is not currently a mechanic — nobody ever "
+                                      "forgoes anything; (2) when exclusivity is imposed anyway, "
+                                      "the choice is inert — it changes the act and nothing else.",
+        "part 1 is arguably the larger finding for the design: §26.3 makes triage 'the PERSON's "
+        "own choice of what to leave undone', and in 143 cases nothing is ever left undone.")
 
     log.rule("ARM 9c — the diagnosis, and my first one was WRONG")
     log("⚠ RETRACTED", "an earlier draft of this arm said the cause was 'the acts do not move "

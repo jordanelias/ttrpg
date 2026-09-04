@@ -19,6 +19,8 @@ import arm6_imports as A6
 import arm7_flexibility as A7
 import arm8_v30_benchmark as A8
 import arm9_forking as A9
+import arm10_throughlines as A10
+import arm11_per_case as A11
 
 OUT = Path(__file__).parent / "runs"
 DEPTH = 3          # `CLAUDE.md` §0.1 pt 5 / G1: declared, not a bare literal.
@@ -109,6 +111,8 @@ def main(seed: int = 0) -> int:
     out["arm7"] = A7.run(log, seed)
     out["arm8"] = A8.run(log)
     out["arm9"] = A9.run(log, seed)
+    out["arm10"] = A10.run(log)
+    out["arm11"] = A11.run(log)
 
     (OUT / "SWEEP_LOG.txt").write_text(log.text() + "\n")
     json.dump(out, open(OUT / "results.json", "w"), indent=1, default=str)

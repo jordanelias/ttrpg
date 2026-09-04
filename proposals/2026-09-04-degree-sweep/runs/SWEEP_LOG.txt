@@ -488,3 +488,126 @@ ARM 9d — and that one channel is closed (measured)
 [MEASURE    ] ... AND predicate in PERSON_PREDICATES       : 0
 [VERDICT    ] the two predicate vocabularies are DISJOINT, and no claim is ever falsy — so clause 4 cannot fire, and the candidate set is invariant with respect to everything that happens in the simulation
               | this is the mechanical cause of 100% reconvergence. A person deposits thousands of claims, the world moves, and not one claim can reach the function that decides what they may do next. `H-72` registers exactly this gap — 'the mapping from a `requires:` note to a predicate' — and `F.24`/`H-94` is typing `requires`. Both unbuilt, same class as arm 6's five.
+
+==============================================================================
+ARM 10 — THROUGHLINES: what the 143 cases ask for, and what the engine supplies
+==============================================================================
+[SCOPE      ] 972 `season_requires` rows across 143 cases (mean 6.8 per case)
+[SCOPE      ] hardness: {'core': 427, 'important': 463, 'flavour': 82}
+              | `core` is the case's own word for a requirement without which the case is not the case
+[METHOD     ] thirteen keyword families over the `need:` prose; a row may match more than one. A SCAN, not a parse — a ranking of pressure, not a census.
+
+==============================================================================
+ARM 10a — the demand, ranked by how many CASES need it
+==============================================================================
+[DEMAND     ] accumulator/clock         65 cases ·  126 rows ( 63 core) · ENGINE: PARTIAL
+[DEMAND     ] threshold crossing        60 cases ·   96 rows ( 50 core) · ENGINE: PARTIAL
+[DEMAND     ] belief/knowledge          58 cases ·  105 rows ( 59 core) · ENGINE: SEVERED
+[DEMAND     ] observability             56 cases ·   79 rows ( 41 core) · ENGINE: PRESENT
+[DEMAND     ] roll/contest              51 cases ·   89 rows ( 47 core) · ENGINE: ABSENT
+[DEMAND     ] relationship/loyalty      46 cases ·   71 rows ( 33 core) · ENGINE: THIN
+[DEMAND     ] memory/persistence        39 cases ·   60 rows ( 29 core) · ENGINE: PRESENT
+[DEMAND     ] investigation             37 cases ·   63 rows ( 24 core) · ENGINE: INERT
+[DEMAND     ] social/speech             31 cases ·   44 rows ( 12 core) · ENGINE: BINARY
+[DEMAND     ] irreversibility           25 cases ·   27 rows ( 11 core) · ENGINE: PRESENT
+[DEMAND     ] third-party substitute    22 cases ·   25 rows (  8 core) · ENGINE: BLOCKED BY belief/knowledge
+[DEMAND     ] DEGREE/partial outcome    19 cases ·   27 rows ( 18 core) · ENGINE: ABSENT
+[DEMAND     ] resource depletion        16 cases ·   21 rows ( 12 core) · ENGINE: PRESENT
+
+==============================================================================
+ARM 10b — THE WORK LIST: demand the engine cannot meet, ranked
+==============================================================================
+[FIX        ] belief/knowledge         wanted by  58 of 143 cases (59 core rows) — SEVERED
+[           ]      arm 9d — claims are deposited (4,800 measured) and `belief_contradicts` cannot read any of them: the predicate vocabularies are disjoint and no claim is falsy
+[FIX        ] roll/contest             wanted by  51 of 143 cases (47 core rows) — ABSENT
+[           ]      arm 0 — the contest seam is never reached; zero DESIGN-GAP and zero INSTRUMENT-DEFECT confirm none was attempted-and-refused either
+[FIX        ] investigation            wanted by  37 of 143 cases (24 core rows) — INERT
+[           ]      arm 5b/6 — `the six investigation acts` is ONE row with `writes: []` and no `contests:`; the split into six degree-emitting rows is HANDOFF_NEXT row 2b, prescribed and unbuilt. The subsystem side is a stub too: social_contest's `inquiry` game is STUB
+[FIX        ] social/speech            wanted by  31 of 143 cases (12 core rows) — BINARY
+[           ]      arm 5b — `speak`, `tell`, `refract`, `comply`, `evade / defy` write no state and carry no degree; the act emits and nothing follows from how well it went
+[FIX        ] third-party substitute   wanted by  22 of 143 cases (8 core rows) — BLOCKED BY belief/knowledge
+[           ]      arm 9 — a third party taking over requires the world to be readable by deliberation, which is the severed edge above
+[FIX        ] DEGREE/partial outcome   wanted by  19 of 143 cases (18 core rows) — ABSENT
+[           ]      arms 0 and 5b — no act resolves at a degree; 12 of 12 interpersonal verbs carry no degree column
+[MEASURE    ] cases touching at least one blocked family: 113 of 143 (79%)
+
+==============================================================================
+ARM 10c — THE TAKEAWAY, and it is one bug in three places
+==============================================================================
+[TAKEAWAY   ] the loop is OPEN. Acts happen, the world changes, and nothing that happened can alter what anyone decides next.
+              | arm 9: 2,403 forks, every one changing the act and the log, none changing the next three decisions
+[TAKEAWAY   ] EDGE 1 — belief -> decision. SEVERED, and it is the bottleneck.
+              | `belief_contradicts` needs `predicate in PERSON_PREDICATES AND value is False`. The corpus deposits `travel.blocked value=True` and ten others; the vocabularies are disjoint and nothing is falsy. `H-72`/`F.24`/`H-94` register it. Fix this FIRST — every other fix is inert without it, because a consequence that cannot reach a decision is a log line.
+[TAKEAWAY   ] EDGE 2 — outcome -> magnitude. ABSENT.
+              | one contested verb, not foldable; 3 of 4 declared prizes claimed by no verb; 12 of 12 interpersonal verbs degreeless. HANDOFF_NEXT row 2b is the built form for investigation. Worth doing SECOND: a degree is a magnitude on an edge that must exist first.
+[TAKEAWAY   ] EDGE 3 — world -> belief. PRESENT AND CARRYING THE WRONG PAYLOAD.
+              | WITNESS deposits 339,804 claims, so the channel works. But they carry event-kind predicates (`speech.made`, `travel.blocked`) — descriptions of what happened — rather than propositions that could contradict a requirement. This is the cheapest of the three and may be the shortest path to closing edge 1.
+[⚠ THE ONE WORTH ACTING ON] the design's OWN worked example is one type mismatch from running.
+              | `opening_set`'s docstring: 'a person who *wrongly* believes the granary full still forms the Candidate, acts, and gets `transfer.refused` from the fold. That is T3 and L2 working.' The fold DOES deposit that refusal. `belief_contradicts` cannot read it — wrong predicate namespace, and recorded `value=True` ('it is true that this was refused') where the reader wants False. The feedback loop this design describes is already deposited and already unread.
+
+==============================================================================
+ARM 11 — PER-CASE THROUGHLINES: the recurring issue inside each arc/NPC
+==============================================================================
+[SCOPE      ] 143 cases profiled against arm 10's thirteen families
+
+==============================================================================
+ARM 11a — the DOMINANT blocker per case
+==============================================================================
+[BLOCKER    ] belief/knowledge         is the dominant blocker for  43 of 143 cases
+[BLOCKER    ] roll/contest             is the dominant blocker for  34 of 143 cases
+[BLOCKER    ] — nothing blocked        is the dominant blocker for  30 of 143 cases
+[BLOCKER    ] investigation            is the dominant blocker for  13 of 143 cases
+[BLOCKER    ] social/speech            is the dominant blocker for  12 of 143 cases
+[BLOCKER    ] DEGREE/partial outcome   is the dominant blocker for   7 of 143 cases
+[BLOCKER    ] third-party substitute   is the dominant blocker for   4 of 143 cases
+[MEASURE    ] cases with NO blocked family: 30 of 143
+              | e.g. NPC-030, NPC-006, NPC-009, NPC-035, NPC-036, NPC-040, NPC-072, NPC-074
+
+==============================================================================
+ARM 11b — how deep the block goes, per case
+==============================================================================
+[RESULT     ] blocked CORE rows per case (6+ bucketed): {0: 59, 1: 37, 2: 27, 3: 10, 4: 6, 5: 1, 6: 3}
+              | a case with 0 blocked core rows can be run for what it is FOR; one with 4+ cannot be meaningfully attempted at all
+[WORST      ] NPC-086              Joren Bergvall                         6 blocked core rows · investigation, roll/contest, belief/knowledge
+[WORST      ] ARC-06               The Debate That Won the Wrong Thing    6 blocked core rows · roll/contest, DEGREE/partial outcome
+[WORST      ] NSC-01               The Hunting Accident (~218 AG)         6 blocked core rows · investigation, DEGREE/partial outcome, social/speech
+[WORST      ] SCN-04               A social conflict escalates into a fac 5 blocked core rows · roll/contest, DEGREE/partial outcome
+[WORST      ] NPC-005              Sigrid Torsvald                        4 blocked core rows · DEGREE/partial outcome, social/speech, belief/knowledge
+[WORST      ] ARC-02               The Unseeing Eye                       4 blocked core rows · belief/knowledge, third-party substitute, roll/contest
+[WORST      ] ARC-10               The Penitent Duke                      4 blocked core rows · roll/contest, investigation, social/speech
+[WORST      ] ARC-12               The Chained Ships                      4 blocked core rows · belief/knowledge, third-party substitute, investigation
+[WORST      ] ARC-15               The Banker's War                       4 blocked core rows · belief/knowledge, roll/contest
+[WORST      ] NSC-04               Niflhel Exposes the Church             4 blocked core rows · belief/knowledge, investigation, social/speech
+
+==============================================================================
+ARM 11c — the recurring signatures: cases that want the same things
+==============================================================================
+[MEASURE    ] 126 distinct demand signatures across 143 cases
+              | a low number would mean the corpus is repetitive; a high one, that it is diverse and every case is its own shape
+[CLUSTER    ]   5 cases share: (no family matched)
+[CLUSTER    ]   4 cases share: accumulator/clock, threshold crossing
+[CLUSTER    ]   3 cases share: relationship/loyalty
+[CLUSTER    ]   2 cases share: belief/knowledge, investigation, observability, relationship/loyalty, roll/contest
+[CLUSTER    ]   2 cases share: accumulator/clock, observability
+[CLUSTER    ]   2 cases share: belief/knowledge, irreversibility, threshold crossing
+
+==============================================================================
+ARM 11d — which demands travel together (the real throughlines)
+==============================================================================
+[PAIR       ]  34 cases want BOTH accumulator/clock + threshold crossing   (PARTIAL / PARTIAL)
+[PAIR       ]  33 cases want BOTH belief/knowledge + observability   (SEVERED / PRESENT)
+[PAIR       ]  32 cases want BOTH accumulator/clock + observability   (PARTIAL / PRESENT)
+[PAIR       ]  24 cases want BOTH accumulator/clock + belief/knowledge   (PARTIAL / SEVERED)
+[PAIR       ]  24 cases want BOTH belief/knowledge + investigation   ⚠ BOTH BLOCKED
+[PAIR       ]  24 cases want BOTH investigation + observability   (INERT / PRESENT)
+[PAIR       ]  24 cases want BOTH accumulator/clock + roll/contest   (PARTIAL / ABSENT)
+[PAIR       ]  23 cases want BOTH belief/knowledge + threshold crossing   (SEVERED / PARTIAL)
+
+==============================================================================
+ARM 11e — does the ARC lane want different things from the NPC lane?
+==============================================================================
+[LANE       ] NPC (46 cases): top demands — relationship/loyalty 46%, belief/knowledge 41%, observability 37%, memory/persistence 35%
+[           ]      cases with a blocked family: 36 of 46 (78%)
+[LANE       ] ARC (97 cases): top demands — accumulator/clock 53%, threshold crossing 48%, roll/contest 43%, belief/knowledge 40%
+[           ]      cases with a blocked family: 77 of 97 (79%)
+[ARTIFACT   ] wrote runs/CASE_PROFILES.md — 143 rows

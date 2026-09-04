@@ -42,6 +42,82 @@ or `systems/` is edited.** The sweep reads them and reports.
 
 ---
 
+## THE TAKEAWAY — what to extend, what to fix, in order
+
+**The loop is open.** Acts happen, the world changes, and nothing that happened can alter what
+anyone decides next. That is one bug appearing in three places, and the order below is a
+dependency order, not a wish list.
+
+| | edge | state | evidence | why this rank |
+|---|---|---|---|---|
+| **1** | **belief → decision** | **SEVERED** | 4,800 claims measured; `belief_contradicts` can read none | **the bottleneck.** Every other fix is inert without it — a consequence that cannot reach a decision is a log line |
+| **2** | **outcome → magnitude** (degrees) | **ABSENT** | 0 acts resolve at a degree; 12 of 12 interpersonal verbs degreeless | a degree is a *magnitude on an edge*. Build the edge first or you get a better-labelled log |
+| **3** | **world → belief** | **PRESENT, WRONG PAYLOAD** | 339,804 claims deposited, carrying event-kind predicates | cheapest of the three, and probably the shortest path to closing #1 |
+
+### The single most actionable thing in this report
+
+`opening_set`'s own docstring describes the feedback loop as working:
+
+> *"a person who **wrongly** believes the granary full still forms the Candidate, acts, and gets
+> `transfer.refused` from the fold. That is T3 and L2 working."*
+
+**The fold does deposit that refusal.** Measured, a real one looks like:
+
+```
+holder=p_a  subject='r_hearth'  predicate='travel.blocked'  value=True
+```
+
+`belief_contradicts` requires `predicate ∈ {church_standing, grade, heritage, office, residence}`
+**and** `value is False`. The deposited claim fails **both** conditions — wrong predicate
+namespace, and recorded `value=True` (*"it is true that this was blocked"*) where the reader wants
+`False`. **The feedback loop this design describes is already being deposited and is already
+unread.** `H-72` (map a `requires:` note to a predicate) and `F.24`/`H-94` (type `requires`) are
+the registered, unbuilt form of exactly this.
+
+### What the 143 cases are actually asking for (ARM 10)
+
+972 `season_requires` rows, 427 of them `core`. Demand ranked by cases wanting it, against what
+the engine supplies:
+
+| demand | cases | rows (core) | engine |
+|---|---|---|---|
+| accumulator / clock | 65 | 126 (63) | PARTIAL |
+| threshold crossing | 60 | 96 (50) | PARTIAL |
+| **belief / knowledge** | **58** | **105 (59)** | **SEVERED** |
+| observability | 56 | 79 (41) | PRESENT |
+| **roll / contest** | **51** | **89 (47)** | **ABSENT** |
+| relationship / loyalty | 46 | 71 (33) | THIN |
+| memory / persistence | 39 | 60 (29) | PRESENT |
+| **investigation** | **37** | **63 (24)** | **INERT** |
+| **social / speech** | **31** | **44 (12)** | **BINARY** |
+| irreversibility | 25 | 27 (11) | PRESENT |
+| **third-party substitute** | **22** | **25 (8)** | **BLOCKED by belief** |
+| **DEGREE / partial outcome** | **19** | **27 (18)** | **ABSENT** |
+| resource depletion | 16 | 21 (12) | PRESENT |
+
+**113 of 143 cases (79%) touch at least one blocked family.**
+
+### Per-case, and the lane split (ARM 11)
+
+Full table: **`runs/CASE_PROFILES.md`**, one row per case.
+
+- **Blocked `core` rows per case:** `0 → 59 cases · 1 → 37 · 2 → 27 · 3 → 10 · 4 → 6 · 5 → 1 · 6+ → 3`.
+  **59 cases can be attempted for what they are for; 20 cannot be meaningfully attempted at all.**
+  Worst: `NPC-086` Joren Bergvall, `ARC-06` The Debate That Won the Wrong Thing, `NSC-01` The
+  Hunting Accident — 6 blocked core rows each.
+- **The two lanes want different things.** NPC: *relationship/loyalty 46%, belief 41%,
+  observability 37%, memory 35%* — an **interiority** profile. ARC: *accumulator 53%, threshold
+  48%, roll/contest 43%, belief 40%* — a **machinery** profile. Both land at ~79% blocked, by
+  different routes.
+- **The demands that travel together** are the real throughlines: `accumulator + threshold` (34
+  cases), `belief + observability` (33), **`belief + investigation` (24, both blocked)**,
+  `accumulator + roll/contest` (24).
+- **126 distinct demand signatures across 143 cases** — the corpus is genuinely diverse, not a set
+  of variations on a few shapes. It is a real stress test, and that is why 79% coverage of its
+  demand is a meaningful bar rather than an easy one.
+
+---
+
 ## 0 · Scope — every case in the chain, and how that was checked
 
 | | |
@@ -503,6 +579,22 @@ success no matter how well the ladder behaves.
      moves; the true cause is that the deliberation never reads it.
   Five of the six were wrong in the direction that flattered the sweep's thesis. Numbers 4, 5 and 6
   would each have been the headline.
+
+## Where these findings were digested (2026-09-04)
+
+Per Jordan's direction — *"We have to digest all of these findings/takeaways too in both
+meta-architecture and code design itself"* — the results are folded into the two surfaces that own
+them, not left in this directory:
+
+| surface | what landed |
+|---|---|
+| **code design** — `proposals/2026-09-02-executable-architecture/hole_register.yaml` | **eight new rows, all grade `measured`**: `H-113` `emits_at` has zero callers · `H-114` `_eff_kill` is degree-blind · `H-115` the degree branches raise `SystemExit` · **`H-116` the severed belief→decision edge** · `H-117` the act budget never binds · `H-118` `content_hash` reads the log, not the world · `H-119` the seam's two degree surfaces contradict · `H-120` 3 of 4 prizes claimed by no verb. Register clean: `R0/R1/R3/G8/G12/G13` ok, transcription clean, citations all resolve, and `R2`/`G6`'s pre-existing violation counts (6 and 15) are **unchanged** — verified by stashing. |
+| **meta-architecture** — `proposals/2026-09-03-meta-architecture/HANDOFF_NEXT.md` | new **§2A, "THE BACKLOG, MEASURED"**. §2's five root causes were argued from reading; they are now executed against all 143 cases. The rows survive and **the ordering changes**: `H-72`/`F.24`/`H-94` moves ahead of all five, because a discovery model or a degree ladder that cannot reach a later decision is a better-labelled log line. |
+
+⚠ **One finding indicts a habit rather than a row, and it is recorded in both places.** #362 applied
+`ID-13` — *a declared field reaching no reader is one that does not exist* — to delete
+`Tenure.conferrer`, and did not apply it to `emits_by_degree`, which the same revision added.
+**Apply `ID-13` to what a revision ADDS, not only to what it inherits.**
 
 ## Reproduce
 
