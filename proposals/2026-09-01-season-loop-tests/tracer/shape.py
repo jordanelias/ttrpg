@@ -3362,13 +3362,24 @@ def resolvable_verbs() -> frozenset:
         effected = not row.writes or v in EFFECTS
         # ⚠ AND A THIRD GATE: A VERB THAT CONTESTS DOES NOT TAKE THE EFFECT PATH AT ALL.
         # `ARCHITECTURE_V2.md:394` — *"`contests: <prize>` — if set, ROUTES TO THE SEAM at
-        # RESOLVE (§39)"* — so such a verb is executable only if the SEAM can return, and today
-        # `contest()` raises `Unspecified` at S39.4 (*"the degree ladder's margin model"*, `H-31`)
-        # before it returns anything. So `kill / wound` is NOT executable, and it was counted as
-        # executable only because the instrument read its own `EFFECTS` entry and never read the
-        # column that says the effect is not the path. Jordan, 2026-09-02: *"you can't just kill
-        # or wound imo."* Correct, and the design agreed at `:434` all along.
-        # `W7` is the item that makes the seam return; this line is what will admit the verb again.
+        # RESOLVE (§39)"* — so such a verb is executable only if the SEAM can return. It was
+        # counted as executable only because the instrument read its own `EFFECTS` entry and never
+        # read the column that says the effect is not the path. Jordan, 2026-09-02: *"you can't
+        # just kill or wound imo."* Correct, and the design agreed at `:434` all along.
+        #
+        # ⚠ THE GATE'S OLD REASON IS NOW FALSE AND ITS NEW ONE IS NARROWER AND MEASURED. What
+        # stood here said *"today `contest()` raises `Unspecified` at S39.4 before it returns
+        # anything"*. That stopped being true for `the body` when the seam started CALLING
+        # personal combat, and `W-E` (2026-09-04) closed the rest: the seam returns, `degree_of`
+        # reads the band off the scene, and `_fold` executes all three branches. THE GATE STAYS,
+        # ON A DIFFERENT AND CHECKABLE GROUND: a contested act needs a `subject` operand to name
+        # the second claimant, and `operands_for` returns `{}` for an UNTYPED verb (`H-80`,
+        # `H-94`) — `kill / wound`'s `requires` is `—`, so it is untyped. A computed
+        # `kill / wound` would therefore reach the seam with ONE claimant, `combat_seam` would
+        # return `PARTY-GAP`, and every case that produced one would become a whole-case
+        # DESIGN-GAP. Admitting the verb here is `H-80`'s item, not this one, and the corpus
+        # measures the difference: at the shipped fixtures no contested act arises from the loop,
+        # which is why closing the seam moved ZERO bytes of the run artifacts.
         contested = bool(row.contests)
         if gated and effected and not contested:
             out.add(v)
