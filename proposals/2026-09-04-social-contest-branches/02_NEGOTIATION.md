@@ -18,6 +18,7 @@
 | `PROCEEDINGS["private_negotiation"]["burden"] = "NONE"` | `Tenure.degree` as the reservation's source (§4 S0) |
 | the deletion of `NegotiationMode` (`modes.py:342`) and of the `negotiation` `GAMES` row | `writes_at(degree)` on a verb row |
 | the ZOPA gate and the clamp rule | `claimants : PersonId[]` — the branch reverts to faction-derived ints |
+| **the settlement as one Record naming both parties** — `LedgerTag(kind="Debt")` and `TreatyRecord` are live today and owe PR #362 nothing | PR #362's own `Record` type, `Tenure.since` on A's edge, and with it **`repudiate` as the breach path** — under a veto, breach reverts to non-performance against the tag, which is §11 cost 1 realised |
 
 Under a veto the branch still runs: the caller supplies the two reservation bounds explicitly, and the settlement is written as a `LedgerTag(kind="Debt")` through `systems/settlements/sim/registry.py:102 Settlement.tag` and/or `systems/factions/sim/treaty.py:145 register_treaty`. **The decomposition was cut so a veto costs the seam vocabulary, not the mechanic** — but that is a claim about a future veto, not a measured one.
 
@@ -440,6 +441,7 @@ By PR #362's own rule — *"the verb declares fewer branches rather than the tab
 | **`settle()`** | …a positive-sum division. Without it the bout's margin becomes a winner, the 4–6 band stays "nobody won" (`resolver.py:91`; `social_contest_v30.md:279`), and the one thing negotiation is — *both parties end better than they started* — has no representation anywhere in the engine. | **No.** Checked against `resolver.py`'s six win-conditions (all return a side or a band), `armature.py` (a δσ leverage shift), `ledger.py` (a store, no arithmetic), `treaty.py` (a store plus a lapse roll), and `faction.py:117` (a division — for succession only, and side-asymmetric). The three-lens audit reached the same conclusion independently (`00_synthesis.md:462`). |
 | **`SHARE_BY_DEGREE`** | …any reward for winning the exchange. Cut it and every settlement is 50/50, which makes the entire bout inert — the strongest possible argument buys exactly what silence buys. | **No.** The values exist in canon prose (`v30:421-423`) and in `faction.py:117`, but §1 row 5 shows `faction.py` is the wrong owner and §1 row 6 shows its keying is wrong. |
 | **`Settlement` / `Refusal`** | …the caller's ability to tell a struck bargain from no bargain without a sentinel value. | **No** — and reusing `stubwire.StubResult` for the refusal would corrupt `tools/m1_acceptance.py` row 1's stub-hit delta (`stubwire.py:56-62`). |
+| **A's own `commit` Tenure beside the Record** | …a visible, authored breach. `repudiate` (`verb_table.yaml:378-383`) requires a live commit; without one, A's defection is non-performance — no act, no Event, no author. | **No.** Checked: `release` does not exist yet (`04_CODE_ARCHITECTURE.md §A.3` row 14, `HANDOFF_NEXT.md:54` 2a), `oblige` has no closer, and a `Record` has no verb that ends it. This is the object §7.3 hunted hardest and could not cut. |
 
 ### 7.3 THE FALSE-N-LINE HUNT — run against my own additions
 
@@ -458,7 +460,7 @@ By PR #362's own rule — *"the verb declares fewer branches rather than the tab
 | **`LedgerTag(kind="Grudge")` on refusal** | a failed negotiation must leave a mark future scenes can read | **KEPT, CONDITIONALLY — and it is the weakest object in this document.** Under PR #362 it *is* a false N-line: the refusal Event (`commitment.refused`) enters the log, WITNESS mints claims from it (`04_CODE_ARCHITECTURE.md:724 §C.6`), and the Grudge is a second owner. **In the live tree it is the only durable trace**: there is no WITNESS, `_OUTCOME_BY_DEGREE` has no `stalemate` row, and the echo fires only on a non-zero delta (`echo_transport.py:424`). Confidence: **medium**. Cut condition, stated so a later pass does not have to re-derive it: *the moment a refusal Event reaches a durable log, cut the Grudge.* |
 | **`settle()` itself** | the terminal | **SURVIVED.** §7.2. |
 
-**Score against `14_NERS.md`'s meta-rule** — *"three edits, two of them deletions, and the vocabulary got shorter"*: this branch adds **one module and three names** (`settle`, `Settlement`, `Refusal`, plus the private `split`/`SHARE_BY_DEGREE`), deletes **`NegotiationMode`, the `negotiation` `GAMES` row, and `faction.py`'s duplicate band logic**, and cuts six candidate objects before they were written. The vocabulary is net shorter by the deletions and net longer by one function that nothing else can do.
+**Score against `14_NERS.md`'s meta-rule** — *"three edits, two of them deletions, and the vocabulary got shorter"*: this branch adds **one module and three names** (`settle`, `Settlement`, `Refusal`, plus the private `split`/`SHARE_BY_DEGREE`), deletes **`NegotiationMode`, the `negotiation` `GAMES` row, and `faction.py`'s duplicate band logic**, and cuts **seven** candidate objects before they were written — three of them my own drafts, and one of them the modelling the shape spec asked for. The vocabulary is net shorter by the deletions and net longer by one function that nothing else can do.
 
 ### 7.4 E-ratio, watched in both directions (`14_NERS.md` §4.1)
 
@@ -562,9 +564,9 @@ This is the one thing `00_BRANCH_SHAPES.md` §3(k)1 sent up. **It came back the 
 
 > **RULING — Jordan, 2026-09-04, verbatim:** *"negotiated agreement bind in scene. in fact, everything that occurs within a scene should bind or else it's as if time doesn't exist within a season."*
 
-**The ruling is general and this branch merely instances it.** It is not a negotiation carve-out: it is a property of scene resolution — *a scene is where time passes inside a season*, and a scene whose outcome does not take effect until the next season has not, in the ruling's terms, happened. The finding and the vote inherit it identically (`03_INQUIRY.md`, `04_CONSENSUS.md`).
+**The ruling is general and this branch merely instances it.** It is not a negotiation carve-out: it is a property of scene resolution — *a scene is where time passes inside a season*, and a scene whose outcome does not take effect until the next season has not, in the ruling's terms, happened. **The general statement is the spine's** (`01_SPINE.md` §1.9, which splits it into I-S6a *binding as commitment* and I-S6b *binding as effect*); the finding and the vote instance it the same way (`03_INQUIRY.md`, `04_CONSENSUS.md`).
 
-**What it settles here, concretely.** The two-season deal with a repudiation window between is REJECTED. `settle()` produces a binding agreement at the point of agreement: A's own `commit` and the instrument Record land in the same RESOLVE that ran the bout (§4 S5). There is no proposal awaiting ratification.
+**What it settles here, concretely.** The two-season deal with a repudiation window between is REJECTED. `settle()` produces a binding agreement at the point of agreement: **the Record — the settlement itself — is written in the same RESOLVE that ran the bout**, with A's own `commit` beside it as the breach handle (§4 S5). There is no proposal awaiting ratification, and nothing in `Settlement` or `ContestOutcome` can express one (I-N12).
 
 **What it costs — named, because a cost stated is worth more than a cost hidden. The ruling stands regardless.**
 
@@ -651,8 +653,9 @@ Canon states the principle (*"track-distance weighting"*, `v30:415`) and lists v
 
 This document audits a shape spec and then proposes the branch that shape spec asked for, and §8.6 of the session brief puts *this proposal* under the same NERS pass. Two limitations an independent reviewer would add and I cannot:
 
-1. **I graded my own false-N-line hunt.** Six cuts, two of them against my own drafts, is a suspiciously convenient ratio. The `Grudge` row is the one I kept, and I kept it on a live-tree argument rather than an architectural one — which is exactly the shape of a rationalisation.
+1. **I graded my own false-N-line hunt.** Seven cuts, three of them against my own drafts, is a suspiciously convenient ratio. The `Grudge` row is the one I kept, and I kept it on a live-tree argument rather than an architectural one — which is exactly the shape of a rationalisation.
 2. **I never ran anything.** Every property in §5 is an argument about code that does not exist, checked against code that does. F-N2's control (running the symmetry identity against the *current* `faction.py` table and watching it fail) is the single cheapest thing a reviewer could execute to test whether §1 row 6 — this document's headline finding — is real. It takes four lines and no fixtures.
+3. **The cut that mattered most was not mine.** The two-Tenure model's order fragility (`canonical_order` + `D-36`) came from `01_SPINE.md`, and I had drafted the two-Tenure sequence before it arrived. I had found the gate clause on my own and had *not* found the ordering argument — which is the stronger of the two, because it holds with no ruling and no gate. A reviewer should read that as evidence about what this document's method catches (clause-level compliance) and what it misses (emergent ordering), and weight §10's dominance bounds accordingly.
 
 ### 12.4 Asymmetric-skepticism check
 
