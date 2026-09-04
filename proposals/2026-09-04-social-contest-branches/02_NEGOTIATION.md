@@ -4,7 +4,8 @@
 
 ## Status: **PROPOSED — nothing ratifies.** 2026-09-04, SC lane. Agonist (producer) output for the negotiation branch of the social-contest rebuild. A read-only critic that never saw this reasoning is expected to attack it; §12 records the attacks I ran on it myself and which of them succeeded.
 ## Grade per `CLAUDE.md` §0.2: **PAPER.** `settle()` does not exist. Nothing in this document has executed. The pieces it composes on *do* execute in isolation (`Bout`, `TallyAtClose`, `DefeatCatalogue`, `degree_from_net`, `LedgerTag`) but no run has produced a `Settlement`, and until one has, this is a design and not a juncture. It becomes DONE when §9's F-N1..F-N8 pass and a seeded run through the seam produces either a Debt tag or a refusal Event and never both.
-## Consumes: **`01_SPINE.md`** (sibling, concurrent) for `WinCondition.margin()`, the single `ContestOutcome` return shape, `burden` on `PROCEEDINGS`, `armature=` passthrough, `rng` injection and `contestant_from_person`. This document defines **only the terminal** and does not redefine any spine object.
+## Consumes: **`proposals/2026-09-04-social-contest-branches/01_SPINE.md`** (sibling, written) for `WinCondition.margin()`, the single `ContestOutcome` return shape, `burden` on `PROCEEDINGS`, `armature=` passthrough, `rng` injection and `contestant_from_person`. This document defines **only the terminal** and redefines no spine object. Three spine results bind it directly and are consumed rather than restated: **§1.9** (the binding-in-scene invariant, I-S6a/I-S6b), **§3.4 (iii)** (a mutual outcome is a `Record`, never per-claimant `commit` Tenures — with the order-fragility proof that makes the alternative broken on its own terms), and **§1.3 + A3** (`margin()` returns **whole-d10-success units** via a per-subclass `SUCCESS_UNIT`, shipped tagged **`[SEED]`** and uncalibrated).
+## ⚠ **Inherited `[SEED]`:** `TallyAtClose.SUCCESS_UNIT` is uncalibrated (`01_SPINE.md:503`, `:526`). Every degree band this document quotes is therefore **`[SEED]`-dependent at its edges** — the *ratios* are canon and the *boundaries between them* are not yet measured. `tools/balance_oracle.py` is the named calibration instrument. Marked here once; §5.3 and §9 carry it.
 ## Compliance target: `proposals/2026-09-03-meta-architecture/04_CODE_ARCHITECTURE.md` (PR #362, **PROPOSED, HELD BACK IN FULL**) — a shape constraint, not canon (`CLAUDE.md` §0.05).
 ## Scope discipline: every anchor below is `path:line symbol`, read against the working tree at HEAD `1e163ee` on 2026-09-04. Snapshot material is cited `v30-snapshot-2026-06-28:<path>` and **is not in `main`**. No pytest was run. Nothing outside this file was created or edited.
 
@@ -36,8 +37,8 @@ Each row is the shape spec's claim, my verdict, and the anchor I read. **Amendme
 | 6 | the split table is the right rule to lift | **AMENDED — the table as written is side-asymmetric, and lifting it unchanged would carry the defect into every negotiated deal.** | Read `faction.py:107` `leader = 'a' if t >= 5 else 'b'` together with `:117`'s `{4: 0.60, 5: 0.55, 6: 0.50}`. On B's side the leader's share is **monotone** in advantage (t=4.6→0.55, t=4.0→0.60); on A's side it is **anti-monotone** (t=5.0→0.55, t=5.6→**0.50**) — more advantage buys A *less*. And an exact tie (t=5.0) awards **A 55%**. Canon carries the same defect in its own principle: `social_contest_v30.md:415` says "**track-distance weighting** applies", and tracks 4 and 6 are the same distance from the centre yet get 0.60 and 0.50. **The values are canon; the keying contradicts canon's own stated principle.** §5 re-keys on `abs(margin)` through the one ladder, which is symmetric and monotone by construction and preserves the three ratios exactly. |
 | 6a | — the one test over that table | **AMENDED — it cannot observe the failure it excludes** (`CLAUDE.md` §0.1 pt 2). | `_kernel_tests.py:182`: `ck("succession split ratio canonical (§7.2.1)", _o[0]!='split' or _o[2] in (0.50,0.55,0.60))`. It asserts **membership in the value set** and nothing about the keying, and its leading `_o[0]!='split'` disjunct makes it vacuously true whenever the sampled contest was not a split. The `SC_INVENTORY.md` §G3 sweep found 0 vacuous-pass patterns because it swept `for`-loops; this one is a bare conditional at module level. |
 | 7 | reservations are the two actors' `commit` degrees, not a new `Contestant` field | **CONFIRMED as the right source; AMENDED as unavailable today.** | `proposals/2026-09-02-executable-architecture/write_matrix.yaml:329-331` declares `Tenure.degree`, steps `[RES]`, class `ACTS`, `by: DR-2`, emits `tenure.graded` — so the carrier is declared. **It does not exist in the live tree**: `systems/social_contest/` has no Person, no Tenure and no commit degree (grep — the package's only inputs are `Contestant(faculty, standing_start, reserve_max, dossier, evidence, charisma)`, `resolver.py:180`). `settle()` therefore takes the two bounds as **required parameters** and the derivation is named as the one missing line (§4 S0, §11 fork 3). |
-| 8 | `settle(margin, floor_b, ceil_a, stakes) -> Settlement \| Refusal(no_zopa)` | **AMENDED on three of four parameters and on the return payload.** | (a) **`floor_b` is transposed against the spec's own call.** §3(d) S4 writes `settle(margin, d_A, d_B, stakes)`; positionally `d_A` lands on `floor_b`. A floor *on A's share* can only come from A. Renamed `floor_a`, with the coordinate system stated once (§5). (b) **`stakes` is read by no line of the body** once `terms` is cut (§7's hunt) — and a declared parameter nothing reads is the exact defect `proposals/2026-09-02-executable-architecture/hole_register.yaml` H-89 registers against `verb_table.yaml`'s `scale:` column. Cut. (c) `Refusal` carries **one** kind here: `Refusal(scope)` and `Refusal(depth_cap)` in the spec belong to the gate and the seam (`04_CODE_ARCHITECTURE.md:520 §C.2`, `:679 §C.5`), not to a pure function. |
-| 9 | both commitments are made as **each actor's own `commit` act** | **AMENDED — one act, not two, and the counterparty is written nowhere.** | This is the change Jordan's 2026-09-04 ruling forces and it is *also* what PR #362's own gate requires. `04_CODE_ARCHITECTURE.md:520 §C.2` F3: `kind is Tenure => actor == subject(id)` … `otherwise raise NotYours`. A second actor's `Tenure.since` written by A's act is refused at the gate. Modelling the bilateral fact as **one `Record` naming both parties** — which is what `treaty.py:63 TreatyRecord.parties: tuple` already is, and what `write_matrix.yaml:243 Record.exists` admits with no ownership clause — writes only A's own edge plus a Record, and passes. §4 and §11. |
+| 8 | `settle(margin, floor_b, ceil_a, stakes) -> Settlement \| Refusal(no_zopa)` | **AMENDED on three of four parameters and on the return payload.** | (a) **`floor_b` is transposed against the spec's own call.** §3(d) S4 writes `settle(margin, d_A, d_B, stakes)`; positionally `d_A` lands on `floor_b`. A floor *on A's share* can only come from A. Renamed `floor_a`, with the coordinate system stated once (§5). (b) **`stakes` is read by no line of the body** once `terms` is cut (§7's hunt) — and a declared parameter nothing reads is the exact defect `proposals/2026-09-02-executable-architecture/hole_register.yaml` H-89 registers against `verb_table.yaml`'s `scale:` column. Cut. (c) `Refusal` carries **one** kind here: `Refusal(scope)` and `Refusal(depth_cap)` in the spec belong to the gate and the seam (`04_CODE_ARCHITECTURE.md:520 §C.2`, `:677 §C.5`), not to a pure function. |
+| 9 | both commitments are made as **each actor's own `commit` act** | **REFUTED. Two `commit` Tenures is the wrong model, and it fails for two independent reasons — one of which has nothing to do with any ruling.** | **(i) The gate refuses it.** `commit` is a Tenure kind (`04_CODE_ARCHITECTURE.md:475`), so `§C.2` F3 fires: `kind is Tenure => actor == subject(id)` … `otherwise raise NotYours` (`:529-534`). A's act cannot write B's commit edge. **(ii) And if B acts instead, it is an actor-hash coin flip.** `canonical_order` is `(stratum, actor-hash, intra-person position)` (`:576`) and `PART D` row 36 (`:857`) states *"rank never breaks a tie"* — so **nothing orders A's act before B's conditional commit**, and roughly half the time B's `requires` is evaluated against a world where the deal does not yet exist and the bargain silently fails to bind **for a reason nobody chose**. That is broken independently of Jordan's ruling. Both findings are the spine's, re-derived here from the same lines: `01_SPINE.md:760-776`. **The model that works is one `Record` naming both parties** — `write_matrix.yaml:243 Record.exists` carries no ownership clause, `treaty.py:63 TreatyRecord.parties: tuple` already has the shape, and `§B.4/§B.5` (`:249-261`) already folds `Petition`/`Dispensation` into Record kinds. §4 S5, §11. |
 | 10 | `register_treaty` is "FA-owned; existing" | **AMENDED — existing, and self-declared scaffolding.** | `treaty.py:145-147` docstring, verbatim: *"Test/scaffolding helper: directly insert a treaty without going through `propose_treaty` (which is canon-gated). Used until Pass 2h lands and the proposal protocol becomes the supported insertion path."* The canon path is a stub: `treaty.py:99 propose_treaty` returns `stubwire.stub_resolve(...)` (`:113`). Writing settlements through `register_treaty` is writing through a declared placeholder — legitimate today, and it must be named rather than cited as the supported path. |
 | 11 | `TreatyRecord.bound_season` and `LedgerTag.ttl` make I-N5 ("a settlement has a term") **STRUCTURAL by signature** | **REFUTED.** | `TreatyRecord.bound_arc/bound_season` (`treaty.py:65-66`) record **when the treaty was bound**, not when it ends; expiry is a 0.90 lapse roll at each arc boundary (`treaty.py:121 process_treaty_expirations`, `:42 TREATY_LAPSE_RATE_DEFAULT`), which is a stochastic sweep, not a declared term. `LedgerTag.ttl` (`ledger.py:41`) defaults to `None`, and `None` means **durable forever** (`ledger.py:16-17`, `:44 is_expired`). Both signatures happily express a termless settlement. I-N5 is **CONVENTION** unless the write path refuses `ttl=None` for `kind="Debt"` — an SE-owned change this branch does not propose. Regraded in §8. |
 | 12 | the outcome enum "already has `compromise`/`stalemate`" | **CONFIRMED in the registry; AMENDED in the producer.** | `engine/engine_params/key_types.json:958` declares `outcome # initiator_win \| target_win \| compromise \| stalemate` for `scene.contest_resolved`. But the one producer, `engine/cross_scale/echo_transport.py:114 _OUTCOME_BY_DEGREE["contest"]`, maps only `{Overwhelming→initiator_win, Success→initiator_win, Partial→compromise, Failure→target_win}` — **`stalemate` has no producer anywhere in the tree**, and the Key fires at all only when `er.fires and … er.delta != 0` (`echo_transport.py:424`). A refused negotiation emits nothing today. |
@@ -64,7 +65,7 @@ Each row is the shape spec's claim, my verdict, and the anchor I read. **Amendme
 2. **Its middle band is "nobody won", not "both gained".** `resolver.py:91` returns `"committee"` for `3 < t < 7`, and canon reads it as a partial narration (`social_contest_v30.md:279`) with the private case explicitly falling back to *"exchange majority determines winner. Tie = stall with consequences"*. A stall is not a bargain.
 3. **The engine's own canon says so.** `social_contest_v30.md:702` files ZOPA resolution as *"structurally different from Persuasion Track, not designed"*, and `:679` gives Private Negotiation's tie the fail-forward stall.
 
-**Is that enough to keep the row?** The legitimate opposite finding would be: *the leverage half already resolves, so delete the row and let `private_negotiation` be an ordinary `TallyAtClose` proceeding.* I take that seriously because it is the three-lens audit's own position — `04_reductive_audit_primitives_and_foundations.md:227` files `GAMES negotiation` inside **T4, "untracked private tally", *until `settle()` exists***, and `:334` says *"ABANDON THE FRAMING. Keep `settle()` as the one genuinely new build."*
+**Is that enough to keep the row?** The legitimate opposite finding would be: *the leverage half already resolves, so delete the row and let `private_negotiation` be an ordinary `TallyAtClose` proceeding.* I take that seriously because it is the three-lens audit's own position — `04_reductive_audit_primitives_and_foundations.md:226` files `GAMES negotiation` inside **T4, "untracked private tally", *until `settle()` exists***, and `:334` says *"ABANDON THE FRAMING. Keep `settle()` as the one genuinely new build."*
 
 **Verdict: delete the `GAMES` row, keep the branch.** These are not in tension, and conflating them is the misreading `00_BRANCH_SHAPES.md` §7.1 warns about. What is deleted is the *game*: `GAMES["negotiation"]` (`wrapper.py:242`) and `NegotiationMode` (`modes.py:342`). What is kept is a **terminal on a proceeding that already resolves** — `PROCEEDINGS["private_negotiation"]` with `burden: "NONE"` plus one pure function. That is the three-lens position implemented, not contradicted: *"negotiation is not a separate system — it is the gate with `burden = NONE`"* (`00_synthesis.md:344`), and `:354` *"'Private Negotiation = burden NONE' literally true, since it already resolves as `TallyAtClose`."*
 
@@ -143,7 +144,12 @@ S2  [loop <= exchanges(1,3)] THE LEVERAGE BOUT -- unchanged, already built
       owner:  -- (SC kernel, transient per-Bout state only; SC_INVENTORY §D2)
 
 S3  [branch] MARGIN AND BAND -- the spine, consumed not redefined
-      margin = TallyAtClose.margin(state) = adv[A] - adv[B]        01_SPINE.md; resolver.py:62
+      margin = TallyAtClose.margin(state) = (adv[A] - adv[B]) / SUCCESS_UNIT
+                                            01_SPINE.md:526 (A-positive already); resolver.py:62
+               ⚠ WHOLE-D10-SUCCESS UNITS, and SUCCESS_UNIT is an uncalibrated [SEED]
+                 (01_SPINE.md:503, :521). The raw `adv` difference is NOT on the ladder's scale --
+                 the spine measured a unanimous 7-0 ballot banding as Partial (§1.3). Every band
+                 edge quoted below inherits that [SEED].
       degree = degree_from_net(margin, ob=0, extension=...)        dice_engine.py:227
                margin >= 3 Overwhelming | >= 1 Success | [0,1) Partial | < 0 Failure
       ONE ladder. This branch adds no second banding.
@@ -155,12 +161,10 @@ S4  [gate] SETTLE -- the one new thing (§5)
     S4.1 [branch] Refusal("no_zopa")  -- floor_a > ceil_a; there was never a deal to be had
     S4.2 [branch] Settlement(share)   -- share = clamp(split(margin), floor_a, ceil_a)
 
-S5  [branch] ON A SETTLEMENT -- ONE act, binding in the scene (Jordan, 2026-09-04)
-    S5.1 [write] A: commit(P) -- A's own edge, A's own act
-                 verb commit -- verb_table.yaml:92, eligibility ["own"], writes ["Tenure.since"]
-                 gate clause satisfied: actor == subject(id)     04_CODE_ARCHITECTURE.md:527
-                 owner: A
-    S5.2 [write] the INSTRUMENT -- one Record naming both parties, carrying `share`
+S5  [branch] ON A SETTLEMENT -- ONE act, ONE write that binds both, in the scene
+             (Jordan, 2026-09-04; the modelling is 01_SPINE.md §3.4 (iii))
+    S5.1 [write] THE SETTLEMENT IS THE RECORD -- this is the binding write, not a side effect
+                 one Record naming BOTH parties and carrying `share`; A's act is its author
                  person scale:  LedgerTag(kind="Debt", key=f"settle:{P.id}",
                                           value=share, created_season, ttl=P.term)
                                 ledger.py:36 LedgerTag, :47 ledger_add, :30 TAG_KINDS
@@ -168,14 +172,32 @@ S5  [branch] ON A SETTLEMENT -- ONE act, binding in the scene (Jordan, 2026-09-0
                                 owner: SE (systems/settlements) -- SC returns, SE writes
                  faction scale: register_treaty(parties=(A,B), terms, bound_arc, bound_season)
                                 treaty.py:145 -- owner: FA. ⚠ self-declared scaffolding (§1 row 10)
-                 ⚠ THE COUNTERPARTY IS WRITTEN NOWHERE. B is bound by being a named party to the
-                   Record, not by a Tenure edge somebody else wrote. §11.
-    S5.3 [emit]  commitment.made                     verb_table.yaml:96
+                 ⚠ A RECORD IS NOT A TENURE, so the gate's AX-4 clause 2 never fires
+                   (04_CODE_ARCHITECTURE.md:529-534); write_matrix.yaml:243 Record.exists
+                   carries no ownership clause. B is bound by being a NAMED PARTY to the
+                   document, not by an edge somebody else wrote. One act. One write.
+                   No nesting, no DELIBERATE reacting to RESOLVE, no order fragility.
+    S5.2 [write] A: commit(P) -- A's OWN edge, A's own act, in the same fold
+                 verb commit -- verb_table.yaml:92, eligibility ["own"], writes ["Tenure.since"]
+                 gate clause satisfied: actor == subject(id)   04_CODE_ARCHITECTURE.md:530
+                 ⚠ THIS IS NOT A SECOND OWNER OF THE SETTLEMENT. Its one job is to give A a
+                   breach path: `repudiate` requires "a live commit exists" and writes
+                   Tenure.until (verb_table.yaml:378-383). Cut it and A's defection is mere
+                   non-performance -- no act, no Event, no author -- which is precisely the
+                   loss §11 cost 1 says the ruling must not incur.
+                 ⚠ AND IT IS ASYMMETRIC. B has no Tenure and therefore no `repudiate`.
+                   B's durable duty needs B's own `oblige` in this or a later season
+                   (01_SPINE.md §3.4 (iii) 2); until then B is bound documentarily only.
+                   This is the sharpest price of one-act binding. §11 cost 4.
+    S5.3 [emit]  commitment.made                     verb_table.yaml:97
     S5.4 [emit]  scene.contest_resolved{outcome, persuasion_track_final}   §6
                  echo_transport.py:371 emit_scene_echo -> :427 Key(...)
+                 ⚠ WHEN it takes effect is I-S6b, which the live tree does NOT satisfy:
+                   the echo's apply is deferred to accounting_boundary (keys.py:569-573,
+                   OF-7). Owner: IN lane. 01_SPINE.md §1.9 (b) and its §7.4 falsifier.
 
 S6  [branch] ON A REFUSAL -- the act refuses; nothing binds
-    S6.1 [emit]  commitment.refused                  verb_table.yaml:97 emits_on_refusal
+    S6.1 [emit]  commitment.refused                  verb_table.yaml:98 emits_on_refusal
                  -- ALREADY DECLARED. This branch adds no refusal kind.
     S6.2 [emit]  scene.contest_resolved{outcome: "stalemate"}
                  ⚠ `stalemate` is declared (key_types.json:958) and has NO PRODUCER today
@@ -234,7 +256,7 @@ class Settlement:
 class Refusal:
     """No deal was available. ONE kind: the reservations do not overlap. `Refusal(scope)`
        and `Refusal(depth_cap)` in 00_BRANCH_SHAPES §3(e) belong to the write gate
-       (04_CODE_ARCHITECTURE.md:520 §C.2) and the seam (:679 §C.5); a pure function cannot
+       (04_CODE_ARCHITECTURE.md:520 §C.2) and the seam (:677 §C.5); a pure function cannot
        raise them and must not claim them."""
     kind: str = "no_zopa"
     reason: str = ""
@@ -255,6 +277,12 @@ class Refusal:
 # dead tie 55% to A, and why canon's own stated principle ("track-distance weighting",
 # :415) demands the symmetric reading. Marked [DERIVED], not [SEED]: no number is invented,
 # one assignment is corrected.
+#
+# ⚠ BUT THE BAND EDGES ARE [SEED], AND THEY ARE NOT MINE. The keys are Degrees, and which
+# Degree a given `adv` difference reaches depends on TallyAtClose.SUCCESS_UNIT, which the
+# spine ships uncalibrated and tagged [SEED] (01_SPINE.md:503, :521, :526). So: the three
+# SHARES are canon and exact; WHERE ONE SHARE GIVES WAY TO THE NEXT is unmeasured. Calibrate
+# with tools/balance_oracle.py, per the spine — never by argument, and never here.
 SHARE_BY_DEGREE = {                 # the winner's share, by how decisive the exchange was
     Degree.PARTIAL:      0.50,      # |margin| in [0, 1)   — even split
     Degree.SUCCESS:      0.55,      # |margin| in [1, 3)
@@ -285,7 +313,7 @@ def settle(margin: float, floor_a: float, ceil_a: float) -> "Settlement | Refusa
 
     A no-ZOPA is a DESIGN OUTCOME and returns a Refusal. An out-of-range bound is a CALLER
     BUG and raises, matching the kernel's own convention for a malformed input
-    (resolver.py:343 raises on an unknown Move.kind; :304 on an unknown appeal).
+    (resolver.py:343 raises on an unknown Move.kind; :320 on an unknown appeal).
     """
     for name, v in (("floor_a", floor_a), ("ceil_a", ceil_a)):
         if not (0.0 <= float(v) <= 1.0):
@@ -302,7 +330,7 @@ def settle(margin: float, floor_a: float, ceil_a: float) -> "Settlement | Refusa
 
 **(a) Clamp into the ZOPA; refuse only when the ZOPA is empty.** The alternative — refuse whenever the margin-derived share falls outside the range — throws away deals both parties want. Nash's disagreement point (T0) says that where a range exists, the parties settle inside it; the margin decides *where*, and a boundary is the most the strong party can get. **The emergent consequence is the branch's best property: a stronger bargaining position can cost you the deal.** At `|margin| ≥ 3` the winner's share is 0.60; if that breaches the other side's reservation the ZOPA does not close (the *range* is unchanged) — the share is clamped back to the boundary. The ZOPA only closes when the two reservations genuinely cannot both be met, which is a fact about the parties, not about the roll. A weak-but-stubborn party (high `floor_a`) extracts more than their exchange performance warrants, right up to the point where nothing is left to agree on. That is Schelling's commitment, made mechanical, with a real cost attached.
 
-**(b) `Refusal` is not a `veto`, and the difference is load-bearing.** The spine's `veto` channel exists for a clinch (`primitives.py:272 DefeatCatalogue.check`) and per `04_CODE_ARCHITECTURE.md:686` "can only demote". A no-ZOPA is not a demotion — it is the absence of a contest outcome, and PR #362's fold already routes it: `if row.contests: degree, evs = seam.contest(...)  # Refusal => emit refusal kind` (`04_CODE_ARCHITECTURE.md:583`). So:
+**(b) `Refusal` is not a `veto`, and the difference is load-bearing.** The spine's `veto` channel exists for a clinch (`primitives.py:272 DefeatCatalogue.check`) and per `04_CODE_ARCHITECTURE.md:696` "the ladder takes the minimum". A no-ZOPA is not a demotion — it is the absence of a contest outcome, and PR #362's fold already routes it: `if row.contests: degree, evs = seam.contest(...)  # Refusal => emit refusal kind` (`04_CODE_ARCHITECTURE.md:582`). So:
 
 | in-bout event | channel | effect |
 |---|---|---|
@@ -332,7 +360,7 @@ Collapsing them would make "I argued badly" and "there was never a deal" indisti
 
 | Key | direction | what this branch does | anchor |
 |---|---|---|---|
-| `scene.contest_resolved` | emit | carries `outcome` and (new) `persuasion_track_final` | declared `key_types.json:954`; `KEY_INDEX.md:817`; produced at `echo_transport.py:427` |
+| `scene.contest_resolved` | emit | carries `outcome` and (new) `persuasion_track_final` | declared `key_types.json:954`; `KEY_INDEX.md:811`; produced at `echo_transport.py:427` |
 | `state.opinion_revised` | consume | already declared consumed; unchanged | `references/module_contracts.yaml:746` |
 | `scene.dialogue` | emit (optional) | unchanged; still has no construction site anywhere | `module_contracts.yaml:751`; `SC_INVENTORY.md` §C |
 
@@ -344,40 +372,43 @@ Collapsing them would make "I argued badly" and "there was never a deal" indisti
 
 | what is written | owner | path | grade of the ownership claim |
 |---|---|---|---|
+| **the settlement — one `Record` naming both parties** | **SE** (person scale) / **FA** (faction scale) | `registry.py:102 Settlement.tag` → `ledger.py:47 ledger_add`; or `treaty.py:145 register_treaty` (⚠ self-declared scaffolding, §1 row 10) | live today. **A Record is not a Tenure**, so `AX-4` clause 2 (`04_CODE_ARCHITECTURE.md:529-534`) does not fire |
 | `Proposition.exists` | A (the actor) | `verb_table.yaml:475 utter` → the gate | PR #362 shape only; no live equivalent |
-| `Tenure.since` on **A's own edge** | A | `verb_table.yaml:92 commit` → the gate; `actor == subject(id)` satisfied | PR #362 shape only |
-| `LedgerTag(kind="Debt")` on `Settlement.ledger` | **SE** | `registry.py:102 Settlement.tag` → `ledger.py:47 ledger_add` | live today |
-| `TreatyRecord` on `world.treaties` | **FA** | `treaty.py:145 register_treaty` (⚠ self-declared scaffolding) | live today |
-| `LedgerTag(kind="Grudge")` on refusal | **SE** | as above | live today; watched (§7) |
-| a `Faction` stat delta | IN | `echo_transport.py:441 _apply` → `game_state.py:153 Faction.adjust` | live today, unchanged |
+| `Tenure.since` on **A's own edge only** | A | `verb_table.yaml:92 commit` → the gate; `actor == subject(id)` satisfied (`:530`) | PR #362 shape only. Its job is the breach path, not the settlement (§4 S5.2) |
+| `LedgerTag(kind="Grudge")` on refusal | **SE** | as the settlement's person-scale path | live today; **watched, medium confidence** (§7.3) |
+| a `Faction` stat delta | IN | `echo_transport.py:441 _apply` → `game_state.py:153 Faction.adjust` | live today, unchanged. **Timing is I-S6b's, not this branch's** |
 
-**`systems/social_contest/` writes nothing persistent in this branch, and that is checkable.** The package's one persistent write today is `parliamentary_vote.py:214` (`SC_INVENTORY.md` §D1), on a different path. `settle()` is a Query; the wrapper returns a value; every write above is somebody else's. This is `04_CODE_ARCHITECTURE.md:161`'s `seam/wrappers/* — owns nothing, ever` satisfied by the current tree rather than by a promise.
+**No `Tenure` edge belonging to the counterparty is written anywhere on this path.** That is the whole content of the compliance argument, and it is checkable by reading the writes column above: one Record, one self-edge, one stat delta.
+
+**`systems/social_contest/` writes nothing persistent in this branch, and that is checkable.** The package's one persistent write today is `parliamentary_vote.py:214` (`SC_INVENTORY.md` §D1), on a different path. `settle()` is a Query; the wrapper returns a value; every write above is somebody else's. This is `04_CODE_ARCHITECTURE.md:164`'s `seam/wrappers/* — owns nothing, ever` satisfied by the current tree rather than by a promise.
 
 **The dedupe hazard, named because it silently destroys settlements.** `ledger_add` dedupes by `(kind, key)` and **refreshes in place** (`ledger.py:53-56`). Two Debts between the same parties with the same key overwrite each other. The key must therefore carry the Proposition id: `f"settle:{P.id}"`, not `f"settle:{A}:{B}"`. Invariant I-N6, falsifier F-N7.
 
 ### 6.3 The degree-keyed consequence column — and the finding it produces
 
-Per `04_CODE_ARCHITECTURE.md:573 §C.4` / F6, a verb declaring `contests:` keys its `writes` **and** its `emits` on the Degree, and the loader asserts the two key sets are equal (`:645`). The column lives **on the calling verb, never in the seam** (`:687`, "a state write from inside — no token, STRUCTURAL"). The verb here is `commit` (`verb_table.yaml:92`), which gains `contests: "a proposition"` — the prize `rosters.yaml:360` already maps to `social_contest`.
+Per `04_CODE_ARCHITECTURE.md:573 §C.4` / F6, a verb declaring `contests:` keys its `writes` **and** its `emits` on the Degree, and the loader asserts the two key sets are equal (`:644`). The column lives **on the calling verb, never in the seam** (`:694`, "a state write from inside — no token, STRUCTURAL"). The verb here is `commit` (`verb_table.yaml:92`), which gains `contests: "a proposition"` — the prize `rosters.yaml:360` already maps to `social_contest`.
 
 ```yaml
   - verb:        "commit"
     contests:    "a proposition"           # NEW — routes to the seam at RESOLVE
     writes:
-      Overwhelming: ["Tenure.since", "Record.exists"]
-      Success:      ["Tenure.since", "Record.exists"]
-      Partial:      ["Tenure.since", "Record.exists"]
-      Failure:      ["Tenure.since", "Record.exists"]
+      Overwhelming: ["Record.exists", "Tenure.since"]
+      Success:      ["Record.exists", "Tenure.since"]
+      Partial:      ["Record.exists", "Tenure.since"]
+      Failure:      ["Record.exists", "Tenure.since"]
     emits:
       Overwhelming: ["commitment.made"]
       Success:      ["commitment.made"]
       Partial:      ["commitment.made"]
       Failure:      ["commitment.made"]
-    emits_on_refusal: ["commitment.refused"]   # unchanged — already declared at :97
+    emits_on_refusal: ["commitment.refused"]   # unchanged — already declared at :98
 ```
 
-⚠ **THE FOUR BRANCHES ARE IDENTICAL, AND THAT IS THE RESULT, NOT AN OVERSIGHT.** `writes_at(degree)` was built to fix `kill / wound`, where losing the fight wrote the same fields as winning it (`04_CODE_ARCHITECTURE.md:606-608`). **Negotiation is the case that shows the repair is not universal: here the degree changes the *value* written, not the *set of fields*.** Every band that reaches the column is a struck bargain; what differs is the `share` in the Debt Record's `value`, which rides in the gate receipt's change, not in the field list. There is no `Failure: []` because there is no losing *outcome* — a negotiation that produces nothing produces a **refusal**, which the fold handles on the `emits_on_refusal` path with no writes at all.
+**`Record.exists` is first in every row because it is the binding write; `Tenure.since` is A's own edge and exists to give `repudiate` something to close** (§4 S5.2). **Why `commit` and not `oblige`**, since `oblige` (`verb_table.yaml:336-343`) is the semantically apter verb for taking on a duty: `oblige` has an opener and **no closer** — the defect `HANDOFF_NEXT.md:54` 2a registers, which it names as blocking *"breaking a treaty"* explicitly — and it carries `emits_on_refusal: []`, so a refused negotiation would produce no Event at all, violating P-01 (`canon/02_canon_constraints.md:10`). `commit` has both. Chosen on the registered defect, not on preference; if `release` (`04_CODE_ARCHITECTURE.md §A.3` row 14) lands, revisit.
 
-By PR #362's own rule — *"a verb declares fewer branches rather than the table inventing the difference"* (`:620`, Jordan-ruled 2026-09-03) — the honest column for this verb is therefore the **flat list**, and the four-band form above is written out only to show that it collapses. The generalisation this branch offers back to the meta-architecture, in one sentence: *a contested verb varies either its field set or its written value by degree, and the sixth column only expresses the first.* That verdict belongs to `01_SPINE.md`; it is flagged here and not adjudicated.
+⚠ **THE FOUR BRANCHES ARE IDENTICAL, AND THAT IS THE RESULT, NOT AN OVERSIGHT.** `writes_at(degree)` was built to fix `kill / wound`, where losing the fight wrote the same fields as winning it (`04_CODE_ARCHITECTURE.md:606-608`; the landed row at `verb_table.yaml:282-285` now reads `Felled / Wounded / Untouched`). **Negotiation is the case that shows the repair is not universal: here the degree changes the *value* written, not the *set of fields*.** Every band that reaches the column is a struck bargain; what differs is the `share` in the Record's `value`, which rides in the gate receipt's change, not in the field list. There is no `Failure: []` because there is no losing *outcome* — a negotiation that produces nothing produces a **refusal**, which the fold handles on the `emits_on_refusal` path with no writes at all.
+
+By PR #362's own rule — *"the verb declares fewer branches rather than the table inventing the difference"* (`:621`, Jordan-ruled 2026-09-03) — the honest column for this verb is therefore the **flat list**, and the four-band form above is written out only to show that it collapses. The generalisation this branch offers back to the meta-architecture, in one sentence: *a contested verb varies either its field set or its written value by degree, and the sixth column only expresses the first.* That verdict belongs to `01_SPINE.md`; it is flagged here and not adjudicated.
 
 ---
 
@@ -402,7 +433,7 @@ By PR #362's own rule — *"a verb declares fewer branches rather than the table
 | the §7.2.1 ratios | `social_contest_v30.md:421-423` | the three shares |
 | `Let It Ride` | `social_contest_v30.md:680` | the re-open block after a refusal |
 
-### 7.2 What is new — three objects, each with its N-line
+### 7.2 What is new — four objects, each with its N-line
 
 | new | N-line: *cut it, and the emergent possibility lost is…* | can anything ruled in supply it? |
 |---|---|---|
@@ -412,12 +443,14 @@ By PR #362's own rule — *"a verb declares fewer branches rather than the table
 
 ### 7.3 THE FALSE-N-LINE HUNT — run against my own additions
 
-`14_NERS.md` §3's pattern, quoted so the test is the source's and not mine: *a mechanism was named, a **store** was proposed for it, and the store's job was already being done by an object the design had ruled in.* Eight candidates, **six cut**, one kept-conditionally, one survived.
+`14_NERS.md` §3's pattern, quoted so the test is the source's and not mine: *a mechanism was named, a **store** was proposed for it, and the store's job was already being done by an object the design had ruled in.* Ten candidates, **seven cut**, one kept-conditionally, two survived.
 
 | candidate | its claim | verdict |
 |---|---|---|
+| **a second `commit` Tenure, on the counterparty** *(the shape spec's S5.2, and my own draft before the spine's verdict)* | both parties must be bound, so both must hold a commit edge | **CUT, and it is the most consequential cut in this document.** The Record does the job — one write naming both parties (`write_matrix.yaml:243`, no ownership clause; `treaty.py:63 TreatyRecord.parties`), which is `§B.4/§B.5`'s own precedent for `Petition`/`Dispensation` (`:249-261`). And the store fails on its own terms twice: the gate refuses it (`:529-534`) and the fold cannot order it (`:576` + `D-36 :857`). §1 row 9 |
+| **A's own `commit` Tenure** | A must be bound too | **SURVIVED, on a narrow N-line that is not "binding".** The Record already binds A. What the self-edge uniquely provides is a **breach path**: `repudiate` requires *"a live commit exists"* (`verb_table.yaml:381`). Cut it and A's defection has no act, no Event and no author — the loss §11 cost 1 says the ruling must not incur. Nothing else in the tree closes a commitment visibly |
 | **`terms: dict` on `Settlement`** *(my own first draft)* | a settlement divides several axes, so the terminal must return a term map | **CUT.** The claimed possibility is the critique's `four-games FG-1` *proportional trade* — "genre-won attribution decides who keeps which axis" (`critique.md:85`). `settle(margin, floor_a, ceil_a)` has **no per-axis input**, so it cannot produce a trade; what it *could* produce is one `share` multiplied across every axis, which is one multiplication the caller already owns. A store for a fact the function cannot compute. |
-| **`stakes: Stakes` parameter** | the terminal needs to know what is being divided | **CUT, as a consequence.** Once `terms` is gone, no line of the body reads it. That is exactly the defect `hole_register.yaml:1036` H-89 registers against `verb_table.yaml`'s `scale:` column — *"a declared axis that decides nothing"*. A reservation stated as a *share* is scale-free, so the pie's size is not needed. |
+| **`stakes: Stakes` parameter** | the terminal needs to know what is being divided | **CUT, as a consequence.** Once `terms` is gone, no line of the body reads it. That is exactly the defect `hole_register.yaml:1029` H-89 registers against `verb_table.yaml`'s `scale:` column — *"a declared axis that decides nothing"*. A reservation stated as a *share* is scale-free, so the pie's size is not needed. |
 | **`latitude` (the Kauṭilyan `dūta` ladder) as a `settle()` parameter** | plenipotentiary vs limited-brief vs message-bearer must be typed somewhere | **CUT.** Its job is done by `Act.via : SeatId?` plus the seat's remit (`04_CODE_ARCHITECTURE.md:392 §B.9`; `01_AXIOMS.md:1356 §E.2.2` — *"authority is a property of the seat being exercised"*). Putting it on `settle()` would be a second owner of an authority fact. **And the honest consequence: `rosters.yaml:102 remit_acts` is `[issue, determine, confer, revoke, dispatch, convene]` — no `commit` — and `commit`'s eligibility is `["own"]` (`verb_table.yaml:94`). So no envoy can bind a principal today, and under §11's ruling a negotiation binds only between principals present in the scene.** Named, not routed around. |
 | **a reservation FIELD on `Contestant`** | the walk-away point needs a carrier | **CUT** — the shape spec cut it first and I re-ran the cut rather than inheriting it. `Contestant` (`resolver.py:180`) is an immutable per-bout spec that is explicitly reusable across bouts; a reservation is a per-*matter* fact. `Tenure.degree` (`write_matrix.yaml:329`) is the declared carrier; the concealment idiom is `Dossier`'s (`primitives.py:291`, exposed as a count at `contract.py:66`). |
 | **`offer` / `concede` Move kinds** | bargaining needs bargaining moves | **CUT** — re-verified. `VALID_KINDS` (`resolver.py:34`) is a closed tuple validated at `resolver.py:342`; an offer is an utterance of a different OUGHT (`verb_table.yaml:475`), which is an Act, not a Move inside the bout. `HANDOFF_NEXT.md:57` 2e forbids the verb until composability is tested; this branch tests it and it composes. |
@@ -450,9 +483,12 @@ Grades per `04_CODE_ARCHITECTURE.md:66 §0`: **STRUCTURAL** = the defect has no 
 | **I-N5** | ~~a settlement has a term or it is not a settlement~~ | **CONVENTION.** *Regraded down from the shape spec's "STRUCTURAL by signature".* `LedgerTag.ttl` defaults to `None` = durable (`ledger.py:41`, `:16-17`); `TreatyRecord.bound_season` is when it was **bound**, not when it ends (`treaty.py:65-66`), and expiry is a 0.90 lapse roll (`treaty.py:121`). Both signatures express a termless settlement happily. §1 row 11 |
 | **I-N6** | two settlements between the same parties do not clobber each other | **MECHANICAL, and only if the key carries the Proposition id** — `ledger_add` dedupes by `(kind, key)` and refreshes in place (`ledger.py:53-56`). Falsifier F-N7 |
 | **I-N7** | a reservation is never readable by the counterparty | **CONVENTION.** `ContestView` (`contract.py:54`) is *built*, not filtered — it exposes `evidence_available` as a count (`:66`), and a reservation is not on it at all today. When it becomes reachable, nothing structurally prevents a policy from being handed it |
-| **I-N8** | the seam holds no token; both sides' consequences flow from one actor's act | **STRUCTURAL in the live tree** — `systems/social_contest/` contains zero writes to persistent state on this path (`SC_INVENTORY.md` §D1; the package's one such write is `parliamentary_vote.py:214`, a different seam). **STRUCTURAL under PR #362** — `04_CODE_ARCHITECTURE.md:161`, the wrapper is handed no token |
+| **I-N8** | the seam holds no token; both sides' consequences flow from one actor's act | **STRUCTURAL in the live tree** — `systems/social_contest/` contains zero writes to persistent state on this path (`SC_INVENTORY.md` §D1; the package's one such write is `parliamentary_vote.py:214`, a different seam). **STRUCTURAL under PR #362** — `04_CODE_ARCHITECTURE.md:164`, the wrapper is handed no token |
 | **I-N9** | `settle.py` never joins the package import cycle | **MECHANICAL** — `tests/valoria/test_import_cycle_game_state_npe.py::test_exactly_two_cycles_remain_and_they_are_the_expected_families` fails on any change to the count. Falsifier F-N6 |
 | **I-N10** | there is no second ladder | **MECHANICAL** — `settle()` calls `dice_engine.degree_from_net` (`:227`), the declared single owner, and passes no `extension`. Falsifier F-N5 uses the `test_balance_oracle_arms.py:65` idiom: patch the ladder, assert the output moves |
+| **I-N11** | **no `Tenure` edge belonging to the counterparty is written on this path** — the settlement is a `Record`, and the only Tenure touched is the actor's own | **MECHANICAL under PR #362** — the gate refuses the alternative outright (`04_CODE_ARCHITECTURE.md:529-534`, `raise NotYours`), so the defect has exactly one path and it refuses. **CONVENTION in the live tree**, which has no gate and no Tenure at all. Falsifier F-N11 |
+| **I-N12** | the settlement binds at return — nothing represents a not-yet-effective agreement | **STRUCTURAL, and inherited: it is the spine's I-S6a** (`01_SPINE.md:334-341`). `Settlement` has one field and `ContestOutcome` has no `pending`/`provisional`/`awaiting_ratification`. This branch adds no such field and could not add one without a visible edit to the spine's contract |
+| **I-N13** | the settlement is in force for everything later in the same season | **NOT ENFORCED — and not CONVENTION, which would be the "guard that cannot observe what it guards" defect wearing a better label** (`04_CODE_ARCHITECTURE.md:78`). It is the spine's **I-S6b**, owned by IN (`engine/substrate/keys.py:569-573`, OF-7 defers the apply to `accounting_boundary`). The falsifier is the spine's §7.4 and **it fails on the current tree** |
 
 ---
 
@@ -470,10 +506,14 @@ Grades per `04_CODE_ARCHITECTURE.md:66 §0`: **STRUCTURAL** = the defect has no 
 | **F-N6** | *`settle.py` stays out of the SCC* (I-N9) | `python -m pytest tests/valoria/test_import_cycle_game_state_npe.py -q` after the module lands | the test hard-codes the 9-module family (`:23`) and asserts the whole-repo cycle count is exactly 2 (`:53-92`). If `settle.py` imports `dictionaries` or `wrapper`, the count moves and the test fails — this is the only automatic detector of the §1 row 5 hazard |
 | **F-N7** | *settlements do not clobber* (I-N6) | write two `Debt` tags for the same `(A,B)` with different Proposition ids into one `Settlement.ledger`; `assert len(ledger_get(led, "Debt")) == 2` | `ledger_add` refreshes in place on a `(kind, key)` match (`ledger.py:53-56`), so a key omitting the Proposition id silently yields 1 |
 | **F-N8** | *the bout itself is not side-biased* | swap A/B over N seeds through `private_negotiation` with mirrored policies and compare the `share` distributions | reproduces the groundup `AUDIT.md` P1 87/13 turn-order finding (`v30-snapshot-2026-06-28:designs/audit/2026-06-03-contest-groundup/AUDIT.md`). **This one needs a tolerance, and the tolerance is a `[SEED]` to declare in the commit, not to hide.** Note the asymmetry with F-N2: `split()`'s half of the symmetry claim is an exact identity and needs no seed; only the bout's half is statistical |
+| **F-N11** | *no counterparty Tenure is written* (I-N11) | scan the branch's write sites for any `Tenure` write whose subject is not the acting person; under PR #362, assert the gate raises `NotYours` on a synthetic attempt (`04_CODE_ARCHITECTURE.md:534`) | a scan that only counted writes would pass on a two-Tenure model; the assertion is on the **subject**, which is the field the defect lives in. In the live tree the scan is the only half available, because there is no gate to raise |
+| **F-N12** | *the two-Tenure alternative is order-fragile* — the reason to reject it that is independent of any ruling | construct both act orders (A-then-B, B-then-A) over the fold and assert the bargain binds in **both**; the two-Tenure model fails one of them | **this is the falsifier for a design I did not choose**, and it is worth shipping precisely because it makes the rejection checkable rather than asserted. `canonical_order` (`:576`) + `D-36` (`:857`) are the mechanism |
 
 ### The control — what would show the change is **not** value-identical where it should be
 
 **F-N9 (the control).** `python -m pytest engine/tests/test_mc_v18_regression.py engine/tests/test_f7_smoke_oracle.py -q` must be **byte-identical** before and after this branch lands. Negotiation is campaign-unreachable today — `scene_dispatch.py:301` is the only production caller of `resolve_contest` and it passes no `game=` (`SC_INVENTORY.md` §F: no file outside the package names any of the four game strings) — so adding `settle.py` and deleting a stub row must move nothing. **If the goldens move, the change reached agon and the branch is wrong.**
+
+⚠ **This control is valid for THIS branch alone and must not be confused with the spine's.** `01_SPINE.md` §1.9 (b) / I-S6b will move the same goldens deliberately when the IN-lane `bind_now` change lands, and that is a **re-pin with a measured delta** (`CLAUDE.md` §0.1 pt 4), not a regression. Land them in separate commits, or F-N9 stops being able to tell the two apart — which is the whole reason it exists.
 
 ⚠ **And the instrument that must NOT be used as the control:** `tools/balance_oracle.py`. Because this branch is campaign-unreachable, both of its arms are identical **by construction**, and a green run would be a fake control — the exact worked case `CLAUDE.md` §7 records as ED-MB-0066. The goldens are the control; the oracle is not.
 
@@ -531,7 +571,8 @@ This is the one thing `00_BRANCH_SHAPES.md` §3(k)1 sent up. **It came back the 
 1. **The deniable defection dies.** Putnam's Level II gave you *"my principal refused to ratify"* — a betrayal with no author, expressible as a **non-event**. Under in-scene binding every defection is `repudiate` (`verb_table.yaml:378`): an act, with an actor, emitting `commitment.ended`, seen by whoever was present. **You lose authorless betrayal; you gain attributable and therefore costly betrayal.** For a game about political intrigue that is a genuine loss on one side and a genuine gain on the other, and I do not think it is obvious which is larger.
 2. **The envoy cannot be disavowed — because the envoy cannot bind.** `commit`'s eligibility is `["own"]` (`verb_table.yaml:94`) and `rosters.yaml:102 remit_acts` has no `commit`, so no seat's remit reaches it. **Under today's roster the ruling means: a negotiation binds only between principals present in the scene.** The Kauṭilyan `dūta` ladder has no home until the roster gains `commit`. That is a registry gap owned by PR #357, named here rather than worked around.
 3. **The ratification window as a pacing device is gone.** A two-season deal gave the world a season to react — counter-offers, bribery, pressure on the principal. Nothing in this branch compensates for that. If the game later wants it, the place to put it is a *declared term before the instrument matures*, not a staged consent.
-4. **The `Diplomacy` precedent is honoured, not violated — and this is an interpretation, not a proof.** `research/valoria_game_precedent_companion_v1.md:493`: *"A world where treaties bind automatically has no diplomacy in it."* Binding **in-scene** is not binding **automatically**: what binds is the agreement the parties reached, and `repudiate` remains available at the cost of an act, an Event and a visible broken commitment. The instrument is the thing that can be broken; that is precisely the *"binding instruments as the expensive exception"* the precedent asks for, priced on the breaking rather than on the making. If a later pass makes a settlement unbreakable, that precedent becomes the falsifier.
+4. **⚠ THE BREACH PATH IS ASYMMETRIC, AND THIS IS THE SHARPEST PRICE OF ONE-ACT BINDING.** One act means one actor, so only A ends the fold holding a `commit` Tenure — and `repudiate` requires exactly that (`verb_table.yaml:381`). **A can defect visibly; B cannot, because B has nothing to repudiate.** B is bound documentarily by the Record and, until B opens their own `oblige` in this or a later season (`01_SPINE.md` §3.4 (iii) 2), B's failure to perform is non-performance rather than an act. The two parties are therefore not symmetric in how their betrayal *reads*, and no ruled-in object closes that today. I did not paper over it with a synthetic B-side act, because a speculative `commit` chosen before the terms existed is the blank cheque the spine's order-fragility proof rules out. **Named as an open consequence, not solved.**
+5. **The `Diplomacy` precedent is honoured, not violated — and this is an interpretation, not a proof.** `research/valoria_game_precedent_companion_v1.md:493`: *"A world where treaties bind automatically has no diplomacy in it."* Binding **in-scene** is not binding **automatically**: what binds is the agreement the parties reached, and `repudiate` remains available at the cost of an act, an Event and a visible broken commitment. The instrument is the thing that can be broken; that is precisely the *"binding instruments as the expensive exception"* the precedent asks for, priced on the breaking rather than on the making. If a later pass makes a settlement unbreakable, that precedent becomes the falsifier.
 
 ### Fork 1a — **the sharp question: where does an NPC counterparty's assent come from?**
 
@@ -547,7 +588,11 @@ The world freezes at barrier 2 and `deliberate(frozen)` is a pure map (`04_CODE_
 - **The honest gap, stated as a gap.** `Tenure.degree` is **declared and does not exist in the live tree** — there is no Person, no Tenure and no commit degree anywhere in `systems/social_contest/`. Until it exists, `settle()`'s two bounds are supplied by the caller, and the one production caller supplies neither (`scene_dispatch.py:300`). **That is this branch's reachability gap, and it is the same "one line that does not ship" the three-lens audit named for `contestant_from_person`** (`04_reductive_audit_primitives_and_foundations.md:210-212`). It is why §0's grade is **paper**.
 - **Is there a reason computed assent cannot work?** One, and it is worth stating precisely so a later pass can test it: **a reservation read from a prior `commit` is a reservation about the *proposition*, not about *this counterparty*.** A person may accept 40% from an ally and refuse 60% from an enemy. Modelling that needs a second input (a disposition toward A), which would make the floor a function of the pair rather than of the person — still computable at the seam, still no second Act, but no longer a single stored degree. I did not add it: it is a widening with no ruled-in carrier, and `settle()` composes with it unchanged if it ever arrives (the caller resolves the bound; `settle()` does not care how).
 
-**On PR #362.** I looked for a clause forbidding in-scene binding and did not find one. `PART D` row 49 (`04_CODE_ARCHITECTURE.md:871`) forbids **nesting** — *"no Act resolves inside another's resolution"* — which this design does not do; `:507` forbids reacting to RESOLVE inside DELIBERATE, which computed assent does not do. **The one clause that genuinely bites is `§C.2`'s F3 (`:527`): `kind is Tenure => actor == subject(id) … otherwise raise NotYours` — and it bites only on the *two-Tenure* modelling of a settlement, where A's act writes B's edge.** Modelling the bilateral fact as one `Record` naming both parties (`write_matrix.yaml:243 Record.exists`, no ownership clause; `treaty.py:63 TreatyRecord.parties`) writes only A's own edge and passes. **So the conflict is a property of the modelling, not of the ruling, and this branch takes the modelling that has none.** The architectural verdict for all three branches belongs to `01_SPINE.md`; this document does not adjudicate it. *(One observation offered to that document and not pursued here: `kill / wound` — PR #362's only `contests:` row — writes `Tenure.until` on the victim's edges (`verb_table.yaml:234-238`) and would trip the same clause.)*
+**On PR #362: there is no conflict, and the verdict is the spine's, not mine.** `01_SPINE.md` §3.4 (iii) establishes it from the primary text and this branch consumes the result: `§C.4:576` flattens acts **across all scenes** into one ordered fold; `PART D` row 49 (`:871`) forbids **nesting**, not same-pass resolution; `:579` evaluates a later act's `requires` against `world_as_predecessors_left_it`; and `:507` forbids DELIBERATE reacting to RESOLVE, which computed assent does not do. **A scene-internal outcome binds in the same RESOLVE with the freeze intact. Nothing in PR #362 needs amending, and this document proposes no amendment to it.**
+
+**What made it look like a conflict is a modelling choice, and it is the one a builder is most likely to make.** Two `commit` Tenures puts you inside `tenure_kinds` (`:475`) and fires `AX-4` clause 2 (`:529-534`); one `Record` does not fire it at all (`§B.4/§B.5`, `:249-261`). **And the two-Tenure route fails for a second reason that has nothing to do with any ruling:** `canonical_order` is `(stratum, actor-hash, intra-person position)` (`:576`) with no rank tiebreak (`D-36`, `:857`), so nothing orders A's act before B's conditional commit and **the bargain silently fails to bind about half the time, for a reason nobody chose**. This branch takes the Record modelling, which has neither defect, and ships F-N12 so the rejection is checkable rather than asserted.
+
+**The remaining gap is real, and it is IN-lane, not architectural.** PR #362's gate applies the write synchronously (`:536`, *"THE GATE APPLIES THE WRITE"*), so a PR #362 build satisfies the ruling natively. **The live engine does not** — OF-7 defers the echo's apply to `accounting_boundary` (`engine/substrate/keys.py:569-573`), so scene 2 of season N reads the world as scene 1 left it *before* scene 1 resolved. That is I-N13 / the spine's I-S6b; its owner is `engine/substrate/keys.py` and its falsifier is `01_SPINE.md` §7.4, which **fails on the current tree**. The ruling and PR #362 agree; the live tree disagrees with both.
 
 ### Fork 2 — ED-SC-0020, the burden-parameterized gate · **ANSWERED BY ARCHITECTURE (rung 5). CLOSE THE ROW.**
 
@@ -590,7 +635,9 @@ Canon states the principle (*"track-distance weighting"*, `v30:415`) and lists v
 | *"`_kernel_tests.py:182` already guards the split, so a change there is safe."* | **SUCCEEDS.** It tests set membership behind a vacuously-satisfiable disjunct. §1 row 6a |
 | *"I-N5 is STRUCTURAL by signature, per the shape spec."* | **SUCCEEDS.** `bound_season` is a start, not a term; `ttl` defaults to durable. Regraded to CONVENTION. §1 row 11 |
 | *"The counterparty's assent needs a second Act, so in-scene binding is unbuildable under PR #362."* | **FAILS.** `settle()` is pure; the floor is an input; the assent is computed. No second Act, no nesting, freeze intact. §11 fork 1a |
-| *"Then PR #362 must be amended for binding-in-scene."* | **FAILS on the design as built, and I looked hard for the clause.** The only biting clause (`§C.2` F3, `:527`) applies to the *two-Tenure* modelling; the Record modelling passes. The conflict is in the modelling, not the ruling. §11 fork 1a |
+| *"Then PR #362 must be amended for binding-in-scene."* | **FAILS, and the refutation is the spine's** (`01_SPINE.md` §3.4 (iii)): `§C.4:576` folds acts across all scenes, `D-49:871` forbids only nesting, `:579` evaluates against `world_as_predecessors_left_it`. **No amendment is owed and this document proposes none.** The clause I had found (`§C.2` F3, `:529-534`) applies to the two-Tenure modelling, which this branch does not use |
+| *"`kill / wound` writes `Tenure.until` on the victim, so PR #362's only contested verb already violates its own gate."* | **FAILS — and I ran it as a check on myself, because it would have been a convenient finding.** `verb_table.yaml:282-285`: `Tenure.until` appears **only** in the `Felled` band, which also writes `Person.exists` — so gate clause 4, *"cause is an existence change this same act caused — destroy's cascade"* (`04_CODE_ARCHITECTURE.md:533`), covers it exactly. The `Wounded` band writes `Person.body` alone. **The verb is compliant and my draft's parenthetical was wrong; it is deleted rather than softened** |
+| *"Even under the Record modelling, the counterparty could bind itself with a conditional `commit` chosen in DELIBERATE."* | **FAILS, on an argument I did not have and the spine did.** `canonical_order` (`:576`) has no rank tiebreak (`D-36`, `:857`), so nothing orders A's act first and the bargain binds on an actor-hash coin flip. F-N12 makes the rejection checkable |
 | *"`stakes` must stay — a terminal that does not know what is being divided cannot divide it."* | **FAILS.** A reservation stated as a share is scale-free, and once `terms` is cut nothing in the body reads `stakes`. A parameter nothing reads is `H-89`'s registered defect. §7.3 |
 | *"`terms` is necessary for a multi-axis trade (critique `four-games FG-1`)."* | **FAILS, against my own first draft.** `settle()` has no per-axis input, so it cannot produce a trade; the uniform division it *could* produce is one multiplication the caller owns. A false N-line. §7.3 |
 | *"A typed envoy latitude is the Kauṭilyan grounding's whole contribution, so it must be a parameter."* | **FAILS as a parameter, SUCCEEDS as a gap.** Latitude is the seat's remit (`§E.2.2`), not the terminal's business — and `rosters.yaml:102` has no `commit`, so no envoy can bind today. The research's contribution survives as a *cut*, and the gap is named. §7.3, §11 fork 1 cost 2 |

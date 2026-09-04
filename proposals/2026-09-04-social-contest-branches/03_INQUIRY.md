@@ -146,7 +146,7 @@ This is the doctrine `SelfGating` (`primitives.py:213`) and `DefeatCatalogue` (`
 
 Idiom: `systems/_architecture/subsystem_flow_skeletons_v1.md:94` — steps `S1`, `S2`, branches nested one level as `S2.1`, tagged `[gate] [branch] [loop] [emit] [write]`, each step naming reads, writes and the owner of the write.
 
-**Two proceedings, not one.** Canon separates the **Heresy Investigation** (§7.3, 4–6 seasons, one interrogation per season, verdict ∈ Acquittal / Insufficient Evidence / **Tribunal Recommended**, `social_contest_v30.md:451`) from the **Excommunication Tribunal** (§7.1, the sentencing proceeding, `:624`). The shape spec's S4 maps an Overwhelming investigation result straight onto `attempt_excommunication`; **canon puts a second proceeding in between** (E-amendment A7 in §1's tail). Both are inquiry-class; each produces its own finding; each binds at its own close.
+**Two proceedings, not one.** Canon separates the **Heresy Investigation** (§7.3, 4–6 seasons, one interrogation per season, verdict ∈ Acquittal / Insufficient Evidence / **Tribunal Recommended**, `social_contest_v30.md:451`) from the **Excommunication Tribunal** (§7.1, the sentencing proceeding, `:624`). The shape spec's S4 maps an Overwhelming investigation result straight onto `attempt_excommunication`; **canon puts a second proceeding in between** — a further amendment to §4 of the shape spec, stated here because it is a property of the sequence rather than of any one element. Both are inquiry-class; each produces its own finding; each binds at its own close.
 
 ```
 S1  [gate][write] open_case  — actor: a Person holding a seat whose remit reaches `determine`
@@ -210,9 +210,9 @@ S3  the Stay — NOT a step of this sequence.  A SEPARATE act, by a DIFFERENT ac
 S4  [branch][write][emit]  determine — the Investigation Verdict.  Actor: the Person in the judging
     seat.  margin = ProofBar.margin (net − bar); veto from S2.2.  THREE canonical outcomes, not four:
              guilty-band      -> finding "guilty",  and the verdict is TRIBUNAL RECOMMENDED,
-                                 which opens a §7.1 proceeding — it does NOT sentence   :452
+                                 which opens a §7.1 proceeding — it does NOT sentence   :451
              inconclusive     -> finding "inconclusive"; the case SUSPENDS; may resume if the
-                                 evidence scalar reaches 3 within 4 seasons              :452
+                                 evidence scalar reaches 3 within 4 seasons              :451
              exonerated       -> finding "exonerated"; case closed; Renown +1 in non-Church
                                  factions; re-filing the same charge REQUIRES FRESH EVIDENCE
                                  ("cannot recycle prior testimony")                      :466
