@@ -12,9 +12,11 @@ or `systems/` is edited.** The sweep reads them and reports.
 
 > ### THE HEADLINE
 > **Every mechanical decision in the ARC and NPC corpus was flipped every way it could be flipped,
-> and each fork was followed forward three decisions. 2,403 forks across 89 cases. All 2,403
-> genuinely changed the act taken and the event stream written. NOT ONE changed any of the next
-> three decisions. Reconvergence: 100%.**
+> and each fork was followed forward three decisions — over a SEASON-AWARE window, because
+> `DELIBERATE` is a parallel map over a frozen world and decisions bind in order only across
+> seasons. 3,204 forks across 89 cases; 801 excluded as having no live window; **2,403 scored, all
+> of which genuinely changed the act taken and the event stream written. NOT ONE changed any of
+> the next three decisions. Reconvergence: 100%.**
 >
 > **No decision in the corpus influences any later decision.** A person does something else, the
 > world moves, a different narrative is written — and the next three deliberations present the
@@ -160,30 +162,41 @@ own printed counts rather than trusting either number.
 
 ## 1 · THE FORKING EXERCISE — flip every decision, follow it three decisions on (ARM 9)
 
-> ### ⚠⚠ THE HEADLINE FIGURE BELOW IS SUPERSEDED AND INFLATED. JORDAN ASKED *"did you ensure that decisions bind in order?"* AND THE ANSWER WAS NO.
+> ### ⚠ RE-MEASURED UNDER A SEASON-AWARE WINDOW — Jordan asked *"did you ensure that decisions bind in order?"* and the answer was NO. **The finding survives at full strength; the first version was partly entailed.**
 >
 > **`DELIBERATE` is a PARALLEL MAP OVER A FROZEN WORLD** — `shape.py:4204-4221` requires
 > `w.frozen`, sets `w._in_parallel_map = True`, and the law reads *"the world is FROZEN from the
 > end of MATTER to the start of RESOLVE. THIS IS WHAT MAKES THE MAP SAFE TO PARALLELISE."* So
 > every person in a season deliberates against the identical pre-RESOLVE state: **decisions bind
-> in order only ACROSS seasons, never within one.**
+> in order only ACROSS seasons, never within one.** Verified by printing the tick per
+> deliberation — D0–D2 → tick 0, D3–D5 → tick 1, D6–D8 → tick 2.
 >
-> **Two ways that inflated the result, both verified by printing the tick per deliberation
-> (D0,D1,D2 → tick 0; D3,D4,D5 → tick 1; D6,D7,D8 → tick 2):**
-> 1. a window counting same-tick decisions counts slots that **cannot** differ. With 3 persons, a
+> **Two ways that inflated the first result:**
+> 1. a window counting same-tick decisions counts slots that **cannot** differ — with 3 persons, a
 >    fork at a season's first deliberation had **2 of its 3 slots dead by construction**;
-> 2. a fork in the **final season** had **zero** live slots — and every one was scored
->    `reconverged`. That is the larger half.
+> 2. a fork in the **final season** had **zero** live slots and every one was scored
+>    `reconverged`. **That is the larger half.**
 >
-> **The instrument is fixed** (`arm9_forking.py` now takes only decisions at a strictly later tick
-> and reports a fork that cannot fill the window as `NO-LIVE-WINDOW`, excluded from the rate rather
-> than counted). On the first case re-measured under the corrected window — 4 seasons, 36 forks —
-> **9 were excluded as NO-LIVE-WINDOW and 27 were scored: 27 reconverged, 0 diverged.** The
-> corpus-wide re-run is in flight; **treat the 2,403 / 100% below as the pre-correction figure
-> until it lands**, and read the direction rather than the number.
+> **The corrected run**, over 4 seasons with a window of 3 strictly-later-tick decisions:
 >
-> ⚠ The `acts diff at the fork index alone` control is **unaffected** — it compares the whole run
-> across all seasons, so it never depended on the window.
+> | | |
+> |---|---|
+> | forks probed | **3,204** (89 cases × 12 decisions × 3 alternatives) |
+> | **excluded as `NO-LIVE-WINDOW`** | **801** — exactly the final season's forks, which the first version silently scored as reconverged |
+> | scored, and genuinely changing the act | **2,403** |
+> | **reconverged** | **2,403** |
+> | **diverged** | **0** |
+> | decisions changed within the window | `{0: 2403}` |
+>
+> **100%, now over a valid window.** The rate did not move; what moved is that it is earned. And
+> the positional control is unchanged and independent of the window: **the acts differ at the fork
+> index alone**, so every subsequent act by every person in every subsequent season is identical
+> too.
+>
+> ⚠ One incidental: the claim-channel probe reports **4,800 claims at both 3 and 4 seasons**. That
+> is not a copy-paste error — the per-person ledger is capped (§18's *at most K*), so it saturates
+> and a fourth season adds no net claims. The disjointness result is unaffected, and is in any case
+> a theorem rather than a sample (see the correction above).
 
 **The ask, verbatim:** *"within each season for NPC or arc, there is a mechanical moment where x
 occurs instead of y (and maybe z or more). I need you to explore what happens when each mechanical
@@ -200,7 +213,9 @@ baseline takes `ranked[0]` at each; a fork takes `ranked[t]` at **exactly one** 
 |---|---|
 | cases | **89** |
 | decision points forked | **every one**, up to 3 alternatives each |
-| forks probed | **2,403** |
+| forks probed | **3,204** |
+| excluded — no live window (final-season forks) | **801** |
+| forks scored | **2,403** |
 | forks that genuinely changed the act taken (control) | **2,403 of 2,403** |
 | forks whose event log differs from baseline | **2,403** |
 | **forks that changed any of the next 3 decisions** | **0** |
