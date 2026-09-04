@@ -182,7 +182,10 @@ def main() -> int:
     out["positive_control"] = out["positive_control_narrow"]
     out["comparator_control"] = out["comparator_control_narrow"]
 
-    log.rule("W-D.4 — PER-FORK FORENSICS on every divergence")
+    log.rule("W-D.4 — PER-FORK FORENSICS on every divergence, AT THE 2 x 1 CELL")
+    log("SCOPE", "The forensics below are the 2 x 1 cell's. The 2 x 3 cell's divergences are "
+                 "reported in W-D.2b and are NOT dissected here — stated rather than left to "
+                 "look like an absence of divergences (§0.1 pt 4 cuts both ways).")
     out["forensics"] = {}
     by_case = {c["id"]: c for _, c in CASES}
     for mode in ("actor", "total"):
@@ -252,16 +255,18 @@ def main() -> int:
                 "— VERBS ONLY. `Query.opening_set` returns `Candidate(verb, subject, why, "
                 "operands)`, so two candidate lists with the SAME VERBS about DIFFERENT SUBJECTS "
                 "compare EQUAL and the fork is scored RECONVERGED.")
-    subj = {}
-    for mode in ARMS:
-        files = sorted(OUT.glob(f"wd_subj_{mode}_*.json"),
-                       key=lambda q: int(q.stem.split("_")[-2]))
+    def collect_subj(slots: str, mode: str) -> dict:
+        pat = (f"wd_subj_{mode}_*.json" if slots == "narrow"
+               else f"wd_subj_{slots}_{mode}_*.json")
+        files = sorted(OUT.glob(pat), key=lambda q: int(q.stem.split("_")[-2]))
         parts = [json.load(open(f)) for f in files]
+        if not parts:
+            return {}
         k = collections.Counter()
         for pt in parts:
             for kk, vv in pt["changed_slot_kinds"].items():
                 k[kk] += vv
-        subj[mode] = dict(
+        r = dict(
             genuine=sum(pt["genuine"] for pt in parts),
             diverged=sum(pt["diverged"] for pt in parts),
             reconverged=sum(pt["reconverged"] for pt in parts),
@@ -271,44 +276,80 @@ def main() -> int:
             no_live_window=sum(pt["no_live_window"] for pt in parts),
             inert=sum(pt["inert"] for pt in parts),
             changed_slot_kinds=dict(k))
-        subj[mode]["reconvergence_rate"] = (subj[mode]["reconverged"] / subj[mode]["genuine"]
-                                            if subj[mode]["genuine"] else None)
-    out["widened_fingerprint"] = subj
-    for mode in ARMS:
-        r, v = subj[mode], out["narrow"][mode]
-        log("MEASURE", f"mode={mode:5} | (verb, subject) fingerprint: RECONVERGED "
-                       f"{r['reconverged']}/{r['genuine']} = "
-                       f"{r['reconvergence_rate']*100:.2f}% · DIVERGED {r['diverged']}   "
-                       f"[verb-only, same run: {v['reconverged']}/{v['genuine']} = "
-                       f"{v['reconvergence_rate']*100:.2f}%, DIVERGED {v['diverged']}]")
-        log("  KINDS", f"changed window slots by kind: {r['changed_slot_kinds']}")
-    ok = all(subj[m]["changed_slot_kinds"].get("VERB-SET", 0) == out["narrow"][m]["diverged"]
-             for m in ARMS)
-    log("CROSS-CHECK", f"VERB-SET changed slots == the verb-only instrument's DIVERGED count, in "
-                       f"every arm: {ok} "
-                       f"({ {m: (subj[m]['changed_slot_kinds'].get('VERB-SET', 0), out['narrow'][m]['diverged']) for m in ARMS} })",
-        "the two instruments are the same instrument at two resolutions, and this is the "
-        "arithmetic that says so — the verb-only probe sees exactly the VERB-SET changes and "
-        "nothing else")
+        r["reconvergence_rate"] = (r["reconverged"] / r["genuine"]) if r["genuine"] else None
+        return r
+
+    out["widened_fingerprint"] = {}
+    for slots, label in (("narrow", "2 x 1 = 2 slots"), ("2x3", "2 x 3 = 6 slots")):
+        subj = {m: collect_subj(slots, m) for m in ARMS}
+        out["widened_fingerprint"][slots] = subj
+        if not all(subj.values()):
+            log("MEASURE", f"[{label}] NOT RUN — no `wd_subj_*` chunks on disk for this cell. "
+                           f"Stated rather than silently omitted: the widened fingerprint is "
+                           f"unmeasured here, which is not the same as measured at 100%.")
+            continue
+        for mode in ARMS:
+            r, v = subj[mode], out[slots][mode]
+            log("MEASURE", f"[{label}] mode={mode:5} | (verb, subject) fingerprint: RECONVERGED "
+                           f"{r['reconverged']}/{r['genuine']} = "
+                           f"{r['reconvergence_rate']*100:.2f}% · DIVERGED {r['diverged']}   "
+                           f"[verb-only, same run: {v['reconverged']}/{v['genuine']} = "
+                           f"{v['reconvergence_rate']*100:.2f}%, DIVERGED {v['diverged']}]")
+            log("  KINDS", f"changed window slots by kind: {r['changed_slot_kinds']}")
+            assert r["genuine"] == v["genuine"], (
+                f"{slots}/{mode}: the widened copy scored {r['genuine']} genuine forks and the "
+                f"shipped probe {v['genuine']}. The fingerprint must change only WHETHER a fork "
+                "diverged, never WHICH forks are genuine — so the two columns are two "
+                "instruments, not two resolutions")
+        ok = all(subj[m]["changed_slot_kinds"].get("VERB-SET", 0) == out[slots][m]["diverged"]
+                 for m in ARMS)
+        pairs = {m: (subj[m]["changed_slot_kinds"].get("VERB-SET", 0), out[slots][m]["diverged"])
+                 for m in ARMS}
+        dist = {m: out[slots][m]["changed_distribution"] for m in ARMS}
+        log("CONSISTENCY", f"[{label}] VERB-SET changed slots == the verb-only instrument's "
+                           f"DIVERGED count, in every arm: {ok} ({pairs})",
+            "⚠ THIS IS A CONSISTENCY CHECK, NOT INDEPENDENT CORROBORATION, AND THE FIRST WRITING "
+            "OF IT OVERCLAIMED. It cannot fail while every divergent fork changes EXACTLY ONE "
+            f"window slot — `changed_distribution` is {dist} — because then the VERB-SET slot "
+            "count is identically the count of verb-differing divergent forks. It would become "
+            "informative only if a fork ever changed two verb-differing slots. Raised by an "
+            "independent read-only critic, 2026-09-04.")
     log("⚠ CONSEQUENCE", "THE CONTROL IS NOT 100% AT THIS RESOLUTION, AND THAT RETRACTS THE "
                           "DIAGNOSIS THE PUBLISHED 100% RESTED ON — not the arithmetic.",
         "ARM 9c reads: *'the deliberation never reads the world ... the only channel by which "
         "anything that happened can reach a later decision is a CLAIM in the actor's ledger'*, "
         "and ARM 9d then shows that channel closed. `opening_set` indeed reads no World — but its "
         "`q` DOES: `questions_for(w, p)` takes a World, and clause 3 is `subject in "
-        "referents(q)`. TRACED, not inferred (NPC-088, `none`, fork at decision 0, "
-        "`('move','r_hearth')` -> `('speak','r_hearth')`): p_c's tick-1 question list goes "
-        "`[claim_landed('p_c'), claim_landed('r_hearth'), ...]` in the baseline to "
-        "`[claim_landed('r_hearth'), claim_landed('p_c'), ...]` in the fork, "
-        "`question_aggregation_rule='first'` takes `qs[0]`, and every one of p_c's seven "
-        "candidates changes subject from `p_c` to `r_hearth` while the verb sequence stays "
-        "identical. So a fork ALREADY changed what a person deliberates ABOUT before `W-B`, "
-        "through Q2 and the ledger's APPEND ORDER — a second ledger channel that is not "
-        "`belief_contradicts`.")
-    log("SO THE TWO CHANNELS SEPARATE", "SUBJECT-ONLY changes are the OLD channel (present at "
-                                        "`none`, 510 slots) and VERB-SET changes are `W-B`'s "
-                                        "(0 at `none`, 62 at `actor`, 182 at `total`). They do "
-                                        "not overlap in any arm.")
+        "referents(q)`.")
+    log("⚠ THE CARRIER", "IT IS NOT THE LEDGER'S APPEND ORDER. `questions_for` SORTS, WHICH "
+                          "DESTROYS APPEND ORDER: `out.sort(key=lambda q: (order[q.source], "
+                          "q.id))`. The first writing of this item named append order and that is "
+                          "corrected here. Found by an independent read-only critic, 2026-09-04.",
+        "Several `claim_landed` questions SHARE a source, so among them `q.id` alone decides — "
+        "and `q.id` is `f'q:claim:{c.id}'` where `c.id` is a CONTENT HASH, "
+        "`H(w.world_seed, w.tick, pid, f'claim:{e.id}:{n}')`, minted in `SeasonDriver.witness` "
+        "off the DEPOSITING EVENT'S OWN ID. So WHICH QUESTION A PERSON ANSWERS IS DECIDED BY "
+        "LEXICOGRAPHIC ORDER OVER CONTENT-HASHED CLAIM IDS. That is an undeclared tiebreaker with "
+        "decision consequences, and it sits one level ABOVE `H-54`, whose three arms "
+        "(`first`/`all`/`one_per_source`) every one read `qs[0]` or `qs[0].id` and none of which "
+        "says what breaks ties WITHIN a source. RE-TRACED with a spy on `questions_for` (NPC-088, "
+        "`none`, fork at decision 0, p_a `move` -> `speak`; p_c at tick 1): the baseline's five "
+        "`claim_landed` questions come back at LEDGER INDICES [6, 0, 1, 9, 10] and the fork's six "
+        "at [12, 5, 0, 1, 8, 9] — neither is append order, both are ascending `q.id`. The fork's "
+        "`speak` emits `speech.made` about `r_hearth`; that lands in p_c's ledger at index 12 as "
+        "claim `0261dc5bd7431c56`, and `0261...` < `219a...`, so `qs[0]` goes from "
+        "`q:claim:219a9f960a5fa368` (referents ('p_c',)) to `q:claim:0261dc5bd7431c56` "
+        "(referents ('r_hearth',)) — which is exactly the p_c -> r_hearth subject flip reported, "
+        "reached by a different mechanism than the one reported. ⚠ AND THE DEPOSITING EVENT'S "
+        "SUBJECT IS `p_a`, NOT `p_c`: the pre-`W-B` channel is CROSS-PERSON at the control arm, "
+        "because event-kind claims are minted in every arm and `fan_out_mode` defaults to "
+        "`total`. So a fork already changed what a person deliberates ABOUT before `W-B`, through "
+        "Q2 and a content-hash tiebreak nobody declared.")
+    log("SO THE TWO CHANNELS SEPARATE", "SUBJECT-ONLY changes are the OLD channel and VERB-SET "
+                                        "changes are `W-B`'s. They do not overlap in any arm — "
+                                        "the per-cell counts are in the KINDS lines above rather "
+                                        "than transcribed here, so this sentence cannot go stale "
+                                        "against them.")
 
     (OUT / "WD_LOG.txt").write_text(log.text() + "\n")
     json.dump(out, open(OUT / "wd_acceptance.json", "w"), indent=1, default=str)
