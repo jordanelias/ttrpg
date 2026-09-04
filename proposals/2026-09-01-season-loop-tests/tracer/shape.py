@@ -566,6 +566,15 @@ CLAIM_SUBJECT_RULES = roster("claim_subject_rules")
 # like every other roster, and for the reason `TITLE_DOMAINS` records below: an unbound
 # roster is the one whose absence goes unnoticed.
 OBSERVATION_DEPOSIT_MODES = roster("observation_deposit_modes")
+# `W-E`. THE THREE BANDS PERSONAL COMBAT CAN DISTINGUISH, and HOW MUCH BODY A WOUND COSTS. Bound
+# here with every other roster rather than beside their reader in the S39 block below, because
+# that is where an absent roster's refusal is guaranteed to fire (`TITLE_DOMAINS`' lesson, above).
+# ⚠ `ordered=True` AND UNPACKED POSITIONALLY: the order is SEVERITY, worst first, and the roster's
+# own note says so. These are NOT the ladder's four bands -- combat is exempt from the ladder by
+# Jordan's 2026-09-03 ruling, and `degree_of`'s margin branch calls the tree's owner for those.
+COMBAT_BANDS = roster("combat_degree_bands", ordered=True)
+FELLED, WOUNDED, UNTOUCHED = COMBAT_BANDS
+WOUND_HARM_MODELS = roster("wound_harm_models")
 # ⚠ BOUND AT IMPORT LIKE THE OTHERS, AND THAT IS THE POINT. `titles` was the ONE roster read
 # lazily through a bare `_ROSTERS.get(...) or {}`, so it alone got no existence refusal -- and
 # because `_req_revoke` fails OPEN into purview-for-everything when the mapping is empty, the one
@@ -1876,6 +1885,14 @@ DEFAULT_FIXTURES = Fixtures(
     # `stores >= 0` admits every giver: a run at this point shows how much of the transfer
     # behaviour rests on the default rather than on the world.
     default_transfer_amount=1,         # `H-94`, swept 0 / 1 / 3
+    # `W-E` / `H-125`. HOW MUCH BODY A WOUND COSTS WHEN THE SCENE SAYS THE SUBJECT BLED AND DID
+    # NOT GO DOWN. Part E's `writes:` names the CELL and never the VALUE, and no in-chain document
+    # supplies this one -- so it is declared, defaulted and swept rather than chosen in a body,
+    # which is what `H-114` measured the cost of (`harm` defaulted to the whole body, so a fold at
+    # `Wounded` deleted the person). The default introduces NO CONSTANT: it scales the body by the
+    # health fraction the ENGINE computed. `total` is the CONTROL and is the code exactly as it
+    # stood before `W-E`. Injection site: this line, read by `_eff_kill`.
+    wound_harm_model="scene_fraction",  # `H-125`, swept scene_fraction / total / none
 )
 # The immutable baseline. `ALIGNMENT` is REBOUND by a sweep; this is not, so every sweep point is
 # built from the declared table rather than from the previous point (see `alignment_at`).
@@ -5140,23 +5157,81 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
     ⚠ THE TENURE ENDS THROUGH THE DEATH, which is §15.3's rule and the reason this is ONE effect
     rather than three writes a caller sequences: "a plague that kills the praefect ends his
     tenure THROUGH THE DEATH; A STORM CANNOT TOUCH IT." A wound that does not kill writes only
-    the band, so the same verb covers both -- which is why the table's row is `kill / wound`."""
+    the band, so the same verb covers both -- which is why the table's row is `kill / wound`.
+
+    ⚠ `W-E`, 2026-09-04. THE EFFECT NOW TAKES THE RESOLUTION, AND `harm` IS GONE. Register row
+    `H-114` measured what the old signature cost: the effect could not honour the branch
+    `writes_at` had just selected, and `int(d.get("harm", p.body))` defaulted the harm to the
+    person's ENTIRE body -- so a fold at degree `Wounded` reached `p.body == 0`, passed
+    `if p.body > 0`, and DELETED THE PERSON. Both halves are closed here, and the `W-C` carve-out
+    that named `harm` as `W-E`'s to own is retired with its subject rather than widened.
+
+    WHERE THE MAGNITUDE COMES FROM NOW, AND WHY IT IS NOT INVENTED. JORDAN, 2026-09-04, VERBATIM:
+    *"the combat engine determines the result there. your code just has to accept the result."*
+    So the harm is not a number this file chooses: it is the LOSS THE SCENE ALREADY COMPUTED, on
+    the engine's own `WoundTracker`, read as the fraction of the subject's health the fight left
+    standing. No constant is introduced by the default arm -- a fraction needs none, which is
+    exactly why it is the default and the other two arms are the sweep.
+
+    THE THREE ARMS (`wound_harm_model`, registered at `H-125`, injected at `DEFAULT_FIXTURES`):
+      `scene_fraction`  body <- body x health_remaining / health_full. The scene decides.
+      `total`           any wound is lethal. ⚠ THIS IS THE CONTROL AND IT IS THE BEHAVIOUR THIS
+                        FUNCTION HAD BEFORE `W-E` (`harm` defaulting to full body), so the arm
+                        that shows what the degree is worth is the code as it stood.
+      `none`            a wound writes nothing. The fold's own write-nothing guard then emits the
+                        REFUSAL rather than the success -- the second control, and it isolates
+                        "the band selected a different write set" from "the band changed a value".
+
+    ⚠ A WOUND CANNOT KILL, AND THE FLOOR IS STRUCTURAL RATHER THAN NUMERIC. The `Wounded` band
+    means the engine did NOT fell this person; a model that took their body to 0 would contradict
+    the band it is implementing. `max(1, ...)` is `combat_seam.derive_party`'s own floor
+    (*"a dying person still fights"*), followed rather than reinvented."""
     d = a.payload if isinstance(a.payload, dict) else {}
     who = d.get("subject")
     p = w.persons.get(who)
     if p is None:
         return None
-    # ⚠ `harm` KEEPS ITS DEFAULT AND `W-C` LEFT IT DELIBERATELY -- IT IS `W-E`. Every other
-    # `.get(<operand>, <literal>)` in this block is deleted, and this one is not, because `harm`
-    # is NOT in `rosters.yaml: requires_operands`: no cell can bind it, `operands_for` cannot
-    # derive it, and there is no route by which a computed act could carry it. Deleting the
-    # default here without that route would make `kill / wound` raise on every act the loop
-    # produces, so the honest move is to name the item that supplies it rather than to break the
-    # verb for tidiness. ⚠ AND THE DEFAULT IS NOT INNOCENT: `p.body` is FULL body, so an act that
-    # names no harm KILLS. `W-E` owns both halves.
-    p.body = max(0, p.body - int(d.get("harm", p.body)))
-    if p.body > 0:
+    # ⚠ NO SCENE, NO HARM -- AND THIS IS A REFUSAL TO INVENT, NOT A MISSING FEATURE. `kill / wound`
+    # declares `contests: the body`, so the only lawful route into this effect is through the
+    # seam; an act folded without one has no scene to read a severity off, and the pre-`W-E`
+    # answer to that was to kill. `writes_at(None)` already refuses one line earlier for the same
+    # reason, so this is the second gate on the same road rather than a new rule.
+    if res is None or not isinstance(res.result, dict):
+        raise Unspecified(
+            f"`kill / wound` on {who!r} was folded with no scene to read a severity from",
+            "S39.4/H-98",
+            needs="a Resolution from `resolve()`'s seam branch -- the personal-combat scene",
+            law="Jordan 2026-09-03 -- kill/wound degrees are taken directly from scene combat. A "
+                "harm this function chose would be the number `H-114` measured: the old default "
+                "was the person's whole body, so an act naming no harm killed")
+    st = (res.result.get("wound_state") or {}).get(who) or {}
+    model = w.fixtures.get("wound_harm_model")
+    if model not in WOUND_HARM_MODELS:
+        raise Unspecified(
+            f"wound-harm model {model!r} is not in the roster", "H-125",
+            needs=f"one of {sorted(WOUND_HARM_MODELS)}",
+            law="`observers_for`'s precedent and its reason -- *an unrecognised mode silently "
+                "falling back would make every measurement of this sweep read the control*")
+    if res.degree == FELLED:
+        # The scene says this person went down, and the table says that is the kill. The body
+        # goes to 0 on every arm: the arms grade a WOUND, and a felling is not one.
+        p.body = 0
+    elif model == "none":
         return None
+    elif model == "total":
+        p.body = 0
+    else:                                       # `scene_fraction`
+        full = int(st.get("health_full") or 0)
+        left = int(st.get("health_remaining") or 0)
+        if full <= 0:
+            raise Unspecified(
+                f"the scene reports no health scale for {who!r} ({st!r})", "S39.4/H-125",
+                needs="`health_full` on the subject's wound state",
+                law="the magnitude is READ from the scene; a scene that carries none cannot be "
+                    "read, and choosing a number here is what this arm exists not to do")
+        p.body = max(1, p.body * max(0, left) // full)
+    if p.body > 0:
+        return [who]
     for t in list(p.tenures) + list(w._unowned):
         if (t.subject == who or t.object == who) and t.live:
             t.until = w.tick
@@ -6030,49 +6105,63 @@ class SeasonDriver:
                             causes=[a.id])
                 if isinstance(r, ContestError):
                     TRACE.note(f"contest returned {r}", "S39.3")
-                elif isinstance(r, dict):
-                    # ⚠ THE SEAM RETURNS A SUBSYSTEM RESULT, NOT EVENTS, AND REV 1 EXTENDED THE
-                    # EVENT LIST WITH ITS KEYS. `out.extend(r)` over a dict yields the STRINGS
-                    # 'status', 'module', 'winner', ... so `resolve()` handed nine strings back to
-                    # `season()` as if they were Events. Invisible until now only because the road
-                    # to the seam was closed (the one-claimant bug above): the first act to reach
-                    # the seam is the first act to hit this.
-                    #
-                    # ⚠ WHAT THE FOLD MAY WRITE HERE IS `H-98`, AND IT IS OPEN. The verb row
-                    # declares `emits: [person.died]` and `writes: [Person.body, Person.exists,
-                    # Tenure.until]`; the subsystem returns a WINNER and a legitimate UNDECIDED
-                    # case. Turning "p_low won" into "p_mid died" is the mapping H-98 says nobody
-                    # has made -- and S27.2 calls inventing it the second resolver. So the fold
-                    # records THAT THE CONTEST RAN and who prevailed, with `changes=[]`: no state
-                    # moves, no degree is minted, and `person.died` stays unemitted, which is the
-                    # honest report that the outcome model is missing rather than empty.
-                    #
-                    # ⚠ WHAT CHANGED 2026-09-03, AND WHAT DID NOT (#358 rev.2 §C.4 / F6).
-                    # THE PLACE THE MAPPING LANDS NOW EXISTS: `VerbRow.writes_at(degree)` is the
-                    # reader, and `kill / wound` declares its four branches in `verb_table.yaml`
-                    # at grade `assumption` with a sweep. So this is no longer "there is nowhere
-                    # to put the answer" -- it is "the bands are not ruled".
-                    # WHAT DID NOT CHANGE: `combat_seam.resolve` returns `winner` and
-                    # `result in {1, -1, 0}`. A WINNER IS NOT A DEGREE. Turning one into the
-                    # other is still H-98, still tier 0, still `absent`, and filling it here
-                    # would be an instrument inventing off the register (G.4.8). The correct
-                    # sequence is: the subsystem returns a MARGIN -> the one ladder mints a
-                    # Degree -> `writes_at` selects the branch. Two of those three now exist.
-                    _win = r.get("winner")
-                    out.append(Event(
-                        H(w.world_seed, w.tick, a.actor, f"contest:{_contests[0]}:{a.id}"),
-                        "contest.resolved", a.actor, [], [a.id], w.tick))
-                    TRACE.decision(
-                        f"contest for {_contests[0]!r} resolved; winner={_win!r}", "S39/H-98",
-                        chose="record that it ran; write nothing",
-                        alternatives=["map winner -> person.died (H-98: the missing model)",
-                                      "raise (E2: failure emits, never raises)"])
-                else:
+                    continue
+                if not isinstance(r, dict):
                     out.extend(r)
-                continue
-            # S27.1: CONTENTION IS AN ORDERED FOLD. Each act sees the world its predecessors
-            # left. SEQUENCE, NOT SIMULTANEITY -- and NO ACT NEEDS TO KNOW ANOTHER EXISTED.
-            produced = self._fold(w, a)
+                    continue
+                # ⚠ THE SEAM RETURNS A SUBSYSTEM RESULT, NOT EVENTS, AND REV 1 EXTENDED THE
+                # EVENT LIST WITH ITS KEYS. `out.extend(r)` over a dict yields the STRINGS
+                # 'status', 'module', 'winner', ... so `resolve()` handed nine strings back to
+                # `season()` as if they were Events. Invisible until now only because the road
+                # to the seam was closed (the one-claimant bug above): the first act to reach
+                # the seam is the first act to hit this.
+                #
+                # ⚠ `W-E`, 2026-09-04 -- THIS BRANCH USED TO `continue`, AND THAT WAS THE FIRST
+                # OF THE THREE BROKEN LINKS. What stood here recorded THAT a contest ran, as a
+                # `contest.resolved` Event with `changes=[]`, and threw the outcome away: a lost
+                # fight and a won one produced the same Event, `Event.degree` was never assigned
+                # by anything, and `emits_at` had no caller anywhere in the tracer (`H-113`).
+                #
+                # ⚠ AND WHAT IT REFUSED TO DO IS STILL REFUSED. The old comment's argument was
+                # *"the subsystem returns a WINNER and a winner is not a degree; mapping one onto
+                # the other is the second resolver S27.2 forbids"*. That argument is CORRECT and
+                # is honoured: nothing here maps a winner. `degree_of` reads the band off the
+                # SCENE -- the engine's own `WoundTracker`, on the Combatants the seam still
+                # holds -- which is Jordan's 2026-09-03 ruling, *"kill/wound degrees should be
+                # directly taken from scene combat"*, and 2026-09-04, *"the combat engine
+                # determines the result there. your code just has to accept the result."*
+                # `winner` is not read by anything below.
+                #
+                # ⚠ AND THE BAND IS READ OFF THE ACT'S **SUBJECT**, NOT OFF THE LOSER.
+                # `kill / wound` writes on `payload["subject"]`, so reading the loser would kill
+                # the target whenever the ACTOR was the one felled. `verb_table.yaml`'s
+                # `writes_source:` cell said `wound_state[loser]` and is corrected there.
+                #
+                # ⚠ `contest.resolved` IS GONE AND ITS REMOVAL IS A CLOSURE, NOT A LOSS. It was
+                # one of the three BODY LITERALS `README.md` records invariant 7 as refusing (a
+                # kind emitted by the fold that no `emits:` column declares). The outcome is now
+                # reported by the verb's OWN degree-keyed `emits:` -- `person.died` /
+                # `body.changed` / `contest.undecided` -- which is where invariant 7 says a kind
+                # is declared. Two body literals remain (`act.ineligible`, `act.refused`) and
+                # they are not this item's.
+                produced = self._fold(w, a, Resolution(degree_of(r, _target), r))
+                TRACE.decision(
+                    f"contest for {_contests[0]!r} resolved", "S39/H-98",
+                    chose=f"read the degree off the scene and fold at it "
+                          f"({produced[0].degree if produced else '?'})",
+                    alternatives=["map winner -> person.died (S27.2: the second resolver)",
+                                  "record that it ran and write nothing (the pre-`W-E` behaviour: "
+                                  "a lost fight wrote exactly what a won one did)"])
+            else:
+                # S27.1: CONTENTION IS AN ORDERED FOLD. Each act sees the world its predecessors
+                # left. SEQUENCE, NOT SIMULTANEITY -- and NO ACT NEEDS TO KNOW ANOTHER EXISTED.
+                produced = self._fold(w, a)
+            # ⚠ `W-E`: THE TWO PATHS SHARE THE BOOKKEEPING BELOW, AND THAT IS §8 RATHER THAN
+            # TIDINESS. The contest branch used to `continue` past all of it, so a contested act's
+            # Events were never entered in `act_of` and its deltas never reached §27.3's
+            # accumulator. The moment the seam started returning something the fold could write,
+            # duplicating those three loops inside the branch would have been the second copy of
+            # a rule that gets to disagree with the first.
             # ⚠ WHICH ACT EMITTED WHICH EVENT, recorded once here rather than re-derived from the
             # id hash by every consumer. WITNESS needs it to answer *what is this deposit ABOUT*
             # for an Event that wrote nothing: an act that changes no state has an empty
@@ -6450,13 +6539,13 @@ def contest_subsystem(prize: Any) -> Optional[dict]:
 # whose state decides which branch of the writes applies. The table's cell is corrected there.
 # ---------------------------------------------------------------------------
 
-# THE THREE BANDS PERSONAL COMBAT CAN DISTINGUISH. Named here because this is where the reading
-# lives; `verb_table.yaml` keys `writes:`/`emits:` on the same three, and `writes_at`'s own
-# refusal prints both sets when they disagree, so drift is loud at the first act that folds.
+# ⚠ THE THREE BANDS AND THE HARM MODEL ARE DATA, NOT LITERALS HERE — `rosters.yaml:
+# combat_degree_bands` / `wound_harm_models`, bound at import beside every other roster (Jordan
+# 2026-09-02: definitions are not hardcoded). `verb_table.yaml` keys `writes:`/`emits:` on the
+# same three strings, and `writes_at`'s own refusal prints BOTH SETS when they disagree, so drift
+# between the reading and the table is loud at the first act that folds.
 # ⚠ A FOURTH BAND (decisive vs narrow) HAS NO SOURCE IN THE DATA and is NOT invented -- that is
 # the whole of what survives in `H-98` after the 2026-09-03 ruling.
-FELLED, WOUNDED, UNTOUCHED = "Felled", "Wounded", "Untouched"
-COMBAT_BANDS = (FELLED, WOUNDED, UNTOUCHED)
 
 _LADDER: Optional[tuple] = None
 _LADDER_ERROR: str = ""

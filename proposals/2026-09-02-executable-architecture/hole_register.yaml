@@ -2339,9 +2339,12 @@ rows:
       retracted with it. `test_the_corpus_runs_and_the_ranking_cannot_discriminate` pins the
       threshold at 1 again and no longer pins the shipped default, so the default's falsifier moved
       to the clause-4 test named above rather than being dropped.
-      ⚠⚠ **`W-D` IS RUN AND THIS IS ITS RESULT. THE ACCEPTANCE IS MET ON THE PUBLISHED INSTRUMENT
-      AND THE PUBLISHED INSTRUMENT IS TOO COARSE TO LICENSE THE WORD `DECISION`. BOTH HALVES ARE
-      THE RESULT; REPORTING ONLY THE FIRST WOULD BE THE `claim.held` FAILURE ONE RESOLUTION UP.**
+      ⚠⚠ **`W-D` IS RUN AND THIS IS ITS RESULT, IN THREE HALVES RATHER THAN TWO — REPORTING ONLY
+      THE FIRST WOULD BE THE `claim.held` FAILURE ONE RESOLUTION UP. (i) THE ACCEPTANCE IS MET ON
+      THE PUBLISHED INSTRUMENT AT 2 x 1 AND IS NOT MET AT 2 x 3, THE OTHER CELL WHERE THE QUESTION
+      IS ASKABLE AND THE CHEAPER INTERVENTION OF THE TWO — so the verdict is CELL-DEPENDENT.
+      (ii) THE PUBLISHED INSTRUMENT IS TOO COARSE TO LICENSE THE WORD `DECISION`. (iii) THE
+      MECHANISM THE RETRACTION NAMED WAS ITSELF WRONG. All three are below.**
       `arm9_forking.fork_case`, unmodified, over all 89 runnable worlds (`apply_rescale` applied —
       THE 89 BASIS, not the 86 one every other figure on this row uses), seed 0, 4 seasons, at
       `scene_budget=2` (a declared `H-10` arm) x `interactions_per_scene=1` (a declared `H-76`
