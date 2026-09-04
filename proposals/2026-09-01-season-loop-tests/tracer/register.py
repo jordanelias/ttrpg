@@ -509,6 +509,22 @@ def _contains(hay: str, needle: str) -> bool:
     return True
 
 
+def _rows_text_excluding(reg: dict, row: dict) -> str:
+    """Every string field of every row EXCEPT `row`, normalised and joined — the haystack for a
+    `cite:` that names this register as a source. See `verify_citations`: a row may not be its own
+    evidence, and excluding it at the data level is the only way that cannot silently no-op."""
+    parts: list = []
+    for other in reg["rows"]:
+        if other is row:
+            continue
+        for v in other.values():
+            if isinstance(v, str):
+                parts.append(v)
+            elif isinstance(v, list):
+                parts.extend(x for x in v if isinstance(x, str))
+    return re.sub(r"\s+", " ", " ".join(_cite_norm(p) for p in parts))
+
+
 def verify_citations(reg: dict) -> list:
     """EVERY `:NNN` A `cite:` NAMES MUST EXIST, AND EVERY VERBATIM QUOTE MUST BE THERE.
 
@@ -593,21 +609,31 @@ def verify_citations(reg: dict) -> list:
             hit_where, hit_any = False, False
             for token, path in named.items():
                 body = [_cite_norm(l) for l in path.read_text().splitlines()]
-                whole = " ".join(body)
-                # ⚠ A ROW MAY NOT BE ITS OWN SOURCE. When the named source is THIS REGISTER --
-                # which is legitimate and used, e.g. `H-122` quoting `H-94` -- the row's OWN
-                # `cite:` is removed from the haystack first. Without this, naming the register in
-                # your own `cite:` makes every quotation verify AGAINST ITSELF, which is a
-                # one-token way to pass the anti-fabrication gate and is WORSE than the defect it
-                # was added to fix: the `W-D` pass first "fixed" a flagged self-quote by DELETING
-                # ITS QUOTE MARKS (making the text invisible to `QUOTE_RE`), was told to restore
-                # them and name the register instead, and MUTATION-CHECKED THAT REMEDY -- planting
-                # `"71 GENUINE forks, all DIVERGED and never reconverged at all"` in `H-117`,
-                # which no source says, and watching `CITATIONS: all resolve` come back green.
-                # With this line the same mutation FIRES. Quoting another row still verifies;
-                # quoting yourself no longer does. 2026-09-04.
+                # ⚠ COLLAPSE AGAIN AFTER THE JOIN. `_cite_norm` collapses whitespace WITHIN a
+                # line, and a BLANK line normalises to "", so joining with " " puts a DOUBLE space
+                # where the source had a paragraph break -- while the YAML-folded `cite` has a
+                # single one. Without this the self-citation removal below silently missed any row
+                # whose `cite:` contains a blank line (`H-117` did), which is a no-op guard that
+                # reports green. Collapsing can only make more text match, never less, so no
+                # previously-resolving citation is affected.
+                whole = re.sub(r"\s+", " ", " ".join(body))
+                # ⚠ A ROW MAY NOT BE ITS OWN SOURCE. Naming this register in your own `cite:`
+                # otherwise makes every quotation verify AGAINST ITSELF -- a one-token way past
+                # the anti-fabrication gate, and WORSE than the defect it was added to fix: the
+                # `W-D` pass first "fixed" a flagged self-quote by DELETING ITS QUOTE MARKS
+                # (invisible to `QUOTE_RE`), then restored them and named the register instead,
+                # and MUTATION-CHECKED that remedy -- planting a `71 GENUINE forks, all DIVERGED`
+                # sentence no source says, and watching `CITATIONS: all resolve` come back green.
+                # ⚠ THE HAYSTACK IS REBUILT FROM THE OTHER ROWS' PARSED FIELDS, NOT BY DELETING
+                # THIS ROW'S TEXT FROM THE FILE. A string subtraction was tried first and SILENTLY
+                # DID NOTHING on `H-117`, because `_cite_norm` strips a leading `+` as a list
+                # marker per line while the YAML-folded `cite` keeps it mid-string, so the two
+                # never matched -- a guard that reports green without checking anything, which is
+                # the failure class this whole pass is about. Excluding at the data level cannot
+                # miss. Quoting another row still verifies; quoting yourself no longer does.
+                # 2026-09-04.
                 if path == REGISTER:
-                    whole = whole.replace(_cite_norm(cite), " ")
+                    whole = _rows_text_excluding(reg, r)
                 if _contains(whole, needle):
                     hit_any = True
                     if token != "#353" or not refs:

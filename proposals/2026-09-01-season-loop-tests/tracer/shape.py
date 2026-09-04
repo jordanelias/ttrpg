@@ -57,6 +57,7 @@ from __future__ import annotations
 import contextlib
 import enum
 import hashlib
+import sys
 from dataclasses import dataclass, field, fields as dc_fields
 from pathlib import Path
 from typing import Any, Callable, Optional
@@ -4947,7 +4948,7 @@ def _operand(a: "Act", name: str):
 # person, it tells one, and whether they go is their own act next season.
 
 @effect_for("confer")
-def _eff_confer(w: "World", a: "Act") -> list:
+def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
     """Seats an office: a new `hold` Tenure opens, and any prior holder's closes.
 
     ⚠ AN EFFECT MUTATES AND RETURNS THE IDS IT TOUCHED; IT DOES NOT CALL `w.write`. The fold
@@ -4984,7 +4985,7 @@ def _eff_confer(w: "World", a: "Act") -> list:
 
 
 @effect_for("revoke")
-def _eff_revoke(w: "World", a: "Act") -> list:
+def _eff_revoke(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
     """Unseats an office: the live `hold` closes. The mirror of `confer`, which is why the two are
     the pair that proves the slice — one opens what the other closes, on the same row."""
     d = (a.payload or {}) if isinstance(a.payload, dict) else {}
@@ -4998,7 +4999,7 @@ def _eff_revoke(w: "World", a: "Act") -> list:
 
 
 @effect_for("convene")
-def _eff_convene(w: "World", a: "Act") -> list:
+def _eff_convene(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
     """Schedules a sitting: a Date comes due, with a ConveningCondition attached — Part E's two
     writes, both done by this one effect because the fold calls it once for the row.
 
@@ -5018,7 +5019,7 @@ def _eff_convene(w: "World", a: "Act") -> list:
 
 
 @effect_for("move")
-def _eff_move(w: "World", a: "Act") -> None:
+def _eff_move(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
     """§D4 / #353 §15.1: travel is a TENURE ALTER, owned by the traveller as the Tenure's subject.
     The old leg closes and a new one opens; the destination rides on the payload where the act
     names one. ⚠ This is `H-63`: Part E's `writes:` names the three cells and never the values, so
@@ -5069,7 +5070,7 @@ def _eff_move(w: "World", a: "Act") -> None:
 
 
 @effect_for("work")
-def _eff_work(w: "World", a: "Act") -> None:
+def _eff_work(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
     """`work` alters `(Site, condition)` by the act's declared delta. The DELTA IS NOT APPLIED
     HERE -- §27.3 sums every delta across the fold and clamps ONCE, so applying it per act would
     make the clamp arrival-order dependent, which §32 forbids. The write goes through the gate so
@@ -5087,7 +5088,7 @@ def _eff_work(w: "World", a: "Act") -> None:
 
 
 @effect_for("create_record")
-def _eff_create_record(w: "World", a: "Act") -> None:
+def _eff_create_record(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
     """§E3: `create_record` writes `(Record, exists)` and `(Record, stages)`. `H-63` is why the
     VALUES are here and not in the table.
 
@@ -5118,7 +5119,7 @@ def _eff_create_record(w: "World", a: "Act") -> None:
 
 
 @effect_for("destroy_record")
-def _eff_destroy_record(w: "World", a: "Act") -> None:
+def _eff_destroy_record(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
     """§E3: writes `(Record, exists)`. The Record goes, and every `hold` on it ends -- S15.3's
     rule that a tenure dies THROUGH the death of what it is over, never beside it."""
     d = a.payload if isinstance(a.payload, dict) else {}
@@ -5133,7 +5134,7 @@ def _eff_destroy_record(w: "World", a: "Act") -> None:
 
 
 @effect_for("kill / wound")
-def _eff_kill(w: "World", a: "Act") -> None:
+def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
     """§E3: writes `(Person, body)`, `(Person, exists)` and `(Tenure, until)`.
 
     ⚠ THE TENURE ENDS THROUGH THE DEATH, which is §15.3's rule and the reason this is ONE effect
@@ -5164,7 +5165,7 @@ def _eff_kill(w: "World", a: "Act") -> None:
 
 
 @effect_for("utter")
-def _eff_utter(w: "World", a: "Act") -> None:
+def _eff_utter(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
     """§E3: writes `(Proposition, exists)`. §14: a Proposition is IDENTITY-BEARING AND IMMUTABLE,
     fixed at utterance and never destroyed -- `Proposition` is a frozen dataclass, so that is
     structural here rather than asserted."""
@@ -5179,7 +5180,7 @@ def _eff_utter(w: "World", a: "Act") -> None:
 
 
 @effect_for("transfer")
-def _eff_transfer(w: "World", a: "Act") -> None:
+def _eff_transfer(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
     """§54 item 7's mirror: the giver's store goes DOWN and the receiver's goes UP.
 
     ⚠ THE FIRST VERSION ONLY DECREMENTED, and §E3 says `transfer` writes `(Rung, stores)` **×2**,
@@ -5700,9 +5701,16 @@ class SeasonDriver:
             return []
         return [c for c in occasioned_by(w, getattr(sc, "occasion", None)) if c != a.id]
 
-    def _fold(self, w: "World", a: Act) -> list[Event]:
+    def _fold(self, w: "World", a: Act, resolution: "Resolution | None" = None) -> list[Event]:
         """ONE act through the table. This is what `effect` used to be, and the difference is
-        that it is the SAME code for every act and every caller."""
+        that it is the SAME code for every act and every caller.
+
+        ⚠ `resolution` IS WHAT THE SEAM RETURNED, AND IT IS THE PARAMETER `W-E` ADDED. It is
+        `None` for every uncontested act, which is every act the corpus produces, and on that
+        path nothing below changes: `writes_at(None)` and `emits_at(None)` on a verb with no
+        degree map return the same flat tuples the fold has always applied. A CONTESTED act
+        arrives here only from `resolve()`'s seam branch, carrying the band the subsystem's own
+        result decided (`degree_of`)."""
         self.resolved.append(a)      # observation only -- decides nothing, see `resolved`
         row = VERB_TABLE.get(a.verb)
         if row is None:
@@ -5730,11 +5738,16 @@ class SeasonDriver:
         # it. The alternative -- passing `observed` as a parameter to all four `ev(...)` call
         # sites -- puts the same fact in four places, which is `§8` one seam over.
         verdict = Verdict(UNKNOWN, ())
+        # `W-E`. THE THIRD BROKEN LINK: `Event.degree` was a declared field NOTHING EVER ASSIGNED
+        # -- `ID-13`'s test applied to the epistemic layer's own outcome column. It is assigned
+        # HERE, on the one path every act-emission takes (§8), rather than at the four `ev(...)`
+        # call sites. `None` on every uncontested act, which is honest: no contest graded it.
+        _degree = resolution.degree if resolution is not None else None
 
         def ev(kinds, causes, changes=None):
             return [Event(H(w.world_seed, w.tick, a.actor, f"{k}:{a.id}"),
                           k, a.actor, list(changes or []), list(causes), w.tick,
-                          observed=verdict.observed)
+                          degree=_degree, observed=verdict.observed)
                     for k in kinds]
 
         if not self._eligible(w, a, row):
@@ -5800,14 +5813,19 @@ class SeasonDriver:
         # resolver consults is not a weak mechanism, it is one that does not exist (ID-13), and
         # this file already carries three instances of that defect found the hard way.
         #
-        # ⚠ A CONTESTED VERB NEVER REACHES THIS LINE TODAY. The contest branch in `resolve()`
-        # `continue`s before the fold, because the subsystem returns a WINNER and no mapping to a
-        # degree exists (H-98, tier 0, absent). `writes_at(None)` on a contested verb RAISES
-        # rather than falling back to the union -- so if that branch is ever wired to fall
-        # through without minting a degree, it fails loudly here instead of silently writing the
-        # full kill. That is the guard, and it is the reason the parameter is not optional.
-        _degree_for_writes = None      # the seam mints this once H-98 rules the bands
-        _pairs = row.writes_at(_degree_for_writes) if row.writes else ()
+        # ⚠ `W-E`, 2026-09-04. THIS LINE READ `_degree_for_writes = None  # the seam mints this
+        # once H-98 rules the bands`, WITH A HARDCODED `None`, so `writes_at` was called for its
+        # side effect of returning the flat tuple and no branch could ever be selected. That is
+        # the first of the three links this item closed. The degree now arrives on `resolution`
+        # from `resolve()`'s seam branch, minted by `degree_of` from what the SUBSYSTEM returned.
+        #
+        # ⚠ THE GUARD THE OLD COMMENT DESCRIBED IS STILL EXACTLY THE GUARD, and it is now the
+        # reachable one rather than the hypothetical one: `writes_at(None)` on a contested verb
+        # RAISES (`Unspecified`, `H-115`) rather than falling back to the union, so a caller that
+        # folds a contested act WITHOUT a resolution fails loudly here instead of silently
+        # writing the full kill. `test_h115_the_degree_branches_raise_unspecified_not_systemexit`
+        # is that path, executed.
+        _pairs = row.writes_at(_degree) if row.writes else ()
         if _pairs:
             eff = EFFECTS.get(a.verb)
             if eff is None:
@@ -5831,7 +5849,7 @@ class SeasonDriver:
                 # The effect runs ONCE, on the first pair: a verb writing three cells is ONE
                 # operation, and running it per pair minted three Tenures for one `move`.
                 made = self._apply_write(w, a, kind, fld, eff if n == 0 else None,
-                                         earned=earned)
+                                         earned=earned, resolution=resolution)
                 changed.extend(c for c in made if c not in changed)
             # ⚠ AN EFFECT THAT TOUCHED NOTHING DID NOT DO THE THING, AND MUST NOT EMIT THE
             # SUCCESS. `kill / wound`'s effect returns early when its payload names no subject --
@@ -5866,7 +5884,16 @@ class SeasonDriver:
         # them, unchanged; one returning a mapping earns exactly the keys it filled. `confer`
         # declares `tenure.opened` AND `tenure.closed`, and conferring onto an unheld office
         # closes nothing -- publishing the second is a state change that did not happen.
-        kinds = tuple(k for k in row.emits if k in earned) if earned else row.emits
+        # ⚠ `W-E`, 2026-09-04: `emits_at(degree)`, NOT `row.emits`. THIS WAS THE SECOND BROKEN
+        # LINK AND IT IS REGISTER ROW `H-113`: `VerbRow.emits_at` had ZERO CALLERS ANYWHERE IN
+        # THE TRACER, verified by an independent read-only critic, so a contested verb reported
+        # the FLAT UNION of every band -- `kill / wound` emitted `person.died` whether the target
+        # died, was wounded, or walked away untouched. That is `ID-9`'s class (a success report
+        # for something that did not happen) inside the epistemic layer, where every witness then
+        # mints a claim from it. The `earned` intersection is UNCHANGED and still runs; it simply
+        # intersects against the band's own kinds now instead of against all of them.
+        _declared = row.emits_at(_degree)
+        kinds = tuple(k for k in _declared if k in earned) if earned else _declared
         # ⚠ `[a.id]` ALONE WAS `N3`. §39.2 line 2 says `causes[]` NAMES THE ACTS, and that is
         # necessary and was treated as sufficient: an Event named the act that emitted it and
         # nothing named what occasioned the act, so the walk stopped dead at every decision and
@@ -5877,7 +5904,8 @@ class SeasonDriver:
         return ev(kinds, [a.id] + self._occasion_ids(w, a), list(a.changes) + changed)
 
     def _apply_write(self, w: "World", a: Act, kind: str, fld: str, eff=None,
-                     earned: Optional[set] = None) -> list:
+                     earned: Optional[set] = None,
+                     resolution: "Resolution | None" = None) -> list:
         """The fold's write. It carries no per-verb behaviour -- the effect of a write is the
         matrix row's business, and what a verb writes is the verb table's.
 
@@ -5893,7 +5921,13 @@ class SeasonDriver:
         earned = earned if earned is not None else set()
 
         def apply():
-            got = eff(w, a) if eff is not None else None
+            # ⚠ `W-E`: EVERY EFFECT TAKES THE RESOLUTION, AND UNIFORMLY. `H-114` measured the
+            # alternative -- `_eff_kill` took no degree, so the effect that computes the VALUES
+            # could not honour the branch `writes_at` had just selected, and a fold at degree
+            # `Wounded` DELETED THE PERSON. One signature for all ten rather than an
+            # inspect-the-callable dispatch: a fold that passes different arguments to different
+            # effects has a second contract nobody declared.
+            got = eff(w, a, resolution) if eff is not None else None
             # ⚠ AN EFFECT MAY EARN SOME OF ITS DECLARED KINDS AND NOT OTHERS. A list means *all*
             # of them (the original contract, unchanged); a MAPPING `{kind: [ids]}` names which.
             # Without this the fold emitted EVERY kind in `emits:` the moment anything changed --
@@ -6368,6 +6402,164 @@ def contest_subsystem(prize: Any) -> Optional[dict]:
         needs="a module named in references/module_contracts.yaml",
         law="the roster may only name a subsystem the contracts file declares -- otherwise the "
             "dispatch target is invented")
+
+
+# ---------------------------------------------------------------------------
+# S39.4 -- THE DEGREE. TWO SOURCES, BOTH ALREADY RULED, NEITHER RE-DERIVED HERE.
+#
+# ⚠ THIS BLOCK IS `W-E`, AND IT EXISTS BECAUSE A PARTIAL SUCCESS AND AN OVERWHELMING ONE WERE
+# THE SAME EVENT. Three links were broken at once and each hid the next: `_fold` hardcoded
+# `_degree_for_writes = None`; `emits_at` had ZERO callers anywhere in the tracer (`H-113`), so a
+# contested verb reported the FLAT UNION of every band; and `Event.degree` was a field nothing
+# ever assigned. Closing any one alone changes nothing observable.
+#
+# THE TWO SOURCES, AND WHY THIS FILE MAY NOT CHOOSE BETWEEN THEM:
+#
+#   1. THE LADDER, for a contest whose subsystem returns a MARGIN. `S39.4` -- one ladder for
+#      every scale, four bands read off the margin -- and the tree OWNS it:
+#      `engine/autoload/dice_engine.py::degree_from_net`, whose docstring reads *"THE degree
+#      ladder. Single owner for every scale of the game (Jordan ruling, 2026-08-14)"*.
+#      ⚠ IT IS IMPORTED AND CALLED, NOT MIRRORED. `S27.2` names a second resolver as its
+#      highest-value refusal, and a band table copied into this file WOULD BE ONE -- it would go
+#      on answering after the owner changed its mind, which is exactly what happened to
+#      `params_tables.yaml`'s captured ladder (`CLAUDE.md` §5: the capture still shows the
+#      PRE-RULING bands). The falsifier that this is a call and not a copy is
+#      `test_we_the_ladder_is_the_trees_and_not_a_copy_of_it`, which monkeypatches
+#      `degree_from_net` and requires every margin here to follow it.
+#      ⚠ AND ITS OPERAND DOES NOT EXIST YET, WHICH IS SAID HERE RATHER THAN DISCOVERED LATER.
+#      `degree_from_net` reads `net - ob`. NOTHING IN THIS TRACER PRODUCES A `net`: there is no
+#      roll anywhere in `shape.py`, `Act.pool` / `Act.obstacle` are read only by `S27.4`'s
+#      refusal gate, and no subsystem the seam can call returns one. So this branch is a READER
+#      WITH NO PRODUCER today. It is written anyway, and registered (`H-124`), because the
+#      alternative is worse in a specific way: without it the shape of the missing thing is a
+#      guess, and with it the gap is exactly *"no subsystem returns a margin"* -- which is one of
+#      the three options `H-98`'s own `cite:` lists.
+#
+#   2. THE SCENE, for a contest that routes to personal combat. JORDAN, 2026-09-03, VERBATIM:
+#      *"kill/wound degrees should be directly taken from scene combat, which is what actually
+#      needs to be called when kill/wound is considered."* And again, 2026-09-04: *"the combat
+#      engine determines the result there. your code just has to accept the result."*
+#      So combat is EXEMPT from the ladder by ruling, and its bands are a READ of the
+#      `WoundTracker` the engine computed -- `combat_seam.resolve`'s `wound_state`.
+#
+# ⚠ THE BAND IS READ OFF **THE ACT'S SUBJECT**, NOT OFF "THE LOSER", AND THAT CORRECTS THE TABLE.
+# `verb_table.yaml`'s `writes_source:` cell says `wound_state[loser]`. `kill / wound` writes on
+# `payload["subject"]` (`_eff_kill`), so reading the LOSER kills the wrong person whenever the
+# ACTOR is the one felled: A attacks B, B fells A, `wound_state[A].felled` is True, and the fold
+# would delete B. The subject is the person the writes land on, so the subject is the person
+# whose state decides which branch of the writes applies. The table's cell is corrected there.
+# ---------------------------------------------------------------------------
+
+# THE THREE BANDS PERSONAL COMBAT CAN DISTINGUISH. Named here because this is where the reading
+# lives; `verb_table.yaml` keys `writes:`/`emits:` on the same three, and `writes_at`'s own
+# refusal prints both sets when they disagree, so drift is loud at the first act that folds.
+# ⚠ A FOURTH BAND (decisive vs narrow) HAS NO SOURCE IN THE DATA and is NOT invented -- that is
+# the whole of what survives in `H-98` after the 2026-09-03 ruling.
+FELLED, WOUNDED, UNTOUCHED = "Felled", "Wounded", "Untouched"
+COMBAT_BANDS = (FELLED, WOUNDED, UNTOUCHED)
+
+_LADDER: Optional[tuple] = None
+_LADDER_ERROR: str = ""
+
+
+def degree_ladder() -> Optional[tuple]:
+    """`(degree_from_net, DEGREE_LABEL)` from the tree's owner, or `None` with a NAMED reason.
+
+    Deferred and by path, which is `combat_seam.engine()`'s shape and for its reason: the tracer
+    still runs where the engine tree is absent, degrading to a named gap rather than an
+    ImportError at import. The repo root carries no top-level modules, so putting it on
+    `sys.path` shadows none of this directory's bare-name imports."""
+    global _LADDER, _LADDER_ERROR
+    if _LADDER is not None or _LADDER_ERROR:
+        return _LADDER
+    root = _HERE.parent.parent.parent
+    try:
+        if str(root) not in sys.path:
+            sys.path.insert(0, str(root))
+        from engine.autoload.dice_engine import (  # noqa: E402
+            DEGREE_LABEL as _L, degree_from_net as _d)
+        _LADDER = (_d, _L)
+        return _LADDER
+    except Exception as e:                        # a real import failure is a NAMED gap
+        _LADDER_ERROR = f"{type(e).__name__}: {e}"
+        return None
+
+
+def ladder_error() -> str:
+    degree_ladder()
+    return _LADDER_ERROR
+
+
+@dataclass
+class Resolution:
+    """WHAT THE SEAM RETURNED, AS THE FOLD SEES IT. `None` for an uncontested verb, and that is
+    the whole of the uncontested path's change: `writes_at(None)`/`emits_at(None)` on a verb with
+    no degree map return the flat tuples they always did.
+
+    Two fields and no third. `degree` is the token `verb_table.yaml` keys on; `result` is the
+    subsystem's own return, kept whole so an effect can read a quantity the SCENE computed rather
+    than one this file made up."""
+    degree: str
+    result: dict
+
+
+def combat_degree(result: dict, subject: Optional[str]) -> str:
+    """The band, READ off the scene the engine just fought (Jordan, 2026-09-03). Invents nothing:
+    every quantity below is a field of the engine's own `WoundTracker`, on the Combatants
+    `combat_seam` constructed and still holds after `wrapper.fight` collapsed them to an int.
+
+    `felled` and `result == 0` are the SAME event from the engine's side -- `wrapper.fight` sets a
+    non-zero result only on a felling -- so the three bands are: the subject went down; the
+    subject is standing and bled; the subject is standing and untouched."""
+    states = result.get("wound_state") or {}
+    st = states.get(subject)
+    if not subject or st is None or not st.get("available"):
+        raise Unspecified(
+            f"personal combat resolved and the scene carries no wound state for the act's "
+            f"subject ({subject!r}); it has {sorted(states)}", "S39.4/H-98",
+            needs="a `wound_state` entry for the person the act writes on",
+            law="Jordan 2026-09-03 -- the degree is READ OFF THE SCENE. A subject the scene never "
+                "fought has no band, and picking one would be the mapping that ruling removed")
+    if st["felled"]:
+        return FELLED
+    return WOUNDED if st["wounds"] > 0 else UNTOUCHED
+
+
+def degree_of(result: Any, subject: Optional[str] = None) -> str:
+    """THE ONE PLACE A SUBSYSTEM'S RESULT BECOMES THE TOKEN `writes_at` / `emits_at` KEY ON.
+
+    ⚠ IT DECIDES NOTHING. Each branch hands the question to whoever already owns it -- the scene
+    for combat, `degree_from_net` for a margin -- and a result carrying NEITHER refuses by name.
+    That refusal is the honest state of `mass_battle` and `social_contest`, which the seam
+    resolves and does not call (Jordan, 2026-09-02: *"we don't NEED to worry about them at this
+    point in time"*)."""
+    if not isinstance(result, dict):
+        raise Unspecified(
+            f"a contest returned {type(result).__name__}, which carries no outcome to grade",
+            "S39.4", needs="a subsystem result",
+            law="S39.4 -- the degree is the SUBSYSTEM's, read off what it returned")
+    if "wound_state" in result:
+        return combat_degree(result, subject)
+    if "net" in result and "ob" in result:
+        lad = degree_ladder()
+        if lad is None:
+            raise Unspecified(
+                f"a contest returned a margin and the tree's degree ladder is unavailable: "
+                f"{ladder_error()}", "S39.4",
+                needs="engine/autoload/dice_engine.py",
+                law="S27.2 -- the ladder is imported from its single owner. A band table copied "
+                    "into this file would be the second resolver, and would keep answering "
+                    "after the owner changed its mind")
+        degree_from_net, label = lad
+        return label[degree_from_net(result["net"], result["ob"])]
+    raise Unspecified(
+        f"a contest for {result.get('prize', result.get('module'))!r} resolved and returned "
+        f"neither a scene to read nor a margin to grade (keys: {sorted(result)})",
+        "S39.4/H-98",
+        needs="a `wound_state` (the scene), or a `net`/`ob` pair (the margin the one ladder reads)",
+        law="S39.4 -- FOUR BANDS READ OFF THE MARGIN, and Jordan 2026-09-03 exempts combat by "
+            "reading them off the scene instead. A subsystem returning neither cannot be graded, "
+            "and grading it anyway is the second resolver S27.2 refuses")
 
 
 def contest(w: World, rung: str, prize: Any, claimants: list[str],

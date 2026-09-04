@@ -1816,12 +1816,21 @@ rows:
       SOURCES QUOTED HERE: proposals/2026-09-04-degree-sweep/arm9_forking.py and
       proposals/2026-09-02-executable-architecture/hole_register.yaml — this register, for this
       row's own earlier paragraphs and for `H-122`'s standing copy of the retracted sentence.
-      ⚠ THIS LINE IS THE FIX FOR A REAL DEFECT AND IS WORTH ONE SENTENCE OF ITS OWN. The
-      supersession paragraph below first passed `verify_citations` because its author DELETED THE
-      QUOTATION MARKS around a self-quote, which makes the text invisible to `QUOTE_RE` — a
-      general recipe for passing the anti-fabrication gate by reformatting, demonstrated on a
-      benign case. The marks are restored and the sources are named instead, which is `H-122`'s
-      own precedent. Found by an independent read-only critic, 2026-09-04.
+      ⚠ THE SUPERSESSION PARAGRAPH BELOW HAS A HISTORY WORTH ONE PARAGRAPH, BECAUSE TWO
+      SUCCESSIVE REPAIRS TO IT WERE BOTH WAYS OF NOT BEING CHECKED. (1) It first passed
+      `verify_citations` because its author DELETED THE QUOTATION MARKS around a self-quote, which
+      makes the text invisible to `QUOTE_RE` — a general recipe for passing the anti-fabrication
+      gate by reformatting, demonstrated on a benign case. Found by an independent read-only
+      critic, 2026-09-04. (2) That critic's proposed remedy — restore the marks and name this
+      register as a source, `H-122`'s precedent — WAS ALSO WRONG, and mutation-checking it is what
+      showed why: naming the register makes a quotation verify AGAINST THE ROW'S OWN `cite:`, so a
+      planted sentence no source says came back green. `verify_citations` now rebuilds the
+      haystack from the OTHER rows' fields when the register is the named source, and the same
+      mutation FIRES. (3) THE CORRECT FORM, USED BELOW AND ON `H-122`: **a row may not be its own
+      evidence, so a row quoting ITS OWN superseded wording DISPLAYS it, labelled RETRACTED
+      WORDING / VERBATIM, and does not set it in quotation marks.** That is the opposite of (1),
+      not a repeat of it — quotation marks there would claim a verification that cannot exist,
+      and the label says exactly what the text is.
       MEASURED 2026-09-04. Found by a null result that was an artifact - a first forking harness
       ROTATED the ranked list so a different candidate led, and all four branches produced
       byte-identical worlds. A spy confirmed the patch was firing, so the null was real and its
@@ -1876,8 +1885,9 @@ rows:
       Retracting a merged number on a claim the surviving artifact cannot adjudicate is the failure
       this repository files most often, so the claim is bounded to what the artifact supports.
       Found by an independent read-only critic, 2026-09-04.
-      ⚠ THE SENTENCE ABOVE — "54 GENUINE forks, all RECONVERGED", read as consistent with arm
-      9c/9d's finding — IS SUPERSEDED AS A CONCLUSION, THOUGH NOT AS A RUN. At 2 slots over the full
+      ⚠ THE SENTENCE ABOVE — SUPERSEDED WORDING, VERBATIM: 54 GENUINE forks, all RECONVERGED,
+      read as consistent with arm 9c/9d's finding — IS SUPERSEDED AS A CONCLUSION, THOUGH NOT AS
+      A RUN. At 2 slots over the full
       corpus the genuine forks are 1,504 / 1,467 / 1,467 by deposit arm and they are NOT all
       reconverged: 100.00% / 95.77% / 87.59% on the verb-only fingerprint, and 68.88% / 65.44% /
       58.28% once the fingerprint includes the Candidate's SUBJECT. The sample of 3 cases x 3
@@ -2369,10 +2379,18 @@ rows:
       DIRECTION (§0.1 point 4 cuts both ways). §F1 clause 4 DOES fire at that cell — 0 / 37 / 56
       drops by arm over the 89 baselines, against 0 / 37 / 123 at 2 x 1 — so the channel is open
       and its effect simply does not reach a later decision at `actor`. The widened
-      `(verb, subject)` fingerprint on the same runs finds SUBJECT-ONLY changes and **zero
-      VERB-SET** changes at `actor`, which is the same statement one resolution finer: `W-B`
-      removes no verb from a candidate set at 6 slots. And the positive control was re-run AT THIS
-      CELL, not carried over from the other one.
+      `(verb, subject)` fingerprint on the same runs reads `none` 585/756 = 77.38% (171 DIVERGED,
+      228 SUBJECT-ONLY / **0 VERB-SET**) · `actor` 573/733 = 78.17% (160 DIVERGED, 174
+      SUBJECT-ONLY / **0 VERB-SET**) · `total` 525/727 = 72.21% (202 DIVERGED, 248 SUBJECT-ONLY /
+      11 VERB-SET). So the instrument sees 160 changes at `actor` and none of them is a verb
+      leaving the set: the same statement one resolution finer — **`W-B` removes no verb from a
+      candidate set at 6 slots**, while the pre-`W-B` subject channel is as loud there as at 2 x 1.
+      AND BOTH CONTROLS WERE RE-RUN AT THIS CELL rather than carried over: NEGATIVE `none`
+      756/756 = 100.00%, 0 DIVERGED; POSITIVE, clause 4 widened by one event-kind predicate at
+      `none`, DETECTED on all four plants (`travel.moved` 6/27, `stores.changed` 2/18,
+      `record.created` 9/24, `yield.taken` 2/18 DIVERGED/genuine); SECOND POSITIVE, comparator
+      plant, 27 streams perturbed, 9 DIVERGED, detected. **The scorer can see a divergence at
+      6 slots, so the `actor` zero is a null result and not a blind instrument.**
       ⚠ WHAT THIS DOES AND DOES NOT IMPLY. It is NOT evidence of tuning: 2 x 3 was never run, so
       no result could be selected on, `MAX_ALT = 3` is declared with its reason in
       `arm9_forking.py`, and both sweeps pre-date `W-D` independently. What it IS: the item banked
@@ -2518,7 +2536,7 @@ rows:
       ⚠ AND THE RETRACTION'S SCOPE WAS UNDER-STATED: THIS ROW SAID, VERBATIM, A SECOND **LEDGER** CHANNEL --
       AND THREE OF `questions_for`'S FOUR SOURCES ARE PURE **WORLD** READS — Q1 `w.dates` +
       `w.docket`, Q3 `w.crossings` + `Query.presence`, Q4 `w.propositions`, none of which touches
-      `p.ledger`. So arm 9c's *"the only channel by which anything that happened can reach a later
+      `p.ledger`. So arm 9c's *"the only channel by which anything that happened can reach a later ...
       decision is a CLAIM in the actor's ledger"* is falsified ARCHITECTURALLY in three places, not
       one. MEASURED over the 89 baselines, which narrows it back down and is worth stating in both
       directions: only **TWO of the four sources fire at all — `claim_landed` (5,086 / 5,646 /

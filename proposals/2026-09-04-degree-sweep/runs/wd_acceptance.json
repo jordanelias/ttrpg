@@ -6183,6 +6183,761 @@
    "failures": []
   }
  },
+ "2x3": {
+  "none": {
+   "mode": "none",
+   "slots": "2x3",
+   "chunks": [
+    [
+     0,
+     23
+    ],
+    [
+     23,
+     46
+    ],
+    [
+     46,
+     69
+    ],
+    [
+     69,
+     89
+    ]
+   ],
+   "covers": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88
+   ],
+   "seconds": 692.3,
+   "probed": 3204,
+   "no_live_window": 801,
+   "inert": 1647,
+   "genuine": 756,
+   "reconverged": 756,
+   "diverged": 0,
+   "acts_differ": 756,
+   "hash_differ": 756,
+   "stream_only": 756,
+   "window_slots_checked": 2268,
+   "window_slots_same_tick": 0,
+   "n_cases_attempted": 89,
+   "n_cases_ok": 89,
+   "n_cases_failed": 0,
+   "fork_rows_failed": 0,
+   "reconvergence_rate": 1.0,
+   "divergences": [],
+   "changed_distribution": {
+    "0": 756
+   },
+   "failures": []
+  },
+  "actor": {
+   "mode": "actor",
+   "slots": "2x3",
+   "chunks": [
+    [
+     0,
+     23
+    ],
+    [
+     23,
+     46
+    ],
+    [
+     46,
+     69
+    ],
+    [
+     69,
+     89
+    ]
+   ],
+   "covers": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88
+   ],
+   "seconds": 697.9,
+   "probed": 3204,
+   "no_live_window": 801,
+   "inert": 1670,
+   "genuine": 733,
+   "reconverged": 733,
+   "diverged": 0,
+   "acts_differ": 733,
+   "hash_differ": 733,
+   "stream_only": 733,
+   "window_slots_checked": 2199,
+   "window_slots_same_tick": 0,
+   "n_cases_attempted": 89,
+   "n_cases_ok": 89,
+   "n_cases_failed": 0,
+   "fork_rows_failed": 0,
+   "reconvergence_rate": 1.0,
+   "divergences": [],
+   "changed_distribution": {
+    "0": 733
+   },
+   "failures": []
+  },
+  "total": {
+   "mode": "total",
+   "slots": "2x3",
+   "chunks": [
+    [
+     0,
+     23
+    ],
+    [
+     23,
+     46
+    ],
+    [
+     46,
+     69
+    ],
+    [
+     69,
+     89
+    ]
+   ],
+   "covers": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88
+   ],
+   "seconds": 865.6,
+   "probed": 3204,
+   "no_live_window": 801,
+   "inert": 1676,
+   "genuine": 727,
+   "reconverged": 716,
+   "diverged": 11,
+   "acts_differ": 727,
+   "hash_differ": 727,
+   "stream_only": 716,
+   "window_slots_checked": 2181,
+   "window_slots_same_tick": 0,
+   "n_cases_attempted": 89,
+   "n_cases_ok": 89,
+   "n_cases_failed": 0,
+   "fork_rows_failed": 0,
+   "reconvergence_rate": 0.984869325997249,
+   "divergences": [
+    {
+     "case": "NPC-075",
+     "lane": "NPC",
+     "at": 8,
+     "take": 3,
+     "tick": 2,
+     "person": "p_c",
+     "from_verb": "tell",
+     "to_verb": "transfer",
+     "in_budget": 3,
+     "changed_at": [
+      1
+     ],
+     "live_window": [
+      9,
+      10,
+      11
+     ],
+     "changed_idx": [
+      9
+     ]
+    },
+    {
+     "case": "NPC-012",
+     "lane": "NPC",
+     "at": 8,
+     "take": 3,
+     "tick": 2,
+     "person": "p_c",
+     "from_verb": "tell",
+     "to_verb": "transfer",
+     "in_budget": 3,
+     "changed_at": [
+      1
+     ],
+     "live_window": [
+      9,
+      10,
+      11
+     ],
+     "changed_idx": [
+      9
+     ]
+    },
+    {
+     "case": "NPC-004",
+     "lane": "NPC",
+     "at": 8,
+     "take": 3,
+     "tick": 2,
+     "person": "p_c",
+     "from_verb": "tell",
+     "to_verb": "transfer",
+     "in_budget": 3,
+     "changed_at": [
+      1
+     ],
+     "live_window": [
+      9,
+      10,
+      11
+     ],
+     "changed_idx": [
+      9
+     ]
+    },
+    {
+     "case": "NPC-036",
+     "lane": "NPC",
+     "at": 8,
+     "take": 3,
+     "tick": 2,
+     "person": "p_c",
+     "from_verb": "tell",
+     "to_verb": "transfer",
+     "in_budget": 3,
+     "changed_at": [
+      1
+     ],
+     "live_window": [
+      9,
+      10,
+      11
+     ],
+     "changed_idx": [
+      9
+     ]
+    },
+    {
+     "case": "NPC-080",
+     "lane": "NPC",
+     "at": 8,
+     "take": 3,
+     "tick": 2,
+     "person": "p_c",
+     "from_verb": "tell",
+     "to_verb": "transfer",
+     "in_budget": 3,
+     "changed_at": [
+      1
+     ],
+     "live_window": [
+      9,
+      10,
+      11
+     ],
+     "changed_idx": [
+      9
+     ]
+    },
+    {
+     "case": "ARC-26",
+     "lane": "ARC",
+     "at": 8,
+     "take": 3,
+     "tick": 2,
+     "person": "p_c",
+     "from_verb": "tell",
+     "to_verb": "transfer",
+     "in_budget": 3,
+     "changed_at": [
+      1
+     ],
+     "live_window": [
+      9,
+      10,
+      11
+     ],
+     "changed_idx": [
+      9
+     ]
+    },
+    {
+     "case": "ARC-30",
+     "lane": "ARC",
+     "at": 8,
+     "take": 3,
+     "tick": 2,
+     "person": "p_c",
+     "from_verb": "tell",
+     "to_verb": "transfer",
+     "in_budget": 3,
+     "changed_at": [
+      1
+     ],
+     "live_window": [
+      9,
+      10,
+      11
+     ],
+     "changed_idx": [
+      9
+     ]
+    },
+    {
+     "case": "ARC-51",
+     "lane": "ARC",
+     "at": 8,
+     "take": 3,
+     "tick": 2,
+     "person": "p_c",
+     "from_verb": "tell",
+     "to_verb": "transfer",
+     "in_budget": 3,
+     "changed_at": [
+      1
+     ],
+     "live_window": [
+      9,
+      10,
+      11
+     ],
+     "changed_idx": [
+      9
+     ]
+    },
+    {
+     "case": "SCN-05",
+     "lane": "ARC",
+     "at": 8,
+     "take": 3,
+     "tick": 2,
+     "person": "p_c",
+     "from_verb": "tell",
+     "to_verb": "transfer",
+     "in_budget": 3,
+     "changed_at": [
+      1
+     ],
+     "live_window": [
+      9,
+      10,
+      11
+     ],
+     "changed_idx": [
+      9
+     ]
+    },
+    {
+     "case": "SCN-07",
+     "lane": "ARC",
+     "at": 8,
+     "take": 3,
+     "tick": 2,
+     "person": "p_c",
+     "from_verb": "tell",
+     "to_verb": "transfer",
+     "in_budget": 3,
+     "changed_at": [
+      1
+     ],
+     "live_window": [
+      9,
+      10,
+      11
+     ],
+     "changed_idx": [
+      9
+     ]
+    },
+    {
+     "case": "SCN-13",
+     "lane": "ARC",
+     "at": 8,
+     "take": 3,
+     "tick": 2,
+     "person": "p_c",
+     "from_verb": "tell",
+     "to_verb": "transfer",
+     "in_budget": 3,
+     "changed_at": [
+      1
+     ],
+     "live_window": [
+      9,
+      10,
+      11
+     ],
+     "changed_idx": [
+      9
+     ]
+    }
+   ],
+   "changed_distribution": {
+    "0": 716,
+    "1": 11
+   },
+   "failures": []
+  }
+ },
+ "positive_control_narrow": {
+  "mode": "none",
+  "slots": "narrow",
+  "why": "event-kind claims the corpus ACTUALLY deposits about the candidate's own subject, measured rather than guessed: a first plant on `act.refused` fired ZERO times because no corpus world emits that kind, and a plant that never fires is not a control. All four are run, not one, so the result does not rest on a lucky pick.",
+  "cases": [
+   "NPC-088",
+   "NPC-087",
+   "NPC-086"
+  ],
+  "plants": [
+   {
+    "predicate": "travel.moved",
+    "n_cases": 3,
+    "genuine": 48,
+    "diverged": 24,
+    "reconverged": 24,
+    "detected": true
+   },
+   {
+    "predicate": "stores.changed",
+    "n_cases": 3,
+    "genuine": 30,
+    "diverged": 15,
+    "reconverged": 15,
+    "detected": true
+   },
+   {
+    "predicate": "record.created",
+    "n_cases": 3,
+    "genuine": 42,
+    "diverged": 18,
+    "reconverged": 24,
+    "detected": true
+   },
+   {
+    "predicate": "yield.taken",
+    "n_cases": 3,
+    "genuine": 30,
+    "diverged": 15,
+    "reconverged": 15,
+    "detected": true
+   }
+  ],
+  "detected_all": true,
+  "detected_any": true
+ },
+ "comparator_control_narrow": {
+  "perturbations_applied": 51,
+  "genuine": 51,
+  "diverged": 15,
+  "detected": true
+ },
+ "positive_control_2x3": {
+  "mode": "none",
+  "slots": "2x3",
+  "why": "event-kind claims the corpus ACTUALLY deposits about the candidate's own subject, measured rather than guessed: a first plant on `act.refused` fired ZERO times because no corpus world emits that kind, and a plant that never fires is not a control. All four are run, not one, so the result does not rest on a lucky pick.",
+  "cases": [
+   "NPC-088",
+   "NPC-087",
+   "NPC-086"
+  ],
+  "plants": [
+   {
+    "predicate": "travel.moved",
+    "n_cases": 3,
+    "genuine": 27,
+    "diverged": 6,
+    "reconverged": 21,
+    "detected": true
+   },
+   {
+    "predicate": "stores.changed",
+    "n_cases": 3,
+    "genuine": 18,
+    "diverged": 2,
+    "reconverged": 16,
+    "detected": true
+   },
+   {
+    "predicate": "record.created",
+    "n_cases": 3,
+    "genuine": 24,
+    "diverged": 9,
+    "reconverged": 15,
+    "detected": true
+   },
+   {
+    "predicate": "yield.taken",
+    "n_cases": 3,
+    "genuine": 18,
+    "diverged": 2,
+    "reconverged": 16,
+    "detected": true
+   }
+  ],
+  "detected_all": true,
+  "detected_any": true
+ },
+ "comparator_control_2x3": {
+  "perturbations_applied": 27,
+  "genuine": 27,
+  "diverged": 9,
+  "detected": true
+ },
  "positive_control": {
   "mode": "none",
   "slots": "narrow",
@@ -12121,49 +12876,96 @@
   ]
  },
  "widened_fingerprint": {
-  "none": {
-   "genuine": 1504,
-   "diverged": 468,
-   "reconverged": 1036,
-   "n_cases_ok": 89,
-   "n_cases_failed": 0,
-   "probed": 3204,
-   "no_live_window": 801,
-   "inert": 899,
-   "changed_slot_kinds": {
-    "SUBJECT-ONLY": 510
+  "narrow": {
+   "none": {
+    "genuine": 1504,
+    "diverged": 468,
+    "reconverged": 1036,
+    "n_cases_ok": 89,
+    "n_cases_failed": 0,
+    "probed": 3204,
+    "no_live_window": 801,
+    "inert": 899,
+    "changed_slot_kinds": {
+     "SUBJECT-ONLY": 510
+    },
+    "reconvergence_rate": 0.6888297872340425
    },
-   "reconvergence_rate": 0.6888297872340425
+   "actor": {
+    "genuine": 1467,
+    "diverged": 507,
+    "reconverged": 960,
+    "n_cases_ok": 89,
+    "n_cases_failed": 0,
+    "probed": 3204,
+    "no_live_window": 801,
+    "inert": 936,
+    "changed_slot_kinds": {
+     "SUBJECT-ONLY": 447,
+     "VERB-SET": 62
+    },
+    "reconvergence_rate": 0.65439672801636
+   },
+   "total": {
+    "genuine": 1467,
+    "diverged": 612,
+    "reconverged": 855,
+    "n_cases_ok": 89,
+    "n_cases_failed": 0,
+    "probed": 3204,
+    "no_live_window": 801,
+    "inert": 936,
+    "changed_slot_kinds": {
+     "SUBJECT-ONLY": 455,
+     "VERB-SET": 182
+    },
+    "reconvergence_rate": 0.5828220858895705
+   }
   },
-  "actor": {
-   "genuine": 1467,
-   "diverged": 507,
-   "reconverged": 960,
-   "n_cases_ok": 89,
-   "n_cases_failed": 0,
-   "probed": 3204,
-   "no_live_window": 801,
-   "inert": 936,
-   "changed_slot_kinds": {
-    "SUBJECT-ONLY": 447,
-    "VERB-SET": 62
+  "2x3": {
+   "none": {
+    "genuine": 756,
+    "diverged": 171,
+    "reconverged": 585,
+    "n_cases_ok": 89,
+    "n_cases_failed": 0,
+    "probed": 3204,
+    "no_live_window": 801,
+    "inert": 1647,
+    "changed_slot_kinds": {
+     "SUBJECT-ONLY": 228
+    },
+    "reconvergence_rate": 0.7738095238095238
    },
-   "reconvergence_rate": 0.65439672801636
-  },
-  "total": {
-   "genuine": 1467,
-   "diverged": 612,
-   "reconverged": 855,
-   "n_cases_ok": 89,
-   "n_cases_failed": 0,
-   "probed": 3204,
-   "no_live_window": 801,
-   "inert": 936,
-   "changed_slot_kinds": {
-    "SUBJECT-ONLY": 455,
-    "VERB-SET": 182
+   "actor": {
+    "genuine": 733,
+    "diverged": 160,
+    "reconverged": 573,
+    "n_cases_ok": 89,
+    "n_cases_failed": 0,
+    "probed": 3204,
+    "no_live_window": 801,
+    "inert": 1670,
+    "changed_slot_kinds": {
+     "SUBJECT-ONLY": 174
+    },
+    "reconvergence_rate": 0.781718963165075
    },
-   "reconvergence_rate": 0.5828220858895705
+   "total": {
+    "genuine": 727,
+    "diverged": 202,
+    "reconverged": 525,
+    "n_cases_ok": 89,
+    "n_cases_failed": 0,
+    "probed": 3204,
+    "no_live_window": 801,
+    "inert": 1676,
+    "changed_slot_kinds": {
+     "SUBJECT-ONLY": 248,
+     "VERB-SET": 11
+    },
+    "reconvergence_rate": 0.7221458046767538
+   }
   }
  }
 }
