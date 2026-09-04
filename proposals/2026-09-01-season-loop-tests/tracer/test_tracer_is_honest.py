@@ -6252,8 +6252,9 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
 
 def test_wb_an_unknown_read_is_never_deposited_because_it_is_the_instruments_own_gap():
     """PROHIBITION 3, EXECUTED. `H-94`'s `operands_for` returns `None` rather than minting an act
-    with a hole, precisely so *"the instrument's own gap would [not] become a FALSE BELIEF held by
-    every witness, about a granary nobody named"*. Depositing an UNKNOWN read reintroduces that
+    with a hole. Its row says why, verbatim: minting one would have it refused for a reason about
+    the INSTRUMENT, *"so the instrument's own gap would become a FALSE BELIEF held by every
+    witness, about a granary nobody named"*. Depositing an UNKNOWN read reintroduces exactly that
     from the other end.
 
     It is inert besides — `LedgerReader` returns the stored value, `_as_number(UNKNOWN)` is

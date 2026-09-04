@@ -1468,7 +1468,7 @@ rows:
     site:      ""
     sweep:     []
     unblocks:  "nothing -- it is a question about what the world SHOULD do, and both answers run"
-    cite:      "FOUND BY AN ADVERSARIAL PASS OVER THE `N3` FIX, WHICH SHIPPED THE BEHAVIOUR WITHOUT NAMING IT. The deposit rule is keyed on 'this Event wrote nothing', and refusals are exactly that, so the behaviour arrived as a side effect of a fix aimed at tellings. ⚠ IT IS REGISTERED RATHER THAN DECIDED BECAUSE BOTH READINGS ARE DEFENSIBLE AND ONE IS ALREADY RUNNING: seeing somebody try and fail is real information -- the reason `§E2` makes failure emit at all -- and a design might equally hold that only what HAPPENED occasions a decision.  Whoever rules it should say so here rather than in a resolver. ⚠ **`W-B` SHARPENS THIS ROW AND DOES NOT CLOSE IT, AND THE SHARPENING IS THAT A REFUSAL IS NOW THE MOST INFORMATIVE EVENT IN THE CORPUS.** Since 2026-09-04 the fold attaches `Verdict.observed` to every Event an act emits and WITNESS deposits it under `observation_deposit_mode` (`H-122`, default `actor`). A refusal writes nothing, so its `changes[]` is empty and it was already taking the write-nothing deposit path — but its READS are precisely WHY it refused (`stores:grain -> 0`, `claim.held -> False`), and a value a comparator can send to False is the only kind of claim §F1 clause 4 can fire on. So a refusal now propagates strictly more than a success does in the one respect that reaches a decision. MEASURED at the default arm over 86 corpus worlds: 200 of the 1,086 deposited grammar-vocabulary claims carry a False-able value, and **186 of those 200 come from `news.untold`, a refusal**. ⚠ THIS DOES NOT ANSWER THE QUESTION AND MUST NOT BE READ AS ANSWERING IT. `CLAUDE.md` §0's five tests still land where they landed: not superseded, not irrelevant, and NOT answered by a design document — §E2 says failure emits and says nothing about whether it should seed deliberation. Precedent does not answer it either, because `H-122`'s precedent settles WHO RECEIVES a read, not WHETHER A FAILURE SHOULD OCCASION A DECISION, which is a claim about the world and not about a distribution rule. Both readings still run, so it stays `absent` with the argument sharpened rather than a default invented for it. What `W-B` changes is the STAKE: whoever rules it is now ruling on the channel that carries every falsifiable belief in the corpus, not on a bookkeeping detail"
+    cite:      "FOUND BY AN ADVERSARIAL PASS OVER THE `N3` FIX, WHICH SHIPPED THE BEHAVIOUR WITHOUT NAMING IT. The deposit rule is keyed on 'this Event wrote nothing', and refusals are exactly that, so the behaviour arrived as a side effect of a fix aimed at tellings. ⚠ IT IS REGISTERED RATHER THAN DECIDED BECAUSE BOTH READINGS ARE DEFENSIBLE AND ONE IS ALREADY RUNNING: seeing somebody try and fail is real information -- the reason `§E2` makes failure emit at all -- and a design might equally hold that only what HAPPENED occasions a decision.  Whoever rules it should say so here rather than in a resolver. ⚠ **`W-B` SHARPENS THIS ROW AND DOES NOT CLOSE IT, AND THE SHARPENING IS THAT A REFUSAL IS NOW THE MOST INFORMATIVE EVENT IN THE CORPUS.** Since 2026-09-04 the fold attaches `Verdict.observed` to every Event an act emits and WITNESS deposits it under `observation_deposit_mode` (`H-122`, default `actor`). A refusal writes nothing, so its `changes[]` is empty and it was already taking the write-nothing deposit path — but its READS are precisely WHY it refused (`stores:grain -> 0`, `claim.held -> False`), and a value a comparator can send to False is the only kind of claim §F1 clause 4 can fire on. So a refusal now propagates strictly more than a success does in the one respect that reaches a decision. MEASURED at the default arm over 86 corpus worlds, by tagging every depositable read with the kind of the Event that carried it: **310 of the 1,761 non-UNKNOWN reads carry a False-able value, and ALL 310 come from a refusal** — 258 `news.untold` (`claim.held` = False) and 52 `travel.blocked` (`contain.path:<person>` = False). ZERO come from a success: `transfer.made` reads a stocked granary (655), `travel.moved` reads a path that exists (587), `news.told` reads a claim that is held (159), and none of those values can make a comparator return False. After eviction, 200 of the 310 are still ledger-resident at the end of the run. ⚠ A FIRST WRITING OF THIS ROW SAID *186 of 200 come from `news.untold`* AND WAS INFERRED FROM THE PREDICATE RATHER THAN MEASURED FROM THE EVENT. The corrected figure is stronger, not weaker, and it was corrected by measuring the whole corpus rather than reasoning from one predicate — `CLAUDE.md` §0.1 point 4. ⚠ THIS DOES NOT ANSWER THE QUESTION AND MUST NOT BE READ AS ANSWERING IT. `CLAUDE.md` §0's five tests still land where they landed: not superseded, not irrelevant, and NOT answered by a design document — §E2 says failure emits and says nothing about whether it should seed deliberation. Precedent does not answer it either, because `H-122`'s precedent settles WHO RECEIVES a read, not WHETHER A FAILURE SHOULD OCCASION A DECISION, which is a claim about the world and not about a distribution rule. Both readings still run, so it stays `absent` with the argument sharpened rather than a default invented for it. What `W-B` changes is the STAKE: whoever rules it is now ruling on the channel that carries every falsifiable belief in the corpus, not on a bookkeeping detail"
     source:    "adversarial pass over the N3 fix, 2026-09-03; sharpened by W-B 2026-09-04"
 
   - id:        H-112
@@ -2073,8 +2073,10 @@ rows:
       `test_wb_an_unknown_read_is_never_deposited_because_it_is_the_instruments_own_gap`, which
       asserts it observed a non-zero number of UNKNOWN reads before asserting none were deposited.
       ⚠ WHY THE ROW STAYS `assumption` RATHER THAN CLOSING. `CLAUDE.md` §0's five tests, in order.
-      (1) SUPERSEDED — no: nothing rules on who receives a read. (2) IRRELEVANT — no: the corpus
-      folds a typed cell 2,516 times per arm and the clause is live. (3) ANSWERED BY A DESIGN
+      (1) SUPERSEDED — no: nothing rules on who receives a read. (2) IRRELEVANT — no: the fold
+      records 2,820 reads onto Events across the corpus at the `none` control and 2,516 at each of
+      the two live arms — the count itself differs because the arms diverge — so the clause is live
+      in every arm. (3) ANSWERED BY A DESIGN
       DOCUMENT — NO, and that is the hole: #353 §28 names the deposit and §20 types the Claim, and
       neither says whether a deposit may carry the fold's reads or to whom. (4) **ANSWERED BY
       PRECEDENT, AND THIS IS WHERE IT CLOSES.** `fan_out_mode` (`H-33`) and `claim_subject_rule`
@@ -2099,6 +2101,21 @@ rows:
       is dropped (21). The subjects match because both sides bind `from` through `W-C`'s one owner —
       the fold off `Act.payload`, the person off `containing_rung_of` — and `pack_scenes` puts the
       second on the first.
+      ⚠ REPRODUCTION, because three of the numbers above come from a sweep no committed script
+      runs and `G11` asks for a command on every number. The `H-40` re-run, the arm counts and the
+      hash movement are all pinned by tests: `python -m pytest test_tracer_is_honest.py -k
+      "h40s_decay_sweep or the_control_arm or carrier_moves or refusals_reads" -s` prints the
+      first two and asserts all four. The CORPUS-SCALE figures (1,086 / 2,577 grammar claims,
+      200 / 600 False-able, 72 / 72 / 243 persons at cap, 2,820 / 2,516 reads) were measured by
+      looping `corpus_run.build_at(case, 0)` over every case whose `scale:` is a rung kind, with
+      `w.fixtures` swept to each arm and `corpus_run.seasons_for(case)` seasons, then counting
+      `claim.deposited` Events against end-of-run ledger occupancy — no committed script does
+      this, and that is stated rather than implied. The corpus-level CONTROL that IS committed is
+      `python corpus_run.py` itself: at the `none` arm it reproduces the pre-`W-B` output exactly,
+      and the shipped `actor` default leaves every headline unchanged (6 verbs executed, 1 always
+      refused, 2 distinct executed sets, R1/R3/R4/R5 counts identical) while moving WHICH cases
+      fall in which set — which `test_the_corpus_runs_and_the_ranking_cannot_discriminate` now
+      pins as a season threshold.
     source:    "W-B 2026-09-04 -- the write side of `H-116`, whose read side shipped in `W-A`"
 
 
