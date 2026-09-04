@@ -298,6 +298,79 @@ def test_d10_the_log_has_a_content_hash():
     assert len(_w().content_hash()) == 32
 
 
+def test_h118_content_hash_folds_persons_sites_rungs_tenures_not_only_the_log():
+    """`H-118`: `content_hash` used to iterate `self.log` alone -- `self.persons`, `self.sites`,
+    `self.rungs` and `self.tenures` were read NOT AT ALL. H-118's own repro: two identical
+    worlds, delete a person from one with NO Event appended -- the hashes matched. `content_hash`
+    now folds persons/sites/rungs (sorted by dict key) and tenures (sorted by `t.id`) IN ID
+    ORDER, ahead of the log.
+
+    FALSIFIER, H-118's OWN REPRO: two fresh `tiny_world()`s are identical; delete a person from
+    one with no Event appended; the hashes must now DIFFER. MUTATION CHECK: reverting
+    `World.content_hash` to iterate `self.log` only (dropping the persons/sites/rungs/tenures
+    loops) makes this assertion fail, because the deleted person -- and the Tenure it owned,
+    S15.1 -- becomes invisible to the hash again, exactly as H-118 measured.
+
+    R4 MUST STILL HOLD, so it is asserted here too: the same case at the same seed hashes
+    IDENTICALLY across two independent builds. MUTATION CHECK: replacing any of the new loops'
+    `sorted(...)` with plain dict/list iteration would make this depend on CONSTRUCTION order
+    rather than content — `tiny_world()`'s own `self.tenures` view is owner-then-unowned, not an
+    id order, so an id-sorted read and an insertion-order read would only coincide by luck; this
+    assertion is the R4 regression net for that ordering rule."""
+    w1 = _w()
+    w2 = _w()
+    assert w1.content_hash() == w2.content_hash(), (
+        "R4: the same case at the same seed must hash identically across two independent builds")
+    assert "p_other" in w2.persons and w2.persons["p_other"].tenures, (
+        "the fixture must actually own a Tenure for this repro to be H-118's own case")
+    del w2.persons["p_other"]
+    assert w1.content_hash() != w2.content_hash(), (
+        "H-118: deleting a person with no Event appended must change the hash -- content_hash "
+        "reading the log alone made this state divergence invisible")
+
+
+def test_h115_the_degree_branches_raise_unspecified_not_systemexit():
+    """`H-115`: `VerbRow.emits_at`/`writes_at` raised `SystemExit` on their two run-time degree
+    refusals (pre-fix: shape.py:708/712/728/733). `SystemExit` derives from `BaseException`, so
+    `corpus_run.run_case`'s `except (S.ShapeGap, S.Unspecified, S.Forbidden, S.NoProducer)` never
+    caught it and a one-case design gap ended the whole corpus run.
+
+    FALSIFIER (`arm2_onramp.run_2c`'s own repro): `SeasonDriver._fold`'s `_degree_for_writes` is
+    hardcoded `None` (H-98 is still open), so folding `kill / wound` DIRECTLY -- bypassing
+    `contest()`, exactly as a contest branch wired to fall through would -- reaches
+    `row.writes_at(None)` on a verb whose `writes` IS degree-keyed. That must now raise
+    `Unspecified`, a `ShapeGap`, and be CAUGHT by run_case's own catch clause rather than escape
+    it. MUTATION CHECK: reverting either run-time raise in `emits_at`/`writes_at` to `SystemExit`
+    makes the second assertion fail -- `SystemExit` is a `BaseException`, not a `ShapeGap`, so
+    `except (S.ShapeGap, S.Unspecified, S.Forbidden, S.NoProducer)` would no longer catch it and
+    it would propagate past this test's own `try`."""
+    w = _w()
+    d = S.SeasonDriver(w)
+    act = S.Act(id="sweep_kw", actor="p_low", verb="kill / wound", payload={"subject": "p_mid"})
+    with pytest.raises(Unspecified):
+        d._fold(w, act)
+    # THE CATCH LIST run_case ACTUALLY USES (corpus_run.py:350), not a copy of it (§8).
+    act2 = S.Act(id="sweep_kw2", actor="p_low", verb="kill / wound", payload={"subject": "p_mid"})
+    caught_as_gap = False
+    try:
+        d._fold(w, act2)
+    except (S.ShapeGap, S.Unspecified, S.Forbidden, S.NoProducer):
+        caught_as_gap = True
+    assert caught_as_gap, (
+        "the degree-branch raise must be a ShapeGap so run_case reports DESIGN-GAP rather than "
+        "the process ending")
+
+
+def test_h115_the_fourteen_load_time_raises_are_unchanged():
+    """`H-115`: only the FOUR run-time degree-branch raises (in `emits_at`/`writes_at`) moved to
+    `Unspecified`. The 14 load-time raises -- missing/malformed `write_matrix.yaml`/
+    `rosters.yaml`/`verb_table.yaml` -- are CORRECTLY fatal and must remain `SystemExit`: this
+    file loads once, at import, and a broken table should end the process rather than be reported
+    as a per-case gap. MUTATION CHECK: converting one of the 14 to `Unspecified`, or leaving a
+    stray `SystemExit` among the four degree branches, flips this count away from 14."""
+    assert SHAPE_CODE.count("raise SystemExit") == 14
+
+
 def test_d10b_resolve_sums_then_clamps_once():
     src = inspect.getsource(S.SeasonDriver.resolve)
     assert "sum(deltas)" in src and "clamp ONCE" in src

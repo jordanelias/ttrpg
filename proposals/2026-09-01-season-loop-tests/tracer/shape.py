@@ -701,17 +701,36 @@ class VerbRow:
     def emits_at(self, degree: str | None) -> tuple:
         """WHAT THIS ACT REPORTS, GIVEN WHAT THE SEAM RETURNED. Same polarity as `writes_at`:
         an uncontested verb ignores the degree; a contested one with no degree, or with a degree
-        it does not declare, RAISES rather than reporting the wrong outcome."""
+        it does not declare, RAISES rather than reporting the wrong outcome.
+
+        ⚠ `H-115`: THESE TWO RAISES USED TO BE `SystemExit`, THE ONLY RUN-TIME REFUSALS IN
+        `shape.py` OUTSIDE THE TYPED GAP TAXONOMY. `SystemExit` derives from `BaseException`, so
+        `corpus_run.run_case`'s `except (S.ShapeGap, S.Unspecified, S.Forbidden, S.NoProducer)`
+        clause never catches it -- a one-case design gap escaped as a whole-corpus run
+        termination, with no DESIGN-GAP row and no section citation. The 14 load-time raises
+        beside these (missing/malformed YAML, at shape.py:365/383/395/454/743/749/776/785/791/
+        800/808/813/821/825) are CORRECTLY fatal and are UNCHANGED -- this file loads once, and a
+        broken table should end the process. These four are not load-time; they fire per-act,
+        mid-corpus, and belong in the taxonomy every other per-case refusal in this file uses."""
         if not self.emits_by_degree:
             return self.emits
         if degree is None:
-            raise SystemExit(
+            raise Unspecified(
                 f"{self.verb!r} declares `contests: {self.contests}` and was folded with no "
-                "degree, so there is no way to say WHICH outcome to report.")
+                "degree, so there is no way to say WHICH outcome to report.",
+                "S39/H-98",
+                needs="a degree from the seam (contest()) before `emits_at` reads an outcome",
+                law="#358 rev.2 §C.4 -- a contested verb's `emits` is degree-keyed; folding one "
+                    "with no degree is the defect the column exists to make unwritable")
         if degree not in self.emits_by_degree:
-            raise SystemExit(
+            raise Unspecified(
                 f"{self.verb!r} has no `emits` branch for degree {degree!r}. Declared: "
-                f"{sorted(self.emits_by_degree)}.")
+                f"{sorted(self.emits_by_degree)}.",
+                "S39/H-98",
+                needs=f"an `emits` branch for degree {degree!r}, or a resolver that returns only "
+                      "a degree this verb declares",
+                law="#358 rev.2 §C.4 -- an unlisted degree RAISES rather than reporting a "
+                    "branch that did not happen")
         return tuple(self.emits_by_degree[degree])
 
     def writes_at(self, degree: str | None) -> tuple:
@@ -721,19 +740,31 @@ class VerbRow:
         an ABSENT degree RAISES rather than falling back to the union -- §42.2's polarity: zero
         evidence goes to the verdict AGAINST, never to a silent full write. `Failure: []` is
         lawful and means the act still EMITS having written nothing, which is what separates a
-        LOSS from a REFUSAL."""
+        LOSS from a REFUSAL.
+
+        ⚠ `H-115`, SAME FIX AS `emits_at` ABOVE -- see that docstring. These two raised
+        `SystemExit` and escaped `run_case`'s `ShapeGap` clause whole."""
         if not self.writes_by_degree:
             return self.writes
         if degree is None:
-            raise SystemExit(
+            raise Unspecified(
                 f"{self.verb!r} declares `contests: {self.contests}` and was folded with no "
                 "degree. A contested verb's writes are degree-keyed (#358 rev.2 §C.4); folding "
-                "one without a degree is the defect that column exists to make unwritable.")
+                "one without a degree is the defect that column exists to make unwritable.",
+                "S39/H-98",
+                needs="a degree from the seam (contest()) before `writes_at` selects a branch",
+                law="#358 rev.2 §C.4 -- a contested verb's `writes` is degree-keyed; folding one "
+                    "with no degree is the defect the column exists to make unwritable")
         if degree not in self.writes_by_degree:
-            raise SystemExit(
+            raise Unspecified(
                 f"{self.verb!r} has no `writes` branch for degree {degree!r}. Declared: "
                 f"{sorted(self.writes_by_degree)}. An unlisted degree RAISES rather than "
-                "defaulting -- a missing branch is a hole, not a full write.")
+                "defaulting -- a missing branch is a hole, not a full write.",
+                "S39/H-98",
+                needs=f"a `writes` branch for degree {degree!r}, or a resolver that returns only "
+                      "a degree this verb declares",
+                law="#358 rev.2 §C.4 -- an unlisted degree RAISES rather than defaulting to the "
+                    "union, which would write more than the contest actually resolved")
         return tuple(self.writes_by_degree[degree])
 
 
@@ -1692,6 +1723,20 @@ for _n in _TenureView._MUTATORS:
     setattr(_TenureView, _n, _TenureView._refuse)
 
 
+def _entity_digest(obj: Any) -> str:
+    """`H-118`: a deterministic string for ONE entity's own state, for `World.content_hash`.
+    `Person`, `Site` and `Tenure` are `@dataclass` -- their auto-generated `__repr__` lists every
+    field in DECLARATION order, which is fixed by the class and not by insertion, so it is stable
+    across two runs of the same seed (R4). `Rung` is not a dataclass (S10 -- it stores its fields
+    via `object.__setattr__` behind a whitelist, `Rung._DECLARED`), so it is read off `vars()`;
+    `Rung.__init__` always inserts the same fields in the same order, so that dict's own iteration
+    order is already stable, and `sorted()` over its items makes the point structural rather than
+    incidental."""
+    if hasattr(obj, "__dataclass_fields__"):
+        return repr(obj)
+    return repr(sorted(vars(obj).items()))
+
+
 class World:
     def __init__(self, world_seed: int, fixtures: Fixtures = DEFAULT_FIXTURES):
         self.world_seed = world_seed
@@ -2024,12 +2069,39 @@ class World:
         return self.draw
 
     def content_hash(self) -> str:
+        """`H-118`: REV 1 (of this fix) hashed the log alone. Demonstrated there -- delete a
+        person from one of two identical worlds with no Event appended, and the hashes still
+        matched, because `content_hash` read the log and nothing else. It now folds `persons`,
+        `sites`, `rungs` and `tenures` -- IN ID ORDER -- ahead of the log, so a state divergence
+        that never reaches the log is no longer invisible to it.
+
+        ⚠ SORTED-KEY ORDER, NEVER INSERTION ORDER (R4). `self.persons`/`self.sites`/`self.rungs`
+        are hashed via `sorted(...)` over their own dict keys, and `self.tenures` (the read-only
+        owner-first VIEW, S15.1) is re-sorted here by `t.id` rather than trusted to already be in
+        one -- its own order is owner-then-unowned, which is a CONSTRUCTION order, not an id
+        order, and R4 (the same seed replaying byte-identically) would break the moment two runs
+        happened to add tenures in a different sequence for the same eventual world.
+
+        `Event.observed` DOES NOT EXIST YET (W-B) -- `getattr` guards it so this hash is
+        forward-compatible without a second edit the day that field lands."""
         h = hashlib.blake2b(digest_size=16)
+        for pid in sorted(self.persons):
+            h.update(f"P|{pid}|{_entity_digest(self.persons[pid])}".encode())
+        for sid in sorted(self.sites):
+            h.update(f"Si|{sid}|{_entity_digest(self.sites[sid])}".encode())
+        for rid in sorted(self.rungs):
+            h.update(f"Ru|{rid}|{_entity_digest(self.rungs[rid])}".encode())
+        for t in sorted(self.tenures, key=lambda t: t.id):
+            h.update(f"T|{t.id}|{_entity_digest(t)}".encode())
         for e in self.log:
             h.update(f"{e.id}|{e.kind}|{e.subject}|{e.emitted_at}|{e.degree}|"
                      f"{','.join(e.causes)}".encode())
             for c in e.changes:
                 h.update(f"~{c.subject}|{c.mode}|{c.driver}|{c.field}|{c.delta}".encode())
+            # W-B forward-compatibility: `Event` carries no `observed` field today (getattr with
+            # a default guards that), and once it does this folds it with no second edit here.
+            for o in (getattr(e, "observed", None) or []):
+                h.update(f"^{o}".encode())
         return h.hexdigest()
 
     # -- S43: resolution AT BOOT, by string. A missing provider is a STARTUP FAILURE WITH A

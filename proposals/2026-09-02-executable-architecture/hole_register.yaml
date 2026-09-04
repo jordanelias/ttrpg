@@ -1684,7 +1684,7 @@ rows:
     owner:     "`interactions_per_scene` - the fixture whose value decides whether the budget binds"
     grade:     "measured"
     default:   ""
-    site:      "proposals/2026-09-04-degree-sweep/arm9_forking.py (arms 7c / 9f)"
+    site:      "proposals/2026-09-04-degree-sweep/arm9_forking.py (arms 7c / 9f / 9g)"
     sweep:     []
     source:    "the degree sweep, 2026-09-04 — found by a null result that was an artifact"
     unblocks:  "choice as a mechanic at all; and the 22 corpus cases wanting a third party to step in"
@@ -1693,6 +1693,25 @@ rows:
       ROTATED the ranked list so a different candidate led, and all four branches produced
       byte-identical worlds. A spy confirmed the patch was firing, so the null was real and its
       cause was here - rotation changes the ORDER and never the SET when everything is taken.
+
+      W-0 (2026-09-04): the fork is now NATIVE at the budget boundary (`recorder`, `fork_case`,
+      arm9_forking.py) instead of imposed by restricting `ranked` to one candidate, and `run()`'s
+      `budget_report` (ARM 9g) prints `budget_binds = candidates > slots` per deliberation, with
+      `slots` read from fixtures rather than written as a literal. AT DEFAULT_FIXTURES (15 slots)
+      `budget_binds` is False at every deliberation measured (0 of 24, sample=2/seasons=2) - this
+      row's own finding, confirmed again rather than merely carried forward, and every fork found
+      is INERT-BY-CONSTRUCTION. AT `interactions_per_scene=1` (5 slots) it flips: `budget_binds`
+      is True at 24 of 24 deliberations (100%) -- see `proposals/2026-09-04-degree-sweep/arm9_forking.py`'s
+      own `budget_report`, whose log line reads `budget_binds True at e.g. case 'NPC-088' person
+      'p_a' tick 0: 7 candidates > 5 slots` -- a real `instead of` moment exists at that
+      fixture point, though `MAX_ALT`'s top-3-alternatives probe does not reach it at that
+      person's own in-budget count (L=5) without also narrowing the budget itself. Narrowing
+      `scene_budget` alongside `interactions_per_scene` (2 slots, sample=3/seasons=3) surfaces 54
+      GENUINE forks, all RECONVERGED - `flipped=True` (e.g. `move` instead of `speak`),
+      `acts_differ`/`hash_differ` both True at the fork's own site, and the next three decisions
+      identical regardless, consistent with arm 9c/9d's finding that no claim can reach
+      `opening_set`. INERT-BY-CONSTRUCTION is reported separately and is never folded into
+      RECONVERGED.
 
   - id:        "H-118"
     tier:      1
