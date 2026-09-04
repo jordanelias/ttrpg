@@ -339,7 +339,12 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs())
     try:
         for _ in range(n):
-            d.season(ch, question=None, subsistence=P.SUBSIST)
+            # `H-87` -- S39.3 gives the contest depth cap NO DEFAULT, so an uncapped call raised
+            # `Forbidden` before `contest()` was ever entered, for every case reaching a contested
+            # act. `w.fixtures.get(...)`, not a literal -- `DEFAULT_FIXTURES.contest_max_depth`
+            # is the one registered number (§0.05).
+            d.season(ch, question=None, subsistence=P.SUBSIST,
+                    contest_max_depth=w.fixtures.get("contest_max_depth"))
     except S.InstrumentDefect as e:
         # ⚠ THE TWO BUCKETS ARE SHAPE'S OWN, NOT A SECOND TAXONOMY (§8). `shape.py` states why the
         # split matters: a call-site bug landing in the design column *"corrupts the measurement in
@@ -385,7 +390,12 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     ch2 = S.make_chooser(w2.fixtures, mint2, verbs=S.resolvable_verbs())
     try:
         for _ in range(n):
-            d2.season(ch2, question=None, subsistence=P.SUBSIST)
+            # ⚠ THE SAME FIXTURE, ON BOTH CALL SITES. A cap on the measured run and not the R4
+            # replay (or vice versa) would make the two runs different EXPERIMENTS -- one
+            # reaching the contest seam and one refusing before it -- and R4 would then be
+            # comparing a hash that never got a chance to diverge against one that did.
+            d2.season(ch2, question=None, subsistence=P.SUBSIST,
+                     contest_max_depth=w2.fixtures.get("contest_max_depth"))
         r4 = w2.content_hash() == w.content_hash()
     except Exception:
         r4 = False

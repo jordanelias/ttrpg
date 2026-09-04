@@ -1540,6 +1540,273 @@ rows:
       what that is under, so the purview test cannot tell the two states of either event apart.
     source: Jordan 2026-09-02 -- "the ability to be under", extended to offices
 
+
+  # ─── 2026-09-04 · from the degree sweep (proposals/2026-09-04-degree-sweep) ────
+  # Eight rows, all grade `measured`: each is an executed result with a reproduction
+  # command, not a reading. H-116 is the one that subsumes the others.
+
+  - id:        "H-116"
+    tier:      0
+    hole:      >-
+      THE FEEDBACK EDGE FROM CONSEQUENCE TO DECISION IS SEVERED, AND BY A TYPE MISMATCH RATHER
+      THAN BY AN ABSENCE. `belief_contradicts` (proposals/2026-09-01-season-loop-tests/tracer/shape.py:2537-2560) narrows a person's candidate
+      set only for a claim whose `predicate` is in `PERSON_PREDICATES` (church_standing, grade,
+      heritage, office, residence) AND whose `value is False`. Measured over 4,800 deposited
+      claims across 8 cases x 3 seasons, the predicates WITNESS actually deposits are
+      claim.decayed, condition.worn, news.told, proposition.uttered, record.created, site.worked,
+      speech.made, stores.changed, transfer.refused, travel.blocked, yield.taken. The two
+      vocabularies are DISJOINT and zero claims are falsy - a refusal is recorded as
+      `predicate=travel.blocked value=True`, meaning it is TRUE that travel was blocked. So clause
+      4 of `opening_set` cannot fire and the candidate set is invariant with respect to everything
+      that happens in the simulation.
+    kind:      "COLLISION"
+    owner:     "`belief_contradicts` and the WITNESS deposit - ONE predicate namespace, written at one end and read at the other"
+    grade:     "measured"
+    default:   ""
+    site:      "proposals/2026-09-04-degree-sweep/arm9_forking.py::claim_channel"
+    sweep:     []
+    source:    "the degree sweep, 2026-09-04 — Jordan-directed forking exercise, found by execution"
+    unblocks:  >-
+      every arc whose engine is a person learning something and acting differently. Measured
+      pressure - belief/knowledge is wanted by 58 of 143 cases (105 rows, 59 of them `core`), the
+      second-most-demanded capability in the corpus; third-party-substitute (22 cases) is blocked
+      behind it outright.
+    cite: >-
+      MEASURED 2026-09-04 BY THE FORKING EXERCISE JORDAN DIRECTED. Every mechanical decision in
+      the corpus was flipped every way it could be flipped and each fork followed forward three
+      decisions - 2,403 forks across 89 cases. All 2,403 changed the act taken AND the event
+      stream written; NOT ONE changed any of the next three decisions, and the acts diff
+      positionally at the fork index ONLY. Controls - the world DOES change (fingerprint
+      b24bb0df -> a0862f1e, three distinct log hashes), the deliberation counts align 9 to 9, and
+      the harness re-derives rather than replays (it patches `pack_scenes`; `ranked` is recomputed
+      by `Query.opening_set` at every deliberation). A FIRST DIAGNOSIS BLAMED THE ACTS FOR NOT
+      MOVING THE WORLD AND IS RETRACTED - the world moves; the deliberation never reads it. THE
+      DESIGN'S OWN WORKED EXAMPLE IS ONE TYPE MISMATCH FROM RUNNING - `opening_set`'s docstring
+      says a person who wrongly believes the granary full acts and gets `transfer.refused` from
+      the fold, and calls that T3 and L2 working. The fold DOES deposit that refusal. Nothing can
+      read it. This is `H-72` and `F.24`/`H-94` seen from the other end, and it is the bottleneck -
+      a degree, a contest or a discovery model that cannot reach a later decision is a
+      better-labelled log line.
+
+  - id:        "H-113"
+    tier:      0
+    hole:      >-
+      `VerbRow.emits_at` (proposals/2026-09-01-season-loop-tests/tracer/shape.py:701) HAS ZERO CALLERS ANYWHERE IN THE TRACER, so a contested
+      verb's degree-keyed emissions are never selected. The fold emits `row.emits` at
+      proposals/2026-09-01-season-loop-tests/tracer/shape.py:4507 - the FLAT UNION of all branches - so all three of `kill / wound`'s degrees
+      emit the same set. Executed - a contest resolved `Untouched`, the degree meaning nobody was
+      hurt, emits `person.died`. The `earned` guard cannot intervene - on `Untouched` `writes_at`
+      returns empty, so `_pairs` is falsy and the whole `if _pairs:` block INCLUDING the refusal
+      guard at proposals/2026-09-01-season-loop-tests/tracer/shape.py:4480 is skipped, leaving `earned` empty. On `Wounded` it is the union for a second
+      reason - `_eff_kill` returns a LIST, and only a dict return populates `earned`
+      (proposals/2026-09-01-season-loop-tests/tracer/shape.py:4542-4548). LATENT, not live - a contested verb cannot reach proposals/2026-09-01-season-loop-tests/tracer/shape.py:4507 today because
+      `_degree_for_writes` is hardcoded `None` at proposals/2026-09-01-season-loop-tests/tracer/shape.py:4447 and `resolve()`'s contest branch
+      `continue`s at proposals/2026-09-01-season-loop-tests/tracer/shape.py:4676.
+    kind:      "WIRING"
+    owner:     "`_fold`'s emission line - it reads `row.emits` where `writes_at` reads the degree"
+    grade:     "measured"
+    default:   ""
+    site:      "proposals/2026-09-04-degree-sweep/arm3_tree.py::fold_one"
+    sweep:     []
+    source:    "the degree sweep, 2026-09-04 — found by execution, confirmed by an independent read-only critic"
+    unblocks:  "any degree-keyed verb emitting the outcome it actually had"
+    cite: >-
+      MEASURED 2026-09-04. Verified exhaustively by an independent read-only critic - proposals/2026-09-01-season-loop-tests/tracer/shape.py (line 701)
+      (def) and proposals/2026-09-01-season-loop-tests/tracer/shape.py (line 702) (docstring) are the only occurrences of `emits_at` in the whole tracer
+      directory, with no getattr or string-dispatch path; `writes_at` by contrast has its one
+      caller at proposals/2026-09-01-season-loop-tests/tracer/shape.py (line 4448). THIS IS THE `ID-13` TEST #362 APPLIED TO DELETE `Tenure.conferrer` AND DID
+      NOT APPLY TO `emits_by_degree`, WHICH IT ADDED IN THE SAME REVISION - a declared field
+      reaching no reader is one that does not exist. It is also the fabricated-deaths defect
+      returning through a different door - Artifact 2 published four deaths for state changes that
+      did not happen, and `person.died` is one of the three endings the chain check accepts.
+
+  - id:        "H-114"
+    tier:      0
+    hole:      >-
+      `_eff_kill` (proposals/2026-09-01-season-loop-tests/tracer/shape.py:3847-3867) TAKES NO DEGREE PARAMETER, so the effect that computes the
+      VALUES cannot honour the branch `writes_at` selected. Worse, `int(d.get("harm", p.body))`
+      defaults harm to the person's ENTIRE body, so body reaches exactly 0, `if p.body > 0` is
+      passed and `del w.persons[who]` fires. Executed - a fold at degree `Wounded` DELETES THE
+      PERSON. Even with the bands ruled, the effect cannot express them.
+    kind:      "FORMULA"
+    owner:     "`_eff_kill` - the effect signature carries no degree"
+    grade:     "measured"
+    default:   ""
+    site:      "proposals/2026-09-04-degree-sweep/arm3_tree.py::fold_one"
+    sweep:     []
+    source:    "the degree sweep, 2026-09-04 — found by execution"
+    unblocks:  "`H-98`'s outcome model - the bands are unbuildable while the effect is degree-blind"
+    cite: >-
+      MEASURED 2026-09-04. SCOPE NARROWED AFTER AN ADVERSARIAL PASS - a first statement claimed
+      every computed act is lethal because §F1's Candidate carries no operands (`H-80`). FALSE - a
+      computed act omits `subject` too, so `_eff_kill` returns early at proposals/2026-09-01-season-loop-tests/tracer/shape.py (line 3858) and the fold takes
+      the refusal branch. The correct and weaker claim - ANY `kill / wound` naming a subject and
+      no `harm` is lethal at every degree, which is reachable from a hand-built act.
+
+  - id:        "H-115"
+    tier:      1
+    hole:      >-
+      THE FOUR DEGREE BRANCHES ARE THE ONLY RUN-TIME REFUSALS IN `shape.py` THAT BYPASS THE TYPED
+      GAP TAXONOMY. `writes_at` and `emits_at` raise `SystemExit` (proposals/2026-09-01-season-loop-tests/tracer/shape.py:708 proposals/2026-09-01-season-loop-tests/tracer/shape.py:712 proposals/2026-09-01-season-loop-tests/tracer/shape.py:728 proposals/2026-09-01-season-loop-tests/tracer/shape.py:733), which
+      derives from `BaseException`. `corpus_run.run_case` catches `InstrumentDefect` (proposals/2026-09-01-season-loop-tests/tracer/shape.py:343) and
+      the `ShapeGap` family (proposals/2026-09-01-season-loop-tests/tracer/shape.py:350); executed under those exact clauses the raise ESCAPES BOTH. Of
+      18 `SystemExit` raises in shape.py, 14 are load-time (missing or malformed YAML) and
+      correctly fatal; these 4 are the exception. They produce no DESIGN-GAP row, no `kind`
+      histogram entry and no section citation, and they end the PROCESS - converting a one-case
+      design gap into a whole-corpus run termination. The guard's DIRECTION is right and
+      proposals/2026-09-01-season-loop-tests/tracer/shape.py:4441-4447 says so; only its mechanism is at issue.
+    kind:      "WIRING"
+    owner:     "`writes_at` / `emits_at` - the raise type, not the raise"
+    grade:     "measured"
+    default:   ""
+    site:      "proposals/2026-09-04-degree-sweep/arm2_onramp.py::run_2c"
+    sweep:     []
+    source:    "the degree sweep, 2026-09-04 — found by execution"
+    unblocks:  "reporting a degree gap as a gap once the contest branch is wired to fall through"
+    cite: >-
+      MEASURED 2026-09-04, static and dynamic. Split verified independently by a read-only critic -
+      all 18 raises enumerated at 365, 383, 395, 454, 708, 712, 728, 733, 743, 749, 776, 785, 791,
+      800, 808, 813, 821, 825; the 14 sit in the three loaders, the 4 in the degree readers.
+
+  - id:        "H-117"
+    tier:      1
+    hole:      >-
+      THE ACT BUDGET NEVER BINDS, SO §26.3'S TRIAGE NEVER HAPPENS. Measured in 12 of 12 sampled
+      cases - every person takes ALL of their ranked candidates every season (3 deliberations x 7
+      ranked = 21 acts resolved, all of them). §26.3 makes triage "the PERSON's own choice of what
+      to leave undone"; in 143 cases nothing is ever left undone, so the ranking ORDERS acts and
+      never SELECTS among them, and a person's convictions cannot express a refusal. Compounding
+      it, the ranking mostly ties - `align` is sparse with `default_cell: 0.0`, so only 2..7 of 22
+      candidates carry a nonzero score and the rest sort alphabetically by verb name. CONSEQUENCE
+      FOR ANY FUTURE FORKING TEST - the engine has no native x-instead-of-y moment, so exclusivity
+      has to be introduced by the instrument before the question can be asked at all.
+    kind:      "NUMBER"
+    owner:     "`interactions_per_scene` - the fixture whose value decides whether the budget binds"
+    grade:     "measured"
+    default:   ""
+    site:      "proposals/2026-09-04-degree-sweep/arm9_forking.py (arms 7c / 9f / 9g)"
+    sweep:     []
+    source:    "the degree sweep, 2026-09-04 — found by a null result that was an artifact"
+    unblocks:  "choice as a mechanic at all; and the 22 corpus cases wanting a third party to step in"
+    cite: >-
+      MEASURED 2026-09-04. Found by a null result that was an artifact - a first forking harness
+      ROTATED the ranked list so a different candidate led, and all four branches produced
+      byte-identical worlds. A spy confirmed the patch was firing, so the null was real and its
+      cause was here - rotation changes the ORDER and never the SET when everything is taken.
+
+      W-0 (2026-09-04): the fork is now NATIVE at the budget boundary (`recorder`, `fork_case`,
+      arm9_forking.py) instead of imposed by restricting `ranked` to one candidate, and `run()`'s
+      `budget_report` (ARM 9g) prints `budget_binds = candidates > slots` per deliberation, with
+      `slots` read from fixtures rather than written as a literal. AT DEFAULT_FIXTURES (15 slots)
+      `budget_binds` is False at every deliberation measured (0 of 24, sample=2/seasons=2) - this
+      row's own finding, confirmed again rather than merely carried forward, and every fork found
+      is INERT-BY-CONSTRUCTION. AT `interactions_per_scene=1` (5 slots) it flips: `budget_binds`
+      is True at 24 of 24 deliberations (100%) -- see `proposals/2026-09-04-degree-sweep/arm9_forking.py`'s
+      own `budget_report`, whose log line reads `budget_binds True at e.g. case 'NPC-088' person
+      'p_a' tick 0: 7 candidates > 5 slots` -- a real `instead of` moment exists at that
+      fixture point, though `MAX_ALT`'s top-3-alternatives probe does not reach it at that
+      person's own in-budget count (L=5) without also narrowing the budget itself. Narrowing
+      `scene_budget` alongside `interactions_per_scene` (2 slots, sample=3/seasons=3) surfaces 54
+      GENUINE forks, all RECONVERGED - `flipped=True` (e.g. `move` instead of `speak`),
+      `acts_differ`/`hash_differ` both True at the fork's own site, and the next three decisions
+      identical regardless, consistent with arm 9c/9d's finding that no claim can reach
+      `opening_set`. INERT-BY-CONSTRUCTION is reported separately and is never folded into
+      RECONVERGED.
+
+  - id:        "H-118"
+    tier:      1
+    hole:      >-
+      ⚠ CLOSED 2026-09-04 BY W-0, AND THEN CLOSED PROPERLY. The state below is the state AS
+      FOUND and is kept because it is the argument that produced this row. W-0's first attempt
+      folded persons/sites/rungs/tenures and its docstring claimed the gap shut; an adversarial
+      pass found it had folded FOUR OF ELEVEN, omitting `records` and `propositions` among
+      others - and `create_record` and `utter`, TWO OF THE FIVE VERBS THAT EXECUTE IN THE
+      CORPUS, write exactly those. So the same blindness was live on the collections the corpus
+      actually moves, behind a docstring saying otherwise. `content_hash` now folds every
+      game-state collection from a declared `World._STATE_COLLECTIONS`/`_STATE_SEQUENCES`, and
+      `test_h118_content_hash_folds_every_game_state_collection` reads the World's OWN attributes
+      and fails when one is added and not folded - so the enumeration cannot go stale again.
+      Mutation-checked both ways. R4 re-verified over 15 NPC cases, R4-false ids: [].
+      ⚠ THE `StateChange.delta` HALF REMAINS OPEN: `_apply_write` still constructs
+      `StateChange(t, "set", "Act", fld)` with no delta, so two runs writing DIFFERENT VALUES to
+      the same field still hash identically. That is not closed here and is not claimed to be.
+      AS FOUND: `World.content_hash` (shape.py) ITERATED `self.log` ONLY - it read `persons`,
+      `tenures`, `sites` and `rungs` not at all. Demonstrated - delete a person from one of two
+      identical worlds with no Event appended and the hashes still match. `R4`, named a
+      load-bearing control in #362's body as the byte-identical corpus_run output, therefore
+      pins that the EVENT STREAM replays identically and NOT that the world state does. A state
+      divergence leaving the log identical is invisible to it. A second blindness one field
+      deeper - `StateChange.delta` is `None` for every act-driven write (proposals/2026-09-01-season-loop-tests/tracer/shape.py:1231-1239 default,
+      proposals/2026-09-01-season-loop-tests/tracer/shape.py:4552 four-positional construction), and `content_hash` folds `c.delta`, so two runs writing
+      DIFFERENT VALUES to the same field also hash identically.
+    kind:      "SCHEMA_COLUMN"
+    owner:     "`content_hash` - its name promises the world and its body reads the log"
+    grade:     "measured"
+    default:   ""
+    site:      "proposals/2026-09-04-degree-sweep/arm4_margin.py::run_a"
+    sweep:     []
+    source:    "the degree sweep, 2026-09-04 — found by an independent read-only critic"
+    unblocks:  "a determinism control that observes the state, not only the narration"
+    cite: >-
+      MEASURED 2026-09-04. THE SWEEP COMMITTED THIS DEFECT IN ITS OWN ARM 3 AND IS RECORDING THAT
+      RATHER THAN SMOOTHING IT - arm 3 used `content_hash` as leaf identity while calling `_fold`
+      directly, and `_fold` contains no `w.log.append`, so the hash was a CONSTANT and the
+      published per-case distinct-leaf count of 1 was entailed by the harness. Found by a
+      read-only critic. The `StateChange.delta` half is that critic's own observation.
+
+  - id:        "H-119"
+    tier:      1
+    hole:      >-
+      `combat_seam.resolve` RETURNS TWO DEGREE SURFACES THAT CONTRADICT EACH OTHER ON ~5% OF
+      DECIDED FIGHTS. It returns `winner` and `wound_state` and names the second THE DEGREE
+      SOURCE. Measured over 300 seeded fights the reported winner is the FELLED fighter in 6.06%;
+      cross-confirmed from an independent quantity, 28 of 595 losers are not at health 0 (4.7%).
+      Cause - `systems/combat/combat_engine_v1/wrapper.py:493`, `if result!=0 and rng.random()<cfg['UPSET_FLOOR']: result =
+      -result`, which inverts the result after the fell was recorded and never touches the wound
+      trackers. Under Jordan's 2026-09-04 ruling (the combat engine determines the result; the
+      caller accepts it) this is answerable by precedent rather than escalation - accept
+      `wound_state`, which is what the seam's own docstring already says.
+    kind:      "COLLISION"
+    owner:     "`combat_seam.resolve` - which of its two returns a caller may read as the outcome"
+    grade:     "measured"
+    default:   "accept `wound_state`; `winner` is not a degree and disagrees with the scene"
+    site:      "proposals/2026-09-04-degree-sweep/arm2_onramp.py (2b-control)"
+    sweep:     []
+    source:    "the degree sweep, 2026-09-04 — found by execution"
+    unblocks:  "`H-98` being answered off a surface that does not contradict the scene it describes"
+    cite: >-
+      MEASURED 2026-09-04. A FIRST STATEMENT SAID THE DESYNCHRONISATION WAS UNDECLARED ANYWHERE
+      AND IS RETRACTED - `systems/combat/combat_engine_v1/config.py (line 295)`, at the constant's own definition site, declares it -
+      "with no in-model event corresponding to the reversal". The narrowed claim that survives - the SEAM
+      repeats none of that warning while naming `wound_state` the degree source and returning
+      `winner` beside it.
+
+  - id:        "H-120"
+    tier:      1
+    hole:      >-
+      THREE OF THE FOUR DECLARED CONTEST PRIZES ARE CLAIMED BY NO VERB. `rosters.yaml`
+      `contest_subsystems.prizes` routes `the body` to personal_combat, `a field` to mass_battle,
+      and `a standing` and `a proposition` to social_contest. Exactly ONE verb in the 32-row table
+      carries a `contests:` column - `kill / wound`, on `the body`. So the social and mass-battle
+      seams are declared from the roster end and unclaimed from the verb end, and `contest()`'s
+      own refusal text says it - "mass_battle and social_contest still resolve to a name only".
+      NOT A PURE WIRING GAP - connecting `a proposition` would reach social_contest's `agon` game,
+      which is WIRED; connecting an investigation would reach `inquiry`, which is a STUB. Jordan,
+      2026-09-04 - "social contest is an unfinished engine."
+    kind:      "WIRING"
+    owner:     "the `contests:` column - the prize roster's other end"
+    grade:     "measured"
+    default:   ""
+    site:      "proposals/2026-09-04-degree-sweep/arm5_social.py::run_b"
+    sweep:     []
+    source:    "the degree sweep, 2026-09-04 — found by execution"
+    unblocks:  >-
+      roll/contest, wanted by 51 of 143 cases (89 rows, 47 core); social/speech (31 cases); and
+      the DEGREE/partial-outcome family (19 cases, 18 core rows)
+    cite: >-
+      MEASURED 2026-09-04 by parsing all 32 verb rows and the roster. Prize-claim recount verified
+      independently by a read-only critic.
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

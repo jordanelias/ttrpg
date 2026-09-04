@@ -4,6 +4,7 @@
 ## rewrote #358 to rev. 2, conditioned #357 against it, and evaluated #359 against both.
 ## ⚠ **UPDATED 2026-09-03 (rev. 3)** — the evaluation's §6A change list is now APPLIED. Read
 ## `README.md`'s rev. 3 banner for what landed; PART 1 and PART 2 below are re-cut against it.
+## ⚠⚠ **UPDATED 2026-09-04 — §2's backlog is now MEASURED rather than argued. See PART 2A.**
 
 **Read `README.md`'s rev. 3 banner first, then `04_CODE_ARCHITECTURE.md`'s rev. 2 banner** — the
 first lists what the evaluation's change list moved, the second the twenty findings and where each
@@ -55,6 +56,47 @@ The nine collapse to five causes, and four are holes #357 already registers.
 | **2c** | **`determine` is `absent`; `judging_set` is `D11` absent** | `vote` — nothing is decided at a sitting | `judging_set` as a Query over seats whose remit covers the matter (#358 `§B.7`) |
 | **2d** | **`Rung.exists` and `Site.exists` have ZERO producers** | `incorporation` · building a holding — **`F.20`: the world only decays** | a founding verb writing `Site.exists`; #359's holdings model says what it confers, #358 `§D.3` says a Site gates verbs by band |
 | **2e** | **no `bargain`** | the third response at every tier | ⚠ **test composability first** — `utter` a counter-`OUGHT` + `commit` may already express it. Adding a verb is the last resort, not the first |
+
+### 2A · ⚠ **THE BACKLOG, MEASURED** (2026-09-04, `proposals/2026-09-04-degree-sweep`)
+
+§2 above was written as an argument from reading. It has now been **executed** against all 143 ARC
+and NPC cases, and the result changes the *ordering* rather than the content: **the five rows are
+real and none is the bottleneck.** The bottleneck is one row further down, and it is `H-72`.
+
+**THE MEASUREMENT.** Every mechanical decision in the corpus was flipped every way it could be
+flipped and each fork followed forward three decisions — **2,403 forks across 89 cases.** All 2,403
+changed the act taken *and* the event stream written. **Not one changed any of the next three
+decisions**, and the acts diff positionally at the fork index alone. Controls: the world *does*
+change; deliberation counts align; the harness re-derives rather than replays.
+
+**THE CAUSE.** `Query.opening_set` has four clauses and **none consults world state** — that is
+`§F1`'s deliberate epistemic design. The single channel from consequence to decision is a claim in
+the actor's ledger, and **that channel is closed by a type mismatch**: `belief_contradicts` fires
+only on `predicate ∈ PERSON_PREDICATES ∧ value is False`, and over 4,800 measured claims the two
+predicate vocabularies are **disjoint** and **zero** claims are falsy. A refusal is deposited as
+`predicate=travel.blocked value=True`.
+
+⚠ **`opening_set`'s own docstring describes this loop as working** — *"a person who wrongly
+believes the granary full still forms the Candidate, acts, and gets `transfer.refused` from the
+fold. That is T3 and L2 working."* The fold **does** deposit that refusal. Nothing can read it.
+**The design's own worked example is one type mismatch from running.**
+
+**WHAT THIS DOES TO THE ORDERING.** `H-72` / `F.24` / `H-94` — typing `requires` so a belief can
+reach a decision — moves **ahead of all five** of §2's rows, because a discovery model, a degree
+ladder or a `release` verb that cannot reach a later decision is a better-labelled log line. §2's
+rows are then worth building in their own order.
+
+| | |
+|---|---|
+| **new rows in `hole_register.yaml`** | `H-113` `emits_at` has zero callers, so every degree emits the union and `Untouched` announces `person.died` · `H-114` `_eff_kill` is degree-blind and defaults harm to the whole body, so `Wounded` deletes the person · `H-115` the four degree branches raise `SystemExit`, escaping `run_case`'s handlers · **`H-116` the severed edge, above** · `H-117` the act budget never binds, so `§26.3`'s triage never happens · `H-118` `content_hash` reads the log, not the world · `H-119` the seam's two degree surfaces contradict on ~5% · `H-120` 3 of 4 declared prizes are claimed by no verb |
+| **corpus demand, for prioritising** | 972 `season_requires` rows, 427 `core`. Blocked families by cases wanting them: belief/knowledge **58**, roll/contest **51**, investigation **37**, social/speech **31**, third-party-substitute **22**, degree/partial **19**. **113 of 143 cases (79%) touch at least one.** |
+| **what the two lanes want** | NPC leans *interiority* (relationship 46%, belief 41%, observability 37%); ARC leans *machinery* (accumulator 53%, threshold 48%, roll/contest 43%). Both ~79% blocked, by different routes. |
+| **the design's own bar** | the v30 counterfactual corpus branches by *"alternate degree"* in **7 of 11** scenarios — **64% of its own way of making an alternative future is unreachable.** |
+
+⚠ **One finding indicts a habit rather than a row.** #362 applied `ID-13` — *a declared field
+reaching no reader is one that does not exist* — to delete `Tenure.conferrer`, and did **not** apply
+it to `emits_by_degree`, which the same revision added. `H-113` is that field. **Apply `ID-13` to
+what a revision ADDS, not only to what it inherits.**
 
 ### 3 · Open questions — ⚠ **these need Jordan, and only these**
 
