@@ -32,15 +32,21 @@ sys.path.insert(0, str(Path(__file__).parent))
 import wd_acceptance as W
 import arm9_forking as A9
 from sweep_core import S
+from trace_log import TRACE
 
 _REAL_QF = S.questions_for
 
 
-def corpus_drops(mode: str):
-    """Every §F1 clause-4 drop over the 89 worlds at the acceptance fixture point, with the
-    carrier's depositing Event — no forking, just the baselines. This is the population the
-    divergences are drawn from."""
-    fx = W.fixtures_for(mode, "narrow")
+def corpus_drops(mode: str, slots: str = "narrow"):
+    """Every §F1 clause-4 drop over the 89 worlds at a fixture point, with the carrier's
+    depositing Event — no forking, just the baselines. This is the population the divergences are
+    drawn from.
+
+    ⚠ RUN AT BOTH ASKABLE CELLS SINCE 2026-09-04. `2x3` reads 100% at `actor` — ZERO divergences —
+    and a zero with no mechanism under it is an uncontrolled number in the favourable direction's
+    mirror (`CLAUDE.md` §0.1 pt 4). The drop count says whether clause 4 had anything to do at
+    that cell at all."""
+    fx = W.fixtures_for(mode, slots)
     rows, false_rec = [], []
     kinds = collections.Counter()          # census 4 -- every Event kind the corpus emits
     qsrc = collections.Counter()           # census 5 -- every Question, by source
@@ -58,6 +64,14 @@ def corpus_drops(mode: str):
 
     for lane, case in W.CASES:
         sink = []
+        # ⚠ VALUE-NEUTRAL, AND THE RE-RUN IS THE CONTROL THAT SAYS SO. `trace_log.TRACE` is a
+        # module-level singleton whose `rows` list nothing resets; MEASURED 2026-09-04, it grows
+        # ~221,000 rows and ~97 MB of RSS PER CASE, strictly linear, which is why a long
+        # single-process W-D run is killed with no traceback. Nothing reads `TRACE.rows` during a
+        # run. The falsifier that this clear changes no number: this file's `narrow` figures after
+        # the change must reproduce the committed 0 / 37 / 123 drops and 123-of-123
+        # true-when-recorded exactly. They do.
+        TRACE.rows.clear()
         S.questions_for = qspy
         try:
             (_r, drops, deps) = W._instrumented(
@@ -108,10 +122,12 @@ def corpus_drops(mode: str):
 
 if __name__ == "__main__":
     out = {}
-    for mode in ("none", "actor", "total"):
-        rows, false_rec, kinds, qsrc, qlead, qmulti = corpus_drops(mode)
+    for slots in ("narrow", "2x3"):
+      out[slots] = {}
+      for mode in ("none", "actor", "total"):
+        rows, false_rec, kinds, qsrc, qlead, qmulti = corpus_drops(mode, slots)
         pred = collections.Counter((r["verb"], r["predicate"]) for r in rows)
-        out[mode] = dict(
+        out[slots][mode] = dict(
             n_drops=len(rows),
             self_referential=sum(1 for r in rows if r["self_ref"]),
             not_self_referential=sum(1 for r in rows if not r["self_ref"]),
@@ -141,10 +157,10 @@ if __name__ == "__main__":
             question_leading_source=dict(sorted(qlead.items(), key=lambda kv: -kv[1])),
             leading_source_is_shared=qmulti,
         )
-        print(mode, {k: v for k, v in out[mode].items()
-                     if k not in ("non_self_referential_rows", "false_when_recorded_examples",
-                                  "event_kinds")})
-        print("   event_kinds:", out[mode]["event_kinds"])
+        print(slots, mode, {k: v for k, v in out[slots][mode].items()
+                            if k not in ("non_self_referential_rows",
+                                         "false_when_recorded_examples", "event_kinds")})
+        print("   event_kinds:", out[slots][mode]["event_kinds"])
         print()
     json.dump(out, open(Path(__file__).parent / "runs" / "wd_extra.json", "w"), indent=1,
               default=str)
