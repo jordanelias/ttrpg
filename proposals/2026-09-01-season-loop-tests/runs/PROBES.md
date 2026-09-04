@@ -74,7 +74,7 @@ either** — they are listed individually below and should be discounted accordi
 | `F21` | **UNSPECIFIED** | construction | S61 | a character sitting on a collective body must be able to have their individual position registered distinctly from the body's deci |
 | `F3` | **FORBIDDEN** | no-signature | S3-L1 | a faction must be able to take an action of its own |
 | `F6` | **UNSPECIFIED** | no-signature | S62 | an order from above must be able to fail to arrive, distinctly from being refused |
-| `F7` | **UNSPECIFIED** | probe-model | E2 | someone with no power must be able to get a matter in front of someone who has it |
+| `F7` | **UNSPECIFIED** | probe-model | E2/E3 | someone with no power must be able to get a matter in front of someone who has it |
 | `F8` | **UNSPECIFIED** | construction | S61 | the body a matter reaches must be able to decide it |
 | `F9` | **UNSPECIFIED** | construction | S27/E2 | a character must be able to spend a whole season putting the same matter to many people |
 | `P17` | **UNSPECIFIED** | probe-model | S22.4 | a character's risk must be able to build up quietly across seasons without anyone acting |
@@ -368,11 +368,11 @@ either** — they are listed individually below and should be discounted accordi
 **needs:** a distortion model, and a ruling on emitter- vs receiver-side refraction
 **law:** T6 says it distorts; NOTHING SPECIFIES BY HOW MUCH (S62). The structural half works -- publishing is a `tell`, delivery is not assumed, and an executor who never received it is DISTINCT from one who received it and refused -- but the distortion itself has no model, and S37.4 records that the chain uses `refraction` TWO WAYS
 
-### `F7` — a demand rises from a hearth to a duchy  ·  **UNSPECIFIED**  ·  `E2`  ·  by `probe-model`
-**what:** 'carry' has a precondition the fold cannot evaluate: 'a Petition exists; costs budget like any act'
+### `F7` — a demand rises from a hearth to a duchy  ·  **UNSPECIFIED**  ·  `E2/E3`  ·  by `probe-model`
+**what:** 'carry' writes ['DocketItem.matter'] and Part E does not say WHAT VALUE
 
-**needs:** a predicate in REQUIRES_PREDICATES, or a `requires:` the table states structurally rather than in prose
-**law:** §E2 -- `requires` is checked IN THE FOLD. Stated as prose it is the same defect `resolve` had, one column along: a rule the code cannot read
+**needs:** an entry in EFFECTS, or a `writes:` column that carries the value
+**law:** §E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and §27.1's scarcity stops happening. Register row H-63
 
 ### `F8` — the sitting decides  ·  **UNSPECIFIED**  ·  `S61`  ·  by `construction`
 **what:** judging_set_rule

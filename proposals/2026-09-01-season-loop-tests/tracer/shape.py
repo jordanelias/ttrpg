@@ -628,6 +628,577 @@ def office_faction(body: str | None, declared: str | None) -> str:
     return declared
 
 # ===========================================================================
+# THE `requires` GRAMMAR -- W-A. ONE DECLARATION, THREE READERS.
+#
+# `04_CODE_ARCHITECTURE.md` §F.24a: *"`F.24` said 'assumed: a small typed predicate grammar' and
+# supplied none, which is the shape of handing a property forward. The 32 `requires` cells in the
+# executable chain are the specification, and reading them yields SEVEN forms."* This block is
+# those seven forms as code, and `rosters.yaml: requires_forms` is the closed roster of their
+# names -- a cell naming an eighth REFUSES AT LOAD.
+#
+# WHY A GRAMMAR RATHER THAN ANOTHER PREDICATE. `H-65` records the defect: Part E states every
+# precondition in PROSE, so each verb needed its own hand-written `_req_*`, and `D20 -- the
+# resolver has no body` came back as *the resolver has thirty*. Eight were written. Each was a
+# SECOND reading of a cell that already exists in the table, and two of the eight were found to
+# have dropped a conjunct or a disjunct (`_req_confer`, `_req_revoke`) -- which is the failure
+# mode a per-verb body has and a typed cell does not.
+#
+# THE THREE READERS, and the reason this is worth doing at all:
+#   1. THE FOLD (`SeasonDriver._fold`), through `WorldReader` -- §E2's `requires` against the
+#      world the predecessors left.
+#   2. THE PERSON (`belief_contradicts`), through `LedgerReader` -- §F1 clause 4, the SAME cell
+#      asked of one person's OWN claims and of nothing else. Before this, the person's reading was
+#      a `person_predicates` membership test that shared NO vocabulary with anything the fold
+#      wrote (`H-116`), so clause 4 could not fire in any run.
+#   3. `resolvable_verbs()` -- *can the fold carry this verb through RESOLVE at all*. It asked
+#      `v in REQUIRES_PREDICATES`; a typed cell is evaluable too, and one owner means that
+#      question has one answer.
+#
+# ⚠ THE HAZARD THIS BLOCK IS MOST LIKELY TO CARRY, stated so the next reader hunts for it: a cell
+# that OVER-refuses (a conjunct the prose does not have) or UNDER-refuses (a dropped disjunct).
+# `G4` weighs the two equally, and `_req_confer`'s own history in this file is the precedent for
+# the second. Every cell names the §E3 line it was transcribed from, in `verb_table.yaml`.
+# ===========================================================================
+
+REQUIRES_FORMS = roster("requires_forms")
+REQUIRES_OPERANDS = roster("requires_operands")
+REQUIRES_FORM_NEEDS = roster_map("requires_forms", "needs")
+
+
+class _Unknown:
+    """THE THIRD TRUTH VALUE, AND IT IS NOT `False`.
+
+    An operand the binding does not supply, or a question the reader cannot answer, is UNKNOWN --
+    *nobody knows*, which is a different fact from *it is false*. The distinction is the whole of
+    §F1 clause 4: `opening_set` drops a Candidate only on a KNOWN-FALSE requirement, and *"absence
+    of a belief is not a belief in the negative"*. Collapse UNKNOWN into False here and every
+    person stops forming every candidate whose requirement they happen to hold no claim about.
+
+    ⚠ IT IS FALSY, AND DELIBERATELY SO. The FOLD's polarity is §42.2's -- zero evidence goes to
+    the verdict AGAINST the thing measured -- so an unevaluable precondition must REFUSE. Callers
+    still test `is True` / `is False` rather than truthiness, because the two readings differ; the
+    falsy `__bool__` is the safe default for a caller that forgets."""
+    __slots__ = ()
+
+    def __bool__(self) -> bool:
+        return False
+
+    def __repr__(self) -> str:
+        return "UNKNOWN"
+
+
+UNKNOWN = _Unknown()
+
+
+@dataclass(frozen=True)
+class Observation:
+    """ONE READ, RECORDED. `(subject, predicate, value)` -- the same triple a `Claim` carries,
+    which is not a coincidence: an Observation is what a Claim would be if the reader wrote one.
+
+    ⚠ THE PREDICATE IS DERIVED FROM THE FORM, NEVER LOOKED UP IN A ROSTER. `f"stores:{kind}"`,
+    `"condition"`, `f"contain.path:{to}"` -- the string falls out of the cell's own fields, so a
+    verb cannot acquire a predicate nobody can produce, and the write side has a name to aim at."""
+    subject: Any
+    predicate: str
+    value: Any
+
+
+@dataclass(frozen=True)
+class Verdict:
+    """`True | False | UNKNOWN`, plus every read that produced it.
+
+    `observed` is kept HERE and attached to NO Event: an Event carrying its reads is `W-B`, and
+    building the carrier before its reader exists is the dead-carrier defect `ID-13` refuses."""
+    value: Any
+    observed: tuple = ()
+
+
+def _as_number(v):
+    """A read coerced to a number, or UNKNOWN. A string is UNKNOWN rather than an error: a ledger
+    claim may carry anything, and a comparison against a word is a question nobody can answer."""
+    if v is UNKNOWN or v is None or isinstance(v, str):
+        return UNKNOWN
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return UNKNOWN
+
+
+def _bound(binding: dict, name: str):
+    return binding.get(name, UNKNOWN) if binding.get(name, UNKNOWN) is not None else UNKNOWN
+
+
+# `>=` is the only comparator both live cells use (§E3 `:418`, `:420`). `<=` is admitted because a
+# threshold has a DIRECTION and a cell that cannot state the other one cannot be shown to have
+# stated this one. MEASURED 2026-09-04: flipping `transfer`'s cell to `<=` reddens THREE tests --
+# `test_wa_a_planted_claim_removes_transfer_and_a_larger_one_leaves_it`, `test_no_probe_errors`
+# (probe `F10`, where both claimants on a one-unit larder are then GRANTED, so §27.1's scarcity
+# stops happening) and the artifact round-trip. A strict `<`/`>` is NOT admitted: §12.1's floor is
+# inclusive, and a fourth comparator would be a change to what a precondition can say.
+COMPARATORS = {">=": lambda a, b: a >= b, "<=": lambda a, b: a <= b}
+
+REQUIREMENT_TYPES: dict = {}
+
+
+def requirement_form(name: str):
+    """Bind a form NAME from `rosters.yaml` to the class that evaluates it. The roster is the
+    closed grammar; this is the implementation, and a name in one and not the other raises."""
+    def deco(cls):
+        if name not in REQUIRES_FORMS:
+            raise SystemExit(f"{name!r} is not in rosters.yaml's requires_forms roster")
+        REQUIREMENT_TYPES[name] = cls
+        return cls
+    return deco
+
+
+class Requirement:
+    """One clause of a typed `requires:`. Subclasses ARE the seven forms; `evaluate` never
+    branches on a form name, because the class IS the branch (`G2` -- forbid the shape, never
+    enumerate the words)."""
+
+    def operands(self) -> tuple:
+        """Every operand name this clause reads. Checked at load against the form's `needs:`."""
+        return ()
+
+    def entity_operands(self) -> tuple:
+        """The operand naming THE THING THE REQUIREMENT IS ABOUT -- what a Candidate's `subject`
+        can bind, and nothing else. A Candidate is `(verb, subject, why)` and carries exactly one
+        entity (`H-94`/`H-80`), so this is the only operand the person's reading can supply."""
+        return ()
+
+    def check(self, reader, binding: dict, observed: list):
+        raise NotImplementedError
+
+
+@requirement_form("existence")
+@dataclass(frozen=True)
+class Existence(Requirement):
+    """§F.24a form 1 -- *existence over an edge kind*, read to cover an OBJECT of a named class
+    as well. The widening is argued in `rosters.yaml: requires_forms`, and it is what makes
+    §F.24a's own "closes 30 of 32 cells" true of `carry`, `commit` and `dispatch`."""
+    of: str
+    kind: str
+
+    def operands(self) -> tuple:
+        return (self.of,)
+
+    def entity_operands(self) -> tuple:
+        return (self.of,)
+
+    def check(self, reader, binding, observed):
+        subj = _bound(binding, self.of)
+        if subj is UNKNOWN:
+            return UNKNOWN
+        n = _as_number(_observe(reader, subj, f"exists:{self.kind}", observed))
+        return UNKNOWN if n is UNKNOWN else n >= 1
+
+
+@requirement_form("scalar_threshold")
+@dataclass(frozen=True)
+class ScalarThreshold(Requirement):
+    """§F.24a form 2 -- *a computed scalar against a threshold*. `transfer`'s
+    `stores(hearth(giver), kind) >= amount` and `work`'s `condition >= floor(verb)`.
+
+    The threshold is EITHER an operand (`transfer`'s `amount`) or a SECOND READ on the same
+    entity (`work`'s `floor`, which is `band_floors[site.kind]`'s minimum and lives in Fixtures,
+    `H-08`). Exactly one, checked at load: a cell with both states two thresholds and a cell with
+    neither states none."""
+    of: str
+    scalar: str
+    comparator: str = ">="
+    key: str = ""
+    threshold: str = ""
+    threshold_predicate: str = ""
+
+    def __post_init__(self) -> None:
+        if bool(self.threshold) == bool(self.threshold_predicate):
+            raise SystemExit(
+                f"a `scalar_threshold` cell needs exactly one of `threshold:` (an operand) and "
+                f"`threshold_predicate:` (a second read); got {self.threshold!r} / "
+                f"{self.threshold_predicate!r}")
+        if self.comparator not in COMPARATORS:
+            raise SystemExit(
+                f"comparator {self.comparator!r} is not one of {sorted(COMPARATORS)}. §12.1's "
+                "floor is inclusive; a strict comparator is a change to what a precondition can "
+                "say and needs a ruling, not a table edit")
+
+    def operands(self) -> tuple:
+        return tuple(x for x in (self.of, self.key, self.threshold) if x)
+
+    def entity_operands(self) -> tuple:
+        return (self.of,)
+
+    def check(self, reader, binding, observed):
+        subj = _bound(binding, self.of)
+        if subj is UNKNOWN:
+            return UNKNOWN
+        pred = self.scalar
+        if self.key:
+            k = _bound(binding, self.key)
+            if k is UNKNOWN:
+                return UNKNOWN
+            pred = f"{self.scalar}:{k}"
+        lhs = _as_number(_observe(reader, subj, pred, observed))
+        if lhs is UNKNOWN:
+            return UNKNOWN
+        rhs = (_as_number(_observe(reader, subj, self.threshold_predicate, observed))
+               if self.threshold_predicate else _as_number(_bound(binding, self.threshold)))
+        if rhs is UNKNOWN:
+            return UNKNOWN
+        return bool(COMPARATORS[self.comparator](lhs, rhs))
+
+
+@requirement_form("contain_path")
+@dataclass(frozen=True)
+class ContainPath(Requirement):
+    """§F.24a form 3 -- *path existence in the containment tree*. `move`'s whole cell (§E3 `:408`).
+
+    ⚠ THE ENTITY IS THE DESTINATION, NOT THE ORIGIN. The origin is the actor and is bound from the
+    act; a Candidate's `subject` names WHERE, which is the operand a person could hold a belief
+    about (*there is no road from here to there*)."""
+    of: str
+    to: str
+
+    def operands(self) -> tuple:
+        return (self.of, self.to)
+
+    def entity_operands(self) -> tuple:
+        return (self.to,)
+
+    def check(self, reader, binding, observed):
+        origin, dest = _bound(binding, self.of), _bound(binding, self.to)
+        if origin is UNKNOWN or dest is UNKNOWN:
+            return UNKNOWN
+        v = _observe(reader, origin, f"contain.path:{dest}", observed)
+        return UNKNOWN if v is UNKNOWN else bool(v)
+
+
+@requirement_form("relation")
+@dataclass(frozen=True)
+class Relation(Requirement):
+    """§F.24a form 5 -- *a relation between actor and subject*. `succeed`'s *the actor holds the
+    office or estate whose heir is being designated*, and `restore`'s *the actor is present at
+    it*. The relation NAME is the cell's; a relation the reader cannot answer is UNKNOWN, so an
+    unimplemented one refuses rather than admitting."""
+    of: str
+    relation: str
+
+    def operands(self) -> tuple:
+        return (self.of, "actor")
+
+    def entity_operands(self) -> tuple:
+        return (self.of,)
+
+    def check(self, reader, binding, observed):
+        subj, actor = _bound(binding, self.of), _bound(binding, "actor")
+        if subj is UNKNOWN or actor is UNKNOWN:
+            return UNKNOWN
+        v = _observe(reader, subj, f"{self.relation}:{actor}", observed)
+        return UNKNOWN if v is UNKNOWN else bool(v)
+
+
+@requirement_form("own_ledger")
+@dataclass(frozen=True)
+class OwnLedger(Requirement):
+    """§F.24a form 6 -- *membership in the ACTOR'S OWN ledger*, and the form the cross-read missed.
+
+    `tell`'s *the teller holds a claim on the subject* (§E3 `:417`). §B.2's corrected row (`F8`):
+    *"the fold may ask the ACTOR'S OWN ledger ... and no other."* That carve-out is what licenses
+    a resolver-side clause to read a ledger at all, and `WorldReader` makes it structural rather
+    than promised -- it is constructed with one actor and can name no other person's claims.
+
+    ⚠ IT READS WHETHER THE CLAIM IS HELD, NEVER WHETHER IT IS TRUE, which is the whole of `T3`.
+    A liar and a mistaken witness both pass it, and the distortion lands at the receiver's
+    WITNESS deposit -- `_req_tell`'s own docstring said so and this preserves it exactly."""
+    of: str
+
+    def operands(self) -> tuple:
+        return (self.of,)
+
+    def entity_operands(self) -> tuple:
+        return (self.of,)
+
+    def check(self, reader, binding, observed):
+        subj = _bound(binding, self.of)
+        if subj is UNKNOWN:
+            return UNKNOWN
+        v = _observe(reader, subj, "claim.held", observed)
+        return UNKNOWN if v is UNKNOWN else bool(v)
+
+
+@dataclass(frozen=True)
+class AllOf(Requirement):
+    """CONJUNCTION, AND IT IS NOT AN EIGHTH FORM. `restore`'s cell is *the site exists AND the
+    actor is present at it*; `confer`'s and `revoke`'s carry an `and` too. §F.24a enumerated the
+    ATOMS -- the `and` was already in the cells it read.
+
+    ⚠ THREE-VALUED, AND FALSE DOMINATES UNKNOWN. One known-false conjunct makes the conjunction
+    known-false even if a sibling is unreadable, which is what lets §F1 clause 4 fire on a person
+    who knows one half of a requirement fails. Collapsing to UNKNOWN there would drop the
+    contradiction, which is the under-refusal `G4` weighs equally with an invention."""
+    clauses: tuple
+
+    def operands(self) -> tuple:
+        return tuple(dict.fromkeys(o for c in self.clauses for o in c.operands()))
+
+    def entity_operands(self) -> tuple:
+        return tuple(dict.fromkeys(o for c in self.clauses for o in c.entity_operands()))
+
+    def check(self, reader, binding, observed):
+        unknown = False
+        for c in self.clauses:
+            r = c.check(reader, binding, observed)
+            if r is False:
+                return False
+            if r is UNKNOWN:
+                unknown = True
+        return UNKNOWN if unknown else True
+
+
+@dataclass(frozen=True)
+class TypedRequires:
+    """ONE `requires_typed:` CELL -- the clause tree, plus the operand values the CELL supplies.
+
+    ⚠ `operand_defaults` IS WHERE `_req_transfer`'s TWO LITERALS WENT, and it is a MOVE rather
+    than an invention. That predicate read `give.get("kind", "grain")` and `give.get("amount", 1)`
+    -- two bare literals in a body, which §0.05 puts in the data file. They are carried verbatim
+    so retiring the predicate is value-identical; `H-94` is the row for where a real operand comes
+    from, and it is open."""
+    requirement: Requirement
+    operand_defaults: dict = field(default_factory=dict)
+
+    def operands(self) -> tuple:
+        return self.requirement.operands()
+
+    def entity_operands(self) -> tuple:
+        return self.requirement.entity_operands()
+
+    def check(self, reader, binding, observed):
+        return self.requirement.check(reader, binding, observed)
+
+
+def _observe(reader, subject, predicate: str, observed: list):
+    v = reader.read(subject, predicate)
+    observed.append(Observation(subject, predicate, v))
+    return v
+
+
+def evaluate(req: Optional[TypedRequires], reader, binding: dict) -> Verdict:
+    """THE ONE EVALUATOR. `Verdict(value in {True, False, UNKNOWN}, observed)`.
+
+    An UNTYPED verb is UNKNOWN to every reader -- not True, and not False. That is what makes
+    `belief_contradicts` return *not contradicted* for one (§F1's asymmetry) while the fold still
+    REFUSES one whose predicate is missing (§42.2's polarity). The same value, read with the two
+    polarities the two sites actually have."""
+    if req is None:
+        return Verdict(UNKNOWN, ())
+    b = dict(req.operand_defaults)
+    b.update({k: v for k, v in (binding or {}).items() if v is not None})
+    observed: list = []
+    return Verdict(req.check(reader, b, observed), tuple(observed))
+
+
+def binding_from_act(a) -> dict:
+    """THE RESOLVER'S BINDING -- `Act.payload`, plus the actor.
+
+    ⚠ IT IS ALLOWED TO BE INCOMPLETE, AND TODAY IT ALWAYS IS. `pack_scenes` puts only the
+    Candidate's `subject` on the payload, so `transfer` has no `kind`, `move` has no `to` and
+    `work` has no `site`. Every one of those evaluates to UNKNOWN and the fold refuses -- which is
+    what those verbs already did through their hand-written predicates. Where operands come from
+    is `H-94`, and it is not answered here."""
+    d = a.payload if isinstance(getattr(a, "payload", None), dict) else {}
+    b = {k: v for k, v in d.items() if k in REQUIRES_OPERANDS}
+    b["actor"] = a.actor
+    return b
+
+
+def binding_from(req: Optional[TypedRequires], actor: str, subject) -> dict:
+    """THE PERSON'S BINDING -- what a Candidate can supply, which is ONE entity and the actor.
+
+    §F1 clause 4 asks whether `requires(verb)` is known-false ABOUT THIS SUBJECT, and a Candidate
+    is `(verb, subject, why)`, so the subject binds the requirement's OWN entity operand --
+    `from` for `transfer`, `to` for `move`, `site` for `restore` -- whatever that operand is
+    named. Everything else is unbound and therefore UNKNOWN, which is the honest reading: a person
+    with no belief about it is not a person who believes it false.
+
+    ⚠ TAKES NO WORLD, AND NEITHER DOES ANYTHING IT CALLS. That is `L2`, asserted by AST in
+    `test_w5_sense_is_still_the_only_world_taking_non_decision_function`."""
+    b: dict = {"actor": actor}
+    if req is not None and subject is not None:
+        for op in req.entity_operands():
+            b[op] = subject
+    return b
+
+
+class WorldReader:
+    """§F.24a's questions asked OF THE WORLD, with every read recorded as an `Observation`.
+
+    ⚠ THE ACTOR'S OWN LEDGER AND NO OTHER, STRUCTURALLY. `04_CODE_ARCHITECTURE.md` §B.2's
+    corrected row (`F8`): *"the carve-out is exact and it is not a widening: the fold may ask the
+    ACTOR'S OWN ledger ... and no other. A Query taking a ledger and an asker who is not its
+    holder still does not exist."* This reader is constructed with ONE actor id, so there is no
+    argument by which a caller could name somebody else's claims -- the same move the
+    `valoria-critic` agent definition makes against a read-only promise written in a prompt.
+
+    ⚠ THE `if stem ==` CHAIN IS NOT THE ROUTER `G2` FORBIDS. It enumerates the GRAMMAR'S OWN
+    predicates -- the strings `Observation` derives from the seven forms -- not verbs, entities or
+    outcomes. A predicate it does not know is UNKNOWN, so an unanswerable question refuses."""
+
+    def __init__(self, w, actor: str):
+        self._w, self._actor = w, actor
+
+    def _ancestry(self, start: str) -> list:
+        seen, cur = [], start
+        while cur is not None and cur not in seen:
+            seen.append(cur)
+            cur = Query.parent_of(self._w, cur)
+        return seen
+
+    def read(self, subject, predicate: str):
+        w = self._w
+        stem, _, arg = str(predicate).partition(":")
+        if stem == "exists":
+            # An EDGE kind is a `tenure_kinds` member and an OBJECT class is one of `World`'s own
+            # collections. Both are DATA -- neither is a list written here.
+            if arg in TENURE_KINDS:
+                return sum(1 for t in w.tenures
+                           if t.kind == arg and t.object == subject and t.live)
+            attr = arg.lower() + "s"
+            if attr in World._STATE_COLLECTIONS:
+                return 1 if subject in getattr(w, attr) else 0
+            return UNKNOWN
+        if stem == "stores":
+            r = w.rungs.get(subject)
+            return UNKNOWN if r is None else (r.stores or {}).get(arg, 0)
+        if stem == "condition":
+            s = w.sites.get(subject)
+            return UNKNOWN if s is None else s.condition
+        if stem == "floor":
+            s = w.sites.get(subject)
+            if s is None:
+                return UNKNOWN
+            floors = w.fixtures.get("band_floors").get(s.kind)
+            if floors is None:
+                # `_req_work`'s refusal, carried unchanged: `H-08` owns the per-kind floors and
+                # §42.2.1 forbids picking a plausible number for a kind nobody registered.
+                raise Unspecified(
+                    f"no band floors for site kind {s.kind!r}", "S12.1",
+                    needs="a per-kind floor table -- register row H-08",
+                    law="§12.1 gates verbs on `condition` against per-kind FLOORS, and §42.2.1 "
+                        "forbids picking a plausible number for a kind nobody registered")
+            return min(floors.values())
+        if stem == "contain.path":
+            if subject not in w.rungs or arg not in w.rungs:
+                return UNKNOWN
+            if subject == arg:
+                return False           # a node is not a path to itself
+            return bool(set(self._ancestry(subject)) & set(self._ancestry(arg)))
+        if stem == "held_by":
+            return any(t.kind == "hold" and t.subject == arg and t.object == subject and t.live
+                       for t in w.tenures)
+        if stem == "present_at":
+            s = w.sites.get(subject)
+            place = s.rung if s is not None else (subject if subject in w.rungs else None)
+            return UNKNOWN if place is None else (arg in Query.presence(w, place))
+        if stem == "claim.held":
+            p = w.persons.get(self._actor)
+            return UNKNOWN if p is None else any(c.subject == subject for c in p.ledger)
+        return UNKNOWN
+
+
+class LedgerReader:
+    """THE SAME QUESTIONS ASKED OF ONE PERSON'S OWN CLAIMS, AND OF NOTHING ELSE.
+
+    ⚠ IT TAKES CLAIMS, NOT A WORLD, AND NOT A PERSON. `#353 :634` permits `sense()` exactly one
+    World among the non-decision functions, and §F1 clause 4 runs person-side; handing this a
+    World would make `belief_contradicts` read the world, which is the filter §F1 spends two
+    paragraphs forbidding (*"a filter on world truth would be `choose` reading the world"*).
+
+    THE MOST RECENT, THEN THE MOST CONFIDENT. A ledger may hold two claims about one
+    `(subject, predicate)` -- that is what a ledger IS -- and answering with the first found would
+    make the verdict depend on append order. No matching claim is UNKNOWN, never False: §F1's
+    asymmetry is that absence of a belief is not a belief in the negative."""
+
+    def __init__(self, claims):
+        self._claims = list(claims or [])
+
+    def read(self, subject, predicate: str):
+        best = None
+        for c in self._claims:
+            if c.subject == subject and c.predicate == predicate:
+                if best is None or (c.when, c.confidence) > (best.when, best.confidence):
+                    best = c
+        return UNKNOWN if best is None else best.value
+
+
+def _build_clause(verb: str, cell: dict) -> Requirement:
+    if not isinstance(cell, dict):
+        raise SystemExit(f"verb_table.yaml: {verb!r} `requires_typed:` clause is not a mapping: "
+                         f"{cell!r}")
+    if "all" in cell:
+        clauses = tuple(_build_clause(verb, c) for c in (cell["all"] or ()))
+        if len(clauses) < 2:
+            raise SystemExit(f"verb_table.yaml: {verb!r} has an `all:` with {len(clauses)} "
+                             "clause(s); a conjunction of one is the clause itself")
+        return AllOf(clauses)
+    form = cell.get("form")
+    if form not in REQUIRES_FORMS:
+        raise SystemExit(
+            f"verb_table.yaml: {verb!r} names requires form {form!r}, which is not in "
+            f"rosters.yaml's requires_forms: {sorted(REQUIRES_FORMS)}. §F.24a derives SEVEN forms "
+            "from the 32 live cells; an eighth is a new thing a precondition can ASK, which is a "
+            "design change and not a table edit")
+    cls = REQUIREMENT_TYPES.get(form)
+    if cls is None:
+        raise SystemExit(
+            f"verb_table.yaml: {verb!r} uses form {form!r}, which is IN the grammar and has no "
+            "implementation. `cardinality` and `basis` have no `own`-eligible cell -- their live "
+            "cells are `confer` and `revoke`, which stay on REQUIRES_PREDICATES")
+    try:
+        req = cls(**{k: v for k, v in cell.items() if k != "form"})
+    except TypeError as e:
+        raise SystemExit(f"verb_table.yaml: {verb!r}'s {form!r} cell does not fit the form: {e}")
+    allowed = set(REQUIRES_FORM_NEEDS.get(form) or ())
+    for o in req.operands():
+        if o not in REQUIRES_OPERANDS:
+            raise SystemExit(
+                f"verb_table.yaml: {verb!r} binds operand {o!r}, which is not in rosters.yaml's "
+                f"requires_operands: {sorted(REQUIRES_OPERANDS)}. Coining an operand is filling "
+                "`H-94` by keyword argument")
+        if o not in allowed:
+            raise SystemExit(
+                f"verb_table.yaml: {verb!r}'s {form!r} cell binds {o!r}, which is not in that "
+                f"form's `needs:` ({sorted(allowed)})")
+    return req
+
+
+def build_typed_requires(verb: str, cell) -> Optional[TypedRequires]:
+    """A `requires_typed:` cell into a `TypedRequires`, or `None` for an explicit `none`.
+
+    `None` means THE COLUMN IS NOT TYPED FOR THIS VERB, and the verb stays on
+    `REQUIRES_PREDICATES` -- which for a verb with no predicate is the fold's existing refusal,
+    naming what is missing. It is never a silent success."""
+    if cell is None:
+        return None
+    if isinstance(cell, str):
+        if cell.strip().lower() == "none":
+            return None
+        raise SystemExit(f"verb_table.yaml: {verb!r} `requires_typed:` is the string {cell!r}; "
+                         "the only string admitted is `none`, which must carry a "
+                         "`requires_typed_note:` saying why")
+    if not isinstance(cell, dict):
+        raise SystemExit(f"verb_table.yaml: {verb!r} `requires_typed:` is not a mapping: {cell!r}")
+    defaults = dict(cell.get("operand_defaults") or {})
+    for o in defaults:
+        if o not in REQUIRES_OPERANDS:
+            raise SystemExit(
+                f"verb_table.yaml: {verb!r} defaults operand {o!r}, which is not in "
+                f"rosters.yaml's requires_operands: {sorted(REQUIRES_OPERANDS)}")
+    body = {k: v for k, v in cell.items() if k != "operand_defaults"}
+    return TypedRequires(_build_clause(verb, body), defaults)
+
+
+# ===========================================================================
 # PART E, LOADED FROM DATA -- W3. THE RESOLVER'S BODY.
 #
 # #353 types `resolve : (Act[], World) -> Event[]` and never says what any verb DOES. That is
@@ -694,6 +1265,15 @@ class VerbRow:
     # for something that did not happen) inside the epistemic layer, where every witness then
     # mints a claim from it.
     emits_by_degree: dict = field(default_factory=dict)
+    # ⚠ THE SEVENTH COLUMN, ADDED BY `W-A` (2026-09-04). THE PROSE `requires` STAYS BESIDE IT AND
+    # IS THE PROVENANCE -- each cell names the §E3 line it was transcribed from, so the derivation
+    # can be checked rather than trusted. `None` means the column is NOT typed for this verb and
+    # the fold falls back to `REQUIRES_PREDICATES`, which for a verb with no predicate is the
+    # existing refusal naming what is missing.
+    requires_typed: Optional["TypedRequires"] = None
+    # Why a row carries `requires_typed: none`. Required BY THE LOADER on such a row: an untyped
+    # cell with no reason is indistinguishable from one nobody got to.
+    requires_typed_note: str = ""
 
     def eligibility_kinds(self) -> tuple:
         return tuple(a.split(":")[0].strip() for a in self.eligibility)
@@ -800,7 +1380,19 @@ def _load_verb_table() -> dict:
                       tuple(r["emits_on_refusal"]), r["grade"],
                       str(r.get("scale") or "person").strip(),
                       str(r.get("contests") or "").strip(),
-                      by_degree, emits_by_degree)
+                      by_degree, emits_by_degree,
+                      build_typed_requires(name, r.get("requires_typed")),
+                      str(r.get("requires_typed_note") or "").strip())
+        # A row that declares `requires_typed: none` must SAY WHY. The three admissible reasons
+        # are a well-formedness constraint on the Act (§F.24a: `issue`, `open_case` -- *"they
+        # belong in the `Act` schema and are refused at construction"*), a `per act` cell, and an
+        # operand the closed `requires_operands` roster has no name for. None of the three is
+        # "nobody got to it", and a blank note cannot tell the two apart.
+        if "requires_typed" in r and row.requires_typed is None and not row.requires_typed_note:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares `requires_typed: none` and no "
+                "`requires_typed_note:`. An untyped cell with no reason is indistinguishable "
+                "from one nobody typed, which is the state W-A exists to end.")
         # The two keyed columns must agree on their band set, or a band writes with nothing to
         # report or reports with nothing written.
         if by_degree and emits_by_degree and set(by_degree) != set(emits_by_degree):
@@ -2427,7 +3019,13 @@ def resolvable_verbs() -> frozenset:
         # narrowing to "what the fold can execute" got a set the fold could not execute, and the
         # gap only surfaced when `W17`'s packing started attempting more verbs per season. Found
         # by running the corpus, not by reading it.
-        gated = (row.requires or "").strip() in NO_PRECONDITION or v in REQUIRES_PREDICATES
+        # ⚠ `requires_typed` IS THE FIRST OF THE THREE, AND ONE OWNER IS WHY IT IS HERE. This
+        # question -- *can the fold evaluate this precondition* -- is the same question `_fold`
+        # asks two hundred lines down, and leaving it reading only `REQUIRES_PREDICATES` would
+        # give the two sites different answers for every typed verb (§8: the rule lives once).
+        gated = ((row.requires or "").strip() in NO_PRECONDITION
+                 or row.requires_typed is not None
+                 or v in REQUIRES_PREDICATES)
         effected = not row.writes or v in EFFECTS
         # ⚠ AND A THIRD GATE: A VERB THAT CONTESTS DOES NOT TAKE THE EFFECT PATH AT ALL.
         # `ARCHITECTURE_V2.md:394` — *"`contests: <prize>` — if set, ROUTES TO THE SEAM at
@@ -2652,17 +3250,24 @@ def belief_contradicts(p: Person, row: "VerbRow", subject: str) -> bool:
     actions"* and *"our understanding of all other words and actions is subjective and singular."*
     A filter on world truth would be `choose` reading the world; this reads one person's ledger.
 
-    The contradiction test is a claim about THIS subject whose value is falsy for the predicate
-    the verb's `requires:` names. `H-72` registers the mapping from a `requires:` note to a
-    predicate: the verb table states requirements as PROSE, so which predicate a requirement is
-    about is not mechanically derivable, and inventing that mapping is what §42.2.1 forbids."""
-    req = (row.requires or "").strip()
-    if req in NO_PRECONDITION:
+    ⚠ `W-A`: IT ASKS THE VERB'S OWN TYPED CELL, NOT A ROSTER. The previous version filtered on
+    `predicate in PERSON_PREDICATES and value is False` -- a MEMBERSHIP TEST standing in for a
+    requirement, because the `requires:` column was prose and `H-72` recorded that the map from a
+    requirement to a predicate did not exist. `H-116` then measured the consequence: over 4,800
+    deposited claims the two vocabularies were DISJOINT and zero claims were falsy, so clause 4
+    could not fire in any run and the candidate set was invariant with respect to everything that
+    happened in the simulation. The predicate is DERIVED from the form now (`stores:grain`,
+    `condition`, `contain.path:D`), so there is one namespace and the write side has a name to aim
+    at. `H-116`'s other half -- WITNESS depositing claims in that namespace -- is not this item.
+
+    ⚠ AN UNTYPED VERB IS NOT CONTRADICTED. `evaluate(None, ...)` is UNKNOWN, and UNKNOWN is not
+    False: a person cannot know a requirement fails when nothing states what the requirement is.
+    That polarity is the OPPOSITE of the fold's, deliberately -- §F1 filters on belief and §42.2
+    governs the resolver -- and the same `Verdict` carries both readings."""
+    if (row.requires or "").strip() in NO_PRECONDITION:
         return False
-    for c in p.ledger:
-        if c.subject == subject and c.predicate in PERSON_PREDICATES and c.value is False:
-            return True
-    return False
+    return evaluate(row.requires_typed, LedgerReader(p.ledger),
+                    binding_from(row.requires_typed, p.id, subject)).value is False
 
 
 def questions_for(w: World, p: Person) -> list[Question]:
@@ -3629,91 +4234,20 @@ def _req_convene(w: "World", a: "Act") -> bool:
     return venue in w.rungs and Query.parent_of(w, venue) is not None
 
 
-@requires_predicate("transfer")
-def _req_transfer(w: "World", a: "Act") -> bool:
-    """#353 §54 item 7: `stores(hearth(giver), kind) >= amount`. THIS IS THE SCARCITY PREDICATE --
-    §27.1's whole argument rests on it: the second claimant on an emptied granary gets a DIFFERENT
-    Event, and it falls out of the fold because each act sees the world its predecessors left."""
-    give = (a.payload or {}) if isinstance(a.payload, dict) else {}
-    rung = w.rungs.get(give.get("from", ""))
-    kind, amount = give.get("kind", "grain"), give.get("amount", 1)
-    return bool(rung and (rung.stores or {}).get(kind, 0) >= amount)
-
-
-@requires_predicate("tell")
-def _req_tell(w: "World", a: "Act") -> bool:
-    """§E3: *"the teller holds a claim on the subject"*.
-
-    ⚠ IT READS THE TELLER'S OWN LEDGER, NOT THE WORLD'S TRUTH, and that is the whole of T3. A
-    person may tell what they wrongly believe -- the precondition is that they HOLD a claim, not
-    that the claim is true -- so a liar and a mistaken witness both pass it and the distortion
-    lands at the receiver's WITNESS deposit. Jordan, 2026-09-02: *"we can't control how others
-    perceive and interpret our words or actions"*, and `H-36` closed receiver-side for the same
-    reason. A predicate that checked the world here would put the refusal on the wrong side."""
-    d = a.payload if isinstance(a.payload, dict) else {}
-    subj = d.get("subject")
-    teller = w.persons.get(a.actor)
-    if teller is None or subj is None:
-        return False
-    return any(c.subject == subj for c in teller.ledger)
-
-
-@requires_predicate("move")
-def _req_move(w: "World", a: "Act") -> bool:
-    """§E3: *a `contain` path exists* -- BETWEEN THE MOVER'S RUNG AND A NAMED DESTINATION.
-
-    ⚠ REV 1 HAD NO DESTINATION TERM AND THE OMISSION EVACUATED EVERY WORLD IN THE CORPUS. It read
-    the ladder's existence as the whole precondition and ended `or here.kind == "person"`, which is
-    true of every person, so the predicate COULD NOT REFUSE ANYBODY. `_eff_move` then closed every
-    live `contain` and, with no `to`, opened none. Measured on `NPC-088` at seed 0: live `contain`
-    edges 10 -> 7 in season 1, `Query.presence` empty for every rung from then on, and
-    `travel.moved` emitted three more times in each of seasons 2 and 3 -- a published success for a
-    state change that did not happen. That is the fabricated-success class already registered for
-    `work` (`test_w8_work_emits_a_success_while_repairing_nothing`) and for `kill`, and `move` was
-    the third instance with no guard.
-
-    ⚠ THE DESTINATION IS NOT AVAILABLE, AND THAT IS `H-94` ARRIVING IN A SECOND VERB. A computed
-    Candidate carries `(verb, subject, why)` and `pack_scenes` puts only `subject` on the payload;
-    `subject` comes from the QUESTION's referents -- a claim's subject or a Proposition -- never a
-    rung. So there is no route from the person's decision to a destination, and inventing one
-    (moving "to" the claim's subject) would put a second resolver in the predicate. `move`
-    therefore REFUSES for want of an operand exactly as `transfer` does, which is the honest
-    reading and drops the executed-verb count from 6 to 5. The old 6 counted a verb that never
-    moved anybody."""
-    here = w.rungs.get(a.actor)
-    if here is None:
-        return False
-    dest = (a.payload or {}).get("to") if isinstance(a.payload, dict) else None
-    if not dest or dest not in w.rungs:
-        return False
-    if dest == a.actor:
-        return False
-    on_ladder = any(t.subject == a.actor or t.subject == here.id
-                    for t in w.tenures if t.kind == "contain" and t.until is None)
-    return on_ladder or here.kind == "person"
-
-
-@requires_predicate("work")
-def _req_work(w: "World", a: "Act") -> bool:
-    """§12.1: `condition >= floor(verb)`. The floors are `H-08` and come from Fixtures, swept.
-    ⚠ THE FIRST VERSION CHECKED `condition >= 0`, WHICH IS EVERY POSSIBLE CONDITION. A predicate
-    that cannot fail is not a predicate — it is a `return True` with a docstring, and §0.1 point 2
-    calls that an assertion that cannot observe the failure it excludes. The floors come from
-    `Fixtures`, which RAISES on an unregistered site kind rather than defaulting, so an unswept
-    floor cannot slip in silently."""
-    for ch in a.changes:
-        site = w.sites.get(ch.subject)
-        if site is None:
-            continue
-        floors = w.fixtures.get("band_floors").get(site.kind)
-        if floors is None:
-            raise Unspecified(
-                f"no band floors for site kind {site.kind!r}", "S12.1",
-                needs="a per-kind floor table -- register row H-08",
-                law="§12.1 gates verbs on `condition` against per-kind FLOORS, and §42.2.1 "
-                    "forbids picking a plausible number for a kind nobody registered")
-        return site.condition >= min(floors.values())
-    return True
+# ---------------------------------------------------------------------------
+# ⚠ FOUR PREDICATES WERE RETIRED HERE BY `W-A` (2026-09-04) -- `_req_transfer`, `_req_tell`,
+# `_req_move` and `_req_work`. Each is now a TYPED CELL in `verb_table.yaml`'s `requires_typed:`
+# column, read by `evaluate()`, and §8's rule is that the rule lives once: a verb with both would
+# be two readings of one cell, which is exactly how `_req_confer` came to drop a disjunct and
+# `_req_revoke` an entire clause.
+# `test_wa_one_owner_a_verb_has_a_typed_cell_or_a_predicate_and_never_both` is the guard that
+# fails on a recurrence.
+#
+# THE FOUR THAT REMAIN -- `confer`, `revoke`, `dispatch`, `convene` -- are `remit:`-eligible, not
+# `own`-eligible, and `W-A`'s scope is the `own` rows. Two of them need grammar forms with no
+# `own` cell (`cardinality`, `basis`) and `confer` needs a DISJUNCTION, which no `own` cell has
+# and which is therefore not built (`ID-13`: a combinator nothing uses is a dead carrier).
+# ---------------------------------------------------------------------------
 
 
 # Verbs the probe corpus uses that #353 does not name AS A VERB — checked, not assumed: the
@@ -4517,16 +5051,35 @@ class SeasonDriver:
 
         # `requires`, AGAINST THE WORLD THE PREDECESSORS LEFT -- which is the whole of §27.1.
         if row.requires.strip() not in NO_PRECONDITION:
-            pred = REQUIRES_PREDICATES.get(a.verb)
-            if pred is None:
-                raise Unspecified(
-                    f"{a.verb!r} has a precondition the fold cannot evaluate: {row.requires!r}",
-                    "E2",
-                    needs="a predicate in REQUIRES_PREDICATES, or a `requires:` the table states "
-                          "structurally rather than in prose",
-                    law="§E2 -- `requires` is checked IN THE FOLD. Stated as prose it is the same "
-                        "defect `resolve` had, one column along: a rule the code cannot read")
-            if not pred(w, a):
+            if row.requires_typed is not None:
+                # ⚠ THE TYPED CELL, AND `is True` RATHER THAN A TRUTH TEST. `evaluate` returns
+                # three values, and UNKNOWN -- an operand the act does not carry, or a question
+                # the world cannot answer -- must REFUSE. §42.2's polarity: zero evidence goes to
+                # the verdict AGAINST the thing measured, so an unevaluable precondition is a
+                # refusal and never a silent admission. That is the same polarity the untyped
+                # branch below has always had, and the reason `work` (whose `_req_work` ended in
+                # a bare `return True` for an act naming no site) now refuses instead.
+                #
+                # ⚠ THE VERDICT'S `observed` IS DELIBERATELY DROPPED HERE. Attaching the reads to
+                # the Event is `W-B`; building the carrier before its reader exists is `ID-13`.
+                verdict = evaluate(row.requires_typed, WorldReader(w, a.actor),
+                                   binding_from_act(a))
+                ok = verdict.value is True
+            else:
+                pred = REQUIRES_PREDICATES.get(a.verb)
+                if pred is None:
+                    raise Unspecified(
+                        f"{a.verb!r} has a precondition the fold cannot evaluate: "
+                        f"{row.requires!r}",
+                        "E2",
+                        needs="a typed `requires_typed:` cell, a predicate in "
+                              "REQUIRES_PREDICATES, or a `requires:` the table states "
+                              "structurally rather than in prose",
+                        law="§E2 -- `requires` is checked IN THE FOLD. Stated as prose it is the "
+                            "same defect `resolve` had, one column along: a rule the code cannot "
+                            "read")
+                ok = bool(pred(w, a))
+            if not ok:
                 TRACE.decision(f"{a.verb} by {a.actor}: precondition unmet", "E2/S27.1",
                                chose="emit the refusal -- scarcity falls out of the fold",
                                alternatives=["raise (no Event, no witness, no arc)"])

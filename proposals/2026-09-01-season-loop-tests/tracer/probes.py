@@ -1063,11 +1063,25 @@ def f7():
     w.petitions["pet1"] = dict(id="pet1", petitioner="p_low", proposition="mend the harbour",
                                respondent_venue="D", backing=[])
     w.dates["d_sitting"] = dict(due_at=99, holder="D", fired=False)
-    carried = {}
+    # ⚠ `payload={"subject": ...}`, NOT A BARE STRING. `W-A` typed `carry`'s `requires:` cell
+    # (§E3 `:415`, *a Petition exists*), and the fold now BINDS its operands from the payload --
+    # a bare string binds nothing, so the precondition read UNKNOWN and the act was refused for
+    # want of an operand rather than reaching the gap this probe is about. The payload key is the
+    # one `pack_scenes` writes and `binding_from_act` reads, so the probe now hands the fold the
+    # same shape a computed act does.
+    #
+    # ⚠ AND THE ASSERTION BELOW WAS DEAD FOR AS LONG AS THIS FILE HAS EXISTED. `carried` is an
+    # empty dict nothing ever writes, so `carried.get("by") == "p_mid"` could never be true; it
+    # was never reached because `carry` had no `requires` predicate at all and the fold raised
+    # `Unspecified` first, which `run_probe` files as a DESIGN-GAP. Typing the column moved the
+    # refusal one step later and exposed it. The claim it was reaching for is `w.docket`, and the
+    # honest state is that the docket stays EMPTY: `carry` writes `(DocketItem, matter)` and Part
+    # E does not say what value, so the fold refuses at `H-63` instead. That refusal is the
+    # finding, and it is the same one the probe published before, arriving one column along.
     def choose(p, v, s, ask_budget):
-        return [Act_(w, p, "carry", payload="pet1")] if p.id == "p_mid" else []
+        return ([Act_(w, p, "carry", payload={"subject": "pet1"})]
+                if p.id == "p_mid" else [])
     _run(w, choose)
-    assert carried.get("by") == "p_mid" and w.docket
     return ("PASS: Petition -> `carry` (AN ACT, BY A NAMED PERSON, COSTING BUDGET) -> DocketItem on "
             "a Date. NO automatic promotion, NO queue drain, NO priority function. THE FILTER IS A "
             "PERSON AND THE PERSON PAYS -- which is why T5 produces politics rather than a work queue")
@@ -1581,7 +1595,15 @@ def a5():
             # verb the table does not carry has no semantics. `work` is the table verb that
             # writes `(Site, condition)`; the delta still rides on `changes`, which is what the
             # control is about, and the label no longer has to encode it.
-            return [Act_(w, p, "work", key=str(d),
+            # ⚠ `payload={"site": ...}` IS NOT DECORATION, AND WITHOUT IT THIS PROBE MEASURES
+            # NOTHING. `W-A` typed `work`'s `requires:` (§E3 `:420`, `condition >= floor(verb)`)
+            # and the fold binds `site` from the act's OPERANDS -- an act naming its site only in
+            # `changes` leaves the operand unbound, the verdict UNKNOWN, and the act refused. Both
+            # arms would then apply zero deltas, agree exactly, and this probe would report
+            # order-independence having folded nothing (§0.1 point 2: an assertion must be able to
+            # observe the failure it excludes). Measured when it happened: the fixed point moved
+            # 893 -> 890, which is the five deltas' sum of 3 not being applied.
+            return [Act_(w, p, "work", key=str(d), payload={"site": site.id},
                          changes=[StateChange(site.id, "alter", "Act", "condition", d)])
                     for d in order][:ask_budget()]
         r = _run(w, choose)

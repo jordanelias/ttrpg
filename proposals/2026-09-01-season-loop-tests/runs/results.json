@@ -9559,12 +9559,12 @@
   "F7": {
    "id": "F7",
    "verdict": "GAP",
-   "detail": "'carry' has a precondition the fold cannot evaluate: 'a Petition exists; costs budget like any act'",
+   "detail": "'carry' writes ['DocketItem.matter'] and Part E does not say WHAT VALUE",
    "kind": "UNSPECIFIED",
-   "section": "E2",
+   "section": "E2/E3",
    "title": "a demand rises from a hearth to a duchy",
-   "needs": "a predicate in REQUIRES_PREDICATES, or a `requires:` the table states structurally rather than in prose",
-   "law": "\u00a7E2 -- `requires` is checked IN THE FOLD. Stated as prose it is the same defect `resolve` had, one column along: a rule the code cannot read",
+   "needs": "an entry in EFFECTS, or a `writes:` column that carries the value",
+   "law": "\u00a7E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and \u00a727.1's scarcity stops happening. Register row H-63",
    "by": "probe-model",
    "tests": "someone with no power must be able to get a matter in front of someone who has it"
   },
@@ -10608,10 +10608,10 @@
   },
   {
    "kind": "UNSPECIFIED",
-   "what": "'carry' has a precondition the fold cannot evaluate: 'a Petition exists; costs budget like any act'",
-   "where": "E2",
-   "needs": "a predicate in REQUIRES_PREDICATES, or a `requires:` the table states structurally rather than in prose",
-   "law": "\u00a7E2 -- `requires` is checked IN THE FOLD. Stated as prose it is the same defect `resolve` had, one column along: a rule the code cannot read",
+   "what": "'carry' writes ['DocketItem.matter'] and Part E does not say WHAT VALUE",
+   "where": "E2/E3",
+   "needs": "an entry in EFFECTS, or a `writes:` column that carries the value",
+   "law": "\u00a7E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and \u00a727.1's scarcity stops happening. Register row H-63",
    "case": "probe:F7",
    "expected": false
   },
@@ -11024,13 +11024,13 @@
  "_trace_counts": {
   "STEP": 1920,
   "BARRIER": 651,
-  "DECISION": 659,
+  "DECISION": 660,
   "QUERY": 5989,
   "NOTE": 468,
-  "WRITE": 24490,
-  "EVENT": 18927,
+  "WRITE": 24484,
+  "EVENT": 18922,
   "ACT": 75,
-  "CLAIM": 8335,
+  "CLAIM": 8330,
   "GAP": 66
  },
  "_corpus_defects": [

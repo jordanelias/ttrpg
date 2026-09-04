@@ -679,6 +679,59 @@ rosters:
       # --- Guilds · worldbuilding_v30.md §5.1, §5.3 ---
       "Guild": "Burgher status: Guild Masters and Free Masters qualify for political participation."
 
+  requires_operands:
+    source: "`W-A`. The names a `requires_typed` cell may bind, closed."
+    note: >-
+      ⚠ THE OPERAND VOCABULARY IS CLOSED, AND THAT CLOSURE IS WHAT STOPS THE GRAMMAR BECOMING A
+      SECOND RESOLVER. A cell naming an operand outside this roster REFUSES AT LOAD. It is the
+      reason `comply` and `exchange` carry `requires_typed: none` rather than a typed cell: the
+      first needs a DISPENSATION and the second needs the counterparty's side of a trade, and
+      neither has a name here. Coining one would be filling `H-94` by keyword argument, which is
+      the ruling `H-94` is waiting for and not a table edit.
+      ⚠ WHERE AN OPERAND COMES FROM IS NOT THIS ROSTER'S QUESTION. Today it is `Act.payload`,
+      which carries only `subject` for a computed act, so most cells bind incompletely and
+      evaluate to UNKNOWN -- which the fold reports as a refusal, exactly as the untyped
+      predicates did.
+    values: [actor, subject, from, to, site, kind, amount, floor]
+
+  requires_forms:
+    source: >-
+      `proposals/2026-09-03-meta-architecture/04_CODE_ARCHITECTURE.md` §F.24a -- SEVEN forms, read
+      off the 32 live `requires` cells rather than designed. `F.24` had said *"assumed: a small
+      typed predicate grammar"* and supplied none.
+    note: >-
+      ⚠ CLOSED AT SEVEN. A cell naming a form outside this roster REFUSES AT LOAD, because an
+      eighth form is a new thing a precondition can ask and that is a design change, not a table
+      edit -- the same polarity `eligibility_kinds` already carries against a fifth kind.
+      ⚠ TWO OF THE SEVEN HAVE NO TYPED CELL TODAY AND THAT IS NOT AN OMISSION. `cardinality`'s and
+      `basis`'s only live cells are `confer` and `revoke`, whose eligibility is `remit:` and not
+      `own`; `W-A` types the `own`-eligible rows, so those two keep their `REQUIRES_PREDICATES`
+      entry and this roster records that the grammar has room for them.
+      ⚠ `existence` IS READ WIDER THAN §F.24a's ONE-LINE GLOSS, DELIBERATELY. The gloss says
+      *"existence over an edge kind"* and names `repudiate` (a live `commit`) and `revoke` (a live
+      `hold`). But §F.24a also claims the seven forms close 30 of 32 cells, and `carry` (*a
+      Petition exists*), `commit` (*the Proposition exists*) and `dispatch` (*the named person
+      exists*) fit no other form -- so the closure claim is only true if `existence` covers an
+      OBJECT of a named class as well as an EDGE of a named kind. It is read that way here, and
+      the widening is stated rather than left for a reader to infer from a passing test.
+      ⚠ CONJUNCTION IS NOT AN EIGHTH FORM. `restore` (*the site exists AND the actor is present at
+      it*), `confer` and `revoke` all carry an `and` IN THE PROSE, so a cell may be written as
+      `all: [<form>, <form>]`. §F.24a enumerated the ATOMS; the `and` was already in the cells it
+      read. Disjunction is deliberately absent: `confer`'s `or` is the only one, `confer` is not
+      `own`-eligible, and adding a combinator no cell uses is the dead carrier `ID-13` refuses.
+      `needs:` is the closed set of operands a cell OF THAT FORM may reference -- checked at load
+      against `requires_operands`, so a form cannot quietly reach an operand its shape has no use
+      for.
+    values: [existence, scalar_threshold, contain_path, cardinality, relation, own_ledger, basis]
+    needs:
+      existence:        [subject, site, from, to]
+      scalar_threshold: [subject, site, from, to, kind, amount, floor]
+      contain_path:     [actor, subject, from, to]
+      cardinality:      [subject, from, to]
+      relation:         [actor, subject, site, from, to]
+      own_ledger:       [subject]
+      basis:            [subject, from, to]
+
 tables:
 
   site_yield:

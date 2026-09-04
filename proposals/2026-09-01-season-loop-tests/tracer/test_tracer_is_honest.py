@@ -417,9 +417,23 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     `Unspecified`. The 14 load-time raises -- missing/malformed `write_matrix.yaml`/
     `rosters.yaml`/`verb_table.yaml` -- are CORRECTLY fatal and must remain `SystemExit`: this
     file loads once, at import, and a broken table should end the process rather than be reported
-    as a per-case gap. MUTATION CHECK: converting one of the 14 to `Unspecified`, or leaving a
-    stray `SystemExit` among the four degree branches, flips this count away from 14."""
-    assert SHAPE_CODE.count("raise SystemExit") == 14
+    as a per-case gap. MUTATION CHECK: converting one of them to `Unspecified`, or leaving a
+    stray `SystemExit` among the four degree branches, flips this count.
+
+    ⚠ 14 -> 28, `W-A`, 2026-09-04, AND THE CLAIM IS UNCHANGED. The typed `requires` column added
+    FOURTEEN load-time refusals and no run-time ones: thirteen in the grammar loader
+    (`requirement_form`, `_build_clause`, `build_typed_requires`, `ScalarThreshold.__post_init__`
+    -- an unrostered form, an unrostered operand, an operand outside its form's `needs:`, a
+    malformed cell, a one-clause `all:`, a form with no implementation, a bad comparator, a cell
+    with two thresholds or none) and one in `_load_verb_table` (a `requires_typed: none` with no
+    reason). Every one of them fires while `verb_table.yaml` is being read, at import, which is
+    what this test is about -- the run-time evaluator raises nothing and returns UNKNOWN.
+
+    ⚠ THE BARE COUNT IS THIS TEST'S WEAKNESS AND IS LEFT IN PLACE DELIBERATELY: it goes red on any
+    change and forces the author to say which side of the load/run-time line the new raise is on,
+    which is the question, and a shape-based check (`is this raise inside a loader?`) would answer
+    it with a heuristic instead of a person."""
+    assert SHAPE_CODE.count("raise SystemExit") == 28
 
 
 def test_d10b_resolve_sums_then_clamps_once():
@@ -1802,14 +1816,20 @@ def test_w3_the_fold_refuses_rather_than_filling_and_the_gap_is_countable():
     ⚠ TWO OF THE THREE GOT THIS WRONG IN THE FIRST DRAFT. `presence:` eligibility returned True
     unconditionally with the comment "the presence index is H-33; not resolvable here" — an
     unevaluable predicate admitting. And `_req_work` checked `condition >= 0`, which is EVERY
-    possible condition: a predicate that cannot fail is a `return True` with a docstring."""
+    possible condition: a predicate that cannot fail is a `return True` with a docstring.
+
+    ⚠ `W-A` RETIRED `_req_work` INTO A TYPED CELL, and this test moved with it rather than being
+    deleted: the CLAIM is unchanged — a site below every floor must be unworkable — and it is now
+    asked of `evaluate()`, which is where that rule lives. The gap count is now over verbs with
+    NEITHER a predicate NOR a typed cell, which is the same question one owner further along."""
     prose = [v for v, r in S.VERB_TABLE.items()
              if r.requires.strip() not in S.NO_PRECONDITION]
     assert prose, "no verb carries a precondition -- the check is vacuous"
     # The gap is COUNTABLE, which is what stops it being forgotten: H-65's number.
-    missing = [v for v in prose if v not in S.REQUIRES_PREDICATES]
-    assert len(missing) == len(prose) - len(
-        [v for v in prose if v in S.REQUIRES_PREDICATES])
+    def _evaluable(v):
+        return v in S.REQUIRES_PREDICATES or S.VERB_TABLE[v].requires_typed is not None
+    missing = [v for v in prose if not _evaluable(v)]
+    assert len(missing) == len(prose) - len([v for v in prose if _evaluable(v)])
 
     # A verb with a prose precondition and no predicate must REFUSE, not succeed.
     w = _w()
@@ -1821,14 +1841,16 @@ def test_w3_the_fold_refuses_rather_than_filling_and_the_gap_is_countable():
         d._fold(w, act)
     assert "precondition" in str(e.value) or "no row" in str(e.value)
 
-    # `_req_work` must be able to FAIL. A site below every floor is unworkable.
+    # `work`'s precondition must be able to FAIL. A site below every floor is unworkable.
     site = w.sites["site_harbour"]
     kept, site.condition = site.condition, 0
     try:
-        ch = S.StateChange(site.id, "alter", "Act", "condition", -1)
-        assert not S._req_work(w, S.Act(id="a_w", actor="p_low", verb="work", changes=[ch])), (
-            "`work`'s precondition admitted a site at condition 0 -- it cannot observe the "
-            "failure it excludes")
+        a_w = S.Act(id="a_w", actor="p_low", verb="work", payload={"site": site.id})
+        v = S.evaluate(S.VERB_TABLE["work"].requires_typed, S.WorldReader(w, a_w.actor),
+                       S.binding_from_act(a_w))
+        assert v.value is False, (
+            f"`work`'s precondition returned {v.value!r} for a site at condition 0 -- it cannot "
+            "observe the failure it excludes")
     finally:
         site.condition = kept
 
@@ -4404,7 +4426,17 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # three more fabricated `travel.moved` in each of seasons 2 and 3. `move` has no destination to
     # move to -- that is `H-94` in a second verb -- so it now refuses alongside `transfer`, and the
     # honest count is 5.
-    assert ever == {"create_record", "speak", "tell", "utter", "work"}, (
+    # ⚠ 5 -> 4, `W-A` (2026-09-04), AND IT IS A CORRECTION RATHER THAN A REGRESSION -- which is
+    # the reading §0.1 point 4 forbids taking on faith, so here is the mechanism. `_req_work`
+    # looked for a Site among the act's declared `changes` and, finding none, `return True`. Every
+    # COMPUTED act declares no changes, so across the whole corpus `work`'s precondition COULD NOT
+    # FAIL -- the same shape that predicate's own docstring indicts in ITS predecessor (*"a
+    # predicate that cannot fail is not a predicate -- it is a `return True` with a docstring"*),
+    # one level in. `work`'s typed cell binds `site` from the act's operands and UNKNOWN refuses,
+    # so `work` leaves this set for the identical reason `move` and `transfer` are already out of
+    # it: `H-94`, no operand. `_eff_work` was meanwhile falling back to the alphabetically FIRST
+    # site in the world, so the `site.worked` events this set counted named a site nobody chose.
+    assert ever == {"create_record", "speak", "tell", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
     # ⚠ `move` JOINED `transfer` HERE, AND IT IS THE SAME HOLE. Both are refused for want of an
@@ -4413,7 +4445,11 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # referents -- a claim's subject or a Proposition -- never a destination rung, so there is no
     # route from the person's decision to a place. `move` used to "execute" by closing every
     # containment and opening none; see the executed-set note above.
-    assert refused_only == {"move", "transfer"}, (
+    # ⚠ `work` JOINED THEM, `W-A`. Three verbs, ONE hole: `transfer` has no `kind`/`amount`,
+    # `move` has no `to`, `work` has no `site`. All three are `H-94` -- `Candidate := (verb,
+    # subject, why)` carries one entity and `pack_scenes` puts only that on the payload -- and the
+    # three of them are now the measure of how much of Part E is waiting on where operands live.
+    assert refused_only == {"move", "transfer", "work"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `transfer` is the STRUCTURAL "
         "half of `H-94`: `Candidate := (verb, subject, why)` has no operand field, so "
         "`stores(hearth(giver), kind) >= amount` has no `kind` and no `amount` to read. `tell` "
@@ -4802,3 +4838,266 @@ def test_id16_the_sign_column_is_shape_validated_and_the_gate_can_fail():
     m3 = copy.deepcopy(reg)
     next(r for r in m3["rows"] if r.get("kind") != R.LOOP_KIND)["sign"] = "-"
     assert R.rule_G13(m3), "a `sign` on a non-LOOP row passed"
+
+
+# ===========================================================================
+# `W-A` -- THE TYPED `requires` COLUMN. ONE DECLARATION, THREE READERS.
+#
+# THESE ARE GUARDS ON THE GAME, not on the apparatus, which is what licenses them under
+# `CLAUDE.md` §0.1 point 5 as amended: the artifact each protects is the precondition the FOLD
+# evaluates and the person DELIBERATES against -- the two sites where a wrong answer changes which
+# acts happen and which do not. A defect in any of them moves the corpus.
+# ===========================================================================
+
+def _wa_own_eligible_with_a_precondition() -> list:
+    """Every row `W-A`'s scope covers: `own` among its eligibility alternatives, and a `requires:`
+    that is not one of the no-precondition markers. Derived from the table, never listed (`G2`)."""
+    return sorted(v for v, r in S.VERB_TABLE.items()
+                  if "own" in r.eligibility_kinds()
+                  and (r.requires or "").strip() not in S.NO_PRECONDITION)
+
+
+def test_wa_one_owner_a_verb_has_a_typed_cell_or_a_predicate_and_never_both():
+    """§8 -- the rule lives once. A verb with BOTH a `requires_typed:` cell and a
+    `REQUIRES_PREDICATES` entry is two readings of one prose cell, which is exactly how
+    `_req_confer` came to drop a disjunct while its docstring claimed the clause was implemented.
+
+    And the coverage half: every `own`-eligible row with a prose precondition must carry either a
+    typed cell or an EXPLICIT `requires_typed: none` with a reason. A row with neither is one
+    nobody got to, and the loader cannot tell that from a deliberate refusal.
+
+    MUTATION (run 2026-09-04, both outcomes reported in the work item's output): re-register
+    `_req_transfer` under `@requires_predicate("transfer")` while `transfer` keeps its typed cell
+    -- this test goes RED on the `both` assertion; delete the `requires_typed:` cell from
+    `transfer`'s row in `verb_table.yaml` and it goes RED on the coverage assertion instead.
+    Unmutated it is GREEN.
+
+    ⚠ COVERAGE IS READ OFF THE YAML KEY, NOT OFF THE LOADED ROW, and the first draft got this
+    wrong: a `requires_typed: none` and an ABSENT `requires_typed:` both load to `None`, so the
+    check used a non-empty `requires_typed_note:` as the proxy for "declared" -- and deleting the
+    cell while leaving the note behind passed. The distinction this test exists to draw is between
+    a deliberate refusal and a row nobody typed, and only the file can tell them apart."""
+    both = [v for v, r in S.VERB_TABLE.items()
+            if r.requires_typed is not None and v in S.REQUIRES_PREDICATES]
+    assert not both, (
+        f"{both} carry a typed `requires_typed:` cell AND a `REQUIRES_PREDICATES` entry. Two "
+        "readings of one cell is how a conjunct gets dropped in one of them; delete the "
+        "predicate, the cell is the owner")
+
+    scope = _wa_own_eligible_with_a_precondition()
+    # The count is asserted so the walk cannot prove anything by finding no offenders among zero
+    # candidates (§0.1 point 2). Part E carries 14 such rows; 8 is the floor the work item set.
+    checked = len(scope)
+    assert checked >= 8, f"only {checked} own-eligible rows carry a precondition: {scope}"
+    import yaml as _yaml
+    declared = {r["verb"] for r in
+                _yaml.safe_load(S.VERB_TABLE_YAML.read_text())["verbs"]
+                if "requires_typed" in r}
+    assert declared, "no row declares `requires_typed:` -- the file the check reads has moved"
+    uncovered = [v for v in scope if v not in declared]
+    assert not uncovered, (
+        f"{uncovered} are `own`-eligible with a prose `requires:` and carry neither a typed cell "
+        "nor an explicit `requires_typed: none` with a reason. Type it, or say why it cannot be")
+    typed = sum(1 for r in S.VERB_TABLE.values() if r.requires_typed is not None)
+    # ⚠ PRINTED FROM THE TABLE, NEVER TYPED INTO A COMMENT. `G11`: a number with no adjacent
+    # command is a defect, and every count this file has hand-carried has eventually been wrong.
+    print(f"\n  typed {typed} of {len(S.VERB_TABLE)}; "
+          f"uncovered own-eligible: {uncovered}  "
+          f"(own-eligible with a precondition: {checked}; "
+          f"declared `none`: {sorted(v for v in scope if S.VERB_TABLE[v].requires_typed is None)})")
+
+
+def test_wa_an_empty_ledger_is_unknown_for_every_form_and_the_candidate_still_forms():
+    """§F1's ASYMMETRY, made mechanical over every form in the grammar rather than over one verb.
+
+    *"Absence of a belief is not a belief in the negative."* A person who holds NO claims must
+    read every typed requirement as UNKNOWN -- not False -- and must therefore still form the
+    Candidate, act on the premise, and be refused by the fold. That is §F1's own worked case: *"a
+    person who wrongly believes the granary full still forms the Candidate, acts, and gets
+    `transfer.refused` from the fold. That is T3 and L2 working."*
+
+    MUTATION (run 2026-09-04): change `LedgerReader.read` to `return False` on no matching claim
+    instead of `UNKNOWN` -- every form's verdict becomes False, `belief_contradicts` becomes True
+    for all nine typed verbs, and this test goes RED on both halves at once (the UNKNOWN loop
+    first). Unmutated it is GREEN. That mutation is the exact softening §F1 forbids, so the test
+    can observe the failure it excludes."""
+    empty = S.LedgerReader([])
+    forms, checked = set(), 0
+    for verb, row in sorted(S.VERB_TABLE.items()):
+        if row.requires_typed is None:
+            continue
+        req = row.requires_typed.requirement
+        forms.add(getattr(req, "clauses", None) and "all" or type(req).__name__)
+        b = S.binding_from(row.requires_typed, "p_low", "a_subject_nobody_has_a_claim_about")
+        v = S.evaluate(row.requires_typed, empty, b)
+        assert v.value is S.UNKNOWN, (
+            f"{verb}: an EMPTY ledger produced {v.value!r} rather than UNKNOWN. A person holding "
+            "no claims would then be treated as holding a claim that the requirement fails, "
+            "which is the softening to 'requires holds' §F1 spends two paragraphs forbidding")
+        checked += 1
+    assert checked >= 8, f"only {checked} typed cells were exercised -- the walk is not seeing them"
+    # The control: the walk must span the grammar, not one form nine times.
+    assert len(forms) >= 5, f"only {sorted(forms)} were exercised; the grammar has more forms"
+
+    # AND THE CONSEQUENCE, WHICH IS THE HALF THAT MATTERS TO THE GAME: the Candidates still form.
+    w = P.tiny_world()
+    p = w.persons["p_low"]
+    assert not p.ledger, "the fixture person now holds claims; this arm needs an empty ledger"
+    q = S.Question("q:wa_asym", "need", ("Hh",))
+    cands = S.Query.opening_set(p, S.View(p.id, [], w.fixtures.get("view_k"), q), q)
+    offered = {c.verb for c in cands}
+    typed_own = {v for v, r in S.VERB_TABLE.items()
+                 if r.requires_typed is not None and S.person_side_eligible(p, r)}
+    assert typed_own <= offered, (
+        f"{sorted(typed_own - offered)} were filtered out of the option set by a person who holds "
+        "NO claims at all. Clause 4 is KNOWN-FALSE, not 'unproven'")
+
+
+def test_wa_a_planted_claim_removes_transfer_and_a_larger_one_leaves_it():
+    """§F1 CLAUSE 4 FIRING, WHICH `H-116` MEASURED AS IMPOSSIBLE.
+
+    `H-116`: over 4,800 deposited claims across 8 cases x 3 seasons, the predicates the person's
+    filter read (`person_predicates`) and the predicates anything wrote were DISJOINT, and zero
+    claims were falsy -- *"so clause 4 of `opening_set` cannot fire and the candidate set is
+    invariant with respect to everything that happens in the simulation."* With the predicate
+    DERIVED from the verb's own typed cell there is one namespace, and a belief about a granary
+    now changes what its holder is willing to attempt.
+
+    ⚠ THE CONTROL IS THE SECOND HALF AND IT IS NOT OPTIONAL. A filter that removed the Candidate
+    for ANY planted claim would pass the first assertion while meaning nothing (§0.1 point 4). The
+    same claim carrying a value that SATISFIES the requirement must leave the Candidate standing,
+    and every other Candidate must survive both plants.
+
+    MUTATION (run 2026-09-04, whole suite): flip `transfer`'s `comparator` in `verb_table.yaml`
+    from `>=` to `<=`. The two arms swap -- `0` keeps the Candidate and `9` removes it -- and this
+    test goes RED. Unmutated it is GREEN. THREE tests go red under that mutation and the OTHER TWO
+    are the ones worth naming, because they show the cell is load-bearing on the GAME and not only
+    on this test: `test_no_probe_errors` fails on probe `F10` -- *a matter closes by scarcity, not
+    by cancelling* -- with `granted=['transfer.made', 'transfer.made'] refused=[]`, i.e. both
+    claimants on a one-unit larder are served and §27.1's scarcity stops happening; and
+    `test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte` fails because the
+    committed run artifacts move."""
+    w = P.tiny_world()
+    p = w.persons["p_low"]
+    q = S.Question("q:wa_contra", "need", ("Hh",))
+    v = S.View(p.id, [], w.fixtures.get("view_k"), q)
+
+    def offered():
+        return {(c.verb, c.subject) for c in S.Query.opening_set(p, v, q)}
+
+    base = offered()
+    assert ("transfer", "Hh") in base, (
+        "`transfer x Hh` was never offered, so removing it proves nothing")
+
+    def plant(value):
+        p.ledger.clear()
+        # `stores:grain` is DERIVED -- `f"{scalar}:{kind}"` from `transfer`'s own cell, with
+        # `kind` coming from the cell's `operand_defaults`. It is not typed into a roster here
+        # and it is not typed into a roster there; that is the point of the whole item.
+        p.ledger.append(S.Claim("c_wa", p.id, "Hh", "stores:grain", value, 1,
+                                "firsthand", 100, "own"))
+        return offered()
+
+    empty_granary = plant(0)
+    assert ("transfer", "Hh") not in empty_granary, (
+        "a person who believes the hearth holds NO grain still offered themselves `transfer`. "
+        "Clause 4 is not reading the verb's typed cell")
+    assert base - empty_granary == {("transfer", "Hh")}, (
+        f"the plant removed {sorted(base - empty_granary)} -- more than the one Candidate whose "
+        "requirement it contradicts. A filter that removes everything is not a filter")
+
+    full_granary = plant(9)
+    assert ("transfer", "Hh") in full_granary, (
+        "a person who believes the hearth holds NINE grain was denied `transfer`. The filter "
+        "fires on the PRESENCE of a claim rather than on its contradicting the requirement, "
+        "which is the control this arm exists to run")
+    assert full_granary == base, (
+        f"a satisfying claim changed the option set: {sorted(full_granary ^ base)}")
+
+
+def test_wa_the_fold_and_the_person_read_the_same_cell_with_opposite_polarities():
+    """THE ONE DECLARATION, READ TWICE, AND THE TWO READINGS ARE NOT THE SAME.
+
+    An UNKNOWN verdict REFUSES in the fold (§42.2 -- zero evidence goes to the verdict against the
+    thing measured) and DOES NOT CONTRADICT for the person (§F1 -- absence of a belief is not a
+    belief in the negative). Getting either polarity wrong is invisible in the other site, so both
+    are asserted here, on the same verb, from the same cell.
+
+    MUTATION (run 2026-09-04): change `belief_contradicts`'s `.value is False` to
+    `.value is not True` -- an UNKNOWN becomes a contradiction, every person stops forming every
+    Candidate whose requirement they hold no claim about, and this test goes RED on the first
+    assertion. Unmutated it is GREEN.
+
+    ⚠ AND THE FOLD HALF OF THIS TEST CANNOT OBSERVE ITS OWN MUTATION, WHICH IS SAID HERE RATHER
+    THAN LEFT TO BE FOUND. Flipping the fold to `ok = verdict.value is not False` leaves the
+    emitted kind UNCHANGED for `transfer`: the act is admitted, `_eff_transfer` finds neither
+    `from` nor `to` on the payload and touches nothing, and the fold's *"an effect that touched
+    nothing must not emit the success"* guard emits `transfer.refused` anyway. Measured -- that
+    mutation leaves this test GREEN. The test that DOES observe it is
+    `test_wa_work_refuses_for_want_of_a_site_and_that_is_a_polarity_correction`, because
+    `_eff_work` falls back to the alphabetically first site in the world and so DOES report a
+    change: mutated, a bare `work` emits `site.worked`. §0.1 point 2 is about knowing which
+    assertion sees which failure, not about every assertion seeing every one."""
+    w = P.tiny_world()
+    row = S.VERB_TABLE["transfer"]
+    p = w.persons["p_low"]
+    # The person's reading: UNKNOWN, so NOT contradicted.
+    assert not S.belief_contradicts(p, row, "Hh"), (
+        "a person holding no claim about `Hh` was treated as knowing `transfer` fails")
+    # The fold's reading of the same cell, on an act with no operands: UNKNOWN, so REFUSED.
+    a = S.Act(id="wa_t", actor="p_low", verb="transfer", payload={"subject": "Hh"})
+    verdict = S.evaluate(row.requires_typed, S.WorldReader(w, a.actor), S.binding_from_act(a))
+    assert verdict.value is S.UNKNOWN, verdict
+    d = S.SeasonDriver(w)
+    w.step = S.Step.RESOLVE
+    kinds = [e.kind for e in d._fold(w, a)]
+    assert kinds == ["transfer.refused"], (
+        f"an operand-less `transfer` emitted {kinds}. UNKNOWN must refuse in the fold; admitting "
+        "it would move grain the act never named -- `H-94` filled by accident")
+    # And the reads are on the Verdict and NOWHERE ELSE: attaching them to the Event is `W-B`.
+    assert all(isinstance(o, S.Observation) for o in verdict.observed)
+    ev = d._fold(w, S.Act(id="wa_t2", actor="p_low", verb="transfer", payload={"subject": "Hh"}))
+    assert not any(hasattr(e, "observed") for e in ev), (
+        "an Event grew an `observed` field -- that is `W-B` and this item must not have built it")
+
+
+def test_wa_work_refuses_for_want_of_a_site_and_that_is_a_polarity_correction():
+    """⚠ THE ONE BEHAVIOUR `W-A` CHANGES IN THE CORPUS, PINNED SO IT IS A MEASUREMENT AND NOT A
+    SURPRISE.
+
+    `_req_work` looked for a Site among the act's declared `changes` and, finding none, returned
+    True. Every COMPUTED act declares no changes, so for the whole corpus its precondition COULD
+    NOT FAIL -- the same shape its own docstring indicts in its predecessor (*"a predicate that
+    cannot fail is not a predicate -- it is a `return True` with a docstring"*), one level in. The
+    typed cell binds `site` from the act's operands; unbound is UNKNOWN and UNKNOWN refuses.
+
+    So `work` leaves the corpus's executed set and joins `move` and `transfer` in the
+    always-refused set, for the identical reason: `H-94`, no operand. That is a REDUCTION in what
+    runs and an INCREASE in what is true, and §0.1 point 4 forbids taking the favourable reading
+    of it either way.
+
+    MUTATION (run 2026-09-04): restore `_req_work`'s trailing `return True` by giving the cell an
+    operand default (`site` bound to any fixture site) -- the operand-less act is admitted again
+    and this test goes RED on the first assertion. Unmutated it is GREEN."""
+    w = P.tiny_world()
+    d = S.SeasonDriver(w)
+    w.step = S.Step.RESOLVE
+    bare = [e.kind for e in d._fold(w, S.Act(id="wa_w0", actor="p_low", verb="work"))]
+    assert bare == ["work.unavailable"], (
+        f"a `work` naming no site emitted {bare}. It cannot have checked a condition against a "
+        "floor, because it was never told whose condition")
+    # AND IT STILL ADMITS A NAMED, WORKABLE SITE -- otherwise the refusal above is not the
+    # polarity rule, it is the verb being broken (§0.1 point 2: the control the first arm needs).
+    ok = [e.kind for e in d._fold(w, S.Act(id="wa_w1", actor="p_low", verb="work",
+                                           payload={"site": "site_harbour"}))]
+    assert ok == ["site.worked"], f"a workable site was refused: {ok}"
+    # AND IT REFUSES A SITE BELOW EVERY FLOOR, which is the failure §12.1's gate exists to
+    # observe and the one `_req_work`'s FIRST version (`condition >= 0`) could not.
+    site = w.sites["site_harbour"]
+    kept, site.condition = site.condition, 0
+    try:
+        dead = [e.kind for e in d._fold(w, S.Act(id="wa_w2", actor="p_low", verb="work",
+                                                 payload={"site": site.id}))]
+        assert dead == ["work.unavailable"], f"a site at condition 0 was worked: {dead}"
+    finally:
+        site.condition = kept
