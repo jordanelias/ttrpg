@@ -497,11 +497,22 @@ def test_d10c_the_obstacle_refusal_gate_exists():
 
 def test_event_never_grows_a_target_or_an_actor():
     """S19.3, and Part VIII lists the target field as a REFUSAL: 'an Event that knows who it
-    is for is an Event that cannot be misattributed, AND MISATTRIBUTION IS A FEATURE.'"""
+    is for is an Event that cannot be misattributed, AND MISATTRIBUTION IS A FEATURE.'
+
+    ⚠ THE BAN LIST IS THE INVARIANT; THE EXACT SET IS A RATCHET, AND `W-B` MOVED IT BY ONE.
+    `observed` is admitted and the other six are still banned, which is the distinction S19.3
+    actually draws: the three absent fields are about ATTRIBUTION and RECIPIENCY -- who did it, who
+    it is for -- and each absence is a design decision. `observed` is neither. It is what the FOLD
+    READ to reach its verdict, and §27.1 already makes reading the precondition the fold's
+    business; `changes[]` is what the act WROTE and no existing field holds what it read.
+    ⚠ THE EQUALITY IS KEPT RATHER THAN LOOSENED TO A SUBSET, and that is the point of the line: a
+    NEW field still turns this red and has to be argued here. Loosening it to `banned & fields ==
+    set()` would let the next field in silently, which is how `target` would eventually arrive."""
     fields = set(Event.__dataclass_fields__)
     for banned in ("target", "actor", "source_actor", "recipient", "to", "stat_deltas"):
         assert banned not in fields
-    assert fields == {"id", "kind", "subject", "changes", "causes", "emitted_at", "degree"}
+    assert fields == {"id", "kind", "subject", "changes", "causes", "emitted_at", "degree",
+                      "observed"}
 
 
 def test_causes_is_never_empty():
@@ -3854,7 +3865,21 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     import headless as HL
     depths, matured = {}, {}
     for n in (0, 3, 6):
-        w = HL.build_world(0, S.DEFAULT_FIXTURES.sweep("record_stages_default", n))
+        # ⚠ `observation_deposit_mode` IS PINNED TO ITS CONTROL ARM, AND THAT IS CONFOUND REMOVAL
+        # RATHER THAN A CONVENIENCE (`CLAUDE.md` §0.1 point 1 -- *are the two arms the same
+        # experiment?*). This sweep's subject is `record_stages_default`; every other fixture must
+        # be held. `W-B` (`H-122`) made that necessary and the interaction is recorded rather than
+        # hidden: each observation deposit is an Event with `causes=[e.id]`, so the extra deposits
+        # LENGTHEN the graph behind a maturation, and at the shipped default the depth clause
+        # SATURATES against the 7-season ceiling. MEASURED 2026-09-04, longest maturation chain by
+        # stage count -- `none` {0:0, 3:6, 6:7} · `actor` {0:0, 3:7, 6:7} · `total` {0:0, 3:7,
+        # 6:7}. So at `actor` the DEPTH clause can no longer tell 3 stages from 6, while the
+        # maturation COUNT still can in every arm (15 / 21 at `none` and `actor`, 27 / 36 at
+        # `total`) because it is not ceiling-bounded. That is why the count assertion below was
+        # added beside the depth one, and it is `H-80`'s version of `H-122`'s `H-40` finding.
+        w = HL.build_world(0, S.DEFAULT_FIXTURES
+                           .sweep("record_stages_default", n)
+                           .sweep("observation_deposit_mode", "none"))
         d = S.SeasonDriver(w)
         mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
         for _ in range(7):
@@ -3881,6 +3906,10 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
         f"at the 0 control {matured[0]} term.matured Events exist — `H-80`'s cite says "
         "NOTHING MATURES there, and if something does, that is a finding worth more than "
         "this control")
+    assert matured[3] < matured[6], (
+        f"the maturation COUNT does not grow with the stage count: {matured} — the depth clause "
+        "below is ceiling-bounded by the season count and this one is not, so if this fails the "
+        "sweep is inert whatever the depths say")
     assert depths[3] > depths[0] and depths[6] > depths[3], (
         f"the chain does not grow with the stage count: {depths} — then check 2's result does not "
         "rest on H-80 and this control is measuring nothing")
@@ -4603,25 +4632,49 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     assert len({r["seasons"] for r in live}) > 1, (
         "every case ran for the same number of seasons — `temporal.span_seasons` is not being "
         "read, and the worlds are identical again for the reason rev 1 was overturned")
-    # ⚠ THE WORLDS DISCRIMINATE NOW, AND EXACTLY ONCE. Two executed sets: the five cases the
-    # corpus declares `span_seasons: 1` do not `tell`, because a claim is deposited at WITNESS at
-    # the END of a season and a one-season life never holds one to tell. That is the corpus's own
-    # data changing the outcome — the first behavioural difference the larger surface produced,
-    # and it appeared only once `temporal.span_seasons` was read and the subject stopped being
-    # dropped. `H-96` still holds for everything else: 2..7 of 22 candidates separate.
+    # ⚠ THE WORLDS DISCRIMINATE, AND EXACTLY ONCE: two executed sets, differing ONLY in `tell`.
+    # The split is a SEASON THRESHOLD -- below it a case does not reach `tell`, at or above it
+    # every case does -- and that partition, not the group's size, is what the explanation says.
+    #
+    # ⚠ **THE THRESHOLD MOVED FROM 1 TO 2 UNDER `W-B` (`H-122`), AND IT MOVED BECAUSE §F1 CLAUSE
+    # 4 STARTED FIRING.** The old wording pinned "the five one-season cases" by GROUP SIZE, which
+    # was a latent defect on its own terms: `min(by_sig.values(), key=len)` silently means the
+    # OTHER group the moment the sizes cross, and under `W-B` they do (5/84 becomes 65/24).
+    # MEASURED 2026-09-04 on NPC-088 at `span_seasons: 2`, acts per season by verb -- at the
+    # `none` control `tell` is attempted three times in BOTH seasons; at the shipped `actor`
+    # default it is attempted three times in season 1 and NOT AT ALL in season 2. The person's
+    # ledger says why: season 1's `tell` was refused (`news.untold`), the refusal carried
+    # `Observation('r_hearth', 'claim.held', False)`, `W-B` deposited it, and in season 2
+    # `belief_contradicts` evaluates `tell`'s own `own_ledger` cell against `LedgerReader`, reads
+    # `claim.held -> False`, and drops the Candidate. **That is the first time in this chain that
+    # a person declined to attempt something because of what a previous season taught them.**
+    # ⚠ WHAT THIS IS NOT: it is not a reconvergence measurement and this test does not make one.
+    # `H-96`'s claim -- the RANKING cannot discriminate -- is untouched and still holds: still
+    # exactly two sets, still differing in one verb, and the ranking still ties 2..7 of 22.
     by_sig = {}
     for r in live:
         by_sig.setdefault(tuple(r["executed"]), []).append(r)
     assert len(by_sig) == 2, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived")
-    small = min(by_sig.values(), key=len)
-    # ⚠ THE DIVERGENT GROUP IS STILL THE FIVE ONE-SEASON CASES AND STILL FOR THE `tell` REASON --
-    # re-measured under `W-C` rather than carried: the small group executes
-    # `create_record, move, speak, transfer, utter` and the large one adds `tell`.
-    assert {r["seasons"] for r in small} == {1} and len(small) == 5, (
-        f"the divergent group is no longer the five one-season cases: "
-        f"{sorted({r['seasons'] for r in small})}, n={len(small)}. The explanation on `H-96` "
-        "(a claim lands at WITNESS, so a one-season life has none to tell) no longer holds")
+    # ⚠ KEYED ON WHAT THE SETS CONTAIN, NEVER ON HOW BIG THEY ARE. See above.
+    with_tell = [rs for sig, rs in by_sig.items() if "tell" in sig]
+    without = [rs for sig, rs in by_sig.items() if "tell" not in sig]
+    assert len(with_tell) == 1 and len(without) == 1, (
+        f"the two sets no longer differ by `tell` alone: {sorted(by_sig)}")
+    with_tell, without = with_tell[0], without[0]
+    assert (set(by_sig) == {("create_record", "move", "speak", "tell", "transfer", "utter"),
+                            ("create_record", "move", "speak", "transfer", "utter")}), sorted(by_sig)
+    lo = {r["seasons"] for r in without}
+    hi = {r["seasons"] for r in with_tell}
+    assert max(lo) < min(hi), (
+        f"the split is no longer a season threshold: cases WITHOUT `tell` run {sorted(lo)} and "
+        f"cases WITH it run {sorted(hi)}. The explanation above is a claim about season count, "
+        "and a straddle means something else is deciding it")
+    assert max(lo) == 2, (
+        f"the `tell` threshold is {max(lo)} seasons, not 2. It was 1 before `W-B` and moved "
+        "because a refused `tell` now deposits `claim.held -> False` and §F1 clause 4 drops the "
+        "Candidate the following season; a different number means that mechanism changed and the "
+        "paragraph above must be re-measured, not this line adjusted")
     assert foldable_all - ever - refused_only == {"confer", "convene", "dispatch", "revoke",
                                               "destroy_record"}, (
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Four of the "
@@ -6074,8 +6127,13 @@ def test_wb_the_fold_attaches_the_verdicts_reads_to_every_event_the_act_emits():
 
     MUTATION (run 2026-09-04): drop `observed=verdict.observed` from `_fold`'s `ev(...)` — every
     Event carries `()` and this goes RED on the first assertion with `refusal carried no reads`.
-    Restored, GREEN. MUTATION 2: hoist `verdict` out of `_fold` onto the driver — the untyped
-    assertion goes RED with `create_record carried 1 read`. Restored, GREEN."""
+    Restored, GREEN. MUTATION 2: hoist `verdict` out of `_fold` onto the driver (`self.
+    _leaked_verdict`, read at the top of `_fold` and written by the typed branch) — the untyped
+    assertion goes RED with `create_record carried 1 read(s) immediately after a transfer that
+    read one`. Restored, GREEN. ⚠ THE FIRST WRITING OF MUTATION 2 WAS RECORDED AS RED AND WAS
+    GREEN: the untyped arm used a FRESH driver, so nothing could leak into it. The claim was
+    false, the test was vacuous on that property, and both are fixed rather than the sentence
+    softened — which is the failure this file exists to catch, committed inside `W-B` itself."""
     # THE REFUSAL — an empty granary.
     w = _wb_world("none", grain=0)
     _d, evs, _ops, _row, _q = _wb_fold_one(w)
@@ -6092,13 +6150,29 @@ def test_wb_the_fold_attaches_the_verdicts_reads_to_every_event_the_act_emits():
     assert evs2[0].observed and evs2[0].observed[0].value == 8, evs2[0].observed
 
     # THE EMPTY CASE — an untyped verb reads nothing through this channel and says so.
+    # ⚠ **FOLDED THROUGH THE SAME DRIVER, IMMEDIATELY AFTER A TYPED ACT THAT DID READ, AND THAT
+    # IS THE WHOLE POINT OF THE ORDERING.** A fresh driver per act CANNOT observe the failure this
+    # excludes: `verdict` leaking out of `_fold` onto the driver is invisible unless two acts share
+    # one. Written the naive way first and the mutation below stayed GREEN, which is §0.1 point 2
+    # arriving as a fact rather than as a principle.
     w3 = _wb_world("none", grain=8)
-    _d3, evs3, _o3, _r3, _q3 = _wb_fold_one(w3, verb="create_record", subject="S")
-    assert evs3, "create_record emitted nothing — the fixture changed"
-    assert all(e.observed == () for e in evs3), (
-        f"`create_record` carried {[len(e.observed) for e in evs3]} read(s). It is untyped, so "
-        "nothing went through the `Observation` channel — a non-empty tuple here is a previous "
-        "act's reads leaking through a hoisted `verdict`")
+    p3, d3 = w3.persons["p_low"], S.SeasonDriver(w3)
+    w3.step = S.Step.RESOLVE
+    q3 = S.Question("q:wb3", "need", ("S",), "prop")
+    typed_ops = S.operands_for(p3, S.VERB_TABLE["transfer"], q3, "S", w3.fixtures)
+    typed = d3._fold(w3, S.Act(id="wb_pre", actor="p_low", verb="transfer",
+                               payload=dict(typed_ops)))
+    assert typed and typed[0].observed, (
+        "the priming act read nothing, so the leak this asserts against cannot happen and the "
+        "assertion below is vacuous")
+    untyped = d3._fold(w3, S.Act(id="wb_cr", actor="p_low", verb="create_record",
+                                 payload={"subject": "S"}))
+    assert untyped, "create_record emitted nothing — the fixture changed"
+    assert all(e.observed == () for e in untyped), (
+        f"`create_record` carried {[len(e.observed) for e in untyped]} read(s) immediately after "
+        "a `transfer` that read one. It is untyped, so nothing went through the `Observation` "
+        "channel — a non-empty tuple here is the PREVIOUS act's reads leaking through a `verdict` "
+        "that outlived its fold")
 
 
 def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_goes():

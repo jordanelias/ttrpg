@@ -216,7 +216,7 @@ either** — they are listed individually below and should be discounted accordi
 **what:** a wrapper checking direction on a Key crossing a rung boundary
 
 **needs:** nothing -- THE RULE WAS STATED OVER A FIELD THAT DOES NOT EXIST
-**law:** S44.1 -- THERE IS NOTHING TO CHECK. Event's fields are ['causes', 'changes', 'degree', 'emitted_at', 'id', 'kind', 'subject']: no target, no actor. 'The only transport the suite defines IS a chain of `tell` acts; there is no non-act news transport anywhere in the shape.' Observers are computed at WITNESS from presence; THE EMITTER DECLARES NO RECIPIENT. Three independent lanes killed this, and the fix that suggests itself -- add a target field -- is the twin of the attribution field the design DELIBERATELY REMOVED
+**law:** S44.1 -- THERE IS NOTHING TO CHECK. Event's fields are ['causes', 'changes', 'degree', 'emitted_at', 'id', 'kind', 'observed', 'subject']: no target, no actor. 'The only transport the suite defines IS a chain of `tell` acts; there is no non-act news transport anywhere in the shape.' Observers are computed at WITNESS from presence; THE EMITTER DECLARES NO RECIPIENT. Three independent lanes killed this, and the fix that suggests itself -- add a target field -- is the twin of the attribution field the design DELIBERATELY REMOVED
 
 ### `A21` — a dispensation is broadcast to every descendant  ·  **FORBIDDEN**  ·  `S37.3`  ·  by `no-signature`
 **what:** broadcasting a dispensation to all descendants

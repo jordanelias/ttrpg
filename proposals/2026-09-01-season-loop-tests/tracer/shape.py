@@ -6141,7 +6141,12 @@ class SeasonDriver:
             # two identical claims would double-count in every eviction comparison.
             if obs_mode != "none" and (obs_mode == "total" or pid == e.subject):
                 seen_obs: set = set()
-                for o in (getattr(e, "observed", ()) or ()):
+                # `e.observed`, NOT `getattr(e, "observed", ())`. The field is on `Event` now, so
+                # a default here would be a guard for a case that cannot arise -- and it would
+                # SWALLOW the one case worth failing on, an object that is not an Event reaching
+                # this barrier. `content_hash`'s `getattr` is a different matter: it is the
+                # forward-compatibility fold `W-B` was written against and predates the field.
+                for o in e.observed:
                     if o.value is UNKNOWN or o.value is None:
                         continue
                     key = (o.subject, o.predicate)

@@ -41,6 +41,7 @@ exercised by this run.**
 | `extended_scene_cost` | `2` | no — a harness fixture |
 | `scene_packing_rule` | `greedy` | no — a harness fixture |
 | `claim_subject_rule` | `both` | no — a harness fixture |
+| `observation_deposit_mode` | `actor` | no — a harness fixture |
 | `record_stages_default` | `3` | no — a harness fixture |
 | `record_stage_term` | `1` | no — a harness fixture |
 | `budget_office_bonus` | `1` | no — a harness fixture |
