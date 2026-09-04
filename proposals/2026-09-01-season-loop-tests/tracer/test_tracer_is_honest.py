@@ -7124,3 +7124,291 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     assert (got["none"]["genuine"], got["none"]["wide"]) == (17, 7), got
     assert (got["actor"]["genuine"], got["actor"]["wide"]) == (16, 11), got
     assert (got["total"]["genuine"], got["total"]["wide"]) == (16, 12), got
+
+
+# ===========================================================================
+# `W-E` -- THE DEGREE. THREE BROKEN LINKS, AND THE DEMONSTRATION THAT THEY ARE CLOSED.
+#
+# The state before: `_fold` hardcoded `_degree_for_writes = None`; `VerbRow.emits_at` had ZERO
+# CALLERS ANYWHERE IN THE TRACER (`H-113`); and `Event.degree` was a declared field NOTHING EVER
+# ASSIGNED. Each hid the next, so a partial success and an overwhelming one were the same event.
+# ===========================================================================
+
+def _we_bands(model="scene_fraction", ids=range(24)):
+    """Fold `kill / wound` through the REAL road -- `SeasonDriver.resolve` -> `contest()` ->
+    `combat_seam` -> `wrapper.fight` -- once per act id, and report what each band did.
+
+    The act id is the only thing that varies: `combat_seam` seeds its RNG from
+    `H(world_seed, tick, actor, "contest:<prize>:<act id>")`, so a different id is a different
+    fight in the same world. Nothing about the WORLD is tuned to reach a band."""
+    seen = {}
+    for i in ids:
+        w = P.tiny_world()
+        w.step = S.Step.RESOLVE
+        w.fixtures = w.fixtures.sweep("wound_harm_model", model)
+        before = w.persons["p_mid"].body
+        d = S.SeasonDriver(w)
+        act = S.Act(id=f"we{i}", actor="p_low", verb="kill / wound",
+                    payload={"subject": "p_mid"})
+        evs = d.resolve([act], w.fixtures.get("contest_max_depth"))
+        deg = evs[0].degree if evs else None
+        alive = "p_mid" in w.persons
+        seen.setdefault(deg, dict(
+            act=act.id, kinds=sorted(e.kind for e in evs), alive=alive,
+            body_before=before, body_after=(w.persons["p_mid"].body if alive else None),
+            degrees={e.degree for e in evs},
+            live_tenures=(sum(1 for t in list(w.tenures) + list(w._unowned)
+                              if (t.subject == "p_mid" or t.object == "p_mid") and t.live))))
+    return seen
+
+
+def test_we_a_contested_acts_consequence_differs_by_degree():
+    """**THE DELIVERABLE, EXECUTED.** `CLAUDE.md` §0.2: a juncture is done when the behaviour
+    RUNS. This runs it -- the whole road, the real personal-combat engine, the real fold -- and
+    asserts the three bands produce three DIFFERENT consequences.
+
+    Before `W-E` this was unreachable in two places at once: `resolve()`'s contest branch
+    `continue`d before the fold, and `_fold` passed a hardcoded `None` to `writes_at`.
+
+    FALSIFIER, and it is the arm rather than an argument: `wound_harm_model="total"` is the code
+    EXACTLY AS IT STOOD (`harm` defaulting to the person's whole body). Under it `Wounded` kills,
+    so `Felled` and `Wounded` become the same consequence and the assertion below goes red. That
+    is the control §0.1 point 4 asks for -- the arm where the degree does not change what is
+    written, measured rather than imagined.
+
+    MUTATION (run 2026-09-04): revert `_fold`'s `_pairs = row.writes_at(_degree)` to
+    `writes_at(None)` and this raises `Unspecified` on the first act; revert the emission line to
+    `row.emits` and the `Untouched` assertion goes red with `person.died` in its kinds."""
+    import combat_seam as C
+    if C.engine() is None:                      # a NAMED gap, never a silent skip
+        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+
+    seen = _we_bands()
+    # ⚠ ASSERT THAT IT ASSERTED (§0.1 point 2). A search over act ids that happened to find only
+    # one band would otherwise "pass" three vacuous comparisons.
+    assert set(seen) == set(S.COMBAT_BANDS), (
+        f"the search reached {sorted(seen)} of {list(S.COMBAT_BANDS)} over 24 act ids. Every "
+        "assertion below compares bands, so a missing band makes them absent rather than weak")
+
+    felled, wounded, untouched = (seen[S.FELLED], seen[S.WOUNDED], seen[S.UNTOUCHED])
+    # FELLED -- the kill. The subject leaves the world and every tenure naming them closes (§15.3,
+    # "a plague that kills the praefect ends his tenure THROUGH THE DEATH").
+    assert felled["alive"] is False and felled["kinds"] == ["person.died"], felled
+    assert felled["live_tenures"] == 0, felled
+    # WOUNDED -- alive, and strictly worse off. This is the case the verb's name always carried
+    # and the table could not express.
+    assert wounded["alive"] is True and wounded["kinds"] == ["body.changed"], wounded
+    assert 0 < wounded["body_after"] < wounded["body_before"], wounded
+    # UNTOUCHED -- the fight happened and changed nothing, and STILL EMITS. Jordan, 2026-06-02:
+    # "an undecided fight is a legitimate outcome." A loss is not a refusal.
+    assert untouched["alive"] is True and untouched["kinds"] == ["contest.undecided"], untouched
+    assert untouched["body_after"] == untouched["body_before"], untouched
+    # AND THE THREE ARE ACTUALLY DIFFERENT -- the claim, stated as one comparison.
+    assert len({tuple(b["kinds"]) for b in (felled, wounded, untouched)}) == 3
+    assert len({(b["alive"], b["body_after"]) for b in (felled, wounded, untouched)}) == 3
+
+    # ── THE CONTROL. `total` re-runs the pre-`W-E` magnitude and collapses two bands into one. ──
+    ctl = _we_bands(model="total")
+    assert set(ctl) == set(S.COMBAT_BANDS), ctl
+    assert ctl[S.WOUNDED]["alive"] is False, (
+        "the control arm no longer reproduces the defect: under `wound_harm_model=total` the "
+        "harm is the whole body, so a WOUND must kill exactly as a FELLING does. If this passes "
+        "with the subject alive, the arm has stopped being the code as it stood and the "
+        "measurement above has no baseline")
+    assert (ctl[S.FELLED]["alive"], ctl[S.WOUNDED]["alive"]) == (False, False)
+    # ⚠ AND THE CONTROL ARM IS VISIBLY WRONG, WHICH IS WHY IT IS A CONTROL AND NOT A CANDIDATE:
+    # it deletes the person and still reports `body.changed`, i.e. a success report for something
+    # that did not happen (`ID-9`) -- the defect class the degree-keyed `emits:` exists to end.
+    assert ctl[S.WOUNDED]["kinds"] == ["body.changed"], ctl[S.WOUNDED]
+
+    # ── THE SECOND CONTROL. `none` isolates the WRITE SET from the VALUE. ──
+    ctl2 = _we_bands(model="none")
+    assert ctl2[S.WOUNDED]["kinds"] == ["kill.refused"], (
+        f"with no harm model a wound writes nothing, so the fold's own write-nothing guard must "
+        f"emit the REFUSAL rather than the success; got {ctl2[S.WOUNDED]}")
+    assert ctl2[S.WOUNDED]["body_after"] == ctl2[S.WOUNDED]["body_before"], ctl2[S.WOUNDED]
+
+    print(f"\n  W-E — kill / wound, tiny_world, 24 act ids, seed as tiny_world sets it:"
+          f"\n    scene_fraction {[(k, v['kinds'], v['alive'], v['body_after']) for k, v in sorted(seen.items())]}"
+          f"\n    total (control) {[(k, v['kinds'], v['alive']) for k, v in sorted(ctl.items())]}"
+          f"\n    none  (control) {[(k, v['kinds'], v['alive']) for k, v in sorted(ctl2.items())]}")
+
+
+def test_we_event_degree_is_assigned_and_stays_none_where_nothing_graded_it():
+    """THE THIRD BROKEN LINK. `Event.degree` was declared on the dataclass and assigned by NOTHING
+    -- `ID-13`'s test (a field no writer reaches is one that does not exist) applied to the
+    outcome column itself. `_fold` assigns it now, on the one path every act-emission takes.
+
+    ⚠ AND `None` ON AN UNCONTESTED ACT IS THE CLAIM'S OTHER HALF, NOT AN OMISSION. No contest
+    graded a `speak`, so stamping one would be the fabrication this item exists to remove -- and
+    it is what keeps the corpus byte-identical: `World.content_hash` mixes `e.degree` in, so a
+    degree on an uncontested Event would move every hash in every artifact.
+
+    MUTATION (run 2026-09-04): drop `degree=_degree` from `_fold`'s `ev(...)` and the first
+    assertion goes red; stamp a degree unconditionally and the second does."""
+    import combat_seam as C
+    if C.engine() is None:
+        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+    seen = _we_bands()
+    for band, got in seen.items():
+        assert band in S.COMBAT_BANDS and got["degrees"] == {band}, (band, got)
+    # THE UNCONTESTED PATH. `speak` declares no `contests:`, so nothing graded it.
+    w = _w(); w.step = S.Step.RESOLVE
+    d = S.SeasonDriver(w)
+    evs = d.resolve([S.Act(id="we_sp", actor="p_low", verb="speak")], 2)
+    assert evs and all(e.degree is None for e in evs), [(e.kind, e.degree) for e in evs]
+
+
+def test_we_emits_at_has_a_caller_and_the_band_selects_the_kind():
+    """`H-113`, closed. `VerbRow.emits_at` had ZERO callers anywhere in the tracer -- verified
+    exhaustively by an independent read-only critic -- so a contested verb emitted the FLAT UNION
+    of every band. Executed then: a contest resolved `Untouched`, the degree meaning NOBODY WAS
+    HURT, emitted `person.died`. That is `ID-9` inside the epistemic layer, where every witness
+    then mints a claim from it.
+
+    FALSIFIER: revert `_fold`'s `_declared = row.emits_at(_degree)` to `row.emits` and the union
+    assertion below goes red naming the extra kinds."""
+    import combat_seam as C
+    if C.engine() is None:
+        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+    row = S.VERB_TABLE["kill / wound"]
+    union = set(row.emits)
+    assert len(union) >= 3, f"the union is no longer bigger than a branch ({union}); re-derive"
+    seen = _we_bands()
+    assert set(seen) == set(S.COMBAT_BANDS), sorted(seen)
+    for band, got in seen.items():
+        declared = set(row.emits_at(band))
+        assert set(got["kinds"]) == declared, (band, got["kinds"], sorted(declared))
+        assert set(got["kinds"]) != union, (
+            f"{band} emitted the flat union {sorted(union)} -- `emits_at` is not being consulted")
+    # THE ONE THAT WAS ACTIVELY FALSE: nobody was hurt and the world was told a man died.
+    assert "person.died" not in seen[S.UNTOUCHED]["kinds"], seen[S.UNTOUCHED]
+    assert "person.died" not in seen[S.WOUNDED]["kinds"], seen[S.WOUNDED]
+
+
+def test_we_the_ladder_is_the_trees_own_and_not_a_copy_of_it():
+    """§27.2's highest-value refusal, applied to the one function this item was most tempted to
+    re-implement. `S39.4` reads four bands off a MARGIN; the tree owns that ladder at
+    `engine/autoload/dice_engine.py::degree_from_net` -- *"THE degree ladder. Single owner for
+    every scale of the game (Jordan ruling, 2026-08-14)"*. `shape.degree_of` IMPORTS AND CALLS it.
+
+    THREE ASSERTIONS, EACH EXCLUDING A DIFFERENT WAY OF FAILING:
+      1. IDENTITY -- the callable this module holds IS the tree's object, not a look-alike.
+      2. CORRESPONDENCE -- the band boundaries, enumerated, including the FRACTIONAL cases the
+         docstring says only the windowed reading survives. A copied table would drift silently
+         the day the owner changed its mind, which is exactly what `params_tables.yaml`'s captured
+         ladder did (`CLAUDE.md` §5 -- the capture still shows the PRE-RULING bands).
+      3. FOLLOW-THE-OWNER -- with the resolved ladder replaced, every answer must change. A
+         private band table inlined in `degree_of` would keep answering correctly and pass 1 and 2
+         on a stale copy; only this one can see it.
+
+    ⚠ AND THE OPERAND DOES NOT EXIST YET, WHICH THIS TEST DOES NOT PRETEND OTHERWISE ABOUT.
+    Nothing in the tracer produces a `net`; the branch is a READER WITH NO PRODUCER and is
+    registered as `H-124`. `test_we_only_a_verb_that_declares_contests_can_be_graded_today` is
+    where that is measured rather than asserted."""
+    lad = S.degree_ladder()
+    assert lad is not None, f"the tree's degree ladder is unavailable: {S.ladder_error()}"
+    from engine.autoload.dice_engine import DEGREE_LABEL, Degree, degree_from_net
+    assert lad[0] is degree_from_net and lad[1] is DEGREE_LABEL, (
+        "`degree_of` is holding something other than the tree's own ladder -- a copy of a single "
+        "owner is a second resolver with a delayed fuse")
+
+    # 2. THE BOUNDARIES. `net - ob`: >= 3 Overwhelming · >= 1 Success · 0 <= m < 1 Partial ·
+    # < 0 Failure. Fractional operands included: the docstring is explicit that the Partial band
+    # is a whole-success-wide WINDOW rather than the point `margin == 0`, and that only the
+    # windowed reading survives contact with a fractional obstacle.
+    checked = 0
+    for net, ob in ((5, 2), (5.0, 2.0), (3, 2), (2.999, 0), (2, 2), (2.5, 2), (2.0, 2.0),
+                    (1, 2), (1.9, 2.0), (-1, 0), (0, 0), (0.5, 0), (3, 0), (0, 3)):
+        assert S.degree_of({"net": net, "ob": ob}) == DEGREE_LABEL[degree_from_net(net, ob)]
+        checked += 1
+    assert checked == 14, checked
+
+    # 3. FOLLOW THE OWNER. Replace the RESOLVED ladder and every band must move with it.
+    saved = S._LADDER
+    try:
+        S._LADDER = (lambda net, ob, **k: Degree.FAILURE, DEGREE_LABEL)
+        moved = {S.degree_of({"net": n, "ob": o}) for n, o in ((5, 2), (3, 2), (2.5, 2), (1, 2))}
+        assert moved == {"Failure"}, (
+            f"replacing the ladder changed nothing ({moved}) -- `degree_of` is answering from a "
+            "band table of its own, which is the second resolver S27.2 refuses")
+    finally:
+        S._LADDER = saved
+    assert S.degree_of({"net": 5, "ob": 2}) == "Overwhelming", "the ladder was not restored"
+
+
+def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
+    """PER VERB, MEASURED RATHER THAN CLAIMED -- and the answer is ONE of thirty-two.
+
+    A degree exists only where something RESOLVES a contest. 31 of the 32 rows in
+    `verb_table.yaml` declare no `contests:` at all, so no degree is even ASKABLE for them: they
+    are not ungraded, they are ungradeable, and a degree wired onto one would be a number with no
+    producer. `speak`, `tell`, `utter`, `petition` and `the six investigation acts` -- the
+    person-to-person verbs a degree would matter most for -- are all in that 31.
+
+    THE THREE PRIZES THAT ARE NOT `the body` ROUTE TO SUBSYSTEMS THE SEAM DOES NOT CALL, and that
+    is a RULING rather than an omission. Jordan, 2026-09-02: *"we don't NEED to worry about them
+    at this point in time."* The seam names the subsystem and refuses, which this test executes.
+
+    AND THE LADDER BRANCH HAS NO PRODUCER. `degree_from_net` reads `net - ob`; nothing in this
+    tracer produces a `net`. The scan below is the falsifier for that sentence -- if a roll ever
+    lands here, it goes red and the claim has to be rewritten rather than quietly outlived."""
+    contested = {v: r.contests for v, r in S.VERB_TABLE.items() if r.contests}
+    assert contested == {"kill / wound": "the body"}, (
+        f"the set of contesting verbs moved: {contested}. Every claim `W-E` published about what "
+        "can be graded today is scoped to this set")
+    assert len(S.VERB_TABLE) == 32, len(S.VERB_TABLE)
+
+    prizes = S.roster_map("contest_subsystems", "prizes")
+    assert prizes["the body"] == "personal_combat"
+    # THE SEAM CALLS personal_combat AND REFUSES THE OTHER TWO, BY NAME. Executed, not read.
+    w = _w(); w.step = S.Step.RESOLVE
+    refused = {}
+    for prize, sub in sorted(prizes.items()):
+        if sub == "personal_combat":
+            continue
+        with pytest.raises(Unspecified) as ei:
+            S.contest(w, "S", prize, ["p_low", "p_mid"], 0, 2, ["a1"])
+        refused[prize] = sub
+        assert sub in str(ei.value), (prize, str(ei.value)[:160])
+    assert set(refused) == {"a field", "a proposition", "a standing"}, refused
+
+    # NOTHING PRODUCES A MARGIN. The only `net` in the instrument is `degree_of`'s own read of
+    # one, so the ladder branch is a reader with no producer (`H-124`).
+    producers = []
+    for f in sorted(HERE.glob("*.py")):
+        if f.name == "test_tracer_is_honest.py":
+            continue
+        for i, line in enumerate(_code_only_lines(f), 1):
+            if re.search(r"\bnet\b\s*=|roll_pool|\bsuccesses\b", line):
+                producers.append(f"{f.name}:{i} {line.strip()[:90]}")
+    assert not producers, (
+        "something now produces a margin. `W-E` published `the ladder branch has no producer` "
+        "and registered it as `H-124`; that sentence is now false and must be rewritten rather "
+        "than left standing:\n  " + "\n  ".join(producers))
+
+
+def _code_only_lines(path: Path) -> list:
+    """Source lines with comments and docstrings removed, so a scan for a mechanism cannot be
+    satisfied -- or reddened -- by prose describing it. `_code_only` collapses the whole file to
+    one string; this keeps line numbers, which a finding needs to be checkable."""
+    import io
+    import tokenize
+    src = path.read_text()
+    keep = [""] * (len(src.splitlines()) + 2)
+    try:
+        toks = list(tokenize.generate_tokens(io.StringIO(src).readline))
+    except tokenize.TokenError:
+        return src.splitlines()
+    prev = tokenize.INDENT
+    for tok in toks:
+        if tok.type == tokenize.COMMENT:
+            continue
+        if tok.type == tokenize.STRING and prev in (
+                tokenize.INDENT, tokenize.DEDENT, tokenize.NEWLINE, tokenize.NL):
+            prev = tok.type
+            continue
+        if tok.type not in (tokenize.NL, tokenize.NEWLINE):
+            prev = tok.type
+        keep[tok.start[0]] += tok.string + " "
+    return keep
