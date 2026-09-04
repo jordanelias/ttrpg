@@ -930,7 +930,9 @@ def p36():
     w.add_tenure(Tenure("t_p36", p.id, prop.id, "commit", since=0))
     # ⚠ NARROWED TO WHAT THE FOLD CAN EXECUTE, AND THE NARROWING IS COMPUTED, NOT AUTHORED.
     # `resolvable_verbs()` asks the fold which verbs it can carry through RESOLVE; the answer is
-    # 12 of 32, because 20 carry a `requires:` no predicate evaluates (W3). Without it the person
+    # 12 of 32 ⚠ FOR TWO REASONS NOW, NOT ONE — recount rather than trusting this clause. `W-A`
+    # typed nine `requires:` cells, so a verb is excluded for want of an EFFECT as well as for
+    # want of a predicate, and the two are no longer the same set (W3). Without it the person
     # forms the full computed set, picks one of the twenty, and the SEASON HALTS -- which is a
     # true finding about the specification and a different one from what this probe tests.
     offered = len(Query.opening_set(p, View(p.id, [], w.fixtures.get("view_k"),

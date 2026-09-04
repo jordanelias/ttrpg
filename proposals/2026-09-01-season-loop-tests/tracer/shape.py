@@ -752,6 +752,13 @@ def requirement_form(name: str):
 
 
 class Requirement:
+    # ⚠ EVERY FORM DECLARES THE STEMS IT ASKS FOR, so `_build_clause` can close the predicate
+    # vocabulary at LOAD without a second list to keep in step (§8). A form that reads a stem it
+    # does not declare here would pass the load check and still read UNKNOWN forever -- so the
+    # rule is: whatever `check()` passes to `_observe`, `stems()` names.
+    def stems(self) -> tuple:
+        return ()
+
     """One clause of a typed `requires:`. Subclasses ARE the seven forms; `evaluate` never
     branches on a form name, because the class IS the branch (`G2` -- forbid the shape, never
     enumerate the words)."""
@@ -784,6 +791,10 @@ class Existence(Requirement):
 
     def entity_operands(self) -> tuple:
         return (self.of,)
+
+
+    def stems(self) -> tuple:
+        return ("exists",)
 
     def check(self, reader, binding, observed):
         subj = _bound(binding, self.of)
@@ -828,6 +839,10 @@ class ScalarThreshold(Requirement):
     def entity_operands(self) -> tuple:
         return (self.of,)
 
+
+    def stems(self) -> tuple:
+        return (self.scalar, self.threshold_predicate) if self.threshold_predicate else (self.scalar,)
+
     def check(self, reader, binding, observed):
         subj = _bound(binding, self.of)
         if subj is UNKNOWN:
@@ -865,6 +880,10 @@ class ContainPath(Requirement):
     def entity_operands(self) -> tuple:
         return (self.to,)
 
+
+    def stems(self) -> tuple:
+        return ("contain.path",)
+
     def check(self, reader, binding, observed):
         origin, dest = _bound(binding, self.of), _bound(binding, self.to)
         if origin is UNKNOWN or dest is UNKNOWN:
@@ -888,6 +907,10 @@ class Relation(Requirement):
 
     def entity_operands(self) -> tuple:
         return (self.of,)
+
+
+    def stems(self) -> tuple:
+        return (self.relation,)
 
     def check(self, reader, binding, observed):
         subj, actor = _bound(binding, self.of), _bound(binding, "actor")
@@ -918,6 +941,10 @@ class OwnLedger(Requirement):
     def entity_operands(self) -> tuple:
         return (self.of,)
 
+
+    def stems(self) -> tuple:
+        return ("claim.held",)
+
     def check(self, reader, binding, observed):
         subj = _bound(binding, self.of)
         if subj is UNKNOWN:
@@ -943,6 +970,10 @@ class AllOf(Requirement):
 
     def entity_operands(self) -> tuple:
         return tuple(dict.fromkeys(o for c in self.clauses for o in c.entity_operands()))
+
+
+    def stems(self) -> tuple:
+        return tuple(x for c in self.clauses for x in c.stems())
 
     def check(self, reader, binding, observed):
         unknown = False
@@ -972,6 +1003,11 @@ class TypedRequires:
 
     def entity_operands(self) -> tuple:
         return self.requirement.entity_operands()
+
+    def stems(self) -> tuple:
+        """Delegated like every other accessor here, so the load-time stem closure sees a cell's
+        stems whether it is asked of the wrapper or of the clause tree (§8: one owner)."""
+        return self.requirement.stems()
 
     def check(self, reader, binding, observed):
         return self.requirement.check(reader, binding, observed)
@@ -1021,8 +1057,16 @@ def binding_from(req: Optional[TypedRequires], actor: str, subject) -> dict:
     named. Everything else is unbound and therefore UNKNOWN, which is the honest reading: a person
     with no belief about it is not a person who believes it false.
 
-    ⚠ TAKES NO WORLD, AND NEITHER DOES ANYTHING IT CALLS. That is `L2`, asserted by AST in
-    `test_w5_sense_is_still_the_only_world_taking_non_decision_function`."""
+    ⚠ TAKES NO WORLD, AND NEITHER DOES ANYTHING IT CALLS -- BUT NOT BECAUSE THAT TEST SAYS SO.
+    An earlier draft of this docstring claimed `L2` here was "asserted by AST in
+    `test_w5_sense_is_still_the_only_world_taking_non_decision_function`". IT IS NOT: that walk
+    inspects only functions whose FIRST PARAMETER IS ANNOTATED `Person`, and `binding_from`,
+    `evaluate`, `LedgerReader.__init__`/`read` and every `Requirement.check` fail that filter, so
+    none of them is examined. Add a `w` parameter here tomorrow and the test stays green. Found by
+    the W-A adversarial pass, and corrected rather than left: a false claim of enforcement is
+    worse than none, because it stops the next reader from checking. What IS true is that the one
+    CALLER, `belief_contradicts(p: Person, ...)`, does match the filter and is covered -- so the
+    guard reaches the boundary and not this function."""
     b: dict = {"actor": actor}
     if req is not None and subject is not None:
         for op in req.entity_operands():
@@ -1086,6 +1130,35 @@ class WorldReader:
                     needs="a per-kind floor table -- register row H-08",
                     law="§12.1 gates verbs on `condition` against per-kind FLOORS, and §42.2.1 "
                         "forbids picking a plausible number for a kind nobody registered")
+            # ⚠ THE LOOSEST FLOOR, AND AN ADVERSARIAL PASS CALLED THIS AN UNDER-REFUSAL.
+            # The objection was exact and is answered rather than dismissed. It said: the prose is
+            # `condition >= floor(verb)`, `band_floors`' inner keys are SITE-USE verbs
+            # (bulk_shipping, fishing, deep_mining …) which its roster note says are "NOT
+            # verb-table rows", so `work` is not among them and `min` silently substitutes the
+            # loosest floor for the one the prose names — admitting, on a harbour, every condition
+            # in 100..800 where `floor(bulk_shipping)` is 800.
+            #
+            # WHAT THE OBJECTION GETS RIGHT: this is not `floor(verb)`, and the site-USE is an
+            # operand neither the act nor `requires_operands` carries (`H-94`).
+            # WHAT IT GETS WRONG, AND WHY `min` STAYS: `work` is the GENERIC labour verb, so the
+            # question its precondition asks is *can this site be worked at all* — and a site is
+            # workable if it clears the floor of its LEAST demanding use. A seam at condition 100
+            # cannot be deep-mined and CAN be surface-gleaned (`surface_gleaning: 50`); a harbour
+            # at 150 cannot take bulk shipping and can be fished. So `min` is the READING of
+            # `floor(verb)` for a verb that names no use, not a substitute for it.
+            #
+            # BOTH ALTERNATIVES WERE BUILT AND MEASURED BEFORE SETTLING HERE, which is why this
+            # comment is long: `max` refuses a seam at 100 that surface-gleaning supports, and
+            # turned `test_w8_...` red for exactly that site; `UNKNOWN` destroys the gate outright
+            # — `work`'s precondition could then never return False, so §12.1's condition gate
+            # could not observe the failure it exists to exclude (§0.1 point 2), and it turned
+            # `test_w3_...` red. `min` is the only one of the three that both refuses an unworkable
+            # site and admits a workable one.
+            #
+            # WHAT REMAINS OPEN AND IS NOT PAPERED OVER: a `work` that MEANS deep-mining is
+            # admitted on a seam only surface-gleaning could support, because nothing on the act
+            # says which use is intended. That is `H-94`'s operand, and when it exists this line
+            # reads `floors[use]` and the reading collapses to the prose.
             return min(floors.values())
         if stem == "contain.path":
             if subject not in w.rungs or arg not in w.rungs:
@@ -1104,6 +1177,26 @@ class WorldReader:
             p = w.persons.get(self._actor)
             return UNKNOWN if p is None else any(c.subject == subject for c in p.ledger)
         return UNKNOWN
+
+
+# THE STEMS `WorldReader.read`/`LedgerReader.read` DISPATCH ON. The two readers below are the
+# only consumers.
+#
+# ⚠ WHY THIS EXISTS: THE GRAMMAR CLOSED ON FORM AND OPERAND NAMES AND NOT ON THE STRINGS THAT
+# ACTUALLY SELECT THE PREDICATE. Found by the W-A adversarial pass. `_build_clause` refused at load
+# on an unrostered form, an unrostered operand, and an operand outside the form's `needs:` -- and
+# validated NOTHING about `Existence.kind`, `ScalarThreshold.scalar`/`threshold_predicate` or
+# `Relation.relation`. Those four strings are what `read` dispatches on, and an unrecognised one
+# fell through to `return UNKNOWN` forever: `kind: Commit` for `commit`, or `relation: present-at`
+# for `present_at`, LOADED CLEAN, evaluated UNKNOWN in every world, and the fold refused the verb
+# everywhere -- reported as `H-94`'s honest operand famine. A typo and a design gap were
+# indistinguishable, which is the silent-wrong-answer shape this file refuses everywhere else.
+# roster-exempt: MECHANISM. These are the grammar's own predicate stems -- what a REQUIREMENT MAY
+# ASK -- not the game's vocabulary; `rosters.yaml` says what the world contains.
+REQUIRES_STEMS = frozenset({
+    "exists", "stores", "condition", "floor", "contain.path", "held_by", "present_at",
+    "claim.held",
+})
 
 
 class LedgerReader:
@@ -1129,6 +1222,18 @@ class LedgerReader:
                 if best is None or (c.when, c.confidence) > (best.when, best.confidence):
                     best = c
         return UNKNOWN if best is None else best.value
+
+
+def _require_known_stem(stem: str, where: str) -> None:
+    """A predicate stem outside `REQUIRES_STEMS` REFUSES AT LOAD rather than reading UNKNOWN
+    forever. The three sibling closure checks below already do this for forms and operands; this
+    is the fourth, and its absence made a typo indistinguishable from a design gap."""
+    if stem not in REQUIRES_STEMS:
+        raise SystemExit(
+            f"verb_table.yaml: {where} names predicate stem {stem!r}, which no reader dispatches "
+            f"on. Declared stems: {sorted(REQUIRES_STEMS)}. An unknown stem would evaluate "
+            f"UNKNOWN in every world and refuse the verb everywhere, which is indistinguishable "
+            f"from an honest operand gap.")
 
 
 def _build_clause(verb: str, cell: dict) -> Requirement:
@@ -1169,6 +1274,12 @@ def _build_clause(verb: str, cell: dict) -> Requirement:
             raise SystemExit(
                 f"verb_table.yaml: {verb!r}'s {form!r} cell binds {o!r}, which is not in that "
                 f"form's `needs:` ({sorted(allowed)})")
+    # ⚠ THE FOURTH CLOSURE CHECK, AND THE ONE THAT WAS MISSING. The three above close the FORM
+    # and the OPERANDS; this closes the PREDICATE STEM, which is what the readers actually
+    # dispatch on. Every stem a requirement can ask for is read off the requirement itself, so a
+    # new form contributes its stems automatically rather than needing this list edited.
+    for stem in req.stems():
+        _require_known_stem(stem, f"{verb!r}'s {form!r} cell")
     return req
 
 
@@ -4433,7 +4544,18 @@ def _eff_work(w: "World", a: "Act") -> None:
     `work`'s DELTA is deferred while its SUBJECT is not: the act is about that site, and saying
     so is what keeps the deferral from reading as a no-op."""
     d = a.payload if isinstance(a.payload, dict) else {}
-    site = d.get("site") or next((x for x in sorted(w.sites)), None)
+    # ⚠ NO FALLBACK. This read `or next((x for x in sorted(w.sites)), None)` -- the alphabetically
+    # FIRST site in the world -- so a `work` with no site named one nobody chose. `_eff_move`
+    # refuses the identical situation (`InstrumentDefect`, a caller minted a malformed act) and
+    # this did not; found by the W-A adversarial pass, which noted the two are the same defect one
+    # verb along. It was reachable only because the precondition now refuses first, which is
+    # exactly why `_eff_move`'s own guard sat un-fired and broken for so long.
+    site = d.get("site")
+    if site is None:
+        raise InstrumentDefect(
+            "a `work` with no `site` reached the effect. The fold binds operands from the act's "
+            "payload; an act minted without one is a CALLER defect, not a design gap, and "
+            "fabricating the alphabetically first site would name a place nobody chose.")
     return [site] if site else []
 
 

@@ -380,6 +380,40 @@ def test_h118_a_record_written_with_no_event_moves_the_hash():
         "corpus, so this blindness was live")
 
 
+def test_wa_an_unknown_predicate_stem_refuses_at_load():
+    """`W-A`'s grammar closed on FORM and OPERAND names and NOT on the strings that actually
+    SELECT the predicate — `Existence.kind`, `ScalarThreshold.scalar`/`threshold_predicate`,
+    `Relation.relation`. Those are what `WorldReader.read`/`LedgerReader.read` dispatch on, and an
+    unrecognised one fell through to `return UNKNOWN`. So `relation: present-at` for `present_at`
+    LOADED CLEAN, evaluated UNKNOWN in every world, and refused the verb everywhere — reported as
+    `H-94`'s honest operand famine. A TYPO AND A DESIGN GAP WERE INDISTINGUISHABLE, which is the
+    silent-wrong-answer shape this file refuses everywhere else. Found by the W-A adversarial pass.
+
+    FALSIFIER: every stem any typed cell declares is in `REQUIRES_STEMS`, and every stem in
+    `REQUIRES_STEMS` is one a reader dispatches on — checked BOTH ways, because a one-way check
+    would let the roster grow entries no reader honours (`ID-13`).
+    MUTATION CHECK, RUN: changing `restore`'s `relation: present_at` to `present-at` in
+    `verb_table.yaml` makes `import shape` raise `SystemExit` naming the stem and listing the
+    declared set — verified by mutating the file, importing in a subprocess, and restoring."""
+    import inspect as _i
+    # (a) every stem a loaded cell declares is closed
+    declared = set()
+    for row in S.VERB_TABLE.values():
+        rt = getattr(row, "requires_typed", None)
+        if rt is not None:
+            declared |= set(rt.stems())
+    assert declared, "no typed cell declares a stem — the grammar is not loaded"
+    assert declared <= S.REQUIRES_STEMS, (
+        f"typed cells declare stem(s) outside REQUIRES_STEMS: {sorted(declared - S.REQUIRES_STEMS)}")
+    # (b) every closed stem is one a reader actually dispatches on — else the roster grows
+    #     entries nothing honours, which is the same defect one direction over.
+    src = _i.getsource(S.WorldReader) + _i.getsource(S.LedgerReader)
+    unread = [st for st in S.REQUIRES_STEMS if f'"{st}"' not in src]
+    assert not unread, (
+        f"REQUIRES_STEMS declares {sorted(unread)}, which no reader dispatches on. A stem no "
+        f"reader honours evaluates UNKNOWN forever — the defect this roster exists to stop.")
+
+
 def test_h115_the_degree_branches_raise_unspecified_not_systemexit():
     """`H-115`: `VerbRow.emits_at`/`writes_at` raised `SystemExit` on their two run-time degree
     refusals (pre-fix: shape.py:708/712/728/733). `SystemExit` derives from `BaseException`, so
@@ -433,7 +467,7 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     change and forces the author to say which side of the load/run-time line the new raise is on,
     which is the question, and a shape-based check (`is this raise inside a loader?`) would answer
     it with a heuristic instead of a person."""
-    assert SHAPE_CODE.count("raise SystemExit") == 28
+    assert SHAPE_CODE.count("raise SystemExit") == 29
 
 
 def test_d10b_resolve_sums_then_clamps_once():
@@ -5101,3 +5135,20 @@ def test_wa_work_refuses_for_want_of_a_site_and_that_is_a_polarity_correction():
         assert dead == ["work.unavailable"], f"a site at condition 0 was worked: {dead}"
     finally:
         site.condition = kept
+    # ⚠ AND THE THRESHOLD IS THE LOOSEST FLOOR BY READING, NOT BY CONVENIENCE -- pinned here
+    # because an adversarial pass called it an under-refusal and the answer is a judgement that a
+    # later reader may want to re-open. `work` is the GENERIC labour verb, so `floor(verb)` for a
+    # verb naming no use is the floor of the least demanding use: a seam at 100 cannot be
+    # deep-mined (700) and CAN be surface-gleaned (50). MUTATION, BOTH RUN: `max` turns
+    # `test_w8_...` red on `site_seam` at condition 100, which surface-gleaning supports;
+    # `UNKNOWN` turns `test_w3_...` red because the gate can then never return False at all.
+    seam = w.sites["site_seam"]
+    fl = w.fixtures.get("band_floors").get(seam.kind)
+    assert min(fl.values()) <= seam.condition < max(fl.values()), (
+        "the fixture no longer places `site_seam` between its loosest and strictest floor, so "
+        "this pin no longer discriminates the three readings -- re-choose the site")
+    workable = [e.kind for e in d._fold(w, S.Act(id="wa_w3", actor="p_low", verb="work",
+                                                 payload={"site": seam.id}))]
+    assert workable == ["site.worked"], (
+        f"a seam at condition {seam.condition} was refused ({workable}); surface_gleaning's "
+        f"floor is {min(fl.values())} and the generic verb reads the loosest")

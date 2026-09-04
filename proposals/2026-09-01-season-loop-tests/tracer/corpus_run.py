@@ -201,7 +201,11 @@ def build_at(case: dict, seed: int = 0) -> S.World:
     for n, pid in enumerate(("p_a", "p_b", "p_c")):
         w.persons[pid] = S.Person(pid, pid)
         # ⚠ A PERSON IS THE BOTTOM RUNG OF THE LADDER, and `tiny_world` models it that way. Without
-        # this, `_req_move`'s `w.rungs.get(a.actor)` is None and `move` is refused everywhere.
+        # this, `move` is refused everywhere. ⚠ THE STATED REASON IS NOW STALE AND THE FIXTURE
+        # IS NOT: `_req_move` was retired by `W-A` and the typed cell short-circuits on an
+        # unbound `to` BEFORE it reads `w.rungs` at all, so the mechanism named here no longer
+        # runs. The seat is still required — `Query.presence` and the contain-path read both need
+        # it — but a reader should not be told a retired predicate is why.
         w.rungs[pid] = S.Rung(pid, "person")
         # The parent is the deepest NON-person rung, which after the filter above is `chain[0]`.
         # A case scaled at `person` therefore seats its people in the `hearth` -- the next rung up
