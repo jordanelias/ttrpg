@@ -1,193 +1,574 @@
 {
- "none": {
-  "n_drops": 0,
-  "self_referential": 0,
-  "not_self_referential": 0,
-  "cross_person": 0,
-  "true_when_recorded": {},
-  "by_verb_predicate": {},
-  "depositing_kinds": {},
-  "non_self_referential_rows": [],
-  "n_false_when_recorded": 0,
-  "false_when_recorded_predicates": {},
-  "false_when_recorded_examples": []
- },
- "actor": {
-  "n_drops": 37,
-  "self_referential": 37,
-  "not_self_referential": 0,
-  "cross_person": 0,
-  "true_when_recorded": {
-   "True": 37
-  },
-  "by_verb_predicate": {
-   "move|contain.path:p_a": 37
-  },
-  "depositing_kinds": {
-   "travel.blocked": 37
-  },
-  "non_self_referential_rows": [],
-  "n_false_when_recorded": 42,
-  "false_when_recorded_predicates": {
-   "stores:grain": 42
-  },
-  "false_when_recorded_examples": [
-   {
-    "tick": 3,
-    "holder": "p_a",
-    "cid": "b04d6921625c79e7",
-    "subject": "r_hearth",
-    "predicate": "stores:grain",
-    "value": 138,
-    "in_grammar": true,
-    "world_at_deposit": 137,
-    "true_when_recorded": false
+ "narrow": {
+  "none": {
+   "n_drops": 0,
+   "self_referential": 0,
+   "not_self_referential": 0,
+   "cross_person": 0,
+   "provenance_resolved": 0,
+   "provenance_unresolved": 0,
+   "true_when_recorded": {},
+   "by_verb_predicate": {},
+   "depositing_kinds": {},
+   "non_self_referential_rows": [],
+   "n_false_when_recorded": 0,
+   "false_when_recorded_predicates": {},
+   "false_when_recorded_examples": [],
+   "event_kinds": {
+    "claim.deposited": 246525,
+    "claim.decayed": 75348,
+    "term.matured": 1602,
+    "record.created": 1068,
+    "condition.worn": 712,
+    "travel.moved": 651,
+    "stores.changed": 623,
+    "travel.blocked": 417,
+    "yield.taken": 356,
+    "speech.made": 243,
+    "news.told": 87
    },
-   {
-    "tick": 3,
-    "holder": "p_a",
-    "cid": "b04d6921625c79e7",
-    "subject": "r_hearth",
-    "predicate": "stores:grain",
-    "value": 138,
-    "in_grammar": true,
-    "world_at_deposit": 137,
-    "true_when_recorded": false
+   "act_refused_emitted": 0,
+   "question_sources": {
+    "claim_landed": 5086,
+    "need": 1068
    },
-   {
-    "tick": 3,
-    "holder": "p_a",
-    "cid": "b04d6921625c79e7",
-    "subject": "r_hearth",
-    "predicate": "stores:grain",
-    "value": 138,
-    "in_grammar": true,
-    "world_at_deposit": 137,
-    "true_when_recorded": false
+   "question_leading_source": {
+    "claim_landed": 801,
+    "need": 267
    },
-   {
-    "tick": 3,
-    "holder": "p_a",
-    "cid": "b04d6921625c79e7",
-    "subject": "r_hearth",
-    "predicate": "stores:grain",
-    "value": 138,
-    "in_grammar": true,
-    "world_at_deposit": 137,
-    "true_when_recorded": false
-   },
-   {
-    "tick": 3,
-    "holder": "p_c",
-    "cid": "4bb1d3b5de151e35",
-    "subject": "r_realm",
-    "predicate": "stores:grain",
-    "value": 138,
-    "in_grammar": true,
-    "world_at_deposit": 137,
-    "true_when_recorded": false
-   },
-   {
-    "tick": 3,
-    "holder": "p_c",
-    "cid": "4bb1d3b5de151e35",
-    "subject": "r_realm",
-    "predicate": "stores:grain",
-    "value": 138,
-    "in_grammar": true,
-    "world_at_deposit": 137,
-    "true_when_recorded": false
+   "leading_source_is_shared": {
+    "False": 267,
+    "True": 801
    }
-  ]
- },
- "total": {
-  "n_drops": 123,
-  "self_referential": 123,
-  "not_self_referential": 0,
-  "cross_person": 0,
-  "true_when_recorded": {
-   "True": 123
   },
-  "by_verb_predicate": {
-   "move|contain.path:p_c": 37,
-   "move|contain.path:p_a": 37,
-   "move|contain.path:p_b": 49
-  },
-  "depositing_kinds": {
-   "travel.blocked": 123
-  },
-  "non_self_referential_rows": [],
-  "n_false_when_recorded": 183,
-  "false_when_recorded_predicates": {
-   "stores:grain": 183
-  },
-  "false_when_recorded_examples": [
-   {
-    "tick": 3,
-    "holder": "p_a",
-    "cid": "97c9063270cc08b0",
-    "subject": "r_hearth",
-    "predicate": "stores:grain",
-    "value": 138,
-    "in_grammar": true,
-    "world_at_deposit": 137,
-    "true_when_recorded": false
+  "actor": {
+   "n_drops": 37,
+   "self_referential": 37,
+   "not_self_referential": 0,
+   "cross_person": 0,
+   "provenance_resolved": 37,
+   "provenance_unresolved": 0,
+   "true_when_recorded": {
+    "True": 37
    },
-   {
-    "tick": 3,
-    "holder": "p_b",
-    "cid": "5389d21c935f37ac",
-    "subject": "r_hearth",
-    "predicate": "stores:grain",
-    "value": 138,
-    "in_grammar": true,
-    "world_at_deposit": 137,
-    "true_when_recorded": false
+   "by_verb_predicate": {
+    "move|contain.path:p_a": 37
    },
-   {
-    "tick": 3,
-    "holder": "p_c",
-    "cid": "5193ddad00c82698",
-    "subject": "r_hearth",
-    "predicate": "stores:grain",
-    "value": 138,
-    "in_grammar": true,
-    "world_at_deposit": 137,
-    "true_when_recorded": false
+   "depositing_kinds": {
+    "travel.blocked": 37
    },
-   {
-    "tick": 2,
-    "holder": "p_a",
-    "cid": "ff7938936692f241",
-    "subject": "r_hearth",
-    "predicate": "stores:grain",
-    "value": 106,
-    "in_grammar": true,
-    "world_at_deposit": 105,
-    "true_when_recorded": false
+   "non_self_referential_rows": [],
+   "n_false_when_recorded": 42,
+   "false_when_recorded_predicates": {
+    "stores:grain": 42
    },
-   {
-    "tick": 2,
-    "holder": "p_b",
-    "cid": "fc44dc9229c684a0",
-    "subject": "r_hearth",
-    "predicate": "stores:grain",
-    "value": 106,
-    "in_grammar": true,
-    "world_at_deposit": 105,
-    "true_when_recorded": false
+   "false_when_recorded_examples": [
+    {
+     "tick": 3,
+     "holder": "p_a",
+     "cid": "b04d6921625c79e7",
+     "subject": "r_hearth",
+     "predicate": "stores:grain",
+     "value": 138,
+     "in_grammar": true,
+     "world_at_deposit": 137,
+     "true_when_recorded": false
+    },
+    {
+     "tick": 3,
+     "holder": "p_a",
+     "cid": "b04d6921625c79e7",
+     "subject": "r_hearth",
+     "predicate": "stores:grain",
+     "value": 138,
+     "in_grammar": true,
+     "world_at_deposit": 137,
+     "true_when_recorded": false
+    },
+    {
+     "tick": 3,
+     "holder": "p_a",
+     "cid": "b04d6921625c79e7",
+     "subject": "r_hearth",
+     "predicate": "stores:grain",
+     "value": 138,
+     "in_grammar": true,
+     "world_at_deposit": 137,
+     "true_when_recorded": false
+    },
+    {
+     "tick": 3,
+     "holder": "p_a",
+     "cid": "b04d6921625c79e7",
+     "subject": "r_hearth",
+     "predicate": "stores:grain",
+     "value": 138,
+     "in_grammar": true,
+     "world_at_deposit": 137,
+     "true_when_recorded": false
+    },
+    {
+     "tick": 3,
+     "holder": "p_c",
+     "cid": "4bb1d3b5de151e35",
+     "subject": "r_realm",
+     "predicate": "stores:grain",
+     "value": 138,
+     "in_grammar": true,
+     "world_at_deposit": 137,
+     "true_when_recorded": false
+    },
+    {
+     "tick": 3,
+     "holder": "p_c",
+     "cid": "4bb1d3b5de151e35",
+     "subject": "r_realm",
+     "predicate": "stores:grain",
+     "value": 138,
+     "in_grammar": true,
+     "world_at_deposit": 137,
+     "true_when_recorded": false
+    }
+   ],
+   "event_kinds": {
+    "claim.deposited": 252454,
+    "claim.decayed": 76898,
+    "term.matured": 1602,
+    "record.created": 1068,
+    "condition.worn": 712,
+    "stores.changed": 623,
+    "travel.moved": 577,
+    "travel.blocked": 454,
+    "yield.taken": 356,
+    "speech.made": 268,
+    "news.told": 147,
+    "transfer.made": 42,
+    "transfer.refused": 22
    },
-   {
-    "tick": 2,
-    "holder": "p_c",
-    "cid": "dbd9cd32bbb3899f",
-    "subject": "r_hearth",
-    "predicate": "stores:grain",
-    "value": 106,
-    "in_grammar": true,
-    "world_at_deposit": 105,
-    "true_when_recorded": false
+   "act_refused_emitted": 0,
+   "question_sources": {
+    "claim_landed": 5646,
+    "need": 1068
+   },
+   "question_leading_source": {
+    "claim_landed": 801,
+    "need": 267
+   },
+   "leading_source_is_shared": {
+    "False": 267,
+    "True": 801
    }
-  ]
+  },
+  "total": {
+   "n_drops": 123,
+   "self_referential": 123,
+   "not_self_referential": 0,
+   "cross_person": 0,
+   "provenance_resolved": 123,
+   "provenance_unresolved": 0,
+   "true_when_recorded": {
+    "True": 123
+   },
+   "by_verb_predicate": {
+    "move|contain.path:p_c": 37,
+    "move|contain.path:p_a": 37,
+    "move|contain.path:p_b": 49
+   },
+   "depositing_kinds": {
+    "travel.blocked": 123
+   },
+   "non_self_referential_rows": [],
+   "n_false_when_recorded": 183,
+   "false_when_recorded_predicates": {
+    "stores:grain": 183
+   },
+   "false_when_recorded_examples": [
+    {
+     "tick": 3,
+     "holder": "p_a",
+     "cid": "97c9063270cc08b0",
+     "subject": "r_hearth",
+     "predicate": "stores:grain",
+     "value": 138,
+     "in_grammar": true,
+     "world_at_deposit": 137,
+     "true_when_recorded": false
+    },
+    {
+     "tick": 3,
+     "holder": "p_b",
+     "cid": "5389d21c935f37ac",
+     "subject": "r_hearth",
+     "predicate": "stores:grain",
+     "value": 138,
+     "in_grammar": true,
+     "world_at_deposit": 137,
+     "true_when_recorded": false
+    },
+    {
+     "tick": 3,
+     "holder": "p_c",
+     "cid": "5193ddad00c82698",
+     "subject": "r_hearth",
+     "predicate": "stores:grain",
+     "value": 138,
+     "in_grammar": true,
+     "world_at_deposit": 137,
+     "true_when_recorded": false
+    },
+    {
+     "tick": 2,
+     "holder": "p_a",
+     "cid": "ff7938936692f241",
+     "subject": "r_hearth",
+     "predicate": "stores:grain",
+     "value": 106,
+     "in_grammar": true,
+     "world_at_deposit": 105,
+     "true_when_recorded": false
+    },
+    {
+     "tick": 2,
+     "holder": "p_b",
+     "cid": "fc44dc9229c684a0",
+     "subject": "r_hearth",
+     "predicate": "stores:grain",
+     "value": 106,
+     "in_grammar": true,
+     "world_at_deposit": 105,
+     "true_when_recorded": false
+    },
+    {
+     "tick": 2,
+     "holder": "p_c",
+     "cid": "dbd9cd32bbb3899f",
+     "subject": "r_hearth",
+     "predicate": "stores:grain",
+     "value": 106,
+     "in_grammar": true,
+     "world_at_deposit": 105,
+     "true_when_recorded": false
+    }
+   ],
+   "event_kinds": {
+    "claim.deposited": 263511,
+    "claim.decayed": 79998,
+    "term.matured": 1602,
+    "record.created": 1068,
+    "condition.worn": 712,
+    "stores.changed": 623,
+    "travel.moved": 549,
+    "travel.blocked": 396,
+    "yield.taken": 356,
+    "speech.made": 298,
+    "news.told": 203,
+    "transfer.made": 76,
+    "transfer.refused": 22
+   },
+   "act_refused_emitted": 0,
+   "question_sources": {
+    "claim_landed": 5769,
+    "need": 1068
+   },
+   "question_leading_source": {
+    "claim_landed": 801,
+    "need": 267
+   },
+   "leading_source_is_shared": {
+    "False": 267,
+    "True": 801
+   }
+  }
+ },
+ "2x3": {
+  "none": {
+   "n_drops": 0,
+   "self_referential": 0,
+   "not_self_referential": 0,
+   "cross_person": 0,
+   "provenance_resolved": 0,
+   "provenance_unresolved": 0,
+   "true_when_recorded": {},
+   "by_verb_predicate": {},
+   "depositing_kinds": {},
+   "non_self_referential_rows": [],
+   "n_false_when_recorded": 0,
+   "false_when_recorded_predicates": {},
+   "false_when_recorded_examples": [],
+   "event_kinds": {
+    "claim.deposited": 264102,
+    "claim.decayed": 80154,
+    "term.matured": 1602,
+    "record.created": 1068,
+    "speech.made": 804,
+    "travel.moved": 749,
+    "condition.worn": 712,
+    "stores.changed": 623,
+    "yield.taken": 356,
+    "news.told": 328,
+    "travel.blocked": 319,
+    "transfer.made": 74,
+    "news.untold": 69,
+    "transfer.refused": 28,
+    "proposition.uttered": 3
+   },
+   "act_refused_emitted": 0,
+   "question_sources": {
+    "claim_landed": 6978,
+    "need": 1068
+   },
+   "question_leading_source": {
+    "claim_landed": 801,
+    "need": 267
+   },
+   "leading_source_is_shared": {
+    "False": 267,
+    "True": 801
+   }
+  },
+  "actor": {
+   "n_drops": 37,
+   "self_referential": 37,
+   "not_self_referential": 0,
+   "cross_person": 0,
+   "provenance_resolved": 37,
+   "provenance_unresolved": 0,
+   "true_when_recorded": {
+    "True": 37
+   },
+   "by_verb_predicate": {
+    "move|contain.path:p_a": 37
+   },
+   "depositing_kinds": {
+    "travel.blocked": 37
+   },
+   "non_self_referential_rows": [],
+   "n_false_when_recorded": 82,
+   "false_when_recorded_predicates": {
+    "stores:grain": 82
+   },
+   "false_when_recorded_examples": [
+    {
+     "tick": 3,
+     "holder": "p_a",
+     "cid": "b04d6921625c79e7",
+     "subject": "r_hearth",
+     "predicate": "stores:grain",
+     "value": 138,
+     "in_grammar": true,
+     "world_at_deposit": 137,
+     "true_when_recorded": false
+    },
+    {
+     "tick": 3,
+     "holder": "p_a",
+     "cid": "b04d6921625c79e7",
+     "subject": "r_hearth",
+     "predicate": "stores:grain",
+     "value": 138,
+     "in_grammar": true,
+     "world_at_deposit": 137,
+     "true_when_recorded": false
+    },
+    {
+     "tick": 3,
+     "holder": "p_a",
+     "cid": "b04d6921625c79e7",
+     "subject": "r_hearth",
+     "predicate": "stores:grain",
+     "value": 138,
+     "in_grammar": true,
+     "world_at_deposit": 137,
+     "true_when_recorded": false
+    },
+    {
+     "tick": 3,
+     "holder": "p_a",
+     "cid": "b04d6921625c79e7",
+     "subject": "r_hearth",
+     "predicate": "stores:grain",
+     "value": 138,
+     "in_grammar": true,
+     "world_at_deposit": 137,
+     "true_when_recorded": false
+    },
+    {
+     "tick": 3,
+     "holder": "p_a",
+     "cid": "b04d6921625c79e7",
+     "subject": "r_hearth",
+     "predicate": "stores:grain",
+     "value": 138,
+     "in_grammar": true,
+     "world_at_deposit": 137,
+     "true_when_recorded": false
+    },
+    {
+     "tick": 3,
+     "holder": "p_a",
+     "cid": "b04d6921625c79e7",
+     "subject": "r_hearth",
+     "predicate": "stores:grain",
+     "value": 138,
+     "in_grammar": true,
+     "world_at_deposit": 137,
+     "true_when_recorded": false
+    }
+   ],
+   "event_kinds": {
+    "claim.deposited": 270338,
+    "claim.decayed": 81720,
+    "term.matured": 1602,
+    "record.created": 1068,
+    "speech.made": 810,
+    "condition.worn": 712,
+    "travel.moved": 643,
+    "stores.changed": 623,
+    "travel.blocked": 388,
+    "yield.taken": 356,
+    "news.told": 330,
+    "transfer.made": 89,
+    "proposition.uttered": 70,
+    "news.untold": 69,
+    "transfer.refused": 59,
+    "work.unavailable": 28
+   },
+   "act_refused_emitted": 0,
+   "question_sources": {
+    "claim_landed": 7525,
+    "need": 1068
+   },
+   "question_leading_source": {
+    "claim_landed": 801,
+    "need": 267
+   },
+   "leading_source_is_shared": {
+    "False": 267,
+    "True": 801
+   }
+  },
+  "total": {
+   "n_drops": 56,
+   "self_referential": 56,
+   "not_self_referential": 0,
+   "cross_person": 0,
+   "provenance_resolved": 56,
+   "provenance_unresolved": 0,
+   "true_when_recorded": {
+    "True": 56
+   },
+   "by_verb_predicate": {
+    "move|contain.path:p_a": 17,
+    "move|contain.path:p_c": 6,
+    "move|contain.path:p_b": 33
+   },
+   "depositing_kinds": {
+    "travel.blocked": 56
+   },
+   "non_self_referential_rows": [],
+   "n_false_when_recorded": 201,
+   "false_when_recorded_predicates": {
+    "stores:grain": 201
+   },
+   "false_when_recorded_examples": [
+    {
+     "tick": 3,
+     "holder": "p_a",
+     "cid": "97c9063270cc08b0",
+     "subject": "r_hearth",
+     "predicate": "stores:grain",
+     "value": 138,
+     "in_grammar": true,
+     "world_at_deposit": 137,
+     "true_when_recorded": false
+    },
+    {
+     "tick": 3,
+     "holder": "p_b",
+     "cid": "5389d21c935f37ac",
+     "subject": "r_hearth",
+     "predicate": "stores:grain",
+     "value": 138,
+     "in_grammar": true,
+     "world_at_deposit": 137,
+     "true_when_recorded": false
+    },
+    {
+     "tick": 3,
+     "holder": "p_c",
+     "cid": "5193ddad00c82698",
+     "subject": "r_hearth",
+     "predicate": "stores:grain",
+     "value": 138,
+     "in_grammar": true,
+     "world_at_deposit": 137,
+     "true_when_recorded": false
+    },
+    {
+     "tick": 2,
+     "holder": "p_a",
+     "cid": "ff7938936692f241",
+     "subject": "r_hearth",
+     "predicate": "stores:grain",
+     "value": 106,
+     "in_grammar": true,
+     "world_at_deposit": 105,
+     "true_when_recorded": false
+    },
+    {
+     "tick": 2,
+     "holder": "p_b",
+     "cid": "fc44dc9229c684a0",
+     "subject": "r_hearth",
+     "predicate": "stores:grain",
+     "value": 106,
+     "in_grammar": true,
+     "world_at_deposit": 105,
+     "true_when_recorded": false
+    },
+    {
+     "tick": 2,
+     "holder": "p_c",
+     "cid": "dbd9cd32bbb3899f",
+     "subject": "r_hearth",
+     "predicate": "stores:grain",
+     "value": 106,
+     "in_grammar": true,
+     "world_at_deposit": 105,
+     "true_when_recorded": false
+    }
+   ],
+   "event_kinds": {
+    "claim.deposited": 281874,
+    "claim.decayed": 84852,
+    "term.matured": 1602,
+    "record.created": 1068,
+    "speech.made": 810,
+    "condition.worn": 712,
+    "stores.changed": 623,
+    "travel.moved": 595,
+    "travel.blocked": 417,
+    "yield.taken": 356,
+    "news.told": 345,
+    "transfer.made": 126,
+    "proposition.uttered": 80,
+    "news.untold": 69,
+    "transfer.refused": 62,
+    "work.unavailable": 28
+   },
+   "act_refused_emitted": 0,
+   "question_sources": {
+    "claim_landed": 7537,
+    "need": 1068
+   },
+   "question_leading_source": {
+    "claim_landed": 801,
+    "need": 267
+   },
+   "leading_source_is_shared": {
+    "False": 267,
+    "True": 801
+   }
+  }
  }
 }

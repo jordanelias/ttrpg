@@ -24,18 +24,61 @@ point 4).
 the act budget NEVER BINDS -- every person takes ALL of their ranked candidates -- so under the
 native fork every probe is INERT-BY-CONSTRUCTION and there is NO `x instead of y` moment to flip.
 The question is unaskable there. A genuine fork needs an alternative OUTSIDE the real budget and
-within `A9.MAX_ALT` (3) of the taken one, i.e. an in-budget count `L <= 3`. Crossing the two
-DECLARED sweeps -- `H-10` `scene_budget: [2, 5, 9]` and `H-76` `interactions_per_scene:
-[1, 3, unbounded]` -- exactly ONE cell gives `L <= 3`: **2 x 1 = 2 slots**. Both values are arms
-of existing register rows, neither is invented here, and the cell is forced by `MAX_ALT`, not
-chosen for its answer. BOTH fixture points are run and both are reported.
+within `A9.MAX_ALT` (3) of the taken one, i.e. a deliberation whose in-budget count is `L <= 3`.
+
+⚠⚠ **AND THE FIRST WRITING OF THIS PARAGRAPH SAID `exactly ONE cell gives L <= 3: 2 x 1`, WHICH
+IS FALSE. TWO CELLS QUALIFY, AND THE ONE THAT WAS NOT RUN IS THE SMALLER INTERVENTION.** Found by
+an independent read-only critic, 2026-09-04. The error is one substitution with two consequences:
+
+  * **`L` IS THE PACKER'S OWN TAKE, NOT THE SLOT PRODUCT.** `recorder.in_budget` records what
+    `pack_scenes` returned; the argument above used `scene_budget x interactions_per_scene` as a
+    proxy for it. `take()` charges an extended scene `extended_scene_cost` (2) and takes a whole
+    chunk whenever `ext <= left`, so at **2 x 3** the first chunk of three candidates is taken
+    ENTIRE for a cost of 2 and **L = 3, not 6** -- inside `MAX_ALT`, so that cell is askable too.
+  * **`L` IS PER DELIBERATION, NOT PER CELL.** MEASURED over the corpus (`wd_cells.py`): at 2 x 1
+    `L` is `{2: 715, 3: 264, 4: 89}` and at 2 x 3 it is `{3: 842, 4: 164, 6: 62}`. So `L <= 3` is
+    a property of a DELIBERATION, and a cell is askable when ANY of its deliberations has one.
+
+MEASURED over all nine cells of the cross, 89 worlds, seed 0 (`runs/wd_cells.json`): **2 of 9 are
+askable -- 2 x 1 (1,467 genuine forks) and 2 x 3 (733). The other seven yield 0.** `2 x 3` is
+`scene_budget=2` with `interactions_per_scene` LEFT AT ITS DEFAULT -- **ONE** declared-arm change
+against 2 x 1's **two** -- so on this file's own criterion (minimum departure from the shipped
+fixture at which the question is askable) 2 x 3 was the better acceptance point and it was never
+run. It is run now and reported beside 2 x 1; see `wd_collect.py` W-D.2b. Both values in both
+cells are arms of existing register rows and none is invented here, and no cell was selected on
+its answer -- but "forced by `MAX_ALT`" was the wrong word for it, and this is the right one:
+`MAX_ALT` narrows the cross to two, and the item ran the more expensive of the two.
+
+ALL THREE fixture points -- 15 slots, 2 slots, 6 slots -- are run and all three are reported.
 
 ⚠ HOW TO RUN IT. `main()` below runs every arm in ONE process and DOES NOT FINISH: two attempts
 were killed silently at ~18 minutes with no traceback and no output. The live path is
-`wd_chunk.py <mode> <default|narrow> <a> <b>` (four slices per arm, ~110s each, four at a time)
-followed by `wd_collect.py`, which concatenates the chunks and runs the controls and the
-forensics. `main()` is kept because it is the same calls in the same order and reading it is how
-you check that the chunked path is not a different experiment.
+`wd_chunk.py <mode> <default|narrow|2x3> <a> <b>` (four slices per arm) followed by
+`wd_collect.py`, which concatenates the chunks and runs the controls and the forensics. `main()`
+is kept because it is the same calls in the same order and reading it is how you check that the
+chunked path is not a different experiment. **DO NOT CITE `main()` AS A REPRODUCTION COMMAND** --
+it is dead code, and a test docstring did cite it until 2026-09-04.
+
+⚠ THE CAUSE OF THE SILENT KILL IS NOW MEASURED RATHER THAN UNKNOWN, which matters because "a
+process died and we split the work" is the kind of unexplained event that hides a real defect.
+`trace_log.TRACE` is a MODULE-LEVEL SINGLETON whose `rows` list nothing in `arm9_forking` or any
+`wd_*.py` ever resets, and `Trace._row` appends on every step, barrier, decision, write, act,
+event, claim and query. MEASURED 2026-09-04 over six cases, arm A untouched vs arm B clearing
+`TRACE.rows` per case:
+
+    arm A  case 1  rows   222,119  peak RSS 121 MB      arm B  case 1  rows 222,119
+    arm A  case 6  rows 1,324,298  peak RSS 604 MB      arm B  case 6  rows 219,320
+
+Growth is strictly linear at ~221,000 rows and ~97 MB per case, and clearing holds it flat at no
+time cost. One corpus arm is 89 cases (~19.6M rows, ~8.6 GB extrapolated) and `main()` runs SIX
+of them in one process, which is a sufficient cause for a SIGKILL with no traceback. **The values
+are unaffected and the scheduling-split claim upholds**: nothing reads `TRACE.rows` mid-run,
+`Fixtures.sweep` returns a copy, the `build_at` spy keeps a one-element buffer, and
+`wd_collect.collect` checks that each arm covers all 89 case slots exactly once. The clear is NOT
+applied to `sweep_arm` here -- changing the memory behaviour of the runner that produced the
+committed numbers needs its own control -- but it IS applied in `wd_cells.py` and `wd_extra.py`,
+where the re-run reproducing the committed figures is that control. Diagnosed by an independent
+read-only critic and then measured, 2026-09-04.
 """
 from __future__ import annotations
 import collections, json, sys, time

@@ -6856,15 +6856,36 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_
     `none`.** NPC-088, seed 0, 4 seasons, at 2 slots — genuine forks / DIVERGED are
     **17/0 at `none`, 16/2 at `actor`, 16/4 at `total`**.
 
-    ⚠ THE FIXTURE POINT IS FORCED, NOT CHOSEN, AND THAT IS THE ONLY REASON THIS TEST MAY MOVE IT.
-    `H-117` measured that at `DEFAULT_FIXTURES` (5 x 3 = 15 slots) the act budget NEVER BINDS —
-    every person takes ALL of their ranked candidates — so under the native fork every probe is
-    INERT-BY-CONSTRUCTION and there is no `x instead of y` moment to flip. A genuine fork needs an
-    alternative OUTSIDE the real budget and within `A9.MAX_ALT` (3) of the taken one, i.e. an
-    in-budget count `L <= 3`. Crossing the two DECLARED sweeps — `H-10` `scene_budget: [2, 5, 9]`
-    and `H-76` `interactions_per_scene: [1, 3, unbounded]` — exactly one cell gives `L <= 3`:
-    **2 x 1**. Both values are arms of existing register rows; neither is invented, and the cell is
-    determined by `MAX_ALT` rather than by its answer (`CLAUDE.md` §0.1 point 4).
+    ⚠ THE FIXTURE POINT IS NARROWED BY `MAX_ALT`, NOT CHOSEN — BUT NOT TO ONE CELL, AND THE FIRST
+    WRITING OF THIS PARAGRAPH SAID IT WAS. `H-117` measured that at `DEFAULT_FIXTURES` (5 x 3 = 15
+    slots) the act budget NEVER BINDS — every person takes ALL of their ranked candidates — so
+    under the native fork every probe is INERT-BY-CONSTRUCTION and there is no `x instead of y`
+    moment to flip. A genuine fork needs an alternative OUTSIDE the real budget and within
+    `A9.MAX_ALT` (3) of the taken one, i.e. a deliberation whose in-budget count is `L <= 3`.
+
+    **THE RETRACTED CLAIM: "crossing the two DECLARED sweeps, exactly one cell gives `L <= 3`:
+    2 x 1".** `L` is THE PACKER'S OWN TAKE (`recorder.in_budget` records what `pack_scenes`
+    returned), NOT the slot product `scene_budget x interactions_per_scene`, which is what that
+    argument substituted for it — and `L` is PER DELIBERATION, not per cell. `take()` charges an
+    extended scene `extended_scene_cost` (2) and takes a whole chunk whenever `ext <= left`, so at
+    **2 x 3** the first chunk of three is taken entire for a cost of 2 and `L = 3`, not 6.
+    MEASURED over all nine cells, 89 worlds, seed 0 (`wd_cells.py` -> `runs/wd_cells.json`):
+    **TWO cells are askable, 2 x 1 (1,467 genuine forks) and 2 x 3 (733); the other seven yield
+    0.** `L` distributions are `{2: 715, 3: 264, 4: 89}` and `{3: 842, 4: 164, 6: 62}`.
+    2 x 3 leaves `interactions_per_scene` at its default, so it is ONE declared-arm change against
+    2 x 1's two — the SMALLER intervention, and it was never run until the adversarial pass.
+    Both values in both cells are arms of existing register rows; neither is invented, and no cell
+    was selected on its answer (`CLAUDE.md` §0.1 point 4). Found by an independent read-only
+    critic, 2026-09-04.
+
+    ⚠⚠ **AND THE ACCEPTANCE VERDICT IS CELL-DEPENDENT, WHICH THIS TEST NOW SAYS OUT LOUD.** Over
+    the corpus, verb-only fingerprint: at **2 x 1** `none` 1504/1504 = 100.00%, `actor` 1405/1467
+    = **95.77%** (62 DIVERGED), `total` 1285/1467 = 87.59% (182) — the acceptance is MET. At
+    **2 x 3** `none` 756/756 = 100.00%, `actor` **733/733 = 100.00% (0 DIVERGED)**, `total`
+    716/727 = 98.49% (11) — **the acceptance is NOT met at the shipped default.** So the cell that
+    was run is the one where the criterion passes, and the cheaper cell that was not run is the
+    one where it fails. That is not evidence of tuning (2 x 3 was never run, so nothing could be
+    selected on its result) and it is exactly the asymmetry §0.1 point 4 exists to surface.
 
     ⚠ THE DENOMINATOR MOVES BETWEEN ARMS AND THIS TEST ASSERTS IT RATHER THAN HIDING IT. `probed`
     and `NO-LIVE-WINDOW` are identical in all three arms (the deliberation count does not depend
@@ -6873,11 +6894,24 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_
     Candidate and shrink the packer's own take `L`. So the denominators are 17 / 16 / 16 and a
     ratio quoted without them is not a measurement.
 
-    ⚠ THE FULL SWEEP IS **NOT** GATED. `wd_acceptance.py` runs 89 worlds x 3 arms x 2 fixture
-    points and takes ~25 minutes; this is a slice of it chosen because it exercises the whole
-    path — fork -> different acts -> different deposits -> different ledger -> clause 4 -> a
-    different candidate list at a strictly later tick. Reproduce the corpus figures with
-    `python proposals/2026-09-04-degree-sweep/wd_acceptance.py`.
+    ⚠ THE FULL SWEEP IS **NOT** GATED. It runs 89 worlds x 3 arms x 3 fixture points; this is a
+    slice of it chosen because it exercises the whole path — fork -> different acts -> different
+    deposits -> different ledger -> clause 4 -> a different candidate list at a strictly later
+    tick. ⚠ REPRODUCE WITH THE CHUNKED PATH, NOT WITH `wd_acceptance.py`: this docstring gave
+    `python proposals/2026-09-04-degree-sweep/wd_acceptance.py` until 2026-09-04, and that file's
+    own docstring says its `main()` DOES NOT FINISH — the two contradicted each other and the
+    command named here was the dead one. The live commands are
+
+        python proposals/2026-09-04-degree-sweep/wd_chunk.py <none|actor|total> <default|narrow|2x3> <a> <b>
+        python proposals/2026-09-04-degree-sweep/wd_subj.py  <none|actor|total> [<slots>] <a> <b>
+        python proposals/2026-09-04-degree-sweep/wd_extra.py
+        python proposals/2026-09-04-degree-sweep/wd_cells.py
+        python proposals/2026-09-04-degree-sweep/wd_collect.py
+
+    with `<a> <b>` over `0 23 / 23 46 / 46 69 / 69 89`. The cause of `main()`'s silent death is
+    measured and recorded in `wd_acceptance.py`'s header (an unbounded module-level
+    `trace_log.TRACE.rows`, ~221,000 rows and ~97 MB per case). Found by an independent read-only
+    critic, 2026-09-04.
 
     FALSIFIERS, each with the outcome recorded beside it:
       * NEGATIVE CONTROL — `none` must be 0 DIVERGED. If it is not, something other than `W-B`
@@ -6991,14 +7025,40 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     NOT THE ARITHMETIC.** ARM 9c reads *"the deliberation never reads the world … the only channel
     by which anything that happened can reach a later decision is a CLAIM in the actor's ledger"*,
     and ARM 9d then measures that channel closed. `opening_set` does read no World — but its `q`
-    does: `questions_for(w, p)` takes one, and clause 3 is `subject in referents(q)`. TRACED on
-    NPC-088 at `none`, forking decision 0 from `('move','r_hearth')` to `('speak','r_hearth')`:
-    p_c's tick-1 question list goes `[claim_landed('p_c'), claim_landed('r_hearth'), …]` in the
-    baseline to `[claim_landed('r_hearth'), claim_landed('p_c'), …]` in the fork,
-    `question_aggregation_rule='first'` takes `qs[0]`, and all seven of p_c's candidates change
-    subject from `p_c` to `r_hearth` with the verb sequence unchanged. **A fork already changed
-    what a person deliberates ABOUT before `W-B` — through Q2 and the ledger's APPEND ORDER, which
-    is a second ledger channel and is not `belief_contradicts`.**
+    does: `questions_for(w, p)` takes one, and clause 3 is `subject in referents(q)`.
+
+    ⚠⚠ **THE CARRIER IS NOT "THE LEDGER'S APPEND ORDER", WHICH IS WHAT THIS DOCSTRING SAID UNTIL
+    2026-09-04. `questions_for` SORTS, AND THE SORT DESTROYS APPEND ORDER.** Its last two lines are
+    `order = {src: i for i, src in enumerate(QUESTION_SOURCES)}` then
+    `out.sort(key=lambda q: (order[q.source], q.id))`. Several `claim_landed` questions SHARE a
+    source, so among them `q.id` ALONE decides — and `q.id` is `f"q:claim:{c.id}"` where `c.id` is
+    a CONTENT HASH, `H(w.world_seed, w.tick, pid, f"claim:{e.id}:{n}")`, minted in
+    `SeasonDriver.witness` off the depositing Event's own id. **So which question a person answers
+    is decided by lexicographic order over content-hashed claim ids** — an undeclared tiebreaker
+    with decision consequences, sitting one level ABOVE `H-54`, whose three arms
+    (`first`/`all`/`one_per_source`) all read `qs[0]` or `qs[0].id` and none of which says what
+    breaks ties WITHIN a source. Found by an independent read-only critic, 2026-09-04.
+
+    RE-TRACED WITH A SPY ON `questions_for`, not inferred (NPC-088, `none`, 2 slots, fork at
+    decision 0 — p_a's `move` -> `speak`; p_c at tick 1). The baseline's five `claim_landed`
+    questions come back at LEDGER INDICES `[6, 0, 1, 9, 10]` and the fork's six at
+    `[12, 5, 0, 1, 8, 9]`: neither is append order, and both are ascending `q.id`. The fork's
+    `speak` emits `speech.made` about `r_hearth`; the WITNESS fan lands it in p_c's ledger at
+    index 12 as claim `0261dc5bd7431c56`, and `0261…` sorts before `219a…`, so `qs[0]` goes from
+    `q:claim:219a9f960a5fa368` (referents `('p_c',)`) to `q:claim:0261dc5bd7431c56` (referents
+    `('r_hearth',)`). `question_aggregation_rule='first'` takes it and all seven of p_c's
+    candidates change subject from `p_c` to `r_hearth` with the verb sequence unchanged — which is
+    the flip originally reported, reached by a different mechanism than the one reported.
+    ⚠ **AND THE DEPOSITING EVENT'S SUBJECT IS `p_a`, NOT `p_c`**: event-kind claims mint in EVERY
+    arm and `fan_out_mode` defaults to `total`, so the pre-`W-B` channel is CROSS-PERSON at the
+    control arm. **A fork already changed what a person deliberates ABOUT before `W-B` — through
+    Q2 and a content-hash tiebreak nobody declared.**
+
+    HOW OFTEN THE TIEBREAK DECIDES, MEASURED (`wd_extra.py`, 89 baselines, 2 slots, `actor`):
+    the leading source is SHARED with at least one other question in **801 of 1,068
+    deliberations**, so three quarters of the corpus's questions are chosen by hash order. And of
+    `questions_for`'s four sources only TWO fire at all — `claim_landed` 6,978 and `need` 1,068;
+    `date_due` (Q1) and `band_crossed` (Q3) fire ZERO times.
 
     THE TWO CHANNELS DO NOT OVERLAP, WHICH IS WHY BOTH READINGS ARE TRUE AT ONCE. Classifying every
     changed window slot over the corpus: `none` = 510 SUBJECT-ONLY and **0 VERB-SET**; `actor` =

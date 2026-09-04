@@ -1,0 +1,19 @@
+{
+ "mode": "actor",
+ "slots": "2x3",
+ "chunk": [
+  46,
+  69
+ ],
+ "n_cases_ok": 23,
+ "n_cases_failed": 0,
+ "probed": 828,
+ "no_live_window": 207,
+ "inert": 431,
+ "genuine": 190,
+ "diverged": 42,
+ "reconverged": 148,
+ "changed_slot_kinds": {
+  "SUBJECT-ONLY": 45
+ }
+}
