@@ -1,5 +1,19 @@
 # 07 · TOP-DOWN / BOTTOM-UP — a structural reading of the whole Valoria system
 
+> # ⚠ OUT OF SCOPE — PARKED 2026-09-04. READ THIS BEFORE THE DOCUMENT.
+>
+> **This reading covers the repository's fifteen subsystems. Jordan did not commission that.** His
+> brief asked for *"top-down for all systems as well as bottom-up for each system"* meaning **the
+> social contest system's own systems** — agôn, the three unbuilt branches, and the kernel's component
+> modules. The orchestrator read one plural in isolation and expanded it to the whole tree.
+>
+> **The correctly-scoped reading is `10_SC_STRUCTURAL_READING.md`.** Its findings about other
+> subsystems are parked in `OUT_OF_SCOPE.md` — real, anchored, and **not prescribed**.
+>
+> This file is kept as the record of what was actually read, and because its coverage table and its
+> stated gaps are honest. **Only its `social_contest` section is inside the commissioned scope, and
+> that section is superseded.** Do not rank anything here against the social-contest work.
+
 ## Status: **READ-ONLY AUDIT, 2026-09-04. PROPOSED. HELD BACK IN FULL. Nothing here runs; nothing ratifies on merge.**
 ## Produced by Fable 5.1 under `CLAUDE.md` §10's audit/guardrail row. Branch `claude/social-contest-system-review-dn2y5d`, HEAD `7a23b831`. **This file is the only thing created or edited.** No `pytest` was run; the only executed code was `python3 -c` arithmetic over `key_types.json`, `canon_buckets.canonical_accord`, and file listings.
 ## Scope: `systems/` (15 subsystems), `engine/`, the registries in `references/`, and — by Jordan's direction — this session's five proposals (`00`–`05`) against PR #362's shape (`proposals/2026-09-03-meta-architecture/04_CODE_ARCHITECTURE.md`, PROPOSED, HELD BACK IN FULL).

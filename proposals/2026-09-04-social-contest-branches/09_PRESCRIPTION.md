@@ -4,6 +4,9 @@
 ## Written by the orchestrator (Opus). **The Fable tier hit its usage limit mid-session**, so this is
 ## not the Fable-authored prescription the plan called for; the synthesis is Opus-tier and says so.
 ## Ranked by what is load-bearing on **the game**, per `CLAUDE.md` §0.1 pt 5 and §0.3.
+## ⚠ **AMENDED 2026-09-04 — §1.1 and the whole of §3 (Tier 2) are WITHDRAWN as out of scope.** They
+## prescribed work outside the social contest, which Jordan did not commission; the findings are
+## parked in `OUT_OF_SCOPE.md`. What remains is scoped to the social contest system.
 
 ---
 
@@ -29,24 +32,11 @@ reader who skips them will act on a superseded picture.
 
 ## §1 · TIER 0 — SHIPPED BEHAVIOUR IS WRONG. Cheapest work in the session, no design authority needed.
 
-### 1.1 · The victory condition advertises three clauses and has two
+### 1.1 · **WITHDRAWN — OUT OF SCOPE.** (The dead victory Political-Stability clause)
 
-`engine/autoload/victory.py:73` reads `world.clocks.get('Turmoil', 0.0)`. `game_state.py:338`
-initialises `Turmoil` to `0.0` and **nothing in `engine/` or `systems/` ever writes it**. With
-`PS_MAX = 6.0`, `ps_ok = (0.0 <= 6.0)` is **always True**. A faction can win with the realm in any
-political state whatsoever.
-
-**Prescription — decide, then make the code say what you decided.** Two honest options, and *leaving
-it* is not one:
-- **(a) Wire it.** Give `Turmoil` a writer. Its natural producers already exist — the same events that
-  move `Stability` and `Legitimacy`. This is the option that makes the victory condition mean what it
-  says.
-- **(b) Delete the clause.** If political stability is not a victory gate, `ps_ok` and `PS_MAX` are
-  dead vocabulary asserting a rule the game does not have.
-
-**Falsifier, either way:** a test that constructs a world at `Turmoil > PS_MAX` with all other clauses
-satisfied and asserts the faction does **not** qualify. Under (b) it asserts the clause is gone. **It
-must fail on today's tree** — that is the control (`§0.1` pt 3).
+Verified, real, and **not part of the social contest.** Parked in `OUT_OF_SCOPE.md` §1.1 with its
+evidence and the falsifier owed by either disposition. **Jordan ruled 2026-09-04: "leave it, file the
+finding."**
 
 ### 1.2 · The only production-path gate cannot see the regression it exists to catch
 
@@ -110,60 +100,16 @@ default is meant to be value-identical. If they move, the change was not what it
 
 ---
 
-## §3 · TIER 2 — CROSS-SYSTEM INTEGRITY, straight from the meta-architecture
+## §3 · TIER 2 — **WITHDRAWN 2026-09-04. OUT OF SCOPE.**
 
-These are `PR #362` shape violations that exist **today**, independent of whether #362 is ever ratified.
-Each is a case where the tree already agrees with the shape and the code does not.
+This section prescribed work on **territory ownership, mass-battle primitive parity, the degree-word
+collision and Key id serialisation** — none of it in the social contest, and **none of it
+commissioned.** Jordan's brief was scoped to the social contest system and its own components; the
+orchestrator misread it as the whole repository.
 
-### 3.1 · Territory ownership has three stored homes — `AX-4` / `D-10`
-
-`Territory.owner` · `Faction.territories` · `Settlement.owner_faction`. `mass_seizure.py:290` writes
-only the first (latent — zero callers), no transfer path ever writes the third, and `mc_v18.py:295`
-scores a winner from two of them **in one expression**. `parliamentary_transfer.py:347-360` records a
-prior divergence, so this has already gone wrong once.
-
-**Prescription: one owner, and the other two become Queries.** This is `PR #362`'s *"every object-side
-index is a barrier cache owned by Nobody"* applied literally. Pick `Territory.owner` as the store —
-it is the one the seizure path already writes — and derive the other two. **Falsifier: a test that
-transfers a territory by every available path and asserts all three reads agree.** It must fail today.
-
-### 3.2 · Two grammars produce the same four words — an **S** defect under §0.06
-
-`massbattle.py:130-139` maps rout state and survivor fractions to
-`Overwhelming/Success/Partial/Failure` with three uncited thresholds; `faction_action.py:470-524`
-consumes that to key Terms/Storm and Accord **with no marker of which grammar produced it**.
-
-⚠ **The single-owner guard's exemption is documented and reasoned** — it exempts band-producers that
-are not dice-margin ladders, and says so. **No guard failed.** But under `CLAUDE.md` §0.06's S
-definition — *"calculations consistent in methodology with other mechanics"*, glossed as **"two ladders
-for one quantity is an S defect even when each is individually correct"** — this is a straightforward
-S defect at the consumer.
-
-**Prescription, cheapest first:** make the grammar explicit at the boundary. The consumer should
-receive a value that names which ladder produced it, or the two should be unified. **Do not start by
-unifying** — the mass-battle bands may be right for mass battle; what is wrong is that a consumer
-cannot tell them apart.
-
-### 3.3 · Mass battle re-implements four engine primitives, and only one is guarded
-
-`resolution.py:37` (die rule), `:209` (soft-cap), `:221` (μ-shift with its own `_SIG_PER_DIE`), `:104`
-(ladder). No test compares the σ pair to `sigma_leverage`. **A drift in `M_MAX` or per-die σ in either
-home moves every conquest, unseen.** This is `CLAUDE.md` §8's *"every rule lives once"* invariant, and
-it is load-bearing on the game.
-
-**Prescription: a parity test, not a refactor.** Assert the two homes agree across a swept range. That
-is the cheap guard that earns its existence under §0.1 pt 5, and it makes any later unification safe
-rather than speculative.
-
-### 3.4 · Key ids cannot survive a restore
-
-Ids are minted from three undeclared per-`World` counters that `serialize_world`/`restore_world` do not
-carry, so **the replay premise asserted at `module_contracts.yaml:1545` cannot hold across a reload.**
-
-**Prescription: carry the counters in the serialised state.** Falsifier: serialise mid-campaign,
-restore, emit, and assert no id collides with one already in the log.
-
----
+**The findings are real and anchored, and they are parked in `OUT_OF_SCOPE.md`** with their evidence
+and their overturning conditions. They are **not prescribed**, not ranked, and must not be weighed
+against the social-contest work — which is the error this withdrawal corrects.
 
 ## §4 · TIER 3 — THE THREE BRANCHES. Do not execute the proposals as written.
 
