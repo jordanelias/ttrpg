@@ -409,6 +409,54 @@ rosters:
       post_remit:    "the person holds a live office Tenure whose remit covers the verb that emitted this kind"
       chronicle:     "the kind is emitted by a `binding_decision` verb -- a matter of record, and public because the decision is institutional"
 
+  # ── THE SEAMS ─────────────────────────────────────────────────────────────────────────────────
+  # RULED BY JORDAN, 2026-09-05, and this is the architecture, not a taxonomy:
+  #   *"what matters is the seams"*
+  #   *"each mode of play is separately called FROM the season loop"*
+  #   *"ignore their shapes. we will be rebuilding probably"*
+  #
+  # THE SEASON LOOP IS THE DRIVER. Every mode of play is a CALL OUT AND A RETURN BACK — one uniform
+  # pattern, differing only in where it attaches and what crosses. A seam survives a rebuild of the
+  # subsystem behind it; a signature does not, which is why nothing here cites one.
+  #
+  # A seam declares three things and only three: WHERE IT ATTACHES, WHAT GOES IN, WHAT COMES BACK.
+  #
+  # | mode of play        | attaches at        | in | out | state |
+  # |---------------------|--------------------|----|-----|-------|
+  # | personal combat     | RESOLVE (S39)      | claimants, prize, causes | a degree | BUILT — `combat_seam.py`. Jordan: "combat engine isn't done" |
+  # | social contest      | RESOLVE (S39)      | claimants, prize, causes | a degree | refuses by name |
+  # | mass battle         | RESOLVE (S39)      | claimants, prize, causes | a degree | refuses by name |
+  # | investigation       | UNRULED            | UNRULED | UNRULED | ITS OWN KIND — not a contest |
+  # | settlement mgmt     | UNRULED (see below)| UNRULED | UNRULED | ⚠ NOT CALLED — done INLINE, which is the defect |
+  # | faction mgmt        | UNRULED            | UNRULED | UNRULED | absent from the loop entirely |
+  # | character dev       | UNRULED            | UNRULED | UNRULED | no creation, no progression, no chronicle |
+  #
+  # ⚠ ONE ROW'S CONTRACT IS RULED AND SIX ARE HONEST BLANKS. S39 fixes the contest attach point at
+  # RESOLVE — "exactly one place" — and its return at a degree. The blanks are Jordan questions, not
+  # session guesses: writing a plausible IN/OUT for a mode nobody has ruled would be inventing the
+  # architecture rather than recording it, and the seam is precisely the thing that must not be
+  # invented.
+  #
+  # ⚠ SETTLEMENT IS THE ONE THE RULING RESOLVES. `SeasonDriver.matter` runs stores/yield/subsistence
+  # INLINE while `systems/settlements` holds a fuller economy. Before this ruling that read as an
+  # open question — which owner wins. It is not open: if every mode is separately CALLED from the
+  # loop, then an economy the loop computes itself is a mode that never got its seam, and the inline
+  # version is the thing to remove. Two ladders for one quantity is also a NERS **S** defect
+  # (§0.06, *calculations consistent in methodology*).
+  #
+  # ⚠ FACTION CANNOT BE A STRAIGHT PORT even once its seam is ruled. Layer 1 PART D rows 1/8/14
+  # forbid a faction that acts, a stored aggregate, and a banner holding territory, so
+  # `game_state.Faction` cannot cross a seam as-is; what crosses must be re-expressed in the loop's
+  # shape (a Faction is a type with no verbs; `holdings` is a Query over members' `hold` Tenures).
+  #
+  # ⚠ INVESTIGATION MUST NOT BE MADE A CONTEST TO BECOME GRADEABLE. Six investigation acts carry no
+  # `contests:` cell and that is CORRECT — they are not ungraded contests but a different kind of
+  # resolution whose seam is unbuilt. Giving them a prize so the existing machinery can grade them
+  # is scripting drift: forcing one mechanism's shape onto another because it is the one that exists.
+  #
+  # Nothing below declares a seam that does not exist. Declaring one would be the dead-carrier
+  # defect this file names elsewhere — a carrier built before its reader.
+
   contest_subsystems:
     source: "`references/module_contracts.yaml` names `personal_combat`, `mass_battle` and `social_contest` as modules with real docs and real resolvers. `ARCHITECTURE_V2.md:394` declares `contests: <prize>` — *if set, routes to the seam at RESOLVE (§39)*."
     cite: "H-88"
