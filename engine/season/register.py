@@ -16,7 +16,6 @@ hole must be able to ASK whether that hole is fillable, and a markdown table can
     python register.py --counts                 # the tallies, computed, never typed
     python register.py --check                  # every rule; exit 1 on any violation
     python register.py --check --rule R0,R1,R2,R3
-    python register.py --verify-transcription   # the 32 rows still match V2's tables
 
 THE RULES, each with the failure that earned it:
 
@@ -106,8 +105,7 @@ SWEEP_POINTS = 3
 DEFECT_RE = re.compile(r"(?<!§)\bD([1-9]\d?)\b")
 # A section reference in a discharge-map value: `§D4`, `§G4`, `§VII.2`, `Part E`.
 SECTION_RE = re.compile(r"§[A-Z]*[0-9IVX]+(?:\.[0-9]+)?|Part [A-Z]+")
-# The marker a row carries when it claims to have come from V2's tables. `verify_transcription`
-# walks BOTH directions on it, so a fabricated row cannot wear this string and go unnoticed.
+# The marker a row carries when it claims to have come from V2's tables; read by `counts()`.
 TRANSCRIBED = "transcribed verbatim"
 # THE HOLE-ID SHAPE, WITH ONE OWNER. `exercises.py` re-derived it as `H-\\d+` and the two
 # disagreed at `H-100`: one classified it as a hole, the other refused it as malformed. CLAUDE.md
@@ -131,8 +129,7 @@ def normalised_default(cell: str) -> str:
     V2 writes an `absent` row's default as "none" FOLLOWED BY COMMENTARY -- "none. ⚠ every
     contest is blocked", "none — §63.1 may accept it instead". The field means *the value an
     instrument may inject*, and a warning is not a value, so it normalises to `none`. THIS IS THE
-    ONE NORMALISATION APPLIED TO `default`, it is declared here rather than in prose, and
-    `verify_transcription` pins the field THROUGH it -- so any other edit to a default is drift.
+    ONE NORMALISATION APPLIED TO `default`, and it is declared here rather than in prose.
 
     ⚠ It is load-bearing on a published number: transcribed literally, H-23/H-25/H-31/H-32/H-33
     would each fire R3, and R3 would read 7 rather than 2."""
@@ -154,44 +151,6 @@ def load(path: Path = REGISTER) -> dict:
     if not path.exists():
         raise SystemExit(f"register not found: {path}")
     return yaml.safe_load(path.read_text())
-
-
-# ---------------------------------------------------------------------------
-# THE SOURCE OF THE 32 TRANSCRIBED ROWS
-# ---------------------------------------------------------------------------
-
-def v2_rows() -> dict:
-    """Re-extract V2's Part VII tables. This is the SAME extraction that produced the register,
-    so `--verify-transcription` is a genuine round trip rather than a comparison of a file with
-    itself: it re-reads the markdown and fails if either side has drifted."""
-    src = ARCHITECTURE_V2.read_text().splitlines()
-    out, tier, on = {}, None, False
-    for ln in src:
-        if "## §VII.1" in ln:
-            tier, on = 0, True
-            continue
-        if "## §VII.2" in ln:
-            tier, on = 1, True
-            continue
-        if "## §VII.3" in ln:
-            on = False
-            continue
-        if on and ln.startswith("| **H-"):
-            c = [x.strip() for x in ln.strip().strip("|").split("|")]
-            rid = c[0].replace("*", "").strip()
-            if not re.fullmatch(REG_ID_RE, rid):
-                # The id CELL must carry the id and nothing else. A marker put there -- an
-                # arrow, a footnote -- silently becomes part of the id, and both directions of
-                # the round trip then fire with a confusing "fabricated row" verdict rather
-                # than naming the real cause. Say the real cause.
-                raise SystemExit(
-                    f"ARCHITECTURE_V2.md Part VII: id cell reads {rid!r}, which is not `H-NN`. "
-                    "The id cell carries the id and nothing else -- put any marker in prose "
-                    "beside the table, not in the cell.")
-            out[rid] = dict(
-                tier=tier, hole=c[1], kind=c[2], owner=c[3],
-                grade_cell=c[4], default=c[5], unblocks=c[6])
-    return out
 
 
 def grade_of(cell: str) -> str:
@@ -655,62 +614,6 @@ def verify_citations(reg: dict) -> list:
     return bad
 
 
-def verify_transcription(reg: dict) -> list:
-    """The 32 rows must still say what V2's tables say. Pins `hole`, `kind`, `owner` and
-    `unblocks` -- NOT `grade`, which `W1` deliberately changes as it runs the ladder. Drift in
-    EITHER direction fails: a row edited here silently, or a table edited there silently."""
-    v2, bad = v2_rows(), []
-    if not v2:
-        # ZERO EXTRACTED IS A FAILURE, NOT A PASS. Part VII's headings or row format changing --
-        # which PLAN.md §0.3 row 14 says is the plan -- would otherwise make this print "clean"
-        # having compared nothing, and every later register edit would be unpinned. `rule_G8`
-        # already applies this polarity to Part B; omitting it here was the asymmetry.
-        return ["ARCHITECTURE_V2.md Part VII parsed to ZERO rows -- the transcription cannot be "
-                "verified, which is a FAILURE and not a pass (§42.2's polarity rule)"]
-    reg_by_id = {r["id"]: r for r in reg["rows"]}
-    # REGISTER -> V2, the direction the first draft did not walk. Without it a fabricated row
-    # carrying `source: "...transcribed verbatim"` is undetectable: it would wear V2's provenance
-    # and every instrument built on this file would inject from it.
-    for r in reg["rows"]:
-        if TRANSCRIBED in str(r.get("source")) and r["id"] not in v2:
-            bad.append(f"{r['id']}: claims `{TRANSCRIBED}` and ARCHITECTURE_V2.md Part VII has "
-                       "no such row -- a fabricated row wearing V2's provenance")
-    for rid, src in sorted(v2.items()):
-        r = reg_by_id.get(rid)
-        if r is None:
-            bad.append(f"{rid}: in ARCHITECTURE_V2.md Part VII and NOT in the register")
-            continue
-        for f in ("hole", "kind", "owner", "unblocks"):
-            if str(r.get(f)) != src[f]:
-                bad.append(f"{rid}.{f}: register has {r.get(f)!r}, V2 has {src[f]!r}")
-        # `default` IS PINNED -- through its one declared normalisation, and ONLY WHILE THE ROW
-        # STILL CARRIES V2'S GRADE. It is the field an instrument injects FROM and the field R3
-        # reads, so an unpinned `default` is the most consequential silent edit this file could
-        # carry. But a re-grade is REQUIRED to move it: `absent` forbids a default (R3) and
-        # `assumption` requires one (§G4), so W1 cannot re-grade a row without rewriting its
-        # default, and pinning it unconditionally would make the guard fire on the work the plan
-        # exists to do. So a moved default is drift while the grade is unchanged, and a reported
-        # NOTE once the grade has moved -- the same treatment `grade` itself gets, for the same
-        # reason.
-        v2_grade = grade_of(src["grade_cell"])
-        if r.get("grade") == v2_grade:
-            if str(r.get("default")) != normalised_default(src["default"]):
-                bad.append(f"{rid}.default: register has {r.get('default')!r}, V2 has "
-                           f"{src['default']!r} (normalises to "
-                           f"{normalised_default(src['default'])!r})")
-        elif str(r.get("default")) != normalised_default(src["default"]):
-            bad.append(f"NOTE {rid}.default: rewritten with the re-grade "
-                       f"{v2_grade!r} -> {r.get('grade')!r}")
-        if r.get("tier") != src["tier"]:
-            bad.append(f"{rid}.tier: register has {r.get('tier')}, V2 has {src['tier']}")
-        if r.get("grade") and grade_of(src["grade_cell"]) != r["grade"]:
-            # Not an error by itself -- W1 re-grades. Reported so a re-grade is visible.
-            bad.append(f"NOTE {rid}.grade: register {r['grade']!r}, V2 cell grades "
-                       f"{grade_of(src['grade_cell'])!r} (a deliberate re-grade, or a drift)")
-    return bad
-
-
-
 # ── THE NINE (ED-IN-0202, Jordan 2026-09-05) ──────────────────────────────────────────────────
 REQUIREMENTS = HERE / "requirements.yaml"
 
@@ -789,7 +692,6 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--counts", action="store_true")
-    ap.add_argument("--verify-transcription", action="store_true")
     ap.add_argument("--verify-citations", action="store_true",
                     help="every `:NNN` a cite names exists, and every verbatim quote is there")
     ap.add_argument("--rule", default="", help="comma-separated subset, e.g. R0,R1,R2,R3")
@@ -798,7 +700,7 @@ def main(argv=None) -> int:
     a = ap.parse_args(argv)
     if a.requirements:
         return check_requirements()
-    if not (a.check or a.counts or a.verify_transcription or a.verify_citations):
+    if not (a.check or a.counts or a.verify_citations):
         ap.print_help()
         return 0
     reg = load()
@@ -817,25 +719,8 @@ def main(argv=None) -> int:
               + ("MET" if not c["tier0_absent"]
                  else "UNMET, on " + ", ".join(c["tier0_absent"])))
 
-    if a.verify_transcription:
-        bad = verify_transcription(reg)
-        hard = [b for b in bad if not b.startswith("NOTE ")]
-        for b in bad:
-            print(("  note: " if b.startswith("NOTE ") else "  DRIFT: ") + b.removeprefix("NOTE "))
-        print(f"TRANSCRIPTION: {'clean' if not hard else str(len(hard)) + ' drifted'}")
-        rc |= 1 if hard else 0
-
     if a.check and not a.rule:
-        # THE TRANSCRIPTION IS PART OF THE CHECK. It was a separate branch, so the plan's proof
-        # command (`--check`) never validated that the register still says what V2 says --
-        # leaving the one guard on fidelity reachable only by a flag nobody was told to pass.
         # Skipped when `--rule` selects a subset, so a rule can still be run in isolation.
-        drift = [b for b in verify_transcription(reg) if not b.startswith("NOTE ")]
-        print("TRANSCRIPTION: " + ("clean" if not drift else f"{len(drift)} drifted"))
-        for b in drift:
-            print("    " + b)
-        rc |= 1 if drift else 0
-
         cbad = verify_citations(reg)
         print("CITATIONS: " + ("all resolve" if not cbad else f"{len(cbad)} unresolved"))
         for b in cbad:

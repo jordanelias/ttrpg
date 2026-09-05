@@ -142,7 +142,7 @@ cd proposals/2026-09-01-season-loop-tests/tracer && python3 report.py
 
 `results.json` and `TRACE.txt` came back **byte-identical** to the committed versions. That is an
 execution artifact under §0.2 and it is the first one this chain has: **the 143-case run reproduces.**
-`python -m pytest engine/season/tests -q` → **184 passed as of 2026-09-05.** ⚠ Run the command rather than citing the number — that is what `G11` asks for and what this line was doing wrong (`W19`).
+`python -m pytest engine/season/tests -q` → **181 passed as of 2026-09-05.** ⚠ Run the command rather than citing the number — that is what `G11` asks for and what this line was doing wrong (`W19`).
 
 **But six markdown artifacts changed**, because two entrypoints write overlapping outputs:
 
@@ -1312,7 +1312,7 @@ So the first item set optimised for a number that can rise while nothing runs, a
 
 | | measured | command |
 |---|---|---|
-| the critical path `W0→W1→W2→W3→W5→W17→W9` | **complete** — every item executes and is tested | `python -m pytest engine/season/tests -q` (184 passed as of 2026-09-05; run it) ⚠ **NOT** `grep LANDED`: only `W0`/`W1`/`W4`/`W6`/`W10`/`W17` carry a note, which is `W19`'s subject |
+| the critical path `W0→W1→W2→W3→W5→W17→W9` | **complete** — every item executes and is tested | `python -m pytest engine/season/tests -q` (181 passed as of 2026-09-05; run it) ⚠ **NOT** `grep LANDED`: only `W0`/`W1`/`W4`/`W6`/`W10`/`W17` carry a note, which is `W19`'s subject |
 | cases that GRADE as `PLAYABLE` | **0 of 143**, both lanes | `python run_cases.py` |
 | cases whose season loop **runs** by §6.1's definition | **0 of 46 — INFERRED, not measured.** ⚠ **PARTLY SUPERSEDED 2026-09-04 — see `:1343`.** The inference rested on `N3` and on *0 Events whose cause is an Act by a different person*; the second is now 30 of 30 (NPC) and 54 of 59 (ARC). **`RUNS` itself is still 0 and this does not move it** — `RUNS` needs `R2`, which is NOT-COMPUTABLE | ⚠ no instrument computes it; that is `W18`. Derived from `N3` (no act cites its question, so no chain walks deliberation) and from **0 Events whose cause is an Act by a different person** — `python -c` over `headless.run(3,0)` comparing `causes[] → Act.actor` |
 | arcs that reach an **ending** by §6.2's definition | **0 of 97 — INFERRED, not measured** | ⚠ same: no ending predicate exists (`W30`), `Q1` never forms (`N1`), and the contest branch cannot reach a subsystem (`N2`) |

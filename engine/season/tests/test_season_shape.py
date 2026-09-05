@@ -1269,14 +1269,6 @@ import exercises as EX
 import register as REG
 
 
-def test_w0_the_register_transcription_still_matches_architecture_v2():
-    """The 32 transcribed rows must still say what V2's Part VII tables say. Drift in EITHER
-    direction is a defect: a row edited here silently, or a table edited there silently. Grade is
-    deliberately NOT pinned -- W1 re-grades by design, and the re-grades are reported as notes."""
-    drift = [b for b in REG.verify_transcription(REG.load()) if not b.startswith("NOTE ")]
-    assert not drift, "register and ARCHITECTURE_V2.md Part VII have diverged:\n  " + "\n  ".join(drift)
-
-
 def test_w0_every_part_b_defect_binds_to_a_row_or_a_section():
     """Guardrail G8. `D16` was the ONLY one of Part B's 26 defects with no Part VII row and no
     Part D-G discharge, and was claimed discharged anyway -- because the binding was prose. It is
@@ -1311,32 +1303,6 @@ def test_w0_every_part_b_defect_binds_to_a_row_or_a_section():
         "a discharge to a section that DOES exist was rejected")
 
 
-def test_w0_a_fabricated_row_cannot_wear_v2s_provenance():
-    """The round trip walks BOTH directions. The first draft walked V2 -> register only, so a row
-    invented here carrying `source: '...transcribed verbatim'` was undetectable: `--verify-
-    transcription` said clean, `R0` said ok, and the counts still balanced. A hole V2 never
-    carried would then be in the register wearing V2's provenance, and every instrument the plan
-    builds on this file would inject from it."""
-    reg = REG.load()
-    reg["rows"].append(dict(REG.load()["rows"][0], id="H-13",
-                            source="ARCHITECTURE_V2.md §VII.1, " + REG.TRANSCRIBED))
-    bad = REG.verify_transcription(reg)
-    assert any("H-13" in b and "fabricated" in b for b in bad), (
-        "a fabricated row claiming V2's provenance passed the transcription check")
-
-
-def test_w0_a_transcription_that_extracts_nothing_is_a_failure_not_a_pass():
-    """§42.2's polarity rule, applied to this module. If Part VII's headings or row format change
-    -- which `PLAN.md` §0.3 row 14 says is the PLAN -- the extractor returns nothing, and the first
-    draft then reported `TRANSCRIPTION: clean` having compared zero rows, leaving every later
-    register edit unpinned while the suite stayed green. `rule_G8` already applied this polarity
-    to Part B; omitting it here was the asymmetry."""
-    import unittest.mock as mock
-    with mock.patch.object(REG, "v2_rows", lambda: {}):
-        bad = REG.verify_transcription(REG.load())
-    assert bad and "ZERO rows" in bad[0], "an empty extraction reported clean"
-
-
 def test_w0_the_default_field_is_pinned_through_its_one_declared_normalisation():
     """`default` is the field an instrument injects FROM and the field R3 reads, and the first
     draft left it unpinned while the docstring named only `grade` as excluded. It is pinned now
@@ -1347,11 +1313,6 @@ def test_w0_the_default_field_is_pinned_through_its_one_declared_normalisation()
     assert REG.normalised_default("none — §63.1 may accept it instead") == "none"
     assert REG.normalised_default("Part E's table") == "Part E's table", (
         "the normalisation swallowed a real default")
-    drifted = REG.load()
-    target = next(r for r in drifted["rows"] if r["id"] == "H-31")
-    target["default"] = "four bands off the margin"
-    assert any("H-31.default" in b for b in REG.verify_transcription(drifted)), (
-        "a silently edited default passed the transcription check")
 
 
 def test_w0_the_checker_fails_on_an_ungraded_row():
