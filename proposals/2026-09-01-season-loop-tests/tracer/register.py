@@ -509,6 +509,22 @@ def _contains(hay: str, needle: str) -> bool:
     return True
 
 
+def _rows_text_excluding(reg: dict, row: dict) -> str:
+    """Every string field of every row EXCEPT `row`, normalised and joined — the haystack for a
+    `cite:` that names this register as a source. See `verify_citations`: a row may not be its own
+    evidence, and excluding it at the data level is the only way that cannot silently no-op."""
+    parts: list = []
+    for other in reg["rows"]:
+        if other is row:
+            continue
+        for v in other.values():
+            if isinstance(v, str):
+                parts.append(v)
+            elif isinstance(v, list):
+                parts.extend(x for x in v if isinstance(x, str))
+    return re.sub(r"\s+", " ", " ".join(_cite_norm(p) for p in parts))
+
+
 def verify_citations(reg: dict) -> list:
     """EVERY `:NNN` A `cite:` NAMES MUST EXIST, AND EVERY VERBATIM QUOTE MUST BE THERE.
 
@@ -560,8 +576,26 @@ def verify_citations(reg: dict) -> list:
         # #353 and reported FABRICATED. Positional rather than a strip, because a legitimate
         # quotation may itself contain backticks — H-33's does.
         code = [(m.start(), m.end()) for m in re.finditer(r"`[^`]*`", cite)]
-        quotes = [m.group(1) for m in QUOTE_RE.finditer(cite)
-                  if not any(a <= m.start() and m.end() <= b for a, b in code)]
+        # ⚠ MASK CODE SPANS BEFORE PAIRING, NOT AFTER. `QUOTE_RE` pairs `"` characters
+        # left-to-right and non-overlapping, so a `"` INSIDE a backticked span -- `f"q:claim:{c.id}"`,
+        # `f"claim:{e.id}:{n}"` -- is consumed as an opening or closing mark and shifts every pair
+        # after it, manufacturing spans that begin and end mid-sentence. Discarding those matches
+        # afterwards (what this did) removes the code-span match but leaves the SHIFT, so real
+        # prose downstream is reported FABRICATED for a reason that has nothing to do with it.
+        # Blanking the spans first, offsets preserved, makes the pairing correct. Found 2026-09-04
+        # when the self-citation fix below turned the misalignment from invisible into 7 spurious
+        # violations.
+        # ⚠ PAIR ON THE MASKED TEXT, EXTRACT FROM THE ORIGINAL. A legitimate quotation OFTEN
+        # CONTAINS a code span -- `H-33` quotes "the `total` default at this milestone is TOTAL
+        # FAN-OUT" -- so reading the quote off the masked string would hand the matcher a sentence
+        # with holes in it and report eight true citations as fabricated. Offsets are preserved by
+        # the blanking, so `cite[m.start(1):m.end(1)]` is the real text.
+        masked = list(cite)
+        for a, b in code:
+            for i in range(a, b):
+                masked[i] = " "
+        masked = "".join(masked)
+        quotes = [cite[m.start(1):m.end(1)] for m in QUOTE_RE.finditer(masked)]
         if quotes and not named:
             bad.append(f"{r['id']}: quotes something and names no source this checker can open")
         for quote in quotes:
@@ -575,7 +609,31 @@ def verify_citations(reg: dict) -> list:
             hit_where, hit_any = False, False
             for token, path in named.items():
                 body = [_cite_norm(l) for l in path.read_text().splitlines()]
-                whole = " ".join(body)
+                # ⚠ COLLAPSE AGAIN AFTER THE JOIN. `_cite_norm` collapses whitespace WITHIN a
+                # line, and a BLANK line normalises to "", so joining with " " puts a DOUBLE space
+                # where the source had a paragraph break -- while the YAML-folded `cite` has a
+                # single one. Without this the self-citation removal below silently missed any row
+                # whose `cite:` contains a blank line (`H-117` did), which is a no-op guard that
+                # reports green. Collapsing can only make more text match, never less, so no
+                # previously-resolving citation is affected.
+                whole = re.sub(r"\s+", " ", " ".join(body))
+                # ⚠ A ROW MAY NOT BE ITS OWN SOURCE. Naming this register in your own `cite:`
+                # otherwise makes every quotation verify AGAINST ITSELF -- a one-token way past
+                # the anti-fabrication gate, and WORSE than the defect it was added to fix: the
+                # `W-D` pass first "fixed" a flagged self-quote by DELETING ITS QUOTE MARKS
+                # (invisible to `QUOTE_RE`), then restored them and named the register instead,
+                # and MUTATION-CHECKED that remedy -- planting a `71 GENUINE forks, all DIVERGED`
+                # sentence no source says, and watching `CITATIONS: all resolve` come back green.
+                # ⚠ THE HAYSTACK IS REBUILT FROM THE OTHER ROWS' PARSED FIELDS, NOT BY DELETING
+                # THIS ROW'S TEXT FROM THE FILE. A string subtraction was tried first and SILENTLY
+                # DID NOTHING on `H-117`, because `_cite_norm` strips a leading `+` as a list
+                # marker per line while the YAML-folded `cite` keeps it mid-string, so the two
+                # never matched -- a guard that reports green without checking anything, which is
+                # the failure class this whole pass is about. Excluding at the data level cannot
+                # miss. Quoting another row still verifies; quoting yourself no longer does.
+                # 2026-09-04.
+                if path == REGISTER:
+                    whole = _rows_text_excluding(reg, r)
                 if _contains(whole, needle):
                     hit_any = True
                     if token != "#353" or not refs:

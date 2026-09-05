@@ -380,16 +380,56 @@ def test_h118_a_record_written_with_no_event_moves_the_hash():
         "corpus, so this blindness was live")
 
 
+def test_wa_an_unknown_predicate_stem_refuses_at_load():
+    """`W-A`'s grammar closed on FORM and OPERAND names and NOT on the strings that actually
+    SELECT the predicate — `Existence.kind`, `ScalarThreshold.scalar`/`threshold_predicate`,
+    `Relation.relation`. Those are what `WorldReader.read`/`LedgerReader.read` dispatch on, and an
+    unrecognised one fell through to `return UNKNOWN`. So `relation: present-at` for `present_at`
+    LOADED CLEAN, evaluated UNKNOWN in every world, and refused the verb everywhere — reported as
+    `H-94`'s honest operand famine. A TYPO AND A DESIGN GAP WERE INDISTINGUISHABLE, which is the
+    silent-wrong-answer shape this file refuses everywhere else. Found by the W-A adversarial pass.
+
+    FALSIFIER: every stem any typed cell declares is in `REQUIRES_STEMS`, and every stem in
+    `REQUIRES_STEMS` is one a reader dispatches on — checked BOTH ways, because a one-way check
+    would let the roster grow entries no reader honours (`ID-13`).
+    MUTATION CHECK, RUN: changing `restore`'s `relation: present_at` to `present-at` in
+    `verb_table.yaml` makes `import shape` raise `SystemExit` naming the stem and listing the
+    declared set — verified by mutating the file, importing in a subprocess, and restoring."""
+    import inspect as _i
+    # (a) every stem a loaded cell declares is closed
+    declared = set()
+    for row in S.VERB_TABLE.values():
+        rt = getattr(row, "requires_typed", None)
+        if rt is not None:
+            declared |= set(rt.stems())
+    assert declared, "no typed cell declares a stem — the grammar is not loaded"
+    assert declared <= S.REQUIRES_STEMS, (
+        f"typed cells declare stem(s) outside REQUIRES_STEMS: {sorted(declared - S.REQUIRES_STEMS)}")
+    # (b) every closed stem is one a reader actually dispatches on — else the roster grows
+    #     entries nothing honours, which is the same defect one direction over.
+    src = _i.getsource(S.WorldReader) + _i.getsource(S.LedgerReader)
+    unread = [st for st in S.REQUIRES_STEMS if f'"{st}"' not in src]
+    assert not unread, (
+        f"REQUIRES_STEMS declares {sorted(unread)}, which no reader dispatches on. A stem no "
+        f"reader honours evaluates UNKNOWN forever — the defect this roster exists to stop.")
+
+
 def test_h115_the_degree_branches_raise_unspecified_not_systemexit():
     """`H-115`: `VerbRow.emits_at`/`writes_at` raised `SystemExit` on their two run-time degree
     refusals (pre-fix: shape.py:708/712/728/733). `SystemExit` derives from `BaseException`, so
     `corpus_run.run_case`'s `except (S.ShapeGap, S.Unspecified, S.Forbidden, S.NoProducer)` never
     caught it and a one-case design gap ended the whole corpus run.
 
-    FALSIFIER (`arm2_onramp.run_2c`'s own repro): `SeasonDriver._fold`'s `_degree_for_writes` is
-    hardcoded `None` (H-98 is still open), so folding `kill / wound` DIRECTLY -- bypassing
-    `contest()`, exactly as a contest branch wired to fall through would -- reaches
+    FALSIFIER (`arm2_onramp.run_2c`'s own repro): folding `kill / wound` DIRECTLY -- bypassing
+    `contest()`, so no `Resolution` arrives -- reaches
     `row.writes_at(None)` on a verb whose `writes` IS degree-keyed. That must now raise
+
+    ⚠ THE REPRO'S REASON CHANGED ON 2026-09-04 AND THE REPRO DID NOT. It used to be that
+    `_fold` hardcoded `_degree_for_writes = None`, so EVERY fold of a contested verb hit this.
+    `W-E` closed that link: the degree now arrives on `_fold`'s `resolution` parameter from
+    `resolve()`'s seam branch. What is still true, and is what this test pins, is that a caller
+    who folds a contested act WITHOUT one gets a typed `ShapeGap` rather than a silent full
+    write -- which is the guard, now on its reachable path instead of on its universal one.
     `Unspecified`, a `ShapeGap`, and be CAUGHT by run_case's own catch clause rather than escape
     it. MUTATION CHECK: reverting either run-time raise in `emits_at`/`writes_at` to `SystemExit`
     makes the second assertion fail -- `SystemExit` is a `BaseException`, not a `ShapeGap`, so
@@ -417,9 +457,33 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     `Unspecified`. The 14 load-time raises -- missing/malformed `write_matrix.yaml`/
     `rosters.yaml`/`verb_table.yaml` -- are CORRECTLY fatal and must remain `SystemExit`: this
     file loads once, at import, and a broken table should end the process rather than be reported
-    as a per-case gap. MUTATION CHECK: converting one of the 14 to `Unspecified`, or leaving a
-    stray `SystemExit` among the four degree branches, flips this count away from 14."""
-    assert SHAPE_CODE.count("raise SystemExit") == 14
+    as a per-case gap. MUTATION CHECK: converting one of them to `Unspecified`, or leaving a
+    stray `SystemExit` among the four degree branches, flips this count.
+
+    ⚠ 14 -> 28, `W-A`, 2026-09-04, AND THE CLAIM IS UNCHANGED. The typed `requires` column added
+    FOURTEEN load-time refusals and no run-time ones: thirteen in the grammar loader
+    (`requirement_form`, `_build_clause`, `build_typed_requires`, `ScalarThreshold.__post_init__`
+    -- an unrostered form, an unrostered operand, an operand outside its form's `needs:`, a
+    malformed cell, a one-clause `all:`, a form with no implementation, a bad comparator, a cell
+    with two thresholds or none) and one in `_load_verb_table` (a `requires_typed: none` with no
+    reason). Every one of them fires while `verb_table.yaml` is being read, at import, which is
+    what this test is about -- the run-time evaluator raises nothing and returns UNKNOWN.
+
+    ⚠ 29 -> 28, `W-C`, 2026-09-04, AND IT IS ONE REFUSAL RETIRED WITH ITS SUBJECT, NOT A CLOSURE
+    WEAKENED. `build_typed_requires` carried a raise for a cell whose `operand_defaults:` named an
+    operand outside `requires_operands`; `operand_defaults:` IS NOT A KEY ANY MORE (`W-C` moved
+    `transfer`'s two values to `DEFAULT_FIXTURES`, where the person derives them and the act
+    carries them), so the check has nothing left to check. THE CELL IS STILL CLOSED AT LOAD: any
+    key a form's dataclass does not take raises `TypeError` inside `_build_clause`, which is
+    already one of the counted 28, so a table edit re-introducing `operand_defaults:` still
+    refuses at import. Falsifier for that specific claim:
+    `test_wc_an_operand_defaults_cell_still_refuses_at_load`.
+
+    ⚠ THE BARE COUNT IS THIS TEST'S WEAKNESS AND IS LEFT IN PLACE DELIBERATELY: it goes red on any
+    change and forces the author to say which side of the load/run-time line the new raise is on,
+    which is the question, and a shape-based check (`is this raise inside a loader?`) would answer
+    it with a heuristic instead of a person."""
+    assert SHAPE_CODE.count("raise SystemExit") == 28
 
 
 def test_d10b_resolve_sums_then_clamps_once():
@@ -439,11 +503,22 @@ def test_d10c_the_obstacle_refusal_gate_exists():
 
 def test_event_never_grows_a_target_or_an_actor():
     """S19.3, and Part VIII lists the target field as a REFUSAL: 'an Event that knows who it
-    is for is an Event that cannot be misattributed, AND MISATTRIBUTION IS A FEATURE.'"""
+    is for is an Event that cannot be misattributed, AND MISATTRIBUTION IS A FEATURE.'
+
+    ⚠ THE BAN LIST IS THE INVARIANT; THE EXACT SET IS A RATCHET, AND `W-B` MOVED IT BY ONE.
+    `observed` is admitted and the other six are still banned, which is the distinction S19.3
+    actually draws: the three absent fields are about ATTRIBUTION and RECIPIENCY -- who did it, who
+    it is for -- and each absence is a design decision. `observed` is neither. It is what the FOLD
+    READ to reach its verdict, and §27.1 already makes reading the precondition the fold's
+    business; `changes[]` is what the act WROTE and no existing field holds what it read.
+    ⚠ THE EQUALITY IS KEPT RATHER THAN LOOSENED TO A SUBSET, and that is the point of the line: a
+    NEW field still turns this red and has to be argued here. Loosening it to `banned & fields ==
+    set()` would let the next field in silently, which is how `target` would eventually arrive."""
     fields = set(Event.__dataclass_fields__)
     for banned in ("target", "actor", "source_actor", "recipient", "to", "stat_deltas"):
         assert banned not in fields
-    assert fields == {"id", "kind", "subject", "changes", "causes", "emitted_at", "degree"}
+    assert fields == {"id", "kind", "subject", "changes", "causes", "emitted_at", "degree",
+                      "observed"}
 
 
 def test_causes_is_never_empty():
@@ -1802,14 +1877,20 @@ def test_w3_the_fold_refuses_rather_than_filling_and_the_gap_is_countable():
     ⚠ TWO OF THE THREE GOT THIS WRONG IN THE FIRST DRAFT. `presence:` eligibility returned True
     unconditionally with the comment "the presence index is H-33; not resolvable here" — an
     unevaluable predicate admitting. And `_req_work` checked `condition >= 0`, which is EVERY
-    possible condition: a predicate that cannot fail is a `return True` with a docstring."""
+    possible condition: a predicate that cannot fail is a `return True` with a docstring.
+
+    ⚠ `W-A` RETIRED `_req_work` INTO A TYPED CELL, and this test moved with it rather than being
+    deleted: the CLAIM is unchanged — a site below every floor must be unworkable — and it is now
+    asked of `evaluate()`, which is where that rule lives. The gap count is now over verbs with
+    NEITHER a predicate NOR a typed cell, which is the same question one owner further along."""
     prose = [v for v, r in S.VERB_TABLE.items()
              if r.requires.strip() not in S.NO_PRECONDITION]
     assert prose, "no verb carries a precondition -- the check is vacuous"
     # The gap is COUNTABLE, which is what stops it being forgotten: H-65's number.
-    missing = [v for v in prose if v not in S.REQUIRES_PREDICATES]
-    assert len(missing) == len(prose) - len(
-        [v for v in prose if v in S.REQUIRES_PREDICATES])
+    def _evaluable(v):
+        return v in S.REQUIRES_PREDICATES or S.VERB_TABLE[v].requires_typed is not None
+    missing = [v for v in prose if not _evaluable(v)]
+    assert len(missing) == len(prose) - len([v for v in prose if _evaluable(v)])
 
     # A verb with a prose precondition and no predicate must REFUSE, not succeed.
     w = _w()
@@ -1821,14 +1902,16 @@ def test_w3_the_fold_refuses_rather_than_filling_and_the_gap_is_countable():
         d._fold(w, act)
     assert "precondition" in str(e.value) or "no row" in str(e.value)
 
-    # `_req_work` must be able to FAIL. A site below every floor is unworkable.
+    # `work`'s precondition must be able to FAIL. A site below every floor is unworkable.
     site = w.sites["site_harbour"]
     kept, site.condition = site.condition, 0
     try:
-        ch = S.StateChange(site.id, "alter", "Act", "condition", -1)
-        assert not S._req_work(w, S.Act(id="a_w", actor="p_low", verb="work", changes=[ch])), (
-            "`work`'s precondition admitted a site at condition 0 -- it cannot observe the "
-            "failure it excludes")
+        a_w = S.Act(id="a_w", actor="p_low", verb="work", payload={"site": site.id})
+        v = S.evaluate(S.VERB_TABLE["work"].requires_typed, S.WorldReader(w, a_w.actor),
+                       S.binding_from_act(a_w))
+        assert v.value is False, (
+            f"`work`'s precondition returned {v.value!r} for a site at condition 0 -- it cannot "
+            "observe the failure it excludes")
     finally:
         site.condition = kept
 
@@ -1919,13 +2002,24 @@ def test_w5_opening_set_has_no_roster_and_is_computed_from_the_table():
     name test and be the same defect — by checking the set MOVES with the verb table."""
     params = list(inspect.signature(S.Query.opening_set).parameters)
     assert "roster" not in params, f"the roster survived: {params}"
-    assert params == ["p", "v", "q"], f"§F1 types it `opening_set(p, view, q)`; got {params}"
+    # ⚠ `["p","v","q"]` -> `["p","v","q","fx"]`, `W-C`, AND THE PROPERTY THIS PINS IS UNCHANGED.
+    # `D2` is that NO AUTHORED OPTION LIST reaches here. `Fixtures` is the params registry -- flat
+    # numbers, no entity, identical for every person in the season, assigned to `params` by #353
+    # §22 -- and `Query.budget` already takes one on the same argument. It is needed because two
+    # of `transfer`'s operands (`kind`, `amount`) are values the design supplies no number for,
+    # so they are fixtures with a register row and a three-point sweep (`H-94`); the alternative
+    # was leaving them in `verb_table.yaml`'s `operand_defaults`, where THE FOLD filled them under
+    # the person. The assertion stays EXACT rather than becoming a subset test, so a fifth
+    # parameter still has to be argued for here. The `World` bar is unmoved and is asserted
+    # separately by `test_w5_sense_is_still_the_only_world_taking_non_decision_function`.
+    assert params == ["p", "v", "q", "fx"], (
+        f"§F1 types it `opening_set(p, view, q)` and `W-C` adds the params registry; got {params}")
 
     w = P.tiny_world()
     p = w.persons["p_mid"]
     q = S.Question("q:t", "need", ("rec_writ", "S"))
     v = S.View(p.id, [], w.fixtures.get("view_k"), q)
-    got = S.Query.opening_set(p, v, q)
+    got = S.Query.opening_set(p, v, q, w.fixtures)
     assert got, "the computed set is empty — nothing is derivable and the roster is only absent"
     assert all(c.verb in S.VERB_TABLE for c in got)
 
@@ -1933,7 +2027,7 @@ def test_w5_opening_set_has_no_roster_and_is_computed_from_the_table():
     victim = sorted({c.verb for c in got})[0]
     saved = S.VERB_TABLE.pop(victim)
     try:
-        after = {c.verb for c in S.Query.opening_set(p, v, q)}
+        after = {c.verb for c in S.Query.opening_set(p, v, q, w.fixtures)}
     finally:
         S.VERB_TABLE[victim] = saved
     assert victim not in after, (
@@ -3459,13 +3553,20 @@ def test_the_corpus_cannot_reach_the_governance_branch_and_h71_is_not_the_reason
         "and the tautology above has become a measurement")
 
 
-def _ten_seasons(w, seasons=10):
-    """Run a world under the COMPUTED chooser and return per-season stores plus the acts minted.
-    One owner, because three `W8` tests need the same run and a second copy would let them drift
-    into describing different worlds."""
+def _ten_seasons(w, seasons=10, verbs=None):
+    """Run a world under the COMPUTED chooser and return per-season stores, the acts minted, and
+    the driver. One owner, because three `W8` tests need the same run and a second copy would let
+    them drift into describing different worlds.
+
+    ⚠ `verbs` NARROWS THE OPTION SET AND IS WHAT GIVES THE ATTRIBUTION BELOW A CONTROL, which the
+    `W-C` adversarial pass found it did not have: `transfer` and `move` went live in the SAME run
+    and a store movement was attributed to one of them by reading. Suppressing one verb re-runs
+    the identical world with one variable removed, which is the only way to say which moved it
+    (§0.1 point 4). `None` means the full set, so the measured arm is unchanged."""
     d = S.SeasonDriver(w)
     mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs())
+    ch = S.make_chooser(w.fixtures, mint,
+                        verbs=S.resolvable_verbs() if verbs is None else verbs)
     minted = []
     def spy(p, v, sc, ask):
         out = ch(p, v, sc, ask)
@@ -3476,7 +3577,7 @@ def _ten_seasons(w, seasons=10):
     for _ in range(seasons):
         d.season(spy, question=None, subsistence=P.SUBSIST)
         hist.append({r: dict(w.rungs[r].stores) for r in w.rungs})
-    return hist, minted
+    return hist, minted, d
 
 
 def test_w8_matter_draws_before_it_produces_which_is_353s_stated_order():
@@ -3548,24 +3649,57 @@ def test_w8_the_none_arm_is_a_real_control_and_the_loader_refuses_it_as_a_defaul
     assert sum(len(v) for v in S.SITE_YIELD.values()), "the restore lost the declared table"
 
 
-def test_w8_the_proof_clause_is_not_met_and_h94_is_why():
-    """⚠ `PLAN.md` `W8`'s PROOF IS **NOT MET**, AND THIS TEST RECORDS THAT RATHER THAN TUNING
-    NUMBERS UNTIL IT IS. The clause asks for *"a 10-season seeded run in which stores neither
-    monotonically deplete nor overflow — the control that catches a starving world"*. Measured on
-    `tiny_world` under the computed chooser: the hearth's grain goes 2, 0, 0, 0, 0, 0, 0, 0, 0, 0
-    (three people, no site, so it eats and cannot produce) while the settlement's goes 74 → 374,
-    monotonically up. Both failure modes at once, in one world.
+def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
+    """⚠ `PLAN.md` `W8`'s PROOF IS **STILL NOT MET**, AND THIS TEST WENT RED WHEN `H-94` CLOSED,
+    WHICH IS WHAT IT PROMISED TO DO. Its previous wording ended *"this test goes red when `H-94`
+    closes, which is exactly when the proof clause becomes reachable and must be re-run rather
+    than re-read"*. `W-C` closed it; the clause has been RE-RUN, and the result is that `H-94` was
+    a real cause and not the only one.
 
-    THE CAUSE IS NOT THE ECONOMY'S NUMBERS. It is `H-94`: the computed chooser mints Acts with
-    `payload: None` and `changes: []` — **0 of 56 over three seasons carry either** — so the two
-    verbs that could move matter between the rungs cannot. `transfer` is refused on a precondition
-    it has no operands to satisfy, and `work` emits `site.worked` while accumulating no delta, so
-    site condition is a one-way ratchet and every producer eventually dies. A steady state needs a
-    verb that MOVES something, and no minted act carries what to move.
+    The clause asks for *"a 10-season seeded run in which stores neither monotonically deplete nor
+    overflow — the control that catches a starving world"*. RE-MEASURED 2026-09-04 on `tiny_world`
+    under the computed chooser, WITH operands: the hearth's grain goes 2, 0, 0, 0, 0, 0, 0, 0, 0,
+    0 (three people, no site, so it eats and cannot produce) and the settlement's goes
+    74 → 356, monotonically up. Both failure modes at once, still, in one world.
 
-    This test goes red when `H-94` closes, which is exactly when the proof clause becomes
-    reachable and must be re-run rather than re-read."""
-    hist, minted = _ten_seasons(P.tiny_world())
+    ⚠ WHAT CHANGED AND WHAT DID NOT, because "the number barely moved" is the reading §0.1 point 4
+    forbids taking on faith. WHAT CHANGED: 108 of 252 minted acts now carry an operand beyond
+    `subject` (0 of 56 before), `transfer` is granted 9 times and refused 27, `move` is granted 15
+    and blocked 21, and grain genuinely crosses between rungs. WHAT DID NOT: the hearth still
+    starves on season 2 and never recovers, because the only economy that reaches it is
+    subsistence OUT and no site produces INTO it — and `work`, the verb that would repair a
+    producer, still declares no delta (`test_w8_work_emits_a_success_while_repairing_nothing`).
+    So the residual cause is the one `H-94` was masking: `work` writes `(Site, condition)` and
+    Part E names the CELL and never the VALUE, which is `H-63`.
+
+    ⚠ THIS DOCSTRING SAID *"the settlement's total is LOWER than before (374 → 356) BECAUSE
+    TRANSFERS NOW MOVE SOME OF IT"*, AND THAT WAS A SINGLE-CAUSE ATTRIBUTION ACROSS A TWO-VARIABLE
+    CHANGE, PUBLISHED AS A MEASUREMENT. `transfer` and `move` went live in the SAME run. Corrected
+    by the `W-C` adversarial pass, by RUNNING the controls rather than re-reading the sentence:
+
+      * THE BEFORE FIGURE 374 DOES NOT REPRODUCE AND IS RETRACTED. Re-run on the pre-`W-C` tree
+        itself — same fixture, same ten seasons, same chooser — the settlement ends at **358**,
+        at `45a537c`, at `fda54d4` and at `1e21f24` alike. 374 was carried forward in prose from a
+        run nothing can reproduce; nothing ever asserted it, which is why it survived.
+      * THE REAL DELTA IS 358 → 356, i.e. **2**, and it is entirely `transfer`'s. Suppressing
+        `transfer` returns the settlement to 358; the two granted transfers whose `from` is `S`
+        and whose `to` is not (`S → p_high`, one grain each) are the whole of it, and the other
+        seven granted transfers out of `S` are SELF-transfers that move nothing.
+      * `move` IS NOT A CAUSE, and the plausible mechanism for it is refuted rather than
+        dismissed: an extra eater seated at `S` would draw 2 per season (grain's subsistence
+        weight), which is the right order of magnitude for the retracted number. Measured:
+        `Query.presence(w, "S")` is exactly `['p_high']` in every season of every arm, and
+        suppressing `move` leaves the settlement at **356** — unchanged.
+
+    Both controls are RUN below rather than recorded here, because a control in a docstring is
+    the thing §0.1 point 4 forbids.
+
+    ⚠ AND THE ASSERTION IS INVERTED RATHER THAN DELETED. It used to pin that NO minted act carries
+    an operand beyond `subject`; it now pins that some DO, and that they carry only names from the
+    closed `requires_operands` vocabulary. Deleting it would have removed the only place this run
+    observes the operand channel at all."""
+    w = P.tiny_world()
+    hist, minted, d = _ten_seasons(w)
     hearth = [h["Hh"].get("grain", 0) for h in hist]
     settle = [h["S"].get("grain", 0) for h in hist]
     assert hearth == sorted(hearth, reverse=True) and hearth[-1] == 0, (
@@ -3574,24 +3708,59 @@ def test_w8_the_proof_clause_is_not_met_and_h94_is_why():
     assert settle == sorted(settle) and settle[-1] > settle[0], (
         f"the settlement no longer overflows: {settle}")
     assert minted, "the chooser minted nothing; this test cannot observe H-94"
-    # ⚠ NARROWED: `H-94` IS HALF CLOSED AND THIS ASSERTION NOW PINS THE HALF THAT IS NOT. It read
-    # `not [a for a in minted if a.payload or a.changes]` — no minted act carries anything — and
-    # that stopped being true when `pack_scenes` began carrying the Candidate's SUBJECT into the
-    # payload instead of folding it into the act id and discarding it. The subject was always
-    # computed by `opening_set`; dropping it was a bug, and `_req_tell` reads exactly that key.
-    #
-    # What remains is the STRUCTURAL half: `Candidate := (verb, subject, why)` (S17) has no
-    # operand field at all, so `transfer`'s `stores(hearth(giver), kind) >= amount` still has no
-    # `kind` and no `amount` any part of the pipeline can carry. A minted act may therefore carry
-    # a subject and NOTHING ELSE, and the day it carries a second key `H-94` has closed.
-    extra = [a for a in minted if a.changes or set((a.payload or {})) - {"subject"}]
-    assert not extra, (
-        f"{len(extra)} of {len(minted)} minted acts now carry an operand beyond `subject` "
-        f"({sorted({k for a in extra for k in (a.payload or {})} - {'subject'})}) — the structural "
-        "half of `H-94` has closed, and `W8`'s proof clause is owed a fresh measurement")
+    # ⚠ INVERTED BY `W-C`. This read `not [a for a in minted if a.changes or set(payload) -
+    # {"subject"}]` and its own message said the day it fired, `H-94`'s structural half had closed
+    # and the proof clause was owed a fresh measurement. It fired; the measurement is in the
+    # docstring; and the assertion now pins the closure rather than the hole, because a test that
+    # only ever says "still broken" cannot observe the day it stops being.
+    extra = [a for a in minted if set((a.payload or {})) - {"subject"}]
+    assert extra, (
+        f"NONE of {len(minted)} minted acts carries an operand beyond `subject` — `H-94` has "
+        "re-opened and `transfer` is back to being refused for want of a `kind` it cannot carry")
+    carried = {k for a in minted for k in (a.payload or {})}
+    assert carried <= set(S.REQUIRES_OPERANDS) | {"subject"}, (
+        f"a minted act carries {sorted(carried - set(S.REQUIRES_OPERANDS) - {'subject'})}, which "
+        "is outside the closed operand vocabulary — coining an operand is filling `H-94` by "
+        "keyword argument, which is what the roster exists to refuse")
+    # AND `changes` IS STILL EMPTY, which is the OTHER half and is `H-63`, not this item: Part E's
+    # `writes:` names the cell and never the value, so `work` reports a site and accumulates no
+    # delta. Pinned so the two are not conflated the next time this run is read.
+    assert not [a for a in minted if a.changes], (
+        "a minted act now declares `changes` — `H-63` has moved and the starving hearth above "
+        "needs re-attributing")
     assert any((a.payload or {}).get("subject") for a in minted), (
         "no minted act carries a subject — `pack_scenes` has gone back to dropping the operand "
         "`opening_set` computed, and `tell` will be refused in every world again")
+
+    # ⚠ THE TWO CONTROLS, RUN. `transfer` and `move` both went live in this run and the docstring
+    # attributed the settlement's fall to one of them by reading. These separate them, and they
+    # are assertions rather than a paragraph because §0.1 point 4 is about what was RUN.
+    ids = {e.id for e in w.log}
+    drained = sum(int((a.payload or {}).get("amount", 0))
+                  for a in d.resolved
+                  if a.verb == "transfer"
+                  and (a.payload or {}).get("from") == "S"
+                  and (a.payload or {}).get("to") != "S"
+                  and any(S.H(w.world_seed, t, a.actor, f"transfer.made:{a.id}") in ids
+                          for t in range(len(hist) + 1)))
+    # ASSERT THAT IT ASSERTED (§0.1 point 2): with nothing drained the equality below is 0 == 0
+    # and observes nothing at all.
+    assert drained > 0, (
+        "no granted `transfer` moved grain OUT of `S`, so the two equalities below are vacuous "
+        "and this run can no longer say what moved the settlement's larder")
+    no_transfer, _, _ = _ten_seasons(P.tiny_world(), verbs=S.resolvable_verbs() - {"transfer"})
+    assert no_transfer[-1]["S"].get("grain", 0) - settle[-1] == drained, (
+        f"the settlement ends at {settle[-1]} and at "
+        f"{no_transfer[-1]['S'].get('grain', 0)} with `transfer` suppressed, a difference of "
+        f"{no_transfer[-1]['S'].get('grain', 0) - settle[-1]} against {drained} grain actually "
+        "carried out of `S` by granted transfers. Something OTHER than `transfer` is moving the "
+        "settlement's larder and the docstring's attribution is confounded again")
+    no_move, _, _ = _ten_seasons(P.tiny_world(), verbs=S.resolvable_verbs() - {"move"})
+    assert no_move[-1]["S"].get("grain", 0) == settle[-1], (
+        f"suppressing `move` moved the settlement to {no_move[-1]['S'].get('grain', 0)} from "
+        f"{settle[-1]}. `move` relocates people and `Query.presence` is what the subsistence draw "
+        "reads, so `move` HAS become a cause of the settlement's larder — re-attribute the "
+        "docstring rather than re-pinning this number")
 
 
 def test_w8_work_emits_a_success_while_repairing_nothing(): 
@@ -3702,7 +3871,40 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     import headless as HL
     depths, matured = {}, {}
     for n in (0, 3, 6):
-        w = HL.build_world(0, S.DEFAULT_FIXTURES.sweep("record_stages_default", n))
+        # ⚠ `observation_deposit_mode` IS PINNED TO ITS CONTROL ARM, AND THAT IS CONFOUND REMOVAL
+        # RATHER THAN A CONVENIENCE (`CLAUDE.md` §0.1 point 1 -- *are the two arms the same
+        # experiment?*). This sweep's subject is `record_stages_default`; every other fixture must
+        # be held. `W-B` (`H-122`) made that necessary and the interaction is recorded rather than
+        # hidden. MEASURED 2026-09-04, longest maturation chain by stage count -- `none`
+        # {0:0, 3:6, 6:7} · `actor` {0:0, 3:7, 6:7} · `total` {0:0, 3:7, 6:7}. So at `actor` the
+        # DEPTH clause can no longer tell 3 stages from 6.
+        #
+        # ⚠ **AND THE CAUSE IS NOT WHAT THE FIRST WRITING OF THIS COMMENT SAID.** It said *"each
+        # observation deposit is an Event with `causes=[e.id]`, so the extra deposits LENGTHEN the
+        # graph behind a maturation"*, and that is false: `depth()` walks UPWARD through
+        # `e.causes`, a `claim.deposited` POINTS AT the Event it was minted from, and
+        # `occasioned_by`'s `claim_landed` branch deliberately returns the ORIGINATING Event
+        # rather than the deposit (*"citing the transport instead would put the postman in the
+        # arc"*). MEASURED over a 7-season run in every arm: `claim.deposited` Events inside a
+        # `term.matured` ancestry = **0, 0, 0** -- the only kind that ever cites one is
+        # `claim.decayed` (2,448 / 2,449 / 2,586 times), and a maturation chain never descends
+        # into a decay. THE REAL CAUSE, read off the longest chain itself: at `none` it is
+        # `term.matured x3 -> record.created -> proposition.uttered -> record.created` (6) and at
+        # `actor` a **`news.told`** link appears between them (7). More claims land, more Q2
+        # questions form, more acts cite a prior Event -- a longer chain of ACTS, not of deposits.
+        # Found by the `W-B` adversarial pass; the number was right and the mechanism was invented.
+        #
+        # ⚠ THE COST OF THE SHIPPED DEFAULT IS STATED HERE AND ON `H-122`, NOT ONLY HERE. By the
+        # criterion `H-122` argues its default from -- *which arm leaves a sweep observable* --
+        # `none` leaves BOTH `H-40`'s and `H-80`'s discriminators alive, `actor` leaves one, and
+        # `total` neither. `actor` over `none` is therefore a DESIGN call (it is the minimum arm
+        # that closes §F1 clause 4 at all), not a falsifier outcome, and `H-122` says so.
+        # The maturation COUNT is not ceiling-bounded and still discriminates in every arm --
+        # 15/21 at `none` and `actor`, 27/36 at `total` -- and that claim is now EXECUTED in every
+        # arm below rather than asserted in this comment (§0.1 point 3).
+        w = HL.build_world(0, S.DEFAULT_FIXTURES
+                           .sweep("record_stages_default", n)
+                           .sweep("observation_deposit_mode", "none"))
         d = S.SeasonDriver(w)
         mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
         for _ in range(7):
@@ -3724,11 +3926,36 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
         mats = [e for e in w.log if e.kind == "term.matured"]
         matured[n] = len(mats)
         depths[n] = max((depth(e) for e in mats), default=0)
+    # ⚠ THE COUNT CLAUSE, RE-RUN IN THE ARMS THE COMMENT ABOVE NAMES. The pin above holds
+    # `observation_deposit_mode` at `none`, so `assert matured[3] < matured[6]` executes in the
+    # CONTROL ARM ONLY -- and the comment claimed the count "still discriminates in every arm".
+    # An un-run claim beside a run one is exactly what this file exists to catch, so it is run.
+    for arm in ("actor", "total"):
+        seen = {}
+        for n in (3, 6):
+            w = HL.build_world(0, S.DEFAULT_FIXTURES
+                               .sweep("record_stages_default", n)
+                               .sweep("observation_deposit_mode", arm))
+            d = S.SeasonDriver(w)
+            mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+            for _ in range(7):
+                d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+                         None, HL.subsistence)
+            seen[n] = sum(1 for e in w.log if e.kind == "term.matured")
+        matured[f"{arm}:3"], matured[f"{arm}:6"] = seen[3], seen[6]
+        assert seen[3] < seen[6], (
+            f"the maturation COUNT does not discriminate in the `{arm}` arm: {seen}. The depth "
+            "clause is already saturated there, so if the count goes too, `H-80` has no live "
+            "discriminator at that arm and the comment above must be re-measured")
     print(f"\n  H-80 sweep — maturations {matured}, longest maturation chain {depths}")
     assert matured[0] == 0 and depths[0] == 0, (
         f"at the 0 control {matured[0]} term.matured Events exist — `H-80`'s cite says "
         "NOTHING MATURES there, and if something does, that is a finding worth more than "
         "this control")
+    assert matured[3] < matured[6], (
+        f"the maturation COUNT does not grow with the stage count: {matured} — the depth clause "
+        "below is ceiling-bounded by the season count and this one is not, so if this fails the "
+        "sweep is inert whatever the depths say")
     assert depths[3] > depths[0] and depths[6] > depths[3], (
         f"the chain does not grow with the stage count: {depths} — then check 2's result does not "
         "rest on H-80 and this control is measuring nothing")
@@ -4404,7 +4631,24 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # three more fabricated `travel.moved` in each of seasons 2 and 3. `move` has no destination to
     # move to -- that is `H-94` in a second verb -- so it now refuses alongside `transfer`, and the
     # honest count is 5.
-    assert ever == {"create_record", "speak", "tell", "utter", "work"}, (
+    # ⚠ 5 -> 4, `W-A` (2026-09-04), AND IT IS A CORRECTION RATHER THAN A REGRESSION -- which is
+    # the reading §0.1 point 4 forbids taking on faith, so here is the mechanism. `_req_work`
+    # looked for a Site among the act's declared `changes` and, finding none, `return True`. Every
+    # COMPUTED act declares no changes, so across the whole corpus `work`'s precondition COULD NOT
+    # FAIL -- the same shape that predicate's own docstring indicts in ITS predecessor (*"a
+    # predicate that cannot fail is not a predicate -- it is a `return True` with a docstring"*),
+    # one level in. `work`'s typed cell binds `site` from the act's operands and UNKNOWN refuses,
+    # so `work` leaves this set for the identical reason `move` and `transfer` are already out of
+    # it: `H-94`, no operand. `_eff_work` was meanwhile falling back to the alphabetically FIRST
+    # site in the world, so the `site.worked` events this set counted named a site nobody chose.
+    # ⚠ 4 -> 6, `W-C` (2026-09-04). `H-94`'s STRUCTURAL half closed: a Candidate carries the
+    # operands its verb's cell names, derived person-side, so `transfer` binds `from` (the actor's
+    # own live `contain` Tenure -- §54 item 7's `hearth(giver)`), `to` (the question's referent),
+    # `kind` and `amount` (two fixtures, swept), and `move` binds a real destination. Both were in
+    # the always-refused set for exactly one reason and it is gone. ⚠ ATTRIBUTION IS BY ACT ID,
+    # not by emission kind: `corpus_run` re-derives `H(seed, tick, actor, f"{kind}:{act.id}")`,
+    # which is what stopped `forge` being credited with `create_record`'s records.
+    assert ever == {"create_record", "move", "speak", "tell", "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
     # ⚠ `move` JOINED `transfer` HERE, AND IT IS THE SAME HOLE. Both are refused for want of an
@@ -4413,34 +4657,80 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # referents -- a claim's subject or a Proposition -- never a destination rung, so there is no
     # route from the person's decision to a place. `move` used to "execute" by closing every
     # containment and opening none; see the executed-set note above.
-    assert refused_only == {"move", "transfer"}, (
-        f"the always-refused set moved to {sorted(refused_only)}. `transfer` is the STRUCTURAL "
-        "half of `H-94`: `Candidate := (verb, subject, why)` has no operand field, so "
-        "`stores(hearth(giver), kind) >= amount` has no `kind` and no `amount` to read. `tell` "
-        "was the other half and it is fixed — `pack_scenes` now carries the Candidate's subject "
-        "into the payload instead of folding it into the act id and discarding it")
+    # ⚠ `work` JOINED THEM, `W-A`. Three verbs, ONE hole: `transfer` has no `kind`/`amount`,
+    # `move` has no `to`, `work` has no `site`. All three are `H-94` -- `Candidate := (verb,
+    # subject, why)` carries one entity and `pack_scenes` puts only that on the payload -- and the
+    # three of them are now the measure of how much of Part E is waiting on where operands live.
+    # ⚠ THREE -> ONE, AND THE SURVIVOR REFUSES FOR A DIFFERENT REASON THAN IT USED TO. `work`'s
+    # `site` IS bound now -- to the question's referent, which is the only thing a person can name
+    # from their own state -- and no referent the corpus produces is a Site, so `condition` reads
+    # UNKNOWN and the fold refuses. That is a fact about these WORLDS (their questions are about
+    # rungs and claims, never about sites), not about the pipeline: the operand channel exists and
+    # the corpus has nothing to put in it. `H-94` is closed; what `work` is waiting on is a
+    # question source that names a site, which is `H-04`'s territory.
+    assert refused_only == {"work"}, (
+        f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
+        "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
+        "`work` stayed for a reason about the corpus's questions rather than about the channel")
 
     # `H-96` — the ranking cannot discriminate, which is WHY one executed set survives worlds that
     # genuinely differ. This is the load-bearing assertion; the identical set alone proves nothing.
     assert len({r["seasons"] for r in live}) > 1, (
         "every case ran for the same number of seasons — `temporal.span_seasons` is not being "
         "read, and the worlds are identical again for the reason rev 1 was overturned")
-    # ⚠ THE WORLDS DISCRIMINATE NOW, AND EXACTLY ONCE. Two executed sets: the five cases the
-    # corpus declares `span_seasons: 1` do not `tell`, because a claim is deposited at WITNESS at
-    # the END of a season and a one-season life never holds one to tell. That is the corpus's own
-    # data changing the outcome — the first behavioural difference the larger surface produced,
-    # and it appeared only once `temporal.span_seasons` was read and the subject stopped being
-    # dropped. `H-96` still holds for everything else: 2..7 of 22 candidates separate.
+    # ⚠ THE WORLDS DISCRIMINATE, AND EXACTLY ONCE: two executed sets, differing ONLY in `tell`.
+    # The split is a SEASON THRESHOLD -- below it a case does not reach `tell`, at or above it
+    # every case does -- and that partition, not the group's size, is what the explanation says.
+    #
+    # ⚠ **THE THRESHOLD IS 1, AND IT MOVED TO 2 AND BACK INSIDE ONE SESSION. BOTH MOVES ARE
+    # RECORDED, BECAUSE THE SECOND IS THE RETRACTION OF A PUBLISHED RESULT.** `W-B` first made it
+    # 2: a refused `tell` deposited `Observation('r_hearth','claim.held',False)`, and the next
+    # season `belief_contradicts` read `claim.held -> False` and dropped the Candidate. That was
+    # reported as *"a person declined to attempt something because of what the previous season
+    # taught them"*. **The adversarial pass showed the belief was false at deposit.**
+    # `WorldReader.read`'s `claim.held` branch answers from LEDGER MEMBERSHIP, so storing a claim
+    # whose subject is `r_hearth` makes that read True -- the person was declining an act the fold
+    # would now ADMIT, on a belief their own bookkeeping had invalidated, and the block lifted two
+    # seasons later only because the ledger CAP EVICTED the claim. `shape.LEDGER_DERIVED_STEMS`
+    # excludes that deposit, and the threshold returns to 1 with the mechanism it always had: a
+    # ONE-season case never reaches `tell`.
+    # ⚠ THE OLD WORDING ALSO PINNED THE GROUP BY SIZE (`min(by_sig.values(), key=len)`), which was
+    # a latent defect on its own terms -- it silently names the OTHER group once the sizes cross,
+    # and under the retracted behaviour they did (5/84 became 65/24). It is keyed on set CONTENT
+    # now and stays that way whatever the threshold.
+    # ⚠ **THE SHIPPED DEFAULT IS NO LONGER PINNED HERE, AND ITS FALSIFIER MOVED RATHER THAN
+    # VANISHED.** With the `tell` firings gone, `none` and `actor` produce the SAME partition, so
+    # flipping the default no longer reddens this line.
+    # `test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_the_control` is
+    # where that falsifier lives now -- it counts clause-4 drops at `S.DEFAULT_FIXTURES` (13
+    # across the 86 corpus worlds, all `move`; 0 at `none`) and goes RED on a flip.
+    # ⚠ WHAT THIS IS NOT: it is not a reconvergence measurement and this test does not make one.
+    # `H-96`'s claim -- the RANKING cannot discriminate -- is untouched and still holds: still
+    # exactly two sets, still differing in one verb, and the ranking still ties 2..7 of 22.
     by_sig = {}
     for r in live:
         by_sig.setdefault(tuple(r["executed"]), []).append(r)
     assert len(by_sig) == 2, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived")
-    small = min(by_sig.values(), key=len)
-    assert {r["seasons"] for r in small} == {1} and len(small) == 5, (
-        f"the divergent group is no longer the five one-season cases: "
-        f"{sorted({r['seasons'] for r in small})}, n={len(small)}. The explanation on `H-96` "
-        "(a claim lands at WITNESS, so a one-season life has none to tell) no longer holds")
+    # ⚠ KEYED ON WHAT THE SETS CONTAIN, NEVER ON HOW BIG THEY ARE. See above.
+    with_tell = [rs for sig, rs in by_sig.items() if "tell" in sig]
+    without = [rs for sig, rs in by_sig.items() if "tell" not in sig]
+    assert len(with_tell) == 1 and len(without) == 1, (
+        f"the two sets no longer differ by `tell` alone: {sorted(by_sig)}")
+    with_tell, without = with_tell[0], without[0]
+    assert (set(by_sig) == {("create_record", "move", "speak", "tell", "transfer", "utter"),
+                            ("create_record", "move", "speak", "transfer", "utter")}), sorted(by_sig)
+    lo = {r["seasons"] for r in without}
+    hi = {r["seasons"] for r in with_tell}
+    assert max(lo) < min(hi), (
+        f"the split is no longer a season threshold: cases WITHOUT `tell` run {sorted(lo)} and "
+        f"cases WITH it run {sorted(hi)}. The explanation above is a claim about season count, "
+        "and a straddle means something else is deciding it")
+    assert max(lo) == 1, (
+        f"the `tell` threshold is {max(lo)} seasons, not 1. A 2 means a `claim.held` claim is "
+        "reaching a ledger again and §F1 clause 4 is firing on the self-refuting belief "
+        "`shape.LEDGER_DERIVED_STEMS` excludes; any other number means the mechanism changed and "
+        "the paragraph above must be re-measured, not this line adjusted")
     assert foldable_all - ever - refused_only == {"confer", "convene", "dispatch", "revoke",
                                               "destroy_record"}, (
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Four of the "
@@ -4802,3 +5092,2370 @@ def test_id16_the_sign_column_is_shape_validated_and_the_gate_can_fail():
     m3 = copy.deepcopy(reg)
     next(r for r in m3["rows"] if r.get("kind") != R.LOOP_KIND)["sign"] = "-"
     assert R.rule_G13(m3), "a `sign` on a non-LOOP row passed"
+
+
+# ===========================================================================
+# `W-A` -- THE TYPED `requires` COLUMN. ONE DECLARATION, THREE READERS.
+#
+# THESE ARE GUARDS ON THE GAME, not on the apparatus, which is what licenses them under
+# `CLAUDE.md` §0.1 point 5 as amended: the artifact each protects is the precondition the FOLD
+# evaluates and the person DELIBERATES against -- the two sites where a wrong answer changes which
+# acts happen and which do not. A defect in any of them moves the corpus.
+# ===========================================================================
+
+def _wa_own_eligible_with_a_precondition() -> list:
+    """Every row `W-A`'s scope covers: `own` among its eligibility alternatives, and a `requires:`
+    that is not one of the no-precondition markers. Derived from the table, never listed (`G2`)."""
+    return sorted(v for v, r in S.VERB_TABLE.items()
+                  if "own" in r.eligibility_kinds()
+                  and (r.requires or "").strip() not in S.NO_PRECONDITION)
+
+
+def test_wa_one_owner_a_verb_has_a_typed_cell_or_a_predicate_and_never_both():
+    """§8 -- the rule lives once. A verb with BOTH a `requires_typed:` cell and a
+    `REQUIRES_PREDICATES` entry is two readings of one prose cell, which is exactly how
+    `_req_confer` came to drop a disjunct while its docstring claimed the clause was implemented.
+
+    And the coverage half: every `own`-eligible row with a prose precondition must carry either a
+    typed cell or an EXPLICIT `requires_typed: none` with a reason. A row with neither is one
+    nobody got to, and the loader cannot tell that from a deliberate refusal.
+
+    MUTATION (run 2026-09-04, both outcomes reported in the work item's output): re-register
+    `_req_transfer` under `@requires_predicate("transfer")` while `transfer` keeps its typed cell
+    -- this test goes RED on the `both` assertion; delete the `requires_typed:` cell from
+    `transfer`'s row in `verb_table.yaml` and it goes RED on the coverage assertion instead.
+    Unmutated it is GREEN.
+
+    ⚠ COVERAGE IS READ OFF THE YAML KEY, NOT OFF THE LOADED ROW, and the first draft got this
+    wrong: a `requires_typed: none` and an ABSENT `requires_typed:` both load to `None`, so the
+    check used a non-empty `requires_typed_note:` as the proxy for "declared" -- and deleting the
+    cell while leaving the note behind passed. The distinction this test exists to draw is between
+    a deliberate refusal and a row nobody typed, and only the file can tell them apart."""
+    both = [v for v, r in S.VERB_TABLE.items()
+            if r.requires_typed is not None and v in S.REQUIRES_PREDICATES]
+    assert not both, (
+        f"{both} carry a typed `requires_typed:` cell AND a `REQUIRES_PREDICATES` entry. Two "
+        "readings of one cell is how a conjunct gets dropped in one of them; delete the "
+        "predicate, the cell is the owner")
+
+    scope = _wa_own_eligible_with_a_precondition()
+    # The count is asserted so the walk cannot prove anything by finding no offenders among zero
+    # candidates (§0.1 point 2). Part E carries 14 such rows; 8 is the floor the work item set.
+    checked = len(scope)
+    assert checked >= 8, f"only {checked} own-eligible rows carry a precondition: {scope}"
+    import yaml as _yaml
+    declared = {r["verb"] for r in
+                _yaml.safe_load(S.VERB_TABLE_YAML.read_text())["verbs"]
+                if "requires_typed" in r}
+    assert declared, "no row declares `requires_typed:` -- the file the check reads has moved"
+    uncovered = [v for v in scope if v not in declared]
+    assert not uncovered, (
+        f"{uncovered} are `own`-eligible with a prose `requires:` and carry neither a typed cell "
+        "nor an explicit `requires_typed: none` with a reason. Type it, or say why it cannot be")
+    typed = sum(1 for r in S.VERB_TABLE.values() if r.requires_typed is not None)
+    # ⚠ PRINTED FROM THE TABLE, NEVER TYPED INTO A COMMENT. `G11`: a number with no adjacent
+    # command is a defect, and every count this file has hand-carried has eventually been wrong.
+    print(f"\n  typed {typed} of {len(S.VERB_TABLE)}; "
+          f"uncovered own-eligible: {uncovered}  "
+          f"(own-eligible with a precondition: {checked}; "
+          f"declared `none`: {sorted(v for v in scope if S.VERB_TABLE[v].requires_typed is None)})")
+
+
+def test_wa_an_empty_ledger_is_unknown_for_every_form_and_the_candidate_still_forms():
+    """§F1's ASYMMETRY, made mechanical over every form in the grammar rather than over one verb.
+
+    *"Absence of a belief is not a belief in the negative."* A person who holds NO claims must
+    read every typed requirement as UNKNOWN -- not False -- and must therefore still form the
+    Candidate, act on the premise, and be refused by the fold. That is §F1's own worked case: *"a
+    person who wrongly believes the granary full still forms the Candidate, acts, and gets
+    `transfer.refused` from the fold. That is T3 and L2 working."*
+
+    MUTATION (run 2026-09-04): change `LedgerReader.read` to `return False` on no matching claim
+    instead of `UNKNOWN` -- every form's verdict becomes False, `belief_contradicts` becomes True
+    for all nine typed verbs, and this test goes RED on both halves at once (the UNKNOWN loop
+    first). Unmutated it is GREEN. That mutation is the exact softening §F1 forbids, so the test
+    can observe the failure it excludes."""
+    empty = S.LedgerReader([])
+    w0 = P.tiny_world()
+    p0 = w0.persons["p_low"]
+    subj = "a_subject_nobody_has_a_claim_about"
+    q0 = S.Question("q:wa_empty", "need", (subj,))
+    forms, checked = set(), 0
+    for verb, row in sorted(S.VERB_TABLE.items()):
+        if row.requires_typed is None:
+            continue
+        req = row.requires_typed.requirement
+        forms.add(getattr(req, "clauses", None) and "all" or type(req).__name__)
+        # ⚠ `W-C`: THE PERSON'S BINDING IS THE CANDIDATE'S OWN OPERANDS, NOT A REBOUND SUBJECT.
+        # This called `S.binding_from(...)`, which pushed `subject` onto whatever the cell called
+        # its entity operand -- so for `transfer` it asked about the RECEIVER's granary while §54
+        # item 7 asks about the GIVER's. `operands_for` derives each operand separately and
+        # `binding_of` is the one shape both readers build, so this now exercises the binding the
+        # fold will see.
+        ops = S.operands_for(p0, row, q0, subj, w0.fixtures)
+        assert ops is not None, (
+            f"{verb}: no Candidate could be formed at all, so this arm cannot observe whether an "
+            "empty ledger reads UNKNOWN")
+        b = S.binding_of(p0.id, ops)
+        v = S.evaluate(row.requires_typed, empty, b)
+        assert v.value is S.UNKNOWN, (
+            f"{verb}: an EMPTY ledger produced {v.value!r} rather than UNKNOWN. A person holding "
+            "no claims would then be treated as holding a claim that the requirement fails, "
+            "which is the softening to 'requires holds' §F1 spends two paragraphs forbidding")
+        checked += 1
+    assert checked >= 8, f"only {checked} typed cells were exercised -- the walk is not seeing them"
+    # The control: the walk must span the grammar, not one form nine times.
+    assert len(forms) >= 5, f"only {sorted(forms)} were exercised; the grammar has more forms"
+
+    # AND THE CONSEQUENCE, WHICH IS THE HALF THAT MATTERS TO THE GAME: the Candidates still form.
+    w = P.tiny_world()
+    p = w.persons["p_low"]
+    assert not p.ledger, "the fixture person now holds claims; this arm needs an empty ledger"
+    q = S.Question("q:wa_asym", "need", ("Hh",))
+    cands = S.Query.opening_set(p, S.View(p.id, [], w.fixtures.get("view_k"), q), q, w.fixtures)
+    offered = {c.verb for c in cands}
+    typed_own = {v for v, r in S.VERB_TABLE.items()
+                 if r.requires_typed is not None and S.person_side_eligible(p, r)}
+    assert typed_own <= offered, (
+        f"{sorted(typed_own - offered)} were filtered out of the option set by a person who holds "
+        "NO claims at all. Clause 4 is KNOWN-FALSE, not 'unproven'")
+
+
+def test_wa_a_planted_claim_removes_transfer_and_a_larger_one_leaves_it():
+    """§F1 CLAUSE 4 FIRING, WHICH `H-116` MEASURED AS IMPOSSIBLE.
+
+    `H-116`: over 4,800 deposited claims across 8 cases x 3 seasons, the predicates the person's
+    filter read (`person_predicates`) and the predicates anything wrote were DISJOINT, and zero
+    claims were falsy -- *"so clause 4 of `opening_set` cannot fire and the candidate set is
+    invariant with respect to everything that happens in the simulation."* With the predicate
+    DERIVED from the verb's own typed cell there is one namespace, and a belief about a granary
+    now changes what its holder is willing to attempt.
+
+    ⚠ THE CONTROL IS THE SECOND HALF AND IT IS NOT OPTIONAL. A filter that removed the Candidate
+    for ANY planted claim would pass the first assertion while meaning nothing (§0.1 point 4). The
+    same claim carrying a value that SATISFIES the requirement must leave the Candidate standing,
+    and every other Candidate must survive both plants.
+
+    MUTATION (run 2026-09-04, whole suite): flip `transfer`'s `comparator` in `verb_table.yaml`
+    from `>=` to `<=`. The two arms swap -- `0` keeps the Candidate and `9` removes it -- and this
+    test goes RED. Unmutated it is GREEN. THREE tests go red under that mutation and the OTHER TWO
+    are the ones worth naming, because they show the cell is load-bearing on the GAME and not only
+    on this test: `test_no_probe_errors` fails on probe `F10` -- *a matter closes by scarcity, not
+    by cancelling* -- with `granted=['transfer.made', 'transfer.made'] refused=[]`, i.e. both
+    claimants on a one-unit larder are served and §27.1's scarcity stops happening; and
+    `test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte` fails because the
+    committed run artifacts move."""
+    w = P.tiny_world()
+    p = w.persons["p_low"]
+    q = S.Question("q:wa_contra", "need", ("Hh",))
+    v = S.View(p.id, [], w.fixtures.get("view_k"), q)
+
+    def offered():
+        return {(c.verb, c.subject) for c in S.Query.opening_set(p, v, q, w.fixtures)}
+
+    base = offered()
+    assert ("transfer", "Hh") in base, (
+        "`transfer x Hh` was never offered, so removing it proves nothing")
+
+    def plant(value):
+        p.ledger.clear()
+        # `stores:grain` is DERIVED -- `f"{scalar}:{kind}"` from `transfer`'s own cell, with
+        # `kind` coming from the `default_store_kind` FIXTURE (`W-C` moved it there from the
+        # cell's `operand_defaults`, which filled it at the fold rather than at the person). It is
+        # not typed into a roster here and it is not typed into a roster there; that is the point
+        # of the whole item.
+        # ⚠ AND `Hh` IS NOW LOAD-BEARING TWICE OVER, WHICH IS WHY THE ARM STILL FIRES: it is the
+        # question's referent AND it is `containing_rung_of(p_low)` -- the object of that person's own live
+        # `contain` Tenure -- so it is what `from` binds to. Before `W-C` the subject was pushed
+        # onto `from` by `binding_from`, which happened to give the same answer HERE and the wrong
+        # one everywhere the referent is not your own hearth.
+        p.ledger.append(S.Claim("c_wa", p.id, "Hh", "stores:grain", value, 1,
+                                "firsthand", 100, "own"))
+        return offered()
+
+    empty_granary = plant(0)
+    assert ("transfer", "Hh") not in empty_granary, (
+        "a person who believes the hearth holds NO grain still offered themselves `transfer`. "
+        "Clause 4 is not reading the verb's typed cell")
+    assert base - empty_granary == {("transfer", "Hh")}, (
+        f"the plant removed {sorted(base - empty_granary)} -- more than the one Candidate whose "
+        "requirement it contradicts. A filter that removes everything is not a filter")
+
+    full_granary = plant(9)
+    assert ("transfer", "Hh") in full_granary, (
+        "a person who believes the hearth holds NINE grain was denied `transfer`. The filter "
+        "fires on the PRESENCE of a claim rather than on its contradicting the requirement, "
+        "which is the control this arm exists to run")
+    assert full_granary == base, (
+        f"a satisfying claim changed the option set: {sorted(full_granary ^ base)}")
+
+
+def test_wa_the_fold_and_the_person_read_the_same_cell_with_opposite_polarities():
+    """THE ONE DECLARATION, READ TWICE, AND THE TWO READINGS ARE NOT THE SAME.
+
+    An UNKNOWN verdict REFUSES in the fold (§42.2 -- zero evidence goes to the verdict against the
+    thing measured) and DOES NOT CONTRADICT for the person (§F1 -- absence of a belief is not a
+    belief in the negative). Getting either polarity wrong is invisible in the other site, so both
+    are asserted here, on the same verb, from the same cell.
+
+    MUTATION (run 2026-09-04): change `belief_contradicts`'s `.value is False` to
+    `.value is not True` -- an UNKNOWN becomes a contradiction, every person stops forming every
+    Candidate whose requirement they hold no claim about, and this test goes RED on the first
+    assertion. Unmutated it is GREEN.
+
+    ⚠ THE FOLD HALF OF THIS TEST COULD NOT OBSERVE ITS OWN MUTATION UNTIL `W-C`, AND NOW IT CAN.
+    The paragraph that stood here recorded the hole: flipping the fold to
+    `ok = verdict.value is not False` left the emitted kind UNCHANGED, because `_eff_transfer`
+    found neither `from` nor `to` on the payload, TOUCHED NOTHING, and the fold's *"an effect that
+    touched nothing must not emit the success"* guard emitted `transfer.refused` anyway -- the
+    right answer for the wrong reason, which is indistinguishable from the right one. Deleting the
+    four silent `.get(<operand>, <literal>)` defaults changed that: an operand-less act reaching
+    `_eff_transfer` now raises `InstrumentDefect`, so the mutation turns this test RED with an
+    error instead of leaving it green. MUTATION RE-RUN 2026-09-04 under `W-C`: `is not False` in
+    `_fold` raises `InstrumentDefect: a 'transfer' reached its effect with no 'from' operand` at
+    the `kinds ==` line. Unmutated it is GREEN. §0.1 point 2, closed rather than disclosed."""
+    w = P.tiny_world()
+    row = S.VERB_TABLE["transfer"]
+    p = w.persons["p_low"]
+    # The person's reading: UNKNOWN, so NOT contradicted. The operands are the Candidate's own --
+    # `from` is `containing_rung_of(p_low)`, not the subject -- so this is the binding the fold will see.
+    ops = S.operands_for(p, row, S.Question("q:wa_pol", "need", ("Hh",)), "Hh", w.fixtures)
+    assert not S.belief_contradicts(p, row, "Hh", ops), (
+        "a person holding no claim about `Hh` was treated as knowing `transfer` fails")
+    # The fold's reading of the same cell, on an act with no operands: UNKNOWN, so REFUSED.
+    a = S.Act(id="wa_t", actor="p_low", verb="transfer", payload={"subject": "Hh"})
+    verdict = S.evaluate(row.requires_typed, S.WorldReader(w, a.actor), S.binding_from_act(a))
+    assert verdict.value is S.UNKNOWN, verdict
+    d = S.SeasonDriver(w)
+    w.step = S.Step.RESOLVE
+    kinds = [e.kind for e in d._fold(w, a)]
+    assert kinds == ["transfer.refused"], (
+        f"an operand-less `transfer` emitted {kinds}. UNKNOWN must refuse in the fold; admitting "
+        "it would move grain the act never named -- `H-94` filled by accident")
+    # And the reads are on the Verdict.
+    assert all(isinstance(o, S.Observation) for o in verdict.observed)
+    # ⚠ **THIS ASSERTION WAS INVERTED BY `W-B` AND THE INVERSION IS THE POINT, NOT A RELAXATION.**
+    # It read `assert not any(hasattr(e, "observed") for e in ev)` -- *"an Event grew an
+    # `observed` field, that is `W-B` and this item must not have built it"* -- and it was `W-A`'s
+    # guard against building a carrier before its reader exists (`ID-13`). `W-B` is the item that
+    # builds it, and the reader is `belief_contradicts`, which evaluates the same cell against
+    # `LedgerReader`. So the guard is not deleted: it now asserts the field EXISTS and CARRIES THE
+    # SAME READS THE VERDICT DID, which is the property that would break if `W-B` were reverted
+    # halfway -- a field added and never populated is the dead carrier from the other direction.
+    ev = d._fold(w, S.Act(id="wa_t2", actor="p_low", verb="transfer", payload={"subject": "Hh"}))
+    assert all(hasattr(e, "observed") for e in ev), (
+        "an Event lost its `observed` field -- `W-B` attaches the fold's reads to every Event an "
+        "act emits, and a missing field means the carrier was reverted")
+    # ⚠ AND ON THIS ACT BOTH ARE EMPTY, WHICH IS ASSERTED AS A VALUE RATHER THAN LEFT VACUOUS
+    # (§0.1 point 2). `transfer`'s cell is `of: from`, the payload binds only `subject`, so
+    # `ScalarThreshold.check` returns UNKNOWN BEFORE calling `_observe` and nothing is recorded.
+    # Pinning `()` is what would catch a fold that leaked a PREVIOUS act's reads onto this one --
+    # the failure a hoisted `verdict` would produce. The POPULATED case is
+    # `test_wb_the_fold_attaches_the_verdicts_reads_to_every_event_the_act_emits`, which is where
+    # it belongs: this is `W-A`'s test and its subject is the UNKNOWN polarity.
+    assert verdict.observed == (), verdict.observed
+    assert all(e.observed == () for e in ev), (
+        f"the Event carries {[e.observed for e in ev]} for an act whose precondition returned "
+        "UNKNOWN before reading anything. A non-empty tuple here is another act's reads leaking "
+        "through, which is the second resolver §27.2 forbids")
+
+
+def test_wa_work_refuses_for_want_of_a_site_and_that_is_a_polarity_correction():
+    """⚠ THE ONE BEHAVIOUR `W-A` CHANGES IN THE CORPUS, PINNED SO IT IS A MEASUREMENT AND NOT A
+    SURPRISE.
+
+    `_req_work` looked for a Site among the act's declared `changes` and, finding none, returned
+    True. Every COMPUTED act declares no changes, so for the whole corpus its precondition COULD
+    NOT FAIL -- the same shape its own docstring indicts in its predecessor (*"a predicate that
+    cannot fail is not a predicate -- it is a `return True` with a docstring"*), one level in. The
+    typed cell binds `site` from the act's operands; unbound is UNKNOWN and UNKNOWN refuses.
+
+    So `work` leaves the corpus's executed set and joins `move` and `transfer` in the
+    always-refused set, for the identical reason: `H-94`, no operand. That is a REDUCTION in what
+    runs and an INCREASE in what is true, and §0.1 point 4 forbids taking the favourable reading
+    of it either way.
+
+    MUTATION (run 2026-09-04): restore `_req_work`'s trailing `return True` by giving the cell an
+    operand default (`site` bound to any fixture site) -- the operand-less act is admitted again
+    and this test goes RED on the first assertion. Unmutated it is GREEN."""
+    w = P.tiny_world()
+    d = S.SeasonDriver(w)
+    w.step = S.Step.RESOLVE
+    bare = [e.kind for e in d._fold(w, S.Act(id="wa_w0", actor="p_low", verb="work"))]
+    assert bare == ["work.unavailable"], (
+        f"a `work` naming no site emitted {bare}. It cannot have checked a condition against a "
+        "floor, because it was never told whose condition")
+    # AND IT STILL ADMITS A NAMED, WORKABLE SITE -- otherwise the refusal above is not the
+    # polarity rule, it is the verb being broken (§0.1 point 2: the control the first arm needs).
+    ok = [e.kind for e in d._fold(w, S.Act(id="wa_w1", actor="p_low", verb="work",
+                                           payload={"site": "site_harbour"}))]
+    assert ok == ["site.worked"], f"a workable site was refused: {ok}"
+    # AND IT REFUSES A SITE BELOW EVERY FLOOR, which is the failure §12.1's gate exists to
+    # observe and the one `_req_work`'s FIRST version (`condition >= 0`) could not.
+    site = w.sites["site_harbour"]
+    kept, site.condition = site.condition, 0
+    try:
+        dead = [e.kind for e in d._fold(w, S.Act(id="wa_w2", actor="p_low", verb="work",
+                                                 payload={"site": site.id}))]
+        assert dead == ["work.unavailable"], f"a site at condition 0 was worked: {dead}"
+    finally:
+        site.condition = kept
+    # ⚠ AND THE THRESHOLD IS THE LOOSEST FLOOR BY READING, NOT BY CONVENIENCE -- pinned here
+    # because an adversarial pass called it an under-refusal and the answer is a judgement that a
+    # later reader may want to re-open. `work` is the GENERIC labour verb, so `floor(verb)` for a
+    # verb naming no use is the floor of the least demanding use: a seam at 100 cannot be
+    # deep-mined (700) and CAN be surface-gleaned (50). MUTATION, BOTH RUN: `max` turns
+    # `test_w8_...` red on `site_seam` at condition 100, which surface-gleaning supports;
+    # `UNKNOWN` turns `test_w3_...` red because the gate can then never return False at all.
+    seam = w.sites["site_seam"]
+    fl = w.fixtures.get("band_floors").get(seam.kind)
+    assert min(fl.values()) <= seam.condition < max(fl.values()), (
+        "the fixture no longer places `site_seam` between its loosest and strictest floor, so "
+        "this pin no longer discriminates the three readings -- re-choose the site")
+    workable = [e.kind for e in d._fold(w, S.Act(id="wa_w3", actor="p_low", verb="work",
+                                                 payload={"site": seam.id}))]
+    assert workable == ["site.worked"], (
+        f"a seam at condition {seam.condition} was refused ({workable}); surface_gleaning's "
+        f"floor is {min(fl.values())} and the generic verb reads the loosest")
+
+
+# ===========================================================================
+# W-C — OPERANDS ON THE CANDIDATE, DERIVED PERSON-SIDE. `H-94`'s structural half.
+# ===========================================================================
+
+def _wc_corpus_pass():
+    """ONE corpus pass, shared by the two tests that measure it, with executions and refusals
+    attributed BY ACT ID and the TRACE slice the pass produced.
+
+    ⚠ ATTRIBUTION IS BY EMISSION ID, NEVER BY KIND, and that is not caution -- it is a defect this
+    corpus has already published once. `forge` and `create_record` BOTH emit `record.created`, so
+    a scan over `{e.kind for e in w.log}` credited `forge` with every record `create_record` made,
+    while `forge` has no predicate and no effect and cannot execute at all. The fold derives every
+    emission id as `H(seed, tick, actor, f"{kind}:{act.id}")`, so re-deriving it names the act.
+
+    One owner because two tests need the same run and a second copy would let them measure
+    different corpora; cached because the pass is the slowest thing either of them does."""
+    import corpus_run as C
+    import run_cases as R
+    if getattr(_wc_corpus_pass, "_memo", None) is not None:
+        return _wc_corpus_pass._memo
+    from collections import Counter
+    first = len(S.TRACE.rows)
+    executed, refused, holes, endpoints = Counter(), Counter(), [], Counter()
+    for case in [c for lane in ("NPC", "ARC") for c in R.load_cases(lane)]:
+        case = C.apply_rescale(case)
+        if str(case.get("scale")) not in set(S.RUNG_KINDS):
+            continue
+        n = C.seasons_for(case)
+        w = C.build_at(case, 0)
+        d = S.SeasonDriver(w)
+        mint = (lambda ww: lambda pid, verb, subj:
+                S.H(ww.world_seed, ww.tick, pid, f"act:{verb}:{subj}"))(w)
+        ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs())
+        for _ in range(n):
+            d.season(ch, question=None, subsistence=P.SUBSIST,
+                     contest_max_depth=w.fixtures.get("contest_max_depth"))
+        ids = {e.id for e in w.log}
+        for a in d.resolved:
+            row = S.VERB_TABLE.get(a.verb)
+            if row is None:
+                continue
+            if a.verb == "transfer":
+                pay = a.payload or {}
+                endpoints["self" if pay.get("from") == pay.get("to") else "across"] += 1
+            for t in range(n + 1):
+                for k in (row.emits or ()):
+                    if S.H(w.world_seed, t, a.actor, f"{k}:{a.id}") in ids:
+                        executed[a.verb] += 1
+                for k in (row.emits_on_refusal or ()):
+                    if S.H(w.world_seed, t, a.actor, f"{k}:{a.id}") not in ids:
+                        continue
+                    refused[a.verb] += 1
+                    req = row.requires_typed
+                    if req is None:
+                        continue
+                    b = S.binding_from_act(a)
+                    missing = [o for o in req.operands() if b.get(o) is None]
+                    if missing:
+                        holes.append((case["id"], a.verb, missing))
+    notes = [r for r in S.TRACE.rows[first:] if r.channel == "NOTE" and "H-94" in r.what]
+    _wc_corpus_pass._memo = (executed, refused, holes, notes, endpoints)
+    return _wc_corpus_pass._memo
+
+
+def test_wc_no_corpus_refusal_arises_from_a_missing_operand():
+    """`W-C`'s FIRST PROOF: **zero** of the corpus's refusals is caused by an operand the act
+    could not carry.
+
+    That number was the whole of `H-94`. `transfer` was *"attempted and refused in every world in
+    the corpus"* because `stores(hearth(giver), kind) >= amount` had no `from`, no `kind` and no
+    `amount` that any part of the pipeline could carry, so the fold read UNKNOWN and refused --
+    a refusal about the INSTRUMENT wearing the shape of a refusal about the world. Once `W-B`
+    deposits a Verdict's reads at WITNESS, every such refusal becomes a FALSE BELIEF, which is why
+    the fix is `operands_for` returning `None` (no Candidate at all) rather than a better default.
+
+    ⚠ THE SCAN MUST BE NON-VACUOUS AND THAT IS ASSERTED, not assumed (§0.1 point 2): a corpus with
+    no refusals in it would pass this trivially, and `work` alone refuses 723 times.
+
+    MUTATIONS, BOTH RUN 2026-09-04, and they fire on the two DIFFERENT assertions below, which is
+    the point of running both.
+      * `_derive_operand` returns `None` for `"from"` -- a person cannot name their own hearth
+        again. Every `transfer` Candidate then DECLINES: this test goes RED on the second
+        assertion with `723 Candidates declined`, and
+        `test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this` goes red
+        beside it with `transfer executed ZERO times`.
+      * the same, PLUS dropping `operands_for`'s `if v is None: ... return None` guard. The
+        Candidate now forms with `from` absent, the act is minted with a hole, the fold reads
+        UNKNOWN and refuses: this test goes RED on the FIRST assertion with
+        `723 refusals arose from an operand the act does not carry`.
+    Unmutated it is GREEN."""
+    executed, refused, holes, notes, _ends = _wc_corpus_pass()
+    assert sum(refused.values()) > 0, (
+        "the corpus produced NO refusals at all, so this scan cannot observe an operand-caused "
+        "one -- the pass is broken, not the claim")
+    assert not holes, (
+        f"{len(holes)} refusals arose from an operand the act does not carry, e.g. {holes[:5]}. "
+        "That is `H-94` re-opened: the fold read UNKNOWN because the person could not say what "
+        "the act was about, and `W-B` will deposit that refusal as a belief")
+    # AND THE DECLINE CHANNEL IS COUNTED RATHER THAN INFERRED FROM AN ABSENCE. A Candidate that
+    # cannot bind its operands is not formed, and `operands_for` traces every one; in this corpus
+    # the count is zero because `build_at` seats every person on the ladder, so every person has a
+    # hearth. The number is printed rather than asserted at zero: a corpus that legitimately
+    # contains a person with nowhere to give from would be a finding, not a regression.
+    assert len(notes) == 0, (
+        f"{len(notes)} Candidates declined for want of an operand: "
+        f"{sorted({r.what[:70] for r in notes})}. Every corpus person is seated on the ladder by "
+        "`build_at`, so a decline here means the world builder changed")
+
+
+def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this():
+    """`W-C`'s SECOND PROOF: `transfer` -- the verb `H-94` was named for -- EXECUTES.
+
+    Before this item the corpus executed FOUR verbs (`create_record`, `speak`, `tell`, `utter`)
+    and attempted-and-always-refused THREE (`move`, `transfer`, `work`). It now executes SIX and
+    refuses one. Measured 2026-09-04, attributed by act id: `transfer` 702 executions against 21
+    refusals, `move` 650 against 73, and `work` 723 refusals with no execution.
+
+    ⚠ `work` IS THE ONE THAT DID NOT MOVE, AND ITS REASON CHANGED EVEN THOUGH ITS COUNT DID NOT.
+    Its `site` IS bound now -- to the question's referent, the only thing a person can name from
+    their own state -- and no referent this corpus produces is a Site (`questions_for` yields
+    claim subjects, matter ids, band names and Proposition subjects), so `condition` reads UNKNOWN
+    and the fold refuses. That is a fact about these worlds, not about the operand channel, and
+    reporting it as "unchanged" would hide the difference.
+
+    ⚠ AND "EXECUTES" IS NOT AUTOMATICALLY "MOVES MATTER", so both shapes are counted below. 650
+    of the 723 transfers are SELF-transfers -- the giver's hearth and the question's referent are
+    the same rung, so the net movement is zero -- and 73 cross rungs. ⚠ THE FIRST WRITING OF THIS
+    PARAGRAPH SAID *EVERY* TRANSFER WAS A SELF-TRANSFER AND WAS WRONG: it generalised from one
+    sampled case, and the assertion below caught it. Recorded rather than quietly corrected,
+    because the mistake is §0.1 point 4's exactly -- a number read off one arm and reported as
+    the result.
+
+    ⚠ AND THE SWEEP IS NOT INERT AT THE CORPUS LEVEL EITHER, measured the same way: the corpus's
+    89 world hashes digest to `9440e0cf48f9f8be` / `3e308adbf30772c4` / `e9ff344d04ab006d` at
+    amount 0 / 1 / 3, while the executed and refused COUNTS are identical at all three (the
+    amounts never cross a scarcity threshold -- a hearth holds tens of units) and the total store
+    mass is conserved at 29,233 in every arm. So the amount moves the WORLD and not the DECISION,
+    and matter is neither created nor destroyed by the two-sided write.
+
+    ⚠ AND THE COUNTS ARE ASSERTED AS SETS, NOT AS TOTALS. The per-verb totals move with the
+    corpus's season counts and are recorded in the docstring as a measurement; pinning them here
+    would make this test fail on a corpus edit that changes nothing about `H-94`.
+
+    MUTATION (run 2026-09-04): delete `_REFERENT_OPERANDS` from `operands_for`'s carry set, so a
+    Candidate carries only what its own cell binds. `transfer`'s cell names `from`/`kind`/`amount`
+    and NOT `to` -- §E3 declares the receiver in the WRITE column (`Rung.stores` twice), not in
+    the precondition -- so every minted `transfer` reaches `_eff_transfer` without a receiver and
+    raises `InstrumentDefect`. This test goes RED (the corpus pass raises). Unmutated it is
+    GREEN."""
+    executed, refused, _holes, _notes, endpoints = _wc_corpus_pass()
+    assert executed["transfer"] > 0, (
+        "`transfer` executed ZERO times. It is the verb `H-94` names, and the row's whole claim "
+        "is that a person can now say which store, how much, and to whom")
+    assert set(executed) == {"create_record", "move", "speak", "tell", "transfer", "utter"}, (
+        f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement and any "
+        "movement is a fresh one, not a re-reading of this one")
+    assert set(refused) - set(executed) == {"work"}, (
+        f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses "
+        "because no referent in this corpus is a Site, which is a fact about the worlds")
+    # ⚠ AND THE HONEST READING OF "IT EXECUTES", MEASURED RATHER THAN ASSUMED — and the first
+    # writing of this arm ASSUMED, from one sampled case, that every corpus transfer was a
+    # SELF-transfer, and was wrong. Measured over the whole corpus: 650 of 723 have `from == to`
+    # and 73 cross rungs. The self ones are net-zero — `from` is the actor's own hearth and `to`
+    # is the question's referent, and most questions these worlds raise are ABOUT that same
+    # hearth (`questions_for` Q2 deposits claims whose subject is the containing rung, and
+    # `question_aggregation_rule="first"` picks one of them). A transfer to yourself is
+    # well-formed, binds, runs and emits; inventing a rule against it would be a precondition
+    # §27.2 does not license and `L1` forbids, so it is reported, not forbidden.
+    assert endpoints["self"] > 0 and endpoints["across"] > 0, (
+        f"the corpus's transfer endpoints are {dict(endpoints)}. BOTH shapes have to be present "
+        "for this corpus to be evidence about the operand channel: all-self would mean no matter "
+        "ever crosses a rung, and all-across would mean the questions changed")
+
+
+def test_wc_the_amount_sweep_runs_all_three_points_and_zero_spends_nothing():
+    """`H-94`'s SWEEP, ALL THREE POINTS EXECUTED. `default_transfer_amount` over `[0, 1, 3]`, with
+    **0 as the control**: nothing is spent, so scarcity never binds.
+
+    §G's declare · default · sweep is what makes an invented number lawful, and §0.1 point 4 is
+    what makes a DECLARED sweep worthless unless it is RUN -- *"a sweep arm that is declared and
+    not executed is laundering"*. So all three arms fold a real `transfer` minted through
+    `pack_scenes` from a real Candidate, and the store VALUES are read on both sides.
+
+    WHAT THE SWEEP SAYS, and it is two findings rather than one:
+      * THE STORES MOVE WITH IT, exactly: at 1 the giver falls by 1 and the receiver rises by 1;
+        at 3, by 3. So `_eff_transfer` rests entirely on this fixture.
+      * THE EMISSION DOES NOT. `transfer.made` at all three points, including 0 -- where the
+        precondition `stores >= 0` admits every giver and the effect changes no value. A verdict
+        that does not flip across a sweep is itself a finding (§42.2.1), and this one is: the
+        fold's *"an effect that touched nothing must not emit the success"* guard watches the IDS
+        an effect returns, not the values it changed, so a transfer of nothing publishes a
+        success. Recorded rather than fixed here -- the guard's polarity is the fold's business
+        and the default is 1, so this is the control arm reporting what a control arm is for.
+
+    MUTATION (run 2026-09-04): make `_derive_operand` return the literal `1` for `"amount"`
+    instead of `fx.get("default_transfer_amount")` -- the fixture stops reaching the derivation,
+    all three arms move the same single unit, and this goes RED on the 0 arm (`moved` is
+    non-empty) and on the 3 arm (delta 1, not 3). Unmutated it is GREEN. That mutation is exactly
+    the laundering the sweep exists to exclude: a declared sweep point that the code cannot see."""
+    seen = {}
+    for amount in (0, 1, 3):
+        fx = S.DEFAULT_FIXTURES.sweep("default_transfer_amount", amount)
+        w = P.tiny_world(fx)
+        p = w.persons["p_low"]
+        q = S.Question("q:wc_sweep", "need", ("S",))
+        v = S.View(p.id, [], w.fixtures.get("view_k"), q)
+        c = next((c for c in S.Query.opening_set(p, v, q, w.fixtures) if c.verb == "transfer"),
+                 None)
+        assert c is not None, f"no `transfer` Candidate at amount={amount}"
+        assert c.operands.get("amount") == amount, (
+            f"the Candidate carries amount={c.operands.get('amount')!r} at sweep point {amount} "
+            "-- the fixture is not reaching the derivation and the sweep would be laundering")
+        mint = lambda pid, verb, subj: f"wc:{amount}:{verb}"
+        acts = [a for sc in S.pack_scenes(p, [c], 5, w.fixtures, mint, occasion=q)
+                for a in sc.acts]
+        assert len(acts) == 1, acts
+        before = {r: dict(w.rungs[r].stores or {}) for r in w.rungs}
+        d = S.SeasonDriver(w)
+        w.step = S.Step.RESOLVE
+        kinds = [e.kind for e in d._fold(w, acts[0])]
+        after = {r: dict(w.rungs[r].stores or {}) for r in w.rungs}
+        # ⚠ ZERO-VALUED KEYS ARE NOT MOVEMENT, AND THIS ARM WAS COUPLED TO THE KIND FIXTURE UNTIL
+        # THE `W-C` ADVERSARIAL PASS. At `amount=0` the effect still runs
+        # `src.stores[kind] = src.stores.get(kind, 0) - 0`, which INSERTS the key when the rung
+        # does not hold it -- so a raw `before[r] != after[r]` reports "the stores moved" for a
+        # dict that gained a zero. It passed only because `tiny_world` happens to stock `grain`,
+        # i.e. this control arm would have reddened for a reason unrelated to spending the moment
+        # `default_store_kind` was swept (which it now is, one test down).
+        norm = lambda st: {k: v for k, v in st.items() if v}
+        moved = {r: (before[r].get(c.operands["kind"]), after[r].get(c.operands["kind"]))
+                 for r in w.rungs if norm(before[r]) != norm(after[r])}
+        seen[amount] = (kinds, moved)
+    # THE CONTROL, RUN: at 0 nothing is spent and no store value moves at all.
+    assert seen[0][1] == {}, (
+        f"at `default_transfer_amount=0` the stores moved: {seen[0][1]}. The control arm is "
+        "supposed to spend nothing, so a transfer that moves matter at 0 means the amount is "
+        "coming from somewhere other than the fixture")
+    # AND THE TWO LIVE ARMS MOVE BY EXACTLY THE FIXTURE'S VALUE, in both directions.
+    for amount in (1, 3):
+        moved = seen[amount][1]
+        assert moved.get("Hh") == (8, 8 - amount) and moved.get("S") == (40, 40 + amount), (
+            f"at amount={amount} the stores moved {moved}; §E3 gives `transfer` TWO "
+            "`Rung.stores` writes, one per side, and they must be equal and opposite")
+    # AND THE EMISSION IS INVARIANT ACROSS THE SWEEP -- the second finding, pinned so it is a
+    # measurement rather than a surprise the next reader has to re-derive.
+    assert {a: k for a, (k, _m) in seen.items()} == {0: ["transfer.made"], 1: ["transfer.made"],
+                                                     3: ["transfer.made"]}, seen
+
+
+def test_wc_the_store_kind_sweep_runs_all_three_arms_and_an_unstocked_kind_refuses():
+    """`H-121`'s SWEEP, ALL THREE ARMS EXECUTED — AND THE FIXTURE THIS SWEEPS WAS UNSWEPT, WHILE
+    ITS OWN COMMENT SAID IT WAS SWEPT. Added by the `W-C` adversarial pass.
+
+    `default_store_kind` shipped as `default_store_kind="grain",  # H-94, swept with the amount
+    below` and **nothing swept it**: every `.sweep(...)` in the instrument named
+    `default_transfer_amount`, and `H-94`'s `sweep: [0, 1, 3]` are INTEGERS, which cannot be arms
+    for a matter kind. One `sweep:` field was carrying two declared fixtures, and
+    `register.rule_R2` counts points on a ROW — it cannot see that the row declares two fixtures
+    and sweeps one. So R2 was green on an unswept default, which is exactly the laundering R2
+    exists to stop.
+
+    ⚠ AND THE POLARITY WAS INVERTED, WHICH IS THE WORSE HALF. `H-94` records that the SWEPT
+    fixture is decision-inert — executed and refused counts identical at 0 / 1 / 3 across the
+    corpus. The UNSWEPT one is decision-LIVE: `WorldReader.read` returns **0, not UNKNOWN**, for a
+    kind a rung does not hold, so `0 >= amount` is False and the transfer REFUSES.
+
+    THE THREE ARMS, and the third is the control because it is the only one that can flip the
+    verdict:
+      * `grain` — the default, stocked in the fixture hearth.
+      * `salt`  — a SECOND stocked kind. This arm is what proves the fixture reaches the effect
+        rather than the effect always moving grain: the store that moves is the one the fixture
+        names.
+      * `coin`  — registered in `rosters.yaml: matter_kinds`, produced by no site in
+        `tables.site_yield` and held by no rung. THE CONTROL.
+
+    MEASURED 2026-09-04 AT BOTH LEVELS. At the fold, below: `grain` and `salt` emit
+    `transfer.made` and move their own store ±1 per side; `coin` emits `transfer.refused` and
+    moves nothing. Across all 89 runnable corpus worlds: `transfer` executes 702 / refuses 21 at
+    `grain` AND at `salt` (both are stocked in those worlds, so they are indistinguishable there)
+    and **0 / 723 at `coin`, where `transfer` leaves the executed set entirely — 6 verbs to 5**.
+    So the corpus's 702-execution headline does rest on this value, and total store mass is
+    conserved at 29,233 in every arm.
+
+    MUTATION (run 2026-09-04): make `_derive_operand` return the literal `"grain"` for `"kind"`
+    instead of `store_kind_of(p, q) or fx.get("default_store_kind")` — the fixture stops reaching
+    the derivation, all three arms move grain, and this goes RED on the `salt` arm and on the
+    `coin` arm. Unmutated it is GREEN. That is precisely the laundering a declared-but-unrun
+    sweep permits."""
+    seen = {}
+    for kind in ("grain", "salt", "coin"):
+        fx = S.DEFAULT_FIXTURES.sweep("default_store_kind", kind)
+        w = P.tiny_world(fx)
+        # A SECOND STOCKED KIND, so the two live arms are distinguishable. Without it `salt` and
+        # `coin` would both refuse and the sweep would have two arms wearing three names.
+        w.rungs["Hh"].stores = dict(w.rungs["Hh"].stores or {}, salt=5)
+        p = w.persons["p_low"]
+        q = S.Question("q:wc_kind_sweep", "need", ("S",))
+        v = S.View(p.id, [], w.fixtures.get("view_k"), q)
+        c = next((c for c in S.Query.opening_set(p, v, q, w.fixtures) if c.verb == "transfer"),
+                 None)
+        assert c is not None, f"no `transfer` Candidate at kind={kind}"
+        assert c.operands.get("kind") == kind, (
+            f"the Candidate carries kind={c.operands.get('kind')!r} at sweep point {kind!r} -- "
+            "the fixture is not reaching the derivation and the sweep would be laundering")
+        mint = lambda pid, verb, subj: f"wc:kind:{kind}:{verb}"
+        acts = [a for sc in S.pack_scenes(p, [c], 5, w.fixtures, mint, occasion=q)
+                for a in sc.acts]
+        assert len(acts) == 1, acts
+        norm = lambda st: {k: val for k, val in st.items() if val}
+        before = {r: dict(w.rungs[r].stores or {}) for r in w.rungs}
+        d = S.SeasonDriver(w)
+        w.step = S.Step.RESOLVE
+        emitted = [e.kind for e in d._fold(w, acts[0])]
+        after = {r: dict(w.rungs[r].stores or {}) for r in w.rungs}
+        moved = {r: (before[r].get(kind), after[r].get(kind))
+                 for r in w.rungs if norm(before[r]) != norm(after[r])}
+        seen[kind] = (emitted, moved)
+
+    # THE TWO STOCKED ARMS EXECUTE, AND EACH MOVES ITS OWN KIND -- one per side, equal and
+    # opposite, which is §E3's two `(Rung, stores)` writes.
+    for kind, held, at_S in (("grain", 8, 40), ("salt", 5, None)):
+        emitted, moved = seen[kind]
+        assert emitted == ["transfer.made"], f"kind={kind} emitted {emitted}"
+        assert moved.get("Hh") == (held, held - 1), (
+            f"at kind={kind!r} the giver's store went {moved.get('Hh')}, expected "
+            f"{held} -> {held - 1}. The fixture names the store that moves, so a different one "
+            "moving means the kind is coming from somewhere other than the fixture")
+        assert moved.get("S") == (at_S, (at_S or 0) + 1), (
+            f"at kind={kind!r} the receiver's store went {moved.get('S')}, expected "
+            f"{at_S} -> {(at_S or 0) + 1}. §E3 gives `transfer` TWO `(Rung, stores)` writes, one "
+            "per side, and they must be equal and opposite in the kind the act names")
+
+    # THE CONTROL, RUN: a registered matter kind nobody stocks REFUSES, and moves nothing at all.
+    # This is the arm that flips the verdict, and §42.2.1 says a verdict that flips across a
+    # sweep is ITSELF a finding -- so it is stated in the docstring as a measurement rather than
+    # left as a passing assertion.
+    assert seen["coin"] == (["transfer.refused"], {}), (
+        f"at kind='coin' the fold emitted {seen['coin'][0]} and moved {seen['coin'][1]}. `coin` "
+        "is on `matter_kinds`, is produced by no site and is held by no rung, so "
+        "`stores(from, coin)` reads 0 and `0 >= 1` is False -- an execution here means the "
+        "scarcity predicate stopped reading the kind the act carries")
+    # AND THE SWEEP IS NOT THREE NAMES FOR ONE ARM (§0.1 point 2 / R2's DISTINCT-points rule).
+    assert len({str(v) for v in seen.values()}) == 3, (
+        f"the three arms produced {len({str(v) for v in seen.values()})} distinct outcomes: "
+        f"{seen}. A sweep whose arms cannot differ reports 'no verdict flipped' truthfully and "
+        "meaninglessly")
+
+
+def test_wc_a_candidate_declines_when_its_hearth_cannot_be_derived():
+    """THE RULE THAT MAKES THE OPERAND CHANNEL SAFE: a form whose operands cannot all be bound
+    forms **NO Candidate**.
+
+    §54 item 7's `hearth(giver)` is the object of the actor's own live `contain` Tenure. A person
+    with none is nowhere, and a person who is nowhere cannot give from a store -- so `transfer`
+    is not offered to them at all. The alternative is to mint the act anyway and let the fold
+    refuse it, which is precisely what must not happen: that refusal is about the INSTRUMENT, and
+    `W-B` will deposit it at WITNESS as a belief about a granary nobody named.
+
+    ⚠ THE CONTROL IS THE SECOND ASSERTION AND IT IS NOT OPTIONAL (§0.1 point 4). A derivation that
+    declined EVERYTHING would satisfy the first clause and mean nothing, so exactly one Candidate
+    must leave the set: `transfer` is the only cell in the grammar that binds `from`.
+
+    MUTATION (run 2026-09-04): change `operands_for`'s `if v is None: ... return None` to
+    `out[name] = v` -- the Candidate forms with `from` unbound, `transfer x S` stays in the option
+    set, and this goes RED on the first assertion. Unmutated it is GREEN. The same mutation is
+    what turns `test_wc_no_corpus_refusal_arises_from_a_missing_operand` red, from the other
+    end."""
+    w = P.tiny_world()
+    p = w.persons["p_low"]
+    q = S.Question("q:wc_decline", "need", ("S",))
+    v = S.View(p.id, [], w.fixtures.get("view_k"), q)
+    base = {(c.verb, c.subject) for c in S.Query.opening_set(p, v, q, w.fixtures)}
+    assert ("transfer", "S") in base, (
+        "`transfer x S` was never offered, so removing it proves nothing")
+    assert S.containing_rung_of(p) == "Hh", (
+        f"the fixture person sits in {S.containing_rung_of(p)!r}; this test needs a containment "
+        "to take away")
+
+    first = len(S.TRACE.rows)
+    for t in p.tenures:                      # they are nowhere: every containment closed
+        if t.kind == "contain" and t.live:
+            t.until = w.tick
+    assert S.containing_rung_of(p) is None
+    after = {(c.verb, c.subject) for c in S.Query.opening_set(p, v, q, w.fixtures)}
+
+    assert ("transfer", "S") not in after, (
+        "a person with no live containment was still offered `transfer`. `hearth(giver)` has "
+        "nothing to bind to, so the act would be minted with a hole")
+    assert base - after == {("transfer", "S")}, (
+        f"the decline removed {sorted(base - after)} -- more than the one Candidate whose "
+        "operands it cannot bind. A derivation that declines everything is not a derivation")
+    notes = [r for r in S.TRACE.rows[first:] if r.channel == "NOTE" and "H-94" in r.what]
+    assert notes and all("'from'" in r.what for r in notes), (
+        f"the decline was silent, or named the wrong operand: {[r.what for r in notes]}. "
+        "`TRACE.note` is what makes a decline COUNTABLE rather than inferred from an absence")
+
+
+def test_wc_the_fold_binds_what_the_person_bound():
+    """THE DIVERGENCE `W-C` EXISTS TO CLOSE, ASSERTED AS AN EQUALITY.
+
+    There were two binding functions and they were two different decisions. `binding_from_act`
+    did a LITERAL key match on the payload; `binding_from` REBOUND the Candidate's `subject` onto
+    whatever the requirement called its entity operand -- `from` for `transfer`, `to` for `move`,
+    `site` for `restore`. So the person could evaluate a cell the fold structurally could not, and
+    worse, could evaluate a DIFFERENT cell: §54 item 7 asks about the GIVER's hearth and the
+    person was asking about the receiver's.
+
+    Both sides go through `binding_of` now, over the same bag of operands, so the two differ only
+    in WHAT THEY READ (one ledger, one world) and in POLARITY (UNKNOWN refuses in the fold and
+    does not contradict for the person). This walks every typed verb the person can reach and
+    asserts the fold's binding of the minted act EQUALS the person's binding of the Candidate it
+    came from.
+
+    MUTATION (run 2026-09-04): make `_payload_of` return `{"subject": c.subject}` -- the old
+    behaviour -- and the two bindings diverge for every verb whose cell names an operand other
+    than `subject`; this goes RED on `move` first, with the fold missing `to`. Unmutated it is
+    GREEN."""
+    w = P.tiny_world()
+    p = w.persons["p_low"]
+    q = S.Question("q:wc_agree", "need", ("S", "Hh"))
+    v = S.View(p.id, [], w.fixtures.get("view_k"), q)
+    # ⚠ THE WALK IS OVER TYPED VERBS AND THE SCOPE IS DECLARED RATHER THAN HIDDEN. An UNTYPED
+    # verb's two bindings DO differ -- the person's is `{actor}` and the fold's is
+    # `{actor, subject}`, because `_payload_of` always writes the subject and an untyped verb
+    # carries no operands -- and the difference has NO READER.
+    # ⚠ THE REASON GIVEN FOR THAT WAS WRONG AND IS CORRECTED BY THE `W-C` ADVERSARIAL PASS. It
+    # read *"`evaluate(None, ...)` returns UNKNOWN whatever it is handed, at both sites"*. The
+    # fold does not call `evaluate` for an untyped verb AT ALL: `_fold` branches on
+    # `requires_typed is None` to `REQUIRES_PREDICATES` and calls `pred(w, a)`, which reads the
+    # payload directly. The true statement is stronger -- FOR AN UNTYPED VERB THE FOLD BUILDS NO
+    # BINDING, so there is nothing for the divergence to be read by -- and it is asserted below
+    # rather than argued, because the old reason was an argument nobody could check.
+    all_typed = {vb for vb, r in S.VERB_TABLE.items() if r.requires_typed is not None}
+    # THE DECLARED EXCLUSION LIST, EMPTY TODAY AND NAMED SO IT CANNOT GROW SILENTLY. A typed verb
+    # belongs here only when something OTHER than this equality keeps it out of a person's option
+    # set -- `person_side_eligible` declining its only `eligibility:` alternative, say. The walk
+    # covers 9 of 9 as measured 2026-09-04, and the previous floor (`>= 5`) let four typed verbs
+    # drop out of the option set while this test stayed green and the claim "walked over every
+    # typed verb" stayed published.
+    WALK_EXCLUDES: frozenset = frozenset()
+    cands = [c for c in S.Query.opening_set(p, v, q, w.fixtures)
+             if S.VERB_TABLE[c.verb].requires_typed is not None]
+    assert {c.verb for c in cands} == all_typed - WALK_EXCLUDES, (
+        f"the walk reached {sorted({c.verb for c in cands})} and the grammar's typed verbs are "
+        f"{sorted(all_typed - WALK_EXCLUDES)}. This equality is what licenses the sentence "
+        "'walked over every typed verb'; a verb that legitimately cannot be reached goes in "
+        "`WALK_EXCLUDES` with its reason, and is not dropped by lowering a floor")
+    mint = lambda pid, verb, subj: f"wc:agree:{verb}:{subj}"
+    checked = 0
+    for c in cands:
+        act = [a for sc in S.pack_scenes(p, [c], 5, w.fixtures, mint, occasion=q)
+               for a in sc.acts][0]
+        person = S.binding_of(p.id, c.operands)
+        fold = S.binding_from_act(act)
+        assert person == fold, (
+            f"{c.verb} x {c.subject}: the person bound {person} and the fold binds {fold}. One "
+            "declaration read twice must be ONE binding read twice")
+        # AND THE BINDING IS NOT VACUOUSLY EQUAL: every operand the cell names is actually there.
+        for o in S.VERB_TABLE[c.verb].requires_typed.operands():
+            assert fold.get(o) is not None, (
+                f"{c.verb} x {c.subject}: the cell binds {o!r} and the act carries nothing for "
+                "it -- the two agree only because both are empty")
+            checked += 1
+    assert checked >= 10, f"only {checked} operands were exercised; the walk proves too little"
+
+    # ⚠ AND THE UNTYPED HALF OF THE SCOPE NOTE, ASSERTED AGAINST THE FOLD'S OWN SOURCE. The claim
+    # is that the fold builds NO BINDING for an untyped verb, and what makes it true is that
+    # `_fold`'s single `evaluate(...)` call sits INSIDE the `requires_typed is not None` branch --
+    # the untyped path reaches `REQUIRES_PREDICATES` or raises, and neither constructs a binding.
+    # Move that call out of the branch and the `{actor}` vs `{actor, subject}` divergence acquires
+    # a reader while this test's scope note silently stops covering it, so the structure is what
+    # is pinned rather than a sentence about it.
+    import ast as _ast
+    _fold_fn = next(n for n in _ast.walk(_ast.parse((HERE / "shape.py").read_text()))
+                    if isinstance(n, _ast.FunctionDef) and n.name == "_fold")
+    _calls = [n for n in _ast.walk(_fold_fn)
+              if isinstance(n, _ast.Call) and getattr(n.func, "id", "") == "evaluate"]
+    # ASSERT THAT IT ASSERTED: zero calls would satisfy every clause below and observe nothing.
+    assert len(_calls) == 1, (
+        f"`_fold` makes {len(_calls)} `evaluate(...)` calls; this scope note is written for "
+        "exactly one, guarded by the typed branch")
+    _guarded = [n for n in _ast.walk(_fold_fn)
+                if isinstance(n, _ast.If) and "requires_typed" in _ast.unparse(n.test)
+                and any(c is _calls[0] for b in n.body for c in _ast.walk(b))]
+    assert _guarded, (
+        "`_fold` calls `evaluate(...)` outside its `requires_typed is not None` branch, so an "
+        "UNTYPED verb now reaches `evaluate` with a binding. The person's binding is `{actor}` "
+        "and the fold's is `{actor, subject}`; that divergence just acquired a reader, and this "
+        "test excludes untyped verbs from its equality on the grounds that it has none")
+
+
+def test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_eff_kill():
+    """§0.05 IN THE ONE PLACE IT KEPT BEING BROKEN: no operand may be defaulted in a body.
+
+    ⚠ THIS TEST WAS CALLED `test_wc_no_operand_carries_a_silent_default_outside_eff_kill` AND THE
+    NAME CLAIMED MORE THAN THE BODY CHECKS. Renamed by the `W-C` adversarial pass, and the scope
+    is now in the name rather than buried four paragraphs down. WHAT IT COVERS, exactly: the
+    `.get("<operand>", <default>)` and `.setdefault("<operand>", <default>)` spellings, over the
+    eight names in `rosters.yaml: requires_operands` plus `harm`, IN `shape.py` ONLY.
+    WHAT IT DOES NOT COVER, and each is spellable around it today:
+      * `d.get("kind") or "grain"` -- DELIBERATE, see the paragraph below, and live and correct
+        in `_eff_create_record`/`_eff_utter` over payload keys that are not operands;
+      * `{"kind": "grain", **d}`, and `k = d.get("kind")` followed by an `if k is None`;
+      * `.get(name, dflt)` where `name` is a VARIABLE rather than a literal;
+      * anything in `probes.py`, `corpus_run.py` or any other module -- a probe writing a literal
+        payload is an author naming an act, not a body inventing an operand, so widening the scan
+        to them would redden correct code, which `G4` weighs equally with an invention.
+    The residual hazard is therefore real and named: this is ONE FAMILY OF SPELLINGS IN ONE FILE,
+    and the collision it cannot see is asserted directly, at the bottom of this test.
+
+    `_eff_transfer` read `give.get("from", "")`, `give.get("to", "")`, `give.get("kind", "grain")`
+    and `give.get("amount", 1)`, so an act naming NOTHING was a well-formed transfer of one grain
+    from nowhere to nowhere. Every one is deleted: they are `_operand` reads, which RAISE, and the
+    two open values are fixtures with a register row and a three-point sweep (`H-94`).
+
+    ⚠ `_eff_kill`'s `harm` IS EXEMPT AND THE EXEMPTION IS NAMED, NOT INFERRED. `harm` is not in
+    `rosters.yaml: requires_operands`, so no cell can bind it, `operands_for` cannot derive it, and
+    there is no route by which a computed act could carry one. Deleting its default without that
+    route would make `kill / wound` raise on every act the loop produces. `W-E` owns it -- and it
+    is not innocent, because the default is `p.body`, i.e. an act that names no harm KILLS.
+
+    ⚠ THE SCANNED NAMES COME FROM THE ROSTER, so a ninth operand is covered the day it is added
+    (`G2` -- forbid the shape, never enumerate the words). And the scan is deliberately narrow: it
+    catches `.get(name, default)` and `.setdefault(name, default)` and not `.get(name) or
+    fallback`. The last form survives in `_eff_create_record` (`d.get("kind") or "text"`) and
+    `_eff_utter`, over payload keys that are NOT operands -- a Record's kind is not a matter kind
+    -- and widening the regex would redden correct code, which `G4` weighs equally with an
+    invention. The genuine hazard in that collision is asserted directly below instead.
+
+    ⚠ AND THE COVERAGE CLAIM IS ITSELF CHECKED, ON PLANTS, because a regex that quietly stopped
+    matching would make this assertion absent rather than weak (§0.1 point 2) -- and because the
+    scan reports its own scope, so the scope had better be true. `setdefault` has no live hit, so
+    without a plant that half of the pattern would ship untested.
+
+    MUTATION (run 2026-09-04): restore `give.get("kind", "grain")` in `_eff_transfer` and this
+    goes RED naming that line. Unmutated it is GREEN. Second mutation, for the second arm: make
+    `operands_for` return the derived operands for an UNTYPED verb instead of `{}` -- a
+    `create_record` then carries `kind="grain"`, every record made by the loop becomes a record of
+    grain, and the second assertion goes RED. Both run."""
+    import re as _re
+    src = (HERE / "shape.py").read_text()
+    names = "|".join(sorted(_re.escape(o) for o in S.REQUIRES_OPERANDS) + ["harm"])
+    pattern = _re.compile(r'\.(?:get|setdefault)\(\s*["\'](' + names + r')["\']\s*,')
+    # ⚠ THE ATTRIBUTION MATCHED A COLUMN-0 `def` ONLY, so a default inside a METHOD was reported
+    # against the previous top-level function -- a true violation named at the wrong site, which
+    # is how a reader dismisses it. Nearest preceding `def` at ANY indentation now.
+    heads = [(m2.start(), m2.group(1))
+             for m2 in _re.finditer(r"^[ \t]*def[ \t]+(\w+)", src, _re.M)]
+    def _enclosing(pos: int) -> str:
+        return next((n for start, n in reversed(heads) if start < pos), "<module>")
+    # THE DECLARED CARVE-OUTS, both `(operand, function)` and both with their reason. A carve-out
+    # that stops matching anything is asserted below, so a stale one cannot sit here hiding a
+    # widening.
+    EXEMPT = {
+        # ⚠ `("harm", "_eff_kill")` STOOD HERE UNTIL 2026-09-04 AND IS RETIRED WITH ITS SUBJECT,
+        # NOT WIDENED. `W-E` deleted the default: the severity of a wound is now READ off the
+        # personal-combat scene (`Resolution.result["wound_state"]`) under a swept fixture
+        # (`wound_harm_model`, `H-125`), so nothing in `_eff_kill` defaults an operand any more
+        # and the carve-out had nothing left to license.
+        # ⚠ AND IT ALMOST SURVIVED ON A DOCSTRING. `W-E`'s first rewrite of `_eff_kill` QUOTED the
+        # deleted line verbatim while explaining it; this scan reads raw source, so the carve-out
+        # went on matching, `used == EXEMPT` stayed green, and an open licence on the name `harm`
+        # would have shipped inside the commit that closed it. That is precisely the staleness the
+        # `used == EXEMPT` assertion below was written to catch, and it caught it -- the fix was to
+        # stop quoting the spelling, which `_eff_kill`'s docstring now says in terms.
+        # `_payload_of` is the WRITE side, not a read with a fallback: the value supplied is
+        # `c.subject`, the Candidate's own derived subject, and the function's docstring says why
+        # it stays even where no cell binds it (`act_refs`, `claim_subjects`, and `tell`, whose
+        # `writes:` is empty by design, have nothing else that knows what was told). It is
+        # exempted rather than excluded from the pattern so that a LITERAL default appearing here
+        # later is still caught.
+        ("subject", "_payload_of"),
+    }
+    offenders, used = [], set()
+    for m in pattern.finditer(src):
+        line = src.count("\n", 0, m.start()) + 1
+        head = _enclosing(m.start())
+        if (m.group(1), head) in EXEMPT:
+            used.add((m.group(1), head))
+            continue
+        offenders.append((line, head, m.group(1)))
+    assert not offenders, (
+        "an operand is silently defaulted in a body — §0.05 puts a value the engine uses in a "
+        "data file or in `DEFAULT_FIXTURES` with a register row:\n  "
+        + "\n  ".join(f"shape.py:{ln} in {fn}() defaults {op!r}" for ln, fn, op in offenders))
+    # AND THE SCAN IS NOT VACUOUS: the pattern must be able to find the legitimate hits, and
+    # EVERY declared carve-out must still match something. A carve-out nothing uses is a licence
+    # sitting open for whatever lands on that name next.
+    assert used == EXEMPT, (
+        f"declared carve-outs that matched nothing: {sorted(EXEMPT - used)}. The pattern cannot "
+        "observe the failure it excludes, which makes the assertion above absent rather than "
+        "weak — or the carve-out is stale and is now an open licence")
+    # AND THE SCOPE THE DOCSTRING PUBLISHES IS CHECKED ON PLANTS, in both directions. `setdefault`
+    # has no live hit, so this is the only thing standing between that half of the pattern and
+    # shipping untested; and the `or` spelling must NOT match, because the docstring declares it
+    # out of scope and `_eff_create_record` depends on that being true.
+    for planted in ('    x = d.get("kind", "grain")', '    d.setdefault("amount", 1)',
+                    '    y = give.get("from", "")'):
+        assert pattern.search(planted), f"the pattern no longer covers {planted.strip()!r}"
+    for outside in ('    k = d.get("kind") or "text"', '    z = d.get("kind")',
+                    '    n = d.get(name, 1)'):
+        assert not pattern.search(outside), (
+            f"the pattern now matches {outside.strip()!r}, which the docstring declares OUT of "
+            "scope — either the scope note is stale or correct code is about to redden")
+    # AND THE ATTRIBUTION FINDS A METHOD, which is the half that was broken: `_enclosing` must
+    # name an indented `def` rather than the nearest top-level one.
+    _m = _re.search(r"^[ \t]+def[ \t]+(\w+)", src, _re.M)
+    assert _m and _enclosing(_m.end()) == _m.group(1), (
+        "`_enclosing` cannot see an indented `def`, so a default inside a method would be "
+        "reported against the previous top-level function")
+
+    # THE COLLISION, ASSERTED DIRECTLY. `kind` is a MATTER kind in `requires_operands` and a
+    # RECORD kind in `_eff_create_record`. What keeps them apart is that an UNTYPED verb carries
+    # no operands at all, so a computed `create_record` can never acquire one.
+    w = P.tiny_world()
+    p = w.persons["p_low"]
+    q = S.Question("q:wc_collide", "need", ("Hh",))
+    v = S.View(p.id, [], w.fixtures.get("view_k"), q)
+    untyped = [c for c in S.Query.opening_set(p, v, q, w.fixtures)
+               if S.VERB_TABLE[c.verb].requires_typed is None]
+    assert any(c.verb == "create_record" for c in untyped), (
+        "`create_record` is no longer an untyped verb in the option set; re-derive this arm")
+    assert all(c.operands == {} for c in untyped), (
+        f"an untyped verb carries operands: "
+        f"{[(c.verb, c.operands) for c in untyped if c.operands][:3]}. `kind` would then reach "
+        "`_eff_create_record`, which reads it as the RECORD's kind — every record the loop makes "
+        "would silently become a record of grain")
+
+
+def test_wc_an_operand_defaults_cell_still_refuses_at_load():
+    """`operand_defaults:` IS GONE AS A KEY AND A CELL CARRYING ONE MUST STILL REFUSE AT LOAD.
+
+    `W-C` deleted the field from `TypedRequires` and with it one of the 28 load-time
+    `SystemExit`s (`test_h115_the_fourteen_load_time_raises_are_unchanged` records the 29 -> 28).
+    A retired check that leaves its subject ACCEPTED is a weakening; this asserts it does not.
+    `_build_clause` constructs the form's dataclass with the cell's own keys, so an unknown key is
+    a `TypeError` and the loader turns it into a `SystemExit` -- the closure survives the field.
+
+    THE REASON IT MATTERS: `operand_defaults` filled `kind`/`amount` inside `evaluate`, i.e. at
+    the FOLD, under the person. Re-introducing it by a table edit would give the value two owners
+    again and, worse, would let the precondition ADMIT a transfer on operands `_eff_transfer` then
+    raises for want of.
+
+    MUTATION (run 2026-09-04): re-add `operand_defaults: dict = field(default_factory=dict)` to
+    `TypedRequires` and pass `cell.get("operand_defaults")` through `build_typed_requires` -- the
+    cell loads clean and this goes RED. Unmutated it is GREEN."""
+    live = S.VERB_TABLE["transfer"].requires_typed
+    assert not hasattr(live, "operand_defaults"), (
+        "`TypedRequires.operand_defaults` is back. The fold would fill the person's operands "
+        "again, invisibly, and `H-94`'s one-owner half re-opens")
+    with pytest.raises(SystemExit) as e:
+        S.build_typed_requires("a_test_verb", {"form": "own_ledger", "of": "subject",
+                                               "operand_defaults": {"kind": "grain"}})
+    assert "operand_defaults" in str(e.value), str(e.value)
+
+
+def test_wc_the_matter_kind_comes_from_the_question_before_it_comes_from_the_fixture():
+    """`kind` HAS TWO SOURCES AND THE FIXTURE IS THE SECOND ONE. §54 item 7 names a `kind` and
+    supplies none, so `default_store_kind` is the declared stand-in -- but a person deliberating
+    ABOUT a granary already knows which store it is, and taking the fixture in that case would
+    make the sweep answer a question the person could answer themselves.
+
+    `q.about` is the originating object's id; for §F1's Q2 (`claim_landed`) that is a Claim in
+    THIS person's ledger, and a claim whose predicate is `stores:<kind>` names one. The predicate
+    is the one the grammar DERIVES (`f"{scalar}:{key}"`), so this reads the namespace the cell
+    writes rather than a second vocabulary -- which is `H-116`'s single namespace being spent
+    rather than restated.
+
+    ⚠ AND IT IS PERSON-SIDE BECAUSE IT IS THE PERSON'S OWN LEDGER (§20). Looking `q.about` up in
+    the world would make this a resolver read wearing a person's signature, which is the exact
+    thing `L2` forbids and the AST proof cannot see for a function whose first parameter is not a
+    `Person` -- which is why `store_kind_of(p: Person, ...)` takes the person first.
+
+    ⚠ THIS BRANCH IS NOT EXERCISED BY THE CORPUS AND THAT IS WHY IT HAS A TEST. WITNESS deposits
+    `stores.changed`, not `stores:<kind>`, so every corpus transfer takes the fixture; the day
+    `W-B`/`H-116`'s write side lands in the derived namespace this branch starts firing, and an
+    untested derivation would start firing wrong.
+
+    MUTATION (run 2026-09-04): make `_derive_operand` return `fx.get("default_store_kind")` for
+    `"kind"` unconditionally -- the planted `stores:salt` claim stops reaching the operand, the
+    Candidate carries `grain`, and this goes RED on the first assertion. Unmutated it is GREEN.
+    The CONTROL is the second half: a claim whose predicate is NOT `stores:<kind>` must leave the
+    fixture in place, or this is a rule that fires on the presence of a claim rather than on what
+    it says."""
+    w = P.tiny_world()
+    p = w.persons["p_low"]
+    row = S.VERB_TABLE["transfer"]
+
+    p.ledger.append(S.Claim("c_kind", p.id, "Hh", "stores:salt", 4, 0, "firsthand", 100, "own"))
+    q = S.Question("q:wc_kind", "claim_landed", ("Hh",), "c_kind")
+    ops = S.operands_for(p, row, q, "Hh", w.fixtures)
+    assert ops["kind"] == "salt", (
+        f"the person deliberating about a claim on `stores:salt` carried kind={ops['kind']!r}. "
+        "The fixture is the stand-in for a kind nobody names, not an override of one somebody "
+        "does")
+
+    # THE CONTROL: a claim that names no matter kind leaves the fixture standing.
+    p.ledger.append(S.Claim("c_other", p.id, "Hh", "condition", 4, 0, "firsthand", 100, "own"))
+    q2 = S.Question("q:wc_kind2", "claim_landed", ("Hh",), "c_other")
+    ops2 = S.operands_for(p, row, q2, "Hh", w.fixtures)
+    assert ops2["kind"] == w.fixtures.get("default_store_kind"), (
+        f"a claim about `condition` supplied kind={ops2['kind']!r}. The derivation fires on the "
+        "PRESENCE of a claim rather than on its naming a store, which is not a derivation")
+
+    # AND A QUESTION ABOUT NOTHING IN THE LEDGER FALLS BACK TOO -- the ordinary case, and the one
+    # the whole corpus takes.
+    q3 = S.Question("q:wc_kind3", "need", ("Hh",), "prop_x")
+    assert S.operands_for(p, row, q3, "Hh", w.fixtures)["kind"] == "grain"
+    assert S.store_kind_of(p, q3) is None
+
+
+# ===========================================================================
+# W-B — `Event.observed`: THE FOLD ATTACHES WHAT IT READ, AND WITNESS DEPOSITS IT.
+#
+# THE LOOP THIS CLOSES, AND THE THEOREM THAT CLOSED IT. `Query.opening_set`'s four clauses never
+# consult world state — §F1 puts the person on BELIEFS — so the only channel from what happened
+# to what is next decided is a ledger claim read by `belief_contradicts`. And that function could
+# not read any claim this corpus deposited: every deposit carried `predicate = e.kind` and
+# `value = True`, while the `requires` vocabulary is `stores:<kind>` / `condition` /
+# `contain.path:<to>` / `claim.held` / `exists:<kind>` / a relation stem. Disjoint vocabularies,
+# and `True` can never make a comparator return False. Closed by a theorem, not by a bug — and
+# MEASURED at seed 0 over three NPC-088 seasons before this item: 600 claims in ledgers, ZERO in
+# the derived namespace, ZERO falsy. `test_wb_the_control_arm_deposits_no_claim_in_the_grammar`
+# is that measurement, kept as the `none` arm rather than as a sentence.
+# ===========================================================================
+
+
+def _wb_world(mode: str, grain: int = 0):
+    """`tiny_world` with `Hh`'s granary set, and one deposit mode. `grain=0` is the arm that can
+    produce a FALSE: `stores(Hh, grain) = 0` against `amount = 1`."""
+    w = P.tiny_world(S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", mode))
+    w.rungs["Hh"].stores["grain"] = grain
+    return w
+
+
+def _wb_fold_one(w, verb="transfer", actor="p_low", subject="S"):
+    """One act through the fold, WITNESSED. Returns `(driver, events)`."""
+    p = w.persons[actor]
+    row = S.VERB_TABLE[verb]
+    q = S.Question("q:wb", "need", (subject,), "prop")
+    ops = S.operands_for(p, row, q, subject, w.fixtures)
+    assert ops is not None, f"{verb} formed no operands — the fixture changed, not the item"
+    d = S.SeasonDriver(w)
+    w.step = S.Step.RESOLVE
+    a = S.Act(id=f"wb_{verb}", actor=actor, verb=verb, payload=dict(ops))
+    evs = d._fold(w, a)
+    for e in evs:
+        w.log.append(e)
+        d.act_of[e.id] = a
+    w.step = S.Step.WITNESS
+    d.witness(evs)
+    return d, evs, ops, row, q
+
+
+def test_wb_the_fold_attaches_the_verdicts_reads_to_every_event_the_act_emits():
+    """EDIT 2, EXECUTED. The reads that produced the verdict ride on the Event — refusal AND
+    success — and a verb whose precondition read nothing through the `Observation` channel
+    carries `()`.
+
+    ⚠ THE REFUSAL IS THE INFORMATIVE ONE AND IS ASSERTED FIRST. `stores:grain -> 0` is *why* it
+    refused, and `0 >= 1` is the only thing in this grammar that can evaluate False — which is
+    what makes the deposit below able to contradict anything at all.
+
+    ⚠ THE EMPTY CASE IS ASSERTED TOO, AND NOT AS DECORATION. `create_record` is untyped, so its
+    Event must carry `()` rather than the previous act's reads: `verdict` is a `_fold` local that
+    `ev` closes over, and a version that hoisted it to the driver would leak one act's reads onto
+    the next act's Events. That is the failure this half excludes (§0.1 point 2).
+
+    MUTATION (run 2026-09-04): drop `observed=verdict.observed` from `_fold`'s `ev(...)` — every
+    Event carries `()` and this goes RED on the first assertion with `refusal carried no reads`.
+    Restored, GREEN. MUTATION 2: hoist `verdict` out of `_fold` onto the driver (`self.
+    _leaked_verdict`, read at the top of `_fold` and written by the typed branch) — the untyped
+    assertion goes RED with `create_record carried 1 read(s) immediately after a transfer that
+    read one`. Restored, GREEN. ⚠ THE FIRST WRITING OF MUTATION 2 WAS RECORDED AS RED AND WAS
+    GREEN: the untyped arm used a FRESH driver, so nothing could leak into it. The claim was
+    false, the test was vacuous on that property, and both are fixed rather than the sentence
+    softened — which is the failure this file exists to catch, committed inside `W-B` itself."""
+    # THE REFUSAL — an empty granary.
+    w = _wb_world("none", grain=0)
+    _d, evs, _ops, _row, _q = _wb_fold_one(w)
+    assert [e.kind for e in evs] == ["transfer.refused"], [e.kind for e in evs]
+    obs = evs[0].observed
+    assert obs, "the refusal carried no reads — `Event.observed` is not reaching the Event"
+    assert all(isinstance(o, S.Observation) for o in obs), obs
+    assert (obs[0].subject, obs[0].predicate, obs[0].value) == ("Hh", "stores:grain", 0), obs
+
+    # THE SUCCESS — the same cell, a stocked granary. A success carries its reads too.
+    w2 = _wb_world("none", grain=8)
+    _d2, evs2, _o2, _r2, _q2 = _wb_fold_one(w2)
+    assert [e.kind for e in evs2] == ["transfer.made"], [e.kind for e in evs2]
+    assert evs2[0].observed and evs2[0].observed[0].value == 8, evs2[0].observed
+
+    # THE EMPTY CASE — an untyped verb reads nothing through this channel and says so.
+    # ⚠ **FOLDED THROUGH THE SAME DRIVER, IMMEDIATELY AFTER A TYPED ACT THAT DID READ, AND THAT
+    # IS THE WHOLE POINT OF THE ORDERING.** A fresh driver per act CANNOT observe the failure this
+    # excludes: `verdict` leaking out of `_fold` onto the driver is invisible unless two acts share
+    # one. Written the naive way first and the mutation below stayed GREEN, which is §0.1 point 2
+    # arriving as a fact rather than as a principle.
+    w3 = _wb_world("none", grain=8)
+    p3, d3 = w3.persons["p_low"], S.SeasonDriver(w3)
+    w3.step = S.Step.RESOLVE
+    q3 = S.Question("q:wb3", "need", ("S",), "prop")
+    typed_ops = S.operands_for(p3, S.VERB_TABLE["transfer"], q3, "S", w3.fixtures)
+    typed = d3._fold(w3, S.Act(id="wb_pre", actor="p_low", verb="transfer",
+                               payload=dict(typed_ops)))
+    assert typed and typed[0].observed, (
+        "the priming act read nothing, so the leak this asserts against cannot happen and the "
+        "assertion below is vacuous")
+    untyped = d3._fold(w3, S.Act(id="wb_cr", actor="p_low", verb="create_record",
+                                 payload={"subject": "S"}))
+    assert untyped, "create_record emitted nothing — the fixture changed"
+    assert all(e.observed == () for e in untyped), (
+        f"`create_record` carried {[len(e.observed) for e in untyped]} read(s) immediately after "
+        "a `transfer` that read one. It is untyped, so nothing went through the `Observation` "
+        "channel — a non-empty tuple here is the PREVIOUS act's reads leaking through a `verdict` "
+        "that outlived its fold")
+
+
+def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_goes():
+    """**THE ACCEPTANCE, END TO END, WITH ITS CONTROL.** A claim in the `requires` vocabulary,
+    with a value that can be False, lands in a ledger, and `belief_contradicts` reads it.
+
+    The chain, each link executed here rather than argued:
+      1. `stores(Hh, grain) = 0` and `amount = 1`, so the fold's `scalar_threshold` is False.
+      2. The refusal Event carries `Observation('Hh', 'stores:grain', 0)`.
+      3. WITNESS deposits `Claim(subject='Hh', predicate='stores:grain', value=0)` to the actor.
+      4. `belief_contradicts` evaluates THE SAME CELL against `LedgerReader`: `0 >= 1` is False.
+      5. `opening_set` clause 4 drops the `transfer` Candidate.
+
+    ⚠ THE SUBJECTS MATCH BECAUSE BOTH SIDES BIND `from` THE SAME WAY, and that is `W-C`'s
+    one-owner binding being spent rather than restated: the fold binds `from` off `Act.payload`,
+    the person binds it off `containing_rung_of(p)`, and `pack_scenes` put the second on the
+    first. A claim about a rung the person will never bind would be inert.
+
+    ⚠ THE CONTROL IS THE `BEFORE` HALF AND IT IS NOT DECORATION (§0.1 point 4). Without it this
+    shows only that a person holding a contradicting claim forms no Candidate — which was already
+    true and is `W-A`. What is new is that the LOOP produced the claim.
+
+    ⚠ WHAT THIS DOES **NOT** CLAIM, AND THE SCOPE IS NARROWER THAN THE FIRST REPORT USED IT AS.
+    Whether closing this channel changes what the corpus decides is `W-D`'s measurement. The
+    candidate count below is this world's, under a planted empty granary, and is evidence the
+    mechanism EXECUTES — never a reconvergence figure. **AND THE BINDING ARGUMENT ABOVE DOES NOT
+    TRANSFER TO THE CORPUS RESULT.** This chain is form 2 `scalar_threshold` with `from` bound by
+    `containing_rung_of`; the corpus's clause-4 firings are form 3 `contain_path` with operands
+    bound by `_derive_operand` — a different operand and a different derivation, about which
+    `containing_rung_of` says nothing. `stores:grain` is in fact UNREACHABLE as a False in the
+    corpus (measured: of 297 False-able reads over the 86 worlds, 0 are `stores:grain`), so the
+    hand-emptied granary is not a convenience — it is the only way to reach this chain at all.
+    That is exactly what "evidence the mechanism executes" means and it is not a warrant for
+    anything about the corpus.
+
+    ⚠ THE ABSOLUTE COUNTS ARE PRINTED BY THIS TEST, so a report quoting them names a command that
+    produced them (`G11`). MEASURED here 2026-09-04: **22 candidates before, 21 after.** The first
+    writing of the report quoted those two numbers from an ad-hoc run while this test asserted
+    only the DELTA, which is the un-reproducible number `G11` exists to stop.
+
+    MUTATION (run 2026-09-04): set `observation_deposit_mode` to `none` in `_wb_world` — the claim
+    never lands, `contradicts AFTER` stays False, and this goes RED on the `AFTER` assertion.
+    Restored, GREEN. MUTATION 2: deposit `o.predicate` as `e.kind` instead — the claim lands in
+    the event-kind namespace, `LedgerReader.read` finds nothing, and it goes RED the same way.
+    Restored, GREEN."""
+    w = _wb_world("actor", grain=0)
+    p, row = w.persons["p_low"], S.VERB_TABLE["transfer"]
+    q = S.Question("q:wb", "need", ("S",), "prop")
+    ops = S.operands_for(p, row, q, "S", w.fixtures)
+
+    # ---- CONTROL: nothing in the ledger, so nothing is contradicted.
+    assert not S.belief_contradicts(p, row, "S", ops), (
+        "a person holding no claim about `Hh` was treated as knowing `transfer` fails — §F1's "
+        "asymmetry is gone and this test can no longer observe what it is for")
+    w.step = S.Step.DELIBERATE
+    before = S.Query.opening_set(p, S.Query.assemble(p, q, w.fixtures.get("view_k")), q,
+                                 w.fixtures)
+    assert any(c.verb == "transfer" for c in before), (
+        "no `transfer` Candidate formed even before the deposit — the control is broken, not the "
+        "claim")
+
+    # ---- THE LOOP: fold, refuse, witness.
+    _d, evs, _o, _r, _q = _wb_fold_one(w)
+    assert evs[0].kind == "transfer.refused", evs[0].kind
+    landed = [c for c in p.ledger if c.predicate == "stores:grain"]
+    assert len(landed) == 1, (
+        f"{len(landed)} `stores:grain` claim(s) in the actor's ledger; expected exactly one. "
+        f"Ledger: {[(c.subject, c.predicate, c.value) for c in p.ledger]}")
+    assert (landed[0].subject, landed[0].value) == ("Hh", 0), landed[0]
+    assert landed[0].holder == p.id and landed[0].visibility == "own", landed[0]
+
+    # ---- THE READ: the same cell, the person's own ledger, and it is FALSE.
+    v = S.evaluate(row.requires_typed, S.LedgerReader(p.ledger), S.binding_of(p.id, ops))
+    assert v.value is False, (
+        f"the deposited claim evaluated {v.value!r}, not False. `LedgerReader.read` returns the "
+        "stored value verbatim, so `0 >= 1` is the whole mechanism — a non-False here means the "
+        "claim is not in the vocabulary the cell reads")
+    assert S.belief_contradicts(p, row, "S", ops)
+
+    # ---- THE DECISION: clause 4 drops it.
+    w.step = S.Step.DELIBERATE
+    after = S.Query.opening_set(p, S.Query.assemble(p, q, w.fixtures.get("view_k")), q,
+                                w.fixtures)
+    assert not any(c.verb == "transfer" for c in after), (
+        f"the `transfer` Candidate survived a claim that makes its requirement known-false: "
+        f"{[c.verb for c in after]}")
+    print(f"\n  W-B — acceptance: candidates {len(before)} -> {len(after)} "
+          f"(dropped {sorted({c.verb for c in before} - {c.verb for c in after})})")
+    assert len(after) == len(before) - 1, (
+        f"{len(before)} -> {len(after)} candidates. Exactly one Candidate should go — a larger "
+        "drop means the deposit contradicted a verb this test did not plant a belief about")
+    assert (len(before), len(after)) == (22, 21), (
+        f"the absolute counts moved to {(len(before), len(after))}. They are quoted on `H-122` "
+        "and the delta alone does not reproduce them — re-derive the row rather than the line")
+
+
+def test_wb_an_unknown_read_is_never_deposited_because_it_is_the_instruments_own_gap():
+    """PROHIBITION 3, EXECUTED. `H-94`'s `operands_for` returns `None` rather than minting an act
+    with a hole. Its row says why, verbatim: minting one would have it refused for a reason about
+    the INSTRUMENT, *"so the instrument's own gap would become a FALSE BELIEF held by every
+    witness, about a granary nobody named"*. Depositing an UNKNOWN read reintroduces exactly that
+    from the other end.
+
+    It is inert besides — `LedgerReader` returns the stored value, `_as_number(UNKNOWN)` is
+    UNKNOWN, and the clause returns UNKNOWN, so the claim can contradict nothing — while still
+    costing a slot the cap evicts somebody else for. That is `H-40`'s hazard paid for nothing.
+
+    ⚠ THE SCAN ASSERTS IT SCANNED (§0.1 point 2). A run producing no UNKNOWN read would pass this
+    trivially, so the count of UNKNOWN reads is asserted non-zero first. `work`'s `condition` on a
+    referent that is not a Site is the live case and is `H-121`'s own finding.
+
+    MUTATION (run 2026-09-04): drop the `if o.value is UNKNOWN ... continue` guard in `witness` —
+    3 `condition = UNKNOWN` claims and 3 `contain.path:* = UNKNOWN` claims land, and this goes RED
+    on the second assertion. Restored, GREEN."""
+    import headless as HL
+    w = HL.build_world(0, S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", "total"))
+    d = S.SeasonDriver(w)
+    mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    for _ in range(3):
+        d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+                 None, HL.subsistence)
+    unknown = [(e.kind, o.predicate) for e in w.log for o in e.observed if o.value is S.UNKNOWN]
+    assert unknown, (
+        "the run produced NO unreadable observation, so this scan cannot observe the deposit it "
+        "excludes — the world builder changed, not the rule")
+    deposited = [(c.subject, c.predicate) for p in w.persons.values() for c in p.ledger
+                 if c.value is S.UNKNOWN]
+    assert not deposited, (
+        f"{len(deposited)} UNKNOWN claim(s) reached a ledger, e.g. {deposited[:5]}. A read the "
+        "world could not answer is the INSTRUMENT'S gap, and depositing it is `H-94`'s false "
+        "belief arriving from the write side")
+
+
+def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_do():
+    """THE `none` ARM IS THE CONTROL AND IT CARRIES THE MEASUREMENT `H-116` REPORTED. Before
+    `W-B`, over three seeded NPC-088 seasons: claims in ledgers, ZERO of them in the vocabulary
+    `belief_contradicts` reads. That is the theorem, and it is asserted here rather than recited.
+
+    ⚠ THE CONTROL IS NOT BYTE-IDENTICAL TO PRE-`W-B` AND SAYING OTHERWISE WOULD BE FALSE.
+    `content_hash` folds `Event.observed`, and the fold attaches it in EVERY arm — the mode gates
+    the DEPOSIT, at WITNESS, not the carrier, in the fold. So `none` reproduces the deposits, the
+    events and the ledger contents exactly, and its world hash differs from the pre-`W-B` hash
+    BECAUSE THE LOG NOW RECORDS THE READS. That difference is the free falsifier
+    (`test_wb_the_carrier_moves_the_seeded_hash`) firing, not a defect in the control.
+
+    ⚠ **MEASURED PER SEASON, NOT ONLY AT THE END, AND THE REASON IS A FINDING.** The `W-B`
+    adversarial pass excluded `claim.held` from the deposit (`shape.LEDGER_DERIVED_STEMS`), and
+    this world's only OTHER depositable grammar read is a single `stores:grain` at tick 0 — which
+    the 200-claim cap evicts long before season 3 ends. So end-of-run occupancy in the live arms is
+    **0 in every arm**, and a test reading only the end state would report the channel as closed
+    when it is open. The union over seasons is the honest measure of *did a claim in this
+    vocabulary ever reach a ledger*; survival is `H-40`'s question and is asserted separately
+    below. MEASURED 2026-09-04: ever-in-a-ledger `none=0 · actor=1 · total=3`, still-held-at-end
+    `0 · 0 · 0`.
+
+    MUTATION (run 2026-09-04): make `none` deposit as `actor` does — the `none` count goes to 1
+    and this goes RED on the first assertion. Restored, GREEN."""
+    import headless as HL
+
+    def grammar_claims(mode):
+        w = HL.build_world(0, S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", mode))
+        d = S.SeasonDriver(w)
+        mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+        ever = {}
+        for _ in range(3):
+            d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+                     None, HL.subsistence)
+            for p in w.persons.values():
+                for c in p.ledger:
+                    if str(c.predicate).partition(":")[0] in S.REQUIRES_STEMS:
+                        ever[c.id] = (c.subject, c.predicate, c.value)
+        total = sum(len(p.ledger) for p in w.persons.values())
+        end = [(c.subject, c.predicate, c.value)
+               for p in w.persons.values() for c in p.ledger
+               if str(c.predicate).partition(":")[0] in S.REQUIRES_STEMS]
+        return total, sorted(ever.values()), end
+
+    held, none_arm, none_end = grammar_claims("none")
+    assert held > 0, "the control run deposited nothing at all — the world builder changed"
+    assert none_arm == [] and none_end == [], (
+        f"the CONTROL arm saw {len(none_arm)} claim(s) in the `requires` vocabulary: "
+        f"{none_arm[:5]}. `none` is defined as the behaviour before `W-B`, and before `W-B` the "
+        "two vocabularies were disjoint")
+    _h2, actor_arm, actor_end = grammar_claims("actor")
+    _h3, total_arm, _te = grammar_claims("total")
+    print(f"\n  W-B — grammar-vocabulary claims that reached a ledger over 3 seasons, by deposit "
+          f"mode: none={len(none_arm)} actor={len(actor_arm)} total={len(total_arm)} "
+          f"(still held at end: {len(none_end)} / {len(actor_end)} / {len(_te)})")
+    assert actor_arm, (
+        "the `actor` arm deposited NO claim in the vocabulary `belief_contradicts` reads — the "
+        "channel this item exists to open is still closed")
+    assert len(total_arm) >= len(actor_arm), (
+        f"`total` saw {len(total_arm)} and `actor` saw {len(actor_arm)}: a wider fan-out "
+        "deposited fewer claims, which cannot happen at the deposit and means the measure moved")
+    # ⚠ AND THE SURVIVAL FIGURE, ASSERTED AS THE FINDING IT IS. In THIS world every grammar claim
+    # is evicted before the run ends. That is not a failure of `W-B` and it is not hidden: it is
+    # `H-40`'s cap doing what `H-122`'s row argues it does, in the smallest world that shows it.
+    assert actor_end == [], (
+        f"a grammar-vocabulary claim now SURVIVES to end-of-run in this world: {actor_end}. That "
+        "is a change in eviction pressure and `H-122`'s cap argument must be re-measured rather "
+        "than this line relaxed")
+
+
+def test_wb_a_read_computed_from_the_ledger_is_never_deposited_into_it():
+    """**THE `W-B` ADVERSARIAL PASS'S FIRST FINDING, FIXED AND PINNED.** `WorldReader.read`'s
+    `claim.held` branch answers `any(c.subject == subject for c in p.ledger)` — LEDGER MEMBERSHIP.
+    So a WITNESS deposit of `Observation(X, 'claim.held', False)` appends a Claim whose `subject`
+    IS `X`, and makes that same read return **True** from the barrier that stored it. The belief is
+    false the moment it becomes readable, and it is made false by the act of recording it.
+
+    MEASURED BEFORE THE FIX, seed 0, corpus case NPC-088 at `actor`, 8 seasons: at end of season 0
+    `LedgerReader(p_a).read('r_hearth','claim.held')` was **False** while
+    `WorldReader(w,'p_a').read('r_hearth','claim.held')` was **True** — the two readers disagreeing
+    about the SAME person's SAME ledger, which `belief_contradicts`' docstring says cannot happen
+    (*"the same cell asked of two readers, differing only in WHAT THEY READ and in POLARITY"*).
+    `tell` was then dropped for a season on a belief the fold would have admitted; the block lifted
+    at season 2 only because the ledger CAP EVICTED the claim, i.e. by forgetting.
+
+    ⚠ **TWO ASSERTIONS, AND THE SECOND ONE IS THE REASON.** The first is that no such claim
+    reaches a ledger. The second PLANTS one by hand and shows the two readers disagree — without
+    it this test would pass just as happily if `claim.held` had simply stopped being read, and it
+    is the disagreement, not the absence, that the rule is about (§0.1 point 2).
+
+    ⚠ NON-VACUITY: the run must have PRODUCED depositable `claim.held` reads, or excluding them
+    proves nothing. Asserted first.
+
+    MUTATION (run 2026-09-04): delete the `LEDGER_DERIVED_STEMS` guard in `witness` — 3
+    `claim.held` claims land in `p_a`'s ledger and this goes RED on the second assertion.
+    Restored, GREEN."""
+    import headless as HL
+    import corpus_run as C
+    import run_cases as R
+    case = next(c for c in R.load_cases("NPC") if c["id"] == "NPC-088")
+    w = C.build_at(case, 0)
+    w.fixtures = S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", "actor")
+    d = S.SeasonDriver(w)
+    mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs())
+    for _ in range(3):
+        d.season(ch, question=None, subsistence=C.P.SUBSIST,
+                 contest_max_depth=w.fixtures.get("contest_max_depth"))
+    produced = [o for e in w.log for o in e.observed
+                if o.predicate == "claim.held" and o.value is not S.UNKNOWN]
+    assert produced, (
+        "the run produced NO depositable `claim.held` read, so this exclusion cannot be observed "
+        "here — the world builder changed, not the rule")
+    landed = [(pid, c.subject, c.value) for pid, pp in w.persons.items() for c in pp.ledger
+              if c.predicate == "claim.held"]
+    assert not landed, (
+        f"{len(landed)} `claim.held` claim(s) reached a ledger, e.g. {landed[:3]}. That predicate "
+        "is answered FROM the ledger, so depositing it into the ledger falsifies its own content "
+        "— see `shape.LEDGER_DERIVED_STEMS`")
+
+    # ---- THE REASON, PLANTED, so this test asserts the disagreement and not merely the absence.
+    # ⚠ THE SUBJECT IS ONE THE HOLDER HAS NO CLAIM ABOUT, AND THAT IS ASSERTED. Planting onto a
+    # subject `WorldReader` ALREADY answers True for would make the flip below unobservable.
+    pid = "p_a"
+    victim = w.persons[pid]
+    wr = S.WorldReader(w, pid)
+    subj = next((r for r in w.rungs if wr.read(r, "claim.held") is False), None)
+    assert subj is not None, (
+        "every rung is already the subject of a claim this person holds, so planting one cannot "
+        "flip `WorldReader` and this half would pass vacuously")
+    before_world = wr.read(subj, "claim.held")
+    assert before_world is False, before_world
+    victim.ledger.append(S.Claim("planted", pid, subj, "claim.held", False, w.tick,
+                                 "firsthand", 100, "own"))
+    assert S.LedgerReader(victim.ledger).read(subj, "claim.held") is False, (
+        "the planted claim is not what `LedgerReader` answers with — the plant is wrong, not the "
+        "rule")
+    assert S.WorldReader(w, pid).read(subj, "claim.held") is True, (
+        f"planting `({subj}, claim.held, False)` left `WorldReader` at "
+        f"{S.WorldReader(w, pid).read(subj, 'claim.held')!r} (it was {before_world!r} before). "
+        "`WorldReader.read` no longer answers `claim.held` from ledger membership, so the reason "
+        "for the exclusion has changed and `LEDGER_DERIVED_STEMS` must be re-derived rather than "
+        "kept")
+
+
+def test_wb_two_reads_of_one_cell_in_one_barrier_deposit_exactly_one_claim():
+    """**THE SECOND ADVERSARIAL FINDING, FIXED AND PINNED — THE DE-DUPLICATION IS PASS-SCOPED.**
+    `LedgerReader.read` matches on `(subject, predicate)` and resolves on `(when, confidence)`
+    with a STRICT `>`, so two claims deposited in ONE barrier with the same `confidence_default`
+    tie on both keys and the FIRST APPENDED wins — the append-order dependence that reader's own
+    docstring says it exists to prevent. `seen_obs` was built inside the fan loop, i.e. per
+    (person, Event), so it could not see a collision ACROSS two Events of one season.
+
+    Reachable by construction and MEASURED: `_eff_transfer` mutates `Rung.stores` during RESOLVE,
+    so two transfers on one rung in one season read 8 then 7. Over the 86 corpus worlds at
+    `total`, before the fix: **651 surviving groups sharing `(subject, predicate, when,
+    confidence)`, 27 of them holding DIFFERENT values** — e.g. `ARC-01`, `p_a`,
+    `('r_realm','stores:grain',when=4,conf=100)` holding `[168, 167, 167]`.
+
+    ⚠ NON-VACUITY (§0.1 point 2): the two Events must actually carry the same `(subject,
+    predicate)` with DIFFERENT values, or one claim would land for a reason that is not the rule.
+    Asserted before the count.
+
+    MUTATION (run 2026-09-04): move `seen_obs` back inside the `for pid, e, channel in fan` loop —
+    two `stores:grain` claims land, tied on `(when, confidence)`, and this goes RED on the count.
+    Restored, GREEN."""
+    w = _wb_world("actor", grain=8)
+    p, row = w.persons["p_low"], S.VERB_TABLE["transfer"]
+    q = S.Question("q:wb", "need", ("S",), "prop")
+    ops = S.operands_for(p, row, q, "S", w.fixtures)
+    d = S.SeasonDriver(w)
+    w.step = S.Step.RESOLVE
+    evs = []
+    for n in (1, 2):
+        a = S.Act(id=f"wb_dedup_{n}", actor="p_low", verb="transfer", payload=dict(ops))
+        out = d._fold(w, a)
+        for e in out:
+            w.log.append(e)
+            d.act_of[e.id] = a
+        evs += out
+    reads = [(o.subject, o.predicate, o.value) for e in evs for o in e.observed]
+    assert len([r for r in reads if r[:2] == ("Hh", "stores:grain")]) == 2, (
+        f"the two acts did not both read `(Hh, stores:grain)`: {reads}. Then there is no "
+        "collision here and the count below is vacuous")
+    assert len({r[2] for r in reads if r[:2] == ("Hh", "stores:grain")}) == 2, (
+        f"both reads returned the same value: {reads}. `_eff_transfer` no longer mutates "
+        "`Rung.stores` during RESOLVE, so the same-tick collision this pins cannot arise")
+    w.step = S.Step.WITNESS
+    d.witness(evs)
+    landed = [(c.subject, c.predicate, c.value, c.when, c.confidence) for c in p.ledger
+              if c.predicate == "stores:grain"]
+    assert len(landed) == 1, (
+        f"{len(landed)} `stores:grain` claims landed in one barrier: {landed}. They tie on "
+        "`(when, confidence)`, so `LedgerReader`'s strict `>` resolves them by APPEND ORDER — "
+        "which is the dependence it exists to remove. De-duplication must span the pass")
+    assert landed[0][2] == 8, (
+        f"the surviving read is {landed[0][2]}, not the first one the fan reached. Which read "
+        "survives is stated at the deposit site; changing it is a decision, not a detail")
+    ties = [(c.subject, c.predicate, c.when, c.confidence) for c in p.ledger
+            if str(c.predicate).partition(":")[0] in S.REQUIRES_STEMS]
+    assert ties, "no grammar-vocabulary claim landed at all, so the sweep below is vacuous"
+    dup = [k for k in set(ties) if ties.count(k) > 1]
+    assert not dup, (
+        f"two grammar-vocabulary claims share `(subject, predicate, when, confidence)`: {dup}. "
+        "`LedgerReader` cannot rank them and falls back to append order")
+
+
+def test_wb_the_carrier_moves_the_seeded_hash():
+    """THE FREE FALSIFIER, SPENT. `content_hash` folded `getattr(e, 'observed', None)` before this
+    field existed, with a comment promising the fold is *"forward-compatible without a second edit
+    the day that field lands"*. This is the day. If the hash did not move, either the field is not
+    reaching the Event or the hash is not folding it, and that comment was false.
+
+    Run as a DIFFERENCE rather than against a pinned literal: two identical seeded worlds, one
+    whose Events carry their reads and one whose Events are stripped of them. Same log, same
+    state, same everything else.
+
+    MUTATION (run 2026-09-04): delete the `for o in (getattr(e, "observed", None) or [])` loop
+    from `World.content_hash` — the two hashes match and this goes RED. Restored, GREEN."""
+    import headless as HL
+    hashes = []
+    for strip in (False, True):
+        w = HL.build_world(0, S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", "none"))
+        d = S.SeasonDriver(w)
+        mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+        for _ in range(2):
+            d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+                     None, HL.subsistence)
+        carried = sum(len(e.observed) for e in w.log)
+        if strip:
+            for e in w.log:
+                e.observed = ()
+        hashes.append(w.content_hash())
+    assert carried > 0, (
+        "no Event in the seeded run carries a read, so this comparison is between two identical "
+        "worlds and could not observe the failure it excludes")
+    assert hashes[0] != hashes[1], (
+        f"stripping every Event's reads left the world hash at {hashes[0]} — `content_hash`'s "
+        "`W-B` forward-compatibility fold does not reach the field it was written for")
+
+
+def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_the_control():
+    """**THE CORPUS RESULT, CORRECTED AND PINNED — AND IT RUNS AT THE SHIPPED DEFAULT, WHICH IS
+    WHAT MAKES IT A FALSIFIER FOR THE DEFAULT ITSELF.** `W-B`'s first published corpus result was
+    that a person declined `tell` because of what the previous season taught them. It was real as
+    an execution and wrong as a reading: the belief it ran on was `('r_hearth','claim.held',False)`,
+    which `WorldReader` answers from ledger membership, so the deposit falsified its own content
+    (`test_wb_a_read_computed_from_the_ledger_is_never_deposited_into_it`). MEASURED across the 86
+    corpus worlds, §F1 clause-4 drops: **before the exclusion 304 at `actor` (288 `tell`, 16
+    `move`); after it 13, every one on `move`, and 0 at `none` in both.** 95% of the published
+    effect was the defect.
+
+    What survives is smaller and true, and it fires in TWO shapes, both executed below:
+      * **`corpus_run`'s worlds — 13 `move` Candidates**, each on a `contain.path` belief a
+        `travel.blocked` refusal deposited. ARC-01 carries one of them. **No case's executed set
+        moves and `corpus_run.py`'s output is byte-identical to the control's**, which this test
+        does not hide.
+      * **`headless`'s NPC-088 world — 2 `transfer` Candidates**, on
+        `('hearth_ostvik','stores:grain',0)` deposited by a `transfer.refused`. That is the
+        ACCEPTANCE TEST'S OWN CHAIN — form 2 `scalar_threshold`, operand `from`, bound by
+        `containing_rung_of` — occurring in a seeded run with NOTHING PLANTED, and it is the only
+        place the acceptance's binding argument transfers. Acts per season go 7/7/7 at `none` to
+        7/6/6 at `actor`. At `total` it is 4 drops and two of them are `p_bailiff`'s, i.e. a
+        person acting on what SOMEONE ELSE'S act read — the cross-person propagation §F1 wants,
+        in the arm this row rejects for other reasons.
+
+    ⚠ RUN AT `S.DEFAULT_FIXTURES`, NOT AT A SWEPT ARM. The corpus threshold test used to pin the
+    shipped default (a flip to `none` moved the `tell` partition); with the `tell` firings gone it
+    no longer can, and dropping that falsifier silently would be the loss §0.1 point 3 forbids.
+    This is its replacement: flip the default to `none` and this goes RED.
+
+    ⚠ THE INSTRUMENT IS A WRAPPER AROUND `belief_contradicts`, RESTORED IN A `finally`. There is
+    no other way to count a Candidate that was never formed — `opening_set` returns the survivors,
+    not the drops — and the alternative, inferring drops from the executed set, is exactly the
+    inference this test exists to replace.
+
+    MUTATION (run 2026-09-04): set `DEFAULT_FIXTURES`' `observation_deposit_mode` to `none` — the
+    live arm records 0 drops and this goes RED on the second assertion. Restored, GREEN.
+    MUTATION 2: `LEDGER_DERIVED_STEMS` emptied — the drop count on ARC-01 goes 1 -> 6 and five of
+    the six are `tell` on `r_realm`, and this goes RED on the third. Restored, GREEN."""
+    import corpus_run as C
+    import run_cases as R
+    case = next(c for c in R.load_cases("ARC") if c["id"] == "ARC-01")
+
+    def drops(fx):
+        hits = []
+        original = S.belief_contradicts
+        def counted(p_, row, subject, operands):
+            out = original(p_, row, subject, operands)
+            if out:
+                hits.append((row.verb, subject))
+            return out
+        S.belief_contradicts = counted
+        try:
+            w = C.build_at(case, 0)
+            w.fixtures = fx
+            d = S.SeasonDriver(w)
+            mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+            ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs())
+            for _ in range(C.seasons_for(case)):
+                d.season(ch, question=None, subsistence=C.P.SUBSIST,
+                         contest_max_depth=w.fixtures.get("contest_max_depth"))
+        finally:
+            S.belief_contradicts = original
+        return hits, w
+
+    control, _wc = drops(S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", "none"))
+    live, wl = drops(S.DEFAULT_FIXTURES)
+
+    # ---- THE SECOND SHAPE, IN A DIFFERENT WORLD AND A DIFFERENT `requires` FORM.
+    import headless as HL
+
+    def hl_drops(fx):
+        hits = []
+        original = S.belief_contradicts
+        def counted(p_, row, subject, operands):
+            out = original(p_, row, subject, operands)
+            if out:
+                hits.append((row.verb, subject))
+            return out
+        S.belief_contradicts = counted
+        try:
+            w = HL.build_world(0, fx)
+            d = S.SeasonDriver(w)
+            mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+            acts = []
+            for _ in range(3):
+                acts.append(d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+                                     None, HL.subsistence)["acts"])
+        finally:
+            S.belief_contradicts = original
+        return hits, acts
+
+    hl_control, hl_acts_none = hl_drops(S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", "none"))
+    hl_live, hl_acts_live = hl_drops(S.DEFAULT_FIXTURES)
+    print(f"\n  W-B — §F1 clause-4 drops on ARC-01: none={control} shipped={live}"
+          f"\n  W-B — §F1 clause-4 drops on headless NPC-088: none={hl_control} shipped={hl_live}"
+          f"   acts/season {hl_acts_none} -> {hl_acts_live}")
+    assert hl_control == [], (
+        f"the headless CONTROL arm dropped {hl_control}; `none` deposits nothing in this "
+        "vocabulary and has nothing to fire on")
+    assert {v for v, _ in hl_live} == {"transfer"}, (
+        f"the headless drops are on {sorted({v for v, _ in hl_live})}, not `transfer` alone. That "
+        "chain is the acceptance's own — `stores:grain` read by a `transfer.refused` and read back "
+        "by the same cell — and it is the only place the acceptance's binding argument transfers")
+    assert hl_acts_live != hl_acts_none and sum(hl_acts_live) < sum(hl_acts_none), (
+        f"acts per season are {hl_acts_none} at the control and {hl_acts_live} at the shipped "
+        "default. Clause 4 dropped Candidates and no act disappeared, which cannot both be true")
+    assert control == [], (
+        f"the CONTROL arm dropped {control}. `none` deposits nothing in the `requires` "
+        "vocabulary, so clause 4 has nothing to fire on and a drop here means the channel is open "
+        "by some route this item does not own")
+    assert live, (
+        "the SHIPPED default dropped no Candidate at all. Either the default has been flipped to "
+        "`none` — in which case `H-122` ships a mode that closes the clause it exists to open — "
+        "or the deposit no longer reaches `belief_contradicts`")
+    assert {v for v, _ in live} == {"move"}, (
+        f"the drops are on {sorted({v for v, _ in live})}, not `move` alone. `tell` here means a "
+        "`claim.held` claim is reaching a ledger again, which is the self-refuting belief "
+        "`LEDGER_DERIVED_STEMS` excludes; any other verb is a new finding and must be measured")
+    assert not [c for pp in wl.persons.values() for c in pp.ledger if c.predicate == "claim.held"], (
+        "a `claim.held` claim is in a ledger at the end of the run")
+
+
+def test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total():
+    """**THE NAMED FALSIFIER, AND IT FIRES.** `claim_subjects` records the precedent: adding
+    referents to every deposit inflated the ledger until the cap — which evicts on
+    `(confidence, recency)` — pushed the decayed claims out, and all three arms of `H-40` reported
+    a minimum confidence of 100. *"The rate is inert and this sweep is measuring nothing"*, which
+    is `ID-10` produced by a fix rather than by a bug.
+
+    `W-B` does the same thing harder: one claim per read, per witness, per Event. So `H-40`'s
+    sweep is re-run IN EVERY ARM, and the result decides the default rather than being reported
+    beside it.
+
+    RE-MEASURED 2026-09-04 AFTER THE `W-B` ADVERSARIAL PASS, seed 0, three NPC-088 seasons,
+    `(decay events, min confidence, evictions)` by rate 0 / 5 / 20:
+      * `none`  — (0,100,0) (183,95,48) (183,80,48).  The control.
+      * `actor` — (0,100,0) (185,95,49) (185,80,49).  Observable. 49 evictions against 48.
+      * `total` — (0,100,0) (219,100,204) (219,100,204). **INERT** at every rate.
+    (Before the `claim.held` exclusion these read `actor` 191/70 and `total` 240/282; the
+    exclusion removed most of `W-B`'s deposit pressure and did not change which arm goes inert.)
+
+    ⚠ **WHAT "OBSERVABLE" MEANS HERE IS NARROWER THAN IT LOOKS, AND THE FIRST WRITING OF THIS
+    DOCSTRING OVERSTATED IT.** Minimum confidence is exactly `100 - rate` in every non-100 cell,
+    which is an ARITHMETIC IDENTITY, not a behavioural measurement: it says only *the deepest
+    surviving claim decayed exactly once*. And rate 5 and rate 20 produce IDENTICAL decay counts,
+    IDENTICAL eviction counts, IDENTICAL ledger MEMBERSHIP (same claim ids) and IDENTICAL acts in
+    all three arms — asserted below. So `claim_decay_per_season`'s VALUE changes no decision in
+    any arm; only `0` vs non-zero does. The honest statement of the finding is therefore
+    **"at `total`, no once-decayed claim survives eviction to end-of-run"**, and that is a fact
+    about EVICTION PRESSURE. The larger finding — that the rate is behaviourally inert — is about
+    `H-40` itself and is recorded on that row, not on `H-122`.
+
+    That `total` flattens it is still why the default is `actor`. Recorded on `H-122`.
+
+    ⚠ THIS ASSERTS THE FINDING, NOT ITS ABSENCE. A later change that makes `total` observable
+    again turns this RED, which is correct: the row's argument would then rest on a fact that had
+    stopped being true.
+
+    MUTATION (run 2026-09-04): change the `actor` arm to deposit to every witness (i.e. make it
+    `total`) — the `actor` ordering collapses to 100/100/100 and this goes RED on the second
+    assertion. Restored, GREEN. MUTATION 2 (run 2026-09-04, after the rate-inertness assertion was
+    added): give `belief_contradicts` a confidence floor — `LedgerReader([c for c in p.ledger if
+    c.confidence >= 90])` — so a rate-20 claim (80) is inert where a rate-5 claim (95) still
+    fires. `actor` goes (185,95,49)/(189,80,69) and `total` (219,100,204)/(228,100,249), and this
+    goes RED on the inertness assertion. Restored, GREEN. ⚠ **THE FIRST MUTATION TRIED FOR THIS
+    ASSERTION WAS GREEN AND IS RECORDED RATHER THAN REPLACED SILENTLY**: decaying by
+    `rate * (1 + c.when)` scales BOTH rates by the same factor, so the eviction ordering — which
+    is what membership depends on — does not change, and the assertion could not see it. That is
+    the shape of the defect, not a failure of the assertion: the rate is inert because nothing
+    downstream READS a confidence except the eviction sort's product, and only a reader that
+    separates 95 from 80 can make it live."""
+    import headless as HL
+    from collections import Counter
+    out, inert = {}, {}
+    for mode in ("none", "actor", "total"):
+        seen, ids = {}, {}
+        for rate in (0, 5, 20):
+            fx = (S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", mode)
+                  .sweep("claim_decay_per_season", rate))
+            w = HL.build_world(0, fx)
+            d = S.SeasonDriver(w)
+            mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+            for _ in range(3):
+                d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+                         None, HL.subsistence)
+            confs = [c.confidence for p in w.persons.values() for c in p.ledger]
+            ev = Counter(e.kind for e in w.log)
+            occ = sum(len(p.ledger) for p in w.persons.values())
+            seen[rate] = (ev["claim.decayed"], min(confs), ev["claim.deposited"] - occ)
+            # THE INERTNESS CONTROL: the ledger's MEMBERSHIP and the acts taken, which are what a
+            # rate would have to move to be moving a decision rather than a number.
+            ids[rate] = (tuple(sorted(c.id for p in w.persons.values() for c in p.ledger)),
+                         tuple(sorted(a.verb for a in d.resolved)))
+        out[mode] = seen
+        inert[mode] = ids[5] == ids[20]
+    print(f"\n  W-B / H-40 — (decay events, min confidence, evictions) by rate, per arm:")
+    for mode, seen in out.items():
+        print(f"     {mode:6} {seen}")
+
+    # THE CONTROL ARM MUST STILL MEASURE SOMETHING, or nothing below is interpretable.
+    assert out["none"][20][1] < out["none"][5][1] < out["none"][0][1], (
+        f"`H-40`'s sweep is not observable in the CONTROL arm: {out['none']}. `W-B` cannot be "
+        "blamed for that, and no other reading here is worth anything until it is fixed")
+    # THE DEFAULT ARM PRESERVES IT.
+    assert out["actor"][20][1] < out["actor"][5][1] < out["actor"][0][1], (
+        f"`H-40`'s sweep went inert in the DEFAULT arm: {out['actor']}. That is the precedent in "
+        "`claim_subjects` repeating, and the default must move rather than the assertion")
+    # AND `total` DOES NOT — asserted, because it is the finding.
+    assert out["total"][20][1] == out["total"][5][1] == out["total"][0][1] == 100, (
+        f"`total` no longer flattens `H-40`: {out['total']}. `H-122`'s argument for `actor` rests "
+        "on this being true; if it has stopped being true the ROW must be re-argued, not this line")
+    # AND THE MECHANISM IS THE CAP, not a coincidence: evictions rise monotonically with fan-out.
+    assert (out["none"][5][2] < out["actor"][5][2] < out["total"][5][2]), (
+        f"evictions do not rise with the deposit fan-out: "
+        f"{[out[m][5][2] for m in ('none', 'actor', 'total')]}. Then the flattening above has "
+        "some other cause and the reading on `H-122` is wrong")
+    # ⚠ AND THE RATE ITSELF IS BEHAVIOURALLY INERT IN ALL THREE ARMS — ASSERTED, BECAUSE IT IS THE
+    # FINDING (`H-40`). Rate 5 and rate 20 leave the same claims in the same ledgers and produce
+    # the same acts; the only thing that moves is the confidence NUMBER, and it moves by
+    # arithmetic. Without this, the ordering above reads as "the sweep measures the rate", which
+    # is what the first writing of this test claimed and is false.
+    assert all(inert.values()), (
+        f"rate 5 and rate 20 now differ in ledger membership or in acts taken, by arm: {inert}. "
+        "`claim_decay_per_season` has become behaviourally live — which is GOOD and means "
+        "`H-40`'s sweep measures something at last, but it also means the minimum-confidence "
+        "ordering above is no longer the only content of this test and the row must be re-argued")
+
+
+# =================================================================================================
+# `W-D` — THE ACCEPTANCE RUN. Does an open §F1 clause 4 make a fork change a LATER DECISION?
+# =================================================================================================
+
+_WD_SWEEP = HERE.parent.parent / "2026-09-04-degree-sweep"
+
+
+def _wd_arm9():
+    """`arm9_forking`, imported UNMODIFIED from the degree sweep. `W-D` re-uses the forking
+    probe; a re-implemented one measuring a different thing is the confound that would void it."""
+    if str(_WD_SWEEP) not in sys.path:
+        sys.path.insert(0, str(_WD_SWEEP))
+    import arm9_forking as A9          # noqa: E402
+    return A9
+
+
+def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_the_control():
+    """**`W-D`'s ACCEPTANCE, PINNED ON A DETERMINISTIC SLICE.**
+
+    THE QUESTION. The forking exercise (`runs/arm9.json`, seed 0, 4 seasons, 89 worlds) flipped
+    every mechanical decision in the corpus and followed three decisions on: **100%
+    reconvergence**. Its diagnosis was that `Query.opening_set` never consults world state, so the
+    only channel from what happened to what is next decided is a claim in the actor's own ledger
+    — and `belief_contradicts` could read no claim the corpus deposited (`H-116`). `W-B` opened
+    that channel. **Does a fork now change one of the next three decisions?**
+
+    THE ANSWER, AND IT IS PINNED HERE ON ONE CASE: **yes at `actor` and at `total`, never at
+    `none`.** NPC-088, seed 0, 4 seasons, at 2 slots — genuine forks / DIVERGED are
+    **17/0 at `none`, 16/2 at `actor`, 16/4 at `total`**.
+
+    ⚠ THE FIXTURE POINT IS NARROWED BY `MAX_ALT`, NOT CHOSEN — BUT NOT TO ONE CELL, AND THE FIRST
+    WRITING OF THIS PARAGRAPH SAID IT WAS. `H-117` measured that at `DEFAULT_FIXTURES` (5 x 3 = 15
+    slots) the act budget NEVER BINDS — every person takes ALL of their ranked candidates — so
+    under the native fork every probe is INERT-BY-CONSTRUCTION and there is no `x instead of y`
+    moment to flip. A genuine fork needs an alternative OUTSIDE the real budget and within
+    `A9.MAX_ALT` (3) of the taken one, i.e. a deliberation whose in-budget count is `L <= 3`.
+
+    **THE RETRACTED CLAIM: "crossing the two DECLARED sweeps, exactly one cell gives `L <= 3`:
+    2 x 1".** `L` is THE PACKER'S OWN TAKE (`recorder.in_budget` records what `pack_scenes`
+    returned), NOT the slot product `scene_budget x interactions_per_scene`, which is what that
+    argument substituted for it — and `L` is PER DELIBERATION, not per cell. `take()` charges an
+    extended scene `extended_scene_cost` (2) and takes a whole chunk whenever `ext <= left`, so at
+    **2 x 3** the first chunk of three is taken entire for a cost of 2 and `L = 3`, not 6.
+    MEASURED over all nine cells, 89 worlds, seed 0 (`wd_cells.py` -> `runs/wd_cells.json`):
+    **TWO cells are askable, 2 x 1 (1,467 genuine forks) and 2 x 3 (733); the other seven yield
+    0.** `L` distributions are `{2: 715, 3: 264, 4: 89}` and `{3: 842, 4: 164, 6: 62}`.
+    2 x 3 leaves `interactions_per_scene` at its default, so it is ONE declared-arm change against
+    2 x 1's two — the SMALLER intervention, and it was never run until the adversarial pass.
+    Both values in both cells are arms of existing register rows; neither is invented, and no cell
+    was selected on its answer (`CLAUDE.md` §0.1 point 4). Found by an independent read-only
+    critic, 2026-09-04.
+
+    ⚠⚠ **AND THE ACCEPTANCE VERDICT IS CELL-DEPENDENT, WHICH THIS TEST NOW SAYS OUT LOUD.** Over
+    the corpus, verb-only fingerprint: at **2 x 1** `none` 1504/1504 = 100.00%, `actor` 1405/1467
+    = **95.77%** (62 DIVERGED), `total` 1285/1467 = 87.59% (182) — the acceptance is MET. At
+    **2 x 3** `none` 756/756 = 100.00%, `actor` **733/733 = 100.00% (0 DIVERGED)**, `total`
+    716/727 = 98.49% (11) — **the acceptance is NOT met at the shipped default.** So the cell that
+    was run is the one where the criterion passes, and the cheaper cell that was not run is the
+    one where it fails. That is not evidence of tuning (2 x 3 was never run, so nothing could be
+    selected on its result) and it is exactly the asymmetry §0.1 point 4 exists to surface.
+
+    ⚠ THE DENOMINATOR MOVES BETWEEN ARMS AND THIS TEST ASSERTS IT RATHER THAN HIDING IT. `probed`
+    and `NO-LIVE-WINDOW` are identical in all three arms (the deliberation count does not depend
+    on the deposit mode — `pack_scenes` is called for every person with a question, whatever their
+    candidate set). `INERT-BY-CONSTRUCTION` is 10 / 11 / 11, because the live arms drop a
+    Candidate and shrink the packer's own take `L`. So the denominators are 17 / 16 / 16 and a
+    ratio quoted without them is not a measurement.
+
+    ⚠ THE FULL SWEEP IS **NOT** GATED. It runs 89 worlds x 3 arms x 3 fixture points; this is a
+    slice of it chosen because it exercises the whole path — fork -> different acts -> different
+    deposits -> different ledger -> clause 4 -> a different candidate list at a strictly later
+    tick. ⚠ REPRODUCE WITH THE CHUNKED PATH, NOT WITH `wd_acceptance.py`: this docstring gave
+    `python proposals/2026-09-04-degree-sweep/wd_acceptance.py` until 2026-09-04, and that file's
+    own docstring says its `main()` DOES NOT FINISH — the two contradicted each other and the
+    command named here was the dead one. The live commands are
+
+        python proposals/2026-09-04-degree-sweep/wd_chunk.py <none|actor|total> <default|narrow|2x3> <a> <b>
+        python proposals/2026-09-04-degree-sweep/wd_subj.py  <none|actor|total> [<slots>] <a> <b>
+        python proposals/2026-09-04-degree-sweep/wd_extra.py
+        python proposals/2026-09-04-degree-sweep/wd_cells.py
+        python proposals/2026-09-04-degree-sweep/wd_collect.py
+
+    with `<a> <b>` over `0 23 / 23 46 / 46 69 / 69 89`. The cause of `main()`'s silent death is
+    measured and recorded in `wd_acceptance.py`'s header (an unbounded module-level
+    `trace_log.TRACE.rows`, ~221,000 rows and ~97 MB per case). Found by an independent read-only
+    critic, 2026-09-04.
+
+    FALSIFIERS, each with the outcome recorded beside it:
+      * NEGATIVE CONTROL — `none` must be 0 DIVERGED. If it is not, something other than `W-B`
+        moved the harness. Run 2026-09-04: 0. GREEN.
+      * POSITIVE CONTROL — the scorer must be able to SEE a divergence. `wd_acceptance.py`'s
+        `positive_control` widens clause 4 by one event-kind predicate at `none` and the scorer
+        reports DIVERGED on all four plants. Not re-run here (it is a corpus-scale plant); the
+        comparator half is covered by the strictly-later-tick assertion below plus the `actor`
+        arm's own non-zero count, which is a divergence this test observes.
+      * MUTATION 1 (run 2026-09-04): `observation_deposit_mode` forced to `none` in all three
+        arms — the `actor` slot then reads (17 genuine, 0 DIVERGED), which is the `none` row of
+        this very run, and this goes RED on BOTH `got["actor"]["diverged"] > 0` and the pinned
+        `(16, 2)`.
+      * MUTATION 2 (run 2026-09-04, on a copy of `arm9_forking.py`): the live window's tick filter
+        DELETED — `[j for j in range(i+1, len(D))][:LOOKAHEAD]`, which is the arm's first version
+        and confound 1 exactly. **18 of 51 scored window slots at `none` then sit at the fork's
+        own tick or earlier** (17 of 48 at `actor` and at `total`) and this goes RED on
+        `bad_windows == 0`. ⚠ AND THE DIVERGENCE COUNTS DO NOT MOVE ON THIS SLICE (0 / 2 / 4 in
+        both), which is worth stating rather than implying otherwise: the window defect inflated
+        the ARM's rate in the corpus by scoring dead slots as reconverged, and on NPC-088 at 2
+        slots it would not have changed the acceptance verdict. The guard is still what stops the
+        regression; it is not what produced the result.
+      * MUTATION 3 (run 2026-09-04): the same tick filter weakened from `>` to `>=` — **nothing
+        moves at all** on this slice (0 / 2 / 4, `nolive` 9). Recorded because it is the mutation
+        that looks like it should fire and does not: with three persons per tick and a lookahead
+        of 3, a same-tick successor rarely changes which slots fill the window. A mutation that
+        does not kill is evidence about the mutation, not about the guard."""
+    A9 = _wd_arm9()
+    import corpus_run as C
+    case = C.apply_rescale(next(c for c in R.load_cases("NPC") if c["id"] == "NPC-088"))
+    base = S.DEFAULT_FIXTURES.sweep("scene_budget", 2).sweep("interactions_per_scene", 1)
+
+    got, windows, bad_windows = {}, 0, 0
+    for mode in ("none", "actor", "total"):
+        r = A9.fork_case(case, 0, 4, fixtures=base.sweep("observation_deposit_mode", mode))
+        assert r["ok"], f"{mode}: the baseline run failed: {r.get('why')}"
+        real = [f for f in r["forks"] if f.get("status") in ("DIVERGED", "RECONVERGED")]
+        # confound 1, CHECKED: every scored fork's lookahead is strictly LATER-tick. DELIBERATE is
+        # a parallel map over a frozen world, so same-tick slots cannot differ and counting them
+        # scores a reconvergence that was true by construction.
+        ticks = {i: d[2] for i, d in enumerate(r["decisions"])}
+        for f in real:
+            for j in f["live_window"]:
+                windows += 1
+                if ticks[j] <= f["tick"]:
+                    bad_windows += 1
+        got[mode] = dict(probed=r["n_forks"], nolive=r["n_no_live_window"], inert=r["n_inert"],
+                         genuine=len(real), diverged=sum(1 for f in real if not f["reconverged"]),
+                         acts_differ=sum(1 for f in real if f["acts_differ"]),
+                         hash_differ=sum(1 for f in real if f["hash_differ"]))
+    print(f"\n  W-D — NPC-088, seed 0, 4 seasons, 2 slots (scene_budget 2 x "
+          f"interactions_per_scene 1): {got}")
+
+    # §0.1 pt 2 — ASSERT THAT IT ASSERTED. A window check that inspected zero windows, or a rate
+    # over a zero denominator, is an ABSENT assertion wearing a green one's clothes.
+    assert windows >= 90, (
+        f"only {windows} lookahead slots were inspected; the strictly-later-tick check has "
+        "nothing to be true of and this test is not checking confound 1 at all")
+    assert bad_windows == 0, (
+        f"{bad_windows} of {windows} scored lookahead slots sit at the fork's OWN tick or "
+        "earlier. DELIBERATE is a parallel map over a frozen world (shape.py:4204-4221), so those "
+        "slots cannot differ and counting them inflates reconvergence — the exact defect the "
+        "NO-LIVE-WINDOW exclusion exists to prevent")
+    assert all(g["genuine"] > 0 for g in got.values()), (
+        f"an arm scored ZERO genuine forks: {got}. Then its reconvergence rate has an empty "
+        "denominator and neither a 100% nor a 0% reading from it means anything. The likely "
+        "cause is the fixture point moving off 2 slots, where `A9.MAX_ALT` can no longer reach "
+        "an alternative outside the real budget (`H-117`)")
+
+    # THE NEGATIVE CONTROL — the single most important number in `W-D`.
+    assert got["none"]["diverged"] == 0, (
+        f"the CONTROL arm diverged {got['none']['diverged']} times of {got['none']['genuine']}. "
+        "`none` deposits nothing in the `requires` vocabulary, so §F1 clause 4 cannot fire and "
+        "the candidate set must be invariant with respect to everything that happens. A "
+        "divergence here means some channel other than `W-B`'s reaches `opening_set`, and every "
+        "other figure in `W-D` is confounded until it is found")
+    # THE ACCEPTANCE — reconvergence STRICTLY below 100% at the shipped default.
+    assert got["actor"]["diverged"] > 0, (
+        f"the SHIPPED default diverged 0 times of {got['actor']['genuine']}: {got}. Either "
+        "`observation_deposit_mode` has been flipped to `none`, or the deposit no longer reaches "
+        "`belief_contradicts`, or the fork no longer changes which acts are performed")
+    # PINNED, so a mechanism change is visible rather than merely allowed.
+    assert (got["none"]["genuine"], got["none"]["diverged"]) == (17, 0), got
+    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (16, 2), got
+    assert (got["total"]["genuine"], got["total"]["diverged"]) == (16, 4), got
+    # AND THE TWO LAYERS ARE SEPARATED. Every genuine fork changes the act/event stream — that was
+    # already true BEFORE `W-B` and is not the finding. The finding is the DECISION count above.
+    assert all(g["acts_differ"] == g["genuine"] and g["hash_differ"] == g["genuine"]
+               for g in got.values()), (
+        f"a genuine fork failed to move the act stream or the event log: {got}. Then the fork is "
+        "not being applied and the reconvergence figures measure nothing")
+
+
+def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_percent_under_it():
+    """**THE LARGEST FINDING IN `W-D`, PINNED SO IT CANNOT BE RE-PUBLISHED WRONG.**
+
+    `arm9_forking.recorder` records a deliberation as `(person, [verb, ...], tick)` — **VERBS
+    ONLY**. `Query.opening_set` returns `Candidate(verb, subject, why, operands)`, so two candidate
+    lists holding the SAME VERBS about DIFFERENT SUBJECTS compare EQUAL and the fork is scored
+    RECONVERGED. Widen the fingerprint to `(verb, subject)` — the only edit, made on a COPY so the
+    shipped instrument is untouched — and over the 89 corpus worlds at the 2-slot fixture point,
+    seed 0, 4 seasons:
+
+    | arm | verb-only | (verb, subject) |
+    |---|---|---|
+    | `none`  | 1504/1504 = **100.00%** | 1036/1504 = **68.88%** |
+    | `actor` | 1405/1467 = **95.77%**  | 960/1467 = **65.44%** |
+    | `total` | 1285/1467 = **87.59%**  | 855/1467 = **58.28%** |
+
+    **SO THE CONTROL IS NOT 100% AT THE FINER RESOLUTION, AND WHAT THAT RETRACTS IS THE DIAGNOSIS,
+    NOT THE ARITHMETIC.** ARM 9c reads *"the deliberation never reads the world … the only channel
+    by which anything that happened can reach a later decision is a CLAIM in the actor's ledger"*,
+    and ARM 9d then measures that channel closed. `opening_set` does read no World — but its `q`
+    does: `questions_for(w, p)` takes one, and clause 3 is `subject in referents(q)`.
+
+    ⚠⚠ **THE CARRIER IS NOT "THE LEDGER'S APPEND ORDER", WHICH IS WHAT THIS DOCSTRING SAID UNTIL
+    2026-09-04. `questions_for` SORTS, AND THE SORT DESTROYS APPEND ORDER.** Its last two lines are
+    `order = {src: i for i, src in enumerate(QUESTION_SOURCES)}` then
+    `out.sort(key=lambda q: (order[q.source], q.id))`. Several `claim_landed` questions SHARE a
+    source, so among them `q.id` ALONE decides — and `q.id` is `f"q:claim:{c.id}"` where `c.id` is
+    a CONTENT HASH, `H(w.world_seed, w.tick, pid, f"claim:{e.id}:{n}")`, minted in
+    `SeasonDriver.witness` off the depositing Event's own id. **So which question a person answers
+    is decided by lexicographic order over content-hashed claim ids** — an undeclared tiebreaker
+    with decision consequences, sitting one level ABOVE `H-54`, whose three arms
+    (`first`/`all`/`one_per_source`) all read `qs[0]` or `qs[0].id` and none of which says what
+    breaks ties WITHIN a source. Found by an independent read-only critic, 2026-09-04.
+
+    RE-TRACED WITH A SPY ON `questions_for`, not inferred (NPC-088, `none`, 2 slots, fork at
+    decision 0 — p_a's `move` -> `speak`; p_c at tick 1). The baseline's five `claim_landed`
+    questions come back at LEDGER INDICES `[6, 0, 1, 9, 10]` and the fork's six at
+    `[12, 5, 0, 1, 8, 9]`: neither is append order, and both are ascending `q.id`. The fork's
+    `speak` emits `speech.made` about `r_hearth`; the WITNESS fan lands it in p_c's ledger at
+    index 12 as claim `0261dc5bd7431c56`, and `0261…` sorts before `219a…`, so `qs[0]` goes from
+    `q:claim:219a9f960a5fa368` (referents `('p_c',)`) to `q:claim:0261dc5bd7431c56` (referents
+    `('r_hearth',)`). `question_aggregation_rule='first'` takes it and all seven of p_c's
+    candidates change subject from `p_c` to `r_hearth` with the verb sequence unchanged — which is
+    the flip originally reported, reached by a different mechanism than the one reported.
+    ⚠ **AND THE DEPOSITING EVENT'S SUBJECT IS `p_a`, NOT `p_c`**: event-kind claims mint in EVERY
+    arm and `fan_out_mode` defaults to `total`, so the pre-`W-B` channel is CROSS-PERSON at the
+    control arm. **A fork already changed what a person deliberates ABOUT before `W-B` — through
+    Q2 and a content-hash tiebreak nobody declared.**
+
+    HOW OFTEN THE TIEBREAK DECIDES, MEASURED (`wd_extra.py`, 89 baselines, 2 slots, `actor`):
+    the leading source is SHARED with at least one other question in **801 of 1,068
+    deliberations**, so three quarters of the corpus's questions are chosen by hash order. And of
+    `questions_for`'s four sources only TWO fire at all — `claim_landed` 6,978 and `need` 1,068;
+    `date_due` (Q1) and `band_crossed` (Q3) fire ZERO times.
+
+    THE TWO CHANNELS DO NOT OVERLAP, WHICH IS WHY BOTH READINGS ARE TRUE AT ONCE. Classifying every
+    changed window slot over the corpus: `none` = 510 SUBJECT-ONLY and **0 VERB-SET**; `actor` =
+    447 SUBJECT-ONLY and **62 VERB-SET**; `total` = 455 and **182**. The VERB-SET counts are
+    **exactly** the verb-only instrument's own DIVERGED counts in every arm, which is the
+    arithmetic saying the two probes are one probe at two resolutions.
+
+    WHAT THIS TEST GUARDS. Not a rate — the shape. If `none` ever reports 0 divergences under the
+    widened fingerprint, the Q2 channel has closed and `W-D`'s reading must be rewritten; if
+    `actor` ever stops adding VERB-SET changes on top of it, `W-B` has stopped reaching a decision.
+
+    Reproduce the corpus figures with `python proposals/2026-09-04-degree-sweep/wd_collect.py`
+    (§W-D.5); the chunks it reads are written by `wd_subj.py`. The full sweep is NOT gated — this
+    is NPC-088 alone."""
+    if str(_WD_SWEEP) not in sys.path:
+        sys.path.insert(0, str(_WD_SWEEP))
+    import arm9_subj as A9S           # the copy; its ONLY edit is the fingerprint
+    import arm9_forking as A9
+    import corpus_run as C
+    # ⚠ THE COPY IS VERIFIED TO BE A COPY. A "widened fingerprint" that had drifted from the
+    # shipped probe in any other line would make this table a comparison of two instruments.
+    a, b = (_WD_SWEEP / "arm9_forking.py").read_text(), (_WD_SWEEP / "arm9_subj.py").read_text()
+    diff = [(x, y) for x, y in zip(a.splitlines(), b.splitlines()) if x != y]
+    assert len(a.splitlines()) == len(b.splitlines()) and len(diff) == 1, (
+        f"`arm9_subj.py` differs from `arm9_forking.py` in {len(diff)} lines, not 1: {diff[:4]}. "
+        "Then the two columns of the table above are two instruments, not two resolutions")
+    assert "c.verb for c in ranked" in diff[0][0] and "(c.verb, c.subject) for c in ranked" in diff[0][1], (
+        f"the one differing line is not the fingerprint: {diff[0]}")
+
+    case = C.apply_rescale(next(c for c in R.load_cases("NPC") if c["id"] == "NPC-088"))
+    base = S.DEFAULT_FIXTURES.sweep("scene_budget", 2).sweep("interactions_per_scene", 1)
+    got = {}
+    for mode in ("none", "actor", "total"):
+        fx = base.sweep("observation_deposit_mode", mode)
+        wide = A9S.fork_case(case, 0, 4, fixtures=fx)
+        narrow = A9.fork_case(case, 0, 4, fixtures=fx)
+        assert wide["ok"] and narrow["ok"]
+        rw = [f for f in wide["forks"] if f.get("status") in ("DIVERGED", "RECONVERGED")]
+        rn = [f for f in narrow["forks"] if f.get("status") in ("DIVERGED", "RECONVERGED")]
+        got[mode] = dict(genuine=len(rw), wide=sum(1 for f in rw if not f["reconverged"]),
+                         verbonly=sum(1 for f in rn if not f["reconverged"]))
+        assert len(rw) == len(rn), (
+            f"{mode}: the two probes scored different numbers of genuine forks "
+            f"({len(rw)} vs {len(rn)}). The fingerprint must not change WHICH forks are genuine — "
+            "only whether they diverged")
+    print(f"\n  W-D.5 — NPC-088, 2 slots, seed 0, 4 seasons — DIVERGED by fingerprint: {got}")
+    assert all(g["genuine"] > 0 for g in got.values()), got
+    # THE FINDING: the control is NOT 100% once a decision includes what it is ABOUT.
+    assert got["none"]["verbonly"] == 0 and got["none"]["wide"] > 0, (
+        f"the control arm reads {got['none']}. Verb-only 0 and (verb, subject) > 0 is the whole "
+        "finding: a fork changes what a person deliberates ABOUT even with no `W-B` deposit at "
+        "all, through `questions_for` Q2 -> `q.referents` -> `opening_set` clause 3. If the "
+        "second number is now 0, that channel has closed and `W-D`'s reading must be rewritten")
+    # AND `W-B` ADDS ON TOP OF IT rather than being the only channel.
+    assert got["actor"]["wide"] > got["none"]["wide"] and got["actor"]["verbonly"] > 0, (
+        f"the shipped default no longer adds divergence over the control: {got}")
+    assert (got["none"]["genuine"], got["none"]["wide"]) == (17, 7), got
+    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (16, 11), got
+    assert (got["total"]["genuine"], got["total"]["wide"]) == (16, 12), got
+
+
+# ===========================================================================
+# `W-E` -- THE DEGREE. THREE BROKEN LINKS, AND THE DEMONSTRATION THAT THEY ARE CLOSED.
+#
+# The state before: `_fold` hardcoded `_degree_for_writes = None`; `VerbRow.emits_at` had ZERO
+# CALLERS ANYWHERE IN THE TRACER (`H-113`); and `Event.degree` was a declared field NOTHING EVER
+# ASSIGNED. Each hid the next, so a partial success and an overwhelming one were the same event.
+# ===========================================================================
+
+def _we_bands(model="scene_fraction", ids=range(24)):
+    """Fold `kill / wound` through the REAL road -- `SeasonDriver.resolve` -> `contest()` ->
+    `combat_seam` -> `wrapper.fight` -- once per act id, and report what each band did.
+
+    The act id is the only thing that varies: `combat_seam` seeds its RNG from
+    `H(world_seed, tick, actor, "contest:<prize>:<act id>")`, so a different id is a different
+    fight in the same world. Nothing about the WORLD is tuned to reach a band."""
+    seen = {}
+    for i in ids:
+        w = P.tiny_world()
+        w.step = S.Step.RESOLVE
+        w.fixtures = w.fixtures.sweep("wound_harm_model", model)
+        before = w.persons["p_mid"].body
+        d = S.SeasonDriver(w)
+        act = S.Act(id=f"we{i}", actor="p_low", verb="kill / wound",
+                    payload={"subject": "p_mid"})
+        evs = d.resolve([act], w.fixtures.get("contest_max_depth"))
+        deg = evs[0].degree if evs else None
+        alive = "p_mid" in w.persons
+        seen.setdefault(deg, dict(
+            act=act.id, kinds=sorted(e.kind for e in evs), alive=alive,
+            body_before=before, body_after=(w.persons["p_mid"].body if alive else None),
+            degrees={e.degree for e in evs},
+            live_tenures=(sum(1 for t in list(w.tenures) + list(w._unowned)
+                              if (t.subject == "p_mid" or t.object == "p_mid") and t.live))))
+    return seen
+
+
+def test_we_a_contested_acts_consequence_differs_by_degree():
+    """**THE DELIVERABLE, EXECUTED.** `CLAUDE.md` §0.2: a juncture is done when the behaviour
+    RUNS. This runs it -- the whole road, the real personal-combat engine, the real fold -- and
+    asserts the three bands produce three DIFFERENT consequences.
+
+    Before `W-E` this was unreachable in two places at once: `resolve()`'s contest branch
+    `continue`d before the fold, and `_fold` passed a hardcoded `None` to `writes_at`.
+
+    FALSIFIER, and it is the arm rather than an argument: `wound_harm_model="total"` is the code
+    EXACTLY AS IT STOOD (`harm` defaulting to the person's whole body). Under it `Wounded` kills,
+    so `Felled` and `Wounded` become the same consequence and the assertion below goes red. That
+    is the control §0.1 point 4 asks for -- the arm where the degree does not change what is
+    written, measured rather than imagined.
+
+    MUTATION (run 2026-09-04): revert `_fold`'s `_pairs = row.writes_at(_degree)` to
+    `writes_at(None)` and this raises `Unspecified` on the first act; revert the emission line to
+    `row.emits` and the `Untouched` assertion goes red with `person.died` in its kinds."""
+    import combat_seam as C
+    if C.engine() is None:                      # a NAMED gap, never a silent skip
+        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+
+    seen = _we_bands()
+    # ⚠ ASSERT THAT IT ASSERTED (§0.1 point 2). A search over act ids that happened to find only
+    # one band would otherwise "pass" three vacuous comparisons.
+    assert set(seen) == set(S.COMBAT_BANDS), (
+        f"the search reached {sorted(seen)} of {list(S.COMBAT_BANDS)} over 24 act ids. Every "
+        "assertion below compares bands, so a missing band makes them absent rather than weak")
+
+    felled, wounded, untouched = (seen[S.FELLED], seen[S.WOUNDED], seen[S.UNTOUCHED])
+    # FELLED -- the kill. The subject leaves the world and every tenure naming them closes (§15.3,
+    # "a plague that kills the praefect ends his tenure THROUGH THE DEATH").
+    assert felled["alive"] is False and felled["kinds"] == ["person.died"], felled
+    assert felled["live_tenures"] == 0, felled
+    # WOUNDED -- alive, and strictly worse off. This is the case the verb's name always carried
+    # and the table could not express.
+    assert wounded["alive"] is True and wounded["kinds"] == ["body.changed"], wounded
+    assert 0 < wounded["body_after"] < wounded["body_before"], wounded
+    # UNTOUCHED -- the fight happened and changed nothing, and STILL EMITS. Jordan, 2026-06-02:
+    # "an undecided fight is a legitimate outcome." A loss is not a refusal.
+    assert untouched["alive"] is True and untouched["kinds"] == ["contest.undecided"], untouched
+    assert untouched["body_after"] == untouched["body_before"], untouched
+    # AND THE THREE ARE ACTUALLY DIFFERENT -- the claim, stated as one comparison.
+    assert len({tuple(b["kinds"]) for b in (felled, wounded, untouched)}) == 3
+    assert len({(b["alive"], b["body_after"]) for b in (felled, wounded, untouched)}) == 3
+
+    # ── THE CONTROL. `total` re-runs the pre-`W-E` magnitude and collapses two bands into one. ──
+    ctl = _we_bands(model="total")
+    assert set(ctl) == set(S.COMBAT_BANDS), ctl
+    assert ctl[S.WOUNDED]["alive"] is False, (
+        "the control arm no longer reproduces the defect: under `wound_harm_model=total` the "
+        "harm is the whole body, so a WOUND must kill exactly as a FELLING does. If this passes "
+        "with the subject alive, the arm has stopped being the code as it stood and the "
+        "measurement above has no baseline")
+    assert (ctl[S.FELLED]["alive"], ctl[S.WOUNDED]["alive"]) == (False, False)
+    # ⚠ AND THE CONTROL ARM IS VISIBLY WRONG, WHICH IS WHY IT IS A CONTROL AND NOT A CANDIDATE:
+    # it deletes the person and still reports `body.changed`, i.e. a success report for something
+    # that did not happen (`ID-9`) -- the defect class the degree-keyed `emits:` exists to end.
+    assert ctl[S.WOUNDED]["kinds"] == ["body.changed"], ctl[S.WOUNDED]
+
+    # ── THE SECOND CONTROL. `none` isolates the WRITE SET from the VALUE. ──
+    ctl2 = _we_bands(model="none")
+    assert ctl2[S.WOUNDED]["kinds"] == ["kill.refused"], (
+        f"with no harm model a wound writes nothing, so the fold's own write-nothing guard must "
+        f"emit the REFUSAL rather than the success; got {ctl2[S.WOUNDED]}")
+    assert ctl2[S.WOUNDED]["body_after"] == ctl2[S.WOUNDED]["body_before"], ctl2[S.WOUNDED]
+
+    print(f"\n  W-E — kill / wound, tiny_world, 24 act ids, seed as tiny_world sets it:"
+          f"\n    scene_fraction {[(k, v['kinds'], v['alive'], v['body_after']) for k, v in sorted(seen.items())]}"
+          f"\n    total (control) {[(k, v['kinds'], v['alive']) for k, v in sorted(ctl.items())]}"
+          f"\n    none  (control) {[(k, v['kinds'], v['alive']) for k, v in sorted(ctl2.items())]}")
+
+
+def test_we_event_degree_is_assigned_and_stays_none_where_nothing_graded_it():
+    """THE THIRD BROKEN LINK. `Event.degree` was declared on the dataclass and assigned by NOTHING
+    -- `ID-13`'s test (a field no writer reaches is one that does not exist) applied to the
+    outcome column itself. `_fold` assigns it now, on the one path every act-emission takes.
+
+    ⚠ AND `None` ON AN UNCONTESTED ACT IS THE CLAIM'S OTHER HALF, NOT AN OMISSION. No contest
+    graded a `speak`, so stamping one would be the fabrication this item exists to remove -- and
+    it is what keeps the corpus byte-identical: `World.content_hash` mixes `e.degree` in, so a
+    degree on an uncontested Event would move every hash in every artifact.
+
+    MUTATION (run 2026-09-04): drop `degree=_degree` from `_fold`'s `ev(...)` and the first
+    assertion goes red; stamp a degree unconditionally and the second does."""
+    import combat_seam as C
+    if C.engine() is None:
+        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+    seen = _we_bands()
+    for band, got in seen.items():
+        assert band in S.COMBAT_BANDS and got["degrees"] == {band}, (band, got)
+    # THE UNCONTESTED PATH. `speak` declares no `contests:`, so nothing graded it.
+    w = _w(); w.step = S.Step.RESOLVE
+    d = S.SeasonDriver(w)
+    evs = d.resolve([S.Act(id="we_sp", actor="p_low", verb="speak")], 2)
+    assert evs and all(e.degree is None for e in evs), [(e.kind, e.degree) for e in evs]
+
+
+def test_we_emits_at_has_a_caller_and_the_band_selects_the_kind():
+    """`H-113`, closed. `VerbRow.emits_at` had ZERO callers anywhere in the tracer -- verified
+    exhaustively by an independent read-only critic -- so a contested verb emitted the FLAT UNION
+    of every band. Executed then: a contest resolved `Untouched`, the degree meaning NOBODY WAS
+    HURT, emitted `person.died`. That is `ID-9` inside the epistemic layer, where every witness
+    then mints a claim from it.
+
+    FALSIFIER: revert `_fold`'s `_declared = row.emits_at(_degree)` to `row.emits` and the union
+    assertion below goes red naming the extra kinds."""
+    import combat_seam as C
+    if C.engine() is None:
+        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+    row = S.VERB_TABLE["kill / wound"]
+    union = set(row.emits)
+    assert len(union) >= 3, f"the union is no longer bigger than a branch ({union}); re-derive"
+    seen = _we_bands()
+    assert set(seen) == set(S.COMBAT_BANDS), sorted(seen)
+    for band, got in seen.items():
+        declared = set(row.emits_at(band))
+        assert set(got["kinds"]) == declared, (band, got["kinds"], sorted(declared))
+        assert set(got["kinds"]) != union, (
+            f"{band} emitted the flat union {sorted(union)} -- `emits_at` is not being consulted")
+    # THE ONE THAT WAS ACTIVELY FALSE: nobody was hurt and the world was told a man died.
+    assert "person.died" not in seen[S.UNTOUCHED]["kinds"], seen[S.UNTOUCHED]
+    assert "person.died" not in seen[S.WOUNDED]["kinds"], seen[S.WOUNDED]
+
+
+def test_we_the_ladder_is_the_trees_own_and_not_a_copy_of_it():
+    """§27.2's highest-value refusal, applied to the one function this item was most tempted to
+    re-implement. `S39.4` reads four bands off a MARGIN; the tree owns that ladder at
+    `engine/autoload/dice_engine.py::degree_from_net` -- *"THE degree ladder. Single owner for
+    every scale of the game (Jordan ruling, 2026-08-14)"*. `shape.degree_of` IMPORTS AND CALLS it.
+
+    THREE ASSERTIONS, EACH EXCLUDING A DIFFERENT WAY OF FAILING:
+      1. IDENTITY -- the callable this module holds IS the tree's object, not a look-alike.
+      2. CORRESPONDENCE -- the band boundaries, enumerated, including the FRACTIONAL cases the
+         docstring says only the windowed reading survives. A copied table would drift silently
+         the day the owner changed its mind, which is exactly what `params_tables.yaml`'s captured
+         ladder did (`CLAUDE.md` §5 -- the capture still shows the PRE-RULING bands).
+      3. FOLLOW-THE-OWNER -- with the resolved ladder replaced, every answer must change. A
+         private band table inlined in `degree_of` would keep answering correctly and pass 1 and 2
+         on a stale copy; only this one can see it.
+
+    ⚠ AND THE OPERAND DOES NOT EXIST YET, WHICH THIS TEST DOES NOT PRETEND OTHERWISE ABOUT.
+    Nothing in the tracer produces a `net`; the branch is a READER WITH NO PRODUCER and is
+    recorded on `H-98`. `test_we_only_a_verb_that_declares_contests_can_be_graded_today` is
+    where that is measured rather than asserted."""
+    lad = S.degree_ladder()
+    assert lad is not None, f"the tree's degree ladder is unavailable: {S.ladder_error()}"
+    from engine.autoload.dice_engine import DEGREE_LABEL, Degree, degree_from_net
+    assert lad[0] is degree_from_net and lad[1] is DEGREE_LABEL, (
+        "`degree_of` is holding something other than the tree's own ladder -- a copy of a single "
+        "owner is a second resolver with a delayed fuse")
+
+    # 2. THE BOUNDARIES. `net - ob`: >= 3 Overwhelming · >= 1 Success · 0 <= m < 1 Partial ·
+    # < 0 Failure. Fractional operands included: the docstring is explicit that the Partial band
+    # is a whole-success-wide WINDOW rather than the point `margin == 0`, and that only the
+    # windowed reading survives contact with a fractional obstacle.
+    checked = 0
+    for net, ob in ((5, 2), (5.0, 2.0), (3, 2), (2.999, 0), (2, 2), (2.5, 2), (2.0, 2.0),
+                    (1, 2), (1.9, 2.0), (-1, 0), (0, 0), (0.5, 0), (3, 0), (0, 3)):
+        assert S.degree_of({"net": net, "ob": ob}) == DEGREE_LABEL[degree_from_net(net, ob)]
+        checked += 1
+    assert checked == 14, checked
+
+    # 3. FOLLOW THE OWNER. Replace the RESOLVED ladder and every band must move with it.
+    saved = S._LADDER
+    try:
+        S._LADDER = (lambda net, ob, **k: Degree.FAILURE, DEGREE_LABEL)
+        moved = {S.degree_of({"net": n, "ob": o}) for n, o in ((5, 2), (3, 2), (2.5, 2), (1, 2))}
+        assert moved == {"Failure"}, (
+            f"replacing the ladder changed nothing ({moved}) -- `degree_of` is answering from a "
+            "band table of its own, which is the second resolver S27.2 refuses")
+    finally:
+        S._LADDER = saved
+    assert S.degree_of({"net": 5, "ob": 2}) == "Overwhelming", "the ladder was not restored"
+
+
+def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
+    """PER VERB, MEASURED RATHER THAN CLAIMED -- and the answer is ONE of thirty-two.
+
+    A degree exists only where something RESOLVES a contest. 31 of the 32 rows in
+    `verb_table.yaml` declare no `contests:` at all, so no degree is even ASKABLE for them: they
+    are not ungraded, they are ungradeable, and a degree wired onto one would be a number with no
+    producer. `speak`, `tell`, `utter`, `petition` and `the six investigation acts` -- the
+    person-to-person verbs a degree would matter most for -- are all in that 31.
+
+    THE THREE PRIZES THAT ARE NOT `the body` ROUTE TO SUBSYSTEMS THE SEAM DOES NOT CALL, and that
+    is a RULING rather than an omission. Jordan, 2026-09-02: *"we don't NEED to worry about them
+    at this point in time."* The seam names the subsystem and refuses, which this test executes.
+
+    AND THE LADDER BRANCH HAS NO PRODUCER. `degree_from_net` reads `net - ob`; nothing in this
+    tracer produces a `net`. The scan below is the falsifier for that sentence -- if a roll ever
+    lands here, it goes red and the claim has to be rewritten rather than quietly outlived."""
+    contested = {v: r.contests for v, r in S.VERB_TABLE.items() if r.contests}
+    assert contested == {"kill / wound": "the body"}, (
+        f"the set of contesting verbs moved: {contested}. Every claim `W-E` published about what "
+        "can be graded today is scoped to this set")
+    assert len(S.VERB_TABLE) == 32, len(S.VERB_TABLE)
+
+    prizes = S.roster_map("contest_subsystems", "prizes")
+    assert prizes["the body"] == "personal_combat"
+    # THE SEAM CALLS personal_combat AND REFUSES THE OTHER TWO, BY NAME. Executed, not read.
+    w = _w(); w.step = S.Step.RESOLVE
+    refused = {}
+    for prize, sub in sorted(prizes.items()):
+        if sub == "personal_combat":
+            continue
+        with pytest.raises(Unspecified) as ei:
+            S.contest(w, "S", prize, ["p_low", "p_mid"], 0, 2, ["a1"])
+        refused[prize] = sub
+        assert sub in str(ei.value), (prize, str(ei.value)[:160])
+    assert set(refused) == {"a field", "a proposition", "a standing"}, refused
+
+    # NOTHING PRODUCES A MARGIN. The only `net` in the instrument is `degree_of`'s own read of
+    # one, so the ladder branch is a reader with no producer (recorded on `H-98`).
+    producers = []
+    for f in sorted(HERE.glob("*.py")):
+        if f.name == "test_tracer_is_honest.py":
+            continue
+        for i, line in enumerate(_code_only_lines(f), 1):
+            if re.search(r"\bnet\b\s*=|roll_pool|\bsuccesses\b", line):
+                producers.append(f"{f.name}:{i} {line.strip()[:90]}")
+    assert not producers, (
+        "something now produces a margin. `W-E` published `the ladder branch has no producer` "
+        "and recorded it on `H-98`; that sentence is now false and must be rewritten rather "
+        "than left standing:\n  " + "\n  ".join(producers))
+
+
+def _code_only_lines(path: Path) -> list:
+    """Source lines with comments and docstrings removed, so a scan for a mechanism cannot be
+    satisfied -- or reddened -- by prose describing it. `_code_only` collapses the whole file to
+    one string; this keeps line numbers, which a finding needs to be checkable."""
+    import io
+    import tokenize
+    src = path.read_text()
+    keep = [""] * (len(src.splitlines()) + 2)
+    try:
+        toks = list(tokenize.generate_tokens(io.StringIO(src).readline))
+    except tokenize.TokenError:
+        return src.splitlines()
+    prev = tokenize.INDENT
+    for tok in toks:
+        if tok.type == tokenize.COMMENT:
+            continue
+        if tok.type == tokenize.STRING and prev in (
+                tokenize.INDENT, tokenize.DEDENT, tokenize.NEWLINE, tokenize.NL):
+            prev = tok.type
+            continue
+        if tok.type not in (tokenize.NL, tokenize.NEWLINE):
+            prev = tok.type
+        keep[tok.start[0]] += tok.string + " "
+    return keep
+
+
+def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
+    """A CORRECTION TO `verb_table.yaml`, EXECUTED. Its `writes_source:` cell said the band comes
+    from `wound_state[loser]`. `kill / wound` writes on `payload["subject"]` (`_eff_kill`), so on
+    a fight the ACTOR loses, the loser's tracker says `felled` and the fold would delete the
+    TARGET -- who is standing, unhurt or merely bled. The band is read off the person the writes
+    land on, and the cell now says so.
+
+    THE CASE IS REAL AND IS NAMED: act `we0` in `tiny_world` is a fight `p_low` starts and LOSES.
+    `wound_state[p_low].felled` is True, `wound_state[p_mid].felled` is False, and `p_mid` carries
+    one wound -- so the subject reading gives `Wounded` and the loser reading gives `Felled`.
+
+    ⚠ AND `winner` IS NOT A SAFE KEY EITHER, WHICH IS THE SECOND HALF OF WHY NOTHING HERE READS
+    IT. Measured over the same 40 seeds: `we4` returns `winner = p_low` with
+    `wound_state[p_low].felled` ALSO True, so "the loser" cannot even be derived from `winner`
+    without contradicting the scene. The seam returns both and the fold reads only the scene.
+
+    MUTATION (run 2026-09-04): change `combat_degree`'s subject lookup to the loser (the party
+    that is not `result["winner"]`) and this goes red -- `p_mid` is deleted by a fight he won."""
+    import combat_seam as C
+    if C.engine() is None:
+        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+    w = _w(); w.step = S.Step.RESOLVE
+    raw = S.contest(w, "R", "the body", ["p_low", "p_mid"], 0, 2, ["we0"])
+    assert raw["wound_state"]["p_low"]["felled"] is True, raw["wound_state"]
+    assert raw["wound_state"]["p_mid"]["felled"] is False, raw["wound_state"]
+    assert raw["wound_state"]["p_mid"]["wounds"] > 0, raw["wound_state"]
+    assert S.combat_degree(raw, "p_mid") == S.WOUNDED
+    assert S.combat_degree(raw, "p_low") == S.FELLED, (
+        "the two readings must actually differ on this case, or the assertion below is vacuous")
+
+    w2 = _w(); w2.step = S.Step.RESOLVE
+    d = S.SeasonDriver(w2)
+    evs = d.resolve([S.Act(id="we0", actor="p_low", verb="kill / wound",
+                           payload={"subject": "p_mid"})], 2)
+    assert [e.kind for e in evs] == ["body.changed"], [(e.kind, e.degree) for e in evs]
+    assert "p_mid" in w2.persons, (
+        "the subject was deleted by a fight the ACTOR lost -- the band is being read off the "
+        "loser, which is the defect `verb_table.yaml`'s `writes_source:` cell used to specify")
+    assert evs[0].degree == S.WOUNDED

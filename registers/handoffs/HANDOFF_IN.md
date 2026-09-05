@@ -1,5 +1,116 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## ⚠ CURRENT — 2026-09-04, PR #368: the season loop can now branch, and by how little (read this first)
+
+**The question this branch answered.** Fork every mechanical decision in the ARC/NPC corpus and
+follow three decisions on: does anything downstream change? At session start the answer was
+**no, 2,403 times out of 2,403**. Things happened and nothing followed from them.
+
+**The answer now: the world diverges 100% of the time, later decisions diverge ~4%.** That gap is
+the finding. Every fork produces different acts, events and state; the people barely notice.
+
+### What was built, in game terms
+
+| item | what it changed |
+|---|---|
+| **W-C** | `move` and `transfer` executed for the first time. Before: refused in every world, every season. After: 650 moves, 702 transfers. Goods travel; people relocate. |
+| **W-B** | Succeeding vs failing now leaves a readable trace. The fold records **what it looked at** (`stores:grain → 0`) instead of **that it said no**, WITNESS deposits it, and it lands in the same vocabulary decisions consult. |
+| **W-D** | The measurement, not a build. 95.77% reconvergence at the shipped default against 100.00% at the control, zero divergences in the control. |
+
+### Four retractions — each caught by a structurally independent critic, five for five
+
+1. **A fabricated provenance on the anti-fabrication gate's own field** (`H-94`). The row claimed
+   §54 item 7 defines `hearth(giver)`; it supplies the token and no definition. `hearth_of` →
+   `containing_rung_of`, because the name was the claim: it returns a non-hearth rung in **156 of
+   267** corpus seatings.
+2. **The swept fixture was the inert one.** `default_store_kind` carried a comment saying it was
+   swept and nothing swept it; one `sweep:` field held two fixtures, which `rule_R2` cannot see.
+   Swept: `grain` and `salt` give 702 transfers, `coin` gives **0** and drops `transfer` from the
+   executed set. The fixture that *was* swept cannot move any verdict.
+3. **W-B's headline was a belief its own deposit falsified.** `WorldReader` answers `claim.held`
+   from ledger membership; the deposit writes a claim with that subject. **95% of the published
+   effect was the defect** — 304 clause-4 drops → 13. Fixed as a closure property
+   (`LEDGER_DERIVED_STEMS`), not a special case.
+4. **W-D's fixture cell was not forced** — wrong for two independent reasons. `L` is the packer's
+   take, not the slot product; and it is per *deliberation*, not per cell. Two cells qualify and
+   the cheaper one was never run. `wd_cells.py` makes the claim checkable. ⚠ **THE CHEAPER CELL
+   WAS THEN RUN AND IT FAILS THE ACCEPTANCE.** At `2 x 3` — ONE declared-arm change from the
+   shipped fixture, against `2 x 1`'s two — the default arm reconverges **733/733 = 100.00%,
+   ZERO divergences**. So the verdict is CELL-DEPENDENT and the cell that was run is the one where
+   it passes. Only `total` diverges there (11 of 727), and `total` is the arm this chain
+   established is *wrong* for form 6. The zero is a null result, not a blind scorer: the widened
+   `(verb, subject)` fingerprint reads 78.17% at the same cell, and the positive control detects
+   4 of 4 plants.
+5. **Cross-person transmission is NOT zero — the opposite of what this chain kept saying.**
+   Re-traced with a spy, not inferred: `p_a`'s forked `speak` lands in **`p_c`'s** ledger and flips
+   which question `p_c` answers. The depositing event's subject is `p_a`. Event-kind claims mint in
+   every arm and `fan_out_mode` defaults to `total`, so the pre-`W-B` **question** channel carries
+   cross-person effects AT THE CONTROL ARM and always has. What measures zero is transmission
+   through the **belief** channel `W-B` built. The mechanism is a content-hash tiebreak, not append
+   order — `questions_for` SORTS by `(source, q.id)` and `q.id` is a hash.
+6. **A citation-gate remedy that would have made the gate worse.** The critic proposed naming the
+   register in a row's own `cite:`; mutation-checking showed that makes a quotation verify AGAINST
+   ITSELF — a planted fabricated figure passed. The GATE was fixed instead. A row may not be its
+   own evidence.
+
+### The state of DEGREE — W-E LANDED, and the answer is a measurement
+
+**A degree now reaches the fold and changes the consequence — for the one verb that can be
+graded.** All three links closed: `_fold` takes a `Resolution(degree, result)` so
+`_degree_for_writes` is no longer hardcoded and `resolve()`'s contest branch falls through instead
+of `continue`ing; `row.emits_at(_degree)` now HAS a caller; `Event.degree` is assigned. Demonstrated
+on the real road with only the act id varying — **Felled** kills and closes every tenure,
+**Wounded leaves the subject alive at body 1000 → 650**, **Untouched** changes nothing — with a
+`total` control that re-runs the old defect and collapses two bands into one.
+
+⚠ **BUT: 1 of 32 VERBS DECLARES `contests:` — `kill / wound`, and nothing else.** `speak`, `tell`,
+`utter`, `petition` and all six investigation acts declare none, so they are not UNGRADED, they are
+**UNGRADEABLE**: nothing resolves a contest for them and a degree wired onto one would be a number
+with no producer. That is the answer to *"can we grade person-to-person interaction"* — no, and the
+blocker is the missing contest, not the missing wiring.
+
+⚠ **AND THE LADDER BRANCH HAS NO PRODUCER.** A comment-stripped scan finds no `net`, no
+`roll_pool`, no `successes` anywhere in the instrument — there is no roll. The branch calls the
+engine's real ladder (`degree_from_net`, imported by path, NOT mirrored) and locates `H-98`'s first
+option; it is the weakest thing shipped and W-E said so rather than defending it. `H-98` stays
+`absent` deliberately: the fourth band and the margin producer are genuinely missing.
+
+**A correction W-E made to its own brief:** the claim "zero verbs declare `writes_by_degree`" was
+FALSE — `kill / wound` has carried Felled/Wounded/Untouched since 2026-09-03. What was true is
+narrower and worse: `emits_at` had **zero callers**, so every band emitted the flat union.
+
+### The throttle on ripple, if amplification is the goal
+
+`assemble(person, question)` takes **one** question, and all three declared `H-54` arms return one
+— they differ in *which*, never *how many*. A season in which the world changed ten ways reaches a
+person as one question, and the option set is generated from that question's referents. Which
+question wins is a fixed source priority then a **content-hash tiebreak** that nothing declares.
+Three other damping terms: no degree; nothing accumulates (`Person.stance` untouched by outcomes,
+ledger evicts at 200 — a person was observed forgetting a fact and resuming the blocked
+behaviour); and cross-person transmission through the **belief** channel measures zero.
+⚠ **BUT NOT THROUGH THE QUESTION CHANNEL — see retraction 5.** One person's act already changes
+what another deliberates about, at the control arm, via an undeclared content-hash tiebreak. So
+transmission is not something to build from nothing; the job is to make the existing accidental
+mechanism deliberate. Every term is still below 1, so the system damps rather than amplifies.
+
+### Two questions that want a ruling, not a session's guess
+
+- **The question-id tiebreak above `H-54`.** Which question a person answers is decided by
+  lexicographic order over two content hashes. `H-54`'s three arms all read `qs[0]`; none says
+  what breaks ties.
+- **`H-111`** — should a *failure* occasion a decision? W-B made this the channel carrying every
+  falsifiable belief in the corpus. Held `absent` deliberately; the critic upheld all five §0 tests.
+
+### Method note worth keeping
+
+Every item ran producer → **structurally independent critic** (`subagent_type: valoria-critic`,
+Read/Grep/Glob only) → fix pass. The critic found a real defect **five times out of five**, and
+twice the fix pass correctly *refuted* its critic with evidence. Two producers self-corrected
+mid-flight — one found a mutation green while its own docstring claimed red (a vacuous assertion)
+and fixed the test rather than the sentence. Do not skip the critic half.
+
+---
+
 ## PORT NOTE — this branch is to be absorbed into PR #313 (`claude/review-commits-workplan-7x4q4g`)
 
 **Jordan's instruction, 2026-08-14.** PR #312 (`claude/recent-commits-review-oumr8s`) and PR #313 are

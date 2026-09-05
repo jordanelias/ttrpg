@@ -9229,7 +9229,7 @@
   "P12": {
    "id": "P12",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION. `opening_set('p', 'v', 'q')` -- THE ROSTER PARAMETER IS GONE, which is `D2` entire. Rev 2 was PARTIAL and said why: the type was right and the property the type protects was not, because S61 left `q` with no producer so there was nothing to compute from. `questions_for()` is that producer. 44 candidates over 22 verbs, every one a verb-table row",
+   "detail": "PASS BY CONSTRUCTION. `opening_set('p', 'v', 'q', 'fx')` -- THE ROSTER PARAMETER IS GONE, which is `D2` entire. Rev 2 was PARTIAL and said why: the type was right and the property the type protects was not, because S61 left `q` with no producer so there was nothing to compute from. `questions_for()` is that producer. 44 candidates over 22 verbs, every one a verb-table row",
    "kind": null,
    "section": "S17",
    "title": "opening_set returns Candidate[], not Act[]",
@@ -9559,12 +9559,12 @@
   "F7": {
    "id": "F7",
    "verdict": "GAP",
-   "detail": "'carry' has a precondition the fold cannot evaluate: 'a Petition exists; costs budget like any act'",
+   "detail": "'carry' writes ['DocketItem.matter'] and Part E does not say WHAT VALUE",
    "kind": "UNSPECIFIED",
-   "section": "E2",
+   "section": "E2/E3",
    "title": "a demand rises from a hearth to a duchy",
-   "needs": "a predicate in REQUIRES_PREDICATES, or a `requires:` the table states structurally rather than in prose",
-   "law": "\u00a7E2 -- `requires` is checked IN THE FOLD. Stated as prose it is the same defect `resolve` had, one column along: a rule the code cannot read",
+   "needs": "an entry in EFFECTS, or a `writes:` column that carries the value",
+   "law": "\u00a7E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and \u00a727.1's scarcity stops happening. Register row H-63",
    "by": "probe-model",
    "tests": "someone with no power must be able to get a matter in front of someone who has it"
   },
@@ -9595,7 +9595,7 @@
   "F10": {
    "id": "F10",
    "verdict": "PASS",
-   "detail": "PASS: granted=1, refused=1, larder=0 (never negative). THE SECOND CLAIMANT ON AN EMPTIED LARDER GOT A DIFFERENT EVENT. Petitions never closed each other; the matter closed AT RESOLVE BY SCARCITY. S54 item 7's precondition is what makes this true rather than minting",
+   "detail": "PASS: granted=1, refused=1, larder=0 (never negative), total store mass 113 == the no-act control's 113. THE SECOND CLAIMANT ON AN EMPTIED LARDER GOT A DIFFERENT EVENT. Petitions never closed each other; the matter closed AT RESOLVE BY SCARCITY. S54 item 7's precondition is what makes this true rather than minting",
    "kind": null,
    "section": "S54.1",
    "title": "a matter closes by scarcity, not by cancelling",
@@ -9901,7 +9901,7 @@
   "A5": {
    "id": "A5",
    "verdict": "PASS",
-   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (5a4b6f6f9582...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (da3335a665a7...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
    "kind": null,
    "section": "S32",
    "title": "the fold is order-independent, and the float control actually fires",
@@ -10076,7 +10076,7 @@
    "section": "S44.1",
    "title": "a wrapper checks what crosses a rung boundary",
    "needs": "nothing -- THE RULE WAS STATED OVER A FIELD THAT DOES NOT EXIST",
-   "law": "S44.1 -- THERE IS NOTHING TO CHECK. Event's fields are ['causes', 'changes', 'degree', 'emitted_at', 'id', 'kind', 'subject']: no target, no actor. 'The only transport the suite defines IS a chain of `tell` acts; there is no non-act news transport anywhere in the shape.' Observers are computed at WITNESS from presence; THE EMITTER DECLARES NO RECIPIENT. Three independent lanes killed this, and the fix that suggests itself -- add a target field -- is the twin of the attribution field the design DELIBERATELY REMOVED",
+   "law": "S44.1 -- THERE IS NOTHING TO CHECK. Event's fields are ['causes', 'changes', 'degree', 'emitted_at', 'id', 'kind', 'observed', 'subject']: no target, no actor. 'The only transport the suite defines IS a chain of `tell` acts; there is no non-act news transport anywhere in the shape.' Observers are computed at WITNESS from presence; THE EMITTER DECLARES NO RECIPIENT. Three independent lanes killed this, and the fix that suggests itself -- add a target field -- is the twin of the attribution field the design DELIBERATELY REMOVED",
    "by": "no-signature",
    "tests": "influence passing between scales must be able to be checked for direction"
   },
@@ -10608,10 +10608,10 @@
   },
   {
    "kind": "UNSPECIFIED",
-   "what": "'carry' has a precondition the fold cannot evaluate: 'a Petition exists; costs budget like any act'",
-   "where": "E2",
-   "needs": "a predicate in REQUIRES_PREDICATES, or a `requires:` the table states structurally rather than in prose",
-   "law": "\u00a7E2 -- `requires` is checked IN THE FOLD. Stated as prose it is the same defect `resolve` had, one column along: a rule the code cannot read",
+   "what": "'carry' writes ['DocketItem.matter'] and Part E does not say WHAT VALUE",
+   "where": "E2/E3",
+   "needs": "an entry in EFFECTS, or a `writes:` column that carries the value",
+   "law": "\u00a7E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and \u00a727.1's scarcity stops happening. Register row H-63",
    "case": "probe:F7",
    "expected": false
   },
@@ -10854,7 +10854,7 @@
    "what": "a wrapper checking direction on a Key crossing a rung boundary",
    "where": "S44.1",
    "needs": "nothing -- THE RULE WAS STATED OVER A FIELD THAT DOES NOT EXIST",
-   "law": "S44.1 -- THERE IS NOTHING TO CHECK. Event's fields are ['causes', 'changes', 'degree', 'emitted_at', 'id', 'kind', 'subject']: no target, no actor. 'The only transport the suite defines IS a chain of `tell` acts; there is no non-act news transport anywhere in the shape.' Observers are computed at WITNESS from presence; THE EMITTER DECLARES NO RECIPIENT. Three independent lanes killed this, and the fix that suggests itself -- add a target field -- is the twin of the attribution field the design DELIBERATELY REMOVED",
+   "law": "S44.1 -- THERE IS NOTHING TO CHECK. Event's fields are ['causes', 'changes', 'degree', 'emitted_at', 'id', 'kind', 'observed', 'subject']: no target, no actor. 'The only transport the suite defines IS a chain of `tell` acts; there is no non-act news transport anywhere in the shape.' Observers are computed at WITNESS from presence; THE EMITTER DECLARES NO RECIPIENT. Three independent lanes killed this, and the fix that suggests itself -- add a target field -- is the twin of the attribution field the design DELIBERATELY REMOVED",
    "case": "probe:A20",
    "expected": false
   },
@@ -11022,15 +11022,15 @@
   }
  ],
  "_trace_counts": {
-  "STEP": 1920,
-  "BARRIER": 651,
-  "DECISION": 659,
-  "QUERY": 5989,
-  "NOTE": 468,
-  "WRITE": 24490,
-  "EVENT": 18927,
+  "STEP": 1932,
+  "BARRIER": 655,
+  "DECISION": 665,
+  "QUERY": 6023,
+  "NOTE": 471,
+  "WRITE": 24534,
+  "EVENT": 18970,
   "ACT": 75,
-  "CLAIM": 8335,
+  "CLAIM": 8372,
   "GAP": 66
  },
  "_corpus_defects": [

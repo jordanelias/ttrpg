@@ -201,7 +201,11 @@ def build_at(case: dict, seed: int = 0) -> S.World:
     for n, pid in enumerate(("p_a", "p_b", "p_c")):
         w.persons[pid] = S.Person(pid, pid)
         # ⚠ A PERSON IS THE BOTTOM RUNG OF THE LADDER, and `tiny_world` models it that way. Without
-        # this, `_req_move`'s `w.rungs.get(a.actor)` is None and `move` is refused everywhere.
+        # this, `move` is refused everywhere. ⚠ THE STATED REASON IS NOW STALE AND THE FIXTURE
+        # IS NOT: `_req_move` was retired by `W-A` and the typed cell short-circuits on an
+        # unbound `to` BEFORE it reads `w.rungs` at all, so the mechanism named here no longer
+        # runs. The seat is still required — `Query.presence` and the contain-path read both need
+        # it — but a reader should not be told a retired predicate is why.
         w.rungs[pid] = S.Rung(pid, "person")
         # The parent is the deepest NON-person rung, which after the filter above is `chain[0]`.
         # A case scaled at `person` therefore seats its people in the `hearth` -- the next rung up
@@ -475,7 +479,7 @@ def main(seed: int = 0) -> int:
         pr = w2.persons["p_a"]
         qs = S.questions_for(w2, pr)
         vw = S.Query.assemble(pr, qs[0] if qs else None, w2.fixtures.get("view_k"))
-        cd = S.Query.opening_set(pr, vw, qs[0]) if qs else []
+        cd = S.Query.opening_set(pr, vw, qs[0], w2.fixtures) if qs else []
         nz = sum(1 for x in cd if any(float(pr.convictions.get(a, 0.0)) * S.align(x.verb, a)
                                       for a in S.CONVICTION_AXES))
         sep.append((nz, len(cd)))

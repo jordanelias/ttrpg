@@ -84,6 +84,11 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     requires:    "a Petition exists; costs budget like any act"
+    requires_typed:
+      form:      existence
+      of:        subject
+      kind:      Petition
+    requires_typed_note: "§E3 `:415` — *a Petition exists; **costs budget like any act***. The second half is not a precondition; §26.3's budget is spent by every act and is charged in `pack_scenes`. ⚠ THE SCOPING IS A CHOICE AND IS DECLARED: the prose is INDEFINITE (*a* Petition) and this reads it as *the petition being carried*, which is the act's `subject`. The alternative — any Petition anywhere in the world — would admit a `carry` of a petition that does not exist, and `carry` writes `(DocketItem, matter)`, i.e. it carries a PARTICULAR one. Under-refusing is the failure `G4` weighs equally with an invention, so the tighter reading is taken and named."
     writes:      ["DocketItem.matter"]
     emits:       ["petition.carried"]
     emits_on_refusal: ["carry.refused"]
@@ -93,6 +98,11 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     requires:    "the Proposition exists (immutable, §14)"
+    requires_typed:
+      form:      existence
+      of:        subject
+      kind:      Proposition
+    requires_typed_note: "§E3 `:426` — *the Proposition exists (immutable, §14)*. Definite article: the one the act commits to, which is the act's `subject`. §14 makes a Proposition immutable and `utter` is the only verb that creates one, so this is the clause that makes `utter` a precondition of the social layer rather than a formality."
     writes:      ["Tenure.since"]
     emits:       ["commitment.made"]
     emits_on_refusal: ["commitment.refused"]
@@ -103,6 +113,8 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     requires:    "a claim of the dispensation's terms is in the actor's own ledger"
+    requires_typed: none
+    requires_typed_note: "§E3 `:430` — *a claim of the dispensation's terms is in the actor's **own** ledger*. §F.24a form 6, and the FORM is not the problem — `tell` is typed on it. THE OPERAND IS: the entity is a DISPENSATION, and `rosters.yaml: requires_operands` is closed on (actor, subject, from, to, site, kind, amount, floor) with no name for one. Typing it as `of: subject` would assert that an act's subject IS the dispensation whose terms are sought, which no in-chain document says; coining `dispensation` would be filling `H-94` by keyword argument. Stays on REQUIRES_PREDICATES, where it has no predicate, so the fold refuses and names what is missing — today's behaviour exactly."
     writes:      []
     emits:       ["compliance.given"]
     emits_on_refusal: ["compliance.impossible"]
@@ -191,6 +203,8 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     requires:    "as comply"
+    requires_typed: none
+    requires_typed_note: "§E3 `:431` — *as `comply`*, and it inherits `comply`'s reason unchanged: the operand is a Dispensation and the closed operand roster has no name for one."
     writes:      []
     emits:       ["compliance.withheld"]
     emits_on_refusal: ["compliance.impossible"]
@@ -204,6 +218,8 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own"]
     requires:    "both sides' stores cover their side of the exchange"
+    requires_typed: none
+    requires_typed_note: "W3's own cell — *both sides' stores cover their side of the exchange*. §F.24a form 2 TWICE, one clause per side, and the SECOND side cannot be written: it needs the counterparty's matter kind and quantity, and `rosters.yaml: requires_operands` is closed with no names for them. ⚠ TYPING ONE SIDE ONLY IS THE `_req_confer` DEFECT — a dropped conjunct is an over-admission, and `G4` weighs it equally with an invention. Stays on REQUIRES_PREDICATES with no predicate, so the fold refuses."
     writes:      ["Rung.stores"]
     emits:       ["exchange.made"]
     emits_on_refusal: ["exchange.refused"]
@@ -283,8 +299,8 @@ verbs:
       Felled:       ["Person.body", "Person.exists", "Tenure.until"]
       Wounded:      ["Person.body"]
       Untouched:    []
-    writes_grade: "ruled -- the SPLIT is read from scene combat (Jordan 2026-09-03); H-98 keeps only the question of whether a decisive win is distinguishable from a narrow one, which the engine currently does not answer"
-    writes_source: "combat_seam.resolve -> wound_state[loser]: felled | wounds | health_remaining"
+    writes_grade: "ruled -- the SPLIT is read from scene combat (Jordan 2026-09-03); H-98 keeps only the question of whether a decisive win is distinguishable from a narrow one, which the engine currently does not answer. ⚠ EXECUTED 2026-09-04 (`W-E`): all three branches now run end to end through `SeasonDriver.resolve` -> `contest()` -> `combat_seam` -> `wrapper.fight`, and their consequences differ -- Felled deletes the subject and emits `person.died`, Wounded leaves them alive with a lower body and emits `body.changed`, Untouched writes nothing and emits `contest.undecided`. Falsifier: `test_we_a_contested_acts_consequence_differs_by_degree`."
+    writes_source: "combat_seam.resolve -> wound_state[THE ACT'S SUBJECT]: felled | wounds. ⚠ CORRECTED 2026-09-04 BY `W-E`, AND THE OLD CELL SAID `wound_state[loser]`, WHICH WOULD KILL THE WRONG PERSON. This verb's writes land on `payload[\"subject\"]` (`_eff_kill`), so if the ACTOR is the one felled, reading `[loser]` selects the `Felled` branch and the fold deletes the TARGET -- who is standing. The band is read off the person the writes land on. `health_remaining`/`health_full` are still read, but for the MAGNITUDE (`wound_harm_model`, `H-125`), not for the band."
     # ⚠ `emits:` IS DEGREE-KEYED TOO, AND THE FLAT VERSION WAS A LIVE `ID-9` DEFECT.
     # This read `["person.died"]` for every band. With the bands above that means A WOUND EMITS
     # `person.died` -- a success report for something that did not happen, in the verb whose own
@@ -328,6 +344,11 @@ verbs:
     stratum:     "movement"
     eligibility: ["own"]
     requires:    "a contain path exists"
+    requires_typed:
+      form:      contain_path
+      of:        actor
+      to:        to
+    requires_typed_note: "§E3 `:408` — *a `contain` path exists*. ⚠ THIS DROPS TWO TERMS `_req_move` CARRIED AND THE DROP IS DELIBERATE: that predicate ended `on_ladder or here.kind == \"person\"`, which is true of every actor with a person-rung, so the ladder term decided nothing; and its `dest == a.actor` refusal is kept, as the reader's own rule that a node is not a path to itself. What replaces them is an actual path check — the two rungs must be connected in the containment forest — which is what the cell says and what `_req_move` never tested. ⚠ THIS CELL ENDED *\"No case moves: `to` is unbound for every computed act (`H-94`), so the verdict is UNKNOWN and the fold refuses, exactly as before\"* AND `W-C` FALSIFIED IT WITHOUT EDITING IT. Struck by the `W-C` adversarial pass. `operands_for` binds `to` from the question's referent, so a computed `move` carries a destination: measured over the 89 runnable corpus worlds, `move` EXECUTES 650 times and is blocked 73. The path check is what decides it now — `corpus_run.build_at` makes every person a `person`-kind rung, so a SIBLING destination fails `contain_ascends` and emits `travel.blocked`, while the actor's own containing rung is a valid ascent."
     writes:      ["Person.travel_leg", "Tenure.until", "Tenure.since"]
     emits:       ["travel.moved"]
     emits_on_refusal: ["travel.blocked"]
@@ -368,6 +389,8 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     requires:    "as comply — ⚠ emitter- or receiver-side is absent, D18"
+    requires_typed: none
+    requires_typed_note: "§E3 `:432` — *as `comply` — ⚠ **emitter- or receiver-side is `absent`, D18***. Grade `absent`. Even setting aside `comply`'s operand problem, WHOSE ledger is read is the thing `D18` records as missing, and a typed cell would have to pick one. §42.2.1: the honest behaviour is to refuse, not to pick."
     writes:      []
     emits:       ["terms.distorted"]
     emits_on_refusal: ["refraction.impossible"]
@@ -379,6 +402,11 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     requires:    "a live commit exists"
+    requires_typed:
+      form:      existence
+      of:        subject
+      kind:      commit
+    requires_typed_note: "§E3 `:427` — *a live `commit` exists*. §F.24a form 1's own named cell. `commit` is a `tenure_kinds` member, so the reader counts LIVE `commit` edges whose OBJECT is the subject — the Proposition being repudiated. Same shape as `revoke`'s *a live `hold` exists*, which `_req_revoke` reads as `t.object == obj`."
     writes:      ["Tenure.until"]
     emits:       ["commitment.ended"]
     emits_on_refusal: ["repudiation.refused"]
@@ -389,6 +417,15 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own", "presence:<site>"]
     requires:    "the site exists and the actor is present at it"
+    requires_typed:
+      all:
+        - form:      existence
+          of:        site
+          kind:      Site
+        - form:      relation
+          of:        site
+          relation:  present_at
+    requires_typed_note: "The `requires` cell here is W3's, not §E3's — §E3 `:421` put an EFFECT formula in the column and W3 moved it to `effect:`, leaving *the site exists and the actor is present at it*. Two clauses, conjoined because the prose conjoins them. ⚠ `present_at` DUPLICATES THE `presence:<site>` ELIGIBILITY ALTERNATIVE, and that duplication is in the prose rather than introduced here; eligibility is a DISJUNCTION (`own | presence:<site>`) so `own` alone admits, and the precondition is where presence actually binds. ⚠ THE PREMISE OF THIS CELL'S LAST SENTENCE WAS FALSIFIED BY `W-C` AND ITS CONCLUSION SURVIVES; corrected by the `W-C` adversarial pass rather than left standing. It read *\"`site` is unbound for every computed act\"*, and `operands_for` now BINDS `site` from the question's referent — a `restore` Candidate carries `{site: <referent>, subject: <referent>, to: <referent>}`. What keeps `restore` unexecutable is the OTHER half, unchanged and now the only half: it writes `Site.condition` and has no `EFFECTS` entry, so `resolvable_verbs()` excludes it and the chooser never offers it to the fold at all. Were it offered, the `existence` clause would still read UNKNOWN, because no referent this corpus produces is a Site."
     writes:      ["Site.condition"]
     emits:       ["site.restored"]
     emits_on_refusal: ["restore.refused"]
@@ -424,6 +461,11 @@ verbs:
     stratum:     "binding_decision"
     eligibility: ["own"]
     requires:    "the actor holds the office or estate whose heir is being designated"
+    requires_typed:
+      form:      relation
+      of:        subject
+      relation:  held_by
+    requires_typed_note: "W3's cell — *the actor holds the office or estate whose heir is being designated* (`succeed` is a W3 addition; #353 `:371`, `:542` name it and Part E omits it). §F.24a form 5, whose named live cell is this one. The relation is a live `hold` Tenure from the actor to the subject."
     writes:      ["Tenure.since"]
     emits:       ["heir.designated"]
     emits_on_refusal: ["succession.refused"]
@@ -434,6 +476,10 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     requires:    "the teller holds a claim on the subject"
+    requires_typed:
+      form:      own_ledger
+      of:        subject
+    requires_typed_note: "§E3 `:417` — *the teller holds a claim on the subject*. §F.24a form 6's first named cell, and the one the `F8` carve-out was written for. This is `_req_tell` verbatim: `any(c.subject == subj for c in teller.ledger)`, with the ledger reached through a reader that can name no other person's."
     writes:      []
     emits:       ["news.told"]
     emits_on_refusal: ["news.untold"]
@@ -445,6 +491,8 @@ verbs:
     stratum:     "contested_physical"
     eligibility: ["own"]
     requires:    "per act"
+    requires_typed: none
+    requires_typed_note: "§E3 `:433` — *per act*. There is no precondition here to type: the cell defers to six acts the table does not carry as rows. Typing it would mean inventing six preconditions, which is what §42.2.1 forbids."
     writes:      []
     emits:       ["finding.made"]
     emits_on_refusal: ["finding.none"]
@@ -466,6 +514,14 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own", "hold:<store>"]
     requires:    "stores(hearth(giver), kind) >= amount (§54 it. 7)"
+    requires_typed:
+      form:      scalar_threshold
+      of:        from
+      scalar:    stores
+      key:       kind
+      threshold: amount
+      comparator: ">="
+    requires_typed_note: "§E3 `:418` — ***`stores(hearth(giver), kind) >= amount`*** (§54 it. 7), the scarcity predicate §27.1 rests on. ⚠ `operand_defaults:` STOOD HERE AND `W-C` DELETED IT. It held `kind: grain` / `amount: 1`, carried over from `_req_transfer`'s two literals, and `evaluate` bound them for any act whose payload lacked them — i.e. THE FOLD supplied the person's operands, invisibly, under the person. Once `H-94`'s structural half closed that became two owners of one value AND an incoherence: the cell would ADMIT a transfer on operands it had invented, and `_eff_transfer` would then raise on those same operands being absent from the payload. The values moved unchanged to `DEFAULT_FIXTURES` (`default_store_kind`, `default_transfer_amount`), where `operands_for` derives them PERSON-SIDE and the act CARRIES them; `from` is the actor's own live `contain` Tenure and `to` is the question's referent, so neither is a fixture at all."
     writes:      ["Rung.stores", "Rung.stores"]
     emits:       ["transfer.made"]
     emits_on_refusal: ["transfer.refused"]
@@ -485,6 +541,13 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own", "presence:<site>"]
     requires:    "condition >= floor(verb) (§12.1)"
+    requires_typed:
+      form:      scalar_threshold
+      of:        site
+      scalar:    condition
+      threshold_predicate: floor
+      comparator: ">="
+    requires_typed_note: "§E3 `:420` — *`condition >= floor(verb)`* (§12.1). ⚠ **RETRACTED BY THE `W-C` ADVERSARIAL PASS: THIS CELL SAID THE THRESHOLD READS UNKNOWN AND DOES NOT SUBSTITUTE, AND THE CODE DOES THE OPPOSITE.** `WorldReader.read`'s `floor` branch returns `min(floors.values())` and argues at length for doing so — *`work` is the GENERIC labour verb, so a site is workable if it clears the floor of its LEAST demanding use* — having built and measured both alternatives (`max` refuses a seam surface-gleaning supports; `UNKNOWN` destroys the gate outright, since `work`'s precondition could then never return False). Measured on the fixture: `floor` reads **100** for `site_harbour` and **50** for `site_seam`, and a named workable site emits `site.worked` (`test_tracer_is_honest.py`). So the `W-A` correction landed in THIS PROSE and was reversed in the CODE, and the prose was never retracted. Under `CLAUDE.md` §0.05 the code is the mechanism: the substitution is LIVE, it is a declared reading of `floor(verb)` for a verb that names no use, and it is registered on `H-08`/`H-94`. The paragraph below is kept because the objection it records is real and is what the code answers — read it as the argument, not as the behaviour. The first version resolved `floor` to `min(band_floors[site.kind].values())` — but `band_floors`' own roster note says its inner keys are SITE-USE verbs (bulk_shipping, fishing, deep_mining …), **NOT verb-table rows**, so `work` is not among them and the cell silently substituted the LOOSEST floor for the one the prose names. On a harbour it asked `condition >= 100` where `floor(bulk_shipping)` is 800: every condition in 100..800 was ADMITTED WHERE THE PROSE REFUSES — an UNDER-refusal, which `G4` weighs equally with an invention. Worse, the reader raised `Unspecified` for an unregistered site KIND citing §42.2.1 (*forbids picking a plausible number for a kind nobody registered*) and then picked a plausible number for a VERB nobody registered, three lines on. ⚠ THE SITE-USE IS AN OPERAND THE CLOSED ROSTER DOES NOT CARRY, and the reader's answer to that is `min` WITH THE READING STATED, not UNKNOWN — see the retraction above. What stays open, and is not papered over, is that a `work` MEANING deep-mining is admitted on a seam only surface-gleaning could support, because nothing on the act says which use is intended. ⚠ AND THE LATENCY IS SPENT: `W-C` binds `site` to the question's referent, so the substitution is now reached on every computed `work` — the corpus refuses all 723 because no referent it produces is a Site, which is a fact about these worlds and not about the threshold. Registered on `H-08`/`H-94`; typing the threshold needs a site-use operand first."
     writes:      ["Site.condition"]
     emits:       ["site.worked"]
     emits_on_refusal: ["work.unavailable"]

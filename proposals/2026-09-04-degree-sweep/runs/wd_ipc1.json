@@ -1,0 +1,65 @@
+{
+ "none": {
+  "mode": "none",
+  "slots": 5,
+  "n_cases_ok": 89,
+  "n_cases_failed": 0,
+  "probed": 3204,
+  "no_live_window": 801,
+  "inert": 2403,
+  "genuine": 0,
+  "diverged": 0,
+  "reconverged": 0,
+  "reconvergence_rate": null,
+  "budget": {
+   "slots": 5,
+   "scene_budget": 5,
+   "interactions_per_scene": 1,
+   "n_binds": 1068,
+   "n_total": 1068
+  },
+  "budget_log": "[BUDGET     ] slots = scene_budget(5) x interactions_per_scene(1) = 5 -- read from fixtures, not a literal\n[RESULT     ] budget_binds = candidates > slots: 1068 of 1068 deliberations (100.0%)\n[RESULT     ] budget_binds True at e.g. case 'NPC-088' person 'p_a' tick 0: 7 candidates > 5 slots\n              | `H-117` -- a real `instead of` moment exists at this fixture point"
+ },
+ "actor": {
+  "mode": "actor",
+  "slots": 5,
+  "n_cases_ok": 89,
+  "n_cases_failed": 0,
+  "probed": 3204,
+  "no_live_window": 801,
+  "inert": 2403,
+  "genuine": 0,
+  "diverged": 0,
+  "reconverged": 0,
+  "reconvergence_rate": null,
+  "budget": {
+   "slots": 5,
+   "scene_budget": 5,
+   "interactions_per_scene": 1,
+   "n_binds": 1068,
+   "n_total": 1068
+  },
+  "budget_log": "[BUDGET     ] slots = scene_budget(5) x interactions_per_scene(1) = 5 -- read from fixtures, not a literal\n[RESULT     ] budget_binds = candidates > slots: 1068 of 1068 deliberations (100.0%)\n[RESULT     ] budget_binds True at e.g. case 'NPC-088' person 'p_a' tick 0: 7 candidates > 5 slots\n              | `H-117` -- a real `instead of` moment exists at this fixture point"
+ },
+ "total": {
+  "mode": "total",
+  "slots": 5,
+  "n_cases_ok": 89,
+  "n_cases_failed": 0,
+  "probed": 3204,
+  "no_live_window": 801,
+  "inert": 2403,
+  "genuine": 0,
+  "diverged": 0,
+  "reconverged": 0,
+  "reconvergence_rate": null,
+  "budget": {
+   "slots": 5,
+   "scene_budget": 5,
+   "interactions_per_scene": 1,
+   "n_binds": 1068,
+   "n_total": 1068
+  },
+  "budget_log": "[BUDGET     ] slots = scene_budget(5) x interactions_per_scene(1) = 5 -- read from fixtures, not a literal\n[RESULT     ] budget_binds = candidates > slots: 1068 of 1068 deliberations (100.0%)\n[RESULT     ] budget_binds True at e.g. case 'NPC-088' person 'p_a' tick 0: 7 candidates > 5 slots\n              | `H-117` -- a real `instead of` moment exists at this fixture point"
+ }
+}

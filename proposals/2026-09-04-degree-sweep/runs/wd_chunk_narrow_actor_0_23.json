@@ -1,0 +1,863 @@
+{
+ "mode": "actor",
+ "slots": "narrow",
+ "seconds": 107.7,
+ "n_cases_attempted": 23,
+ "n_cases_ok": 23,
+ "n_cases_failed": 0,
+ "failures": [],
+ "fork_rows_failed": 0,
+ "probed": 828,
+ "no_live_window": 207,
+ "inert": 254,
+ "genuine": 367,
+ "reconverged": 345,
+ "diverged": 22,
+ "reconvergence_rate": 0.9400544959128065,
+ "window_slots_checked": 1101,
+ "window_slots_same_tick": 0,
+ "acts_differ": 367,
+ "hash_differ": 367,
+ "stream_only": 345,
+ "changed_distribution": {
+  "0": 345,
+  "1": 22
+ },
+ "divergences": [
+  {
+   "case": "NPC-088",
+   "lane": "NPC",
+   "at": 6,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "move",
+   "to_verb": "speak",
+   "in_budget": 2,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "NPC-088",
+   "lane": "NPC",
+   "at": 6,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "move",
+   "to_verb": "transfer",
+   "in_budget": 2,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "NPC-087",
+   "lane": "NPC",
+   "at": 6,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "move",
+   "to_verb": "speak",
+   "in_budget": 2,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "NPC-087",
+   "lane": "NPC",
+   "at": 6,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "move",
+   "to_verb": "tell",
+   "in_budget": 2,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "NPC-086",
+   "lane": "NPC",
+   "at": 6,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "move",
+   "to_verb": "speak",
+   "in_budget": 2,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "NPC-086",
+   "lane": "NPC",
+   "at": 6,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "move",
+   "to_verb": "tell",
+   "in_budget": 2,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "NPC-075",
+   "lane": "NPC",
+   "at": 6,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "move",
+   "to_verb": "speak",
+   "in_budget": 2,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "NPC-075",
+   "lane": "NPC",
+   "at": 6,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "move",
+   "to_verb": "tell",
+   "in_budget": 2,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "NPC-005",
+   "lane": "NPC",
+   "at": 6,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "move",
+   "to_verb": "speak",
+   "in_budget": 2,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "NPC-005",
+   "lane": "NPC",
+   "at": 6,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "move",
+   "to_verb": "tell",
+   "in_budget": 2,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "NPC-012",
+   "lane": "NPC",
+   "at": 6,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "move",
+   "to_verb": "speak",
+   "in_budget": 2,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "NPC-012",
+   "lane": "NPC",
+   "at": 6,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "move",
+   "to_verb": "tell",
+   "in_budget": 2,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "NPC-002",
+   "lane": "NPC",
+   "at": 6,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "move",
+   "to_verb": "speak",
+   "in_budget": 2,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "NPC-002",
+   "lane": "NPC",
+   "at": 6,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "move",
+   "to_verb": "tell",
+   "in_budget": 2,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "NPC-004",
+   "lane": "NPC",
+   "at": 6,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "move",
+   "to_verb": "speak",
+   "in_budget": 2,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "NPC-004",
+   "lane": "NPC",
+   "at": 6,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "move",
+   "to_verb": "transfer",
+   "in_budget": 2,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "NPC-006",
+   "lane": "NPC",
+   "at": 6,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "move",
+   "to_verb": "speak",
+   "in_budget": 2,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "NPC-006",
+   "lane": "NPC",
+   "at": 6,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "move",
+   "to_verb": "tell",
+   "in_budget": 2,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "NPC-035",
+   "lane": "NPC",
+   "at": 6,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "move",
+   "to_verb": "speak",
+   "in_budget": 2,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "NPC-035",
+   "lane": "NPC",
+   "at": 6,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "move",
+   "to_verb": "tell",
+   "in_budget": 2,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "NPC-036",
+   "lane": "NPC",
+   "at": 6,
+   "take": 2,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "move",
+   "to_verb": "speak",
+   "in_budget": 2,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    9
+   ]
+  },
+  {
+   "case": "NPC-036",
+   "lane": "NPC",
+   "at": 6,
+   "take": 3,
+   "tick": 2,
+   "person": "p_a",
+   "from_verb": "move",
+   "to_verb": "transfer",
+   "in_budget": 2,
+   "changed_at": [
+    1
+   ],
+   "live_window": [
+    9,
+    10,
+    11
+   ],
+   "changed_idx": [
+    9
+   ]
+  }
+ ],
+ "rows": [
+  {
+   "case": "NPC-088",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 12,
+   "n_forks": 36,
+   "n_real_forks": 16,
+   "n_no_live_window": 9,
+   "n_inert": 11,
+   "n_reconverged": 14,
+   "n_diverged": 2,
+   "mean_changed": 0.125,
+   "baseline_decisions": 12,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-087",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 12,
+   "n_forks": 36,
+   "n_real_forks": 16,
+   "n_no_live_window": 9,
+   "n_inert": 11,
+   "n_reconverged": 14,
+   "n_diverged": 2,
+   "mean_changed": 0.125,
+   "baseline_decisions": 12,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-086",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 12,
+   "n_forks": 36,
+   "n_real_forks": 16,
+   "n_no_live_window": 9,
+   "n_inert": 11,
+   "n_reconverged": 14,
+   "n_diverged": 2,
+   "mean_changed": 0.125,
+   "baseline_decisions": 12,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-075",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 12,
+   "n_forks": 36,
+   "n_real_forks": 16,
+   "n_no_live_window": 9,
+   "n_inert": 11,
+   "n_reconverged": 14,
+   "n_diverged": 2,
+   "mean_changed": 0.125,
+   "baseline_decisions": 12,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-005",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 12,
+   "n_forks": 36,
+   "n_real_forks": 16,
+   "n_no_live_window": 9,
+   "n_inert": 11,
+   "n_reconverged": 14,
+   "n_diverged": 2,
+   "mean_changed": 0.125,
+   "baseline_decisions": 12,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-010",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 12,
+   "n_forks": 36,
+   "n_real_forks": 16,
+   "n_no_live_window": 9,
+   "n_inert": 11,
+   "n_reconverged": 16,
+   "n_diverged": 0,
+   "mean_changed": 0.0,
+   "baseline_decisions": 12,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-012",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 12,
+   "n_forks": 36,
+   "n_real_forks": 16,
+   "n_no_live_window": 9,
+   "n_inert": 11,
+   "n_reconverged": 14,
+   "n_diverged": 2,
+   "mean_changed": 0.125,
+   "baseline_decisions": 12,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-002",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 12,
+   "n_forks": 36,
+   "n_real_forks": 16,
+   "n_no_live_window": 9,
+   "n_inert": 11,
+   "n_reconverged": 14,
+   "n_diverged": 2,
+   "mean_changed": 0.125,
+   "baseline_decisions": 12,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-004",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 12,
+   "n_forks": 36,
+   "n_real_forks": 16,
+   "n_no_live_window": 9,
+   "n_inert": 11,
+   "n_reconverged": 14,
+   "n_diverged": 2,
+   "mean_changed": 0.125,
+   "baseline_decisions": 12,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-033",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 12,
+   "n_forks": 36,
+   "n_real_forks": 14,
+   "n_no_live_window": 9,
+   "n_inert": 13,
+   "n_reconverged": 14,
+   "n_diverged": 0,
+   "mean_changed": 0.0,
+   "baseline_decisions": 12,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-083",
+   "scale": "settlement",
+   "ok": true,
+   "n_decisions": 12,
+   "n_forks": 36,
+   "n_real_forks": 17,
+   "n_no_live_window": 9,
+   "n_inert": 10,
+   "n_reconverged": 17,
+   "n_diverged": 0,
+   "mean_changed": 0.0,
+   "baseline_decisions": 12,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-008",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 12,
+   "n_forks": 36,
+   "n_real_forks": 14,
+   "n_no_live_window": 9,
+   "n_inert": 13,
+   "n_reconverged": 14,
+   "n_diverged": 0,
+   "mean_changed": 0.0,
+   "baseline_decisions": 12,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-038",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 12,
+   "n_forks": 36,
+   "n_real_forks": 14,
+   "n_no_live_window": 9,
+   "n_inert": 13,
+   "n_reconverged": 14,
+   "n_diverged": 0,
+   "mean_changed": 0.0,
+   "baseline_decisions": 12,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-071",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 12,
+   "n_forks": 36,
+   "n_real_forks": 16,
+   "n_no_live_window": 9,
+   "n_inert": 11,
+   "n_reconverged": 16,
+   "n_diverged": 0,
+   "mean_changed": 0.0,
+   "baseline_decisions": 12,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-020",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 12,
+   "n_forks": 36,
+   "n_real_forks": 17,
+   "n_no_live_window": 9,
+   "n_inert": 10,
+   "n_reconverged": 17,
+   "n_diverged": 0,
+   "mean_changed": 0.0,
+   "baseline_decisions": 12,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-032",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 12,
+   "n_forks": 36,
+   "n_real_forks": 17,
+   "n_no_live_window": 9,
+   "n_inert": 10,
+   "n_reconverged": 17,
+   "n_diverged": 0,
+   "mean_changed": 0.0,
+   "baseline_decisions": 12,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-031",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 12,
+   "n_forks": 36,
+   "n_real_forks": 17,
+   "n_no_live_window": 9,
+   "n_inert": 10,
+   "n_reconverged": 17,
+   "n_diverged": 0,
+   "mean_changed": 0.0,
+   "baseline_decisions": 12,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-030",
+   "scale": "realm",
+   "ok": true,
+   "n_decisions": 12,
+   "n_forks": 36,
+   "n_real_forks": 17,
+   "n_no_live_window": 9,
+   "n_inert": 10,
+   "n_reconverged": 17,
+   "n_diverged": 0,
+   "mean_changed": 0.0,
+   "baseline_decisions": 12,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-006",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 12,
+   "n_forks": 36,
+   "n_real_forks": 16,
+   "n_no_live_window": 9,
+   "n_inert": 11,
+   "n_reconverged": 14,
+   "n_diverged": 2,
+   "mean_changed": 0.125,
+   "baseline_decisions": 12,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-009",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 12,
+   "n_forks": 36,
+   "n_real_forks": 16,
+   "n_no_live_window": 9,
+   "n_inert": 11,
+   "n_reconverged": 16,
+   "n_diverged": 0,
+   "mean_changed": 0.0,
+   "baseline_decisions": 12,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-011",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 12,
+   "n_forks": 36,
+   "n_real_forks": 16,
+   "n_no_live_window": 9,
+   "n_inert": 11,
+   "n_reconverged": 16,
+   "n_diverged": 0,
+   "mean_changed": 0.0,
+   "baseline_decisions": 12,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-035",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 12,
+   "n_forks": 36,
+   "n_real_forks": 16,
+   "n_no_live_window": 9,
+   "n_inert": 11,
+   "n_reconverged": 14,
+   "n_diverged": 2,
+   "mean_changed": 0.125,
+   "baseline_decisions": 12,
+   "lane": "NPC"
+  },
+  {
+   "case": "NPC-036",
+   "scale": "person",
+   "ok": true,
+   "n_decisions": 12,
+   "n_forks": 36,
+   "n_real_forks": 16,
+   "n_no_live_window": 9,
+   "n_inert": 11,
+   "n_reconverged": 14,
+   "n_diverged": 2,
+   "mean_changed": 0.125,
+   "baseline_decisions": 12,
+   "lane": "NPC"
+  }
+ ],
+ "chunk": [
+  0,
+  23
+ ]
+}

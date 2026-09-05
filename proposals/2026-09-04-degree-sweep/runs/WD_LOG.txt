@@ -1,0 +1,185 @@
+
+==============================================================================
+W-D — THE ACCEPTANCE RUN: did `W-B` change the forking result?
+==============================================================================
+[INSTRUMENT ] `arm9_forking.fork_case`, imported UNMODIFIED. `wd_acceptance.sweep_arm` loops it over (deposit mode x fixture point); `wd_chunk.py` splits the corpus into four slices per arm because two full-corpus processes were killed at ~18 minutes with no traceback; this file concatenates them.
+[BASIS      ] 89 cases = 30 NPC + 59 ARC, `apply_rescale` APPLIED — THE 89 BASIS. The 86 basis is the raw `scale:` filter and is not used here.
+[SEED       ] 0; seasons 4 — `runs/arm9.json`'s own published configuration
+[CONTEST    ] confound 2, CHECKED NOT ASSUMED: `A9._run` does not pass `contest_max_depth`, and does not need to. The only contesting verb is ['kill / wound']; `resolvable_verbs()` — the verb set `A9._run` hands `make_chooser` — excludes it (intersection []), so `resolve()`'s `Forbidden` branch is unreachable and the probe is left unedited. `n_cases_failed` below is the empirical check.
+
+==============================================================================
+W-D.0 — WHICH CELLS OF THE DECLARED SWEEP CROSS CAN THE QUESTION BE ASKED AT?
+==============================================================================
+[⚠ CORRECTION] THE FIRST WRITING OF THIS ITEM SAID `exactly ONE cell gives L <= 3` AND THAT IS FALSE. TWO of the nine cells qualify, and the one that was NOT run is the SMALLER intervention. Found by an independent read-only critic, 2026-09-04; re-measured over the corpus by `wd_cells.py`.
+              | `L` is THE PACKER'S OWN TAKE — `sum(len(sc.acts) for sc in pack_scenes(...))`, read off `recorder.in_budget` — and NOT the slot product `scene_budget x interactions_per_scene`. The product was used as a proxy for it. `take()` charges an EXTENDED scene `extended_scene_cost`=2 and takes a whole chunk whenever `ext <= left`, so at 2 x 3 the first chunk of three candidates is taken entire for a cost of 2 and L = 3, not 6. And L is PER DELIBERATION, not per cell: it varies with the person's own ranked list, so `L <= 3` is a property of a deliberation and a cell is askable when ANY of its deliberations has one.
+
+==============================================================================
+W-D.1 — THE SHIPPED FIXTURE POINT (5 x 3 = 15 slots)
+==============================================================================
+[MEASURE    ] mode=none  | cases 89/89 ok, 0 failed, 0 fork rows failed | probed 3204 = NO-LIVE-WINDOW 801 + INERT-BY-CONSTRUCTION 2403 + GENUINE 0 | RECONVERGED 0/0 = n/a — EMPTY DENOMINATOR · DIVERGED 0  [36.2s]
+[  WINDOW   ] strictly-later-tick: 0 slots inspected, 0 at the fork's own tick or earlier (confound 1; must be 0)
+[  STREAM   ] acts differ 0/0 · event-log hash differs 0/0 · CHANGED THE STREAM AND NOT A DECISION 0 (the pre-`W-B` condition)
+[  CHANGED  ] decisions changed within the lookahead: {}
+[MEASURE    ] mode=actor | cases 89/89 ok, 0 failed, 0 fork rows failed | probed 3204 = NO-LIVE-WINDOW 801 + INERT-BY-CONSTRUCTION 2403 + GENUINE 0 | RECONVERGED 0/0 = n/a — EMPTY DENOMINATOR · DIVERGED 0  [34.2s]
+[  WINDOW   ] strictly-later-tick: 0 slots inspected, 0 at the fork's own tick or earlier (confound 1; must be 0)
+[  STREAM   ] acts differ 0/0 · event-log hash differs 0/0 · CHANGED THE STREAM AND NOT A DECISION 0 (the pre-`W-B` condition)
+[  CHANGED  ] decisions changed within the lookahead: {}
+[MEASURE    ] mode=total | cases 89/89 ok, 0 failed, 0 fork rows failed | probed 3204 = NO-LIVE-WINDOW 801 + INERT-BY-CONSTRUCTION 2403 + GENUINE 0 | RECONVERGED 0/0 = n/a — EMPTY DENOMINATOR · DIVERGED 0  [35.9s]
+[  WINDOW   ] strictly-later-tick: 0 slots inspected, 0 at the fork's own tick or earlier (confound 1; must be 0)
+[  STREAM   ] acts differ 0/0 · event-log hash differs 0/0 · CHANGED THE STREAM AND NOT A DECISION 0 (the pre-`W-B` condition)
+[  CHANGED  ] decisions changed within the lookahead: {}
+[SAME-EXPT  ] probed identical across arms: True {'none': 3204, 'actor': 3204, 'total': 3204} · NO-LIVE-WINDOW identical: True {'none': 801, 'actor': 801, 'total': 801} · each arm covers all 89 case slots exactly once: {'none': True, 'actor': True, 'total': True}
+              | the deliberation count does not depend on the deposit mode (`pack_scenes` is called for every person with a question, whatever their candidate set), so these MUST be equal; INERT and GENUINE legitimately differ, because a dropped Candidate shrinks the packer's own take `L` — which is why the denominator is printed with every rate
+
+==============================================================================
+W-D.2 — THE ACCEPTANCE FIXTURE POINT (2 x 1 = 2 slots): scene_budget=2 (`H-10` arm) x interactions_per_scene=1 (`H-76` arm) — TWO declared-arm changes
+==============================================================================
+[MEASURE    ] mode=none  | cases 89/89 ok, 0 failed, 0 fork rows failed | probed 3204 = NO-LIVE-WINDOW 801 + INERT-BY-CONSTRUCTION 899 + GENUINE 1504 | RECONVERGED 1504/1504 = 100.00% · DIVERGED 0  [423.9s]
+[  WINDOW   ] strictly-later-tick: 4512 slots inspected, 0 at the fork's own tick or earlier (confound 1; must be 0)
+[  STREAM   ] acts differ 1504/1504 · event-log hash differs 1504/1504 · CHANGED THE STREAM AND NOT A DECISION 1504 (the pre-`W-B` condition)
+[  CHANGED  ] decisions changed within the lookahead: {0: 1504}
+[MEASURE    ] mode=actor | cases 89/89 ok, 0 failed, 0 fork rows failed | probed 3204 = NO-LIVE-WINDOW 801 + INERT-BY-CONSTRUCTION 936 + GENUINE 1467 | RECONVERGED 1405/1467 = 95.77% · DIVERGED 62  [423.9s]
+[  WINDOW   ] strictly-later-tick: 4401 slots inspected, 0 at the fork's own tick or earlier (confound 1; must be 0)
+[  STREAM   ] acts differ 1467/1467 · event-log hash differs 1467/1467 · CHANGED THE STREAM AND NOT A DECISION 1405 (the pre-`W-B` condition)
+[  CHANGED  ] decisions changed within the lookahead: {0: 1405, 1: 62}
+[MEASURE    ] mode=total | cases 89/89 ok, 0 failed, 0 fork rows failed | probed 3204 = NO-LIVE-WINDOW 801 + INERT-BY-CONSTRUCTION 936 + GENUINE 1467 | RECONVERGED 1285/1467 = 87.59% · DIVERGED 182  [447.7s]
+[  WINDOW   ] strictly-later-tick: 4401 slots inspected, 0 at the fork's own tick or earlier (confound 1; must be 0)
+[  STREAM   ] acts differ 1467/1467 · event-log hash differs 1467/1467 · CHANGED THE STREAM AND NOT A DECISION 1285 (the pre-`W-B` condition)
+[  CHANGED  ] decisions changed within the lookahead: {0: 1285, 1: 182}
+[SAME-EXPT  ] probed identical across arms: True {'none': 3204, 'actor': 3204, 'total': 3204} · NO-LIVE-WINDOW identical: True {'none': 801, 'actor': 801, 'total': 801} · each arm covers all 89 case slots exactly once: {'none': True, 'actor': True, 'total': True}
+              | the deliberation count does not depend on the deposit mode (`pack_scenes` is called for every person with a question, whatever their candidate set), so these MUST be equal; INERT and GENUINE legitimately differ, because a dropped Candidate shrinks the packer's own take `L` — which is why the denominator is printed with every rate
+
+==============================================================================
+W-D.2b — THE SECOND QUALIFYING CELL (2 x 3 = 6 slots): scene_budget=2 (`H-10` arm) x interactions_per_scene LEFT AT ITS DEFAULT — ONE declared-arm change, so by the item's own minimum-departure criterion this is the BETTER acceptance point, and it was never run until the adversarial pass
+==============================================================================
+[MEASURE    ] mode=none  | cases 89/89 ok, 0 failed, 0 fork rows failed | probed 3204 = NO-LIVE-WINDOW 801 + INERT-BY-CONSTRUCTION 1647 + GENUINE 756 | RECONVERGED 756/756 = 100.00% · DIVERGED 0  [692.3s]
+[  WINDOW   ] strictly-later-tick: 2268 slots inspected, 0 at the fork's own tick or earlier (confound 1; must be 0)
+[  STREAM   ] acts differ 756/756 · event-log hash differs 756/756 · CHANGED THE STREAM AND NOT A DECISION 756 (the pre-`W-B` condition)
+[  CHANGED  ] decisions changed within the lookahead: {0: 756}
+[MEASURE    ] mode=actor | cases 89/89 ok, 0 failed, 0 fork rows failed | probed 3204 = NO-LIVE-WINDOW 801 + INERT-BY-CONSTRUCTION 1670 + GENUINE 733 | RECONVERGED 733/733 = 100.00% · DIVERGED 0  [697.9s]
+[  WINDOW   ] strictly-later-tick: 2199 slots inspected, 0 at the fork's own tick or earlier (confound 1; must be 0)
+[  STREAM   ] acts differ 733/733 · event-log hash differs 733/733 · CHANGED THE STREAM AND NOT A DECISION 733 (the pre-`W-B` condition)
+[  CHANGED  ] decisions changed within the lookahead: {0: 733}
+[MEASURE    ] mode=total | cases 89/89 ok, 0 failed, 0 fork rows failed | probed 3204 = NO-LIVE-WINDOW 801 + INERT-BY-CONSTRUCTION 1676 + GENUINE 727 | RECONVERGED 716/727 = 98.49% · DIVERGED 11  [865.6s]
+[  WINDOW   ] strictly-later-tick: 2181 slots inspected, 0 at the fork's own tick or earlier (confound 1; must be 0)
+[  STREAM   ] acts differ 727/727 · event-log hash differs 727/727 · CHANGED THE STREAM AND NOT A DECISION 716 (the pre-`W-B` condition)
+[  CHANGED  ] decisions changed within the lookahead: {0: 716, 1: 11}
+[SAME-EXPT  ] probed identical across arms: True {'none': 3204, 'actor': 3204, 'total': 3204} · NO-LIVE-WINDOW identical: True {'none': 801, 'actor': 801, 'total': 801} · each arm covers all 89 case slots exactly once: {'none': True, 'actor': True, 'total': True}
+              | the deliberation count does not depend on the deposit mode (`pack_scenes` is called for every person with a question, whatever their candidate set), so these MUST be equal; INERT and GENUINE legitimately differ, because a dropped Candidate shrinks the packer's own take `L` — which is why the denominator is printed with every rate
+
+==============================================================================
+W-D.3 — CONTROLS, AT BOTH QUALIFYING CELLS
+==============================================================================
+[NEGATIVE   ] [2 x 1 = 2 slots] `observation_deposit_mode = none`: 1504 of 1504 genuine forks RECONVERGED = 100.00%, DIVERGED 0
+              | THE SINGLE MOST IMPORTANT NUMBER. `none` is the pre-`W-B` deposit behaviour exactly. A non-100% here would mean something other than `W-B` moved the harness and every other figure in this item would be confounded
+[POSITIVE   ] [2 x 1 = 2 slots] planted widened clause 4, at the CONTROL arm `none`, cases ['NPC-088', 'NPC-087', 'NPC-086'] — detected on ALL 4 plants: True
+              | event-kind claims the corpus ACTUALLY deposits about the candidate's own subject, measured rather than guessed: a first plant on `act.refused` fired ZERO times because no corpus world emits that kind, and a plant that never fires is not a control. All four are run, not one, so the result does not rest on a lucky pick.
+[  PLANT    ] predicate travel.moved     genuine  48  DIVERGED  24  detected True
+[  PLANT    ] predicate stores.changed   genuine  30  DIVERGED  15  detected True
+[  PLANT    ] predicate record.created   genuine  42  DIVERGED  18  detected True
+[  PLANT    ] predicate yield.taken      genuine  30  DIVERGED  15  detected True
+[POSITIVE-2 ] [2 x 1 = 2 slots] comparator-only plant (a token spliced into one later ranked list): 51 fork streams perturbed, genuine 51, DIVERGED 15 -> detected True
+[NEGATIVE   ] [2 x 3 = 6 slots] `observation_deposit_mode = none`: 756 of 756 genuine forks RECONVERGED = 100.00%, DIVERGED 0
+              | THE SINGLE MOST IMPORTANT NUMBER. `none` is the pre-`W-B` deposit behaviour exactly. A non-100% here would mean something other than `W-B` moved the harness and every other figure in this item would be confounded
+[POSITIVE   ] [2 x 3 = 6 slots] planted widened clause 4, at the CONTROL arm `none`, cases ['NPC-088', 'NPC-087', 'NPC-086'] — detected on ALL 4 plants: True
+              | event-kind claims the corpus ACTUALLY deposits about the candidate's own subject, measured rather than guessed: a first plant on `act.refused` fired ZERO times because no corpus world emits that kind, and a plant that never fires is not a control. All four are run, not one, so the result does not rest on a lucky pick.
+[  PLANT    ] predicate travel.moved     genuine  27  DIVERGED   6  detected True
+[  PLANT    ] predicate stores.changed   genuine  18  DIVERGED   2  detected True
+[  PLANT    ] predicate record.created   genuine  24  DIVERGED   9  detected True
+[  PLANT    ] predicate yield.taken      genuine  18  DIVERGED   2  detected True
+[POSITIVE-2 ] [2 x 3 = 6 slots] comparator-only plant (a token spliced into one later ranked list): 27 fork streams perturbed, genuine 27, DIVERGED 9 -> detected True
+
+==============================================================================
+W-D.4 — PER-FORK FORENSICS on every divergence, AT THE 2 x 1 CELL
+==============================================================================
+[SCOPE      ] The forensics below are the 2 x 1 cell's. The 2 x 3 cell's divergences are reported in W-D.2b and are NOT dissected here — stated rather than left to look like an absence of divergences (§0.1 pt 4 cuts both ways).
+[COUNT      ] mode=actor: 62 divergent forks of 1467 genuine
+[SIGNATURES ]   (from_verb -> to_verb, which of the next 3 changed) x count: {('move', 'speak', (1,)): 31, ('move', 'transfer', (1,)): 14, ('move', 'tell', (1,)): 17}
+[  DROP     ] NPC-088 fork(at=6,take=2) move->speak @tick 2 | clause-4 drop present ONLY IN base-only: p_a declines `move` on 'p_a', ops={'to': 'p_a', 'subject': 'p_a'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_a', 'contain.path:p_a', False) when=2 conf=95 src=firsthand | deposited by Event be5087788c71c178 kind=travel.blocked actor=p_a | holder=p_a CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[  DROP     ] NPC-088 fork(at=6,take=3) move->transfer @tick 2 | clause-4 drop present ONLY IN base-only: p_a declines `move` on 'p_a', ops={'to': 'p_a', 'subject': 'p_a'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_a', 'contain.path:p_a', False) when=2 conf=95 src=firsthand | deposited by Event be5087788c71c178 kind=travel.blocked actor=p_a | holder=p_a CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[  DROP     ] NPC-087 fork(at=6,take=3) move->tell @tick 2 | clause-4 drop present ONLY IN base-only: p_a declines `move` on 'p_a', ops={'to': 'p_a', 'subject': 'p_a'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_a', 'contain.path:p_a', False) when=2 conf=95 src=firsthand | deposited by Event be5087788c71c178 kind=travel.blocked actor=p_a | holder=p_a CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[  DROP     ] ARC-09 fork(at=6,take=2) move->speak @tick 2 | clause-4 drop present ONLY IN base-only: p_a declines `move` on 'p_a', ops={'to': 'p_a', 'subject': 'p_a'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_a', 'contain.path:p_a', False) when=2 conf=95 src=firsthand | deposited by Event be5087788c71c178 kind=travel.blocked actor=p_a | holder=p_a CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[  DROP     ] ARC-09 fork(at=6,take=3) move->transfer @tick 2 | clause-4 drop present ONLY IN base-only: p_a declines `move` on 'p_a', ops={'to': 'p_a', 'subject': 'p_a'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_a', 'contain.path:p_a', False) when=2 conf=95 src=firsthand | deposited by Event be5087788c71c178 kind=travel.blocked actor=p_a | holder=p_a CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[  DROP     ] ARC-28 fork(at=6,take=3) move->tell @tick 2 | clause-4 drop present ONLY IN base-only: p_a declines `move` on 'p_a', ops={'to': 'p_a', 'subject': 'p_a'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_a', 'contain.path:p_a', False) when=2 conf=95 src=firsthand | deposited by Event be5087788c71c178 kind=travel.blocked actor=p_a | holder=p_a CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[SAMPLED    ]   forensics EXECUTED on 6 representatives of 62 divergences (6 distinct signatures); every distinct signature is covered when that count is <= 24
+[SHAPE      ]   carrying clause-4 drops seen: 6 SELF-REFERENTIAL (operand == subject, the degenerate class the operand channel produces), 0 not
+[TRUTH      ]   carrying beliefs FALSE WHEN RECORDED: 0 of 6. Over ALL in-grammar deposits in those runs: 6 of 120 disagreed with `WorldReader` at the barrier that stored them
+              | `W-B`'s retraction was that a self-refuting belief produced 95% of its published effect, so a divergence driven by a belief that was false at deposit is a DEFECT and not a result. This is that check, generalized over every predicate the reader has a branch for.
+[COUNT      ] mode=total: 182 divergent forks of 1467 genuine
+[SIGNATURES ]   (from_verb -> to_verb, which of the next 3 changed) x count: {('move', 'speak', (3,)): 26, ('move', 'tell', (3,)): 22, ('move', 'speak', (1,)): 31, ('move', 'transfer', (1,)): 14, ('move', 'tell', (1,)): 17, ('move', 'transfer', (3,)): 4, ('move', 'speak', (2,)): 34, ('move', 'tell', (2,)): 23, ('move', 'transfer', (2,)): 11}
+[  DROP     ] NPC-088 fork(at=5,take=2) move->speak @tick 1 | clause-4 drop present ONLY IN base-only: p_c declines `move` on 'p_c', ops={'to': 'p_c', 'subject': 'p_c'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_c', 'contain.path:p_c', False) when=1 conf=95 src=firsthand | deposited by Event 259c6fcb3d3f854d kind=travel.blocked actor=p_c | holder=p_c CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[  DROP     ] NPC-088 fork(at=5,take=3) move->tell @tick 1 | clause-4 drop present ONLY IN base-only: p_c declines `move` on 'p_c', ops={'to': 'p_c', 'subject': 'p_c'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_c', 'contain.path:p_c', False) when=1 conf=95 src=firsthand | deposited by Event 259c6fcb3d3f854d kind=travel.blocked actor=p_c | holder=p_c CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[  DROP     ] NPC-088 fork(at=6,take=2) move->speak @tick 2 | clause-4 drop present ONLY IN base-only: p_a declines `move` on 'p_a', ops={'to': 'p_a', 'subject': 'p_a'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_a', 'contain.path:p_a', False) when=2 conf=95 src=firsthand | deposited by Event be5087788c71c178 kind=travel.blocked actor=p_a | holder=p_a CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[  DROP     ] NPC-088 fork(at=6,take=3) move->transfer @tick 2 | clause-4 drop present ONLY IN base-only: p_a declines `move` on 'p_a', ops={'to': 'p_a', 'subject': 'p_a'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_a', 'contain.path:p_a', False) when=2 conf=95 src=firsthand | deposited by Event be5087788c71c178 kind=travel.blocked actor=p_a | holder=p_a CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[  DROP     ] NPC-087 fork(at=6,take=3) move->tell @tick 2 | clause-4 drop present ONLY IN base-only: p_a declines `move` on 'p_a', ops={'to': 'p_a', 'subject': 'p_a'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_a', 'contain.path:p_a', False) when=2 conf=95 src=firsthand | deposited by Event be5087788c71c178 kind=travel.blocked actor=p_a | holder=p_a CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[  DROP     ] NPC-002 fork(at=5,take=3) move->transfer @tick 1 | clause-4 drop present ONLY IN base-only: p_c declines `move` on 'p_c', ops={'to': 'p_c', 'subject': 'p_c'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_c', 'contain.path:p_c', False) when=1 conf=95 src=firsthand | deposited by Event 259c6fcb3d3f854d kind=travel.blocked actor=p_c | holder=p_c CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[  DROP     ] NPC-002 fork(at=5,take=3) move->transfer @tick 1 | clause-4 drop present ONLY IN base-only: p_a declines `move` on 'p_a', ops={'to': 'p_a', 'subject': 'p_a'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_a', 'contain.path:p_a', False) when=2 conf=95 src=firsthand | deposited by Event be5087788c71c178 kind=travel.blocked actor=p_a | holder=p_a CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[  DROP     ] NPC-083 fork(at=7,take=2) move->speak @tick 2 | clause-4 drop present ONLY IN base-only: p_b declines `move` on 'p_b', ops={'to': 'p_b', 'subject': 'p_b'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_b', 'contain.path:p_b', False) when=2 conf=95 src=firsthand | deposited by Event 71460a53d39a2f06 kind=travel.blocked actor=p_b | holder=p_b CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[  DROP     ] NPC-083 fork(at=7,take=3) move->tell @tick 2 | clause-4 drop present ONLY IN base-only: p_b declines `move` on 'p_b', ops={'to': 'p_b', 'subject': 'p_b'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_b', 'contain.path:p_b', False) when=2 conf=95 src=firsthand | deposited by Event 71460a53d39a2f06 kind=travel.blocked actor=p_b | holder=p_b CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[  DROP     ] NPC-032 fork(at=7,take=3) move->transfer @tick 2 | clause-4 drop present ONLY IN base-only: p_b declines `move` on 'p_b', ops={'to': 'p_b', 'subject': 'p_b'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_b', 'contain.path:p_b', False) when=2 conf=95 src=firsthand | deposited by Event 71460a53d39a2f06 kind=travel.blocked actor=p_b | holder=p_b CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[  DROP     ] ARC-02 fork(at=5,take=2) move->speak @tick 1 | clause-4 drop present ONLY IN base-only: p_c declines `move` on 'p_c', ops={'to': 'p_c', 'subject': 'p_c'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_c', 'contain.path:p_c', False) when=1 conf=95 src=firsthand | deposited by Event 259c6fcb3d3f854d kind=travel.blocked actor=p_c | holder=p_c CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[  DROP     ] ARC-02 fork(at=5,take=3) move->tell @tick 1 | clause-4 drop present ONLY IN base-only: p_c declines `move` on 'p_c', ops={'to': 'p_c', 'subject': 'p_c'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_c', 'contain.path:p_c', False) when=1 conf=95 src=firsthand | deposited by Event 259c6fcb3d3f854d kind=travel.blocked actor=p_c | holder=p_c CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[  DROP     ] ARC-09 fork(at=6,take=2) move->speak @tick 2 | clause-4 drop present ONLY IN base-only: p_a declines `move` on 'p_a', ops={'to': 'p_a', 'subject': 'p_a'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_a', 'contain.path:p_a', False) when=2 conf=95 src=firsthand | deposited by Event be5087788c71c178 kind=travel.blocked actor=p_a | holder=p_a CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[  DROP     ] ARC-09 fork(at=6,take=3) move->transfer @tick 2 | clause-4 drop present ONLY IN base-only: p_a declines `move` on 'p_a', ops={'to': 'p_a', 'subject': 'p_a'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_a', 'contain.path:p_a', False) when=2 conf=95 src=firsthand | deposited by Event be5087788c71c178 kind=travel.blocked actor=p_a | holder=p_a CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[  DROP     ] ARC-11 fork(at=7,take=2) move->speak @tick 2 | clause-4 drop present ONLY IN base-only: p_b declines `move` on 'p_b', ops={'to': 'p_b', 'subject': 'p_b'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_b', 'contain.path:p_b', False) when=2 conf=95 src=firsthand | deposited by Event 71460a53d39a2f06 kind=travel.blocked actor=p_b | holder=p_b CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[  DROP     ] ARC-11 fork(at=7,take=3) move->transfer @tick 2 | clause-4 drop present ONLY IN base-only: p_b declines `move` on 'p_b', ops={'to': 'p_b', 'subject': 'p_b'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_b', 'contain.path:p_b', False) when=2 conf=95 src=firsthand | deposited by Event 71460a53d39a2f06 kind=travel.blocked actor=p_b | holder=p_b CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[  DROP     ] ARC-12 fork(at=7,take=3) move->tell @tick 2 | clause-4 drop present ONLY IN base-only: p_b declines `move` on 'p_b', ops={'to': 'p_b', 'subject': 'p_b'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_b', 'contain.path:p_b', False) when=2 conf=95 src=firsthand | deposited by Event 71460a53d39a2f06 kind=travel.blocked actor=p_b | holder=p_b CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[  DROP     ] ARC-28 fork(at=6,take=3) move->tell @tick 2 | clause-4 drop present ONLY IN base-only: p_a declines `move` on 'p_a', ops={'to': 'p_a', 'subject': 'p_a'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_a', 'contain.path:p_a', False) when=2 conf=95 src=firsthand | deposited by Event be5087788c71c178 kind=travel.blocked actor=p_a | holder=p_a CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[  DROP     ] SCN-10 fork(at=5,take=3) move->transfer @tick 1 | clause-4 drop present ONLY IN base-only: p_c declines `move` on 'p_c', ops={'to': 'p_c', 'subject': 'p_c'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_c', 'contain.path:p_c', False) when=1 conf=95 src=firsthand | deposited by Event 259c6fcb3d3f854d kind=travel.blocked actor=p_c | holder=p_c CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[  DROP     ] SCN-10 fork(at=5,take=3) move->transfer @tick 1 | clause-4 drop present ONLY IN base-only: p_a declines `move` on 'p_a', ops={'to': 'p_a', 'subject': 'p_a'} — SELF-REFERENTIAL=True
+[  CLAIM    ]     carrier ('p_a', 'contain.path:p_a', False) when=2 conf=95 src=firsthand | deposited by Event be5087788c71c178 kind=travel.blocked actor=p_a | holder=p_a CROSS-PERSON=False | TRUE WHEN RECORDED = True (world at deposit False; world now False)
+[SAMPLED    ]   forensics EXECUTED on 18 representatives of 182 divergences (18 distinct signatures); every distinct signature is covered when that count is <= 24
+[SHAPE      ]   carrying clause-4 drops seen: 20 SELF-REFERENTIAL (operand == subject, the degenerate class the operand channel produces), 0 not
+[TRUTH      ]   carrying beliefs FALSE WHEN RECORDED: 0 of 20. Over ALL in-grammar deposits in those runs: 75 of 957 disagreed with `WorldReader` at the barrier that stored them
+              | `W-B`'s retraction was that a self-refuting belief produced 95% of its published effect, so a divergence driven by a belief that was false at deposit is a DEFECT and not a result. This is that check, generalized over every predicate the reader has a branch for.
+
+==============================================================================
+W-D.5 — IS THE DECISION FINGERPRINT WIDE ENOUGH? (it is not, and this is the largest finding in the item)
+==============================================================================
+[READ       ] `arm9_forking.recorder` records a deliberation as `(person, [verb, ...], tick)` — VERBS ONLY. `Query.opening_set` returns `Candidate(verb, subject, why, operands)`, so two candidate lists with the SAME VERBS about DIFFERENT SUBJECTS compare EQUAL and the fork is scored RECONVERGED.
+[MEASURE    ] [2 x 1 = 2 slots] mode=none  | (verb, subject) fingerprint: RECONVERGED 1036/1504 = 68.88% · DIVERGED 468   [verb-only, same run: 1504/1504 = 100.00%, DIVERGED 0]
+[  KINDS    ] changed window slots by kind: {'SUBJECT-ONLY': 510}
+[MEASURE    ] [2 x 1 = 2 slots] mode=actor | (verb, subject) fingerprint: RECONVERGED 960/1467 = 65.44% · DIVERGED 507   [verb-only, same run: 1405/1467 = 95.77%, DIVERGED 62]
+[  KINDS    ] changed window slots by kind: {'SUBJECT-ONLY': 447, 'VERB-SET': 62}
+[MEASURE    ] [2 x 1 = 2 slots] mode=total | (verb, subject) fingerprint: RECONVERGED 855/1467 = 58.28% · DIVERGED 612   [verb-only, same run: 1285/1467 = 87.59%, DIVERGED 182]
+[  KINDS    ] changed window slots by kind: {'SUBJECT-ONLY': 455, 'VERB-SET': 182}
+[CONSISTENCY] [2 x 1 = 2 slots] VERB-SET changed slots == the verb-only instrument's DIVERGED count, in every arm: True ({'none': (0, 0), 'actor': (62, 62), 'total': (182, 182)})
+              | ⚠ THIS IS A CONSISTENCY CHECK, NOT INDEPENDENT CORROBORATION, AND THE FIRST WRITING OF IT OVERCLAIMED. It cannot fail while every divergent fork changes EXACTLY ONE window slot — `changed_distribution` is {'none': {0: 1504}, 'actor': {0: 1405, 1: 62}, 'total': {0: 1285, 1: 182}} — because then the VERB-SET slot count is identically the count of verb-differing divergent forks. It would become informative only if a fork ever changed two verb-differing slots. Raised by an independent read-only critic, 2026-09-04.
+[MEASURE    ] [2 x 3 = 6 slots] mode=none  | (verb, subject) fingerprint: RECONVERGED 585/756 = 77.38% · DIVERGED 171   [verb-only, same run: 756/756 = 100.00%, DIVERGED 0]
+[  KINDS    ] changed window slots by kind: {'SUBJECT-ONLY': 228}
+[MEASURE    ] [2 x 3 = 6 slots] mode=actor | (verb, subject) fingerprint: RECONVERGED 573/733 = 78.17% · DIVERGED 160   [verb-only, same run: 733/733 = 100.00%, DIVERGED 0]
+[  KINDS    ] changed window slots by kind: {'SUBJECT-ONLY': 174}
+[MEASURE    ] [2 x 3 = 6 slots] mode=total | (verb, subject) fingerprint: RECONVERGED 525/727 = 72.21% · DIVERGED 202   [verb-only, same run: 716/727 = 98.49%, DIVERGED 11]
+[  KINDS    ] changed window slots by kind: {'SUBJECT-ONLY': 248, 'VERB-SET': 11}
+[CONSISTENCY] [2 x 3 = 6 slots] VERB-SET changed slots == the verb-only instrument's DIVERGED count, in every arm: True ({'none': (0, 0), 'actor': (0, 0), 'total': (11, 11)})
+              | ⚠ THIS IS A CONSISTENCY CHECK, NOT INDEPENDENT CORROBORATION, AND THE FIRST WRITING OF IT OVERCLAIMED. It cannot fail while every divergent fork changes EXACTLY ONE window slot — `changed_distribution` is {'none': {0: 756}, 'actor': {0: 733}, 'total': {0: 716, 1: 11}} — because then the VERB-SET slot count is identically the count of verb-differing divergent forks. It would become informative only if a fork ever changed two verb-differing slots. Raised by an independent read-only critic, 2026-09-04.
+[⚠ CONSEQUENCE] THE CONTROL IS NOT 100% AT THIS RESOLUTION, AND THAT RETRACTS THE DIAGNOSIS THE PUBLISHED 100% RESTED ON — not the arithmetic.
+              | ARM 9c reads: *'the deliberation never reads the world ... the only channel by which anything that happened can reach a later decision is a CLAIM in the actor's ledger'*, and ARM 9d then shows that channel closed. `opening_set` indeed reads no World — but its `q` DOES: `questions_for(w, p)` takes a World, and clause 3 is `subject in referents(q)`.
+[⚠ THE CARRIER] IT IS NOT THE LEDGER'S APPEND ORDER. `questions_for` SORTS, WHICH DESTROYS APPEND ORDER: `out.sort(key=lambda q: (order[q.source], q.id))`. The first writing of this item named append order and that is corrected here. Found by an independent read-only critic, 2026-09-04.
+              | Several `claim_landed` questions SHARE a source, so among them `q.id` alone decides — and `q.id` is `f'q:claim:{c.id}'` where `c.id` is a CONTENT HASH, `H(w.world_seed, w.tick, pid, f'claim:{e.id}:{n}')`, minted in `SeasonDriver.witness` off the DEPOSITING EVENT'S OWN ID. So WHICH QUESTION A PERSON ANSWERS IS DECIDED BY LEXICOGRAPHIC ORDER OVER CONTENT-HASHED CLAIM IDS. That is an undeclared tiebreaker with decision consequences, and it sits one level ABOVE `H-54`, whose three arms (`first`/`all`/`one_per_source`) every one read `qs[0]` or `qs[0].id` and none of which says what breaks ties WITHIN a source. RE-TRACED with a spy on `questions_for` (NPC-088, `none`, fork at decision 0, p_a `move` -> `speak`; p_c at tick 1): the baseline's five `claim_landed` questions come back at LEDGER INDICES [6, 0, 1, 9, 10] and the fork's six at [12, 5, 0, 1, 8, 9] — neither is append order, both are ascending `q.id`. The fork's `speak` emits `speech.made` about `r_hearth`; that lands in p_c's ledger at index 12 as claim `0261dc5bd7431c56`, and `0261...` < `219a...`, so `qs[0]` goes from `q:claim:219a9f960a5fa368` (referents ('p_c',)) to `q:claim:0261dc5bd7431c56` (referents ('r_hearth',)) — which is exactly the p_c -> r_hearth subject flip reported, reached by a different mechanism than the one reported. ⚠ AND THE DEPOSITING EVENT'S SUBJECT IS `p_a`, NOT `p_c`: the pre-`W-B` channel is CROSS-PERSON at the control arm, because event-kind claims are minted in every arm and `fan_out_mode` defaults to `total`. So a fork already changed what a person deliberates ABOUT before `W-B`, through Q2 and a content-hash tiebreak nobody declared.
+[SO THE TWO CHANNELS SEPARATE] SUBJECT-ONLY changes are the OLD channel and VERB-SET changes are `W-B`'s. They do not overlap in any arm — the per-cell counts are in the KINDS lines above rather than transcribed here, so this sentence cannot go stale against them.

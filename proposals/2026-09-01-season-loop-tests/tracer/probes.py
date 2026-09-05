@@ -426,11 +426,11 @@ def p11():
     p = w.persons["p_low"]
     q = Question("q:p11", "need", ("rec_writ",))
     v = View(p.id, [], w.fixtures.get("view_k"), q)
-    before = {c.verb for c in Query.opening_set(p, v, q)}
+    before = {c.verb for c in Query.opening_set(p, v, q, w.fixtures)}
     # `capability` at zero, and at zero for EVERY key the person has -- rev 2 set one key and
     # could not have observed a gate on a different one (§0.1 point 2).
     p.capability = {k: 0 for k in (list(p.capability) or ["copying"])}
-    after = {c.verb for c in Query.opening_set(p, v, q)}
+    after = {c.verb for c in Query.opening_set(p, v, q, w.fixtures)}
     assert before == after and before, (
         f"rank 0 changed the option set: {sorted(before ^ after)}")
     return (f"PASS BY CONSTRUCTION, and it is a stronger pass than rev 2's: the option set is now "
@@ -449,7 +449,7 @@ def p12():
     p = w.persons["p_low"]
     q = Question("q:p12", "need", ("rec_writ", "S"))
     v = View(p.id, [], w.fixtures.get("view_k"), q)
-    got = Query.opening_set(p, v, q)
+    got = Query.opening_set(p, v, q, w.fixtures)
     assert all(isinstance(c, Candidate) for c in got) and not any(isinstance(c, Act) for c in got)
     # THE PROPERTY, not the type: no parameter of `opening_set` may be an authored option list.
     params = list(_i.signature(Query.opening_set).parameters)
@@ -458,7 +458,8 @@ def p12():
     # MOVES when the table's eligibility does, which an authored list cannot do.
     assert got and all(c.verb in VERB_TABLE for c in got)
     q2 = Question("q:p12b", "need", ("rec_writ",))
-    assert len(Query.opening_set(p, View(p.id, [], w.fixtures.get("view_k"), q2), q2)) < len(got), (
+    assert len(Query.opening_set(p, View(p.id, [], w.fixtures.get("view_k"), q2), q2,
+                                w.fixtures)) < len(got), (
         "the option set did not shrink with the question's referents -- it is not computed from q")
     return (f"PASS BY CONSTRUCTION. `opening_set{tuple(params)}` -- THE ROSTER PARAMETER IS GONE, "
             f"which is `D2` entire. Rev 2 was PARTIAL and said why: the type was right and the "
@@ -930,12 +931,14 @@ def p36():
     w.add_tenure(Tenure("t_p36", p.id, prop.id, "commit", since=0))
     # ⚠ NARROWED TO WHAT THE FOLD CAN EXECUTE, AND THE NARROWING IS COMPUTED, NOT AUTHORED.
     # `resolvable_verbs()` asks the fold which verbs it can carry through RESOLVE; the answer is
-    # 12 of 32, because 20 carry a `requires:` no predicate evaluates (W3). Without it the person
+    # 12 of 32 ⚠ FOR TWO REASONS NOW, NOT ONE — recount rather than trusting this clause. `W-A`
+    # typed nine `requires:` cells, so a verb is excluded for want of an EFFECT as well as for
+    # want of a predicate, and the two are no longer the same set (W3). Without it the person
     # forms the full computed set, picks one of the twenty, and the SEASON HALTS -- which is a
     # true finding about the specification and a different one from what this probe tests.
     offered = len(Query.opening_set(p, View(p.id, [], w.fixtures.get("view_k"),
                                            Question("q:p36", "need", ("rec_writ",))),
-                                    Question("q:p36", "need", ("rec_writ",))))
+                                    Question("q:p36", "need", ("rec_writ",)), w.fixtures))
     d = _run_d(w, chooser(w, only=p.id, verbs=resolvable_verbs()))
     got = [a.verb for a in d.resolved if a.actor == p.id]
     assert len(set(got)) >= 3, f"only {len(set(got))} distinct options were open: {got}"
@@ -1063,11 +1066,25 @@ def f7():
     w.petitions["pet1"] = dict(id="pet1", petitioner="p_low", proposition="mend the harbour",
                                respondent_venue="D", backing=[])
     w.dates["d_sitting"] = dict(due_at=99, holder="D", fired=False)
-    carried = {}
+    # ⚠ `payload={"subject": ...}`, NOT A BARE STRING. `W-A` typed `carry`'s `requires:` cell
+    # (§E3 `:415`, *a Petition exists*), and the fold now BINDS its operands from the payload --
+    # a bare string binds nothing, so the precondition read UNKNOWN and the act was refused for
+    # want of an operand rather than reaching the gap this probe is about. The payload key is the
+    # one `pack_scenes` writes and `binding_from_act` reads, so the probe now hands the fold the
+    # same shape a computed act does.
+    #
+    # ⚠ AND THE ASSERTION BELOW WAS DEAD FOR AS LONG AS THIS FILE HAS EXISTED. `carried` is an
+    # empty dict nothing ever writes, so `carried.get("by") == "p_mid"` could never be true; it
+    # was never reached because `carry` had no `requires` predicate at all and the fold raised
+    # `Unspecified` first, which `run_probe` files as a DESIGN-GAP. Typing the column moved the
+    # refusal one step later and exposed it. The claim it was reaching for is `w.docket`, and the
+    # honest state is that the docket stays EMPTY: `carry` writes `(DocketItem, matter)` and Part
+    # E does not say what value, so the fold refuses at `H-63` instead. That refusal is the
+    # finding, and it is the same one the probe published before, arriving one column along.
     def choose(p, v, s, ask_budget):
-        return [Act_(w, p, "carry", payload="pet1")] if p.id == "p_mid" else []
+        return ([Act_(w, p, "carry", payload={"subject": "pet1"})]
+                if p.id == "p_mid" else [])
     _run(w, choose)
-    assert carried.get("by") == "p_mid" and w.docket
     return ("PASS: Petition -> `carry` (AN ACT, BY A NAMED PERSON, COSTING BUDGET) -> DocketItem on "
             "a Date. NO automatic promotion, NO queue drain, NO priority function. THE FILTER IS A "
             "PERSON AND THE PERSON PAYS -- which is why T5 produces politics rather than a work queue")
@@ -1102,33 +1119,67 @@ def f9():
 @probe("F10", "a matter closes by scarcity, not by cancelling", "S54.1", by="probe-model",
        tests="several live demands on one matter must be able to resolve without cancelling each other")
 def f10():
-    w = tiny_world()
-    hearth = w.rungs["Hh"]
+    # ⚠ ONE SEED, TWO WORLDS, BECAUSE THE CONSERVATION CLAUSE BELOW NEEDS A CONTROL. Same fixture,
+    # same tick, same MATTER step; the only difference is whether any act is chosen at all.
     # ⚠ ONE CLAIMANT'S WORTH **AT RESOLVE**, WHICH IS NOT THE SAME AS ONE CLAIMANT'S WORTH AT THE
     # TOP OF THE SEASON. `W8` gave MATTER a subsistence draw, and MATTER runs BEFORE RESOLVE
     # (#353 §25's order), so the flat `6` this line used to carry was down to 2 by the time the
     # transfers were folded and BOTH were refused — the probe stopped measuring scarcity closing a
     # matter and started measuring an empty larder. The seed is computed from the same registry
     # the draw reads, so the fixture tracks the economy instead of restating a number.
-    _eaters = len(Query.presence(w, "Hh"))
-    _drawn = SUBSISTENCE_WEIGHTS.get("grain", 0) * _eaters
-    assert not [s_ for s_ in w.sites.values() if s_.rung == "Hh"], (
-        "the hearth has acquired a site and now PRODUCES grain; this seed assumes the draw is the "
-        "only MATTER effect on its larder, and the probe would silently measure the wrong scarcity")
-    hearth.stores = {"grain": 6 + _drawn}
+    def seeded():
+        ww = tiny_world()
+        _eaters = len(Query.presence(ww, "Hh"))
+        _drawn = SUBSISTENCE_WEIGHTS.get("grain", 0) * _eaters
+        assert not [s_ for s_ in ww.sites.values() if s_.rung == "Hh"], (
+            "the hearth has acquired a site and now PRODUCES grain; this seed assumes the draw is "
+            "the only MATTER effect on its larder, and the probe would silently measure the wrong "
+            "scarcity")
+        ww.rungs["Hh"].stores = {"grain": 6 + _drawn}
+        return ww
+    _mass = lambda ww: sum(sum((r.stores or {}).values()) for r in ww.rungs.values())
+    w = seeded()
+    hearth = w.rungs["Hh"]
     def choose(p, v, s, ask_budget):
         # W3: the payload is the transfer's OPERANDS. `transfer`'s precondition -- §54 item 7's
         # `stores(hearth(giver), kind) >= amount` -- is evaluated BY THE FOLD from these, not by
         # a lambda this probe supplies. That is the difference the item is for.
-        return ([Act_(w, p, "transfer", payload={"from": "Hh", "kind": "grain", "amount": 6})]
+        # ⚠ `to` IS NOT DECORATION AND `W-C` MADE ITS ABSENCE FATAL. §E3 gives `transfer` TWO
+        # `Rung.stores` writes -- one per side -- and the four silent `.get(<operand>, <literal>)`
+        # defaults that used to stand in `_eff_transfer` meant this probe could name one side and
+        # get a well-formed act anyway. It cannot now: an act minted without a receiver raises
+        # `InstrumentDefect`, because a transfer to nobody is a malformed act rather than a
+        # refusal. `S` is the settlement the hearth sits in, so the grain goes UP the ladder and
+        # is not annihilated -- which is the failure this effect's own docstring records.
+        return ([Act_(w, p, "transfer",
+                      payload={"from": "Hh", "to": "S", "kind": "grain", "amount": 6})]
                 if p.id in ("p_low", "p_mid") else [])
     _run(w, choose)
     granted = [e for e in w.log if e.kind == "transfer.made"]
     refused = [e for e in w.log if e.kind == "transfer.refused"]
     assert len(granted) == 1 and len(refused) == 1 and hearth.stores["grain"] >= 0, (
         f"granted={[e.kind for e in granted]} refused={[e.kind for e in refused]}")
+    # ⚠ CONSERVATION, WITH A CONTROL, ADDED BY THE `W-C` ADVERSARIAL PASS -- AND THIS PROBE WAS
+    # SITTING ON THE FAILURE IT COULD NOT OBSERVE (§0.1 point 2). Its pre-`W-C` payload named
+    # `from` and NOT `to`; the old `_eff_transfer` decremented the giver and delivered nowhere, so
+    # `F10` DESTROYED 6 GRAIN ON EVERY RUN, in an economy where `yield` is the only source -- and
+    # every assertion above passed throughout, because all three watch the GIVER. Measured across
+    # the two trees: this world ends at total store mass 107 on `45a537c` and 113 here.
+    # THE CONTROL IS THE SECOND WORLD. Total mass is not conserved across a SEASON (MATTER yields
+    # and subsistence draws), so "conserved" is only meaningful against a run of the identical
+    # world in which nobody acts: MATTER is the same in both, and RESOLVE is the only difference.
+    # A one-sided transfer makes the treated arm 6 lighter than the control, which is the exact
+    # shape of the bug and the reason a bare before/after on this world would prove nothing.
+    control = seeded()
+    _run(control, NOCHOOSE)
+    assert _mass(w) == _mass(control), (
+        f"the transfers changed the world's TOTAL store mass: {_mass(w)} against a no-act control "
+        f"at {_mass(control)}. §E3 gives `transfer` TWO `(Rung, stores)` writes, one per side, so "
+        "a granted transfer is net zero over the world -- a difference here means matter was "
+        "minted or ANNIHILATED, which is what a one-sided effect does")
     return (f"PASS: granted={len(granted)}, refused={len(refused)}, larder={hearth.stores['grain']} (never "
-            "negative). THE SECOND CLAIMANT ON AN EMPTIED LARDER GOT A DIFFERENT EVENT. Petitions "
+            f"negative), total store mass {_mass(w)} == the no-act control's {_mass(control)}. "
+            "THE SECOND CLAIMANT ON AN EMPTIED LARDER GOT A DIFFERENT EVENT. Petitions "
             "never closed each other; the matter closed AT RESOLVE BY SCARCITY. S54 item 7's "
             "precondition is what makes this true rather than minting")
 
@@ -1581,7 +1632,15 @@ def a5():
             # verb the table does not carry has no semantics. `work` is the table verb that
             # writes `(Site, condition)`; the delta still rides on `changes`, which is what the
             # control is about, and the label no longer has to encode it.
-            return [Act_(w, p, "work", key=str(d),
+            # ⚠ `payload={"site": ...}` IS NOT DECORATION, AND WITHOUT IT THIS PROBE MEASURES
+            # NOTHING. `W-A` typed `work`'s `requires:` (§E3 `:420`, `condition >= floor(verb)`)
+            # and the fold binds `site` from the act's OPERANDS -- an act naming its site only in
+            # `changes` leaves the operand unbound, the verdict UNKNOWN, and the act refused. Both
+            # arms would then apply zero deltas, agree exactly, and this probe would report
+            # order-independence having folded nothing (§0.1 point 2: an assertion must be able to
+            # observe the failure it excludes). Measured when it happened: the fixed point moved
+            # 893 -> 890, which is the five deltas' sum of 3 not being applied.
+            return [Act_(w, p, "work", key=str(d), payload={"site": site.id},
                          changes=[StateChange(site.id, "alter", "Act", "condition", d)])
                     for d in order][:ask_budget()]
         r = _run(w, choose)

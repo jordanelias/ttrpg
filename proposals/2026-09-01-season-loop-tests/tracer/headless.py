@@ -118,8 +118,11 @@ def run(seasons: int = 2, seed: int = 0) -> dict:
         #
         # ⚠ THIS IS THE HONEST CEILING ON ARTIFACT 2 AND IT IS REPORTED RATHER THAN HIDDEN:
         # Carin chooses from the resolvable subset, not from all 32. Which verbs those are moves
-        # with `verb_table.yaml`, `REQUIRES_PREDICATES` and `EFFECTS`, so the number below is a
-        # measurement of the specification's completeness, not a setting.
+        # with `verb_table.yaml`, `REQUIRES_PREDICATES`, `requires_typed:` and `EFFECTS`, so the
+        # number below is a measurement of the specification's completeness, not a setting.
+        # ⚠ `requires_typed:` JOINED THAT LIST IN `W-A` and this comment did not say so until the
+        # adversarial pass read it: `resolvable_verbs` now admits a verb whose precondition is a
+        # TYPED CELL as well as one carrying a hand-written predicate.
         # `H-87`: the contest depth cap is the CALLER's to supply (S39.3 refuses a default), and
         # artifact 2 never had to decide until Part E's `contests:` column became real and the
         # seam started firing on `kill / wound`.

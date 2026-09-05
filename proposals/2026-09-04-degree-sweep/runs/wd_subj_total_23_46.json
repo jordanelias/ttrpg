@@ -1,0 +1,19 @@
+{
+ "mode": "total",
+ "chunk": [
+  23,
+  46
+ ],
+ "n_cases_ok": 23,
+ "n_cases_failed": 0,
+ "probed": 828,
+ "no_live_window": 207,
+ "inert": 238,
+ "genuine": 383,
+ "diverged": 151,
+ "reconverged": 232,
+ "changed_slot_kinds": {
+  "SUBJECT-ONLY": 113,
+  "VERB-SET": 44
+ }
+}
