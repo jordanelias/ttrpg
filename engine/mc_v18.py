@@ -124,10 +124,10 @@ class BatchResult:
 def _faction_actions_callback(world):
     """Per-season faction action dispatch — passed to season.run_season.
 
-    GD-2 mandatory-actions precedence is enforced inside faction_take_action
-    (mandatory pass before stochastic candidates per HR-9). Parliamentary +
-    territory-holding gate matches the pre-migration inline block at
-    mc_v18 L75-87 prior to 2026-05-20.
+    ⚠ GD-2's mandatory pass is NOT implemented and this line claimed it was (ED-IN-0202,
+    2026-09-05): faction_take_action takes ONE weighted draw, and "threat" only raises
+    Muster's WEIGHT, so canon's own GD-2 violation test fails against live code. The
+    parliamentary + territory-holding gate below is unaffected and stands (from 2026-05-20).
     """
     for fn, faction in world.factions.items():
         if not faction.parliamentary:

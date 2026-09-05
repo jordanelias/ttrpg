@@ -1,5 +1,38 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## ⚠ CURRENT — 2026-09-05, ED-IN-0202: a reference for future sessions, and eight false self-claims
+
+**`references/what_valoria_is_and_what_runs.md`** is new and is the thing to read if you are asked
+what the game is. Jordan-directed, and his framing is quoted in it verbatim (nine required systems +
+the genre list). It is **reference only** under §0.05 — a mechanism for nothing — and every number in
+it ships the command that re-measures it, so re-run rather than trust.
+
+**The part that will rot slowest and matters most is its §3: eight claims the tree makes about itself
+that are false.** Three were corrected in code by this commit (all behaviour-free docstrings); five
+are recorded for their lanes and not edited from here. The two with the largest consequences:
+
+- **Nothing writes the `Turmoil` clock** — two references in the whole tree, an initialiser and the
+  victory read — so GD-1's Political Stability clause is **vacuously true** and no campaign can win
+  by GD-1. Seed 7 runs all 50 seasons and a fallback tiebreak names Crown. **IN/WR lane.**
+- **GD-2's mandatory threat-response does not exist.** Two docstrings claimed it was enforced (now
+  corrected); the body takes one weighted draw and "threat" is a Muster weight multiplier. Canon's own
+  violation test fails against live code. Closing it is a behaviour change with campaign goldens
+  attached, so it is recorded, not fixed. **FA lane.**
+
+Also recorded: the insurgency pipeline and NPE are pinned at 0 by the seeded goldens and named there
+as *built-but-unreachable islands*; four mass-battle flags whose comments say "Default OFF" default
+**ON**; seven faction-unique actions are unbuilt, not six. **MB/FA lane.**
+
+**No head moved, no `CURRENT.md` row changed, no `needs_jordan` row opened.** The five questions the
+architecture chain leaves open are recorded in the reference as facts about the chain, not as a docket.
+
+⚠ **`tests/valoria/test_forked_status.py`'s two ref tests fail in a shallow clone** — `FORK:c451bcb`
+is not fetchable at depth 89. Environment artifact, not a regression; check clone depth before reading
+it as one. Independently hit by the 2026-09-04 social-contest pass, which reached the content at tag
+`v30-snapshot-2026-06-28` instead.
+
+---
+
 ## ⚠ CURRENT — 2026-09-04, PR #368: the season loop can now branch, and by how little (read this first)
 
 **The question this branch answered.** Fork every mechanical decision in the ARC/NPC corpus and

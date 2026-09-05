@@ -208,7 +208,7 @@ def _threat_signal(faction, world) -> float:
 def faction_take_action(faction, world, rng) -> str:
     """Select and execute one action for a faction this season.
 
-    GD-2: mandatory threat-response before stochastic selection.
+    ⚠ GD-2 IS NOT IMPLEMENTED HERE; this line claimed it was (ED-IN-0202). No mandatory pass.
     ED-FA-0012 (FA-5): the four action buckets' PRIOR weights (30/35/20/15, M7_ASSUMPTION_SIX) are
     re-weighted by faction state BEFORE the single selection draw, then renormalized to sum 1.0, so
     the cumulative-threshold dispatch below is identical in structure to v17 — only the boundaries

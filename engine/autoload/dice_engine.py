@@ -241,10 +241,17 @@ def degree_from_net(net: int | float, ob: int | float,
     Both operands may be fractional. `net` already is — the continuous engine returns fractional
     nets. `ob` is RULED to become fractional (Jordan, 2026-08-14: an obstacle rolled against a
     character or faction is "their corresponding score/2 plus whatever specific modifiers exist for
-    them in that instance") but ⚠ THAT DERIVATION IS IMPLEMENTED NOWHERE — every call site in the
-    tree still passes a hand-set Ob. An earlier draft of this paragraph stated it as an accomplished
-    fact; it is a ruling awaiting execution, and the distinction matters here more than anywhere
-    else, because this is the function a reader consults to learn what an obstacle IS.
+    them in that instance"). ⚠ CORRECTED 2026-09-05 (ED-IN-0202) — this read "THAT DERIVATION IS
+    IMPLEMENTED NOWHERE — every call site in the tree still passes a hand-set Ob", and the second
+    clause is FALSE. Measured: `systems/factions/sim/crown_initiative.py::coronation_renewal_ob`
+    implements `floor(Church.L / 2) + 1` exactly, Royal Progress derives its Ob from the standing
+    gap, and the tribunal derives under formal grounds. What is true is narrower: there is NO
+    SINGLE-OWNER derivation — most sites still hand-set (Muster 1, Govern 2, DECISIVE_OB 3, the
+    threadwork table), the three opposed sites disagree, and `parliamentary_transfer`'s `L+2`
+    contradicts the ruling while being stated as canon in `parliamentary_transfer_v30.md`.
+    Reconciling them is a systems ruling, not an edit, and is SUSPENDED by Jordan (2026-08-21).
+    The distinction matters here more than anywhere else, because this is the function a reader
+    consults to learn what an obstacle IS.
     The Partial band is a whole-success-wide window rather
     than the single point `margin == 0`, which is what the same rule reduces to on integers
     (`floor(margin) == 0`) — the two readings agree everywhere the game rolls whole dice, and
