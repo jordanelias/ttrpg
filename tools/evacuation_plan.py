@@ -182,11 +182,15 @@ RULES = [
     # are superseded design surface kept alive by a live runtime dependency, not canon in their
     # own right. `combat/`, `social_contest/` and `mass_battle/` are NOT matched here and fall
     # through to R-CODE below, unchanged, because the ruling retains them outright.
+    # ⚠ SPLIT 2026-09-05 AFTER AN ADVERSARIAL PASS. The first version matched all twelve and gave
+    # ONE reason -- "engine/ still resolves into this subsystem at runtime". That is FALSE for five
+    # of them: _architecture, articulation, npcs, ui and victory contain ZERO .py files and are not
+    # importable packages, so nothing can resolve into them by any mechanism. Emitting that reason
+    # verbatim as their verdict would tell a Step B session all twelve are blocked on R-04 when five
+    # are not blocked on anything code-related. Two rules now, because there are two reasons.
     (lambda p: p.startswith((
-        'systems/_architecture/', 'systems/articulation/', 'systems/characters/',
-        'systems/factions/', 'systems/fieldwork/', 'systems/npcs/', 'systems/overview/',
-        'systems/settlements/', 'systems/threadwork/', 'systems/ui/', 'systems/victory/',
-        'systems/world/',
+        'systems/characters/', 'systems/factions/', 'systems/fieldwork/', 'systems/overview/',
+        'systems/settlements/', 'systems/threadwork/', 'systems/world/',
     )), 'keep', 'R-SUPERSEDED-RETAINED-PENDING-R04',
      "SUPERSEDED by engine/season/ (ED-IN-0202, 2026-09-05) but RETAINED, and retained for exactly "
      "one reason: engine/ still resolves into this subsystem at runtime through a composition role "
@@ -198,6 +202,22 @@ RULES = [
      "blocking-reader hazard this tool exists to catch. It becomes deletable only once every role "
      "targeting it is removed or repointed at R-04's closure; until then this verdict is a record "
      "of the collision, not a step toward resolving it -- DELETE NOTHING on the strength of it"),
+
+    # The five code-free members of the same superseded set. Same ruling, DIFFERENT reason, and the
+    # difference is the point: these are prose with no code pair, which this tool's own docstring
+    # already covers ("prose with NO code pair -> KEEP, and it IS the spec"). Their retention does
+    # not wait on R-04 and never did.
+    (lambda p: p.startswith((
+        'systems/_architecture/', 'systems/articulation/', 'systems/npcs/',
+        'systems/ui/', 'systems/victory/',
+    )), 'keep', 'R-SUPERSEDED-DOC-ONLY',
+     "SUPERSEDED by engine/season/ (ED-IN-0202, 2026-09-05) and RETAINED, but NOT for the reason "
+     "its seven code-bearing siblings are. This subsystem holds ZERO .py files -- it is not an "
+     "importable package and no composition role targets it, so engine/ cannot resolve into it and "
+     "its retention is NOT gated on R-04. It is kept under this tool's standing rule for prose with "
+     "no code pair: the document IS the spec, and deleting it would delete design intent that "
+     "nothing else records. Whoever runs Step B should read this verdict as 'decide on the prose', "
+     "not as 'wait for the code dependency to clear' -- there is no code dependency to clear"),
 
     # ---- inside an evacuating parent, but KEEP (this is why the cut is per-file, not per-root)
     (lambda p: p.startswith('tests/sim/mass_battle/'), 'keep', 'R-MB-CANON',
