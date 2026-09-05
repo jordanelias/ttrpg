@@ -28,7 +28,7 @@ Every anchor cited was opened this session (`path:line symbol`); the assertion w
 | `faculty.py` | faculty dose-response on the production terminal and the band ladder on the **same** state; `Pool.size`/`net_boost` staircase; the `TRACK_SCALE × MERIT_SCALE` table | same seeds, same state, two readers | 1v6 reproduces `11_` row 3 (0.071 / 0.299); **the two dials are one dial** for the band terminal (product) |
 | `bench2.py` | 100 random 5-benches × 200 bouts, per-member reception (12_ S7's shape), three transforms, two aggregations, spread s ∈ {0, .04, .08, .12}; one leaning member on a neutral bench | **s = 0 gives SD 0.000** (homogeneous = one mind); `MemberBout` byte-identical to the kernel `Bout` on the crowd proceeding, **0/500** mismatches; mirror arm | under the multiplier, **33 %** of mildly-varied benches are decided (>70/30) before anyone argues; under δσ, **0 %** |
 | `draw.py` | `VoteAtClose` with a per-juror abstention dead zone at n = 5; institutional pressure as today's multiplier vs a start offset under the ED-621 clamp; `private_negotiation` under the multiplier | eps = 0 reproduces 0 % draw; inst = 0 identical across arms | draw reachable at an odd bench from eps > 0; the institutional multiplier moves `grand_contest` 0.11 → 0.81 A-decisive, the clamped offset caps at 0.26 |
-| `extra2.py` | the fold's one decision: the parliament's **raw** margin vs the **banded** margin, same 3,000 votes; the raw rule's pool-size dependence | same rng | banding changes 39 % of outcomes and makes total victory unreachable (0.351 → 0.038) — **J-P1** |
+| `extra2.py` | the fold's one decision: the parliament's **raw** margin vs the **banded** margin, same 3,000 votes; the raw rule's pool-size dependence | same rng | banding changes 39 % of outcomes and makes total victory unreachable (0.351 → 0.038) — **J-P1, closed raw 2026-09-05 (§1.8.1)** |
 
 ### §0.4 The measurement error I made, and the control that caught it
 
@@ -62,7 +62,7 @@ My first `dsigma` arm dropped the office/person blend entirely (`res = venue_w`)
     resistance="abstention",     # §10 step 3: +1 per Stability>=6 abstainer, cap +2 — the ADAPTER derives it
     adjudicator=None,            # BODY: the declared positions are the deciders; no third party is minted
     track_start=TRACK_START, tracker=True, tracker_mode="required",
-    scale=1.0,                   # §10: "net track movement = difference" — the RAW margin, unscaled (J-P1, §1.8)
+    scale=1.0,                   # §10: "net track movement = difference" — the RAW margin (J-P1 closed raw, §1.8.1)
 ),
 
 # resolver.py — the depth-0 entry point, beside Bout. Shares ContestState / PersuasionTrack / ContestOutcome.
@@ -70,8 +70,8 @@ def resolve_body(pools: dict, base_ob: float, venue, rng=None) -> "ContestOutcom
     """BODY topology at depth 0 (12_ §8.2 row 4; social_contest_v30 §10). Each side receives ONCE:
        pool = the side's declared weight (the adapter sums Mandate and adds the §10 genre dice);
        base_ob = the abstention resistance (the adapter counts it);
-       adv[side] = max(0, net - base_ob)  — the RAW margin (canon §10 verbatim; J-P1 holds the banded
-       reading). Draws exactly as run_parliamentary_vote did: dice_engine.roll_pool(pool, 7, rng) for
+       adv[side] = max(0, net - base_ob)  — the RAW margin (canon §10 verbatim; J-P1 closed raw
+       2026-09-05, §1.8.1 — and THIS docstring is where the depth reasoning must be written). Draws exactly as run_parliamentary_vote did: dice_engine.roll_pool(pool, 7, rng) for
        side A then side B, so the campaign goldens do not move. The venue's terminal reads the state."""
     s = ContestState()
     for side in (A, B):
@@ -151,6 +151,66 @@ Three production callers resolve the role by string (`references/module_contract
 | **banded** (one ladder) | 0.193 / 0.692 / 0.115 | **0.038** | — |
 
 Banding changes **39 %** of outcomes, makes the chamber referral-dominant, and makes total victory unreachable without a lobbied start (each side's movement is ≤ 3, so |A − B| ≤ 3 < 4). The raw rule has its own property to weigh: **decisiveness scales with pool size** — big coalitions produce a total victory half the time (0.497 at pool 20), a flat-shift trap of the kind `SKILL.md` §11 names. Architecture prefers **raw** — byte-identical, canon verbatim, and the kernel already has one unbanded magnitude entering `adv` (evidence, `resolver.py:364-365`, readiness-free and capped) — so the **default is raw, declared on the row as `scale=1.0` with this citation**, and banded is a one-line switch (`resolve_body` calls `DEGREE_ORDINAL[degree_from_net(net, base_ob)]`) that lands only in phase G with the re-pin. If Jordan picks banded, the raw rule's pool-size trap goes with it and TV needs lobbying, which may be the intended reading of *"lobbying provides advantage"*.
+
+#### §1.8.1 · **DISPOSITION 2026-09-05 — the consequences, laid out, and RAW recorded as the default**
+
+**Jordan was asked to rule and said, correctly, that the consequences were not in front of him.** They
+are below. The row is **closed at rung 3 — answered by a design requirement Jordan stated this session**
+— not escalated. It stays reopenable on the one condition named at the end.
+
+**The two readings are not "more texture vs less". They are two different shapes of chamber.**
+
+| | passed | committee | failed | total victory | P(TV) at equal pools 2 / 8 / 20 |
+|---|---|---|---|---|---|
+| **raw** (today, canon §10) | 0.412 | 0.342 | 0.246 | **0.351** | 0.038 / 0.287 / 0.497 |
+| **banded** (one ladder) | 0.193 | **0.692** | 0.115 | **0.038** | — (bounded, see below) |
+
+**Consequence 1 — banded collapses the distribution into the middle.** 69 % committee is a chamber that
+refers seven motions in ten and decides three. The argument for banded was Jordan's requirement (1)
+(*"somewhat okay odds to win or at least not completely lose, which is where degrees and bands come
+in"*) read as *lower the loss rate* — and it does lower it, 0.246 → 0.115. But that requirement asks
+bands to **spread** outcomes so a loss is partial rather than total; a legislature that almost never
+resolves anything is not a spread, it is a constant. **Raw is the three-outcome distribution, 41 / 34 /
+25, with a real 34 % middle already there.** On Jordan's own criterion raw wins, and the earlier reading
+measured the wrong property.
+
+**Consequence 2 — banded silently removes the top and bottom of the ladder.** Each side's banded
+movement is 0–3, so |A − B| ≤ 3; from the neutral start 5 the track is confined to [2, 8], and
+`A_total` (≥ 9) and `B_total` (≤ 1) become **unreachable on the dice**. They return only through an
+ED-621 lobbied start, and asymmetrically — at start 6 a diff of +3 reaches `A_total` while `B_total`
+stays unreachable *in that same vote*. Aggregate P(TV) 0.351 → 0.038, the residual entirely lobbied. So
+banded is not a re-weighting; it is a rule that **no motion can be totally won or totally lost unless
+someone lobbied the start in that direction.** Defensible as a reading of *"lobbying provides
+advantage"*, and a large commitment to make by implication.
+
+**Consequence 3 — raw's pool-size scaling is a parliament feature, not a defect.** P(TV) 0.038 / 0.287 /
+0.497 at equal pools 2 / 8 / 20 was filed as a flat-shift trap. In a chamber that is correct behaviour:
+**a bigger coalition should be more decisive.** The trap framing came from the resolution-diagnostic
+vocabulary Jordan has ruled out of use here, and it does not survive on its own terms.
+
+**Consequence 4 — raw is free and banded is not.** Raw is today's code and canon §10 verbatim
+(`social_contest_v30.md:606-607`), so it is **byte-identical**: phase G loses its only mandatory golden
+re-pin and `tools/balance_oracle.py` is not needed as a control for this row. Banded moves ~39 % of
+outcomes and forces the re-pin.
+
+**⚠ What raw owes, stated rather than dissolved — this is the real cost of the answer.** The S finding
+survives the disposition: the kernel moves the track by a **degree** (`resolver.py:307-308` →
+`degree_from_net`), the parliament by the **raw margin** (`parliamentary_vote.py:185`) — one quantity,
+the movement into a shared track, computed two ways, which §0.06 S names as *calculations inconsistent
+in methodology*. Recording raw makes that a **declared depth difference rather than an accident**: a
+bout is an exchange sequence whose per-exchange contribution is quantized so repeated exchanges cannot
+compound a fractional edge; a chamber vote is a single reception, where the margin **is** the quantity
+and there is nothing to compound. Per §0.05 and §4 that reasoning must live **at the call site**, not
+in this document — `resolve_body`'s docstring is the site, and writing it there is the one line this
+disposition adds to the plan.
+
+**Reopening condition — the only one.** If a later reading cannot defend the depth distinction on its
+own terms (i.e. the parliament acquires more than one reception per motion, so its margin *does*
+compound), raw becomes a second ladder with no reason and the row reopens on that fact alone.
+
+**Falsifier owed:** the claim is that raw is byte-identical; its falsifier is a same-seed campaign whose
+parliamentary outcomes differ at all from today's. Nothing here has run under `CLAUDE.md` §0.2 — this
+is a recorded disposition, not an executed one.
 
 ---
 
@@ -309,7 +369,7 @@ This is the number the brief's sentence — *"a member drawn with a mild lean de
 | **W-G5** preference → δσ | G | **yes** | `:86-93`, `:167-168`, `:518` | **yes** | no |
 | **W-G6** Readiness dials | G | **yes** | `:92`, `:246-252` | **yes** | no |
 | **W-G7** ε = 0.3 | G | no | `:117` | **yes** | no |
-| **J-P1** banded (only if Jordan) | G | no | no | **yes** | **yes**, all of them |
+| ~~**J-P1** banded~~ — **closed raw 2026-09-05** | — | no | no | **no** (byte-identical) | **no** — row closed, no re-pin |
 
 Phase G is one re-pin (`11_` §7: *the goldens MOVE, deliberately*) with `tools/balance_oracle.py` as the campaign-level control — and note `CLAUDE.md` §7's caveat applies: the oracle is a **campaign** instrument, so for W-G4 (no pressure on the path) and W-F3b (ε = 0) both arms are identical by construction and running it would be a fake control; run it for G1, G5, G6, G7 and J-P1 only.
 
