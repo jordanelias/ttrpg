@@ -1754,15 +1754,15 @@ rows:
     hole:      >-
       `VerbRow.emits_at` (engine/season/shape.py::emits_at) HAS ZERO CALLERS ANYWHERE IN THE TRACER, so a contested
       verb's degree-keyed emissions are never selected. The fold emits `row.emits` at
-      engine/season/shape.py:4507 - the FLAT UNION of all branches - so all three of `kill / wound`'s degrees
+      engine/season/shape.py::_fold (the `emits_at` union) - the FLAT UNION of all branches - so all three of `kill / wound`'s degrees
       emit the same set. Executed - a contest resolved `Untouched`, the degree meaning nobody was
       hurt, emits `person.died`. The `earned` guard cannot intervene - on `Untouched` `writes_at`
       returns empty, so `_pairs` is falsy and the whole `if _pairs:` block INCLUDING the refusal
-      guard at engine/season/shape.py:4480 is skipped, leaving `earned` empty. On `Wounded` it is the union for a second
+      guard at engine/season/shape.py::_fold (the refusal guard) is skipped, leaving `earned` empty. On `Wounded` it is the union for a second
       reason - `_eff_kill` returns a LIST, and only a dict return populates `earned`
-      (engine/season/shape.py::_eff_kill). LATENT, not live - a contested verb cannot reach engine/season/shape.py:4507 today because
-      `_degree_for_writes` is hardcoded `None` at engine/season/shape.py:4447 and `resolve()`'s contest branch
-      `continue`s at engine/season/shape.py:4676.
+      (engine/season/shape.py::_eff_kill). LATENT, not live - a contested verb cannot reach engine/season/shape.py::_fold (the `emits_at` union) today because
+      `_degree_for_writes` is hardcoded `None` at engine/season/shape.py::_fold (the `writes_at` pairing) and `resolve()`'s contest branch
+      `continue`s at engine/season/shape.py::resolve (the contest branch).
     kind:      "WIRING"
     owner:     "`_fold`'s emission line - it reads `row.emits` where `writes_at` reads the degree"
     grade:     "measured"
@@ -1841,13 +1841,13 @@ rows:
     hole:      >-
       THE FOUR DEGREE BRANCHES ARE THE ONLY RUN-TIME REFUSALS IN `shape.py` THAT BYPASS THE TYPED
       GAP TAXONOMY. `writes_at` and `emits_at` raise `SystemExit` (engine/season/shape.py::emits_at and engine/season/shape.py::writes_at), which
-      derives from `BaseException`. `corpus_run.run_case` catches `InstrumentDefect` (engine/season/corpus_run.py::run_case) and
+      derives from `BaseException`. ⚠ **CLOSED 2026-09-04 BY `W-E`, AND THIS ROW WAS NEVER MARKED — the sibling rows H-113 and H-114 both carry their closure note and this one did not, which is §0.2's closed-in-code/open-on-the-register contradiction. Both branches now raise `Unspecified` (a `ShapeGap`), which IS caught: `shape.py::emits_at` and `shape.py::writes_at`, pinned by `test_h115_the_degree_branches_raise_unspecified_not_systemexit`. The count below is also stale — 28 `raise SystemExit` in `shape.py` today, not 18, because `W-A`'s loader validation added more.** The text that follows is the state as it stood on 2026-09-03 and is kept so the reasoning resolves. `corpus_run.run_case` catches `InstrumentDefect` (engine/season/corpus_run.py::run_case) and
       the `ShapeGap` family (same function, the second clause); executed under those exact clauses the raise ESCAPES BOTH. Of
       18 `SystemExit` raises in shape.py, 14 are load-time (missing or malformed YAML) and
       correctly fatal; these 4 are the exception. They produce no DESIGN-GAP row, no `kind`
       histogram entry and no section citation, and they end the PROCESS - converting a one-case
       design gap into a whole-corpus run termination. The guard's DIRECTION is right and
-      engine/season/shape.py:4441-4447 says so; only its mechanism is at issue.
+      engine/season/shape.py::_fold (the `writes_at` pairing) says so; only its mechanism is at issue.
     kind:      "WIRING"
     owner:     "`writes_at` / `emits_at` - the raise type, not the raise"
     grade:     "measured"
@@ -1996,7 +1996,7 @@ rows:
       pins that the EVENT STREAM replays identically and NOT that the world state does. A state
       divergence leaving the log identical is invisible to it. A second blindness one field
       deeper - `StateChange.delta` is `None` for every act-driven write (engine/season/shape.py::StateChange default,
-      engine/season/shape.py:4552 four-positional construction), and `content_hash` folds `c.delta`, so two runs writing
+      engine/season/shape.py::_apply_write four-positional construction), and `content_hash` folds `c.delta`, so two runs writing
       DIFFERENT VALUES to the same field also hash identically.
     kind:      "SCHEMA_COLUMN"
     owner:     "`content_hash` - its name promises the world and its body reads the log"
