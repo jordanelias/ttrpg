@@ -97,7 +97,7 @@ Suggested, not prescribed — Jordan named the axes and this is one reading of t
 ## State at handoff — verified, not remembered
 
 - Branch `claude/agonist-antagonist-workplan-rbc3oc`, PR #357. Head `4c68adc`.
-- `pytest test_tracer_is_honest.py` — **145 passed**. All 8 register gates clean on every touched row.
+- `python -m pytest engine/season/tests -q` — **184 passed as of 2026-09-05**; run it rather than citing the number. All 8 register gates clean on every touched row.
 - Corpus: **89 of 143 runnable**, UNREPRESENTABLE 54 (faction 44 · world 10).
   **NPC RUNS = 0 · ARC ENDS = 0** — unchanged, and both remain honest zeros.
   ⚠ **UPDATED 2026-09-03 — THE ZEROS ARE STILL ZERO AND THE CHECK UNDER THEM IS NOT.** `R3`

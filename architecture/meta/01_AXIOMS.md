@@ -469,8 +469,8 @@ asserted. `matrix_rows_without_a_field` tested `is_dataclass` against a plain cl
 rows *"uncheckable"* while the class carried exactly the declaration needed to check them. A verb
 table extractor's `len == 8` filter **silently dropped four rows** whose cells contained an escaped
 pipe. And in the instrument as it stood at PR #351, **15 of 20 PASS probes contained no assertion at
-all** — a PASS meant *did not crash*. ⚠ That last figure is **of that version** (the honesty suite is
-143 tests now, was 20); it is cited as the worked example of the shape, never as current state.
+all** — a PASS meant *did not crash*. ⚠ That last figure is **of that version** (the honesty suite has grown far past
+that — `python -m pytest engine/season/tests -q` is the count; it was 20); it is cited as the worked example of the shape, never as current state.
 
 ### **ID-13 · A DECLARED FIELD MUST REACH A READER, OR IT IS NOT DECLARED.**
 

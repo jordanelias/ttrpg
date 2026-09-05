@@ -24,7 +24,7 @@
 |---|---|
 | **`PLAN.md`** | **the improvement plan — read this first if you are about to do work.** What to build, in what order, what may not be invented while building it, and the one question for Jordan. It also **adjudicates `ARCHITECTURE_V2.md` and corrects it in three places** |
 | **`ARCHITECTURE_V2.md`** | **the proposal.** Read Part A before the tables, or they look like bureaucracy |
-| **`hole_register.yaml`** | **Part VII, as data** (`W0`, landed). 54 rows in §G4's shape. `python engine/season/register.py --counts` computes what Part VII's prose used to assert; `--check` fails on a row that breaks §42.2/§42.2.1 |
+| **`hole_register.yaml`** | **Part VII, as data** (`W0`, landed). 113 rows in §G4's shape as of 2026-09-05 — `python engine/season/register.py --counts` is the authority and computes what Part VII's prose used to assert; `--check` fails on a row that breaks §42.2/§42.2.1 |
 | `proposals/2026-09-01-season-loop-tests/` | the executed session it rests on — instrument, 143 cases, run output |
 | `proposals/2026-09-01-season-loop-tests/session/00_FINDINGS_LEDGER.md` | the 56 findings, transcribed |
 
@@ -96,7 +96,7 @@ architecture; they are in what the architecture declines to say.
   does a scene equal an act? — **and it blocks nothing.**
 - **Nineteen holes have no row at all.** The register could not report this because **it was a
   markdown table nothing reads**, whose own counts did not reproduce from its own rows. **`W0`
-  landed 2026-09-02: it is `hole_register.yaml` now, 54 rows, and `register.py --check` is what
+  landed 2026-09-02: it is `hole_register.yaml` now — 113 rows as of 2026-09-05, per `python engine/season/register.py --counts` — and `register.py --check` is what
   makes a wrong row fail.** The nineteen became **twenty-two** once §1.4's four §62/§54
   carry-overs were carried as separate rows, which is what the plan told `W0` to do.
 - **The critical path is six items** — `W0 → W1 → W2 → W3 → W5 → W9` — ending at **one NPC season
