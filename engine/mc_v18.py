@@ -124,9 +124,17 @@ class BatchResult:
 def _faction_actions_callback(world):
     """Per-season faction action dispatch — passed to season.run_season.
 
-    GD-2 mandatory-actions precedence is enforced inside faction_take_action
-    (mandatory pass before stochastic candidates per HR-9). Parliamentary +
-    territory-holding gate matches the pre-migration inline block at
+    ⚠ CORRECTED 2026-09-05 (ED-IN-0202). This read "GD-2 mandatory-actions precedence is
+    enforced inside faction_take_action (mandatory pass before stochastic candidates per
+    HR-9)" and that is FALSE. `faction_take_action` computes four signals, three weight
+    multipliers and takes ONE `rng.random()` draw; there is no pass that FORCES Muster at
+    Accord <= 3 ungarrisoned or Govern at Accord <= 2 garrisoned. "Threat" enters as a Muster
+    WEIGHT multiplier (`muster_mult = 1.0 + threat`), not as a mandatory action, so canon's
+    own violation test (canon/02_canon_constraints.md, GD-2) fails against live code. The
+    gate below is unaffected and stands. A false claim of enforcement is worse than none,
+    because it stops the next reader from checking.
+
+    Parliamentary + territory-holding gate matches the pre-migration inline block at
     mc_v18 L75-87 prior to 2026-05-20.
     """
     for fn, faction in world.factions.items():
