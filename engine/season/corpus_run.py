@@ -75,7 +75,7 @@ def rescales() -> dict:
     """`W28`. The corpus's `scale:` re-authoring, as an OVERLAY keyed by case id.
 
     ⚠ AN OVERLAY, NOT AN EDIT TO THE CORPUS, AND THE REASON IS ARCHITECTURAL. 47 of the 57
-    unrepresentable cases live in `2026-08-31-shape-tracer/cases/` — a PREDECESSOR proposal's
+    unrepresentable cases live in `engine/season/cases/chain/` — a PREDECESSOR proposal's
     committed corpus, which this chain reads and does not own. Editing another chain's extraction
     would destroy the record of what was extracted, and the corpus is evidence. `cases/exercises/`
     is already the established overlay: per-case files, bound by id, carrying this chain's answers

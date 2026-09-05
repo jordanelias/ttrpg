@@ -1800,3 +1800,31 @@ paths and resolve through this row rather than reading as broken.
 
 | `tests/sim/mass_battle/` | `systems/mass_battle/sim/` |
 
+
+
+## THE ADOPTION — `proposals/` → `architecture/` + `engine/season/` (2026-09-05, ED-IN-0202)
+
+Jordan ruled *"adopt in full"*. The season-loop chain left `proposals/` in two layers: the code
+architecture and shape to `architecture/`, the game code and the registries it reads at runtime to
+`engine/season/`. These are MOVES, not `FORK:` retirements — every path below resolves to a live
+file in the working tree.
+
+⚠ **A `git show <sha>:<path>` reference must keep the OLD path**, because the path at that commit
+was the old one. Two such references in `architecture/PLAN.md` were rewritten by the bulk pass and
+restored; if you are repointing citations in bulk, exclude those lines.
+
+| Old Path | New Path |
+|---|---|
+| `proposals/2026-09-01-season-loop-tests/tracer/test_tracer_is_honest.py` | `engine/season/tests/test_season_shape.py` |
+| `proposals/2026-09-01-season-loop-tests/tracer/` | `engine/season/` |
+| `proposals/2026-09-01-season-loop-tests/cases/` | `engine/season/cases/` |
+| `proposals/2026-09-01-season-loop-tests/runs/` | `engine/season/runs/` |
+| `proposals/2026-08-31-shape-tracer/cases/` | `engine/season/cases/chain/` |
+| `proposals/2026-09-02-executable-architecture/rosters.yaml` | `engine/season/rosters.yaml` |
+| `proposals/2026-09-02-executable-architecture/verb_table.yaml` | `engine/season/verb_table.yaml` |
+| `proposals/2026-09-02-executable-architecture/write_matrix.yaml` | `engine/season/write_matrix.yaml` |
+| `proposals/2026-09-02-executable-architecture/hole_register.yaml` | `engine/season/hole_register.yaml` |
+| `proposals/2026-09-02-executable-architecture/README.md` | `architecture/00_ADOPTION_README.md` |
+| `proposals/2026-09-02-executable-architecture/` | `architecture/` |
+| `proposals/2026-09-03-meta-architecture/` | `architecture/meta/` |
+| `proposals/2026-09-01-holonic-architecture/ARCHITECTURE.md` | `architecture/holonic_ARCHITECTURE.md` |

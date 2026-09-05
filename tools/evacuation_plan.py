@@ -158,6 +158,19 @@ RULES = [
     (lambda p: relocation(p) is not None, 'relocate', 'R-RELOCATE',
      'kept, but moved to its subsystem home -- see the RELOCATE table'),
 
+    # ---- THE ADOPTED SYSTEM (ED-IN-0202, Jordan 2026-09-05, "adopt in full"). Two new top-level
+    # trees left `proposals/` and matched no rule here, which `test_partition_is_total` caught as
+    # the CARRY-union-LEAVE defect: a file with no verdict would be removed under a mirror-image
+    # deletion without ever appearing in a plan. Both are KEEP, and for different reasons worth
+    # stating separately rather than under one pattern.
+    (lambda p: p.startswith('architecture/'), 'keep', 'R-ARCH-LAYER1',
+     'LAYER 1 -- the code architecture and shape, RATIFIED 2026-09-05. It governs how all coding '
+     'is conducted, which is agent instruction (CLAUDE.md 0.05 exempts that class from demotion), '
+     'and it is the citation target of `PLAN.md` section references across the tree'),
+    (lambda p: p.startswith('engine/season/'), 'keep', 'R-SEASON-LAYER2',
+     'LAYER 2 -- the game code, RATIFIED 2026-09-05. The executable season loop, the four '
+     'registries it reads at runtime, its corpus and its suite. This is the mechanism'),
+
     # ---- inside an evacuating parent, but KEEP (this is why the cut is per-file, not per-root)
     (lambda p: p.startswith('tests/sim/mass_battle/'), 'keep', 'R-MB-CANON',
      'the CANON mass-battle engine (J2/ED-MB-0064) -- 28 .py, zero .md, misfiled under tests/'),

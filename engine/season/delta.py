@@ -24,16 +24,25 @@ from collections import Counter
 from pathlib import Path
 
 RESULTS = "engine/season/runs/results.json"
+# ⚠ THE ARTIFACT MOVED AT ADOPTION (ED-IN-0202) AND THIS TOOL READS IT OUT OF HISTORY, so the
+# path is rev-dependent: before the adoption commit it existed only under `proposals/`. Naming
+# one path made `delta.py <any earlier rev>` a hard SystemExit — which is this lane's declared
+# G11 carrier ("every number a commit message states should be a line of this output") going
+# silent at the exact commit that needed it. Found by an adversarial pass on the conversion.
+RESULTS_BEFORE_ADOPTION = "proposals/2026-09-01-season-loop-tests/runs/results.json"
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parent.parent
 
 
 def at(rev: str) -> dict:
-    out = subprocess.run(["git", "show", f"{rev}:{RESULTS}"],
-                         cwd=REPO, capture_output=True, text=True)
-    if out.returncode:
-        raise SystemExit(f"cannot read {RESULTS} at {rev}: {out.stderr.strip()}")
-    return json.loads(out.stdout)
+    tried = []
+    for path in (RESULTS, RESULTS_BEFORE_ADOPTION):
+        out = subprocess.run(["git", "show", f"{rev}:{path}"],
+                             cwd=REPO, capture_output=True, text=True)
+        if not out.returncode:
+            return json.loads(out.stdout)
+        tried.append(f"{path} ({out.stderr.strip()})")
+    raise SystemExit(f"cannot read results.json at {rev}; tried " + " and ".join(tried))
 
 
 def now() -> dict:

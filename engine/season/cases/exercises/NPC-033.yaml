@@ -8,7 +8,7 @@
 # used it, and 47 cases are unrepresentable through no fault of their own reading of the character.
 #
 # ⚠ THIS IS AN OVERLAY, NOT AN EDIT TO THE CORPUS. NPC-033 lives in a PREDECESSOR chain's committed
-# extraction (`2026-08-31-shape-tracer/cases/NPC2.yaml`), which this chain reads and does not own.
+# extraction (`engine/season/cases/chain/NPC2.yaml`), which this chain reads and does not own.
 # The corpus is evidence of what was extracted; overwriting it would destroy that record.
 #
 # ⚠ THIS IS ALSO THE PILOT THAT EXERCISES THE SCHEMA'S GAP ARM, DELIBERATELY. Canon gives the

@@ -1,7 +1,7 @@
 # PART D, AS DATA -- the write matrix keyed on `(kind, field)`.
 #
 # W2 of `architecture/PLAN.md`. `ARCHITECTURE_V2.md` §D3 is the
-# source and this file is the object: `tracer/shape.py`'s `write()` gate reads it, and six
+# source and this file is the object: `engine/season/shape.py`'s `write()` gate reads it, and six
 # hand-maintained Python structures -- `WRITE_MATRIX`, `WRITE_CLASS_OF`, `PARTITION`,
 # `PARTITION_ASSUMED`, `MATRIX_FIELD_OF`, `PARTITION_MISSING` -- are replaced by a loader.
 #
@@ -27,7 +27,7 @@
 # hole (`H-20`, and its enumeration is `H-46`), which is where it belongs.
 #
 # PROVENANCE. The 28 rows carried over are extracted mechanically from §D3's markdown table;
-# `python tracer/register.py --verify-write-matrix` re-extracts and fails on drift. The 10 rows
+# `python engine/season/register.py --verify-write-matrix` re-extracts and fails on drift. The 10 rows
 # W2 ADDS each name the §1.4 hole they carry and the `hole_register.yaml` row that grades it, so
 # no row here is a value nobody can trace.
 

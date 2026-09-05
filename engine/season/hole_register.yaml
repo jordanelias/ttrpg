@@ -6,7 +6,7 @@
 # `site:`, `sweep:` or `cite:` fields its own §G4 defines; its self-reported counts did not
 # reproduce from its own rows; and it could not report that TWENTY-TWO holes had no row at all.
 # By `CLAUDE.md` §0.05's test -- would the game behave differently if this were deleted? -- it
-# was reference. This file is the object. `tracer/register.py` is the only thing that reads it,
+# was reference. This file is the object. `engine/season/register.py` is the only thing that reads it,
 # and `register.py --check` is what makes a wrong row FAIL rather than merely read oddly.
 #
 # THE ROW SHAPE is `ARCHITECTURE_V2.md` §G4's TEN FIELDS VERBATIM --

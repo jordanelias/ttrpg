@@ -576,7 +576,7 @@ row**. By §0.05's own test — *would the game behave differently if this docum
 
 **Discharges.** `V2` §0.3 rows 13–14 · §VII.3's counts · the precondition for artifact 0 · **G11**.
 
-**Proof.** `python tracer/register.py --check` exits 0 and **prints the computed counts** (so the
+**Proof.** `python engine/season/register.py --check` exits 0 and **prints the computed counts** (so the
 counts can never again be a hand-typed sentence); planting a row with no `grade` makes it exit 1;
 planting a `default:` on an `absent` row makes it exit 1.
 
@@ -584,7 +584,7 @@ planting a `default:` on an `absent` row makes it exit 1.
 >
 > `hole_register.yaml` carries **54 rows** — the 32 transcribed mechanically from `V2` §VII, the
 > 18 holes of §1.4 with its four §62/§54 carry-overs expanded to four rows, and `A18`.
-> `tracer/register.py` reads it and nothing else does.
+> `engine/season/register.py` reads it and nothing else does.
 >
 > **`--check` exits 1, and it must.** *"Exits 0"* was written before anyone transcribed the rows,
 > and it contradicts **this document's own §1.5**: if not one of the 32 rows carries `site:`,
@@ -676,7 +676,7 @@ Move `H-26` **to Tier 0**.
 > `H-26` moved to **Tier 0**, in the register *and* in `V2`'s tables — a tier that disagrees
 > between the two is `W0`'s counts defect, one field over.
 >
-> **Measured** — `python tracer/register.py --counts` and `--check`:
+> **Measured** — `python engine/season/register.py --counts` and `--check`:
 > `absent` **34 → 22** · `assumption` 12 → 20 · `measured` 0 → **1** · `ruled` 8 → 11 ·
 > `R3` **2 → 1** · `G6` **34 → 22**.
 >
@@ -703,7 +703,7 @@ Move `H-26` **to Tier 0**.
 > date fires… and lapses"* sentence is at **`:835`**, not `:837`; *"`yield` — only here"* is at
 > **`:856`**, not `:855`. **Neither claim is wrong** — every one of the fourteen citations was
 > verified by hand against #353 and then mechanised, so it stops depending on anyone remembering:
-> `python tracer/register.py --verify-citations` checks that every `:NNN` exists and every verbatim
+> `python engine/season/register.py --verify-citations` checks that every `:NNN` exists and every verbatim
 > quote is at the line cited, and it **distinguishes a fabricated quote from a wrong line number**.
 
 **Size S–M.** Depends on **W0**.
@@ -714,7 +714,7 @@ Move `H-26` **to Tier 0**.
 
 **Do.** `write_matrix.yaml` — `kind · field · steps · class · social · by · emits`. Replace
 `WRITE_MATRIX`, `WRITE_CLASS_OF`, `PARTITION`, `PARTITION_ASSUMED`, `MATRIX_FIELD_OF` and
-`PARTITION_MISSING` in `tracer/shape.py` with a loader. **Add the missing rows §1.4 names:**
+`PARTITION_MISSING` in `engine/season/shape.py` with a loader. **Add the missing rows §1.4 names:**
 `(Claim, confidence)` at MATTER · `(Rung|Office|Site, exists)` · `(Petition|Dispensation|
 Proposition, exists)` in the ACTS class **so creation stops bypassing the gate** · `(Person, weight)`
 at CENSUS · `(Tenure, payload)` · `(Person, coherence)` **via the seam only**. Fix `(Date, due_at)`
@@ -1359,7 +1359,7 @@ softened in the commit message, which is pushed.
 **47 cases declare `scale: faction`** (NPC 18, ARC 29), and a faction acting is a *ruled refusal* —
 `ARCHITECTURE_V2.md:93` (held under 143 cases), `H-21` ruled, `H-95` ruled, and `shape.py`'s own
 *"a faction never acts: a PERSON HOLDING AN OFFICE acts"*. The origin is traceable:
-`2026-08-31-shape-tracer/cases/CASE_BRIEF.md` gives the extraction schema as
+`engine/season/cases/chain/CASE_BRIEF.md` gives the extraction schema as
 `scale: <person | settlement | faction | realm | world>` — **the brief was written in a vocabulary
 the architecture had already closed**, so every extractor used it. The fix is a corpus authoring
 pass (`W28`), not a design item. ⚠ And re-scaling alone buys representability, **not behaviour**:

@@ -3,15 +3,16 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 166,
-    "total": 415,
-    "uncited": 249,
+    "total": 418,
+    "uncited": 252,
     "of_which_assumption_grade": 11
   },
-  "count": 415,
+  "count": 418,
   "by_module": {
     "engine.autoload": 14,
     "engine.cross_scale": 15,
     "engine": 1,
+    "engine.season": 3,
     "characters": 7,
     "combat": 12,
     "factions": 65,
@@ -384,6 +385,39 @@
       "kind": "table",
       "module": "engine",
       "file": "engine/mc_v18.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.DEFAULT_SEASONS",
+      "name": "DEFAULT_SEASONS",
+      "value": 2,
+      "kind": "scalar",
+      "module": "engine.season",
+      "file": "engine/season/corpus_run.py",
+      "note": "for the 86 cases whose `span_seasons` is prose (\"ongoing\")",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.MAX_SEASONS",
+      "name": "MAX_SEASONS",
+      "value": 6,
+      "kind": "scalar",
+      "module": "engine.season",
+      "file": "engine/season/corpus_run.py",
+      "note": "the corpus asks for up to 16; the flood (`W6`) makes that unaffordable",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.SWEEP_POINTS",
+      "name": "SWEEP_POINTS",
+      "value": 3,
+      "kind": "scalar",
+      "module": "engine.season",
+      "file": "engine/season/register.py",
       "note": "",
       "citation": null,
       "citation_grade": null

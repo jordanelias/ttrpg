@@ -24,9 +24,9 @@
 |---|---|
 | **`PLAN.md`** | **the improvement plan — read this first if you are about to do work.** What to build, in what order, what may not be invented while building it, and the one question for Jordan. It also **adjudicates `ARCHITECTURE_V2.md` and corrects it in three places** |
 | **`ARCHITECTURE_V2.md`** | **the proposal.** Read Part A before the tables, or they look like bureaucracy |
-| **`hole_register.yaml`** | **Part VII, as data** (`W0`, landed). 54 rows in §G4's shape. `python ../2026-09-01-season-loop-tests/tracer/register.py --counts` computes what Part VII's prose used to assert; `--check` fails on a row that breaks §42.2/§42.2.1 |
-| `../2026-09-01-season-loop-tests/` | the executed session it rests on — instrument, 143 cases, run output |
-| `../2026-09-01-season-loop-tests/session/00_FINDINGS_LEDGER.md` | the 56 findings, transcribed |
+| **`hole_register.yaml`** | **Part VII, as data** (`W0`, landed). 54 rows in §G4's shape. `python engine/season/register.py --counts` computes what Part VII's prose used to assert; `--check` fails on a row that breaks §42.2/§42.2.1 |
+| `proposals/2026-09-01-season-loop-tests/` | the executed session it rests on — instrument, 143 cases, run output |
+| `proposals/2026-09-01-season-loop-tests/session/00_FINDINGS_LEDGER.md` | the 56 findings, transcribed |
 
 ## The one-sentence difference
 
@@ -68,7 +68,7 @@ architecture; they are in what the architecture declines to say.
 - **Part VII** — **the hole register**, replacing §61–§62's prose. ⚠ **Its self-reported counts
   — "39 holes, 8 ruled, 13 assumption, 12 absent" — DO NOT REPRODUCE, and this line no longer
   states any.** `W0` made the register data; the counts are computed:
-  `python ../2026-09-01-season-loop-tests/tracer/register.py --counts`.
+  `python engine/season/register.py --counts`.
 
 ## The two things a reader should carry
 

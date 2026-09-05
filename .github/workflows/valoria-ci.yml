@@ -363,6 +363,14 @@ jobs:
       # IF THIS EVER NEEDS TO BE FASTER STILL: split into JOBS whose union is the full
       # collection. Do not select a subset of it.
       - run: python -m pytest tests/valoria -q -n auto
+      # ED-IN-0202 (adoption, 2026-09-05). `engine/season/` is the game code now and NOTHING ran
+      # its 184 tests — `pytest.ini`'s `testpaths` is `tests/valoria` and the sim-regression job
+      # runs `engine/tests`, so the suite fell between both. An adopted mechanism outside every
+      # gate is the state this adoption exists to end.
+      - run: python -m pytest engine/season/tests -q -n auto
+      # The nine acceptance requirements (Jordan, 2026-09-05) — fails a row claiming a status
+      # with no measurement behind it, or naming a measure command that resolves to nothing.
+      - run: python engine/season/register.py --requirements
       # tests/contracts EVACUATED 2026-08-05 (ED-IN-0145); its step is removed here. It had been
       # wired since 2026-07-07 (ED-IN-0017) after being orphaned from CI. Content at fork ref c451bcb.
 
